@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "node_id": "N01-CONTEXT-EFFECT",
+  "tool_id": "HCT-CONTEXT",
+  "root_decision": "accepted_tool_implementation",
+  "binding_rule": "This acceptance applies only when this record, the listed implementation, and the adopted contract are tracked by the same current HEAD with no tracked or staged diff.",
+  "worker_result": "docs/ultragoal-successor-live/worker-results/LEASE-N01-CONTEXT-001.json",
+  "independent_reviewer": "independent claim falsifier",
+  "review_result": "no_remaining_P0_P1_P2_in_current_host_HCT_CONTEXT_scope",
+  "accepted_requirements": ["REQ-STATE-002"],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-STATE-001",
+      "state": "implementation_foundation_only",
+      "blocker": "No production authority-bearing dispatcher yet constructs and propagates exactly one LiveContext."
+    }
+  ],
+  "verification": [
+    {"command": "cargo fmt --all --check", "result": "pass"},
+    {"command": "cargo test --locked --offline --test cli_contract -- --test-threads=1", "result": "pass_9_of_9"},
+    {"command": "cargo test --locked --offline --lib context:: -- --test-threads=1", "result": "pass_7_context_owned_plus_5_existing_filter_matches"},
+    {"command": "cargo check --locked --offline --all-targets", "result": "pass_warning_free"}
+  ],
+  "environment_ceiling": "exercised_macos_candidate_only",
+  "unsupported_host_state": "withheld_under_OD_003",
+  "downstream_claims_raised": [],
+  "explicitly_withheld": [
+    "product-wide REQ-STATE-001",
+    "CL-PACKAGE",
+    "CL-INSTALL",
+    "CL-DISCOVERY",
+    "CL-RUNTIME",
+    "CL-REAL-JOURNEY",
+    "CL-RELEASE",
+    "CL-COMPLETION"
+  ],
+  "root_acceptance_limit": "N01 tool implementation only; no downstream product or claim completion."
+}

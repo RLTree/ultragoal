@@ -1,0 +1,129 @@
+{
+  "worker": "/root/n01_context_worker",
+  "lease_id": "LEASE-N01-CONTEXT-001",
+  "context_id": "pending_post_commit_root_recompute",
+  "candidate_identity": {
+    "base_head": "245d721599d31f6697acbfe452f0e2f0a6b09e96",
+    "base_tree": "433bf986e8795f7721d1284b71c2823c11ff3961",
+    "base_head_unchanged_during_worker_lease": true,
+    "pre_existing_user_dirt": [".DS_Store"]
+  },
+  "base_state": {
+    "head": "245d721599d31f6697acbfe452f0e2f0a6b09e96",
+    "tree": "433bf986e8795f7721d1284b71c2823c11ff3961",
+    "lease_scope": [
+      "validator/src/context/**",
+      "validator/tests/cli_contract.rs",
+      "validator/tests/cli_contract/**"
+    ]
+  },
+  "final_state": {
+    "head": "245d721599d31f6697acbfe452f0e2f0a6b09e96",
+    "root_integration_observed_not_worker_authored": "validator/src/lib.rs",
+    "leased_rust_lines": 2607,
+    "maximum_file_lines": 295,
+    "files_over_300_lines": 0,
+    "pre_existing_user_dirt_preserved": [".DS_Store"]
+  },
+  "touched_paths": [
+    "validator/src/context/authorized_io.rs",
+    "validator/src/context/build.rs",
+    "validator/src/context/capability.rs",
+    "validator/src/context/configuration.rs",
+    "validator/src/context/digest.rs",
+    "validator/src/context/effects.rs",
+    "validator/src/context/error.rs",
+    "validator/src/context/git.rs",
+    "validator/src/context/mod.rs",
+    "validator/src/context/path.rs",
+    "validator/src/context/process.rs",
+    "validator/src/context/request.rs",
+    "validator/src/context/revalidate.rs",
+    "validator/src/context/tests.rs",
+    "validator/src/context/types.rs",
+    "validator/src/context/zero_write_tests.rs",
+    "validator/tests/cli_contract.rs"
+  ],
+  "touched_semantics": [
+    "HCT-CONTEXT",
+    "LiveContext",
+    "CandidateIdentity",
+    "CapabilitySet",
+    "ConfigurationIdentity",
+    "PermissionIdentity",
+    "EffectClass",
+    "EffectBoundary",
+    "RootEffectGrant",
+    "AuthorizedPath",
+    "fixed protected Git substrate",
+    "descriptor-bound I/O",
+    "construction and use-time revalidation",
+    "zero-hidden-write construction"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "validator/tests/cli_contract.rs:9 exported-library integration tests",
+    "validator/src/context/tests.rs:7 context-owned effect/path/race tests",
+    "validator/src/context/zero_write_tests.rs:1 exact worktree-and-Git zero-write test"
+  ],
+  "effects": [
+    {"class": "workspace-write", "scope": "leased files"},
+    {"class": "workspace-write", "scope": "normal Cargo target artifacts"},
+    {"class": "workspace-write", "scope": "isolated temporary Git fixtures removed after tests"},
+    {"class": "external-write", "performed": false},
+    {"class": "network", "performed": false}
+  ],
+  "requirements": [
+    "REQ-STATE-001",
+    "REQ-STATE-002",
+    "REQ-CLI-003",
+    "REQ-CLI-004",
+    "REQ-SECURITY-001",
+    "HCT-CONTEXT implementation contract",
+    "HCT-CONTEXT negative proof requirement"
+  ],
+  "dependency_nodes": ["N01-CONTEXT-EFFECT"],
+  "changes": [
+    {"area": "immutability", "result": "LiveContext payload is private after context-ID computation."},
+    {"area": "candidate identity", "result": "Canonical roots, Git state, dirty content, inputs, configuration, tools, permissions, and effects are deterministically bound."},
+    {"area": "Git trust", "result": "Only fixed protected /usr/bin/git or /bin/git is executed with a cleared environment and read-only Git configuration."},
+    {"area": "effects", "result": "Public callers cannot self-issue write, external, or destructive grants."},
+    {"area": "path safety", "result": "macOS/Linux descriptor traversal uses openat with no-follow, directory, close-on-exec, and exclusive-create constraints plus recorded inode checks."},
+    {"area": "zero writes", "result": "Build and revalidation preserve an exact path/type/size/content/mode/mtime snapshot of fixture worktree and .git state."}
+  ],
+  "commands_and_tests": [
+    {"command": "cargo fmt --all --check", "result": "pass"},
+    {"command": "cargo test --locked --offline --test cli_contract -- --test-threads=1", "result": "pass", "summary": "9 passed"},
+    {"command": "cargo test --locked --offline --lib context:: -- --test-threads=1", "result": "pass", "summary": "7 context-owned tests plus 5 existing name-filter matches passed"},
+    {"command": "cargo check --locked --offline --all-targets", "result": "pass", "summary": "warning-free"}
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/context/*.rs",
+      "digest": "b1d40f41b3b1fb06d4903ec6e6a1ff9f44923828863228cb5c4794a92711f6ae",
+      "digest_method": "SHA-256 of sorted per-file shasum lines"
+    },
+    {"path": "validator/tests/cli_contract.rs", "sha256": "7bee9c9be8559307c539287b8f6b0cfe24bee4299d01d73d3d40757d08111eb7"}
+  ],
+  "findings": [
+    {"severity": "integration-required", "finding": "REQ-STATE-001 remains open until production dispatch builds and propagates one LiveContext per authority-bearing operation."},
+    {"severity": "integration-required", "finding": "Production write grants require a root-sealed bridge without broadening grant constructors."}
+  ],
+  "unresolved_dependencies": [
+    "root dispatcher adoption",
+    "retirement of command-local root and candidate resolution",
+    "root-owned command and effect catalog generation"
+  ],
+  "requested_root_changes": [
+    {"path": "validator/src/lib.rs", "request": "Expose context module; applied by root."},
+    {"path": "root dispatcher", "request": "Add a narrow root-sealed grant bridge and one-context-per-operation propagation."}
+  ],
+  "limitations": [
+    "Git is supported only at fixed protected /usr/bin/git or /bin/git.",
+    "Descriptor-bound writes are implemented for macOS and Linux; other systems fail unsupported.",
+    "Permission identity reports observed metadata rather than effective authorization.",
+    "REQ-STATE-001 is not product-wide proof.",
+    "No package, install, discovery, runtime-product, journey, release, or completion claim is raised."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

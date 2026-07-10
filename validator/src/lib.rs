@@ -6,6 +6,7 @@ mod claim_semantics;
 mod cli;
 mod command;
 mod command_run;
+pub mod context;
 mod contract_check_ids;
 mod digest;
 mod json_boundary;

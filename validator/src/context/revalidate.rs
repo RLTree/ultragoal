@@ -1,0 +1,65 @@
+use super::build::{path_text, permissions, selected_inputs};
+use super::capability;
+use super::error::ContextError;
+use super::git;
+use super::types::{LiveContext, RootIdentity};
+use std::path::{Path, PathBuf};
+
+fn changed(dimension: &str) -> ContextError {
+    ContextError::ConcurrentMutation(format!("{dimension} changed after context construction"))
+}
+
+impl LiveContext {
+    /// Re-runs the complete read-only live snapshot before authority-bearing use.
+    pub fn revalidate(&self) -> Result<(), ContextError> {
+        let recorded_git = self
+            .capabilities()
+            .tool("git")
+            .filter(|tool| tool.available)
+            .ok_or_else(|| changed("Git substrate"))?;
+        let git_path = PathBuf::from(
+            recorded_git
+                .executable
+                .as_deref()
+                .ok_or_else(|| changed("Git substrate path"))?,
+        );
+        if capability::executable_identity("git", &git_path)? != *recorded_git {
+            return Err(changed("Git substrate identity"));
+        }
+        let (repository, worktree) = git::resolve_roots(self.worktree_root(), &git_path)?;
+        let roots = RootIdentity {
+            repository_root: path_text(&repository)?,
+            worktree_root: path_text(&worktree)?,
+        };
+        if &roots != self.roots() {
+            return Err(changed("repository or worktree root"));
+        }
+        if &git::capture_candidate(&git_path, &worktree)? != self.candidate() {
+            return Err(changed("Git candidate identity"));
+        }
+        let input_paths = self
+            .selected_inputs()
+            .iter()
+            .map(|input| PathBuf::from(&input.relative_path))
+            .collect::<Vec<_>>();
+        if selected_inputs(&input_paths, &worktree)? != self.selected_inputs() {
+            return Err(changed("selected inputs"));
+        }
+        let tool_names = self
+            .capabilities()
+            .tools
+            .iter()
+            .map(|tool| tool.name.clone())
+            .collect::<Vec<_>>();
+        if capability::capture(&tool_names, &git_path)? != *self.capabilities() {
+            return Err(changed("capabilities or PATH"));
+        }
+        if permissions(&repository, &worktree) != *self.permissions() {
+            return Err(changed("observed root metadata"));
+        }
+        if capability::executable_identity("git", Path::new(&git_path))? != *recorded_git {
+            return Err(changed("Git substrate identity"));
+        }
+        Ok(())
+    }
+}
