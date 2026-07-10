@@ -2019,7 +2019,7 @@
     },
     {
       "id": "LANE-015",
-      "status": "pending_worktree_creation",
+      "status": "active_rebinding_required",
       "lane_type": "implementation",
       "lane_objective": "Build a Harness-owned non-self-authored command-result authority for live-loop command execution so timing/cache rows can reconcile against real process output without using local JSON as its own proof.",
       "macro_lane_rationale": "Lane 014 blocked at clean commit bb300618a because live_loop_measurement_rust_tests cannot legally prove command-result authority from local timing JSON plus sibling command-observation JSON. This lane owns the parent-required command-result authority surface that Lane 014 needs next.",
@@ -2027,19 +2027,21 @@
         "command_result_authority_for_live_loop_measurement"
       ],
       "owner": "codex-app-worktree-lane-015",
-      "thread_or_session_id": null,
-      "pending_worktree_id": "local:5ae1f6ac-b70e-4b69-9926-05a5c55f9a26",
+      "thread_or_session_id": "019f47a2-2136-70e1-8321-081b8042450a",
+      "pending_worktree_id": null,
       "actor_binding": {
         "actor_id": "codex-app-worktree-lane-015",
-        "thread_or_session_id": null,
+        "thread_or_session_id": "019f47a2-2136-70e1-8321-081b8042450a",
         "pending_worktree_id": "local:5ae1f6ac-b70e-4b69-9926-05a5c55f9a26",
-        "actor_status": "pending_worktree_creation",
+        "actor_status": "active_rebinding_required",
         "goal_binding_required_first_action": true,
-        "delivery_confirmed": false,
-        "delivery_confirmation_evidence": "codex_app.create_thread returned pendingWorktreeId local:5ae1f6ac-b70e-4b69-9926-05a5c55f9a26. Next heartbeat must resolve the materialized thread, confirm the initial lane contract is present, and confirm the lane called create_goal."
+        "delivery_confirmed": true,
+        "delivery_confirmation_evidence": "codex_app.read_thread confirmed userMessage item-15 was received by thread 019f47a2-2136-70e1-8321-081b8042450a in /Users/terrynoblin/.codex/worktrees/6c42/harness-ultragoal-plugin-proposal; the thread is active. create_goal binding is not yet parent-visible and remains required before acceptance.",
+        "materialized_workspace": "/Users/terrynoblin/.codex/worktrees/6c42/harness-ultragoal-plugin-proposal",
+        "materialized_from_pending_worktree_id": "local:5ae1f6ac-b70e-4b69-9926-05a5c55f9a26"
       },
       "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
-      "workspace": "pending Codex app worktree for /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+      "workspace": "/Users/terrynoblin/.codex/worktrees/6c42/harness-ultragoal-plugin-proposal",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "f28aecb94 Record lane 014 parent authority blocker",
       "forbidden_paths": [
@@ -2068,10 +2070,10 @@
         "parent_rejects_complete_when": "Any gate is absent, prose-only, tests-only without product behavior or verified current-input reuse, self-reconciled by the same local JSON payload it claims, missing false-pass proof, missing source guard, missing old-surface disposition, missing reviewer question, missing parent rerun, or missing explicit unsupported claims."
       },
       "parent_orchestrator_state": {
-        "status": "launch_pending",
-        "observed_at": "2026-07-09T15:35:11Z",
-        "finding": "No existing lane owned the parent-required non-self-authored command-result authority for live_loop_measurement_rust_tests. Parent launched a Codex app worktree thread with create_thread; app returned pendingWorktreeId local:5ae1f6ac-b70e-4b69-9926-05a5c55f9a26.",
-        "action": "Next heartbeat must resolve the materialized Lane 015 thread, confirm delivery/read receipt, confirm create_goal binding, then poll for progress. If the worktree never materializes, escalate the Codex app worktree tooling gap. Do not start Gate 92 speed/fitting while this lane is pending."
+        "status": "active_rebinding_required",
+        "observed_at": "2026-07-10T01:13:53Z",
+        "finding": "Lane 015 materialized as thread 019f47a2-2136-70e1-8321-081b8042450a in /Users/terrynoblin/.codex/worktrees/6c42/harness-ultragoal-plugin-proposal. The original turn was interrupted mid-source edit; parent sent a rebind/resume contract as userMessage item-15 and codex_app.read_thread confirmed receipt and active execution. create_goal binding is still not parent-visible.",
+        "action": "Lane owner must complete create_goal binding, continue the owned-path command-result authority work, and return the complete V6 packet. Parent must not accept or start Gate 92 speed/fitting until command-result authority, independent reconciliation, and goal binding are proven."
       }
     }
   ],
