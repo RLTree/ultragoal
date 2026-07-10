@@ -5,6 +5,9 @@ use crate::self_tests::boundaries::workspace_fixtures::temp_root;
 use serde_json::json;
 use std::path::{Path, PathBuf};
 
+#[path = "test_process_receipt.rs"]
+mod test_process_receipt;
+
 pub(super) struct ReplayFixture {
     pub(super) root: PathBuf,
     pub(super) surface: crate::cli::live_loop::surfaces::LoopValidationSurface,
@@ -82,6 +85,12 @@ pub(super) fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
         crate::cli::live_loop::nodes::measurement::full_command::product_command_argv(
             fixture.surface.narrow_rerun,
         );
+    let process_receipt =
+        test_process_receipt::command_observation_receipt(fixture, &command_text, &command_argv);
+    let process_receipt_digest = crate::digest::canonical_json(&process_receipt);
+    let process_result_digest = result_digest();
+    let process_receipt_path =
+        test_process_receipt::command_observation_receipt_rel(fixture.surface.id);
     json!({
         "node_id": fixture.surface.id,
         "candidate_digest": fixture.candidate,
@@ -95,7 +104,15 @@ pub(super) fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
         "cache_key": fixture.cache_key,
         "cache_honesty": "pass",
         "telemetry_reconciliation_status": "pass",
-        "telemetry_reconciliation": {"status": "pass"},
+        "telemetry_reconciliation": {
+            "status": "pass",
+            "command_observation_receipt": process_receipt_path,
+            "command_observation_receipt_digest": process_receipt_digest,
+            "process_result_digest": process_result_digest
+        },
+        "command_observation_receipt": process_receipt_path,
+        "command_observation_receipt_digest": process_receipt_digest,
+        "process_result_digest": process_result_digest,
         "verified_local_exit_code": 0,
         "exit_status": 0,
         "verified_local_launch_error": false,
@@ -188,11 +205,13 @@ pub(super) fn digest(label: &str) -> String {
 }
 
 pub(super) fn write_timing_row(root: &Path, row: serde_json::Value) {
+    test_process_receipt::write_command_observation_receipt(root, &row);
     crate::json_boundary::write_json(&root.join(NODE_TIMING_REL), &json!({"nodes": [row]}))
         .expect("timing row");
 }
 
 pub(super) fn write_validation_cache_row(root: &Path, row: serde_json::Value) {
+    test_process_receipt::write_command_observation_receipt(root, &row);
     crate::json_boundary::write_json(&root.join(VALIDATION_CACHE_REL), &json!({"records": [row]}))
         .expect("validation cache row");
 }

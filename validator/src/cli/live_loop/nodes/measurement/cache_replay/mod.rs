@@ -1,5 +1,4 @@
 use super::super::command_failure::CommandFailureSummary;
-use super::super::timing::{NODE_TIMING_REL, VALIDATION_CACHE_REL};
 use super::full_command::FullCommandRun;
 use super::observation::TelemetryReconciliation;
 use super::observation_mode::ObservationMode;
@@ -14,12 +13,13 @@ use std::time::Instant;
 mod acceptance;
 mod fields;
 mod node_guards;
+mod process_receipt;
+mod store;
 mod telemetry_reuse;
 
 use acceptance::{has_reconciled_duration, has_replayable_proof, matches_observation_mode};
 use fields::{elapsed_ms, expected_result_digest, node_rows, text, valid_digest};
-
-const LINE_CAP_CHECK_RECEIPT_REL: &str = "validation_artifacts/observability/line-cap-check.json";
+pub(super) use store::ReplayStore;
 
 pub(super) struct CacheReplay {
     pub(super) run: FullCommandRun,
@@ -30,27 +30,6 @@ pub(super) struct CacheReplay {
     pub(super) telemetry_reconciliation: TelemetryReconciliation,
     pub(super) source_speed_claim_status: Option<String>,
     pub(super) routine_replay_speed_claim_status: Option<String>,
-}
-
-pub(super) struct ReplayStore {
-    values: Vec<Value>,
-}
-
-impl ReplayStore {
-    pub(super) fn load(root: &Path, command: &LiveLoopCommand) -> Self {
-        if command.cache_mode != "verified-local" {
-            return Self { values: Vec::new() };
-        }
-        let values = [
-            VALIDATION_CACHE_REL,
-            NODE_TIMING_REL,
-            LINE_CAP_CHECK_RECEIPT_REL,
-        ]
-        .into_iter()
-        .filter_map(|rel| crate::json_boundary::read_json(&root.join(rel)).ok())
-        .collect();
-        Self { values }
-    }
 }
 
 #[cfg(test)]
@@ -101,6 +80,7 @@ pub(super) fn verified_local_hit_from_store(
                 cache_key,
                 started,
                 observation_mode,
+                &store.root,
             )
         })
     })
@@ -115,6 +95,7 @@ fn replay_from_row(
     cache_key: &str,
     started: Instant,
     observation_mode: ObservationMode,
+    root: &Path,
 ) -> Option<CacheReplay> {
     if text(row, "node_id")? != surface.id
         || candidate_mismatch(row, surface, candidate)
@@ -178,6 +159,20 @@ fn replay_from_row(
     if prior_result_digest != expected_result_digest
         || text(row, "verified_local_result_digest")? != expected_result_digest
     {
+        return None;
+    }
+    if !process_receipt::matches(
+        root,
+        row,
+        surface,
+        candidate,
+        exit_code,
+        launch_error,
+        stdout_digest,
+        stderr_digest,
+        &replayed_output_digest,
+        prior_result_digest,
+    ) {
         return None;
     }
     let cached_telemetry = telemetry_reuse::reconciliation(row)?;

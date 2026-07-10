@@ -110,6 +110,9 @@ fn required_cache_fields_present(row: &Value) -> bool {
         "verified_local_output_digest",
         "verified_local_stdout_digest",
         "verified_local_stderr_digest",
+        "command_observation_receipt",
+        "command_observation_receipt_digest",
+        "process_result_digest",
         "baseline_stdout_digest",
         "baseline_stderr_digest",
     ]

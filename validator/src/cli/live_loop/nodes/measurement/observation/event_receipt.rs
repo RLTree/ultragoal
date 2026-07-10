@@ -73,6 +73,20 @@ fn command_observation_receipt_names_actual_node_command_surface() {
         observation.value["event"]["claim_impact"],
         "source_local_live_loop_node_observation_only_not_speed_claim"
     );
+    assert_eq!(
+        observation.value["process_result_authority"]["stdout_digest"],
+        "sha256:stdout"
+    );
+    assert_eq!(
+        observation.value["process_result_authority"]["bounded_output_status"],
+        "digest_only_raw_output_not_retained"
+    );
+    assert!(
+        observation.value["process_result_authority"]["result_digest"]
+            .as_str()
+            .expect("process result digest")
+            .starts_with("sha256:")
+    );
     assert!(root.join(receipt).is_file());
     std::fs::remove_dir_all(root).expect("cleanup command observation");
 }

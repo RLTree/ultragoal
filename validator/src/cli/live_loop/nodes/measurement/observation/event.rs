@@ -77,6 +77,7 @@ pub(super) fn write(
         candidate.to_string(),
     )?;
     insert_command_result_authority(&mut observation, actual_work);
+    bind_process_result_authority(&mut observation, surface, actual_work, &argv);
     let observation = CommandObservation::from_receipt(observation)?;
     write_receipt(root, receipt_path, &observation.value)?;
     Ok(observation)
@@ -113,6 +114,64 @@ fn insert_command_result_authority(observation: &mut Value, actual_work: &FullCo
             event.insert("command_result_authority".to_string(), authority);
         }
     }
+}
+
+fn bind_process_result_authority(
+    observation: &mut Value,
+    surface: LoopValidationSurface,
+    actual_work: &FullCommandRun,
+    argv: &[String],
+) {
+    let output_digest = crate::digest::bytes(
+        format!(
+            "stdout={};stderr={}",
+            actual_work.stdout_digest, actual_work.stderr_digest
+        )
+        .as_bytes(),
+    );
+    let result_digest = crate::digest::bytes(
+        format!(
+            "exit={};launch={};output={output_digest}",
+            actual_work.exit_code, actual_work.launch_error
+        )
+        .as_bytes(),
+    );
+    let object = observation
+        .as_object_mut()
+        .expect("command telemetry receipt is always an object");
+    object.insert(
+        "command_identity".to_string(),
+        serde_json::json!({
+            "node_id": surface.id,
+            "canonical_full_command": surface.canonical_full_command,
+            "verified_local_command": super::super::full_command::product_command_text(surface.narrow_rerun),
+            "command_argv": argv,
+        }),
+    );
+    object.insert(
+        "process_result_authority".to_string(),
+        serde_json::json!({
+            "exit_status": actual_work.exit_code,
+            "status_success": actual_work.status_success,
+            "launch_error": actual_work.launch_error,
+            "duration_ms": actual_work.duration_ms,
+            "work_unit_count": 1,
+            "stdout_digest": actual_work.stdout_digest,
+            "stderr_digest": actual_work.stderr_digest,
+            "output_digest": output_digest,
+            "result_digest": result_digest,
+            "redaction_status": "pass",
+            "bounded_output_status": "digest_only_raw_output_not_retained",
+            "claim_ceiling": "source_local_command_result_authority_only",
+            "unsupported_claims": [
+                "readiness",
+                "release",
+                "completion",
+                "final_packet_correctness",
+                "update_goal_eligibility"
+            ]
+        }),
+    );
 }
 
 fn telemetry_command_name(command_text: &str, argv: &[String]) -> String {

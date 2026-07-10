@@ -18,6 +18,12 @@ pub(super) fn from_roundtrips(
     let status = reconciliation_status(all_roundtrip_statuses_pass(
         &logs, &metrics, &traces, &explain,
     ));
+    let observation_digest = crate::digest::canonical_json(&observation.value);
+    let process_result_digest = text_path(
+        &observation.value,
+        &["process_result_authority", "result_digest"],
+    )
+    .unwrap_or("");
     let roundtrip_durations = roundtrip_durations(&logs, &metrics, &traces, &explain);
     let slowest_roundtrip = slowest_roundtrip(&logs, &metrics, &traces, &explain);
     let first_failed_roundtrip = first_failed_roundtrip(&logs, &metrics, &traces, &explain);
@@ -29,6 +35,8 @@ pub(super) fn from_roundtrips(
             "correlation_id": observation.correlation_id,
             "trace_id": observation.trace_id,
             "command_observation_receipt": observation_path.display().to_string(),
+            "command_observation_receipt_digest": observation_digest,
+            "process_result_digest": process_result_digest,
             "command_observation": observation.value(),
             "logs_query": logs.value(),
             "metrics_query": metrics.value(),
@@ -168,6 +176,14 @@ fn explain_query_evidence_is_present(value: &Value) -> bool {
 
 fn text<'a>(value: &'a Value, key: &str) -> Option<&'a str> {
     value.get(key).and_then(Value::as_str)
+}
+
+fn text_path<'a>(value: &'a Value, path: &[&str]) -> Option<&'a str> {
+    let mut current = value;
+    for key in path {
+        current = current.get(*key)?;
+    }
+    current.as_str()
 }
 
 fn nonempty(value: &str) -> bool {

@@ -67,6 +67,7 @@ pub(crate) fn insert(
         "telemetry_reconciliation".to_string(),
         verified_local.telemetry_reconciliation.value(),
     );
+    insert_command_observation_binding_fields(object, &verified_local.telemetry_reconciliation);
     insert_command_fields(object, surface);
     object.insert(
         "verified_local_exit_code".to_string(),
@@ -101,6 +102,29 @@ pub(crate) fn insert(
         );
     }
     insert_cache_replay_fields(object, verified_local);
+}
+
+fn insert_command_observation_binding_fields(
+    object: &mut Map<String, Value>,
+    telemetry: &crate::cli::live_loop::nodes::measurement::observation::TelemetryReconciliation,
+) {
+    let value = telemetry.value();
+    if let Some(receipt) = text(&value, "command_observation_receipt") {
+        object.insert("command_observation_receipt".to_string(), json!(receipt));
+    }
+    if let Some(digest) = text(&value, "command_observation_receipt_digest") {
+        object.insert(
+            "command_observation_receipt_digest".to_string(),
+            json!(digest),
+        );
+    }
+    if let Some(digest) = text(&value, "process_result_digest") {
+        object.insert("process_result_digest".to_string(), json!(digest));
+    }
+}
+
+fn text<'a>(value: &'a Value, key: &str) -> Option<&'a str> {
+    value.get(key).and_then(Value::as_str)
 }
 
 fn insert_surface_input_spec_fields(

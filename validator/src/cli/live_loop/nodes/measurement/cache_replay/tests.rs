@@ -140,6 +140,49 @@ fn cache_replay_rejects_cached_reconciliation_without_status() {
 }
 
 #[test]
+fn cache_replay_rejects_timing_row_without_process_receipt_authority() {
+    let fixture = ReplayFixture::new();
+    let row = timing_row(&fixture)
+        .without_key("command_observation_receipt")
+        .without_key("command_observation_receipt_digest")
+        .without_key("process_result_digest");
+    crate::json_boundary::write_json(
+        &fixture.root.join(super::NODE_TIMING_REL),
+        &json!({"nodes": [row]}),
+    )
+    .expect("forged timing row");
+
+    assert!(
+        cache_hit(&fixture, &fixture.input_digest).is_none(),
+        "timing/cache rows cannot self-authorize without the command-result receipt"
+    );
+    std::fs::remove_dir_all(fixture.root).expect("cleanup missing process receipt authority");
+}
+
+#[test]
+fn cache_replay_rejects_mismatched_process_receipt_authority() {
+    let fixture = ReplayFixture::new();
+    for bad_row in [
+        timing_row(&fixture).with_value(
+            "command_observation_receipt_digest",
+            json!(digest("wrong-receipt-digest")),
+        ),
+        timing_row(&fixture).with_value(
+            "process_result_digest",
+            json!(digest("wrong-process-result")),
+        ),
+        timing_row(&fixture).with_value("command_observation_receipt", json!("../forged.json")),
+    ] {
+        write_timing_row(&fixture.root, bad_row);
+        assert!(
+            cache_hit(&fixture, &fixture.input_digest).is_none(),
+            "mismatched or unsafe process-result receipt authority must fail closed"
+        );
+    }
+    std::fs::remove_dir_all(fixture.root).expect("cleanup mismatched process receipt authority");
+}
+
+#[test]
 fn cache_replay_rejects_same_input_from_wrong_candidate() {
     let fixture = ReplayFixture::build_check();
     write_timing_row(
