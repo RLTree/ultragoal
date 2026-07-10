@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0-candidate",
+  "archive_root": "ultragoal-contract-2026-07-successor-candidate-v1",
+  "include_policy": "Only the listed candidate files are included. Product source, receipts, caches, validation artifacts, install state, and git metadata are excluded.",
+  "digest_algorithm": "sha256",
+  "digest_input_format": "For content_set_digest: each non-manifest entry is one line of lowercase sha256, two spaces, relative path, newline; entries sorted bytewise by relative path.",
+  "content_set_digest": "f450645e73f0c324b2c9d8ca041142fff3ed4535c815ac80f87ed39c8a72d795",
+  "self_digest_included": false,
+  "files": [
+    {"path":"00-READ-ME-FIRST.md","sha256":"656233d8be1fbc7a6026aac46b3b088e39795063525a0444670ceeaa1e5ca40f"},
+    {"path":"01-CURRENT-SYSTEM-ASSESSMENT.md","sha256":"0e631f96f67039a60c88d98f5ca0af53fb3d466317f724ec9db493d188325bb7"},
+    {"path":"02-PRODUCT-CONTRACT.md","sha256":"e7f587263326782b3968c9e0e0a958999080c52f0ff6caf5526cbaf7d26855db"},
+    {"path":"03-PLUGIN-PRODUCT-CONTRACT.md","sha256":"002277f7131b5883440a1f0377a9c7aeb2a3e0c9893d5b2eb39d4fff57ccc442"},
+    {"path":"04-ULTRA-ORCHESTRATION-CONTRACT.md","sha256":"900ca31bee8529ad207b6edb7e878cee1fda4d77a9899484cf323a7ceff06246"},
+    {"path":"05-CLI-AND-CUSTOM-TOOLING-CONTRACT.md","sha256":"573f2943520fab31279b93ef06fce4f42dc47a7863ce3da10dd3cf88456f006e"},
+    {"path":"06-RESEARCH-AND-LAW-AUTHORITY.md","sha256":"81bb4d0c704ee2344000eac73ec8e33847722a8019881980e9b90bfc9de49619"},
+    {"path":"07-PROOF-CLAIM-AND-EVIDENCE-CONTRACT.md","sha256":"13af960d4c69ad5d5c224ec9c1856f215b1da0e6a5c538b006dd6e1e712286d1"},
+    {"path":"08-IMPLEMENTATION-DEPENDENCY-ORDER.md","sha256":"fe10f8447088205192a7b753c0a8650099cd93acf5f12d3479e9771a7ef56bcc"},
+    {"path":"09-MIGRATION-AND-RETIREMENT.md","sha256":"b7cc4516998bbd356740d703e8731fb637ef38903031d499e847542e0989ef53"},
+    {"path":"CONTRACT_MANIFEST.json","sha256":"7489750e9a42ed6c50b64ec07c30242302b501956fdf4726ce56bbf6e680d91d"},
+    {"path":"CUSTOM_TOOL_INVENTORY.json","sha256":"0f78f91699589912b730cbbc68b1eed21ef253a3f51410ac9f3d6b79384db548"},
+    {"path":"FOR_SOL_PRO_REVIEW.md","sha256":"b7a04b5f2bf005361debc9ebbf43abd1a6d5e5743a9a2236e5b802596e43a5dd"},
+    {"path":"PRODUCT_SURFACE_INVENTORY.json","sha256":"8f76426caae5cf709bd83e63cb8ffc172a1de0b34f205e825b6e5642e1763761"},
+    {"path":"REQUIREMENT_TRACE.json","sha256":"00c9f0c3d7a7d4727f0c84b5de4f07d2c54f43b9965f158468d7e7d48aaab927"},
+    {"path":"RESEARCH_SOURCE_REGISTRY.json","sha256":"a558681d4ea5f03ad5134241e4b63e4cd0c7001f073842e9c4fd2cc2c1fa1366"},
+    {"path":"checklist/STATUS.md","sha256":"3c18ee943c1934e879865d3430c0233ff6033f9895be0964cc4a2f41eb870270"}
+  ]
+}

@@ -1,0 +1,320 @@
+{
+  "schema_version": "1.0.0-candidate",
+  "checked_at": "2026-07-09",
+  "policy": {
+    "primary_source_required_for_external_facts": true,
+    "local_summary_inherits_primary_authority": false,
+    "binding_requires_product_translation_and_proof": true,
+    "drift_prone_sources_require_release_refresh": true
+  },
+  "sources": [
+    {
+      "source_id": "SRC-OPENAI-HARNESS-ENGINEERING",
+      "title": "Harness engineering: leveraging Codex in an agent-first world",
+      "publisher": "OpenAI",
+      "url": "https://openai.com/index/harness-engineering/",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Repository maps, product behavior, logs, metrics, traces, mechanical constraints, and entropy control are parts of an agent harness."],
+      "laws": ["HUL-PRODUCT-001", "HUL-OBSERVE-001", "HUL-MAINTENANCE-001"],
+      "limits": "First-party engineering practice, not proof of this product or a prescribed command topology."
+    },
+    {
+      "source_id": "SRC-OPENAI-GOALS",
+      "title": "Follow a goal",
+      "publisher": "OpenAI",
+      "url": "https://learn.chatgpt.com/use-cases/follow-goals",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Durable goals need a clear outcome, constraints, stop condition, validation loop, and checkpoint controls."],
+      "laws": ["HUL-GOAL-001", "HUL-COMPLETION-001"],
+      "limits": "Platform goal state must be observed through the platform and cannot be inferred from repository receipts."
+    },
+    {
+      "source_id": "SRC-OPENAI-GPT-5-6",
+      "title": "Introducing GPT-5.6",
+      "publisher": "OpenAI",
+      "url": "https://openai.com/index/gpt-5-6/",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["GPT-5.6 Sol is presented as a flagship coding model and Ultra as a multi-agent coordination mode."],
+      "laws": ["HUL-ORCHESTRATION-001"],
+      "limits": "Availability, active runtime metadata, worker count, and reasoning setting must be observed; none is a product correctness condition."
+    },
+    {
+      "source_id": "SRC-OPENAI-SUBAGENTS",
+      "title": "Subagents",
+      "publisher": "OpenAI",
+      "url": "https://learn.chatgpt.com/docs/agent-configuration/subagents",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Read-heavy work is safer to parallelize; write-heavy work risks conflict; the main agent integrates delegated results."],
+      "laws": ["HUL-ORCHESTRATION-001", "HUL-WORKER-001", "HUL-REVIEW-001"],
+      "limits": "Product safety classes and acceptance rules are Harness-owned translations."
+    },
+    {
+      "source_id": "SRC-OPENAI-SYMPHONY",
+      "title": "Open-sourcing Symphony: building an orchestration layer for Codex",
+      "publisher": "OpenAI",
+      "url": "https://openai.com/index/open-source-codex-orchestration-symphony/",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Task/workspace dependencies are useful, but rigid state machines can constrain capable agents; objectives and tools enable adaptive execution."],
+      "laws": ["HUL-ORCHESTRATION-001", "HUL-WORKER-001"],
+      "limits": "Symphony is a design input, not a required dependency or architecture clone."
+    },
+    {
+      "source_id": "SRC-OPENAI-SKILLS",
+      "title": "Build skills",
+      "publisher": "OpenAI",
+      "url": "https://learn.chatgpt.com/docs/build-skills",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Skills use progressive disclosure: concise discovery metadata first and complete selected instructions when invoked."],
+      "laws": ["HUL-PLUGIN-001"],
+      "limits": "Current host context guidance is drift-prone and must be refreshed before release."
+    },
+    {
+      "source_id": "SRC-OPENAI-PLUGINS",
+      "title": "Build plugins",
+      "publisher": "OpenAI",
+      "url": "https://learn.chatgpt.com/docs/build-plugins",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Plugins may bundle skills and MCP/app capabilities; marketplace, install, restart/discovery, and new-task testing are separate operational steps."],
+      "laws": ["HUL-PLUGIN-001", "HUL-DISCOVERY-001", "HUL-SUPPLY-001"],
+      "limits": "Exact host paths and behavior are versioned product surfaces and require live verification."
+    },
+    {
+      "source_id": "SRC-OPENAI-TAX-AGENTS",
+      "title": "Building self-improving tax agents with Codex",
+      "publisher": "OpenAI",
+      "url": "https://openai.com/index/building-self-improving-tax-agents-with-codex/",
+      "class": "primary_empirical",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Production evidence and corrections can be turned into findings, evaluations, and scoped improvement tasks."],
+      "laws": ["HUL-EVAL-001", "HUL-IMPROVEMENT-001"],
+      "limits": "Domain-specific results do not prove general autonomous self-improvement."
+    },
+    {
+      "source_id": "SRC-OPENAI-EVAL-AUDIT",
+      "title": "Separating signal from noise in coding evaluations",
+      "publisher": "OpenAI",
+      "url": "https://openai.com/index/separating-signal-from-noise-coding-evaluations/",
+      "class": "primary_empirical",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Coding evaluation tasks can be broken by overly strict tests, underspecified prompts, low-coverage tests, or misleading setup; evaluation data needs quality review."],
+      "laws": ["HUL-EVAL-001", "HUL-REVIEW-001", "HUL-PROOF-001"],
+      "limits": "Reported benchmark proportions are not generalized as a Harness product rate."
+    },
+    {
+      "source_id": "SRC-OPENAI-GPT-5-6-SYSTEM-CARD",
+      "title": "GPT-5.6 System Card",
+      "publisher": "OpenAI Deployment Safety Hub",
+      "url": "https://deploymentsafety.openai.com/gpt-5-6",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Stronger agent autonomy does not remove the need to preserve scope, permissions, and safety boundaries."],
+      "laws": ["HUL-SECURITY-001", "HUL-WORKER-001"],
+      "limits": "System-level safety evaluation is not product-specific security proof."
+    },
+    {
+      "source_id": "SRC-GOOGLE-SRE-MONITORING",
+      "title": "Monitoring Distributed Systems",
+      "publisher": "Google SRE",
+      "url": "https://sre.google/sre-book/monitoring-distributed-systems/",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Latency, traffic, errors, and saturation are key signals; dashboards, ad hoc analysis, trends, and simple robust alerts serve distinct purposes."],
+      "laws": ["HUL-OBSERVE-001", "HUL-PERFORMANCE-001"],
+      "limits": "Service monitoring practices are translated to local agent/product operations rather than copied literally."
+    },
+    {
+      "source_id": "SRC-OTEL-SEMCONV",
+      "title": "OpenTelemetry Semantic Conventions",
+      "publisher": "OpenTelemetry",
+      "url": "https://opentelemetry.io/docs/specs/semconv/",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Telemetry should use stable semantic names and types with explicit stability and evolution."],
+      "laws": ["HUL-OBSERVE-001", "HUL-PRIVACY-001"],
+      "limits": "Harness-specific attributes require product prototyping and governance."
+    },
+    {
+      "source_id": "SRC-OTEL-WRITING-CONVENTIONS",
+      "title": "How to write semantic conventions",
+      "publisher": "OpenTelemetry",
+      "url": "https://opentelemetry.io/docs/specs/semconv/how-to-write-conventions/",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Conventions should be prototyped, clearly typed, and designed to avoid unstable or unbounded attributes."],
+      "laws": ["HUL-OBSERVE-001", "HUL-PRIVACY-001"],
+      "limits": "Convention stability does not prove exporter or backend behavior."
+    },
+    {
+      "source_id": "SRC-OTEL-BAGGAGE",
+      "title": "OpenTelemetry Baggage",
+      "publisher": "OpenTelemetry",
+      "url": "https://opentelemetry.io/docs/concepts/signals/baggage/",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Baggage has no built-in integrity and may propagate to downstream or third-party systems."],
+      "laws": ["HUL-SECURITY-001", "HUL-PRIVACY-001"],
+      "limits": "Implementation-specific propagation behavior still requires tests."
+    },
+    {
+      "source_id": "SRC-CARGO-BUILD-CACHE",
+      "title": "Cargo Build Cache",
+      "publisher": "Rust Project",
+      "url": "https://doc.rust-lang.org/stable/cargo/reference/build-cache.html",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Cargo provides incremental/build cache substrate with defined inputs and locations."],
+      "laws": ["HUL-INCREMENTAL-001", "HUL-PERFORMANCE-001"],
+      "limits": "Cargo cache validity does not establish Harness product cache or claim semantics."
+    },
+    {
+      "source_id": "SRC-CARGO-EXTERNAL-TOOLS",
+      "title": "External Tools and Cargo JSON Messages",
+      "publisher": "Rust Project",
+      "url": "https://doc.rust-lang.org/cargo/reference/external-tools.html",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Cargo exposes machine-readable build information suitable for external tooling."],
+      "laws": ["HUL-INCREMENTAL-001", "HUL-CLI-001"],
+      "limits": "Harness must still validate candidate identity and semantic affected closure."
+    },
+    {
+      "source_id": "SRC-NEXTEST",
+      "title": "cargo-nextest documentation",
+      "publisher": "nextest-rs",
+      "url": "https://nexte.st/docs/",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Nextest provides test listing, partitioning, retries policy, archives, and execution substrate."],
+      "laws": ["HUL-COVERAGE-001", "HUL-PERFORMANCE-001"],
+      "limits": "It does not determine Harness impacted-test legality or fixture claim authority."
+    },
+    {
+      "source_id": "SRC-RUSTC-COVERAGE",
+      "title": "Instrumenting your Rust code for code coverage",
+      "publisher": "Rust Project",
+      "url": "https://doc.rust-lang.org/beta/rustc/instrument-coverage.html",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Rustc supports source-based coverage instrumentation and profile generation."],
+      "laws": ["HUL-COVERAGE-001"],
+      "limits": "Instrumentation output requires scoped collection, mapping, exclusion review, and candidate reconciliation."
+    },
+    {
+      "source_id": "SRC-CARGO-LLVM-COV",
+      "title": "cargo-llvm-cov",
+      "publisher": "taiki-e",
+      "url": "https://github.com/taiki-e/cargo-llvm-cov",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["cargo-llvm-cov integrates Rust coverage collection, reports, and nextest workflows, with documented cleaning/profile caveats."],
+      "laws": ["HUL-COVERAGE-001", "HUL-PERFORMANCE-001"],
+      "limits": "Third-party tool output is observation; Harness owns semantic coverage and claim guards."
+    },
+    {
+      "source_id": "SRC-CLAP",
+      "title": "clap crate documentation",
+      "publisher": "clap maintainers",
+      "url": "https://docs.rs/clap/latest/clap/",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Clap provides maintained command parsing, derive-based schemas, enums, help, and validation substrate."],
+      "laws": ["HUL-CLI-001"],
+      "limits": "Specific adoption is advisory pending dependency/build/UX measurement."
+    },
+    {
+      "source_id": "SRC-RUST-CLI-BOOK",
+      "title": "Command Line Applications in Rust",
+      "publisher": "Rust CLI Working Group",
+      "url": "https://rust-cli.github.io/book/",
+      "class": "secondary_advisory",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Predictable output, errors, exit status, and composability are core CLI usability practices."],
+      "laws": ["HUL-CLI-001", "HUL-REPAIR-001"],
+      "limits": "Advisory practice, translated into product-specific behavioral requirements."
+    },
+    {
+      "source_id": "SRC-SLSA-PROVENANCE",
+      "title": "SLSA v1.2 Provenance",
+      "publisher": "SLSA",
+      "url": "https://slsa.dev/spec/v1.2/provenance",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Artifact provenance should identify inputs, build process, and produced subject identity."],
+      "laws": ["HUL-STATE-001", "HUL-SUPPLY-001", "HUL-PROOF-001"],
+      "limits": "Provenance proves an integrity relationship, not product behavior."
+    },
+    {
+      "source_id": "SRC-SLSA-BUILD",
+      "title": "SLSA v1.2 Build Requirements",
+      "publisher": "SLSA",
+      "url": "https://slsa.dev/spec/v1.2/build-requirements",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Build isolation, parameter integrity, and cache-poisoning boundaries matter to artifact trust."],
+      "laws": ["HUL-SECURITY-001", "HUL-SUPPLY-001", "HUL-INCREMENTAL-001"],
+      "limits": "Local development may use lower assurance with an explicit ceiling; release claims require named level and proof."
+    },
+    {
+      "source_id": "SRC-SIGSTORE-COSIGN",
+      "title": "Cosign signing and verification documentation",
+      "publisher": "Sigstore",
+      "url": "https://docs.sigstore.dev/cosign/verifying/verify/",
+      "class": "primary_authoritative",
+      "checked_at": "2026-07-09",
+      "facts_adopted": ["Signed bundles can bind release artifact identity to verification material."],
+      "laws": ["HUL-SUPPLY-001"],
+      "limits": "Optional release control; signature validity cannot prove installation, discovery, or runtime behavior."
+    },
+    {
+      "source_id": "SRC-REPOSITORY-CURRENT",
+      "title": "Harness Ultragoal repository observation",
+      "publisher": "Harness Ultragoal project",
+      "url": null,
+      "class": "repository_observation",
+      "checked_at": "2026-07-09",
+      "local_surfaces": ["README.md", "plugin-manifest-draft.json", ".codex-plugin/plugin.json", "docs/ultragoal-contract-2026-07/**", "skills/**", "agents/**", "custom-agents/**", "templates/**", "schemas/**", "validator/**", "scripts/**", "install/**", "dev/observability/**", "fixtures/**", "artifacts/source-snapshots/**"],
+      "facts_adopted": ["Current authority is duplicated across commands, manifests, matrices, fixtures, receipts, and historical lanes; plugin journeys lack one reconciled closure."],
+      "laws": ["HUL-PRODUCT-001", "HUL-AUTHORITY-001", "HUL-PROOF-001", "HUL-CLI-001", "HUL-MAINTENANCE-001"],
+      "limits": "Snapshot is current only for the authoring context; live implementation must re-inventory."
+    }
+  ],
+  "legacy_corpus_disposition": [
+    {"legacy_source_id":"openai-harness-engineering","candidate_source_ids":["SRC-OPENAI-HARNESS-ENGINEERING"],"disposition":"retained_and_refreshed","binding_posture":"primary facts translated through candidate laws"},
+    {"legacy_source_id":"openai-codex-iterative-repair-loops","candidate_source_ids":["SRC-OPENAI-HARNESS-ENGINEERING","SRC-OPENAI-TAX-AGENTS"],"disposition":"principles_consolidated_refresh_before_direct_fact_use","binding_posture":"repair-loop pattern retained; legacy card is not independent authority"},
+    {"legacy_source_id":"openai-agents-observability","candidate_source_ids":["SRC-OTEL-SEMCONV","SRC-OTEL-BAGGAGE"],"disposition":"provider_specific_guidance_demoted_to_optional_adapter","binding_posture":"refresh official provider documentation before implementing an OpenAI-specific adapter"},
+    {"legacy_source_id":"openai-agents-sdk-tracing","candidate_source_ids":["SRC-OTEL-SEMCONV","SRC-OPENAI-HARNESS-ENGINEERING"],"disposition":"retained_as_optional_adapter_input","binding_posture":"Agents SDK topology does not bind the local Harness event model"},
+    {"legacy_source_id":"google-sre-monitoring-workbook","candidate_source_ids":["SRC-GOOGLE-SRE-MONITORING"],"disposition":"principles_consolidated","binding_posture":"freshness and diagnostic-loop practices remain advisory translations"},
+    {"legacy_source_id":"google-sre-four-golden-signals","candidate_source_ids":["SRC-GOOGLE-SRE-MONITORING"],"disposition":"retained_and_refreshed","binding_posture":"signal classes translated to local product operations"},
+    {"legacy_source_id":"charity-majors-structured-events","candidate_source_ids":["SRC-OTEL-WRITING-CONVENTIONS"],"disposition":"retained_as_secondary_advisory","binding_posture":"wide-event practice informs prototypes but does not independently bind law"},
+    {"legacy_source_id":"honeycomb-high-cardinality","candidate_source_ids":["SRC-OTEL-WRITING-CONVENTIONS","SRC-OTEL-BAGGAGE"],"disposition":"retained_as_vendor_advisory","binding_posture":"provider guidance does not require a Honeycomb dependency or unbounded labels"},
+    {"legacy_source_id":"opentelemetry-semantic-conventions","candidate_source_ids":["SRC-OTEL-SEMCONV","SRC-OTEL-WRITING-CONVENTIONS"],"disposition":"retained_and_refreshed","binding_posture":"standard semantics adopted with Harness-specific prototyping"},
+    {"legacy_source_id":"openai-agent-improvement-loop","candidate_source_ids":["SRC-OPENAI-TAX-AGENTS","SRC-OPENAI-EVAL-AUDIT"],"disposition":"principles_consolidated_refresh_before_direct_fact_use","binding_posture":"improvement loop retained with evaluation-quality and independent-promotion guards"},
+    {"legacy_source_id":"openai-self-improving-tax-agent","candidate_source_ids":["SRC-OPENAI-TAX-AGENTS"],"disposition":"retained_and_refreshed","binding_posture":"domain pattern retained without general autonomous-improvement claim"},
+    {"legacy_source_id":"attached-rust-devx-guide","candidate_source_ids":["SRC-CARGO-BUILD-CACHE","SRC-CARGO-EXTERNAL-TOOLS","SRC-NEXTEST","SRC-RUSTC-COVERAGE","SRC-CARGO-LLVM-COV","SRC-CLAP"],"disposition":"decomposed_into_primary_tool_sources_and_repository_fit","binding_posture":"attachment remains advisory; detected Rust surfaces determine applicability"},
+    {"legacy_source_id":"attached-typescript-frontend-guide","candidate_source_ids":["SRC-REPOSITORY-CURRENT"],"disposition":"retained_as_stack_specific_advisory","binding_posture":"no TypeScript universal law; detected stack creates fitted product requirements"},
+    {"legacy_source_id":"agentic-gold-standard-stack-synthesis-2026-07-01","candidate_source_ids":["SRC-OPENAI-HARNESS-ENGINEERING","SRC-OPENAI-SUBAGENTS","SRC-GOOGLE-SRE-MONITORING","SRC-OTEL-SEMCONV","SRC-REPOSITORY-CURRENT"],"disposition":"decomposed_and_demoted_from_source_authority","binding_posture":"synthesis routes research but primary sources and product proof bind facts"},
+    {"legacy_source_id":"gold-standard-stack-developer-experience-governance-2026-07-01","candidate_source_ids":["SRC-CARGO-BUILD-CACHE","SRC-NEXTEST","SRC-RUSTC-COVERAGE","SRC-CARGO-LLVM-COV","SRC-REPOSITORY-CURRENT"],"disposition":"decomposed_and_retained_as_advisory_history","binding_posture":"stack-law archive cannot prove current tool versions, product behavior, or universal requirements"}
+  ],
+  "experimental_hypotheses": [
+    "Semantic compiler and Cargo data will reduce impacted-test false negatives versus conservative path mapping.",
+    "A bounded local event spool plus repair compiler will reduce time to diagnosis without a live backend.",
+    "Generated plugin and agent presentations will reduce authority drift.",
+    "Host plugin discovery can be verified through a stable API rather than UI automation."
+  ],
+  "rejected_ideas": [
+    "Fixed historical lanes as the successor work plan",
+    "Receipt existence as proof",
+    "External observability backend as a routine correctness prerequisite",
+    "Package signatures as product behavior proof",
+    "Worker-issued integrated completion",
+    "Model name or worker count as a correctness law",
+    "Automatic law promotion from harvested failures"
+  ]
+}

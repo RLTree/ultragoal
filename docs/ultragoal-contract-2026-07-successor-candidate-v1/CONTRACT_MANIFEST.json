@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0.0-candidate",
+  "contract_id": "harness-ultragoal-successor-contract-candidate-v1",
+  "authored_at": "2026-07-09",
+  "status": "candidate_for_independent_review",
+  "active_contract_replaced": false,
+  "runtime_record": {
+    "expected_model": "GPT-5.6 Sol",
+    "expected_reasoning": "Extra High",
+    "runtime_configuration_verified": false
+  },
+  "claim_ceiling": "candidate_contract_authored_and_internally_reviewed",
+  "product_definition": [
+    "plugin product",
+    "Rust ultragoal authority kernel",
+    "Harness-owned product and claim tooling",
+    "installation-through-completion lifecycle"
+  ],
+  "authority": {
+    "binding": false,
+    "adoption_requires": [
+      "independent GPT-5.6 Pro review",
+      "material finding revision and disposition",
+      "explicit product-owner adoption"
+    ],
+    "runtime_truth_precedence": true,
+    "mutable_receipts_are_contract_inputs": false
+  },
+  "artifacts": [
+    {"path":"00-READ-ME-FIRST.md","role":"entrypoint_and_authority"},
+    {"path":"01-CURRENT-SYSTEM-ASSESSMENT.md","role":"authoring_time_repository_assessment"},
+    {"path":"02-PRODUCT-CONTRACT.md","role":"integrated_binding_law_candidate"},
+    {"path":"03-PLUGIN-PRODUCT-CONTRACT.md","role":"plugin_lifecycle_and_journeys"},
+    {"path":"04-ULTRA-ORCHESTRATION-CONTRACT.md","role":"adaptive_root_worker_and_recovery_contract"},
+    {"path":"05-CLI-AND-CUSTOM-TOOLING-CONTRACT.md","role":"cli_and_harness_owned_tool_contract"},
+    {"path":"06-RESEARCH-AND-LAW-AUTHORITY.md","role":"source_classes_and_law_adoption"},
+    {"path":"07-PROOF-CLAIM-AND-EVIDENCE-CONTRACT.md","role":"claim_specific_proof_and_false_pass_rejection"},
+    {"path":"08-IMPLEMENTATION-DEPENDENCY-ORDER.md","role":"semantic_dependency_and_promotion_order"},
+    {"path":"09-MIGRATION-AND-RETIREMENT.md","role":"legacy_alias_consolidation_and_safe_retirement"},
+    {"path":"checklist/STATUS.md","role":"concise_candidate_status_only"},
+    {"path":"CONTRACT_MANIFEST.json","role":"bundle_identity_and_logical_manifest"},
+    {"path":"REQUIREMENT_TRACE.json","role":"canonical_source_to_blocker_requirement_join"},
+    {"path":"PRODUCT_SURFACE_INVENTORY.json","role":"canonical_product_and_journey_surface_inventory"},
+    {"path":"CUSTOM_TOOL_INVENTORY.json","role":"definitive_harness_owned_tool_inventory"},
+    {"path":"RESEARCH_SOURCE_REGISTRY.json","role":"current_source_provenance_and_adoption_registry"},
+    {"path":"FOR_SOL_PRO_REVIEW.md","role":"self_contained_independent_review_packet"},
+    {"path":"ZIP_INCLUDE_MANIFEST.json","role":"archive_include_and_content_digest_manifest"}
+  ],
+  "counts": {
+    "stable_laws": 24,
+    "plugin_journeys": 14,
+    "product_surfaces": 19,
+    "custom_tools": 19,
+    "claim_contracts": 14,
+    "research_sources": 25,
+    "legacy_corpus_dispositions": 15,
+    "logical_artifacts": 18
+  },
+  "stable_law_ids": [
+    "HUL-PRODUCT-001",
+    "HUL-PLUGIN-001",
+    "HUL-DISCOVERY-001",
+    "HUL-FIT-001",
+    "HUL-STATE-001",
+    "HUL-INCREMENTAL-001",
+    "HUL-AUTHORITY-001",
+    "HUL-PROOF-001",
+    "HUL-COVERAGE-001",
+    "HUL-OBSERVE-001",
+    "HUL-REPAIR-001",
+    "HUL-GOAL-001",
+    "HUL-ORCHESTRATION-001",
+    "HUL-WORKER-001",
+    "HUL-REVIEW-001",
+    "HUL-SECURITY-001",
+    "HUL-SUPPLY-001",
+    "HUL-CLI-001",
+    "HUL-EVAL-001",
+    "HUL-IMPROVEMENT-001",
+    "HUL-PERFORMANCE-001",
+    "HUL-PRIVACY-001",
+    "HUL-MAINTENANCE-001",
+    "HUL-COMPLETION-001"
+  ],
+  "review_targets": [
+    "internal references and machine joins",
+    "requirement-to-source traceability",
+    "plugin and CLI product-family completeness",
+    "duplicate authority",
+    "semantic naming and migration completeness",
+    "custom-tool gaps and obsolete surfaces",
+    "product usability and recovery",
+    "orchestration safety and root authority",
+    "security, privacy, supply chain, and performance",
+    "proof integrity and false-pass resistance"
+  ]
+}
