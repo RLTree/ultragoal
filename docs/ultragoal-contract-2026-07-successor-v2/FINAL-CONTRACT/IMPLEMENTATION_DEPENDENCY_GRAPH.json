@@ -1,0 +1,776 @@
+{
+  "schema_version": "2.0.0",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "graph_type": "directed_acyclic_graph",
+  "topological_order": [
+    "N00-LIVE-BASELINE",
+    "N01-CONTEXT-EFFECT",
+    "N02-INVENTORY",
+    "N03-CLI-STATE",
+    "N04-DISTRIBUTION",
+    "N05-FIT",
+    "N06-ROUTINE",
+    "N07-OBSERVABILITY",
+    "N09-AGENTS-REPO",
+    "N08-PLUGIN-PRODUCT",
+    "N10-ORCHESTRATION",
+    "N11-EVAL-RESEARCH",
+    "N12-CLAIMS",
+    "N13-REAL-JOURNEYS",
+    "N14-MIGRATION",
+    "N15-RETIREMENT",
+    "N16-RELEASE",
+    "N17-COMPLETION"
+  ],
+  "nodes": [
+    {
+      "node_id": "N00-LIVE-BASELINE",
+      "name": "Live baseline and contract adoption",
+      "depends_on": [],
+      "owner": "OWN-ULTRA-ROOT",
+      "required_tools": [],
+      "surfaces": [
+        "PS-SOURCE",
+        "PS-GOAL"
+      ],
+      "completion": "Live context report, adopted contract digest, unresolved external decisions, and root-only authority map."
+    },
+    {
+      "node_id": "N01-CONTEXT-EFFECT",
+      "name": "Live context and effect model",
+      "depends_on": [
+        "N00-LIVE-BASELINE"
+      ],
+      "owner": "OWN-AUTHORITY-KERNEL",
+      "required_tools": [
+        "HCT-CONTEXT"
+      ],
+      "surfaces": [
+        "PS-CLI",
+        "PS-ORCHESTRATION"
+      ],
+      "completion": "Pure context construction and structural effect enforcement pass negative fixtures."
+    },
+    {
+      "node_id": "N02-INVENTORY",
+      "name": "Canonical inventory and generated authority",
+      "depends_on": [
+        "N01-CONTEXT-EFFECT"
+      ],
+      "owner": "OWN-PRODUCT-ARCHITECTURE",
+      "required_tools": [
+        "HCT-INVENTORY"
+      ],
+      "surfaces": [
+        "PS-SOURCE",
+        "PS-PLUGIN-MANIFEST",
+        "PS-SKILLS",
+        "PS-AGENTS"
+      ],
+      "completion": "Deterministic inventory covers active and legacy surfaces with no parallel authority."
+    },
+    {
+      "node_id": "N03-CLI-STATE",
+      "name": "CLI grammar, typed state, diagnostics, and capture",
+      "depends_on": [
+        "N01-CONTEXT-EFFECT",
+        "N02-INVENTORY"
+      ],
+      "owner": "OWN-CLI",
+      "required_tools": [
+        "HCT-CAPTURE",
+        "HCT-STATE"
+      ],
+      "surfaces": [
+        "PS-CLI",
+        "PS-DIAGNOSE"
+      ],
+      "completion": "Product-semantic commands, zero-write reads, stable machine output, repair, and next pass."
+    },
+    {
+      "node_id": "N04-DISTRIBUTION",
+      "name": "Package, marketplace, installation, and discovery",
+      "depends_on": [
+        "N02-INVENTORY",
+        "N03-CLI-STATE"
+      ],
+      "owner": "OWN-DISTRIBUTION",
+      "required_tools": [
+        "HCT-DISTRIBUTION"
+      ],
+      "surfaces": [
+        "PS-PLUGIN-MANIFEST",
+        "PS-MARKETPLACE",
+        "PS-PACKAGE",
+        "PS-INSTALL",
+        "PS-DISCOVERY"
+      ],
+      "completion": "Deterministic package and honest source-to-runtime identity ladder pass supported-host probes."
+    },
+    {
+      "node_id": "N05-FIT",
+      "name": "Fresh setup and retrofit reconciliation",
+      "depends_on": [
+        "N02-INVENTORY",
+        "N03-CLI-STATE"
+      ],
+      "owner": "OWN-REPOSITORY-FIT",
+      "required_tools": [
+        "HCT-FIT"
+      ],
+      "surfaces": [
+        "PS-FIT-FRESH",
+        "PS-FIT-RETROFIT"
+      ],
+      "completion": "Inspect/plan/apply/verify behavior passes fresh, partial, conflict, dirty, and rollback fixtures."
+    },
+    {
+      "node_id": "N06-ROUTINE",
+      "name": "Routine impact, capture, fixtures, and verified reuse",
+      "depends_on": [
+        "N02-INVENTORY",
+        "N03-CLI-STATE"
+      ],
+      "owner": "OWN-DEVELOPER-LOOP",
+      "required_tools": [
+        "HCT-IMPACT",
+        "HCT-FIXTURES"
+      ],
+      "surfaces": [
+        "PS-ROUTINE"
+      ],
+      "completion": "Dirty-tree fast path, conservative closure, cache validation, and fallback behavior pass."
+    },
+    {
+      "node_id": "N07-OBSERVABILITY",
+      "name": "Local observability, diagnosis, and optional export",
+      "depends_on": [
+        "N03-CLI-STATE"
+      ],
+      "owner": "OWN-OBSERVABILITY",
+      "required_tools": [
+        "HCT-OBSERVE"
+      ],
+      "surfaces": [
+        "PS-OBSERVE-LOCAL",
+        "PS-OBSERVE-EXPORT",
+        "PS-DIAGNOSE"
+      ],
+      "completion": "Local causal query and privacy controls pass; optional export passes only when configured."
+    },
+    {
+      "node_id": "N08-PLUGIN-PRODUCT",
+      "name": "Plugin front door, canonical skills, and journeys",
+      "depends_on": [
+        "N02-INVENTORY",
+        "N03-CLI-STATE",
+        "N04-DISTRIBUTION",
+        "N05-FIT",
+        "N06-ROUTINE",
+        "N07-OBSERVABILITY"
+      ],
+      "owner": "OWN-PLUGIN-PRODUCT",
+      "required_tools": [
+        "HCT-INVENTORY",
+        "HCT-DISTRIBUTION"
+      ],
+      "surfaces": [
+        "PS-SKILLS",
+        "PS-ENTRY"
+      ],
+      "completion": "Eight-skill topology and plugin-led representative routes are discoverable and behaviorally closed."
+    },
+    {
+      "node_id": "N09-AGENTS-REPO",
+      "name": "Read-only agents and agent-first repository guidance",
+      "depends_on": [
+        "N02-INVENTORY",
+        "N05-FIT"
+      ],
+      "owner": "OWN-ULTRA-ROOT",
+      "required_tools": [
+        "HCT-FIT"
+      ],
+      "surfaces": [
+        "PS-AGENTS",
+        "PS-ENTRY"
+      ],
+      "completion": "Current discovery paths, least privilege, root/scoped instructions, and fresh-agent comprehension pass."
+    },
+    {
+      "node_id": "N10-ORCHESTRATION",
+      "name": "Adaptive orchestration and write leases",
+      "depends_on": [
+        "N03-CLI-STATE",
+        "N06-ROUTINE",
+        "N09-AGENTS-REPO"
+      ],
+      "owner": "OWN-ULTRA-ROOT",
+      "required_tools": [
+        "HCT-CONTEXT",
+        "HCT-INVENTORY",
+        "HCT-STATE"
+      ],
+      "surfaces": [
+        "PS-ORCHESTRATION"
+      ],
+      "completion": "Disjoint leases, worker schemas, independent acceptance, recovery, and root reconciliation pass."
+    },
+    {
+      "node_id": "N11-EVAL-RESEARCH",
+      "name": "Evaluation, improvement, and research promotion",
+      "depends_on": [
+        "N06-ROUTINE",
+        "N07-OBSERVABILITY",
+        "N08-PLUGIN-PRODUCT"
+      ],
+      "owner": "OWN-AGENT-QUALITY",
+      "required_tools": [
+        "HCT-EVAL"
+      ],
+      "surfaces": [
+        "PS-EVAL",
+        "PS-RESEARCH"
+      ],
+      "completion": "Task/scorer validity, vendor-neutral records, negative controls, and reviewed promotion pass."
+    },
+    {
+      "node_id": "N12-CLAIMS",
+      "name": "Claim graph and proof reconciliation",
+      "depends_on": [
+        "N03-CLI-STATE",
+        "N04-DISTRIBUTION",
+        "N05-FIT",
+        "N06-ROUTINE",
+        "N07-OBSERVABILITY",
+        "N10-ORCHESTRATION",
+        "N11-EVAL-RESEARCH"
+      ],
+      "owner": "OWN-PROOF-AUTHORITY",
+      "required_tools": [
+        "HCT-CLAIMS"
+      ],
+      "surfaces": [
+        "PS-PROOF"
+      ],
+      "completion": "One claim graph, independent reviewers, false-pass controls, and exact ceilings pass."
+    },
+    {
+      "node_id": "N13-REAL-JOURNEYS",
+      "name": "Representative product and quality-in-use journeys",
+      "depends_on": [
+        "N08-PLUGIN-PRODUCT",
+        "N09-AGENTS-REPO",
+        "N10-ORCHESTRATION",
+        "N11-EVAL-RESEARCH",
+        "N12-CLAIMS"
+      ],
+      "owner": "OWN-INDEPENDENT-REVIEW",
+      "required_tools": [
+        "HCT-FIXTURES",
+        "HCT-EVAL",
+        "HCT-CLAIMS"
+      ],
+      "surfaces": [
+        "PS-ENTRY",
+        "PS-FIT-FRESH",
+        "PS-FIT-RETROFIT",
+        "PS-ROUTINE",
+        "PS-DIAGNOSE",
+        "PS-ORCHESTRATION"
+      ],
+      "completion": "Fresh user/agent, maintainer, failure/recovery, and adversarial journeys pass on live candidate."
+    },
+    {
+      "node_id": "N14-MIGRATION",
+      "name": "Migration routes and compatibility",
+      "depends_on": [
+        "N02-INVENTORY",
+        "N03-CLI-STATE",
+        "N08-PLUGIN-PRODUCT",
+        "N09-AGENTS-REPO",
+        "N12-CLAIMS"
+      ],
+      "owner": "OWN-MAINTENANCE",
+      "required_tools": [
+        "HCT-MIGRATE"
+      ],
+      "surfaces": [
+        "PS-UPGRADE"
+      ],
+      "completion": "Every legacy surface has measured route/removal/archive disposition and compatible behavior where promised."
+    },
+    {
+      "node_id": "N15-RETIREMENT",
+      "name": "Old-surface retirement and authority cleanup",
+      "depends_on": [
+        "N12-CLAIMS",
+        "N14-MIGRATION"
+      ],
+      "owner": "OWN-MAINTENANCE",
+      "required_tools": [
+        "HCT-MIGRATE",
+        "HCT-CLAIMS"
+      ],
+      "surfaces": [
+        "PS-UPGRADE",
+        "PS-SOURCE"
+      ],
+      "completion": "No retired writer/reader/public route remains beyond adopted compatibility; duplicate authority is absent."
+    },
+    {
+      "node_id": "N16-RELEASE",
+      "name": "Release candidate proof",
+      "depends_on": [
+        "N04-DISTRIBUTION",
+        "N13-REAL-JOURNEYS",
+        "N15-RETIREMENT"
+      ],
+      "owner": "OWN-DISTRIBUTION",
+      "required_tools": [
+        "HCT-DISTRIBUTION",
+        "HCT-CLAIMS"
+      ],
+      "surfaces": [
+        "PS-RELEASE"
+      ],
+      "completion": "Exact live release proof, package/provenance verification, supported install/discovery, and open decisions resolve."
+    },
+    {
+      "node_id": "N17-COMPLETION",
+      "name": "Integrated goal completion reconciliation",
+      "depends_on": [
+        "N13-REAL-JOURNEYS",
+        "N15-RETIREMENT",
+        "N16-RELEASE"
+      ],
+      "owner": "OWN-ULTRA-ROOT",
+      "required_tools": [
+        "HCT-CLAIMS",
+        "HCT-STATE"
+      ],
+      "surfaces": [
+        "PS-COMPLETION",
+        "PS-GOAL"
+      ],
+      "completion": "Root independently reconciles all required claims and reports complete only if every exact live surface passes."
+    }
+  ],
+  "root_only_authority": {
+    "owner": "OWN-ULTRA-ROOT",
+    "paths_or_semantics": [
+      "adopted contract and all machine-readable authority registries",
+      "workspace Cargo.toml, Cargo.lock, and dependency policy",
+      "`.codex-plugin/plugin.json`, `.agents/plugins/marketplace.json`, `.codex/agents/`, and authoritative `AGENTS.md` changes",
+      "public CLI command catalog and root dispatcher",
+      "global generated inventory schemas and canonical outputs",
+      "claim graph, claim decisions, readiness/release/completion state",
+      "migration alias registry and compatibility deadlines",
+      "integration branches, merges, rebases, release tags, and publishing"
+    ],
+    "rule": "Workers submit requested shared-authority edits in their output schema; only the root applies and reconciles them."
+  },
+  "worker_output_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:harness-ultragoal:WorkerResult-v1",
+    "title": "WorkerResult-v1",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "worker",
+      "lease_id",
+      "context_id",
+      "candidate_identity",
+      "base_state",
+      "final_state",
+      "touched_paths",
+      "touched_semantics",
+      "generated_outputs",
+      "fixtures",
+      "effects",
+      "requirements",
+      "dependency_nodes",
+      "changes",
+      "commands_and_tests",
+      "artifacts",
+      "findings",
+      "unresolved_dependencies",
+      "requested_root_changes",
+      "limitations",
+      "no_claim_statement"
+    ],
+    "properties": {
+      "worker": {
+        "type": "string",
+        "minLength": 1
+      },
+      "lease_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "context_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "candidate_identity": {
+        "type": "object"
+      },
+      "base_state": {
+        "type": "object"
+      },
+      "final_state": {
+        "type": "object"
+      },
+      "touched_paths": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "touched_semantics": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "generated_outputs": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "fixtures": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "effects": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "requirements": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "dependency_nodes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "changes": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "commands_and_tests": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "artifacts": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "findings": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "unresolved_dependencies": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "requested_root_changes": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "limitations": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "no_claim_statement": {
+        "const": "This worker does not claim readiness, release, or completion."
+      }
+    }
+  },
+  "write_scopes": [
+    {
+      "scope_id": "WS-PLUGIN",
+      "owner": "OWN-PLUGIN-PRODUCT",
+      "depends_on": [
+        "WS-CLI-CORE",
+        "WS-DISTRIBUTION",
+        "WS-FIT",
+        "WS-ROUTINE",
+        "WS-OBSERVE"
+      ],
+      "exclusive_paths": [
+        "skills/",
+        "docs/product-journeys/",
+        "tests/plugin_journeys/"
+      ],
+      "exclusive_semantics": [
+        "canonical skill bodies",
+        "front-door routing",
+        "plugin product journey prose and fixtures"
+      ],
+      "generated_outputs": [
+        "generated/plugin-route-index.json"
+      ],
+      "forbidden": [
+        "root-only plugin version fields",
+        "claim decisions",
+        "Cargo lock/workspace dependencies"
+      ],
+      "worker_output_schema": "WorkerResult-v1"
+    },
+    {
+      "scope_id": "WS-AGENTS",
+      "owner": "OWN-ULTRA-ROOT",
+      "depends_on": [
+        "WS-FIT"
+      ],
+      "exclusive_paths": [
+        "docs/agent-roles/",
+        "tests/agent_discovery/"
+      ],
+      "exclusive_semantics": [
+        "read-only custom agent role proposals",
+        "worker lease templates",
+        "agent discovery fixtures"
+      ],
+      "generated_outputs": [
+        "generated/agent-role-index.json"
+      ],
+      "forbidden": [
+        "writing `.codex/agents/` or other host-protected configuration",
+        "live worker lease grants",
+        "root integration",
+        "claim decisions"
+      ],
+      "worker_output_schema": "WorkerResult-v1"
+    },
+    {
+      "scope_id": "WS-CLI-CORE",
+      "owner": "OWN-CLI",
+      "depends_on": [],
+      "exclusive_paths": [
+        "validator/src/cli/",
+        "validator/src/context/",
+        "validator/src/state/",
+        "validator/tests/cli_contract/"
+      ],
+      "exclusive_semantics": [
+        "typed CLI parser",
+        "LiveContext",
+        "effect classes",
+        "finding/repair/next schemas",
+        "machine output and exit codes"
+      ],
+      "generated_outputs": [
+        "generated/command-catalog.json",
+        "generated/effect-catalog.json"
+      ],
+      "forbidden": [
+        "workspace dependencies",
+        "public command catalog final adoption",
+        "claim decisions"
+      ],
+      "worker_output_schema": "WorkerResult-v1"
+    },
+    {
+      "scope_id": "WS-DISTRIBUTION",
+      "owner": "OWN-DISTRIBUTION",
+      "depends_on": [
+        "WS-CLI-CORE"
+      ],
+      "exclusive_paths": [
+        "validator/src/distribution/",
+        "install/",
+        "tests/distribution/"
+      ],
+      "exclusive_semantics": [
+        "package writer",
+        "marketplace/install/discovery adapters",
+        "provenance adapters"
+      ],
+      "generated_outputs": [
+        "generated/package-inventory.json",
+        "generated/marketplace-fixtures.json"
+      ],
+      "forbidden": [
+        "plugin release version",
+        "publishing",
+        "signing identity decision",
+        "claim decisions"
+      ],
+      "worker_output_schema": "WorkerResult-v1"
+    },
+    {
+      "scope_id": "WS-FIT",
+      "owner": "OWN-REPOSITORY-FIT",
+      "depends_on": [
+        "WS-CLI-CORE"
+      ],
+      "exclusive_paths": [
+        "validator/src/fit/",
+        "templates/repository-fit/",
+        "tests/fit/"
+      ],
+      "exclusive_semantics": [
+        "fit inspect/plan/apply/verify",
+        "ownership and rollback",
+        "fresh and retrofit templates"
+      ],
+      "generated_outputs": [
+        "generated/fit-template-index.json"
+      ],
+      "forbidden": [
+        "modifying live user repositories outside fixtures",
+        "claim decisions",
+        "root AGENTS adoption"
+      ],
+      "worker_output_schema": "WorkerResult-v1"
+    },
+    {
+      "scope_id": "WS-ROUTINE",
+      "owner": "OWN-DEVELOPER-LOOP",
+      "depends_on": [
+        "WS-CLI-CORE"
+      ],
+      "exclusive_paths": [
+        "validator/src/impact/",
+        "validator/src/fixtures/",
+        "tests/routine/"
+      ],
+      "exclusive_semantics": [
+        "impact graph",
+        "verified reuse",
+        "fixture scheduling",
+        "routine/strict profile planning"
+      ],
+      "generated_outputs": [
+        "generated/impact-node-catalog.json",
+        "generated/fixture-catalog.json"
+      ],
+      "forbidden": [
+        "claim decisions",
+        "release profile final adoption",
+        "workspace dependency edits"
+      ],
+      "worker_output_schema": "WorkerResult-v1"
+    },
+    {
+      "scope_id": "WS-OBSERVE",
+      "owner": "OWN-OBSERVABILITY",
+      "depends_on": [
+        "WS-CLI-CORE"
+      ],
+      "exclusive_paths": [
+        "validator/src/observe/",
+        "schemas/observability/",
+        "tests/observability/"
+      ],
+      "exclusive_semantics": [
+        "semantic event schema/store/query",
+        "causal explanation",
+        "optional export adapters",
+        "privacy controls"
+      ],
+      "generated_outputs": [
+        "generated/event-catalog.json"
+      ],
+      "forbidden": [
+        "telemetry consent decision",
+        "external collector configuration",
+        "claim decisions"
+      ],
+      "worker_output_schema": "WorkerResult-v1"
+    },
+    {
+      "scope_id": "WS-EVAL",
+      "owner": "OWN-AGENT-QUALITY",
+      "depends_on": [
+        "WS-ROUTINE",
+        "WS-OBSERVE"
+      ],
+      "exclusive_paths": [
+        "validator/src/eval/",
+        "evals/",
+        "tests/eval/"
+      ],
+      "exclusive_semantics": [
+        "vendor-neutral eval schemas",
+        "task/scorer audit",
+        "failure harvesting",
+        "promotion candidate records"
+      ],
+      "generated_outputs": [
+        "generated/eval-task-catalog.json"
+      ],
+      "forbidden": [
+        "law promotion",
+        "claim decisions",
+        "vendor account changes"
+      ],
+      "worker_output_schema": "WorkerResult-v1"
+    },
+    {
+      "scope_id": "WS-MIGRATION",
+      "owner": "OWN-MAINTENANCE",
+      "depends_on": [
+        "WS-PLUGIN",
+        "WS-AGENTS",
+        "WS-CLI-CORE"
+      ],
+      "exclusive_paths": [
+        "validator/src/migrate/",
+        "migration/",
+        "tests/migration/"
+      ],
+      "exclusive_semantics": [
+        "legacy inventory",
+        "compatibility route implementations",
+        "retirement scans and plans"
+      ],
+      "generated_outputs": [
+        "generated/migration-registry.json"
+      ],
+      "forbidden": [
+        "destructive cleanup without authority",
+        "compatibility deadline decision",
+        "claim decisions"
+      ],
+      "worker_output_schema": "WorkerResult-v1"
+    }
+  ],
+  "scope_overlap_validation": {
+    "silent_overlap_count": 0,
+    "findings": [],
+    "root_overlap_policy": "root-only integration overlap is explicit and never delegated"
+  }
+}

@@ -1,0 +1,332 @@
+{
+  "schema_version": "2.0.0",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "meaning_of_resolved": "The final contract contains a specific design resolution; live implementation and proof remain required.",
+  "finding_count": 36,
+  "findings": [
+    {
+      "finding_id": "F-001",
+      "severity": "critical",
+      "title": "Archive-wide provenance is incomplete",
+      "evidence": "Candidate, tracked source, and fixture digest authorities verify, but 249 copied metadata/evidence/research/legacy entries lack a supplied archive-wide digest authority.",
+      "resolution_in_final_contract": "Treat those entries as unverified context; preserve assistant-computed digests and never promote them without independent corroboration.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-002",
+      "severity": "critical",
+      "title": "Snapshot cannot prove live state",
+      "evidence": "Archived branch, HEAD, status, worktrees, runtime, plugin installation, and command output are historical observations only.",
+      "resolution_in_final_contract": "Ultra must recompute every live precondition before acting or claiming.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-003",
+      "severity": "critical",
+      "title": "Candidate law binding is circular",
+      "evidence": "Candidate wording conditions binding behavior on implemented validators/proof, permitting absent validators to weaken law.",
+      "resolution_in_final_contract": "Separate adopted normative status, implementation status, proof eligibility, and claim decision.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-004",
+      "severity": "high",
+      "title": "Candidate requirement trace is too coarse",
+      "evidence": "The candidate has one row per broad law and cannot localize implementation/proof responsibility.",
+      "resolution_in_final_contract": "Replace with granular stable requirement IDs and full source/surface/tool/claim mappings.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-005",
+      "severity": "high",
+      "title": "Current plugin manifest is lane-era",
+      "evidence": "The snapshot manifest description and routes retain gate/lane product semantics.",
+      "resolution_in_final_contract": "Rewrite around plugin journeys and bind manifest contents to package inventory.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-006",
+      "severity": "high",
+      "title": "Plugin draft is not a supported runtime manifest",
+      "evidence": "The large draft inventory is useful internal data but conflates generated inventory with host plugin wiring.",
+      "resolution_in_final_contract": "Use supported manifest fields and generate internal inventories separately.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-007",
+      "severity": "high",
+      "title": "Repo marketplace surface is missing",
+      "evidence": "Only a personal-marketplace example is present; current repo-scoped marketplace conventions are not implemented.",
+      "resolution_in_final_contract": "Add and test repo and personal distribution surfaces independently.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-008",
+      "severity": "high",
+      "title": "Three skills lack required discovery metadata",
+      "evidence": "agent-improvement-loop, agent-observability-stack, and product-fitness-gate lack required `name`/`description` frontmatter.",
+      "resolution_in_final_contract": "Consolidate topology and validate every active skill metadata block.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-009",
+      "severity": "high",
+      "title": "Skill topology duplicates concepts",
+      "evidence": "Fourteen active skills overlap around fitting, proof/product gates, orchestration, and observability.",
+      "resolution_in_final_contract": "Consolidate to eight product-semantic skills with measured legacy routes.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-010",
+      "severity": "high",
+      "title": "Custom agents use the wrong current discovery path",
+      "evidence": "Snapshot TOMLs live in `custom-agents/`, while current project-scoped Codex custom agents use `.codex/agents/`.",
+      "resolution_in_final_contract": "Move canonical read-only roles and verify discovery in a new run.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-011",
+      "severity": "high",
+      "title": "Static write roles overgrant authority",
+      "evidence": "Static lane-era roles make ownership durable and broad rather than run-scoped and dependency-aware.",
+      "resolution_in_final_contract": "Keep custom agents read-only; create explicit disjoint write leases per run.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-012",
+      "severity": "critical",
+      "title": "Lane/gate migration is pervasive",
+      "evidence": "Tracked snapshot includes 13,542 lane references across 872 files and 10,808 gate references across 1,221 files.",
+      "resolution_in_final_contract": "Use semantic inventory, compatibility routing, active-reference scans, and staged retirement rather than renaming only visible docs.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-013",
+      "severity": "high",
+      "title": "Hard-coded GPT-5.5 assumptions remain",
+      "evidence": "Tracked snapshot contains 297 GPT-5.5 references across 172 files.",
+      "resolution_in_final_contract": "Classify historical references; capability-probe or parameterize active model assumptions.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-014",
+      "severity": "high",
+      "title": "Public CLI surface is overgrown",
+      "evidence": "The handwritten `Command` enum exposes 37 variants with overlapping authority and internal terminology.",
+      "resolution_in_final_contract": "Collapse to ten product-semantic groups and generate compatibility routes.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-015",
+      "severity": "critical",
+      "title": "CLI parse errors may mutate observability state",
+      "evidence": "The parser error path invokes observability emission, violating no-hidden-write expectations for parsing/read surfaces.",
+      "resolution_in_final_contract": "Enforce structural zero-write parsing/help/query behavior and test filesystem/event-store immutability.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-016",
+      "severity": "high",
+      "title": "Handwritten parser increases drift and ambiguity",
+      "evidence": "Manual parsing duplicates grammar, help, validation, and compatibility logic.",
+      "resolution_in_final_contract": "Adopt a typed parser and generate command/effect catalogs.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-017",
+      "severity": "medium",
+      "title": "Candidate custom tooling is over-fragmented",
+      "evidence": "Nineteen candidate tools split tightly coupled authority and invite orchestration overhead.",
+      "resolution_in_final_contract": "Consolidate to twelve semantic Harness-owned tools with explicit APIs and proof.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-018",
+      "severity": "critical",
+      "title": "Duplicate finalizers and claim authorities remain",
+      "evidence": "Audit, product, standards, final-packet, and transactional-finalization surfaces can compete.",
+      "resolution_in_final_contract": "Make HCT-CLAIMS the sole machine claim authority and retire projections/writers.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-019",
+      "severity": "critical",
+      "title": "Proof-shaped output can be rewarded",
+      "evidence": "Receipts, generated rows, telemetry, and green tests are abundant enough to become optimization targets.",
+      "resolution_in_final_contract": "Install explicit surrogate-evidence guards, negative controls, and behavior-grounded scoring.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-020",
+      "severity": "high",
+      "title": "Mutable receipts/current-state files are too authoritative",
+      "evidence": "State projections and receipts appear across many command-specific flows.",
+      "resolution_in_final_contract": "Recompute from typed context-bound facts; treat projections as disposable views.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-021",
+      "severity": "high",
+      "title": "Some host proof requirements are impossible without exposed APIs",
+      "evidence": "A snapshot or local tool cannot prove host-internal cache, selected model/mode, or undisclosed registry state.",
+      "resolution_in_final_contract": "Probe only exposed surfaces, report unknown, and lower dependent claims.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-022",
+      "severity": "high",
+      "title": "Installation and discovery are conflated",
+      "evidence": "Catalog files, installed bytes, host registration, and runtime selection are not consistently separated.",
+      "resolution_in_final_contract": "Implement identity-preserving transition claims from package through runtime.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-023",
+      "severity": "high",
+      "title": "Routine work inherits excessive ceremony",
+      "evidence": "Lane/gate architecture encourages broad proof on ordinary changes.",
+      "resolution_in_final_contract": "Use conservative affected sets and reserve claim-specific strict proof for boundaries.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-024",
+      "severity": "critical",
+      "title": "Dirty-tree preservation is not a universal invariant",
+      "evidence": "Scattered commands may assume clean state or write unrelated artifacts.",
+      "resolution_in_final_contract": "Centralize context/effects and test staged, modified, untracked, and worktree cases.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-025",
+      "severity": "critical",
+      "title": "Telemetry is at risk of becoming proof authority",
+      "evidence": "Observability and proof surfaces are tightly intertwined.",
+      "resolution_in_final_contract": "Make events diagnostic evidence only; prohibit event rows from setting claims.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-026",
+      "severity": "high",
+      "title": "Plugin hooks and extensions cross trust boundaries",
+      "evidence": "Plugin components can execute with host permissions and require explicit trust.",
+      "resolution_in_final_contract": "Inventory components, minimize them, disclose effects, and test disabled/denied states.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-027",
+      "severity": "high",
+      "title": "Evaluation core is vendor-adapter heavy",
+      "evidence": "Promptfoo and OpenAI-specific modules risk owning canonical semantics and future deprecation exposure.",
+      "resolution_in_final_contract": "Keep vendor-neutral canonical schemas and adapters; migrate deprecated surfaces.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-028",
+      "severity": "high",
+      "title": "Candidate research is already temporally stale",
+      "evidence": "GPT-5.6, Goal, plugin marketplace, and custom-agent documentation changed by July 10, 2026.",
+      "resolution_in_final_contract": "Refresh primary sources and require freshness checks for mutable capability claims.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-029",
+      "severity": "critical",
+      "title": "Path-only write scopes cannot prevent semantic collision",
+      "evidence": "Workers can edit different paths that generate or govern the same authority.",
+      "resolution_in_final_contract": "Lease path, semantic symbols, generated outputs, fixtures, and external effects together.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-030",
+      "severity": "critical",
+      "title": "Shared authority needs a sole root owner",
+      "evidence": "Workspace manifests, command catalogs, claim graphs, migration registries, and releases cannot be safely co-owned.",
+      "resolution_in_final_contract": "Workers request changes; root applies, integrates, and reconciles.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-031",
+      "severity": "medium",
+      "title": "External stop conditions are under-specified",
+      "evidence": "Signing, distribution, telemetry, licensing, and destructive cleanup require real authority.",
+      "resolution_in_final_contract": "Represent them as open decisions with claim-local effects and safe defaults.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-032",
+      "severity": "critical",
+      "title": "CLI implementation can crowd out the plugin product",
+      "evidence": "Repository volume and candidate detail center heavily on validators and receipts.",
+      "resolution_in_final_contract": "Make plugin journeys, skill quality, installation/discovery, and fresh-user behavior first-class nodes and claims.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-033",
+      "severity": "high",
+      "title": "Legacy aliases lack complete retirement policy",
+      "evidence": "Scattered compatibility and historical references do not carry owner, measurement, deadline, or removal proof.",
+      "resolution_in_final_contract": "Generate a single migration registry and enforce route lifecycle.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-034",
+      "severity": "high",
+      "title": "Fresh-agent navigation is not proven",
+      "evidence": "File presence and extensive documentation do not establish comprehensibility or correct route selection.",
+      "resolution_in_final_contract": "Run new-task skill/agent/repository journeys without hidden context.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-035",
+      "severity": "critical",
+      "title": "Release and completion can be conflated",
+      "evidence": "A package or green finalizer can be mistaken for integrated product completion.",
+      "resolution_in_final_contract": "Use separate claim IDs and exact prerequisites; completion remains root-reconciled.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    },
+    {
+      "finding_id": "F-036",
+      "severity": "critical",
+      "title": "Protected host configuration cannot be leased to workspace-write workers",
+      "evidence": "Current Codex sandbox documentation protects project `.git`, `.agents`, and `.codex` paths; treating those paths as ordinary worker write scopes creates an impossible or bypass-seeking workflow.",
+      "resolution_in_final_contract": "Keep protected configuration root-owned. Workers return exact requested changes; the root independently reviews and applies them only through exposed host authority.",
+      "resolution_status": "resolved_in_contract_design_not_live_implementation",
+      "live_verification_required": true
+    }
+  ]
+}

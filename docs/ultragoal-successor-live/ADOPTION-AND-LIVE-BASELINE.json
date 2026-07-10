@@ -1,0 +1,250 @@
+{
+  "schema_version": "1.0.0",
+  "record_id": "harness-ultragoal-successor-v2-live-adoption-2026-07-10",
+  "record_owner": "OWN-ULTRA-ROOT",
+  "recorded_at": "2026-07-10T05:10:49Z",
+  "contract_adoption": {
+    "contract_id": "harness-ultragoal-successor-contract-v2",
+    "decision": "adopted_for_live_implementation",
+    "adopted_bundle_root": "docs/ultragoal-contract-2026-07-successor-v2",
+    "authority_index": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/00-READ-ME-FIRST.md",
+    "contract_manifest": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CONTRACT_MANIFEST.json",
+    "handoff_manifest": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-HANDOFF-MANIFEST.sha256",
+    "handoff_manifest_sha256": "d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51",
+    "listed_file_count": 26,
+    "digest_verification": {
+      "status": "passed",
+      "command": "shasum -a 256 -c FINAL-HANDOFF-MANIFEST.sha256",
+      "coverage": "every regular bundle file except the manifest itself",
+      "coverage_check": "passed_no_missing_or_extra_bundle_files"
+    },
+    "separation_rule": "The adopted contract is normative authority. Handoff review and snapshot evidence remain context only; implementation, proof eligibility, and claim decisions remain separate live states.",
+    "supersedes_as_normative_authority": [
+      "docs/ultragoal-contract-2026-07-successor-candidate-v1",
+      "docs/ultragoal-contract-2026-07"
+    ],
+    "supersession_effect": "Prior contracts remain historical context until routed under the migration registry; they are not live normative authority."
+  },
+  "pre_adoption_live_repository": {
+    "observed_at": "2026-07-10T05:04:57Z",
+    "root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "master",
+    "head_commit": "125b717f9a5a5480e04452b1c9e5c487de7cb3c7",
+    "head_tree": "bfc907544597541b1c2e3e7082413528b006455e",
+    "head_parent": "63eab8dcec81138abfa8bc5b48185d003abaaab2",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "staged_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "status_sha256": "f9badcfdc8e2dedf2286d5922b017c66cfc2921c68a7a723bccf2d99a31b74cc",
+    "dirty": true,
+    "preserved_user_changes": [
+      {
+        "path": ".DS_Store",
+        "state": "untracked",
+        "sha256": "d65165279105ca6773180500688df4bdc69a2c7b771752f0a46ef120b7fd8ec3"
+      }
+    ],
+    "worktree_count": 1,
+    "submodules": [],
+    "remotes": [],
+    "upstream": null
+  },
+  "adoption_workspace_context": {
+    "observed_at": "2026-07-10T05:10:49Z",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "125b717f9a5a5480e04452b1c9e5c487de7cb3c7",
+    "head_tree": "bfc907544597541b1c2e3e7082413528b006455e",
+    "status_sha256_before_this_record": "f1020d86d956de910801d6b66c3c3a08b1325c43a7dc38fc4597aa21ebf8ed2f",
+    "tracked_diff_sha256_before_this_record": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "staged_diff_sha256_before_this_record": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "untracked_content_manifest_sha256_before_this_record": "04f26badee100608500b8c482a95a8ec3919dfc580dd9075ad5a7b92120ff06a",
+    "candidate_identity_state": "baseline_observed_pre_record_not_release_candidate",
+    "candidate_identity_rule": "Recompute after every authority-bearing change; no pre-change identity may support a later claim.",
+    "binding_plan": "Commit the immutable bundle and this corrected adoption record together, then independently recompute the post-commit HEAD, tree, status, and content digests before accepting N00."
+  },
+  "digest_algorithms": {
+    "status_sha256": "Run `git status --porcelain=v2 --branch --untracked-files=all` from the canonical repository root and SHA-256 the exact stdout bytes.",
+    "tracked_diff_sha256": "Run `git diff --binary HEAD` from the canonical repository root and SHA-256 the exact stdout bytes.",
+    "staged_diff_sha256": "Run `git diff --cached --binary` from the canonical repository root and SHA-256 the exact stdout bytes.",
+    "untracked_content_manifest_sha256": "Run `git ls-files --others --exclude-standard`, sort paths bytewise with LC_ALL=C, emit each file's `shasum -a 256` line in that order, and SHA-256 the exact concatenated manifest bytes. Paths are repository-relative Git path output; ignored files are excluded.",
+    "package_identity": "Parse plugin-manifest-draft.json; collect each `.path` from skills and agents, every schema_catalog path, and string rows from schemas, fixtures, authorable_templates, generated_examples, and resources; exclude validation_artifacts/; sort paths bytewise; concatenate repository-relative UTF-8 path, NUL, stable payload bytes, NUL. Stable payload canonicalizes fixtures/valid/*.json by replacing validator_receipt with {schema:harness-ultragoal.validator-receipt.v1,runtime_binding:audit_time_overlay} and canonicalizes the two coverage manifests by replacing their declared runtime digest/time fields. SHA-256 the concatenated bytes and prefix `sha256:`. This mirrors validator/src/package/inventory/mod.rs:116-141 and validator/src/package/inventory/payload.rs:10-45."
+  },
+  "runtime_configuration": {
+    "source": "metadata_exposed_to_this_codex_session_only",
+    "model_family": "GPT-5",
+    "exact_model": "unknown_not_exposed",
+    "collaboration_mode": "Default",
+    "service_mode": "unknown_not_exposed",
+    "reasoning_effort": "unknown_not_exposed",
+    "filesystem": "unrestricted",
+    "sandbox_mode": "danger-full-access",
+    "network_access": "enabled",
+    "approval_review": "auto_review",
+    "total_agent_slots": 4,
+    "claim_effect": "The requested GPT-5.6 Pro and reasoning configuration cannot be confirmed in this runtime; dependent runtime and evaluation claims remain lowered."
+  },
+  "host_and_toolchain": {
+    "host": "macOS 27.0 arm64",
+    "timezone": "America/Los_Angeles",
+    "repository_readable": true,
+    "repository_writable": true,
+    "umask": "0022",
+    "tools": {
+      "git": "2.52.0",
+      "cargo": "1.95.0",
+      "rustc": "1.95.0",
+      "rustup": "1.29.0",
+      "jq": "1.8.1",
+      "rg": "15.1.0",
+      "python": "3.14",
+      "node": "26",
+      "npm": "11.12.1",
+      "bun": "1.3.11",
+      "pnpm": "11.1.2",
+      "codex": "0.144.0",
+      "cargo_nextest": "0.9.137",
+      "cargo_llvm_cov": "0.8.7",
+      "cargo_audit": "0.22.1",
+      "cargo_deny": "0.19.4",
+      "gh": "2.86"
+    },
+    "unavailable_tools": [
+      "codex-workflow",
+      "cosign",
+      "syft",
+      "ninja",
+      "repository-local promptfoo"
+    ],
+    "workflow_routing": "The adopted successor dependency graph controls execution. The global workflow engine is both weaker than this active contract and unavailable on PATH."
+  },
+  "codex_and_plugin_capabilities": {
+    "codex_features_observed_enabled": [
+      "plugins",
+      "goals",
+      "multi_agent",
+      "multi_agent_v2",
+      "plugin_sharing",
+      "apps",
+      "hooks",
+      "workspace_dependencies"
+    ],
+    "stable_cli_surfaces_observed": [
+      "codex plugin add",
+      "codex plugin list",
+      "codex plugin remove",
+      "codex plugin marketplace add",
+      "codex plugin marketplace list",
+      "codex plugin marketplace upgrade",
+      "codex plugin marketplace remove"
+    ],
+    "unsupported_or_unproven": [
+      "plugin validate command",
+      "plugin-provided project custom-agent installation",
+      "custom-agent selection through the current collaboration tool schema",
+      "current app/runtime discovery after plugin install without a new session"
+    ]
+  },
+  "component_and_command_inventory": {
+    "cargo_packages": 1,
+    "rust_files_under_validator_src": 1178,
+    "rust_files_under_validator_including_integration_tests": 1179,
+    "command_enum_variants": 37,
+    "generated_command_inventory_entries": 73,
+    "source_skills": 14,
+    "plugin_manifest_skills": 13,
+    "session_exposed_skills": 11,
+    "source_custom_agent_tomls": 7,
+    "successor_custom_tool_ids_present_in_live_implementation": 0,
+    "successor_custom_tools_required": 12,
+    "hidden_write_failures": [
+      "parse rejection emits observability",
+      "package digest writes a receipt",
+      "current-state --json writes a receipt",
+      "observe query paths write receipts"
+    ]
+  },
+  "source_install_cache_runtime_separation": {
+    "pre_adoption_source_package_identity": {
+      "algorithm": "live package inventory algorithm recomputed read-only",
+      "digest": "sha256:7cae47b872044e8c17ead4aa584909c01acd875d2ccd4eb38d419e80782e1978",
+      "entry_count": 4989,
+      "claim_limit": "pre-adoption source identity only"
+    },
+    "installed_plugin": {
+      "path": "/Users/terrynoblin/.codex/plugins/harness-ultragoal",
+      "version": "0.0.11",
+      "enabled": true,
+      "package_identity": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724",
+      "entry_count": 4250,
+      "state": "byte_aligned_with_cache_but_materially_stale_against_source"
+    },
+    "marketplace_cache": {
+      "package_identity": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724",
+      "entry_count": 4250,
+      "state": "byte_aligned_with_installed_but_materially_stale_against_source"
+    },
+    "pre_adoption_source_to_installed_difference": {
+      "common_paths": 4203,
+      "changed_common_paths": 825,
+      "source_only_paths": 786,
+      "installed_only_paths": 47
+    },
+    "path_cli": "absent",
+    "repository_debug_binary": "present_but_stale_and_not_accepted_as_current_proof",
+    "runtime_discovery": "not_verified"
+  },
+  "security_baseline": {
+    "secret_value_recorded": false,
+    "finding": "An ignored mode-0600 local environment file contains a plaintext OpenAI API key.",
+    "path": ".codex-worktree/env.sh",
+    "external_action_required": "Rotate or revoke the key through the owning OpenAI authority, then replace local configuration through an approved secret channel.",
+    "actions_forbidden_without_authority": [
+      "print or copy the key",
+      "use the key for external calls",
+      "delete or rewrite the local environment file"
+    ],
+    "claim_effect": "Security, release, and completion claims remain blocked pending rotation or revocation and independent hygiene verification."
+  },
+  "root_only_authority": {
+    "owner": "OWN-ULTRA-ROOT",
+    "paths_or_semantics": [
+      "adopted contract and all machine-readable authority registries",
+      "workspace Cargo.toml, Cargo.lock, and dependency policy",
+      ".codex-plugin/plugin.json, .agents/plugins/marketplace.json, .codex/agents/, and authoritative AGENTS.md changes",
+      "public CLI command catalog and root dispatcher",
+      "global generated inventory schemas and canonical outputs",
+      "claim graph, claim decisions, readiness/release/completion state",
+      "migration alias registry and compatibility deadlines",
+      "integration branches, merges, rebases, release tags, and publishing"
+    ],
+    "worker_rule": "Workers receive disjoint run-scoped leases and return WorkerResult-v1. They may request but never apply root-only changes or claim readiness, release, or completion."
+  },
+  "external_decisions": [
+    {"id": "OD-001", "state": "unresolved", "safe_default": "repository-local and unpublished"},
+    {"id": "OD-002", "state": "unresolved", "safe_default": "no public distribution claim"},
+    {"id": "OD-003", "state": "unresolved", "safe_default": "claim only independently exercised environments"},
+    {"id": "OD-004", "state": "unresolved", "safe_default": "local-only observability"},
+    {"id": "OD-005", "state": "unresolved", "safe_default": "digest and provenance without signature claim"},
+    {"id": "OD-006", "state": "unresolved", "safe_default": "no optional executable extension"},
+    {"id": "OD-007", "state": "unresolved", "safe_default": "local bounded events with no export"},
+    {"id": "OD-008", "state": "unresolved", "safe_default": "route non-destructively with warnings and do not claim retirement complete"},
+    {"id": "OD-009", "state": "unresolved", "safe_default": "archive or leave historical files in place as non-authoritative"},
+    {"id": "OD-010", "state": "unresolved", "safe_default": "preserve harness-ultragoal identity and avoid public rename"}
+  ],
+  "initial_claim_decisions": [
+    {"claim_id": "CL-SOURCE", "state": "not_evaluated_on_live_candidate", "ceiling": "adopted_contract_only"},
+    {"claim_id": "CL-PACKAGE", "state": "not_evaluated_on_live_candidate", "ceiling": "withheld"},
+    {"claim_id": "CL-INSTALL", "state": "not_evaluated_on_live_candidate", "ceiling": "withheld"},
+    {"claim_id": "CL-DISCOVERY", "state": "not_evaluated_on_live_candidate", "ceiling": "withheld"},
+    {"claim_id": "CL-RUNTIME", "state": "not_evaluated_on_live_candidate", "ceiling": "withheld"},
+    {"claim_id": "CL-FIT", "state": "not_evaluated_on_live_candidate", "ceiling": "withheld"},
+    {"claim_id": "CL-ROUTINE", "state": "not_evaluated_on_live_candidate", "ceiling": "withheld"},
+    {"claim_id": "CL-OBSERVABILITY", "state": "known_hidden_write_failures", "ceiling": "withheld"},
+    {"claim_id": "CL-STRICT", "state": "not_evaluated_on_live_candidate", "ceiling": "withheld"},
+    {"claim_id": "CL-ORCHESTRATION", "state": "not_evaluated_on_live_candidate", "ceiling": "withheld"},
+    {"claim_id": "CL-EVAL-IMPROVEMENT", "state": "not_evaluated_on_live_candidate", "ceiling": "withheld"},
+    {"claim_id": "CL-REAL-JOURNEY", "state": "not_evaluated_on_live_candidate", "ceiling": "withheld"},
+    {"claim_id": "CL-RELEASE", "state": "blocked_by_unresolved_external_authority_and_secret_rotation", "ceiling": "withheld"},
+    {"claim_id": "CL-COMPLETION", "state": "blocked_by_unresolved_external_authority_and_secret_rotation", "ceiling": "withheld"}
+  ],
+  "highest_honest_ceiling": "The successor contract is adopted for implementation in this live repository. No source-coherence, package, install, discovery, runtime, journey, release, or completion claim has yet passed on a current live candidate."
+}

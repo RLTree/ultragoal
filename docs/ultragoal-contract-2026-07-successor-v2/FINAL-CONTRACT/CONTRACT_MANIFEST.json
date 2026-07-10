@@ -1,0 +1,312 @@
+{
+  "schema_version": "2.0.0",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "title": "Harness Ultragoal Successor Contract",
+  "build_date": "2026-07-10",
+  "status": "final_proposed_successor_contract_snapshot_review",
+  "live_adoption_status": "not_verified",
+  "claim_ceiling": "snapshot-based contract review and final handoff bundle only",
+  "runtime_record": {
+    "expected_model_family": "GPT-5.6",
+    "expected_mode": "Pro",
+    "runtime_configuration_verified": true,
+    "basis": "The client exposed the model family and Pro mode to this review runtime. This record does not attest the later Codex Ultra runtime."
+  },
+  "authority_index": "FINAL-CONTRACT/00-READ-ME-FIRST.md",
+  "owner_registry": [
+    {
+      "owner_id": "OWN-PRODUCT-ARCHITECTURE",
+      "name": "Product Architecture"
+    },
+    {
+      "owner_id": "OWN-PLUGIN-PRODUCT",
+      "name": "Plugin Product"
+    },
+    {
+      "owner_id": "OWN-REPOSITORY-FIT",
+      "name": "Repository Fitting"
+    },
+    {
+      "owner_id": "OWN-DEVELOPER-LOOP",
+      "name": "Routine Development"
+    },
+    {
+      "owner_id": "OWN-AUTHORITY-KERNEL",
+      "name": "Authority Kernel"
+    },
+    {
+      "owner_id": "OWN-CLI",
+      "name": "CLI Product"
+    },
+    {
+      "owner_id": "OWN-OPERATOR-EXPERIENCE",
+      "name": "Operator Experience"
+    },
+    {
+      "owner_id": "OWN-OBSERVABILITY",
+      "name": "Observability"
+    },
+    {
+      "owner_id": "OWN-PROOF-AUTHORITY",
+      "name": "Proof Authority"
+    },
+    {
+      "owner_id": "OWN-ULTRA-ROOT",
+      "name": "Ultra Root"
+    },
+    {
+      "owner_id": "OWN-INDEPENDENT-REVIEW",
+      "name": "Independent Review"
+    },
+    {
+      "owner_id": "OWN-SECURITY",
+      "name": "Security"
+    },
+    {
+      "owner_id": "OWN-DISTRIBUTION",
+      "name": "Distribution and Release Engineering"
+    },
+    {
+      "owner_id": "OWN-AGENT-QUALITY",
+      "name": "Agent Quality"
+    },
+    {
+      "owner_id": "OWN-RESEARCH",
+      "name": "Research Authority"
+    },
+    {
+      "owner_id": "OWN-MAINTENANCE",
+      "name": "Maintenance and Migration"
+    },
+    {
+      "owner_id": "OWN-GOAL-INTEGRATION",
+      "name": "Goal Integration"
+    },
+    {
+      "owner_id": "OWN-RELEASE-AUTHORITY",
+      "name": "Human Release Authority"
+    }
+  ],
+  "law_ids": [
+    "HUL-PRODUCT-001",
+    "HUL-PLUGIN-001",
+    "HUL-FIT-001",
+    "HUL-ROUTINE-001",
+    "HUL-STATE-001",
+    "HUL-CLI-001",
+    "HUL-REPAIR-001",
+    "HUL-OBSERVE-001",
+    "HUL-PROOF-001",
+    "HUL-ORCHESTRATION-001",
+    "HUL-REVIEW-001",
+    "HUL-SECURITY-001",
+    "HUL-SUPPLY-001",
+    "HUL-EVAL-001",
+    "HUL-RESEARCH-001",
+    "HUL-MAINTENANCE-001",
+    "HUL-GOAL-001",
+    "HUL-COMPLETION-001"
+  ],
+  "requirement_count": 105,
+  "product_surface_count": 24,
+  "custom_tool_count": 12,
+  "claim_count": 14,
+  "research_source_count": 35,
+  "implementation_node_count": 18,
+  "contract_entries": [
+    {
+      "path": "FINAL-CONTRACT/00-READ-ME-FIRST.md",
+      "role": "contract index and authority/claim boundary",
+      "media_type": "text/markdown",
+      "sha256": "09a5552c4c7d23eb63b2e01874b55e01356ce4da56d549278de1609956b774ed",
+      "bytes": 3716,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/01-AUTHORITY-AND-PRODUCT-LAWS.md",
+      "role": "stable normative laws",
+      "media_type": "text/markdown",
+      "sha256": "c62a97fd359b8191a88313892b793865fd25879635dbdf50f6eb9e71f6a46f2d",
+      "bytes": 6441,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/02-PLUGIN-PRODUCT-AND-JOURNEYS.md",
+      "role": "plugin product, journeys, skills, agents, and surfaces",
+      "media_type": "text/markdown",
+      "sha256": "fbe22493a64da7feb3a0482dcc11cb31e9796ce99c5eee2ae0c61c0fd16cf389",
+      "bytes": 12617,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/03-CLI-KERNEL-AND-CUSTOM-TOOLS.md",
+      "role": "CLI and semantic tool contract",
+      "media_type": "text/markdown",
+      "sha256": "22e7c53e6e67d406e0de252bd8211e794ef0c032c393beec1fa6a3fcc79ff134",
+      "bytes": 5328,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/04-ORCHESTRATION-AND-WRITE-SCOPES.md",
+      "role": "Ultra root, dependency graph, leases, and worker protocol",
+      "media_type": "text/markdown",
+      "sha256": "e5218498da2ae1c7bd7cf0d6704c52d1753ef270c7804584b7427948db2e11fc",
+      "bytes": 10346,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/05-PROOF-CLAIMS-AND-COMPLETION.md",
+      "role": "claim/evidence/release/completion contract",
+      "media_type": "text/markdown",
+      "sha256": "1d31a306d723a309f1a05d95d8e3f2ce1c329346ecaf853856ee2d8ddb83eb61",
+      "bytes": 5848,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/06-SECURITY-SUPPLY-AND-PRIVACY.md",
+      "role": "security, supply, and privacy boundaries",
+      "media_type": "text/markdown",
+      "sha256": "abaac2e7dceb0de22c050024878954881ccf1f6a15426138542fb5fe3a900a1d",
+      "bytes": 1907,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/07-OBSERVABILITY-EVALUATION-AND-RESEARCH.md",
+      "role": "observability, eval, improvement, and source classification",
+      "media_type": "text/markdown",
+      "sha256": "8d12e912335057eac0f8d91ce512da9dfc31ddf09eeb90447d05de386299c0fa",
+      "bytes": 10859,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md",
+      "role": "implementation order and quality gates",
+      "media_type": "text/markdown",
+      "sha256": "8fe85ba8a49c4bf19aa6263256b4f35c696d8c17e17da31d82e0a385ca66e5b0",
+      "bytes": 3377,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/BUNDLE-VALIDATION-REPORT.json",
+      "role": "structural quality-gate report",
+      "media_type": "application/json",
+      "sha256": "7a00b39bfa674f8a669ce411c2fa0294b5f7ea6a87b3d961cde7254ea32c6ccc",
+      "bytes": 2826,
+      "normative": false
+    },
+    {
+      "path": "FINAL-CONTRACT/CLAIM_REGISTRY.json",
+      "role": "machine-readable claim graph, proof boundaries, repairs, reruns, and ceilings",
+      "media_type": "application/json",
+      "sha256": "67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc",
+      "bytes": 35911,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/CODEX-ULTRA-BOOTSTRAP.md",
+      "role": "local Codex project bootstrap and no-claim rules",
+      "media_type": "text/markdown",
+      "sha256": "efcc73d3b40dccbfda925d759ee2c7221e4e7fffb84ab2957ac4e8954be55467",
+      "bytes": 3375,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/CODEX-ULTRA-GOAL.md",
+      "role": "exact pasteable /goal objective",
+      "media_type": "text/markdown",
+      "sha256": "7e992a7eec84d937968aa45a3907698d070e8aa7e86eeb971032786dabb1f34f",
+      "bytes": 3580,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json",
+      "role": "Harness-owned semantic tools and proof dependencies",
+      "media_type": "application/json",
+      "sha256": "03073c8ee853d02be0776443cf39828d0630d3e1389d69be7817b201fc971fb7",
+      "bytes": 22485,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+      "role": "DAG, root authority, scopes, and worker schema",
+      "media_type": "application/json",
+      "sha256": "a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+      "bytes": 20505,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/MIGRATION-AND-RETIREMENT.md",
+      "role": "legacy routing and retirement contract",
+      "media_type": "text/markdown",
+      "sha256": "17cc0ac6ac74fbafc3518dd8040cc78918ab5d6c0450f95e51d0c1b9d5364b20",
+      "bytes": 20411,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/OPEN-DECISIONS.md",
+      "role": "external and destructive decisions",
+      "media_type": "text/markdown",
+      "sha256": "ac806088630d09b9ce15b6ca31c6e3022bdca996f87202213ccfd5c80be0d46f",
+      "bytes": 2690,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/PRO-ADVERSARIAL-REVIEW.md",
+      "role": "independent falsification and residual uncertainty",
+      "media_type": "text/markdown",
+      "sha256": "c72d7cda7d2136e818cf55778477e37c00cbef48ed2f44199308e9a2a2dfd4b5",
+      "bytes": 13271,
+      "normative": false
+    },
+    {
+      "path": "FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json",
+      "role": "owned product surfaces and dispositions",
+      "media_type": "application/json",
+      "sha256": "410fa8b0ff620d085e37ee83aae8e7c7407bb702f88afe51abe89dc5b8c1d0fb",
+      "bytes": 36878,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/REQUIREMENT_TRACE.json",
+      "role": "granular machine-readable requirements",
+      "media_type": "application/json",
+      "sha256": "07ae7af84eada1ea5889f52a0a6707e339e3e0cbaff65ac7b7d3bace72076af8",
+      "bytes": 126109,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/RESEARCH_SOURCE_REGISTRY.json",
+      "role": "classified current primary and internal sources",
+      "media_type": "application/json",
+      "sha256": "be7797fc857f69dbada671664404f184e8ea35a27350c6b6d59b4ee97842ee87",
+      "bytes": 44287,
+      "normative": true
+    },
+    {
+      "path": "FINAL-CONTRACT/RESOLVED-FINDINGS.json",
+      "role": "machine-readable candidate findings and design resolutions",
+      "media_type": "application/json",
+      "sha256": "a953ee693df54624b7f6fe166344ebd5b1aa72687a673cd10d1a999ae386115b",
+      "bytes": 18434,
+      "normative": false
+    },
+    {
+      "path": "FINAL-CONTRACT/SNAPSHOT-INTEGRITY-REPORT.json",
+      "role": "archive integrity and provenance coverage report",
+      "media_type": "application/json",
+      "sha256": "8784531d3adea2444ec23de6c5afa7053150564cff65f80453a2dc800b06bcf5",
+      "bytes": 2504,
+      "normative": false
+    },
+    {
+      "path": "FINAL-CONTRACT/ULTRA-INPUT-MANIFEST.json",
+      "role": "self-contained Ultra input map and snapshot limitations",
+      "media_type": "application/json",
+      "sha256": "cbcb6ef2d69165c3bc6e21efbcde9114cf67875dd02b12493a43aa3076ba07f2",
+      "bytes": 3002,
+      "normative": true
+    }
+  ],
+  "self_digest_authority": "FINAL-HANDOFF-MANIFEST.sha256",
+  "final_manifest_rule": "The final SHA-256 manifest covers every bundle file except itself, which avoids self-reference."
+}

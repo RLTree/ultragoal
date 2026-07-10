@@ -1,0 +1,990 @@
+{
+  "schema_version": "2.0.0",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "truth_layers": [
+    "artifact_truth",
+    "installed_truth",
+    "observability_truth",
+    "product_truth",
+    "claim_truth"
+  ],
+  "journey_count": 16,
+  "journeys": [
+    {
+      "journey_id": "J-ACQUIRE",
+      "name": "Acquire the intended plugin",
+      "surface_ids": [
+        "PS-MARKETPLACE",
+        "PS-PLUGIN-MANIFEST",
+        "PS-SOURCE"
+      ]
+    },
+    {
+      "journey_id": "J-INSTALL",
+      "name": "Install and verify package bytes",
+      "surface_ids": [
+        "PS-INSTALL",
+        "PS-MARKETPLACE",
+        "PS-PACKAGE",
+        "PS-PLUGIN-MANIFEST"
+      ]
+    },
+    {
+      "journey_id": "J-DISCOVER",
+      "name": "Discover the plugin in the selected host",
+      "surface_ids": [
+        "PS-DISCOVERY",
+        "PS-MARKETPLACE",
+        "PS-PLUGIN-MANIFEST"
+      ]
+    },
+    {
+      "journey_id": "J-ENTER",
+      "name": "Understand and invoke the front door",
+      "surface_ids": [
+        "PS-DISCOVERY",
+        "PS-ENTRY",
+        "PS-SKILLS"
+      ]
+    },
+    {
+      "journey_id": "J-FIT-FRESH",
+      "name": "Fit a fresh repository",
+      "surface_ids": [
+        "PS-FIT-FRESH",
+        "PS-SKILLS"
+      ]
+    },
+    {
+      "journey_id": "J-FIT-RETROFIT",
+      "name": "Retrofit an existing repository",
+      "surface_ids": [
+        "PS-FIT-RETROFIT",
+        "PS-SKILLS"
+      ]
+    },
+    {
+      "journey_id": "J-ROUTINE",
+      "name": "Perform routine dirty-tree work",
+      "surface_ids": [
+        "PS-CLI",
+        "PS-ROUTINE",
+        "PS-SKILLS"
+      ]
+    },
+    {
+      "journey_id": "J-DIAGNOSE",
+      "name": "Diagnose and repair a failure",
+      "surface_ids": [
+        "PS-CLI",
+        "PS-DIAGNOSE",
+        "PS-OBSERVE-LOCAL",
+        "PS-SKILLS"
+      ]
+    },
+    {
+      "journey_id": "J-PROVE",
+      "name": "Run claim-specific strict proof",
+      "surface_ids": [
+        "PS-CLI",
+        "PS-PROOF",
+        "PS-SKILLS"
+      ]
+    },
+    {
+      "journey_id": "J-OBSERVE",
+      "name": "Query and explain product behavior",
+      "surface_ids": [
+        "PS-OBSERVE-EXPORT",
+        "PS-OBSERVE-LOCAL"
+      ]
+    },
+    {
+      "journey_id": "J-ORCHESTRATE",
+      "name": "Complete dependency-closed multi-scope work",
+      "surface_ids": [
+        "PS-AGENTS",
+        "PS-GOAL",
+        "PS-ORCHESTRATION"
+      ]
+    },
+    {
+      "journey_id": "J-EVALUATE",
+      "name": "Evaluate behavior and harvest failures",
+      "surface_ids": [
+        "PS-AGENTS",
+        "PS-EVAL",
+        "PS-SKILLS"
+      ]
+    },
+    {
+      "journey_id": "J-RESEARCH",
+      "name": "Refresh research and propose law changes",
+      "surface_ids": [
+        "PS-RESEARCH",
+        "PS-SKILLS"
+      ]
+    },
+    {
+      "journey_id": "J-UPGRADE",
+      "name": "Upgrade, route, and retire old surfaces",
+      "surface_ids": [
+        "PS-CLI",
+        "PS-RESEARCH",
+        "PS-SKILLS",
+        "PS-SOURCE",
+        "PS-UPGRADE"
+      ]
+    },
+    {
+      "journey_id": "J-RELEASE",
+      "name": "Build and verify a release candidate",
+      "surface_ids": [
+        "PS-CLI",
+        "PS-PACKAGE",
+        "PS-PROOF",
+        "PS-RELEASE"
+      ]
+    },
+    {
+      "journey_id": "J-COMPLETE",
+      "name": "Reconcile integrated completion honestly",
+      "surface_ids": [
+        "PS-COMPLETION",
+        "PS-GOAL",
+        "PS-ORCHESTRATION",
+        "PS-PROOF"
+      ]
+    }
+  ],
+  "component_topology": {
+    "canonical_skills": [
+      {
+        "canonical": "harness-ultragoal",
+        "purpose": "Concise front door, intent classification, authority disclosure, and route selection.",
+        "legacy_routes": [
+          "ultragoal",
+          "harness-engineering"
+        ]
+      },
+      {
+        "canonical": "repository-fit",
+        "purpose": "Fresh setup and existing-repository retrofit through inspect/plan/apply/verify.",
+        "legacy_routes": [
+          "agent-first-repo-init",
+          "agent-first-repo-retrofit",
+          "fit-repo"
+        ]
+      },
+      {
+        "canonical": "routine-work",
+        "purpose": "Dirty-tree-safe affected checks, verified reuse, and exact execution reporting.",
+        "legacy_routes": [
+          "execplan-lane",
+          "agent-runtime-legibility"
+        ]
+      },
+      {
+        "canonical": "diagnose-and-observe",
+        "purpose": "Causal diagnosis, local semantic observability, repair, and deterministic next action.",
+        "legacy_routes": [
+          "agent-observability-stack"
+        ]
+      },
+      {
+        "canonical": "goal-run",
+        "purpose": "Durable Goal-mode execution, root orchestration, checkpoints, and honest stops.",
+        "legacy_routes": [
+          "orchestrator-reconciler"
+        ]
+      },
+      {
+        "canonical": "prove",
+        "purpose": "Claim-specific strict proof and independent reconciliation.",
+        "legacy_routes": [
+          "proof-gate",
+          "product-cohesion-gate",
+          "product-fitness-gate"
+        ]
+      },
+      {
+        "canonical": "improve-and-maintain",
+        "purpose": "Evaluation, failure harvesting, research refresh, migration, compatibility, and retirement.",
+        "legacy_routes": [
+          "agent-improvement-loop",
+          "standards-gardener"
+        ]
+      },
+      {
+        "canonical": "product-journey-review",
+        "purpose": "Fresh-user, fresh-agent, maintainer, security, recovery, and proof-falsification journeys.",
+        "legacy_routes": []
+      }
+    ],
+    "read_only_agent_roles": [
+      {
+        "name": "repo-recon",
+        "purpose": "Recompute live repository, worktree, command, component, and authority state.",
+        "sandbox": "read-only"
+      },
+      {
+        "name": "research-verifier",
+        "purpose": "Revalidate mutable primary-source facts and classification without changing product law.",
+        "sandbox": "read-only"
+      },
+      {
+        "name": "product-journey-reviewer",
+        "purpose": "Attack acquisition-through-completion journeys and quality in use.",
+        "sandbox": "read-only"
+      },
+      {
+        "name": "claim-falsifier",
+        "purpose": "Attack wrong-surface, stale, surrogate, bypass, and reward-hacking proof.",
+        "sandbox": "read-only"
+      },
+      {
+        "name": "security-reviewer",
+        "purpose": "Attack confinement, permissions, secrets, supply-chain, and trust boundaries.",
+        "sandbox": "read-only"
+      },
+      {
+        "name": "orchestration-recovery-reviewer",
+        "purpose": "Attack work decomposition, write leases, shared authority, recovery, and stop conditions.",
+        "sandbox": "read-only"
+      }
+    ],
+    "cli_command_groups": [
+      {
+        "name": "inspect",
+        "default_effect": "read",
+        "purpose": "Inspect live context, inventory, capabilities, findings, and claim ceilings."
+      },
+      {
+        "name": "next",
+        "default_effect": "read",
+        "purpose": "Select one deterministic legal next action or authority request."
+      },
+      {
+        "name": "fit",
+        "default_effect": "read_for_inspect_and_plan; workspace-write_for_explicit_apply",
+        "purpose": "Inspect, plan, apply, and verify fresh setup or retrofit."
+      },
+      {
+        "name": "check",
+        "default_effect": "read_plus_declared_local_build_artifacts",
+        "purpose": "Run routine or strict affected validation with verified reuse."
+      },
+      {
+        "name": "diagnose",
+        "default_effect": "read",
+        "purpose": "Explain causal failures, repairs, reruns, and ceilings."
+      },
+      {
+        "name": "prove",
+        "default_effect": "declared_local_write",
+        "purpose": "Execute claim-specific proof and independent reconciliation."
+      },
+      {
+        "name": "observe",
+        "default_effect": "read_for_query; external-write_for_explicit_export",
+        "purpose": "Query local semantic events or explicitly export approved data."
+      },
+      {
+        "name": "package",
+        "default_effect": "declared_local_write; external-write_only_for_explicit_publish",
+        "purpose": "Build, inventory, verify, install-test, and prepare distribution."
+      },
+      {
+        "name": "eval",
+        "default_effect": "declared_local_write; external-write_only_for_explicit_adapter",
+        "purpose": "Audit and run evaluations, harvest failures, and produce promotion candidates."
+      },
+      {
+        "name": "migrate",
+        "default_effect": "read_for_plan; workspace-write_for_explicit_apply; destructive_requires_decision",
+        "purpose": "Route legacy surfaces and verify retirement."
+      }
+    ]
+  },
+  "surface_count": 24,
+  "surfaces": [
+    {
+      "surface_id": "PS-SOURCE",
+      "name": "Canonical source and contract",
+      "owner": "OWN-PRODUCT-ARCHITECTURE",
+      "journey_ids": [
+        "J-ACQUIRE",
+        "J-UPGRADE"
+      ],
+      "behavior": "One navigable, machine-readable source contract and product inventory.",
+      "truth_layer": "artifact_truth",
+      "current_snapshot_status": "fragmented",
+      "snapshot_evidence": [
+        "source/README.md",
+        "source/plugin-manifest-draft.json",
+        "candidate-contract/*"
+      ],
+      "implementation_disposition": "Consolidate into this contract index, live canonical inventories, and generated projections; archive candidate/history outside active authority.",
+      "required_tools": [
+        "HCT-INVENTORY",
+        "HCT-CLAIMS"
+      ],
+      "proof_claims": [
+        "CL-SOURCE"
+      ],
+      "proof_requirement": "Independent manifest/reference validation against the live tree and adopted contract digest.",
+      "claim_guard": "A coherent document or source digest does not prove package, install, runtime, or product behavior."
+    },
+    {
+      "surface_id": "PS-PLUGIN-MANIFEST",
+      "name": "Standards-compliant plugin manifest",
+      "owner": "OWN-PLUGIN-PRODUCT",
+      "journey_ids": [
+        "J-ACQUIRE",
+        "J-INSTALL",
+        "J-DISCOVER"
+      ],
+      "behavior": "A supported .codex-plugin/plugin.json accurately describes shipped components and product entry behavior.",
+      "truth_layer": "artifact_truth",
+      "current_snapshot_status": "partial_lane_era",
+      "snapshot_evidence": [
+        "source/.codex-plugin/plugin.json"
+      ],
+      "implementation_disposition": "Rewrite descriptions, remove lane/gate UX, include only supported component fields, and bind version to package inventory.",
+      "required_tools": [
+        "HCT-INVENTORY",
+        "HCT-DISTRIBUTION"
+      ],
+      "proof_claims": [
+        "CL-SOURCE",
+        "CL-PACKAGE"
+      ],
+      "proof_requirement": "Schema/path validation plus package inspection; host discovery remains a separate claim.",
+      "claim_guard": "Manifest presence is not installation or discovery proof."
+    },
+    {
+      "surface_id": "PS-MARKETPLACE",
+      "name": "Repository and personal marketplace wiring",
+      "owner": "OWN-DISTRIBUTION",
+      "journey_ids": [
+        "J-ACQUIRE",
+        "J-INSTALL",
+        "J-DISCOVER"
+      ],
+      "behavior": "Supported marketplace catalogs point to the intended plugin origin and version.",
+      "truth_layer": "artifact_truth",
+      "current_snapshot_status": "incomplete",
+      "snapshot_evidence": [
+        "source/install/personal-marketplace.example.json"
+      ],
+      "implementation_disposition": "Add repo-scoped marketplace support and tested personal installation instructions; do not infer host registration from catalog bytes.",
+      "required_tools": [
+        "HCT-DISTRIBUTION"
+      ],
+      "proof_claims": [
+        "CL-PACKAGE",
+        "CL-INSTALL",
+        "CL-DISCOVERY"
+      ],
+      "proof_requirement": "Catalog schema/path validation, install-byte reconciliation, and independent new-session host probe.",
+      "claim_guard": "Marketplace catalog visibility is not plugin runtime behavior."
+    },
+    {
+      "surface_id": "PS-SKILLS",
+      "name": "Canonical skill topology",
+      "owner": "OWN-PLUGIN-PRODUCT",
+      "journey_ids": [
+        "J-ENTER",
+        "J-FIT-FRESH",
+        "J-FIT-RETROFIT",
+        "J-ROUTINE",
+        "J-DIAGNOSE",
+        "J-PROVE",
+        "J-EVALUATE",
+        "J-RESEARCH",
+        "J-UPGRADE"
+      ],
+      "behavior": "Eight non-duplicative, progressively disclosed skills with valid metadata and closed routes.",
+      "truth_layer": "product_truth",
+      "current_snapshot_status": "duplicated_and_three_invalid_frontmatters",
+      "snapshot_evidence": [
+        "source/skills/*/SKILL.md"
+      ],
+      "implementation_disposition": "Consolidate 14 skills into the final semantic topology and route or retire legacy names.",
+      "required_tools": [
+        "HCT-INVENTORY",
+        "HCT-DISTRIBUTION",
+        "HCT-EVAL"
+      ],
+      "proof_claims": [
+        "CL-SOURCE",
+        "CL-DISCOVERY",
+        "CL-RUNTIME",
+        "CL-REAL-JOURNEY"
+      ],
+      "proof_requirement": "Metadata/reachability validation plus new-task representative invocations in supported hosts.",
+      "claim_guard": "A valid SKILL.md file does not prove selection, comprehension, or journey closure."
+    },
+    {
+      "surface_id": "PS-AGENTS",
+      "name": "Project-scoped custom agents and role contracts",
+      "owner": "OWN-ULTRA-ROOT",
+      "journey_ids": [
+        "J-ORCHESTRATE",
+        "J-EVALUATE"
+      ],
+      "behavior": "Read-only reconnaissance and review agents are discoverable from supported paths; write workers use explicit run-scoped leases.",
+      "truth_layer": "product_truth",
+      "current_snapshot_status": "wrong_discovery_path_and_static_roles",
+      "snapshot_evidence": [
+        "source/custom-agents/*.toml",
+        "source/agents/*.md"
+      ],
+      "implementation_disposition": "Move canonical read-only roles to .codex/agents and generate write-worker instructions per work package; retire static lane agents.",
+      "required_tools": [
+        "HCT-INVENTORY",
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "proof_claims": [
+        "CL-DISCOVERY",
+        "CL-ORCHESTRATION",
+        "CL-REAL-JOURNEY"
+      ],
+      "proof_requirement": "Host agent discovery probe, sandbox/effect verification, collision tests, and root acceptance replay.",
+      "claim_guard": "A TOML file or spawned thread is not proof of correct permissions, ownership, or integration."
+    },
+    {
+      "surface_id": "PS-CLI",
+      "name": "Rust authority and acceleration CLI",
+      "owner": "OWN-CLI",
+      "journey_ids": [
+        "J-ROUTINE",
+        "J-DIAGNOSE",
+        "J-PROVE",
+        "J-UPGRADE",
+        "J-RELEASE"
+      ],
+      "behavior": "A small typed CLI exposes inspect, next, fit, check, diagnose, prove, observe, package, eval, and migrate semantics.",
+      "truth_layer": "product_truth",
+      "current_snapshot_status": "large_fragmented_37_variant_surface",
+      "snapshot_evidence": [
+        "source/validator/src/command/mod.rs",
+        "source/validator/src/argument_parser/mod.rs"
+      ],
+      "implementation_disposition": "Replace the gate/receipt-heavy public grammar with ten product-semantic groups and explicit effect types; provide temporary routers only where justified.",
+      "required_tools": [
+        "HCT-CONTEXT",
+        "HCT-STATE",
+        "HCT-CLAIMS",
+        "HCT-MIGRATE"
+      ],
+      "proof_claims": [
+        "CL-ROUTINE",
+        "CL-STRICT",
+        "CL-REAL-JOURNEY"
+      ],
+      "proof_requirement": "Parser/property tests, no-write probes, behavior tests, help snapshots, exit-code tests, and representative operator journeys.",
+      "claim_guard": "CLI tests cannot substitute for plugin acquisition, discovery, or usability."
+    },
+    {
+      "surface_id": "PS-PACKAGE",
+      "name": "Deterministic plugin package",
+      "owner": "OWN-DISTRIBUTION",
+      "journey_ids": [
+        "J-INSTALL",
+        "J-RELEASE"
+      ],
+      "behavior": "A package snapshot includes the intended files in stable order with stable metadata, digest, inventory, and build context.",
+      "truth_layer": "artifact_truth",
+      "current_snapshot_status": "partial",
+      "snapshot_evidence": [
+        "snapshot/package-digest.txt",
+        "source/plugin-manifest-draft.json"
+      ],
+      "implementation_disposition": "Build from canonical inventory rather than the internal draft; emit deterministic archive, digest, and provenance envelope.",
+      "required_tools": [
+        "HCT-INVENTORY",
+        "HCT-DISTRIBUTION",
+        "HCT-CAPTURE"
+      ],
+      "proof_claims": [
+        "CL-PACKAGE",
+        "CL-RELEASE"
+      ],
+      "proof_requirement": "Independent clean-environment rebuild/compare or an explicitly lower reproducibility ceiling, plus expectation-based provenance verification.",
+      "claim_guard": "Digest equality proves byte identity only, not installation or behavior."
+    },
+    {
+      "surface_id": "PS-INSTALL",
+      "name": "Installation and installed-byte identity",
+      "owner": "OWN-DISTRIBUTION",
+      "journey_ids": [
+        "J-INSTALL"
+      ],
+      "behavior": "Supported install paths place exactly the verified package bytes under an explicitly selected scope.",
+      "truth_layer": "artifact_truth",
+      "current_snapshot_status": "instructions_only",
+      "snapshot_evidence": [
+        "source/docs/install-and-visibility.md",
+        "source/install/personal-marketplace.example.json"
+      ],
+      "implementation_disposition": "Implement capability-probed install verification and clear repo/personal scope; require authorization for writes outside the repository.",
+      "required_tools": [
+        "HCT-DISTRIBUTION",
+        "HCT-CAPTURE"
+      ],
+      "proof_claims": [
+        "CL-INSTALL"
+      ],
+      "proof_requirement": "Post-install byte inventory and digest reconciliation in the selected live location.",
+      "claim_guard": "Successful copy or exit code does not prove host discovery."
+    },
+    {
+      "surface_id": "PS-DISCOVERY",
+      "name": "Host discovery and new-session visibility",
+      "owner": "OWN-DISTRIBUTION",
+      "journey_ids": [
+        "J-DISCOVER",
+        "J-ENTER"
+      ],
+      "behavior": "The selected Codex host exposes the intended plugin, skills, and supported agents in a new task/session.",
+      "truth_layer": "observability_truth",
+      "current_snapshot_status": "unproven_by_snapshot",
+      "snapshot_evidence": [
+        "Snapshot explicitly cannot prove app or installed-plugin state."
+      ],
+      "implementation_disposition": "Add host capability adapters and independent new-session probes; report unsupported surfaces without fabricating state.",
+      "required_tools": [
+        "HCT-DISTRIBUTION",
+        "HCT-CAPTURE",
+        "HCT-CLAIMS"
+      ],
+      "proof_claims": [
+        "CL-DISCOVERY",
+        "CL-RUNTIME"
+      ],
+      "proof_requirement": "Same-version package/install reconciliation plus a host-observed listing and representative task invocation.",
+      "claim_guard": "Source, package, and installed bytes cannot promote discovery."
+    },
+    {
+      "surface_id": "PS-ENTRY",
+      "name": "First-run front door",
+      "owner": "OWN-PLUGIN-PRODUCT",
+      "journey_ids": [
+        "J-ENTER"
+      ],
+      "behavior": "A fresh agent can identify the product, choose inspect/fit/work/prove modes, and reach exact next actions without reading the full contract.",
+      "truth_layer": "product_truth",
+      "current_snapshot_status": "multiple_competing_entries",
+      "snapshot_evidence": [
+        "source/.codex-plugin/plugin.json",
+        "source/skills/fit-repo/SKILL.md",
+        "source/skills/harness-engineering/SKILL.md"
+      ],
+      "implementation_disposition": "Create one harness-ultragoal skill and route specialized skills by state and intent.",
+      "required_tools": [
+        "HCT-STATE",
+        "HCT-EVAL"
+      ],
+      "proof_claims": [
+        "CL-RUNTIME",
+        "CL-REAL-JOURNEY"
+      ],
+      "proof_requirement": "Fresh-agent comprehension evaluation and real task completion with bounded context.",
+      "claim_guard": "Documentation readability alone does not prove first-run success."
+    },
+    {
+      "surface_id": "PS-FIT-FRESH",
+      "name": "Fresh repository fitting",
+      "owner": "OWN-REPOSITORY-FIT",
+      "journey_ids": [
+        "J-FIT-FRESH"
+      ],
+      "behavior": "Inspect, plan, apply, and verify a minimal agent-first repository setup with rollback.",
+      "truth_layer": "product_truth",
+      "current_snapshot_status": "partial_receipt_heavy",
+      "snapshot_evidence": [
+        "source/skills/agent-first-repo-init/SKILL.md",
+        "source/templates/*"
+      ],
+      "implementation_disposition": "Unify under HCT-FIT and repository-fit skill; generated files derive from typed desired state.",
+      "required_tools": [
+        "HCT-CONTEXT",
+        "HCT-INVENTORY",
+        "HCT-FIT",
+        "HCT-CAPTURE"
+      ],
+      "proof_claims": [
+        "CL-FIT",
+        "CL-REAL-JOURNEY"
+      ],
+      "proof_requirement": "Behavioral fixture and live temporary-repository journey, including idempotency and rollback.",
+      "claim_guard": "Generated files or receipts do not prove loaded instructions or working commands."
+    },
+    {
+      "surface_id": "PS-FIT-RETROFIT",
+      "name": "Existing repository retrofit",
+      "owner": "OWN-REPOSITORY-FIT",
+      "journey_ids": [
+        "J-FIT-RETROFIT"
+      ],
+      "behavior": "Reconcile an existing repository while preserving user changes, conventions, generated ownership, and runnable workflows.",
+      "truth_layer": "product_truth",
+      "current_snapshot_status": "partial_receipt_heavy",
+      "snapshot_evidence": [
+        "source/skills/agent-first-repo-retrofit/SKILL.md",
+        "source/templates/*"
+      ],
+      "implementation_disposition": "Use semantic ownership and three-way reconciliation; conflicts become findings, never silent overwrites.",
+      "required_tools": [
+        "HCT-CONTEXT",
+        "HCT-INVENTORY",
+        "HCT-FIT",
+        "HCT-CAPTURE"
+      ],
+      "proof_claims": [
+        "CL-FIT",
+        "CL-REAL-JOURNEY"
+      ],
+      "proof_requirement": "Adversarial repositories with pre-existing instructions, partial setup, local edits, conflicts, symlinks, and rollback.",
+      "claim_guard": "A clean diff or successful template write cannot prove preservation and runtime behavior."
+    },
+    {
+      "surface_id": "PS-ROUTINE",
+      "name": "Routine development loop",
+      "owner": "OWN-DEVELOPER-LOOP",
+      "journey_ids": [
+        "J-ROUTINE"
+      ],
+      "behavior": "Inspect changed semantics, choose a conservative legal check set, execute/reuse transparently, and return actionable findings quickly.",
+      "truth_layer": "product_truth",
+      "current_snapshot_status": "fragmented_with_global_gate_pressure",
+      "snapshot_evidence": [
+        "source/scripts/check",
+        "source/validator/src/cli/routine",
+        "source/.harness/*"
+      ],
+      "implementation_disposition": "Consolidate impact, cache, test, fixture, and result semantics under routine profile; no artifacts by default.",
+      "required_tools": [
+        "HCT-CONTEXT",
+        "HCT-IMPACT",
+        "HCT-FIXTURES",
+        "HCT-CAPTURE",
+        "HCT-STATE"
+      ],
+      "proof_claims": [
+        "CL-ROUTINE"
+      ],
+      "proof_requirement": "Dirty/clean trees, uncertainty expansion, cache poisoning, timing, interruption, and strict-comparison tests on representative repository tiers.",
+      "claim_guard": "A fast result without executed/reused-work identity cannot claim correctness or performance."
+    },
+    {
+      "surface_id": "PS-DIAGNOSE",
+      "name": "Diagnosis, repair, and next action",
+      "owner": "OWN-OPERATOR-EXPERIENCE",
+      "journey_ids": [
+        "J-DIAGNOSE"
+      ],
+      "behavior": "One findings graph yields causal explanations, safe repair, exact rerun, and one prioritized next action.",
+      "truth_layer": "product_truth",
+      "current_snapshot_status": "partial_multiple_status_surfaces",
+      "snapshot_evidence": [
+        "source/validator/src/cli/current_state",
+        "source/validator/src/cli/next_action",
+        "source/docs/*"
+      ],
+      "implementation_disposition": "Unify current state, findings, repair, diagnose, and next; reject prose-only or duplicate authority.",
+      "required_tools": [
+        "HCT-STATE",
+        "HCT-OBSERVE",
+        "HCT-CAPTURE"
+      ],
+      "proof_claims": [
+        "CL-ROUTINE",
+        "CL-OBSERVABILITY",
+        "CL-REAL-JOURNEY"
+      ],
+      "proof_requirement": "Injected causal failures, ambiguity, unsupported capability, stale context, and operator comprehension tests.",
+      "claim_guard": "A finding row does not prove cause or repair until reproduction and rerun close the loop."
+    },
+    {
+      "surface_id": "PS-PROOF",
+      "name": "Claim-specific strict proof",
+      "owner": "OWN-PROOF-AUTHORITY",
+      "journey_ids": [
+        "J-PROVE",
+        "J-RELEASE",
+        "J-COMPLETE"
+      ],
+      "behavior": "Strict proof executes the exact validators and independent observations required by one named claim and emits an evidence envelope to an explicit output directory.",
+      "truth_layer": "validation_truth",
+      "current_snapshot_status": "fragmented_receipt_and_final_packet_authorities",
+      "snapshot_evidence": [
+        "source/validator/src/cli/final_packet",
+        "source/schemas/*receipt*",
+        "source/fixtures/*"
+      ],
+      "implementation_disposition": "Replace universal receipt ceremony and duplicate finalizers with HCT-CLAIMS and claim-specific validators.",
+      "required_tools": [
+        "HCT-CONTEXT",
+        "HCT-CAPTURE",
+        "HCT-FIXTURES",
+        "HCT-CLAIMS"
+      ],
+      "proof_claims": [
+        "CL-STRICT",
+        "CL-RELEASE",
+        "CL-COMPLETION"
+      ],
+      "proof_requirement": "Stale, wrong-surface, omitted, contradictory, self-signed, tampered, and reward-hacked evidence corpus.",
+      "claim_guard": "Tests, receipts, generated rows, telemetry, reviewer approval, or signatures cannot substitute for the named behavior."
+    },
+    {
+      "surface_id": "PS-OBSERVE-LOCAL",
+      "name": "Zero-dependency local observability",
+      "owner": "OWN-OBSERVABILITY",
+      "journey_ids": [
+        "J-OBSERVE",
+        "J-DIAGNOSE"
+      ],
+      "behavior": "Structured local events can be queried and correlated without an external backend.",
+      "truth_layer": "observability_truth",
+      "current_snapshot_status": "partial_receipt_and_stack_split",
+      "snapshot_evidence": [
+        "source/schemas/observability-*.schema.json",
+        "source/docs/observability-stack.md",
+        "source/validator/src/cli/observe"
+      ],
+      "implementation_disposition": "Make a bounded append/query store and semantic catalog authoritative for diagnosis, not for claims.",
+      "required_tools": [
+        "HCT-CONTEXT",
+        "HCT-OBSERVE",
+        "HCT-STATE"
+      ],
+      "proof_claims": [
+        "CL-OBSERVABILITY"
+      ],
+      "proof_requirement": "Roundtrip, corruption, truncation, ordering, duplicate, cardinality, redaction, and causal-query tests.",
+      "claim_guard": "Event existence is observability evidence only."
+    },
+    {
+      "surface_id": "PS-OBSERVE-EXPORT",
+      "name": "Optional observability export",
+      "owner": "OWN-OBSERVABILITY",
+      "journey_ids": [
+        "J-OBSERVE"
+      ],
+      "behavior": "Capability-probed adapters export approved event classes and reconcile a query roundtrip.",
+      "truth_layer": "observability_truth",
+      "current_snapshot_status": "optional_partial",
+      "snapshot_evidence": [
+        "source/docs/observability-stack.md",
+        "source/schemas/observability-*.schema.json"
+      ],
+      "implementation_disposition": "Keep export optional; absence lowers only export claims, never routine product behavior.",
+      "required_tools": [
+        "HCT-OBSERVE",
+        "HCT-CAPTURE"
+      ],
+      "proof_claims": [
+        "CL-OBSERVABILITY"
+      ],
+      "proof_requirement": "Consent, redaction, outage, delay, duplicate, wrong-candidate, and backend-query reconciliation.",
+      "claim_guard": "A dashboard, exporter process, or successful POST is not roundtrip or product proof."
+    },
+    {
+      "surface_id": "PS-ORCHESTRATION",
+      "name": "Adaptive Ultra orchestration",
+      "owner": "OWN-ULTRA-ROOT",
+      "journey_ids": [
+        "J-ORCHESTRATE",
+        "J-COMPLETE"
+      ],
+      "behavior": "Live dependency-closed work packages run with read-only reconnaissance, disjoint write scopes, root integration, and recovery.",
+      "truth_layer": "product_truth",
+      "current_snapshot_status": "historical_static_lane_model",
+      "snapshot_evidence": [
+        "source/LANE_REGISTRY.json",
+        "source/.codex/lane-registry/*",
+        "source/skills/execplan-lane/SKILL.md",
+        "source/skills/orchestrator-reconciler/SKILL.md"
+      ],
+      "implementation_disposition": "Replace lanes with run-scoped work packages and a root-owned scope/claim graph; move historical registries out of active authority.",
+      "required_tools": [
+        "HCT-CONTEXT",
+        "HCT-INVENTORY",
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "proof_claims": [
+        "CL-ORCHESTRATION",
+        "CL-REAL-JOURNEY"
+      ],
+      "proof_requirement": "Conflict, stale worker, blocked worker, drift, interruption, recovery, root acceptance, and no-overlap trials.",
+      "claim_guard": "Parallel threads, lane completion rows, or merged diffs do not prove safe orchestration."
+    },
+    {
+      "surface_id": "PS-EVAL",
+      "name": "Behavior evaluation and improvement",
+      "owner": "OWN-AGENT-QUALITY",
+      "journey_ids": [
+        "J-EVALUATE"
+      ],
+      "behavior": "Representative tasks and traces are audited, scored, triaged, adversarially reviewed, and promoted only after measured improvement.",
+      "truth_layer": "validation_truth",
+      "current_snapshot_status": "partial_adapter_and_receipt_heavy",
+      "snapshot_evidence": [
+        "source/docs/product-eval-protocol.schema.json",
+        "source/docs/promptfoo-*",
+        "source/validator/src/cli/improvement_loop",
+        "source/validator/src/cli/promptfoo"
+      ],
+      "implementation_disposition": "Create vendor-neutral HCT-EVAL; keep Promptfoo/OpenAI adapters optional and current; retire score-only promotion.",
+      "required_tools": [
+        "HCT-CAPTURE",
+        "HCT-FIXTURES",
+        "HCT-EVAL",
+        "HCT-CLAIMS"
+      ],
+      "proof_claims": [
+        "CL-EVAL-IMPROVEMENT",
+        "CL-REAL-JOURNEY"
+      ],
+      "proof_requirement": "Broken-task, scoring perturbation, contamination, negative-control, replay, and behavior-inspection tests.",
+      "claim_guard": "A higher score, passing grader, or test row cannot by itself prove product improvement."
+    },
+    {
+      "surface_id": "PS-RESEARCH",
+      "name": "Research and law authority",
+      "owner": "OWN-RESEARCH",
+      "journey_ids": [
+        "J-RESEARCH",
+        "J-UPGRADE"
+      ],
+      "behavior": "Current primary sources are classified, mapped to product requirements, challenged, and reviewed for staleness.",
+      "truth_layer": "artifact_truth",
+      "current_snapshot_status": "broad_but_stale_and_fragmented",
+      "snapshot_evidence": [
+        "source/docs/research-*",
+        "research/*",
+        "candidate-contract/RESEARCH_SOURCE_REGISTRY.json"
+      ],
+      "implementation_disposition": "Use the final source registry and promotion workflow; archive duplicate cards and generated mappings.",
+      "required_tools": [
+        "HCT-INVENTORY",
+        "HCT-EVAL",
+        "HCT-CLAIMS"
+      ],
+      "proof_claims": [
+        "CL-SOURCE",
+        "CL-EVAL-IMPROVEMENT"
+      ],
+      "proof_requirement": "Source availability/currentness checks and trace validation that each adopted external requirement has the required classifications and mappings.",
+      "claim_guard": "Publication authority or recency does not make a recommendation binding without product adoption."
+    },
+    {
+      "surface_id": "PS-UPGRADE",
+      "name": "Migration, compatibility, and retirement",
+      "owner": "OWN-MAINTENANCE",
+      "journey_ids": [
+        "J-UPGRADE"
+      ],
+      "behavior": "Legacy names and surfaces route predictably during a bounded compatibility window and are removed after successor proof.",
+      "truth_layer": "product_truth",
+      "current_snapshot_status": "large_unfinished_lane_gate_migration",
+      "snapshot_evidence": [
+        "13,542 lane references across 872 files",
+        "10,808 gate references across 1,221 files",
+        "297 gpt-5.5 references across 172 files"
+      ],
+      "implementation_disposition": "Apply the explicit migration map, generated deprecation inventory, compatibility telemetry, and removal gates.",
+      "required_tools": [
+        "HCT-INVENTORY",
+        "HCT-MIGRATE",
+        "HCT-CLAIMS"
+      ],
+      "proof_claims": [
+        "CL-REAL-JOURNEY",
+        "CL-RELEASE"
+      ],
+      "proof_requirement": "Compatibility route tests, zero-active-reference inventory, generated-surface cleanup, rollback, and representative upgrade journey.",
+      "claim_guard": "Renaming files or deleting references does not prove replacement behavior or safe migration."
+    },
+    {
+      "surface_id": "PS-GOAL",
+      "name": "Host durable goal integration",
+      "owner": "OWN-GOAL-INTEGRATION",
+      "journey_ids": [
+        "J-ORCHESTRATE",
+        "J-COMPLETE"
+      ],
+      "behavior": "The implementation prompt uses the host /goal mechanism when available and records exposed runtime metadata separately from product state.",
+      "truth_layer": "observability_truth",
+      "current_snapshot_status": "not_live_verifiable",
+      "snapshot_evidence": [
+        "Snapshot cannot establish host goal or runtime state."
+      ],
+      "implementation_disposition": "Use CODEX-ULTRA-GOAL.md; capability-probe Goal mode and lower only the host-goal claim if unavailable.",
+      "required_tools": [
+        "HCT-CONTEXT",
+        "HCT-STATE"
+      ],
+      "proof_claims": [
+        "CL-ORCHESTRATION"
+      ],
+      "proof_requirement": "Host-exposed goal state and runtime metadata captured without prompt inference; product progress remains separately computed.",
+      "claim_guard": "Prompt text, repository receipts, or an objective file cannot prove model, mode, or host goal state."
+    },
+    {
+      "surface_id": "PS-RELEASE",
+      "name": "Release candidate and publication boundary",
+      "owner": "OWN-DISTRIBUTION",
+      "journey_ids": [
+        "J-RELEASE"
+      ],
+      "behavior": "A release candidate links adopted source, deterministic package, supported installation/discovery journeys, migration status, proof envelopes, and human publication authority.",
+      "truth_layer": "validation_truth",
+      "current_snapshot_status": "not_established",
+      "snapshot_evidence": [
+        "Snapshot claim ceiling forbids readiness and release."
+      ],
+      "implementation_disposition": "Implement release claim graph but stop for unresolved channel, license, signing identity, and publication authorization decisions.",
+      "required_tools": [
+        "HCT-DISTRIBUTION",
+        "HCT-CLAIMS",
+        "HCT-MIGRATE"
+      ],
+      "proof_claims": [
+        "CL-RELEASE"
+      ],
+      "proof_requirement": "Exact live release profile, independent claim reconciliation, and explicit human release authorization.",
+      "claim_guard": "A built ZIP, signature, CI pass, or version bump is not release authority."
+    },
+    {
+      "surface_id": "PS-COMPLETION",
+      "name": "Integrated completion authority",
+      "owner": "OWN-RELEASE-AUTHORITY",
+      "journey_ids": [
+        "J-COMPLETE"
+      ],
+      "behavior": "One root-owned reconciliation confirms every required product journey, tool, migration, proof, and external decision at the same live candidate identity.",
+      "truth_layer": "validation_truth",
+      "current_snapshot_status": "not_established",
+      "snapshot_evidence": [
+        "Snapshot claim ceiling forbids product completion."
+      ],
+      "implementation_disposition": "Use HCT-CLAIMS only after all predecessors; no duplicate final packet or checklist authority.",
+      "required_tools": [
+        "HCT-CONTEXT",
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "proof_claims": [
+        "CL-COMPLETION"
+      ],
+      "proof_requirement": "Fresh live context, dependency-closed claim graph, independent final falsification, and no unresolved completion blocker.",
+      "claim_guard": "No subset, aggregate score, artifact count, test count, receipt set, or root assertion may substitute for integrated product behavior."
+    }
+  ]
+}

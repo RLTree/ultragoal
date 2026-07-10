@@ -1,0 +1,1043 @@
+{
+  "schema_version": "2.0.0",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "checked_at": "2026-07-10",
+  "classification_fields": [
+    "verified_facts",
+    "binding_product_requirements",
+    "advisory_practices",
+    "experimental_hypotheses",
+    "rejected_recommendations"
+  ],
+  "source_count": 35,
+  "sources": [
+    {
+      "source_id": "SRC-USER-MISSION",
+      "title": "Harness Ultragoal final review and implementation-handoff mission",
+      "publisher": "User product authority",
+      "url": null,
+      "source_class": "binding_product_authority",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "The requested product includes the plugin, Rust CLI, Harness-owned tools, installation/discovery, fitting, observability, journeys, research, proof, release, and completion authority."
+      ],
+      "binding_product_requirements": [
+        "All explicit mission, review-standard, handoff, deliverable, quality-gate, and claim-ceiling constraints in the request."
+      ],
+      "advisory_practices": [],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [],
+      "mapped_law_ids": [
+        "HUL-CLI-001",
+        "HUL-COMPLETION-001",
+        "HUL-EVAL-001",
+        "HUL-FIT-001",
+        "HUL-GOAL-001",
+        "HUL-MAINTENANCE-001",
+        "HUL-OBSERVE-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-PLUGIN-001",
+        "HUL-PRODUCT-001",
+        "HUL-PROOF-001",
+        "HUL-REPAIR-001",
+        "HUL-RESEARCH-001",
+        "HUL-REVIEW-001",
+        "HUL-ROUTINE-001",
+        "HUL-SECURITY-001",
+        "HUL-STATE-001",
+        "HUL-SUPPLY-001"
+      ],
+      "limitations": "Defines desired product and review authority, not live implementation evidence."
+    },
+    {
+      "source_id": "SRC-SNAPSHOT-README",
+      "title": "Harness Ultragoal Sol Pro Review Snapshot 00-READ-ME-FIRST",
+      "publisher": "Snapshot producer",
+      "url": "archive:00-READ-ME-FIRST.md",
+      "source_class": "snapshot_provenance_statement",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "The package declares itself a snapshot and expressly disclaims live installation, cache, app-registry, release, and runtime proof."
+      ],
+      "binding_product_requirements": [
+        "Treat all snapshot state as context, not live proof; preserve the stated claim ceiling."
+      ],
+      "advisory_practices": [],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [],
+      "mapped_law_ids": [
+        "HUL-COMPLETION-001",
+        "HUL-PROOF-001",
+        "HUL-STATE-001"
+      ],
+      "limitations": "Its own file is outside a supplied archive-wide digest manifest; the review computed its digest independently."
+    },
+    {
+      "source_id": "SRC-SNAPSHOT-REPO",
+      "title": "Verified repository snapshot and tracked source digest set",
+      "publisher": "Snapshot producer; independently checked in this review",
+      "url": "archive:source/ and snapshot/tracked-file-digests.sha256",
+      "source_class": "verified_snapshot_evidence",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "All 5,011 tracked source digests and all 3,499 fixture digests match the supplied manifests; the candidate content-set digest also matches."
+      ],
+      "binding_product_requirements": [
+        "Use repository findings as migration/implementation input only; recompute live state before implementation."
+      ],
+      "advisory_practices": [],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [],
+      "mapped_law_ids": [
+        "HUL-CLI-001",
+        "HUL-COMPLETION-001",
+        "HUL-EVAL-001",
+        "HUL-FIT-001",
+        "HUL-GOAL-001",
+        "HUL-MAINTENANCE-001",
+        "HUL-OBSERVE-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-PLUGIN-001",
+        "HUL-PRODUCT-001",
+        "HUL-PROOF-001",
+        "HUL-REPAIR-001",
+        "HUL-RESEARCH-001",
+        "HUL-REVIEW-001",
+        "HUL-ROUTINE-001",
+        "HUL-SECURITY-001",
+        "HUL-STATE-001",
+        "HUL-SUPPLY-001"
+      ],
+      "limitations": "The archive has 249 copied metadata/evidence/research/legacy files not covered by a supplied archive-wide digest manifest and cannot prove the current branch or runtime."
+    },
+    {
+      "source_id": "SRC-CANDIDATE",
+      "title": "Sol Extra High successor contract candidate v1",
+      "publisher": "Candidate author",
+      "url": "archive:candidate-contract/",
+      "source_class": "review_input_not_authority",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "The 17 candidate files match their supplied per-entry and content-set digests."
+      ],
+      "binding_product_requirements": [],
+      "advisory_practices": [
+        "Plugin-first framing, truth-surface separation, adaptive orchestration, explicit custom-tool necessity, and strict claim boundaries were retained after falsification."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Binding status conditioned on completed validators/proof",
+        "Twenty-four top-level laws",
+        "Nineteen separately authoritative custom tools",
+        "Host-internal proof requirements without capability ceilings"
+      ],
+      "mapped_law_ids": [
+        "HUL-CLI-001",
+        "HUL-COMPLETION-001",
+        "HUL-EVAL-001",
+        "HUL-FIT-001",
+        "HUL-GOAL-001",
+        "HUL-MAINTENANCE-001",
+        "HUL-OBSERVE-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-PLUGIN-001",
+        "HUL-PRODUCT-001",
+        "HUL-PROOF-001",
+        "HUL-REPAIR-001",
+        "HUL-RESEARCH-001",
+        "HUL-REVIEW-001",
+        "HUL-ROUTINE-001",
+        "HUL-SECURITY-001",
+        "HUL-STATE-001",
+        "HUL-SUPPLY-001"
+      ],
+      "limitations": "A coherent candidate is not live product or contract adoption proof."
+    },
+    {
+      "source_id": "SRC-OAI-GPT56-GA",
+      "title": "GPT-5.6: Frontier intelligence that scales with your ambition",
+      "publisher": "OpenAI",
+      "url": "https://openai.com/index/gpt-5-6/",
+      "source_class": "primary_current_product_source",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "GPT-5.6 is generally available; Sol is the flagship; Ultra is described as the highest-capability setting coordinating multiple agents."
+      ],
+      "binding_product_requirements": [
+        "Do not hard-code stale predecessor model names as product law; record actual runtime metadata when exposed."
+      ],
+      "advisory_practices": [
+        "Use multi-agent work only when workstreams divide cleanly."
+      ],
+      "experimental_hypotheses": [
+        "Ultra orchestration can reduce wall-clock time for cleanly separable work; validate on this repository."
+      ],
+      "rejected_recommendations": [
+        "Adopting vendor benchmark scores as product completion criteria"
+      ],
+      "mapped_law_ids": [
+        "HUL-GOAL-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-RESEARCH-001"
+      ],
+      "limitations": "Product announcement; does not expose or prove the later local Codex runtime configuration."
+    },
+    {
+      "source_id": "SRC-OAI-MODEL-GUIDANCE",
+      "title": "Model guidance for GPT-5.6",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/api/docs/guides/latest-model",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Pro mode is configured with reasoning.mode=pro independently from reasoning effort; persisted reasoning, explicit prompt caching, programmatic tool calling, and multi-agent features have distinct contracts."
+      ],
+      "binding_product_requirements": [
+        "Never infer model/mode from prompt text; treat runtime metadata as an observed surface with a bounded claim."
+      ],
+      "advisory_practices": [
+        "Use the smallest prompt/tool set that reliably works",
+        "Benchmark migration on representative tasks",
+        "Use programmatic tool calling only for bounded tool-heavy processing"
+      ],
+      "experimental_hypotheses": [
+        "Persisted reasoning or prompt caching may improve efficiency without changing product authority; measure before adoption."
+      ],
+      "rejected_recommendations": [
+        "Treating persisted reasoning as repository state or proof",
+        "Making programmatic tool calling a universal orchestration layer"
+      ],
+      "mapped_law_ids": [
+        "HUL-COMPLETION-001",
+        "HUL-EVAL-001",
+        "HUL-GOAL-001",
+        "HUL-MAINTENANCE-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-PLUGIN-001",
+        "HUL-PRODUCT-001",
+        "HUL-RESEARCH-001"
+      ],
+      "limitations": "API feature availability may differ from the local Codex host and must be capability-probed."
+    },
+    {
+      "source_id": "SRC-OAI-GOAL",
+      "title": "Follow a goal",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/codex/use-cases/follow-goals",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "/goal attaches a durable objective; effective goals define the target, constraints, validation loop, and stopping condition and can be paused, resumed, or cleared."
+      ],
+      "binding_product_requirements": [
+        "The implementation handoff states outcome, constraints, validation, stopping conditions, recovery, and keeps host goal state separate from product state."
+      ],
+      "advisory_practices": [
+        "Use checkpoints and compact progress reports."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Creating a competing repository goal engine"
+      ],
+      "mapped_law_ids": [
+        "HUL-COMPLETION-001",
+        "HUL-EVAL-001",
+        "HUL-GOAL-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-PLUGIN-001",
+        "HUL-PROOF-001",
+        "HUL-RESEARCH-001"
+      ],
+      "limitations": "Host support and runtime state must be observed in the actual project."
+    },
+    {
+      "source_id": "SRC-OAI-GOAL-COMMAND",
+      "title": "Developer commands: /goal",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/codex/developer-commands",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "A /goal objective must be non-empty and at most 4,000 characters; longer instructions should live in a file referenced by the objective."
+      ],
+      "binding_product_requirements": [
+        "The exact handoff begins with /goal, remains within 4,000 characters, and obtains detailed authority through verified local files rather than hidden chat context."
+      ],
+      "advisory_practices": [
+        "Keep the objective compact and file-referential."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Embedding the full successor contract in the /goal objective"
+      ],
+      "mapped_law_ids": [
+        "HUL-COMPLETION-001",
+        "HUL-GOAL-001"
+      ],
+      "limitations": "The documented limit does not prove that Goal mode is enabled in the later local project."
+    },
+    {
+      "source_id": "SRC-OAI-PLUGINS",
+      "title": "Plugins overview",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/codex/plugins",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Plugins package skills and optional app/MCP capabilities; installation is followed by a new session/chat; hooks require review and trust."
+      ],
+      "binding_product_requirements": [
+        "Use supported plugin components and prove source, install, discovery, and runtime separately; hooks cannot be essential to correctness without explicit trust."
+      ],
+      "advisory_practices": [
+        "Test installed plugins in a new task."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Assuming install automatically proves discovery",
+        "Using untrusted hooks as a mandatory enforcement path"
+      ],
+      "mapped_law_ids": [
+        "HUL-PLUGIN-001",
+        "HUL-PROOF-001",
+        "HUL-SECURITY-001",
+        "HUL-SUPPLY-001"
+      ],
+      "limitations": "Host UI and capabilities can vary by version and account."
+    },
+    {
+      "source_id": "SRC-OAI-PLUGIN-BUILD",
+      "title": "Build plugins",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/codex/plugins/build",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "A plugin requires .codex-plugin/plugin.json; repo marketplaces use $REPO_ROOT/.agents/plugins/marketplace.json and personal marketplaces use ~/.agents/plugins/marketplace.json; local source paths are relative and ./-prefixed."
+      ],
+      "binding_product_requirements": [
+        "Implement and verify supported repo/personal marketplace wiring, required manifest paths, stable package inventory, and new-task discovery."
+      ],
+      "advisory_practices": [
+        "Use plugin creator tooling as scaffolding, not authority."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Treating plugin-manifest-draft.json resources as host runtime wiring"
+      ],
+      "mapped_law_ids": [
+        "HUL-PLUGIN-001",
+        "HUL-RESEARCH-001",
+        "HUL-SECURITY-001",
+        "HUL-SUPPLY-001"
+      ],
+      "limitations": "Exact host registry APIs remain capability-dependent."
+    },
+    {
+      "source_id": "SRC-OAI-SKILLS",
+      "title": "Build skills",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/codex/skills",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Skills are reusable workflows and use progressive disclosure; SKILL.md requires name and description metadata."
+      ],
+      "binding_product_requirements": [
+        "Every shipped skill has valid metadata, accurate trigger descriptions, bounded references, and one product-semantic owner."
+      ],
+      "advisory_practices": [
+        "Keep long references and scripts outside the initial metadata context."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "A large overlapping skill set with multiple front doors"
+      ],
+      "mapped_law_ids": [
+        "HUL-EVAL-001",
+        "HUL-PLUGIN-001"
+      ],
+      "limitations": "Metadata validity alone does not prove skill selection or behavior."
+    },
+    {
+      "source_id": "SRC-OAI-SUBAGENTS",
+      "title": "Subagents and custom agents",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/codex/subagents",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Custom agents are defined under ~/.codex/agents or .codex/agents; read-only sandbox overrides are supported; parallel agents are useful for independent work and consume additional resources."
+      ],
+      "binding_product_requirements": [
+        "Reconnaissance, research verification, and adversarial review agents are read-only; write work is delegated only with explicit disjoint scope and root acceptance."
+      ],
+      "advisory_practices": [
+        "Use built-in explorer/worker roles where sufficient and keep subagent prompts bounded."
+      ],
+      "experimental_hypotheses": [
+        "Run-scoped write leases outperform static write-privileged custom roles; validate through conflict/recovery trials."
+      ],
+      "rejected_recommendations": [
+        "Parallel write agents on shared authority surfaces",
+        "Hard-pinning model names without runtime need"
+      ],
+      "mapped_law_ids": [
+        "HUL-GOAL-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-PLUGIN-001",
+        "HUL-RESEARCH-001",
+        "HUL-SECURITY-001"
+      ],
+      "limitations": "Parent live permission overrides and host version still govern effective behavior."
+    },
+    {
+      "source_id": "SRC-OAI-AGENTS-MD",
+      "title": "Custom instructions with AGENTS.md",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/codex/guides/agents-md",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Codex layers global and repository instructions and supports nested overrides; instruction discovery must be verified from the working directory in a new run."
+      ],
+      "binding_product_requirements": [
+        "Repository fitting must create/reconcile concise root guidance and scoped overrides without duplicating the full contract."
+      ],
+      "advisory_practices": [
+        "Place specialized instructions close to their scope."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Using AGENTS.md as a mutable state store or full contract dump"
+      ],
+      "mapped_law_ids": [
+        "HUL-FIT-001",
+        "HUL-MAINTENANCE-001",
+        "HUL-PLUGIN-001"
+      ],
+      "limitations": "Instruction discovery depends on actual start directory and host behavior."
+    },
+    {
+      "source_id": "SRC-OAI-WORKTREES",
+      "title": "Codex worktrees",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/codex/app/worktrees",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Worktrees isolate independent tasks in a project; concurrent tasks should not silently share writes."
+      ],
+      "binding_product_requirements": [
+        "Use separate worktrees/branches for write workers when supported and still enforce semantic, not merely path, ownership."
+      ],
+      "advisory_practices": [
+        "Use local mode for integration and isolated worktrees for independent implementation."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Assuming worktrees alone prevent semantic or generated-output conflicts"
+      ],
+      "mapped_law_ids": [
+        "HUL-ORCHESTRATION-001",
+        "HUL-SECURITY-001"
+      ],
+      "limitations": "Worktree availability and setup behavior must be checked live."
+    },
+    {
+      "source_id": "SRC-OAI-LOCAL-ENV",
+      "title": "Codex local environments",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/codex/app/local-environments",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Local environment setup and actions are stored under the project .codex folder and can configure worktree setup and common commands."
+      ],
+      "binding_product_requirements": [
+        "Fit and migration must reconcile .codex environment setup/actions as a capability-probed product surface, not assume universal host support."
+      ],
+      "advisory_practices": [
+        "Use setup scripts for checked-out worktrees and actions for common commands."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Making app-only local environment actions the sole CLI/product entry"
+      ],
+      "mapped_law_ids": [
+        "HUL-FIT-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-PLUGIN-001",
+        "HUL-SECURITY-001"
+      ],
+      "limitations": "Documented as desktop-app-only and therefore optional for CLI-only hosts."
+    },
+    {
+      "source_id": "SRC-OAI-HARNESS",
+      "title": "Harness engineering: leveraging Codex in an agent-first world",
+      "publisher": "OpenAI",
+      "url": "https://openai.com/index/harness-engineering/",
+      "source_class": "primary_engineering_case_study",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Agent legibility requires relevant product and engineering context to be discoverable in the repository; observability can be exposed to agents locally."
+      ],
+      "binding_product_requirements": [
+        "Make product semantics, commands, owners, diagnostics, and validation discoverable to a fresh agent without relying on hidden chat context."
+      ],
+      "advisory_practices": [
+        "Keep generated knowledge organized and queryable rather than adding ad-hoc prompt volume."
+      ],
+      "experimental_hypotheses": [
+        "A compact semantic index plus generated inventories will improve fresh-agent task success; evaluate."
+      ],
+      "rejected_recommendations": [
+        "Copying an external team’s exact stack or assuming their observability substrate is universally required"
+      ],
+      "mapped_law_ids": [
+        "HUL-COMPLETION-001",
+        "HUL-EVAL-001",
+        "HUL-FIT-001",
+        "HUL-OBSERVE-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-PLUGIN-001",
+        "HUL-PRODUCT-001",
+        "HUL-REPAIR-001",
+        "HUL-RESEARCH-001",
+        "HUL-REVIEW-001",
+        "HUL-ROUTINE-001",
+        "HUL-STATE-001"
+      ],
+      "limitations": "Case study, not a universal product specification."
+    },
+    {
+      "source_id": "SRC-OAI-SYMPHONY",
+      "title": "An open-source spec for Codex orchestration: Symphony",
+      "publisher": "OpenAI",
+      "url": "https://openai.com/index/open-source-codex-orchestration-symphony/",
+      "source_class": "primary_engineering_case_study",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Continuous agent orchestration benefits from an explicit control plane, agent-friendly repository, tests, and guardrails."
+      ],
+      "binding_product_requirements": [
+        "Harness Ultragoal must own an explicit live work/claim graph and recovery model rather than rely on static lane files."
+      ],
+      "advisory_practices": [
+        "Use external project management only as an adapter if adopted."
+      ],
+      "experimental_hypotheses": [
+        "A repository-local semantic work graph is sufficient for this product without introducing an external board dependency."
+      ],
+      "rejected_recommendations": [
+        "Requiring Linear or continuous unattended agents for product correctness"
+      ],
+      "mapped_law_ids": [
+        "HUL-MAINTENANCE-001",
+        "HUL-ORCHESTRATION-001"
+      ],
+      "limitations": "Case study and orchestration specification; external control-plane assumptions are not adopted."
+    },
+    {
+      "source_id": "SRC-OAI-PTC",
+      "title": "Programmatic Tool Calling",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Programmatic tool calling is intended for bounded tool-heavy processing with explicit allowed callers and structured outputs."
+      ],
+      "binding_product_requirements": [],
+      "advisory_practices": [
+        "Consider it for bounded filtering, joining, validation, and aggregation stages only after direct tooling works."
+      ],
+      "experimental_hypotheses": [
+        "It may accelerate research/source reconciliation or large inventory checks if the local runtime exposes it."
+      ],
+      "rejected_recommendations": [
+        "Using it for stages requiring fresh judgment or as a hidden universal controller"
+      ],
+      "mapped_law_ids": [
+        "HUL-EVAL-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-RESEARCH-001"
+      ],
+      "limitations": "API feature, not guaranteed in the local Codex project."
+    },
+    {
+      "source_id": "SRC-OAI-PROMPT-CACHE",
+      "title": "Prompt caching",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/api/docs/guides/prompt-caching",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Prompt caching rewards reusable exact prefixes and is an efficiency mechanism, not application state."
+      ],
+      "binding_product_requirements": [],
+      "advisory_practices": [
+        "Keep stable contract/index prefixes concise and place variable live context later when API callers are implemented."
+      ],
+      "experimental_hypotheses": [
+        "Progressive disclosure and stable prefixes may reduce latency/cost; measure representative workloads."
+      ],
+      "rejected_recommendations": [
+        "Treating cache hits as correctness, persistence, or product proof"
+      ],
+      "mapped_law_ids": [
+        "HUL-EVAL-001",
+        "HUL-PLUGIN-001",
+        "HUL-ROUTINE-001"
+      ],
+      "limitations": "Not necessarily visible or controllable in Codex host interactions."
+    },
+    {
+      "source_id": "SRC-OAI-PERSISTED-REASONING",
+      "title": "Reasoning and conversation state",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/api/docs/guides/reasoning",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Persisted reasoning can make compatible prior reasoning available across supported API calls; it is distinct from visible conversation and application state."
+      ],
+      "binding_product_requirements": [
+        "No completion, current-state, or audit authority may depend on hidden/persisted reasoning."
+      ],
+      "advisory_practices": [
+        "Use persisted reasoning only as an optional efficiency/quality feature in API adapters."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Using hidden reasoning as durable product memory, provenance, or evidence"
+      ],
+      "mapped_law_ids": [
+        "HUL-GOAL-001",
+        "HUL-PROOF-001",
+        "HUL-RESEARCH-001",
+        "HUL-STATE-001"
+      ],
+      "limitations": "Feature support and retention semantics vary by API/runtime."
+    },
+    {
+      "source_id": "SRC-OAI-AGENT-EVALS",
+      "title": "Evaluate agent workflows",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/api/docs/guides/agent-evals",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "End-to-end traces can expose model calls, tool calls, guardrails, and handoffs; trace grading can identify workflow-level failures."
+      ],
+      "binding_product_requirements": [
+        "Evaluation must inspect end-to-end behavior and artifacts, preserve reproducibility, and keep vendor traces as observations rather than claim authority."
+      ],
+      "advisory_practices": [
+        "Use trace grading to diagnose routing/tool/handoff failures when available."
+      ],
+      "experimental_hypotheses": [
+        "Trace-derived failure harvesting will improve journey eval coverage after independent triage."
+      ],
+      "rejected_recommendations": [
+        "Treating grader output as self-sufficient proof"
+      ],
+      "mapped_law_ids": [
+        "HUL-EVAL-001",
+        "HUL-OBSERVE-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-PROOF-001",
+        "HUL-REVIEW-001"
+      ],
+      "limitations": "Vendor trace APIs are optional adapters and may have retention/privacy constraints."
+    },
+    {
+      "source_id": "SRC-OAI-REWARD-HACKING",
+      "title": "How we monitor internal coding agents for misalignment",
+      "publisher": "OpenAI",
+      "url": "https://openai.com/index/how-we-monitor-internal-coding-agents-misalignment/",
+      "source_class": "primary_current_research_engineering_source",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Coding agents can optimize evaluation signals by editing or disabling tests instead of solving the underlying task."
+      ],
+      "binding_product_requirements": [
+        "Tests, fixtures, receipts, telemetry, and generated rows never substitute for behavior; proof must include tamper/reward-hacking controls and protected authority surfaces."
+      ],
+      "advisory_practices": [
+        "Use independent diff/reviewer checks for validation-surface changes."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Allowing implementation workers to own acceptance tests and final claim authority without review"
+      ],
+      "mapped_law_ids": [
+        "HUL-EVAL-001",
+        "HUL-OBSERVE-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-PROOF-001",
+        "HUL-REPAIR-001",
+        "HUL-REVIEW-001"
+      ],
+      "limitations": "Risk evidence supports controls but does not quantify this repository’s incidence."
+    },
+    {
+      "source_id": "SRC-OAI-EVAL-DEPRECATION",
+      "title": "Evaluation best practices and Evals platform transition",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/api/docs/guides/evaluation-best-practices",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Generative systems require evaluations; the legacy Evals platform has a stated read-only and shutdown transition in late 2026."
+      ],
+      "binding_product_requirements": [
+        "Harness-owned evaluation semantics and stored results must be vendor-neutral; deprecated vendor surfaces cannot be product authority."
+      ],
+      "advisory_practices": [
+        "Use current supported APIs/adapters when selected."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Binding the product contract to a deprecated hosted Evals platform"
+      ],
+      "mapped_law_ids": [
+        "HUL-EVAL-001",
+        "HUL-MAINTENANCE-001"
+      ],
+      "limitations": "The deprecation timeline may change and must be rechecked before implementation decisions."
+    },
+    {
+      "source_id": "SRC-RUST-CARGO-CHECK",
+      "title": "cargo check",
+      "publisher": "The Rust Project",
+      "url": "https://doc.rust-lang.org/cargo/commands/cargo-check.html",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "cargo check is faster because it skips final code generation, and therefore cannot report some code-generation diagnostics."
+      ],
+      "binding_product_requirements": [
+        "Routine check may use cargo check but strict claims that depend on build/codegen behavior must run the appropriate stronger command."
+      ],
+      "advisory_practices": [
+        "Exploit Cargo metadata reuse for routine iteration."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Treating cargo check as universal build/runtime proof"
+      ],
+      "mapped_law_ids": [
+        "HUL-PROOF-001",
+        "HUL-ROUTINE-001",
+        "HUL-SUPPLY-001"
+      ],
+      "limitations": "Command suitability depends on crate targets/features/platforms."
+    },
+    {
+      "source_id": "SRC-RUST-CARGO-TEST",
+      "title": "cargo test",
+      "publisher": "The Rust Project",
+      "url": "https://doc.rust-lang.org/cargo/commands/cargo-test.html",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "cargo test compiles and executes unit, integration, and documentation tests subject to target/filter configuration."
+      ],
+      "binding_product_requirements": [
+        "Test claims must name selected packages, targets, features, filters, platform, and candidate identity; a zero exit code cannot imply unselected behavior."
+      ],
+      "advisory_practices": [
+        "Use targeted tests in routine mode and declared complete selections in strict mode."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Counting test files or receipts as behavior coverage"
+      ],
+      "mapped_law_ids": [
+        "HUL-EVAL-001",
+        "HUL-PROOF-001",
+        "HUL-ROUTINE-001"
+      ],
+      "limitations": "Tests can be incomplete, incorrect, flaky, or reward-hacked."
+    },
+    {
+      "source_id": "SRC-RUST-CLAP",
+      "title": "clap derive parser documentation",
+      "publisher": "clap project",
+      "url": "https://docs.rs/clap/latest/clap/_derive/index.html",
+      "source_class": "primary_project_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "clap supports typed derive-based parsers, subcommands, and enum value parsing."
+      ],
+      "binding_product_requirements": [
+        "Replace the handwritten public parser with a mature typed parser unless live implementation evidence demonstrates a superior supported alternative."
+      ],
+      "advisory_practices": [
+        "Generate help and shell completions from the same command model."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Maintaining duplicate handwritten grammar and domain validation"
+      ],
+      "mapped_law_ids": [
+        "HUL-CLI-001",
+        "HUL-MAINTENANCE-001"
+      ],
+      "limitations": "Library choice remains an implementation decision if equivalent requirements are met."
+    },
+    {
+      "source_id": "SRC-NEXTEST",
+      "title": "cargo-nextest documentation",
+      "publisher": "Nextest project",
+      "url": "https://nexte.st/",
+      "source_class": "primary_project_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Nextest supports retries/flaky classification, recording/rerun, archives, sharding, configuration profiles, and JUnit output."
+      ],
+      "binding_product_requirements": [],
+      "advisory_practices": [
+        "Use as an optional execution substrate where it materially improves isolation, reruns, or CI partitioning."
+      ],
+      "experimental_hypotheses": [
+        "Recorded runs may improve failure diagnosis and impacted-test validation when bound to candidate identity."
+      ],
+      "rejected_recommendations": [
+        "Making Nextest availability a prerequisite for routine correctness or giving its output Harness claim authority"
+      ],
+      "mapped_law_ids": [
+        "HUL-EVAL-001",
+        "HUL-PROOF-001",
+        "HUL-ROUTINE-001"
+      ],
+      "limitations": "Third-party tool; version/features and installation must be capability-probed."
+    },
+    {
+      "source_id": "SRC-OTEL-SENSITIVE",
+      "title": "OpenTelemetry handling sensitive data",
+      "publisher": "OpenTelemetry",
+      "url": "https://opentelemetry.io/docs/security/handling-sensitive-data/",
+      "source_class": "primary_project_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Telemetry should follow data minimization, avoid unnecessary personal data, and review/redact sensitive attributes."
+      ],
+      "binding_product_requirements": [
+        "Events carry privacy classes; persisted/exported data is minimized and redacted; export requires explicit configuration/consent and retention policy."
+      ],
+      "advisory_practices": [
+        "Prefer aggregation or anonymization when it serves the diagnostic purpose."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Capturing raw prompts, secrets, full paths, or unrestricted stdout by default"
+      ],
+      "mapped_law_ids": [
+        "HUL-CLI-001",
+        "HUL-OBSERVE-001",
+        "HUL-SECURITY-001"
+      ],
+      "limitations": "Legal obligations depend on deployment context and require human policy decisions."
+    },
+    {
+      "source_id": "SRC-SLSA-PROVENANCE",
+      "title": "SLSA provenance v1",
+      "publisher": "SLSA",
+      "url": "https://slsa.dev/provenance/v1",
+      "source_class": "primary_standard_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Provenance describes how an artifact was produced so consumers can verify it against expectations and optionally rebuild it."
+      ],
+      "binding_product_requirements": [
+        "Release/package provenance identifies output digests, source/candidate inputs, build process, and environment sufficiently for expectation-based verification."
+      ],
+      "advisory_practices": [
+        "Use standard provenance predicates where compatible."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Treating provenance existence as behavior or authenticity without verification"
+      ],
+      "mapped_law_ids": [
+        "HUL-PRODUCT-001",
+        "HUL-PROOF-001",
+        "HUL-SUPPLY-001"
+      ],
+      "limitations": "An exact SLSA level is not adopted without release-platform authority and verification."
+    },
+    {
+      "source_id": "SRC-SLSA-VERIFY",
+      "title": "SLSA build track and verification",
+      "publisher": "SLSA",
+      "url": "https://slsa.dev/spec/v1.2/tracks",
+      "source_class": "primary_standard_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "The purpose of provenance is verification that artifacts were built as expected; expectations and trust roots matter."
+      ],
+      "binding_product_requirements": [
+        "HCT-DISTRIBUTION must verify provenance/signatures against explicit trusted expectations, not merely parse or store them."
+      ],
+      "advisory_practices": [
+        "Raise assurance as a release policy after build-platform ownership is decided."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Claiming a SLSA level from an unsigned local metadata file"
+      ],
+      "mapped_law_ids": [
+        "HUL-COMPLETION-001",
+        "HUL-PROOF-001",
+        "HUL-STATE-001",
+        "HUL-SUPPLY-001"
+      ],
+      "limitations": "Trust roots and builder identities are open release decisions."
+    },
+    {
+      "source_id": "SRC-SIGSTORE",
+      "title": "Cosign signature verification",
+      "publisher": "Sigstore",
+      "url": "https://docs.sigstore.dev/cosign/verifying/verify/",
+      "source_class": "primary_project_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Cosign can verify artifact signatures against keys or identity/issuer expectations."
+      ],
+      "binding_product_requirements": [],
+      "advisory_practices": [
+        "Use signing and identity-bound verification if the release authority adopts a signing service and policy."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Making a signature substitute for reproducibility, installation, runtime, or product proof"
+      ],
+      "mapped_law_ids": [
+        "HUL-SUPPLY-001"
+      ],
+      "limitations": "Signing identity, service, transparency policy, and offline verification are open decisions."
+    },
+    {
+      "source_id": "SRC-REPRO-SDE",
+      "title": "SOURCE_DATE_EPOCH",
+      "publisher": "Reproducible Builds",
+      "url": "https://reproducible-builds.org/docs/source-date-epoch/",
+      "source_class": "primary_standard_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "SOURCE_DATE_EPOCH is a standardized timestamp input used to avoid current-time variability in reproducible outputs."
+      ],
+      "binding_product_requirements": [
+        "Package creation uses an explicit source-derived timestamp or documents why bit-reproducibility is not achieved; stable order and metadata remain required."
+      ],
+      "advisory_practices": [
+        "Normalize archive timestamps, ordering, permissions, locale, and paths."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Embedding build-now timestamps in claim-bearing package bytes"
+      ],
+      "mapped_law_ids": [
+        "HUL-MAINTENANCE-001",
+        "HUL-SUPPLY-001"
+      ],
+      "limitations": "It is one reproducibility control, not a complete reproducible-build guarantee."
+    },
+    {
+      "source_id": "SRC-GIT-WORKTREE",
+      "title": "git-worktree and git-status porcelain documentation",
+      "publisher": "Git project",
+      "url": "https://git-scm.com/docs/git-worktree",
+      "source_class": "primary_project_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Git supports multiple linked worktrees; git worktree list --porcelain and git status --porcelain provide script-oriented state surfaces."
+      ],
+      "binding_product_requirements": [
+        "The Ultra root recomputes live repository/worktree/dirty state with stable machine-readable Git commands before delegating or claiming."
+      ],
+      "advisory_practices": [
+        "Use worktrees for isolated implementation branches and preserve per-worktree metadata."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Trusting archived branch/status text as current",
+        "Assuming path isolation eliminates semantic conflicts"
+      ],
+      "mapped_law_ids": [
+        "HUL-FIT-001",
+        "HUL-GOAL-001",
+        "HUL-MAINTENANCE-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-PROOF-001",
+        "HUL-ROUTINE-001",
+        "HUL-SECURITY-001",
+        "HUL-STATE-001"
+      ],
+      "limitations": "The root must account for submodules, untracked/ignored files, and host-specific worktree behavior."
+    },
+    {
+      "source_id": "SRC-OAI-SECURITY",
+      "title": "Agent approvals and security",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/codex/agent-approvals-security",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Codex exposes sandbox and approval controls; read-only mode is available; external workspace or network actions can require approval; project `.git`, `.agents`, and `.codex` paths are protected read-only under the documented workspace sandbox."
+      ],
+      "binding_product_requirements": [
+        "Harness commands and agents declare effects structurally, keep read-only operations non-mutating, stop for external or destructive authority, and keep protected host configuration root-owned rather than leasing it to workers."
+      ],
+      "advisory_practices": [
+        "Use least-privilege workspace-write or read-only modes and constrain network destinations when network is enabled."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Assuming host sandboxing alone enforces Harness semantic ownership",
+        "Treating broad workspace-write as permission for external or destructive effects"
+      ],
+      "mapped_law_ids": [
+        "HUL-CLI-001",
+        "HUL-COMPLETION-001",
+        "HUL-FIT-001",
+        "HUL-MAINTENANCE-001",
+        "HUL-OBSERVE-001",
+        "HUL-ORCHESTRATION-001",
+        "HUL-REPAIR-001",
+        "HUL-SECURITY-001",
+        "HUL-STATE-001"
+      ],
+      "limitations": "Actual sandbox, approval, connector annotations, and network policy must be observed in the live Codex project."
+    },
+    {
+      "source_id": "SRC-OAI-BEST-PRACTICES",
+      "title": "Codex best practices",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/codex/learn/best-practices",
+      "source_class": "primary_current_documentation",
+      "checked_at": "2026-07-10",
+      "verified_facts": [
+        "Project guidance should explain repository layout, run/build/test commands, engineering constraints, and what completion means."
+      ],
+      "binding_product_requirements": [
+        "Repository fitting must produce concise, locally relevant guidance that a fresh agent can use without embedding the whole contract."
+      ],
+      "advisory_practices": [
+        "Keep repository guidance practical, testable, and close to the applicable scope."
+      ],
+      "experimental_hypotheses": [],
+      "rejected_recommendations": [
+        "Treating generated starter guidance as complete without repository-specific reconciliation"
+      ],
+      "mapped_law_ids": [
+        "HUL-FIT-001",
+        "HUL-PLUGIN-001",
+        "HUL-REVIEW-001"
+      ],
+      "limitations": "Guidance quality and discovery must be behaviorally tested in the actual repository and host."
+    }
+  ]
+}

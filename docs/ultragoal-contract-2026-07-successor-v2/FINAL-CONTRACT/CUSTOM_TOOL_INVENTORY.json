@@ -1,0 +1,662 @@
+{
+  "schema_version": "2.0.0",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "rule": "Every missing Harness-owned semantic tool blocks all downstream claims named in claim_blocks.",
+  "tool_topological_order": [
+    "HCT-CONTEXT",
+    "HCT-CAPTURE",
+    "HCT-INVENTORY",
+    "HCT-FIXTURES",
+    "HCT-DISTRIBUTION",
+    "HCT-IMPACT",
+    "HCT-STATE",
+    "HCT-CLAIMS",
+    "HCT-FIT",
+    "HCT-OBSERVE",
+    "HCT-MIGRATE",
+    "HCT-EVAL"
+  ],
+  "tool_count": 12,
+  "tools": [
+    {
+      "tool_id": "HCT-CONTEXT",
+      "name": "LiveContext and effect boundary",
+      "owner": "OWN-AUTHORITY-KERNEL",
+      "status": "fragmented_partial",
+      "product_role": "Resolve repository/worktree roots, candidate identity, digests, configuration, tool/capability versions, permissions, and command effect into one immutable context.",
+      "command_groups": [
+        "inspect",
+        "next",
+        "fit",
+        "check",
+        "diagnose",
+        "prove",
+        "observe",
+        "package",
+        "eval",
+        "migrate"
+      ],
+      "current_snapshot_evidence": [
+        "validator argument/root handling",
+        "multiple command-specific receipts",
+        "candidate CT-AUDIT-CONTEXT and CT-SURFACE-SPEC"
+      ],
+      "replaces_candidate_tools": [
+        "CT-AUDIT-CONTEXT",
+        "CT-SURFACE-SPEC"
+      ],
+      "implementation_contract": "Pure construction before domain execution; no writes, network, telemetry, or cache mutation. Context ID binds canonical serialized fields and selected live inputs.",
+      "public_api": [
+        "LiveContext::build",
+        "EffectClass",
+        "CapabilitySet",
+        "CandidateIdentity"
+      ],
+      "external_substrates": [
+        "git porcelain commands",
+        "filesystem metadata",
+        "Cargo metadata when available"
+      ],
+      "dependencies": [],
+      "product_surfaces": [
+        "PS-CLI",
+        "PS-FIT-FRESH",
+        "PS-FIT-RETROFIT",
+        "PS-ROUTINE",
+        "PS-PROOF",
+        "PS-GOAL",
+        "PS-COMPLETION"
+      ],
+      "proof_requirement": "Root ambiguity, nested worktree, symlink, dirty tree, missing tools, unsupported host features, concurrent mutation, and repeatability tests.",
+      "claim_blocks": [
+        "CL-FIT",
+        "CL-ROUTINE",
+        "CL-STRICT",
+        "CL-ORCHESTRATION",
+        "CL-COMPLETION"
+      ],
+      "retirement_mapping": "Remove command-local root/context builders after all consumers migrate."
+    },
+    {
+      "tool_id": "HCT-INVENTORY",
+      "name": "Semantic inventory and authority catalog",
+      "owner": "OWN-PRODUCT-ARCHITECTURE",
+      "status": "fragmented_large_hand_maintained_catalogs",
+      "product_role": "Generate canonical inventories of plugin components, semantic symbols, schemas, fixtures, commands, requirements, generated outputs, and legacy aliases.",
+      "command_groups": [
+        "inspect",
+        "package",
+        "migrate"
+      ],
+      "current_snapshot_evidence": [
+        "plugin-manifest-draft.json",
+        "schema catalog",
+        "fixture catalogs",
+        "candidate CT-SEMANTIC-INVENTORY"
+      ],
+      "replaces_candidate_tools": [
+        "CT-SEMANTIC-INVENTORY"
+      ],
+      "implementation_contract": "Deterministic generation from source and explicit metadata; handwritten projections are non-authoritative and drift is a finding.",
+      "public_api": [
+        "InventoryBuilder",
+        "AuthorityCatalog",
+        "GeneratedSurfaceIndex"
+      ],
+      "external_substrates": [
+        "walkdir",
+        "Serde",
+        "Cargo metadata"
+      ],
+      "dependencies": [
+        "HCT-CONTEXT"
+      ],
+      "product_surfaces": [
+        "PS-SOURCE",
+        "PS-PLUGIN-MANIFEST",
+        "PS-SKILLS",
+        "PS-AGENTS",
+        "PS-PACKAGE",
+        "PS-RESEARCH",
+        "PS-UPGRADE"
+      ],
+      "proof_requirement": "Deterministic regeneration, omitted/duplicate/renamed component corpus, stale projection detection, and path confinement.",
+      "claim_blocks": [
+        "CL-SOURCE",
+        "CL-PACKAGE",
+        "CL-RELEASE"
+      ],
+      "retirement_mapping": "Replace plugin-manifest-draft resources, static fixture catalogs, lane registries, and duplicate command inventories."
+    },
+    {
+      "tool_id": "HCT-IMPACT",
+      "name": "Affected-set graph and verified reuse",
+      "owner": "OWN-DEVELOPER-LOOP",
+      "status": "partial_heuristic_and_distributed",
+      "product_role": "Map semantic changes to a conservative dependency-closed set of checks and bind cache reuse to node semantics, inputs, tool identity, environment, and outputs.",
+      "command_groups": [
+        "check",
+        "inspect"
+      ],
+      "current_snapshot_evidence": [
+        "impacted Rust tests",
+        "coverage scripts",
+        "candidate CT-INCREMENTAL-GRAPH, CT-NODE-CACHE, CT-IMPACTED-TESTS, CT-COVERAGE"
+      ],
+      "replaces_candidate_tools": [
+        "CT-INCREMENTAL-GRAPH",
+        "CT-NODE-CACHE",
+        "CT-COVERAGE",
+        "CT-IMPACTED-TESTS"
+      ],
+      "implementation_contract": "Unknown edges expand work; cache misses never lower correctness; routine and strict profiles have distinct declared closure rules.",
+      "public_api": [
+        "ImpactGraph",
+        "AffectedSet",
+        "ReuseDecision",
+        "CoverageDimensions"
+      ],
+      "external_substrates": [
+        "Cargo metadata/messages",
+        "nextest optional",
+        "rustc/llvm coverage optional"
+      ],
+      "dependencies": [
+        "HCT-CONTEXT",
+        "HCT-INVENTORY",
+        "HCT-CAPTURE"
+      ],
+      "product_surfaces": [
+        "PS-ROUTINE",
+        "PS-PROOF"
+      ],
+      "proof_requirement": "Mutation comparison against strict runs, cache poisoning, tool/version drift, generated code, rename, feature, platform, and uncertainty cases.",
+      "claim_blocks": [
+        "CL-ROUTINE",
+        "CL-STRICT"
+      ],
+      "retirement_mapping": "Retire static path rules and one-dimensional coverage authority after comparison corpus passes."
+    },
+    {
+      "tool_id": "HCT-CAPTURE",
+      "name": "Command execution and artifact capture",
+      "owner": "OWN-AUTHORITY-KERNEL",
+      "status": "fragmented_receipt_writers",
+      "product_role": "Execute authorized subprocesses and capture typed argv, cwd, environment allowlist, exit/signal, timing, bounded output, and produced artifacts without interpreting claim success.",
+      "command_groups": [
+        "fit",
+        "check",
+        "prove",
+        "observe",
+        "package",
+        "eval",
+        "migrate"
+      ],
+      "current_snapshot_evidence": [
+        "command-specific subprocess helpers and receipts",
+        "candidate CT-COMMAND-CAPTURE and CT-ARTIFACT-DEREF"
+      ],
+      "replaces_candidate_tools": [
+        "CT-COMMAND-CAPTURE",
+        "CT-ARTIFACT-DEREF"
+      ],
+      "implementation_contract": "Capture is effect-aware, path-confined, bounded, redacted, and content-addressed. Printed PASS text has no authority.",
+      "public_api": [
+        "CommandSpec",
+        "CapturedRun",
+        "ArtifactRef",
+        "ArtifactResolver"
+      ],
+      "external_substrates": [
+        "std::process",
+        "monotonic clock",
+        "digest store"
+      ],
+      "dependencies": [
+        "HCT-CONTEXT"
+      ],
+      "product_surfaces": [
+        "PS-PACKAGE",
+        "PS-INSTALL",
+        "PS-FIT-FRESH",
+        "PS-FIT-RETROFIT",
+        "PS-ROUTINE",
+        "PS-PROOF",
+        "PS-OBSERVE-EXPORT",
+        "PS-EVAL"
+      ],
+      "proof_requirement": "Timeout, signal, truncation, non-UTF8, spoofed text, wrong output, symlink, race, redaction, and interruption tests.",
+      "claim_blocks": [
+        "CL-PACKAGE",
+        "CL-INSTALL",
+        "CL-FIT",
+        "CL-ROUTINE",
+        "CL-STRICT",
+        "CL-EVAL-IMPROVEMENT"
+      ],
+      "retirement_mapping": "Migrate command-specific receipt writers/readers through adapters, then remove them."
+    },
+    {
+      "tool_id": "HCT-FIXTURES",
+      "name": "Isolated behavioral fixture scheduler",
+      "owner": "OWN-INDEPENDENT-REVIEW",
+      "status": "partial_large_fixture_corpus",
+      "product_role": "Schedule isolated positive, negative, tamper, stale, recovery, and reward-hacking scenarios and generate catalogs from fixture metadata.",
+      "command_groups": [
+        "check",
+        "prove",
+        "eval",
+        "migrate"
+      ],
+      "current_snapshot_evidence": [
+        "3,499 verified fixture files",
+        "fixture scheduler",
+        "candidate CT-FIXTURE-SCHEDULER"
+      ],
+      "replaces_candidate_tools": [
+        "CT-FIXTURE-SCHEDULER"
+      ],
+      "implementation_contract": "Each fixture declares semantic target, isolation needs, expected behavior/finding/ceiling, cleanup, and independent observer.",
+      "public_api": [
+        "FixtureSpec",
+        "FixtureScheduler",
+        "IsolationLease",
+        "ExpectedOutcome"
+      ],
+      "external_substrates": [
+        "temporary directories",
+        "nextest optional",
+        "process/resource allocators"
+      ],
+      "dependencies": [
+        "HCT-CONTEXT",
+        "HCT-CAPTURE"
+      ],
+      "product_surfaces": [
+        "PS-ROUTINE",
+        "PS-PROOF",
+        "PS-EVAL",
+        "PS-UPGRADE"
+      ],
+      "proof_requirement": "Cross-test file/env/process/port/cache/telemetry/install leakage, cleanup failure, flaky quarantine, and expectation integrity.",
+      "claim_blocks": [
+        "CL-ROUTINE",
+        "CL-STRICT",
+        "CL-EVAL-IMPROVEMENT",
+        "CL-RELEASE"
+      ],
+      "retirement_mapping": "Delete boolean/marker-only fixtures after behavioral replacements and generated catalog parity."
+    },
+    {
+      "tool_id": "HCT-STATE",
+      "name": "Findings, repair, current state, and next",
+      "owner": "OWN-OPERATOR-EXPERIENCE",
+      "status": "partial_duplicate_views",
+      "product_role": "Project one typed findings/state graph, compile causal repair, and deterministically select one legal next action.",
+      "command_groups": [
+        "inspect",
+        "next",
+        "diagnose",
+        "fit",
+        "check",
+        "prove",
+        "migrate"
+      ],
+      "current_snapshot_evidence": [
+        "current-state and next-action modules",
+        "candidate CT-CURRENT-STATE, CT-NEXT, CT-OBSERVE-REPAIR"
+      ],
+      "replaces_candidate_tools": [
+        "CT-CURRENT-STATE",
+        "CT-NEXT",
+        "CT-OBSERVE-REPAIR"
+      ],
+      "implementation_contract": "Views cannot author state. Inspect/next/diagnose are read-only and emit no telemetry or artifacts unless an explicit output is requested.",
+      "public_api": [
+        "Finding",
+        "Repair",
+        "ProductState",
+        "NextAction",
+        "ClaimCeiling"
+      ],
+      "external_substrates": [
+        "Serde",
+        "local event query"
+      ],
+      "dependencies": [
+        "HCT-CONTEXT",
+        "HCT-INVENTORY"
+      ],
+      "product_surfaces": [
+        "PS-CLI",
+        "PS-ENTRY",
+        "PS-DIAGNOSE",
+        "PS-GOAL",
+        "PS-COMPLETION"
+      ],
+      "proof_requirement": "Contradiction, tie, blocked dependency, stale input, unsupported capability, repeated query, and no-op cases.",
+      "claim_blocks": [
+        "CL-ROUTINE",
+        "CL-ORCHESTRATION",
+        "CL-COMPLETION"
+      ],
+      "retirement_mapping": "Retire checklists, lane status, duplicate readiness engines, and hand-maintained current-state files."
+    },
+    {
+      "tool_id": "HCT-DISTRIBUTION",
+      "name": "Package, install, and discovery reconciler",
+      "owner": "OWN-DISTRIBUTION",
+      "status": "fragmented_incomplete_host_proof",
+      "product_role": "Build deterministic packages and reconcile source, package, marketplace, installed bytes, host discovery, and representative runtime identity without crossing truth surfaces.",
+      "command_groups": [
+        "package",
+        "inspect"
+      ],
+      "current_snapshot_evidence": [
+        "package digest",
+        "install docs",
+        "personal marketplace example",
+        "candidate CT-PACKAGE-SNAPSHOT and CT-PLUGIN-DISCOVERY"
+      ],
+      "replaces_candidate_tools": [
+        "CT-PACKAGE-SNAPSHOT",
+        "CT-PLUGIN-DISCOVERY"
+      ],
+      "implementation_contract": "Each adapter declares supported host/version/capabilities; unavailable APIs lower only their claim. External installs require explicit authority.",
+      "public_api": [
+        "PackageSnapshot",
+        "InstallSnapshot",
+        "MarketplaceSnapshot",
+        "DiscoveryObservation",
+        "RuntimeObservation"
+      ],
+      "external_substrates": [
+        "Codex plugin/marketplace interfaces",
+        "filesystem",
+        "archive writer",
+        "optional signing/provenance services"
+      ],
+      "dependencies": [
+        "HCT-CONTEXT",
+        "HCT-INVENTORY",
+        "HCT-CAPTURE"
+      ],
+      "product_surfaces": [
+        "PS-PLUGIN-MANIFEST",
+        "PS-MARKETPLACE",
+        "PS-PACKAGE",
+        "PS-INSTALL",
+        "PS-DISCOVERY",
+        "PS-RELEASE"
+      ],
+      "proof_requirement": "Byte mismatch, stale cache, duplicate versions, wrong home/project, registered-hidden, unsupported host, deterministic rebuild, and real new-session task.",
+      "claim_blocks": [
+        "CL-PACKAGE",
+        "CL-INSTALL",
+        "CL-DISCOVERY",
+        "CL-RUNTIME",
+        "CL-RELEASE"
+      ],
+      "retirement_mapping": "Environment scripts remain thin adapters; legacy package inventory and install receipts lose authority."
+    },
+    {
+      "tool_id": "HCT-FIT",
+      "name": "Repository fit reconciler",
+      "owner": "OWN-REPOSITORY-FIT",
+      "status": "partial_split_init_retrofit",
+      "product_role": "Inspect desired/current semantic state, plan bounded changes, apply with ownership and rollback, and verify loaded repository behavior.",
+      "command_groups": [
+        "fit"
+      ],
+      "current_snapshot_evidence": [
+        "init/retrofit skills and agents",
+        "fit receipts",
+        "candidate CT-FIT-RECONCILE"
+      ],
+      "replaces_candidate_tools": [
+        "CT-FIT-RECONCILE"
+      ],
+      "implementation_contract": "One engine supports fresh and retrofit modes; conflicts are explicit; generated ownership and user ownership cannot be conflated.",
+      "public_api": [
+        "FitInspection",
+        "FitPlan",
+        "Mutation",
+        "Ownership",
+        "RollbackPlan",
+        "FitVerification"
+      ],
+      "external_substrates": [
+        "semantic diff",
+        "filesystem",
+        "host instruction discovery probe"
+      ],
+      "dependencies": [
+        "HCT-CONTEXT",
+        "HCT-INVENTORY",
+        "HCT-CAPTURE",
+        "HCT-STATE"
+      ],
+      "product_surfaces": [
+        "PS-FIT-FRESH",
+        "PS-FIT-RETROFIT",
+        "PS-AGENTS",
+        "PS-ENTRY"
+      ],
+      "proof_requirement": "Fresh/partial/conflicting repositories, user edits, idempotency, rollback, unsupported host features, and real routine command after fit.",
+      "claim_blocks": [
+        "CL-FIT",
+        "CL-REAL-JOURNEY"
+      ],
+      "retirement_mapping": "Retire separate initializer/retrofit authorities and template-presence success checks."
+    },
+    {
+      "tool_id": "HCT-OBSERVE",
+      "name": "Semantic event store, query, and export",
+      "owner": "OWN-OBSERVABILITY",
+      "status": "partial_split_local_external",
+      "product_role": "Emit/query bounded local semantic events, correlate causes, compile explanations, and optionally export approved data with roundtrip reconciliation.",
+      "command_groups": [
+        "observe",
+        "diagnose"
+      ],
+      "current_snapshot_evidence": [
+        "observability schemas/docs",
+        "observe CLI",
+        "candidate CT-TELEMETRY-RECONCILE and CT-OBSERVE-REPAIR"
+      ],
+      "replaces_candidate_tools": [
+        "CT-TELEMETRY-RECONCILE",
+        "CT-OBSERVE-REPAIR"
+      ],
+      "implementation_contract": "Local operation is zero-dependency; read queries have no writes; exports are explicit effects; event rows cannot set claim state.",
+      "public_api": [
+        "SemanticEvent",
+        "EventStore",
+        "EventQuery",
+        "CausalExplanation",
+        "ExportAdapter"
+      ],
+      "external_substrates": [
+        "tracing",
+        "OpenTelemetry optional"
+      ],
+      "dependencies": [
+        "HCT-CONTEXT",
+        "HCT-STATE",
+        "HCT-CAPTURE"
+      ],
+      "product_surfaces": [
+        "PS-DIAGNOSE",
+        "PS-OBSERVE-LOCAL",
+        "PS-OBSERVE-EXPORT"
+      ],
+      "proof_requirement": "Roundtrip, corruption, redaction, high-cardinality, duplicate/reorder, exporter failure/delay, and wrong-context tests.",
+      "claim_blocks": [
+        "CL-OBSERVABILITY"
+      ],
+      "retirement_mapping": "Retire receipt-presence telemetry proof and mandatory external-stack assumptions."
+    },
+    {
+      "tool_id": "HCT-EVAL",
+      "name": "Evaluation and improvement engine",
+      "owner": "OWN-AGENT-QUALITY",
+      "status": "partial_vendor_adapter_heavy",
+      "product_role": "Audit tasks, datasets, scorers, traces, contamination, reproducibility, and product artifacts; harvest failures and evaluate scoped changes with rollback.",
+      "command_groups": [
+        "eval"
+      ],
+      "current_snapshot_evidence": [
+        "Promptfoo/OpenAI modules",
+        "improvement loop",
+        "candidate CT-AGENT-EVAL"
+      ],
+      "replaces_candidate_tools": [
+        "CT-AGENT-EVAL"
+      ],
+      "implementation_contract": "Core schemas and promotion rules are vendor-neutral; adapters may run current tools but cannot own law or completion authority.",
+      "public_api": [
+        "EvaluationSpec",
+        "TaskAudit",
+        "EvaluationRun",
+        "FailureCase",
+        "PromotionDecision"
+      ],
+      "external_substrates": [
+        "OpenAI trace/eval APIs optional",
+        "Promptfoo optional",
+        "local deterministic graders"
+      ],
+      "dependencies": [
+        "HCT-CONTEXT",
+        "HCT-CAPTURE",
+        "HCT-FIXTURES",
+        "HCT-OBSERVE"
+      ],
+      "product_surfaces": [
+        "PS-ENTRY",
+        "PS-EVAL",
+        "PS-RESEARCH"
+      ],
+      "proof_requirement": "Broken task, label/score perturbation, leakage, contamination, non-determinism, grader disagreement, reward hacking, and artifact inspection.",
+      "claim_blocks": [
+        "CL-EVAL-IMPROVEMENT",
+        "CL-REAL-JOURNEY"
+      ],
+      "retirement_mapping": "Retire score-only promotion and deprecated/vendor-specific top-level command authority."
+    },
+    {
+      "tool_id": "HCT-CLAIMS",
+      "name": "Claim graph and independent reconciliation",
+      "owner": "OWN-PROOF-AUTHORITY",
+      "status": "fragmented_duplicate_finalizers",
+      "product_role": "Join laws, requirements, surfaces, behavior, evidence, observations, findings, guards, ceilings, reviewers, and external decisions into one claim authority.",
+      "command_groups": [
+        "inspect",
+        "prove",
+        "package",
+        "eval",
+        "migrate"
+      ],
+      "current_snapshot_evidence": [
+        "audit/product/standards/final-packet/transactional finalization commands",
+        "candidate CT-CLAIM-GRAPH"
+      ],
+      "replaces_candidate_tools": [
+        "CT-CLAIM-GRAPH"
+      ],
+      "implementation_contract": "Claim definitions are adopted independently of implementation. Evidence producers cannot reconcile their own completion-bearing output. Claims bind one LiveContext/candidate identity.",
+      "public_api": [
+        "ClaimDefinition",
+        "EvidenceEnvelope",
+        "Observation",
+        "ClaimDecision",
+        "ClaimGuard"
+      ],
+      "external_substrates": [
+        "Serde",
+        "digest verification"
+      ],
+      "dependencies": [
+        "HCT-CONTEXT",
+        "HCT-INVENTORY",
+        "HCT-CAPTURE",
+        "HCT-STATE"
+      ],
+      "product_surfaces": [
+        "PS-SOURCE",
+        "PS-PROOF",
+        "PS-ORCHESTRATION",
+        "PS-EVAL",
+        "PS-RESEARCH",
+        "PS-UPGRADE",
+        "PS-RELEASE",
+        "PS-COMPLETION"
+      ],
+      "proof_requirement": "Contradictory, omitted, stale, wrong-surface, self-authored, tampered, partial, and reviewer-only evidence; independent replay of completion claims.",
+      "claim_blocks": [
+        "CL-COMPLETION",
+        "CL-DISCOVERY",
+        "CL-EVAL-IMPROVEMENT",
+        "CL-FIT",
+        "CL-INSTALL",
+        "CL-OBSERVABILITY",
+        "CL-ORCHESTRATION",
+        "CL-PACKAGE",
+        "CL-REAL-JOURNEY",
+        "CL-RELEASE",
+        "CL-ROUTINE",
+        "CL-RUNTIME",
+        "CL-SOURCE",
+        "CL-STRICT"
+      ],
+      "retirement_mapping": "Route legacy final packet, readiness, product, standards, and receipt validators to read-only compatibility views, then remove."
+    },
+    {
+      "tool_id": "HCT-MIGRATE",
+      "name": "Migration router and retirement verifier",
+      "owner": "OWN-MAINTENANCE",
+      "status": "absent_as_single_authority",
+      "product_role": "Generate migration plans, compatibility aliases, deprecation findings, active-reference inventories, cleanup operations, and retirement proof.",
+      "command_groups": [
+        "migrate"
+      ],
+      "current_snapshot_evidence": [
+        "legacy mappings and scattered aliases",
+        "candidate migration document"
+      ],
+      "replaces_candidate_tools": [],
+      "implementation_contract": "Plan is read-only; apply is explicit and reversible where possible; destructive cleanup requires authority; compatibility has an owner, measurement, deadline, and removal condition.",
+      "public_api": [
+        "MigrationPlan",
+        "CompatibilityRoute",
+        "RetirementTarget",
+        "RetirementDecision"
+      ],
+      "external_substrates": [
+        "HCT inventory",
+        "Git diff/status"
+      ],
+      "dependencies": [
+        "HCT-CONTEXT",
+        "HCT-INVENTORY",
+        "HCT-CAPTURE",
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "product_surfaces": [
+        "PS-SKILLS",
+        "PS-AGENTS",
+        "PS-CLI",
+        "PS-UPGRADE",
+        "PS-RELEASE"
+      ],
+      "proof_requirement": "Alias correctness, deprecation visibility, zero-active-reference checks, generated outputs, rollback, dirty tree, and successor behavior before removal.",
+      "claim_blocks": [
+        "CL-REAL-JOURNEY",
+        "CL-RELEASE",
+        "CL-COMPLETION"
+      ],
+      "retirement_mapping": "This tool owns retirement and remains after legacy-specific adapters disappear."
+    }
+  ]
+}

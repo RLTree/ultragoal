@@ -1,0 +1,58 @@
+{
+  "schema_version": "2.0.0",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "purpose": "Self-contained file-referenced input for a later local Codex Ultra root; no hidden chat context is required or authoritative.",
+  "runtime_record_for_review_only": {
+    "expected_model_family": "GPT-5.6",
+    "expected_mode": "Pro",
+    "runtime_configuration_verified": true,
+    "basis": "The client exposed the model family and Pro mode to this review runtime. This record does not attest the later Codex Ultra runtime."
+  },
+  "required_first_load": [
+    "FINAL-CONTRACT/00-READ-ME-FIRST.md",
+    "FINAL-CONTRACT/CONTRACT_MANIFEST.json",
+    "FINAL-CONTRACT/ULTRA-INPUT-MANIFEST.json",
+    "FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+    "FINAL-CONTRACT/REQUIREMENT_TRACE.json",
+    "FINAL-CONTRACT/CLAIM_REGISTRY.json"
+  ],
+  "authoritative_machine_files": [
+    "FINAL-CONTRACT/CONTRACT_MANIFEST.json",
+    "FINAL-CONTRACT/REQUIREMENT_TRACE.json",
+    "FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json",
+    "FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json",
+    "FINAL-CONTRACT/CLAIM_REGISTRY.json",
+    "FINAL-CONTRACT/RESEARCH_SOURCE_REGISTRY.json",
+    "FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+    "FINAL-CONTRACT/RESOLVED-FINDINGS.json"
+  ],
+  "human_review_files": [
+    "FINAL-CONTRACT/MIGRATION-AND-RETIREMENT.md",
+    "FINAL-CONTRACT/PRO-ADVERSARIAL-REVIEW.md",
+    "FINAL-CONTRACT/OPEN-DECISIONS.md"
+  ],
+  "execution_files": [
+    "FINAL-CONTRACT/CODEX-ULTRA-BOOTSTRAP.md",
+    "FINAL-CONTRACT/CODEX-ULTRA-GOAL.md"
+  ],
+  "snapshot_context": {
+    "source_archive": "harness-ultragoal-sol-pro-review-2026-07-10T02-22-23Z.zip",
+    "archive_file_not_embedded": true,
+    "assistant_computed_full_archive_content_set_sha256": "009dd56edc88be1fef4f404ef816f5f7aef248b41f6d0206994ea3e948baa801",
+    "candidate_content_set_sha256": "f450645e73f0c324b2c9d8ca041142fff3ed4535c815ac80f87ed39c8a72d795",
+    "tracked_source_digest_count": 5011,
+    "fixture_digest_count": 3499,
+    "uncovered_copied_context_entries": 249,
+    "claim_limit": "snapshot context only; never live proof"
+  },
+  "live_recomputation_mandatory": true,
+  "live_recomputation_required": [
+    "Git root, branch, HEAD, base/diff, status, worktrees, submodules, and candidate identity",
+    "toolchain, Cargo metadata, host/plugin/marketplace/skill/custom-agent capabilities and versions",
+    "current component, command, schema, fixture, generated-authority, lane/gate/model-reference inventories",
+    "installed plugin bytes, host discovery, representative runtime behavior, permissions, and exposed runtime metadata",
+    "all implementation, proof, release, and completion results"
+  ],
+  "claim_ceiling": "snapshot-based contract review and final handoff bundle only",
+  "execution_use_after_live_adoption": "This input may guide a review-derived implementation plan after the Ultra root verifies and adopts it against live state; it cannot itself prove product behavior or completion."
+}

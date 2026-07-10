@@ -1,0 +1,61 @@
+{
+  "zip_entry_count": 6609,
+  "duplicate_entry_names": [],
+  "encrypted_entries": [],
+  "unsafe_paths": [],
+  "symlink_entries": [],
+  "zip_test_bad_entry": null,
+  "hashed_file_count": 5277,
+  "candidate_manifest": {
+    "listed_count": 17,
+    "all_entry_digests_ok": true,
+    "content_set_expected": "f450645e73f0c324b2c9d8ca041142fff3ed4535c815ac80f87ed39c8a72d795",
+    "content_set_actual": "f450645e73f0c324b2c9d8ca041142fff3ed4535c815ac80f87ed39c8a72d795",
+    "content_set_ok": true,
+    "missing_or_mismatched": [],
+    "unlisted_candidate_files": [],
+    "listed_missing_files": []
+  },
+  "tracked_source_manifest": {
+    "digest_lines": 5011,
+    "malformed_lines": [],
+    "all_digests_ok": true,
+    "mismatches": [],
+    "tracked_files_list_count": 5011,
+    "digest_path_count": 5011,
+    "paths_in_list_not_digest": [],
+    "paths_in_digest_not_list": [],
+    "source_files_in_zip_not_tracked": []
+  },
+  "fixture_manifest": {
+    "digest_lines": 3499,
+    "malformed_lines": [],
+    "all_digests_ok": true,
+    "mismatch_count": 0,
+    "mismatches": [],
+    "scope": "source/fixtures corpus; the manifest is stored under schemas-and-fixtures but its paths are archive-root relative"
+  },
+  "computed_full_archive_content_set_sha256": "009dd56edc88be1fef4f404ef816f5f7aef248b41f6d0206994ea3e948baa801",
+  "manifest_coverage": {
+    "all_files": 5277,
+    "candidate_covered": 18,
+    "tracked_source_covered": 5011,
+    "fixture_covered": 3500,
+    "uncovered_files_count": 249,
+    "uncovered_top_level_counts": {
+      "(root)": 1,
+      "candidate-contract": 1,
+      "evidence": 22,
+      "legacy-and-migration": 24,
+      "research": 25,
+      "schemas-and-fixtures": 165,
+      "snapshot": 11
+    },
+    "note": "No single archive-wide supplied digest manifest was found; candidate, tracked source, and copied fixture subsets have supplied manifests. Root/snapshot/research/evidence/legacy metadata are not all covered by a supplied archive-wide manifest.",
+    "candidate_listed_entries": 17,
+    "tracked_source_entries": 5011,
+    "fixture_entries": 3499,
+    "fixture_entries_overlap_tracked_source": 3499
+  },
+  "integrity_conclusion": "ZIP CRC, candidate per-entry/content-set digests, all 5,011 tracked source digests, and all 3,499 fixture-corpus digests verify. No supplied archive-wide digest manifest covers the root README, snapshot metadata, copied research/evidence/legacy subsets, selected schemas-and-fixtures copies, or the candidate include manifest itself."
+}

@@ -1,0 +1,956 @@
+{
+  "schema_version": "2.0.0",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "separation_rule": "A claim definition, current evidence, proof decision, and downstream ceiling are independent; evidence existence never promotes a claim by itself.",
+  "claim_topological_order": [
+    "CL-SOURCE",
+    "CL-ORCHESTRATION",
+    "CL-PACKAGE",
+    "CL-STRICT",
+    "CL-INSTALL",
+    "CL-DISCOVERY",
+    "CL-RUNTIME",
+    "CL-EVAL-IMPROVEMENT",
+    "CL-FIT",
+    "CL-OBSERVABILITY",
+    "CL-ROUTINE",
+    "CL-REAL-JOURNEY",
+    "CL-RELEASE",
+    "CL-COMPLETION"
+  ],
+  "claim_count": 14,
+  "claims": [
+    {
+      "claim_id": "CL-SOURCE",
+      "name": "Canonical source contract",
+      "expected_behavior": "The live adopted contract, source tree, semantic inventories, and generated projections resolve to one authority with no missing, duplicate, stale, or circular reference.",
+      "truth_surface": "live canonical source tree and adopted contract",
+      "prerequisite_claim_ids": [],
+      "requirement_ids": [
+        "REQ-GOAL-001",
+        "REQ-MAINT-001",
+        "REQ-MAINT-003",
+        "REQ-MAINT-005",
+        "REQ-MAINT-006",
+        "REQ-PLUGIN-001",
+        "REQ-PLUGIN-004",
+        "REQ-PLUGIN-005",
+        "REQ-PLUGIN-006",
+        "REQ-PRODUCT-001",
+        "REQ-PRODUCT-004",
+        "REQ-PROOF-001",
+        "REQ-RESEARCH-001",
+        "REQ-RESEARCH-002",
+        "REQ-RESEARCH-003",
+        "REQ-RESEARCH-004",
+        "REQ-STATE-001",
+        "REQ-STATE-002",
+        "REQ-SUPPLY-003",
+        "REQ-SUPPLY-004"
+      ],
+      "required_surface_ids": [
+        "PS-PLUGIN-MANIFEST",
+        "PS-RESEARCH",
+        "PS-SKILLS",
+        "PS-SOURCE"
+      ],
+      "required_tool_ids": [
+        "HCT-CLAIMS",
+        "HCT-INVENTORY"
+      ],
+      "required_decision_ids": [],
+      "required_evidence": [
+        "live source and adopted-contract digests",
+        "deterministic semantic inventory",
+        "reference/ownership validation",
+        "independent source-to-projection reconciliation"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "independent source/manifest reviewer",
+      "false_pass_controls": [
+        "tampered manifest digest",
+        "missing required file",
+        "duplicate stable ID",
+        "stale generated projection",
+        "shadow authority writer"
+      ],
+      "claim_guard": "Source coherence proves no package or runtime behavior.",
+      "repair": "Resolve the canonical owner, repair or regenerate affected authority, invalidate dependent evidence, and independently revalidate the live tree.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-SOURCE with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "source_only",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-PROOF-AUTHORITY"
+    },
+    {
+      "claim_id": "CL-PACKAGE",
+      "name": "Built package identity",
+      "expected_behavior": "The built package contains exactly the intended product components and can be reproduced or honestly bounded at every non-reproducible dimension.",
+      "truth_surface": "built package bytes and generated package inventory",
+      "prerequisite_claim_ids": [
+        "CL-SOURCE"
+      ],
+      "requirement_ids": [
+        "REQ-MAINT-005",
+        "REQ-PLUGIN-001",
+        "REQ-PLUGIN-002",
+        "REQ-PLUGIN-005",
+        "REQ-PRODUCT-003",
+        "REQ-PRODUCT-004",
+        "REQ-PROOF-001",
+        "REQ-PROOF-002",
+        "REQ-STATE-001",
+        "REQ-SUPPLY-001",
+        "REQ-SUPPLY-002",
+        "REQ-SUPPLY-003",
+        "REQ-SUPPLY-004",
+        "REQ-SUPPLY-005",
+        "REQ-SUPPLY-006"
+      ],
+      "required_surface_ids": [
+        "PS-MARKETPLACE",
+        "PS-PACKAGE",
+        "PS-PLUGIN-MANIFEST"
+      ],
+      "required_tool_ids": [
+        "HCT-CAPTURE",
+        "HCT-CLAIMS",
+        "HCT-DISTRIBUTION",
+        "HCT-INVENTORY"
+      ],
+      "required_decision_ids": [
+        "OD-002",
+        "OD-005",
+        "OD-010"
+      ],
+      "required_evidence": [
+        "clean build inputs and toolchain identity",
+        "unpacked byte-level inventory",
+        "source-to-package component mapping",
+        "dependency lock/provenance record",
+        "independent second-build comparison"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "independent unpack/reinventory verifier",
+      "false_pass_controls": [
+        "omitted required component",
+        "unexpected extra executable",
+        "stale generated file",
+        "wrong source revision",
+        "non-deterministic archive metadata"
+      ],
+      "claim_guard": "Package identity proves no install or discovery.",
+      "repair": "Correct package generation or inventory ownership, rebuild from a clean context, and repeat independent unpack/reinventory and reproducibility checks.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-PACKAGE with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "package_only",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-PROOF-AUTHORITY"
+    },
+    {
+      "claim_id": "CL-INSTALL",
+      "name": "Installed bytes",
+      "expected_behavior": "The exact verified package bytes are installed only into the authorized target with observable identity, bounded effects, and a tested recovery path.",
+      "truth_surface": "measured installed bytes in authorized target",
+      "prerequisite_claim_ids": [
+        "CL-PACKAGE"
+      ],
+      "requirement_ids": [
+        "REQ-COMPLETE-003",
+        "REQ-PLUGIN-002",
+        "REQ-PRODUCT-003",
+        "REQ-PROOF-001",
+        "REQ-SECURITY-003",
+        "REQ-STATE-001",
+        "REQ-SUPPLY-004"
+      ],
+      "required_surface_ids": [
+        "PS-INSTALL",
+        "PS-MARKETPLACE"
+      ],
+      "required_tool_ids": [
+        "HCT-CAPTURE",
+        "HCT-CLAIMS",
+        "HCT-DISTRIBUTION"
+      ],
+      "required_decision_ids": [
+        "OD-001",
+        "OD-003",
+        "OD-010"
+      ],
+      "required_evidence": [
+        "authorized target and effect declaration",
+        "before/after installed inventory",
+        "installed-byte digest reconciliation",
+        "permission and rollback observations"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "independent installer/byte reconciler",
+      "false_pass_controls": [
+        "wrong user or repository home",
+        "partial install",
+        "stale cached version",
+        "permission denial",
+        "install receipt without byte match"
+      ],
+      "claim_guard": "Installed bytes prove no host discovery.",
+      "repair": "Remove or quarantine the incorrect installation without losing user work, install the intended bytes into the authorized target, and rerun byte reconciliation.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-INSTALL with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "installed_bytes_only",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-PROOF-AUTHORITY"
+    },
+    {
+      "claim_id": "CL-DISCOVERY",
+      "name": "Host discovery",
+      "expected_behavior": "A supported host discovers the intended installed plugin identity in a newly loaded session through the documented marketplace/discovery route.",
+      "truth_surface": "supported host's exposed discovery observation in a new session",
+      "prerequisite_claim_ids": [
+        "CL-INSTALL"
+      ],
+      "requirement_ids": [
+        "REQ-PLUGIN-002",
+        "REQ-PLUGIN-003",
+        "REQ-PLUGIN-005",
+        "REQ-PLUGIN-006",
+        "REQ-PLUGIN-007",
+        "REQ-PRODUCT-003",
+        "REQ-PROOF-001",
+        "REQ-PROOF-008",
+        "REQ-SECURITY-005",
+        "REQ-SECURITY-007",
+        "REQ-STATE-001",
+        "REQ-SUPPLY-004"
+      ],
+      "required_surface_ids": [
+        "PS-AGENTS",
+        "PS-DISCOVERY",
+        "PS-MARKETPLACE",
+        "PS-SKILLS"
+      ],
+      "required_tool_ids": [
+        "HCT-CLAIMS",
+        "HCT-DISTRIBUTION"
+      ],
+      "required_decision_ids": [
+        "OD-001",
+        "OD-003",
+        "OD-006"
+      ],
+      "required_evidence": [
+        "host/version/capability record",
+        "marketplace source observation",
+        "new-session discovery observation",
+        "discovered identity and version match"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "independent host probe",
+      "false_pass_controls": [
+        "installed but hidden",
+        "duplicate plugin versions",
+        "wrong marketplace root",
+        "no host restart/new task",
+        "manual path invocation only"
+      ],
+      "claim_guard": "Discovery proves no representative route behavior.",
+      "repair": "Repair marketplace or manifest wiring, remove or disambiguate stale versions under authority, reload the host, and repeat the independent discovery probe.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-DISCOVERY with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "discovered_only",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-PROOF-AUTHORITY"
+    },
+    {
+      "claim_id": "CL-RUNTIME",
+      "name": "Representative runtime behavior",
+      "expected_behavior": "The discovered plugin front door, canonical skills, supported custom agents, and CLI kernel perform representative product-semantic actions with the declared effects and identity.",
+      "truth_surface": "representative live plugin and CLI invocations",
+      "prerequisite_claim_ids": [
+        "CL-DISCOVERY"
+      ],
+      "requirement_ids": [
+        "REQ-CLI-001",
+        "REQ-CLI-002",
+        "REQ-CLI-003",
+        "REQ-CLI-004",
+        "REQ-CLI-005",
+        "REQ-CLI-006",
+        "REQ-FIT-006",
+        "REQ-MAINT-002",
+        "REQ-MAINT-004",
+        "REQ-MAINT-006",
+        "REQ-OBSERVE-003",
+        "REQ-PLUGIN-003",
+        "REQ-PLUGIN-004",
+        "REQ-PLUGIN-007",
+        "REQ-PRODUCT-003",
+        "REQ-PROOF-001",
+        "REQ-PROOF-004",
+        "REQ-PROOF-008",
+        "REQ-REPAIR-001",
+        "REQ-REPAIR-002",
+        "REQ-REPAIR-003",
+        "REQ-SECURITY-001",
+        "REQ-SECURITY-005",
+        "REQ-STATE-001",
+        "REQ-STATE-002",
+        "REQ-STATE-004",
+        "REQ-SUPPLY-004"
+      ],
+      "required_surface_ids": [
+        "PS-DISCOVERY",
+        "PS-ENTRY",
+        "PS-SKILLS"
+      ],
+      "required_tool_ids": [
+        "HCT-CLAIMS",
+        "HCT-DISTRIBUTION"
+      ],
+      "required_decision_ids": [
+        "OD-003",
+        "OD-006",
+        "OD-008"
+      ],
+      "required_evidence": [
+        "representative plugin-led invocation",
+        "representative CLI invocation",
+        "runtime identity binding",
+        "declared-versus-observed effects",
+        "fresh-agent route comprehension"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "independent runtime journey reviewer",
+      "false_pass_controls": [
+        "direct binary invocation that bypasses plugin",
+        "wrong installed plugin identity",
+        "unsupported capability silently simulated",
+        "single happy-path command treated as product proof"
+      ],
+      "claim_guard": "One invocation proves only the exercised behavior and environment.",
+      "repair": "Repair the failing route or capability degradation behavior, reload the actual installed product, and rerun the exact representative journey under a fresh context.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-RUNTIME with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "runtime_observed",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-PROOF-AUTHORITY"
+    },
+    {
+      "claim_id": "CL-FIT",
+      "name": "Repository fitting behavior",
+      "expected_behavior": "Fresh setup and existing-repository retrofit inspect, plan, apply, and verify bounded repository changes while preserving user authority and producing usable loaded behavior.",
+      "truth_surface": "fresh and retrofit inspect/plan/apply/verify journeys",
+      "prerequisite_claim_ids": [
+        "CL-RUNTIME"
+      ],
+      "requirement_ids": [
+        "REQ-FIT-001",
+        "REQ-FIT-002",
+        "REQ-FIT-003",
+        "REQ-FIT-004",
+        "REQ-FIT-005",
+        "REQ-FIT-006",
+        "REQ-PROOF-001",
+        "REQ-REPAIR-003",
+        "REQ-SECURITY-001",
+        "REQ-SECURITY-002",
+        "REQ-SECURITY-005",
+        "REQ-STATE-001"
+      ],
+      "required_surface_ids": [
+        "PS-FIT-FRESH",
+        "PS-FIT-RETROFIT"
+      ],
+      "required_tool_ids": [
+        "HCT-CAPTURE",
+        "HCT-CLAIMS",
+        "HCT-CONTEXT",
+        "HCT-FIT"
+      ],
+      "required_decision_ids": [
+        "OD-006"
+      ],
+      "required_evidence": [
+        "fresh and retrofit inspections",
+        "semantic mutation plans",
+        "authorized diffs and rollback",
+        "idempotency and user-change preservation",
+        "post-fit loaded behavior"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "independent repository-fit reviewer",
+      "false_pass_controls": [
+        "files present but host ignores them",
+        "user-owned content overwritten",
+        "partial/conflicting repository",
+        "second apply drifts",
+        "template receipt only"
+      ],
+      "claim_guard": "Generated files or receipts do not prove loaded behavior or preservation.",
+      "repair": "Reconcile ownership/conflicts, restore user work where needed, revise the fit plan, apply only authorized mutations, and repeat post-fit behavior verification.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-FIT with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "repository_fit",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-PROOF-AUTHORITY"
+    },
+    {
+      "claim_id": "CL-ROUTINE",
+      "name": "Routine development behavior",
+      "expected_behavior": "Routine work remains fast and useful on a dirty tree by selecting a legally dependency-closed affected set, verifying reuse, preserving local work, and reporting actual execution.",
+      "truth_surface": "dirty-tree affected-set execution and preserved workspace",
+      "prerequisite_claim_ids": [
+        "CL-FIT"
+      ],
+      "requirement_ids": [
+        "REQ-CLI-007",
+        "REQ-PROOF-001",
+        "REQ-PROOF-005",
+        "REQ-ROUTINE-001",
+        "REQ-ROUTINE-002",
+        "REQ-ROUTINE-003",
+        "REQ-ROUTINE-004",
+        "REQ-ROUTINE-005",
+        "REQ-ROUTINE-006",
+        "REQ-SECURITY-002",
+        "REQ-STATE-001",
+        "REQ-STATE-003"
+      ],
+      "required_surface_ids": [
+        "PS-CLI",
+        "PS-DIAGNOSE",
+        "PS-ROUTINE"
+      ],
+      "required_tool_ids": [
+        "HCT-CAPTURE",
+        "HCT-CLAIMS",
+        "HCT-CONTEXT",
+        "HCT-FIXTURES",
+        "HCT-IMPACT",
+        "HCT-STATE"
+      ],
+      "required_decision_ids": [],
+      "required_evidence": [
+        "dirty-tree baseline and preservation check",
+        "impact closure",
+        "executed command/test set",
+        "cache/reuse key validation",
+        "actual-versus-planned report"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "independent routine-work reviewer",
+      "false_pass_controls": [
+        "omitted impacted target",
+        "stale cache hit",
+        "hidden repository-wide work",
+        "unexpected writes",
+        "green subset without applicability proof"
+      ],
+      "claim_guard": "A green subset is valid only if impact closure and reuse are verified.",
+      "repair": "Invalidate unsafe reuse, expand the affected closure, restore unexpected mutations, and rerun only the corrected dependency-closed routine profile.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-ROUTINE with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "routine_verified",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-PROOF-AUTHORITY"
+    },
+    {
+      "claim_id": "CL-OBSERVABILITY",
+      "name": "Observability behavior",
+      "expected_behavior": "Local semantic events can be queried to explain cause and repair without hidden query writes; any adopted external export is explicit, privacy-bounded, and roundtrip-verified.",
+      "truth_surface": "local query behavior and optional export roundtrip",
+      "prerequisite_claim_ids": [
+        "CL-RUNTIME"
+      ],
+      "requirement_ids": [
+        "REQ-CLI-004",
+        "REQ-COMPLETE-003",
+        "REQ-OBSERVE-001",
+        "REQ-OBSERVE-002",
+        "REQ-OBSERVE-003",
+        "REQ-OBSERVE-004",
+        "REQ-OBSERVE-005",
+        "REQ-OBSERVE-006",
+        "REQ-PROOF-001",
+        "REQ-SECURITY-003",
+        "REQ-SECURITY-004",
+        "REQ-STATE-001"
+      ],
+      "required_surface_ids": [
+        "PS-DIAGNOSE",
+        "PS-OBSERVE-EXPORT",
+        "PS-OBSERVE-LOCAL"
+      ],
+      "required_tool_ids": [
+        "HCT-CLAIMS",
+        "HCT-OBSERVE"
+      ],
+      "required_decision_ids": [
+        "OD-004",
+        "OD-007"
+      ],
+      "required_evidence": [
+        "local emission/query roundtrip",
+        "causal correlation and repair output",
+        "retention/redaction behavior",
+        "explicit export effect and collector reconciliation when adopted"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "independent observability/privacy reviewer",
+      "false_pass_controls": [
+        "event existence used as behavior proof",
+        "query mutates store",
+        "secret or high-cardinality leakage",
+        "corrupt/reordered events",
+        "exporter failure hidden"
+      ],
+      "claim_guard": "Event presence cannot prove product behavior or claims.",
+      "repair": "Correct event semantics, storage/query purity, privacy controls, or export reconciliation; purge unsafe data under authority and rerun the affected observation path.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-OBSERVABILITY with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "observability_verified",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-PROOF-AUTHORITY"
+    },
+    {
+      "claim_id": "CL-STRICT",
+      "name": "Strict validation profile",
+      "expected_behavior": "Strict proof selects one named claim, closes its exact dependency boundary, executes positive and adversarial controls, binds evidence to the live candidate, and obtains independent reconciliation.",
+      "truth_surface": "claim-specific dependency-closed proof with negative controls",
+      "prerequisite_claim_ids": [
+        "CL-SOURCE"
+      ],
+      "requirement_ids": [
+        "REQ-CLI-007",
+        "REQ-EVAL-003",
+        "REQ-ORCH-006",
+        "REQ-PROOF-001",
+        "REQ-PROOF-002",
+        "REQ-PROOF-003",
+        "REQ-PROOF-005",
+        "REQ-PROOF-006",
+        "REQ-PROOF-007",
+        "REQ-REPAIR-004",
+        "REQ-REVIEW-001",
+        "REQ-REVIEW-002",
+        "REQ-ROUTINE-002",
+        "REQ-ROUTINE-003",
+        "REQ-ROUTINE-005",
+        "REQ-STATE-001",
+        "REQ-STATE-003",
+        "REQ-STATE-005"
+      ],
+      "required_surface_ids": [
+        "PS-CLI",
+        "PS-PROOF"
+      ],
+      "required_tool_ids": [
+        "HCT-CAPTURE",
+        "HCT-CLAIMS",
+        "HCT-CONTEXT",
+        "HCT-FIXTURES",
+        "HCT-IMPACT"
+      ],
+      "required_decision_ids": [],
+      "required_evidence": [
+        "claim-specific proof plan",
+        "candidate/context-bound evidence envelopes",
+        "positive behavior observations",
+        "false-pass control results",
+        "independent claim decision"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "independent claim falsifier",
+      "false_pass_controls": [
+        "green test without applicability",
+        "stale or wrong-candidate evidence",
+        "wrong truth surface",
+        "self-authored reconciliation",
+        "receipt/row/telemetry surrogate"
+      ],
+      "claim_guard": "Receipts/tests/rows cannot substitute for named behavior.",
+      "repair": "Reject the invalid evidence, repair the behavior or proof adapter, recompute the live claim boundary, and rerun with an independent reconciler.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-STRICT with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "strict_profile_verified",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-PROOF-AUTHORITY"
+    },
+    {
+      "claim_id": "CL-ORCHESTRATION",
+      "name": "Adaptive orchestration behavior",
+      "expected_behavior": "The Ultra root decomposes live dependency-ready work, grants disjoint leases, confines workers, independently reviews outputs, and alone reconciles shared authority and integration.",
+      "truth_surface": "live work graph, leases, worker outputs, reviews, and root reconciliation",
+      "prerequisite_claim_ids": [
+        "CL-SOURCE"
+      ],
+      "requirement_ids": [
+        "REQ-CLI-003",
+        "REQ-GOAL-004",
+        "REQ-ORCH-001",
+        "REQ-ORCH-002",
+        "REQ-ORCH-003",
+        "REQ-ORCH-004",
+        "REQ-ORCH-005",
+        "REQ-ORCH-006",
+        "REQ-ORCH-007",
+        "REQ-ORCH-008",
+        "REQ-PLUGIN-006",
+        "REQ-PROOF-001",
+        "REQ-REVIEW-002",
+        "REQ-SECURITY-001",
+        "REQ-SECURITY-006",
+        "REQ-SECURITY-007",
+        "REQ-STATE-001",
+        "REQ-STATE-002"
+      ],
+      "required_surface_ids": [
+        "PS-AGENTS",
+        "PS-GOAL",
+        "PS-ORCHESTRATION"
+      ],
+      "required_tool_ids": [
+        "HCT-CLAIMS",
+        "HCT-CONTEXT",
+        "HCT-STATE"
+      ],
+      "required_decision_ids": [],
+      "required_evidence": [
+        "live work graph and context",
+        "explicit worker leases",
+        "WorkerResult-v1 outputs",
+        "scope-collision validation",
+        "independent reviews",
+        "root integration/recovery record"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "orchestration recovery reviewer",
+      "false_pass_controls": [
+        "overlapping path or semantic writes",
+        "worker modifies shared authority",
+        "stale-base acceptance",
+        "parallel activity treated as success",
+        "cancellation/recovery loses work"
+      ],
+      "claim_guard": "Parallel activity or merged code alone does not prove safe orchestration.",
+      "repair": "Revoke conflicting leases, preserve work, recompute state, isolate or replay affected changes, and have the root reconcile only independently accepted outputs.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-ORCHESTRATION with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "orchestration_verified",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-PROOF-AUTHORITY"
+    },
+    {
+      "claim_id": "CL-EVAL-IMPROVEMENT",
+      "name": "Evaluation and improvement behavior",
+      "expected_behavior": "Evaluations use valid representative tasks and scorers, expose artifacts and configuration, resist contamination/reward hacking, and promote only independently reviewed behavior improvements.",
+      "truth_surface": "audited tasks/scorers, paired runs, guarded non-regression, and review",
+      "prerequisite_claim_ids": [
+        "CL-RUNTIME"
+      ],
+      "requirement_ids": [
+        "REQ-EVAL-001",
+        "REQ-EVAL-002",
+        "REQ-EVAL-003",
+        "REQ-EVAL-004",
+        "REQ-EVAL-005",
+        "REQ-EVAL-006",
+        "REQ-GOAL-003",
+        "REQ-PROOF-001",
+        "REQ-PROOF-003",
+        "REQ-PROOF-006",
+        "REQ-STATE-001"
+      ],
+      "required_surface_ids": [
+        "PS-EVAL",
+        "PS-RESEARCH"
+      ],
+      "required_tool_ids": [
+        "HCT-CAPTURE",
+        "HCT-CLAIMS",
+        "HCT-EVAL",
+        "HCT-FIXTURES"
+      ],
+      "required_decision_ids": [],
+      "required_evidence": [
+        "task/dataset/scorer audit",
+        "runtime/tool configuration when exposed",
+        "paired baseline/candidate runs",
+        "artifact and failure-case inspection",
+        "non-regression guard",
+        "independent promotion review"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "independent evaluation reviewer",
+      "false_pass_controls": [
+        "label or score perturbation",
+        "task leakage/contamination",
+        "grader disagreement",
+        "metric gain with artifact regression",
+        "prompt text used as runtime metadata"
+      ],
+      "claim_guard": "Metric gain alone does not prove product improvement.",
+      "repair": "Repair or reject invalid tasks/scorers, rerun a representative paired evaluation, inspect artifacts, and withhold promotion until independent non-regression review passes.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-EVAL-IMPROVEMENT with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "improvement_candidate",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-PROOF-AUTHORITY"
+    },
+    {
+      "claim_id": "CL-REAL-JOURNEY",
+      "name": "Representative product journeys",
+      "expected_behavior": "Fresh users, agents, and maintainers can acquire, enter, fit, use, diagnose, observe, improve, and upgrade the product without hidden expert context or proof-shaped shortcuts.",
+      "truth_surface": "fresh user/agent and maintainer journeys in supported environments",
+      "prerequisite_claim_ids": [
+        "CL-FIT",
+        "CL-ROUTINE",
+        "CL-OBSERVABILITY"
+      ],
+      "requirement_ids": [
+        "REQ-CLI-002",
+        "REQ-EVAL-006",
+        "REQ-FIT-005",
+        "REQ-FIT-006",
+        "REQ-MAINT-001",
+        "REQ-PLUGIN-003",
+        "REQ-PLUGIN-004",
+        "REQ-PRODUCT-001",
+        "REQ-PRODUCT-002",
+        "REQ-PROOF-001",
+        "REQ-PROOF-004",
+        "REQ-REVIEW-004",
+        "REQ-STATE-001"
+      ],
+      "required_surface_ids": [
+        "PS-AGENTS",
+        "PS-CLI",
+        "PS-DIAGNOSE",
+        "PS-ENTRY",
+        "PS-EVAL",
+        "PS-FIT-FRESH",
+        "PS-FIT-RETROFIT",
+        "PS-ORCHESTRATION",
+        "PS-SKILLS",
+        "PS-UPGRADE"
+      ],
+      "required_tool_ids": [
+        "HCT-CLAIMS",
+        "HCT-EVAL",
+        "HCT-FIT",
+        "HCT-MIGRATE"
+      ],
+      "required_decision_ids": [
+        "OD-008"
+      ],
+      "required_evidence": [
+        "fresh-user journey",
+        "fresh-agent journey",
+        "maintainer/recovery journey",
+        "time-to-correct-route and repair usefulness",
+        "quality-in-use observations across supported environments"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "product journey reviewer",
+      "false_pass_controls": [
+        "documentation walkthrough only",
+        "seeded expert context",
+        "hidden manual intervention",
+        "artifact presence in place of use",
+        "single environment generalized"
+      ],
+      "claim_guard": "Artifact presence or internal tests do not prove quality in use.",
+      "repair": "Repair routing, language, automation, failure diagnosis, or supported-environment behavior and repeat the journey with a genuinely fresh independent actor.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-REAL-JOURNEY with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "journey_verified",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-PROOF-AUTHORITY"
+    },
+    {
+      "claim_id": "CL-RELEASE",
+      "name": "Release readiness",
+      "expected_behavior": "A specific live release candidate satisfies the exact adopted release proof set across source, package, install, discovery, runtime, journeys, migration, security, and supply boundaries.",
+      "truth_surface": "exact live release proof set, verified package, supported install/discovery, and resolved release decisions",
+      "prerequisite_claim_ids": [
+        "CL-PACKAGE",
+        "CL-INSTALL",
+        "CL-DISCOVERY",
+        "CL-RUNTIME",
+        "CL-FIT",
+        "CL-ROUTINE",
+        "CL-OBSERVABILITY",
+        "CL-STRICT",
+        "CL-ORCHESTRATION",
+        "CL-EVAL-IMPROVEMENT",
+        "CL-REAL-JOURNEY"
+      ],
+      "requirement_ids": [
+        "REQ-COMPLETE-001",
+        "REQ-COMPLETE-003",
+        "REQ-COMPLETE-004",
+        "REQ-MAINT-001",
+        "REQ-MAINT-002",
+        "REQ-MAINT-004",
+        "REQ-MAINT-006",
+        "REQ-OBSERVE-006",
+        "REQ-ORCH-002",
+        "REQ-PROOF-001",
+        "REQ-PROOF-002",
+        "REQ-PROOF-005",
+        "REQ-PROOF-007",
+        "REQ-RESEARCH-003",
+        "REQ-REVIEW-001",
+        "REQ-REVIEW-003",
+        "REQ-SECURITY-003",
+        "REQ-SECURITY-004",
+        "REQ-SECURITY-007",
+        "REQ-STATE-001",
+        "REQ-STATE-005",
+        "REQ-SUPPLY-002",
+        "REQ-SUPPLY-003",
+        "REQ-SUPPLY-005",
+        "REQ-SUPPLY-006",
+        "REQ-SUPPLY-007"
+      ],
+      "required_surface_ids": [
+        "PS-PACKAGE",
+        "PS-PROOF",
+        "PS-RELEASE",
+        "PS-UPGRADE"
+      ],
+      "required_tool_ids": [
+        "HCT-CLAIMS",
+        "HCT-DISTRIBUTION",
+        "HCT-FIXTURES",
+        "HCT-INVENTORY",
+        "HCT-MIGRATE"
+      ],
+      "required_decision_ids": [
+        "OD-001",
+        "OD-002",
+        "OD-003",
+        "OD-004",
+        "OD-005",
+        "OD-006",
+        "OD-007",
+        "OD-008",
+        "OD-009",
+        "OD-010"
+      ],
+      "required_evidence": [
+        "candidate identity and clean release baseline",
+        "all prerequisite claim decisions",
+        "verified package/provenance",
+        "supported install/discovery/runtime matrix",
+        "retirement state",
+        "resolved release-authority decisions"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "independent release reviewer and human release authority",
+      "false_pass_controls": [
+        "package-only release",
+        "unresolved license/signing/support decision",
+        "stale or mixed candidate evidence",
+        "legacy duplicate authority",
+        "publish action treated as proof"
+      ],
+      "claim_guard": "Release candidate is not integrated product completion.",
+      "repair": "Resolve the exact failed prerequisite or external decision, rebuild/rebind the candidate as needed, invalidate stale evidence, and rerun the complete release proof set.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-RELEASE with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "release_candidate",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-RELEASE-AUTHORITY"
+    },
+    {
+      "claim_id": "CL-COMPLETION",
+      "name": "Integrated goal completion",
+      "expected_behavior": "The live integrated product closes every mandatory law, requirement, surface, custom tool, product journey, material finding, retirement obligation, and required decision at its exact claim boundary.",
+      "truth_surface": "root-reconciled closure of all required live claims, surfaces, tools, journeys, findings, and decisions",
+      "prerequisite_claim_ids": [
+        "CL-RELEASE"
+      ],
+      "requirement_ids": [
+        "REQ-COMPLETE-001",
+        "REQ-COMPLETE-002",
+        "REQ-COMPLETE-003",
+        "REQ-COMPLETE-004",
+        "REQ-COMPLETE-005",
+        "REQ-COMPLETE-006",
+        "REQ-EVAL-004",
+        "REQ-GOAL-002",
+        "REQ-GOAL-003",
+        "REQ-GOAL-004",
+        "REQ-MAINT-003",
+        "REQ-OBSERVE-005",
+        "REQ-ORCH-001",
+        "REQ-ORCH-002",
+        "REQ-ORCH-007",
+        "REQ-ORCH-008",
+        "REQ-PRODUCT-002",
+        "REQ-PRODUCT-003",
+        "REQ-PROOF-001",
+        "REQ-PROOF-003",
+        "REQ-PROOF-004",
+        "REQ-PROOF-007",
+        "REQ-PROOF-008",
+        "REQ-REPAIR-001",
+        "REQ-REPAIR-002",
+        "REQ-REPAIR-004",
+        "REQ-RESEARCH-004",
+        "REQ-REVIEW-001",
+        "REQ-REVIEW-003",
+        "REQ-REVIEW-004",
+        "REQ-STATE-001",
+        "REQ-STATE-003",
+        "REQ-STATE-004",
+        "REQ-STATE-005"
+      ],
+      "required_surface_ids": [
+        "PS-COMPLETION",
+        "PS-PROOF"
+      ],
+      "required_tool_ids": [
+        "HCT-CLAIMS",
+        "HCT-CONTEXT",
+        "HCT-MIGRATE",
+        "HCT-STATE"
+      ],
+      "required_decision_ids": [
+        "OD-001",
+        "OD-002",
+        "OD-003",
+        "OD-004",
+        "OD-005",
+        "OD-007",
+        "OD-008",
+        "OD-009"
+      ],
+      "required_evidence": [
+        "passed release claim",
+        "complete requirement/surface/tool closure",
+        "all representative journeys",
+        "resolved material findings and required decisions",
+        "root reconciliation",
+        "independent final adversarial reviews"
+      ],
+      "current_live_evidence": [],
+      "current_live_evidence_status": "not_verified",
+      "independent_reconciler": "Ultra root plus independent final reviewers",
+      "false_pass_controls": [
+        "host Goal status",
+        "green finalizer or report",
+        "release claim alone",
+        "telemetry/receipt/manifest existence",
+        "hidden external blocker or unsupported environment"
+      ],
+      "claim_guard": "Goal state, green finalizer, telemetry, package, or report cannot substitute for integrated completion.",
+      "repair": "Keep the goal incomplete, report the highest honest ceiling, repair or obtain authority for the exact blocker, recompute all affected live state, and rerun dependent claims only.",
+      "rerun": "Recompute LiveContext and candidate identity, invalidate stale dependent evidence, then rerun strict proof for CL-COMPLETION with the named independent reconciler.",
+      "allowed_ceiling_on_pass": "complete",
+      "initial_claim_state": "not_evaluated_on_live_candidate",
+      "claim_decision_owner": "OWN-RELEASE-AUTHORITY"
+    }
+  ]
+}

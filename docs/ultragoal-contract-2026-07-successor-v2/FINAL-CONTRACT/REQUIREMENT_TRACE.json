@@ -1,0 +1,3552 @@
+{
+  "schema_version": "2.0.0",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "separation_rule": "normative adoption, live adoption, implementation, proof eligibility, and claim decision are independent",
+  "requirement_count": 105,
+  "requirements": [
+    {
+      "requirement_id": "REQ-PRODUCT-001",
+      "law_id": "HUL-PRODUCT-001",
+      "statement": "The plugin is the user-facing product; the CLI and custom tools remain enabling and enforcement components rather than a competing product.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-OAI-HARNESS",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-PRODUCT-ARCHITECTURE",
+      "product_surfaces": [
+        "PS-SOURCE",
+        "PS-ENTRY",
+        "PS-CLI"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-REAL-JOURNEY"
+      ],
+      "implementation_scope": "product architecture and public narrative",
+      "validator": "Inventory rule rejects CLI-only journey closure and duplicate top-level products.",
+      "independent_proof": "A fresh user completes a plugin-led representative journey and can reach CLI functions through product-semantic routes.",
+      "completion_blockers": [
+        "CLI is the only complete entry",
+        "plugin routes terminate in undocumented commands"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PRODUCT-002",
+      "law_id": "HUL-PRODUCT-001",
+      "statement": "Every required product journey maps to owned surfaces, implementation disposition, proof, and claim guard.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-CANDIDATE"
+      ],
+      "owner": "OWN-PRODUCT-ARCHITECTURE",
+      "product_surfaces": [
+        "PS-SOURCE",
+        "PS-PLUGIN-MANIFEST",
+        "PS-MARKETPLACE",
+        "PS-SKILLS",
+        "PS-AGENTS",
+        "PS-CLI",
+        "PS-PACKAGE",
+        "PS-INSTALL",
+        "PS-DISCOVERY",
+        "PS-ENTRY",
+        "PS-FIT-FRESH",
+        "PS-FIT-RETROFIT",
+        "PS-ROUTINE",
+        "PS-DIAGNOSE",
+        "PS-PROOF",
+        "PS-OBSERVE-LOCAL",
+        "PS-OBSERVE-EXPORT",
+        "PS-ORCHESTRATION",
+        "PS-EVAL",
+        "PS-RESEARCH",
+        "PS-UPGRADE",
+        "PS-GOAL",
+        "PS-RELEASE",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-REAL-JOURNEY",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "journey and surface registries",
+      "validator": "Machine-reference and coverage validator over journeys, surfaces, owners, proof, and guards.",
+      "independent_proof": "Independent reviewer samples each journey and confirms no unmapped transition or authority gap.",
+      "completion_blockers": [
+        "unowned surface",
+        "journey transition without proof or repair"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PRODUCT-003",
+      "law_id": "HUL-PRODUCT-001",
+      "statement": "Artifact truth, installed-byte truth, host-discovery truth, runtime truth, and product-behavior truth remain separate claim layers.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-SLSA-PROVENANCE",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-PRODUCT-ARCHITECTURE",
+      "product_surfaces": [
+        "PS-PACKAGE",
+        "PS-INSTALL",
+        "PS-DISCOVERY",
+        "PS-ENTRY",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-DISTRIBUTION",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-PACKAGE",
+        "CL-INSTALL",
+        "CL-DISCOVERY",
+        "CL-RUNTIME",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "claim graph and distribution adapters",
+      "validator": "Claim graph forbids evidence-type substitution and requires identity transitions.",
+      "independent_proof": "False-pass fixtures present a valid lower-layer artifact with a broken upper-layer behavior and must lower the ceiling.",
+      "completion_blockers": [
+        "lower-layer evidence satisfies upper-layer claim",
+        "identity transition unreconciled"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PRODUCT-004",
+      "law_id": "HUL-PRODUCT-001",
+      "statement": "Generated projections derive from one canonical machine-readable inventory and are not independent authority stores.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-MODEL-GUIDANCE",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-PRODUCT-ARCHITECTURE",
+      "product_surfaces": [
+        "PS-SOURCE",
+        "PS-PLUGIN-MANIFEST",
+        "PS-UPGRADE"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-PACKAGE"
+      ],
+      "implementation_scope": "inventory generation",
+      "validator": "Regenerate-and-diff plus duplicate-authority scan.",
+      "independent_proof": "Tampering with a projection is detected and cannot change canonical state.",
+      "completion_blockers": [
+        "hand-maintained duplicate inventory",
+        "projection can author state"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PLUGIN-001",
+      "law_id": "HUL-PLUGIN-001",
+      "statement": "Ship a supported `.codex-plugin/plugin.json` with stable kebab-case identity, version, description, and only supported component fields.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-PLUGIN-BUILD",
+        "SRC-OAI-PLUGINS",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-PLUGIN-PRODUCT",
+      "product_surfaces": [
+        "PS-PLUGIN-MANIFEST"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-DISTRIBUTION"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-PACKAGE"
+      ],
+      "implementation_scope": "plugin manifest",
+      "validator": "Manifest schema/path/inventory validator.",
+      "independent_proof": "Inspect built package bytes and resolve every declared component without escaping the plugin root.",
+      "completion_blockers": [
+        "unsupported field",
+        "missing component",
+        "manifest/package mismatch"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PLUGIN-002",
+      "law_id": "HUL-PLUGIN-001",
+      "statement": "Provide repo-scoped and personal marketplace instructions and fixtures using currently documented marketplace paths.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-PLUGIN-BUILD",
+        "SRC-OAI-PLUGINS"
+      ],
+      "owner": "OWN-PLUGIN-PRODUCT",
+      "product_surfaces": [
+        "PS-MARKETPLACE",
+        "PS-INSTALL",
+        "PS-DISCOVERY"
+      ],
+      "custom_tools": [
+        "HCT-DISTRIBUTION"
+      ],
+      "claim_ids": [
+        "CL-PACKAGE",
+        "CL-INSTALL",
+        "CL-DISCOVERY"
+      ],
+      "implementation_scope": "marketplace catalogs and install documentation",
+      "validator": "Marketplace JSON/path and relative-source validator.",
+      "independent_proof": "Clean repo and clean personal-home fixtures install intended bytes, then a new host session discovers the intended identity.",
+      "completion_blockers": [
+        "catalog path stale",
+        "installed bytes differ",
+        "new session does not discover plugin"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PLUGIN-003",
+      "law_id": "HUL-PLUGIN-001",
+      "statement": "Expose one concise front-door skill named `harness-ultragoal` that states purpose, authority boundaries, and routes to specialized journeys.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SKILLS",
+        "SRC-OAI-PLUGIN-BUILD",
+        "SRC-OAI-MODEL-GUIDANCE"
+      ],
+      "owner": "OWN-PLUGIN-PRODUCT",
+      "product_surfaces": [
+        "PS-SKILLS",
+        "PS-ENTRY"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-EVAL"
+      ],
+      "claim_ids": [
+        "CL-DISCOVERY",
+        "CL-RUNTIME",
+        "CL-REAL-JOURNEY"
+      ],
+      "implementation_scope": "front-door skill",
+      "validator": "Skill metadata, context-budget, route target, ambiguity, and stale-command checks.",
+      "independent_proof": "Fresh-agent tasks identify the front door and choose the correct route without loading the complete contract.",
+      "completion_blockers": [
+        "invalid metadata",
+        "duplicate front doors",
+        "route ambiguity"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PLUGIN-004",
+      "law_id": "HUL-PLUGIN-001",
+      "statement": "Consolidate the active skill topology to eight product-semantic skills: harness-ultragoal, repository-fit, routine-work, diagnose-and-observe, goal-run, prove, improve-and-maintain, and product-journey-review.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SKILLS",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-PLUGIN-PRODUCT",
+      "product_surfaces": [
+        "PS-SKILLS",
+        "PS-ENTRY",
+        "PS-UPGRADE"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-MIGRATE"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-RUNTIME",
+        "CL-REAL-JOURNEY"
+      ],
+      "implementation_scope": "skills directory and compatibility routes",
+      "validator": "Canonical-name and semantic-overlap validator.",
+      "independent_proof": "Representative prompts select each canonical skill; old names either route with deprecation or are absent under the adopted compatibility policy.",
+      "completion_blockers": [
+        "duplicate semantic skill",
+        "legacy name silently diverges",
+        "missing canonical route"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PLUGIN-005",
+      "law_id": "HUL-PLUGIN-001",
+      "statement": "Every active skill contains valid `name` and `description` frontmatter and references only shipped, current commands and files.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-PLUGIN-BUILD",
+        "SRC-OAI-SKILLS",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-PLUGIN-PRODUCT",
+      "product_surfaces": [
+        "PS-SKILLS"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-DISTRIBUTION"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-PACKAGE",
+        "CL-DISCOVERY"
+      ],
+      "implementation_scope": "skill metadata and references",
+      "validator": "Frontmatter parser and package-relative reference resolver.",
+      "independent_proof": "Packaged skill load in a new task; broken, omitted, or stale-route fixtures fail.",
+      "completion_blockers": [
+        "missing frontmatter",
+        "unshipped reference",
+        "stale command"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PLUGIN-006",
+      "law_id": "HUL-PLUGIN-001",
+      "statement": "Project-scoped custom agents live under `.codex/agents/` and define the required current fields; static write authority is not embedded in those files.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SUBAGENTS",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-PLUGIN-PRODUCT",
+      "product_surfaces": [
+        "PS-AGENTS",
+        "PS-ORCHESTRATION"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-MIGRATE"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-DISCOVERY",
+        "CL-ORCHESTRATION"
+      ],
+      "implementation_scope": "custom agent files",
+      "validator": "Agent path/schema and prohibited-write-authority validator.",
+      "independent_proof": "New local Codex run discovers read-only roles; attempted write delegation without a lease is rejected.",
+      "completion_blockers": [
+        "wrong discovery path",
+        "missing required field",
+        "static agent has broad write authority"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PLUGIN-007",
+      "law_id": "HUL-PLUGIN-001",
+      "statement": "Plugin routes must degrade explicitly when a host capability is unavailable instead of simulating or silently claiming it.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-PLUGINS",
+        "SRC-OAI-LOCAL-ENV",
+        "SRC-OAI-GOAL"
+      ],
+      "owner": "OWN-PLUGIN-PRODUCT",
+      "product_surfaces": [
+        "PS-DISCOVERY",
+        "PS-ENTRY",
+        "PS-GOAL"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-STATE",
+        "HCT-DISTRIBUTION"
+      ],
+      "claim_ids": [
+        "CL-DISCOVERY",
+        "CL-RUNTIME"
+      ],
+      "implementation_scope": "host adapters and user routes",
+      "validator": "Capability matrix and unsupported-host fixture validation.",
+      "independent_proof": "A host lacking a feature produces a bounded finding, safe alternative, and lower claim ceiling.",
+      "completion_blockers": [
+        "feature simulated",
+        "unsupported capability treated as pass"
+      ]
+    },
+    {
+      "requirement_id": "REQ-FIT-001",
+      "law_id": "HUL-FIT-001",
+      "statement": "`fit inspect` is read-only and classifies the target as fresh, partial, compatible, conflicting, or already fitted.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-OAI-AGENTS-MD",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-REPOSITORY-FIT",
+      "product_surfaces": [
+        "PS-FIT-FRESH",
+        "PS-FIT-RETROFIT"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-FIT",
+        "HCT-STATE"
+      ],
+      "claim_ids": [
+        "CL-FIT"
+      ],
+      "implementation_scope": "fit inspection",
+      "validator": "Before/after filesystem, Git, and event-store non-mutation check.",
+      "independent_proof": "Fixtures for each state class return stable semantic findings and no writes.",
+      "completion_blockers": [
+        "inspection mutates target",
+        "state class depends on path accidents"
+      ]
+    },
+    {
+      "requirement_id": "REQ-FIT-002",
+      "law_id": "HUL-FIT-001",
+      "statement": "`fit plan` expresses desired state, existing ownership, exact mutations, conflicts, effects, rollback, verification, and authority needs.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-AGENTS-MD",
+        "SRC-OAI-LOCAL-ENV",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-REPOSITORY-FIT",
+      "product_surfaces": [
+        "PS-FIT-FRESH",
+        "PS-FIT-RETROFIT"
+      ],
+      "custom_tools": [
+        "HCT-FIT",
+        "HCT-STATE"
+      ],
+      "claim_ids": [
+        "CL-FIT"
+      ],
+      "implementation_scope": "fit planning",
+      "validator": "Plan schema, completeness, determinism, and path-confinement checks.",
+      "independent_proof": "Review plan against fresh, partial, and conflicting repositories before any mutation.",
+      "completion_blockers": [
+        "implicit mutation",
+        "missing ownership or rollback",
+        "plan depends on current clock"
+      ]
+    },
+    {
+      "requirement_id": "REQ-FIT-003",
+      "law_id": "HUL-FIT-001",
+      "statement": "`fit apply` requires explicit authorization, applies only the accepted plan, and rejects context or target drift.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SECURITY",
+        "SRC-GIT-WORKTREE"
+      ],
+      "owner": "OWN-REPOSITORY-FIT",
+      "product_surfaces": [
+        "PS-FIT-FRESH",
+        "PS-FIT-RETROFIT"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-FIT",
+        "HCT-CAPTURE"
+      ],
+      "claim_ids": [
+        "CL-FIT"
+      ],
+      "implementation_scope": "fit executor",
+      "validator": "Plan/context digest and mutation allowlist enforcement.",
+      "independent_proof": "Tamper and time-of-check/time-of-use fixtures are blocked without partial unauthorized writes.",
+      "completion_blockers": [
+        "plan drift accepted",
+        "undeclared file changed"
+      ]
+    },
+    {
+      "requirement_id": "REQ-FIT-004",
+      "law_id": "HUL-FIT-001",
+      "statement": "Retrofit preserves user-authored content and requires explicit conflict decisions; generated ownership is marked and narrow.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-AGENTS-MD",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-REPOSITORY-FIT",
+      "product_surfaces": [
+        "PS-FIT-RETROFIT"
+      ],
+      "custom_tools": [
+        "HCT-FIT",
+        "HCT-MIGRATE"
+      ],
+      "claim_ids": [
+        "CL-FIT"
+      ],
+      "implementation_scope": "retrofit reconciliation",
+      "validator": "Ownership markers, semantic merge, and no-clobber checks.",
+      "independent_proof": "Conflicting user files survive or are changed only through recorded decisions; rollback restores pre-fit bytes.",
+      "completion_blockers": [
+        "user content overwritten",
+        "ownership inferred without evidence"
+      ]
+    },
+    {
+      "requirement_id": "REQ-FIT-005",
+      "law_id": "HUL-FIT-001",
+      "statement": "Fresh setup creates the minimum useful agent-first surfaces rather than copying the full Harness repository or contract.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-HARNESS",
+        "SRC-OAI-BEST-PRACTICES",
+        "SRC-OAI-AGENTS-MD"
+      ],
+      "owner": "OWN-REPOSITORY-FIT",
+      "product_surfaces": [
+        "PS-FIT-FRESH",
+        "PS-ENTRY"
+      ],
+      "custom_tools": [
+        "HCT-FIT",
+        "HCT-INVENTORY"
+      ],
+      "claim_ids": [
+        "CL-FIT",
+        "CL-REAL-JOURNEY"
+      ],
+      "implementation_scope": "fresh setup templates",
+      "validator": "Minimal-surface and orphan-reference checks.",
+      "independent_proof": "A small representative repository is fitted and a fresh agent can build/test/navigate it without Harness internals.",
+      "completion_blockers": [
+        "contract dump copied",
+        "essential workflow missing"
+      ]
+    },
+    {
+      "requirement_id": "REQ-FIT-006",
+      "law_id": "HUL-FIT-001",
+      "statement": "Fit verification tests actual instruction discovery and representative repository behavior from relevant working directories.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-AGENTS-MD",
+        "SRC-OAI-LOCAL-ENV"
+      ],
+      "owner": "OWN-REPOSITORY-FIT",
+      "product_surfaces": [
+        "PS-FIT-FRESH",
+        "PS-FIT-RETROFIT",
+        "PS-ENTRY"
+      ],
+      "custom_tools": [
+        "HCT-FIT",
+        "HCT-DISTRIBUTION",
+        "HCT-EVAL"
+      ],
+      "claim_ids": [
+        "CL-FIT",
+        "CL-RUNTIME",
+        "CL-REAL-JOURNEY"
+      ],
+      "implementation_scope": "fit verification",
+      "validator": "Instruction-chain and representative-action probes.",
+      "independent_proof": "New runs from root and scoped subdirectories observe expected guidance and complete target actions.",
+      "completion_blockers": [
+        "files exist but are not loaded",
+        "wrong override precedence"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ROUTINE-001",
+      "law_id": "HUL-ROUTINE-001",
+      "statement": "Routine inspection and checks support dirty trees without resetting, stashing, cleaning, or rewriting unrelated work.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-GIT-WORKTREE",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-DEVELOPER-LOOP",
+      "product_surfaces": [
+        "PS-ROUTINE"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-IMPACT",
+        "HCT-CAPTURE"
+      ],
+      "claim_ids": [
+        "CL-ROUTINE"
+      ],
+      "implementation_scope": "routine profile",
+      "validator": "Dirty-tree preservation fixture and before/after status/digest comparison.",
+      "independent_proof": "Modified, staged, untracked, and nested-worktree fixtures retain unrelated bytes and state.",
+      "completion_blockers": [
+        "hidden cleanup",
+        "unrelated file mutation"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ROUTINE-002",
+      "law_id": "HUL-ROUTINE-001",
+      "statement": "Affected-set selection is conservative and dependency-closed; unknown edges expand work rather than lower correctness.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-RUST-CARGO-CHECK",
+        "SRC-RUST-CARGO-TEST",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-DEVELOPER-LOOP",
+      "product_surfaces": [
+        "PS-ROUTINE"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-IMPACT"
+      ],
+      "claim_ids": [
+        "CL-ROUTINE",
+        "CL-STRICT"
+      ],
+      "implementation_scope": "impact graph",
+      "validator": "Mutation-to-check coverage and unknown-edge fixtures.",
+      "independent_proof": "Seeded changes in source, schema, fixture, skill, manifest, and generated authority select the required checks.",
+      "completion_blockers": [
+        "known dependency omitted",
+        "unknown relation treated as no impact"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ROUTINE-003",
+      "law_id": "HUL-ROUTINE-001",
+      "statement": "Cache reuse binds semantic node, inputs, relevant environment, tool identity, dependency results, and output digests.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-PROMPT-CACHE",
+        "SRC-RUST-CARGO-CHECK",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-DEVELOPER-LOOP",
+      "product_surfaces": [
+        "PS-ROUTINE"
+      ],
+      "custom_tools": [
+        "HCT-IMPACT",
+        "HCT-CAPTURE"
+      ],
+      "claim_ids": [
+        "CL-ROUTINE",
+        "CL-STRICT"
+      ],
+      "implementation_scope": "verified reuse",
+      "validator": "Cache-key perturbation and stale-output checks.",
+      "independent_proof": "Changing any bound dimension invalidates reuse; identical safe inputs permit measured reuse.",
+      "completion_blockers": [
+        "path-only cache key",
+        "tool/version omitted",
+        "output not verified"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ROUTINE-004",
+      "law_id": "HUL-ROUTINE-001",
+      "statement": "Routine checks declare exactly what ran, what was reused, what was skipped, why, and the resulting claim ceiling.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-HARNESS",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-DEVELOPER-LOOP",
+      "product_surfaces": [
+        "PS-ROUTINE",
+        "PS-DIAGNOSE"
+      ],
+      "custom_tools": [
+        "HCT-IMPACT",
+        "HCT-STATE",
+        "HCT-OBSERVE"
+      ],
+      "claim_ids": [
+        "CL-ROUTINE"
+      ],
+      "implementation_scope": "routine result schema",
+      "validator": "Result completeness and false-summary checks.",
+      "independent_proof": "Independent recomputation agrees with selected/executed/reused/skipped sets.",
+      "completion_blockers": [
+        "generic PASS",
+        "skipped work undisclosed"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ROUTINE-005",
+      "law_id": "HUL-ROUTINE-001",
+      "statement": "Routine profile excludes release-only ceremonies unless the affected graph or explicit request requires them.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-RUST-CARGO-CHECK",
+        "SRC-NEXTEST",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-DEVELOPER-LOOP",
+      "product_surfaces": [
+        "PS-ROUTINE",
+        "PS-PROOF"
+      ],
+      "custom_tools": [
+        "HCT-IMPACT",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-ROUTINE",
+        "CL-STRICT"
+      ],
+      "implementation_scope": "profile policy",
+      "validator": "Profile inclusion and latency-budget fixtures.",
+      "independent_proof": "Small scoped edits avoid unrelated package/release/journey work while strict profile still closes claim dependencies.",
+      "completion_blockers": [
+        "routine always runs global release proof",
+        "strict profile silently reduced"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ROUTINE-006",
+      "law_id": "HUL-ROUTINE-001",
+      "statement": "A bounded fast path exists even when optional accelerators such as nextest or coverage tooling are unavailable.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-NEXTEST",
+        "SRC-RUST-CARGO-CHECK",
+        "SRC-RUST-CARGO-TEST"
+      ],
+      "owner": "OWN-DEVELOPER-LOOP",
+      "product_surfaces": [
+        "PS-ROUTINE"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-IMPACT",
+        "HCT-CAPTURE"
+      ],
+      "claim_ids": [
+        "CL-ROUTINE"
+      ],
+      "implementation_scope": "tool fallback adapters",
+      "validator": "Capability-off fixtures and fallback equivalence checks.",
+      "independent_proof": "Routine behavior remains correct with optional tools removed; only performance/coverage dimensions lower explicitly.",
+      "completion_blockers": [
+        "optional binary is hard dependency",
+        "fallback changes semantics without disclosure"
+      ]
+    },
+    {
+      "requirement_id": "REQ-STATE-001",
+      "law_id": "HUL-STATE-001",
+      "statement": "Each authority-bearing command constructs one immutable `LiveContext` before domain work.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-GIT-WORKTREE",
+        "SRC-SNAPSHOT-REPO",
+        "SRC-SNAPSHOT-README"
+      ],
+      "owner": "OWN-AUTHORITY-KERNEL",
+      "product_surfaces": [
+        "PS-CLI",
+        "PS-DIAGNOSE",
+        "PS-PROOF"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT"
+      ],
+      "claim_ids": [
+        "CL-COMPLETION",
+        "CL-DISCOVERY",
+        "CL-EVAL-IMPROVEMENT",
+        "CL-FIT",
+        "CL-INSTALL",
+        "CL-OBSERVABILITY",
+        "CL-ORCHESTRATION",
+        "CL-PACKAGE",
+        "CL-REAL-JOURNEY",
+        "CL-RELEASE",
+        "CL-ROUTINE",
+        "CL-RUNTIME",
+        "CL-SOURCE",
+        "CL-STRICT"
+      ],
+      "implementation_scope": "command entry architecture",
+      "validator": "Construction-order and immutable-context type checks.",
+      "independent_proof": "Instrumentation shows one context ID per operation and no later root/candidate re-resolution.",
+      "completion_blockers": [
+        "context rebuilt mid-run",
+        "command-specific root semantics"
+      ]
+    },
+    {
+      "requirement_id": "REQ-STATE-002",
+      "law_id": "HUL-STATE-001",
+      "statement": "Live context binds canonical repository/worktree roots, Git candidate identity, dirty state, configuration, tool capabilities, permissions, effect class, and selected inputs.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-GIT-WORKTREE",
+        "SRC-OAI-SECURITY",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-AUTHORITY-KERNEL",
+      "product_surfaces": [
+        "PS-CLI",
+        "PS-ORCHESTRATION"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-RUNTIME",
+        "CL-ORCHESTRATION"
+      ],
+      "implementation_scope": "LiveContext schema",
+      "validator": "Context schema and canonicalization checks.",
+      "independent_proof": "Path aliases, alternate working directories, worktrees, dirty changes, and tool changes produce expected context identity changes.",
+      "completion_blockers": [
+        "missing candidate dimension",
+        "non-canonical root"
+      ]
+    },
+    {
+      "requirement_id": "REQ-STATE-003",
+      "law_id": "HUL-STATE-001",
+      "statement": "Findings are typed facts with cause and scope; status views and receipts cannot author them.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-HARNESS",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-AUTHORITY-KERNEL",
+      "product_surfaces": [
+        "PS-DIAGNOSE",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-ROUTINE",
+        "CL-STRICT",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "finding and state graph",
+      "validator": "Authority-direction and projection checks.",
+      "independent_proof": "Tampered status/receipt files cannot change recomputed findings or ceilings.",
+      "completion_blockers": [
+        "view file is authority",
+        "finding lacks causal input"
+      ]
+    },
+    {
+      "requirement_id": "REQ-STATE-004",
+      "law_id": "HUL-STATE-001",
+      "statement": "Current state, repair, next action, and claim ceilings are deterministic projections of the same context-bound graph.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-SNAPSHOT-REPO",
+        "SRC-OAI-PERSISTED-REASONING"
+      ],
+      "owner": "OWN-AUTHORITY-KERNEL",
+      "product_surfaces": [
+        "PS-DIAGNOSE",
+        "PS-GOAL",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-RUNTIME",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "state projections",
+      "validator": "Repeated-run determinism and cross-view consistency checks.",
+      "independent_proof": "Independent projection from serialized graph matches CLI human and JSON views.",
+      "completion_blockers": [
+        "views disagree",
+        "next action uses hidden mutable state"
+      ]
+    },
+    {
+      "requirement_id": "REQ-STATE-005",
+      "law_id": "HUL-STATE-001",
+      "statement": "Claim-bearing evidence is accepted only for the same live context and candidate identity, subject to declared freshness rules.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-SLSA-VERIFY",
+        "SRC-GIT-WORKTREE",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-AUTHORITY-KERNEL",
+      "product_surfaces": [
+        "PS-PROOF",
+        "PS-RELEASE",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-STRICT",
+        "CL-RELEASE",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "evidence envelope",
+      "validator": "Identity/freshness mismatch checks.",
+      "independent_proof": "Old-commit, other-worktree, changed-tool, and changed-config evidence is rejected or narrowed.",
+      "completion_blockers": [
+        "stale evidence accepted",
+        "candidate identity absent"
+      ]
+    },
+    {
+      "requirement_id": "REQ-CLI-001",
+      "law_id": "HUL-CLI-001",
+      "statement": "Replace the handwritten public argument parser with a conventional typed parser such as clap.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-RUST-CLAP",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-CLI",
+      "product_surfaces": [
+        "PS-CLI"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-STATE"
+      ],
+      "claim_ids": [
+        "CL-RUNTIME"
+      ],
+      "implementation_scope": "CLI grammar",
+      "validator": "Parser golden tests, invalid-input property tests, and help snapshot tests.",
+      "independent_proof": "Malformed and ambiguous inputs fail before domain execution with stable exit semantics and zero writes.",
+      "completion_blockers": [
+        "manual parser remains public authority",
+        "parse ambiguity"
+      ]
+    },
+    {
+      "requirement_id": "REQ-CLI-002",
+      "law_id": "HUL-CLI-001",
+      "statement": "Reduce the public command surface to product-semantic groups: inspect, next, fit, check, diagnose, prove, observe, package, eval, and migrate.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-CLI",
+      "product_surfaces": [
+        "PS-CLI",
+        "PS-ENTRY",
+        "PS-UPGRADE"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-MIGRATE"
+      ],
+      "claim_ids": [
+        "CL-RUNTIME",
+        "CL-REAL-JOURNEY"
+      ],
+      "implementation_scope": "public command catalog",
+      "validator": "Command inventory and route/deprecation checks.",
+      "independent_proof": "Fresh users map common intents to one command group; retired commands either route correctly or fail with migration guidance.",
+      "completion_blockers": [
+        "multiple commands claim same authority",
+        "legacy command silently active"
+      ]
+    },
+    {
+      "requirement_id": "REQ-CLI-003",
+      "law_id": "HUL-CLI-001",
+      "statement": "Command effect class is structural and machine-readable: read, planned-write, workspace-write, external-write, or destructive.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SECURITY",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-CLI",
+      "product_surfaces": [
+        "PS-CLI",
+        "PS-ORCHESTRATION"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-CAPTURE"
+      ],
+      "claim_ids": [
+        "CL-RUNTIME",
+        "CL-ORCHESTRATION"
+      ],
+      "implementation_scope": "effect model",
+      "validator": "Every subcommand/option maps to one effect class; dynamic escalation is prohibited.",
+      "independent_proof": "Permission matrix exercises all commands and rejects undeclared effects.",
+      "completion_blockers": [
+        "effect inferred from prose",
+        "read command writes"
+      ]
+    },
+    {
+      "requirement_id": "REQ-CLI-004",
+      "law_id": "HUL-CLI-001",
+      "statement": "Help, version, parse errors, inspect, next, and default diagnose queries perform zero filesystem, cache, telemetry, network, or external writes unless an explicit output effect is selected.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SECURITY",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-CLI",
+      "product_surfaces": [
+        "PS-CLI",
+        "PS-DIAGNOSE",
+        "PS-OBSERVE-LOCAL"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-STATE",
+        "HCT-OBSERVE"
+      ],
+      "claim_ids": [
+        "CL-RUNTIME",
+        "CL-OBSERVABILITY"
+      ],
+      "implementation_scope": "read-only command boundary",
+      "validator": "System-call/file snapshot tests and event-store immutability checks.",
+      "independent_proof": "Parse-error and query fixtures show byte-for-byte unchanged writable surfaces.",
+      "completion_blockers": [
+        "parse error emits telemetry",
+        "read query updates access metadata"
+      ]
+    },
+    {
+      "requirement_id": "REQ-CLI-005",
+      "law_id": "HUL-CLI-001",
+      "statement": "Machine output uses versioned schemas on stdout; diagnostics use stderr; no ANSI or prose contaminates machine mode.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-RUST-CLAP",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-CLI",
+      "product_surfaces": [
+        "PS-CLI",
+        "PS-DIAGNOSE"
+      ],
+      "custom_tools": [
+        "HCT-STATE",
+        "HCT-CAPTURE"
+      ],
+      "claim_ids": [
+        "CL-RUNTIME"
+      ],
+      "implementation_scope": "CLI output contract",
+      "validator": "Golden JSON/JSONL schema, stream, encoding, and ANSI checks.",
+      "independent_proof": "Independent parser consumes outputs across success, finding, blocked, and internal-error cases.",
+      "completion_blockers": [
+        "mixed stdout",
+        "unversioned machine schema"
+      ]
+    },
+    {
+      "requirement_id": "REQ-CLI-006",
+      "law_id": "HUL-CLI-001",
+      "statement": "Exit codes distinguish success, actionable findings, invalid invocation, blocked authority, unsupported capability, and internal failure.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-RUST-CLAP",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-CLI",
+      "product_surfaces": [
+        "PS-CLI",
+        "PS-DIAGNOSE"
+      ],
+      "custom_tools": [
+        "HCT-STATE"
+      ],
+      "claim_ids": [
+        "CL-RUNTIME"
+      ],
+      "implementation_scope": "exit-code registry",
+      "validator": "Exhaustive outcome-to-code mapping tests.",
+      "independent_proof": "Shell-level fixture verifies code, machine output, repair, and no accidental success across every class.",
+      "completion_blockers": [
+        "all nonzero outcomes conflated",
+        "finding returns success without explicit policy"
+      ]
+    },
+    {
+      "requirement_id": "REQ-CLI-007",
+      "law_id": "HUL-CLI-001",
+      "statement": "Long-running work supports cancellation, bounded output, cleanup, and no orphaned child processes or locks.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OTEL-SENSITIVE",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-CLI",
+      "product_surfaces": [
+        "PS-CLI",
+        "PS-ROUTINE",
+        "PS-PROOF"
+      ],
+      "custom_tools": [
+        "HCT-CAPTURE",
+        "HCT-FIXTURES"
+      ],
+      "claim_ids": [
+        "CL-ROUTINE",
+        "CL-STRICT"
+      ],
+      "implementation_scope": "process lifecycle",
+      "validator": "Signal, timeout, output-flood, and cleanup fixtures.",
+      "independent_proof": "Cancellation leaves coherent state, terminates descendants, releases leases, and explains rerun.",
+      "completion_blockers": [
+        "orphan child",
+        "partial artifact presented as success"
+      ]
+    },
+    {
+      "requirement_id": "REQ-REPAIR-001",
+      "law_id": "HUL-REPAIR-001",
+      "statement": "Every actionable finding includes cause, affected surface, smallest safe repair, effect class, exact rerun, and resulting ceiling.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-HARNESS",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-OPERATOR-EXPERIENCE",
+      "product_surfaces": [
+        "PS-DIAGNOSE",
+        "PS-GOAL"
+      ],
+      "custom_tools": [
+        "HCT-STATE"
+      ],
+      "claim_ids": [
+        "CL-RUNTIME",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "finding and repair schema",
+      "validator": "Required-field and command-route validation.",
+      "independent_proof": "Fresh-agent diagnosis can execute or escalate the proposed repair without hidden context.",
+      "completion_blockers": [
+        "generic remediation",
+        "rerun missing or stale"
+      ]
+    },
+    {
+      "requirement_id": "REQ-REPAIR-002",
+      "law_id": "HUL-REPAIR-001",
+      "statement": "`next` is read-only and deterministically selects one legal dependency-closed action or one authority request.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-OPERATOR-EXPERIENCE",
+      "product_surfaces": [
+        "PS-DIAGNOSE",
+        "PS-GOAL"
+      ],
+      "custom_tools": [
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-RUNTIME",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "next-action selection",
+      "validator": "Priority/legality/determinism tests over blocked graphs.",
+      "independent_proof": "Independent recomputation selects the same action and no write occurs.",
+      "completion_blockers": [
+        "multiple ambiguous next actions",
+        "next mutates state"
+      ]
+    },
+    {
+      "requirement_id": "REQ-REPAIR-003",
+      "law_id": "HUL-REPAIR-001",
+      "statement": "Automatic repair is restricted to declared safe reversible mutations and never crosses external or destructive authority.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SECURITY",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-OPERATOR-EXPERIENCE",
+      "product_surfaces": [
+        "PS-DIAGNOSE",
+        "PS-FIT-RETROFIT",
+        "PS-UPGRADE"
+      ],
+      "custom_tools": [
+        "HCT-STATE",
+        "HCT-FIT",
+        "HCT-MIGRATE"
+      ],
+      "claim_ids": [
+        "CL-FIT",
+        "CL-RUNTIME"
+      ],
+      "implementation_scope": "repair executor",
+      "validator": "Effect/rollback/authority matrix.",
+      "independent_proof": "External, destructive, conflict, and secret-bearing fixtures stop with explicit requests and no partial write.",
+      "completion_blockers": [
+        "repair escalates effect",
+        "rollback absent"
+      ]
+    },
+    {
+      "requirement_id": "REQ-REPAIR-004",
+      "law_id": "HUL-REPAIR-001",
+      "statement": "Repairs target root causes and invalidate dependent evidence rather than editing receipts, telemetry, generated rows, or status labels.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-REWARD-HACKING",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-OPERATOR-EXPERIENCE",
+      "product_surfaces": [
+        "PS-DIAGNOSE",
+        "PS-PROOF",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-STRICT",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "repair policy",
+      "validator": "Prohibited proof-shaping mutation checks.",
+      "independent_proof": "Fixtures offering easy receipt/status tampering are rejected while the causal defect remains.",
+      "completion_blockers": [
+        "proof artifact edited to pass",
+        "dependent evidence not invalidated"
+      ]
+    },
+    {
+      "requirement_id": "REQ-OBSERVE-001",
+      "law_id": "HUL-OBSERVE-001",
+      "statement": "Define a versioned semantic event schema with stable names, context/candidate correlation, causal links, bounded fields, and explicit sensitivity classification.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OTEL-SENSITIVE",
+        "SRC-OAI-HARNESS",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-OBSERVABILITY",
+      "product_surfaces": [
+        "PS-OBSERVE-LOCAL",
+        "PS-DIAGNOSE"
+      ],
+      "custom_tools": [
+        "HCT-OBSERVE",
+        "HCT-CONTEXT"
+      ],
+      "claim_ids": [
+        "CL-OBSERVABILITY"
+      ],
+      "implementation_scope": "event schema",
+      "validator": "Schema evolution, size, cardinality, sensitivity, and correlation checks.",
+      "independent_proof": "Representative operations can be causally reconstructed without raw secrets or unbounded content.",
+      "completion_blockers": [
+        "unstable event names",
+        "missing context correlation"
+      ]
+    },
+    {
+      "requirement_id": "REQ-OBSERVE-002",
+      "law_id": "HUL-OBSERVE-001",
+      "statement": "A zero-dependency local event store and query plane remain usable without any external collector or network.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-OTEL-SENSITIVE"
+      ],
+      "owner": "OWN-OBSERVABILITY",
+      "product_surfaces": [
+        "PS-OBSERVE-LOCAL"
+      ],
+      "custom_tools": [
+        "HCT-OBSERVE"
+      ],
+      "claim_ids": [
+        "CL-OBSERVABILITY"
+      ],
+      "implementation_scope": "local observability",
+      "validator": "Offline and collector-absent fixtures.",
+      "independent_proof": "User queries timelines, failures, causes, and selected/reused work from local data only.",
+      "completion_blockers": [
+        "collector required",
+        "network failure breaks local diagnosis"
+      ]
+    },
+    {
+      "requirement_id": "REQ-OBSERVE-003",
+      "law_id": "HUL-OBSERVE-001",
+      "statement": "Read-only observability queries do not write events, caches, access timestamps controlled by the product, or exports.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SECURITY",
+        "SRC-OTEL-SENSITIVE",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-OBSERVABILITY",
+      "product_surfaces": [
+        "PS-OBSERVE-LOCAL",
+        "PS-CLI"
+      ],
+      "custom_tools": [
+        "HCT-OBSERVE",
+        "HCT-CONTEXT"
+      ],
+      "claim_ids": [
+        "CL-OBSERVABILITY",
+        "CL-RUNTIME"
+      ],
+      "implementation_scope": "query path",
+      "validator": "Before/after filesystem and event-log digest checks.",
+      "independent_proof": "Repeated query and parse-error fixtures leave all product-managed state unchanged.",
+      "completion_blockers": [
+        "query emits query event",
+        "read updates index"
+      ]
+    },
+    {
+      "requirement_id": "REQ-OBSERVE-004",
+      "law_id": "HUL-OBSERVE-001",
+      "statement": "External export is optional, explicit, capability-probed, privacy-filtered, and independently roundtrip-verified.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OTEL-SENSITIVE",
+        "SRC-OAI-SECURITY"
+      ],
+      "owner": "OWN-OBSERVABILITY",
+      "product_surfaces": [
+        "PS-OBSERVE-EXPORT"
+      ],
+      "custom_tools": [
+        "HCT-OBSERVE",
+        "HCT-CAPTURE"
+      ],
+      "claim_ids": [
+        "CL-OBSERVABILITY"
+      ],
+      "implementation_scope": "export adapters",
+      "validator": "Consent/config/redaction/retry/roundtrip checks.",
+      "independent_proof": "Collector fixtures verify accepted, dropped, redacted, duplicated, delayed, and unavailable conditions.",
+      "completion_blockers": [
+        "implicit export",
+        "secret leakage",
+        "send success substituted for ingestion"
+      ]
+    },
+    {
+      "requirement_id": "REQ-OBSERVE-005",
+      "law_id": "HUL-OBSERVE-001",
+      "statement": "Event or telemetry existence cannot set a product claim, requirement state, or completion status.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-OAI-REWARD-HACKING"
+      ],
+      "owner": "OWN-OBSERVABILITY",
+      "product_surfaces": [
+        "PS-OBSERVE-LOCAL",
+        "PS-OBSERVE-EXPORT",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-OBSERVE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-OBSERVABILITY",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "authority separation",
+      "validator": "Authority-flow and tamper checks.",
+      "independent_proof": "Forged or duplicated events do not promote any claim without behavior evidence and reconciliation.",
+      "completion_blockers": [
+        "telemetry row is proof",
+        "event count controls readiness"
+      ]
+    },
+    {
+      "requirement_id": "REQ-OBSERVE-006",
+      "law_id": "HUL-OBSERVE-001",
+      "statement": "Retention, deletion, redaction, and export-consent policies are explicit and configurable within supported authority.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OTEL-SENSITIVE",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-OBSERVABILITY",
+      "product_surfaces": [
+        "PS-OBSERVE-LOCAL",
+        "PS-OBSERVE-EXPORT"
+      ],
+      "custom_tools": [
+        "HCT-OBSERVE"
+      ],
+      "claim_ids": [
+        "CL-OBSERVABILITY",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "privacy and lifecycle policy",
+      "validator": "Retention/deletion/redaction fixtures and policy-schema validation.",
+      "independent_proof": "Sensitive synthetic inputs do not persist or export beyond declared policy; deletion is verifiable.",
+      "completion_blockers": [
+        "undefined retention",
+        "sensitive fields unclassified"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PROOF-001",
+      "law_id": "HUL-PROOF-001",
+      "statement": "Maintain one machine-readable claim graph with stable claim IDs, prerequisites, truth surface, allowed evidence, guards, reviewer, ceiling, and repair.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-SLSA-VERIFY",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-PROOF-AUTHORITY",
+      "product_surfaces": [
+        "PS-PROOF",
+        "PS-RELEASE",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-CLAIMS",
+        "HCT-INVENTORY"
+      ],
+      "claim_ids": [
+        "CL-COMPLETION",
+        "CL-DISCOVERY",
+        "CL-EVAL-IMPROVEMENT",
+        "CL-FIT",
+        "CL-INSTALL",
+        "CL-OBSERVABILITY",
+        "CL-ORCHESTRATION",
+        "CL-PACKAGE",
+        "CL-REAL-JOURNEY",
+        "CL-RELEASE",
+        "CL-ROUTINE",
+        "CL-RUNTIME",
+        "CL-SOURCE",
+        "CL-STRICT"
+      ],
+      "implementation_scope": "claim registry",
+      "validator": "Claim graph schema/reference/DAG validation.",
+      "independent_proof": "Independent claim evaluator recomputes every decision from accepted evidence envelopes.",
+      "completion_blockers": [
+        "duplicate claim authority",
+        "missing guard or reviewer"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PROOF-002",
+      "law_id": "HUL-PROOF-001",
+      "statement": "Each evidence envelope binds producer, method, live context, candidate identity, time/freshness, inputs, outputs, artifacts, and effect.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-SLSA-PROVENANCE",
+        "SRC-SLSA-VERIFY",
+        "SRC-GIT-WORKTREE"
+      ],
+      "owner": "OWN-PROOF-AUTHORITY",
+      "product_surfaces": [
+        "PS-PROOF",
+        "PS-PACKAGE",
+        "PS-RELEASE"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-CAPTURE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-PACKAGE",
+        "CL-STRICT",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "evidence envelope",
+      "validator": "Envelope schema, digest, identity, freshness, and artifact dereference checks.",
+      "independent_proof": "Tamper, missing-artifact, old-candidate, and producer-mismatch fixtures are rejected.",
+      "completion_blockers": [
+        "unbound evidence",
+        "artifact unavailable"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PROOF-003",
+      "law_id": "HUL-PROOF-001",
+      "statement": "Evidence producers cannot reconcile completion-bearing claims they materially implement or score.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-AGENT-EVALS",
+        "SRC-OAI-REWARD-HACKING",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-PROOF-AUTHORITY",
+      "product_surfaces": [
+        "PS-PROOF",
+        "PS-EVAL",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-CLAIMS",
+        "HCT-FIXTURES"
+      ],
+      "claim_ids": [
+        "CL-STRICT",
+        "CL-EVAL-IMPROVEMENT",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "review independence",
+      "validator": "Producer/reviewer conflict-of-interest rules.",
+      "independent_proof": "Self-authored acceptance is blocked; designated independent reviewer can reproduce and decide.",
+      "completion_blockers": [
+        "self-reconciliation",
+        "reviewer shares mutable primary output"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PROOF-004",
+      "law_id": "HUL-PROOF-001",
+      "statement": "Tests, receipts, generated rows, event presence, documentation, or a green command cannot substitute for the exact product behavior named by a claim.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-REWARD-HACKING",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-PROOF-AUTHORITY",
+      "product_surfaces": [
+        "PS-PROOF",
+        "PS-ENTRY",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-FIXTURES",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-RUNTIME",
+        "CL-REAL-JOURNEY",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "claim guards",
+      "validator": "False-pass and surrogate-evidence fixtures.",
+      "independent_proof": "Broken real behavior with green surrogate artifacts must fail the claim.",
+      "completion_blockers": [
+        "surrogate evidence accepted",
+        "claim behavior not directly observed"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PROOF-005",
+      "law_id": "HUL-PROOF-001",
+      "statement": "Strict proof is claim-specific and dependency-closed; routine work does not inherit unrelated release ceremony.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-RUST-CARGO-TEST",
+        "SRC-NEXTEST"
+      ],
+      "owner": "OWN-PROOF-AUTHORITY",
+      "product_surfaces": [
+        "PS-ROUTINE",
+        "PS-PROOF",
+        "PS-RELEASE"
+      ],
+      "custom_tools": [
+        "HCT-IMPACT",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-ROUTINE",
+        "CL-STRICT",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "proof profile planner",
+      "validator": "Claim-to-node closure and minimality checks.",
+      "independent_proof": "Proof plan includes every prerequisite and excludes unrelated nodes with recorded rationale.",
+      "completion_blockers": [
+        "hidden global proof",
+        "required prerequisite omitted"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PROOF-006",
+      "law_id": "HUL-PROOF-001",
+      "statement": "Negative, stale, tamper, bypass, recovery, and reward-hacking controls are first-class proof inputs.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-REWARD-HACKING",
+        "SRC-OAI-AGENT-EVALS",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-PROOF-AUTHORITY",
+      "product_surfaces": [
+        "PS-PROOF",
+        "PS-EVAL"
+      ],
+      "custom_tools": [
+        "HCT-FIXTURES",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-STRICT",
+        "CL-EVAL-IMPROVEMENT"
+      ],
+      "implementation_scope": "fixture taxonomy",
+      "validator": "Coverage rules for each claim's false-pass classes.",
+      "independent_proof": "Required negative controls fail for the intended causal reason and pass after causal repair.",
+      "completion_blockers": [
+        "only happy-path proof",
+        "negative control tests the wrong surface"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PROOF-007",
+      "law_id": "HUL-PROOF-001",
+      "statement": "Proof output exposes accepted and rejected evidence, guards evaluated, reviewer identity, decision, ceiling, and exact rerun without embedding mutable authority in prose.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-SLSA-VERIFY"
+      ],
+      "owner": "OWN-PROOF-AUTHORITY",
+      "product_surfaces": [
+        "PS-PROOF",
+        "PS-RELEASE",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-CLAIMS",
+        "HCT-STATE"
+      ],
+      "claim_ids": [
+        "CL-STRICT",
+        "CL-RELEASE",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "proof decision schema",
+      "validator": "Decision completeness and deterministic rendering checks.",
+      "independent_proof": "Independent consumer parses and reproduces the decision; edited prose cannot change it.",
+      "completion_blockers": [
+        "opaque pass",
+        "rejected evidence hidden"
+      ]
+    },
+    {
+      "requirement_id": "REQ-PROOF-008",
+      "law_id": "HUL-PROOF-001",
+      "statement": "Unavailable proof surfaces lower only dependent claims and produce a bounded repair or authority request; they do not manufacture host evidence.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-GOAL",
+        "SRC-OAI-PLUGINS",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-PROOF-AUTHORITY",
+      "product_surfaces": [
+        "PS-DISCOVERY",
+        "PS-GOAL",
+        "PS-PROOF"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-DISCOVERY",
+        "CL-RUNTIME",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "capability-conditioned claims",
+      "validator": "Unavailable-capability fixtures and ceiling propagation checks.",
+      "independent_proof": "No-host and no-permission environments report honest lower ceilings while unrelated local claims remain evaluable.",
+      "completion_blockers": [
+        "unavailable surface marked pass",
+        "all work blocked unnecessarily"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ORCH-001",
+      "law_id": "HUL-ORCHESTRATION-001",
+      "statement": "The Ultra root recomputes the live Git root, branch/HEAD, status, worktrees, candidate identity, tools, host capabilities, and permissions before planning.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SUBAGENTS",
+        "SRC-GIT-WORKTREE",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-ULTRA-ROOT",
+      "product_surfaces": [
+        "PS-ORCHESTRATION",
+        "PS-GOAL"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-INVENTORY"
+      ],
+      "claim_ids": [
+        "CL-ORCHESTRATION",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "Ultra bootstrap",
+      "validator": "Bootstrap report schema and live-command capture.",
+      "independent_proof": "Archived state differs from live fixture and root plans from live state only.",
+      "completion_blockers": [
+        "snapshot treated as live",
+        "candidate identity unresolved"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ORCH-002",
+      "law_id": "HUL-ORCHESTRATION-001",
+      "statement": "The Ultra root is sole owner of shared authority, contract adoption, global dependency resolution, integration, merge/rebase, reconciliation, claim decisions, and final reporting.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SUBAGENTS",
+        "SRC-OAI-HARNESS",
+        "SRC-OAI-SYMPHONY",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-ULTRA-ROOT",
+      "product_surfaces": [
+        "PS-ORCHESTRATION",
+        "PS-RELEASE",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-ORCHESTRATION",
+        "CL-RELEASE",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "root role contract",
+      "validator": "Authority ownership and worker-forbidden-action checks.",
+      "independent_proof": "Workers cannot modify or decide root-only authority; root independently reconciles all accepted outputs.",
+      "completion_blockers": [
+        "worker merges or claims",
+        "shared authority lacks owner"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ORCH-003",
+      "law_id": "HUL-ORCHESTRATION-001",
+      "statement": "Reconnaissance, research verification, security review, product-journey review, claim falsification, and recovery review use read-only subagents.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SUBAGENTS",
+        "SRC-OAI-SECURITY"
+      ],
+      "owner": "OWN-ULTRA-ROOT",
+      "product_surfaces": [
+        "PS-AGENTS",
+        "PS-ORCHESTRATION"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-CAPTURE"
+      ],
+      "claim_ids": [
+        "CL-ORCHESTRATION"
+      ],
+      "implementation_scope": "custom read-only roles",
+      "validator": "Agent schema/sandbox and mutation trap fixtures.",
+      "independent_proof": "Read-only agents complete assignments without repository or external writes.",
+      "completion_blockers": [
+        "reviewer can alter subject",
+        "sandbox not read-only"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ORCH-004",
+      "law_id": "HUL-ORCHESTRATION-001",
+      "statement": "Implementation workers receive explicit run-scoped leases with disjoint path, semantic-symbol, generated-output, test-fixture, and external-effect ownership.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SUBAGENTS",
+        "SRC-OAI-WORKTREES",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-ULTRA-ROOT",
+      "product_surfaces": [
+        "PS-ORCHESTRATION"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-INVENTORY",
+        "HCT-CAPTURE"
+      ],
+      "claim_ids": [
+        "CL-ORCHESTRATION"
+      ],
+      "implementation_scope": "write lease schema",
+      "validator": "Lease overlap, canonical path, semantic ownership, generated-output, and effect checks.",
+      "independent_proof": "Deliberate path and semantic collision fixtures are blocked before concurrent writes.",
+      "completion_blockers": [
+        "silent lease overlap",
+        "generated authority shared"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ORCH-005",
+      "law_id": "HUL-ORCHESTRATION-001",
+      "statement": "Worker output uses a required schema containing scope, candidate, changes, tests, findings, unresolved dependencies, artifacts, and requested shared-authority edits.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SUBAGENTS",
+        "SRC-OAI-MODEL-GUIDANCE"
+      ],
+      "owner": "OWN-ULTRA-ROOT",
+      "product_surfaces": [
+        "PS-ORCHESTRATION"
+      ],
+      "custom_tools": [
+        "HCT-CAPTURE",
+        "HCT-STATE"
+      ],
+      "claim_ids": [
+        "CL-ORCHESTRATION"
+      ],
+      "implementation_scope": "worker result protocol",
+      "validator": "Worker-output schema and artifact dereference validation.",
+      "independent_proof": "Root can reject incomplete, stale, out-of-scope, or ungrounded worker results without hidden chat context.",
+      "completion_blockers": [
+        "free-form handoff",
+        "candidate identity absent"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ORCH-006",
+      "law_id": "HUL-ORCHESTRATION-001",
+      "statement": "Each material worker result receives independent review before root acceptance and integration.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SUBAGENTS",
+        "SRC-OAI-AGENT-EVALS",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-ULTRA-ROOT",
+      "product_surfaces": [
+        "PS-ORCHESTRATION",
+        "PS-PROOF"
+      ],
+      "custom_tools": [
+        "HCT-FIXTURES",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-ORCHESTRATION",
+        "CL-STRICT"
+      ],
+      "implementation_scope": "worker acceptance",
+      "validator": "Review assignment and producer-independence checks.",
+      "independent_proof": "Adversarial reviewer reproduces tests and inspects diff/scope; root records accept/reject/rework decision.",
+      "completion_blockers": [
+        "self-reviewed worker output",
+        "root merges unreviewed material change"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ORCH-007",
+      "law_id": "HUL-ORCHESTRATION-001",
+      "statement": "Delegation follows a dependency graph; workers cannot claim downstream completion while required Harness-owned tools or shared authority are missing.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SUBAGENTS",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-ULTRA-ROOT",
+      "product_surfaces": [
+        "PS-ORCHESTRATION",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-ORCHESTRATION",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "work graph scheduler",
+      "validator": "Topological/dependency-closure and missing-tool claim guards.",
+      "independent_proof": "A missing tool blocks only dependent nodes/claims and scheduler selects legal parallel work elsewhere.",
+      "completion_blockers": [
+        "downstream claim before tool",
+        "hidden circular dependency"
+      ]
+    },
+    {
+      "requirement_id": "REQ-ORCH-008",
+      "law_id": "HUL-ORCHESTRATION-001",
+      "statement": "The root continues through ordinary blockers by repairing or replanning dependency-closed work and stops only for genuine external authority or destructive decisions.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-GOAL",
+        "SRC-OAI-MODEL-GUIDANCE",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-ULTRA-ROOT",
+      "product_surfaces": [
+        "PS-ORCHESTRATION",
+        "PS-GOAL",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-ORCHESTRATION",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "orchestration recovery",
+      "validator": "Blocker taxonomy and recovery-plan fixtures.",
+      "independent_proof": "Recoverable failures trigger bounded replanning; external/destructive cases produce exact authority requests.",
+      "completion_blockers": [
+        "premature stop",
+        "unauthorized destructive continuation"
+      ]
+    },
+    {
+      "requirement_id": "REQ-REVIEW-001",
+      "law_id": "HUL-REVIEW-001",
+      "statement": "Independent review attacks stale context, wrong truth surface, bypass, reward hacking, security boundaries, user journey failure, recovery, and maintainability.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-AGENT-EVALS",
+        "SRC-OAI-REWARD-HACKING",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-INDEPENDENT-REVIEW",
+      "product_surfaces": [
+        "PS-PROOF",
+        "PS-ORCHESTRATION",
+        "PS-RELEASE"
+      ],
+      "custom_tools": [
+        "HCT-FIXTURES",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-STRICT",
+        "CL-RELEASE",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "review taxonomy",
+      "validator": "Review coverage registry and required-class checks.",
+      "independent_proof": "Each release/completion claim contains findings or explicit reviewed-no-finding results for every required class.",
+      "completion_blockers": [
+        "review only checks style",
+        "material class omitted"
+      ]
+    },
+    {
+      "requirement_id": "REQ-REVIEW-002",
+      "law_id": "HUL-REVIEW-001",
+      "statement": "Reviewer inputs include canonical requirements, live candidate, primary evidence, diff, and proof surfaces, but not implementation conclusions as authority.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-AGENT-EVALS",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-INDEPENDENT-REVIEW",
+      "product_surfaces": [
+        "PS-PROOF",
+        "PS-ORCHESTRATION"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-STRICT",
+        "CL-ORCHESTRATION"
+      ],
+      "implementation_scope": "review input envelope",
+      "validator": "Input completeness and conclusion-independence checks.",
+      "independent_proof": "Reviewer can reproduce findings from raw inputs and identifies seeded misleading implementation summaries.",
+      "completion_blockers": [
+        "review based only on worker summary",
+        "live candidate omitted"
+      ]
+    },
+    {
+      "requirement_id": "REQ-REVIEW-003",
+      "law_id": "HUL-REVIEW-001",
+      "statement": "Material findings are resolved by causal repair, explicit rejection with evidence, or bounded external decision; suppression is not resolution.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-OAI-REWARD-HACKING"
+      ],
+      "owner": "OWN-INDEPENDENT-REVIEW",
+      "product_surfaces": [
+        "PS-PROOF",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-RELEASE",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "finding resolution",
+      "validator": "Resolution status/evidence/authority checks.",
+      "independent_proof": "Reopen seeded defects whose evidence or repair no longer holds; unresolved material findings block dependent claims.",
+      "completion_blockers": [
+        "finding marked resolved without repair",
+        "suppressed finding disappears"
+      ]
+    },
+    {
+      "requirement_id": "REQ-REVIEW-004",
+      "law_id": "HUL-REVIEW-001",
+      "statement": "A fresh-agent comprehension review and a maintainer review are mandatory for product-journey and completion claims.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-HARNESS",
+        "SRC-OAI-BEST-PRACTICES",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-INDEPENDENT-REVIEW",
+      "product_surfaces": [
+        "PS-ENTRY",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-EVAL",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-REAL-JOURNEY",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "quality-in-use review",
+      "validator": "Reviewer persona/task and independence checks.",
+      "independent_proof": "Fresh agent navigates without hidden context; maintainer identifies authority, extension, diagnosis, and migration paths.",
+      "completion_blockers": [
+        "only author understands system",
+        "maintainer cannot locate authority"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SECURITY-001",
+      "law_id": "HUL-SECURITY-001",
+      "statement": "Canonicalize roots and paths, reject traversal and symlink escapes, and confine all writes to the authorized lease and effect.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SECURITY",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-SECURITY",
+      "product_surfaces": [
+        "PS-CLI",
+        "PS-FIT-RETROFIT",
+        "PS-ORCHESTRATION"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-CAPTURE",
+        "HCT-FIT"
+      ],
+      "claim_ids": [
+        "CL-FIT",
+        "CL-RUNTIME",
+        "CL-ORCHESTRATION"
+      ],
+      "implementation_scope": "path confinement",
+      "validator": "Traversal, symlink swap, hardlink, alternate-root, and race fixtures.",
+      "independent_proof": "Attempted escape produces no out-of-scope mutation and a causal finding.",
+      "completion_blockers": [
+        "path validation lexical only",
+        "symlink escape"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SECURITY-002",
+      "law_id": "HUL-SECURITY-001",
+      "statement": "Preserve local work: no implicit reset, clean, checkout, stash, force update, destructive rewrite, or overwrite of unowned files.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-GIT-WORKTREE",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-SECURITY",
+      "product_surfaces": [
+        "PS-FIT-RETROFIT",
+        "PS-ROUTINE",
+        "PS-UPGRADE"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-FIT",
+        "HCT-MIGRATE"
+      ],
+      "claim_ids": [
+        "CL-FIT",
+        "CL-ROUTINE"
+      ],
+      "implementation_scope": "Git/workspace safety",
+      "validator": "Dirty/staged/untracked/diverged fixtures and command audit.",
+      "independent_proof": "Unrelated local work remains byte- and state-equivalent after authorized operations.",
+      "completion_blockers": [
+        "implicit destructive Git command",
+        "unowned overwrite"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SECURITY-003",
+      "law_id": "HUL-SECURITY-001",
+      "statement": "Network, external installs, plugin sharing, signing, publishing, and telemetry export require declared capability and authority.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SECURITY",
+        "SRC-OAI-PLUGIN-BUILD",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-SECURITY",
+      "product_surfaces": [
+        "PS-INSTALL",
+        "PS-OBSERVE-EXPORT",
+        "PS-RELEASE"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-DISTRIBUTION",
+        "HCT-OBSERVE"
+      ],
+      "claim_ids": [
+        "CL-INSTALL",
+        "CL-OBSERVABILITY",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "external effects",
+      "validator": "Permission/capability/effect matrix and no-network fixtures.",
+      "independent_proof": "Unauthorized external calls fail before side effect; authorized calls are captured and reconciled.",
+      "completion_blockers": [
+        "implicit network",
+        "permission inferred"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SECURITY-004",
+      "law_id": "HUL-SECURITY-001",
+      "statement": "Secrets and sensitive values are minimized, redacted, excluded from digests when inappropriate, and never written into fixtures, logs, prompts, or proof bundles.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OTEL-SENSITIVE",
+        "SRC-OAI-SECURITY"
+      ],
+      "owner": "OWN-SECURITY",
+      "product_surfaces": [
+        "PS-OBSERVE-LOCAL",
+        "PS-OBSERVE-EXPORT",
+        "PS-PROOF"
+      ],
+      "custom_tools": [
+        "HCT-CAPTURE",
+        "HCT-OBSERVE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-OBSERVABILITY",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "sensitive-data handling",
+      "validator": "Canary-secret scans across output, events, artifacts, and errors.",
+      "independent_proof": "Synthetic secrets do not appear in any persisted or exported surface; required secret identity is represented non-reversibly.",
+      "completion_blockers": [
+        "secret leakage",
+        "raw environment captured"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SECURITY-005",
+      "law_id": "HUL-SECURITY-001",
+      "statement": "Plugin hooks, MCP/connectors, local actions, and host extensions are treated as executable trust boundaries and are opt-in unless required and approved.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-PLUGINS",
+        "SRC-OAI-LOCAL-ENV",
+        "SRC-OAI-SECURITY"
+      ],
+      "owner": "OWN-SECURITY",
+      "product_surfaces": [
+        "PS-PLUGIN-MANIFEST",
+        "PS-ENTRY",
+        "PS-FIT-RETROFIT"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-FIT",
+        "HCT-DISTRIBUTION"
+      ],
+      "claim_ids": [
+        "CL-DISCOVERY",
+        "CL-RUNTIME",
+        "CL-FIT"
+      ],
+      "implementation_scope": "plugin trust surface",
+      "validator": "Component inventory, permission disclosure, and disabled-capability fixtures.",
+      "independent_proof": "Install/fit surfaces explain and preserve user choice; disabled extensions do not silently execute.",
+      "completion_blockers": [
+        "hook executes without trust",
+        "hidden connector dependency"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SECURITY-006",
+      "law_id": "HUL-SECURITY-001",
+      "statement": "Workers and reviewers use least privilege; read-only roles cannot write and write roles cannot escalate beyond leases.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SUBAGENTS",
+        "SRC-OAI-SECURITY"
+      ],
+      "owner": "OWN-SECURITY",
+      "product_surfaces": [
+        "PS-AGENTS",
+        "PS-ORCHESTRATION"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-CAPTURE"
+      ],
+      "claim_ids": [
+        "CL-ORCHESTRATION"
+      ],
+      "implementation_scope": "agent sandbox and lease enforcement",
+      "validator": "Role permission matrix and mutation/escalation traps.",
+      "independent_proof": "Each role is exercised against forbidden file, network, and shared-authority actions.",
+      "completion_blockers": [
+        "broad inherited privilege",
+        "worker modifies root-only path"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SECURITY-007",
+      "law_id": "HUL-SECURITY-001",
+      "statement": "Host-protected configuration paths such as project `.codex/`, `.agents/`, and Git metadata are root-only authority surfaces: workers may propose exact changes but may not write them, and the root applies them only through exposed approval/capability boundaries.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SECURITY",
+        "SRC-OAI-SUBAGENTS",
+        "SRC-OAI-PLUGIN-BUILD"
+      ],
+      "owner": "OWN-SECURITY",
+      "product_surfaces": [
+        "PS-MARKETPLACE",
+        "PS-AGENTS",
+        "PS-ORCHESTRATION"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-CAPTURE",
+        "HCT-STATE"
+      ],
+      "claim_ids": [
+        "CL-DISCOVERY",
+        "CL-ORCHESTRATION",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "protected host configuration and root application",
+      "validator": "Protected-path lease rejection, requested-root-change schema, approval-denial, and root-only application checks.",
+      "independent_proof": "A workspace-write worker cannot modify protected configuration; its exact proposal is independently reviewed and applied only by the root when the host exposes the required authority.",
+      "completion_blockers": [
+        "protected path leased to worker",
+        "approval inferred",
+        "worker bypasses root application"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SUPPLY-001",
+      "law_id": "HUL-SUPPLY-001",
+      "statement": "Package inventory is generated deterministically from canonical source and declares every included file, type, mode, digest, and semantic role.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-SLSA-PROVENANCE",
+        "SRC-REPRO-SDE",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-DISTRIBUTION",
+      "product_surfaces": [
+        "PS-PACKAGE"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-DISTRIBUTION"
+      ],
+      "claim_ids": [
+        "CL-PACKAGE"
+      ],
+      "implementation_scope": "package inventory",
+      "validator": "Regeneration, ordering, path, mode, and digest checks.",
+      "independent_proof": "Independent unpack/reinventory matches the signed or recorded package manifest.",
+      "completion_blockers": [
+        "undeclared package file",
+        "nondeterministic ordering"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SUPPLY-002",
+      "law_id": "HUL-SUPPLY-001",
+      "statement": "Package creation normalizes timestamps, order, locale-sensitive behavior, permissions, paths, and other controlled metadata; non-reproducible dimensions are disclosed.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-REPRO-SDE",
+        "SRC-SLSA-PROVENANCE"
+      ],
+      "owner": "OWN-DISTRIBUTION",
+      "product_surfaces": [
+        "PS-PACKAGE",
+        "PS-RELEASE"
+      ],
+      "custom_tools": [
+        "HCT-DISTRIBUTION",
+        "HCT-CAPTURE"
+      ],
+      "claim_ids": [
+        "CL-PACKAGE",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "deterministic packaging",
+      "validator": "Repeated isolated builds and archive metadata comparison.",
+      "independent_proof": "Two clean builds either match byte-for-byte or produce a documented dimension-level explanation that lowers the reproducibility claim.",
+      "completion_blockers": [
+        "build-now timestamps",
+        "environment-dependent package bytes"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SUPPLY-003",
+      "law_id": "HUL-SUPPLY-001",
+      "statement": "Lockfile and dependency resolution are reviewed, reproducible within supported constraints, and included in source/package provenance.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-SLSA-PROVENANCE",
+        "SRC-RUST-CARGO-CHECK"
+      ],
+      "owner": "OWN-DISTRIBUTION",
+      "product_surfaces": [
+        "PS-SOURCE",
+        "PS-PACKAGE",
+        "PS-RELEASE"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-DISTRIBUTION"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-PACKAGE",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "dependency resolution",
+      "validator": "Locked/offline where supported, dependency inventory, and unexpected-update checks.",
+      "independent_proof": "Clean environment resolves intended dependencies without silent lock drift.",
+      "completion_blockers": [
+        "lockfile changed implicitly",
+        "dependency identity absent"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SUPPLY-004",
+      "law_id": "HUL-SUPPLY-001",
+      "statement": "Source, package, marketplace, installed bytes, discovered plugin, and runtime observation are linked by expected identity and digest without collapsing claims.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-PLUGIN-BUILD",
+        "SRC-SLSA-VERIFY",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-DISTRIBUTION",
+      "product_surfaces": [
+        "PS-PACKAGE",
+        "PS-INSTALL",
+        "PS-DISCOVERY",
+        "PS-ENTRY"
+      ],
+      "custom_tools": [
+        "HCT-DISTRIBUTION",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-PACKAGE",
+        "CL-INSTALL",
+        "CL-DISCOVERY",
+        "CL-RUNTIME"
+      ],
+      "implementation_scope": "distribution identity ladder",
+      "validator": "Transition identity and wrong-version/cache fixtures.",
+      "independent_proof": "Independent clean install/new-session journey observes the intended identity at each layer.",
+      "completion_blockers": [
+        "wrong version discovered",
+        "installed bytes not measured"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SUPPLY-005",
+      "law_id": "HUL-SUPPLY-001",
+      "statement": "Provenance is generated and verified as a separate supply-chain claim; it never substitutes for installation or behavior proof.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-SLSA-PROVENANCE",
+        "SRC-SLSA-VERIFY"
+      ],
+      "owner": "OWN-DISTRIBUTION",
+      "product_surfaces": [
+        "PS-PACKAGE",
+        "PS-RELEASE"
+      ],
+      "custom_tools": [
+        "HCT-DISTRIBUTION",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-PACKAGE",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "provenance generation and verification",
+      "validator": "Subject/material/builder/predicate and verifier-expectation checks.",
+      "independent_proof": "Tampered subject/material/provenance fails; valid provenance still leaves runtime claims unevaluated.",
+      "completion_blockers": [
+        "provenance subject mismatch",
+        "provenance treated as behavior"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SUPPLY-006",
+      "law_id": "HUL-SUPPLY-001",
+      "statement": "Signing is optional until identity and policy are adopted; when used, verification pins expected identity/issuer/key and subject digest.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-SIGSTORE",
+        "SRC-SLSA-VERIFY"
+      ],
+      "owner": "OWN-DISTRIBUTION",
+      "product_surfaces": [
+        "PS-PACKAGE",
+        "PS-RELEASE"
+      ],
+      "custom_tools": [
+        "HCT-DISTRIBUTION"
+      ],
+      "claim_ids": [
+        "CL-PACKAGE",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "signature adapter",
+      "validator": "Expected-identity, wrong-identity, wrong-subject, offline/policy fixtures.",
+      "independent_proof": "Independent verifier enforces adopted expectations; absence of adopted signing authority lowers only signature claims.",
+      "completion_blockers": [
+        "signature accepted without identity policy",
+        "key/issuer external decision unresolved"
+      ]
+    },
+    {
+      "requirement_id": "REQ-SUPPLY-007",
+      "law_id": "HUL-SUPPLY-001",
+      "statement": "Release output contains a self-verifying manifest, source/candidate identity, toolchain/capability record, package digests, and claim decisions.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-SLSA-PROVENANCE",
+        "SRC-REPRO-SDE",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-DISTRIBUTION",
+      "product_surfaces": [
+        "PS-RELEASE"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-DISTRIBUTION",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "release bundle",
+      "validator": "Manifest completeness, reference, and digest verification.",
+      "independent_proof": "A clean independent verifier can validate the bundle without hidden chat or mutable workspace context.",
+      "completion_blockers": [
+        "manifest incomplete",
+        "candidate identity absent"
+      ]
+    },
+    {
+      "requirement_id": "REQ-EVAL-001",
+      "law_id": "HUL-EVAL-001",
+      "statement": "Evaluation tasks declare target behavior, applicability, inputs, expected outcomes, scorer, failure semantics, and product-surface mapping.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-AGENT-EVALS",
+        "SRC-OAI-REWARD-HACKING"
+      ],
+      "owner": "OWN-AGENT-QUALITY",
+      "product_surfaces": [
+        "PS-EVAL",
+        "PS-ENTRY"
+      ],
+      "custom_tools": [
+        "HCT-EVAL",
+        "HCT-INVENTORY"
+      ],
+      "claim_ids": [
+        "CL-EVAL-IMPROVEMENT"
+      ],
+      "implementation_scope": "evaluation specification",
+      "validator": "Task-schema and surface/requirement reference validation.",
+      "independent_proof": "Independent task audit rejects ambiguous, impossible, irrelevant, or surrogate-only tasks.",
+      "completion_blockers": [
+        "task not mapped to behavior",
+        "expected outcome ambiguous"
+      ]
+    },
+    {
+      "requirement_id": "REQ-EVAL-002",
+      "law_id": "HUL-EVAL-001",
+      "statement": "Datasets and fixtures are audited for provenance, contamination, duplication, representativeness, labels, and split leakage.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-AGENT-EVALS",
+        "SRC-OAI-REWARD-HACKING"
+      ],
+      "owner": "OWN-AGENT-QUALITY",
+      "product_surfaces": [
+        "PS-EVAL"
+      ],
+      "custom_tools": [
+        "HCT-EVAL",
+        "HCT-FIXTURES"
+      ],
+      "claim_ids": [
+        "CL-EVAL-IMPROVEMENT"
+      ],
+      "implementation_scope": "dataset audit",
+      "validator": "Content/digest/provenance/near-duplicate and split-leakage checks.",
+      "independent_proof": "Seeded duplicate, mislabeled, leaked, and unrepresentative cases are detected.",
+      "completion_blockers": [
+        "unknown dataset provenance",
+        "train/test leakage"
+      ]
+    },
+    {
+      "requirement_id": "REQ-EVAL-003",
+      "law_id": "HUL-EVAL-001",
+      "statement": "Scorers are perturbation-tested and cannot reward proof-shaped output, receipt production, verbosity, or test manipulation over behavior.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-REWARD-HACKING",
+        "SRC-OAI-AGENT-EVALS"
+      ],
+      "owner": "OWN-AGENT-QUALITY",
+      "product_surfaces": [
+        "PS-EVAL",
+        "PS-PROOF"
+      ],
+      "custom_tools": [
+        "HCT-EVAL",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-EVAL-IMPROVEMENT",
+        "CL-STRICT"
+      ],
+      "implementation_scope": "scorer validation",
+      "validator": "Label, output, receipt, verbosity, and adversarial perturbation suite.",
+      "independent_proof": "Behavior-preserving formatting changes remain stable; behavior-breaking proof artifacts do not score as success.",
+      "completion_blockers": [
+        "scorer rewards surrogate",
+        "score insensitive to behavior break"
+      ]
+    },
+    {
+      "requirement_id": "REQ-EVAL-004",
+      "law_id": "HUL-EVAL-001",
+      "statement": "Evaluation execution captures model/runtime/tool configuration only when exposed and does not infer model, mode, or reasoning from prompt text.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-MODEL-GUIDANCE",
+        "SRC-OAI-GOAL",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-AGENT-QUALITY",
+      "product_surfaces": [
+        "PS-EVAL",
+        "PS-GOAL"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-EVAL"
+      ],
+      "claim_ids": [
+        "CL-EVAL-IMPROVEMENT",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "evaluation runtime record",
+      "validator": "Metadata-source and prompt-inference prohibition checks.",
+      "independent_proof": "Missing metadata results in an explicit unknown and lower comparison/claim ceiling.",
+      "completion_blockers": [
+        "prompt claims runtime mode",
+        "unexposed model treated as verified"
+      ]
+    },
+    {
+      "requirement_id": "REQ-EVAL-005",
+      "law_id": "HUL-EVAL-001",
+      "statement": "Core evaluation schemas and promotion rules are vendor-neutral; OpenAI trace grading, Promptfoo, or successor systems are adapters.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-AGENT-EVALS",
+        "SRC-OAI-EVAL-DEPRECATION",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-AGENT-QUALITY",
+      "product_surfaces": [
+        "PS-EVAL",
+        "PS-RESEARCH"
+      ],
+      "custom_tools": [
+        "HCT-EVAL"
+      ],
+      "claim_ids": [
+        "CL-EVAL-IMPROVEMENT"
+      ],
+      "implementation_scope": "evaluation architecture",
+      "validator": "Adapter boundary and no-vendor-authority checks.",
+      "independent_proof": "A local deterministic adapter and one external adapter produce comparable canonical run records.",
+      "completion_blockers": [
+        "vendor row is canonical law state",
+        "deprecated API hard-coded"
+      ]
+    },
+    {
+      "requirement_id": "REQ-EVAL-006",
+      "law_id": "HUL-EVAL-001",
+      "statement": "Promotion requires measured improvement on representative behavior, non-regression on guarded surfaces, independent review, bounded change, and rollback.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-AGENT-EVALS",
+        "SRC-OAI-REWARD-HACKING",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-AGENT-QUALITY",
+      "product_surfaces": [
+        "PS-EVAL",
+        "PS-UPGRADE"
+      ],
+      "custom_tools": [
+        "HCT-EVAL",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-EVAL-IMPROVEMENT",
+        "CL-REAL-JOURNEY"
+      ],
+      "implementation_scope": "improvement promotion",
+      "validator": "Baseline/candidate pairing, guard, significance/policy, review, and rollback checks.",
+      "independent_proof": "Candidate beats adopted threshold without guarded regression; failure or ambiguity prevents promotion.",
+      "completion_blockers": [
+        "metric-only promotion",
+        "no rollback",
+        "unreviewed change"
+      ]
+    },
+    {
+      "requirement_id": "REQ-RESEARCH-001",
+      "law_id": "HUL-RESEARCH-001",
+      "statement": "Every external source record identifies publisher, URL, source class, checked date, verified facts, limitations, and mapped laws.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-CANDIDATE"
+      ],
+      "owner": "OWN-RESEARCH",
+      "product_surfaces": [
+        "PS-RESEARCH",
+        "PS-SOURCE"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-EVAL"
+      ],
+      "claim_ids": [
+        "CL-SOURCE"
+      ],
+      "implementation_scope": "research source registry",
+      "validator": "Source-schema/reference/completeness checks.",
+      "independent_proof": "Independent verifier can locate the primary source and reproduce each adopted fact within its limitation.",
+      "completion_blockers": [
+        "source missing",
+        "fact exceeds source"
+      ]
+    },
+    {
+      "requirement_id": "REQ-RESEARCH-002",
+      "law_id": "HUL-RESEARCH-001",
+      "statement": "Verified source fact, binding product requirement, advisory practice, experimental hypothesis, and rejected recommendation remain distinct fields.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-OAI-MODEL-GUIDANCE"
+      ],
+      "owner": "OWN-RESEARCH",
+      "product_surfaces": [
+        "PS-RESEARCH"
+      ],
+      "custom_tools": [
+        "HCT-EVAL",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-SOURCE"
+      ],
+      "implementation_scope": "research classification",
+      "validator": "Classification and unsupported-promotion checks.",
+      "independent_proof": "Sample source records show no automatic conversion of vendor capability or advice into binding law.",
+      "completion_blockers": [
+        "fact treated as requirement without decision",
+        "hypothesis presented as fact"
+      ]
+    },
+    {
+      "requirement_id": "REQ-RESEARCH-003",
+      "law_id": "HUL-RESEARCH-001",
+      "statement": "Mutable or current capability/version claims are refreshed from primary sources before implementation or release decisions that depend on them.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-GPT56-GA",
+        "SRC-OAI-PLUGIN-BUILD",
+        "SRC-OAI-SUBAGENTS",
+        "SRC-OAI-GOAL",
+        "SRC-OAI-PTC",
+        "SRC-OAI-PERSISTED-REASONING"
+      ],
+      "owner": "OWN-RESEARCH",
+      "product_surfaces": [
+        "PS-RESEARCH",
+        "PS-RELEASE"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-EVAL"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "research freshness policy",
+      "validator": "Freshness window, source availability, and stale-claim checks.",
+      "independent_proof": "Seeded outdated docs/version assumptions are detected and dependent requirements are reclassified or repaired.",
+      "completion_blockers": [
+        "stale current claim",
+        "secondary source used when primary exists"
+      ]
+    },
+    {
+      "requirement_id": "REQ-RESEARCH-004",
+      "law_id": "HUL-RESEARCH-001",
+      "statement": "Research changes enter binding law only through an explicit reviewed contract change with impact, migration, proof, and authority analysis.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-OAI-HARNESS"
+      ],
+      "owner": "OWN-RESEARCH",
+      "product_surfaces": [
+        "PS-RESEARCH",
+        "PS-UPGRADE",
+        "PS-SOURCE"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-IMPACT",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "law promotion workflow",
+      "validator": "Change proposal required-field and trace-impact validation.",
+      "independent_proof": "Advisory source update alone cannot change active requirement state; adopted proposal updates all dependent registries coherently.",
+      "completion_blockers": [
+        "research row silently changes law",
+        "migration/proof impact missing"
+      ]
+    },
+    {
+      "requirement_id": "REQ-MAINT-001",
+      "law_id": "HUL-MAINTENANCE-001",
+      "statement": "Maintain a generated migration registry for every retired lane, gate, skill, agent, CLI command, tool, alias, schema, package, helper, and generated surface.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-MAINTENANCE",
+      "product_surfaces": [
+        "PS-UPGRADE",
+        "PS-SKILLS",
+        "PS-AGENTS",
+        "PS-CLI"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-MIGRATE"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-REAL-JOURNEY",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "migration registry",
+      "validator": "Active-reference and unmapped-legacy-symbol checks.",
+      "independent_proof": "Every detected legacy surface has route, removal, archive, or retained-with-reason disposition.",
+      "completion_blockers": [
+        "legacy symbol unmapped",
+        "two active authorities"
+      ]
+    },
+    {
+      "requirement_id": "REQ-MAINT-002",
+      "law_id": "HUL-MAINTENANCE-001",
+      "statement": "Compatibility routes have an owner, semantic target, warning, measurement, deadline/version boundary, and removal condition.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-MAINTENANCE",
+      "product_surfaces": [
+        "PS-UPGRADE",
+        "PS-CLI",
+        "PS-SKILLS"
+      ],
+      "custom_tools": [
+        "HCT-MIGRATE",
+        "HCT-OBSERVE"
+      ],
+      "claim_ids": [
+        "CL-RUNTIME",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "compatibility policy",
+      "validator": "Route metadata and target-equivalence checks.",
+      "independent_proof": "Legacy invocation reaches canonical behavior and emits bounded deprecation; removal condition is measurable.",
+      "completion_blockers": [
+        "permanent unmeasured alias",
+        "alias behavior diverges"
+      ]
+    },
+    {
+      "requirement_id": "REQ-MAINT-003",
+      "law_id": "HUL-MAINTENANCE-001",
+      "statement": "Old state stores, receipts, generated catalogs, and finalizers become migration inputs or archives, never parallel active authority.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-MAINTENANCE",
+      "product_surfaces": [
+        "PS-SOURCE",
+        "PS-UPGRADE",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-STATE",
+        "HCT-MIGRATE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "authority retirement",
+      "validator": "Duplicate-authority and write-path scans.",
+      "independent_proof": "Changing a retired artifact cannot alter current state or claims; active readers/writers are absent.",
+      "completion_blockers": [
+        "retired store still read",
+        "legacy finalizer can claim"
+      ]
+    },
+    {
+      "requirement_id": "REQ-MAINT-004",
+      "law_id": "HUL-MAINTENANCE-001",
+      "statement": "Migration planning is read-only; apply is explicit, path-confined, context-bound, and reversible where possible.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SECURITY",
+        "SRC-GIT-WORKTREE"
+      ],
+      "owner": "OWN-MAINTENANCE",
+      "product_surfaces": [
+        "PS-UPGRADE"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-MIGRATE",
+        "HCT-CAPTURE"
+      ],
+      "claim_ids": [
+        "CL-RUNTIME",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "migration execution",
+      "validator": "Plan/apply drift, effect, path, rollback, and dirty-tree checks.",
+      "independent_proof": "Legacy fixture plans without mutation, applies authorized changes, and rolls back or reports irreversible decisions.",
+      "completion_blockers": [
+        "plan writes",
+        "apply exceeds plan"
+      ]
+    },
+    {
+      "requirement_id": "REQ-MAINT-005",
+      "law_id": "HUL-MAINTENANCE-001",
+      "statement": "Generated surfaces identify their generator and inputs; regeneration is deterministic and stale outputs are findings.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-REPRO-SDE",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-MAINTENANCE",
+      "product_surfaces": [
+        "PS-SOURCE",
+        "PS-PACKAGE",
+        "PS-UPGRADE"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-MIGRATE"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-PACKAGE"
+      ],
+      "implementation_scope": "generated-output lifecycle",
+      "validator": "Provenance header/metadata, regenerate-and-diff, and orphan checks.",
+      "independent_proof": "Modified or orphaned generated files are detected; regeneration cannot overwrite unowned paths.",
+      "completion_blockers": [
+        "unknown generator",
+        "stale generated authority"
+      ]
+    },
+    {
+      "requirement_id": "REQ-MAINT-006",
+      "law_id": "HUL-MAINTENANCE-001",
+      "statement": "Hard-coded model, vendor, version, branch, lane, and gate assumptions are inventoried and either parameterized, capability-probed, migrated, or retired.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-MODEL-GUIDANCE",
+        "SRC-SNAPSHOT-REPO"
+      ],
+      "owner": "OWN-MAINTENANCE",
+      "product_surfaces": [
+        "PS-UPGRADE",
+        "PS-RESEARCH",
+        "PS-CLI"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY",
+        "HCT-MIGRATE"
+      ],
+      "claim_ids": [
+        "CL-SOURCE",
+        "CL-RUNTIME",
+        "CL-RELEASE"
+      ],
+      "implementation_scope": "assumption retirement",
+      "validator": "Semantic and text inventory with allowlisted historical contexts.",
+      "independent_proof": "Current configuration works without GPT-5.5/lane/gate identity assumptions; retained historical references are non-authoritative.",
+      "completion_blockers": [
+        "hard-coded current model",
+        "lane/gate required for new behavior"
+      ]
+    },
+    {
+      "requirement_id": "REQ-GOAL-001",
+      "law_id": "HUL-GOAL-001",
+      "statement": "The implementation handoff begins with `/goal` and keeps the objective within the documented limit by referencing local contract files.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-GOAL-COMMAND",
+        "SRC-OAI-GOAL",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-GOAL-INTEGRATION",
+      "product_surfaces": [
+        "PS-GOAL"
+      ],
+      "custom_tools": [
+        "HCT-INVENTORY"
+      ],
+      "claim_ids": [
+        "CL-SOURCE"
+      ],
+      "implementation_scope": "Codex Ultra goal handoff",
+      "validator": "First-line and character-count validation plus file-reference resolution.",
+      "independent_proof": "Exact goal text is pasteable and all referenced files exist in the verified bundle/project.",
+      "completion_blockers": [
+        "objective exceeds limit",
+        "hidden chat context required"
+      ]
+    },
+    {
+      "requirement_id": "REQ-GOAL-002",
+      "law_id": "HUL-GOAL-001",
+      "statement": "Product goal state and claim state remain separate from host-managed durable goal state.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-GOAL",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-GOAL-INTEGRATION",
+      "product_surfaces": [
+        "PS-GOAL",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "goal adapter",
+      "validator": "Authority-flow and host-state simulation checks.",
+      "independent_proof": "Changing product records cannot assert host goal status, and host goal presence cannot assert product completion.",
+      "completion_blockers": [
+        "host goal simulated",
+        "goal status used as product proof"
+      ]
+    },
+    {
+      "requirement_id": "REQ-GOAL-003",
+      "law_id": "HUL-GOAL-001",
+      "statement": "Model family, mode, reasoning effort, and runtime configuration are recorded only when exposed by Codex/runtime metadata; otherwise they remain unverified and lower affected claims.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-MODEL-GUIDANCE",
+        "SRC-OAI-SUBAGENTS",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-GOAL-INTEGRATION",
+      "product_surfaces": [
+        "PS-GOAL",
+        "PS-EVAL",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-STATE"
+      ],
+      "claim_ids": [
+        "CL-EVAL-IMPROVEMENT",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "runtime metadata",
+      "validator": "Metadata provenance and prompt-inference checks.",
+      "independent_proof": "Requested mode text without exposed metadata remains unverified; exposed runtime metadata is captured verbatim with source.",
+      "completion_blockers": [
+        "prompt used as runtime proof",
+        "missing metadata silently assumed"
+      ]
+    },
+    {
+      "requirement_id": "REQ-GOAL-004",
+      "law_id": "HUL-GOAL-001",
+      "statement": "The goal can pause or stop for genuine authority without marking completion and can resume from recomputed live state rather than stale plans.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-GOAL",
+        "SRC-GIT-WORKTREE"
+      ],
+      "owner": "OWN-GOAL-INTEGRATION",
+      "product_surfaces": [
+        "PS-GOAL",
+        "PS-ORCHESTRATION"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-STATE"
+      ],
+      "claim_ids": [
+        "CL-ORCHESTRATION",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "goal recovery",
+      "validator": "Pause/resume, stale-plan, and authority-stop fixtures.",
+      "independent_proof": "After live state changes, resumed work invalidates stale assumptions and replans before writing.",
+      "completion_blockers": [
+        "pause reported complete",
+        "resume trusts stale context"
+      ]
+    },
+    {
+      "requirement_id": "REQ-COMPLETE-001",
+      "law_id": "HUL-COMPLETION-001",
+      "statement": "Readiness, release, and completion are distinct claims with explicit prerequisites and exact live proof surfaces.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-SLSA-VERIFY"
+      ],
+      "owner": "OWN-RELEASE-AUTHORITY",
+      "product_surfaces": [
+        "PS-RELEASE",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-RELEASE",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "claim graph",
+      "validator": "Claim distinction and prerequisite closure checks.",
+      "independent_proof": "A release-ready but not fully integrated fixture cannot claim completion; a source-complete fixture cannot claim release.",
+      "completion_blockers": [
+        "claims conflated",
+        "prerequisite missing"
+      ]
+    },
+    {
+      "requirement_id": "REQ-COMPLETE-002",
+      "law_id": "HUL-COMPLETION-001",
+      "statement": "Completion requires plugin, CLI, all required Harness-owned tools, installation/discovery, fresh and retrofit fit, routine work, diagnosis, observability, orchestration, evaluation, migration, release, and representative journeys at their required ceilings.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-OAI-HARNESS"
+      ],
+      "owner": "OWN-RELEASE-AUTHORITY",
+      "product_surfaces": [
+        "PS-SOURCE",
+        "PS-PLUGIN-MANIFEST",
+        "PS-MARKETPLACE",
+        "PS-SKILLS",
+        "PS-AGENTS",
+        "PS-CLI",
+        "PS-PACKAGE",
+        "PS-INSTALL",
+        "PS-DISCOVERY",
+        "PS-ENTRY",
+        "PS-FIT-FRESH",
+        "PS-FIT-RETROFIT",
+        "PS-ROUTINE",
+        "PS-DIAGNOSE",
+        "PS-PROOF",
+        "PS-OBSERVE-LOCAL",
+        "PS-OBSERVE-EXPORT",
+        "PS-ORCHESTRATION",
+        "PS-EVAL",
+        "PS-RESEARCH",
+        "PS-UPGRADE",
+        "PS-GOAL",
+        "PS-RELEASE",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-INVENTORY",
+        "HCT-IMPACT",
+        "HCT-CAPTURE",
+        "HCT-FIXTURES",
+        "HCT-STATE",
+        "HCT-DISTRIBUTION",
+        "HCT-FIT",
+        "HCT-OBSERVE",
+        "HCT-EVAL",
+        "HCT-CLAIMS",
+        "HCT-MIGRATE"
+      ],
+      "claim_ids": [
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "integrated completion closure",
+      "validator": "Surface/tool/journey/claim coverage and prerequisite DAG validation.",
+      "independent_proof": "Independent product and claim reviewers execute the exact live proof set against the final candidate.",
+      "completion_blockers": [
+        "any required surface below ceiling",
+        "required custom tool absent"
+      ]
+    },
+    {
+      "requirement_id": "REQ-COMPLETE-003",
+      "law_id": "HUL-COMPLETION-001",
+      "statement": "Open external authority decisions block only dependent claims and remain explicit in the final decision; they are never auto-resolved.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-OAI-SECURITY"
+      ],
+      "owner": "OWN-RELEASE-AUTHORITY",
+      "product_surfaces": [
+        "PS-INSTALL",
+        "PS-OBSERVE-EXPORT",
+        "PS-RELEASE",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-INSTALL",
+        "CL-OBSERVABILITY",
+        "CL-RELEASE",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "external decision handling",
+      "validator": "Decision-to-claim dependency checks.",
+      "independent_proof": "Each open decision names affected claims, alternatives, default safe state, and exact authority required.",
+      "completion_blockers": [
+        "decision hidden",
+        "unrelated claims blocked"
+      ]
+    },
+    {
+      "requirement_id": "REQ-COMPLETE-004",
+      "law_id": "HUL-COMPLETION-001",
+      "statement": "Destructive actions require a human decision naming target, consequence, reversibility, and accepted loss; absence preserves the target and lowers dependent claims.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-SECURITY",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-RELEASE-AUTHORITY",
+      "product_surfaces": [
+        "PS-UPGRADE",
+        "PS-RELEASE",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-MIGRATE",
+        "HCT-STATE"
+      ],
+      "claim_ids": [
+        "CL-RELEASE",
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "destructive authority",
+      "validator": "Destructive-action decision schema and no-authority fixtures.",
+      "independent_proof": "Without authority, cleanup/removal does not occur; with authority, exact accepted action is captured and verified.",
+      "completion_blockers": [
+        "destructive action inferred",
+        "target/consequence unspecified"
+      ]
+    },
+    {
+      "requirement_id": "REQ-COMPLETE-005",
+      "law_id": "HUL-COMPLETION-001",
+      "statement": "The final completion decision records live candidate, accepted/rejected evidence, open findings/decisions, independent reviewers, exact ceilings, and no-claim limitations.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-USER-MISSION",
+        "SRC-SLSA-VERIFY"
+      ],
+      "owner": "OWN-RELEASE-AUTHORITY",
+      "product_surfaces": [
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-CONTEXT",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "completion decision",
+      "validator": "Decision schema/reference/digest and claim-language checks.",
+      "independent_proof": "Independent reader can reproduce the decision and identify every withheld claim without hidden context.",
+      "completion_blockers": [
+        "ambiguous completion prose",
+        "open finding omitted"
+      ]
+    },
+    {
+      "requirement_id": "REQ-COMPLETE-006",
+      "law_id": "HUL-COMPLETION-001",
+      "statement": "A blocked or incomplete run reports the highest honestly achieved ceiling, completed dependency-closed work, exact blockers, safe next action, and preserved state.",
+      "normative_status": "binding_in_final_handoff",
+      "live_adoption_status": "not_verified",
+      "snapshot_implementation_status": "not_verified_or_partial",
+      "source_ids": [
+        "SRC-OAI-GOAL",
+        "SRC-OAI-MODEL-GUIDANCE",
+        "SRC-USER-MISSION"
+      ],
+      "owner": "OWN-RELEASE-AUTHORITY",
+      "product_surfaces": [
+        "PS-GOAL",
+        "PS-COMPLETION"
+      ],
+      "custom_tools": [
+        "HCT-STATE",
+        "HCT-CLAIMS"
+      ],
+      "claim_ids": [
+        "CL-COMPLETION"
+      ],
+      "implementation_scope": "incomplete outcome",
+      "validator": "Blocked-run output and overclaim language checks.",
+      "independent_proof": "Seeded external and technical blockers produce bounded truthful outcomes rather than false completion or vague failure.",
+      "completion_blockers": [
+        "partial work called complete",
+        "next action unavailable"
+      ]
+    }
+  ]
+}
