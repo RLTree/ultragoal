@@ -54,8 +54,10 @@ until completed, amended, or explicitly abandoned.
 ## Review Requirement
 
 This work requires a material sign-off review using all four current falsifier
-personas, `gpt-5.5` with `high`, full scope, fresh reviewers, and detached
-validator/review-target/archive/registry anchors. A `REVISE_BEFORE_NEXT_PHASE`
+personas, full scope, fresh reviewers, and detached
+validator/review-target/archive/registry anchors. Use only model and reasoning
+configuration supported by the current runtime, and record those values only
+when exposed. A `REVISE_BEFORE_NEXT_PHASE`
 or `BLOCKED` verdict closes the round; repairs require fresh anchors and a
 fresh full-scope round.
 

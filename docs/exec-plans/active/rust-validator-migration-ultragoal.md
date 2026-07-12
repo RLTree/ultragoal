@@ -126,7 +126,8 @@ Preserve green fixtures for:
 Material sign-off rounds:
 
 - all four merged personas;
-- `gpt-5.5`, `high`;
+- the model and reasoning configuration actually exposed by the current runtime,
+  recorded without inference;
 - full scope every round;
 - fresh reviewers every round;
 - current validator, review-target, archive, registry, and claim-ceiling
@@ -176,6 +177,6 @@ start a fresh full-scope round with new reviewers.
 Do not claim completion until the canonical Rust validator receipt is fresh,
 red fixture count is equal or higher than the prework count unless justified,
 generated artifacts and package digest are refreshed, review-target and archive
-receipts are regenerated where relevant, and four fresh `gpt-5.5 high`
-reviewers sign off in the same material sign-off round against the same
-anchors.
+receipts are regenerated where relevant, and four fresh reviewers sign off in
+the same material sign-off round against the same anchors. Record model and
+reasoning only when the runtime exposes them; otherwise record them as unknown.

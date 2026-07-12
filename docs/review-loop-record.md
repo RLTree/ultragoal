@@ -30,7 +30,9 @@ the compact index in this file instead of stale narrative logs.
 ## Review Cadence
 
 - Every material review round is a sign-off attempt using all four canonical
-  personas with fresh context, full scope, `gpt-5.5`, and `high`.
+  personas with fresh context and full scope. Use only model and reasoning
+  configuration supported by the current runtime; record it only when exposed,
+  otherwise as unknown.
 - Each reviewer checks the current validator receipt, review-target digest,
   archive receipt when relevant, active registry exposure, and claim ceiling.
 - All four reviewers must return `SIGN_OFF` in the same round. Any
