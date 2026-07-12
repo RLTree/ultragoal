@@ -1,0 +1,43 @@
+{
+  "schema_version": "RoutineRecoveryReuseJourneyCases-v1",
+  "claim_effect": "none",
+  "no_claim_statement": "These local fixture cases do not claim public command behavior, cross-platform recovery, live product journeys, node closure, readiness, release, or completion.",
+  "cases": [
+    {
+      "id": "clean-no-op",
+      "expected_mode": "no-op",
+      "expected_reuse": "none",
+      "preserves_unrelated_work": true
+    },
+    {
+      "id": "dirty-dependency-closed",
+      "expected_mode": "fast",
+      "expected_reuse": "first-run-executed",
+      "preserves_unrelated_work": true
+    },
+    {
+      "id": "conflict-expands-strict",
+      "expected_mode": "strict",
+      "expected_reuse": "none",
+      "preserves_unrelated_work": true
+    },
+    {
+      "id": "optional-accelerator-fallback",
+      "expected_mode": "fast",
+      "expected_reuse": "fallback-disclosed",
+      "preserves_unrelated_work": true
+    },
+    {
+      "id": "exact-repeat-reuse",
+      "expected_mode": "fast",
+      "expected_reuse": "all-selected-reused",
+      "preserves_unrelated_work": true
+    },
+    {
+      "id": "mutation-forces-miss",
+      "expected_mode": "fast",
+      "expected_reuse": "candidate-miss",
+      "preserves_unrelated_work": true
+    }
+  ]
+}

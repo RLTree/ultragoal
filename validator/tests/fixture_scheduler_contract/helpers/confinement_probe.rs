@@ -116,6 +116,10 @@ fn write_process_record(path: &str, descendants: &[u32], denied: usize) {
     .unwrap();
 }
 
+fn write_readiness(path: &str) {
+    std::fs::write(path, b"ready\n").unwrap();
+}
+
 fn main() {
     let args = std::env::args().collect::<Vec<_>>();
     match args.get(1).map(String::as_str) {
@@ -143,6 +147,7 @@ fn main() {
             let (descendants, denied) =
                 spawn_descendants(&args[0], &args[2], count, lifetime_millis);
             write_process_record(&args[2], &descendants, denied);
+            write_readiness(&args[5]);
             if mode == "output-limit-descendants" {
                 std::io::stdout().write_all(&vec![b'x'; 64 * 1024]).unwrap();
                 std::io::stdout().flush().unwrap();
@@ -159,6 +164,13 @@ fn main() {
             let (descendants, denied) =
                 spawn_detached_descendants(&args[0], &args[2], count, lifetime_millis);
             write_process_record(&args[2], &descendants, denied);
+        }
+        Some("delayed-readiness") => {
+            ignore_sigterm();
+            std::thread::sleep(Duration::from_millis(500));
+            write_process_record(&args[2], &[], 0);
+            write_readiness(&args[3]);
+            std::thread::sleep(Duration::from_secs(30));
         }
         Some("exit-record") => {
             write_process_record(&args[2], &[], 0);

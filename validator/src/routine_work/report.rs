@@ -136,15 +136,12 @@ pub fn reconcile_report(
         .collect::<Vec<_>>();
     let selected_set = selected.iter().cloned().collect::<BTreeSet<_>>();
     let mut seen = BTreeSet::new();
-    let mut executed = Vec::new();
-    let mut reused = Vec::new();
-    let mut skipped = BTreeMap::new();
-    let mut failed = BTreeMap::new();
-    for record in records {
+    let mut result_artifacts = BTreeMap::new();
+    for record in &records {
         if !selected_set.contains(&record.node_id) || !seen.insert(record.node_id.clone()) {
             return Err(report_error("report-row-unknown-or-duplicated"));
         }
-        match record.disposition {
+        match &record.disposition {
             ReportDisposition::Executed(result) => {
                 if result.node_id() != record.node_id
                     || !result
@@ -156,11 +153,13 @@ pub fn reconcile_report(
                 {
                     return Err(report_error("execution-witness-binding-invalid"));
                 }
-                if result.outcome() == RunOutcome::Passed && result.behavior_observed() {
-                    executed.push(record.node_id);
-                } else {
-                    failed.insert(record.node_id, "behavior-not-passed".to_owned());
-                }
+                result_artifacts.insert(
+                    record.node_id.clone(),
+                    (
+                        result.facts.result_artifact_sha256.clone(),
+                        result.outcome() == RunOutcome::Passed && result.behavior_observed(),
+                    ),
+                );
             }
             ReportDisposition::Reused(evidence) => {
                 if evidence.node_id() != record.node_id
@@ -173,6 +172,54 @@ pub fn reconcile_report(
                 {
                     return Err(report_error("reuse-witness-binding-invalid"));
                 }
+                result_artifacts.insert(
+                    record.node_id.clone(),
+                    (evidence.facts.result_artifact_sha256.clone(), true),
+                );
+            }
+            ReportDisposition::Skipped(_) | ReportDisposition::Failed { .. } => {}
+        }
+    }
+    for record in &records {
+        let binding = match &record.disposition {
+            ReportDisposition::Executed(result) => &result.facts.binding,
+            ReportDisposition::Reused(evidence) => &evidence.facts.binding,
+            ReportDisposition::Skipped(_) | ReportDisposition::Failed { .. } => continue,
+        };
+        let check = plan
+            .check(&record.node_id)
+            .ok_or_else(|| report_error("report-row-unknown-or-duplicated"))?;
+        let mut exact_dependencies = BTreeMap::new();
+        for dependency in check.depends_on() {
+            let Some((artifact_sha256, behaviorally_passed)) = result_artifacts.get(dependency)
+            else {
+                return Err(report_error("report-dependency-result-chain-inconsistent"));
+            };
+            if !behaviorally_passed {
+                return Err(report_error("report-dependency-result-chain-inconsistent"));
+            }
+            exact_dependencies.insert(dependency.clone(), artifact_sha256.clone());
+        }
+        if !binding.dependency_results_match(&exact_dependencies) {
+            return Err(report_error("report-dependency-result-chain-inconsistent"));
+        }
+    }
+    seen.clear();
+    let mut executed = Vec::new();
+    let mut reused = Vec::new();
+    let mut skipped = BTreeMap::new();
+    let mut failed = BTreeMap::new();
+    for record in records {
+        seen.insert(record.node_id.clone());
+        match record.disposition {
+            ReportDisposition::Executed(result) => {
+                if result.outcome() == RunOutcome::Passed && result.behavior_observed() {
+                    executed.push(record.node_id);
+                } else {
+                    failed.insert(record.node_id, "behavior-not-passed".to_owned());
+                }
+            }
+            ReportDisposition::Reused(_evidence) => {
                 reused.push(record.node_id);
             }
             ReportDisposition::Skipped(reason) => {

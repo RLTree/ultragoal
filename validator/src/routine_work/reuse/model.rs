@@ -141,6 +141,10 @@ impl EvidenceBinding {
             None
         }
     }
+
+    pub(crate) fn dependency_results_match(&self, expected: &BTreeMap<String, String>) -> bool {
+        &self.dependency_results == expected
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]

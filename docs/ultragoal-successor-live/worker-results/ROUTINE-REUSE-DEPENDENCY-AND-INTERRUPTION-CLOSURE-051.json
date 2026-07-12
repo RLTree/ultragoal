@@ -1,0 +1,361 @@
+{
+  "worker": "/root/routine_reuse_dependency_engineer",
+  "lease_id": "ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051",
+  "context_id": "sha256:03caf2a0ff45517ce8d41443070bb391be7429fabb5e58e7b031b3b5b9e4094a",
+  "candidate_identity": {
+    "candidate_id": "sha256:78868eae10c410365752386aab512b7a79be93ba2de138afb9cc477024696473",
+    "task_envelope_candidate_id": "sha256:48cb6fc070944c921bea9caecb99920d99768bcd4dd55530f89a8a9c53c4c1bb",
+    "issued_candidate_id": "sha256:2e4919ff08f87c60f39219d2dea2984c99da0569d5270bae091deccedc5e0419",
+    "branch": "codex/successor-contract-v2-live-product",
+    "issued_head_commit": "0cb1ab3c296031d79844fbc2bf3a8f0353dcaca3",
+    "issued_head_tree": "9f5c073ec5b8185e072b1c8046a37c1d9420476d",
+    "task_envelope_head_commit": "d20cc753cb1ccc67233c6d36703e8a4a50f4101a",
+    "task_envelope_head_tree": "f24bc76f8cc68e41c5d9df7cb9374b6f16672eef",
+    "worker_owned_artifact_set_sha256": "sha256:78868eae10c410365752386aab512b7a79be93ba2de138afb9cc477024696473",
+    "worker_owned_artifact_set_formula": "Sort artifact rows by UTF-8 path bytes, serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>, concatenate, then SHA-256 the resulting bytes.",
+    "worker_owned_artifact_count": 11,
+    "worker_owned_artifact_total_bytes": 88527,
+    "worker_owned_artifact_total_lines": 2257,
+    "worker_result_self_excluded": true,
+    "concurrent_unowned_changes_preserved": true
+  },
+  "base_state": {
+    "work_envelope": "docs/ultragoal-successor-live/work-packages/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051.json",
+    "work_envelope_sha256": "sha256:65ca5c7a6c8fc0419b8b225d0d418a53063d74e283717a353d7fcd4fee9d4bee",
+    "issued_context_id": "sha256:7553c543acfb3cb6bfa1829adbd0e2540800ed9a5c3ca0e533f60b40b987b753",
+    "agent_task_envelope": "docs/ultragoal-successor-live/task-envelopes/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051.json",
+    "agent_task_envelope_sha256": "sha256:c60b7beec56957513b5d997d47d3dab6fb8e1be10e0ed2685aad0baf9235e732",
+    "accepted_fixture_result_commitment_sha256": "sha256:b0111832f3166b29c49b91e552dc02d6bda38d2004e3b26536deb93ef108341b",
+    "fixture_recovery_correction_sha256": "sha256:682ab9a880d691a93fd0771a572614542e71ba03ad9327001fe238cd655051ec",
+    "fixture_result_commitment_correction_sha256": "sha256:9f749a6773d803090d12fb5c6a8e8153e872ce40cb6aabd5c46919999d2b1fd6",
+    "routine_public_kernel_sha256": "sha256:b52d38ce45b71f6e4088841ab783c3e4839413f50f3c7b3d9cec21c6ef610f8d",
+    "routine_public_kernel_state": "reopened_by_authority_bearing_edit",
+    "historical_dependency_surface": "The predecessor exact dependency command covered 214 controls before this package added three current controls.",
+    "decisive_defect": "Report reconciliation validated each opaque witness independently but did not require one downstream dependency map to name the exact result artifact selected for every upstream row. Two valid same-plan witnesses could therefore be cross-spliced into an inconsistent accepted chain.",
+    "root_owned_surfaces_not_modified": [
+      "public CLI grammar, command catalog, dispatcher, and adapter wiring",
+      "Cargo manifests, workspace dependencies, and Cargo.lock",
+      "shared schemas, generated authority, acceptance, critical-path board, root decisions, claims, migration, release, and completion state",
+      "Git metadata, network, host-global state, and external systems"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_exact_independent_review_and_root_reconciliation",
+    "implementation_scope": "source-local routine report dependency reconciliation, deterministic fixture interruption, and representative local recovery/reuse journey contracts",
+    "report_reconciliation_passes": 2,
+    "selected_result_artifact_binding": "exact",
+    "executed_and_reused_dependency_rows_covered": true,
+    "readiness_handshake": "bounded exact file handshake",
+    "journey_case_count": 6,
+    "journey_tests": "22 passed; 0 failed; twice",
+    "expanded_dependency_controls": "217 passed; 0 failed; twice",
+    "correction_controls": "2 passed; 0 failed; twice",
+    "network_effects": 0,
+    "git_mutations": 0,
+    "public_adapter_writes": 0,
+    "claim_effect": false,
+    "current_ceiling": "Exact source-local candidate and local contract evidence only. Public command behavior, supported FreeBSD cleanup execution, install or runtime behavior, independent live product journeys, node closure, readiness, release, and completion remain unproven.",
+    "lease_no_claim_statement": "This worker provides routine recovery and reuse implementation evidence only; it does not claim public command behavior, cross-platform recovery, live product journeys, node closure, readiness, release, or goal completion."
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/task-envelopes/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051.json",
+    "docs/ultragoal-successor-live/worker-results/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051.json",
+    "fixtures/routine-recovery-reuse/cases.json",
+    "validator/src/routine_work/report.rs",
+    "validator/src/routine_work/reuse/model.rs",
+    "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs",
+    "validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs",
+    "validator/tests/routine_recovery_reuse_journey_contract.rs",
+    "validator/tests/routine_recovery_reuse_journey_contract/catalog.rs",
+    "validator/tests/routine_recovery_reuse_journey_contract/journeys.rs",
+    "validator/tests/routine_recovery_reuse_journey_contract/support.rs",
+    "validator/tests/routine_work_contract/report.rs"
+  ],
+  "touched_semantics": [
+    "two-pass report reconciliation freezes one unique selected result artifact and behaviorally passed disposition for every executed or reused row before validating downstream edges",
+    "every downstream dependency map must equal the exact selected upstream result artifact digest map, including mixed executed and reused chains",
+    "same-plan artifact substitution, missing upstream, skipped or failed upstream, duplicate, unknown, stale, reordered, and mutated evidence fail closed",
+    "fixture interruption waits on an exact bounded readiness file instead of a fixed delay and separately proves interrupt-before-readiness without a process record",
+    "clean, dirty, conflict, fallback, first-run, exact-repeat, and mutation-forced-miss journeys preserve unrelated tracked bytes and expose causal mode and reuse outcomes",
+    "read-only and refusal paths compare recursive tree snapshots and Git status at the same scope before and after execution"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/routine-recovery-reuse/cases.json",
+    "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs",
+    "validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs",
+    "validator/tests/routine_recovery_reuse_journey_contract.rs",
+    "validator/tests/routine_recovery_reuse_journey_contract",
+    "validator/tests/routine_work_contract/report.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "leased routine source, tests, fixture catalog, task envelope, and WorkerResult",
+      "performed": true,
+      "scope": "exact leased paths only"
+    },
+    {
+      "class": "process",
+      "target": "locked offline cargo nextest, rustfmt, jq, Git read probes, and cargo check",
+      "performed": true,
+      "scope": "isolated /tmp/hul-routine-reuse-051 with 16 build and test threads"
+    },
+    {
+      "class": "temporary_fixture_write",
+      "target": "/tmp/hul-routine-reuse-051",
+      "performed": true,
+      "scope": "reproducible scratch only"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external_or_host_write",
+      "performed": false
+    },
+    {
+      "class": "git_mutation",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-CLI-007",
+    "REQ-PROOF-001",
+    "REQ-PROOF-005",
+    "REQ-PROOF-006",
+    "REQ-ROUTINE-001",
+    "REQ-ROUTINE-002",
+    "REQ-ROUTINE-003",
+    "REQ-ROUTINE-004",
+    "REQ-ROUTINE-005",
+    "REQ-ROUTINE-006",
+    "REQ-SECURITY-002",
+    "REQ-STATE-001",
+    "REQ-STATE-003",
+    "CTRL-ROUTINE-REUSE-POSITIVE",
+    "CTRL-ROUTINE-REUSE-NEGATIVE",
+    "CTRL-ROUTINE-REUSE-RACE",
+    "CTRL-ROUTINE-REUSE-SECURITY",
+    "CTRL-ROUTINE-REUSE-FALSE-PASS"
+  ],
+  "dependency_nodes": [
+    "N06-ROUTINE",
+    "accepted-routine-capture-impact-kernel",
+    "accepted-fixture-recovery-state-correction-019",
+    "accepted-fixture-result-commitment-correction-026"
+  ],
+  "changes": [
+    {
+      "area": "exact-selected-result-chain",
+      "result": "Reconciliation now performs a first pass that validates unique selected rows and records each executed or reused result artifact digest plus behavioral eligibility. A second pass compares every downstream dependency map to that exact selected upstream postimage before any disposition can be accepted."
+    },
+    {
+      "area": "opaque-witness-encapsulation",
+      "result": "Reuse evidence exposes only a crate-private exact dependency-result comparison, preserving opaque witness construction while letting reconciliation reject cross-spliced same-plan artifacts."
+    },
+    {
+      "area": "adversarial-report-controls",
+      "result": "Executed and mixed executed/reused multilevel controls reject same-plan A-B substitution, missing selected upstream rows, selected skipped or failed upstream rows, duplicate or unknown rows, stale candidates, reordered reports, and tracked mutation with stable causal errors and zero-write refusal evidence."
+    },
+    {
+      "area": "deterministic-interruption",
+      "result": "The process-group control now waits for an exact ready newline written only after the child process record exists. A delayed-readiness mode proves pre-readiness interruption returns causally with no process record or readiness artifact."
+    },
+    {
+      "area": "representative-local-journeys",
+      "result": "A six-case catalog and direct-path journey target exercise clean no-op, dirty dependency-closed fast planning, conflict-driven strict expansion, explicit optional-accelerator fallback, first execution, exact repeat reuse, mutation-forced miss, record reordering, and recursive zero-write comparisons."
+    },
+    {
+      "area": "dependency-surface-expansion",
+      "result": "The exact predecessor dependency command expanded from its historical 214-control baseline to 217 current controls by adding two report-chain controls and one interruption-before-readiness control; the expanded surface passed twice without retries."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -c '<validate ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051 against the current AgentTaskEnvelope-v1 schema and semantic resolver>'",
+      "status": "pass",
+      "result": "Current proposal-only AgentTaskEnvelope-v1 schema and semantic validation passed against HEAD d20cc753cb1ccc67233c6d36703e8a4a50f4101a."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-routine-reuse-051 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test routine_work_contract -E 'test(/report/)' --no-fail-fast",
+      "status": "pass-6-of-6",
+      "run_id": "b694d2c3-c389-4134-b944-e61a5fde5b39",
+      "result": "Focused report reconciliation controls passed, including exact selected-result chain refusal."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-routine-reuse-051 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test fixture_scheduler_contract -E 'test(/process_group/)' --no-fail-fast",
+      "status": "pass-5-of-5",
+      "run_id": "3e7aee40-6c56-445c-ad09-179125781696",
+      "result": "Readiness-bound process-group and interrupt-before-readiness controls passed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-routine-reuse-051 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test fixture_scheduler_contract -E 'test(lease_identity_worker_result)' --no-fail-fast",
+      "status": "pass-2-of-2-twice-without-retries",
+      "run_ids": [
+        "f51dfacb-d20b-4240-a97c-29995f92c821",
+        "c6370fdc-e922-4a3f-a4ba-1c6a142b173e"
+      ],
+      "result": "Exact correction-026 WorkerResult and commitment controls passed twice on the final formatted source."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-routine-reuse-051 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test routine_recovery_reuse_journey_contract --no-fail-fast",
+      "status": "pass-22-of-22-twice-without-retries",
+      "run_ids": [
+        "a61cdce6-8ccb-46a6-ac17-170b671387ea",
+        "cb782f92-950e-46b5-bd8d-6f1353a59724"
+      ],
+      "result": "All six journey catalog cases plus reused dependency modules passed twice on the final formatted source."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-routine-reuse-051 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --lib --test cli_contract --test routine_work_contract --test fixture_scheduler_contract --test public_api_witness -E 'test(/cli::capture/) | test(/successor_capture/) | binary(routine_work_contract) | binary(fixture_scheduler_contract) | binary(public_api_witness)' --no-fail-fast",
+      "status": "pass-217-of-217-twice-without-retries",
+      "run_ids": [
+        "5dc86fc1-29e2-4c21-b826-80afd2cc4db9",
+        "9c8aca5b-06d5-42d3-afb4-b30ad3455f88"
+      ],
+      "result": "Expanded exact dependency-closed surface passed twice; each run executed 217 controls and skipped 1,639 out-of-scope controls."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-routine-reuse-051 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo check --manifest-path validator/Cargo.toml --locked --offline --lib --jobs 16",
+      "status": "pass-with-diagnostics",
+      "result": "Production library check completed. The crate emitted 664 existing or aggregate diagnostics; warning count is diagnostic only and not completion evidence."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <leased Rust artifacts>; jq -e . fixtures/routine-recovery-reuse/cases.json; git diff --check -- <leased artifacts>",
+      "status": "pass",
+      "result": "All leased Rust files are formatted, the fixture catalog is valid JSON, and the leased diff has no whitespace errors."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/ultragoal-successor-live/task-envelopes/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051.json",
+      "sha256": "sha256:c60b7beec56957513b5d997d47d3dab6fb8e1be10e0ed2685aad0baf9235e732",
+      "byte_length": 23729,
+      "line_count": 295
+    },
+    {
+      "path": "fixtures/routine-recovery-reuse/cases.json",
+      "sha256": "sha256:91b5b2b2509b02601c5da5c39c74cb3a1824997bd698adb7d1aa9ea9a8fd0c36",
+      "byte_length": 1259,
+      "line_count": 43
+    },
+    {
+      "path": "validator/src/routine_work/report.rs",
+      "sha256": "sha256:43aaef371236ee6044939a079e3e448a14a61d21fb2ca12d789d2ebaae07da59",
+      "byte_length": 9768,
+      "line_count": 297
+    },
+    {
+      "path": "validator/src/routine_work/reuse/model.rs",
+      "sha256": "sha256:6471debf72a52a5dba8cffbf068670e3bb0dc99480cc2e5c96f1849ae3ea186a",
+      "byte_length": 7055,
+      "line_count": 225
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs",
+      "sha256": "sha256:70af2e73601752720fb6c95c008d99a5f05f26f85e7981ba116e32b8681c38b0",
+      "byte_length": 9832,
+      "line_count": 347
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs",
+      "sha256": "sha256:69287ac76ea07bf8969c8ea8dffc343e920826ec2fdd2e2e427f1eae8944bf9e",
+      "byte_length": 5919,
+      "line_count": 181
+    },
+    {
+      "path": "validator/tests/routine_recovery_reuse_journey_contract.rs",
+      "sha256": "sha256:b4f0ddb5aa266d2ff074c34960e581a616ceaf93e88c03df77dd274f0bb9fe65",
+      "byte_length": 666,
+      "line_count": 24
+    },
+    {
+      "path": "validator/tests/routine_recovery_reuse_journey_contract/catalog.rs",
+      "sha256": "sha256:a388b0d9a98c229b0c0081de0c8c09f79187bc9e0209e84a6cf8c452149f90a4",
+      "byte_length": 1637,
+      "line_count": 57
+    },
+    {
+      "path": "validator/tests/routine_recovery_reuse_journey_contract/journeys.rs",
+      "sha256": "sha256:fa8d9ad0052a7aa8892b7cedb6b2b36a72998fb58117b1e8e4100df7f82c0c8f",
+      "byte_length": 8528,
+      "line_count": 227
+    },
+    {
+      "path": "validator/tests/routine_recovery_reuse_journey_contract/support.rs",
+      "sha256": "sha256:1cbdf64befc579bce030501b0d23efc9800df13723b17a5264d860fec686ad12",
+      "byte_length": 4559,
+      "line_count": 148
+    },
+    {
+      "path": "validator/tests/routine_work_contract/report.rs",
+      "sha256": "sha256:a3e7f9ae61733d79b139e2c96355b8ae46a01f4f7a7494636f3e8b12f97c1279",
+      "byte_length": 15575,
+      "line_count": 413
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material-corrected",
+      "class": "same-plan-selected-result-chain-substitution",
+      "finding": "Independent valid opaque witnesses from one plan could previously be cross-spliced so a downstream dependency named a different upstream result artifact than the selected upstream row. Two-pass exact selected-artifact reconciliation now rejects the chain before disposition."
+    },
+    {
+      "severity": "material-corrected",
+      "class": "timing-dependent-process-interruption",
+      "finding": "The former fixed 80 millisecond delay made interruption evidence scheduler-dependent. The exact readiness file is now written only after the process record and bounded waits distinguish pre-readiness from post-readiness interruption."
+    },
+    {
+      "severity": "authoring-corrected",
+      "class": "unknown-untracked-dirty-fixture-expanded-strict",
+      "finding": "The first dirty journey used an unknown untracked file and correctly expanded to strict mode. The final dependency-closed dirty case now mutates tracked docs/guide.md; the separate unknown/conflict expansion behavior remains covered."
+    },
+    {
+      "severity": "ceiling-withheld",
+      "class": "supported-freebsd-cleanup-unexecuted",
+      "finding": "Darwin cleanup and retained RecoveryRequired behavior are exercised. The identity-conditioned FreeBSD cleanup branch remains unexecuted, so cross-platform recovery is not claimed."
+    },
+    {
+      "severity": "ceiling-withheld",
+      "class": "public-product-adapter-not-in-lease",
+      "finding": "The source-local kernel and journey contract are direct-path exercised, but no root-owned public command adapter or supported live product journey was changed or accepted."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent review of the exact 11-artifact candidate and root acceptance/reconciliation.",
+    "Root recomputation of candidate identity after integration and after any authority-bearing edit.",
+    "Separately leased root-owned public routine adapter and exact command catalog integration.",
+    "Supported FreeBSD execution for the identity-conditioned cleanup branch before any cross-platform recovery claim.",
+    "Representative supported live product journeys and fresh-user or fresh-agent comprehension outside this direct-path local contract.",
+    "Node closure, readiness, release, and completion decisions remain root-only and withheld."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "exact 11-artifact candidate",
+      "request": "Assign independent read-only falsification of the self-excluded artifact set, exact dependency-chain semantics, interruption handshake, zero-write controls, and WorkerResult commitment; accept or return one decisive REWORK finding."
+    },
+    {
+      "path": "root integration candidate identity",
+      "request": "After independent PASS, integrate this exact set, recompute all affected digests and reopened routine acceptance evidence, and rerun candidate-bound proof surfaces."
+    },
+    {
+      "path": "public routine adapter and command catalog",
+      "request": "Wire public routine behavior only in a separate root-owned dependency-closed change; do not infer public command behavior from this source-local test target."
+    },
+    {
+      "path": "cross-platform claim ceiling",
+      "request": "Preserve the Darwin-only recovery-state ceiling until supported FreeBSD cleanup execution is independently observed."
+    }
+  ],
+  "limitations": [
+    "The exact 11-artifact aggregate excludes this WorkerResult by design; the WorkerResult is separately digestible after creation.",
+    "The current AgentTaskEnvelope-v1 is proposal-only and requires a workspace effect mediator before any future workspace effect. It validates the frozen postimage but does not retroactively replace the root-issued work package that authorized this completed lease.",
+    "The expanded 217-control dependency surface is the current exact command, not a claim that the historical 214-control baseline itself was rerun unchanged.",
+    "Cargo check warnings are diagnostics and do not substitute for behavior, review, integration, or product proof.",
+    "Routine public-kernel acceptance is already marked reopened by authority-bearing edits; this worker does not close or rewrite that root-owned acceptance.",
+    "The WorkerResult schema requires its shorter literal no-claim value; the stronger lease ceiling remains binding verbatim: This worker provides routine recovery and reuse implementation evidence only; it does not claim public command behavior, cross-platform recovery, live product journeys, node closure, readiness, release, or goal completion."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

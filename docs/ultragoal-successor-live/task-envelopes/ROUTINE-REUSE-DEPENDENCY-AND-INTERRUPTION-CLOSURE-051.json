@@ -1,0 +1,295 @@
+{
+  "schema_version": "AgentTaskEnvelope-v1",
+  "task_id": "routine-reuse-dependency-and-interruption-closure-051",
+  "role_binding": {
+    "role_id": "implementation-worker",
+    "source_kind": "runtime_agent_type_receipt",
+    "source_ref": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+    "source_sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+    "sandbox_mode": "workspace-write",
+    "may_exercise_root_authority": false
+  },
+  "goal": "Close the source-local routine recovery and verified-reuse dependency chain by binding every executed or reused downstream row to the exact selected upstream result artifact, replacing timing-based interruption with a bounded readiness handshake, and exercising clean, dirty, conflict, fallback, repeat-use, mutation, refusal, and zero-write journeys.",
+  "success": [
+    "Every executed or reused report row is reconciled in two passes against the exact selected upstream result artifact digest and behaviorally passed disposition.",
+    "Same-plan substitution, missing, failed, duplicate, unknown, reordered, stale, and mutation-forced dependency chains fail closed without converting proxy evidence into acceptance.",
+    "Process interruption uses an exact bounded readiness handshake and independently proves interrupt-before-readiness without assuming a child process record exists.",
+    "Clean no-op, dirty dependency-closed, conflict-strict, optional fallback, first execution, exact repeat reuse, and mutation-forced miss journeys preserve unrelated bytes and zero-write read/refusal behavior.",
+    "Correction controls, journey target, and the expanded dependency-closed routine surface pass twice without retries under the isolated offline 16-thread target.",
+    "The self-excluded WorkerResult binds every worker-owned artifact and preserves the no-claim ceiling for public command behavior, cross-platform recovery, live product journeys, node closure, readiness, release, and completion."
+  ],
+  "candidate_identity": {
+    "repository": {
+      "root_uri": "repo://harness-ultragoal-plugin-proposal",
+      "canonical_root_sha256": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170"
+    },
+    "context_id": "sha256:03caf2a0ff45517ce8d41443070bb391be7429fabb5e58e7b031b3b5b9e4094a",
+    "candidate_id": "sha256:48cb6fc070944c921bea9caecb99920d99768bcd4dd55530f89a8a9c53c4c1bb",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "d20cc753cb1ccc67233c6d36703e8a4a50f4101a",
+    "head_tree": "f24bc76f8cc68e41c5d9df7cb9374b6f16672eef",
+    "dirty": true,
+    "captured_at": "2026-07-12T18:01:56Z",
+    "freeze": {
+      "kind": "artifact_set",
+      "artifact_set_sha256": "sha256:7c2d5c0b419d0d878a628ccb5e01313b0c3e6c46a70fe901c08d6775236af31d",
+      "artifact_count": 13,
+      "bytes": 303852,
+      "lines": 8391,
+      "artifacts": [
+        {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json", "sha256": "sha256:67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc", "bytes": 35911, "lines": 956},
+        {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json", "sha256": "sha256:03073c8ee853d02be0776443cf39828d0630d3e1389d69be7817b201fc971fb7", "bytes": 22485, "lines": 662},
+        {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json", "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f", "bytes": 20505, "lines": 776},
+        {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json", "sha256": "sha256:410fa8b0ff620d085e37ee83aae8e7c7407bb702f88afe51abe89dc5b8c1d0fb", "bytes": 36878, "lines": 990},
+        {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "sha256": "sha256:07ae7af84eada1ea5889f52a0a6707e339e3e0cbaff65ac7b7d3bace72076af8", "bytes": 126109, "lines": 3552},
+        {"path": "docs/ultragoal-successor-live/acceptance/ROUTINE-CAPTURE-IMPACT-PUBLIC-KERNEL.json", "sha256": "sha256:b52d38ce45b71f6e4088841ab783c3e4839413f50f3c7b3d9cec21c6ef610f8d", "bytes": 4807, "lines": 88},
+        {"path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json", "sha256": "sha256:6d72c5ae767595044668df989b95cf7d4fe977acea4d9198ac75f7ff27988168", "bytes": 25194, "lines": 791},
+        {"path": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json", "sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5", "bytes": 2176, "lines": 53},
+        {"path": "docs/ultragoal-successor-live/root-decisions/FIXTURE-RESULT-COMMITMENT-ACCEPTANCE-026.json", "sha256": "sha256:b0111832f3166b29c49b91e552dc02d6bda38d2004e3b26536deb93ef108341b", "bytes": 1943, "lines": 41},
+        {"path": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json", "sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74", "bytes": 555, "lines": 11},
+        {"path": "docs/ultragoal-successor-live/work-packages/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051.json", "sha256": "sha256:65ca5c7a6c8fc0419b8b225d0d418a53063d74e283717a353d7fcd4fee9d4bee", "bytes": 6001, "lines": 117},
+        {"path": "docs/ultragoal-successor-live/worker-results/FIXTURE-RECOVERY-STATE-CORRECTION-019.json", "sha256": "sha256:682ab9a880d691a93fd0771a572614542e71ba03ad9327001fe238cd655051ec", "bytes": 11993, "lines": 202},
+        {"path": "docs/ultragoal-successor-live/worker-results/FIXTURE-RESULT-COMMITMENT-CORRECTION-026.json", "sha256": "sha256:9f749a6773d803090d12fb5c6a8e8153e872ce40cb6aabd5c46919999d2b1fd6", "bytes": 9295, "lines": 152}
+      ]
+    }
+  },
+  "scope": {
+    "artifact_paths": [
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json", "access": "read"},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "access": "read"},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json", "access": "read"},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json", "access": "read"},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json", "access": "read"},
+      {"path": "docs/ultragoal-successor-live/acceptance/ROUTINE-CAPTURE-IMPACT-PUBLIC-KERNEL.json", "access": "read"},
+      {"path": "docs/ultragoal-successor-live/root-decisions/FIXTURE-RESULT-COMMITMENT-ACCEPTANCE-026.json", "access": "read"},
+      {"path": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json", "access": "read"},
+      {"path": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json", "access": "read"},
+      {"path": "docs/ultragoal-successor-live/work-packages/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051.json", "access": "read"},
+      {"path": "docs/ultragoal-successor-live/task-envelopes/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051.json", "access": "read"},
+      {"path": "validator/src/routine_work/report.rs", "access": "propose_write"},
+      {"path": "validator/src/routine_work/reuse/model.rs", "access": "propose_write"}
+    ],
+    "semantic_symbols": [
+      "complete-upstream-result-artifact-digest-binding",
+      "two-pass-routine-report-reconciliation",
+      "executed-and-reused-dependency-chain-consistency",
+      "bounded-process-readiness-handshake",
+      "deterministic-early-interruption-refusal",
+      "clean-dirty-conflict-fallback-and-repeat-reuse-journeys"
+    ],
+    "generated_outputs": [],
+    "fixtures": [
+      {"path": "fixtures/routine-recovery-reuse", "access": "propose_write"},
+      {"path": "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs", "access": "propose_write"},
+      {"path": "validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs", "access": "propose_write"},
+      {"path": "validator/tests/routine_recovery_reuse_journey_contract.rs", "access": "propose_write"},
+      {"path": "validator/tests/routine_recovery_reuse_journey_contract", "access": "propose_write"},
+      {"path": "validator/tests/routine_work_contract/report.rs", "access": "propose_write"}
+    ],
+    "external_effects": [],
+    "scratch_uris": ["scratch://routine-reuse-dependency-051/cargo-target"],
+    "forbidden_paths": [
+      ".git",
+      "Cargo.lock",
+      "Cargo.toml",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "migration/authority-routes.json",
+      "plugin-manifest-draft.json",
+      "validator/Cargo.toml",
+      "validator/src/cli",
+      "validator/src/lib.rs"
+    ],
+    "path_resolution": {
+      "policy": "candidate-relative-no-follow-v2",
+      "session_id": "sha256:dbb7cfac9ef1491ba39e93ee24ef450b90a0d94460cdca99f873b7108cb9a450",
+      "resolved_scope_sha256": "sha256:f7cdee1bbffd821d3af52ccd176d239a7095fb0fc7a4209c4cd2b775a505101b",
+      "symlinks": "reject",
+      "special_files": "reject",
+      "post_freeze_revalidation": "required",
+      "forbidden_overlap_policy": "exact-ancestor-descendant-casefold-reject-v1",
+      "protected_write_policy": "git-host-root-authority-reject-v1",
+      "proposed_write_object_policy": "lstat-no-follow-bounded-identity-set-v1",
+      "proposed_write_object_set_sha256": "sha256:39001e205c10a4c0bfa07942b38594d29948969e16cb30e628a11781ea74c6be",
+      "proposed_write_object_count": 22,
+      "max_existing_descendants": 4096
+    }
+  },
+  "authority_binding": {
+    "session_id": "sha256:59e92a1c9054f9b7c72e22621cd13cefdf17783c0a16bfd7e96a17c200859d03",
+    "captured_at": "2026-07-12T18:01:56Z",
+    "sources": [
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json", "sha256": "sha256:67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc"},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json", "sha256": "sha256:03073c8ee853d02be0776443cf39828d0630d3e1389d69be7817b201fc971fb7"},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json", "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json", "sha256": "sha256:410fa8b0ff620d085e37ee83aae8e7c7407bb702f88afe51abe89dc5b8c1d0fb"},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "sha256": "sha256:07ae7af84eada1ea5889f52a0a6707e339e3e0cbaff65ac7b7d3bace72076af8"}
+    ],
+    "ids": {
+      "nodes": ["N06-ROUTINE"],
+      "requirements": [
+        "REQ-CLI-007",
+        "REQ-PROOF-001",
+        "REQ-PROOF-005",
+        "REQ-PROOF-006",
+        "REQ-ROUTINE-001",
+        "REQ-ROUTINE-002",
+        "REQ-ROUTINE-003",
+        "REQ-ROUTINE-004",
+        "REQ-ROUTINE-005",
+        "REQ-ROUTINE-006",
+        "REQ-SECURITY-002",
+        "REQ-STATE-001",
+        "REQ-STATE-003"
+      ],
+      "surfaces": ["PS-ROUTINE"],
+      "tools": ["HCT-CAPTURE", "HCT-FIXTURES", "HCT-IMPACT"],
+      "claims": ["CL-ROUTINE"],
+      "migration_routes": [],
+      "decisions": []
+    },
+    "resolved_rows": [
+      {"stable_id": "CL-ROUTINE", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json", "row_sha256": "sha256:de55fc697978bef551a2d104be82bd6fcdccecf90c30405352fc4ddd6b91fa85"},
+      {"stable_id": "HCT-CAPTURE", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json", "row_sha256": "sha256:488a79cf4ef88731dc72b67e83bcdf1555fdd22c5bece963444495c26c0509f8"},
+      {"stable_id": "HCT-FIXTURES", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json", "row_sha256": "sha256:cd9ea117215841e5cb0db2b3fe0d3cc6ab38a765241b2159c0be3122113d2e03"},
+      {"stable_id": "HCT-IMPACT", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json", "row_sha256": "sha256:a21d39c02533e7164fa4b989a430df3c3268fe9082f88b9a93eaf0d334605ffe"},
+      {"stable_id": "N06-ROUTINE", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json", "row_sha256": "sha256:103d2082b477d88cf6a2e36c46e6843fb1b9557256413e8391e2f42853d37fdd"},
+      {"stable_id": "PS-ROUTINE", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json", "row_sha256": "sha256:41372e67cd4e5ca6b19b2076b4ef8fe20ba923296173eb91e236d02d77867f9a"},
+      {"stable_id": "REQ-CLI-007", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "row_sha256": "sha256:e19c05a31f439f27272f724ee15a0fe1117a82aa03364d94408d98cb4dadc697"},
+      {"stable_id": "REQ-PROOF-001", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "row_sha256": "sha256:4d8df6e91e335628f3fe41566e285b58cc3bf015a2411271485035e10ad7e53e"},
+      {"stable_id": "REQ-PROOF-005", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "row_sha256": "sha256:6892fc09fb0432f97a27677710f1bb56de3ed918b6b1270cb33aa19ac6bf269d"},
+      {"stable_id": "REQ-PROOF-006", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "row_sha256": "sha256:fd80f24a537a861e545a3a2c62887c7214d7e3cbee3dcfc761c17c985920d3bb"},
+      {"stable_id": "REQ-ROUTINE-001", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "row_sha256": "sha256:04d360139cc3f7e8a7efe898bf1ef063b0a5cfb2d60d4b05b4cc0b4ee2a646c4"},
+      {"stable_id": "REQ-ROUTINE-002", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "row_sha256": "sha256:cd60135616dc0b3e421ab00f0adc00ddccfb2d0d81c66cbdbc6bfbb8b8fe8b95"},
+      {"stable_id": "REQ-ROUTINE-003", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "row_sha256": "sha256:87ae320e2e11be3155bc835511d02c255450d3684e2ae388aa54b463ac611d15"},
+      {"stable_id": "REQ-ROUTINE-004", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "row_sha256": "sha256:821714ce0ea116f134928ac763021e04855d68fc5839bdfabb158e8d7d0a1a10"},
+      {"stable_id": "REQ-ROUTINE-005", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "row_sha256": "sha256:bdd965ef2ac44e90ec8c06d089b141eae3552d9878b25474e3aec64bf5977dc0"},
+      {"stable_id": "REQ-ROUTINE-006", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "row_sha256": "sha256:da336ab13b752ff383e0a01c2213eb4952f934be96bb0d41a4a7612c219810da"},
+      {"stable_id": "REQ-SECURITY-002", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "row_sha256": "sha256:52e6f14f1fa49a56a83bb6a5e2fa7ab03f2738ed86bc9f94a04ca7c59ffaf377"},
+      {"stable_id": "REQ-STATE-001", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "row_sha256": "sha256:e1651578d570f9ea07db32b885e08ad673c1343ddf63584411b748a2ca21a031"},
+      {"stable_id": "REQ-STATE-003", "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "row_sha256": "sha256:116cf9a279eda1bd8fd73875a0683871cba9703525a6d59147c222133d202b1d"}
+    ],
+    "resolution": {
+      "resolved_set_sha256": "sha256:0f2a80508c608b19740a477913f6d5561c14adad2a506750eff9f876adf55e1b",
+      "unknown_count": 0,
+      "duplicate_count": 0,
+      "ambiguous_count": 0,
+      "conflict_count": 0,
+      "final_session_revalidation": "required"
+    }
+  },
+  "evidence": {
+    "primary_references": [
+      {"path": "docs/ultragoal-successor-live/work-packages/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051.json", "sha256": "sha256:65ca5c7a6c8fc0419b8b225d0d418a53063d74e283717a353d7fcd4fee9d4bee", "kind": "authority", "candidate_bound": true},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json", "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f", "kind": "authority", "candidate_bound": true},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "sha256": "sha256:07ae7af84eada1ea5889f52a0a6707e339e3e0cbaff65ac7b7d3bace72076af8", "kind": "authority", "candidate_bound": true},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json", "sha256": "sha256:410fa8b0ff620d085e37ee83aae8e7c7407bb702f88afe51abe89dc5b8c1d0fb", "kind": "authority", "candidate_bound": true},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json", "sha256": "sha256:03073c8ee853d02be0776443cf39828d0630d3e1389d69be7817b201fc971fb7", "kind": "authority", "candidate_bound": true},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json", "sha256": "sha256:67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc", "kind": "authority", "candidate_bound": true},
+      {"path": "docs/ultragoal-successor-live/acceptance/ROUTINE-CAPTURE-IMPACT-PUBLIC-KERNEL.json", "sha256": "sha256:b52d38ce45b71f6e4088841ab783c3e4839413f50f3c7b3d9cec21c6ef610f8d", "kind": "review", "candidate_bound": true},
+      {"path": "docs/ultragoal-successor-live/root-decisions/FIXTURE-RESULT-COMMITMENT-ACCEPTANCE-026.json", "sha256": "sha256:b0111832f3166b29c49b91e552dc02d6bda38d2004e3b26536deb93ef108341b", "kind": "review", "candidate_bound": true},
+      {"path": "docs/ultragoal-successor-live/worker-results/FIXTURE-RECOVERY-STATE-CORRECTION-019.json", "sha256": "sha256:682ab9a880d691a93fd0771a572614542e71ba03ad9327001fe238cd655051ec", "kind": "receipt", "candidate_bound": true},
+      {"path": "docs/ultragoal-successor-live/worker-results/FIXTURE-RESULT-COMMITMENT-CORRECTION-026.json", "sha256": "sha256:9f749a6773d803090d12fb5c6a8e8153e872ce40cb6aabd5c46919999d2b1fd6", "kind": "receipt", "candidate_bound": true}
+    ],
+    "unsupported_truth_surfaces": [
+      "package",
+      "install",
+      "cache",
+      "marketplace",
+      "app_registry",
+      "plugins_ui",
+      "discovery",
+      "runtime",
+      "journey",
+      "readiness",
+      "release",
+      "completion"
+    ],
+    "implementation_conclusions_are_authority": false
+  },
+  "effects": {
+    "candidate_source": "instruction_only_no_effect",
+    "git_metadata": "read_only_no_mutation",
+    "shared_root_authority": "forbidden",
+    "scratch": "bounded_read_write",
+    "network": "forbidden",
+    "external_systems": "forbidden",
+    "destructive_actions": "forbidden",
+    "secrets": "forbidden",
+    "workspace_effect_mediator": "required_before_any_workspace_effect"
+  },
+  "output_contract": {
+    "schema_id": "WorkerResult-v1",
+    "schema_ref": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+    "schema_sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+    "result_target": "docs/ultragoal-successor-live/worker-results/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051.json",
+    "required_sections": [
+      "candidate-identity",
+      "touched-paths",
+      "commands-and-tests",
+      "artifacts",
+      "findings",
+      "requested-root-changes",
+      "limitations",
+      "no-claim-statement"
+    ]
+  },
+  "verification": {
+    "positive": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-ROUTINE-REUSE-POSITIVE",
+          "procedure": "Execute first-run capture, exact repeat reuse, complete multilevel dependency reconciliation, bounded readiness interruption, and clean, dirty, conflict, fallback, and mutation journeys under the isolated locked offline target.",
+          "expected": "Only exact current candidate-, context-, plan-, source-, selected-result-, and behaviorally-passed chains reconcile; repeat use reuses all selected rows while first use executes them.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "negative": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-ROUTINE-REUSE-NEGATIVE",
+          "procedure": "Exercise same-plan A-B substitution, missing, failed, duplicate, unknown, reordered, stale, special-file, foreign-byte, collision, process-absence, output-limit, and rollback-failure cases.",
+          "expected": "Every inconsistent, ambiguous, unsafe, incomplete, or failed dependency and recovery state returns a stable causal refusal and never becomes accepted or reused.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "race_or_mutation": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-ROUTINE-REUSE-RACE",
+          "procedure": "Interrupt before readiness, interrupt after the exact readiness file appears, mutate tracked candidate bytes after context issuance, reorder records, and revalidate the final candidate and Git tree.",
+          "expected": "Early interruption is deterministic without a child record; ready interruption is causal; mutation forces concurrent-mutation or fresh-candidate miss; record order cannot alter exact selected-set reconciliation.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "security": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-ROUTINE-REUSE-SECURITY",
+          "procedure": "Run existing foreign-byte, special-file, collision, no-follow, output-limit, process-group cleanup, rollback-failure, recursive tree, permission, and Git-status controls with zero network and no root-owned writes.",
+          "expected": "Unsafe files, replacement identities, unbounded output, surviving process groups, and cleanup failures remain fail-closed and preserve unrelated operator state.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "false_pass": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-ROUTINE-REUSE-FALSE-PASS",
+          "procedure": "Attempt to satisfy downstream dependency evidence with a different same-plan upstream artifact, a failed selected upstream result, stale context, reordered record list, fixture metadata, or receipt-shaped proxy evidence.",
+          "expected": "No opaque witness, fixture, receipt, ordering accident, or same-plan artifact substitution can replace the exact selected upstream result artifact and current live candidate revalidation.",
+          "evidence_kind": "test"
+        }
+      ]
+    }
+  },
+  "stop_rule": "Stop on public CLI or adapter wiring, workspace dependencies, shared schemas, root-owned generated authority, board or claim decisions, migration or release state, Git mutation, network, host mutation, destructive cleanup, unsupported FreeBSD proof, or any material scope ambiguity. This worker may provide only an exact source-local candidate for independent review and root reconciliation.",
+  "no_claim_statement": "This agent does not claim readiness, release, node closure, or goal completion."
+}

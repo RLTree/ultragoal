@@ -88,6 +88,27 @@ pub(super) fn read_process_record(path: &Path) -> ProcessRecord {
     }
 }
 
+fn wait_for_readiness(path: &Path) {
+    let deadline = Instant::now() + Duration::from_secs(3);
+    loop {
+        match std::fs::read(path) {
+            Ok(bytes) => {
+                assert_eq!(bytes, b"ready\n");
+                let metadata = std::fs::symlink_metadata(path).unwrap();
+                assert!(metadata.is_file());
+                return;
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => panic!("read readiness handshake: {error}"),
+        }
+        assert!(
+            Instant::now() < deadline,
+            "fixture never reached the readiness handshake"
+        );
+        std::thread::sleep(Duration::from_millis(2));
+    }
+}
+
 fn signal_target_absent(target: i32) -> bool {
     if unsafe { libc::kill(target, 0) } == 0 {
         return false;
@@ -146,6 +167,7 @@ fn actual_adapter_termination(
         .lease
         .root()
         .join("file/pids");
+    let readiness_path = record_path.with_extension("ready");
     let output_limit = if matches!(trigger, TerminationTrigger::OutputLimit) {
         64
     } else {
@@ -159,6 +181,7 @@ fn actual_adapter_termination(
             record_path.to_str().unwrap(),
             &descendants.to_string(),
             "1200",
+            readiness_path.to_str().unwrap(),
         ]
         .into_iter()
         .map(OsString::from)
@@ -170,7 +193,7 @@ fn actual_adapter_termination(
     let outcome = if matches!(trigger, TerminationTrigger::Interrupt) {
         std::thread::scope(|scope| {
             scope.spawn(|| {
-                std::thread::sleep(Duration::from_millis(80));
+                wait_for_readiness(&readiness_path);
                 adapter.interrupt();
             });
             let run = scheduler.run(&lease).unwrap();
@@ -193,6 +216,54 @@ fn actual_adapter_termination(
         "adapter returned before process group {} was absent",
         record.group
     );
+    scheduler.recover(&lease).unwrap();
+    std::fs::remove_dir_all(root).unwrap();
+}
+
+#[test]
+fn interrupt_before_readiness_is_deterministic_without_a_process_record() {
+    let root = root("interrupt-before-readiness");
+    let probe = compile_probe(&root.join("build"));
+    let fixture = timeout_spec("interrupt-before-readiness", 5_000);
+    let mut scheduler = FixtureScheduler::new(root.join("leases"));
+    let lease = scheduler
+        .schedule([fixture.clone()])
+        .unwrap()
+        .pop()
+        .unwrap();
+    let record_path = scheduler
+        .run(&lease)
+        .unwrap()
+        .lease
+        .root()
+        .join("file/pids");
+    let readiness_path = record_path.with_extension("ready");
+    let adapter = FixtureCaptureAdapter::issue(
+        &fixture,
+        probe,
+        [
+            "delayed-readiness",
+            record_path.to_str().unwrap(),
+            readiness_path.to_str().unwrap(),
+        ]
+        .into_iter()
+        .map(OsString::from)
+        .collect(),
+        4096,
+        Vec::new(),
+    )
+    .unwrap();
+    adapter.interrupt();
+    let run = scheduler.run(&lease).unwrap();
+    assert_eq!(
+        adapter
+            .execute(&run.fixture, &run.lease, &run.environment)
+            .unwrap()
+            .verdict,
+        OutcomeVerdict::Fail
+    );
+    assert!(!record_path.exists());
+    assert!(!readiness_path.exists());
     scheduler.recover(&lease).unwrap();
     std::fs::remove_dir_all(root).unwrap();
 }
