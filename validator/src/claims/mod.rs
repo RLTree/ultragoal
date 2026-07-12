@@ -17,8 +17,10 @@ pub use evidence::{
     ObligationResult, Observation,
 };
 pub use false_pass::{
-    ExecutionObservation, ExecutionOutcome, FalsePassExecution, LocalNegativeControlAuthority,
+    LocalNegativeControlAuthority, SemanticControlModel, SemanticControlObservation,
 };
 #[cfg(test)]
-pub(crate) use false_pass::{TestSubstitution, product_executor_catalog_preflight_for_test};
+pub(crate) use false_pass::{
+    PRIVATE_TRANSPORT_UNAVAILABLE, TestSubstitution, product_executor_catalog_preflight_for_test,
+};
 pub use guard::ClaimGuard;

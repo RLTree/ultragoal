@@ -9,14 +9,15 @@ pub(super) fn obligation_reasons(
     registry_digest: &str,
     definition: &ClaimDefinition,
     observations: &[&Observation],
+    allow_semantic_models: bool,
 ) -> Vec<String> {
     let expected = definition.required_obligations();
     let mut reasons = Vec::new();
     let mut observed = BTreeSet::new();
     let mut methods = BTreeSet::new();
     let mut artifacts = BTreeSet::new();
-    let mut outputs = BTreeMap::new();
-    let mut execution_ids = BTreeSet::new();
+    let mut outputs: BTreeMap<String, &ClaimObligation> = BTreeMap::new();
+    let mut model_ids = BTreeSet::new();
 
     for observation in observations {
         let envelope = observation.envelope();
@@ -42,35 +43,28 @@ pub(super) fn obligation_reasons(
             || envelope
                 .outputs
                 .values()
-                .any(|digest| outputs.insert(digest, obligation).is_some())
+                .any(|digest| outputs.insert(digest.to_owned(), obligation).is_some())
         {
             reasons.push("claims-obligation-shared-output".to_owned());
         }
-        if let Some(observed_execution) = &envelope.false_pass_execution {
-            let execution = observed_execution.execution();
-            if !execution_ids.insert(execution.execution_id()) {
-                reasons.push("claims-false-pass-execution-replayed".to_owned());
+        if let Some(observed_model) = &envelope.false_pass_model {
+            let model = observed_model.model();
+            if !model_ids.insert(model.model_id()) {
+                reasons.push("claims-semantic-control-model-replayed".to_owned());
             }
-            if !methods.insert(execution.execution_method())
-                || !methods.insert(observed_execution.observation_method())
+            if !methods.insert(model.model_method())
+                || !methods.insert(observed_model.observation_method())
             {
-                reasons.push("claims-false-pass-generic-method-reused".to_owned());
+                reasons.push("claims-semantic-control-generic-method-reused".to_owned());
             }
-            if execution.artifact_digests().len() != 1
-                || execution
-                    .artifact_digests()
-                    .iter()
-                    .any(|digest| !artifacts.insert(digest.as_str()))
-            {
-                reasons.push("claims-false-pass-shared-artifact".to_owned());
+            if !artifacts.insert(model.model_record_digest()) {
+                reasons.push("claims-semantic-control-shared-model-record".to_owned());
             }
-            if execution.output_digests().len() != 1
-                || execution
-                    .output_digests()
-                    .values()
-                    .any(|digest| outputs.insert(digest, obligation).is_some())
+            if outputs
+                .insert(model.modeled_result_digest().to_owned(), obligation)
+                .is_some()
             {
-                reasons.push("claims-false-pass-shared-output".to_owned());
+                reasons.push("claims-semantic-control-shared-modeled-result".to_owned());
             }
         }
         reasons.extend(binding_reasons(
@@ -78,6 +72,7 @@ pub(super) fn obligation_reasons(
             definition,
             obligation,
             observation,
+            allow_semantic_models,
         ));
     }
     for missing in expected.difference(&observed) {
@@ -91,14 +86,13 @@ fn binding_reasons(
     definition: &ClaimDefinition,
     obligation: &ClaimObligation,
     observation: &Observation,
+    allow_semantic_models: bool,
 ) -> Vec<String> {
     let envelope = observation.envelope();
     let mut reasons = Vec::new();
-    if obligation.kind != ObligationKind::FalsePassControl
-        && envelope.false_pass_execution.is_some()
-    {
+    if obligation.kind != ObligationKind::FalsePassControl && envelope.false_pass_model.is_some() {
         reasons.push(format!(
-            "claims-false-pass-execution-on-wrong-obligation:{}",
+            "claims-false-pass-model-on-wrong-obligation:{}",
             obligation.id
         ));
     }
@@ -127,6 +121,7 @@ fn binding_reasons(
                 definition,
                 obligation,
                 envelope,
+                allow_semantic_models,
             ));
         }
         _ => {}
@@ -147,6 +142,7 @@ fn false_pass_binding_reasons(
     definition: &ClaimDefinition,
     obligation: &ClaimObligation,
     envelope: &EvidenceEnvelope,
+    allow_semantic_models: bool,
 ) -> Vec<String> {
     let mut reasons = Vec::new();
     if !matches!(envelope.result, ObligationResult::Supported { .. }) {
@@ -155,19 +151,25 @@ fn false_pass_binding_reasons(
             obligation.id
         ));
     }
-    let Some(observed) = &envelope.false_pass_execution else {
+    let Some(observed) = &envelope.false_pass_model else {
         reasons.push(format!(
-            "claims-false-pass-execution-unobserved:{}",
+            "claims-false-pass-proof-unobserved:{}",
             obligation.id
         ));
         return reasons;
     };
-    let execution = observed.execution();
+    if !allow_semantic_models {
+        reasons.push(format!(
+            "claims-false-pass-semantic-model-not-executed-proof:{}",
+            obligation.id
+        ));
+    }
+    let model = observed.model();
     let expected = expected_control_definition(registry_digest, definition, &obligation.id);
-    if execution.control_id() != obligation.id
-        || !expected.as_ref().is_ok_and(|item| {
-            item.expected_failure_contract == execution.expected_failure_contract()
-        })
+    if model.control_id() != obligation.id
+        || !expected
+            .as_ref()
+            .is_ok_and(|item| item.expected_failure_contract == model.expected_failure_contract())
     {
         reasons.push(format!(
             "claims-false-pass-control-or-contract-mismatch:{}",
@@ -176,13 +178,12 @@ fn false_pass_binding_reasons(
     }
     if envelope.result.result_digest() != observed.observed_digest() {
         reasons.push(format!(
-            "claims-false-pass-result-not-execution-bound:{}",
+            "claims-false-pass-result-not-model-bound:{}",
             obligation.id
         ));
     }
     if envelope.inputs.len() != 1
-        || envelope.inputs.get(&obligation.id)
-            != Some(&execution.negative_stimulus_digest().to_owned())
+        || envelope.inputs.get(&obligation.id) != Some(&model.negative_stimulus_digest().to_owned())
     {
         reasons.push(format!(
             "claims-false-pass-negative-stimulus-unbound:{}",
@@ -190,35 +191,17 @@ fn false_pass_binding_reasons(
         ));
     }
     if envelope.environment_and_tools.len() != 1
-        || envelope
-            .environment_and_tools
-            .get(execution.execution_method())
-            != Some(&execution.executor_tool_digest().to_owned())
+        || envelope.environment_and_tools.get(model.model_method())
+            != Some(&model.model_implementation_digest().to_owned())
     {
         reasons.push(format!(
-            "claims-false-pass-executor-method-unbound:{}",
+            "claims-false-pass-model-method-unbound:{}",
             obligation.id
         ));
     }
-    let outcome_digest = execution.actual_causal_outcome().outcome_digest();
-    if execution.output_digests().len() != 1
-        || execution
-            .output_digests()
-            .get(&obligation.id)
-            .map(String::as_str)
-            != Some(outcome_digest)
-    {
+    if model.modeled_result_digest().is_empty() {
         reasons.push(format!(
-            "claims-false-pass-causal-output-unbound:{}",
-            obligation.id
-        ));
-    }
-    if !execution
-        .actual_causal_outcome()
-        .is_expected_failure(execution.expected_failure_contract())
-    {
-        reasons.push(format!(
-            "claims-false-pass-control-not-executed-to-expected-failure:{}",
+            "claims-false-pass-modeled-result-unbound:{}",
             obligation.id
         ));
     }

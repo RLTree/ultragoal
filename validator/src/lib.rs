@@ -6,6 +6,7 @@ mod argument_parser;
 mod audit;
 mod claim;
 mod claim_semantics;
+mod claims;
 mod cli;
 pub use cli::capture;
 mod command;

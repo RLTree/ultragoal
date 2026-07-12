@@ -40,7 +40,7 @@ fn rejects_tampered_duplicate_missing_and_cyclic_registry_definitions() {
 #[test]
 fn complete_exact_obligation_sets_pass_all_fourteen_claims_in_topological_order() {
     let definitions = definitions();
-    let mut ledger = DecisionLedger::default();
+    let mut ledger = super::support::semantic_model_ledger();
     for claim_id in definitions.order() {
         pass_claim(&mut ledger, &definitions, claim_id, "complete");
     }

@@ -1,130 +1,84 @@
 use super::evidence::Actor;
-use super::false_pass::ReceiptAuthority;
-use super::false_pass_integrity::{seal_digest, validate_execution_shape};
+use super::false_pass::ModelAuthority;
+use super::false_pass_integrity::{model_record_digest, seal_digest, validate_model_shape};
 use serde::{Deserialize, Deserializer, Serialize};
-use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
-#[serde(tag = "status", rename_all = "snake_case")]
-pub enum ExecutionOutcome {
-    ExecutedFailure {
-        failure_code: String,
-        outcome_digest: String,
-    },
-}
-
-impl ExecutionOutcome {
-    pub fn outcome_digest(&self) -> &str {
-        let Self::ExecutedFailure { outcome_digest, .. } = self;
-        outcome_digest
-    }
-
-    pub fn is_expected_failure(&self, expected_failure_contract: &str) -> bool {
-        matches!(self, Self::ExecutedFailure { failure_code, .. } if failure_code == expected_failure_contract)
-    }
-}
-
-impl<'de> Deserialize<'de> for ExecutionOutcome {
-    fn deserialize<D>(_deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        Err(serde::de::Error::custom(
-            "claims-execution-outcome-deserialization-prohibited",
-        ))
-    }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
-pub struct FalsePassExecution {
-    pub(super) execution_id: String,
+pub struct SemanticControlModel {
+    pub(super) model_id: String,
     pub(super) registry_digest: String,
     pub(super) claim_id: String,
     pub(super) control_id: String,
     pub(super) control_definition_digest: String,
-    pub(super) command_spec_digest: String,
-    pub(super) argument_digest: String,
-    pub(super) script_digest: String,
+    pub(super) model_spec_digest: String,
     pub(super) authority_nonce: String,
     pub(super) negative_stimulus_digest: String,
     pub(super) expected_failure_contract: String,
-    pub(super) executor: Actor,
-    pub(super) execution_method: String,
-    pub(super) executor_tool_digest: String,
-    pub(super) started_at_unix_ms: u64,
-    pub(super) ended_at_unix_ms: u64,
+    pub(super) modeler: Actor,
+    pub(super) model_method: String,
+    pub(super) model_implementation_digest: String,
+    pub(super) modeled_at_unix_ms: u64,
     pub(super) live_context_id: String,
     pub(super) candidate_id: String,
     pub(super) max_age_ms: u64,
     pub(super) truth_surface: String,
     pub(super) declared_ceiling: String,
-    pub(super) exit_code: i32,
-    pub(super) actual_causal_outcome: ExecutionOutcome,
-    pub(super) output_digests: BTreeMap<String, String>,
-    pub(super) artifact_digests: BTreeSet<String>,
+    pub(super) modeled_result_digest: String,
+    pub(super) model_record_digest: String,
 }
 
-impl FalsePassExecution {
+impl SemanticControlModel {
     #[allow(clippy::too_many_arguments)]
     pub(super) fn from_authority(
-        _authority: &ReceiptAuthority,
-        execution_id: String,
+        _authority: &ModelAuthority,
+        model_id: String,
         registry_digest: String,
         claim_id: String,
         control_id: String,
         control_definition_digest: String,
-        command_spec_digest: String,
-        argument_digest: String,
-        script_digest: String,
+        model_spec_digest: String,
         authority_nonce: String,
         negative_stimulus_digest: String,
         expected_failure_contract: String,
-        executor: Actor,
-        execution_method: String,
-        executor_tool_digest: String,
-        started_at_unix_ms: u64,
-        ended_at_unix_ms: u64,
+        modeler: Actor,
+        model_method: String,
+        model_implementation_digest: String,
+        modeled_at_unix_ms: u64,
         live_context_id: String,
         candidate_id: String,
         max_age_ms: u64,
         truth_surface: String,
         declared_ceiling: String,
-        exit_code: i32,
-        actual_causal_outcome: ExecutionOutcome,
-        output_digests: BTreeMap<String, String>,
-        artifact_digests: BTreeSet<String>,
-    ) -> Self {
-        Self {
-            execution_id,
+        modeled_result_digest: String,
+    ) -> Result<Self, String> {
+        let mut model = Self {
+            model_id,
             registry_digest,
             claim_id,
             control_id,
             control_definition_digest,
-            command_spec_digest,
-            argument_digest,
-            script_digest,
+            model_spec_digest,
             authority_nonce,
             negative_stimulus_digest,
             expected_failure_contract,
-            executor,
-            execution_method,
-            executor_tool_digest,
-            started_at_unix_ms,
-            ended_at_unix_ms,
+            modeler,
+            model_method,
+            model_implementation_digest,
+            modeled_at_unix_ms,
             live_context_id,
             candidate_id,
             max_age_ms,
             truth_surface,
             declared_ceiling,
-            exit_code,
-            actual_causal_outcome,
-            output_digests,
-            artifact_digests,
-        }
+            modeled_result_digest,
+            model_record_digest: String::new(),
+        };
+        model.model_record_digest = model_record_digest(&model)?;
+        Ok(model)
     }
 
-    pub fn execution_id(&self) -> &str {
-        &self.execution_id
+    pub fn model_id(&self) -> &str {
+        &self.model_id
     }
     pub fn registry_digest(&self) -> &str {
         &self.registry_digest
@@ -138,14 +92,8 @@ impl FalsePassExecution {
     pub fn control_definition_digest(&self) -> &str {
         &self.control_definition_digest
     }
-    pub fn command_spec_digest(&self) -> &str {
-        &self.command_spec_digest
-    }
-    pub fn argument_digest(&self) -> &str {
-        &self.argument_digest
-    }
-    pub fn script_digest(&self) -> &str {
-        &self.script_digest
+    pub fn model_spec_digest(&self) -> &str {
+        &self.model_spec_digest
     }
     pub fn authority_nonce(&self) -> &str {
         &self.authority_nonce
@@ -156,20 +104,17 @@ impl FalsePassExecution {
     pub fn expected_failure_contract(&self) -> &str {
         &self.expected_failure_contract
     }
-    pub fn executor(&self) -> &Actor {
-        &self.executor
+    pub fn modeler(&self) -> &Actor {
+        &self.modeler
     }
-    pub fn execution_method(&self) -> &str {
-        &self.execution_method
+    pub fn model_method(&self) -> &str {
+        &self.model_method
     }
-    pub fn executor_tool_digest(&self) -> &str {
-        &self.executor_tool_digest
+    pub fn model_implementation_digest(&self) -> &str {
+        &self.model_implementation_digest
     }
-    pub fn started_at_unix_ms(&self) -> u64 {
-        self.started_at_unix_ms
-    }
-    pub fn ended_at_unix_ms(&self) -> u64 {
-        self.ended_at_unix_ms
+    pub fn modeled_at_unix_ms(&self) -> u64 {
+        self.modeled_at_unix_ms
     }
     pub fn live_context_id(&self) -> &str {
         &self.live_context_id
@@ -186,69 +131,63 @@ impl FalsePassExecution {
     pub fn declared_ceiling(&self) -> &str {
         &self.declared_ceiling
     }
-    pub fn exit_code(&self) -> i32 {
-        self.exit_code
+    pub fn modeled_result_digest(&self) -> &str {
+        &self.modeled_result_digest
     }
-    pub fn actual_causal_outcome(&self) -> &ExecutionOutcome {
-        &self.actual_causal_outcome
-    }
-    pub fn output_digests(&self) -> &BTreeMap<String, String> {
-        &self.output_digests
-    }
-    pub fn artifact_digests(&self) -> &BTreeSet<String> {
-        &self.artifact_digests
+    pub fn model_record_digest(&self) -> &str {
+        &self.model_record_digest
     }
 }
 
-impl<'de> Deserialize<'de> for FalsePassExecution {
+impl<'de> Deserialize<'de> for SemanticControlModel {
     fn deserialize<D>(_deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
         Err(serde::de::Error::custom(
-            "claims-false-pass-execution-deserialization-prohibited",
+            "claims-semantic-control-model-deserialization-prohibited",
         ))
     }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
-pub struct ExecutionObservation {
-    execution: FalsePassExecution,
+pub struct SemanticControlObservation {
+    model: SemanticControlModel,
     observer: Actor,
     observation_method: String,
     observed_at_unix_ms: u64,
-    captured_process_digest: String,
+    observed_model_digest: String,
     observed_digest: String,
 }
 
-impl ExecutionObservation {
+impl SemanticControlObservation {
     pub(super) fn from_authority(
-        _authority: &ReceiptAuthority,
-        execution: FalsePassExecution,
+        _authority: &ModelAuthority,
+        model: SemanticControlModel,
         observer: Actor,
         observation_method: String,
         observed_at_unix_ms: u64,
-        captured_process_digest: String,
     ) -> Result<Self, String> {
+        let observed_model_digest = model.model_record_digest.clone();
         let observed_digest = seal_digest(
-            &execution,
+            &model,
             &observer,
             &observation_method,
             observed_at_unix_ms,
-            &captured_process_digest,
+            &observed_model_digest,
         )?;
         Ok(Self {
-            execution,
+            model,
             observer,
             observation_method,
             observed_at_unix_ms,
-            captured_process_digest,
+            observed_model_digest,
             observed_digest,
         })
     }
 
-    pub fn execution(&self) -> &FalsePassExecution {
-        &self.execution
+    pub fn model(&self) -> &SemanticControlModel {
+        &self.model
     }
     pub fn observer(&self) -> &Actor {
         &self.observer
@@ -264,29 +203,29 @@ impl ExecutionObservation {
     }
 
     pub fn verify_integrity(&self) -> Result<(), String> {
-        validate_execution_shape(&self.execution)?;
+        validate_model_shape(&self.model)?;
         let actual = seal_digest(
-            &self.execution,
+            &self.model,
             &self.observer,
             &self.observation_method,
             self.observed_at_unix_ms,
-            &self.captured_process_digest,
+            &self.observed_model_digest,
         )?;
         if actual == self.observed_digest {
             Ok(())
         } else {
-            Err("claims-false-pass-observation-mutated".to_owned())
+            Err("claims-semantic-control-observation-mutated".to_owned())
         }
     }
 }
 
-impl<'de> Deserialize<'de> for ExecutionObservation {
+impl<'de> Deserialize<'de> for SemanticControlObservation {
     fn deserialize<D>(_deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
         Err(serde::de::Error::custom(
-            "claims-false-pass-observation-deserialization-prohibited",
+            "claims-semantic-control-observation-deserialization-prohibited",
         ))
     }
 }

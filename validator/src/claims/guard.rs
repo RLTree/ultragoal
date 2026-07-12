@@ -20,6 +20,7 @@ impl ClaimGuard {
         now: u64,
         reviewer: &Actor,
         evidence_ids: &[String],
+        allow_semantic_models: bool,
     ) -> ClaimDecision {
         let Some(definition) = definitions.definition(claim_id) else {
             return rejected(
@@ -53,6 +54,7 @@ impl ClaimGuard {
                         candidate,
                         now,
                         reviewer,
+                        allow_semantic_models,
                     ));
                     selected.push(observation);
                 }
@@ -63,6 +65,7 @@ impl ClaimGuard {
             definitions.registry_digest(),
             definition,
             &selected,
+            allow_semantic_models,
         ));
         if reasons.is_empty() {
             ClaimDecision {
@@ -132,6 +135,7 @@ fn evidence_reasons(
     candidate: &str,
     now: u64,
     reviewer: &Actor,
+    allow_semantic_models: bool,
 ) -> Vec<String> {
     let envelope = observation.envelope();
     let mut reasons = Vec::new();
@@ -190,7 +194,7 @@ fn evidence_reasons(
     {
         reasons.push("claims-evidence-artifact-replayed".to_owned());
     }
-    if envelope.false_pass_execution.is_some() {
+    if envelope.false_pass_model.is_some() {
         reasons.extend(super::false_pass_guard::reasons(
             registry_digest,
             definition,
@@ -200,6 +204,7 @@ fn evidence_reasons(
             candidate,
             now,
             reviewer,
+            allow_semantic_models,
         ));
     }
     reasons

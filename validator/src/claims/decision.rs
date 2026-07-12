@@ -39,7 +39,7 @@ pub struct Projection {
     pub invalidated_evidence_ids: Vec<String>,
 }
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug)]
 pub struct DecisionLedger {
     observations: BTreeMap<String, Observation>,
     rejected: BTreeMap<String, BTreeSet<String>>,
@@ -47,9 +47,32 @@ pub struct DecisionLedger {
     accepted_evidence_candidates: BTreeMap<String, String>,
     accepted_artifact_digests: BTreeSet<String>,
     invalidated_evidence_ids: BTreeSet<String>,
+    allow_semantic_models: bool,
+}
+
+impl Default for DecisionLedger {
+    fn default() -> Self {
+        Self {
+            observations: BTreeMap::new(),
+            rejected: BTreeMap::new(),
+            decisions: BTreeMap::new(),
+            accepted_evidence_candidates: BTreeMap::new(),
+            accepted_artifact_digests: BTreeSet::new(),
+            invalidated_evidence_ids: BTreeSet::new(),
+            allow_semantic_models: false,
+        }
+    }
 }
 
 impl DecisionLedger {
+    #[cfg(test)]
+    pub(crate) fn for_semantic_model_tests() -> Self {
+        Self {
+            allow_semantic_models: true,
+            ..Self::default()
+        }
+    }
+
     pub fn submit(&mut self, observation: Observation) -> Result<(), String> {
         let evidence_id = observation.evidence_id().to_owned();
         if self.observations.contains_key(&evidence_id) {
@@ -82,6 +105,7 @@ impl DecisionLedger {
             now_unix_ms,
             reviewer,
             evidence_ids,
+            self.allow_semantic_models,
         );
         if decision.status == DecisionStatus::Passed {
             for evidence_id in &decision.evidence_ids {
@@ -90,9 +114,9 @@ impl DecisionLedger {
                 if let Some(observation) = self.observations.get(evidence_id) {
                     self.accepted_artifact_digests
                         .extend(observation.envelope().artifact_digests.iter().cloned());
-                    if let Some(execution) = &observation.envelope().false_pass_execution {
+                    if let Some(model) = &observation.envelope().false_pass_model {
                         self.accepted_artifact_digests
-                            .extend(execution.execution().artifact_digests().iter().cloned());
+                            .insert(model.model().model_record_digest().to_owned());
                     }
                 }
             }

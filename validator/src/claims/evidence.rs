@@ -1,4 +1,4 @@
-use super::false_pass::ExecutionObservation;
+use super::false_pass::SemanticControlObservation;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
@@ -10,6 +10,8 @@ pub enum ActorRole {
     IndependentObserver,
     ControlExecutor,
     ExecutionObserver,
+    SemanticModeler,
+    SemanticModelObserver,
     MaterialScorer,
     IndependentReviewer,
     RootAuthority,
@@ -90,7 +92,7 @@ pub struct EvidenceEnvelope {
     pub kind: EvidenceKind,
     pub result: ObligationResult,
     #[serde(skip_deserializing, default)]
-    pub false_pass_execution: Option<ExecutionObservation>,
+    pub false_pass_model: Option<SemanticControlObservation>,
     pub inputs: BTreeMap<String, String>,
     pub environment_and_tools: BTreeMap<String, String>,
     pub effects: BTreeMap<String, String>,
@@ -178,7 +180,7 @@ fn validate_envelope_shape(envelope: &EvidenceEnvelope) -> Result<(), String> {
     {
         return Err("claims-evidence-envelope-incomplete".to_owned());
     }
-    if let Some(observation) = &envelope.false_pass_execution {
+    if let Some(observation) = &envelope.false_pass_model {
         observation.verify_integrity()?;
     }
     match &envelope.result {

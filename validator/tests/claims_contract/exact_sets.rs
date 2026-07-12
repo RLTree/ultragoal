@@ -43,7 +43,7 @@ fn each_required_item_is_individually_mandatory_for_material_claims() {
             .required_obligations()
             .len();
         for omitted in 0..count {
-            let mut ledger = DecisionLedger::default();
+            let mut ledger = super::support::semantic_model_ledger();
             pass_before(&mut ledger, &definitions, claim_id, "prior");
             let mut observations = observations_for(&definitions, claim_id, "omission");
             let missing = observations
@@ -74,7 +74,7 @@ fn each_required_item_is_individually_mandatory_for_material_claims() {
 fn one_generic_observation_never_substitutes_for_an_exact_set() {
     let definitions = definitions();
     for claim_id in MATRIX_CLAIMS {
-        let mut ledger = DecisionLedger::default();
+        let mut ledger = super::support::semantic_model_ledger();
         pass_before(&mut ledger, &definitions, claim_id, "generic-prior");
         let observation = observations_for(&definitions, claim_id, "generic").remove(0);
         let decision = decide(&mut ledger, &definitions, claim_id, vec![observation]);
@@ -93,7 +93,7 @@ fn bare_duplicate_unknown_and_shared_proof_reject_before_elevation() {
     let definitions = definitions();
     let claim_id = "CL-RELEASE";
     for case in ["bare", "duplicate", "unknown", "shared"] {
-        let mut ledger = DecisionLedger::default();
+        let mut ledger = super::support::semantic_model_ledger();
         pass_before(
             &mut ledger,
             &definitions,
@@ -160,7 +160,7 @@ fn false_pass_controls_reject_report_only_results_and_contradictions() {
     let definitions = definitions();
     let claim_id = "CL-COMPLETION";
     for case in ["report-only", "contradicted"] {
-        let mut ledger = DecisionLedger::default();
+        let mut ledger = super::support::semantic_model_ledger();
         pass_before(
             &mut ledger,
             &definitions,
@@ -186,7 +186,7 @@ fn false_pass_controls_reject_report_only_results_and_contradictions() {
         let mut envelope = observations.remove(position).envelope().clone();
         let result_digest = envelope.result.result_digest().to_owned();
         envelope.result = if case == "report-only" {
-            envelope.false_pass_execution = None;
+            envelope.false_pass_model = None;
             ObligationResult::ObservedFailure {
                 result_digest,
                 failure_code: "arbitrary-self-report".to_owned(),
@@ -223,7 +223,7 @@ fn wrong_tool_surface_and_decision_ids_reject_as_unknown_and_missing() {
         ObligationKind::RequiredDecision,
     ] {
         let claim_id = "CL-RELEASE";
-        let mut ledger = DecisionLedger::default();
+        let mut ledger = super::support::semantic_model_ledger();
         pass_before(&mut ledger, &definitions, claim_id, "wrong-binding-prior");
         let mut observations = observations_for(&definitions, claim_id, "wrong-binding");
         let position = observations
@@ -272,7 +272,7 @@ fn self_authored_material_scorer_and_reviewer_only_proof_reject() {
     let definitions = definitions();
     let claim_id = "CL-PACKAGE";
     for case in ["self", "material", "reviewer-only"] {
-        let mut ledger = DecisionLedger::default();
+        let mut ledger = super::support::semantic_model_ledger();
         pass_before(
             &mut ledger,
             &definitions,

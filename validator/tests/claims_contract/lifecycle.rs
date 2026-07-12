@@ -8,7 +8,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 #[test]
 fn repair_invalidates_only_present_dependent_decisions_and_rerun_recloses_them() {
     let definitions = definitions();
-    let mut ledger = DecisionLedger::default();
+    let mut ledger = super::support::semantic_model_ledger();
     pass_claim(&mut ledger, &definitions, "CL-SOURCE", "initial");
     pass_claim(&mut ledger, &definitions, "CL-PACKAGE", "initial");
     pass_claim(&mut ledger, &definitions, "CL-INSTALL", "initial");
@@ -73,7 +73,7 @@ fn repair_invalidates_only_present_dependent_decisions_and_rerun_recloses_them()
 #[test]
 fn rejected_obligations_remain_visible_and_projection_is_deterministic_zero_write() {
     let definitions = definitions();
-    let mut ledger = DecisionLedger::default();
+    let mut ledger = super::support::semantic_model_ledger();
     pass_claim(&mut ledger, &definitions, "CL-SOURCE", "projection-source");
     let mut observations = observations_for(&definitions, "CL-PACKAGE", "projection");
     observations.remove(0);

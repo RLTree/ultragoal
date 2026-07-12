@@ -1,0 +1,72 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "CLAIM-MODEL-BOUNDARY-CORRECTION-032",
+  "node_id": "claim-control",
+  "root_disposition": "accepted_lowered_ceiling",
+  "candidate_binding": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "base_head_commit": "b729c497fa54f52854ee396b86be61ed115c96f1",
+    "reviewed_set_aggregate_sha256": "d35f4acac219532fea9542238f0911e461c876d2abe00bf8b7e76a505ee888ef",
+    "aggregate_formula": "SHA-256 over path-bound shasum lines for validator/src/lib.rs, validator/src/claims/*.rs, validator/tests/claims_contract/*.rs, and validator/tests/claims_contract.rs in lexical shell expansion order"
+  },
+  "superseded_attempt": {
+    "decision": "docs/ultragoal-successor-live/root-decisions/CLAIM-CONTROL-TRANSPORT-CAPABILITY-REWORK-028.json",
+    "disposition": "The modeled ProcessCapture/ExecutedFailure attempt remains rejected and is replaced by structurally separate semantic model types. The transport capability blocker remains open."
+  },
+  "accepted_behavior": [
+    "SemanticControlModel and SemanticControlObservation are disjoint from executed causal proof types and omit process-only fields.",
+    "DecisionLedger default and product coverage reject a well-formed semantic model with claims-false-pass-semantic-model-not-executed-proof.",
+    "Only the cfg(test) DecisionLedger constructor permits semantic models for decision-engine tests.",
+    "The dormant scheduler, confinement, process adapter, ProcessCapture, unreachable transport, and substituted-fixture implementation were removed.",
+    "The private transport and every substitution refuse before scheduling, model issue, proof issue, or scratch-tree mutation.",
+    "validator/src/lib.rs privately compiles the claims module and its production executor-catalog refusal."
+  ],
+  "independent_review": {
+    "reviewer": "/root/claim_model_boundary_falsifier",
+    "verdict": "accept",
+    "nextest_run_id": "112ee633-9626-4ad0-bb48-f255c501f1bf",
+    "tests_passed": 45,
+    "tests_failed": 0,
+    "test_threads": 16,
+    "cargo_check_lib": "pass",
+    "diff_check": "pass"
+  },
+  "root_reproduction": {
+    "nextest_run_id_before_final_source_scan": "a5d7fa6b-043a-4db9-ac7b-0f3ce3e74a10",
+    "tests_passed": 44,
+    "tests_failed": 0,
+    "source_scan_run_id": "3c0b086c-9795-4f81-86ac-df30d5f8bef4",
+    "source_scan_tests_passed": 1,
+    "cargo_check_lib": "pass"
+  },
+  "commit_revalidation": {
+    "reviewer": "/root/claim_boundary_commit_reviewer",
+    "reviewed_set_aggregate_sha256": "d35f4acac219532fea9542238f0911e461c876d2abe00bf8b7e76a505ee888ef",
+    "independent_nextest_run_id": "b8120f87-ed8b-46f4-8af9-77b950ad9e7b",
+    "independent_tests_passed": 45,
+    "independent_tests_failed": 0,
+    "root_nextest_run_id": "a7f32843-1490-4c83-83b7-78e1a7fddec5",
+    "root_tests_passed": 45,
+    "root_tests_failed": 0,
+    "test_jobs": 16,
+    "cargo_check_lib": "pass",
+    "diff_check": "pass"
+  },
+  "claim_ceiling": {
+    "supported": [
+      "compiled source-level product-executor refusal",
+      "private capability-intersection refusal",
+      "test-only semantic decision-model guard behavior"
+    ],
+    "withheld": [
+      "named product negative-control execution",
+      "HCT-CLAIMS output",
+      "claim elevation",
+      "claim-control node closure",
+      "readiness",
+      "release",
+      "completion"
+    ]
+  },
+  "no_claim_statement": "This acceptance does not claim readiness, release, or completion."
+}

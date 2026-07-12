@@ -1,7 +1,7 @@
 use super::claims::{
     Actor, ActorRole, ClaimDefinitions, ClaimObligation, DecisionLedger, DecisionStatus,
-    EvidenceEnvelope, EvidenceKind, ExecutionObservation, LocalNegativeControlAuthority,
-    ObligationKind, ObligationResult, Observation,
+    EvidenceEnvelope, EvidenceKind, LocalNegativeControlAuthority, ObligationKind,
+    ObligationResult, Observation, SemanticControlObservation,
 };
 use super::context::{BuildRequest, LiveContext};
 use sha2::{Digest, Sha256};
@@ -16,7 +16,7 @@ struct TestBinding {
 }
 
 static TEST_BINDING: OnceLock<TestBinding> = OnceLock::new();
-static CONTROL_OBSERVATIONS: OnceLock<BTreeMap<String, BTreeMap<String, ExecutionObservation>>> =
+static CONTROL_MODELS: OnceLock<BTreeMap<String, BTreeMap<String, SemanticControlObservation>>> =
     OnceLock::new();
 
 pub fn live_context() -> &'static LiveContext {
@@ -40,6 +40,10 @@ pub fn candidate_id() -> &'static str {
 pub fn authority<'a>(definitions: &'a ClaimDefinitions) -> LocalNegativeControlAuthority<'a> {
     LocalNegativeControlAuthority::bind(definitions, live_context(), &test_binding().scratch_root)
         .expect("candidate-bound claim authority")
+}
+
+pub fn control_scratch_root() -> &'static Path {
+    &test_binding().scratch_root
 }
 
 fn test_binding() -> &'static TestBinding {
@@ -112,32 +116,32 @@ pub fn obligation_observation(
     obligation: &ClaimObligation,
     ordinal: usize,
     tag: &str,
-    false_pass_execution: Option<ExecutionObservation>,
+    false_pass_model: Option<SemanticControlObservation>,
 ) -> Observation {
     let definition = definitions.definition(claim_id).expect("definition");
     let evidence_id = format!("evidence-{claim_id}-{ordinal}-{tag}");
     assert_eq!(
-        false_pass_execution.is_some(),
+        false_pass_model.is_some(),
         obligation.kind == ObligationKind::FalsePassControl,
-        "false-pass execution must exactly match the obligation kind"
+        "false-pass semantic model must exactly match the obligation kind"
     );
-    let result_digest = false_pass_execution
+    let result_digest = false_pass_model
         .as_ref()
         .map(|item| item.observed_digest().to_owned())
         .unwrap_or_else(|| digest(&format!("result:{evidence_id}")));
     let result = ObligationResult::Supported {
         result_digest: result_digest.clone(),
     };
-    let (mut inputs, mut tools) = if let Some(observed) = &false_pass_execution {
-        let execution = observed.execution();
+    let (mut inputs, mut tools) = if let Some(observed) = &false_pass_model {
+        let model = observed.model();
         (
             BTreeMap::from([(
                 obligation.id.clone(),
-                execution.negative_stimulus_digest().to_owned(),
+                model.negative_stimulus_digest().to_owned(),
             )]),
             BTreeMap::from([(
-                execution.execution_method().to_owned(),
-                execution.executor_tool_digest().to_owned(),
+                model.model_method().to_owned(),
+                model.model_implementation_digest().to_owned(),
             )]),
         )
     } else {
@@ -184,7 +188,7 @@ pub fn obligation_observation(
         declared_ceiling: definition.allowed_ceiling_on_pass.clone(),
         kind: EvidenceKind::DirectObservation,
         result,
-        false_pass_execution,
+        false_pass_model,
         inputs,
         environment_and_tools: tools,
         effects: BTreeMap::from([("read".to_owned(), "observed".to_owned())]),
@@ -201,10 +205,10 @@ pub fn observations_for(
     claim_id: &str,
     tag: &str,
 ) -> Vec<Observation> {
-    let mut executions = if tag == "rerun" {
+    let mut models = if tag == "rerun" {
         authority(definitions)
-            .execute_claim(claim_id)
-            .expect("rerun receives fresh named control executions")
+            .model_claim_for_decision_tests(claim_id)
+            .expect("rerun receives fresh named semantic control models")
     } else {
         cached_claim_controls(definitions, claim_id)
     };
@@ -215,13 +219,13 @@ pub fn observations_for(
         .iter()
         .enumerate()
         .map(|(index, obligation)| {
-            let execution = executions.remove(&obligation.id);
-            obligation_observation(definitions, claim_id, obligation, index, tag, execution)
+            let model = models.remove(&obligation.id);
+            obligation_observation(definitions, claim_id, obligation, index, tag, model)
         })
         .collect();
     assert!(
-        executions.is_empty(),
-        "all named controls consumed exactly once"
+        models.is_empty(),
+        "all named semantic control models consumed exactly once"
     );
     observations
 }
@@ -229,8 +233,8 @@ pub fn observations_for(
 fn cached_claim_controls(
     definitions: &ClaimDefinitions,
     claim_id: &str,
-) -> BTreeMap<String, ExecutionObservation> {
-    CONTROL_OBSERVATIONS
+) -> BTreeMap<String, SemanticControlObservation> {
+    CONTROL_MODELS
         .get_or_init(|| {
             let bound = authority(definitions);
             definitions
@@ -240,8 +244,8 @@ fn cached_claim_controls(
                     (
                         claim_id.clone(),
                         bound
-                            .execute_claim(claim_id)
-                            .expect("authority executes adopted named controls"),
+                            .model_claim_for_decision_tests(claim_id)
+                            .expect("authority models adopted named controls"),
                     )
                 })
                 .collect()
@@ -249,6 +253,10 @@ fn cached_claim_controls(
         .get(claim_id)
         .cloned()
         .expect("cached adopted named controls")
+}
+
+pub fn semantic_model_ledger() -> DecisionLedger {
+    DecisionLedger::for_semantic_model_tests()
 }
 
 pub fn submit(ledger: &mut DecisionLedger, observations: Vec<Observation>) -> Vec<String> {
