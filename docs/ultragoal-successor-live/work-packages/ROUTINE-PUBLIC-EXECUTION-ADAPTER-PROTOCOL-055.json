@@ -1,0 +1,98 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:11a7bc336aad017e4e242bd651c0a620bfe5a52e4bb2c8daacffa5daea4a8579",
+    "candidate_id": "sha256:226efc689750528e7c253b4f67f6bd3428a5b1c1faaa06bc420ed3d83d3473bd",
+    "head_commit": "8451ccf61ed986f474a451eab5423c6b2294d44a",
+    "head_tree": "814eb609a822a33aabfe0dcdd1ae2119cddf38e0",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true
+  },
+  "work_package": {
+    "node_id": "routine-public-execution-adapter-protocol",
+    "dependencies": [
+      "accepted-routine-capture-impact-kernel",
+      "accepted-routine-reuse-dependency-and-interruption-closure",
+      "accepted-successor-cli-typed-grammar",
+      "root-owned-workspace-effect-mediator-remains-pending"
+    ],
+    "required_tools": ["cargo-nextest", "rustfmt", "shasum"],
+    "safety_class": "isolated_workspace_write",
+    "owned_scope": {
+      "paths": [
+        "validator/src/routine_work/mod.rs",
+        "validator/src/routine_work/runtime_adapter.rs",
+        "validator/src/routine_work/runtime_adapter",
+        "validator/tests/routine_work_contract.rs",
+        "validator/tests/routine_work_contract/runtime_adapter.rs",
+        "fixtures/routine-public-adapter/cases.json",
+        "docs/ultragoal-successor-live/worker-results/ROUTINE-PUBLIC-EXECUTION-ADAPTER-PROTOCOL-055.json"
+      ],
+      "semantic_symbols": [
+        "candidate-bound-routine-adapter-session",
+        "exact-runner-and-tool-identity-binding",
+        "ordered-routine-execution-request",
+        "opaque-one-use-workspace-effect-request",
+        "post-execution-report-reconciliation",
+        "root-public-dispatch-change-request"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "clean no-op adapter request",
+        "dirty dependency-closed ordered request",
+        "strict expansion request",
+        "missing or substituted tool identity",
+        "stale context plan snapshot and runner",
+        "duplicate unknown reordered and partial effect outcomes",
+        "request replay and cross-session substitution",
+        "zero-write zero-spawn preparation and refusal"
+      ],
+      "effects": [
+        {"class": "workspace_write", "target": "exact leased internal adapter source tests fixture and WorkerResult"},
+        {"class": "process", "target": "offline adapter contract tests only"},
+        {"class": "temporary_build_write", "target": "/tmp/hul-routine-public-adapter-055"}
+      ]
+    },
+    "acceptance": [
+      "one internal adapter session binds one current LiveContext one exact ImpactGraph one dirty snapshot one RoutinePlan and the complete selected runner and tool identities",
+      "preparation emits deterministic ordered effect intents but performs zero process spawn workspace write receipt write telemetry write cache write or Git mutation",
+      "the effect request is opaque non-Clone non-Copy non-Deserialize one-use and cannot be caller-constructed from known digests",
+      "every selected check binds exact program content identity argv working directory environment policy timeout output budget declared output scopes dependency result expectations and plan order",
+      "clean no-op produces no effect request and an exact non-effectful report projection",
+      "unknown duplicate missing reordered stale substituted cross-session replayed partial skipped failed and unobserved outcomes fail closed before complete execution",
+      "post-execution reconciliation delegates to the accepted exact result-chain authority and cannot manufacture reuse or completion",
+      "no public successor dispatch or WorkspaceWrite capability is activated by this worker",
+      "focused adapter plus dependency-closed routine tests pass twice with 16 test threads",
+      "WorkerResult-v1 uses the repository-standard path-bound aggregate and exact no-claim ceiling"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "ROUTINE-PUBLIC-EXECUTION-ADAPTER-PROTOCOL-055",
+    "run_id": "ultragoal-successor-live-20260712-macro-009",
+    "node_id": "routine-public-execution-adapter-protocol",
+    "principal": "worker",
+    "owner": "/root/routine_public_execution_adapter_engineer",
+    "binding": {
+      "context_id": "sha256:11a7bc336aad017e4e242bd651c0a620bfe5a52e4bb2c8daacffa5daea4a8579",
+      "candidate_id": "sha256:226efc689750528e7c253b4f67f6bd3428a5b1c1faaa06bc420ed3d83d3473bd"
+    },
+    "safety_class": "isolated_workspace_write",
+    "owned_scope": "exactly work_package.owned_scope",
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 3
+  },
+  "prohibited_surfaces": [
+    "validator/src/cli/successor catalog parser help runtime dispatcher successor_public command_run and binary entrypoints",
+    "root effect grants capture sandbox workspace dependency Cargo manifests lockfile public API witness lib exports generated authority board acceptance claims migration release and completion state",
+    "actual process execution host workspace writes receipts caches telemetry Git network external systems and every path not expressly leased"
+  ],
+  "root_validation_obligations": [
+    "independently falsify the opaque adapter protocol and exact result reconciliation",
+    "design and implement the separate root-owned workspace effect mediator before public activation",
+    "wire the accepted adapter through the public dispatcher only after effect authority passes",
+    "prove installed-runtime clean dirty conflict fallback recovery repeat-use and zero-hidden-write journeys before changing product ceilings"
+  ],
+  "no_claim_statement": "This worker implements an internal routine adapter protocol only. It does not execute workspace effects, activate the public command, prove installed product behavior, close the routine node, or claim readiness, release, or completion."
+}
