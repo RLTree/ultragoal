@@ -1,0 +1,178 @@
+{
+  "worker": "/root/plugin_plan_authorization_engineer",
+  "lease_id": "PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-CORRECTION-035",
+  "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+  "candidate_identity": {
+    "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+    "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "b729c497fa54f52854ee396b86be61ed115c96f1",
+    "head_tree": "50b8caa02e3a6c86cb08bd3b0a65ab82f27c4942",
+    "worker_owned_artifact_count": 4,
+    "worker_owned_artifact_total_bytes": 96450
+  },
+  "base_state": {
+    "status": "independent-recovery-activation-rework",
+    "work_envelope": "docs/ultragoal-successor-live/work-packages/PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-CORRECTION-035.json",
+    "work_envelope_sha256": "sha256:45c2e2ce138a3b2d5e97e5cadeae10e8bcd5fd5304c9eda038630824bf5e410d",
+    "rework_decision": "docs/ultragoal-successor-live/root-decisions/PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-REWORK-034.json",
+    "rework_decision_sha256": "sha256:5fce81869aee6939636e65a555aa69e43612011ac7fc1ea999617c7e5cb4cbba",
+    "dependency_worker_result": "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-PLAN-AUTHORIZATION-CORRECTION-031.json",
+    "dependency_worker_result_sha256": "sha256:10506d979ebb2369e053012d22c3d7fe7f1ef12f22ffae5714794e41126f26c9"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "atomic_action_state_machine": true,
+    "action_state_sequence": [
+      "planned",
+      "applying",
+      "recovery_available",
+      "recovering",
+      "closed"
+    ],
+    "post_apply_recovery_exactly_once": true,
+    "failed_restore_partial_state_bound": true,
+    "failure_observation_model": "completed-prefix-derived-and-adapter-observed",
+    "successful_automatic_restore_closes_recovery": true,
+    "effects_before_refusal": 0,
+    "source_candidate": "independent_review_pending",
+    "package_runtime_and_journey_claims": "withheld"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-CORRECTION-035.json",
+    "validator/src/plugin_product/lifecycle/execution.rs",
+    "validator/src/plugin_product/lifecycle/model.rs",
+    "validator/tests/plugin_product_contract/dependency_closure.rs",
+    "validator/tests/plugin_product_contract/lifecycle_contract.rs"
+  ],
+  "touched_semantics": [
+    "LifecycleActionState",
+    "PlanAuthorizationSeal-apply-transition",
+    "RecoveryAuthorizationSeal-recovery-transition",
+    "apply",
+    "recover",
+    "recovery_token"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "validator/tests/plugin_product_contract/dependency_closure.rs",
+    "validator/tests/plugin_product_contract/lifecycle_contract.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "plugin-lifecycle-recovery-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "plugin-lifecycle-recovery-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-plugin-lifecycle-recovery-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "atomic-lifecycle-action-state-machine",
+    "recovery-before-apply-refusal",
+    "successful-apply-explicit-recovery",
+    "failed-restore-usable-partial-recovery",
+    "successful-automatic-restore-closure",
+    "concurrent-apply-recover-replay-serialization",
+    "recovery-token-false-pass-controls",
+    "worker-result-v1",
+    "independent-review-and-root-reconciliation"
+  ],
+  "dependency_nodes": [
+    "plugin-lifecycle-plan-authorization-correction-031"
+  ],
+  "changes": [
+    {
+      "area": "atomic-lifecycle-action-authority",
+      "result": "Replaced the shared boolean with an explicit planned, applying, recovery-available, recovering, and closed state machine shared by every plan and recovery-token clone."
+    },
+    {
+      "area": "failed-restore-recovery-binding",
+      "result": "A failed effect plus failed automatic restore now arms recovery only for a valid adapter-observed state that exactly matches the deterministic completed-effect prefix and carries recovery-required state."
+    },
+    {
+      "area": "false-pass-controls",
+      "result": "Recovery before or during apply, duplicate clones, replay, transport, public-field mutation, planned-final substitution, newer-generation drift, candidate substitution, and unmodeled observations refuse before recovery-adapter effects."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rustfmt --edition 2024 validator/src/plugin_product/lifecycle/model.rs validator/src/plugin_product/lifecycle/execution.rs validator/tests/plugin_product_contract/dependency_closure.rs validator/tests/plugin_product_contract/lifecycle_contract.rs",
+      "status": "pass"
+    },
+    {
+      "command": "HUL_REPO_ROOT=<repo> CARGO_TARGET_DIR=/tmp/hul-plugin-recovery-035 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test plugin_product_contract --build-jobs 16 --test-threads 16 -E 'test(lifecycle_contract)' --no-fail-fast",
+      "status": "pass-30-of-30",
+      "run_id": "c3db3c2b-3e4d-40dc-81c3-00f554f50b85"
+    },
+    {
+      "command": "HUL_REPO_ROOT=<repo> CARGO_TARGET_DIR=/tmp/hul-plugin-recovery-035 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test plugin_product_contract --build-jobs 16 --test-threads 16 -E 'test(recovery_activation_worker_result_is_lease_bound_and_verifies_every_artifact)' --no-fail-fast",
+      "status": "pass-1-of-1",
+      "run_id": "468d73c6-1195-4e05-b358-15c8ff4aca75"
+    },
+    {
+      "command": "HUL_REPO_ROOT=<repo> CARGO_TARGET_DIR=/tmp/hul-plugin-recovery-035 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test plugin_product_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "status": "pass-74-of-74",
+      "run_id": "3fb81218-7288-4f5a-be1e-80405003a693"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/plugin_product/lifecycle/execution.rs",
+      "sha256": "sha256:92051de1fc69241f3c94d06fbe0a1212ef5d838cc05618723763d5798955db08",
+      "byte_length": 6511
+    },
+    {
+      "path": "validator/src/plugin_product/lifecycle/model.rs",
+      "sha256": "sha256:ac9fd97fa08a5fd92e5110f31955caa991c5216319efb49bee2f868789b39847",
+      "byte_length": 17358
+    },
+    {
+      "path": "validator/tests/plugin_product_contract/dependency_closure.rs",
+      "sha256": "sha256:a859290771a4e6d212da822a905f7fe2fef65907f362eb0f2e546b91592f888c",
+      "byte_length": 37151
+    },
+    {
+      "path": "validator/tests/plugin_product_contract/lifecycle_contract.rs",
+      "sha256": "sha256:a6c2f112401e56af409234b64c3cdb496792cef16fe269d44b718d58b39154fe",
+      "byte_length": 35430
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material-corrected",
+      "finding": "Apply no longer consumes recovery authority before effects; recovery becomes available only after apply reaches a state with an exact sealed recovery observation."
+    },
+    {
+      "severity": "material-corrected",
+      "finding": "Failed automatic restore no longer relies on caller-fabricated plan.expected_after; it binds one recovery action to the actual modeled partial state and refuses unrelated or newer authority."
+    },
+    {
+      "severity": "claim-ceiling",
+      "finding": "This remains a source-and-contract-test candidate pending independent review, root reconciliation, package closure, and live host product proof."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-plugin-lifecycle-recovery-review",
+    "root-recomputed-plugin-candidate-identity",
+    "root-module-and-distribution-adapter-wiring",
+    "live-host-plugin-lifecycle-proof"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "The correction is compiled and exercised through the plugin_product_contract test inclusion path; public root module and distribution-adapter wiring remain root-owned and withheld.",
+    "The adapter observation boundary must be implemented by a real distribution adapter before live host recovery behavior can be claimed.",
+    "No manifest, marketplace, installation, cache, app-registry, Plugins UI, discovery, runtime identity, or live product journey was mutated or observed.",
+    "The four artifact records exclude this WorkerResult itself and require independent root revalidation against the exact envelope and live files.",
+    "No source acceptance, package, runtime, journey, readiness, release, node closure, or goal-completion claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

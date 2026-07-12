@@ -116,6 +116,32 @@ an operator canary echoed by a failure blocks reuse of the result.
 Package, marketplace, install, cache, app registry, Plugins UI, discovery, and
 runtime are not synonyms. A successful lower layer does not raise a higher claim.
 
+## Lifecycle coordinator boundary
+
+The source-local lifecycle coordinator covers eight operations with typed
+plan, apply, verify, and recovery semantics:
+
+| Operation | Required invariant |
+| --- | --- |
+| Fresh install | The observed state is absent and a host write is explicitly authorized. |
+| Monotonic update | The target version is strictly newer and the expected installed digest still matches. |
+| Failed-update recovery | The exact captured prior installed and cache authority is restored before reuse. |
+| Authorized rollback | The target is older and a separate downgrade authorization is present. |
+| Idempotent reinstall | Matching installed and cache bytes are verified without replacement. |
+| Uninstall and teardown | Installed and cache authority are removed and absence is verified. |
+| Stale-cache recovery | Installed authority is preserved while cache identity is reconciled. |
+| Repeat use | Installed bytes, cache identity, and runtime behavior are re-observed without writes. |
+
+Planning and verification are read-only. Applying a host mutation remains
+behind an explicit adapter and authorization; source tests do not authorize or
+perform installation. Every effect rechecks the observed prior state. A failed
+effect restores that prior authority or returns a recovery-required result.
+
+Product Fitness is independently withheld until accessibility, cognitive
+load, recovery burden, continuance, and real-use evidence are all bound to the
+same current candidate and independently reviewed. A passing source fixture or
+lifecycle simulation cannot raise that ceiling.
+
 ## Safe failure
 
 Stop the dependent layer when the required package, marketplace, host command,

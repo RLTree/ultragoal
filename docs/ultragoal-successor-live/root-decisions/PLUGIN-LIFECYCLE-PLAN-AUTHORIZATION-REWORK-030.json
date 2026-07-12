@@ -1,0 +1,30 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "PLUGIN-LIFECYCLE-PLAN-AUTHORIZATION-REWORK-030",
+  "node_id": "plugin-lifecycle-product-closure",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-PRODUCT-CORRECTION-024.json",
+    "sha256": "11d91f3ccad533e4eefcc63fa470b727e38dc3caa77589e58d9c1afb5eb49927",
+    "artifact_count": 29,
+    "matching_artifact_count": 29,
+    "build_closure_row_count": 71,
+    "build_closure_aggregate_sha256": "ab98a4fe3717afa547ee51d77e4ff322e7c0f742814e5dae71d88995b2280b8e"
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "forged_lifecycle_plan_authorization_bypass",
+    "cause": "LifecyclePlan fields are publicly constructible and apply validates only self-consistent structure before executing effects. A caller can forge host-write effects, set writes_host_state=false, recompute the documented digest, and bypass plan-time write authorization."
+  },
+  "focused_verification": {
+    "nextest_run_id": "c1afb479-9775-48f9-9681-08c67a415d72",
+    "tests_passed": 57,
+    "tests_failed": 0,
+    "interpretation": "The green suite is diagnostic and lacks the decisive forged-plan false-pass control."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_action": "Seal lifecycle plans behind crate-private construction or bind apply to a root-issued authorization and canonical transition re-derivation. Reject forged, deserialized, effect-expanded, write-flag-mismatched, stale, substituted, and replayed plans before adapter effects.",
+  "claim_ceiling": "Source candidate remains under REWORK. Package, marketplace, install, cache, app-registry, Plugins UI, discovery, runtime, lifecycle journey, readiness, release, and completion claims remain withheld.",
+  "no_claim_statement": "This decision does not claim readiness, release, or completion."
+}

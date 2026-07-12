@@ -1,9 +1,15 @@
 #![allow(clippy::expect_used)]
 
 mod dependency_closure;
+mod host_truth_layers;
+mod lifecycle_contract;
+mod product_fitness_contract;
 mod route_contract;
 mod source_contract;
 mod zero_write;
+
+#[path = "../../src/plugin_product/mod.rs"]
+mod plugin_product;
 
 use std::path::PathBuf;
 

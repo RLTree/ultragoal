@@ -1,0 +1,163 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+    "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+    "head_commit": "b729c497fa54f52854ee396b86be61ed115c96f1",
+    "head_tree": "50b8caa02e3a6c86cb08bd3b0a65ab82f27c4942",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true
+  },
+  "work_package": {
+    "node_id": "plugin-lifecycle-read-failure-guard-correction",
+    "dependencies": [
+      "plugin-lifecycle-recovery-activation-correction-035"
+    ],
+    "required_tools": [
+      "cargo-nextest",
+      "rustfmt",
+      "shasum"
+    ],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/root-decisions/PLUGIN-LIFECYCLE-READ-FAILURE-RESTORE-REWORK-038.json",
+      "docs/ultragoal-successor-live/work-packages/PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-CORRECTION-035.json",
+      "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-CORRECTION-035.json",
+      "validator/src/plugin_product/lifecycle/plan/mod.rs",
+      "validator/src/plugin_product/lifecycle/plan/transitions.rs",
+      "validator/tests/plugin_product_contract/zero_write.rs"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-READ-FAILURE-GUARD-CORRECTION-039.json",
+        "validator/src/plugin_product/lifecycle/execution.rs",
+        "validator/src/plugin_product/lifecycle/model.rs"
+      ],
+      "semantic_symbols": [
+        "LifecycleError-read-effect-failure",
+        "apply-read-only-failure-path",
+        "read-only-plan-authority-closure"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "validator/tests/plugin_product_contract/dependency_closure.rs",
+        "validator/tests/plugin_product_contract/lifecycle_contract.rs"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "plugin-lifecycle-read-failure-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "plugin-lifecycle-read-failure-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-plugin-lifecycle-read-failure-validation"
+        }
+      ]
+    },
+    "prerequisites": [
+      "independent-read-failure-restore-rework"
+    ],
+    "outputs": [
+      "read-only-effect-failure-guard",
+      "causal-read-failure-diagnostic",
+      "plugin-lifecycle-read-failure-worker-result-v1"
+    ],
+    "acceptance": [
+      "read-only-verification-failure-never-calls-restore-or-observe-state",
+      "read-only-runtime-probe-failure-never-calls-restore-or-observe-state",
+      "read-only-failure-closes-apply-authority-without-arming-recovery",
+      "read-only-failure-returns-stable-causal-diagnostic",
+      "idempotent-reinstall-and-repeat-use-failure-paths-are-recursively-zero-write",
+      "replay-concurrency-serialization-mutation-and-false-pass-controls-pass",
+      "full-plugin-product-contract-passes",
+      "worker-result-binds-every-corrected-artifact",
+      "independent-review-and-root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "PLUGIN-LIFECYCLE-READ-FAILURE-GUARD-CORRECTION-039",
+    "run_id": "ultragoal-successor-live-20260712",
+    "node_id": "plugin-lifecycle-read-failure-guard-correction",
+    "principal": "worker",
+    "owner": "/root/plugin_plan_authorization_engineer",
+    "binding": {
+      "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+      "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/root-decisions/PLUGIN-LIFECYCLE-READ-FAILURE-RESTORE-REWORK-038.json",
+      "docs/ultragoal-successor-live/work-packages/PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-CORRECTION-035.json",
+      "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-CORRECTION-035.json",
+      "validator/src/plugin_product/lifecycle/plan/mod.rs",
+      "validator/src/plugin_product/lifecycle/plan/transitions.rs",
+      "validator/tests/plugin_product_contract/zero_write.rs"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-READ-FAILURE-GUARD-CORRECTION-039.json",
+        "validator/src/plugin_product/lifecycle/execution.rs",
+        "validator/src/plugin_product/lifecycle/model.rs"
+      ],
+      "semantic_symbols": [
+        "LifecycleError-read-effect-failure",
+        "apply-read-only-failure-path",
+        "read-only-plan-authority-closure"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "validator/tests/plugin_product_contract/dependency_closure.rs",
+        "validator/tests/plugin_product_contract/lifecycle_contract.rs"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "plugin-lifecycle-read-failure-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "plugin-lifecycle-read-failure-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-plugin-lifecycle-read-failure-validation"
+        }
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "plugin-lifecycle-recovery-activation-correction-035": "sha256:1aef189788463efebdd3ba08d3377ed27467401edb6b4c748896345aea23b128"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "rustfmt": "sha256:aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "independent-read-failure-restore-rework": "sha256:adb9bf74937f5052867d74ef819bcd405726ff0e555621f21c5734d99e5b3c2f"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "prohibited_surfaces": [
+    "all plugin-product files not explicitly leased",
+    "validator/src/lib.rs, distribution adapters, public command catalog, parser, dispatcher, and command_run",
+    "Cargo.toml, Cargo.lock, schemas, manifests, marketplace, migration and claim registries, board, acceptance, generated authority",
+    "claims, orchestration, inventory, observability, repository-fit, Git, network, host state, and destructive cleanup"
+  ],
+  "root_validation_obligations": [
+    "independently-review-exact-corrected-set",
+    "recompute-complete-plugin-artifact-set-and-build-closure-after-correction",
+    "apply-root-module-or-distribution-wiring-only-after-acceptance"
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

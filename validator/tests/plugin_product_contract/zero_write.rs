@@ -268,3 +268,66 @@ fn unavailable_root_does_not_echo_the_operator_path_or_mutate_its_parent() {
     assert!(!text.contains("private-missing-root-closure-018"));
     assert!(!text.contains(SECRET));
 }
+
+#[cfg(unix)]
+#[test]
+fn lifecycle_plan_verify_and_build_closure_capture_are_recursively_zero_write() {
+    use super::plugin_product::lifecycle::{
+        LifecycleAuthorization, LifecycleIntent, LifecycleRequest, LifecycleState,
+        PackageAuthority, Version, plan,
+    };
+    use super::plugin_product::source_closure::{
+        BuildClosurePolicy, BuildClosureV1, BuildInputKind, RequiredBuildInput,
+    };
+
+    let repository = Repository::new();
+    let policy = BuildClosurePolicy::new(vec![
+        RequiredBuildInput {
+            path: ".codex-plugin/plugin.json".to_owned(),
+            kind: BuildInputKind::RuntimeAuthority,
+        },
+        RequiredBuildInput {
+            path: "nested/tracked.txt".to_owned(),
+            kind: BuildInputKind::RustSource,
+        },
+        RequiredBuildInput {
+            path: "private-canary.txt".to_owned(),
+            kind: BuildInputKind::VerifierInput,
+        },
+    ])
+    .unwrap();
+    let before = observe(&repository.root);
+    let closure = BuildClosureV1::capture(&repository.root, &policy).unwrap();
+    closure.verify(&repository.root, &policy).unwrap();
+
+    let authority = PackageAuthority {
+        version: Version::parse("0.0.12").unwrap(),
+        package_sha256: "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+            .to_owned(),
+        inventory_sha256: "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+            .to_owned(),
+        candidate_id: "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+            .to_owned(),
+    };
+    let request = LifecycleRequest {
+        intent: LifecycleIntent::RepeatUse,
+        target: Some(authority.clone()),
+        prior_authority: None,
+        authorization: LifecycleAuthorization {
+            allow_host_write: false,
+            allow_downgrade: false,
+            expected_installed_sha256: Some(authority.package_sha256.clone()),
+        },
+    };
+    let state = LifecycleState {
+        installed: Some(authority.clone()),
+        cache: Some(authority),
+        generation: 1,
+        recovery_required: false,
+    };
+    let planned = plan(&state, &request).unwrap();
+    assert!(!planned.writes_host_state);
+    assert_eq!(planned.expected_after, state);
+
+    assert_eq!(observe(&repository.root), before);
+}

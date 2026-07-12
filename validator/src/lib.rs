@@ -24,6 +24,7 @@ pub mod orchestration;
 mod output_path;
 mod package;
 mod plugin_manifest;
+pub mod plugin_product;
 mod red;
 pub mod repository_fit;
 mod review;

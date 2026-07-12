@@ -1,0 +1,316 @@
+{
+  "worker": "/root/plugin_lifecycle_product_engineer",
+  "lease_id": "PLUGIN-LIFECYCLE-PRODUCT-CORRECTION-024",
+  "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+  "candidate_identity": {
+    "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+    "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e6427ae4d0c1bdfa191356bd082abadf5f723903",
+    "head_tree": "dfe8437fcb4756d74477ffd4d6867c43f55c1788",
+    "issued_work_envelope": "docs/ultragoal-successor-live/work-packages/PLUGIN-LIFECYCLE-PRODUCT-CORRECTION-024.json",
+    "issued_work_envelope_sha256": "sha256:02c94732f55382b848e11385c962e04983b8881805a0fdd3af45c3e3593717b5",
+    "source_freeze_anchor": "sha256:ab98a4fe3717afa547ee51d77e4ff322e7c0f742814e5dae71d88995b2280b8e"
+  },
+  "base_state": {
+    "status": "root-issued-correction",
+    "dependency_decision": "docs/ultragoal-successor-live/root-decisions/CANONICAL-PLUGIN-TRANSITIVE-PRODUCT-FITNESS-REWORK-020.json",
+    "dependency_decision_sha256": "sha256:00009f4db0183d6766a5bd52f7e12347c7c91a5ebf6c5baeb5d60383176cb2ac",
+    "prior_worker_result": "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-DEPENDENCY-CLOSURE-018.json",
+    "prior_worker_result_sha256": "sha256:9d72810e66e14784ea485cfb1f2cc6969d8252180b95d4685373dca8ab02ef61",
+    "root_envelope_no_claim_statement": "This root-issued envelope grants no root authority and raises no source, package, marketplace, install, cache, app-registry, Plugins UI, discovery, runtime, lifecycle, Product Fitness, readiness, release, or completion claim."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "proposal_status": "source-only-plugin-lifecycle-product-fitness-candidate",
+    "build_closure": {
+      "schema_version": "BuildClosure-v1",
+      "aggregate_sha256": "sha256:ab98a4fe3717afa547ee51d77e4ff322e7c0f742814e5dae71d88995b2280b8e",
+      "row_count": 71,
+      "final_session_revalidated": true,
+      "policy": "plugin_product_build_policy",
+      "root_extension_required": true
+    },
+    "lifecycle_coordinator": {
+      "schema_version": "HarnessPluginLifecyclePlan-v1",
+      "intent_count": 8,
+      "operations": ["plan", "apply", "verify", "recover"],
+      "authority": "source_candidate_only",
+      "root_wiring": "withheld"
+    },
+    "product_fitness_disposition": {
+      "schema_version": "HarnessProductFitnessDisposition-v1",
+      "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+      "producer_actor_id": "/root/plugin_lifecycle_product_engineer",
+      "reviewer_actor_id": "/root/independent-review-pending",
+      "owner_role": "product-journey-reviewer",
+      "reviewer_authority": "falsification_evidence_only",
+      "may_raise_claim_ceiling": false,
+      "dimensions": [
+        {
+          "dimension": "accessibility",
+          "disposition": "blocked",
+          "finding": "Source guidance is current, but no independent fresh-user same-surface accessibility journey has run.",
+          "evidence": {
+            "path": "docs/plugin-resource-map.md",
+            "sha256": "sha256:5f93c8e77e5c477bc154f249501455400d497f5ab6f892c4ee1e9de4acb837ab",
+            "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+            "same_surface": false,
+            "current_session": true
+          }
+        },
+        {
+          "dimension": "cognitive_load",
+          "disposition": "blocked",
+          "finding": "The source map separates lifecycle and truth layers, but same-surface comprehension remains independently unverified.",
+          "evidence": {
+            "path": "docs/plugin-resource-map.md",
+            "sha256": "sha256:5f93c8e77e5c477bc154f249501455400d497f5ab6f892c4ee1e9de4acb837ab",
+            "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+            "same_surface": false,
+            "current_session": true
+          }
+        },
+        {
+          "dimension": "recovery_burden",
+          "disposition": "blocked",
+          "finding": "Typed failed-update and stale-cache recovery pass source tests, but no live host recovery journey is available in this lease.",
+          "evidence": {
+            "path": "validator/tests/plugin_product_contract/lifecycle_contract.rs",
+            "sha256": "sha256:15d61c9245e46d24b47b0a36b4c79a5039eef3c0e8af6b639695c29235f2512e",
+            "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+            "same_surface": false,
+            "current_session": true
+          }
+        },
+        {
+          "dimension": "continuance",
+          "disposition": "blocked",
+          "finding": "Repeat-use and idempotent-reinstall source controls pass, but verified reuse in a current installed runtime is absent.",
+          "evidence": {
+            "path": "validator/tests/plugin_product_contract/lifecycle_contract.rs",
+            "sha256": "sha256:15d61c9245e46d24b47b0a36b4c79a5039eef3c0e8af6b639695c29235f2512e",
+            "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+            "same_surface": false,
+            "current_session": true
+          }
+        },
+        {
+          "dimension": "real_use_evidence",
+          "disposition": "blocked",
+          "finding": "The install and visibility guide names the real proof surfaces, while this source-only worker performed no host product journey.",
+          "evidence": {
+            "path": "docs/install-and-visibility.md",
+            "sha256": "sha256:424fef4d84a8735429b685bd99b8d1018201fa89813b81cdbdb6e0549db1b9ec",
+            "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+            "same_surface": false,
+            "current_session": true
+          }
+        }
+      ],
+      "truth_layer_ceilings": {
+        "source": "withheld",
+        "package": "withheld",
+        "marketplace": "withheld",
+        "install": "withheld",
+        "cache": "withheld",
+        "app_registry": "withheld",
+        "plugins_ui": "withheld",
+        "discovery": "withheld",
+        "runtime": "withheld",
+        "journey": "withheld"
+      },
+      "substitution_rejections": [
+        "documentation_only",
+        "fixture_pass",
+        "install_success",
+        "package_publication",
+        "receipt_only",
+        "reviewer_agreement",
+        "smoke_test"
+      ],
+      "overall": "blocked"
+    },
+    "root_envelope_no_claim_statement": "This root-issued envelope grants no root authority and raises no source, package, marketplace, install, cache, app-registry, Plugins UI, discovery, runtime, lifecycle, Product Fitness, readiness, release, or completion claim."
+  },
+  "touched_paths": [
+    "docs/install-and-visibility.md",
+    "docs/plugin-resource-map.md",
+    "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-PRODUCT-CORRECTION-024.json",
+    "fixtures/plugin-product/lifecycle-cases.json",
+    "fixtures/plugin-product/product-fitness-cases.json",
+    "skills/improve-and-maintain/SKILL.md",
+    "skills/product-journey-review/SKILL.md",
+    "validator/src/plugin_product/journey_matrix.rs",
+    "validator/src/plugin_product/lifecycle/execution.rs",
+    "validator/src/plugin_product/lifecycle/mod.rs",
+    "validator/src/plugin_product/lifecycle/model.rs",
+    "validator/src/plugin_product/lifecycle/plan/mod.rs",
+    "validator/src/plugin_product/lifecycle/plan/transitions.rs",
+    "validator/src/plugin_product/mod.rs",
+    "validator/src/plugin_product/product_fitness/evidence.rs",
+    "validator/src/plugin_product/product_fitness/ladder.rs",
+    "validator/src/plugin_product/product_fitness/mod.rs",
+    "validator/src/plugin_product/product_fitness/model.rs",
+    "validator/src/plugin_product/source_closure/filesystem.rs",
+    "validator/src/plugin_product/source_closure/format.rs",
+    "validator/src/plugin_product/source_closure/mod.rs",
+    "validator/src/plugin_product/source_closure/model.rs",
+    "validator/src/plugin_product/source_closure/policy.rs",
+    "validator/src/plugin_product/source_closure/registry.rs",
+    "validator/tests/plugin_product_contract/dependency_closure.rs",
+    "validator/tests/plugin_product_contract/host_truth_layers.rs",
+    "validator/tests/plugin_product_contract/lifecycle_contract.rs",
+    "validator/tests/plugin_product_contract/main.rs",
+    "validator/tests/plugin_product_contract/product_fitness_contract.rs",
+    "validator/tests/plugin_product_contract/zero_write.rs"
+  ],
+  "touched_semantics": [
+    "plugin_product::journey_matrix",
+    "plugin_product::lifecycle",
+    "plugin_product::product_fitness",
+    "plugin_product::source_closure"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/plugin-product/lifecycle-cases.json",
+    "fixtures/plugin-product/product-fitness-cases.json",
+    "skills/improve-and-maintain/SKILL.md",
+    "skills/product-journey-review/SKILL.md",
+    "validator/tests/plugin_product_contract/dependency_closure.rs",
+    "validator/tests/plugin_product_contract/host_truth_layers.rs",
+    "validator/tests/plugin_product_contract/lifecycle_contract.rs",
+    "validator/tests/plugin_product_contract/main.rs",
+    "validator/tests/plugin_product_contract/product_fitness_contract.rs",
+    "validator/tests/plugin_product_contract/zero_write.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "plugin-lifecycle-product-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "plugin-lifecycle-product-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-plugin-product-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "typed-eight-lifecycle-intents",
+    "plan-apply-verify-recover",
+    "prior-authority-preservation",
+    "five-dimension-product-fitness",
+    "ten-distinct-host-truth-layers",
+    "dependency-closed-source-capture",
+    "unknown-alias-special-race-rejection",
+    "recursive-zero-write-read-paths",
+    "worker-result-v1",
+    "independent-review-and-root-reconciliation"
+  ],
+  "dependency_nodes": [
+    "plugin-transitive-product-fitness-rework-020"
+  ],
+  "changes": [
+    {
+      "area": "lifecycle-coordinator",
+      "result": "Added typed plan, apply, verify, and recover semantics for all eight required plugin lifecycle intents with authorization, expected-prior, rollback, race, and zero-write boundaries."
+    },
+    {
+      "area": "product-fitness",
+      "result": "Added one candidate-bound disposition over accessibility, cognitive load, recovery burden, continuance, and real-use evidence while withholding every unsupported host truth layer."
+    },
+    {
+      "area": "build-closure",
+      "result": "Added a 71-row BuildClosure-v1 policy with exact source, runtime-authority, verifier, contract, Cargo, and distribution inputs plus same-session final revalidation."
+    },
+    {
+      "area": "operator-guidance",
+      "result": "Updated installation, resource-map, maintenance, and journey guidance to expose lifecycle controls and prevent source, package, install, discovery, runtime, or journey claim collapse."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "HUL_REPO_ROOT=<repo> CARGO_TARGET_DIR=/tmp/hul-plugin-lifecycle-024 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo nextest run --locked --offline --test plugin_product_contract --test-threads 16 --no-fail-fast",
+      "result": "57 passed; 0 failed",
+      "run_id": "2384be57-eaab-4ee0-b866-b70d5a90f9d1"
+    },
+    {
+      "command": "HUL_REPO_ROOT=<repo> HUL_PRINT_BUILD_CLOSURE=1 CARGO_TARGET_DIR=/tmp/hul-plugin-lifecycle-024 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo test --locked --offline --test plugin_product_contract dependency_closure::live_plugin_product_build_closure_is_exact_and_byte_identical_twice -- --exact --nocapture",
+      "result": "1 passed; BuildClosure-v1 captured twice byte-identically with 71 rows and aggregate sha256:ab98a4fe3717afa547ee51d77e4ff322e7c0f742814e5dae71d88995b2280b8e"
+    }
+  ],
+  "artifacts": [
+    {"path":"docs/install-and-visibility.md","sha256":"sha256:424fef4d84a8735429b685bd99b8d1018201fa89813b81cdbdb6e0549db1b9ec","byte_length":7226},
+    {"path":"docs/plugin-resource-map.md","sha256":"sha256:5f93c8e77e5c477bc154f249501455400d497f5ab6f892c4ee1e9de4acb837ab","byte_length":9250},
+    {"path":"skills/improve-and-maintain/SKILL.md","sha256":"sha256:423355b55e8dfc549302ed51cf9fe1369cbd7d5c4fbefc6b80785476e8f57c37","byte_length":4341},
+    {"path":"skills/product-journey-review/SKILL.md","sha256":"sha256:c0c92bffb987f83509db47d469459c2e34d48e83d8d1120bc6901a4066d2b1f0","byte_length":3903},
+    {"path":"fixtures/plugin-product/lifecycle-cases.json","sha256":"sha256:006cccfb3646c82fac268717609be3fa07ff9eaec7a80ba1effee886fecd186e","byte_length":1452},
+    {"path":"fixtures/plugin-product/product-fitness-cases.json","sha256":"sha256:64c567eebec5f93d35d188045d614194c9a25e5981433b4899f4858689b5b365","byte_length":514},
+    {"path":"validator/src/plugin_product/journey_matrix.rs","sha256":"sha256:ff08e93817411475b635baa30e81ae5e239a7b7dab573f7c7dce6f269e4362f0","byte_length":5784},
+    {"path":"validator/src/plugin_product/lifecycle/execution.rs","sha256":"sha256:9ae23c921dbab92440e9ad166d13ec0c2aeee43288c8c6a1aa871652e07e9fab","byte_length":2232},
+    {"path":"validator/src/plugin_product/lifecycle/mod.rs","sha256":"sha256:5572706ac87f077ed75e3833c510c79266db238d50f0c8676399deaff3575b4f","byte_length":370},
+    {"path":"validator/src/plugin_product/lifecycle/model.rs","sha256":"sha256:c8375cba61e027ac1fddb0da2f4c4476558ee3801ae6a32cb8dc8563c64979ea","byte_length":6175},
+    {"path":"validator/src/plugin_product/lifecycle/plan/mod.rs","sha256":"sha256:2638ecc8f882931a3b7a2f0b0df21b2948667e923da8a59ef27ef13c7444f27a","byte_length":3841},
+    {"path":"validator/src/plugin_product/lifecycle/plan/transitions.rs","sha256":"sha256:c5c4d8190525f4265b651c05a0eba8fba400227386e8e717dfc255aed24c854b","byte_length":7290},
+    {"path":"validator/src/plugin_product/mod.rs","sha256":"sha256:c33e7c77c9bec6f53c908113c81474bdc37ff0a084f8d94939b625cb614ef4d5","byte_length":411},
+    {"path":"validator/src/plugin_product/product_fitness/evidence.rs","sha256":"sha256:d2197fe38f740921577d526b8d1fe3e3fa1d8280e963f0fef271a3bd9f63036f","byte_length":3474},
+    {"path":"validator/src/plugin_product/product_fitness/ladder.rs","sha256":"sha256:aaf1a5d781979d70517412c5344cc55da08f05e4773d53d50953996433183aa2","byte_length":1062},
+    {"path":"validator/src/plugin_product/product_fitness/mod.rs","sha256":"sha256:8dc74b029c6811d0ee6b1d106f8bc05f3cfb031738c57f34303350caa8e92de7","byte_length":3746},
+    {"path":"validator/src/plugin_product/product_fitness/model.rs","sha256":"sha256:79d6829f505eb683d2c82814597860a0abd435bf399b777b75284eed715b12f7","byte_length":3058},
+    {"path":"validator/src/plugin_product/source_closure/filesystem.rs","sha256":"sha256:b95fe2766edfcb2766df477d66b07457ea7c9ea166fe396c0948445f164d5960","byte_length":4774},
+    {"path":"validator/src/plugin_product/source_closure/format.rs","sha256":"sha256:236b0bdf74f536b0952b58dd125c320ad4b2546c6451d4237309183c2d3656c4","byte_length":2280},
+    {"path":"validator/src/plugin_product/source_closure/mod.rs","sha256":"sha256:53ff58b0d00d78fd300283937f6ba157ba28e1b60f8b4f1a1158c0a004fbe039","byte_length":4400},
+    {"path":"validator/src/plugin_product/source_closure/model.rs","sha256":"sha256:e3630c64b4c1c2df79093866794b87f1ea320a8dfd1877824b17e4679718aebf","byte_length":1496},
+    {"path":"validator/src/plugin_product/source_closure/policy.rs","sha256":"sha256:67a43b681add11956467b46d99cb1d4764d8ce67712ce04d0f575dee0089759f","byte_length":3759},
+    {"path":"validator/src/plugin_product/source_closure/registry.rs","sha256":"sha256:8ba5cdb5d33ed9acdc4980574225dc4f83c3de19820a91daf9bdd126388a409b","byte_length":7648},
+    {"path":"validator/tests/plugin_product_contract/dependency_closure.rs","sha256":"sha256:4f60d84a428ba79bd19099d4317e00146b6451d9918b9bf30630ddabbd474ccd","byte_length":32652},
+    {"path":"validator/tests/plugin_product_contract/host_truth_layers.rs","sha256":"sha256:a6c351a297f265ef2d1b3e27d9659528be59a5c66de7e5dbe1c44839f96f728a","byte_length":1451},
+    {"path":"validator/tests/plugin_product_contract/lifecycle_contract.rs","sha256":"sha256:15d61c9245e46d24b47b0a36b4c79a5039eef3c0e8af6b639695c29235f2512e","byte_length":14302},
+    {"path":"validator/tests/plugin_product_contract/main.rs","sha256":"sha256:9abd67700e09d91597b553556ecd318b17ee1a331aba259b59b28f077c3e78e5","byte_length":708},
+    {"path":"validator/tests/plugin_product_contract/product_fitness_contract.rs","sha256":"sha256:fb8eaff7bffd12e0155b3c312412f3067a237361ea10951312d3cfdd6b7fecf2","byte_length":9990},
+    {"path":"validator/tests/plugin_product_contract/zero_write.rs","sha256":"sha256:48638815f2983c8e52a173b5ce67a81c98717c3a3d2e2f6e3354b0fb468b76ed","byte_length":10603}
+  ],
+  "findings": [
+    {
+      "class": "root-extension-pending",
+      "result": "The worker-scoped 71-row closure is exact and same-session revalidated; root must extend it with lib.rs, command_run.rs, successor_public, orchestration artifact verification, and final binary dep-info after integration."
+    },
+    {
+      "class": "host-product-proof-withheld",
+      "result": "No package, marketplace, host installation, cache, app-registry, Plugins UI, discovery, runtime, or real-use journey surface was mutated or observed by this source-only lease."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-plugin-lifecycle-review",
+    "root-module-and-adapter-wiring",
+    "root-build-closure-extension",
+    "live-host-product-proof"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/lib.rs",
+      "expected_sha256": "sha256:17974c7f87b8ecc9433ec2b73269617d37c7adfc5bffe07f8b6e338711466bdc",
+      "request": "After independent acceptance and live-preimage revalidation, add pub mod plugin_product; and recompute final binary dep-info plus the root-extended BuildClosure-v1 before any source claim."
+    },
+    {
+      "path": "validator/src/distribution/mod.rs",
+      "expected_sha256": "sha256:61d148dc4d8f4611d7ad616e53909ddb749dcca61eee4d47d64de1e7336d7429",
+      "request": "After independent acceptance, root-review and apply only the minimal lifecycle adapter wiring needed to connect typed plugin lifecycle plans to existing authorized distribution effects; reject semantic duplication and revalidate the live preimage."
+    }
+  ],
+  "limitations": [
+    "This candidate is source-only and remains withheld pending independent review and root acceptance.",
+    "The plugin_product module is intentionally not wired through validator/src/lib.rs by this worker.",
+    "Existing distribution effects are not yet connected to the lifecycle effect adapter; root wiring and integrated tests remain required.",
+    "The BuildClosure-v1 candidate covers 71 worker-verifiable inputs but requires root extension from fresh final binary dep-info and protected root-owned source inputs.",
+    "Product Fitness remains blocked on every dimension because no same-surface independent host journey was performed.",
+    "No package, marketplace, install, cache, app-registry, Plugins UI, discovery, runtime, readiness, release, node closure, or goal-completion claim is supported."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

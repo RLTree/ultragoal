@@ -64,6 +64,21 @@ An unavailable evaluation or migration capability blocks only that operation.
 Do not substitute a compatibility helper, scorecard, research summary, receipt,
 or renamed source for real behavior and retirement proof.
 
+## Maintain the plugin lifecycle
+
+Treat fresh install, monotonic update, failed-update recovery, authorized
+rollback, idempotent reinstall, uninstall and teardown, stale-cache recovery,
+and repeat use as distinct operations. Inspect and bind the exact installed and
+cache authority before planning. Any host write requires explicit authority;
+rollback additionally requires downgrade authority. A failed effect preserves
+or restores the prior authority before another operation can proceed.
+
+If the current host does not expose the reviewed lifecycle adapter, report that
+surface as unsupported. Do not hand-edit plugin, marketplace, cache, app
+registry, or Plugins UI state. Verify source, package, marketplace, install,
+cache, app registry, Plugins UI, discovery, runtime, and journey layers
+separately after an authorized operation.
+
 ## Output
 
 Report audited validity, paired behavioral observations, failures,

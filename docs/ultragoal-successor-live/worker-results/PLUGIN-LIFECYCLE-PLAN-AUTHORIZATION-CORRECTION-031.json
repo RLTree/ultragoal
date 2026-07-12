@@ -1,0 +1,184 @@
+{
+  "worker": "/root/plugin_plan_authorization_engineer",
+  "lease_id": "PLUGIN-LIFECYCLE-PLAN-AUTHORIZATION-CORRECTION-031",
+  "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+  "candidate_identity": {
+    "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+    "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "b729c497fa54f52854ee396b86be61ed115c96f1",
+    "head_tree": "50b8caa02e3a6c86cb08bd3b0a65ab82f27c4942",
+    "worker_owned_artifact_count": 6,
+    "worker_owned_artifact_total_bytes": 91505
+  },
+  "base_state": {
+    "status": "independent-plan-authorization-rework",
+    "work_envelope": "docs/ultragoal-successor-live/work-packages/PLUGIN-LIFECYCLE-PLAN-AUTHORIZATION-CORRECTION-031.json",
+    "work_envelope_sha256": "sha256:6c65470208eda2e47fc9dd9c2aed8127fc3a4921a1b7c7f75da91afa04ffe544",
+    "rework_decision": "docs/ultragoal-successor-live/root-decisions/PLUGIN-LIFECYCLE-PLAN-AUTHORIZATION-REWORK-030.json",
+    "rework_decision_sha256": "sha256:9007c8ec66fa98371b4cfcbf1ff1e1ab8b4f008340a216a7c163533eaec943a4",
+    "superseded_worker_result": "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-PRODUCT-CORRECTION-024.json",
+    "superseded_worker_result_sha256": "sha256:11d91f3ccad533e4eefcc63fa470b727e38dc3caa77589e58d9c1afb5eb49927"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "plan_authority_sealed": true,
+    "recovery_authority_sealed": true,
+    "write_classification": "derived_from_effects",
+    "canonical_transition_rederived_at_apply": true,
+    "canonical_restore_bound_at_recover": true,
+    "shared_plan_recovery_effect_gate": true,
+    "effects_before_refusal": 0,
+    "source_candidate": "independent_review_pending",
+    "package_runtime_and_journey_claims": "withheld"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-PLAN-AUTHORIZATION-CORRECTION-031.json",
+    "validator/src/plugin_product/lifecycle/execution.rs",
+    "validator/src/plugin_product/lifecycle/model.rs",
+    "validator/src/plugin_product/lifecycle/plan/mod.rs",
+    "validator/src/plugin_product/lifecycle/plan/transitions.rs",
+    "validator/tests/plugin_product_contract/dependency_closure.rs",
+    "validator/tests/plugin_product_contract/lifecycle_contract.rs"
+  ],
+  "touched_semantics": [
+    "PlanAuthorizationSeal",
+    "RecoveryAuthorizationSeal",
+    "apply",
+    "canonical-transition-rederivation",
+    "recover",
+    "validate_plan",
+    "validate_recovery_token"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "validator/tests/plugin_product_contract/dependency_closure.rs",
+    "validator/tests/plugin_product_contract/lifecycle_contract.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "plugin-lifecycle-authorization-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "plugin-lifecycle-authorization-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-plugin-lifecycle-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "sealed-plan-construction-authority",
+    "canonical-transition-rederivation",
+    "effect-derived-write-classification",
+    "plan-forgery-mutation-stale-substitution-and-replay-refusal",
+    "sealed-canonical-recovery-authority",
+    "recovery-forgery-substitution-stale-and-replay-refusal",
+    "shared-apply-recover-race-gate",
+    "recursive-zero-write-read-paths",
+    "worker-result-v1",
+    "independent-review-and-root-reconciliation"
+  ],
+  "dependency_nodes": [
+    "plugin-lifecycle-product-correction-024"
+  ],
+  "changes": [
+    {
+      "area": "plan-authority",
+      "result": "LifecyclePlan now carries a process-local private authorization seal and apply re-derives the exact canonical transition before atomically consuming its one-effect authority."
+    },
+    {
+      "area": "effect-classification",
+      "result": "writes_host_state is derived from the exact effect set and caller flag or effect expansion mutations refuse before the adapter."
+    },
+    {
+      "area": "recovery-authority",
+      "result": "RecoveryToken now carries a private canonical restore seal, binds the expected current state, shares the plan effect gate, and refuses transport, substitution, staleness, and replay before restore."
+    },
+    {
+      "area": "false-pass-controls",
+      "result": "Added positive, negative, mutation, serialization, stale-state, replay, security, and concurrent apply/recover race controls, then marked WorkerResult 024 stale and rebound this six-artifact correction."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rustfmt --edition 2024 validator/src/plugin_product/lifecycle/model.rs validator/src/plugin_product/lifecycle/execution.rs validator/src/plugin_product/lifecycle/plan/mod.rs validator/src/plugin_product/lifecycle/plan/transitions.rs validator/tests/plugin_product_contract/dependency_closure.rs validator/tests/plugin_product_contract/lifecycle_contract.rs",
+      "status": "pass"
+    },
+    {
+      "command": "HUL_REPO_ROOT=<repo> CARGO_TARGET_DIR=/tmp/hul-plugin-plan-auth-031 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test plugin_product_contract --build-jobs 16 --test-threads 16 -E 'test(lifecycle_contract)' --no-fail-fast",
+      "status": "pass-26-of-26",
+      "run_id": "8480a3a3-6183-4442-8fec-739d6c7736bb"
+    },
+    {
+      "command": "HUL_REPO_ROOT=<repo> CARGO_TARGET_DIR=/tmp/hul-plugin-plan-auth-031 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test plugin_product_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "status": "pass-69-of-69",
+      "run_id": "9ac35dfc-8836-451a-bfbe-e7ae700411c3"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/plugin_product/lifecycle/execution.rs",
+      "sha256": "sha256:a9afd26521e231d2c6e5699bc02422181a85516cc04874658ef8cafab386dfa1",
+      "byte_length": 3622
+    },
+    {
+      "path": "validator/src/plugin_product/lifecycle/model.rs",
+      "sha256": "sha256:2bc2f357ff29b861f76d8c73507c76da68951d7d86f978ca6cc6e42de660883d",
+      "byte_length": 13087
+    },
+    {
+      "path": "validator/src/plugin_product/lifecycle/plan/mod.rs",
+      "sha256": "sha256:0246379c656d2912d6b3cd398b578ca32eb6ac694304c75e3bb8751ce1fd2600",
+      "byte_length": 5709
+    },
+    {
+      "path": "validator/src/plugin_product/lifecycle/plan/transitions.rs",
+      "sha256": "sha256:7d441961b4729c15abfd84836fad5896511924894819c77e5aacd68cfc883951",
+      "byte_length": 7556
+    },
+    {
+      "path": "validator/tests/plugin_product_contract/dependency_closure.rs",
+      "sha256": "sha256:669bade435ea75159a926e6c5ea9b5d5fde42c505f241cb193c16fe9c5ce79f9",
+      "byte_length": 35345
+    },
+    {
+      "path": "validator/tests/plugin_product_contract/lifecycle_contract.rs",
+      "sha256": "sha256:3630c67d335cbe52658d1b497c5c79f7b6a08f2171787b7a7b4b82e603e9e97b",
+      "byte_length": 26186
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material-corrected",
+      "finding": "Public plan fields and documented digests no longer grant apply authority because only a sealed plan whose canonical authorized transition re-derives exactly can reach adapter effects."
+    },
+    {
+      "severity": "material-corrected",
+      "finding": "Public RecoveryToken transport no longer grants restore authority; exact deserialization is intentionally unsealed and the plan and token share one atomic effect gate."
+    },
+    {
+      "severity": "claim-ceiling",
+      "finding": "This is a source-only corrected candidate; independent review, root reconciliation, root module and adapter wiring, package closure, and live host product proof remain absent."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-plugin-lifecycle-authorization-review",
+    "root-recomputed-plugin-candidate-identity",
+    "root-module-and-distribution-adapter-wiring",
+    "live-host-plugin-lifecycle-proof"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "The correction is compiled and exercised through the plugin_product_contract test inclusion path; public root module wiring remains root-owned and withheld.",
+    "No distribution adapter, manifest, marketplace, install, cache, app-registry, Plugins UI, discovery, runtime, or live product journey was mutated or observed.",
+    "The six artifact records exclude this WorkerResult itself and require independent root revalidation against the exact envelope and live files.",
+    "No source acceptance, package, runtime, journey, readiness, release, node closure, or goal-completion claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

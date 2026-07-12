@@ -47,9 +47,19 @@ replace the reviewer with the implementer.
 5. Exercise the named journey's positive case and at least one causal failure or
    false-pass control. For fit, include fresh, partial, and conflicting
    authority; for routine work, include dirty and repeat-use state; for goal
-   execution, include interruption and recovery.
+   execution, include interruption and recovery. For plugin lifecycle, include
+   fresh install, monotonic update, failed-update recovery, authorized
+   rollback, idempotent reinstall, uninstall and teardown, stale-cache
+   recovery, and repeat use.
 6. Distinguish observed fact, inference, recommendation, and unsupported
    surface. Return findings to the root; do not fix or decide acceptance.
+
+For a Product Fitness disposition, bind exactly accessibility, cognitive load,
+recovery burden, continuance, and real-use evidence to the same candidate.
+Keep the reviewer falsification-only: it may lower a ceiling but cannot raise
+one. Reject documentation, fixture success, package publication, installation,
+smoke tests, receipts, or reviewer agreement as substitutes for the named
+real-use behavior.
 
 The reviewer remains read-only with zero hidden writes. When a journey requires
 mutation, observe a separately authorized executor and verify its declared

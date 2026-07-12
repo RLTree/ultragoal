@@ -1,0 +1,169 @@
+{
+  "worker": "/root/plugin_plan_authorization_engineer",
+  "lease_id": "PLUGIN-LIFECYCLE-READ-FAILURE-GUARD-CORRECTION-039",
+  "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+  "candidate_identity": {
+    "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+    "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "b729c497fa54f52854ee396b86be61ed115c96f1",
+    "head_tree": "50b8caa02e3a6c86cb08bd3b0a65ab82f27c4942",
+    "worker_owned_artifact_count": 4,
+    "worker_owned_artifact_total_bytes": 108234
+  },
+  "base_state": {
+    "status": "independent-read-failure-restore-rework",
+    "work_envelope": "docs/ultragoal-successor-live/work-packages/PLUGIN-LIFECYCLE-READ-FAILURE-GUARD-CORRECTION-039.json",
+    "work_envelope_sha256": "sha256:07ca18128ef998fb7645c4f2f3fa8bd8b9904a8a34146198442e6f3ccfb1be8e",
+    "rework_decision": "docs/ultragoal-successor-live/root-decisions/PLUGIN-LIFECYCLE-READ-FAILURE-RESTORE-REWORK-038.json",
+    "rework_decision_sha256": "sha256:adb9bf74937f5052867d74ef819bcd405726ff0e555621f21c5734d99e5b3c2f",
+    "dependency_worker_result": "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-CORRECTION-035.json",
+    "dependency_worker_result_sha256": "sha256:1aef189788463efebdd3ba08d3377ed27467401edb6b4c748896345aea23b128"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "read_effect_failure_guard": true,
+    "read_only_failure_authority_closed": true,
+    "stable_causal_diagnostic": "ReadEffectFailed-effect-and-causal-error",
+    "restore_calls_after_failure": 0,
+    "observe_calls_after_failure": 0,
+    "recovery_authority_after_failure": "closed-and-never-armed",
+    "recursive_zero_write": true,
+    "write_recovery_correction_035_preserved": true,
+    "source_candidate": "independent_review_pending",
+    "package_runtime_and_journey_claims": "withheld"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-READ-FAILURE-GUARD-CORRECTION-039.json",
+    "validator/src/plugin_product/lifecycle/execution.rs",
+    "validator/src/plugin_product/lifecycle/model.rs",
+    "validator/tests/plugin_product_contract/dependency_closure.rs",
+    "validator/tests/plugin_product_contract/lifecycle_contract.rs"
+  ],
+  "touched_semantics": [
+    "LifecycleError-read-effect-failure",
+    "apply-read-only-failure-path",
+    "read-only-plan-authority-closure"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "validator/tests/plugin_product_contract/dependency_closure.rs",
+    "validator/tests/plugin_product_contract/lifecycle_contract.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "plugin-lifecycle-read-failure-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "plugin-lifecycle-read-failure-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-plugin-lifecycle-read-failure-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "read-only-verification-failure-no-restore-or-observation",
+    "read-only-probe-failure-no-restore-or-observation",
+    "read-only-failure-closes-apply-authority",
+    "stable-causal-read-failure-diagnostic",
+    "repeat-use-and-reinstall-recursive-zero-write",
+    "replay-concurrency-serialization-mutation-controls",
+    "worker-result-v1",
+    "independent-review-and-root-reconciliation"
+  ],
+  "dependency_nodes": [
+    "plugin-lifecycle-recovery-activation-correction-035"
+  ],
+  "changes": [
+    {
+      "area": "read-only-failure-boundary",
+      "result": "Apply now closes the one-shot plan authority and returns ReadEffectFailed immediately when a non-writing plan's verification or runtime probe fails, before restore or mutable-state observation can run."
+    },
+    {
+      "area": "stable-causal-diagnostic",
+      "result": "Read-only failure reports the exact typed LifecycleEffect together with the adapter's causal error while preserving the prior state and withholding all recovery authority."
+    },
+    {
+      "area": "false-pass-controls",
+      "result": "RepeatUse and IdempotentReinstall now cover both failing read effects, exact adapter call counts, replay, concurrency, serialized write mutation, recursive tree preservation, and the full correction-035 write-recovery suite."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rustfmt --edition 2024 validator/src/plugin_product/lifecycle/model.rs validator/src/plugin_product/lifecycle/execution.rs validator/tests/plugin_product_contract/lifecycle_contract.rs validator/tests/plugin_product_contract/dependency_closure.rs",
+      "status": "pass"
+    },
+    {
+      "command": "HUL_REPO_ROOT=<repo> CARGO_TARGET_DIR=/tmp/hul-plugin-read-failure-039 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test plugin_product_contract --build-jobs 16 --test-threads 16 -E 'test(lifecycle_contract)' --no-fail-fast",
+      "status": "pass-34-of-34",
+      "run_id": "76b20375-a087-485a-bd18-066884d7fede"
+    },
+    {
+      "command": "HUL_REPO_ROOT=<repo> CARGO_TARGET_DIR=/tmp/hul-plugin-read-failure-039 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test plugin_product_contract --build-jobs 16 --test-threads 16 -E 'test(read_failure_guard_worker_result_is_lease_bound_and_verifies_every_artifact)' --no-fail-fast",
+      "status": "pass-1-of-1",
+      "run_id": "7bbf4af6-edda-4e91-87fb-cd6a85c6f2dd"
+    },
+    {
+      "command": "HUL_REPO_ROOT=<repo> CARGO_TARGET_DIR=/tmp/hul-plugin-read-failure-039 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test plugin_product_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "status": "pass-79-of-79",
+      "run_id": "86c0424a-19a9-43d1-9ec8-bd28af93b1fe"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/plugin_product/lifecycle/execution.rs",
+      "sha256": "sha256:66dc81a5be62c6ecfcc1a4b4cb6971ede4830e258737e860160a4c24245dc711",
+      "byte_length": 6780
+    },
+    {
+      "path": "validator/src/plugin_product/lifecycle/model.rs",
+      "sha256": "sha256:a6bb757b5e3fba593b4ac91b4c24df111d88fa63c5906f68d634459c723f7d78",
+      "byte_length": 17451
+    },
+    {
+      "path": "validator/tests/plugin_product_contract/dependency_closure.rs",
+      "sha256": "sha256:4f9b943be12627ef1e8f44bfd6861484646ef5ed1b314132f87abfa002b878d7",
+      "byte_length": 39066
+    },
+    {
+      "path": "validator/tests/plugin_product_contract/lifecycle_contract.rs",
+      "sha256": "sha256:0ccb47c7e0a175d72315e808e29945d36998e25d3ec299fcb260f5779d282446",
+      "byte_length": 44937
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material-corrected",
+      "finding": "A failed read-only verification or runtime probe no longer enters adapter.restore and therefore cannot turn allow_host_write=false into an implicit write path."
+    },
+    {
+      "severity": "material-corrected",
+      "finding": "The failed read-only plan and all clones close atomically; concurrent or replayed apply attempts refuse before adapter effects, and no recovery token can be issued."
+    },
+    {
+      "severity": "claim-ceiling",
+      "finding": "This remains a source-and-contract-test candidate pending independent review, root reconciliation, package closure, and live host product proof."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-plugin-lifecycle-read-failure-review",
+    "root-recomputed-plugin-candidate-identity",
+    "root-module-and-distribution-adapter-wiring",
+    "live-host-plugin-lifecycle-proof"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "The correction is compiled and exercised through the plugin_product_contract test inclusion path; public root module and distribution-adapter wiring remain root-owned and withheld.",
+    "The recursive zero-write control uses a test adapter whose restore and observe methods are deliberate write traps; a real distribution adapter remains absent.",
+    "No manifest, marketplace, installation, cache, app-registry, Plugins UI, discovery, runtime identity, or live product journey was mutated or observed.",
+    "The four artifact records exclude this WorkerResult itself and require independent root revalidation against the exact envelope and live files.",
+    "No source acceptance, package, runtime, journey, readiness, release, node closure, or goal-completion claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

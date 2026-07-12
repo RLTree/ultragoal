@@ -1,0 +1,174 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+    "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+    "head_commit": "b729c497fa54f52854ee396b86be61ed115c96f1",
+    "head_tree": "50b8caa02e3a6c86cb08bd3b0a65ab82f27c4942",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true
+  },
+  "work_package": {
+    "node_id": "plugin-lifecycle-recovery-activation-correction",
+    "dependencies": [
+      "plugin-lifecycle-plan-authorization-correction-031"
+    ],
+    "required_tools": [
+      "cargo-nextest",
+      "rustfmt",
+      "shasum"
+    ],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/root-decisions/PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-REWORK-034.json",
+      "docs/ultragoal-successor-live/work-packages/PLUGIN-LIFECYCLE-PLAN-AUTHORIZATION-CORRECTION-031.json",
+      "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-PLAN-AUTHORIZATION-CORRECTION-031.json",
+      "validator/src/orchestration/model.rs",
+      "validator/src/orchestration/worker.rs",
+      "validator/src/plugin_product/lifecycle/plan/mod.rs",
+      "validator/src/plugin_product/lifecycle/plan/transitions.rs",
+      "validator/src/plugin_product/mod.rs"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-CORRECTION-035.json",
+        "validator/src/plugin_product/lifecycle/execution.rs",
+        "validator/src/plugin_product/lifecycle/model.rs"
+      ],
+      "semantic_symbols": [
+        "LifecycleActionState",
+        "PlanAuthorizationSeal-apply-transition",
+        "RecoveryAuthorizationSeal-recovery-transition",
+        "apply",
+        "recover",
+        "recovery_token"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "validator/tests/plugin_product_contract/dependency_closure.rs",
+        "validator/tests/plugin_product_contract/lifecycle_contract.rs"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "plugin-lifecycle-recovery-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "plugin-lifecycle-recovery-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-plugin-lifecycle-recovery-validation"
+        }
+      ]
+    },
+    "prerequisites": [
+      "independent-recovery-activation-rework"
+    ],
+    "outputs": [
+      "atomic-lifecycle-action-state-machine",
+      "post-apply-recovery-authority",
+      "plugin-lifecycle-recovery-worker-result-v1"
+    ],
+    "acceptance": [
+      "planned-to-applying-to-recovery-available-to-recovering-or-closed-transitions-are-atomic",
+      "recovery-before-authorized-apply-refuses-before-effects",
+      "successful-apply-then-explicit-recovery-restores-prior-once",
+      "failed-effect-and-failed-automatic-restore-preserve-one-usable-recovery-action",
+      "successful-automatic-restore-closes-redundant-recovery",
+      "concurrent-apply-recover-and-replay-have-one-authoritative-effect-path",
+      "stale-mutated-deserialized-substituted-and-cloned-tokens-refuse-before-effects",
+      "full-plugin-product-contract-passes",
+      "worker-result-binds-every-corrected-artifact",
+      "independent-review-and-root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-CORRECTION-035",
+    "run_id": "ultragoal-successor-live-20260712",
+    "node_id": "plugin-lifecycle-recovery-activation-correction",
+    "principal": "worker",
+    "owner": "/root/plugin_plan_authorization_engineer",
+    "binding": {
+      "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+      "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/root-decisions/PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-REWORK-034.json",
+      "docs/ultragoal-successor-live/work-packages/PLUGIN-LIFECYCLE-PLAN-AUTHORIZATION-CORRECTION-031.json",
+      "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-PLAN-AUTHORIZATION-CORRECTION-031.json",
+      "validator/src/orchestration/model.rs",
+      "validator/src/orchestration/worker.rs",
+      "validator/src/plugin_product/lifecycle/plan/mod.rs",
+      "validator/src/plugin_product/lifecycle/plan/transitions.rs",
+      "validator/src/plugin_product/mod.rs"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-CORRECTION-035.json",
+        "validator/src/plugin_product/lifecycle/execution.rs",
+        "validator/src/plugin_product/lifecycle/model.rs"
+      ],
+      "semantic_symbols": [
+        "LifecycleActionState",
+        "PlanAuthorizationSeal-apply-transition",
+        "RecoveryAuthorizationSeal-recovery-transition",
+        "apply",
+        "recover",
+        "recovery_token"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "validator/tests/plugin_product_contract/dependency_closure.rs",
+        "validator/tests/plugin_product_contract/lifecycle_contract.rs"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "plugin-lifecycle-recovery-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "plugin-lifecycle-recovery-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-plugin-lifecycle-recovery-validation"
+        }
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "plugin-lifecycle-plan-authorization-correction-031": "sha256:10506d979ebb2369e053012d22c3d7fe7f1ef12f22ffae5714794e41126f26c9"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "rustfmt": "sha256:aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "independent-recovery-activation-rework": "sha256:5fce81869aee6939636e65a555aa69e43612011ac7fc1ea999617c7e5cb4cbba"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "prohibited_surfaces": [
+    "all plugin-product files not explicitly leased",
+    "validator/src/lib.rs, distribution adapters, public command catalog, parser, dispatcher, and command_run",
+    "Cargo.toml, Cargo.lock, schemas, manifests, marketplace, migration and claim registries, board, acceptance, generated authority",
+    "claims, orchestration, inventory, observability, repository-fit, Git, network, host state, and destructive cleanup"
+  ],
+  "root_validation_obligations": [
+    "independently-review-exact-corrected-set",
+    "recompute-complete-plugin-artifact-set-and-build-closure-after-correction",
+    "apply-root-module-or-distribution-wiring-only-after-acceptance"
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

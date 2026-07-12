@@ -1,0 +1,13 @@
+{
+  "schema_version": "HarnessPluginLifecycleCases-v1",
+  "cases": [
+    {"id":"fresh-install","intent":"fresh_install","expected_effects":["install_package","refresh_cache","probe_runtime"],"prior_authority_preserved_on_failure":true},
+    {"id":"monotonic-update","intent":"monotonic_update","expected_effects":["install_package","refresh_cache","probe_runtime"],"prior_authority_preserved_on_failure":true},
+    {"id":"failed-update-recovery","intent":"failed_update_recovery","expected_effects":["restore_prior_authority","probe_runtime"],"prior_authority_preserved_on_failure":true},
+    {"id":"authorized-rollback","intent":"authorized_rollback","expected_effects":["install_package","refresh_cache","probe_runtime"],"prior_authority_preserved_on_failure":true},
+    {"id":"idempotent-reinstall","intent":"idempotent_reinstall","expected_effects":["verify_installed_bytes","probe_runtime"],"prior_authority_preserved_on_failure":true},
+    {"id":"uninstall-teardown","intent":"uninstall_teardown","expected_effects":["remove_installed_package","remove_cache","verify_teardown"],"prior_authority_preserved_on_failure":true},
+    {"id":"stale-cache-recovery","intent":"stale_cache_recovery","expected_effects":["refresh_cache","probe_runtime"],"prior_authority_preserved_on_failure":true},
+    {"id":"repeat-use","intent":"repeat_use","expected_effects":["verify_installed_bytes","probe_runtime"],"prior_authority_preserved_on_failure":true}
+  ]
+}

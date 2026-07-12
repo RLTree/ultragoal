@@ -149,6 +149,29 @@ A lower surface never proves a higher one. Help, parse, inspect, query,
 diagnose, and next-action selection must also prove zero hidden writes at the
 same recursive tree and Git-status scope as the command.
 
+## Lifecycle and Product Fitness source modules
+
+`validator/src/plugin_product/` is the source candidate for lifecycle
+coordination, transitive build closure, and Product Fitness disposition. Root
+integration must wire it into the crate and public command catalog only after
+independent review.
+
+- `lifecycle` owns fresh install, monotonic update, failed-update recovery,
+  authorized rollback, idempotent reinstall, uninstall and teardown,
+  stale-cache recovery, and repeat-use state transitions.
+- `source_closure` binds repo-relative Cargo manifests, lock state, dep-info,
+  Rust sources, runtime authority, verifier inputs, and dynamic inputs into one
+  `BuildClosure-v1` aggregate. It rejects missing, unknown, duplicate, alias,
+  outside-root, symlink, hard-link, special-file, stale, and final-session-drift
+  inputs.
+- `product_fitness` binds accessibility, cognitive load, recovery burden,
+  continuance, and real-use evidence. The reviewer is falsification-only and
+  cannot raise a claim ceiling.
+
+The truth ladder is source, package, marketplace, install, cache, app registry,
+Plugins UI, discovery, runtime, and journey. Each layer retains its own ceiling;
+an unsupported or unobserved layer is explicitly withheld.
+
 The source-candidate freeze includes these docs, the eight canonical skills,
 the route and journey fixtures, their semantic tests, the plugin descriptor,
 the package manifest, and `validator/src/cli/successor/catalog.rs`. Root-only

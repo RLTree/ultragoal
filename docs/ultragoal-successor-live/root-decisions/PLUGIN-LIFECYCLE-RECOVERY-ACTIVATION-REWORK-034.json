@@ -1,0 +1,28 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-REWORK-034",
+  "node_id": "plugin-lifecycle-product-closure",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-PLAN-AUTHORIZATION-CORRECTION-031.json",
+    "sha256": "10506d979ebb2369e053012d22c3d7fe7f1ef12f22ffae5714794e41126f26c9",
+    "artifact_count": 6,
+    "matching_artifact_count": 6
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "post_apply_recovery_authority_destroyed",
+    "cause": "LifecyclePlan apply and RecoveryToken share one AtomicBool. apply consumes it before effects, so recovery after successful apply or after a failed automatic restore always returns ReplayedRecoveryToken before restore."
+  },
+  "false_pass_control": {
+    "nextest_run_id": "3258d100-215d-423b-8af2-ca055fb282bb",
+    "tests_passed": 69,
+    "tests_failed": 0,
+    "missing_behavior": "Tests recovered from a fabricated expected-after state without applying and covered recovery-then-apply, not apply-then-recover or failed-restore-then-recover."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_action": "Replace the shared boolean with an atomic lifecycle state machine that distinguishes planned, applying, recovery-available, recovering/consumed, and closed states. Arm recovery only from an authorized apply attempt, preserve it after failed automatic restore and successful apply where explicit recovery is promised, and reject pre-apply, concurrent, stale, substituted, and replayed recovery before effects.",
+  "claim_ceiling": "The source candidate remains under REWORK. Package, marketplace, install, cache, app-registry, Plugins UI, discovery, runtime, lifecycle journey, readiness, release, and completion claims remain withheld.",
+  "no_claim_statement": "This decision does not claim readiness, release, or completion."
+}

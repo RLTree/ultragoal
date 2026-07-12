@@ -1,0 +1,7 @@
+{
+  "schema_version": "HarnessProductFitnessCases-v1",
+  "required_dimensions": ["accessibility", "cognitive_load", "recovery_burden", "continuance", "real_use_evidence"],
+  "truth_layers": ["source", "package", "marketplace", "install", "cache", "app_registry", "plugins_ui", "discovery", "runtime", "journey"],
+  "unsupported_ceiling": "withheld",
+  "substitution_rejections": ["documentation_only", "fixture_pass", "install_success", "package_publication", "receipt_only", "reviewer_agreement", "smoke_test"]
+}

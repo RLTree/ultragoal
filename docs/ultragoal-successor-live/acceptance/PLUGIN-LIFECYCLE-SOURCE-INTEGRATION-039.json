@@ -1,0 +1,91 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N08-PLUGIN-PRODUCT",
+  "root_decision": "accepted_source_local_lifecycle_coordinator_and_production_module_wiring",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-READ-FAILURE-GUARD-CORRECTION-039.json",
+    "sha256": "d5e8d7b6f5c41ce8036dbd9718cf935d68b7811cd6aca371cf7510f896e05142",
+    "artifact_count": 4,
+    "matching_artifact_count": 4
+  },
+  "dependency_history": [
+    "PLUGIN-LIFECYCLE-PRODUCT-CORRECTION-024",
+    "PLUGIN-LIFECYCLE-PLAN-AUTHORIZATION-CORRECTION-031",
+    "PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-CORRECTION-035",
+    "PLUGIN-LIFECYCLE-READ-FAILURE-GUARD-CORRECTION-039"
+  ],
+  "independent_review": {
+    "reviewer": "/root/claim_model_boundary_falsifier",
+    "verdict": "pass",
+    "review_mode": "independent_read_only",
+    "dependency_review_artifact_count": 12,
+    "dependency_review_artifact_set_sha256": "cfc59b20a8153b14205ed8249b0af323decb9032782a3e53df4394236e51b27f",
+    "focused_nextest_run_id": "0c613457-fdf4-4366-aa17-4c4df6a73910",
+    "focused_result": "34 passed; 0 failed",
+    "full_nextest_run_id": "23b9b916-4e38-475d-bf3f-d9906383209f",
+    "full_result": "79 passed; 0 failed",
+    "blocking_findings": 0
+  },
+  "build_closure": {
+    "schema_version": "BuildClosure-v1",
+    "row_count": 71,
+    "aggregate_sha256": "sha256:45a605d1b55dc1e222c77b62b537aaf4af2abd41a7f247d3c66885f4e1b5489f",
+    "independent_capture_ids": [
+      "49557da2-9a95-4653-9000-f6ef91aad326",
+      "999db2f5-5d02-4208-9916-aaf6ba7b6ff1"
+    ],
+    "root_recapture_byte_identical": true,
+    "final_session_revalidated": true
+  },
+  "root_integration": {
+    "path": "validator/src/lib.rs",
+    "sha256": "4785a21515ab1cf0ad52606f60ed0e0235cb4ed05a0fa9d80dff0835495330ba",
+    "change": "pub mod plugin_product;",
+    "library_check": "passed with 16 build jobs under --locked --offline",
+    "integrated_nextest_run_id": "16e69a79-2db3-40ed-96d6-ec3824be9f9e",
+    "integrated_result": "79 passed; 0 failed"
+  },
+  "commit_revalidation": {
+    "parent_head": "b8b3e41f1c23df6d76bdb356a5221ebe098fb315",
+    "library_root_sha256": "4785a21515ab1cf0ad52606f60ed0e0235cb4ed05a0fa9d80dff0835495330ba",
+    "nextest_run_id": "6d35b3f3-1997-40ac-b1fc-60790700c251",
+    "result": "79 passed; 0 failed",
+    "test_jobs": 16,
+    "required_repository_root_binding": "HUL_REPO_ROOT",
+    "production_library_check": "passed"
+  },
+  "closed_findings": [
+    "caller-self-consistent lifecycle plans cannot bypass canonical authorization",
+    "apply and recovery have distinct one-shot authority states",
+    "failed automatic restore binds recovery to the adapter-observed completed effect prefix",
+    "newer generation candidate transport unmodeled and replay substitutions refuse before recovery effects",
+    "read-only verification and runtime-probe failures never call restore observe mutable state arm recovery or write"
+  ],
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-PRODUCT-001",
+      "state": "compiled source-local plugin lifecycle coordinator",
+      "blocker": "A real distribution adapter and representative plugin-led host journey are not yet implemented or observed."
+    },
+    {
+      "requirement_id": "REQ-SUPPLY-004",
+      "state": "source-local Product Fitness layers remain separate",
+      "blocker": "Package marketplace install cache app-registry Plugins UI discovery and runtime identity have no current same-surface proof."
+    }
+  ],
+  "root_acceptance_limit": "Compiled production module plus exact source-local lifecycle planning, one-shot apply/recovery authority, causal failure handling, deterministic source closure, Product Fitness types, and contract-test behavior.",
+  "explicitly_withheld": [
+    "distribution lifecycle adapter behavior",
+    "supported plugin manifest and package bytes",
+    "marketplace installation cache app-registry Plugins UI and discovery",
+    "runtime identity and live host lifecycle behavior",
+    "fresh update rollback reinstall uninstall stale-cache and repeat-use journeys",
+    "plugin product node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any change to an accepted artifact, dependency envelope or result, BuildClosure input, validator/src/lib.rs module wiring, lifecycle adapter contract, or named test harness immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim package, install, discovery, runtime, journey, readiness, release, node closure, or goal completion."
+}

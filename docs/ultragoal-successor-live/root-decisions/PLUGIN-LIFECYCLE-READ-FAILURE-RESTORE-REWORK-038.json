@@ -1,0 +1,31 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "PLUGIN-LIFECYCLE-READ-FAILURE-RESTORE-REWORK-038",
+  "node_id": "plugin-lifecycle-product-closure",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-RECOVERY-ACTIVATION-CORRECTION-035.json",
+    "sha256": "1aef189788463efebdd3ba08d3377ed27467401edb6b4c748896345aea23b128",
+    "artifact_count": 4,
+    "matching_artifact_count": 4,
+    "dependency_closed_artifact_count": 29,
+    "dependency_closed_artifact_set_sha256": "cf5eebd9e5e4dd13326b483bea9ebddbbeda82762d179c738c03438123bf71ed"
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "read_only_failure_invokes_unauthorized_restore",
+    "cause": "Lifecycle apply calls adapter.restore after every effect failure. RepeatUse and IdempotentReinstall plans contain only verification and runtime-probe effects, set writes_host_state false, and may be authorized with allow_host_write false; their failure path can nevertheless cross into the adapter restore write."
+  },
+  "false_pass_control": {
+    "focused_nextest_run_id": "b93d1e25-2dfb-4d1b-a865-cca838f007f9",
+    "focused_tests_passed": 30,
+    "full_nextest_run_id": "a035fff3-97fe-4056-b764-46b9c001d6c4",
+    "full_tests_passed": 74,
+    "missing_behavior": "Existing zero-write controls construct read-only plans but never apply a failing verification or probe through an adapter that records restore calls."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_action": "On a read-only plan effect failure, close the one-shot apply authority and return a stable causal read failure without calling restore, observing mutable recovery state, arming recovery, or changing host state. Add failing VerifyInstalledBytes and ProbeRuntime adapter-call controls for both read-only intents, plus replay, concurrency, serialization, and recursive zero-write checks.",
+  "claim_ceiling": "The plugin lifecycle source candidate remains under REWORK. Root module/distribution wiring and all package, marketplace, install, cache, app-registry, Plugins UI, discovery, runtime, journey, readiness, release, and completion claims remain withheld.",
+  "no_claim_statement": "This decision does not claim readiness, release, or completion."
+}
