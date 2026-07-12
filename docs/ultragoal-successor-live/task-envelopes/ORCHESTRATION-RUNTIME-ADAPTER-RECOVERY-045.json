@@ -1,0 +1,362 @@
+{
+  "authority_binding": {
+    "captured_at": "2026-07-12T12:28:46Z",
+    "ids": {
+      "claims": [],
+      "decisions": [],
+      "migration_routes": [],
+      "nodes": [
+        "N10-ORCHESTRATION"
+      ],
+      "requirements": [],
+      "surfaces": [],
+      "tools": []
+    },
+    "resolution": {
+      "ambiguous_count": 0,
+      "conflict_count": 0,
+      "duplicate_count": 0,
+      "final_session_revalidation": "required",
+      "resolved_set_sha256": "sha256:1469b4d24c45a93945e4a330360673c87b6e69861ad854606f4425c579758140",
+      "unknown_count": 0
+    },
+    "resolved_rows": [
+      {
+        "row_sha256": "sha256:aa6f0cb7e2679cdd1c9fa39754ab974b31e2dd24893e58a9a8c73c043895c117",
+        "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "stable_id": "N10-ORCHESTRATION"
+      }
+    ],
+    "session_id": "sha256:0fffc1960eeb1d6cacf2f9c11b0fdae16c62607a60cf3a5a6829d6d5e87de6b1",
+    "sources": [
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+      }
+    ]
+  },
+  "candidate_identity": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "candidate_id": "sha256:a95c468383e747f3068890ca256c178c15b9e3b2dc3aaf97edf65e53e406b3da",
+    "captured_at": "2026-07-12T12:28:46Z",
+    "context_id": "sha256:3514c35e49ba817e524b7d0ee6c8814bfd8934c0e243c4a7cd8424b3ba3ff8de",
+    "dirty": false,
+    "freeze": {
+      "artifact_count": 8,
+      "artifact_set_sha256": "sha256:1fd40e8b424f92368c070bda356983b3e50b207c38a21722cf191671bec8fc64",
+      "artifacts": [
+        {
+          "bytes": 20505,
+          "lines": 776,
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+          "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+        },
+        {
+          "bytes": 3816,
+          "lines": 65,
+          "path": "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-PUBLIC-STATE-JOURNEY-INTEGRATION-042.json",
+          "sha256": "sha256:9ff49ae5602196babaef0f9b9db5676c6b850338afee1c7ff939f42b891fe665"
+        },
+        {
+          "bytes": 5819,
+          "lines": 94,
+          "path": "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-RECOVERY-PRODUCT-INTEGRATION-037.json",
+          "sha256": "sha256:bd1f2dccd9156a6590194e07cbabc7931ed37f1c91416ad79778b7115776b364"
+        },
+        {
+          "bytes": 23425,
+          "lines": 747,
+          "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+          "sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604"
+        },
+        {
+          "bytes": 2176,
+          "lines": 53,
+          "path": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+          "sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5"
+        },
+        {
+          "bytes": 4395,
+          "lines": 60,
+          "path": "docs/ultragoal-successor-live/root-decisions/PUBLIC-CLI-EXCLUSIVE-DISPATCH-CANDIDATE-023.json",
+          "sha256": "sha256:1c64805c0c620935f59fcd9901a1005b9219fb3653bee3a3b0b7c790ee882bbf"
+        },
+        {
+          "bytes": 555,
+          "lines": 11,
+          "path": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+          "sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74"
+        },
+        {
+          "bytes": 8705,
+          "lines": 185,
+          "path": "docs/ultragoal-successor-live/work-packages/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json",
+          "sha256": "sha256:1edff6fde38824d22b06ccca63fa79fa2301f73dbcf84b02803ede4acac98739"
+        }
+      ],
+      "bytes": 69396,
+      "kind": "artifact_set",
+      "lines": 1991
+    },
+    "head_commit": "a77becd62cc7a699aa469558462bbaa0967b3003",
+    "head_tree": "ee152cd8b900a0e2712fb4986d585218a3697022",
+    "repository": {
+      "canonical_root_sha256": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170",
+      "root_uri": "repo://harness-ultragoal-plugin-proposal"
+    }
+  },
+  "effects": {
+    "candidate_source": "bounded_workspace_write",
+    "destructive_actions": "forbidden",
+    "external_systems": "forbidden",
+    "git_metadata": "read_only_no_mutation",
+    "network": "forbidden",
+    "scratch": "bounded_read_write",
+    "secrets": "forbidden",
+    "shared_root_authority": "forbidden"
+  },
+  "evidence": {
+    "implementation_conclusions_are_authority": false,
+    "primary_references": [
+      {
+        "candidate_bound": true,
+        "kind": "authority",
+        "path": "docs/ultragoal-successor-live/work-packages/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json",
+        "sha256": "sha256:1edff6fde38824d22b06ccca63fa79fa2301f73dbcf84b02803ede4acac98739"
+      },
+      {
+        "candidate_bound": true,
+        "kind": "authority",
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+      },
+      {
+        "candidate_bound": true,
+        "kind": "review",
+        "path": "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-PUBLIC-STATE-JOURNEY-INTEGRATION-042.json",
+        "sha256": "sha256:9ff49ae5602196babaef0f9b9db5676c6b850338afee1c7ff939f42b891fe665"
+      },
+      {
+        "candidate_bound": true,
+        "kind": "review",
+        "path": "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-RECOVERY-PRODUCT-INTEGRATION-037.json",
+        "sha256": "sha256:bd1f2dccd9156a6590194e07cbabc7931ed37f1c91416ad79778b7115776b364"
+      },
+      {
+        "candidate_bound": true,
+        "kind": "review",
+        "path": "docs/ultragoal-successor-live/root-decisions/PUBLIC-CLI-EXCLUSIVE-DISPATCH-CANDIDATE-023.json",
+        "sha256": "sha256:1c64805c0c620935f59fcd9901a1005b9219fb3653bee3a3b0b7c790ee882bbf"
+      }
+    ],
+    "unsupported_truth_surfaces": [
+      "runtime",
+      "journey",
+      "readiness",
+      "release",
+      "completion"
+    ]
+  },
+  "goal": "Correct the production-callable orchestration runtime adapter so action-only execution remains separate from reconciliation and every reconciliation permit binds the complete exact effect resolution across representative fresh-process recovery journeys.",
+  "no_claim_statement": "This agent does not claim readiness, release, node closure, or goal completion.",
+  "output_contract": {
+    "required_sections": [
+      "candidate-identity",
+      "touched-paths",
+      "commands-and-tests",
+      "artifacts",
+      "findings",
+      "requested-root-changes",
+      "limitations",
+      "no-claim-statement"
+    ],
+    "result_target": "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json",
+    "schema_id": "WorkerResult-v1",
+    "schema_ref": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+    "schema_sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5"
+  },
+  "role_binding": {
+    "may_exercise_root_authority": false,
+    "role_id": "implementation-worker",
+    "sandbox_mode": "workspace-write",
+    "source_kind": "runtime_agent_type_receipt",
+    "source_ref": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+    "source_sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74"
+  },
+  "schema_version": "AgentTaskEnvelope-v1",
+  "scope": {
+    "artifact_paths": [
+      {
+        "access": "read",
+        "path": "docs/ultragoal-successor-live/work-packages/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json"
+      },
+      {
+        "access": "read",
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT"
+      },
+      {
+        "access": "read",
+        "path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md"
+      },
+      {
+        "access": "read",
+        "path": "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-PUBLIC-STATE-JOURNEY-INTEGRATION-042.json"
+      },
+      {
+        "access": "read",
+        "path": "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-RECOVERY-PRODUCT-INTEGRATION-037.json"
+      },
+      {
+        "access": "read",
+        "path": "docs/ultragoal-successor-live/root-decisions/PUBLIC-CLI-EXCLUSIVE-DISPATCH-CANDIDATE-023.json"
+      },
+      {
+        "access": "read",
+        "path": "validator/src/cli/successor"
+      },
+      {
+        "access": "read",
+        "path": "validator/src/cli/successor_public"
+      },
+      {
+        "access": "read",
+        "path": "validator/src/orchestration"
+      },
+      {
+        "access": "read",
+        "path": "validator/src/state"
+      },
+      {
+        "access": "read",
+        "path": "validator/tests/orchestration_contract"
+      },
+      {
+        "access": "read",
+        "path": "validator/tests/orchestration_product_contract"
+      },
+      {
+        "access": "read",
+        "path": "validator/tests/orchestration_state_journey_contract"
+      },
+      {
+        "access": "write",
+        "path": "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json"
+      },
+      {
+        "access": "write",
+        "path": "validator/src/orchestration/product/runtime_adapter"
+      }
+    ],
+    "external_effects": [],
+    "fixtures": [
+      {
+        "access": "write",
+        "path": "fixtures/orchestration-runtime-adapter"
+      },
+      {
+        "access": "write",
+        "path": "validator/tests/orchestration_runtime_adapter_contract.rs"
+      },
+      {
+        "access": "write",
+        "path": "validator/tests/orchestration_runtime_adapter_contract"
+      },
+      {
+        "access": "write",
+        "path": "validator/tests/orchestration_runtime_adapter_public_api.rs"
+      }
+    ],
+    "forbidden_paths": [
+      ".git/config",
+      "Cargo.lock",
+      "validator/src/lib.rs",
+      "validator/src/orchestration/product/mod.rs",
+      "validator/src/cli",
+      "validator/src/argument_parser",
+      "validator/src/command_run.rs"
+    ],
+    "generated_outputs": [],
+    "path_resolution": {
+      "policy": "candidate-relative-no-follow-v1",
+      "post_freeze_revalidation": "required",
+      "resolved_scope_sha256": "sha256:f9ff413ed3a6ce90c8a86ab1262997e92b0f6fcbbf424be8636e44b5b4043632",
+      "session_id": "sha256:9766d84479c167d6bb899fa1c79079c428c16f805e3a106b7428561d01fc1d39",
+      "special_files": "reject",
+      "symlinks": "reject"
+    },
+    "scratch_uris": [
+      "scratch://orchestration-runtime-adapter-045/cargo-target",
+      "scratch://orchestration-runtime-adapter-045/fresh-process-repositories"
+    ],
+    "semantic_symbols": [
+      "orchestration-runtime-adapter",
+      "sealed-current-and-interrupted-inspection",
+      "externally-authorized-resume-reconcile-recover-routing",
+      "fresh-process-recovery-journey"
+    ]
+  },
+  "stop_rule": "Stop after the first root-authority exercise, permit issuance, lease escape, post-mutation ordinary error, stale revalidation, or state and journal binding defect; otherwise finish the adapter, journeys, and WorkerResult-v1.",
+  "success": [
+    "Sealed current and interrupted views route externally authorized Resume and Recover requests through the action-only interface and Reconcile through the decision-bound interface without minting permits or adopting state.",
+    "Fresh-process interruption, restart, ambiguity, reconciliation, and recovery preserve exact workspace, head, lease, result, action, request, complete effect resolution, and permit identity.",
+    "A schema-valid WorkerResult-v1 requests exact root module, state, dispatcher, and permit wiring without exercising it."
+  ],
+  "task_id": "orchestration-runtime-adapter-recovery-045",
+  "verification": {
+    "false_pass": {
+      "controls": [
+        {
+          "control_id": "CTRL-ORCHESTRATION-ADAPTER-FALSE-PASS",
+          "evidence_kind": "test",
+          "expected": "No proxy substitutes for root dispatch, real permit issuance, or installed fresh-binary behavior.",
+          "procedure": "Offer serialized views, fixture permits, unit receipts, in-process simulations, and generated rows as public or installed proof."
+        }
+      ],
+      "status": "required"
+    },
+    "negative": {
+      "controls": [
+        {
+          "control_id": "CTRL-ORCHESTRATION-ADAPTER-NEGATIVE",
+          "evidence_kind": "test",
+        "expected": "Every case refuses before mutation or permit consumption.",
+        "procedure": "Inject stale views, actions, requests, targets, leases, heads, ticks, operations, permits, results, live-worker sets, evidence digests, outcomes, and every receipt field."
+        }
+      ],
+      "status": "required"
+    },
+    "positive": {
+      "controls": [
+        {
+          "control_id": "CTRL-ORCHESTRATION-ADAPTER-POSITIVE",
+          "evidence_kind": "test",
+          "expected": "Exact externally authorized requests produce one deterministic result and reopen to the same authoritative state.",
+          "procedure": "Run fresh-process interruption, restart, ambiguity, reconciliation, and recovery fixtures through the production adapter."
+        }
+      ],
+      "status": "required"
+    },
+    "race_or_mutation": {
+      "controls": [
+        {
+          "control_id": "CTRL-ORCHESTRATION-ADAPTER-RACE-OR-MUTATION",
+          "evidence_kind": "test",
+        "expected": "Exactly one authoritative winner exists and replay or drift refuses.",
+        "procedure": "Race same-view differently-bound reconciliation decisions and concurrent recovery, then mutate journal, workspace, action, request, permit, candidate, and source bindings across process restart."
+        }
+      ],
+      "status": "required"
+    },
+    "security": {
+      "controls": [
+        {
+          "control_id": "CTRL-ORCHESTRATION-ADAPTER-SECURITY",
+          "evidence_kind": "test",
+        "expected": "Unsafe state never writes, mints authority, consumes a valid permit, or echoes attacker values.",
+        "procedure": "Exercise root swaps, path escape, links, hardlinks, FIFO and socket entries, oversized frames, forged permits, v1 downgrade, missing decision binding, action/reconcile cross-use, and non-echo diagnostics."
+        }
+      ],
+      "status": "required"
+    }
+  }
+}

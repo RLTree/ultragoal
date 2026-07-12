@@ -1,0 +1,93 @@
+{
+  "schema_version": "RootCorrectiveLease-v1",
+  "corrects_lease_id": "ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045",
+  "issued_from_live_context": {
+    "head_commit": "b1441c2d97ff549c65f72ae5e5ce152dfa4bc9df",
+    "head_tree": "337f9585d359eab40fb90ba8bec9383d161c6557",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty_only_outside_root_authority": true
+  },
+  "corrective_owner": "/root/orchestration_runtime_adapter_engineer",
+  "root_dependency": {
+    "implementation_commit": "f98d93bc10dd6873c690e21fedab181f9ed1f676",
+    "authority_path": "validator/src/orchestration/product/authority.rs",
+    "authority_sha256": "sha256:6c376a6378d39db8da0c3d9d4eba8dc17d7d9bd7d90758f1397da125644cea73",
+    "effect_resolution_path": "validator/src/orchestration/effect.rs",
+    "effect_resolution_sha256": "sha256:7626f82c92355f60284e24c74e5134d4480f2931552459d664dd12678c5ba670",
+    "reconcile_path": "validator/src/orchestration/product/reconcile.rs",
+    "reconcile_sha256": "sha256:a805685dd98e23a3af0d80489c258c6b0ef88a466881746ded8d1aad29022e0b"
+  },
+  "owned_scope": {
+    "paths": [
+      "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json",
+      "validator/src/orchestration/product/runtime_adapter"
+    ],
+    "fixtures": [
+      "fixtures/orchestration-runtime-adapter",
+      "validator/tests/orchestration_runtime_adapter_contract.rs",
+      "validator/tests/orchestration_runtime_adapter_contract",
+      "validator/tests/orchestration_runtime_adapter_public_api.rs"
+    ],
+    "semantic_symbols": [
+      "action-only-resume-and-recover-routing",
+      "decision-bound-reconciliation-routing",
+      "complete-effect-resolution-substitution-refusal",
+      "differently-bound-reconciliation-one-winner",
+      "fresh-process-recovery-journey"
+    ],
+    "generated_outputs": [],
+    "effects": [
+      "bounded_workspace_write",
+      "fixture_write",
+      "offline_process"
+    ]
+  },
+  "read_only_root_authority": [
+    "docs/ultragoal-successor-live/work-packages/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json",
+    "docs/ultragoal-successor-live/task-envelopes/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json",
+    "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-ROOT-PERMIT-V2-AUTHORITY-INTEGRATION.json",
+    "validator/src/orchestration/effect.rs",
+    "validator/src/orchestration/product/authority.rs",
+    "validator/src/orchestration/product/reconcile.rs",
+    "validator/src/orchestration/product/resume.rs",
+    "validator/src/orchestration/product/recover.rs"
+  ],
+  "required_corrections": [
+    "Use RootPermit-v2 action-only verification for Resume and Recover.",
+    "Use RootPermit-v2 exact EffectResolution verification for Reconcile.",
+    "Reject evidence outcome and every receipt-field substitution before writes.",
+    "Reject v1 missing-decision-binding and action-reconcile cross-use before writes.",
+    "Do not claim the root-issued task envelope as a worker-touched or worker-output artifact.",
+    "Retain the task-envelope digest only as read-only root authority in WorkerResult context."
+  ],
+  "verification": {
+    "jobs": 16,
+    "cargo_target_dir": "/tmp/hul-orchestration-runtime-045-rework",
+    "focused": "orchestration_runtime_adapter_contract and public API",
+    "dependencies": "orchestration product state journey and kernel contracts",
+    "false_pass": "tests receipts serialized views and generated rows do not substitute for public dispatch durable issuance or installed runtime behavior"
+  },
+  "prohibited_surfaces": [
+    ".git",
+    "Cargo.toml",
+    "Cargo.lock",
+    "validator/src/orchestration/effect.rs",
+    "validator/src/orchestration/product/authority.rs",
+    "validator/src/orchestration/product/reconcile.rs",
+    "validator/src/orchestration/product/resume.rs",
+    "validator/src/orchestration/product/recover.rs",
+    "validator/src/orchestration/product/mod.rs",
+    "validator/src/cli",
+    "validator/src/lib.rs",
+    "docs/ultragoal-successor-live/acceptance",
+    "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+    "docs/ultragoal-successor-live/generated-authority"
+  ],
+  "root_validation_obligations": [
+    "independently-review-the-exact-corrected-artifact-set",
+    "commit-root-task-authority-separately-from-worker-output",
+    "wire-only-an-independently-accepted-runtime-adapter",
+    "withhold-public-dispatch-durable-issuer-journey-and-completion-claims"
+  ],
+  "no_claim_statement": "This corrective lease does not claim public command behavior, durable root permit issuance, installed runtime behavior, node closure, readiness, release, or completion."
+}
