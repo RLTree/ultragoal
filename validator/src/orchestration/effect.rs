@@ -1,6 +1,10 @@
 use super::model::{validate_digest, validate_identifier};
 use super::{Binding, EffectGrant, OrchestrationError};
 use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
+
+const EFFECT_RESOLUTION_SCHEMA: &str = "OrchestrationEffectResolution-v1";
+const EFFECT_RESOLUTION_DOMAIN: &[u8] = b"harness-ultragoal/orchestration-effect-resolution/v1\0";
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -46,9 +50,37 @@ pub struct EffectResolution {
 }
 
 impl EffectResolution {
-    pub(crate) fn validate_for(&self, request: &EffectRequest) -> Result<(), OrchestrationError> {
+    pub(crate) fn validate_shape(&self) -> Result<(), OrchestrationError> {
         validate_identifier(&self.operation_id)?;
         validate_digest(&self.evidence_digest)?;
+        if let EffectOutcome::Applied { receipt } = &self.outcome {
+            receipt.validate()?;
+        }
+        Ok(())
+    }
+
+    pub(crate) fn commitment_id(&self) -> Result<String, OrchestrationError> {
+        #[derive(Serialize)]
+        struct Commitment<'a> {
+            schema_version: &'a str,
+            resolution: &'a EffectResolution,
+        }
+
+        self.validate_shape()?;
+        let bytes = serde_json::to_vec(&Commitment {
+            schema_version: EFFECT_RESOLUTION_SCHEMA,
+            resolution: self,
+        })
+        .map_err(|_| OrchestrationError::InvalidEvent)?;
+        let mut hasher = Sha256::new();
+        hasher.update(EFFECT_RESOLUTION_DOMAIN);
+        hasher.update((bytes.len() as u64).to_be_bytes());
+        hasher.update(bytes);
+        Ok(format!("sha256:{:x}", hasher.finalize()))
+    }
+
+    pub(crate) fn validate_for(&self, request: &EffectRequest) -> Result<(), OrchestrationError> {
+        self.validate_shape()?;
         if self.operation_id != request.operation_id {
             return Err(OrchestrationError::EffectDenied);
         }

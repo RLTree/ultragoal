@@ -158,7 +158,12 @@ fn reconcile_state(
         .operation_id
         .clone()
         .ok_or(ProductError::UnknownOperation)?;
-    let (authority, permit) = permit_for_action(&action, input.tick);
+    let resolution = EffectResolution {
+        operation_id,
+        evidence_digest: digest('e'),
+        outcome: EffectOutcome::NotApplied,
+    };
+    let (authority, permit) = permit_for_reconciliation(&action, input.tick, &resolution);
     let outcome = reconcile(
         &context(),
         workspace,
@@ -169,11 +174,7 @@ fn reconcile_state(
             tick: input.tick,
             live_workers: input.live_workers.clone(),
             lease_id,
-            resolution: EffectResolution {
-                operation_id,
-                evidence_digest: digest('e'),
-                outcome: EffectOutcome::NotApplied,
-            },
+            resolution,
             target: action.target.clone(),
         },
     )?;

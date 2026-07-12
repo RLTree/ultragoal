@@ -18,7 +18,9 @@ mod snapshot;
 
 pub use authority::{PermitTarget, RootAuthority, RootOperation, RootPermit};
 #[cfg(test)]
-pub use authority::{issue_permit_for_test, root_authority_for_test};
+pub use authority::{
+    issue_action_permit_for_test, issue_reconcile_permit_for_test, root_authority_for_test,
+};
 pub use context::{ProductContext, ProductWorkspace, journal_head_identity};
 pub use error::ProductError;
 pub use plan::{PlanRequest, ProductPlan, plan};

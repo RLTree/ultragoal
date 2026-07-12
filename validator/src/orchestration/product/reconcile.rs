@@ -1,8 +1,7 @@
 use super::context::{ReadOnlySink, journal_head_identity, open_engine};
 use super::snapshot::snapshot;
 use super::{
-    PermitTarget, ProductContext, ProductError, ProductWorkspace, RootAuthority, RootOperation,
-    RootPermit,
+    PermitTarget, ProductContext, ProductError, ProductWorkspace, RootAuthority, RootPermit,
 };
 use crate::orchestration::{EffectResolution, JournalHead};
 use serde::{Deserialize, Serialize};
@@ -35,21 +34,25 @@ pub fn reconcile(
     permit: &RootPermit,
     request: &ReconcileRequest,
 ) -> Result<ReconcileOutcome, ProductError> {
+    request
+        .resolution
+        .validate_shape()
+        .map_err(ProductError::from)?;
     if request.target.lease_id.as_deref() != Some(&request.lease_id)
         || request.target.operation_id.as_deref() != Some(&request.resolution.operation_id)
     {
         return Err(ProductError::AuthorityOperationMismatch);
     }
     let head_identity = journal_head_identity(&request.expected_head)?;
-    authority.verify(
+    authority.verify_reconcile(
         permit,
         &context.root,
-        RootOperation::Reconcile,
         &context.binding,
         workspace.identity(),
         &head_identity,
         request.tick,
         &request.target,
+        &request.resolution,
     )?;
     let mut engine = open_engine(context, workspace, &request.expected_head, ReadOnlySink)?;
     let before = snapshot(&engine, request.tick, &request.live_workers)?;

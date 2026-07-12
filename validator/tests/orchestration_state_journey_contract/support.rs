@@ -181,7 +181,7 @@ pub fn permit_for_action(
     tick: u64,
 ) -> (RootAuthority, RootPermit) {
     let authority = authority();
-    let permit = issue_permit_for_test(
+    let permit = issue_action_permit_for_test(
         &authority,
         action.operation,
         action.authority_binding.clone(),
@@ -191,6 +191,27 @@ pub fn permit_for_action(
         tick + 10,
         b"journey-unique-nonce-0123456789",
         action.target.clone(),
+    )
+    .unwrap();
+    (authority, permit)
+}
+
+pub fn permit_for_reconciliation(
+    action: &command::RootActionRequest,
+    tick: u64,
+    resolution: &EffectResolution,
+) -> (RootAuthority, RootPermit) {
+    let authority = authority();
+    let permit = issue_reconcile_permit_for_test(
+        &authority,
+        action.authority_binding.clone(),
+        &action.workspace_identity,
+        &action.journal_head_identity,
+        tick.saturating_sub(1),
+        tick + 10,
+        b"journey-reconcile-nonce-012345",
+        action.target.clone(),
+        resolution,
     )
     .unwrap();
     (authority, permit)

@@ -84,7 +84,7 @@ fn authority_token_mutation_and_secret_echo_fail_closed() {
     assert!(!surfaces.contains(std::str::from_utf8(SECRET_CANARY).unwrap()));
     let wrong_root =
         root_authority_for_test(Actor::parse("not-the-root").unwrap(), SECRET_CANARY).unwrap();
-    let wrong_root_permit = issue_permit_for_test(
+    let wrong_root_permit = issue_action_permit_for_test(
         &wrong_root,
         RootOperation::Resume,
         binding(),

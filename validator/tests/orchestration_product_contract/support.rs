@@ -184,7 +184,7 @@ pub fn permit(
     tick: u64,
     target: PermitTarget,
 ) -> RootPermit {
-    issue_permit_for_test(
+    issue_action_permit_for_test(
         authority,
         operation,
         binding(),
@@ -194,6 +194,28 @@ pub fn permit(
         tick + 10,
         b"unique-test-nonce-0123456789",
         target,
+    )
+    .unwrap()
+}
+
+pub fn reconcile_permit(
+    authority: &RootAuthority,
+    workspace: &ProductWorkspace,
+    head: &JournalHead,
+    tick: u64,
+    target: PermitTarget,
+    resolution: &EffectResolution,
+) -> RootPermit {
+    issue_reconcile_permit_for_test(
+        authority,
+        binding(),
+        workspace.identity(),
+        &journal_head_identity(head).unwrap(),
+        tick.saturating_sub(1),
+        tick + 10,
+        b"unique-reconcile-nonce-0123456",
+        target,
+        resolution,
     )
     .unwrap()
 }

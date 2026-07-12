@@ -42,7 +42,7 @@ pub fn recover(
         return Err(ProductError::AuthorityOperationMismatch);
     }
     let head_identity = journal_head_identity(&request.expected_prior_head)?;
-    authority.verify(
+    authority.verify_action(
         permit,
         &context.root,
         RootOperation::Recover,

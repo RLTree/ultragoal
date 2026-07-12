@@ -116,7 +116,7 @@ fn stale_result_expired_authority_and_expired_lease_fail_closed() {
         result_commitment_id: Some(commitment),
         ..PermitTarget::default()
     };
-    let expired = issue_permit_for_test(
+    let expired = issue_action_permit_for_test(
         &authority,
         RootOperation::Resume,
         binding(),

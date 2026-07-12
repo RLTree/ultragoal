@@ -1,11 +1,11 @@
 use super::ProductError;
-use crate::orchestration::{Actor, Binding};
+use crate::orchestration::{Actor, Binding, EffectResolution};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::fmt::{Debug, Formatter};
 
-const AUTHORITY_SCHEMA: &str = "OrchestrationRootPermit-v1";
-const AUTHORITY_DOMAIN: &[u8] = b"harness-ultragoal/orchestration-root-permit/v1\0";
+const AUTHORITY_SCHEMA: &str = "OrchestrationRootPermit-v2";
+const AUTHORITY_DOMAIN: &[u8] = b"harness-ultragoal/orchestration-root-permit/v2\0";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -24,6 +24,15 @@ pub struct PermitTarget {
     pub recovered_binding: Option<Binding>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+enum PermitDecisionBinding {
+    ActionOnly,
+    ReconcileEffect {
+        effect_resolution_commitment_id: String,
+    },
+}
+
 #[derive(Clone, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct RootPermit {
@@ -37,6 +46,7 @@ pub struct RootPermit {
     expires_tick: u64,
     nonce_digest: String,
     target: PermitTarget,
+    decision_binding: PermitDecisionBinding,
     authenticator: String,
 }
 
@@ -54,6 +64,7 @@ impl Debug for RootPermit {
             .field("expires_tick", &self.expires_tick)
             .field("nonce_digest", &self.nonce_digest)
             .field("target", &self.target)
+            .field("decision_binding", &"[bound]")
             .field("authenticator", &"[redacted]")
             .finish()
     }
@@ -85,7 +96,7 @@ impl RootAuthority {
     }
 
     #[allow(clippy::too_many_arguments)]
-    pub(crate) fn issue(
+    pub(crate) fn issue_action(
         &self,
         operation: RootOperation,
         binding: Binding,
@@ -96,12 +107,75 @@ impl RootAuthority {
         nonce: &[u8],
         target: PermitTarget,
     ) -> Result<RootPermit, ProductError> {
+        if operation == RootOperation::Reconcile {
+            return Err(ProductError::AuthorityOperationMismatch);
+        }
+        self.issue(
+            operation,
+            binding,
+            workspace_identity,
+            journal_head_identity,
+            issued_tick,
+            expires_tick,
+            nonce,
+            target,
+            PermitDecisionBinding::ActionOnly,
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn issue_reconcile(
+        &self,
+        binding: Binding,
+        workspace_identity: &str,
+        journal_head_identity: &str,
+        issued_tick: u64,
+        expires_tick: u64,
+        nonce: &[u8],
+        target: PermitTarget,
+        resolution: &EffectResolution,
+    ) -> Result<RootPermit, ProductError> {
+        resolution.validate_shape().map_err(ProductError::from)?;
+        if target.operation_id.as_deref() != Some(resolution.operation_id.as_str()) {
+            return Err(ProductError::AuthorityOperationMismatch);
+        }
+        let effect_resolution_commitment_id =
+            resolution.commitment_id().map_err(ProductError::from)?;
+        self.issue(
+            RootOperation::Reconcile,
+            binding,
+            workspace_identity,
+            journal_head_identity,
+            issued_tick,
+            expires_tick,
+            nonce,
+            target,
+            PermitDecisionBinding::ReconcileEffect {
+                effect_resolution_commitment_id,
+            },
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn issue(
+        &self,
+        operation: RootOperation,
+        binding: Binding,
+        workspace_identity: &str,
+        journal_head_identity: &str,
+        issued_tick: u64,
+        expires_tick: u64,
+        nonce: &[u8],
+        target: PermitTarget,
+        decision_binding: PermitDecisionBinding,
+    ) -> Result<RootPermit, ProductError> {
         if expires_tick < issued_tick || nonce.len() < 16 {
             return Err(ProductError::AuthorityInvalid);
         }
         validate_digest(workspace_identity)?;
         validate_digest(journal_head_identity)?;
         validate_target(&target)?;
+        validate_decision_binding(operation, &decision_binding)?;
         let nonce_digest = digest(nonce);
         let mut permit = RootPermit {
             schema_version: AUTHORITY_SCHEMA.to_owned(),
@@ -114,6 +188,7 @@ impl RootAuthority {
             expires_tick,
             nonce_digest,
             target,
+            decision_binding,
             authenticator: String::new(),
         };
         permit.authenticator = self.authenticate(&permit)?;
@@ -121,7 +196,7 @@ impl RootAuthority {
     }
 
     #[allow(clippy::too_many_arguments)]
-    pub(crate) fn verify(
+    pub(crate) fn verify_action(
         &self,
         permit: &RootPermit,
         expected_root: &Actor,
@@ -132,6 +207,68 @@ impl RootAuthority {
         tick: u64,
         target: &PermitTarget,
     ) -> Result<(), ProductError> {
+        if operation == RootOperation::Reconcile {
+            return Err(ProductError::AuthorityOperationMismatch);
+        }
+        self.verify(
+            permit,
+            expected_root,
+            operation,
+            binding,
+            workspace_identity,
+            journal_head_identity,
+            tick,
+            target,
+            &PermitDecisionBinding::ActionOnly,
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn verify_reconcile(
+        &self,
+        permit: &RootPermit,
+        expected_root: &Actor,
+        binding: &Binding,
+        workspace_identity: &str,
+        journal_head_identity: &str,
+        tick: u64,
+        target: &PermitTarget,
+        resolution: &EffectResolution,
+    ) -> Result<(), ProductError> {
+        resolution.validate_shape().map_err(ProductError::from)?;
+        if target.operation_id.as_deref() != Some(resolution.operation_id.as_str()) {
+            return Err(ProductError::AuthorityOperationMismatch);
+        }
+        let effect_resolution_commitment_id =
+            resolution.commitment_id().map_err(ProductError::from)?;
+        self.verify(
+            permit,
+            expected_root,
+            RootOperation::Reconcile,
+            binding,
+            workspace_identity,
+            journal_head_identity,
+            tick,
+            target,
+            &PermitDecisionBinding::ReconcileEffect {
+                effect_resolution_commitment_id,
+            },
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn verify(
+        &self,
+        permit: &RootPermit,
+        expected_root: &Actor,
+        operation: RootOperation,
+        binding: &Binding,
+        workspace_identity: &str,
+        journal_head_identity: &str,
+        tick: u64,
+        target: &PermitTarget,
+        decision_binding: &PermitDecisionBinding,
+    ) -> Result<(), ProductError> {
         if &self.root_actor != expected_root
             || permit.schema_version != AUTHORITY_SCHEMA
             || permit.root_actor != self.root_actor.as_str()
@@ -139,6 +276,7 @@ impl RootAuthority {
             || permit.workspace_identity != workspace_identity
             || permit.journal_head_identity != journal_head_identity
             || permit.target != *target
+            || permit.decision_binding != *decision_binding
             || permit.issued_tick > tick
         {
             return Err(ProductError::AuthorityInvalid);
@@ -150,6 +288,7 @@ impl RootAuthority {
             return Err(ProductError::AuthorityExpired);
         }
         validate_target(&permit.target)?;
+        validate_decision_binding(permit.operation, &permit.decision_binding)?;
         let expected = self.authenticate(permit)?;
         if !constant_time_equal(expected.as_bytes(), permit.authenticator.as_bytes()) {
             return Err(ProductError::AuthorityInvalid);
@@ -170,6 +309,7 @@ impl RootAuthority {
             expires_tick: u64,
             nonce_digest: &'a str,
             target: &'a PermitTarget,
+            decision_binding: &'a PermitDecisionBinding,
         }
         let bytes = serde_json::to_vec(&Unsigned {
             schema_version: &permit.schema_version,
@@ -182,6 +322,7 @@ impl RootAuthority {
             expires_tick: permit.expires_tick,
             nonce_digest: &permit.nonce_digest,
             target: &permit.target,
+            decision_binding: &permit.decision_binding,
         })
         .map_err(|_| ProductError::AuthorityInvalid)?;
         let mut hasher = Sha256::new();
@@ -190,6 +331,24 @@ impl RootAuthority {
         hasher.update((bytes.len() as u64).to_be_bytes());
         hasher.update(bytes);
         Ok(format!("sha256:{:x}", hasher.finalize()))
+    }
+}
+
+fn validate_decision_binding(
+    operation: RootOperation,
+    decision_binding: &PermitDecisionBinding,
+) -> Result<(), ProductError> {
+    match (operation, decision_binding) {
+        (
+            RootOperation::Reconcile,
+            PermitDecisionBinding::ReconcileEffect {
+                effect_resolution_commitment_id,
+            },
+        ) => validate_digest(effect_resolution_commitment_id),
+        (RootOperation::Resume | RootOperation::Recover, PermitDecisionBinding::ActionOnly) => {
+            Ok(())
+        }
+        _ => Err(ProductError::AuthorityOperationMismatch),
     }
 }
 
@@ -271,7 +430,7 @@ pub fn root_authority_for_test(
 
 #[cfg(test)]
 #[allow(clippy::too_many_arguments)]
-pub fn issue_permit_for_test(
+pub fn issue_action_permit_for_test(
     authority: &RootAuthority,
     operation: RootOperation,
     binding: Binding,
@@ -282,7 +441,7 @@ pub fn issue_permit_for_test(
     nonce: &[u8],
     target: PermitTarget,
 ) -> Result<RootPermit, ProductError> {
-    authority.issue(
+    authority.issue_action(
         operation,
         binding,
         workspace_identity,
@@ -291,5 +450,30 @@ pub fn issue_permit_for_test(
         expires_tick,
         nonce,
         target,
+    )
+}
+
+#[cfg(test)]
+#[allow(clippy::too_many_arguments)]
+pub fn issue_reconcile_permit_for_test(
+    authority: &RootAuthority,
+    binding: Binding,
+    workspace_identity: &str,
+    journal_head_identity: &str,
+    issued_tick: u64,
+    expires_tick: u64,
+    nonce: &[u8],
+    target: PermitTarget,
+    resolution: &EffectResolution,
+) -> Result<RootPermit, ProductError> {
+    authority.issue_reconcile(
+        binding,
+        workspace_identity,
+        journal_head_identity,
+        issued_tick,
+        expires_tick,
+        nonce,
+        target,
+        resolution,
     )
 }
