@@ -1,0 +1,63 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N10-ORCHESTRATION",
+  "root_decision": "accepted_source_local_decision_bound_root_permit_v2_authority",
+  "accepted_artifact_set": {
+    "implementation_commit": "f98d93bc10dd6873c690e21fedab181f9ed1f676",
+    "implementation_tree": "e06522e42e22c87a93711f78c9bd41cf7253c614",
+    "artifact_count": 12,
+    "reviewed_diff_sha256": "ff42287a1a5ce78f206b758d550a836ff332fea56c3b6848a0ea60df0c4fa62a"
+  },
+  "rework_history": [
+    "The runtime adapter's first candidate proved that RootPermit-v1 bound only the pre-decision action and target, so a caller could substitute the complete effect resolution while retaining the same permit.",
+    "RootPermit-v2 separates action-only Resume and Recover issuance from Reconcile issuance and binds Reconcile to a domain-separated commitment over the complete typed EffectResolution."
+  ],
+  "independent_review": {
+    "reviewer": "/root/root_permit_security_reviewer",
+    "verdict": "pass",
+    "review_mode": "independent_read_only_frozen_tracked_diff",
+    "focused_result": "44 passed; 0 failed",
+    "production_library_check": "passed under locked offline 16-job build",
+    "diff_check": "passed",
+    "blocking_review_findings": 0
+  },
+  "root_integration": {
+    "commit": "f98d93bc10dd6873c690e21fedab181f9ed1f676",
+    "integrated_tree": "e06522e42e22c87a93711f78c9bd41cf7253c614",
+    "root_focused_nextest_run_id": "fe8b0646-674f-44a4-8bdd-edb60c0ff97e",
+    "root_focused_result": "23 passed; 0 failed",
+    "root_dependency_nextest_run_id": "e39449e0-833c-41b5-8b74-d2e6c2f860f7",
+    "root_dependency_result": "42 passed; 0 failed; one non-reproduced leak diagnostic"
+  },
+  "closed_findings": [
+    "RootPermit-v1 schema and domain are rejected and missing decision bindings cannot deserialize.",
+    "Resume and Recover accept only action-bound permits while Reconcile accepts only an exact resolution-bound permit.",
+    "The resolution commitment covers operation identity, evidence digest, outcome, and every applied receipt field.",
+    "Resolution shape and exact permit decision binding are verified before the durable workspace can mutate.",
+    "Root actor, context and candidate binding, workspace identity, expected journal head, operation, target, expiry, nonce, and exact decision all participate in permit authentication.",
+    "Competing differently bound reconciliation decisions retain expected-head one-winner semantics and replay refusal.",
+    "Debug and serialized surfaces do not expose the root authority secret."
+  ],
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-ORCHESTRATION-001",
+      "state": "source-local RootPermit-v2 issuance and verification authority accepted",
+      "blocker": "The runtime adapter remains under corrective review, no public dispatcher or durable external issuer is wired, and representative process-restart journeys remain unproved."
+    }
+  ],
+  "root_acceptance_limit": "Production-compiled source-local RootPermit-v2 schema, exact action-versus-decision issuance interfaces, full EffectResolution commitment, and mutation-path verification behavior.",
+  "explicitly_withheld": [
+    "orchestration runtime adapter acceptance",
+    "public successor command dispatch",
+    "durable external root-authority issuer",
+    "representative fresh-process interruption restart ambiguity reconciliation and recovery journey",
+    "sudden power-loss durability",
+    "orchestration node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any change to the accepted permit, effect-resolution, reconcile, resume, recover, test-helper, or named contract-test artifacts immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim runtime adapter behavior, public command behavior, a durable external issuer, representative journeys, readiness, release, node closure, or goal completion."
+}
