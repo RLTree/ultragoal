@@ -1,0 +1,90 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:f48ea8959193f877e8af956605a93d636088861819dd531347b16ac543af5d7d",
+    "candidate_id": "sha256:67c5040abf6b1dcdb3048ba14bd71e68a9e14dd844fe44950dc7043e8786e394",
+    "head_commit": "e49dab86f4a91e0e36aaf6deabfd0c0319c8e0dd",
+    "head_tree": "9eb939952925d8fb8dbb63c60689df284d489fd1",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true
+  },
+  "work_package": {
+    "node_id": "inventory-live-reader-and-topology-reconciliation",
+    "dependencies": [
+      "accepted-custom-agent-authority-discovery-verifier",
+      "accepted-inventory-closure-disposition-accounting",
+      "accepted-evaluation-migration-decision-kernel-public-types"
+    ],
+    "required_tools": ["cargo-nextest", "rustfmt", "shasum"],
+    "safety_class": "isolated_workspace_write",
+    "owned_scope": {
+      "paths": [
+        "validator/src/inventory/agent_reader_guard_digests.rs",
+        "validator/tests/inventory_contract.rs",
+        "validator/tests/inventory_contract_cases/agent_routes.rs",
+        "validator/tests/inventory_contract_cases/agent_routes/reader_false_pass.rs",
+        "docs/ultragoal-successor-live/worker-results/INVENTORY-LIVE-READER-AND-TOPOLOGY-RECONCILIATION-054.json"
+      ],
+      "semantic_symbols": [
+        "exact-current-agent-reader-guard",
+        "agent-discovery-reader-digest-binding",
+        "evaluation-spec-current-topology-expectation",
+        "positive-reader-mutation-refusal",
+        "current-live-inventory-regression-closure"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "validator/src/plugin_product/agent_discovery/host.rs current reader",
+        "validator/src/plugin_product/agent_discovery/model.rs current reader",
+        "validator/src/plugin_product/agent_discovery/source.rs current reader",
+        "positive-reader omission mutation",
+        "EvaluationSpec canonical active expectation"
+      ],
+      "effects": [
+        {"class": "workspace_write", "target": "exact leased reader guard tests and WorkerResult"},
+        {"class": "process", "target": "offline inventory reader and topology tests"},
+        {"class": "temporary_build_write", "target": "/tmp/hul-inventory-reader-reconcile-054"}
+      ]
+    },
+    "acceptance": [
+      "the exact current host model and source agent-discovery readers are bound by compile-time bytes without broad directory or token allowlisting",
+      "each new reader is classified from actual behavior and legacy tokens are never relabeled negative-only when they select live authority",
+      "unknown omitted duplicate stale mutated substituted and newly introduced positive readers fail closed",
+      "the existing positive-reader mutation fixture still fails for the causal unbound-reader reason",
+      "EvaluationSpec is expected Active only because the current compiled public API witness and production module prove that exact type",
+      "no custom tool command route host discovery agent migration retirement package runtime or claim authority is inferred",
+      "focused reader and exact current-live inventory tests pass twice with 16 test threads",
+      "WorkerResult-v1 binds the exact standard artifact aggregate and no-claim ceiling"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "INVENTORY-LIVE-READER-AND-TOPOLOGY-RECONCILIATION-054",
+    "run_id": "ultragoal-successor-live-20260712-macro-008",
+    "node_id": "inventory-live-reader-and-topology-reconciliation",
+    "principal": "worker",
+    "owner": "/root/inventory_live_reader_topology_engineer",
+    "binding": {
+      "context_id": "sha256:f48ea8959193f877e8af956605a93d636088861819dd531347b16ac543af5d7d",
+      "candidate_id": "sha256:67c5040abf6b1dcdb3048ba14bd71e68a9e14dd844fe44950dc7043e8786e394"
+    },
+    "safety_class": "isolated_workspace_write",
+    "owned_scope": "exactly work_package.owned_scope",
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 3
+  },
+  "prohibited_surfaces": [
+    "agent-discovery implementation host readers source descriptors installed cache global package and runtime state",
+    "inventory builders discovery registries routing projection generated authority activation witnesses compatibility routes and closure arithmetic",
+    "public API witnesses CLI catalog parser dispatcher state claims migration board acceptance root decisions release and completion state",
+    "Cargo manifests lockfile Git network host state external effects and every path not expressly leased"
+  ],
+  "root_validation_obligations": [
+    "independently review exact reader behavior and digest bindings",
+    "rebuild current HCT-INVENTORY after integration",
+    "keep all fourteen active legacy agent authorities and agent product ceilings open",
+    "run two final byte-identical inventory summaries only after the last authority edit"
+  ],
+  "no_claim_statement": "This worker reconciles two stale inventory tests only. It does not adopt agent routes, migrate or retire authority, prove host discovery, close inventory, or claim readiness, release, or completion."
+}
