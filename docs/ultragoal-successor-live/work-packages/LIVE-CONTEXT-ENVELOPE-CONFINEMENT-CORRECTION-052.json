@@ -1,0 +1,102 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:7553c543acfb3cb6bfa1829adbd0e2540800ed9a5c3ca0e533f60b40b987b753",
+    "candidate_id": "sha256:2e4919ff08f87c60f39219d2dea2984c99da0569d5270bae091deccedc5e0419",
+    "head_commit": "0cb1ab3c296031d79844fbc2bf3a8f0353dcaca3",
+    "head_tree": "9f5c073ec5b8185e072b1c8046a37c1d9420476d",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": false
+  },
+  "work_package": {
+    "node_id": "live-context-envelope-confinement-correction",
+    "dependencies": [
+      "adopted-final-contract-remains-read-only",
+      "corrected-proposal-source-only-not-adopted",
+      "root-protected-git-and-host-authority-boundaries"
+    ],
+    "required_tools": [
+      "python-jsonschema",
+      "jq",
+      "shasum"
+    ],
+    "safety_class": "isolated_workspace_write",
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1",
+        "docs/ultragoal-successor-live/task-envelopes/LIVE-CONTEXT-ENVELOPE-CONFINEMENT-CORRECTION-052.json",
+        "docs/ultragoal-successor-live/worker-results/LIVE-CONTEXT-ENVELOPE-CONFINEMENT-CORRECTION-052.json"
+      ],
+      "semantic_symbols": [
+        "allowed-and-forbidden-path-disjointness",
+        "git-and-host-protected-write-refusal",
+        "effect-class-and-path-grant-consistency",
+        "runtime-agent-role-receipt-semantic-binding",
+        "immutable-proposal-artifact-recomputation",
+        "causal-task-envelope-red-fixture-closure"
+      ],
+      "generated_outputs": [
+        "corrected non-authoritative request manifest and root change request inside the proposal directory"
+      ],
+      "fixtures": [
+        "causal Git write overlap fixture",
+        "allowed-forbidden prefix overlap fixture",
+        "host-protected path write fixture",
+        "effect-class mismatch fixture",
+        "runtime role receipt substitution fixture",
+        "duplicate unknown stale and overbroad path fixtures"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "non-authoritative proposal directory and exact leased receipts only"
+        },
+        {
+          "class": "temporary_fixture_write",
+          "target": "/tmp/hul-live-context-envelope-052"
+        }
+      ]
+    },
+    "acceptance": [
+      "schema and semantic validation both reject any grant overlapping forbidden paths",
+      "implementation workers can never receive Git metadata or host-protected configuration writes",
+      "read-only git_metadata and forbidden shared_root_authority cannot coexist with a conflicting path or effect grant",
+      "path overlap detection covers exact ancestor descendant normalized and ambiguous forms",
+      "runtime_agent_type_receipt proves the expected role identity sandbox and source rather than arbitrary bound-file bytes",
+      "every old and new red fixture is causally rejected by the intended rule",
+      "valid read-only reviewer and scoped implementation envelopes still pass",
+      "all proposal artifact rows counts bytes lines and deterministic aggregate are recomputed after the final edit",
+      "adopted FINAL-CONTRACT board manifests claims routes and generated authority remain byte-identical",
+      "WorkerResult-v1 records proposal-only no-effect ceiling"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "LIVE-CONTEXT-ENVELOPE-CONFINEMENT-CORRECTION-052",
+    "run_id": "ultragoal-successor-live-20260712-macro-006",
+    "node_id": "live-context-envelope-confinement-correction",
+    "principal": "worker",
+    "owner": "/root/live_context_envelope_confinement_engineer",
+    "binding": {
+      "context_id": "sha256:7553c543acfb3cb6bfa1829adbd0e2540800ed9a5c3ca0e533f60b40b987b753",
+      "candidate_id": "sha256:2e4919ff08f87c60f39219d2dea2984c99da0569d5270bae091deccedc5e0419"
+    },
+    "safety_class": "isolated_workspace_write",
+    "owned_scope": "exactly work_package.owned_scope",
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 3
+  },
+  "prohibited_surfaces": [
+    "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT and every adopted manifest or trace",
+    "critical-path board acceptance root decisions migration registry authority routes claims public catalog package manifests generated authority and release state",
+    "validator source Cargo files Git metadata host configuration global state network external effects and destructive cleanup"
+  ],
+  "root_validation_obligations": [
+    "independently review the exact corrected immutable proposal set",
+    "decide adoption separately after review",
+    "if adopted rebuild LiveContext and every dependent baseline from the post-adoption candidate",
+    "do not raise any live claim from proposal tests"
+  ],
+  "no_claim_statement": "This worker corrects a non-authoritative contract-change proposal only; it does not adopt a contract, change live authority, prove product behavior, close a node, or claim readiness, release, or goal completion."
+}

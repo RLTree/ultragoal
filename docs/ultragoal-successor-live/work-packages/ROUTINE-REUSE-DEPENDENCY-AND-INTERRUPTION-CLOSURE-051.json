@@ -1,0 +1,117 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:7553c543acfb3cb6bfa1829adbd0e2540800ed9a5c3ca0e533f60b40b987b753",
+    "candidate_id": "sha256:2e4919ff08f87c60f39219d2dea2984c99da0569d5270bae091deccedc5e0419",
+    "head_commit": "0cb1ab3c296031d79844fbc2bf3a8f0353dcaca3",
+    "head_tree": "9f5c073ec5b8185e072b1c8046a37c1d9420476d",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": false
+  },
+  "work_package": {
+    "node_id": "routine-recovery-reuse-closure",
+    "dependencies": [
+      "accepted-routine-capture-impact-kernel",
+      "accepted-fixture-recovery-state-correction-019",
+      "accepted-fixture-result-commitment-correction-026"
+    ],
+    "required_tools": [
+      "cargo-nextest",
+      "rustfmt",
+      "shasum"
+    ],
+    "safety_class": "isolated_workspace_write",
+    "owned_scope": {
+      "paths": [
+        "validator/src/routine_work/reuse/model.rs",
+        "validator/src/routine_work/report.rs",
+        "validator/tests/routine_work_contract/report.rs",
+        "validator/tests/routine_work_contract/local_capture.rs",
+        "validator/tests/routine_work_contract/planning.rs",
+        "validator/tests/routine_work_contract/security.rs",
+        "validator/tests/routine_work_contract/support.rs",
+        "validator/tests/routine_work_contract/reuse/authority.rs",
+        "validator/tests/routine_work_contract/reuse/integrity.rs",
+        "validator/tests/routine_work_contract/reuse/matching.rs",
+        "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs",
+        "validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs",
+        "validator/tests/routine_recovery_reuse_journey_contract.rs",
+        "validator/tests/routine_recovery_reuse_journey_contract",
+        "fixtures/routine-recovery-reuse",
+        "docs/ultragoal-successor-live/task-envelopes/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051.json",
+        "docs/ultragoal-successor-live/worker-results/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051.json"
+      ],
+      "semantic_symbols": [
+        "complete-upstream-result-artifact-digest-binding",
+        "two-pass-routine-report-reconciliation",
+        "executed-and-reused-dependency-chain-consistency",
+        "bounded-process-readiness-handshake",
+        "deterministic-early-interruption-refusal",
+        "clean-dirty-conflict-fallback-and-repeat-reuse-journeys"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/routine-recovery-reuse",
+        "validator/tests/routine_recovery_reuse_journey_contract.rs",
+        "validator/tests/routine_recovery_reuse_journey_contract"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "leased routine and fixture contract artifacts"
+        },
+        {
+          "class": "process",
+          "target": "offline isolated routine and interruption validation"
+        },
+        {
+          "class": "temporary_fixture_write",
+          "target": "/tmp/hul-routine-reuse-051"
+        }
+      ]
+    },
+    "acceptance": [
+      "complete execution cannot combine mutually inconsistent opaque dependency witnesses",
+      "every downstream witness dependency map equals the exact selected upstream result artifact digests",
+      "executed and reused multilevel chains reject same-plan A-B substitution missing failed duplicate unknown reordered and mutated dependencies",
+      "cleanup failure remains RecoveryRequired and never Accepted or CausalFailure on Darwin",
+      "bounded readiness replaces fixed-delay process interruption",
+      "interrupt-before-readiness is separately deterministic and does not assume a child record exists",
+      "clean dirty conflict strict fallback first-run exact-repeat and mutation-forced-miss journeys pass",
+      "foreign bytes special files collision process absence output limit and rollback failure remain preserved and causal",
+      "read-only and refusal paths preserve recursive type bytes permissions and Git status",
+      "correction surface and full dependency-closed routine surface each pass twice without retries",
+      "WorkerResult-v1 binds every owned artifact and exact no-claim ceiling"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051",
+    "run_id": "ultragoal-successor-live-20260712-macro-005",
+    "node_id": "routine-recovery-reuse-closure",
+    "principal": "worker",
+    "owner": "/root/routine_reuse_dependency_engineer",
+    "binding": {
+      "context_id": "sha256:7553c543acfb3cb6bfa1829adbd0e2540800ed9a5c3ca0e533f60b40b987b753",
+      "candidate_id": "sha256:2e4919ff08f87c60f39219d2dea2984c99da0569d5270bae091deccedc5e0419"
+    },
+    "safety_class": "isolated_workspace_write",
+    "owned_scope": "exactly work_package.owned_scope",
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 3
+  },
+  "prohibited_surfaces": [
+    "public CLI grammar catalog dispatcher and command routing",
+    "Cargo manifests lockfile shared schemas generated authority acceptance board root decisions claims migration release and completion state",
+    "repository-fit observability distribution evaluation agent-discovery and host-effect authority",
+    "Git mutation network global host state external effects and destructive cleanup"
+  ],
+  "root_validation_obligations": [
+    "independently review the exact artifact set",
+    "recompute the current candidate after integration",
+    "wire any public routine adapter only in a separate root-owned integration",
+    "preserve the Darwin-only recovery-state ceiling until supported FreeBSD execution exists"
+  ],
+  "no_claim_statement": "This worker provides routine recovery and reuse implementation evidence only; it does not claim public command behavior, cross-platform recovery, live product journeys, node closure, readiness, release, or goal completion."
+}
