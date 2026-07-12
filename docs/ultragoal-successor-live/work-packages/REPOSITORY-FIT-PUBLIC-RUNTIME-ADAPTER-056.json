@@ -1,0 +1,99 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_state": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "9097f711e621b0ed1ba281f56d1f5dad512e4698",
+    "head_tree": "b6d5fd0cbce84b2ee0bf11bf920a83c942c9545c",
+    "dirty": true,
+    "identity_rule": "worker must recompute the complete live context and exact artifact freeze after concurrent root integration"
+  },
+  "work_package": {
+    "node_id": "repository-fit-public-runtime-adapter",
+    "dependencies": [
+      "accepted-repository-fit-bounded-linearization-kernel",
+      "accepted-successor-cli-typed-grammar",
+      "accepted-live-context-effect-boundary",
+      "current-public-fit-runtime-rework"
+    ],
+    "safety_class": "isolated_workspace_write",
+    "owned_scope": {
+      "paths": [
+        "validator/src/repository_fit/mod.rs",
+        "validator/src/repository_fit/product_adapter.rs",
+        "validator/src/repository_fit/product_adapter",
+        "validator/src/repository_fit/local/mod.rs",
+        "validator/src/repository_fit/local/effects.rs",
+        "validator/src/cli/successor_public/fit.rs",
+        "validator/tests/repository_fit_public_adapter_contract.rs",
+        "validator/tests/repository_fit_public_adapter_contract",
+        "fixtures/repository-fit-public-adapter",
+        "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-PUBLIC-RUNTIME-ADAPTER-056.json"
+      ],
+      "semantic_symbols": [
+        "canonical-template-desired-state-compiler",
+        "candidate-bound-fit-inspect-plan-verify-adapter",
+        "opaque-accepted-plan-apply-request",
+        "descriptor-anchored-local-fit-effects",
+        "fit-runtime-machine-projections",
+        "fit-public-wiring-change-request"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fresh repository",
+        "partial retrofit",
+        "conflicting authority",
+        "dirty repository",
+        "already fitted repeat use",
+        "failed apply rollback and recovery",
+        "symlink hardlink special-file and path-swap refusal",
+        "stale context target plan template and acceptance refusal",
+        "zero-hidden-write inspect plan and verify"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "exact leased adapter source tests fixtures and WorkerResult only"
+        },
+        {
+          "class": "process",
+          "target": "offline focused Rust tests only"
+        },
+        {
+          "class": "temporary_repository_write",
+          "target": "/tmp/hul-repository-fit-public-adapter-056"
+        }
+      ]
+    },
+    "acceptance": [
+      "compile-time canonical template bytes produce one bounded deterministic DesiredState bound to the current target LiveContext and candidate",
+      "template catalog rejects duplicate case aliases traversal special-file substitution unknown rows missing rows and manifest drift without reading host configuration",
+      "fit inspect classifies fresh partial compatible conflicting and already-fitted targets through the accepted anchored LocalRepository reader",
+      "fit plan returns a deterministic machine projection containing exact target context candidate root desired inspection plan conflict mutation rollback and authority identities and performs zero target writes",
+      "fit verify performs zero target writes and reports exact matched idempotent or causal failure state",
+      "fit apply preparation reads one bounded plan record and exact accept-plan digest recomputes the current plan and emits one opaque move-only apply request without effects",
+      "the local effect adapter is descriptor anchored no-follow bounded and compare-exchange atomic on the supported Darwin surface and fails closed on links aliases special files cross-device objects races stale roots partial effects and rollback ambiguity",
+      "no worker-owned path activates the public catalog parser dispatcher binary WorkspaceWrite grant or root permit",
+      "fresh partial conflict dirty failed rollback recovery repeat-use mutation security and false-pass tests pass twice with 16 build jobs and 16 test threads",
+      "inspect plan verify and every refusal path preserve recursive target type bytes permissions link count and Git status",
+      "WorkerResult-v1 freezes the exact leased artifact set with the repository-standard path-bound aggregate and exact no-claim ceiling"
+    ],
+    "claim_effect": "none"
+  },
+  "prohibited_surfaces": [
+    "validator/src/cli/successor catalog parser help runtime dispatcher and model",
+    "validator/src/cli/successor_public/mod.rs command_run binary entrypoints and root effect issuance",
+    "validator/src/lib.rs validator/src/api_witness.rs validator/src/command_witness.rs Cargo manifests and Cargo.lock",
+    "existing accepted repository-fit kernel files outside the leased mod.rs and local/mod.rs wiring",
+    "templates package manifest marketplace migration claims generated authority board acceptance root decisions release and completion state",
+    "writes to any live user repository or host configuration network external systems Git metadata or any path outside isolated /tmp fixtures"
+  ],
+  "root_validation_obligations": [
+    "independently falsify the exact adapter and supported local-effects candidate",
+    "apply only the reviewed crate-private module wiring requested by the worker",
+    "design and issue the separate root-owned fit apply permit before any public workspace effect",
+    "wire inspect plan verify and later apply through the sole public dispatcher without duplicate authority",
+    "run a fresh uncontaminated representative product journey review after public integration"
+  ],
+  "no_claim_statement": "This worker implements a candidate repository-fit runtime adapter and isolated local effect boundary only. It does not activate a public command, mutate a live user repository, prove installed product behavior, close the repository-fit node, or claim readiness, release, or completion."
+}
