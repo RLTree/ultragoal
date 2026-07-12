@@ -14,6 +14,7 @@ mod query;
 mod reconcile;
 mod recover;
 mod resume;
+pub mod runtime_adapter;
 mod snapshot;
 
 pub use authority::{PermitTarget, RootAuthority, RootOperation, RootPermit};
