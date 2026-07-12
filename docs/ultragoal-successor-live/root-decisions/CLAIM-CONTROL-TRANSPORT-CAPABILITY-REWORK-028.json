@@ -1,0 +1,45 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "CLAIM-CONTROL-TRANSPORT-CAPABILITY-REWORK-028",
+  "root_decision": "rework",
+  "review_mode": "focused_claim_transport_regression_triage_and_host_capability_falsification",
+  "reviewer": "/root/claim_control_fixture_triager",
+  "superseded_acceptance": {
+    "path": "docs/ultragoal-successor-live/reviews/CLAIM-CONTROL-FAIL-CLOSED-REVIEW-017.json",
+    "previous_scope": "exact private source/test fail-closed transport and current public refusal behavior",
+    "retained_scope": "current public production refusal behavior only",
+    "reopened_scope": "private test transport execution and cleanup"
+  },
+  "independent_verification": {
+    "managed_host_run": {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-claim-control-triage-025 CARGO_BUILD_JOBS=16 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test claims_contract --test-threads 16 --no-fail-fast",
+      "result": "20 passed; 22 failed; named controls rejected nested sandbox-exec status 71 before target execution"
+    },
+    "outside_outer_sandbox_run": {
+      "command": "same focused command with the outer Codex sandbox removed",
+      "result": "20 passed; 22 failed; controls reached expected exit 70, then the scheduler returned CleanupFailure with a RecoveryRequired lease and the transport rejected claims-control-causal-failure-not-observed"
+    },
+    "host_capability_intersection": "empty: the confinement backend is implemented only for macOS while identity-conditioned lease deletion succeeds only through FreeBSD funlinkat"
+  },
+  "material_findings": [
+    {
+      "severity": "material",
+      "class": "no_host_supports_confined_execution_and_identity_conditioned_cleanup",
+      "cause": "The private transport can execute causally under the macOS sandbox, but security-correct cleanup must retain RecoveryRequired because macOS has no identity-conditioned unlink primitive. FreeBSD has the cleanup primitive but no implemented confinement backend. A receipt cannot be issued honestly on either surface."
+    },
+    {
+      "severity": "material",
+      "class": "prior_private_transport_acceptance_stale",
+      "cause": "Review 017 preceded the accepted fixture cleanup correction. Its 42-of-42 private transport result no longer describes the integrated source, and the current transport leaves recovery-required scratch state while rejecting the disposition."
+    }
+  ],
+  "corrective_action": {
+    "immediate": "Return one stable transport-unavailable/recovery-required error before receipt issuance, add a no-receipt and no-hidden-cleanup control, and update private transport tests and proof language to the lowered ceiling.",
+    "restoration": "Implement and independently verify a confinement backend on a host with identity-conditioned cleanup, or adopt an equally strong cross-platform cleanup capability without weakening race, substitution, or unrelated-identity preservation controls."
+  },
+  "root_disposition": {
+    "accepted_artifact_sets": [],
+    "claim_ceiling": "Public HCT-CLAIMS refusal only. No named product negative-control execution, HCT-CLAIMS output, claim elevation, node closure, readiness, release, or completion claim."
+  },
+  "no_claim_statement": "This decision records a capability conflict and raises no claim, readiness, release, or completion ceiling."
+}
