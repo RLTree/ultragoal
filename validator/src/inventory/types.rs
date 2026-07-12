@@ -34,6 +34,61 @@ pub enum FindingSeverity {
     Info,
 }
 
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum InventoryClosureState {
+    Closed,
+    Blocked,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct InventoryClosureStatus {
+    schema_version: &'static str,
+    catalog_id: String,
+    context_id: String,
+    state: InventoryClosureState,
+    blocker_count: usize,
+    blockers_by_code: BTreeMap<String, usize>,
+}
+
+impl InventoryClosureStatus {
+    pub fn state(&self) -> InventoryClosureState {
+        self.state
+    }
+
+    pub fn is_closed(&self) -> bool {
+        self.state == InventoryClosureState::Closed
+    }
+
+    pub fn blocker_count(&self) -> usize {
+        self.blocker_count
+    }
+
+    pub fn blockers_by_code(&self) -> &BTreeMap<String, usize> {
+        &self.blockers_by_code
+    }
+
+    pub(crate) fn new(
+        catalog_id: String,
+        context_id: String,
+        blockers_by_code: BTreeMap<String, usize>,
+    ) -> Self {
+        let blocker_count = blockers_by_code.values().sum();
+        Self {
+            schema_version: "InventoryClosureStatus-v1",
+            catalog_id,
+            context_id,
+            state: if blocker_count == 0 {
+                InventoryClosureState::Closed
+            } else {
+                InventoryClosureState::Blocked
+            },
+            blocker_count,
+            blockers_by_code,
+        }
+    }
+}
+
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct InventoryFinding {
     pub code: String,
@@ -184,9 +239,34 @@ impl AuthorityCatalog {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct ProjectionComparison {
     pub matches: bool,
+    pub input_verified_in_session: bool,
+    pub authority_eligible: bool,
     pub expected_sha256: String,
     pub actual_sha256: String,
     pub findings: Vec<InventoryFinding>,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ActivationFailure {
+    UnknownRow,
+    MissingRow,
+    DuplicateRow,
+    ConflictingRow,
+    StaleInput,
+    UnsafeInput,
+}
+
+impl ActivationFailure {
+    pub const fn code(self) -> &'static str {
+        match self {
+            Self::UnknownRow => "unknown-row",
+            Self::MissingRow => "missing-row",
+            Self::DuplicateRow => "duplicate-row",
+            Self::ConflictingRow => "conflicting-row",
+            Self::StaleInput => "stale-input",
+            Self::UnsafeInput => "unsafe-input",
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -196,6 +276,7 @@ pub enum InventoryError {
     Json { path: PathBuf, message: String },
     PathEscape(PathBuf),
     InvalidRegistry(String),
+    Activation(ActivationFailure),
     Serialization(String),
 }
 
@@ -209,6 +290,9 @@ impl fmt::Display for InventoryError {
                 write!(formatter, "path escapes worktree: {}", path.display())
             }
             Self::InvalidRegistry(message) => write!(formatter, "invalid registry: {message}"),
+            Self::Activation(failure) => {
+                write!(formatter, "inventory activation failed: {}", failure.code())
+            }
             Self::Serialization(message) => write!(formatter, "serialization failed: {message}"),
         }
     }

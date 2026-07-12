@@ -103,10 +103,14 @@ pub(super) fn load(
             active_status: ActiveStatus::Candidate,
             generator: Some("HCT-INVENTORY:compiled-command-catalog-witness".to_owned()),
             input_provenance: vec![
+                "validator/src/command_witness.rs".to_owned(),
                 "validator/src/cli/successor/catalog.rs".to_owned(),
                 "validator/src/cli/successor/model.rs".to_owned(),
             ],
-            references: vec![format!("ROUTE-COUNT:{}", group.route_count)],
+            references: vec![
+                "ACTIVATION-CLASS:catalog-definition-only".to_owned(),
+                format!("ROUTE-COUNT:{}", group.route_count),
+            ],
         });
     }
     counts.insert(

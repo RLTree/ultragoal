@@ -223,6 +223,13 @@ fn retained_context_missing_and_tamper_are_causal_findings() {
         finding.relative_path.as_deref() == Some(missing_output)
             && finding.code == "retained_context_output_missing"
     }));
+    assert!(!catalog.closure_status().is_closed());
+    assert!(
+        catalog
+            .closure_status()
+            .blockers_by_code()
+            .contains_key("retained_context_output_missing")
+    );
 
     let tampered = TestRepo::new("generated-retained-tampered");
     let tampered_output = "generated/tampered-context.json";
@@ -247,6 +254,13 @@ fn retained_context_missing_and_tamper_are_causal_findings() {
     assert_eq!(entry.active_status, ActiveStatus::Active);
     assert_eq!(entry.generator, None);
     assert!(entry.references.is_empty());
+    assert!(!catalog.closure_status().is_closed());
+    assert!(
+        catalog
+            .closure_status()
+            .blockers_by_code()
+            .contains_key("retained_context_digest_mismatch")
+    );
 }
 
 #[cfg(unix)]

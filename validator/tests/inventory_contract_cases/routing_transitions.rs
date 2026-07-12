@@ -20,6 +20,14 @@ fn live_exact_sources_are_sole_current_and_pending_migration() {
         .collect::<Vec<_>>();
 
     assert_eq!(pending.len(), 33);
+    let closure = catalog.closure_status();
+    assert!(!closure.is_closed());
+    assert_eq!(
+        closure
+            .blockers_by_code()
+            .get("sole_current_authority_pending_migration"),
+        Some(&33)
+    );
     assert!(
         !catalog
             .findings()

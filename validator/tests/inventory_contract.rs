@@ -11,6 +11,8 @@ mod inventory {
 mod agent_manifest;
 #[path = "inventory_contract_cases/agent_routes.rs"]
 mod agent_routes;
+#[path = "inventory_contract_cases/command_activation.rs"]
+mod command_activation;
 #[path = "inventory_contract_cases/compatibility_routes.rs"]
 mod compatibility_routes;
 #[path = "inventory_contract_cases/context_scopes.rs"]
@@ -242,8 +244,21 @@ fn current_live_catalog_reports_contract_definitions_and_missing_topology() {
         .filter(|finding| finding.code == "compatibility_route_retained")
         .filter_map(|finding| finding.entry_id.as_deref())
         .collect::<std::collections::BTreeSet<_>>();
+    let pending_ids = catalog
+        .findings()
+        .iter()
+        .filter(|finding| finding.code == "sole_current_authority_pending_migration")
+        .filter_map(|finding| finding.entry_id.as_deref())
+        .collect::<std::collections::BTreeSet<_>>();
     assert!(legacy.iter().all(|entry| {
-        parallel_ids.contains(entry.stable_id.as_str())
-            ^ retained_ids.contains(entry.stable_id.as_str())
+        [
+            parallel_ids.contains(entry.stable_id.as_str()),
+            retained_ids.contains(entry.stable_id.as_str()),
+            pending_ids.contains(entry.stable_id.as_str()),
+        ]
+        .into_iter()
+        .filter(|classified| *classified)
+        .count()
+            == 1
     }));
 }

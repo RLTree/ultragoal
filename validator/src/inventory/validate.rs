@@ -1,6 +1,9 @@
 use super::compatibility::RETAINED_KIND;
 use super::routing::RoutingData;
-use super::types::{ActiveStatus, AuthorityState, InventoryEntry, InventoryFinding};
+use super::types::{
+    ActiveStatus, AuthorityCatalog, AuthorityState, FindingSeverity, InventoryClosureStatus,
+    InventoryEntry, InventoryFinding,
+};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
@@ -233,4 +236,22 @@ pub(crate) fn reconcile(
     findings.sort();
     findings.dedup();
     (entries, findings)
+}
+
+impl AuthorityCatalog {
+    pub fn closure_status(&self) -> InventoryClosureStatus {
+        let mut blockers = BTreeMap::new();
+        for finding in self
+            .findings()
+            .iter()
+            .filter(|finding| finding.severity != FindingSeverity::Info)
+        {
+            *blockers.entry(finding.code.clone()).or_insert(0) += 1;
+        }
+        InventoryClosureStatus::new(
+            self.catalog_id().to_owned(),
+            self.context_id().to_owned(),
+            blockers,
+        )
+    }
 }

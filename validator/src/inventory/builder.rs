@@ -55,7 +55,8 @@ impl<'context> InventoryBuilder<'context> {
                     "root did not bind the adopted handoff manifest digest".to_owned(),
                 )
             })?;
-        let registry = registry::load(&reads, root, expected_handoff_digest)?;
+        let mut registry = registry::load(&reads, root, expected_handoff_digest)?;
+        let activation_sources_current = registry::guard_activation(&reads, root, &mut registry)?;
         let routing = routing::load(&reads, root, &registry.contract_id)?;
         let context_scopes = context_scopes::load(&reads, root, &registry.contract_id)?;
         let discovered = discovery::discover(&reads, root, &registry)?;
@@ -120,7 +121,7 @@ impl<'context> InventoryBuilder<'context> {
                 "catalog identity exceeds {MAX_CATALOG_BYTES} bytes"
             )));
         }
-        Ok(AuthorityCatalog::new(
+        let catalog = AuthorityCatalog::new(
             format!("sha256:{}", sha256_hex(&bytes)),
             self.context.context_id().to_owned(),
             registry.contract_id,
@@ -128,6 +129,11 @@ impl<'context> InventoryBuilder<'context> {
             entries,
             findings,
             generated,
-        ))
+        );
+        registry::revalidate_sources(&reads, root, activation_sources_current)?;
+        reads
+            .revalidate()
+            .map_err(|error| InventoryError::Context(error.to_string()))?;
+        Ok(catalog)
     }
 }

@@ -1,0 +1,348 @@
+{
+  "schema_version": "AgentTaskEnvelope-v1",
+  "task_id": "inventory-activation-closure-guard-040",
+  "role_binding": {
+    "role_id": "implementation-worker",
+    "source_kind": "runtime_agent_type_receipt",
+    "source_ref": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+    "source_sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+    "sandbox_mode": "workspace-write",
+    "may_exercise_root_authority": false
+  },
+  "goal": "Implement the inventory activation and closure guard without activating definition-only or refusal-only product surfaces.",
+  "success": [
+    "Current handler and API activation inputs are deny-unknown, candidate-bound, and revalidated in one read session.",
+    "Inventory closure diagnostics remain honest under stale, duplicate, conflicting, mutation, special-file, and false-pass controls.",
+    "A schema-valid WorkerResult-v1 reports exact artifacts and root-only changes without claiming closure."
+  ],
+  "candidate_identity": {
+    "repository": {
+      "root_uri": "repo://harness-ultragoal-plugin-proposal",
+      "canonical_root_sha256": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170"
+    },
+    "context_id": "sha256:fb931fae8079e957d2a84fde60ff6f872ff1cab43d98fdf22018af5f3fcf0dcf",
+    "candidate_id": "sha256:1dbd2d0703e800105dcce14073d380ca14b77d4d15feb1e7533444680fa28d28",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "9f7cae29124f98b37b632afb48aa52d27dc250d2",
+    "head_tree": "47effd7288abb44454606eac64cede41a70b6a20",
+    "dirty": false,
+    "captured_at": "2026-07-12T10:08:48Z",
+    "freeze": {
+      "kind": "artifact_set",
+      "artifact_set_sha256": "sha256:7b4eb8d91b2f89046ae2c8d0d462ca2c02ed757e3e3f6c7b32de42e8713050ec",
+      "artifact_count": 6,
+      "bytes": 62661,
+      "lines": 1931,
+      "artifacts": [
+        {
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+          "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+          "bytes": 20505,
+          "lines": 776
+        },
+        {
+          "path": "docs/ultragoal-successor-live/acceptance/N02-INVENTORY-TOOL.json",
+          "sha256": "sha256:51912e7daeeb1c64b5e5cd8a6f3a043d0a87c06522646339d84d198b73764dff",
+          "bytes": 7054,
+          "lines": 161
+        },
+        {
+          "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+          "sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604",
+          "bytes": 23425,
+          "lines": 747
+        },
+        {
+          "path": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+          "sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+          "bytes": 2176,
+          "lines": 53
+        },
+        {
+          "path": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+          "sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+          "bytes": 555,
+          "lines": 11
+        },
+        {
+          "path": "docs/ultragoal-successor-live/work-packages/INVENTORY-ACTIVATION-CLOSURE-GUARD-040.json",
+          "sha256": "sha256:8399526bffe2ec0e8267952358d847277d6a847dddf382cf77778fa8a1b2d594",
+          "bytes": 8946,
+          "lines": 183
+        }
+      ]
+    }
+  },
+  "scope": {
+    "artifact_paths": [
+      {
+        "path": "docs/ultragoal-successor-live/work-packages/INVENTORY-ACTIVATION-CLOSURE-GUARD-040.json",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/api_witness.rs",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/command_witness.rs",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/cli/successor",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/context",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/inventory/builder.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/src/inventory/projection.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/src/inventory/registry/command_activation.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/src/inventory/registry/mod.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/src/inventory/registry/topology.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/src/inventory/types.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/src/inventory/validate.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/examples/hct_inventory.rs",
+        "access": "write"
+      },
+      {
+        "path": "docs/ultragoal-successor-live/worker-results/INVENTORY-ACTIVATION-CLOSURE-GUARD-040.json",
+        "access": "write"
+      }
+    ],
+    "semantic_symbols": [
+      "inventory-command-activation-witness",
+      "inventory-closure-blocker-reconciliation",
+      "inventory-final-session-revalidation",
+      "inventory-projection-input-verification"
+    ],
+    "generated_outputs": [],
+    "fixtures": [
+      {
+        "path": "fixtures/inventory-authority/closure-cases.json",
+        "access": "write"
+      },
+      {
+        "path": "validator/tests/inventory_contract.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/command_activation.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/generated_disposition.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/generated_regeneration.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/routing_transitions.rs",
+        "access": "write"
+      }
+    ],
+    "external_effects": [],
+    "scratch_uris": [
+      "scratch://inventory-activation-040/cargo-target",
+      "scratch://inventory-activation-040/temp-repositories"
+    ],
+    "forbidden_paths": [
+      ".codex-plugin/plugin.json",
+      ".git/config",
+      "Cargo.lock",
+      "migration/authority-routes.json",
+      "validator/src/inventory/generated",
+      "validator/src/lib.rs"
+    ],
+    "path_resolution": {
+      "policy": "candidate-relative-no-follow-v1",
+      "session_id": "sha256:9880013fc40e083095a2228bccfa3db9da8bbc2c6dc229e2d8ec2c7191f01cd4",
+      "resolved_scope_sha256": "sha256:051097e7579d066efc52973486a813b5bbf1d25210f30288fb3b22857a5f7d71",
+      "symlinks": "reject",
+      "special_files": "reject",
+      "post_freeze_revalidation": "required"
+    }
+  },
+  "authority_binding": {
+    "session_id": "sha256:2e2b2e4fe39d20eb9a618e4bd5da77e2107fe9912662add7857ebdf99a9c756f",
+    "captured_at": "2026-07-12T10:08:48Z",
+    "sources": [
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+      }
+    ],
+    "ids": {
+      "nodes": [
+        "N02-INVENTORY"
+      ],
+      "requirements": [],
+      "surfaces": [],
+      "tools": [],
+      "claims": [],
+      "migration_routes": [],
+      "decisions": []
+    },
+    "resolved_rows": [
+      {
+        "stable_id": "N02-INVENTORY",
+        "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "row_sha256": "sha256:c4c85bbbb962f6f3b9c0addc8af6c708b3767e4f5e7388c6e0075392edf8121b"
+      }
+    ],
+    "resolution": {
+      "resolved_set_sha256": "sha256:79f5a75ed76c5f5833ff9a2f41975fc91ae1fcc8f09bed6aa04701f785fe7b15",
+      "unknown_count": 0,
+      "duplicate_count": 0,
+      "ambiguous_count": 0,
+      "conflict_count": 0,
+      "final_session_revalidation": "required"
+    }
+  },
+  "evidence": {
+    "primary_references": [
+      {
+        "path": "docs/ultragoal-successor-live/work-packages/INVENTORY-ACTIVATION-CLOSURE-GUARD-040.json",
+        "sha256": "sha256:8399526bffe2ec0e8267952358d847277d6a847dddf382cf77778fa8a1b2d594",
+        "kind": "authority",
+        "candidate_bound": true
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+        "kind": "authority",
+        "candidate_bound": true
+      },
+      {
+        "path": "docs/ultragoal-successor-live/acceptance/N02-INVENTORY-TOOL.json",
+        "sha256": "sha256:51912e7daeeb1c64b5e5cd8a6f3a043d0a87c06522646339d84d198b73764dff",
+        "kind": "review",
+        "candidate_bound": true
+      }
+    ],
+    "unsupported_truth_surfaces": [
+      "package",
+      "install",
+      "cache",
+      "marketplace",
+      "app_registry",
+      "plugins_ui",
+      "discovery",
+      "runtime",
+      "journey",
+      "readiness",
+      "release",
+      "completion"
+    ],
+    "implementation_conclusions_are_authority": false
+  },
+  "effects": {
+    "candidate_source": "bounded_workspace_write",
+    "git_metadata": "read_only_no_mutation",
+    "shared_root_authority": "forbidden",
+    "scratch": "bounded_read_write",
+    "network": "forbidden",
+    "external_systems": "forbidden",
+    "destructive_actions": "forbidden",
+    "secrets": "forbidden"
+  },
+  "output_contract": {
+    "schema_id": "WorkerResult-v1",
+    "schema_ref": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+    "schema_sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+    "result_target": "docs/ultragoal-successor-live/worker-results/INVENTORY-ACTIVATION-CLOSURE-GUARD-040.json",
+    "required_sections": [
+      "candidate-identity",
+      "touched-paths",
+      "commands-and-tests",
+      "artifacts",
+      "findings",
+      "requested-root-changes",
+      "limitations",
+      "no-claim-statement"
+    ]
+  },
+  "verification": {
+    "positive": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-INVENTORY-ACTIVATION-POSITIVE",
+          "procedure": "Run focused inventory tests with current exact handler and API witnesses.",
+          "expected": "Only real active implementations can move from Candidate to Active.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "negative": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-INVENTORY-ACTIVATION-NEGATIVE",
+          "procedure": "Inject unknown, missing, duplicate, conflicting, stale, and refusal-only activation rows.",
+          "expected": "Every case fails closed with a stable causal class and no output authority.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "race_or_mutation": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-INVENTORY-ACTIVATION-RACE",
+          "procedure": "Mutate and restore activation and projection inputs across capture and final revalidation.",
+          "expected": "All drift invalidates the session; no stale summary is emitted.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "security": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-INVENTORY-ACTIVATION-SECURITY",
+          "procedure": "Exercise symlink, hardlink, FIFO, ancestor swap, bounded-read, and non-echo controls.",
+          "expected": "Unsafe paths and attacker values are rejected before authority use.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "false_pass": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-INVENTORY-ACTIVATION-FALSE-PASS",
+          "procedure": "Offer registry prose, green unit tests, definition-only types, and stale identical summaries as activation evidence.",
+          "expected": "None can activate a component or demote live legacy authority.",
+          "evidence_kind": "test"
+        }
+      ]
+    }
+  },
+  "stop_rule": "Stop after the first material lease escape, authority conflict, or unsafe special-file behavior; otherwise finish the exact macro package and WorkerResult-v1.",
+  "no_claim_statement": "This agent does not claim readiness, release, node closure, or goal completion."
+}

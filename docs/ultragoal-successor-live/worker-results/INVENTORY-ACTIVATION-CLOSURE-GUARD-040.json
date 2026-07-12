@@ -1,0 +1,314 @@
+{
+  "worker": "/root/inventory_activation_guard_engineer",
+  "lease_id": "inventory-public-export-closure-correction-040-r2",
+  "context_id": "sha256:fb931fae8079e957d2a84fde60ff6f872ff1cab43d98fdf22018af5f3fcf0dcf",
+  "candidate_identity": {
+    "candidate_id": "sha256:d75f64b10cca13aea038a01e8d3d4bb2aeccd7dab14ba2b0e38fe4ea02b859f4",
+    "task_envelope_candidate_id": "sha256:1dbd2d0703e800105dcce14073d380ca14b77d4d15feb1e7533444680fa28d28",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "9f7cae29124f98b37b632afb48aa52d27dc250d2",
+    "head_tree": "47effd7288abb44454606eac64cede41a70b6a20",
+    "worker_owned_artifact_set_sha256": "sha256:d75f64b10cca13aea038a01e8d3d4bb2aeccd7dab14ba2b0e38fe4ea02b859f4",
+    "worker_owned_artifact_count": 14,
+    "worker_owned_artifact_total_bytes": 113783,
+    "worker_owned_artifact_total_lines": 3307,
+    "worker_result_self_excluded": true
+  },
+  "base_state": {
+    "status": "second-material-rework-of-inventory-activation-candidate",
+    "initial_candidate_sha256": "sha256:3e15c3ea1df1b52a5561605c532ae0a87c60cb1d9f5d2abe0febec583782f377",
+    "initial_worker_result_sha256": "sha256:399875519b0e9a42ba237aefbcdf401d01a4fa914cf47ca3ca16363a5384766a",
+    "first_correction_candidate_sha256": "sha256:608143f2663af186424a85c77392973c5f1d5be943b967c45b3aed8b24621bd7",
+    "first_correction_worker_result_sha256": "sha256:1075f174589e1b2545068d1054d919799f923a840956fa56111aca9dc753833b",
+    "material_rework_r1": "validator/src/inventory/registry/semantic.rs created Active API rows but was absent from the embedded/current activation source set",
+    "material_rework_r2": "root public export authority and the external-crate visibility witness were absent, so internal API witnesses could remain green after public APIs became unavailable",
+    "agent_task_envelope": "docs/ultragoal-successor-live/task-envelopes/INVENTORY-ACTIVATION-CLOSURE-GUARD-040.json",
+    "agent_task_envelope_sha256": "sha256:dd9019d1aebfda85acd27198198f5b7fefd88466fecafcac26154079242a4aa6",
+    "work_envelope": "docs/ultragoal-successor-live/work-packages/INVENTORY-ACTIVATION-CLOSURE-GUARD-040.json",
+    "work_envelope_sha256": "sha256:8399526bffe2ec0e8267952358d847277d6a847dddf382cf77778fa8a1b2d594"
+  },
+  "final_state": {
+    "status": "corrected_candidate_for_independent_review",
+    "activation_source_closure": "22-direct-sources-with-explicit-responsibilities",
+    "activation_source_final_reread": true,
+    "api_activation": "compiled-current-exact-source-closure-only",
+    "command_activation": "definition-only-remains-candidate",
+    "projection_input_authority": "non-authoritative-until-canonical-reconciliation",
+    "closure_state": "blocked",
+    "closure_blocker_count": 90,
+    "artifact_set_frozen": true,
+    "claim_effect": "none"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/INVENTORY-ACTIVATION-CLOSURE-GUARD-040.json",
+    "fixtures/inventory-authority/closure-cases.json",
+    "validator/examples/hct_inventory.rs",
+    "validator/src/inventory/builder.rs",
+    "validator/src/inventory/projection.rs",
+    "validator/src/inventory/registry/command_activation.rs",
+    "validator/src/inventory/registry/mod.rs",
+    "validator/src/inventory/registry/topology.rs",
+    "validator/src/inventory/types.rs",
+    "validator/src/inventory/validate.rs",
+    "validator/tests/inventory_contract.rs",
+    "validator/tests/inventory_contract_cases/command_activation.rs",
+    "validator/tests/inventory_contract_cases/generated_disposition.rs",
+    "validator/tests/inventory_contract_cases/generated_regeneration.rs",
+    "validator/tests/inventory_contract_cases/routing_transitions.rs"
+  ],
+  "touched_semantics": [
+    "inventory-command-activation-witness",
+    "inventory-closure-blocker-reconciliation",
+    "inventory-final-session-revalidation",
+    "inventory-projection-input-verification"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/inventory-authority/closure-cases.json",
+    "validator/tests/inventory_contract.rs",
+    "validator/tests/inventory_contract_cases/command_activation.rs",
+    "validator/tests/inventory_contract_cases/generated_disposition.rs",
+    "validator/tests/inventory_contract_cases/generated_regeneration.rs",
+    "validator/tests/inventory_contract_cases/routing_transitions.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "leased-inventory-activation-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "leased-inventory-activation-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-isolated-inventory-validation",
+      "performed": true,
+      "network": false,
+      "external_systems": false
+    }
+  ],
+  "requirements": [
+    "CTRL-INVENTORY-ACTIVATION-POSITIVE",
+    "CTRL-INVENTORY-ACTIVATION-NEGATIVE",
+    "CTRL-INVENTORY-ACTIVATION-RACE",
+    "CTRL-INVENTORY-ACTIVATION-SECURITY",
+    "CTRL-INVENTORY-ACTIVATION-FALSE-PASS",
+    "complete-activation-source-closure",
+    "root-public-export-and-external-visibility-binding",
+    "final-session-source-reread",
+    "unknown-missing-duplicate-conflicting-stale-and-special-input-rejection",
+    "definition-only-command-groups-remain-candidate",
+    "read-and-summary-paths-are-recursively-zero-write",
+    "worker-result-v1",
+    "independent-review-and-root-reconciliation"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "accepted-live-context-effect-boundary",
+    "accepted-inventory-tool-boundary",
+    "accepted-exact-command-catalog-discovery"
+  ],
+  "changes": [
+    {
+      "area": "material-review-correction",
+      "result": "The first correction expanded seven partial inputs to twenty direct activation sources including semantic.rs; the second correction added root lib.rs export authority and the external-crate public API witness for an exact twenty-two-source closure."
+    },
+    {
+      "area": "exact-source-manifest",
+      "result": "Each embedded source now names its activation responsibility; unknown, omitted, duplicate, conflicting, changed, linked, and special inputs fail closed without echoing source bytes."
+    },
+    {
+      "area": "final-session-reread",
+      "result": "The guard returns its initial source-set state and InventoryBuilder rereads all twenty-two activation sources after catalog construction, then revalidates the same ReadSession before returning any catalog."
+    },
+    {
+      "area": "honest-activation-and-closure-ceiling",
+      "result": "Only exact compiled APIs become Active, command definitions remain Candidate without executing-handler proof, projections remain non-authoritative, and all existing closure findings remain visible."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rustfmt --edition 2024 --check <all leased Rust artifacts> && git diff --check -- <leased artifact set>",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-inventory-activation-040-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo test --manifest-path validator/Cargo.toml --locked --offline --lib inventory::registry::command_activation -- --test-threads=16",
+      "status": "pass-4-of-4"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-inventory-activation-040-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test inventory_contract -E 'test(command_activation)' --no-fail-fast",
+      "status": "pass-5-of-5",
+      "run_id": "59fc82c1-4491-4fbe-b16f-31aa195830d9"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-inventory-activation-040-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test public_api_witness --no-fail-fast",
+      "status": "pass-1-of-1",
+      "run_id": "1b39feca-e0d2-4556-831e-4cfec08aa7ce"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-inventory-activation-040-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test inventory_contract --no-fail-fast",
+      "status": "pass-95-of-95-with-two-leaky-signals",
+      "run_id": "2f96d545-e250-467d-9466-14d71e62bef3"
+    },
+    {
+      "command": "Rerun exact leaky test agent_manifest::exact_read_only_agent_manifests_satisfy_source_topology in isolation",
+      "status": "pass-1-of-1-no-leak",
+      "run_id": "1661fa48-54f6-444d-817d-054852c99ec3"
+    },
+    {
+      "command": "Rerun exact leaky test agent_routes::reader_false_pass::manifest_and_resource_legacy_paths_cannot_reuse_phase_a_receipt in isolation",
+      "status": "pass-1-of-1-no-leak",
+      "run_id": "adf92d6b-da99-436e-b20d-1bccf9f37d71"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-inventory-activation-040-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --lib -E 'test(inventory::race_tests) | test(context::read_session_tests) | test(context::zero_write_tests)' --no-fail-fast",
+      "status": "pass-14-of-14",
+      "run_id": "2d66600d-245a-4128-9e6a-47cf1fca02bf"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-inventory-activation-040-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline --lib --example hct_inventory --jobs 16",
+      "status": "pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/inventory-authority/closure-cases.json",
+      "sha256": "sha256:7fcd9d546beedd19971588a19c03ac450fc1c9ade45650b3dc35e3ee9cddca7f",
+      "byte_length": 1578,
+      "line_count": 60
+    },
+    {
+      "path": "validator/examples/hct_inventory.rs",
+      "sha256": "sha256:18d6172e188ece92d4bbe004d7a7fa1cb56e1f4cfe07c87408397088974a4c8d",
+      "byte_length": 2825,
+      "line_count": 79
+    },
+    {
+      "path": "validator/src/inventory/builder.rs",
+      "sha256": "sha256:f881d930ebee9c5f2e676cbcc1d5b8c3e6c6098493cbf052f175a8a5c7cfd408",
+      "byte_length": 5425,
+      "line_count": 139
+    },
+    {
+      "path": "validator/src/inventory/projection.rs",
+      "sha256": "sha256:280af528fa64978de62cd03c261d4c0dc8af19010763e1241f1b54a8ead52f06",
+      "byte_length": 5357,
+      "line_count": 152
+    },
+    {
+      "path": "validator/src/inventory/registry/command_activation.rs",
+      "sha256": "sha256:db1ab71ceeece14324e5927143fe0bef1e1431ac402ea8812deb1d0889c2771f",
+      "byte_length": 20479,
+      "line_count": 621
+    },
+    {
+      "path": "validator/src/inventory/registry/mod.rs",
+      "sha256": "sha256:02e979e18c9939a15180d4db45092115faccb6a1c910883fb91a463c368dca9f",
+      "byte_length": 9277,
+      "line_count": 295
+    },
+    {
+      "path": "validator/src/inventory/registry/topology.rs",
+      "sha256": "sha256:dfbc845b6f2d7e3ddee985995b2cac01e81fcb68b4d2930b221131e383f7a274",
+      "byte_length": 4886,
+      "line_count": 129
+    },
+    {
+      "path": "validator/src/inventory/types.rs",
+      "sha256": "sha256:6b61d7acf3c553ad7fdd28d053c024e0a038eb4ae65b01985db5bb0a3d01f95e",
+      "byte_length": 8418,
+      "line_count": 301
+    },
+    {
+      "path": "validator/src/inventory/validate.rs",
+      "sha256": "sha256:b0e678c75a70a941bc5f235abab2ae78d471b8818f952e951600081ea3369f5c",
+      "byte_length": 8709,
+      "line_count": 257
+    },
+    {
+      "path": "validator/tests/inventory_contract.rs",
+      "sha256": "sha256:36ff555d285399678e9dacc1a72faee47481acbecc61284f0b83faf0e13ecd23",
+      "byte_length": 8292,
+      "line_count": 264
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/command_activation.rs",
+      "sha256": "sha256:52dfcb09629d4c80629765ca6247a17985ccee4d00e8e373fe5e147d289314ce",
+      "byte_length": 13364,
+      "line_count": 392
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/generated_disposition.rs",
+      "sha256": "sha256:f2323089d02a3242ec15db1ce286818833fd17b6130e3bc959fea38d36a583b4",
+      "byte_length": 12449,
+      "line_count": 304
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/generated_regeneration.rs",
+      "sha256": "sha256:14aaf1ab1d033bf51919b3b4fb9d84f1d3d5a4c69f70a6ff9e11596c04179548",
+      "byte_length": 4726,
+      "line_count": 112
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/routing_transitions.rs",
+      "sha256": "sha256:691498c5e41d24ebc7484932509278901926ae833f5f656fc4e97a3c99d676f2",
+      "byte_length": 7998,
+      "line_count": 202
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material-corrected",
+      "finding": "Independent review found semantic.rs absent from the original embedded source set even though it constructed Active API rows; the corrected closure now binds semantic construction and every direct activation gate/finalizer/export dependency."
+    },
+    {
+      "severity": "material-corrected",
+      "finding": "The original guard relied on one final generic session revalidation; the corrected builder explicitly rereads all twenty-two activation and export sources after catalog construction and then revalidates their same-session observations."
+    },
+    {
+      "severity": "material-corrected",
+      "finding": "Second-round review found that internal crate witnesses stayed compile-valid if root public modules became private. The corrected source closure now binds root lib.rs and the separately compiled external public API witness without granting this worker export authority."
+    },
+    {
+      "severity": "diagnostic-reconciled",
+      "finding": "The 95-test concurrent run marked two unrelated inventory tests leaky while passing them; each exact test immediately passed alone without a leak signal."
+    },
+    {
+      "severity": "claim-ceiling",
+      "finding": "Source closure and tests do not resolve the current 90 inventory blockers or prove command handlers, migration, product journeys, readiness, release, or completion."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-review-of-sha256-d75f64b10cca13aea038a01e8d3d4bb2aeccd7dab14ba2b0e38fe4ea02b859f4",
+    "root-candidate-reconciliation-and-commit",
+    "root-owned-command-handler-activation-witnesses",
+    "root-owned-generated-authority-and-migration-reconciliation",
+    "final-integrated-summary-proof-after-last-authority-change"
+  ],
+  "requested_root_changes": [
+    {
+      "request": "Independently review the second corrected exact 14-artifact set bound by sha256:d75f64b10cca13aea038a01e8d3d4bb2aeccd7dab14ba2b0e38fe4ea02b859f4, specifically falsifying root export visibility, source-set completeness, and mutate/restore behavior.",
+      "authority": "root-review-and-reconciliation"
+    },
+    {
+      "request": "Supply executing-handler activation witnesses through root-owned command catalog and dispatcher authority before changing any command group from Candidate to Active.",
+      "authority": "root-command-catalog-and-dispatcher-authority"
+    },
+    {
+      "request": "After integration and the last authority-bearing edit, rebuild hct_inventory fresh and repeat two byte-identical recursive-zero-write summaries before changing the inventory claim ceiling.",
+      "authority": "root-generated-migration-and-claim-authority"
+    }
+  ],
+  "limitations": [
+    "The twenty-two-source closure is the direct activation and public-export path; generic context and descriptor-confined I/O remain bound by the accepted live-context dependency.",
+    "Root lib.rs and the external public API test are read-only binding evidence; this worker did not modify or adopt either root-owned surface.",
+    "Command definitions remain Candidate because this lease did not include dispatcher or executing-handler activation authority.",
+    "The current inventory remains blocked with 90 findings; none are hidden or relabeled by this correction.",
+    "This self-excluded WorkerResult cannot contain the post-write summary digest without invalidating that summary; the exact post-result pair is reported separately to root.",
+    "No inventory closure, migration, package, install, runtime, journey, readiness, release, or completion claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

@@ -1,3 +1,4 @@
+mod command_activation;
 mod data;
 mod integrity;
 mod semantic;
@@ -290,4 +291,5 @@ pub(crate) fn load(
         legacy_skills,
     })
 }
+pub(crate) use command_activation::{guard as guard_activation, revalidate_sources};
 pub(crate) use data::{CONTRACT_DIR, MAX_CONTRACT_JSON_BYTES, RegistryData, safe_identifier};

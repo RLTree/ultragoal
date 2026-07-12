@@ -33,7 +33,8 @@ fn run() -> Result<bool, String> {
     let catalog = InventoryBuilder::new(&context)
         .build()
         .map_err(|error| error.to_string())?;
-    let has_errors = catalog.has_error_findings();
+    let closure = catalog.closure_status();
+    let is_blocked = !closure.is_closed();
     let canonical = catalog
         .to_canonical_json()
         .map_err(|error| error.to_string())?;
@@ -52,6 +53,7 @@ fn run() -> Result<bool, String> {
             "source_registry_counts": catalog.source_registry_counts(),
             "finding_count": catalog.findings().len(),
             "findings_by_code": findings,
+            "closure": closure,
         }))
         .map_err(|error| error.to_string())?
     } else {
@@ -62,7 +64,7 @@ fn run() -> Result<bool, String> {
         .write_all(&bytes)
         .and_then(|_| stdout.write_all(b"\n"))
         .map_err(|error| format!("cannot write catalog to stdout: {error}"))?;
-    Ok(has_errors)
+    Ok(is_blocked)
 }
 
 fn main() {

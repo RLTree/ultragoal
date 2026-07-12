@@ -97,4 +97,16 @@ fn deterministic_generated_index_regenerates_and_tamper_drifts() {
         finding.relative_path.as_deref() == Some("generated/missing.json")
             && finding.code == "registered_generated_surface_missing"
     }));
+    let closure = catalog.closure_status();
+    assert!(!closure.is_closed());
+    assert!(
+        closure
+            .blockers_by_code()
+            .contains_key("generated_output_drift")
+    );
+    assert!(
+        closure
+            .blockers_by_code()
+            .contains_key("registered_generated_surface_missing")
+    );
 }

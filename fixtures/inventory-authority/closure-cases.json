@@ -1,0 +1,60 @@
+{
+  "schema_version": "InventoryClosureCases-v1",
+  "cases": [
+    {
+      "case_id": "active-compiled-api",
+      "expected_disposition": "active",
+      "causal_code": null
+    },
+    {
+      "case_id": "definition-only-command",
+      "expected_disposition": "candidate",
+      "causal_code": "candidate_component_not_active"
+    },
+    {
+      "case_id": "refusal-only-command",
+      "expected_disposition": "candidate",
+      "causal_code": "candidate_component_not_active"
+    },
+    {
+      "case_id": "unknown-activation-row",
+      "expected_disposition": "abort",
+      "causal_code": "unknown-row"
+    },
+    {
+      "case_id": "missing-activation-row",
+      "expected_disposition": "abort",
+      "causal_code": "missing-row"
+    },
+    {
+      "case_id": "duplicate-activation-row",
+      "expected_disposition": "abort",
+      "causal_code": "duplicate-row"
+    },
+    {
+      "case_id": "conflicting-activation-row",
+      "expected_disposition": "abort",
+      "causal_code": "conflicting-row"
+    },
+    {
+      "case_id": "stale-witness-source",
+      "expected_disposition": "abort",
+      "causal_code": "stale-input"
+    },
+    {
+      "case_id": "unsafe-witness-source",
+      "expected_disposition": "abort",
+      "causal_code": "unsafe-input"
+    },
+    {
+      "case_id": "mutate-restore-projection",
+      "expected_disposition": "abort",
+      "causal_code": "live-context-stale"
+    },
+    {
+      "case_id": "projection-self-attestation",
+      "expected_disposition": "non-authoritative",
+      "causal_code": "authority-ineligible"
+    }
+  ]
+}
