@@ -1,0 +1,180 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:be2c86ec67893967702f13232a818254969c5d08ba461c22167a39d0b1613b2d",
+    "candidate_id": "sha256:d830183140c339804dfff1d374aa30f1e677d733ff5f592895576d6365038a93",
+    "head_commit": "4db7bbabb4fc940876c109c3beaac0b78c905ec3",
+    "head_tree": "4055af774c7adf759cbc6933d9f520434c2bf5f1",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true,
+    "dirty_scope": "orchestration-runtime-adapter-candidate-outside-this-lease"
+  },
+  "work_package": {
+    "node_id": "successor-cli-read-path-closure",
+    "dependencies": [
+      "accepted-typed-state-policy-kernel",
+      "accepted-routine-capture-impact-kernel"
+    ],
+    "required_tools": [
+      "cargo-nextest",
+      "rustfmt",
+      "shasum"
+    ],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "validator/src/cli/successor",
+      "validator/src/cli/successor_public",
+      "validator/src/state",
+      "validator/src/inventory",
+      "validator/src/observability",
+      "validator/src/cli/live_loop/nodes/measurement/cache_replay/process_receipt.rs",
+      "validator/tests/cli_surface.rs",
+      "docs/ultragoal-successor-live/root-decisions/PUBLIC-CLI-EXCLUSIVE-DISPATCH-CANDIDATE-023.json"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/task-envelopes/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json",
+        "docs/ultragoal-successor-live/worker-results/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json",
+        "validator/src/cli/live_loop/nodes/measurement/cache_replay/tests.rs",
+        "validator/src/cli/live_loop/nodes/measurement/cache_replay/test_rows.rs"
+      ],
+      "semantic_symbols": [
+        "cache-record-command-observation-fixture-authority",
+        "fresh-binary-successor-read-adapter-journeys",
+        "recursive-zero-write-read-boundary",
+        "stable-state-repair-next-projection"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/successor-cli-state-journeys",
+        "validator/tests/successor_cli_state_journey_contract.rs",
+        "validator/tests/successor_cli_state_journey_contract"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "cache-replay-test-authority-fixture"
+        },
+        {
+          "class": "fixture_write",
+          "target": "successor-cli-state-process-journeys"
+        },
+        {
+          "class": "process",
+          "target": "offline-fresh-binary-successor-cli-validation"
+        }
+      ]
+    },
+    "prerequisites": [
+      "public-command-catalog-dispatch-and-state-adoption-remain-root-owned",
+      "process-receipt-authority-remains-read-only-and-fail-closed",
+      "effectful-downstream-command-groups-remain-unavailable"
+    ],
+    "outputs": [
+      "exact-command-observation-bound-cache-replay-fixture",
+      "fresh-binary-clean-dirty-conflict-diagnosis-and-repeat-use-read-journeys",
+      "recursive-zero-write-help-parse-query-proof",
+      "successor-cli-read-path-worker-result-v1",
+      "exact-root-public-candidate-refreeze-request"
+    ],
+    "acceptance": [
+      "cache-replay-accepts-only-the-exact-materialized-command-observation-receipt",
+      "missing-substituted-stale-unsafe-mismatched-or-inline-receipt-authority-fails-closed",
+      "fresh-cargo-provided-binary-exercises-clean-dirty-conflict-diagnosis-and-repeat-use-reads",
+      "help-version-malformed-parse-inspect-next-diagnose-and-observe-query-are-recursively-zero-write",
+      "machine-schema-stream-separation-non-echo-and-six-exit-classes-remain-exact",
+      "all-successor-cli-state-and-cache-replay-dependency-tests-pass",
+      "worker-result-binds-every-owned-artifact",
+      "independent-review-and-root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "SUCCESSOR-CLI-READ-PATH-CLOSURE-047",
+    "run_id": "ultragoal-successor-live-20260712-macro-003",
+    "node_id": "successor-cli-read-path-closure",
+    "principal": "worker",
+    "owner": "/root/successor_cli_read_path_engineer",
+    "binding": {
+      "context_id": "sha256:be2c86ec67893967702f13232a818254969c5d08ba461c22167a39d0b1613b2d",
+      "candidate_id": "sha256:d830183140c339804dfff1d374aa30f1e677d733ff5f592895576d6365038a93"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "validator/src/cli/successor",
+      "validator/src/cli/successor_public",
+      "validator/src/state",
+      "validator/src/inventory",
+      "validator/src/observability",
+      "validator/src/cli/live_loop/nodes/measurement/cache_replay/process_receipt.rs",
+      "validator/tests/cli_surface.rs",
+      "docs/ultragoal-successor-live/root-decisions/PUBLIC-CLI-EXCLUSIVE-DISPATCH-CANDIDATE-023.json"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/task-envelopes/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json",
+        "docs/ultragoal-successor-live/worker-results/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json",
+        "validator/src/cli/live_loop/nodes/measurement/cache_replay/tests.rs",
+        "validator/src/cli/live_loop/nodes/measurement/cache_replay/test_rows.rs"
+      ],
+      "semantic_symbols": [
+        "cache-record-command-observation-fixture-authority",
+        "fresh-binary-successor-read-adapter-journeys",
+        "recursive-zero-write-read-boundary",
+        "stable-state-repair-next-projection"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/successor-cli-state-journeys",
+        "validator/tests/successor_cli_state_journey_contract.rs",
+        "validator/tests/successor_cli_state_journey_contract"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "cache-replay-test-authority-fixture"
+        },
+        {
+          "class": "fixture_write",
+          "target": "successor-cli-state-process-journeys"
+        },
+        {
+          "class": "process",
+          "target": "offline-fresh-binary-successor-cli-validation"
+        }
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "accepted-typed-state-policy-kernel": "sha256:30a088df9156748c1e37fa7ef29ca18a63fa683ddb8d66b0b1cd363d441cb00b",
+        "accepted-routine-capture-impact-kernel": "sha256:b52d38ce45b71f6e4088841ab783c3e4839413f50f3c7b3d9cec21c6ef610f8d"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "rustfmt": "sha256:aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "public-command-catalog-dispatch-and-state-adoption-remain-root-owned": "sha256:1c64805c0c620935f59fcd9901a1005b9219fb3653bee3a3b0b7c790ee882bbf",
+        "process-receipt-authority-remains-read-only-and-fail-closed": "sha256:9774ed82408a67211f08a1cbda40b3dc204923813660c7212358738aa17d93b6",
+        "effectful-downstream-command-groups-remain-unavailable": "sha256:6af25256de4b5b9908cbb137003ab6a85a9bb4a71d64cfe98eb68650cb5c9e8c"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "prohibited_surfaces": [
+    "public CLI grammar parser dispatcher command catalog and state adoption",
+    "production process-receipt matching, state, inventory, observability, migration, claims, distribution, repository-fit, and effectful downstream adapters",
+    "validator/src/lib.rs, Cargo manifests and lockfile, Git writes, network, external effects, and destructive cleanup",
+    "shared schemas, generated authority, acceptance, critical-path board, root decisions, claim decisions, release state, and root authority"
+  ],
+  "root_validation_obligations": [
+    "independently-review-exact-artifact-set",
+    "refreeze-public-cli-candidate-only-after-integration",
+    "recompute-current-inventory-state-and-observability-dependencies",
+    "run-representative-effectful-command-journeys-only-in-their-own-product-leases"
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, node closure, or goal completion."
+}
