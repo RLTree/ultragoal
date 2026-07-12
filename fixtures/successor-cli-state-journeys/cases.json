@@ -1,0 +1,23 @@
+{
+  "schema_version": "SuccessorCliStateJourneyFixtures-v1",
+  "cases": [
+    {
+      "id": "clean",
+      "dirty": false,
+      "legacy_conflict": false,
+      "expected_finding_code": null
+    },
+    {
+      "id": "dirty",
+      "dirty": true,
+      "legacy_conflict": false,
+      "expected_finding_code": null
+    },
+    {
+      "id": "conflicting-authority",
+      "dirty": false,
+      "legacy_conflict": true,
+      "expected_finding_code": "parallel_authority"
+    }
+  ]
+}

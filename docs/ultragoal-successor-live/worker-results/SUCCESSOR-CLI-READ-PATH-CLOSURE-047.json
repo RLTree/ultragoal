@@ -1,0 +1,258 @@
+{
+  "worker": "/root/successor_cli_read_path_engineer",
+  "lease_id": "SUCCESSOR-CLI-READ-PATH-CLOSURE-047",
+  "context_id": "sha256:51b0dd37ec5d849d2ac896bca64246efd39ea6ea425bf08134cfc24109935488",
+  "candidate_identity": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "freeze_head_commit": "2155124f1a03f1c271e1fd795f1a501bea582e36",
+    "freeze_head_tree": "9984492c7033ce0235a181cdce9fdcb03c403e97",
+    "task_envelope_candidate_id": "sha256:73ed29f6ab74b180c89d6c8a4c9c08e181f743b9809f6473e2fc34421e03f518",
+    "root_issued_context_id": "sha256:be2c86ec67893967702f13232a818254969c5d08ba461c22167a39d0b1613b2d",
+    "root_issued_candidate_id": "sha256:d830183140c339804dfff1d374aa30f1e677d733ff5f592895576d6365038a93",
+    "root_issued_work_package_sha256": "sha256:299a09a6411bc9f3c2c1e7f6adc2444dcfb53356a3731111eea240985b87b8d6",
+    "worker_owned_artifact_set_sha256": "sha256:d7e7db34d1f0c8a811a33bead90e738aa493ff420d0afd58be1eb5cb6d8b03e3",
+    "worker_owned_artifact_count_excluding_self_referential_worker_result": 10,
+    "worker_owned_artifact_total_bytes": 78558,
+    "worker_owned_artifact_total_lines": 2024,
+    "artifact_set_formula": "SHA-256 of sorted UTF-8 rows path, TAB, lowercase sha256 without prefix, LF",
+    "worker_result_self_excluded": true,
+    "concurrent_unowned_changes_preserved": true
+  },
+  "base_state": {
+    "work_package": "docs/ultragoal-successor-live/work-packages/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json",
+    "work_package_sha256": "sha256:299a09a6411bc9f3c2c1e7f6adc2444dcfb53356a3731111eea240985b87b8d6",
+    "task_envelope": "docs/ultragoal-successor-live/task-envelopes/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json",
+    "task_envelope_sha256": "sha256:8bf336461ab36808c20ee9ea93fa9f801071129faff72ff17ffab4b148ba411f",
+    "accepted_dependencies": [
+      "accepted-typed-state-policy-kernel",
+      "accepted-routine-capture-impact-kernel"
+    ],
+    "observed_gap": "Cache replay tests still self-described receipt paths without always materializing exact external command-result authority, and one legacy line-cap summary test expected reuse after its public command route became unavailable.",
+    "root_owned_surfaces_not_modified": [
+      "public CLI catalog grammar parser dispatcher and state adoption",
+      "production process-receipt matching inventory state observability and claim authority",
+      "Cargo manifests lockfile shared schemas generated authority board decisions release and completion"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_exact_independent_review_and_root_reconciliation",
+    "cache_authority": "Only an exact materialized external command-observation receipt can authorize replay; absent, inline, unsafe, mismatched, stale, post-binding-mutated, or digest-valid semantically substituted receipts fail closed.",
+    "legacy_line_cap_authority": "The legacy line-cap summary is rejected twice by direct cache lookup, and the production public parser rejects the retired route twice with the exact stable non-panicking CLI_UNKNOWN_SUBCOMMAND machine diagnostic and exit class 2. No opportunistically discovered binary is used as authority.",
+    "fresh_binary_journeys": "Cargo-provided ultragoal binary covers clean, dirty, conflicting-authority, failed diagnosis, stable repair and next, repeat use, machine streams, non-echo, and process exit classes.",
+    "read_behavior": "Help, version, malformed parse, inspect, capabilities, inventory, state, claims, next, diagnose, and observe query compare recursive tree bytes and Git status before and after the command scope.",
+    "focused_cache_controls": "25 passed; 0 failed",
+    "dependency_cli_state_cache_controls": "94 passed; 0 failed",
+    "cli_capture_surface_fresh_binary_controls": "143 passed; 0 failed",
+    "production_compile": "passed",
+    "claim_effect": "none",
+    "lease_no_claim_statement": "This worker provides implementation and test evidence only; it does not claim public catalog or dispatcher authority, installed runtime behavior, representative product journey completion, node closure, readiness, release, or goal completion."
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/task-envelopes/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json",
+    "docs/ultragoal-successor-live/worker-results/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json",
+    "fixtures/successor-cli-state-journeys/cases.json",
+    "validator/src/cli/live_loop/nodes/measurement/cache_replay/test_rows.rs",
+    "validator/src/cli/live_loop/nodes/measurement/cache_replay/tests.rs",
+    "validator/src/cli/live_loop/nodes/measurement/command/cache_replay.rs",
+    "validator/src/cli/live_loop/nodes/measurement/command/line_caps_cache_replay.rs",
+    "validator/tests/successor_cli_state_journey_contract.rs",
+    "validator/tests/successor_cli_state_journey_contract/assertions.rs",
+    "validator/tests/successor_cli_state_journey_contract/fixture.rs",
+    "validator/tests/successor_cli_state_journey_contract/snapshot.rs"
+  ],
+  "touched_semantics": [
+    "cache-record-command-observation-fixture-authority",
+    "legacy-command-cache-replay-test-fixture-closure",
+    "fresh-binary-successor-read-adapter-journeys",
+    "recursive-zero-write-read-boundary",
+    "stable-state-repair-next-projection",
+    "machine-stream-separation-non-echo-and-process-exit-classes"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/successor-cli-state-journeys/cases.json",
+    "validator/tests/successor_cli_state_journey_contract.rs",
+    "validator/tests/successor_cli_state_journey_contract/assertions.rs",
+    "validator/tests/successor_cli_state_journey_contract/fixture.rs",
+    "validator/tests/successor_cli_state_journey_contract/snapshot.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "cache-replay-test-authority-fixture",
+      "performed": true,
+      "scope": "leased test paths only"
+    },
+    {
+      "class": "fixture_write",
+      "target": "successor-cli-state-process-journeys",
+      "performed": true,
+      "scope": "leased fixtures and temporary repositories only"
+    },
+    {
+      "class": "process",
+      "target": "offline fresh-binary and dependency-closed Rust validation",
+      "performed": true,
+      "scope": "isolated CARGO_TARGET_DIR with 16 build and test jobs"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external_or_host_write",
+      "performed": false
+    },
+    {
+      "class": "git_mutation",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-STATE-003",
+    "REQ-STATE-004",
+    "REQ-STATE-005",
+    "REQ-CLI-004",
+    "REQ-CLI-005",
+    "REQ-CLI-006",
+    "REQ-REPAIR-001",
+    "REQ-REPAIR-002",
+    "REQ-REPAIR-004",
+    "REQ-OBSERVE-002",
+    "REQ-OBSERVE-003",
+    "REQ-OBSERVE-005",
+    "REQ-PROOF-002",
+    "REQ-PROOF-004",
+    "REQ-PROOF-006",
+    "REQ-PROOF-008",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-002",
+    "REQ-SECURITY-006",
+    "REQ-SECURITY-007"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE",
+    "accepted-typed-state-policy-kernel",
+    "accepted-routine-capture-impact-kernel"
+  ],
+  "changes": [
+    {
+      "area": "cache-replay-command-authority",
+      "result": "Positive cache rows materialize the exact command-observation receipt. Test helpers refuse to synthesize authority for absolute or parent-segment paths, and cache-record fixtures carry the same external binding as timing rows."
+    },
+    {
+      "area": "cache-replay-false-pass-controls",
+      "result": "Missing, inline, mismatched, unsafe, stale, post-binding-mutated, and digest-valid semantically substituted receipts all fail closed; an exact changed-files receipt replays and a substituted receipt executes current work instead."
+    },
+    {
+      "area": "legacy-line-cap-migration-boundary",
+      "result": "The prior line-cap summary is no longer treated as command-result authority. The test performs two direct cache lookups that both reject it, then invokes the production public parser twice under catch_unwind and proves one exact CLI_UNKNOWN_SUBCOMMAND machine diagnostic with exit class 2, no input echo, and no recursive tree or Git-status mutation."
+    },
+    {
+      "area": "fresh-binary-successor-state-journeys",
+      "result": "Three repository scenarios drive current clean, dirty, and parallel-authority state. Process-level tests prove deterministic diagnosis, repair, next, repeat reads, bounded machine output, stdout and stderr separation, no ANSI or input echo, and process exits 0, 1, 2, and 4; dependency tests retain blocked and internal exit classes."
+    },
+    {
+      "area": "recursive-zero-write-boundary",
+      "result": "Read paths compare recursive file kind, bytes, mode, link count, and Git status before and after each command while disabling asynchronous Git auto-maintenance in the isolated fixture."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "python3 semantic validation of SUCCESSOR-CLI-READ-PATH-CLOSURE-047 against AgentTaskEnvelope-v1",
+      "status": "pass",
+      "result": "AgentTaskEnvelope-v1 schema-and-semantic-validation:pass at freeze head 2155124f1a03f1c271e1fd795f1a501bea582e36"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-successor-cli-state-047-rework CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test-threads 16 --lib -E 'test(/cache_replay/)' --no-fail-fast",
+      "status": "pass-25-of-25",
+      "run_id": "191e670a-dda6-4af8-a5fb-d762df54e586",
+      "result": "Exact materialized receipt replay, stale and substitution refusal, cache equivalence, direct legacy line-cap summary rejection, stable typed parser refusal, and zero-write control passed from a brand-new target in 1.544 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-successor-cli-state-047-rework CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test-threads 16 --lib -E '<successor parser public state and cache dependency closure>' --no-fail-fast",
+      "status": "pass-94-of-94",
+      "run_id": "0eb9f7ce-2253-49a4-91bf-3d4267dff6cb",
+      "result": "Typed parser, successor runtime, public reads, state policy, diagnosis, and cache replay dependency controls passed from the same fresh target in 8.120 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-successor-cli-state-047-rework CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test-threads 16 --test cli_contract --test cli_surface --test successor_cli_state_journey_contract --no-fail-fast",
+      "status": "pass-143-of-143",
+      "run_id": "0b75cfe4-5d88-458f-b491-9d8591ac0b49",
+      "result": "CLI grammar, capture security, public surface, recursive zero-write, and fresh-binary successor state journeys passed from the same fresh target in 29.443 seconds; nextest reported one passing test as leaky and the command exited zero."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-successor-cli-state-047-rework CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline -j 16",
+      "status": "pass",
+      "result": "Production code compiled from the same fresh target in 7.55 seconds; this compile result is not product proof."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <leased Rust files>; jq empty <leased JSON files>; git diff --check -- <leased artifact set>",
+      "status": "pass",
+      "result": "No formatting, JSON parse, or whitespace errors."
+    }
+  ],
+  "artifacts": [
+    {"path":"docs/ultragoal-successor-live/task-envelopes/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json","sha256":"sha256:8bf336461ab36808c20ee9ea93fa9f801071129faff72ff17ffab4b148ba411f","byte_length":15216,"line_count":302},
+    {"path":"fixtures/successor-cli-state-journeys/cases.json","sha256":"sha256:233ea49d2efb70ed1734c993c5f9332b4312ed2c3241e45f7107f4112baafe53","byte_length":481,"line_count":23},
+    {"path":"validator/src/cli/live_loop/nodes/measurement/cache_replay/test_rows.rs","sha256":"sha256:d9bc6c1dffd355c24f17e62fbe892b77d87266f2a3acff76e33c00138152863d","byte_length":10765,"line_count":282},
+    {"path":"validator/src/cli/live_loop/nodes/measurement/cache_replay/tests.rs","sha256":"sha256:68eeb2dc54e5e886414177b9cd6c35b070aeeb71c997bde3dba8708a94b2fcbc","byte_length":12835,"line_count":319},
+    {"path":"validator/src/cli/live_loop/nodes/measurement/command/cache_replay.rs","sha256":"sha256:53d46a81f2766ac0c14c226d48dd742dcd4237e9a1a310219fb439ece651b485","byte_length":12553,"line_count":302},
+    {"path":"validator/src/cli/live_loop/nodes/measurement/command/line_caps_cache_replay.rs","sha256":"sha256:48f020bc72c62220ec70f21018b7a19ef2936acbc8b232a109d5f33593cafefa","byte_length":6850,"line_count":187},
+    {"path":"validator/tests/successor_cli_state_journey_contract.rs","sha256":"sha256:4f036f00720ec8cde17e4e2bb152d4103314d7e4b16cc3fd30238679acefa945","byte_length":8974,"line_count":278},
+    {"path":"validator/tests/successor_cli_state_journey_contract/assertions.rs","sha256":"sha256:c7811d2e80cf322940a2f6bc2419bf379c7e49f930804fecbd76ed6073521c27","byte_length":1309,"line_count":38},
+    {"path":"validator/tests/successor_cli_state_journey_contract/fixture.rs","sha256":"sha256:df067edf3dfb249740ec7f5997e2a970d4102af86b9d0f7bc45bebb0d86ec6df","byte_length":6686,"line_count":190},
+    {"path":"validator/tests/successor_cli_state_journey_contract/snapshot.rs","sha256":"sha256:15e02971c2ac21c4c0c5aff994364f762d3793b466ac8dcebd6e48d62b757089","byte_length":2889,"line_count":103}
+  ],
+  "findings": [
+    {
+      "severity": "resolved-material",
+      "class": "cache-replay-test-authority-drift",
+      "finding": "Two dependency tests were stale after production correctly required external command authority and the successor public parser removed the legacy line-cap route. The accepted lease amendment corrected only test-fixture semantics; no production change was indicated."
+    },
+    {
+      "severity": "resolved-material",
+      "class": "target-state-dependent-test-executable-fallback",
+      "finding": "Independent fresh-target review exposed exit 101 because the unit test's command launcher fell back to the current lib-test executable when neither CARGO_BIN_EXE_ultragoal nor an adjacent target/debug/ultragoal existed. A reused target had masked this with a stale adjacent binary and exit 2. The corrected control never launches an opportunistically discovered executable: it tests replay rejection directly and the production parser's exact typed refusal, with repeated no-panic and zero-write checks."
+    },
+    {
+      "severity": "ceiling-withheld",
+      "class": "source-local-fresh-binary-test-is-not-installed-runtime-or-product-journey-proof",
+      "finding": "The process tests use Cargo's current binary in isolated repositories. They do not prove package installation, supported-host runtime identity, effectful command groups, or the complete representative product journey matrix."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent review of the exact 10-artifact set and root acceptance/reconciliation.",
+    "Root recomputation of the integrated candidate and any public CLI, inventory, state, observability, and claim evidence affected by the commit.",
+    "Separate supported package, install, discovery, runtime identity, and representative product-journey proof before any higher claim.",
+    "Separate effectful command adapters and live journeys remain outside this read-path lease."
+  ],
+  "requested_root_changes": [
+    {
+      "action": "independently-review-exact-artifact-set",
+      "artifact_set_sha256": "sha256:d7e7db34d1f0c8a811a33bead90e738aa493ff420d0afd58be1eb5cb6d8b03e3",
+      "artifact_count": 10
+    },
+    {
+      "action": "accept-and-commit-if-review-passes",
+      "scope": "Only the listed worker-owned paths; preserve concurrent custom-agent discovery work and all unowned changes."
+    },
+    {
+      "action": "refreeze-root-owned-public-candidate-after-integration",
+      "scope": "Recompute current candidate identity and dependency-closed CLI, inventory, state, observability, and claim evidence without raising package, installed runtime, journey, node, release, or completion ceilings from this result."
+    }
+  ],
+  "limitations": [
+    "WorkerResult-v1 does not make its artifact aggregate self-enforcing; independent review and root must recompute every row, total, and the sorted path-bound set digest.",
+    "The worker did not edit or adopt the public command catalog, parser, dispatcher, state policy, shared schemas, manifests, migration registry, generated authority, claims, board, release state, or completion state.",
+    "Cargo-provided fresh-binary tests are source-local process evidence, not installed or supported-host runtime proof and not the full representative product journey surface.",
+    "Tests, receipts, fixtures, digests, and this WorkerResult support the named read behavior but do not substitute for package, install, discovery, runtime, effectful journey, readiness, release, or completion behavior.",
+    "This worker provides implementation and test evidence only; it does not claim public catalog or dispatcher authority, installed runtime behavior, representative product journey completion, node closure, readiness, release, or goal completion."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

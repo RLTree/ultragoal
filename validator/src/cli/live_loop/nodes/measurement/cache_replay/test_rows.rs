@@ -31,7 +31,10 @@ impl ReplayFixture {
     }
 
     fn for_surface(surface_id: &'static str) -> Self {
-        let root = temp_root("live-loop-cache-replay");
+        let root = temp_root(&format!(
+            "live-loop-cache-replay-process-{}",
+            std::process::id()
+        ));
         let surface = surface_by_id(surface_id).expect("replay fixture surface");
         let command = LiveLoopCommand {
             action: LiveLoopAction::Measure,
@@ -205,15 +208,58 @@ pub(super) fn digest(label: &str) -> String {
 }
 
 pub(super) fn write_timing_row(root: &Path, row: serde_json::Value) {
-    test_process_receipt::write_command_observation_receipt(root, &row);
+    materialize_safe_command_observation_receipt(root, &row);
+    write_timing_row_without_receipt(root, row);
+}
+
+pub(super) fn write_timing_row_without_receipt(root: &Path, row: serde_json::Value) {
     crate::json_boundary::write_json(&root.join(NODE_TIMING_REL), &json!({"nodes": [row]}))
         .expect("timing row");
 }
 
 pub(super) fn write_validation_cache_row(root: &Path, row: serde_json::Value) {
-    test_process_receipt::write_command_observation_receipt(root, &row);
+    materialize_safe_command_observation_receipt(root, &row);
     crate::json_boundary::write_json(&root.join(VALIDATION_CACHE_REL), &json!({"records": [row]}))
         .expect("validation cache row");
+}
+
+pub(super) fn write_cache_records(root: &Path, row: serde_json::Value) {
+    materialize_safe_command_observation_receipt(root, &row);
+    crate::json_boundary::write_json(
+        &root.join(NODE_TIMING_REL),
+        &json!({"cache_records": [row]}),
+    )
+    .expect("cache records row");
+}
+
+fn materialize_safe_command_observation_receipt(root: &Path, row: &serde_json::Value) {
+    let Some(receipt) = row
+        .get("command_observation_receipt")
+        .and_then(serde_json::Value::as_str)
+    else {
+        return;
+    };
+    let relative = Path::new(receipt);
+    if relative.is_absolute()
+        || relative
+            .components()
+            .any(|component| matches!(component, std::path::Component::ParentDir))
+    {
+        return;
+    }
+    test_process_receipt::write_command_observation_receipt(root, row);
+}
+
+pub(super) fn command_observation_receipt_path(
+    root: &Path,
+    row: &serde_json::Value,
+) -> Option<PathBuf> {
+    let relative = Path::new(row.get("command_observation_receipt")?.as_str()?);
+    (!relative.is_absolute()
+        && !relative
+            .components()
+            .any(|component| matches!(component, std::path::Component::ParentDir)))
+    .then(|| root.join(relative))
 }
 
 pub(super) trait WithValue {

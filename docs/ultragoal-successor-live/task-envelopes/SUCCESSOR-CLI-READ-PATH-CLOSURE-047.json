@@ -1,0 +1,302 @@
+{
+  "schema_version": "AgentTaskEnvelope-v1",
+  "task_id": "successor-cli-read-path-closure-047",
+  "role_binding": {
+    "role_id": "implementation-worker",
+    "source_kind": "runtime_agent_type_receipt",
+    "source_ref": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+    "source_sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+    "sandbox_mode": "workspace-write",
+    "may_exercise_root_authority": false
+  },
+  "goal": "Close the source-local successor CLI read path with exact external cache-replay authority, fresh-binary state journeys, stable diagnostics, and recursive zero-write proof without changing root-owned public authority.",
+  "success": [
+    "Cache replay accepts only an exact materialized command-observation receipt and rejects missing, inline, stale, unsafe, mismatched, or semantically substituted authority.",
+    "A legacy line-cap summary receipt cannot substitute for command-result authority after the public legacy command route is unavailable.",
+    "Fresh cargo-provided binary journeys cover clean, dirty, conflicting-authority, failure diagnosis, stable repair and next projections, repeat reads, stream separation, non-echo, and exact process exit classes.",
+    "Help, parse, inspect, inventory, state, claims, next, diagnose, and observe-query reads preserve recursive tree bytes and Git status at command scope.",
+    "A schema-valid WorkerResult-v1 binds every worker-owned artifact and requests independent review and root reconciliation without a claim effect."
+  ],
+  "candidate_identity": {
+    "repository": {
+      "root_uri": "repo://harness-ultragoal-plugin-proposal",
+      "canonical_root_sha256": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170"
+    },
+    "context_id": "sha256:51b0dd37ec5d849d2ac896bca64246efd39ea6ea425bf08134cfc24109935488",
+    "candidate_id": "sha256:73ed29f6ab74b180c89d6c8a4c9c08e181f743b9809f6473e2fc34421e03f518",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "2155124f1a03f1c271e1fd795f1a501bea582e36",
+    "head_tree": "9984492c7033ce0235a181cdce9fdcb03c403e97",
+    "dirty": true,
+    "captured_at": "2026-07-12T16:45:07Z",
+    "freeze": {
+      "kind": "artifact_set",
+      "artifact_set_sha256": "sha256:75a7d899f123bb5bd0bf0c541b0aa2167fc029f1bb9193b2a2a76a2da6c7d406",
+      "artifact_count": 8,
+      "bytes": 222954,
+      "lines": 6377,
+      "artifacts": [
+        {
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+          "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+          "bytes": 20505,
+          "lines": 776
+        },
+        {
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json",
+          "sha256": "sha256:410fa8b0ff620d085e37ee83aae8e7c7407bb702f88afe51abe89dc5b8c1d0fb",
+          "bytes": 36878,
+          "lines": 990
+        },
+        {
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json",
+          "sha256": "sha256:07ae7af84eada1ea5889f52a0a6707e339e3e0cbaff65ac7b7d3bace72076af8",
+          "bytes": 126109,
+          "lines": 3552
+        },
+        {
+          "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+          "sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604",
+          "bytes": 23425,
+          "lines": 747
+        },
+        {
+          "path": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+          "sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+          "bytes": 2176,
+          "lines": 53
+        },
+        {
+          "path": "docs/ultragoal-successor-live/root-decisions/PUBLIC-CLI-EXCLUSIVE-DISPATCH-CANDIDATE-023.json",
+          "sha256": "sha256:1c64805c0c620935f59fcd9901a1005b9219fb3653bee3a3b0b7c790ee882bbf",
+          "bytes": 4395,
+          "lines": 60
+        },
+        {
+          "path": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+          "sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+          "bytes": 555,
+          "lines": 11
+        },
+        {
+          "path": "docs/ultragoal-successor-live/work-packages/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json",
+          "sha256": "sha256:299a09a6411bc9f3c2c1e7f6adc2444dcfb53356a3731111eea240985b87b8d6",
+          "bytes": 8911,
+          "lines": 188
+        }
+      ]
+    }
+  },
+  "scope": {
+    "artifact_paths": [
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT", "access": "read"},
+      {"path": "docs/ultragoal-successor-live/root-decisions/PUBLIC-CLI-EXCLUSIVE-DISPATCH-CANDIDATE-023.json", "access": "read"},
+      {"path": "docs/ultragoal-successor-live/task-envelopes/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json", "access": "write"},
+      {"path": "docs/ultragoal-successor-live/worker-results/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json", "access": "write"},
+      {"path": "docs/ultragoal-successor-live/work-packages/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json", "access": "read"},
+      {"path": "validator/src/cli/successor", "access": "read"},
+      {"path": "validator/src/cli/successor_public", "access": "read"},
+      {"path": "validator/src/inventory", "access": "read"},
+      {"path": "validator/src/observability", "access": "read"},
+      {"path": "validator/src/state", "access": "read"},
+      {"path": "validator/src/cli/live_loop/nodes/measurement/cache_replay/process_receipt.rs", "access": "read"},
+      {"path": "validator/src/cli/live_loop/nodes/measurement/cache_replay/test_rows.rs", "access": "write"},
+      {"path": "validator/src/cli/live_loop/nodes/measurement/cache_replay/tests.rs", "access": "write"},
+      {"path": "validator/src/cli/live_loop/nodes/measurement/command/cache_replay.rs", "access": "write"},
+      {"path": "validator/src/cli/live_loop/nodes/measurement/command/line_caps_cache_replay.rs", "access": "write"}
+    ],
+    "semantic_symbols": [
+      "cache-record-command-observation-fixture-authority",
+      "legacy-command-cache-replay-test-fixture-closure",
+      "fresh-binary-successor-read-adapter-journeys",
+      "recursive-zero-write-read-boundary",
+      "stable-state-repair-next-projection"
+    ],
+    "generated_outputs": [],
+    "fixtures": [
+      {"path": "fixtures/successor-cli-state-journeys", "access": "write"},
+      {"path": "validator/tests/successor_cli_state_journey_contract.rs", "access": "write"},
+      {"path": "validator/tests/successor_cli_state_journey_contract", "access": "write"}
+    ],
+    "external_effects": [],
+    "scratch_uris": [
+      "scratch://successor-cli-read-path-closure-047/cargo-target",
+      "scratch://successor-cli-read-path-closure-047/fresh-process-repositories"
+    ],
+    "forbidden_paths": [
+      "Cargo.lock",
+      "migration/authority-routes.json",
+      "plugin-manifest-draft.json",
+      "validator/Cargo.toml",
+      "validator/src/argument_parser",
+      "validator/src/cli/successor/catalog.rs",
+      "validator/src/cli/successor_public/mod.rs",
+      "validator/src/lib.rs"
+    ],
+    "path_resolution": {
+      "policy": "candidate-relative-no-follow-v1",
+      "session_id": "sha256:02db26b933a54c5d208d21470a1827ad5e42bbdaaadfb0a492e7be969e6a99f1",
+      "resolved_scope_sha256": "sha256:775c02ce12bb099ca938f0678704091921f0e2d496af0ed2f421352ddbb41c5e",
+      "symlinks": "reject",
+      "special_files": "reject",
+      "post_freeze_revalidation": "required"
+    }
+  },
+  "authority_binding": {
+    "session_id": "sha256:6154999b39d2f1792734cfed00c32fc9b19e6766a62acb9e0f90a937ba1a0e2a",
+    "captured_at": "2026-07-12T16:45:07Z",
+    "sources": [
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json",
+        "sha256": "sha256:410fa8b0ff620d085e37ee83aae8e7c7407bb702f88afe51abe89dc5b8c1d0fb"
+      }
+    ],
+    "ids": {
+      "nodes": ["N03-CLI-STATE"],
+      "requirements": [],
+      "surfaces": ["PS-CLI", "PS-DIAGNOSE"],
+      "tools": [],
+      "claims": [],
+      "migration_routes": [],
+      "decisions": []
+    },
+    "resolved_rows": [
+      {
+        "stable_id": "N03-CLI-STATE",
+        "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "row_sha256": "sha256:9481f51ac1cccf1215a4ce3d37756d547b76d246913cdc0b54a5d95f97951a09"
+      },
+      {
+        "stable_id": "PS-CLI",
+        "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json",
+        "row_sha256": "sha256:dce0b2e93886ea1a4edfcd757fe45dee3997c2314f77f85c03d317f83b864148"
+      },
+      {
+        "stable_id": "PS-DIAGNOSE",
+        "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json",
+        "row_sha256": "sha256:5b9b5472de4726280c0aac027fa8136e07dd185e52f5e01c058bee9d20e217e6"
+      }
+    ],
+    "resolution": {
+      "resolved_set_sha256": "sha256:2aff48c240ce9dd52f81c3d7f5d51f612e7ca7b9c88b61de93405de0a58aa588",
+      "unknown_count": 0,
+      "duplicate_count": 0,
+      "ambiguous_count": 0,
+      "conflict_count": 0,
+      "final_session_revalidation": "required"
+    }
+  },
+  "evidence": {
+    "primary_references": [
+      {"path": "docs/ultragoal-successor-live/work-packages/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json", "sha256": "sha256:299a09a6411bc9f3c2c1e7f6adc2444dcfb53356a3731111eea240985b87b8d6", "kind": "authority", "candidate_bound": true},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json", "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f", "kind": "authority", "candidate_bound": true},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json", "sha256": "sha256:410fa8b0ff620d085e37ee83aae8e7c7407bb702f88afe51abe89dc5b8c1d0fb", "kind": "authority", "candidate_bound": true},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json", "sha256": "sha256:07ae7af84eada1ea5889f52a0a6707e339e3e0cbaff65ac7b7d3bace72076af8", "kind": "authority", "candidate_bound": true},
+      {"path": "docs/ultragoal-successor-live/root-decisions/PUBLIC-CLI-EXCLUSIVE-DISPATCH-CANDIDATE-023.json", "sha256": "sha256:1c64805c0c620935f59fcd9901a1005b9219fb3653bee3a3b0b7c790ee882bbf", "kind": "review", "candidate_bound": true}
+    ],
+    "unsupported_truth_surfaces": [
+      "package",
+      "install",
+      "cache",
+      "marketplace",
+      "app_registry",
+      "plugins_ui",
+      "discovery",
+      "runtime",
+      "journey",
+      "readiness",
+      "release",
+      "completion"
+    ],
+    "implementation_conclusions_are_authority": false
+  },
+  "effects": {
+    "candidate_source": "bounded_workspace_write",
+    "git_metadata": "read_only_no_mutation",
+    "shared_root_authority": "forbidden",
+    "scratch": "bounded_read_write",
+    "network": "forbidden",
+    "external_systems": "forbidden",
+    "destructive_actions": "forbidden",
+    "secrets": "forbidden"
+  },
+  "output_contract": {
+    "schema_id": "WorkerResult-v1",
+    "schema_ref": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+    "schema_sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+    "result_target": "docs/ultragoal-successor-live/worker-results/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json",
+    "required_sections": [
+      "candidate-identity",
+      "touched-paths",
+      "commands-and-tests",
+      "artifacts",
+      "findings",
+      "requested-root-changes",
+      "limitations",
+      "no-claim-statement"
+    ]
+  },
+  "verification": {
+    "positive": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-SUCCESSOR-CLI-READ-POSITIVE",
+          "procedure": "Exercise exact command-receipt cache reuse and fresh-binary clean, dirty, conflict, state, diagnosis, repair, next, and repeat-read journeys.",
+          "expected": "Exact current authority replays; current fresh-binary reads emit stable typed results without writes.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "negative": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-SUCCESSOR-CLI-READ-NEGATIVE",
+          "procedure": "Remove, inline, mismatch, stale, path-escape, or semantically substitute cache receipt authority and exercise malformed or unavailable public routes.",
+          "expected": "Every invalid authority or route fails closed without replay, fallback authority, input echo, or hidden writes.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "race_or_mutation": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-SUCCESSOR-CLI-READ-MUTATION",
+          "procedure": "Mutate the external command receipt after digest binding and compare recursive trees plus Git status before and after every read journey.",
+          "expected": "Post-binding drift invalidates reuse and zero-write snapshots remain identical.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "security": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-SUCCESSOR-CLI-READ-SECURITY",
+          "procedure": "Exercise unsafe receipt paths, conflicting authority, hostile malformed input, non-echo diagnostics, bounded JSON, stream separation, and exact process exit classes.",
+          "expected": "Unsafe or hostile input is rejected causally without path traversal, ANSI, reflected input, mutation, or ambiguous exit state.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "false_pass": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-SUCCESSOR-CLI-READ-FALSE-PASS",
+          "procedure": "Offer a digest-valid receipt for different command semantics and a legacy line-cap summary as substitutes for exact command-result authority.",
+          "expected": "Neither proxy produces a cache hit or raises any product, runtime, journey, readiness, release, or completion claim.",
+          "evidence_kind": "test"
+        }
+      ]
+    }
+  },
+  "stop_rule": "Stop on public catalog or dispatcher edits, production receipt matching changes, shared schema or manifest changes, Git mutation, external effects, destructive cleanup, claim decisions, release authority, or any lease escape; otherwise finish the exact test and WorkerResult candidate.",
+  "no_claim_statement": "This agent does not claim readiness, release, node closure, or goal completion."
+}

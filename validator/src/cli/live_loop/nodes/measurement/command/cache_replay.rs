@@ -1,13 +1,14 @@
 use super::fixtures::{command, live_loop_timing_receipt_arg, live_loop_timing_receipt_path};
 use crate::cli::live_loop::changed_inputs::ChangedInputs;
-use crate::cli::live_loop::surfaces::surface_by_id;
+use crate::cli::live_loop::surfaces::{LoopValidationSurface, input_spec_for, surface_by_id};
 use serde_json::json;
+use std::path::Path;
+
+const COMMAND_OBSERVATION_REL: &str = "validation_artifacts/observability/changed-files.json";
 
 #[test]
 fn live_loop_measure_replays_current_input_cache_row_into_timing_output() {
-    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
-        "live-loop-measure-cache-replay",
-    );
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("cache-replay");
     std::fs::create_dir_all(&root).expect("root");
     std::process::Command::new("git")
         .arg("init")
@@ -38,11 +39,9 @@ fn live_loop_measure_replays_current_input_cache_row_into_timing_output() {
     );
     let receipt = live_loop_timing_receipt_path(&root);
     std::fs::create_dir_all(receipt.parent().expect("receipt parent")).expect("receipt dir");
-    crate::json_boundary::write_json(
-        &receipt,
-        &json!({"nodes": [cache_row(&candidate, &input_digest, &cache_key)]}),
-    )
-    .expect("prior timing row");
+    let cache_row = cache_row(&root, surface, &candidate, &input_digest, &cache_key);
+    crate::json_boundary::write_json(&receipt, &json!({"nodes": [cache_row.clone()]}))
+        .expect("prior timing row");
     let replay_store = super::super::cache_replay::ReplayStore::load(&root, &command);
 
     let row = super::super::measure_surface(
@@ -79,12 +78,83 @@ fn live_loop_measure_replays_current_input_cache_row_into_timing_output() {
     assert_eq!(row["input_digest"], input_digest);
     assert_eq!(row["cache_key"], cache_key);
 
+    let mut substituted_receipt =
+        crate::json_boundary::read_json(&root.join(COMMAND_OBSERVATION_REL))
+            .expect("bound command observation receipt");
+    substituted_receipt["command_identity"]["node_id"] = json!("substituted-node");
+    crate::json_boundary::write_json(&root.join(COMMAND_OBSERVATION_REL), &substituted_receipt)
+        .expect("substituted command observation receipt");
+    let substituted_digest = crate::digest::canonical_json(&substituted_receipt);
+    let mut substituted_row = cache_row;
+    substituted_row["command_observation_receipt_digest"] = json!(substituted_digest);
+    substituted_row["telemetry_reconciliation"]["command_observation_receipt_digest"] =
+        substituted_row["command_observation_receipt_digest"].clone();
+    crate::json_boundary::write_json(&receipt, &json!({"nodes": [substituted_row]}))
+        .expect("digest-bound semantic substitution row");
+    let substituted_store = super::super::cache_replay::ReplayStore::load(&root, &command);
+    let result = super::super::measure_surface(
+        &root,
+        &command,
+        surface,
+        &candidate,
+        &inputs,
+        &substituted_store,
+        super::super::timing::receipt::affected_set_status(inputs.changed_file_count),
+        super::super::ObservationMode::LoopRunSnapshot,
+    );
+    assert_eq!(result["proof_kind"], "executed");
+    assert_eq!(result["cache_hit"], false);
+    assert_eq!(result["work_unit_count"], 1);
+    assert_eq!(
+        result["invalidation_proof"],
+        "cache_not_used_current_command_executed"
+    );
+
     std::fs::remove_dir_all(root).expect("cleanup measure cache replay");
 }
 
-fn cache_row(candidate: &str, input_digest: &str, cache_key: &str) -> serde_json::Value {
-    let input_spec = crate::cli::live_loop::surfaces::input_spec_for("changed_files")
-        .expect("changed_files input spec");
+fn cache_row(
+    root: &Path,
+    surface: LoopValidationSurface,
+    candidate: &str,
+    input_digest: &str,
+    cache_key: &str,
+) -> serde_json::Value {
+    let input_spec = input_spec_for("changed_files").expect("changed_files input spec");
+    let command_argv = super::super::full_command::product_command_argv(surface.narrow_rerun);
+    let verified_local_command =
+        super::super::full_command::product_command_text(surface.narrow_rerun);
+    let command_receipt = json!({
+        "schema": "harness-ultragoal.observe-receipt.v1",
+        "status": "pass",
+        "candidate_digest": candidate,
+        "run_id": "run-changed-files-cache-replay",
+        "correlation_id": "corr-changed-files-cache-replay",
+        "trace_id": "trace-changed-files-cache-replay",
+        "command_identity": {
+            "node_id": surface.id,
+            "canonical_full_command": surface.canonical_full_command,
+            "verified_local_command": verified_local_command,
+            "command_argv": command_argv
+        },
+        "process_result_authority": {
+            "exit_status": 0,
+            "status_success": true,
+            "launch_error": false,
+            "duration_ms": 100,
+            "work_unit_count": 1,
+            "stdout_digest": stdout_digest(),
+            "stderr_digest": stderr_digest(),
+            "output_digest": output_digest(),
+            "result_digest": result_digest(),
+            "redaction_status": "pass",
+            "bounded_output_status": "digest_only_raw_output_not_retained",
+            "claim_ceiling": "source_local_command_result_authority_only"
+        }
+    });
+    crate::json_boundary::write_json(&root.join(COMMAND_OBSERVATION_REL), &command_receipt)
+        .expect("materialized command observation receipt");
+    let command_receipt_digest = crate::digest::canonical_json(&command_receipt);
     json!({
         "node_id": "changed_files",
         "candidate_digest": candidate,
@@ -137,6 +207,25 @@ fn cache_row(candidate: &str, input_digest: &str, cache_key: &str) -> serde_json
     .with_value("observability_status", json!("pass"))
     .with_value("speed_claim_status", json!("supported"))
     .with_value("observability_failure_class", json!("none"))
+    .with_value(
+        "telemetry_reconciliation",
+        json!({
+            "status": "pass",
+            "command_observation_receipt": COMMAND_OBSERVATION_REL,
+            "command_observation_receipt_digest": command_receipt_digest,
+            "process_result_digest": result_digest()
+        }),
+    )
+    .with_value(
+        "command_observation_receipt",
+        json!(COMMAND_OBSERVATION_REL),
+    )
+    .with_value(
+        "command_observation_receipt_digest",
+        json!(command_receipt_digest),
+    )
+    .with_value("process_result_digest", json!(result_digest()))
+    .with_value("verified_local_command", json!(verified_local_command))
     .with_value(
         "surface_input_spec_status",
         json!("surface_input_spec_bound"),
@@ -207,9 +296,7 @@ trait WithValue {
 
 impl WithValue for serde_json::Value {
     fn with_value(mut self, key: &str, value: serde_json::Value) -> Self {
-        self.as_object_mut()
-            .expect("timing row object")
-            .insert(key.to_string(), value);
+        self.as_object_mut().unwrap().insert(key.to_string(), value);
         self
     }
 }
