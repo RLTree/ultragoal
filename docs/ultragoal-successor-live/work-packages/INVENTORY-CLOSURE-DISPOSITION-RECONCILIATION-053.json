@@ -1,0 +1,112 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:4bc5a325abaf903517a04c870cb04863dece525f7d53053fa76675dddda57c5c",
+    "candidate_id": "sha256:2d52dad393d081955b25452a6cf3739eef153bac088c4e096d586eb5e4358efb",
+    "head_commit": "69f41f0cfb2c5c95a7b5ac3623b2f604ca28a51c",
+    "head_tree": "e59d0bda2f2d11b2d241568ce4f5f947bea66bf9",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": false
+  },
+  "work_package": {
+    "node_id": "inventory-closure-disposition-reconciliation",
+    "dependencies": [
+      "accepted-inventory-tool-boundary",
+      "accepted-inventory-activation-closure-guard",
+      "adopted-sole-current-pending-migration-decision",
+      "accepted-exact-compatibility-route-verification"
+    ],
+    "required_tools": [
+      "cargo-nextest",
+      "rustfmt",
+      "shasum"
+    ],
+    "safety_class": "isolated_workspace_write",
+    "owned_scope": {
+      "paths": [
+        "validator/src/inventory/types.rs",
+        "validator/src/inventory/validate.rs",
+        "validator/tests/inventory_contract_cases/routing_transitions.rs",
+        "validator/tests/inventory_contract_cases/compatibility_routes.rs",
+        "fixtures/inventory-authority/closure-cases.json",
+        "docs/ultragoal-successor-live/worker-results/INVENTORY-CLOSURE-DISPOSITION-RECONCILIATION-053.json"
+      ],
+      "semantic_symbols": [
+        "inventory-finding-disposition",
+        "inventory-closure-blocker-accounting",
+        "open-migration-obligation-accounting",
+        "unknown-warning-fail-closed-classification",
+        "current-live-finding-preservation"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "current 33 sole-current pending-migration findings remain visible",
+        "current 14 exact compatibility-route-retained findings remain visible",
+        "same-code error severity remains blocking",
+        "unknown warning remains blocking",
+        "candidate warning remains blocking",
+        "stale conflict duplicate unknown and partial registry failures remain blocking",
+        "zero-blocker catalog with open migration obligations reports closed inventory and explicit open obligations"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "exact leased inventory source tests fixture and WorkerResult paths"
+        },
+        {
+          "class": "process",
+          "target": "offline focused and dependency-closed inventory validation"
+        },
+        {
+          "class": "temporary_build_write",
+          "target": "/tmp/hul-inventory-disposition-053"
+        }
+      ]
+    },
+    "acceptance": [
+      "all findings remain serialized and observable; closure accounting never deletes relabels or suppresses a finding",
+      "only warning-severity sole_current_authority_pending_migration and compatibility_route_retained findings are non-blocking open migration obligations",
+      "every error remains blocking even when its code matches an open-obligation code",
+      "every other warning including an unknown code remains blocking",
+      "the closure status separately reports blocker count and open-obligation count with deterministic per-code maps",
+      "the current live catalog preserves all 81 findings while reporting 34 blockers and 47 open migration obligations",
+      "the 34 current blockers remain exactly 14 parallel_authority 9 missing_required_component 10 candidate_component_not_active and 1 projection_requires_canonical_reconciliation",
+      "the 47 open obligations remain exactly 33 sole_current_authority_pending_migration and 14 compatibility_route_retained",
+      "unknown duplicate conflicting stale unsafe and partial registry evidence still aborts or blocks closed state",
+      "no migration retirement compatibility equivalence package install runtime journey readiness release or completion claim is raised",
+      "focused and dependency-closed inventory tests pass twice with 16 test threads from one frozen artifact set",
+      "WorkerResult-v1 binds every leased artifact and records the exact no-claim ceiling"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "INVENTORY-CLOSURE-DISPOSITION-RECONCILIATION-053",
+    "run_id": "ultragoal-successor-live-20260712-macro-007",
+    "node_id": "inventory-closure-disposition-reconciliation",
+    "principal": "worker",
+    "owner": "/root/inventory_closure_disposition_engineer",
+    "binding": {
+      "context_id": "sha256:4bc5a325abaf903517a04c870cb04863dece525f7d53053fa76675dddda57c5c",
+      "candidate_id": "sha256:2d52dad393d081955b25452a6cf3739eef153bac088c4e096d586eb5e4358efb"
+    },
+    "safety_class": "isolated_workspace_write",
+    "owned_scope": "exactly work_package.owned_scope",
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 3
+  },
+  "prohibited_surfaces": [
+    "validator inventory discovery builders registries routing application projection generated authority agent readers command witnesses API witnesses public CLI catalog parser dispatcher and command runtime",
+    "routine-work context plugin product distribution orchestration claims state evaluation observability package repository-fit migration and release source",
+    "Cargo manifests lockfile shared schemas adopted manifests authority routes migration registry claim registry generated outputs board acceptance root decisions and release state",
+    "Git writes network host state external effects destructive cleanup and every path not expressly leased"
+  ],
+  "root_validation_obligations": [
+    "independently review the exact frozen WorkerResult artifact set",
+    "recompute current candidate identity after integration",
+    "run two same-session byte-identical HCT-INVENTORY summaries after the last authority-bearing edit",
+    "verify exact 81 finding preservation 34 blocker accounting and 47 open-obligation accounting",
+    "keep migration and retirement nodes open until their separate product behavior and proof surfaces close"
+  ],
+  "no_claim_statement": "This worker reconciles inventory closure accounting only. It does not migrate or retire any surface, adopt shared authority, close the inventory node, prove package or runtime behavior, or claim readiness, release, or goal completion."
+}
