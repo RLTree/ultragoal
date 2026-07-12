@@ -1,0 +1,41 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "FIXTURE-RESULT-COMMITMENT-ACCEPTANCE-026",
+  "root_decision": "accept_bounded_artifact_set",
+  "review_mode": "independent_read_only_worker_result_commitment_and_fixture_behavior_falsification",
+  "reviewer": "/root/fixture_result_commitment_reviewer",
+  "accepted_results": [
+    {
+      "path": "docs/ultragoal-successor-live/worker-results/FIXTURE-RECOVERY-STATE-CORRECTION-019.json",
+      "sha256": "682ab9a880d691a93fd0771a572614542e71ba03ad9327001fe238cd655051ec"
+    },
+    {
+      "path": "docs/ultragoal-successor-live/worker-results/FIXTURE-RESULT-COMMITMENT-CORRECTION-026.json",
+      "sha256": "9f749a6773d803090d12fb5c6a8e8153e872ce40cb6aabd5c46919999d2b1fd6"
+    }
+  ],
+  "committed_artifact_set": {
+    "aggregate_sha256": "sha256:7d2747bb53f1886b61be26969473fcb467e847ebceb69c327a6a93e5b3d1409b",
+    "artifact_count": 5,
+    "fixture_count": 3,
+    "artifact_workspace_verified": 5,
+    "result_commitment_verified": 5,
+    "opaque_fixture_artifact_rows_absent": true
+  },
+  "independent_verification": {
+    "commitment_controls": "2 passed; 0 failed; nextest run 54b39902-65d1-4ef8-b8d2-0e7132f06c54",
+    "fixture_behavior": "24 passed; 0 failed; nextest run 59a6ba3a-94ac-46dc-b2f9-4768df770b6a",
+    "negative_controls": "all-row mutation, missing, unknown, stale, scope escape, and inflated claim rejected",
+    "format_json_diff": "pass",
+    "blocking_findings": 0
+  },
+  "accepted_scope": "Darwin source and focused fixture behavior with the exact five-record WorkerResult and canonical ResultCommitment.",
+  "withheld_scope": [
+    "FreeBSD identity-conditioned cleanup execution",
+    "fixture node closure",
+    "readiness",
+    "release",
+    "completion"
+  ],
+  "no_claim_statement": "This decision accepts only the five-artifact commitment correction and does not claim FreeBSD execution, node closure, readiness, release, or completion."
+}

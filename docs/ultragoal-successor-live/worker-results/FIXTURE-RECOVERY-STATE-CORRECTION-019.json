@@ -6,10 +6,10 @@
     "candidate_id": "sha256:44d6e42a0ef56a3d3dcd0c5dce97f450ca80f72ce959f35494b4fe434857bc55",
     "context_id": "sha256:e16ec3d65c5cad916484db7a38218efdeb8e68410c1ddd40075bc5d44094dd16",
     "aggregate_algorithm": "sha256(path UTF-8, NUL, unsigned 64-bit big-endian byte length, file bytes), in artifacts order",
-    "worker_owned_artifact_count": 2,
-    "worker_owned_artifact_total_bytes": 30605,
-    "worker_owned_artifact_total_lines": 945,
-    "worker_owned_artifact_set_sha256": "sha256:34f5233bb9a913fc1b71de7d0b35e574d40844aef7d84760f4791c7249882f8b"
+    "worker_owned_artifact_count": 5,
+    "worker_owned_artifact_total_bytes": 79248,
+    "worker_owned_artifact_total_lines": 2301,
+    "worker_owned_artifact_set_sha256": "sha256:7d2747bb53f1886b61be26969473fcb467e847ebceb69c327a6a93e5b3d1409b"
   },
   "base_state": {
     "status": "independent-rework-required",
@@ -28,36 +28,16 @@
     "freebsd_observation": "the successful identity-conditioned cleanup branch is source- and cfg-covered but was not executed on this Darwin worker host",
     "envelope_no_claim_statement": "This root-issued envelope grants no root authority and raises no fixture product, evaluation, readiness, release, or completion claim.",
     "worker_owned_artifact_count": 5,
-    "worker_owned_artifact_total_bytes": 76498,
-    "worker_owned_artifact_total_lines": 2244,
-    "worker_owned_artifact_set_sha256": "sha256:1f36bc714bb88986e5c63b0dd53ff8cbbb8f478e810c6621da85f5d9e59df658",
-    "fixture_artifact_rows": [
-      {
-        "path": "validator/tests/fixture_scheduler_contract/adversarial.rs",
-        "before_sha256": "sha256:1ff81c2e49b8b0c5dc13405e21c8e6b95df4d33e750cf4f8ff0c9d7743d63e1e",
-        "sha256": "sha256:b060176101dff756f15c24901b2311540398d786e24c49db6d85ec5f51476552",
-        "byte_length": 33143,
-        "summary": "ordinary finish and finish_observed false-pass, repeated-recovery, resource, mutation, race, and security controls"
-      },
-      {
-        "path": "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
-        "before_sha256": "sha256:c4680dc145b00d4a4bb9474fe843e01311c5b376a75d8ffa53b0304e799eb869",
-        "sha256": "sha256:047713d05a05ff9362362312c624fc01c21a0fa7c9d5ffd5b0473c0bbeec6530",
-        "byte_length": 8050,
-        "summary": "persisted LeaseSpec and WorkPackage validation, typed source artifact verification, fixture-row verification, and negative mutations"
-      },
-      {
-        "path": "validator/tests/fixture_scheduler_contract/scheduling.rs",
-        "before_sha256": "sha256:735ddb139ac8a45ad53975e19156de392f0b55320960524cfeb4c17472f2c6c9",
-        "sha256": "sha256:9976ad8a44df0e8c59342654d7eb4abcdacc36fbc3b97cad20362cd8692f8398",
-        "byte_length": 4700,
-        "summary": "platform-truthful active-count and RecoveryRequired scheduling expectations"
-      }
-    ]
+    "worker_owned_artifact_total_bytes": 79248,
+    "worker_owned_artifact_total_lines": 2301,
+    "worker_owned_artifact_set_sha256": "sha256:7d2747bb53f1886b61be26969473fcb467e847ebceb69c327a6a93e5b3d1409b"
   },
   "touched_paths": [
     "validator/src/fixture_scheduler/lease.rs",
-    "validator/src/fixture_scheduler/scheduler.rs"
+    "validator/src/fixture_scheduler/scheduler.rs",
+    "validator/tests/fixture_scheduler_contract/adversarial.rs",
+    "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
+    "validator/tests/fixture_scheduler_contract/scheduling.rs"
   ],
   "touched_semantics": [
     "fixture_scheduler::FixtureRun::is_active",
@@ -68,7 +48,11 @@
     "fixture_scheduler::IsolationLease::recover"
   ],
   "generated_outputs": [],
-  "fixtures": [],
+  "fixtures": [
+    "validator/tests/fixture_scheduler_contract/adversarial.rs",
+    "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
+    "validator/tests/fixture_scheduler_contract/scheduling.rs"
+  ],
   "effects": [
     {
       "class": "workspace_write",
@@ -108,6 +92,24 @@
       "before_sha256": "sha256:7c3efc093d4965a7f9018ba916ed5a2cb5a6558bbe0556c37ecaf86fdff3f758",
       "after_sha256": "sha256:8ddc4dcf8674ca4273c39bc1062093c6d7ee164bb116d6b23ee693ac809a465c",
       "summary": "reinserts a cleanup-failed run only when its lease is already observably RecoveryRequired; otherwise returns an integrity error"
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/adversarial.rs",
+      "before_sha256": "sha256:1ff81c2e49b8b0c5dc13405e21c8e6b95df4d33e750cf4f8ff0c9d7743d63e1e",
+      "after_sha256": "sha256:b060176101dff756f15c24901b2311540398d786e24c49db6d85ec5f51476552",
+      "summary": "adds ordinary finish and finish_observed false-pass, repeated-recovery, resource, mutation, race, and security controls"
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
+      "before_sha256": "sha256:c4680dc145b00d4a4bb9474fe843e01311c5b376a75d8ffa53b0304e799eb869",
+      "after_sha256": "sha256:20986e85b42d38c9b99e8afdccf6af09b3ad48163f1bbfdb34712ff6caae4d80",
+      "summary": "binds all five changed files through ArtifactWorkspace and the canonical ResultCommitment, with exact missing, unknown, mutation, scope-escape, stale-candidate, and claim-inflation controls"
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/scheduling.rs",
+      "before_sha256": "sha256:735ddb139ac8a45ad53975e19156de392f0b55320960524cfeb4c17472f2c6c9",
+      "after_sha256": "sha256:9976ad8a44df0e8c59342654d7eb4abcdacc36fbc3b97cad20362cd8692f8398",
+      "summary": "updates platform-truthful active-count and RecoveryRequired scheduling expectations"
     }
   ],
   "commands_and_tests": [
@@ -143,6 +145,21 @@
       "path": "validator/src/fixture_scheduler/scheduler.rs",
       "sha256": "sha256:8ddc4dcf8674ca4273c39bc1062093c6d7ee164bb116d6b23ee693ac809a465c",
       "byte_length": 7877
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/adversarial.rs",
+      "sha256": "sha256:b060176101dff756f15c24901b2311540398d786e24c49db6d85ec5f51476552",
+      "byte_length": 33143
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
+      "sha256": "sha256:20986e85b42d38c9b99e8afdccf6af09b3ad48163f1bbfdb34712ff6caae4d80",
+      "byte_length": 10800
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/scheduling.rs",
+      "sha256": "sha256:9976ad8a44df0e8c59342654d7eb4abcdacc36fbc3b97cad20362cd8692f8398",
+      "byte_length": 4700
     }
   ],
   "findings": [
@@ -157,6 +174,10 @@
     {
       "severity": "platform-ceiling",
       "finding": "Darwin and Linux intentionally retain RecoveryRequired because the selected API surface has no identity-conditioned destructive primitive; FreeBSD success remains unexecuted here"
+    },
+    {
+      "severity": "material-corrected",
+      "finding": "all five changed files now use canonical touched_paths, fixtures, artifacts, ArtifactWorkspace verification, and ResultCommitment binding; the opaque fixture_artifact_rows substitute was removed"
     }
   ],
   "unresolved_dependencies": [
