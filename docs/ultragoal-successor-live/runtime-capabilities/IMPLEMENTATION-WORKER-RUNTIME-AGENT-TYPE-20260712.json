@@ -1,0 +1,11 @@
+{
+  "schema_version": "RuntimeAgentTypeReceipt-v1",
+  "captured_at": "2026-07-12T10:01:43Z",
+  "source": "Codex spawn_agent tool metadata exposed in the current runtime",
+  "role_id": "implementation-worker",
+  "runtime_agent_type": "worker",
+  "sandbox_mode": "workspace-write",
+  "may_exercise_root_authority": false,
+  "model_metadata": null,
+  "capability_ceiling": "Bounded repository implementation under an explicit disjoint lease; no root authority, Git mutation, external effects, claim decisions, readiness, release, or completion authority."
+}

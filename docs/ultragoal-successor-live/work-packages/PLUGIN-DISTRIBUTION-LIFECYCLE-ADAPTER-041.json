@@ -1,0 +1,155 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:0ba9c41256bee12354a03ef5c7052ccceedd159464baf82326c08050b2a5b747",
+    "candidate_id": "sha256:50ce9c73e2cfc659e3d0637bd78ae5f4a50919c9aba2a65c6e6b4334717c759f",
+    "head_commit": "dcf85216566e69d10ba4c2b16c20a88af2d86884",
+    "head_tree": "9ff13e5d98f78ccc2685907d331e786ceddf2996",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": false
+  },
+  "work_package": {
+    "node_id": "plugin-distribution-lifecycle-adapter",
+    "dependencies": ["accepted-plugin-lifecycle-source", "accepted-package-artifact-writer"],
+    "required_tools": ["cargo-nextest", "rustfmt", "shasum"],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "docs/ultragoal-successor-live/acceptance/PLUGIN-LIFECYCLE-SOURCE-INTEGRATION-039.json",
+      "docs/ultragoal-successor-live/acceptance/PACKAGE-ARTIFACT-WRITER-CORRECTION.json",
+      "validator/src/distribution",
+      "validator/src/plugin_product",
+      "validator/tests/distribution_contract.rs",
+      "validator/tests/distribution_contract",
+      "validator/tests/plugin_product_contract"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041.json",
+        "validator/src/plugin_product/distribution_adapter",
+        "validator/src/plugin_product/mod.rs"
+      ],
+      "semantic_symbols": [
+        "plugin-distribution-effect-adapter",
+        "plugin-package-plan-snapshot-binding",
+        "plugin-installed-cache-observation",
+        "plugin-lifecycle-effect-prefix-recovery"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/plugin-distribution-adapter",
+        "validator/tests/plugin_distribution_adapter_contract.rs",
+        "validator/tests/plugin_distribution_adapter_contract"
+      ],
+      "effects": [
+        {"class": "workspace_write", "target": "plugin-distribution-adapter-source"},
+        {"class": "fixture_write", "target": "plugin-distribution-adapter-tests"},
+        {"class": "process", "target": "offline-isolated-filesystem-adapter-validation"}
+      ]
+    },
+    "prerequisites": [
+      "accepted-source-local-lifecycle-coordinator",
+      "accepted-permit-bound-package-writer",
+      "host-mutation-remains-fixture-confined"
+    ],
+    "outputs": [
+      "real-distribution-lifecycle-adapter-candidate",
+      "package-plan-snapshot-identity-binding",
+      "isolated-install-update-rollback-reinstall-uninstall-stale-cache-repeat-use-controls",
+      "plugin-distribution-worker-result-v1",
+      "exact-root-change-request"
+    ],
+    "acceptance": [
+      "adapter-executes-real-distribution-kernel-effects-in-an-isolated-filesystem",
+      "package-plan-snapshot-and-lifecycle-authority-bind-one-candidate",
+      "read-only-verify-and-probe-failures-never-restore-or-write",
+      "partial-effect-failure-arms-only-the-observed-recovery-prefix",
+      "install-update-rollback-reinstall-uninstall-stale-cache-and-repeat-use-controls-pass",
+      "positive-negative-race-mutation-security-and-false-pass-controls-pass",
+      "worker-result-binds-every-owned-artifact",
+      "independent-review-and-root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041",
+    "run_id": "ultragoal-successor-live-20260712-macro-001",
+    "node_id": "plugin-distribution-lifecycle-adapter",
+    "principal": "worker",
+    "owner": "/root/distribution_lifecycle_adapter_engineer",
+    "binding": {
+      "context_id": "sha256:0ba9c41256bee12354a03ef5c7052ccceedd159464baf82326c08050b2a5b747",
+      "candidate_id": "sha256:50ce9c73e2cfc659e3d0637bd78ae5f4a50919c9aba2a65c6e6b4334717c759f"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "docs/ultragoal-successor-live/acceptance/PLUGIN-LIFECYCLE-SOURCE-INTEGRATION-039.json",
+      "docs/ultragoal-successor-live/acceptance/PACKAGE-ARTIFACT-WRITER-CORRECTION.json",
+      "validator/src/distribution",
+      "validator/src/plugin_product",
+      "validator/tests/distribution_contract.rs",
+      "validator/tests/distribution_contract",
+      "validator/tests/plugin_product_contract"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041.json",
+        "validator/src/plugin_product/distribution_adapter",
+        "validator/src/plugin_product/mod.rs"
+      ],
+      "semantic_symbols": [
+        "plugin-distribution-effect-adapter",
+        "plugin-package-plan-snapshot-binding",
+        "plugin-installed-cache-observation",
+        "plugin-lifecycle-effect-prefix-recovery"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/plugin-distribution-adapter",
+        "validator/tests/plugin_distribution_adapter_contract.rs",
+        "validator/tests/plugin_distribution_adapter_contract"
+      ],
+      "effects": [
+        {"class": "workspace_write", "target": "plugin-distribution-adapter-source"},
+        {"class": "fixture_write", "target": "plugin-distribution-adapter-tests"},
+        {"class": "process", "target": "offline-isolated-filesystem-adapter-validation"}
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "accepted-plugin-lifecycle-source": "sha256:8c8ae1d9ce6c5cb6769408e8dff2bf3db463e2788439c8b6f21caf1b70e10955",
+        "accepted-package-artifact-writer": "sha256:41c4b6c3e83173240658b3d115df5404bf28397c0e0994a6d3b6feaf75752853"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "rustfmt": "sha256:aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "accepted-source-local-lifecycle-coordinator": "sha256:8c8ae1d9ce6c5cb6769408e8dff2bf3db463e2788439c8b6f21caf1b70e10955",
+        "accepted-permit-bound-package-writer": "sha256:41c4b6c3e83173240658b3d115df5404bf28397c0e0994a6d3b6feaf75752853",
+        "host-mutation-remains-fixture-confined": "sha256:d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "prohibited_surfaces": [
+    "validator/src/distribution and every existing package, install, cache, marketplace, registry, runtime, and host authority implementation",
+    ".codex-plugin/plugin.json, plugin-manifest-draft.json, marketplace files, version authority, package bytes, and host plugin/cache/app/UI state",
+    "validator/src/lib.rs, public catalog, parser, dispatcher, command_run, inventory, orchestration, claims, and generated authority",
+    "shared schemas, adopted manifests, migration and claim registries, acceptance, board, release state",
+    "Cargo manifests and lockfile, Git writes, network, external effects, destructive cleanup, and host state"
+  ],
+  "root_validation_obligations": [
+    "independently-review-exact-artifact-set",
+    "apply-only-reviewed-distribution-export-or-public-wiring",
+    "keep-source-package-install-cache-marketplace-app-ui-discovery-runtime-and-journey-proof-separate",
+    "run-candidate-bound-isolated-and-supported-host-journeys-after-integration"
+  ],
+  "no_claim_statement": "This worker does not claim package, install, cache, marketplace, app-registry, Plugins UI, discovery, runtime, journey, readiness, release, or completion."
+}

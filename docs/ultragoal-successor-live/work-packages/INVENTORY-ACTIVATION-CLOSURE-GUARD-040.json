@@ -1,0 +1,183 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:0ba9c41256bee12354a03ef5c7052ccceedd159464baf82326c08050b2a5b747",
+    "candidate_id": "sha256:50ce9c73e2cfc659e3d0637bd78ae5f4a50919c9aba2a65c6e6b4334717c759f",
+    "head_commit": "dcf85216566e69d10ba4c2b16c20a88af2d86884",
+    "head_tree": "9ff13e5d98f78ccc2685907d331e786ceddf2996",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": false
+  },
+  "work_package": {
+    "node_id": "inventory-activation-and-closure-guard",
+    "dependencies": [
+      "accepted-live-context-effect-boundary",
+      "accepted-inventory-tool-boundary",
+      "accepted-exact-command-catalog-discovery"
+    ],
+    "required_tools": ["cargo-nextest", "rustfmt", "shasum"],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "docs/ultragoal-successor-live/acceptance/N02-INVENTORY-TOOL.json",
+      "docs/ultragoal-successor-live/acceptance/INVENTORY-EXACT-COMMAND-CATALOG-DISCOVERY.json",
+      "migration/authority-routes.json",
+      "validator/src/api_witness.rs",
+      "validator/src/command_witness.rs",
+      "validator/src/cli/successor",
+      "validator/src/context",
+      "validator/src/inventory",
+      "validator/tests/inventory_contract.rs",
+      "validator/tests/inventory_contract_cases"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/INVENTORY-ACTIVATION-CLOSURE-GUARD-040.json",
+        "validator/src/inventory/builder.rs",
+        "validator/src/inventory/projection.rs",
+        "validator/src/inventory/registry/command_activation.rs",
+        "validator/src/inventory/registry/mod.rs",
+        "validator/src/inventory/registry/topology.rs",
+        "validator/src/inventory/types.rs",
+        "validator/src/inventory/validate.rs",
+        "validator/examples/hct_inventory.rs"
+      ],
+      "semantic_symbols": [
+        "inventory-command-activation-witness",
+        "inventory-closure-blocker-reconciliation",
+        "inventory-final-session-revalidation",
+        "inventory-projection-input-verification"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/inventory-authority/closure-cases.json",
+        "validator/tests/inventory_contract.rs",
+        "validator/tests/inventory_contract_cases/command_activation.rs",
+        "validator/tests/inventory_contract_cases/generated_disposition.rs",
+        "validator/tests/inventory_contract_cases/generated_regeneration.rs",
+        "validator/tests/inventory_contract_cases/routing_transitions.rs"
+      ],
+      "effects": [
+        {"class": "workspace_write", "target": "inventory-activation-source"},
+        {"class": "fixture_write", "target": "inventory-activation-tests"},
+        {"class": "process", "target": "offline-inventory-validation"}
+      ]
+    },
+    "prerequisites": [
+      "actual-command-handlers-remain-root-issued-inputs",
+      "actual-public-apis-remain-root-issued-inputs",
+      "generated-authority-remains-root-owned"
+    ],
+    "outputs": [
+      "deny-unknown-command-activation-guard",
+      "typed-inventory-closure-status",
+      "inventory-activation-worker-result-v1",
+      "exact-root-change-request"
+    ],
+    "acceptance": [
+      "definition-only-and-refusal-only-routes-remain-candidate",
+      "unknown-duplicate-conflicting-and-stale-activation-rows-abort",
+      "projection-output-never-self-authorizes-canonical-inputs",
+      "final-session-drift-invalidates-all-output",
+      "positive-negative-race-mutation-security-and-false-pass-controls-pass",
+      "read-and-summary-paths-are-recursively-zero-write",
+      "worker-result-binds-every-owned-artifact",
+      "independent-review-and-root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "INVENTORY-ACTIVATION-CLOSURE-GUARD-040",
+    "run_id": "ultragoal-successor-live-20260712-macro-001",
+    "node_id": "inventory-activation-and-closure-guard",
+    "principal": "worker",
+    "owner": "/root/inventory_activation_guard_engineer",
+    "binding": {
+      "context_id": "sha256:0ba9c41256bee12354a03ef5c7052ccceedd159464baf82326c08050b2a5b747",
+      "candidate_id": "sha256:50ce9c73e2cfc659e3d0637bd78ae5f4a50919c9aba2a65c6e6b4334717c759f"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "docs/ultragoal-successor-live/acceptance/N02-INVENTORY-TOOL.json",
+      "docs/ultragoal-successor-live/acceptance/INVENTORY-EXACT-COMMAND-CATALOG-DISCOVERY.json",
+      "migration/authority-routes.json",
+      "validator/src/api_witness.rs",
+      "validator/src/command_witness.rs",
+      "validator/src/cli/successor",
+      "validator/src/context",
+      "validator/src/inventory",
+      "validator/tests/inventory_contract.rs",
+      "validator/tests/inventory_contract_cases"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/INVENTORY-ACTIVATION-CLOSURE-GUARD-040.json",
+        "validator/src/inventory/builder.rs",
+        "validator/src/inventory/projection.rs",
+        "validator/src/inventory/registry/command_activation.rs",
+        "validator/src/inventory/registry/mod.rs",
+        "validator/src/inventory/registry/topology.rs",
+        "validator/src/inventory/types.rs",
+        "validator/src/inventory/validate.rs",
+        "validator/examples/hct_inventory.rs"
+      ],
+      "semantic_symbols": [
+        "inventory-command-activation-witness",
+        "inventory-closure-blocker-reconciliation",
+        "inventory-final-session-revalidation",
+        "inventory-projection-input-verification"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/inventory-authority/closure-cases.json",
+        "validator/tests/inventory_contract.rs",
+        "validator/tests/inventory_contract_cases/command_activation.rs",
+        "validator/tests/inventory_contract_cases/generated_disposition.rs",
+        "validator/tests/inventory_contract_cases/generated_regeneration.rs",
+        "validator/tests/inventory_contract_cases/routing_transitions.rs"
+      ],
+      "effects": [
+        {"class": "workspace_write", "target": "inventory-activation-source"},
+        {"class": "fixture_write", "target": "inventory-activation-tests"},
+        {"class": "process", "target": "offline-inventory-validation"}
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "accepted-live-context-effect-boundary": "sha256:d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51",
+        "accepted-inventory-tool-boundary": "sha256:51912e7daeeb1c64b5e5cd8a6f3a043d0a87c06522646339d84d198b73764dff",
+        "accepted-exact-command-catalog-discovery": "sha256:960510129fb3ba313f3cd57f517e1bdfba02de7e08995813258d555dde3cca91"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "rustfmt": "sha256:aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "actual-command-handlers-remain-root-issued-inputs": "sha256:960510129fb3ba313f3cd57f517e1bdfba02de7e08995813258d555dde3cca91",
+        "actual-public-apis-remain-root-issued-inputs": "sha256:51912e7daeeb1c64b5e5cd8a6f3a043d0a87c06522646339d84d198b73764dff",
+        "generated-authority-remains-root-owned": "sha256:d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "prohibited_surfaces": [
+    "validator/src/api_witness.rs, validator/src/command_witness.rs, validator/src/lib.rs, public catalog, parser, dispatcher, and command_run",
+    "validator/src/inventory/generated and every global generated output",
+    "agent, plugin-product, distribution, orchestration, claims, observability, package, and repository-fit paths",
+    "shared schemas, adopted manifests, migration and claim registries, acceptance, board, release state",
+    "Cargo manifests and lockfile, Git writes, network, external effects, destructive cleanup, and host state"
+  ],
+  "root_validation_obligations": [
+    "independently-review-exact-artifact-set",
+    "apply-only-reviewed-api-command-generated-and-migration-root-changes",
+    "rebuild-fresh-hct-inventory-after-last-authority-change",
+    "run-two-same-session-byte-identical-summaries-and-permission-controls"
+  ],
+  "no_claim_statement": "This worker does not claim a current catalog identity, inventory closure, migration, readiness, release, or completion."
+}
