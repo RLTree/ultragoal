@@ -1,0 +1,79 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N08-PLUGIN-PRODUCT",
+  "root_decision": "accepted_source_local_transaction_bound_host_lifecycle_coordinator",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/SUPPORTED-HOST-PLUGIN-LIFECYCLE-COORDINATOR-044.json",
+    "sha256": "ce08a7c4ac7a029825c1393b69d0e0ce489027356a1f7300b4193d5fcbe9d39e",
+    "artifact_count": 18,
+    "artifact_set_sha256": "9504905134ef556288958ce90387014851c0832327952af2aae8f0a50904426e"
+  },
+  "rework_history": [
+    "Sibling sessions initially received indistinguishable external-effect requests.",
+    "Unsupported hosts initially advanced far enough to receive a runnable plan.",
+    "Marketplace and host-effect scopes initially admitted contradictory authorities.",
+    "Raw observation capture initially bypassed the unified session scope.",
+    "Capture and verification initially admitted post-capture host drift.",
+    "The observation transaction initially released before final report close.",
+    "Invalid or replayed sessions initially contacted the adapter before complete local preflight.",
+    "The corrected coordinator uses unique one-use issuance, one unified scope, capability-first eligibility, private observation frames, final rereads, a generation-stable reader transaction through close, and zero-contact local preflight refusal."
+  ],
+  "independent_review": {
+    "reviewer": "/root/host_lifecycle_independent_reviewer",
+    "verdict": "pass",
+    "review_mode": "independent_read_only_corrected_set",
+    "closed_not_ready_red_controls": "2 passed; 0 failed",
+    "preflight_and_race_nextest_run_id": "e92507ed-6f92-4318-a78d-c5d967e064dc",
+    "preflight_and_race_result": "5 passed; 0 failed",
+    "focused_nextest_run_id": "b1544245-0aed-4948-95bd-603d3a2bb539",
+    "focused_result": "44 passed; 0 failed",
+    "dependency_nextest_run_id": "496cfb9e-d594-42d9-9817-1e1529be5e43",
+    "dependency_result": "199 passed; 0 failed",
+    "blocking_review_findings": 0
+  },
+  "root_integration": {
+    "implementation_commit": "a5ff328b5c38f4b28549c5bee258b1aceab58c46",
+    "public_wiring_commit": "e3f1d2c48f655eedbd6c2b621ceb700df57e23b3",
+    "integrated_head": "e3f1d2c48f655eedbd6c2b621ceb700df57e23b3",
+    "integrated_tree": "761263f45ace1fcb65612cbe05a53cd73fe20088",
+    "combined_nextest_run_id": "123a6c88-0d34-4a4c-a1fa-0400b43a2c1e",
+    "combined_result": "104 passed; 0 failed",
+    "production_library_check": "passed under locked offline 16-job build"
+  },
+  "closed_findings": [
+    "Every effect request is unique one-use session authority and cannot cross sibling sessions.",
+    "Unsupported capability rejects before a runnable host plan is released.",
+    "Marketplace observation effect command cache repository and capability scope derive from one exact host-scope authority.",
+    "Observation frames retain private exact scope and issuance identity and cannot be cloned deserialized or captured outside the session.",
+    "All host truth layers and confined state are reread and byte-compared under one reader-owned generation-stable transaction through final close.",
+    "Invalid stale replayed or mutated sessions fail local preflight before request construction adapter contact provenance generation or surface reads."
+  ],
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-PRODUCT-001",
+      "state": "production-compiled source-local host lifecycle coordinator accepted",
+      "blocker": "No live supported-host adapter, host transaction, package adoption, installation, discovery, runtime, or lifecycle journey has passed."
+    },
+    {
+      "requirement_id": "REQ-SUPPLY-004",
+      "state": "separate transaction-bound host truth layers accepted at coordinator boundary",
+      "blocker": "Marketplace cache app registry Plugins UI discovery runtime and real-user surfaces remain separately unproved."
+    }
+  ],
+  "root_acceptance_limit": "Production-compiled source-local descriptor-confined host lifecycle coordinator with exact private session scope, one-use effect issuance, and reader-owned generation-stable observation transactions.",
+  "explicitly_withheld": [
+    "supported-host transaction or locking adapter",
+    "authenticated reader provenance from a live host",
+    "package version or manifest adoption",
+    "marketplace installation cache app-registry or Plugins UI state",
+    "host discovery or runtime execution",
+    "fresh update rollback reinstall uninstall stale-cache or repeat-use journeys",
+    "plugin product node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any change to an accepted host-lifecycle artifact, lifecycle or distribution dependency, task envelope, WorkerResult, public wiring, fixture, named test harness, transaction schema, or scope binding immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim a live supported-host adapter, package, install, discovery, runtime, representative journey, readiness, release, node closure, or goal completion."
+}

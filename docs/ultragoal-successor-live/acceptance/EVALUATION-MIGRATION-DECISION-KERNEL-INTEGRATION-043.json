@@ -1,0 +1,76 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N11-EVALUATION-AND-N14-MIGRATION",
+  "root_decision": "accepted_source_local_evaluation_and_migration_decision_kernel",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/EVALUATION-MIGRATION-DECISION-KERNEL-043.json",
+    "sha256": "ef847d611b56cf5e34b6bbcc98f10ec7f006eeab6262947ae3594b328b4eee68",
+    "artifact_count": 8,
+    "artifact_set_sha256": "8d63c551734abf74761a4b7014f7a7bdddd5ef2b028136d6ced4d5eeaab43d6c"
+  },
+  "rework_history": [
+    "Promotion review initially trusted a caller-supplied independence boolean instead of crate-controlled authority.",
+    "Retirement review initially trusted caller-supplied independence and destructive-effect booleans.",
+    "Replacement evidence initially accepted caller-supplied proof-shaped hashes and reviewer identity.",
+    "Final retirement initially dropped the originating replacement ledger instead of revalidating it atomically.",
+    "Opaque promotion and retirement authorities initially exposed proof-shaped fields through Debug.",
+    "Migration plans and retirement targets initially serialized or cloned consumed replacement authority.",
+    "The corrected kernel uses opaque one-shot authorities, a persistent exact replacement ledger, bounded redaction, safe projections, and atomic one-winner reconciliation."
+  ],
+  "independent_review": {
+    "reviewer": "/root/evaluation_migration_independent_reviewer",
+    "verdict": "pass",
+    "review_mode": "independent_read_only_corrected_set",
+    "focused_result": "59 passed; 0 failed",
+    "claims_dependency_result": "45 passed; 0 failed",
+    "inventory_dependency_controls": "7 exact controls passed",
+    "production_library_check": "passed after root module wiring",
+    "blocking_review_findings": 0
+  },
+  "root_integration": {
+    "implementation_commit": "ab7571d2bd624ad2ef7ec4213bdad002bacf4305",
+    "public_wiring_commit": "e3f1d2c48f655eedbd6c2b621ceb700df57e23b3",
+    "integrated_head": "e3f1d2c48f655eedbd6c2b621ceb700df57e23b3",
+    "integrated_tree": "761263f45ace1fcb65612cbe05a53cd73fe20088",
+    "combined_nextest_run_id": "123a6c88-0d34-4a4c-a1fa-0400b43a2c1e",
+    "combined_result": "104 passed; 0 failed",
+    "transient_leak_followup_run_id": "3ee5298e-3df9-4594-896f-1d5d4b8ce833",
+    "transient_leak_followup_result": "1 passed; 0 failed; no leak signal",
+    "production_library_check": "passed under locked offline 16-job build"
+  },
+  "closed_findings": [
+    "Promotion and retirement decisions require opaque independently issued authority instead of caller assertions.",
+    "Replacement equivalence remains bound to exact root-observed evidence and its originating live ledger.",
+    "Consumed authority cannot be cloned serialized deserialized reconstructed from projections or echoed through Debug.",
+    "Final reconciliation revalidates exact candidate catalog inventory session review and destructive-effect authority and elects one atomic winner.",
+    "Evaluation records bind immutable specs audits provenance contamination controls observed execution failure harvesting and promotion reconciliation."
+  ],
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-EVALUATION-001",
+      "state": "source-local vendor-neutral evaluation and promotion-decision authority accepted",
+      "blocker": "Production adapters durable cross-process ledgers commands representative executions and promotion journeys remain unproved."
+    },
+    {
+      "requirement_id": "REQ-MIGRATION-001",
+      "state": "source-local migration planning review and retirement-decision authority accepted",
+      "blocker": "No migration registry adoption compatibility-route effect destructive effect reader-writer retirement or live migration journey is accepted."
+    }
+  ],
+  "root_acceptance_limit": "Production-compiled source-local evaluation, promotion, migration, review, and retirement-decision authority with opaque one-shot evidence and atomic reconciliation.",
+  "explicitly_withheld": [
+    "public evaluation or migration commands",
+    "durable cross-process authority ledgers",
+    "migration registry adoption",
+    "compatibility or retirement effects",
+    "representative live evaluation promotion migration or retirement journeys",
+    "claim elevation",
+    "node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any change to an accepted evaluation or migration artifact, its task envelope, WorkerResult, public wiring, fixture, named test harness, authority schema, or dependency binding immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim adapters, durable ledgers, commands, migration adoption, effects, representative journeys, claim elevation, readiness, release, node closure, or goal completion."
+}
