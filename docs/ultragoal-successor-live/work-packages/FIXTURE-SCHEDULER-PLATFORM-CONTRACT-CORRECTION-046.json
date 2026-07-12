@@ -1,0 +1,154 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:be2c86ec67893967702f13232a818254969c5d08ba461c22167a39d0b1613b2d",
+    "candidate_id": "sha256:d0827d3a77ca3af028985a9ad0a9c822ca803eff180137afe2c22a5763a802e5",
+    "head_commit": "f98d93bc10dd6873c690e21fedab181f9ed1f676",
+    "head_tree": "e06522e42e22c87a93711f78c9bd41cf7253c614",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true,
+    "dirty_scope": "orchestration-runtime-adapter-candidate-outside-this-lease"
+  },
+  "work_package": {
+    "node_id": "fixture-scheduler-platform-contract-correction",
+    "dependencies": [
+      "current-fixture-recovery-state-correction"
+    ],
+    "required_tools": [
+      "cargo-nextest",
+      "rustfmt",
+      "shasum"
+    ],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "validator/src/fixture_scheduler",
+      "validator/src/cli/capture/fixture",
+      "validator/tests/fixture_scheduler_contract/adversarial.rs",
+      "validator/tests/fixture_scheduler_contract/confinement.rs",
+      "validator/tests/fixture_scheduler_contract/scheduling.rs",
+      "docs/ultragoal-successor-live/worker-results/FIXTURE-RECOVERY-STATE-CORRECTION-019.json"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/task-envelopes/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json",
+        "docs/ultragoal-successor-live/worker-results/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json"
+      ],
+      "semantic_symbols": [
+        "fixture-scheduler-platform-conditioned-cleanup-expectations",
+        "fixture-scheduler-exact-retained-lease-paths",
+        "fixture-scheduler-observed-outcome-preservation"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "validator/tests/fixture_scheduler_contract/isolation.rs",
+        "validator/tests/fixture_scheduler_contract/execution_adapter.rs"
+      ],
+      "effects": [
+        {
+          "class": "fixture_write",
+          "target": "fixture-scheduler-contract-expectations"
+        },
+        {
+          "class": "process",
+          "target": "offline-isolated-fixture-scheduler-validation"
+        }
+      ]
+    },
+    "prerequisites": [
+      "production-fixture-scheduler-source-remains-read-only",
+      "darwin-unsupported-cleanup-remains-recovery-required",
+      "freebsd-funlinkat-remains-unverified"
+    ],
+    "outputs": [
+      "five-current-platform-expectation-corrections",
+      "exact-digest-bearing-lease-path-controls",
+      "fixture-scheduler-platform-contract-worker-result-v1"
+    ],
+    "acceptance": [
+      "all-five-stale-tests-assert-current-platform-specific-causal-results",
+      "darwin-cleanup-failure-never-masquerades-as-accepted-causal-failure-or-deleted-state",
+      "retained-recovery-required-state-active-count-and-exact-paths-remain-visible",
+      "all-existing-race-mutation-confinement-security-and-false-pass-controls-remain-intact",
+      "full-fixture-scheduler-contract-passes-47-of-47-on-current-darwin-candidate",
+      "worker-result-binds-every-owned-artifact",
+      "independent-review-and-root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046",
+    "run_id": "ultragoal-successor-live-20260712-macro-003",
+    "node_id": "fixture-scheduler-platform-contract-correction",
+    "principal": "worker",
+    "owner": "/root/fixture_scheduler_platform_engineer",
+    "binding": {
+      "context_id": "sha256:be2c86ec67893967702f13232a818254969c5d08ba461c22167a39d0b1613b2d",
+      "candidate_id": "sha256:d0827d3a77ca3af028985a9ad0a9c822ca803eff180137afe2c22a5763a802e5"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "validator/src/fixture_scheduler",
+      "validator/src/cli/capture/fixture",
+      "validator/tests/fixture_scheduler_contract/adversarial.rs",
+      "validator/tests/fixture_scheduler_contract/confinement.rs",
+      "validator/tests/fixture_scheduler_contract/scheduling.rs",
+      "docs/ultragoal-successor-live/worker-results/FIXTURE-RECOVERY-STATE-CORRECTION-019.json"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/task-envelopes/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json",
+        "docs/ultragoal-successor-live/worker-results/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json"
+      ],
+      "semantic_symbols": [
+        "fixture-scheduler-platform-conditioned-cleanup-expectations",
+        "fixture-scheduler-exact-retained-lease-paths",
+        "fixture-scheduler-observed-outcome-preservation"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "validator/tests/fixture_scheduler_contract/isolation.rs",
+        "validator/tests/fixture_scheduler_contract/execution_adapter.rs"
+      ],
+      "effects": [
+        {
+          "class": "fixture_write",
+          "target": "fixture-scheduler-contract-expectations"
+        },
+        {
+          "class": "process",
+          "target": "offline-isolated-fixture-scheduler-validation"
+        }
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "current-fixture-recovery-state-correction": "sha256:682ab9a880d691a93fd0771a572614542e71ba03ad9327001fe238cd655051ec"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "rustfmt": "sha256:aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "production-fixture-scheduler-source-remains-read-only": "sha256:682ab9a880d691a93fd0771a572614542e71ba03ad9327001fe238cd655051ec",
+        "darwin-unsupported-cleanup-remains-recovery-required": "sha256:7d06a45ba5a04d361370ba210c2ea5564cc1f9eabc7a9d0e6b50caa7ab0c7947",
+        "freebsd-funlinkat-remains-unverified": "sha256:c74e8fcdb245d6d7408a25055d75a4eaa1b36f8672cd399374e706c05a85fafc"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "prohibited_surfaces": [
+    "all validator production source and public command surfaces",
+    "all fixture-scheduler contract files outside the two exact owned test files",
+    "Cargo manifests and lockfile, Git writes, network, external effects, and destructive cleanup",
+    "shared schemas, generated authority, acceptance, critical-path board, claim decisions, release state, and root authority"
+  ],
+  "root_validation_obligations": [
+    "independently-review-exact-artifact-set",
+    "recompute-platform-ceiling-with-freebsd-explicitly-unverified",
+    "reconcile-fixture-scheduler-dependent-evaluation-and-claim-evidence-after-integration"
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, node closure, or goal completion."
+}

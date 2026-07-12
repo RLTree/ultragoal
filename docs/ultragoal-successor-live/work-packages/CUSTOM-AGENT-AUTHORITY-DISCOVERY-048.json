@@ -1,0 +1,182 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:be2c86ec67893967702f13232a818254969c5d08ba461c22167a39d0b1613b2d",
+    "candidate_id": "sha256:d0827d3a77ca3af028985a9ad0a9c822ca803eff180137afe2c22a5763a802e5",
+    "head_commit": "f98d93bc10dd6873c690e21fedab181f9ed1f676",
+    "head_tree": "e06522e42e22c87a93711f78c9bd41cf7253c614",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true,
+    "dirty_scope": "orchestration-runtime-adapter-candidate-outside-this-lease"
+  },
+  "work_package": {
+    "node_id": "custom-agent-authority-discovery",
+    "dependencies": [
+      "accepted-inventory-activation-guard",
+      "accepted-plugin-lifecycle-source"
+    ],
+    "required_tools": [
+      "cargo-nextest",
+      "rustfmt",
+      "shasum"
+    ],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      ".codex/agents",
+      "agents",
+      "custom-agents",
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/acceptance/INVENTORY-ACTIVATION-CLOSURE-GUARD-INTEGRATION-040.json",
+      "docs/ultragoal-successor-live/acceptance/PLUGIN-LIFECYCLE-SOURCE-INTEGRATION-039.json",
+      "validator/src/inventory",
+      "validator/src/plugin_product"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/task-envelopes/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json",
+        "docs/ultragoal-successor-live/worker-results/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json",
+        "validator/src/plugin_product/agent_discovery"
+      ],
+      "semantic_symbols": [
+        "bound-agent-discovery-session",
+        "host-agent-authority-snapshot",
+        "canonical-agent-role-observation",
+        "legacy-agent-exposure",
+        "sandbox-effect-observation",
+        "agent-route-eligibility"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/plugin-agent-discovery",
+        "validator/tests/plugin_agent_discovery_contract.rs",
+        "validator/tests/plugin_agent_discovery_contract"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "custom-agent-discovery-verifier-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "custom-agent-discovery-contract-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-isolated-agent-discovery-validation"
+        }
+      ]
+    },
+    "prerequisites": [
+      "live-host-agent-surfaces-remain-read-only",
+      "route-registry-inventory-and-manifest-authority-remain-root-owned",
+      "genuine-legacy-global-and-installed-authority-remains-unsuppressed"
+    ],
+    "outputs": [
+      "candidate-session-and-host-bound-agent-authority-verifier",
+      "canonical-legacy-collision-sandbox-package-install-cache-observation-model",
+      "positive-negative-race-mutation-security-and-false-pass-controls",
+      "custom-agent-authority-discovery-worker-result-v1",
+      "exact-root-wiring-retirement-and-route-adoption-request"
+    ],
+    "acceptance": [
+      "route-eligibility-requires-exact-six-canonical-roles-and-descriptor-digests",
+      "legacy-extra-duplicate-colliding-omitted-sandbox-or-write-capable-authority-blocks-eligibility",
+      "package-install-cache-project-session-and-candidate-identity-remain-separate-and-current",
+      "host-surface-and-candidate-drift-invalidates-the-observation-before-eligibility",
+      "unsafe-special-link-path-oversize-duplicate-key-forged-replay-and-echo-inputs-fail-closed",
+      "source-installed-cache-catalog-receipt-or-fixture-proxies-cannot-substitute-for-fresh-host-discovery",
+      "worker-result-binds-every-owned-artifact",
+      "independent-review-and-root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "CUSTOM-AGENT-AUTHORITY-DISCOVERY-048",
+    "run_id": "ultragoal-successor-live-20260712-macro-003",
+    "node_id": "custom-agent-authority-discovery",
+    "principal": "worker",
+    "owner": "/root/custom_agent_authority_engineer",
+    "binding": {
+      "context_id": "sha256:be2c86ec67893967702f13232a818254969c5d08ba461c22167a39d0b1613b2d",
+      "candidate_id": "sha256:d0827d3a77ca3af028985a9ad0a9c822ca803eff180137afe2c22a5763a802e5"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      ".codex/agents",
+      "agents",
+      "custom-agents",
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/acceptance/INVENTORY-ACTIVATION-CLOSURE-GUARD-INTEGRATION-040.json",
+      "docs/ultragoal-successor-live/acceptance/PLUGIN-LIFECYCLE-SOURCE-INTEGRATION-039.json",
+      "validator/src/inventory",
+      "validator/src/plugin_product"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/task-envelopes/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json",
+        "docs/ultragoal-successor-live/worker-results/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json",
+        "validator/src/plugin_product/agent_discovery"
+      ],
+      "semantic_symbols": [
+        "bound-agent-discovery-session",
+        "host-agent-authority-snapshot",
+        "canonical-agent-role-observation",
+        "legacy-agent-exposure",
+        "sandbox-effect-observation",
+        "agent-route-eligibility"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/plugin-agent-discovery",
+        "validator/tests/plugin_agent_discovery_contract.rs",
+        "validator/tests/plugin_agent_discovery_contract"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "custom-agent-discovery-verifier-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "custom-agent-discovery-contract-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-isolated-agent-discovery-validation"
+        }
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "accepted-inventory-activation-guard": "sha256:6782d954ef05279ea31dcd4f833fadbb44635ddc90832eba1bcbb914cde08d8c",
+        "accepted-plugin-lifecycle-source": "sha256:8c8ae1d9ce6c5cb6769408e8dff2bf3db463e2788439c8b6f21caf1b70e10955"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "rustfmt": "sha256:aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "live-host-agent-surfaces-remain-read-only": "sha256:be2c86ec67893967702f13232a818254969c5d08ba461c22167a39d0b1613b2d",
+        "route-registry-inventory-and-manifest-authority-remain-root-owned": "sha256:6782d954ef05279ea31dcd4f833fadbb44635ddc90832eba1bcbb914cde08d8c",
+        "genuine-legacy-global-and-installed-authority-remains-unsuppressed": "sha256:8c8ae1d9ce6c5cb6769408e8dff2bf3db463e2788439c8b6f21caf1b70e10955"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "prohibited_surfaces": [
+    "all repository and global agent descriptors, route registries, manifests, inventory source, agent role contracts, and registry readers",
+    "validator public module exports, public command catalog and dispatcher, shared schemas, generated authority, acceptance, board, claim decisions, and release state",
+    "Cargo manifests and lockfile, Git writes, network, external or host writes, destructive cleanup, global legacy retirement, install or cache replacement, and route adoption"
+  ],
+  "root_validation_obligations": [
+    "independently-review-exact-artifact-set",
+    "wire-only-reviewed-verifier-without-suppressing-current-host-duplicates",
+    "obtain-explicit-authority-before-global-legacy-retirement-or-installed-cache-replacement",
+    "run-new-session-supported-host-discovery-before-route-adoption",
+    "atomically-adopt-exact-routes-only-after-host-and-repository-authority-closure"
+  ],
+  "no_claim_statement": "This worker does not claim route adoption, legacy retirement, host discovery, sandbox enforcement, fresh-agent comprehension, readiness, release, node closure, or completion."
+}
