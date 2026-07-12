@@ -194,6 +194,7 @@ fn current_live_catalog_reports_contract_definitions_and_missing_topology() {
         "API:MarketplaceSnapshot",
         "API:DiscoveryObservation",
         "API:RuntimeObservation",
+        "API:EvaluationSpec",
     ] {
         assert_eq!(
             catalog
@@ -205,15 +206,6 @@ fn current_live_catalog_reports_contract_definitions_and_missing_topology() {
             ActiveStatus::Active
         );
     }
-    assert_eq!(
-        catalog
-            .entries()
-            .iter()
-            .find(|entry| entry.stable_id == "API:EvaluationSpec")
-            .unwrap()
-            .active_status,
-        ActiveStatus::Missing
-    );
     let hct_eval = catalog
         .entries()
         .iter()

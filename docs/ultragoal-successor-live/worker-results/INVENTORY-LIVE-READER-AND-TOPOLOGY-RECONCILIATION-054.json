@@ -1,0 +1,239 @@
+{
+  "worker": "/root/inventory_authority_closure_architect/inventory_cli_semantics_falsifier",
+  "lease_id": "INVENTORY-LIVE-READER-AND-TOPOLOGY-RECONCILIATION-054",
+  "context_id": "sha256:f48ea8959193f877e8af956605a93d636088861819dd531347b16ac543af5d7d",
+  "candidate_identity": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "root_issued_head_commit": "e49dab86f4a91e0e36aaf6deabfd0c0319c8e0dd",
+    "root_issued_head_tree": "9eb939952925d8fb8dbb63c60689df284d489fd1",
+    "root_issued_candidate_id": "sha256:67c5040abf6b1dcdb3048ba14bd71e68a9e14dd844fe44950dc7043e8786e394",
+    "freeze_head_commit": "0bcc965486a49737b8365bb52f2df30acefb944b",
+    "freeze_head_tree": "305070f11a9a753f34b642caa6ff8deee32befd5",
+    "work_package_sha256": "sha256:1d797f3b205b699767b4e769587d41e86736184e477b19f155e565dbd66941ee",
+    "worker_owned_artifact_set_sha256": "sha256:1a3f2a268fc4710405f8a9f1260a1a299992afb82c4cc085887651d9b7af5b28",
+    "worker_owned_artifact_count_excluding_self_referential_worker_result": 4,
+    "worker_owned_artifact_total_bytes": 36671,
+    "worker_owned_artifact_total_lines": 1081,
+    "artifact_set_formula": "SHA-256 of sorted UTF-8 rows path, TAB, lowercase sha256 without prefix, LF",
+    "worker_result_self_excluded": true,
+    "concurrent_unowned_changes_preserved": true
+  },
+  "base_state": {
+    "work_package": "docs/ultragoal-successor-live/work-packages/INVENTORY-LIVE-READER-AND-TOPOLOGY-RECONCILIATION-054.json",
+    "work_package_sha256": "sha256:1d797f3b205b699767b4e769587d41e86736184e477b19f155e565dbd66941ee",
+    "reader_gap": "The repository-wide positive-reader scan found current host.rs, model.rs, and source.rs agent-discovery readers absent from the exact compiled reader set.",
+    "topology_gap": "The current-live topology test still expected API:EvaluationSpec Missing after the compiled API witness, public export, and production EvaluationSpec type made it Active.",
+    "root_owned_surfaces_not_modified": [
+      "agent-discovery implementation and host runtime state",
+      "inventory builders discovery registries routing projection generated authority activation and closure arithmetic",
+      "public API witnesses CLI Cargo board claims migration release and Git"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_exact_independent_review_and_root_reconciliation",
+    "exact_positive_readers": [
+      "validator/src/plugin_product/agent_discovery/host.rs",
+      "validator/src/plugin_product/agent_discovery/model.rs",
+      "validator/src/plugin_product/agent_discovery/source.rs"
+    ],
+    "reader_binding": "Each current source path is bound to compile-time bytes with legacy_tokens_are_negative_only=false; no directory, suffix, token, or semantic allowlist was added.",
+    "reader_failure_behavior": "Omission or one-byte-equivalent source mutation of any bound reader leaves legacy routes active with invalid_agent_route_transition and parallel_authority findings.",
+    "evaluation_spec_topology": "API:EvaluationSpec is asserted Active in the existing compiled-current API loop; no new activation authority was created.",
+    "focused_reader_and_current_live_tests": "passed twice, 4 of 4 each",
+    "dependency_reader_tests": "passed 15 of 15",
+    "claim_effect": "none",
+    "lease_no_claim_ceiling": "Exact reader-digest and stale-test reconciliation only; no agent route, migration, retirement, host discovery, custom tool, command, inventory closure, product, readiness, release, or goal-completion claim is raised."
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/INVENTORY-LIVE-READER-AND-TOPOLOGY-RECONCILIATION-054.json",
+    "validator/src/inventory/agent_reader_guard_digests.rs",
+    "validator/tests/inventory_contract.rs",
+    "validator/tests/inventory_contract_cases/agent_routes.rs",
+    "validator/tests/inventory_contract_cases/agent_routes/reader_false_pass.rs"
+  ],
+  "touched_semantics": [
+    "exact-current-agent-reader-guard",
+    "agent-discovery-reader-digest-binding",
+    "evaluation-spec-current-topology-expectation",
+    "positive-reader-mutation-refusal",
+    "current-live-inventory-regression-closure"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "validator/src/plugin_product/agent_discovery/host.rs current reader",
+    "validator/src/plugin_product/agent_discovery/model.rs current reader",
+    "validator/src/plugin_product/agent_discovery/source.rs current reader",
+    "positive-reader omission and mutation",
+    "EvaluationSpec canonical active expectation"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "exact leased reader guard tests and WorkerResult paths",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline focused and dependency reader inventory validation",
+      "performed": true,
+      "build_jobs": 16,
+      "test_threads": 16
+    },
+    {
+      "class": "temporary_build_write",
+      "target": "/tmp/hul-inventory-reader-reconcile-054",
+      "performed": true
+    },
+    {
+      "class": "network_host_external_or_git_write",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "exact-current-host-model-source-reader-binding",
+    "no-broad-reader-allowlist",
+    "positive-reader-classification",
+    "unknown-omitted-duplicate-stale-mutated-substituted-and-new-reader-failure",
+    "positive-reader-omission-and-mutation-refusal",
+    "EvaluationSpec-current-active-expectation",
+    "no-route-or-claim-inference",
+    "focused-reader-and-current-live-tests-twice",
+    "worker-result-v1",
+    "independent-review-and-root-reconciliation"
+  ],
+  "dependency_nodes": [
+    "inventory-live-reader-and-topology-reconciliation",
+    "accepted-custom-agent-authority-discovery-verifier",
+    "accepted-inventory-closure-disposition-accounting",
+    "accepted-evaluation-migration-decision-kernel-public-types"
+  ],
+  "changes": [
+    {
+      "area": "exact-reader-guard",
+      "result": "Added the three current production agent-discovery modules as exact compile-time ReaderSpec rows. All are positive readers and none receives the legacy negative-only exemption."
+    },
+    {
+      "area": "test-repository-closure",
+      "result": "Leased agent-route tests now copy the exact three reader sources alongside the current compiled guard without changing the shared support helper."
+    },
+    {
+      "area": "reader-false-pass-controls",
+      "result": "New controls independently omit and mutate each reader and require legacy authority to remain active; existing positive-reader mutation, generic-reader, constructed-path, special-file, and allowlist-drift controls remain passing."
+    },
+    {
+      "area": "current-topology",
+      "result": "Moved API:EvaluationSpec into the existing exact Active API assertion set, matching current compiled and public source without changing activation logic."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rustfmt --edition 2024 <four leased Rust files>; git diff --check -- <leased artifact set>",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-inventory-reader-reconcile-054 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --lib --test inventory_contract -E '<live reader guard | current live topology | new reader omission mutation | existing positive-reader mutation>' --no-fail-fast",
+      "status": "pass-twice-4-of-4",
+      "run_ids": [
+        "7fa86e90-45b5-47e9-82ec-55ab225fb3dd",
+        "eae533bf-7289-49c3-b53a-0501cae5ce4d"
+      ]
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-inventory-reader-reconcile-054 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --lib --test inventory_contract -E 'test(inventory::compatibility::reader_witness) | test(agent_routes) | test(current_live_catalog_reports_contract_definitions_and_missing_topology)' --no-fail-fast",
+      "status": "pass-15-of-15-with-one-leak-diagnostic",
+      "run_id": "9413e8e5-5870-4386-885f-b74643fad544"
+    },
+    {
+      "command": "Exact isolation rerun of changed_allowlist_or_generic_package_consumer_blocks_route",
+      "status": "pass-1-of-1-without-leak",
+      "run_id": "6dcd317a-e1b2-4f4e-998e-78615d67058c"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-inventory-reader-reconcile-054 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline --lib --example hct_inventory -j 16",
+      "status": "pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/inventory/agent_reader_guard_digests.rs",
+      "sha256": "sha256:629f838743b9278358538cdd00f43548179bdf0a54fa2e8dfb01ff23576aaf80",
+      "byte_length": 8966,
+      "line_count": 304
+    },
+    {
+      "path": "validator/tests/inventory_contract.rs",
+      "sha256": "sha256:6eb77ffbdd1cee7913f3ad89952b9aacdfd4c1e53f2a5277acb722b2cfeb9101",
+      "byte_length": 8093,
+      "line_count": 256
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/agent_routes.rs",
+      "sha256": "sha256:1fa2b9fad27a82354be7e654cb609e264c43df41fa4697d83332038f0c2816b6",
+      "byte_length": 6318,
+      "line_count": 166
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/agent_routes/reader_false_pass.rs",
+      "sha256": "sha256:0c7a4d08b12beed6fe0106ee88fae21626edbb00ff8764ac89426bfe07c2b37d",
+      "byte_length": 13294,
+      "line_count": 355
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-material",
+      "class": "unbound-current-positive-readers",
+      "finding": "The exact current positive-reader scan previously reported host.rs, model.rs, and source.rs as unbound. They are now individually digest-bound and remain positive authority readers."
+    },
+    {
+      "severity": "resolved-stale-test",
+      "class": "evaluation-spec-topology",
+      "finding": "The current-live topology test expected EvaluationSpec Missing despite its current compiled API witness, public export, and production type. The assertion now expects Active through the existing exact witness path."
+    },
+    {
+      "severity": "diagnostic-reconciled",
+      "class": "concurrent-candidate-advance",
+      "finding": "One attempted second focused run failed with Activation(StaleInput) while root advanced HEAD by committing an unrelated work-package file. The exact unchanged artifact set then passed 4 of 4 against the new stable HEAD."
+    },
+    {
+      "severity": "diagnostic-reconciled",
+      "class": "nextest-process-leak-signal",
+      "finding": "The 15-test dependency run marked one passing allowlist-drift control leaky; the exact test passed alone without leak."
+    },
+    {
+      "severity": "claim-ceiling",
+      "class": "reader-and-test-only",
+      "finding": "No agent authority was routed, migrated, retired, installed, discovered, or made runtime-eligible by this increment."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-review-of-sha256-1a3f2a268fc4710405f8a9f1260a1a299992afb82c4cc085887651d9b7af5b28",
+    "root-candidate-reconciliation-and-commit",
+    "rebuild-current-hct-inventory-after-integration",
+    "all-fourteen-active-legacy-agent-authorities-remain-open",
+    "final-byte-identical-inventory-summaries-after-last-authority-edit"
+  ],
+  "requested_root_changes": [
+    {
+      "request": "Independently review the exact four-artifact set bound by sha256:1a3f2a268fc4710405f8a9f1260a1a299992afb82c4cc085887651d9b7af5b28, specifically checking positive-reader classification, exact compile-time byte paths, omission and mutation refusal, and the EvaluationSpec source basis.",
+      "authority": "root-review-and-reconciliation"
+    },
+    {
+      "request": "After accepted integration, rebuild current HCT-INVENTORY and keep all fourteen live legacy-agent authorities and every host/runtime ceiling open.",
+      "authority": "root-inventory-agent-and-claim-authority"
+    },
+    {
+      "request": "Run the final two byte-identical inventory summaries only after the last authority-bearing edit.",
+      "authority": "root-generated-authority-and-final-claim-decision"
+    }
+  ],
+  "limitations": [
+    "The reader guard binds four source artifacts in this candidate; it does not adopt agent routes or prove any host observation.",
+    "EvaluationSpec activation was already produced by root-owned compiled/public witnesses; this worker changed only the stale expectation.",
+    "No agent-discovery implementation, inventory routing, activation witness, public API, Cargo, board, claim, migration, release, Git, or host state was changed.",
+    "Root must independently review, integrate, recompute the candidate, and rebuild HCT-INVENTORY before changing any ceiling.",
+    "No agent route, migration, retirement, host discovery, custom tool, command, inventory closure, product, readiness, release, or completion claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

@@ -1,4 +1,5 @@
-use super::support::{CASES, READER_PROOF, catalog, catalog_result, entry, prepare};
+use super::prepare;
+use super::support::{CASES, READER_PROOF, catalog, catalog_result, entry};
 use crate::inventory::{ActiveStatus, AuthorityState};
 use crate::repository_fixture::TestRepo;
 use serde_json::{Value, json};
@@ -70,6 +71,25 @@ fn manifest_and_resource_legacy_paths_cannot_reuse_phase_a_receipt() {
         write_manifest(&repo, &value);
         assert_eq!(fs::read(repo.root.join(READER_PROOF)).unwrap(), receipt);
         assert_reader_drift_blocks_route(&repo);
+    }
+}
+
+#[test]
+fn current_agent_discovery_reader_omission_and_mutation_block_routes() {
+    for path in super::CURRENT_AGENT_DISCOVERY_READERS {
+        let label = path.rsplit('/').next().unwrap().trim_end_matches(".rs");
+
+        let omitted = TestRepo::new(&format!("agent-route-{label}-reader-omitted"));
+        prepare(&omitted, &[CASES[0]], true);
+        fs::remove_file(omitted.root.join(path)).unwrap();
+        assert_reader_drift_blocks_route(&omitted);
+
+        let mutated = TestRepo::new(&format!("agent-route-{label}-reader-mutated"));
+        prepare(&mutated, &[CASES[0]], true);
+        let mut bytes = fs::read(mutated.root.join(path)).unwrap();
+        bytes.extend_from_slice(b"\n// exact positive reader drift\n");
+        mutated.write(path, &bytes);
+        assert_reader_drift_blocks_route(&mutated);
     }
 }
 

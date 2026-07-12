@@ -110,6 +110,24 @@ pub(crate) const READERS: &[ReaderSpec] = &[
         "../audit/plugin/registry/live/reviewers.rs",
         false
     ),
+    // These three production modules jointly read, decode, and validate the
+    // current source and host agent-authority catalogs. They are positive
+    // readers, so their exact bytes are bound without a negative-only escape.
+    reader!(
+        "validator/src/plugin_product/agent_discovery/host.rs",
+        "../plugin_product/agent_discovery/host.rs",
+        false
+    ),
+    reader!(
+        "validator/src/plugin_product/agent_discovery/model.rs",
+        "../plugin_product/agent_discovery/model.rs",
+        false
+    ),
+    reader!(
+        "validator/src/plugin_product/agent_discovery/source.rs",
+        "../plugin_product/agent_discovery/source.rs",
+        false
+    ),
     reader!(
         "validator/src/review/round/config.rs",
         "../review/round/config.rs",

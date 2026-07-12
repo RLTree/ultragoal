@@ -10,8 +10,24 @@ mod reader_false_pass;
 mod support;
 
 use support::{
-    CASES, READER_PROOF, catalog, entry, prepare, registry, route_id, target_path, write_registry,
+    CASES, Case, READER_PROOF, catalog, entry, prepare as prepare_without_agent_discovery_readers,
+    registry, route_id, target_path, write_registry,
 };
+
+const CURRENT_AGENT_DISCOVERY_READERS: [&str; 3] = [
+    "validator/src/plugin_product/agent_discovery/host.rs",
+    "validator/src/plugin_product/agent_discovery/model.rs",
+    "validator/src/plugin_product/agent_discovery/source.rs",
+];
+
+fn prepare(repo: &TestRepo, cases: &[Case], reader_proof: bool) {
+    prepare_without_agent_discovery_readers(repo, cases, reader_proof);
+    if reader_proof {
+        for path in CURRENT_AGENT_DISCOVERY_READERS {
+            repo.write(path, &fs::read(live_root().join(path)).unwrap());
+        }
+    }
+}
 
 #[test]
 fn all_fourteen_exact_agent_routes_demote_only_to_preserved_context() {
