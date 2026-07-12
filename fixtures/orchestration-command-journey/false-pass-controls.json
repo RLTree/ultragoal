@@ -1,0 +1,15 @@
+{
+  "schema_version": "OrchestrationCommandFalsePassControls-v1",
+  "claim_effect": "none",
+  "supporting_only": [
+    "unit_test",
+    "fixture_receipt",
+    "serialized_permit",
+    "generated_row",
+    "in_process_simulation"
+  ],
+  "root_reconciliation_required": [
+    "root_integrated_public_command",
+    "fresh_process_observation"
+  ]
+}

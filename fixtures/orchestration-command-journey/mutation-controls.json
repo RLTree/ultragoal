@@ -1,0 +1,33 @@
+{
+  "schema_version": "OrchestrationCommandMutationControls-v1",
+  "claim_effect": "none",
+  "controls": [
+    "unknown-worker",
+    "stale-candidate",
+    "expired-lease",
+    "orphaned-lease",
+    "ambiguous-head",
+    "action-substitution",
+    "whole-view-deserialization",
+    "current-head-ready-node-substitution",
+    "finding-membership-substitution",
+    "root-action-membership-injection",
+    "self-consistent-state-id",
+    "stale-snapshot-head-mix",
+    "interrupted-view-json-roundtrip",
+    "interrupted-cloned-snapshot-ready-substitution",
+    "interrupted-lease-result-stripping",
+    "interrupted-alternate-lease-result-substitution",
+    "interrupted-recomputed-action-id",
+    "interrupted-snapshot-id-mismatch",
+    "interrupted-prospective-head-identity-substitution",
+    "interrupted-stale-prior-current-head",
+    "interrupted-zero-write-no-permit-rejection",
+    "workspace-ancestor-swap",
+    "symlink-root",
+    "hardlink-journal",
+    "special-file-root",
+    "oversized-journal",
+    "non-echo-diagnostic"
+  ]
+}

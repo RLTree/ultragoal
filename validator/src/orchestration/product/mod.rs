@@ -6,6 +6,7 @@
 //! completion decision.
 
 mod authority;
+pub mod command;
 mod context;
 mod error;
 mod plan;

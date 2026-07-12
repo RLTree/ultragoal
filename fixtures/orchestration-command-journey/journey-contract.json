@@ -1,0 +1,18 @@
+{
+  "schema_version": "OrchestrationCommandJourneyFixture-v1",
+  "claim_effect": "none",
+  "scenarios": [
+    {
+      "id": "interrupted-root-fresh-process-resume",
+      "required_bindings": ["candidate", "lease", "result", "journal", "workspace"]
+    },
+    {
+      "id": "ambiguous-effect-fresh-process-reconcile",
+      "required_bindings": ["candidate", "lease", "operation", "journal", "workspace"]
+    },
+    {
+      "id": "interrupted-publication-concurrent-recover",
+      "required_bindings": ["candidate", "lease", "event", "journal", "workspace"]
+    }
+  ]
+}

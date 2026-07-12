@@ -1,0 +1,249 @@
+{
+  "worker": "/root/orchestration_state_journey_engineer",
+  "lease_id": "ORCHESTRATION-PUBLIC-STATE-JOURNEY-042",
+  "context_id": "sha256:ed41483e7020fa9fcad30557e11f55ea09f1224f40841c0622b84a3d2e19e17e",
+  "candidate_identity": {
+    "candidate_id": "sha256:45f1f1d2e696dab67f6079cdedac34b50bd3e40a7887ddd753c88512f8b7c6cb",
+    "task_envelope_candidate_id": "sha256:bbc565dc01c983def36252051938687a4ccc49408847fc258b1525f752d33858",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "9f7cae29124f98b37b632afb48aa52d27dc250d2",
+    "head_tree": "47effd7288abb44454606eac64cede41a70b6a20",
+    "worker_owned_artifact_set_sha256": "sha256:45f1f1d2e696dab67f6079cdedac34b50bd3e40a7887ddd753c88512f8b7c6cb",
+    "worker_owned_artifact_count": 20,
+    "worker_owned_artifact_total_bytes": 106522,
+    "worker_owned_artifact_total_lines": 3091,
+    "worker_result_self_excluded": true
+  },
+  "base_state": {
+    "status": "two-prior-candidate-reworks",
+    "agent_task_envelope": "docs/ultragoal-successor-live/task-envelopes/ORCHESTRATION-PUBLIC-STATE-JOURNEY-042.json",
+    "agent_task_envelope_sha256": "sha256:bbeca94f209cdf2ca7893ab1730702694ead48ce0ea1115ae83c6082592b881b",
+    "work_envelope": "docs/ultragoal-successor-live/work-packages/ORCHESTRATION-PUBLIC-STATE-JOURNEY-042.json",
+    "work_envelope_sha256": "sha256:58e5840cb3b73e1b93eead3b96355558180b232501f0e3dbc3d48a07cdf4f925",
+    "corrective_lease_id": "orchestration-interrupted-authority-binding-correction-042-r2",
+    "rework_rounds": [
+      {
+        "round": "r0",
+        "corrective_lease_id": "orchestration-state-authority-binding-correction-042-r1",
+        "candidate_id": "sha256:888944c2e1447ed2423efb51ac418d8e4179ffa7561bac71fb8bd7ffb9883ccb",
+        "worker_result_sha256": "sha256:b52c8b6657c6db7bdc06f99f466909efa94f39e97b44c75894f1874e13e5b384",
+        "finding": "Caller-controlled public Deserialize state views were revalidated only by workspace and journal head, so a self-consistent whole-view substitution could forge snapshot, ready nodes, findings, root actions, and state_id while still projecting as current."
+      },
+      {
+        "round": "r1",
+        "corrective_lease_id": "orchestration-interrupted-authority-binding-correction-042-r2",
+        "candidate_id": "sha256:d8d91bdd7adb5053f6a49cd020ac38018f03f5ce9e68ffd48a00fccd10bb4c71",
+        "worker_result_sha256": "sha256:1c3679993d658d56e842d71ee88e1e3854a91e54202d26f01ca191ccbdd922e7",
+        "finding": "InterruptedRecoveryView remained publicly Clone and Deserialize without a private full-preview seal; a caller could strip or substitute lease and result membership, recompute the public action_id, preserve operation and recovered-binding fields, and pass validation for the weakened recovery target."
+      }
+    ]
+  },
+  "final_state": {
+    "status": "corrected_candidate_for_independent_review",
+    "full_state_authority": "private-process-local-serde-skipped-complete-view-seal",
+    "serialized_state_authority": "always-untrusted-until-rederived-by-inspect",
+    "state_id_scope": "canonical-complete-view-plus-snapshot-and-current-journal-identity",
+    "state_commitment_bound_bytes": 16773120,
+    "invalid_direct_next_behavior": "fixed-non-echoing-no-legal-route",
+    "interrupted_preview_authority": "private-process-local-serde-skipped-complete-preview-seal",
+    "serialized_interrupted_preview_authority": "always-untrusted-until-rederived-by-inspect-interrupted",
+    "interrupted_commitment_scope": "schema-workspace-prior-and-prospective-heads-full-snapshot-snapshot-id-exact-target-action-and-prospective-identity",
+    "interrupted_current_source_revalidation": "exact-prospective-append-target-and-action-rederived-before-and-after-action-validation",
+    "interrupted_commitment_bound_bytes": 16773120,
+    "artifact_count": 20,
+    "artifact_total_bytes": 106522,
+    "artifact_total_lines": 3091,
+    "maximum_file_lines": 537,
+    "artifact_set_sha256": "sha256:45f1f1d2e696dab67f6079cdedac34b50bd3e40a7887ddd753c88512f8b7c6cb",
+    "artifact_set_canonicalization": "sorted UTF-8 TSV rows path, sha256 hex, byte length, line count separated by tabs and terminated by LF",
+    "focused_controls": "21 passed; 0 failed",
+    "accepted_product_regression": "21 passed; 0 failed; one nextest leak signal passed alone without leak",
+    "accepted_kernel_regression": "163 passed; 0 failed; no nextest leak signal",
+    "production_library_check": "passed",
+    "artifact_set_frozen": true,
+    "claim_effect": "none"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-PUBLIC-STATE-JOURNEY-042.json",
+    "fixtures/orchestration-command-journey/false-pass-controls.json",
+    "fixtures/orchestration-command-journey/journey-contract.json",
+    "fixtures/orchestration-command-journey/mutation-controls.json",
+    "validator/src/orchestration/product/command/action.rs",
+    "validator/src/orchestration/product/command/diagnose.rs",
+    "validator/src/orchestration/product/command/finding.rs",
+    "validator/src/orchestration/product/command/interrupted.rs",
+    "validator/src/orchestration/product/command/mod.rs",
+    "validator/src/orchestration/product/command/projection.rs",
+    "validator/src/orchestration/product/command/proof.rs",
+    "validator/src/orchestration/product/command/state.rs",
+    "validator/src/orchestration/product/mod.rs",
+    "validator/tests/orchestration_state_journey_contract.rs",
+    "validator/tests/orchestration_state_journey_contract/fixtures.rs",
+    "validator/tests/orchestration_state_journey_contract/fresh_process.rs",
+    "validator/tests/orchestration_state_journey_contract/fresh_process_child.rs",
+    "validator/tests/orchestration_state_journey_contract/mutation_security.rs",
+    "validator/tests/orchestration_state_journey_contract/negative.rs",
+    "validator/tests/orchestration_state_journey_contract/read_views.rs",
+    "validator/tests/orchestration_state_journey_contract/support.rs"
+  ],
+  "touched_semantics": [
+    "orchestration-complete-view-state-id",
+    "orchestration-deserialized-view-deauthorization",
+    "orchestration-full-state-authority-seal",
+    "orchestration-interrupted-complete-preview-authority-seal",
+    "orchestration-interrupted-current-source-rederivation",
+    "orchestration-interrupted-recovery-target-binding",
+    "orchestration-read-only-command-view",
+    "orchestration-root-action-request",
+    "orchestration-state-overlay"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/orchestration-command-journey",
+    "validator/tests/orchestration_state_journey_contract.rs",
+    "validator/tests/orchestration_state_journey_contract"
+  ],
+  "effects": [
+    {"class": "workspace_write", "target": "orchestration-command-adapter-source", "performed": true, "scope": "leased-paths-only"},
+    {"class": "fixture_write", "target": "orchestration-state-authority-tests", "performed": true, "scope": "leased-fixtures-only"},
+    {"class": "process", "target": "offline-orchestration-validation", "performed": true, "network": false, "external_systems": false}
+  ],
+  "requirements": [
+    "REQ-ORCH-005",
+    "REQ-ORCH-007",
+    "REQ-ORCH-008",
+    "whole-view-deserialization-substitution",
+    "cloned-current-head-ready-node-substitution",
+    "finding-deletion-and-injection",
+    "root-action-membership-injection",
+    "self-consistent-forged-state-id",
+    "stale-snapshot-current-head-mix",
+    "bounded-deterministic-zero-write-projection",
+    "interrupted-view-json-roundtrip-deauthorization",
+    "interrupted-cloned-snapshot-ready-substitution",
+    "interrupted-lease-result-stripping",
+    "interrupted-alternate-lease-result-substitution",
+    "interrupted-recomputed-action-id",
+    "interrupted-snapshot-id-mismatch",
+    "interrupted-prospective-head-identity-substitution",
+    "interrupted-stale-prior-current-head",
+    "interrupted-zero-write-no-permit-rejection"
+  ],
+  "dependency_nodes": [
+    "accepted-orchestration-recovery-product",
+    "successor-cli-exclusive-dispatch-candidate"
+  ],
+  "changes": [
+    {
+      "area": "full-state-authority",
+      "result": "inspect now issues a private process-local seal over the canonical complete view state_id; the seal is skipped on serialization and defaults to untrusted on deserialization, so safe external bytes or struct construction cannot recreate authority."
+    },
+    {
+      "area": "complete-state-revalidation",
+      "result": "revalidate now checks the exact schema, private seal, complete-view state_id, snapshot_id, snapshot and journal binding, journal-head identity, workspace identity, and current durable head before projection or action membership validation."
+    },
+    {
+      "area": "projection-and-action-guards",
+      "result": "project and diagnose refuse untrusted views; validate_action requires the authenticated full view plus exact request membership; direct next preserves its existing infallible API while returning one fixed non-echoing NoLegalRoute result for untrusted state."
+    },
+    {
+      "area": "resource-and-adversarial-controls",
+      "result": "state commitment hashing streams through a deterministic bounded writer; controls now cover exact JSON round trips, self-consistent full-state forgeries, ready-node and snapshot substitution, finding deletion and injection, root-action injection, oversized views, and recursive zero-write failures."
+    },
+    {
+      "area": "interrupted-complete-preview-authority",
+      "result": "inspect_interrupted now issues a private serde-skipped process-local seal over a bounded canonical commitment to the schema, workspace, prior and prospective heads and identities, full snapshot, snapshot_id, exact recovery target, and complete action; JSON round trips default to untrusted."
+    },
+    {
+      "area": "interrupted-current-source-and-target-rederivation",
+      "result": "validate_action checks the full preview seal, snapshot identity, current anchored interrupted append, prospective head and identity, exact lease/result/operation/recovered-binding target, and exact rederived action before validation, then repeats current-source rederivation before returning to the root issuer."
+    },
+    {
+      "area": "interrupted-false-pass-controls",
+      "result": "controls reject JSON, cloned ready/snapshot, empty or alternate lease/result, recomputed action_id, snapshot_id, prospective head/identity, prior-head, and stale-current-source substitutions with recursive zero writes and zero counted permit issuance; the exact sealed preview remains usable."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "HUL_REPO_ROOT=/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_state_journey_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "status": "pass-21-of-21",
+      "run_id": "3c0ac425-992f-415a-a27c-90f3bfdaa573"
+    },
+    {
+      "command": "HUL_REPO_ROOT=/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_product_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "status": "pass-21-of-21-with-one-leaky-signal",
+      "run_id": "2aff2160-bd89-46f8-a8c5-4e665cb48fbb",
+      "result": "All 21 passed; the blocker planning control was marked leaky and immediately rechecked alone."
+    },
+    {
+      "command": "HUL_REPO_ROOT=/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_product_contract -E 'test(plan_query::blocker_plan_replans_ordinary_work_but_scopes_external_stops)' --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "status": "pass-1-of-1-no-leak",
+      "run_id": "22d3f44c-05dc-4eaf-8e33-ffc4af5f8f53"
+    },
+    {
+      "command": "HUL_REPO_ROOT=/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "status": "pass-163-of-163-no-leak",
+      "run_id": "09b2122e-7105-427f-bb82-980438195037"
+    },
+    {
+      "command": "HUL_REPO_ROOT=/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline --lib --jobs 16",
+      "status": "pass"
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <leased corrective Rust artifacts> && git diff --check -- <leased corrective artifact set>",
+      "status": "pass"
+    }
+  ],
+  "artifacts": [
+    {"path": "fixtures/orchestration-command-journey/false-pass-controls.json", "sha256": "sha256:d65f29eedd91929b25150b1ee4e29029df146f0f1d4155fc34d2607f0132c28f", "byte_length": 346, "line_count": 15},
+    {"path": "fixtures/orchestration-command-journey/journey-contract.json", "sha256": "sha256:893cd81d1ce80593d13f9848f74fa775fc13588601494a18627c22c2394bbb0f", "byte_length": 571, "line_count": 18},
+    {"path": "fixtures/orchestration-command-journey/mutation-controls.json", "sha256": "sha256:984a98a6db68638f5411952c82da70497098abc4aac7171cd8697a6a5732ce11", "byte_length": 1043, "line_count": 33},
+    {"path": "validator/src/orchestration/product/command/action.rs", "sha256": "sha256:20ac66a5a5f3a430cd512c402faf2f4187880fc26667e15fad10f868cbdabb64", "byte_length": 8322, "line_count": 228},
+    {"path": "validator/src/orchestration/product/command/diagnose.rs", "sha256": "sha256:229a702ae242a73f32f0e3490d62fd8c8848d03b2cd6377d718df6556496e243", "byte_length": 2290, "line_count": 67},
+    {"path": "validator/src/orchestration/product/command/finding.rs", "sha256": "sha256:e10c7eb2eb94d8e221fa46ed24002c52c85ed10cc42f3f7d6c352420369c8293", "byte_length": 5348, "line_count": 158},
+    {"path": "validator/src/orchestration/product/command/interrupted.rs", "sha256": "sha256:cb49830adb8ba06949f0269fe983e9416b437029ca56d7eb369945ae5cebedf6", "byte_length": 11991, "line_count": 336},
+    {"path": "validator/src/orchestration/product/command/mod.rs", "sha256": "sha256:dd0e195a247357713c7ecdb6793ab9205fe133b870cbd4660646eaf9d87f4828", "byte_length": 927, "line_count": 24},
+    {"path": "validator/src/orchestration/product/command/projection.rs", "sha256": "sha256:da935e421696c68ebce2ebb2c519d63a397674f489c2a111e448d8ed3cd9b650", "byte_length": 1460, "line_count": 40},
+    {"path": "validator/src/orchestration/product/command/proof.rs", "sha256": "sha256:16b2fa6eaf4a0b274796b4905464d88e3b0da739df2fb50e1c584fa2131b4e3b", "byte_length": 1185, "line_count": 35},
+    {"path": "validator/src/orchestration/product/command/state.rs", "sha256": "sha256:eb4be29336ed0d1dcf0429263bdbefe790f8cfd9815e6a93a4fd160b23426ec3", "byte_length": 12935, "line_count": 375},
+    {"path": "validator/src/orchestration/product/mod.rs", "sha256": "sha256:62d7b1f271c16354b81a86ab2d9ee6d8087c91519b73c69540955b174cdcec29", "byte_length": 1053, "line_count": 29},
+    {"path": "validator/tests/orchestration_state_journey_contract.rs", "sha256": "sha256:34416d1191fa1f8c42613ab0d6b1abcccb0d155aab23fcb2c2bbe70b3ef5cd86", "byte_length": 295, "line_count": 14},
+    {"path": "validator/tests/orchestration_state_journey_contract/fixtures.rs", "sha256": "sha256:d5c870a286cc2aa8c5f5a96d36623e0190c392c64eb94afb6527c77c634f188f", "byte_length": 2277, "line_count": 72},
+    {"path": "validator/tests/orchestration_state_journey_contract/fresh_process.rs", "sha256": "sha256:d60cedaf3abc2a66771dbb6740d9d3c6d75673c18e9a0abb07fc4182801642f2", "byte_length": 9013, "line_count": 257},
+    {"path": "validator/tests/orchestration_state_journey_contract/fresh_process_child.rs", "sha256": "sha256:0672804435233132f68a303fa7949680852b853a7e54642befe2f3e9be231eff", "byte_length": 7463, "line_count": 238},
+    {"path": "validator/tests/orchestration_state_journey_contract/mutation_security.rs", "sha256": "sha256:cf8aca494af240cc06b2a0d2575dcd9b6d7e431f746ba413c8d82c78c28ca714", "byte_length": 5571, "line_count": 175},
+    {"path": "validator/tests/orchestration_state_journey_contract/negative.rs", "sha256": "sha256:3dd86d20ce5c92fc775e8572c9053eda8ac453de344b1faea0c860912381c742", "byte_length": 19777, "line_count": 537},
+    {"path": "validator/tests/orchestration_state_journey_contract/read_views.rs", "sha256": "sha256:9e1d80f52554442766f02fe8f243cce902ef788883b71981cd3eecad3b0120f4", "byte_length": 5628, "line_count": 156},
+    {"path": "validator/tests/orchestration_state_journey_contract/support.rs", "sha256": "sha256:b03c8af1fb4cb69fb20f0c48eaa5cf9fa3f41bc0a15c129f5494bbd8abaec2ff", "byte_length": 9027, "line_count": 284}
+  ],
+  "findings": [
+    {"severity": "material-corrected", "finding": "Whole-view JSON, cloned full-state, finding, ready-node, snapshot, root-action membership, and self-consistent state_id substitutions now fail before any projection or action effect."},
+    {"severity": "security-corrected", "finding": "Untrusted view commitment work is bounded and streamed; oversized cloned state returns the stable resource-limit class without writes or attacker-value echo."},
+    {"severity": "material-corrected", "finding": "Interrupted preview JSON, cloned snapshot and ready-node, empty or alternate lease/result, recomputed action_id, snapshot_id, prior/prospective head and identity, and stale-current-source substitutions now fail before counted root permit issuance with recursive zero writes."},
+    {"severity": "security-corrected", "finding": "Interrupted preview commitment hashing is bounded and domain-separated; every ordinary substitution returns a fixed non-echoing authority error while exact current-source drift returns the stable concurrent-update class."},
+    {"severity": "diagnostic-reconciled", "finding": "The 21-test product run marked one pre-existing blocker-planning control leaky while passing it; the exact test then passed alone without a leak signal. The 163-test kernel run had no leak signal."},
+    {"severity": "claim-ceiling", "finding": "The corrected candidate proves source-local orchestration overlay behavior only; public command wiring, root permit issuance, representative public journey, node closure, readiness, release, and completion remain unsupported."}
+  ],
+  "unresolved_dependencies": [
+    "independent-review-of-sha256-45f1f1d2e696dab67f6079cdedac34b50bd3e40a7887ddd753c88512f8b7c6cb",
+    "root-candidate-reconciliation-and-commit",
+    "root-public-state-composition",
+    "root-validated-permit-issuance",
+    "root-public-fresh-process-journey"
+  ],
+  "requested_root_changes": [
+    {"path": "validator/src/cli/successor/runtime/state_view.rs", "expected_sha256": "sha256:b026417ae4f50ed168e43d267da6e3d50f9fa7809a44b2a68f8140380ec3d63b", "request": "Compose the independently accepted orchestration overlay through fresh inspect-derived views only; never deserialize an authoritative view, preserve bounded outputs, and fail closed on absent, stale, conflicting, or concurrent journal state."},
+    {"path": "validator/src/cli/successor_public/mod.rs", "expected_sha256": "sha256:1e66d36156aec3562eeb24d8b510e433d1c59df8809fedf95f5bfbcf06057ee8", "request": "At existing inspect, next, and diagnose routes, construct current ProductContext, ProductWorkspace, JournalHead, tick, and live-worker inputs from root-owned authority and consume only a fresh authenticated view; add no public route or hidden write."},
+    {"path": "validator/src/orchestration/product/authority.rs", "expected_sha256": "sha256:2def1fcb3ca45381ee5bafa285bdabf0c7ed7d0829cd09589a87bbaaf74050b7", "request": "Any root-only issuance adapter must accept the exact authenticated state or interrupted view plus request and call the originating view.validate_action immediately before separately authorized issuance; serialized views, requests, fixtures, tests, and generated rows remain non-permits."}
+  ],
+  "limitations": [
+    "The source overlay is not wired into the public successor dispatcher or HCT-STATE composition.",
+    "No production root permit issuer consumes the typed action requests yet.",
+    "Deserialized OrchestrationStateView values are intentionally output-only and cannot regain process-local authority; callers must rerun inspect against trusted current inputs.",
+    "Deserialized InterruptedRecoveryView values are intentionally output-only and cannot regain process-local authority; callers must rerun inspect_interrupted against trusted current inputs.",
+    "The fresh-process controls execute the production Rust library boundary through a test binary, not an installed public CLI or host runtime.",
+    "Independent review and root reconciliation of this exact artifact set remain pending.",
+    "No package, install, cache, marketplace, app-registry, Plugins UI, discovery, public-runtime, representative-public-journey, node-closure, readiness, release, or completion claim is supported."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

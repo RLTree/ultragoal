@@ -1,0 +1,331 @@
+{
+  "schema_version": "AgentTaskEnvelope-v1",
+  "task_id": "orchestration-public-state-journey-042",
+  "role_binding": {
+    "role_id": "implementation-worker",
+    "source_kind": "runtime_agent_type_receipt",
+    "source_ref": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+    "source_sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+    "sandbox_mode": "workspace-write",
+    "may_exercise_root_authority": false
+  },
+  "goal": "Implement the orchestration state overlay and fresh-process journey adapter behind existing root-owned inspect, next, and diagnose grammar.",
+  "success": [
+    "Read-only orchestration state views are deterministic, causal, candidate-bound, and recursively zero-write.",
+    "Fresh-process interruption, restart, ambiguity, reconciliation, and recovery controls preserve lease, result, journal, and candidate identity.",
+    "A schema-valid WorkerResult-v1 requests exact root command and permit wiring without exercising it."
+  ],
+  "candidate_identity": {
+    "repository": {
+      "root_uri": "repo://harness-ultragoal-plugin-proposal",
+      "canonical_root_sha256": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170"
+    },
+    "context_id": "sha256:ed41483e7020fa9fcad30557e11f55ea09f1224f40841c0622b84a3d2e19e17e",
+    "candidate_id": "sha256:bbc565dc01c983def36252051938687a4ccc49408847fc258b1525f752d33858",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "9f7cae29124f98b37b632afb48aa52d27dc250d2",
+    "head_tree": "47effd7288abb44454606eac64cede41a70b6a20",
+    "dirty": false,
+    "captured_at": "2026-07-12T10:08:48Z",
+    "freeze": {
+      "kind": "artifact_set",
+      "artifact_set_sha256": "sha256:51ef7fc4a8013436356935bdb103e5f9dac349f446d44fc05cffcddeafaaa9b1",
+      "artifact_count": 7,
+      "bytes": 64818,
+      "lines": 1898,
+      "artifacts": [
+        {
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+          "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+          "bytes": 20505,
+          "lines": 776
+        },
+        {
+          "path": "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-RECOVERY-PRODUCT-INTEGRATION-037.json",
+          "sha256": "sha256:bd1f2dccd9156a6590194e07cbabc7931ed37f1c91416ad79778b7115776b364",
+          "bytes": 5819,
+          "lines": 94
+        },
+        {
+          "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+          "sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604",
+          "bytes": 23425,
+          "lines": 747
+        },
+        {
+          "path": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+          "sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+          "bytes": 2176,
+          "lines": 53
+        },
+        {
+          "path": "docs/ultragoal-successor-live/root-decisions/PUBLIC-CLI-EXCLUSIVE-DISPATCH-CANDIDATE-023.json",
+          "sha256": "sha256:1c64805c0c620935f59fcd9901a1005b9219fb3653bee3a3b0b7c790ee882bbf",
+          "bytes": 4395,
+          "lines": 60
+        },
+        {
+          "path": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+          "sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+          "bytes": 555,
+          "lines": 11
+        },
+        {
+          "path": "docs/ultragoal-successor-live/work-packages/ORCHESTRATION-PUBLIC-STATE-JOURNEY-042.json",
+          "sha256": "sha256:58e5840cb3b73e1b93eead3b96355558180b232501f0e3dbc3d48a07cdf4f925",
+          "bytes": 7943,
+          "lines": 157
+        }
+      ]
+    }
+  },
+  "scope": {
+    "artifact_paths": [
+      {
+        "path": "docs/ultragoal-successor-live/work-packages/ORCHESTRATION-PUBLIC-STATE-JOURNEY-042.json",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/cli/successor",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/cli/successor_public",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/orchestration",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/orchestration/product/command",
+        "access": "write"
+      },
+      {
+        "path": "validator/src/orchestration/product/mod.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/src/state",
+        "access": "read"
+      },
+      {
+        "path": "validator/tests/orchestration_contract",
+        "access": "read"
+      },
+      {
+        "path": "validator/tests/orchestration_product_contract",
+        "access": "read"
+      },
+      {
+        "path": "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-PUBLIC-STATE-JOURNEY-042.json",
+        "access": "write"
+      }
+    ],
+    "semantic_symbols": [
+      "orchestration-state-overlay",
+      "orchestration-read-only-command-view",
+      "orchestration-root-action-request",
+      "orchestration-fresh-process-journey"
+    ],
+    "generated_outputs": [],
+    "fixtures": [
+      {
+        "path": "fixtures/orchestration-command-journey",
+        "access": "write"
+      },
+      {
+        "path": "validator/tests/orchestration_state_journey_contract.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/tests/orchestration_state_journey_contract",
+        "access": "write"
+      }
+    ],
+    "external_effects": [],
+    "scratch_uris": [
+      "scratch://orchestration-state-042/cargo-target",
+      "scratch://orchestration-state-042/fresh-process-repositories"
+    ],
+    "forbidden_paths": [
+      ".git/config",
+      "Cargo.lock",
+      "validator/src/lib.rs",
+      "validator/src/main.rs",
+      "validator/src/orchestration/mod.rs"
+    ],
+    "path_resolution": {
+      "policy": "candidate-relative-no-follow-v1",
+      "session_id": "sha256:19391c4e6786bdcbdeec9adf77cdde3051ae2f9f243d243aede689ecd0b435e8",
+      "resolved_scope_sha256": "sha256:8b392fd5b36121024204fb2978d975d86308970af4c83a15645a3e14ef49aa84",
+      "symlinks": "reject",
+      "special_files": "reject",
+      "post_freeze_revalidation": "required"
+    }
+  },
+  "authority_binding": {
+    "session_id": "sha256:0fffc1960eeb1d6cacf2f9c11b0fdae16c62607a60cf3a5a6829d6d5e87de6b1",
+    "captured_at": "2026-07-12T10:08:48Z",
+    "sources": [
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+      }
+    ],
+    "ids": {
+      "nodes": [
+        "N10-ORCHESTRATION"
+      ],
+      "requirements": [],
+      "surfaces": [],
+      "tools": [],
+      "claims": [],
+      "migration_routes": [],
+      "decisions": []
+    },
+    "resolved_rows": [
+      {
+        "stable_id": "N10-ORCHESTRATION",
+        "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "row_sha256": "sha256:aa6f0cb7e2679cdd1c9fa39754ab974b31e2dd24893e58a9a8c73c043895c117"
+      }
+    ],
+    "resolution": {
+      "resolved_set_sha256": "sha256:1469b4d24c45a93945e4a330360673c87b6e69861ad854606f4425c579758140",
+      "unknown_count": 0,
+      "duplicate_count": 0,
+      "ambiguous_count": 0,
+      "conflict_count": 0,
+      "final_session_revalidation": "required"
+    }
+  },
+  "evidence": {
+    "primary_references": [
+      {
+        "path": "docs/ultragoal-successor-live/work-packages/ORCHESTRATION-PUBLIC-STATE-JOURNEY-042.json",
+        "sha256": "sha256:58e5840cb3b73e1b93eead3b96355558180b232501f0e3dbc3d48a07cdf4f925",
+        "kind": "authority",
+        "candidate_bound": true
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+        "kind": "authority",
+        "candidate_bound": true
+      },
+      {
+        "path": "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-RECOVERY-PRODUCT-INTEGRATION-037.json",
+        "sha256": "sha256:bd1f2dccd9156a6590194e07cbabc7931ed37f1c91416ad79778b7115776b364",
+        "kind": "review",
+        "candidate_bound": true
+      },
+      {
+        "path": "docs/ultragoal-successor-live/root-decisions/PUBLIC-CLI-EXCLUSIVE-DISPATCH-CANDIDATE-023.json",
+        "sha256": "sha256:1c64805c0c620935f59fcd9901a1005b9219fb3653bee3a3b0b7c790ee882bbf",
+        "kind": "review",
+        "candidate_bound": true
+      }
+    ],
+    "unsupported_truth_surfaces": [
+      "package",
+      "install",
+      "cache",
+      "marketplace",
+      "app_registry",
+      "plugins_ui",
+      "discovery",
+      "runtime",
+      "journey",
+      "readiness",
+      "release",
+      "completion"
+    ],
+    "implementation_conclusions_are_authority": false
+  },
+  "effects": {
+    "candidate_source": "bounded_workspace_write",
+    "git_metadata": "read_only_no_mutation",
+    "shared_root_authority": "forbidden",
+    "scratch": "bounded_read_write",
+    "network": "forbidden",
+    "external_systems": "forbidden",
+    "destructive_actions": "forbidden",
+    "secrets": "forbidden"
+  },
+  "output_contract": {
+    "schema_id": "WorkerResult-v1",
+    "schema_ref": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+    "schema_sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+    "result_target": "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-PUBLIC-STATE-JOURNEY-042.json",
+    "required_sections": [
+      "candidate-identity",
+      "touched-paths",
+      "commands-and-tests",
+      "artifacts",
+      "findings",
+      "requested-root-changes",
+      "limitations",
+      "no-claim-statement"
+    ]
+  },
+  "verification": {
+    "positive": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-ORCHESTRATION-STATE-POSITIVE",
+          "procedure": "Run read-only state views and fresh-process interruption, restart, reconciliation, and recovery fixtures.",
+          "expected": "Views and outcomes preserve exact candidate, lease, result, and journal identity.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "negative": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-ORCHESTRATION-STATE-NEGATIVE",
+          "procedure": "Inject unknown workers, stale candidates, expired leases, orphaned results, ambiguous heads, and action substitutions.",
+          "expected": "Every case returns the exact causal refusal before mutation.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "race_or_mutation": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-ORCHESTRATION-STATE-RACE",
+          "procedure": "Race concurrent recovery and mutate journal, state, workspace, and candidate bindings across restart.",
+          "expected": "Exactly one authoritative outcome is possible and drift invalidates reuse.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "security": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-ORCHESTRATION-STATE-SECURITY",
+          "procedure": "Exercise path escape, links, special files, ancestor swaps, oversized frames, forged authority, and non-echo diagnostics.",
+          "expected": "Unsafe state never mints permits, writes public state, or echoes attacker values.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "false_pass": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-ORCHESTRATION-STATE-FALSE-PASS",
+          "procedure": "Offer unit tests, fixture receipts, serialized permits, generated rows, and in-process simulations as public or fresh-process proof.",
+          "expected": "None substitutes for exact root wiring or representative live journey proof.",
+          "evidence_kind": "test"
+        }
+      ]
+    }
+  },
+  "stop_rule": "Stop after the first root-authority exercise, lease escape, post-mutation ordinary error, or state/journal binding defect; otherwise finish the exact overlay, fixtures, and WorkerResult-v1.",
+  "no_claim_statement": "This agent does not claim readiness, release, node closure, or goal completion."
+}
