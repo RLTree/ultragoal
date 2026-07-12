@@ -1,0 +1,241 @@
+{
+  "schema_version": "AgentTaskEnvelope-v1",
+  "task_id": "custom-agent-authority-discovery-048",
+  "role_binding": {
+    "role_id": "implementation-worker",
+    "source_kind": "runtime_agent_type_receipt",
+    "source_ref": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+    "source_sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+    "sandbox_mode": "workspace-write",
+    "may_exercise_root_authority": false
+  },
+  "goal": "Implement the complete candidate- and session-bound host custom-agent authority verifier without suppressing current legacy, installed, cached, colliding, or write-capable authority.",
+  "success": [
+    "Exact six canonical project roles and descriptor digests are required from source, package, install, cache, and fresh host discovery under one current transaction.",
+    "Legacy, extra, missing, duplicate, normalized-colliding, omitted-sandbox, write-capable, stale, unsafe, or substituted authority blocks route eligibility.",
+    "The worker-owned verifier, adversarial fixtures, direct-path tests, and WorkerResult bind the current candidate while preserving every root-owned adoption and retirement decision."
+  ],
+  "candidate_identity": {
+    "repository": {
+      "root_uri": "repo://harness-ultragoal-plugin-proposal",
+      "canonical_root_sha256": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170"
+    },
+    "context_id": "sha256:6fc99b77fbd89ce92b7a5add58205c7984918a61b2af2461f0a932d119301e2f",
+    "candidate_id": "sha256:daa53cdd1d75114eb8aa97b2d3eecb25e30c68d60a8461c8673c32cf193c1010",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "2155124f1a03f1c271e1fd795f1a501bea582e36",
+    "head_tree": "9984492c7033ce0235a181cdce9fdcb03c403e97",
+    "dirty": true,
+    "captured_at": "2026-07-12T16:50:05Z",
+    "freeze": {
+      "kind": "artifact_set",
+      "artifact_set_sha256": "sha256:f03378de6876a9de71041431dfd5f36a613d024edeebf8e8f8ca319903865065",
+      "artifact_count": 8,
+      "bytes": 100353,
+      "lines": 2917,
+      "artifacts": [
+        {
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+          "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+          "bytes": 20505,
+          "lines": 776
+        },
+        {
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json",
+          "sha256": "sha256:410fa8b0ff620d085e37ee83aae8e7c7407bb702f88afe51abe89dc5b8c1d0fb",
+          "bytes": 36878,
+          "lines": 990
+        },
+        {
+          "path": "docs/ultragoal-successor-live/acceptance/INVENTORY-ACTIVATION-CLOSURE-GUARD-INTEGRATION-040.json",
+          "sha256": "sha256:6782d954ef05279ea31dcd4f833fadbb44635ddc90832eba1bcbb914cde08d8c",
+          "bytes": 3894,
+          "lines": 67
+        },
+        {
+          "path": "docs/ultragoal-successor-live/acceptance/PLUGIN-LIFECYCLE-SOURCE-INTEGRATION-039.json",
+          "sha256": "sha256:8c8ae1d9ce6c5cb6769408e8dff2bf3db463e2788439c8b6f21caf1b70e10955",
+          "bytes": 4629,
+          "lines": 91
+        },
+        {
+          "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+          "sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604",
+          "bytes": 23425,
+          "lines": 747
+        },
+        {
+          "path": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+          "sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+          "bytes": 2176,
+          "lines": 53
+        },
+        {
+          "path": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+          "sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+          "bytes": 555,
+          "lines": 11
+        },
+        {
+          "path": "docs/ultragoal-successor-live/work-packages/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json",
+          "sha256": "sha256:493b12d9f16d6bcf0c8a81291e23ec4aaaa57a618f62516b0447bf57974b942d",
+          "bytes": 8291,
+          "lines": 182
+        }
+      ]
+    }
+  },
+  "scope": {
+    "artifact_paths": [
+      {"path": ".codex/agents", "access": "read"},
+      {"path": "agents", "access": "read"},
+      {"path": "custom-agents", "access": "read"},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT", "access": "read"},
+      {"path": "docs/ultragoal-successor-live/acceptance/INVENTORY-ACTIVATION-CLOSURE-GUARD-INTEGRATION-040.json", "access": "read"},
+      {"path": "docs/ultragoal-successor-live/acceptance/PLUGIN-LIFECYCLE-SOURCE-INTEGRATION-039.json", "access": "read"},
+      {"path": "docs/ultragoal-successor-live/task-envelopes/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json", "access": "write"},
+      {"path": "docs/ultragoal-successor-live/worker-results/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json", "access": "write"},
+      {"path": "docs/ultragoal-successor-live/work-packages/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json", "access": "read"},
+      {"path": "validator/src/inventory", "access": "read"},
+      {"path": "validator/src/plugin_product/agent_discovery", "access": "write"}
+    ],
+    "semantic_symbols": [
+      "bound-agent-discovery-session",
+      "host-agent-authority-snapshot",
+      "canonical-agent-role-observation",
+      "legacy-agent-exposure",
+      "sandbox-effect-observation",
+      "agent-route-eligibility"
+    ],
+    "generated_outputs": [],
+    "fixtures": [
+      {"path": "fixtures/plugin-agent-discovery", "access": "write"},
+      {"path": "validator/tests/plugin_agent_discovery_contract.rs", "access": "write"},
+      {"path": "validator/tests/plugin_agent_discovery_contract", "access": "write"}
+    ],
+    "external_effects": [],
+    "scratch_uris": [
+      "scratch://custom-agent-authority-discovery-048/cargo-target"
+    ],
+    "forbidden_paths": [
+      "Cargo.lock",
+      "migration/authority-routes.json",
+      "plugin-manifest-draft.json",
+      "validator/Cargo.toml",
+      "validator/src/agent_manifest.rs",
+      "validator/src/agent_roles.rs",
+      "validator/src/lib.rs",
+      "validator/src/plugin_product/mod.rs"
+    ],
+    "path_resolution": {
+      "policy": "candidate-relative-no-follow-v1",
+      "session_id": "sha256:44fbd9d76472d1cb322ff71615869c7806b8433649875fd034e5d8b7476b9938",
+      "resolved_scope_sha256": "sha256:5a4fdde02445678a98443240a4ddf36fa33bae02f70221e49affcb6a03f83bd6",
+      "symlinks": "reject",
+      "special_files": "reject",
+      "post_freeze_revalidation": "required"
+    }
+  },
+  "authority_binding": {
+    "session_id": "sha256:ac1b1bd798df5c5257bb2ba7167b4d2cd17310300b0fc5363651229184ee8d45",
+    "captured_at": "2026-07-12T15:57:37Z",
+    "sources": [
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json",
+        "sha256": "sha256:410fa8b0ff620d085e37ee83aae8e7c7407bb702f88afe51abe89dc5b8c1d0fb"
+      }
+    ],
+    "ids": {
+      "nodes": ["N09-AGENTS-REPO"],
+      "requirements": [],
+      "surfaces": ["PS-AGENTS"],
+      "tools": [],
+      "claims": [],
+      "migration_routes": [],
+      "decisions": []
+    },
+    "resolved_rows": [
+      {
+        "stable_id": "N09-AGENTS-REPO",
+        "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "row_sha256": "sha256:8375646111a051108ceed463eccd7a6387670779a0afb95fbe625783192e55d7"
+      },
+      {
+        "stable_id": "PS-AGENTS",
+        "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json",
+        "row_sha256": "sha256:8f43f8687d597977600059b0a8521fe4f08c4f6ffb34ea841ed81917b708c4d0"
+      }
+    ],
+    "resolution": {
+      "resolved_set_sha256": "sha256:64506485414758b8d804f7978c90eb7756195870e1b4d325e754069611bd43b5",
+      "unknown_count": 0,
+      "duplicate_count": 0,
+      "ambiguous_count": 0,
+      "conflict_count": 0,
+      "final_session_revalidation": "required"
+    }
+  },
+  "evidence": {
+    "primary_references": [
+      {"path": "docs/ultragoal-successor-live/work-packages/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json", "sha256": "sha256:493b12d9f16d6bcf0c8a81291e23ec4aaaa57a618f62516b0447bf57974b942d", "kind": "authority", "candidate_bound": true},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json", "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f", "kind": "authority", "candidate_bound": true},
+      {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json", "sha256": "sha256:410fa8b0ff620d085e37ee83aae8e7c7407bb702f88afe51abe89dc5b8c1d0fb", "kind": "authority", "candidate_bound": true},
+      {"path": "docs/ultragoal-successor-live/acceptance/INVENTORY-ACTIVATION-CLOSURE-GUARD-INTEGRATION-040.json", "sha256": "sha256:6782d954ef05279ea31dcd4f833fadbb44635ddc90832eba1bcbb914cde08d8c", "kind": "review", "candidate_bound": true},
+      {"path": "docs/ultragoal-successor-live/acceptance/PLUGIN-LIFECYCLE-SOURCE-INTEGRATION-039.json", "sha256": "sha256:8c8ae1d9ce6c5cb6769408e8dff2bf3db463e2788439c8b6f21caf1b70e10955", "kind": "review", "candidate_bound": true}
+    ],
+    "unsupported_truth_surfaces": [
+      "package",
+      "install",
+      "cache",
+      "marketplace",
+      "app_registry",
+      "plugins_ui",
+      "discovery",
+      "runtime",
+      "journey",
+      "readiness",
+      "release",
+      "completion"
+    ],
+    "implementation_conclusions_are_authority": false
+  },
+  "effects": {
+    "candidate_source": "bounded_workspace_write",
+    "git_metadata": "read_only_no_mutation",
+    "shared_root_authority": "forbidden",
+    "scratch": "bounded_read_write",
+    "network": "forbidden",
+    "external_systems": "forbidden",
+    "destructive_actions": "forbidden",
+    "secrets": "forbidden"
+  },
+  "output_contract": {
+    "schema_id": "WorkerResult-v1",
+    "schema_ref": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+    "schema_sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+    "result_target": "docs/ultragoal-successor-live/worker-results/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json",
+    "required_sections": [
+      "candidate-identity",
+      "touched-paths",
+      "commands-and-tests",
+      "artifacts",
+      "findings",
+      "requested-root-changes",
+      "limitations",
+      "no-claim-statement"
+    ]
+  },
+  "verification": {
+    "positive": {"status": "required", "controls": [{"control_id": "CTRL-AGENT-DISCOVERY-POSITIVE", "procedure": "Capture exact canonical source and five host authority layers twice under one candidate-, project-, session-, issuance-, nonce-, provenance-, and generation-bound transaction, then enforce read-only effects for all six roles.", "expected": "Only an exact fresh six-role identity chain produces a route-eligible report, and that report has no claim effect.", "evidence_kind": "test"}]},
+    "negative": {"status": "required", "controls": [{"control_id": "CTRL-AGENT-DISCOVERY-NEGATIVE", "procedure": "Mutate roles, paths, descriptor bytes, digests, versions, project, candidate, session, package, install, cache, global, discovery, and sandbox observations.", "expected": "Every missing, extra, duplicate, collision, legacy, mismatch, omission, or write-capable state fails closed.", "evidence_kind": "test"}]},
+    "race_or_mutation": {"status": "required", "controls": [{"control_id": "CTRL-AGENT-DISCOVERY-RACE", "procedure": "Mutate source ancestors, descriptors, host catalogs, transaction generation, and sibling or replayed session bindings before final close.", "expected": "Drift or replay returns no eligibility and cannot contact the adapter after local session rejection.", "evidence_kind": "test"}]},
+    "security": {"status": "required", "controls": [{"control_id": "CTRL-AGENT-DISCOVERY-SECURITY", "procedure": "Exercise symlink, hardlink, FIFO, socket, device, path escape, oversize, duplicate-key, non-UTF-8, and hostile non-echo input controls.", "expected": "Unsafe entries and hostile input fail closed without blocking reads or reflected data.", "evidence_kind": "test"}]},
+    "false_pass": {"status": "required", "controls": [{"control_id": "CTRL-AGENT-DISCOVERY-FALSE-PASS", "procedure": "Attempt to substitute source TOMLs, installed/cache bytes, catalog names, version strings, receipt-shaped digests, fixture invocation, and forged sandbox observations for the fresh host transaction.", "expected": "No proxy produces claim or adoption authority; unsupported or forged host evidence is rejected.", "evidence_kind": "test"}]}
+  },
+  "stop_rule": "Stop on root-owned wiring, route adoption, legacy retirement, host mutation, install/cache replacement, manifest or inventory edits, unbounded host probes, destructive effects, or external authority. This worker does not claim route adoption, legacy retirement, host discovery, sandbox enforcement, fresh-agent comprehension, readiness, release, node closure, or completion.",
+  "no_claim_statement": "This agent does not claim readiness, release, node closure, or goal completion."
+}

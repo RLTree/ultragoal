@@ -1,0 +1,303 @@
+{
+  "worker": "/root/custom_agent_authority_engineer",
+  "lease_id": "CUSTOM-AGENT-AUTHORITY-DISCOVERY-048",
+  "context_id": "sha256:6fc99b77fbd89ce92b7a5add58205c7984918a61b2af2461f0a932d119301e2f",
+  "candidate_identity": {
+    "candidate_id": "sha256:5b4137fcc924192c4475773aac9e95d068ccdb27171a209b09d60b9d46bac6de",
+    "task_envelope_candidate_id": "sha256:daa53cdd1d75114eb8aa97b2d3eecb25e30c68d60a8461c8673c32cf193c1010",
+    "branch": "codex/successor-contract-v2-live-product",
+    "issued_head_commit": "f98d93bc10dd6873c690e21fedab181f9ed1f676",
+    "issued_head_tree": "e06522e42e22c87a93711f78c9bd41cf7253c614",
+    "task_envelope_head_commit": "2155124f1a03f1c271e1fd795f1a501bea582e36",
+    "task_envelope_head_tree": "9984492c7033ce0235a181cdce9fdcb03c403e97",
+    "worker_owned_artifact_set_sha256": "sha256:5b4137fcc924192c4475773aac9e95d068ccdb27171a209b09d60b9d46bac6de",
+    "worker_owned_artifact_count": 16,
+    "worker_owned_artifact_total_bytes": 134750,
+    "worker_owned_artifact_total_lines": 3894,
+    "worker_result_self_excluded": true,
+    "concurrent_unowned_changes_preserved": true
+  },
+  "base_state": {
+    "work_envelope": "docs/ultragoal-successor-live/work-packages/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json",
+    "work_envelope_sha256": "sha256:493b12d9f16d6bcf0c8a81291e23ec4aaaa57a618f62516b0447bf57974b942d",
+    "agent_task_envelope": "docs/ultragoal-successor-live/task-envelopes/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json",
+    "agent_task_envelope_sha256": "sha256:65d618084ef434f59a5ec4835ae90fde4b321f4215b04009de2bfb10a654e3b7",
+    "accepted_inventory_activation_guard_sha256": "sha256:6782d954ef05279ea31dcd4f833fadbb44635ddc90832eba1bcbb914cde08d8c",
+    "accepted_plugin_lifecycle_source_sha256": "sha256:8c8ae1d9ce6c5cb6769408e8dff2bf3db463e2788439c8b6f21caf1b70e10955",
+    "live_rework_state": "Six canonical repository descriptors exist, but legacy global, installed, and cached authority plus same-version manifest drift block route adoption.",
+    "independent_rework_findings": [
+      "The initial verifier recognized only the hyphenated harness- namespace, while the seven live legacy descriptor names use harness_ identifiers; those exact live rows could fall through to generic conflict handling instead of authoritative legacy classification.",
+      "The first correction retained only path fingerprints around ordinary path opens. A coordinated rename, outside-directory symlink substitution, read, removal, and restoration could expose outside descriptor or manifest bytes before the final path revalidation observed the restored identities.",
+      "The FD-anchored correction still collected and sorted an arbitrary source directory and opened every observed body before exact-set comparison, allowing untrusted extra entries to force unbounded enumeration and O(entry-count times descriptor-limit) reads.",
+      "The bounded scanner treated every null readdir result as clean EOF without clearing and checking errno, so an EIO after a complete-looking six-row prefix could hide logically remaining authority and permit a false exact-set result."
+    ],
+    "root_owned_surfaces_not_modified": [
+      ".codex/agents and host-global agent descriptors",
+      "migration/authority-routes.json",
+      "plugin and marketplace manifests",
+      "inventory source and agent role contracts",
+      "validator public module wiring and command catalog",
+      "generated authority, acceptance, board, claims, release, and completion"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_exact_independent_review_and_root_reconciliation",
+    "implementation_scope": "source-local candidate-and-session-bound verifier with a supported-host transaction interface",
+    "canonical_role_count": 6,
+    "host_authority_layers": 5,
+    "catalog_capture_rounds": 2,
+    "effect_policy_probes_per_successful_transaction": 6,
+    "fresh_host_adapter_implemented": false,
+    "live_host_mutations": 0,
+    "external_effect_authorizations": 0,
+    "route_adoptions": 0,
+    "legacy_retirements": 0,
+    "claim_effect": false,
+    "focused_tests": "39 passed; 0 failed",
+    "dependency_agent_route_tests": "11 passed; 0 failed",
+    "current_route_eligibility": false,
+    "current_ceiling": "Verifier candidate only. The current host remains ineligible because legacy global, installed, and cached authority is active, installed/cache bytes drift from source, and no supported-host transaction or fresh-session discovery proof was exercised.",
+    "lease_no_claim_statement": "This worker does not claim route adoption, legacy retirement, host discovery, sandbox enforcement, fresh-agent comprehension, readiness, release, node closure, or completion."
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/task-envelopes/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json",
+    "docs/ultragoal-successor-live/worker-results/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json",
+    "fixtures/plugin-agent-discovery/scenarios.json",
+    "validator/src/plugin_product/agent_discovery/error.rs",
+    "validator/src/plugin_product/agent_discovery/filesystem.rs",
+    "validator/src/plugin_product/agent_discovery/host.rs",
+    "validator/src/plugin_product/agent_discovery/mod.rs",
+    "validator/src/plugin_product/agent_discovery/model.rs",
+    "validator/src/plugin_product/agent_discovery/session.rs",
+    "validator/src/plugin_product/agent_discovery/source.rs",
+    "validator/tests/plugin_agent_discovery_contract.rs",
+    "validator/tests/plugin_agent_discovery_contract/false_pass.rs",
+    "validator/tests/plugin_agent_discovery_contract/negative.rs",
+    "validator/tests/plugin_agent_discovery_contract/positive.rs",
+    "validator/tests/plugin_agent_discovery_contract/race.rs",
+    "validator/tests/plugin_agent_discovery_contract/security.rs",
+    "validator/tests/plugin_agent_discovery_contract/support.rs"
+  ],
+  "touched_semantics": [
+    "source catalog derives exact roles from root-owned CANONICAL_AGENT_ROLES instead of defining a second role table",
+    "source capture walks from retained candidate-root handles with no-follow openat directory and file operations and rejects links, hardlinks, special files, extra entries, path escape, oversize, non-UTF-8, duplicate TOML fields, invalid descriptors, and non-read-only canonical roles",
+    "source directory enumeration is bounded to the exact six canonical descriptor entries and one exact plugin metadata entry, metadata-probes entries no-follow, rejects unexpected names before body reads, and opens only expected canonical filenames",
+    "the POSIX directory scanner clears errno before every readdir, distinguishes zero-errno EOF from fail-closed enumeration errors, does not retry EINTR, and makes errored streams terminal before close",
+    "source identity binds retained root and authority-directory handles, path-visible ancestor identities, candidate, plugin version and manifest bytes, exact descriptor bytes and digests, and a caller-supplied session ID",
+    "each bound session adds a private unique issuance and observation nonce so sibling sessions with identical public IDs cannot substitute",
+    "one reader-owned generation-stable transaction captures package, installed, cache, global, and fresh discovery catalogs twice before close",
+    "package installed cache and discovery require exact six-role path byte digest manifest version project candidate session issuance nonce and new-session closure",
+    "one canonical Harness authority namespace predicate recognizes both harness_ and harness- identifiers before generic descriptor parsing and blocks them without suppressing the observed rows",
+    "each canonical role requires descriptor-level read-only policy and a same-transaction denial of workspace write host write and root authority",
+    "source catalog host catalog package install cache version strings digests receipts and fixtures cannot be fed into a separate positive evidence API",
+    "source capture and final revalidation are recursively zero write and coordinated ancestor swap restore cannot read outside descriptor or manifest bytes",
+    "eligibility reports are one-session outputs with claim_effect false and cannot adopt routes or retire authority"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/plugin-agent-discovery/scenarios.json",
+    "validator/tests/plugin_agent_discovery_contract.rs",
+    "validator/tests/plugin_agent_discovery_contract"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "custom-agent-discovery-verifier-source",
+      "performed": true,
+      "scope": "leased paths only"
+    },
+    {
+      "class": "fixture_write",
+      "target": "custom-agent-discovery-contract-tests",
+      "performed": true,
+      "scope": "leased fixtures and /tmp scratch only"
+    },
+    {
+      "class": "host_observation",
+      "target": "repository global installed and cached agent bytes",
+      "performed": true,
+      "scope": "read-only bounded digest field and path enumeration"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external_or_host_write",
+      "performed": false
+    },
+    {
+      "class": "git_mutation",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PLUGIN-006",
+    "REQ-ORCH-003",
+    "REQ-SECURITY-006",
+    "REQ-PROOF-001",
+    "REQ-PROOF-007",
+    "CTRL-AGENT-DISCOVERY-POSITIVE",
+    "CTRL-AGENT-DISCOVERY-NEGATIVE",
+    "CTRL-AGENT-DISCOVERY-RACE",
+    "CTRL-AGENT-DISCOVERY-SECURITY",
+    "CTRL-AGENT-DISCOVERY-FALSE-PASS"
+  ],
+  "dependency_nodes": [
+    "N09-AGENTS-REPO",
+    "N02-INVENTORY",
+    "accepted-inventory-activation-guard",
+    "accepted-plugin-lifecycle-source"
+  ],
+  "changes": [
+    {
+      "area": "canonical-source-authority",
+      "result": "SourceAgentCatalog consumes the root-owned six-role table and securely captures exact repository descriptor and plugin-manifest bytes through retained candidate-root, .codex, .codex/agents, and .codex-plugin handles. It proves exact bounded name sets for six descriptor entries and one plugin metadata entry before any body read, metadata-probes entries no-follow, and opens only expected filenames."
+    },
+    {
+      "area": "bound-host-discovery-session",
+      "result": "AgentDiscoverySession combines project, candidate, caller session, exact source catalog, unique private issuance, and unique observation nonce. Atomic states make success, rejection, and replay one-winner outcomes."
+    },
+    {
+      "area": "host-authority-transaction",
+      "result": "The adapter boundary must hold one provenance- and generation-stable transaction while package, installed, cache, global, and discovery catalogs are captured twice and six read-only effect denials are enforced."
+    },
+    {
+      "area": "authority-conflict-policy",
+      "result": "Exact non-global closure requires six canonical paths, descriptor bytes, digests, read-only sandbox, source manifest bytes, version, candidate, project, and session. One separator-aware Harness namespace predicate classifies both harness_ and harness- authority before generic descriptor parsing; normalized collisions, unsafe files, extras, omissions, or substitutions remain independently blocked."
+    },
+    {
+      "area": "independent-review-correction",
+      "result": "Added exact-byte controls for all seven live underscore legacy descriptors, individual one-at-a-time blocking, and a mixed-removal control proving removal of the two additional hyphenated global roles cannot hide any remaining underscore legacy authority."
+    },
+    {
+      "area": "independent-review-fd-anchor-correction",
+      "result": "Replaced path-only source reads with retained FD-anchored no-follow traversal and handle-relative reads. Coordinated agent-root and plugin-root swap/read/restore controls, persistent replacement, final and ancestor symlink controls, outside substitution, and recursive zero-write comparison now fail closed before any substituted bytes can become evidence."
+    },
+    {
+      "area": "independent-review-bounded-enumeration-correction",
+      "result": "Replaced arbitrary name collection and pre-comparison body reads with an exact bounded directory scanner. It retains at most six expected agent names or one plugin name, aborts on the first unexpected entry, rejects special entries through fstatat without opening them, and validates both directories before opening any source body. A 2,048-extra-entry fixture proves no more than seven agent entries are examined, zero body opens occur, refusal is stable, and the tree remains byte-identical."
+    },
+    {
+      "area": "independent-review-readdir-error-correction",
+      "result": "Wrapped POSIX readdir in a terminal scanner that clears errno before every call, accepts null only when errno remains zero, and maps EIO, EINTR, and all other enumeration failures to the stable non-echoing unsafe-filesystem error. Deterministic agent and plugin prefix faults prove complete-looking prefixes cannot become EOF, EINTR is not retried, zero body opens and writes occur, and post-error probes never invoke readdir again."
+    },
+    {
+      "area": "false-pass-control",
+      "result": "No public receipt or prebuilt observation acceptance path exists. Fixture success remains claim_effect false; source, package, install, cache, catalog, digest, and version proxies cannot replace the same-session host transaction."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -c '<validate CUSTOM-AGENT-AUTHORITY-DISCOVERY-048 against AgentTaskEnvelope-v1 schema and semantic resolver>'",
+      "status": "pass",
+      "result": "AgentTaskEnvelope-v1 schema-and-semantic-validation:pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-agent-discovery-048-rework4 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test plugin_agent_discovery_contract --no-fail-fast",
+      "status": "pass-39-of-39",
+      "run_id": "34b841d8-3150-4a62-b084-26e73f8a5bf2",
+      "result": "All prior controls plus errno-aware agent/plugin EIO, fail-closed EINTR, and terminal failed-stream controls passed in 0.470 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-agent-discovery-048-rework4 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test plugin_agent_discovery_contract -E 'test(/readdir/)' --no-fail-fast",
+      "status": "pass-3-of-3",
+      "run_id": "f2e16b06-0b91-445d-a239-124183b0e107",
+      "result": "Agent EIO after six expected rows, plugin EIO after one required row, and EINTR all failed closed with zero body opens and writes, one failed-stream close, stable diagnostics, and no underlying readdir call on the post-error reuse probe."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-agent-discovery-048-rework4 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test inventory_contract -E 'test(/agent_routes/)' --no-fail-fast",
+      "status": "pass-11-of-11",
+      "run_id": "0ac4f5e8-8c64-4b84-86ab-5b19a561bc9b",
+      "result": "All existing exact agent-route dependency controls passed in 36.873 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-agent-discovery-048-rework4 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS='-Awarnings -Dunexpected_cfgs' cargo check --manifest-path validator/Cargo.toml --locked --offline --test plugin_agent_discovery_contract --jobs 16",
+      "status": "pass-with-diagnostics",
+      "result": "The direct-path verifier compiled and all platform errno cfg branches accepted rustc check-cfg; existing crate-wide diagnostics remain outside this verifier proof."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <leased Rust artifacts>; awk trailing-whitespace scan <leased artifact set>",
+      "status": "pass",
+      "result": "No formatting or whitespace errors."
+    },
+    {
+      "command": "bounded read-only digest and field comparison across .codex/agents, ~/.codex/agents, source custom-agents, installed plugin, and cache 0.0.11",
+      "status": "blocked-live-route",
+      "result": "Six repository canonical descriptors are current and read-only. Seven legacy contract descriptors are byte-identical across source, global, installed, and cache; two legacy descriptors omit sandbox_mode. Two additional exposed global harness-prefixed agents also omit sandbox_mode. Installed and cache manifest digest sha256:8e93403398fe1ccf6c93dcd15f2143677e1ab47c65b7ee59f53e051e5f7ffcb6 differs from source sha256:12c123fa9442dbf9e2eb7877b6fd1c4446ffc04a26d37727dddc0fb3877b06da at version 0.0.11, and installed/cache contain zero project-scoped .codex/agents descriptors."
+    }
+  ],
+  "artifacts": [
+    {"path":"docs/ultragoal-successor-live/task-envelopes/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json","sha256":"sha256:65d618084ef434f59a5ec4835ae90fde4b321f4215b04009de2bfb10a654e3b7","byte_length":13721,"line_count":241},
+    {"path":"fixtures/plugin-agent-discovery/scenarios.json","sha256":"sha256:9015bc6dc8c0caf3d77f0da41938bedb98c9cb50aaa205ef00b1635bc7273829","byte_length":1995,"line_count":43},
+    {"path":"validator/src/plugin_product/agent_discovery/error.rs","sha256":"sha256:6ce2fea5f8dce9f1a435ab15f27b560c75977e7e8e33fd9bdf5c78080cab0a47","byte_length":2666,"line_count":75},
+    {"path":"validator/src/plugin_product/agent_discovery/filesystem.rs","sha256":"sha256:5305d53e590c809fabfc57a60ec27e89344cc30e1a2d6f4bd036329d1d15ea15","byte_length":28809,"line_count":921},
+    {"path":"validator/src/plugin_product/agent_discovery/host.rs","sha256":"sha256:80afc420a7d2e6751da36d034a4cfc1fad6a912a12f3bff13cd266c5f41d26de","byte_length":16399,"line_count":499},
+    {"path":"validator/src/plugin_product/agent_discovery/mod.rs","sha256":"sha256:2ace65bab82beabe2cd2b51ae0ab8bd960c0cd38074d16c9ff491f96e6c9728f","byte_length":1011,"line_count":29},
+    {"path":"validator/src/plugin_product/agent_discovery/model.rs","sha256":"sha256:ead8d8311402444a8e379548aa8cdc8f7c0438b237d62998b8183dbf12ead75a","byte_length":5616,"line_count":220},
+    {"path":"validator/src/plugin_product/agent_discovery/session.rs","sha256":"sha256:7d9fa9c57ddceadfb9755bece945c0811d907ff694b8cf588f3faa9f60051339","byte_length":6740,"line_count":187},
+    {"path":"validator/src/plugin_product/agent_discovery/source.rs","sha256":"sha256:bfd119a54d01545b89f60578a60d720beb77c9447a44a912cb4bbf4fa7f74081","byte_length":10164,"line_count":324},
+    {"path":"validator/tests/plugin_agent_discovery_contract.rs","sha256":"sha256:6beb2ff724a7e963210ecd50bb92b89e08a31976775eaf4b4281593f9c0bcb5d","byte_length":544,"line_count":17},
+    {"path":"validator/tests/plugin_agent_discovery_contract/false_pass.rs","sha256":"sha256:c9b1cd0d2085af15c4bb9bebd595eb5a806f92b2bafd799b0a5309937c942113","byte_length":3297,"line_count":86},
+    {"path":"validator/tests/plugin_agent_discovery_contract/negative.rs","sha256":"sha256:7ec835d3874a36f311109d7e4884c98ca2d80579a6fa3f2347bcc18bc07e83e3","byte_length":7783,"line_count":215},
+    {"path":"validator/tests/plugin_agent_discovery_contract/positive.rs","sha256":"sha256:6ca0aec4621fed26e3fa4ba3bcb4767ed12a4c996695a10cd12687ed75dc39ad","byte_length":2020,"line_count":55},
+    {"path":"validator/tests/plugin_agent_discovery_contract/race.rs","sha256":"sha256:bad2bf323d98685747d7749167863c7bbb2c34bf9bfb077f80cec60dff1fc57f","byte_length":8409,"line_count":226},
+    {"path":"validator/tests/plugin_agent_discovery_contract/security.rs","sha256":"sha256:25d8e7b7072a09558f49855dbd27b54e30bad9f9bf35b9ce4f7df3f113949324","byte_length":13047,"line_count":375},
+    {"path":"validator/tests/plugin_agent_discovery_contract/support.rs","sha256":"sha256:c66208e622c40659622b71abad8b3f105b9c137f3402022efe199fc7ff1044e9","byte_length":12529,"line_count":381}
+  ],
+  "findings": [
+    {
+      "severity": "material-blocker",
+      "class": "active-legacy-global-installed-cache-authority",
+      "finding": "Seven legacy contract descriptors remain byte-identical across source custom-agents, ~/.codex/agents, installed plugin, and cache. Two of those seven omit sandbox_mode."
+    },
+    {
+      "severity": "material-blocker",
+      "class": "additional-global-harness-authority",
+      "finding": "Two additional exposed global harness-prefixed agent descriptors, harness-cost-benefit-reviewer and harness-log-scout, also omit sandbox_mode. They are not silently classified as retired."
+    },
+    {
+      "severity": "material-blocker",
+      "class": "same-version-install-cache-drift",
+      "finding": "Source manifest and installed/cache manifest all report 0.0.11, but installed/cache bytes have a different digest and retain legacy custom-agents with no .codex/agents descriptors."
+    },
+    {
+      "severity": "ceiling-withheld",
+      "class": "supported-host-adapter-absent",
+      "finding": "No reviewed supported-host transaction adapter or independent new-session probe exercised the verifier, so fixture success does not prove live discovery or sandbox enforcement."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent review of the exact 16-artifact candidate and root acceptance/reconciliation.",
+    "Root-only crate module wiring after review without changing agent routes or current inventory classification.",
+    "A separately leased supported-host transaction adapter that observes actual file kinds, link counts, manifest and descriptor bytes, live discovery, and effect enforcement.",
+    "Explicit authority and a root-owned migration plan for global legacy retirement and installed/cache replacement.",
+    "Independent fresh-session host discovery and fresh-agent comprehension after the host state is corrected.",
+    "Atomic exact route adoption, inventory regeneration, and two byte-identical current summaries only after all authority blockers close."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/plugin_product/mod.rs",
+      "request": "After exact independent PASS, production-compile the reviewed agent_discovery module without granting it command, route, registry, or claim authority."
+    },
+    {
+      "path": "supported-host adapter in a new disjoint lease",
+      "request": "Implement the actual generation-stable HostAgentAuthorityReader boundary and independently exercise a fresh Codex session; do not accept receipts or static catalog bytes as a substitute."
+    },
+    {
+      "path": "host global installed and cache state",
+      "request": "Keep all current duplicate rows active until explicit authority permits retirement/replacement and exact post-change observation proves them absent."
+    },
+    {
+      "path": "migration/authority-routes.json and inventory generated authority",
+      "request": "Do not adopt the fourteen routes yet. Reconcile them atomically only after supported-host discovery, sandbox enforcement, legacy absence, install/cache identity closure, independent review, and final-session digest revalidation."
+    }
+  ],
+  "limitations": [
+    "The module is direct-path tested and intentionally not root-wired by this worker.",
+    "The host interface models the required trusted adapter boundary; it does not itself inspect Codex UI or runtime state.",
+    "Read-only host probes established current blockers but did not mutate global, installed, cached, marketplace, registry, or runtime state.",
+    "The WorkerResult schema requires its shorter literal no-claim value; the stronger lease ceiling remains binding verbatim: This worker does not claim route adoption, legacy retirement, host discovery, sandbox enforcement, fresh-agent comprehension, readiness, release, node closure, or completion."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

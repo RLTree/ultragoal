@@ -1,0 +1,43 @@
+{
+  "schema_version": "PluginAgentDiscoveryScenarios-v1",
+  "claim_effect": false,
+  "positive": [
+    "exact-six-canonical-descriptors-current-package-install-cache-and-new-session-discovery",
+    "read-only-effect-enforcement-for-each-role-under-one-generation-stable-transaction",
+    "exact-name-set-independent-of-directory-enumeration-order"
+  ],
+  "negative": [
+    "missing-extra-duplicate-normalized-collision",
+    "legacy-global-installed-or-cache-authority",
+    "all-seven-live-underscore-legacy-identifiers-with-exact-descriptor-bytes",
+    "mixed-hyphen-and-underscore-harness-authority-with-partial-removal",
+    "omitted-or-write-capable-sandbox",
+    "wrong-project-candidate-session-version-path-or-digest"
+  ],
+  "race_or_mutation": [
+    "source-catalog-descriptor-package-cache-session-or-ancestor-drift",
+    "fd-anchored-agent-root-swap-outside-symlink-read-and-restore",
+    "fd-anchored-plugin-root-swap-outside-symlink-read-and-restore",
+    "persistent-directory-replacement-and-parent-identity-drift",
+    "host-generation-drift-and-two-capture-mismatch",
+    "replay-and-sibling-session-substitution"
+  ],
+  "security": [
+    "symlink-hardlink-fifo-socket-device-path-escape",
+    "final-component-and-ancestor-no-follow-traversal",
+    "oversize-duplicate-key-non-utf8-and-non-echo",
+    "bounded-exact-agent-and-plugin-entry-enumeration-with-metadata-only-special-file-rejection",
+    "unicode-and-oversized-unexpected-directory-names",
+    "readdir-eio-after-complete-looking-agent-or-plugin-prefix-is-not-eof",
+    "readdir-eintr-fails-closed-without-retry-or-stream-reuse"
+  ],
+  "false_pass": [
+    "source-installed-cache-or-catalog-bytes-alone",
+    "receipt-shaped-digests-version-strings-and-fixture-invocation",
+    "forged-sandbox-effect-response",
+    "large-extra-directory-cannot-trigger-unbounded-enumeration-or-extra-body-reads"
+  ],
+  "zero_write": [
+    "recursive-source-tree-byte-and-entry-identity-before-and-after-capture-revalidation"
+  ]
+}
