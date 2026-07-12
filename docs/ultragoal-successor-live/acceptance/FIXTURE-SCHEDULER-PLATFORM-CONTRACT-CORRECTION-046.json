@@ -1,0 +1,64 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N11-EVALUATION",
+  "root_decision": "accepted_darwin_fixture_scheduler_platform_contract_correction",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json",
+    "sha256": "911a86956c16232723d7840f1e5b75023d0aab8f1775df57bc6b913654ec3f15",
+    "artifact_count": 4,
+    "artifact_set_sha256": "74b13af6a1ddde61817db455a879e320b82bb962e980c58aa1a863c243ab1fcb"
+  },
+  "rework_history": [
+    "Five fixture-scheduler tests asserted obsolete cross-platform deletion behavior and disagreed with the descriptor-conditioned cleanup contract.",
+    "The first correction left the historical WorkerResult current against changed artifact bytes.",
+    "The next correction reconstructed a reduced synthetic lease subject and omitted root-issued prerequisite and acceptance rows, permitting a false pass.",
+    "The accepted correction deserializes the exact persisted LeaseSpec and WorkPackage, verifies their complete equality and digest, and rejects every omitted binding row."
+  ],
+  "independent_review": {
+    "reviewer": "/root/fixture_scheduler_platform_reviewer",
+    "verdict": "pass",
+    "review_mode": "independent_read_only_exact_corrected_artifact_set",
+    "full_nextest_run_id": "6f2c4c87-e147-4283-aa45-0ccf812adaf6",
+    "full_result": "47 passed; 0 failed",
+    "receipt_control_run_id": "babcca90-5e41-4bbd-b7e9-8868fb323a8f",
+    "receipt_control_result": "4 passed; 0 failed",
+    "blocking_review_findings": 0
+  },
+  "root_integration": {
+    "commit": "b595bef7549b09641611a5c88cecb6b78cd870e0",
+    "integrated_tree": "36ad021cfe950f4daa6eb559911b4d3ed5816692",
+    "root_full_nextest_run_id": "8b41913c-9fb5-4b90-9109-d7b1734e4b86",
+    "root_full_result": "47 passed; 0 failed",
+    "transient_exact_rerun_id": "05a8115c-2c25-4525-b507-e2c04d74ec3f",
+    "transient_exact_rerun_result": "1 passed; 0 failed"
+  },
+  "closed_findings": [
+    "Darwin cleanup failure remains RecoveryRequired and cannot be relabeled Accepted or CausalFailure.",
+    "Lease paths, namespace and environment expectations, active counts, repeat recovery, and collision behavior match current platform truth.",
+    "Historical receipt 009 remains byte-preserved and structurally bound while correctly rejecting as stale against current artifact bytes.",
+    "Current receipt verification binds the exact root-issued work package, dependency rows, tool rows, prerequisite evidence, acceptance criteria, and work-envelope digest.",
+    "Omission and substitution controls fail closed with StaleBinding."
+  ],
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-EVALUATION-001",
+      "state": "Darwin fixture-scheduler contract-test closure accepted",
+      "blocker": "Production evaluation adapters, durable execution and review ledgers, public commands, promotion behavior, and representative live journeys remain unimplemented or unproved."
+    }
+  ],
+  "root_acceptance_limit": "Darwin-only fixture-scheduler contract tests and exact current-versus-historical receipt binding. Production fixture behavior is unchanged.",
+  "explicitly_withheld": [
+    "FreeBSD funlinkat compilation or execution",
+    "cross-platform identity-conditioned deletion behavior",
+    "production evaluation adapter behavior",
+    "public evaluation commands",
+    "representative evaluation and promotion journeys",
+    "evaluation node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any change to the accepted task envelope, WorkerResult, three fixture-scheduler contract modules, root work package, or named scheduler and receipt dependencies immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim FreeBSD execution, cross-platform product behavior, public evaluation commands, representative journeys, readiness, release, node closure, or goal completion."
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N10-ORCHESTRATION",
+  "root_decision": "accepted_production_exported_source_local_decision_bound_runtime_adapter",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json",
+    "sha256": "ed6d2e83e288c80be62e7c34b2ecb6f3bc8af95107d550e2b39c87b671d549a7",
+    "artifact_count": 17,
+    "artifact_set_sha256": "2e5ad0495eb66848ce2f20bab0f08e80bc4d0c70749139b7effb8471f3a6516f"
+  },
+  "rework_history": [
+    "The first runtime-adapter candidate accepted a RootPermit-v1 that authenticated only action and target, so a complete reconciliation decision could be substituted.",
+    "RootPermit-v2 corrected that authority boundary by separating action-only issuance from reconciliation issuance and binding the latter to the complete typed EffectResolution.",
+    "The first corrected receipt falsely classified its root-issued task envelope as worker-owned; root committed the envelope and corrective lease before refreezing the worker set.",
+    "The next receipt named imprecise semantic ownership; the final WorkerResult enumerates the exact leased symbols and generated outputs."
+  ],
+  "independent_review": {
+    "reviewer": "/root/orchestration_decision_binding_reviewer",
+    "verdict": "pass",
+    "review_mode": "independent_read_only_exact_corrected_artifact_set",
+    "focused_nextest_run_id": "4fa1ede8-1092-46c6-a95b-063ce3e5e7b0",
+    "focused_result": "25 passed; 0 failed",
+    "dependency_nextest_run_id": "af2b38fc-ac44-4752-b95e-69af766cf40f",
+    "dependency_result": "207 passed; 0 failed",
+    "blocking_review_findings": 0
+  },
+  "root_integration": {
+    "implementation_commit": "771f6bcc3a2602c30259d5f3133b42f6076ecbb6",
+    "implementation_tree": "23d4ef9db3073676971464cc3a4333b175972423",
+    "module_export_commit": "ea40557cec15fa16224a2450c6db3986c03d26e8",
+    "module_export_tree": "5f50af2cc3ca648fbc98eb26c02ee65d930a788a",
+    "integrated_nextest_run_id": "ec3e6a43-53b6-4cd5-9afa-4b74f47d4b5e",
+    "integrated_result": "232 passed; 0 failed",
+    "production_library_check": "passed under locked offline 16-job build"
+  },
+  "closed_findings": [
+    "Every reconcile mutation verifies a RootPermit-v2 bound to the exact complete EffectResolution before workspace mutation.",
+    "Resume and recover routes reject reconciliation permits, reconciliation rejects action-only permits, and RootPermit-v1 input is rejected.",
+    "Candidate, source, workspace, operation, target, expected head, expiry, nonce, actor, and exact effect decision remain bound across dispatch and replay checks.",
+    "Read-only planning and refusal paths preserve recursive zero-write behavior.",
+    "Race, replay, stale-head, mutation, substitution, downgrade, recovery, and fresh-process test journeys pass through the production-exported adapter source."
+  ],
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-ORCHESTRATION-001",
+      "state": "production-exported source-local runtime adapter with exact RootPermit-v2 decision binding accepted",
+      "blocker": "No production root-authority issuer or durable replay ledger is wired through the public successor dispatcher, and representative installed-runtime restart and recovery journeys remain unproved."
+    }
+  ],
+  "root_acceptance_limit": "Production-exported source-local orchestration runtime adapter behavior with exact decision-bound permit verification, typed refusal, replay/race controls, and recursive zero-write read paths.",
+  "explicitly_withheld": [
+    "production root-authority issuer",
+    "durable cross-process replay ledger",
+    "public successor command dispatch",
+    "installed runtime behavior",
+    "representative supported-host interruption restart ambiguity reconciliation and recovery journey",
+    "sudden power-loss durability",
+    "orchestration node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any change to an accepted runtime-adapter artifact, RootPermit-v2 authority, effect-resolution binding, product module export, dependency named by the WorkerResult, or named contract test immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim a production issuer, durable replay ledger, public command behavior, installed runtime, representative supported-host journeys, readiness, release, node closure, or goal completion."
+}
