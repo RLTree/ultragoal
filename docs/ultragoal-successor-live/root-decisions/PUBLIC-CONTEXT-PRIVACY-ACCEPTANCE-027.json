@@ -1,0 +1,47 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "PUBLIC-CONTEXT-PRIVACY-ACCEPTANCE-027",
+  "root_decision": "accept_bounded_artifact_set",
+  "review_mode": "independent_read_only_public_context_privacy_and_zero_write_falsification",
+  "reviewer": "/root/public_context_privacy_reviewer",
+  "base_head": "5a7c0a0ff",
+  "accepted_artifacts": [
+    {
+      "path": "validator/src/cli/successor_public/mod.rs",
+      "sha256": "1e66d36156aec3562eeb24d8b510e433d1c59df8809fedf95f5bfbcf06057ee8"
+    },
+    {
+      "path": "validator/src/cli/successor_public/public_context.rs",
+      "sha256": "c0d185b846e837b65d54d7d44d1ac3e1ee4a5482067450a61f84f6e126deac9b"
+    },
+    {
+      "path": "validator/src/cli/successor_public/tests.rs",
+      "sha256": "588c362a56f31dba10e1f36448b24dc0f0b43a36a378ee06caff81428630ed70"
+    },
+    {
+      "path": "validator/tests/cli_surface.rs",
+      "sha256": "dde07884386206f1ca8dd89f9e9bb78dadf204165fb44da2989f46c1bdf14e49"
+    }
+  ],
+  "fresh_binary": {
+    "path": "/tmp/hul-public-context-redaction-027/debug/ultragoal",
+    "sha256": "38186a7e817822f00ade510dba66746b4d663de0f046563b6430b97eb33d163b"
+  },
+  "verification": {
+    "successor_public": "19 passed; 0 failed",
+    "cli_surface": "5 passed; 0 failed; nextest run 7c8a02dd-ee8c-417a-bc88-06ebbf3b6f5d",
+    "forced_output_failure": "fixed path-free successor_runtime_projection_failed diagnostic",
+    "zero_write_scope": "recursive repository tree plus Git status",
+    "blocking_findings": 0
+  },
+  "accepted_scope": "Exact public inspect-context privacy correction at source and fresh-binary behavior level: absolute repository and worktree roots remain internal, public success emits candidate-bound opaque root identifiers, and projection failure cannot fall back to the private LiveContext renderer.",
+  "withheld_scope": [
+    "external consumer adoption of HarnessPublicContext-v1",
+    "broader CLI product acceptance",
+    "node closure",
+    "readiness",
+    "release",
+    "completion"
+  ],
+  "no_claim_statement": "This decision accepts only the bounded public-context privacy correction and does not claim broader CLI acceptance, readiness, release, or completion."
+}

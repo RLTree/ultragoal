@@ -312,6 +312,25 @@ fn public_read_help_parse_and_query_paths_are_recursively_zero_write() {
 
 #[cfg(unix)]
 #[test]
+fn public_context_never_echoes_the_operator_supplied_absolute_root() {
+    let repository = Repository::new("context-root-redaction");
+    let before = observe(&repository.root);
+    let output = repository.run(&["--json", "inspect", "context"]);
+
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    assert!(output.stderr.is_empty());
+    assert!(!String::from_utf8_lossy(&output.stdout).contains(repository.root.to_str().unwrap()));
+    let value: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(value["schema_version"], "HarnessPublicContext-v1");
+    assert!(value["roots"]["repository_root_id"].as_str().is_some());
+    assert!(value["roots"]["worktree_root_id"].as_str().is_some());
+    assert!(value["roots"].get("repository_root").is_none());
+    assert!(value["roots"].get("worktree_root").is_none());
+    assert_eq!(observe(&repository.root), before);
+}
+
+#[cfg(unix)]
+#[test]
 fn unavailable_effectful_routes_refuse_before_repository_mutation_or_path_echo() {
     let repository = Repository::new("effect-refusal");
     let initial = observe(&repository.root);

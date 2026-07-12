@@ -42,7 +42,10 @@ fn execute_invocation(root: &Path, invocation: ParsedInvocation) -> RuntimeOutco
         Err(()) => return context_unavailable(),
     };
     match invocation.command {
-        SuccessorCommand::Inspect(InspectTarget::Context | InspectTarget::Capabilities) => {
+        SuccessorCommand::Inspect(InspectTarget::Context) => {
+            public_context::project(&context, &invocation)
+        }
+        SuccessorCommand::Inspect(InspectTarget::Capabilities) => {
             RuntimeSession::new(&context, None).dispatch(&invocation)
         }
         SuccessorCommand::Inspect(InspectTarget::Inventory) => {
@@ -196,6 +199,7 @@ fn write_all(mut output: impl Write, bytes: &[u8]) -> Result<(), String> {
 mod diagnose;
 mod local_store;
 mod observe;
+mod public_context;
 
 #[cfg(test)]
 #[path = "tests.rs"]
