@@ -41,6 +41,13 @@ pub enum InventoryClosureState {
     Blocked,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum InventoryFindingDisposition {
+    Blocking,
+    OpenMigrationObligation,
+    Informational,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct InventoryClosureStatus {
     schema_version: &'static str,
@@ -49,6 +56,8 @@ pub struct InventoryClosureStatus {
     state: InventoryClosureState,
     blocker_count: usize,
     blockers_by_code: BTreeMap<String, usize>,
+    open_obligation_count: usize,
+    open_obligations_by_code: BTreeMap<String, usize>,
 }
 
 impl InventoryClosureStatus {
@@ -68,14 +77,24 @@ impl InventoryClosureStatus {
         &self.blockers_by_code
     }
 
+    pub fn open_obligation_count(&self) -> usize {
+        self.open_obligation_count
+    }
+
+    pub fn open_obligations_by_code(&self) -> &BTreeMap<String, usize> {
+        &self.open_obligations_by_code
+    }
+
     pub(crate) fn new(
         catalog_id: String,
         context_id: String,
         blockers_by_code: BTreeMap<String, usize>,
+        open_obligations_by_code: BTreeMap<String, usize>,
     ) -> Self {
         let blocker_count = blockers_by_code.values().sum();
+        let open_obligation_count = open_obligations_by_code.values().sum();
         Self {
-            schema_version: "InventoryClosureStatus-v1",
+            schema_version: "InventoryClosureStatus-v2",
             catalog_id,
             context_id,
             state: if blocker_count == 0 {
@@ -85,6 +104,8 @@ impl InventoryClosureStatus {
             },
             blocker_count,
             blockers_by_code,
+            open_obligation_count,
+            open_obligations_by_code,
         }
     }
 }
@@ -99,6 +120,22 @@ pub struct InventoryFinding {
 }
 
 impl InventoryFinding {
+    pub(crate) fn closure_disposition(&self) -> InventoryFindingDisposition {
+        match self.severity {
+            FindingSeverity::Error => InventoryFindingDisposition::Blocking,
+            FindingSeverity::Warning
+                if matches!(
+                    self.code.as_str(),
+                    "sole_current_authority_pending_migration" | "compatibility_route_retained"
+                ) =>
+            {
+                InventoryFindingDisposition::OpenMigrationObligation
+            }
+            FindingSeverity::Warning => InventoryFindingDisposition::Blocking,
+            FindingSeverity::Info => InventoryFindingDisposition::Informational,
+        }
+    }
+
     pub(crate) fn error(code: &str, id: Option<&str>, path: Option<&str>, message: String) -> Self {
         Self {
             code: code.to_owned(),

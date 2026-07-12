@@ -140,6 +140,18 @@ fn all_exact_explicit_only_wrappers_are_retained_without_claiming_retirement() {
             .count(),
         14
     );
+    let closure = catalog.closure_status();
+    assert_eq!(
+        closure
+            .open_obligations_by_code()
+            .get("compatibility_route_retained"),
+        Some(&14)
+    );
+    assert!(
+        !closure
+            .blockers_by_code()
+            .contains_key("compatibility_route_retained")
+    );
     assert!(entries.iter().all(|entry| {
         !catalog.findings().iter().any(|finding| {
             finding.entry_id.as_deref() == Some(entry.stable_id.as_str())

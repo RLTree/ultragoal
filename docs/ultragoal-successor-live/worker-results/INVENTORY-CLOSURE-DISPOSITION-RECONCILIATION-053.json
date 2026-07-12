@@ -1,0 +1,263 @@
+{
+  "worker": "/root/inventory_authority_closure_architect/inventory_cli_semantics_falsifier",
+  "lease_id": "INVENTORY-CLOSURE-DISPOSITION-RECONCILIATION-053",
+  "context_id": "sha256:4bc5a325abaf903517a04c870cb04863dece525f7d53053fa76675dddda57c5c",
+  "candidate_identity": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "root_issued_head_commit": "69f41f0cfb2c5c95a7b5ac3623b2f604ca28a51c",
+    "root_issued_head_tree": "e59d0bda2f2d11b2d241568ce4f5f947bea66bf9",
+    "root_issued_candidate_id": "sha256:2d52dad393d081955b25452a6cf3739eef153bac088c4e096d586eb5e4358efb",
+    "freeze_head_commit": "d20cc753cb1ccc67233c6d36703e8a4a50f4101a",
+    "freeze_head_tree": "f24bc76f8cc68e41c5d9df7cb9374b6f16672eef",
+    "work_package_sha256": "sha256:59b04a83b777123cc3ec5abd9702ec9baf92e35af7ec182cb15236b366274151",
+    "worker_owned_artifact_set_sha256": "sha256:ef30ceafc30a0dbad7259381f5408918f470e7a931d947b8212cf34698978cb9",
+    "worker_owned_artifact_count_excluding_self_referential_worker_result": 5,
+    "worker_owned_artifact_total_bytes": 46651,
+    "worker_owned_artifact_total_lines": 1322,
+    "artifact_set_formula": "SHA-256 of sorted UTF-8 rows path, TAB, lowercase sha256 without prefix, LF",
+    "worker_result_self_excluded": true,
+    "concurrent_unowned_changes_preserved": true
+  },
+  "base_state": {
+    "work_package": "docs/ultragoal-successor-live/work-packages/INVENTORY-CLOSURE-DISPOSITION-RECONCILIATION-053.json",
+    "work_package_sha256": "sha256:59b04a83b777123cc3ec5abd9702ec9baf92e35af7ec182cb15236b366274151",
+    "prior_closure_behavior": "Every warning was counted as a closure blocker, including exact sole-current pending-migration and retained compatibility-route warnings.",
+    "prior_live_accounting": "81 findings were visible but all 81 were treated as blockers.",
+    "root_owned_surfaces_not_modified": [
+      "inventory discovery builders registries routes projection generated authority and activation witnesses",
+      "public CLI catalog parser dispatcher state and command runtime",
+      "Cargo manifests lockfile adopted contracts board acceptance claims migration release and Git"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_exact_independent_review_and_root_reconciliation",
+    "finding_preservation": "All 81 current live finding rows remain serialized byte-for-byte in AuthorityCatalog; closure_status is a separate immutable projection.",
+    "blocking_policy": "Every error blocks. Every warning blocks except the exact warning-severity sole_current_authority_pending_migration and compatibility_route_retained codes. Informational findings remain informational.",
+    "open_obligation_policy": "Only the two exact warning codes are reported as open migration obligations; same-code errors and unknown warnings fail closed as blockers.",
+    "live_finding_count": 81,
+    "live_blocker_count": 34,
+    "live_blockers_by_code": {
+      "candidate_component_not_active": 10,
+      "missing_required_component": 9,
+      "parallel_authority": 14,
+      "projection_requires_canonical_reconciliation": 1
+    },
+    "live_open_obligation_count": 47,
+    "live_open_obligations_by_code": {
+      "compatibility_route_retained": 14,
+      "sole_current_authority_pending_migration": 33
+    },
+    "closure_state": "blocked",
+    "zero_blocker_semantics": "A catalog with zero blockers and open migration obligations reports Closed while retaining explicit obligation counts and maps.",
+    "claim_effect": "none",
+    "lease_no_claim_ceiling": "Accounting behavior only; no finding, route, migration, retirement, compatibility, equivalence, package, install, runtime, journey, readiness, release, inventory-node closure, or goal-completion claim is raised."
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/INVENTORY-CLOSURE-DISPOSITION-RECONCILIATION-053.json",
+    "fixtures/inventory-authority/closure-cases.json",
+    "validator/src/inventory/types.rs",
+    "validator/src/inventory/validate.rs",
+    "validator/tests/inventory_contract_cases/compatibility_routes.rs",
+    "validator/tests/inventory_contract_cases/routing_transitions.rs"
+  ],
+  "touched_semantics": [
+    "inventory-finding-disposition",
+    "inventory-closure-blocker-accounting",
+    "open-migration-obligation-accounting",
+    "unknown-warning-fail-closed-classification",
+    "current-live-finding-preservation"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/inventory-authority/closure-cases.json",
+    "validator/tests/inventory_contract_cases/compatibility_routes.rs",
+    "validator/tests/inventory_contract_cases/routing_transitions.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "exact leased inventory source tests fixture and WorkerResult paths",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline focused and dependency-closed inventory validation",
+      "performed": true,
+      "build_jobs": 16,
+      "test_threads": 16
+    },
+    {
+      "class": "temporary_build_write",
+      "target": "/tmp/hul-inventory-disposition-053",
+      "performed": true
+    },
+    {
+      "class": "network_or_external_write",
+      "performed": false
+    },
+    {
+      "class": "git_or_root_authority",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "all-findings-remain-serialized-and-observable",
+    "exact-warning-only-open-migration-obligations",
+    "same-code-error-remains-blocking",
+    "unknown-warning-remains-blocking",
+    "candidate-warning-remains-blocking",
+    "deterministic-blocker-and-open-obligation-maps",
+    "current-live-81-findings-34-blockers-47-open-obligations",
+    "unknown-duplicate-conflicting-stale-unsafe-and-partial-evidence-fail-closed",
+    "zero-blocker-open-obligation-closed-state",
+    "focused-and-dependency-closed-tests-twice",
+    "worker-result-v1",
+    "independent-review-and-root-reconciliation"
+  ],
+  "dependency_nodes": [
+    "inventory-closure-disposition-reconciliation",
+    "accepted-inventory-tool-boundary",
+    "accepted-inventory-activation-closure-guard",
+    "adopted-sole-current-pending-migration-decision",
+    "accepted-exact-compatibility-route-verification"
+  ],
+  "changes": [
+    {
+      "area": "typed-finding-disposition",
+      "result": "Introduced one internal typed disposition with Blocking, OpenMigrationObligation, and Informational states. Severity is evaluated before code, so an error can never be laundered by an obligation code."
+    },
+    {
+      "area": "deterministic-closure-accounting",
+      "result": "InventoryClosureStatus-v2 now exposes separate blocker and open-obligation counts and sorted per-code maps; only blocker count controls Closed versus Blocked."
+    },
+    {
+      "area": "finding-preservation",
+      "result": "Closure projection reads findings immutably. The live test compares AuthorityCatalog canonical bytes before and after closure projection and retains exactly 81 finding rows."
+    },
+    {
+      "area": "false-pass-controls",
+      "result": "Exact tests cover same-code errors, unknown warnings, candidate warnings, informational rows, zero blockers with 47 open obligations, route failures, stale and unsafe activation evidence, generated drift, and exact current 81/34/47 accounting."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rustfmt --edition 2024 <leased Rust files>; jq empty <leased JSON fixture>; git diff --check -- <leased artifact set>",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-inventory-disposition-053 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --lib --test inventory_contract -E 'test(inventory::validate::closure_tests) | test(routing_transitions) | test(compatibility_routes)' --no-fail-fast",
+      "status": "pass-twice-14-of-14",
+      "run_ids": [
+        "3b2dc9ca-efdf-430a-a23b-290e6cd343df",
+        "dbb3cff9-f8c2-4b26-a5b6-ab32a54d3473"
+      ]
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-inventory-disposition-053 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --lib --test inventory_contract -E 'test(inventory::validate::closure_tests) | test(command_activation) | test(generated_disposition) | test(generated_regeneration) | test(routing_transitions) | test(compatibility_routes)' --no-fail-fast",
+      "status": "pass-twice-42-of-42",
+      "run_ids": [
+        "7aab38b1-5e17-4785-9cd0-95cca99050e7",
+        "78522aa8-9b33-43ac-9fef-503f2b976093"
+      ]
+    },
+    {
+      "command": "Exact isolation rerun of the two dependency-run leak diagnostics",
+      "status": "pass-2-of-2-without-leak",
+      "run_id": "8075b3da-8dc5-4845-beba-979472a7d3f2"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-inventory-disposition-053 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline --lib --example hct_inventory -j 16",
+      "status": "pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/inventory-authority/closure-cases.json",
+      "sha256": "sha256:595e1637ee9ec4bf08ac24f7ca427bb0399db9223a8f57eebc1bb0d7e6f1d26d",
+      "byte_length": 3265,
+      "line_count": 109
+    },
+    {
+      "path": "validator/src/inventory/types.rs",
+      "sha256": "sha256:d050779ccf535c1f571bdf273eab5ee73b0148c97c795fb4ebdc47a9ef33f0d8",
+      "byte_length": 9766,
+      "line_count": 338
+    },
+    {
+      "path": "validator/src/inventory/validate.rs",
+      "sha256": "sha256:8e5108b57722fc19f8e5e1d27eb5ae16edaed65d64309f4f45d94bcafdef49a4",
+      "byte_length": 11071,
+      "line_count": 320
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/compatibility_routes.rs",
+      "sha256": "sha256:e36c98d61285a976f6571aa0d7140841c2c7959edf1952316eea1438674da593",
+      "byte_length": 12126,
+      "line_count": 289
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/routing_transitions.rs",
+      "sha256": "sha256:515109097bec2b3e22930882ac11276cf208a0b5b986057e8e9ca0f076d6d68c",
+      "byte_length": 10423,
+      "line_count": 266
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-material",
+      "class": "warning-blocker-conflation",
+      "finding": "The prior closure projection counted every warning as a blocker, so exact adopted pending-migration and retained-route obligations could never remain visible without falsely preventing zero-blocker closure."
+    },
+    {
+      "severity": "diagnostic-unowned",
+      "class": "stale-topology-expectation",
+      "finding": "A broader current-live inventory test expects API:EvaluationSpec to be Missing, but the current source reports it Active. This test path and evaluation activation authority are outside lease 053."
+    },
+    {
+      "severity": "diagnostic-unowned",
+      "class": "agent-reader-guard-drift",
+      "finding": "A broader inventory unit test reports three committed plugin_product/agent_discovery readers absent from its positive-reader binding. Reader guard source is outside lease 053."
+    },
+    {
+      "severity": "diagnostic-reconciled",
+      "class": "concurrent-candidate-and-process-leak-signals",
+      "finding": "One broad run observed a concurrent Git candidate change and two passing dependency tests were marked leaky; the exact accepted dependency set passed twice and both leak-marked tests passed together in isolation without leak."
+    },
+    {
+      "severity": "claim-ceiling",
+      "class": "accounting-only",
+      "finding": "The live inventory remains Blocked by 34 findings and retains 47 open migration obligations. No underlying product authority or migration state changed."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-review-of-sha256-ef30ceafc30a0dbad7259381f5408918f470e7a931d947b8212cf34698978cb9",
+    "root-candidate-reconciliation-and-commit",
+    "two-byte-identical-current-hct-inventory-summaries-after-last-authority-edit",
+    "root-owned-agent-reader-guard-reconciliation",
+    "root-owned-current-topology-expectation-reconciliation",
+    "migration-and-retirement-product-behavior-and-proof"
+  ],
+  "requested_root_changes": [
+    {
+      "request": "Independently review the exact five-artifact set bound by sha256:ef30ceafc30a0dbad7259381f5408918f470e7a931d947b8212cf34698978cb9, specifically falsifying severity laundering, unknown-warning handling, finding preservation, and zero-blocker open-obligation closure.",
+      "authority": "root-review-and-reconciliation"
+    },
+    {
+      "request": "Reconcile the three unbound custom-agent discovery readers and the stale EvaluationSpec topology expectation under their owning lanes; neither may be repaired through this lease.",
+      "authority": "root-inventory-reader-and-activation-authority"
+    },
+    {
+      "request": "After integration and the final authority-bearing edit, rebuild HCT-INVENTORY fresh and run two same-session byte-identical summaries before changing any inventory claim ceiling.",
+      "authority": "root-generated-authority-and-claim-decision"
+    }
+  ],
+  "limitations": [
+    "This change classifies findings for closure accounting only; it does not change finding severity, code, message, entry identity, ordering, serialization, or underlying authority state.",
+    "Open migration obligations are non-blocking only in closure arithmetic. They remain visible and keep their separate migration and retirement obligations open.",
+    "The accepted test closure excludes two source-stale broader diagnostics owned by other lanes; both are reported explicitly rather than hidden or weakened.",
+    "Worker evidence is source and isolated-test evidence. Root must independently review, integrate, recompute the candidate, and run the final HCT-INVENTORY summaries.",
+    "No migration, retirement, compatibility equivalence, package, install, discovery, runtime, journey, readiness, release, inventory-node closure, or goal-completion claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

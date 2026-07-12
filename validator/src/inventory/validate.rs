@@ -1,8 +1,8 @@
 use super::compatibility::RETAINED_KIND;
 use super::routing::RoutingData;
 use super::types::{
-    ActiveStatus, AuthorityCatalog, AuthorityState, FindingSeverity, InventoryClosureStatus,
-    InventoryEntry, InventoryFinding,
+    ActiveStatus, AuthorityCatalog, AuthorityState, InventoryClosureStatus, InventoryEntry,
+    InventoryFinding, InventoryFindingDisposition,
 };
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
@@ -241,17 +241,80 @@ pub(crate) fn reconcile(
 impl AuthorityCatalog {
     pub fn closure_status(&self) -> InventoryClosureStatus {
         let mut blockers = BTreeMap::new();
-        for finding in self
-            .findings()
-            .iter()
-            .filter(|finding| finding.severity != FindingSeverity::Info)
-        {
-            *blockers.entry(finding.code.clone()).or_insert(0) += 1;
+        let mut open_obligations = BTreeMap::new();
+        for finding in self.findings() {
+            let counts = match finding.closure_disposition() {
+                InventoryFindingDisposition::Blocking => &mut blockers,
+                InventoryFindingDisposition::OpenMigrationObligation => &mut open_obligations,
+                InventoryFindingDisposition::Informational => continue,
+            };
+            *counts.entry(finding.code.clone()).or_insert(0) += 1;
         }
         InventoryClosureStatus::new(
             self.catalog_id().to_owned(),
             self.context_id().to_owned(),
             blockers,
+            open_obligations,
         )
+    }
+}
+
+#[cfg(test)]
+mod closure_tests {
+    use super::*;
+    use crate::inventory::types::{FindingSeverity, InventoryClosureState};
+
+    fn finding(code: &str, severity: FindingSeverity) -> InventoryFinding {
+        InventoryFinding {
+            code: code.to_owned(),
+            severity,
+            entry_id: None,
+            relative_path: None,
+            message: "test finding".to_owned(),
+        }
+    }
+
+    #[test]
+    fn only_exact_warning_codes_are_open_migration_obligations() {
+        for code in [
+            "sole_current_authority_pending_migration",
+            "compatibility_route_retained",
+        ] {
+            assert_eq!(
+                finding(code, FindingSeverity::Warning).closure_disposition(),
+                InventoryFindingDisposition::OpenMigrationObligation
+            );
+            assert_eq!(
+                finding(code, FindingSeverity::Error).closure_disposition(),
+                InventoryFindingDisposition::Blocking
+            );
+        }
+        for code in ["candidate_component_not_active", "unknown_warning_code"] {
+            assert_eq!(
+                finding(code, FindingSeverity::Warning).closure_disposition(),
+                InventoryFindingDisposition::Blocking
+            );
+        }
+        assert_eq!(
+            finding("informational", FindingSeverity::Info).closure_disposition(),
+            InventoryFindingDisposition::Informational
+        );
+    }
+
+    #[test]
+    fn zero_blockers_close_with_explicit_open_obligations() {
+        let status = InventoryClosureStatus::new(
+            "catalog".to_owned(),
+            "context".to_owned(),
+            BTreeMap::new(),
+            BTreeMap::from([
+                ("compatibility_route_retained".to_owned(), 14),
+                ("sole_current_authority_pending_migration".to_owned(), 33),
+            ]),
+        );
+        assert_eq!(status.state(), InventoryClosureState::Closed);
+        assert!(status.is_closed());
+        assert_eq!(status.blocker_count(), 0);
+        assert_eq!(status.open_obligation_count(), 47);
     }
 }

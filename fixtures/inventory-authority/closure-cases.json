@@ -55,6 +55,55 @@
       "case_id": "projection-self-attestation",
       "expected_disposition": "non-authoritative",
       "causal_code": "authority-ineligible"
+    },
+    {
+      "case_id": "sole-current-warning-open-obligation",
+      "expected_disposition": "non-authoritative",
+      "causal_code": "sole_current_authority_pending_migration",
+      "severity": "warning",
+      "closure_disposition": "open-migration-obligation"
+    },
+    {
+      "case_id": "compatibility-warning-open-obligation",
+      "expected_disposition": "non-authoritative",
+      "causal_code": "compatibility_route_retained",
+      "severity": "warning",
+      "closure_disposition": "open-migration-obligation"
+    },
+    {
+      "case_id": "sole-current-error-blocks",
+      "expected_disposition": "abort",
+      "causal_code": "sole_current_authority_pending_migration",
+      "severity": "error",
+      "closure_disposition": "blocking"
+    },
+    {
+      "case_id": "compatibility-error-blocks",
+      "expected_disposition": "abort",
+      "causal_code": "compatibility_route_retained",
+      "severity": "error",
+      "closure_disposition": "blocking"
+    },
+    {
+      "case_id": "unknown-warning-blocks",
+      "expected_disposition": "abort",
+      "causal_code": "unknown_warning_code",
+      "severity": "warning",
+      "closure_disposition": "blocking"
+    },
+    {
+      "case_id": "candidate-warning-blocks",
+      "expected_disposition": "candidate",
+      "causal_code": "candidate_component_not_active",
+      "severity": "warning",
+      "closure_disposition": "blocking"
+    },
+    {
+      "case_id": "zero-blocker-open-obligations-close",
+      "expected_disposition": "non-authoritative",
+      "causal_code": "open_obligations_do_not_block_closure",
+      "severity": "warning",
+      "closure_disposition": "closed-with-open-obligations"
     }
   ]
 }
