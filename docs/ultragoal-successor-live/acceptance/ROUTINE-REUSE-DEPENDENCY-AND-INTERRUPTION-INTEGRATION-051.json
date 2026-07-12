@@ -1,0 +1,48 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-INTEGRATION-051",
+  "workstream": "routine-impact-capture-fixtures-and-verified-reuse",
+  "decision": "ACCEPT",
+  "accepted_candidate": {
+    "implementation_commit": "9ec7d7d44a2bb526d497fd6277cb4a58c2645169",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-CLOSURE-051.json",
+    "worker_result_sha256": "sha256:deec5e9cea4eeb0eda2be71f28bf702a1f8c56b4dba6a523aca122f8987465b5",
+    "artifact_set_sha256": "sha256:78868eae10c410365752386aab512b7a79be93ba2de138afb9cc477024696473",
+    "artifact_count": 11,
+    "artifact_bytes": 88527,
+    "artifact_lines": 2257
+  },
+  "independent_root_review": {
+    "scratch_candidate": "/tmp/hul-routine-051-review",
+    "dependency_run_id": "57e502e6-2e96-4cbf-91c1-f6c048d26077",
+    "dependency_result": "217 passed; 0 failed",
+    "journey_run_id": "ac17afb5-3011-4dd9-b477-7847f4f43608",
+    "journey_result": "22 passed; 0 failed",
+    "artifact_recomputation": "all eleven digests byte counts line counts and the standard path-bound aggregate matched after one evidence-only REWORK correction",
+    "false_pass_controls": [
+      "same-plan executed witness cross-splicing is rejected",
+      "mixed executed and reused cross-splicing is rejected",
+      "missing skipped failed stale duplicate unknown and mutated upstream evidence is rejected",
+      "interrupt-before-readiness creates no process record or readiness file",
+      "read and refusal journeys preserve recursive bytes and Git status"
+    ]
+  },
+  "integrated_candidate": {
+    "head_commit": "9ec7d7d44a2bb526d497fd6277cb4a58c2645169",
+    "head_tree": "200d7ef9623bd728c93f0ed4d9fdc81c2e2b5886"
+  },
+  "accepted_scope": [
+    "two-pass exact selected-upstream result artifact reconciliation for executed and reused rows",
+    "deterministic readiness-bound interruption and causal pre-readiness refusal",
+    "source-local clean dirty conflict fallback first-run exact-repeat reuse and mutation-forced-miss journeys",
+    "Darwin source-test behavior on the exact integrated implementation"
+  ],
+  "open_reconciliation": [
+    "root-owned public routine command adapter and catalog wiring",
+    "supported FreeBSD execution of identity-conditioned cleanup",
+    "representative installed product and fresh-agent journeys",
+    "candidate-wide strict claim reconciliation after upstream dependencies close"
+  ],
+  "claim_ceiling": "Accepted source-local routine and Darwin contract behavior only; public product and cross-platform ceilings remain withheld.",
+  "no_claim_statement": "This acceptance does not claim public command behavior, cross-platform recovery, live installed journeys, node closure, readiness, release, or goal completion."
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "LIVE-CONTEXT-ENVELOPE-FILESYSTEM-ALIAS-REWORK-052",
+  "workstream": "model-adaptive-prompt-and-context-contract-change",
+  "decision": "REWORK",
+  "reviewed_candidate": {
+    "change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
+    "worker_result_sha256": "sha256:583c3b5981a83ae022208af13459170db30fe6688a90a7684f117ad6e9db2bb8",
+    "worker_owned_artifact_set_sha256": "sha256:c75497cf0943990af2bfde68b9600fd9c1c873230c4a07f2090e4b0b56f3bd91",
+    "proposal_artifact_set_sha256": "sha256:4b4b4e7ad045b461698963f14976ea5189a9386c79b489bcf0dc95a4f6013e0e"
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "protected-authority-hardlink-alias-false-pass",
+    "reproduction_scope": "/tmp/hul-live-context-052-independent-review",
+    "observed": [
+      "validate_scope_authority accepted a write grant to allowed/alias.toml while Cargo.toml was forbidden",
+      "verify_scope_path accepted the alias as a regular file with link count two",
+      "writing the authorized alias changed the protected Cargo.toml bytes"
+    ],
+    "cause": "The proposal validates lexical overlap and rejects symlinks and special files, but it does not bind or reject writable filesystem aliases and link identity."
+  },
+  "required_correction": [
+    "causally reject hardlinked or otherwise aliased existing writable files",
+    "boundedly inspect writable directory descendants for alias symlink special and cross-device hazards",
+    "bind the proposed writable object identity set into scope resolution and final revalidation",
+    "fail closed when the exposed runtime cannot mechanically mediate the declared path-confined effect",
+    "add alias insertion mutation and valid scoped-write controls",
+    "recompute the complete proposal manifest task envelope and WorkerResult after the final edit"
+  ],
+  "current_state": "mid_rework_not_a_reviewable_candidate",
+  "root_disposition": "The proposal remains non-authoritative and cannot be adopted until a fresh corrected set passes independent review.",
+  "no_claim_statement": "This REWORK decision changes no adopted contract, product behavior, claim ceiling, readiness, release, or completion state."
+}
