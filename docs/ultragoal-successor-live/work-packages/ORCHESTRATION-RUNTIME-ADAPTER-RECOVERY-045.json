@@ -1,0 +1,185 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:22d7a16b18b6232db68bd228a79a7129405750ee3188fde3534880bf0c29bf50",
+    "candidate_id": "sha256:cb6220f66f0075f7ab6eedb3b76b74652c3d4e7e12d66fe45db267d6e5ddf2f1",
+    "head_commit": "049c48143aeab5f887c7c93c617252ccb01328b7",
+    "head_tree": "7b405f0ac311a1721e3effcd634224d1d4267cb3",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": false
+  },
+  "work_package": {
+    "node_id": "orchestration-runtime-adapter-recovery",
+    "dependencies": [
+      "accepted-orchestration-state-overlay",
+      "accepted-orchestration-recovery-product"
+    ],
+    "required_tools": [
+      "cargo-nextest",
+      "rustfmt",
+      "shasum"
+    ],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-PUBLIC-STATE-JOURNEY-INTEGRATION-042.json",
+      "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-RECOVERY-PRODUCT-INTEGRATION-037.json",
+      "docs/ultragoal-successor-live/root-decisions/PUBLIC-CLI-EXCLUSIVE-DISPATCH-CANDIDATE-023.json",
+      "validator/src/cli/successor",
+      "validator/src/cli/successor_public",
+      "validator/src/orchestration",
+      "validator/src/state",
+      "validator/tests/orchestration_contract",
+      "validator/tests/orchestration_product_contract",
+      "validator/tests/orchestration_state_journey_contract"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json",
+        "validator/src/orchestration/product/runtime_adapter"
+      ],
+      "semantic_symbols": [
+        "orchestration-runtime-adapter",
+        "sealed-current-and-interrupted-inspection",
+        "externally-authorized-resume-reconcile-recover-routing",
+        "fresh-process-recovery-journey"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/orchestration-runtime-adapter",
+        "validator/tests/orchestration_runtime_adapter_contract.rs",
+        "validator/tests/orchestration_runtime_adapter_contract",
+        "validator/tests/orchestration_runtime_adapter_public_api.rs"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "orchestration-runtime-adapter-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "orchestration-runtime-adapter-contract-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-fresh-process-recovery-validation"
+        }
+      ]
+    },
+    "prerequisites": [
+      "sealed-state-and-interrupted-preview-validation-is-accepted",
+      "public-dispatch-permit-issuance-and-adopted-state-remain-root-owned"
+    ],
+    "outputs": [
+      "production-callable-orchestration-runtime-adapter",
+      "fresh-process-interruption-restart-ambiguity-reconciliation-and-recovery-controls",
+      "external-crate-public-api-witness",
+      "orchestration-runtime-adapter-worker-result-v1",
+      "exact-root-module-dispatch-state-and-permit-wiring-request"
+    ],
+    "acceptance": [
+      "adapter-never-mints-permits-or-selects-root-authority",
+      "sealed-view-action-request-target-head-lease-tick-operation-and-supplied-permit-revalidate-immediately-before-mutation",
+      "fresh-process-interruption-restart-ambiguity-reconciliation-and-recovery-preserve-exact-binding",
+      "concurrent-recovery-has-one-authoritative-outcome-and-replay-refuses",
+      "inspect-project-help-parse-and-read-paths-are-recursively-zero-write",
+      "positive-negative-race-mutation-security-and-false-pass-controls-pass",
+      "worker-result-binds-every-owned-artifact",
+      "independent-review-and-root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045",
+    "run_id": "ultragoal-successor-live-20260712-macro-002",
+    "node_id": "orchestration-runtime-adapter-recovery",
+    "principal": "worker",
+    "owner": "/root/orchestration_state_journey_engineer",
+    "binding": {
+      "context_id": "sha256:22d7a16b18b6232db68bd228a79a7129405750ee3188fde3534880bf0c29bf50",
+      "candidate_id": "sha256:cb6220f66f0075f7ab6eedb3b76b74652c3d4e7e12d66fe45db267d6e5ddf2f1"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-PUBLIC-STATE-JOURNEY-INTEGRATION-042.json",
+      "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-RECOVERY-PRODUCT-INTEGRATION-037.json",
+      "docs/ultragoal-successor-live/root-decisions/PUBLIC-CLI-EXCLUSIVE-DISPATCH-CANDIDATE-023.json",
+      "validator/src/cli/successor",
+      "validator/src/cli/successor_public",
+      "validator/src/orchestration",
+      "validator/src/state",
+      "validator/tests/orchestration_contract",
+      "validator/tests/orchestration_product_contract",
+      "validator/tests/orchestration_state_journey_contract"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json",
+        "validator/src/orchestration/product/runtime_adapter"
+      ],
+      "semantic_symbols": [
+        "orchestration-runtime-adapter",
+        "sealed-current-and-interrupted-inspection",
+        "externally-authorized-resume-reconcile-recover-routing",
+        "fresh-process-recovery-journey"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/orchestration-runtime-adapter",
+        "validator/tests/orchestration_runtime_adapter_contract.rs",
+        "validator/tests/orchestration_runtime_adapter_contract",
+        "validator/tests/orchestration_runtime_adapter_public_api.rs"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "orchestration-runtime-adapter-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "orchestration-runtime-adapter-contract-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-fresh-process-recovery-validation"
+        }
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "accepted-orchestration-state-overlay": "sha256:9ff49ae5602196babaef0f9b9db5676c6b850338afee1c7ff939f42b891fe665",
+        "accepted-orchestration-recovery-product": "sha256:bd1f2dccd9156a6590194e07cbabc7931ed37f1c91416ad79778b7115776b364"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "rustfmt": "sha256:aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "sealed-state-and-interrupted-preview-validation-is-accepted": "sha256:9ff49ae5602196babaef0f9b9db5676c6b850338afee1c7ff939f42b891fe665",
+        "public-dispatch-permit-issuance-and-adopted-state-remain-root-owned": "sha256:1c64805c0c620935f59fcd9901a1005b9219fb3653bee3a3b0b7c790ee882bbf"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "prohibited_surfaces": [
+    "validator/src/orchestration/product/mod.rs and orchestration kernel journal lease effect authority permit or state-store internals",
+    "validator/src/cli, validator/src/argument_parser, command_run, public command catalog dispatcher and adopted state",
+    "root authority creation permit issuance manifest claims generated authority board acceptance release and Git",
+    "inventory distribution plugin-product claims observability repository-fit package and migration source paths",
+    "Cargo manifests and lockfile, network, external effects, destructive cleanup, and host-state mutation"
+  ],
+  "root_validation_obligations": [
+    "independently-review-exact-artifact-set",
+    "wire-only-reviewed-runtime-adapter-module",
+    "bind-canonical-workspace-context-head-tick-live-workers-and-adopted-state",
+    "decide-public-dispatch-and-one-time-permit-issuance-after-originating-view-validation",
+    "run-installed-fresh-binary-public-journeys-before-raising-command-or-node-claims"
+  ],
+  "no_claim_statement": "This worker does not claim public command behavior, root permit issuance, installed runtime behavior, node closure, readiness, release, or completion."
+}

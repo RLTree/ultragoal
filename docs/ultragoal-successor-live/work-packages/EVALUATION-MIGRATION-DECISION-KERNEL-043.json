@@ -1,0 +1,190 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:22d7a16b18b6232db68bd228a79a7129405750ee3188fde3534880bf0c29bf50",
+    "candidate_id": "sha256:cb6220f66f0075f7ab6eedb3b76b74652c3d4e7e12d66fe45db267d6e5ddf2f1",
+    "head_commit": "049c48143aeab5f887c7c93c617252ccb01328b7",
+    "head_tree": "7b405f0ac311a1721e3effcd634224d1d4267cb3",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": false
+  },
+  "work_package": {
+    "node_id": "evaluation-migration-decision-kernel",
+    "dependencies": [
+      "accepted-inventory-activation-guard",
+      "accepted-claim-fail-closed-subset"
+    ],
+    "required_tools": [
+      "cargo-nextest",
+      "rustfmt",
+      "shasum"
+    ],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "docs/ultragoal-successor-live/acceptance/INVENTORY-ACTIVATION-CLOSURE-GUARD-INTEGRATION-040.json",
+      "docs/ultragoal-successor-live/acceptance/CLAIM-MODEL-BOUNDARY-CORRECTION-032.json",
+      "validator/src/claims",
+      "validator/src/context",
+      "validator/src/fixture_scheduler",
+      "validator/src/inventory",
+      "validator/tests/claims_contract",
+      "validator/tests/fixture_scheduler_contract"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/EVALUATION-MIGRATION-DECISION-KERNEL-043.json",
+        "validator/src/evaluation",
+        "validator/src/migration"
+      ],
+      "semantic_symbols": [
+        "vendor-neutral-evaluation-kernel",
+        "failure-case-harvesting",
+        "independent-promotion-reconciliation",
+        "inventory-bound-migration-planner",
+        "compatibility-route-validation",
+        "retirement-decision-reconciliation"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/evaluation-engine",
+        "fixtures/migration-engine",
+        "validator/tests/evaluation_contract.rs",
+        "validator/tests/evaluation_contract",
+        "validator/tests/migration_contract.rs",
+        "validator/tests/migration_contract"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "evaluation-and-migration-kernel-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "evaluation-and-migration-contract-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-isolated-evaluation-and-migration-validation"
+        }
+      ]
+    },
+    "prerequisites": [
+      "existing-claims-and-fixture-scheduler-remain-read-only-dependencies",
+      "public-export-witness-command-and-migration-adoption-remain-root-owned"
+    ],
+    "outputs": [
+      "vendor-neutral-evaluation-spec-audit-run-failure-and-promotion-kernel",
+      "inventory-bound-migration-plan-compatibility-and-retirement-kernel",
+      "positive-negative-race-mutation-security-and-reward-hacking-controls",
+      "evaluation-migration-worker-result-v1",
+      "exact-root-public-export-witness-and-command-wiring-request"
+    ],
+    "acceptance": [
+      "evaluation-outcomes-derive-from-crate-controlled-observed-execution-not-caller-score-metadata",
+      "promotion-requires-paired-representative-improvement-nonregression-rollback-and-independent-review",
+      "migration-plans-bind-current-candidate-inventory-readers-writers-routes-and-generated-surfaces",
+      "compatibility-and-retirement-fail-closed-on-unknown-ambiguous-active-stale-or-unauthorized-state",
+      "audit-plan-and-verify-paths-are-recursively-zero-write",
+      "positive-negative-race-mutation-security-reward-hacking-and-false-pass-controls-pass",
+      "worker-result-binds-every-owned-artifact",
+      "independent-review-and-root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "EVALUATION-MIGRATION-DECISION-KERNEL-043",
+    "run_id": "ultragoal-successor-live-20260712-macro-002",
+    "node_id": "evaluation-migration-decision-kernel",
+    "principal": "worker",
+    "owner": "/root/inventory_activation_guard_engineer",
+    "binding": {
+      "context_id": "sha256:22d7a16b18b6232db68bd228a79a7129405750ee3188fde3534880bf0c29bf50",
+      "candidate_id": "sha256:cb6220f66f0075f7ab6eedb3b76b74652c3d4e7e12d66fe45db267d6e5ddf2f1"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "docs/ultragoal-successor-live/acceptance/INVENTORY-ACTIVATION-CLOSURE-GUARD-INTEGRATION-040.json",
+      "docs/ultragoal-successor-live/acceptance/CLAIM-MODEL-BOUNDARY-CORRECTION-032.json",
+      "validator/src/claims",
+      "validator/src/context",
+      "validator/src/fixture_scheduler",
+      "validator/src/inventory",
+      "validator/tests/claims_contract",
+      "validator/tests/fixture_scheduler_contract"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/EVALUATION-MIGRATION-DECISION-KERNEL-043.json",
+        "validator/src/evaluation",
+        "validator/src/migration"
+      ],
+      "semantic_symbols": [
+        "vendor-neutral-evaluation-kernel",
+        "failure-case-harvesting",
+        "independent-promotion-reconciliation",
+        "inventory-bound-migration-planner",
+        "compatibility-route-validation",
+        "retirement-decision-reconciliation"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/evaluation-engine",
+        "fixtures/migration-engine",
+        "validator/tests/evaluation_contract.rs",
+        "validator/tests/evaluation_contract",
+        "validator/tests/migration_contract.rs",
+        "validator/tests/migration_contract"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "evaluation-and-migration-kernel-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "evaluation-and-migration-contract-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-isolated-evaluation-and-migration-validation"
+        }
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "accepted-inventory-activation-guard": "sha256:6782d954ef05279ea31dcd4f833fadbb44635ddc90832eba1bcbb914cde08d8c",
+        "accepted-claim-fail-closed-subset": "sha256:87afd2b3fdf3465d0b101d179a18dc47cf46ebf1788b981e89bcf5b01280875e"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "rustfmt": "sha256:aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "existing-claims-and-fixture-scheduler-remain-read-only-dependencies": "sha256:6782d954ef05279ea31dcd4f833fadbb44635ddc90832eba1bcbb914cde08d8c",
+        "public-export-witness-command-and-migration-adoption-remain-root-owned": "sha256:d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "prohibited_surfaces": [
+    "validator/src/lib.rs, validator/src/api_witness.rs, validator/tests/public_api_witness.rs, validator/src/command_witness.rs, and inventory activation registries",
+    "public CLI grammar, parser, dispatcher, command catalog, state adoption, effect permits, and root authority",
+    "accepted claims, fixture-scheduler, inventory, distribution, orchestration, observability, package, and repository-fit source paths",
+    "adopted migration registry, shared schemas, manifests, generated authority, acceptance, board, claim decisions, and release state",
+    "Cargo manifests and lockfile, Git writes, network, external effects, destructive cleanup, and live repository migration"
+  ],
+  "root_validation_obligations": [
+    "independently-review-exact-artifact-set",
+    "wire-only-reviewed-public-modules-api-witnesses-external-witnesses-and-exact-command-handlers",
+    "adopt-or-reject-migration-registry-and-retirement-decisions-under-root-authority",
+    "recompute-current-inventory-and-dependent-claims-after-integration"
+  ],
+  "no_claim_statement": "This worker does not claim API activation, command activation, inventory closure, migration adoption, readiness, release, or completion."
+}

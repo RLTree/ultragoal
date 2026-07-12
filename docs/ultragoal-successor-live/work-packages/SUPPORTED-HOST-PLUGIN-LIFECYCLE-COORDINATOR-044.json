@@ -1,0 +1,184 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:22d7a16b18b6232db68bd228a79a7129405750ee3188fde3534880bf0c29bf50",
+    "candidate_id": "sha256:cb6220f66f0075f7ab6eedb3b76b74652c3d4e7e12d66fe45db267d6e5ddf2f1",
+    "head_commit": "049c48143aeab5f887c7c93c617252ccb01328b7",
+    "head_tree": "7b405f0ac311a1721e3effcd634224d1d4267cb3",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": false
+  },
+  "work_package": {
+    "node_id": "supported-host-plugin-lifecycle-coordinator",
+    "dependencies": [
+      "accepted-confined-distribution-adapter",
+      "accepted-source-local-plugin-lifecycle"
+    ],
+    "required_tools": [
+      "cargo-nextest",
+      "rustfmt",
+      "shasum"
+    ],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "docs/ultragoal-successor-live/acceptance/PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-INTEGRATION-041.json",
+      "docs/ultragoal-successor-live/acceptance/PLUGIN-LIFECYCLE-SOURCE-INTEGRATION-039.json",
+      "validator/src/distribution",
+      "validator/src/package",
+      "validator/src/plugin_product",
+      "validator/tests/distribution_contract",
+      "validator/tests/plugin_distribution_adapter_contract",
+      "validator/tests/plugin_product_contract"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/SUPPORTED-HOST-PLUGIN-LIFECYCLE-COORDINATOR-044.json",
+        "validator/src/plugin_product/host_lifecycle"
+      ],
+      "semantic_symbols": [
+        "host-lifecycle-session",
+        "host-observation-frame",
+        "host-surface-reader",
+        "plugins-ui-observation",
+        "external-host-effect-request",
+        "host-lifecycle-report",
+        "host-identity-chain-verification"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/plugin-host-lifecycle",
+        "validator/tests/plugin_host_lifecycle_contract.rs",
+        "validator/tests/plugin_host_lifecycle_contract"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "plugin-host-lifecycle-coordinator-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "plugin-host-lifecycle-contract-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-confined-host-lifecycle-validation"
+        }
+      ]
+    },
+    "prerequisites": [
+      "root-supplies-exact-package-plan-snapshot-and-sealed-lifecycle-authority",
+      "manifest-version-package-adoption-host-effects-and-claims-remain-root-owned"
+    ],
+    "outputs": [
+      "production-shaped-host-lifecycle-coordinator",
+      "separate-package-marketplace-install-cache-app-registry-ui-discovery-runtime-observations",
+      "clean-dirty-partial-conflict-update-rollback-reinstall-uninstall-stale-cache-repeat-use-controls",
+      "plugin-host-lifecycle-worker-result-v1",
+      "exact-root-module-manifest-package-host-effect-and-journey-request"
+    ],
+    "acceptance": [
+      "coordinator-reuses-accepted-package-lifecycle-and-distribution-authority-without-parallel-implementation",
+      "every-host-truth-layer-remains-separate-candidate-and-version-bound",
+      "conflict-and-unsupported-capability-states-fail-closed-before-external-effects",
+      "read-plan-observe-and-verify-paths-are-recursively-zero-write",
+      "update-failure-rollback-uninstall-stale-cache-and-repeat-use-preserve-exact-prior-state",
+      "positive-negative-race-mutation-security-and-false-pass-controls-pass",
+      "worker-result-binds-every-owned-artifact",
+      "independent-review-and-root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "SUPPORTED-HOST-PLUGIN-LIFECYCLE-COORDINATOR-044",
+    "run_id": "ultragoal-successor-live-20260712-macro-002",
+    "node_id": "supported-host-plugin-lifecycle-coordinator",
+    "principal": "worker",
+    "owner": "/root/distribution_lifecycle_adapter_engineer",
+    "binding": {
+      "context_id": "sha256:22d7a16b18b6232db68bd228a79a7129405750ee3188fde3534880bf0c29bf50",
+      "candidate_id": "sha256:cb6220f66f0075f7ab6eedb3b76b74652c3d4e7e12d66fe45db267d6e5ddf2f1"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "docs/ultragoal-successor-live/acceptance/PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-INTEGRATION-041.json",
+      "docs/ultragoal-successor-live/acceptance/PLUGIN-LIFECYCLE-SOURCE-INTEGRATION-039.json",
+      "validator/src/distribution",
+      "validator/src/package",
+      "validator/src/plugin_product",
+      "validator/tests/distribution_contract",
+      "validator/tests/plugin_distribution_adapter_contract",
+      "validator/tests/plugin_product_contract"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/SUPPORTED-HOST-PLUGIN-LIFECYCLE-COORDINATOR-044.json",
+        "validator/src/plugin_product/host_lifecycle"
+      ],
+      "semantic_symbols": [
+        "host-lifecycle-session",
+        "host-observation-frame",
+        "host-surface-reader",
+        "plugins-ui-observation",
+        "external-host-effect-request",
+        "host-lifecycle-report",
+        "host-identity-chain-verification"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/plugin-host-lifecycle",
+        "validator/tests/plugin_host_lifecycle_contract.rs",
+        "validator/tests/plugin_host_lifecycle_contract"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "plugin-host-lifecycle-coordinator-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "plugin-host-lifecycle-contract-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-confined-host-lifecycle-validation"
+        }
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "accepted-confined-distribution-adapter": "sha256:dc2ff3ce1c3829c212adaf3e832b67f0f60de03392860467bd410f00b9581132",
+        "accepted-source-local-plugin-lifecycle": "sha256:8c8ae1d9ce6c5cb6769408e8dff2bf3db463e2788439c8b6f21caf1b70e10955"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "rustfmt": "sha256:aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "root-supplies-exact-package-plan-snapshot-and-sealed-lifecycle-authority": "sha256:dc2ff3ce1c3829c212adaf3e832b67f0f60de03392860467bd410f00b9581132",
+        "manifest-version-package-adoption-host-effects-and-claims-remain-root-owned": "sha256:d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "prohibited_surfaces": [
+    "validator/src/plugin_product/mod.rs and every accepted distribution package lifecycle or adapter source outside the new host_lifecycle module",
+    "manifest version package inventory HUGPKG marketplace adoption public CLI catalog generated authority claims board acceptance and release state",
+    "live host home cache app database Plugins UI discovery runtime or codex plugin effects",
+    "inventory orchestration claims observability repository-fit and migration source paths",
+    "Cargo manifests and lockfile, Git writes, network, external effects, destructive cleanup, and host-state mutation"
+  ],
+  "root_validation_obligations": [
+    "independently-review-exact-artifact-set",
+    "wire-only-reviewed-host-lifecycle-module",
+    "adopt-version-manifest-marketplace-package-and-host-effect-authority-separately",
+    "run-supported-host-clean-update-recovery-rollback-reinstall-uninstall-stale-cache-repeat-use-journeys-before-raising-claims"
+  ],
+  "no_claim_statement": "This worker does not claim package adoption, host installation, discovery, runtime, journey completion, readiness, release, or completion."
+}
