@@ -36,12 +36,14 @@
       "semantic_symbols": [
         "fixture-scheduler-platform-conditioned-cleanup-expectations",
         "fixture-scheduler-exact-retained-lease-paths",
-        "fixture-scheduler-observed-outcome-preservation"
+        "fixture-scheduler-observed-outcome-preservation",
+        "fixture-scheduler-historical-worker-result-staleness"
       ],
       "generated_outputs": [],
       "fixtures": [
         "validator/tests/fixture_scheduler_contract/isolation.rs",
-        "validator/tests/fixture_scheduler_contract/execution_adapter.rs"
+        "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+        "validator/tests/fixture_scheduler_contract/worker_result.rs"
       ],
       "effects": [
         {
@@ -62,6 +64,7 @@
     "outputs": [
       "five-current-platform-expectation-corrections",
       "exact-digest-bearing-lease-path-controls",
+      "historical-receipt-staleness-and-current-receipt-verification",
       "fixture-scheduler-platform-contract-worker-result-v1"
     ],
     "acceptance": [
@@ -69,6 +72,8 @@
       "darwin-cleanup-failure-never-masquerades-as-accepted-causal-failure-or-deleted-state",
       "retained-recovery-required-state-active-count-and-exact-paths-remain-visible",
       "all-existing-race-mutation-confinement-security-and-false-pass-controls-remain-intact",
+      "superseded-historical-worker-result-remains-parseable-but-fails-current-artifact-verification",
+      "current-046-worker-result-is-structurally-and-artifact-verified-against-its-exact-lease",
       "full-fixture-scheduler-contract-passes-47-of-47-on-current-darwin-candidate",
       "worker-result-binds-every-owned-artifact",
       "independent-review-and-root-reconciliation"
@@ -102,12 +107,14 @@
       "semantic_symbols": [
         "fixture-scheduler-platform-conditioned-cleanup-expectations",
         "fixture-scheduler-exact-retained-lease-paths",
-        "fixture-scheduler-observed-outcome-preservation"
+        "fixture-scheduler-observed-outcome-preservation",
+        "fixture-scheduler-historical-worker-result-staleness"
       ],
       "generated_outputs": [],
       "fixtures": [
         "validator/tests/fixture_scheduler_contract/isolation.rs",
-        "validator/tests/fixture_scheduler_contract/execution_adapter.rs"
+        "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+        "validator/tests/fixture_scheduler_contract/worker_result.rs"
       ],
       "effects": [
         {
@@ -132,7 +139,8 @@
       "prerequisites": {
         "production-fixture-scheduler-source-remains-read-only": "sha256:682ab9a880d691a93fd0771a572614542e71ba03ad9327001fe238cd655051ec",
         "darwin-unsupported-cleanup-remains-recovery-required": "sha256:7d06a45ba5a04d361370ba210c2ea5564cc1f9eabc7a9d0e6b50caa7ab0c7947",
-        "freebsd-funlinkat-remains-unverified": "sha256:c74e8fcdb245d6d7408a25055d75a4eaa1b36f8672cd399374e706c05a85fafc"
+        "freebsd-funlinkat-remains-unverified": "sha256:c74e8fcdb245d6d7408a25055d75a4eaa1b36f8672cd399374e706c05a85fafc",
+        "historical-worker-result-test-preimage": "sha256:a4be7e0f8a52709ffc9077698cb00ab3fcc1684b99c04a25c26e186982d42630"
       }
     },
     "issued_tick": 1,
@@ -141,12 +149,13 @@
   },
   "prohibited_surfaces": [
     "all validator production source and public command surfaces",
-    "all fixture-scheduler contract files outside the two exact owned test files",
+    "all fixture-scheduler contract files outside the three exact owned test files",
     "Cargo manifests and lockfile, Git writes, network, external effects, and destructive cleanup",
     "shared schemas, generated authority, acceptance, critical-path board, claim decisions, release state, and root authority"
   ],
   "root_validation_obligations": [
     "independently-review-exact-artifact-set",
+    "verify-the-historical-receipt-remains-preserved-but-no-longer-passes-current-artifact-bytes",
     "recompute-platform-ceiling-with-freebsd-explicitly-unverified",
     "reconcile-fixture-scheduler-dependent-evaluation-and-claim-evidence-after-integration"
   ],
