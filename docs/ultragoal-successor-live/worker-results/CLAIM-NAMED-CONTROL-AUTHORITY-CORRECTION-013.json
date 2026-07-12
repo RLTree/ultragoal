@@ -1,0 +1,277 @@
+{
+  "worker": "/root/claim_specific_control_authority_builder",
+  "lease_id": "CLAIM-NAMED-CONTROL-AUTHORITY-CORRECTION-013",
+  "context_id": "sha256:49b2bd0a1f2f31b3aa6a0f1c04df7393acd691d3ace36c5549b13f25536d5836",
+  "candidate_identity": {
+    "candidate_id": "sha256:d89dfe0b3285d3451f29b6db94012ad006eeb43ca310e023011bfc6483622db8",
+    "context_id": "sha256:49b2bd0a1f2f31b3aa6a0f1c04df7393acd691d3ace36c5549b13f25536d5836",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "artifact_set_formula": "Sort path; append path, TAB, lowercase SHA-256 without prefix, LF; SHA-256 the concatenation.",
+    "artifact_set_sha256": "sha256:d89dfe0b3285d3451f29b6db94012ad006eeb43ca310e023011bfc6483622db8",
+    "artifact_count": 17,
+    "artifact_total_bytes": 139196,
+    "artifact_total_lines": 3948,
+    "artifact_line_counts": {
+      "validator/src/claims/coverage.rs": 226,
+      "validator/src/claims/decision.rs": 149,
+      "validator/src/claims/definition.rs": 218,
+      "validator/src/claims/evidence.rs": 209,
+      "validator/src/claims/false_pass.rs": 930,
+      "validator/src/claims/false_pass_guard.rs": 126,
+      "validator/src/claims/false_pass_integrity.rs": 101,
+      "validator/src/claims/false_pass_receipt.rs": 292,
+      "validator/src/claims/guard.rs": 225,
+      "validator/src/claims/mod.rs": 24,
+      "validator/tests/claims_contract.rs": 19,
+      "validator/tests/claims_contract/adoption.rs": 48,
+      "validator/tests/claims_contract/exact_sets.rs": 300,
+      "validator/tests/claims_contract/false_pass_execution.rs": 476,
+      "validator/tests/claims_contract/lifecycle.rs": 113,
+      "validator/tests/claims_contract/rejections.rs": 179,
+      "validator/tests/claims_contract/support.rs": 313
+    },
+    "aggregate_authority": "Worker-local frozen private source and test set only; root must independently review, bind, accept, rework, or reject it."
+  },
+  "base_state": {
+    "status": "named-control-authority-rework-bound",
+    "root_decision": "docs/ultragoal-successor-live/root-decisions/CLAIM-NAMED-CONTROL-AUTHORITY-REWORK.json",
+    "reviewed_candidate": "sha256:9685464f61a97110e7fe43de0b21634a40aa4059467d21e9b5e2b2a9cefabcb2",
+    "claim_registry_sha256": "sha256:67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc"
+  },
+  "final_state": {
+    "status": "worker_blocked",
+    "acceptance_check": "CLAIM-NAMED-CONTROL-AUTHORITY-CORRECTION-013",
+    "acceptance_status": "production-fail-closed-transport-only",
+    "acceptance_ceiling": "private claim receipt and confinement transport mechanics only; no product negative-control behavior",
+    "exact_blocker": "No adopted per-control executable/spec catalog or upstream product control implementation exists for the 69 CLAIM_REGISTRY false-pass scenarios.",
+    "root_acceptance": "withheld",
+    "public_integration": "withheld",
+    "claim_elevation": "disabled",
+    "readiness": "withheld"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/CLAIM-NAMED-CONTROL-AUTHORITY-CORRECTION-013.json",
+    "validator/src/claims/coverage.rs",
+    "validator/src/claims/definition.rs",
+    "validator/src/claims/false_pass.rs",
+    "validator/src/claims/false_pass_guard.rs",
+    "validator/src/claims/false_pass_integrity.rs",
+    "validator/src/claims/false_pass_receipt.rs",
+    "validator/src/claims/guard.rs",
+    "validator/src/claims/mod.rs",
+    "validator/tests/claims_contract.rs",
+    "validator/tests/claims_contract/exact_sets.rs",
+    "validator/tests/claims_contract/false_pass_execution.rs",
+    "validator/tests/claims_contract/lifecycle.rs",
+    "validator/tests/claims_contract/rejections.rs",
+    "validator/tests/claims_contract/support.rs"
+  ],
+  "touched_semantics": [
+    "claims::adopted_registry_binding",
+    "claims::candidate_bound_control_authority",
+    "claims::false_pass_coverage",
+    "claims::named_control_production_preflight",
+    "claims::receipt_authority_capability",
+    "claims::test_only_control_transport"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/CLAIM-NAMED-CONTROL-AUTHORITY-CORRECTION-013.json"
+  ],
+  "fixtures": [
+    "validator/tests/claims_contract/false_pass_execution.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "owned-claim-control-source-tests-result",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "local-test-control-scratch",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-cargo-claims-contract",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "test-only-confined-control-transport",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "HCT-CLAIMS",
+    "REQ-PROOF-006"
+  ],
+  "dependency_nodes": [
+    "claim-named-control-authority-rework"
+  ],
+  "changes": [
+    {
+      "area": "candidate and definition authority",
+      "result": "Removed the caller-selected FalsePassControlRequest path. Authority binding now requires the exact adopted registry plus a revalidated LiveContext and derives the candidate digest from that context; raw context, candidate, control, surface, and ceiling strings are not accepted."
+    },
+    {
+      "area": "receipt minting boundary",
+      "result": "Receipt and observation constructors require a capability whose private field can be constructed only inside the authority module. Accepted receipt fields remain private and non-deserializable; exact registry, claim, control definition, command spec, argument, script, nonce, runner, process, surface, ceiling, time, output, and artifact bindings are sealed and revalidated."
+    },
+    {
+      "area": "production no-surrogate behavior",
+      "result": "Production execute_claim returns claims-control-product-executor-catalog-unavailable before any receipt can be minted. Registry prose is not converted into an inferred executable. The local shell transport is compiled only as test behavior for confinement, substitution, replay, uniqueness, and receipt mechanics and is explicitly rejected by the production preflight."
+    },
+    {
+      "area": "negative and lifecycle controls",
+      "result": "The focused suite covers all 14 adopted claim mappings, generic /usr/bin/false substitution across all claims, argument/spec substitution, non-digest/raw-ID exclusion through LiveContext-only binding, wrong claim/context/candidate/surface/ceiling, producer synthesis, report-only, replay, stale, cross-claim, cross-candidate, post-execution mutation, concurrency uniqueness, exact obligation removal, dependency closure, repair rerun, registry drift, and unknown rows."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-claim-control-builder-013/target cargo test --locked --offline -j16 --manifest-path validator/Cargo.toml --test claims_contract -- --test-threads=16",
+      "status": "pass",
+      "result": "42 passed, 0 failed in 70.07 seconds on the final post-capability source freeze."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-claim-control-builder-013/target cargo test --locked --offline -j16 --manifest-path validator/Cargo.toml --test claims_contract production_preflight_rejects_test_transport_as_product_behavior -- --test-threads=16",
+      "status": "pass",
+      "result": "1 passed; production preflight returns the stable unavailable-catalog error and raises no claim."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check on the 17 frozen Rust paths",
+      "status": "pass",
+      "result": "Exact-path formatting check passed; no repository-wide formatter was used."
+    },
+    {
+      "command": "git diff --check -- validator/src/claims validator/tests/claims_contract.rs validator/tests/claims_contract",
+      "status": "pass",
+      "result": "Owned source and test whitespace check passed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-claim-control-builder-013/worker-result-target cargo run --locked --offline -j16",
+      "status": "pass",
+      "result": "The live WorkerResultV1 parser, lease/work-package validator, and ArtifactWorkspace verifier accepted all 17 frozen artifacts; unknown-path, stale-digest, and forged-path mutations each failed closed."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/claims/coverage.rs",
+      "sha256": "sha256:fb1bf79e7f96f0006158b6a8bd5c0855bb86b4eea15ab7403f7f91a70c9a5715",
+      "byte_length": 7917
+    },
+    {
+      "path": "validator/src/claims/decision.rs",
+      "sha256": "sha256:1de2348b65bfaa144a25d14564300719289d86a182a56c2c500bd7deb02c5e3d",
+      "byte_length": 5299
+    },
+    {
+      "path": "validator/src/claims/definition.rs",
+      "sha256": "sha256:b1057edbe01577793524e3a51fa3750aca248b733efa2af0c92813499aec16c7",
+      "byte_length": 7859
+    },
+    {
+      "path": "validator/src/claims/evidence.rs",
+      "sha256": "sha256:67f67ee38eceadeb7b7096c86482829fb910a7b29cc431ca01e84d008c6f0cf5",
+      "byte_length": 6359
+    },
+    {
+      "path": "validator/src/claims/false_pass.rs",
+      "sha256": "sha256:bb85239851b3a233e7a21340d8a9a7a11a7f646f8c8de98e212038c40fba6f0e",
+      "byte_length": 34338
+    },
+    {
+      "path": "validator/src/claims/false_pass_guard.rs",
+      "sha256": "sha256:cb53aecb6bdf42715d42dda1e3e983e99f02a97c2937dbe9d38c5db7cc8aa61a",
+      "byte_length": 4884
+    },
+    {
+      "path": "validator/src/claims/false_pass_integrity.rs",
+      "sha256": "sha256:60639ca30981d677f67218b93da9ce895df27bee4af76c586dd2215b6cf46da2",
+      "byte_length": 3769
+    },
+    {
+      "path": "validator/src/claims/false_pass_receipt.rs",
+      "sha256": "sha256:a30c6759274b12c4be8c80296ae1b3b72807ab68753b07becac641535b33c3cf",
+      "byte_length": 8569
+    },
+    {
+      "path": "validator/src/claims/guard.rs",
+      "sha256": "sha256:b7a3094b23e25aad20544805b07c2d0467a97011e30de477855f28f788b15149",
+      "byte_length": 7536
+    },
+    {
+      "path": "validator/src/claims/mod.rs",
+      "sha256": "sha256:0d17d8f55ac5dc820a61ed78dbcaa06f3a09d9b90aeedddc90546fa66867ac9c",
+      "byte_length": 777
+    },
+    {
+      "path": "validator/tests/claims_contract.rs",
+      "sha256": "sha256:056fdafc65d8ce661620a188e75cea76fae38f88a41dbcec4957a542771d0f4b",
+      "byte_length": 516
+    },
+    {
+      "path": "validator/tests/claims_contract/adoption.rs",
+      "sha256": "sha256:648f6b11d182753e391488399dfa77da8f079637326479c315097882458063b1",
+      "byte_length": 2013
+    },
+    {
+      "path": "validator/tests/claims_contract/exact_sets.rs",
+      "sha256": "sha256:410026c5f4c47c2009f7392e128a0dd72b985e6441578870777d6873d5a91dd4",
+      "byte_length": 11226
+    },
+    {
+      "path": "validator/tests/claims_contract/false_pass_execution.rs",
+      "sha256": "sha256:d0901f6ce510efc26c95390a02b8b9208067c0f6ae9e639632f1a0a635b81ed1",
+      "byte_length": 18319
+    },
+    {
+      "path": "validator/tests/claims_contract/lifecycle.rs",
+      "sha256": "sha256:2216f3929acdcc6aab6415ee7b87322eaad0c1ab91188d826cae4e3e0ffbe5b5",
+      "byte_length": 3949
+    },
+    {
+      "path": "validator/tests/claims_contract/rejections.rs",
+      "sha256": "sha256:c53f44374291943c5448477ab7b058084290c6356a8b9a8f382648f76d911ea7",
+      "byte_length": 5812
+    },
+    {
+      "path": "validator/tests/claims_contract/support.rs",
+      "sha256": "sha256:e0966f7cac9061e2751e5d3b7561427d97ae1e20785d6cb4a7ea5c72db168ef8",
+      "byte_length": 10054
+    }
+  ],
+  "findings": [
+    {
+      "severity": "critical",
+      "class": "required-product-control-catalog-absent",
+      "result": "The adopted registry contains 69 scenario names but no executable, immutable fixture spec, causal rejection code, repair/pass condition, or authority-issued permit identity. Exact live source search found no implementations outside registry prose. Converting those names into shell exits would test the wrong surface and violate REQ-PROOF-006."
+    }
+  ],
+  "unresolved_dependencies": [
+    "adopted-claim-control-executor-catalog",
+    "fixture-scheduler-sealed-control-permit",
+    "upstream-product-negative-control-implementations"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/fixture_scheduler/mod.rs",
+      "expected_sha256": "sha256:6e8e5123adb8268e6d3e1d6694d1434a9503c14bb11157c1e4beeb55ecbf9069",
+      "request": "Add a crate-private sealed claim-control execution permit and captured-result API. The permit must bind LiveContext ID, candidate ID, adopted registry digest, claim/control IDs, immutable FixtureSpec digest, exact executor/tool identity, exact argument/spec identity, expected causal rejection, repair/pass condition, scratch confinement, freshness, and single-use nonce. Arbitrary evidence producers must not construct the permit, implement the accepted executor, or supply ObservedOutcome metadata."
+    },
+    {
+      "path": "validator/src/lib.rs",
+      "expected_sha256": "sha256:9e778144797940207cd63b014e1e73e0b03dd75376fb431120e40e1c93fe0629",
+      "request": "After upstream product nodes provide real controls, root must adopt one exact ClaimControlExecutorCatalog-v1 mapping all 69 registry controls to their actual product surface, immutable fixture/executor/spec identities, causal rejection code, causal repair and post-repair pass, and owning tool. Reject missing, unknown, duplicate, ambiguous, stale, cross-claim, and cross-candidate rows. Only then bind the catalog to claims and consider public claims integration; do not infer executables from registry prose."
+    }
+  ],
+  "limitations": [
+    "The test-only shell transport proves receipt and confinement mechanics only; it does not execute any named product false-pass scenario and cannot raise a production claim.",
+    "Production execute_claim intentionally fails closed with claims-control-product-executor-catalog-unavailable.",
+    "No validator/src/lib.rs claims binding, public API witness, CLI prove route, source acceptance, product behavior, claim elevation, readiness, release, node closure, or goal completion is asserted.",
+    "The full claims suite includes imported LiveContext tests because the private claims harness binds the real context module by path.",
+    "Any source, registry, fixture-scheduler interface, catalog, WorkerResult, candidate digest, or root wiring change invalidates this freeze."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

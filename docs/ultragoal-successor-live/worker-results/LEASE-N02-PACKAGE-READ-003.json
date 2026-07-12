@@ -1,0 +1,321 @@
+{
+  "worker": "/root/n02_package_finalize4",
+  "lease_id": "LEASE-N02-PACKAGE-READ-003",
+  "context_id": "sha256:e8434482812c3321f9fa08e1307febdc66261e12b76c6458db0275fa11de93b1",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "dirty": true,
+    "status_sha256_before_result": "bd1f77277e9da9cb8fd52a1c27db229f518f60995ab7215c6ba64b950eaa803f",
+    "worktree_diff_sha256_before_result": "8b70c49b1f3dde0063bdc91d66aa29730967d10c4c010fa90f10c4e84e9a6b8e",
+    "staged_diff_sha256_before_result": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "owned_artifact_set_sha256": "9840e146a94ffe5006db1a699f147107bdb4fe80b78ef45f3babd8b7a9b485b3",
+    "context_formula": "SHA-256 of ordered rows key<TAB>value<LF> for head_commit, head_tree, branch, status_sha256, worktree_diff_sha256, staged_diff_sha256, and artifact_set_sha256.",
+    "context_note": "The context digest was frozen immediately before this self-referential WorkerResult was added. The protected .codex-worktree/env.sh file was not opened, read, hashed, or sourced.",
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "continuation_source": "A prior implementation worker reached its execution quota after leaving the package-reader candidate in the shared worktree and before emitting a final WorkerResult. This finalizer inspected the live bytes rather than assuming that candidate was correct.",
+    "write_scope": [
+      "the 17 exact leased package-reader, package-reader-test, and reconciled self-test artifacts recorded below",
+      "docs/ultragoal-successor-live/worker-results/LEASE-N02-PACKAGE-READ-003.json"
+    ],
+    "root_owned_surfaces_not_modified": [
+      "plugin-manifest-draft.json",
+      "migration/generated-surface-authority.json",
+      "migration and claim registries",
+      "Cargo manifests and lockfiles",
+      "public command catalog",
+      "release, readiness, completion, and update-goal authority"
+    ],
+    "inherited_dependency_inputs": [
+      {
+        "path": "validator/src/package/inventory/generated_disposition/schema.rs",
+        "sha256": "sha256:b643dcc1e6faecb165808d17b56684ee8d27d99ae5914e6374727f243dbdb434",
+        "modified_by_worker": false
+      },
+      {
+        "path": "validator/src/package/inventory/generated_disposition/tests.rs",
+        "sha256": "sha256:5ece36a5c25aa845f9b82d03b2fed78c4bab478ac1f9f36b917270785d7dd1db",
+        "modified_by_worker": false
+      },
+      {
+        "path": "validator/src/package/inventory/generated_disposition/unique_json.rs",
+        "sha256": "sha256:0de4f06f48b32e808978a6c2dabe0f18601c51b2e7fb27be91a6a7c379ced5db",
+        "modified_by_worker": false
+      },
+      {
+        "path": "validator/src/cli/package/digest.rs",
+        "sha256": "sha256:88cc97b5b31c7f8fca8afa1085ed902c164f29f7547dcc25510a0f43e566ff42",
+        "modified_by_worker": false
+      },
+      {
+        "path": "plugin-manifest-draft.json",
+        "sha256": "sha256:e9755d8832b4bd038b675f5edf18a63a25e2864d96cdcfaf8b9484e22427db91",
+        "modified_by_worker": false
+      },
+      {
+        "path": "migration/generated-surface-authority.json",
+        "sha256": "sha256:f25ebf2c3d3bb8281dbd77720b6e62c1ce4df94a910833b20c12669c1d92ef6a",
+        "modified_by_worker": false
+      }
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "acceptance_ceiling": "Package digest/inventory single-session read hardening only. This result does not accept the separate package-surface audit scanner, N02, package readiness, release, or completion.",
+    "artifact_count_excluding_result": 17,
+    "artifact_set_sha256": "9840e146a94ffe5006db1a699f147107bdb4fe80b78ef45f3babd8b7a9b485b3",
+    "artifact_set_formula": "Use artifacts array order. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "artifact_lines": 2110,
+    "artifact_bytes": 76432,
+    "maximum_file_lines": 299,
+    "files_over_300_lines": 0,
+    "focused_package_inventory_tests": "55 passed; 0 failed",
+    "reconciled_command_tests": "6 passed; 0 failed",
+    "inventory_contract": "80 passed; 1 concurrent out-of-scope agent-route failure",
+    "native_all_target_check": "pass with unrelated existing warnings",
+    "exact_windows_module_check": "pass with one unused-import warning",
+    "whole_crate_windows_check": "blocked by eleven out-of-scope platform-gating errors",
+    "direct_binary_package_digest": "sha256:84def2278734d3bb4123d93bfdcc2622395dc0905f31149d901610259ead5a82",
+    "direct_binary_status_before_after_equal": true,
+    "exact_leased_format_check": "pass",
+    "diff_check": "pass",
+    "tracked_deletions": 0,
+    "required_root_manifest_resource_additions": 9,
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "destructive_effect_performed": false
+  },
+  "touched_paths": [
+    "validator/src/package/inventory/mod.rs",
+    "validator/src/package/inventory/anchored/json.rs",
+    "validator/src/package/inventory/anchored/mod.rs",
+    "validator/src/package/inventory/anchored/session.rs",
+    "validator/src/package/inventory/anchored/snapshot.rs",
+    "validator/src/package/inventory/anchored/sys.rs",
+    "validator/src/package/inventory/anchored/test_hooks.rs",
+    "validator/src/package/inventory/generated_disposition/anchored.rs",
+    "validator/src/package/inventory/generated_disposition/mod.rs",
+    "validator/src/package/inventory/generated_disposition/hardening_tests.rs",
+    "validator/src/package/inventory/tests.rs",
+    "validator/src/package/inventory/tests/bounds.rs",
+    "validator/src/package/inventory/tests/security.rs",
+    "validator/src/package/inventory/tests/support.rs",
+    "validator/src/self_tests/cli/observe/package_digest.rs",
+    "validator/src/self_tests/cli/product/cohesion.rs",
+    "validator/src/self_tests/command/run.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-PACKAGE-READ-003.json"
+  ],
+  "touched_semantics": [
+    "one descriptor-pinned Session spans the manifest, ordinary resources, generated registry, canonical inputs, generated outputs, and final whole-session revalidation",
+    "Unix traversal performs fstatat with AT_SYMLINK_NOFOLLOW before openat with O_NOFOLLOW and compares descriptor snapshots before accepting bytes",
+    "root, ancestor, leaf, and previously observed object identities are revalidated; hardlinks and non-regular files are rejected",
+    "manifest JSON is duplicate-key rejected from one bounded buffer and inventory paths are duplicate rejected",
+    "path bytes, component depth, entry count, per-file bytes, and aggregate session bytes are bounded",
+    "non-Unix Session open, read, and finish branches fail closed",
+    "package digest success and failure paths do not emit validation artifacts or implicit receipts"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "root, manifest, ordinary ancestor, ordinary leaf, and whole-session substitution or mutation",
+    "generated registry, input, and output ancestor substitution",
+    "ordinary and generated hardlinks, FIFO, Unix socket, and symlink objects",
+    "duplicate-key manifest, duplicate paths, oversized path, excessive entries, oversized file, and aggregate byte limit",
+    "cross-resource and generated mixed-snapshot mutations",
+    "SECRET_CANARY non-echo controls",
+    "unwritable observability output with read-only package digest success"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "This finalizer added only the leased WorkerResult; the inherited candidate bytes remain within the exact implementation lease."
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "Focused tests created and cleaned isolated package roots containing regular files, hardlinks, symlinks, FIFOs, and Unix sockets."
+    },
+    {
+      "class": "cargo-output",
+      "scope": "Normal ignored native and Windows target artifacts plus /tmp/package_non_unix_probe.rmeta for exact-module cross-checking."
+    },
+    {
+      "class": "git",
+      "scope": "Read-only identity, status, diff, and deletion checks only."
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-CLI-002",
+    "REQ-PROOF-001",
+    "REQ-MAINT-005",
+    "REQ-SECURITY-001",
+    "HCT-INVENTORY package identity read boundary"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY"
+  ],
+  "changes": [
+    {
+      "area": "package read transaction",
+      "result": "Refactored package identity reads onto one root-descriptor Session shared by the manifest, ordinary resources, and generated-disposition registry, inputs, and outputs."
+    },
+    {
+      "area": "race and special-file defense",
+      "result": "Added pre-open no-follow metadata, descriptor identity comparison, hardlink rejection, bounded reads, per-read revalidation, and final whole-session revalidation."
+    },
+    {
+      "area": "deterministic manifest boundary",
+      "result": "Added bounded duplicate-key JSON parsing and duplicate inventory-path rejection before package identity projection."
+    },
+    {
+      "area": "zero hidden writes",
+      "result": "Reconciled package-digest command tests with the read-only receipt-none behavior and verified an unchanged live Git status around direct binary execution."
+    },
+    {
+      "area": "claim ceiling",
+      "result": "Limited this candidate to the package digest/inventory Session and withheld the split-session audit caller, N02, readiness, release, and completion."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml package::inventory -- --test-threads=1",
+      "result": "pass",
+      "summary": "55 passed; 0 failed."
+    },
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --lib self_tests::cli::observe::package_digest -- --test-threads=1",
+      "result": "pass",
+      "summary": "4 passed; 0 failed, including attack failure and zero-write success/failure paths."
+    },
+    {
+      "command": "exact command-run and product-cohesion reconciled tests",
+      "result": "pass",
+      "summary": "2 passed; 0 failed. Together with the four package-digest command tests: 6 passed; 0 failed."
+    },
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --test inventory_contract -- --test-threads=1",
+      "result": "concurrent_out_of_scope_failure",
+      "summary": "80 passed; 1 failed. Sole failure is the macro-owned all_fourteen_exact_agent_routes_demote_only_to_preserved_context witness."
+    },
+    {
+      "command": "cargo check --manifest-path validator/Cargo.toml --all-targets",
+      "result": "pass",
+      "summary": "All native targets compile; unrelated existing warnings remain."
+    },
+    {
+      "command": "target/debug/ultragoal --root /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal package digest",
+      "result": "pass",
+      "summary": "Returned sha256:84def2278734d3bb4123d93bfdcc2622395dc0905f31149d901610259ead5a82 with source_package_digest as the only supported claim; exact pre/post Git status bytes matched."
+    },
+    {
+      "command": "rustc exact anchored/mod.rs module probe --target x86_64-pc-windows-msvc",
+      "result": "pass",
+      "summary": "The exact non-Unix module compiles and routes Session open/read/finish through fail-closed implementations."
+    },
+    {
+      "command": "cargo check --manifest-path validator/Cargo.toml --target x86_64-pc-windows-msvc --lib",
+      "result": "out_of_scope_blocked",
+      "summary": "Eleven pre-existing capture/context/target-fixture platform-gating errors block the whole crate; none originate in the leased package-reader modules."
+    },
+    {
+      "command": "exact leased rustfmt --check, git diff --check, and tracked-deletion scan",
+      "result": "pass",
+      "summary": "17 implementation artifacts are formatted; no whitespace errors; no tracked deletions."
+    }
+  ],
+  "artifacts": [
+    {"path":"validator/src/package/inventory/mod.rs","sha256":"sha256:bf9fe1e3f5e5bffc8d8777df3d4c5f8a1e60bdc0a5ee97b6d16a8cd542715d2e","bytes":6637,"lines":189},
+    {"path":"validator/src/package/inventory/anchored/json.rs","sha256":"sha256:1dd6de34ec1f9f1887b949beedb094f67d101351e62dfca594f213ef3d6d5ee7","bytes":2589,"lines":97},
+    {"path":"validator/src/package/inventory/anchored/mod.rs","sha256":"sha256:99e7375c297deda17e2f674dee82d4fc38d746e1b5e65c9c4688b90fc858f709","bytes":924,"lines":37},
+    {"path":"validator/src/package/inventory/anchored/session.rs","sha256":"sha256:3269d3710b041188e17cc394a9f555b1b0e919e3a485a2f45f994b6f0ed39e23","bytes":9734,"lines":272},
+    {"path":"validator/src/package/inventory/anchored/snapshot.rs","sha256":"sha256:b058a7fabc80ef76d212056d65efea242ea7ebf7f6153a394e6180a141181a06","bytes":1912,"lines":65},
+    {"path":"validator/src/package/inventory/anchored/sys.rs","sha256":"sha256:3c31395ff719ca09ed90257980afd3d9ed5335ccc0a41b4a90c6fa91e88dbed6","bytes":2957,"lines":83},
+    {"path":"validator/src/package/inventory/anchored/test_hooks.rs","sha256":"sha256:bc5ebc63893aafabbe1a3e6722a7673d0ab5e626b559b2ec61b03e0796d2e68b","bytes":2690,"lines":108},
+    {"path":"validator/src/package/inventory/generated_disposition/anchored.rs","sha256":"sha256:8f9691426f5a3b783e932635f6d92990b1e692511f6cd6738642fae26fa25bec","bytes":169,"lines":4},
+    {"path":"validator/src/package/inventory/generated_disposition/mod.rs","sha256":"sha256:187e71e2bfcafd610f009fe3da734cfad0cb56c3b40d09a66e24ce9a52e7d240","bytes":4965,"lines":145},
+    {"path":"validator/src/package/inventory/generated_disposition/hardening_tests.rs","sha256":"sha256:054a577f67174630399162a3b3a401a692a2c37e93c57032715bb1b2bc484abc","bytes":12188,"lines":299},
+    {"path":"validator/src/package/inventory/tests.rs","sha256":"sha256:8134da2c674251ac6d1bf3a772be384f31fb1e48936a7b665de971cf24e7a248","bytes":4960,"lines":137},
+    {"path":"validator/src/package/inventory/tests/bounds.rs","sha256":"sha256:df642098c36a7ec7a9f3abc6e305768ddd3b77e461bf48e2db15b962b383a926","bytes":2881,"lines":75},
+    {"path":"validator/src/package/inventory/tests/security.rs","sha256":"sha256:f09d70ddadf8af4ed0516781eb17900af7a12799955c1e50316449ba0419d39c","bytes":7870,"lines":169},
+    {"path":"validator/src/package/inventory/tests/support.rs","sha256":"sha256:2eaa9b22966ab882b51b86d3d49b452409556fc34aeb8ef18ca4e7c545ce20ec","bytes":1721,"lines":54},
+    {"path":"validator/src/self_tests/cli/observe/package_digest.rs","sha256":"sha256:9daa656e47a0be97095775af21bf18b806354afa629090cb34e5220cbe9aa903","bytes":3058,"lines":77},
+    {"path":"validator/src/self_tests/cli/product/cohesion.rs","sha256":"sha256:87acff05a36f463e419dcd5e3ebdf8b1bb34a8f07fe8b5a84425586dff53f0f7","bytes":3756,"lines":93},
+    {"path":"validator/src/self_tests/command/run.rs","sha256":"sha256:e1fb95dba71c8cf506dd6b17e0fbaaf311706a1b407dce389e4f1fdc0e287b1b","bytes":7421,"lines":206}
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Package digest no longer mixes path-based manifest reads with separately anchored generated reads; one Session owns the dependency-closed read transaction."
+    },
+    {
+      "severity": "material-out-of-scope",
+      "finding": "validator/src/audit/law/authority_surfaces/package_surfaces/generated.rs still calls Catalog::load and Catalog::classify through separate Sessions, so this result does not accept that audit scanner as a candidate-bound package-authority proof surface."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "Nine new anchored-reader and split-test modules are not yet listed in the root-owned plugin-manifest resource inventory."
+    },
+    {
+      "severity": "concurrent-out-of-scope",
+      "finding": "The full inventory aggregate is 80/81 because the macro-owned fourteen-agent route witness currently fails; package-focused tests are green."
+    },
+    {
+      "severity": "platform-gap-outside-lease",
+      "finding": "The exact package module cross-compiles for Windows, but eleven unrelated crate-wide platform-gating errors prevent a whole-crate Windows check."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent security and claim-falsification review of this exact 17-artifact digest set",
+    "Root addition of the nine new package-reader modules to plugin-manifest-draft.json resources",
+    "Root or a new disjoint lease must repair the split-session package-surface audit caller before using it as live proof",
+    "Fresh 81-test inventory rerun after the agent-integration macro freezes",
+    "Root acceptance or bounded rework verdict",
+    "Representative package and product verification after integration"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "plugin-manifest-draft.json",
+      "request": "Add exactly validator/src/package/inventory/anchored/{json,mod,session,snapshot,sys,test_hooks}.rs and validator/src/package/inventory/tests/{bounds,security,support}.rs to the shipped resources, then recompute package identity."
+    },
+    {
+      "path": "validator/src/audit/law/authority_surfaces/package_surfaces/generated.rs",
+      "request": "Route a disjoint repair so registry and all classified generated outputs share one candidate-bound Session; do not accept the current split-session scanner from this result."
+    },
+    {
+      "path": "validator/src/inventory/agent_reader_guard_digests.rs",
+      "request": "Reconcile any macro guard rows against the exact frozen package-reader production digests in this artifact set."
+    },
+    {
+      "path": "independent review",
+      "request": "Reproduce the focused suite, attack root/ancestor/leaf/session substitution, bounds, hardlinks, FIFO/socket, canary non-echo, non-Unix fail-close, and direct-binary zero-write behavior."
+    },
+    {
+      "path": "root authority",
+      "request": "Decide package-reader adoption, migration and generated authority, N02 status, and every readiness/release/completion claim only after independent reconciliation."
+    }
+  ],
+  "limitations": [
+    "This finalizer inherited and audited the implementation candidate; it did not silently broaden the lease or modify root-owned authority.",
+    "Acceptance is limited to the package digest/inventory Session and does not cover the split-session package-surface audit caller.",
+    "The nine new modules are not shipped until root updates and revalidates the plugin manifest.",
+    "The 81-test inventory aggregate is not green because of one concurrent agent-route witness outside this lease.",
+    "A passing package digest proves source package identity only, not package readiness, installation, cache, marketplace, app registry, runtime, release, N02 completion, or goal completion.",
+    "No N02-complete, readiness, release, completion, or update-goal claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

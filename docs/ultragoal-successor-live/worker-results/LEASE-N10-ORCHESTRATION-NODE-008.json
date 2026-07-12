@@ -1,0 +1,423 @@
+{
+  "worker": "/root/n10_node008_clean_rebind",
+  "lease_id": "LEASE-N10-ORCHESTRATION-NODE-008",
+  "context_id": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+  "candidate_identity": {
+    "candidate_id": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "context_id": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "artifact_set_sha256": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "artifact_count_excluding_result": 34,
+    "identity_method": "Byte-only identity. Sort current artifact rows by path; concatenate path, one TAB byte, SHA-256 without prefix, and one LF byte; SHA-256 the concatenation. No Git command, Git metadata, or Git-derived observation was used.",
+    "tainted_context_parent_path": "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-007.json",
+    "tainted_context_parent_sha256": "sha256:4568df7164b726819c5f7c9f2b584f6e2aa462375784dd390ddbee7925d68312",
+    "tainted_context_parent_artifact_set_sha256": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "root_decision_path": "docs/ultragoal-successor-live/root-decisions/N10-NODE-007-TAINTED.json",
+    "root_decision_sha256": "sha256:3814a443eb9dcc9aed873a3be85e89f36b4dcd3c1ccd47859f286f47745b3908",
+    "frozen_node006_parent_path": "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-006.json",
+    "frozen_node006_parent_sha256": "sha256:f59bb87bea10d15133cf3b34a47aab606b3e144dbb5ce048ce85efeb60df5469",
+    "frozen_node006_artifact_set_sha256": "sha256:de8c5d6b300be0d5aa0698eda1aa3551b58d2aa1befaf99e632f737c794a1fb5",
+    "frozen_node006_root_decision_path": "docs/ultragoal-successor-live/root-decisions/N10-NODE-006-REWORK.json",
+    "frozen_node006_root_decision_sha256": "sha256:058e7a131f57cf65e46905b238d93965fd4055dc8b123ff82fbc4be704b0fb87"
+  },
+  "base_state": {
+    "node": "N10-ORCHESTRATION",
+    "root_decision": "N10-NODE-007-TAINTED",
+    "corrective_lease": "LEASE-N10-ORCHESTRATION-NODE-008",
+    "tainted_context_parent": "sha256:4568df7164b726819c5f7c9f2b584f6e2aa462375784dd390ddbee7925d68312",
+    "tainted_context_artifact_set": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "frozen_node006_parent": "sha256:f59bb87bea10d15133cf3b34a47aab606b3e144dbb5ce048ce85efeb60df5469",
+    "frozen_node006_artifact_count": 29,
+    "frozen_node006_artifact_set": "sha256:de8c5d6b300be0d5aa0698eda1aa3551b58d2aa1befaf99e632f737c794a1fb5",
+    "frozen_node006_total_bytes": 210427,
+    "review_decision": "rework"
+  },
+  "final_state": {
+    "status": "worker_blocked",
+    "disposition": "material_semantic_rework",
+    "blocker": "Artifact authority can still relabel an owned path as read-only when the same filesystem path is represented by an explicitly authorized ASCII-case alias read path. Owned-scope and read-path validation are separate, and validate_authority uses exact-case ownership and touched membership before accepting the alias under exact-case read authority.",
+    "acceptance_ceiling": "N10 NODE-008 is a clean byte-only revalidation result with a material semantic blocker. Root acceptance, root wiring, production execution, persisted recovery, node closure, readiness, release, and completion remain withheld.",
+    "artifact_count_excluding_result": 34,
+    "read_only_artifact_count": 34,
+    "artifact_set_sha256": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "artifact_set_formula": "Sort artifacts by path; concatenate path, one TAB byte, sha256 without prefix, and one LF byte; SHA-256 the concatenation.",
+    "total_bytes": 230845,
+    "total_lines": 6801,
+    "artifact_line_counts": {
+      "validator/src/orchestration/artifact.rs": 280,
+      "validator/src/orchestration/effect.rs": 54,
+      "validator/src/orchestration/engine.rs": 235,
+      "validator/src/orchestration/engine_query.rs": 84,
+      "validator/src/orchestration/engine_submission.rs": 71,
+      "validator/src/orchestration/error.rs": 89,
+      "validator/src/orchestration/event.rs": 240,
+      "validator/src/orchestration/graph.rs": 162,
+      "validator/src/orchestration/lease.rs": 155,
+      "validator/src/orchestration/mod.rs": 162,
+      "validator/src/orchestration/model.rs": 223,
+      "validator/src/orchestration/reconcile.rs": 271,
+      "validator/src/orchestration/recovery.rs": 151,
+      "validator/src/orchestration/replay.rs": 276,
+      "validator/src/orchestration/scope.rs": 234,
+      "validator/src/orchestration/scope_policy.rs": 130,
+      "validator/src/orchestration/transition.rs": 290,
+      "validator/src/orchestration/worker.rs": 263,
+      "validator/tests/orchestration_contract.rs": 35,
+      "validator/tests/orchestration_contract/artifact_aliases.rs": 101,
+      "validator/tests/orchestration_contract/artifact_evidence.rs": 177,
+      "validator/tests/orchestration_contract/artifact_live.rs": 174,
+      "validator/tests/orchestration_contract/blockers.rs": 117,
+      "validator/tests/orchestration_contract/candidate_rebind.rs": 297,
+      "validator/tests/orchestration_contract/effects.rs": 286,
+      "validator/tests/orchestration_contract/frozen_parent.rs": 144,
+      "validator/tests/orchestration_contract/graph.rs": 155,
+      "validator/tests/orchestration_contract/leases.rs": 281,
+      "validator/tests/orchestration_contract/path_aliases.rs": 220,
+      "validator/tests/orchestration_contract/reconciliation.rs": 295,
+      "validator/tests/orchestration_contract/recovery.rs": 299,
+      "validator/tests/orchestration_contract/security.rs": 257,
+      "validator/tests/orchestration_contract/support.rs": 300,
+      "validator/tests/orchestration_contract/worker_results.rs": 293
+    },
+    "maximum_rust_file_lines": 300,
+    "rust_files_over_300_lines": 0,
+    "source_set_matches_tainted_context": true,
+    "source_set_drift_explanation": "No drift. All 34 current artifact rows, bytes, line counts, and the aggregate set identity equal the tainted NODE-007 context exactly.",
+    "path_type_revalidation": "All 34 rows are regular files, link count one, unique device/inode identities, with no unknown, missing, duplicate, ASCII-case alias, ancestor alias, symlink, hardlink, special-file, or enumeration row.",
+    "focused_artifact_tests": "25 passed; 0 failed; 102 skipped under cargo-nextest with 16 jobs",
+    "full_orchestration_tests": "127 passed; 0 failed; 0 skipped under cargo-nextest with 16 jobs",
+    "all_targets_check": "pass with existing warnings under 16 jobs",
+    "rustfmt_check": "pass for all 34 current Rust artifacts",
+    "same_session_final_revalidation": "pass for the exact 34-artifact set, parent result, root decision, frozen NODE006 result and decision, path types, link counts, totals, and WorkerResult JSON parse",
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "destructive_effect_performed": false,
+    "git_commands_performed": false,
+    "git_metadata_inspected": false,
+    "git_derived_identity_used": false
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-008.json"
+  ],
+  "touched_semantics": [],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-008.json"
+  ],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "lease-n10-node008-result",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "fixtures",
+      "performed": false
+    },
+    {
+      "class": "process",
+      "target": "lease-n10-node008-read-only-validation",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "destructive",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "target": "root-authority",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "HUL-ORCHESTRATION-001",
+    "HUL-SECURITY-001",
+    "REQ-ORCH-004"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE",
+    "N06-ROUTINE",
+    "N09-AGENTS-REPO"
+  ],
+  "changes": [
+    {
+      "area": "clean revalidation result only",
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-008.json"
+      ],
+      "rationale": "Bind the exact current N10 artifact bytes, parent decisions, verification commands, and material semantic blocker without changing source, fixtures, root authority, or candidate behavior."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "sha256sum and stat -f over the exact NODE007 artifact list, NODE007 result, N10-NODE-007-TAINTED decision, NODE006 result, and N10-NODE-006-REWORK decision; recompute sorted path-TAB-digest-LF set and wc -l totals",
+      "result": "pass",
+      "summary": "All 34 current rows match; set f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35; 230845 bytes; 6801 lines; maximum 300. Parent and decision SHA-256 bindings match exactly."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node008-clean-target cargo nextest run --offline --locked --manifest-path validator/Cargo.toml --jobs 16 --test orchestration_contract -E 'test(/artifact|node006|read_authority|casefold|unicode|hardlink|symlink/)'",
+      "result": "pass",
+      "summary": "25 passed; 0 failed; 102 skipped. Passing tests are diagnostic and do not cover the combined explicitly authorized ASCII-case alias read/write relabel finding."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node008-clean-target cargo nextest run --offline --locked --manifest-path validator/Cargo.toml --jobs 16 --test orchestration_contract --no-fail-fast",
+      "result": "pass",
+      "summary": "127 passed; 0 failed; 0 skipped."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node008-clean-target cargo check --offline --locked --manifest-path validator/Cargo.toml --all-targets --jobs 16",
+      "result": "pass_with_existing_warnings",
+      "summary": "All targets checked successfully; warning counts remain diagnostic only."
+    },
+    {
+      "command": "jq -r '.artifacts[].path' LEASE-N10-ORCHESTRATION-NODE-007.json | xargs rustfmt --edition 2024 --check",
+      "result": "pass",
+      "summary": "All 34 current Rust artifacts satisfy exact rustfmt check without writes."
+    },
+    {
+      "command": "read-only line-addressed inspection of validator/src/orchestration/{artifact,scope,lease,scope_policy,engine_submission,reconcile,replay,transition,worker}.rs and associated orchestration_contract controls",
+      "result": "material_semantic_finding",
+      "summary": "artifact.rs:56-75 classifies ownership, touched membership, and read authority with exact-case paths. LeaseSpec validates owned scope and reads separately at lease.rs:60-74, while scope alias conflict checks are not applied across owned_scope and read_paths. An explicitly allowed ASCII-case alias read can therefore relabel the same owned host path as read-only."
+    },
+    {
+      "command": "same-session final byte, type, link, enumeration, aggregate identity, parent binding, decision binding, and JSON parse revalidation after writing LEASE-N10-ORCHESTRATION-NODE-008.json",
+      "result": "pass",
+      "summary": "Exact source set and parent bindings remained unchanged; only the leased NODE008 result was written."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/orchestration/artifact.rs",
+      "sha256": "sha256:968fa69fe1e5bfc6a66c721c335232f81ac8d69ea59cde201e517dea45cfc8bd",
+      "byte_length": 9245
+    },
+    {
+      "path": "validator/src/orchestration/effect.rs",
+      "sha256": "sha256:8b1ee0966e04f0aae8b8749d6a88deb8266ef9e69c2bb5dcd27f0103215877ae",
+      "byte_length": 1864
+    },
+    {
+      "path": "validator/src/orchestration/engine.rs",
+      "sha256": "sha256:351acfe8c1a6a1268c4deda181e7b9924434a75a6f38cdab670c6beca73cf6d6",
+      "byte_length": 6930
+    },
+    {
+      "path": "validator/src/orchestration/engine_query.rs",
+      "sha256": "sha256:784acba762893e57d67771a1cc9fe4e0250d3b7c6f216a8518a5210b5c8ff25a",
+      "byte_length": 2293
+    },
+    {
+      "path": "validator/src/orchestration/engine_submission.rs",
+      "sha256": "sha256:8aade6bedeb8f4432232b0c66cd43f86dbabc9f122e9beb200e22cb47b6c1013",
+      "byte_length": 2332
+    },
+    {
+      "path": "validator/src/orchestration/error.rs",
+      "sha256": "sha256:aee3d14728dd091c3a4a2c740c3b5d012cbdf641002732c0e2f26c3eebf84746",
+      "byte_length": 3684
+    },
+    {
+      "path": "validator/src/orchestration/event.rs",
+      "sha256": "sha256:14a07936ce5545cc5e1835a2b9d4cee1507f4442a1bd317ce987aa48f4fb9606",
+      "byte_length": 6916
+    },
+    {
+      "path": "validator/src/orchestration/graph.rs",
+      "sha256": "sha256:54c7d8ecafbdbfa3fb8fd5379f189c71ad5232388016bd9d54090b751fe9f8de",
+      "byte_length": 5469
+    },
+    {
+      "path": "validator/src/orchestration/lease.rs",
+      "sha256": "sha256:bd00b476344167de3be39c25c5bd34878014db962374301dc36441b18ea6b32c",
+      "byte_length": 5349
+    },
+    {
+      "path": "validator/src/orchestration/mod.rs",
+      "sha256": "sha256:b3c8dd160386df4a7446ac997cdd6964efddf97533d2ac7f19395f86ea37b07c",
+      "byte_length": 5123
+    },
+    {
+      "path": "validator/src/orchestration/model.rs",
+      "sha256": "sha256:57935b61dbb6fc2b52047960acdaa4f1e4222fbc4fa80073d750552141a0d8b9",
+      "byte_length": 6543
+    },
+    {
+      "path": "validator/src/orchestration/reconcile.rs",
+      "sha256": "sha256:50d68e3965fc43771079af54db637c0bd459341cad2eb5cc78930276a70ad553",
+      "byte_length": 10131
+    },
+    {
+      "path": "validator/src/orchestration/recovery.rs",
+      "sha256": "sha256:7cb26de8ba75a514062684dd73629fac3c4135ad22d04612d4cad78c1b028348",
+      "byte_length": 5474
+    },
+    {
+      "path": "validator/src/orchestration/replay.rs",
+      "sha256": "sha256:0e24409af27a94768c2ff877450c1b61377c87d53e0b4cc3ed56c76cbb72d70b",
+      "byte_length": 9464
+    },
+    {
+      "path": "validator/src/orchestration/scope.rs",
+      "sha256": "sha256:0d9b8a41d5e4f5f7a205681ad66472be7caed53f7b72f9eb9d1dd659c55c1fc6",
+      "byte_length": 8424
+    },
+    {
+      "path": "validator/src/orchestration/scope_policy.rs",
+      "sha256": "sha256:e97d2888889c985fa5b76fa7c6cadfd45413b6d2aeac8749cdfb24d0ed6b44e5",
+      "byte_length": 4726
+    },
+    {
+      "path": "validator/src/orchestration/transition.rs",
+      "sha256": "sha256:959e390918282749b093e4d422568ba68f7c755242723819763556ab1b60526f",
+      "byte_length": 11461
+    },
+    {
+      "path": "validator/src/orchestration/worker.rs",
+      "sha256": "sha256:b084ba517bfae0a991102e3b522d371bcda2b297f931622da9c9f5d6aa688d92",
+      "byte_length": 9920
+    },
+    {
+      "path": "validator/tests/orchestration_contract.rs",
+      "sha256": "sha256:bc91d39ac5c9be39a60d462cd8d23bad41e7aaafd3e3b8ba172b26d4e9156caa",
+      "byte_length": 1101
+    },
+    {
+      "path": "validator/tests/orchestration_contract/artifact_aliases.rs",
+      "sha256": "sha256:67791a11e93a908526d1b2ea10046a7ee51c34acc4b6164bbe362098f5b458f6",
+      "byte_length": 3098
+    },
+    {
+      "path": "validator/tests/orchestration_contract/artifact_evidence.rs",
+      "sha256": "sha256:fe866d09d89b09ccbc5719527ece533b13245b89fda8cfb91fb220f30f374711",
+      "byte_length": 6237
+    },
+    {
+      "path": "validator/tests/orchestration_contract/artifact_live.rs",
+      "sha256": "sha256:5ddfff8bb6027725137956b47e244bafe31923dbd6950e09e34d81fcc5982da4",
+      "byte_length": 5792
+    },
+    {
+      "path": "validator/tests/orchestration_contract/blockers.rs",
+      "sha256": "sha256:59baa415aa9e50d2639426b8f5944ba77dbbe705dcdfc5ea1cacc40ad2c20370",
+      "byte_length": 3513
+    },
+    {
+      "path": "validator/tests/orchestration_contract/candidate_rebind.rs",
+      "sha256": "sha256:0544c5e1fc801ebba818f104e49a278c100998f504841f981f21924562e3fd14",
+      "byte_length": 10912
+    },
+    {
+      "path": "validator/tests/orchestration_contract/effects.rs",
+      "sha256": "sha256:eb277c06438411534f7311ef4a30cb74379f30664bf53f3385240f055abfb98e",
+      "byte_length": 8404
+    },
+    {
+      "path": "validator/tests/orchestration_contract/frozen_parent.rs",
+      "sha256": "sha256:2e06dbf5867a186b8d0f43d69851b00c3b2823496fe02b7b9beaf80b39ab1535",
+      "byte_length": 5279
+    },
+    {
+      "path": "validator/tests/orchestration_contract/graph.rs",
+      "sha256": "sha256:ee33a4ec43adf2a4df11f252066ee0b977b4857d8e650e2c41e25acd1dd6f536",
+      "byte_length": 4871
+    },
+    {
+      "path": "validator/tests/orchestration_contract/leases.rs",
+      "sha256": "sha256:32db73e7a37313f31b73f37e34a96d1edc7d3a7b431e71327638ce131d0ef8f8",
+      "byte_length": 9252
+    },
+    {
+      "path": "validator/tests/orchestration_contract/path_aliases.rs",
+      "sha256": "sha256:9b4345d03109d0f5beb46fc872c5b11ba0c19f08ab7d9e92b7f1dfb2fd6cc63c",
+      "byte_length": 8116
+    },
+    {
+      "path": "validator/tests/orchestration_contract/reconciliation.rs",
+      "sha256": "sha256:2ffbb9f5ac64463b5c89f3581ccb1ad384ab34b2e4c143100d0c766878233701",
+      "byte_length": 10610
+    },
+    {
+      "path": "validator/tests/orchestration_contract/recovery.rs",
+      "sha256": "sha256:178fd87e15a6533c879c807fad601265ef20c25c8d0b066523b3c5f58ac30c6f",
+      "byte_length": 10186
+    },
+    {
+      "path": "validator/tests/orchestration_contract/security.rs",
+      "sha256": "sha256:e5d92621b79d7eb37c6cbac990d8072dd431404659c8099190e1da8a653c8858",
+      "byte_length": 7483
+    },
+    {
+      "path": "validator/tests/orchestration_contract/support.rs",
+      "sha256": "sha256:f0f362419acd8e83e611ca69dd4daac9ef9d200efb1dc43925e96434c51882fd",
+      "byte_length": 10934
+    },
+    {
+      "path": "validator/tests/orchestration_contract/worker_results.rs",
+      "sha256": "sha256:85fee689a5565a357dc9244b23f47939f1390ff9e504cf5c068b276cfeaac610",
+      "byte_length": 9709
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material",
+      "class": "owned_artifact_case_alias_relabel",
+      "finding": "An explicitly authorized ASCII-case alias read path can relabel the same owned host file as read-only. validate_authority uses exact-case owned-scope and touched checks, then exact-case read authorization; LeaseSpec and ScopePolicy validate owned scope and reads independently and do not reject their ASCII-alias overlap.",
+      "typed_boundaries": [
+        "validator/src/orchestration/artifact.rs:56",
+        "validator/src/orchestration/artifact.rs:67",
+        "validator/src/orchestration/scope.rs:151",
+        "validator/src/orchestration/lease.rs:60",
+        "validator/src/orchestration/scope_policy.rs:43"
+      ],
+      "false_pass_shape": "Lease-owned lower-case validator/src/orchestration/node_a.rs remains in touched_paths. A separately allowlisted read root VALIDATOR/SRC/ORCHESTRATION lets an artifact row use VALIDATOR/SRC/ORCHESTRATION/NODE_A.RS. That row is not recognized as owned or touched but is accepted as read-only even though the paths alias on a case-insensitive host.",
+      "required_correction": "Reject ASCII-alias overlap between lease read_paths and every owned path category, or make artifact authority classify alias overlap as owned before read-only authorization. Add positive disjoint-read controls and negative exact, ancestor, child, ASCII-case, generated-output, and fixture alias relabel controls."
+    },
+    {
+      "severity": "identity-pass",
+      "finding": "The exact current 34-artifact set is byte-identical to the tainted NODE007 context and every parent/root-decision binding recomputes exactly from file bytes."
+    },
+    {
+      "severity": "diagnostic-pass-only",
+      "finding": "Focused artifact tests, all 127 orchestration tests, rustfmt check, and all-target compilation pass at 16 jobs, but do not negate the untested combined alias-authority finding."
+    },
+    {
+      "severity": "independent-review-required-after-correction",
+      "finding": "This clean revalidation worker does not accept the artifact set and cannot review a future corrective implementation."
+    }
+  ],
+  "unresolved_dependencies": [
+    "N10-ASCII-ALIAS-READ-WRITE-REWORK",
+    "INDEPENDENT-N10-CORRECTED-REVIEW",
+    "ROOT-N10-MODULE-WIRING",
+    "ROOT-HCT-STATE-ADAPTER",
+    "ROOT-PACKAGE-MANIFEST-INTEGRATION",
+    "N03-CLI-STATE-CURRENT-PROOF",
+    "N06-ROUTINE-CURRENT-PROOF",
+    "N09-AGENTS-REPO-CURRENT-PROOF",
+    "REPRESENTATIVE-RECOVERY-JOURNEY"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "This lease was read-only for N10 source and fixtures; the material defect was not repaired and no source or test file was changed.",
+    "NODE008 binds a clean byte-only revalidation of the NODE007 candidate context, not an acceptable corrected candidate.",
+    "ArtifactWorkspace intentionally fails closed outside Unix because no dependency-free stable device/inode identity is implemented for other hosts.",
+    "The live adapter proves one immediate frozen workspace snapshot; root must revalidate exact current bytes after any integration or candidate change.",
+    "Passing tests, formatting, and compilation are diagnostics and do not substitute for the missing alias-authority rejection behavior.",
+    "The orchestration module remains unexported and no root wiring was requested or applied.",
+    "No production persisted recovery journey, current whole-candidate suite, or N10 node closure was established.",
+    "No package, install, discovery, runtime, claim, release, network, external-host, destructive, or Git proof was performed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

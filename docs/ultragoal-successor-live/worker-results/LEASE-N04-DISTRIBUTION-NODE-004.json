@@ -1,0 +1,355 @@
+{
+  "worker": "/root/n04_install_atomicity_fix",
+  "lease_id": "LEASE-N04-DISTRIBUTION-NODE-004",
+  "context_id": "sha256:79e15e948f17fd0031a2aa306499832994a7b356c1e512b1ec349f9cdf82b003",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "status_sha256_before_result": "c105c66035aefbdee29e9b944a1b1a2c9d849ea39578b6af475e24543c45b594",
+    "artifact_set_sha256": "79e15e948f17fd0031a2aa306499832994a7b356c1e512b1ec349f9cdf82b003",
+    "live_plugin_manifest_sha256": "8494432c2ad67b679a75634fad68562e6a79dd3fcb3b76e756d020d88e33ad38",
+    "live_plugin_manifest_resource_count": 1499,
+    "parent_result_path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-003.json",
+    "parent_result_sha256": "9593bd8a2798b54dcb0323513738a3ac05bfec30f395a8e455284be93fbc4df7",
+    "parent_artifact_set_sha256": "c3369ea8e54b7f9faf465bdd65637e2915faddbb3585bcc4d30515493beb05db",
+    "context_note": "The context_id is the lease-local 26-artifact N04 identity, not root-owned HCT-CONTEXT. The protected .codex-worktree/env.sh file was not opened, read, hashed, or sourced."
+  },
+  "base_state": {
+    "review_verdict": "REWORK",
+    "reviewer_finding": "Package build read the current output and then issued an unconditional replacement; verification rollback likewise restored or removed unconditionally, so a concurrent user mutation could be overwritten between observation and effect.",
+    "corrective_scope": "Only validator/src/distribution/package/plan.rs, validator/tests/distribution_contract/package.rs, the PackageEffects adapter in validator/tests/distribution_contract/install.rs, and this corrective result were writable.",
+    "parent_candidate": "NODE-003 result 9593bd8a2798b54dcb0323513738a3ac05bfec30f395a8e455284be93fbc4df7 and set c3369ea8e54b7f9faf465bdd65637e2915faddbb3585bcc4d30515493beb05db."
+  },
+  "final_state": {
+    "status": "corrected_candidate_for_independent_re_review_and_root_acceptance",
+    "acceptance_ceiling": "Atomic expected-state package-output transition and candidate-conditional restoration semantics at the injected N04 effect-contract boundary only; no real-host package-output atomicity, public activation, N04 closure, readiness, release, or completion.",
+    "artifact_count_excluding_result": 26,
+    "artifact_set_sha256": "79e15e948f17fd0031a2aa306499832994a7b356c1e512b1ec349f9cdf82b003",
+    "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "implementation_lines": 2401,
+    "test_lines": 1436,
+    "total_lines": 3837,
+    "total_bytes": 125609,
+    "maximum_file_lines": 299,
+    "files_over_300_lines": 0,
+    "focused_package_tests": "4 passed; 0 failed",
+    "full_distribution_tests": "25 passed; 0 failed",
+    "all_targets_check": "pass with existing warnings",
+    "tracked_deletions": 0,
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/distribution/package/plan.rs",
+    "validator/tests/distribution_contract/package.rs",
+    "validator/tests/distribution_contract/install.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-004.json"
+  ],
+  "touched_semantics": [
+    "atomic expected-state package-output effect contract",
+    "candidate-conditional verification rollback",
+    "absent and exact-prior package-output races",
+    "concurrent user mutation preservation",
+    "special-file substitution rejection at the atomic boundary",
+    "stable non-secret conflict classification",
+    "transition and rollback failure causality",
+    "idempotent exact-prior package build"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "deterministic package plan, build, inventory, and independent verification",
+    "absent package output mutated immediately before atomic transition",
+    "exact-prior package output mutated immediately before atomic transition",
+    "package-output special-file substitution at atomic transition boundary",
+    "transition failure preserving exact prior bytes",
+    "verification corruption followed by exact prior restoration",
+    "post-write read failure followed by concurrent mutation before rollback",
+    "conditional rollback effect failure preserving the package candidate",
+    "identical exact-prior idempotent package build with zero physical writes",
+    "symlink, hardlink, FIFO, malformed, duplicate, traversal, oversized, and wrong-manifest package inputs"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Only the four corrective lease paths were written."
+    },
+    {
+      "class": "local-build-write",
+      "scope": "Rust artifacts were isolated under /tmp/hug-n04-node004-target."
+    },
+    {
+      "class": "fixture-write",
+      "scope": "Tests wrote only temporary package fixtures and injected in-memory package effects."
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product-effect",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-002",
+    "REQ-SUPPLY-004"
+  ],
+  "dependency_nodes": [
+    "N04-DISTRIBUTION"
+  ],
+  "changes": [
+    {
+      "area": "package-output effect authority",
+      "rationale": "PackageEffects no longer exposes unconditional replacement or removal. One compare_exchange_package primitive requires digest expectation comparison and transition to be indivisible, requires mismatch and error to preserve state, and rejects read-then-unconditional-write emulation."
+    },
+    {
+      "area": "package build",
+      "rationale": "Build derives the exact prior package-output digest from a bounded read and installs the deterministic candidate only through the atomic expected-state transition; a mismatch returns stable InstallConflict without mutating concurrent state."
+    },
+    {
+      "area": "verification rollback safety",
+      "rationale": "A failed post-transition verification restores prior bytes or absence only while the installed candidate digest remains current, then byte-reconciles the restoration. Concurrent substitutions are preserved and reported as InstallConflict; effect and reconciliation failures report RollbackFailed."
+    },
+    {
+      "area": "false-pass controls",
+      "rationale": "Injected races cover absent and exact-prior states, mutation before write and rollback, special-file substitution, failed transition, failed verification, failed rollback, non-echo, and idempotent repeat use."
+    },
+    {
+      "area": "cross-fixture interface reconciliation",
+      "rationale": "The existing install fixture's PackageSink implements only the changed PackageEffects contract so the full N04 suite compiles against one package-output authority; InstallEffects and install atomicity semantics were not changed."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n04-node004-target cargo test --offline --locked --manifest-path validator/Cargo.toml --test distribution_contract package:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "Focused package boundary: 4 test functions passed; 0 failed, including deterministic output, atomic output races and conditional rollback, hostile filesystem objects, malformed input, limits, and manifest mismatch."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n04-node004-target cargo test --offline --locked --manifest-path validator/Cargo.toml --test distribution_contract -- --test-threads=1",
+      "result": "pass",
+      "summary": "Full current N04 suite: 25 passed; 0 failed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n04-node004-target cargo check --offline --locked --manifest-path validator/Cargo.toml --all-targets",
+      "result": "pass",
+      "summary": "All validator targets compiled successfully; only pre-existing unused/dead-code warnings were emitted."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/distribution/package/plan.rs validator/tests/distribution_contract/package.rs validator/tests/distribution_contract/install.rs; git diff --check on the same paths",
+      "result": "pass",
+      "summary": "All corrected Rust paths are formatted and have no whitespace errors."
+    },
+    {
+      "command": "WorkerResult-v1 JSON/schema-key validation, artifact digest/byte/line/set reconciliation, parent identity, manifest observation, and tracked-deletion check",
+      "result": "pass",
+      "summary": "The complete current 26-artifact set is 79e15e948f17fd0031a2aa306499832994a7b356c1e512b1ec349f9cdf82b003; 3,837 lines, 125,609 bytes, maximum 299 lines, no file over 300 lines, and no tracked deletion."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/distribution/error.rs",
+      "sha256": "sha256:cecf86d9bc10f292047f7a69a13ea8f70660aeaa4ee7bd9db6f66964897ded26",
+      "bytes": 2536,
+      "lines": 67
+    },
+    {
+      "path": "validator/src/distribution/install.rs",
+      "sha256": "sha256:4d2cf9f2910c2af9e6807fe01001590ad528465de2484cb530dd596fa16cfee9",
+      "bytes": 8138,
+      "lines": 265
+    },
+    {
+      "path": "validator/src/distribution/json.rs",
+      "sha256": "sha256:a6e6e3c8b07871ffd4ff1ac60c924f5f491fb0bc7e129f9319cfc63e56735d35",
+      "bytes": 3497,
+      "lines": 114
+    },
+    {
+      "path": "validator/src/distribution/marketplace.rs",
+      "sha256": "sha256:90cfc76a1855eb3e57aa673f043a57d4ce2269fcd0411af03ead8606fef783cb",
+      "bytes": 5487,
+      "lines": 192
+    },
+    {
+      "path": "validator/src/distribution/mod.rs",
+      "sha256": "sha256:821d8f0c9409ea0f2d7e085264159ac73eefce191dea8de6fb58027a2370ac11",
+      "bytes": 1068,
+      "lines": 35
+    },
+    {
+      "path": "validator/src/distribution/model.rs",
+      "sha256": "sha256:6f9b5e665ff2bc007ca65c78269e1843b91eb89ff138034d90adf75a5ff0fb97",
+      "bytes": 6153,
+      "lines": 237
+    },
+    {
+      "path": "validator/src/distribution/observations.rs",
+      "sha256": "sha256:184ff00b914a2f5116dc3cb03baf0c7b9c9771972ba141244446d9daec391636",
+      "bytes": 1181,
+      "lines": 44
+    },
+    {
+      "path": "validator/src/distribution/package/archive.rs",
+      "sha256": "sha256:ee3576427a5ffa1deb1ad8bb57b0d0f763c11a5ea0bf23aa829671470d3d6831",
+      "bytes": 2871,
+      "lines": 83
+    },
+    {
+      "path": "validator/src/distribution/package/mod.rs",
+      "sha256": "sha256:d24edb43ec66773125f82bdc36c7b03f80a9b20ff77d29e385862a3cb20688e8",
+      "bytes": 193,
+      "lines": 9
+    },
+    {
+      "path": "validator/src/distribution/package/plan.rs",
+      "sha256": "sha256:da8e493f21086354c51de846de7767ea20dba1fa8884905168994118b31e350e",
+      "bytes": 8982,
+      "lines": 285
+    },
+    {
+      "path": "validator/src/distribution/package/spec.rs",
+      "sha256": "sha256:a63c2ff5b7f93e3ed424e3147144f4308f73156033b5a2941bde29444dba9426",
+      "bytes": 3807,
+      "lines": 126
+    },
+    {
+      "path": "validator/src/distribution/reader/fallback.rs",
+      "sha256": "sha256:8fd8b8a447c545295827c0d9f5269752b873e9598eca93bf8006e07a080fb77d",
+      "bytes": 483,
+      "lines": 17
+    },
+    {
+      "path": "validator/src/distribution/reader/mod.rs",
+      "sha256": "sha256:14ddabff12b90d437eccc93c73fca451bf22d3eafa86276c1fe66ca8f2fd8f22",
+      "bytes": 3744,
+      "lines": 130
+    },
+    {
+      "path": "validator/src/distribution/reader/unix.rs",
+      "sha256": "sha256:b4020e7efd8936407db6dbd52e074354fb01c5cd411c34f4bd731e66493800d1",
+      "bytes": 4276,
+      "lines": 121
+    },
+    {
+      "path": "validator/src/distribution/spec.rs",
+      "sha256": "sha256:5551a1124dbdab70172e0a7676c783528089711c3189305cbd07f23988ff60f4",
+      "bytes": 8370,
+      "lines": 264
+    },
+    {
+      "path": "validator/src/distribution/supply.rs",
+      "sha256": "sha256:51e28ebbea17035edafaa87dec3aeaed9af6fafbd9e0d954dcf0e624b2635dab",
+      "bytes": 5225,
+      "lines": 168
+    },
+    {
+      "path": "validator/src/distribution/verify.rs",
+      "sha256": "sha256:998e17314d839ec8dd6baa03cde772f722d2b29d8814b59dc16172e8780c63ca",
+      "bytes": 7807,
+      "lines": 244
+    },
+    {
+      "path": "validator/tests/distribution_contract.rs",
+      "sha256": "sha256:99bb58fddfddca3c2337335b207c57dd897476c0db1a86d1a670bb8fddc0b031",
+      "bytes": 586,
+      "lines": 19
+    },
+    {
+      "path": "validator/tests/distribution_contract/adversarial_fs.rs",
+      "sha256": "sha256:ceb874ea8705d858625156baecee014bf77a8cc28fa53d24a178ebe3f0eb5877",
+      "bytes": 3136,
+      "lines": 90
+    },
+    {
+      "path": "validator/tests/distribution_contract/adversarial_semantics.rs",
+      "sha256": "sha256:665f2d30d4decf910fc7f1d6bdb48daaaebf54df54c50bbdbad8fc958feacfa3",
+      "bytes": 5904,
+      "lines": 169
+    },
+    {
+      "path": "validator/tests/distribution_contract/install.rs",
+      "sha256": "sha256:da1806f21697e0258b2043cd269fae93fa63fb2af369aa7f5eb115c1441d535e",
+      "bytes": 11896,
+      "lines": 299
+    },
+    {
+      "path": "validator/tests/distribution_contract/marketplace_supply.rs",
+      "sha256": "sha256:19538962c94b88f70089ff79ae2f20f3003331ab1ea76da42ed78341fa729fb9",
+      "bytes": 8760,
+      "lines": 238
+    },
+    {
+      "path": "validator/tests/distribution_contract/package.rs",
+      "sha256": "sha256:b131fde82d1dc3df3a3f652b63bb1327e08ec84cb3ade4c8a429287fe2746900",
+      "bytes": 10843,
+      "lines": 299
+    },
+    {
+      "path": "validator/tests/distribution_contract/positive.rs",
+      "sha256": "sha256:8a1e0822930ec26646154a6ca417158593e1f5ab6c45109cc5bcb230e539d664",
+      "bytes": 1148,
+      "lines": 29
+    },
+    {
+      "path": "validator/tests/distribution_contract/states.rs",
+      "sha256": "sha256:3c83ee3c38c9735e50a9e2a1d8849fe45a417ca4b995a1a48606decb1105d142",
+      "bytes": 3059,
+      "lines": 93
+    },
+    {
+      "path": "validator/tests/distribution_contract/support.rs",
+      "sha256": "sha256:b2393b7f849dd744951765195dc2c27b9860afea3cba98ccdcaf074534a426f9",
+      "bytes": 6459,
+      "lines": 200
+    }
+  ],
+  "findings": [
+    {
+      "severity": "review-finding-repaired",
+      "finding": "No package build or verification rollback path can issue an unconditional package-output mutation; expected-state comparison and transition are one injected atomic effect, and rollback conflicts preserve concurrent state."
+    },
+    {
+      "severity": "independent-re-review-required",
+      "finding": "The complete corrected 26-artifact set and this WorkerResult require independent review; this worker does not accept its own repair."
+    },
+    {
+      "severity": "host-proof-withheld",
+      "finding": "The repair proves the injected package effect contract and fixtures only. No real filesystem package-output adapter, Codex marketplace, install/cache/app-registry/Plugins UI, discovery, runtime, network, or external host effect was exercised."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent re-review and root acceptance of set 79e15e948f17fd0031a2aa306499832994a7b356c1e512b1ec349f9cdf82b003",
+    "Root-owned validator/src/lib.rs wiring, package manifest integration, and public HCT-DISTRIBUTION dispatch",
+    "Same-session LiveContext and independently accepted PackageSnapshot binding",
+    "A supported real-host package-output effects adapter that provides the atomic expected-state contract or fails unavailable without read-then-write emulation",
+    "Supported real Codex marketplace/install/cache/app-registry/Plugins-UI/discovery/runtime proof",
+    "Independent clean rebuild and fresh-session representative journey before N04 or any package/install claim promotion"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "independent re-review",
+      "request": "Recompute the complete 26-artifact set and attack absent and exact-prior package-output races, mutation immediately before candidate transition and rollback, special-file substitution, failed transition and verification, failed restoration, non-echo, and idempotence."
+    },
+    {
+      "path": "validator/src/lib.rs and plugin-manifest-draft.json",
+      "request": "Only after independent PASS, apply root-owned distribution wiring and integrate the NODE-004 source/test/result digests rather than stale NODE-003 package-output digests."
+    },
+    {
+      "path": "root-owned HCT-DISTRIBUTION package-output adapter",
+      "request": "Implement compare_exchange_package as a genuinely atomic safe-object expected-state transition on each supported host, with mismatch and error preserving state, or return an unavailable/effect failure before mutation. Never emulate it with a separate read plus unconditional replace or remove."
+    }
+  ],
+  "limitations": [
+    "Only the exact independent package-output TOCTOU finding was changed; all other NODE-003 limitations remain.",
+    "The compare-and-exchange guarantee is an injected effect-interface contract. This lease implemented no operating-system or Codex-host adapter and therefore proves no real-host package-output atomicity.",
+    "The pre-transition read is used only to derive the expected prior digest and restoration bytes; safety depends on the adapter performing comparison and transition indivisibly and preserving state on mismatch or error.",
+    "The current integration tests compile the distribution module and crate but do not activate a public command, emit a real package file, or perform a real installation.",
+    "No root manifest, lib wiring, Cargo, dispatcher, registry, board, claim, release, Git, network, or external host surface was changed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

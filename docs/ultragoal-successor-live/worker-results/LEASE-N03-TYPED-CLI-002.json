@@ -1,0 +1,350 @@
+{
+  "worker": "/root/n03_typed_cli_worker",
+  "lease_id": "LEASE-N03-TYPED-CLI-002",
+  "context_id": "sha256:19a8c173f590ee14f8ce0dcac0b7320f95f8fb363a6b56ec5d2e4aa1d8d38a50",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_unchanged": true,
+    "status_sha256_before_result": "107b59a2ca50c0a59113d161fed0a06d2f0a583c092d167e8db914bccb04eeec",
+    "untracked_content_sha256_before_result": "afed509fdd4134e0a58fb0c9d3b29714397d423b23144f556afdd1a471989a53",
+    "context_note": "LiveContext was rebuilt after every leased source, test, and golden change and immediately before this self-referential WorkerResult was written."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "lease_scope": "validator/src/cli/successor/**, validator/tests/cli_contract/successor/**, and this WorkerResult only",
+    "correction_source": "Independent review findings CLI-REVIEW-002, CLI-REVIEW-003, and CLI-REVIEW-004 against LEASE-N03-TYPED-CLI-001",
+    "root_or_other_lane_changes_present": [
+      "plugin manifest, Cargo dependency files, and root CLI/lib compilation wiring",
+      "validator/src/cli/capture/** and validator/src/state/**",
+      "validator/src/inventory/** and inventory contract cases",
+      "migration and parent-source schema authority files",
+      "other WorkerResult-v1 artifacts"
+    ],
+    "pre_existing_user_dirt": [
+      ".DS_Store"
+    ]
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "root_integration_preserved": [
+      "validator/src/cli/mod.rs contains the root-applied candidate compilation include",
+      "validator/tests/cli_contract.rs contains the root-applied focused test include"
+    ],
+    "leased_rust_lines": 2089,
+    "production_rust_lines": 1369,
+    "test_rust_lines": 720,
+    "golden_lines": 68,
+    "maximum_file_lines": 293,
+    "files_over_300_lines": 0,
+    "git_operations_performed": false,
+    "network_performed": false,
+    "external_writes_performed": false
+  },
+  "touched_paths": [
+    "validator/src/cli/successor/catalog.rs",
+    "validator/src/cli/successor/clap_error.rs",
+    "validator/src/cli/successor/clap_grammar.rs",
+    "validator/src/cli/successor/error.rs",
+    "validator/src/cli/successor/help.rs",
+    "validator/src/cli/successor/input.rs",
+    "validator/src/cli/successor/mod.rs",
+    "validator/src/cli/successor/model.rs",
+    "validator/src/cli/successor/parser.rs",
+    "validator/src/cli/successor/value.rs",
+    "validator/tests/cli_contract/successor/boundaries.rs",
+    "validator/tests/cli_contract/successor/catalog.rs",
+    "validator/tests/cli_contract/successor/goldens/root-help.json",
+    "validator/tests/cli_contract/successor/goldens/root-help.txt",
+    "validator/tests/cli_contract/successor/mod.rs",
+    "validator/tests/cli_contract/successor/parsing.rs",
+    "validator/tests/cli_contract/successor/security.rs",
+    "validator/tests/cli_contract/successor/standalone.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-TYPED-CLI-002.json"
+  ],
+  "touched_semantics": [
+    "canonical human help spelling for --json with no --format lane",
+    "catalog-derived clap requiredness, value kind, arity, and singleton multiplicity",
+    "clap-owned missing-required-option enforcement",
+    "stable sanitized clap ErrorKind to ParseErrorId mapping",
+    "bounded preparse collection and descriptor-derived help targeting",
+    "inclusive argument-count, per-argument, identifier, and path byte ceilings",
+    "exact deterministic root human and JSON help goldens",
+    "explicit malformed-input rejection oracle",
+    "live context::EffectClass reuse without duplicate effect authority"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "exact root human help golden with canonical --json and no --format",
+    "exact root versioned JSON help golden with no --format",
+    "compiled clap introspection for every command descriptor and OptionSpec",
+    "behavior parity for required and optional omission, one occurrence, duplicate occurrence, and wrong arity for every OptionSpec",
+    "256 versus 257 argument-count boundary",
+    "8192 versus 8193 per-argument byte boundary",
+    "128 versus 129 identifier byte boundary",
+    "4096 versus 4097 relative-path byte boundary",
+    "explicit malformed corpus mapping each case to a ParseErrorId oracle",
+    "unknown-input, non-UTF-8, ANSI-free machine error, and non-echo controls",
+    "deterministic bounded mixed-input matrix"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased successor source, focused tests, exact goldens, and this WorkerResult only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal Cargo/rustc target output and /private/tmp standalone harness artifact"
+    },
+    {
+      "class": "external-process",
+      "scope": "local rustfmt, rustc, Cargo, Git, shasum, wc, file, and read-only search commands"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "parser-runtime",
+      "filesystem_reads": false,
+      "filesystem_writes": false,
+      "environment_reads": false,
+      "clock_reads": false,
+      "processes": false,
+      "network": false,
+      "telemetry": false
+    }
+  ],
+  "requirements": [
+    "REQ-CLI-001",
+    "REQ-CLI-002",
+    "REQ-CLI-003",
+    "REQ-CLI-004",
+    "REQ-CLI-005",
+    "REQ-CLI-006"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "CLI-REVIEW-002",
+      "rationale": "Root human help now names only canonical --json, exact human and versioned JSON golden assertions fail on any byte-level drift, and neither golden contains --format."
+    },
+    {
+      "area": "CLI-REVIEW-003",
+      "rationale": "The clap builder consumes requiredness and ValueKind directly from OptionSpec. Introspection and executable behavior tests now cover every option's requiredness, kind, arity, and singleton multiplicity. Manual post-parse requiredness was removed; clap MissingRequiredArgument maps to MissingRequiredOption."
+    },
+    {
+      "area": "CLI-REVIEW-004",
+      "rationale": "Dedicated off-by-one tests cover all four bounded dimensions, and malformed inputs use an explicit case-to-ParseErrorId oracle rather than treating every generated combination as necessarily invalid."
+    },
+    {
+      "area": "sanitized clap boundary",
+      "rationale": "Clap diagnostics are classified from ErrorKind and bounded context only. Raw clap messages and untrusted argv are never returned, preserving ANSI-free non-echo human and JSON failures."
+    },
+    {
+      "area": "dependency recommendation",
+      "rationale": "The candidate uses clap's builder API and no derive macro or suggestion rendering. Root should retain only error-context, help, std, and usage features while this implementation shape remains authoritative."
+    },
+    {
+      "area": "scope boundary",
+      "rationale": "This module parses and describes only. It constructs no LiveContext, dispatches no command, reads no repository or environment state, emits no telemetry, and makes no behavior or readiness decision."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/cli/successor/*.rs validator/tests/cli_contract/successor/*.rs",
+      "result": "pass"
+    },
+    {
+      "command": "rustc --edition 2024 --test validator/tests/cli_contract/successor/standalone.rs -L dependency=target/debug/deps --extern ultragoal=target/debug/deps/libultragoal-96e7d61cf6f61aa5.rlib --extern clap=target/debug/deps/libclap-901b841419424f86.rlib --extern serde_json=target/debug/deps/libserde_json-0c364a97b46bdcd3.rlib -o /private/tmp/ultragoal-successor-cli-002-tests",
+      "result": "pass",
+      "qualification": "The direct-source harness uses the live crate's context::EffectClass and locked clap/serde_json libraries. Three expected unused re-export warnings remain because it intentionally includes the private candidate module directly."
+    },
+    {
+      "command": "/private/tmp/ultragoal-successor-cli-002-tests",
+      "result": "pass",
+      "summary": "25 passed; 0 failed; includes exact human/JSON help goldens, exhaustive OptionSpec parity, all boundary controls, malformed oracle, and security/non-echo controls"
+    },
+    {
+      "command": "cargo check --locked --offline --all-targets",
+      "result": "other_lane_failure",
+      "qualification": "Successor code compiled far enough to emit only expected dormant-module unused warnings. On the final rerun, the live tree was concurrently blocked by capture-lane error E0277 in validator/src/cli/capture/artifact.rs: pinned.byte_length() now returns Result<u64, String> but is passed directly to usize::try_from. Earlier capture edits produced transient run.rs type/signature errors. This lease did not touch that lane."
+    },
+    {
+      "command": "git diff --check -- validator/src/cli/successor validator/tests/cli_contract/successor",
+      "result": "pass"
+    },
+    {
+      "command": "target/debug/deps/live_context-68875da31690b6dc accepted_live_candidate_builds_a_contract_bound_context --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "LiveContext sha256:19a8c173f590ee14f8ce0dcac0b7320f95f8fb363a6b56ec5d2e4aa1d8d38a50 was emitted before this result file."
+    },
+    {
+      "command": "per-file line-count audit",
+      "result": "pass",
+      "summary": "16 Rust files, 2089 Rust lines, maximum 293 lines, zero files over 300 lines; two exact golden files add 68 lines"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/successor/catalog.rs",
+      "sha256": "ae5958c7260ea274eb53aaeede6c9856ab0ec61ac84fd322d054885addec82b3"
+    },
+    {
+      "path": "validator/src/cli/successor/clap_error.rs",
+      "sha256": "1cde01772b038338053701332170e1e4d40de2d28fb5f120b1773e54e45d2c43"
+    },
+    {
+      "path": "validator/src/cli/successor/clap_grammar.rs",
+      "sha256": "1642c6d3c5b899df67b2f285dcfc9b9e6b933d1e8a201a9b972af189eec2e45a"
+    },
+    {
+      "path": "validator/src/cli/successor/error.rs",
+      "sha256": "214229baf123356b302efcf984727258946c8d2aa7012a01777c103dad1231d5"
+    },
+    {
+      "path": "validator/src/cli/successor/help.rs",
+      "sha256": "351985d36f4615087835129df78f20a28ea4143d0ede176668ffed32aca01120"
+    },
+    {
+      "path": "validator/src/cli/successor/input.rs",
+      "sha256": "501130c1d73f02ecd26fee59dfafddff79872d272c70d0c707520b4d79da5200"
+    },
+    {
+      "path": "validator/src/cli/successor/mod.rs",
+      "sha256": "804ce1bc5aa015a0ee6820e93fc7bcba205652e6ac202ecc972e8738becd41b7"
+    },
+    {
+      "path": "validator/src/cli/successor/model.rs",
+      "sha256": "d077a52a9725ad9c3d31a2083ed695bab2cfcce9db4795192e3aef9f5fca860a"
+    },
+    {
+      "path": "validator/src/cli/successor/parser.rs",
+      "sha256": "0c603d9a928a8736988ab0d9ffc5bfe2a802b4538261fa5dd6e0cb46a06a9b83"
+    },
+    {
+      "path": "validator/src/cli/successor/value.rs",
+      "sha256": "ca043c30d1f88ae57edf58a05ba51093db82abe1d63ee56f127e9cf42204f4f9"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/boundaries.rs",
+      "sha256": "febb48bd449a5a1161248e3cc2979a2f6105bd6cd7e2cbab9f15853da943af14"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/catalog.rs",
+      "sha256": "ca1b0241ba8145734df08a2e933fccf916d95e0da068c3f7cc9425cf2eeae37d"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/goldens/root-help.json",
+      "sha256": "f47a75e3dc0f0d966d747fea8e0e8f848ac940a41b48ab2f2e185088002599a8"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/goldens/root-help.txt",
+      "sha256": "e59eb8343f4ef822b43f5de0afcbfde3ccc539dedfe5d63850b982c0f9a2a3a9"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/mod.rs",
+      "sha256": "1a0df4884b051cb8465d67291f08f63525ddf1eed80fa38ced2a5d04d0828875"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/parsing.rs",
+      "sha256": "0c2012e53c9a1caadc387af75086699f0956858a7fc743d68823dc7a69d8ac41"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/security.rs",
+      "sha256": "c37174afa5cec40321382a6aeae30db1b85d5a3b1015c2f202ad43ee0775c0e7"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/standalone.rs",
+      "sha256": "2250798a28d7a8e308fbb41fe72ec6f9f4ba4662e1c5066962d5da54bf9be40a"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "CLI-REVIEW-002 is closed at candidate scope: exact root help goldens expose only canonical --json and contain no --format."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "CLI-REVIEW-003 is closed at candidate scope: clap grammar and runtime behavior now exhaustively match OptionSpec requiredness, kind, arity, and singleton multiplicity."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "CLI-REVIEW-004 is closed at candidate scope: four inclusive off-by-one boundaries and an explicit malformed rejection oracle are green."
+    },
+    {
+      "severity": "integration-required",
+      "finding": "The legacy handwritten argument parser and dispatcher remain the live public authority. This corrected candidate is compiled by root wiring and independently executable in the direct-source harness but remains undispatched; no successor command group is Active."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "The canonical --json spelling, nested routes, command/effect catalog, public API, machine schemas, exit policy, generated projections, and migration decisions still require root adoption."
+    },
+    {
+      "severity": "behavior-gap",
+      "finding": "No successor group is connected to LiveContext, product state, capture, inventory, domain adapters, stdout/stderr routing, or actual effects. Parser and grammar tests do not prove named command behavior."
+    },
+    {
+      "severity": "cross-lane-build-blocker",
+      "finding": "Current broad locked/offline Cargo compilation is blocked by concurrent capture-lane type/signature drift, not by this lease. The standalone live-type candidate suite is green."
+    },
+    {
+      "severity": "proof-gap",
+      "finding": "Source inspection and pure functional tests show no filesystem, environment, clock, process, network, or telemetry APIs in this parser module. A syscall-level independent zero-read/zero-write probe remains required for the adopted live binary routes."
+    },
+    {
+      "severity": "platform-ceiling",
+      "finding": "Only the current aarch64 macOS toolchain was exercised; supported Linux and other host behavior remain unverified."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Root adoption of the public command catalog, canonical machine-mode spelling, schemas, generated projections, and exit policy.",
+    "Root dispatcher integration using std::env::args_os without retaining the handwritten parser as duplicate authority.",
+    "Command adapters that construct and revalidate LiveContext and enforce the parsed context::EffectClass.",
+    "Product-state, capture, inventory, fit, distribution, observe, eval, claims, and migrate behavior integrations.",
+    "Migration routes or explicit retirement for every replaced legacy parser and dispatcher surface.",
+    "Independent post-integration parser, security, false-pass, product-journey, and zero-hidden-write review.",
+    "Representative live binary help, invalid invocation, read-only query, write, external-write, and destructive permission probes.",
+    "Repair and reconciliation of the concurrent capture lane before broad Cargo validation can be rerun."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/argument_parser/**, validator/src/command_run/**, validator/src/lib.rs, and root dispatcher wiring",
+      "request": "At the adopted migration boundary, call cli::successor::parse_args over args_os, render only catalog-backed Help/Version/ParseFailure results, and route typed invocations to explicit adapters. Do not leave the handwritten parser as parallel authority."
+    },
+    {
+      "path": "validator/src/state/policy_action.rs and the root command/action catalog",
+      "request": "Adopt ultragoal --json inspect as the canonical machine invocation and remove or explicitly route --format=json under migration authority."
+    },
+    {
+      "path": "validator/Cargo.toml",
+      "request": "For this builder-only candidate, reduce clap features from derive,error-context,help,std,suggestions,usage to error-context,help,std,usage. Derive and suggestions are unused and suggestion text is intentionally excluded from the stable sanitized error contract."
+    },
+    {
+      "path": "validator/src/api_witness.rs and validator/tests/public_api_witness.rs",
+      "request": "After public-catalog adoption, add compiled witnesses for parse_args, ParseOutcome, ParsedInvocation, SuccessorCommand, OutputMode, ParseFailure, ExitClass, parser_command, and reuse of context::EffectClass."
+    },
+    {
+      "path": "root-owned schemas and generated command/effect catalogs",
+      "request": "Register the help, version, and error machine schema identities and generate canonical command/effect rows directly from the accepted descriptor source and exact goldens."
+    },
+    {
+      "path": "root acceptance and migration authority",
+      "request": "Independently review this correction, reconcile nested verbs and compatibility routes, prove zero hidden writes at the binary boundary, and keep all successor groups non-Active until their dispatch behavior is real."
+    }
+  ],
+  "limitations": [
+    "This is a corrected parser, catalog, clap grammar, help, error, and boundary-test candidate only; it does not dispatch or execute commands.",
+    "The root-owned public catalog, generated authority, schemas, dispatcher, and dependency declaration were not changed by this worker.",
+    "Exact goldens prove deterministic candidate help bytes but do not prove installation, discovery, or live product routing.",
+    "No global compatibility route, migration deadline, claim decision, release decision, or retirement was adopted.",
+    "Broad live-crate compilation must be rerun after the unrelated capture-lane compile errors are reconciled.",
+    "System-call-level read/write absence and supported-host portability require independent live binary verification."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

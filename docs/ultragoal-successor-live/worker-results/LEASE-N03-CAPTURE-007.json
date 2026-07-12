@@ -1,0 +1,261 @@
+{
+  "worker": "/root/capture007_worker",
+  "lease_id": "LEASE-N03-CAPTURE-007",
+  "context_id": "sha256:d93a3b74a557bfd72198de685ed95ac3dbd1d9fb29c958e3298e8818e7c6575c",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "status_sha256_before_result": "c870faa161800c59a0b565b561557cbc6aee6452e6d591f1d4e67901fa30e2e3",
+    "untracked_content_sha256_before_result": "0163d9672812cab939f54b2aa1dca178042a32d4b23e1c2c039625f929c15d28",
+    "context_note": "LiveContext-v1 was rebuilt after the leased CAPTURE source, tests, focused verification, all-target check, and formatting were frozen, and before this self-referential WorkerResult was added. No protected .codex-worktree file was opened, read, hashed, or sourced by this worker.",
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "supersedes_lease_result": "LEASE-N03-CAPTURE-006",
+    "correction_source": "Independent CAPTURE-006 final review found unbounded rejection-path collection and path work; no CAPTURE-006 subset was accepted as final",
+    "preserved_predecessors": [
+      {
+        "lease_id": "LEASE-N03-CAPTURE-006",
+        "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-006.json",
+        "sha256": "3b2f744ffd5b3afec06658da7cf914919cf0f217c7e0c9f0dde815ece74f93a5"
+      }
+    ],
+    "write_scope": [
+      "validator/src/cli/capture/spec.rs",
+      "validator/src/cli/capture/artifact.rs",
+      "validator/tests/cli_contract/capture/bounds.rs",
+      "validator/tests/cli_contract/capture/mod.rs necessary module declaration only",
+      "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-007.json"
+    ],
+    "root_owned_surfaces_not_modified": [
+      "Cargo.toml and Cargo.lock",
+      "validator/src/cli/capture environment, run, descriptor, filesystem, process, sandbox, and output modules",
+      "validator/src/context/** and validator/src/cli/successor/**",
+      "public command catalog, generated authority, plugin, migration, claims, release, and completion authority"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "Exact rejection-path resource-bound correction only; independent review and root acceptance remain required",
+    "touched_rust_files": 4,
+    "touched_rust_lines": 557,
+    "maximum_file_lines": 199,
+    "files_over_300_lines": 0,
+    "new_bounds_tests": "4 passed; 0 failed",
+    "focused_capture_tests": "39 passed; 0 failed",
+    "capture_lib_tests": "4 passed; 0 failed",
+    "all_target_check": "pass",
+    "workspace_format_check": "pass",
+    "target_execution_performed": false,
+    "production_artifact_capture_performed": false,
+    "network_performed": false,
+    "external_product_effect_performed": false
+  },
+  "touched_paths": [
+    "validator/src/cli/capture/spec.rs",
+    "validator/src/cli/capture/artifact.rs",
+    "validator/tests/cli_contract/capture/bounds.rs",
+    "validator/tests/cli_contract/capture/mod.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-007.json"
+  ],
+  "touched_semantics": [
+    "argument, environment, and artifact cardinality bounds are checked before any collection item is inspected",
+    "program, cwd, and artifact path byte bounds are checked before component scanning or path hex allocation",
+    "over-bound requests reject before LiveContext root work, typed-catalog work, descriptor reads, or process launch",
+    "exact maximum cardinalities and path byte bounds preserve the fixed catalog-boundary error",
+    "existing, missing, and executable-FIFO programs preserve byte-identical rejection with both interruption states"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "4097 arguments with a first NUL-bearing argument",
+    "1025 all-secret environment entries with an invalid-length value and unbound source",
+    "129 artifact expectations with a first protected-path expectation",
+    "4096-byte exact and over-bound program, cwd, and artifact paths carrying an exfiltration canary",
+    "maximum-cardinality requests for existing, missing, and executable-FIFO programs with both interrupt states",
+    "descriptor-byte counter and target-write marker false-pass controls"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased CAPTURE source, capture-specific tests, one necessary test module declaration, and this WorkerResult only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal ignored Cargo target output"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "isolated temporary Git repositories, FIFOs, scripts, and canary files created and cleaned by tests"
+    },
+    {
+      "class": "git",
+      "scope": "read-only live-repository identity and status commands; fixture-only git init operations under temporary directories"
+    },
+    {
+      "class": "product-subprocess",
+      "performed": false
+    },
+    {
+      "class": "network",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-CLI-003",
+    "REQ-CLI-007",
+    "REQ-PROOF-002",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-004",
+    "HCT-CAPTURE negative proof requirement"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "collection cardinality preflight",
+      "result": "CommandSpec now rejects more than 4096 arguments, 1024 environment entries, or 128 artifact expectations before path checks, byte scans, NUL scans, or any item-specific validation. Error-precedence tests use deliberately malformed first items to falsify accidental iteration."
+    },
+    {
+      "area": "path resource bounds",
+      "result": "Program, cwd, and artifact paths share a conservative 4096-byte lexical ceiling. The byte check precedes component scans, prohibited-path classification, and artifact path hex allocation, and emits no caller path bytes."
+    },
+    {
+      "area": "catalog-boundary preservation",
+      "result": "Requests at every exact collection maximum and exact path-byte maximum still reach the same fixed typed-catalog rejection. Existing, missing, and executable-FIFO programs return byte-identical errors with and without pre-requested interruption."
+    },
+    {
+      "area": "no-read and no-spawn controls",
+      "result": "Oversized paths and maximum-cardinality FIFO cases leave the capture descriptor-byte counter at zero, never create the target marker, never echo or digest the path canary, and complete without blocking."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test cli_contract capture::bounds -- --test-threads=1",
+      "result": "pass",
+      "summary": "4 passed; 0 failed; 77 filtered out."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test cli_contract capture -- --test-threads=1",
+      "result": "pass",
+      "summary": "39 passed; 0 failed; 42 filtered out. Includes all CAPTURE-006 controls and the four new resource-bound controls."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --lib cli::capture -- --test-threads=1",
+      "result": "pass",
+      "summary": "4 passed; 0 failed; 1442 filtered out."
+    },
+    {
+      "command": "cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "pass",
+      "summary": "All targets compiled after root finished concurrent N02 test edits. Existing dormant-successor warning debt remains outside this lease."
+    },
+    {
+      "command": "cargo fmt --all -- --check; rustfmt --edition 2024 --check on the four touched Rust files; git diff --check",
+      "result": "pass"
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; emitted LiveContext sha256:d93a3b74a557bfd72198de685ed95ac3dbd1d9fb29c958e3298e8818e7c6575c immediately before this result file."
+    },
+    {
+      "command": "SHA-256, byte-count, line-count, predecessor-preservation, and touched-path audit",
+      "result": "pass",
+      "summary": "CAPTURE-006 preserved at the required SHA; four touched Rust files total 557 lines, maximum 199, zero over 300."
+    },
+    {
+      "command": "Draft 2020-12 validation against FINAL-CONTRACT IMPLEMENTATION_DEPENDENCY_GRAPH.json worker_output_schema",
+      "result": "pass",
+      "summary": "Exact WorkerResult-v1 schema accepted with no additional top-level properties after the self-referential result file was written."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/capture/spec.rs",
+      "sha256": "1ce8ce8af008ae779dba4c9d121768528c6addab2d1bc6cd6887e6857d33a64a",
+      "bytes": 7443,
+      "lines": 199
+    },
+    {
+      "path": "validator/src/cli/capture/artifact.rs",
+      "sha256": "91930ae3e3effe50709ce7d9b3a57eb65076452b44a6169ce0048b1aaf9772b8",
+      "bytes": 6572,
+      "lines": 189
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/bounds.rs",
+      "sha256": "6136482250567f79a72ec22f3d826efad36749cb996e4d4b18f09524cfcf9e79",
+      "bytes": 5565,
+      "lines": 158
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/mod.rs",
+      "sha256": "eae7eec048ede36ff2c62c7e5a21f5e74a4f57ad73c51f28253a6f564bc4fcbd",
+      "bytes": 283,
+      "lines": 11
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "CAPTURE-006 rejection paths no longer permit caller-controlled collection counts or path bytes to drive unbounded item inspection, component scanning, or hex allocation."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Exact maximum inputs preserve the one fixed catalog-boundary error without exposing program existence, FIFO state, interruption state, secret identity, path content, or descriptor bytes."
+    },
+    {
+      "severity": "catalog-gap",
+      "finding": "No accepted unforgeable typed-catalog token or binding exists. Every production caller-supplied CommandSpec remains unavailable."
+    },
+    {
+      "severity": "material-product-blocker",
+      "finding": "No production subprocess or artifact capture behavior exists. HCT-CAPTURE cannot support a product journey or downstream command claim."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "Independent review, root acceptance, catalog integration, generated authority, migration routing, claim decisions, and activation remain root-only."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent security and claim-falsification review of the exact CAPTURE-007 digests, ordering, and false-pass controls",
+    "Root acceptance of this bounded fail-closed candidate",
+    "An unforgeable token derived from the single accepted successor command catalog before any production CommandSpec can proceed",
+    "A separately proven descriptor-safe no-secondary-exec substrate if product subprocess execution remains required",
+    "Descriptor-brokered explicit effect confinement before any mutating command can depend on capture",
+    "Representative product verification after root integration"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "independent review and root acceptance records",
+      "request": "Verify this exact source and WorkerResult digest set, including error precedence for malformed first items, exact-bound controls, FIFO equality, zero descriptor bytes, and no-spawn markers."
+    },
+    {
+      "path": "root-owned successor catalog and dispatcher integration",
+      "request": "Do not activate HCT-CAPTURE until an unforgeable token derived from the single accepted successor command catalog is implemented and independently verified."
+    },
+    {
+      "path": "root-owned process and effect substrate",
+      "request": "If execution remains required, separately prove a descriptor-safe no-secondary-exec substrate and explicit effect confinement before routing product commands through capture."
+    },
+    {
+      "path": "generated authority, product docs, and release claims",
+      "request": "Keep test-only artifact and output helpers out of generated authority, product behavior documentation, readiness, release, and completion claims."
+    }
+  ],
+  "limitations": [
+    "The fixed catalog-boundary error remains the only production result for a structurally valid single-root CommandSpec.",
+    "Malformed, prohibited, over-count, over-byte, and otherwise structurally unsupported requests may fail earlier through bounded lexical validation.",
+    "The 4096-byte path ceiling is a capture-request lexical bound; it does not claim that every path at the ceiling is openable on every host filesystem.",
+    "No production executable existence, digest, artifact, stdout, stderr, timeout, termination, target-effect, or subprocess observation exists.",
+    "Artifact storage, descriptor reads, output accounting, sandbox policy, and process cleanup remain dormant or test-only mechanics.",
+    "Two initial verification attempts observed transient compile errors in concurrent root-owned N02 plugin/inventory edits; root corrected those unrelated files and every exact CAPTURE and all-target command was rerun successfully.",
+    "No public command catalog, dispatcher, schema, generated output, migration registry, package, install, marketplace, release, or claim surface was changed by this worker.",
+    "This result is a candidate for exact root acceptance only; it is not root acceptance, HCT activation, N03 completion, readiness, release, or goal completion."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

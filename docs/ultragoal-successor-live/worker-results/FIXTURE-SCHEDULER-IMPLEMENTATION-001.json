@@ -1,0 +1,89 @@
+{
+  "worker": "/root/fixture_scheduler_builder",
+  "lease_id": "FIXTURE-SCHEDULER-IMPLEMENTATION-001",
+  "context_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "candidate_identity": {
+    "candidate_id": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "context_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "base_state": {
+    "status": "leased-module-only"
+  },
+  "final_state": {
+    "acceptance_ceiling": "isolated scheduler module and focused contract tests only",
+    "loc": "1,103 total leased source/test lines; every production file is at most 146 lines",
+    "performance": "BTree ordering and bounded per-lease resource bindings; no network or host install",
+    "quality": "12 focused tests pass; clippy -D warnings is blocked by 201 existing errors outside this lease",
+    "security": "metadata integrity, symlink/special-file cleanup rejection, and constrained temporary roots covered",
+    "status": "candidate_for_root_acceptance"
+  },
+  "touched_paths": [
+    "validator/src/fixture_scheduler/error.rs",
+    "validator/src/fixture_scheduler/lease.rs",
+    "validator/src/fixture_scheduler/mod.rs",
+    "validator/src/fixture_scheduler/outcome.rs",
+    "validator/src/fixture_scheduler/scheduler.rs",
+    "validator/src/fixture_scheduler/spec.rs",
+    "validator/tests/fixture_scheduler_contract.rs",
+    "validator/tests/fixture_scheduler_contract/adversarial.rs",
+    "validator/tests/fixture_scheduler_contract/isolation.rs",
+    "validator/tests/fixture_scheduler_contract/scheduling.rs",
+    "validator/tests/fixture_scheduler_contract/worker_result.rs"
+  ],
+  "touched_semantics": [
+    "fixture-scheduler"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    { "class": "workspace_write", "target": "fixture-scheduler", "performed": true },
+    { "class": "fixture_write", "target": "fixture-scheduler-tests", "performed": true },
+    { "class": "process", "target": "fixture-scheduler-tests", "performed": true }
+  ],
+  "requirements": [
+    "req-cli-007",
+    "req-proof-006"
+  ],
+  "dependency_nodes": [
+    "hct-capture",
+    "hct-context"
+  ],
+  "changes": [
+    { "summary": "metadata-bound isolated fixture scheduler" }
+  ],
+  "commands_and_tests": [
+    { "command": "cargo test --test fixture_scheduler_contract", "status": "pass" },
+    { "command": "cargo clippy --test fixture_scheduler_contract -- -D warnings", "status": "blocked-outside-lease", "exit_code": 101 }
+  ],
+  "artifacts": [
+    { "path": "validator/src/fixture_scheduler/error.rs", "sha256": "sha256:f76248ad3951826711b954ac882b58b04f40e323756764f164ad90600cdf408a", "byte_length": 1881 },
+    { "path": "validator/src/fixture_scheduler/lease.rs", "sha256": "sha256:833da709b9860b3e27950654a39642262731ae473d282207b8f243626c37b5bf", "byte_length": 4008 },
+    { "path": "validator/src/fixture_scheduler/mod.rs", "sha256": "sha256:5223b976f1f76cd4a8609401425fe4b24051d2cd9262e6359246950f83de2b2d", "byte_length": 643 },
+    { "path": "validator/src/fixture_scheduler/outcome.rs", "sha256": "sha256:201720239cdb26f9779940d0e12216880245639224ff7c5b347139590f68b35e", "byte_length": 3241 },
+    { "path": "validator/src/fixture_scheduler/scheduler.rs", "sha256": "sha256:f3175a9f886e43f4cf8c2e58bc7ad26c55d13b86abf51ab062141414436f2c01", "byte_length": 4537 },
+    { "path": "validator/src/fixture_scheduler/spec.rs", "sha256": "sha256:11f911b9d87cc332c569a62261cf61f10f494a18fc62754d0e1ae77248492bfe", "byte_length": 3904 },
+    { "path": "validator/tests/fixture_scheduler_contract.rs", "sha256": "sha256:f0338193735d09e9cc925df20b7e48a3d8acd1002f072aa28137fce58d34a023", "byte_length": 409 },
+    { "path": "validator/tests/fixture_scheduler_contract/adversarial.rs", "sha256": "sha256:cab078e0b78b67a6aeb130e031a8f9a20c5fd3c02995a41de63b661502a67420", "byte_length": 4126 },
+    { "path": "validator/tests/fixture_scheduler_contract/isolation.rs", "sha256": "sha256:2f8c8009761eb52bb9a4a017b42c4ba1ddc05788ce9ef68f8403a1fba4be0d84", "byte_length": 2911 },
+    { "path": "validator/tests/fixture_scheduler_contract/scheduling.rs", "sha256": "sha256:46b9b8f09d133f67108bb940c05268dfcff2b882272b45deb714d19818764afe", "byte_length": 3328 },
+    { "path": "validator/tests/fixture_scheduler_contract/worker_result.rs", "sha256": "sha256:47bec668277679f412e4f2ae8ecc1719833ea9e0df9a2536da4d259630ecbc47", "byte_length": 7826 }
+  ],
+  "findings": [
+    { "code": "clippy-outside-lease", "detail": "201 existing crate errors outside fixture scheduler ownership" }
+  ],
+  "unresolved_dependencies": [
+    "root-public-module-wiring",
+    "context-capture-execution-adapter"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/lib.rs",
+      "expected_sha256": "sha256:544e97fd6877ebdd7eff7dcb3d2fdef2be02a3ad740ee7bc0b92c25226dbf601",
+      "request": "After independently accepting this result, add `pub mod fixture_scheduler;` as a standalone line after `mod json_boundary;`, only if this exact preimage remains current."
+    }
+  ],
+  "limitations": [
+    "No root acceptance, public integration, routine behavior, strict proof, node closure, readiness, release, or goal completion is claimed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

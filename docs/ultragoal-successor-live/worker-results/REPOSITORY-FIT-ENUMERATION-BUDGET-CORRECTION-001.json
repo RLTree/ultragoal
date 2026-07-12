@@ -1,0 +1,197 @@
+{
+  "schema_version": "WorkerResult-v1",
+  "worker": "/root/repository_fit_enumeration_budget_corrector",
+  "lease_id": "REPOSITORY-FIT-ENUMERATION-BUDGET-CORRECTION-001",
+  "result_status": "corrective_candidate_pending_exact_byte_rerun_and_independent_review",
+  "route": {
+    "model": "gpt-5.6-terra",
+    "reasoning": "xhigh",
+    "rationale": "Bounded deterministic resource-control correction with a precise enumeration loop and deterministic test oracle; the lease does not alter the F_GETPATH architecture."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "reviewed_unaccepted_artifact_set_sha256": "f63ef0412a81840bdd3b2c65d02f6e74b2b688cbc185cb243ff877bc062b4b81",
+    "review_decision": "repository-fit-unbounded-directory-enumeration",
+    "review_decision_path": "docs/ultragoal-successor-live/root-decisions/REPOSITORY-FIT-ENUMERATION-BOUNDS-REWORK.json"
+  },
+  "lease_boundary": {
+    "production": [
+      "validator/src/repository_fit/**"
+    ],
+    "tests": [
+      "validator/tests/repository_fit_contract.rs",
+      "validator/tests/repository_fit_contract/**"
+    ],
+    "generated_output": "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-ENUMERATION-BUDGET-CORRECTION-001.json",
+    "forbidden_surfaces_modified": false,
+    "git_operations_performed": false,
+    "network_performed": false,
+    "external_effects_performed": false
+  },
+  "candidate": {
+    "artifact_set_formula": "Sort source and test artifacts by path; for each concatenate path, one TAB, lowercase SHA-256 without prefix, and one LF; SHA-256 the resulting bytes.",
+    "artifact_set_sha256": "sha256:b15bb0d19063bf4419d339c32d9d92bb5f296472f22647e834f1299c4e7511e7",
+    "artifact_count": 21,
+    "total_bytes": 128138,
+    "total_lines": 4016,
+    "maximum_file_lines": 300,
+    "line_cap_compliant": true,
+    "candidate_status": "unaccepted"
+  },
+  "changes": [
+    {
+      "area": "enumeration budget",
+      "paths": [
+        "validator/src/repository_fit/local/sys.rs"
+      ],
+      "result": "Added a 256-entry and 64-KiB name-byte cap for each exact-name scan plus a 4096-entry and 1-MiB name-byte cap shared by every scan in one read operation. Budget exhaustion returns the existing content-free ResourceLimit failure after close, never a partial EntryMatch."
+    },
+    {
+      "area": "operation-wide propagation",
+      "paths": [
+        "validator/src/repository_fit/local/unix.rs",
+        "validator/src/repository_fit/local/apple_path.rs"
+      ],
+      "result": "One EnumerationBudget is created per read_file and is passed to ancestor pre-open and post-open checks, leaf pre-read and post-read checks, reverse attachment revalidation, and final present/absent Apple exact-name checks."
+    },
+    {
+      "area": "resource and host controls",
+      "paths": [
+        "validator/src/repository_fit/local/sys_tests.rs",
+        "validator/src/repository_fit/local/apple_path.rs",
+        "validator/tests/repository_fit_contract.rs",
+        "validator/tests/repository_fit_contract/enumeration.rs"
+      ],
+      "result": "Added exact-limit, one-over, late-alias, cumulative scan, bounded churn, byte-cap, filesystem repeated-ancestor, and Darwin churn controls; added the non-Apple descriptor-path UnsupportedHost unit control."
+    }
+  ],
+  "resource_budget": {
+    "per_scan": {
+      "accepted_entries": 256,
+      "accepted_name_bytes": 65536,
+      "completion_behavior": "One additional readdir call may observe EOF or the first over-limit entry; then the scan completes or returns ResourceLimit."
+    },
+    "per_read_operation": {
+      "accepted_entries": 4096,
+      "accepted_name_bytes": 1048576,
+      "scan_sites": "Every exact_entry call is budgeted; canonical path depth is already bounded at 16, so read_file has at most 48 exact-name scan sites."
+    },
+    "stopping": "No retry, polling, or partial-success path is added. A stream that continues past either bound terminates with ResourceLimit."
+  },
+  "verification": {
+    "commands": [
+      {
+        "command": "rustfmt --edition 2024 --check validator/src/repository_fit/*.rs validator/src/repository_fit/local/*.rs validator/tests/repository_fit_contract.rs validator/tests/repository_fit_contract/*.rs",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      {
+        "command": "(cd validator && CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo test --locked --offline --test repository_fit_contract -j16 -- --test-threads=16)",
+        "exit_code": 0,
+        "result": "53 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; 0.46 seconds",
+        "qualification": "The execution occurred before a three-blank-line removal in unix.rs that restored the 300-line cap. That removal is source-byte drift, although it changes no code tokens or behavior; this exact post-result artifact set requires one authorized rerun before it can be used as exact-byte evidence."
+      },
+      {
+        "command": "(cd validator && CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo test --locked --offline --test repository_fit_contract --no-run -j16 -- --test-threads=16)",
+        "exit_code": 101,
+        "result": "pre-fix failure only: E0689 ambiguous integer type for name_bytes; fixed by declaring usize; not used as passing evidence"
+      },
+      {
+        "command": "normal-production LLDB RENAME_SWAP reproduction against the exact corrective set",
+        "exit_code": null,
+        "result": "not run",
+        "qualification": "The authorized focused Cargo target was consumed by the contract suite. No exact-current normal-production binary was built, and no stale binary is cited."
+      }
+    ],
+    "resource_tests": {
+      "exit_code": 0,
+      "coverage": [
+        "sys exact at limit",
+        "sys one over",
+        "sys late alias after boundary returns ResourceLimit without Exact",
+        "sys cumulative repeated complete scans",
+        "sys churning stream hard stop",
+        "sys oversized name bytes",
+        "Darwin filesystem exact at limit",
+        "Darwin one-over and repeated-ancestor cumulative operation cap",
+        "Darwin concurrent rename churn hard stop"
+      ],
+      "qualification": "Same three-blank-line exact-byte gap as the focused Cargo result."
+    },
+    "security_and_race_tests": {
+      "exit_code": 0,
+      "coverage": [
+        "case-alias rejection including exact plus alias",
+        "symlink, hardlink, FIFO, socket, and traversal rejection",
+        "ordered substitutions, root replacement, recreation, and same-inode mutation fail closed",
+        "pre-final F_GETPATH swap fails closed"
+      ],
+      "qualification": "Existing controls passed in the focused run; no new F_GETPATH architecture claim is made."
+    },
+    "zero_write_and_rollback_tests": {
+      "exit_code": 0,
+      "coverage": [
+        "recursive local inspect/plan/verify tree and Git-status zero-write",
+        "fresh, partial, conflict, apply, rollback, reconciliation, and final rollback sweep controls"
+      ],
+      "qualification": "Existing controls passed in the focused run."
+    },
+    "non_apple_control": {
+      "exit_code": null,
+      "coverage": "Added cfg(non-Apple) descriptor_path unit assertion for UnsupportedHost.",
+      "qualification": "The current host is Apple, so the non-Apple cfg test was not executable in this Darwin run; no cross-host runtime claim is made."
+    }
+  },
+  "support_ceiling": {
+    "apple": "Apple/Darwin F_GETPATH finite present/absent linearization remains candidate behavior only. The new budget neither widens that claim nor proves function-return-state or eternal namespace state.",
+    "non_apple": "descriptor-path binding remains fail-closed with UnsupportedHost.",
+    "security": "Directory enumeration remains descriptor-anchored, O_NOFOLLOW-based, exact-case checked, special-file rejecting, and read-only; large or churning directories now have deterministic entry and byte ceilings."
+  },
+  "effects": [
+    {
+      "class": "workspace_write",
+      "performed": true,
+      "scope": "leased repository-fit source, tests, and this WorkerResult only"
+    },
+    {
+      "class": "temporary_probe",
+      "performed": true,
+      "scope": "/tmp/hul-fit-enumeration-* test fixtures, removed by test Fixture drop"
+    },
+    {
+      "class": "cargo_target_write",
+      "performed": true,
+      "scope": "existing workspace target for the one focused contract target"
+    }
+  ],
+  "root_requests": [
+    "Recompute the exact 21-artifact set after any root integration; this WorkerResult does not update the root candidate manifest or board.",
+    "Authorize one exact-byte repository_fit_contract rerun for artifact set sha256:b15bb0d19063bf4419d339c32d9d92bb5f296472f22647e834f1299c4e7511e7 before treating the passing 53-test result as candidate-bound proof.",
+    "When a current normal-production probe is authorized, reproduce the LLDB RENAME_SWAP control against the exact set and bind its output separately."
+  ],
+  "artifacts": [
+    {"path":"validator/src/repository_fit/apply.rs","sha256":"sha256:70df0f417dbf57edda9be4929017d2e16377c1949749e1c94f6d5d1df5658ec2","byte_length":9208,"lines":282},
+    {"path":"validator/src/repository_fit/error.rs","sha256":"sha256:ca4c06db9ce2d203612fa183f5467510c2f714957c4deb56b4f018967b2a0fe1","byte_length":1524,"lines":59},
+    {"path":"validator/src/repository_fit/inspect.rs","sha256":"sha256:b140aa44c8245d7ca381ccdab265c81314c3d89bc01eca3bd3721a63f8ad2288","byte_length":10174,"lines":290},
+    {"path":"validator/src/repository_fit/local/apple_path.rs","sha256":"sha256:540cc58aaf8a390dfb48c418af010df80c7e3cf398a321de2c7c3e2ed13f2831","byte_length":7131,"lines":198},
+    {"path":"validator/src/repository_fit/local/mod.rs","sha256":"sha256:f1d49253bebc8a031f04581732bf7dd7e17cbc4a7304aefb61cbc87b12498f6b","byte_length":1402,"lines":57},
+    {"path":"validator/src/repository_fit/local/sys.rs","sha256":"sha256:c0f0430f19345b975b9b6a9513a0ff0c921607f9e51808f1dc86253bdc0fd9aa","byte_length":8725,"lines":284},
+    {"path":"validator/src/repository_fit/local/sys_tests.rs","sha256":"sha256:0e1bff65593892e0491cd3aa3a24197cec7163bb3d17d47dfdcbfd13648447a6","byte_length":6000,"lines":196},
+    {"path":"validator/src/repository_fit/local/unix.rs","sha256":"sha256:29f4988132d6589dc66368f17a9ba82aaa13a769e5eeadb15925cc2fc9453982","byte_length":11419,"lines":300},
+    {"path":"validator/src/repository_fit/local/unix_tests.rs","sha256":"sha256:22c4eac8ae517e348fbde9a31a1e7eeed14c114008c549766e1bbfdd66642431","byte_length":9824,"lines":300},
+    {"path":"validator/src/repository_fit/mod.rs","sha256":"sha256:77c8720c618c3f2a07fd38ccc536f7c90d91967f373ecb8b98c779bb2a502faf","byte_length":1104,"lines":39},
+    {"path":"validator/src/repository_fit/model.rs","sha256":"sha256:f80283a192513038c47e32278eeefcacb376e5ecbe4d614706d924cf8cdfcd3b","byte_length":6617,"lines":223},
+    {"path":"validator/src/repository_fit/ownership.rs","sha256":"sha256:8631977f153e3458697fa97ea5140df39d7dba15823930b989830e59e64ece7b","byte_length":3366,"lines":123},
+    {"path":"validator/src/repository_fit/path.rs","sha256":"sha256:dda9b100450082345d7f1bd9bc08dd90fab995471a162d1a74ffb4b21560c2b7","byte_length":1720,"lines":62},
+    {"path":"validator/src/repository_fit/state.rs","sha256":"sha256:a37bf5a72b5607591c259199be63e221ebd0b96b8725efca3fba63ac8f93cea3","byte_length":7373,"lines":286},
+    {"path":"validator/tests/repository_fit_contract.rs","sha256":"sha256:d83ee98e63064a97b79f5fe5b07380147253cfe1dce5ba285a508b809076ae7f","byte_length":480,"lines":17},
+    {"path":"validator/tests/repository_fit_contract/apply_failures.rs","sha256":"sha256:053a079b109052abb23f3751f51002d15b06523d4e0d06ada436681448c7ede5","byte_length":9789,"lines":295},
+    {"path":"validator/tests/repository_fit_contract/engine.rs","sha256":"sha256:4e24fd5abf4e5bbf97a10df3d5ed0a2a5bbdb1cd1517536bbd8a5ad1fd7daf80","byte_length":9946,"lines":297},
+    {"path":"validator/tests/repository_fit_contract/enumeration.rs","sha256":"sha256:69e039f223cef0fa1ec1fe9eafe112e2da3ed3d86a5b1002598aa1b48177e51d","byte_length":3218,"lines":108},
+    {"path":"validator/tests/repository_fit_contract/local_read.rs","sha256":"sha256:02971a7e039555958b1f599e07196bb8625bdb7ad2428bf64240aa4d524c45b8","byte_length":9973,"lines":296},
+    {"path":"validator/tests/repository_fit_contract/spec.rs","sha256":"sha256:a9f62b0e7cc42f2f30989517a089cef7bc3732619cd87d39c881e91a0d7307eb","byte_length":3496,"lines":118},
+    {"path":"validator/tests/repository_fit_contract/support.rs","sha256":"sha256:3f3324d15faf9b6a091773a7a656af389c17a9a8e6841a633ee3a8e3d944ea2b","byte_length":5649,"lines":186}
+  ],
+  "no_claim_statement": "No acceptance, public integration, readiness, release, node closure, or goal completion is claimed. This WorkerResult does not accept the prior f63ef0412a81840bdd3b2c65d02f6e74b2b688cbc185cb243ff877bc062b4b81 set or the new corrective set."
+}

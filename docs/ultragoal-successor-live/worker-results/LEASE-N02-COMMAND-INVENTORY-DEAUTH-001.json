@@ -1,0 +1,221 @@
+{
+  "worker": "/root/n02_context_scope_review",
+  "lease_id": "LEASE-N02-COMMAND-INVENTORY-DEAUTH-001",
+  "context_id": "sha256:f5bb2beb422dcfdaade22239cc6d432c2ddf3551b2db12eb19e65129c6ac5551",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "dirty": true,
+    "status_sha256_before_result": "86b1e2973dee7b875347cd7bc6cd3fa2b25c54d5f7d98e3e3cb801fa01abaed0",
+    "leased_worktree_diff_sha256": "24de50bd3476f85791d73c8a9b3b5a0f31866aa65f4a45670387c6c615c71f93",
+    "leased_candidate_set_sha256": "c84419b190302b6d53ec0206727684805f0896a7ef3c76368b48542278e1f54b",
+    "context_source": {
+      "path": "docs/ultragoal-successor-live/worker-results/LEASE-N02-CONTEXT-SCOPE-001.json",
+      "sha256": "bcf9c3da5d66759de79880fc8c17eea32bb67bc72fd9ebe4159892a027eb2e73"
+    },
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "lease_scope": [
+      "validator/src/audit/observability/registry/**",
+      "validator/src/audit/research/trace/observability_binding.rs",
+      "validator/src/cli/current_state/**",
+      "validator/src/cli/observe/explain/next/**",
+      "validator/src/cli/observe/telemetry/inventory_status.rs and adjacent tests",
+      "validator/src/audit/observability/files.rs and adjacent tests",
+      "validator/src/audit/law/authority_surfaces/inventory/required_surfaces.rs and adjacent tests",
+      "focused observe package, prove, query command-inventory, next-action, and live-loop timing tests",
+      "this WorkerResult"
+    ],
+    "lease_amendments": [
+      "inventory/mod.rs may exclude the exact static command inventory before recursive JSON reads",
+      "artifact_authority.rs may exclude the exact static command inventory from generated authority rows",
+      "query/mod.rs may migrate observe_green_prove_and_query_contracts_are_typed",
+      "explain/tests/next_plan.rs may migrate three stale expectations to exit 1, exact blocker, and unchanged spool"
+    ],
+    "predecessor_behavior": [
+      "production registry checks parsed docs/generated/observability/command-inventory.json as observability authority",
+      "current-state and observe prove could project positive state from the static control board",
+      "ExplainNext derived repair targets from static bytes and used the telemetry base receipt path with hidden spool writes",
+      "package, research trace, required-surface, generated provenance, and generated authority paths treated the static file as required or authoritative",
+      "legacy parser and assertion trees were compiled as test authority"
+    ],
+    "root_owned_surfaces_not_modified": [
+      "docs/generated/observability/command-inventory.json bytes",
+      "Cargo manifests and workspace dependencies",
+      "public successor command catalog",
+      "adopted manifests and migration registries",
+      "claim, release, readiness, completion, and update-goal authority"
+    ],
+    "concurrent_dirt_policy": "All user, root, and other-worker changes were preserved; no git mutation or destructive cleanup was performed."
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "acceptance_ceiling": "Static command-inventory deauthorization only. HCT-OBSERVE is explicitly unavailable/not adopted, so observability product closure and downstream readiness, release, completion, and update-goal claims remain blocked.",
+    "leased_rust_files": 24,
+    "leased_rust_lines": 3713,
+    "leased_rust_bytes": 138054,
+    "leased_diff_additions": 604,
+    "leased_diff_deletions": 739,
+    "maximum_file_lines": 269,
+    "files_over_300_lines": 0,
+    "focused_distinct_tests": "109 passed; 0 failed",
+    "all_target_check": "pass",
+    "workspace_format_check": "pass",
+    "scoped_diff_check": "pass",
+    "active_production_static_catalog_readers": 0,
+    "active_required_or_generated_authority_rows_for_static_catalog": 0,
+    "stable_blocker": "HCT-OBSERVE successor catalog unavailable/not adopted",
+    "legacy_context_files_deleted": 0,
+    "packaged_static_catalog_bytes_modified": false,
+    "network_performed": "fixed loopback exporter probes only; no remote network",
+    "external_product_effect_performed": false
+  },
+  "touched_paths": [
+    "validator/src/audit/law/authority_surfaces/inventory/mod.rs",
+    "validator/src/audit/law/authority_surfaces/inventory/required_surfaces.rs",
+    "validator/src/audit/law/authority_surfaces/surface_inventory/discovered/artifact_authority.rs",
+    "validator/src/audit/observability/files.rs",
+    "validator/src/audit/observability/registry/mod.rs",
+    "validator/src/audit/observability/registry/tests/mod.rs",
+    "validator/src/audit/research/trace/observability_binding.rs",
+    "validator/src/cli/current_state/mod.rs",
+    "validator/src/cli/current_state/tests.rs",
+    "validator/src/cli/live_loop/run_node_timing_refresh_tests.rs",
+    "validator/src/cli/observe/explain/next/mod.rs",
+    "validator/src/cli/observe/explain/next/tests.rs",
+    "validator/src/cli/observe/explain/tests/next_plan.rs",
+    "validator/src/cli/observe/telemetry/inventory_status.rs",
+    "validator/src/cli/observe/telemetry/tests.rs",
+    "validator/src/self_tests/boundaries/authority/generated_artifacts/artifact_boundaries.rs",
+    "validator/src/self_tests/boundaries/authority/generated_artifacts/inventory_boundaries.rs",
+    "validator/src/self_tests/boundaries/authority/inventory/authority_classes.rs",
+    "validator/src/self_tests/boundaries/authority/inventory/roles.rs",
+    "validator/src/self_tests/boundaries/authority/inventory/rows.rs",
+    "validator/src/self_tests/cli/observe/package.rs",
+    "validator/src/self_tests/cli/observe/prove.rs",
+    "validator/src/self_tests/cli/observe/query/command_inventory/mod.rs",
+    "validator/src/self_tests/cli/observe/query/mod.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-COMMAND-INVENTORY-DEAUTH-001.json"
+  ],
+  "touched_semantics": [
+    "no active production path reads, parses, validates, requires, or recursively treats the static command inventory as observability authority",
+    "registry, current-state, prove, package audit, and ExplainNext expose the same causal HCT-OBSERVE unavailable blocker",
+    "retained bytes, malformed bytes, absence, symlinks, FIFOs, and SECRET_CANARY bait cannot change the blocker or raise a claim ceiling",
+    "ExplainNext planning and current-state snapshot paths do not create telemetry spool or validation artifact writes",
+    "the exact static path is excluded before generated JSON reads and before generated authority-row construction while all other generated JSON checks remain active",
+    "HCT-INVENTORY may still classify retained bytes; this slice does not invent an HCT-OBSERVE replacement",
+    "legacy parser and assertion files are preserved byte-for-byte but are unreferenced and uncompiled"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "regular SECRET_CANARY static catalog bait",
+    "malformed non-UTF-8 static catalog bait",
+    "missing static catalog",
+    "symlink to an outside SECRET_CANARY file",
+    "FIFO at the static catalog path",
+    "unrelated generated JSON with missing provenance",
+    "unwritable telemetry spool sentinel",
+    "passing live-stack receipts followed by unavailable successor catalog"
+  ],
+  "effects": [
+    {"class":"workspace-write","scope":"24 leased Rust files and this WorkerResult only"},
+    {"class":"workspace-write","scope":"ignored Cargo target output and isolated temporary fixtures from tests"},
+    {"class":"loopback-network","scope":"existing observability receipt tests invoked bounded curl probes only against 127.0.0.1"},
+    {"class":"git","scope":"read-only identity, status, diff, and digest commands"},
+    {"class":"remote-network","performed":false},
+    {"class":"external-product","performed":false}
+  ],
+  "requirements": [
+    "REQ-PRODUCT-004",
+    "REQ-CLI-002",
+    "REQ-PROOF-001",
+    "REQ-MAINT-003",
+    "REQ-MAINT-005",
+    "HCT-INVENTORY retained-byte classification boundary",
+    "HCT-OBSERVE adoption dependency and negative proof"
+  ],
+  "dependency_nodes": ["N02-INVENTORY"],
+  "changes": [
+    {"area":"observability registry","result":"Replaced static JSON parsing with law-row checks plus the exact stable HCT-OBSERVE unavailable blocker. Test-only compatibility accessors return no synthetic catalog rows."},
+    {"area":"current state and prove","result":"Removed static control-board reads. Current state names HCT-OBSERVE as first blocker; prove always lowers the claim ceiling after live-stack checks when the successor catalog is unavailable."},
+    {"area":"ExplainNext","result":"Builds a typed fail receipt directly from current candidate state, supports no claims, requires no query commands, and performs no hidden spool write during planning."},
+    {"area":"package, research, and generated authority","result":"Removed the static file from required package/research surfaces and excluded its exact path before generic generated JSON provenance reads and authority-row construction."},
+    {"area":"false-pass controls","result":"Converted legacy positive expectations to non-echoing unavailable controls across package, prove, query, current-state, ExplainNext, generated authority, and live-loop projection tests."},
+    {"area":"preservation boundary","result":"Restored all 38 briefly removed legacy files byte-for-byte after root clarified OD-009 does not authorize physical deletion; they remain unreferenced and uncompiled."}
+  ],
+  "commands_and_tests": [
+    {"command":"cargo test --locked --offline -p ultragoal --lib audit::observability::registry::tests -- --test-threads=1","result":"pass","summary":"3 passed; 0 failed."},
+    {"command":"cargo test --locked --offline -p ultragoal --lib cli::current_state::tests; cli::observe::explain::next::tests; cli::observe::telemetry::tests","result":"pass","summary":"16 passed; 0 failed across three separately executed commands."},
+    {"command":"cargo test --locked --offline -p ultragoal --lib self_tests::cli::observe::package; prove; query::command_inventory; query::observe_green_prove_and_query_contracts_are_typed","result":"pass","summary":"13 passed; 0 failed across four separately executed commands."},
+    {"command":"cargo test --locked --offline -p ultragoal --lib cli::observe::explain::tests::next_plan; cli::next_action::tests; cli::live_loop::run_node_timing_refresh_tests; self_tests::cli::observe::snapshot","result":"pass","summary":"18 passed; 0 failed across four separately executed commands."},
+    {"command":"cargo test --locked --offline -p ultragoal --lib audit::research::trace::tests; self_tests::boundaries::authority::generated_artifacts; self_tests::boundaries::authority::inventory","result":"pass","summary":"59 passed; 0 failed across three separately executed commands; the 50-test inventory sweep includes two tests also run in a narrower diagnostic."},
+    {"command":"cargo check --locked --offline -p ultragoal --all-targets","result":"pass","summary":"All targets compiled after source freeze; warnings are shared dormant successor/dead-code warnings."},
+    {"command":"cargo fmt --all -- --check; git diff --check over the leased path set","result":"pass","summary":"Workspace formatting and scoped whitespace checks passed."},
+    {"command":"active module graph and static reader scan using rg over registry, current-state, observe, research binding, and authority surfaces","result":"pass","summary":"Zero active production static-catalog readers and zero required/generated authority rows; remaining literal hits are the exact deauthorization guard, negative text, bait tests, retained HCT-INVENTORY classification, and preserved uncompiled legacy context."},
+    {"command":"cargo test --locked --offline -p ultragoal --lib -- --test-threads=1","result":"root_terminated_partial_diagnostic","summary":"Root terminated the 1,424-test non-acceptance diagnostic with exit 130 to free CPU. Libtest emitted no aggregate pass count. Seven out-of-lease failures were observed before termination; all N02-focused tests encountered in the partial run passed."}
+  ],
+  "artifacts": [
+    {"path":"validator/src/audit/law/authority_surfaces/inventory/mod.rs","sha256":"77978d14188e688afd1cc69dd30fbc613ac84a9e24c25f9a8624b90bd048e966","bytes":8499,"lines":254},
+    {"path":"validator/src/audit/law/authority_surfaces/inventory/required_surfaces.rs","sha256":"18c7c9658a4eafa1fbff98affd03069abb4ad87e77688c68182dee8a8c937ea1","bytes":6668,"lines":205},
+    {"path":"validator/src/audit/law/authority_surfaces/surface_inventory/discovered/artifact_authority.rs","sha256":"9e52686f17f303e0c584d60c657b1cf5cfe2b5c143e07747be89b17dac60f651","bytes":2904,"lines":84},
+    {"path":"validator/src/audit/observability/files.rs","sha256":"23d4ca8d2573cd00c1ee825b8af4e07149ec2d58a3640872e42fbe64a6a52137","bytes":2541,"lines":71},
+    {"path":"validator/src/audit/observability/registry/mod.rs","sha256":"42df32ab9a88b0a550d5b47da1bb3c9eb7c5eba5508624927cd28412b8b72f4c","bytes":2250,"lines":89},
+    {"path":"validator/src/audit/observability/registry/tests/mod.rs","sha256":"1f41b7949e89a77f7a2dc85fcfcbee70f249360d5384aeb38631a9b13809a771","bytes":5026,"lines":143},
+    {"path":"validator/src/audit/research/trace/observability_binding.rs","sha256":"5b8491e0a9935ad5bdb483990e5ee8773b3ae4dab02935caabad3bb295be8660","bytes":3120,"lines":105},
+    {"path":"validator/src/cli/current_state/mod.rs","sha256":"10433af86bad63085a2d870a9189dfddaa7d1f2ad3120559adbecfd49aef6251","bytes":10707,"lines":269},
+    {"path":"validator/src/cli/current_state/tests.rs","sha256":"4a81ef59deb0d5817e86a0c756c8a44e3db609a853d45a7ebd1e6b81e6e08a33","bytes":8311,"lines":226},
+    {"path":"validator/src/cli/live_loop/run_node_timing_refresh_tests.rs","sha256":"bba2850828f4857219dc9a4bc687454af40c3459d17cbb646775b435cf06a86d","bytes":8566,"lines":220},
+    {"path":"validator/src/cli/observe/explain/next/mod.rs","sha256":"dce19f68e09fab5749bd217d048b0157455dda28bd6ab66275458190be954e35","bytes":4418,"lines":113},
+    {"path":"validator/src/cli/observe/explain/next/tests.rs","sha256":"dd7a43e497b161e9a3405ede9d381e9189ada86c80c5d8e19214e5a91e4c12e7","bytes":2404,"lines":62},
+    {"path":"validator/src/cli/observe/explain/tests/next_plan.rs","sha256":"10e7cc9272831aba703807b67b86e765a7d96d4258ffaeeb4d75620fb9c9b9e5","bytes":6837,"lines":184},
+    {"path":"validator/src/cli/observe/telemetry/inventory_status.rs","sha256":"a44c42ae7e40697da98e5e1b983441cdee763528d2cd809a9aa9789f019bb993","bytes":578,"lines":16},
+    {"path":"validator/src/cli/observe/telemetry/tests.rs","sha256":"132b8a8d0a2fd8e0797fcf3091f33c9135f2df5e4d9bdd58280d9e1347d553e1","bytes":8739,"lines":221},
+    {"path":"validator/src/self_tests/boundaries/authority/generated_artifacts/artifact_boundaries.rs","sha256":"856f2af53a17b9b0336acedf34ab142743902d12cc3c44fe630c6aed2cfef8f5","bytes":9150,"lines":248},
+    {"path":"validator/src/self_tests/boundaries/authority/generated_artifacts/inventory_boundaries.rs","sha256":"39719232a37c22a08be50f3e45397def6ac70cad4b56eae4a382cdfa4b677c2b","bytes":6942,"lines":170},
+    {"path":"validator/src/self_tests/boundaries/authority/inventory/authority_classes.rs","sha256":"c2549e765bba9010082cd5ef65bcd20188511b950530b15722a33e81316195f3","bytes":6403,"lines":164},
+    {"path":"validator/src/self_tests/boundaries/authority/inventory/roles.rs","sha256":"ab68d432cfc3c9d69d23483432606407a8ce321747c14677f85c630f78f0fae9","bytes":3540,"lines":91},
+    {"path":"validator/src/self_tests/boundaries/authority/inventory/rows.rs","sha256":"4f4feb7426911211b129861345001ab1448ebcb12ddc6cebb51c2427c60b21b9","bytes":9681,"lines":249},
+    {"path":"validator/src/self_tests/cli/observe/package.rs","sha256":"d631595d3f08b2cee87c2261f65fc10017b7a630947f632c859d9f232bd6f956","bytes":7109,"lines":187},
+    {"path":"validator/src/self_tests/cli/observe/prove.rs","sha256":"858cafda1a02c776f3e896f37810a1b6db62a65ce3e2249b65d90ee1bc532208","bytes":3961,"lines":95},
+    {"path":"validator/src/self_tests/cli/observe/query/command_inventory/mod.rs","sha256":"649507faead8b0683421c62f0cbfbeefcbe22b14fa7b08713f4db2a053821fec","bytes":4420,"lines":105},
+    {"path":"validator/src/self_tests/cli/observe/query/mod.rs","sha256":"a747f29202035627d455c9e7e4deac45461b6f83e5275feefd4d490c13aead68","bytes":5280,"lines":142}
+  ],
+  "findings": [
+    {"severity":"resolved-in-candidate","finding":"Static command-inventory bytes no longer become active observability authority or positive claim evidence."},
+    {"severity":"resolved-in-candidate","finding":"ExplainNext and current-state read/plan paths expose the stable causal blocker without hidden writes or secret echo."},
+    {"severity":"material-proof-gap","finding":"No accepted typed candidate-bound HCT-OBSERVE successor catalog exists; the blocker is intentionally retained."},
+    {"severity":"migration-boundary","finding":"OD-009 does not authorize physical deletion. Thirty-eight legacy parser/test files are preserved byte-for-byte, unreferenced, and uncompiled; root must disposition them under migration authority."},
+    {"severity":"partial-broad-diagnostic","finding":"The root-terminated broad run observed seven out-of-lease failures in live-loop cache replay, package inventory, typed boundaries, and plugin policy before interruption."},
+    {"severity":"root-authority-required","finding":"Independent review, root reconciliation, HCT-OBSERVE adoption, migration routing, N02 node decision, and all readiness/release/completion decisions remain root-owned."}
+  ],
+  "unresolved_dependencies": [
+    "Independent review against the exact 24 leased-file digests and false-pass controls",
+    "Root acceptance or bounded rework verdict",
+    "A real accepted candidate-bound HCT-OBSERVE catalog API before any positive observability claim",
+    "Root migration disposition for the preserved uncompiled legacy parser and assertion files",
+    "HCT-INVENTORY classification and root reconciliation of the remaining live findings",
+    "A fresh integrated candidate context after all concurrent N02 workers freeze",
+    "Repository-wide rerun and reconciliation of the partial broad diagnostic failures",
+    "Representative product verification after integration"
+  ],
+  "requested_root_changes": [
+    {"request":"Commission independent claim-falsification review against this WorkerResult's exact artifact digests."},
+    {"request":"Keep HCT-OBSERVE and every dependent claim unavailable until a real candidate-bound successor catalog is implemented, adopted, and negatively verified."},
+    {"request":"Under root migration authority, explicitly retain-as-context, archive, route, or retire the preserved uncompiled legacy parser/test bytes; do not reactivate them as authority."},
+    {"request":"Rebuild the integrated LiveContext and rerun the dependency-closed acceptance boundary after concurrent workers freeze."},
+    {"request":"Rerun and reconcile the full library suite separately; do not treat the root-terminated partial diagnostic as an N02 acceptance failure or a green repository claim."}
+  ],
+  "limitations": [
+    "This slice deauthorizes a false proof source; it does not implement HCT-OBSERVE or produce positive observability evidence.",
+    "The static command-inventory file remains on disk unchanged and may be classified by HCT-INVENTORY as retained context.",
+    "Preserved legacy source/test files remain textually discoverable even though the Rust module graph does not compile them.",
+    "The broad 1,424-test diagnostic was terminated by root with exit 130; no aggregate pass count exists and seven out-of-lease failures were observed before termination.",
+    "No remote network, marketplace, install/cache refresh, external product mutation, merge, rebase, migration-registry write, or release action was performed.",
+    "No N02-complete, readiness, release, completion, or update-goal claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

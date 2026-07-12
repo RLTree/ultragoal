@@ -1,0 +1,74 @@
+{
+  "worker": "/root/routine_public_import_corrector",
+  "lease_id": "ROUTINE-PUBLIC-IMPORT-CORRECTION-003",
+  "context_id": "sha256:8fa91231341c885240412cf7a266be8bce6f0e2c10dc404021f65f6829f16b13",
+  "candidate_identity": {
+    "candidate_id": "sha256:cc4f3589b288f4717697996d7a8f6eb8d09b2488d2f414ae301edf58ba562add",
+    "context_id": "sha256:8fa91231341c885240412cf7a266be8bce6f0e2c10dc404021f65f6829f16b13",
+    "artifact_set_formula": "sorted path TAB lowercase_sha256 LF rows, then SHA-256",
+    "artifact_count": 46,
+    "artifact_total_bytes": 194402,
+    "artifact_total_lines": 6061,
+    "base_candidate_id": "sha256:e025e59afa8e7b948ae20500e469ec082664e803a3f874c08c178be62b9b7b1b",
+    "self_exclusion": "This WorkerResult is not an artifact row."
+  },
+  "base_state": {
+    "status": "root-rework-public-self-import",
+    "root_decision": "docs/ultragoal-successor-live/root-decisions/ROUTINE-PUBLIC-SELF-IMPORT-REWORK.json",
+    "root_decision_sha256": "sha256:e096c3c509b5379cbf3264a3e4e25651526e40ffc5d15b1041ef2875090857ed",
+    "scope_amendment": "docs/ultragoal-successor-live/root-decisions/ROUTINE-PUBLIC-WRAPPER-SCOPE-AMENDMENT.json",
+    "scope_amendment_sha256": "sha256:8fa91231341c885240412cf7a266be8bce6f0e2c10dc404021f65f6829f16b13"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "candidate_status": "corrected-routine-public-import-candidate",
+    "public_api_status": "external-witness-passed",
+    "root_acceptance_authority": "withheld-to-root"
+  },
+  "touched_paths": [
+    "validator/src/routine_work/reuse/artifact.rs",
+    "validator/src/routine_work/reuse/receipt.rs",
+    "validator/tests/routine_work_contract/provenance.rs",
+    "docs/ultragoal-successor-live/worker-results/ROUTINE-PUBLIC-IMPORT-CORRECTION-003.json"
+  ],
+  "touched_semantics": ["routine_work::reuse::capture_boundary", "routine_work::provenance_wrapper"],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {"class":"workspace_write","target":"routine-public-import-correction","performed":true},
+    {"class":"process","target":"offline-routine-public-import-validation","performed":true},
+    {"class":"network","target":"network","performed":false},
+    {"class":"external_write","target":"external-product","performed":false},
+    {"class":"root_authority","target":"root-acceptance","performed":false}
+  ],
+  "requirements": ["crate-owned-capture-import", "public-api-witness", "routine-forgery-probes", "no-behavior-change"],
+  "dependency_nodes": [],
+  "changes": [
+    {"area":"routine-reuse-imports","result":"Both non-test reuse modules now import the crate-owned public capture boundary instead of self-importing ultragoal."},
+    {"area":"provenance-wrapper","result":"The standalone routine surface now supplies only the wrapper-local capture reexport required to model the real library boundary; consumer probes and expected diagnostics are unchanged."}
+  ],
+  "commands_and_tests": [
+    {"command":"CARGO_TARGET_DIR=/tmp/hul-routine-public-import-003 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo check --manifest-path validator/Cargo.toml --lib --locked --offline -j16","status":"pass","exit_code":0,"result":"Non-test library compilation passed."},
+    {"command":"CARGO_TARGET_DIR=/tmp/hul-routine-public-import-003 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo test --manifest-path validator/Cargo.toml --locked --offline -j16 --test public_api_witness --test routine_work_contract -- --test-threads=16","status":"pass","exit_code":0,"result":"public_api_witness 1/1 and routine_work_contract 66/66 passed; the provenance test confirmed all four external construction/deserialization/evidence forgery probes remained rejected."},
+    {"command":"CARGO_TARGET_DIR=/tmp/hul-routine-public-import-003 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo test --manifest-path validator/Cargo.toml --locked --offline -j16 --lib cli::capture -- --test-threads=16","status":"pass","exit_code":0,"result":"13 capture-focused CLI library tests passed."},
+    {"command":"rustfmt --edition 2024 --check validator/src/routine_work/reuse/artifact.rs validator/src/routine_work/reuse/receipt.rs validator/tests/routine_work_contract/provenance.rs","status":"pass","exit_code":0,"result":"Scoped formatting passed."},
+    {"command":"WorkerResultV1::parse_json, result_id, and ArtifactWorkspace::verify against a root-issued lease/package","status":"not_run","result":"No root-issued typed LeaseSpec and WorkPackage object was available to this textual corrective dispatch; this WorkerResult is schema-shaped evidence only and makes no runtime-validation claim."}
+  ],
+  "artifacts": [
+    {"path":"validator/src/routine_work/reuse/artifact.rs","sha256":"sha256:a0c7756843347cae06b64e3a95e78667a6a1afe87bd6cb21c0354e21ed637998","byte_length":8419},
+    {"path":"validator/src/routine_work/reuse/receipt.rs","sha256":"sha256:95cf6b1c09d7a5e363bd14eb3db5619ecca2a31cf9e73906d0d9a7d7babfb2e1","byte_length":4698},
+    {"path":"validator/tests/routine_work_contract/provenance.rs","sha256":"sha256:15d837fdc0d7e2906cbb4ae453fdb0332acb7846cab8ae06b2221c3e5aaf8826","byte_length":7736}
+  ],
+  "findings": [
+    {"id":"routine-public-self-import","severity":"material","result":"Resolved: non-test library compilation no longer attempts to resolve ultragoal as an external self crate."},
+    {"id":"routine-provenance-forgery-boundary","severity":"none","result":"Preserved: read-only control compiles and constructor, partial-field, deserialization, and evidence-reconstruction probes remain rejected with expected diagnostics."}
+  ],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [],
+  "limitations": [
+    "This worker does not claim root acceptance, public integration acceptance, product journeys, readiness, release, node closure, or completion.",
+    "The corrected 46-artifact routine candidate identity is frozen above; only the three changed source/test artifacts are live artifact rows in this WorkerResult.",
+    "The broad cli_contract target remains outside this correction and did not compile due pre-existing successor test-wrapper imports; the capture-focused library surface passed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

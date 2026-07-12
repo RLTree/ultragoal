@@ -1,0 +1,686 @@
+{
+  "worker": "/root/n03_cli_state",
+  "lease_id": "LEASE-N03-CLI-STATE-NODE-001",
+  "context_id": "sha256:ae01a870bb0b8d0caa86800ab2f6822c9368496a57cef7b5089c72017f252607",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "live_context_id_observed_before_result": "sha256:ae01a870bb0b8d0caa86800ab2f6822c9368496a57cef7b5089c72017f252607",
+    "status_sha256_observed_before_result": "f0e5859a877b06c1c4372ff8588c9b94e44d5f963534e0eea8b4e4f33c8c5625",
+    "untracked_content_sha256_observed_before_result": "3a9ab25e37e26ab6b0e2735dd80b6e5a1de8a26618016f663c306e4c6c079946",
+    "artifact_set_sha256": "24b4d4edb39b26d2d621db9d5729096c120c57bb5537a4d89accf28167f5a012",
+    "context_note": "LiveContext-v1 was rebuilt after the leased source and focused verification froze and before this self-referential result was added. Concurrent N10 changes can invalidate the shared repository identity without changing this exact N03 artifact set. The protected .codex-worktree/env.sh file was not opened, read, hashed, or sourced."
+  },
+  "base_state": {
+    "node": "N03-CLI-STATE",
+    "preserved_prior_results": [
+      {
+        "lease_id": "LEASE-N03-STATE-002",
+        "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-STATE-002.json",
+        "sha256": "1efad6e43cefdb3c6765be3a617b5e4c196940edb0ee11302305d4049611a813"
+      },
+      {
+        "lease_id": "LEASE-N03-CAPTURE-007",
+        "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-007.json",
+        "sha256": "553042ea5b2dd9b86a257d131479b4c83743bbbdbf35e8e0afd971ec063584c5"
+      },
+      {
+        "lease_id": "LEASE-N03-TYPED-CLI-003",
+        "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-TYPED-CLI-003.json",
+        "sha256": "545e4e26d3011d869600967052218d1a35c0bf29b7263f6230c3e28dc0ceaba5"
+      },
+      {
+        "lease_id": "LEASE-N03-CLI-RUNTIME-CONTEXT-001",
+        "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-RUNTIME-CONTEXT-001.json",
+        "sha256": "4748ab915918af85118c15f503a00f06cdd2ec7440b35e257220566e71afcc6e"
+      }
+    ],
+    "starting_gaps": [
+      "HCT-CAPTURE rejected every production subprocess request and could not support downstream product behavior.",
+      "Typed successor grammar and inspect-context existed but had no consolidated state-backed runtime outcome or stable diagnostic stream.",
+      "HCT-STATE projections were not the direct runtime authority for inspect findings, inspect claims, diagnose, and next.",
+      "Public successor dispatcher, root module authority, generated authority, migration, and claims remained root-owned and outside this lease."
+    ],
+    "prohibited_shared_surfaces_preserved": [
+      "validator/src/lib.rs",
+      "validator/src/cli/mod.rs",
+      "validator/src/cli/successor/mod.rs",
+      "successor grammar, catalog, clap parser, and model",
+      "Cargo.toml and Cargo.lock",
+      "manifests, registries, generated authority, migration, claims, board, release, and completion state"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "acceptance_ceiling": "Exact node-internal N03 artifact candidate only. Public dispatch, root wiring, broad capture substrates, integrated all-target proof, N03 closure, readiness, release, and completion remain withheld.",
+    "artifact_count_excluding_result": 63,
+    "artifact_set_sha256": "24b4d4edb39b26d2d621db9d5729096c120c57bb5537a4d89accf28167f5a012",
+    "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "total_lines": 8930,
+    "total_bytes": 301676,
+    "maximum_file_lines": 299,
+    "files_over_300_lines": 0,
+    "capture_tests": "42 passed; 0 failed",
+    "successor_cli_tests": "35 passed; 0 failed",
+    "state_library_tests": "42 passed; 0 failed",
+    "state_public_boundary_tests": "4 passed; 0 failed",
+    "live_context_test": "1 passed; 0 failed",
+    "current_all_target_check": "blocked by concurrent N10 orchestration compile errors outside this lease",
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "live_git_writes_performed": false
+  },
+  "touched_paths": [
+    "validator/src/cli/capture/**",
+    "validator/src/cli/successor/diagnostics/**",
+    "validator/src/cli/successor/runtime/**",
+    "validator/src/state/**",
+    "validator/tests/cli_contract/capture/**",
+    "validator/tests/cli_contract/state/**",
+    "validator/tests/cli_contract/successor/runtime_context.rs",
+    "validator/tests/cli_contract/successor/node_n03.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-001.json"
+  ],
+  "touched_semantics": [
+    "catalog-bound root-owned native read capture",
+    "candidate and context revalidation before and after subprocess observation",
+    "typed argv, environment, exit, signal, timing, bounded output, redaction, and immutable artifact records",
+    "macOS sandbox denial of network, writes, links, clones, and process forking",
+    "one ProductState-backed runtime for summary, findings, claims, diagnose, and deterministic next",
+    "stable versioned machine diagnostics and exact exit classes",
+    "stdout payload and stderr diagnostic isolation",
+    "zero-write successor inspect, diagnose, and next behavior",
+    "typed unsupported and authority-blocked outcomes for unintegrated downstream commands"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "temporary clean and dirty Git repositories for LiveContext and zero-write runtime checks",
+    "native printf non-UTF8 and secret-output probes",
+    "native yes output-flood probe",
+    "native sleep timeout and interruption probes",
+    "PATH-shadowed sandbox and supported-program substitution canaries",
+    "FIFO, symlink, hardlink, race, mutation, special-file, and path-bound capture controls",
+    "ProductState findings, claims, repairs, ceilings, and deterministic-next fixtures",
+    "mismatched state context, absent finding, malformed invocation, and downstream capability controls"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Only the explicit N03 leased source, tests, and this WorkerResult were written."
+    },
+    {
+      "class": "local-build-write",
+      "scope": "Cargo artifacts were isolated under /tmp/hug-n03-node001-target."
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "Tests created and cleaned temporary Git repositories, files, FIFOs, symlinks, hardlinks, and process markers."
+    },
+    {
+      "class": "local-subprocess",
+      "performed": true,
+      "scope": "Tests executed fixed macOS sandbox-exec with protected native printf, yes, sleep, true, and false capabilities; no shell or caller-selected program was authorized."
+    },
+    {
+      "class": "git",
+      "scope": "Read-only live repository identity/status operations and fixture-only git init/commit operations; no live Git writes."
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product-effect",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-STATE-001",
+    "REQ-STATE-002",
+    "REQ-STATE-003",
+    "REQ-STATE-004",
+    "REQ-STATE-005",
+    "REQ-CLI-001",
+    "REQ-CLI-002",
+    "REQ-CLI-003",
+    "REQ-CLI-004",
+    "REQ-CLI-005",
+    "REQ-CLI-006",
+    "REQ-CLI-007",
+    "REQ-REPAIR-001",
+    "REQ-REPAIR-002",
+    "REQ-REPAIR-003",
+    "REQ-REPAIR-004",
+    "REQ-PROOF-002",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-004",
+    "REQ-SECURITY-006",
+    "REQ-SECURITY-007"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "HCT-CAPTURE execution",
+      "result": "A crate-internal permit can be issued only from a pointer-identical canonical read descriptor and a narrow native capability allowlist. The executable is LiveContext-bound, descriptor-opened without following symlinks, protected-file checked, content-digest checked, revalidated, and executed under the host sandbox."
+    },
+    {
+      "area": "capture observation",
+      "result": "CapturedRun-v1 records command/context/candidate bindings, typed public or secret argv and environment channels, exact termination class, monotonic timing, bounded raw-byte output, redaction, enforcement identity, and content-addressed immutable artifacts without interpreting claim success."
+    },
+    {
+      "area": "successor runtime",
+      "result": "RuntimeSession consumes one LiveContext and optional same-context StateView, revalidates at both boundaries, checks catalog effect equality, renders versioned payloads or HarnessDiagnostic-v1, and preserves exact exit codes 0, 1, 2, 3, 4, and 70."
+    },
+    {
+      "area": "HCT-STATE runtime authority",
+      "result": "ProductState directly supplies summary, findings, claims, diagnose, exact-finding diagnosis, and next projections; the same graph controls actionable and authority-blocked exit classes."
+    },
+    {
+      "area": "security falsification",
+      "result": "A review pass found that an allow-default sandbox profile merely omitted process-fork allowance while the receipt claimed forking was denied. The profile now explicitly denies process-fork, and a PATH-shadowed supported native program is rejected before launch."
+    },
+    {
+      "area": "read-path purity",
+      "result": "Source-mounted dirty-repository tests compare recursive tree metadata and Git status before and after inspect context, inspect findings, inspect claims, diagnose, next, invalid invocation, unsupported capability, and effect-mismatch paths."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n03-node001-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --test cli_contract 'successor_capture::' -- --test-threads=1",
+      "result": "pass",
+      "summary": "42 passed; 0 failed; includes native execution, timeout, signal/interruption, output bound, secret redaction, artifact integrity, special files, races, path shadowing, and no-spawn controls."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n03-node001-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --test cli_contract 'successor_cli_contract::' -- --test-threads=1",
+      "result": "pass",
+      "summary": "35 passed; 0 failed; includes grammar plus the N03 runtime context, diagnostics, exact exit classes, stream isolation, state mismatch, and zero-write controls."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n03-node001-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --lib 'state::' -- --test-threads=1",
+      "result": "pass",
+      "summary": "42 passed; 0 failed; complete HCT-STATE library partition."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n03-node001-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --test cli_contract 'state_contract::' -- --test-threads=1",
+      "result": "pass",
+      "summary": "4 passed; 0 failed; current live public state boundary was candidate-bound, deterministic, and zero-write in a stable interval."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n03-node001-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --test cli_contract -- --test-threads=1",
+      "result": "shared-candidate-drift",
+      "summary": "88 passed; 2 live-root state fixtures rejected because another lane changed the Git candidate during LiveContext construction. Both exact state fixtures then passed 4/4 in a stable interval; root must rerun the integrated 90-test command at candidate freeze."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n03-node001-target cargo check --quiet --offline --locked --manifest-path validator/Cargo.toml --all-targets",
+      "result": "blocked-by-concurrent-node",
+      "summary": "Current shared candidate fails only in active N10 orchestration files: EventKind::NodeCompleted is referenced but absent, and RootIntegrationReceipt.binding was removed without updating its fixture. No N03 diagnostic appears. Rerun after N10 freeze."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check on all 63 leased Rust artifacts; git diff --check on the exact leased paths",
+      "result": "pass",
+      "summary": "All artifacts formatted; 8,930 lines, maximum file 299 lines, zero files over 300."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n03-node001-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; emitted LiveContext sha256:ae01a870bb0b8d0caa86800ab2f6822c9368496a57cef7b5089c72017f252607 before this result."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/capture/artifact.rs",
+      "sha256": "sha256:5283f7d107d88984f0a3300206ca1f4c75d034a42bbdae519634505f6d984e07",
+      "bytes": 8250,
+      "lines": 254
+    },
+    {
+      "path": "validator/src/cli/capture/descriptor.rs",
+      "sha256": "sha256:0b4d26edbb6e5af6ced5291061d8448b7e7c656e4c2dbc94f594242fbf24d09b",
+      "bytes": 7052,
+      "lines": 234
+    },
+    {
+      "path": "validator/src/cli/capture/environment.rs",
+      "sha256": "sha256:4ed85d3dc4f0d5d01739252d5b3eacce186171288a830dfed0dc66caba74bd17",
+      "bytes": 8381,
+      "lines": 232
+    },
+    {
+      "path": "validator/src/cli/capture/filesystem.rs",
+      "sha256": "sha256:46bd6e19e623a0b2928e4567e655eaad32d02d854ef6faab55bc2f76bd4f8499",
+      "bytes": 9173,
+      "lines": 281
+    },
+    {
+      "path": "validator/src/cli/capture/inputs.rs",
+      "sha256": "sha256:4b5e53531a491738ec31cf3b4a05d2527d7a5138379ade6283af990d60a53234",
+      "bytes": 2294,
+      "lines": 112
+    },
+    {
+      "path": "validator/src/cli/capture/mod.rs",
+      "sha256": "sha256:b26dd014d6c18fcd4cffa036cc1bf3d54cb75c00b1690df84835517ee8e07c9c",
+      "bytes": 1324,
+      "lines": 41
+    },
+    {
+      "path": "validator/src/cli/capture/output.rs",
+      "sha256": "sha256:f56c2129afd58bfc13982cfc37b9884d59e51dd4bc205e023c6db70cde516ade",
+      "bytes": 5100,
+      "lines": 191
+    },
+    {
+      "path": "validator/src/cli/capture/process.rs",
+      "sha256": "sha256:108041770fb989f72f08a800328334ca153200273333419ee20cf60ab80cdc8e",
+      "bytes": 7947,
+      "lines": 239
+    },
+    {
+      "path": "validator/src/cli/capture/program.rs",
+      "sha256": "sha256:5b7dee7ba67bbea303cb31c5cfea0c7a435e9859c6e02373e3309491fa5be7cb",
+      "bytes": 4828,
+      "lines": 156
+    },
+    {
+      "path": "validator/src/cli/capture/run.rs",
+      "sha256": "sha256:f9f2ccc44f0a4654c1572537f15bd016ee5c08a853f53bede5df1ed7dfb4212a",
+      "bytes": 7203,
+      "lines": 203
+    },
+    {
+      "path": "validator/src/cli/capture/sandbox.rs",
+      "sha256": "sha256:c9721b24bd8bdd84c37635c85c0ba02691a3394b3e4ff00c05a62664be25f372",
+      "bytes": 7333,
+      "lines": 206
+    },
+    {
+      "path": "validator/src/cli/capture/spec.rs",
+      "sha256": "sha256:3f58ca0f539220993c1ee882c08f036a03eee247485f5f8ff8ce60ae25318a20",
+      "bytes": 10979,
+      "lines": 299
+    },
+    {
+      "path": "validator/src/cli/capture/tree.rs",
+      "sha256": "sha256:50a2d76e714ae80accb631b68b1753a892e0b0a9771ba3368882ff381e85d13f",
+      "bytes": 3754,
+      "lines": 125
+    },
+    {
+      "path": "validator/src/cli/capture/util.rs",
+      "sha256": "sha256:30cbefc48612a11982ee899823529cba3389433a310d7cc7433ddaaea10b91fd",
+      "bytes": 2782,
+      "lines": 95
+    },
+    {
+      "path": "validator/src/cli/successor/diagnostics/mod.rs",
+      "sha256": "sha256:ec082e0c79d42c13721e9278a3a1e127279ec515e43f2b3015f17ec3ae59e633",
+      "bytes": 106,
+      "lines": 4
+    },
+    {
+      "path": "validator/src/cli/successor/diagnostics/model.rs",
+      "sha256": "sha256:71a48bee6c74b66a872757cad0926d7103a283b69ebffbbd0f62f1e6337f2ae2",
+      "bytes": 3927,
+      "lines": 128
+    },
+    {
+      "path": "validator/src/cli/successor/diagnostics/render.rs",
+      "sha256": "sha256:7f1a18bdfcac71b0898959d124df337439c7ae3e7353d11e58f7573902677e93",
+      "bytes": 1496,
+      "lines": 40
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/dispatch.rs",
+      "sha256": "sha256:d00860d9ff177b6fb284b7cb8311c3b96368cb6fa3389ab542e52c64b19c66cc",
+      "bytes": 8518,
+      "lines": 236
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/error.rs",
+      "sha256": "sha256:59ff3865abc74004064297519bb76caa80cd182258294459826a7fae0d2b50cb",
+      "bytes": 1587,
+      "lines": 56
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/failures.rs",
+      "sha256": "sha256:be793a547928f941f846fbf065e6d8dd41eecd916e093d9de48f04c3955d2855",
+      "bytes": 5742,
+      "lines": 169
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/inspect_context.rs",
+      "sha256": "sha256:a35ee2601bdafef5f06231c0835044561cfb2121c17b0f8087c64e95e3a4c918",
+      "bytes": 1032,
+      "lines": 27
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/mod.rs",
+      "sha256": "sha256:9f29726ad53578a302e88c4b603db3627357a9cb95b8f98a041afb640ca199cb",
+      "bytes": 435,
+      "lines": 13
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/state_view.rs",
+      "sha256": "sha256:b026417ae4f50ed168e43d267da6e3d50f9fa7809a44b2a68f8140380ec3d63b",
+      "bytes": 588,
+      "lines": 24
+    },
+    {
+      "path": "validator/src/state/catalog.rs",
+      "sha256": "sha256:7294b6d825455e1004be5efda6c5ba6370e16e98ce92845d09d26bb66efcca42",
+      "bytes": 5489,
+      "lines": 176
+    },
+    {
+      "path": "validator/src/state/ceiling.rs",
+      "sha256": "sha256:44fe67e5db53a07253f711ad3247f169f4127c5ce4f3a03fb8b339b8a92a0703",
+      "bytes": 2157,
+      "lines": 73
+    },
+    {
+      "path": "validator/src/state/engine.rs",
+      "sha256": "sha256:3e40246ef3290fb682de511f4077c6ce5a64cf8ae509f55222a0e4d31c20d688",
+      "bytes": 10351,
+      "lines": 292
+    },
+    {
+      "path": "validator/src/state/findings.rs",
+      "sha256": "sha256:ef65571919e3f379b6295d569f236888e78f54043c426ce03c2e4c57fd4e5861",
+      "bytes": 4379,
+      "lines": 129
+    },
+    {
+      "path": "validator/src/state/identity.rs",
+      "sha256": "sha256:40a33bc3220b861ce0716fb12b45266936c9e8973d55b735dcbc0b95b36ddc29",
+      "bytes": 1085,
+      "lines": 30
+    },
+    {
+      "path": "validator/src/state/limits.rs",
+      "sha256": "sha256:fe3af08f6830605a9ac5280d359211677793a0e42bf3b686b45dd0742e55e285",
+      "bytes": 9907,
+      "lines": 297
+    },
+    {
+      "path": "validator/src/state/mod.rs",
+      "sha256": "sha256:6adbbd7875497aef619e378b0389241c781731aaf89526afa9dc667b3c4276ad",
+      "bytes": 1193,
+      "lines": 39
+    },
+    {
+      "path": "validator/src/state/next.rs",
+      "sha256": "sha256:b28fd9a5e19da14e758a31442d2a96e4f7f7d148ea284cf0cdc9a762c86941b5",
+      "bytes": 5307,
+      "lines": 151
+    },
+    {
+      "path": "validator/src/state/normalize.rs",
+      "sha256": "sha256:e47c7f5f5ccccd5284b1b40ea467ff714fc252d63c4b4bdafecda3d976b0a0fd",
+      "bytes": 2001,
+      "lines": 56
+    },
+    {
+      "path": "validator/src/state/observations.rs",
+      "sha256": "sha256:3fbcd30ca154c254d800c4f45c4c8ef67d447b9d6ce8cc4f90814aba962a8187",
+      "bytes": 2173,
+      "lines": 63
+    },
+    {
+      "path": "validator/src/state/policy.rs",
+      "sha256": "sha256:63f7d9a53d701af94b23ee527b60da1ddb05576be84c4869cda1177cd983707d",
+      "bytes": 7740,
+      "lines": 230
+    },
+    {
+      "path": "validator/src/state/policy_action.rs",
+      "sha256": "sha256:f7beb5452fc878c1f9ced5ee2886fd2430026549320e34a17d25bd2fcb5097f7",
+      "bytes": 4174,
+      "lines": 112
+    },
+    {
+      "path": "validator/src/state/policy_repair.rs",
+      "sha256": "sha256:cb617b259a49a99dd299721144b19451b48769326e4ba05c682c695a5486ace0",
+      "bytes": 3508,
+      "lines": 99
+    },
+    {
+      "path": "validator/src/state/projection.rs",
+      "sha256": "sha256:28cf07c26f5777b4de93667189b9927b031a7ff3f6cf1021217205743b3ff4fb",
+      "bytes": 7181,
+      "lines": 215
+    },
+    {
+      "path": "validator/src/state/provenance.rs",
+      "sha256": "sha256:05557bdc169861d42b34cacd63bebe10e778298c9a5f0b2b51bb808c8db40f71",
+      "bytes": 4979,
+      "lines": 181
+    },
+    {
+      "path": "validator/src/state/reduce.rs",
+      "sha256": "sha256:d7eec1cc0d272f1a24cd945336c73cd02b0d79e1c734af9c02a410d0ff6121d9",
+      "bytes": 798,
+      "lines": 26
+    },
+    {
+      "path": "validator/src/state/snapshot.rs",
+      "sha256": "sha256:9af7f30e89852fdec4a148d44fa553082649eb327f01b658f81c2821de72e5cb",
+      "bytes": 4419,
+      "lines": 121
+    },
+    {
+      "path": "validator/src/state/tests/engine_cases.rs",
+      "sha256": "sha256:e8fc68ff6f0368ad40e85e6f65fd37ea3160e2aa1e6ae97df5a1429da8f2d93a",
+      "bytes": 8220,
+      "lines": 226
+    },
+    {
+      "path": "validator/src/state/tests/fixture.rs",
+      "sha256": "sha256:44544ea322817adc2d033d6d8ce850c855b817a6b40704c95c304f946ba46c63",
+      "bytes": 4381,
+      "lines": 123
+    },
+    {
+      "path": "validator/src/state/tests/mod.rs",
+      "sha256": "sha256:514d0effbdbf2b61077d806dc8528e9149edac03b34efa258f10db9514e2bbd1",
+      "bytes": 128,
+      "lines": 7
+    },
+    {
+      "path": "validator/src/state/tests/ordering_cases.rs",
+      "sha256": "sha256:5da5125f3191f0bad275cdcda0fb78f86a49a5bf9e78900b4121373539c7c85a",
+      "bytes": 4033,
+      "lines": 105
+    },
+    {
+      "path": "validator/src/state/tests/policy_cases.rs",
+      "sha256": "sha256:3574cd2aaf46a812357cf2f9c89440358411e3d14c10e155db1caeea6c09f8d6",
+      "bytes": 8251,
+      "lines": 246
+    },
+    {
+      "path": "validator/src/state/tests/projection_cases.rs",
+      "sha256": "sha256:8855176f9c25173a8890cdc535ba77ee52c670447d1deba9d54754efab59336e",
+      "bytes": 3589,
+      "lines": 99
+    },
+    {
+      "path": "validator/src/state/tests/review_cases.rs",
+      "sha256": "sha256:9b29b6dcaaa20b80ac13770db93339b066b0be67446888e4b19a33d07ee91406",
+      "bytes": 5949,
+      "lines": 185
+    },
+    {
+      "path": "validator/src/state/tests/runtime_cases.rs",
+      "sha256": "sha256:2b1ff4ca257dd8431ae3e4742e8ba84eec5ee9e69bf9c19b1b2efa4ae90df047",
+      "bytes": 4729,
+      "lines": 134
+    },
+    {
+      "path": "validator/src/state/types.rs",
+      "sha256": "sha256:c6e79d626a24d42f6c5d9dabef65c0017248280825b24c31a5535d756059f239",
+      "bytes": 6142,
+      "lines": 224
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/artifacts.rs",
+      "sha256": "sha256:ba40ad4c6082cf726350033440dedbac2c757dfd9e54cbf6f58eab1bd357ff65",
+      "bytes": 8313,
+      "lines": 217
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/bounds.rs",
+      "sha256": "sha256:6136482250567f79a72ec22f3d826efad36749cb996e4d4b18f09524cfcf9e79",
+      "bytes": 5565,
+      "lines": 158
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/enforcement.rs",
+      "sha256": "sha256:6b09ab92cf47a4ddf1efcf3efaa985bb9e9c49c2f903b281db78eb369d95c331",
+      "bytes": 9846,
+      "lines": 281
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/fixture.rs",
+      "sha256": "sha256:2b91c2c4ee4c6e04faa0db6610c62887c554c75db351e61e269861a5ffb0c7b2",
+      "bytes": 2911,
+      "lines": 91
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/mod.rs",
+      "sha256": "sha256:c13bd4000af19ec747475102ca2f39b678f41c48ac9563a03216dc599112ab9e",
+      "bytes": 305,
+      "lines": 12
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/process.rs",
+      "sha256": "sha256:6d319925c7ee9c09b144bc84849a8dad68aefe0e73c87919e77b9fc307b5a3a3",
+      "bytes": 9656,
+      "lines": 255
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/program_security.rs",
+      "sha256": "sha256:9c072e30e50065ac5835b55ac4d40917ce70e89b1602185d2b4e96889a94906f",
+      "bytes": 1964,
+      "lines": 58
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/security.rs",
+      "sha256": "sha256:f07c65f1d01eecd0614fc79fd57981a9738ca520937c9e389fa149e6fa65b1de",
+      "bytes": 5247,
+      "lines": 149
+    },
+    {
+      "path": "validator/tests/cli_contract/state/fixture.rs",
+      "sha256": "sha256:e69ab36610202accca116d86268d90034c2293f9efd204b608d3ef415bfce4f5",
+      "bytes": 3863,
+      "lines": 102
+    },
+    {
+      "path": "validator/tests/cli_contract/state/mod.rs",
+      "sha256": "sha256:584e0f97d1954146bee2f5ad57727a3f7c54bae150ca8a7dbda842d782b2be7e",
+      "bytes": 48,
+      "lines": 3
+    },
+    {
+      "path": "validator/tests/cli_contract/state/mutation.rs",
+      "sha256": "sha256:81f9634bc6c9a4262362bcf99f84c6b74c1f958fa01958ed15ddf1840872799f",
+      "bytes": 4524,
+      "lines": 129
+    },
+    {
+      "path": "validator/tests/cli_contract/state/public_boundary.rs",
+      "sha256": "sha256:e2a29c5a7fdcd8443ff5596c01e19c299a615b9b3a2fd7bed89d3edf7706d834",
+      "bytes": 3572,
+      "lines": 97
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/node_n03.rs",
+      "sha256": "sha256:60d062ef7c61cc6285ae163ecaad83ced1c965d78ff540230673682cd6346903",
+      "bytes": 6671,
+      "lines": 178
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/runtime_context.rs",
+      "sha256": "sha256:cd96ca3b3ca4700a7cefbb08f42432335a3d4d1f6e4ba2efc3019481057082cf",
+      "bytes": 7097,
+      "lines": 196
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "HCT-CAPTURE now performs real, bounded, context-bound native read observation instead of rejecting every production subprocess request."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "The sandbox receipt and policy now agree that process forking is denied; the prior false security statement was removed by explicit enforcement."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "ProductState is the single node-internal source for inspect, diagnose, claims, and next projections, with stable machine diagnostics and exit classes."
+    },
+    {
+      "severity": "independent-review-required",
+      "finding": "This worker does not accept its own 63-artifact set; exact security, state, runtime, and false-pass review remains mandatory."
+    },
+    {
+      "severity": "shared-candidate-blocker",
+      "finding": "The live all-target check is red in concurrently edited N10 orchestration code outside this lease. Integrated candidate proof is withheld until root reconciles that node and reruns."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "Public dispatch, root module wiring, package/generated authority, migration, claim ceilings, and node closure remain root-only."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent review and root acceptance of exact N03 set 24b4d4edb39b26d2d621db9d5729096c120c57bb5537a4d89accf28167f5a012",
+    "Root reconciliation of existing validator/src/lib.rs and validator/src/cli/mod.rs authority bytes that predated this lease",
+    "Root public successor parser/dispatcher integration and retirement or internalization of the legacy public route",
+    "N10 compile repair followed by a current integrated all-target and full cli_contract rerun",
+    "Descriptor-brokered capture substrates for workspace-write, external-write, and destructive effects where downstream nodes actually require them",
+    "Independent representative public-binary and product journey verification after root integration",
+    "Root-owned manifest, generated authority, migration registry, claim ceiling, release, and completion reconciliation"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "independent review",
+      "request": "Recompute all 63 artifact hashes and set 24b4d4edb39b26d2d621db9d5729096c120c57bb5537a4d89accf28167f5a012; attack permit provenance, program substitution, sandbox policy/receipt equality, output races, redaction, artifact resolution, state-context joins, diagnostics, exit classes, and zero-write paths."
+    },
+    {
+      "path": "validator/src/lib.rs",
+      "request": "This lease did not write the pre-existing `pub use cli::capture;` or `pub mod state;` lines. Root must explicitly accept, change, or remove those shared-authority bytes after independent review."
+    },
+    {
+      "path": "validator/src/cli/mod.rs",
+      "request": "This lease did not write the pre-existing capture/successor module mounts. Root must reconcile them with the one public catalog and dispatcher."
+    },
+    {
+      "path": "root-owned successor parser and dispatcher",
+      "request": "After independent PASS, wire RuntimeSession and the accepted ProductState through the canonical public route; preserve payload/diagnostic stream isolation and never simulate downstream success."
+    },
+    {
+      "path": "root-owned capture adapters",
+      "request": "Issue CatalogPermit only from the pointer-identical canonical descriptor, retain the protected native allowlist, and do not promote mutating or cross-platform capture claims without a separately proven substrate."
+    },
+    {
+      "path": "manifests, generated authority, migration, claims, and board",
+      "request": "Integrate the exact accepted paths and digests, route or retire legacy authority, recompute proof after every authority-bearing edit, and keep N03 open until public integrated proof passes."
+    }
+  ],
+  "limitations": [
+    "The real capture substrate is limited to protected native read probes on the verified macOS host; no Linux, Windows, workspace-write, external-write, destructive, shell, wrapper, or arbitrary-program execution is proven.",
+    "The macOS sandbox profile denies network, writes, links, clones, process forking, and the exact protected worktree environment path, but otherwise retains host-default reads. Safety against arbitrary host reads currently also depends on the fixed protected native program allowlist; no general read-command sandbox claim is raised.",
+    "CatalogPermit and RuntimeSession remain crate-internal and are not yet wired through the public binary; dormant code and source-mounted tests do not establish product behavior.",
+    "Inspect inventory and all N04-plus product commands return typed delegated or authority-blocked outcomes until their independently accepted adapters exist.",
+    "The current shared candidate does not pass all-target because N10 orchestration is mid-edit; this result freezes only the exact N03 artifact set and focused proof.",
+    "A full 90-test CLI run observed legitimate concurrent-candidate rejection in two live-root fixtures; exact partitions later passed, but only root can produce a stable integrated rerun.",
+    "Existing compiler warning debt includes dormant successor exports and unrelated concurrent-node code; warnings were not treated as completion evidence.",
+    "No public command catalog, dispatcher, Cargo dependency, package, manifest, generated authority, migration registry, claim, board, release, Git branch, network, or external host state was changed by this lease.",
+    "No N03 closure, readiness, release, or goal completion is claimed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

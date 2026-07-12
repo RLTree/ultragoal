@@ -1,0 +1,406 @@
+{
+  "worker": "/root/n02_pending_routes6",
+  "lease_id": "LEASE-N02-PENDING-AUTHORITY-006",
+  "context_id": "sha256:f474021ad6a2ae8eaa7ec894d3f6129e9e8a2e35d05b6338f4247d707d8c9b75",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "dirty": true,
+    "head_unchanged_by_worker": true,
+    "leased_artifact_set_sha256": "f474021ad6a2ae8eaa7ec894d3f6129e9e8a2e35d05b6338f4247d707d8c9b75",
+    "plugin_manifest_sha256": "31ab54cef02cd6b271ab6bf522b1e5e69a23609839c3ed05050128747bb009b9",
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "reconciled_live_source_count": 33,
+    "reconciled_breakdown": {
+      "command": 6,
+      "lane": 14,
+      "finalizer": 12,
+      "manifest_projection": 1
+    },
+    "observed_behavior": "All thirty-three sources are compiled or otherwise active current behavior. None is a compatibility wrapper, a demoted surface, or a verified replacement.",
+    "rejected_predecessor_interpretation": "The predecessor candidate's compatibility-route-retained transition could suppress parallel_authority without behavioral routing or equivalence proof and was not preserved.",
+    "live_registry_state": "The root-owned registry still has four broad unverified active rows for these source classes. This worker did not edit it.",
+    "concurrent_manifest_rebind": "The root froze plugin-manifest-draft.json at 31ab54cef02cd6b271ab6bf522b1e5e69a23609839c3ed05050128747bb009b9 during this lease; the exact manifest route was rebound and all focused tests were rerun.",
+    "concurrent_dirt_policy": "All root, user, and other-worker changes were preserved. Only leased paths were written."
+  },
+  "final_state": {
+    "status": "standalone_candidate_for_independent_review_and_root_integration",
+    "acceptance_ceiling": "A standalone, exact, fail-closed catalog of thirty-three active authorities pending migration. It is not wired, adopted, or allowed to demote an entry or suppress a finding.",
+    "authority_classification": "sole-current-authority-pending-migration",
+    "compiled_route_count": 33,
+    "compiled_category_counts": {
+      "command_to_PS-CLI": 6,
+      "lane_to_PS-ORCHESTRATION": 14,
+      "finalizer_to_HCT-CLAIMS": 12,
+      "manifest_projection_to_PS-PLUGIN-MANIFEST": 1
+    },
+    "transition": {
+      "compatibility_behavior": "unverified",
+      "compatibility_boundary": "blocked-by-OD-008",
+      "replacement_state": "unverified",
+      "active_reader_writer_state": "active",
+      "observed_authority_state": "active",
+      "equivalence_proof": "missing",
+      "physical_cleanup_state": "blocked-by-OD-009",
+      "intended_disposition": "non-authoritative"
+    },
+    "parallel_authority_policy": "Every successful standalone result returns suppresses_parallel_authority=false and performs no mutation. Root integration must preserve active legacy kind/state/status and the parallel_authority finding until separate dependency-closed migration proof exists.",
+    "focused_tests": "12 passed; 0 failed",
+    "inventory_regression_tests": "81 passed; 0 failed",
+    "all_target_check": "pass with shared pre-existing warnings",
+    "scoped_format_check": "pass",
+    "artifact_count_excluding_result": 14,
+    "implementation_lines_excluding_result": 1234,
+    "implementation_bytes_excluding_result": 43727,
+    "maximum_file_lines": 228,
+    "files_over_300_lines": 0,
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "git_operations_performed": false,
+    "claim_ceiling": "No N02 completion, product claim, readiness, release, or goal completion is claimed."
+  },
+  "touched_paths": [
+    "validator/src/inventory/retained_routes/claims.rs",
+    "validator/src/inventory/retained_routes/commands.rs",
+    "validator/src/inventory/retained_routes/lanes.rs",
+    "validator/src/inventory/retained_routes/manifest.rs",
+    "validator/src/inventory/retained_routes/mod.rs",
+    "validator/src/inventory/retained_routes/model.rs",
+    "validator/src/inventory/retained_routes/specs.rs",
+    "validator/src/inventory/retained_routes/verify.rs",
+    "validator/tests/retained_route_contract.rs",
+    "validator/tests/retained_route_contract/catalog_cases.rs",
+    "validator/tests/retained_route_contract/registry_cases.rs",
+    "validator/tests/retained_route_contract/source_cases.rs",
+    "validator/tests/retained_route_contract/support.rs",
+    "validator/tests/retained_route_contract/transition_cases.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-PENDING-AUTHORITY-006.json"
+  ],
+  "touched_semantics": [
+    "Thirty-three exact active-authority specifications pending migration",
+    "Exact source stable ID, kind, path, catalog digest, and current-byte digest binding",
+    "Exact canonical target definition identity binding",
+    "Exact registry route ID, three-field matcher, target, disposition, transition, and proof binding",
+    "Raw pre-merge source, target, registry, and digest conflict rejection",
+    "Non-mutating result that cannot suppress parallel_authority"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-PENDING-AUTHORITY-006.json"
+  ],
+  "fixtures": [],
+  "effects": [
+    {
+      "effect": "repository_write",
+      "scope": "exclusive leased paths only",
+      "result": "fourteen Rust implementation/test artifacts and this WorkerResult"
+    },
+    {
+      "effect": "network",
+      "result": "not performed"
+    },
+    {
+      "effect": "external_product",
+      "result": "not performed"
+    },
+    {
+      "effect": "git",
+      "result": "no stage, commit, merge, rebase, checkout, or registry adoption"
+    }
+  ],
+  "requirements": [
+    "REQ-PLUGIN-001",
+    "REQ-CLI-001",
+    "REQ-ORCH-002",
+    "REQ-MAINT-003",
+    "REQ-MAINT-006"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N03-TYPED-CLI",
+    "N08-PLUGIN-PRODUCT",
+    "N10-ORCHESTRATION",
+    "N12-CLAIM-GRAPH",
+    "N14-MIGRATION"
+  ],
+  "changes": [
+    {
+      "area": "truthful transition model",
+      "rationale": "Replaces the rejected compatibility-route-retained interpretation with the exact live unverified/active transition required by OD-008 and OD-009."
+    },
+    {
+      "area": "exact catalog",
+      "rationale": "Pins route ID, source stable ID, kind, path, current source digest, canonical definition identity, and proof references for every reconciled source."
+    },
+    {
+      "area": "raw conflict gate",
+      "rationale": "Rejects stable-ID and path conflicts in unmerged source and target rows, exact registry matcher conflicts, cross source-target conflicts, and duplicate current-digest paths before any lookup or map normalization."
+    },
+    {
+      "area": "false-pass controls",
+      "rationale": "Rejects broad matchers, unregistered sources, stale or missing digests, missing or active canonical targets, all transition overclaims, registry mismatch, set-count drift, and the predecessor compatibility transition."
+    },
+    {
+      "area": "non-mutation boundary",
+      "rationale": "Returns only an immutable pending-authority witness whose suppression decision is hard-coded false; it has no API that mutates kind, state, status, or findings."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --offline --locked --manifest-path validator/Cargo.toml --test retained_route_contract",
+      "result": "pass",
+      "summary": "12 passed; 0 failed, including exact count/digests, canonical definition identity, all transition fields, old-interpretation rejection, unregistered source, active target, and raw conflict classes."
+    },
+    {
+      "command": "cargo test --offline --locked --manifest-path validator/Cargo.toml --test inventory_contract",
+      "result": "pass",
+      "summary": "81 passed; 0 failed against the live inventory contract."
+    },
+    {
+      "command": "cargo check --offline --locked --manifest-path validator/Cargo.toml --all-targets",
+      "result": "pass_with_shared_pre_existing_warnings",
+      "summary": "All current targets compiled; warnings are in shared successor CLI, audit, and observability paths outside this lease."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/inventory/retained_routes/*.rs validator/tests/retained_route_contract.rs validator/tests/retained_route_contract/*.rs",
+      "result": "pass",
+      "summary": "Every leased Rust artifact is formatted and none exceeds 228 lines."
+    },
+    {
+      "command": "git diff --check -- validator/src/inventory/retained_routes validator/tests/retained_route_contract.rs validator/tests/retained_route_contract",
+      "result": "pass",
+      "summary": "No whitespace errors in leased Rust paths."
+    },
+    {
+      "command": "shasum -a 256 plugin-manifest-draft.json",
+      "result": "pass",
+      "summary": "Frozen root manifest digest is 31ab54cef02cd6b271ab6bf522b1e5e69a23609839c3ed05050128747bb009b9 and the manifest route is rebound to it."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/inventory/retained_routes/claims.rs",
+      "sha256": "e4bb7a599022a07b21835f4ac53ec154e1187df1c39c011fc522a3bf0e7e5c91",
+      "bytes": 4000,
+      "lines": 102
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/commands.rs",
+      "sha256": "78e83c42211eb98f767a25562cd8aa0e0e7e0edacb4e31d9e2ad0be41ffaa931",
+      "bytes": 1901,
+      "lines": 54
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/lanes.rs",
+      "sha256": "331b4cc8b65f0758c84854262b663af60003d520394be46c0d79e76847086ae5",
+      "bytes": 4474,
+      "lines": 118
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/manifest.rs",
+      "sha256": "1e4605cdd17918c4e060dbd05cd182cc4991d12fe3a3ab26168bb4295fe8763d",
+      "bytes": 391,
+      "lines": 10
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/mod.rs",
+      "sha256": "4142feaf0e51c1fcb9f77e247a2880df904bb42b1c9e4f5e7a7ce5c2e769f0f3",
+      "bytes": 680,
+      "lines": 18
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/model.rs",
+      "sha256": "5c915020f4b2978da3bbe4a6423b9cc961493d3adb11ec448613e205d24abedd",
+      "bytes": 4881,
+      "lines": 132
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/specs.rs",
+      "sha256": "77e1815ffeba0d87e321a5aae5c698550627de467d08b848dc723caf067b6dcb",
+      "bytes": 864,
+      "lines": 26
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/verify.rs",
+      "sha256": "16e4b6f304cccafc287c9d637472ddcb40966d65da99a392e8b9c9ea238ec0c0",
+      "bytes": 8176,
+      "lines": 228
+    },
+    {
+      "path": "validator/tests/retained_route_contract.rs",
+      "sha256": "51c56762d4803f41986b7788f169e25feb3cc689ee76dba13ddbe0c47aa7e5d7",
+      "bytes": 427,
+      "lines": 12
+    },
+    {
+      "path": "validator/tests/retained_route_contract/catalog_cases.rs",
+      "sha256": "46c117c7f6688c87ff0b2ba55c7adcc56b1772dfbf7005b6e70d180184bd23d1",
+      "bytes": 3067,
+      "lines": 74
+    },
+    {
+      "path": "validator/tests/retained_route_contract/registry_cases.rs",
+      "sha256": "6c6b24bbaa0a57c75dafc9c5405d408b53c57f51611a6e1ba2d07ffe396fdeb4",
+      "bytes": 3963,
+      "lines": 135
+    },
+    {
+      "path": "validator/tests/retained_route_contract/source_cases.rs",
+      "sha256": "045c132a4513a7637e68b388b1bf590cb3e1f5d411189b136a9a903af6462cab",
+      "bytes": 2687,
+      "lines": 91
+    },
+    {
+      "path": "validator/tests/retained_route_contract/support.rs",
+      "sha256": "9e0672923597a0df7abd3f79ee2180ae6b930cd187d7518fb86614aab6a9592f",
+      "bytes": 4742,
+      "lines": 143
+    },
+    {
+      "path": "validator/tests/retained_route_contract/transition_cases.rs",
+      "sha256": "9b5aaf6df662eeaf0bae65cda75d9e08387f098cc5d57ddd47eed2e2958b5de7",
+      "bytes": 3474,
+      "lines": 91
+    }
+  ],
+  "findings": [
+    {
+      "severity": "blocking_for_N02_completion",
+      "finding": "The thirty-three exact sources remain active current authority. Exact cataloging is not behavioral migration, so parallel_authority must remain until the relevant N03, N10, N12, and N14 product behavior and equivalence boundaries are independently proved."
+    },
+    {
+      "severity": "blocking_for_adoption",
+      "finding": "The standalone module is intentionally unwired and the four root registry rows remain broad. No live inventory behavior changed under this lease."
+    },
+    {
+      "severity": "self_falsification",
+      "finding": "A green standalone catalog can prove exact known rows but cannot by itself prove there is no additional active implementation outside the adapter's raw input scope. Root integration must collect the complete four-kind raw groups before merge and fail on count or identity drift."
+    },
+    {
+      "severity": "self_falsification",
+      "finding": "Canonical targets are contract definitions, not implemented replacements. If an active canonical implementation appears, verification fails; this worker does not treat the definition as behavior or equivalence proof."
+    },
+    {
+      "severity": "corrected_false_pass",
+      "finding": "The predecessor compatibility-route-retained transition is explicitly rejected field-by-field and as a combined transition, and the result cannot suppress parallel_authority."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent read-only review of this exact artifact set and WorkerResult",
+    "Root-owned module wiring and complete raw pre-merge adapter",
+    "Root-owned atomic replacement of four broad registry rows with thirty-three exact rows",
+    "Root-owned package resource and package-digest reconciliation after adoption",
+    "Dependency-closed N03 typed CLI migration for command sources",
+    "Dependency-closed N10 orchestration migration for lane sources",
+    "Dependency-closed N12 claim authority migration for finalizer sources",
+    "N14 behavioral routing, equivalence decisions, and non-destructive retirement disposition",
+    "Two byte-identical candidate-bound HCT-INVENTORY runs after root integration"
+  ],
+  "requested_root_changes": [
+    {
+      "request": "Independently review the leased artifact set at context_id sha256:f474021ad6a2ae8eaa7ec894d3f6129e9e8a2e35d05b6338f4247d707d8c9b75 before accepting any shared change.",
+      "acceptance_guard": "Reject on artifact drift, a source-set change, a broad matcher, a mutation or suppression path, or any transition value other than the exact unverified/active state."
+    },
+    {
+      "request": "If independently accepted, wire the module and add a root-owned adapter before BTreeMap merge that passes all unmerged entries in the four exact source kinds, the four exact canonical definition rows, the exact registry subset, and same-session current source digests to verify_catalog.",
+      "integration_rules": [
+        "Fail closed with one causal inventory finding and no partial application on every VerificationError.",
+        "Do not filter unknown rows out before verify_catalog; they must produce UnregisteredSource or a set mismatch.",
+        "Preserve each source kind, AuthorityState::Legacy, ActiveStatus::Active, bytes, and path.",
+        "Never convert these rows to compatibility-route-retained, context-only, archived, retired, or canonical.",
+        "Never suppress parallel_authority from a successful pending-authority witness.",
+        "Bind source digests and canonical definition bytes within the candidate ReadSession and revalidate the session before returning."
+      ]
+    },
+    {
+      "request": "Atomically replace, rather than append to, the four broad root rows legacy-command-catalogs-to-typed-cli, legacy-lanes-to-dependency-graph, legacy-finalizers-to-claim-graph, and legacy-manifest-to-supported-projection with the thirty-three exact rows below only after review and adapter wiring.",
+      "registry": "migration/authority-routes.json",
+      "deterministic_patch_payload": {
+        "language": "jq-1.8",
+        "registry_input_sha256_precondition": "681f4399126c6cd1ff835950bf9e47127a6766108548af3d9004b4de6d98c652",
+        "proposal_input": "this WorkerResult",
+        "proposal_rows_pointer": "/requested_root_changes/2/exact_rows",
+        "remove_route_ids": [
+          "legacy-command-catalogs-to-typed-cli",
+          "legacy-lanes-to-dependency-graph",
+          "legacy-finalizers-to-claim-graph",
+          "legacy-manifest-to-supported-projection"
+        ],
+        "materialized_replacement_count": 33,
+        "materialized_replacement_canonical_json_sha256": "d833553e3a5ad3845380f370632bc4ff36c5cbf83b74c5cb8b02115adf8da15a",
+        "invocation": "jq --slurpfile p docs/ultragoal-successor-live/worker-results/LEASE-N02-PENDING-AUTHORITY-006.json '<program>' migration/authority-routes.json",
+        "program": "def tp: if .canonical_target == \"PS-CLI\" then \"docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI\" elif .canonical_target == \"PS-ORCHESTRATION\" then \"docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION\" elif .canonical_target == \"HCT-CLAIMS\" then \"docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS\" else \"docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-PLUGIN-MANIFEST\" end; def m: {route_id, match:{stable_id,kind,relative_path}, canonical_target, intended_disposition:\"non-authoritative\", transition:{compatibility_behavior:\"unverified\",compatibility_boundary:\"blocked-by-OD-008\",replacement_state:\"unverified\",active_reader_writer_state:\"active\",observed_authority_state:\"active\",equivalence_proof:\"missing\",physical_cleanup_state:\"blocked-by-OD-009\",proof_refs:[.relative_path,tp,\"docs/ultragoal-successor-live/worker-results/LEASE-N02-PENDING-AUTHORITY-006.json\"]}}; ($p[0].requested_root_changes[2].exact_rows | map(m)) as $new | .routes = ([.routes[] | select((.route_id as $id | [\"legacy-command-catalogs-to-typed-cli\",\"legacy-lanes-to-dependency-graph\",\"legacy-finalizers-to-claim-graph\",\"legacy-manifest-to-supported-projection\"] | index($id) | not))] + $new)"
+      },
+      "match_shape": {
+        "stable_id": "the exact row stable_id",
+        "kind": "the exact row kind",
+        "relative_path": "the exact row relative_path"
+      },
+      "transition_for_all_rows": {
+        "compatibility_behavior": "unverified",
+        "compatibility_boundary": "blocked-by-OD-008",
+        "replacement_state": "unverified",
+        "active_reader_writer_state": "active",
+        "observed_authority_state": "active",
+        "equivalence_proof": "missing",
+        "physical_cleanup_state": "blocked-by-OD-009",
+        "intended_disposition": "non-authoritative",
+        "proof_refs": "the exact compiled [source path, canonical definition path, WorkerResult path]"
+      },
+      "exact_rows": [
+        {"route_id":"command-argument-parser-authority-to-ps-cli","stable_id":"LEGACY-COMMAND:validator/src/argument_parser/authority.rs","kind":"legacy-command-authority","relative_path":"validator/src/argument_parser/authority.rs","canonical_target":"PS-CLI","source_sha256":"e4a5c21667f27c779585f01faa57f2e5f8c435354e4e4ee4033237c1138ef109"},
+        {"route_id":"command-argument-parser-help-request-to-ps-cli","stable_id":"LEGACY-COMMAND:validator/src/argument_parser/help_request.rs","kind":"legacy-command-authority","relative_path":"validator/src/argument_parser/help_request.rs","canonical_target":"PS-CLI","source_sha256":"d65afba98d06646bca33d23658069ede5fd38eceddce2ed62584b042f0dd1937"},
+        {"route_id":"command-argument-parser-root-to-ps-cli","stable_id":"LEGACY-COMMAND:validator/src/argument_parser/mod.rs","kind":"legacy-command-authority","relative_path":"validator/src/argument_parser/mod.rs","canonical_target":"PS-CLI","source_sha256":"00900d3c3e073f7f1ab140088dcd4292811024d5f292109009701cd18d23b45e"},
+        {"route_id":"command-argument-parser-specialized-to-ps-cli","stable_id":"LEGACY-COMMAND:validator/src/argument_parser/specialized.rs","kind":"legacy-command-authority","relative_path":"validator/src/argument_parser/specialized.rs","canonical_target":"PS-CLI","source_sha256":"a4d02928f6938c747fc66be5ba6325abbe2bb3d8e745c4edfbf50f0e3ea0bab0"},
+        {"route_id":"command-argument-parser-tests-to-ps-cli","stable_id":"LEGACY-COMMAND:validator/src/argument_parser/tests.rs","kind":"legacy-command-authority","relative_path":"validator/src/argument_parser/tests.rs","canonical_target":"PS-CLI","source_sha256":"2bcff63e242cfc20cf1118d81b69c5ccdfa4a01379a2db4564b259a278a0d556"},
+        {"route_id":"command-dispatcher-root-to-ps-cli","stable_id":"LEGACY-COMMAND:validator/src/command/mod.rs","kind":"legacy-command-authority","relative_path":"validator/src/command/mod.rs","canonical_target":"PS-CLI","source_sha256":"4f283f14138ee56dfacfaceb8687d88fd1312c3351ce74443e226620fb82b305"},
+        {"route_id":"lane-root-registry-to-ps-orchestration","stable_id":"LEGACY-LANE:LANE_REGISTRY.json","kind":"legacy-lane-authority","relative_path":"LANE_REGISTRY.json","canonical_target":"PS-ORCHESTRATION","source_sha256":"8e557015f1b42caef72d7d60c47447d51c24e61419dcc3671f45bf16c9f7f4c8"},
+        {"route_id":"lane-template-registry-to-ps-orchestration","stable_id":"LEGACY-LANE:templates/LANE_REGISTRY.json","kind":"legacy-lane-authority","relative_path":"templates/LANE_REGISTRY.json","canonical_target":"PS-ORCHESTRATION","source_sha256":"a3449c03de55b9fb2bc29d80de32e4127f78f44529377e31a40089490e715ab6"},
+        {"route_id":"lane-claim-actor-freshness-to-ps-orchestration","stable_id":"LEGACY-LANE:validator/src/claim_semantics/lane/actor/freshness.rs","kind":"legacy-lane-authority","relative_path":"validator/src/claim_semantics/lane/actor/freshness.rs","canonical_target":"PS-ORCHESTRATION","source_sha256":"bc60c7002409b2369f2eb56138bed9e06f18f2ade7724e0a1155e58c2b1ce406"},
+        {"route_id":"lane-claim-actor-root-to-ps-orchestration","stable_id":"LEGACY-LANE:validator/src/claim_semantics/lane/actor/mod.rs","kind":"legacy-lane-authority","relative_path":"validator/src/claim_semantics/lane/actor/mod.rs","canonical_target":"PS-ORCHESTRATION","source_sha256":"c7a635362af7aaff94f6f74c7fbb4a289c65f59f43608f7277c33ab3fa2d6a63"},
+        {"route_id":"lane-claim-dependency-to-ps-orchestration","stable_id":"LEGACY-LANE:validator/src/claim_semantics/lane/dependency.rs","kind":"legacy-lane-authority","relative_path":"validator/src/claim_semantics/lane/dependency.rs","canonical_target":"PS-ORCHESTRATION","source_sha256":"d98f6fbfa44bdfa264ae28003dcb2c4a2cdb205259728bfdf4754577459c54c3"},
+        {"route_id":"lane-claim-isolation-to-ps-orchestration","stable_id":"LEGACY-LANE:validator/src/claim_semantics/lane/isolation.rs","kind":"legacy-lane-authority","relative_path":"validator/src/claim_semantics/lane/isolation.rs","canonical_target":"PS-ORCHESTRATION","source_sha256":"4122698decf54ef2dcbc662b11ae67fb82bea9052a6a8abf0f3515510679b69f"},
+        {"route_id":"lane-claim-root-to-ps-orchestration","stable_id":"LEGACY-LANE:validator/src/claim_semantics/lane/mod.rs","kind":"legacy-lane-authority","relative_path":"validator/src/claim_semantics/lane/mod.rs","canonical_target":"PS-ORCHESTRATION","source_sha256":"265b59fa7c0c761cb521a9df870449140e3a62ba2b6c187d360f03575cfb021b"},
+        {"route_id":"lane-claim-paths-to-ps-orchestration","stable_id":"LEGACY-LANE:validator/src/claim_semantics/lane/paths.rs","kind":"legacy-lane-authority","relative_path":"validator/src/claim_semantics/lane/paths.rs","canonical_target":"PS-ORCHESTRATION","source_sha256":"cd014198c1097cdd0dba43152a7cc3dc0a7e12d443fd0d5c686b6af585eebb03"},
+        {"route_id":"lane-claim-policy-to-ps-orchestration","stable_id":"LEGACY-LANE:validator/src/claim_semantics/lane/policy.rs","kind":"legacy-lane-authority","relative_path":"validator/src/claim_semantics/lane/policy.rs","canonical_target":"PS-ORCHESTRATION","source_sha256":"5db0c04508950bc72cbf6443c8b43d96bdd3cc90b095342c30c0fd1a998e2377"},
+        {"route_id":"lane-claim-root-module-to-ps-orchestration","stable_id":"LEGACY-LANE:validator/src/claim_semantics/lane/root/mod.rs","kind":"legacy-lane-authority","relative_path":"validator/src/claim_semantics/lane/root/mod.rs","canonical_target":"PS-ORCHESTRATION","source_sha256":"885589f6d7f1e1eebc9f773a13c82261790a964ed278030e6ddb3a6cd8f0ea12"},
+        {"route_id":"lane-claim-root-scope-to-ps-orchestration","stable_id":"LEGACY-LANE:validator/src/claim_semantics/lane/root/scope.rs","kind":"legacy-lane-authority","relative_path":"validator/src/claim_semantics/lane/root/scope.rs","canonical_target":"PS-ORCHESTRATION","source_sha256":"5caf68f5e39ce579b22ea9c9f6585906366b98045475754918a3392e5dd3e28a"},
+        {"route_id":"lane-claim-runtime-root-to-ps-orchestration","stable_id":"LEGACY-LANE:validator/src/claim_semantics/lane/runtime/mod.rs","kind":"legacy-lane-authority","relative_path":"validator/src/claim_semantics/lane/runtime/mod.rs","canonical_target":"PS-ORCHESTRATION","source_sha256":"419264b1da032f5edd148ac86ccc2b109c0d564d50508467c463bc11cd73a88f"},
+        {"route_id":"lane-claim-runtime-state-to-ps-orchestration","stable_id":"LEGACY-LANE:validator/src/claim_semantics/lane/runtime/state.rs","kind":"legacy-lane-authority","relative_path":"validator/src/claim_semantics/lane/runtime/state.rs","canonical_target":"PS-ORCHESTRATION","source_sha256":"355d20951115bb4cff110abf5e5b64e52d112fc8cb70ff7fdba983932e9dad45"},
+        {"route_id":"lane-claim-status-to-ps-orchestration","stable_id":"LEGACY-LANE:validator/src/claim_semantics/lane/status.rs","kind":"legacy-lane-authority","relative_path":"validator/src/claim_semantics/lane/status.rs","canonical_target":"PS-ORCHESTRATION","source_sha256":"17b0fc92ff03f569306dbe00cf182f33fb8b25ea12be1368b80837aea03bcf69"},
+        {"route_id":"finalizer-audit-packet-root-to-hct-claims","stable_id":"LEGACY-FINALIZER:validator/src/audit/final_packet/mod.rs","kind":"legacy-finalizer-authority","relative_path":"validator/src/audit/final_packet/mod.rs","canonical_target":"HCT-CLAIMS","source_sha256":"87cc50b150f580daa210a04d4c505777d04089ff863c1accc78de95b9a23dc89"},
+        {"route_id":"finalizer-audit-observability-root-to-hct-claims","stable_id":"LEGACY-FINALIZER:validator/src/audit/final_packet/observability/mod.rs","kind":"legacy-finalizer-authority","relative_path":"validator/src/audit/final_packet/observability/mod.rs","canonical_target":"HCT-CLAIMS","source_sha256":"769e0138f251c6aec95e7f2accac20855b73d220b224f18db7cf861fdbf21841"},
+        {"route_id":"finalizer-audit-observability-tests-to-hct-claims","stable_id":"LEGACY-FINALIZER:validator/src/audit/final_packet/observability/tests.rs","kind":"legacy-finalizer-authority","relative_path":"validator/src/audit/final_packet/observability/tests.rs","canonical_target":"HCT-CLAIMS","source_sha256":"8f65ad0ddbfc09acdf7f30e2d3ccdeda9790268f2fffb57baad92789af7cef8a"},
+        {"route_id":"finalizer-audit-reference-coverage-to-hct-claims","stable_id":"LEGACY-FINALIZER:validator/src/audit/final_packet/references/coverage.rs","kind":"legacy-finalizer-authority","relative_path":"validator/src/audit/final_packet/references/coverage.rs","canonical_target":"HCT-CLAIMS","source_sha256":"6b73fb435dc5019c1658d3d3e0d5ff0c6e52748a85ec5b1d61dcc33983517f11"},
+        {"route_id":"finalizer-audit-reference-root-to-hct-claims","stable_id":"LEGACY-FINALIZER:validator/src/audit/final_packet/references/mod.rs","kind":"legacy-finalizer-authority","relative_path":"validator/src/audit/final_packet/references/mod.rs","canonical_target":"HCT-CLAIMS","source_sha256":"c8a23f52623de8513de9624c9327954bca33c8e1bc6d88d5336e0a71f7383827"},
+        {"route_id":"finalizer-audit-reference-package-to-hct-claims","stable_id":"LEGACY-FINALIZER:validator/src/audit/final_packet/references/package.rs","kind":"legacy-finalizer-authority","relative_path":"validator/src/audit/final_packet/references/package.rs","canonical_target":"HCT-CLAIMS","source_sha256":"ff52bf319d94622d6f82ea320b4b0b529aa524c3ce9dcc9f97e4f26b33832fb6"},
+        {"route_id":"finalizer-audit-reference-source-to-hct-claims","stable_id":"LEGACY-FINALIZER:validator/src/audit/final_packet/references/source_audit.rs","kind":"legacy-finalizer-authority","relative_path":"validator/src/audit/final_packet/references/source_audit.rs","canonical_target":"HCT-CLAIMS","source_sha256":"0601fad955489f01bdaa9507f71e0aeb2af169532c25a1eafc688fd7c0bec219"},
+        {"route_id":"finalizer-cli-packet-root-to-hct-claims","stable_id":"LEGACY-FINALIZER:validator/src/cli/final_packet/mod.rs","kind":"legacy-finalizer-authority","relative_path":"validator/src/cli/final_packet/mod.rs","canonical_target":"HCT-CLAIMS","source_sha256":"5fe33fa3d0882af6e5569982a398d2431fa2e3eff1eaa9ff1ee81cc623d918ab"},
+        {"route_id":"finalizer-cli-proof-root-to-hct-claims","stable_id":"LEGACY-FINALIZER:validator/src/cli/final_packet/proof/mod.rs","kind":"legacy-finalizer-authority","relative_path":"validator/src/cli/final_packet/proof/mod.rs","canonical_target":"HCT-CLAIMS","source_sha256":"0c83e164791d6ddaa9ecf3eef4e73983c948efe02db44b228ba28e0fbbc4ad56"},
+        {"route_id":"finalizer-cli-proof-spans-to-hct-claims","stable_id":"LEGACY-FINALIZER:validator/src/cli/final_packet/proof/spans.rs","kind":"legacy-finalizer-authority","relative_path":"validator/src/cli/final_packet/proof/spans.rs","canonical_target":"HCT-CLAIMS","source_sha256":"cdc83ba6e1d221f1a4f3d47d50d91de920e40cd848cbf3333ea2e51cf825c6e1"},
+        {"route_id":"finalizer-cli-proof-stdout-to-hct-claims","stable_id":"LEGACY-FINALIZER:validator/src/cli/final_packet/proof/stdout.rs","kind":"legacy-finalizer-authority","relative_path":"validator/src/cli/final_packet/proof/stdout.rs","canonical_target":"HCT-CLAIMS","source_sha256":"bca6f32953f4cda700b61bdb6ff05509ff4cfe5751daada8275027c67c1d73f2"},
+        {"route_id":"finalizer-cli-proof-tests-to-hct-claims","stable_id":"LEGACY-FINALIZER:validator/src/cli/final_packet/proof/tests.rs","kind":"legacy-finalizer-authority","relative_path":"validator/src/cli/final_packet/proof/tests.rs","canonical_target":"HCT-CLAIMS","source_sha256":"a4290e40a1487955f7f945afb75d4760ab3816efac020202a017f78a84ef44d9"},
+        {"route_id":"manifest-draft-to-ps-plugin-manifest","stable_id":"LEGACY-MANIFEST-PROJECTION:plugin-manifest-draft.json","kind":"legacy-manifest-projection-authority","relative_path":"plugin-manifest-draft.json","canonical_target":"PS-PLUGIN-MANIFEST","source_sha256":"31ab54cef02cd6b271ab6bf522b1e5e69a23609839c3ed05050128747bb009b9"}
+      ]
+    },
+    {
+      "request": "After independent acceptance and root wiring, add only the accepted Rust artifacts and this WorkerResult to root-owned package resources as required, refresh the package digest, and rerun package and inventory closure. Do not use package membership as behavioral proof."
+    },
+    {
+      "request": "Keep all thirty-three parallel_authority findings open and assign their actual behavioral migration/equivalence decisions to the dependency-closed N03, N10, N12, and N14 work. Do not close N02 from registry text or this standalone green test."
+    }
+  ],
+  "limitations": [
+    "The module is standalone and is not imported by the production inventory path.",
+    "The root-owned migration registry was not edited and still contains four broad rows for these source classes.",
+    "The catalog proves exact known identities only when root supplies the complete unmerged scope from one candidate-bound read session.",
+    "Canonical target definitions are definitions only; they do not prove implemented replacement behavior or equivalence.",
+    "The active sources remain physical current authority under OD-009 and no deletion, demotion, or compatibility classification is authorized.",
+    "Shared all-target warnings outside the lease remain; no warning-clean claim is made.",
+    "This worker does not claim N02 completion, any product claim, readiness, release, or goal completion."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

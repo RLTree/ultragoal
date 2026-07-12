@@ -1,0 +1,216 @@
+{
+  "worker": "/root",
+  "lease_id": "LEASE-N04-DISTRIBUTION-NODE-006",
+  "context_id": "sha256:b0bfe557b4a16bbff2b8cd54154c55c082b97bba83a2f0740689e9e3cb619409",
+  "candidate_identity": {
+    "candidate_id": "sha256:b0bfe557b4a16bbff2b8cd54154c55c082b97bba83a2f0740689e9e3cb619409",
+    "context_id": "sha256:b0bfe557b4a16bbff2b8cd54154c55c082b97bba83a2f0740689e9e3cb619409",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "artifact_set_sha256": "b0bfe557b4a16bbff2b8cd54154c55c082b97bba83a2f0740689e9e3cb619409",
+    "artifact_count_excluding_result": 29,
+    "parent_result_path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-005.json",
+    "parent_result_sha256": "sha256:8314fe7d15d45a6fcd14ec05fabd69bd066bc9ae094062565fd50db06750db3f",
+    "parent_artifact_set_sha256": "18ed54615c18f3aafbab261ee6186f0d30a4833332163e9569205cbe3a603f54",
+    "reconciliation": "The leased external worker wrote the three production helper call sites before interruption; Ultra root preserved those bytes, added only the leased false-pass controls and diagnostic expectation reconciliation, and froze this combined exact set for independent review."
+  },
+  "base_state": {
+    "node": "N04-DISTRIBUTION",
+    "root_decision": "N04-NODE-005-REWORK",
+    "decisive_finding": "Case-folded ancestor/descendant component roots and package target paths could coexist even though a safe archive cannot represent a file and a child below it.",
+    "parent_result": "sha256:8314fe7d15d45a6fcd14ec05fabd69bd066bc9ae094062565fd50db06750db3f",
+    "parent_set": "sha256:18ed54615c18f3aafbab261ee6186f0d30a4833332163e9569205cbe3a603f54"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "Prefix-safe typed package and injected distribution-effect kernel only. Independent review, shared N02/N04 manifest-schema reconciliation, real supported-host install/discovery/runtime proof, N04 closure, readiness, release, and completion remain withheld.",
+    "artifact_count_excluding_result": 29,
+    "artifact_set_sha256": "b0bfe557b4a16bbff2b8cd54154c55c082b97bba83a2f0740689e9e3cb619409",
+    "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "total_bytes": 155487,
+    "total_lines": 4696,
+    "maximum_file_lines": 299,
+    "files_over_300_lines": 0,
+    "distribution_nextest": "34 passed; 0 failed; 16 jobs; 0.313 seconds after incremental build",
+    "all_targets_check": "pass with existing unrelated warnings; 16 jobs",
+    "scoped_format_check": "pass",
+    "scoped_diff_check": "pass",
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/distribution/package/manifest.rs",
+    "validator/src/distribution/package/mod.rs",
+    "validator/src/distribution/package/spec.rs",
+    "validator/tests/distribution_contract.rs",
+    "validator/tests/distribution_contract/package_manifest.rs",
+    "validator/tests/distribution_contract/prefix_collisions.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-006.json"
+  ],
+  "touched_semantics": [
+    "ASCII-case-folded segment-boundary prefix rejection for package target paths",
+    "shared prefix-free insertion semantics for component roots and package targets",
+    "order-independent ancestor and descendant conflict rejection",
+    "safe segment-sibling preservation",
+    "zero-write planning on prefix rejection"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-006.json"
+  ],
+  "fixtures": [
+    "validator/tests/distribution_contract/prefix_collisions.rs",
+    "cross-component assets and assets/icon.svg collision in both orders and ASCII case aliases",
+    "skills file and child collision in both orders and ASCII case aliases",
+    "multi-segment file and child collision",
+    "safe assets/a and assets/ab plus skills/a and skills/ab siblings"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "performed": true,
+      "scope": "Six leased source/test paths and this WorkerResult only"
+    },
+    {
+      "class": "local-build-write",
+      "performed": true,
+      "scope": "/private/tmp/hug-n04-node006-root-target"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "performed": true,
+      "scope": "Isolated distribution test repositories under the system temporary directory"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    },
+    {
+      "class": "git",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PLUGIN-001",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-002",
+    "REQ-SUPPLY-001",
+    "REQ-SUPPLY-002",
+    "REQ-SUPPLY-004"
+  ],
+  "dependency_nodes": [
+    "N04-DISTRIBUTION"
+  ],
+  "changes": [
+    {
+      "area": "prefix-free path authority",
+      "result": "One private segment-aware helper now rejects exact, ancestor, descendant, and ASCII-case-alias conflicts for both manifest component roots and package targets."
+    },
+    {
+      "area": "false-pass controls",
+      "result": "Added both-order, case-alias, multi-segment, sibling-positive, and recursive zero-write controls; reconciled the prior case-alias fixture to the earlier InvalidSpec rejection boundary."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n04-node006-root-target cargo nextest run --offline --locked --manifest-path validator/Cargo.toml --jobs 16 --test distribution_contract",
+      "result": "pass",
+      "summary": "34 passed; 0 failed; 0 skipped in 0.313 seconds after incremental build"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n04-node006-root-target cargo check --offline --locked --manifest-path validator/Cargo.toml --all-targets --jobs 16",
+      "result": "pass",
+      "summary": "All targets compiled; existing unrelated candidate warnings remain outside this correction."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check over the six leased Rust paths",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check over the six leased source/test paths",
+      "result": "pass"
+    }
+  ],
+  "artifacts": [
+    {"path":"validator/src/distribution/error.rs","sha256":"sha256:cecf86d9bc10f292047f7a69a13ea8f70660aeaa4ee7bd9db6f66964897ded26","byte_length":2536},
+    {"path":"validator/src/distribution/install.rs","sha256":"sha256:4d2cf9f2910c2af9e6807fe01001590ad528465de2484cb530dd596fa16cfee9","byte_length":8138},
+    {"path":"validator/src/distribution/json.rs","sha256":"sha256:a11fe853f940a73a2266bcc5225748df4b686e8da91e6d9bdb5fa3dab73f6349","byte_length":9339},
+    {"path":"validator/src/distribution/marketplace.rs","sha256":"sha256:90cfc76a1855eb3e57aa673f043a57d4ce2269fcd0411af03ead8606fef783cb","byte_length":5487},
+    {"path":"validator/src/distribution/mod.rs","sha256":"sha256:821d8f0c9409ea0f2d7e085264159ac73eefce191dea8de6fb58027a2370ac11","byte_length":1068},
+    {"path":"validator/src/distribution/model.rs","sha256":"sha256:6f9b5e665ff2bc007ca65c78269e1843b91eb89ff138034d90adf75a5ff0fb97","byte_length":6153},
+    {"path":"validator/src/distribution/observations.rs","sha256":"sha256:184ff00b914a2f5116dc3cb03baf0c7b9c9771972ba141244446d9daec391636","byte_length":1181},
+    {"path":"validator/src/distribution/package/archive.rs","sha256":"sha256:ee3576427a5ffa1deb1ad8bb57b0d0f763c11a5ea0bf23aa829671470d3d6831","byte_length":2871},
+    {"path":"validator/src/distribution/package/manifest.rs","sha256":"sha256:543ad9235510cab1b929d16a684bbafacfeadfc171f8ae521a891752c3bd6783","byte_length":10222},
+    {"path":"validator/src/distribution/package/mod.rs","sha256":"sha256:4bddc59ca05f264bf022200ae0e0e4ceb9e610a0ac83cdf9e7b511db40dfca50","byte_length":1616},
+    {"path":"validator/src/distribution/package/plan.rs","sha256":"sha256:648df0ec9607e56fd7d31efad7ad902f8b469f5f0ae4d2243e1a7d74df99e597","byte_length":8335},
+    {"path":"validator/src/distribution/package/spec.rs","sha256":"sha256:ee449d21bca70f58730b73912d6c0ea87de719c46372277d6b3a7248da190d82","byte_length":3859},
+    {"path":"validator/src/distribution/reader/fallback.rs","sha256":"sha256:8fd8b8a447c545295827c0d9f5269752b873e9598eca93bf8006e07a080fb77d","byte_length":483},
+    {"path":"validator/src/distribution/reader/mod.rs","sha256":"sha256:14ddabff12b90d437eccc93c73fca451bf22d3eafa86276c1fe66ca8f2fd8f22","byte_length":3744},
+    {"path":"validator/src/distribution/reader/unix.rs","sha256":"sha256:b4020e7efd8936407db6dbd52e074354fb01c5cd411c34f4bd731e66493800d1","byte_length":4276},
+    {"path":"validator/src/distribution/spec.rs","sha256":"sha256:5551a1124dbdab70172e0a7676c783528089711c3189305cbd07f23988ff60f4","byte_length":8370},
+    {"path":"validator/src/distribution/supply.rs","sha256":"sha256:51e28ebbea17035edafaa87dec3aeaed9af6fafbd9e0d954dcf0e624b2635dab","byte_length":5225},
+    {"path":"validator/src/distribution/verify.rs","sha256":"sha256:998e17314d839ec8dd6baa03cde772f722d2b29d8814b59dc16172e8780c63ca","byte_length":7807},
+    {"path":"validator/tests/distribution_contract.rs","sha256":"sha256:9e745b6be250412946ecf91f221712d8dff870ded156642567771383d15e3091","byte_length":740},
+    {"path":"validator/tests/distribution_contract/adversarial_fs.rs","sha256":"sha256:ceb874ea8705d858625156baecee014bf77a8cc28fa53d24a178ebe3f0eb5877","byte_length":3136},
+    {"path":"validator/tests/distribution_contract/adversarial_semantics.rs","sha256":"sha256:665f2d30d4decf910fc7f1d6bdb48daaaebf54df54c50bbdbad8fc958feacfa3","byte_length":5904},
+    {"path":"validator/tests/distribution_contract/install.rs","sha256":"sha256:8eaf760f47a89b8761f130ea12a0c0d21b7890bb46bbcde8f1dc201e0170f0ab","byte_length":11343},
+    {"path":"validator/tests/distribution_contract/marketplace_supply.rs","sha256":"sha256:19538962c94b88f70089ff79ae2f20f3003331ab1ea76da42ed78341fa729fb9","byte_length":8760},
+    {"path":"validator/tests/distribution_contract/package.rs","sha256":"sha256:63dc9ee6808f6f773b2051566fd9c1629001326ff6b0026cdab2e23f33f3580d","byte_length":9786},
+    {"path":"validator/tests/distribution_contract/package_manifest.rs","sha256":"sha256:dc15c4a27722a2de0f24396868764336e14a4cf2613c1a6592427227cd7db2bf","byte_length":11280},
+    {"path":"validator/tests/distribution_contract/positive.rs","sha256":"sha256:8a1e0822930ec26646154a6ca417158593e1f5ab6c45109cc5bcb230e539d664","byte_length":1148},
+    {"path":"validator/tests/distribution_contract/prefix_collisions.rs","sha256":"sha256:c91be980efe7200bdfcf6ec7a7ca6831a61a470a03611ef037f4a2880f98ce72","byte_length":3162},
+    {"path":"validator/tests/distribution_contract/states.rs","sha256":"sha256:3c83ee3c38c9735e50a9e2a1d8849fe45a417ca4b995a1a48606decb1105d142","byte_length":3059},
+    {"path":"validator/tests/distribution_contract/support.rs","sha256":"sha256:b2393b7f849dd744951765195dc2c27b9860afea3cba98ccdcaf074534a426f9","byte_length":6459}
+  ],
+  "findings": [
+    {
+      "severity": "corrected-candidate",
+      "finding": "Exact and case-folded ancestor/descendant component and target paths now fail before package output; safe segment siblings remain valid."
+    },
+    {
+      "severity": "independent-review-required",
+      "finding": "The combined external-worker/root-reconciled set has not accepted or independently reviewed itself."
+    },
+    {
+      "severity": "root-schema-reconciliation-required",
+      "finding": "N02 and N04 still contain separate private plugin-manifest schema readers; root must adopt one canonical supported schema before public activation."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-node-rereview",
+    "root-shared-manifest-schema-reconciliation",
+    "supported-host-distribution-proof"
+  ],
+  "requested_root_changes": [
+    {
+      "authority": "shared manifest schema",
+      "request": "Before public activation, reconcile the N02 inventory reader and N04 package validator into one root-adopted canonical supported plugin-manifest schema and one semantic authority. Preserve duplicate-key, unknown-field, confinement, role, reachability, prefix-safety, and unreferenced-byte behavior."
+    },
+    {
+      "authority": "root integration",
+      "request": "After independent PASS, wire the accepted distribution module through root-owned lib and dispatcher authority without creating a second public package or manifest validator."
+    },
+    {
+      "authority": "global generated authority",
+      "request": "After independent PASS, add the exact accepted N04 sources, tests, and WorkerResult to root-owned generated authority and recompute all affected digests."
+    },
+    {
+      "authority": "supported host proof",
+      "request": "Supply reviewed real-host package, install, discovery, and runtime effect adapters and run the exact source-to-runtime identity ladder before raising any N04 or release claim."
+    }
+  ],
+  "limitations": [
+    "No real host marketplace, install location, cache, app registry, Plugins UI, discovery surface, or runtime was mutated or observed.",
+    "The package and install atomicity results prove injected compare-exchange contracts, not a production filesystem adapter.",
+    "The package-bound manifest schema is not shared public authority until root reconciles it with N02.",
+    "Supported source manifests intentionally reject hooks under current plugin-creator guidance.",
+    "Tests, WorkerResult rows, deterministic bytes, and green commands do not close N04 or prove readiness, release, or completion."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

@@ -1,0 +1,168 @@
+{
+  "worker": "/root/detached_descendant_confinement_builder",
+  "lease_id": "FIXTURE-DETACHED-DESCENDANT-CONFINEMENT-CORRECTION-009",
+  "context_id": "sha256:f78a70f87a5f9dd9ea3afd2afabcc8ef1feac9cdae36bfc2942b292a8a54e1fa",
+  "candidate_identity": {
+    "candidate_id": "sha256:69769cb581756bb9432762bda2c4bf834e01effcb30ac8be7f7216c611600b49",
+    "context_id": "sha256:f78a70f87a5f9dd9ea3afd2afabcc8ef1feac9cdae36bfc2942b292a8a54e1fa",
+    "acceptance_check": "FIXTURE-DETACHED-CONFINEMENT-009",
+    "requested_route": "gpt-5.6-sol/high",
+    "effective_route": "unverified",
+    "worker_owned_artifact_count": 9,
+    "worker_owned_artifact_total_bytes": 48026,
+    "worker_owned_artifact_total_lines": 1480,
+    "worker_owned_artifact_set_sha256": "sha256:64ae845b113f0e7c40276daa1bede5626d8253f36262f4fc10602f178425e079"
+  },
+  "base_state": {
+    "status": "root-decision-rework",
+    "decisive_finding": "descendant_can_escape_process_group_and_outlive_adapter"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "private Darwin fixture confinement with child process creation prohibited",
+    "root_acceptance": "withheld"
+  },
+  "touched_paths": [
+    "validator/src/cli/capture/fixture/execute.rs",
+    "validator/src/fixture_scheduler/confinement/backend.rs",
+    "validator/src/fixture_scheduler/confinement/policy.rs",
+    "validator/tests/fixture_scheduler_contract/confinement.rs",
+    "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+    "validator/tests/fixture_scheduler_contract/execution_adapter/detached_descendant.rs",
+    "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs",
+    "validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs",
+    "validator/tests/fixture_scheduler_contract/worker_result.rs"
+  ],
+  "touched_semantics": [
+    "fixture_scheduler::detached_descendant_confinement"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "fixture-detached-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "fixture-detached-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "fixture-detached-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "fixture-detached-confinement-009",
+    "darwin-child-process-denial",
+    "detached-descendant-red-green"
+  ],
+  "dependency_nodes": [
+    "fixture-scheduler-detached-descendant-rework"
+  ],
+  "changes": [
+    {
+      "summary": "The fixed Darwin sandbox profile denies process-fork, making child process and session creation unsupported fixture behavior and preventing descendants from escaping by setsid."
+    },
+    {
+      "summary": "Termination signals the original process group and direct PID, reaps an early SIGTERM exit without a false EPERM failure, escalates signal-resistant work, and proves group absence before return."
+    },
+    {
+      "summary": "The real-adapter regression attempted three detached setsid descendants after a rapid direct-child exit; it failed RED with three live descendants and passes GREEN only when all three creation attempts are denied and the original group is absent."
+    },
+    {
+      "summary": "Focused tests preserve network and outside-write denial, CPU RLIMIT_CPU, file-size RLIMIT_FSIZE, Darwin address-space RLIMIT_AS, fixed-backend integrity, policy digest binding, collision, recovery, supplied-outcome, and reward-hacking controls."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/harness-fixture-detached-009-target cargo test --locked --offline -j16 --test fixture_scheduler_contract execution_adapter::process_group::actual_adapter_contains_rapidly_reparented_setsid_descendants -- --exact --nocapture --test-threads=1",
+      "status": "expected-failure-observed-before-correction-three-live-detached-descendants"
+    },
+    {
+      "command": "RUSTFLAGS=-Awarnings CARGO_TARGET_DIR=/tmp/harness-fixture-detached-009-target cargo test --locked --offline -j16 --test fixture_scheduler_contract execution_adapter::detached_descendant::actual_adapter_contains_rapidly_reparented_setsid_descendants -- --exact --nocapture --test-threads=1",
+      "status": "pass-green"
+    },
+    {
+      "command": "RUSTFLAGS=-Awarnings CARGO_TARGET_DIR=/tmp/harness-fixture-detached-009-target cargo test --locked --offline -j16 --test fixture_scheduler_contract -- --test-threads=16",
+      "status": "pass-29-of-29"
+    },
+    {
+      "command": "RUSTFLAGS=-Awarnings CARGO_TARGET_DIR=/tmp/harness-fixture-detached-009-target cargo check --locked --offline -j16",
+      "status": "pass"
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/cli/capture/fixture/execute.rs validator/src/fixture_scheduler/confinement/backend.rs validator/src/fixture_scheduler/confinement/policy.rs validator/tests/fixture_scheduler_contract/confinement.rs validator/tests/fixture_scheduler_contract/execution_adapter.rs validator/tests/fixture_scheduler_contract/execution_adapter/detached_descendant.rs validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs validator/tests/fixture_scheduler_contract/worker_result.rs",
+      "status": "pass"
+    },
+    {
+      "command": "ps -axo pid=,ppid=,pgid=,sess=,command= | awk '/hul-fixture-adapter-.*confinement-probe|hul-confinement-.*confinement-probe/ && !/awk/ {print}'",
+      "status": "pass-no-matches-after-full-suite-and-after-worker-result-repeat"
+    },
+    {
+      "command": "shasum -a 256 validator/src/cli/capture/fixture/execute.rs validator/src/fixture_scheduler/confinement/backend.rs validator/src/fixture_scheduler/confinement/policy.rs validator/tests/fixture_scheduler_contract/confinement.rs validator/tests/fixture_scheduler_contract/execution_adapter.rs validator/tests/fixture_scheduler_contract/execution_adapter/detached_descendant.rs validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs validator/tests/fixture_scheduler_contract/worker_result.rs | shasum -a 256",
+      "status": "pass-source-freeze-sha256-64ae845b113f0e7c40276daa1bede5626d8253f36262f4fc10602f178425e079"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/capture/fixture/execute.rs",
+      "sha256": "sha256:3e161671a5b0d99b3232a322aa72d32f8644b00e972c2595696795f097776d67",
+      "byte_length": 7833
+    },
+    {
+      "path": "validator/src/fixture_scheduler/confinement/backend.rs",
+      "sha256": "sha256:92d3e51e1fc4894b011c22d684e0ed4c222254f4b3c296b937f2979575908a43",
+      "byte_length": 8093
+    },
+    {
+      "path": "validator/src/fixture_scheduler/confinement/policy.rs",
+      "sha256": "sha256:c52b274991a94e4705c4cacd7050599647b229c6be8abcba0c6af1f3cecb9e1d",
+      "byte_length": 2349
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/confinement.rs",
+      "sha256": "sha256:0a4e535dd4c63145c8fb3d636f6f5809b3d94d937e21f7a16669353e9463bb0c",
+      "byte_length": 6134
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+      "sha256": "sha256:c74e8fcdb245d6d7408a25055d75a4eaa1b36f8672cd399374e706c05a85fafc",
+      "byte_length": 2559
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/execution_adapter/detached_descendant.rs",
+      "sha256": "sha256:1af7f0fa4dae551c18b3f555e46a119cec3fd6ea6cce1fb788c0214269191fb2",
+      "byte_length": 1822
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs",
+      "sha256": "sha256:aaa6293e3fb075b95b389b26fa4f00c577ede36680435ee961683e4dafd980cb",
+      "byte_length": 7623
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs",
+      "sha256": "sha256:0833a7f369fbfc092a9f49e99bc21f0c341f65cef4250c118ed2fd69d14eccf6",
+      "byte_length": 5510
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/worker_result.rs",
+      "sha256": "sha256:a4be7e0f8a52709ffc9077698cb00ab3fcc1684b99c04a25c26e186982d42630",
+      "byte_length": 6103
+    }
+  ],
+  "findings": [],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [],
+  "limitations": [
+    "Supported Darwin fixture behavior now prohibits child process creation; fixtures requiring subprocesses are rejected by the sandbox substrate.",
+    "Rapid reparenting, multiple descendants, and setsid escape are prevented before descendant creation rather than tracked and reaped after creation.",
+    "Darwin RLIMIT_DATA is explicitly unclaimed; the enforced memory control is the tested RLIMIT_AS budget above the preparing process baseline.",
+    "The correction is bound only to private Darwin fixture-scheduler behavior and focused evidence.",
+    "No public HCT-FIXTURES integration, routine or strict journey, readiness, release, node closure, or completion is claimed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

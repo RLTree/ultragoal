@@ -1,0 +1,362 @@
+{
+  "worker": "/root/n02_agent_migration_map",
+  "lease_id": "LEASE-N02-AGENT-REVIEW-002",
+  "context_id": "sha256:f038a85c30e680d08349ca49ea89cdfcd0de03ff45f2bc2056bec9f1c7f39300",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "dirty": true,
+    "live_context_status_sha256": "17048c074f186407ef25614222fc932c3c5d29a03756e736c4fc6da70acf8622",
+    "live_context_untracked_sha256": "9997cf42f878c2c3cd478249171a96b676b5d804079e295659392c8ba2d2fcaf",
+    "corrective_candidate_set_sha256": "599e89b57a305331d46e5caaca54250713e21598cb592a2a33708df129c69e3e",
+    "candidate_set_formula": "SHA-256 of newline-delimited artifact SHA-256 values in listed order",
+    "staged_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "predecessor_result": {
+      "path": "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-REVIEW-001.json",
+      "sha256": "sha256:438aa435988c1c9812e1bb6c8f43a1ec73a2455fd1b73510b7e929839ea35f35"
+    },
+    "corrective_findings": [
+      "P1-A: materiality accepted receipt-declared decision authority, gate-run arrays, evidence arrays, and placeholder DELTA anchors without deriving the decision from verified inputs",
+      "P1-B: review receipts accepted inline host_exposed model, mode, and reasoning strings without candidate/session/tool-invocation-bound external provenance"
+    ],
+    "lease_scope": [
+      "validator/src/review/round/**",
+      "validator/src/review/materiality.rs",
+      "schemas/review-round-receipt.schema.json",
+      "schemas/review-materiality-gate.schema.json",
+      "fixtures/review-round/** and review-materiality fixtures",
+      "validator/src/self_tests/review/**",
+      "this WorkerResult"
+    ],
+    "root_owned_surfaces_not_modified": [
+      "plugin, command, and migration registries",
+      "root red-packet catalog and template authority",
+      "claim decisions and claim registry",
+      "Cargo manifests and dependency files",
+      "release, readiness, and N02 completion state"
+    ],
+    "concurrent_dirt_policy": "All root, user, and other-worker changes were preserved; no merge, rebase, staging, commit, or destructive operation was performed."
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "acceptance_ceiling": "Corrective deterministic review enforcement only; no runtime discovery, reviewer configuration, readiness, release, or N02 completion claim.",
+    "materiality_decision_authority": "typed deterministic Rust derivation",
+    "materiality_positive_inputs": "bounded typed trigger plus verified current file identities and pass-state content for exactly three anchors and one four-role registry artifact",
+    "materiality_unverified_input_result": "BLOCKED_BEFORE_REVIEW",
+    "runtime_metadata_positive_mode": "unavailable only",
+    "runtime_metadata_ceiling": "unavailable_no_runtime_configuration_claim",
+    "withheld_runtime_claims": [
+      "reviewer_runtime_configuration",
+      "custom_agent_runtime_discovery"
+    ],
+    "canonical_review_config_api": [
+      "REVIEW_ROLES",
+      "review_role_spec",
+      "ReviewRoleSpec::agent_manifest_path"
+    ],
+    "corrective_artifact_count_excluding_result": 13,
+    "corrective_rust_file_count": 7,
+    "corrective_schema_file_count": 2,
+    "corrective_fixture_file_count": 4,
+    "corrective_lines_excluding_result": 2462,
+    "corrective_bytes_excluding_result": 75667,
+    "maximum_corrective_rust_file_lines": 300,
+    "corrective_rust_files_over_300_lines": 0,
+    "focused_materiality_tests": "5 passed; 0 failed",
+    "focused_runtime_tests": "4 passed; 0 failed",
+    "complete_review_tests": "39 passed; 0 failed",
+    "broader_review_round_tests": "24 passed; 0 failed",
+    "canonical_fixture_test": "1 passed; 0 failed",
+    "library_check": "pass",
+    "all_target_check": "pass",
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/review/materiality.rs",
+    "validator/src/review/round/anchor/values.rs",
+    "validator/src/review/round/config.rs",
+    "validator/src/review/round/mod.rs",
+    "validator/src/review/round/runtime.rs",
+    "schemas/review-materiality-gate.schema.json",
+    "schemas/review-round-receipt.schema.json",
+    "fixtures/review-materiality/valid/advisory-review-allowed.json",
+    "fixtures/review-materiality/valid/blocked-before-review.json",
+    "fixtures/review-materiality/valid/delta-review-allowed.json",
+    "fixtures/review-materiality/valid/full-scope-material-review-required.json",
+    "validator/src/self_tests/review/materiality.rs",
+    "validator/src/self_tests/review/runtime.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-REVIEW-002.json"
+  ],
+  "touched_semantics": [
+    "receipt decision must exactly equal the Rust-derived materiality result",
+    "material triggers are a bounded deny-unknown typed enum and cannot be omitted for a valid result",
+    "DELTA requires the sole trigger narrow_validator_only_change and ADVISORY requires the sole trigger advisory_only_no_candidate_change",
+    "material, repair, mixed, malformed, or unverified inputs derive FULL_SCOPE_MATERIAL_REVIEW_REQUIRED or BLOCKED_BEFORE_REVIEW",
+    "exactly three distinct normalized anchor references and one registry reference must bind current non-placeholder SHA-256 file identities",
+    "verified anchor contents must be pass receipts and registry content must expose exactly the four canonical read-only reviewer roles",
+    "gate arrays cannot authorize a lower scope without verified artifact identities and typed trigger inputs",
+    "host_exposed runtime metadata is disabled in schema and deterministic Rust until an external provenance artifact exists",
+    "only the exact runtime_metadata object {exposure: unavailable} may pass",
+    "matching row and spawn host strings do not establish provenance",
+    "reviewer_runtime_configuration and custom_agent_runtime_discovery must both remain unsupported",
+    "legacy prompt_path, custom_path, PERSONAS, and persona_spec review-config aliases are removed"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/review-materiality/valid/advisory-review-allowed.json",
+    "fixtures/review-materiality/valid/blocked-before-review.json",
+    "fixtures/review-materiality/valid/delta-review-allowed.json",
+    "fixtures/review-materiality/valid/full-scope-material-review-required.json"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Thirteen corrective implementation, schema, fixture, and test artifacts plus this WorkerResult"
+    },
+    {
+      "class": "local-build-artifact",
+      "scope": "Normal ignored Cargo target output"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "Isolated temporary test paths created and cleaned by the existing self-test substrate"
+    },
+    {
+      "class": "git",
+      "scope": "Read-only live identity, status, diff, and digest operations"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PLUGIN-006",
+    "REQ-ORCH-003",
+    "REQ-SECURITY-006",
+    "REQ-GOAL-003",
+    "REQ-PROOF-001",
+    "REQ-PROOF-007"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N10-ORCHESTRATION",
+    "N12-CLAIMS"
+  ],
+  "changes": [
+    {
+      "area": "materiality derivation",
+      "result": "Added typed bounded triggers and a deterministic decision function. The declared decision and decision_authority no longer authorize their own result; the declared decision must match the derived result."
+    },
+    {
+      "area": "artifact-bound preflight",
+      "result": "Materiality now verifies exact current file SHA-256 identities, non-placeholder digests, normalized distinct paths, pass receipt contents, top-level anchor linkage, and exact four-role registry exposure before DELTA or ADVISORY is possible."
+    },
+    {
+      "area": "runtime provenance",
+      "result": "Removed the host_exposed positive schema branch and made deterministic validation accept only exact unavailable metadata while requiring both runtime and custom-agent-discovery claims to be withheld."
+    },
+    {
+      "area": "review configuration authority",
+      "result": "Canonicalized the producer API on REVIEW_ROLES, review_role_spec, and agent_manifest_path and removed duplicate prompt/custom/persona aliases."
+    },
+    {
+      "area": "false-pass controls",
+      "result": "Added decision-flip, forged DELTA, missing and unknown trigger, placeholder digest, evidence substitution, self-declared gate, matching-spawn host metadata, and prompt-provided runtime-value negatives."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --locked --offline -p ultragoal self_tests::review::materiality --lib -- --test-threads=1",
+      "result": "pass",
+      "summary": "5 passed; 0 failed, including deterministic forgery and substitution controls."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal self_tests::review::runtime --lib -- --test-threads=1",
+      "result": "pass",
+      "summary": "4 passed; 0 failed, including matching-spawn and prompt-provided host metadata controls."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal self_tests::review --lib -- --test-threads=1",
+      "result": "pass",
+      "summary": "39 passed; 0 failed across the complete review self-test surface."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal review_round --lib -- --test-threads=1",
+      "result": "pass",
+      "summary": "24 passed; 0 failed across review-round command, schema, receipt, registry, and observability consumers."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal canonical_review_round_and_materiality_fixtures_pass_current_validation --lib -- --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; the canonical review fixture and all four corrected materiality fixtures validate."
+    },
+    {
+      "command": "cargo check --locked --offline -p ultragoal --lib",
+      "result": "pass",
+      "summary": "Corrective production source compiles; warnings are unrelated dormant successor code."
+    },
+    {
+      "command": "cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "pass",
+      "summary": "All library, test, and integration targets compile on the integrated dirty candidate."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check over seven corrective Rust files; jq empty over schemas and fixtures; git diff --check over corrective paths",
+      "result": "pass",
+      "summary": "Corrective Rust, JSON, formatting, and whitespace checks pass; no corrective Rust file exceeds 300 lines."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; emitted LiveContext sha256:f038a85c30e680d08349ca49ea89cdfcd0de03ff45f2bc2056bec9f1c7f39300 after source freeze."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/review/materiality.rs",
+      "sha256": "20ccc15b81925ea514f73b87dada145373c2c155c8b962f0970bb5ff215e3add",
+      "bytes": 9333,
+      "lines": 268
+    },
+    {
+      "path": "validator/src/review/round/anchor/values.rs",
+      "sha256": "b05956f484d994e369f621375da87e0ac7b953497c161e28e0788b21400ae4db",
+      "bytes": 9703,
+      "lines": 300
+    },
+    {
+      "path": "validator/src/review/round/config.rs",
+      "sha256": "78b0a031248aaa88c39f5d1fbe5b5933d41714c8db9e0e99422318e246e00cb4",
+      "bytes": 6503,
+      "lines": 182
+    },
+    {
+      "path": "validator/src/review/round/mod.rs",
+      "sha256": "29c5320b6bcfe3c2f45e52581f6819a032539266cb90a60440df883bb4dc7eef",
+      "bytes": 3985,
+      "lines": 125
+    },
+    {
+      "path": "validator/src/review/round/runtime.rs",
+      "sha256": "e4f2a7393416fa7d7efa9575d94ad7489eae5c56f28e2914f86c1e94d6fc039c",
+      "bytes": 3322,
+      "lines": 99
+    },
+    {
+      "path": "schemas/review-materiality-gate.schema.json",
+      "sha256": "f3f4fc96514d49e3d42bf26384bb30b31bb04051b24e4fe1755112864bf64a9a",
+      "bytes": 4353,
+      "lines": 176
+    },
+    {
+      "path": "schemas/review-round-receipt.schema.json",
+      "sha256": "ff2c6f847993c7a50f3960defbe7112c16a8492eced31f779322955ba7befe10",
+      "bytes": 15321,
+      "lines": 637
+    },
+    {
+      "path": "fixtures/review-materiality/valid/advisory-review-allowed.json",
+      "sha256": "1a55dd01cccee081ca5f450d2cd412d9444be69d4fc77e5ee6fbfd1a20a6b636",
+      "bytes": 2057,
+      "lines": 64
+    },
+    {
+      "path": "fixtures/review-materiality/valid/blocked-before-review.json",
+      "sha256": "f2f6536e7cc3872e46e0a98e47ff3929fc1e40390c2ca857780083753935c4af",
+      "bytes": 2129,
+      "lines": 65
+    },
+    {
+      "path": "fixtures/review-materiality/valid/delta-review-allowed.json",
+      "sha256": "276994d8323fa3a1c199433aa6a8783c12fe30f4bd52024edb98920d5e7d0359",
+      "bytes": 2115,
+      "lines": 66
+    },
+    {
+      "path": "fixtures/review-materiality/valid/full-scope-material-review-required.json",
+      "sha256": "bf497cbbeea489f05f3ab78b17c259647d52c436a1911ac9e3e27c2c90de740e",
+      "bytes": 2514,
+      "lines": 76
+    },
+    {
+      "path": "validator/src/self_tests/review/materiality.rs",
+      "sha256": "d437806238b87309b1a9e9dd167bdbf02a219be5d4a6d7ace479a0a91a879f02",
+      "bytes": 10582,
+      "lines": 294
+    },
+    {
+      "path": "validator/src/self_tests/review/runtime.rs",
+      "sha256": "82416d8bb39ebde1a33ddd7bbd25e1be6d95c7db42cf7ab46216e8a037abdef0",
+      "bytes": 3750,
+      "lines": 110
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "A receipt can no longer obtain DELTA or ADVISORY by changing its decision, authority string, gate-run array, or evidence array without matching typed inputs and verified current artifacts."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Placeholder or zero digests are rejected for materiality anchor references; all four valid materiality fixtures now bind actual current anchor-file SHA-256 values."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Inline host_exposed values are never positive provenance, including when copied identically into a live-spawn row."
+    },
+    {
+      "severity": "root-integration-required",
+      "finding": "Root-owned red-packet catalog coverage does not yet name the new materiality_decision_derivation_mismatch, placeholder-identity, evidence-substitution, or host_exposed-unbound controls."
+    },
+    {
+      "severity": "static-fixture-ceiling",
+      "finding": "The review anchor payload fixtures outside materiality_gate still contain inherited repeated-character package/review/archive example values. Materiality binds their actual file hashes and cannot use those payload placeholders to authorize DELTA or ADVISORY, but they remain static fixture context rather than live proof."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent review of the exact thirteen corrective artifact digests and this WorkerResult",
+    "Root integration of exact red packets for decision derivation mismatch, trigger tamper, placeholder identity, evidence substitution, and host_exposed matching-spawn forgery",
+    "Root decision whether to replace inherited repeated-character values inside static review anchor payload fixtures with non-placeholder generated fixture identities",
+    "Fresh integrated proof after any root red-packet or anchor-fixture digest cascade",
+    "Root-only claim, release, readiness, migration, and N02 completion reconciliation"
+  ],
+  "requested_root_changes": [
+    {
+      "request": "Add and catalog a red packet that flips only /materiality_gate/decision from FULL to DELTA and expects materiality_decision_derivation_mismatch."
+    },
+    {
+      "request": "Add and catalog negatives for missing or unknown material_triggers, zero/repeated anchor-ref digest, validator-anchor substitution into reviewer_registry_evidence, and deterministic_gates_run removal."
+    },
+    {
+      "request": "Add and catalog a host_exposed row plus identically matching live_spawn_receipt runtime_metadata; require schema rejection and semantic review_round_runtime_metadata_host_exposed_unbound plus stale spawn binding."
+    },
+    {
+      "request": "After independent acceptance and any root fixture integration, rerun the 39 review tests, 24 review_round tests, all-target check, canonical fixture validation, and LiveContext build before any N02 or review-authority claim."
+    }
+  ],
+  "limitations": [
+    "This lease supplies deterministic static enforcement and does not provide an external candidate/session/tool-invocation runtime provenance artifact.",
+    "Accordingly host_exposed has no positive branch and both runtime configuration and custom-agent runtime discovery remain unsupported.",
+    "The four materiality fixtures are representative static fixtures; they are not live product or host proof.",
+    "The inherited review-round receipt schema is 637 lines; all corrective Rust implementation and test files are at or below 300 lines.",
+    "Root red-packet catalog edits, internal anchor-payload fixture replacement, claims, release, readiness, and N02 closure remain outside this worker's authority."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

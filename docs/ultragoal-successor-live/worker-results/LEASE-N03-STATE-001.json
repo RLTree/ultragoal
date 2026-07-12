@@ -1,0 +1,334 @@
+{
+  "schema_version": "WorkerResult-v1",
+  "worker": "/root/n03_state_worker",
+  "lease_id": "LEASE-N03-STATE-001",
+  "context_id": "sha256:945f46aa74ca749520310ce0963ae02ef9603e569f1eed58d3242104f069f5a4",
+  "context_note": "Read-only live context observed after root integration, all focused verification, and before this self-referential result file was written.",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_unchanged": true,
+    "status_sha256_before_result": "68db26318ec69229384b699b5ab93ca23a1b6a74a31ef765edb50713a0bb4f59",
+    "untracked_content_sha256_before_result": "d0ca653b4240864b253e1d2a80e5e9cf33ec9b65427567986a0fd3742987087b",
+    "worktree_state": "leased state source and nested tests are untracked; root-owned integration, Cargo, schema, and capture-lane changes plus pre-existing .DS_Store were preserved"
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "root_or_other_lane_changes_present_at_lease_start": [
+      "Cargo.lock",
+      "validator/Cargo.toml",
+      "validator/src/cli/capture/**",
+      "validator/tests/cli_contract/capture/**",
+      "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-001.json"
+    ],
+    "pre_existing_user_dirt": [
+      ".DS_Store"
+    ]
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "root_integration_changes_preserved": [
+      "validator/src/lib.rs",
+      "validator/tests/cli_contract.rs"
+    ],
+    "other_root_or_lane_changes_preserved": [
+      "Cargo.lock",
+      "validator/Cargo.toml",
+      "validator/src/cli/mod.rs",
+      "schemas/parent-source-runtime-verification.schema.json",
+      "validator/src/cli/capture/**",
+      "validator/tests/cli_contract/capture/**",
+      "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-001.json",
+      "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-002.json"
+    ],
+    "pre_existing_user_dirt_preserved": [
+      ".DS_Store"
+    ],
+    "leased_rust_lines": 2453,
+    "production_rust_lines": 1708,
+    "test_rust_lines": 745,
+    "maximum_file_lines": 289,
+    "files_over_300_lines": 0,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/state/catalog.rs",
+    "validator/src/state/ceiling.rs",
+    "validator/src/state/engine.rs",
+    "validator/src/state/findings.rs",
+    "validator/src/state/identity.rs",
+    "validator/src/state/mod.rs",
+    "validator/src/state/next.rs",
+    "validator/src/state/normalize.rs",
+    "validator/src/state/observations.rs",
+    "validator/src/state/policy.rs",
+    "validator/src/state/projection.rs",
+    "validator/src/state/reduce.rs",
+    "validator/src/state/snapshot.rs",
+    "validator/src/state/tests/engine_cases.rs",
+    "validator/src/state/tests/fixture.rs",
+    "validator/src/state/tests/mod.rs",
+    "validator/src/state/tests/ordering_cases.rs",
+    "validator/src/state/tests/projection_cases.rs",
+    "validator/src/state/tests/runtime_cases.rs",
+    "validator/src/state/types.rs",
+    "validator/tests/cli_contract/state/fixture.rs",
+    "validator/tests/cli_contract/state/mod.rs",
+    "validator/tests/cli_contract/state/public_boundary.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-STATE-001.json"
+  ],
+  "touched_semantics": [
+    "HCT-STATE internals",
+    "Finding",
+    "Repair",
+    "ProductState",
+    "NextAction",
+    "ClaimCeiling",
+    "DependencyActionCatalog",
+    "typed dependency facts and causal repairs",
+    "partial-order per-claim ceilings",
+    "deterministic legal next-action selection",
+    "versioned inspect, diagnose, and next projections"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "no findings produces an explicit no-op without asserting completion",
+    "contradictory dependency facts remain causal and lower only mapped dimensions",
+    "equal-priority actions use lexical action ID as a deterministic tie breaker",
+    "blocked external dependency selects one exact authority request",
+    "blocked facts cannot route through a higher-priority command",
+    "actions remain blocked until every declared dependency is satisfied",
+    "stale LiveContext identity fails closed",
+    "AuthorityCatalog built for another LiveContext fails closed",
+    "unsupported capability lowers only mapped claim dimensions",
+    "missing runtime metadata remains unverified and lowers mapped dimensions",
+    "runtime metadata with exposed provenance is retained verbatim",
+    "runtime metadata without exposed provenance fails closed",
+    "host goal state cannot alter product state identity, claim ceilings, or next action",
+    "semantically equal catalog order has one catalog and state identity",
+    "claim ceilings can be incomparable under set-inclusion order",
+    "tampered receipt and view files are ignored and queries write nothing",
+    "machine projections are versioned, valid JSON, byte-stable, and contain no raw ANSI",
+    "live public boundary is context-bound, deterministic, and Git-status stable",
+    "stale live dependency catalog cannot author state"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased state source, nested state tests, and this WorkerResult only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal Cargo target artifacts and isolated temporary test fixtures"
+    },
+    {
+      "class": "external-process",
+      "scope": "local Cargo, rustfmt, Git status, and test-fixture commands only"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-write",
+      "performed": false
+    },
+    {
+      "class": "state-runtime-core",
+      "filesystem_reads": false,
+      "filesystem_writes": false,
+      "processes": false,
+      "network": false,
+      "clock": false
+    }
+  ],
+  "requirements_addressed": [
+    "REQ-PLUGIN-007",
+    "REQ-STATE-003",
+    "REQ-STATE-004",
+    "REQ-CLI-004",
+    "REQ-CLI-005",
+    "REQ-REPAIR-001",
+    "REQ-REPAIR-002",
+    "REQ-REPAIR-004",
+    "REQ-PROOF-008",
+    "REQ-GOAL-002",
+    "REQ-GOAL-003",
+    "REQ-GOAL-004",
+    "REQ-COMPLETE-006",
+    "HCT-STATE implementation contract",
+    "HCT-STATE negative proof requirement"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "authority direction",
+      "rationale": "State accepts explicit LiveContext, AuthorityCatalog, and immutable DependencyActionCatalog inputs; receipts, generated views, status labels, telemetry, clocks, processes, and filesystem paths are not state inputs."
+    },
+    {
+      "area": "causal graph",
+      "rationale": "Typed findings preserve source, scope, dependency, cause, effect, authority, smallest declared repair, exact rerun, evidence invalidation, and bounded claim reductions."
+    },
+    {
+      "area": "context binding",
+      "rationale": "The engine rejects stale policy identities and rejects an AuthorityCatalog whose context_id differs from the supplied LiveContext."
+    },
+    {
+      "area": "claim ceilings",
+      "rationale": "Each claim starts at an explicit maximum dimension set and derivation can only remove dimensions. Set inclusion provides lower, equal, higher, and incomparable relations without a false global total order."
+    },
+    {
+      "area": "next action",
+      "rationale": "Only actions for live repairs with satisfied dependencies and available capabilities are eligible. Blocked facts require authority-request routes; ties resolve by priority then lexical action ID; no findings yields a non-completion no-op."
+    },
+    {
+      "area": "runtime and host metadata",
+      "rationale": "Runtime fields accept only typed exposed-source classes plus nonempty source provenance; missing or invalid metadata remains explicit. Host goal observations are excluded from product authority identity and forcibly non-authoritative."
+    },
+    {
+      "area": "machine projections",
+      "rationale": "Inspect, diagnose, and next are deterministic ProductState-v1 projections serialized as isolated JSON bytes with no side effects."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "result": "pass"
+    },
+    {
+      "command": "cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "pass",
+      "qualification": "Two warnings originate in the separate capture lane test-only export; no state warning was emitted."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --lib state::tests:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "25 passed; 0 failed. Sixteen are HCT-STATE tests and nine are legacy current_state tests matched by the substring filter."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test cli_contract state_contract:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "2 passed; 0 failed against the live public crate boundary"
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; 0 failed; emitted the pre-result live context identity"
+    },
+    {
+      "command": "cargo clippy --locked --offline -p ultragoal --lib --message-format short -- -D warnings",
+      "result": "repository_baseline_failure",
+      "summary": "90 repo-wide pre-existing or other-lane lint errors remain; the short-form output contained no validator/src/state finding"
+    },
+    {
+      "command": "git diff --check -- validator/src/state validator/tests/cli_contract/state",
+      "result": "pass"
+    },
+    {
+      "command": "per-file line-count audit",
+      "result": "pass",
+      "summary": "23 Rust files, 2453 lines, maximum 289 lines, zero files over 300 lines"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/state/** and validator/tests/cli_contract/state/**",
+      "sha256": "c9b06f2a46541411a413e1c005c1ffad4e4561baa97e6fe6a122e0ef04a392c6",
+      "digest_method": "SHA-256 of sorted path-bound per-file shasum -a 256 lines"
+    },
+    {
+      "path": "validator/src/state/**",
+      "sha256": "d6e5444d7d684ff935ae06dc051ad21b043f458e642d8a47ae06add5f555ff8e",
+      "digest_method": "SHA-256 of sorted path-bound per-file shasum -a 256 lines"
+    },
+    {
+      "path": "validator/tests/cli_contract/state/**",
+      "sha256": "4342cca1a7c2c1440c58e604947a0e8ac6edebb1d073bf432e28afc1989e52b3",
+      "digest_method": "SHA-256 of sorted path-bound per-file shasum -a 256 lines"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "integration-required",
+      "finding": "Root must add Finding, Repair, ProductState, NextAction, and ClaimCeiling to both compiled public API witnesses; module export alone is not contract-complete API proof."
+    },
+    {
+      "severity": "integration-required",
+      "finding": "The root-owned typed public parser, inspect/next/diagnose renderers, exit-code registry, machine schemas, command/effect catalogs, and compatibility adapters do not yet consume HCT-STATE."
+    },
+    {
+      "severity": "authority-required",
+      "finding": "No production DependencyActionCatalog has been adopted. The live integration fixture maps current inventory codes only to prove the boundary and cannot make root-owned claim decisions."
+    },
+    {
+      "severity": "migration-required",
+      "finding": "Legacy current_state, next_action, observe/repair, receipt, generated-view, and finalizer authorities remain active. This worker neither routed nor retired them."
+    },
+    {
+      "severity": "proof-boundary",
+      "finding": "The pure state core checks cross-input identities but intentionally does not execute LiveContext::revalidate because its lease is process-free. The root adapter must revalidate immediately before inventory/state derivation and lower affected claims on failure."
+    },
+    {
+      "severity": "proof-boundary",
+      "finding": "Typed RuntimeSource and nonempty exposed_source prevent blank or prompt-only placeholders structurally, but the pure core cannot attest that a caller truthfully obtained metadata from the host. Root integration must populate it only from exposed Codex/runtime metadata."
+    },
+    {
+      "severity": "quality-baseline",
+      "finding": "Repo-wide clippy with -D warnings remains red on 90 existing or other-lane findings. No validator/src/state lint remained in the reproduced short-form output."
+    },
+    {
+      "severity": "platform-ceiling",
+      "finding": "Only the current aarch64 macOS environment was exercised; Linux and other supported-host behavior remain unverified."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Root-owned public API witnesses for all five required HCT-STATE types.",
+    "Root-owned adopted dependency/action and claim-dimension policy derived from the live successor graph.",
+    "Root-owned typed parser, renderers, exit semantics, schemas, command/effect catalogs, and read-only adapters.",
+    "Immediate upstream LiveContext revalidation in each authority-bearing state adapter.",
+    "Root-owned migration routing and retirement of duplicate current-state, next-action, repair, receipt, generated-view, and finalizer authorities.",
+    "Independent claim-falsification, security, product-journey, and orchestration-recovery review.",
+    "Representative installed-plugin runtime verification after integration."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/api_witness.rs",
+      "request": "Add compiled internal witnesses for Finding, Repair, ProductState, NextAction, and ClaimCeiling after independent review."
+    },
+    {
+      "path": "validator/tests/public_api_witness.rs",
+      "request": "Add external-crate compile witnesses for the five required HCT-STATE public APIs."
+    },
+    {
+      "path": "root-owned CLI and state adapters",
+      "request": "Revalidate LiveContext, build the live AuthorityCatalog, supply the adopted DependencyActionCatalog, derive once, and route inspect/next/diagnose from the same ProductState without writes."
+    },
+    {
+      "path": "root-owned schemas and command/effect catalogs",
+      "request": "Register versioned ProductState inspect/diagnose/next machine schemas and exact read-only exit/stream behavior."
+    },
+    {
+      "path": "migration authority",
+      "request": "Route then retire legacy current_state, next_action, observe/repair, receipt, generated-view, and finalizer readers/writers under the adopted migration contract."
+    },
+    {
+      "path": "root acceptance",
+      "request": "Reproduce focused tests and digests, run independent reviewers, then accept, reject, or rework this worker result without promoting N03 or downstream claims."
+    }
+  ],
+  "limitations": [
+    "StateEngine derives and projects state; it does not execute repairs or mutate any target.",
+    "The engine relies on HCT-CONTEXT for fresh live revalidation and HCT-INVENTORY for authoritative discovery.",
+    "The dependency/action catalog is explicit root input and has not yet been adopted as product authority.",
+    "No root parser, command catalog, generated surface, schema registry, migration registry, or legacy adapter was modified by this worker.",
+    "No install, discovery, runtime, routine-use, orchestration, release, readiness, or completion claim was reconciled.",
+    "The repo-wide clippy baseline remains red outside this lease.",
+    "Only current macOS behavior was executed."
+  ],
+  "no_claim_statement": "This worker does not claim accepted HCT-STATE behavior, N03 completion, orchestration readiness, release readiness, or goal completion."
+}

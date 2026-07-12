@@ -1,0 +1,151 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:a0fd9ee151cbc01f5ba9e6e43b0322cb095732ad6ca121aff77c3ddef2809c69",
+    "candidate_id": "sha256:78333fe2106c86ad1e8e705513f822ac8d6d28a83fa5a9cdb8fee98542ba1269",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true
+  },
+  "work_package": {
+    "node_id": "canonical-plugin-product-dependency-closure",
+    "dependencies": ["plugin-product-dependency-closure-rework"],
+    "required_tools": ["cargo-nextest", "jq", "shasum"],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      ".codex-plugin/plugin.json",
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/root-decisions/CANONICAL-PLUGIN-DEPENDENCY-CLOSURE-REWORK.json",
+      "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-DESCRIPTOR-BINDING-CORRECTION-017.json",
+      "plugin-manifest-draft.json",
+      "validator/src/cli/successor/catalog.rs"
+    ],
+    "owned_scope": {
+      "paths": [
+        "README.md",
+        "docs/install-and-visibility.md",
+        "docs/plugin-resource-map.md",
+        "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-DEPENDENCY-CLOSURE-018.json",
+        "skills/diagnose-and-observe/SKILL.md",
+        "skills/goal-run/SKILL.md",
+        "skills/harness-ultragoal/SKILL.md",
+        "skills/improve-and-maintain/SKILL.md",
+        "skills/product-journey-review/SKILL.md",
+        "skills/prove/SKILL.md",
+        "skills/repository-fit/SKILL.md",
+        "skills/routine-work/SKILL.md"
+      ],
+      "semantic_symbols": [
+        "plugin_product::canonical_source",
+        "plugin_product::dependency_closure",
+        "plugin_product::zero_write"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/plugin-product",
+        "validator/tests/plugin_product_contract"
+      ],
+      "effects": [
+        {"class":"workspace_write","target":"canonical-plugin-source"},
+        {"class":"fixture_write","target":"plugin-product-fixtures"},
+        {"class":"process","target":"offline-plugin-product-validation"}
+      ]
+    },
+    "prerequisites": ["adopted-contract", "root-issued-rework"],
+    "outputs": [
+      "canonical-plugin-dependency-closed-source-candidate",
+      "recursive-zero-write-proof",
+      "worker-result-v1"
+    ],
+    "acceptance": [
+      "independent-dependency-closure-review",
+      "root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "CANONICAL-PLUGIN-DEPENDENCY-CLOSURE-018",
+    "run_id": "ultragoal-successor-live-20260712",
+    "node_id": "canonical-plugin-product-dependency-closure",
+    "principal": "worker",
+    "owner": "/root/canonical_plugin_dependency_closure_engineer",
+    "binding": {
+      "context_id": "sha256:a0fd9ee151cbc01f5ba9e6e43b0322cb095732ad6ca121aff77c3ddef2809c69",
+      "candidate_id": "sha256:78333fe2106c86ad1e8e705513f822ac8d6d28a83fa5a9cdb8fee98542ba1269"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      ".codex-plugin/plugin.json",
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/root-decisions/CANONICAL-PLUGIN-DEPENDENCY-CLOSURE-REWORK.json",
+      "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-DESCRIPTOR-BINDING-CORRECTION-017.json",
+      "plugin-manifest-draft.json",
+      "validator/src/cli/successor/catalog.rs"
+    ],
+    "owned_scope": {
+      "paths": [
+        "README.md",
+        "docs/install-and-visibility.md",
+        "docs/plugin-resource-map.md",
+        "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-DEPENDENCY-CLOSURE-018.json",
+        "skills/diagnose-and-observe/SKILL.md",
+        "skills/goal-run/SKILL.md",
+        "skills/harness-ultragoal/SKILL.md",
+        "skills/improve-and-maintain/SKILL.md",
+        "skills/product-journey-review/SKILL.md",
+        "skills/prove/SKILL.md",
+        "skills/repository-fit/SKILL.md",
+        "skills/routine-work/SKILL.md"
+      ],
+      "semantic_symbols": [
+        "plugin_product::canonical_source",
+        "plugin_product::dependency_closure",
+        "plugin_product::zero_write"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/plugin-product",
+        "validator/tests/plugin_product_contract"
+      ],
+      "effects": [
+        {"class":"workspace_write","target":"canonical-plugin-source"},
+        {"class":"fixture_write","target":"plugin-product-fixtures"},
+        {"class":"process","target":"offline-plugin-product-validation"}
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "plugin-product-dependency-closure-rework": "sha256:a34d3f80468910d7f802d1ccf89ee2c7490623068900380e42bd08c63524918f"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "jq": "sha256:ef35d26cab5fffd780c5272142dc2d5ae37ae02cae7885204030e48020f74cd1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "adopted-contract": "sha256:d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51",
+        "root-issued-rework": "sha256:a34d3f80468910d7f802d1ccf89ee2c7490623068900380e42bd08c63524918f"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "protected_root_inputs": [
+    {"path":".codex/agents/claim-falsifier.toml","sha256":"6ecb0324f07793dd2c8581cd82b83ae6086095fea5d4715c550076211c324e6f","byte_length":450,"line_count":4,"worker_access":"prohibited"},
+    {"path":".codex/agents/orchestration-recovery-reviewer.toml","sha256":"da39757a9d58499821f6c11863d1f6bb1d64e015826837ead3962de9c0e6fb75","byte_length":446,"line_count":4,"worker_access":"prohibited"},
+    {"path":".codex/agents/product-journey-reviewer.toml","sha256":"9d5f4955afbf33a0965676ad00474aabe4843b3345e901fa0e518b0c9daf6a32","byte_length":466,"line_count":4,"worker_access":"prohibited"},
+    {"path":".codex/agents/repo-recon.toml","sha256":"4272e86928d359a867da83491497ee163a1f66c9cf99683df69bec7d55b91f9c","byte_length":382,"line_count":4,"worker_access":"prohibited"},
+    {"path":".codex/agents/research-verifier.toml","sha256":"47ee7d30b1052e1c990bc65f9dcaefb77f341b80d1dcbe0fd2d024daeb5901ee","byte_length":424,"line_count":4,"worker_access":"prohibited"},
+    {"path":".codex/agents/security-reviewer.toml","sha256":"20efde18349120ad57c938a678ea7e6fa076dd454201ec2ec6e3d9d6fe670b65","byte_length":460,"line_count":4,"worker_access":"prohibited"},
+    {"path":".agents/plugins/marketplace.json","precondition":"path_absent","sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","worker_access":"prohibited"}
+  ],
+  "root_validation_obligations": [
+    "rederive every protected root input before candidate freeze",
+    "run any semantic test that reads .codex or .agents only from root authority",
+    "extend the worker-owned source set with protected inputs and every live semantic dependency",
+    "perform independent review before applying manifests or marketplace state"
+  ],
+  "no_claim_statement": "This root-issued envelope grants no root authority and raises no source, package, install, discovery, runtime, readiness, release, or completion claim."
+}

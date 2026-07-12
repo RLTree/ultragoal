@@ -1,0 +1,723 @@
+{
+  "worker": "/root/n03_node006_corrective_implementation",
+  "lease_id": "LEASE-N03-CLI-STATE-NODE-006",
+  "context_id": "sha256:580bf9b3d64041b6cbf3d8bcadd9dca65e60d758420461bcf5250e91f0140611",
+  "candidate_identity": {
+    "candidate_id": "sha256:580bf9b3d64041b6cbf3d8bcadd9dca65e60d758420461bcf5250e91f0140611",
+    "context_id": "sha256:580bf9b3d64041b6cbf3d8bcadd9dca65e60d758420461bcf5250e91f0140611",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "artifact_set_sha256": "580bf9b3d64041b6cbf3d8bcadd9dca65e60d758420461bcf5250e91f0140611",
+    "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "parent_worker_result_path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-005.json",
+    "parent_worker_result_sha256": "4cec98bf8f7d52b197b38c2954f26992eef6c8a519f02e278e0ebe55d0697bf0",
+    "parent_artifact_set_sha256": "1b7ce62f111eb90a6c534c476a9759727472f8d5cbe6e17e1a2fb19f3f922ef5",
+    "root_decision_path": "docs/ultragoal-successor-live/root-decisions/N03-NODE-005-REWORK.json",
+    "root_decision_sha256": "b05e540f4cbae611ebd80ef421e9f86b500f94e9aa348d444ab284a9e9d4c4ea",
+    "context_note": "Git operations were prohibited. This candidate identity binds only the exact current path-bound 70-artifact set listed below, derived from the immutable parent set plus current leased capture paths; it does not assert repository-wide Git identity."
+  },
+  "base_state": {
+    "node": "N03-CLI-STATE",
+    "parent_worker_result_path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-005.json",
+    "parent_worker_result": "sha256:4cec98bf8f7d52b197b38c2954f26992eef6c8a519f02e278e0ebe55d0697bf0",
+    "parent_artifact_set": "sha256:1b7ce62f111eb90a6c534c476a9759727472f8d5cbe6e17e1a2fb19f3f922ef5",
+    "parent_artifact_count": 64,
+    "root_decision": "rework",
+    "root_decision_path": "docs/ultragoal-successor-live/root-decisions/N03-NODE-005-REWORK.json",
+    "root_decision_sha256": "b05e540f4cbae611ebd80ef421e9f86b500f94e9aa348d444ab284a9e9d4c4ea",
+    "decisive_finding": "The parent capture run bound explicit secrets for stdout and stderr redaction but did not pass that exact secret set into artifact finalization, so public artifact bytes and raw digests could become observable."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "Corrected unaccepted internal N03 capture candidate for independent rereview only. Root acceptance, public dispatcher/schema/generated-authority and migration integration, representative zero-write CLI journeys, stable repository-wide CLI verification, N03 closure, readiness, release, and completion remain withheld.",
+    "corrective_secret_binding_implemented": true,
+    "implementation_bytes_changed": true,
+    "independent_acceptance_performed": false,
+    "n03_closure_withheld": true,
+    "artifact_count_excluding_result": 70,
+    "changed_artifact_count_from_parent": 12,
+    "unchanged_parent_artifact_count": 58,
+    "touched_path_count": 13,
+    "fixture_count": 5,
+    "generated_output_count": 1,
+    "requested_root_change_count": 0,
+    "artifact_set_sha256": "580bf9b3d64041b6cbf3d8bcadd9dca65e60d758420461bcf5250e91f0140611",
+    "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "total_bytes": 347269,
+    "total_lines": 10140,
+    "maximum_file_lines": 299,
+    "files_over_300_lines": 0,
+    "secret_finalization_scan_budget_bytes": 67108864,
+    "secret_safe_withheld_representation": "empty bytes, zero byte length, sha256 of empty bytes, and an explicit withheld disposition",
+    "bounded_prefix_rule": "Any nonempty proper prefix of an explicit secret at the terminal artifact boundary, including after arbitrary public leading bytes, is withheld.",
+    "focused_artifact_tests": {
+      "passed": 12,
+      "failed": 0,
+      "skipped": 99,
+      "jobs": 16
+    },
+    "dependency_closed_control_tests": {
+      "passed": 46,
+      "failed": 0,
+      "leaky_process_warnings": 0,
+      "skipped": 1604,
+      "jobs": 16
+    },
+    "broad_capture_tests": {
+      "passed": 74,
+      "failed": 5,
+      "skipped": 1571,
+      "jobs": 16,
+      "environment_limited": true
+    },
+    "cargo_check_all_tests_passed": true,
+    "rustfmt_check_passed": true,
+    "artifact_line_counts": {
+      "validator/src/cli/capture/artifact.rs": 178,
+      "validator/src/cli/capture/artifact_model.rs": 142,
+      "validator/src/cli/capture/artifact_safety.rs": 75,
+      "validator/src/cli/capture/descriptor.rs": 277,
+      "validator/src/cli/capture/environment.rs": 240,
+      "validator/src/cli/capture/filesystem.rs": 281,
+      "validator/src/cli/capture/inputs.rs": 112,
+      "validator/src/cli/capture/mod.rs": 46,
+      "validator/src/cli/capture/output.rs": 250,
+      "validator/src/cli/capture/process.rs": 282,
+      "validator/src/cli/capture/program.rs": 156,
+      "validator/src/cli/capture/run.rs": 220,
+      "validator/src/cli/capture/sandbox.rs": 206,
+      "validator/src/cli/capture/spec.rs": 299,
+      "validator/src/cli/capture/tree.rs": 125,
+      "validator/src/cli/capture/util.rs": 95,
+      "validator/src/cli/successor/diagnostics/mod.rs": 4,
+      "validator/src/cli/successor/diagnostics/model.rs": 128,
+      "validator/src/cli/successor/diagnostics/render.rs": 40,
+      "validator/src/cli/successor/runtime/dispatch.rs": 236,
+      "validator/src/cli/successor/runtime/error.rs": 56,
+      "validator/src/cli/successor/runtime/failures.rs": 169,
+      "validator/src/cli/successor/runtime/inspect_context.rs": 27,
+      "validator/src/cli/successor/runtime/mod.rs": 13,
+      "validator/src/cli/successor/runtime/state_view.rs": 24,
+      "validator/src/state/catalog.rs": 176,
+      "validator/src/state/ceiling.rs": 73,
+      "validator/src/state/engine.rs": 292,
+      "validator/src/state/findings.rs": 129,
+      "validator/src/state/identity.rs": 30,
+      "validator/src/state/limits.rs": 297,
+      "validator/src/state/mod.rs": 39,
+      "validator/src/state/next.rs": 151,
+      "validator/src/state/normalize.rs": 56,
+      "validator/src/state/observations.rs": 63,
+      "validator/src/state/policy.rs": 230,
+      "validator/src/state/policy_action.rs": 112,
+      "validator/src/state/policy_repair.rs": 99,
+      "validator/src/state/projection.rs": 215,
+      "validator/src/state/provenance.rs": 181,
+      "validator/src/state/reduce.rs": 26,
+      "validator/src/state/snapshot.rs": 121,
+      "validator/src/state/tests/engine_cases.rs": 226,
+      "validator/src/state/tests/fixture.rs": 123,
+      "validator/src/state/tests/mod.rs": 7,
+      "validator/src/state/tests/ordering_cases.rs": 105,
+      "validator/src/state/tests/policy_cases.rs": 246,
+      "validator/src/state/tests/projection_cases.rs": 99,
+      "validator/src/state/tests/review_cases.rs": 185,
+      "validator/src/state/tests/runtime_cases.rs": 134,
+      "validator/src/state/types.rs": 224,
+      "validator/tests/cli_contract/capture/artifact_secret_policy.rs": 118,
+      "validator/tests/cli_contract/capture/artifact_secret_support.rs": 99,
+      "validator/tests/cli_contract/capture/artifact_secrets.rs": 221,
+      "validator/tests/cli_contract/capture/artifact_special_files.rs": 47,
+      "validator/tests/cli_contract/capture/artifacts.rs": 217,
+      "validator/tests/cli_contract/capture/bounds.rs": 255,
+      "validator/tests/cli_contract/capture/enforcement.rs": 281,
+      "validator/tests/cli_contract/capture/fixture.rs": 91,
+      "validator/tests/cli_contract/capture/mod.rs": 16,
+      "validator/tests/cli_contract/capture/process.rs": 291,
+      "validator/tests/cli_contract/capture/program_security.rs": 58,
+      "validator/tests/cli_contract/capture/security.rs": 149,
+      "validator/tests/cli_contract/capture/shared_budget.rs": 272,
+      "validator/tests/cli_contract/state/fixture.rs": 102,
+      "validator/tests/cli_contract/state/mod.rs": 3,
+      "validator/tests/cli_contract/state/mutation.rs": 129,
+      "validator/tests/cli_contract/state/public_boundary.rs": 97,
+      "validator/tests/cli_contract/successor/node_n03.rs": 178,
+      "validator/tests/cli_contract/successor/runtime_context.rs": 196
+    },
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "live_git_mutation_performed": false,
+    "public_dispatcher_or_schema_integration_performed": false,
+    "atomic_stat_open_regular_file_proof": false
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-006.json",
+    "validator/src/cli/capture/artifact.rs",
+    "validator/src/cli/capture/artifact_model.rs",
+    "validator/src/cli/capture/artifact_safety.rs",
+    "validator/src/cli/capture/descriptor.rs",
+    "validator/src/cli/capture/environment.rs",
+    "validator/src/cli/capture/mod.rs",
+    "validator/src/cli/capture/run.rs",
+    "validator/tests/cli_contract/capture/artifact_secret_policy.rs",
+    "validator/tests/cli_contract/capture/artifact_secret_support.rs",
+    "validator/tests/cli_contract/capture/artifact_secrets.rs",
+    "validator/tests/cli_contract/capture/artifact_special_files.rs",
+    "validator/tests/cli_contract/capture/mod.rs"
+  ],
+  "touched_semantics": [
+    "capture::artifact::secret_safe_finalization",
+    "capture::artifact_model::observability",
+    "capture::run::explicit_secret_binding",
+    "capture::descriptor::static_regular_file_preflight",
+    "capture::tests::artifact_false_pass"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-006.json"
+  ],
+  "fixtures": [
+    "validator/tests/cli_contract/capture/artifact_secret_policy.rs",
+    "validator/tests/cli_contract/capture/artifact_secret_support.rs",
+    "validator/tests/cli_contract/capture/artifact_secrets.rs",
+    "validator/tests/cli_contract/capture/artifact_special_files.rs",
+    "validator/tests/cli_contract/capture/mod.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "lease-n03-node006-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "lease-n03-node006-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "lease-n03-node006-cargo",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "destructive",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "target": "root-authority",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-CLI-006",
+    "REQ-PROOF-002",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-004",
+    "REQ-SECURITY-006",
+    "REQ-SECURITY-007"
+  ],
+  "dependency_nodes": [
+    "N01-CONTEXT-EFFECT",
+    "N02-INVENTORY"
+  ],
+  "changes": [
+    {
+      "area": "explicit-secret artifact finalization",
+      "result": "The exact canonical SecretArg and SecretEnv byte set is deterministically ordered, deduplicated, and passed into artifact finalization before CapturedArtifact or ArtifactRef construction. Full-secret matches, terminal nonempty proper-prefix ambiguity, and scan-budget exhaustion produce only the secret-safe withheld representation."
+    },
+    {
+      "area": "artifact observability",
+      "result": "CapturedArtifact and ArtifactRef now carry an explicit disposition. Bytes, byte length, digest, Debug, resolver output, artifact JSON, and canonical CapturedRun JSON are derived only from finalized safe state; withheld records expose empty bytes and the empty-byte digest."
+    },
+    {
+      "area": "policy and descriptor preservation",
+      "result": "Artifact path and expected-digest labels are checked against argument and environment secret policy. Candidate/context binding, deterministic artifact order, aggregate bounds, expected digests, symlink/hardlink rejection, mutation detection, nonblocking static special-file preflight, and post-open substitution checks remain wired."
+    },
+    {
+      "area": "false-pass coverage",
+      "result": "Focused tests now cover a full SecretArg artifact, an environment-only secret, multiple overlapping secrets and role permutations, arbitrary public leading bytes ending in every nonempty proper prefix, both artifact roles/orders, all label/channel combinations, raw bytes, compact and Debug numeric bytes, prefixed and bare raw digests, ArtifactRef, artifact JSON, canonical CapturedRun JSON, positive public artifacts, and FIFO/socket controls."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "shasum -a 256 docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-005.json docs/ultragoal-successor-live/root-decisions/N03-NODE-005-REWORK.json",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "Parent 4cec98bf8f7d52b197b38c2954f26992eef6c8a519f02e278e0ebe55d0697bf0; root REWORK b05e540f4cbae611ebd80ef421e9f86b500f94e9aa348d444ab284a9e9d4c4ea; both matched the lease inputs."
+    },
+    {
+      "command": "rustfmt --edition 2024 --config skip_children=true --check on the 12 leased changed Rust files; whitespace scan; leased capture LOC scan",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "Rustfmt check passed, the trailing-whitespace scan found no matches, 29 capture files remained at or below 300 lines, and the maximum was 299."
+    },
+    {
+      "command": "CARGO_NET_OFFLINE=true CARGO_TARGET_DIR=/private/tmp/hug-n03-node006-worker-target cargo check --jobs 16 --tests",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "The current all-tests compile passed in the authorized isolated target. Existing warnings remain outside this lease's correction."
+    },
+    {
+      "command": "CARGO_NET_OFFLINE=true CARGO_TARGET_DIR=/private/tmp/hug-n03-node006-worker-target cargo nextest run --jobs 16 --test cli_contract -E 'test(/capture::artifact_/)'",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "12 focused artifact secret-policy, observability, prefix, role/order, special-file, and capture-run integration tests passed; 99 skipped."
+    },
+    {
+      "command": "CARGO_NET_OFFLINE=true CARGO_TARGET_DIR=/private/tmp/hug-n03-node006-worker-target cargo nextest run --jobs 16 --lib --test cli_contract -E 'test(/cli::capture::/) or test(/successor_capture::artifact/) or test(/successor_capture::security/) or test(/successor_capture::enforcement/) or test(/successor_capture::program_security/)'",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "46 dependency-closed capture and control tests passed; 1604 skipped."
+    },
+    {
+      "command": "CARGO_NET_OFFLINE=true CARGO_TARGET_DIR=/private/tmp/hug-n03-node006-worker-target cargo nextest run --no-fail-fast --jobs 16 --lib --test cli_contract -E 'test(/capture/)'",
+      "result": "environment_limited_failure",
+      "exit_code": 100,
+      "summary": "79 tests ran: 74 passed and 5 existing child-execution assertions failed because nested /usr/bin/sandbox-exec returned exit 71 or no expected output under the outer command sandbox. The 12 new artifact tests passed inside this run. An unsandboxed rerun was requested but not run because escalation approval quota was unavailable."
+    },
+    {
+      "command": "Two-pass in-memory SHA-256, byte-length, line-count, regular-file, symlink, aggregate, and path-bound artifact-set reconciliation",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "Both snapshots matched: 70 artifacts, 347269 bytes, 10140 lines, maximum 299, zero files over 300 lines, set 580bf9b3d64041b6cbf3d8bcadd9dca65e60d758420461bcf5250e91f0140611."
+    },
+    {
+      "command": "Independent read-only source and false-pass review followed by corrective test strengthening",
+      "result": "pass_with_residual_finding",
+      "exit_code": 0,
+      "summary": "Review-confirmed secret binding and safe observability. Its environment-only, suffix-prefix, complete-payload, label/channel, compact-JSON, and bare-digest test gaps were corrected. The stat-to-open substitution window remains an explicitly withheld proof claim."
+    },
+    {
+      "command": "Typed WorkerResult-v1 JSON/top-level/type-shape reconciliation against validator/src/orchestration/worker.rs plus jq structural and digest checks",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "The result has exactly the 21 WorkerResultV1 fields, typed artifact/effect records, empty requested_root_changes, the exact no-claim statement, current artifact records, and no self-referential result artifact. Runtime validate_for is not claimed without the exact root-issued LeaseSpec and WorkPackage."
+    },
+    {
+      "command": "Claim-ceiling check for N03 closure, readiness, release, and completion",
+      "result": "pass_with_all_claims_withheld",
+      "exit_code": 0,
+      "summary": "This result makes none of those claims and requests no root changes."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/capture/artifact.rs",
+      "sha256": "sha256:c19e5e9f6ba81cb045fba21aba984b12e7b6e93af43fb3894a3c497523ef01fb",
+      "byte_length": 6399
+    },
+    {
+      "path": "validator/src/cli/capture/artifact_model.rs",
+      "sha256": "sha256:6e2a5477b86d4ae3fce9f846f40bf9d33095a69154a3e64979d102cf305dbf8b",
+      "byte_length": 3877
+    },
+    {
+      "path": "validator/src/cli/capture/artifact_safety.rs",
+      "sha256": "sha256:a2eb7734d4a31bc00d228190fdd597486130712d7f9787289504a9553ebd361b",
+      "byte_length": 2482
+    },
+    {
+      "path": "validator/src/cli/capture/descriptor.rs",
+      "sha256": "sha256:01aeb17a233f3a1eefebd8edc0f0542935fcdb2716e910e3ee01c54d95d750b8",
+      "byte_length": 8062
+    },
+    {
+      "path": "validator/src/cli/capture/environment.rs",
+      "sha256": "sha256:78348785f809a3e63186adae595a01f9aec982d4a6018ccdeedeec21558d9f56",
+      "byte_length": 8648
+    },
+    {
+      "path": "validator/src/cli/capture/filesystem.rs",
+      "sha256": "sha256:46bd6e19e623a0b2928e4567e655eaad32d02d854ef6faab55bc2f76bd4f8499",
+      "byte_length": 9173
+    },
+    {
+      "path": "validator/src/cli/capture/inputs.rs",
+      "sha256": "sha256:4b5e53531a491738ec31cf3b4a05d2527d7a5138379ade6283af990d60a53234",
+      "byte_length": 2294
+    },
+    {
+      "path": "validator/src/cli/capture/mod.rs",
+      "sha256": "sha256:bd766ae86e740943088c8478fcb71ec659dd61d2bdfe771ef3047dd50b338e1e",
+      "byte_length": 1516
+    },
+    {
+      "path": "validator/src/cli/capture/output.rs",
+      "sha256": "sha256:9284579656bdceb4eadc9e6034aab6c0b4e937f58ec50368ad8230590505b927",
+      "byte_length": 7006
+    },
+    {
+      "path": "validator/src/cli/capture/process.rs",
+      "sha256": "sha256:60a71d1b818c60cd2d16638ab59aeb8a4c2629af5c316fc8d9df47e7fc6b24c5",
+      "byte_length": 9740
+    },
+    {
+      "path": "validator/src/cli/capture/program.rs",
+      "sha256": "sha256:5b7dee7ba67bbea303cb31c5cfea0c7a435e9859c6e02373e3309491fa5be7cb",
+      "byte_length": 4828
+    },
+    {
+      "path": "validator/src/cli/capture/run.rs",
+      "sha256": "sha256:59884844b4a0f88e4897ff9cf6ec897a5759da75f1e511fca5cadb54d0b80cf5",
+      "byte_length": 7613
+    },
+    {
+      "path": "validator/src/cli/capture/sandbox.rs",
+      "sha256": "sha256:c9721b24bd8bdd84c37635c85c0ba02691a3394b3e4ff00c05a62664be25f372",
+      "byte_length": 7333
+    },
+    {
+      "path": "validator/src/cli/capture/spec.rs",
+      "sha256": "sha256:3f58ca0f539220993c1ee882c08f036a03eee247485f5f8ff8ce60ae25318a20",
+      "byte_length": 10979
+    },
+    {
+      "path": "validator/src/cli/capture/tree.rs",
+      "sha256": "sha256:50a2d76e714ae80accb631b68b1753a892e0b0a9771ba3368882ff381e85d13f",
+      "byte_length": 3754
+    },
+    {
+      "path": "validator/src/cli/capture/util.rs",
+      "sha256": "sha256:30cbefc48612a11982ee899823529cba3389433a310d7cc7433ddaaea10b91fd",
+      "byte_length": 2782
+    },
+    {
+      "path": "validator/src/cli/successor/diagnostics/mod.rs",
+      "sha256": "sha256:ec082e0c79d42c13721e9278a3a1e127279ec515e43f2b3015f17ec3ae59e633",
+      "byte_length": 106
+    },
+    {
+      "path": "validator/src/cli/successor/diagnostics/model.rs",
+      "sha256": "sha256:71a48bee6c74b66a872757cad0926d7103a283b69ebffbbd0f62f1e6337f2ae2",
+      "byte_length": 3927
+    },
+    {
+      "path": "validator/src/cli/successor/diagnostics/render.rs",
+      "sha256": "sha256:7f1a18bdfcac71b0898959d124df337439c7ae3e7353d11e58f7573902677e93",
+      "byte_length": 1496
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/dispatch.rs",
+      "sha256": "sha256:d00860d9ff177b6fb284b7cb8311c3b96368cb6fa3389ab542e52c64b19c66cc",
+      "byte_length": 8518
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/error.rs",
+      "sha256": "sha256:59ff3865abc74004064297519bb76caa80cd182258294459826a7fae0d2b50cb",
+      "byte_length": 1587
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/failures.rs",
+      "sha256": "sha256:be793a547928f941f846fbf065e6d8dd41eecd916e093d9de48f04c3955d2855",
+      "byte_length": 5742
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/inspect_context.rs",
+      "sha256": "sha256:a35ee2601bdafef5f06231c0835044561cfb2121c17b0f8087c64e95e3a4c918",
+      "byte_length": 1032
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/mod.rs",
+      "sha256": "sha256:9f29726ad53578a302e88c4b603db3627357a9cb95b8f98a041afb640ca199cb",
+      "byte_length": 435
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/state_view.rs",
+      "sha256": "sha256:b026417ae4f50ed168e43d267da6e3d50f9fa7809a44b2a68f8140380ec3d63b",
+      "byte_length": 588
+    },
+    {
+      "path": "validator/src/state/catalog.rs",
+      "sha256": "sha256:7294b6d825455e1004be5efda6c5ba6370e16e98ce92845d09d26bb66efcca42",
+      "byte_length": 5489
+    },
+    {
+      "path": "validator/src/state/ceiling.rs",
+      "sha256": "sha256:44fe67e5db53a07253f711ad3247f169f4127c5ce4f3a03fb8b339b8a92a0703",
+      "byte_length": 2157
+    },
+    {
+      "path": "validator/src/state/engine.rs",
+      "sha256": "sha256:3e40246ef3290fb682de511f4077c6ce5a64cf8ae509f55222a0e4d31c20d688",
+      "byte_length": 10351
+    },
+    {
+      "path": "validator/src/state/findings.rs",
+      "sha256": "sha256:ef65571919e3f379b6295d569f236888e78f54043c426ce03c2e4c57fd4e5861",
+      "byte_length": 4379
+    },
+    {
+      "path": "validator/src/state/identity.rs",
+      "sha256": "sha256:40a33bc3220b861ce0716fb12b45266936c9e8973d55b735dcbc0b95b36ddc29",
+      "byte_length": 1085
+    },
+    {
+      "path": "validator/src/state/limits.rs",
+      "sha256": "sha256:fe3af08f6830605a9ac5280d359211677793a0e42bf3b686b45dd0742e55e285",
+      "byte_length": 9907
+    },
+    {
+      "path": "validator/src/state/mod.rs",
+      "sha256": "sha256:6adbbd7875497aef619e378b0389241c781731aaf89526afa9dc667b3c4276ad",
+      "byte_length": 1193
+    },
+    {
+      "path": "validator/src/state/next.rs",
+      "sha256": "sha256:b28fd9a5e19da14e758a31442d2a96e4f7f7d148ea284cf0cdc9a762c86941b5",
+      "byte_length": 5307
+    },
+    {
+      "path": "validator/src/state/normalize.rs",
+      "sha256": "sha256:e47c7f5f5ccccd5284b1b40ea467ff714fc252d63c4b4bdafecda3d976b0a0fd",
+      "byte_length": 2001
+    },
+    {
+      "path": "validator/src/state/observations.rs",
+      "sha256": "sha256:3fbcd30ca154c254d800c4f45c4c8ef67d447b9d6ce8cc4f90814aba962a8187",
+      "byte_length": 2173
+    },
+    {
+      "path": "validator/src/state/policy.rs",
+      "sha256": "sha256:63f7d9a53d701af94b23ee527b60da1ddb05576be84c4869cda1177cd983707d",
+      "byte_length": 7740
+    },
+    {
+      "path": "validator/src/state/policy_action.rs",
+      "sha256": "sha256:f7beb5452fc878c1f9ced5ee2886fd2430026549320e34a17d25bd2fcb5097f7",
+      "byte_length": 4174
+    },
+    {
+      "path": "validator/src/state/policy_repair.rs",
+      "sha256": "sha256:cb617b259a49a99dd299721144b19451b48769326e4ba05c682c695a5486ace0",
+      "byte_length": 3508
+    },
+    {
+      "path": "validator/src/state/projection.rs",
+      "sha256": "sha256:28cf07c26f5777b4de93667189b9927b031a7ff3f6cf1021217205743b3ff4fb",
+      "byte_length": 7181
+    },
+    {
+      "path": "validator/src/state/provenance.rs",
+      "sha256": "sha256:05557bdc169861d42b34cacd63bebe10e778298c9a5f0b2b51bb808c8db40f71",
+      "byte_length": 4979
+    },
+    {
+      "path": "validator/src/state/reduce.rs",
+      "sha256": "sha256:d7eec1cc0d272f1a24cd945336c73cd02b0d79e1c734af9c02a410d0ff6121d9",
+      "byte_length": 798
+    },
+    {
+      "path": "validator/src/state/snapshot.rs",
+      "sha256": "sha256:9af7f30e89852fdec4a148d44fa553082649eb327f01b658f81c2821de72e5cb",
+      "byte_length": 4419
+    },
+    {
+      "path": "validator/src/state/tests/engine_cases.rs",
+      "sha256": "sha256:e8fc68ff6f0368ad40e85e6f65fd37ea3160e2aa1e6ae97df5a1429da8f2d93a",
+      "byte_length": 8220
+    },
+    {
+      "path": "validator/src/state/tests/fixture.rs",
+      "sha256": "sha256:44544ea322817adc2d033d6d8ce850c855b817a6b40704c95c304f946ba46c63",
+      "byte_length": 4381
+    },
+    {
+      "path": "validator/src/state/tests/mod.rs",
+      "sha256": "sha256:514d0effbdbf2b61077d806dc8528e9149edac03b34efa258f10db9514e2bbd1",
+      "byte_length": 128
+    },
+    {
+      "path": "validator/src/state/tests/ordering_cases.rs",
+      "sha256": "sha256:5da5125f3191f0bad275cdcda0fb78f86a49a5bf9e78900b4121373539c7c85a",
+      "byte_length": 4033
+    },
+    {
+      "path": "validator/src/state/tests/policy_cases.rs",
+      "sha256": "sha256:3574cd2aaf46a812357cf2f9c89440358411e3d14c10e155db1caeea6c09f8d6",
+      "byte_length": 8251
+    },
+    {
+      "path": "validator/src/state/tests/projection_cases.rs",
+      "sha256": "sha256:8855176f9c25173a8890cdc535ba77ee52c670447d1deba9d54754efab59336e",
+      "byte_length": 3589
+    },
+    {
+      "path": "validator/src/state/tests/review_cases.rs",
+      "sha256": "sha256:9b29b6dcaaa20b80ac13770db93339b066b0be67446888e4b19a33d07ee91406",
+      "byte_length": 5949
+    },
+    {
+      "path": "validator/src/state/tests/runtime_cases.rs",
+      "sha256": "sha256:2b1ff4ca257dd8431ae3e4742e8ba84eec5ee9e69bf9c19b1b2efa4ae90df047",
+      "byte_length": 4729
+    },
+    {
+      "path": "validator/src/state/types.rs",
+      "sha256": "sha256:c6e79d626a24d42f6c5d9dabef65c0017248280825b24c31a5535d756059f239",
+      "byte_length": 6142
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/artifact_secret_policy.rs",
+      "sha256": "sha256:ab7a5f38eccb8226c5f696a4a3be8d28c6fc8bb9520d25139701c9a77c2933b2",
+      "byte_length": 4837
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/artifact_secret_support.rs",
+      "sha256": "sha256:d6aa31f5108fffba6b20eeef719217484384cfd97694f71d7dff5b9cb5ea9827",
+      "byte_length": 3483
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/artifact_secrets.rs",
+      "sha256": "sha256:af8a94838fb32e91cec09ce30376341ad8e57ca95079f384679c2ac9191cdcbb",
+      "byte_length": 9413
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/artifact_special_files.rs",
+      "sha256": "sha256:b4ff6406129b135454805f5c117e95df2c7d7c5cc17919159d9fec16ade14c73",
+      "byte_length": 2024
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/artifacts.rs",
+      "sha256": "sha256:ba40ad4c6082cf726350033440dedbac2c757dfd9e54cbf6f58eab1bd357ff65",
+      "byte_length": 8313
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/bounds.rs",
+      "sha256": "sha256:98c58f0499cfde82d45c9706e4122e26632da500fd747193e11e141cae8446af",
+      "byte_length": 9216
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/enforcement.rs",
+      "sha256": "sha256:6b09ab92cf47a4ddf1efcf3efaa985bb9e9c49c2f903b281db78eb369d95c331",
+      "byte_length": 9846
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/fixture.rs",
+      "sha256": "sha256:2b91c2c4ee4c6e04faa0db6610c62887c554c75db351e61e269861a5ffb0c7b2",
+      "byte_length": 2911
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/mod.rs",
+      "sha256": "sha256:0dc48bfa0d8e29911cca409910bdaae0a7b37bedafcec7b35280efdcf2836cfc",
+      "byte_length": 412
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/process.rs",
+      "sha256": "sha256:96609b3d6e99341497d44116681b201be47aef87aafe8853a531eea55248519a",
+      "byte_length": 11126
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/program_security.rs",
+      "sha256": "sha256:9c072e30e50065ac5835b55ac4d40917ce70e89b1602185d2b4e96889a94906f",
+      "byte_length": 1964
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/security.rs",
+      "sha256": "sha256:f07c65f1d01eecd0614fc79fd57981a9738ca520937c9e389fa149e6fa65b1de",
+      "byte_length": 5247
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/shared_budget.rs",
+      "sha256": "sha256:2e126690ca8361e1e9bcaa86a8d11ab38fa59e828bbc56dc69d875031907b6b4",
+      "byte_length": 10522
+    },
+    {
+      "path": "validator/tests/cli_contract/state/fixture.rs",
+      "sha256": "sha256:e69ab36610202accca116d86268d90034c2293f9efd204b608d3ef415bfce4f5",
+      "byte_length": 3863
+    },
+    {
+      "path": "validator/tests/cli_contract/state/mod.rs",
+      "sha256": "sha256:584e0f97d1954146bee2f5ad57727a3f7c54bae150ca8a7dbda842d782b2be7e",
+      "byte_length": 48
+    },
+    {
+      "path": "validator/tests/cli_contract/state/mutation.rs",
+      "sha256": "sha256:81f9634bc6c9a4262362bcf99f84c6b74c1f958fa01958ed15ddf1840872799f",
+      "byte_length": 4524
+    },
+    {
+      "path": "validator/tests/cli_contract/state/public_boundary.rs",
+      "sha256": "sha256:e2a29c5a7fdcd8443ff5596c01e19c299a615b9b3a2fd7bed89d3edf7706d834",
+      "byte_length": 3572
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/node_n03.rs",
+      "sha256": "sha256:60d062ef7c61cc6285ae163ecaad83ced1c965d78ff540230673682cd6346903",
+      "byte_length": 6671
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/runtime_context.rs",
+      "sha256": "sha256:cd96ca3b3ca4700a7cefbb08f42432335a3d4d1f6e4ba2efc3019481057082cf",
+      "byte_length": 7097
+    }
+  ],
+  "findings": [
+    {
+      "severity": "corrected-candidate",
+      "finding": "The root REWORK disclosure path is removed from the candidate surfaces: explicit secrets reach artifact finalization before observable artifact values exist, and secret-ambiguous artifacts expose only the withheld representation."
+    },
+    {
+      "severity": "secret-safe-observability",
+      "finding": "Full secrets, environment-only secrets, overlapping sets, every nonempty terminal proper prefix after public leading bytes, raw bytes, compact/Debug numeric forms, and prefixed/bare raw digests are absent from CapturedArtifact, ArtifactRef, artifact JSON, and canonical CapturedRun JSON in focused tests."
+    },
+    {
+      "severity": "control-preserved",
+      "finding": "Positive non-secret artifacts retain bytes, digest, resolver behavior, ordering, and candidate/context binding; focused dependency controls retain bounds, symlink, hardlink, FIFO, mutation, process, output-budget, and policy behavior."
+    },
+    {
+      "severity": "security-proof-gap",
+      "finding": "On this POSIX/macOS substrate, fstatat preflight and openat are separate operations. A path changed from a regular file to a special file in that interval can be opened nonblocking and then rejected before read. Static special paths are rejected before open, but atomic reject-before-open under substitution is not proved."
+    },
+    {
+      "severity": "sandbox-runtime-gap",
+      "finding": "The outer sandbox prevented a representative nested sandbox-exec success-path run and can prohibit filesystem Unix-socket binding. The socket test uses a real bound path when permitted and an explicit mode-classification fallback on PermissionDenied; real socket-path proof in this run is withheld."
+    },
+    {
+      "severity": "independent-rereview-required",
+      "finding": "This worker does not accept its own implementation, evidence receipt, or exact artifact set. Fresh independent security, concurrency, false-pass, schema-shape, and exact-set rereview remains required."
+    },
+    {
+      "severity": "public-integration-unresolved",
+      "finding": "Public dispatcher, canonical schema/generated authority, migration reconciliation, and representative zero-write CLI journeys remain root-owned and were neither modified nor verified by this lease."
+    },
+    {
+      "severity": "node-claim-withheld",
+      "finding": "N03 closure, readiness, release, and completion remain withheld."
+    }
+  ],
+  "unresolved_dependencies": [
+    "fresh-independent-rereview",
+    "root-exact-set-acceptance",
+    "root-public-dispatch-reconciliation",
+    "root-schema-and-migration-reconciliation",
+    "representative-zero-write-cli-journeys",
+    "stable-repository-wide-cli-contract-rerun",
+    "atomic-regular-file-open-under-substitution",
+    "sandboxed-filesystem-socket-runtime-proof",
+    "root-work-package-validation"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "Git operations were prohibited. Candidate and context identity bind only the exact listed path-bound artifact set, not repository-wide Git state.",
+    "An early diagnostic cargo check omitted CARGO_TARGET_DIR. Immediate target mtime scans found no newly persisted files or directories, and every claimed compile/test result was repeated with the authorized isolated target; no stronger no-write proof is claimed for that diagnostic.",
+    "The broad capture selector ran 79 tests with 74 passing and 5 existing child-execution assertions failing because nested /usr/bin/sandbox-exec returned exit 71 or empty output under the outer sandbox. An unsandboxed rerun was requested but not run because escalation approval quota was unavailable.",
+    "Filesystem Unix-socket binding can be denied by the outer sandbox. The leased test exercises a real socket path when binding is permitted and otherwise checks the exact socket-mode predicate; this run does not claim real socket-path runtime proof.",
+    "The pre-open regular-file check rejects stable FIFO/socket paths without an open and post-open identity checks reject substitution before read, but POSIX/macOS provides no atomic regular-file-only open in this implementation. A regular-to-special rename in the stat-to-open window can still open the special node nonblocking before rejection.",
+    "Runtime WorkerResultV1 validate_for was not invoked because the exact root-issued LeaseSpec and WorkPackage objects for this textual corrective lease were not available. The static typed shape was reconciled and requested_root_changes is empty.",
+    "No public dispatcher, catalog, canonical schema, generated authority, migration, board, root decision, acceptance, claim, Cargo, lib.rs, cli/mod.rs, Git, host plugin/cache/app/runtime, network, or external-product surface was modified.",
+    "Fresh independent rereview, exact-set acceptance, public integration, representative zero-write CLI journeys, and stable repository-wide CLI verification remain unresolved and outside this lease.",
+    "No Linux, Windows, performance benchmark, release, readiness, N03 closure, or completion claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

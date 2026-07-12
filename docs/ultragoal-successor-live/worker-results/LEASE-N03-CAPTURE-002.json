@@ -1,0 +1,351 @@
+{
+  "schema_version": "WorkerResult-v1",
+  "worker": "/root/n03_capture_worker",
+  "lease_id": "LEASE-N03-CAPTURE-002",
+  "supersedes_lease_result": "LEASE-N03-CAPTURE-001",
+  "context_id": "sha256:650db2afd191928918871a04749339e081efb90d520c3610fe6cee93919e836a",
+  "context_note": "Read-only live context observed after corrective relocation and before this self-referential result file was written.",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged": true,
+    "worktree_state": "correctively leased CLI capture source, nested CLI-contract tests, and WorkerResults are untracked; root-owned Cargo.toml/Cargo.lock edits and pre-existing .DS_Store were preserved"
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "rejected_path_result": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-001.json",
+    "rejected_path_result_sha256": "3dde558f1ff010b4a773287a4ec6bab2e2a6b0351b31ca03f407090e96560315",
+    "root_owned_pre_existing_changes": [
+      "validator/Cargo.toml",
+      "Cargo.lock"
+    ],
+    "pre_existing_user_dirt": [
+      ".DS_Store"
+    ]
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "historical_result_preserved_unchanged": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-001.json",
+    "historical_result_sha256": "3dde558f1ff010b4a773287a4ec6bab2e2a6b0351b31ca03f407090e96560315",
+    "root_owned_pre_existing_changes_preserved": [
+      "validator/Cargo.toml",
+      "Cargo.lock"
+    ],
+    "pre_existing_user_dirt_preserved": [
+      ".DS_Store"
+    ],
+    "leased_rust_lines": 2621,
+    "maximum_file_lines": 280,
+    "files_over_300_lines": 0,
+    "git_operations_performed": false
+  },
+  "path_disposition": {
+    "decision": "rejected_original_paths_removed_after_corrective_relocation",
+    "reason": "The original grant placed HCT-CAPTURE outside adopted WS-CLI-CORE.",
+    "historical_result_treatment": "LEASE-N03-CAPTURE-001.json remains byte-unchanged as rejected-path provenance and must not be treated as an accepted live path claim.",
+    "source_destination": "validator/src/cli/capture/**",
+    "test_destination": "validator/tests/cli_contract/capture/**",
+    "removed_untracked_worker_owned_paths": [
+      "validator/src/capture/**",
+      "validator/tests/capture_contract.rs",
+      "validator/tests/capture_contract_cases/**"
+    ],
+    "remaining_old_path_files": 0
+  },
+  "touched_paths": [
+    "validator/src/cli/capture/artifact.rs",
+    "validator/src/cli/capture/descriptor.rs",
+    "validator/src/cli/capture/environment.rs",
+    "validator/src/cli/capture/filesystem.rs",
+    "validator/src/cli/capture/mod.rs",
+    "validator/src/cli/capture/output.rs",
+    "validator/src/cli/capture/process.rs",
+    "validator/src/cli/capture/run.rs",
+    "validator/src/cli/capture/spec.rs",
+    "validator/src/cli/capture/tree.rs",
+    "validator/src/cli/capture/util.rs",
+    "validator/tests/cli_contract/capture/artifacts.rs",
+    "validator/tests/cli_contract/capture/fixture.rs",
+    "validator/tests/cli_contract/capture/mod.rs",
+    "validator/tests/cli_contract/capture/process.rs",
+    "validator/tests/cli_contract/capture/security.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-002.json"
+  ],
+  "deleted_paths": [
+    "validator/src/capture/artifact.rs",
+    "validator/src/capture/descriptor.rs",
+    "validator/src/capture/environment.rs",
+    "validator/src/capture/filesystem.rs",
+    "validator/src/capture/mod.rs",
+    "validator/src/capture/output.rs",
+    "validator/src/capture/process.rs",
+    "validator/src/capture/run.rs",
+    "validator/src/capture/spec.rs",
+    "validator/src/capture/tree.rs",
+    "validator/src/capture/util.rs",
+    "validator/tests/capture_contract.rs",
+    "validator/tests/capture_contract_cases/artifacts.rs",
+    "validator/tests/capture_contract_cases/fixture.rs",
+    "validator/tests/capture_contract_cases/process.rs",
+    "validator/tests/capture_contract_cases/security.rs"
+  ],
+  "touched_semantics": [
+    "HCT-CAPTURE internals",
+    "CommandSpec",
+    "CapturedRun",
+    "ArtifactRef",
+    "ArtifactResolver"
+  ],
+  "generated_outputs": [],
+  "relocation_evidence": {
+    "implementation_byte_equivalence": {
+      "method": "SHA-256 of file bytes before and after relocation",
+      "all_equal": true,
+      "files": [
+        {
+          "old": "validator/src/capture/artifact.rs",
+          "new": "validator/src/cli/capture/artifact.rs",
+          "sha256": "1105fa238a9fa1aea20e59581239c31de7b161c04b73086804bd1b1759afef69"
+        },
+        {
+          "old": "validator/src/capture/descriptor.rs",
+          "new": "validator/src/cli/capture/descriptor.rs",
+          "sha256": "6978664fb57d7f6b2e1a736ae70eb23de311d256eafcbf5d36b6f24707458728"
+        },
+        {
+          "old": "validator/src/capture/environment.rs",
+          "new": "validator/src/cli/capture/environment.rs",
+          "sha256": "512f4f0fdef158a564695591a0480e93f76c216015c15e6841bbf6227d5100af"
+        },
+        {
+          "old": "validator/src/capture/filesystem.rs",
+          "new": "validator/src/cli/capture/filesystem.rs",
+          "sha256": "e8d70282d038761e728969a76c350fe504fa13126b0cbaf83e89a0ac807ef185"
+        },
+        {
+          "old": "validator/src/capture/mod.rs",
+          "new": "validator/src/cli/capture/mod.rs",
+          "sha256": "b5324e5ef9441c531471b1f6e2afaf64917d6ac33fa3d65a7b1f3689972146c5"
+        },
+        {
+          "old": "validator/src/capture/output.rs",
+          "new": "validator/src/cli/capture/output.rs",
+          "sha256": "8d8bfdf1880cb3ba3ba6ad40b28a9301cb32b216921e5b6583af86caaf21d878"
+        },
+        {
+          "old": "validator/src/capture/process.rs",
+          "new": "validator/src/cli/capture/process.rs",
+          "sha256": "b62f5379049e2d928ea91e20fbcd3c14ed9c07cb8d3ad84662ee5bc89b5dd8ea"
+        },
+        {
+          "old": "validator/src/capture/run.rs",
+          "new": "validator/src/cli/capture/run.rs",
+          "sha256": "a26cf30199c70edabb622fc9c593df88fe387dd99c92d3c5dc92075de41cca59"
+        },
+        {
+          "old": "validator/src/capture/spec.rs",
+          "new": "validator/src/cli/capture/spec.rs",
+          "sha256": "1be280a9d465bec770ce970e3c8463c155688c9cd0d21917433d3547f252fafe"
+        },
+        {
+          "old": "validator/src/capture/tree.rs",
+          "new": "validator/src/cli/capture/tree.rs",
+          "sha256": "bb55aee882e2f5169910bd0b748a2c624bad7806138c6cb0eaf131b597d57616"
+        },
+        {
+          "old": "validator/src/capture/util.rs",
+          "new": "validator/src/cli/capture/util.rs",
+          "sha256": "ec7f5061a58dbafaaf51706a5e52f7e948f285a3ffd8f6d3510fc464db53ac92"
+        }
+      ]
+    },
+    "test_semantic_equivalence": {
+      "method": "Reverse only super::capture to crate::capture and restore rustfmt import ordering, then SHA-256 the resulting bytes against the rejected-path test cases.",
+      "all_equal": true,
+      "normalized_hashes": {
+        "artifacts.rs": "11a2f0fc76cc982e4fb80ba259d2341a1c54ebc6c32f4df4a639f03ccd082f61",
+        "fixture.rs": "d73824310355fab3844155a3524d4c9a34ac2683d2cefc4d8a7545db599a80de",
+        "process.rs": "8a3cc8bd026d66167f60b2a936a68def13dcb45aa0c5cd445395e8121d605595",
+        "security.rs": "64ec2882010126f85c6d7ee51f81724822af2c293b9911145769543c8c852b97"
+      },
+      "harness_change": "The rejected standalone validator/tests/capture_contract.rs was replaced by a nine-line nested module adapter at validator/tests/cli_contract/capture/mod.rs; test logic was not added, removed, or renamed."
+    },
+    "behavioral_reproduction": "A rustc test harness path-mounted the relocated nested module with the required crate::context adapter; all 29 tests passed."
+  },
+  "fixtures": [
+    "29 relocated HCT-CAPTURE contract fixtures from LEASE-N03-CAPTURE-001, with no test logic changes"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "correctively leased source, test, and WorkerResult paths only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal Cargo target artifacts"
+    },
+    {
+      "class": "external-process",
+      "scope": "local rustc relocation probe and isolated temporary subprocess fixtures"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-write",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-ROUTINE-001",
+    "REQ-CLI-003",
+    "REQ-CLI-007",
+    "REQ-PROOF-002",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-004",
+    "HCT-CAPTURE implementation contract",
+    "HCT-CAPTURE negative proof requirement"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "authority-path correction",
+      "rationale": "Relocates HCT-CAPTURE beneath adopted WS-CLI-CORE and removes the worker-owned rejected-path copies so no duplicate implementation authority remains."
+    },
+    {
+      "area": "implementation preservation",
+      "rationale": "All eleven implementation files retain exact byte digests; no implementation behavior changed during relocation."
+    },
+    {
+      "area": "test harness adaptation",
+      "rationale": "Moves contract tests beneath the existing cli_contract family and changes only capture-module namespace references plus the nested module adapter needed for root inclusion."
+    },
+    {
+      "area": "historical provenance",
+      "rationale": "Preserves LEASE-N03-CAPTURE-001.json unchanged as an explicit rejected-path input rather than rewriting history."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rg --files validator/src/cli/capture validator/tests/cli_contract/capture | sort | xargs rustfmt --edition 2024 --check",
+      "result": "pass"
+    },
+    {
+      "command": "rustc --edition=2024 --test stdin-wrapper-with-crate-context-adapter and absolute validator/tests/cli_contract/capture/mod.rs path",
+      "result": "pass",
+      "summary": "Relocated implementation and nested test module compiled without root-file edits."
+    },
+    {
+      "command": "/private/tmp/capture-relocation-probe --test-threads=1",
+      "result": "pass",
+      "summary": "29 passed; 0 failed"
+    },
+    {
+      "command": "cargo check --locked --offline --all-targets",
+      "result": "pass",
+      "qualification": "Current root-owned cli/mod.rs and cli_contract.rs do not yet include the relocated module; the standalone rustc proof is the compile/run evidence for relocated files."
+    },
+    {
+      "command": "cargo test --locked --offline --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture",
+      "result": "pass",
+      "summary": "1 passed; 0 failed; emitted corrective pre-result context identity"
+    },
+    {
+      "command": "per-file SHA-256 equality and namespace-normalized test-case SHA-256 comparison",
+      "result": "pass",
+      "summary": "11 of 11 implementation files byte-identical; 4 of 4 test-case bodies semantically identical after the required namespace adaptation"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/capture/** and validator/tests/cli_contract/capture/**",
+      "sha256": "487d5921e7b1b1a0fbaaf49dfeb4463319c485d979aaad94d365c5af0839f3c1",
+      "digest_method": "SHA-256 of sorted path-bound per-file shasum -a 256 lines"
+    },
+    {
+      "path": "validator/src/cli/capture/**",
+      "sha256": "d43e9f0ef627ccab4c3fca3f4bba2fae097083ca1721e442e435dfc0470df83f",
+      "digest_method": "SHA-256 of sorted path-bound per-file shasum -a 256 lines"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/**",
+      "sha256": "c4752f3a894658aecd5e92b9aeea1f94851bdf4c32ac4f616b82bbbc80a64ed7",
+      "digest_method": "SHA-256 of sorted path-bound per-file shasum -a 256 lines"
+    },
+    {
+      "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-001.json",
+      "sha256": "3dde558f1ff010b4a773287a4ec6bab2e2a6b0351b31ca03f407090e96560315",
+      "disposition": "preserved unchanged historical rejected-path input"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "integration-required",
+      "finding": "Root-owned validator/src/cli/mod.rs does not yet declare capture, so normal Cargo compilation and product routing do not yet consume the relocated module."
+    },
+    {
+      "severity": "integration-required",
+      "finding": "Root-owned validator/tests/cli_contract.rs does not yet include cli_contract/capture/mod.rs or provide its crate::context adapter."
+    },
+    {
+      "severity": "proof-boundary",
+      "finding": "Standalone path-mounted compilation and 29 green tests prove relocation preservation only; they do not establish CLI integration, public discovery, accepted HCT-CAPTURE behavior, or N03 completion."
+    },
+    {
+      "severity": "carried-security-ceiling",
+      "finding": "LEASE-N03-CAPTURE-001 macOS non-shebang execution-race and detached-daemon ceilings remain unresolved and are not improved by relocation."
+    },
+    {
+      "severity": "carried-platform-ceiling",
+      "finding": "Only aarch64 macOS behavior has been run; Linux runtime and supported-host integration remain unproved."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Root inclusion in validator/src/cli/mod.rs.",
+    "Root inclusion of validator/tests/cli_contract/capture/mod.rs from validator/tests/cli_contract.rs with a crate::context adapter.",
+    "Root-owned public re-export and compiled API witness for CommandSpec, CapturedRun, ArtifactRef, and ArtifactResolver.",
+    "Root-owned positive WorkspaceWrite and Destructive fixtures using an actual effect grant.",
+    "Independent security and claim-falsification review of all carried findings.",
+    "Root-owned CLI/state routing and migration retirement work for N03."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/cli/mod.rs",
+      "request": "Declare the relocated module under WS-CLI-CORE, initially with `pub(crate) mod capture;` or the stricter visibility selected by root public-routing design."
+    },
+    {
+      "path": "validator/tests/cli_contract.rs",
+      "request": "Provide `mod context { pub use ultragoal::context::*; }` for the path-mounted implementation and include `#[path = \"cli_contract/capture/mod.rs\"] mod capture_contract;`, then reproduce all 29 tests through Cargo."
+    },
+    {
+      "path": "validator/src/lib.rs and public API witness surfaces",
+      "request": "Expose the accepted public API route for CommandSpec, CapturedRun, ArtifactRef, and ArtifactResolver and compile the public witness after independent review."
+    },
+    {
+      "path": "root-owned context/effect tests",
+      "request": "Exercise real WorkspaceWrite and Destructive grants, post-run candidate rebinding, artifact resolution, timeout/partial-artifact handling, and no out-of-scope writes."
+    },
+    {
+      "path": "migration and command authority",
+      "request": "Route accepted CLI consumers through HCT-CAPTURE and retire CT-COMMAND-CAPTURE, CT-ARTIFACT-DEREF, and fragmented receipt writers under root migration authority."
+    }
+  ],
+  "limitations": [
+    "The corrective lease changed authority paths, not implementation semantics.",
+    "Normal Cargo integration remains root-owned and absent at this worker boundary.",
+    "The standalone rustc probe is not a product command or release proof.",
+    "The root-owned libc dependency edits in validator/Cargo.toml and Cargo.lock were neither modified nor staged by this worker.",
+    "No network, public command catalog, manifest, generated authority, migration registry, schema, CLI dispatcher, or root-owned integration file was modified.",
+    "No HCT-CAPTURE, N03, source, package, install, runtime, readiness, release, or completion acceptance is claimed."
+  ],
+  "no_claim_statement": "This corrective relocation does not claim that HCT-CAPTURE or N03 is accepted or complete, and does not claim readiness, release, or goal completion. Root reconciliation and independent review remain mandatory."
+}

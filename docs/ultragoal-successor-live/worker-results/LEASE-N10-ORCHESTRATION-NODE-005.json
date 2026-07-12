@@ -1,0 +1,216 @@
+{
+  "worker": "/root/n10_node004_recovery",
+  "lease_id": "LEASE-N10-ORCHESTRATION-NODE-005",
+  "context_id": "sha256:6bc280b2eb67563d310a5f361d927631331e208bbfdce0526d448b4c2230caa1",
+  "candidate_identity": {
+    "candidate_id": "sha256:e5a7ff3f9ee4a3aec95978c57802cdf99b36bee73f0302b091e681475b047d5e",
+    "context_id": "sha256:6bc280b2eb67563d310a5f361d927631331e208bbfdce0526d448b4c2230caa1",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "status_sha256_before_result": "7c70f64c1260ca32e5c360282c5a8892e6b9476dad1b69acc13494ede48d718b",
+    "untracked_sha256_before_result": "b3146741355c20bb9382f7998f342b97e8e3952dbd72043900647cc75d805aeb",
+    "artifact_set_sha256": "sha256:e5a7ff3f9ee4a3aec95978c57802cdf99b36bee73f0302b091e681475b047d5e",
+    "artifact_set_formula": "Sort artifacts by path; concatenate path, one TAB byte, sha256 without prefix, and one LF byte; SHA-256 the concatenation.",
+    "context_note": "Two successive same-session LiveContext-v1 captures were byte-identical after NODE-005 froze. The protected .codex-worktree/env.sh file was not opened, read, hashed, or sourced."
+  },
+  "base_state": {
+    "node": "N10-ORCHESTRATION",
+    "parent_worker_result": "sha256:84b082bdd47b44fbec3db8ce49df1293168748d889989654ef6ef5ca80367ac7",
+    "parent_artifact_set": "sha256:fa7c951083cd0982cdce9c07a8fe8dc737c7e12fa92dee3cd0a201bc7df3d4e4",
+    "review_decision": "rework",
+    "finding": "RootIntegrationReceipt.applied_changes was not exact-bound to the independently reviewed requested-root-change map, allowing omission, substitution, or extra paths behind narrower summaries."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "Corrected N10 typed orchestration candidate only; fresh independent re-review, exact root module wiring, a live execution adapter, and representative supported-host recovery proof remain required. No node closure, readiness, release, or completion.",
+    "artifact_count_excluding_result": 28,
+    "artifact_set_sha256": "sha256:e5a7ff3f9ee4a3aec95978c57802cdf99b36bee73f0302b091e681475b047d5e",
+    "total_bytes": 199264,
+    "total_lines": 5872,
+    "maximum_rust_file_lines": 300,
+    "rust_files_over_300_lines": 0,
+    "focused_tests": "106 passed; 0 failed under cargo-nextest with 16 jobs",
+    "library_check": "pass",
+    "all_targets_check": "pass",
+    "full_suite": "not run at the NODE-005 freeze; the parent cache-replay failures remain unresolved and are not current NODE-005 proof",
+    "focused_clippy": "pass with warnings outside the leased paths",
+    "live_context": "pass twice with identical sha256:6bc280b2eb67563d310a5f361d927631331e208bbfdce0526d448b4c2230caa1",
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "destructive_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/orchestration/event.rs",
+    "validator/src/orchestration/mod.rs",
+    "validator/src/orchestration/reconcile.rs",
+    "validator/src/orchestration/transition.rs",
+    "validator/src/orchestration/worker.rs",
+    "validator/tests/orchestration_contract/candidate_rebind.rs",
+    "validator/tests/orchestration_contract/reconciliation.rs",
+    "validator/tests/orchestration_contract/recovery.rs",
+    "validator/tests/orchestration_contract/support.rs",
+    "validator/tests/orchestration_contract/worker_results.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-005.json"
+  ],
+  "touched_semantics": [
+    "orchestration::worker_result::typed_exact_root_change_request",
+    "orchestration::submission::canonical_root_change_map",
+    "orchestration::review::root_change_map_binding",
+    "orchestration::acceptance::exact_applied_change_equality",
+    "orchestration::replay::root_change_map_tamper_rejection",
+    "orchestration::candidate_rebind::cross_lease_root_change_disjointness"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "validator/tests/orchestration_contract/candidate_rebind.rs",
+    "validator/tests/orchestration_contract/reconciliation.rs",
+    "validator/tests/orchestration_contract/recovery.rs",
+    "validator/tests/orchestration_contract/support.rs",
+    "validator/tests/orchestration_contract/worker_results.rs"
+  ],
+  "effects": [
+    { "class": "workspace_write", "target": "lease-n10-node005-source", "performed": true },
+    { "class": "fixture_write", "target": "lease-n10-node005-tests", "performed": true },
+    { "class": "process", "target": "lease-n10-node005-cargo", "performed": true },
+    { "class": "network", "target": "network", "performed": false },
+    { "class": "external_write", "target": "external-product", "performed": false },
+    { "class": "destructive", "target": "destructive", "performed": false },
+    { "class": "root_authority", "target": "root-authority", "performed": false }
+  ],
+  "requirements": [
+    "HUL-ORCHESTRATION-001",
+    "HUL-SECURITY-001",
+    "REQ-ORCH-004"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE",
+    "N06-ROUTINE",
+    "N09-AGENTS-REPO"
+  ],
+  "changes": [
+    {
+      "area": "exact requested-root-change authority",
+      "paths": ["validator/src/orchestration/mod.rs", "validator/src/orchestration/worker.rs"],
+      "rationale": "Every request now has one canonical path and expected post-apply SHA-256; missing, unknown, malformed, duplicate, case-alias, ancestor, and descendant forms fail closed."
+    },
+    {
+      "area": "immutable review and integration binding",
+      "paths": ["validator/src/orchestration/event.rs", "validator/src/orchestration/reconcile.rs", "validator/src/orchestration/transition.rs"],
+      "rationale": "Submission, review, acceptance, replay, and CandidateRebound persist and compare the complete path-to-digest map. Count and digest are derived summaries; applied_changes must equal the reviewed disjoint union exactly."
+    },
+    {
+      "area": "positive, negative, race, mutation, security, and false-pass controls",
+      "paths": ["validator/tests/orchestration_contract/candidate_rebind.rs", "validator/tests/orchestration_contract/reconciliation.rs", "validator/tests/orchestration_contract/recovery.rs", "validator/tests/orchestration_contract/support.rs", "validator/tests/orchestration_contract/worker_results.rs"],
+      "rationale": "Controls cover zero, one, multi, multi-lease, omission, substitution, extra, wrong summary, duplicate, alias, stale, recomputed identity, serialized tamper, reorder, interrupted recovery, and byte-identical rejection state."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node005-target cargo nextest run --manifest-path validator/Cargo.toml --locked --jobs 16 --test orchestration_contract",
+      "result": "pass",
+      "summary": "106 passed; 0 failed across the exact positive and adversarial N10 boundary."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node005-target cargo check --manifest-path validator/Cargo.toml --lib --locked --jobs 16 --quiet",
+      "result": "pass",
+      "summary": "Library check passed; warnings were outside leased correction paths."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node005-target cargo check --manifest-path validator/Cargo.toml --all-targets --locked --jobs 16 --quiet",
+      "result": "pass",
+      "summary": "All current targets compiled."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node005-target cargo clippy --manifest-path validator/Cargo.toml --test orchestration_contract --locked --jobs 16 --quiet",
+      "result": "pass",
+      "summary": "Focused clippy passed with no leased-path warning."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node005-target cargo test --manifest-path validator/Cargo.toml --locked --jobs 16 -p ultragoal --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass_twice_identical",
+      "summary": "Both captures returned context sha256:6bc280b2eb67563d310a5f361d927631331e208bbfdce0526d448b4c2230caa1, status 7c70f64c1260ca32e5c360282c5a8892e6b9476dad1b69acc13494ede48d718b, and untracked b3146741355c20bb9382f7998f342b97e8e3952dbd72043900647cc75d805aeb."
+    },
+    {
+      "command": "cargo fmt --manifest-path validator/Cargo.toml --all -- --check; git diff --check; WorkerResult-v1 schema and exact artifact reconciliation",
+      "result": "pass",
+      "summary": "28 artifacts, 199264 bytes, 5872 lines, maximum Rust file length 300, no Rust file over 300 lines, set sha256:e5a7ff3f9ee4a3aec95978c57802cdf99b36bee73f0302b091e681475b047d5e."
+    }
+  ],
+  "artifacts": [
+    { "path": "validator/src/orchestration/effect.rs", "sha256": "sha256:8b1ee0966e04f0aae8b8749d6a88deb8266ef9e69c2bb5dcd27f0103215877ae", "byte_length": 1864 },
+    { "path": "validator/src/orchestration/engine.rs", "sha256": "sha256:345790c43d4772f003a2f68506ba052463fd34647b64f3b7e8d2da2fb962c972", "byte_length": 7877 },
+    { "path": "validator/src/orchestration/engine_query.rs", "sha256": "sha256:784acba762893e57d67771a1cc9fe4e0250d3b7c6f216a8518a5210b5c8ff25a", "byte_length": 2293 },
+    { "path": "validator/src/orchestration/error.rs", "sha256": "sha256:aee3d14728dd091c3a4a2c740c3b5d012cbdf641002732c0e2f26c3eebf84746", "byte_length": 3684 },
+    { "path": "validator/src/orchestration/event.rs", "sha256": "sha256:14a07936ce5545cc5e1835a2b9d4cee1507f4442a1bd317ce987aa48f4fb9606", "byte_length": 6916 },
+    { "path": "validator/src/orchestration/graph.rs", "sha256": "sha256:54c7d8ecafbdbfa3fb8fd5379f189c71ad5232388016bd9d54090b751fe9f8de", "byte_length": 5469 },
+    { "path": "validator/src/orchestration/lease.rs", "sha256": "sha256:bd00b476344167de3be39c25c5bd34878014db962374301dc36441b18ea6b32c", "byte_length": 5349 },
+    { "path": "validator/src/orchestration/mod.rs", "sha256": "sha256:dbe6478bcd9616153568c44116a96e16b4d4e5637151f2e659876e4164536bde", "byte_length": 5026 },
+    { "path": "validator/src/orchestration/model.rs", "sha256": "sha256:57935b61dbb6fc2b52047960acdaa4f1e4222fbc4fa80073d750552141a0d8b9", "byte_length": 6543 },
+    { "path": "validator/src/orchestration/reconcile.rs", "sha256": "sha256:50d68e3965fc43771079af54db637c0bd459341cad2eb5cc78930276a70ad553", "byte_length": 10131 },
+    { "path": "validator/src/orchestration/recovery.rs", "sha256": "sha256:7cb26de8ba75a514062684dd73629fac3c4135ad22d04612d4cad78c1b028348", "byte_length": 5474 },
+    { "path": "validator/src/orchestration/replay.rs", "sha256": "sha256:0e24409af27a94768c2ff877450c1b61377c87d53e0b4cc3ed56c76cbb72d70b", "byte_length": 9464 },
+    { "path": "validator/src/orchestration/scope.rs", "sha256": "sha256:0d9b8a41d5e4f5f7a205681ad66472be7caed53f7b72f9eb9d1dd659c55c1fc6", "byte_length": 8424 },
+    { "path": "validator/src/orchestration/scope_policy.rs", "sha256": "sha256:e97d2888889c985fa5b76fa7c6cadfd45413b6d2aeac8749cdfb24d0ed6b44e5", "byte_length": 4726 },
+    { "path": "validator/src/orchestration/transition.rs", "sha256": "sha256:959e390918282749b093e4d422568ba68f7c755242723819763556ab1b60526f", "byte_length": 11461 },
+    { "path": "validator/src/orchestration/worker.rs", "sha256": "sha256:b13f7acc4057642225567cfd13e9ef3984163c0343f42416ff6cd675c40ebdb3", "byte_length": 10007 },
+    { "path": "validator/tests/orchestration_contract.rs", "sha256": "sha256:500cc4c53533380e32d58fec152a75adf3da1c7a81efdac64930a69221f3d0aa", "byte_length": 803 },
+    { "path": "validator/tests/orchestration_contract/blockers.rs", "sha256": "sha256:59baa415aa9e50d2639426b8f5944ba77dbbe705dcdfc5ea1cacc40ad2c20370", "byte_length": 3513 },
+    { "path": "validator/tests/orchestration_contract/candidate_rebind.rs", "sha256": "sha256:6b7231b5cc1c87119363d62937321227a17e7151c13ffa29ffa8248a65fb4b71", "byte_length": 10857 },
+    { "path": "validator/tests/orchestration_contract/effects.rs", "sha256": "sha256:1002648ceb81f5de758c46b2b25d98ce8ae04798eeac1eabeb7590554754c541", "byte_length": 8393 },
+    { "path": "validator/tests/orchestration_contract/graph.rs", "sha256": "sha256:ee33a4ec43adf2a4df11f252066ee0b977b4857d8e650e2c41e25acd1dd6f536", "byte_length": 4871 },
+    { "path": "validator/tests/orchestration_contract/leases.rs", "sha256": "sha256:32db73e7a37313f31b73f37e34a96d1edc7d3a7b431e71327638ce131d0ef8f8", "byte_length": 9252 },
+    { "path": "validator/tests/orchestration_contract/path_aliases.rs", "sha256": "sha256:9b4345d03109d0f5beb46fc872c5b11ba0c19f08ab7d9e92b7f1dfb2fd6cc63c", "byte_length": 8116 },
+    { "path": "validator/tests/orchestration_contract/reconciliation.rs", "sha256": "sha256:177d50f44ad03cfbad1b2d2e1e1d898a93ef78cbb8f388599fbf4b0139057fb3", "byte_length": 10588 },
+    { "path": "validator/tests/orchestration_contract/recovery.rs", "sha256": "sha256:568a837cc9a27a41500087ad0e94a7a89b55a5473b8cbb393ee2b189f890f749", "byte_length": 10094 },
+    { "path": "validator/tests/orchestration_contract/security.rs", "sha256": "sha256:e5d92621b79d7eb37c6cbac990d8072dd431404659c8099190e1da8a653c8858", "byte_length": 7483 },
+    { "path": "validator/tests/orchestration_contract/support.rs", "sha256": "sha256:f0f362419acd8e83e611ca69dd4daac9ef9d200efb1dc43925e96434c51882fd", "byte_length": 10934 },
+    { "path": "validator/tests/orchestration_contract/worker_results.rs", "sha256": "sha256:2c56d591593a055cd54c25d3b3a9ce23b37524fabc9683e26831e7562078e3e3", "byte_length": 9652 }
+  ],
+  "findings": [
+    {
+      "severity": "corrected",
+      "finding": "Reviewed requested root changes now remain exact through submission, review, acceptance, replay, and integration; applied_changes must equal the reviewed union."
+    },
+    {
+      "severity": "corrected",
+      "finding": "Count and digest are derived from the exact map; wrong summaries, reordered requests, recomputed identities, unknown fields, and cross-lease aliases cannot false-pass."
+    },
+    {
+      "severity": "integration-rework",
+      "finding": "NODE-004 recorded two cache-replay failures outside N10; NODE-005 did not rerun the whole-candidate suite, so root must establish current integrated status at its next freeze."
+    },
+    {
+      "severity": "independent-review-required",
+      "finding": "The worker has not reviewed or accepted its own NODE-005 set."
+    }
+  ],
+  "unresolved_dependencies": [
+    "INDEPENDENT-N10-NODE005-REVIEW",
+    "ROOT-N10-MODULE-WIRING",
+    "ROOT-HCT-STATE-ADAPTER",
+    "ROOT-PACKAGE-MANIFEST-INTEGRATION",
+    "ROOT-FULL-SUITE-CACHE-REPLAY-RECONCILIATION",
+    "N03-CLI-STATE-CURRENT-PROOF",
+    "N06-ROUTINE-CURRENT-PROOF",
+    "N09-AGENTS-REPO-CURRENT-PROOF",
+    "REPRESENTATIVE-RECOVERY-JOURNEY"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/lib.rs",
+      "expected_sha256": "sha256:de1aa22ebbfd508855903368160a0b2880f18b93e9b96a6b6eafbfb8cb890f13",
+      "request": "Only after independent PASS and while validator/src/lib.rs has pre-apply sha256:39e4a99135c96a55a1e107e2c9d81ee676d3c6ea166fc5cd87e765b2531e9005, insert the exact bytes pub mod orchestration; followed by LF immediately after mod json_boundary; followed by LF. Reject any different preimage, placement, content, or post-apply digest."
+    }
+  ],
+  "limitations": [
+    "The orchestration module remains unexported; the sole root edit is exact-bound and must wait for independent PASS.",
+    "No live adapter proves symlink, hardlink, mount, filesystem-normalization, or post-validation substitution rejection at host effect time.",
+    "NODE-005 does not establish a current whole-candidate green suite or a persisted supported-host recovery journey.",
+    "N03, N06, and N09 current completion evidence is not established here.",
+    "No package, install, discovery, runtime, claim, release, Git, network, external-host, or destructive proof was performed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

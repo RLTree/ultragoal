@@ -1,0 +1,224 @@
+{
+  "worker": "/root",
+  "lease_id": "LEASE-N04-DISTRIBUTION-NODE-007",
+  "context_id": "sha256:649c94ab3a470d895ca86a2f181f6b011107ff5a43f9d5a6cce245c1ef02b78a",
+  "candidate_identity": {
+    "candidate_id": "sha256:649c94ab3a470d895ca86a2f181f6b011107ff5a43f9d5a6cce245c1ef02b78a",
+    "context_id": "sha256:649c94ab3a470d895ca86a2f181f6b011107ff5a43f9d5a6cce245c1ef02b78a",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "artifact_set_sha256": "sha256:649c94ab3a470d895ca86a2f181f6b011107ff5a43f9d5a6cce245c1ef02b78a",
+    "artifact_count_excluding_result": 46,
+    "parent_result_path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-006.json",
+    "parent_result_sha256": "sha256:9b18ff09979462fa6e3ba8d77f50f1464ec48151ce793ca2176c03daa2b285af",
+    "parent_artifact_set_sha256": "sha256:b0bfe557b4a16bbff2b8cd54154c55c082b97bba83a2f0740689e9e3cb619409"
+  },
+  "base_state": {
+    "node": "N04-DISTRIBUTION",
+    "parent_acceptance": "accepted_internal_prefix_kernel",
+    "parent_acceptance_path": "docs/ultragoal-successor-live/acceptance/N04-DISTRIBUTION-PREFIX-KERNEL.json",
+    "open_root_request": "Reconcile N02 inventory parsing and N04 package parsing into one canonical supported plugin-manifest authority before public activation."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "Canonical shared supported plugin-manifest parser and internal N02/N04 distribution reconciliation only. Independent review, generated-authority integration, production host adapters, real package/install/discovery/runtime identity, N04 closure, readiness, release, and completion remain withheld.",
+    "artifact_count_excluding_result": 46,
+    "artifact_set_sha256": "sha256:649c94ab3a470d895ca86a2f181f6b011107ff5a43f9d5a6cce245c1ef02b78a",
+    "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256 prefix, and one LF byte; SHA-256 the concatenation.",
+    "total_bytes": 207812,
+    "total_lines": 6314,
+    "maximum_file_lines": 299,
+    "files_over_300_lines": 0,
+    "focused_shared_manifest_tests": "21 passed; 0 failed; 16 jobs; 6.375 seconds",
+    "all_targets_check": "pass; 16 jobs; 10.12 seconds; existing warnings retained as diagnostics",
+    "full_inventory_distribution_observation": "121 passed and 2 open N02 failures; all 36 distribution tests passed before the two independent N02 assertions failed",
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/lib.rs",
+    "validator/src/plugin_manifest/json.rs",
+    "validator/src/plugin_manifest/mod.rs",
+    "validator/src/plugin_manifest/validation.rs",
+    "validator/src/distribution/json.rs",
+    "validator/src/distribution/package/manifest.rs",
+    "validator/src/distribution/package/manifest_bind.rs",
+    "validator/src/distribution/package/mod.rs",
+    "validator/src/inventory/plugin_manifest.rs",
+    "validator/src/inventory/plugin_manifest_interface.rs",
+    "validator/src/inventory/plugin_manifest_json.rs",
+    "validator/src/inventory/plugin_manifest_semver.rs",
+    "validator/tests/distribution_contract.rs",
+    "validator/tests/distribution_contract/package_manifest.rs",
+    "validator/tests/inventory_contract_cases/plugin_hooks.rs",
+    "validator/tests/inventory_contract_cases/plugin_manifest.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-007.json"
+  ],
+  "touched_semantics": [
+    "plugin_manifest::canonical_supported_schema",
+    "plugin_manifest::duplicate_key_rejection",
+    "distribution::package::manifest_authority",
+    "distribution::package::prefix_free_binding",
+    "inventory::plugin_manifest::legacy_hook_diagnosis"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-007.json"
+  ],
+  "fixtures": [
+    "validator/tests/distribution_contract/package_manifest.rs",
+    "validator/tests/inventory_contract_cases/plugin_hooks.rs",
+    "validator/tests/inventory_contract_cases/plugin_manifest.rs"
+  ],
+  "effects": [
+    {"class":"workspace_write","target":"root-n04-node007-source","performed":true},
+    {"class":"fixture_write","target":"root-n04-node007-tests","performed":true},
+    {"class":"process","target":"root-n04-node007-cargo","performed":true},
+    {"class":"root_authority","target":"n04-shared-schema","performed":true},
+    {"class":"network","target":"network","performed":false},
+    {"class":"external_write","target":"external-product","performed":false},
+    {"class":"destructive","target":"destructive","performed":false}
+  ],
+  "requirements": [
+    "REQ-PLUGIN-001",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-002",
+    "REQ-SUPPLY-001",
+    "REQ-SUPPLY-002"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "canonical supported manifest model",
+      "result": "One bounded duplicate-key-rejecting typed parser now owns the supported manifest shape, validation primitives, nested unknown-field rejection, and supported components used by both inventory and package planning."
+    },
+    {
+      "area": "package authority integration",
+      "result": "The distribution package validator consumes the shared model, requires the canonical skills root, rejects hooks and unknown fields as unsupported package authority, preserves component closure, and splits binding logic below the 300-line ceiling."
+    },
+    {
+      "area": "inventory authority integration",
+      "result": "The inventory reader consumes the same supported model. Legacy hooks remain physically discovered and causally diagnosed but produce unsupported_plugin_manifest_field and never enter supported manifest authority."
+    },
+    {
+      "area": "root wiring",
+      "result": "The shared internal module is wired once through validator/src/lib.rs without exporting a second public parser or changing the public command catalog."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-root-shared-schema-target cargo nextest run --offline --locked --manifest-path validator/Cargo.toml --jobs 16 --test distribution_contract --test inventory_contract -E 'test(plugin_manifest) | test(plugin_hooks) | test(package_manifest)'",
+      "result": "pass",
+      "summary": "21 passed; 0 failed; 102 skipped; 6.375 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-root-shared-schema-target cargo check --offline --locked --manifest-path validator/Cargo.toml --all-targets --jobs 16",
+      "result": "pass",
+      "summary": "All targets compiled in 10.12 seconds. Existing unrelated warnings remain diagnostic and are not completion evidence."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-root-shared-schema-target cargo nextest run --offline --locked --manifest-path validator/Cargo.toml --jobs 16 --test inventory_contract --test distribution_contract",
+      "result": "partial_open_n02",
+      "exit_code": 100,
+      "summary": "121 passed and 2 failed in 38.319 seconds. Every distribution test passed. The failures are current N02 live-routing assertions: declared_routes_do_not_suppress_live_legacy_authority and current_live_catalog_reports_contract_definitions_and_missing_topology."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check on the exact sixteen root-touched Rust files",
+      "result": "pass"
+    },
+    {
+      "command": "rg trailing whitespace on the shared manifest integration files",
+      "result": "pass_no_matches",
+      "exit_code": 1
+    },
+    {
+      "command": "parallel 16-worker SHA-256, byte, line, line-cap, and artifact-set reconciliation",
+      "result": "pass",
+      "summary": "46 artifacts; 207812 bytes; 6314 lines; maximum 299; zero files over 300; set 649c94ab3a470d895ca86a2f181f6b011107ff5a43f9d5a6cce245c1ef02b78a."
+    }
+  ],
+  "artifacts": [
+    {"path":".codex-plugin/plugin.json","sha256":"sha256:12c123fa9442dbf9e2eb7877b6fd1c4446ffc04a26d37727dddc0fb3877b06da","byte_length":1083},
+    {"path":"validator/src/distribution/error.rs","sha256":"sha256:cecf86d9bc10f292047f7a69a13ea8f70660aeaa4ee7bd9db6f66964897ded26","byte_length":2536},
+    {"path":"validator/src/distribution/install.rs","sha256":"sha256:4d2cf9f2910c2af9e6807fe01001590ad528465de2484cb530dd596fa16cfee9","byte_length":8138},
+    {"path":"validator/src/distribution/json.rs","sha256":"sha256:a6e6e3c8b07871ffd4ff1ac60c924f5f491fb0bc7e129f9319cfc63e56735d35","byte_length":3497},
+    {"path":"validator/src/distribution/marketplace.rs","sha256":"sha256:90cfc76a1855eb3e57aa673f043a57d4ce2269fcd0411af03ead8606fef783cb","byte_length":5487},
+    {"path":"validator/src/distribution/mod.rs","sha256":"sha256:821d8f0c9409ea0f2d7e085264159ac73eefce191dea8de6fb58027a2370ac11","byte_length":1068},
+    {"path":"validator/src/distribution/model.rs","sha256":"sha256:6f9b5e665ff2bc007ca65c78269e1843b91eb89ff138034d90adf75a5ff0fb97","byte_length":6153},
+    {"path":"validator/src/distribution/observations.rs","sha256":"sha256:184ff00b914a2f5116dc3cb03baf0c7b9c9771972ba141244446d9daec391636","byte_length":1181},
+    {"path":"validator/src/distribution/package/archive.rs","sha256":"sha256:ee3576427a5ffa1deb1ad8bb57b0d0f763c11a5ea0bf23aa829671470d3d6831","byte_length":2871},
+    {"path":"validator/src/distribution/package/manifest.rs","sha256":"sha256:f7fc1b8e36a092b6c634a33f7c7e0b6da04314103a49b24c23e3789bf062a138","byte_length":8510},
+    {"path":"validator/src/distribution/package/manifest_bind.rs","sha256":"sha256:24880f72b816dd60ad3d6c15a9b60c6d5a26900fb1701fdb10fd4b4e50f07ce4","byte_length":2787},
+    {"path":"validator/src/distribution/package/mod.rs","sha256":"sha256:67dcc8a042942199c818ecbc863fa5687593d2b5a2601de3734508f3c26899df","byte_length":1635},
+    {"path":"validator/src/distribution/package/plan.rs","sha256":"sha256:648df0ec9607e56fd7d31efad7ad902f8b469f5f0ae4d2243e1a7d74df99e597","byte_length":8335},
+    {"path":"validator/src/distribution/package/spec.rs","sha256":"sha256:ee449d21bca70f58730b73912d6c0ea87de719c46372277d6b3a7248da190d82","byte_length":3859},
+    {"path":"validator/src/distribution/reader/fallback.rs","sha256":"sha256:8fd8b8a447c545295827c0d9f5269752b873e9598eca93bf8006e07a080fb77d","byte_length":483},
+    {"path":"validator/src/distribution/reader/mod.rs","sha256":"sha256:14ddabff12b90d437eccc93c73fca451bf22d3eafa86276c1fe66ca8f2fd8f22","byte_length":3744},
+    {"path":"validator/src/distribution/reader/unix.rs","sha256":"sha256:b4020e7efd8936407db6dbd52e074354fb01c5cd411c34f4bd731e66493800d1","byte_length":4276},
+    {"path":"validator/src/distribution/spec.rs","sha256":"sha256:5551a1124dbdab70172e0a7676c783528089711c3189305cbd07f23988ff60f4","byte_length":8370},
+    {"path":"validator/src/distribution/supply.rs","sha256":"sha256:51e28ebbea17035edafaa87dec3aeaed9af6fafbd9e0d954dcf0e624b2635dab","byte_length":5225},
+    {"path":"validator/src/distribution/verify.rs","sha256":"sha256:998e17314d839ec8dd6baa03cde772f722d2b29d8814b59dc16172e8780c63ca","byte_length":7807},
+    {"path":"validator/src/inventory/plugin_hooks.rs","sha256":"sha256:e00edd1eaf68522a21c65e29f5782957c58ef6d2445592cee632417130eea4ad","byte_length":4469},
+    {"path":"validator/src/inventory/plugin_manifest.rs","sha256":"sha256:3bdb08af5963bf782fc40a9695ab88db65b11e2f1749d0525967c0f2d249c327","byte_length":6564},
+    {"path":"validator/src/inventory/plugin_manifest_hook_document.rs","sha256":"sha256:0f3107ab29b0c9b4c46f074cb083f4f34b121fdb87b119ecf95acf14c0d166b8","byte_length":1459},
+    {"path":"validator/src/inventory/plugin_manifest_hook_matcher.rs","sha256":"sha256:98b4b54790d81ceb834128fefd9727352f985eb8520d06c713612d5b6bd63b2e","byte_length":1690},
+    {"path":"validator/src/inventory/plugin_manifest_hooks.rs","sha256":"sha256:b2406b7a8499bc28ed8573feaedd0bfb1f2a2b959c9a7351a6c736f464a3a063","byte_length":8463},
+    {"path":"validator/src/inventory/plugin_manifest_interface.rs","sha256":"sha256:97afbcb5fbd16373c1574ec26ee3a22e3e62e296900546dc8551e3b3d9079a7c","byte_length":2968},
+    {"path":"validator/src/inventory/plugin_manifest_json.rs","sha256":"sha256:a1f4b23c0c9178d9ebc773880b827708a57ed6a3ff4b217b6439d922c59e895a","byte_length":335},
+    {"path":"validator/src/inventory/plugin_manifest_path.rs","sha256":"sha256:c6a61c25149405f8b2de19669cbaaad0fa5e175867a7f1802a7c5e26dd1ef9d6","byte_length":2090},
+    {"path":"validator/src/inventory/plugin_manifest_semver.rs","sha256":"sha256:7ecbf26d11e217ff53597a75b9fdb6f084acdc8f28acf79740691cef2727a717","byte_length":401},
+    {"path":"validator/src/lib.rs","sha256":"sha256:abc23d56b97b7f289f40f96565745407ee54ff9c82e78caee28608a5ab408223","byte_length":1146},
+    {"path":"validator/src/plugin_manifest/json.rs","sha256":"sha256:769dd1df63cfcf89383d622955d2205b0341ac9c7d512ef29d32658b3a30c7f0","byte_length":3558},
+    {"path":"validator/src/plugin_manifest/mod.rs","sha256":"sha256:b11d47ed5239369c1052445ba3376cc69e86144a1a77a8fe165545ba2ac7c789","byte_length":3756},
+    {"path":"validator/src/plugin_manifest/validation.rs","sha256":"sha256:d076018f41af4d01da421c47c7240b61cf4fbc8272d3fc87bd991ae99b32728a","byte_length":3511},
+    {"path":"validator/tests/distribution_contract.rs","sha256":"sha256:52e587fbdf4920d31a425b56d8dacaf0c9b0aef75ae3c617cca6b3fbfd48a990","byte_length":804},
+    {"path":"validator/tests/distribution_contract/adversarial_fs.rs","sha256":"sha256:ceb874ea8705d858625156baecee014bf77a8cc28fa53d24a178ebe3f0eb5877","byte_length":3136},
+    {"path":"validator/tests/distribution_contract/adversarial_semantics.rs","sha256":"sha256:665f2d30d4decf910fc7f1d6bdb48daaaebf54df54c50bbdbad8fc958feacfa3","byte_length":5904},
+    {"path":"validator/tests/distribution_contract/install.rs","sha256":"sha256:8eaf760f47a89b8761f130ea12a0c0d21b7890bb46bbcde8f1dc201e0170f0ab","byte_length":11343},
+    {"path":"validator/tests/distribution_contract/marketplace_supply.rs","sha256":"sha256:19538962c94b88f70089ff79ae2f20f3003331ab1ea76da42ed78341fa729fb9","byte_length":8760},
+    {"path":"validator/tests/distribution_contract/package.rs","sha256":"sha256:63dc9ee6808f6f773b2051566fd9c1629001326ff6b0026cdab2e23f33f3580d","byte_length":9786},
+    {"path":"validator/tests/distribution_contract/package_manifest.rs","sha256":"sha256:78bb1275c4a21eabce13d88836f4f8d7c03a2a64321c73646d1fe7e3ad0be323","byte_length":11289},
+    {"path":"validator/tests/distribution_contract/positive.rs","sha256":"sha256:8a1e0822930ec26646154a6ca417158593e1f5ab6c45109cc5bcb230e539d664","byte_length":1148},
+    {"path":"validator/tests/distribution_contract/prefix_collisions.rs","sha256":"sha256:c91be980efe7200bdfcf6ec7a7ca6831a61a470a03611ef037f4a2880f98ce72","byte_length":3162},
+    {"path":"validator/tests/distribution_contract/states.rs","sha256":"sha256:3c83ee3c38c9735e50a9e2a1d8849fe45a417ca4b995a1a48606decb1105d142","byte_length":3059},
+    {"path":"validator/tests/distribution_contract/support.rs","sha256":"sha256:b2393b7f849dd744951765195dc2c27b9860afea3cba98ccdcaf074534a426f9","byte_length":6459},
+    {"path":"validator/tests/inventory_contract_cases/plugin_hooks.rs","sha256":"sha256:ad8a92ca75a0a4a68916f14a423c82637708a1b77b937f4c309d2f16da0d526c","byte_length":4508},
+    {"path":"validator/tests/inventory_contract_cases/plugin_manifest.rs","sha256":"sha256:ae5ec3e3a03a1bb4e794fe629931f1766d91bd146d84d41d583be84e0d022e6f","byte_length":10999}
+  ],
+  "findings": [
+    {
+      "severity": "candidate",
+      "finding": "The internal N02 and N04 supported plugin-manifest readers now share one code authority and current source manifest bytes."
+    },
+    {
+      "severity": "open-n02",
+      "finding": "The full inventory/distribution run retains two independent N02 live-routing assertion failures; this N04 integration does not suppress, relabel, or close them."
+    },
+    {
+      "severity": "host-proof-withheld",
+      "finding": "Local Codex runtime diagnostics confirm the three-prompt and 128-character prompt limits, while real package, installation, discovery, marketplace, Plugins UI, and runtime identity remain unproved."
+    }
+  ],
+  "unresolved_dependencies": [
+    "INDEPENDENT-N04-NODE007-REVIEW",
+    "GLOBAL-GENERATED-AUTHORITY-INTEGRATION",
+    "PUBLIC-DISPATCHER-INTEGRATION",
+    "N02-INVENTORY-CURRENT-PROOF",
+    "N03-CLI-STATE-CURRENT-PROOF",
+    "SUPPORTED-HOST-DISTRIBUTION-PROOF"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "No real host package, install location, cache, app registry, Plugins UI, discovery surface, or runtime was mutated or accepted.",
+    "Legacy hook files and manifest hook declarations remain migration context for N14 and N15 and are not supported manifest authority.",
+    "The package and install kernels still use injected effects and do not prove a production host filesystem adapter.",
+    "The unavailable local plugin-creator skill was not treated as authority; current contract, local runtime diagnostics, and exact source behavior bound this candidate.",
+    "Tests, manifests, receipts, deterministic bytes, and green commands do not close N04 or prove readiness, release, or completion."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

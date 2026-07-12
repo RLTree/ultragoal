@@ -1,0 +1,414 @@
+{
+  "worker": "/root/n02_legacy_skill_routes",
+  "lease_id": "LEASE-N02-LEGACY-SKILL-ROUTES-001",
+  "context_id": "sha256:f7840e1040b8342e39fa016d6c8b0271a185c0f1d1ea47b0b1b65d8657ae75bf",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "status_sha256_before_result": "beb795fba14dc8d29e303bee4cba522867b792a648ca17d3fc972d27f6f0cb7d",
+    "worktree_diff_sha256_before_result": "60d16a902eb07a4b9efd10c4a275eaf933f8a67aa04691bfee1d3b27a93d2109",
+    "staged_diff_sha256_before_result": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "leased_candidate_set_sha256": "2805f0ce14d40ebb50730f40a95b1ff598455c9a1824b6103d6848064bef6eb0",
+    "dirty": true,
+    "context_note": "A stable read-only Git status window and all twenty-eight leased implementation-file digests were captured immediately before this self-referential WorkerResult was added. Concurrent dirt outside the lease was preserved. The prohibited .codex-worktree/env.sh file was not read, sourced, or content-hashed."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "status_sha256_at_lease_start": "97ae78c6508fd104299c2d8f63b921d70df2f724d59834c77c668efe072a1cf8",
+    "worktree_diff_sha256_at_lease_start": "5c522d124365193a3a170fd6f32460ca988d8332f5e86881b94dea15cd2d19e6",
+    "staged_diff_sha256_at_lease_start": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "legacy_skill_count": 14,
+    "legacy_metadata_file_count": 0,
+    "pre_existing_user_dirt": [
+      ".DS_Store"
+    ],
+    "concurrent_dirt_policy": "All root-owned and other-worker paths were left untouched."
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged": true,
+    "route_only_skill_count": 14,
+    "explicit_only_metadata_count": 14,
+    "implicit_candidate_count": 0,
+    "exact_mapping_count": 14,
+    "implementation_file_count": 28,
+    "total_candidate_bytes_excluding_result": 23337,
+    "total_candidate_lines_excluding_result": 294,
+    "maximum_file_lines": 15,
+    "files_over_300_lines": 0,
+    "stale_positive_command_references": 0,
+    "root_authority_files_modified": false,
+    "git_operations_performed": false,
+    "network_performed": false,
+    "external_writes_performed": false
+  },
+  "touched_paths": [
+    "skills/ultragoal/SKILL.md",
+    "skills/ultragoal/agents/openai.yaml",
+    "skills/harness-engineering/SKILL.md",
+    "skills/harness-engineering/agents/openai.yaml",
+    "skills/agent-first-repo-init/SKILL.md",
+    "skills/agent-first-repo-init/agents/openai.yaml",
+    "skills/agent-first-repo-retrofit/SKILL.md",
+    "skills/agent-first-repo-retrofit/agents/openai.yaml",
+    "skills/fit-repo/SKILL.md",
+    "skills/fit-repo/agents/openai.yaml",
+    "skills/execplan-lane/SKILL.md",
+    "skills/execplan-lane/agents/openai.yaml",
+    "skills/agent-runtime-legibility/SKILL.md",
+    "skills/agent-runtime-legibility/agents/openai.yaml",
+    "skills/agent-observability-stack/SKILL.md",
+    "skills/agent-observability-stack/agents/openai.yaml",
+    "skills/orchestrator-reconciler/SKILL.md",
+    "skills/orchestrator-reconciler/agents/openai.yaml",
+    "skills/proof-gate/SKILL.md",
+    "skills/proof-gate/agents/openai.yaml",
+    "skills/product-cohesion-gate/SKILL.md",
+    "skills/product-cohesion-gate/agents/openai.yaml",
+    "skills/product-fitness-gate/SKILL.md",
+    "skills/product-fitness-gate/agents/openai.yaml",
+    "skills/agent-improvement-loop/SKILL.md",
+    "skills/agent-improvement-loop/agents/openai.yaml",
+    "skills/standards-gardener/SKILL.md",
+    "skills/standards-gardener/agents/openai.yaml",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-LEGACY-SKILL-ROUTES-001.json"
+  ],
+  "touched_semantics": [
+    "fourteen non-destructive legacy-to-canonical compatibility routes",
+    "explicit-only legacy alias invocation policy",
+    "unchanged user request, context, constraint, and authorization preservation",
+    "fail-closed handling when a canonical target is unavailable",
+    "removal of legacy workflow, lane, gate, receipt, finalizer, command, tool, helper, schema, state-store, and generated authority from the fourteen wrappers",
+    "surrogate-proof and affirmative claim guards for every wrapper"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Fourteen leased SKILL.md files, fourteen leased agents/openai.yaml files, and this WorkerResult only"
+    },
+    {
+      "class": "external-process",
+      "scope": "Local quick_validate.py, Ruby, Git, find, and read-only digest commands"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-write",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PLUGIN-003",
+    "REQ-PLUGIN-004",
+    "REQ-PLUGIN-005"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N08-PLUGIN-PRODUCT",
+    "N14-MIGRATION"
+  ],
+  "changes": [
+    {
+      "area": "legacy workflow authority",
+      "rationale": "Replaced each independent legacy workflow body with the same minimal compatibility contract so old names cannot continue to own lanes, gates, receipts, finalizers, commands, tools, schemas, state, or generated authority."
+    },
+    {
+      "area": "canonical routing",
+      "rationale": "Bound every old name to the root-specified fully qualified canonical target while requiring the full original request, context, constraints, and effect authorization to survive the route unchanged."
+    },
+    {
+      "area": "invocation policy",
+      "rationale": "Added current agents/openai.yaml interface metadata with policy.allow_implicit_invocation set to boolean false for all fourteen aliases; each default prompt contains exactly its own fully qualified legacy token and no second skill token."
+    },
+    {
+      "area": "false-pass resistance",
+      "rationale": "Every wrapper fails closed when the canonical target is unavailable and rejects fallback, inferred equivalence, hidden routing writes, surrogate completion, and positive adoption, discovery, runtime, retirement, readiness, release, or completion claims."
+    },
+    {
+      "area": "invalid legacy metadata",
+      "rationale": "Added exact name and description frontmatter to agent-observability-stack, product-fitness-gate, and agent-improvement-loop while normalizing all fourteen wrappers to the same valid two-key frontmatter contract."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "python3 /Users/terrynoblin/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/<each legacy alias>, then final fallback rerun with /Users/terrynoblin/.codex/skills/assets/samples/skill-creator/scripts/quick_validate.py after the system path disappeared",
+      "result": "pass",
+      "summary": "The selected current validator returned Skill is valid for 14 of 14 before its host-local path disappeared; the inspected local fallback validator returned Skill is valid for 14 of 14 on the final frozen SKILL.md bytes."
+    },
+    {
+      "command": "ruby -ryaml exact frontmatter, mapping, interface, policy, quote, fail-closed, whitespace, size, and stale-positive-command validation over fourteen wrappers",
+      "result": "pass",
+      "summary": "Fourteen exact mappings and fourteen boolean-false explicit-only policies passed; every body contained its exact target twice and every file was at most fifteen lines."
+    },
+    {
+      "command": "ruby adversarial compatibility resolver over metadata prompts and explicit, implicit, bare, unknown, canonical-direct, and conflicting canaries",
+      "result": "pass",
+      "summary": "Fourteen explicit legacy prompts resolved to their exact target; zero aliases were implicit candidates; fourteen bare names plus unknown, canonical-direct, and two-token conflicts failed closed."
+    },
+    {
+      "command": "find, Ruby Digest::SHA256, byte, line, and leased candidate-set reconciliation over twenty-eight implementation files",
+      "result": "pass",
+      "summary": "Exactly twenty-eight files existed under the leased directories: 23337 bytes, 294 lines, maximum fifteen lines, and candidate-set sha256:2805f0ce14d40ebb50730f40a95b1ff598455c9a1824b6103d6848064bef6eb0."
+    },
+    {
+      "command": "read-only stable Git status, worktree diff, staged diff, branch, HEAD, and tree capture",
+      "result": "pass",
+      "summary": "The pre-result context was stable across the capture window, HEAD and tree stayed unchanged, and the staged diff remained empty."
+    },
+    {
+      "command": "python3 jsonschema.Draft202012Validator against IMPLEMENTATION_DEPENDENCY_GRAPH.json worker_output_schema; Ruby exact artifact digest, byte, line, candidate-set, and touched-path reconciliation",
+      "result": "pass",
+      "summary": "WorkerResult-v1 accepted with no extra fields; all twenty-eight implementation artifacts and the exact touched-path set reconciled after freeze."
+    },
+    {
+      "command": "git diff --check over all leased paths",
+      "result": "pass",
+      "summary": "No whitespace errors were reported."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "skills/ultragoal/SKILL.md",
+      "sha256": "sha256:37dc72cc4cc373bec0d43e0e3769ea576f63b09444f0620d3c02693c1d08f71f",
+      "bytes": 1349,
+      "lines": 15
+    },
+    {
+      "path": "skills/ultragoal/agents/openai.yaml",
+      "sha256": "sha256:ab5bccf623a3fc3028d2e04df656f9319dc177a0d72bfc7614c7ed90c2b3dc1f",
+      "bytes": 292,
+      "lines": 6
+    },
+    {
+      "path": "skills/harness-engineering/SKILL.md",
+      "sha256": "sha256:d0d3fdb6e3c8bf9034c3520bee41e0699323c097199fe12d76991208a251fed4",
+      "bytes": 1369,
+      "lines": 15
+    },
+    {
+      "path": "skills/harness-engineering/agents/openai.yaml",
+      "sha256": "sha256:b33afdd0c8edaeb48054f4a37125162896178975dcce39dc985a839588677581",
+      "bytes": 312,
+      "lines": 6
+    },
+    {
+      "path": "skills/agent-first-repo-init/SKILL.md",
+      "sha256": "sha256:cc4a602686f4672c19425a194a34278eb214cb25b72bb9e61bbad8d1038b2344",
+      "bytes": 1364,
+      "lines": 15
+    },
+    {
+      "path": "skills/agent-first-repo-init/agents/openai.yaml",
+      "sha256": "sha256:16254fbaf33789be4bfc36fd06b770e1de613bb23523bffd21ee00c4c0041706",
+      "bytes": 316,
+      "lines": 6
+    },
+    {
+      "path": "skills/agent-first-repo-retrofit/SKILL.md",
+      "sha256": "sha256:3ce9801dc41161b475c5a336bbaddb462fd5c7fd084a5d3de362309faa66e7ad",
+      "bytes": 1372,
+      "lines": 15
+    },
+    {
+      "path": "skills/agent-first-repo-retrofit/agents/openai.yaml",
+      "sha256": "sha256:b56030ddd7a503657872632539ae9e0965fd3a634e880c2da0a11aba722c2c74",
+      "bytes": 324,
+      "lines": 6
+    },
+    {
+      "path": "skills/fit-repo/SKILL.md",
+      "sha256": "sha256:b7027dce5df0954b90bfb64532d9f9bed825b6443ef74ef2b35edcb015058844",
+      "bytes": 1338,
+      "lines": 15
+    },
+    {
+      "path": "skills/fit-repo/agents/openai.yaml",
+      "sha256": "sha256:9d3eb5b610a8aebf87e1c9e6196abaebcacafd5ec82001f12ab407c1bf4980e1",
+      "bytes": 290,
+      "lines": 6
+    },
+    {
+      "path": "skills/execplan-lane/SKILL.md",
+      "sha256": "sha256:e8da39ac2b6990b13ad840c3ef99a97900f908786820c26591992d6fa8b95659",
+      "bytes": 1342,
+      "lines": 15
+    },
+    {
+      "path": "skills/execplan-lane/agents/openai.yaml",
+      "sha256": "sha256:040d610d042ded1fd9d5cb7271d77ab1b7adc79f1f6e9dab8acede84f6df8034",
+      "bytes": 300,
+      "lines": 6
+    },
+    {
+      "path": "skills/agent-runtime-legibility/SKILL.md",
+      "sha256": "sha256:593bf1cfb5c0d7587487ac3cd129ce44bbb4fb8c0434b7b95439c46418b44b7b",
+      "bytes": 1364,
+      "lines": 15
+    },
+    {
+      "path": "skills/agent-runtime-legibility/agents/openai.yaml",
+      "sha256": "sha256:a72e3355ca8ccb84c408ba1176ca7a81622d8d991cceec5418014867a19d3fe1",
+      "bytes": 322,
+      "lines": 6
+    },
+    {
+      "path": "skills/agent-observability-stack/SKILL.md",
+      "sha256": "sha256:2e0779b7c3703efc55f9086ceb1653e0e9d7c7fe8f77a04f7caa8fa930eb85e6",
+      "bytes": 1390,
+      "lines": 15
+    },
+    {
+      "path": "skills/agent-observability-stack/agents/openai.yaml",
+      "sha256": "sha256:b9a5b81b8dfb5e2ddf15094d2797b545d870e8a2f1900858362a01c365b01a01",
+      "bytes": 324,
+      "lines": 6
+    },
+    {
+      "path": "skills/orchestrator-reconciler/SKILL.md",
+      "sha256": "sha256:31b81b2ed0dd4b3c2026da1eab3f7c20074d2d4488163b374e9b30e460f83528",
+      "bytes": 1350,
+      "lines": 15
+    },
+    {
+      "path": "skills/orchestrator-reconciler/agents/openai.yaml",
+      "sha256": "sha256:5b21a2d77b4a85afa0fbec8b31abe185802c5bc155966e4da348396c7e946c10",
+      "bytes": 320,
+      "lines": 6
+    },
+    {
+      "path": "skills/proof-gate/SKILL.md",
+      "sha256": "sha256:b7d17361cba4b22fb1757220a68857b476cb9d627c7988fbb9bde93725c8c414",
+      "bytes": 1315,
+      "lines": 15
+    },
+    {
+      "path": "skills/proof-gate/agents/openai.yaml",
+      "sha256": "sha256:63f240452a1b187723e54defa42f18e7402842abe0acbd882295b9aa2fc20ca3",
+      "bytes": 294,
+      "lines": 6
+    },
+    {
+      "path": "skills/product-cohesion-gate/SKILL.md",
+      "sha256": "sha256:509498e952f1ad3ba2e3deb2e5537b8825cf4c4c7096ea65bb94949cda8e8ee2",
+      "bytes": 1337,
+      "lines": 15
+    },
+    {
+      "path": "skills/product-cohesion-gate/agents/openai.yaml",
+      "sha256": "sha256:127059ef7156fd2aa371db1de33146feea9d898815f979af59ee5a685eb2fe04",
+      "bytes": 316,
+      "lines": 6
+    },
+    {
+      "path": "skills/product-fitness-gate/SKILL.md",
+      "sha256": "sha256:f248feb6c6df96df7bb84749d478f832e0edd6f10ea5d2b4c08bd34e0f45925d",
+      "bytes": 1335,
+      "lines": 15
+    },
+    {
+      "path": "skills/product-fitness-gate/agents/openai.yaml",
+      "sha256": "sha256:131c4afd492455d4ffa5a79445cfb03e80636fbd3f33aabe6f9a2c454ec3eada",
+      "bytes": 314,
+      "lines": 6
+    },
+    {
+      "path": "skills/agent-improvement-loop/SKILL.md",
+      "sha256": "sha256:d338cd10239796de25748b71cb79acdc2411f8843053151cf91e6ba22d59a407",
+      "bytes": 1384,
+      "lines": 15
+    },
+    {
+      "path": "skills/agent-improvement-loop/agents/openai.yaml",
+      "sha256": "sha256:cb096aeae7c14feede648016b24733a0f3845820e2c42f520bbbc36580537e3e",
+      "bytes": 318,
+      "lines": 6
+    },
+    {
+      "path": "skills/standards-gardener/SKILL.md",
+      "sha256": "sha256:5f64a2ac04137c50b915611cd075991be92838dc5b734cfe1e3bdcc6c9689d5a",
+      "bytes": 1376,
+      "lines": 15
+    },
+    {
+      "path": "skills/standards-gardener/agents/openai.yaml",
+      "sha256": "sha256:e9910a5b0447e8e24c44d8c5e1fd0b800d433ffc3dd05a61f18c80014ec293f5",
+      "bytes": 310,
+      "lines": 6
+    }
+  ],
+  "findings": [
+    {
+      "severity": "candidate-source-only",
+      "finding": "All fourteen legacy bodies are route-only and explicit-only in source, but this does not establish package, installed cache, app registry, marketplace, discovery, selection, invocation, or runtime behavior."
+    },
+    {
+      "severity": "blocking-for-inventory-closure",
+      "finding": "The fourteen directories still exist and may remain live inventory entries until root adopts typed compatibility state and compiled witnesses. Their route-only content must not be used to suppress a parallel-authority finding by path alone."
+    },
+    {
+      "severity": "blocking-for-semantic-equivalence",
+      "finding": "No legacy workflow is claimed semantically equivalent to its canonical target. The wrappers preserve access and fail closed; representative request behavior still requires independent review against each target."
+    },
+    {
+      "severity": "blocking-for-host-proof",
+      "finding": "Static openai.yaml parsing supports the explicit-only candidate, but no fresh supported host session proved explicit legacy invocation, implicit non-selection, or cross-skill routing."
+    },
+    {
+      "severity": "blocking-for-downstream-behavior",
+      "finding": "Canonical target skills and their typed commands or Harness-owned custom tools remain subject to root acceptance and downstream implementation; an unavailable target must stop rather than resurrect legacy behavior."
+    },
+    {
+      "severity": "host-context-gap",
+      "finding": "The selected host-local .system/skill-creator directory disappeared after its instructions were read and its validator passed 14 of 14. Final frozen SKILL.md bytes passed the inspected local sample validator and stricter exact static checks, but root should recompute supported capability inventory before host claims."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent read-only review and representative forward tests over all fourteen mappings, including ambiguous, unknown, bare, and unavailable-target requests.",
+    "Root acceptance of the eight canonical skill candidates and every typed command or Harness-owned custom tool their workflows require.",
+    "Root-owned migration registry transition and compiled HCT-INVENTORY witnesses that classify compatibility without hiding live parallel authority.",
+    "Root-owned plugin manifest, marketplace, package inventory, generated inventory, and installed-byte reconciliation.",
+    "Fresh supported-host proof that every old fully qualified name remains explicitly invocable, none is implicitly injected, and the preserved request reaches exactly one canonical target.",
+    "Retirement decision and deadline evidence for each alias; compatibility source candidates do not prove retirement."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "migration/authority-routes.json and root-owned migration registry",
+      "request": "After independent acceptance, adopt one typed compatibility transition for each exact mapping without recording semantic equivalence or retirement."
+    },
+    {
+      "path": "validator inventory and generated authority",
+      "request": "Recompute the live inventory and add reference-aware compiled witnesses for route-only wrappers; do not suppress findings merely because a legacy path contains a deprecation string."
+    },
+    {
+      "path": ".codex-plugin/plugin.json, .agents/plugins/marketplace.json, and package inventories",
+      "request": "Reconcile canonical skills and explicit-only compatibility aliases across source, built, installed, cached, marketplace, and app-registry surfaces."
+    },
+    {
+      "path": "supported-host verification surfaces",
+      "request": "Run fresh-session positive explicit and negative implicit, bare, unknown, conflicting, and unavailable-target canaries with candidate-bound evidence."
+    }
+  ],
+  "limitations": [
+    "This lease changed only the fourteen named legacy SKILL.md files, their fourteen new agents/openai.yaml files, and this WorkerResult; all root-owned and concurrent worker paths were preserved.",
+    "The wrappers are candidate compatibility routes, not claims of semantic equivalence, adoption, discovery, runtime behavior, retirement, readiness, release, N02 closure, or goal completion.",
+    "quick_validate and static YAML routing canaries do not prove host loading, package inclusion, installed bytes, selection, invocation, cross-skill dispatch, or requested product behavior.",
+    "No full live HCT-INVENTORY run was used as acceptance evidence because concurrent repository writes and root-owned migration authority remain unresolved.",
+    "The originally selected host-local skill-creator path disappeared during final validation; this worker used an inspected local fallback for the final 14-of-14 run and makes no supported-capability or host-stability claim.",
+    "No network, external write, Git mutation, manifest edit, marketplace edit, dependency edit, public command-catalog edit, generated-authority edit, migration-registry edit, claim decision, or release action was performed.",
+    "The candidate identity binds the twenty-eight implementation files before this WorkerResult was added; the WorkerResult cannot contain its own digest and root must rebuild candidate context after integration or concurrent change.",
+    "The highest honest ceiling is fourteen schema-valid, explicit-only, non-destructive source compatibility-route candidates pending independent review and root reconciliation."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

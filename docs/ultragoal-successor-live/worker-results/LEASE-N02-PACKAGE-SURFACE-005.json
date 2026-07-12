@@ -1,0 +1,252 @@
+{
+  "worker": "/root/n02_package_surface_session",
+  "lease_id": "LEASE-N02-PACKAGE-SURFACE-005",
+  "context_id": "sha256:23d3e43e7dc823b81607fd44b5b1545db86c97c6ac395421692ef357dfc9beac",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "dirty": true,
+    "status_sha256_before_result": "c7eea4a480936d8ea851dcd6d045d973f098c5283ac45b8c03d415cf38f11427",
+    "worktree_diff_sha256_before_result": "e38dd89ee9198bf26e0c8d31a24351a61e29b00f4c28570db0122811dcf3c0ba",
+    "staged_diff_sha256_before_result": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "owned_artifact_set_sha256": "471dc3cd851ea748c376e7af38aef6e41ed427a38f99f1335de7d6b9e6b8f637",
+    "context_formula": "SHA-256 of ordered rows key<TAB>value<LF> for head_commit, head_tree, branch, status_sha256, worktree_diff_sha256, staged_diff_sha256, and artifact_set_sha256.",
+    "context_note": "The context digest was frozen immediately before this self-referential WorkerResult was added. The protected .codex-worktree/env.sh file was not opened, read, hashed, or sourced.",
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "supersedes": "LEASE-N02-PACKAGE-SURFACE-004",
+    "superseded_worker_result": "docs/ultragoal-successor-live/worker-results/LEASE-N02-PACKAGE-SURFACE-004.json",
+    "superseded_worker_result_sha256": "sha256:9110421fc6a7f45852a20925f25ce7f192c51b375324e50cf9c00ea8db59a535",
+    "superseded_artifact_set_sha256": "sha256:c08363bef4dbe58bdc54ae1ecfea7aede81b8574d72a45871a48400292774bda",
+    "independent_review_verdict": "REWORK",
+    "confirmed_finding": "State::failures embedded an attacker-controlled safe generated inventory path in generated-disposition:{path}; package_surfaces::failures then copied it into exported audit text.",
+    "concurrent_dirt_policy": "All root, user, manifest, registry, macro, migration, claim, release, and other-worker changes were preserved."
+  },
+  "final_state": {
+    "status": "corrective_candidate_for_independent_rereview_and_root_acceptance",
+    "acceptance_ceiling": "Generated package-surface batch-session and failure non-echo hardening only; this result does not accept package identity, N02, readiness, release, or completion.",
+    "artifact_count_excluding_result": 4,
+    "artifact_set_sha256": "471dc3cd851ea748c376e7af38aef6e41ed427a38f99f1335de7d6b9e6b8f637",
+    "artifact_set_formula": "Use artifacts array order. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "artifact_lines": 707,
+    "artifact_bytes": 25809,
+    "maximum_file_lines": 284,
+    "files_over_300_lines": 0,
+    "package_surface_tests": "13 passed; 0 failed",
+    "generated_disposition_tests": "13 passed; 0 failed",
+    "package_session_tests": "16 passed; 0 failed",
+    "inventory_contract": "85 passed; 0 failed",
+    "native_library_check": "pass with unrelated existing warnings",
+    "production_split_session_api": "unavailable; Catalog::load and Catalog::classify are compiled only for tests",
+    "failure_export_non_echo": "pass for four distinct safe attacker-controlled path forms in inner tuples and the full serialized package_surfaces::failures output",
+    "read_path_hidden_writes": "zero in the exact fixture tree assertion",
+    "format_check": "pass",
+    "diff_check": "pass",
+    "tracked_deletions": 0,
+    "required_root_manifest_resource_additions": 3,
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "destructive_effect_performed": false
+  },
+  "touched_paths": [
+    "validator/src/audit/law/authority_surfaces/package_surfaces/generated.rs",
+    "validator/src/audit/law/authority_surfaces/package_surfaces/generated_tests.rs",
+    "validator/src/audit/law/authority_surfaces/package_surfaces/generated_batch_tests.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-PACKAGE-SURFACE-005.json"
+  ],
+  "touched_semantics": [
+    "generated batch failures use one fixed non-path failure surface and fixed failure class",
+    "failure output exposes only the bounded invalid generated path count and never an inner error string",
+    "invalid generated row surface IDs are fixed before the parent package-surface contract-failure exporter consumes them",
+    "attacker paths, filenames, canary tokens, digests, and reversible path fragments are absent from returned failure tuples and serialized exports",
+    "one descriptor-confined Session still spans registry load, complete batch classification, and final revalidation",
+    "any registry, input, output, root, ancestor, leaf, or row failure still invalidates the whole batch",
+    "legacy split-session APIs remain test-only and production classification remains read-only"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "docs/generated/SECRET_CANARY.json safe-path canary",
+    "docs/generated/nested/SECRET_CANARY_file-1.json nested underscore and hyphen canary",
+    "examples/generated/SECRET-CANARY.json hyphen canary",
+    "generated/secret_canary.json lowercase canary",
+    "inner State failure tuple serialization",
+    "full package_surfaces::failures tuple and message document serialization",
+    "registry, input, output, root, ancestor, leaf, and one-row batch failure attacks",
+    "byte-exact before-after fixture tree zero-write assertion"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Three corrective leased Rust artifacts and this WorkerResult only."
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "Focused tests created and removed isolated safe-path canaries plus generated registry, input, output, root, ancestor, and leaf fixtures under ignored target paths."
+    },
+    {
+      "class": "cargo-output",
+      "scope": "Normal ignored local Cargo build artifacts only."
+    },
+    {
+      "class": "git",
+      "scope": "Read-only identity, status, diff, and deletion inspection."
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-SECURITY-001",
+    "REQ-PROOF-001",
+    "REQ-MAINT-005",
+    "HCT-INVENTORY generated package-surface read and failure boundary"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY"
+  ],
+  "changes": [
+    {
+      "area": "failure identity",
+      "result": "Replaced generated-disposition:{attacker_path} with the fixed generated-disposition-batch surface and generated_disposition_batch_invalid failure class."
+    },
+    {
+      "area": "failure data minimization",
+      "result": "State stores unit errors for invalid rows and emits one fixed batch failure containing only invalid_generated_path_count; inner classifier error text is not retained or exported."
+    },
+    {
+      "area": "parent exporter containment",
+      "result": "Invalid generated rows use a fixed surface_id so the later package-surface row contract check cannot reintroduce attacker paths after the batch failure is sanitized."
+    },
+    {
+      "area": "exported false-pass proof",
+      "result": "Four safe path shapes are serialized through inner and full package-surface failure documents and checked for the complete paths plus upper, lower, underscore, and hyphen canary tokens."
+    },
+    {
+      "area": "causality",
+      "result": "The fixed class and exact invalid generated path count retain deterministic batch-level causality without revealing path material."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --offline --locked --manifest-path validator/Cargo.toml package_surfaces::generated -- --nocapture",
+      "result": "pass",
+      "summary": "13 passed; includes four-form full-export non-echo, stable/read-only batches, all mutation boundaries, one-row failure, retained context, tamper, and live nine-row no-claim controls."
+    },
+    {
+      "command": "cargo test --offline --locked --manifest-path validator/Cargo.toml package::inventory::generated_disposition -- --nocapture",
+      "result": "pass",
+      "summary": "13 passed; generated descriptor confinement, mutation, hardlink, FIFO, JSON, digest, canonical drift, and retained-context controls remained green."
+    },
+    {
+      "command": "cargo test --offline --locked --manifest-path validator/Cargo.toml package::inventory::tests -- --nocapture",
+      "result": "pass",
+      "summary": "16 passed; package bounds, hardlink, FIFO, Unix socket, symlink, substitution, mutation, deterministic read-only, and non-echo controls remained green."
+    },
+    {
+      "command": "cargo test --offline --locked --manifest-path validator/Cargo.toml --test inventory_contract",
+      "result": "pass",
+      "summary": "85 passed; 0 failed against the live concurrent candidate."
+    },
+    {
+      "command": "cargo check --offline --locked --manifest-path validator/Cargo.toml --lib",
+      "result": "pass",
+      "summary": "The native production library compiled; only unrelated existing warnings remained."
+    },
+    {
+      "command": "cargo fmt --check; exact trailing-whitespace scan; git diff --check; tracked-deletion scan; production split-session API search",
+      "result": "pass",
+      "summary": "Formatting and text checks passed, no tracked deletion exists, and classify_many remains the only production package-surface classification API."
+    },
+    {
+      "command": "Python jsonschema.Draft202012Validator against worker_output_schema plus exact artifact digest, byte, line, and ordered set reconciliation",
+      "result": "pass",
+      "summary": "WorkerResult-v1 validates with zero errors; all four artifact rows and 471dc3cd851ea748c376e7af38aef6e41ed427a38f99f1335de7d6b9e6b8f637 reconcile exactly."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/package/inventory/generated_disposition/mod.rs",
+      "sha256": "sha256:3ff6f4f0b2e77e0dd132dd72106feabce051b27893b08d5f96bc7d44dc99511f",
+      "bytes": 6183,
+      "lines": 177,
+      "modified_by_corrective_worker": false
+    },
+    {
+      "path": "validator/src/audit/law/authority_surfaces/package_surfaces/generated.rs",
+      "sha256": "sha256:7a350c7c52e4d2b97b323d14b6f96f213205d470e52d7da78226f3d8490fd171",
+      "bytes": 2479,
+      "lines": 72
+    },
+    {
+      "path": "validator/src/audit/law/authority_surfaces/package_surfaces/generated_tests.rs",
+      "sha256": "sha256:0c789d50d82100572d1b2e00a667e4600b395682779b42d398e7a20c55bf2857",
+      "bytes": 7032,
+      "lines": 174
+    },
+    {
+      "path": "validator/src/audit/law/authority_surfaces/package_surfaces/generated_batch_tests.rs",
+      "sha256": "sha256:6317024674c701b675d3465a8f0eb1d4067b444c32a11293aebaac1cd495cb71",
+      "bytes": 10115,
+      "lines": 284
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Attacker-controlled safe generated inventory paths no longer appear in State failure keys, messages, parent row-contract failure surfaces, or serialized package-surface failure exports."
+    },
+    {
+      "severity": "confirmed-preserved",
+      "finding": "Single-session all-or-nothing classification, fixed non-echo inner reader errors, bounds, special-file rejection, cross-resource mutation detection, and zero hidden writes remain green."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "The three package-surface module files remain outside the root-owned plugin-manifest resource inventory."
+    },
+    {
+      "severity": "independent-rereview-required",
+      "finding": "This superseding four-artifact set requires fresh independent non-echo and security review before root acceptance."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent security and claim-falsification rereview of artifact_set_sha256 471dc3cd851ea748c376e7af38aef6e41ed427a38f99f1335de7d6b9e6b8f637.",
+    "Root addition of the three package-surface modules to plugin-manifest-draft.json resources followed by package identity recomputation.",
+    "Root acceptance or bounded rework verdict.",
+    "N02 inventory closure, claim decisions, readiness, release, and product completion remain root-only decisions."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "plugin-manifest-draft.json",
+      "request": "Add exactly validator/src/audit/law/authority_surfaces/package_surfaces/generated.rs, generated_tests.rs, and generated_batch_tests.rs to resources, then recompute package identity and dependent digests."
+    },
+    {
+      "path": "independent rereview",
+      "request": "Reproduce the exact four-artifact set 471dc3cd851ea748c376e7af38aef6e41ed427a38f99f1335de7d6b9e6b8f637, emphasizing full exported failure non-echo, fixed IDs, count-only causality, all-or-nothing sessions, mutation timing, special files, bounds, and zero hidden writes."
+    },
+    {
+      "path": "root authority",
+      "request": "Decide package-surface adoption, manifest integration, N02 status, claim ceiling, readiness, release, and completion only after independent reconciliation."
+    }
+  ],
+  "limitations": [
+    "This corrective worker changed only the leased package-surface state and tests plus this WorkerResult; it did not modify manifests, registries, Cargo dependencies, commands, migration, claims, release, or other package modules.",
+    "The non-echo guarantee in this lease covers returned generated failure tuples/messages and their package-surface audit export; governed inventory rows intentionally still identify inventoried paths and are not failure messages.",
+    "The mutation-hook tests are Unix-only; non-Unix product behavior inherits the package Session's fixed fail-closed open path and was not cross-compiled or runtime-executed by this lease.",
+    "The three package-surface modules are not shipped resources until root updates and revalidates the manifest.",
+    "Passing focused tests establishes this candidate boundary only and does not establish package identity, N02 closure, installation, marketplace, runtime, readiness, release, completion, or update-goal authority."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

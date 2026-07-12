@@ -1,0 +1,81 @@
+{
+  "worker": "/root/fixture_execution_scheduler_builder",
+  "lease_id": "FIXTURE-SCHEDULER-EXECUTION-CORRECTION-003",
+  "context_id": "sha256:278823db36451b0534d4166413b348e451232b18a0582ce5350f61d456d0e623",
+  "candidate_identity": {
+    "candidate_id": "sha256:e510a8883cabc31db814d583adc63bfbb4641c47c1ecc4821b905dc70eedd65c",
+    "context_id": "sha256:278823db36451b0534d4166413b348e451232b18a0582ce5350f61d456d0e623",
+    "root_bound_artifact_count": 15,
+    "root_bound_artifact_total_bytes": 52172,
+    "root_bound_artifact_total_lines": 1611,
+    "root_aggregate_enforcement": "Root independently enforces the complete 15-file aggregate; WorkerResult-v1 is not claimed to enforce aggregate fields."
+  },
+  "base_state": {
+    "status": "root-bound-execution-correction"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "private execution-capable fixture scheduler and focused evidence only",
+    "root_acceptance": "withheld"
+  },
+  "touched_paths": [
+    "validator/src/cli/capture/fixture.rs",
+    "validator/src/cli/capture/fixture/execute.rs",
+    "validator/src/cli/capture/fixture/permit.rs",
+    "validator/src/cli/capture/mod.rs",
+    "validator/src/fixture_scheduler/lease.rs",
+    "validator/src/fixture_scheduler/mod.rs",
+    "validator/src/fixture_scheduler/scheduler.rs",
+    "validator/tests/fixture_scheduler_contract/adversarial.rs",
+    "validator/tests/fixture_scheduler_contract/isolation.rs",
+    "validator/tests/fixture_scheduler_contract/scheduling.rs",
+    "validator/tests/fixture_scheduler_contract/worker_result.rs"
+  ],
+  "touched_semantics": [
+    "fixture_scheduler::execution",
+    "cli::capture::fixture"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {"class":"workspace_write","target":"fixture-scheduler-execution-source","performed":true},
+    {"class":"fixture_write","target":"fixture-scheduler-execution-tests","performed":true},
+    {"class":"process","target":"offline-fixture-scheduler-execution-validation","performed":true}
+  ],
+  "requirements": [
+    "req-cli-007",
+    "req-proof-006",
+    "ac-fixture-scheduler-execution-003"
+  ],
+  "dependency_nodes": [
+    "capture-secret-boundary-kernel",
+    "fixture-scheduler-execution-rework"
+  ],
+  "changes": [
+    {"summary":"Added a private fixture execution adapter, lease-owned resource reservations, and a fail-closed caller observation boundary."}
+  ],
+  "commands_and_tests": [
+    {"command":"CARGO_TARGET_DIR=/tmp/hul-fixture-execution-003 cargo build --locked --offline -j16","status":"pass"},
+    {"command":"CARGO_TARGET_DIR=/tmp/hul-fixture-execution-003 cargo test --locked --offline -j16 --test fixture_scheduler_contract -- --test-threads=16","status":"pass"}
+  ],
+  "artifacts": [
+    {"path":"validator/src/cli/capture/fixture.rs","sha256":"sha256:a291046c64fe49af244b4bdec48b1ddc6ac99fef69fa18018c965a4684814144","byte_length":3054},
+    {"path":"validator/src/cli/capture/fixture/execute.rs","sha256":"sha256:8ea487b881fec4be90221f10c619e40523a14de79846d60c1cf6eed8eff68932","byte_length":5763},
+    {"path":"validator/src/cli/capture/fixture/permit.rs","sha256":"sha256:6818c747b91ec31cf669544a4bbbb9ac539b723f93c93f2c8b6c31f0e02637c8","byte_length":2802},
+    {"path":"validator/src/cli/capture/mod.rs","sha256":"sha256:592a372f71124fb808401cb8ec72480aa8171d89e360728f1f51268596f211d6","byte_length":2099},
+    {"path":"validator/src/fixture_scheduler/lease.rs","sha256":"sha256:e73403d7ae9769840f9771cde61546a927b03ab4ebfa9be100f12f8e72c1dd2b","byte_length":5280},
+    {"path":"validator/src/fixture_scheduler/mod.rs","sha256":"sha256:cd3a0b37f49b9959875cb8c51123957d793cb63ed7e5fb9ca806272a68f1dca8","byte_length":686},
+    {"path":"validator/src/fixture_scheduler/scheduler.rs","sha256":"sha256:385438e71c0e0bc9ee81f2228a4b451b758e26699f3bef71eb722b22550ac36b","byte_length":7446},
+    {"path":"validator/tests/fixture_scheduler_contract/adversarial.rs","sha256":"sha256:a7ecb66302e5eac3424846d262081311509c3be9ccb9df59f32d94f6c1301abd","byte_length":4086},
+    {"path":"validator/tests/fixture_scheduler_contract/isolation.rs","sha256":"sha256:7d06a45ba5a04d361370ba210c2ea5564cc1f9eabc7a9d0e6b50caa7ab0c7947","byte_length":2836},
+    {"path":"validator/tests/fixture_scheduler_contract/scheduling.rs","sha256":"sha256:735ddb139ac8a45ad53975e19156de392f0b55320960524cfeb4c17472f2c6c9","byte_length":3186},
+    {"path":"validator/tests/fixture_scheduler_contract/worker_result.rs","sha256":"sha256:b204c310d668a6f07a7a0468aa90524d534273576c8847f5a1752cc371d040b5","byte_length":5499}
+  ],
+  "findings": [],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [],
+  "limitations": [
+    "No public HCT-FIXTURES integration, routine or strict proof, node closure, readiness, release, or completion is claimed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

@@ -1,0 +1,244 @@
+{
+  "worker": "/root/n02_package_snapshot_design",
+  "lease_id": "LEASE-N02-PACKAGE-SNAPSHOT-001",
+  "context_id": "sha256:24f37f74f42c05ce291310d9ab75c25bd4355887369973f2eec69c8f81d7d9de",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "dirty": true,
+    "status_sha256_before_result": "7b81156a7cbf2cdfa0eca5507f158f872210ecf8c320794058d4c6151a7bc94e",
+    "worktree_diff_sha256_before_result": "bc5c3411367899332125cd52ad15658348593f6014b1a1040fcc0a20b4f18c5d",
+    "staged_diff_sha256_before_result": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "owned_artifact_set_sha256": "1cceb68c69c03c44139ab5539fc3a8d5e6290e5b536670afcd820ef656a52df8",
+    "context_formula": "SHA-256 of ordered rows key<TAB>value<LF> for head_commit, head_tree, branch, status_sha256, worktree_diff_sha256, staged_diff_sha256, and artifact_set_sha256.",
+    "context_note": "The context digest was frozen immediately before this self-referential WorkerResult was added. The protected .codex-worktree/env.sh file was not opened, read, hashed, or sourced.",
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "lease_scope": [
+      "validator/src/package/inventory/snapshot/**",
+      "validator/src/package/inventory/anchored/session.rs",
+      "validator/src/package/inventory/anchored/session/tree.rs",
+      "validator/src/package/inventory/anchored/snapshot.rs",
+      "validator/src/package/inventory/generated_disposition/mod.rs",
+      "validator/src/package/inventory/mod.rs",
+      "docs/ultragoal-successor-live/worker-results/LEASE-N02-PACKAGE-SNAPSHOT-001.json"
+    ],
+    "inherited_package_reader_result": "LEASE-N02-PACKAGE-READ-003",
+    "root_owned_surfaces_not_modified": [
+      "plugin-manifest-draft.json",
+      "migration registries and generated authority registries",
+      "Cargo manifests and lockfiles",
+      "public command catalog and CLI adapters",
+      "claim, readiness, release, completion, and update-goal authority"
+    ],
+    "shared_worktree_note": "The live worktree contained concurrent root and worker changes. This worker preserved them and froze only the ten leased implementation artifacts below."
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "acceptance_ceiling": "Candidate-bound immutable package snapshot core only. This result does not accept CLI routing, telemetry routing, N02, package readiness, release, or completion.",
+    "artifact_count_excluding_result": 10,
+    "artifact_set_sha256": "1cceb68c69c03c44139ab5539fc3a8d5e6290e5b536670afcd820ef656a52df8",
+    "artifact_set_formula": "Use artifacts array order. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "artifact_lines": 1563,
+    "artifact_bytes": 53652,
+    "maximum_file_lines": 277,
+    "files_over_300_lines": 0,
+    "focused_package_inventory_tests": "60 passed; 0 failed",
+    "native_all_target_check": "pass with unrelated existing warnings",
+    "whole_crate_windows_check": "blocked by eleven out-of-scope platform-gating errors; no error was attributed to this artifact set",
+    "exact_leased_format_check": "pass",
+    "diff_check": "pass",
+    "tracked_deletions": 0,
+    "required_root_manifest_resource_additions": 6,
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "destructive_effect_performed": false
+  },
+  "touched_paths": [
+    "validator/src/package/inventory/mod.rs",
+    "validator/src/package/inventory/anchored/session.rs",
+    "validator/src/package/inventory/anchored/session/tree.rs",
+    "validator/src/package/inventory/anchored/snapshot.rs",
+    "validator/src/package/inventory/generated_disposition/mod.rs",
+    "validator/src/package/inventory/snapshot/mod.rs",
+    "validator/src/package/inventory/snapshot/capture.rs",
+    "validator/src/package/inventory/snapshot/identity.rs",
+    "validator/src/package/inventory/snapshot/tree.rs",
+    "validator/src/package/inventory/snapshot/tests.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-PACKAGE-SNAPSHOT-001.json"
+  ],
+  "touched_semantics": [
+    "PackageCapture binds a descriptor-pinned package session to one authorized LiveContext and one immutable Arc<PackageSnapshot>.",
+    "One bounded no-follow tree walk observes every retained entry once and records regular, hardlink-state, directory, symlink, and special-file facts without opening symlinks or special files.",
+    "Manifest, listed package bytes, generated registry, generated dependencies, generated outputs, and downstream Rust source dependencies share a physical read cache and one final revalidation boundary.",
+    "Snapshot identity binds context id, manifest digest, tree identity, cached dependency identity, and the compatible package digest.",
+    "Strict root metadata sealing is activated only for PackageCapture; the inherited package digest retains its accepted identity-only behavior for unrelated root churn.",
+    "Non-Unix PackageCapture construction fails closed."
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "deterministic repeated capture with package-digest parity and zero Git-status writes",
+    "unlisted Rust dependency captured into the immutable byte cache",
+    "symlink, FIFO, and multiple-hardlink tree facts observed without opening attacker-controlled special objects",
+    "listed hardlink rejection with fixed non-echo error",
+    "missing or malformed manifest collection rejection with fixed non-echo error",
+    "persistent mutation and mutate-restore rejection at finalization",
+    "PackageSnapshot Send plus Sync compile-time witness"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Only the exact leased Rust modules and this WorkerResult were written."
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "Tests created and removed isolated temporary Git repositories containing regular files, hardlinks, symlinks, and FIFOs."
+    },
+    {
+      "class": "cargo-output",
+      "scope": "All Cargo output used /tmp/hug-n02-package-snapshot001-target or /tmp/hug-n02-package-snapshot001-windows."
+    },
+    {
+      "class": "git",
+      "scope": "Read-only root, branch, HEAD, tree, status, diff, and deletion checks only."
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "HCT-INVENTORY",
+    "CT-PACKAGE-SNAPSHOT candidate-bound read core",
+    "REQ-CLI-002",
+    "REQ-PROOF-001",
+    "REQ-MAINT-005",
+    "REQ-SECURITY-001"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY"
+  ],
+  "changes": [
+    {
+      "area": "candidate-bound capture",
+      "result": "Added a LiveContext-authorized PackageCapture that owns the session until final whole-session and context revalidation."
+    },
+    {
+      "area": "immutable snapshot",
+      "result": "Added an Arc-backed PackageSnapshot with stable context, snapshot, package, manifest, listed-path, tree, and dependency-byte surfaces."
+    },
+    {
+      "area": "single physical read authority",
+      "result": "Generalized generated disposition over a bounded Source so package and generated bytes are read once through the same descriptor-pinned cache."
+    },
+    {
+      "area": "tree and race defense",
+      "result": "Added bounded one-pass no-follow tree capture, exact entry reconciliation, strict capture-only root sealing, and mutation/mutate-restore rejection."
+    },
+    {
+      "area": "compatibility",
+      "result": "Preserved the existing package digest formula and proved equality between PackageSnapshot.package_digest and the legacy package_digest surface."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n02-package-snapshot001-target cargo test --locked --offline -p ultragoal --lib package::inventory -- --test-threads=1",
+      "result": "pass",
+      "summary": "60 passed; 0 failed; 1466 filtered out after the final root-sealing refactor."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n02-package-snapshot001-target cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "pass",
+      "summary": "All native targets compile; unrelated existing warnings remain."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n02-package-snapshot001-windows cargo check --locked --offline -p ultragoal --target x86_64-pc-windows-msvc --lib",
+      "result": "out_of_scope_blocked",
+      "summary": "Eleven existing capture/context/target-fixture platform-gating errors block the whole crate. No diagnostic points to this leased artifact set, but positive whole-crate non-Unix proof is withheld."
+    },
+    {
+      "command": "rustfmt --edition 2021 --check --config skip_children=true <ten leased Rust files>",
+      "result": "pass",
+      "summary": "All ten exact leased implementation artifacts are formatted without rewriting neighboring concurrent modules."
+    },
+    {
+      "command": "git diff --check -- <ten leased Rust files>; tracked deletion scans",
+      "result": "pass",
+      "summary": "No whitespace errors and no tracked deletions."
+    }
+  ],
+  "artifacts": [
+    {"path":"validator/src/package/inventory/mod.rs","sha256":"sha256:5f754040ee783190e6d89d9422a4b94b2000756ce9eb3c0410bdfe97938baf20","bytes":6719,"lines":191},
+    {"path":"validator/src/package/inventory/anchored/session.rs","sha256":"sha256:f7497be7745e5e79944d3af711a541849c44a378601ce20b78bca4738073999c","bytes":9879,"lines":277},
+    {"path":"validator/src/package/inventory/anchored/session/tree.rs","sha256":"sha256:2d3ac01dc9715d049a0057bf8aba7c1df90bcabfd47759da2e554bebda3441bd","bytes":3693,"lines":92},
+    {"path":"validator/src/package/inventory/anchored/snapshot.rs","sha256":"sha256:c905fd59c05b2fa1fe102836aaab6a28853089bd65daa33814908dc575c234e4","bytes":2544,"lines":88},
+    {"path":"validator/src/package/inventory/generated_disposition/mod.rs","sha256":"sha256:80ffef008573e9ae969dd9971d29e473d4e479d9bd83a86e99ee2adb2621e6b5","bytes":7062,"lines":207},
+    {"path":"validator/src/package/inventory/snapshot/mod.rs","sha256":"sha256:9a785ab01fa22e770caf9bfbbb758d84a99257bc78c3a34415d45c2b8d944cba","bytes":2022,"lines":86},
+    {"path":"validator/src/package/inventory/snapshot/capture.rs","sha256":"sha256:21b961c173bd42bbca204df076bc0af2c401913836fa14dab7ea2f16fd237d50","bytes":8840,"lines":244},
+    {"path":"validator/src/package/inventory/snapshot/identity.rs","sha256":"sha256:96294beddbfe77961b14edf2bb2dbde1ecd97e805e82c87639140d0d46ed8cef","bytes":1770,"lines":55},
+    {"path":"validator/src/package/inventory/snapshot/tree.rs","sha256":"sha256:dc57b3d8ce13edd8f85342709a386a8abc7dd6c4e7c71d65fbad3c9e2b0b4edc","bytes":3450,"lines":103},
+    {"path":"validator/src/package/inventory/snapshot/tests.rs","sha256":"sha256:dc3cc9519dd15e8266cfa8dae2d4b1d8016711c7ada84fbe89efea2897d9980c","bytes":7673,"lines":220}
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Package and generated dependency bytes can now share one candidate-bound physical read cache and immutable snapshot identity instead of being reacquired across downstream tasks."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Tree enumeration records symlink, special-file, and hardlink state without opening symlinks or special files; listed multiple-hardlink resources still fail closed."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "Six new Rust module files are not yet listed in the root-owned plugin manifest resource inventory."
+    },
+    {
+      "severity": "integration-required",
+      "finding": "PackageCapture is intentionally dormant until root-owned CLI and telemetry adapters route all dependent tasks through one capture."
+    },
+    {
+      "severity": "platform-gap-outside-lease",
+      "finding": "The non-Unix constructor is fail-closed, but eleven unrelated crate-wide platform-gating errors prevent positive whole-crate Windows proof."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Root acceptance and independent immutable-artifact review.",
+    "Root-owned plugin manifest reconciliation for the six new module files.",
+    "A separately leased CLI/telemetry adapter that constructs one PackageCapture and supplies its immutable PackageSnapshot to package inventory, package digest, generated disposition, closure, skill-link, namespace, and telemetry consumers.",
+    "Candidate-bound representative product verification after adapters are wired."
+  ],
+  "requested_root_changes": [
+    {
+      "surface": "plugin-manifest-draft.json",
+      "request": "After independent acceptance, add validator/src/package/inventory/anchored/session/tree.rs and the five validator/src/package/inventory/snapshot/*.rs files to the root-owned resource inventory."
+    },
+    {
+      "surface": "CLI and telemetry integration lease",
+      "request": "Lease adapters that construct exactly one PackageCapture per candidate and route dependent package/generated/inventory tasks through its immutable PackageSnapshot; workers must not create a second snapshot authority."
+    },
+    {
+      "surface": "candidate reconciliation",
+      "request": "Refresh package result, manifest/digest evidence, and any guard hashes only after the accepted integration bytes are frozen."
+    }
+  ],
+  "limitations": [
+    "The snapshot core is not yet invoked by public package inventory or telemetry commands.",
+    "The existing package_digest function remains as a compatibility surface; this lease proves digest parity but does not retire or reroute it.",
+    "This lease does not implement VerifiedRepositoryScopes or change root-owned manifests, registries, public commands, telemetry, claims, or release state.",
+    "The tree identity records entry kind and hardlink state; file content authority is represented by the cached dependency identity and package digest, not by a second full-tree byte hash.",
+    "Positive whole-crate non-Unix support is withheld because the live crate has eleven unrelated platform-gating errors."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

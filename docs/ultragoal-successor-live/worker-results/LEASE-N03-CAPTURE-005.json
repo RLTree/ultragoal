@@ -1,0 +1,385 @@
+{
+  "worker": "/root/n03_capture_worker",
+  "lease_id": "LEASE-N03-CAPTURE-005",
+  "context_id": "sha256:5fc719a7d83aff8d125c498fd04def49fdac9bf78ce904dd12cefae3e1e9027f",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "status_sha256_before_result": "2c857787d07079c5c4de3e2f306b9315f562e0d32a1fc9bc91dae1706a65c170",
+    "untracked_content_sha256_before_result": "34df124e0273fa652e0d9e711cb1fdbbcca8b848559457f8570a0c5dc5dc4ed4",
+    "context_note": "LiveContext was rebuilt after all leased source and test changes and immediately before this self-referential WorkerResult was written. The live .gitignore excludes .codex-worktree/; no protected live file was directly opened, read, hashed, or sourced by this worker."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "predecessor_result": "LEASE-N03-CAPTURE-004",
+    "predecessor_sha256": "76805052cc5edba71467a5358ea6277b037895a6cfd589852d5358710afd5bbf",
+    "correction_source": "Independent REWORK verdict with no accepted CAPTURE-004 subset",
+    "lease_scope": [
+      "validator/src/cli/capture/**",
+      "validator/tests/cli_contract/capture/**",
+      "validator/tests/cli_contract/capture.rs",
+      "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-005.json"
+    ],
+    "root_owned_surfaces_not_modified": [
+      "validator/src/context/**",
+      "validator/src/cli/mod.rs",
+      "validator/src/lib.rs",
+      "validator/Cargo.toml",
+      "public command catalog",
+      "schemas and generated authority",
+      "migration and claim registries"
+    ]
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "leased_rust_lines": 2953,
+    "production_rust_lines": 2159,
+    "test_rust_lines": 794,
+    "maximum_rust_file_lines": 275,
+    "rust_files_over_300_lines": 0,
+    "focused_tests": "32 passed; 0 failed",
+    "capture_lib_tests": "3 passed; 0 failed",
+    "compile_check": "pass",
+    "format_check": "pass",
+    "capture_004_preserved_sha256": "76805052cc5edba71467a5358ea6277b037895a6cfd589852d5358710afd5bbf",
+    "git_commands_issued_by_worker": false,
+    "network_performed": false,
+    "external_writes_performed": false
+  },
+  "touched_paths": [
+    "validator/src/cli/capture/artifact.rs",
+    "validator/src/cli/capture/descriptor.rs",
+    "validator/src/cli/capture/environment.rs",
+    "validator/src/cli/capture/filesystem.rs",
+    "validator/src/cli/capture/mod.rs",
+    "validator/src/cli/capture/run.rs",
+    "validator/src/cli/capture/sandbox.rs",
+    "validator/src/cli/capture/spec.rs",
+    "validator/src/cli/capture/tree.rs",
+    "validator/src/cli/capture/util.rs",
+    "validator/tests/cli_contract/capture/artifacts.rs",
+    "validator/tests/cli_contract/capture/enforcement.rs",
+    "validator/tests/cli_contract/capture/process.rs",
+    "validator/tests/cli_contract/capture/security.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-005.json"
+  ],
+  "touched_semantics": [
+    "portable ASCII case-insensitive protected path components",
+    "pre-revalidation protected-root rejection",
+    "alternate repository/worktree root fail-closed boundary",
+    "catalog-unbound public input rejection",
+    "Read-only no-spawn effect ceiling",
+    "explicit secret-source metadata without sensitivity inference",
+    "self-authenticating immutable artifact records",
+    "dormant test-only artifact store access",
+    "per-file and aggregate artifact byte bounds",
+    "bounded descriptor reads and rejected-read instrumentation",
+    "same-length ignored-artifact mutation distinction"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "isolated lowercase .codex-worktree dummy directory",
+    "isolated uppercase .CODEX-WORKTREE dummy directory",
+    "isolated title-case .Codex-Worktree dummy directory",
+    "isolated nested mixed-case .cOdEx-WoRkTrEe dummy directory",
+    "chmod-000 protected-directory traversal canaries restored before fixture cleanup",
+    "program, cwd, and artifact protected-component rejection canaries",
+    "caller-classified public argument, environment, sensitive-looking environment name, and artifact rejection canaries",
+    "secret argument and environment source-only serialization canary",
+    "self-authenticating immutable artifact canonical record",
+    "same-length ignored-artifact mutation canonical-record distinction",
+    "per-file oversized artifact rejected with zero descriptor bytes consumed",
+    "aggregate artifact overflow rejected before the excess file is consumed",
+    "artifact symlink, hard-link, and swap canaries",
+    "wrapper exec, source, write, network, fork, and signal canaries",
+    "aggregate output overflow, termination, and reap canary"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased capture source, tests, and this WorkerResult only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal locked/offline Cargo target output"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "isolated temporary repositories, ignored artifacts, permission canaries, and outside-root canary files created by tests and cleaned locally"
+    },
+    {
+      "class": "external-process",
+      "scope": "local Cargo, rustfmt, rg, sed, Python schema validation, wc, shasum, and test-fixture processes only"
+    },
+    {
+      "class": "git",
+      "scope": "no repository Git command issued by the worker; test fixtures internally ran git init only in isolated temporary directories"
+    },
+    {
+      "class": "product-subprocess",
+      "performed": false,
+      "reason": "all non-preinterrupted CommandSpec executions reject before target open or spawn"
+    },
+    {
+      "class": "network",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-CLI-003",
+    "REQ-CLI-007",
+    "REQ-PROOF-002",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-004",
+    "HCT-CAPTURE negative proof requirement"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "protected path handling",
+      "result": "Every path component is compared with .codex-worktree using portable ASCII case-insensitive comparison. Program, cwd, artifact, worktree-root, descriptor-open, and tree-walk entry points reject or prune before open. Lowercase, uppercase, title-case, and nested mixed-case canaries use isolated dummy fixtures only."
+    },
+    {
+      "area": "root guard ordering",
+      "result": "The pure repository/worktree equality and protected-component checks now run before LiveContext revalidation or RootAnchor open. Alternate repository/worktree roots reject with an exact root-owned device/inode binding requirement."
+    },
+    {
+      "area": "caller-label distrust",
+      "result": "Without an accepted typed-catalog binding, production CommandSpec rejects every caller-classified public argument, environment entry, and artifact. It also rejects every effect except Read. No sensitive-looking-name heuristic remains, and secret values are never inferred."
+    },
+    {
+      "area": "exact production subset",
+      "result": "The only surviving production behavior is a Read, pre-requested-interruption, zero-spawn observation with no public argv, environment, or artifact inputs. Explicit bound secret inputs serialize source name and public version only; target execution remains unavailable."
+    },
+    {
+      "area": "artifact canonical record",
+      "result": "CapturedArtifact canonical JSON now includes immutable content_sha256, exact byte_length, context_id, candidate_id, relative path encoding, store_identity immutable-memory-arc-v1, and resolver_identity none. In-memory bytes and the internal PathBuf are excluded."
+    },
+    {
+      "area": "artifact production boundary",
+      "result": "Production public artifact capture fails before RootAnchor construction. Artifact mechanics are reachable only through a cfg(test) helper for adversarial verification and cannot create a production bypass."
+    },
+    {
+      "area": "bounded reads",
+      "result": "Descriptor reads accept an explicit maximum, reject oversized metadata before allocation or read, never consume beyond the initial bounded length, and recheck metadata after read. Artifact capture applies a 4 MiB per-file and 8 MiB aggregate logical-content ceiling before each initial read."
+    },
+    {
+      "area": "oversize instrumentation",
+      "result": "Thread-local test instrumentation records descriptor bytes consumed. A rejected 5 MiB artifact records zero consumed bytes; a third 3 MiB artifact is rejected at the remaining aggregate bound after only the first two bounded artifacts are read and validated."
+    },
+    {
+      "area": "scope boundary",
+      "result": "No LiveContext identity schema, root device/inode authority, root wiring, Cargo dependency, public witness, generated catalog, migration registry, claim registry, package, or release surface was modified."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --locked --offline --test cli_contract --no-run",
+      "result": "pass",
+      "summary": "The root-integrated cli_contract harness compiled. Warning output belongs to the concurrently developed dormant successor parser, not the capture lease."
+    },
+    {
+      "command": "cargo test --locked --offline --test cli_contract successor_capture -- --test-threads=1",
+      "result": "pass",
+      "summary": "32 passed; 0 failed; 42 filtered out; 32.21 seconds."
+    },
+    {
+      "command": "cargo test --locked --offline --lib cli::capture -- --test-threads=1",
+      "result": "pass",
+      "summary": "3 passed; 0 failed; 1437 filtered out."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/cli/capture/*.rs validator/tests/cli_contract/capture/*.rs",
+      "result": "pass"
+    },
+    {
+      "command": "cargo test --locked --offline --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "Emitted LiveContext sha256:5fc719a7d83aff8d125c498fd04def49fdac9bf78ce904dd12cefae3e1e9027f immediately before this result file."
+    },
+    {
+      "command": "protected-path, catalog-boundary, sensitivity-inference, canonical-record, line-count, predecessor-preservation, and per-file digest audits",
+      "result": "pass",
+      "summary": "19 Rust files, 2953 lines, maximum 275 lines, zero files over 300 lines; CAPTURE-004 remained byte-exact; no ArtifactResolver or sensitive-name inference helper remains."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/capture/artifact.rs",
+      "sha256": "0ccf7a2f910858a238d5ecf453e2e8da5a2c8c879e865e847658c83cf2bd307a"
+    },
+    {
+      "path": "validator/src/cli/capture/descriptor.rs",
+      "sha256": "4a2b73e9e13a15e89533ed51035873c7a7a31dc7d087fa670305b26e2b99014d"
+    },
+    {
+      "path": "validator/src/cli/capture/environment.rs",
+      "sha256": "fe3373596151241dc92e6beaa1fb88f7cb15ed1a0262e74fa217ee85f5059790"
+    },
+    {
+      "path": "validator/src/cli/capture/filesystem.rs",
+      "sha256": "22b04b708d6ae4fb6eae55ee03c2ce56739a9875c15f311789b03a30e8aaf3db"
+    },
+    {
+      "path": "validator/src/cli/capture/inputs.rs",
+      "sha256": "4b5e53531a491738ec31cf3b4a05d2527d7a5138379ade6283af990d60a53234"
+    },
+    {
+      "path": "validator/src/cli/capture/mod.rs",
+      "sha256": "ad22f8d624d5066f49a1d216e7f15ceef8b8e748f041d4ff53b070b89ab4904c"
+    },
+    {
+      "path": "validator/src/cli/capture/output.rs",
+      "sha256": "386ac2193074d21fae2a622f12e01f0c728b6968cb3dbde719a13e152025ac43"
+    },
+    {
+      "path": "validator/src/cli/capture/process.rs",
+      "sha256": "00713df73d8019d1e0623dbbd5d62839b5443510e1e9c5dc8a10e9e571498d42"
+    },
+    {
+      "path": "validator/src/cli/capture/run.rs",
+      "sha256": "2db8d6510811f2a457fd91b8e92caff170bdd2d2116ad6ec263aa688aba77034"
+    },
+    {
+      "path": "validator/src/cli/capture/sandbox.rs",
+      "sha256": "108e3826dbf681d0ba25a88cb397abc4c3960cddee1d179459924058202b5b82"
+    },
+    {
+      "path": "validator/src/cli/capture/spec.rs",
+      "sha256": "b8305f2feca99ca2e004a736aca959c4c86bf319719409e0e0647a610a5b384e"
+    },
+    {
+      "path": "validator/src/cli/capture/tree.rs",
+      "sha256": "50a2d76e714ae80accb631b68b1753a892e0b0a9771ba3368882ff381e85d13f"
+    },
+    {
+      "path": "validator/src/cli/capture/util.rs",
+      "sha256": "30cbefc48612a11982ee899823529cba3389433a310d7cc7433ddaaea10b91fd"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/artifacts.rs",
+      "sha256": "af7d6fbdf0caf300efcb9128107cc11a6513bf7c034f181410460b78ee1b287f"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/enforcement.rs",
+      "sha256": "b5c9ed45244d1c8cb91303f266dfeac14e933b66ebc9b16120ea8942587e15ba"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/fixture.rs",
+      "sha256": "2b91c2c4ee4c6e04faa0db6610c62887c554c75db351e61e269861a5ffb0c7b2"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/mod.rs",
+      "sha256": "07fdf8685a61c278e6f02f3cd55d31be60c9a2aee59a89764d400853228720f8"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/process.rs",
+      "sha256": "e6d6b91478b9d0351ba1cf7231faeec4eab34081caa75b9eb6647bb1c50a21ec"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/security.rs",
+      "sha256": "6c407211d31e1b9300d444c53bf8aefe7cdbc2a797ed5d3ca6ab90a4dc0707b0"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "All requested ASCII case variants and nested protected components reject before capture-layer revalidation/open, and the tree witness prunes them with the same portable predicate. Tests use only isolated dummy fixtures."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Dormant artifact canonical records are self-authenticating and distinguish same-length ignored-file mutations without serializing bytes or exposing a path-rereading resolver."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Caller public sensitivity and non-Read effect labels cannot enable capture. Public argv, environment, and artifact inputs fail closed, and no name-based sensitivity inference remains."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Per-file and aggregate artifact limits are applied before reads, bounded during reads, and instrumented to prove that rejected oversized content is not fully consumed."
+    },
+    {
+      "severity": "material-product-blocker",
+      "finding": "HCT-CAPTURE still does not execute subprocesses. No proven substrate both confines filesystem effects and prevents an allowed wrapper from executing or sourcing unpinned secondary code."
+    },
+    {
+      "severity": "material-product-blocker",
+      "finding": "WorkspaceWrite, ExternalWrite, Destructive, and PlannedWrite capture remain unavailable. Setup, retrofit, repair, migration, and other mutating product journeys cannot depend on this candidate."
+    },
+    {
+      "severity": "root-authority-gap",
+      "finding": "RootIdentity does not bind canonical repository/worktree device and inode identities. This lease rejects alternate repository/worktree roots but does not solve or claim adopted root identity."
+    },
+    {
+      "severity": "catalog-gap",
+      "finding": "No accepted unforgeable typed-catalog token binds command identity, effect, arguments, environment, or artifact sensitivity. Production public capture therefore remains entirely unavailable."
+    },
+    {
+      "severity": "proof-gap",
+      "finding": "Artifact storage and descriptor-read mechanics are exercised through a cfg(test) helper only. They are not production artifact-capture behavior."
+    },
+    {
+      "severity": "proof-gap",
+      "finding": "Aggregate output accounting and overflow cleanup are exercised by a direct test fixture only. The production process path remains disabled and always emits empty output."
+    },
+    {
+      "severity": "platform-ceiling",
+      "finding": "Preinterrupted observations require the current fixed macOS sandbox-exec capability record. Native execution and non-macOS capture remain unavailable."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "Independent re-review, public integration, migration routing, generated authority, claim decisions, and any HCT-CAPTURE acceptance remain root-only."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent security and claim-falsification re-review of this exact CAPTURE-005 candidate.",
+    "A root-owned RootIdentity revision that binds canonical repository and worktree device/inode identities and revalidates them.",
+    "An accepted unforgeable typed-catalog token derived from the single successor catalog authority.",
+    "A proven no-secondary-exec process substrate, or explicit routing that removes actual execution from HCT-CAPTURE.",
+    "A descriptor-brokered workspace-write substrate before any mutating command can depend on capture.",
+    "Root reconciliation of capture with the public dispatcher, schemas, generated witnesses, migration registry, and claim registry.",
+    "Representative candidate-bound product verification after root integration; these module tests are not product behavior."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/context/types.rs, validator/src/context/build.rs, and validator/src/context/revalidate.rs",
+      "request": "Extend RootIdentity with canonical repository and worktree device/inode identities, include them in the context identity, and revalidate them before alternate-root capture can be supported. Until then preserve the current alternate-root rejection."
+    },
+    {
+      "path": "root-owned successor catalog and dispatcher integration",
+      "request": "Create an unforgeable typed-catalog binding derived from the existing pure successor catalog that carries command identity, exact effect, argv/environment sensitivity, and artifact declarations. Do not duplicate catalog authority or accept caller labels."
+    },
+    {
+      "path": "root-owned capture execution substrate",
+      "request": "Implement a proven descriptor-safe, no-secondary-exec substrate before enabling subprocess execution. Do not restore a shell wrapper, broaden file reads, or grant process execution in the dormant sandbox plan."
+    },
+    {
+      "path": "root-owned write-effect substrate",
+      "request": "Implement descriptor-brokered explicit write targets before enabling PlannedWrite, WorkspaceWrite, ExternalWrite, or Destructive capture."
+    },
+    {
+      "path": "MIGRATION-AND-RETIREMENT.md, claim registry, schemas, and generated authority",
+      "request": "Preserve CAPTURE-004 as historical evidence, supersede its candidate assertions with this lower CAPTURE-005 ceiling, and keep HCT-CAPTURE plus dependent claims lowered until representative integrated proof exists."
+    },
+    {
+      "path": "root acceptance records",
+      "request": "Route this exact candidate and WorkerResult for independent security and claim-falsification review before accepting any subset."
+    }
+  ],
+  "limitations": [
+    "The only production behavior is a Read, pre-requested-interruption, zero-target-execution observation with no public argv, environment, or artifact inputs.",
+    "Explicit secret argument and environment values may be supplied only with LiveContext-bound source identities; canonical output contains source name and public version, never value bytes or digests.",
+    "No production artifact capture exists. The immutable artifact store and bounded descriptor reader are dormant mechanics verified only under cfg(test).",
+    "No actual stdout, stderr, timeout, signal, exit-status, or target-effect observation is produced by the production path.",
+    "Alternate repository/worktree roots reject; canonical root device/inode identity remains root-owned and unimplemented.",
+    "The output overflow helper is test-only and must not be cited as production capture behavior.",
+    "No public command catalog, dispatcher, schema, generated authority, migration registry, state store, package, installation, marketplace, release, or completion state was changed.",
+    "Root acceptance, independent review, integration, representative product verification, and claim reconciliation remain mandatory."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

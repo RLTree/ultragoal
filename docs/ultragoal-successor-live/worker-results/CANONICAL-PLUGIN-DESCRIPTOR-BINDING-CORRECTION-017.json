@@ -1,0 +1,477 @@
+{
+  "worker": "/root/canonical_plugin_product_builder",
+  "lease_id": "CANONICAL-PLUGIN-DESCRIPTOR-BINDING-CORRECTION-017",
+  "context_id": "sha256:69abd0660919366f7b972f82ddaadf2b9fcacd9c7dd0c8eb0f6c14384e9de469",
+  "candidate_identity": {
+    "candidate_id": "sha256:dc175f51deb82aded394d72d1a63773360e191624fc274ef655ae2cac20ad55b",
+    "context_id": "sha256:69abd0660919366f7b972f82ddaadf2b9fcacd9c7dd0c8eb0f6c14384e9de469",
+    "parent_agent": "/root",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "dirty": true,
+    "artifact_set_formula": "Sort paths; concatenate each path, one TAB byte, lowercase SHA-256 without prefix, and one LF byte; SHA-256 the result.",
+    "artifact_count": 23,
+    "artifact_total_bytes": 81057,
+    "artifact_total_lines": 1899,
+    "worker_artifact_rows": 17,
+    "worker_artifact_bytes": 78429,
+    "worker_artifact_lines": 1875,
+    "worker_artifact_set_sha256": "sha256:a57da99f35c540cc7658bb8c61eae32ebeca6d13550477d4f910b72284076472",
+    "protected_descriptor_rows": 6,
+    "protected_descriptor_bytes": 2628,
+    "protected_descriptor_lines": 24,
+    "protected_descriptor_protocol": "The full candidate and root-wiring request bind the six .codex/agents rows. WorkerResult-v1 ArtifactWorkspace rejects .codex artifacts as RootOnlyScope, so its artifact array covers the 17 non-protected outputs while root rederives all 23 rows.",
+    "full_artifact_rows": [
+      {
+        "path": ".codex/agents/claim-falsifier.toml",
+        "sha256": "sha256:6ecb0324f07793dd2c8581cd82b83ae6086095fea5d4715c550076211c324e6f",
+        "byte_length": 450,
+        "line_count": 4
+      },
+      {
+        "path": ".codex/agents/orchestration-recovery-reviewer.toml",
+        "sha256": "sha256:da39757a9d58499821f6c11863d1f6bb1d64e015826837ead3962de9c0e6fb75",
+        "byte_length": 446,
+        "line_count": 4
+      },
+      {
+        "path": ".codex/agents/product-journey-reviewer.toml",
+        "sha256": "sha256:9d5f4955afbf33a0965676ad00474aabe4843b3345e901fa0e518b0c9daf6a32",
+        "byte_length": 466,
+        "line_count": 4
+      },
+      {
+        "path": ".codex/agents/repo-recon.toml",
+        "sha256": "sha256:4272e86928d359a867da83491497ee163a1f66c9cf99683df69bec7d55b91f9c",
+        "byte_length": 382,
+        "line_count": 4
+      },
+      {
+        "path": ".codex/agents/research-verifier.toml",
+        "sha256": "sha256:47ee7d30b1052e1c990bc65f9dcaefb77f341b80d1dcbe0fd2d024daeb5901ee",
+        "byte_length": 424,
+        "line_count": 4
+      },
+      {
+        "path": ".codex/agents/security-reviewer.toml",
+        "sha256": "sha256:20efde18349120ad57c938a678ea7e6fa076dd454201ec2ec6e3d9d6fe670b65",
+        "byte_length": 460,
+        "line_count": 4
+      },
+      {
+        "path": "README.md",
+        "sha256": "sha256:edac93f4e88c2ddfaf5fed827a45c085e759e81bd9d7e098f00e5d15a9c58ad8",
+        "byte_length": 3376,
+        "line_count": 71
+      },
+      {
+        "path": "docs/install-and-visibility.md",
+        "sha256": "sha256:95c886f864b0daaca0be84b04888713c61e8d54102d125665d948290f51c2a9c",
+        "byte_length": 5154,
+        "line_count": 119
+      },
+      {
+        "path": "docs/plugin-resource-map.md",
+        "sha256": "sha256:05af5699cde319b646fdb309914d9e0510a53eb16f924f68bab3a6524c5ceba4",
+        "byte_length": 7537,
+        "line_count": 150
+      },
+      {
+        "path": "fixtures/plugin-product/journey-controls.tsv",
+        "sha256": "sha256:23f7f098ec15b4d140acc17e3d38056c5d4aea768469617f99053ea31bd4e368",
+        "byte_length": 1395,
+        "line_count": 11
+      },
+      {
+        "path": "fixtures/plugin-product/root-wiring-request.json",
+        "sha256": "sha256:bf18d11509b43887999e4b4e38c8e4a2c469b164b0b5e70d03a889374e2a3fae",
+        "byte_length": 8189,
+        "line_count": 204
+      },
+      {
+        "path": "fixtures/plugin-product/route-cases.tsv",
+        "sha256": "sha256:9e211f5ff897bf52dac4756b1fbdc9c197fc13840c72279714c6eefb10fb875f",
+        "byte_length": 2421,
+        "line_count": 17
+      },
+      {
+        "path": "skills/diagnose-and-observe/SKILL.md",
+        "sha256": "sha256:69bd02c303556f384219f8ea163c433825c1943e9e81cd221eb3ed37e54edf87",
+        "byte_length": 2874,
+        "line_count": 73
+      },
+      {
+        "path": "skills/goal-run/SKILL.md",
+        "sha256": "sha256:58e59be58ab5bd7b498dbef7b1922dface5407f477e10b2edc91564ff2994153",
+        "byte_length": 3650,
+        "line_count": 78
+      },
+      {
+        "path": "skills/harness-ultragoal/SKILL.md",
+        "sha256": "sha256:74582d0e88d72d170a292553253fa3b8fa7f2e91d4f3d5d05bb43e49a695f474",
+        "byte_length": 3373,
+        "line_count": 77
+      },
+      {
+        "path": "skills/improve-and-maintain/SKILL.md",
+        "sha256": "sha256:6e2910a28bca81d9588ea1dabe76b6e8bd2be3d8266a468fb8c3a476b2cbc146",
+        "byte_length": 3504,
+        "line_count": 76
+      },
+      {
+        "path": "skills/product-journey-review/SKILL.md",
+        "sha256": "sha256:7e6c27216caad307b52720dfd3148189f699509b3c3e69c0f8bba4c789250e08",
+        "byte_length": 3297,
+        "line_count": 67
+      },
+      {
+        "path": "skills/prove/SKILL.md",
+        "sha256": "sha256:ae02f80545cb4fa8626941f89d525ea6c3e5227aaf5faa239efb51f352a2daa7",
+        "byte_length": 2877,
+        "line_count": 73
+      },
+      {
+        "path": "skills/repository-fit/SKILL.md",
+        "sha256": "sha256:2dff9a887ce3e89532f61e6d061276cf800e4dc5ac090929439e7f2f7198781e",
+        "byte_length": 3369,
+        "line_count": 81
+      },
+      {
+        "path": "skills/routine-work/SKILL.md",
+        "sha256": "sha256:00d0f3cf46603ac1f9241141c02a64e071888f71fd3f9886f3c827f7796e7d82",
+        "byte_length": 2998,
+        "line_count": 64
+      },
+      {
+        "path": "validator/tests/plugin_product_contract/main.rs",
+        "sha256": "sha256:a8b9029cdc4b2f6246a6b936eba1cda8f280d19456bc14702323237d419bccb7",
+        "byte_length": 526,
+        "line_count": 20
+      },
+      {
+        "path": "validator/tests/plugin_product_contract/route_contract.rs",
+        "sha256": "sha256:97c3748d65e2e1df7789b2c74457ede929a8d440afa7c950e069fdb07965c02e",
+        "byte_length": 4652,
+        "line_count": 153
+      },
+      {
+        "path": "validator/tests/plugin_product_contract/source_contract.rs",
+        "sha256": "sha256:1300ea1cf2a60a601d97441ec15fc38d2396d5c802d6e99a017303ffc8aa9654",
+        "byte_length": 19237,
+        "line_count": 541
+      }
+    ],
+    "self_exclusion": "This WorkerResult is excluded from candidate_id."
+  },
+  "base_state": {
+    "status": "independent-rework-descriptor-omission",
+    "prior_binding": "docs/ultragoal-successor-live/root-decisions/CANONICAL-PLUGIN-PRODUCT-CORRECTION-BINDING.json",
+    "prior_binding_sha256": "sha256:69abd0660919366f7b972f82ddaadf2b9fcacd9c7dd0c8eb0f6c14384e9de469",
+    "prior_candidate_id": "sha256:443e0f9d745786daa81723241b06c139b1fddba240c9e2bc1b3c0e8fd4e5035a",
+    "prior_candidate_artifacts": 17,
+    "omitted_descriptor_artifacts": 6,
+    "prior_worker_result": "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-PRODUCT-CORRECTION-015.json",
+    "prior_worker_result_sha256": "sha256:db3d647c04245d284f88c32004c90e5ee479fd3acd0ae60d834113feeb0eea7d"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "candidate_status": "canonical-plugin-descriptor-bound-source-candidate",
+    "full_candidate_artifacts": 23,
+    "canonical_skills": 8,
+    "front_doors": 1,
+    "project_agent_descriptors": 6,
+    "semantic_contract_tests": "13-of-13-pass",
+    "descriptor_false_passes": "7-of-7-rejected",
+    "root_manifest_changes": "requested-not-applied",
+    "source_acceptance": "withheld-to-independent-review-and-root",
+    "package_install_discovery_runtime": "unproven"
+  },
+  "touched_paths": [
+    "README.md",
+    "docs/install-and-visibility.md",
+    "docs/plugin-resource-map.md",
+    "fixtures/plugin-product/journey-controls.tsv",
+    "fixtures/plugin-product/root-wiring-request.json",
+    "fixtures/plugin-product/route-cases.tsv",
+    "skills/diagnose-and-observe/SKILL.md",
+    "skills/goal-run/SKILL.md",
+    "skills/harness-ultragoal/SKILL.md",
+    "skills/improve-and-maintain/SKILL.md",
+    "skills/product-journey-review/SKILL.md",
+    "skills/prove/SKILL.md",
+    "skills/repository-fit/SKILL.md",
+    "skills/routine-work/SKILL.md",
+    "validator/tests/plugin_product_contract/main.rs",
+    "validator/tests/plugin_product_contract/route_contract.rs",
+    "validator/tests/plugin_product_contract/source_contract.rs",
+    "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-DESCRIPTOR-BINDING-CORRECTION-017.json"
+  ],
+  "touched_semantics": [
+    "plugin_product::canonical_skill_topology",
+    "plugin_product::descriptor_binding",
+    "plugin_product::fresh_operator_routing",
+    "plugin_product::source_only_contract_controls"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/plugin-product/journey-controls.tsv",
+    "fixtures/plugin-product/root-wiring-request.json",
+    "fixtures/plugin-product/route-cases.tsv",
+    "validator/tests/plugin_product_contract/main.rs",
+    "validator/tests/plugin_product_contract/route_contract.rs",
+    "validator/tests/plugin_product_contract/source_contract.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "canonical-plugin-product-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "plugin-product-fixtures",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-plugin-product-validation",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "host-plugin-state",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "retirement",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "target": "manifest-and-marketplace",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "canonical-eight-skills",
+    "single-front-door",
+    "six-exact-project-agent-descriptors",
+    "semantic-toml-validation",
+    "least-authority-read-only-agents",
+    "descriptor-package-membership",
+    "descriptor-false-pass-controls",
+    "fresh-operator-guidance",
+    "proof-layer-separation",
+    "exact-root-wiring-request"
+  ],
+  "dependency_nodes": [],
+  "changes": [
+    {
+      "area": "descriptor-candidate-binding",
+      "result": "All six current .codex/agents descriptor rows are exact members of the 23-file candidate and the non-authoritative root-wiring request binds their paths, names, SHA-256 digests, byte lengths, and line counts."
+    },
+    {
+      "area": "semantic-descriptor-validation",
+      "result": "The source contract parses TOML semantically and enforces exact names, descriptions, developer instructions, four-field shape, read-only sandbox, least authority, unique paths and names, no global setup authority, and exact package membership."
+    },
+    {
+      "area": "descriptor-false-passes",
+      "result": "Unknown and missing descriptors, duplicate agent identity, semantically valid TOML substitution, workspace-write escalation, stale descriptor digest, and missing, duplicate, or unknown package membership fail closed."
+    },
+    {
+      "area": "root-wiring",
+      "result": "The 0.0.12 request now asserts exact six name/path package rows and descriptor byte bindings while preserving the previously verified plugin, package, and repository marketplace postimages."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "HUL_REPO_ROOT=<live-root> cargo test --manifest-path /tmp/hul-plugin-descriptor-017/Cargo.toml --locked --offline -j16 --test plugin_product_contract -- --test-threads=16",
+      "status": "pass",
+      "result": "13 of 13 source and descriptor contract tests passed in 0.05 seconds."
+    },
+    {
+      "command": "semantic descriptor false-pass corpus",
+      "status": "pass",
+      "result": "Unknown descriptor, missing descriptor, duplicate agent, semantic TOML mutation, write-authority escalation, stale descriptor preimage, and missing, duplicate, and unknown package rows were rejected."
+    },
+    {
+      "command": "skill-creator quick_validate.py against each of the eight canonical skill directories",
+      "status": "pass",
+      "result": "Eight of eight canonical skills passed discovery metadata validation."
+    },
+    {
+      "command": "plugin-creator validate_plugin.py .",
+      "status": "pass",
+      "result": "The current source plugin structure parsed; this does not apply or prove the reserved 0.0.12 package."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check on the focused Rust test files and scoped whitespace validation",
+      "status": "pass",
+      "result": "Scoped formatting and whitespace checks passed."
+    },
+    {
+      "command": "jq and SHA-256 reconciliation of descriptor bindings, exact package membership, and the three proposed 0.0.12 root postimages",
+      "status": "pass",
+      "result": "Six descriptor bindings and package rows were unique and current; all plugin, package, and repository marketplace preimage and postimage digests, bytes, and lines matched."
+    },
+    {
+      "command": "two same-session sorted path TAB sha256 LF freezes plus final live artifact revalidation",
+      "status": "pass",
+      "result": "Both freezes were byte-identical at sha256:dc175f51deb82aded394d72d1a63773360e191624fc274ef655ae2cac20ad55b for 23 artifacts, 81057 bytes, and 1899 lines."
+    },
+    {
+      "command": "WorkerResultV1::parse_json, reconstructed-envelope validate_for, ArtifactWorkspace verification, result_id, and negative mutations",
+      "status": "pass",
+      "result": "Typed parse, reconstructed-envelope validate_for, ArtifactWorkspace 17-of-17 output verification, raw live verification of all 23 candidate rows and aggregate, result_id, and unknown-field, stale-candidate, scope-escape, no-claim, and descriptor-row mutations passed. ArtifactWorkspace did not authorize the six .codex inputs; root rederivation remains required."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "README.md",
+      "sha256": "sha256:edac93f4e88c2ddfaf5fed827a45c085e759e81bd9d7e098f00e5d15a9c58ad8",
+      "byte_length": 3376
+    },
+    {
+      "path": "docs/install-and-visibility.md",
+      "sha256": "sha256:95c886f864b0daaca0be84b04888713c61e8d54102d125665d948290f51c2a9c",
+      "byte_length": 5154
+    },
+    {
+      "path": "docs/plugin-resource-map.md",
+      "sha256": "sha256:05af5699cde319b646fdb309914d9e0510a53eb16f924f68bab3a6524c5ceba4",
+      "byte_length": 7537
+    },
+    {
+      "path": "fixtures/plugin-product/journey-controls.tsv",
+      "sha256": "sha256:23f7f098ec15b4d140acc17e3d38056c5d4aea768469617f99053ea31bd4e368",
+      "byte_length": 1395
+    },
+    {
+      "path": "fixtures/plugin-product/root-wiring-request.json",
+      "sha256": "sha256:bf18d11509b43887999e4b4e38c8e4a2c469b164b0b5e70d03a889374e2a3fae",
+      "byte_length": 8189
+    },
+    {
+      "path": "fixtures/plugin-product/route-cases.tsv",
+      "sha256": "sha256:9e211f5ff897bf52dac4756b1fbdc9c197fc13840c72279714c6eefb10fb875f",
+      "byte_length": 2421
+    },
+    {
+      "path": "skills/diagnose-and-observe/SKILL.md",
+      "sha256": "sha256:69bd02c303556f384219f8ea163c433825c1943e9e81cd221eb3ed37e54edf87",
+      "byte_length": 2874
+    },
+    {
+      "path": "skills/goal-run/SKILL.md",
+      "sha256": "sha256:58e59be58ab5bd7b498dbef7b1922dface5407f477e10b2edc91564ff2994153",
+      "byte_length": 3650
+    },
+    {
+      "path": "skills/harness-ultragoal/SKILL.md",
+      "sha256": "sha256:74582d0e88d72d170a292553253fa3b8fa7f2e91d4f3d5d05bb43e49a695f474",
+      "byte_length": 3373
+    },
+    {
+      "path": "skills/improve-and-maintain/SKILL.md",
+      "sha256": "sha256:6e2910a28bca81d9588ea1dabe76b6e8bd2be3d8266a468fb8c3a476b2cbc146",
+      "byte_length": 3504
+    },
+    {
+      "path": "skills/product-journey-review/SKILL.md",
+      "sha256": "sha256:7e6c27216caad307b52720dfd3148189f699509b3c3e69c0f8bba4c789250e08",
+      "byte_length": 3297
+    },
+    {
+      "path": "skills/prove/SKILL.md",
+      "sha256": "sha256:ae02f80545cb4fa8626941f89d525ea6c3e5227aaf5faa239efb51f352a2daa7",
+      "byte_length": 2877
+    },
+    {
+      "path": "skills/repository-fit/SKILL.md",
+      "sha256": "sha256:2dff9a887ce3e89532f61e6d061276cf800e4dc5ac090929439e7f2f7198781e",
+      "byte_length": 3369
+    },
+    {
+      "path": "skills/routine-work/SKILL.md",
+      "sha256": "sha256:00d0f3cf46603ac1f9241141c02a64e071888f71fd3f9886f3c827f7796e7d82",
+      "byte_length": 2998
+    },
+    {
+      "path": "validator/tests/plugin_product_contract/main.rs",
+      "sha256": "sha256:a8b9029cdc4b2f6246a6b936eba1cda8f280d19456bc14702323237d419bccb7",
+      "byte_length": 526
+    },
+    {
+      "path": "validator/tests/plugin_product_contract/route_contract.rs",
+      "sha256": "sha256:97c3748d65e2e1df7789b2c74457ede929a8d440afa7c950e069fdb07965c02e",
+      "byte_length": 4652
+    },
+    {
+      "path": "validator/tests/plugin_product_contract/source_contract.rs",
+      "sha256": "sha256:1300ea1cf2a60a601d97441ec15fc38d2396d5c802d6e99a017303ffc8aa9654",
+      "byte_length": 19237
+    }
+  ],
+  "findings": [
+    {
+      "code": "DESCRIPTOR_CANDIDATE_OMISSION",
+      "severity": "corrected-candidate",
+      "summary": "The six exact project-agent descriptors are now full candidate rows and root-wiring invalidation inputs rather than unbound source context."
+    },
+    {
+      "code": "WORKER_RESULT_PROTECTED_PATH_PROTOCOL",
+      "severity": "protocol-boundary",
+      "summary": "WorkerResult-v1 ArtifactWorkspace rejects .codex artifact rows as RootOnlyScope; the full candidate metadata and root-wiring request bind them, semantic tests verify them live, and root must independently rederive all 23 rows."
+    },
+    {
+      "code": "PHYSICAL_COMPATIBILITY_SKILLS_REMAIN",
+      "severity": "root-migration-open",
+      "summary": "Fourteen non-canonical skill directories remain physically present pending root migration and package deauthorization."
+    },
+    {
+      "code": "HOST_PRODUCT_SURFACES_UNPROVEN",
+      "severity": "claim-withheld",
+      "summary": "No current HUGPKG, repository marketplace application, install, cache, app registry, Plugins UI, new-task discovery, runtime identity, or real product journey was performed."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-descriptor-bound-source-review",
+    "root-full-candidate-rederivation",
+    "root-manifest-marketplace-integration",
+    "legacy-skill-migration",
+    "package-install-discovery-runtime-proof"
+  ],
+  "requested_root_changes": [
+    {
+      "path": ".codex-plugin/plugin.json",
+      "expected_sha256": "sha256:12c123fa9442dbf9e2eb7877b6fd1c4446ffc04a26d37727dddc0fb3877b06da",
+      "request": "After independent acceptance and live preimage revalidation, apply only the /version replacement to 0.0.12 recorded in fixtures/plugin-product/root-wiring-request.json. Require exact canonical jq postimage sha256:9a8beb3bea1e104eb82e31b591d546075402e460334b04da5b67c6976d86f067, 1083 bytes, and 31 lines; reject drift."
+    },
+    {
+      "path": "plugin-manifest-draft.json",
+      "expected_sha256": "sha256:8494432c2ad67b679a75634fad68562e6a79dd3fcb3b76e756d020d88e33ad38",
+      "request": "After independent acceptance and live preimage revalidation, apply exactly the operations in fixtures/plugin-product/root-wiring-request.json: remove the stray legacy skill resource, replace skills with the canonical eight rows, replace purpose, reserve version 0.0.12, and assert the exact six current agent name/path rows bound to the descriptor digests. Require canonical jq postimage sha256:2f3a38df105f14f01285bc5f35fbe41143148adfd36d0f452f56295b667f7cca, 403196 bytes, and 5182 lines; reject drift."
+    },
+    {
+      "path": ".agents/plugins/marketplace.json",
+      "expected_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "request": "Only if the path remains absent after independent acceptance, create the exact harness-ultragoal-local repository catalog recorded in fixtures/plugin-product/root-wiring-request.json with source ./plugins/harness-ultragoal and required policy. Require canonical jq postimage sha256:fda926319866f7bc020af59f0d4a0021111953ceab5a2a2e5bb51fb2f2823734, 410 bytes, and 20 lines. Catalog bytes alone prove no package materialization, host registration, install, discovery, or runtime behavior."
+    }
+  ],
+  "limitations": [
+    "This is a corrected source candidate pending independent rereview and root acceptance.",
+    "Six protected .codex descriptor rows are bound in the full candidate identity but cannot appear in WorkerResult-v1 artifacts because the current verifier rejects that root-protected prefix; root rederivation is required.",
+    "The canonical eight are preferred, but fourteen compatibility skill directories remain pending root-owned migration and retirement.",
+    "The live root manifests remain at 0.0.11 and the repository marketplace path remains absent; this worker did not apply root authority.",
+    "Semantic source tests and fixtures do not prove package, install, host discovery, runtime behavior, or a fresh-user journey.",
+    "No package, marketplace application, installation, cache, app registry, Plugins UI, discovery, runtime, readiness, release, node closure, or completion proof was performed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

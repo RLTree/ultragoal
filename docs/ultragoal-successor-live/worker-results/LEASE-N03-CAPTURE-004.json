@@ -1,0 +1,354 @@
+{
+  "worker": "/root/n03_capture_worker",
+  "lease_id": "LEASE-N03-CAPTURE-004",
+  "context_id": "sha256:9d5585c2066a9656b521fe7994d55c3b4de0f873b5795ddf028d12de23d69698",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "status_sha256_before_result": "5e2d1bd62fecb857bc42d7e4624293072fd66a090a8762f7f8b1db792b91c1ef",
+    "untracked_content_sha256_before_result": "7dd79fea2df48a0d0ddbc679faed33242440580c64578d03984074877aaeff4d",
+    "context_note": "LiveContext was rebuilt after all leased source and test changes and immediately before this self-referential WorkerResult was written."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "predecessor_result": "LEASE-N03-CAPTURE-003",
+    "correction_source": "Independent security rework verdict against the prior capture candidate",
+    "lease_scope": [
+      "validator/src/cli/capture/**",
+      "validator/tests/cli_contract/capture/**",
+      "validator/tests/cli_contract/capture.rs",
+      "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-004.json"
+    ],
+    "root_owned_surfaces_not_modified": [
+      "validator/src/cli/mod.rs",
+      "validator/src/lib.rs",
+      "validator/Cargo.toml",
+      "public command catalog",
+      "schemas and generated authority",
+      "migration and claim registries"
+    ]
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "leased_rust_lines": 2747,
+    "production_rust_lines": 2029,
+    "test_rust_lines": 718,
+    "maximum_rust_file_lines": 253,
+    "rust_files_over_300_lines": 0,
+    "focused_tests": "30 passed; 0 failed",
+    "capture_lib_tests": "3 passed; 0 failed",
+    "compile_check": "pass",
+    "format_check": "pass",
+    "git_commands_issued_by_worker": false,
+    "network_performed": false,
+    "external_writes_performed": false
+  },
+  "touched_paths": [
+    "validator/src/cli/capture/artifact.rs",
+    "validator/src/cli/capture/descriptor.rs",
+    "validator/src/cli/capture/environment.rs",
+    "validator/src/cli/capture/filesystem.rs",
+    "validator/src/cli/capture/inputs.rs",
+    "validator/src/cli/capture/mod.rs",
+    "validator/src/cli/capture/output.rs",
+    "validator/src/cli/capture/process.rs",
+    "validator/src/cli/capture/run.rs",
+    "validator/src/cli/capture/sandbox.rs",
+    "validator/src/cli/capture/spec.rs",
+    "validator/src/cli/capture/tree.rs",
+    "validator/src/cli/capture/util.rs",
+    "validator/tests/cli_contract/capture/artifacts.rs",
+    "validator/tests/cli_contract/capture/enforcement.rs",
+    "validator/tests/cli_contract/capture/fixture.rs",
+    "validator/tests/cli_contract/capture/mod.rs",
+    "validator/tests/cli_contract/capture/process.rs",
+    "validator/tests/cli_contract/capture/security.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-004.json"
+  ],
+  "touched_semantics": [
+    "fail-closed no-spawn capture boundary",
+    "worktree-relative descriptor confinement",
+    "prohibited secret-bearing path exclusion",
+    "typed public and secret argument channels",
+    "typed public and secret environment channels",
+    "typed public and secret artifact channels",
+    "secret cross-channel rejection and non-serialization",
+    "immutable in-memory public artifact observations",
+    "aggregate artifact count and byte bounds",
+    "aggregate observed-output budget test helper",
+    "child cleanup and reap overflow canary",
+    "candidate-bound pre-interruption observations",
+    "deny-default dormant sandbox plan"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "outside-worktree read and exfiltration canary",
+    "root and nested .codex-worktree/env.sh exclusion canaries",
+    "wrapper exec and source canaries",
+    "write, network, fork, and signal canaries",
+    "PATH-shadowed sandbox capability canary",
+    "symlink and hard-link program canaries",
+    "cwd symlink canary",
+    "program path replacement canary",
+    "public and secret argument serialization canaries",
+    "public and secret environment serialization canaries",
+    "non-UTF-8 public argument canary",
+    "immutable artifact mutation canary",
+    "artifact symlink, hard-link, and swap canaries",
+    "artifact count and aggregate-byte overflow canaries",
+    "aggregate output overflow, termination, and reap canary"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased capture source, tests, and this WorkerResult only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal locked/offline Cargo target output"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "isolated temporary repositories and canary files created by tests and removed by fixture cleanup"
+    },
+    {
+      "class": "external-process",
+      "scope": "local Cargo, rustfmt, rg, sed, jq, wc, shasum, and test-fixture processes only"
+    },
+    {
+      "class": "product-subprocess",
+      "performed": false,
+      "reason": "all non-preinterrupted CommandSpec executions reject before target open or spawn"
+    },
+    {
+      "class": "network",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-CLI-003",
+    "REQ-CLI-007",
+    "REQ-PROOF-002",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-004",
+    "HCT-CAPTURE negative proof requirement"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "worktree confinement",
+      "result": "Public program, cwd, and artifact paths are relative and descriptor-opened with no-follow semantics. Every .codex-worktree path component is rejected, and the tree witness prunes that directory before traversal."
+    },
+    {
+      "area": "process execution",
+      "result": "Actual target execution is intentionally unavailable. A non-preinterrupted request returns a stable causal error before SandboxPlan construction, program or cwd open, tree walk, artifact read, or spawn."
+    },
+    {
+      "area": "dormant sandbox plan",
+      "result": "The recorded future plan is deny-default, denies network, fork, process execution, signals, clone, and link operations, and grants file reads only under the parameterized worktree while explicitly denying the prohibited environment path. No shell or system-runtime read allowance remains."
+    },
+    {
+      "area": "typed sensitivity",
+      "result": "Untyped argv, environment, and artifact builders were removed. Public and secret channels are distinct types; secret sources bind to LiveContext public versions; secret values cannot cross into public fields."
+    },
+    {
+      "area": "secret serialization",
+      "result": "Captured argument and environment records contain source identity and public version only for secret inputs. Secret bytes and their SHA-256 digests are absent from canonical JSON. Secret artifacts reject generically before any path open or read."
+    },
+    {
+      "area": "artifact observations",
+      "result": "Public artifacts are bounded, descriptor-pinned, copied into immutable Arc-backed memory, and exposed without a path-rereading resolver. Mutation after capture cannot change observed bytes."
+    },
+    {
+      "area": "resource bounds",
+      "result": "Specifications bound argv, environment, timeout, retained output, total observed output, artifact count, and aggregate artifact bytes. Because product execution is disabled, output is always empty in product observations; a test-only drain helper proves aggregate overflow detection and child reap behavior."
+    },
+    {
+      "area": "scope boundary",
+      "result": "No root wiring, Cargo dependency, public witness, generated catalog, schema, migration registry, claim registry, state store, package, or release surface was modified."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --locked --offline --test cli_contract --no-run",
+      "result": "pass",
+      "summary": "The root-integrated cli_contract harness compiled. Warning output belongs to the concurrently developed dormant successor parser, not the capture lease."
+    },
+    {
+      "command": "cargo test --locked --offline --test cli_contract successor_capture -- --test-threads=1",
+      "result": "pass",
+      "summary": "30 passed; 0 failed; 42 filtered out; 38.70 seconds."
+    },
+    {
+      "command": "cargo test --locked --offline --lib cli::capture -- --test-threads=1",
+      "result": "pass",
+      "summary": "3 passed; 0 failed; 1437 filtered out."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/cli/capture/*.rs validator/tests/cli_contract/capture/*.rs",
+      "result": "pass"
+    },
+    {
+      "command": "cargo test --locked --offline --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "Emitted LiveContext sha256:9d5585c2066a9656b521fe7994d55c3b4de0f873b5795ddf028d12de23d69698 immediately before this result file."
+    },
+    {
+      "command": "public API, prohibited-path, profile, line-count, and per-file digest audits",
+      "result": "pass",
+      "summary": "No legacy untyped argv/environment/artifact builder or ArtifactResolver remains; 19 Rust files, 2747 lines, maximum 253 lines, zero files over 300 lines."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/capture/artifact.rs",
+      "sha256": "94db961c44fee585db31a8fbe1007768c7187f7384dfeedea15ee7279fb175b8"
+    },
+    {
+      "path": "validator/src/cli/capture/descriptor.rs",
+      "sha256": "6978664fb57d7f6b2e1a736ae70eb23de311d256eafcbf5d36b6f24707458728"
+    },
+    {
+      "path": "validator/src/cli/capture/environment.rs",
+      "sha256": "37f212858bffc0502c8e2cb5bc8819b3112e4c5aa8ab56fda789b8bae35aebb5"
+    },
+    {
+      "path": "validator/src/cli/capture/filesystem.rs",
+      "sha256": "e8c0a9077f78bbe942f46118221325aab8d2105f86c7606028daf9f79d23fe3c"
+    },
+    {
+      "path": "validator/src/cli/capture/inputs.rs",
+      "sha256": "4b5e53531a491738ec31cf3b4a05d2527d7a5138379ade6283af990d60a53234"
+    },
+    {
+      "path": "validator/src/cli/capture/mod.rs",
+      "sha256": "825a8888329e2813a6fd2db366c37a4be47025a382dba3c366ff3dbaa7716b6d"
+    },
+    {
+      "path": "validator/src/cli/capture/output.rs",
+      "sha256": "386ac2193074d21fae2a622f12e01f0c728b6968cb3dbde719a13e152025ac43"
+    },
+    {
+      "path": "validator/src/cli/capture/process.rs",
+      "sha256": "00713df73d8019d1e0623dbbd5d62839b5443510e1e9c5dc8a10e9e571498d42"
+    },
+    {
+      "path": "validator/src/cli/capture/run.rs",
+      "sha256": "fad1b8ab659c667aa37aa7de839da168f7c7b6fc95ae8961a0e8897e61ae9079"
+    },
+    {
+      "path": "validator/src/cli/capture/sandbox.rs",
+      "sha256": "8d60e182e644276f0ab413eb1045f1ab92f63b707d99280820df45274082116d"
+    },
+    {
+      "path": "validator/src/cli/capture/spec.rs",
+      "sha256": "379c6e36a33ffa3fb1cc70a53eba701e5e815e42232445f141842dfa141cd683"
+    },
+    {
+      "path": "validator/src/cli/capture/tree.rs",
+      "sha256": "95281acb6d532a076cc040b1adfc712b8169478adae8718e5df5977d19d7d293"
+    },
+    {
+      "path": "validator/src/cli/capture/util.rs",
+      "sha256": "10cf8bc89d957432faade527e01e9ac99b7384499beb70f1a49db3ce117d8c37"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/artifacts.rs",
+      "sha256": "5f0c2449d35659b73be06fc829c1381e0b61af04fc1d21993aac7b869ff9b299"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/enforcement.rs",
+      "sha256": "04027281c1180df0f15d9ad5ba4c5efa237ef9686a04e8740e0adc76c98dfbcd"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/fixture.rs",
+      "sha256": "2b91c2c4ee4c6e04faa0db6610c62887c554c75db351e61e269861a5ffb0c7b2"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/mod.rs",
+      "sha256": "07fdf8685a61c278e6f02f3cd55d31be60c9a2aee59a89764d400853228720f8"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/process.rs",
+      "sha256": "04a302b07c3166a58e4c7e26b257c11d9f0dd0dc1461b2195a47a36c9f3dedad"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/security.rs",
+      "sha256": "bc3fd16b31a620727d54db63d40084ea71a8c18b3e0437d476e0770e4a81db85"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "The six independent rework findings are closed at the no-spawn candidate scope: worktree confinement and prohibited-path canaries, shell exec/source rejection, typed sensitivity channels and secret non-serialization, total resource bounds, immutable artifact observations, and exact WorkerResult-v1 shape."
+    },
+    {
+      "severity": "material-product-blocker",
+      "finding": "HCT-CAPTURE does not execute subprocesses. No proven substrate both confines filesystem effects and prevents an allowed shell wrapper from executing or sourcing unpinned secondary code. Every ordinary CommandSpec run therefore rejects before target open or spawn."
+    },
+    {
+      "severity": "material-product-blocker",
+      "finding": "WorkspaceWrite, ExternalWrite, and Destructive capture have no descriptor-brokered effect substrate. Setup, retrofit, repair, migration, and other mutating product journeys cannot depend on this candidate."
+    },
+    {
+      "severity": "proof-gap",
+      "finding": "Aggregate output accounting and overflow cleanup are exercised by a direct test fixture only. They are not production evidence because the production process path is disabled and always emits empty output."
+    },
+    {
+      "severity": "capability-gap",
+      "finding": "Secret artifact capture is deliberately unsupported and rejects before read. Only explicitly public, bounded artifacts can be captured into immutable memory."
+    },
+    {
+      "severity": "platform-ceiling",
+      "finding": "Preinterrupted observations currently require the fixed macOS sandbox-exec capability record. Non-macOS hosts reject even though no target is spawned."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "Public integration, old capture authority retirement, generated catalog and schema projection, migration routing, claim decisions, and HCT-CAPTURE acceptance remain root-only."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent security and claim-falsification re-review of this exact candidate.",
+    "A proven no-secondary-exec process substrate, or explicit routing that removes actual execution from HCT-CAPTURE.",
+    "A descriptor-brokered workspace-write substrate before any mutating command can depend on capture.",
+    "Root reconciliation of typed capture APIs with the public dispatcher, command catalog, schemas, and witnesses.",
+    "Root retirement or historical-only routing for replaced ArtifactResolver, untyped builder, and CAPTURE-003 authority surfaces.",
+    "Representative candidate-bound product verification after root integration; these module tests are not product behavior."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "root acceptance records",
+      "request": "Independently re-review all six corrective findings and accept at most the preinterrupted immutable no-spawn observation subset."
+    },
+    {
+      "path": "validator/src/cli/mod.rs, validator/src/lib.rs, dispatcher, and public command catalog",
+      "request": "Do not wire actual command execution to this candidate. Adopt typed APIs only if the no-spawn observation use case is real, and keep execution-dependent commands routed elsewhere or unavailable."
+    },
+    {
+      "path": "root-owned capture substrate",
+      "request": "Implement a proven descriptor-safe, no-secondary-exec substrate before enabling subprocess execution; do not restore the shell wrapper path or broaden read and process-exec allowances."
+    },
+    {
+      "path": "root-owned write-effect substrate",
+      "request": "Implement descriptor-brokered workspace writes with explicit targets before enabling WorkspaceWrite, ExternalWrite, or Destructive capture."
+    },
+    {
+      "path": "MIGRATION-AND-RETIREMENT.md, claim registry, schemas, and generated authority",
+      "request": "Retire or mark historical the prior ArtifactResolver, untyped builder, and CAPTURE-003 assertions; lower HCT-CAPTURE and all dependent claims until representative execution proof exists."
+    }
+  ],
+  "limitations": [
+    "The supported behavior is a pre-requested-interruption observation with zero target execution and optional bounded public artifact capture.",
+    "No actual stdout, stderr, timeout, signal, exit-status, or target-effect observation is produced by the product path.",
+    "The output overflow helper is test-only and must not be cited as production capture behavior.",
+    "Only public artifact bytes are captured; secret artifacts remain unsupported.",
+    "No public command catalog, dispatcher, schema, generated authority, migration registry, state store, package, installation, marketplace, release, or completion state was changed.",
+    "Root acceptance, independent review, integration, representative product verification, and claim reconciliation remain mandatory."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

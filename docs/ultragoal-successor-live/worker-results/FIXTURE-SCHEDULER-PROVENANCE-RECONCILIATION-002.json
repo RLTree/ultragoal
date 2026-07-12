@@ -1,0 +1,96 @@
+{
+  "worker": "/root/fixture_scheduler_provenance_reconciler",
+  "lease_id": "FIXTURE-SCHEDULER-PROVENANCE-RECONCILIATION-002",
+  "context_id": "sha256:101e2079b2ebc2d540c264f8ccef0ca84aeaf6734d54fdf08096410a06dc1085",
+  "candidate_identity": {
+    "candidate_id": "sha256:3460ee75cc217b20d37dc4ef389b3b44f374b7396678d2d89a47ffd4169cae68",
+    "context_id": "sha256:101e2079b2ebc2d540c264f8ccef0ca84aeaf6734d54fdf08096410a06dc1085",
+    "artifact_set_formula": "sort paths; concatenate each path, one TAB byte, lowercase SHA-256 without prefix, and one LF byte; SHA-256 the result",
+    "artifact_count": 11,
+    "artifact_total_bytes": 36814,
+    "artifact_total_lines": 1103,
+    "implementation_author": "/root/fixture_scheduler_builder",
+    "reconciliation_worker": "/root/fixture_scheduler_provenance_reconciler",
+    "self_exclusion": "This WorkerResult is not an artifact row and is the sole touched workspace path."
+  },
+  "base_state": {
+    "status": "root-rework-pending-result-only-reconciliation",
+    "root_rework_path": "docs/ultragoal-successor-live/root-decisions/FIXTURE-SCHEDULER-WORKER-IDENTITY-REWORK.json",
+    "root_rework_sha256": "sha256:101e2079b2ebc2d540c264f8ccef0ca84aeaf6734d54fdf08096410a06dc1085",
+    "rejected_result_path": "docs/ultragoal-successor-live/worker-results/FIXTURE-SCHEDULER-IMPLEMENTATION-001.json",
+    "rejected_result_sha256": "sha256:11241b4f9df7a8ac5686e8c244ef7e454c80be3ce35920a7da90ffa06f51c0b5"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "reconciliation_status": "mechanically-reconciled-result-only-evidence",
+    "artifact_set_sha256": "sha256:3460ee75cc217b20d37dc4ef389b3b44f374b7396678d2d89a47ffd4169cae68",
+    "artifact_count": 11,
+    "artifact_total_bytes": 36814,
+    "artifact_total_lines": 1103,
+    "source_implementation_authorship": "not-asserted-by-this-worker",
+    "behavior_acceptance": "not-asserted-by-this-worker",
+    "root_acceptance": "withheld",
+    "independent_semantic_review": "requested",
+    "product_no_claim": "No source acceptance, HCT-FIXTURES behavior, public integration, routine proof, strict proof, node closure, readiness, release, or goal completion is claimed."
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/FIXTURE-SCHEDULER-PROVENANCE-RECONCILIATION-002.json"
+  ],
+  "touched_semantics": ["fixture_scheduler::provenance_reconciliation"],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {"class": "workspace_write", "target": "fixture-scheduler-provenance-reconciliation-result", "performed": true},
+    {"class": "process", "target": "offline-fixture-scheduler-provenance-validation", "performed": true},
+    {"class": "network", "target": "network", "performed": false},
+    {"class": "external_write", "target": "external-product", "performed": false},
+    {"class": "destructive", "target": "destructive", "performed": false},
+    {"class": "root_authority", "target": "root-acceptance", "performed": false}
+  ],
+  "requirements": [
+    "AC-FIXTURE-SCHEDULER-PROVENANCE-002",
+    "result-only-reconciliation",
+    "exact-11-artifact-membership",
+    "mechanical-aggregate-invariants",
+    "independent-semantic-review-requested",
+    "root-acceptance-withheld"
+  ],
+  "dependency_nodes": ["fixture-scheduler-worker-identity-rework"],
+  "changes": [
+    {"area": "result-only-reconciliation", "result": "Emitted this WorkerResult from the unchanged 11 read-only fixture-scheduler source/test artifacts; no source or test path was edited."},
+    {"area": "aggregate-integrity", "result": "Two independent derivations produced 11 regular non-symlink files, 36814 bytes, 1103 physical lines, and artifact-set SHA-256 3460ee75cc217b20d37dc4ef389b3b44f374b7396678d2d89a47ffd4169cae68."},
+    {"area": "authority-separation", "result": "The original implementation worker remains the implementation author; this worker reconciles result-only evidence and does not assert source authorship or acceptance."}
+  ],
+  "commands_and_tests": [
+    {"command": "independent artifact derivation pass A", "status": "pass", "result": "All exact rows matched current regular non-symlink files; sorted path/TAB/lowercase-SHA-256/LF digest, count, byte sum, and physical-line sum matched the declared aggregates."},
+    {"command": "independent artifact derivation pass B", "status": "pass", "result": "Second independent derivation produced the same 11 rows, 36814 bytes, 1103 physical lines, and candidate identity."},
+    {"command": "WorkerResultV1::parse_json and actual result-only validate_for", "status": "pass", "result": "Parsed and validated against the dispatched result-only worker, lease, context, candidate, node, dependency, semantic, scope, and effect envelope; synthetic, duplicate, unknown, missing, special, mismatched, aggregate, and no-claim mutation probes were rejected."},
+    {"command": "ArtifactWorkspace::verify and computed result_id", "status": "pass", "result": "Verified every current artifact row as a regular non-symlink file and computed the emitted result_id after writing this packet."},
+    {"command": "source behavior and implementation acceptance", "status": "not_run", "result": "Intentionally not rerun or claimed; this lease is result-only provenance reconciliation."}
+  ],
+  "artifacts": [
+    {"path": "validator/src/fixture_scheduler/error.rs", "sha256": "sha256:f76248ad3951826711b954ac882b58b04f40e323756764f164ad90600cdf408a", "byte_length": 1881},
+    {"path": "validator/src/fixture_scheduler/lease.rs", "sha256": "sha256:833da709b9860b3e27950654a39642262731ae473d282207b8f243626c37b5bf", "byte_length": 4008},
+    {"path": "validator/src/fixture_scheduler/mod.rs", "sha256": "sha256:5223b976f1f76cd4a8609401425fe4b24051d2cd9262e6359246950f83de2b2d", "byte_length": 643},
+    {"path": "validator/src/fixture_scheduler/outcome.rs", "sha256": "sha256:201720239cdb26f9779940d0e12216880245639224ff7c5b347139590f68b35e", "byte_length": 3241},
+    {"path": "validator/src/fixture_scheduler/scheduler.rs", "sha256": "sha256:f3175a9f886e43f4cf8c2e58bc7ad26c55d13b86abf51ab062141414436f2c01", "byte_length": 4537},
+    {"path": "validator/src/fixture_scheduler/spec.rs", "sha256": "sha256:11f911b9d87cc332c569a62261cf61f10f494a18fc62754d0e1ae77248492bfe", "byte_length": 3904},
+    {"path": "validator/tests/fixture_scheduler_contract.rs", "sha256": "sha256:f0338193735d09e9cc925df20b7e48a3d8acd1002f072aa28137fce58d34a023", "byte_length": 409},
+    {"path": "validator/tests/fixture_scheduler_contract/adversarial.rs", "sha256": "sha256:cab078e0b78b67a6aeb130e031a8f9a20c5fd3c02995a41de63b661502a67420", "byte_length": 4126},
+    {"path": "validator/tests/fixture_scheduler_contract/isolation.rs", "sha256": "sha256:2f8c8009761eb52bb9a4a017b42c4ba1ddc05788ce9ef68f8403a1fba4be0d84", "byte_length": 2911},
+    {"path": "validator/tests/fixture_scheduler_contract/scheduling.rs", "sha256": "sha256:46b9b8f09d133f67108bb940c05268dfcff2b882272b45deb714d19818764afe", "byte_length": 3328},
+    {"path": "validator/tests/fixture_scheduler_contract/worker_result.rs", "sha256": "sha256:47bec668277679f412e4f2ae8ecc1719833ea9e0df9a2536da4d259630ecbc47", "byte_length": 7826}
+  ],
+  "findings": [
+    {"code": "SYNTHETIC-IDENTITY-REWORK", "severity": "material", "detail": "The rejected implementation result used synthetic candidate and context IDs; this result binds candidate identity to the sorted live artifact set and context identity to the root correction decision."},
+    {"code": "INDEPENDENT-SEMANTIC-REVIEW-REQUIRED", "severity": "root-authority-required", "detail": "Request independent semantic review of the unchanged fixture-scheduler source/test candidate; no source behavior acceptance is claimed."}
+  ],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [],
+  "limitations": [
+    "This packet proves only result-only artifact reconciliation and typed evidence integrity; it does not prove source authorship, source acceptance, HCT-FIXTURES behavior, public integration, routine proof, strict proof, node closure, readiness, release, or completion.",
+    "The original implementation worker and this reconciliation worker are distinct; this worker makes no retroactive authorship claim.",
+    "Effective runtime route is unverified unless exposed by dispatch metadata."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

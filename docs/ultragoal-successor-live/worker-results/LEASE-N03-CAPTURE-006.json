@@ -1,0 +1,318 @@
+{
+  "worker": "/root/capture006_worker",
+  "lease_id": "LEASE-N03-CAPTURE-006",
+  "context_id": "sha256:729023acab144e27c65403922e77cf38aed3e6e9e92f07c582385428c40eb511",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "status_sha256_before_result": "59e9b5c2cdeffbb749d6127245516eb2e3868a001d28476f5d5af294c7b75eca",
+    "untracked_content_sha256_before_result": "66803077ae1bb7fc0eb34f77bd6c9996d3d945b8a3600cf89b76a9a353a95da3",
+    "context_note": "LiveContext-v1 was rebuilt after final leased source, tests, formatting, and focused verification were stable and immediately before this self-referential result was written. No protected .codex-worktree file was opened, read, hashed, or sourced by this worker.",
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "supersedes_lease_result": "LEASE-N03-CAPTURE-005",
+    "correction_source": "Independent CAPTURE-005 REWORK verdict; no CAPTURE-005 subset was accepted",
+    "preserved_predecessors": [
+      {
+        "lease_id": "LEASE-N03-CAPTURE-004",
+        "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-004.json",
+        "sha256": "76805052cc5edba71467a5358ea6277b037895a6cfd589852d5358710afd5bbf"
+      },
+      {
+        "lease_id": "LEASE-N03-CAPTURE-005",
+        "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-005.json",
+        "sha256": "e24c6dd7bf99f716a01fc53d8dedb6f2ed87db7e5f5d80335f0a4133a386b04f"
+      }
+    ],
+    "write_scope": [
+      "validator/src/cli/capture/descriptor.rs",
+      "validator/src/cli/capture/filesystem.rs",
+      "validator/src/cli/capture/spec.rs",
+      "validator/src/cli/capture/run.rs",
+      "validator/src/cli/capture/mod.rs documentation only",
+      "validator/tests/cli_contract/capture/process.rs",
+      "validator/tests/cli_contract/capture/enforcement.rs",
+      "validator/tests/cli_contract/capture/security.rs",
+      "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-006.json"
+    ],
+    "root_owned_surfaces_not_modified": [
+      "Cargo.toml and Cargo.lock",
+      "validator/src/context/**",
+      "validator/src/cli/successor/**",
+      "validator/src/cli/mod.rs and validator/src/lib.rs",
+      "public command catalog and generated authority",
+      "plugin, migration, claim, release, and completion authority"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "Exact fail-closed source candidate only; independent review and root acceptance are still required",
+    "leased_rust_files": 8,
+    "leased_rust_lines": 1525,
+    "production_rust_files": 5,
+    "production_rust_lines": 937,
+    "test_rust_files": 3,
+    "test_rust_lines": 588,
+    "maximum_file_lines": 281,
+    "files_over_300_lines": 0,
+    "focused_tests": "35 passed; 0 failed",
+    "capture_lib_tests": "4 passed; 0 failed",
+    "all_target_check": "pass",
+    "workspace_format_check": "pass",
+    "target_execution_performed": false,
+    "production_artifact_capture_performed": false,
+    "network_performed": false,
+    "external_product_effect_performed": false
+  },
+  "touched_paths": [
+    "validator/src/cli/capture/descriptor.rs",
+    "validator/src/cli/capture/spec.rs",
+    "validator/src/cli/capture/run.rs",
+    "validator/src/cli/capture/mod.rs",
+    "validator/tests/cli_contract/capture/process.rs",
+    "validator/tests/cli_contract/capture/enforcement.rs",
+    "validator/tests/cli_contract/capture/security.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-006.json"
+  ],
+  "touched_semantics": [
+    "O_NONBLOCK and O_CLOEXEC on every descriptor-confined file open",
+    "bounded executable FIFO open false-pass control",
+    "catalog-unbound CommandSpec rejection before context revalidation and descriptor access",
+    "pre-requested interruption cannot bypass the typed-catalog boundary",
+    "program paths cannot become an executable availability or digest oracle",
+    "alternate repository/worktree rejection before revalidation and descriptor open",
+    "test-only artifact mechanics remain unavailable to public product behavior",
+    "module documentation states the lowered production ceiling"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "chmod-executable FIFO opened directly through descriptor-confined open_file_at",
+    "existing, missing, and executable-FIFO public program paths with both interrupt states",
+    "real linked Git worktree with distinct roots, executable FIFO program, and deliberate post-context drift",
+    "wrapper exec, source, write, network, fork, signal, hidden-write, symlink, hard-link, and path-swap canaries",
+    "protected .codex-worktree case-variant dummy fixtures only; no live protected file access",
+    "test-only immutable artifact, byte-bound, link, and race controls inherited from CAPTURE-005"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased source, capture-specific tests, and this WorkerResult only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal ignored Cargo target output"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "isolated temporary Git repositories, a linked temporary worktree, FIFOs, and canary files created and cleaned by tests"
+    },
+    {
+      "class": "git",
+      "scope": "read-only live-repository identity/status commands; fixture-only init, add, commit, worktree add, and worktree remove operations under temporary directories"
+    },
+    {
+      "class": "product-subprocess",
+      "performed": false
+    },
+    {
+      "class": "network",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-CLI-003",
+    "REQ-CLI-007",
+    "REQ-PROOF-002",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-004",
+    "HCT-CAPTURE negative proof requirement"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "descriptor open safety",
+      "result": "open_file_at now always sets O_NONBLOCK and O_CLOEXEC in addition to O_RDONLY and O_NOFOLLOW. Executable descriptors no longer drop close-on-exec. A chmod-executable FIFO control directly opens through open_file_at on a worker thread, completes within 500 ms, and verifies FD_CLOEXEC."
+    },
+    {
+      "area": "catalog boundary",
+      "result": "Every structurally valid caller-supplied CommandSpec now requires a typed-catalog binding and root-issued token before LiveContext revalidation, executable open, hashing, sandbox preparation, or target execution. No such token exists, so the production run path fails closed with one fixed error."
+    },
+    {
+      "area": "path-oracle control",
+      "result": "Existing, missing, and executable-FIFO program paths return byte-identical catalog-boundary errors with and without a pre-requested interrupt. The bounded FIFO control proves the public path cannot hang or reveal executable existence. Structural malformed and prohibited path rejection remains purely lexical and performs no descriptor access."
+    },
+    {
+      "area": "alternate-root ordering",
+      "result": "A real Git linked worktree fixture carries distinct repository and worktree roots, an executable FIFO program, and post-context candidate drift. Capture returns the alternate-root authority error within 500 ms, proving that root rejection precedes both LiveContext revalidation and descriptor open."
+    },
+    {
+      "area": "claim correction",
+      "result": "The former pre-interrupted CapturedRun subset is withdrawn. There is no production CapturedRun, artifact capture, output capture, executable digest observation, or target execution behavior until root adopts a typed-catalog token and independently proves downstream execution substrates."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test cli_contract capture -- --test-threads=1",
+      "result": "pass",
+      "summary": "35 passed; 0 failed; 42 filtered out. Includes both FIFO controls, the real linked-worktree control, catalog-oracle controls, and prior capture controls."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --lib cli::capture -- --test-threads=1",
+      "result": "pass",
+      "summary": "4 passed; 0 failed; 1438 filtered out."
+    },
+    {
+      "command": "cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "pass",
+      "summary": "All targets compiled. Warning debt is in the dormant root-owned successor candidate, not this capture correction."
+    },
+    {
+      "command": "cargo fmt --all -- --check",
+      "result": "pass"
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/cli/capture/descriptor.rs validator/src/cli/capture/filesystem.rs validator/src/cli/capture/spec.rs validator/src/cli/capture/run.rs validator/src/cli/capture/mod.rs validator/tests/cli_contract/capture/process.rs validator/tests/cli_contract/capture/enforcement.rs validator/tests/cli_contract/capture/security.rs",
+      "result": "pass"
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; emitted LiveContext sha256:729023acab144e27c65403922e77cf38aed3e6e9e92f07c582385428c40eb511 immediately before this result file."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --lib -- --test-threads=1",
+      "result": "repository_baseline_failure",
+      "summary": "1430 passed; 12 failed; 0 capture tests failed. Failures were in live-loop cache replay, package and typed-boundary inventory, namespace, research mapping, stale red identity, and red runtime fixtures under concurrent N02 and root development. This broad run is diagnostic and is not CAPTURE-006 acceptance evidence."
+    },
+    {
+      "command": "per-file line-count, SHA-256, and predecessor-preservation audit",
+      "result": "pass",
+      "summary": "8 leased Rust files, 1525 lines, maximum 281 lines, zero files over 300 lines; CAPTURE-004 and CAPTURE-005 preserved exactly."
+    },
+    {
+      "command": "Draft 2020-12 validation against FINAL-CONTRACT IMPLEMENTATION_DEPENDENCY_GRAPH.json worker_output_schema",
+      "result": "pass",
+      "summary": "Exact WorkerResult-v1 schema accepted with no additional top-level properties."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/capture/descriptor.rs",
+      "sha256": "0b4d26edbb6e5af6ced5291061d8448b7e7c656e4c2dbc94f594242fbf24d09b"
+    },
+    {
+      "path": "validator/src/cli/capture/filesystem.rs",
+      "sha256": "22b04b708d6ae4fb6eae55ee03c2ce56739a9875c15f311789b03a30e8aaf3db"
+    },
+    {
+      "path": "validator/src/cli/capture/spec.rs",
+      "sha256": "9458b6d03f78bd1b90d27434820c7cc3aeb25cf2cc429f186d6c89c5842fa9c1"
+    },
+    {
+      "path": "validator/src/cli/capture/run.rs",
+      "sha256": "d61b82dabace2d16c0044580cdee8678a294d5536ebc4a92feb63b7feceec337"
+    },
+    {
+      "path": "validator/src/cli/capture/mod.rs",
+      "sha256": "a895672c7d892daba9edbfb7f2bbe61e3f268358aaef0f865b951b2d89faac22"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/process.rs",
+      "sha256": "46cbd86a611d5f16f98792a223dde3791d090ec764481166f3d978b2820c2021"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/enforcement.rs",
+      "sha256": "6b09ab92cf47a4ddf1efcf3efaa985bb9e9c49c2f903b281db78eb369d95c331"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/security.rs",
+      "sha256": "f07c65f1d01eecd0614fc79fd57981a9738ca520937c9e389fa149e6fa65b1de"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Executable descriptor opens cannot block indefinitely on FIFOs and always carry close-on-exec."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Pre-requested interruption no longer reaches executable existence, digest, sandbox, or path-dependent behavior without a typed-catalog binding."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "A real linked-worktree fixture proves alternate-root rejection occurs before both context revalidation and descriptor open."
+    },
+    {
+      "severity": "catalog-gap",
+      "finding": "No accepted unforgeable typed-catalog token or binding exists. Every production caller-supplied CommandSpec therefore remains unavailable."
+    },
+    {
+      "severity": "material-product-blocker",
+      "finding": "No production subprocess or artifact capture behavior survives this correction. HCT-CAPTURE cannot support any product journey or downstream command claim."
+    },
+    {
+      "severity": "proof-gap",
+      "finding": "Artifact storage, descriptor reads, output accounting, sandbox policy, and process cleanup remain dormant or test-only mechanics, not representative product behavior."
+    },
+    {
+      "severity": "repository-baseline",
+      "finding": "The broad lib suite has 12 non-capture failures under concurrent N02 and root development. Focused capture verification is green, but repository-wide quality remains root-owned and open."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "Independent review, root acceptance, catalog integration, generated authority, migration routing, claim decisions, and any activation remain root-only."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent security and claim-falsification review of the exact CAPTURE-006 digests and false-pass controls",
+    "Root acceptance of the lowered no-production-capture ceiling",
+    "An unforgeable token derived from the single accepted successor command catalog before any production CommandSpec can proceed",
+    "A separately proven descriptor-safe no-secondary-exec substrate if product subprocess execution remains required",
+    "Descriptor-brokered explicit effect confinement before any mutating command can depend on capture",
+    "Root reconciliation of the 12 broad lib-suite failures in their owning lanes",
+    "Representative product verification after root integration"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "independent review and root acceptance records",
+      "request": "Verify this exact source and WorkerResult digest set, including both FIFO controls, the path-oracle equality check, and the real linked-worktree ordering control before accepting the candidate."
+    },
+    {
+      "path": "claim registry, migration registry, and CAPTURE lineage",
+      "request": "Withdraw every CAPTURE-005 assertion that a production pre-interrupted CapturedRun exists. CAPTURE-006 supports no production run observation. Preserve CAPTURE-004 and CAPTURE-005 as historical evidence only."
+    },
+    {
+      "path": "root-owned successor catalog and dispatcher integration",
+      "request": "Do not activate HCT-CAPTURE until an unforgeable token derived from the single accepted successor command catalog is implemented and independently verified."
+    },
+    {
+      "path": "root-owned process and effect substrate",
+      "request": "If execution remains required, separately prove a descriptor-safe no-secondary-exec substrate and explicit effect confinement before routing any product command through capture."
+    },
+    {
+      "path": "generated authority, product docs, and release claims",
+      "request": "Keep test-only artifact and output helpers out of generated authority, product behavior documentation, readiness, release, and completion claims."
+    },
+    {
+      "path": "N02 and root-owned broad verification lanes",
+      "request": "Reconcile the 12 broad lib-suite failures in their owning lanes; do not attribute them to CAPTURE-006 or hide them behind the focused pass."
+    }
+  ],
+  "limitations": [
+    "The fixed catalog-boundary error is the only production result for a structurally valid single-root CommandSpec.",
+    "Malformed, prohibited, and structurally unsupported requests may fail earlier through bounded lexical validation, but no capture-layer descriptor or executable-path lookup occurs.",
+    "Alternate repository/worktree roots fail before the catalog boundary because root device and inode binding remains unavailable.",
+    "No production executable existence, digest, artifact, stdout, stderr, timeout, termination, target-effect, or subprocess observation exists.",
+    "Artifact storage, descriptor reads, output accounting, sandbox policy, and process cleanup are dormant or test-only mechanics.",
+    "No public command catalog, dispatcher, schema, generated output, migration registry, package, install, marketplace, release, or claim surface was changed by this worker.",
+    "The broad repository lib suite is not green and cannot support a repository-complete claim.",
+    "This result is a candidate for exact root acceptance only; it is not root acceptance, HCT activation, N03 completion, readiness, release, or goal completion."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

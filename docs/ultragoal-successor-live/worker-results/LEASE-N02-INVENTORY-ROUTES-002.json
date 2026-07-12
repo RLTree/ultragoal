@@ -1,0 +1,309 @@
+{
+  "worker": "/root/n02_inventory_routes",
+  "lease_id": "LEASE-N02-INVENTORY-ROUTES-002",
+  "context_id": "sha256:e60d64ae8a88239783d329be2545a25ff00326c5b8124ea44aa70bc028c59104",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_unchanged": true,
+    "dirty": true,
+    "status_sha256_before_result": "dc45619d5df25f1bea5d9fbf654ea5ccd3a1bfb2d99a7baec87eae34b7ea5649",
+    "untracked_content_sha256_before_result": "350dcf8e056d6b4e80f9f9e88dcd66d572f605e5985266cc0351b1c39a307b4b",
+    "context_note": "LiveContext-v1 was rebuilt read-only after the leased source, tests, and all fourteen corrected wrapper clauses were stable and immediately before this self-referential WorkerResult was added."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "lease_scope": "validator/src/inventory/{components.rs,routing.rs,routing_state.rs,validate.rs}, narrowly scoped validator/src/inventory/compatibility/**, validator/src/inventory/mod.rs declaration only, specified inventory tests, and this WorkerResult",
+    "root_authority_retained": [
+      "migration/authority-routes.json",
+      "Cargo dependency files",
+      "canonical and legacy skill sources",
+      "generated authority",
+      "command catalog",
+      "claim, release, and completion decisions"
+    ],
+    "root_or_other_lane_changes_present": [
+      "plugin manifest, Cargo dependency files, schema, root CLI/lib wiring, and root-owned migration registry",
+      "canonical skills, legacy compatibility wrappers and metadata, capture, state, typed CLI, plugin-manifest validation, and other WorkerResults"
+    ],
+    "pre_existing_user_dirt": [
+      ".DS_Store"
+    ]
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "compiled_legacy_skill_routes": 14,
+    "current_live_structural_witnesses": 14,
+    "canonical_skill_candidates_active_in_current_live_inventory": 8,
+    "hypothetical_retained_route_fixture_count": 14,
+    "live_registry_transition_applied_by_worker": false,
+    "production_rust_lines": 1173,
+    "test_rust_lines": 496,
+    "maximum_touched_rust_file_lines": 283,
+    "touched_rust_files_over_300_lines": 0,
+    "full_inventory_tests": "31 passed; 0 failed",
+    "git_operations_performed": false,
+    "network_performed": false,
+    "external_writes_performed": false
+  },
+  "touched_paths": [
+    "validator/src/inventory/components.rs",
+    "validator/src/inventory/routing.rs",
+    "validator/src/inventory/routing_state.rs",
+    "validator/src/inventory/validate.rs",
+    "validator/src/inventory/mod.rs",
+    "validator/src/inventory/compatibility/mod.rs",
+    "validator/src/inventory/compatibility/specs.rs",
+    "validator/src/inventory/compatibility/witness.rs",
+    "validator/tests/inventory_contract.rs",
+    "validator/tests/inventory_contract_cases/compatibility_routes.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-INVENTORY-ROUTES-002.json"
+  ],
+  "touched_semantics": [
+    "compiled one-to-one stable-ID, route-ID, canonical-target, and proof-reference table for exactly fourteen legacy skill routes",
+    "exact structural wrapper witness over SKILL.md and agents/openai.yaml, including explicit-only policy, one canonical target, bounded warning, no independent workflow, and fail-closed distinct-token conflict handling",
+    "typed compatibility-route-retained transition distinct from active authority, context-only, archived, retired, equivalent, or cleanup-authorized states",
+    "canonical candidate presence and ambiguity checks before retained classification",
+    "one compatibility_route_retained warning while retirement, equivalence, readiness, release, and completion remain unproven",
+    "current-live topology assertions for eight discovered canonical skill candidates and fourteen exact legacy structural witnesses"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "all fourteen exact live wrappers plus eight canonical candidates under a non-persisted retained-route registry fixture",
+    "registry-only laundering without a wrapper",
+    "missing and ambiguous canonical target",
+    "missing allow_implicit_invocation false policy",
+    "missing distinct-token conflict guard",
+    "extra legacy command workflow authority",
+    "wrong canonical target",
+    "broad kind matcher",
+    "forged proof reference",
+    "equivalence and context-only retirement overclaim"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased inventory source, focused tests, and this WorkerResult only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal locked/offline Cargo target output"
+    },
+    {
+      "class": "external-process",
+      "scope": "local Cargo, rustfmt, Git, jq, rg, wc, and shasum commands"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-write",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PLUGIN-004",
+    "REQ-MAINT-002"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N14-MIGRATION"
+  ],
+  "changes": [
+    {
+      "area": "compiled route identity",
+      "rationale": "Registry prose cannot create retained status. A route must match one compiled route ID, one exact LEGACY-SKILL stable ID, one canonical SKILL target, and the two exact safe proof paths."
+    },
+    {
+      "area": "structural compatibility witness",
+      "rationale": "Only the exact route-only skill and explicit-only metadata shape are witnessed. Missing policy, missing conflict guard, extra workflow, wrong path, wrong name, extra target, symlink, or unreadable evidence stays invalid and parallel."
+    },
+    {
+      "area": "honest retained state",
+      "rationale": "The new state preserves a compatibility surface without converting it to context, retired, equivalent, archived, or cleanup-authorized. It emits a warning that keeps all higher ceilings open."
+    },
+    {
+      "area": "candidate checks",
+      "rationale": "The canonical target must be physically Active and Canonical and free of duplicate, renamed-required, or duplicate-path findings. A required-but-missing or ambiguous target cannot suppress parallel authority."
+    },
+    {
+      "area": "scope boundary",
+      "rationale": "No migration registry row, wrapper source, dependency file, generated surface, public command, API witness, claim, release state, or completion record was changed by this worker."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test inventory_contract compatibility_routes::all_exact_explicit_only_wrappers_are_retained_without_claiming_retirement -- --exact --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; the fixture copied all fourteen final live wrappers, supplied all eight canonical candidates, applied only an in-fixture retained transition, and observed fourteen retained warnings with no parallel or invalid-transition finding for those entries."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test inventory_contract current_live_catalog_reports_contract_definitions_and_missing_topology -- --exact --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; the current live inventory discovered all eight canonical skill candidates Active/Canonical and all fourteen corrected legacy wrappers as exact structural witnesses, with no invalid-wrapper finding."
+    },
+    {
+      "command": "target/debug/deps/inventory_contract-1061254fd08fb813 --test-threads=1",
+      "result": "pass",
+      "summary": "31 passed; 0 failed in 50.25 seconds after final wrapper and test freeze, including deterministic, tamper, path-confinement, zero-write, routing, and compatibility false-pass controls."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <leased Rust files>; git diff --check -- <leased inventory and test paths>; wc -l <leased Rust files>",
+      "result": "pass",
+      "summary": "All leased Rust files are formatted, diff-clean, and at or below 283 lines."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "Built read-only LiveContext-v1 sha256:e60d64ae8a88239783d329be2545a25ff00326c5b8124ea44aa70bc028c59104 before this result file."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/inventory/components.rs",
+      "sha256": "sha256:edea550a6b09ff41bb8071e39fc2ee0c5155d85b0425768332c14a3b3be53624",
+      "bytes": 6085,
+      "lines": 192
+    },
+    {
+      "path": "validator/src/inventory/routing.rs",
+      "sha256": "sha256:0c163ef5ff33c5387cc60c1a27e95a515a9a1947e4812ff9451e522c2641a11c",
+      "bytes": 9584,
+      "lines": 283
+    },
+    {
+      "path": "validator/src/inventory/routing_state.rs",
+      "sha256": "sha256:c69a492ee8012e5ecfe06bca607e868d7e0eacf6a41f01e2093d8453be10c7e5",
+      "bytes": 5762,
+      "lines": 163
+    },
+    {
+      "path": "validator/src/inventory/validate.rs",
+      "sha256": "sha256:ce3f7e67dbeff98a46842465db32aa0b8c72f3fc3f7476a1f4e03a6d3b249cc4",
+      "bytes": 7323,
+      "lines": 217
+    },
+    {
+      "path": "validator/src/inventory/mod.rs",
+      "sha256": "sha256:0bd6ca8d226a91007867b07fbf63a39f951d92bb3cb4b91252c6398cbaa472ae",
+      "bytes": 1029,
+      "lines": 37
+    },
+    {
+      "path": "validator/src/inventory/compatibility/mod.rs",
+      "sha256": "sha256:ee017c968c517a7877ef774c90cb3f39497972ec8e21e391c8ac2f2186598a93",
+      "bytes": 249,
+      "lines": 9
+    },
+    {
+      "path": "validator/src/inventory/compatibility/specs.rs",
+      "sha256": "sha256:9586daa6e2c0e9a77e98a3356eaecc8edb0174bec154cb488c2b6b9fbb775f5a",
+      "bytes": 4210,
+      "lines": 127
+    },
+    {
+      "path": "validator/src/inventory/compatibility/witness.rs",
+      "sha256": "sha256:556060b059db6094862c8342d322e0cec19ed71913405b7da8f6c8356820e43c",
+      "bytes": 6899,
+      "lines": 145
+    },
+    {
+      "path": "validator/tests/inventory_contract.rs",
+      "sha256": "sha256:d9359011b3d3b83bb195fd11b626f4f2bef3446c7e985a8ebef50563fcf09b0e",
+      "bytes": 6659,
+      "lines": 216
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/compatibility_routes.rs",
+      "sha256": "sha256:720d9bba9ce18c107004d842af65e0b97a5e8b326e0d51dfc84447f74fccefb9",
+      "bytes": 11793,
+      "lines": 280
+    }
+  ],
+  "findings": [
+    {
+      "severity": "candidate",
+      "finding": "The validator can now distinguish exact explicit-only compatibility wrappers from independent legacy skill authority without claiming retirement or equivalence."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "The live migration registry still records all fourteen skill transitions as unverified/active. This worker did not apply the designed retained transition, so the live wrappers remain parallel_authority findings until root review and adoption."
+    },
+    {
+      "severity": "requirement-open",
+      "finding": "REQ-MAINT-002 remains open: measurement, deadline or version boundary, removal condition, representative legacy-to-canonical behavior, and independent equivalence proof are not supplied by this structural inventory candidate."
+    },
+    {
+      "severity": "node-open",
+      "finding": "N02 remains open beyond these fourteen skill routes: other active legacy lanes, gates, commands, agents, contracts, models, finalizers, generated surfaces, readers, and writers still require root reconciliation."
+    },
+    {
+      "severity": "proof-ceiling",
+      "finding": "Exact wrapper bytes prove declarative route-only structure, not installed-plugin discovery, host invocation behavior, usage measurement, deprecation telemetry, equivalence, or retirement."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Root and independent review acceptance of the compiled witness and retained-state semantics.",
+    "Root decision whether and when to apply the exact fourteen-route interim transition request below.",
+    "Adopted measurement, deadline or version boundary, removal condition, and independent behavioral equivalence proof for REQ-MAINT-002 and N14.",
+    "HCT-MIGRATE and HCT-OBSERVE behavior required for measured migration and retirement decisions.",
+    "Root reconciliation of every remaining active legacy reader, writer, public route, generated authority surface, and current live inventory finding.",
+    "Fresh installed-plugin and representative legacy-to-canonical product-journey verification."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "migration/authority-routes.json",
+      "request": "If root accepts the interim preserved-route classification, replace only the transition object for each exact route listed below. Keep destructive_cleanup_authorized false; do not set adopted, verified equivalence, none-verified readers/writers, context-only, archived, retired, or cleanup-authorized.",
+      "transition": {
+        "compatibility_behavior": "exact-route-only",
+        "compatibility_boundary": "explicit-only",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "active",
+        "observed_authority_state": "compatibility-route-retained",
+        "equivalence_proof": "missing",
+        "physical_cleanup_state": "preserve"
+      },
+      "routes": [
+        {"route_id":"skill-ultragoal-to-harness-ultragoal","stable_id":"LEGACY-SKILL:ultragoal","canonical_target":"SKILL:harness-ultragoal","proof_refs":["skills/ultragoal/SKILL.md","skills/ultragoal/agents/openai.yaml"]},
+        {"route_id":"skill-harness-engineering-to-harness-ultragoal","stable_id":"LEGACY-SKILL:harness-engineering","canonical_target":"SKILL:harness-ultragoal","proof_refs":["skills/harness-engineering/SKILL.md","skills/harness-engineering/agents/openai.yaml"]},
+        {"route_id":"skill-agent-first-init-to-repository-fit","stable_id":"LEGACY-SKILL:agent-first-repo-init","canonical_target":"SKILL:repository-fit","proof_refs":["skills/agent-first-repo-init/SKILL.md","skills/agent-first-repo-init/agents/openai.yaml"]},
+        {"route_id":"skill-agent-first-retrofit-to-repository-fit","stable_id":"LEGACY-SKILL:agent-first-repo-retrofit","canonical_target":"SKILL:repository-fit","proof_refs":["skills/agent-first-repo-retrofit/SKILL.md","skills/agent-first-repo-retrofit/agents/openai.yaml"]},
+        {"route_id":"skill-fit-repo-to-repository-fit","stable_id":"LEGACY-SKILL:fit-repo","canonical_target":"SKILL:repository-fit","proof_refs":["skills/fit-repo/SKILL.md","skills/fit-repo/agents/openai.yaml"]},
+        {"route_id":"skill-execplan-lane-to-routine-work","stable_id":"LEGACY-SKILL:execplan-lane","canonical_target":"SKILL:routine-work","proof_refs":["skills/execplan-lane/SKILL.md","skills/execplan-lane/agents/openai.yaml"]},
+        {"route_id":"skill-runtime-legibility-to-routine-work","stable_id":"LEGACY-SKILL:agent-runtime-legibility","canonical_target":"SKILL:routine-work","proof_refs":["skills/agent-runtime-legibility/SKILL.md","skills/agent-runtime-legibility/agents/openai.yaml"]},
+        {"route_id":"skill-observability-to-diagnose-and-observe","stable_id":"LEGACY-SKILL:agent-observability-stack","canonical_target":"SKILL:diagnose-and-observe","proof_refs":["skills/agent-observability-stack/SKILL.md","skills/agent-observability-stack/agents/openai.yaml"]},
+        {"route_id":"skill-orchestrator-to-goal-run","stable_id":"LEGACY-SKILL:orchestrator-reconciler","canonical_target":"SKILL:goal-run","proof_refs":["skills/orchestrator-reconciler/SKILL.md","skills/orchestrator-reconciler/agents/openai.yaml"]},
+        {"route_id":"skill-proof-gate-to-prove","stable_id":"LEGACY-SKILL:proof-gate","canonical_target":"SKILL:prove","proof_refs":["skills/proof-gate/SKILL.md","skills/proof-gate/agents/openai.yaml"]},
+        {"route_id":"skill-cohesion-gate-to-prove","stable_id":"LEGACY-SKILL:product-cohesion-gate","canonical_target":"SKILL:prove","proof_refs":["skills/product-cohesion-gate/SKILL.md","skills/product-cohesion-gate/agents/openai.yaml"]},
+        {"route_id":"skill-fitness-gate-to-prove","stable_id":"LEGACY-SKILL:product-fitness-gate","canonical_target":"SKILL:prove","proof_refs":["skills/product-fitness-gate/SKILL.md","skills/product-fitness-gate/agents/openai.yaml"]},
+        {"route_id":"skill-improvement-loop-to-improve-and-maintain","stable_id":"LEGACY-SKILL:agent-improvement-loop","canonical_target":"SKILL:improve-and-maintain","proof_refs":["skills/agent-improvement-loop/SKILL.md","skills/agent-improvement-loop/agents/openai.yaml"]},
+        {"route_id":"skill-standards-gardener-to-improve-and-maintain","stable_id":"LEGACY-SKILL:standards-gardener","canonical_target":"SKILL:improve-and-maintain","proof_refs":["skills/standards-gardener/SKILL.md","skills/standards-gardener/agents/openai.yaml"]}
+      ]
+    },
+    {
+      "path": "root acceptance and independent review records",
+      "request": "Independently re-run the all-fourteen positive fixture, every negative control, current-live zero-write inventory, and artifact digest reconciliation before accepting or applying any registry transition."
+    },
+    {
+      "path": "N02 and N14 root reconciliation",
+      "request": "After any accepted registry edit, rebuild the candidate-bound live inventory and lower only the exact fourteen parallel-authority findings that become compatibility_route_retained; keep every other finding and all retirement, readiness, release, and completion ceilings open."
+    }
+  ],
+  "limitations": [
+    "The live root-owned migration registry was deliberately not edited, so this result requests rather than applies the fourteen transitions.",
+    "The structural witness is intentionally byte-exact and will fail closed on any wrapper or metadata drift until the compiled template is deliberately reviewed and updated.",
+    "Canonical candidate presence is inventory-level evidence, not representative behavior, installed discovery, or semantic equivalence proof.",
+    "No usage measurement, deprecation deadline, removal condition, reader/writer absence proof, or destructive cleanup authorization exists in this lease.",
+    "Other N02 inventory and generated-authority findings remain outside this corrective slice and remain open.",
+    "No API witness, command activation, plugin package/install/marketplace proof, claim promotion, release decision, or goal completion was performed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

@@ -1,0 +1,181 @@
+{
+  "worker": "/root/fixture_cleanup_recovery_state_engineer",
+  "lease_id": "FIXTURE-RECOVERY-STATE-CORRECTION-019",
+  "context_id": "sha256:e16ec3d65c5cad916484db7a38218efdeb8e68410c1ddd40075bc5d44094dd16",
+  "candidate_identity": {
+    "candidate_id": "sha256:44d6e42a0ef56a3d3dcd0c5dce97f450ca80f72ce959f35494b4fe434857bc55",
+    "context_id": "sha256:e16ec3d65c5cad916484db7a38218efdeb8e68410c1ddd40075bc5d44094dd16",
+    "aggregate_algorithm": "sha256(path UTF-8, NUL, unsigned 64-bit big-endian byte length, file bytes), in artifacts order",
+    "worker_owned_artifact_count": 2,
+    "worker_owned_artifact_total_bytes": 30605,
+    "worker_owned_artifact_total_lines": 945,
+    "worker_owned_artifact_set_sha256": "sha256:34f5233bb9a913fc1b71de7d0b35e574d40844aef7d84760f4791c7249882f8b"
+  },
+  "base_state": {
+    "status": "independent-rework-required",
+    "issued_candidate_id": "sha256:44d6e42a0ef56a3d3dcd0c5dce97f450ca80f72ce959f35494b4fe434857bc55",
+    "work_envelope": "docs/ultragoal-successor-live/work-packages/FIXTURE-RECOVERY-STATE-CORRECTION-019.json",
+    "work_envelope_sha256": "sha256:23ce62d5206c5ad0d8278e80a2f08a2cd90325bff0c17ff49144c150f8babd83",
+    "rework_decision": "docs/ultragoal-successor-live/root-decisions/FIXTURE-RECOVERY-STATE-REWORK-019.json",
+    "rework_decision_sha256": "sha256:e65de110e268abc4a70b693c95f9bfa913f292fef35f2d63bb2b2dae94a61604",
+    "decisive_false_pass": "ordinary finish cleanup failure returned CleanupFailure and reinserted a lease whose observable disposition remained Active"
+  },
+  "final_state": {
+    "status": "worker_blocked",
+    "root_acceptance": "withheld",
+    "product_ceiling": "the owned Darwin source and fixture evidence covers cleanup-failure recovery-state transition, repeated recovery, and identity-preserving retention; it grants no node, product, evaluation, readiness, release, or completion claim",
+    "darwin_observation": "identity-conditioned deletion remains unsupported; ordinary cleanup fails closed, retains identities, and is observably RecoveryRequired before scheduler reinsertion",
+    "freebsd_observation": "the successful identity-conditioned cleanup branch is source- and cfg-covered but was not executed on this Darwin worker host",
+    "envelope_no_claim_statement": "This root-issued envelope grants no root authority and raises no fixture product, evaluation, readiness, release, or completion claim.",
+    "worker_owned_artifact_count": 5,
+    "worker_owned_artifact_total_bytes": 76498,
+    "worker_owned_artifact_total_lines": 2244,
+    "worker_owned_artifact_set_sha256": "sha256:1f36bc714bb88986e5c63b0dd53ff8cbbb8f478e810c6621da85f5d9e59df658",
+    "fixture_artifact_rows": [
+      {
+        "path": "validator/tests/fixture_scheduler_contract/adversarial.rs",
+        "before_sha256": "sha256:1ff81c2e49b8b0c5dc13405e21c8e6b95df4d33e750cf4f8ff0c9d7743d63e1e",
+        "sha256": "sha256:b060176101dff756f15c24901b2311540398d786e24c49db6d85ec5f51476552",
+        "byte_length": 33143,
+        "summary": "ordinary finish and finish_observed false-pass, repeated-recovery, resource, mutation, race, and security controls"
+      },
+      {
+        "path": "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
+        "before_sha256": "sha256:c4680dc145b00d4a4bb9474fe843e01311c5b376a75d8ffa53b0304e799eb869",
+        "sha256": "sha256:047713d05a05ff9362362312c624fc01c21a0fa7c9d5ffd5b0473c0bbeec6530",
+        "byte_length": 8050,
+        "summary": "persisted LeaseSpec and WorkPackage validation, typed source artifact verification, fixture-row verification, and negative mutations"
+      },
+      {
+        "path": "validator/tests/fixture_scheduler_contract/scheduling.rs",
+        "before_sha256": "sha256:735ddb139ac8a45ad53975e19156de392f0b55320960524cfeb4c17472f2c6c9",
+        "sha256": "sha256:9976ad8a44df0e8c59342654d7eb4abcdacc36fbc3b97cad20362cd8692f8398",
+        "byte_length": 4700,
+        "summary": "platform-truthful active-count and RecoveryRequired scheduling expectations"
+      }
+    ]
+  },
+  "touched_paths": [
+    "validator/src/fixture_scheduler/lease.rs",
+    "validator/src/fixture_scheduler/scheduler.rs"
+  ],
+  "touched_semantics": [
+    "fixture_scheduler::FixtureRun::is_active",
+    "fixture_scheduler::FixtureScheduler::finish",
+    "fixture_scheduler::FixtureScheduler::finish_observed",
+    "fixture_scheduler::FixtureScheduler::retain_for_recovery",
+    "fixture_scheduler::IsolationLease::cleanup",
+    "fixture_scheduler::IsolationLease::recover"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "fixture-recovery-state-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "fixture-recovery-state-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-fixture-recovery-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "REQ-FIXTURE-ORDINARY-CLEANUP-RECOVERY-STATE",
+    "REQ-FIXTURE-REINSERTION-STATE-INVARIANT",
+    "REQ-FIXTURE-REPEATED-RECOVERY-IDEMPOTENCE",
+    "REQ-FIXTURE-BOTH-IDENTITY-RACE-RETENTION",
+    "REQ-FIXTURE-PLATFORM-TRUTHFUL-SCHEDULING"
+  ],
+  "dependency_nodes": [
+    "fixture-recovery-state-rework-019"
+  ],
+  "changes": [
+    {
+      "path": "validator/src/fixture_scheduler/lease.rs",
+      "before_sha256": "sha256:344dfc78d1a6ddb32b868733fe967dff8f12be28bed7df452ea313ccc18f5faa",
+      "after_sha256": "sha256:59d6647b11fdfbd8820362d1e940b35dc8027d33935b225ad56ad40acd271d54",
+      "summary": "marks every cleanup attempt RecoveryRequired before destructive I/O, permits only successful identity-conditioned deletion to set Cleaned, and makes recover idempotent for an already-cleaned lease"
+    },
+    {
+      "path": "validator/src/fixture_scheduler/scheduler.rs",
+      "before_sha256": "sha256:7c3efc093d4965a7f9018ba916ed5a2cb5a6558bbe0556c37ecaf86fdff3f758",
+      "after_sha256": "sha256:8ddc4dcf8674ca4273c39bc1062093c6d7ee164bb116d6b23ee693ac809a465c",
+      "summary": "reinserts a cleanup-failed run only when its lease is already observably RecoveryRequired; otherwise returns an integrity error"
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-recovery-state-red-019 cargo nextest run --manifest-path validator/Cargo.toml --build-jobs 16 -j16 --test fixture_scheduler_contract -E 'test(false_pass_ordinary_finish_failure_is_recovery_required_before_reinsertion)'",
+      "status": "expected-red-1-failed-prior-implementation",
+      "result": "CleanupFailure was returned, but the retained lease disposition was Active rather than RecoveryRequired"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-recovery-state-red-019 cargo nextest run --manifest-path validator/Cargo.toml --build-jobs 16 -j16 --test fixture_scheduler_contract -E 'test(false_pass_ordinary_finish_failure) | test(resource_and_mutation_finish_observed_failure)'",
+      "status": "pass-2-of-2-after-correction"
+    },
+    {
+      "command": "rustfmt --edition 2024 validator/src/fixture_scheduler/lease.rs validator/src/fixture_scheduler/scheduler.rs validator/tests/fixture_scheduler_contract/adversarial.rs validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs validator/tests/fixture_scheduler_contract/scheduling.rs",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-recovery-state-019-target cargo nextest run --manifest-path validator/Cargo.toml --build-jobs 16 -j16 --test fixture_scheduler_contract -E 'test(adversarial) | test(scheduling)'",
+      "status": "pass-24-of-24-on-darwin"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-recovery-state-019-target cargo nextest run --manifest-path validator/Cargo.toml --build-jobs 16 -j16 --test fixture_scheduler_contract -E 'test(lease_identity_worker_result)'",
+      "status": "pass-2-of-2-persisted-envelope-validation-and-artifact-negative-mutations"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/fixture_scheduler/lease.rs",
+      "sha256": "sha256:59d6647b11fdfbd8820362d1e940b35dc8027d33935b225ad56ad40acd271d54",
+      "byte_length": 22728
+    },
+    {
+      "path": "validator/src/fixture_scheduler/scheduler.rs",
+      "sha256": "sha256:8ddc4dcf8674ca4273c39bc1062093c6d7ee164bb116d6b23ee693ac809a465c",
+      "byte_length": 7877
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material-corrected",
+      "finding": "ordinary cleanup failure previously left retained finish and finish_observed runs observably Active"
+    },
+    {
+      "severity": "security-boundary-preserved",
+      "finding": "no final name-only delete was restored; file, directory, and lease-root final-race controls retain the expected and unrelated replacement identities"
+    },
+    {
+      "severity": "platform-ceiling",
+      "finding": "Darwin and Linux intentionally retain RecoveryRequired because the selected API surface has no identity-conditioned destructive primitive; FreeBSD success remains unexecuted here"
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-root-review-and-reconciliation",
+    "root-recomputed-integrated-candidate-identity",
+    "freebsd-executed-identity-conditioned-cleanup-proof"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "docs/ultragoal-successor-live/root-decisions/FIXTURE-RECOVERY-STATE-REWORK-019.json",
+      "expected_sha256": "sha256:e65de110e268abc4a70b693c95f9bfa913f292fef35f2d63bb2b2dae94a61604",
+      "request": "Anchor independent read-only review to this unchanged rework decision and the exact five-artifact worker set; if accepted, root must recompute the integrated candidate identity and issue its own reconciliation decision. Do not infer or apply public API, claim, manifest, migration, registry, release, Git, network, or host-state changes from this request."
+    }
+  ],
+  "limitations": [
+    "The successful FreeBSD funlinkat branch was not compiled or executed on this Darwin worker host.",
+    "Darwin and Linux cleanup success is intentionally unavailable under the retained post-validation pre-unlink attacker model; the safe result is a typed retained cleanup failure.",
+    "The dependency-closed fixture target may include sandbox-denied process, network, and confinement cases outside this owned correction; those surfaces are classified separately and do not authorize weaker tests.",
+    "No node, product, evaluation, readiness, release, completion, public API, dispatcher, catalog, manifest, migration, registry, generated authority, Git, network, or host-state claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

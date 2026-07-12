@@ -1,0 +1,106 @@
+{
+  "worker": "/root/observability_structure_refactorer",
+  "lease_id": "OBSERVABILITY-STRUCTURE-CORRECTION-003",
+  "context_id": "sha256:58c67c44d7da257142f7e2fce95e896a86a489defc32504391d351bc22b8c292",
+  "candidate_identity": {
+    "candidate_id": "sha256:ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e",
+    "context_id": "sha256:58c67c44d7da257142f7e2fce95e896a86a489defc32504391d351bc22b8c292",
+    "identity_scope": "21 exact observability source and contract-test artifacts; this WorkerResult is excluded to avoid self-reference.",
+    "artifact_set_formula": "Sort paths; concatenate each path, one TAB byte, lowercase SHA-256 without prefix, and one LF byte; SHA-256 the result.",
+    "artifact_set_sha256": "sha256:ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e",
+    "artifact_count": 21,
+    "artifact_total_bytes": 94418,
+    "artifact_total_lines": 2906,
+    "maximum_production_file_lines": 298,
+    "production_files_over_300_lines": []
+  },
+  "base_state": {
+    "root_decision_path": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-SOURCE-SIZE-REWORK.json",
+    "root_decision_sha256": "sha256:58c67c44d7da257142f7e2fce95e896a86a489defc32504391d351bc22b8c292",
+    "prior_behavior_result": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-ANCESTOR-SYMLINK-CORRECTION-002.json",
+    "prior_artifact_set_sha256": "sha256:6ca48a49298dc0e4317e27a25fc81f3f2762ecdf22d582b9a372e803cd0dac70",
+    "decisive_failure": "validator/src/observability/filesystem.rs was a 361-line hand-written production source above the 300-line cap."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_check": "AC-OBSERVABILITY-KERNEL-003",
+    "acceptance_check_status": "provisional",
+    "focused_contract_tests": "25 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out.",
+    "structure": "filesystem.rs is 162 lines and its private descriptor-confinement sibling is 215 lines; every hand-written observability production source is at most 298 lines.",
+    "security": "The private move preserves retained-descriptor ancestor traversal with O_NOFOLLOW, leaf O_NOFOLLOW validation, identity revalidation, and fail-closed symlink, hardlink, special-file, and substitution handling.",
+    "zero_write": "The existing recursive before/after snapshot control still proves query and explain do not create or mutate storage.",
+    "root_acceptance": "withheld",
+    "readiness_release_completion": "withheld"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-STRUCTURE-CORRECTION-003.json",
+    "validator/src/observability/filesystem.rs",
+    "validator/src/observability/filesystem/confinement.rs"
+  ],
+  "touched_semantics": ["observability::filesystem"],
+  "generated_outputs": ["docs/ultragoal-successor-live/worker-results/OBSERVABILITY-STRUCTURE-CORRECTION-003.json"],
+  "fixtures": [],
+  "effects": [
+    {"class": "workspace_write", "target": "observability-structure", "performed": true},
+    {"class": "process", "target": "observability-verification", "performed": true},
+    {"class": "network", "target": "network", "performed": false},
+    {"class": "external_write", "target": "external-product", "performed": false},
+    {"class": "destructive", "target": "destructive", "performed": false},
+    {"class": "root_authority", "target": "root-authority", "performed": false}
+  ],
+  "requirements": [
+    "AC-OBSERVABILITY-KERNEL-003",
+    "REQ-OBSERVE-ANCESTOR-CONFINEMENT",
+    "REQ-OBSERVE-NO-CANONICALIZE"
+  ],
+  "dependency_nodes": ["N01-CONTEXT", "N03-CAPTURE", "N03-STATE"],
+  "changes": [
+    {"area": "private-module-boundary", "result": "Moved descriptor-anchored ancestor traversal, leaf inspection/opening, metadata validation, identity, and stable I/O error mapping into a private filesystem::confinement sibling module."},
+    {"area": "public-surface-preservation", "result": "Kept filesystem.rs as the unchanged super-module boundary for callers; no observability public export or root wiring changed."}
+  ],
+  "commands_and_tests": [
+    {"command": "RUSTFLAGS=-Awarnings CARGO_TARGET_DIR=/tmp/hul-observability-structure-003 cargo test -q --locked --offline --manifest-path validator/Cargo.toml --test observability_contract -j16 -- --test-threads=16", "status": "pass", "exit_code": 0, "summary": "25 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out."},
+    {"command": "nested_ancestor_symlink_is_rejected_before_store_binding_or_creation", "status": "pass", "summary": "Exact deep-ancestor reproducer remained rejected before target-side creation."},
+    {"command": "ancestor_substitution_after_binding_rejects_before_an_outside_store_is_created", "status": "pass", "summary": "Post-binding ancestor substitution stayed fail-closed before outside-store creation."},
+    {"command": "recursive_before_after_snapshot_proves_query_and_explain_have_no_hidden_writes", "status": "pass", "summary": "Query and explain remained zero-write operations."},
+    {"command": "RUSTFLAGS=-Awarnings CARGO_TARGET_DIR=/tmp/hul-observability-structure-003 cargo check -q --locked --offline --manifest-path validator/Cargo.toml -j16", "status": "pass", "exit_code": 0},
+    {"command": "rustfmt --edition 2024 --check validator/src/observability/filesystem.rs validator/src/observability/filesystem/confinement.rs", "status": "pass", "exit_code": 0},
+    {"command": "observability production LOC audit", "status": "pass", "summary": "14 production Rust files; maximum 298 lines; no file over 300 lines."}
+  ],
+  "artifacts": [
+    {"path":"validator/src/observability/binding.rs","sha256":"sha256:dd0a419531c1490fb2950db3ea0d0ce4a6fd5c61adfe6e248c1dd335b87f9475","byte_length":824},
+    {"path":"validator/src/observability/event.rs","sha256":"sha256:9f0788f199dc15cc7368137527c33ed4109fed950cf771871169efe871b3f42b","byte_length":10360},
+    {"path":"validator/src/observability/explain.rs","sha256":"sha256:8972df827dfc9a89f1e254ef36746aeb8c96b76a569fcf7dd7fad4f3a2a902be","byte_length":5542},
+    {"path":"validator/src/observability/export.rs","sha256":"sha256:e62cfd30411471171b546d1137ed65c99ef6cc27611c60fbce4faf328f57965f","byte_length":4448},
+    {"path":"validator/src/observability/filesystem.rs","sha256":"sha256:5aa0a44c24852655a6ff4d794a2c67ae35e7d0bb3baa524d5a22ab1598d06eb0","byte_length":4400},
+    {"path":"validator/src/observability/filesystem/confinement.rs","sha256":"sha256:10bdd31c0ce56083ee9bedddba3b8763c0e66fe0bd9c57f568c9a915989025db","byte_length":6972},
+    {"path":"validator/src/observability/format.rs","sha256":"sha256:0dd9cbe2b91ad6b8ba07b4cb3df17e3fd215cbd2391c6f19302d1435121e87b3","byte_length":3465},
+    {"path":"validator/src/observability/identity.rs","sha256":"sha256:b12de596a27a24b8bb4650483d1fc55f7a8d72cde31df604e178004f1bf31202","byte_length":2057},
+    {"path":"validator/src/observability/lifecycle.rs","sha256":"sha256:f103b87e1b8869a9b9d63ea407adfdbed93a955cbe414e1b1e870517607bd292","byte_length":2525},
+    {"path":"validator/src/observability/limits.rs","sha256":"sha256:e5c63cb8a0e386a31d091ee604d7af246b672d00a15bc643b23fc6ea2a2007fc","byte_length":739},
+    {"path":"validator/src/observability/mod.rs","sha256":"sha256:b8bff1fda74040af8e2f53a401785dcafa69793ba289541d82a4c16f84bf1b48","byte_length":627},
+    {"path":"validator/src/observability/privacy.rs","sha256":"sha256:1043892bf26c20ca8af11b108dfa859e02d9113e3e42c63283ddeb78bf6dc6f0","byte_length":5782},
+    {"path":"validator/src/observability/query.rs","sha256":"sha256:d573d619c27c57fbefb85ccef3b53612366dc441786bb1fe937bad144204c87f","byte_length":3821},
+    {"path":"validator/src/observability/store.rs","sha256":"sha256:ced908bbc727babf51b789f472e1a0af774b85a6377aab46763971e6aef47d0c","byte_length":9082},
+    {"path":"validator/tests/observability_contract.rs","sha256":"sha256:2d381508d3ca7795f69f5ae7be69232b373d0d4f79c288fb6c7890472677636a","byte_length":619},
+    {"path":"validator/tests/observability_contract/corruption.rs","sha256":"sha256:67e082ff607a7e07d2271885237660fce70d88b5849b1c88fa865c828b985cd5","byte_length":6445},
+    {"path":"validator/tests/observability_contract/limits_false_pass.rs","sha256":"sha256:7de92445764f210d8146a49509487b12ccacadb5bcdfc36d574024e4d5a2dcf8","byte_length":4683},
+    {"path":"validator/tests/observability_contract/local_store.rs","sha256":"sha256:c61e7c0d02d9dc66166619d66eba1c06751289710d68435fb23deb05e04a6cdc","byte_length":3331},
+    {"path":"validator/tests/observability_contract/privacy_export.rs","sha256":"sha256:0c041b7763875677afe9131487ab55492734e53dcdb578101df2bad836c6f834","byte_length":6335},
+    {"path":"validator/tests/observability_contract/races_paths.rs","sha256":"sha256:41db885f388efaafd4e701600361514fd5810e8c9db3006aeb2560ee25476fdd","byte_length":7168},
+    {"path":"validator/tests/observability_contract/support.rs","sha256":"sha256:2f9b51c05bd75c0b9d460cc8a9d3fe65958391a299f8025e6bcaad7e1ea464a6","byte_length":5559}
+  ],
+  "findings": [
+    {"code": "ROOT-WIRING-PENDING", "severity": "root-authority-required", "summary": "validator/src/lib.rs public wiring remains root-owned and unchanged by this private structure correction."}
+  ],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [
+    {"path": "validator/src/lib.rs", "expected_sha256": "sha256:544e97fd6877ebdd7eff7dcb3d2fdef2be02a3ad740ee7bc0b92c25226dbf601", "request": "No change requested by this structure correction; root-owned public wiring and acceptance remain outside this lease."}
+  ],
+  "limitations": [
+    "AC-OBSERVABILITY-KERNEL-003 is provisional pending fresh independent root review.",
+    "This proves only the leased local Unix confinement and source-size surface; it does not prove public API wiring, CLI integration, live export, node closure, readiness, release, or completion.",
+    "Existing unrelated workspace warnings remain outside the lease and were suppressed only to keep focused command receipts readable."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

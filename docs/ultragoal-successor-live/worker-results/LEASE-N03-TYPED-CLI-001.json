@@ -1,0 +1,330 @@
+{
+  "worker": "/root/n03_typed_cli_worker",
+  "lease_id": "LEASE-N03-TYPED-CLI-001",
+  "context_id": "sha256:f3f5df32101014f277cba4f077e5719a8fefa2c43f8e1ac3325eaf2b3c2d70f4",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_unchanged": true,
+    "status_sha256_before_result": "0bb4f50d8fe509934cfdc6b04708b3c774e7e486eaae2d0cf8414147bceffec7",
+    "untracked_content_sha256_before_result": "45661504322ac4b5c6cf9ae1f5114638775f64fa9263a772c5a1612fedefeb09",
+    "context_note": "LiveContext was rebuilt after all leased source and test changes and immediately before this self-referential WorkerResult was written."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "lease_scope": "validator/src/cli/successor/**, validator/tests/cli_contract/successor/**, and this WorkerResult only",
+    "root_or_other_lane_changes_present": [
+      "Cargo.lock and validator/Cargo.toml",
+      "validator/src/cli/capture/** and validator/tests/cli_contract/capture/**",
+      "validator/src/state/** and validator/tests/cli_contract/state/**",
+      "validator/src/inventory/** and validator/tests/inventory_contract_cases/**",
+      "migration/authority-routes.json",
+      "schemas/parent-source-runtime-verification.schema.json"
+    ],
+    "pre_existing_user_dirt": [
+      ".DS_Store"
+    ]
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "root_integration_preserved": [
+      "validator/src/cli/mod.rs contains the root-applied candidate compilation include",
+      "validator/tests/cli_contract.rs contains the root-applied focused test include"
+    ],
+    "leased_rust_lines": 1784,
+    "production_rust_lines": 1305,
+    "test_rust_lines": 479,
+    "maximum_file_lines": 293,
+    "files_over_300_lines": 0,
+    "git_operations_performed": false,
+    "network_performed": false,
+    "external_writes_performed": false
+  },
+  "touched_paths": [
+    "validator/src/cli/successor/catalog.rs",
+    "validator/src/cli/successor/clap_grammar.rs",
+    "validator/src/cli/successor/error.rs",
+    "validator/src/cli/successor/help.rs",
+    "validator/src/cli/successor/mod.rs",
+    "validator/src/cli/successor/model.rs",
+    "validator/src/cli/successor/parser.rs",
+    "validator/src/cli/successor/value.rs",
+    "validator/tests/cli_contract/successor/catalog.rs",
+    "validator/tests/cli_contract/successor/mod.rs",
+    "validator/tests/cli_contract/successor/parsing.rs",
+    "validator/tests/cli_contract/successor/security.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-TYPED-CLI-001.json"
+  ],
+  "touched_semantics": [
+    "private successor clap grammar candidate",
+    "SuccessorCommand and typed group/subcommand enums",
+    "one descriptor source for parsing, help, and catalog projection",
+    "canonical --json machine-mode selector",
+    "stable sanitized parse-error identities",
+    "typed exit-class registry",
+    "context::EffectClass reuse without duplicate effect authority",
+    "confined relative-path and bounded identifier validation",
+    "explicit authorization-bearing write, external-write, and destructive routes"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "exact ten-group catalog and compiled clap coverage parity",
+    "every descriptor route parses from its required option specification",
+    "catalog-derived human and valid JSON help",
+    "workspace, external, destructive, and read effect matrix",
+    "canonical --json and duplicate singleton rejection",
+    "root, group, and command help projection",
+    "stable typed version and exit classes",
+    "missing required values and help-as-value confusion",
+    "path traversal, absolute path, Windows prefix, alternate separator, percent encoding, and NUL rejection",
+    "effect override and implicit write-verb rejection",
+    "unknown input and canary non-echo in human and machine errors",
+    "duplicate value and flag options",
+    "non-UTF-8 rejection",
+    "valid versioned JSON machine errors without ANSI",
+    "deterministic 1024-case malformed-input matrix"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased successor source, focused tests, and this WorkerResult only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal Cargo/rustc target output and /private/tmp standalone harness artifacts"
+    },
+    {
+      "class": "external-process",
+      "scope": "local rustfmt, rustc, Cargo, Git, shasum, wc, and read-only search commands"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "parser-runtime",
+      "filesystem_reads": false,
+      "filesystem_writes": false,
+      "environment_reads": false,
+      "clock_reads": false,
+      "processes": false,
+      "network": false,
+      "telemetry": false
+    }
+  ],
+  "requirements": [
+    "REQ-CLI-001",
+    "REQ-CLI-002",
+    "REQ-CLI-003",
+    "REQ-CLI-004",
+    "REQ-CLI-005",
+    "REQ-CLI-006"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "typed parser",
+      "rationale": "The candidate consumes a clap 4.6 grammar instead of a handwritten token parser. Clap errors are mapped to stable sanitized identities without rendering or retaining untrusted input."
+    },
+    {
+      "area": "single descriptor authority",
+      "rationale": "One static descriptor catalog supplies the exact ten groups, nested routes, options, purposes, and effects; the clap builder, help renderer, catalog API, and parity tests all consume it."
+    },
+    {
+      "area": "effect identity",
+      "rationale": "Command descriptors use crate::context::EffectClass directly. Read routes remain Read; local artifact and apply routes are WorkspaceWrite; export, publish, and provider adapters are ExternalWrite; migrate retire is Destructive."
+    },
+    {
+      "area": "machine boundary",
+      "rationale": "--json is the sole machine-mode selector. Help, version, and error documents carry fixed schema identities and valid isolated JSON; error output never includes clap's raw diagnostic text."
+    },
+    {
+      "area": "input confinement",
+      "rationale": "Arguments are byte/count bounded, singleton options reject duplication, paths reject traversal and alternate escape encodings, identifiers are bounded ASCII, and effect overrides or undeclared write verbs fail closed."
+    },
+    {
+      "area": "scope boundary",
+      "rationale": "The module parses and describes only. It constructs no LiveContext, dispatches no command, reads no repository or environment state, emits no telemetry, and makes no behavior or readiness decision."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/cli/successor/*.rs validator/tests/cli_contract/successor/*.rs",
+      "result": "pass"
+    },
+    {
+      "command": "rustc --edition 2024 --test /private/tmp/ultragoal_successor_harness.rs -L dependency=target/debug/deps --extern clap=target/debug/deps/libclap-901b841419424f86.rlib --extern serde_json=target/debug/deps/libserde_json-0c364a97b46bdcd3.rlib -o /private/tmp/ultragoal-successor-cli-tests",
+      "result": "pass",
+      "qualification": "Standalone harness substitutes only the shape of context::EffectClass; live-crate tests below exercise the real type. Four expected dormant/test-harness warnings remain."
+    },
+    {
+      "command": "/private/tmp/ultragoal-successor-cli-tests --test-threads=1",
+      "result": "pass",
+      "summary": "19 passed; 0 failed"
+    },
+    {
+      "command": "cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "pass",
+      "qualification": "The successor candidate compiles against live context::EffectClass and locked clap. Broad unused/dead-code warnings are expected while root intentionally keeps the candidate undispatched; unrelated capture warnings also remain."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test cli_contract successor_cli_contract:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "19 passed; 0 failed; 52 filtered out"
+    },
+    {
+      "command": "cargo clippy --locked --offline -p ultragoal --lib --message-format short -- -W clippy::all",
+      "result": "pass_with_warnings",
+      "qualification": "Successor findings are only intentional dormant-module unused/dead-code warnings. Repo-wide pre-existing and other-lane clippy warnings remain."
+    },
+    {
+      "command": "cargo fmt --all -- --check",
+      "result": "other_lane_failure",
+      "qualification": "Current state-lane files policy_action.rs and tests/review_cases.rs require formatting. No leased successor file differed; the targeted rustfmt check passes."
+    },
+    {
+      "command": "git diff --check -- validator/src/cli/successor validator/tests/cli_contract/successor",
+      "result": "pass"
+    },
+    {
+      "command": "target/debug/deps/live_context-68875da31690b6dc accepted_live_candidate_builds_a_contract_bound_context --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "LiveContext sha256:f3f5df32101014f277cba4f077e5719a8fefa2c43f8e1ac3325eaf2b3c2d70f4 was emitted before this result file."
+    },
+    {
+      "command": "per-file line-count audit",
+      "result": "pass",
+      "summary": "12 Rust files, 1784 lines, maximum 293 lines, zero files over 300 lines"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/successor/catalog.rs",
+      "sha256": "ae5958c7260ea274eb53aaeede6c9856ab0ec61ac84fd322d054885addec82b3"
+    },
+    {
+      "path": "validator/src/cli/successor/clap_grammar.rs",
+      "sha256": "fab20200930cda92e34ee301c12e10a6263154b9efa3086e8401c5b12df728ee"
+    },
+    {
+      "path": "validator/src/cli/successor/error.rs",
+      "sha256": "214229baf123356b302efcf984727258946c8d2aa7012a01777c103dad1231d5"
+    },
+    {
+      "path": "validator/src/cli/successor/help.rs",
+      "sha256": "00e92c9c0394aa7d9b483b49ae3924de5f5638f7d517f3298914d1788e34e9eb"
+    },
+    {
+      "path": "validator/src/cli/successor/mod.rs",
+      "sha256": "18ef82430df3087716fa194b240acfabea65fb0ab8569dadb47beac968127312"
+    },
+    {
+      "path": "validator/src/cli/successor/model.rs",
+      "sha256": "d077a52a9725ad9c3d31a2083ed695bab2cfcce9db4795192e3aef9f5fca860a"
+    },
+    {
+      "path": "validator/src/cli/successor/parser.rs",
+      "sha256": "7bc1ee93d9aea9dccd110025a24bd1ff555bd8e01fdf48fcc32053312a4decbc"
+    },
+    {
+      "path": "validator/src/cli/successor/value.rs",
+      "sha256": "ca043c30d1f88ae57edf58a05ba51093db82abe1d63ee56f127e9cf42204f4f9"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/catalog.rs",
+      "sha256": "9e8116f452f88d16a4c22b418db2942ba1a18ab1c89eee1cdf7beef96b764f8d"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/mod.rs",
+      "sha256": "bd0e40413037b9b6a1e7c6018a5a5abe2c503d31c369f87e4d6ffa7e8c6dc33f"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/parsing.rs",
+      "sha256": "0c2012e53c9a1caadc387af75086699f0956858a7fc743d68823dc7a69d8ac41"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/security.rs",
+      "sha256": "5e92228c7a0ff850205025bceacfb1ec065450751112c017d8cc572d8d97cb7d"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "integration-required",
+      "finding": "The legacy handwritten argument parser and dispatcher remain the live public authority. This candidate is compiled and tested but intentionally undispatched; no successor command group is Active."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "The nested subcommand names, canonical --json spelling, command/effect catalog, public API, machine schemas, and exit mapping require root adoption before they become shared authority."
+    },
+    {
+      "severity": "cross-lane-reconciliation",
+      "finding": "validator/src/state/policy_action.rs currently hard-codes ultragoal inspect --format=json. Successor canonical syntax is ultragoal --json inspect; root must reconcile the state command catalog rather than preserve two machine-mode authorities."
+    },
+    {
+      "severity": "behavior-gap",
+      "finding": "No group is connected to LiveContext, HCT-STATE, HCT-CAPTURE, domain adapters, stdout/stderr routing, or actual effects. Parser tests do not prove command behavior."
+    },
+    {
+      "severity": "proof-gap",
+      "finding": "Source inspection confirms no filesystem, environment, clock, process, network, or telemetry API in the parser module, and functional parse/help/error tests are pure. A syscall-level independent zero-read/zero-write probe remains required for the eventual binary route."
+    },
+    {
+      "severity": "temporary-quality-boundary",
+      "finding": "Because the module is deliberately dormant, cargo check/clippy report its symbols as unused/dead. The smallest temporary root boundary is #[allow(dead_code, unused_imports)] on the root-owned pub(crate) mod successor declaration, removed before dispatcher adoption and Active status. No leased file suppresses these warnings."
+    },
+    {
+      "severity": "platform-ceiling",
+      "finding": "Only the current aarch64 macOS toolchain was exercised; supported Linux and other host behavior remain unverified."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Root adoption of the public command catalog, machine-mode spelling, schemas, and exit-code policy.",
+    "Root dispatcher integration using std::env::args_os without retaining the legacy parser as duplicate authority.",
+    "Command adapters that construct and revalidate LiveContext and enforce the parsed context::EffectClass.",
+    "HCT-STATE, HCT-CAPTURE, inventory, fit, distribution, observe, eval, claims, and migrate behavior integrations.",
+    "Migration routes or explicit retirement for all 37 legacy parser/dispatcher variants.",
+    "Cross-lane reconciliation of the state command spec from --format=json to canonical --json.",
+    "Independent parser, security, false-pass, product-journey, and zero-hidden-write review.",
+    "Representative live binary help, invalid invocation, read-only query, write, external-write, and destructive permission probes."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/argument_parser/**, validator/src/command_run/**, and validator/src/lib.rs",
+      "request": "At the adopted migration boundary, call cli::successor::parse_args over args_os, render only catalog-backed Help/Version/ParseFailure results, and route typed invocations to explicit adapters. Do not leave the handwritten parser as parallel authority."
+    },
+    {
+      "path": "validator/src/state/policy_action.rs and the root command/action catalog",
+      "request": "Adopt ultragoal --json inspect as the canonical machine invocation and remove or explicitly route --format=json under migration authority."
+    },
+    {
+      "path": "validator/src/cli/mod.rs",
+      "request": "While the candidate remains deliberately undispatched, the smallest temporary lint boundary is #[allow(dead_code, unused_imports)] on pub(crate) mod successor. Remove it before any command is marked Active."
+    },
+    {
+      "path": "validator/src/api_witness.rs and validator/tests/public_api_witness.rs",
+      "request": "After public-catalog adoption, add compiled witnesses for parse_args, ParseOutcome, ParsedInvocation, SuccessorCommand, OutputMode, ParseFailure, ExitClass, and reuse of context::EffectClass."
+    },
+    {
+      "path": "root-owned schemas and generated command/effect catalogs",
+      "request": "Register the help, version, and error machine schema identities and generate canonical command/effect rows directly from the accepted descriptor source."
+    },
+    {
+      "path": "root acceptance and migration authority",
+      "request": "Independently review the candidate, reconcile nested verbs and compatibility routes, prove zero hidden writes at the binary boundary, and keep all successor groups non-Active until their dispatch behavior is real."
+    }
+  ],
+  "limitations": [
+    "This is a parser, catalog, help, and error candidate only; it does not dispatch or execute commands.",
+    "The root-owned public command catalog and generated command/effect catalogs were not written.",
+    "No global machine schema, compatibility route, migration deadline, or claim decision was adopted.",
+    "No source, package, install, discovery, runtime, product-journey, release, or completion behavior is proved.",
+    "The current broad clippy warning set cannot be closed until root either dispatches the module or adopts the documented temporary module-level lint boundary.",
+    "System-call-level read/write absence and supported-host portability require independent live binary verification."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

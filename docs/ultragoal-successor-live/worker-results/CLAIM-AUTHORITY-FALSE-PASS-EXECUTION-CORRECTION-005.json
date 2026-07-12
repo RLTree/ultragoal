@@ -1,0 +1,237 @@
+{
+  "worker": "/root/claim_authority_builder",
+  "lease_id": "CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-CORRECTION-005",
+  "context_id": "sha256:8442ed3ef1b2562d93cdedb0e3af8ceabae1e42d4dc83feb9288382254a4495b",
+  "candidate_identity": {
+    "candidate_id": "sha256:d912b28970843e74b22a44907fa111310ac0cde3f29601d879422726b507c669",
+    "context_id": "sha256:8442ed3ef1b2562d93cdedb0e3af8ceabae1e42d4dc83feb9288382254a4495b",
+    "binding_path": "docs/ultragoal-successor-live/root-decisions/CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-CORRECTION-BINDING.json",
+    "binding_sha256": "sha256:8442ed3ef1b2562d93cdedb0e3af8ceabae1e42d4dc83feb9288382254a4495b",
+    "artifact_set_formula": "Sort path; append path, TAB, lowercase SHA-256 without prefix, LF; SHA-256 the concatenation.",
+    "artifact_set_sha256": "sha256:d912b28970843e74b22a44907fa111310ac0cde3f29601d879422726b507c669",
+    "artifact_count": 15,
+    "artifact_total_bytes": 94301,
+    "artifact_total_lines": 2694,
+    "aggregate_authority": "Root independently rederived and bound all fifteen regular-file rows and the aggregate; WorkerResult-v1 is not claimed to enforce aggregate fields."
+  },
+  "base_state": {
+    "status": "false_pass_execution_provenance_rework_bound",
+    "rework_path": "docs/ultragoal-successor-live/root-decisions/CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-PROVENANCE-REWORK.json",
+    "rework_sha256": "sha256:c5818acd471b6a65fc5dc6935ba31a67690d6aa313bfdaf9bc7a0030a4d425fd",
+    "binding_path": "docs/ultragoal-successor-live/root-decisions/CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-CORRECTION-BINDING.json",
+    "binding_sha256": "sha256:8442ed3ef1b2562d93cdedb0e3af8ceabae1e42d4dc83feb9288382254a4495b"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_check": "AC-CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-005",
+    "acceptance_status": "provisional",
+    "candidate_id": "sha256:d912b28970843e74b22a44907fa111310ac0cde3f29601d879422726b507c669",
+    "acceptance_ceiling": "definition-level execution-bound false-pass claim authority and focused contract tests only",
+    "root_acceptance": "withheld",
+    "public_integration": "not-asserted",
+    "passed_live_claim": "not-asserted",
+    "readiness": "withheld"
+  },
+  "touched_paths": [
+    "validator/src/claims/coverage.rs",
+    "validator/src/claims/decision.rs",
+    "validator/src/claims/definition.rs",
+    "validator/src/claims/evidence.rs",
+    "validator/src/claims/false_pass.rs",
+    "validator/src/claims/false_pass_guard.rs",
+    "validator/src/claims/guard.rs",
+    "validator/src/claims/mod.rs",
+    "validator/tests/claims_contract.rs",
+    "validator/tests/claims_contract/adoption.rs",
+    "validator/tests/claims_contract/exact_sets.rs",
+    "validator/tests/claims_contract/false_pass_execution.rs",
+    "validator/tests/claims_contract/lifecycle.rs",
+    "validator/tests/claims_contract/rejections.rs",
+    "validator/tests/claims_contract/support.rs"
+  ],
+  "touched_semantics": [
+    "claims::definition",
+    "claims::evidence",
+    "claims::obligation_coverage",
+    "claims::false_pass_execution",
+    "claims::observation",
+    "claims::decision",
+    "claims::guard"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "claim-authority-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "claim-authority-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-claim-authority-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "AC-CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-005",
+    "REQ-PROOF-001",
+    "REQ-STATE-001",
+    "false-pass-execution-provenance"
+  ],
+  "dependency_nodes": [
+    "claim-authority-false-pass-execution-provenance-rework",
+    "hct-context",
+    "hct-inventory",
+    "hct-capture",
+    "hct-state"
+  ],
+  "changes": [
+    {
+      "area": "separate execution observation",
+      "result": "Each false-pass obligation binds an executor record to a distinct sealed execution observation before an evidence producer can present it for claim evaluation."
+    },
+    {
+      "area": "causal provenance",
+      "result": "Exact control, negative stimulus, named expected failure, executor and observer methods, start and end time, actual causal outcome, outputs, artifacts, freshness, context, candidate, truth surface, and ceiling are checked before elevation."
+    },
+    {
+      "area": "false-pass rejection",
+      "result": "Report-only, arbitrary-code, generic-input or tool, unexecuted, producer-synthesized, shared or replayed artifact, stale, cross-candidate, self-authored, material-scorer, reviewer-only, and outcome-mismatch controls reject."
+    },
+    {
+      "area": "preserved obligation lifecycle",
+      "result": "Exact obligation sets, 109 one-item omissions, DAG closure, repair invalidation, rejected-evidence visibility, and deterministic zero-write projection remain covered."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hct-claims-false-pass-target cargo test --manifest-path validator/Cargo.toml --locked --offline -j16 --test claims_contract -- --test-threads=16",
+      "status": "pass",
+      "result": "21 passed, 0 failed; includes 140 one-field omission and 125 one-field substitution controls across CL-PACKAGE, CL-INSTALL, CL-ORCHESTRATION, CL-RELEASE, and CL-COMPLETION."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check on all fifteen claim-authority source and test paths; git diff --check",
+      "status": "pass",
+      "result": "Scoped formatting and whitespace checks passed; the largest production file is 218 physical lines."
+    },
+    {
+      "command": "two-phase root-bound artifact snapshot using path, SHA-256, byte length, line count, and canonical artifact-set formula",
+      "status": "pass",
+      "result": "Both phases matched candidate sha256:d912b28970843e74b22a44907fa111310ac0cde3f29601d879422726b507c669 with 15 artifacts, 94301 bytes, and 2694 lines."
+    },
+    {
+      "command": "WorkerResultV1::parse_json, validate_for, ArtifactWorkspace::verify, result_id, and worker/scope/effect/artifact/no-claim mutations",
+      "status": "pass",
+      "result": "The exact root-issued envelope parses and validates; all fifteen artifacts verify from the workspace, the result ID computes, and five negative mutations reject."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/claims/coverage.rs",
+      "sha256": "sha256:c0369c21cd187f96a8dfbef0ad96e1e99ddd751cd477f5641bbdfd11dff63853",
+      "byte_length": 7649
+    },
+    {
+      "path": "validator/src/claims/decision.rs",
+      "sha256": "sha256:9429db50de57af8401d04a93e2ba8f7fefedd32c2d1b4a4206750fa6b2570aa7",
+      "byte_length": 5297
+    },
+    {
+      "path": "validator/src/claims/definition.rs",
+      "sha256": "sha256:509fcc4c3c1f999095f45c55eab13faa4fdd0c8d9b52011e36842b4ba73187a6",
+      "byte_length": 7696
+    },
+    {
+      "path": "validator/src/claims/evidence.rs",
+      "sha256": "sha256:f02c9f2a18b79d6e90bd7ebe8265563950b44d39d2329140276a80d116ac68fa",
+      "byte_length": 6317
+    },
+    {
+      "path": "validator/src/claims/false_pass.rs",
+      "sha256": "sha256:2654407f0c0612d5d73f8ffb22f8dfa3e2e469ac5b54ff6537ddbbf700b934c3",
+      "byte_length": 6535
+    },
+    {
+      "path": "validator/src/claims/false_pass_guard.rs",
+      "sha256": "sha256:76e3fac5d6f399d847d56680a14db56a3a97d6f0d47d272fb53d3f066a74d603",
+      "byte_length": 4054
+    },
+    {
+      "path": "validator/src/claims/guard.rs",
+      "sha256": "sha256:0e12fd3de565a6cc534c4db9a4f9c4422a4be650301d7cabb5d3dc5190491075",
+      "byte_length": 7347
+    },
+    {
+      "path": "validator/src/claims/mod.rs",
+      "sha256": "sha256:1de2062bf950ac9900401ef45fbcee8a4b02f0440facb8ac6cc5099e0fa1b523",
+      "byte_length": 584
+    },
+    {
+      "path": "validator/tests/claims_contract.rs",
+      "sha256": "sha256:7c6c3ffca05bea5fbffc853056262d5024ace348d69d4ed114c2cb6aa507ab25",
+      "byte_length": 402
+    },
+    {
+      "path": "validator/tests/claims_contract/adoption.rs",
+      "sha256": "sha256:648f6b11d182753e391488399dfa77da8f079637326479c315097882458063b1",
+      "byte_length": 2013
+    },
+    {
+      "path": "validator/tests/claims_contract/exact_sets.rs",
+      "sha256": "sha256:e47c6942bf35a5f94b8969372beabd481e0b22d7fbbd0b6394da76e81c3ffb8c",
+      "byte_length": 11208
+    },
+    {
+      "path": "validator/tests/claims_contract/false_pass_execution.rs",
+      "sha256": "sha256:1e3781b8d6b2bdd83b2eeea18b61fe649414a0df0f686ab8c2ece5107d179ba8",
+      "byte_length": 17348
+    },
+    {
+      "path": "validator/tests/claims_contract/lifecycle.rs",
+      "sha256": "sha256:0c395ee0d4059dcbfda89e028c54600a02260667adf4a8f0ab228d3a38639952",
+      "byte_length": 3919
+    },
+    {
+      "path": "validator/tests/claims_contract/rejections.rs",
+      "sha256": "sha256:ef292fe9c5b280d1e8e729d747c5977f2dbc4ae61097847745e9ff3815f6e201",
+      "byte_length": 5739
+    },
+    {
+      "path": "validator/tests/claims_contract/support.rs",
+      "sha256": "sha256:822cfce3c06042cf134cbd01823546cb97ff68790e04739ac6a76837f0d4fd17",
+      "byte_length": 8193
+    }
+  ],
+  "findings": [
+    {
+      "id": "report-only-false-pass",
+      "status": "corrected-in-candidate",
+      "evidence": "A generic-input, generic-tool envelope with an arbitrary self-reported failure cannot elevate any of the five material claims."
+    },
+    {
+      "id": "execution-provenance-matrix",
+      "status": "covered-in-candidate",
+      "evidence": "All 140 omitted-field and 125 substituted-field cases reject across the five material claims, while separately sealed positive controls pass."
+    },
+    {
+      "id": "root-aggregate-authority",
+      "status": "truthfully-bounded",
+      "evidence": "The exact membership and aggregate come from RootBinding-v1 and were rechecked from live files; WorkerResult-v1 is not represented as aggregate authority."
+    }
+  ],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [],
+  "limitations": [
+    "No validator/src/lib.rs binding, external public API witness, CLI route, public integration, or passed live claim is asserted.",
+    "No source acceptance, readiness, release, node closure, or goal completion is asserted.",
+    "The candidate remains definition-only pending independent review and root acceptance.",
+    "Effective runtime route is unverified unless runtime metadata exposes it.",
+    "Any fifteen-artifact, binding, registry, execution-provenance, obligation, dependency, context, effect, or result change reopens this result."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

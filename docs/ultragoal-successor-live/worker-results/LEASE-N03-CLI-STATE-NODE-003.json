@@ -1,0 +1,677 @@
+{
+  "worker": "/root/n03_cli_state_review",
+  "lease_id": "LEASE-N03-CLI-STATE-NODE-003",
+  "context_id": "sha256:15d8ad4697e4d4e3e9f6c000a2a1a212786b5ead0ffc2ea74ce284ba91fcb850",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "live_context_id_observed_before_result": "sha256:15d8ad4697e4d4e3e9f6c000a2a1a212786b5ead0ffc2ea74ce284ba91fcb850",
+    "status_sha256_observed_before_result": "2190701cefbf655b2130dd0747799538526789cf1631b167ef493fad5975b00e",
+    "untracked_content_sha256_observed_before_result": "5100d2abe3e2e5f1bb6070beb6eb22b705cfc9b90c8c1eba5754b66f948ec0c5",
+    "artifact_set_sha256": "fb49f18347bd993134e6ccb175e15b7fcb035148f6f2ec7e95e2a4b827055cb7",
+    "context_note": "LiveContext-v1 was rebuilt after the final source, 50-test capture partition, 98-test CLI contract, all-target check, formatting, and line-cap checks froze and before this self-referential result was added. Concurrent disjoint-node edits can invalidate shared repository identity without changing this exact N03 artifact set. The protected .codex-worktree/env.sh file was not opened, read, hashed, or sourced."
+  },
+  "base_state": {
+    "node": "N03-CLI-STATE",
+    "parent_candidate": {
+      "lease_id": "LEASE-N03-CLI-STATE-NODE-002",
+      "result_path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-002.json",
+      "result_sha256": "acffa4800350cbc1f35154c801d5abaaa183690353e489cc7ac9c0f85f0a813b",
+      "artifact_set_sha256": "9b6994dc5bf26519947259515aa384af116cd44c1e741c09bb04f6715a34d197",
+      "artifact_count": 63
+    },
+    "decisive_rework_finding": "When the shared observation budget cut through a secret, drain treated the remaining look-behind bytes as true EOF and finalized an incomplete secret prefix as ordinary output. Raw prefix bytes and their raw digest could therefore enter CapturedOutput and canonical JSON.",
+    "additional_ordering_finding": "When one bound secret prefixed another, first-match behavior could redact the shorter secret and emit the longer secret's suffix. At a truncated longer prefix, complete-shorter matching could also outrank unresolved longer-secret ambiguity.",
+    "corrective_scope": [
+      "true EOF versus observation-limit finalization",
+      "conservative redaction of ambiguous pending suffixes",
+      "longest complete secret matching independent of insertion order",
+      "exhaustive prefix, overlapping-secret, stream, race, boundary, and canonical JSON controls"
+    ],
+    "prohibited_shared_surfaces_preserved": [
+      "validator/src/lib.rs",
+      "validator/src/cli/mod.rs",
+      "validator/src/cli/successor/mod.rs",
+      "Cargo.toml and Cargo.lock",
+      "public command catalog and dispatcher",
+      "schemas, generated authority, manifests, board, migration registry, claims, release, and completion state",
+      ".codex-worktree/env.sh"
+    ]
+  },
+  "final_state": {
+    "status": "corrected_candidate_for_fresh_independent_rereview",
+    "acceptance_ceiling": "Exact corrected 63-artifact N03 node-internal candidate only. Independent rereview, root acceptance, public wiring, schema/generated reconciliation, migration, N03 closure, readiness, release, and completion remain withheld.",
+    "n03_no_claim_statement": "This worker does not claim N03 closure, readiness, release, or completion.",
+    "artifact_count_excluding_result": 63,
+    "changed_artifact_count_from_parent": 3,
+    "changed_artifacts_from_parent": [
+      "validator/src/cli/capture/output.rs",
+      "validator/tests/cli_contract/capture/bounds.rs",
+      "validator/tests/cli_contract/capture/process.rs"
+    ],
+    "artifact_set_sha256": "fb49f18347bd993134e6ccb175e15b7fcb035148f6f2ec7e95e2a4b827055cb7",
+    "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "total_lines": 9213,
+    "total_bytes": 313181,
+    "maximum_file_lines": 299,
+    "files_over_300_lines": 0,
+    "private_output_security_tests": "3 passed; 0 failed, covering every proper prefix on both stream roles, true EOF, exact boundary, ordinary truncation, zero/one/max secret bounds, shared-budget cuts, and overlapping secrets in both insertion orders at every cut.",
+    "capture_tests": "50 passed; 0 failed.",
+    "full_cli_contract": "98 passed; 0 failed on the current live candidate.",
+    "all_target_check": "passed on the current live candidate.",
+    "live_context_test": "1 passed; 0 failed.",
+    "strict_clippy": "not rerun in NODE-003; NODE-002 recorded broad candidate lint debt, and no strict-quality claim is raised.",
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "live_git_writes_performed": false
+  },
+  "touched_paths": [
+    "validator/src/cli/capture/output.rs",
+    "validator/tests/cli_contract/capture/bounds.rs",
+    "validator/tests/cli_contract/capture/process.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-003.json"
+  ],
+  "touched_semantics": [
+    "true EOF versus observation-limit truncation finalization",
+    "ambiguous secret-prefix redaction before incomplete bytes are emitted or hashed",
+    "longest complete secret matching independent of secret insertion order",
+    "per-stream lower-bound and truncation disclosure preservation",
+    "shared stdout and stderr observation-budget safety",
+    "canonical CapturedRun-v1 secret and digest non-disclosure",
+    "finite overflow, exact-boundary, and shared-stream race regression"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-003.json"
+  ],
+  "fixtures": [
+    "every proper prefix of a bound secret for both stdout and stderr drain roles",
+    "true EOF and full secret exactly at the observation boundary",
+    "ordinary nonsecret truncation plus zero-byte budget, one-byte secret-engine, and 4096-byte maximum secret controls",
+    "shared stdout/stderr budget with one complete and one ambiguous secret observation",
+    "overlapping production-valid secrets where one prefixes the other, in both insertion orders and at every cut",
+    "canonical native printf capture with a secret argument cut at byte seven",
+    "24 repeated finite overflow runs and 16 repeated shared stdout/stderr budget runs"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Only the three explicitly leased Rust paths and this WorkerResult were written."
+    },
+    {
+      "class": "local-build-write",
+      "scope": "Cargo artifacts were isolated under /private/tmp/hug-n03-node003-target."
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "Tests created and cleaned temporary Git repositories, files, pipes, and fixed native-process fixtures."
+    },
+    {
+      "class": "local-subprocess",
+      "performed": true,
+      "scope": "Tests executed fixed macOS sandbox-exec and the parent candidate's protected native printf, yes, sleep, true, and false capabilities; no shell or caller-selected production program was authorized."
+    },
+    {
+      "class": "git",
+      "scope": "Read-only live repository identity and status operations plus fixture-only Git operations; no live Git writes."
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product-effect",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-STATE-001",
+    "REQ-STATE-002",
+    "REQ-STATE-003",
+    "REQ-STATE-004",
+    "REQ-STATE-005",
+    "REQ-CLI-001",
+    "REQ-CLI-002",
+    "REQ-CLI-003",
+    "REQ-CLI-004",
+    "REQ-CLI-005",
+    "REQ-CLI-006",
+    "REQ-CLI-007",
+    "REQ-REPAIR-001",
+    "REQ-REPAIR-002",
+    "REQ-REPAIR-003",
+    "REQ-REPAIR-004",
+    "REQ-PROOF-002",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-004",
+    "REQ-SECURITY-006",
+    "REQ-SECURITY-007"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "stream finalization",
+      "result": "Drain now passes an explicit observation-limit state when finalizing pending redaction look-behind bytes. True EOF may emit a known nonsecret suffix; observation-limit finalization conservatively redacts any nonempty suffix that is still a proper prefix of a bound secret."
+    },
+    {
+      "area": "overlapping secret precedence",
+      "result": "At truncation, unresolved longer-secret ambiguity outranks a complete shorter-secret match. At true EOF or complete observation, matching_secret selects the longest complete match, making redaction independent of insertion order."
+    },
+    {
+      "area": "hash and serialization safety",
+      "result": "Ambiguous bytes are replaced before Collector emit/hash, so retained bytes, captured_sha256, Debug output, CapturedOutput JSON, and representative CapturedRun-v1 canonical JSON do not contain the raw prefix, full secret, or either raw digest."
+    },
+    {
+      "area": "boundary preservation",
+      "result": "Complete secrets at true EOF and the exact observation boundary remain fully redacted without false truncation. Ordinary nonsecret truncation remains observable, and output-limit/lower-bound fields remain true when bytes are unobserved."
+    },
+    {
+      "area": "race and line-cap controls",
+      "result": "The finite success overflow control repeats 24 times and the shared stdout/stderr budget control repeats 16 times. All 63 N03 artifacts remain at or below 299 lines."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n03-node003-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --lib 'cli::capture::output::tests::every_truncated_secret_prefix_is_redacted_for_both_streams' -- --exact --nocapture --test-threads=1",
+      "result": "red-before-production-change",
+      "summary": "Exit 101. At stdout cut 1, retained output was raw byte [122] instead of [REDACTED], directly reproducing the secret-prefix leak from true-EOF finalization."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n03-node003-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --lib 'cli::capture::output::tests::overlapping_secrets_are_order_independent_at_every_cut' -- --exact --nocapture --test-threads=1",
+      "result": "red-before-ordering-change",
+      "summary": "Exit 101. At cut 4 under the original overlapping fixture, output was [REDACTED] followed by raw suffix byte d, proving first-match precedence leaked an undecidable longer-secret fragment."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n03-node003-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --lib 'cli::capture::output::tests::' -- --test-threads=1",
+      "result": "pass",
+      "summary": "3 passed; 0 failed after the final production-valid overlapping-secret fixture update."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n03-node003-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --test cli_contract 'successor_capture::process::truncated_secret_prefix_is_absent_from_canonical_run_json' -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; representative fixed-native stdout cut retained output-limit and lower-bound disclosure while excluding raw prefix, full secret, and raw SHA-256 values from canonical CapturedRun-v1 JSON."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n03-node003-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --test cli_contract 'successor_capture::bounds::finite_' -- --test-threads=1",
+      "result": "pass",
+      "summary": "3 passed; 0 failed in 56.30 seconds, including 24 finite overflow races, exact-boundary success, and 16 shared stdout/stderr budget races."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n03-node003-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --test cli_contract 'successor_capture::' -- --test-threads=1",
+      "result": "pass",
+      "summary": "50 passed; 0 failed in 89.30 seconds; complete current capture partition."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n03-node003-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --test cli_contract -- --test-threads=1",
+      "result": "pass",
+      "summary": "98 passed; 0 failed in 120.09 seconds on the current live candidate."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n03-node003-target cargo check --quiet --offline --locked --manifest-path validator/Cargo.toml --all-targets",
+      "result": "pass",
+      "summary": "All targets compiled on the current live candidate; existing warning debt was emitted and is not treated as quality completion."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/cli/capture/output.rs validator/tests/cli_contract/capture/bounds.rs validator/tests/cli_contract/capture/process.rs; trailing-whitespace scan; line-count audit",
+      "result": "pass",
+      "summary": "All leased Rust paths are formatted with no trailing whitespace. Their line counts are 298, 255, and 291; the full 63-artifact set has maximum 299 and zero files over 300."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n03-node003-target cargo test --quiet --offline --locked --manifest-path validator/Cargo.toml --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; emitted LiveContext sha256:15d8ad4697e4d4e3e9f6c000a2a1a212786b5ead0ffc2ea74ce284ba91fcb850 before this result."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/capture/artifact.rs",
+      "sha256": "sha256:5283f7d107d88984f0a3300206ca1f4c75d034a42bbdae519634505f6d984e07",
+      "bytes": 8250,
+      "lines": 254
+    },
+    {
+      "path": "validator/src/cli/capture/descriptor.rs",
+      "sha256": "sha256:0b4d26edbb6e5af6ced5291061d8448b7e7c656e4c2dbc94f594242fbf24d09b",
+      "bytes": 7052,
+      "lines": 234
+    },
+    {
+      "path": "validator/src/cli/capture/environment.rs",
+      "sha256": "sha256:4ed85d3dc4f0d5d01739252d5b3eacce186171288a830dfed0dc66caba74bd17",
+      "bytes": 8381,
+      "lines": 232
+    },
+    {
+      "path": "validator/src/cli/capture/filesystem.rs",
+      "sha256": "sha256:46bd6e19e623a0b2928e4567e655eaad32d02d854ef6faab55bc2f76bd4f8499",
+      "bytes": 9173,
+      "lines": 281
+    },
+    {
+      "path": "validator/src/cli/capture/inputs.rs",
+      "sha256": "sha256:4b5e53531a491738ec31cf3b4a05d2527d7a5138379ade6283af990d60a53234",
+      "bytes": 2294,
+      "lines": 112
+    },
+    {
+      "path": "validator/src/cli/capture/mod.rs",
+      "sha256": "sha256:b26dd014d6c18fcd4cffa036cc1bf3d54cb75c00b1690df84835517ee8e07c9c",
+      "bytes": 1324,
+      "lines": 41
+    },
+    {
+      "path": "validator/src/cli/capture/output.rs",
+      "sha256": "sha256:be58811d3f96890353fcdb02ea619bd43b01370248bf5d70b0f47798cbf417aa",
+      "bytes": 9869,
+      "lines": 298
+    },
+    {
+      "path": "validator/src/cli/capture/process.rs",
+      "sha256": "sha256:b816e1202d8cdf1cda14ca631d2d3356d6a7fdbca1cab777ff2698c65bbcf4bd",
+      "bytes": 9562,
+      "lines": 282
+    },
+    {
+      "path": "validator/src/cli/capture/program.rs",
+      "sha256": "sha256:5b7dee7ba67bbea303cb31c5cfea0c7a435e9859c6e02373e3309491fa5be7cb",
+      "bytes": 4828,
+      "lines": 156
+    },
+    {
+      "path": "validator/src/cli/capture/run.rs",
+      "sha256": "sha256:f9f2ccc44f0a4654c1572537f15bd016ee5c08a853f53bede5df1ed7dfb4212a",
+      "bytes": 7203,
+      "lines": 203
+    },
+    {
+      "path": "validator/src/cli/capture/sandbox.rs",
+      "sha256": "sha256:c9721b24bd8bdd84c37635c85c0ba02691a3394b3e4ff00c05a62664be25f372",
+      "bytes": 7333,
+      "lines": 206
+    },
+    {
+      "path": "validator/src/cli/capture/spec.rs",
+      "sha256": "sha256:3f58ca0f539220993c1ee882c08f036a03eee247485f5f8ff8ce60ae25318a20",
+      "bytes": 10979,
+      "lines": 299
+    },
+    {
+      "path": "validator/src/cli/capture/tree.rs",
+      "sha256": "sha256:50a2d76e714ae80accb631b68b1753a892e0b0a9771ba3368882ff381e85d13f",
+      "bytes": 3754,
+      "lines": 125
+    },
+    {
+      "path": "validator/src/cli/capture/util.rs",
+      "sha256": "sha256:30cbefc48612a11982ee899823529cba3389433a310d7cc7433ddaaea10b91fd",
+      "bytes": 2782,
+      "lines": 95
+    },
+    {
+      "path": "validator/src/cli/successor/diagnostics/mod.rs",
+      "sha256": "sha256:ec082e0c79d42c13721e9278a3a1e127279ec515e43f2b3015f17ec3ae59e633",
+      "bytes": 106,
+      "lines": 4
+    },
+    {
+      "path": "validator/src/cli/successor/diagnostics/model.rs",
+      "sha256": "sha256:71a48bee6c74b66a872757cad0926d7103a283b69ebffbbd0f62f1e6337f2ae2",
+      "bytes": 3927,
+      "lines": 128
+    },
+    {
+      "path": "validator/src/cli/successor/diagnostics/render.rs",
+      "sha256": "sha256:7f1a18bdfcac71b0898959d124df337439c7ae3e7353d11e58f7573902677e93",
+      "bytes": 1496,
+      "lines": 40
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/dispatch.rs",
+      "sha256": "sha256:d00860d9ff177b6fb284b7cb8311c3b96368cb6fa3389ab542e52c64b19c66cc",
+      "bytes": 8518,
+      "lines": 236
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/error.rs",
+      "sha256": "sha256:59ff3865abc74004064297519bb76caa80cd182258294459826a7fae0d2b50cb",
+      "bytes": 1587,
+      "lines": 56
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/failures.rs",
+      "sha256": "sha256:be793a547928f941f846fbf065e6d8dd41eecd916e093d9de48f04c3955d2855",
+      "bytes": 5742,
+      "lines": 169
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/inspect_context.rs",
+      "sha256": "sha256:a35ee2601bdafef5f06231c0835044561cfb2121c17b0f8087c64e95e3a4c918",
+      "bytes": 1032,
+      "lines": 27
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/mod.rs",
+      "sha256": "sha256:9f29726ad53578a302e88c4b603db3627357a9cb95b8f98a041afb640ca199cb",
+      "bytes": 435,
+      "lines": 13
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/state_view.rs",
+      "sha256": "sha256:b026417ae4f50ed168e43d267da6e3d50f9fa7809a44b2a68f8140380ec3d63b",
+      "bytes": 588,
+      "lines": 24
+    },
+    {
+      "path": "validator/src/state/catalog.rs",
+      "sha256": "sha256:7294b6d825455e1004be5efda6c5ba6370e16e98ce92845d09d26bb66efcca42",
+      "bytes": 5489,
+      "lines": 176
+    },
+    {
+      "path": "validator/src/state/ceiling.rs",
+      "sha256": "sha256:44fe67e5db53a07253f711ad3247f169f4127c5ce4f3a03fb8b339b8a92a0703",
+      "bytes": 2157,
+      "lines": 73
+    },
+    {
+      "path": "validator/src/state/engine.rs",
+      "sha256": "sha256:3e40246ef3290fb682de511f4077c6ce5a64cf8ae509f55222a0e4d31c20d688",
+      "bytes": 10351,
+      "lines": 292
+    },
+    {
+      "path": "validator/src/state/findings.rs",
+      "sha256": "sha256:ef65571919e3f379b6295d569f236888e78f54043c426ce03c2e4c57fd4e5861",
+      "bytes": 4379,
+      "lines": 129
+    },
+    {
+      "path": "validator/src/state/identity.rs",
+      "sha256": "sha256:40a33bc3220b861ce0716fb12b45266936c9e8973d55b735dcbc0b95b36ddc29",
+      "bytes": 1085,
+      "lines": 30
+    },
+    {
+      "path": "validator/src/state/limits.rs",
+      "sha256": "sha256:fe3af08f6830605a9ac5280d359211677793a0e42bf3b686b45dd0742e55e285",
+      "bytes": 9907,
+      "lines": 297
+    },
+    {
+      "path": "validator/src/state/mod.rs",
+      "sha256": "sha256:6adbbd7875497aef619e378b0389241c781731aaf89526afa9dc667b3c4276ad",
+      "bytes": 1193,
+      "lines": 39
+    },
+    {
+      "path": "validator/src/state/next.rs",
+      "sha256": "sha256:b28fd9a5e19da14e758a31442d2a96e4f7f7d148ea284cf0cdc9a762c86941b5",
+      "bytes": 5307,
+      "lines": 151
+    },
+    {
+      "path": "validator/src/state/normalize.rs",
+      "sha256": "sha256:e47c7f5f5ccccd5284b1b40ea467ff714fc252d63c4b4bdafecda3d976b0a0fd",
+      "bytes": 2001,
+      "lines": 56
+    },
+    {
+      "path": "validator/src/state/observations.rs",
+      "sha256": "sha256:3fbcd30ca154c254d800c4f45c4c8ef67d447b9d6ce8cc4f90814aba962a8187",
+      "bytes": 2173,
+      "lines": 63
+    },
+    {
+      "path": "validator/src/state/policy.rs",
+      "sha256": "sha256:63f7d9a53d701af94b23ee527b60da1ddb05576be84c4869cda1177cd983707d",
+      "bytes": 7740,
+      "lines": 230
+    },
+    {
+      "path": "validator/src/state/policy_action.rs",
+      "sha256": "sha256:f7beb5452fc878c1f9ced5ee2886fd2430026549320e34a17d25bd2fcb5097f7",
+      "bytes": 4174,
+      "lines": 112
+    },
+    {
+      "path": "validator/src/state/policy_repair.rs",
+      "sha256": "sha256:cb617b259a49a99dd299721144b19451b48769326e4ba05c682c695a5486ace0",
+      "bytes": 3508,
+      "lines": 99
+    },
+    {
+      "path": "validator/src/state/projection.rs",
+      "sha256": "sha256:28cf07c26f5777b4de93667189b9927b031a7ff3f6cf1021217205743b3ff4fb",
+      "bytes": 7181,
+      "lines": 215
+    },
+    {
+      "path": "validator/src/state/provenance.rs",
+      "sha256": "sha256:05557bdc169861d42b34cacd63bebe10e778298c9a5f0b2b51bb808c8db40f71",
+      "bytes": 4979,
+      "lines": 181
+    },
+    {
+      "path": "validator/src/state/reduce.rs",
+      "sha256": "sha256:d7eec1cc0d272f1a24cd945336c73cd02b0d79e1c734af9c02a410d0ff6121d9",
+      "bytes": 798,
+      "lines": 26
+    },
+    {
+      "path": "validator/src/state/snapshot.rs",
+      "sha256": "sha256:9af7f30e89852fdec4a148d44fa553082649eb327f01b658f81c2821de72e5cb",
+      "bytes": 4419,
+      "lines": 121
+    },
+    {
+      "path": "validator/src/state/tests/engine_cases.rs",
+      "sha256": "sha256:e8fc68ff6f0368ad40e85e6f65fd37ea3160e2aa1e6ae97df5a1429da8f2d93a",
+      "bytes": 8220,
+      "lines": 226
+    },
+    {
+      "path": "validator/src/state/tests/fixture.rs",
+      "sha256": "sha256:44544ea322817adc2d033d6d8ce850c855b817a6b40704c95c304f946ba46c63",
+      "bytes": 4381,
+      "lines": 123
+    },
+    {
+      "path": "validator/src/state/tests/mod.rs",
+      "sha256": "sha256:514d0effbdbf2b61077d806dc8528e9149edac03b34efa258f10db9514e2bbd1",
+      "bytes": 128,
+      "lines": 7
+    },
+    {
+      "path": "validator/src/state/tests/ordering_cases.rs",
+      "sha256": "sha256:5da5125f3191f0bad275cdcda0fb78f86a49a5bf9e78900b4121373539c7c85a",
+      "bytes": 4033,
+      "lines": 105
+    },
+    {
+      "path": "validator/src/state/tests/policy_cases.rs",
+      "sha256": "sha256:3574cd2aaf46a812357cf2f9c89440358411e3d14c10e155db1caeea6c09f8d6",
+      "bytes": 8251,
+      "lines": 246
+    },
+    {
+      "path": "validator/src/state/tests/projection_cases.rs",
+      "sha256": "sha256:8855176f9c25173a8890cdc535ba77ee52c670447d1deba9d54754efab59336e",
+      "bytes": 3589,
+      "lines": 99
+    },
+    {
+      "path": "validator/src/state/tests/review_cases.rs",
+      "sha256": "sha256:9b29b6dcaaa20b80ac13770db93339b066b0be67446888e4b19a33d07ee91406",
+      "bytes": 5949,
+      "lines": 185
+    },
+    {
+      "path": "validator/src/state/tests/runtime_cases.rs",
+      "sha256": "sha256:2b1ff4ca257dd8431ae3e4742e8ba84eec5ee9e69bf9c19b1b2efa4ae90df047",
+      "bytes": 4729,
+      "lines": 134
+    },
+    {
+      "path": "validator/src/state/types.rs",
+      "sha256": "sha256:c6e79d626a24d42f6c5d9dabef65c0017248280825b24c31a5535d756059f239",
+      "bytes": 6142,
+      "lines": 224
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/artifacts.rs",
+      "sha256": "sha256:ba40ad4c6082cf726350033440dedbac2c757dfd9e54cbf6f58eab1bd357ff65",
+      "bytes": 8313,
+      "lines": 217
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/bounds.rs",
+      "sha256": "sha256:98c58f0499cfde82d45c9706e4122e26632da500fd747193e11e141cae8446af",
+      "bytes": 9216,
+      "lines": 255
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/enforcement.rs",
+      "sha256": "sha256:6b09ab92cf47a4ddf1efcf3efaa985bb9e9c49c2f903b281db78eb369d95c331",
+      "bytes": 9846,
+      "lines": 281
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/fixture.rs",
+      "sha256": "sha256:2b91c2c4ee4c6e04faa0db6610c62887c554c75db351e61e269861a5ffb0c7b2",
+      "bytes": 2911,
+      "lines": 91
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/mod.rs",
+      "sha256": "sha256:c13bd4000af19ec747475102ca2f39b678f41c48ac9563a03216dc599112ab9e",
+      "bytes": 305,
+      "lines": 12
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/process.rs",
+      "sha256": "sha256:96609b3d6e99341497d44116681b201be47aef87aafe8853a531eea55248519a",
+      "bytes": 11126,
+      "lines": 291
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/program_security.rs",
+      "sha256": "sha256:9c072e30e50065ac5835b55ac4d40917ce70e89b1602185d2b4e96889a94906f",
+      "bytes": 1964,
+      "lines": 58
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/security.rs",
+      "sha256": "sha256:f07c65f1d01eecd0614fc79fd57981a9738ca520937c9e389fa149e6fa65b1de",
+      "bytes": 5247,
+      "lines": 149
+    },
+    {
+      "path": "validator/tests/cli_contract/state/fixture.rs",
+      "sha256": "sha256:e69ab36610202accca116d86268d90034c2293f9efd204b608d3ef415bfce4f5",
+      "bytes": 3863,
+      "lines": 102
+    },
+    {
+      "path": "validator/tests/cli_contract/state/mod.rs",
+      "sha256": "sha256:584e0f97d1954146bee2f5ad57727a3f7c54bae150ca8a7dbda842d782b2be7e",
+      "bytes": 48,
+      "lines": 3
+    },
+    {
+      "path": "validator/tests/cli_contract/state/mutation.rs",
+      "sha256": "sha256:81f9634bc6c9a4262362bcf99f84c6b74c1f958fa01958ed15ddf1840872799f",
+      "bytes": 4524,
+      "lines": 129
+    },
+    {
+      "path": "validator/tests/cli_contract/state/public_boundary.rs",
+      "sha256": "sha256:e2a29c5a7fdcd8443ff5596c01e19c299a615b9b3a2fd7bed89d3edf7706d834",
+      "bytes": 3572,
+      "lines": 97
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/node_n03.rs",
+      "sha256": "sha256:60d062ef7c61cc6285ae163ecaad83ced1c965d78ff540230673682cd6346903",
+      "bytes": 6671,
+      "lines": 178
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/runtime_context.rs",
+      "sha256": "sha256:cd96ca3b3ca4700a7cefbb08f42432335a3d4d1f6e4ba2efc3019481057082cf",
+      "bytes": 7097,
+      "lines": 196
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-corrected-candidate",
+      "finding": "Observation-limit truncation no longer finalizes an incomplete secret prefix as ordinary output or hashes it as raw data."
+    },
+    {
+      "severity": "resolved-in-corrected-candidate",
+      "finding": "Overlapping secrets are redacted independently of insertion order; unresolved longer-prefix ambiguity cannot be split into a shorter redaction plus raw suffix."
+    },
+    {
+      "severity": "resolved-in-corrected-candidate",
+      "finding": "True EOF, exact-boundary complete redaction, ordinary nonsecret truncation, zero/one/max boundaries, shared budgets, and finite exit/output-limit reconciliation remain green."
+    },
+    {
+      "severity": "independent-rereview-required",
+      "finding": "This corrective worker does not accept its own exact 63-artifact set. Fresh independent security and false-pass rereview remains mandatory."
+    },
+    {
+      "severity": "node-claim-withheld",
+      "finding": "This worker does not claim N03 closure, readiness, release, or completion."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "Public dispatch, shared module wiring, schema/generated authority, migration, claim ceilings, board, release, and completion remain root-only."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Fresh independent rereview and root acceptance of exact N03 set fb49f18347bd993134e6ccb175e15b7fcb035148f6f2ec7e95e2a4b827055cb7",
+    "Root reconciliation of validator/src/lib.rs, validator/src/cli/mod.rs, and the canonical public dispatcher",
+    "Root review of CapturedRun-v1 redaction and lower-bound semantics against public schema, generated authority, compatibility, and migration surfaces",
+    "Candidate-wide strict lint reconciliation remains outside this lease and was not rerun",
+    "Independent representative public-binary and product journey verification after root integration",
+    "Cross-platform capture proof beyond the verified macOS fixed-native-read substrate",
+    "Root-owned manifest, generated authority, migration registry, claim ceiling, board, release, and completion reconciliation"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "fresh independent rereview",
+      "request": "Recompute all 63 artifact hashes and set fb49f18347bd993134e6ccb175e15b7fcb035148f6f2ec7e95e2a4b827055cb7; mutate truncation finalization back to true EOF, swap overlapping secret order, restore first-match behavior, cut every prefix, vary stream scheduling, and inspect retained bytes, hashes, Debug, CapturedOutput JSON, and canonical CapturedRun-v1 JSON."
+    },
+    {
+      "path": "validator/src/lib.rs and validator/src/cli/mod.rs",
+      "request": "After independent PASS, explicitly accept or revise the pre-existing capture, successor, and state mounts; this corrective lease did not write shared module authority."
+    },
+    {
+      "path": "root-owned public dispatcher",
+      "request": "Wire only the independently accepted RuntimeSession, ProductState, and capture permit through the canonical public route, preserving output-limit diagnostics, lower-bound disclosure, and zero-write read behavior."
+    },
+    {
+      "path": "root-owned schemas, generated authority, and migration registry",
+      "request": "Reconcile the accepted redaction and lower-bound semantics, regenerate exact authority, and route or retire incompatible duplicate output contracts."
+    },
+    {
+      "path": "claims and critical-path board",
+      "request": "Bind any N03 ceiling only to the independently accepted exact set and rerun public product proof after the last authority-bearing root edit."
+    }
+  ],
+  "limitations": [
+    "Conservative observation-limit finalization intentionally redacts a trailing byte sequence that could be a bound secret prefix even when unseen bytes might ultimately have made it nonsecret; privacy wins over reconstructing unavailable output.",
+    "The direct one-byte secret-engine control is below the production environment's four-byte minimum and proves defensive private behavior, not expanded public input acceptance.",
+    "The corrected substrate remains limited to protected native read probes on the verified macOS host; no Linux, Windows, workspace-write, external-write, destructive, shell, wrapper, or arbitrary-program execution is proven.",
+    "CatalogPermit and RuntimeSession remain crate-internal and are not yet proven through the canonical public binary.",
+    "Candidate-wide clippy -D warnings was not rerun in NODE-003; NODE-002 recorded existing repository lint debt, and strict-quality completion remains withheld.",
+    "Repeated scheduling controls exercise the reproduced boundaries but do not prove every host scheduler.",
+    "This result supersedes NODE-002 only as a corrected candidate for fresh rereview; it does not accept either candidate.",
+    "No public command catalog, dispatcher, Cargo dependency, package, manifest, schema, generated authority, migration registry, claim, board, release, Git branch, network, or external host state was changed by this lease.",
+    "This worker does not claim N03 closure, readiness, release, or completion."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

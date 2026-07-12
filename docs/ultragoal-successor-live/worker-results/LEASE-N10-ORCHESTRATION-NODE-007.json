@@ -1,0 +1,331 @@
+{
+  "worker": "/root/n10_node007_corrective",
+  "lease_id": "LEASE-N10-ORCHESTRATION-NODE-007",
+  "context_id": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+  "candidate_identity": {
+    "candidate_id": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "context_id": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "artifact_set_sha256": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "artifact_count_excluding_result": 34,
+    "parent_result_path": "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-006.json",
+    "parent_result_sha256": "sha256:f59bb87bea10d15133cf3b34a47aab606b3e144dbb5ce048ce85efeb60df5469",
+    "parent_artifact_set_sha256": "sha256:de8c5d6b300be0d5aa0698eda1aa3551b58d2aa1befaf99e632f737c794a1fb5",
+    "root_decision_path": "docs/ultragoal-successor-live/root-decisions/N10-NODE-006-REWORK.json",
+    "root_decision_sha256": "sha256:058e7a131f57cf65e46905b238d93965fd4055dc8b123ff82fbc4be704b0fb87",
+    "identity_note": "Identity binds only the exact 34-artifact N10 set. A prohibited read-only Git preflight occurred, but no Git-derived identity or Git write is used in this candidate identity."
+  },
+  "base_state": {
+    "node": "N10-ORCHESTRATION",
+    "root_decision": "N10-NODE-006-REWORK",
+    "parent_worker_result": "sha256:f59bb87bea10d15133cf3b34a47aab606b3e144dbb5ce048ce85efeb60df5469",
+    "parent_artifact_set": "sha256:de8c5d6b300be0d5aa0698eda1aa3551b58d2aa1befaf99e632f737c794a1fb5",
+    "review_decision": "rework",
+    "decisive_findings": [
+      "changed_artifact_reclassified_as_read_only",
+      "case_alias_duplicate_artifact",
+      "stale_positive_frozen_fixture"
+    ]
+  },
+  "final_state": {
+    "status": "worker_blocked",
+    "disposition": "tainted_candidate_context_only",
+    "blocker": "The worker executed prohibited read-only Git preflight commands. Root requires a fresh clean N10 revalidation and rebinding lease before any acceptance.",
+    "acceptance_ceiling": "Corrective N10 candidate context only. Acceptance, root wiring, production execution, persisted recovery, node closure, readiness, release, and completion remain withheld.",
+    "artifact_count_excluding_result": 34,
+    "changed_artifact_count": 15,
+    "read_only_artifact_count": 19,
+    "artifact_set_sha256": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "artifact_set_formula": "Sort artifacts by path; concatenate path, one TAB byte, sha256 without prefix, and one LF byte; SHA-256 the concatenation.",
+    "total_bytes": 230845,
+    "total_lines": 6801,
+    "artifact_line_counts": {
+      "validator/src/orchestration/artifact.rs": 280,
+      "validator/src/orchestration/effect.rs": 54,
+      "validator/src/orchestration/engine.rs": 235,
+      "validator/src/orchestration/engine_query.rs": 84,
+      "validator/src/orchestration/engine_submission.rs": 71,
+      "validator/src/orchestration/error.rs": 89,
+      "validator/src/orchestration/event.rs": 240,
+      "validator/src/orchestration/graph.rs": 162,
+      "validator/src/orchestration/lease.rs": 155,
+      "validator/src/orchestration/mod.rs": 162,
+      "validator/src/orchestration/model.rs": 223,
+      "validator/src/orchestration/reconcile.rs": 271,
+      "validator/src/orchestration/recovery.rs": 151,
+      "validator/src/orchestration/replay.rs": 276,
+      "validator/src/orchestration/scope.rs": 234,
+      "validator/src/orchestration/scope_policy.rs": 130,
+      "validator/src/orchestration/transition.rs": 290,
+      "validator/src/orchestration/worker.rs": 263,
+      "validator/tests/orchestration_contract.rs": 35,
+      "validator/tests/orchestration_contract/artifact_aliases.rs": 101,
+      "validator/tests/orchestration_contract/artifact_evidence.rs": 177,
+      "validator/tests/orchestration_contract/artifact_live.rs": 174,
+      "validator/tests/orchestration_contract/blockers.rs": 117,
+      "validator/tests/orchestration_contract/candidate_rebind.rs": 297,
+      "validator/tests/orchestration_contract/effects.rs": 286,
+      "validator/tests/orchestration_contract/frozen_parent.rs": 144,
+      "validator/tests/orchestration_contract/graph.rs": 155,
+      "validator/tests/orchestration_contract/leases.rs": 281,
+      "validator/tests/orchestration_contract/path_aliases.rs": 220,
+      "validator/tests/orchestration_contract/reconciliation.rs": 295,
+      "validator/tests/orchestration_contract/recovery.rs": 299,
+      "validator/tests/orchestration_contract/security.rs": 257,
+      "validator/tests/orchestration_contract/support.rs": 300,
+      "validator/tests/orchestration_contract/worker_results.rs": 293
+    },
+    "maximum_rust_file_lines": 300,
+    "rust_files_over_300_lines": 0,
+    "focused_artifact_tests": "25 passed; 0 failed; 102 skipped under cargo-nextest with 16 jobs",
+    "full_orchestration_tests": "127 passed; 0 failed; 0 skipped under cargo-nextest with 16 jobs",
+    "all_targets_check": "pass with existing warnings under 16 jobs",
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "destructive_effect_performed": false,
+    "git_read_only_commands_performed": true,
+    "git_write_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/orchestration/artifact.rs",
+    "validator/src/orchestration/engine.rs",
+    "validator/src/orchestration/engine_submission.rs",
+    "validator/src/orchestration/mod.rs",
+    "validator/src/orchestration/worker.rs",
+    "validator/tests/orchestration_contract.rs",
+    "validator/tests/orchestration_contract/artifact_aliases.rs",
+    "validator/tests/orchestration_contract/artifact_evidence.rs",
+    "validator/tests/orchestration_contract/artifact_live.rs",
+    "validator/tests/orchestration_contract/candidate_rebind.rs",
+    "validator/tests/orchestration_contract/effects.rs",
+    "validator/tests/orchestration_contract/frozen_parent.rs",
+    "validator/tests/orchestration_contract/reconciliation.rs",
+    "validator/tests/orchestration_contract/recovery.rs",
+    "validator/tests/orchestration_contract/worker_results.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-007.json"
+  ],
+  "touched_semantics": [
+    "orchestration::worker_result::issued_authority_provenance",
+    "orchestration::artifact::structural_identity",
+    "orchestration::artifact::workspace_verification",
+    "orchestration::engine::verified_submission",
+    "orchestration::tests::artifact_evidence"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-007.json"
+  ],
+  "fixtures": [
+    "validator/tests/orchestration_contract/artifact_aliases.rs",
+    "validator/tests/orchestration_contract/artifact_evidence.rs",
+    "validator/tests/orchestration_contract/artifact_live.rs",
+    "validator/tests/orchestration_contract/candidate_rebind.rs",
+    "validator/tests/orchestration_contract/effects.rs",
+    "validator/tests/orchestration_contract/frozen_parent.rs",
+    "validator/tests/orchestration_contract/reconciliation.rs",
+    "validator/tests/orchestration_contract/recovery.rs",
+    "validator/tests/orchestration_contract/worker_results.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "lease-n10-node007-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "lease-n10-node007-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "lease-n10-node007-cargo-rustfmt",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "lease-n10-node007-prohibited-read-only-git-preflight",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "destructive",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "target": "root-authority",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "HUL-ORCHESTRATION-001",
+    "HUL-SECURITY-001",
+    "REQ-ORCH-004"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE",
+    "N06-ROUTINE",
+    "N09-AGENTS-REPO"
+  ],
+  "changes": [
+    {
+      "area": "issued artifact provenance",
+      "paths": [
+        "validator/src/orchestration/artifact.rs",
+        "validator/src/orchestration/worker.rs"
+      ],
+      "rationale": "Artifact write versus read-only provenance now derives from the independently issued lease owned scope and read paths, not from worker result prose. Owned artifacts must remain touched; generated and fixture artifacts retain typed declarations."
+    },
+    {
+      "area": "canonical and live artifact identity",
+      "paths": [
+        "validator/src/orchestration/artifact.rs",
+        "validator/src/orchestration/engine.rs",
+        "validator/src/orchestration/engine_submission.rs",
+        "validator/src/orchestration/mod.rs"
+      ],
+      "rationale": "Structural aliases fail before commitment. Event-producing submission requires an ArtifactWorkspace verification of regular non-symlink single-link files, stable device/inode identity, stable metadata, exact bytes, exact length, exact SHA-256, root confinement, and no duplicate inode."
+    },
+    {
+      "area": "false-pass and parent controls",
+      "paths": [
+        "validator/tests/orchestration_contract.rs",
+        "validator/tests/orchestration_contract/artifact_aliases.rs",
+        "validator/tests/orchestration_contract/artifact_evidence.rs",
+        "validator/tests/orchestration_contract/artifact_live.rs",
+        "validator/tests/orchestration_contract/frozen_parent.rs"
+      ],
+      "rationale": "Controls cover changed-owned relabeling, exact and broad reads, cross-lease scope, duplicate/case/segment/Unicode aliases, traversal/absolute/ancestor/host roots, generated and fixture declarations, symlink/hardlink substitution, deterministic path swaps and in-place mutation, no-event rejection, and the exact NODE006 29-artifact parent."
+    },
+    {
+      "area": "verified submission API reconciliation",
+      "paths": [
+        "validator/tests/orchestration_contract/candidate_rebind.rs",
+        "validator/tests/orchestration_contract/effects.rs",
+        "validator/tests/orchestration_contract/reconciliation.rs",
+        "validator/tests/orchestration_contract/recovery.rs",
+        "validator/tests/orchestration_contract/worker_results.rs"
+      ],
+      "rationale": "Pure structural submission is test-only; the production-facing submit method requires live ArtifactWorkspace verification before any event append while replay and root-change commitment behavior remains covered."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node007-worker-target cargo nextest run --test orchestration_contract -E 'test(/artifact|node006|read_authority|casefold|unicode|hardlink|symlink/)' --jobs 16",
+      "result": "pass",
+      "summary": "Final focused run: 25 passed; 0 failed; 102 skipped. Earlier compile/test failures were corrected before this final run."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node007-worker-target cargo nextest run --test orchestration_contract --jobs 16 --no-fail-fast",
+      "result": "pass",
+      "summary": "Final full N10 run: 127 passed; 0 failed; 0 skipped."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node007-worker-target cargo check --all-targets --jobs 16",
+      "result": "pass_with_existing_warnings",
+      "summary": "All targets checked successfully in 10.48 seconds; warning counts are diagnostic only."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <15 touched Rust files>",
+      "result": "pass"
+    },
+    {
+      "command": "git rev-parse --show-toplevel; git rev-parse HEAD; git status --short -- <N10 paths>",
+      "result": "prohibited_read_only_lease_deviation",
+      "summary": "Executed during startup preflight despite the lease prohibition. It made no write and no Git-derived identity is used, but it taints NODE007 and blocks acceptance."
+    }
+  ],
+  "artifacts": [
+    {"path":"validator/src/orchestration/artifact.rs","sha256":"sha256:968fa69fe1e5bfc6a66c721c335232f81ac8d69ea59cde201e517dea45cfc8bd","byte_length":9245},
+    {"path":"validator/src/orchestration/effect.rs","sha256":"sha256:8b1ee0966e04f0aae8b8749d6a88deb8266ef9e69c2bb5dcd27f0103215877ae","byte_length":1864},
+    {"path":"validator/src/orchestration/engine.rs","sha256":"sha256:351acfe8c1a6a1268c4deda181e7b9924434a75a6f38cdab670c6beca73cf6d6","byte_length":6930},
+    {"path":"validator/src/orchestration/engine_query.rs","sha256":"sha256:784acba762893e57d67771a1cc9fe4e0250d3b7c6f216a8518a5210b5c8ff25a","byte_length":2293},
+    {"path":"validator/src/orchestration/engine_submission.rs","sha256":"sha256:8aade6bedeb8f4432232b0c66cd43f86dbabc9f122e9beb200e22cb47b6c1013","byte_length":2332},
+    {"path":"validator/src/orchestration/error.rs","sha256":"sha256:aee3d14728dd091c3a4a2c740c3b5d012cbdf641002732c0e2f26c3eebf84746","byte_length":3684},
+    {"path":"validator/src/orchestration/event.rs","sha256":"sha256:14a07936ce5545cc5e1835a2b9d4cee1507f4442a1bd317ce987aa48f4fb9606","byte_length":6916},
+    {"path":"validator/src/orchestration/graph.rs","sha256":"sha256:54c7d8ecafbdbfa3fb8fd5379f189c71ad5232388016bd9d54090b751fe9f8de","byte_length":5469},
+    {"path":"validator/src/orchestration/lease.rs","sha256":"sha256:bd00b476344167de3be39c25c5bd34878014db962374301dc36441b18ea6b32c","byte_length":5349},
+    {"path":"validator/src/orchestration/mod.rs","sha256":"sha256:b3c8dd160386df4a7446ac997cdd6964efddf97533d2ac7f19395f86ea37b07c","byte_length":5123},
+    {"path":"validator/src/orchestration/model.rs","sha256":"sha256:57935b61dbb6fc2b52047960acdaa4f1e4222fbc4fa80073d750552141a0d8b9","byte_length":6543},
+    {"path":"validator/src/orchestration/reconcile.rs","sha256":"sha256:50d68e3965fc43771079af54db637c0bd459341cad2eb5cc78930276a70ad553","byte_length":10131},
+    {"path":"validator/src/orchestration/recovery.rs","sha256":"sha256:7cb26de8ba75a514062684dd73629fac3c4135ad22d04612d4cad78c1b028348","byte_length":5474},
+    {"path":"validator/src/orchestration/replay.rs","sha256":"sha256:0e24409af27a94768c2ff877450c1b61377c87d53e0b4cc3ed56c76cbb72d70b","byte_length":9464},
+    {"path":"validator/src/orchestration/scope.rs","sha256":"sha256:0d9b8a41d5e4f5f7a205681ad66472be7caed53f7b72f9eb9d1dd659c55c1fc6","byte_length":8424},
+    {"path":"validator/src/orchestration/scope_policy.rs","sha256":"sha256:e97d2888889c985fa5b76fa7c6cadfd45413b6d2aeac8749cdfb24d0ed6b44e5","byte_length":4726},
+    {"path":"validator/src/orchestration/transition.rs","sha256":"sha256:959e390918282749b093e4d422568ba68f7c755242723819763556ab1b60526f","byte_length":11461},
+    {"path":"validator/src/orchestration/worker.rs","sha256":"sha256:b084ba517bfae0a991102e3b522d371bcda2b297f931622da9c9f5d6aa688d92","byte_length":9920},
+    {"path":"validator/tests/orchestration_contract.rs","sha256":"sha256:bc91d39ac5c9be39a60d462cd8d23bad41e7aaafd3e3b8ba172b26d4e9156caa","byte_length":1101},
+    {"path":"validator/tests/orchestration_contract/artifact_aliases.rs","sha256":"sha256:67791a11e93a908526d1b2ea10046a7ee51c34acc4b6164bbe362098f5b458f6","byte_length":3098},
+    {"path":"validator/tests/orchestration_contract/artifact_evidence.rs","sha256":"sha256:fe866d09d89b09ccbc5719527ece533b13245b89fda8cfb91fb220f30f374711","byte_length":6237},
+    {"path":"validator/tests/orchestration_contract/artifact_live.rs","sha256":"sha256:5ddfff8bb6027725137956b47e244bafe31923dbd6950e09e34d81fcc5982da4","byte_length":5792},
+    {"path":"validator/tests/orchestration_contract/blockers.rs","sha256":"sha256:59baa415aa9e50d2639426b8f5944ba77dbbe705dcdfc5ea1cacc40ad2c20370","byte_length":3513},
+    {"path":"validator/tests/orchestration_contract/candidate_rebind.rs","sha256":"sha256:0544c5e1fc801ebba818f104e49a278c100998f504841f981f21924562e3fd14","byte_length":10912},
+    {"path":"validator/tests/orchestration_contract/effects.rs","sha256":"sha256:eb277c06438411534f7311ef4a30cb74379f30664bf53f3385240f055abfb98e","byte_length":8404},
+    {"path":"validator/tests/orchestration_contract/frozen_parent.rs","sha256":"sha256:2e06dbf5867a186b8d0f43d69851b00c3b2823496fe02b7b9beaf80b39ab1535","byte_length":5279},
+    {"path":"validator/tests/orchestration_contract/graph.rs","sha256":"sha256:ee33a4ec43adf2a4df11f252066ee0b977b4857d8e650e2c41e25acd1dd6f536","byte_length":4871},
+    {"path":"validator/tests/orchestration_contract/leases.rs","sha256":"sha256:32db73e7a37313f31b73f37e34a96d1edc7d3a7b431e71327638ce131d0ef8f8","byte_length":9252},
+    {"path":"validator/tests/orchestration_contract/path_aliases.rs","sha256":"sha256:9b4345d03109d0f5beb46fc872c5b11ba0c19f08ab7d9e92b7f1dfb2fd6cc63c","byte_length":8116},
+    {"path":"validator/tests/orchestration_contract/reconciliation.rs","sha256":"sha256:2ffbb9f5ac64463b5c89f3581ccb1ad384ab34b2e4c143100d0c766878233701","byte_length":10610},
+    {"path":"validator/tests/orchestration_contract/recovery.rs","sha256":"sha256:178fd87e15a6533c879c807fad601265ef20c25c8d0b066523b3c5f58ac30c6f","byte_length":10186},
+    {"path":"validator/tests/orchestration_contract/security.rs","sha256":"sha256:e5d92621b79d7eb37c6cbac990d8072dd431404659c8099190e1da8a653c8858","byte_length":7483},
+    {"path":"validator/tests/orchestration_contract/support.rs","sha256":"sha256:f0f362419acd8e83e611ca69dd4daac9ef9d200efb1dc43925e96434c51882fd","byte_length":10934},
+    {"path":"validator/tests/orchestration_contract/worker_results.rs","sha256":"sha256:85fee689a5565a357dc9244b23f47939f1390ff9e504cf5c068b276cfeaac610","byte_length":9709}
+  ],
+  "findings": [
+    {
+      "severity": "corrected-candidate",
+      "finding": "Lease-owned artifact provenance is now independent of touched_paths prose; an owned artifact omitted from touches fails even when a read path overlaps."
+    },
+    {
+      "severity": "corrected-candidate",
+      "finding": "Exact, ASCII case-fold, ancestor/segment, Unicode-ambiguous, symlink, hardlink, path-swap, and in-place mutation identities fail closed before an event-producing submission."
+    },
+    {
+      "severity": "corrected-candidate",
+      "finding": "The positive frozen parent fixture now parses and validates the exact NODE006 29-artifact result; mutation and missing-authority controls reject it."
+    },
+    {
+      "severity": "material-lease-deviation",
+      "finding": "The worker ran prohibited read-only Git preflight commands before implementation. They made no write and supplied no candidate identity, but this taints NODE007 and requires a fresh clean N10 revalidation/rebinding lease."
+    },
+    {
+      "severity": "independent-review-required",
+      "finding": "This worker has not accepted or independently reviewed its own NODE007 artifact set."
+    }
+  ],
+  "unresolved_dependencies": [
+    "FRESH-CLEAN-N10-NODE007-REVALIDATION-REBINDING",
+    "INDEPENDENT-N10-NODE007-REVIEW",
+    "ROOT-N10-MODULE-WIRING",
+    "ROOT-N10-WIRING-PREIMAGE-REVALIDATION",
+    "ROOT-HCT-STATE-ADAPTER",
+    "ROOT-PACKAGE-MANIFEST-INTEGRATION",
+    "N03-CLI-STATE-CURRENT-PROOF",
+    "N06-ROUTINE-CURRENT-PROOF",
+    "N09-AGENTS-REPO-CURRENT-PROOF",
+    "REPRESENTATIVE-RECOVERY-JOURNEY"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "NODE007 is candidate context only because a prohibited read-only Git preflight tainted the run-scoped lease. No acceptance or root action may rely on this WorkerResult.",
+    "The orchestration module remains unexported. The observed root-owned validator/src/lib.rs preimage is sha256:abc23d56b97b7f289f40f96565745407ee54ff9c82e78caee28608a5ab408223 and the prospective exact insertion after mod json_boundary would produce sha256:8ff1fddb1eadb0c6d592af6af6eed2f1900806aefb6cff8193bc5a0c0f139b9a, but this tainted worker requests no root change.",
+    "ArtifactWorkspace intentionally fails closed outside Unix because no dependency-free stable device/inode identity is implemented for other hosts.",
+    "Live artifact verification bounds each artifact to 64 MiB and rejects files with more than one hard link.",
+    "The live adapter proves one immediate frozen workspace snapshot; root must revalidate exact current bytes after any integration or candidate change.",
+    "The all-target check is green with existing warnings, but warnings and test counts are diagnostics rather than completion evidence.",
+    "No production persisted recovery journey, current whole-candidate suite, or N10 node closure was established.",
+    "N03, N06, and N09 current completion evidence is not established here.",
+    "No package, install, discovery, runtime, claim, release, network, external-host, or destructive proof was performed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

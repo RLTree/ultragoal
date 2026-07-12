@@ -1,0 +1,574 @@
+{
+  "worker": "/root/n02_context_review",
+  "lease_id": "LEASE-N02-RETAINED-ROUTES-005",
+  "context_id": "sha256:3fb46f834e1d77c50375f880aaa23e102e936de266a2cbc2aebecd56c7fae95b",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "dirty": true,
+    "head_unchanged_by_worker": true,
+    "leased_artifact_set_sha256": "3fb46f834e1d77c50375f880aaa23e102e936de266a2cbc2aebecd56c7fae95b",
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "reconciled_legacy_surface_count": 33,
+    "reconciled_breakdown": {
+      "command": 6,
+      "lane": 14,
+      "finalizer": 12,
+      "manifest_projection": 1
+    },
+    "broad_registry_rows_still_live": [
+      "legacy-command-catalogs-to-typed-cli",
+      "legacy-lanes-to-dependency-graph",
+      "legacy-finalizers-to-claim-graph",
+      "legacy-manifest-to-supported-projection"
+    ],
+    "plugin_manifest_sha256": "e9755d8832b4bd038b675f5edf18a63a25e2864d96cdcfaf8b9484e22427db91",
+    "context_scope_reconciliation": "After root repaired LEASE-N02-AGENT-REVIEW-003.json to WorkerResult-v1, the two command-named WorkerResult receipts were correctly removed as evidence context. They are not routes in this candidate.",
+    "concurrent_dirt_policy": "All user, root, and other-worker changes were preserved. No existing shared authority file was edited."
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_wiring",
+    "acceptance_ceiling": "Standalone exact retained-route framework for thirty-three currently reconciled legacy surfaces. It is not wired into shared routing and no registry row is adopted.",
+    "compiled_route_count": 33,
+    "compiled_category_counts": {
+      "command_to_PS-CLI": 6,
+      "lane_to_PS-ORCHESTRATION": 14,
+      "finalizer_to_HCT-CLAIMS": 12,
+      "manifest_projection_to_PS-PLUGIN-MANIFEST": 1
+    },
+    "transition": {
+      "compatibility_behavior": "exact-route-only",
+      "compatibility_boundary": "explicit-only",
+      "replacement_state": "candidate-required",
+      "active_reader_writer_state": "active",
+      "observed_authority_state": "compatibility-route-retained",
+      "equivalence_proof": "missing",
+      "physical_cleanup_state": "preserve"
+    },
+    "focused_cargo_tests": "4 passed; 0 failed",
+    "strict_standalone_tests": "4 passed; 0 failed with rustc -D warnings",
+    "all_target_check": "pass with pre-existing shared warnings",
+    "scoped_format_check": "pass",
+    "workspace_format_check": "blocked by out-of-lease diffs in validator/src/inventory/compatibility/agent_witness.rs and validator/src/inventory/validate.rs",
+    "artifact_count_excluding_result": 14,
+    "implementation_lines_excluding_result": 997,
+    "implementation_bytes_excluding_result": 33708,
+    "maximum_file_lines": 151,
+    "files_over_300_lines": 0,
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/inventory/retained_routes/claims.rs",
+    "validator/src/inventory/retained_routes/commands.rs",
+    "validator/src/inventory/retained_routes/lanes.rs",
+    "validator/src/inventory/retained_routes/manifest.rs",
+    "validator/src/inventory/retained_routes/mod.rs",
+    "validator/src/inventory/retained_routes/model.rs",
+    "validator/src/inventory/retained_routes/specs.rs",
+    "validator/src/inventory/retained_routes/verify.rs",
+    "validator/tests/retained_route_contract.rs",
+    "validator/tests/retained_route_contract/catalog_cases.rs",
+    "validator/tests/retained_route_contract/registry_cases.rs",
+    "validator/tests/retained_route_contract/source_cases.rs",
+    "validator/tests/retained_route_contract/support.rs",
+    "validator/tests/retained_route_contract/transition_cases.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"
+  ],
+  "touched_semantics": [
+    "Thirty-three exact retained-route specifications",
+    "Exact live source-byte and legacy-entry binding",
+    "Exact canonical-target presence and identity binding",
+    "Exact registry matcher, transition, and proof-reference binding",
+    "Precomputed source and target stable-id/path conflict rejection"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"
+  ],
+  "fixtures": [],
+  "effects": [
+    {
+      "effect": "repository_write",
+      "scope": "leased new paths only",
+      "result": "fourteen implementation/test artifacts plus this WorkerResult"
+    },
+    {
+      "effect": "network",
+      "result": "not performed"
+    },
+    {
+      "effect": "external_product",
+      "result": "not performed"
+    },
+    {
+      "effect": "git",
+      "result": "no stage, commit, merge, rebase, checkout, or registry adoption"
+    }
+  ],
+  "requirements": [
+    "REQ-PLUGIN-001",
+    "REQ-CLI-001",
+    "REQ-ORCH-002",
+    "REQ-MAINT-003",
+    "REQ-MAINT-006"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N03-TYPED-CLI",
+    "N08-PLUGIN-PRODUCT",
+    "N10-ORCHESTRATION",
+    "N14-MIGRATION"
+  ],
+  "changes": [
+    {
+      "area": "compiled route catalog",
+      "rationale": "Pins exact route ID, stable ID, kind, path, current source digest, canonical target identity, and three proof references for each of the thirty-three reconciled sources."
+    },
+    {
+      "area": "generic verification API",
+      "rationale": "Exposes crate-scoped lookup, compiled-registry verification, and full source/target/current-byte/conflict verification without touching shared routing authority."
+    },
+    {
+      "area": "claim ceiling",
+      "rationale": "Accepts only active exact-route retained compatibility semantics and rejects equivalence, implementation, demotion, cleanup, and retirement overclaims."
+    },
+    {
+      "area": "false-pass controls",
+      "rationale": "Covers every source byte digest plus path, stable ID, kind, entry digest, current-byte digest, matcher, target, proof refs, every transition field, and four conflict classes."
+    },
+    {
+      "area": "self-classification prevention",
+      "rationale": "Uses neutral claims.rs rather than finalizers.rs so the candidate implementation does not itself match the broad legacy-finalizer classifier."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rustc --edition 2024 --test -D warnings validator/tests/retained_route_contract.rs -o /tmp/n02-retained-route-contract-tests-strict",
+      "result": "pass",
+      "summary": "Standalone test target compiled without warnings."
+    },
+    {
+      "command": "/tmp/n02-retained-route-contract-tests-strict --nocapture",
+      "result": "pass",
+      "summary": "4 passed; 0 failed."
+    },
+    {
+      "command": "cargo test --locked --offline --manifest-path validator/Cargo.toml --test retained_route_contract -- --nocapture",
+      "result": "pass",
+      "summary": "4 passed; 0 failed; no network resolution."
+    },
+    {
+      "command": "cargo check --manifest-path validator/Cargo.toml --all-targets",
+      "result": "pass_with_pre_existing_warnings",
+      "summary": "All current library, binary, example, unit-test, and integration-test targets compiled."
+    },
+    {
+      "command": "target/debug/examples/hct_inventory . | jq retained route kind counts",
+      "result": "pass",
+      "summary": "Current reconciled counts are command 6, finalizer 12, lane 14, manifest projection 1."
+    },
+    {
+      "command": "target/debug/examples/hct_inventory . | jq canonical target identities",
+      "result": "pass",
+      "summary": "PS-CLI, PS-ORCHESTRATION, HCT-CLAIMS, and PS-PLUGIN-MANIFEST are present with the exact compiled kind, path, digest, canonical state, and definition status."
+    },
+    {
+      "command": "rustfmt --edition 2024 --config skip_children=true --check over every leased Rust artifact",
+      "result": "pass",
+      "summary": "Every leased Rust file is formatted and no file exceeds 151 lines."
+    },
+    {
+      "command": "cargo fmt --manifest-path validator/Cargo.toml --all -- --check",
+      "result": "blocked_outside_lease",
+      "summary": "Only shared agent_witness.rs and validate.rs require formatting; neither is leased to this worker."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/inventory/retained_routes/claims.rs",
+      "sha256": "e4bb7a599022a07b21835f4ac53ec154e1187df1c39c011fc522a3bf0e7e5c91",
+      "bytes": 4000,
+      "lines": 102
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/commands.rs",
+      "sha256": "78e83c42211eb98f767a25562cd8aa0e0e7e0edacb4e31d9e2ad0be41ffaa931",
+      "bytes": 1901,
+      "lines": 54
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/lanes.rs",
+      "sha256": "331b4cc8b65f0758c84854262b663af60003d520394be46c0d79e76847086ae5",
+      "bytes": 4474,
+      "lines": 118
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/manifest.rs",
+      "sha256": "bd84905662a29003dbae4a8a13da2f4e898514469bc294b5f50abbd674feea41",
+      "bytes": 391,
+      "lines": 10
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/mod.rs",
+      "sha256": "d65c4c140f44c19230326b03b57ba571b4eda433bc66b837cc204dec3df5a371",
+      "bytes": 621,
+      "lines": 16
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/model.rs",
+      "sha256": "af8a89b0203a20ee2f47cf442e0f838cda5dbfcc44b07653f8fe402801f61366",
+      "bytes": 4761,
+      "lines": 136
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/specs.rs",
+      "sha256": "7fc8b7bf6aa4037c4fbd2e38787293f0140386ec235703089435aaf0217948d3",
+      "bytes": 590,
+      "lines": 19
+    },
+    {
+      "path": "validator/src/inventory/retained_routes/verify.rs",
+      "sha256": "31034013773d14476a6ad82e226e947e248b9cff94f4a96805b5b6163f925aef",
+      "bytes": 3428,
+      "lines": 88
+    },
+    {
+      "path": "validator/tests/retained_route_contract.rs",
+      "sha256": "51c56762d4803f41986b7788f169e25feb3cc689ee76dba13ddbe0c47aa7e5d7",
+      "bytes": 427,
+      "lines": 12
+    },
+    {
+      "path": "validator/tests/retained_route_contract/catalog_cases.rs",
+      "sha256": "a8e98808bbae93a44c0221ac0cd52c8ee0bc3a83d340ab8d2ba66e7609d2efac",
+      "bytes": 2448,
+      "lines": 61
+    },
+    {
+      "path": "validator/tests/retained_route_contract/registry_cases.rs",
+      "sha256": "e11fe512bf9179f81b575a6735ea83a294d8b508430dfdbb1bf0588479663d17",
+      "bytes": 3801,
+      "lines": 151
+    },
+    {
+      "path": "validator/tests/retained_route_contract/source_cases.rs",
+      "sha256": "494cb390f5e62c1191a6eaad83e7402ae85e01100fefca09c96b8b61d2d9c4e1",
+      "bytes": 1552,
+      "lines": 60
+    },
+    {
+      "path": "validator/tests/retained_route_contract/support.rs",
+      "sha256": "e7737bc2b701368968732a0e35f3dfd0ceeff3addb20baf753ee26a4e4709a64",
+      "bytes": 3134,
+      "lines": 97
+    },
+    {
+      "path": "validator/tests/retained_route_contract/transition_cases.rs",
+      "sha256": "50d1f16f50b24ac773f0d881e0617394e4113aa63df44d0b535ce3298f8e31ad",
+      "bytes": 2180,
+      "lines": 73
+    }
+  ],
+  "findings": [
+    {
+      "severity": "candidate",
+      "finding": "Exactly thirty-three current legacy sources and four canonical targets are byte- and identity-pinned in a standalone fail-closed framework."
+    },
+    {
+      "severity": "claim-ceiling",
+      "finding": "Every accepted transition remains active retained compatibility with replacement candidate-required and equivalence missing; no implementation, behavior, retirement, or demotion fact is asserted."
+    },
+    {
+      "severity": "root-wiring-required",
+      "finding": "The framework is intentionally unreachable from the live inventory until Ultra root reviews and wires it into shared routing. The four broad registry rows remain live."
+    },
+    {
+      "severity": "context-reconciled",
+      "finding": "The two command-named WorkerResult receipts are evidence context, not command routes. A reconciled catalog reports the required six command sources after root repaired the invalid REVIEW-003 record."
+    },
+    {
+      "severity": "verification-gap",
+      "finding": "Workspace rustfmt remains red only in two concurrently owned shared files outside this lease; all leased files pass scoped rustfmt."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent review and Ultra-root acceptance of this exact artifact set",
+    "Root-only module and routing integration with current-byte reads and precomputed conflict evidence",
+    "Atomic replacement of four broad migration rows with the exact thirty-three rows below",
+    "Fresh reconciled inventory proving exactly thirty-three source rows before adoption",
+    "Root-owned workspace rustfmt after concurrent shared-file owners freeze",
+    "HCT-INVENTORY reconciliation and all behavior, readiness, release, and completion proof"
+  ],
+  "requested_root_changes": [
+    {
+      "request": "Apply the root-only wiring only after independent review.",
+      "patch_plan": [
+        {
+          "path": "validator/src/inventory/mod.rs",
+          "change": "Declare private module retained_routes."
+        },
+        {
+          "path": "validator/src/inventory/routing.rs",
+          "change": "Adapt each exact RouteRule into RegistryRouteEvidence and OR retained_routes::registry_route_is_compiled into the existing compatibility witness. Broad kind/path matchers must not satisfy this witness."
+        },
+        {
+          "path": "validator/src/inventory/validate.rs",
+          "change": "Compute duplicate stable-id and component-path conflict evidence before routing; retain normal findings after routing without losing the precomputed conflict set."
+        },
+        {
+          "path": "validator/src/inventory/routing_apply.rs",
+          "change": "For a single exact registry match, adapt the live legacy entry, current source digest, exact canonical target entry, and precomputed source/target conflict bits into VerificationEvidence. Only an Ok result may set kind compatibility-route-retained while preserving Active state and physical bytes; extend provenance with the exact proof refs."
+        },
+        {
+          "path": "validator/tests/inventory_contract.rs and a new or leased case module",
+          "change": "Replay all thirty-three positive routes and source/path/digest/matcher/target/proof/transition/conflict false passes through the integrated inventory builder."
+        }
+      ],
+      "mandatory_guards": [
+        "Read each current source through the existing bounded candidate ReadSession before passing its digest.",
+        "Do not reuse the earlier post-routing duplicate-path ordering.",
+        "Do not infer semantic or behavioral equivalence from an accepted retained route.",
+        "Do not alter or delete the thirty-three source files under this adoption."
+      ]
+    },
+    {
+      "request": "Atomically replace the four broad rows only after integrated tests pass.",
+      "registry": "migration/authority-routes.json",
+      "remove_route_ids": [
+        "legacy-command-catalogs-to-typed-cli",
+        "legacy-lanes-to-dependency-graph",
+        "legacy-finalizers-to-claim-graph",
+        "legacy-manifest-to-supported-projection"
+      ],
+      "common_row": {
+        "intended_disposition": "non-authoritative",
+        "transition": {
+          "compatibility_behavior": "exact-route-only",
+          "compatibility_boundary": "explicit-only",
+          "replacement_state": "candidate-required",
+          "active_reader_writer_state": "active",
+          "observed_authority_state": "compatibility-route-retained",
+          "equivalence_proof": "missing",
+          "physical_cleanup_state": "preserve"
+        }
+      },
+      "insert_routes": [
+        {
+          "route_id": "command-argument-parser-authority-to-ps-cli",
+          "match": { "stable_id": "LEGACY-COMMAND:validator/src/argument_parser/authority.rs" },
+          "canonical_target": "PS-CLI",
+          "proof_refs": ["validator/src/argument_parser/authority.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "command-argument-parser-help-request-to-ps-cli",
+          "match": { "stable_id": "LEGACY-COMMAND:validator/src/argument_parser/help_request.rs" },
+          "canonical_target": "PS-CLI",
+          "proof_refs": ["validator/src/argument_parser/help_request.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "command-argument-parser-root-to-ps-cli",
+          "match": { "stable_id": "LEGACY-COMMAND:validator/src/argument_parser/mod.rs" },
+          "canonical_target": "PS-CLI",
+          "proof_refs": ["validator/src/argument_parser/mod.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "command-argument-parser-specialized-to-ps-cli",
+          "match": { "stable_id": "LEGACY-COMMAND:validator/src/argument_parser/specialized.rs" },
+          "canonical_target": "PS-CLI",
+          "proof_refs": ["validator/src/argument_parser/specialized.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "command-argument-parser-tests-to-ps-cli",
+          "match": { "stable_id": "LEGACY-COMMAND:validator/src/argument_parser/tests.rs" },
+          "canonical_target": "PS-CLI",
+          "proof_refs": ["validator/src/argument_parser/tests.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "command-dispatcher-root-to-ps-cli",
+          "match": { "stable_id": "LEGACY-COMMAND:validator/src/command/mod.rs" },
+          "canonical_target": "PS-CLI",
+          "proof_refs": ["validator/src/command/mod.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-root-registry-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:LANE_REGISTRY.json" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["LANE_REGISTRY.json", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-template-registry-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:templates/LANE_REGISTRY.json" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["templates/LANE_REGISTRY.json", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-claim-actor-freshness-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/actor/freshness.rs" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["validator/src/claim_semantics/lane/actor/freshness.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-claim-actor-root-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/actor/mod.rs" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["validator/src/claim_semantics/lane/actor/mod.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-claim-dependency-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/dependency.rs" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["validator/src/claim_semantics/lane/dependency.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-claim-isolation-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/isolation.rs" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["validator/src/claim_semantics/lane/isolation.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-claim-root-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/mod.rs" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["validator/src/claim_semantics/lane/mod.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-claim-paths-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/paths.rs" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["validator/src/claim_semantics/lane/paths.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-claim-policy-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/policy.rs" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["validator/src/claim_semantics/lane/policy.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-claim-root-module-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/root/mod.rs" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["validator/src/claim_semantics/lane/root/mod.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-claim-root-scope-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/root/scope.rs" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["validator/src/claim_semantics/lane/root/scope.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-claim-runtime-root-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/runtime/mod.rs" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["validator/src/claim_semantics/lane/runtime/mod.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-claim-runtime-state-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/runtime/state.rs" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["validator/src/claim_semantics/lane/runtime/state.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "lane-claim-status-to-ps-orchestration",
+          "match": { "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/status.rs" },
+          "canonical_target": "PS-ORCHESTRATION",
+          "proof_refs": ["validator/src/claim_semantics/lane/status.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "finalizer-audit-packet-root-to-hct-claims",
+          "match": { "stable_id": "LEGACY-FINALIZER:validator/src/audit/final_packet/mod.rs" },
+          "canonical_target": "HCT-CLAIMS",
+          "proof_refs": ["validator/src/audit/final_packet/mod.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "finalizer-audit-observability-root-to-hct-claims",
+          "match": { "stable_id": "LEGACY-FINALIZER:validator/src/audit/final_packet/observability/mod.rs" },
+          "canonical_target": "HCT-CLAIMS",
+          "proof_refs": ["validator/src/audit/final_packet/observability/mod.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "finalizer-audit-observability-tests-to-hct-claims",
+          "match": { "stable_id": "LEGACY-FINALIZER:validator/src/audit/final_packet/observability/tests.rs" },
+          "canonical_target": "HCT-CLAIMS",
+          "proof_refs": ["validator/src/audit/final_packet/observability/tests.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "finalizer-audit-reference-coverage-to-hct-claims",
+          "match": { "stable_id": "LEGACY-FINALIZER:validator/src/audit/final_packet/references/coverage.rs" },
+          "canonical_target": "HCT-CLAIMS",
+          "proof_refs": ["validator/src/audit/final_packet/references/coverage.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "finalizer-audit-reference-root-to-hct-claims",
+          "match": { "stable_id": "LEGACY-FINALIZER:validator/src/audit/final_packet/references/mod.rs" },
+          "canonical_target": "HCT-CLAIMS",
+          "proof_refs": ["validator/src/audit/final_packet/references/mod.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "finalizer-audit-reference-package-to-hct-claims",
+          "match": { "stable_id": "LEGACY-FINALIZER:validator/src/audit/final_packet/references/package.rs" },
+          "canonical_target": "HCT-CLAIMS",
+          "proof_refs": ["validator/src/audit/final_packet/references/package.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "finalizer-audit-reference-source-to-hct-claims",
+          "match": { "stable_id": "LEGACY-FINALIZER:validator/src/audit/final_packet/references/source_audit.rs" },
+          "canonical_target": "HCT-CLAIMS",
+          "proof_refs": ["validator/src/audit/final_packet/references/source_audit.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "finalizer-cli-packet-root-to-hct-claims",
+          "match": { "stable_id": "LEGACY-FINALIZER:validator/src/cli/final_packet/mod.rs" },
+          "canonical_target": "HCT-CLAIMS",
+          "proof_refs": ["validator/src/cli/final_packet/mod.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "finalizer-cli-proof-root-to-hct-claims",
+          "match": { "stable_id": "LEGACY-FINALIZER:validator/src/cli/final_packet/proof/mod.rs" },
+          "canonical_target": "HCT-CLAIMS",
+          "proof_refs": ["validator/src/cli/final_packet/proof/mod.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "finalizer-cli-proof-spans-to-hct-claims",
+          "match": { "stable_id": "LEGACY-FINALIZER:validator/src/cli/final_packet/proof/spans.rs" },
+          "canonical_target": "HCT-CLAIMS",
+          "proof_refs": ["validator/src/cli/final_packet/proof/spans.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "finalizer-cli-proof-stdout-to-hct-claims",
+          "match": { "stable_id": "LEGACY-FINALIZER:validator/src/cli/final_packet/proof/stdout.rs" },
+          "canonical_target": "HCT-CLAIMS",
+          "proof_refs": ["validator/src/cli/final_packet/proof/stdout.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "finalizer-cli-proof-tests-to-hct-claims",
+          "match": { "stable_id": "LEGACY-FINALIZER:validator/src/cli/final_packet/proof/tests.rs" },
+          "canonical_target": "HCT-CLAIMS",
+          "proof_refs": ["validator/src/cli/final_packet/proof/tests.rs", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        },
+        {
+          "route_id": "manifest-draft-to-ps-plugin-manifest",
+          "match": { "stable_id": "LEGACY-MANIFEST-PROJECTION:plugin-manifest-draft.json" },
+          "canonical_target": "PS-PLUGIN-MANIFEST",
+          "proof_refs": ["plugin-manifest-draft.json", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-PLUGIN-MANIFEST", "docs/ultragoal-successor-live/worker-results/LEASE-N02-RETAINED-ROUTES-005.json"]
+        }
+      ]
+    },
+    {
+      "request": "Run a fresh candidate-bound HCT-INVENTORY reconciliation after root wiring and atomic registry replacement. Withhold adoption if the reconciled pre-route source set is not exactly the thirty-three compiled stable IDs or any false-pass control fails."
+    }
+  ],
+  "limitations": [
+    "This worker did not edit inventory module wiring, route parsing, route application, validation ordering, or the root-owned migration registry.",
+    "The standalone verifier accepts a current source digest supplied by the root adapter; root wiring must obtain that digest through the candidate ReadSession rather than copying the compiled value.",
+    "The framework proves exact retained-route eligibility only. It does not prove successor command behavior, orchestration behavior, claim-tool behavior, plugin manifest installation, runtime discovery, equivalence, or retirement.",
+    "The thirty-three source files remain active and physically preserved by design.",
+    "Workspace rustfmt remains an out-of-lease root reconciliation item even though every leased file is formatted.",
+    "No model, mode, reasoning configuration, installed plugin state, marketplace state, readiness, release, or completion fact was inferred."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

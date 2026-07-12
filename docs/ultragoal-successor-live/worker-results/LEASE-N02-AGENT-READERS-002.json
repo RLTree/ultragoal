@@ -1,0 +1,313 @@
+{
+  "worker": "/root/n02_agent_recovery",
+  "lease_id": "LEASE-N02-AGENT-READERS-002",
+  "context_id": "sha256:4bebefdaa80aa9ebbd667871d4a1156c6ea69d51c583657b07eecca70df24a73",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "dirty": true,
+    "status_sha256_before_result": "ec92dfa288d77677198471e60ca20de60ca95ae633248274ee595b5801bde219",
+    "leased_artifact_set_sha256": "4bebefdaa80aa9ebbd667871d4a1156c6ea69d51c583657b07eecca70df24a73",
+    "leased_artifact_set_formula": "SHA-256 of path-bound shasum -a 256 lines for the nineteen listed implementation artifacts in listed order",
+    "tracked_diff_sha256_excluding_untracked_agent_rows": "acbb3b94ef2b0c90d954efe070842fac8fde65f65b92415aa998e65156031d2d",
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "recovery_source": "Orphaned Phase A edits from the interrupted LEASE-N02-AGENT-READERS-001 lane were audited, corrected, and adopted only inside this replacement lease.",
+    "original_lease_scope": [
+      "validator/src/claim_semantics/plugin_policy/**",
+      "validator/src/schema_catalog/fixture_schema_rules.rs",
+      "validator/src/schema_catalog/schema/patterns.rs",
+      "validator/src/audit/plugin/registry/live/reviewers.rs",
+      "agent logic under validator/src/cli/control/plane/registry/**",
+      "validator/src/claim_semantics/coverage/receipt/exclusions.rs",
+      "validator/src/cli/live_loop/surfaces/input_spec/path_rules.rs",
+      "validator/src/self_tests/command/round_receipts.rs",
+      "exact focused plugin, schema, and control-registry tests",
+      "this WorkerResult"
+    ],
+    "root_approved_amendments": [
+      "validator/src/audit/plugin/registry/live/mod.rs and raw.rs plus directly coupled tests, to remove active legacy persona/custom_agent_path/agent_type selection",
+      "schemas/codex-registry-exposure.schema.json plus directly coupled fixtures/tests, as an implementation candidate requiring later root adoption"
+    ],
+    "recovery_findings": [
+      "The orphaned reviewer table used canonical values, but live/mod.rs and live/raw.rs still selected legacy agent_type/persona/custom_agent_path keys.",
+      "The orphaned fail-closed producer emitted canonical role rows, but codex-registry-exposure.schema.json still required the legacy row shape.",
+      "A broad agent-substring diagnostic reached a stale red-fixture expectation that still names the removed custom-agent failure contract."
+    ],
+    "root_owned_surfaces_not_modified": [
+      "plugin and marketplace manifests",
+      "migration and authority-route registries",
+      "audit::contract REQUIRED_AGENTS and REQUIRED_SKILLS constants",
+      "public successor command catalog and dispatcher",
+      "claim decisions, readiness, release, completion, and N02 state"
+    ],
+    "concurrent_dirt_policy": "All root, user, and other-worker changes were preserved. No merge, rebase, staging, commit, deletion, or destructive cleanup was performed."
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "acceptance_ceiling": "Canonical agent-reader and unavailable-only registry-row enforcement candidate. No install, host discovery, runtime configuration, reviewer exposure, readiness, release, completion, or N02-complete claim.",
+    "canonical_agent_role_count": 6,
+    "canonical_review_role_count": 4,
+    "active_leased_legacy_identity_readers": 0,
+    "runtime_metadata_positive_modes": 0,
+    "runtime_metadata_status": "unavailable",
+    "custom_agent_discovery_status": "unavailable",
+    "registry_exposed_status": false,
+    "positive_live_registry_receipt_possible_under_candidate_schema": false,
+    "implementation_artifact_count_excluding_result": 19,
+    "implementation_lines_excluding_result": 3670,
+    "implementation_bytes_excluding_result": 124863,
+    "maximum_rust_file_lines": 249,
+    "rust_files_over_300_lines": 0,
+    "focused_distinct_tests": "22 passed; 0 failed",
+    "broader_plugin_registry_tests": "5 passed; 0 failed",
+    "broader_schema_catalog_tests": "4 passed; 0 failed",
+    "all_target_check": "pass",
+    "workspace_format_check": "pass",
+    "scoped_diff_check": "pass",
+    "physical_deletions": 0,
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "schemas/codex-registry-exposure.schema.json",
+    "validator/src/audit/plugin/registry/live/mod.rs",
+    "validator/src/audit/plugin/registry/live/raw.rs",
+    "validator/src/audit/plugin/registry/live/reviewers.rs",
+    "validator/src/claim_semantics/coverage/receipt/exclusions.rs",
+    "validator/src/claim_semantics/plugin_policy/mod.rs",
+    "validator/src/claim_semantics/plugin_policy/tests.rs",
+    "validator/src/cli/control/plane/registry/mod.rs",
+    "validator/src/cli/control/plane/registry/agent_rows.rs",
+    "validator/src/cli/live_loop/surfaces/input_spec/path_rules.rs",
+    "validator/src/schema_catalog/fixture_schema_rules.rs",
+    "validator/src/schema_catalog/schema/patterns.rs",
+    "validator/src/self_tests/claim/plugin/policy.rs",
+    "validator/src/self_tests/cli/control/registry.rs",
+    "validator/src/self_tests/command/round_receipts.rs",
+    "validator/src/self_tests/plugin/registry/fixture.rs",
+    "validator/src/self_tests/plugin/registry/guard.rs",
+    "validator/src/self_tests/plugin/registry/mod.rs",
+    "validator/src/self_tests/schema/rules.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+  ],
+  "touched_semantics": [
+    "all six packaged project-agent identities and paths derive from crate::agent_roles::CANONICAL_AGENT_ROLES",
+    "review-only surfaces select exactly claim-falsifier, orchestration-recovery-reviewer, product-journey-reviewer, and security-reviewer",
+    "project-agent TOML must be an exact read-only deny-unknown manifest and cannot gain authority from model or reasoning strings",
+    "live registry rows use role and agent_manifest_path, never agent_type, persona, or custom_agent_path",
+    "the registry schema requires exactly one row for each canonical review role and binds each role to its exact .codex/agents path",
+    "registry rows reject mixed legacy/current shapes, duplicate roles or paths, substituted paths, unknown fields, host_exposed metadata, and self-asserted model fields",
+    "runtime metadata and custom-agent discovery remain unavailable, exposed remains false, and no static disk/install/cache state becomes live discovery proof",
+    "legacy custom-agents and agents paths are negative controls or retained context only within the leased surfaces",
+    "round-receipt test helpers replace legacy identity references with current agent manifests and omit missing manifests rather than inventing digests"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "validator/src/self_tests/plugin/registry/fixture.rs",
+    "temporary canonical, legacy, duplicate, substituted, and host-asserted agent-row fixtures created and removed by focused tests"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Nineteen leased or root-amended implementation/schema/test artifacts plus this WorkerResult only"
+    },
+    {
+      "class": "local-build-artifact",
+      "scope": "Isolated Cargo output under /tmp/n02-agent-recovery-target"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "Existing self-test substrate created and removed isolated temporary repository and home directories"
+    },
+    {
+      "class": "git",
+      "scope": "Read-only identity, status, diff, and digest operations"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PLUGIN-006",
+    "REQ-ORCH-003",
+    "REQ-SECURITY-006",
+    "REQ-PROOF-001",
+    "REQ-PROOF-007"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N08-PLUGIN-PRODUCT",
+    "N10-ORCHESTRATION"
+  ],
+  "changes": [
+    {
+      "area": "canonical packaged-agent policy",
+      "result": "Replaced legacy REQUIRED_AGENTS/custom-agent parsing with exact six-role name/path closure and deny-unknown read-only TOML validation. Legacy files and hardcoded model/reasoning strings cannot change the result."
+    },
+    {
+      "area": "schema and path consumers",
+      "result": "Bound fixture schema rules, schema path patterns, coverage ownership, live-loop input classification, and round-receipt reference repair to .codex/agents and crate::agent_roles."
+    },
+    {
+      "area": "reviewer subset",
+      "result": "Bound review registries and local-state projections to exactly four of the six canonical roles while keeping repo-recon and research-verifier out of material sign-off semantics."
+    },
+    {
+      "area": "live registry fail-closed correction",
+      "result": "Removed active legacy row-key readers and made producer, raw observation parser, semantic validator, schema, and directly coupled fixtures agree on canonical role/path rows with unavailable runtime/discovery and exposed=false."
+    },
+    {
+      "area": "false-pass controls",
+      "result": "Added or preserved missing manifest, write-authorized TOML, fake reasoning metadata, stale legacy file, legacy/mixed registry row, duplicate role/path, path substitution, unknown field, host_exposed metadata, and unbound same-surface receipt controls."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --lib claim_semantics::plugin_policy -- --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "3 passed; canonical closure, legacy-file invariance, and cache behavior."
+    },
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --lib self_tests::claim::plugin::policy -- --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "2 passed; noncanonical identity, static write authority, resource-purpose, and skill-link edges."
+    },
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --lib plugin::registry -- --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "5 passed; canonical subset, unavailable-only rows, claim guard, provenance, and legacy/mixed/duplicate/substitution/host-assertion controls."
+    },
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --lib self_tests::cli::control::registry -- --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "4 passed; unbound apparent live pass is overwritten by a fail-closed canonical receipt and local source/install/cache state never becomes exposure."
+    },
+    {
+      "command": "focused exact schema, round-receipt, agent-row, coverage-exclusion, and path-rule tests",
+      "result": "pass",
+      "summary": "8 additional distinct tests passed; combined Phase A focused total is 22 passed and 0 failed."
+    },
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --lib schema_catalog -- --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "4 passed; schema catalog parser, vocabulary, canonical agent pattern, and fixture rules remained green."
+    },
+    {
+      "command": "cargo check --manifest-path validator/Cargo.toml --all-targets",
+      "result": "pass",
+      "summary": "All library, binary, unit-test, and integration targets compiled on the shared dirty candidate; warnings are unrelated dormant successor or baseline dead-code warnings."
+    },
+    {
+      "command": "cargo fmt --manifest-path validator/Cargo.toml --all -- --check; jq empty schemas/codex-registry-exposure.schema.json; git diff --check over the lease; deletion scan",
+      "result": "pass",
+      "summary": "Workspace Rust format, JSON syntax, scoped whitespace, and OD-009 no-deletion checks passed."
+    },
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --lib -- --test-threads=1",
+      "result": "timeboxed_partial_diagnostic",
+      "summary": "The broad 1,434-test diagnostic was interrupted after three previously known out-of-lease live-loop cache-replay failures; all Phase A tests reached before interruption passed. No aggregate green claim is made."
+    },
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --lib agent -- --nocapture",
+      "result": "diagnostic_failure_outside_lease",
+      "summary": "24 passed and one stale out-of-lease red-fixture expectation failed because it still expected custom_agent_app_visible_name_missing instead of the canonical policy failures."
+    }
+  ],
+  "artifacts": [
+    {"path":"schemas/codex-registry-exposure.schema.json","sha256":"c6f814afae2631fa02f693d6e9785115dda7331ed5a7a7e7be94955f1e7e4173","bytes":14441,"lines":627},
+    {"path":"validator/src/audit/plugin/registry/live/mod.rs","sha256":"7ab5996f8b9b22d83f21a107fde4772511542dae0a52fc92f291e87c6fbdbf51","bytes":5872,"lines":165},
+    {"path":"validator/src/audit/plugin/registry/live/raw.rs","sha256":"a0b93154ae043a22a3d7f287c2e2c4663e2cf128bcdb419ef1ea118d8dfc0a6f","bytes":6115,"lines":178},
+    {"path":"validator/src/audit/plugin/registry/live/reviewers.rs","sha256":"e05afc06f83658c43ce502573b4af38ac72adcafc1656ca9697a79c43c21647b","bytes":1469,"lines":48},
+    {"path":"validator/src/claim_semantics/coverage/receipt/exclusions.rs","sha256":"3ac6ecd75a072db612af32f89000257f5723f8beb242af8f2319b17eb09febf6","bytes":1970,"lines":79},
+    {"path":"validator/src/claim_semantics/plugin_policy/mod.rs","sha256":"0402169f674c6c026613107c2364f2f54089730e70a744556ab4a4a4d0b67e9b","bytes":5839,"lines":185},
+    {"path":"validator/src/claim_semantics/plugin_policy/tests.rs","sha256":"ffe717cbb8d1fb2d9de5f6121c27e7d1d8a78a08c0c9342fcc74c97f7a3de23f","bytes":4797,"lines":122},
+    {"path":"validator/src/cli/control/plane/registry/mod.rs","sha256":"eb2f6c7341c665bf35f2f1ffbcdf3972899b17ff19941907b3b02d84314fcf4c","bytes":6652,"lines":196},
+    {"path":"validator/src/cli/control/plane/registry/agent_rows.rs","sha256":"8a850630845f3d6cb4944dff0467937e653f017547356e3c6f21c62bd9e55fa1","bytes":5096,"lines":111},
+    {"path":"validator/src/cli/live_loop/surfaces/input_spec/path_rules.rs","sha256":"7880797e1832bd81c850b7ef61e5029710e61efe3b5fca6b37d45651afd08df7","bytes":8239,"lines":249},
+    {"path":"validator/src/schema_catalog/fixture_schema_rules.rs","sha256":"ba00909a97a944cf8f33b555cfb8c7f15c5a91a98bd0e201bfc5f667bbd1260e","bytes":7177,"lines":231},
+    {"path":"validator/src/schema_catalog/schema/patterns.rs","sha256":"03f579dd5c5c8107c28ed6650063e170e120dbf0799295ca7232589c03e80743","bytes":9589,"lines":245},
+    {"path":"validator/src/self_tests/claim/plugin/policy.rs","sha256":"a968480da4f951344338a16c71cbeb92b82c26adf106c4677c70875bd63949df","bytes":4366,"lines":120},
+    {"path":"validator/src/self_tests/cli/control/registry.rs","sha256":"904e019aa7adca8cf8ccb7863d2a92a5ec0854d5f4d3c4321492662710035fe8","bytes":9922,"lines":248},
+    {"path":"validator/src/self_tests/command/round_receipts.rs","sha256":"7c6997dffa60c0eb7141ae3e9de8f38ea2eee17909f5746429ae1716ed050043","bytes":5018,"lines":138},
+    {"path":"validator/src/self_tests/plugin/registry/fixture.rs","sha256":"ed85a08e23c9b242b7ee9d8a9535edeee05fb56b32b3834161059eab52b8dc67","bytes":6123,"lines":148},
+    {"path":"validator/src/self_tests/plugin/registry/guard.rs","sha256":"f46b39c6472e1d1cb8dce9d4c03276f6b4066812b1865f158c1c60487799a4da","bytes":6220,"lines":163},
+    {"path":"validator/src/self_tests/plugin/registry/mod.rs","sha256":"17c0ac91315b48eaeb5c74aed34f8cfa931c2a21dc71ceeddb0f7164af45118b","bytes":8496,"lines":212},
+    {"path":"validator/src/self_tests/schema/rules.rs","sha256":"a0cda442c0f33b9a4f4dab4b67ac4367d601f5e383efc7b6a3272c3f0cbb6023","bytes":7462,"lines":205}
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Active leased and amended readers no longer select or authorize legacy agent_type, persona, custom_agent_path, custom-agents paths, or hardcoded model/reasoning values."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "The CLI fail-closed producer, semantic validator, raw observation validator, schema, and direct fixtures now agree on the exact unavailable-only canonical four-reviewer row shape."
+    },
+    {
+      "severity": "root-adoption-required",
+      "finding": "The codex-registry-exposure schema edit is an implementation candidate under an explicit amendment; only Ultra root may adopt it as shared authority."
+    },
+    {
+      "severity": "claim-ceiling",
+      "finding": "No supported same-surface runtime/custom-agent discovery channel was exposed. The candidate intentionally makes a positive live-registry receipt impossible and keeps every dependent claim withheld."
+    },
+    {
+      "severity": "out-of-lease-test-cascade",
+      "finding": "A stale runtime-bound-custom-agent red-fixture test still expects the removed custom_agent_app_visible_name_missing result and requires root-owned broader fixture reconciliation."
+    },
+    {
+      "severity": "partial-broad-diagnostic",
+      "finding": "The timeboxed broad sweep observed three known out-of-lease live-loop cache-replay failures before interruption; no aggregate repository test claim is available."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent claim-falsification review against the exact nineteen implementation artifact digests",
+    "Ultra-root acceptance and adoption or rework of the codex registry exposure schema candidate",
+    "Root update and reconciliation of audit::contract REQUIRED_AGENTS and REQUIRED_SKILLS",
+    "Root reconciliation of stale legacy plugin-agent red fixtures and other out-of-lease legacy receipt producers",
+    "A real externally sourced candidate/session/tool-call-bound custom-agent discovery proof channel before any positive exposure claim",
+    "Fresh integrated HCT-INVENTORY reconciliation after concurrent N02 lanes freeze",
+    "Repository-wide diagnostic failures outside this lease"
+  ],
+  "requested_root_changes": [
+    {
+      "request": "Commission independent review of this WorkerResult and replay the legacy/mixed/duplicate/path-substitution/host-assertion false-pass controls."
+    },
+    {
+      "request": "Adopt or rework schemas/codex-registry-exposure.schema.json under root shared-authority ownership; do not treat this worker write as adoption."
+    },
+    {
+      "request": "Update root-owned REQUIRED_AGENTS and REQUIRED_SKILLS to the accepted canonical role and skill sets only after all agent-reader sources freeze."
+    },
+    {
+      "request": "Reconcile stale legacy registry and plugin-agent fixtures outside this lease without reactivating legacy names or positive runtime discovery."
+    },
+    {
+      "request": "Keep reviewer exposure, runtime configuration, install/discovery, readiness, release, completion, update-goal, and N02 completion claims withheld until their exact live proof surfaces pass."
+    }
+  ],
+  "limitations": [
+    "This worker did not inspect, infer, or record a model, mode, or reasoning configuration from prompt text or local TOML.",
+    "Disk source/install/cache equality is reported only as local state and never as live host discovery or exposure proof.",
+    "The candidate registry schema deliberately supports only unavailable runtime/discovery rows with exposed=false; a future positive path requires a separately designed and root-adopted provenance contract.",
+    "Legacy files remain preserved under OD-009 and may still be textually discoverable outside the active leased readers.",
+    "The broad library diagnostic was interrupted and contains out-of-lease failures; it is not a passing repository claim.",
+    "No network, marketplace, install/cache refresh, external product mutation, merge, rebase, migration-registry write, claim decision, release action, or destructive operation was performed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

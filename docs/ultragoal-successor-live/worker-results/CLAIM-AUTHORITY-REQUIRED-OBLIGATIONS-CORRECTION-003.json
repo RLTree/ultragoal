@@ -1,0 +1,192 @@
+{
+  "worker": "/root/claim_authority_builder",
+  "lease_id": "CLAIM-AUTHORITY-REQUIRED-OBLIGATIONS-CORRECTION-003",
+  "context_id": "sha256:bd19f0b1846f733b73eaac076e4244d6511e293ecb574791ac29425f17de2df8",
+  "candidate_identity": {
+    "candidate_id": "sha256:0c30f37411cf4a51b06e6f3e8bb73e6e8bfd12104a73690e47f5a85e481615f8",
+    "context_id": "sha256:bd19f0b1846f733b73eaac076e4244d6511e293ecb574791ac29425f17de2df8",
+    "binding_path": "docs/ultragoal-successor-live/root-decisions/CLAIM-AUTHORITY-REQUIRED-OBLIGATIONS-CORRECTION-BINDING.json",
+    "binding_sha256": "sha256:bd19f0b1846f733b73eaac076e4244d6511e293ecb574791ac29425f17de2df8",
+    "root_bound_artifact_count": 12,
+    "root_bound_artifact_total_bytes": 57752,
+    "root_bound_artifact_total_lines": 1685,
+    "root_aggregate_authority": "Root independently enforces this exact twelve-artifact candidate; WorkerResult-v1 records the same leased artifacts and does not claim aggregate enforcement."
+  },
+  "base_state": {
+    "status": "required_obligations_rework_bound",
+    "rejected_candidate": "sha256:b377a1f7156fd8bdb7999eafbcd862d3f65b9d9465d245cff5c10b93bd700215",
+    "root_integration": "withheld"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_check": "AC-CLAIM-AUTHORITY-REQUIRED-OBLIGATIONS-003",
+    "acceptance_ceiling": "definition-level obligation-complete claim authority and focused contract tests only",
+    "root_binding": "definition-only; public integration remains root-owned"
+  },
+  "touched_paths": [
+    "validator/src/claims/coverage.rs",
+    "validator/src/claims/decision.rs",
+    "validator/src/claims/definition.rs",
+    "validator/src/claims/evidence.rs",
+    "validator/src/claims/guard.rs",
+    "validator/src/claims/mod.rs",
+    "validator/tests/claims_contract.rs",
+    "validator/tests/claims_contract/adoption.rs",
+    "validator/tests/claims_contract/exact_sets.rs",
+    "validator/tests/claims_contract/lifecycle.rs",
+    "validator/tests/claims_contract/rejections.rs",
+    "validator/tests/claims_contract/support.rs"
+  ],
+  "touched_semantics": [
+    "claims::definition",
+    "claims::evidence",
+    "claims::obligation_coverage",
+    "claims::observation",
+    "claims::decision",
+    "claims::guard"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "claim-authority-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "claim-authority-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-claim-authority-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "AC-CLAIM-AUTHORITY-REQUIRED-OBLIGATIONS-003",
+    "REQ-PROOF-001",
+    "REQ-STATE-001"
+  ],
+  "dependency_nodes": [
+    "claim-authority-required-obligations-rework",
+    "hct-capture",
+    "hct-context",
+    "hct-inventory",
+    "hct-state"
+  ],
+  "changes": [
+    {
+      "area": "exact registry obligation closure",
+      "result": "Every required evidence item, surface, tool, decision, and false-pass control is represented as one exact observed obligation with independent actor, method, context, candidate, freshness, truth surface, ceiling, artifact, output digest, and supported result."
+    },
+    {
+      "area": "false-pass resistance",
+      "result": "Unknown, duplicate, omitted, partial, contradicted, cross-candidate, stale, self-authored, materially-scored, reviewer-only, bare-asserted, and shared-artifact evidence rejects before elevation."
+    },
+    {
+      "area": "repair and projection",
+      "result": "Repair invalidates only dependent decisions and their evidence; old observations cannot re-elevate repaired claims, and rejected reasons remain visible in deterministic zero-write projections."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hct-claims-obligations-target cargo test --manifest-path validator/Cargo.toml --locked --offline -j16 --test claims_contract -- --test-threads=16",
+      "status": "pass",
+      "result": "16 passed, including complete closure of all fourteen claims and 109 one-item omission cases for CL-PACKAGE, CL-INSTALL, CL-ORCHESTRATION, CL-RELEASE, and CL-COMPLETION."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/claims/*.rs validator/tests/claims_contract.rs validator/tests/claims_contract/*.rs; git diff --check on the leased paths",
+      "status": "pass",
+      "result": "Scoped formatting and whitespace checks passed; all production files are at or below 216 physical lines."
+    },
+    {
+      "command": "WorkerResultV1::parse_json, validate_for, ArtifactWorkspace::verify, and result_id against the root-bound twelve-artifact lease/package envelope",
+      "status": "pass",
+      "result": "Typed validation verifies all twelve artifacts; mutations for worker, path, effect, context, candidate, digest, and no-claim statement reject."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/claims/coverage.rs",
+      "sha256": "sha256:ca17f5cae8d405a7a0bf8f44cc531d4dcbb686fb6c73dfdda58e077632a96e11",
+      "byte_length": 3512
+    },
+    {
+      "path": "validator/src/claims/decision.rs",
+      "sha256": "sha256:b63f2aefd2998e81548489fe6aa895f616c23006301c398a933f9a2fe697dc97",
+      "byte_length": 4702
+    },
+    {
+      "path": "validator/src/claims/definition.rs",
+      "sha256": "sha256:509fcc4c3c1f999095f45c55eab13faa4fdd0c8d9b52011e36842b4ba73187a6",
+      "byte_length": 7696
+    },
+    {
+      "path": "validator/src/claims/evidence.rs",
+      "sha256": "sha256:bd33d7e82aebb21703608d909fcb89b7fad3612afa886620652dba971e7a79ca",
+      "byte_length": 6057
+    },
+    {
+      "path": "validator/src/claims/guard.rs",
+      "sha256": "sha256:2ef555cb8d16ca4d019373f29dd01beb0e3f41ded5213fdd43677122fe7ed5bf",
+      "byte_length": 6729
+    },
+    {
+      "path": "validator/src/claims/mod.rs",
+      "sha256": "sha256:f74b8a8d5725603459767cce47f79bfb5cdb221cbc3c167576dc20eea998e4d9",
+      "byte_length": 464
+    },
+    {
+      "path": "validator/tests/claims_contract.rs",
+      "sha256": "sha256:d2ab91e992431e8a22eb6d45e37e5c55ae46c259966df4f778494beb656130e3",
+      "byte_length": 324
+    },
+    {
+      "path": "validator/tests/claims_contract/adoption.rs",
+      "sha256": "sha256:648f6b11d182753e391488399dfa77da8f079637326479c315097882458063b1",
+      "byte_length": 2013
+    },
+    {
+      "path": "validator/tests/claims_contract/exact_sets.rs",
+      "sha256": "sha256:916fbb2fb4f29806f57259def881813b1fe36b02cf975f91722272cffe31a555",
+      "byte_length": 11097
+    },
+    {
+      "path": "validator/tests/claims_contract/lifecycle.rs",
+      "sha256": "sha256:0c395ee0d4059dcbfda89e028c54600a02260667adf4a8f0ab228d3a38639952",
+      "byte_length": 3919
+    },
+    {
+      "path": "validator/tests/claims_contract/rejections.rs",
+      "sha256": "sha256:ef292fe9c5b280d1e8e729d747c5977f2dbc4ae61097847745e9ff3815f6e201",
+      "byte_length": 5739
+    },
+    {
+      "path": "validator/tests/claims_contract/support.rs",
+      "sha256": "sha256:0413e87524207374c173a11ddb3db72c480007c1c3d30fb392e6da613461ddf2",
+      "byte_length": 5500
+    }
+  ],
+  "findings": [
+    {
+      "id": "prior-generic-envelope-false-pass",
+      "status": "corrected-in-candidate",
+      "evidence": "The focused matrix rejects one generic observation and every one-item omission across the five required material claims."
+    },
+    {
+      "id": "root-aggregate-authority",
+      "status": "truthfully-bounded",
+      "evidence": "The candidate count, bytes, lines, phase sets, and candidate digest come from the root binding; WorkerResult-v1 is not represented as aggregate authority."
+    }
+  ],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [],
+  "limitations": [
+    "No validator/src/lib.rs binding, external public API witness, CLI route, public integration, or passed live claim is asserted.",
+    "No readiness, release, node closure, or goal completion is asserted.",
+    "Any twelve-artifact, binding, registry, obligation semantic, dependency, behavior, effect, or result change reopens this result."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

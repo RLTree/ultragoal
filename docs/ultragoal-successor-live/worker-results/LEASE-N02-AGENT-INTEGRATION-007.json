@@ -1,0 +1,216 @@
+{
+  "worker": "/root/n02_agent007_finish",
+  "lease_id": "LEASE-N02-AGENT-INTEGRATION-007",
+  "context_id": "sha256:fd87925e39caee10eb915f88bbcc32ea8461962b52853acb93bd5234a7f641bc",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true,
+    "captured_at": "2026-07-11T02:46:45Z",
+    "status_sha256_before_result": "de357035d7ed6a6ae8c62b30c9d0eb1944673a776fd60fac8d5a2c078e02186a",
+    "worktree_diff_sha256_before_result": "bc5c3411367899332125cd52ad15658348593f6014b1a1040fcc0a20b4f18c5d",
+    "staged_diff_sha256_before_result": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "owned_artifact_set_sha256": "fd87925e39caee10eb915f88bbcc32ea8461962b52853acb93bd5234a7f641bc",
+    "artifact_set_formula": "SHA-256 of artifact array order using path<TAB>sha256-without-prefix<LF>; WorkerResult excluded."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "superseded_worker_result": "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-INTEGRATION-006.json",
+    "superseded_worker_result_sha256": "sha256:6d904f87cb9af8a7c1224174259d08768aa6e17059a4acab91097121054ef7bb",
+    "superseded_artifact_set_sha256": "ecadd74ea5fd54a78ae79f5f00cfc5d1500774aa8e7cdaa1bf22addbfcd65e7e",
+    "review_disposition": "REWORK: ordered raw-byte matching did not decode common escapes or Java pre-lexical Unicode and needed explicit malformed-input, Rust lexical, and production-negative controls."
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged": true,
+    "artifact_count_excluding_result": 3,
+    "artifact_set_sha256": "fd87925e39caee10eb915f88bbcc32ea8461962b52853acb93bd5234a7f641bc",
+    "artifact_bytes": 37261,
+    "artifact_lines": 1013,
+    "maximum_touched_rust_source_lines": 577,
+    "live_registry_ceiling": "withheld_or_blocked",
+    "result": "corrective scanner candidate returned for independent review and root reconciliation; no authority route or claim was adopted"
+  },
+  "touched_paths": [
+    "validator/src/inventory/compatibility/reader_witness/scan.rs",
+    "validator/src/inventory/compatibility/reader_witness/tests.rs",
+    "validator/tests/inventory_contract_cases/agent_routes/reader_false_pass.rs"
+  ],
+  "touched_semantics": [
+    "active source scanning lexes quoted, triple-quoted, Rust raw, and comment forms before matching ordered literal fragments",
+    "common hexadecimal, octal, fixed Unicode, braced Unicode, and line-continuation escapes are decoded with malformed and unterminated forms failing closed",
+    "Java source and extensionless conservative surfaces apply pre-lexical Unicode translation while Rust sources do not reinterpret raw-string escape text",
+    "canonical agent paths require a leading dot at the canonical component and target-looking word prefixes require a real path boundary",
+    "unrelated literals may separate real constructed path fragments without arbitrary literal suffixes being consumed",
+    "Rust lifetimes, labels, characters, raw prose, production-shaped labels, comments, and canonical descriptors remain negative controls"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "filesystem",
+      "scope": "three leased source/test paths plus this WorkerResult",
+      "result": "modified candidate files; no deletions"
+    },
+    {
+      "class": "test_filesystem",
+      "scope": "isolated temporary Git repositories and existing agent-route filesystem controls",
+      "result": "created and cleaned by tests"
+    },
+    {
+      "class": "network",
+      "scope": "none",
+      "result": "all Cargo commands used --offline"
+    },
+    {
+      "class": "git",
+      "scope": "read-only identity, status, and diff inspection in the live repository",
+      "result": "no commit, branch, merge, rebase, stage, reset, checkout, or push"
+    },
+    {
+      "class": "external_product",
+      "scope": "none",
+      "result": "not performed"
+    }
+  ],
+  "requirements": [
+    "detect constructed canonical and legacy agent paths even when unrelated literals or statements separate relevant fragments",
+    "decode common and Unicode string escapes including Java pre-lexical encoded quotes, separators, and paths",
+    "fail closed on malformed escapes and unterminated quoted or raw literals",
+    "avoid false positives from Rust lifetimes, labels, character literals, raw escape prose, incidental word suffixes, and production-shaped negative text",
+    "prove positive and negative behavior end to end through agent-route authority transitions",
+    "preserve zero production writes, exact compile-time reader binding, and final read-session revalidation"
+  ],
+  "dependency_nodes": [
+    "N02"
+  ],
+  "changes": [
+    {
+      "area": "literal lexer",
+      "result": "extracts decoded literal fragments while skipping comments and Rust lifetime syntax; malformed or unterminated literal state returns a fail-closed reader classification"
+    },
+    {
+      "area": "escape semantics",
+      "result": "supports common simple, hexadecimal, octal, fixed-width Unicode, braced Unicode, eight-digit Unicode, and Java pre-lexical Unicode forms"
+    },
+    {
+      "area": "path semantics",
+      "result": "tracks canonical-dot position and slash, backslash, or dot component boundaries so agentship-style suffixes cannot complete a path target"
+    },
+    {
+      "area": "language separation",
+      "result": "path-aware scanning enables Java pre-lexical translation for Java and conservative extensionless sources but preserves Rust raw-string contents literally"
+    },
+    {
+      "area": "false-pass controls",
+      "result": "unit and route tests cover the two independent-review counterexamples, common escape families, Java encoded delimiters, malformed and unterminated forms, Rust syntax, path-like suffixes, production negatives, and canonical descriptors"
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --offline --manifest-path validator/Cargo.toml --lib constructed_agent_paths_are_detected_without_treating_manifests_as_readers -- --nocapture --test-threads=1",
+      "status": "pass",
+      "result": "1 passed; 0 failed; positive escape, malformed-input, Java pre-lexical, Rust lexical, component-boundary, production-negative, and six canonical-descriptor controls"
+    },
+    {
+      "command": "cargo test --offline --manifest-path validator/Cargo.toml --lib live_reader_guard_has_no_unbound_positive_reader -- --nocapture --test-threads=1",
+      "status": "pass",
+      "result": "1 passed; 0 failed; live compile-time reader closure and production-negative scan"
+    },
+    {
+      "command": "cargo test --offline --manifest-path validator/Cargo.toml --test inventory_contract agent_routes::reader_false_pass::constructed_agent_paths_cannot_bypass_the_reader_guard -- --nocapture --test-threads=1",
+      "status": "pass",
+      "result": "1 passed; 0 failed; sixteen end-to-end positive route mutations"
+    },
+    {
+      "command": "cargo test --offline --manifest-path validator/Cargo.toml --test inventory_contract agent_routes::reader_false_pass::unrelated_literal_and_comment_controls_do_not_block_legacy_demotion -- --nocapture --test-threads=1",
+      "status": "pass",
+      "result": "1 passed; 0 failed; seven end-to-end negative route controls"
+    },
+    {
+      "command": "cargo test --offline --manifest-path validator/Cargo.toml --lib self_tests::review -- --nocapture --test-threads=1",
+      "status": "pass",
+      "result": "55 passed; 0 failed"
+    },
+    {
+      "command": "initial cargo test --offline --manifest-path validator/Cargo.toml --test inventory_contract -- --nocapture --test-threads=1",
+      "status": "reworked",
+      "result": "85 passed; one live-catalog test observed ConcurrentMutation from a concurrent package-snapshot lease; no semantic assertion failed"
+    },
+    {
+      "command": "cargo test --offline --manifest-path validator/Cargo.toml --test inventory_contract current_live_catalog_reports_contract_definitions_and_missing_topology -- --nocapture --test-threads=1",
+      "status": "pass",
+      "result": "1 passed; 0 failed in the root-confirmed frozen window"
+    },
+    {
+      "command": "cargo test --offline --manifest-path validator/Cargo.toml --test inventory_contract -- --nocapture --test-threads=1",
+      "status": "pass",
+      "result": "86 passed; 0 failed in 201.29 seconds in the root-confirmed frozen window"
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <three exact leased Rust files>",
+      "status": "pass",
+      "result": "all exact leased Rust files formatted"
+    },
+    {
+      "command": "git diff --check -- <three exact leased Rust files>; git status --short | awk '$1 ~ /D/ {print}'",
+      "status": "pass",
+      "result": "no whitespace diagnostic and blank deletion scan"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/inventory/compatibility/reader_witness/scan.rs",
+      "sha256": "sha256:e0d35ca7964ee74905c5c5d4762efd6e079ed1846430a48d46a48d3461448cc0"
+    },
+    {
+      "path": "validator/src/inventory/compatibility/reader_witness/tests.rs",
+      "sha256": "sha256:5213a279cab50abdc19117afd43170f733cc474fd566e8914dc9d5e884f2e84c"
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/agent_routes/reader_false_pass.rs",
+      "sha256": "sha256:2d770ea6ae3e4a776e064363cf9f7f34e661ffb08f4091e6b0a97c0c4b12d7a3"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "P1",
+      "status": "resolved",
+      "summary": "escaped and Java pre-lexical construction of canonical agent paths can no longer bypass current-reader binding"
+    },
+    {
+      "severity": "P1",
+      "status": "resolved",
+      "summary": "relevant fragments survive intervening unrelated literals without accepting arbitrary target-looking word suffixes"
+    },
+    {
+      "severity": "P1",
+      "status": "resolved",
+      "summary": "malformed and unterminated literals fail closed while Rust lifetime, character, raw-string, and production-negative inputs remain non-readers"
+    }
+  ],
+  "unresolved_dependencies": [
+    "Root must independently reproduce the three-artifact set and dependency-closed tests, then accept or rework Integration-007.",
+    "Root retains sole authority over exact agent migration rows, adopted manifests, claim ceilings, release state, and completion reporting.",
+    "Live host custom-agent discovery and exposure remain unavailable; source-local reader evidence does not raise those ceilings."
+  ],
+  "requested_root_changes": [
+    {
+      "request": "independently review Integration-007 against the Integration-006 counterexamples and reproduce the scanner unit, live guard, positive and negative route controls, self-review, and full inventory-contract commands"
+    },
+    {
+      "request": "if and only if independent review passes, reconcile this corrective artifact set before any root-owned exact agent-route adoption"
+    }
+  ],
+  "limitations": [
+    "The repository remained broadly dirty from concurrent leased work; this lease wrote only the three named scanner/test files and this WorkerResult.",
+    "The scanner is intentionally conservative for unknown extensionless source languages and fails closed when literal syntax cannot be safely classified.",
+    "The first full inventory attempt observed a real concurrent candidate mutation; only the later root-confirmed frozen run is acceptance evidence.",
+    "This is source-local candidate evidence, not host discovery, installation, marketplace, runtime, readiness, release, or full N02 proof.",
+    "No migration row, shared authority, manifest, claim, release state, or completion decision was modified by this worker."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

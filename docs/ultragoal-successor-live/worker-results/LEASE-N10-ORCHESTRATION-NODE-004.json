@@ -1,0 +1,395 @@
+{
+  "worker": "/root/n10_node004_recovery",
+  "lease_id": "LEASE-N10-ORCHESTRATION-NODE-004",
+  "context_id": "sha256:3e5178f80cc7d26634d4f6a5354b9209a184521f993cddf5654c06d36c3e4fd2",
+  "candidate_identity": {
+    "candidate_id": "sha256:fa7c951083cd0982cdce9c07a8fe8dc737c7e12fa92dee3cd0a201bc7df3d4e4",
+    "context_id": "sha256:3e5178f80cc7d26634d4f6a5354b9209a184521f993cddf5654c06d36c3e4fd2",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "status_sha256_before_result": "04fb77a34fa154d203697871da020fe1b57ce3e8d6913d2d23ebe837efe5d437",
+    "untracked_sha256_before_result": "c72c749fb91ecbb29070455a37f5bbbc7dc3908e1b294c7fe917a1dbacf2307d",
+    "artifact_set_sha256": "sha256:fa7c951083cd0982cdce9c07a8fe8dc737c7e12fa92dee3cd0a201bc7df3d4e4",
+    "artifact_set_formula": "Sort artifacts by path; concatenate path, one TAB byte, sha256 without prefix, and one LF byte; SHA-256 the concatenation.",
+    "context_note": "LiveContext-v1 initially rejected one concurrent whole-candidate mutation, then rebuilt twice with byte-identical identity after the N10 correction and dependency-closed checks froze. The protected .codex-worktree/env.sh file was not opened, read, hashed, or sourced."
+  },
+  "base_state": {
+    "node": "N10-ORCHESTRATION",
+    "parent_worker_result": "sha256:128e350014b5340359823f0c9c1b5f9200edbaf5b8bc6c2a4ff09cee0abe418c",
+    "parent_artifact_set": "sha256:b8b4da4558edc35a0d3bf1f66a3ffb6238ad231da56f52ea5afd70771433d6ff",
+    "review_decision": "rework",
+    "finding_1": "AcceptanceProposal could change artifact and requested-root-change commitments while retaining the submitted result and independent-review identities; engine acceptance and replay compared only those narrower identities.",
+    "finding_2": "External effect targets differing only by ASCII case did not conflict even when they alias on a case-insensitive substrate."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "Corrected N10 typed orchestration candidate only; fresh independent re-review, root module wiring, a live execution adapter, and representative supported-host recovery proof remain required. No node closure, readiness, release, or completion.",
+    "artifact_count_excluding_result": 28,
+    "artifact_set_sha256": "sha256:fa7c951083cd0982cdce9c07a8fe8dc737c7e12fa92dee3cd0a201bc7df3d4e4",
+    "total_bytes": 186963,
+    "total_lines": 5532,
+    "maximum_rust_file_lines": 296,
+    "rust_files_over_300_lines": 0,
+    "focused_tests": "100 passed; 0 failed under cargo-nextest with 16 jobs",
+    "library_check": "pass",
+    "all_targets_check": "pass",
+    "full_suite": "integration red outside the leased N10 paths: 248 passed, 2 failed, and 1613 were not run after fail-fast; both failures reproduced individually with one test thread",
+    "focused_clippy": "pass with pre-existing and concurrent warnings outside the leased corrective paths",
+    "live_context": "pass twice with identical LiveContext-v1 sha256:3e5178f80cc7d26634d4f6a5354b9209a184521f993cddf5654c06d36c3e4fd2",
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "destructive_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/orchestration/engine.rs",
+    "validator/src/orchestration/event.rs",
+    "validator/src/orchestration/reconcile.rs",
+    "validator/src/orchestration/replay.rs",
+    "validator/src/orchestration/scope.rs",
+    "validator/src/orchestration/transition.rs",
+    "validator/tests/orchestration_contract/effects.rs",
+    "validator/tests/orchestration_contract/reconciliation.rs",
+    "validator/tests/orchestration_contract/recovery.rs",
+    "validator/tests/orchestration_contract/support.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-004.json"
+  ],
+  "touched_semantics": [
+    "orchestration::submission::canonical_result_commitment",
+    "orchestration::review::commitment_binding",
+    "orchestration::acceptance::persisted_commitment_equality",
+    "orchestration::replay::commitment_tamper_rejection",
+    "orchestration::integration::persisted_accepted_commitment",
+    "orchestration::effects::ascii_case_alias_conflict"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "validator/tests/orchestration_contract/effects.rs",
+    "validator/tests/orchestration_contract/reconciliation.rs",
+    "validator/tests/orchestration_contract/recovery.rs",
+    "validator/tests/orchestration_contract/support.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "lease-n10-node004-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "lease-n10-node004-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "lease-n10-node004-cargo",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "destructive",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "target": "root-authority",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "HUL-ORCHESTRATION-001",
+    "HUL-SECURITY-001",
+    "REQ-ORCH-004"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE",
+    "N06-ROUTINE",
+    "N09-AGENTS-REPO"
+  ],
+  "changes": [
+    {
+      "area": "immutable canonical worker-result commitment",
+      "paths": [
+        "validator/src/orchestration/event.rs",
+        "validator/src/orchestration/reconcile.rs",
+        "validator/src/orchestration/engine.rs",
+        "validator/src/orchestration/replay.rs",
+        "validator/src/orchestration/transition.rs"
+      ],
+      "rationale": "Submission now persists the binding, node, lease, result identity, sorted artifact path-to-digest map, requested-root-change count and digest, plus its deterministic commitment identity. Review records bind that identity; acceptance compares the complete internally valid commitment to the persisted reviewed value before append; replay repeats the equality checks; integration reads the persisted accepted commitment rather than a mutable side map."
+    },
+    {
+      "area": "commitment mutation and interrupted-replay controls",
+      "paths": [
+        "validator/tests/orchestration_contract/reconciliation.rs",
+        "validator/tests/orchestration_contract/recovery.rs",
+        "validator/tests/orchestration_contract/support.rs"
+      ],
+      "rationale": "Controls independently mutate, add, and delete artifacts; mutate count, request digest, node, lease, binding, result, review, and commitment identities; recompute internally valid attacker commitment identities; assert no event or projection change; reject reidentified serialized submit, review, and accept tampering; and complete the exact positive flow after a byte-identical interrupted restart."
+    },
+    {
+      "area": "ASCII-case-safe external effect ownership",
+      "paths": [
+        "validator/src/orchestration/scope.rs",
+        "validator/tests/orchestration_contract/effects.rs"
+      ],
+      "rationale": "Same-class workspace, fixture, network, and external effect targets now conflict conservatively across ASCII-case aliases at segment boundaries within one scope and across leases. Exact-case authorization remains fail-closed; siblings and class mismatches remain disjoint."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node004-recovery-target cargo test --manifest-path validator/Cargo.toml --test orchestration_contract --locked",
+      "result": "expected_red_failure",
+      "summary": "The interrupted corrective tests initially exposed three decisive failures: commitment substitutions were accepted, reidentified submit/review/accept tampering replayed, and effect case aliases did not conflict."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node004-recovery-target cargo nextest run --manifest-path validator/Cargo.toml --test orchestration_contract --locked --jobs 16",
+      "result": "pass",
+      "summary": "100 passed; 0 failed, including exact positive, stale/self-review, independently recomputed commitment substitutions, serialized tamper, interrupted replay, effect alias, class mismatch, sibling, ancestor, and descendant controls."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node004-recovery-target cargo check --manifest-path validator/Cargo.toml --lib --locked --jobs 16 --quiet",
+      "result": "pass",
+      "summary": "The current library compiled; warnings were pre-existing or outside the leased corrective paths."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node004-recovery-target cargo check --manifest-path validator/Cargo.toml --all-targets --locked --jobs 16 --quiet",
+      "result": "pass",
+      "summary": "Every current target compiled against the corrected N10 interfaces."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node004-recovery-target cargo nextest run --manifest-path validator/Cargo.toml --locked --jobs 16",
+      "result": "integration_rework",
+      "summary": "The whole-candidate run stopped after 248 passes and two failures in cli::live_loop::nodes::measurement::cache_replay; 1613 tests were not run after fail-fast. Both named tests reproduced individually with --test-threads=1, so this is current unrelated candidate debt rather than a parallel-fixture collision or N10 failure."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node004-recovery-target cargo clippy --manifest-path validator/Cargo.toml --test orchestration_contract --locked --jobs 16 --quiet",
+      "result": "pass",
+      "summary": "Focused clippy completed; emitted warnings are outside the leased corrective paths."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node004-recovery-target cargo test --manifest-path validator/Cargo.toml --locked --jobs 16 -p ultragoal --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass_twice_identical_after_one_concurrent_retry",
+      "summary": "After one truthful ConcurrentMutation rejection during another lane's write, two successive captures returned LiveContext-v1 sha256:3e5178f80cc7d26634d4f6a5354b9209a184521f993cddf5654c06d36c3e4fd2, status sha256:04fb77a34fa154d203697871da020fe1b57ce3e8d6913d2d23ebe837efe5d437, and untracked sha256:c72c749fb91ecbb29070455a37f5bbbc7dc3908e1b294c7fe917a1dbacf2307d."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check on every leased Rust path; exact WorkerResult-v1 schema, artifact digest, byte, line, parent, and path-bound set reconciliation",
+      "result": "pass",
+      "summary": "28 artifacts, 186963 bytes, 5532 lines, maximum Rust file length 296, no Rust file over 300 lines, set sha256:fa7c951083cd0982cdce9c07a8fe8dc737c7e12fa92dee3cd0a201bc7df3d4e4."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/orchestration/effect.rs",
+      "sha256": "sha256:8b1ee0966e04f0aae8b8749d6a88deb8266ef9e69c2bb5dcd27f0103215877ae",
+      "byte_length": 1864
+    },
+    {
+      "path": "validator/src/orchestration/engine.rs",
+      "sha256": "sha256:345790c43d4772f003a2f68506ba052463fd34647b64f3b7e8d2da2fb962c972",
+      "byte_length": 7877
+    },
+    {
+      "path": "validator/src/orchestration/engine_query.rs",
+      "sha256": "sha256:784acba762893e57d67771a1cc9fe4e0250d3b7c6f216a8518a5210b5c8ff25a",
+      "byte_length": 2293
+    },
+    {
+      "path": "validator/src/orchestration/error.rs",
+      "sha256": "sha256:aee3d14728dd091c3a4a2c740c3b5d012cbdf641002732c0e2f26c3eebf84746",
+      "byte_length": 3684
+    },
+    {
+      "path": "validator/src/orchestration/event.rs",
+      "sha256": "sha256:44587f2a5f7606c7ea3705cc7f84cfc4538e51c2c03b4de666adee22a1ebde13",
+      "byte_length": 6670
+    },
+    {
+      "path": "validator/src/orchestration/graph.rs",
+      "sha256": "sha256:54c7d8ecafbdbfa3fb8fd5379f189c71ad5232388016bd9d54090b751fe9f8de",
+      "byte_length": 5469
+    },
+    {
+      "path": "validator/src/orchestration/lease.rs",
+      "sha256": "sha256:bd00b476344167de3be39c25c5bd34878014db962374301dc36441b18ea6b32c",
+      "byte_length": 5349
+    },
+    {
+      "path": "validator/src/orchestration/mod.rs",
+      "sha256": "sha256:6c2732a1ba1fd56fefeac4a0163a9797e075f447d76d96bb13dc2ec44b438b94",
+      "byte_length": 1251
+    },
+    {
+      "path": "validator/src/orchestration/model.rs",
+      "sha256": "sha256:57935b61dbb6fc2b52047960acdaa4f1e4222fbc4fa80073d750552141a0d8b9",
+      "byte_length": 6543
+    },
+    {
+      "path": "validator/src/orchestration/reconcile.rs",
+      "sha256": "sha256:4550c92162e658654fb3618fdbac90752eceeac84430fadfaa0c5f8fcd2de922",
+      "byte_length": 10888
+    },
+    {
+      "path": "validator/src/orchestration/recovery.rs",
+      "sha256": "sha256:7cb26de8ba75a514062684dd73629fac3c4135ad22d04612d4cad78c1b028348",
+      "byte_length": 5474
+    },
+    {
+      "path": "validator/src/orchestration/replay.rs",
+      "sha256": "sha256:0e24409af27a94768c2ff877450c1b61377c87d53e0b4cc3ed56c76cbb72d70b",
+      "byte_length": 9464
+    },
+    {
+      "path": "validator/src/orchestration/scope.rs",
+      "sha256": "sha256:0d9b8a41d5e4f5f7a205681ad66472be7caed53f7b72f9eb9d1dd659c55c1fc6",
+      "byte_length": 8424
+    },
+    {
+      "path": "validator/src/orchestration/scope_policy.rs",
+      "sha256": "sha256:e97d2888889c985fa5b76fa7c6cadfd45413b6d2aeac8749cdfb24d0ed6b44e5",
+      "byte_length": 4726
+    },
+    {
+      "path": "validator/src/orchestration/transition.rs",
+      "sha256": "sha256:b615a876a87298ee93a8af9b80c45ef99b784ef1ca7649c2a8049748089717ab",
+      "byte_length": 11171
+    },
+    {
+      "path": "validator/src/orchestration/worker.rs",
+      "sha256": "sha256:9c0785e4409a4e485ad987794f9f525a9d853f638f1048613347aec11b1547d2",
+      "byte_length": 9978
+    },
+    {
+      "path": "validator/tests/orchestration_contract.rs",
+      "sha256": "sha256:500cc4c53533380e32d58fec152a75adf3da1c7a81efdac64930a69221f3d0aa",
+      "byte_length": 803
+    },
+    {
+      "path": "validator/tests/orchestration_contract/blockers.rs",
+      "sha256": "sha256:59baa415aa9e50d2639426b8f5944ba77dbbe705dcdfc5ea1cacc40ad2c20370",
+      "byte_length": 3513
+    },
+    {
+      "path": "validator/tests/orchestration_contract/candidate_rebind.rs",
+      "sha256": "sha256:28a9687d0ed7239974c325f9af522012c4cfb4850d7eb4980b1cb4877ec7a0e2",
+      "byte_length": 5776
+    },
+    {
+      "path": "validator/tests/orchestration_contract/effects.rs",
+      "sha256": "sha256:1002648ceb81f5de758c46b2b25d98ce8ae04798eeac1eabeb7590554754c541",
+      "byte_length": 8393
+    },
+    {
+      "path": "validator/tests/orchestration_contract/graph.rs",
+      "sha256": "sha256:ee33a4ec43adf2a4df11f252066ee0b977b4857d8e650e2c41e25acd1dd6f536",
+      "byte_length": 4871
+    },
+    {
+      "path": "validator/tests/orchestration_contract/leases.rs",
+      "sha256": "sha256:32db73e7a37313f31b73f37e34a96d1edc7d3a7b431e71327638ce131d0ef8f8",
+      "byte_length": 9252
+    },
+    {
+      "path": "validator/tests/orchestration_contract/path_aliases.rs",
+      "sha256": "sha256:9b4345d03109d0f5beb46fc872c5b11ba0c19f08ab7d9e92b7f1dfb2fd6cc63c",
+      "byte_length": 8116
+    },
+    {
+      "path": "validator/tests/orchestration_contract/reconciliation.rs",
+      "sha256": "sha256:eb788052b45f334056822990efff94e1f11fa74b9f5baaf66d2fb0a4dc5c6b2d",
+      "byte_length": 10628
+    },
+    {
+      "path": "validator/tests/orchestration_contract/recovery.rs",
+      "sha256": "sha256:985eaf53bcd94f47bfc7335bbfe0c9b04b71d99be564aa90f76dcbc89e6e48ee",
+      "byte_length": 8573
+    },
+    {
+      "path": "validator/tests/orchestration_contract/security.rs",
+      "sha256": "sha256:e5d92621b79d7eb37c6cbac990d8072dd431404659c8099190e1da8a653c8858",
+      "byte_length": 7483
+    },
+    {
+      "path": "validator/tests/orchestration_contract/support.rs",
+      "sha256": "sha256:b945a80ca74e6a911ea5b2ca3bc1e77e4b8aab06ffa70e6375b1dff5150c8e7e",
+      "byte_length": 10916
+    },
+    {
+      "path": "validator/tests/orchestration_contract/worker_results.rs",
+      "sha256": "sha256:eb8eb3de971d469f188ff0c5514f86c0d98deb7f6d4057bf4b784492890d142c",
+      "byte_length": 7514
+    }
+  ],
+  "findings": [
+    {
+      "severity": "corrected",
+      "finding": "Worker submission, independent review, root acceptance, replay, and integration now carry and compare the exact persisted canonical result commitment; a proposal with an internally recomputed attacker commitment identity still cannot replace the reviewed artifact or root-change set."
+    },
+    {
+      "severity": "corrected",
+      "finding": "Same-class workspace, fixture, network, and external effect target aliases now collide conservatively across ASCII case without broadening exact-case authorization."
+    },
+    {
+      "severity": "integration-rework",
+      "finding": "The current whole-candidate suite has two reproducible failures outside N10 in cli::live_loop::nodes::measurement::cache_replay; root must route and reconcile them before candidate-wide green proof."
+    },
+    {
+      "severity": "independent-review-required",
+      "finding": "The correcting worker has not accepted or reviewed its own NODE-004 set; a fresh independent reviewer must reproduce and attack the exact artifacts."
+    }
+  ],
+  "unresolved_dependencies": [
+    "INDEPENDENT-N10-NODE004-REVIEW",
+    "ROOT-N10-MODULE-WIRING",
+    "ROOT-HCT-STATE-ADAPTER",
+    "ROOT-PACKAGE-MANIFEST-INTEGRATION",
+    "ROOT-FULL-SUITE-CACHE-REPLAY-RECONCILIATION",
+    "N03-CLI-STATE-CURRENT-PROOF",
+    "N06-ROUTINE-CURRENT-PROOF",
+    "N09-AGENTS-REPO-CURRENT-PROOF",
+    "REPRESENTATIVE-RECOVERY-JOURNEY"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "independent N10 NODE-004 review",
+      "request": "Recompute the WorkerResult and 28-artifact identities; reproduce the 100-test N10 suite; attack internally recomputed artifact, root-change, node, lease, binding, result, review, and commitment substitutions; reidentify serialized submit/review/accept events; reproduce interrupted replay; and attack case-alias effect targets for workspace, fixture, network, and external classes."
+    },
+    {
+      "path": "validator/src/lib.rs",
+      "request": "Only after independent PASS, add public N10 module wiring without altering the accepted candidate bytes."
+    },
+    {
+      "path": "plugin-manifest-draft.json",
+      "request": "Only after independent PASS and root reconciliation, add the exact accepted N10 source, split tests, and WorkerResult resources using current digests."
+    },
+    {
+      "path": "root-owned execution adapter",
+      "request": "Implement and independently verify descriptor-relative resolution that rejects symlink, hardlink, mount, filesystem-normalization, and substitution aliases at the actual read/write boundary; this typed kernel does not prove those host effects."
+    },
+    {
+      "path": "root integrated candidate",
+      "request": "Route and reconcile the two current cache-replay suite failures, then rerun the complete candidate suite against one frozen integrated digest."
+    }
+  ],
+  "limitations": [
+    "The corrected orchestration module remains unexported from validator/src/lib.rs and cannot be treated as live public behavior.",
+    "The typed kernel conservatively handles ASCII case aliases but no execution adapter exists here to resolve or reject symlink, hardlink, mount-point, filesystem-normalization, or post-validation substitution aliases at host effect time.",
+    "The 100-test N10 suite, library check, and all-target check pass, but the current whole-candidate suite has two reproducible unrelated cache-replay failures and did not reach its remaining 1613 tests.",
+    "Tests use an injected in-memory sink and do not prove persisted live orchestration or a supported-host interrupted-recovery journey.",
+    "N03, N06, and N09 exact current completion evidence is not established by this correction.",
+    "No package, marketplace, install, cache, app-registry, Plugins UI, discovery, runtime, claim, release, Git, network, external-host, or destructive proof was performed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

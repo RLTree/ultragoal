@@ -1,0 +1,121 @@
+{
+  "worker": "/root/n02_agent_integration5",
+  "lease_id": "LEASE-N02-AGENT-INTEGRATION-006",
+  "context_id": "sha256:ecadd74ea5fd54a78ae79f5f00cfc5d1500774aa8e7cdaa1bf22addbfcd65e7e",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true,
+    "captured_at": "2026-07-11T01:59:07Z",
+    "status_sha256_before_result": "4fbcf850d4e3a2b08516922b608336d356a27c8f92c37a42cea112873c959403",
+    "worktree_diff_sha256_before_result": "e38dd89ee9198bf26e0c8d31a24351a61e29b00f4c28570db0122811dcf3c0ba",
+    "staged_diff_sha256_before_result": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "owned_artifact_set_sha256": "ecadd74ea5fd54a78ae79f5f00cfc5d1500774aa8e7cdaa1bf22addbfcd65e7e",
+    "artifact_set_formula": "SHA-256 of artifact array order using path<TAB>sha256-without-prefix<LF>; WorkerResult excluded."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "superseded_worker_result": "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-INTEGRATION-005.json",
+    "superseded_worker_result_sha256": "sha256:04a9118ae9d86cb593cd183cceef01c80af3d9466904dba22da97df11f24970c",
+    "review_disposition": "REWORK: constructed agent-path binding depended on a short operation-name list, and file-only enumeration omitted special entries and empty directories under .codex/agents."
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged": true,
+    "artifact_count_excluding_result": 11,
+    "artifact_set_sha256": "ecadd74ea5fd54a78ae79f5f00cfc5d1500774aa8e7cdaa1bf22addbfcd65e7e",
+    "artifact_bytes": 56525,
+    "artifact_lines": 1689,
+    "maximum_touched_rust_source_lines": 263,
+    "live_registry_ceiling": "withheld_or_blocked",
+    "result": "corrective candidate returned for independent review and root reconciliation; no authority row or claim was adopted"
+  },
+  "touched_paths": [
+    "validator/src/inventory/agent_reader_guard_digests.rs",
+    "validator/src/inventory/compatibility/reader_witness.rs",
+    "validator/src/inventory/compatibility/reader_witness/scan.rs",
+    "validator/src/inventory/compatibility/reader_witness/tests.rs",
+    "validator/src/inventory/walk.rs",
+    "validator/src/inventory/walk/tests.rs",
+    "validator/tests/inventory_contract_cases/agent_routes/reader_false_pass.rs",
+    "validator/tests/inventory_contract_cases/agent_routes/support.rs"
+  ],
+  "touched_semantics": [
+    "constructed canonical and legacy agent paths are recognized from ordered literal-fragment semantics without depending on reader function names",
+    "the active legacy root source and typed walk implementation are included in the compile-time reader dependency closure",
+    "bounded collection walking preserves regular single-link status, directories, symlinks, and special entries while pinning and revalidating every traversed directory",
+    "exact canonical-agent state requires exactly six immediate regular single-link files and rejects every missing, extra, nested, directory, symlink, hardlink, FIFO, socket, or other special shape",
+    "the same ReadSession reads the six compile-time bytes and performs final descriptor and directory revalidation"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {"class": "filesystem", "scope": "eight leased repository paths plus this WorkerResult", "result": "modified candidate files; no deletions"},
+    {"class": "test_filesystem", "scope": "isolated temporary Git repositories and FIFO, Unix socket, symlink, hardlink, nested, empty-directory, extra, and missing-entry controls", "result": "created and cleaned by tests"},
+    {"class": "network", "scope": "none", "result": "no network access; Unix-domain socket was local test filesystem state only"},
+    {"class": "git", "scope": "repository under test only", "result": "no commit, branch, merge, rebase, stage, or push in the live repository"},
+    {"class": "external_product", "scope": "none", "result": "not performed"}
+  ],
+  "requirements": [
+    "operation-name-independent detection of constructed canonical and legacy agent paths in every active source language and extensionless script surface",
+    "typed bounded enumeration of every immediate and nested .codex/agents entry",
+    "exactly six regular non-symlink single-link descriptors with compile-time byte equality",
+    "FIFO, Unix socket, symlink, empty directory, nested entry, seventh file, missing file, and hardlink false-pass controls",
+    "zero production writes and final candidate-bound read-session revalidation"
+  ],
+  "dependency_nodes": ["N02"],
+  "changes": [
+    {"area": "reader discovery", "result": "a lexical literal-fragment matcher recognizes canonical and legacy path construction across variable and separated fragments; no read/open/load operation allowlist remains"},
+    {"area": "reader closure", "result": "the newly security-critical typed walk and existing legacy agent-root source are compile-time byte bound and copied into route fixtures"},
+    {"area": "typed collection walk", "result": "all entry kinds are retained under a 64-level and 100000-entry bound; directories are descriptor pinned and identity revalidated"},
+    {"area": "canonical agent topology", "result": "only the exact six immediate single-link regular descriptors proceed to byte and manifest validation"},
+    {"area": "false-pass controls", "result": "Rust read_to_string, Node readFile, Go os.ReadFile, Java readAllBytes, arbitrary extensionless operations, and every requested filesystem topology attack fail closed"}
+  ],
+  "commands_and_tests": [
+    {"command": "cargo test --offline -p ultragoal --lib constructed_agent_paths_are_detected_without_treating_manifests_as_readers -- --nocapture --test-threads=1", "status": "pass", "result": "1 passed; 0 failed; includes Rust, Node, Go, Java, extensionless, canonical, legacy, and six-descriptor negative controls"},
+    {"command": "cargo test --offline -p ultragoal --lib inventory::walk::tests:: -- --nocapture --test-threads=1", "status": "pass", "result": "2 passed; 0 failed; typed entry kinds and final directory revalidation"},
+    {"command": "cargo test --offline -p ultragoal --lib live_reader_guard_has_no_unbound_positive_reader -- --nocapture --test-threads=1", "status": "pass", "result": "1 passed; 0 failed"},
+    {"command": "cargo test --offline -p ultragoal --test inventory_contract agent_routes::reader_false_pass::symlink_hardlink_fifo_and_socket_agent_entries_block_without_opening_specials -- --nocapture --test-threads=1", "status": "pass", "result": "1 passed; 0 failed"},
+    {"command": "cargo test --offline -p ultragoal --lib self_tests::review -- --nocapture --test-threads=1", "status": "pass", "result": "55 passed; 0 failed"},
+    {"command": "cargo test --offline -p ultragoal --test inventory_contract -- --nocapture --test-threads=1", "status": "pass", "result": "85 passed; 0 failed; includes all 10 agent-route tests and the zero-write inventory control"},
+    {"command": "earlier Integration-006 focused attempts", "status": "reworked", "result": "test-fixture-only failures from noncanonical temp roots, Unix socket path length, and an unwrap that rejected the expected hardlink error were corrected; the final focused and full suites above passed"},
+    {"command": "rustfmt --edition 2024 --check <eight exact leased Rust files>", "status": "pass", "result": "all exact corrective sources formatted; maximum 263 lines"},
+    {"command": "git status --short | awk '$1 ~ /D/ {print}'", "status": "pass", "result": "blank; no deletion status"}
+  ],
+  "artifacts": [
+    {"path":"validator/src/inventory/agent_reader_guard_digests.rs","sha256":"sha256:632bdec892779c1837c1be5d447f41a601fb99b5a18d6bd9886dbdf4ba0322d5"},
+    {"path":"validator/src/inventory/agent_reader_guard_manifest_digests.rs","sha256":"sha256:f4f667d3089ff7972a61c779c175c03e356d28229cbc5f2418a3c2efcbabb392"},
+    {"path":"validator/src/inventory/agent_reader_guard_package_digests.rs","sha256":"sha256:e2fe7dc8c6053626054c600a219068a2c9f0cdd2aa79fcfa0b887fce5fe1febf"},
+    {"path":"validator/src/audit/coverage/scope/roots.rs","sha256":"sha256:41b2a4558cf13b5864a108c1670f41d4b4be451045b91fce777f952ff32ad03a"},
+    {"path":"validator/src/inventory/compatibility/reader_witness.rs","sha256":"sha256:475a5147cdadb827aaf11e43f40349f993c20e8b43d43344b26776fd80424ed2"},
+    {"path":"validator/src/inventory/compatibility/reader_witness/scan.rs","sha256":"sha256:79d551a9435279be233f0f1cdfcb8f7a67b541b361e0db280e8f19a7e5a84c3d"},
+    {"path":"validator/src/inventory/compatibility/reader_witness/tests.rs","sha256":"sha256:11f516489fc8c6c1de2cc384b62d385835d0186ea5af52114d81fc592dfda765"},
+    {"path":"validator/src/inventory/walk.rs","sha256":"sha256:2ce16ebce7c3aaf0f9bbe3ff1290162c53fa431f99f101ecc492e8b549fe703e"},
+    {"path":"validator/src/inventory/walk/tests.rs","sha256":"sha256:5ed30bfc08088bc6743645741cee24f70033d092fd82bc0bbdb6043e60833153"},
+    {"path":"validator/tests/inventory_contract_cases/agent_routes/reader_false_pass.rs","sha256":"sha256:1c9d975110ff504071c269dd1c6828a9a8be7207b51b2ef6e2e411e914f74008"},
+    {"path":"validator/tests/inventory_contract_cases/agent_routes/support.rs","sha256":"sha256:9216184a9fe663249be0599e4423a679ffa01011d7a352f2152c8211fc2ddce7"}
+  ],
+  "findings": [
+    {"severity": "P1", "status": "resolved", "summary": "constructed agent paths now require binding from path semantics regardless of reader API spelling"},
+    {"severity": "P1", "status": "resolved", "summary": "exact .codex/agents proof now observes and rejects special entries, empty and nested directories, links, missing rows, and extra files"}
+  ],
+  "unresolved_dependencies": [
+    "Root must independently reproduce the eleven-artifact set and dependency-closed tests, then accept or rework Integration-006.",
+    "Root retains sole authority over migration rows, adopted manifests, claim ceilings, release state, and completion reporting.",
+    "Live custom-agent discovery and runtime configuration remain unavailable; this corrective source evidence does not raise those ceilings."
+  ],
+  "requested_root_changes": [
+    {"request": "independently review Integration-006 against both REVIEW-005 findings and reproduce the scanner, typed-walk, live-guard, review, and full inventory-contract commands"},
+    {"request": "if and only if independent review passes, reconcile this corrective artifact set in place of Integration-005 for the agent-route portion of N02"}
+  ],
+  "limitations": [
+    "The repository remained broadly dirty from concurrent leased work; only the eight named corrective files were modified by this lease.",
+    "Single-link proof is Unix metadata based and fails closed on platforms where link counts are unavailable.",
+    "This is source-local candidate evidence, not host custom-agent discovery, installation, marketplace, runtime, readiness, or release proof.",
+    "No full N02, readiness, release, or completion claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

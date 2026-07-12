@@ -1,0 +1,94 @@
+{
+  "worker": "/root/observability_absent_store_corrector",
+  "lease_id": "OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION-008",
+  "context_id": "sha256:10301d644e632d2d7f199fd97dc7f599089fca5702134432c168eb8b9b5b5732",
+  "candidate_identity": {
+    "candidate_id": "sha256:1c811d9b0f27545239d2e38c4b1c9ed28a634b018015f5d4f8f76eba864b0649",
+    "context_id": "sha256:10301d644e632d2d7f199fd97dc7f599089fca5702134432c168eb8b9b5b5732",
+    "binding_path": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION-BINDING.json",
+    "binding_sha256": "sha256:10301d644e632d2d7f199fd97dc7f599089fca5702134432c168eb8b9b5b5732",
+    "artifact_set_formula": "Sort paths; concatenate each path, one TAB byte, lowercase SHA-256 without prefix, and one LF byte; SHA-256 the result.",
+    "artifact_count": 22,
+    "artifact_total_bytes": 107366,
+    "artifact_total_lines": 3271,
+    "artifact_set_sha256": "sha256:1c811d9b0f27545239d2e38c4b1c9ed28a634b018015f5d4f8f76eba864b0649",
+    "changed_subset_count": 3,
+    "changed_subset_bytes": 25918,
+    "changed_subset_lines": 748,
+    "changed_subset_sha256": "sha256:1202f5b55aa627138292d689f1872804b3dac13001154bff08ad48cc32ba1b1d",
+    "aggregate_enforcement": "RootBinding-v1 independently enforces the full 22-file aggregate; WorkerResult-v1 artifacts cover only the three owned changed paths."
+  },
+  "base_state": {
+    "status": "root-rework-relative-cwd-anchor",
+    "rework_path": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-RELATIVE-CWD-ANCHOR-REWORK.json",
+    "rework_sha256": "sha256:31e0da2b73608c759356aa6470446c8ced38da77b853ca88a52204f5f60acd8c",
+    "prior_candidate_id": "sha256:d264da50b7f9449afa0bb713eec2d6310bbed1f64e205e9b85be7b4cd1f2a14d",
+    "unsafe_relative_cwd_cases": 5
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_check": "AC-OBSERVABILITY-RELATIVE-CWD-ANCHOR-008",
+    "acceptance_status": "provisional",
+    "candidate_id": "sha256:1c811d9b0f27545239d2e38c4b1c9ed28a634b018015f5d4f8f76eba864b0649",
+    "full_artifact_count": 22,
+    "changed_artifact_count": 3,
+    "root_acceptance": "withheld",
+    "public_integration": "retracted-pending-root-review",
+    "readiness": "withheld"
+  },
+  "touched_paths": [
+    "validator/src/observability/filesystem/anchors.rs",
+    "validator/src/observability/filesystem/confinement.rs",
+    "validator/tests/observability_contract/races_paths.rs",
+    "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION-008.json"
+  ],
+  "touched_semantics": [
+    "observability::absolute_cwd_attachment",
+    "observability::retained_ancestor_binding",
+    "observability::confined_store_lifecycle"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {"class": "workspace_write", "target": "observability-confinement-source", "performed": true},
+    {"class": "fixture_write", "target": "observability-relative-cwd-tests", "performed": true},
+    {"class": "process", "target": "offline-observability-validation", "performed": true}
+  ],
+  "requirements": [
+    "AC-OBSERVABILITY-RELATIVE-CWD-ANCHOR-008",
+    "absolute-cwd-descriptor-attachment",
+    "five-operation-relative-cwd-false-pass",
+    "full-observability-preservation",
+    "root-aggregate-binding"
+  ],
+  "dependency_nodes": ["observability-relative-cwd-anchor-rework"],
+  "changes": [
+    {"area": "relative-path-authority", "result": "Relative store parents are lexically attached at bind time to an absolute root-to-CWD descriptor and identity chain without canonicalizing through untrusted paths."},
+    {"area": "cwd-attachment", "result": "Binding compares the retained current-directory descriptor identity with the directory reached through the absolute lexical chain; every later lifecycle revalidation includes that root/CWD link."},
+    {"area": "five-operation-false-pass", "result": "A subprocess-isolated CWD rename and ordinary replacement makes first creation, append, query, clear, and recovery error while replacement and detached retained trees remain unchanged."}
+  ],
+  "commands_and_tests": [
+    {"command": "rustfmt --check validator/src/observability/filesystem/anchors.rs validator/src/observability/filesystem/confinement.rs validator/tests/observability_contract/races_paths.rs", "status": "pass", "result": "Scoped Rust-2024 formatting passed; production confinement.rs is exactly 300 lines and races_paths.rs is a 371-line adversarial-test exception."},
+    {"command": "CARGO_TARGET_DIR=/tmp/hul-observability-relative-cwd-008 cargo test -j16 --locked --offline --manifest-path validator/Cargo.toml --test observability_contract -- --test-threads=16", "status": "pass", "result": "29 of 29 observability contract tests passed in the isolated target; unrelated warnings remain outside this lease."},
+    {"command": "relative_cwd_anchor_replacement_fails_closed_for_full_lifecycle", "status": "pass", "result": "Subprocess control covered first creation, append, query, clear, and recovery after working-directory pathname replacement; all operations errored and both trees remained unchanged."},
+    {"command": "absolute ordinary/symlink replacement, hardlink/special, corruption, privacy/export, and recursive zero-write controls", "status": "pass", "result": "Full suite and individually named preservation controls passed without source/test drift."},
+    {"command": "WorkerResultV1::parse_json, validate_for, ArtifactWorkspace::verify, result_id, and worker/scope/effect/artifact/no-claim mutations", "status": "pass", "result": "Exact root-issued envelope parsed and validated; ArtifactWorkspace verified all three artifacts, and five of five negative mutations were rejected."}
+  ],
+  "artifacts": [
+    {"path": "validator/src/observability/filesystem/anchors.rs", "sha256": "sha256:95e3f33c5b3bb9e6bf953c07993b4c9fb5d2818f4b7e94ff1f12bb7d2f9c8e9a", "byte_length": 2635},
+    {"path": "validator/src/observability/filesystem/confinement.rs", "sha256": "sha256:3b60a42464566976579dbe56e3d379ac96aad3f327ea3d4e58393b6a0a420b18", "byte_length": 9433},
+    {"path": "validator/tests/observability_contract/races_paths.rs", "sha256": "sha256:819fae8869b7b766eb205b165017647464f02cdb82f5ed3f25afd1728135b5af", "byte_length": 13850}
+  ],
+  "findings": [
+    {"code": "RELATIVE_CWD_ANCHOR_SUBSTITUTION", "severity": "corrected-candidate", "summary": "The prior retained relative '.' descriptor lacked a root pathname attachment, so five lifecycle operations continued against a detached renamed directory."},
+    {"code": "ROOT_AGGREGATE_ENFORCEMENT", "severity": "scope-boundary", "summary": "The complete 22-file identity is independently frozen by RootBinding-v1; this WorkerResult records the three owned changed artifacts."}
+  ],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [],
+  "limitations": [
+    "This WorkerResult records a confined local-store source candidate only; it does not assert source acceptance, public observability integration, product behavior, readiness, release, node closure, or goal completion.",
+    "WorkerResult-v1 does not enforce the declared full candidate aggregate; RootBinding-v1 is the authority for the 22-file membership and aggregate.",
+    "Effective runtime route is unverified unless runtime metadata exposes it."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

@@ -1,0 +1,223 @@
+{
+  "worker": "/root/n02_snapshot_review",
+  "lease_id": "LEASE-N02-PACKAGE-SNAPSHOT-002",
+  "context_id": "sha256:ec3bd82fc19401029c13f9cd84c8844a879a86f51b020413e19f6e1d6a0761b1",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "dirty": true,
+    "status_sha256_before_result": "458cfc109704d14ddd50014f1d6bad880222b04195e45b5527a305cf89710d10",
+    "worktree_diff_sha256_before_result": "bc5c3411367899332125cd52ad15658348593f6014b1a1040fcc0a20b4f18c5d",
+    "staged_diff_sha256_before_result": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "owned_artifact_set_sha256": "0a308f9ef7d4a2e4b1b2c54fe1e8457bb7a50eea60fbed8958dc1407eb5900bd",
+    "context_formula": "SHA-256 of ordered rows key<TAB>value<LF> for head_commit, head_tree, branch, status_sha256, worktree_diff_sha256, staged_diff_sha256, and artifact_set_sha256.",
+    "context_note": "The context digest was frozen immediately before this self-referential WorkerResult was added. The protected .codex-worktree/env.sh file was not opened, read, hashed, or sourced.",
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "lease_scope": [
+      "validator/src/package/inventory/snapshot/capture.rs",
+      "validator/src/package/inventory/snapshot/mod.rs",
+      "validator/src/package/inventory/snapshot/tree.rs",
+      "validator/src/package/inventory/snapshot/tests.rs",
+      "docs/ultragoal-successor-live/worker-results/LEASE-N02-PACKAGE-SNAPSHOT-002.json"
+    ],
+    "predecessor_result": "LEASE-N02-PACKAGE-SNAPSHOT-001",
+    "predecessor_review": "REWORK: a pre-finalization Arc could escape and any path component named target was pruned.",
+    "root_owned_surfaces_not_modified": [
+      "plugin-manifest-draft.json",
+      "migration and generated-authority registries",
+      "Cargo manifests and lockfiles",
+      "CLI, closure/package_entries, telemetry, claims, and git state"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "acceptance_ceiling": "Corrective immutable package snapshot core only. This result does not accept root integration, N02, package readiness, release, or completion.",
+    "artifact_count_excluding_result": 4,
+    "artifact_set_sha256": "0a308f9ef7d4a2e4b1b2c54fe1e8457bb7a50eea60fbed8958dc1407eb5900bd",
+    "artifact_set_formula": "Use artifacts array order. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "artifact_lines": 699,
+    "artifact_bytes": 23147,
+    "maximum_file_lines": 275,
+    "files_over_300_lines": 0,
+    "focused_snapshot_tests": "7 passed; 0 failed",
+    "focused_package_inventory_tests": "62 passed; 0 failed",
+    "native_all_target_check": "pass with unrelated existing warnings",
+    "whole_crate_windows_check": "blocked by eleven out-of-scope platform-gating errors; no diagnostic was attributed to this artifact set",
+    "exact_leased_format_check": "pass",
+    "diff_check": "pass",
+    "tracked_deletions": 0,
+    "required_root_manifest_resource_additions": 6,
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "destructive_effect_performed": false
+  },
+  "touched_paths": [
+    "validator/src/package/inventory/snapshot/capture.rs",
+    "validator/src/package/inventory/snapshot/mod.rs",
+    "validator/src/package/inventory/snapshot/tree.rs",
+    "validator/src/package/inventory/snapshot/tests.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-PACKAGE-SNAPSHOT-002.json"
+  ],
+  "touched_semantics": [
+    "PackageCapture exposes no snapshot accessor on Unix or non-Unix; only successful finish(self) returns Arc<PackageSnapshot>.",
+    "A failed session or LiveContext finalization cannot coexist with an escaped snapshot authority.",
+    "Only intended top-level target output is local-only; a legitimate nested path such as skills/target/SKILL.md remains in the tree and byte cache.",
+    "PackageSnapshot remains immutable and suitable for later pure task adapters after finalization."
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "source-bound negative API regression covering both Unix and non-Unix PackageCapture implementations",
+    "manifest-listed skills/target/SKILL.md captured as a directory and single-link regular file after finalization",
+    "persistent and mutate-restore changes rejected without any pre-finalization snapshot handle"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Only the four exact leased Rust modules and this WorkerResult were written."
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "Tests created and removed isolated temporary Git repositories; Cargo output was confined to /tmp target directories."
+    },
+    {
+      "class": "git",
+      "scope": "Read-only identity, status, diff, and deletion inspection only; no stage, commit, branch, worktree, merge, or rebase operation."
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "HCT-INVENTORY",
+    "CT-PACKAGE-SNAPSHOT candidate-bound read core",
+    "REQ-CLI-002",
+    "REQ-PROOF-001",
+    "REQ-MAINT-005",
+    "REQ-SECURITY-001"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY"
+  ],
+  "changes": [
+    {
+      "area": "finalization authority",
+      "result": "Removed both pre-finalization snapshot accessors and rewrote consumers/tests to inspect only the Arc returned by successful finish(self)."
+    },
+    {
+      "area": "tree coverage",
+      "result": "Removed any-component target pruning while retaining the exact top-level target prefix exclusion."
+    },
+    {
+      "area": "regression proof",
+      "result": "Added a negative API surface guard and a finalized nested-target resource witness; both failed before the correction and pass afterward."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n02-package-snapshot002-target cargo test --locked --offline -p ultragoal --lib snapshot::tests -- --test-threads=1",
+      "result": "red_then_pass",
+      "summary": "Before implementation, 5 passed and the two exact regressions failed for the expected accessor and missing-tree-entry reasons; after implementation, 7 passed and 0 failed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n02-package-snapshot002-target cargo test --locked --offline -p ultragoal --lib package::inventory -- --test-threads=1",
+      "result": "pass",
+      "summary": "62 passed; 0 failed; 1466 filtered out after final formatting."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n02-package-snapshot002-target cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "pass",
+      "summary": "All native targets compile; unrelated existing warnings remain."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n02-package-snapshot002-windows cargo check --locked --offline -p ultragoal --target x86_64-pc-windows-msvc --lib",
+      "result": "out_of_scope_blocked",
+      "summary": "The same eleven existing non-Unix platform-gating errors block the crate; none points to the leased snapshot files."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check --config skip_children=true <four leased Rust files>; git diff --no-index --check /dev/null <each leased Rust file>; tracked deletion scans",
+      "result": "pass",
+      "summary": "All four implementation files are exactly formatted, whitespace-clean, and no tracked deletion exists."
+    },
+    {
+      "command": "Draft 2020-12 validation against IMPLEMENTATION_DEPENDENCY_GRAPH.json worker_output_schema plus exact artifact digest, byte, line, and ordered-set reconciliation",
+      "result": "pass",
+      "summary": "WorkerResult-v1 and the four frozen implementation artifacts reconcile exactly."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/package/inventory/snapshot/capture.rs",
+      "sha256": "sha256:b737542aa405679289698784b3284cabd25943fdb62f0385e2ad8e6232b0bc24",
+      "bytes": 8738,
+      "lines": 240
+    },
+    {
+      "path": "validator/src/package/inventory/snapshot/mod.rs",
+      "sha256": "sha256:6c480d37013179ca6a78046c5c8c59231c93750c83e6d77ad0d8ecb2ae3e643c",
+      "bytes": 1877,
+      "lines": 82
+    },
+    {
+      "path": "validator/src/package/inventory/snapshot/tree.rs",
+      "sha256": "sha256:26901070def18637590508465f24b170f9d936ee019e3e503f3ee0b395bd2360",
+      "bytes": 3390,
+      "lines": 102
+    },
+    {
+      "path": "validator/src/package/inventory/snapshot/tests.rs",
+      "sha256": "sha256:313e09066ea6b921b925af78d4bc237f68a691c41b3f5acaa3b44bad23d7c80c",
+      "bytes": 9142,
+      "lines": 275
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "The stale pre-finalization Arc escape is removed at the API boundary on both supported and fail-closed platform implementations."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Nested legitimate target-named package paths are no longer hidden from the immutable tree index."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "The six snapshot-core Rust modules remain subject to root-owned package-manifest reconciliation after independent acceptance."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent review and root acceptance of this corrective artifact set.",
+    "Root-owned manifest reconciliation for the six snapshot-core module files requested by LEASE-N02-PACKAGE-SNAPSHOT-001.",
+    "A separately leased root-integrated adapter that constructs one PackageCapture, finalizes it, and supplies only the finalized PackageSnapshot to pure tasks.",
+    "Candidate-bound representative product verification after root integration."
+  ],
+  "requested_root_changes": [
+    {
+      "surface": "plugin-manifest-draft.json",
+      "request": "After independent PASS, add validator/src/package/inventory/anchored/session/tree.rs and validator/src/package/inventory/snapshot/{mod,capture,identity,tree,tests}.rs to the root-owned resource inventory."
+    },
+    {
+      "surface": "root integration lease",
+      "request": "Route downstream pure package tasks only from the Arc returned by successful PackageCapture::finish; do not recreate a pre-finalization accessor or second snapshot authority."
+    }
+  ],
+  "limitations": [
+    "The corrected snapshot core remains dormant until a separate root-owned CLI and telemetry integration lease is accepted.",
+    "This lease does not change closure/package_entries, public commands, telemetry, manifests, registries, claims, release state, or git state.",
+    "Positive whole-crate non-Unix compilation remains unavailable because eleven pre-existing platform-gating errors are outside this lease."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

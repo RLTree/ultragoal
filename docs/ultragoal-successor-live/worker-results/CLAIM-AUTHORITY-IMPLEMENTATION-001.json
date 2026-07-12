@@ -1,0 +1,136 @@
+{
+  "worker": "/root/claim_authority_builder",
+  "lease_id": "CLAIM-AUTHORITY-IMPLEMENTATION-001",
+  "context_id": "sha256:097aa5974881f5eefc35c10f9c54cafe0f698a087a14fbac9666011d77a70d67",
+  "candidate_identity": {
+    "candidate_id": "sha256:b377a1f7156fd8bdb7999eafbcd862d3f65b9d9465d245cff5c10b93bd700215",
+    "context_id": "sha256:097aa5974881f5eefc35c10f9c54cafe0f698a087a14fbac9666011d77a70d67",
+    "binding_path": "docs/ultragoal-successor-live/root-decisions/CLAIM-AUTHORITY-FREEZE-BINDING.json",
+    "binding_sha256": "sha256:097aa5974881f5eefc35c10f9c54cafe0f698a087a14fbac9666011d77a70d67",
+    "root_bound_artifact_count": 6,
+    "root_bound_artifact_total_bytes": 35473,
+    "root_bound_artifact_total_lines": 1089,
+    "root_aggregate_authority": "Root independently enforces this exact six-artifact candidate; WorkerResult-v1 artifacts record the same six leased paths and do not claim aggregate enforcement."
+  },
+  "base_state": {
+    "status": "definition_only_claim_authority_frozen",
+    "root_integration": "withheld",
+    "public_api": "unbound"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_check": "AC-CLAIM-AUTHORITY-IMPLEMENTATION-001",
+    "acceptance_ceiling": "definition-level claim authority and focused contract tests only",
+    "root_binding": "definition-only; public integration remains root-owned"
+  },
+  "touched_paths": [
+    "validator/src/claims/decision.rs",
+    "validator/src/claims/definition.rs",
+    "validator/src/claims/evidence.rs",
+    "validator/src/claims/guard.rs",
+    "validator/src/claims/mod.rs",
+    "validator/tests/claims_contract.rs"
+  ],
+  "touched_semantics": [
+    "claims::definition",
+    "claims::evidence",
+    "claims::observation",
+    "claims::decision",
+    "claims::guard"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "claim-authority-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "claim-authority-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-claim-authority-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "AC-CLAIM-AUTHORITY-IMPLEMENTATION-001",
+    "REQ-PROOF-001",
+    "REQ-STATE-001"
+  ],
+  "dependency_nodes": [
+    "hct-capture",
+    "hct-context",
+    "hct-inventory",
+    "hct-state"
+  ],
+  "changes": [
+    {
+      "area": "definition-level claim authority",
+      "result": "The adopted fourteen-claim DAG, immutable evidence observations, independent decisions, guards, rejection visibility, invalidation, rerun closure, and deterministic read-only projections are confined to the six root-bound artifacts."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hct-claims-authority-target cargo test --locked --offline -j16 --test claims_contract -- --test-threads=16",
+      "status": "pass",
+      "result": "4 passed; the focused contract covers exact adoption, evidence rejection controls, prerequisite closure, repair/rerun invalidation, and deterministic zero-write projections."
+    },
+    {
+      "command": "WorkerResultV1::parse_json, validate_for, ArtifactWorkspace::verify, and result_id against the root-bound six-artifact lease/package envelope",
+      "status": "pass",
+      "result": "Typed validation is recorded against the root candidate and binding; mutation controls reject wrong worker, path, effect, context, candidate, digest, and no-claim statement."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/claims/decision.rs",
+      "sha256": "sha256:1af18afbbe79b6be83be76917c02ecd8155249611e9a4c1f525eac9c1d0ce8d3",
+      "byte_length": 4430
+    },
+    {
+      "path": "validator/src/claims/definition.rs",
+      "sha256": "sha256:a3c5d4d7163a20b3778f2a1966ae8f503f65f1a6375c0c67d17c2c755952f2eb",
+      "byte_length": 5787
+    },
+    {
+      "path": "validator/src/claims/evidence.rs",
+      "sha256": "sha256:43e878e80cca85991e292f3a280e8be8bc21827c650384475cc070729d5267b8",
+      "byte_length": 3370
+    },
+    {
+      "path": "validator/src/claims/guard.rs",
+      "sha256": "sha256:400778258659448c09c9acdad47c06e4bb3bfd78c8e177aa9e183d0bb67cb366",
+      "byte_length": 7354
+    },
+    {
+      "path": "validator/src/claims/mod.rs",
+      "sha256": "sha256:e15bf14463bb15f3ae73cb9d0706a26255d6a308583a055a829d59fd18cc6b9c",
+      "byte_length": 388
+    },
+    {
+      "path": "validator/tests/claims_contract.rs",
+      "sha256": "sha256:0169731c5517aa50904e99d1175321caac8ccd29c1443bedac7681753e27c618",
+      "byte_length": 14144
+    }
+  ],
+  "findings": [
+    {
+      "id": "root-aggregate-authority",
+      "status": "truthfully-bounded",
+      "evidence": "The candidate count, bytes, lines, and candidate digest come from the root binding; no worker-local aggregate or public integration claim is substituted."
+    }
+  ],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [],
+  "limitations": [
+    "No validator/src/lib.rs binding, external public API witness, CLI route, public integration, or passed live claim is asserted.",
+    "No readiness, release, node closure, or goal completion is asserted.",
+    "Any six-artifact, binding, candidate, adopted-input, dependency, behavior, or effect change reopens this result."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

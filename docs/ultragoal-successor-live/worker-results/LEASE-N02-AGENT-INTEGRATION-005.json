@@ -1,0 +1,104 @@
+{
+  "worker": "/root/n02_agent_integration5",
+  "lease_id": "LEASE-N02-AGENT-INTEGRATION-005",
+  "context_id": "sha256:c387c6adf6462b4f5f8a413a4458d2fba3b10d276c07896573ef0334979a0b4e",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true,
+    "captured_at": "2026-07-10T22:59:01Z",
+    "status_sha256_before_result": "2878625a563e1253f570efd228ca71ef555eaf6cc663e98d3df68de893282d1c",
+    "worktree_diff_sha256_before_result": "76a160f4b70516d0abdfc9b3c71134813afec302505c241681852d1dd523fee2",
+    "staged_diff_sha256_before_result": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "owned_artifact_set_sha256": "c387c6adf6462b4f5f8a413a4458d2fba3b10d276c07896573ef0334979a0b4e",
+    "artifact_set_formula": "SHA-256 of artifact array order using path<TAB>sha256-without-prefix<LF>; WorkerResult excluded."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "superseded_worker_result": "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-INTEGRATION-004.json",
+    "superseded_worker_result_sha256": "sha256:bb92b0645013e62b5fe77647dcaf6312a326596290fa6bb3f68807437834c806",
+    "review_disposition": "REWORK: constructed canonical-agent paths could evade the production-reader heuristic, and a valid seventh .codex/agents descriptor did not invalidate exact manifest state."
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged": true,
+    "artifact_count_excluding_result": 7,
+    "artifact_set_sha256": "c387c6adf6462b4f5f8a413a4458d2fba3b10d276c07896573ef0334979a0b4e",
+    "artifact_bytes": 31006,
+    "artifact_lines": 938,
+    "maximum_touched_rust_source_lines": 232,
+    "live_registry_ceiling": "withheld_or_blocked",
+    "result": "corrective candidate returned for independent review and root reconciliation; no authority row or claim was adopted"
+  },
+  "touched_paths": [
+    "validator/src/inventory/compatibility/reader_witness.rs",
+    "validator/src/inventory/compatibility/reader_witness/scan.rs",
+    "validator/src/inventory/compatibility/reader_witness/tests.rs",
+    "validator/tests/inventory_contract_cases/agent_routes/reader_false_pass.rs"
+  ],
+  "touched_semantics": [
+    "production-reader discovery recognizes canonical and legacy agent paths assembled from quoted fragments only when paired with a source read/open/load operation",
+    "legacy token matching also recognizes separator-free constructions of every retired agent path",
+    "exact canonical-agent state enumerates .codex/agents through the existing descriptor-aware read session and requires exactly the six compiled manifest paths",
+    "constructed-reader and seventh-descriptor false-pass controls keep legacy routes active and invalid instead of allowing demotion"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {"class": "filesystem", "scope": "four leased Rust paths plus this WorkerResult", "result": "modified candidate files; no deletions"},
+    {"class": "network", "scope": "none", "result": "not performed"},
+    {"class": "git", "scope": "none", "result": "no commit, branch, merge, rebase, stage, or push"},
+    {"class": "external_product", "scope": "none", "result": "not performed"}
+  ],
+  "requirements": [
+    "detect production readers that construct .codex/agents paths without a contiguous literal",
+    "reject every extra regular file under the canonical .codex/agents directory",
+    "preserve canonical manifest descriptors as data rather than misclassifying them as production readers",
+    "fail closed on both adversarial cases before any legacy route demotion"
+  ],
+  "dependency_nodes": ["N02"],
+  "changes": [
+    {"area": "reader discovery", "result": "quoted path fragments are compacted across separators and gated by explicit read/open/load operations, catching array joins, reversed fragments, path builders, and formatting"},
+    {"area": "canonical manifest state", "result": "the live .codex/agents directory is enumerated in the same ReadSession and compared exactly with the six compile-time manifest paths"},
+    {"area": "false-pass controls", "result": "four constructed-reader forms and a syntactically valid seventh descriptor now prove route demotion remains blocked"}
+  ],
+  "commands_and_tests": [
+    {"command": "cargo test --offline -p ultragoal --lib constructed_agent_paths_are_detected_without_treating_manifests_as_readers -- --nocapture --test-threads=1", "status": "pass", "result": "1 passed; 0 failed"},
+    {"command": "cargo test --offline -p ultragoal --lib live_reader_guard_has_no_unbound_positive_reader -- --nocapture --test-threads=1", "status": "pass", "result": "1 passed; 0 failed"},
+    {"command": "cargo test --offline -p ultragoal --test inventory_contract agent_routes:: -- --nocapture --test-threads=1", "status": "pass", "result": "8 passed; 0 failed"},
+    {"command": "cargo test --offline -p ultragoal --lib self_tests::review -- --nocapture --test-threads=1", "status": "pass", "result": "55 passed; 0 failed"},
+    {"command": "rustfmt --edition 2024 --check <four exact leased Rust files>", "status": "pass", "result": "all four corrective sources formatted; maximum 232 lines"},
+    {"command": "git status --short | awk '$1 ~ /D/ {print}'", "status": "pass", "result": "blank; no deletion status"}
+  ],
+  "artifacts": [
+    {"path":"validator/src/inventory/agent_reader_guard_digests.rs","sha256":"sha256:518762d2d431951d2c3d8e8ce1a689d5f6e6de10bc41d7c71b27eadafd35ede9"},
+    {"path":"validator/src/inventory/agent_reader_guard_manifest_digests.rs","sha256":"sha256:f4f667d3089ff7972a61c779c175c03e356d28229cbc5f2418a3c2efcbabb392"},
+    {"path":"validator/src/inventory/agent_reader_guard_package_digests.rs","sha256":"sha256:e2fe7dc8c6053626054c600a219068a2c9f0cdd2aa79fcfa0b887fce5fe1febf"},
+    {"path":"validator/src/inventory/compatibility/reader_witness.rs","sha256":"sha256:294dc3c6ce2f375bedf3861b588058bae93e94fb0c050f6e1607d8cf378f00d2"},
+    {"path":"validator/src/inventory/compatibility/reader_witness/scan.rs","sha256":"sha256:2b98f77e4d581a080d347e96b9a5fddb89e63f10518eda1b67c1531ebd7a0c51"},
+    {"path":"validator/src/inventory/compatibility/reader_witness/tests.rs","sha256":"sha256:c6a1c4e831e8ad6135237f26afe3d5036d3c53bec5bf9e3aac5c35b0101818f6"},
+    {"path":"validator/tests/inventory_contract_cases/agent_routes/reader_false_pass.rs","sha256":"sha256:c682d8392c73cbccd40d5437b77f34a48cc0742e8125d417269537036e738221"}
+  ],
+  "findings": [
+    {"severity": "P1", "status": "resolved", "summary": "constructed .codex/agents reader paths can no longer bypass the all-language positive-reader guard"},
+    {"severity": "P1", "status": "resolved", "summary": "an unauthorized seventh canonical agent descriptor invalidates exact manifest state and blocks legacy demotion"}
+  ],
+  "unresolved_dependencies": [
+    "Root must independently reproduce the seven-artifact set and focused tests, then accept or rework Integration-005.",
+    "Root retains sole authority over migration rows, adopted manifests, claim ceilings, release state, and completion reporting.",
+    "Live custom-agent discovery and runtime configuration remain unavailable; this corrective source evidence does not raise those ceilings."
+  ],
+  "requested_root_changes": [
+    {"request": "independently review Integration-005 against the two REWORK findings and reproduce all four focused test commands"},
+    {"request": "if and only if independent review passes, reconcile this corrective artifact set in place of Integration-004 for the agent-route portion of N02"}
+  ],
+  "limitations": [
+    "The repository remained broadly dirty from concurrent leased work; only the four named corrective files were modified by this lease.",
+    "This is source-local candidate evidence, not host custom-agent discovery, installation, marketplace, runtime, readiness, or release proof.",
+    "No full N02, readiness, release, or completion claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

@@ -1,0 +1,644 @@
+{
+  "worker": "/root/n02_route_recovery3",
+  "lease_id": "LEASE-N02-AGENT-ROUTE-WITNESS-002",
+  "context_id": "sha256:d8e4e0b8365531e04fdf30ea3668cea95ee2f96b1e29294aea04ceaef6c00c57",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "dirty": true,
+    "status_sha256_before_result": "0c97f4c17c0174333f1617db0b2042c62aa69e47a4ac5cc3ac3498951f69c181",
+    "leased_artifact_set_sha256": "d8e4e0b8365531e04fdf30ea3668cea95ee2f96b1e29294aea04ceaef6c00c57",
+    "leased_artifact_set_formula": "SHA-256 of path-bound shasum -a 256 lines for the twenty-one listed implementation artifacts in listed order",
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "phase_a_reader_result": "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json",
+    "phase_a_reader_result_sha256": "47a5690209d11d3bbea3bc3d2b2a14c7de3404e09364e9ad48ebe0df85f40d99",
+    "phase_a_disposition": "Frozen candidate provenance only; the Phase B witness independently re-hashes every listed Phase A artifact and audits active production readers.",
+    "live_registry_state": "migration/authority-routes.json still contains one broad unverified legacy-agents-to-current-discovery row. It was not modified under this worker lease.",
+    "retained_legacy_agent_count": 14,
+    "root_approved_amendment": "validator/src/review/round/registry.rs, its descriptor-anchored reader module, direct registry tests, route-reader digest bindings, and exact canonical fixture bindings were amended after audit found split-read and path-substitution flaws outside Phase A.",
+    "concurrent_dirt_policy": "All root, user, and other-worker changes were preserved. No merge, rebase, staging, commit, deletion, or destructive cleanup was performed."
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_registry_adoption",
+    "acceptance_ceiling": "Compiled fail-closed context-routing candidate for fourteen retained legacy agent descriptors. The live migration registry is unchanged, so N02, migration adoption, readiness, release, and completion remain open.",
+    "compiled_agent_route_count": 14,
+    "live_adopted_agent_route_count": 0,
+    "verified_context_transition": {
+      "replacement_state": "candidate-required",
+      "equivalence_proof": "not-applicable",
+      "physical_cleanup_state": "preserve",
+      "behavior_or_runtime_equivalence_claimed": false
+    },
+    "reader_witness": {
+      "phase_a_artifacts_directly_digest_bound": 19,
+      "outside_phase_a_modules_directly_digest_bound": 4,
+      "active_positive_legacy_reader_count": 0,
+      "negative_guard_literals_permitted_only_at_exact_digests": true,
+      "unchanged_worker_result_with_changed_positive_reader_demotes": false
+    },
+    "focused_agent_route_tests": "3 passed; 0 failed",
+    "compatibility_route_tests": "5 passed; 0 failed",
+    "routing_transition_tests": "5 passed; 0 failed",
+    "direct_review_registry_tests": "6 passed; 0 failed",
+    "canonical_review_fixture_test": "1 passed; 0 failed",
+    "inventory_contract_aggregate": "78 passed; 0 failed",
+    "all_target_check": "pass",
+    "scoped_format_check": "pass",
+    "workspace_format_check": "pass",
+    "scoped_diff_check": "pass",
+    "physical_deletions": 0,
+    "maximum_rust_file_lines": 298,
+    "rust_files_over_300_lines": 0,
+    "implementation_artifact_count_excluding_result": 21,
+    "implementation_lines_excluding_result": 3880,
+    "implementation_bytes_excluding_result": 149126,
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/inventory/compatibility/agent_specs.rs",
+    "validator/src/inventory/compatibility/agent_witness.rs",
+    "validator/src/inventory/compatibility/mod.rs",
+    "validator/src/inventory/compatibility/reader_witness.rs",
+    "validator/src/inventory/compatibility/reader_witness_specs.rs",
+    "validator/src/inventory/compatibility/specs.rs",
+    "validator/src/inventory/compatibility/witness.rs",
+    "validator/src/inventory/routing.rs",
+    "validator/src/inventory/routing_apply.rs",
+    "validator/src/inventory/routing_state.rs",
+    "validator/src/review/round/registry.rs",
+    "validator/src/review/round/registry/reader.rs",
+    "validator/src/self_tests/review/registry.rs",
+    "validator/src/self_tests/review/registry/reader.rs",
+    "validator/tests/inventory_contract.rs",
+    "validator/tests/inventory_contract_cases/agent_routes.rs",
+    "fixtures/review-round/anchors/live-registry-exposure.json",
+    "fixtures/review-round/anchors/live-registry-exposure-stale.json",
+    "fixtures/review-round/anchors/live-registry-exposure-stale-captured-at.json",
+    "fixtures/review-round/anchors/live-registry-exposure-disk-synced-active-stale.json",
+    "fixtures/review-round/valid/review-round-receipt.json",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-ROUTE-WITNESS-002.json"
+  ],
+  "touched_semantics": [
+    "Each of the fourteen retained legacy agent descriptors has one compiled stable ID, relative path, retained digest, canonical target, target path, and target digest.",
+    "A legacy agent descriptor becomes Context/ContextOnly only when its exact route, direct reader witness, preserved source digest, current canonical target, candidate-required replacement state, not-applicable equivalence state, and OD-009 preservation state all verify.",
+    "Any source, target, reader, proof-reference, matcher, transition, or active module drift leaves the descriptor Legacy/Active and emits a causal invalid_agent_route_transition finding.",
+    "The Phase A WorkerResult is provenance, never sole proof: all nineteen Phase A artifacts are re-hashed and active validator Rust sources are scanned for unbound legacy positive readers.",
+    "Exact-digest negative guards may retain legacy literals solely to reject or classify them; positive selection and authorization readers may not.",
+    "The review-round registry consumes canonical role and agent_manifest_path, rejects legacy or mixed identity keys and inferred model/reasoning fields, and does not infer runtime discovery or exposure.",
+    "The registry exposure artifact is read once through root-anchored no-follow descriptors; the same bounded bytes supply SHA-256 and duplicate-key-safe JSON parsing, while symlink, special, hardlink, ancestor/leaf swap, and identity-change cases fail closed without echoing paths.",
+    "Agent context routing does not claim semantic equivalence, replacement behavior, product behavior, runtime discovery, readiness, release, or completion.",
+    "Legacy descriptors remain physically present under OD-009; no destructive cleanup is encoded or performed."
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "validator/tests/inventory_contract_cases/agent_routes.rs",
+    "validator/src/self_tests/review/registry/reader.rs",
+    "fixtures/review-round/anchors/live-registry-exposure.json",
+    "fixtures/review-round/anchors/live-registry-exposure-stale.json",
+    "fixtures/review-round/anchors/live-registry-exposure-stale-captured-at.json",
+    "fixtures/review-round/anchors/live-registry-exposure-disk-synced-active-stale.json",
+    "fixtures/review-round/valid/review-round-receipt.json",
+    "temporary Git repositories with exact fourteen-route, source-drift, target-drift, reader-proof-missing, positive-reader-reintroduced, broad-matcher, forged-target, forged-proof, and cleanup-overclaim cases"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Twenty-one leased or root-amended implementation/test/fixture artifacts plus this WorkerResult only"
+    },
+    {
+      "class": "local-build-artifact",
+      "scope": "Isolated Cargo output under /tmp/n02-agent-recovery3-target"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "Inventory integration tests created and removed isolated temporary Git repositories"
+    },
+    {
+      "class": "git",
+      "scope": "Read-only root, branch, HEAD/tree, status, diff, and digest operations"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PLUGIN-006",
+    "REQ-ORCH-003",
+    "REQ-SECURITY-006",
+    "REQ-MAINT-001",
+    "REQ-MAINT-003",
+    "REQ-MAINT-006"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N08-PLUGIN-PRODUCT",
+    "N10-ORCHESTRATION",
+    "N14-MIGRATION"
+  ],
+  "changes": [
+    {
+      "area": "compiled agent-route specifications",
+      "result": "Added fourteen exact source-to-target specifications, including retained and target digests for six canonical agents and two adopted product-surface definitions."
+    },
+    {
+      "area": "direct current-reader witness",
+      "result": "Replaced receipt-only trust with direct digest checks over all nineteen Phase A artifacts, four audited outside modules, and a bounded active-source scan that permits legacy literals only in exact negative guards."
+    },
+    {
+      "area": "typed non-equivalence transition",
+      "result": "Added equivalence_proof=not-applicable and a dedicated agent context transition using replacement_state=candidate-required; generic verified-equivalence retirement cannot authorize these rows."
+    },
+    {
+      "area": "fail-closed route application",
+      "result": "Removed generic text-authorized demotion. Context demotion now requires exact matcher, source digest, target identity/status/digest, reader witness, proof references, and preserve state at application time."
+    },
+    {
+      "area": "positive reader migration",
+      "result": "Migrated review/round/registry.rs from agent_type selection to canonical role/path validation and explicit rejection of legacy, mixed, or inferred-runtime identity fields."
+    },
+    {
+      "area": "single-snapshot registry exposure reader",
+      "result": "Replaced the independent digest/read pair with one bounded descriptor-anchored snapshot whose bytes supply both the digest and duplicate-key-safe JSON value; deterministic path, ancestor, hardlink, special-file, oversized, and secret-echo controls fail closed."
+    },
+    {
+      "area": "direct review fixture reconciliation",
+      "result": "Migrated four registry anchors to canonical role/path rows and rebound the canonical review receipt to the current anchor and review-registry source digests."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-agent-recovery3-target cargo test --manifest-path validator/Cargo.toml --test inventory_contract agent_routes -- --nocapture",
+      "result": "pass",
+      "summary": "3 passed; all fourteen exact routes, source/target/reader/unchanged-receipt positive-reader drift, and forged matcher/target/proof/cleanup controls."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-agent-recovery3-target cargo test --manifest-path validator/Cargo.toml --test inventory_contract compatibility_routes -- --nocapture",
+      "result": "pass",
+      "summary": "5 passed; retained skill compatibility behavior remained non-equivalence and fail-closed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-agent-recovery3-target cargo test --manifest-path validator/Cargo.toml --test inventory_contract routing_transitions -- --nocapture",
+      "result": "pass",
+      "summary": "5 passed; generic typed-route overclaim, compatibility, cleanup, identifier-echo, and live-legacy controls remained green."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-agent-recovery3-target cargo test --manifest-path validator/Cargo.toml --lib self_tests::review::registry -- --nocapture",
+      "result": "pass",
+      "summary": "6 passed; mixed identity, stale capture, leaf and ancestor swaps, symlink/hardlink/special targets, duplicate keys, oversized files, stable errors, and secret non-echo controls."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-agent-recovery3-target cargo test --manifest-path validator/Cargo.toml --lib self_tests::review::round_core::canonical_review_round_and_materiality_fixtures_pass_current_validation -- --nocapture",
+      "result": "pass",
+      "summary": "1 passed after direct canonical anchor and source-digest reconciliation."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-agent-recovery3-target cargo check --manifest-path validator/Cargo.toml --all-targets",
+      "result": "pass",
+      "summary": "All library, binary, unit-test, and integration targets compiled on the shared dirty candidate."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-agent-recovery3-target cargo test --quiet --manifest-path validator/Cargo.toml --test inventory_contract",
+      "result": "pass",
+      "summary": "78 passed; 0 failed on the frozen shared candidate."
+    },
+    {
+      "command": "rustfmt --edition 2024 --config skip_children=true --check over all leased Rust files; jq empty over direct JSON fixtures; git diff --check over the lease; deletion scan",
+      "result": "pass",
+      "summary": "Scoped Rust format, JSON syntax, whitespace, and OD-009 no-deletion checks passed."
+    },
+    {
+      "command": "cargo fmt --manifest-path validator/Cargo.toml --all -- --check",
+      "result": "pass",
+      "summary": "The complete validator workspace passed rustfmt check after concurrent owners froze their files."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/inventory/compatibility/agent_specs.rs",
+      "sha256": "d357c99a7eb74aedea24a9a3be56bc0445d978edc0fa00dac9bb6ad4bfe8cdb8",
+      "bytes": 8958,
+      "lines": 171
+    },
+    {
+      "path": "validator/src/inventory/compatibility/agent_witness.rs",
+      "sha256": "9b7d754237305227e0591150e47541661add2fd3c3beccf59d07a0b54fbbc45e",
+      "bytes": 3995,
+      "lines": 101
+    },
+    {
+      "path": "validator/src/inventory/compatibility/mod.rs",
+      "sha256": "737b3f126e0ed63033820af1f3041fecae086eb4bc51ac9681c5a2c5a8f52546",
+      "bytes": 469,
+      "lines": 15
+    },
+    {
+      "path": "validator/src/inventory/compatibility/reader_witness.rs",
+      "sha256": "ebbb05e6a88b2dc67e88c7a702c96718a5c1d00c8941e57fcb894fa1d01f11e8",
+      "bytes": 3912,
+      "lines": 107
+    },
+    {
+      "path": "validator/src/inventory/compatibility/reader_witness_specs.rs",
+      "sha256": "f4e31018dd1b873f612953e47348ae50ec3233513802bfda2fba1068199a6d83",
+      "bytes": 4562,
+      "lines": 110
+    },
+    {
+      "path": "validator/src/inventory/compatibility/specs.rs",
+      "sha256": "9586daa6e2c0e9a77e98a3356eaecc8edb0174bec154cb488c2b6b9fbb775f5a",
+      "bytes": 4210,
+      "lines": 127
+    },
+    {
+      "path": "validator/src/inventory/compatibility/witness.rs",
+      "sha256": "556060b059db6094862c8342d322e0cec19ed71913405b7da8f6c8356820e43c",
+      "bytes": 6899,
+      "lines": 145
+    },
+    {
+      "path": "validator/src/inventory/routing.rs",
+      "sha256": "7f06189e2b3234a68a7e1dd906eba63dd0b25e6c49084c7eb24a2f881d6642f6",
+      "bytes": 8218,
+      "lines": 253
+    },
+    {
+      "path": "validator/src/inventory/routing_apply.rs",
+      "sha256": "01496e55866461e96539f5b385e8316a2aaacc21fff2630ba55cc1f0406424dc",
+      "bytes": 3230,
+      "lines": 77
+    },
+    {
+      "path": "validator/src/inventory/routing_state.rs",
+      "sha256": "cabd6625fcc8a7ae05f844bc7eb06ac2978b588d967af0407b802b7f4a23bfa1",
+      "bytes": 7085,
+      "lines": 191
+    },
+    {
+      "path": "validator/src/review/round/registry.rs",
+      "sha256": "21bd26bb200252eb7d2ab2ed8fa5043fc3acc3665404706ecb319379b5f043ce",
+      "bytes": 7512,
+      "lines": 227
+    },
+    {
+      "path": "validator/src/review/round/registry/reader.rs",
+      "sha256": "63b068104400ef1ea14e9225acb5468c7a1dddc707137a7b98d793ac81900066",
+      "bytes": 8517,
+      "lines": 284
+    },
+    {
+      "path": "validator/src/self_tests/review/registry.rs",
+      "sha256": "0c8d1a5a1229dad37a66649f8417f22404ce32b0788d35eaacba0b97e7192ed2",
+      "bytes": 8286,
+      "lines": 226
+    },
+    {
+      "path": "validator/src/self_tests/review/registry/reader.rs",
+      "sha256": "dc5304d2e23867a036cf597800cd01dc55e45255cd4833137d6de0ffb02640a6",
+      "bytes": 6398,
+      "lines": 150
+    },
+    {
+      "path": "validator/tests/inventory_contract.rs",
+      "sha256": "3316d69af71c42c7ffadb5cc0c7f63f6a33067a28926a25d73dd17ece7d08ad8",
+      "bytes": 7500,
+      "lines": 242
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/agent_routes.rs",
+      "sha256": "d1f350e7a0f56024fe8159c275758a67f4ed0fa92aa3fcf018b49250336b37f3",
+      "bytes": 10403,
+      "lines": 298
+    },
+    {
+      "path": "fixtures/review-round/anchors/live-registry-exposure.json",
+      "sha256": "f4fe233068a4dad7e32b5b10262efb70832b84641f7e2733811d7aaf29bbb3d3",
+      "bytes": 1437,
+      "lines": 37
+    },
+    {
+      "path": "fixtures/review-round/anchors/live-registry-exposure-stale.json",
+      "sha256": "7d2ce48b4d4772bb0e5f09384b333eb1773f6fdf22ee5991793c227cf1937883",
+      "bytes": 1440,
+      "lines": 37
+    },
+    {
+      "path": "fixtures/review-round/anchors/live-registry-exposure-stale-captured-at.json",
+      "sha256": "8f486ea71c5c773e1178481f8a7fb482878515be1362eac42326913988a2a50c",
+      "bytes": 1437,
+      "lines": 37
+    },
+    {
+      "path": "fixtures/review-round/anchors/live-registry-exposure-disk-synced-active-stale.json",
+      "sha256": "568d1f13cc10133d164aca7b291e980e7db628a05975b40e06068e49a7b668b0",
+      "bytes": 1713,
+      "lines": 45
+    },
+    {
+      "path": "fixtures/review-round/valid/review-round-receipt.json",
+      "sha256": "5860ca8f549807da1b7541e57fd29986efffbfe11b8238328e584322b5b2e4a3",
+      "bytes": 42945,
+      "lines": 1000
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Fourteen retained legacy agent descriptors now have exact compiled fail-closed transition witnesses and adversarial source/target/reader/registry controls."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "The Phase A receipt-only proof flaw was removed. The live witness now requires current direct artifact digests and rejects an unchanged receipt when a positive reader changes."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "The out-of-Phase-A positive agent_type reader in review/round/registry.rs was migrated to canonical role/path validation; exact negative guards remain allowed only at compiled digests."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "The registry exposure split-read, path echo, duplicate-key, symlink/special/hardlink, and ancestor/leaf substitution flaws were removed with a descriptor-anchored one-buffer reader and deterministic false-pass controls."
+    },
+    {
+      "severity": "claim-ceiling",
+      "finding": "Context-only routing is based on exact no-reader and preservation proof. It deliberately keeps replacement behavior candidate-required and equivalence not-applicable."
+    },
+    {
+      "severity": "root-adoption-required",
+      "finding": "The live migration registry is root-owned and unchanged. Until Ultra root replaces its broad legacy-agent row with the fourteen exact rows below, all fourteen live descriptors correctly remain Legacy/Active."
+    },
+    {
+      "severity": "verification",
+      "finding": "The frozen candidate passed all 78 inventory integration tests, the canonical review fixture, the six direct registry security tests, all-target compilation, scoped checks, and workspace rustfmt."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Ultra-root replacement of legacy-agents-to-current-discovery with the fourteen exact route rows in this result",
+    "Independent review and Ultra-root acceptance of this WorkerResult and its exact twenty-one artifact digests",
+    "Fresh root-owned HCT-INVENTORY reconciliation after all concurrent N02 lanes and the migration registry freeze",
+    "All readiness, release, completion, runtime discovery, replacement behavior, and semantic-equivalence claims"
+  ],
+  "requested_root_changes": [
+    {
+      "request": "Atomically replace the broad legacy-agents-to-current-discovery row in migration/authority-routes.json with these fourteen exact rows after independent review; do not append them while the broad row remains.",
+      "registry": "migration/authority-routes.json",
+      "remove_route_id": "legacy-agents-to-current-discovery",
+      "insert_routes": [
+        {
+          "route_id": "agent-contract-claim-falsifier-to-claim-falsifier",
+          "match": {"stable_id": "LEGACY-AGENT:agents/contract-claim-falsifier.md"},
+          "canonical_target": "AGENT:claim-falsifier",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["agents/contract-claim-falsifier.md", ".codex/agents/claim-falsifier.toml", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        },
+        {
+          "route_id": "agent-harness-contract-claim-falsifier-to-claim-falsifier",
+          "match": {"stable_id": "LEGACY-AGENT:custom-agents/harness-contract-claim-falsifier.toml"},
+          "canonical_target": "AGENT:claim-falsifier",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["custom-agents/harness-contract-claim-falsifier.toml", ".codex/agents/claim-falsifier.toml", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        },
+        {
+          "route_id": "agent-orchestration-recovery-falsifier-to-orchestration-recovery-reviewer",
+          "match": {"stable_id": "LEGACY-AGENT:agents/orchestration-recovery-falsifier.md"},
+          "canonical_target": "AGENT:orchestration-recovery-reviewer",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["agents/orchestration-recovery-falsifier.md", ".codex/agents/orchestration-recovery-reviewer.toml", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        },
+        {
+          "route_id": "agent-harness-orchestration-recovery-falsifier-to-orchestration-recovery-reviewer",
+          "match": {"stable_id": "LEGACY-AGENT:custom-agents/harness-orchestration-recovery-falsifier.toml"},
+          "canonical_target": "AGENT:orchestration-recovery-reviewer",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["custom-agents/harness-orchestration-recovery-falsifier.toml", ".codex/agents/orchestration-recovery-reviewer.toml", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        },
+        {
+          "route_id": "agent-security-trust-boundary-falsifier-to-security-reviewer",
+          "match": {"stable_id": "LEGACY-AGENT:agents/security-trust-boundary-falsifier.md"},
+          "canonical_target": "AGENT:security-reviewer",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["agents/security-trust-boundary-falsifier.md", ".codex/agents/security-reviewer.toml", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        },
+        {
+          "route_id": "agent-harness-security-trust-boundary-falsifier-to-security-reviewer",
+          "match": {"stable_id": "LEGACY-AGENT:custom-agents/harness-security-trust-boundary-falsifier.toml"},
+          "canonical_target": "AGENT:security-reviewer",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["custom-agents/harness-security-trust-boundary-falsifier.toml", ".codex/agents/security-reviewer.toml", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        },
+        {
+          "route_id": "agent-product-simplicity-falsifier-to-product-journey-reviewer",
+          "match": {"stable_id": "LEGACY-AGENT:agents/product-simplicity-falsifier.md"},
+          "canonical_target": "AGENT:product-journey-reviewer",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["agents/product-simplicity-falsifier.md", ".codex/agents/product-journey-reviewer.toml", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        },
+        {
+          "route_id": "agent-harness-product-simplicity-falsifier-to-product-journey-reviewer",
+          "match": {"stable_id": "LEGACY-AGENT:custom-agents/harness-product-simplicity-falsifier.toml"},
+          "canonical_target": "AGENT:product-journey-reviewer",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["custom-agents/harness-product-simplicity-falsifier.toml", ".codex/agents/product-journey-reviewer.toml", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        },
+        {
+          "route_id": "agent-material-review-scope-gatekeeper-to-product-journey-reviewer",
+          "match": {"stable_id": "LEGACY-AGENT:agents/material-review-scope-gatekeeper.md"},
+          "canonical_target": "AGENT:product-journey-reviewer",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["agents/material-review-scope-gatekeeper.md", ".codex/agents/product-journey-reviewer.toml", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        },
+        {
+          "route_id": "agent-harness-material-review-scope-gatekeeper-to-product-journey-reviewer",
+          "match": {"stable_id": "LEGACY-AGENT:custom-agents/harness-material-review-scope-gatekeeper.toml"},
+          "canonical_target": "AGENT:product-journey-reviewer",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["custom-agents/harness-material-review-scope-gatekeeper.toml", ".codex/agents/product-journey-reviewer.toml", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        },
+        {
+          "route_id": "agent-plugin-scout-to-repo-recon",
+          "match": {"stable_id": "LEGACY-AGENT:agents/plugin-scout.md"},
+          "canonical_target": "AGENT:repo-recon",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["agents/plugin-scout.md", ".codex/agents/repo-recon.toml", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        },
+        {
+          "route_id": "agent-standards-extractor-to-research-verifier",
+          "match": {"stable_id": "LEGACY-AGENT:agents/standards-extractor.md"},
+          "canonical_target": "AGENT:research-verifier",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["agents/standards-extractor.md", ".codex/agents/research-verifier.toml", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        },
+        {
+          "route_id": "agent-harness-repo-initializer-to-fit-fresh",
+          "match": {"stable_id": "LEGACY-AGENT:custom-agents/harness-repo-initializer.toml"},
+          "canonical_target": "PS-FIT-FRESH",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["custom-agents/harness-repo-initializer.toml", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-FIT-FRESH", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        },
+        {
+          "route_id": "agent-harness-retrofit-planner-to-fit-retrofit",
+          "match": {"stable_id": "LEGACY-AGENT:custom-agents/harness-retrofit-planner.toml"},
+          "canonical_target": "PS-FIT-RETROFIT",
+          "intended_disposition": "non-authoritative",
+          "transition": {
+            "compatibility_behavior": "not-applicable",
+            "compatibility_boundary": "adopted",
+            "replacement_state": "candidate-required",
+            "active_reader_writer_state": "none-verified",
+            "observed_authority_state": "context-only",
+            "equivalence_proof": "not-applicable",
+            "physical_cleanup_state": "preserve",
+            "proof_refs": ["custom-agents/harness-retrofit-planner.toml", "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-FIT-RETROFIT", "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"]
+          }
+        }
+      ]
+    },
+    {
+      "request": "Commission independent review of this WorkerResult and replay all fourteen positive routes plus source, target, Phase A artifact, positive-reader, matcher, target, proof-reference, cleanup, and broad-route-overlap false-pass controls."
+    },
+    {
+      "request": "After registry adoption, run a fresh candidate-bound HCT-INVENTORY reconciliation and keep N02, product behavior, runtime discovery, readiness, release, and completion claims withheld until their separate proof surfaces pass."
+    }
+  ],
+  "limitations": [
+    "This worker did not edit the root-owned migration registry; no live legacy agent has been reclassified by this candidate alone.",
+    "The reader witness scans active Rust sources under validator/src and exact-digest audited negative guards; it is not a general semantic proof over every language or external runtime.",
+    "Any legitimate change to a directly bound Phase A artifact or audited module intentionally invalidates all fourteen transitions until Ultra root reviews and recompiles the witness.",
+    "The Phase A WorkerResult is retained as provenance only and cannot substitute for current implementation bytes.",
+    "Context-only disposition proves absence of active Harness-owned reader authority at this boundary, not behavioral equivalence or implementation of fresh/retrofit product journeys.",
+    "No model, mode, reasoning configuration, runtime custom-agent discovery, marketplace state, install state, or external reviewer exposure was inferred or claimed.",
+    "The descriptor-anchored registry exposure reader is supported on Unix; non-Unix execution fails closed rather than weakening confinement."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

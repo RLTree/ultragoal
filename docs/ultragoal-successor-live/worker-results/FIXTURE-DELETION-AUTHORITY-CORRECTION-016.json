@@ -1,0 +1,198 @@
+{
+  "worker": "/root/fixture_cleanup_recovery_engineer",
+  "lease_id": "FIXTURE-DELETION-AUTHORITY-CORRECTION-016",
+  "context_id": "sha256:2923b027d610e8f12ef01691a962249b16d9e3210036c82b6824d1c37ece3969",
+  "candidate_identity": {
+    "candidate_id": "sha256:11142b703b05385d85bd2c899e00e8ff6722ca82467e41021736451ea04271ba",
+    "context_id": "sha256:2923b027d610e8f12ef01691a962249b16d9e3210036c82b6824d1c37ece3969",
+    "aggregate_algorithm": "sha256(path UTF-8, NUL, unsigned 64-bit big-endian byte length, file bytes), in touched_paths order",
+    "worker_owned_artifact_count": 3,
+    "worker_owned_artifact_total_bytes": 58277,
+    "worker_owned_artifact_total_lines": 1712,
+    "worker_owned_artifact_set_sha256": "sha256:11142b703b05385d85bd2c899e00e8ff6722ca82467e41021736451ea04271ba"
+  },
+  "base_state": {
+    "status": "adversarial-red",
+    "baseline_worker_result": "docs/ultragoal-successor-live/worker-results/FIXTURE-LEASE-IDENTITY-RECOVERY-CORRECTION-014.json",
+    "attacker_model": "an attacker may replace a validated child file, child directory, or lease-root name after the last userspace identity check and before namespace deletion",
+    "decisive_finding": "the prior quarantine path revalidated an inode and then called name-only unlinkat, leaving a replacement race at the final destructive syscall",
+    "before_rows": [
+      {
+        "path": "validator/src/fixture_scheduler/lease.rs",
+        "sha256": "sha256:23e8ec3213062c0c8c90c0ab75d6e6480664fade86c2e8ced7353395e9d26bda",
+        "byte_length": 20610
+      },
+      {
+        "path": "validator/tests/fixture_scheduler_contract/adversarial.rs",
+        "sha256": "sha256:4c06bc23097c8d326451bb09cea8273f0fb64a1d0c8e743139612d563cc38a68",
+        "byte_length": 16686
+      },
+      {
+        "path": "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
+        "sha256": "sha256:79460cbe0efd23711ded74d3c723dac5ab3bf44d9a5387b0c671fe47b3e893cb",
+        "byte_length": 5382
+      }
+    ]
+  },
+  "final_state": {
+    "status": "worker_blocked",
+    "root_acceptance": "withheld",
+    "product_ceiling": "the owned implementation proves fail-closed retention and recovery-required typing; it does not prove successful cleanup on macOS, Linux, Windows, or any unexecuted host",
+    "freebsd_authority": "funlinkat binds the directory/name and already-open expected file descriptor in the destructive syscall; this branch was not executed on the Darwin worker host",
+    "macos_linux_authority": "identity-conditioned deletion is unavailable in the selected API surface, so cleanup returns Unsupported and retains the lease instead of issuing a final name-only unlink",
+    "after_rows": [
+      {
+        "path": "validator/src/fixture_scheduler/lease.rs",
+        "sha256": "sha256:344dfc78d1a6ddb32b868733fe967dff8f12be28bed7df452ea313ccc18f5faa",
+        "byte_length": 22369
+      },
+      {
+        "path": "validator/tests/fixture_scheduler_contract/adversarial.rs",
+        "sha256": "sha256:1ff81c2e49b8b0c5dc13405e21c8e6b95df4d33e750cf4f8ff0c9d7743d63e1e",
+        "byte_length": 28619
+      },
+      {
+        "path": "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
+        "sha256": "sha256:c4680dc145b00d4a4bb9474fe843e01311c5b376a75d8ffa53b0304e799eb869",
+        "byte_length": 7289
+      }
+    ],
+    "worker_owned_artifact_set_sha256": "sha256:11142b703b05385d85bd2c899e00e8ff6722ca82467e41021736451ea04271ba"
+  },
+  "touched_paths": [
+    "validator/src/fixture_scheduler/lease.rs",
+    "validator/tests/fixture_scheduler_contract/adversarial.rs",
+    "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs"
+  ],
+  "touched_semantics": [
+    "fixture_scheduler::identity_conditioned_cleanup"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "fixture-delete-authority-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "fixture-delete-authority-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-fixture-delete-authority-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "REQ-FIXTURE-DELETE-EXACT-IDENTITY",
+    "REQ-FIXTURE-DELETE-REPLACEMENT-SURVIVAL",
+    "REQ-FIXTURE-DELETE-RETAINED-RECOVERY"
+  ],
+  "dependency_nodes": [
+    "fixture-lease-identity-recovery-correction-014"
+  ],
+  "changes": [
+    {
+      "path": "validator/src/fixture_scheduler/lease.rs",
+      "before_sha256": "sha256:23e8ec3213062c0c8c90c0ab75d6e6480664fade86c2e8ced7353395e9d26bda",
+      "after_sha256": "sha256:344dfc78d1a6ddb32b868733fe967dff8f12be28bed7df452ea313ccc18f5faa",
+      "summary": "removed the final name-only deletion authority; FreeBSD uses descriptor-conditioned funlinkat and unsupported hosts retain the entry with a typed error"
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/adversarial.rs",
+      "before_sha256": "sha256:4c06bc23097c8d326451bb09cea8273f0fb64a1d0c8e743139612d563cc38a68",
+      "after_sha256": "sha256:1ff81c2e49b8b0c5dc13405e21c8e6b95df4d33e750cf4f8ff0c9d7743d63e1e",
+      "summary": "added deterministic post-validation swaps for a child file, child directory, and lease root, and asserted that both the expected inode and unrelated replacement survive"
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
+      "before_sha256": "sha256:79460cbe0efd23711ded74d3c723dac5ab3bf44d9a5387b0c671fe47b3e893cb",
+      "after_sha256": "sha256:c4680dc145b00d4a4bb9474fe843e01311c5b376a75d8ffa53b0304e799eb869",
+      "summary": "bound this WorkerResult-v1 to the three live owned artifacts, the exact attacker model, and a blocked product ceiling"
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-delete-red-target cargo test --manifest-path validator/Cargo.toml --test fixture_scheduler_contract swap_after_capture_validation_retains_both -- --nocapture",
+      "status": "red-3-of-3-failed-against-prior-name-only-unlink-path"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-delete-red-target cargo test --manifest-path validator/Cargo.toml --test fixture_scheduler_contract swap_after_capture_validation_retains_both -- --nocapture",
+      "status": "pass-3-of-3-after-fail-closed-correction"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-delete-red-target cargo test --manifest-path validator/Cargo.toml --test fixture_scheduler_contract adversarial:: -- --test-threads=1",
+      "status": "pass-19-of-19-on-darwin"
+    },
+    {
+      "command": "rustfmt --edition 2024 validator/src/fixture_scheduler/lease.rs validator/tests/fixture_scheduler_contract/adversarial.rs validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-delete-red-target cargo test --manifest-path validator/Cargo.toml --test fixture_scheduler_contract lease_identity_worker_result:: -- --test-threads=1",
+      "status": "pass-2-of-2-typed-result-artifact-verification-and-negative-mutations"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-delete-red-target cargo test --manifest-path validator/Cargo.toml --test fixture_scheduler_contract -- --test-threads=1",
+      "status": "fail-29-passed-16-failed",
+      "result": "3 scheduling expectation conflicts are bound in requested_root_changes; 13 confinement, execution-adapter, and port-isolation failures were PermissionDenied Operation-not-permitted on this sandboxed Darwin host"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-delete-red-target cargo check --manifest-path validator/Cargo.toml",
+      "status": "pass-with-pre-existing-warnings"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/fixture_scheduler/lease.rs",
+      "sha256": "sha256:344dfc78d1a6ddb32b868733fe967dff8f12be28bed7df452ea313ccc18f5faa",
+      "byte_length": 22369
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/adversarial.rs",
+      "sha256": "sha256:1ff81c2e49b8b0c5dc13405e21c8e6b95df4d33e750cf4f8ff0c9d7743d63e1e",
+      "byte_length": 28619
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
+      "sha256": "sha256:c4680dc145b00d4a4bb9474fe843e01311c5b376a75d8ffa53b0304e799eb869",
+      "byte_length": 7289
+    }
+  ],
+  "findings": [
+    {
+      "severity": "safety-critical",
+      "finding": "userspace identity rechecks followed by unlinkat do not bind the checked inode to the name deleted by the kernel"
+    },
+    {
+      "severity": "platform-authority",
+      "finding": "the selected Darwin and Linux APIs expose name-based unlink only; the safe owned behavior is a typed retained cleanup failure"
+    },
+    {
+      "severity": "proof-boundary",
+      "finding": "the FreeBSD exact-delete branch is source-backed but not executed on this Darwin host"
+    }
+  ],
+  "unresolved_dependencies": [
+    "root-fixture-deletion-authority-decision",
+    "supported-host-cleanup-proof",
+    "unowned-fixture-expectation-reconciliation"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/tests/fixture_scheduler_contract/scheduling.rs",
+      "expected_sha256": "sha256:a8f164702a9dee3287a1ce9c1c8a2e69464e539e80558a3cea502ddfe807fc71",
+      "request": "Only if root adopts the typed retained-recovery ceiling, replace current preimage sha256:735ddb139ac8a45ad53975e19156de392f0b55320960524cfeb4c17472f2c6c9 with the rustfmt-normalized postimage that adds FreeBSD Integrity versus other-host CleanupFailure helpers, expects active counts 0 versus 2/4/1, and has the bound postimage digest above. Otherwise reject this request and choose exact deletion authority or explicitly revise the attacker model; do not silently restore name-only unlink."
+    }
+  ],
+  "limitations": [
+    "macOS and Linux cleanup intentionally cannot reach Cleaned while the attacker model includes post-validation pre-unlink name replacement and no identity-conditioned destructive primitive is authorized.",
+    "The FreeBSD funlinkat branch was not compiled or executed on this Darwin host.",
+    "The wider fixture suite contains platform-ceiling expectation conflicts and sandbox-denied confinement or port operations outside this worker scope.",
+    "No threat-boundary narrowing, privileged helper, mount-namespace strategy, platform support decision, package, install, release, readiness, Git, network, or external-host claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

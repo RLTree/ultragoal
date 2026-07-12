@@ -1,0 +1,222 @@
+{
+  "worker": "/root/n02_route_recovery3",
+  "lease_id": "LEASE-N02-REVIEW-ANCHOR-004",
+  "context_id": "sha256:7ad9ac23f95fbea454b747b9bd317c01c82979c2ba98e2e920271105354f9016",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "status_sha256_before_result": "5d4950237a3b5c85808043c7bfb87508ac34b4ffc03fc71cee81b1d858194165",
+    "worktree_diff_sha256_before_result": "7cedfd496ea129f31f4f6c492c161b41bd85892d6546ea00abc452348585ef78",
+    "staged_diff_sha256_before_result": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "owned_artifact_set_sha256": "651008c4bc5537ff1d06281a4280d344998c9a9aac82a25ce9e23e83ba1cf5b1",
+    "dirty": true,
+    "context_note": "The context digest binds HEAD, tree, branch, the time-bound live status digest, and the exact three-artifact set immediately before this self-referential WorkerResult was added."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "predecessor_worker_result": "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-REVIEW-003.json",
+    "predecessor_worker_result_sha256": "sha256:fe25d9e1247fdfee4958065d2df0417b3e09256cbf9601ad51f1ef03d5377d6f",
+    "review_verdict": "REWORK",
+    "confirmed_findings": [
+      "P1 path-based anchor precheck and open admitted an ancestor-substitution package-root escape",
+      "P2 direct serde_json parsing accepted duplicate authority keys and trailing JSON",
+      "P2 semantic persona failures echoed attacker-controlled reviewer identifiers; explicitly outside this lease"
+    ],
+    "concurrent_dirt_policy": "All root, user, route, command, persona, and other-worker changes were preserved; no staging, commit, merge, rebase, deletion, or destructive operation was performed."
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged": true,
+    "artifact_count_excluding_result": 3,
+    "artifact_set_sha256": "651008c4bc5537ff1d06281a4280d344998c9a9aac82a25ce9e23e83ba1cf5b1",
+    "artifact_lines": 565,
+    "artifact_bytes": 19641,
+    "maximum_file_lines": 261,
+    "files_over_300_lines": 0,
+    "focused_anchor_artifact_tests": "10 passed; 0 failed",
+    "existing_anchor_security_tests": "6 passed; 0 failed",
+    "complete_review_tests": "51 passed; 0 failed",
+    "all_target_check": "pass with unrelated existing warnings",
+    "non_unix_behavior": "fail closed with review_round_anchor_path_invalid",
+    "persona_echo_status": "unresolved and untouched outside this lease",
+    "git_operations_performed": false,
+    "network_performed": false,
+    "external_product_effect_performed": false
+  },
+  "touched_paths": [
+    "validator/src/review/round/anchor/artifact.rs",
+    "validator/src/review/round/anchor/artifact/unique_json.rs",
+    "validator/src/review/round/anchor/artifact_tests.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-REVIEW-ANCHOR-004.json"
+  ],
+  "touched_semantics": [
+    "descriptor-rooted read-only openat traversal for canonical review anchors",
+    "O_NOFOLLOW confinement on package root, every relative ancestor, and the leaf",
+    "pre-open and post-read root, ancestor, and leaf identity revalidation",
+    "single-link regular-file and four-megabyte anchor bounds",
+    "same-buffer unique-key JSON parsing with trailing-input rejection",
+    "stable non-echoing anchor failure identifiers",
+    "non-Unix fail-closed behavior"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Three leased anchor implementation/test files and this WorkerResult only"
+    },
+    {
+      "class": "local-build-artifact",
+      "scope": "Ignored Cargo output under /tmp/n02-anchor004-target and existing target directories"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "Isolated test roots created and removed by the self-test substrate"
+    },
+    {
+      "class": "git",
+      "scope": "Read-only identity, status, diff, and deletion inspection"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-SECURITY-006",
+    "REQ-PROOF-001",
+    "REQ-PROOF-007",
+    "REQ-REVIEW-003"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY"
+  ],
+  "changes": [
+    {
+      "area": "descriptor confinement",
+      "result": "Replaced path precheck plus path reopen with a pinned package-root descriptor, openat traversal, O_NOFOLLOW on all opened components, and descriptor-relative final revalidation."
+    },
+    {
+      "area": "root and ancestor races",
+      "result": "Added safe deterministic stages around root and ancestor opens; pre-open root substitution, pre-open ancestor substitution, opened-ancestor swap, in-place mutation, and leaf path swap now fail closed."
+    },
+    {
+      "area": "file boundary",
+      "result": "Requires a regular single-link leaf, caps metadata and read bytes at four megabytes, opens nonblocking to avoid special-file hangs, and distinguishes stable missing from invalid-path failures without echoing paths."
+    },
+    {
+      "area": "JSON authority boundary",
+      "result": "Parses and hashes one byte snapshot while recursively rejecting duplicate object keys and rejecting any trailing JSON input."
+    },
+    {
+      "area": "platform ceiling",
+      "result": "Unix receives descriptor confinement; unsupported non-Unix builds return a fixed fail-closed error and claim no anchor authority."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-anchor004-target cargo test --locked --offline -p ultragoal review::round::anchor::artifact_tests --lib -- --test-threads=1",
+      "result": "pass",
+      "summary": "10 passed: root and ancestor substitution, opened-ancestor identity, leaf/path and in-place mutation, symlink, hardlink, special file, missing file, duplicate keys, trailing input, byte bound, and read-only single-snapshot behavior."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-anchor004-target cargo test --locked --offline -p ultragoal self_tests::review::anchor_security --lib -- --test-threads=1",
+      "result": "pass",
+      "summary": "6 passed across canonical source, root escape, ancestor and leaf symlink, hardlink, special-file, placeholder, and semantic anchor controls."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-anchor004-target cargo test --locked --offline -p ultragoal self_tests::review --lib -- --test-threads=1",
+      "result": "pass",
+      "summary": "51 passed across the complete integrated review self-test surface."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-anchor004-target cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "pass",
+      "summary": "All library, binary, test, and integration targets compiled; warnings were unrelated dormant successor code."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check on the three artifacts; rg trailing-whitespace scan; git diff --check; tracked deletion scan",
+      "result": "pass",
+      "summary": "All three artifacts are formatted, text-clean, at or below 261 lines, and no tracked deletion rows exist."
+    },
+    {
+      "command": "Python jsonschema.Draft202012Validator against IMPLEMENTATION_DEPENDENCY_GRAPH.json worker_output_schema plus exact artifact digest, byte, line, and set reconciliation",
+      "result": "pass",
+      "summary": "WorkerResult-v1 validated with zero schema errors; all three artifact digests, byte counts, line counts, and the path-bound ordered set digest reconciled exactly."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/review/round/anchor/artifact.rs",
+      "sha256": "sha256:be42d07102892550c65a86a99a09313963b89b76a3868918aec4f762cef42cbc",
+      "bytes": 8113,
+      "lines": 261
+    },
+    {
+      "path": "validator/src/review/round/anchor/artifact/unique_json.rs",
+      "sha256": "sha256:1bee82bcc8b519890a0ed57bdb4a2be66de57f0be5e27b7010cc2655612e3217",
+      "bytes": 2640,
+      "lines": 86
+    },
+    {
+      "path": "validator/src/review/round/anchor/artifact_tests.rs",
+      "sha256": "sha256:f508b41ea73af58500f7c259989ade8a20b3232e044bb3ccd081acabf826e000",
+      "bytes": 8888,
+      "lines": 218
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "The executable ancestor-substitution escape is closed by descriptor-rooted traversal and deterministic pre-open substitution controls."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Top-level and nested duplicate JSON keys plus trailing JSON no longer enter anchor authority."
+    },
+    {
+      "severity": "unresolved-outside-lease",
+      "finding": "Semantic persona failure construction can still echo attacker-controlled reviewer identifiers. personas.rs is concurrently leased and was not touched."
+    },
+    {
+      "severity": "independent-review-required",
+      "finding": "This exact three-artifact set requires independent digest, race, portability, and false-pass review before root acceptance."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Disjoint persona-lane correction and independent SECRET_CANARY validation for semantic reviewer failures.",
+    "Independent review and root acceptance of this exact three-artifact set.",
+    "Root reconciliation with the route-owned registry reader and any later integrated review receipt.",
+    "Typed live materiality observations, reviewer runtime provenance, and custom-agent discovery remain outside this anchor lease.",
+    "N02 inventory closure, readiness, release, and product completion remain root-only decisions."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/review/round/personas.rs and its disjoint tests",
+      "request": "Complete the separately leased semantic non-echo correction and prove SECRET_CANARY absence through the full semantic validation path."
+    },
+    {
+      "path": "root acceptance state",
+      "request": "Commission an independent review bound to artifact_set_sha256 651008c4bc5537ff1d06281a4280d344998c9a9aac82a25ce9e23e83ba1cf5b1 before accepting this lease."
+    }
+  ],
+  "limitations": [
+    "The implementation supplies descriptor-confined anchor reads on Unix only; unsupported non-Unix platforms fail closed and receive no anchor-authority claim.",
+    "The three source/test artifacts prove deterministic local behavior only and do not establish runtime discovery, reviewer configuration, live materiality, N02 completion, readiness, or release.",
+    "The semantic persona SECRET_CANARY echo remains explicit unresolved work outside this disjoint lease.",
+    "The repository is intentionally dirty with root, user, and concurrent-worker changes; this worker changed no shared manifest, dependency, registry reader, materiality, runtime, persona, migration, claim, or release file.",
+    "The result excludes its own digest; its candidate identity and artifact set were frozen immediately before the self-referential result was added."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

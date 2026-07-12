@@ -1,0 +1,667 @@
+{
+  "worker": "/root/distribution_confinement_corrector",
+  "lease_id": "DISTRIBUTION-ANCESTOR-RELOCATION-CORRECTION-002",
+  "context_id": "sha256:32dc57e26e9f438136b014734be48a4b07a930229177b49e017e7263a47cb436",
+  "candidate_identity": {
+    "candidate_id": "sha256:f9d7aeee5cfd170e4ad5822e720442dfd0f31e2989971de7a2be2e770ada9359",
+    "context_id": "sha256:32dc57e26e9f438136b014734be48a4b07a930229177b49e017e7263a47cb436",
+    "identity_scope": "70 exact distribution source and contract-test artifacts; this WorkerResult is excluded to avoid self-reference.",
+    "artifact_set_formula": "Sort artifact paths; for each append path, one TAB byte, lowercase SHA-256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "artifact_set_sha256": "sha256:f9d7aeee5cfd170e4ad5822e720442dfd0f31e2989971de7a2be2e770ada9359",
+    "artifact_count": 70,
+    "artifact_total_bytes": 415473,
+    "artifact_total_lines": 12409,
+    "maximum_file_lines": 460,
+    "files_over_300_lines": [
+      "validator/src/distribution/filesystem/descriptor/directory.rs:322",
+      "validator/src/distribution/filesystem/descriptor/mutation.rs:342",
+      "validator/src/distribution/filesystem/file.rs:359",
+      "validator/tests/distribution_contract/descriptor_races.rs:460"
+    ],
+    "freeze_rows_path_sha_bytes_lines_device_inode_links": [
+      "validator/src/distribution/cache.rs\tb2b67ab2a58f142e2fd3551d92dec9df51f5f25c5c1ad982f8cd16b04e533dc8\t9221\t291\t16777229:1085968356:1",
+      "validator/src/distribution/cache_observation.rs\t1f4433e67de1aaa1083a2ebc71fed33da6506653213d08ef56708af43d020a25\t1250\t33\t16777229:1087378232:1",
+      "validator/src/distribution/error.rs\tcecf86d9bc10f292047f7a69a13ea8f70660aeaa4ee7bd9db6f66964897ded26\t2536\t67\t16777229:1083709978:1",
+      "validator/src/distribution/filesystem/descriptor/directory.rs\t16b70d4ecd5fc1a6f15b7c6a814a773b24c5cf48033dd6c28fa66293b3f6608a\t11670\t322\t16777229:1087539087:1",
+      "validator/src/distribution/filesystem/descriptor/file.rs\t2bb034c4fee991d49957ee466cd1fad06c70c7a7330e17892e40deab5242130b\t5519\t156\t16777229:1087539088:1",
+      "validator/src/distribution/filesystem/descriptor/mod.rs\td69d314e28f27206450cc968852676e5f13f99b765b0b4fcb717717962ad171a\t418\t14\t16777229:1087539089:1",
+      "validator/src/distribution/filesystem/descriptor/mutation.rs\t9b7db1274e2dc87c011a84cd49f7cc51a61130033f688b451a5f229ac715252c\t10571\t342\t16777229:1087539090:1",
+      "validator/src/distribution/filesystem/descriptor/types.rs\t2a6e3b6e54007a7916c688e0f81ff1a570956e52678efac323826499f5c98d3d\t3312\t111\t16777229:1087539091:1",
+      "validator/src/distribution/filesystem/file.rs\t9f7f8319f9e62394059ecb3d0856780de31a282ab806af2505f290cfd663115b\t12354\t359\t16777229:1087524938:1",
+      "validator/src/distribution/filesystem/hooks.rs\t8b42d797bbb0d4c73653eab760b3cd31ed1d2b94582855ad698db6f0c8158ee4\t1966\t77\t16777229:1087517467:1",
+      "validator/src/distribution/filesystem/mod.rs\t0bd8ed71e1561f3010506a81d3ec4379e0c4762cfde051d429a6375c84c44eb4\t375\t20\t16777229:1087345507:1",
+      "validator/src/distribution/filesystem/owned.rs\tf3c24eb516ac638d1a9ee4fc6e7bc2ef75c01bf9264ab7af51485987dd14c491\t2447\t93\t16777229:1087525898:1",
+      "validator/src/distribution/filesystem/remove.rs\t87a9a8d433d97ddc8558d037ec4a38071691cb6a9ef44d80a6b036a9c13017ac\t2586\t66\t16777229:1087526334:1",
+      "validator/src/distribution/filesystem/root.rs\t7b30875dd25930a98a23512ca0eee457ab82d704229eea5235923bb535ad563c\t4934\t157\t16777229:1087523781:1",
+      "validator/src/distribution/filesystem/tree.rs\t58f116590a0974e258810e4b1f4d1a5339ee4bdc3b06334dda4c747f78a0085e\t7975\t221\t16777229:1087531146:1",
+      "validator/src/distribution/filesystem/tree_ops.rs\t001e8d741be7df6e98a2dc19cc0b7a6d390c556dcd851eb8f29d978555434227\t8811\t291\t16777229:1087531145:1",
+      "validator/src/distribution/filesystem/walk.rs\t1e5514001274cc5a5367e4a13f4f9517e6526ec283ccece9e917cdbb36e3acc3\t3252\t99\t16777229:1087524667:1",
+      "validator/src/distribution/host.rs\t291ed899b315390f4de5eae4e285fc402545c18091e5719a85075b82b95e65c9\t8641\t296\t16777229:1085969380:1",
+      "validator/src/distribution/host_capability.rs\t39dfc20a142b376c5b1e5a6b844c2f19fa22bd803c256ce81a0411653bb34ec7\t8886\t273\t16777229:1087349844:1",
+      "validator/src/distribution/identity.rs\t8d06dffff9d92271b6915fe7dcff9392556f4d058464d46fdf0ca4254027f9f4\t8366\t283\t16777229:1085960621:1",
+      "validator/src/distribution/install.rs\te4c99a252da434035d8ff3771037328b63631137d12cb065eb5fad52375d8e85\t8769\t281\t16777229:1083725669:1",
+      "validator/src/distribution/json.rs\ta6e6e3c8b07871ffd4ff1ac60c924f5f491fb0bc7e129f9319cfc63e56735d35\t3497\t114\t16777229:1084537315:1",
+      "validator/src/distribution/marketplace.rs\tf2d87566d1ddfb8ccaebb351cc5560e8587c53189f7e4919835519ee692bde2e\t8704\t300\t16777229:1085973111:1",
+      "validator/src/distribution/marketplace_observation.rs\t37a3eb1224d0004b6fd19a88b7a59d59c2bf9f078c2e3b6891f9224a807ae61d\t1034\t32\t16777229:1087363883:1",
+      "validator/src/distribution/mod.rs\t79e57cf62ad2af01841ce3a35120a2d7704075dac8a2de6815fa2325f4e5acd3\t2790\t70\t16777229:1083716385:1",
+      "validator/src/distribution/model.rs\td0ab5a746d31d2a8d250163275e509a53025aff7d890c929b4231534edd287aa\t6368\t244\t16777229:1083709980:1",
+      "validator/src/distribution/observations.rs\t377d9a85af50ecb8e67f52b59343691926d4ae824fa6da70626cee5acb7f4691\t3139\t90\t16777229:1087376632:1",
+      "validator/src/distribution/package/archive.rs\t42893230c1e0b7beaedd64b9e98828753bbfbda3f0a310ba8d5f070502b15e8c\t3308\t92\t16777229:1083722155:1",
+      "validator/src/distribution/package/manifest.rs\tcf3c7d790d063470808b66e31c1da764a19e7ae40f723f7a4d5885520bd974c0\t5172\t155\t16777229:1084546489:1",
+      "validator/src/distribution/package/manifest_bind.rs\t24880f72b816dd60ad3d6c15a9b60c6d5a26900fb1701fdb10fd4b4e50f07ce4\t2787\t83\t16777229:1084989984:1",
+      "validator/src/distribution/package/materialize.rs\teddd92f6f5c7d39fe802225a97a862604d9b18f2333014d347b5e5a67f314473\t7859\t266\t16777229:1085964038:1",
+      "validator/src/distribution/package/mod.rs\t3d33d8073e2e03b4f8e81c2cd78c4e9c20f9143d94cca43b7235546ded964dfd\t1933\t65\t16777229:1083722152:1",
+      "validator/src/distribution/package/plan.rs\tf3229621155cd4db95636244f31aa308204b2840c4a37d565e384bb2eafdbff3\t5935\t197\t16777229:1083722156:1",
+      "validator/src/distribution/package/snapshot.rs\t6ec63cd265080e71ef3abab3a5722e66f1a2eb1787f2589c7040bc2d890295ae\t6024\t183\t16777229:1085997888:1",
+      "validator/src/distribution/package/source.rs\t5539d97ce88fa92870e6e49a73855c61ed51b4bab0c86585313914b82dd9a98a\t6450\t198\t16777229:1085962232:1",
+      "validator/src/distribution/package/spec.rs\t2993d9c6aa21a8c27992f977bb49ea62c70c1aea9e7cb7eedbd1f20a062daed2\t3877\t127\t16777229:1083722153:1",
+      "validator/src/distribution/reader/fallback.rs\t8fd8b8a447c545295827c0d9f5269752b873e9598eca93bf8006e07a080fb77d\t483\t17\t16777229:1083715609:1",
+      "validator/src/distribution/reader/mod.rs\t14ddabff12b90d437eccc93c73fca451bf22d3eafa86276c1fe66ca8f2fd8f22\t3744\t130\t16777229:1083715606:1",
+      "validator/src/distribution/reader/unix.rs\tb4020e7efd8936407db6dbd52e074354fb01c5cd411c34f4bd731e66493800d1\t4276\t121\t16777229:1083715607:1",
+      "validator/src/distribution/registry_observation.rs\t796fc13bb4c312fcbb4842946f01d80d88435c91cd0d2d27744577c1b1531e55\t9801\t292\t16777229:1087376633:1",
+      "validator/src/distribution/runtime_probe.rs\t524e8055cbd6c72b5c2605cca94c1ce9a8b0f713d3a70ddaa1bb610e110b60b5\t9803\t274\t16777229:1087358667:1",
+      "validator/src/distribution/spec.rs\tda00941e35b424d6b3ce6bef23ed64640848f32c33a4f5792777f5e72c8a8066\t8938\t282\t16777229:1083715215:1",
+      "validator/src/distribution/supply.rs\t51e28ebbea17035edafaa87dec3aeaed9af6fafbd9e0d954dcf0e624b2635dab\t5225\t168\t16777229:1083730462:1",
+      "validator/src/distribution/verify.rs\t2af4b397569c39584f75c6375fbe976831b729c6393b29ae7a7900add73371f2\t8070\t251\t16777229:1083716384:1",
+      "validator/tests/distribution_contract.rs\t926d7ab041fb867473a5992a0ae11c2e62ffb3401c051ec9b23dd6553b1b6fd1\t1976\t56\t16777229:1083649505:1",
+      "validator/tests/distribution_contract/adversarial_fs.rs\tceb874ea8705d858625156baecee014bf77a8cc28fa53d24a178ebe3f0eb5877\t3136\t90\t16777229:1083649511:1",
+      "validator/tests/distribution_contract/adversarial_semantics.rs\t665f2d30d4decf910fc7f1d6bdb48daaaebf54df54c50bbdbad8fc958feacfa3\t5904\t169\t16777229:1083649510:1",
+      "validator/tests/distribution_contract/cache_host_kernel.rs\t5929c997886da2289fb51bc881a6402834f57f6cab21665ae34117842d604b19\t7204\t220\t16777229:1086090051:1",
+      "validator/tests/distribution_contract/descriptor_cas.rs\t551599b29c58de22f341dfe60358e134e07da4ff3ea01793a2946f875cd86553\t4663\t116\t16777229:1087550963:1",
+      "validator/tests/distribution_contract/descriptor_races.rs\t43adf20f8982930ed1ff5ace95029e07e8bf9d464694a2b0c23432dabbad2087\t19067\t460\t16777229:1087541755:1",
+      "validator/tests/distribution_contract/descriptor_recovery.rs\tb6b0e8e182d97e48c42cc53e973d86474cb479ec4097c1ea6b52480fb25f8a36\t6597\t193\t16777229:1087758525:1",
+      "validator/tests/distribution_contract/descriptor_unlink.rs\t2ececda68647d7e240ca43aed1c94cd49b2bc284aa60f56258fbe80bc8ab79f9\t7252\t173\t16777229:1087574049:1",
+      "validator/tests/distribution_contract/identity_ladder.rs\t7f3ea0f8168b963e0cc206580e1867ca190d8e836d3023bece104d37d487d25a\t3585\t117\t16777229:1086028412:1",
+      "validator/tests/distribution_contract/install.rs\t8eaf760f47a89b8761f130ea12a0c0d21b7890bb46bbcde8f1dc201e0170f0ab\t11343\t286\t16777229:1083731210:1",
+      "validator/tests/distribution_contract/isolated_journey.rs\t027cbb1afcc68eb4743c1aa1bb17c9d8be914a1aee7adc605e1cbf37762929cd\t7097\t197\t16777229:1087364075:1",
+      "validator/tests/distribution_contract/journey_adversarial.rs\t2330f08e153ce4ee8515530f9b4e52f2856ca24dc46fd8b3320fba3c8c3d2d9b\t8702\t257\t16777229:1087364295:1",
+      "validator/tests/distribution_contract/journey_support.rs\t1a1c63f89cfdded3a096ec1f4c37307e22c8cee5c25e842adbdb7f7150088bfb\t4471\t155\t16777229:1087363646:1",
+      "validator/tests/distribution_contract/manifest_semantics.rs\t187a1ce4889e1677a4dbb0c37969053d51b5b1b388f1641cbcd039132c5f6120\t6049\t110\t16777229:1085156254:1",
+      "validator/tests/distribution_contract/marketplace_install_kernel.rs\t89461d48fd0c2a0195a2643e02d96e426277339197d6b3c5c35d6f8a108cb394\t6393\t192\t16777229:1086024839:1",
+      "validator/tests/distribution_contract/marketplace_supply.rs\t19538962c94b88f70089ff79ae2f20f3003331ab1ea76da42ed78341fa729fb9\t8760\t238\t16777229:1083731211:1",
+      "validator/tests/distribution_contract/observation_races.rs\t89104e55a05cc5101a719b6a14c3736c61a9b42ed2cecdfdecc5838b1281bcdd\t3183\t103\t16777229:1087378918:1",
+      "validator/tests/distribution_contract/package.rs\t63dc9ee6808f6f773b2051566fd9c1629001326ff6b0026cdab2e23f33f3580d\t9786\t269\t16777229:1083731208:1",
+      "validator/tests/distribution_contract/package_identity.rs\t44d45773bfa580e442ed37d057711427ac5778594e42377b760e5c6f52bd2104\t9410\t286\t16777229:1086019858:1",
+      "validator/tests/distribution_contract/package_manifest.rs\tb0991d0300750492b62baf9209180be27f4b62aa75c797ab215fafed4f98517d\t11300\t299\t16777229:1084552435:1",
+      "validator/tests/distribution_contract/positive.rs\t8a1e0822930ec26646154a6ca417158593e1f5ab6c45109cc5bcb230e539d664\t1148\t29\t16777229:1083649508:1",
+      "validator/tests/distribution_contract/prefix_collisions.rs\tc91be980efe7200bdfcf6ec7a7ca6831a61a470a03611ef037f4a2880f98ce72\t3162\t88\t16777229:1084722661:1",
+      "validator/tests/distribution_contract/runtime_session.rs\tf73bf6d151c6a3f6c6bf4f44a4d6dce031082feb20f67083cd183abdc8b50865\t6195\t197\t16777229:1087363794:1",
+      "validator/tests/distribution_contract/states.rs\t3c83ee3c38c9735e50a9e2a1d8849fe45a417ca4b995a1a48606decb1105d142\t3059\t93\t16777229:1083649509:1",
+      "validator/tests/distribution_contract/support.rs\tcc8e7deb14a61c6de46c10beb8f9f39294b3f26bb566b5096558bc70506f6aff\t6649\t208\t16777229:1083649507:1",
+      "validator/tests/distribution_contract/version_identity.rs\t4cbd0381dbc05cbe291f7a5bc8b8e7560b84576d410a87d3a821cf377e2519ff\t6306\t205\t16777229:1086187629:1"
+    ],
+    "path_identity_check": "Each frozen row was a regular file with link count one; device:inode:links is recorded in the final field of every sorted freeze row. No symlink, hardlink, special-file, duplicate device/inode, or missing-final-newline row was accepted."
+  },
+  "base_state": {
+    "root_decision_path": "docs/ultragoal-successor-live/root-decisions/DISTRIBUTION-ANCESTOR-RELOCATION-REWORK.json",
+    "root_decision_sha256": "sha256:32dc57e26e9f438136b014734be48a4b07a930229177b49e017e7263a47cb436",
+    "prior_worker_result_id": "sha256:7d1d0da039cb854fc8a4cd831648f3a701837ad6db4c3c7edf6840de23e881ac",
+    "prior_artifact_set_sha256": "sha256:2ea50b21aaaf36cc1dfcd7b1b16dac73084f7db37be19fe1478c85a36bd805be",
+    "prior_decisive_failure": "A descendant directory substituted at open could be moved outside before rename_swap; the old candidate returned ObjectChanged only after outside bytes changed."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "candidate_status": "unaccepted_corrective_candidate_pending_fresh_independent_root_review",
+    "authority_model": "Descendant directories are identity-plus-relative-path bindings. Every directory open, stat, enumeration, file open/create, rename, and unlink resolves a fresh descriptor from the retained anchor immediately at the operation boundary and rejects identity drift before the syscall.",
+    "focused_contract_tests": "101 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out.",
+    "artifact_set_sha256": "sha256:f9d7aeee5cfd170e4ad5822e720442dfd0f31e2989971de7a2be2e770ada9359",
+    "artifact_count_excluding_result": 70,
+    "independent_acceptance_performed": false,
+    "product_no_claim": "No source acceptance, package, install, cache, marketplace, app-registry, Plugins UI, discovery, runtime, node closure, readiness, release, or goal completion is claimed."
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/DISTRIBUTION-ANCESTOR-RELOCATION-CORRECTION-002.json",
+    "validator/src/distribution/cache.rs",
+    "validator/src/distribution/cache_observation.rs",
+    "validator/src/distribution/error.rs",
+    "validator/src/distribution/filesystem/descriptor/directory.rs",
+    "validator/src/distribution/filesystem/descriptor/file.rs",
+    "validator/src/distribution/filesystem/descriptor/mod.rs",
+    "validator/src/distribution/filesystem/descriptor/mutation.rs",
+    "validator/src/distribution/filesystem/descriptor/types.rs",
+    "validator/src/distribution/filesystem/file.rs",
+    "validator/src/distribution/filesystem/hooks.rs",
+    "validator/src/distribution/filesystem/mod.rs",
+    "validator/src/distribution/filesystem/owned.rs",
+    "validator/src/distribution/filesystem/remove.rs",
+    "validator/src/distribution/filesystem/root.rs",
+    "validator/src/distribution/filesystem/tree.rs",
+    "validator/src/distribution/filesystem/tree_ops.rs",
+    "validator/src/distribution/filesystem/walk.rs",
+    "validator/src/distribution/host.rs",
+    "validator/src/distribution/host_capability.rs",
+    "validator/src/distribution/identity.rs",
+    "validator/src/distribution/install.rs",
+    "validator/src/distribution/json.rs",
+    "validator/src/distribution/marketplace.rs",
+    "validator/src/distribution/marketplace_observation.rs",
+    "validator/src/distribution/mod.rs",
+    "validator/src/distribution/model.rs",
+    "validator/src/distribution/observations.rs",
+    "validator/src/distribution/package/archive.rs",
+    "validator/src/distribution/package/manifest.rs",
+    "validator/src/distribution/package/manifest_bind.rs",
+    "validator/src/distribution/package/materialize.rs",
+    "validator/src/distribution/package/mod.rs",
+    "validator/src/distribution/package/plan.rs",
+    "validator/src/distribution/package/snapshot.rs",
+    "validator/src/distribution/package/source.rs",
+    "validator/src/distribution/package/spec.rs",
+    "validator/src/distribution/reader/fallback.rs",
+    "validator/src/distribution/reader/mod.rs",
+    "validator/src/distribution/reader/unix.rs",
+    "validator/src/distribution/registry_observation.rs",
+    "validator/src/distribution/runtime_probe.rs",
+    "validator/src/distribution/spec.rs",
+    "validator/src/distribution/supply.rs",
+    "validator/src/distribution/verify.rs",
+    "validator/tests/distribution_contract.rs",
+    "validator/tests/distribution_contract/adversarial_fs.rs",
+    "validator/tests/distribution_contract/adversarial_semantics.rs",
+    "validator/tests/distribution_contract/cache_host_kernel.rs",
+    "validator/tests/distribution_contract/descriptor_cas.rs",
+    "validator/tests/distribution_contract/descriptor_races.rs",
+    "validator/tests/distribution_contract/descriptor_recovery.rs",
+    "validator/tests/distribution_contract/descriptor_unlink.rs",
+    "validator/tests/distribution_contract/identity_ladder.rs",
+    "validator/tests/distribution_contract/install.rs",
+    "validator/tests/distribution_contract/isolated_journey.rs",
+    "validator/tests/distribution_contract/journey_adversarial.rs",
+    "validator/tests/distribution_contract/journey_support.rs",
+    "validator/tests/distribution_contract/manifest_semantics.rs",
+    "validator/tests/distribution_contract/marketplace_install_kernel.rs",
+    "validator/tests/distribution_contract/marketplace_supply.rs",
+    "validator/tests/distribution_contract/observation_races.rs",
+    "validator/tests/distribution_contract/package.rs",
+    "validator/tests/distribution_contract/package_identity.rs",
+    "validator/tests/distribution_contract/package_manifest.rs",
+    "validator/tests/distribution_contract/positive.rs",
+    "validator/tests/distribution_contract/prefix_collisions.rs",
+    "validator/tests/distribution_contract/runtime_session.rs",
+    "validator/tests/distribution_contract/states.rs",
+    "validator/tests/distribution_contract/support.rs",
+    "validator/tests/distribution_contract/version_identity.rs"
+  ],
+  "touched_semantics": [
+    "distribution::filesystem::descriptor",
+    "distribution::filesystem::descriptor::mutation",
+    "distribution::tests::descriptor-races"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/DISTRIBUTION-ANCESTOR-RELOCATION-CORRECTION-002.json"
+  ],
+  "fixtures": [
+    "validator/tests/distribution_contract/adversarial_fs.rs",
+    "validator/tests/distribution_contract/adversarial_semantics.rs",
+    "validator/tests/distribution_contract/cache_host_kernel.rs",
+    "validator/tests/distribution_contract/descriptor_cas.rs",
+    "validator/tests/distribution_contract/descriptor_races.rs",
+    "validator/tests/distribution_contract/descriptor_recovery.rs",
+    "validator/tests/distribution_contract/descriptor_unlink.rs",
+    "validator/tests/distribution_contract/identity_ladder.rs",
+    "validator/tests/distribution_contract/install.rs",
+    "validator/tests/distribution_contract/isolated_journey.rs",
+    "validator/tests/distribution_contract/journey_adversarial.rs",
+    "validator/tests/distribution_contract/journey_support.rs",
+    "validator/tests/distribution_contract/manifest_semantics.rs",
+    "validator/tests/distribution_contract/marketplace_install_kernel.rs",
+    "validator/tests/distribution_contract/marketplace_supply.rs",
+    "validator/tests/distribution_contract/observation_races.rs",
+    "validator/tests/distribution_contract/package.rs",
+    "validator/tests/distribution_contract/package_identity.rs",
+    "validator/tests/distribution_contract/package_manifest.rs",
+    "validator/tests/distribution_contract/positive.rs",
+    "validator/tests/distribution_contract/prefix_collisions.rs",
+    "validator/tests/distribution_contract/runtime_session.rs",
+    "validator/tests/distribution_contract/states.rs",
+    "validator/tests/distribution_contract/support.rs",
+    "validator/tests/distribution_contract/version_identity.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "distribution-confinement-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "distribution-confinement-fixtures",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-cargo-distribution-tests",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "external-product",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "target": "root-authority",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "distribution-ancestor-relocation",
+    "outside-byte-preservation",
+    "fail-before-effect-confinement",
+    "descriptor-rooted-transaction",
+    "rollback-recovery-idempotence"
+  ],
+  "dependency_nodes": [
+    "distribution-ancestor-relocation-rework"
+  ],
+  "changes": [
+    {
+      "area": "root-anchored-directory-resolution",
+      "result": "Directory no longer retains a descendant mutation descriptor. Its anchor descriptor, relative path, and expected identity are re-resolved before every filesystem operation; a relocated or replaced ancestor fails as ObjectChanged before a mutating syscall."
+    },
+    {
+      "area": "mutation-boundary-rebinding",
+      "result": "rename_noreplace, rename_swap, quarantine/disposal rename, unlinkat, mkdirat, create-file, and read/open paths use fresh anchor-derived descriptors after the deterministic effect hook."
+    },
+    {
+      "area": "ancestor-relocation-regressions",
+      "result": "The imported chained OpenDirectory-plus-Rename adversary now proves outside prior bytes remain unchanged on overwrite/swap and removal/fallback; the matching tree-target test proves the directory path also rejects without outside-tree mutation."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-distribution-ancestor-relocation-correction-target CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo check --manifest-path validator/Cargo.toml --test distribution_contract --offline --locked -j16",
+      "status": "pass",
+      "exit_code": 0,
+      "summary": "The frozen current candidate compiled with the project lockfile and no network access. Broader existing warnings remained diagnostics."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-distribution-ancestor-relocation-correction-target CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo test --manifest-path validator/Cargo.toml --test distribution_contract --offline --locked -j16 -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "summary": "Final full distribution contract suite evidence is recorded after the ancestor-relocation corrections; final execution is re-run after this WorkerResult freeze."
+    },
+    {
+      "command": "rg --files validator/src/distribution validator/tests/distribution_contract validator/tests/distribution_contract.rs -g '*.rs' | sort | xargs rustfmt --edition 2024 --check",
+      "status": "pass",
+      "exit_code": 0,
+      "summary": "All 70 frozen owned Rust artifacts were rustfmt-checked."
+    },
+    {
+      "command": "Two sorted SHA-256/byte/line/device/inode/link freeze snapshots plus path-bound artifact-set digest comparison",
+      "status": "pending-final-revalidation",
+      "summary": "The final snapshot and WorkerResult parsing, validate_for, ArtifactWorkspace verification, and external result_id are performed after the file is emitted."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/distribution/cache.rs",
+      "sha256": "sha256:b2b67ab2a58f142e2fd3551d92dec9df51f5f25c5c1ad982f8cd16b04e533dc8",
+      "byte_length": 9221
+    },
+    {
+      "path": "validator/src/distribution/cache_observation.rs",
+      "sha256": "sha256:1f4433e67de1aaa1083a2ebc71fed33da6506653213d08ef56708af43d020a25",
+      "byte_length": 1250
+    },
+    {
+      "path": "validator/src/distribution/error.rs",
+      "sha256": "sha256:cecf86d9bc10f292047f7a69a13ea8f70660aeaa4ee7bd9db6f66964897ded26",
+      "byte_length": 2536
+    },
+    {
+      "path": "validator/src/distribution/filesystem/descriptor/directory.rs",
+      "sha256": "sha256:16b70d4ecd5fc1a6f15b7c6a814a773b24c5cf48033dd6c28fa66293b3f6608a",
+      "byte_length": 11670
+    },
+    {
+      "path": "validator/src/distribution/filesystem/descriptor/file.rs",
+      "sha256": "sha256:2bb034c4fee991d49957ee466cd1fad06c70c7a7330e17892e40deab5242130b",
+      "byte_length": 5519
+    },
+    {
+      "path": "validator/src/distribution/filesystem/descriptor/mod.rs",
+      "sha256": "sha256:d69d314e28f27206450cc968852676e5f13f99b765b0b4fcb717717962ad171a",
+      "byte_length": 418
+    },
+    {
+      "path": "validator/src/distribution/filesystem/descriptor/mutation.rs",
+      "sha256": "sha256:9b7db1274e2dc87c011a84cd49f7cc51a61130033f688b451a5f229ac715252c",
+      "byte_length": 10571
+    },
+    {
+      "path": "validator/src/distribution/filesystem/descriptor/types.rs",
+      "sha256": "sha256:2a6e3b6e54007a7916c688e0f81ff1a570956e52678efac323826499f5c98d3d",
+      "byte_length": 3312
+    },
+    {
+      "path": "validator/src/distribution/filesystem/file.rs",
+      "sha256": "sha256:9f7f8319f9e62394059ecb3d0856780de31a282ab806af2505f290cfd663115b",
+      "byte_length": 12354
+    },
+    {
+      "path": "validator/src/distribution/filesystem/hooks.rs",
+      "sha256": "sha256:8b42d797bbb0d4c73653eab760b3cd31ed1d2b94582855ad698db6f0c8158ee4",
+      "byte_length": 1966
+    },
+    {
+      "path": "validator/src/distribution/filesystem/mod.rs",
+      "sha256": "sha256:0bd8ed71e1561f3010506a81d3ec4379e0c4762cfde051d429a6375c84c44eb4",
+      "byte_length": 375
+    },
+    {
+      "path": "validator/src/distribution/filesystem/owned.rs",
+      "sha256": "sha256:f3c24eb516ac638d1a9ee4fc6e7bc2ef75c01bf9264ab7af51485987dd14c491",
+      "byte_length": 2447
+    },
+    {
+      "path": "validator/src/distribution/filesystem/remove.rs",
+      "sha256": "sha256:87a9a8d433d97ddc8558d037ec4a38071691cb6a9ef44d80a6b036a9c13017ac",
+      "byte_length": 2586
+    },
+    {
+      "path": "validator/src/distribution/filesystem/root.rs",
+      "sha256": "sha256:7b30875dd25930a98a23512ca0eee457ab82d704229eea5235923bb535ad563c",
+      "byte_length": 4934
+    },
+    {
+      "path": "validator/src/distribution/filesystem/tree.rs",
+      "sha256": "sha256:58f116590a0974e258810e4b1f4d1a5339ee4bdc3b06334dda4c747f78a0085e",
+      "byte_length": 7975
+    },
+    {
+      "path": "validator/src/distribution/filesystem/tree_ops.rs",
+      "sha256": "sha256:001e8d741be7df6e98a2dc19cc0b7a6d390c556dcd851eb8f29d978555434227",
+      "byte_length": 8811
+    },
+    {
+      "path": "validator/src/distribution/filesystem/walk.rs",
+      "sha256": "sha256:1e5514001274cc5a5367e4a13f4f9517e6526ec283ccece9e917cdbb36e3acc3",
+      "byte_length": 3252
+    },
+    {
+      "path": "validator/src/distribution/host.rs",
+      "sha256": "sha256:291ed899b315390f4de5eae4e285fc402545c18091e5719a85075b82b95e65c9",
+      "byte_length": 8641
+    },
+    {
+      "path": "validator/src/distribution/host_capability.rs",
+      "sha256": "sha256:39dfc20a142b376c5b1e5a6b844c2f19fa22bd803c256ce81a0411653bb34ec7",
+      "byte_length": 8886
+    },
+    {
+      "path": "validator/src/distribution/identity.rs",
+      "sha256": "sha256:8d06dffff9d92271b6915fe7dcff9392556f4d058464d46fdf0ca4254027f9f4",
+      "byte_length": 8366
+    },
+    {
+      "path": "validator/src/distribution/install.rs",
+      "sha256": "sha256:e4c99a252da434035d8ff3771037328b63631137d12cb065eb5fad52375d8e85",
+      "byte_length": 8769
+    },
+    {
+      "path": "validator/src/distribution/json.rs",
+      "sha256": "sha256:a6e6e3c8b07871ffd4ff1ac60c924f5f491fb0bc7e129f9319cfc63e56735d35",
+      "byte_length": 3497
+    },
+    {
+      "path": "validator/src/distribution/marketplace.rs",
+      "sha256": "sha256:f2d87566d1ddfb8ccaebb351cc5560e8587c53189f7e4919835519ee692bde2e",
+      "byte_length": 8704
+    },
+    {
+      "path": "validator/src/distribution/marketplace_observation.rs",
+      "sha256": "sha256:37a3eb1224d0004b6fd19a88b7a59d59c2bf9f078c2e3b6891f9224a807ae61d",
+      "byte_length": 1034
+    },
+    {
+      "path": "validator/src/distribution/mod.rs",
+      "sha256": "sha256:79e57cf62ad2af01841ce3a35120a2d7704075dac8a2de6815fa2325f4e5acd3",
+      "byte_length": 2790
+    },
+    {
+      "path": "validator/src/distribution/model.rs",
+      "sha256": "sha256:d0ab5a746d31d2a8d250163275e509a53025aff7d890c929b4231534edd287aa",
+      "byte_length": 6368
+    },
+    {
+      "path": "validator/src/distribution/observations.rs",
+      "sha256": "sha256:377d9a85af50ecb8e67f52b59343691926d4ae824fa6da70626cee5acb7f4691",
+      "byte_length": 3139
+    },
+    {
+      "path": "validator/src/distribution/package/archive.rs",
+      "sha256": "sha256:42893230c1e0b7beaedd64b9e98828753bbfbda3f0a310ba8d5f070502b15e8c",
+      "byte_length": 3308
+    },
+    {
+      "path": "validator/src/distribution/package/manifest.rs",
+      "sha256": "sha256:cf3c7d790d063470808b66e31c1da764a19e7ae40f723f7a4d5885520bd974c0",
+      "byte_length": 5172
+    },
+    {
+      "path": "validator/src/distribution/package/manifest_bind.rs",
+      "sha256": "sha256:24880f72b816dd60ad3d6c15a9b60c6d5a26900fb1701fdb10fd4b4e50f07ce4",
+      "byte_length": 2787
+    },
+    {
+      "path": "validator/src/distribution/package/materialize.rs",
+      "sha256": "sha256:eddd92f6f5c7d39fe802225a97a862604d9b18f2333014d347b5e5a67f314473",
+      "byte_length": 7859
+    },
+    {
+      "path": "validator/src/distribution/package/mod.rs",
+      "sha256": "sha256:3d33d8073e2e03b4f8e81c2cd78c4e9c20f9143d94cca43b7235546ded964dfd",
+      "byte_length": 1933
+    },
+    {
+      "path": "validator/src/distribution/package/plan.rs",
+      "sha256": "sha256:f3229621155cd4db95636244f31aa308204b2840c4a37d565e384bb2eafdbff3",
+      "byte_length": 5935
+    },
+    {
+      "path": "validator/src/distribution/package/snapshot.rs",
+      "sha256": "sha256:6ec63cd265080e71ef3abab3a5722e66f1a2eb1787f2589c7040bc2d890295ae",
+      "byte_length": 6024
+    },
+    {
+      "path": "validator/src/distribution/package/source.rs",
+      "sha256": "sha256:5539d97ce88fa92870e6e49a73855c61ed51b4bab0c86585313914b82dd9a98a",
+      "byte_length": 6450
+    },
+    {
+      "path": "validator/src/distribution/package/spec.rs",
+      "sha256": "sha256:2993d9c6aa21a8c27992f977bb49ea62c70c1aea9e7cb7eedbd1f20a062daed2",
+      "byte_length": 3877
+    },
+    {
+      "path": "validator/src/distribution/reader/fallback.rs",
+      "sha256": "sha256:8fd8b8a447c545295827c0d9f5269752b873e9598eca93bf8006e07a080fb77d",
+      "byte_length": 483
+    },
+    {
+      "path": "validator/src/distribution/reader/mod.rs",
+      "sha256": "sha256:14ddabff12b90d437eccc93c73fca451bf22d3eafa86276c1fe66ca8f2fd8f22",
+      "byte_length": 3744
+    },
+    {
+      "path": "validator/src/distribution/reader/unix.rs",
+      "sha256": "sha256:b4020e7efd8936407db6dbd52e074354fb01c5cd411c34f4bd731e66493800d1",
+      "byte_length": 4276
+    },
+    {
+      "path": "validator/src/distribution/registry_observation.rs",
+      "sha256": "sha256:796fc13bb4c312fcbb4842946f01d80d88435c91cd0d2d27744577c1b1531e55",
+      "byte_length": 9801
+    },
+    {
+      "path": "validator/src/distribution/runtime_probe.rs",
+      "sha256": "sha256:524e8055cbd6c72b5c2605cca94c1ce9a8b0f713d3a70ddaa1bb610e110b60b5",
+      "byte_length": 9803
+    },
+    {
+      "path": "validator/src/distribution/spec.rs",
+      "sha256": "sha256:da00941e35b424d6b3ce6bef23ed64640848f32c33a4f5792777f5e72c8a8066",
+      "byte_length": 8938
+    },
+    {
+      "path": "validator/src/distribution/supply.rs",
+      "sha256": "sha256:51e28ebbea17035edafaa87dec3aeaed9af6fafbd9e0d954dcf0e624b2635dab",
+      "byte_length": 5225
+    },
+    {
+      "path": "validator/src/distribution/verify.rs",
+      "sha256": "sha256:2af4b397569c39584f75c6375fbe976831b729c6393b29ae7a7900add73371f2",
+      "byte_length": 8070
+    },
+    {
+      "path": "validator/tests/distribution_contract.rs",
+      "sha256": "sha256:926d7ab041fb867473a5992a0ae11c2e62ffb3401c051ec9b23dd6553b1b6fd1",
+      "byte_length": 1976
+    },
+    {
+      "path": "validator/tests/distribution_contract/adversarial_fs.rs",
+      "sha256": "sha256:ceb874ea8705d858625156baecee014bf77a8cc28fa53d24a178ebe3f0eb5877",
+      "byte_length": 3136
+    },
+    {
+      "path": "validator/tests/distribution_contract/adversarial_semantics.rs",
+      "sha256": "sha256:665f2d30d4decf910fc7f1d6bdb48daaaebf54df54c50bbdbad8fc958feacfa3",
+      "byte_length": 5904
+    },
+    {
+      "path": "validator/tests/distribution_contract/cache_host_kernel.rs",
+      "sha256": "sha256:5929c997886da2289fb51bc881a6402834f57f6cab21665ae34117842d604b19",
+      "byte_length": 7204
+    },
+    {
+      "path": "validator/tests/distribution_contract/descriptor_cas.rs",
+      "sha256": "sha256:551599b29c58de22f341dfe60358e134e07da4ff3ea01793a2946f875cd86553",
+      "byte_length": 4663
+    },
+    {
+      "path": "validator/tests/distribution_contract/descriptor_races.rs",
+      "sha256": "sha256:43adf20f8982930ed1ff5ace95029e07e8bf9d464694a2b0c23432dabbad2087",
+      "byte_length": 19067
+    },
+    {
+      "path": "validator/tests/distribution_contract/descriptor_recovery.rs",
+      "sha256": "sha256:b6b0e8e182d97e48c42cc53e973d86474cb479ec4097c1ea6b52480fb25f8a36",
+      "byte_length": 6597
+    },
+    {
+      "path": "validator/tests/distribution_contract/descriptor_unlink.rs",
+      "sha256": "sha256:2ececda68647d7e240ca43aed1c94cd49b2bc284aa60f56258fbe80bc8ab79f9",
+      "byte_length": 7252
+    },
+    {
+      "path": "validator/tests/distribution_contract/identity_ladder.rs",
+      "sha256": "sha256:7f3ea0f8168b963e0cc206580e1867ca190d8e836d3023bece104d37d487d25a",
+      "byte_length": 3585
+    },
+    {
+      "path": "validator/tests/distribution_contract/install.rs",
+      "sha256": "sha256:8eaf760f47a89b8761f130ea12a0c0d21b7890bb46bbcde8f1dc201e0170f0ab",
+      "byte_length": 11343
+    },
+    {
+      "path": "validator/tests/distribution_contract/isolated_journey.rs",
+      "sha256": "sha256:027cbb1afcc68eb4743c1aa1bb17c9d8be914a1aee7adc605e1cbf37762929cd",
+      "byte_length": 7097
+    },
+    {
+      "path": "validator/tests/distribution_contract/journey_adversarial.rs",
+      "sha256": "sha256:2330f08e153ce4ee8515530f9b4e52f2856ca24dc46fd8b3320fba3c8c3d2d9b",
+      "byte_length": 8702
+    },
+    {
+      "path": "validator/tests/distribution_contract/journey_support.rs",
+      "sha256": "sha256:1a1c63f89cfdded3a096ec1f4c37307e22c8cee5c25e842adbdb7f7150088bfb",
+      "byte_length": 4471
+    },
+    {
+      "path": "validator/tests/distribution_contract/manifest_semantics.rs",
+      "sha256": "sha256:187a1ce4889e1677a4dbb0c37969053d51b5b1b388f1641cbcd039132c5f6120",
+      "byte_length": 6049
+    },
+    {
+      "path": "validator/tests/distribution_contract/marketplace_install_kernel.rs",
+      "sha256": "sha256:89461d48fd0c2a0195a2643e02d96e426277339197d6b3c5c35d6f8a108cb394",
+      "byte_length": 6393
+    },
+    {
+      "path": "validator/tests/distribution_contract/marketplace_supply.rs",
+      "sha256": "sha256:19538962c94b88f70089ff79ae2f20f3003331ab1ea76da42ed78341fa729fb9",
+      "byte_length": 8760
+    },
+    {
+      "path": "validator/tests/distribution_contract/observation_races.rs",
+      "sha256": "sha256:89104e55a05cc5101a719b6a14c3736c61a9b42ed2cecdfdecc5838b1281bcdd",
+      "byte_length": 3183
+    },
+    {
+      "path": "validator/tests/distribution_contract/package.rs",
+      "sha256": "sha256:63dc9ee6808f6f773b2051566fd9c1629001326ff6b0026cdab2e23f33f3580d",
+      "byte_length": 9786
+    },
+    {
+      "path": "validator/tests/distribution_contract/package_identity.rs",
+      "sha256": "sha256:44d45773bfa580e442ed37d057711427ac5778594e42377b760e5c6f52bd2104",
+      "byte_length": 9410
+    },
+    {
+      "path": "validator/tests/distribution_contract/package_manifest.rs",
+      "sha256": "sha256:b0991d0300750492b62baf9209180be27f4b62aa75c797ab215fafed4f98517d",
+      "byte_length": 11300
+    },
+    {
+      "path": "validator/tests/distribution_contract/positive.rs",
+      "sha256": "sha256:8a1e0822930ec26646154a6ca417158593e1f5ab6c45109cc5bcb230e539d664",
+      "byte_length": 1148
+    },
+    {
+      "path": "validator/tests/distribution_contract/prefix_collisions.rs",
+      "sha256": "sha256:c91be980efe7200bdfcf6ec7a7ca6831a61a470a03611ef037f4a2880f98ce72",
+      "byte_length": 3162
+    },
+    {
+      "path": "validator/tests/distribution_contract/runtime_session.rs",
+      "sha256": "sha256:f73bf6d151c6a3f6c6bf4f44a4d6dce031082feb20f67083cd183abdc8b50865",
+      "byte_length": 6195
+    },
+    {
+      "path": "validator/tests/distribution_contract/states.rs",
+      "sha256": "sha256:3c83ee3c38c9735e50a9e2a1d8849fe45a417ca4b995a1a48606decb1105d142",
+      "byte_length": 3059
+    },
+    {
+      "path": "validator/tests/distribution_contract/support.rs",
+      "sha256": "sha256:cc8e7deb14a61c6de46c10beb8f9f39294b3f26bb566b5096558bc70506f6aff",
+      "byte_length": 6649
+    },
+    {
+      "path": "validator/tests/distribution_contract/version_identity.rs",
+      "sha256": "sha256:4cbd0381dbc05cbe291f7a5bc8b8e7560b84576d410a87d3a821cf377e2519ff",
+      "byte_length": 6306
+    }
+  ],
+  "findings": [
+    {
+      "finding": "The prior descriptor-relative model had a post-effect ObjectChanged false pass: it could mutate bytes in a relocated outside ancestor before detecting identity drift.",
+      "disposition": "corrected-in-candidate",
+      "evidence": "The imported chained OpenDirectory-plus-Rename regression now returns ObjectChanged with both outside and restored confined bytes still equal to same-prior."
+    }
+  ],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [],
+  "limitations": [
+    "This is source-level candidate evidence only. Independent root review and all source/package/install/cache/marketplace/app-registry/Plugins UI/discovery/runtime proof remain outside this worker claim.",
+    "No change was made to public wiring, Cargo or workspace dependencies, live installation, plugin cache, app state, or root authority."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

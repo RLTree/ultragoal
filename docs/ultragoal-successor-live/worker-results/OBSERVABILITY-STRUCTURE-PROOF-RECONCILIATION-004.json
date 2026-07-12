@@ -1,0 +1,98 @@
+{
+  "worker": "/root/observability_receipt_reconciler",
+  "lease_id": "OBSERVABILITY-STRUCTURE-PROOF-RECONCILIATION-004",
+  "context_id": "sha256:6890241a5fe284c5d2ce39001573ae8b1929e6b1b442a77203cc513eb37791ac",
+  "candidate_identity": {
+    "candidate_id": "sha256:ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e",
+    "context_id": "sha256:6890241a5fe284c5d2ce39001573ae8b1929e6b1b442a77203cc513eb37791ac",
+    "artifact_set_formula": "Sort paths; concatenate each path, one TAB byte, lowercase SHA-256 without prefix, and one LF byte; SHA-256 the result.",
+    "artifact_count": 21,
+    "artifact_total_bytes": 94784,
+    "artifact_total_lines": 2906,
+    "implementation_author": "/root/observability_structure_refactorer",
+    "reconciliation_worker": "/root/observability_receipt_reconciler",
+    "self_exclusion": "This WorkerResult is excluded from the 21-artifact evidence set and is the sole touched workspace path."
+  },
+  "base_state": {
+    "status": "root-rework-pending-result-reconciliation",
+    "root_rework_path": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-WORKER-RESULT-AGGREGATE-REWORK.json",
+    "root_rework_sha256": "sha256:6890241a5fe284c5d2ce39001573ae8b1929e6b1b442a77203cc513eb37791ac",
+    "rejected_result_path": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-STRUCTURE-CORRECTION-003.json",
+    "rejected_result_sha256": "sha256:0544f12e4f260b2cea13f494b61d429a6e36d0f97762a6c844ed4148ae868601",
+    "independent_review_path": "docs/ultragoal-successor-live/reviews/OBSERVABILITY-STRUCTURE-REVIEW-003.json",
+    "independent_review_sha256": "sha256:6910c718650dbf12a89dd9b70d832410f07fba148eff446f275f49ff373b6381"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "reconciliation_status": "mechanically-reconciled-result-only-evidence",
+    "artifact_set_sha256": "sha256:ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e",
+    "artifact_count": 21,
+    "artifact_total_bytes": 94784,
+    "artifact_total_lines": 2906,
+    "source_authorship": "not-asserted-by-this-worker",
+    "behavior_acceptance": "not-asserted-by-this-worker",
+    "root_acceptance": "withheld",
+    "independent_rereview": "requested"
+  },
+  "touched_paths": ["docs/ultragoal-successor-live/worker-results/OBSERVABILITY-STRUCTURE-PROOF-RECONCILIATION-004.json"],
+  "touched_semantics": ["observability::proof_reconciliation"],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {"class":"workspace_write","target":"observability-proof-reconciliation-result","performed":true},
+    {"class":"process","target":"offline-observability-proof-validation","performed":true},
+    {"class":"network","target":"network","performed":false},
+    {"class":"external_write","target":"external-product","performed":false},
+    {"class":"destructive","target":"destructive","performed":false},
+    {"class":"root_authority","target":"root-acceptance","performed":false}
+  ],
+  "requirements": ["AC-OBSERVABILITY-PROOF-004","result-only-reconciliation","exact-21-artifact-membership","mechanical-aggregate-invariants","independent-rereview-requested"],
+  "dependency_nodes": ["observability-worker-result-aggregate-rework"],
+  "changes": [
+    {"area":"result-only-reconciliation","result":"Regenerated only this WorkerResult from the unchanged 21 read-only artifact rows; no observability source or test file was edited."},
+    {"area":"aggregate-integrity","result":"Derived count 21, bytes 94784, physical lines 2906, and artifact-set SHA-256 ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e twice independently."},
+    {"area":"authority-separation","result":"Original implementation authorship, runtime behavior, source acceptance, and root acceptance remain outside this reconciliation worker's authority."}
+  ],
+  "commands_and_tests": [
+    {"command":"independent artifact derivation pass A","status":"pass","result":"21 regular non-symlink files; every current SHA-256 and byte length matched the prior rows; sums were 21, 94784, and 2906; sorted path/TAB/digest/LF digest matched ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e."},
+    {"command":"independent artifact derivation pass B","status":"pass","result":"Second derivation independently produced the same 21 rows, 94784 bytes, 2906 physical lines, and artifact-set SHA-256."},
+    {"command":"WorkerResultV1::parse_json and exact result-only validate_for","status":"not_run_parent_required","result":"Mechanical JSON and artifact derivation passed; the worker did not execute the typed validate_for or mutation harness."},
+    {"command":"ArtifactWorkspace::verify and computed result_id","status":"not_run_parent_required","result":"The worker derived the artifact set externally but did not execute ArtifactWorkspace verification; independent review must do so."},
+    {"command":"behavior and source acceptance tests","status":"not_run","result":"Intentionally not rerun or claimed; this lease is result-only reconciliation."}
+  ],
+  "artifacts": [
+    {"path":"validator/src/observability/binding.rs","sha256":"sha256:dd0a419531c1490fb2950db3ea0d0ce4a6fd5c61adfe6e248c1dd335b87f9475","byte_length":824},
+    {"path":"validator/src/observability/event.rs","sha256":"sha256:9f0788f199dc15cc7368137527c33ed4109fed950cf771871169efe871b3f42b","byte_length":10360},
+    {"path":"validator/src/observability/explain.rs","sha256":"sha256:8972df827dfc9a89f1e254ef36746aeb8c96b76a569fcf7dd7fad4f3a2a902be","byte_length":5542},
+    {"path":"validator/src/observability/export.rs","sha256":"sha256:e62cfd30411471171b546d1137ed65c99ef6cc27611c60fbce4faf328f57965f","byte_length":4448},
+    {"path":"validator/src/observability/filesystem.rs","sha256":"sha256:5aa0a44c24852655a6ff4d794a2c67ae35e7d0bb3baa524d5a22ab1598d06eb0","byte_length":4400},
+    {"path":"validator/src/observability/filesystem/confinement.rs","sha256":"sha256:10bdd31c0ce56083ee9bedddba3b8763c0e66fe0bd9c57f568c9a915989025db","byte_length":6972},
+    {"path":"validator/src/observability/format.rs","sha256":"sha256:0dd9cbe2b91ad6b8ba07b4cb3df17e3fd215cbd2391c6f19302d1435121e87b3","byte_length":3465},
+    {"path":"validator/src/observability/identity.rs","sha256":"sha256:b12de596a27a24b8bb4650483d1fc55f7a8d72cde31df604e178004f1bf31202","byte_length":2057},
+    {"path":"validator/src/observability/lifecycle.rs","sha256":"sha256:f103b87e1b8869a9b9d63ea407adfdbed93a955cbe414e1b1e870517607bd292","byte_length":2525},
+    {"path":"validator/src/observability/limits.rs","sha256":"sha256:e5c63cb8a0e386a31d091ee604d7af246b672d00a15bc643b23fc6ea2a2007fc","byte_length":739},
+    {"path":"validator/src/observability/mod.rs","sha256":"sha256:b8bff1fda74040af8e2f53a401785dcafa69793ba289541d82a4c16f84bf1b48","byte_length":627},
+    {"path":"validator/src/observability/privacy.rs","sha256":"sha256:1043892bf26c20ca8af11b108dfa859e02d9113e3e42c63283ddeb78bf6dc6f0","byte_length":5782},
+    {"path":"validator/src/observability/query.rs","sha256":"sha256:d573d619c27c57fbefb85ccef3b53612366dc441786bb1fe937bad144204c87f","byte_length":3821},
+    {"path":"validator/src/observability/store.rs","sha256":"sha256:ced908bbc727babf51b789f472e1a0af774b85a6377aab46763971e6aef47d0c","byte_length":9082},
+    {"path":"validator/tests/observability_contract.rs","sha256":"sha256:2d381508d3ca7795f69f5ae7be69232b373d0d4f79c288fb6c7890472677636a","byte_length":619},
+    {"path":"validator/tests/observability_contract/corruption.rs","sha256":"sha256:67e082ff607a7e07d2271885237660fce70d88b5849b1c88fa865c828b985cd5","byte_length":6445},
+    {"path":"validator/tests/observability_contract/limits_false_pass.rs","sha256":"sha256:7de92445764f210d8146a49509487b12ccacadb5bcdfc36d574024e4d5a2dcf8","byte_length":4683},
+    {"path":"validator/tests/observability_contract/local_store.rs","sha256":"sha256:c61e7c0d02d9dc66166619d66eba1c06751289710d68435fb23deb05e04a6cdc","byte_length":3331},
+    {"path":"validator/tests/observability_contract/privacy_export.rs","sha256":"sha256:0c041b7763875677afe9131487ab55492734e53dcdb578101df2bad836c6f834","byte_length":6335},
+    {"path":"validator/tests/observability_contract/races_paths.rs","sha256":"sha256:41db885f388efaafd4e701600361514fd5810e8c9db3006aeb2560ee25476fdd","byte_length":7168},
+    {"path":"validator/tests/observability_contract/support.rs","sha256":"sha256:2f9b51c05bd75c0b9d460cc8a9d3fe65958391a299f8025e6bcaad7e1ea464a6","byte_length":5559}
+  ],
+  "findings": [
+    {"code":"PRIOR-AGGREGATE-REWORK","severity":"material","summary":"Prior result rows matched current files but falsely declared artifact_total_bytes=94418; this packet records the derived 94784."},
+    {"code":"INDEPENDENT-REVIEW-REQUIRED","severity":"root-authority-required","summary":"Request full independent confinement, privacy, and zero-write rereview against this corrected result; no behavior acceptance is claimed."}
+  ],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [],
+  "limitations": [
+    "This packet proves only result-only artifact reconciliation and typed evidence integrity; it does not prove source authorship, behavior, public integration, node closure, readiness, release, or completion.",
+    "Full independent AC-OBSERVABILITY-KERNEL-003 review remains required after this corrected result.",
+    "Effective runtime route is unverified unless exposed by the dispatch metadata."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

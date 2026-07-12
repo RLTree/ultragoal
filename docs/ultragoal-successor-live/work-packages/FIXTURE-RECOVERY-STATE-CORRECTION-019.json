@@ -1,0 +1,145 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:e16ec3d65c5cad916484db7a38218efdeb8e68410c1ddd40075bc5d44094dd16",
+    "candidate_id": "sha256:44d6e42a0ef56a3d3dcd0c5dce97f450ca80f72ce959f35494b4fe434857bc55",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true
+  },
+  "work_package": {
+    "node_id": "fixture-cleanup-recovery-state",
+    "dependencies": ["fixture-recovery-state-rework-019"],
+    "required_tools": ["cargo-nextest", "rustfmt", "shasum"],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/root-decisions/FIXTURE-RECOVERY-STATE-REWORK-019.json",
+      "docs/ultragoal-successor-live/worker-results/FIXTURE-DELETION-AUTHORITY-CORRECTION-016.json",
+      "validator/src/fixture_scheduler/error.rs",
+      "validator/src/fixture_scheduler/mod.rs",
+      "validator/src/fixture_scheduler/outcome.rs",
+      "validator/src/fixture_scheduler/spec.rs"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/FIXTURE-RECOVERY-STATE-CORRECTION-019.json",
+        "validator/src/fixture_scheduler/lease.rs",
+        "validator/src/fixture_scheduler/scheduler.rs"
+      ],
+      "semantic_symbols": [
+        "fixture_scheduler::FixtureRun::is_active",
+        "fixture_scheduler::FixtureScheduler::finish",
+        "fixture_scheduler::FixtureScheduler::finish_observed",
+        "fixture_scheduler::FixtureScheduler::retain_for_recovery",
+        "fixture_scheduler::IsolationLease::cleanup",
+        "fixture_scheduler::IsolationLease::recover"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "validator/tests/fixture_scheduler_contract/adversarial.rs",
+        "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
+        "validator/tests/fixture_scheduler_contract/scheduling.rs"
+      ],
+      "effects": [
+        {"class":"workspace_write","target":"fixture-recovery-state-source"},
+        {"class":"fixture_write","target":"fixture-recovery-state-tests"},
+        {"class":"process","target":"offline-fixture-recovery-validation"}
+      ]
+    },
+    "prerequisites": ["adopted-contract", "independent-rework"],
+    "outputs": [
+      "truthful-recovery-state-candidate",
+      "ordinary-cleanup-failure-controls",
+      "worker-result-v1"
+    ],
+    "acceptance": [
+      "cleanup-failure-transitions-to-recovery-required-before-reinsertion",
+      "explicit-recover-idempotent-without-ordinary-finish-mask",
+      "cleaned-requires-platform-identity-conditioned-delete-authority",
+      "substitution-preserves-expected-and-unrelated-identities",
+      "scheduling-distinguishes-supported-and-unsupported-hosts",
+      "race-mutation-security-resource-false-pass-controls",
+      "independent-review-and-root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "FIXTURE-RECOVERY-STATE-CORRECTION-019",
+    "run_id": "ultragoal-successor-live-20260711",
+    "node_id": "fixture-cleanup-recovery-state",
+    "principal": "worker",
+    "owner": "/root/fixture_cleanup_recovery_state_engineer",
+    "binding": {
+      "context_id": "sha256:e16ec3d65c5cad916484db7a38218efdeb8e68410c1ddd40075bc5d44094dd16",
+      "candidate_id": "sha256:44d6e42a0ef56a3d3dcd0c5dce97f450ca80f72ce959f35494b4fe434857bc55"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/root-decisions/FIXTURE-RECOVERY-STATE-REWORK-019.json",
+      "docs/ultragoal-successor-live/worker-results/FIXTURE-DELETION-AUTHORITY-CORRECTION-016.json",
+      "validator/src/fixture_scheduler/error.rs",
+      "validator/src/fixture_scheduler/mod.rs",
+      "validator/src/fixture_scheduler/outcome.rs",
+      "validator/src/fixture_scheduler/spec.rs"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/FIXTURE-RECOVERY-STATE-CORRECTION-019.json",
+        "validator/src/fixture_scheduler/lease.rs",
+        "validator/src/fixture_scheduler/scheduler.rs"
+      ],
+      "semantic_symbols": [
+        "fixture_scheduler::FixtureRun::is_active",
+        "fixture_scheduler::FixtureScheduler::finish",
+        "fixture_scheduler::FixtureScheduler::finish_observed",
+        "fixture_scheduler::FixtureScheduler::retain_for_recovery",
+        "fixture_scheduler::IsolationLease::cleanup",
+        "fixture_scheduler::IsolationLease::recover"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "validator/tests/fixture_scheduler_contract/adversarial.rs",
+        "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
+        "validator/tests/fixture_scheduler_contract/scheduling.rs"
+      ],
+      "effects": [
+        {"class":"workspace_write","target":"fixture-recovery-state-source"},
+        {"class":"fixture_write","target":"fixture-recovery-state-tests"},
+        {"class":"process","target":"offline-fixture-recovery-validation"}
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "fixture-recovery-state-rework-019": "sha256:e65de110e268abc4a70b693c95f9bfa913f292fef35f2d63bb2b2dae94a61604"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "rustfmt": "sha256:aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "adopted-contract": "sha256:d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51",
+        "independent-rework": "sha256:e65de110e268abc4a70b693c95f9bfa913f292fef35f2d63bb2b2dae94a61604"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "prohibited_surfaces": [
+    "Cargo.toml and Cargo.lock",
+    "validator/src/lib.rs and all public API witnesses",
+    "public command catalog and dispatcher",
+    "adopted manifests, migration registries, generated authority, claims, release state",
+    "network, host plugin state, Git writes, destructive cleanup outside isolated fixtures"
+  ],
+  "root_validation_obligations": [
+    "independently review the exact corrected artifact set",
+    "recompute candidate identity after concurrent root integration",
+    "apply no public API, claim, manifest, migration, or release wiring before acceptance"
+  ],
+  "no_claim_statement": "This root-issued envelope grants no root authority and raises no fixture product, evaluation, readiness, release, or completion claim."
+}

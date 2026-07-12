@@ -1,0 +1,197 @@
+{
+  "worker": "/root/n04_distribution",
+  "lease_id": "LEASE-N04-DISTRIBUTION-NODE-002",
+  "context_id": "sha256:064ff911431aa7db45f4ff5dd6c1cd57b3739941ff926ec2f03be83192a570c2",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "status_sha256_before_result": "b87fd17a1c9bb664272ea7c0aae8b4c9455df2cadb4c0c3d9463bf20b46ba2fe",
+    "artifact_set_sha256": "064ff911431aa7db45f4ff5dd6c1cd57b3739941ff926ec2f03be83192a570c2",
+    "live_plugin_manifest_sha256": "8494432c2ad67b679a75634fad68562e6a79dd3fcb3b76e756d020d88e33ad38",
+    "live_plugin_manifest_resource_count": 1499,
+    "parent_result_path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-001.json",
+    "parent_result_sha256": "160804727f6e41263121d54f195bf24f65fdbaf831dcc34fc4bb75b4dcfced77",
+    "parent_artifact_set_sha256": "84970119746113df2fadb7b28f958709ded2e7a0269b49acc25bf44933c125b5",
+    "context_note": "The context_id is the corrected lease-local 26-artifact identity, not root-owned HCT-CONTEXT. The protected .codex-worktree/env.sh file was not opened, read, hashed, or sourced."
+  },
+  "base_state": {
+    "review_verdict": "REWORK",
+    "reviewer_finding": "MarketplaceExpectation bound scope, plugin, version, and package digest but not the exact expected catalog origin, so an attacker-controlled alternate in-root origin could verify.",
+    "corrective_scope": "Only validator/src/distribution/marketplace.rs, validator/tests/distribution_contract/marketplace_supply.rs, and this corrective result were writable.",
+    "parent_candidate": "NODE-001 result 160804727f6e41263121d54f195bf24f65fdbaf831dcc34fc4bb75b4dcfced77 and set 84970119746113df2fadb7b28f958709ded2e7a0269b49acc25bf44933c125b5."
+  },
+  "final_state": {
+    "status": "corrected_candidate_for_independent_re_review_and_root_acceptance",
+    "acceptance_ceiling": "Corrected exact-origin marketplace behavior within the N04 tool candidate only; no N04 closure, host proof, readiness, release, or completion.",
+    "artifact_count_excluding_result": 26,
+    "artifact_set_sha256": "064ff911431aa7db45f4ff5dd6c1cd57b3739941ff926ec2f03be83192a570c2",
+    "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "implementation_lines": 2365,
+    "test_lines": 1250,
+    "total_lines": 3615,
+    "total_bytes": 115092,
+    "maximum_file_lines": 268,
+    "files_over_300_lines": 0,
+    "full_distribution_tests": "23 passed; 0 failed",
+    "tracked_deletions": 0,
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/distribution/marketplace.rs",
+    "validator/tests/distribution_contract/marketplace_supply.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-002.json"
+  ],
+  "touched_semantics": [
+    "bounded canonical expected marketplace origin",
+    "exact catalog origin equality before Verified",
+    "repository and personal origin binding",
+    "safe in-root alternate-origin substitution rejection",
+    "traversal, absolute, repeated-separator, backslash, drive-like, NUL, non-ASCII, and oversize origin rejection",
+    "unavailable marketplace remains non-promoting without catalog digest"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "repository marketplace/repository/plugin.json exact-origin catalog",
+    "personal marketplace/personal/plugin.json exact-origin catalog",
+    "alternate/plugin.json safe in-root substitution for both scopes",
+    "traversal, absolute, repeated separator, backslash, drive-like, NUL, non-ASCII, and 513-byte origin controls",
+    "explicit unavailable marketplace with absent catalog digest"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Only the three corrective lease paths were written."
+    },
+    {
+      "class": "local-build-write",
+      "scope": "Rust artifacts were isolated under /tmp/hug-n04-node002-target."
+    },
+    {
+      "class": "fixture-write",
+      "scope": "The full suite wrote only temporary test fixtures and injected in-memory effects."
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product-effect",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-SUPPLY-004"
+  ],
+  "dependency_nodes": [
+    "N04-DISTRIBUTION"
+  ],
+  "changes": [
+    {
+      "area": "marketplace expectation",
+      "rationale": "MarketplaceExpectation now requires a descriptor-confined canonical relative origin and rejects malformed or oversized expectations before catalog processing."
+    },
+    {
+      "area": "marketplace reconciliation",
+      "rationale": "A catalog row can reach Verified only when its origin exactly equals the expectation in addition to the existing scope, plugin, version, candidate, and package-digest joins."
+    },
+    {
+      "area": "false-pass controls",
+      "rationale": "Both repository and personal catalogs reject a syntactically safe alternate in-root origin; malformed origins retain bounded non-echo errors, and unavailable has no catalog digest."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n04-node002-target cargo test --offline --locked --manifest-path validator/Cargo.toml --test distribution_contract -- --test-threads=1",
+      "result": "pass",
+      "summary": "Full suite: 23 passed; 0 failed, including all 21 parent tests plus exact-origin substitution and malformed-origin coverage."
+    },
+    {
+      "command": "rustfmt --edition 2024 validator/src/distribution/marketplace.rs validator/tests/distribution_contract/marketplace_supply.rs; git diff --check on the two corrected Rust paths",
+      "result": "pass"
+    },
+    {
+      "command": "WorkerResult-v1 schema, JSON, artifact digest/byte/line/set, parent identity, and tracked-deletion reconciliation",
+      "result": "pass",
+      "summary": "The current 26-artifact set is 064ff911431aa7db45f4ff5dd6c1cd57b3739941ff926ec2f03be83192a570c2; 3,615 lines, 115,092 bytes, no tracked deletions."
+    },
+    {
+      "command": "shasum -a 256 plugin-manifest-draft.json; jq '.resources | length' plugin-manifest-draft.json",
+      "result": "pass",
+      "summary": "Current root manifest observed at 8494432c2ad67b679a75634fad68562e6a79dd3fcb3b76e756d020d88e33ad38 with 1,499 resources and not modified by this worker."
+    }
+  ],
+  "artifacts": [
+    {"path":"validator/src/distribution/error.rs","sha256":"sha256:cecf86d9bc10f292047f7a69a13ea8f70660aeaa4ee7bd9db6f66964897ded26","bytes":2536,"lines":67},
+    {"path":"validator/src/distribution/install.rs","sha256":"sha256:98038b5e1d653442e9a0ea99812e5f9cc50da025109f558b4dfc6cd5421709d2","bytes":7274,"lines":246},
+    {"path":"validator/src/distribution/json.rs","sha256":"sha256:a6e6e3c8b07871ffd4ff1ac60c924f5f491fb0bc7e129f9319cfc63e56735d35","bytes":3497,"lines":114},
+    {"path":"validator/src/distribution/marketplace.rs","sha256":"sha256:90cfc76a1855eb3e57aa673f043a57d4ce2269fcd0411af03ead8606fef783cb","bytes":5487,"lines":192},
+    {"path":"validator/src/distribution/mod.rs","sha256":"sha256:821d8f0c9409ea0f2d7e085264159ac73eefce191dea8de6fb58027a2370ac11","bytes":1068,"lines":35},
+    {"path":"validator/src/distribution/model.rs","sha256":"sha256:6f9b5e665ff2bc007ca65c78269e1843b91eb89ff138034d90adf75a5ff0fb97","bytes":6153,"lines":237},
+    {"path":"validator/src/distribution/observations.rs","sha256":"sha256:184ff00b914a2f5116dc3cb03baf0c7b9c9771972ba141244446d9daec391636","bytes":1181,"lines":44},
+    {"path":"validator/src/distribution/package/archive.rs","sha256":"sha256:ee3576427a5ffa1deb1ad8bb57b0d0f763c11a5ea0bf23aa829671470d3d6831","bytes":2871,"lines":83},
+    {"path":"validator/src/distribution/package/mod.rs","sha256":"sha256:d24edb43ec66773125f82bdc36c7b03f80a9b20ff77d29e385862a3cb20688e8","bytes":193,"lines":9},
+    {"path":"validator/src/distribution/package/plan.rs","sha256":"sha256:3523b17c9af5ecd791df4ef0866d3db416ca744fc4b855025c0c5927fbf053ed","bytes":8027,"lines":268},
+    {"path":"validator/src/distribution/package/spec.rs","sha256":"sha256:a63c2ff5b7f93e3ed424e3147144f4308f73156033b5a2941bde29444dba9426","bytes":3807,"lines":126},
+    {"path":"validator/src/distribution/reader/fallback.rs","sha256":"sha256:8fd8b8a447c545295827c0d9f5269752b873e9598eca93bf8006e07a080fb77d","bytes":483,"lines":17},
+    {"path":"validator/src/distribution/reader/mod.rs","sha256":"sha256:14ddabff12b90d437eccc93c73fca451bf22d3eafa86276c1fe66ca8f2fd8f22","bytes":3744,"lines":130},
+    {"path":"validator/src/distribution/reader/unix.rs","sha256":"sha256:b4020e7efd8936407db6dbd52e074354fb01c5cd411c34f4bd731e66493800d1","bytes":4276,"lines":121},
+    {"path":"validator/src/distribution/spec.rs","sha256":"sha256:5551a1124dbdab70172e0a7676c783528089711c3189305cbd07f23988ff60f4","bytes":8370,"lines":264},
+    {"path":"validator/src/distribution/supply.rs","sha256":"sha256:51e28ebbea17035edafaa87dec3aeaed9af6fafbd9e0d954dcf0e624b2635dab","bytes":5225,"lines":168},
+    {"path":"validator/src/distribution/verify.rs","sha256":"sha256:998e17314d839ec8dd6baa03cde772f722d2b29d8814b59dc16172e8780c63ca","bytes":7807,"lines":244},
+    {"path":"validator/tests/distribution_contract.rs","sha256":"sha256:99bb58fddfddca3c2337335b207c57dd897476c0db1a86d1a670bb8fddc0b031","bytes":586,"lines":19},
+    {"path":"validator/tests/distribution_contract/adversarial_fs.rs","sha256":"sha256:ceb874ea8705d858625156baecee014bf77a8cc28fa53d24a178ebe3f0eb5877","bytes":3136,"lines":90},
+    {"path":"validator/tests/distribution_contract/adversarial_semantics.rs","sha256":"sha256:665f2d30d4decf910fc7f1d6bdb48daaaebf54df54c50bbdbad8fc958feacfa3","bytes":5904,"lines":169},
+    {"path":"validator/tests/distribution_contract/install.rs","sha256":"sha256:a72128bf15a349116c4a2beea341d25e62a4c1e5f2ce849b6a1a36ecc1df7f10","bytes":6411,"lines":187},
+    {"path":"validator/tests/distribution_contract/marketplace_supply.rs","sha256":"sha256:19538962c94b88f70089ff79ae2f20f3003331ab1ea76da42ed78341fa729fb9","bytes":8760,"lines":238},
+    {"path":"validator/tests/distribution_contract/package.rs","sha256":"sha256:7e79ebb075492df69ec5761adaf6ce9111e88a1dfcb19941ea65137ae954a50c","bytes":7630,"lines":225},
+    {"path":"validator/tests/distribution_contract/positive.rs","sha256":"sha256:8a1e0822930ec26646154a6ca417158593e1f5ab6c45109cc5bcb230e539d664","bytes":1148,"lines":29},
+    {"path":"validator/tests/distribution_contract/states.rs","sha256":"sha256:3c83ee3c38c9735e50a9e2a1d8849fe45a417ca4b995a1a48606decb1105d142","bytes":3059,"lines":93},
+    {"path":"validator/tests/distribution_contract/support.rs","sha256":"sha256:b2393b7f849dd744951765195dc2c27b9860afea3cba98ccdcaf074534a426f9","bytes":6459,"lines":200}
+  ],
+  "findings": [
+    {
+      "severity": "review-finding-repaired",
+      "finding": "Exact expected origin is now mandatory and compared before Verified; the safe in-root substitution false-pass is closed for both scopes."
+    },
+    {
+      "severity": "independent-re-review-required",
+      "finding": "The corrected set and result require independent re-review; this worker does not accept its own repair."
+    },
+    {
+      "severity": "host-proof-withheld",
+      "finding": "The correction proves fixture semantics only and performs no real marketplace, install, app, UI, discovery, runtime, or network effect."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent re-review and root acceptance of set 064ff911431aa7db45f4ff5dd6c1cd57b3739941ff926ec2f03be83192a570c2",
+    "Root-owned validator/src/lib.rs wiring, package manifest integration, and public HCT-DISTRIBUTION dispatch",
+    "Same-session LiveContext and accepted PackageSnapshot binding",
+    "Supported real Codex marketplace/install/cache/app-registry/Plugins-UI/discovery/runtime adapters and authorized host proof",
+    "Independent clean rebuild and fresh-session representative journey before N04 or claim promotion"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "independent re-review",
+      "request": "Recompute the exact set and specifically attack expected-origin validation, origin equality ordering, both marketplace scopes, alternate in-root paths, malformed path strings, non-echo, and unavailable non-promotion."
+    },
+    {
+      "path": "validator/src/lib.rs and plugin-manifest-draft.json",
+      "request": "Only after independent PASS, apply the previously requested root wiring and integrate the corrected marketplace source/test plus NODE-002 result rather than accepting stale NODE-001 digests."
+    },
+    {
+      "path": "root-owned HCT-DISTRIBUTION adapters",
+      "request": "Supply exact canonical origins from same-session accepted marketplace configuration; never derive the expectation from the observed catalog row."
+    }
+  ],
+  "limitations": [
+    "Only the exact reviewer finding was changed; all other NODE-001 limitations remain.",
+    "Origins are canonical descriptor-confined relative identifiers, not proof that a live host opened or exposed them.",
+    "Unavailable is an explicit non-promoting result and does not prove absence on an unprobed host.",
+    "No root manifest, lib wiring, Cargo, dispatcher, registry, board, claim, release, Git, network, or external host surface was changed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

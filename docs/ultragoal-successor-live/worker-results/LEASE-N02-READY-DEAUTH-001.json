@@ -1,0 +1,293 @@
+{
+  "worker": "/root/n02_generated_map",
+  "lease_id": "LEASE-N02-READY-DEAUTH-001",
+  "context_id": "sha256:f5bb2beb422dcfdaade22239cc6d432c2ddf3551b2db12eb19e65129c6ac5551",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "dirty": true,
+    "status_sha256_before_result": "06173471baea5c91cd18c9454177340b4a9daf3419b74c96893c922ed89bc4eb",
+    "leased_worktree_diff_sha256": "e5e3f84bbbcc5f15eb503ea980cef80c751bb4dadf649aaa233d0a3d0abfd756",
+    "leased_candidate_set_sha256": "c7ab4ba439f0ff3e07e3a84ee1ec4e00d3bb0f084dd991e6f99c2b71b520320b",
+    "context_source": {
+      "path": "docs/ultragoal-successor-live/worker-results/LEASE-N02-CONTEXT-SCOPE-001.json",
+      "sha256": "bcf9c3da5d66759de79880fc8c17eea32bb67bc72fd9ebe4159892a027eb2e73",
+      "note": "The context worker captured two byte-identical live summaries after this READY source froze and before AGENT-REVIEW made its later source write."
+    },
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "lease_scope": [
+      "validator/src/audit/receipt/generated.rs",
+      "validator/src/audit/package/run/semantic_valid.rs",
+      "adjacent self-test modules only",
+      "this WorkerResult"
+    ],
+    "predecessor_behavior": [
+      "receipt generation scanned examples/generated/READY_FOR_MERGE*.json and stamped matching rows with the current run id",
+      "package semantic validation scanned the same static examples and treated selected JSON as current ready artifacts",
+      "caller-supplied target artifacts could inject artifact_type ready_for_merge into the generated receipt"
+    ],
+    "root_owned_surfaces_not_modified": [
+      "inventory and context implementation",
+      "legacy and plugin implementation",
+      "Cargo manifests and dependency graph",
+      "public command catalog",
+      "migration registries and adopted manifests",
+      "claim, release, readiness, and completion authority",
+      "packaged examples/generated fixture bytes"
+    ],
+    "concurrent_dirt_policy": "All root-owned, user-owned, and other-worker paths were preserved."
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "acceptance_ceiling": "Deauthorization slice only; it proves static READY examples no longer become current-run evidence and does not provide accepted HCT-CLAIMS output.",
+    "leased_rust_files": 6,
+    "leased_rust_lines": 861,
+    "leased_rust_bytes": 32254,
+    "maximum_file_lines": 257,
+    "files_over_300_lines": 0,
+    "focused_tests": "13 passed; 0 failed",
+    "all_target_check_before_concurrent_review_race": "pass",
+    "full_lib_diagnostic_before_concurrent_review_race": "1437 passed; 12 failed; 0 ignored",
+    "static_ready_artifacts_selected": 0,
+    "accepted_hct_claims_artifacts_selected": 0,
+    "packaged_fixture_bytes_modified": false,
+    "network_performed": false,
+    "external_product_effect_performed": false
+  },
+  "touched_paths": [
+    "validator/src/audit/receipt/generated.rs",
+    "validator/src/audit/package/run/semantic_valid.rs",
+    "validator/src/self_tests/receipts/validator/generated.rs",
+    "validator/src/self_tests/receipts/validator/mod.rs",
+    "validator/src/self_tests/receipts/validator/boundaries.rs",
+    "validator/src/self_tests/package/run.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-READY-DEAUTH-001.json"
+  ],
+  "touched_semantics": [
+    "static examples/generated READY files cannot become current-run generated artifacts",
+    "caller-injected target_artifacts with artifact_type ready_for_merge are filtered before receipt emission",
+    "missing, malformed, duplicated, symlinked, or adversarial static READY examples cannot restore a fallback",
+    "package semantic validation receives an empty ready-artifact set until an accepted candidate-bound HCT-CLAIMS output surface exists",
+    "dependency-required package validation fails causally with ready_receipt_not_validator_output when no real ready output exists",
+    "non-ready target artifacts and the existing red validator report behavior remain preserved"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "static READY rows with ready true and proven_live true",
+    "current and future run ids",
+    "abcdef0 and zero input digests",
+    "duplicate lane ids and malformed filenames",
+    "embedded and standalone identity mismatch",
+    "forged current digest",
+    "missing and malformed examples/generated directories",
+    "symlinked static READY example",
+    "caller-injected ready_for_merge target artifact",
+    "real two-lane dependency fixture requiring live ready evidence"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "six leased Rust files and this WorkerResult only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal ignored Cargo target output from tests and checks"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "isolated temporary package and generated-example fixtures created and cleaned by tests"
+    },
+    {
+      "class": "git",
+      "scope": "read-only live repository identity, status, diff, and digest commands"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PRODUCT-004",
+    "REQ-PROOF-004",
+    "REQ-MAINT-003",
+    "REQ-MAINT-005"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N12-CLAIMS"
+  ],
+  "changes": [
+    {
+      "area": "receipt generated artifacts",
+      "result": "Removed the examples/generated directory scan and ready_for_merge static-file parser. The receipt builder now emits the red fixture report plus non-ready target artifacts only, and rejects caller-injected ready_for_merge rows."
+    },
+    {
+      "area": "package semantic overlay",
+      "result": "Replaced static READY discovery with an explicitly empty ready-artifact set. Packaged examples remain context fixtures and cannot stand in for candidate-bound accepted HCT-CLAIMS output."
+    },
+    {
+      "area": "false-pass controls",
+      "result": "Added missing, malformed, duplicate, filename, truth-flag, run-id, digest, identity-mismatch, symlink, injected-row, and dependency-required controls; none restores a static fallback."
+    },
+    {
+      "area": "proof ceiling",
+      "result": "The slice deliberately lowers the ready-evidence ceiling to unavailable. It does not invent a replacement authority and leaves future HCT-CLAIMS integration to a separately accepted root-owned boundary."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --locked --offline -p ultragoal --lib self_tests::receipts::validator:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "6 passed; 0 failed."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --lib self_tests::package::run:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "7 passed; 0 failed, including the real dependency-required causal control."
+    },
+    {
+      "command": "cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "pass",
+      "summary": "Completed after source freeze and before the concurrent AGENT-REVIEW compile race. Warnings included two now-unused receipt helpers outside this lease and pre-existing dormant successor warnings."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check over the six leased Rust files; git diff --check over the same files",
+      "result": "pass",
+      "summary": "All leased files are formatted and have no whitespace errors."
+    },
+    {
+      "command": "cargo fmt --all -- --check",
+      "result": "concurrent_out_of_lease_failure",
+      "summary": "Workspace check reported only unrelated concurrent formatting differences in validator/src/review/round/registry.rs and validator/src/review/round/runtime.rs; no leased file was reported."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --lib -- --test-threads=1",
+      "result": "repository_baseline_failure",
+      "summary": "1437 passed; 12 failed; 0 ignored. The same twelve test names and categories were present in the pre-lease CAPTURE-006 broad baseline; no new failing test name was introduced by this slice. The existing two-lane test now also exposes the intended ready_receipt_not_validator_output causal finding."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "concurrent_out_of_lease_compile_blocker",
+      "summary": "The later refresh could not compile after AGENT-REVIEW changed shared review code: review::round::config::PERSONAS and config::persona_spec were missing. The accepted pre-race context above was captured after READY source freeze, so this later shared-state failure is not acceptance evidence for or against the leased slice."
+    },
+    {
+      "command": "SHA-256, byte, line, numstat, and packaged-fixture preservation audit",
+      "result": "pass",
+      "summary": "Six leased Rust files are bound below: 861 lines, 32254 bytes, maximum 257 lines, 109 added and 91 deleted lines; static package fixture files have no diff."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/audit/receipt/generated.rs",
+      "sha256": "e81a705271972428ae3826cc81394ecb06c6e0cc28b2b78eff13405f2e40f91f",
+      "bytes": 1034,
+      "lines": 27
+    },
+    {
+      "path": "validator/src/audit/package/run/semantic_valid.rs",
+      "sha256": "dc9aa0197a3380d23bf6bf480c57de6829041ec6904af4be3b1d3cc39b134d59",
+      "bytes": 4027,
+      "lines": 126
+    },
+    {
+      "path": "validator/src/self_tests/receipts/validator/generated.rs",
+      "sha256": "724a62cfd103570d750ec5ae748b995005bcd78939d2ae88ef779c178e801f6b",
+      "bytes": 4551,
+      "lines": 114
+    },
+    {
+      "path": "validator/src/self_tests/receipts/validator/mod.rs",
+      "sha256": "9f3b2c0f4cafe5e977c63ad66ab0414533040cd0e36bd06022cac370eacc3d40",
+      "bytes": 8339,
+      "lines": 207
+    },
+    {
+      "path": "validator/src/self_tests/receipts/validator/boundaries.rs",
+      "sha256": "d421951fc94f7680b5f63d9ee8d0759796bcc002bc38595c630d61f6473e602a",
+      "bytes": 5130,
+      "lines": 130
+    },
+    {
+      "path": "validator/src/self_tests/package/run.rs",
+      "sha256": "0b1edb6036551015eef1bd590961582ceadd0e036f171d5822fc63ba58ef093c",
+      "bytes": 9173,
+      "lines": 257
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Static READY example files and caller-injected ready rows no longer receive current-run authority."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "A dependency-required package now fails with ready_receipt_not_validator_output instead of passing from a static example."
+    },
+    {
+      "severity": "material-proof-gap",
+      "finding": "No accepted candidate-bound HCT-CLAIMS output surface exists, so the honest current ready-artifact set is empty."
+    },
+    {
+      "severity": "repository-baseline",
+      "finding": "The broad lib suite retains twelve shared failures from the pre-lease baseline; repository-wide quality remains open and root-owned."
+    },
+    {
+      "severity": "concurrent-integration-blocker",
+      "finding": "Post-freeze AGENT-REVIEW changes temporarily prevent a fresh compile because two review config symbols are missing."
+    },
+    {
+      "severity": "maintenance-debt",
+      "finding": "audit/receipt/mod.rs retains generated_dir_entries and generated_entry_path helpers that became production-unused; that file was outside this lease."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "Independent review, HCT-CLAIMS integration, inventory/generated disposition, migration routing, claims, release, and N02 closure remain root-only."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent claim-falsification review of the exact six leased-file digests and false-pass controls",
+    "Root acceptance of the intentionally empty current ready-artifact set",
+    "An accepted candidate-bound HCT-CLAIMS output API before any ready artifact can be selected",
+    "Root reconciliation of the twelve broad lib-suite failures",
+    "AGENT-REVIEW reconciliation of the missing review config symbols followed by a fresh candidate-context rebuild",
+    "Root-owned disposition and migration routing for all nine live generated surfaces",
+    "Representative product verification after integration"
+  ],
+  "requested_root_changes": [
+    {
+      "request": "Commission independent review against the exact artifact digests in this WorkerResult and either accept or return a bounded rework verdict."
+    },
+    {
+      "request": "Keep ready evidence unavailable until HCT-CLAIMS exposes an accepted candidate-bound output surface; integrate that future surface through a separate explicit API without static fallback."
+    },
+    {
+      "request": "In a separate lease, remove or test-gate audit/receipt/mod.rs generated_dir_entries and generated_entry_path after confirming no accepted caller remains."
+    },
+    {
+      "request": "Reconcile the AGENT-REVIEW compile break, rebuild LiveContext, and bind any root acceptance to the refreshed integrated candidate."
+    },
+    {
+      "request": "Complete the root-owned generated-surface disposition and migration registry work before considering N02 closure."
+    }
+  ],
+  "limitations": [
+    "This slice removes a false authority source; it does not implement HCT-CLAIMS or generate positive ready evidence.",
+    "Static examples/generated files remain packaged context fixtures because fixture removal or migration was outside the lease.",
+    "Nine live generated surfaces and their inventory findings remain subject to root-owned disposition and migration work.",
+    "The full library suite is not green: twelve shared failures remain from the pre-lease baseline.",
+    "A post-freeze candidate-context refresh is blocked by concurrent AGENT-REVIEW compile errors outside this lease.",
+    "Workspace-wide rustfmt is blocked by unrelated concurrent review files; all six leased Rust files pass exact rustfmt.",
+    "Two now-unused receipt helpers are outside the leased path set and remain for root cleanup.",
+    "No readiness, release, completion, or N02-complete claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

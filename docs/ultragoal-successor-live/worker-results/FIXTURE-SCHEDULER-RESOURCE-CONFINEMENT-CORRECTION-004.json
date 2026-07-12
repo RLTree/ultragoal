@@ -1,0 +1,207 @@
+{
+  "worker": "/root/fixture_execution_scheduler_builder",
+  "lease_id": "FIXTURE-SCHEDULER-RESOURCE-CONFINEMENT-CORRECTION-004",
+  "context_id": "sha256:5411de4eb5f955f12a21f4e257c3d2403efb5d61bbcf0548820785c5d7007ea3",
+  "candidate_identity": {
+    "candidate_id": "sha256:c3f3d440f446e328f73eba5044a2609c9277b1ae085873e8c6539e3f60ff2826",
+    "context_id": "sha256:5411de4eb5f955f12a21f4e257c3d2403efb5d61bbcf0548820785c5d7007ea3",
+    "root_bound_artifact_count": 24,
+    "root_bound_artifact_total_bytes": 80071,
+    "root_bound_artifact_total_lines": 2500,
+    "worker_owned_artifact_count": 20,
+    "worker_owned_artifact_total_bytes": 65404,
+    "worker_owned_artifact_total_lines": 2051,
+    "worker_owned_artifact_set_sha256": "5268897db1d387d7dcf0244d69a22caa76256c5e66f146f2d264c882deee226f",
+    "root_aggregate_enforcement": "Root independently enforces the complete 24-file dependency aggregate; WorkerResult-v1 artifacts enforce the exact 20 worker-owned files and are not claimed to enforce the 24-file aggregate."
+  },
+  "base_state": {
+    "status": "root-bound-resource-confinement-correction"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "private Darwin resource confinement and focused evidence only",
+    "root_acceptance": "withheld"
+  },
+  "touched_paths": [
+    "validator/src/cli/capture/fixture.rs",
+    "validator/src/cli/capture/fixture/execute.rs",
+    "validator/src/cli/capture/fixture/permit.rs",
+    "validator/src/fixture_scheduler/confinement/backend.rs",
+    "validator/src/fixture_scheduler/confinement/mod.rs",
+    "validator/src/fixture_scheduler/confinement/policy.rs",
+    "validator/src/fixture_scheduler/lease.rs",
+    "validator/src/fixture_scheduler/mod.rs",
+    "validator/src/fixture_scheduler/spec.rs",
+    "validator/tests/fixture_scheduler_contract.rs",
+    "validator/tests/fixture_scheduler_contract/adversarial.rs",
+    "validator/tests/fixture_scheduler_contract/confinement.rs",
+    "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+    "validator/tests/fixture_scheduler_contract/execution_adapter/capture.rs",
+    "validator/tests/fixture_scheduler_contract/execution_adapter/fixture.rs",
+    "validator/tests/fixture_scheduler_contract/execution_adapter/output.rs",
+    "validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs",
+    "validator/tests/fixture_scheduler_contract/isolation.rs",
+    "validator/tests/fixture_scheduler_contract/scheduling.rs",
+    "validator/tests/fixture_scheduler_contract/worker_result.rs"
+  ],
+  "touched_semantics": [
+    "cli::capture::fixture",
+    "fixture_scheduler::resource_confinement"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "fixture-scheduler-resource-confinement-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "fixture-scheduler-resource-confinement-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-fixture-scheduler-resource-confinement-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "req-cli-007",
+    "req-proof-006",
+    "ac-fixture-scheduler-resource-confinement-005"
+  ],
+  "dependency_nodes": [
+    "capture-secret-boundary-kernel",
+    "fixture-scheduler-resource-confinement-rework"
+  ],
+  "changes": [
+    {
+      "summary": "Added immutable fixture resource policy, Darwin CPU/address-space/file/process-group enforcement, canonical lease-root pinning, and fail-closed sandbox denial for outside writes and all network access."
+    },
+    {
+      "summary": "Added child-visible limit, lease-write, loopback-denial, timeout/descendant, backend substitution, collision, cleanup, supplied-outcome, and real capture-adapter probes."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-confinement-005 cargo check --locked --offline -j16",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-confinement-005 cargo test --locked --offline -j16 --test fixture_scheduler_contract -- --test-threads=16",
+      "status": "pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/capture/fixture.rs",
+      "sha256": "sha256:f9c1546559abc73eb19175fd19bb24572a22c7369ad5db6490c9baab0385461c",
+      "byte_length": 2972
+    },
+    {
+      "path": "validator/src/cli/capture/fixture/execute.rs",
+      "sha256": "sha256:52544250ba6e532dfcf81d242ae83eeb61842faaf967cfccda60ef76a8f9e348",
+      "byte_length": 5406
+    },
+    {
+      "path": "validator/src/cli/capture/fixture/permit.rs",
+      "sha256": "sha256:2d5690879d393d77be5c1a6ab61e30ca3db8c066b8f7fce173aedef93653acb0",
+      "byte_length": 4598
+    },
+    {
+      "path": "validator/src/fixture_scheduler/confinement/backend.rs",
+      "sha256": "sha256:a370496b9a2c80bb686ef17cd116d5485f731d9346dfe68592460fde3793ad32",
+      "byte_length": 8072
+    },
+    {
+      "path": "validator/src/fixture_scheduler/confinement/mod.rs",
+      "sha256": "sha256:26255f55ef5416e96f18a35f99dd352ea8d88da14251546b16e40215a6677ba7",
+      "byte_length": 122
+    },
+    {
+      "path": "validator/src/fixture_scheduler/confinement/policy.rs",
+      "sha256": "sha256:1825856086d368d45d6a1ef694944d3dd1b07348a9a30c5230ece64589d3c9c6",
+      "byte_length": 2335
+    },
+    {
+      "path": "validator/src/fixture_scheduler/lease.rs",
+      "sha256": "sha256:e73403d7ae9769840f9771cde61546a927b03ab4ebfa9be100f12f8e72c1dd2b",
+      "byte_length": 5280
+    },
+    {
+      "path": "validator/src/fixture_scheduler/mod.rs",
+      "sha256": "sha256:5a9a724b26483b9e15b7f716902f90b5ed7dea902a1a85b8001ee1a50271d619",
+      "byte_length": 808
+    },
+    {
+      "path": "validator/src/fixture_scheduler/spec.rs",
+      "sha256": "sha256:de75783e4c37ec731490c1a52bf0cf400a7c36cb9b36ac6103eaf68a0301218a",
+      "byte_length": 4618
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract.rs",
+      "sha256": "sha256:81ec9a16847ff061dc40f7eb6c721f365ce3c4b3b588cb47ce04614a2d83ba06",
+      "byte_length": 604
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/adversarial.rs",
+      "sha256": "sha256:a7ecb66302e5eac3424846d262081311509c3be9ccb9df59f32d94f6c1301abd",
+      "byte_length": 4086
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/confinement.rs",
+      "sha256": "sha256:4628d52a2e4d6ab54a69eea27fc5dc5b79326e602f09c69598f9d49ab0b66c1f",
+      "byte_length": 6853
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+      "sha256": "sha256:d83c977b789302a37cbc5b8b26446cb42dda15339db741247770a451a47c251d",
+      "byte_length": 2415
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/execution_adapter/capture.rs",
+      "sha256": "sha256:c7b6b2238098db79a7dcc3e60b15c0f635cb4f643cdc07ebb93ab650ec51d5a4",
+      "byte_length": 549
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/execution_adapter/fixture.rs",
+      "sha256": "sha256:21ea9db3ed991ad918ceb0dc014ed9ae1cb45e3acb13482c8928ff48ea320bc8",
+      "byte_length": 183
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/execution_adapter/output.rs",
+      "sha256": "sha256:f00054937977ef485567bcdc48befcf24cd05a11c313cbdd2a698e69f4c3064d",
+      "byte_length": 2439
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs",
+      "sha256": "sha256:c02adfd36041c695055a04c236a875ae1163058ecde62cbaf393c4a1373626e6",
+      "byte_length": 1204
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/isolation.rs",
+      "sha256": "sha256:7d06a45ba5a04d361370ba210c2ea5564cc1f9eabc7a9d0e6b50caa7ab0c7947",
+      "byte_length": 2836
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/scheduling.rs",
+      "sha256": "sha256:735ddb139ac8a45ad53975e19156de392f0b55320960524cfeb4c17472f2c6c9",
+      "byte_length": 3186
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/worker_result.rs",
+      "sha256": "sha256:705f6b6a8f613f5149bcf7bbcd5a35a53c2492b6bcfeb70e88ff61cbec2148dd",
+      "byte_length": 6838
+    }
+  ],
+  "findings": [],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [],
+  "limitations": [
+    "On Darwin, address_space_bytes is an immutable additional virtual-address budget over the observed Mach task baseline; no independent RLIMIT_DATA heap limit is claimed.",
+    "No public HCT-FIXTURES integration, routine or strict product behavior, node closure, readiness, release, or completion is claimed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

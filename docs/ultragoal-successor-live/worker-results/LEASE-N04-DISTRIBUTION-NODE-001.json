@@ -1,0 +1,264 @@
+{
+  "worker": "/root/n04_distribution",
+  "lease_id": "LEASE-N04-DISTRIBUTION-NODE-001",
+  "context_id": "sha256:84970119746113df2fadb7b28f958709ded2e7a0269b49acc25bf44933c125b5",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "status_sha256_before_result": "ee24691139b533785f35d571dfaa5650083b81660b4ad375e92f9bdb414b4ff9",
+    "live_plugin_manifest_sha256": "8e703d3113519f0757b5666b8d38bb71686528244f2e2bacb3faf76bad9b2bbe",
+    "live_plugin_manifest_resource_count": 1498,
+    "artifact_set_sha256": "84970119746113df2fadb7b28f958709ded2e7a0269b49acc25bf44933c125b5",
+    "context_note": "The context_id is the lease-local frozen 26-artifact identity, not a root-owned HCT-CONTEXT claim. Concurrent root integration prevents this worker from adopting shared candidate identity. The protected .codex-worktree/env.sh file was not opened, read, hashed, or sourced."
+  },
+  "base_state": {
+    "node": "N04-DISTRIBUTION",
+    "tool": "HCT-DISTRIBUTION",
+    "observed_state": "The live tree contained seven distribution contract tests but validator/src/distribution did not exist, so the focused test target initially had no implementation module.",
+    "root_authority_preserved": "The worker did not edit lib/module wiring, Cargo dependencies or lockfile, package or plugin manifests, marketplace files, migration registries, public commands, claims, release state, or shared schemas.",
+    "upstream_state": "N02 and N03 remain root-owned concurrent dependencies; this candidate exposes typed adapters for their later LiveContext, package-snapshot, dispatcher, and state wiring."
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "acceptance_ceiling": "Complete root-wirable N04 tool kernel and fixture behavior only; no public activation, real host install/discovery, package claim, N04 closure, readiness, release, or completion.",
+    "artifact_count_excluding_result": 26,
+    "artifact_set_sha256": "84970119746113df2fadb7b28f958709ded2e7a0269b49acc25bf44933c125b5",
+    "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "implementation_lines": 2358,
+    "test_lines": 1185,
+    "total_lines": 3543,
+    "total_bytes": 112688,
+    "maximum_file_lines": 268,
+    "files_over_300_lines": 0,
+    "focused_distribution_tests": "21 passed; 0 failed",
+    "tracked_deletions": 0,
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/distribution/error.rs",
+    "validator/src/distribution/install.rs",
+    "validator/src/distribution/json.rs",
+    "validator/src/distribution/marketplace.rs",
+    "validator/src/distribution/mod.rs",
+    "validator/src/distribution/model.rs",
+    "validator/src/distribution/observations.rs",
+    "validator/src/distribution/package/archive.rs",
+    "validator/src/distribution/package/mod.rs",
+    "validator/src/distribution/package/plan.rs",
+    "validator/src/distribution/package/spec.rs",
+    "validator/src/distribution/reader/fallback.rs",
+    "validator/src/distribution/reader/mod.rs",
+    "validator/src/distribution/reader/unix.rs",
+    "validator/src/distribution/spec.rs",
+    "validator/src/distribution/supply.rs",
+    "validator/src/distribution/verify.rs",
+    "validator/tests/distribution_contract.rs",
+    "validator/tests/distribution_contract/adversarial_fs.rs",
+    "validator/tests/distribution_contract/adversarial_semantics.rs",
+    "validator/tests/distribution_contract/install.rs",
+    "validator/tests/distribution_contract/marketplace_supply.rs",
+    "validator/tests/distribution_contract/package.rs",
+    "validator/tests/distribution_contract/positive.rs",
+    "validator/tests/distribution_contract/states.rs",
+    "validator/tests/distribution_contract/support.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-001.json"
+  ],
+  "touched_semantics": [
+    "deterministic path-sorted package plan, inventory, archive, digest, and rebuild verification",
+    "plugin manifest name and version binding inside package inputs",
+    "injected atomic package effects with failed-verification rollback",
+    "injected fixture-only repository and personal install, uninstall, exact-prior replacement, and rollback",
+    "separate repository and personal marketplace catalog expectations",
+    "source, package, install, cache, marketplace, app-registry, Plugins-UI, discovery, and runtime identity ladder",
+    "explicit definition-only, missing, unavailable, stale, mixed, contradicted, payload-mismatch, and unjoined states",
+    "expectation-bound provenance and injected signature-verifier adapters",
+    "descriptor-confined no-follow bounded Unix reads with hardlink and final-session revalidation",
+    "unique-key JSON, bounded non-echo errors, redacted debug output, and zero-write read planning"
+  ],
+  "generated_outputs": [
+    "deterministic HUGPKG1 package bytes returned to an injected PackageEffects implementation",
+    "canonical harness-ultragoal.package-inventory.v1 bytes held in PackageSnapshot"
+  ],
+  "fixtures": [
+    "complete ten-layer source-to-runtime identity ladder",
+    "definition-only, missing, unavailable, stale-version, mixed-candidate, registered-hidden, payload-mismatch, and unjoined observations",
+    "symlink leaf, symlink ancestor, hardlink, FIFO, oversized, escaped-path, missing-object, and between-read mutation",
+    "deterministic reordered package plans and corrupted package sinks",
+    "fixture-contained clean install, exact-prior replacement, uninstall, rollback, write corruption, and substitution conflict",
+    "repository and personal marketplace catalogs with duplicate-version, wrong-digest, stale, and path-substitution controls",
+    "tampered provenance subject and material plus absent, accepting, and rejecting signature policies"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Only validator/src/distribution/**, validator/tests/distribution_contract.rs, validator/tests/distribution_contract/**, and this WorkerResult were written."
+    },
+    {
+      "class": "local-build-write",
+      "scope": "Rust artifacts were isolated under /tmp/hug-n04-node001-target."
+    },
+    {
+      "class": "fixture-write",
+      "scope": "Tests wrote only unique temporary fixture roots and injected in-memory package/install effects."
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product-effect",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-SUPPLY-001",
+    "REQ-SUPPLY-002",
+    "REQ-SUPPLY-003",
+    "REQ-SUPPLY-004",
+    "REQ-SUPPLY-005",
+    "REQ-SUPPLY-006"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N03-CLI-STATE",
+    "N04-DISTRIBUTION"
+  ],
+  "changes": [
+    {
+      "area": "package",
+      "rationale": "Package plans read one descriptor-confined source session, sort exact targets, normalize regular-file modes, bind plugin name/version, generate canonical inventory and archive bytes, and require an injected sink to read back exact bytes or roll back."
+    },
+    {
+      "area": "install",
+      "rationale": "Install effects are explicit and fixture-scoped; absent or exact-digest prior state is required, post-write bytes are reconciled, conflicts never overwrite, and rollback restores exact prior bytes."
+    },
+    {
+      "area": "marketplace and identity ladder",
+      "rationale": "Repository and personal catalogs remain distinct, while ten separately reported layers prevent source, package, cache, catalog, app registry, Plugins UI, discovery, or runtime evidence from promoting another layer."
+    },
+    {
+      "area": "supply-chain adapters",
+      "rationale": "Provenance requires exact subject, candidate, material, builder, and predicate expectations; signatures cannot verify without an adopted identity policy and an affirmative injected cryptographic verifier effect."
+    },
+    {
+      "area": "security and privacy",
+      "rationale": "Unix reads use anchored openat descriptors, no-follow and nonblocking flags, regular single-link checks, byte bounds, and same-session reopen/digest revalidation; failures and Debug projections do not retain untrusted bytes or paths."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n04-node001-target cargo test --offline --locked --manifest-path validator/Cargo.toml --test distribution_contract -- --test-threads=1",
+      "result": "pass",
+      "summary": "21 passed; 0 failed. Covers complete and unavailable ladders, deterministic build/rebuild, manifest identity, package rollback, install/uninstall/rollback, marketplace scopes, provenance/signatures, substitutions, special files, race revalidation, privacy, and zero-write reads."
+    },
+    {
+      "command": "rustfmt --edition 2024 over all 26 leased Rust artifacts; git diff --check over the leased paths",
+      "result": "pass"
+    },
+    {
+      "command": "artifact SHA-256, byte, line, ordered-set, maximum-file, and tracked-deletion reconciliation",
+      "result": "pass",
+      "summary": "All 26 frozen artifacts reconcile to set 84970119746113df2fadb7b28f958709ded2e7a0269b49acc25bf44933c125b5; 3,543 lines, 112,688 bytes, maximum 268 lines, no tracked deletions."
+    },
+    {
+      "command": "shasum -a 256 plugin-manifest-draft.json; jq '.resources | length' plugin-manifest-draft.json",
+      "result": "pass",
+      "summary": "The concurrent root manifest was re-read immediately before freeze as 8e703d3113519f0757b5666b8d38bb71686528244f2e2bacb3faf76bad9b2bbe with 1,498 resources; it was not modified by this worker."
+    }
+  ],
+  "artifacts": [
+    {"path":"validator/src/distribution/error.rs","sha256":"sha256:cecf86d9bc10f292047f7a69a13ea8f70660aeaa4ee7bd9db6f66964897ded26","bytes":2536,"lines":67},
+    {"path":"validator/src/distribution/install.rs","sha256":"sha256:98038b5e1d653442e9a0ea99812e5f9cc50da025109f558b4dfc6cd5421709d2","bytes":7274,"lines":246},
+    {"path":"validator/src/distribution/json.rs","sha256":"sha256:a6e6e3c8b07871ffd4ff1ac60c924f5f491fb0bc7e129f9319cfc63e56735d35","bytes":3497,"lines":114},
+    {"path":"validator/src/distribution/marketplace.rs","sha256":"sha256:362a826a61f57097e28ff8dcdf634d7bc15b27e7725684c654504bd2a557d445","bytes":5325,"lines":185},
+    {"path":"validator/src/distribution/mod.rs","sha256":"sha256:821d8f0c9409ea0f2d7e085264159ac73eefce191dea8de6fb58027a2370ac11","bytes":1068,"lines":35},
+    {"path":"validator/src/distribution/model.rs","sha256":"sha256:6f9b5e665ff2bc007ca65c78269e1843b91eb89ff138034d90adf75a5ff0fb97","bytes":6153,"lines":237},
+    {"path":"validator/src/distribution/observations.rs","sha256":"sha256:184ff00b914a2f5116dc3cb03baf0c7b9c9771972ba141244446d9daec391636","bytes":1181,"lines":44},
+    {"path":"validator/src/distribution/package/archive.rs","sha256":"sha256:ee3576427a5ffa1deb1ad8bb57b0d0f763c11a5ea0bf23aa829671470d3d6831","bytes":2871,"lines":83},
+    {"path":"validator/src/distribution/package/mod.rs","sha256":"sha256:d24edb43ec66773125f82bdc36c7b03f80a9b20ff77d29e385862a3cb20688e8","bytes":193,"lines":9},
+    {"path":"validator/src/distribution/package/plan.rs","sha256":"sha256:3523b17c9af5ecd791df4ef0866d3db416ca744fc4b855025c0c5927fbf053ed","bytes":8027,"lines":268},
+    {"path":"validator/src/distribution/package/spec.rs","sha256":"sha256:a63c2ff5b7f93e3ed424e3147144f4308f73156033b5a2941bde29444dba9426","bytes":3807,"lines":126},
+    {"path":"validator/src/distribution/reader/fallback.rs","sha256":"sha256:8fd8b8a447c545295827c0d9f5269752b873e9598eca93bf8006e07a080fb77d","bytes":483,"lines":17},
+    {"path":"validator/src/distribution/reader/mod.rs","sha256":"sha256:14ddabff12b90d437eccc93c73fca451bf22d3eafa86276c1fe66ca8f2fd8f22","bytes":3744,"lines":130},
+    {"path":"validator/src/distribution/reader/unix.rs","sha256":"sha256:b4020e7efd8936407db6dbd52e074354fb01c5cd411c34f4bd731e66493800d1","bytes":4276,"lines":121},
+    {"path":"validator/src/distribution/spec.rs","sha256":"sha256:5551a1124dbdab70172e0a7676c783528089711c3189305cbd07f23988ff60f4","bytes":8370,"lines":264},
+    {"path":"validator/src/distribution/supply.rs","sha256":"sha256:51e28ebbea17035edafaa87dec3aeaed9af6fafbd9e0d954dcf0e624b2635dab","bytes":5225,"lines":168},
+    {"path":"validator/src/distribution/verify.rs","sha256":"sha256:998e17314d839ec8dd6baa03cde772f722d2b29d8814b59dc16172e8780c63ca","bytes":7807,"lines":244},
+    {"path":"validator/tests/distribution_contract.rs","sha256":"sha256:99bb58fddfddca3c2337335b207c57dd897476c0db1a86d1a670bb8fddc0b031","bytes":586,"lines":19},
+    {"path":"validator/tests/distribution_contract/adversarial_fs.rs","sha256":"sha256:ceb874ea8705d858625156baecee014bf77a8cc28fa53d24a178ebe3f0eb5877","bytes":3136,"lines":90},
+    {"path":"validator/tests/distribution_contract/adversarial_semantics.rs","sha256":"sha256:665f2d30d4decf910fc7f1d6bdb48daaaebf54df54c50bbdbad8fc958feacfa3","bytes":5904,"lines":169},
+    {"path":"validator/tests/distribution_contract/install.rs","sha256":"sha256:a72128bf15a349116c4a2beea341d25e62a4c1e5f2ce849b6a1a36ecc1df7f10","bytes":6411,"lines":187},
+    {"path":"validator/tests/distribution_contract/marketplace_supply.rs","sha256":"sha256:6c0213eeead63824873c0c92fdd9a3ee62d6de0fa930a2d439bab2679e21e7f6","bytes":6518,"lines":173},
+    {"path":"validator/tests/distribution_contract/package.rs","sha256":"sha256:7e79ebb075492df69ec5761adaf6ce9111e88a1dfcb19941ea65137ae954a50c","bytes":7630,"lines":225},
+    {"path":"validator/tests/distribution_contract/positive.rs","sha256":"sha256:8a1e0822930ec26646154a6ca417158593e1f5ab6c45109cc5bcb230e539d664","bytes":1148,"lines":29},
+    {"path":"validator/tests/distribution_contract/states.rs","sha256":"sha256:3c83ee3c38c9735e50a9e2a1d8849fe45a417ca4b995a1a48606decb1105d142","bytes":3059,"lines":93},
+    {"path":"validator/tests/distribution_contract/support.rs","sha256":"sha256:b2393b7f849dd744951765195dc2c27b9860afea3cba98ccdcaf074534a426f9","bytes":6459,"lines":200}
+  ],
+  "findings": [
+    {
+      "severity": "candidate-behavior-added",
+      "finding": "The previously absent HCT-DISTRIBUTION kernel now provides real deterministic package, fixture transaction, catalog, supply-chain expectation, and identity-ladder behavior under one N04 module."
+    },
+    {
+      "severity": "independent-review-required",
+      "finding": "No worker accepts its own work. The exact 26-artifact set and this result require independent security, product, and false-pass review before root wiring."
+    },
+    {
+      "severity": "root-integration-required",
+      "finding": "The module is intentionally not present in validator/src/lib.rs and no public package/inspect dispatcher or shared manifest entry was changed under this lease."
+    },
+    {
+      "severity": "host-proof-withheld",
+      "finding": "Only temporary and injected fixtures were mutated. No Codex marketplace, cache, app registry, Plugins UI, new session, or runtime host surface was changed or claimed."
+    },
+    {
+      "severity": "platform-ceiling",
+      "finding": "Descriptor-anchored reads are implemented for Unix. Non-Unix builds fail the secure-reader capability closed, so Windows support remains unavailable rather than simulated."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent review and root acceptance of artifact set 84970119746113df2fadb7b28f958709ded2e7a0269b49acc25bf44933c125b5",
+    "Root-owned validator/src/lib.rs wiring and public HCT-DISTRIBUTION command/runtime dispatch",
+    "Root adapter binding PackagePlan inputs to the accepted N02 PackageSnapshot and a same-session LiveContext rather than caller-supplied digest strings",
+    "Root package-resource reconciliation against plugin-manifest-draft.json 8e703d3113519f0757b5666b8d38bb71686528244f2e2bacb3faf76bad9b2bbe or its current successor",
+    "Supported Codex host adapters and authorized real marketplace/install/cache/app-registry/Plugins-UI/new-session/runtime probes",
+    "Adopted signing identity or an explicit unavailable decision; no signing authority was inferred",
+    "Independent clean rebuild and real fresh-session representative journey before CL-PACKAGE, CL-INSTALL, CL-DISCOVERY, CL-RUNTIME, N04, N16, or release claims"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "independent review",
+      "request": "Recompute set 84970119746113df2fadb7b28f958709ded2e7a0269b49acc25bf44933c125b5 and attack archive format determinism, manifest substitution, effect rollback, installed-state conflicts, catalog scope/version ambiguity, identity joins, descriptor races, bounds, special files, non-echo, and false unavailable promotion."
+    },
+    {
+      "path": "validator/src/lib.rs",
+      "request": "After independent PASS, add exactly one `pub mod distribution;` declaration and run the dependency-closed library/test suites."
+    },
+    {
+      "path": "plugin-manifest-draft.json",
+      "request": "After independent PASS and root wiring, add the accepted distribution source/test paths and this WorkerResult, then recompute the live package snapshot and candidate identity."
+    },
+    {
+      "path": "root-owned HCT-DISTRIBUTION adapter and successor CLI",
+      "request": "Construct package and ladder requests from same-session LiveContext plus accepted PackageSnapshot, expose product-semantic package/inspect behavior, and keep all external writes behind explicit authority and injected effects."
+    },
+    {
+      "path": "supported host proof",
+      "request": "Select supported Codex host/version adapters, perform explicitly authorized install and independent new-session discovery/runtime probes, and preserve unavailable states for APIs that cannot be confirmed."
+    }
+  ],
+  "limitations": [
+    "The candidate is compiled by validator/tests/distribution_contract.rs via an explicit path because root-owned validator/src/lib.rs wiring is not part of this lease.",
+    "The deterministic HUGPKG1 archive is an internal self-verifying HCT artifact format; it is not claimed to be a Codex marketplace publication format.",
+    "Package planning binds manifest name/version and exact source bytes but does not yet derive its plan directly from the accepted root PackageSnapshot or full 1,498-resource live manifest.",
+    "Install effects represent exact package bytes at an injected fixture target; supported live host layout/materialization remains a root adapter and journey obligation.",
+    "Marketplace, cache, app registry, Plugins UI, discovery, and runtime rows are observation inputs; this candidate does not manufacture or scrape live host evidence.",
+    "Provenance verification is expectation-based metadata verification. Signature success additionally requires an injected real verifier; no signing key, issuer, or identity policy is adopted here.",
+    "No Windows secure-reader claim is made, and no real external install, publish, signing, network, app, cache, registry, UI, session, or runtime effect occurred."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

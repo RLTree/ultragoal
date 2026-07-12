@@ -1,0 +1,323 @@
+{
+  "worker": "/root/canonical_plugin_product_builder",
+  "lease_id": "CANONICAL-PLUGIN-PRODUCT-CORRECTION-015",
+  "context_id": "sha256:296cdd9053bbb3319e0b917db239bc25e3e6457453292203655fa143f11f6d00",
+  "candidate_identity": {
+    "candidate_id": "sha256:443e0f9d745786daa81723241b06c139b1fddba240c9e2bc1b3c0e8fd4e5035a",
+    "context_id": "sha256:296cdd9053bbb3319e0b917db239bc25e3e6457453292203655fa143f11f6d00",
+    "parent_agent": "/root",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "dirty": true,
+    "artifact_set_formula": "Sort paths; concatenate each path, one TAB byte, lowercase SHA-256 without prefix, and one LF byte; SHA-256 the result.",
+    "artifact_count": 17,
+    "artifact_total_bytes": 63008,
+    "artifact_total_lines": 1475,
+    "self_exclusion": "This WorkerResult is not an artifact row and is excluded from candidate_id."
+  },
+  "base_state": {
+    "status": "root-rework-plugin-product",
+    "root_decision": "docs/ultragoal-successor-live/root-decisions/PLUGIN-ACQUISITION-DISCOVERY-REWORK.json",
+    "root_decision_sha256": "sha256:296cdd9053bbb3319e0b917db239bc25e3e6457453292203655fa143f11f6d00",
+    "source_plugin_manifest_sha256": "sha256:12c123fa9442dbf9e2eb7877b6fd1c4446ffc04a26d37727dddc0fb3877b06da",
+    "source_package_manifest_sha256": "sha256:8494432c2ad67b679a75634fad68562e6a79dd3fcb3b76e756d020d88e33ad38",
+    "source_skill_directories": 22,
+    "current_project_agents": 6,
+    "active_package_manifest_skills": 13
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "candidate_status": "canonical-plugin-product-source-candidate",
+    "canonical_skill_count": 8,
+    "front_door_count": 1,
+    "project_agent_count": 6,
+    "source_contract_tests": "11-of-11-pass",
+    "root_manifest_changes": "requested-not-applied",
+    "source_acceptance": "withheld-to-independent-review-and-root",
+    "package_install_discovery_runtime": "unproven"
+  },
+  "touched_paths": [
+    "README.md",
+    "docs/install-and-visibility.md",
+    "docs/plugin-resource-map.md",
+    "fixtures/plugin-product/journey-controls.tsv",
+    "fixtures/plugin-product/root-wiring-request.json",
+    "fixtures/plugin-product/route-cases.tsv",
+    "skills/diagnose-and-observe/SKILL.md",
+    "skills/goal-run/SKILL.md",
+    "skills/harness-ultragoal/SKILL.md",
+    "skills/improve-and-maintain/SKILL.md",
+    "skills/product-journey-review/SKILL.md",
+    "skills/prove/SKILL.md",
+    "skills/repository-fit/SKILL.md",
+    "skills/routine-work/SKILL.md",
+    "validator/tests/plugin_product_contract/main.rs",
+    "validator/tests/plugin_product_contract/route_contract.rs",
+    "validator/tests/plugin_product_contract/source_contract.rs",
+    "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-PRODUCT-CORRECTION-015.json"
+  ],
+  "touched_semantics": [
+    "plugin_product::canonical_skill_topology",
+    "plugin_product::fresh_operator_routing",
+    "plugin_product::source_only_contract_controls"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/plugin-product/journey-controls.tsv",
+    "fixtures/plugin-product/root-wiring-request.json",
+    "fixtures/plugin-product/route-cases.tsv",
+    "validator/tests/plugin_product_contract/main.rs",
+    "validator/tests/plugin_product_contract/route_contract.rs",
+    "validator/tests/plugin_product_contract/source_contract.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "canonical-plugin-product-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "plugin-product-fixtures",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-plugin-product-validation",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "host-plugin-state",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "retirement",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "target": "manifest-and-marketplace",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "canonical-eight-skills",
+    "single-front-door",
+    "six-project-agents",
+    "fresh-operator-guidance",
+    "route-fail-closed-controls",
+    "dirty-tree-safety",
+    "proof-layer-separation",
+    "exact-root-wiring-request"
+  ],
+  "dependency_nodes": [],
+  "changes": [
+    {
+      "area": "canonical-skills",
+      "result": "The preferred source topology is one harness-ultragoal front door plus seven specialized workflows with deterministic selection, exact effects, executable successor grammar, missing-target and missing-capability stops, and narrow claim ceilings."
+    },
+    {
+      "area": "fresh-operator-source",
+      "result": "README and both product guides now route only through canonical skills and six project-scoped read-only agents; they no longer direct operators to proposal-era lanes, legacy skill entries, global custom-agent copying, or proof-layer collapse."
+    },
+    {
+      "area": "journey-controls",
+      "result": "Source-only fixtures and a standalone Rust contract suite cover all eight routes, ambiguity, cross-skill authority, missing target and capability, dirty-tree safety, fresh setup, partial retrofit, repeat use, causal diagnosis, interrupted recovery, strict proof, migration, and fresh-agent comprehension."
+    },
+    {
+      "area": "root-wiring",
+      "result": "A non-authoritative exact 0.0.12 request binds current preimages to proposed plugin manifest, package manifest, and repository marketplace postimages without applying root-owned changes."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rustc --edition 2024 --test validator/tests/plugin_product_contract/main.rs -o /tmp/hul-plugin-product-builder-015/plugin-product-contract-tests; binary run with --test-threads=16",
+      "status": "pass",
+      "result": "11 of 11 deterministic source-contract tests passed, including all canonical routes and fail-closed controls."
+    },
+    {
+      "command": "skill-creator quick_validate.py against each of the eight canonical skill directories",
+      "status": "pass",
+      "result": "Eight of eight canonical skills passed discovery metadata validation."
+    },
+    {
+      "command": "plugin-creator validate_plugin.py .",
+      "status": "pass",
+      "result": "The current source plugin structure and 0.0.11 manifest parsed; this does not validate or apply the reserved 0.0.12 root changes."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check on the three focused Rust test files; git diff --check on all 17 artifacts",
+      "status": "pass",
+      "result": "Scoped formatting and whitespace validation passed."
+    },
+    {
+      "command": "jq validation of fixtures/plugin-product/root-wiring-request.json and proposed 0.0.12 package and marketplace scratch postimages",
+      "status": "pass",
+      "result": "The request parsed; the proposed package has version 0.0.12, exactly eight unique skills and six agents; the marketplace has one supported local entry and required policy."
+    },
+    {
+      "command": "SHA-256 and byte/line reconciliation of live manifest preimages and three proposed scratch postimages against root-wiring-request.json",
+      "status": "pass",
+      "result": "All live preimages and proposed postimages matched the exact recorded digests, byte counts, and line counts."
+    },
+    {
+      "command": "negative source scan for global custom-agent paths, old namespaced entry skills, and proposal-bundle routing",
+      "status": "pass",
+      "result": "No prohibited fresh-operator route remained in the canonical skills, README, or the two product guides."
+    },
+    {
+      "command": "two same-session sorted path TAB sha256 LF artifact-set freezes with final artifact revalidation",
+      "status": "pass",
+      "result": "Both freezes were byte-identical at sha256:443e0f9d745786daa81723241b06c139b1fddba240c9e2bc1b3c0e8fd4e5035a for 17 artifacts, 63008 bytes, and 1475 lines."
+    },
+    {
+      "command": "WorkerResultV1::parse_json and exact reconstructed textual-lease validation",
+      "status": "pass",
+      "result": "Typed parse, reconstructed-envelope validate_for, ArtifactWorkspace verification of all 17 artifact rows, result_id, and unknown-field, stale-candidate, scope-escape, and no-claim mutations passed; root must still reconcile the reconstructed envelope with its authoritative work package."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "README.md",
+      "sha256": "sha256:edac93f4e88c2ddfaf5fed827a45c085e759e81bd9d7e098f00e5d15a9c58ad8",
+      "byte_length": 3376
+    },
+    {
+      "path": "docs/install-and-visibility.md",
+      "sha256": "sha256:95c886f864b0daaca0be84b04888713c61e8d54102d125665d948290f51c2a9c",
+      "byte_length": 5154
+    },
+    {
+      "path": "docs/plugin-resource-map.md",
+      "sha256": "sha256:05af5699cde319b646fdb309914d9e0510a53eb16f924f68bab3a6524c5ceba4",
+      "byte_length": 7537
+    },
+    {
+      "path": "fixtures/plugin-product/journey-controls.tsv",
+      "sha256": "sha256:23f7f098ec15b4d140acc17e3d38056c5d4aea768469617f99053ea31bd4e368",
+      "byte_length": 1395
+    },
+    {
+      "path": "fixtures/plugin-product/root-wiring-request.json",
+      "sha256": "sha256:f23801ce42ff42a29638d3af4819743e70ec34c2befbb2ba5bec13d03f4a687b",
+      "byte_length": 5882
+    },
+    {
+      "path": "fixtures/plugin-product/route-cases.tsv",
+      "sha256": "sha256:9e211f5ff897bf52dac4756b1fbdc9c197fc13840c72279714c6eefb10fb875f",
+      "byte_length": 2421
+    },
+    {
+      "path": "skills/diagnose-and-observe/SKILL.md",
+      "sha256": "sha256:69bd02c303556f384219f8ea163c433825c1943e9e81cd221eb3ed37e54edf87",
+      "byte_length": 2874
+    },
+    {
+      "path": "skills/goal-run/SKILL.md",
+      "sha256": "sha256:58e59be58ab5bd7b498dbef7b1922dface5407f477e10b2edc91564ff2994153",
+      "byte_length": 3650
+    },
+    {
+      "path": "skills/harness-ultragoal/SKILL.md",
+      "sha256": "sha256:74582d0e88d72d170a292553253fa3b8fa7f2e91d4f3d5d05bb43e49a695f474",
+      "byte_length": 3373
+    },
+    {
+      "path": "skills/improve-and-maintain/SKILL.md",
+      "sha256": "sha256:6e2910a28bca81d9588ea1dabe76b6e8bd2be3d8266a468fb8c3a476b2cbc146",
+      "byte_length": 3504
+    },
+    {
+      "path": "skills/product-journey-review/SKILL.md",
+      "sha256": "sha256:7e6c27216caad307b52720dfd3148189f699509b3c3e69c0f8bba4c789250e08",
+      "byte_length": 3297
+    },
+    {
+      "path": "skills/prove/SKILL.md",
+      "sha256": "sha256:ae02f80545cb4fa8626941f89d525ea6c3e5227aaf5faa239efb51f352a2daa7",
+      "byte_length": 2877
+    },
+    {
+      "path": "skills/repository-fit/SKILL.md",
+      "sha256": "sha256:2dff9a887ce3e89532f61e6d061276cf800e4dc5ac090929439e7f2f7198781e",
+      "byte_length": 3369
+    },
+    {
+      "path": "skills/routine-work/SKILL.md",
+      "sha256": "sha256:00d0f3cf46603ac1f9241141c02a64e071888f71fd3f9886f3c827f7796e7d82",
+      "byte_length": 2998
+    },
+    {
+      "path": "validator/tests/plugin_product_contract/main.rs",
+      "sha256": "sha256:431a70407a9d109264a7f6f0dc091f0a76a4b7be76f34ce43cebc8146a899891",
+      "byte_length": 436
+    },
+    {
+      "path": "validator/tests/plugin_product_contract/route_contract.rs",
+      "sha256": "sha256:97c3748d65e2e1df7789b2c74457ede929a8d440afa7c950e069fdb07965c02e",
+      "byte_length": 4652
+    },
+    {
+      "path": "validator/tests/plugin_product_contract/source_contract.rs",
+      "sha256": "sha256:bae692ac34aa9ba126ee70a52d9d61d295009a247fcb48ea0d759bb8e88e25ee",
+      "byte_length": 6213
+    }
+  ],
+  "findings": [
+    {
+      "code": "FRESH_OPERATOR_LEGACY_ROUTING",
+      "severity": "corrected-candidate",
+      "summary": "Canonical source guidance no longer sends fresh operators through proposal-era lanes, old entry skills, or global custom-agent copying."
+    },
+    {
+      "code": "PHYSICAL_COMPATIBILITY_SKILLS_REMAIN",
+      "severity": "root-migration-open",
+      "summary": "Fourteen non-canonical skill directories remain physically present and current root manifests are not yet changed; root migration and package authority must prevent duplicate active discovery."
+    },
+    {
+      "code": "HOST_PRODUCT_SURFACES_UNPROVEN",
+      "severity": "claim-withheld",
+      "summary": "No current HUGPKG, repository marketplace application, install, cache, app registry, Plugins UI, new-task discovery, runtime identity, or real product journey was performed in this source-only lease."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-source-review",
+    "root-manifest-marketplace-integration",
+    "legacy-skill-migration",
+    "package-install-discovery-runtime-proof"
+  ],
+  "requested_root_changes": [
+    {
+      "path": ".codex-plugin/plugin.json",
+      "expected_sha256": "sha256:12c123fa9442dbf9e2eb7877b6fd1c4446ffc04a26d37727dddc0fb3877b06da",
+      "request": "After independent acceptance and live preimage revalidation, apply only the /version replacement to 0.0.12 recorded in fixtures/plugin-product/root-wiring-request.json. Require the exact canonical jq postimage sha256:9a8beb3bea1e104eb82e31b591d546075402e460334b04da5b67c6976d86f067, 1083 bytes, and 31 lines; reject drift."
+    },
+    {
+      "path": "plugin-manifest-draft.json",
+      "expected_sha256": "sha256:8494432c2ad67b679a75634fad68562e6a79dd3fcb3b76e756d020d88e33ad38",
+      "request": "After independent acceptance and live preimage revalidation, apply exactly the operations recorded in fixtures/plugin-product/root-wiring-request.json: remove the stray legacy skill resource, replace skills with the canonical eight rows, replace purpose, reserve version 0.0.12, and assert the existing exact six agent rows. Require canonical jq postimage sha256:2f3a38df105f14f01285bc5f35fbe41143148adfd36d0f452f56295b667f7cca, 403196 bytes, and 5182 lines; reject drift."
+    },
+    {
+      "path": ".agents/plugins/marketplace.json",
+      "expected_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "request": "Only if the path remains absent after independent acceptance, create the exact harness-ultragoal-local repository catalog recorded in fixtures/plugin-product/root-wiring-request.json with source ./plugins/harness-ultragoal and required policy. Require canonical jq postimage sha256:fda926319866f7bc020af59f0d4a0021111953ceab5a2a2e5bb51fb2f2823734, 410 bytes, and 20 lines. Catalog bytes alone prove no package materialization, host registration, install, discovery, or runtime behavior."
+    }
+  ],
+  "limitations": [
+    "This is a source-only candidate. Independent review and root acceptance have not occurred.",
+    "The canonical eight are the preferred source topology, but fourteen compatibility skill directories remain physically present pending root-owned migration and retirement.",
+    "The live root manifests remain at 0.0.11 and the repository marketplace path remains absent; this worker requested exact changes but did not apply root authority.",
+    "The static route oracle and comprehension fixtures validate deterministic source guidance; they are not a fresh Codex task, host discovery observation, or real product journey.",
+    "No package, marketplace application, installation, cache, app registry, Plugins UI, discovery, runtime, readiness, release, node closure, or completion proof was performed.",
+    "The typed WorkerResult validation uses a reconstructed envelope for the textual lease; root must reconcile it against any separately persisted authoritative WorkPackage and LeaseSpec."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

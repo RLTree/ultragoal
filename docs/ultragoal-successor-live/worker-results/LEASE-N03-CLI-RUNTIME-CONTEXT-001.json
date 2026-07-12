@@ -1,0 +1,240 @@
+{
+  "worker": "/root/n02_manifest_reconcile",
+  "lease_id": "LEASE-N03-CLI-RUNTIME-CONTEXT-001",
+  "context_id": "sha256:ae2fadbcd9ae2a07c2cd434e330e6cd252f5588d33b2c66a1c19e85ade10e139",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "status_sha256_before_result": "ff50d4d093df26fb5a090eb36138afe69aad52e71018c3499fc358a5f47c2173",
+    "untracked_content_sha256_before_result": "41fe287a79a97ef92fd058ec22e83fd66aaf7614b398036fb2dcfca8c0d13c98",
+    "head_unchanged_by_worker": true,
+    "context_note": "LiveContext was rebuilt and revalidated after the leased implementation, formatting, and isolated-target tests and immediately before this self-referential WorkerResult was added. The protected .codex-worktree/env.sh file was not opened, read, hashed, or sourced by this worker."
+  },
+  "base_state": {
+    "legacy_public_authority": "validator/src/argument_parser and validator/src/command remain the live parser and execution projection",
+    "successor_state": "The accepted typed successor catalog parsed inspect context but had no runtime behavior and no production dispatch.",
+    "lease_scope": "Four new runtime source/test paths plus this WorkerResult only; existing source, public catalog, manifest, registry, dependencies, claims, and Git state were root-only or out of scope.",
+    "tdd_red": "The root added only the test-module declaration; the focused test then failed with E0432 because successor::runtime did not exist."
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "acceptance_ceiling": "Candidate-bound read-only inspect-context runtime behavior only; no public dispatch, legacy retirement, N02/N03 completion, readiness, release, or completion.",
+    "runtime_behavior": "Exact inspect context invocations build LiveContext with EffectClass::Read and immediately revalidate before returning.",
+    "public_activation": false,
+    "legacy_parser_or_dispatch_changed": false,
+    "artifact_count_excluding_result": 4,
+    "artifact_set_sha256": "2edc5077568e5a0c493581e7f88b27c8cbc6d6d0d5012a78cece6e514d513a71",
+    "artifact_set_formula": "Use artifacts array order. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "implementation_lines": 88,
+    "test_lines": 193,
+    "total_lines": 281,
+    "total_bytes": 9813,
+    "maximum_file_lines": 193,
+    "files_over_300_lines": 0,
+    "focused_runtime_tests": "4 passed; 0 failed",
+    "successor_regression_tests": "33 passed; 0 failed using isolated CARGO_TARGET_DIR",
+    "live_context_test": "1 passed; 0 failed using isolated CARGO_TARGET_DIR",
+    "library_check": "pass with existing dormant-candidate and concurrent package-snapshot warning debt",
+    "format_and_diff_checks": "pass",
+    "tracked_deletions": 0,
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/cli/successor/runtime/mod.rs",
+    "validator/src/cli/successor/runtime/inspect_context.rs",
+    "validator/src/cli/successor/runtime/error.rs",
+    "validator/tests/cli_contract/successor/runtime_context.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-RUNTIME-CONTEXT-001.json"
+  ],
+  "touched_semantics": [
+    "exact inspect context runtime command boundary",
+    "structural EffectClass::Read enforcement before repository access",
+    "zero-option runtime enforcement before repository access",
+    "candidate-bound LiveContext construction and immediate revalidation",
+    "fixed bounded non-echo runtime error identities",
+    "read-path recursive-tree and Git-status zero-write control"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "temporary committed Git repository with one dirty untracked file",
+    "nonexistent wrong-command path canary",
+    "nonexistent effect-drift path canary",
+    "synthetic unexpected OptionArgument",
+    "non-repository context failure path canary"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Only the five leased new paths were written by this worker."
+    },
+    {
+      "class": "local-build-write",
+      "scope": "Cargo target output, including /tmp/hug-n03-cli-runtime-context001-target."
+    },
+    {
+      "class": "runtime-read",
+      "scope": "HCT-CONTEXT performs bounded local Git, repository, capability, PATH, and permission reads for an accepted inspect context invocation; it performs no workspace, telemetry, cache, network, or external write."
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product-effect",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-CLI-003",
+    "REQ-CLI-004"
+  ],
+  "dependency_nodes": [
+    "N01-CONTEXT-EFFECT",
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "runtime command admission",
+      "rationale": "The adapter accepts only SuccessorCommand::Inspect(InspectTarget::Context), exact EffectClass::Read, and zero parsed arguments before any repository access."
+    },
+    {
+      "area": "candidate binding",
+      "rationale": "The accepted invocation uses BuildRequest::new(start).with_effect(Read), builds LiveContext, and performs an explicit second revalidation immediately before returning it."
+    },
+    {
+      "area": "error boundary",
+      "rationale": "Wrong command, effect drift, unexpected arguments, and context failure map to fixed bounded RuntimeErrorId values and messages that retain no untrusted path or underlying error text."
+    },
+    {
+      "area": "zero hidden writes",
+      "rationale": "The real runtime adapter is exercised against a dirty temporary repository while recursive file bytes and byte-exact Git status are equal before and after."
+    },
+    {
+      "area": "scope boundary",
+      "rationale": "The candidate returns a typed LiveContext only. It does not render, print, emit telemetry, write receipts, read package or inventory state, fall back to legacy parsing, dispatch publicly, or make claims."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --offline --locked --manifest-path validator/Cargo.toml --test cli_contract successor_cli_contract::runtime_context:: -- --test-threads=1",
+      "result": "expected_tdd_red",
+      "summary": "Exited 101 with E0432 unresolved import super::successor::runtime after root wired only the new test module; the leased behavior was demonstrably absent."
+    },
+    {
+      "command": "cargo test --offline --locked --manifest-path validator/Cargo.toml --test cli_contract successor_cli_contract::runtime_context:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "4 passed; 0 failed. Covers candidate-bound dirty context, recursive-tree and Git-status zero writes, command/effect/argument prechecks, and bounded non-echo context failures."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n03-cli-runtime-context001-target cargo test --offline --locked --manifest-path validator/Cargo.toml --test cli_contract successor_cli_contract:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "33 passed; 0 failed; 52 filtered out in an isolated target directory."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n03-cli-runtime-context001-target cargo test --offline --locked --manifest-path validator/Cargo.toml --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; emitted and revalidated context sha256:ae2fadbcd9ae2a07c2cd434e330e6cd252f5588d33b2c66a1c19e85ade10e139."
+    },
+    {
+      "command": "cargo check --offline --locked --manifest-path validator/Cargo.toml --lib",
+      "result": "pass_with_warnings",
+      "summary": "No compile errors. Runtime symbols remain intentionally dormant until root public integration; concurrent package-snapshot and pre-existing warning debt also remains."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <four leased Rust files>; git diff --check -- <leased runtime and test paths>",
+      "result": "pass"
+    },
+    {
+      "command": "forbidden-runtime-effect source scan; artifact digest/byte/line/set reconciliation; staged and unstaged tracked-deletion scans",
+      "result": "pass",
+      "summary": "No printing, telemetry, receipt, package, inventory, filesystem-write, environment-write, network, or process-spawn API exists in the runtime implementation; all four artifacts reconcile; no tracked deletion exists."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/successor/runtime/mod.rs",
+      "sha256": "sha256:97d4102786db89295596342e38b9b330493ea7e1932105d26bab33a54fff9678",
+      "bytes": 136,
+      "lines": 5
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/inspect_context.rs",
+      "sha256": "sha256:a35ee2601bdafef5f06231c0835044561cfb2121c17b0f8087c64e95e3a4c918",
+      "bytes": 1032,
+      "lines": 27
+    },
+    {
+      "path": "validator/src/cli/successor/runtime/error.rs",
+      "sha256": "sha256:59ff3865abc74004064297519bb76caa80cd182258294459826a7fae0d2b50cb",
+      "bytes": 1587,
+      "lines": 56
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/runtime_context.rs",
+      "sha256": "sha256:1ee83b70d10b5c3dfd6292fdd927013191ecc994ee9d208b51f405451b7a773d",
+      "bytes": 7058,
+      "lines": 193
+    }
+  ],
+  "findings": [
+    {
+      "severity": "candidate-behavior-added",
+      "finding": "Inspect context now has a real HCT-CONTEXT-backed runtime adapter, but it remains intentionally unreachable from the production binary."
+    },
+    {
+      "severity": "integration-required",
+      "finding": "The legacy handwritten parser and dispatcher remain live public authority. This lease neither suppresses nor retires any legacy-command parallel_authority finding."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "Output rendering, binary routing, public schema/catalog decisions, package membership, migration transitions, and activation remain root-owned."
+    },
+    {
+      "severity": "independent-proof-required",
+      "finding": "The temporary-repository test proves the adapter read path is zero-write, but independent review and an eventual live binary/system-call probe are still required before public activation."
+    },
+    {
+      "severity": "platform-ceiling",
+      "finding": "Only the current aarch64 macOS locked toolchain was exercised."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent review of the exact four-artifact set and WorkerResult",
+    "Root acceptance and package-resource reconciliation",
+    "Root-owned versioned human and machine output projection for LiveContext",
+    "Root-owned production dispatcher integration without parallel parser authority",
+    "Behavior adapters for the remaining successor command routes",
+    "HCT-MIGRATE equivalence and retirement decisions for the six exact legacy command sources",
+    "Representative live binary and supported-platform zero-write verification"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "independent review",
+      "request": "Recompute the ordered four-artifact set 2edc5077568e5a0c493581e7f88b27c8cbc6d6d0d5012a78cece6e514d513a71 and attack command/effect/argument precheck ordering, non-echo, dirty candidate binding, revalidation, and hidden writes before acceptance."
+    },
+    {
+      "path": "validator/src/cli/successor/mod.rs and validator/tests/cli_contract/successor/mod.rs",
+      "request": "Retain the already root-applied minimum compile/test declarations only if independent review passes; do not activate or re-export the runtime publicly from this result."
+    },
+    {
+      "path": "plugin-manifest-draft.json",
+      "request": "After independent acceptance, add only the accepted three runtime source paths, focused test path, and this WorkerResult as package resources if required, then recompute package identity."
+    },
+    {
+      "path": "root public CLI and migration authority",
+      "request": "Define output and dispatcher integration in a later dependency-closed lease. Keep legacy command findings open until all replaced behavior and routing are independently proved."
+    }
+  ],
+  "limitations": [
+    "The runtime adapter is compiled and tested but not called by main_entry or command_run.",
+    "It implements only inspect context; inspect summary, inventory, capabilities, findings, and claims remain unimplemented runtime behavior.",
+    "It returns LiveContext and deliberately owns no public rendering, stdout, stderr, exit-code, telemetry, or receipt behavior.",
+    "Fixed runtime errors intentionally do not retain or expose underlying ContextError text; later root diagnostics must not weaken non-echo.",
+    "No legacy parser, command projection, dispatcher, manifest, registry, package, claim, release, or goal state was changed by this worker."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

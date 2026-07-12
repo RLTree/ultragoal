@@ -1,0 +1,636 @@
+{
+  "worker": "/root/n02_command_finish3",
+  "lease_id": "LEASE-N02-COMMAND-INVENTORY-DEAUTH-002",
+  "context_id": "sha256:92fa54e9e0321ebf0dc5a17c617792975cb00df5d0da43aad9a622a36d2eb9a5",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "dirty": true,
+    "live_context_status_sha256": "a2b53a3b17864d58e74ddd7b8d33050e10914d10245763d61ea0af435c50aa92",
+    "live_context_untracked_sha256": "e312eb70309f5c3af37533051c9a8c74d1875bf2511c1a65349828612aac69b1",
+    "context_note": "LiveContext-v1 was rebuilt read-only after the implementation and exact focused verification were frozen and before this self-referential WorkerResult was added. No protected .codex-worktree file was opened, read, hashed, or sourced.",
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "supersedes_lease_result": "LEASE-N02-COMMAND-INVENTORY-DEAUTH-001",
+    "superseded_worker_result": {
+      "path": "docs/ultragoal-successor-live/worker-results/LEASE-N02-COMMAND-INVENTORY-DEAUTH-001.json",
+      "sha256": "21da0d4bd57ca47338c4676e0cbd66f07f95a8dec892a16a3712aa77cc838d3c"
+    },
+    "correction_source": "Independent review found the root-owned retained catalog still entered package identity and package-surface generated authority, while public current-state, package-digest, audit parse rejection, query, and explain paths had hidden-write gaps.",
+    "root_owned_inputs": [
+      {
+        "path": "migration/generated-surface-authority.json",
+        "sha256": "f25ebf2c3d3bb8281dbd77720b6e62c1ce4df94a910833b20c12669c1d92ef6a",
+        "modified_by_worker": false
+      },
+      {
+        "path": "plugin-manifest-draft.json",
+        "modified_by_worker": false
+      }
+    ],
+    "write_scope": [
+      "the 49 exact leased Rust and integration-test artifacts recorded below",
+      "docs/ultragoal-successor-live/worker-results/LEASE-N02-COMMAND-INVENTORY-DEAUTH-002.json"
+    ],
+    "root_owned_surfaces_not_modified": [
+      "plugin-manifest-draft.json",
+      "migration/generated-surface-authority.json",
+      "migration authority/context registries",
+      "dependencies and lockfiles",
+      "public successor command catalog",
+      "agent/review code and receipts",
+      "claim, release, readiness, completion, and update-goal authority"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "acceptance_ceiling": "Source-local command-catalog deauthorization, retained-context package classification, and zero-hidden-write read-path correction only. HCT-OBSERVE remains unavailable/not adopted; N02, readiness, release, and completion remain unclaimed.",
+    "artifacts": 49,
+    "artifact_lines": 7901,
+    "artifact_bytes": 288443,
+    "maximum_file_lines": 290,
+    "files_over_300_lines": 0,
+    "retained_context_rows": 9,
+    "retained_registry_sha256": "f25ebf2c3d3bb8281dbd77720b6e62c1ce4df94a910833b20c12669c1d92ef6a",
+    "all_retained_outputs_manifest_shipped": true,
+    "all_retained_output_digests_match": true,
+    "retained_rows_with_claim_surface": 0,
+    "package_digest": "sha256:1824389ae850c20101be494c4b28402ce91761a5325805707a0290fe985e4c72",
+    "package_digest_claim_ceiling": "source_package_digest_only",
+    "in_scope_test_failures": 0,
+    "full_inventory_contract": "77 passed; 1 concurrent out-of-lease agent-route failure",
+    "all_target_check": "pass",
+    "exact_leased_format_check": "pass",
+    "workspace_format_check": "blocked only by concurrent validator/src/review/round/registry.rs formatting drift",
+    "diff_check": "pass",
+    "tracked_deletions": 0,
+    "remaining_live_package_findings": [
+      "No in-scope generated-disposition, retained-context package-identity, package-surface authority, or read-path test failure remains.",
+      "The exact live current-state blocker is HCT-OBSERVE successor catalog unavailable/not adopted.",
+      "The full inventory aggregate has one concurrent agent-route failure: agents/contract-claim-falsifier.md classified Legacy instead of Context.",
+      "This worker did not use a passing package digest or test receipt to claim repository-wide package, N02, readiness, release, or completion status."
+    ],
+    "network_performed": false,
+    "external_product_effect_performed": false
+  },
+  "touched_paths": [
+    "validator/src/audit/law/authority_surfaces/inventory/mod.rs",
+    "validator/src/audit/law/authority_surfaces/inventory/required_surfaces.rs",
+    "validator/src/audit/law/authority_surfaces/package_surfaces/mod.rs",
+    "validator/src/audit/law/authority_surfaces/package_surfaces/proof_binding.rs",
+    "validator/src/audit/law/authority_surfaces/package_surfaces/row.rs",
+    "validator/src/audit/law/authority_surfaces/package_surfaces/generated.rs",
+    "validator/src/audit/law/authority_surfaces/package_surfaces/generated_tests.rs",
+    "validator/src/audit/law/authority_surfaces/surface_inventory/discovered/artifact_authority.rs",
+    "validator/src/audit/observability/files.rs",
+    "validator/src/audit/observability/registry/mod.rs",
+    "validator/src/audit/observability/registry/tests/mod.rs",
+    "validator/src/audit/research/trace/observability_binding.rs",
+    "validator/src/cli/audit/edge_tests.rs",
+    "validator/src/cli/audit/mod.rs",
+    "validator/src/cli/audit/parse_tests.rs",
+    "validator/src/cli/current_state/mod.rs",
+    "validator/src/cli/current_state/tests.rs",
+    "validator/src/cli/live_loop/run_node_timing_refresh_tests.rs",
+    "validator/src/cli/observe/explain/next/mod.rs",
+    "validator/src/cli/observe/explain/next/tests.rs",
+    "validator/src/cli/observe/explain/tests/next_plan.rs",
+    "validator/src/cli/observe/explain/tests/telemetry_receipt.rs",
+    "validator/src/cli/observe/telemetry/command.rs",
+    "validator/src/cli/observe/telemetry/inventory_status.rs",
+    "validator/src/cli/observe/telemetry/query_receipt_tests.rs",
+    "validator/src/cli/observe/telemetry/receipt.rs",
+    "validator/src/cli/observe/telemetry/record/mod.rs",
+    "validator/src/cli/observe/telemetry/tests.rs",
+    "validator/src/cli/package/digest.rs",
+    "validator/src/package/inventory/mod.rs",
+    "validator/src/package/inventory/generated_disposition/anchored.rs",
+    "validator/src/package/inventory/generated_disposition/hardening_tests.rs",
+    "validator/src/package/inventory/generated_disposition/mod.rs",
+    "validator/src/package/inventory/generated_disposition/schema.rs",
+    "validator/src/package/inventory/generated_disposition/tests.rs",
+    "validator/src/package/inventory/generated_disposition/unique_json.rs",
+    "validator/src/self_tests/boundaries/authority/generated_artifacts/artifact_boundaries.rs",
+    "validator/src/self_tests/boundaries/authority/generated_artifacts/inventory_boundaries.rs",
+    "validator/src/self_tests/boundaries/authority/inventory/authority_classes.rs",
+    "validator/src/self_tests/boundaries/authority/inventory/roles.rs",
+    "validator/src/self_tests/boundaries/authority/inventory/rows.rs",
+    "validator/src/self_tests/cli/observe/package.rs",
+    "validator/src/self_tests/cli/observe/package_digest.rs",
+    "validator/src/self_tests/cli/observe/prove.rs",
+    "validator/src/self_tests/cli/observe/query/command_inventory/mod.rs",
+    "validator/src/self_tests/cli/observe/query/command_inventory/public_paths.rs",
+    "validator/src/self_tests/cli/observe/query/mod.rs",
+    "validator/tests/inventory_contract.rs",
+    "validator/tests/inventory_contract_cases/generated_disposition.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-COMMAND-INVENTORY-DEAUTH-002.json"
+  ],
+  "touched_semantics": [
+    "the root-owned GeneratedSurfaceAuthority-v2 registry is a shipped package input and its exact bytes affect package identity",
+    "digest-bound retained_context output bytes are verified but omitted from package identity and cannot become generated_projection, source_local_projection, query, observability, readiness, release, or claim authority",
+    "canonical_projection rows remain regeneration-bound and identity-bearing",
+    "descriptor-anchored generated reads use same-buffer digest and parse, O_NOFOLLOW traversal, nlink equal to one, byte bounds, pre/post identity, path revalidation, and non-Unix fail-closed behavior",
+    "all nine current retained rows are rendered as retained_context_no_claim with empty claim_surfaces_allowed",
+    "current-state, package-digest, audit parse rejection, read-only query, and explain paths perform no implicit receipt, spool, exporter, or validation-artifact write",
+    "HCT-OBSERVE remains the stable causal blocker; retained predecessor bytes cannot raise the claim ceiling or leak secret canaries"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "hardlinked registry, canonical input, and retained output",
+    "ancestor symlink substitution for registry, input, and output",
+    "FIFO and symlink retained outputs",
+    "missing, tampered, unregistered, malformed, duplicate-key, duplicate-manifest, over-bound, and unsafe-path generated dispositions",
+    "SECRET_CANARY and non-UTF-8 retained command-inventory bytes",
+    "unwritable telemetry spool with read-only query, explain, package-digest, and audit parse rejection",
+    "all nine live retained registry rows projected through the current package-surface scanner"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased production, direct-test, and integration-test files plus this WorkerResult only"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "isolated generated-disposition, package, symlink, hardlink, FIFO, and no-hidden-write test roots created and cleaned by tests"
+    },
+    {
+      "class": "cargo-output",
+      "scope": "normal ignored target artifacts"
+    },
+    {
+      "class": "git",
+      "scope": "read-only identity, status, diff, and deletion checks only"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PRODUCT-004",
+    "REQ-CLI-002",
+    "REQ-PROOF-001",
+    "REQ-MAINT-003",
+    "REQ-MAINT-005",
+    "REQ-SECURITY-001",
+    "HCT-INVENTORY retained-context boundary",
+    "HCT-OBSERVE unavailable dependency"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY"
+  ],
+  "changes": [
+    {
+      "area": "generated disposition package boundary",
+      "result": "Added a strict v2 catalog with unique-key parsing, bounded canonical schema, descriptor-anchored reads, exact retained digests, and regeneration-bound canonical projections."
+    },
+    {
+      "area": "package identity",
+      "result": "The adopted registry itself is identity-bearing; canonical projections remain identity-bearing; retained predecessor output bytes are verified then omitted."
+    },
+    {
+      "area": "package surface authority",
+      "result": "Retained rows become retained_context_no_claim with no claim surfaces, while tamper becomes invalid_generated_authority and a causal failure."
+    },
+    {
+      "area": "public read paths",
+      "result": "Current-state, package digest, audit parse rejection, query, and explain no longer create hidden receipt, spool, exporter, or validation-artifact writes."
+    },
+    {
+      "area": "live nine-row control",
+      "result": "Added a direct current-candidate test proving all nine root-owned retained rows remain package context with no claim authority."
+    },
+    {
+      "area": "claim ceiling",
+      "result": "Preserved the exact HCT-OBSERVE unavailable blocker and withheld N02, package readiness, release, completion, and update-goal claims."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --locked --offline -p ultragoal --lib generated_disposition -- --test-threads=1",
+      "result": "pass",
+      "summary": "10 passed; 0 failed."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --lib package::inventory:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "31 passed; 0 failed."
+    },
+    {
+      "command": "focused current-state, package-digest, audit parse, observe explain, retained public-path, and blocked-spool query commands",
+      "result": "pass",
+      "summary": "11 + 3 + 2 + 26 + 5 + 1 passed; 0 failed."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --lib audit::law::authority_surfaces::package_surfaces::generated::tests -- --test-threads=1",
+      "result": "pass",
+      "summary": "3 passed; 0 failed, including all nine live retained rows."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test inventory_contract generated_disposition:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "5 passed; 0 failed."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test inventory_contract -- --test-threads=1",
+      "result": "concurrent_out_of_scope_failure",
+      "summary": "77 passed; 1 failed. Sole failure: agent_routes::all_fourteen_exact_agent_routes_demote_only_to_preserved_context expected Context but observed Legacy for agents/contract-claim-falsifier.md."
+    },
+    {
+      "command": "read-only manifest and registry digest reconciliation",
+      "result": "pass",
+      "summary": "Registry is manifest-shipped; all 9 outputs are shipped; all 9 exact SHA-256 values match live regular-file bytes."
+    },
+    {
+      "command": "cargo run --locked --offline -q -p ultragoal --bin ultragoal -- --root . package digest",
+      "result": "pass",
+      "summary": "Read-only source package digest sha256:1824389ae850c20101be494c4b28402ce91761a5325805707a0290fe985e4c72; supported claim is source_package_digest only."
+    },
+    {
+      "command": "target/debug/ultragoal --root . current-state --json",
+      "result": "expected_fail_closed",
+      "summary": "Exit 1 with first blocker HCT-OBSERVE successor catalog unavailable/not adopted and claim ceiling source_local_custom_tooling_prerequisite_only."
+    },
+    {
+      "command": "cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "pass",
+      "summary": "All targets compiled after source freeze."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check over 49 leased Rust files; git diff --check; tracked deletion check",
+      "result": "pass",
+      "summary": "Exact leased formatting, whitespace, and zero-deletion checks passed. Workspace cargo fmt is red only in concurrent review/round/registry.rs."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "LiveContext-v1 sha256:92fa54e9e0321ebf0dc5a17c617792975cb00df5d0da43aad9a622a36d2eb9a5."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/audit/law/authority_surfaces/inventory/mod.rs",
+      "sha256": "77978d14188e688afd1cc69dd30fbc613ac84a9e24c25f9a8624b90bd048e966",
+      "bytes": 8499,
+      "lines": 254
+    },
+    {
+      "path": "validator/src/audit/law/authority_surfaces/inventory/required_surfaces.rs",
+      "sha256": "18c7c9658a4eafa1fbff98affd03069abb4ad87e77688c68182dee8a8c937ea1",
+      "bytes": 6668,
+      "lines": 205
+    },
+    {
+      "path": "validator/src/audit/law/authority_surfaces/package_surfaces/mod.rs",
+      "sha256": "dc4a48602509d0c79bc550888cf1fddd301bd2f9215e6f1a233d82ba30956ae7",
+      "bytes": 9887,
+      "lines": 267
+    },
+    {
+      "path": "validator/src/audit/law/authority_surfaces/package_surfaces/proof_binding.rs",
+      "sha256": "b6566aa4419f1639d40acd19aec1e199de0139589742dd9d333823b710b9c98d",
+      "bytes": 5347,
+      "lines": 141
+    },
+    {
+      "path": "validator/src/audit/law/authority_surfaces/package_surfaces/row.rs",
+      "sha256": "8722afa9a29f4da15179bee3991183fad8db463742e3075c31addd792f01a9b7",
+      "bytes": 8125,
+      "lines": 237
+    },
+    {
+      "path": "validator/src/audit/law/authority_surfaces/package_surfaces/generated.rs",
+      "sha256": "fdeecceda39d48fb7fbd89491d2c895edf20f94e64d1d69487a7176bb1d06fe1",
+      "bytes": 2118,
+      "lines": 63
+    },
+    {
+      "path": "validator/src/audit/law/authority_surfaces/package_surfaces/generated_tests.rs",
+      "sha256": "96cc94d758e9bdf8bcd0b31868aa1b80194906a0c3ac10d1e2c72a5b32f6077f",
+      "bytes": 4589,
+      "lines": 116
+    },
+    {
+      "path": "validator/src/audit/law/authority_surfaces/surface_inventory/discovered/artifact_authority.rs",
+      "sha256": "9e52686f17f303e0c584d60c657b1cf5cfe2b5c143e07747be89b17dac60f651",
+      "bytes": 2904,
+      "lines": 84
+    },
+    {
+      "path": "validator/src/audit/observability/files.rs",
+      "sha256": "23d4ca8d2573cd00c1ee825b8af4e07149ec2d58a3640872e42fbe64a6a52137",
+      "bytes": 2541,
+      "lines": 71
+    },
+    {
+      "path": "validator/src/audit/observability/registry/mod.rs",
+      "sha256": "42df32ab9a88b0a550d5b47da1bb3c9eb7c5eba5508624927cd28412b8b72f4c",
+      "bytes": 2250,
+      "lines": 89
+    },
+    {
+      "path": "validator/src/audit/observability/registry/tests/mod.rs",
+      "sha256": "1f41b7949e89a77f7a2dc85fcfcbee70f249360d5384aeb38631a9b13809a771",
+      "bytes": 5026,
+      "lines": 143
+    },
+    {
+      "path": "validator/src/audit/research/trace/observability_binding.rs",
+      "sha256": "5b8491e0a9935ad5bdb483990e5ee8773b3ae4dab02935caabad3bb295be8660",
+      "bytes": 3120,
+      "lines": 105
+    },
+    {
+      "path": "validator/src/cli/audit/edge_tests.rs",
+      "sha256": "2f757ad36652b7a3a15a88f1ca4d2bcc2c51d5e29082fa4b2cbc36a5b13be776",
+      "bytes": 9465,
+      "lines": 231
+    },
+    {
+      "path": "validator/src/cli/audit/mod.rs",
+      "sha256": "444c0fa592e87becbfeaa44fa8352bf55969ab01e8b835b923fb7df12a4104bb",
+      "bytes": 4007,
+      "lines": 116
+    },
+    {
+      "path": "validator/src/cli/audit/parse_tests.rs",
+      "sha256": "52676039cba827bdb831d34d2096a2188888d8c5584bc15af593fc96845d73c4",
+      "bytes": 1811,
+      "lines": 57
+    },
+    {
+      "path": "validator/src/cli/current_state/mod.rs",
+      "sha256": "95566976f363cf96a9f5d9419eaffbae3920e4e14ce695661b12035afcc3e3c5",
+      "bytes": 10812,
+      "lines": 272
+    },
+    {
+      "path": "validator/src/cli/current_state/tests.rs",
+      "sha256": "eda2e14160616ace4639b65976e33d6f0c34017aa2c53701413c9865059ce45b",
+      "bytes": 10029,
+      "lines": 275
+    },
+    {
+      "path": "validator/src/cli/live_loop/run_node_timing_refresh_tests.rs",
+      "sha256": "bba2850828f4857219dc9a4bc687454af40c3459d17cbb646775b435cf06a86d",
+      "bytes": 8566,
+      "lines": 220
+    },
+    {
+      "path": "validator/src/cli/observe/explain/next/mod.rs",
+      "sha256": "dce19f68e09fab5749bd217d048b0157455dda28bd6ab66275458190be954e35",
+      "bytes": 4418,
+      "lines": 113
+    },
+    {
+      "path": "validator/src/cli/observe/explain/next/tests.rs",
+      "sha256": "dd7a43e497b161e9a3405ede9d381e9189ada86c80c5d8e19214e5a91e4c12e7",
+      "bytes": 2404,
+      "lines": 62
+    },
+    {
+      "path": "validator/src/cli/observe/explain/tests/next_plan.rs",
+      "sha256": "8053aa74a0dc014da1ad815ef075d760809590f4dc5fc0f447e48550be278676",
+      "bytes": 7308,
+      "lines": 192
+    },
+    {
+      "path": "validator/src/cli/observe/explain/tests/telemetry_receipt.rs",
+      "sha256": "484bef5feafb919678780c6e41ab665fc7f4bf8aa227f25c195444bdf4e8f9af",
+      "bytes": 1854,
+      "lines": 50
+    },
+    {
+      "path": "validator/src/cli/observe/telemetry/command.rs",
+      "sha256": "203a38424b2b1c8ea3625a1334a03a118ad112707164d4239312f7305e4db800",
+      "bytes": 8107,
+      "lines": 211
+    },
+    {
+      "path": "validator/src/cli/observe/telemetry/inventory_status.rs",
+      "sha256": "a44c42ae7e40697da98e5e1b983441cdee763528d2cd809a9aa9789f019bb993",
+      "bytes": 578,
+      "lines": 16
+    },
+    {
+      "path": "validator/src/cli/observe/telemetry/query_receipt_tests.rs",
+      "sha256": "f47464dfca1a8b2bc28f910d6b35a1656d0449d7508f713f5b4c88f7656049a1",
+      "bytes": 5083,
+      "lines": 172
+    },
+    {
+      "path": "validator/src/cli/observe/telemetry/receipt.rs",
+      "sha256": "ff203f02eefa95e77965a6c3b6b6db74f6de85ae7b3ab98638c6d316a7d3af33",
+      "bytes": 4265,
+      "lines": 110
+    },
+    {
+      "path": "validator/src/cli/observe/telemetry/record/mod.rs",
+      "sha256": "163b843cc74c191173831c27ff0006f3b08c170136220903a96f38341746403d",
+      "bytes": 7914,
+      "lines": 213
+    },
+    {
+      "path": "validator/src/cli/observe/telemetry/tests.rs",
+      "sha256": "132b8a8d0a2fd8e0797fcf3091f33c9135f2df5e4d9bdd58280d9e1347d553e1",
+      "bytes": 8739,
+      "lines": 221
+    },
+    {
+      "path": "validator/src/cli/package/digest.rs",
+      "sha256": "88cc97b5b31c7f8fca8afa1085ed902c164f29f7547dcc25510a0f43e566ff42",
+      "bytes": 5280,
+      "lines": 148
+    },
+    {
+      "path": "validator/src/package/inventory/mod.rs",
+      "sha256": "bc4a3176e1710ac3a56dd6ee20bace037df973b7d2874f57d33fc9ad6938ed85",
+      "bytes": 6174,
+      "lines": 178
+    },
+    {
+      "path": "validator/src/package/inventory/generated_disposition/anchored.rs",
+      "sha256": "1666b8ed36428619e0ef31c3e460dc2a3a20a00d5d6d2ce52316f9da1124e1cf",
+      "bytes": 7281,
+      "lines": 220
+    },
+    {
+      "path": "validator/src/package/inventory/generated_disposition/hardening_tests.rs",
+      "sha256": "9192ea726058d211e301374e0d9ad7be390361258c920ccec06116af756be334",
+      "bytes": 7305,
+      "lines": 192
+    },
+    {
+      "path": "validator/src/package/inventory/generated_disposition/mod.rs",
+      "sha256": "606c37d7ec7ab667146c2b31c988775967c455261aafed35226ef68a2c38c644",
+      "bytes": 4478,
+      "lines": 123
+    },
+    {
+      "path": "validator/src/package/inventory/generated_disposition/schema.rs",
+      "sha256": "b643dcc1e6faecb165808d17b56684ee8d27d99ae5914e6374727f243dbdb434",
+      "bytes": 7647,
+      "lines": 238
+    },
+    {
+      "path": "validator/src/package/inventory/generated_disposition/tests.rs",
+      "sha256": "5ece36a5c25aa845f9b82d03b2fed78c4bab478ac1f9f36b917270785d7dd1db",
+      "bytes": 7244,
+      "lines": 195
+    },
+    {
+      "path": "validator/src/package/inventory/generated_disposition/unique_json.rs",
+      "sha256": "0de4f06f48b32e808978a6c2dabe0f18601c51b2e7fb27be91a6a7c379ced5db",
+      "bytes": 2315,
+      "lines": 92
+    },
+    {
+      "path": "validator/src/self_tests/boundaries/authority/generated_artifacts/artifact_boundaries.rs",
+      "sha256": "856f2af53a17b9b0336acedf34ab142743902d12cc3c44fe630c6aed2cfef8f5",
+      "bytes": 9150,
+      "lines": 248
+    },
+    {
+      "path": "validator/src/self_tests/boundaries/authority/generated_artifacts/inventory_boundaries.rs",
+      "sha256": "39719232a37c22a08be50f3e45397def6ac70cad4b56eae4a382cdfa4b677c2b",
+      "bytes": 6942,
+      "lines": 170
+    },
+    {
+      "path": "validator/src/self_tests/boundaries/authority/inventory/authority_classes.rs",
+      "sha256": "c2549e765bba9010082cd5ef65bcd20188511b950530b15722a33e81316195f3",
+      "bytes": 6403,
+      "lines": 164
+    },
+    {
+      "path": "validator/src/self_tests/boundaries/authority/inventory/roles.rs",
+      "sha256": "ab68d432cfc3c9d69d23483432606407a8ce321747c14677f85c630f78f0fae9",
+      "bytes": 3540,
+      "lines": 91
+    },
+    {
+      "path": "validator/src/self_tests/boundaries/authority/inventory/rows.rs",
+      "sha256": "4f4feb7426911211b129861345001ab1448ebcb12ddc6cebb51c2427c60b21b9",
+      "bytes": 9681,
+      "lines": 249
+    },
+    {
+      "path": "validator/src/self_tests/cli/observe/package.rs",
+      "sha256": "d631595d3f08b2cee87c2261f65fc10017b7a630947f632c859d9f232bd6f956",
+      "bytes": 7109,
+      "lines": 187
+    },
+    {
+      "path": "validator/src/self_tests/cli/observe/package_digest.rs",
+      "sha256": "18e4212a5bab8759ad80053964f743fc733486f33c855da507faf14ed75586f0",
+      "bytes": 1626,
+      "lines": 41
+    },
+    {
+      "path": "validator/src/self_tests/cli/observe/prove.rs",
+      "sha256": "858cafda1a02c776f3e896f37810a1b6db62a65ce3e2249b65d90ee1bc532208",
+      "bytes": 3961,
+      "lines": 95
+    },
+    {
+      "path": "validator/src/self_tests/cli/observe/query/command_inventory/mod.rs",
+      "sha256": "bc8ab3891d356bd6d328e288b3684b7f68d962fb8bf12ecc1f48a669d97159f9",
+      "bytes": 4439,
+      "lines": 107
+    },
+    {
+      "path": "validator/src/self_tests/cli/observe/query/command_inventory/public_paths.rs",
+      "sha256": "b4e401b8214be85fa2c0210c716b7c159356f654917587df143d7ddee6c013fc",
+      "bytes": 6628,
+      "lines": 183
+    },
+    {
+      "path": "validator/src/self_tests/cli/observe/query/mod.rs",
+      "sha256": "a747f29202035627d455c9e7e4deac45461b6f83e5275feefd4d490c13aead68",
+      "bytes": 5280,
+      "lines": 142
+    },
+    {
+      "path": "validator/tests/inventory_contract.rs",
+      "sha256": "3316d69af71c42c7ffadb5cc0c7f63f6a33067a28926a25d73dd17ece7d08ad8",
+      "bytes": 7500,
+      "lines": 242
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/generated_disposition.rs",
+      "sha256": "76ef2e0b3df4459ea883f1131e2f7383ef721c5b2b1c8521b329d5781cbeb20d",
+      "bytes": 12026,
+      "lines": 290
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Static command-inventory and retained readiness examples are digest-bound predecessor context, not package/query/generated/claim authority."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "All requested public read and parse rejection paths have direct zero-hidden-write controls."
+    },
+    {
+      "severity": "material-proof-gap",
+      "finding": "No accepted candidate-bound HCT-OBSERVE successor catalog exists; current-state correctly fails closed."
+    },
+    {
+      "severity": "concurrent-out-of-scope",
+      "finding": "The 78-test inventory aggregate has one agent-route classification failure outside this lease; root will rerun after route freeze."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "Independent review, generated-registry adoption decision, migration reconciliation, N02 decision, and every readiness/release/completion decision remain root-owned."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent claim-falsification and security review of this exact WorkerResult and 49-artifact digest set",
+    "Root acceptance or bounded rework verdict",
+    "Fresh 78-test inventory rerun after the agent-route candidate freezes",
+    "A real accepted candidate-bound HCT-OBSERVE catalog before any positive observability claim",
+    "Root reconciliation of command, manifest, lane, finalizer, agent, and migration findings outside this lease",
+    "Representative product verification after integration"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "independent review",
+      "request": "Attack the exact 49 artifacts, root registry digest, nine live output digests, descriptor hardening, package identity split, no-claim rows, and hidden-write controls."
+    },
+    {
+      "path": "agent-route integration",
+      "request": "Reconcile the concurrent agents/contract-claim-falsifier.md Legacy-versus-Context failure, then rerun all 78 inventory_contract tests."
+    },
+    {
+      "path": "HCT-OBSERVE",
+      "request": "Keep observability and dependent claims unavailable until a real typed candidate-bound successor catalog is implemented, adopted, and negatively verified."
+    },
+    {
+      "path": "root authority",
+      "request": "Decide registry adoption, migration routes, N02 status, and every readiness/release/completion claim only after independent reconciliation."
+    }
+  ],
+  "limitations": [
+    "This slice deauthorizes predecessor surfaces and hardens package/read boundaries; it does not implement HCT-OBSERVE.",
+    "A passing source package digest proves only source package identity, not package readiness, installation, cache, marketplace, app registry, runtime, release, or completion.",
+    "The full inventory integration aggregate is not green because of one concurrent agent-route failure outside this lease.",
+    "Workspace-wide formatting is not green because validator/src/review/round/registry.rs has concurrent out-of-lease formatting drift; all 49 leased artifacts are rustfmt-clean.",
+    "No public command catalog, dependency, plugin manifest, migration registry, generated authority input, agent/review surface, claim, release, or completion authority was changed by this worker.",
+    "No N02-complete, readiness, release, completion, or update-goal claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}
+

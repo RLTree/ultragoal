@@ -1,0 +1,236 @@
+{
+  "schema_version": "WorkerResult-v1",
+  "worker": "/root/n03_capture_worker",
+  "lease_id": "LEASE-N03-CAPTURE-003",
+  "supersedes_lease_result": "LEASE-N03-CAPTURE-002",
+  "result_status": "rework_required",
+  "acceptance_recommendation": "accept the fail-closed read-only security subset only; reject HCT-CAPTURE or N03 completion",
+  "context_id": "sha256:fd89e062741b47dc63fc5e5fbd06732a05e63e89e590655e570774a72191241d",
+  "context_note": "Fresh live context observed after focused verification and before this self-referential WorkerResult was written.",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree_at_lease_start": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "status_sha256_before_result": "134c83b6016081511a89de7e9455fdf8d749d7d11c79ba9cd3b974f9b8f9bce2",
+    "untracked_content_sha256_before_result": "510a5ea26f75a9209181fa182a94772afe9169257cc441b24a4964da08331cb6",
+    "git_operations_performed": false
+  },
+  "lease_boundary": {
+    "write_scope": [
+      "validator/src/cli/capture/**",
+      "validator/tests/cli_contract/capture/**",
+      "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-003.json"
+    ],
+    "root_owned_integration_observed_not_modified": [
+      "validator/src/cli/mod.rs",
+      "validator/src/lib.rs",
+      "validator/tests/cli_contract.rs"
+    ],
+    "forbidden_surfaces_modified": false
+  },
+  "final_state": {
+    "leased_rust_lines": 3115,
+    "production_rust_lines": 2213,
+    "test_rust_lines": 902,
+    "maximum_file_lines": 293,
+    "files_over_300_lines": 0,
+    "network_performed_by_worker": false,
+    "external_write_performed_by_worker": false
+  },
+  "touched_paths": [
+    "validator/src/cli/capture/filesystem.rs",
+    "validator/src/cli/capture/mod.rs",
+    "validator/src/cli/capture/process.rs",
+    "validator/src/cli/capture/run.rs",
+    "validator/src/cli/capture/sandbox.rs",
+    "validator/src/cli/capture/spec.rs",
+    "validator/tests/cli_contract/capture/enforcement.rs",
+    "validator/tests/cli_contract/capture/fixture.rs",
+    "validator/tests/cli_contract/capture/mod.rs",
+    "validator/tests/cli_contract/capture/process.rs",
+    "validator/tests/cli_contract/capture/security.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-003.json"
+  ],
+  "touched_semantics": [
+    "SandboxPlan",
+    "EnforcementRecord",
+    "descriptor-fed macOS script launch",
+    "process-group termination and reaping",
+    "final pre-execution context and descriptor revalidation",
+    "HCT-CAPTURE effect-class ceiling"
+  ],
+  "changes": [
+    {
+      "area": "host enforcement",
+      "result": "On macOS, capture now requires LiveContext capabilities that identify executable /usr/bin/sandbox-exec and /bin/sh with nonempty digests, lengths, and executable modes. A bounded no-target preflight must succeed before launch. Unsupported hosts reject before spawn."
+    },
+    {
+      "area": "sandbox policy",
+      "result": "The deny-default profile explicitly denies network, process-fork, signal, file-clone, and file-link operations. It contains no file-write allowance. The serialized observation records the sandbox executable digest, profile digest, denied effect categories, empty write scopes, and preflight result."
+    },
+    {
+      "area": "effect ceiling",
+      "result": "Read and PlannedWrite use the same zero-write profile. WorkspaceWrite, ExternalWrite, and Destructive reject before spawn. Workspace-scoped writes were not represented as supported because a path-subtree profile cannot truthfully exclude hard-link alias writes without a descriptor-brokered write substrate."
+    },
+    {
+      "area": "program identity",
+      "result": "macOS launches only a descriptor-pinned shebang script whose interpreter is fixed /bin/sh. Non-shebang executables and other interpreters reject before target launch. A persistent path replacement rejects; a swap-and-restore can execute only the already pinned original descriptor."
+    },
+    {
+      "area": "cleanup",
+      "result": "Timeout and interruption terminate the bound process group before reaping, poll for exit before escalation, and preserve cleanup errors causally. The prior post-reap process-group signal was removed to eliminate PID-reuse signaling risk. Fork denial prevents descendant or detached-session escape."
+    },
+    {
+      "area": "read-path integrity",
+      "result": "Read and PlannedWrite captures retain the stable tree witness and final LiveContext revalidation. Sandbox-denied writes return an observed nonzero CapturedRun without mutating the candidate."
+    }
+  ],
+  "verified_behavior": [
+    "outside-worktree write attempt denied and no file created",
+    "network connection attempt denied",
+    "fork and detached-child attempt denied",
+    "cross-process signal attempt denied while the target process survived",
+    "self-signal remains a typed internal signal termination",
+    "missing sandbox capability rejected before target spawn",
+    "PATH-shadowed sandbox capability rejected without executing the fake tool",
+    "non-shebang executable rejected before effectful launch",
+    "persistent program replacement rejected before launch",
+    "swap-and-restore executed only the pinned original",
+    "hidden create, overwrite, restore, and remove sequence denied without mutation",
+    "timeout and interruption reaped the process",
+    "artifact and secret-redaction contracts remained green"
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --locked --offline --test cli_contract --no-run",
+      "result": "pass",
+      "summary": "Live root-integrated cli_contract harness compiled."
+    },
+    {
+      "command": "cargo test --locked --offline --test cli_contract successor_capture -- --test-threads=1",
+      "result": "pass",
+      "summary": "39 passed; 0 failed; 31 filtered out; 68.61 seconds."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/cli/capture/*.rs validator/tests/cli_contract/capture/*.rs",
+      "result": "pass"
+    },
+    {
+      "command": "cargo test --locked --offline --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; emitted the pre-result live context identity."
+    },
+    {
+      "command": "rustfmt check chained with Cargo in one shell invocation",
+      "result": "invalid_verification_surface",
+      "summary": "The chained invocation caused nested sandbox-exec preflights to reject with host exit 71; 13 of 39 tests passed and no target launched for the rejected cases. The exact unchained Cargo command then passed 39 of 39. This failed run is not used as product evidence."
+    }
+  ],
+  "file_digests": [
+    {
+      "path": "validator/src/cli/capture/filesystem.rs",
+      "sha256": "25e3392a689f4b9d87cd934e4f4ce2f3a65288280e2972cd8547c7fa1d8b35a7"
+    },
+    {
+      "path": "validator/src/cli/capture/mod.rs",
+      "sha256": "5e95c9a4305eaaee2b86c5cc8437f7ddbc249f50486813265af576d4f112ecb6"
+    },
+    {
+      "path": "validator/src/cli/capture/process.rs",
+      "sha256": "c31162d6238ef0342b2d8b637425c75ec098213e0ddb228cd3156bb5f2cd1038"
+    },
+    {
+      "path": "validator/src/cli/capture/run.rs",
+      "sha256": "ee91d2af470afc0cbf0ce4d1c37e7d2dd27f3c967dbb38292fb163296356413d"
+    },
+    {
+      "path": "validator/src/cli/capture/sandbox.rs",
+      "sha256": "91cd665b750adaa2344ca8bf69e315c271a228e30f4376fd33c9079949b43634"
+    },
+    {
+      "path": "validator/src/cli/capture/spec.rs",
+      "sha256": "4b39492fc8e3ee80154bf2622212e0b022455fba1438e111ebd83575e4ae77d4"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/enforcement.rs",
+      "sha256": "3eeede3504ef3f4ab8876e7e702ba717487240fa856b4d1275ce0c361293ca25"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/fixture.rs",
+      "sha256": "2b91c2c4ee4c6e04faa0db6610c62887c554c75db351e61e269861a5ffb0c7b2"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/mod.rs",
+      "sha256": "07fdf8685a61c278e6f02f3cd55d31be60c9a2aee59a89764d400853228720f8"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/process.rs",
+      "sha256": "1d2194f28827755109b53062ef1b206be30f0b1acb43f7e14fb66723c7f1d658"
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/security.rs",
+      "sha256": "5a37a49060b6aade9e46138a374420f632a5d6b6abc7db47803ef403b30ba6ac"
+    }
+  ],
+  "claim_ceiling": {
+    "supported": [
+      "macOS-only, /bin/sh-shebang, descriptor-pinned Read capture",
+      "macOS-only PlannedWrite capture with zero filesystem writes",
+      "candidate-bound stdout, stderr, termination, artifact, and enforcement observations",
+      "fail-closed rejection when the host sandbox capability or preflight is unavailable"
+    ],
+    "not_supported": [
+      "WorkspaceWrite subprocesses",
+      "ExternalWrite subprocesses",
+      "Destructive subprocesses",
+      "non-shebang native binaries, including the typed Rust CLI itself",
+      "Linux or other non-macOS subprocess execution",
+      "full product-command coverage, routine effectful journeys, readiness, release, or completion"
+    ]
+  },
+  "findings": [
+    {
+      "severity": "material-rework-blocker",
+      "finding": "No truthful descriptor-brokered write substrate exists. All write-capable effect classes therefore reject before spawn; HCT-CAPTURE cannot support setup, retrofit, repair, migration, or other workspace-mutating product commands."
+    },
+    {
+      "severity": "material-rework-blocker",
+      "finding": "Descriptor-safe launch currently supports only fixed-/bin/sh shebang scripts. Native executables are rejected to avoid the macOS non-shebang path-swap race, so the typed Rust CLI cannot yet be captured through this implementation."
+    },
+    {
+      "severity": "platform-ceiling",
+      "finding": "Non-macOS hosts reject before spawn because no proven equivalent sandbox is implemented."
+    },
+    {
+      "severity": "security-hardening",
+      "finding": "The sandbox still grants broad file-read and process-exec operations so /bin/sh and system runtime dependencies function. Network, writes, fork, cross-process signals, file links, and clones are denied, but least-privilege read and executable allowlists remain unproved."
+    },
+    {
+      "severity": "runtime-surface",
+      "finding": "A chained shell verification surface denied nested sandbox-exec with exit 71 while a pure Cargo invocation passed. Runtime preflight correctly rejects before target launch, but supported operator invocation surfaces require root reconciliation."
+    }
+  ],
+  "requested_root_actions": [
+    "Do not accept HCT-CAPTURE or N03 as complete from this result.",
+    "Choose and implement a descriptor-brokered write substrate before enabling WorkspaceWrite or Destructive commands; otherwise route those commands away from HCT-CAPTURE and lower their claims.",
+    "Implement descriptor-safe native executable launch or explicitly constrain the product command catalog to supported /bin/sh scripts.",
+    "Add root-owned tests using actual PlannedWrite, WorkspaceWrite, and Destructive grants to prove the intended reject/route decisions at the LiveContext boundary.",
+    "Decide whether non-macOS support is required; if it is, implement and independently verify an equivalent fail-closed sandbox.",
+    "Run independent security and claim-falsification review before root acceptance."
+  ],
+  "requirements_addressed": [
+    "REQ-CLI-003",
+    "REQ-CLI-007",
+    "REQ-PROOF-002",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-004",
+    "HCT-CAPTURE negative proof requirement"
+  ],
+  "limitations": [
+    "The green focused suite proves only the bounded capture module behavior on the current macOS candidate and invocation surface.",
+    "No public command catalog, dispatcher, schema, migration registry, generated authority, marketplace, package, installation, or release surface was changed by this lease.",
+    "Root-owned integration was compiled and observed but was not edited or accepted by this worker.",
+    "No HCT-CAPTURE, N03, product, readiness, release, or goal-completion claim is made."
+  ],
+  "no_claim_statement": "LEASE-N03-CAPTURE-003 returns a verified fail-closed read-only subset plus material rework blockers. Workers cannot accept root authority, and this result does not claim completion."
+}

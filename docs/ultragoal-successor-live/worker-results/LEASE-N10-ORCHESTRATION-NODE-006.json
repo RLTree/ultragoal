@@ -1,0 +1,259 @@
+{
+  "worker": "/root",
+  "lease_id": "LEASE-N10-ORCHESTRATION-NODE-006",
+  "context_id": "sha256:de8c5d6b300be0d5aa0698eda1aa3551b58d2aa1befaf99e632f737c794a1fb5",
+  "candidate_identity": {
+    "candidate_id": "sha256:de8c5d6b300be0d5aa0698eda1aa3551b58d2aa1befaf99e632f737c794a1fb5",
+    "context_id": "sha256:de8c5d6b300be0d5aa0698eda1aa3551b58d2aa1befaf99e632f737c794a1fb5",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "artifact_set_sha256": "sha256:de8c5d6b300be0d5aa0698eda1aa3551b58d2aa1befaf99e632f737c794a1fb5",
+    "artifact_count_excluding_result": 29,
+    "parent_result_path": "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-005.json",
+    "parent_result_sha256": "sha256:acff16f3164915d4f628b102b97f4008c688736ef2716d135ca831e8b5b5891e",
+    "parent_artifact_set_sha256": "sha256:e5a7ff3f9ee4a3aec95978c57802cdf99b36bee73f0302b091e681475b047d5e",
+    "root_decision_path": "docs/ultragoal-successor-live/root-decisions/N10-NODE-005-REWORK.json",
+    "context_note": "Git state was not read because the lease forbids Git operations. Candidate and context identity bind only to the exact 29-artifact N10 set recorded here."
+  },
+  "base_state": {
+    "node": "N10-ORCHESTRATION",
+    "root_decision": "N10-NODE-005-REWORK",
+    "parent_worker_result": "sha256:acff16f3164915d4f628b102b97f4008c688736ef2716d135ca831e8b5b5891e",
+    "parent_artifact_set": "sha256:e5a7ff3f9ee4a3aec95978c57802cdf99b36bee73f0302b091e681475b047d5e",
+    "review_decision": "rework",
+    "decisive_finding": "NODE-005 could not enter typed submission because validate_for required all 28 frozen artifacts to be touched even though 18 were read-only evidence."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "Corrected unaccepted N10 typed orchestration candidate only. Independent review, exact current root wiring, production execution adapter, persisted recovery journey, dependency reconciliation, node closure, readiness, release, and goal completion remain withheld.",
+    "lease_no_claim_statement": "This worker does not claim readiness, release, node closure, or goal completion.",
+    "artifact_count_excluding_result": 29,
+    "changed_artifact_count": 3,
+    "read_only_artifact_count": 26,
+    "validated_read_roots_required": [
+      "validator/src/orchestration",
+      "validator/tests/orchestration_contract",
+      "validator/tests/orchestration_contract.rs"
+    ],
+    "artifact_set_sha256": "sha256:de8c5d6b300be0d5aa0698eda1aa3551b58d2aa1befaf99e632f737c794a1fb5",
+    "artifact_set_formula": "Sort artifacts by path; concatenate path, one TAB byte, sha256 without prefix, and one LF byte; SHA-256 the concatenation.",
+    "total_bytes": 210427,
+    "total_lines": 6181,
+    "artifact_line_counts": {
+      "validator/src/orchestration/effect.rs": 54,
+      "validator/src/orchestration/engine.rs": 265,
+      "validator/src/orchestration/engine_query.rs": 84,
+      "validator/src/orchestration/error.rs": 89,
+      "validator/src/orchestration/event.rs": 240,
+      "validator/src/orchestration/graph.rs": 162,
+      "validator/src/orchestration/lease.rs": 155,
+      "validator/src/orchestration/mod.rs": 159,
+      "validator/src/orchestration/model.rs": 223,
+      "validator/src/orchestration/reconcile.rs": 271,
+      "validator/src/orchestration/recovery.rs": 151,
+      "validator/src/orchestration/replay.rs": 276,
+      "validator/src/orchestration/scope.rs": 234,
+      "validator/src/orchestration/scope_policy.rs": 130,
+      "validator/src/orchestration/transition.rs": 290,
+      "validator/src/orchestration/worker.rs": 278,
+      "validator/tests/orchestration_contract.rs": 29,
+      "validator/tests/orchestration_contract/artifact_evidence.rs": 294,
+      "validator/tests/orchestration_contract/blockers.rs": 117,
+      "validator/tests/orchestration_contract/candidate_rebind.rs": 297,
+      "validator/tests/orchestration_contract/effects.rs": 286,
+      "validator/tests/orchestration_contract/graph.rs": 155,
+      "validator/tests/orchestration_contract/leases.rs": 281,
+      "validator/tests/orchestration_contract/path_aliases.rs": 220,
+      "validator/tests/orchestration_contract/reconciliation.rs": 295,
+      "validator/tests/orchestration_contract/recovery.rs": 297,
+      "validator/tests/orchestration_contract/security.rs": 257,
+      "validator/tests/orchestration_contract/support.rs": 300,
+      "validator/tests/orchestration_contract/worker_results.rs": 292
+    },
+    "maximum_rust_file_lines": 300,
+    "rust_files_over_300_lines": 0,
+    "focused_artifact_evidence_tests": "7 passed; 0 failed under cargo-nextest with 16 jobs",
+    "focused_n10_tests": "113 passed; 0 failed under cargo-nextest with 16 jobs",
+    "all_targets_check": "failed outside lease with exit 101: current plugin_manifest and distribution_contract compile errors",
+    "scoped_clippy": "failed before the leased test target with exit 101 because current inventory/plugin_manifest code outside the lease does not compile",
+    "scoped_format_check": "pass",
+    "scoped_diff_check": "pass by baseline diff review, rustfmt check, line caps, and no trailing whitespace",
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "destructive_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/orchestration/worker.rs",
+    "validator/tests/orchestration_contract.rs",
+    "validator/tests/orchestration_contract/artifact_evidence.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-006.json"
+  ],
+  "touched_semantics": [
+    "orchestration::worker_result::validate_for::artifact_path_authorization",
+    "orchestration::tests::artifact_evidence"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-006.json"
+  ],
+  "fixtures": [
+    "validator/tests/orchestration_contract/artifact_evidence.rs"
+  ],
+  "effects": [
+    { "class": "workspace_write", "target": "lease-n10-node006-source", "performed": true },
+    { "class": "fixture_write", "target": "lease-n10-node006-tests", "performed": true },
+    { "class": "process", "target": "lease-n10-node006-cargo", "performed": true },
+    { "class": "network", "target": "network", "performed": false },
+    { "class": "external_write", "target": "external-product", "performed": false },
+    { "class": "destructive", "target": "destructive", "performed": false },
+    { "class": "root_authority", "target": "root-authority", "performed": false }
+  ],
+  "requirements": [
+    "HUL-ORCHESTRATION-001",
+    "HUL-SECURITY-001",
+    "REQ-ORCH-004"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE",
+    "N06-ROUTINE",
+    "N09-AGENTS-REPO"
+  ],
+  "changes": [
+    {
+      "area": "artifact evidence authorization",
+      "paths": ["validator/src/orchestration/worker.rs"],
+      "rationale": "Artifacts declared touched retain owned-scope validation. A non-touched artifact is accepted only when its canonical exact-case path is equal to or slash-segment-contained by a current LeaseSpec.read_paths entry; host-protected roots remain denied."
+    },
+    {
+      "area": "focused false-pass controls",
+      "paths": ["validator/tests/orchestration_contract.rs", "validator/tests/orchestration_contract/artifact_evidence.rs"],
+      "rationale": "Controls cover exact and broad reads, outside and cross-lease scope, case and prefix aliases, ancestors, traversal, absolute paths, host roots, touched/generated/fixture preservation, duplicates, digest commitment mutation, no-event rejection, and the exact NODE-005 broad frozen receipt shape."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node006-worker-target cargo nextest run --offline --locked --manifest-path validator/Cargo.toml --jobs 16 --test orchestration_contract artifact_evidence::",
+      "result": "pass",
+      "summary": "Final focused run: 7 passed; 0 failed; 106 skipped. Two earlier fixture-only failures were corrected before this final pass."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node006-worker-target cargo nextest run --offline --locked --manifest-path validator/Cargo.toml --jobs 16 --test orchestration_contract",
+      "result": "pass",
+      "summary": "113 passed; 0 failed; 0 skipped. Existing replay, root-change commitment, generated/fixture touch, and no-event controls remained green."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node006-worker-target cargo check --offline --locked --manifest-path validator/Cargo.toml --all-targets --jobs 16",
+      "result": "failed_outside_lease",
+      "exit_code": 101,
+      "summary": "Current failures were outside the four writable paths: PluginManifest lacked Debug for a lib test and distribution_contract could not resolve crate::plugin_manifest."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-n10-node006-worker-target cargo clippy --offline --locked --manifest-path validator/Cargo.toml --jobs 16 --test orchestration_contract",
+      "result": "failed_outside_lease",
+      "exit_code": 101,
+      "summary": "Clippy stopped in validator/src/inventory/plugin_manifest.rs on missing MAX_MANIFEST_BYTES, missing Manifest, and an Interface type mismatch before checking the leased integration-test target."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/orchestration/worker.rs validator/tests/orchestration_contract.rs validator/tests/orchestration_contract/artifact_evidence.rs",
+      "result": "pass"
+    },
+    {
+      "command": "diff -u leased baselines against validator/src/orchestration/worker.rs and validator/tests/orchestration_contract.rs",
+      "result": "expected_scoped_differences_reviewed",
+      "summary": "worker.rs: 15 additions and 2 deletions; orchestration_contract.rs: 2 additions; artifact_evidence.rs: 294 new lines."
+    },
+    {
+      "command": "rg -n '[[:blank:]]+$' validator/src/orchestration/worker.rs validator/tests/orchestration_contract.rs validator/tests/orchestration_contract/artifact_evidence.rs",
+      "result": "pass_no_matches",
+      "exit_code": 1
+    },
+    {
+      "command": "wc -l validator/src/orchestration/worker.rs validator/tests/orchestration_contract.rs validator/tests/orchestration_contract/artifact_evidence.rs",
+      "result": "pass",
+      "summary": "278, 29, and 294 lines; every handwritten leased Rust file is at or below 300 lines."
+    }
+  ],
+  "artifacts": [
+    { "path": "validator/src/orchestration/effect.rs", "sha256": "sha256:8b1ee0966e04f0aae8b8749d6a88deb8266ef9e69c2bb5dcd27f0103215877ae", "byte_length": 1864 },
+    { "path": "validator/src/orchestration/engine.rs", "sha256": "sha256:345790c43d4772f003a2f68506ba052463fd34647b64f3b7e8d2da2fb962c972", "byte_length": 7877 },
+    { "path": "validator/src/orchestration/engine_query.rs", "sha256": "sha256:784acba762893e57d67771a1cc9fe4e0250d3b7c6f216a8518a5210b5c8ff25a", "byte_length": 2293 },
+    { "path": "validator/src/orchestration/error.rs", "sha256": "sha256:aee3d14728dd091c3a4a2c740c3b5d012cbdf641002732c0e2f26c3eebf84746", "byte_length": 3684 },
+    { "path": "validator/src/orchestration/event.rs", "sha256": "sha256:14a07936ce5545cc5e1835a2b9d4cee1507f4442a1bd317ce987aa48f4fb9606", "byte_length": 6916 },
+    { "path": "validator/src/orchestration/graph.rs", "sha256": "sha256:54c7d8ecafbdbfa3fb8fd5379f189c71ad5232388016bd9d54090b751fe9f8de", "byte_length": 5469 },
+    { "path": "validator/src/orchestration/lease.rs", "sha256": "sha256:bd00b476344167de3be39c25c5bd34878014db962374301dc36441b18ea6b32c", "byte_length": 5349 },
+    { "path": "validator/src/orchestration/mod.rs", "sha256": "sha256:dbe6478bcd9616153568c44116a96e16b4d4e5637151f2e659876e4164536bde", "byte_length": 5026 },
+    { "path": "validator/src/orchestration/model.rs", "sha256": "sha256:57935b61dbb6fc2b52047960acdaa4f1e4222fbc4fa80073d750552141a0d8b9", "byte_length": 6543 },
+    { "path": "validator/src/orchestration/reconcile.rs", "sha256": "sha256:50d68e3965fc43771079af54db637c0bd459341cad2eb5cc78930276a70ad553", "byte_length": 10131 },
+    { "path": "validator/src/orchestration/recovery.rs", "sha256": "sha256:7cb26de8ba75a514062684dd73629fac3c4135ad22d04612d4cad78c1b028348", "byte_length": 5474 },
+    { "path": "validator/src/orchestration/replay.rs", "sha256": "sha256:0e24409af27a94768c2ff877450c1b61377c87d53e0b4cc3ed56c76cbb72d70b", "byte_length": 9464 },
+    { "path": "validator/src/orchestration/scope.rs", "sha256": "sha256:0d9b8a41d5e4f5f7a205681ad66472be7caed53f7b72f9eb9d1dd659c55c1fc6", "byte_length": 8424 },
+    { "path": "validator/src/orchestration/scope_policy.rs", "sha256": "sha256:e97d2888889c985fa5b76fa7c6cadfd45413b6d2aeac8749cdfb24d0ed6b44e5", "byte_length": 4726 },
+    { "path": "validator/src/orchestration/transition.rs", "sha256": "sha256:959e390918282749b093e4d422568ba68f7c755242723819763556ab1b60526f", "byte_length": 11461 },
+    { "path": "validator/src/orchestration/worker.rs", "sha256": "sha256:34dc1fa2563c08f595c5d53a730607b6ee18de84bf79d5be21f3b37364da22d6", "byte_length": 10573 },
+    { "path": "validator/tests/orchestration_contract.rs", "sha256": "sha256:f06ed1d851338b7ddc86ebe0ecc91623ef7d45d0ea8f3b83d5a058f11f52f2c1", "byte_length": 882 },
+    { "path": "validator/tests/orchestration_contract/artifact_evidence.rs", "sha256": "sha256:56dbfc964e3e9fedecbe5e6ea139e913015cc795a2710cf859210905a93a597f", "byte_length": 10518 },
+    { "path": "validator/tests/orchestration_contract/blockers.rs", "sha256": "sha256:59baa415aa9e50d2639426b8f5944ba77dbbe705dcdfc5ea1cacc40ad2c20370", "byte_length": 3513 },
+    { "path": "validator/tests/orchestration_contract/candidate_rebind.rs", "sha256": "sha256:6b7231b5cc1c87119363d62937321227a17e7151c13ffa29ffa8248a65fb4b71", "byte_length": 10857 },
+    { "path": "validator/tests/orchestration_contract/effects.rs", "sha256": "sha256:1002648ceb81f5de758c46b2b25d98ce8ae04798eeac1eabeb7590554754c541", "byte_length": 8393 },
+    { "path": "validator/tests/orchestration_contract/graph.rs", "sha256": "sha256:ee33a4ec43adf2a4df11f252066ee0b977b4857d8e650e2c41e25acd1dd6f536", "byte_length": 4871 },
+    { "path": "validator/tests/orchestration_contract/leases.rs", "sha256": "sha256:32db73e7a37313f31b73f37e34a96d1edc7d3a7b431e71327638ce131d0ef8f8", "byte_length": 9252 },
+    { "path": "validator/tests/orchestration_contract/path_aliases.rs", "sha256": "sha256:9b4345d03109d0f5beb46fc872c5b11ba0c19f08ab7d9e92b7f1dfb2fd6cc63c", "byte_length": 8116 },
+    { "path": "validator/tests/orchestration_contract/reconciliation.rs", "sha256": "sha256:177d50f44ad03cfbad1b2d2e1e1d898a93ef78cbb8f388599fbf4b0139057fb3", "byte_length": 10588 },
+    { "path": "validator/tests/orchestration_contract/recovery.rs", "sha256": "sha256:568a837cc9a27a41500087ad0e94a7a89b55a5473b8cbb393ee2b189f890f749", "byte_length": 10094 },
+    { "path": "validator/tests/orchestration_contract/security.rs", "sha256": "sha256:e5d92621b79d7eb37c6cbac990d8072dd431404659c8099190e1da8a653c8858", "byte_length": 7483 },
+    { "path": "validator/tests/orchestration_contract/support.rs", "sha256": "sha256:f0f362419acd8e83e611ca69dd4daac9ef9d200efb1dc43925e96434c51882fd", "byte_length": 10934 },
+    { "path": "validator/tests/orchestration_contract/worker_results.rs", "sha256": "sha256:2c56d591593a055cd54c25d3b3a9ce23b37524fabc9683e26831e7562078e3e3", "byte_length": 9652 }
+  ],
+  "findings": [
+    {
+      "severity": "corrected-candidate",
+      "finding": "Broad frozen WorkerResult artifact sets now reach typed validation and result commitment without classifying read-only evidence as touched writes."
+    },
+    {
+      "severity": "scope-preserved",
+      "finding": "Canonical parsing, exact-case slash-segment lease reads, host-root denial, owned touched paths, generated and fixture touches, duplicate rejection, digest commitments, root-change maps, replay, and no-event rejection remain enforced."
+    },
+    {
+      "severity": "verification-blocker-outside-lease",
+      "finding": "The required repository-wide all-target check and scoped cargo clippy command are not green because current plugin-manifest and distribution sources outside this lease do not compile."
+    },
+    {
+      "severity": "root-preimage-drift",
+      "finding": "validator/src/lib.rs changed during this lease from the NODE-005 preimage. The requested wiring was rebound without applying it to current preimage sha256:abc23d56b97b7f289f40f96565745407ee54ff9c82e78caee28608a5ab408223 and projected post-image sha256:8ff1fddb1eadb0c6d592af6af6eed2f1900806aefb6cff8193bc5a0c0f139b9a."
+    },
+    {
+      "severity": "independent-review-required",
+      "finding": "This worker has not accepted or independently reviewed its own NODE-006 artifact set."
+    }
+  ],
+  "unresolved_dependencies": [
+    "INDEPENDENT-N10-NODE006-REVIEW",
+    "ROOT-N10-MODULE-WIRING",
+    "ROOT-N10-WIRING-PREIMAGE-REVALIDATION",
+    "ROOT-ALL-TARGET-COMPILE-RECONCILIATION",
+    "ROOT-SCOPED-CLIPPY-RECONCILIATION",
+    "ROOT-HCT-STATE-ADAPTER",
+    "ROOT-PACKAGE-MANIFEST-INTEGRATION",
+    "N03-CLI-STATE-CURRENT-PROOF",
+    "N06-ROUTINE-CURRENT-PROOF",
+    "N09-AGENTS-REPO-CURRENT-PROOF",
+    "REPRESENTATIVE-RECOVERY-JOURNEY"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/lib.rs",
+      "expected_sha256": "sha256:8ff1fddb1eadb0c6d592af6af6eed2f1900806aefb6cff8193bc5a0c0f139b9a",
+      "request": "Only after independent PASS and while validator/src/lib.rs has pre-apply sha256:abc23d56b97b7f289f40f96565745407ee54ff9c82e78caee28608a5ab408223, insert the exact bytes pub mod orchestration; followed by LF immediately after mod json_boundary; followed by LF. Reject any different preimage, placement, content, or post-apply digest."
+    }
+  ],
+  "limitations": [
+    "The orchestration module remains unexported; the sole root edit is requested but was not applied.",
+    "The requested root edit is bound to a live preimage that changed during this lease and must be revalidated again immediately before any root action.",
+    "The repository-wide all-target and scoped cargo-clippy commands are not green because of compile errors outside the leased files; this WorkerResult does not convert focused N10 proof into an integrated build claim.",
+    "The protocol trusts touched_paths as the typed write declaration; it does not independently observe filesystem writes, and opaque changes records cannot supply that provenance.",
+    "No live adapter proves symlink, hardlink, mount, filesystem-normalization, or post-validation substitution rejection at host effect time.",
+    "No current whole-candidate green suite or persisted supported-host recovery journey was established.",
+    "N03, N06, and N09 current completion evidence is not established here.",
+    "No package, install, discovery, runtime, claim, release, Git, network, external-host, or destructive proof was performed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

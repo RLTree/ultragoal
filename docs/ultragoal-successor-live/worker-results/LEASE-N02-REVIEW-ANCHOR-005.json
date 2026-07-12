@@ -1,0 +1,261 @@
+{
+  "worker": "/root/n02_context_review",
+  "lease_id": "LEASE-N02-REVIEW-ANCHOR-005",
+  "context_id": "sha256:bfc035c1fac082906da27494268b081af5ffba50a0d44f1599f4c27ea1154dfd",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "status_sha256_before_result": "954352cabeb6cb7be883b4afacbc07d7836c7847aba264d4323163a7d6208a67",
+    "worktree_diff_sha256_before_result": "a16bf5cebcae46b546b636facb5e688b965047c8db518f665f4aa29066763f06",
+    "staged_diff_sha256_before_result": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "owned_artifact_set_sha256": "586159e9870aeb06f94a40924f73c636f193db9a6ec581077f860de16e9d4773",
+    "dirty": true,
+    "context_formula": "SHA-256 of ordered rows key<TAB>value<LF> for head_commit, head_tree, branch, status_sha256, worktree_diff_sha256, staged_diff_sha256, and artifact_set_sha256.",
+    "context_note": "The context digest is time-bound immediately before this self-referential WorkerResult was added; unrelated concurrent dirt is preserved."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "predecessor_worker_result": "docs/ultragoal-successor-live/worker-results/LEASE-N02-REVIEW-ANCHOR-004.json",
+    "predecessor_worker_result_sha256": "sha256:f2ba3efd692e1583a70755388025090c8c686d44086adc54d1fc63e70fa6260d",
+    "predecessor_artifact_set_sha256": "sha256:651008c4bc5537ff1d06281a4280d344998c9a9aac82a25ce9e23e83ba1cf5b1",
+    "independent_review_verdict": "REWORK",
+    "confirmed_findings": [
+      "P1 regular ancestor and leaf substitutions at their pre-open boundaries were accepted",
+      "P2 relative path bytes and component depth were not explicitly bounded before traversal",
+      "P2 special-file proof used a directory rather than representative FIFO and Unix socket objects",
+      "current integrated review proof remained a concurrent macro reconciliation gap"
+    ],
+    "concurrent_dirt_policy": "All root, user, macro, registry, materiality, persona, manifest, migration, schema, fixture, dependency, and other-worker changes were preserved."
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged": true,
+    "result": "corrective artifact set ready for independent review",
+    "artifact_count_excluding_result": 5,
+    "artifact_set_sha256": "586159e9870aeb06f94a40924f73c636f193db9a6ec581077f860de16e9d4773",
+    "artifact_set_formula": "Use artifacts array order. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+    "artifact_lines": 794,
+    "artifact_bytes": 27926,
+    "maximum_file_lines": 243,
+    "files_over_300_lines": 0,
+    "focused_anchor_artifact_tests": "15 passed; 0 failed",
+    "existing_anchor_security_tests": "6 passed; 0 failed",
+    "complete_review_tests": "withheld pending root macro freeze and integrated reconciliation",
+    "native_all_target_check": "pass with unrelated existing warnings",
+    "isolated_windows_anchor_check": "pass with dead-code warnings",
+    "whole_crate_windows_check": "blocked by eleven pre-existing out-of-lease platform-gating errors",
+    "non_unix_anchor_behavior": "isolated exact module compiles and returns review_round_anchor_path_invalid",
+    "git_operations_performed": false,
+    "network_performed": false,
+    "external_product_effect_performed": false
+  },
+  "touched_paths": [
+    "validator/src/review/round/anchor/artifact.rs",
+    "validator/src/review/round/anchor/artifact/unix_entry.rs",
+    "validator/src/review/round/anchor/artifact_tests.rs",
+    "validator/src/review/round/anchor/artifact_tests/corrective.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-REVIEW-ANCHOR-005.json"
+  ],
+  "touched_semantics": [
+    "descriptor-relative no-follow fstatat baseline before every ancestor substitution hook",
+    "full descriptor-relative regular single-link leaf snapshot before a dedicated leaf-open hook",
+    "opened ancestor and leaf comparison against pre-open baselines",
+    "4096-byte relative-path and 64-component traversal limits before root filesystem access",
+    "representative FIFO and Unix-domain-socket fail-closed proof",
+    "existing post-read and final descriptor-relative identity revalidation",
+    "same-buffer unique-key JSON parsing and hashing"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Five leased anchor implementation/test artifacts and this WorkerResult only"
+    },
+    {
+      "class": "temporary-source",
+      "scope": "/tmp/n02-anchor-independent isolated cross-platform harness"
+    },
+    {
+      "class": "local-build-artifact",
+      "scope": "Ignored Cargo outputs under /tmp/n02-anchor005-* only"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "Isolated /tmp test roots, FIFOs, sockets, files, and directories created and removed by tests"
+    },
+    {
+      "class": "git",
+      "scope": "Read-only identity, status, and diff inspection"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-SECURITY-006",
+    "REQ-PROOF-001",
+    "REQ-PROOF-007",
+    "REQ-REVIEW-003"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY"
+  ],
+  "changes": [
+    {
+      "area": "ancestor pre-open identity",
+      "result": "Each relative ancestor now receives an fstatat AT_SYMLINK_NOFOLLOW identity baseline before its hook; the subsequently opened O_NOFOLLOW directory descriptor must match that baseline."
+    },
+    {
+      "area": "leaf pre-open identity",
+      "result": "A new BeforeLeafOpen boundary follows an fstatat AT_SYMLINK_NOFOLLOW regular-file snapshot including device, inode, link count, length, mtime, and ctime; the opened leaf must match exactly."
+    },
+    {
+      "area": "resource bounds",
+      "result": "Relative input is rejected above 4096 bytes or 64 components before root canonicalization, vector growth beyond the cap, or descriptor traversal."
+    },
+    {
+      "area": "special-file proof",
+      "result": "Focused tests construct a real FIFO and bound Unix-domain socket and prove immediate fixed non-echoing rejection without opening or reading either object."
+    },
+    {
+      "area": "platform ceiling",
+      "result": "Unix keeps descriptor confinement; the exact anchor module cross-compiles for the installed Windows target with its fixed fail-closed branch."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-anchor005-final-artifact cargo test --locked --offline -p ultragoal review::round::anchor::artifact_tests --lib -- --test-threads=1",
+      "result": "pass",
+      "summary": "15 passed; ordinary ancestor and leaf substitutions, bounds, FIFO, socket, root and ancestor symlinks, hardlink, directory, post-read swaps and mutations, duplicate JSON, trailing input, byte bound, and read-only behavior all passed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-anchor005-final-security cargo test --locked --offline -p ultragoal self_tests::review::anchor_security --lib -- --test-threads=1",
+      "result": "pass",
+      "summary": "6 passed; existing package-root, source policy, ancestor/leaf link, hardlink, non-regular, placeholder, and semantic anchor controls remained green."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-anchor005-check-target cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "pass",
+      "summary": "All native library, binary, test, and integration targets compiled; warnings were pre-existing and outside this lease."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-anchor005-windows-isolated-target cargo check --offline --manifest-path /tmp/n02-anchor-independent/Cargo.toml --target x86_64-pc-windows-msvc",
+      "result": "pass",
+      "summary": "The isolated harness importing the exact live artifact.rs cross-compiled for the installed Windows target; only dead-code warnings were emitted."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/n02-anchor005-windows-target cargo check --locked --offline -p ultragoal --lib --target x86_64-pc-windows-msvc",
+      "result": "blocked-outside-lease",
+      "summary": "Whole-crate Windows compilation reached unrelated capture, context, target-fixture, and inventory cfg defects and reported eleven errors; the exact anchor module independently cross-compiled successfully."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal self_tests::review --lib -- --test-threads=1",
+      "result": "withheld-per-lease",
+      "summary": "Root directed integrated review to run after the concurrent macro materiality and registry freeze; this result does not borrow or claim that proof."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check on the five artifacts; git diff --check on leased paths; production write-call scan; line and byte bounds",
+      "result": "pass",
+      "summary": "All artifacts are formatted and text-clean, production reader sources contain no write calls, total size is 794 lines and 27926 bytes, and every file is at or below 243 lines."
+    },
+    {
+      "command": "Python jsonschema.Draft202012Validator against the successor-v2 worker_output_schema plus exact artifact digest and set reconciliation",
+      "result": "pass",
+      "summary": "WorkerResult-v1 validates with zero errors; five artifact digests and the ordered path-bound set digest reconcile exactly."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/review/round/anchor/artifact.rs",
+      "sha256": "sha256:757b5b49010e0389910bae18015b25b5fd4228a77342825f6cc9512f7e8c1eb5",
+      "bytes": 7628,
+      "lines": 243
+    },
+    {
+      "path": "validator/src/review/round/anchor/artifact/unique_json.rs",
+      "sha256": "sha256:1bee82bcc8b519890a0ed57bdb4a2be66de57f0be5e27b7010cc2655612e3217",
+      "bytes": 2640,
+      "lines": 86
+    },
+    {
+      "path": "validator/src/review/round/anchor/artifact/unix_entry.rs",
+      "sha256": "sha256:4b08589bdca3b08180425011fbfc98e1b1dd81946b782f48a6023a59f099e47a",
+      "bytes": 3847,
+      "lines": 118
+    },
+    {
+      "path": "validator/src/review/round/anchor/artifact_tests.rs",
+      "sha256": "sha256:3a441e881ff4a735993dd36c4cf8710b9b3abfd097a9dab1aaea6812b285361b",
+      "bytes": 8918,
+      "lines": 221
+    },
+    {
+      "path": "validator/src/review/round/anchor/artifact_tests/corrective.rs",
+      "sha256": "sha256:30ee820b775c1324530ff0d752f2b74dfb37d597154f8bb12666c1bed78ecf8d",
+      "bytes": 4893,
+      "lines": 126
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Ordinary directory and ordinary leaf substitutions at their pre-open boundaries now return review_round_anchor_changed_during_read instead of accepting attacker bytes."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Relative anchor labels now have explicit pre-traversal byte and component-count limits with fixed non-echoing rejection."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Representative FIFO and Unix socket objects are rejected at the no-follow metadata boundary without a blocking open or attacker-controlled error text."
+    },
+    {
+      "severity": "confirmed-preserved",
+      "finding": "Post-read descriptor/path revalidation, same-buffer digest plus unique-key parse, hardlink rejection, and unsupported-platform fail-close remain present."
+    },
+    {
+      "severity": "unresolved-integration",
+      "finding": "The complete integrated review self-test surface is intentionally not claimed until root freezes and reconciles concurrent macro materiality and registry work."
+    },
+    {
+      "severity": "independent-review-required",
+      "finding": "This exact five-artifact set requires independent digest, race, bounds, unsafe, special-file, portability, and false-pass review before root acceptance."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent review and root acceptance of artifact_set_sha256 586159e9870aeb06f94a40924f73c636f193db9a6ec581077f860de16e9d4773.",
+    "Root-run integrated self_tests::review after the concurrent macro materiality and registry freeze.",
+    "Whole-crate non-Unix support remains blocked by pre-existing out-of-lease platform-gating defects; only this exact anchor module has cross-target compile proof.",
+    "N02 inventory closure, claim decisions, readiness, release, and product completion remain root-only decisions."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "root acceptance state",
+      "request": "Commission independent review bound to artifact_set_sha256 586159e9870aeb06f94a40924f73c636f193db9a6ec581077f860de16e9d4773 before accepting this superseding lease."
+    },
+    {
+      "path": "integrated review proof",
+      "request": "After macro materiality and registry work freezes, rerun the complete serial self_tests::review surface and reconcile every failure without attributing concurrent results to this lease."
+    }
+  ],
+  "limitations": [
+    "This worker implemented and verified only its leased anchor reader and test artifacts; it did not modify or claim macro materiality, registry, personas, schemas, fixtures, dependencies, manifests, migration, claims, release, or prior WorkerResults.",
+    "The isolated Windows check compiles the exact live anchor module but does not establish whole-product Windows support or execute Windows runtime behavior.",
+    "The repository remains intentionally dirty with preserved root, user, and concurrent-worker work; candidate identity is time-bound and must be refreshed for later integrated claims.",
+    "The Harness Ultragoal goal probe returned no subagent-local goal binding; this worker did not create competing goal authority because goal ownership remains with root."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

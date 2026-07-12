@@ -1,0 +1,306 @@
+{
+  "worker": "/root/n02_canonical_skills",
+  "lease_id": "LEASE-N02-CANONICAL-SKILLS-002",
+  "context_id": "sha256:60fae523bdaf4c821efab1ec310523cfba01eb88328cfdaf2f83586aa68d93b2",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "status_sha256_before_result": "0129ee7f0ed63d9eb25b96e6c2bbc01daae4bbc7b6d778468c611562cda2db0b",
+    "worktree_diff_sha256_before_result": "5c522d124365193a3a170fd6f32460ca988d8332f5e86881b94dea15cd2d19e6",
+    "staged_diff_sha256_before_result": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "untracked_content_sha256_before_result": "93661af3297e67fa2fecb16222d6e950237955528f2bafdf9e34dea06f0b1425",
+    "dirty": true,
+    "context_note": "LiveContext-v1 was rebuilt read-only after the seven policy corrections and immediately before this self-referential WorkerResult was added."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "superseded_worker_result": "docs/ultragoal-successor-live/worker-results/LEASE-N02-CANONICAL-SKILLS-001.json",
+    "superseded_worker_result_sha256": "sha256:65b807a41f7f66e3f170dc19e9272ae444752f9706ec7e6796123f8b337f24c3",
+    "review_verdict": "ACCEPT_SUBSET with one corrective metadata finding",
+    "review_finding": "All seven specialist interface files omitted policy.allow_implicit_invocation, whose documented default true permitted direct implicit specialist entry and bypassed the single front door.",
+    "pre_existing_user_dirt": [
+      ".DS_Store"
+    ]
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged": true,
+    "candidate_skill_count": 8,
+    "implicit_candidate_count": 1,
+    "explicit_only_specialist_count": 7,
+    "front_door": "harness-ultragoal",
+    "total_candidate_lines_excluding_result": 291,
+    "maximum_file_lines": 35,
+    "files_over_300_lines": 0,
+    "legacy_skill_files_modified": false,
+    "worker_result_001_modified": false,
+    "root_authority_files_modified": false,
+    "git_operations_performed": false,
+    "network_performed": false,
+    "external_writes_performed": false
+  },
+  "touched_paths": [
+    "skills/repository-fit/agents/openai.yaml",
+    "skills/routine-work/agents/openai.yaml",
+    "skills/diagnose-and-observe/agents/openai.yaml",
+    "skills/goal-run/agents/openai.yaml",
+    "skills/prove/agents/openai.yaml",
+    "skills/improve-and-maintain/agents/openai.yaml",
+    "skills/product-journey-review/agents/openai.yaml",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-CANONICAL-SKILLS-002.json"
+  ],
+  "touched_semantics": [
+    "single implicit candidate front door among the eight canonical source candidates",
+    "explicit-only invocation policy for seven specialist source candidates",
+    "preserved fully qualified $harness-ultragoal:<skill> specialist invocation",
+    "fail-closed rejection of bare, unknown, and conflicting specialist invocation canaries"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Seven leased specialist agents/openai.yaml files and this WorkerResult only"
+    },
+    {
+      "class": "external-process",
+      "scope": "Local quick_validate.py, Ruby, rg, wc, shasum, Git, Python jsonschema, and accepted LiveContext commands"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-write",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PLUGIN-003",
+    "REQ-PLUGIN-004"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N08-PLUGIN-PRODUCT"
+  ],
+  "changes": [
+    {
+      "area": "specialist implicit-entry bypass",
+      "rationale": "Added the exact supported boolean policy.allow_implicit_invocation: false to repository-fit, routine-work, diagnose-and-observe, goal-run, prove, improve-and-maintain, and product-journey-review."
+    },
+    {
+      "area": "front-door preservation",
+      "rationale": "Left harness-ultragoal policy absent so the documented default true keeps it as the sole implicit candidate within this eight-skill source set."
+    },
+    {
+      "area": "explicit specialist access",
+      "rationale": "Preserved each one-sentence default prompt with its exact fully qualified $harness-ultragoal:<skill> invocation; the local metadata contract states false disables default injection but retains explicit $skill invocation."
+    },
+    {
+      "area": "scope preservation",
+      "rationale": "Changed no SKILL.md body, legacy skill, prior WorkerResult, manifest, marketplace, validator, migration registry, generated authority, Cargo file, claim, or acceptance record."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "python3 /Users/terrynoblin/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/<each canonical skill>",
+      "result": "pass",
+      "summary": "8 of 8 returned Skill is valid after the correction."
+    },
+    {
+      "command": "ruby -ryaml exact policy, interface, and fully qualified prompt validation over eight agents/openai.yaml files",
+      "result": "pass",
+      "summary": "Front door has only interface metadata and no policy override; seven specialists have exactly interface plus policy, with a real boolean false and exact qualified prompt."
+    },
+    {
+      "command": "ruby adversarial metadata routing resolver over explicit, implicit, bare, unknown, and conflicting invocation cases",
+      "result": "pass",
+      "summary": "Seven explicit routes resolved exactly; five unqualified intents had only harness-ultragoal eligible; bare, unknown, and conflicting invocation canaries were rejected."
+    },
+    {
+      "command": "ruby fail-closed, candidate binding, ceiling, surrogate-proof, affirmative-overclaim, and bare-route scan over eight SKILL.md files",
+      "result": "pass",
+      "summary": "All eight retain unavailable-capability, candidate, ceiling, and surrogate guards; zero prohibited affirmative overclaims and zero bare cross-skill invocations were found."
+    },
+    {
+      "command": "ruby final-newline and trailing-whitespace validation; rg placeholder scan over sixteen candidate files",
+      "result": "pass",
+      "summary": "Sixteen files were text-clean; placeholder rg returned exit 1 with no matches."
+    },
+    {
+      "command": "wc -l, wc -c, and shasum -a 256 over sixteen candidate files",
+      "result": "pass",
+      "summary": "291 total lines, 24155 total bytes, maximum 35 lines; exact per-file values are recorded below."
+    },
+    {
+      "command": "shasum -a 256 and lines 45-50 inspection of skill-creator/references/openai_yaml.md",
+      "result": "pass",
+      "summary": "Reference sha256:ffac39318e408108141d40f820968e59f70434a891694f9bf1d25be8237b150c states false disables default context injection, preserves explicit $skill invocation, and defaults to true."
+    },
+    {
+      "command": "/private/tmp/n02-skills-live-context",
+      "result": "pass",
+      "summary": "Built read-only LiveContext-v1 sha256:60fae523bdaf4c821efab1ec310523cfba01eb88328cfdaf2f83586aa68d93b2 with no write probe."
+    },
+    {
+      "command": "python3 jsonschema.Draft202012Validator against IMPLEMENTATION_DEPENDENCY_GRAPH.json worker_output_schema; Ruby artifact digest/byte/line reconciliation",
+      "result": "pass",
+      "summary": "WorkerResult-v1 exact schema and all sixteen recorded implementation artifacts validated after freeze."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "skills/harness-ultragoal/SKILL.md",
+      "sha256": "sha256:785eabd12d7170e947627d2afae60a482c9e41e5fb851d5109e229356637914d",
+      "bytes": 2784,
+      "lines": 35
+    },
+    {
+      "path": "skills/harness-ultragoal/agents/openai.yaml",
+      "sha256": "sha256:4b13b6b7bcab8c3c2ad20c4930b278b4cd4eedf28a68ba50314e406d0426d62f",
+      "bytes": 250,
+      "lines": 4
+    },
+    {
+      "path": "skills/repository-fit/SKILL.md",
+      "sha256": "sha256:affd1dde2e52d6a34078922dc41da7dc68d3bca899757da5532085c965cd9c74",
+      "bytes": 2926,
+      "lines": 31
+    },
+    {
+      "path": "skills/repository-fit/agents/openai.yaml",
+      "sha256": "sha256:e8acab100cd4e13659b7038a3567f32578d9c6c4d72857924153513f6517372d",
+      "bytes": 296,
+      "lines": 6
+    },
+    {
+      "path": "skills/routine-work/SKILL.md",
+      "sha256": "sha256:55252d2b5c4d378120f4b28d125a64449626b84467191c06ce81ec8523989a4c",
+      "bytes": 2447,
+      "lines": 29
+    },
+    {
+      "path": "skills/routine-work/agents/openai.yaml",
+      "sha256": "sha256:e43cf5bee8391e633a185d0a1359df434dd995f0a39def6c54cca97968d392d3",
+      "bytes": 290,
+      "lines": 6
+    },
+    {
+      "path": "skills/diagnose-and-observe/SKILL.md",
+      "sha256": "sha256:c56b2f4918972ea768a29b061b713de75fc37942ecbda24867cd5b9256d17cc4",
+      "bytes": 2500,
+      "lines": 28
+    },
+    {
+      "path": "skills/diagnose-and-observe/agents/openai.yaml",
+      "sha256": "sha256:0d814ca62231fe6d29b4e19e18cec45937d15fdcc28d8a5878ddfd1b9707a90c",
+      "bytes": 291,
+      "lines": 6
+    },
+    {
+      "path": "skills/goal-run/SKILL.md",
+      "sha256": "sha256:c782bb98b8cb7224ee5d5b97f7a6e24ecb852f51a6236a43d0784b7c64cb4796",
+      "bytes": 2941,
+      "lines": 30
+    },
+    {
+      "path": "skills/goal-run/agents/openai.yaml",
+      "sha256": "sha256:61f9c6c29d470bfbeebd9ba77e565869402595c31ac52034f509857235563e64",
+      "bytes": 281,
+      "lines": 6
+    },
+    {
+      "path": "skills/prove/SKILL.md",
+      "sha256": "sha256:6021a8cbf9375a936536a77f8f64ba9dd9bf0a51fd4585a21dcefc2d11acad97",
+      "bytes": 2593,
+      "lines": 28
+    },
+    {
+      "path": "skills/prove/agents/openai.yaml",
+      "sha256": "sha256:a12174ff86f65d4470e97a868ae57d1a7917d1389231b5d058ada97615bffabd",
+      "bytes": 269,
+      "lines": 6
+    },
+    {
+      "path": "skills/improve-and-maintain/SKILL.md",
+      "sha256": "sha256:d9b82a83cb93a3f5730d423ae15a8b61a3a69770764f1635b715a6dcd8d87aee",
+      "bytes": 2936,
+      "lines": 33
+    },
+    {
+      "path": "skills/improve-and-maintain/agents/openai.yaml",
+      "sha256": "sha256:9aaeb60b00ed3457b820eac12ee8bea9eabfb137293676ee0ae09d0e46ad560f",
+      "bytes": 295,
+      "lines": 6
+    },
+    {
+      "path": "skills/product-journey-review/SKILL.md",
+      "sha256": "sha256:6ce87bcbf5d5d2613bc4d3219e6dfdc4f5c6e34ee29853bf897c3e77fe5bc6f6",
+      "bytes": 2760,
+      "lines": 31
+    },
+    {
+      "path": "skills/product-journey-review/agents/openai.yaml",
+      "sha256": "sha256:8e411a19acf9f4278aa6c3a60a90063e0a941596c8db975db58432d2cb9d427a",
+      "bytes": 296,
+      "lines": 6
+    }
+  ],
+  "findings": [
+    {
+      "severity": "corrected-source-bypass",
+      "finding": "Within the eight canonical source candidates, seven specialist implicit entries are now disabled and harness-ultragoal is the only implicit candidate. This is source metadata behavior, not host discovery or runtime proof."
+    },
+    {
+      "severity": "blocking-for-global-topology",
+      "finding": "Fourteen legacy skill directories still coexist and may have their own discovery or implicit behavior. This correction proves only the eight canonical candidate metadata files, not a global single-front-door installation."
+    },
+    {
+      "severity": "blocking-for-host-proof",
+      "finding": "The local supported metadata contract documents the policy semantics, but no built package, installed catalog, new host session, implicit selection, or explicit specialist invocation was observed live."
+    },
+    {
+      "severity": "blocking-for-command-behavior",
+      "finding": "Typed successor command dispatch and required Harness-owned tools remain incomplete or unaccepted; the skill bodies continue to fail closed."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Root post-correction acceptance and integration of the seven policy edits.",
+    "Root-owned manifest, package inventory, generated catalog, marketplace, installed-byte, and host discovery reconciliation.",
+    "Migration routes, compatibility proof, active-reader scans, and retirement or preservation decisions for all fourteen legacy skill directories.",
+    "Accepted typed successor dispatch and every Harness-owned behavior required by the specialist workflows.",
+    "Independent new-session implicit front-door and explicit specialist invocation tests in each supported host.",
+    "Independent representative product journeys, ambiguity controls, security review, recovery review, and exact claim reconciliation."
+  ],
+  "requested_root_changes": [
+    {
+      "path": ".codex-plugin/plugin.json and root-owned component/package inventories",
+      "request": "After independent post-correction review, include only intended canonical components and retain the specialist explicit-only policy in built and installed bytes."
+    },
+    {
+      "path": "generated skill inventory and migration authority",
+      "request": "Recompute canonical and legacy discovery state without suppressing parallel-authority findings, then route or retire legacy skills only after equivalence and removal proof."
+    },
+    {
+      "path": "installed package and supported-host proof surfaces",
+      "request": "Independently prove one unqualified intent enters only harness-ultragoal and every fully qualified specialist remains explicitly invocable in a new session."
+    }
+  ],
+  "limitations": [
+    "This corrective lease changed only seven specialist interface metadata files and added this WorkerResult; WorkerResult 001 and every SKILL.md body remain byte-identical.",
+    "The sole-implicit result is bounded to the eight canonical source candidates and does not describe legacy, packaged, installed, cached, marketplace, or host-observed topology.",
+    "Static metadata parsing and adversarial resolver canaries do not prove Codex host loading, discovery, selection, invocation, or workflow behavior.",
+    "No manifest, marketplace, validator, migration, generated authority, Cargo, claim, acceptance, install, or external system was modified.",
+    "The LiveContext and artifact digests bind the candidate before this self-referential WorkerResult; root must rebuild context after integration or concurrent change.",
+    "The WorkerResult cannot contain its own digest; all sixteen candidate implementation files have exact recorded digests, bytes, and lines.",
+    "The highest honest ceiling is corrected candidate source metadata only; independent review and root reconciliation remain required."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

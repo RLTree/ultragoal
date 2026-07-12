@@ -1,0 +1,281 @@
+{
+  "worker": "/root/n02_context_scope_worker",
+  "lease_id": "LEASE-N02-CONTEXT-SCOPE-001",
+  "context_id": "sha256:f5bb2beb422dcfdaade22239cc6d432c2ddf3551b2db12eb19e65129c6ac5551",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_unchanged": true,
+    "dirty": true,
+    "catalog_id": "sha256:f4c3c52bb0428011faaa5a51c09c02152393dd4ce1f799cd218ccd19b8ddf327",
+    "canonical_json_sha256": "c55c80500a9138a753bda9b3263af6891ae8d1b989480a953d8ec501f252b053",
+    "context_note": "Two byte-identical live summaries were captured after READY source froze and before AGENT-REVIEW made any source write. This WorkerResult was added afterward."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "predecessor_result": "docs/ultragoal-successor-live/worker-results/LEASE-N02-LEGACY-SCOPE-002.json",
+    "predecessor_status": "independently accepted conservative legacy classifier",
+    "preserved_live_baseline": {
+      "entry_count": 4034,
+      "finding_count": 172,
+      "parallel_authority_count": 82,
+      "legacy_entry_count": 96,
+      "candidate_contract_rows": 18
+    },
+    "root_authority_retained": [
+      "creation and adoption of migration/non-authoritative-contexts.json",
+      "contract and migration decisions",
+      "public commands, generated authority, claims, release, readiness, and completion"
+    ],
+    "unrelated_user_state_preserved": [
+      ".DS_Store",
+      "all pre-existing and parallel root/worker changes outside this lease"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "entry_count": 4035,
+    "finding_count": 154,
+    "parallel_authority_count": 64,
+    "compatibility_route_retained_count": 14,
+    "missing_required_component_count": 47,
+    "candidate_component_not_active_count": 10,
+    "generated_surface_count": 9,
+    "verified_context_file_count": 18,
+    "context_registry_entry_count": 1,
+    "parallel_authority_reduction": 18,
+    "entry_count_delta": 1,
+    "finding_count_delta": -18,
+    "focused_tests": "7 passed; 0 failed",
+    "full_inventory_tests": "54 passed; 0 failed",
+    "all_target_check": "pass with pre-existing candidate dead-code warnings",
+    "maximum_touched_rust_file_lines": 245,
+    "touched_rust_files_over_300_lines": 0,
+    "git_operations_performed": false,
+    "network_performed": false,
+    "external_writes_performed": false
+  },
+  "touched_paths": [
+    "validator/src/inventory/context_scopes.rs",
+    "validator/src/inventory/context_scopes/manifest.rs",
+    "validator/src/inventory/mod.rs",
+    "validator/src/inventory/builder.rs",
+    "validator/tests/inventory_contract.rs",
+    "validator/tests/inventory_contract_cases/context_scopes.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-CONTEXT-SCOPE-001.json"
+  ],
+  "touched_semantics": [
+    "root-owned non-authoritative context registry verification",
+    "exact candidate-v1 ZIP and content-set manifest verification",
+    "descriptor-bound regular-file and directory identity verification",
+    "post-verification removal of only exact candidate paths from conservative legacy classification",
+    "Context and ContextOnly catalog projection with registry provenance",
+    "fail-closed malformed, spoofed, tampered, missing, extra, symlink, special-entry, and prose-bait controls"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "exact current 18-file successor-candidate-v1 bundle",
+    "missing root registry",
+    "wrong root, current contract, candidate contract, digest, binding, and replacement rows",
+    "unknown and duplicate registry keys",
+    "tampered, extra, missing, and malformed-manifest bundle files",
+    "Markdown fence, HTML comment, and JSON self-classification bait",
+    "in-root symlinked candidate file",
+    "FIFO special filesystem entry"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased context classifier source, tests, module wiring, and this WorkerResult only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal locked/offline Cargo target output"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "isolated inventory test repositories only"
+    },
+    {
+      "class": "external-process",
+      "scope": "local Cargo, rustfmt check, Git, jq, wc, and shasum commands"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-write",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PRODUCT-004",
+    "REQ-MAINT-001",
+    "REQ-MAINT-003",
+    "REQ-MAINT-006"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N14-MIGRATION"
+  ],
+  "changes": [
+    {
+      "area": "structured context authority",
+      "rationale": "Candidate prose and candidate-local manifests can no longer opt themselves out. Only the root-owned registry row bound to the current adopted contract can request context classification."
+    },
+    {
+      "area": "exact bundle identity",
+      "rationale": "The verifier pins the candidate root, ZIP manifest SHA-256, 17 declared file digests, content-set digest, contract-manifest SHA-256 and semantics, plus the ZIP manifest itself."
+    },
+    {
+      "area": "read integrity",
+      "rationale": "Registry, manifests, and files are bounded, confined, regular non-symlink reads; directories are descriptor-pinned and all observations are revalidated by the live ReadSession."
+    },
+    {
+      "area": "conservative reconciliation",
+      "rationale": "Legacy rows are removed only after the complete exact proof succeeds. Any registry or bundle rejection leaves every cataloged candidate path Legacy and Active with a causal error finding."
+    },
+    {
+      "area": "scope boundary",
+      "rationale": "The worker did not create or edit the root-owned registry, manifests, public commands, dependencies, generated authority, claims, or release state."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test inventory_contract context_scopes:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "7 passed; exact current bundle plus missing, malformed, spoofed, tampered, extra, missing-file, symlink, FIFO, duplicate-key, and prose-bait controls."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test inventory_contract -- --test-threads=1",
+      "result": "pass",
+      "summary": "54 passed; 0 failed on the source-frozen live candidate."
+    },
+    {
+      "command": "cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "pass",
+      "summary": "All targets compiled offline; pre-existing warnings remain because successor surfaces are still candidate-only."
+    },
+    {
+      "command": "cargo build --locked --offline -p ultragoal --example hct_inventory",
+      "result": "pass",
+      "summary": "Rebuilt the live inventory example after the disjoint READY source freeze."
+    },
+    {
+      "command": "target/debug/examples/hct_inventory --summary . (twice)",
+      "result": "expected-open-node-exit-1",
+      "summary": "Both outputs were byte-identical: context f5bb2b..., catalog f4c3c5..., canonical c55c80..., 4035 entries, 154 findings, 64 parallel-authority errors, and 47 missing components."
+    },
+    {
+      "command": "rustfmt/check and git diff --check on leased paths",
+      "result": "pass",
+      "summary": "All leased Rust files are formatted, diff-clean, and at or below 245 lines."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/inventory/context_scopes.rs",
+      "sha256": "e35ad347a19cfcd9c109593cb10c2aa29f37d597d8cc4d91c3ba9127dcf6593b",
+      "bytes": 7271,
+      "lines": 224
+    },
+    {
+      "path": "validator/src/inventory/context_scopes/manifest.rs",
+      "sha256": "413a0ef2254fb1d0af98243efa29f57df1f0fcad24ba94bf5319d6c734cf428f",
+      "bytes": 7954,
+      "lines": 211
+    },
+    {
+      "path": "validator/src/inventory/mod.rs",
+      "sha256": "80eb5a779fb28922101a2a6a7ff3c6932d9f5971bffa6aee92abea0c99c5de71",
+      "bytes": 1220,
+      "lines": 44,
+      "leased_change": "one module declaration"
+    },
+    {
+      "path": "validator/src/inventory/builder.rs",
+      "sha256": "2333529018609d21415f6a71ad22a8fee45599acacdaa60c18126f95dbb55dfc",
+      "bytes": 5002,
+      "lines": 134,
+      "leased_change": "context load, exact legacy post-filter, findings, and entry group wiring"
+    },
+    {
+      "path": "validator/tests/inventory_contract.rs",
+      "sha256": "02d2f27098a4e17f317c745faae18085a37750b1ac5a74726324a2a1bc2aa218",
+      "bytes": 7340,
+      "lines": 238,
+      "leased_change": "one integration-test module declaration"
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/context_scopes.rs",
+      "sha256": "cd72f5342145b2facd60552b78ca6fec2fb2c37077af3f4feddc3d1153cb3843",
+      "bytes": 8499,
+      "lines": 245
+    },
+    {
+      "path": "migration/non-authoritative-contexts.json",
+      "sha256": "5fcc9384073e92780d48e9e1913ef6dfb2fcf9ea2f6e959fd48d0332c347bb84",
+      "bytes": 806,
+      "lines": 19,
+      "ownership": "root-applied dependency; not worker-written"
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/repository_fixture.rs",
+      "sha256": "736bb483e1e16cfaf22f2d87bf3d93e4d54351ba46cad8fe6c5e55c2e147477b",
+      "bytes": 6677,
+      "lines": 208,
+      "ownership": "root-applied fixture default; not worker-written"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "candidate",
+      "finding": "Exactly 18 digest-pinned candidate-v1 files are now Context and ContextOnly with root-registry provenance; no candidate-local prose or JSON grants that status."
+    },
+    {
+      "severity": "reduction",
+      "finding": "The exact live catalog drops from 82 to 64 parallel-authority errors and from 172 to 154 total findings; no other legacy row is suppressed."
+    },
+    {
+      "severity": "node-open",
+      "finding": "N02 still reports 64 parallel-authority errors, 47 missing components, 10 candidate components, and 18 generated-surface findings."
+    },
+    {
+      "severity": "proof-ceiling",
+      "finding": "This candidate proves exact source-context classification only. It does not prove retirement, installed discovery, runtime behavior, readiness, release, or completion."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent review and root acceptance of this WorkerResult are still required.",
+    "The remaining 64 parallel-authority findings require separate reader migration or root dispositions.",
+    "The nine generated surfaces still lack accepted generator provenance and registration.",
+    "N02 remains open until every material inventory finding is reconciled."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "migration/non-authoritative-contexts.json",
+      "status": "applied_by_root",
+      "sha256": "5fcc9384073e92780d48e9e1913ef6dfb2fcf9ea2f6e959fd48d0332c347bb84"
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/repository_fixture.rs",
+      "status": "applied_by_root",
+      "request": "copy the root-owned context registry into isolated TestRepo defaults",
+      "sha256": "736bb483e1e16cfaf22f2d87bf3d93e4d54351ba46cad8fe6c5e55c2e147477b"
+    }
+  ],
+  "limitations": [
+    "The registry implementation intentionally accepts only the one exact candidate-v1 context row; future contexts require a separately reviewed implementation change.",
+    "The inventory summary exits 1 because N02 remains open; green tests and deterministic output do not raise that claim ceiling.",
+    "Warnings from dormant typed CLI and newly deauthorized agent-role source remain outside this lease.",
+    "This WorkerResult is not independent review or root acceptance."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

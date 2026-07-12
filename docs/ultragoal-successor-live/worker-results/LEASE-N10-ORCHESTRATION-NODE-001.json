@@ -1,0 +1,310 @@
+{
+  "worker": "/root/n10_orchestration",
+  "lease_id": "LEASE-N10-ORCHESTRATION-NODE-001",
+  "context_id": "sha256:553a758eb51a14a5353773ef471162e76e1f6fdf79927749ce4e478f9ac47b97",
+  "candidate_identity": {
+    "candidate_id": "sha256:713623ba225dfafdd4bb65e7c919f5b4cd90e4128f8ea0fbf9c3bef790076c49",
+    "context_id": "sha256:553a758eb51a14a5353773ef471162e76e1f6fdf79927749ce4e478f9ac47b97",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "status_sha256_before_result": "4688c4711d1910d09689ad1db2934b19c1c9b0ec523f88596a59bd3454391c79",
+    "untracked_sha256_before_result": "bc8c69b5cf9ca9db8f4186ff7ce47f890066b678ffddd7eb1710d5c970617fef",
+    "artifact_set_sha256": "sha256:713623ba225dfafdd4bb65e7c919f5b4cd90e4128f8ea0fbf9c3bef790076c49",
+    "artifact_set_formula": "Sort artifacts by path; concatenate path, one TAB byte, sha256 without prefix, and one LF byte; SHA-256 the concatenation.",
+    "context_note": "LiveContext-v1 was rebuilt after the leased source, tests, focused suite, all-target check, clippy, and static controls froze and immediately before this self-referential WorkerResult was added. The protected .codex-worktree/env.sh file was not opened, read, hashed, or sourced."
+  },
+  "base_state": {
+    "node": "N10-ORCHESTRATION",
+    "implementation": "absent from root module wiring",
+    "dependencies": [
+      "N03-CLI-STATE",
+      "N06-ROUTINE",
+      "N09-AGENTS-REPO"
+    ],
+    "shared_authority": "retained by Ultra root"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "N10 typed orchestration kernel candidate only; no node closure, product journey, readiness, release, or completion.",
+    "artifact_count_excluding_result": 27,
+    "artifact_set_sha256": "sha256:713623ba225dfafdd4bb65e7c919f5b4cd90e4128f8ea0fbf9c3bef790076c49",
+    "total_bytes": 156442,
+    "total_lines": 4666,
+    "maximum_file_lines": 298,
+    "files_over_300_lines": 0,
+    "focused_tests": "82 passed; 0 failed",
+    "all_targets_check": "pass",
+    "clippy": "pass with pre-existing and concurrent warnings outside the leased N10 paths",
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "destructive_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/orchestration/effect.rs",
+    "validator/src/orchestration/engine.rs",
+    "validator/src/orchestration/engine_query.rs",
+    "validator/src/orchestration/error.rs",
+    "validator/src/orchestration/event.rs",
+    "validator/src/orchestration/graph.rs",
+    "validator/src/orchestration/lease.rs",
+    "validator/src/orchestration/mod.rs",
+    "validator/src/orchestration/model.rs",
+    "validator/src/orchestration/reconcile.rs",
+    "validator/src/orchestration/recovery.rs",
+    "validator/src/orchestration/replay.rs",
+    "validator/src/orchestration/scope.rs",
+    "validator/src/orchestration/scope_policy.rs",
+    "validator/src/orchestration/transition.rs",
+    "validator/src/orchestration/worker.rs",
+    "validator/tests/orchestration_contract.rs",
+    "validator/tests/orchestration_contract/blockers.rs",
+    "validator/tests/orchestration_contract/candidate_rebind.rs",
+    "validator/tests/orchestration_contract/effects.rs",
+    "validator/tests/orchestration_contract/graph.rs",
+    "validator/tests/orchestration_contract/leases.rs",
+    "validator/tests/orchestration_contract/reconciliation.rs",
+    "validator/tests/orchestration_contract/recovery.rs",
+    "validator/tests/orchestration_contract/security.rs",
+    "validator/tests/orchestration_contract/support.rs",
+    "validator/tests/orchestration_contract/worker_results.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-001.json"
+  ],
+  "touched_semantics": [
+    "orchestration::binding",
+    "orchestration::blockers",
+    "orchestration::effects",
+    "orchestration::events",
+    "orchestration::graph",
+    "orchestration::leases",
+    "orchestration::planning",
+    "orchestration::reconciliation",
+    "orchestration::recovery",
+    "orchestration::replay",
+    "orchestration::reviews",
+    "orchestration::scopes",
+    "orchestration::transitions",
+    "orchestration::worker_results"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "validator/tests/orchestration_contract.rs",
+    "validator/tests/orchestration_contract/blockers.rs",
+    "validator/tests/orchestration_contract/candidate_rebind.rs",
+    "validator/tests/orchestration_contract/effects.rs",
+    "validator/tests/orchestration_contract/graph.rs",
+    "validator/tests/orchestration_contract/leases.rs",
+    "validator/tests/orchestration_contract/reconciliation.rs",
+    "validator/tests/orchestration_contract/recovery.rs",
+    "validator/tests/orchestration_contract/security.rs",
+    "validator/tests/orchestration_contract/support.rs",
+    "validator/tests/orchestration_contract/worker_results.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "lease-n10-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "lease-n10-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "lease-n10-cargo",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "destructive",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "target": "root-authority",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "HUL-ORCHESTRATION-001",
+    "HUL-SECURITY-001",
+    "HUL-STATE-001",
+    "REQ-ORCH-001",
+    "REQ-ORCH-002",
+    "REQ-ORCH-003",
+    "REQ-ORCH-004",
+    "REQ-ORCH-005",
+    "REQ-ORCH-006",
+    "REQ-ORCH-007",
+    "REQ-ORCH-008"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE",
+    "N06-ROUTINE",
+    "N09-AGENTS-REPO"
+  ],
+  "changes": [
+    {
+      "area": "adaptive work graph",
+      "rationale": "Derives dependency-closed work from current package data, rejects cycles and unknown nodes, localizes missing-tool blocks, and selects deterministic maximal conflict-free fanout without historical lane identifiers."
+    },
+    {
+      "area": "run-scoped leases",
+      "rationale": "Enforces candidate/context and prerequisite evidence plus disjoint path, semantic-symbol, generated-output, fixture, and effect ownership before work starts."
+    },
+    {
+      "area": "root authority and WorkerResult-v1",
+      "rationale": "Matches the adopted schema top-level exactly, rejects stale or escaped results, requires the exact no-claim statement, and separates independent review, acceptance proposal, and root integration."
+    },
+    {
+      "area": "immutable recovery and reconciliation",
+      "rationale": "Hash-chained events replay deterministically, retries are bounded, interrupted roots suppress effects, disjoint reviewed batches rebind once, and all other active leases are explicitly invalidated."
+    },
+    {
+      "area": "blocker taxonomy",
+      "rationale": "Ordinary failures repair or replan while only external authority, unavailable required access, and destructive decisions stop dependent work; independent ready nodes remain visible."
+    },
+    {
+      "area": "effect confinement",
+      "rationale": "The injected EffectSink is the only mutation boundary; pure plan, events, recovery, and replay paths cannot receive it, and effects require a current running unexpired lease with an exact grant."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n10-node001-target cargo test --manifest-path validator/Cargo.toml --test orchestration_contract --locked --offline --quiet",
+      "result": "pass",
+      "summary": "82 passed; 0 failed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n10-node001-target cargo check --manifest-path validator/Cargo.toml --all-targets --locked --offline --quiet",
+      "result": "pass",
+      "summary": "All targets compiled; warnings were pre-existing or concurrent outside N10."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n10-node001-target cargo clippy --manifest-path validator/Cargo.toml --test orchestration_contract --locked --offline --message-format short",
+      "result": "pass",
+      "summary": "Focused clippy completed successfully."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hug-n10-node001-target cargo test --manifest-path validator/Cargo.toml --locked --offline -p ultragoal --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "LiveContext-v1 sha256:553a758eb51a14a5353773ef471162e76e1f6fdf79927749ce4e478f9ac47b97."
+    },
+    {
+      "command": "Static scan for production unwrap, expect, panic, unreachable, todo, unimplemented, unsafe, direct filesystem/process/network clients, fixed lane IDs, and historical lane registry",
+      "result": "pass",
+      "summary": "No matches in validator/src/orchestration."
+    },
+    {
+      "command": "Exact artifact digest, byte, line, maximum-size, and ordered artifact-set reconciliation",
+      "result": "pass",
+      "summary": "27 artifacts, 156442 bytes, 4666 lines, maximum 298 lines, set sha256:713623ba225dfafdd4bb65e7c919f5b4cd90e4128f8ea0fbf9c3bef790076c49."
+    }
+  ],
+  "artifacts": [
+    {"path":"validator/src/orchestration/effect.rs","sha256":"sha256:8b1ee0966e04f0aae8b8749d6a88deb8266ef9e69c2bb5dcd27f0103215877ae","byte_length":1864},
+    {"path":"validator/src/orchestration/engine.rs","sha256":"sha256:339a7ada44ea2123f99b318a7651908922bc9f5621c54a5a9e8124a3e49e7a50","byte_length":7522},
+    {"path":"validator/src/orchestration/engine_query.rs","sha256":"sha256:784acba762893e57d67771a1cc9fe4e0250d3b7c6f216a8518a5210b5c8ff25a","byte_length":2293},
+    {"path":"validator/src/orchestration/error.rs","sha256":"sha256:aee3d14728dd091c3a4a2c740c3b5d012cbdf641002732c0e2f26c3eebf84746","byte_length":3684},
+    {"path":"validator/src/orchestration/event.rs","sha256":"sha256:b480377e682521933cadc60b382ccf12368c280a31355865373ccbc6b95e7f2e","byte_length":4519},
+    {"path":"validator/src/orchestration/graph.rs","sha256":"sha256:54c7d8ecafbdbfa3fb8fd5379f189c71ad5232388016bd9d54090b751fe9f8de","byte_length":5469},
+    {"path":"validator/src/orchestration/lease.rs","sha256":"sha256:bd00b476344167de3be39c25c5bd34878014db962374301dc36441b18ea6b32c","byte_length":5349},
+    {"path":"validator/src/orchestration/mod.rs","sha256":"sha256:6c2732a1ba1fd56fefeac4a0163a9797e075f447d76d96bb13dc2ec44b438b94","byte_length":1251},
+    {"path":"validator/src/orchestration/model.rs","sha256":"sha256:57935b61dbb6fc2b52047960acdaa4f1e4222fbc4fa80073d750552141a0d8b9","byte_length":6543},
+    {"path":"validator/src/orchestration/reconcile.rs","sha256":"sha256:ac77f0435b57e3a66885cf63bcbd2a0d0375490b097379ac89908e321c3431b1","byte_length":8353},
+    {"path":"validator/src/orchestration/recovery.rs","sha256":"sha256:7cb26de8ba75a514062684dd73629fac3c4135ad22d04612d4cad78c1b028348","byte_length":5474},
+    {"path":"validator/src/orchestration/replay.rs","sha256":"sha256:f2dcffc5432685adb5c2127a177f8292b66321750bee3566270b197f254f70fb","byte_length":8559},
+    {"path":"validator/src/orchestration/scope.rs","sha256":"sha256:651298f728005dd1f83a0cb1d0a6eec45ab836b1e5eb856651d43cfb526af5d1","byte_length":6865},
+    {"path":"validator/src/orchestration/scope_policy.rs","sha256":"sha256:a928a9b0cf8f7b053d36f3214a487969322a56fd9fc18485b486e250d21a2703","byte_length":4511},
+    {"path":"validator/src/orchestration/transition.rs","sha256":"sha256:9657c685b6de25512e70b3b48d5161682fd4e5d44448955fd482f9617bebd690","byte_length":11466},
+    {"path":"validator/src/orchestration/worker.rs","sha256":"sha256:9c0785e4409a4e485ad987794f9f525a9d853f638f1048613347aec11b1547d2","byte_length":9978},
+    {"path":"validator/tests/orchestration_contract.rs","sha256":"sha256:ad6dedd7fe7aa340f1667751830461626dc68aacae3e3b6500c159959176df51","byte_length":734},
+    {"path":"validator/tests/orchestration_contract/blockers.rs","sha256":"sha256:59baa415aa9e50d2639426b8f5944ba77dbbe705dcdfc5ea1cacc40ad2c20370","byte_length":3513},
+    {"path":"validator/tests/orchestration_contract/candidate_rebind.rs","sha256":"sha256:28a9687d0ed7239974c325f9af522012c4cfb4850d7eb4980b1cb4877ec7a0e2","byte_length":5776},
+    {"path":"validator/tests/orchestration_contract/effects.rs","sha256":"sha256:04f9a65eb379a6cf684182447f7ccbf6993e8bbb5c2197131fc095d04a088103","byte_length":4926},
+    {"path":"validator/tests/orchestration_contract/graph.rs","sha256":"sha256:ee33a4ec43adf2a4df11f252066ee0b977b4857d8e650e2c41e25acd1dd6f536","byte_length":4871},
+    {"path":"validator/tests/orchestration_contract/leases.rs","sha256":"sha256:748a8e35f52e2796d0a29afcde9094fd7754ab8b78e91c64960f4b920c6d3f00","byte_length":7112},
+    {"path":"validator/tests/orchestration_contract/reconciliation.rs","sha256":"sha256:8de9e8e5481d9527e4d936317f7d6bfd50a3018fad42f866fd4b731ed1224e45","byte_length":4269},
+    {"path":"validator/tests/orchestration_contract/recovery.rs","sha256":"sha256:5fbcfdec2b89276dd736c2309081a41dfb1dd85a3c33677775522e1a8d453842","byte_length":8530},
+    {"path":"validator/tests/orchestration_contract/security.rs","sha256":"sha256:5ff2c378f6608046eedcf997e52f1a38000c353b6058f32399dcf46887b55fa3","byte_length":4782},
+    {"path":"validator/tests/orchestration_contract/support.rs","sha256":"sha256:73a491188ac0a6a62deaa32c35f927761adee8ed7ec347a4941204865492adb6","byte_length":10715},
+    {"path":"validator/tests/orchestration_contract/worker_results.rs","sha256":"sha256:eb8eb3de971d469f188ff0c5514f86c0d98deb7f6d4057bf4b784492890d142c","byte_length":7514}
+  ],
+  "findings": [
+    {
+      "severity": "self-review-repaired",
+      "finding": "Interrupted-root effect authorization was fail-open before event append; the sink is now denied before invocation and covered by a mutation-count negative control."
+    },
+    {
+      "severity": "self-review-repaired",
+      "finding": "The initial recovery view lacked REQ-ORCH-008 stop/continue taxonomy; a typed dependency-closed blocker plan and false-pass matrix now cover it."
+    },
+    {
+      "severity": "independent-review-required",
+      "finding": "This exact artifact set requires a fresh independent N10 reviewer; the producer has not accepted its own work."
+    },
+    {
+      "severity": "integration-withheld",
+      "finding": "No root module, public command, package manifest, migration registry, claim, release, or shared state authority was changed by this worker."
+    }
+  ],
+  "unresolved_dependencies": [
+    "INDEPENDENT-N10-REVIEW",
+    "ROOT-N10-MODULE-WIRING",
+    "ROOT-HCT-STATE-ADAPTER",
+    "ROOT-PACKAGE-MANIFEST-INTEGRATION",
+    "N03-CLI-STATE-CURRENT-PROOF",
+    "N06-ROUTINE-CURRENT-PROOF",
+    "N09-AGENTS-REPO-CURRENT-PROOF",
+    "REPRESENTATIVE-RECOVERY-JOURNEY"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "independent N10 review",
+      "request": "Freeze and recompute result plus artifact-set identities, reproduce the 82-test suite, and attack stale binding, scope overlap, root-only effects, WorkerResult false-pass, review independence, batch rebind, replay, interruption, retry exhaustion, and blocker taxonomy."
+    },
+    {
+      "path": "validator/src/lib.rs",
+      "request": "After independent PASS, add pub mod orchestration without altering the N10 candidate bytes."
+    },
+    {
+      "path": "existing WorkerResult-v1 and HCT-STATE authority",
+      "request": "Bind this typed semantic profile to the adopted embedded WorkerResult-v1 schema and expose pure plan, recovery, event, and reconciliation views through existing inspect-state, next, and diagnose authority; create no duplicate public verb or schema."
+    },
+    {
+      "path": "plugin-manifest-draft.json",
+      "request": "After independent PASS and root reconciliation, add the exact accepted N10 source, tests, and WorkerResult resources using current digests."
+    },
+    {
+      "path": "root-owned persistence and effect adapter",
+      "request": "Bind immutable event persistence and effect execution to same-session HCT-CONTEXT, HCT-CAPTURE, and typed state authority. Reads, plan, replay, recovery, and query must stay zero-write; no hidden writer or stale debug binary."
+    },
+    {
+      "path": "N03-CLI-STATE, N06-ROUTINE, and N09-AGENTS-REPO",
+      "request": "Revalidate and reconcile the exact N10 dependencies before acceptance or representative orchestration proof."
+    }
+  ],
+  "limitations": [
+    "The module is a root-wirable candidate and is not yet exported by validator/src/lib.rs.",
+    "Tests exercise the typed kernel and injected in-memory effect sink; they do not prove a persisted live orchestration run or supported-host product journey.",
+    "Artifact digests are carried into acceptance proposals, but live artifact dereference must be supplied by the accepted HCT-CAPTURE/root adapter before root acceptance.",
+    "The WorkerResult semantic profile is stricter than the adopted schema's generic nested object shapes; root must bind it to the existing schema authority rather than publish a second schema.",
+    "N03, N06, and N09 exact current completion evidence was not available to this worker and no dependent claim is raised.",
+    "No package, marketplace, install, cache, app-registry, Plugins UI, discovery, runtime, claim, release, Git, network, external-host, or destructive proof was performed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

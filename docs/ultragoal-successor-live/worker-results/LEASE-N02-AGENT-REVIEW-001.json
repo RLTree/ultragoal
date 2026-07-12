@@ -1,0 +1,491 @@
+{
+  "worker": "/root/n02_agent_migration_map",
+  "lease_id": "LEASE-N02-AGENT-REVIEW-001",
+  "context_id": "sha256:f5bb2beb422dcfdaade22239cc6d432c2ddf3551b2db12eb19e65129c6ac5551",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "dirty": true,
+    "status_sha256_before_result": "9c9edbbfe922d9d2e124e3107e3d7937f92d0f29c96e9913cd772767323eba73",
+    "tracked_leased_diff_sha256": "b99dffb6976d84ba5f01930d4d3ba0402651feb83e8fb7fcc0c771d58a647399",
+    "leased_candidate_set_sha256": "22418f6620e3a31991f05f2970c128c4f5b3b09635f6d20b48663160681aa98d",
+    "staged_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "context_source": {
+      "path": "docs/ultragoal-successor-live/worker-results/LEASE-N02-CONTEXT-SCOPE-001.json",
+      "sha256": "sha256:bcf9c3da5d66759de79880fc8c17eea32bb67bc72fd9ebe4159892a027eb2e73",
+      "note": "Root supplied this frozen context witness; it is routing context, not live proof for this later source state."
+    },
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "lease_scope": [
+      "validator/src/review/round/**",
+      "validator/src/review/materiality.rs",
+      "schemas/review-round-receipt.schema.json",
+      "schemas/review-materiality-gate.schema.json",
+      "fixtures/review-round/**",
+      "materiality-specific fixtures",
+      "validator/src/self_tests/review/**",
+      "this WorkerResult"
+    ],
+    "predecessor_review_authority": {
+      "review_stage": "sign_off",
+      "status": "pass",
+      "reviewer_result": "SIGN_OFF",
+      "materiality_output_authorized_signoff": true,
+      "runtime_configuration": "hard-coded model gpt-5.5 and reasoning effort high",
+      "identity": "four duplicated persona, prompt, and custom-agent identities"
+    },
+    "root_owned_dependency": "validator/src/agent_roles.rs and the six .codex/agents manifests were adopted by root and consumed read-only by this lease.",
+    "root_owned_surfaces_not_modified": [
+      "validator/src/agent_roles.rs and validator/src/agent_manifest.rs",
+      ".codex/agents/**",
+      "plugin and command registries",
+      "claim_semantics and root claim state",
+      "migration registries and package manifests",
+      "Cargo manifests and dependency graph",
+      "release, readiness, and completion authority"
+    ],
+    "concurrent_dirt_policy": "All user-owned, root-owned, and other-worker paths were preserved; no merge, rebase, staging, commit, or destructive action was performed."
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "acceptance_ceiling": "Canonical static review enforcement, schemas, and fixtures only; no host custom-agent discovery, reviewer runtime configuration, readiness, release, or N02 completion claim.",
+    "canonical_review_role_count": 4,
+    "review_receipt_schema": "harness-ultragoal.review-round-receipt.v2",
+    "materiality_schema": "harness-ultragoal.review-materiality-gate.v2",
+    "review_stage": "falsification",
+    "review_authority": "falsification_evidence_only",
+    "reviewer_may_raise_claim_ceiling": false,
+    "materiality_decision_authority": "deterministic_rust",
+    "runtime_metadata_modes": [
+      "host_exposed_values_bound",
+      "unavailable_no_runtime_configuration_claim"
+    ],
+    "explicitly_unsupported_claims_added": [
+      "reviewer_runtime_configuration",
+      "custom_agent_runtime_discovery"
+    ],
+    "implementation_file_count_excluding_result": 41,
+    "rust_file_count": 25,
+    "schema_file_count": 2,
+    "fixture_file_count": 14,
+    "candidate_lines_excluding_result": 6401,
+    "candidate_bytes_excluding_result": 224451,
+    "maximum_touched_rust_file_lines": 258,
+    "touched_rust_files_over_300_lines": 0,
+    "tracked_diff_added_lines": 1092,
+    "tracked_diff_deleted_lines": 936,
+    "untracked_rust_added_lines": 191,
+    "focused_review_tests_before_concurrent_compile_race": "36 passed; 0 failed; single-threaded",
+    "broader_review_round_tests_before_concurrent_compile_race": "24 passed; 0 failed",
+    "root_applied_post_freeze_integration": {
+      "scope": "Three root-owned red packets and templates/RED_FIXTURES.json only; not worker-touched artifacts",
+      "stale_packet_digest": "sha256:88ab6e08de4c15b0e9952e47143d54a20942f1849b67a18bf40c0a4694f3be44",
+      "stale_captured_packet_digest": "sha256:de0d6564a8bc25aa6657aa843574fd346c56cc3104cc77928c4870650d005bca",
+      "disk_synced_packet_digest": "sha256:00ed7282a88a1bcc03f9a7762cebbcc637ba91f094add00e15460b7c3e703c02",
+      "root_reported_checks": "live packet and catalog checks pass"
+    },
+    "network_performed": false,
+    "external_writes_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/review/materiality.rs",
+    "validator/src/review/round/anchor/values.rs",
+    "validator/src/review/round/claim/ceiling.rs",
+    "validator/src/review/round/config.rs",
+    "validator/src/review/round/mod.rs",
+    "validator/src/review/round/personas.rs",
+    "validator/src/review/round/product/fitness/mod.rs",
+    "validator/src/review/round/registry.rs",
+    "validator/src/review/round/report.rs",
+    "validator/src/review/round/row/policy.rs",
+    "validator/src/review/round/runtime.rs",
+    "validator/src/review/round/spawn/receipts.rs",
+    "schemas/review-round-receipt.schema.json",
+    "schemas/review-materiality-gate.schema.json",
+    "fixtures/review-round/anchors/live-registry-exposure.json",
+    "fixtures/review-round/anchors/live-registry-exposure-stale.json",
+    "fixtures/review-round/anchors/live-registry-exposure-stale-captured-at.json",
+    "fixtures/review-round/anchors/live-registry-exposure-disk-synced-active-stale.json",
+    "fixtures/review-round/anchors/product-fitness-receipt.json",
+    "fixtures/review-round/prompt-packets/contract_claim_falsifier.md",
+    "fixtures/review-round/prompt-packets/orchestration_recovery_falsifier.md",
+    "fixtures/review-round/prompt-packets/security_trust_boundary_falsifier.md",
+    "fixtures/review-round/prompt-packets/product_simplicity_falsifier.md",
+    "fixtures/review-round/valid/review-round-receipt.json",
+    "fixtures/review-materiality/valid/advisory-review-allowed.json",
+    "fixtures/review-materiality/valid/blocked-before-review.json",
+    "fixtures/review-materiality/valid/delta-review-allowed.json",
+    "fixtures/review-materiality/valid/full-scope-material-review-required.json",
+    "validator/src/self_tests/review/archive/materiality.rs",
+    "validator/src/self_tests/review/claim_ceiling.rs",
+    "validator/src/self_tests/review/materiality.rs",
+    "validator/src/self_tests/review/mod.rs",
+    "validator/src/self_tests/review/product/fitness.rs",
+    "validator/src/self_tests/review/red_fixture.rs",
+    "validator/src/self_tests/review/registry.rs",
+    "validator/src/self_tests/review/root.rs",
+    "validator/src/self_tests/review/round_core.rs",
+    "validator/src/self_tests/review/row_policy.rs",
+    "validator/src/self_tests/review/runtime.rs",
+    "validator/src/self_tests/review/semantic_claim_ceiling_edges.rs",
+    "validator/src/self_tests/review/spawn.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-REVIEW-001.json"
+  ],
+  "touched_semantics": [
+    "four review identities project from the root-adopted canonical AgentRole table and .codex/agents manifests",
+    "legacy persona, prompt-authority, custom-agent-authority, verdict, model, and reasoning fields are rejected by v2 receipt schemas",
+    "review output is falsification evidence only and cannot approve signoff, raise materiality, or raise claim ceilings",
+    "materiality decisions remain deterministic Rust authority and every materiality result is non-signoff-capable",
+    "runtime metadata is recorded only when host-exposed; unavailable metadata cannot carry inferred model, mode, or reasoning values",
+    "mixed or unavailable runtime metadata lowers the receipt ceiling and keeps reviewer_runtime_configuration unsupported",
+    "repository manifest identity does not prove current host discovery; custom_agent_runtime_discovery remains unsupported",
+    "canonical agent manifest path and live digest replace duplicated prompt and custom-agent identity anchors",
+    "product-journey review remains a separate lower-only falsification disposition and cannot substitute generic approval",
+    "canonical negative registry anchors isolate stale session, stale capture time, and disk-sync-without-exposure failures"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/review-round/valid/review-round-receipt.json",
+    "fixtures/review-round/anchors/live-registry-exposure.json",
+    "fixtures/review-round/anchors/live-registry-exposure-stale.json",
+    "fixtures/review-round/anchors/live-registry-exposure-stale-captured-at.json",
+    "fixtures/review-round/anchors/live-registry-exposure-disk-synced-active-stale.json",
+    "fixtures/review-round/anchors/product-fitness-receipt.json",
+    "fixtures/review-round/prompt-packets/contract_claim_falsifier.md",
+    "fixtures/review-round/prompt-packets/orchestration_recovery_falsifier.md",
+    "fixtures/review-round/prompt-packets/security_trust_boundary_falsifier.md",
+    "fixtures/review-round/prompt-packets/product_simplicity_falsifier.md",
+    "fixtures/review-materiality/valid/advisory-review-allowed.json",
+    "fixtures/review-materiality/valid/blocked-before-review.json",
+    "fixtures/review-materiality/valid/delta-review-allowed.json",
+    "fixtures/review-materiality/valid/full-scope-material-review-required.json"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Forty-one leased implementation/schema/fixture/test files and this WorkerResult only"
+    },
+    {
+      "class": "local-build-artifact",
+      "scope": "Normal ignored Cargo target output from checks and tests"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "Isolated test fixtures created and cleaned by existing review self-tests"
+    },
+    {
+      "class": "git",
+      "scope": "Read-only repository identity, status, diff, and digest commands"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PLUGIN-006",
+    "REQ-ORCH-003",
+    "REQ-SECURITY-006",
+    "REQ-GOAL-003",
+    "REQ-PROOF-001",
+    "REQ-PROOF-007"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N10-ORCHESTRATION",
+    "N12-CLAIMS"
+  ],
+  "changes": [
+    {
+      "area": "canonical role identity",
+      "result": "Replaced four duplicated persona/prompt/custom-agent identity authorities with four read-only roles projected from the root-adopted six-role AgentRole table and current .codex/agents manifests."
+    },
+    {
+      "area": "review authority",
+      "result": "Changed the review round from signoff to falsification, renamed pass to evidence_complete, and made reviewer outputs lower-only evidence that cannot approve or raise claims."
+    },
+    {
+      "area": "runtime metadata ceiling",
+      "result": "Removed inferred model and reasoning constants. Added typed host_exposed and unavailable branches, exact row/spawn binding, conservative mixed-exposure handling, and an explicit unsupported runtime-configuration claim."
+    },
+    {
+      "area": "materiality authority",
+      "result": "Moved decision authority explicitly to deterministic Rust, canonicalized reviewer roles, and made full, delta, advisory, and blocked outputs all non-signoff-capable."
+    },
+    {
+      "area": "schemas and candidate fixture",
+      "result": "Introduced receipt v2 and materiality v2 schemas, canonical manifest/digest anchors, lower-only assessments, updated prompt packets, and a candidate fixture that withholds host discovery and runtime claims."
+    },
+    {
+      "area": "false-pass controls",
+      "result": "Added or migrated controls for old path substitution, digest substitution, inferred hidden model values, missing exposed metadata, generic approval, reviewer claim raising, stale sessions, stale capture time, and disk sync without active exposure."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo check --locked --offline -p ultragoal --lib",
+      "result": "pass_before_concurrent_command_inventory_race",
+      "summary": "The final production review source compiled at its frozen digests; only unrelated dormant CLI and inventory warnings were emitted."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal self_tests::review --lib -- --test-threads=1",
+      "result": "pass_36_of_36_before_final_negative_anchor_test_addition",
+      "summary": "All review, materiality, runtime, role identity, product disposition, claim ceiling, schema/fixture, report, spawn, registry, and red-observation self-tests passed on the final production source and primary v2 fixture."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal review_round --lib",
+      "result": "pass_24_of_24_before_concurrent_command_inventory_race",
+      "summary": "The broader review-round command, audit, observability, parser, schema, and review filters passed."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal canonical_review_round_and_materiality_fixtures_pass_current_validation --lib",
+      "result": "pass",
+      "summary": "The canonical v2 review-round fixture and all four materiality fixtures passed current schema and semantic validation."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check over the twenty-five leased Rust files; git diff --check over every leased path",
+      "result": "pass",
+      "summary": "All leased Rust files were formatted and the leased diff had no whitespace errors."
+    },
+    {
+      "command": "jq empty over every changed schema and JSON fixture; jq causal-shape assertions over three negative registry anchors",
+      "result": "pass",
+      "summary": "All JSON parsed; canonical role sets, stale session, stale capture time, and disk-sync-without-exposure predicates matched their intended causal controls."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal canonical_registry_negative_anchors_preserve_their_causal_first_failure --lib -- --exact --nocapture",
+      "result": "concurrent_out_of_lease_compile_blocker",
+      "summary": "The source-frozen test could not compile because COMMAND-INVENTORY-DEAUTH concurrently removed or hid audit observability registry modules, producing 53 unrelated errors under validator/src/audit/observability/registry/tests."
+    },
+    {
+      "command": "SHA-256, byte, line, candidate-set, status, tracked-diff, and staged-diff reconciliation",
+      "result": "pass",
+      "summary": "Forty-one implementation files were bound to candidate-set sha256:22418f6620e3a31991f05f2970c128c4f5b3b09635f6d20b48663160681aa98d; HEAD/tree were unchanged and staged diff was empty."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/review/materiality.rs",
+      "sha256": "sha256:3a0d78238246a0e3a4de8cacf86e6468f461ee9ac1261644aa4afcaf33bdd768",
+      "bytes": 7232,
+      "lines": 220
+    },
+    {
+      "path": "validator/src/review/round/anchor/values.rs",
+      "sha256": "sha256:2e611eaa1ade2edc82bcd634c6ede00dbfe0d796dffc521b8abe969fe8758c26",
+      "bytes": 7731,
+      "lines": 234
+    },
+    {
+      "path": "validator/src/review/round/claim/ceiling.rs",
+      "sha256": "sha256:a25545cbd419745f039d404f11451939a1faf206b46b1fb1a0f64cc5bc0bb0f3",
+      "bytes": 8589,
+      "lines": 258
+    },
+    {
+      "path": "validator/src/review/round/config.rs",
+      "sha256": "sha256:10eac72249bbc97411b22cf53816452e3ad837969d3111115099b036ec2909ad",
+      "bytes": 2380,
+      "lines": 59
+    },
+    {
+      "path": "validator/src/review/round/mod.rs",
+      "sha256": "sha256:743b22f0b7d0b3e601e0220b4fcf2bc7a131db2a0b6216a171a2906630cd0cb6",
+      "bytes": 3979,
+      "lines": 125
+    },
+    {
+      "path": "validator/src/review/round/personas.rs",
+      "sha256": "sha256:645431d70ca3ef7fab0af0ed5c22b0f6cb782d07eb45b494b61813df1ad0e1c6",
+      "bytes": 5158,
+      "lines": 160
+    },
+    {
+      "path": "validator/src/review/round/product/fitness/mod.rs",
+      "sha256": "sha256:62cf16f739f2734c7133e6e9d2b9bb2435808a0077a176f4c3258c393b998b4b",
+      "bytes": 5163,
+      "lines": 170
+    },
+    {
+      "path": "validator/src/review/round/registry.rs",
+      "sha256": "sha256:a2dc250080311df4247ac36d1c678380ceb19260ca925a7b28738bc0dfc8336e",
+      "bytes": 6600,
+      "lines": 189
+    },
+    {
+      "path": "validator/src/review/round/report.rs",
+      "sha256": "sha256:dbf8780c5a83dde8fec9c3cef43dd3eed506ae4a252ae852f2eb763b83af063e",
+      "bytes": 4701,
+      "lines": 157
+    },
+    {
+      "path": "validator/src/review/round/row/policy.rs",
+      "sha256": "sha256:c0631da2bf810065b26637b72bccf2fc7a905e6d2fb02afbf38b7e29c0750e5b",
+      "bytes": 3457,
+      "lines": 109
+    },
+    {
+      "path": "validator/src/review/round/runtime.rs",
+      "sha256": "sha256:501dcb76685a40a033cc32a9cbda50b4a2c68e1df2735f9d859f9e08046ff960",
+      "bytes": 3754,
+      "lines": 113
+    },
+    {
+      "path": "validator/src/review/round/spawn/receipts.rs",
+      "sha256": "sha256:ebd09fa12378785abcd8daf1616ae6709803810bc67355a8586ab10f1389561a",
+      "bytes": 1728,
+      "lines": 49
+    },
+    {
+      "path": "schemas/review-round-receipt.schema.json",
+      "sha256": "sha256:b95b780d7c23a038f818d3614f222a38c32b80bf79eb40a07952e35dcf91e81c",
+      "bytes": 16202,
+      "lines": 674
+    },
+    {
+      "path": "schemas/review-materiality-gate.schema.json",
+      "sha256": "sha256:42c1093c41eac0319bfeb5f7189c9ec3f661158e4940c86c54cb47b728cd9b7f",
+      "bytes": 3588,
+      "lines": 151
+    },
+    {
+      "path": "fixtures/review-round/valid/review-round-receipt.json",
+      "sha256": "sha256:ec4ed0287326af71f61dd4196a8fafc4918bea46a86b41d6d45bdb432a5c7db7",
+      "bytes": 42945,
+      "lines": 1000
+    },
+    {
+      "path": "fixtures/review-round/anchors/live-registry-exposure.json",
+      "sha256": "sha256:f266f2966c3ee0a5ce6e125cddbbcb8ec7a89bde0a9c775ef134d6c784b2af32",
+      "bytes": 1620,
+      "lines": 41
+    },
+    {
+      "path": "fixtures/review-round/anchors/live-registry-exposure-stale.json",
+      "sha256": "sha256:1188f1a7fb24554335fb5ab96a7301f79416bbeed6a2c85f11e7086070569db8",
+      "bytes": 1623,
+      "lines": 41
+    },
+    {
+      "path": "fixtures/review-round/anchors/live-registry-exposure-stale-captured-at.json",
+      "sha256": "sha256:f75afccee3060b11e5e39d1703029b37428e41975a777bd11b977e32cef6ff29",
+      "bytes": 1620,
+      "lines": 41
+    },
+    {
+      "path": "fixtures/review-round/anchors/live-registry-exposure-disk-synced-active-stale.json",
+      "sha256": "sha256:10e371c1d72679cc04a3ad123d864eebaa3b613ec21487cd55bc62b8d036d60f",
+      "bytes": 1896,
+      "lines": 49
+    },
+    {
+      "path": "validator/src/self_tests/review/runtime.rs",
+      "sha256": "sha256:b3a56604b74c45704a5dc6154ce79c2c774f1d414670bc9c20991a4573e9df78",
+      "bytes": 2605,
+      "lines": 78
+    },
+    {
+      "path": "validator/src/self_tests/review/registry.rs",
+      "sha256": "sha256:b4fa6814f2b17b5b924b822d766d378ac1c5f7a848b3b9e88ed6e242bcbb5ede",
+      "bytes": 7249,
+      "lines": 196
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-N02-AGENT-REVIEW-001",
+      "severity": "root_reconciliation_required",
+      "summary": "Compatibility-only config names remain because root-owned claim_semantics/plugin_policy and command receipt tests still consume PERSONAS, persona_spec, prompt_path, and custom_path.",
+      "evidence": [
+        "validator/src/claim_semantics/plugin_policy/mod.rs",
+        "validator/src/self_tests/command/round_receipts.rs"
+      ]
+    },
+    {
+      "id": "F-N02-AGENT-REVIEW-002",
+      "severity": "claim_ceiling_lowered",
+      "summary": "The current live host custom-agent discovery and role-selecting spawn surfaces were not exposed to this worker; repository manifests and fixture registry rows cannot prove runtime discovery.",
+      "evidence": [
+        "fixtures/review-round/valid/review-round-receipt.json#/claim_ceiling/unsupported",
+        "validator/src/review/round/claim/ceiling.rs"
+      ]
+    },
+    {
+      "id": "F-N02-AGENT-REVIEW-003",
+      "severity": "root_reconciliation_required",
+      "summary": "Legacy-named prompt/report fixture paths remain referenced by root-owned package manifests and package fixture inventories, so renaming them inside this lease would create an unauthorized cross-authority cascade.",
+      "evidence": [
+        "plugin-manifest-draft.json",
+        "fixtures/valid/minimal-goal-run.json",
+        "fixtures/review-round/valid/review-round-receipt.json"
+      ]
+    },
+    {
+      "id": "F-N02-AGENT-REVIEW-004",
+      "severity": "resolved_by_root_post_freeze",
+      "summary": "Root atomically adopted the three canonical negative-anchor digests in their red packets and refreshed templates/RED_FIXTURES.json; root reported live packet and catalog checks passing.",
+      "evidence": [
+        "fixtures/red/review-round-stale-live-registry-exposure.json",
+        "fixtures/red/review-round-live-registry-stale-captured-at.json",
+        "fixtures/red/review-round-disk-synced-active-registry-stale.json"
+      ]
+    },
+    {
+      "id": "F-N02-AGENT-REVIEW-005",
+      "severity": "concurrent_integration_blocker",
+      "summary": "After the leased source froze, concurrent COMMAND-INVENTORY-DEAUTH edits caused 53 unrelated audit observability registry test compile errors and prevented a final post-anchor Rust rerun.",
+      "evidence": [
+        "validator/src/audit/observability/registry/tests/proof/edges.rs",
+        "validator/src/audit/observability/registry/tests/shape/commands.rs"
+      ]
+    }
+  ],
+  "unresolved_dependencies": [
+    "Root must reconcile compatibility consumers before removing the final config aliases.",
+    "Root must route or retire the legacy multi_agent_v1 registry and spawn interface under the supported current product surface.",
+    "Root must update package-manifest and package-fixture inventories if canonical prompt/report fixture filenames are adopted.",
+    "Root must restore the concurrent command-inventory observability compile boundary and rerun the dependency-closed review and red-fixture tests.",
+    "Independent review and root acceptance remain required."
+  ],
+  "requested_root_changes": [
+    {
+      "area": "compatibility aliases",
+      "action": "Migrate claim_semantics/plugin_policy and self_tests/command/round_receipts to REVIEW_ROLES, review_role_spec, agent_manifest_path, and prompt_packet, then remove PERSONAS, persona_spec, prompt_path, and custom_path from review config."
+    },
+    {
+      "area": "runtime discovery interface",
+      "action": "Either bind registry/spawn receipts to a supported current host surface with real runtime evidence or retain custom_agent_runtime_discovery as unsupported; do not promote fixture registry rows into live proof."
+    },
+    {
+      "area": "fixture path migration",
+      "action": "If legacy prompt/report filenames are retired, update plugin-manifest-draft.json, all package fixture inventories, red packets, and the migration registry in one root-owned dependency-closed change."
+    },
+    {
+      "area": "integration verification",
+      "action": "After all N02 workers freeze and COMMAND-INVENTORY-DEAUTH restores compile, run focused review tests, review_round/materiality filters, red-fixture causal checks, all-target check, and the exact N02 inventory closure before any claim decision."
+    }
+  ],
+  "limitations": [
+    "This slice validates canonical repository role manifests and static fixture behavior; it does not prove that a new live Codex session discovers or can select those roles.",
+    "Model, mode, and reasoning effort were not exposed to this worker as receipt metadata and therefore remain unverified rather than inferred.",
+    "The existing multi_agent_v1 registry and spawn names remain a compatibility boundary outside this lease, not a newly proven current runtime surface.",
+    "The final negative-anchor Rust test was source-frozen but not executed because of the concurrent out-of-lease compile regression; only its read-only JSON causal-shape assertions passed.",
+    "Broad repository verification, N02 closure, claim decisions, readiness, release, and completion remain root-only and unclaimed.",
+    "This WorkerResult is not independent review or root acceptance."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

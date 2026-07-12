@@ -1,0 +1,261 @@
+{
+  "worker": "/root/n02_closeout_map",
+  "lease_id": "LEASE-N02-LEGACY-SKILL-ROUTES-002",
+  "context_id": "not-recomputed:stale-read-only-hct-inventory-example-rejected-current-routing-schema",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "status_sha256_before_result": "a5f40f30466c4fc96a78729c570623a5f9ef7defa0c15ea8ad2d38104cb37b75",
+    "worktree_diff_sha256_before_result": "a2a1ccc9da61948cdad0d3540c25a72c848fb837d0bf8dd4189a8af1de9004d9",
+    "staged_diff_sha256_before_result": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "leased_skill_set_sha256": "68f69ebc03f1a8200ae23e162612f349bc76ae1ceaf0092054d6925dc0a85fa9",
+    "read_only_metadata_set_sha256": "74564a9540ec63c406a8f0bfca92fca3725be5e59392e6dd2182e697b925c409",
+    "dirty": true,
+    "context_note": "HEAD and tree were unchanged and Git status, worktree diff, and staged diff hashes were stable across two consecutive captures before this self-referential result was added. A current LiveContext ID was not claimed because the existing read-only hct_inventory binary rejected the newer routing schema and rebuilding would write outside this lease."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "status_sha256_at_lease_start": "a87ee7c58467e85320dece02c20493c374fbe5cf3c9e63e16b66e5d11f8a9d1f",
+    "worktree_diff_sha256_at_lease_start": "ec9bc3a962a0404ef002ee32358c747cafa5a37c245f51773e60300cd9d45908",
+    "staged_diff_sha256_at_lease_start": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "legacy_skill_count": 14,
+    "preexisting_worker_result": "docs/ultragoal-successor-live/worker-results/LEASE-N02-LEGACY-SKILL-ROUTES-001.json",
+    "concurrent_dirt_policy": "All root-owned, canonical-skill, Rust, registry, plugin-manifest, metadata, and other-worker paths were preserved."
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged": true,
+    "exact_conflict_clause_count": 14,
+    "uniform_numbering_count": 14,
+    "exact_mapping_count": 14,
+    "explicit_only_metadata_count": 14,
+    "template_match_count": 14,
+    "known_distinct_token_conflict_count": 14,
+    "unknown_distinct_token_conflict_count": 14,
+    "canonical_distinct_token_conflict_count": 14,
+    "repeated_same_alias_route_count": 14,
+    "system_quick_validate_pass_count": 22,
+    "implementation_file_count": 14,
+    "total_candidate_bytes_excluding_result": 23017,
+    "total_candidate_lines_excluding_result": 224,
+    "maximum_file_lines": 16,
+    "files_over_300_lines": 0,
+    "openai_metadata_files_modified": false,
+    "worker_result_001_modified": false,
+    "git_operations_performed": false,
+    "network_performed": false,
+    "external_writes_performed": false
+  },
+  "touched_paths": [
+    "skills/agent-first-repo-init/SKILL.md",
+    "skills/agent-first-repo-retrofit/SKILL.md",
+    "skills/agent-improvement-loop/SKILL.md",
+    "skills/agent-observability-stack/SKILL.md",
+    "skills/agent-runtime-legibility/SKILL.md",
+    "skills/execplan-lane/SKILL.md",
+    "skills/fit-repo/SKILL.md",
+    "skills/harness-engineering/SKILL.md",
+    "skills/orchestrator-reconciler/SKILL.md",
+    "skills/product-cohesion-gate/SKILL.md",
+    "skills/product-fitness-gate/SKILL.md",
+    "skills/proof-gate/SKILL.md",
+    "skills/standards-gardener/SKILL.md",
+    "skills/ultragoal/SKILL.md",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-LEGACY-SKILL-ROUTES-002.json"
+  ],
+  "touched_semantics": [
+    "fail-closed detection of a second distinct explicit Harness Ultragoal skill token",
+    "fail-closed detection of multiple selected compatibility routes",
+    "same-alias repetition remains one compatibility route",
+    "uniform seven-step compatibility-wrapper ordering"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "Fourteen leased legacy SKILL.md files and this WorkerResult only"
+    },
+    {
+      "class": "external-process",
+      "scope": "Read-only Ruby, restored system quick_validate.py, content-lint, Git inspection, and digest commands"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-write",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PLUGIN-003",
+    "REQ-PLUGIN-004",
+    "REQ-PLUGIN-005"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N08-PLUGIN-PRODUCT",
+    "N14-MIGRATION"
+  ],
+  "changes": [
+    {
+      "area": "compatibility-route conflict detection",
+      "rationale": "Inserted the root-supplied sentence exactly once immediately before the canonical invoke step in every legacy wrapper."
+    },
+    {
+      "area": "uniform ordering",
+      "rationale": "Renumbered every wrapper from steps 1-6 to steps 1-7 without changing any other wrapper sentence or metadata file."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "Ruby source-grounded exact template, frontmatter, mapping, explicit-only metadata, token extraction, and resolver matrix over the fourteen live wrappers",
+      "result": "pass",
+      "summary": "14 mappings, 14 templates, 14 explicit-only policies, 42 distinct-token conflict cases, and 14 repeated-same-alias cases passed."
+    },
+    {
+      "command": "python3 /Users/terrynoblin/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/<each of 22 live skill directories>",
+      "result": "pass_22_of_22",
+      "summary": "The restored system validator returned Skill is valid for all twenty-two live skill directories."
+    },
+    {
+      "command": "Ruby comparison of fourteen current agents/openai.yaml digests against WorkerResult 001",
+      "result": "pass",
+      "summary": "All fourteen explicit-only metadata files remained byte-identical and WorkerResult 001 remained preserved."
+    },
+    {
+      "command": "bash /Users/terrynoblin/.codex/scripts/content-lint-deterministic.sh <fourteen leased SKILL.md files>",
+      "result": "pass",
+      "summary": "Layer 1 returned zero errors and zero warnings across fourteen inputs; manual cause/action and internal-terse review found no additional issue in the exact root-supplied clause."
+    },
+    {
+      "command": "shasum -a 256 plus wc -c and wc -l over the fourteen leased SKILL.md files",
+      "result": "pass",
+      "summary": "Fourteen exact artifacts total 23017 bytes and 224 lines; maximum file length is sixteen lines; ordered skill-set digest is sha256:68f69ebc03f1a8200ae23e162612f349bc76ae1ceaf0092054d6925dc0a85fa9."
+    },
+    {
+      "command": "git diff --check -- <fourteen leased SKILL.md files>",
+      "result": "pass",
+      "summary": "No whitespace errors were reported."
+    },
+    {
+      "command": "read-only stable Git status, worktree diff, staged diff, branch, HEAD, and tree capture",
+      "result": "pass",
+      "summary": "Two consecutive pre-result captures matched; HEAD/tree were unchanged and the staged diff was empty."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "skills/agent-first-repo-init/SKILL.md",
+      "sha256": "sha256:af106cacea2fc55bf52cd737f14698cccb828e6867c42576ed1afb799e0c3ddd",
+      "bytes": 1652,
+      "lines": 16
+    },
+    {
+      "path": "skills/agent-first-repo-retrofit/SKILL.md",
+      "sha256": "sha256:b2ffe01b14f64c493bd15c47e2db13bcf8149600e02d0b62ff834fa4d6aac838",
+      "bytes": 1660,
+      "lines": 16
+    },
+    {
+      "path": "skills/agent-improvement-loop/SKILL.md",
+      "sha256": "sha256:c404acdef0f047b81cb7b68a42ede75573feb3fdc56459d7553fad2e2dc826d6",
+      "bytes": 1672,
+      "lines": 16
+    },
+    {
+      "path": "skills/agent-observability-stack/SKILL.md",
+      "sha256": "sha256:41f2f1816f4f6a14f06d7376bf0d99f363e8270b9316db61776073e19a11248b",
+      "bytes": 1678,
+      "lines": 16
+    },
+    {
+      "path": "skills/agent-runtime-legibility/SKILL.md",
+      "sha256": "sha256:44259ec643dbbe48747c92aabf28084806274b29d1220401d2ec8b712dd7ae76",
+      "bytes": 1652,
+      "lines": 16
+    },
+    {
+      "path": "skills/execplan-lane/SKILL.md",
+      "sha256": "sha256:006bc523413a56a0149a9ad1a43e5eb5ab51f53b06fecfb2becbdaecaf800687",
+      "bytes": 1630,
+      "lines": 16
+    },
+    {
+      "path": "skills/fit-repo/SKILL.md",
+      "sha256": "sha256:7ba8b5ecf3102eb823e653bb25268b5ad5555e63c21021c3f216c5b31fa8251f",
+      "bytes": 1626,
+      "lines": 16
+    },
+    {
+      "path": "skills/harness-engineering/SKILL.md",
+      "sha256": "sha256:de126043c900ce360b4d95c6903d5bec60ec824c730359b7059d6d458b889e45",
+      "bytes": 1657,
+      "lines": 16
+    },
+    {
+      "path": "skills/orchestrator-reconciler/SKILL.md",
+      "sha256": "sha256:c4cc592caa975f62beb93ff9d788c1048f754598fc195c526d4d0ab664db8aca",
+      "bytes": 1638,
+      "lines": 16
+    },
+    {
+      "path": "skills/product-cohesion-gate/SKILL.md",
+      "sha256": "sha256:4be522f62cacad8ff3a43846cd6673d34a80366ac0a9ad10159d00e32cfa4907",
+      "bytes": 1625,
+      "lines": 16
+    },
+    {
+      "path": "skills/product-fitness-gate/SKILL.md",
+      "sha256": "sha256:1d427d6d8752fc71f11c1c1a13dbf977a6ea94920e403145c05aecd2930463bb",
+      "bytes": 1623,
+      "lines": 16
+    },
+    {
+      "path": "skills/proof-gate/SKILL.md",
+      "sha256": "sha256:55cea52c282f2ee3ad47de6f89a6165456795dc61954581c9e8624e9b525082c",
+      "bytes": 1603,
+      "lines": 16
+    },
+    {
+      "path": "skills/standards-gardener/SKILL.md",
+      "sha256": "sha256:a0f7fde1ce3bd5378d491d962ad58f0c44c5d19c0e58380f2c7fe04cdd2f39a9",
+      "bytes": 1664,
+      "lines": 16
+    },
+    {
+      "path": "skills/ultragoal/SKILL.md",
+      "sha256": "sha256:064648c92bb7c1c27660b4e495bc87eb99d44b1271e7e114ada1634162275cc9",
+      "bytes": 1637,
+      "lines": 16
+    }
+  ],
+  "findings": [],
+  "unresolved_dependencies": [
+    "Root must recompute a current LiveContext after integrating the newer routing schema.",
+    "Independent review and root acceptance/reconciliation remain required.",
+    "Compatibility equivalence, source adoption, host discovery, runtime routing, and retirement remain unproven."
+  ],
+  "requested_root_changes": [
+    {
+      "request": "Recompute candidate-bound LiveContext and independently review this corrective clause before root acceptance.",
+      "reason": "The worker preserved the exclusive write lease and did not rebuild or mutate shared Rust/tooling outputs."
+    }
+  ],
+  "limitations": [
+    "Validation is source-grounded wrapper and metadata proof only.",
+    "No canonical-skill behavior, host discovery, runtime invocation, compatibility equivalence, migration, or retirement claim is made.",
+    "No N02, product, readiness, release, or completion claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

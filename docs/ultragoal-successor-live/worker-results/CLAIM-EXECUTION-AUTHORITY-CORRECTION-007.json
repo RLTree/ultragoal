@@ -1,0 +1,98 @@
+{
+  "worker": "/root/claim_execution_authority_builder",
+  "lease_id": "CLAIM-EXECUTION-AUTHORITY-CORRECTION-007",
+  "context_id": "sha256:23b481ec64290c845c51d7bfdbaaec1615d448f6c89e52487a3eaf9414cc3517",
+  "candidate_identity": {
+    "candidate_id": "sha256:9685464f61a97110e7fe43de0b21634a40aa4059467d21e9b5e2b2a9cefabcb2",
+    "context_id": "sha256:23b481ec64290c845c51d7bfdbaaec1615d448f6c89e52487a3eaf9414cc3517",
+    "artifact_set_formula": "Sort path; append path, TAB, lowercase SHA-256 without prefix, LF; SHA-256 the concatenation.",
+    "artifact_set_sha256": "sha256:9685464f61a97110e7fe43de0b21634a40aa4059467d21e9b5e2b2a9cefabcb2",
+    "artifact_count": 17,
+    "artifact_total_bytes": 97888,
+    "artifact_total_lines": 2803,
+    "aggregate_authority": "This is a worker-local current snapshot only; root must independently bind or reject it."
+  },
+  "base_state": {
+    "status": "producer-synthesized-execution-rework-bound",
+    "root_decision": "docs/ultragoal-successor-live/root-decisions/CLAIM-AUTHORITY-PRODUCER-SYNTHESIS-REWORK.json",
+    "reviewed_candidate": "sha256:d912b28970843e74b22a44907fa111310ac0cde3f29601d879422726b507c669"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_check": "CLAIM-EXEC-AUTH-007",
+    "acceptance_status": "provisional",
+    "acceptance_ceiling": "private source claim-authority correction and focused contract proof only",
+    "root_acceptance": "withheld",
+    "public_integration": "not-asserted",
+    "passed_live_claim": "not-asserted",
+    "readiness": "withheld"
+  },
+  "touched_paths": [
+    "validator/src/claims/coverage.rs",
+    "validator/src/claims/decision.rs",
+    "validator/src/claims/evidence.rs",
+    "validator/src/claims/false_pass.rs",
+    "validator/src/claims/false_pass_guard.rs",
+    "validator/src/claims/false_pass_integrity.rs",
+    "validator/src/claims/false_pass_receipt.rs",
+    "validator/src/claims/mod.rs",
+    "validator/tests/claims_contract.rs",
+    "validator/tests/claims_contract/adoption.rs",
+    "validator/tests/claims_contract/exact_sets.rs",
+    "validator/tests/claims_contract/false_pass_execution.rs",
+    "validator/tests/claims_contract/lifecycle.rs",
+    "validator/tests/claims_contract/rejections.rs",
+    "validator/tests/claims_contract/support.rs"
+  ],
+  "touched_semantics": [
+    "claims::accepted_receipt_construction",
+    "claims::local_negative_control_execution",
+    "claims::observer_attestation",
+    "claims::false_pass_rejection"
+  ],
+  "generated_outputs": [],
+  "fixtures": ["validator/tests/claims_contract/false_pass_execution.rs"],
+  "effects": [
+    {"class": "workspace_write", "target": "owned-claim-authority-source-and-tests", "performed": true},
+    {"class": "process", "target": "local-/usr/bin/false-negative-control", "performed": true},
+    {"class": "process", "target": "offline-claim-contract-validation", "performed": true}
+  ],
+  "requirements": ["CLAIM-EXEC-AUTH-007", "AC-CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-REVIEW-006"],
+  "dependency_nodes": ["claim-authority-producer-synthesis-rework"],
+  "changes": [
+    {"area": "receipt authority", "result": "Accepted execution and observation receipts have private fields, private authority constructors, and deserializers that always reject; producers cannot construct an accepted receipt from metadata."},
+    {"area": "causal control", "result": "The local authority clears its environment, executes /usr/bin/false, captures its nonzero exit with outputs, and seals time, context, candidate, surface, ceiling, executor, observer, artifacts, and result into the receipt."},
+    {"area": "negative proof", "result": "The in-repo producer-synthesis regression rejects fabricated distinct executor and observer JSON plus report-only evidence across PACKAGE, INSTALL, ORCHESTRATION, RELEASE, and COMPLETION. Replay, omission, substitution, stale, cross-context, cross-candidate, self-author, and report-only cases reject."}
+  ],
+  "commands_and_tests": [
+    {"command": "CARGO_TARGET_DIR=/tmp/harness-claim-exec-auth-007-target cargo test --manifest-path validator/Cargo.toml --locked --offline -j16 --test claims_contract -- --test-threads=16", "status": "pass", "result": "21 passed, 0 failed; includes deterministic local negative-control positives and authority/replay/omission/substitution/rejection matrix."},
+    {"command": "CARGO_TARGET_DIR=/tmp/harness-claim-exec-auth-007-target cargo test --manifest-path validator/Cargo.toml --locked --offline -j16 --test claims_contract false_pass_execution::producer_synthesis_regression_rejects_without_an_authority_receipt -- --test-threads=16", "status": "pass", "result": "The preserved-equivalent producer-synthesis regression rejects in all five required material claim surfaces."},
+    {"command": "CARGO_TARGET_DIR=/tmp/harness-claim-exec-auth-007-target cargo test --manifest-path validator/Cargo.toml --locked --offline -j16 --test claims_contract lifecycle::rejected_obligations_remain_visible_and_projection_is_deterministic_zero_write -- --test-threads=16", "status": "pass", "result": "Deterministic projection, rejected-evidence visibility, and zero-write reads remain covered."},
+    {"command": "rustfmt --edition 2024 --check on the 15 owned Rust paths; git diff --check on owned paths", "status": "pass", "result": "Exact-path formatting and whitespace checks passed; largest production source is 244 lines."},
+    {"command": "CARGO_TARGET_DIR=/tmp/harness-claim-worker-result-008-target cargo run --manifest-path /tmp/claim-worker-result-typed-008/Cargo.toml --locked --offline", "status": "pass", "result": "WorkerResultV1 parse_json and validate_for passed against the exact dispatch lease/package; ArtifactWorkspace verified 17 live artifacts; unknown-field, stale-candidate, forged-worker, and result-id mutations passed their fail-closed checks."}
+  ],
+  "artifacts": [
+    {"path":"validator/src/claims/coverage.rs","sha256":"sha256:c2e57a47e718554e33cf91d6628db721c14edd178cf72d35d75955420c2e1fc5","byte_length":7438},
+    {"path":"validator/src/claims/decision.rs","sha256":"sha256:1de2348b65bfaa144a25d14564300719289d86a182a56c2c500bd7deb02c5e3d","byte_length":5299},
+    {"path":"validator/src/claims/definition.rs","sha256":"sha256:509fcc4c3c1f999095f45c55eab13faa4fdd0c8d9b52011e36842b4ba73187a6","byte_length":7696},
+    {"path":"validator/src/claims/evidence.rs","sha256":"sha256:67f67ee38eceadeb7b7096c86482829fb910a7b29cc431ca01e84d008c6f0cf5","byte_length":6359},
+    {"path":"validator/src/claims/false_pass.rs","sha256":"sha256:2aa7605083aba836c9892fb3e25c95d4019d48580ca33b9b8f730fbbfe6e5bf8","byte_length":6185},
+    {"path":"validator/src/claims/false_pass_guard.rs","sha256":"sha256:607fe3a9bf5956b786fba71d4fd89dd66e8532db497c0249e84c83209e86fd85","byte_length":4085},
+    {"path":"validator/src/claims/false_pass_integrity.rs","sha256":"sha256:f1b39080e71a1fb7c855c75fb1df2793beb12491618b4c636774453c845c80a2","byte_length":3078},
+    {"path":"validator/src/claims/false_pass_receipt.rs","sha256":"sha256:f88f5321f8e1e1abad7c418e5dc930394413fd975410183b64a6c8f2ecb4ca92","byte_length":7129},
+    {"path":"validator/src/claims/guard.rs","sha256":"sha256:0e12fd3de565a6cc534c4db9a4f9c4422a4be650301d7cabb5d3dc5190491075","byte_length":7347},
+    {"path":"validator/src/claims/mod.rs","sha256":"sha256:33b053b42d05c2a19ab8cf3f59056ed7f6f07628ec9458213d1f02ba3144d250","byte_length":701},
+    {"path":"validator/tests/claims_contract.rs","sha256":"sha256:7c6c3ffca05bea5fbffc853056262d5024ace348d69d4ed114c2cb6aa507ab25","byte_length":402},
+    {"path":"validator/tests/claims_contract/adoption.rs","sha256":"sha256:648f6b11d182753e391488399dfa77da8f079637326479c315097882458063b1","byte_length":2013},
+    {"path":"validator/tests/claims_contract/exact_sets.rs","sha256":"sha256:1b8fb2182c3024010de47d0a9de3ecf92c2e9ef6ab9b530e5f861d1510477aa0","byte_length":11210},
+    {"path":"validator/tests/claims_contract/false_pass_execution.rs","sha256":"sha256:49d0585aee2d8ae33ba2ed76bafb1f34c2aacba6cbacd12f426ffc3faa621937","byte_length":12128},
+    {"path":"validator/tests/claims_contract/lifecycle.rs","sha256":"sha256:77be637e5bbaae84588507b2b075c88a6121cf8919c78c18e78c6123b139aefb","byte_length":3923},
+    {"path":"validator/tests/claims_contract/rejections.rs","sha256":"sha256:7d1e0680ba7dd3552ddd60dce094749b5925b3e3e16c4401037c91d6549b074a","byte_length":5751},
+    {"path":"validator/tests/claims_contract/support.rs","sha256":"sha256:874c79692975c56118658dc8e1d59290d02602a0a10c9e728dd780c4b82929d0","byte_length":7144}
+  ],
+  "findings": [],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [],
+  "limitations": ["No validator/src/lib.rs binding, API witness, CLI route, public integration, source acceptance, readiness, release, node closure, or completion is asserted.", "Any artifact, digest, receipt authority, process, binding, registry, or test change reopens this result."],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

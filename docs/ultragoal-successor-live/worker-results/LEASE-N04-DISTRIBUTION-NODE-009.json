@@ -1,0 +1,460 @@
+{
+  "worker": "/root",
+  "lease_id": "LEASE-N04-DISTRIBUTION-NODE-009",
+  "context_id": "sha256:8732f3bec9c11fcbbc53097dcec928d98c33401318b81c3e2f05fd339f7d539f",
+  "candidate_identity": {
+    "candidate_id": "sha256:8732f3bec9c11fcbbc53097dcec928d98c33401318b81c3e2f05fd339f7d539f",
+    "context_id": "sha256:8732f3bec9c11fcbbc53097dcec928d98c33401318b81c3e2f05fd339f7d539f",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "artifact_set_sha256": "sha256:8732f3bec9c11fcbbc53097dcec928d98c33401318b81c3e2f05fd339f7d539f",
+    "artifact_count_excluding_result": 53,
+    "parent_result_path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-008.json",
+    "parent_result_sha256": "sha256:275e60a07c78f1e47512ec782491b059be78df510f5942b5b2308a56a3a7406a",
+    "parent_artifact_set_sha256": "sha256:6564ec051ffe95f4a21aa9fab14a999811a9153a09b947d2165edb9ec144bced",
+    "root_decision_path": "docs/ultragoal-successor-live/root-decisions/N04-NODE-008-REWORK.json",
+    "root_decision_sha256": "sha256:98b99f37fdfc8ed21594cd6b14d44cab5ea590000c46398202d6fcbf8a1b77aa"
+  },
+  "base_state": {
+    "node": "N04-DISTRIBUTION",
+    "parent_review": "rework",
+    "decisive_finding": "NODE-008 centralized MCP semantics but generic map-key validation admitted invalid environment-variable and HTTP field names through both N02 and N04.",
+    "open_n02_failures": 2
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "Canonical shared supported plugin-manifest intrinsic semantics for N02 and N04 plus N04-specific package reachability only. Independent review and real package/install/discovery/runtime proof, N04 closure, readiness, release, and completion remain withheld.",
+    "artifact_count_excluding_result": 53,
+    "artifact_set_sha256": "sha256:8732f3bec9c11fcbbc53097dcec928d98c33401318b81c3e2f05fd339f7d539f",
+    "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256 prefix, and one LF byte; SHA-256 the concatenation.",
+    "total_bytes": 232952,
+    "total_lines": 7002,
+    "maximum_file_lines": 299,
+    "files_over_300_lines": 0,
+    "focused_consumer_parity_tests": "7 passed; 0 failed; 16 jobs; 3.085 seconds",
+    "full_distribution_tests": "43 passed; 0 failed; 16 jobs; 0.339 seconds",
+    "focused_inventory_manifest_tests": "13 passed; 0 failed; 16 jobs; 8.892 seconds",
+    "all_targets_check": "pass; 16 jobs; 10.26 seconds; warnings retained as diagnostics",
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/plugin_manifest/mod.rs",
+    "validator/src/plugin_manifest/validation.rs",
+    "validator/src/plugin_manifest/semantics/mcp.rs",
+    "validator/tests/inventory_contract_cases/plugin_manifest_semantics.rs",
+    "validator/tests/distribution_contract/manifest_semantics.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-009.json"
+  ],
+  "touched_semantics": [
+    "plugin_manifest::environment_map",
+    "plugin_manifest::header_map",
+    "plugin_manifest::mcp_semantics",
+    "inventory::plugin_manifest::mcp_key_controls",
+    "distribution::package::mcp_key_controls"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-009.json"
+  ],
+  "fixtures": [
+    "validator/tests/inventory_contract_cases/plugin_manifest_semantics.rs",
+    "validator/tests/distribution_contract/manifest_semantics.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "root-n04-node009-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "root-n04-node009-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "root-n04-node009-cargo",
+      "performed": true
+    },
+    {
+      "class": "root_authority",
+      "target": "n04-shared-mcp-key-grammar",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PLUGIN-001",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-002",
+    "REQ-SUPPLY-001",
+    "REQ-SUPPLY-002"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "canonical environment grammar",
+      "result": "Inline stdio env keys now require the adopted ASCII [A-Za-z_][A-Za-z0-9_]* grammar, bounded length and values, and case-insensitive duplicate rejection for cross-platform safety."
+    },
+    {
+      "area": "canonical HTTP field grammar",
+      "result": "Inline HTTP header names now require the RFC token byte set, bounded length and values, and case-insensitive duplicate rejection; whitespace, equals, colon, CR, and LF fail closed."
+    },
+    {
+      "area": "paired consumer controls",
+      "result": "Both N02 inventory and N04 distribution reject the same invalid env/header key matrix and accept supported _MODE_2, X-Mode, and X_Proof names through one semantic authority."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-root-n04-node009-target cargo nextest run --offline --locked --manifest-path validator/Cargo.toml --jobs 16 --test inventory_contract --test distribution_contract manifest_semantics::",
+      "result": "pass",
+      "summary": "7 passed; 0 failed; 126 skipped; 3.085 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-root-n04-node009-target cargo nextest run --offline --locked --manifest-path validator/Cargo.toml --jobs 16 --test distribution_contract",
+      "result": "pass",
+      "summary": "43 passed; 0 failed; 0 skipped; 0.339 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-root-n04-node009-target cargo nextest run --offline --locked --manifest-path validator/Cargo.toml --jobs 16 --test inventory_contract plugin_manifest",
+      "result": "pass",
+      "summary": "13 passed; 0 failed; 77 skipped; 8.892 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hug-root-n04-node009-target cargo check --offline --locked --manifest-path validator/Cargo.toml --all-targets --jobs 16",
+      "result": "pass",
+      "summary": "All targets compiled in 10.26 seconds; existing warnings remain diagnostic and are not completion evidence."
+    },
+    {
+      "command": "rustfmt --edition 2024 on the exact NODE-009 touched Rust files",
+      "result": "pass"
+    },
+    {
+      "command": "parallel SHA-256, byte, line, line-cap, and artifact-set reconciliation",
+      "result": "pass",
+      "summary": "53 artifacts; 232952 bytes; 7002 lines; maximum 299; zero files over 300; set 8732f3bec9c11fcbbc53097dcec928d98c33401318b81c3e2f05fd339f7d539f."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".codex-plugin/plugin.json",
+      "sha256": "sha256:12c123fa9442dbf9e2eb7877b6fd1c4446ffc04a26d37727dddc0fb3877b06da",
+      "byte_length": 1083
+    },
+    {
+      "path": "validator/src/distribution/error.rs",
+      "sha256": "sha256:cecf86d9bc10f292047f7a69a13ea8f70660aeaa4ee7bd9db6f66964897ded26",
+      "byte_length": 2536
+    },
+    {
+      "path": "validator/src/distribution/install.rs",
+      "sha256": "sha256:4d2cf9f2910c2af9e6807fe01001590ad528465de2484cb530dd596fa16cfee9",
+      "byte_length": 8138
+    },
+    {
+      "path": "validator/src/distribution/json.rs",
+      "sha256": "sha256:a6e6e3c8b07871ffd4ff1ac60c924f5f491fb0bc7e129f9319cfc63e56735d35",
+      "byte_length": 3497
+    },
+    {
+      "path": "validator/src/distribution/marketplace.rs",
+      "sha256": "sha256:90cfc76a1855eb3e57aa673f043a57d4ce2269fcd0411af03ead8606fef783cb",
+      "byte_length": 5487
+    },
+    {
+      "path": "validator/src/distribution/mod.rs",
+      "sha256": "sha256:821d8f0c9409ea0f2d7e085264159ac73eefce191dea8de6fb58027a2370ac11",
+      "byte_length": 1068
+    },
+    {
+      "path": "validator/src/distribution/model.rs",
+      "sha256": "sha256:6f9b5e665ff2bc007ca65c78269e1843b91eb89ff138034d90adf75a5ff0fb97",
+      "byte_length": 6153
+    },
+    {
+      "path": "validator/src/distribution/observations.rs",
+      "sha256": "sha256:184ff00b914a2f5116dc3cb03baf0c7b9c9771972ba141244446d9daec391636",
+      "byte_length": 1181
+    },
+    {
+      "path": "validator/src/distribution/package/archive.rs",
+      "sha256": "sha256:ee3576427a5ffa1deb1ad8bb57b0d0f763c11a5ea0bf23aa829671470d3d6831",
+      "byte_length": 2871
+    },
+    {
+      "path": "validator/src/distribution/package/manifest.rs",
+      "sha256": "sha256:cf3c7d790d063470808b66e31c1da764a19e7ae40f723f7a4d5885520bd974c0",
+      "byte_length": 5172
+    },
+    {
+      "path": "validator/src/distribution/package/manifest_bind.rs",
+      "sha256": "sha256:24880f72b816dd60ad3d6c15a9b60c6d5a26900fb1701fdb10fd4b4e50f07ce4",
+      "byte_length": 2787
+    },
+    {
+      "path": "validator/src/distribution/package/mod.rs",
+      "sha256": "sha256:67dcc8a042942199c818ecbc863fa5687593d2b5a2601de3734508f3c26899df",
+      "byte_length": 1635
+    },
+    {
+      "path": "validator/src/distribution/package/plan.rs",
+      "sha256": "sha256:648df0ec9607e56fd7d31efad7ad902f8b469f5f0ae4d2243e1a7d74df99e597",
+      "byte_length": 8335
+    },
+    {
+      "path": "validator/src/distribution/package/spec.rs",
+      "sha256": "sha256:ee449d21bca70f58730b73912d6c0ea87de719c46372277d6b3a7248da190d82",
+      "byte_length": 3859
+    },
+    {
+      "path": "validator/src/distribution/reader/fallback.rs",
+      "sha256": "sha256:8fd8b8a447c545295827c0d9f5269752b873e9598eca93bf8006e07a080fb77d",
+      "byte_length": 483
+    },
+    {
+      "path": "validator/src/distribution/reader/mod.rs",
+      "sha256": "sha256:14ddabff12b90d437eccc93c73fca451bf22d3eafa86276c1fe66ca8f2fd8f22",
+      "byte_length": 3744
+    },
+    {
+      "path": "validator/src/distribution/reader/unix.rs",
+      "sha256": "sha256:b4020e7efd8936407db6dbd52e074354fb01c5cd411c34f4bd731e66493800d1",
+      "byte_length": 4276
+    },
+    {
+      "path": "validator/src/distribution/spec.rs",
+      "sha256": "sha256:5551a1124dbdab70172e0a7676c783528089711c3189305cbd07f23988ff60f4",
+      "byte_length": 8370
+    },
+    {
+      "path": "validator/src/distribution/supply.rs",
+      "sha256": "sha256:51e28ebbea17035edafaa87dec3aeaed9af6fafbd9e0d954dcf0e624b2635dab",
+      "byte_length": 5225
+    },
+    {
+      "path": "validator/src/distribution/verify.rs",
+      "sha256": "sha256:998e17314d839ec8dd6baa03cde772f722d2b29d8814b59dc16172e8780c63ca",
+      "byte_length": 7807
+    },
+    {
+      "path": "validator/src/inventory/plugin_hooks.rs",
+      "sha256": "sha256:e00edd1eaf68522a21c65e29f5782957c58ef6d2445592cee632417130eea4ad",
+      "byte_length": 4469
+    },
+    {
+      "path": "validator/src/inventory/plugin_manifest.rs",
+      "sha256": "sha256:9bd4d8049fd026b3d78ad9b6b22f0262eae87c62f3a8b759f9118c6a8a65df93",
+      "byte_length": 6001
+    },
+    {
+      "path": "validator/src/inventory/plugin_manifest_hook_document.rs",
+      "sha256": "sha256:0f3107ab29b0c9b4c46f074cb083f4f34b121fdb87b119ecf95acf14c0d166b8",
+      "byte_length": 1459
+    },
+    {
+      "path": "validator/src/inventory/plugin_manifest_hook_matcher.rs",
+      "sha256": "sha256:98b4b54790d81ceb834128fefd9727352f985eb8520d06c713612d5b6bd63b2e",
+      "byte_length": 1690
+    },
+    {
+      "path": "validator/src/inventory/plugin_manifest_hooks.rs",
+      "sha256": "sha256:b2406b7a8499bc28ed8573feaedd0bfb1f2a2b959c9a7351a6c736f464a3a063",
+      "byte_length": 8463
+    },
+    {
+      "path": "validator/src/inventory/plugin_manifest_interface.rs",
+      "sha256": "sha256:7d37c0fafab80bc25531502d58293e2a2f961d0d928dea96f3425f253a81fd9a",
+      "byte_length": 988
+    },
+    {
+      "path": "validator/src/inventory/plugin_manifest_json.rs",
+      "sha256": "sha256:a1f4b23c0c9178d9ebc773880b827708a57ed6a3ff4b217b6439d922c59e895a",
+      "byte_length": 335
+    },
+    {
+      "path": "validator/src/inventory/plugin_manifest_path.rs",
+      "sha256": "sha256:c6a61c25149405f8b2de19669cbaaad0fa5e175867a7f1802a7c5e26dd1ef9d6",
+      "byte_length": 2090
+    },
+    {
+      "path": "validator/src/inventory/plugin_manifest_semver.rs",
+      "sha256": "sha256:7ecbf26d11e217ff53597a75b9fdb6f084acdc8f28acf79740691cef2727a717",
+      "byte_length": 401
+    },
+    {
+      "path": "validator/src/lib.rs",
+      "sha256": "sha256:abc23d56b97b7f289f40f96565745407ee54ff9c82e78caee28608a5ab408223",
+      "byte_length": 1146
+    },
+    {
+      "path": "validator/src/plugin_manifest/json.rs",
+      "sha256": "sha256:769dd1df63cfcf89383d622955d2205b0341ac9c7d512ef29d32658b3a30c7f0",
+      "byte_length": 3558
+    },
+    {
+      "path": "validator/src/plugin_manifest/mod.rs",
+      "sha256": "sha256:1ec75ddf18bee9e06787589dae12573efa550726ced152e6697ba4bd9b57c3c3",
+      "byte_length": 3854
+    },
+    {
+      "path": "validator/src/plugin_manifest/semantics/interface.rs",
+      "sha256": "sha256:834b8e9a073eb1639f40035e450839f4d1b1838d3142c6f31a35bdb01787c51d",
+      "byte_length": 1993
+    },
+    {
+      "path": "validator/src/plugin_manifest/semantics/mcp.rs",
+      "sha256": "sha256:b586a564ac8e2ea23b46b62ee738c921c3792d3e97e4686be859fe55db1542d7",
+      "byte_length": 1378
+    },
+    {
+      "path": "validator/src/plugin_manifest/semantics/metadata.rs",
+      "sha256": "sha256:583b3cd8319f992639a26fff6c4654faf7999c958993b23b2da3fe0a568693cf",
+      "byte_length": 1192
+    },
+    {
+      "path": "validator/src/plugin_manifest/semantics/mod.rs",
+      "sha256": "sha256:9f48c3e40101073e2a6760e00099eff911ca097f2534d6c7f2f1027f6b21d637",
+      "byte_length": 723
+    },
+    {
+      "path": "validator/src/plugin_manifest/validation.rs",
+      "sha256": "sha256:d512d134c775293243c5129ec1262e58e1289bc9447f5531b19f93ba37ccc873",
+      "byte_length": 9581
+    },
+    {
+      "path": "validator/tests/distribution_contract.rs",
+      "sha256": "sha256:0b443353110b8c87863e66ca99b9e5cc5039bf3302aeb19b5e757bd79d01bf5b",
+      "byte_length": 884
+    },
+    {
+      "path": "validator/tests/distribution_contract/adversarial_fs.rs",
+      "sha256": "sha256:ceb874ea8705d858625156baecee014bf77a8cc28fa53d24a178ebe3f0eb5877",
+      "byte_length": 3136
+    },
+    {
+      "path": "validator/tests/distribution_contract/adversarial_semantics.rs",
+      "sha256": "sha256:665f2d30d4decf910fc7f1d6bdb48daaaebf54df54c50bbdbad8fc958feacfa3",
+      "byte_length": 5904
+    },
+    {
+      "path": "validator/tests/distribution_contract/install.rs",
+      "sha256": "sha256:8eaf760f47a89b8761f130ea12a0c0d21b7890bb46bbcde8f1dc201e0170f0ab",
+      "byte_length": 11343
+    },
+    {
+      "path": "validator/tests/distribution_contract/manifest_semantics.rs",
+      "sha256": "sha256:de89c503f3d221dc1a180eecfaec62b885ab11a4546b53a98469bdf0b228e3dc",
+      "byte_length": 4883
+    },
+    {
+      "path": "validator/tests/distribution_contract/marketplace_supply.rs",
+      "sha256": "sha256:19538962c94b88f70089ff79ae2f20f3003331ab1ea76da42ed78341fa729fb9",
+      "byte_length": 8760
+    },
+    {
+      "path": "validator/tests/distribution_contract/package.rs",
+      "sha256": "sha256:63dc9ee6808f6f773b2051566fd9c1629001326ff6b0026cdab2e23f33f3580d",
+      "byte_length": 9786
+    },
+    {
+      "path": "validator/tests/distribution_contract/package_manifest.rs",
+      "sha256": "sha256:b0991d0300750492b62baf9209180be27f4b62aa75c797ab215fafed4f98517d",
+      "byte_length": 11300
+    },
+    {
+      "path": "validator/tests/distribution_contract/positive.rs",
+      "sha256": "sha256:8a1e0822930ec26646154a6ca417158593e1f5ab6c45109cc5bcb230e539d664",
+      "byte_length": 1148
+    },
+    {
+      "path": "validator/tests/distribution_contract/prefix_collisions.rs",
+      "sha256": "sha256:c91be980efe7200bdfcf6ec7a7ca6831a61a470a03611ef037f4a2880f98ce72",
+      "byte_length": 3162
+    },
+    {
+      "path": "validator/tests/distribution_contract/states.rs",
+      "sha256": "sha256:3c83ee3c38c9735e50a9e2a1d8849fe45a417ca4b995a1a48606decb1105d142",
+      "byte_length": 3059
+    },
+    {
+      "path": "validator/tests/distribution_contract/support.rs",
+      "sha256": "sha256:b2393b7f849dd744951765195dc2c27b9860afea3cba98ccdcaf074534a426f9",
+      "byte_length": 6459
+    },
+    {
+      "path": "validator/tests/inventory_contract.rs",
+      "sha256": "sha256:9a1d7845e0c061ac2ba3a52a169540017deb471b7d8c530c296173b689bc884b",
+      "byte_length": 7597
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/plugin_hooks.rs",
+      "sha256": "sha256:ad8a92ca75a0a4a68916f14a423c82637708a1b77b937f4c309d2f16da0d526c",
+      "byte_length": 4508
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/plugin_manifest.rs",
+      "sha256": "sha256:ae5ec3e3a03a1bb4e794fe629931f1766d91bd146d84d41d583be84e0d022e6f",
+      "byte_length": 10999
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/plugin_manifest_semantics.rs",
+      "sha256": "sha256:c904496a36e04941467972ab47839325eaeb08ec4b00f19993389f3ac1e6a32f",
+      "byte_length": 6996
+    }
+  ],
+  "findings": [
+    {
+      "severity": "candidate",
+      "finding": "Manifest-intrinsic semantic authority, including distinct env and HTTP field-name grammars, is centralized and consumed by both N02 and N04."
+    },
+    {
+      "severity": "scope-preserved",
+      "finding": "Repository companion existence remains N02-specific; package path, role, executable, and archive closure remain N04-specific."
+    },
+    {
+      "severity": "open-n02",
+      "finding": "The two previously observed N02 live-routing assertions remain explicitly open and were not hidden or relabeled."
+    },
+    {
+      "severity": "independent-review-required",
+      "finding": "NODE-009 is frozen but has not been independently accepted."
+    }
+  ],
+  "unresolved_dependencies": [
+    "INDEPENDENT-N04-NODE009-REVIEW",
+    "GLOBAL-GENERATED-AUTHORITY-INTEGRATION",
+    "N02-INVENTORY-CURRENT-PROOF",
+    "N03-CLI-STATE-CURRENT-PROOF",
+    "SUPPORTED-HOST-DISTRIBUTION-PROOF"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "No real host package, install location, cache, marketplace, app registry, Plugins UI, discovery surface, or runtime was mutated or accepted.",
+    "Legacy hook files and declarations remain migration context for N14 and N15 and are not supported manifest authority.",
+    "The package and install kernels still use injected effects and do not prove a production host filesystem adapter.",
+    "The exact artifact set excludes concurrently changing N03 and N10 files; later integrated reconciliation remains required.",
+    "Tests, manifests, receipts, deterministic bytes, and green commands do not close N04 or prove readiness, release, or completion."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

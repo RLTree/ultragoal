@@ -1,0 +1,301 @@
+{
+  "schema_version": "WorkerResult-v1",
+  "worker": "/root/routine_live_authority_corrector",
+  "lease_id": "ROUTINE-LIVE-AUTHORITY-CORRECTION-001",
+  "workstream": "routine_work_verified_reuse_authority",
+  "status": "BLOCKED_ENOSPC_SOURCE_CANDIDATE",
+  "route": {
+    "model": "gpt-5.6-sol",
+    "reasoning": "ultra",
+    "rationale": "Critical false-pass authority boundary: stale evidence could skip current execution, mint VerifiedReuse, and reconcile CompleteExecution after candidate mutation. The correction spans dirty capture, planning, executed capture, observation, dependency results, reuse, and report reconciliation."
+  },
+  "base": {
+    "head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "reviewed_candidate": "docs/ultragoal-successor-live/root-decisions/ROUTINE-WORK-OPAQUE-REUSE-CANDIDATE.json",
+    "rework_decision": "docs/ultragoal-successor-live/root-decisions/ROUTINE-WORK-STALE-SESSION-REWORK.json",
+    "stale_session_probe": "/tmp/hul-routine-review-stale-session.rs",
+    "stale_session_probe_sha256": "sha256:b41646efda9eac8cdb36587b5886e5f1cfb8d14ed573d89e799bd06238f79dc4",
+    "original_forged_probe": "/tmp/hul-routine-forged-reuse.rs",
+    "original_forged_probe_sha256": "sha256:78a055705da4349c8847553af00ac927fcc5a51d8c4f05d208eb3364c3bcee43"
+  },
+  "lease": {
+    "production_paths": [
+      "validator/src/routine_work/**"
+    ],
+    "test_paths": [
+      "validator/tests/routine_work_contract.rs",
+      "validator/tests/routine_work_contract/**"
+    ],
+    "generated_outputs": [
+      "docs/ultragoal-successor-live/worker-results/ROUTINE-LIVE-AUTHORITY-CORRECTION-001.json"
+    ],
+    "owned_semantics": [
+      "live current-candidate authority for dirty snapshots",
+      "live current-candidate authority for routine planning",
+      "live current-candidate authority for reuse expectations",
+      "live current-candidate authority for executed capture and result observation",
+      "live current-candidate authority for dependency results",
+      "live current-candidate authority for reuse assessment",
+      "live current-candidate authority for truthful report reconciliation"
+    ],
+    "forbidden_and_preserved": [
+      "validator/src/lib.rs",
+      "validator/src/api_witness.rs",
+      "argument parser, CLI, state, inventory, and global generated authority",
+      "Cargo.toml and Cargo.lock",
+      "contracts, manifests, board, acceptance, root decisions, and migration registries",
+      "other modules",
+      "Git and Git metadata",
+      "network, user-home, external effects, and cleanup"
+    ]
+  },
+  "changes": [
+    {
+      "area": "concrete live authority",
+      "paths": [
+        "validator/src/routine_work/authority.rs",
+        "validator/src/routine_work/binding.rs",
+        "validator/src/routine_work/mod.rs"
+      ],
+      "summary": "Removed the public caller-implementable RoutineSession trait and its re-export. Added one internal current-binding boundary that accepts only a concrete LiveContext, revalidates it, derives RoutineBinding from that validated context, and distinguishes stale-context from mid-operation mutation failures. RoutineBinding remains inspectable data but is accepted by no authority-bearing public routine function."
+    },
+    {
+      "area": "snapshot and plan authority",
+      "paths": [
+        "validator/src/routine_work/local/mod.rs",
+        "validator/src/routine_work/plan/mod.rs",
+        "validator/src/routine_work/snapshot.rs"
+      ],
+      "summary": "LocalDirtyTree::capture and plan_routine now accept only &LiveContext, validate before work, and revalidate the same binding after work. DirtySnapshot construction is crate-confined so external callers cannot synthesize snapshot authority from a cloned RoutineBinding."
+    },
+    {
+      "area": "opaque evidence and reuse authority",
+      "paths": [
+        "validator/src/routine_work/reuse/artifact.rs",
+        "validator/src/routine_work/reuse/decision.rs",
+        "validator/src/routine_work/reuse/expectation.rs",
+        "validator/src/routine_work/reuse/mod.rs",
+        "validator/src/routine_work/reuse/model.rs",
+        "validator/src/routine_work/reuse/witness.rs"
+      ],
+      "summary": "Reuse expectation creation, executed-result capture, result observation, dependency-result derivation, and reuse assessment now require a concrete current LiveContext and validate it before and after successful evidence minting. DependencyResult now carries opaque origin binding and must match the same plan, node, scope, dependency closure, candidate, root, configuration, selected inputs, and tool set before downstream use. Existing opaque executed, observed, receipt, and VerifiedReuse evidence remains non-caller-constructible."
+    },
+    {
+      "area": "truthful report authority",
+      "paths": [
+        "validator/src/routine_work/report.rs"
+      ],
+      "summary": "reconcile_report now requires &LiveContext, rejects a stale plan before reconciliation, revalidates after reconciliation, and binds report identity to the current binding, context, candidate, and plan. A retained old plan or old VerifiedReuse cannot produce a current CompleteExecution report after tracked mutation."
+    },
+    {
+      "area": "adversarial contract coverage",
+      "paths": [
+        "validator/tests/routine_work_contract/contract.rs",
+        "validator/tests/routine_work_contract/local_capture.rs",
+        "validator/tests/routine_work_contract/planning.rs",
+        "validator/tests/routine_work_contract/report.rs",
+        "validator/tests/routine_work_contract/reuse/authority.rs",
+        "validator/tests/routine_work_contract/reuse/common.rs",
+        "validator/tests/routine_work_contract/reuse/integrity.rs",
+        "validator/tests/routine_work_contract/reuse/matching.rs",
+        "validator/tests/routine_work_contract/security.rs",
+        "validator/tests/routine_work_contract/support.rs"
+      ],
+      "summary": "Replaced forged FixedSession and SwitchingSession controls with real LiveContext flows and deterministic thread-local hooks that exist only under cfg(test). Added compile-time concrete-signature witnesses; tracked and untracked mutation controls across capture, plan, expectation, executed capture, observation, dependency results, reuse, and report; fresh configuration/input/tool substitutions; cross-plan dependency substitution; and a complete-record report race that must fail before CompleteExecution. Existing clean/dirty, repeat-use, fallback, closure, duplicate/unknown/missing evidence, special-file, artifact-swap, zero-write, and executed/reused/missing report controls are preserved."
+    }
+  ],
+  "candidate_identity": {
+    "identity_scope": "23 exact source and test artifacts; generated WorkerResult excluded to avoid self-reference",
+    "artifact_count_excluding_result": 23,
+    "artifact_set_sha256": "sha256:cd0d2320c64b411c393ba0e19e1e465e834f4fe44267817e22b7addeae2e20b9",
+    "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without a prefix, and one LF byte; SHA-256 the concatenation.",
+    "total_bytes": 123719,
+    "total_lines": 3721,
+    "maximum_file_lines": 250,
+    "files_over_300_lines": 0,
+    "path_type_check": "23 regular files, link count one, unique device/inode rows; no symlink, hardlink, special-file, missing, duplicate, or case-alias row in the frozen set.",
+    "manifest_rows": [
+      "validator/src/routine_work/authority.rs\t5f69ff479e23e9386f7b4c2ff74792bb9d2b71f371c137366f217bb252d36bc0",
+      "validator/src/routine_work/binding.rs\t84a2004f1abe9d9c5990c0141e41dfe07c138e08f6bbf2e82dca0413f0c4b001",
+      "validator/src/routine_work/local/mod.rs\td1f4d61755bd0e6b3bd75436cc5f3d1178d116f8785b75f2b66cb6da829989f5",
+      "validator/src/routine_work/mod.rs\t5770451bbfbc9403308843a01e26dfe512e419e398f200c5d3495f097e78fb1a",
+      "validator/src/routine_work/plan/mod.rs\t29ed308f2f892617f96ab4e8793cf691d2b6ae9108dd9faad01fc91ffffc4d8d",
+      "validator/src/routine_work/report.rs\ta7c75ff153bfb05fcf92e04ec96a203db1b0b9013064058f661db021c52f3a81",
+      "validator/src/routine_work/reuse/artifact.rs\t7c5a2f838f80f1774ea8d1ce9f8657e9887ae0fb55d40ef58c214841f2b6a0f1",
+      "validator/src/routine_work/reuse/decision.rs\t9a30179b46efaf647430bec44cef546a4223ceede9527efcafb8623647ba6024",
+      "validator/src/routine_work/reuse/expectation.rs\t7c0d164d4e0f199b5d8f69be2f2bff2011b967a08bb7f8d649fd30a22559b300",
+      "validator/src/routine_work/reuse/mod.rs\t9a7fb9dc4f04e4fdc86547d0552da5d83c144fd214ce2cff502db88c6391619c",
+      "validator/src/routine_work/reuse/model.rs\t27f7a27d9e732192a0a0e83f6dbd954249ca6dda6ab025ca8f85f33e83b06108",
+      "validator/src/routine_work/reuse/witness.rs\t26fe381f123e8e1e7ab0103da9d68b451236054e6bda735536fbd7603acc2e90",
+      "validator/src/routine_work/snapshot.rs\tc1bb541e4649ee98904db33349a533b421df51008c1cafca11cf76618641ce8b",
+      "validator/tests/routine_work_contract/contract.rs\tae2fdbdbef58da39b9a0f46e09b28806cae069397a524f6cf3e0bd5d48ccd5af",
+      "validator/tests/routine_work_contract/local_capture.rs\tb8d4d49e99a984532ede7dc5d771e2e92367cd749c29e36b17dc1ade7bedcf1d",
+      "validator/tests/routine_work_contract/planning.rs\tc71dcf588d88fea8a168e8190523e760d77ef907b13fc56ee3f66e4fd6b3b332",
+      "validator/tests/routine_work_contract/report.rs\ta7ec6ee597249206f9f32eb15ecb5a914b6bff2ac5a9ba817b954797a0e273c8",
+      "validator/tests/routine_work_contract/reuse/authority.rs\teefeedca17f501b831ca7d322520b8298c904f4c0d1d28d38256f7cfd60b6a1a",
+      "validator/tests/routine_work_contract/reuse/common.rs\t79f6e7f5508a97bb5e637e41f2c1330c54bc1eb9c780b1f354d742d11833657a",
+      "validator/tests/routine_work_contract/reuse/integrity.rs\t07d9631ab1aa4569e8e745ba4c91ecd304e2992db1d2adc0ba3772be29f07373",
+      "validator/tests/routine_work_contract/reuse/matching.rs\tb2e9c781babdf4968b71da00547e1b51df1ef373ccaad8458057ac748f7d45b7",
+      "validator/tests/routine_work_contract/security.rs\t99602b2a09bc95476bab65a6a0cd6c4a92997fee0b4eb70ef3820b275628b87c",
+      "validator/tests/routine_work_contract/support.rs\t26e1756acf349f0d96eb56a6189736056a5a3cd8e6f3c4e0af6574cad829865a"
+    ]
+  },
+  "artifacts": [
+    {"path":"validator/src/routine_work/authority.rs","sha256":"sha256:5f69ff479e23e9386f7b4c2ff74792bb9d2b71f371c137366f217bb252d36bc0","bytes":1840,"lines":73},
+    {"path":"validator/src/routine_work/binding.rs","sha256":"sha256:84a2004f1abe9d9c5990c0141e41dfe07c138e08f6bbf2e82dca0413f0c4b001","bytes":5539,"lines":185},
+    {"path":"validator/src/routine_work/local/mod.rs","sha256":"sha256:d1f4d61755bd0e6b3bd75436cc5f3d1178d116f8785b75f2b66cb6da829989f5","bytes":1917,"lines":55},
+    {"path":"validator/src/routine_work/mod.rs","sha256":"sha256:5770451bbfbc9403308843a01e26dfe512e419e398f200c5d3495f097e78fb1a","bytes":1283,"lines":40},
+    {"path":"validator/src/routine_work/plan/mod.rs","sha256":"sha256:29ed308f2f892617f96ab4e8793cf691d2b6ae9108dd9faad01fc91ffffc4d8d","bytes":3847,"lines":128},
+    {"path":"validator/src/routine_work/report.rs","sha256":"sha256:a7c75ff153bfb05fcf92e04ec96a203db1b0b9013064058f661db021c52f3a81","bytes":7673,"lines":250},
+    {"path":"validator/src/routine_work/reuse/artifact.rs","sha256":"sha256:7c5a2f838f80f1774ea8d1ce9f8657e9887ae0fb55d40ef58c214841f2b6a0f1","bytes":8423,"lines":245},
+    {"path":"validator/src/routine_work/reuse/decision.rs","sha256":"sha256:9a30179b46efaf647430bec44cef546a4223ceede9527efcafb8623647ba6024","bytes":3993,"lines":100},
+    {"path":"validator/src/routine_work/reuse/expectation.rs","sha256":"sha256:7c0d164d4e0f199b5d8f69be2f2bff2011b967a08bb7f8d649fd30a22559b300","bytes":3430,"lines":86},
+    {"path":"validator/src/routine_work/reuse/mod.rs","sha256":"sha256:9a7fb9dc4f04e4fdc86547d0552da5d83c144fd214ce2cff502db88c6391619c","bytes":404,"lines":12},
+    {"path":"validator/src/routine_work/reuse/model.rs","sha256":"sha256:27f7a27d9e732192a0a0e83f6dbd954249ca6dda6ab025ca8f85f33e83b06108","bytes":6906,"lines":221},
+    {"path":"validator/src/routine_work/reuse/witness.rs","sha256":"sha256:26fe381f123e8e1e7ab0103da9d68b451236054e6bda735536fbd7603acc2e90","bytes":3867,"lines":140},
+    {"path":"validator/src/routine_work/snapshot.rs","sha256":"sha256:c1bb541e4649ee98904db33349a533b421df51008c1cafca11cf76618641ce8b","bytes":5424,"lines":185},
+    {"path":"validator/tests/routine_work_contract/contract.rs","sha256":"sha256:ae2fdbdbef58da39b9a0f46e09b28806cae069397a524f6cf3e0bd5d48ccd5af","bytes":1849,"lines":53},
+    {"path":"validator/tests/routine_work_contract/local_capture.rs","sha256":"sha256:b8d4d49e99a984532ede7dc5d771e2e92367cd749c29e36b17dc1ade7bedcf1d","bytes":6197,"lines":173},
+    {"path":"validator/tests/routine_work_contract/planning.rs","sha256":"sha256:c71dcf588d88fea8a168e8190523e760d77ef907b13fc56ee3f66e4fd6b3b332","bytes":7801,"lines":215},
+    {"path":"validator/tests/routine_work_contract/report.rs","sha256":"sha256:a7ec6ee597249206f9f32eb15ecb5a914b6bff2ac5a9ba817b954797a0e273c8","bytes":8085,"lines":218},
+    {"path":"validator/tests/routine_work_contract/reuse/authority.rs","sha256":"sha256:eefeedca17f501b831ca7d322520b8298c904f4c0d1d28d38256f7cfd60b6a1a","bytes":9103,"lines":233},
+    {"path":"validator/tests/routine_work_contract/reuse/common.rs","sha256":"sha256:79f6e7f5508a97bb5e637e41f2c1330c54bc1eb9c780b1f354d742d11833657a","bytes":6502,"lines":218},
+    {"path":"validator/tests/routine_work_contract/reuse/integrity.rs","sha256":"sha256:07d9631ab1aa4569e8e745ba4c91ecd304e2992db1d2adc0ba3772be29f07373","bytes":8412,"lines":243},
+    {"path":"validator/tests/routine_work_contract/reuse/matching.rs","sha256":"sha256:b2e9c781babdf4968b71da00547e1b51df1ef373ccaad8458057ac748f7d45b7","bytes":8270,"lines":226},
+    {"path":"validator/tests/routine_work_contract/security.rs","sha256":"sha256:99602b2a09bc95476bab65a6a0cd6c4a92997fee0b4eb70ef3820b275628b87c","bytes":6159,"lines":182},
+    {"path":"validator/tests/routine_work_contract/support.rs","sha256":"sha256:26e1756acf349f0d96eb56a6189736056a5a3cd8e6f3c4e0af6574cad829865a","bytes":6795,"lines":240}
+  ],
+  "verification": {
+    "rustfmt_apply": {
+      "result": "PASS",
+      "exit_code": 0,
+      "command": "rustfmt --edition 2024 validator/src/routine_work/authority.rs validator/src/routine_work/binding.rs validator/src/routine_work/mod.rs validator/src/routine_work/local/mod.rs validator/src/routine_work/plan/mod.rs validator/src/routine_work/snapshot.rs validator/src/routine_work/reuse/model.rs validator/src/routine_work/reuse/expectation.rs validator/src/routine_work/reuse/mod.rs validator/src/routine_work/reuse/artifact.rs validator/src/routine_work/reuse/decision.rs validator/src/routine_work/reuse/witness.rs validator/src/routine_work/report.rs validator/tests/routine_work_contract/contract.rs validator/tests/routine_work_contract/local_capture.rs validator/tests/routine_work_contract/planning.rs validator/tests/routine_work_contract/report.rs validator/tests/routine_work_contract/reuse/common.rs validator/tests/routine_work_contract/reuse/matching.rs validator/tests/routine_work_contract/reuse/authority.rs validator/tests/routine_work_contract/reuse/integrity.rs validator/tests/routine_work_contract/security.rs validator/tests/routine_work_contract/support.rs",
+      "summary": "Formatting changed only leased Rust paths."
+    },
+    "rustfmt_check": {
+      "result": "PASS",
+      "exit_code": 0,
+      "command": "rustfmt --edition 2024 --check validator/src/routine_work/authority.rs validator/src/routine_work/binding.rs validator/src/routine_work/mod.rs validator/src/routine_work/local/mod.rs validator/src/routine_work/plan/mod.rs validator/src/routine_work/snapshot.rs validator/src/routine_work/reuse/model.rs validator/src/routine_work/reuse/expectation.rs validator/src/routine_work/reuse/mod.rs validator/src/routine_work/reuse/artifact.rs validator/src/routine_work/reuse/decision.rs validator/src/routine_work/reuse/witness.rs validator/src/routine_work/report.rs validator/tests/routine_work_contract/contract.rs validator/tests/routine_work_contract/local_capture.rs validator/tests/routine_work_contract/planning.rs validator/tests/routine_work_contract/report.rs validator/tests/routine_work_contract/reuse/common.rs validator/tests/routine_work_contract/reuse/matching.rs validator/tests/routine_work_contract/reuse/authority.rs validator/tests/routine_work_contract/reuse/integrity.rs validator/tests/routine_work_contract/security.rs validator/tests/routine_work_contract/support.rs"
+    },
+    "caller_session_absence": {
+      "result": "PASS_STATIC_ONLY",
+      "exit_code": 1,
+      "command": "rg -n 'RoutineSession|impl[[:space:]].*RoutineSession' validator/src/routine_work",
+      "summary": "Expected no-match exit; no RoutineSession declaration, implementation, use, or re-export remains in production routine_work source."
+    },
+    "concrete_signature_scan": {
+      "result": "PASS_STATIC_ONLY",
+      "exit_code": 0,
+      "command": "rg -n 'pub fn (capture|plan_routine|for_check|capture_executed_result|observe_result_artifact|assess_reuse|dependency_result|reconcile_report)' validator/src/routine_work",
+      "summary": "Every authority-bearing public routine signature shown by the scan takes &LiveContext; contract.rs adds exact function-pointer type witnesses."
+    },
+    "test_hook_confinement": {
+      "result": "PASS_STATIC_ONLY",
+      "exit_code": 0,
+      "command": "rg -n '#\\[cfg\\(test\\)\\]|test_authority_checkpoint|set_test_live_authority_hook' validator/src/routine_work/authority.rs validator/src/routine_work/mod.rs",
+      "summary": "Hook import, state, checkpoint, setter, and re-export are cfg(test)-gated; production authority signatures do not diverge."
+    },
+    "artifact_freeze": {
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "23 exact regular single-link unique-inode artifacts; aggregate sha256:cd0d2320c64b411c393ba0e19e1e465e834f4fe44267817e22b7addeae2e20b9; 123719 bytes; 3721 lines; maximum 250."
+    },
+    "focused_contract_tests": {
+      "result": "BLOCKED_ENOSPC",
+      "exit_code": null,
+      "command_not_run": "CARGO_TARGET_DIR=/tmp/hul-routine-reuse-correction CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo test --manifest-path validator/Cargo.toml --test routine_work_contract --locked --offline -j16 -- --test-threads=16",
+      "blocker": "The lane started with 1.7 GiB free, later crossed the 512 MiB hard stop while unrelated host work consumed disk. Final pre-close df reported 518384 KiB free, still below the original 1 GiB compile gate. Root ordered source freeze and BLOCKED_ENOSPC handoff rather than another build.",
+      "claim_effect": "No focused, dependency-closed, race, negative, clean/dirty, repeat-use, fallback, report, or runtime test pass is claimed for this exact artifact set."
+    },
+    "original_forged_probe": {
+      "result": "BLOCKED_ENOSPC",
+      "exit_code": null,
+      "probe_sha256": "sha256:78a055705da4349c8847553af00ac927fcc5a51d8c4f05d208eb3364c3bcee43",
+      "summary": "Not recompiled against the exact current candidate. Static source still lacks CurrentResult and ResultObserver, but compile-fail closure is not claimed without execution."
+    },
+    "stale_frozen_session_probe": {
+      "result": "BLOCKED_ENOSPC",
+      "exit_code": null,
+      "probe_sha256": "sha256:b41646efda9eac8cdb36587b5886e5f1cfb8d14ed573d89e799bd06238f79dc4",
+      "summary": "Not recompiled against the exact current candidate. Static source removes RoutineSession and no authority boundary accepts RoutineBinding, but compile-fail closure is not claimed without execution."
+    }
+  },
+  "authored_test_scope": {
+    "positive": [
+      "real clean and dirty LocalDirtyTree capture",
+      "real dirty dependency-closed planning",
+      "exact repeated reuse Hit on an unchanged real LiveContext",
+      "executed and reused dependency result derivation",
+      "complete mixed executed/reused report and incomplete missing/failure report",
+      "fallback and strict boundary planning"
+    ],
+    "negative_and_race": [
+      "tracked and untracked mutation after initial capture validation",
+      "root swap during capture",
+      "tracked mutation during planning, expectation creation, executed capture, result observation, dependency result derivation, reuse assessment, and complete report reconciliation",
+      "old LiveContext failure and fresh-candidate ReuseMiss::Candidate after legitimate evidence",
+      "fresh configuration, selected-input, and tool-set substitutions",
+      "context, candidate, root, configuration, inputs, tool, graph, plan, coverage, node, dependency, result scope, result artifact, output, and program substitutions",
+      "cross-plan dependency result substitution",
+      "unknown, duplicate, missing, incomplete, failed, and unobserved evidence",
+      "symlink, hardlink, FIFO, socket, submodule, oversized file, root alias, and artifact-swap controls",
+      "recursively zero-write reuse assessment"
+    ],
+    "execution_status": "AUTHORED_NOT_EXECUTED_ON_EXACT_CANDIDATE_DUE_ENOSPC"
+  },
+  "effects": {
+    "workspace_source_writes": true,
+    "workspace_test_writes": true,
+    "worker_result_write": true,
+    "temporary_probe_writes": false,
+    "git_commands": false,
+    "git_metadata_inspection": false,
+    "network": false,
+    "user_home_writes": false,
+    "external_product_effects": false,
+    "destructive_effects": false,
+    "cleanup": false
+  },
+  "security": {
+    "result": "SOURCE_REVIEWED_RUNTIME_UNVERIFIED",
+    "summary": "Caller-implementable live authority is removed; cloned RoutineBinding values are not accepted at any authority boundary; opaque evidence construction remains capture-owned; successful authority-bearing outputs require initial and final current LiveContext validation; dependency results retain origin binding; diagnostics remain content-free; test race hooks are cfg(test)-only and thread-local. Runtime race and probe proof remains BLOCKED_ENOSPC."
+  },
+  "performance": {
+    "result": "UNMEASURED_BLOCKED_ENOSPC",
+    "summary": "Successful capture, planning, expectation, observation, dependency, reuse, and report paths now pay initial and final LiveContext revalidation. This intentionally adds bounded Git/filesystem reads at a critical authority boundary. No latency or throughput result is claimed without the exact-current test run."
+  },
+  "quality": {
+    "result": "FORMATTED_STATICALLY_INSPECTED_RUNTIME_UNVERIFIED",
+    "summary": "Exact rustfmt passes; all frozen files are at or below 250 lines; no new dependency, TODO, debug log, public caller authority trait, or test-only production signature was introduced. Behavioral, race, negative, and probe execution is unverified because the compile gate was not met."
+  },
+  "requested_root_changes": [
+    {
+      "request": "Restore at least 1 GiB free disk and rerun the one exact focused Cargo command using /tmp/hul-routine-reuse-correction with CARGO_INCREMENTAL=0 and CARGO_PROFILE_TEST_DEBUG=0.",
+      "reason": "Required exact-current focused, dependency-closed, race, and negative proof is BLOCKED_ENOSPC."
+    },
+    {
+      "request": "After the focused suite builds, recompile the original forged probe and stale FrozenSession probe against the exact current dependency artifacts and record their nonzero exits and diagnostics.",
+      "reason": "Static source closure is insufficient for the required compile-fail proof."
+    },
+    {
+      "request": "Launch a fresh independent false-pass review only after exact-current tests and probes pass and a new root-owned candidate manifest is frozen.",
+      "reason": "This worker cannot accept, integrate, or close N06."
+    }
+  ],
+  "unsupported_scope": [
+    "exact-current Cargo compilation or test pass",
+    "original forged-probe compile-fail proof",
+    "stale FrozenSession compile-fail proof",
+    "runtime race proof",
+    "internal HCT-IMPACT acceptance",
+    "public HCT-CAPTURE or HCT-IMPACT wiring",
+    "HCT-FIXTURES completion",
+    "public command integration",
+    "real product dirty/repeat-use journeys",
+    "root candidate adoption or integration",
+    "readiness, release, node closure, or goal completion"
+  ],
+  "claim_ceiling": "A formatted, statically inspected source candidate removes caller-implementable RoutineSession authority and requires concrete LiveContext revalidation at routine authority boundaries. Runtime correctness, compile-fail closure, acceptance, and every downstream product claim remain withheld because exact-current Cargo and probe verification is BLOCKED_ENOSPC.",
+  "no_claim_statement": "I do not claim acceptance, public integration, readiness, release, node closure, or goal completion."
+}

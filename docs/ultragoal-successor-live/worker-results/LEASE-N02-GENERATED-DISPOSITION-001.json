@@ -1,0 +1,319 @@
+{
+  "worker": "/root/n02_generated_map",
+  "lease_id": "LEASE-N02-GENERATED-DISPOSITION-001",
+  "context_id": "sha256:67b76d378368909386cf4c119b2f67c295c184dcb813436e5d9e3869abb0b80d",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged_by_worker": true,
+    "dirty": true,
+    "live_context_status_sha256": "b9a79ac95cb61b4e0cd052f6195474ae2f4dd2cb082eea1d86f4cb6a4df38d2a",
+    "live_context_untracked_sha256": "3f3c8e6c89b6249ae34753b9850973b0910842b3ed6e97c80f8e59e92e6bf123",
+    "leased_candidate_set_sha256": "fe3c9fea5b00fb65225a6e1a6136bbfce4470310ad62f1f13c414c6922deede2",
+    "context_note": "LiveContext-v1 was rebuilt after source freeze, the complete inventory suite, exact formatting, and diff checks. The result file is self-referential and was added afterward.",
+    "live_repo_git_writes_performed": false
+  },
+  "base_state": {
+    "registry_contract": "GeneratedSurfaceAuthority-v1 canonical-projection rows only",
+    "lease_scope": [
+      "validator/src/inventory/generated/**",
+      "validator/tests/inventory_contract_cases/generated_regeneration.rs",
+      "validator/tests/inventory_contract_cases/generated_disposition.rs",
+      "one generated_disposition module declaration in validator/tests/inventory_contract.rs",
+      "this WorkerResult"
+    ],
+    "root_owned_surfaces_not_modified": [
+      "migration/generated-surface-authority.json",
+      "validator/tests/inventory_contract_cases/fixtures.rs",
+      "validator/tests/inventory_contract_cases/repository_fixture.rs",
+      "Cargo manifests and dependency files",
+      "public commands, claims, release, readiness, and completion authority",
+      "READY deauthorization, context, review, and packaged fixture files"
+    ],
+    "root_integration_observed": "Root separately adopted an empty GeneratedSurfaceAuthority-v2 envelope and updated shared canonical fixture rows before final full-inventory verification.",
+    "concurrent_dirt_policy": "All user, root, and other-worker changes outside the lease were preserved."
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "acceptance_ceiling": "Typed generated-disposition implementation and false-pass controls only; no retained-context registry row is adopted by this worker.",
+    "production_rust_files": 6,
+    "production_rust_lines": 795,
+    "test_rust_files": 3,
+    "test_rust_lines": 630,
+    "leased_rust_files": 9,
+    "leased_rust_lines": 1425,
+    "leased_rust_bytes": 49170,
+    "maximum_file_lines": 290,
+    "files_over_300_lines": 0,
+    "focused_generated_tests": "7 passed; 0 failed",
+    "complete_inventory_tests": "60 passed; 0 failed",
+    "library_check": "pass",
+    "all_target_check": "blocked by concurrent LEASE-N02-COMMAND-INVENTORY-DEAUTH-001 test-module errors",
+    "exact_leased_format_check": "pass",
+    "network_performed": false,
+    "external_product_effect_performed": false
+  },
+  "touched_paths": [
+    "validator/src/inventory/generated/authority.rs",
+    "validator/src/inventory/generated/discovery.rs",
+    "validator/src/inventory/generated/json.rs",
+    "validator/src/inventory/generated/metadata.rs",
+    "validator/src/inventory/generated/mod.rs",
+    "validator/src/inventory/generated/retained.rs",
+    "validator/tests/inventory_contract_cases/generated_disposition.rs",
+    "validator/tests/inventory_contract_cases/generated_regeneration.rs",
+    "validator/tests/inventory_contract.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-GENERATED-DISPOSITION-001.json"
+  ],
+  "touched_semantics": [
+    "strict GeneratedSurfaceAuthority-v2 internally tagged union",
+    "canonical_projection preserves exact input-digest-index-v1 deterministic regeneration",
+    "retained_context requires exact lowercase SHA-256, bounded reason, canonical replacement targets, preserve true, and physical_deletion_authorized false",
+    "recursive duplicate JSON object keys and all unknown or mixed variant fields fail closed",
+    "registry, surface, input, replacement, reason, path, identifier, and output byte/count bounds",
+    "retained outputs are descriptor-bound regular files and become Context/ContextOnly only after exact digest verification",
+    "valid retained entries carry registry provenance and canonical replacement references without generator authority or missing-provenance warnings",
+    "present digest-mismatched retained files remain inventoried as Legacy/Active with no replacement or generator authority",
+    "missing, tampered, symlinked, special, and concurrently swapped retained outputs fail causally"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "valid retained binary context with exact digest and two canonical replacement targets",
+    "mixed canonical and retained fields",
+    "uppercase and substituted digest",
+    "unknown field and recursively duplicated JSON key",
+    "preserve false and physical deletion true",
+    "missing output and cross-variant duplicate output",
+    "unsorted, traversal-like, and unprefixed replacement targets",
+    "double-separator and directory-only output spellings",
+    "257-row surface, input, and replacement limits plus oversized registry bytes",
+    "missing and digest-mismatched physical outputs",
+    "in-root symlink and FIFO special output",
+    "deterministic path-swap race during retained identity binding",
+    "canonical deterministic regeneration and drift fixtures"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased generated inventory source, focused tests, one module declaration, and this WorkerResult"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal ignored Cargo target output"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "isolated temporary Git repositories, regular files, symlinks, and FIFOs created and cleaned by tests"
+    },
+    {
+      "class": "git",
+      "scope": "read-only live identity/status operations and fixture-only init, add, and commit operations under temporary directories"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-product",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PRODUCT-004",
+    "REQ-PROOF-004",
+    "REQ-MAINT-003",
+    "REQ-MAINT-005"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N14-MIGRATION"
+  ],
+  "changes": [
+    {
+      "area": "typed registry authority",
+      "result": "Replaced the v1 canonical-only row with a deny-unknown-fields disposition union. Canonical projection rows retain generator, exact recipe, sorted unique confined inputs, and deterministic regeneration; retained context rows cannot contain any generator, recipe, or inputs field."
+    },
+    {
+      "area": "retained context contract",
+      "result": "Retained rows require a lowercase 64-byte SHA-256, trimmed bounded reason, sorted unique nonempty canonical semantic targets, preserve true, and physical_deletion_authorized false. Only HCT-, PS-, SKILL:, AGENT:, COMMAND:, and CONTRACT-REGISTRY: target grammars are accepted."
+    },
+    {
+      "area": "physical discovery",
+      "result": "A valid retained output is read as a confined regular file, digest-bound, and emitted as Context/ContextOnly with registry provenance, no generator, and replacement references. Invalid present regular output remains visible as Legacy/Active without positive authority; unsafe identity states fail closed."
+    },
+    {
+      "area": "parser and resource bounds",
+      "result": "Added recursive duplicate-key rejection plus exact schema, contract, path normalization, surface, input, replacement, reason, identifier, and registry byte limits. Cross-variant duplicate outputs are rejected through one output map."
+    },
+    {
+      "area": "false-pass resistance",
+      "result": "Added mixed-variant, digest, extra-field, duplicate-key, lifecycle-boolean, missing-output, path-spelling, target-grammar, duplicate-output, bound, tamper, symlink, FIFO, and deterministic path-swap controls while preserving canonical regeneration coverage."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test inventory_contract generated_disposition:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "5 passed; 0 failed, including schema, bounds, retained projection, tamper visibility, symlink, and special-file controls."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test inventory_contract generated_regeneration:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; 0 failed; canonical deterministic regeneration semantics remain exact."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --lib retained_context_path_swap_fails_identity_binding -- --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; 0 failed; a deterministic path replacement between metadata and descriptor open is rejected."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test inventory_contract -- --test-threads=1",
+      "result": "pass",
+      "summary": "60 passed; 0 failed on the stable post-v2-envelope candidate."
+    },
+    {
+      "command": "cargo check --locked --offline -p ultragoal --lib",
+      "result": "pass",
+      "summary": "Frozen production library compiles; warnings are shared dormant successor debt."
+    },
+    {
+      "command": "cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "concurrent_out_of_lease_failure",
+      "summary": "The frozen generated-disposition code compiled, but lib-test compilation reported 53 missing observability registry modules/imports from concurrent LEASE-N02-COMMAND-INVENTORY-DEAUTH-001. The primary changed path at failure was validator/src/audit/observability/registry/mod.rs sha256:34728ce4132f0ab9763f1fa1cdd93398bc1c2aa2df1a554759c2bc8da985a1ab."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check over all nine leased Rust files; git diff --check over all leased paths",
+      "result": "pass",
+      "summary": "Exact leased formatting and whitespace checks passed; maximum file length is 290 lines."
+    },
+    {
+      "command": "cargo fmt --all -- --check",
+      "result": "concurrent_out_of_lease_failure",
+      "summary": "Only concurrent LEASE-N02-COMMAND-INVENTORY-DEAUTH-001 path validator/src/audit/law/authority_surfaces/inventory/mod.rs sha256:77978d14188e688afd1cc69dd30fbc613ac84a9e24c25f9a8624b90bd048e966 was reported."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "1 passed; emitted LiveContext sha256:67b76d378368909386cf4c119b2f67c295c184dcb813436e5d9e3869abb0b80d after source freeze."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/inventory/generated/authority.rs",
+      "sha256": "1fc63a14f5f9476e4394c228844feb9535be6b50fc1844d006a10e5cc3a9de37",
+      "bytes": 8401,
+      "lines": 255
+    },
+    {
+      "path": "validator/src/inventory/generated/discovery.rs",
+      "sha256": "658c9fc61a53461bda777623b0d0b87142a9f35af040a348ba22612a66acffed",
+      "bytes": 5304,
+      "lines": 144
+    },
+    {
+      "path": "validator/src/inventory/generated/json.rs",
+      "sha256": "a292c1b17ff8bf908a8fee8f806f550bc951d6dcbdc95835b1266fa6a0eb954c",
+      "bytes": 2514,
+      "lines": 99
+    },
+    {
+      "path": "validator/src/inventory/generated/metadata.rs",
+      "sha256": "40e9a43add1521e354e96891471698d81825a08a3c4294a854c9ffe0afd2d38c",
+      "bytes": 4624,
+      "lines": 155
+    },
+    {
+      "path": "validator/src/inventory/generated/mod.rs",
+      "sha256": "eeb6c82842ba73c5a424b24bff496d85807878d0ac2903f896c15cf82ba35589",
+      "bytes": 105,
+      "lines": 7
+    },
+    {
+      "path": "validator/src/inventory/generated/retained.rs",
+      "sha256": "fba9b53a2644fdd4ff78ac5a71bddff025d882e5b307d372ea1faf648fc0bb0a",
+      "bytes": 4374,
+      "lines": 135
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/generated_disposition.rs",
+      "sha256": "76ef2e0b3df4459ea883f1131e2f7383ef721c5b2b1c8521b329d5781cbeb20d",
+      "bytes": 12026,
+      "lines": 290
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/generated_regeneration.rs",
+      "sha256": "26d6cf9abb73540c4bab42edfa91846ae80b1ad474a15935dbca762585f58e1f",
+      "bytes": 4393,
+      "lines": 100
+    },
+    {
+      "path": "validator/tests/inventory_contract.rs",
+      "sha256": "a39d7b55223dbecbdcd9969cbe6341877d940a9207e74f0d7b32840bb1779693",
+      "bytes": 7429,
+      "lines": 240,
+      "lease_note": "Only the generated_disposition module declaration is worker-owned; the digest binds the shared frozen file containing concurrent declarations."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Retained generated context can no longer masquerade as a canonical projection or advertise a generator."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Arbitrary replacement strings, non-normalized output spellings, recursive duplicate keys, and mixed variant fields fail closed."
+    },
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "Digest-mismatched regular outputs remain physically inventoried without positive context or replacement authority."
+    },
+    {
+      "severity": "root-adoption-required",
+      "finding": "The root-owned v2 registry currently supplies the integration envelope; retained-context disposition rows must be adopted separately after independent review."
+    },
+    {
+      "severity": "concurrent-integration-blocker",
+      "finding": "LEASE-N02-COMMAND-INVENTORY-DEAUTH-001 currently prevents all-target lib-test compilation through validator/src/audit/observability/registry/mod.rs sha256:34728ce4132f0ab9763f1fa1cdd93398bc1c2aa2df1a554759c2bc8da985a1ab."
+    },
+    {
+      "severity": "concurrent-format-blocker",
+      "finding": "LEASE-N02-COMMAND-INVENTORY-DEAUTH-001 currently leaves validator/src/audit/law/authority_surfaces/inventory/mod.rs sha256:77978d14188e688afd1cc69dd30fbc613ac84a9e24c25f9a8624b90bd048e966 unformatted; its companion required_surfaces.rs digest at capture was 18c7c9658a4eafa1fbff98affd03069abb4ad87e77688c68182dee8a8c937ea1."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "Independent review, exact registry-row adoption, migration reconciliation, claims, release, and N02 closure remain root-only."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent claim-falsification and security review of the exact nine leased-file digests",
+    "Root adoption of exact retained_context rows and replacement targets after review",
+    "Root reconciliation of each adopted retained digest against the current physical output",
+    "LEASE-N02-COMMAND-INVENTORY-DEAUTH-001 repair followed by fresh all-target and workspace-format checks",
+    "Fresh integrated LiveContext and inventory proof after root adopts disposition rows",
+    "Root migration, claim, representative-product, release, and completion reconciliation"
+  ],
+  "requested_root_changes": [
+    {
+      "request": "Commission independent review against the exact artifact digests and all false-pass controls in this WorkerResult."
+    },
+    {
+      "request": "After acceptance, adopt exact retained_context registry rows with current physical SHA-256 values, bounded reasons, and canonical replacement targets; do not add generator, recipe, or inputs fields."
+    },
+    {
+      "request": "Reconcile LEASE-N02-COMMAND-INVENTORY-DEAUTH-001 test-module and formatting failures, then rerun all-target and workspace format checks on the integrated candidate."
+    },
+    {
+      "request": "Rebuild LiveContext and rerun the full inventory suite after registry-row adoption before any N02 or generated-authority claim."
+    }
+  ],
+  "limitations": [
+    "This worker implemented the v2 reader and discovery semantics but did not adopt or mutate any root-owned registry row.",
+    "The live v2 envelope alone does not disposition the nine physical generated surfaces.",
+    "All-target and workspace-wide formatting are not green because of concurrent LEASE-N02-COMMAND-INVENTORY-DEAUTH-001 paths; exact leased checks are green.",
+    "The Context/ContextOnly positive path is proven in representative repository fixtures, not yet by root-adopted live retained rows.",
+    "No migration retirement, physical deletion, readiness, release, completion, or N02-complete claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

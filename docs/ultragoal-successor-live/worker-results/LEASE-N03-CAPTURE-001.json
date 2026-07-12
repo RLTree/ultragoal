@@ -1,0 +1,302 @@
+{
+  "schema_version": "WorkerResult-v1",
+  "worker": "/root/n03_capture_worker",
+  "lease_id": "LEASE-N03-CAPTURE-001",
+  "context_id": "sha256:75748713022bad0916629e81b395c3bd5f98e75e900e30e49faab6a2f47ae9d6",
+  "context_note": "Read-only live context observed after the leased source and tests existed and before this self-referential result file was written.",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "head_unchanged": true,
+    "worktree_state": "leased capture source, tests, and this result are untracked; root-owned Cargo.toml/Cargo.lock edits and pre-existing .DS_Store were preserved"
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "root_owned_pre_existing_changes": [
+      "validator/Cargo.toml",
+      "Cargo.lock"
+    ],
+    "pre_existing_user_dirt": [
+      ".DS_Store"
+    ]
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "root_owned_pre_existing_changes_preserved": [
+      "validator/Cargo.toml",
+      "Cargo.lock"
+    ],
+    "pre_existing_user_dirt_preserved": [
+      ".DS_Store"
+    ],
+    "leased_rust_lines": 2627,
+    "maximum_file_lines": 280,
+    "files_over_300_lines": 0,
+    "git_operations_performed": false
+  },
+  "touched_paths": [
+    "validator/src/capture/artifact.rs",
+    "validator/src/capture/descriptor.rs",
+    "validator/src/capture/environment.rs",
+    "validator/src/capture/filesystem.rs",
+    "validator/src/capture/mod.rs",
+    "validator/src/capture/output.rs",
+    "validator/src/capture/process.rs",
+    "validator/src/capture/run.rs",
+    "validator/src/capture/spec.rs",
+    "validator/src/capture/tree.rs",
+    "validator/src/capture/util.rs",
+    "validator/tests/capture_contract.rs",
+    "validator/tests/capture_contract_cases/artifacts.rs",
+    "validator/tests/capture_contract_cases/fixture.rs",
+    "validator/tests/capture_contract_cases/process.rs",
+    "validator/tests/capture_contract_cases/security.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-CAPTURE-001.json"
+  ],
+  "touched_semantics": [
+    "HCT-CAPTURE internals",
+    "CommandSpec",
+    "CapturedRun",
+    "ArtifactRef",
+    "ArtifactResolver",
+    "explicit argv execution without shell command text",
+    "structural EffectClass authorization",
+    "pre-authority and post-observation candidate binding",
+    "descriptor-confined program, cwd, and artifact access",
+    "bounded raw byte output with digest, truncation, and redaction",
+    "typed exit, signal, timeout, and interruption observations",
+    "Unix process-group cleanup",
+    "content-addressed artifact serialization and dereference",
+    "read-class worktree mutation witness"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "printed_pass_text_never_overrides_the_exit_observation",
+    "timeout_is_typed_and_process_output_remains_bounded",
+    "signal_termination_is_distinct_from_an_exit_code",
+    "raw_non_utf8_output_and_argv_are_lossless",
+    "output_flood_is_drained_digested_and_truncated",
+    "explicit_interruption_is_typed_and_reaps_the_process",
+    "interruption_already_requested_is_a_typed_no_spawn_observation",
+    "timeout_and_environment_budgets_fail_before_spawn",
+    "secret_environment_is_source_bound_and_redacted_before_digesting",
+    "redaction_covers_repeated_values_on_both_output_streams",
+    "environment_is_empty_unless_each_value_is_explicitly_allowed",
+    "normal_exit_cleans_up_descendants_in_the_process_group",
+    "artifact_reference_is_content_addressed_and_dereferenceable",
+    "artifact_reference_rejects_a_different_live_candidate",
+    "serialized_artifact_reference_rejects_traversal_and_unknown_fields",
+    "missing_and_wrong_artifacts_fail_causally",
+    "symlink_and_hardlink_artifacts_are_rejected",
+    "artifact_swap_between_open_and_validation_is_rejected",
+    "resolver_rejects_artifact_bytes_changed_after_capture",
+    "symlink_and_hardlink_programs_fail_before_execution",
+    "symlink_cwd_is_not_followed",
+    "program_swap_and_restore_is_rejected_during_binding_or_execution",
+    "traversal_absolute_paths_and_shell_text_are_never_executed",
+    "structural_effect_mismatch_is_denied_before_spawn",
+    "secrets_cannot_be_smuggled_through_argv_or_public_environment",
+    "unbound_or_self_exposing_secret_identity_is_rejected",
+    "candidate_and_context_identifiers_are_bound_in_the_capture",
+    "read_effect_rejects_hidden_create_and_restore_mutations",
+    "artifact_resolver_type_is_constructible_from_the_same_context"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased source, test, and WorkerResult paths only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal Cargo target artifacts"
+    },
+    {
+      "class": "external-process",
+      "scope": "isolated temporary Git repositories and local subprocess fixtures only"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-write",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-ROUTINE-001",
+    "REQ-CLI-003",
+    "REQ-CLI-007",
+    "REQ-PROOF-002",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-004",
+    "HCT-CAPTURE implementation contract",
+    "HCT-CAPTURE negative proof requirement"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "typed command request",
+      "rationale": "CommandSpec accepts one confined program plus an explicit OsString argv vector, a structural effect class, bounded timeout/output settings, an explicit environment allowlist, interruption state, and expected artifacts; no shell command string exists."
+    },
+    {
+      "area": "candidate and effect binding",
+      "rationale": "Execution requires a current LiveContext and authorized EffectClass. CapturedRun records both the authority-time context/candidate and a freshly rebuilt observation-time read context/candidate after legal workspace effects."
+    },
+    {
+      "area": "filesystem confinement",
+      "rationale": "Root, cwd, program, and artifact paths are worktree-relative and opened component-by-component with no-follow descriptors on Unix. Symlinks, hardlinks, traversal, non-regular files, identity drift, content drift, and swap/restore races fail closed."
+    },
+    {
+      "area": "read-effect mutation detection",
+      "rationale": "Read, planned-write, and external-write subprocesses receive stable pre/post worktree metadata witnesses so transient create/remove and mutate/restore activity cannot become a green read observation."
+    },
+    {
+      "area": "process lifecycle",
+      "rationale": "Subprocesses run in their own Unix process group with null stdin, piped output, monotonic timing, polling cancellation, typed timeout/interruption/signal/exit, descendant cleanup, and reaping."
+    },
+    {
+      "area": "bounded output and privacy",
+      "rationale": "Stdout and stderr are drained as raw bytes, redacted before retention and digesting, capped at a caller-selected limit, fully digested after redaction, and never decoded as UTF-8 or interpreted as PASS authority."
+    },
+    {
+      "area": "environment minimization",
+      "rationale": "Child environments are cleared and reconstructed only from a bounded allowlist. Sensitive-looking names require a context-bound secret source; secret bytes never enter the serialized environment record and are removed from both output streams before digesting."
+    },
+    {
+      "area": "artifact capture",
+      "rationale": "ArtifactRef binds post-run context/candidate, confined path bytes, SHA-256, and length. Canonical JSON roundtrip denies unknown fields and path escape; ArtifactResolver revalidates live candidate and exact bytes."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo fmt --all --check",
+      "result": "pass"
+    },
+    {
+      "command": "cargo check --locked --offline --all-targets",
+      "result": "pass"
+    },
+    {
+      "command": "cargo test --locked --offline --test capture_contract -- --test-threads=1",
+      "result": "pass",
+      "summary": "29 passed; 0 failed"
+    },
+    {
+      "command": "cargo test --locked --offline --lib context:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "21 passed; 0 failed; 1388 filtered out"
+    },
+    {
+      "command": "cargo test --locked --offline --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture",
+      "result": "pass",
+      "summary": "1 passed; 0 failed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    },
+    {
+      "command": "cargo check --locked --offline --target x86_64-pc-windows-msvc --test capture_contract",
+      "result": "blocked_by_pre_existing_code",
+      "summary": "The build stops in existing HCT-CONTEXT and target-fixture Unix-only imports before the path-mounted capture module can establish a Windows compile result."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/capture/**, validator/tests/capture_contract.rs, and validator/tests/capture_contract_cases/**",
+      "sha256": "c948d4ab3af2f67e1e699d22a45644464bd63ae5f01070f0aa2742cc24f9f317",
+      "digest_method": "SHA-256 of sorted per-file shasum -a 256 lines"
+    },
+    {
+      "path": "validator/src/capture/artifact.rs",
+      "sha256": "1105fa238a9fa1aea20e59581239c31de7b161c04b73086804bd1b1759afef69"
+    },
+    {
+      "path": "validator/src/capture/process.rs",
+      "sha256": "b62f5379049e2d928ea91e20fbcd3c14ed9c07cb8d3ad84662ee5bc89b5dd8ea"
+    },
+    {
+      "path": "validator/src/capture/run.rs",
+      "sha256": "a26cf30199c70edabb622fc9c593df88fe387dd99c92d3c5dc92075de41cca59"
+    },
+    {
+      "path": "validator/tests/capture_contract.rs",
+      "sha256": "184597460bb8eb3eaba1d8a11025469e61be95194956f6d02f4daa420b143579"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "integration-required",
+      "finding": "validator/src/lib.rs intentionally does not expose capture; root integration and a compiled public API witness are required."
+    },
+    {
+      "severity": "proof-gap",
+      "finding": "Positive WorkspaceWrite and Destructive execution could not be constructed through the public LiveContext API because matching effect grants are root-only; only denial and zero-workspace-mutation classifications were exercised in this lease."
+    },
+    {
+      "severity": "platform-ceiling",
+      "finding": "Runtime proof is aarch64 macOS only. The Linux descriptor execution branch was not compiled or run because no Linux Rust target is installed. The installed Windows target is currently blocked by pre-existing context/fixture cfg gaps and HCT-CAPTURE itself intentionally fails closed off Unix."
+    },
+    {
+      "severity": "security-ceiling",
+      "finding": "On macOS, descriptor-fed shebang scripts are pinned, but non-shebang Mach-O programs must launch by their canonical path because /dev/fd is not executable. Pre/post descriptor, content, parent, tree, and candidate checks reject observed swap/restore races, but cannot undo effects from bytes raced into execution before rejection."
+    },
+    {
+      "severity": "lifecycle-ceiling",
+      "finding": "Process-group cleanup proves descendants that remain in the assigned group are terminated; a deliberately daemonized descendant that successfully leaves the group is not independently excluded by this implementation."
+    },
+    {
+      "severity": "boundedness",
+      "finding": "Regular program/artifact reads are limited to 64 MiB, retained output to at most 16 MiB per stream, environment payload to 1 MiB, timeout to 24 hours, and read-effect worktree witnesses to 250000 entries and depth 128."
+    },
+    {
+      "severity": "claim-boundary",
+      "finding": "PASS text, receipts, digests, and green tests remain observations only; this worker performed no claim interpretation or promotion."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Root integration of `pub mod capture;` and a compiled public API witness for CommandSpec, CapturedRun, ArtifactRef, and ArtifactResolver.",
+    "Root-owned positive WorkspaceWrite and Destructive fixtures using a real run-scoped effect grant and post-run ArtifactResolver::from_run proof.",
+    "Independent security and claim-falsification review of the macOS non-shebang execution race ceiling and detached-descendant ceiling.",
+    "Root-owned CLI/state integration for N03-CLI-STATE.",
+    "Root-owned migration routing and retirement of CT-COMMAND-CAPTURE, CT-ARTIFACT-DEREF, and fragmented receipt writers.",
+    "Linux runtime compilation and behavioral execution before claiming Linux support."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/lib.rs",
+      "request": "After independent review, expose the module with `pub mod capture;`."
+    },
+    {
+      "path": "validator/src/api_witness.rs and validator/tests/public_api_witness.rs",
+      "request": "Add compiled public API witnesses for CommandSpec, CapturedRun, ArtifactRef, and ArtifactResolver after module exposure."
+    },
+    {
+      "path": "root-owned context/effect tests",
+      "request": "Issue real WorkspaceWrite and Destructive grants in crate-owned tests and prove legal mutation, post-run candidate rebinding, artifact resolution, timeout/partial-artifact handling, and no out-of-scope writes."
+    },
+    {
+      "path": "platform support policy",
+      "request": "Accept a lower macOS non-shebang race ceiling, add a stronger host execution substrate, or restrict the supported executable class; separately decide whether detached-daemon prevention is required beyond Unix process-group cleanup."
+    },
+    {
+      "path": "migration and command authority",
+      "request": "Route downstream commands through accepted HCT-CAPTURE, then retire CT-COMMAND-CAPTURE, CT-ARTIFACT-DEREF, and command-specific receipt writers under root-owned migration authority."
+    }
+  ],
+  "limitations": [
+    "The module was compiled and tested through a path-mounted integration boundary because validator/src/lib.rs is root-owned.",
+    "The root-owned libc dependency edits in validator/Cargo.toml and Cargo.lock were present before this lease and were neither edited nor staged by this worker.",
+    "Only aarch64 macOS behavior was executed; no Linux runtime proof exists.",
+    "Windows is not a supported runtime for this implementation and its compile probe was blocked earlier by existing non-portable context code.",
+    "No network or external-write behavior was exercised.",
+    "No public command catalog, manifest, generated authority, migration registry, schema, CLI dispatcher, or root-owned integration file was modified.",
+    "No N03, HCT-CAPTURE, source, package, install, runtime, release, readiness, or completion acceptance is claimed."
+  ],
+  "no_claim_statement": "This worker does not claim that HCT-CAPTURE or N03 is accepted or complete, and does not claim readiness, release, or goal completion. Root reconciliation and independent review remain mandatory."
+}

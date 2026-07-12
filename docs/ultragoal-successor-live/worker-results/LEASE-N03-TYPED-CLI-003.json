@@ -1,0 +1,237 @@
+{
+  "worker": "/root/n03_typed_cli_worker",
+  "lease_id": "LEASE-N03-TYPED-CLI-003",
+  "context_id": "sha256:538ef679e02b94064875facc63dd4dd5db1283ed332569979c7ec89e226e254b",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_unchanged": true,
+    "status_sha256_before_result": "d4a50fd44dac6c6873d33b17f6b49e2b8a907d8e2b455d57c1450b97fdf13aa5",
+    "untracked_content_sha256_before_result": "3a6f31423d4c8680108330523124fd80f45d03f63b65b776b5ea019e46c7cea5",
+    "context_note": "LiveContext was rebuilt after all leased source and test changes and immediately before this self-referential WorkerResult was written."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "lease_scope": "validator/src/cli/successor/**, validator/tests/cli_contract/successor/**, and this WorkerResult only",
+    "correction_source": "Independent review finding CLI-REVIEW-007 against LEASE-N03-TYPED-CLI-002",
+    "root_or_other_lane_changes_present": [
+      "plugin manifest, Cargo dependency files, root CLI/lib compilation wiring, migration authority, and parent-source schema",
+      "capture, state, inventory, canonical skill, and other WorkerResult lanes"
+    ],
+    "pre_existing_user_dirt": [
+      ".DS_Store"
+    ]
+  },
+  "final_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "leased_rust_lines": 2233,
+    "production_rust_lines": 1380,
+    "test_rust_lines": 853,
+    "golden_lines": 68,
+    "maximum_rust_file_lines": 293,
+    "rust_files_over_300_lines": 0,
+    "focused_live_crate_tests": "29 passed; 0 failed",
+    "all_target_check": "pass with dormant-candidate and unrelated warning debt",
+    "git_operations_performed": false,
+    "network_performed": false,
+    "external_writes_performed": false
+  },
+  "touched_paths": [
+    "validator/src/cli/successor/input.rs",
+    "validator/tests/cli_contract/successor/boundaries.rs",
+    "validator/tests/cli_contract/successor/help_boundaries.rs",
+    "validator/tests/cli_contract/successor/mod.rs",
+    "validator/tests/cli_contract/successor/standalone.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-TYPED-CLI-003.json"
+  ],
+  "touched_semantics": [
+    "first-help-token semantic stop boundary",
+    "HelpTarget derivation from only the validated prefix before --help or -h",
+    "output-mode derivation from only global --json tokens parsed before help",
+    "semantic preparse guards bounded to the first help token while full argv resource bounds remain enforced",
+    "exact root, group, and command help-position behavior",
+    "trailing argument non-echo and non-influence controls"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "--help fit apply selects exact root human help",
+    "fit --help apply selects exact fit-group human help",
+    "-h mirrors the same root and group stop boundary",
+    "fit apply --help selects exact fit-apply command help",
+    "--json before the group and --json after the subcommand but before help both select exact JSON command help",
+    "global --json between group and subcommand remains supported",
+    "--json after help cannot retroactively change human output mode",
+    "trailing canary cannot change target or appear in human or JSON rendered help",
+    "malformed tokens before help fail with stable ParseErrorId values",
+    "malformed, version, option, and route tokens after help are ignored at the semantic stop boundary",
+    "all 25 prior parser/catalog/boundary/security controls remain green"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased successor source, focused tests, and this WorkerResult only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal locked/offline Cargo target output"
+    },
+    {
+      "class": "external-process",
+      "scope": "local Cargo, rustfmt, Git, shasum, wc, and read-only search commands"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "parser-runtime",
+      "filesystem_reads": false,
+      "filesystem_writes": false,
+      "environment_reads": false,
+      "clock_reads": false,
+      "processes": false,
+      "network": false,
+      "telemetry": false
+    }
+  ],
+  "requirements": [
+    "REQ-CLI-001",
+    "REQ-CLI-002",
+    "REQ-CLI-003",
+    "REQ-CLI-004",
+    "REQ-CLI-005",
+    "REQ-CLI-006"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE"
+  ],
+  "changes": [
+    {
+      "area": "CLI-REVIEW-007",
+      "rationale": "requested_help_target now stops before the first exact --help or -h token, removes only pre-help global --json tokens, and derives root, group, or command from the remaining sequential grammar prefix. It can no longer discover a route from unparsed trailing input."
+    },
+    {
+      "area": "preparse boundary",
+      "rationale": "Semantic ambiguity guards inspect through the first help token so help-as-a-required-value still fails, while tokens after help cannot create duplicate, missing-value, flag-value, or help/version conflicts that clap never parsed."
+    },
+    {
+      "area": "machine mode boundary",
+      "rationale": "A canonical --json token changes OutputMode only before the first help token. Both supported global positions before help remain green; a trailing --json is inert."
+    },
+    {
+      "area": "resource defense",
+      "rationale": "Argument count, per-argument bytes, and UTF-8 validation still cover the complete argv before clap. Semantic stop does not bypass bounded-input defenses."
+    },
+    {
+      "area": "scope boundary",
+      "rationale": "No dispatcher, public witness, Cargo feature, schema, generated catalog, migration registry, or activation surface was edited."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test cli_contract successor_cli_contract:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "29 passed; 0 failed; 43 filtered out. This includes the 25 prior controls and 4 exact help-boundary tests."
+    },
+    {
+      "command": "cargo check --locked --offline --all-targets",
+      "result": "pass_with_warnings",
+      "qualification": "No compile errors. Warnings are dormant successor/capture dead-code and unused-import debt while the candidate remains intentionally undispatched."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/cli/successor/*.rs validator/tests/cli_contract/successor/*.rs",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check -- validator/src/cli/successor validator/tests/cli_contract/successor",
+      "result": "pass"
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test live_context accepted_live_candidate_builds_a_contract_bound_context -- --exact --nocapture --test-threads=1",
+      "result": "pass",
+      "summary": "LiveContext sha256:538ef679e02b94064875facc63dd4dd5db1283ed332569979c7ec89e226e254b was emitted before this result file."
+    },
+    {
+      "command": "per-file line-count and leased-artifact digest audit",
+      "result": "pass",
+      "summary": "17 Rust files, 2233 Rust lines, maximum 293 lines, zero Rust files over 300 lines; five changed source/test artifacts were SHA-256 recorded."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/cli/successor/input.rs",
+      "sha256": "ce68590351b4e245a3dfce7dcdfa4e540dbd696198298c9754ada83ae9008ff7"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/boundaries.rs",
+      "sha256": "12131727572bd1273046adfe99b9eed39721228638361f29fa13f83909c4f31e"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/help_boundaries.rs",
+      "sha256": "e1f5f72303572f56bcf42987f72aac640e2ca6a74bca68039e43c7f78a416bcf"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/mod.rs",
+      "sha256": "097ed7514396d64dcbb0ba5090c4a9f38ae75b0e81470d4cbc3f8ecc7c7d53b7"
+    },
+    {
+      "path": "validator/tests/cli_contract/successor/standalone.rs",
+      "sha256": "3e36d49433ed45f29f07173969c68f93b5015cb852021abacebc0c6050958b51"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "resolved-in-candidate",
+      "finding": "CLI-REVIEW-007 is closed at candidate scope: HelpTarget, OutputMode, and semantic preparse guards now share clap's first-help stop boundary, with exact root/group/command, JSON-placement, malformed-prefix, and canary controls."
+    },
+    {
+      "severity": "integration-required",
+      "finding": "The corrected successor candidate remains compiled and tested but undispatched. The legacy parser/dispatcher is still live public authority, so no successor command group is Active."
+    },
+    {
+      "severity": "root-authority-required",
+      "finding": "Public witnesses, dispatcher adoption, machine schemas, generated command/effect catalogs, migration routes, and activation decisions remain root-only work."
+    },
+    {
+      "severity": "proof-gap",
+      "finding": "These tests prove pure parser outcomes and rendered non-echo. The eventual adopted binary still requires independent syscall-level zero-hidden-write and representative product-behavior verification."
+    },
+    {
+      "severity": "platform-ceiling",
+      "finding": "Only the current aarch64 macOS locked toolchain was exercised."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Root acceptance and independent review of the corrected help boundary.",
+    "Root dispatcher integration without retaining the handwritten parser as duplicate authority.",
+    "Public API witnesses, machine schemas, and canonical generated command/effect projections.",
+    "Command adapters that construct and revalidate LiveContext and execute the named product behavior.",
+    "Migration routing or retirement for replaced legacy parser and dispatcher surfaces.",
+    "Representative live binary help, invalid-invocation, zero-hidden-write, read, write, external-write, and destructive probes."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "root acceptance records",
+      "request": "Independently verify CLI-REVIEW-007 against the exact positional, trailing-canary, malformed-prefix, and post-help inertness tests before accepting this correction."
+    },
+    {
+      "path": "validator/src/argument_parser/**, validator/src/command_run/**, validator/src/lib.rs, and root dispatcher wiring",
+      "request": "At the migration boundary, adopt cli::successor::parse_args over args_os and retire or explicitly route the handwritten parser; do not create parallel help-target authority."
+    },
+    {
+      "path": "root-owned public witnesses, schemas, generated catalogs, and migration registry",
+      "request": "Adopt only after integration behavior is real and independently proved; this worker requests no activation or claim promotion."
+    }
+  ],
+  "limitations": [
+    "This correction changes only candidate help-boundary parsing and tests; it does not dispatch commands.",
+    "Full-argv UTF-8/count/byte bounds intentionally remain earlier than semantic help stop as resource defenses.",
+    "Dormant candidate symbols continue to produce warning debt until root adopts or explicitly contains the module.",
+    "No public witness, schema, generated authority, Cargo dependency, dispatcher, migration, release, or completion state was changed.",
+    "Installed-plugin discovery and real product behavior are outside this lease and remain unproved."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

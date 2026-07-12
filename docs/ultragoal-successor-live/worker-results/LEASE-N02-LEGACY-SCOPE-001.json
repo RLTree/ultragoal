@@ -1,0 +1,271 @@
+{
+  "worker": "/root/n02_legacy_scope_worker",
+  "lease_id": "LEASE-N02-LEGACY-SCOPE-001",
+  "context_id": "sha256:620e7d7dc7ee205d5c9dc2577a1bfeb670a624dfbbfdfe91f9f6f5b3937e6634",
+  "candidate_identity": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_unchanged": true,
+    "dirty": true,
+    "status_sha256_before_result": "c4242675bd6d5a079a0af7a96ab802c55335ecabf8dcff179860d9b1224858d3",
+    "context_note": "Two byte-identical live HCT-INVENTORY summaries rebuilt LiveContext-v1 after all leased source and tests and the shared CAPTURE-006 and plugin-manifest corrections were frozen. This self-referential WorkerResult was added afterward."
+  },
+  "base_state": {
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "lease_scope": "validator/src/inventory/legacy.rs, new validator/src/inventory/legacy/**, validator/tests/inventory_contract_cases/legacy_scope.rs, one inventory-contract module declaration, and this WorkerResult",
+    "preserved_live_baseline": {
+      "catalog_id": "sha256:fe0cf077f649b0af2fb0bb4a2c7ff998f3924e45f375ee8394973fa285746fbb",
+      "context_id": "sha256:f9c61e966335fff2d0760724d652fd6ba0971b95b28c3c9fc6bbea1032a2e6d8",
+      "entry_count": 4092,
+      "finding_count": 236,
+      "parallel_authority_count": 154,
+      "legacy_entry_count": 154
+    },
+    "root_authority_retained": [
+      "migration and generated-authority registries",
+      "Cargo and dependency policy",
+      "public commands and root dispatcher",
+      "plugin manifest, agents, skills, docs, and templates",
+      "claim, release, readiness, and completion decisions"
+    ],
+    "pre_existing_user_dirt": [
+      ".DS_Store"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "catalog_id": "sha256:bf4bec71348beaf725e40fd360a6704e6c8beafcd1c7ef55b4bbd56e56954324",
+    "canonical_json_sha256": "0be589e40aca62b3d7355b57b3151f967d6971949544987ea4b46b3b7567f574",
+    "entry_count": 4013,
+    "finding_count": 151,
+    "parallel_authority_count": 61,
+    "compatibility_route_retained_count": 14,
+    "missing_required_component_count": 47,
+    "legacy_entry_count": 75,
+    "scope_exclusions_from_preserved_baseline": 70,
+    "scope_exclusion_breakdown": {
+      "nonoperative_successor_candidate": 18,
+      "validator_integration_tests": 1,
+      "validator_self_tests": 32,
+      "review_history": 15,
+      "classifier_implementation": 1,
+      "source_proven_cfg_test_modules": 3
+    },
+    "remaining_parallel_authority_breakdown": {
+      "agent": 14,
+      "command": 5,
+      "contract": 16,
+      "finalizer": 10,
+      "lane": 14,
+      "manifest_projection": 1,
+      "model": 1
+    },
+    "production_rust_lines": 385,
+    "test_rust_lines": 199,
+    "integration_test_harness_lines": 234,
+    "maximum_touched_rust_file_lines": 234,
+    "touched_rust_files_over_300_lines": 0,
+    "full_inventory_tests": "41 passed; 0 failed",
+    "git_operations_performed": false,
+    "network_performed": false,
+    "external_writes_performed": false
+  },
+  "touched_paths": [
+    "validator/src/inventory/legacy.rs",
+    "validator/src/inventory/legacy/matchers.rs",
+    "validator/src/inventory/legacy/scope.rs",
+    "validator/tests/inventory_contract.rs",
+    "validator/tests/inventory_contract_cases/legacy_scope.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N02-LEGACY-SCOPE-001.json"
+  ],
+  "touched_semantics": [
+    "bounded legacy authority classification with per-entry scope evidence",
+    "source-proven local cfg-test module exclusion using a bounded comment-and-string-aware token scan",
+    "exact test, historical review, non-operative candidate, and classifier-self scopes",
+    "fail-closed candidate-context evidence anchored only in its exact entrypoint",
+    "active predecessor contract, command, lane, finalizer, agent, manifest, and fixed-model negative controls",
+    "unconfined symlink rejection before content classification or physical-entry construction"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "exact non-operative successor-candidate entrypoint plus candidate descendants",
+    "validator integration-test and self-test authority lookalikes",
+    "historical review artifact fixed-model lookalike",
+    "classifier self-match canary",
+    "source-proven cfg-test module and active same-filename module",
+    "comment and raw-string forged cfg-test declarations",
+    "arbitrary prose attempting to self-declare non-operative status",
+    "binding predecessor contract and plugin-manifest draft",
+    "active argument parser, command, claim-semantics lane, lane registries, audit final packet, and CLI final packet",
+    "current public document, template, and review configuration fixed-model references"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased classifier source, tests, and this WorkerResult only"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal locked/offline Cargo target output"
+    },
+    {
+      "class": "temporary-fixture-write",
+      "scope": "isolated inventory test repositories and temporary path-set comparison files only"
+    },
+    {
+      "class": "external-process",
+      "scope": "local Cargo, rustfmt, Git, jq, rg, sort, comm, awk, wc, and shasum commands"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-write",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PRODUCT-004",
+    "REQ-MAINT-001",
+    "REQ-MAINT-003",
+    "REQ-MAINT-006"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY",
+    "N14-MIGRATION"
+  ],
+  "changes": [
+    {
+      "area": "scope classification",
+      "rationale": "Known tests, self-tests, review transcripts, the classifier implementation, and an explicitly non-operative contract candidate are context rather than live competing authority. Exact scope or external source evidence is required; arbitrary prose cannot opt out."
+    },
+    {
+      "area": "cfg-test reachability",
+      "rationale": "A tests.rs filename is excluded only when its sibling module source contains an exact cfg-test-only declaration after comments and strings are ignored. A production file with the same name remains active authority."
+    },
+    {
+      "area": "active negative controls",
+      "rationale": "Binding predecessor contracts and all currently reachable agent, command, lane, finalizer, manifest-projection, and fixed-model sources remain Legacy and Active with evidence references."
+    },
+    {
+      "area": "confinement",
+      "rationale": "Every walked path receives the existing causal symlink confinement check before model content is read or a physical entry is emitted."
+    },
+    {
+      "area": "scope boundary",
+      "rationale": "No route registry, generated authority, plugin, agent, skill, public command, dependency, claim, release, or root-owned integration decision was changed by this worker."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test inventory_contract legacy_scope:: -- --test-threads=1",
+      "result": "pass",
+      "summary": "3 passed; exclusions, active negative controls, and prose/comment/string false-pass canaries all passed."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test inventory_contract -- --test-threads=1",
+      "result": "pass",
+      "summary": "41 passed; 0 failed on the final frozen shared tree, including deterministic, zero-write, symlink, generated, routing, plugin, agent, and legacy-scope controls."
+    },
+    {
+      "command": "cargo test --locked --offline -p ultragoal --test inventory_contract -- --test-threads=1",
+      "result": "discarded-overlap",
+      "summary": "An earlier shared run reported 40 passed and one stale LiveContext construction after a concurrent root import correction. Root disclosed the overlap; the run was discarded and repeated cleanly after freeze."
+    },
+    {
+      "command": "cargo check --locked --offline -p ultragoal --all-targets",
+      "result": "pass",
+      "summary": "All targets compiled offline; existing dormant successor-CLI unused-code warnings remain outside this lease."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <leased Rust files>; git diff --check -- <leased paths>",
+      "result": "pass",
+      "summary": "All leased Rust files are formatted and diff-clean; every touched Rust file is at or below 234 lines."
+    },
+    {
+      "command": "target/debug/examples/hct_inventory --summary . (twice)",
+      "result": "expected-open-node-exit-1",
+      "summary": "Both runs were byte-identical and candidate-bound: catalog bf4bec..., canonical JSON 0be589..., 4013 entries, 151 findings, 61 parallel-authority findings, 14 retained-route warnings, and 47 missing components. Exit 1 truthfully reflects open error findings."
+    },
+    {
+      "command": "preserved baseline/current legacy path-set and category reconciliation",
+      "result": "pass",
+      "summary": "Exactly 70 baseline rows match the new exclusion scopes. Nine additional fixed-model rows disappeared through concurrent root-owned documentation/template edits, and fourteen legacy skills remain inventoried as retained compatibility routes; these other-lane reductions are not attributed to this worker."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/inventory/legacy.rs",
+      "sha256": "7271e92fe82205e5686819f74bf02f502e594114171fa94ec0fa93b9e6fcafb4",
+      "bytes": 2524,
+      "lines": 84
+    },
+    {
+      "path": "validator/src/inventory/legacy/matchers.rs",
+      "sha256": "b16e2c6839aaec2f61ef98036f4accd0781685f707120a3f037b104ce0f54d79",
+      "bytes": 3232,
+      "lines": 94
+    },
+    {
+      "path": "validator/src/inventory/legacy/scope.rs",
+      "sha256": "f8ab98742afe5418e40f5aaa9b7a567f51dae6e6115acf052110be4c63bc1e9d",
+      "bytes": 6668,
+      "lines": 207
+    },
+    {
+      "path": "validator/tests/inventory_contract.rs",
+      "sha256": "d31c6be99bfb980572f1cd2b0c0f36dadd50ee832f797bedadee8b88e591fff9",
+      "bytes": 7194,
+      "lines": 234
+    },
+    {
+      "path": "validator/tests/inventory_contract_cases/legacy_scope.rs",
+      "sha256": "7dae38b35abb280801871100f2ebec29e169b0da5b4fe4fbec98990679cdc567",
+      "bytes": 6518,
+      "lines": 199
+    }
+  ],
+  "findings": [
+    {
+      "severity": "candidate",
+      "finding": "Seventy baseline parallel-authority rows now have exact test, context, history, classifier-self, or source-proven cfg-test exclusion evidence instead of filename-only suppression."
+    },
+    {
+      "severity": "node-open",
+      "finding": "The current live catalog still reports 61 parallel-authority errors: 14 agents, 5 commands, 16 predecessor-contract files, 10 finalizers, 14 lane surfaces, 1 manifest projection, and 1 fixed-model configuration."
+    },
+    {
+      "severity": "shared-delta",
+      "finding": "The preserved live baseline moved from 236 to 151 total findings and from 154 to 61 parallel-authority findings. Only the 70 exact scope exclusions belong to this lease; 14 retained skill routes and 9 documentation/template model-text removals belong to root or other lanes."
+    },
+    {
+      "severity": "proof-ceiling",
+      "finding": "The candidate proves deterministic source classification and negative controls only. It does not prove retirement, reader/writer removal, installed-plugin discovery, runtime invocation, readiness, release, or completion."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent review and root acceptance of this classifier candidate.",
+    "Root reconciliation or adopted routing of all 61 remaining active parallel-authority rows.",
+    "Implementation and verification of the 47 remaining required components and other open generated-authority findings.",
+    "Representative installed-product and runtime verification at the exact downstream claim boundaries.",
+    "N02 completion remains unavailable until the deterministic live inventory has zero parallel authority."
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "Scope exclusion is classification evidence, not proof that an active reader or writer was retired.",
+    "The non-operative candidate exclusion depends on an exact marker in its bounded entrypoint; missing or altered evidence fails back to active legacy classification.",
+    "The preserved baseline-to-current total includes concurrent root-owned changes; only 70 path-set exclusions are attributed to this lease.",
+    "Current live summaries intentionally exit 1 while the remaining inventory errors are open.",
+    "No host installation, marketplace, plugin UI, custom-agent spawn, or representative user journey was exercised by this worker."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}
