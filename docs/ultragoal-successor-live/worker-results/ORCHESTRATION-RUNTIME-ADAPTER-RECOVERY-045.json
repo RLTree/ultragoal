@@ -1,0 +1,241 @@
+{
+  "worker": "/root/orchestration_runtime_adapter_engineer",
+  "lease_id": "ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045",
+  "context_id": "sha256:3514c35e49ba817e524b7d0ee6c8814bfd8934c0e243c4a7cd8424b3ba3ff8de",
+  "candidate_identity": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "corrective_base_head_commit": "f98d93bc10dd6873c690e21fedab181f9ed1f676",
+    "corrective_base_head_tree": "e06522e42e22c87a93711f78c9bd41cf7253c614",
+    "freeze_head_commit": "50d3e9f1d7a5cc95ee7ee31e0d0a54a0a40c5cdb",
+    "freeze_head_tree": "56089ad665b81c5db08bba1d02c15a16adf955ee",
+    "task_envelope_candidate_id": "sha256:a95c468383e747f3068890ca256c178c15b9e3b2dc3aaf97edf65e53e406b3da",
+    "root_issued_task_envelope_sha256": "sha256:a006507f8d6a89c8780f26dd0c418dedb6bb7bf602f366bf7941fc3858e3f90a",
+    "corrective_lease_authority": "docs/ultragoal-successor-live/work-packages/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045-CORRECTIVE-001.json",
+    "corrective_lease_authority_sha256": "sha256:ed46c29071d22770fb068a72b01b457a9555842734916270b72b2d3b01d67620",
+    "leased_artifact_set_sha256": "sha256:2e5ad0495eb66848ce2f20bab0f08e80bc4d0c70749139b7effb8471f3a6516f",
+    "leased_artifact_count_excluding_self_referential_worker_result": 17,
+    "leased_artifact_bytes": 99552,
+    "leased_artifact_lines": 2854,
+    "artifact_set_formula": "SHA-256 of sorted UTF-8 rows path, TAB, sha256-prefixed digest, LF"
+  },
+  "base_state": {
+    "status": "material_rework_due_to_reconciliation_permit_not_binding_the_complete_effect_resolution",
+    "root_issued_task_envelope": "docs/ultragoal-successor-live/task-envelopes/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json",
+    "root_issued_task_envelope_sha256": "sha256:a006507f8d6a89c8780f26dd0c418dedb6bb7bf602f366bf7941fc3858e3f90a",
+    "root_issued_corrective_lease": "docs/ultragoal-successor-live/work-packages/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045-CORRECTIVE-001.json",
+    "root_issued_corrective_lease_sha256": "sha256:ed46c29071d22770fb068a72b01b457a9555842734916270b72b2d3b01d67620",
+    "root_permit_v2_commit": "f98d93bc10dd6873c690e21fedab181f9ed1f676",
+    "root_permit_v2_authority_sha256": "sha256:6c376a6378d39db8da0c3d9d4eba8dc17d7d9bd7d90758f1397da125644cea73",
+    "effect_resolution_sha256": "sha256:7626f82c92355f60284e24c74e5134d4480f2931552459d664dd12678c5ba670",
+    "reconcile_boundary_sha256": "sha256:a805685dd98e23a3af0d80489c258c6b0ef88a466881746ded8d1aad29022e0b",
+    "work_package_sha256": "sha256:1edff6fde38824d22b06ccca63fa79fa2301f73dbcf84b02803ede4acac98739"
+  },
+  "final_state": {
+    "status": "corrected_candidate_for_independent_review_and_root_acceptance",
+    "adapter_interface": "action-only Resume and Recover are separate from decision-bound Reconcile",
+    "reconciliation_binding": "complete typed EffectResolution including operation, evidence digest, outcome, and every receipt field",
+    "read_behavior": "recursive-zero-write inspect and project",
+    "focused_controls": "25 passed; 0 failed; 0 skipped",
+    "dependency_controls": "207 passed; 0 failed; 0 skipped",
+    "production_and_test_compile": "passed",
+    "claim_effect": "none",
+    "lease_no_claim_statement": "This worker does not claim readiness, release, node closure, or goal completion."
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json",
+    "fixtures/orchestration-runtime-adapter/false-pass-controls.json",
+    "fixtures/orchestration-runtime-adapter/journey-contract.json",
+    "fixtures/orchestration-runtime-adapter/mutation-controls.json",
+    "validator/src/orchestration/product/runtime_adapter/action.rs",
+    "validator/src/orchestration/product/runtime_adapter/mod.rs",
+    "validator/src/orchestration/product/runtime_adapter/view.rs",
+    "validator/tests/orchestration_runtime_adapter_contract.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/decision_binding.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/fixture_contract.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/fresh_process.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/fresh_process_child.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/negative.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/positive.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/race.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/security.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/support.rs",
+    "validator/tests/orchestration_runtime_adapter_public_api.rs"
+  ],
+  "touched_semantics": [
+    "action-only-resume-and-recover-routing",
+    "complete-effect-resolution-substitution-refusal",
+    "decision-bound-reconciliation-routing",
+    "differently-bound-reconciliation-one-winner",
+    "externally-authorized-resume-reconcile-recover-routing",
+    "fresh-process-recovery-journey",
+    "orchestration-runtime-adapter",
+    "sealed-current-and-interrupted-inspection"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/orchestration-runtime-adapter/false-pass-controls.json",
+    "fixtures/orchestration-runtime-adapter/journey-contract.json",
+    "fixtures/orchestration-runtime-adapter/mutation-controls.json",
+    "validator/tests/orchestration_runtime_adapter_contract.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/decision_binding.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/fixture_contract.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/fresh_process.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/fresh_process_child.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/negative.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/positive.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/race.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/security.rs",
+    "validator/tests/orchestration_runtime_adapter_contract/support.rs",
+    "validator/tests/orchestration_runtime_adapter_public_api.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "leased-orchestration-runtime-adapter-artifacts",
+      "performed": true,
+      "scope": "leased-paths-only"
+    },
+    {
+      "class": "process",
+      "target": "locked-offline-focused-and-dependency-validation",
+      "performed": true,
+      "network": false,
+      "external_systems": false,
+      "scratch_root": "/tmp/hul-orchestration-runtime-045-rework"
+    }
+  ],
+  "requirements": [
+    "CTRL-ORCHESTRATION-ADAPTER-FALSE-PASS",
+    "CTRL-ORCHESTRATION-ADAPTER-NEGATIVE",
+    "CTRL-ORCHESTRATION-ADAPTER-POSITIVE",
+    "CTRL-ORCHESTRATION-ADAPTER-RACE-OR-MUTATION",
+    "CTRL-ORCHESTRATION-ADAPTER-SECURITY",
+    "complete-effect-resolution-permit-binding",
+    "fresh-process-recovery-preserves-exact-decision-binding",
+    "recursive-zero-write-read-paths",
+    "worker-result-v1"
+  ],
+  "dependency_nodes": [
+    "accepted-orchestration-recovery-product",
+    "accepted-orchestration-state-overlay",
+    "accepted-root-permit-v2-decision-binding"
+  ],
+  "changes": [
+    {
+      "area": "typed-runtime-boundary",
+      "result": "Replaced the mixed execution interface with execute_action for Resume and Recover and execute_reconcile for the complete decision-bound ReconcileRequest."
+    },
+    {
+      "area": "root-permit-v2-adaptation",
+      "result": "Test-only root issuance now calls issue_action_permit_for_test only for action operations and issue_reconcile_permit_for_test with the exact EffectResolution for reconciliation."
+    },
+    {
+      "area": "adversarial-decision-controls",
+      "result": "Evidence, outcome, receipt operation, receipt effect class and target, receipt digest, v1 downgrade, missing or crossed binding, replay, and same-view differently-bound races refuse before unauthorized writes."
+    },
+    {
+      "area": "fresh-process-recovery",
+      "result": "The reconciliation journey serializes one root-selected resolution into both permit issuance and execution and reopens the exact settled journal in a fresh process."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "AgentTaskEnvelope-v1 JSON Schema validation plus jq fixture parsing",
+      "exit_code": 0,
+      "result": "Corrective envelope and all three JSON fixtures are schema/JSON valid."
+    },
+    {
+      "command": "CARGO_BUILD_JOBS=16 CARGO_TARGET_DIR=/tmp/hul-orchestration-runtime-045-rework CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline -j 16 --no-fail-fast --test orchestration_runtime_adapter_contract --test orchestration_runtime_adapter_public_api",
+      "exit_code": 0,
+      "run_id": "4829b4a3-4bc7-4101-910f-c81bef6e87a6",
+      "result": "25 passed; 0 failed; 0 skipped. Complete decision binding, cross-use, downgrade, replay, mutation, security, three fresh-process journeys, public API, and recursive zero-write controls passed."
+    },
+    {
+      "command": "CARGO_BUILD_JOBS=16 CARGO_TARGET_DIR=/tmp/hul-orchestration-runtime-045-rework CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline -j 16 --no-fail-fast --test orchestration_runtime_adapter_contract -E <three transient leak diagnostics>",
+      "exit_code": 0,
+      "run_id": "667cf824-17d5-4d1d-9965-5cb840cda46f",
+      "result": "3 passed; 0 failed; no leak signal."
+    },
+    {
+      "command": "CARGO_BUILD_JOBS=16 CARGO_TARGET_DIR=/tmp/hul-orchestration-runtime-045-rework CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline -j 16 --no-fail-fast --test orchestration_contract --test orchestration_product_contract --test orchestration_state_journey_contract",
+      "exit_code": 0,
+      "run_id": "f3f4276a-e9dc-4afa-9e6e-de0be3012a7a",
+      "result": "207 passed; 0 failed; 0 skipped across the accepted orchestration kernel, product, and state journey dependencies."
+    },
+    {
+      "command": "CARGO_BUILD_JOBS=16 CARGO_TARGET_DIR=/tmp/hul-orchestration-runtime-045-rework-check CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline --lib --tests -j 16",
+      "exit_code": 0,
+      "result": "Production library and all test targets compile."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <all leased Rust artifacts> and git diff --check -- <leased artifact set>",
+      "exit_code": 0,
+      "result": "All leased Rust artifacts are formatted and whitespace-clean."
+    },
+    {
+      "command": "Final same-session shasum revalidation of RootPermit-v2 authority.rs, effect.rs, reconcile.rs, product/mod.rs, work package, and every leased artifact row",
+      "exit_code": 0,
+      "result": "All dependency preimages remained unchanged; 17 worker-output artifact rows total 99552 bytes and 2854 lines and aggregate to sha256:2e5ad0495eb66848ce2f20bab0f08e80bc4d0c70749139b7effb8471f3a6516f. The root-issued task envelope remains read-only context at sha256:a006507f8d6a89c8780f26dd0c418dedb6bb7bf602f366bf7941fc3858e3f90a and the corrective lease remains read-only context at sha256:ed46c29071d22770fb068a72b01b457a9555842734916270b72b2d3b01d67620."
+    }
+  ],
+  "artifacts": [
+    {"path":"fixtures/orchestration-runtime-adapter/false-pass-controls.json","sha256":"sha256:3c1a458907744b3d568dc41c2a9a5c4b38558b9b5ac571defb66143cbc62a9b9","bytes":625,"lines":28},
+    {"path":"fixtures/orchestration-runtime-adapter/journey-contract.json","sha256":"sha256:ca38d610c6007b534b94e7555d14b71d39f2f3c5c4174cf0bf02e3e64a72c361","bytes":611,"lines":19},
+    {"path":"fixtures/orchestration-runtime-adapter/mutation-controls.json","sha256":"sha256:c697757040c4f1b73a4c208bc7bcf9a7b98871c7b7072eb1d45bba638cd0a24e","bytes":1220,"lines":40},
+    {"path":"validator/src/orchestration/product/runtime_adapter/action.rs","sha256":"sha256:0e10520130d16a9017a498f583b7726d088a6900ec6bd9be2158e94332849e26","bytes":5682,"lines":139},
+    {"path":"validator/src/orchestration/product/runtime_adapter/mod.rs","sha256":"sha256:7491a0e872d77928d2d74f932ff6f07ddff9f86983ce03ab9a531ad6de778308","bytes":485,"lines":11},
+    {"path":"validator/src/orchestration/product/runtime_adapter/view.rs","sha256":"sha256:5dca1e7b3db9bc12ac4fd5c620d92258ed46b3856d212bac7f3b51416a3838db","bytes":4409,"lines":130},
+    {"path":"validator/tests/orchestration_runtime_adapter_contract.rs","sha256":"sha256:5fa022391fea4dbcb569cf745e9f030ccd78e004529c15ee90653d08e544d80c","bytes":419,"lines":18},
+    {"path":"validator/tests/orchestration_runtime_adapter_contract/decision_binding.rs","sha256":"sha256:a80338e38d5242c7fe6b8a752c6743d3cec53896e494a1b21afff999a30ff52e","bytes":9785,"lines":248},
+    {"path":"validator/tests/orchestration_runtime_adapter_contract/fixture_contract.rs","sha256":"sha256:aed83b2dec061ce4fdf9875d7c6f780982cf991cb7614de6ed9ed1e24619b1af","bytes":4121,"lines":131},
+    {"path":"validator/tests/orchestration_runtime_adapter_contract/fresh_process.rs","sha256":"sha256:30ad37574263009c02a5506d6050eedf27c00e84ea7ff9a4cbace45027390958","bytes":6582,"lines":192},
+    {"path":"validator/tests/orchestration_runtime_adapter_contract/fresh_process_child.rs","sha256":"sha256:ef4623e41883a0e061b1387cb52c5c842c5213d0217b97931793bd072c62e030","bytes":11186,"lines":320},
+    {"path":"validator/tests/orchestration_runtime_adapter_contract/negative.rs","sha256":"sha256:89f8ccc9c4a0c01e8f083faf88111d35c101e1f0314c7bb7d867d62c48af3f4b","bytes":12387,"lines":350},
+    {"path":"validator/tests/orchestration_runtime_adapter_contract/positive.rs","sha256":"sha256:af589f6827f7a6a8c29a066c9c637098689733c58288f85aadd72b968dae6187","bytes":8048,"lines":209},
+    {"path":"validator/tests/orchestration_runtime_adapter_contract/race.rs","sha256":"sha256:66ac4df2d97ccc74bd39014f42ce72a62e79e19569f47fa76a4135d3d9d8832d","bytes":6598,"lines":181},
+    {"path":"validator/tests/orchestration_runtime_adapter_contract/security.rs","sha256":"sha256:4bcb4658914feea684148fc0437879fc41248ac0979dae50a647278f57f7d906","bytes":5015,"lines":148},
+    {"path":"validator/tests/orchestration_runtime_adapter_contract/support.rs","sha256":"sha256:f73d00066079cd0c27bca033b57229a132a975db1cf9bc03dc7a90ff7a942e2d","bytes":13838,"lines":442},
+    {"path":"validator/tests/orchestration_runtime_adapter_public_api.rs","sha256":"sha256:06400336a930ab0f4afe4b82e0cbd848ebb0c945c265d66b16e39895eec72647","bytes":8541,"lines":248}
+  ],
+  "findings": [
+    {
+      "severity": "closed-material-rework",
+      "finding": "The prior adapter candidate allowed a Reconcile permit to authorize a substituted EffectResolution. The corrected adapter consumes RootPermit-v2 through a separate reconciliation interface and adversarially proves exact full-resolution binding before mutation."
+    },
+    {
+      "severity": "expected-root-boundary",
+      "finding": "The corrected adapter remains unexported from the live product module; only the scratch external-consumer witness adds the exact proposed export."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-review-of-sha256-2e5ad0495eb66848ce2f20bab0f08e80bc4d0c70749139b7effb8471f3a6516f",
+    "root-module-export-after-independent-acceptance",
+    "root-production-authority-issuance-and-replay-ledger",
+    "root-public-dispatch-decision",
+    "installed-fresh-binary-public-journey"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/orchestration/product/mod.rs",
+      "expected_sha256": "sha256:9844f03161964bba108b70e7df15ed56826b65e3eda912387a3427dba1433d82",
+      "request": "After independent acceptance of exact worker-output artifact set sha256:2e5ad0495eb66848ce2f20bab0f08e80bc4d0c70749139b7effb8471f3a6516f, add exactly one public runtime_adapter module export."
+    },
+    {
+      "path": "root-owned orchestration runtime composition",
+      "request": "Bind the accepted adapter to canonical ProductContext, ProductWorkspace, current head, tick, live workers, adopted state, production RootAuthority issuance, bounded expiry and nonce policy, and a durable one-shot replay ledger without deserializing process-local view authority."
+    },
+    {
+      "path": "root-owned public command dispatcher and handler witness",
+      "request": "Decide and independently prove any mutation route; preserve recursive zero writes for help, parse, query, inspect, next, and diagnose."
+    }
+  ],
+  "limitations": [
+    "The live product module does not export runtime_adapter and no public dispatcher route consumes it.",
+    "Tests use crate test-only root authority issuance; production authority construction, issuance, expiry/nonce policy, and durable replay consumption remain root-owned and unproved.",
+    "Fresh-process controls exercise production adapter source through test binaries, not an installed public CLI or supported host runtime.",
+    "The schema-required WorkerResult no-claim literal is shorter than the corrective lease wording; final_state preserves the stronger exact lease ceiling without changing root-owned schema authority.",
+    "No public-command, package, install, cache, marketplace, app-registry, Plugins UI, discovery, installed-runtime, node-closure, readiness, release, or completion claim is supported."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": "OrchestrationRuntimeAdapterFalsePassControls-v1",
+  "claim_effect": "none",
+  "supporting_only": [
+    "serialized-view",
+    "fixture-permit",
+    "unit-test",
+    "in-process-simulation",
+    "generated-row",
+    "worker-result"
+  ],
+  "refused_as_authority": [
+    "pre-decision-root-action-request",
+    "permit-v1",
+    "permit-without-decision-binding",
+    "permit-bound-to-a-different-resolution"
+  ],
+  "withheld": [
+    "root-dispatch",
+    "real-permit-issuance",
+    "installed-fresh-binary",
+    "public-command",
+    "node-closure",
+    "readiness",
+    "release",
+    "completion"
+  ]
+}

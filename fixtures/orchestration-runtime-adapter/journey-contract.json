@@ -1,0 +1,19 @@
+{
+  "schema_version": "OrchestrationRuntimeAdapterJourney-v1",
+  "claim_effect": "none",
+  "scenarios": [
+    {
+      "id": "interrupted-root-resume",
+      "processes": ["create-and-interrupt", "inspect-and-authorize", "execute", "reopen"]
+    },
+    {
+      "id": "ambiguous-effect-reconciliation",
+      "decision_binding": "complete-effect-resolution",
+      "processes": ["create-ambiguity", "inspect-and-authorize", "execute", "reopen"]
+    },
+    {
+      "id": "interrupted-publication-recovery",
+      "processes": ["create-interrupted-append", "inspect-and-authorize", "execute", "reopen"]
+    }
+  ]
+}
