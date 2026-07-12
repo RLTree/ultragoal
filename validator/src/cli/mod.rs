@@ -1,6 +1,7 @@
 pub(crate) mod archive;
 mod archive_stdout;
 pub(crate) mod audit;
+pub mod capture;
 pub(crate) mod control;
 pub(crate) mod coverage;
 pub(crate) mod current_state;
@@ -28,5 +29,7 @@ pub(crate) mod schema_validation;
 pub(crate) mod session;
 pub(crate) mod source_obligations;
 pub(crate) mod standards;
+pub(crate) mod successor;
+pub(crate) mod successor_public;
 pub(crate) mod typed_boundaries;
 pub(crate) mod usage;

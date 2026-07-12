@@ -1,39 +1,16 @@
 ---
 name: fit-repo
-description: Mandatory Harness Ultragoal entry contract for fitting a fresh or existing repo before any harnessed, initialized, retrofitted, ultragoal-ready, or material-review-ready claim.
+description: Deprecated compatibility alias for explicit `$harness-ultragoal:fit-repo` requests. Preserve the request and route it to `$harness-ultragoal:repository-fit`; do not use this alias as independent workflow authority.
 ---
 
-# Fit Repo
+# Deprecated Compatibility Route
 
-`fit-repo` is the mandatory product entrypoint for Harness Ultragoal repo setup.
-Do not claim a repo is harnessed, initialized, retrofitted, agent-first,
-coverage-enforced, ultragoal-ready, or ready for material review without a
-schema-valid fit-repo receipt.
+> Compatibility warning: this legacy alias is not an independent workflow or authority. Its canonical target is `$harness-ultragoal:repository-fit`.
 
-## Required Sequence
-
-1. Discover repo root, plugin source root, installed plugin root, cache root,
-   and app registry exposure when available.
-2. Classify the target as `fresh_repo`, `retrofit_repo`, or
-   `blocked_unclassified_repo`.
-3. Classify runtime and product surfaces.
-4. Install or verify required templates, scripts, schemas, standards rows,
-   coverage authority, coverage scope authority, worktree environment setup,
-   Product Fitness authority, ultragoal bundle surfaces, and orchestrator
-   automation surfaces.
-5. Run the fast setup gate and target-repo setup validator.
-6. Emit the schema-defined fit-repo receipt in the repo validation artifacts surface.
-7. Withhold unsupported claims in the receipt claim ceiling.
-
-## Hard Rules
-
-- Missing setup surfaces become blockers with owner, reason, affected claim ids,
-  required repair, and claim ceiling.
-- Source, installed plugin, cache package, app registry, and marketplace
-  surfaces are distinct proof surfaces.
-- Reading docs is not fit-repo proof.
-- Reviewer approval is not fit-repo proof.
-- Package/static proof is not live app, registry, launcher, or marketplace
-  proof.
-- Product Cohesion is not Product Fitness. Product-impacting claims require
-  Product Fitness receipt proof or explicit claim withholding.
+1. Preserve the user's full request, context, constraints, and authorized effects unchanged.
+2. Before routing, inspect the request and supplied context for Harness Ultragoal skill tokens. If it contains another distinct explicit Harness Ultragoal skill token or selects multiple compatibility routes, report a causal compatibility-route conflict and perform no routing or effect.
+3. Invoke `$harness-ultragoal:repository-fit` with that preserved input.
+4. Follow only the canonical target's current contract. Do not restore or apply legacy lane, gate, receipt, finalizer, command, tool, helper, schema, state-store, or generated authority from this wrapper.
+5. Perform no hidden writes or external effects while resolving the route. Any later effect must remain authorized by the original request and the canonical target.
+6. Fail closed if the canonical target is unavailable: report the exact blocker and do not fall back, infer semantic equivalence, or claim adoption, discovery, runtime behavior, retirement, readiness, release, or completion.
+7. Never substitute documentation, tests, receipts, generated rows, telemetry, signatures, or provenance for the requested product behavior.

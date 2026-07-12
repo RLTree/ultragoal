@@ -7,16 +7,36 @@ mod inventory {
     pub use ultragoal::inventory::*;
 }
 
+#[path = "inventory_contract_cases/agent_manifest.rs"]
+mod agent_manifest;
+#[path = "inventory_contract_cases/agent_routes.rs"]
+mod agent_routes;
+#[path = "inventory_contract_cases/compatibility_routes.rs"]
+mod compatibility_routes;
+#[path = "inventory_contract_cases/context_scopes.rs"]
+mod context_scopes;
 #[path = "inventory_contract_cases/contract_integrity.rs"]
 mod contract_integrity;
 #[path = "inventory_contract_cases/fixtures.rs"]
 mod fixtures;
+#[path = "inventory_contract_cases/generated_disposition.rs"]
+mod generated_disposition;
 #[path = "inventory_contract_cases/generated_regeneration.rs"]
 mod generated_regeneration;
 #[path = "inventory_contract_cases/legacy_limits.rs"]
 mod legacy_limits;
+#[path = "inventory_contract_cases/legacy_scope.rs"]
+mod legacy_scope;
+#[path = "inventory_contract_cases/plugin_hooks.rs"]
+mod plugin_hooks;
+#[path = "inventory_contract_cases/plugin_manifest.rs"]
+mod plugin_manifest;
+#[path = "inventory_contract_cases/plugin_manifest_semantics.rs"]
+mod plugin_manifest_semantics;
 #[path = "inventory_contract_cases/repository_fixture.rs"]
 mod repository_fixture;
+#[path = "inventory_contract_cases/routing_transitions.rs"]
+mod routing_transitions;
 #[path = "inventory_contract_cases/schema_references.rs"]
 mod schema_references;
 
@@ -52,12 +72,13 @@ fn current_live_catalog_reports_contract_definitions_and_missing_topology() {
         "improve-and-maintain",
         "product-journey-review",
     ] {
-        assert!(
-            catalog
-                .entries()
-                .iter()
-                .any(|entry| entry.stable_id == format!("SKILL:{skill}"))
-        );
+        let entry = catalog
+            .entries()
+            .iter()
+            .find(|entry| entry.stable_id == format!("SKILL:{skill}"))
+            .unwrap();
+        assert_eq!(entry.active_status, ActiveStatus::Active);
+        assert_eq!(entry.authority_state, AuthorityState::Canonical);
     }
     for agent in [
         "repo-recon",
@@ -67,22 +88,28 @@ fn current_live_catalog_reports_contract_definitions_and_missing_topology() {
         "security-reviewer",
         "orchestration-recovery-reviewer",
     ] {
-        assert!(
+        assert_eq!(
             catalog
                 .entries()
                 .iter()
-                .any(|entry| entry.stable_id == format!("AGENT:{agent}"))
+                .find(|entry| entry.stable_id == format!("AGENT:{agent}"))
+                .unwrap()
+                .active_status,
+            ActiveStatus::Active
         );
     }
     for command in [
         "inspect", "next", "fit", "check", "diagnose", "prove", "observe", "package", "eval",
         "migrate",
     ] {
-        assert!(
+        assert_eq!(
             catalog
                 .entries()
                 .iter()
-                .any(|entry| entry.stable_id == format!("COMMAND:{command}"))
+                .find(|entry| entry.stable_id == format!("COMMAND:{command}"))
+                .unwrap()
+                .active_status,
+            ActiveStatus::Candidate
         );
     }
     assert_eq!(catalog.source_registry_counts().get("surfaces"), Some(&24));
@@ -118,7 +145,39 @@ fn current_live_catalog_reports_contract_definitions_and_missing_topology() {
                 && matches!(entry.kind.as_str(), "skill" | "agent" | "command-group")
         })
         .collect::<Vec<_>>();
-    assert_eq!(missing_topology.len(), 24);
+    assert!(
+        missing_topology
+            .iter()
+            .all(|entry| matches!(entry.kind.as_str(), "agent" | "command-group"))
+    );
+    assert_eq!(
+        catalog
+            .findings()
+            .iter()
+            .filter(|finding| finding.code == "candidate_component_not_active")
+            .count(),
+        10
+    );
+    assert_eq!(
+        catalog
+            .entries()
+            .iter()
+            .filter(|entry| {
+                entry.stable_id.starts_with("LEGACY-SKILL:")
+                    && matches!(
+                        entry.kind.as_str(),
+                        "legacy-skill-route-witness" | "compatibility-route-retained"
+                    )
+            })
+            .count(),
+        14
+    );
+    assert!(
+        !catalog
+            .findings()
+            .iter()
+            .any(|finding| finding.code == "invalid_compatibility_route_wrapper")
+    );
     assert!(catalog.has_error_findings());
     for api in [
         "API:LiveContext::build",
@@ -128,6 +187,11 @@ fn current_live_catalog_reports_contract_definitions_and_missing_topology() {
         "API:InventoryBuilder",
         "API:AuthorityCatalog",
         "API:GeneratedSurfaceIndex",
+        "API:PackageSnapshot",
+        "API:InstallSnapshot",
+        "API:MarketplaceSnapshot",
+        "API:DiscoveryObservation",
+        "API:RuntimeObservation",
     ] {
         assert_eq!(
             catalog
@@ -166,12 +230,20 @@ fn current_live_catalog_reports_contract_definitions_and_missing_topology() {
             .iter()
             .all(|entry| entry.active_status == ActiveStatus::Active)
     );
-    assert_eq!(
-        catalog
-            .findings()
-            .iter()
-            .filter(|finding| finding.code == "parallel_authority")
-            .count(),
-        legacy.len()
-    );
+    let parallel_ids = catalog
+        .findings()
+        .iter()
+        .filter(|finding| finding.code == "parallel_authority")
+        .filter_map(|finding| finding.entry_id.as_deref())
+        .collect::<std::collections::BTreeSet<_>>();
+    let retained_ids = catalog
+        .findings()
+        .iter()
+        .filter(|finding| finding.code == "compatibility_route_retained")
+        .filter_map(|finding| finding.entry_id.as_deref())
+        .collect::<std::collections::BTreeSet<_>>();
+    assert!(legacy.iter().all(|entry| {
+        parallel_ids.contains(entry.stable_id.as_str())
+            ^ retained_ids.contains(entry.stable_id.as_str())
+    }));
 }

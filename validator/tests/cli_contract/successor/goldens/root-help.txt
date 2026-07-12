@@ -1,0 +1,67 @@
+Harness Ultragoal successor CLI
+Usage: ultragoal [--json] <group> [subcommand] [options]
+Effects are structural; no effect override option is accepted.
+
+Commands:
+  inspect  [read]
+      Summarize live context, findings, capabilities, and claim ceilings.
+  inspect context  [read]
+      Inspect candidate-bound live context.
+  inspect inventory  [read]
+      Inspect semantic components and authority conflicts.
+  inspect capabilities  [read]
+      Inspect exposed tools and supported capability surfaces.
+  inspect findings  [read]
+      Inspect typed current findings.
+  inspect claims  [read]
+      Inspect per-claim ceilings without promotion.
+  next  [read]
+      Select one deterministic legal action or authority request.
+  fit inspect  [read] [--target <value>]
+      Classify a fresh, partial, compatible, conflicting, or fitted target.
+  fit plan  [read] [--target <value>]
+      Compute desired state, exact mutations, conflicts, rollback, and authority needs.
+  fit apply  [workspace-write] [--target <value>] --plan <value> --accept-plan <value>
+      Apply only an explicitly accepted, context-bound fit plan.
+  fit verify  [read] [--target <value>]
+      Verify fitted discovery and behavior without mutation.
+  check routine  [workspace-write] [--target <value>]
+      Run conservative affected validation with declared local build artifacts.
+  check strict  [workspace-write] [--target <value>] --claim <value>
+      Run dependency-closed validation for one named claim.
+  diagnose  [read] [--finding <value>]
+      Explain cause, smallest repair, exact rerun, effect, and ceiling.
+  prove  [workspace-write] --claim <value> --output <value>
+      Execute one claim-specific proof and independent reconciliation packet.
+  observe query  [read] [--filter <value>]
+      Query local semantic events without access-metadata writes.
+  observe export  [external-write] --output <value> --approve-export
+      Export explicitly approved semantic data to an external destination.
+  package inventory  [workspace-write] --output <value>
+      Write a deterministic package inventory from canonical source.
+  package build  [workspace-write] --output <value>
+      Build deterministic package bytes and local provenance inputs.
+  package verify  [read] --input <value>
+      Verify package bytes and inventory without mutation.
+  package install-test  [workspace-write] --input <value> --output <value>
+      Exercise an isolated install and write a local verification artifact.
+  package publish  [external-write] --input <value> --provider <value> --approve-publish
+      Publish only an explicitly approved package through a named provider.
+  eval audit  [read] --spec <value>
+      Audit an evaluation specification and dataset without mutation.
+  eval run  [workspace-write] --spec <value> --output <value>
+      Run a vendor-neutral evaluation and write bounded local results.
+  eval harvest  [workspace-write] --input <value> --output <value>
+      Harvest independently triaged failures into a local candidate artifact.
+  eval promote  [workspace-write] --candidate <value> --output <value>
+      Write a bounded, reversible improvement promotion candidate.
+  eval adapter  [external-write] --spec <value> --provider <value>
+      Invoke one explicitly named external evaluation provider adapter.
+  migrate plan  [read] [--registry <value>]
+      Plan routes, compatibility, and retirement from the migration registry.
+  migrate apply  [workspace-write] --plan <value> --accept-plan <value>
+      Apply only an explicitly accepted, context-bound migration plan.
+  migrate verify  [read] [--registry <value>]
+      Verify replacement behavior and absence of duplicate authority.
+  migrate retire  [destructive] --plan <value> --approve-retirement
+      Retire named legacy surfaces only with an explicit destructive approval.

@@ -27,14 +27,14 @@ fn deterministic_generated_index_regenerates_and_tamper_drifts() {
     repo.write(
         "migration/generated-surface-authority.json",
         serde_json::to_vec(&serde_json::json!({
-            "schema_version": "GeneratedSurfaceAuthority-v1",
+            "schema_version": "GeneratedSurfaceAuthority-v2",
             "contract_id": "harness-ultragoal-successor-contract-v2",
             "surfaces": [
-                {"output":"generated/missing.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},
-                {"output":"generated/no-generator.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},
-                {"output":"generated/repointed.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},
-                {"output":"generated/tampered.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},
-                {"output":"generated/valid.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]}
+                {"disposition":"canonical_projection","output":"generated/missing.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},
+                {"disposition":"canonical_projection","output":"generated/no-generator.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},
+                {"disposition":"canonical_projection","output":"generated/repointed.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},
+                {"disposition":"canonical_projection","output":"generated/tampered.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},
+                {"disposition":"canonical_projection","output":"generated/valid.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]}
             ]
         }))
         .unwrap()

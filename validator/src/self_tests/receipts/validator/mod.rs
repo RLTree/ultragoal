@@ -172,7 +172,7 @@ fn validator_receipt_builds_execution_and_generated_artifacts() {
             .as_array()
             .expect("generated artifacts")
             .iter()
-            .any(|row| row["artifact_type"] == "ready_for_merge")
+            .all(|row| row["artifact_type"] != "ready_for_merge")
     );
     assert!(
         !receipt["generated_artifacts"]

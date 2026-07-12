@@ -1,4 +1,4 @@
-use crate::{digest, review::round::ReviewFailure, review::round::anchor::values::AnchorValues};
+use crate::{review::round::ReviewFailure, review::round::anchor::values::AnchorValues};
 use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
@@ -14,15 +14,15 @@ pub(crate) fn persona_errors(
         .and_then(Value::as_array)
         .cloned()
         .unwrap_or_default();
-    let seen_personas = rows
+    let seen_roles = rows
         .iter()
-        .filter_map(|row| row.get("persona").and_then(Value::as_str))
+        .filter_map(|row| row.get("role").and_then(Value::as_str))
         .map(str::to_string)
         .collect::<BTreeSet<_>>();
-    required_persona_errors(&rows, &seen_personas, out);
-    crate::review::round::registry::exposure_errors(root, value, out);
+    required_role_errors(&rows, &seen_roles, out);
+    let registry = crate::review::round::registry::exposure_errors(root, value, out);
     prior_reviewer_errors(value, &rows, out);
-    let mut row_seen_personas = BTreeSet::new();
+    let mut row_seen_roles = BTreeSet::new();
     let mut seen_agents = BTreeSet::new();
     for row in &rows {
         row_errors(
@@ -30,33 +30,34 @@ pub(crate) fn persona_errors(
             value,
             row,
             anchors,
-            &mut row_seen_personas,
+            &mut row_seen_roles,
             &mut seen_agents,
+            &registry,
             out,
         );
     }
 }
 
-fn required_persona_errors(
+fn required_role_errors(
     rows: &[Value],
-    seen_personas: &BTreeSet<String>,
+    seen_roles: &BTreeSet<String>,
     out: &mut Vec<ReviewFailure>,
 ) {
-    let required = crate::review::round::config::PERSONAS
+    let required = crate::review::round::config::REVIEW_ROLES
         .iter()
-        .map(|spec| spec.persona.to_string())
+        .map(|spec| spec.role_name.to_string())
         .collect::<BTreeSet<_>>();
-    if rows.len() != crate::review::round::config::PERSONAS.len() {
+    if rows.len() != crate::review::round::config::REVIEW_ROLES.len() {
         out.push(ReviewFailure::new(
             "validator-execution-provenance",
-            "review_round_wrong_persona_count",
+            "review_round_wrong_role_count",
             rows.len().to_string(),
         ));
     }
-    for missing in required.difference(seen_personas) {
+    for missing in required.difference(seen_roles) {
         out.push(ReviewFailure::new(
             "validator-execution-provenance",
-            "review_round_missing_persona",
+            "review_round_missing_role",
             missing.clone(),
         ));
     }
@@ -87,7 +88,7 @@ fn prior_reviewer_errors(value: &Value, rows: &[Value], out: &mut Vec<ReviewFail
             out.push(ReviewFailure::new(
                 "validator-execution-provenance",
                 "review_round_reused_reviewer",
-                agent,
+                "prior-reviewer-id",
             ));
         }
     }
@@ -98,16 +99,17 @@ fn row_errors(
     receipt: &Value,
     row: &Value,
     anchors: &AnchorValues,
-    seen_personas: &mut BTreeSet<String>,
+    seen_roles: &mut BTreeSet<String>,
     seen_agents: &mut BTreeSet<String>,
+    registry: &crate::review::round::registry::RegistrySnapshot,
     out: &mut Vec<ReviewFailure>,
 ) {
-    let persona = row.get("persona").and_then(Value::as_str).unwrap_or("");
-    if !seen_personas.insert(persona.to_string()) {
+    let role = row.get("role").and_then(Value::as_str).unwrap_or("");
+    if !seen_roles.insert(role.to_string()) {
         out.push(ReviewFailure::new(
             "validator-execution-provenance",
-            "review_round_duplicate_persona",
-            persona,
+            "review_round_duplicate_role",
+            "reviewer-role",
         ));
     }
     let agent = row
@@ -119,63 +121,41 @@ fn row_errors(
         out.push(ReviewFailure::new(
             "validator-execution-provenance",
             "review_round_reused_reviewer",
-            persona,
+            "reviewer-agent-id",
         ));
     }
-    let Some(spec) = crate::review::round::config::persona_spec(persona) else {
+    let Some(spec) = crate::review::round::config::review_role_spec(role) else {
         return;
     };
-    crate::review::round::registry::row_agent_type_error(row, persona, out);
-    crate::review::round::spawn::receipts::spawn_receipt_errors(receipt, row, persona, out);
-    prompt_identity_errors(root, row, persona, spec.prompt_path, out);
-    custom_agent_identity_errors(root, row, persona, spec.custom_path, out);
-    crate::review::round::row::policy::row_policy_errors(row, receipt, anchors, persona, out);
-    crate::review::round::product::fitness::disposition_errors(root, row, receipt, persona, out);
+    crate::review::round::registry::row_agent_role_error(row, role, out);
+    crate::review::round::spawn::receipts::spawn_receipt_errors(receipt, row, role, out);
+    agent_manifest_identity_errors(row, role, spec, registry, out);
+    crate::review::round::row::policy::row_policy_errors(row, receipt, anchors, role, out);
+    crate::review::round::product::fitness::disposition_errors(root, row, receipt, role, out);
     crate::review::round::claim::ceiling::row_authority_errors(
-        root, receipt, anchors, row, persona, out,
+        root, receipt, anchors, row, role, out,
     );
-    crate::review::round::artifacts::artifact_binding_errors(root, row, persona, out);
-    crate::review::round::report::report_errors(root, receipt, row, anchors, persona, out);
+    crate::review::round::artifacts::artifact_binding_errors(root, row, role, out);
+    crate::review::round::report::report_errors(root, receipt, row, anchors, role, out);
 }
 
-fn prompt_identity_errors(
-    root: &Path,
+fn agent_manifest_identity_errors(
     row: &Value,
-    persona: &str,
-    path: &str,
+    role: &str,
+    spec: &crate::review::round::config::ReviewRoleSpec,
+    registry: &crate::review::round::registry::RegistrySnapshot,
     out: &mut Vec<ReviewFailure>,
 ) {
-    let digest = digest::file(&root.join(path)).unwrap_or_else(|_| String::new());
-    if row.get("persona_prompt_path").and_then(Value::as_str) != Some(path)
-        || digest.is_empty()
-        || digest == crate::digest::ZERO
-        || row.get("persona_prompt_digest").and_then(Value::as_str) != Some(&digest)
+    let path = crate::review::round::config::agent_role(spec).manifest_path;
+    let digest = registry.manifest_digest(role, path);
+    if row.get("agent_manifest_path").and_then(Value::as_str) != Some(path)
+        || digest.is_none_or(|digest| digest == crate::digest::ZERO)
+        || row.get("agent_manifest_digest").and_then(Value::as_str) != digest
     {
         out.push(ReviewFailure::new(
             "validator-execution-provenance",
-            "review_round_substituted_persona_prompt",
-            persona,
-        ));
-    }
-}
-
-fn custom_agent_identity_errors(
-    root: &Path,
-    row: &Value,
-    persona: &str,
-    path: &str,
-    out: &mut Vec<ReviewFailure>,
-) {
-    let digest = digest::file(&root.join(path)).unwrap_or_else(|_| String::new());
-    if row.get("custom_agent_path").and_then(Value::as_str) != Some(path)
-        || digest.is_empty()
-        || digest == crate::digest::ZERO
-        || row.get("custom_agent_digest").and_then(Value::as_str) != Some(&digest)
-    {
-        out.push(ReviewFailure::new(
-            "validator-execution-provenance",
-            "review_round_custom_agent_mismatch",
-            persona,
+            "review_round_agent_manifest_mismatch",
+            role,
         ));
     }
 }

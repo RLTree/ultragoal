@@ -9,27 +9,33 @@ mod matching;
 mod run;
 mod spool;
 mod text;
-use command_inventory::inventory_fixtures::write_observable_inventory;
+
+const HCT_OBSERVE_BLOCKER: &str = "HCT-OBSERVE successor catalog unavailable/not adopted";
 
 #[test]
 fn observe_green_prove_and_query_contracts_are_typed() {
     let root = super::minimal_root("observe-green-prove");
+    let static_catalog = root.join("docs/generated/observability/command-inventory.json");
+    fs::create_dir_all(static_catalog.parent().expect("catalog parent")).expect("catalog parent");
+    fs::write(&static_catalog, "SECRET_CANARY").expect("static catalog bait");
     let health = command(&["observe", "stack", "health", "--run-id", "run-health"]);
     let smoke = command(&["observe", "stack", "smoke", "--run-id", "run-smoke"]);
     write_default_receipt(&root, &health, "pass");
     write_default_receipt(&root, &smoke, "pass");
-    write_observable_inventory(&root);
 
     let prove_rel = Path::new("validation_artifacts/observability/test/prove.json");
     let prove_path = root.join(prove_rel);
     let prove = command_with_receipt(&["observe", "prove", "--run-id", "run-prove"], prove_rel);
-    assert_eq!(observe::run(&root, &prove).expect("prove"), 0);
+    assert_eq!(observe::run(&root, &prove).expect("prove"), 1);
     let receipt = crate::json_boundary::read_json(&prove_path).expect("prove receipt");
-    assert_eq!(receipt["status"], "pass");
-    assert_eq!(
-        receipt["supported_claims"],
-        json!(["source_local_observability_stack"])
+    assert_eq!(receipt["status"], "fail");
+    assert_eq!(receipt["supported_claims"], json!([]));
+    assert!(
+        receipt["why_failed"]
+            .as_str()
+            .is_some_and(|failure| failure.contains(HCT_OBSERVE_BLOCKER))
     );
+    assert!(!receipt.to_string().contains("SECRET_CANARY"));
     assert!(
         observe::telemetry::exporter_failure_probe_for_test().starts_with("curl export failed:")
     );
@@ -41,7 +47,7 @@ fn observe_green_prove_and_query_contracts_are_typed() {
             Path::new("validation_artifacts/observability/test/dispatch-prove.json"),
         )),
     };
-    assert_eq!(crate::command_run::run_with_exit_code(dispatch).unwrap(), 0);
+    assert_eq!(crate::command_run::run_with_exit_code(dispatch).unwrap(), 1);
     assert!(matches!(
         crate::parse_command(&super::args(&["observe", "snapshot"])).unwrap(),
         crate::Command::Observe(_)

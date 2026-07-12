@@ -1,9 +1,9 @@
 {
-  "schema": "harness-ultragoal.review-round-receipt.v1",
-  "round_id": "fixture-four-persona-signoff-round",
-  "review_stage": "sign_off",
+  "schema": "harness-ultragoal.review-round-receipt.v2",
+  "round_id": "fixture-canonical-falsification-round",
+  "review_stage": "falsification",
   "anchor_policy": "validator_review_target_archive",
-  "status": "pass",
+  "status": "evidence_complete",
   "generated_at": "2026-06-18T00:00:00Z",
   "validator_receipt": {
     "path": "fixtures/review-round/anchors/validator-receipt.json",
@@ -13,7 +13,7 @@
   },
   "live_registry_exposure": {
     "path": "fixtures/review-round/anchors/live-registry-exposure.json",
-    "digest": "sha256:8913a6f99d943994abe5e14832c2d2ca07194f3eb4bdee49296cf0d17ec22f62"
+    "digest": "sha256:a9174e9ca23ce0a341080f7bb056f52f03da2b877e743bb82f24f5a47295b31d"
   },
   "review_target": {
     "path": "fixtures/review-round/anchors/review-target-receipt.json",
@@ -66,33 +66,34 @@
         "claim_id": "external_product_ux_improvement",
         "status": "unsupported",
         "rationale": "No same-surface external product UX improvement proof is present."
+      },
+      {
+        "claim_id": "reviewer_runtime_configuration",
+        "status": "unsupported",
+        "rationale": "The host did not expose reviewer model, mode, or reasoning metadata; no runtime configuration claim is made."
+      },
+      {
+        "claim_id": "custom_agent_runtime_discovery",
+        "status": "unsupported",
+        "rationale": "The fixture proves canonical repository manifests only; it does not prove current host discovery or runtime selection of custom agents."
       }
     ]
   },
   "prior_round_reviewer_agent_ids": [],
   "reviewers": [
     {
-      "persona": "contract_claim_falsifier",
-      "agent_type": "harness_contract_claim_falsifier",
-      "persona_prompt_path": "agents/contract-claim-falsifier.md",
-      "persona_prompt_digest": "sha256:4a4f23123620793e816fc29aaddac076c07867c9055af53a28838399f614182f",
-      "custom_agent_path": "custom-agents/harness-contract-claim-falsifier.toml",
-      "custom_agent_digest": "sha256:637d4e212900a16933180c93646468aa878914dc36111050799e10043de25a6d",
-      "model": "gpt-5.5",
-      "reasoning_effort": "high",
       "sandbox_mode": "read-only",
       "reviewer_agent_id": "agent-contract-claim-fixture",
       "fresh_context": true,
       "reused_reviewer": false,
       "review_scope": "full_current_scope",
-      "verdict": "SIGN_OFF",
       "validator_receipt_digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa",
       "review_target_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "archive_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "completed_at": "2026-06-18T00:00:00Z",
       "prompt_packet": {
         "path": "fixtures/review-round/prompt-packets/contract_claim_falsifier.md",
-        "digest": "sha256:0c1eb63f7fa89092d4a601108bb630c6a2def471175801a15a12e86a7adb637d"
+        "digest": "sha256:8f0620c140f68941d513fb1da721f931cc2d1aad244132550eb5aef794b7356c"
       },
       "review_report": {
         "path": "fixtures/review-round/reports/contract_claim_falsifier.md",
@@ -102,20 +103,22 @@
         "fixtures/review-round/anchors/validator-receipt.json",
         "fixtures/review-round/anchors/review-target-receipt.json",
         "fixtures/review-round/anchors/archive-receipt.json",
-        "agents/contract-claim-falsifier.md",
-        "custom-agents/harness-contract-claim-falsifier.toml",
+        ".codex/agents/claim-falsifier.toml",
+        "fixtures/review-round/prompt-packets/contract_claim_falsifier.md",
         "docs/hypercritical-review-law.md"
       ],
       "live_spawn_receipt": {
         "tool": "multi_agent_v1.spawn_agent",
         "source_thread_id": "fixture-review-round-thread",
         "tool_invocation_id": "fixture-spawn-contract_claim_falsifier",
-        "round_id": "fixture-four-persona-signoff-round",
+        "round_id": "fixture-canonical-falsification-round",
         "captured_at": "2026-06-18T00:00:00Z",
-        "agent_type": "harness_contract_claim_falsifier",
+        "role": "claim-falsifier",
         "spawned_reviewer_agent_id": "agent-contract-claim-fixture",
-        "model": "gpt-5.5",
-        "reasoning_effort": "high",
+        "sandbox_mode": "read-only",
+        "runtime_metadata": {
+          "exposure": "unavailable"
+        },
         "status": "spawned"
       },
       "evidence_artifacts_checked": [
@@ -132,12 +135,12 @@
           "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
         },
         {
-          "path": "agents/contract-claim-falsifier.md",
-          "digest": "sha256:4a4f23123620793e816fc29aaddac076c07867c9055af53a28838399f614182f"
+          "path": ".codex/agents/claim-falsifier.toml",
+          "digest": "sha256:6ecb0324f07793dd2c8581cd82b83ae6086095fea5d4715c550076211c324e6f"
         },
         {
-          "path": "custom-agents/harness-contract-claim-falsifier.toml",
-          "digest": "sha256:637d4e212900a16933180c93646468aa878914dc36111050799e10043de25a6d"
+          "path": "fixtures/review-round/prompt-packets/contract_claim_falsifier.md",
+          "digest": "sha256:8f0620c140f68941d513fb1da721f931cc2d1aad244132550eb5aef794b7356c"
         },
         {
           "path": "docs/hypercritical-review-law.md",
@@ -185,12 +188,12 @@
           "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
         },
         {
-          "path": "agents/contract-claim-falsifier.md",
-          "digest": "sha256:4a4f23123620793e816fc29aaddac076c07867c9055af53a28838399f614182f"
+          "path": ".codex/agents/claim-falsifier.toml",
+          "digest": "sha256:6ecb0324f07793dd2c8581cd82b83ae6086095fea5d4715c550076211c324e6f"
         },
         {
-          "path": "custom-agents/harness-contract-claim-falsifier.toml",
-          "digest": "sha256:637d4e212900a16933180c93646468aa878914dc36111050799e10043de25a6d"
+          "path": "fixtures/review-round/prompt-packets/contract_claim_falsifier.md",
+          "digest": "sha256:8f0620c140f68941d513fb1da721f931cc2d1aad244132550eb5aef794b7356c"
         },
         {
           "path": "docs/hypercritical-review-law.md",
@@ -198,7 +201,8 @@
         }
       ],
       "claim_ceiling_assessment": {
-        "supported": [
+        "authority": "falsification_only_cannot_raise",
+        "not_disproven": [
           {
             "claim_id": "package_static_fixture_proof",
             "status": "supported",
@@ -210,7 +214,7 @@
             "rationale": "Supported by deterministic review-target and candidate archive receipts only as review anchors."
           }
         ],
-        "unsupported": [
+        "challenged": [
           {
             "claim_id": "plugins_ui_visibility",
             "status": "unsupported",
@@ -240,6 +244,16 @@
             "claim_id": "external_product_ux_improvement",
             "status": "unsupported",
             "rationale": "No same-surface external product UX improvement proof is present."
+          },
+          {
+            "claim_id": "reviewer_runtime_configuration",
+            "status": "unsupported",
+            "rationale": "The host did not expose reviewer model, mode, or reasoning metadata; no runtime configuration claim is made."
+          },
+          {
+            "claim_id": "custom_agent_runtime_discovery",
+            "status": "unsupported",
+            "rationale": "The fixture proves canonical repository manifests only; it does not prove current host discovery or runtime selection of custom agents."
           }
         ]
       },
@@ -252,30 +266,29 @@
             "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
           }
         }
-      ]
+      ],
+      "role": "claim-falsifier",
+      "agent_manifest_path": ".codex/agents/claim-falsifier.toml",
+      "agent_manifest_digest": "sha256:6ecb0324f07793dd2c8581cd82b83ae6086095fea5d4715c550076211c324e6f",
+      "runtime_metadata": {
+        "exposure": "unavailable"
+      },
+      "reviewer_authority": "falsification_only_cannot_raise_claims",
+      "falsification_result": "no_material_finding"
     },
     {
-      "persona": "orchestration_recovery_falsifier",
-      "agent_type": "harness_orchestration_recovery_falsifier",
-      "persona_prompt_path": "agents/orchestration-recovery-falsifier.md",
-      "persona_prompt_digest": "sha256:bcf785b28af425a4d7c43f8a18cd2919a905bf8b1b5a62543b8ae660f5618593",
-      "custom_agent_path": "custom-agents/harness-orchestration-recovery-falsifier.toml",
-      "custom_agent_digest": "sha256:5666c376c73af8b5f83cfcd1d9afbb1976efe69bc36fc3ad26f4543b8fad3003",
-      "model": "gpt-5.5",
-      "reasoning_effort": "high",
       "sandbox_mode": "read-only",
       "reviewer_agent_id": "agent-orchestration-recovery-fixture",
       "fresh_context": true,
       "reused_reviewer": false,
       "review_scope": "full_current_scope",
-      "verdict": "SIGN_OFF",
       "validator_receipt_digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa",
       "review_target_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "archive_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "completed_at": "2026-06-18T00:00:00Z",
       "prompt_packet": {
         "path": "fixtures/review-round/prompt-packets/orchestration_recovery_falsifier.md",
-        "digest": "sha256:b7f832dc68b0c14595f50147a0cc20736a0b791ba968d61ce2d17973ba87acc4"
+        "digest": "sha256:0449e134d0de3e87ae03c42dfadc97c0dcf40fef83dae02981cb645c857faf37"
       },
       "review_report": {
         "path": "fixtures/review-round/reports/orchestration_recovery_falsifier.md",
@@ -285,20 +298,22 @@
         "fixtures/review-round/anchors/validator-receipt.json",
         "fixtures/review-round/anchors/review-target-receipt.json",
         "fixtures/review-round/anchors/archive-receipt.json",
-        "agents/orchestration-recovery-falsifier.md",
-        "custom-agents/harness-orchestration-recovery-falsifier.toml",
+        ".codex/agents/orchestration-recovery-reviewer.toml",
+        "fixtures/review-round/prompt-packets/orchestration_recovery_falsifier.md",
         "validator/src/review/round/registry.rs"
       ],
       "live_spawn_receipt": {
         "tool": "multi_agent_v1.spawn_agent",
         "source_thread_id": "fixture-review-round-thread",
         "tool_invocation_id": "fixture-spawn-orchestration_recovery_falsifier",
-        "round_id": "fixture-four-persona-signoff-round",
+        "round_id": "fixture-canonical-falsification-round",
         "captured_at": "2026-06-18T00:00:00Z",
-        "agent_type": "harness_orchestration_recovery_falsifier",
+        "role": "orchestration-recovery-reviewer",
         "spawned_reviewer_agent_id": "agent-orchestration-recovery-fixture",
-        "model": "gpt-5.5",
-        "reasoning_effort": "high",
+        "sandbox_mode": "read-only",
+        "runtime_metadata": {
+          "exposure": "unavailable"
+        },
         "status": "spawned"
       },
       "evidence_artifacts_checked": [
@@ -315,16 +330,16 @@
           "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
         },
         {
-          "path": "agents/orchestration-recovery-falsifier.md",
-          "digest": "sha256:bcf785b28af425a4d7c43f8a18cd2919a905bf8b1b5a62543b8ae660f5618593"
+          "path": ".codex/agents/orchestration-recovery-reviewer.toml",
+          "digest": "sha256:da39757a9d58499821f6c11863d1f6bb1d64e015826837ead3962de9c0e6fb75"
         },
         {
-          "path": "custom-agents/harness-orchestration-recovery-falsifier.toml",
-          "digest": "sha256:5666c376c73af8b5f83cfcd1d9afbb1976efe69bc36fc3ad26f4543b8fad3003"
+          "path": "fixtures/review-round/prompt-packets/orchestration_recovery_falsifier.md",
+          "digest": "sha256:0449e134d0de3e87ae03c42dfadc97c0dcf40fef83dae02981cb645c857faf37"
         },
         {
           "path": "validator/src/review/round/registry.rs",
-          "digest": "sha256:6ca2e3bb3b5cab0e17be0fd134d5ffb186a6a66b12c8d10e4ea3a8e232fbac1a"
+          "digest": "sha256:84747be93069318ffe7411dc242ac4ec53264cea4920b987c9480c83f90472c7"
         }
       ],
       "material_blockers": [],
@@ -368,20 +383,21 @@
           "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
         },
         {
-          "path": "agents/orchestration-recovery-falsifier.md",
-          "digest": "sha256:bcf785b28af425a4d7c43f8a18cd2919a905bf8b1b5a62543b8ae660f5618593"
+          "path": ".codex/agents/orchestration-recovery-reviewer.toml",
+          "digest": "sha256:da39757a9d58499821f6c11863d1f6bb1d64e015826837ead3962de9c0e6fb75"
         },
         {
-          "path": "custom-agents/harness-orchestration-recovery-falsifier.toml",
-          "digest": "sha256:5666c376c73af8b5f83cfcd1d9afbb1976efe69bc36fc3ad26f4543b8fad3003"
+          "path": "fixtures/review-round/prompt-packets/orchestration_recovery_falsifier.md",
+          "digest": "sha256:0449e134d0de3e87ae03c42dfadc97c0dcf40fef83dae02981cb645c857faf37"
         },
         {
           "path": "validator/src/review/round/registry.rs",
-          "digest": "sha256:6ca2e3bb3b5cab0e17be0fd134d5ffb186a6a66b12c8d10e4ea3a8e232fbac1a"
+          "digest": "sha256:84747be93069318ffe7411dc242ac4ec53264cea4920b987c9480c83f90472c7"
         }
       ],
       "claim_ceiling_assessment": {
-        "supported": [
+        "authority": "falsification_only_cannot_raise",
+        "not_disproven": [
           {
             "claim_id": "package_static_fixture_proof",
             "status": "supported",
@@ -393,7 +409,7 @@
             "rationale": "Supported by deterministic review-target and candidate archive receipts only as review anchors."
           }
         ],
-        "unsupported": [
+        "challenged": [
           {
             "claim_id": "plugins_ui_visibility",
             "status": "unsupported",
@@ -423,6 +439,16 @@
             "claim_id": "external_product_ux_improvement",
             "status": "unsupported",
             "rationale": "No same-surface external product UX improvement proof is present."
+          },
+          {
+            "claim_id": "reviewer_runtime_configuration",
+            "status": "unsupported",
+            "rationale": "The host did not expose reviewer model, mode, or reasoning metadata; no runtime configuration claim is made."
+          },
+          {
+            "claim_id": "custom_agent_runtime_discovery",
+            "status": "unsupported",
+            "rationale": "The fixture proves canonical repository manifests only; it does not prove current host discovery or runtime selection of custom agents."
           }
         ]
       },
@@ -435,30 +461,29 @@
             "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
           }
         }
-      ]
+      ],
+      "role": "orchestration-recovery-reviewer",
+      "agent_manifest_path": ".codex/agents/orchestration-recovery-reviewer.toml",
+      "agent_manifest_digest": "sha256:da39757a9d58499821f6c11863d1f6bb1d64e015826837ead3962de9c0e6fb75",
+      "runtime_metadata": {
+        "exposure": "unavailable"
+      },
+      "reviewer_authority": "falsification_only_cannot_raise_claims",
+      "falsification_result": "no_material_finding"
     },
     {
-      "persona": "security_trust_boundary_falsifier",
-      "agent_type": "harness_security_trust_boundary_falsifier",
-      "persona_prompt_path": "agents/security-trust-boundary-falsifier.md",
-      "persona_prompt_digest": "sha256:682d2435dcf3a049ae1551cba6feb87180c743bd9897c297a33411eadb90b9e1",
-      "custom_agent_path": "custom-agents/harness-security-trust-boundary-falsifier.toml",
-      "custom_agent_digest": "sha256:13125d9551b085ef9fbc6b21434ef0ced7a1717df6b3a51ecc3f2ddfcca602af",
-      "model": "gpt-5.5",
-      "reasoning_effort": "high",
       "sandbox_mode": "read-only",
       "reviewer_agent_id": "agent-security-trust-boundary-fixture",
       "fresh_context": true,
       "reused_reviewer": false,
       "review_scope": "full_current_scope",
-      "verdict": "SIGN_OFF",
       "validator_receipt_digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa",
       "review_target_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "archive_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "completed_at": "2026-06-18T00:00:00Z",
       "prompt_packet": {
         "path": "fixtures/review-round/prompt-packets/security_trust_boundary_falsifier.md",
-        "digest": "sha256:0788354fcfd9f326c840c1b84a5e7642a129092a31ce56f6d35df2dd19459f2f"
+        "digest": "sha256:ba599a01b70fcb860ab40a7d27210b9326a7a5ddcbad3717d114ee72464d5f00"
       },
       "review_report": {
         "path": "fixtures/review-round/reports/security_trust_boundary_falsifier.md",
@@ -468,20 +493,22 @@
         "fixtures/review-round/anchors/validator-receipt.json",
         "fixtures/review-round/anchors/review-target-receipt.json",
         "fixtures/review-round/anchors/archive-receipt.json",
-        "agents/security-trust-boundary-falsifier.md",
-        "custom-agents/harness-security-trust-boundary-falsifier.toml",
+        ".codex/agents/security-reviewer.toml",
+        "fixtures/review-round/prompt-packets/security_trust_boundary_falsifier.md",
         "validator/src/schema_catalog/mod.rs"
       ],
       "live_spawn_receipt": {
         "tool": "multi_agent_v1.spawn_agent",
         "source_thread_id": "fixture-review-round-thread",
         "tool_invocation_id": "fixture-spawn-security_trust_boundary_falsifier",
-        "round_id": "fixture-four-persona-signoff-round",
+        "round_id": "fixture-canonical-falsification-round",
         "captured_at": "2026-06-18T00:00:00Z",
-        "agent_type": "harness_security_trust_boundary_falsifier",
+        "role": "security-reviewer",
         "spawned_reviewer_agent_id": "agent-security-trust-boundary-fixture",
-        "model": "gpt-5.5",
-        "reasoning_effort": "high",
+        "sandbox_mode": "read-only",
+        "runtime_metadata": {
+          "exposure": "unavailable"
+        },
         "status": "spawned"
       },
       "evidence_artifacts_checked": [
@@ -498,16 +525,16 @@
           "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
         },
         {
-          "path": "agents/security-trust-boundary-falsifier.md",
-          "digest": "sha256:682d2435dcf3a049ae1551cba6feb87180c743bd9897c297a33411eadb90b9e1"
+          "path": ".codex/agents/security-reviewer.toml",
+          "digest": "sha256:20efde18349120ad57c938a678ea7e6fa076dd454201ec2ec6e3d9d6fe670b65"
         },
         {
-          "path": "custom-agents/harness-security-trust-boundary-falsifier.toml",
-          "digest": "sha256:13125d9551b085ef9fbc6b21434ef0ced7a1717df6b3a51ecc3f2ddfcca602af"
+          "path": "fixtures/review-round/prompt-packets/security_trust_boundary_falsifier.md",
+          "digest": "sha256:ba599a01b70fcb860ab40a7d27210b9326a7a5ddcbad3717d114ee72464d5f00"
         },
         {
           "path": "validator/src/schema_catalog/mod.rs",
-          "digest": "sha256:0416cb10fe0eeae62ad511576cdde3067d187fba8a054c0b84782ea17db367b7"
+          "digest": "sha256:e756d8bce3f9fe939d20b0834d467d2289fdb2f02b7ac58b7ff7522d97affe40"
         }
       ],
       "material_blockers": [],
@@ -551,20 +578,21 @@
           "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
         },
         {
-          "path": "agents/security-trust-boundary-falsifier.md",
-          "digest": "sha256:682d2435dcf3a049ae1551cba6feb87180c743bd9897c297a33411eadb90b9e1"
+          "path": ".codex/agents/security-reviewer.toml",
+          "digest": "sha256:20efde18349120ad57c938a678ea7e6fa076dd454201ec2ec6e3d9d6fe670b65"
         },
         {
-          "path": "custom-agents/harness-security-trust-boundary-falsifier.toml",
-          "digest": "sha256:13125d9551b085ef9fbc6b21434ef0ced7a1717df6b3a51ecc3f2ddfcca602af"
+          "path": "fixtures/review-round/prompt-packets/security_trust_boundary_falsifier.md",
+          "digest": "sha256:ba599a01b70fcb860ab40a7d27210b9326a7a5ddcbad3717d114ee72464d5f00"
         },
         {
           "path": "validator/src/schema_catalog/mod.rs",
-          "digest": "sha256:0416cb10fe0eeae62ad511576cdde3067d187fba8a054c0b84782ea17db367b7"
+          "digest": "sha256:e756d8bce3f9fe939d20b0834d467d2289fdb2f02b7ac58b7ff7522d97affe40"
         }
       ],
       "claim_ceiling_assessment": {
-        "supported": [
+        "authority": "falsification_only_cannot_raise",
+        "not_disproven": [
           {
             "claim_id": "package_static_fixture_proof",
             "status": "supported",
@@ -576,7 +604,7 @@
             "rationale": "Supported by deterministic review-target and candidate archive receipts only as review anchors."
           }
         ],
-        "unsupported": [
+        "challenged": [
           {
             "claim_id": "plugins_ui_visibility",
             "status": "unsupported",
@@ -606,6 +634,16 @@
             "claim_id": "external_product_ux_improvement",
             "status": "unsupported",
             "rationale": "No same-surface external product UX improvement proof is present."
+          },
+          {
+            "claim_id": "reviewer_runtime_configuration",
+            "status": "unsupported",
+            "rationale": "The host did not expose reviewer model, mode, or reasoning metadata; no runtime configuration claim is made."
+          },
+          {
+            "claim_id": "custom_agent_runtime_discovery",
+            "status": "unsupported",
+            "rationale": "The fixture proves canonical repository manifests only; it does not prove current host discovery or runtime selection of custom agents."
           }
         ]
       },
@@ -618,30 +656,29 @@
             "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
           }
         }
-      ]
+      ],
+      "role": "security-reviewer",
+      "agent_manifest_path": ".codex/agents/security-reviewer.toml",
+      "agent_manifest_digest": "sha256:20efde18349120ad57c938a678ea7e6fa076dd454201ec2ec6e3d9d6fe670b65",
+      "runtime_metadata": {
+        "exposure": "unavailable"
+      },
+      "reviewer_authority": "falsification_only_cannot_raise_claims",
+      "falsification_result": "no_material_finding"
     },
     {
-      "persona": "product_simplicity_falsifier",
-      "agent_type": "harness_product_simplicity_falsifier",
-      "persona_prompt_path": "agents/product-simplicity-falsifier.md",
-      "persona_prompt_digest": "sha256:9232988103fcf7e99c42b610bed9210dc1d4f68d7690e9e3be5070cc04ac5d84",
-      "custom_agent_path": "custom-agents/harness-product-simplicity-falsifier.toml",
-      "custom_agent_digest": "sha256:cf27b760170ec93113c4fd6f648f3c04f9e4b0fa7e86715e888fbeb9a20897b3",
-      "model": "gpt-5.5",
-      "reasoning_effort": "high",
       "sandbox_mode": "read-only",
       "reviewer_agent_id": "agent-product-simplicity-fixture",
       "fresh_context": true,
       "reused_reviewer": false,
       "review_scope": "full_current_scope",
-      "verdict": "SIGN_OFF",
       "validator_receipt_digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa",
       "review_target_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "archive_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "completed_at": "2026-06-18T00:00:00Z",
       "prompt_packet": {
         "path": "fixtures/review-round/prompt-packets/product_simplicity_falsifier.md",
-        "digest": "sha256:1dc6e77d72409488c72213c46ed71569bc16da501ec6b43b1e373b49ee0d2568"
+        "digest": "sha256:36760327c288c5322a1c1e3a5d752e90577ff7f4ae79f5d2f50bd5c65b2f9976"
       },
       "review_report": {
         "path": "fixtures/review-round/reports/product_simplicity_falsifier.md",
@@ -651,21 +688,22 @@
         "fixtures/review-round/anchors/validator-receipt.json",
         "fixtures/review-round/anchors/review-target-receipt.json",
         "fixtures/review-round/anchors/archive-receipt.json",
-        "agents/product-simplicity-falsifier.md",
-        "custom-agents/harness-product-simplicity-falsifier.toml",
-        "docs/plugin-resource-map.md",
-        "fixtures/review-round/anchors/product-fitness-receipt.json"
+        ".codex/agents/product-journey-reviewer.toml",
+        "fixtures/review-round/prompt-packets/product_simplicity_falsifier.md",
+        "docs/plugin-resource-map.md"
       ],
       "live_spawn_receipt": {
         "tool": "multi_agent_v1.spawn_agent",
         "source_thread_id": "fixture-review-round-thread",
         "tool_invocation_id": "fixture-spawn-product_simplicity_falsifier",
-        "round_id": "fixture-four-persona-signoff-round",
+        "round_id": "fixture-canonical-falsification-round",
         "captured_at": "2026-06-18T00:00:00Z",
-        "agent_type": "harness_product_simplicity_falsifier",
+        "role": "product-journey-reviewer",
         "spawned_reviewer_agent_id": "agent-product-simplicity-fixture",
-        "model": "gpt-5.5",
-        "reasoning_effort": "high",
+        "sandbox_mode": "read-only",
+        "runtime_metadata": {
+          "exposure": "unavailable"
+        },
         "status": "spawned"
       },
       "evidence_artifacts_checked": [
@@ -682,24 +720,16 @@
           "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
         },
         {
-          "path": "agents/product-simplicity-falsifier.md",
-          "digest": "sha256:9232988103fcf7e99c42b610bed9210dc1d4f68d7690e9e3be5070cc04ac5d84"
+          "path": ".codex/agents/product-journey-reviewer.toml",
+          "digest": "sha256:9d5f4955afbf33a0965676ad00474aabe4843b3345e901fa0e518b0c9daf6a32"
         },
         {
-          "path": "custom-agents/harness-product-simplicity-falsifier.toml",
-          "digest": "sha256:cf27b760170ec93113c4fd6f648f3c04f9e4b0fa7e86715e888fbeb9a20897b3"
+          "path": "fixtures/review-round/prompt-packets/product_simplicity_falsifier.md",
+          "digest": "sha256:36760327c288c5322a1c1e3a5d752e90577ff7f4ae79f5d2f50bd5c65b2f9976"
         },
         {
           "path": "docs/plugin-resource-map.md",
-          "digest": "sha256:07ea0cfb06833e891209f5e27f8fbe6cc99a8a198ffa9be70694ac759bd82543"
-        },
-        {
-          "path": "docs/source-obligation-matrix.md",
-          "digest": "sha256:287c36eee531f9721c747142edcfebdd1e64ca40f824bbbb789fd8924ea45b77"
-        },
-        {
-          "path": "fixtures/review-round/anchors/product-fitness-receipt.json",
-          "digest": "sha256:040dd25f584bbced15229feefe5cf0f9bfdaafed48d0abfc24ddc09a017b234c"
+          "digest": "sha256:19f66ca69b8f10bef81efa51fd23cbb72c01ce8427932683a3b4651c22af7c87"
         }
       ],
       "material_blockers": [],
@@ -743,24 +773,21 @@
           "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
         },
         {
-          "path": "agents/product-simplicity-falsifier.md",
-          "digest": "sha256:9232988103fcf7e99c42b610bed9210dc1d4f68d7690e9e3be5070cc04ac5d84"
+          "path": ".codex/agents/product-journey-reviewer.toml",
+          "digest": "sha256:9d5f4955afbf33a0965676ad00474aabe4843b3345e901fa0e518b0c9daf6a32"
         },
         {
-          "path": "custom-agents/harness-product-simplicity-falsifier.toml",
-          "digest": "sha256:cf27b760170ec93113c4fd6f648f3c04f9e4b0fa7e86715e888fbeb9a20897b3"
+          "path": "fixtures/review-round/prompt-packets/product_simplicity_falsifier.md",
+          "digest": "sha256:36760327c288c5322a1c1e3a5d752e90577ff7f4ae79f5d2f50bd5c65b2f9976"
         },
         {
           "path": "docs/plugin-resource-map.md",
-          "digest": "sha256:07ea0cfb06833e891209f5e27f8fbe6cc99a8a198ffa9be70694ac759bd82543"
-        },
-        {
-          "path": "fixtures/review-round/anchors/product-fitness-receipt.json",
-          "digest": "sha256:040dd25f584bbced15229feefe5cf0f9bfdaafed48d0abfc24ddc09a017b234c"
+          "digest": "sha256:19f66ca69b8f10bef81efa51fd23cbb72c01ce8427932683a3b4651c22af7c87"
         }
       ],
       "claim_ceiling_assessment": {
-        "supported": [
+        "authority": "falsification_only_cannot_raise",
+        "not_disproven": [
           {
             "claim_id": "package_static_fixture_proof",
             "status": "supported",
@@ -772,7 +799,7 @@
             "rationale": "Supported by deterministic review-target and candidate archive receipts only as review anchors."
           }
         ],
-        "unsupported": [
+        "challenged": [
           {
             "claim_id": "plugins_ui_visibility",
             "status": "unsupported",
@@ -802,6 +829,16 @@
             "claim_id": "external_product_ux_improvement",
             "status": "unsupported",
             "rationale": "No same-surface external product UX improvement proof is present."
+          },
+          {
+            "claim_id": "reviewer_runtime_configuration",
+            "status": "unsupported",
+            "rationale": "The host did not expose reviewer model, mode, or reasoning metadata; no runtime configuration claim is made."
+          },
+          {
+            "claim_id": "custom_agent_runtime_discovery",
+            "status": "unsupported",
+            "rationale": "The fixture proves canonical repository manifests only; it does not prove current host discovery or runtime selection of custom agents."
           }
         ]
       },
@@ -816,13 +853,11 @@
         }
       ],
       "product_fitness_disposition": {
-        "owner_persona": "product_simplicity_falsifier",
-        "owner_agent_type": "harness_product_simplicity_falsifier",
         "applies_to_product_impacting_claims": true,
         "status": "pass",
         "receipt": {
           "path": "fixtures/review-round/anchors/product-fitness-receipt.json",
-          "digest": "sha256:040dd25f584bbced15229feefe5cf0f9bfdaafed48d0abfc24ddc09a017b234c"
+          "digest": "sha256:d9009ac09a5c7c557370142f7c58e1f8a1518cfeb57e1511fe722369666389a3"
         },
         "receipt_generated_at": "2026-06-18T00:00:00Z",
         "claim_ids_reviewed": [
@@ -846,11 +881,14 @@
           "product_success_substitution_rejection"
         ],
         "substitution_rejection": true,
-        "generic_product_simplicity_approval_only": false
+        "owner_role": "product-journey-reviewer",
+        "reviewer_authority": "falsification_evidence_only",
+        "may_raise_claim_ceiling": false,
+        "generic_product_approval_only": false
       },
       "product_fitness_required": true,
-      "product_fitness_owner": "product_simplicity_falsifier",
-      "product_fitness_receipt_digest": "sha256:040dd25f584bbced15229feefe5cf0f9bfdaafed48d0abfc24ddc09a017b234c",
+      "product_fitness_owner": "product-journey-reviewer",
+      "product_fitness_receipt_digest": "sha256:d9009ac09a5c7c557370142f7c58e1f8a1518cfeb57e1511fe722369666389a3",
       "product_fitness_claim_ids": [
         "plugins_ui_visibility",
         "install_button_success",
@@ -870,16 +908,24 @@
         "reviewer_agreement",
         "happy_path",
         "receipt_only"
-      ]
+      ],
+      "role": "product-journey-reviewer",
+      "agent_manifest_path": ".codex/agents/product-journey-reviewer.toml",
+      "agent_manifest_digest": "sha256:9d5f4955afbf33a0965676ad00474aabe4843b3345e901fa0e518b0c9daf6a32",
+      "runtime_metadata": {
+        "exposure": "unavailable"
+      },
+      "reviewer_authority": "falsification_only_cannot_raise_claims",
+      "falsification_result": "no_material_finding"
     }
   ],
   "materiality_gate": {
-    "schema": "harness-ultragoal.review-materiality-gate.v1",
+    "schema": "harness-ultragoal.review-materiality-gate.v2",
     "confidence": "high",
     "deterministic_gates_required": [
       "anchor_existence_and_digest",
       "validator_receipt_status",
-      "reviewer_registry_model_persona_exposure",
+      "reviewer_registry_role_exposure",
       "stale_receipt_check",
       "package_private_artifact_hygiene",
       "readiness_validator",
@@ -889,7 +935,7 @@
     "deterministic_gates_run": [
       "anchor_existence_and_digest",
       "validator_receipt_status",
-      "reviewer_registry_model_persona_exposure",
+      "reviewer_registry_role_exposure",
       "stale_receipt_check",
       "package_private_artifact_hygiene",
       "readiness_validator",
@@ -913,7 +959,7 @@
     "reviewer_registry_evidence": [
       {
         "path": "fixtures/review-round/anchors/live-registry-exposure.json",
-        "digest": "sha256:8913a6f99d943994abe5e14832c2d2ca07194f3eb4bdee49296cf0d17ec22f62"
+        "digest": "sha256:a9174e9ca23ce0a341080f7bb056f52f03da2b877e743bb82f24f5a47295b31d"
       }
     ],
     "validator_repairs_recommended": [],
@@ -926,23 +972,29 @@
         "install_button_success",
         "marketplace_publication",
         "real_multilane_dogfood",
-        "production_readiness"
+        "production_readiness",
+        "reviewer_runtime_configuration",
+        "custom_agent_runtime_discovery"
       ],
       "blocked": []
     },
     "decision": "FULL_SCOPE_MATERIAL_REVIEW_REQUIRED",
-    "reason": "Material sign-off and release advancement require full-scope review against current anchors.",
+    "reason": "Material changes require full-scope falsification review against current anchors; reviewers cannot authorize sign-off or raise claim ceilings.",
     "material_triggers": [
-      "material_signoff",
+      "material_claim_boundary",
       "phase_advancement",
       "proof_anchor_change"
     ],
     "reviewers_required": [
-      "contract_claim_falsifier",
-      "orchestration_recovery_falsifier",
-      "security_trust_boundary_falsifier",
-      "product_simplicity_falsifier"
+      "claim-falsifier",
+      "orchestration-recovery-reviewer",
+      "security-reviewer",
+      "product-journey-reviewer"
     ],
-    "output_may_be_used_for_material_signoff": true
-  }
+    "output_may_be_used_for_material_signoff": false,
+    "decision_authority": "deterministic_rust",
+    "reviewer_output_authority": "falsification_only_cannot_raise_claims"
+  },
+  "review_authority": "falsification_evidence_only",
+  "runtime_metadata_ceiling": "unavailable_no_runtime_configuration_claim"
 }

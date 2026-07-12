@@ -8384,7 +8384,7 @@
       "error": "review_round_live_registry_agent_missing"
     },
     "id": "review-round-disk-synced-active-registry-stale",
-    "packet_digest": "sha256:73cc61fe69e54214a5a01bedd3b412f6356c7109843a84ae8b1a5705d346740e",
+    "packet_digest": "sha256:00ed7282a88a1bcc03f9a7762cebbcc637ba91f094add00e15460b7c3e703c02",
     "packet_path": "fixtures/red/review-round-disk-synced-active-registry-stale.json"
   },
   {
@@ -8447,7 +8447,7 @@
       "error": "review_round_live_registry_stale"
     },
     "id": "review-round-live-registry-stale-captured-at",
-    "packet_digest": "sha256:0cdd02e6b3b094981cdf41c852cae443bf2cc2aa4e0daa6b91f9f34df32a1a41",
+    "packet_digest": "sha256:de0d6564a8bc25aa6657aa843574fd346c56cc3104cc77928c4870650d005bca",
     "packet_path": "fixtures/red/review-round-live-registry-stale-captured-at.json"
   },
   {
@@ -8897,7 +8897,7 @@
       "error": "review_round_live_registry_stale"
     },
     "id": "review-round-stale-live-registry-exposure",
-    "packet_digest": "sha256:ee4c388b98ade3b46058d78d2356ab69afc16cfdb2bd5129b6eb294ce0f78d38",
+    "packet_digest": "sha256:88ab6e08de4c15b0e9952e47143d54a20942f1849b67a18bf40c0a4694f3be44",
     "packet_path": "fixtures/red/review-round-stale-live-registry-exposure.json"
   },
   {

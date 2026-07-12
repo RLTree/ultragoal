@@ -1,74 +1,78 @@
-# Harness Ultragoal Plugin Proposal Package
+# Harness Ultragoal
 
-This package is a proposal bundle plus the Rust-backed `ultragoal` CLI for a future plugin that turns the strongest practices from the `codex-workflow-rs` repo and the recent large goal run into reusable, reproducible goal-run infrastructure.
+Harness Ultragoal is a Codex plugin and typed Rust CLI candidate for fitting
+repositories, running conservative routine checks, diagnosing failures,
+orchestrating durable goals, proving named claims, reviewing product journeys,
+and improving or retiring harness behavior.
 
-The skills, agents, connectors, and dogfood rollout remain proposal-stage. The included Rust validator is implemented for package/schema validation, exactly-once inventory closure, static semantic fixture checks, target-repo fixtures, semantic-classification receipts, and red-fixture proof.
+The source tree is under active successor-contract integration. Source,
+package, marketplace, install, cache, host discovery, runtime behavior, product
+journeys, readiness, and release are separate truth surfaces. The presence of
+these files proves none of the higher surfaces by itself.
 
-## Package Map
+## Start here
 
-- `REPORT.md`: detailed rationale, evidence, architecture, review method, and recommended plugin composition.
-- `plugin-manifest-draft.json`: proposed plugin inventory and relationships.
-- `.codex-plugin/plugin.json`: Codex plugin manifest for local marketplace testing.
-- `install/personal-marketplace.example.json`: personal marketplace entry shape.
-- `skills/`: proposed skill contracts.
-- `agents/`: proposed review personas and supporting agent contracts.
-- `custom-agents/`: Codex custom-agent TOML files intended for app-visible subagents; app visibility still requires install/reload proof.
-- `templates/`: proposed repo-local contract templates.
-- `templates/agent-standards/`: decomposed standards modules routed by
-  `templates/AGENT_STANDARDS.md`.
-- `schemas/`: proposed JSON schemas plus `schema-catalog.json` for offline resolver binding.
-- `connectors/CONNECTORS.md`: connector stance and optional adapter boundaries.
-- `docs/source-article-synthesis.md`: how the foundation articles shaped the proposal.
-- `docs/plugin-resource-map.md`: product-cohesion map for when agents should
-  use each skill, persona, template, receipt, and gate.
-- `docs/codex-worktree-environment.md`: Codex app worktree environment setup,
-  generated `.codex-worktree/` state, and toolbar action contract.
-- `docs/observability-stack.md`: optional observability setup and proof surface
-  for runtime claims that cite logs, metrics, traces, or agent context.
-- `docs/repo-patterns-extracted.md`: reusable standards extracted from `codex-workflow-rs`.
-- `docs/agent-first-repo-shape.md`: fresh repo and retrofit baseline shape.
-- `docs/product-cohesion-gate.md`: conditional product/UX cohesion gate for consumer-facing changes.
-- `docs/install-and-visibility.md`: Codex local plugin and custom-agent install route.
-- `docs/implementation-roadmap.md`: staged implementation plan and acceptance gates.
-- `docs/schema-resolver.md`: offline schema resolver contract.
-- `docs/review-target-and-archive.md`: detached review-target and deterministic zip receipt procedure.
-- `docs/review-loop-record.md`: compact review-history index; typed review
-  receipt fixtures live under `fixtures/review-round/`.
-- `validator/`: Rust canonical validator crate. Invoke with `cargo run --offline -- --root <package> audit --receipt <receipt.json>`.
-- `Cargo.toml`: workspace entrypoint for the Rust validator.
-- `validation_artifacts/ultragoal-audit/`: generated validator receipt and red-fixture report from the current package.
+Use `$harness-ultragoal:harness-ultragoal` as the only first-entry skill. It
+selects one of seven specialized workflows after disclosing the effect,
+required authority, candidate boundary, and unavailable capabilities:
 
-## Design Intent
+1. `$harness-ultragoal:repository-fit` for fresh setup or retrofit.
+2. `$harness-ultragoal:routine-work` for dirty-tree-safe affected checks.
+3. `$harness-ultragoal:diagnose-and-observe` for causal diagnosis and local
+   semantic queries.
+4. `$harness-ultragoal:goal-run` for durable dependency-closed orchestration.
+5. `$harness-ultragoal:prove` for one named strict claim boundary.
+6. `$harness-ultragoal:improve-and-maintain` for evaluation, research,
+   migration, compatibility, or retirement.
+7. `$harness-ultragoal:product-journey-review` for independent quality-in-use,
+   security, recovery, or fresh-operator review.
 
-The plugin should create high-trust goal runs where:
+If more than one route appears relevant, select the skill that owns the
+operator's immediate outcome and list later workflows as follow-ons. Use
+`goal-run` only when the immediate outcome is coordinated multi-scope
+execution. If the target, authority, or requested outcome is ambiguous, stop
+selection and ask one focused question.
 
-- the goal is a real runtime object, not a chat convention;
-- long work is bound to restartable ExecPlans;
-- lanes are macro-sized, isolated, non-overlapping, and proof-bound;
-- the parent acts as orchestrator and reconciler unless explicitly registered as a lane;
-- every completion claim maps to a typed claim id and evidence surface;
-- consumer-facing product claims map to a product journey, user promise, UI proof, and human-attention policy;
-- skipped checks become lane-owed, root-owed, externally-blocked, or withheld-claim;
-- live beneficial end-to-end proof is required for feature completion claims;
-- stale sessions, stale worktrees, stale receipts, and hand-written readiness are rejected;
-- standards are enforced mechanically, with prose serving as routing and explanation.
-- operating law is progressively disclosed through a compact standards router
-  and semantically named standards modules, not one always-loaded mega
-  document.
+## Product resources
 
-## Reviewer Instructions
+- [Plugin resource map](docs/plugin-resource-map.md): deterministic routing,
+  representative journeys, and the six project-scoped read-only agents.
+- [Install and visibility](docs/install-and-visibility.md): source, package,
+  repository marketplace, personal install, discovery, and runtime boundaries.
+- `.codex-plugin/plugin.json`: root-owned Codex plugin metadata.
+- `plugin-manifest-draft.json`: root-owned package inventory input.
+- `.codex/agents/`: the six current project-scoped read-only agent roles.
+- `skills/`: canonical skills plus compatibility sources awaiting root-owned
+  migration and retirement decisions.
+- `validator/`: the Rust enforcement and acceleration kernel.
 
-Review this package as a contract and product spec. The highest-value feedback is not copyediting. Look for any place an agent could:
+## Command boundary
 
-- treat a weak run as complete;
-- hide unverified work behind generic status text;
-- substitute one proof surface for another;
-- treat engine/runtime proof as a substitute for product journey proof;
-- overuse human handoff states instead of preserving agent autonomy;
-- leave stale worktrees or sessions behind;
-- launch tiny or overlapping lanes;
-- drift from live repo truth into memory or chat lore;
-- avoid installing, provisioning, escalating, or running checks it can actually run;
-- produce a bulky process artifact that agents will ignore.
+Probe the actual binary before relying on it:
 
-The included review loop record should be considered part of the evidence packet, not proof that the proposal is final. Current sign-off must bind to the detached review-target digest and current validator receipt described in `docs/review-target-and-archive.md`. The current validator pass is package/static proof only; local install visibility and real multi-lane dogfood require separate receipts before V1 claims.
+```text
+ultragoal --json --help
+ultragoal --json inspect capabilities
+ultragoal --json inspect context
+```
+
+The source candidate is frozen with every direct semantic-test input, including
+the typed successor command catalog. Any member-byte or protected root-metadata
+change invalidates the proposal before its tests can be reused. Read, help, and
+query probes are exercised against an isolated dirty repository and must
+preserve recursive content, object type, mode, modification time, and Git
+status.
+
+Help, parse, inspect, query, diagnose, and next-action selection are read-only
+and must produce zero hidden writes. Mutating commands disclose structural
+effects: `WorkspaceWrite`, `ExternalWrite`, or `Destructive`. A prompt or source
+file never proves that a command, plugin, model, permission, agent, or host
+surface is currently available.
+
+## Proof boundary
+
+Use live evidence from the same surface as the claim. Unit tests, fixtures,
+schemas, docs, receipts, generated rows, telemetry, signatures, and package
+bytes can support narrower checks but cannot substitute for installed bytes,
+host discovery, representative runtime behavior, preserved repository state,
+quality in use, release, or completion.

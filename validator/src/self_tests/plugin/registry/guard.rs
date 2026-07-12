@@ -11,7 +11,7 @@ fn active_registry_claim_guard_accepts_only_cli_fail_closed_receipts() {
     let current = crate::package::inventory::package_digest(&root).expect("digest");
     let raw_path =
         root.join("validation_artifacts/ultragoal-audit/active-registry-observation-current.json");
-    super::write_json(&raw_path, &json!({"status":"fail","candidate":current}));
+    super::write_json(&raw_path, &super::fail_closed_raw_observation(&current));
     let raw_digest = crate::digest::file(&raw_path).expect("raw digest");
     let receipt = super::fail_closed_registry_receipt(&current, &raw_digest);
     let store = crate::schema_catalog::load(
@@ -26,9 +26,13 @@ fn active_registry_claim_guard_accepts_only_cli_fail_closed_receipts() {
     super::write_json(&live_raw_path, &super::raw_observation(&current));
     let live_raw_digest = crate::digest::file(&live_raw_path).expect("live raw digest");
     let live_pass = super::live_registry_receipt(&current, &live_raw_digest);
+    let failures =
+        crate::audit::plugin::registry::value_claim_guard_failures(&root, &store, &live_pass);
     assert!(
-        crate::audit::plugin::registry::value_claim_guard_failures(&root, &store, &live_pass)
-            .is_empty()
+        failures
+            .iter()
+            .any(|failure| failure == "plugin_self_law_registry_positive_status_forbidden"),
+        "{failures:?}"
     );
 
     let mut wrong_source = receipt.clone();
@@ -68,7 +72,7 @@ fn active_registry_claim_guard_requires_typed_capability_gap_record() {
     let current = crate::package::inventory::package_digest(&root).expect("digest");
     let raw_path =
         root.join("validation_artifacts/ultragoal-audit/active-registry-observation-current.json");
-    super::write_json(&raw_path, &json!({"status":"fail","candidate":current}));
+    super::write_json(&raw_path, &super::fail_closed_raw_observation(&current));
     let raw_digest = crate::digest::file(&raw_path).expect("raw digest");
     let receipt = super::fail_closed_registry_receipt(&current, &raw_digest);
     let store = crate::schema_catalog::load(

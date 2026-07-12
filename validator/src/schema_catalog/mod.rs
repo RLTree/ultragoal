@@ -96,6 +96,21 @@ pub fn schema_errors(store: &SchemaStore, schema_name: &str, instance: &Value) -
     errors
 }
 
+pub(crate) fn bound_schema_errors(
+    schema_name: &str,
+    schema: &Value,
+    instance: &Value,
+) -> Vec<String> {
+    let Some(id) = schema.get("$id").and_then(Value::as_str) else {
+        return vec!["bound schema id missing".to_owned()];
+    };
+    let schemas = BTreeMap::from([
+        (schema_name.to_owned(), schema.clone()),
+        (id.to_owned(), schema.clone()),
+    ]);
+    schema::keywords::validate(&store(schemas, Vec::new()), schema, instance)
+}
+
 pub fn schema_error_code(errors: &[String]) -> String {
     let joined = errors.join("\n");
     if joined.contains("required_claim_ids") && joined.contains("non-empty") {

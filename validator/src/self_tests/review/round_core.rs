@@ -1,6 +1,18 @@
 use serde_json::json;
 
 #[test]
+fn canonical_review_round_is_registry_blocked_while_materiality_fixtures_remain_valid() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let review_failures = crate::review::round::fixture_failures(&root);
+    assert_eq!(
+        review_failures,
+        vec!["review-round fixture: review_round_live_registry_unavailable"]
+    );
+    let materiality_failures = crate::review::materiality::fixture_failures(&root);
+    assert!(materiality_failures.is_empty(), "{materiality_failures:?}");
+}
+
+#[test]
 fn review_round_core_reports_schema_and_unreadable_fixture_boundaries() {
     assert!(crate::review::round::is_review_round_fixture(
         "fixtures/review-round/valid/review-round-receipt.json",
@@ -77,7 +89,10 @@ fn review_round_validate_files_reads_all_anchor_paths_fail_closed() {
     };
     let err = crate::review::round::validate_files(&root, &receipt, &anchors)
         .expect_err("invalid receipt rejected");
-    assert!(err.contains("review_round_schema_invalid"), "{err}");
+    assert!(
+        err.contains("review_round_trusted_anchor_source_unavailable"),
+        "{err}"
+    );
 
     let missing_archive = crate::review::round::AnchorPaths {
         validator_receipt: anchors.validator_receipt.clone(),
@@ -87,7 +102,7 @@ fn review_round_validate_files_reads_all_anchor_paths_fail_closed() {
     let err = crate::review::round::validate_files(&root, &receipt, &missing_archive)
         .expect_err("missing archive anchor rejected");
     assert!(
-        err.contains("metadata failed") || err.contains("open failed"),
+        err.contains("review_round_trusted_anchor_source_unavailable"),
         "{err}"
     );
     std::fs::remove_dir_all(root).expect("cleanup review round validate files");

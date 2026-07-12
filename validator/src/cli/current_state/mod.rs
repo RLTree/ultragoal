@@ -11,7 +11,7 @@ pub(crate) use receipt_status::receipt_state;
 #[derive(Debug)]
 pub(crate) struct CurrentStateCommand {
     pub(crate) json: bool,
-    pub(crate) receipt: PathBuf,
+    pub(crate) receipt: Option<PathBuf>,
 }
 
 pub(crate) fn parse(raw: &[String]) -> Result<Option<CurrentStateCommand>, String> {
@@ -20,23 +20,24 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<CurrentStateCommand>, Strin
     }
     Ok(Some(CurrentStateCommand {
         json: raw.iter().any(|arg| arg == "--json"),
-        receipt: opt_path(&raw[1..], "--receipt")
-            .unwrap_or_else(|| PathBuf::from("validation_artifacts/current-state.json")),
+        receipt: opt_path(&raw[1..], "--receipt"),
     }))
 }
 
 pub(crate) fn run(root: &Path, command: &CurrentStateCommand) -> Result<i32, String> {
     let state = snapshot(root)?;
-    let receipt =
-        crate::output_path::claim_artifact_path(root, &command.receipt, "current state receipt")?;
-    crate::json_boundary::write_json(&receipt, &state)?;
+    if let Some(relative) = command.receipt.as_ref() {
+        let receipt =
+            crate::output_path::claim_artifact_path(root, relative, "current state receipt")?;
+        crate::json_boundary::write_json(&receipt, &state)?;
+    }
     if command.json {
         println!(
             "{}",
             serde_json::to_string_pretty(&state).expect("json value")
         );
     } else {
-        print_summary(&state, &command.receipt);
+        print_summary(&state, command.receipt.as_deref());
     }
     Ok(i32::from(
         state.get("status").and_then(Value::as_str) != Some("pass"),
@@ -89,25 +90,47 @@ pub(crate) fn snapshot_for_candidate(root: &Path, candidate: String) -> Value {
         "source_receipts": [
             "validation_artifacts/coverage/coverage-receipt.json",
             "validation_artifacts/ultragoal-audit/validator-receipt.json",
-            "validation_artifacts/ultragoal-audit/red-fixture-report.json",
-            "docs/generated/observability/command-inventory.json"
+            "validation_artifacts/ultragoal-audit/red-fixture-report.json"
+        ],
+        "unavailable_dependencies": [
+            crate::audit::observability::command_inventory_failures(root)[0]
         ]
     })
 }
 
 fn observability_control_board(root: &Path) -> Value {
-    let value = crate::json_boundary::read_json(
-        &root.join("docs/generated/observability/command-inventory.json"),
-    )
-    .unwrap_or(Value::Null);
-    value
-        .get("observability_control_board")
-        .cloned()
-        .unwrap_or_else(|| json!({"status": "missing"}))
+    let blocker = crate::audit::observability::command_inventory_failures(root)
+        .into_iter()
+        .next()
+        .unwrap_or_else(|| "HCT-OBSERVE successor catalog unavailable/not adopted".to_string());
+    json!({
+        "status": "unavailable",
+        "capability": "HCT-OBSERVE",
+        "adoption_status": "not_adopted",
+        "failure_class": "hct_observe_successor_catalog_unavailable",
+        "why_failed": blocker,
+        "first_incomplete": {
+            "family": "successor_catalog",
+            "id": "HCT-OBSERVE",
+            "observability_status": "unavailable",
+            "next_unobservable_surface": "typed candidate-bound successor catalog"
+        }
+    })
 }
 
 fn first_blocker(board: &Value, coverage: &Value, audit: &Value, red: &Value) -> Value {
     if board.get("status").and_then(Value::as_str) != Some("observable") {
+        if board.get("status").and_then(Value::as_str) == Some("unavailable") {
+            return json!({
+                "id": "HCT-OBSERVE",
+                "surface": "successor observability catalog",
+                "failure_class": "hct_observe_successor_catalog_unavailable",
+                "why_failed": text(board, "why_failed", "HCT-OBSERVE successor catalog unavailable/not adopted"),
+                "next_repair": "implement and adopt the typed candidate-bound HCT-OBSERVE successor catalog",
+                "narrow_rerun": "ultragoal current-state --json",
+                "broad_rerun": "source audit only after HCT-OBSERVE adoption and narrow verification"
+            });
+        }
         let incomplete = board
             .get("first_incomplete")
             .cloned()
@@ -220,13 +243,15 @@ fn git_status(root: &Path) -> Value {
     }
 }
 
-fn print_summary(state: &Value, receipt: &Path) {
+fn print_summary(state: &Value, receipt: Option<&Path>) {
     let blocker = state.get("first_blocker").unwrap_or(&Value::Null);
     println!(
         "ultragoal-current-state {} candidate={} receipt={} first_blocker={} why={} next_repair={} narrow_rerun='{}' claim_ceiling='{}'",
         text(state, "status", "fail"),
         text(state, "candidate_digest", "<missing>"),
-        receipt.display(),
+        receipt
+            .map(|path| path.display().to_string())
+            .unwrap_or_else(|| "none-read-only".to_string()),
         text(blocker, "id", "unknown"),
         text(blocker, "why_failed", "unknown"),
         text(state, "next_repair", "unknown"),

@@ -49,7 +49,13 @@ pub(crate) fn inspect(
     path: &Path,
     spec: Option<&SurfaceSpec>,
 ) -> GeneratedMetadata {
-    let Some(spec) = spec else {
+    let Some(SurfaceSpec::CanonicalProjection {
+        generator,
+        recipe,
+        inputs,
+        ..
+    }) = spec
+    else {
         return problem(
             None,
             Vec::new(),
@@ -57,8 +63,8 @@ pub(crate) fn inspect(
             "generated output has no external canonical authority row",
         );
     };
-    let generator = Some(spec.generator.clone());
-    let inputs = spec.inputs.clone();
+    let generator = Some(generator.clone());
+    let inputs = inputs.clone();
     let Ok(bytes) = read_bounded(reads, path, MAX_METADATA_BYTES) else {
         return problem(
             generator,
@@ -79,7 +85,7 @@ pub(crate) fn inspect(
     if metadata
         .and_then(|metadata| metadata.get("generator"))
         .and_then(Value::as_str)
-        != Some(spec.generator.as_str())
+        != Some(generator.as_deref().expect("canonical generator exists"))
     {
         return problem(
             generator,
@@ -91,7 +97,7 @@ pub(crate) fn inspect(
     if metadata
         .and_then(|metadata| metadata.get("recipe"))
         .and_then(Value::as_str)
-        != Some(spec.recipe.as_str())
+        != Some(recipe.as_str())
     {
         return problem(
             generator,
@@ -100,8 +106,8 @@ pub(crate) fn inspect(
             "generated output omits or changes its externally authorized recipe",
         );
     }
-    let mut verified_inputs = Vec::with_capacity(spec.inputs.len());
-    for relative in &spec.inputs {
+    let mut verified_inputs = Vec::with_capacity(inputs.len());
+    for relative in &inputs {
         let input_path = root.join(relative);
         let Ok(metadata) = fs::symlink_metadata(&input_path) else {
             return problem(
@@ -129,7 +135,10 @@ pub(crate) fn inspect(
         };
         verified_inputs.push((relative.clone(), digest));
     }
-    let expected = regenerated_bytes(&spec.generator, &verified_inputs);
+    let expected = regenerated_bytes(
+        generator.as_deref().expect("canonical generator exists"),
+        &verified_inputs,
+    );
     if bytes != expected {
         return problem(
             generator,

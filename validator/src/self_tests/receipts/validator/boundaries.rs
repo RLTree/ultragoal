@@ -76,16 +76,6 @@ fn validator_receipt_error_paths_are_typed_and_testable() {
             .contains("current executable lookup failed")
     );
     assert!(
-        crate::audit::receipt::generated_dir_entries(Err(std::io::Error::other("missing dir")))
-            .expect_err("generated dir error")
-            .contains("read generated dir")
-    );
-    assert!(
-        crate::audit::receipt::generated_entry_path(Err(std::io::Error::other("bad entry")))
-            .expect_err("generated entry error")
-            .contains("read generated entry")
-    );
-    assert!(
         crate::audit::receipt::canonical_or_original(std::path::Path::new(
             "definitely-missing-receipt-path"
         ))
@@ -95,7 +85,7 @@ fn validator_receipt_error_paths_are_typed_and_testable() {
 
 #[test]
 #[cfg(unix)]
-fn validator_receipt_rejects_tampered_generated_artifacts() {
+fn validator_receipt_rejects_hardlinked_authority_and_ignores_static_ready_symlinks() {
     let hard_root = receipt_root("receipt-hardlinked-red");
     let mut hard_input = input(&hard_root);
     let red_link = hard_root.join("validation_artifacts/ultragoal-audit/red-hardlink.json");
@@ -117,7 +107,14 @@ fn validator_receipt_rejects_tampered_generated_artifacts() {
     .expect("ready symlink");
     ready_input.red_report =
         ready_root.join("validation_artifacts/ultragoal-audit/red-fixture-report.json");
-    let ready_err = crate::audit::receipt::build(ready_input).expect_err("ready symlink rejected");
-    assert!(ready_err.contains("not a regular file"), "{ready_err}");
+    let receipt = crate::audit::receipt::build(ready_input)
+        .expect("static ready-example symlink is not inspected as current evidence");
+    assert!(
+        receipt["generated_artifacts"]
+            .as_array()
+            .expect("generated artifacts")
+            .iter()
+            .all(|row| row["artifact_type"] != "ready_for_merge")
+    );
     std::fs::remove_dir_all(ready_root).expect("cleanup ready root");
 }

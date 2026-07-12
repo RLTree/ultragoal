@@ -75,6 +75,20 @@ impl ObserveOperation {
         let name = self.id().replace('.', "-");
         PathBuf::from(format!("validation_artifacts/observability/{name}.json"))
     }
+
+    pub(crate) fn zero_hidden_write_read(self) -> bool {
+        matches!(
+            self,
+            Self::LogsQuery
+                | Self::MetricsQuery
+                | Self::TracesQuery
+                | Self::ExplainNext
+                | Self::ExplainFailure
+                | Self::ExplainClaim
+                | Self::ExplainCheck
+                | Self::ExplainLaw
+        )
+    }
 }
 
 #[derive(Debug)]
@@ -99,5 +113,11 @@ impl ObserveCommand {
         self.receipt
             .clone()
             .unwrap_or_else(|| self.operation.receipt_rel())
+    }
+
+    pub(crate) fn selected_receipt_rel(&self) -> Option<PathBuf> {
+        self.receipt.clone().or_else(|| {
+            (!self.operation.zero_hidden_write_read()).then(|| self.operation.receipt_rel())
+        })
     }
 }

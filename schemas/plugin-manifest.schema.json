@@ -246,7 +246,8 @@
     },
     "agents": {
       "type": "array",
-      "minItems": 12,
+      "minItems": 6,
+      "maxItems": 6,
       "items": {
         "type": "object",
         "required": [
@@ -274,7 +275,7 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "contract-claim-falsifier"
+                "const": "claim-falsifier"
               }
             },
             "required": [
@@ -286,7 +287,7 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "orchestration-recovery-falsifier"
+                "const": "orchestration-recovery-reviewer"
               }
             },
             "required": [
@@ -298,7 +299,7 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "security-trust-boundary-falsifier"
+                "const": "security-reviewer"
               }
             },
             "required": [
@@ -310,7 +311,7 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "product-simplicity-falsifier"
+                "const": "product-journey-reviewer"
               }
             },
             "required": [
@@ -322,7 +323,7 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "plugin-scout"
+                "const": "repo-recon"
               }
             },
             "required": [
@@ -334,7 +335,7 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "standards-extractor"
+                "const": "research-verifier"
               }
             },
             "required": [
@@ -346,10 +347,10 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "harness-contract-claim-falsifier"
+                "const": "claim-falsifier"
               },
               "path": {
-                "const": "custom-agents/harness-contract-claim-falsifier.toml"
+                "const": ".codex/agents/claim-falsifier.toml"
               }
             },
             "required": [
@@ -362,10 +363,10 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "harness-orchestration-recovery-falsifier"
+                "const": "orchestration-recovery-reviewer"
               },
               "path": {
-                "const": "custom-agents/harness-orchestration-recovery-falsifier.toml"
+                "const": ".codex/agents/orchestration-recovery-reviewer.toml"
               }
             },
             "required": [
@@ -378,10 +379,10 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "harness-security-trust-boundary-falsifier"
+                "const": "security-reviewer"
               },
               "path": {
-                "const": "custom-agents/harness-security-trust-boundary-falsifier.toml"
+                "const": ".codex/agents/security-reviewer.toml"
               }
             },
             "required": [
@@ -394,10 +395,10 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "harness-product-simplicity-falsifier"
+                "const": "product-journey-reviewer"
               },
               "path": {
-                "const": "custom-agents/harness-product-simplicity-falsifier.toml"
+                "const": ".codex/agents/product-journey-reviewer.toml"
               }
             },
             "required": [
@@ -410,10 +411,10 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "harness-repo-initializer"
+                "const": "repo-recon"
               },
               "path": {
-                "const": "custom-agents/harness-repo-initializer.toml"
+                "const": ".codex/agents/repo-recon.toml"
               }
             },
             "required": [
@@ -426,10 +427,10 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "harness-retrofit-planner"
+                "const": "research-verifier"
               },
               "path": {
-                "const": "custom-agents/harness-retrofit-planner.toml"
+                "const": ".codex/agents/research-verifier.toml"
               }
             },
             "required": [

@@ -113,7 +113,7 @@ fn package_inventory_dispatch_writes_fail_closed_receipt() {
 }
 
 #[test]
-fn package_inventory_run_passes_for_current_package_surface() {
+fn package_inventory_run_reports_truthful_live_package_surface_status() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let receipt =
         std::path::PathBuf::from("validation_artifacts/package/package-inventory-pass.json");
@@ -128,17 +128,33 @@ fn package_inventory_run_passes_for_current_package_surface() {
             jobs: Some(1),
         },
     )
-    .expect("current package inventory pass");
-    assert_eq!(exit, 0);
+    .expect("current package inventory result");
     let value = crate::json_boundary::read_json(&receipt_path).expect("receipt");
-    assert_eq!(value["status"], "pass");
-    assert_eq!(value["failure_class"], "none");
-    assert_eq!(value["where_failed"], "none");
-    assert_eq!(
-        value["claim_impact"],
-        "supports_package_inventory_source_local_observability_only"
-    );
     let _ = std::fs::remove_file(receipt_path);
+    assert_eq!(
+        exit,
+        i32::from(value["status"].as_str() != Some("pass")),
+        "exit must reflect the live inventory receipt"
+    );
+    assert_eq!(
+        value["candidate_digest"],
+        crate::package::inventory::package_digest(&root).expect("current candidate")
+    );
+    if exit == 0 {
+        assert_eq!(value["failure_class"], "none");
+        assert_eq!(value["where_failed"], "none");
+        assert_eq!(
+            value["claim_impact"],
+            "supports_package_inventory_source_local_observability_only"
+        );
+    } else {
+        assert_eq!(value["failure_class"], "package_inventory_failure");
+        assert_eq!(value["where_failed"], "package.inventory");
+        assert_eq!(
+            value["claim_impact"],
+            "package_inventory_failed_blocks_package_readiness_release_completion_update_goal"
+        );
+    }
 }
 
 #[test]

@@ -1,6 +1,13 @@
-use crate::{digest, json_boundary, review::round::ReviewFailure};
+use crate::{digest, review::round::ReviewFailure};
 use serde_json::Value;
 use std::path::{Path, PathBuf};
+
+use super::{
+    artifact,
+    policy::{self, AnchorSource},
+    refs::VerifiedRef,
+    semantics,
+};
 
 pub struct AnchorPaths {
     pub validator_receipt: PathBuf,
@@ -18,6 +25,7 @@ pub(crate) struct AnchorValues {
     pub(crate) validator_run_id: String,
     pub(crate) package_digest: String,
     pub(crate) source_errors: Vec<String>,
+    pub(crate) materiality_anchors: Vec<VerifiedRef>,
 }
 
 impl AnchorValues {
@@ -27,49 +35,62 @@ impl AnchorValues {
         review_path: &Path,
         archive_path: &Path,
     ) -> Result<Self, String> {
-        Self::read_labeled(
-            current_root,
-            current_root,
-            validator_path,
-            review_path,
-            archive_path,
-        )
+        let root = current_root
+            .ok_or_else(|| "review_round_trusted_anchor_source_unavailable".to_string())?;
+        let labels = labels(root, validator_path, review_path, archive_path)?;
+        let source = policy::exact_source(&labels)
+            .ok_or_else(|| "review_round_trusted_anchor_source_unavailable".to_string())?;
+        if source != AnchorSource::Live {
+            return Err("review_round_trusted_anchor_source_unavailable".to_string());
+        }
+        Self::read_bound(root, source, labels)
     }
 
-    fn read_labeled(
-        current_root: Option<&Path>,
-        label_root: Option<&Path>,
-        validator_path: &Path,
-        review_path: &Path,
-        archive_path: &Path,
-    ) -> Result<Self, String> {
-        let validator = json_boundary::read_json(validator_path)?;
-        let review = json_boundary::read_json(review_path)?;
-        let archive = json_boundary::read_json(archive_path)?;
-        let validator_digest = digest::file(validator_path)?;
-        let validator_label = path_label(label_root, validator_path);
-        let review_label = path_label(label_root, review_path);
-        let archive_label = path_label(label_root, archive_path);
-        let package_digest = string(&validator, "/target_revision/value");
-        let mut source_errors = Vec::new();
-        crate::review::round::anchor::sources::validate_anchor_sources(
-            &validator_digest,
-            &package_digest,
-            current_root,
-            &review,
-            &archive,
-            &mut source_errors,
-        );
+    fn read_bound(root: &Path, source: AnchorSource, labels: [String; 3]) -> Result<Self, String> {
+        let validator = artifact::read(root, &labels[0])?;
+        let review = artifact::read(root, &labels[1])?;
+        let archive = artifact::read(root, &labels[2])?;
+        let source_errors = semantics::errors(semantics::Inputs {
+            source,
+            root,
+            labels: &labels,
+            validator: &validator,
+            review: &review,
+            archive: &archive,
+        });
+        let validator_digest = validator.digest.clone();
+        let review_target_digest = string(&review.value, "/review_target_digest");
+        let archive_digest = string(&archive.value, "/archive/digest");
+        let validator_run_id = string(&validator.value, "/run_id");
+        let package_digest = string(&validator.value, "/target_revision/value");
+        let materiality_anchors = vec![
+            VerifiedRef {
+                path: labels[0].clone(),
+                digest: validator.digest,
+                value: Some(validator.value),
+            },
+            VerifiedRef {
+                path: labels[1].clone(),
+                digest: review.digest,
+                value: Some(review.value),
+            },
+            VerifiedRef {
+                path: labels[2].clone(),
+                digest: archive.digest,
+                value: Some(archive.value),
+            },
+        ];
         Ok(Self {
-            validator_path: validator_label,
-            review_target_path: review_label,
-            archive_path: archive_label,
+            validator_path: labels[0].clone(),
+            review_target_path: labels[1].clone(),
+            archive_path: labels[2].clone(),
             validator_digest,
-            review_target_digest: string(&review, "/review_target_digest"),
-            archive_digest: string(&archive, "/archive/digest"),
-            validator_run_id: string(&validator, "/run_id"),
+            review_target_digest,
+            archive_digest,
+            validator_run_id,
             package_digest,
             source_errors,
+            materiality_anchors,
         })
     }
 
@@ -84,6 +105,7 @@ impl AnchorValues {
             validator_run_id: String::new(),
             package_digest: digest::ZERO.to_string(),
             source_errors: Vec::new(),
+            materiality_anchors: Vec::new(),
         }
     }
 }
@@ -103,14 +125,19 @@ pub(crate) fn fixture_anchor_values_for(
     review_target: &str,
     archive: &str,
 ) -> AnchorValues {
-    AnchorValues::read_labeled(
-        None,
-        Some(root),
-        &root.join(validator),
-        &root.join(review_target),
-        &root.join(archive),
-    )
-    .unwrap_or_else(|_| AnchorValues::zero())
+    let labels = [
+        validator.to_string(),
+        review_target.to_string(),
+        archive.to_string(),
+    ];
+    if labels
+        .iter()
+        .any(|label| !policy::static_fixture_variant(label))
+    {
+        return AnchorValues::zero();
+    }
+    AnchorValues::read_bound(root, AnchorSource::StaticFixture, labels)
+        .unwrap_or_else(|_| AnchorValues::zero())
 }
 
 pub(crate) fn anchor_errors(value: &Value, anchors: &AnchorValues, out: &mut Vec<ReviewFailure>) {
@@ -121,10 +148,10 @@ pub(crate) fn anchor_errors(value: &Value, anchors: &AnchorValues, out: &mut Vec
             error,
         ));
     }
-    if value.get("status").and_then(Value::as_str) != Some("pass") {
+    if value.get("status").and_then(Value::as_str) != Some("evidence_complete") {
         out.push(ReviewFailure::new(
             "validator-execution-provenance",
-            "review_round_status_not_pass",
+            "review_round_evidence_incomplete",
             "status",
         ));
     }
@@ -195,13 +222,17 @@ fn validator_receipt_errors(value: &Value, anchors: &AnchorValues, out: &mut Vec
     }
 }
 
-fn path_label(root: Option<&Path>, path: &Path) -> String {
-    if let Some(root) = root {
-        if let Ok(stripped) = path.strip_prefix(root) {
-            return stripped.to_string_lossy().to_string();
-        }
-    }
-    path.to_string_lossy().to_string()
+fn labels(
+    root: &Path,
+    validator: &Path,
+    review: &Path,
+    archive: &Path,
+) -> Result<[String; 3], String> {
+    Ok([
+        policy::relative_label(root, validator)?,
+        policy::relative_label(root, review)?,
+        policy::relative_label(root, archive)?,
+    ])
 }
 
 fn string(value: &Value, pointer: &str) -> String {
@@ -210,25 +241,4 @@ fn string(value: &Value, pointer: &str) -> String {
         .and_then(Value::as_str)
         .unwrap_or("")
         .to_string()
-}
-
-#[cfg(test)]
-mod tests {
-    use std::path::Path;
-
-    #[test]
-    fn path_label_uses_relative_label_when_possible_and_full_path_otherwise() {
-        assert_eq!(
-            super::path_label(Some(Path::new("/repo")), Path::new("/repo/a/b.json")),
-            "a/b.json"
-        );
-        assert_eq!(
-            super::path_label(Some(Path::new("/repo")), Path::new("/other/b.json")),
-            "/other/b.json"
-        );
-        assert_eq!(
-            super::path_label(None, Path::new("local.json")),
-            "local.json"
-        );
-    }
 }

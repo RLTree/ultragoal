@@ -19,7 +19,9 @@
     "session_id",
     "round_id",
     "raw_observation",
-    "agent_types"
+    "agent_types",
+    "failure",
+    "capability_gap"
   ],
   "properties": {
     "schema": {
@@ -34,10 +36,7 @@
       "minLength": 20
     },
     "status": {
-      "enum": [
-        "pass",
-        "fail"
-      ]
+      "const": "fail"
     },
     "issuer": {
       "type": "object",
@@ -149,10 +148,7 @@
       }
     },
     "claim_ceiling": {
-      "enum": [
-        "live_registry_reviewer_exposure_proven",
-        "withheld_or_blocked"
-      ]
+      "const": "withheld_or_blocked"
     },
     "session_id": {
       "type": "string",
@@ -186,15 +182,72 @@
     "agent_types": {
       "type": "array",
       "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
       "items": {
         "$ref": "#/$defs/agentTypeExposure"
-      }
+      },
+      "allOf": [
+        {
+          "contains": {
+            "properties": {
+              "role": {
+                "const": "claim-falsifier"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "role": {
+                "const": "orchestration-recovery-reviewer"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "role": {
+                "const": "product-journey-reviewer"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "role": {
+                "const": "security-reviewer"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
     },
     "failure": {
-      "type": [
-        "object",
-        "null"
-      ],
+      "type": "object",
       "additionalProperties": false,
       "required": [
         "reason",
@@ -221,76 +274,6 @@
       }
     }
   },
-  "allOf": [
-    {
-      "if": {
-        "properties": {
-          "status": {
-            "const": "pass"
-          }
-        },
-        "required": [
-          "status"
-        ]
-      },
-      "then": {
-        "properties": {
-          "issuer": {
-            "properties": {
-              "tool": {
-                "const": "multi_agent_v1"
-              },
-              "authority": {
-                "const": "tool_registry"
-              }
-            }
-          },
-          "tool_call": {
-            "properties": {
-              "name": {
-                "const": "multi_agent_v1.tool_registry"
-              }
-            }
-          },
-          "capture_method": {
-            "const": "live_tool_registry_query"
-          },
-          "source": {
-            "const": "multi_agent_v1.tool_registry"
-          },
-          "claim_ceiling": {
-            "const": "live_registry_reviewer_exposure_proven"
-          }
-        }
-      }
-    },
-    {
-      "if": {
-        "properties": {
-          "status": {
-            "const": "fail"
-          }
-        },
-        "required": [
-          "status"
-        ]
-      },
-      "then": {
-        "required": [
-          "failure",
-          "capability_gap"
-        ],
-        "properties": {
-          "claim_ceiling": {
-            "const": "withheld_or_blocked"
-          },
-          "failure": {
-            "type": "object"
-          }
-        }
-      }
-    }
-  ],
   "$defs": {
     "artifactAnchor": {
       "type": "object",
@@ -420,25 +403,53 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "agent_type",
-        "persona",
-        "custom_agent_path",
+        "role",
+        "agent_manifest_path",
+        "agent_manifest_digest",
+        "source_manifest_present",
+        "sandbox_mode",
         "disk_cache_synced",
         "global_toml_present",
+        "runtime_metadata_status",
+        "custom_agent_discovery_status",
         "exposed"
       ],
       "properties": {
-        "agent_type": {
-          "type": "string",
-          "minLength": 1
+        "role": {
+          "enum": [
+            "claim-falsifier",
+            "orchestration-recovery-reviewer",
+            "product-journey-reviewer",
+            "security-reviewer"
+          ]
         },
-        "persona": {
-          "type": "string",
-          "minLength": 1
+        "agent_manifest_path": {
+          "enum": [
+            ".codex/agents/claim-falsifier.toml",
+            ".codex/agents/orchestration-recovery-reviewer.toml",
+            ".codex/agents/product-journey-reviewer.toml",
+            ".codex/agents/security-reviewer.toml"
+          ]
         },
-        "custom_agent_path": {
-          "type": "string",
-          "pattern": "^custom-agents/harness-[a-z-]+\\.toml$"
+        "agent_manifest_digest": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            {
+              "const": "unavailable"
+            }
+          ]
+        },
+        "source_manifest_present": {
+          "type": "boolean"
+        },
+        "sandbox_mode": {
+          "enum": [
+            "read-only",
+            "unavailable"
+          ]
         },
         "disk_cache_synced": {
           "type": "boolean"
@@ -446,10 +457,94 @@
         "global_toml_present": {
           "type": "boolean"
         },
+        "runtime_metadata_status": {
+          "const": "unavailable"
+        },
+        "custom_agent_discovery_status": {
+          "const": "unavailable"
+        },
         "exposed": {
-          "type": "boolean"
+          "const": false
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "role": {
+                "const": "claim-falsifier"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "then": {
+            "properties": {
+              "agent_manifest_path": {
+                "const": ".codex/agents/claim-falsifier.toml"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "role": {
+                "const": "orchestration-recovery-reviewer"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "then": {
+            "properties": {
+              "agent_manifest_path": {
+                "const": ".codex/agents/orchestration-recovery-reviewer.toml"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "role": {
+                "const": "product-journey-reviewer"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "then": {
+            "properties": {
+              "agent_manifest_path": {
+                "const": ".codex/agents/product-journey-reviewer.toml"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "role": {
+                "const": "security-reviewer"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "then": {
+            "properties": {
+              "agent_manifest_path": {
+                "const": ".codex/agents/security-reviewer.toml"
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

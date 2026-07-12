@@ -1,4 +1,4 @@
-use super::digest::file_identity;
+use super::digest::{file_identity, file_identity_regular};
 use super::types::{
     ActiveStatus, AuthorityState, InventoryEntry, InventoryError, InventoryFinding,
 };
@@ -75,6 +75,36 @@ pub(crate) fn physical_entry(
     references: Vec<String>,
 ) -> Result<InventoryEntry, InventoryError> {
     let (digest_sha256, unix_mode) = file_identity(reads, path)?;
+    Ok(InventoryEntry {
+        stable_id,
+        kind: kind.to_owned(),
+        owner_role: owner.to_owned(),
+        relative_path: relative(root, path)?,
+        digest_sha256,
+        unix_mode,
+        authority_state,
+        active_status,
+        generator,
+        input_provenance: provenance,
+        references,
+    })
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn physical_regular_entry(
+    reads: &ReadSession,
+    root: &Path,
+    path: &Path,
+    stable_id: String,
+    kind: &str,
+    owner: &str,
+    authority_state: AuthorityState,
+    active_status: ActiveStatus,
+    generator: Option<String>,
+    provenance: Vec<String>,
+    references: Vec<String>,
+) -> Result<InventoryEntry, InventoryError> {
+    let (digest_sha256, unix_mode) = file_identity_regular(reads, path)?;
     Ok(InventoryEntry {
         stable_id,
         kind: kind.to_owned(),

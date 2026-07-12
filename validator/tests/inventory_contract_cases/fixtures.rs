@@ -17,70 +17,28 @@ fn has_code(catalog: &AuthorityCatalog, code: &str) -> bool {
 }
 
 #[test]
-fn declared_routes_do_not_suppress_live_legacy_authority() {
-    let repo = TestRepo::new("legacy-routes");
-    repo.skill("ultragoal", "ultragoal");
-    repo.write("plugin-manifest-draft.json", br#"{"legacy":true}"#);
-    repo.write("agents/old-agent.md", b"legacy agent\n");
-    repo.write("legacy/lane/owner.md", b"legacy lane\n");
-    repo.write("legacy/gate/rule.md", b"legacy gate\n");
-    repo.write("legacy/command-catalog.json", b"{}\n");
-    repo.write("legacy/finalizer.md", b"legacy finalizer\n");
-    repo.write("legacy/model.md", b"obsolete gpt-5.5 pin\n");
+fn supported_manifest_is_never_compared_to_the_unsupported_legacy_draft() {
+    let repo = TestRepo::new("manifest-authority-separation");
     repo.write(
-        "docs/ultragoal-contract-2026-07/legacy.md",
-        b"legacy contract\n",
+        ".codex-plugin/plugin.json",
+        br#"{"name":"harness-ultragoal","version":"0.0.0-test"}"#,
+    );
+    repo.write(
+        "plugin-manifest-draft.json",
+        br#"{"legacy":true,"unsupported_shape":"intentionally-different"}"#,
     );
     repo.commit();
+
     let catalog = catalog(&repo);
-    let legacy = catalog
-        .entries()
-        .iter()
-        .filter(|entry| entry.authority_state == crate::inventory::AuthorityState::Legacy)
-        .collect::<Vec<_>>();
-    assert!(legacy.len() >= 8);
-    assert!(
-        legacy
-            .iter()
-            .all(|entry| entry.active_status == crate::inventory::ActiveStatus::Active)
-    );
-    assert!(has_code(&catalog, "parallel_authority"));
-    assert!(!has_code(&catalog, "unrouted_legacy_authority"));
-    assert!(!has_code(&catalog, "ambiguous_authority_route"));
-}
-
-#[test]
-fn routing_registry_cannot_claim_cleanup_or_compatibility() {
-    let repo = TestRepo::new("route-overclaim");
-    let path = repo.root.join("migration/authority-routes.json");
-    let mut value: serde_json::Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
-    value["destructive_cleanup_authorized"] = serde_json::json!(true);
-    fs::write(&path, serde_json::to_vec(&value).unwrap()).unwrap();
-    repo.commit();
-    let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
-    let error = InventoryBuilder::new(&context).build().unwrap_err();
-    assert!(error.to_string().contains("OD-009"));
-
-    let repo = TestRepo::new("route-compatibility-overclaim");
-    let path = repo.root.join("migration/authority-routes.json");
-    let mut value: serde_json::Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
-    value["routes"][0]["compatibility_behavior"] = serde_json::json!("verified");
-    fs::write(&path, serde_json::to_vec(&value).unwrap()).unwrap();
-    repo.commit();
-    let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
-    let error = InventoryBuilder::new(&context).build().unwrap_err();
-    assert!(error.to_string().contains("overstates"));
-
-    let repo = TestRepo::new("route-canary");
-    let path = repo.root.join("migration/authority-routes.json");
-    let mut value: serde_json::Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
-    value["routes"][0]["route_id"] = serde_json::json!("SECRET_CANARY");
-    value["routes"][0]["canonical_target"] = serde_json::json!("SECRET_CANARY");
-    fs::write(&path, serde_json::to_vec(&value).unwrap()).unwrap();
-    repo.commit();
-    let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
-    let error = InventoryBuilder::new(&context).build().unwrap_err();
-    assert!(!error.to_string().contains("SECRET_CANARY"));
+    assert!(!has_code(&catalog, "projection_drift"));
+    assert!(catalog.findings().iter().any(|finding| {
+        finding.code == "parallel_authority"
+            && finding.relative_path.as_deref() == Some("plugin-manifest-draft.json")
+    }));
+    assert!(has_code(
+        &catalog,
+        "projection_requires_canonical_reconciliation"
+    ));
 }
 
 #[test]
@@ -148,6 +106,12 @@ fn symlink_escape_is_a_causal_finding() {
     repo.commit();
     let catalog = catalog(&repo);
     assert!(has_code(&catalog, "symlink_path_escape"));
+    assert!(
+        !catalog
+            .entries()
+            .iter()
+            .any(|entry| entry.relative_path == "skills/escape/SKILL.md")
+    );
     let _ = fs::remove_dir_all(outside);
 }
 
@@ -177,6 +141,18 @@ fn escaped_inventory_symlinks_are_not_dereferenced() {
     let catalog = catalog(&repo);
     assert!(has_code(&catalog, "symlink_path_escape"));
     let json = String::from_utf8(catalog.to_canonical_json().unwrap()).unwrap();
+    for escaped in [
+        ".codex-plugin/plugin.json",
+        "schemas/escaped.schema.json",
+        "generated/escaped.json",
+    ] {
+        assert!(
+            !catalog
+                .entries()
+                .iter()
+                .any(|entry| entry.relative_path == escaped)
+        );
+    }
     for secret in ["OUTSIDE-GENERATOR", "OUTSIDE-INPUT", "OUTSIDE-REF"] {
         assert!(!json.contains(secret));
     }
@@ -249,7 +225,7 @@ fn generated_and_schema_drift_are_discovered() {
     repo.write("source.txt", source);
     repo.write(
         "migration/generated-surface-authority.json",
-        br#"{"schema_version":"GeneratedSurfaceAuthority-v1","contract_id":"harness-ultragoal-successor-contract-v2","surfaces":[{"output":"docs/generated/current-input.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},{"output":"docs/generated/stale-input.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]}]}"#,
+        br#"{"schema_version":"GeneratedSurfaceAuthority-v2","contract_id":"harness-ultragoal-successor-contract-v2","surfaces":[{"disposition":"canonical_projection","output":"docs/generated/current-input.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},{"disposition":"canonical_projection","output":"docs/generated/stale-input.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]}]}"#,
     );
     repo.write("docs/generated/stale.json", br#"{"value":1}"#);
     repo.write(

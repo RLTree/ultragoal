@@ -7,6 +7,7 @@ pub(crate) mod product;
 pub(crate) mod registry;
 pub(crate) mod report;
 pub(crate) mod row;
+pub(crate) mod runtime;
 pub(crate) mod spawn;
 
 use crate::{json_boundary, schema_catalog};
@@ -15,7 +16,7 @@ use std::path::Path;
 
 pub use anchor::values::AnchorPaths;
 
-const SCHEMA: &str = "harness-ultragoal.review-round-receipt.v1";
+const SCHEMA: &str = "harness-ultragoal.review-round-receipt.v2";
 
 pub fn validate_files(root: &Path, receipt: &Path, anchors: &AnchorPaths) -> Result<(), String> {
     let value = json_boundary::read_json(receipt)?;
@@ -101,7 +102,8 @@ fn semantic_errors(
         ));
     }
     crate::review::round::anchor::values::anchor_errors(value, anchors, out);
-    crate::review::materiality::review_round_errors(value, out);
+    crate::review::materiality::review_round_errors(root, value, anchors, out);
+    crate::review::round::runtime::receipt_errors(value, out);
     crate::review::round::personas::persona_errors(root, value, anchors, out);
 }
 

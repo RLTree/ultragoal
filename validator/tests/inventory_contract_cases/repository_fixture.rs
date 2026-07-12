@@ -81,10 +81,15 @@ impl TestRepo {
             root.join("migration/generated-surface-authority.json"),
         )
         .unwrap();
+        fs::copy(
+            live_root().join("migration/non-authoritative-contexts.json"),
+            root.join("migration/non-authoritative-contexts.json"),
+        )
+        .unwrap();
         fs::create_dir_all(root.join(".codex-plugin")).unwrap();
         fs::write(
             root.join(".codex-plugin/plugin.json"),
-            br#"{"name":"harness-ultragoal","version":"0.0.0-test"}"#,
+            br#"{"name":"harness-ultragoal","version":"0.0.0-test","description":"fixture","author":{"name":"Inventory Test"},"skills":"./skills/","interface":{"displayName":"Harness Ultragoal","shortDescription":"fixture","longDescription":"fixture manifest","developerName":"Inventory Test","category":"Productivity","capabilities":["Read"],"defaultPrompt":["Inspect this fixture."]}}"#,
         )
         .unwrap();
         Self { root }

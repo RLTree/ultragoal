@@ -1,5 +1,6 @@
-use super::fs::{check_symlink, physical_entry, regular_files, relative};
+use super::fs::{check_symlink, physical_entry, physical_regular_entry, regular_files, relative};
 use super::generated;
+use super::plugin_manifest;
 use super::registry::RegistryData;
 use super::schema_references::json_references;
 use super::types::{
@@ -36,24 +37,63 @@ fn discover_plugin(
     let path = root.join(".codex-plugin/plugin.json");
     if path.exists() {
         let confined = check_symlink(root, &path, findings)?;
+        if !confined {
+            return Ok(());
+        }
+        let manifest_metadata =
+            std::fs::symlink_metadata(&path).map_err(|error| InventoryError::Io {
+                path: path.clone(),
+                message: error.to_string(),
+            })?;
+        if manifest_metadata.file_type().is_symlink() {
+            findings.push(InventoryFinding::error(
+                "plugin_manifest_symlink_unsupported",
+                Some("PLUGIN-MANIFEST"),
+                Some(".codex-plugin/plugin.json"),
+                "source plugin manifest must be a regular non-symlink file".to_owned(),
+            ));
+            return Ok(());
+        }
+        let manifest = plugin_manifest::inspect(reads, root, &path);
+        for (code, message) in &manifest.problems {
+            findings.push(
+                if matches!(
+                    *code,
+                    "plugin_default_prompt_truncated"
+                        | "inactive_plugin_hook_configuration"
+                        | "plugin_hook_trust_required"
+                ) {
+                    InventoryFinding::warning(
+                        code,
+                        Some("PLUGIN-MANIFEST"),
+                        Some(".codex-plugin/plugin.json"),
+                        (*message).to_owned(),
+                    )
+                } else {
+                    InventoryFinding::error(
+                        code,
+                        Some("PLUGIN-MANIFEST"),
+                        Some(".codex-plugin/plugin.json"),
+                        (*message).to_owned(),
+                    )
+                },
+            );
+        }
+        super::plugin_hooks::discover(reads, root, &manifest, entries, findings)?;
         findings.push(InventoryFinding::warning(
             "projection_requires_canonical_reconciliation",
             Some("PLUGIN-MANIFEST"),
             Some(".codex-plugin/plugin.json"),
             "plugin manifest is a product projection, not inventory authority".to_owned(),
         ));
-        let references = if confined {
-            discovered_references(
-                reads,
-                &path,
-                "PLUGIN-MANIFEST",
-                ".codex-plugin/plugin.json",
-                findings,
-            )
-        } else {
-            Vec::new()
-        };
-        entries.push(physical_entry(
+        let references = discovered_references(
+            reads,
+            &path,
+            "PLUGIN-MANIFEST",
+            ".codex-plugin/plugin.json",
+            findings,
+        );
+        entries.push(physical_regular_entry(
             reads,
             root,
             &path,
@@ -94,7 +134,10 @@ fn discover_collection(
     for path in regular_files(reads, root, spec.directory)? {
         let confined = check_symlink(root, &path, findings)?;
         let rel = relative(root, &path)?;
-        let references = if spec.kind == "schema" && confined {
+        if !confined {
+            continue;
+        }
+        let references = if spec.kind == "schema" {
             discovered_references(
                 reads,
                 &path,

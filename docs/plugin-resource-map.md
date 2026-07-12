@@ -1,121 +1,158 @@
 # Harness Ultragoal Plugin Resource Map
 
-This map is the product cohesion layer for plugin usage. It tells agents which
-plugin surface to use and why, so users do not have to manually orchestrate the
-skills.
+This is the source-level product map. It defines one preferred entry and seven
+specialized workflows so an operator does not need to remember an internal
+sequence of lanes, gates, receipts, or helper scripts.
 
-## Core Flow
+## Canonical skill topology
 
-1. Use `harness-ultragoal:fit-repo` first. It classifies the repo, chooses init
-   or retrofit follow-on paths, installs or verifies required setup surfaces,
-   emits the fit-repo receipt, and records the claim ceiling.
-2. Use `ultragoal` after fit-repo when the work needs a binding goal contract, lane registry,
-   verification backlog, completion manifest, amendments, and red fixtures.
-3. Use `harness-engineering` as the umbrella for agent-first repo setup.
-4. Use `agent-first-repo-init` for a new repo and `agent-first-repo-retrofit`
-   for an existing repo.
-5. Use `execplan-lane` to create each macro-lane contract.
-6. Use `orchestrator-reconciler` in the parent session to launch, monitor,
-   merge, advance dependencies, and tear down lane worktrees.
-7. Use `proof-gate` before accepting lane completion, final completion, or any
-   ready/install/publish claim.
-8. Use `standards-gardener` when friction, repeated review findings, stale
-   docs, stale worktrees, or agent-legibility entropy appear.
+`$harness-ultragoal:harness-ultragoal` is the only front door. It selects
+exactly one primary route:
 
-## Conditional Gates
+| Immediate outcome | Canonical skill | First capability probe | Effect ceiling |
+| --- | --- | --- | --- |
+| Classify an unknown request | `harness-ultragoal` | `ultragoal --json inspect capabilities` | Read |
+| Set up a fresh repository or retrofit an existing one | `repository-fit` | `ultragoal --json fit inspect --target <relative-path>` | Read until an accepted apply plan |
+| Run affected checks while preserving a dirty tree | `routine-work` | `ultragoal --json check routine --target <relative-path>` | Declared local `WorkspaceWrite` |
+| Explain a failure, query local events, or choose the next action | `diagnose-and-observe` | `ultragoal --json inspect findings` | Read; export is separately approved `ExternalWrite` |
+| Coordinate durable multi-scope work and recover it after interruption | `goal-run` | `ultragoal --json inspect context` | Per-work-package effects only |
+| Prove one named claim at its exact truth surface | `prove` | `ultragoal --json inspect claims` | Declared proof output `WorkspaceWrite` |
+| Evaluate, research, migrate, preserve compatibility, or retire | `improve-and-maintain` | `ultragoal --json eval audit --spec <relative-path>` or `migrate plan` | Read until an accepted bounded operation |
+| Independently falsify a real operator journey | `product-journey-review` | Probe every required command and host surface | Read-only reviewer |
 
-- Use `agent-runtime-legibility` when the target repo has an app, CLI, service,
-  workflow engine, or runtime surface that agents must run or prove.
-- Use `agent-observability-stack` only when the user requests observability,
-  the goal contract requires it, or a runtime claim cites logs, metrics,
-  traces, spans, or agent context summaries.
-- Use `product-cohesion-gate` when the work changes how a user starts,
-  understands, monitors, trusts, or completes work through a product surface.
+The old skill names may remain as non-authoritative compatibility sources until
+the root-owned migration registry retires them. They are not preferred product
+routes and must never be selected as a fallback when a canonical capability is
+missing.
 
-## Supporting Agents
+## Deterministic selection
 
-- Use `agents/plugin-scout.md` when plugin or connector capability is uncertain,
-  when installing a plugin could change the implementation path, or when a
-  claim depends on app/plugin availability. Evidence lives in
-  `docs/plugin-scout-receipt.json` and `artifacts/plugin-scout/`.
-- Use `agents/standards-extractor.md` when harvesting reusable operating laws
-  from a successful repo, decomposing mega-doc guidance, or updating templates
-  after repeated friction. Evidence routes through `docs/repo-patterns-extracted.md`
-  and `templates/agent-standards/`.
-- Use `custom-agents/harness-repo-initializer.toml` only for fresh repo setup
-  lanes; use `custom-agents/harness-retrofit-planner.toml` only for existing
-  repo retrofit lanes.
+Select the skill that owns the requested immediate outcome:
 
-## Setup And Proof Roots
+1. A request to independently review or falsify an existing journey selects
+   `product-journey-review`.
+2. A request to prove a named claim selects `prove`.
+3. A symptom, finding, failure, query, repair plan, or next-action request
+   selects `diagnose-and-observe`.
+4. Fresh setup, retrofit, partial fitting, or an ownership conflict selects
+   `repository-fit`.
+5. Affected tests, changed-impact validation, or safe reuse selects
+   `routine-work`.
+6. Coordinated execution across multiple dependency-bound scopes selects
+   `goal-run`.
+7. Evaluation, research refresh, compatibility, migration, or retirement
+   selects `improve-and-maintain`.
 
-- Codex app worktree setup is documented in
-  `docs/codex-worktree-environment.md`; generated state belongs in
-  `.codex-worktree/` and agents source `.codex-worktree/env.sh` before
-  validation.
-- Standards enforcement is a first-class setup surface. Fresh and retrofitted
-  repos install `agent-standards/enforcement.json`,
-  `agent-standards/enforcement.tsv`, `agent-standards/enforcement-audit.tsv`,
-  and `scripts/check-agent-standards`; the validator check
-  `agent-standards-enforcement` fails missing, unclassified, stale, or
-  overclaimed standards rows.
-- Coverage proof is a first-class setup surface. Generated repos receive
-  `templates/COVERAGE_RECEIPT.json` and `templates/scripts/check`; the check
-  runs standards enforcement first and blocks when no real coverage command is
-  configured.
-- Optional observability setup is documented in `docs/observability-stack.md`;
-  use it only when the goal or claim surface requires observable runtime proof.
-- Current review authority is typed, not narrative:
-  `fixtures/review-round/valid/review-round-receipt.json` plus anchors in
-  `fixtures/review-round/anchors/`.
-- Active custom-agent registry proof is separate from disk sync and is
-  documented in `docs/codex-custom-agent-registry-preflight.md`.
-- `docs/review-loop-record.md` is a compact index. Raw historical Markdown is
-  archive context, not approval or claim-ceiling authority.
+When one prompt contains multiple outcomes, choose the earliest outcome the
+operator must complete and name the others as follow-ons. Do not merge skill
+authorities. If two outcomes are truly simultaneous and require coordination,
+select `goal-run`, then create disjoint work packages that invoke the owning
+specialized workflows. If a repository-dependent route lacks a target, or a
+write route lacks required authority, stop before execution and ask one focused
+question. Unknown intents produce no route.
 
-## Review Team
+## Representative journeys
 
-Material review uses the four merged canonical personas:
+### Fresh repository
 
-1. Contract and Claim Falsifier.
-2. Orchestration and Recovery Falsifier.
-3. Security Trust-Boundary Falsifier.
-4. Product and Simplicity Falsifier.
+1. Enter through `harness-ultragoal` and select `repository-fit`.
+2. Run `fit inspect` and `fit plan` without writes.
+3. Present every mutation, preservation rule, conflict, rollback, and effect.
+4. Run `fit apply` only after acceptance of the unchanged current plan.
+5. Run `fit verify`, then route actual routine work to `routine-work`.
 
-Every material review round is a sign-off attempt using all four installed
-personas with `gpt-5.5`, `high`, fresh context, full scope, current anchors,
-and the current claim ceiling. Any `REVISE_BEFORE_NEXT_PHASE` or `BLOCKED`
-invalidates the round; repair, regenerate anchors, close reviewers, and launch
-a fresh full-scope round.
+### Partial retrofit or conflicting authority
 
-Earlier separated reviewer prompts are historical compatibility resources only.
-Current review authority is the typed four-persona review receipt plus the
-current validator, review-target, and archive anchors.
+Use `repository-fit`. Classify existing owners and preserve all unrelated
+modified, staged, untracked, and worktree state. Conflicts remain findings;
+they are never resolved by preference or hidden behind generated output.
 
-Before any reviewer launch, run the Material Review Scope Gate. The gatekeeper
-agent is `harness_material_review_scope_gatekeeper`, backed by
-`agents/material-review-scope-gatekeeper.md` and
-`schemas/review-materiality-gate.schema.json`. Its output classifies the launch
-as full-scope material review, delta review, advisory review, or blocked before
-review. Delta and advisory review outputs are never material `SIGN_OFF`.
+### Routine repeat use
 
-## Parent And Lane Signals
+Use `routine-work`. Recompute changed impact, verify every reuse key against the
+current candidate and environment, run only the dependency-closed affected set,
+and compare the full declared workspace boundary before and after. A strict
+claim boundary follows through `prove`; routine work does not become release
+ceremony.
 
-Lane agents report completion to the parent with:
+### Failure and diagnosis
 
-- lane id, branch, worktree, and current commit;
-- owned paths changed and forbidden/shared paths untouched;
-- commands run with exit codes and artifact paths;
-- ready receipt path and claim ceiling;
-- dirty worktree status or explicit preserved uncommitted paths;
-- blockers, withheld claims, and next recommended parent action.
+Use `diagnose-and-observe`. Inspect the current candidate and findings, query
+bounded local events when available, derive one causal explanation, and return
+one legal next action. The selected repair executes only through the workflow
+that owns its effect.
 
-The parent then decides whether to steer, request repair, merge, run root
-verification, advance dependent lanes, or tear down the lane.
+### Interrupted orchestration
 
-Future Codex app worktree lane owners default to `gpt-5.5` with `low`
-reasoning. Review agents are a different surface: material sign-off reviewers
-use `gpt-5.5` with `high`.
+Use `goal-run`. Recompute candidate identity, leases, worker results, reviews,
+and preserved state. Reconcile accepted work at the root, reissue stale work,
+and advance independent ready work. Parallel activity does not prove recovery.
 
-Active repo files must justify their current function. Files kept only as
-archives, old versions, or maybe-useful references should be removed from the
-active repo instead of moved into in-repo archive folders.
+### Strict proof
+
+Use `prove` for one claim. Bind prerequisites, positive behavior checks,
+false-pass controls, outputs, and an independent reconciler to the current
+candidate. Root authority alone decides claim promotion.
+
+### Improvement and migration
+
+Use `improve-and-maintain`. Audit tasks and scorers before evaluation. Treat
+research and metric gains as candidates. Inventory active readers and writers,
+verify replacement behavior, preserve explicitly adopted compatibility, and
+require destructive approval before retirement.
+
+## Current project-scoped agents
+
+The six current read-only roles live under `.codex/agents/`. Their presence in
+source does not prove package inclusion or host discovery.
+
+| Agent | Use |
+| --- | --- |
+| `repo-recon` | Recompute repository, worktree, command, component, and candidate truth. |
+| `research-verifier` | Recheck mutable primary-source and capability facts. |
+| `product-journey-reviewer` | Falsify acquisition-through-completion and quality-in-use journeys. |
+| `claim-falsifier` | Attack prerequisites, wrong surfaces, stale evidence, guards, and ceilings. |
+| `security-reviewer` | Attack confinement, effects, secrets, permissions, and supply chain. |
+| `orchestration-recovery-reviewer` | Attack leases, dependency closure, interruption, reconciliation, and recovery. |
+
+Do not copy these files into a global agent directory as part of source setup.
+Use project-scoped discovery when the current host exposes it. If the host does
+not expose the named role in the current task, record discovery as unsupported
+and lower the dependent review ceiling.
+
+## Human attention policy
+
+The plugin handles deterministic routing, capability probes, read-only
+inspection, causal diagnosis, safe retry planning, and independent-work
+advancement. Interrupt the operator only for a missing choice that changes the
+product outcome or authority, an external write, an unavailable required
+access, a secret boundary, or a destructive decision. The interruption names
+the exhausted safe routes, the exact blocker, preserved state, and the exact
+next action.
+
+## Truth surfaces
+
+Keep these surfaces separate and candidate-bound:
+
+1. source coherence;
+2. deterministic package bytes and package inventory;
+3. repository or personal marketplace catalog observation;
+4. installed bytes;
+5. cache identity;
+6. app registry and Plugins UI observation;
+7. new-task discovery;
+8. representative runtime behavior;
+9. repository and product journeys;
+10. release and completion.
+
+A lower surface never proves a higher one. Help, parse, inspect, query,
+diagnose, and next-action selection must also prove zero hidden writes at the
+same recursive tree and Git-status scope as the command.
+
+The source-candidate freeze includes these docs, the eight canonical skills,
+the route and journey fixtures, their semantic tests, the plugin descriptor,
+the package manifest, and `validator/src/cli/successor/catalog.rs`. Root-only
+agent descriptors and marketplace absence enter only through root-rederived
+metadata. Either kind of input invalidates the full extension when it changes;
+the issued lease candidate identity and the worker artifact aggregate remain
+separate fields.

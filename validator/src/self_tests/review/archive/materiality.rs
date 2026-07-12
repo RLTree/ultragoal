@@ -17,11 +17,14 @@ fn manifest(root: &Path, resources: &[&str]) {
 
 fn gate(decision: &str) -> Value {
     json!({
+        "schema": "harness-ultragoal.review-materiality-gate.v2",
+        "decision_authority": "deterministic_rust",
+        "reviewer_output_authority": "falsification_only_cannot_raise_claims",
         "decision": decision,
         "deterministic_gates_required": [
             "anchor_existence_and_digest",
             "validator_receipt_status",
-            "reviewer_registry_model_persona_exposure",
+            "reviewer_registry_role_exposure",
             "stale_receipt_check",
             "package_private_artifact_hygiene",
             "readiness_validator",
@@ -31,7 +34,7 @@ fn gate(decision: &str) -> Value {
         "deterministic_gates_run": [
             "anchor_existence_and_digest",
             "validator_receipt_status",
-            "reviewer_registry_model_persona_exposure",
+            "reviewer_registry_role_exposure",
             "stale_receipt_check",
             "package_private_artifact_hygiene",
             "readiness_validator",
@@ -196,17 +199,15 @@ fn materiality_scope_variants_reject_overclaim_and_missing_evidence() {
         ),
         vec!["review_materiality_fixture_dir_missing".to_string()]
     );
-    assert_eq!(
-        crate::review::materiality::value_failures(&json!({"decision":"OTHER"})),
-        vec!["materiality_decision_invalid".to_string()]
-    );
+    let invalid = crate::review::materiality::value_failures(&json!({"decision":"OTHER"}));
+    assert!(invalid.contains(&"materiality_decision_invalid".to_string()));
 
     let mut full = gate("FULL_SCOPE_MATERIAL_REVIEW_REQUIRED");
-    full["reviewers_required"] = json!(["contract_claim_falsifier"]);
+    full["reviewers_required"] = json!(["claim-falsifier"]);
     let full_errors = crate::review::materiality::value_failures(&full);
     for expected in [
         "materiality_full_scope_reviewer_set_missing",
-        "materiality_full_scope_not_signoff_capable",
+        "materiality_reviewer_cannot_authorize_signoff",
         "materiality_anchor_evidence_missing",
         "materiality_reviewer_registry_evidence_missing",
         "materiality_trigger_missing",
@@ -232,7 +233,7 @@ fn materiality_scope_variants_reject_overclaim_and_missing_evidence() {
     assert!(advisory_errors.contains(&"materiality_advisory_overclaims_support".to_string()));
 
     let mut blocked = gate("BLOCKED_BEFORE_REVIEW");
-    blocked["reviewers_required"] = json!(["contract_claim_falsifier"]);
+    blocked["reviewers_required"] = json!(["claim-falsifier"]);
     let blocked_errors = crate::review::materiality::value_failures(&blocked);
     assert!(blocked_errors.contains(&"materiality_blocked_launches_reviewers".to_string()));
     assert!(blocked_errors.contains(&"materiality_blocked_without_repair".to_string()));

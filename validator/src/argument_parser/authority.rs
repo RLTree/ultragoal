@@ -19,10 +19,6 @@ impl CliRoot {
     pub(super) fn into_path_buf(self) -> PathBuf {
         self.path
     }
-
-    pub(super) fn as_path(&self) -> &std::path::Path {
-        &self.path
-    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

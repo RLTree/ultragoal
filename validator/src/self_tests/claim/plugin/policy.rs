@@ -1,67 +1,36 @@
 use crate::audit::contract::Failure;
-use serde_json::json;
+use serde_json::{Value, json};
 
 fn errors(out: &[Failure]) -> Vec<&str> {
     out.iter().map(|failure| failure.error.as_str()).collect()
 }
 
 #[test]
-fn plugin_policy_rejects_custom_agent_boundary_and_runtime_drift() {
+fn plugin_policy_rejects_noncanonical_agent_identity_and_static_write_authority() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-policy");
-    std::fs::create_dir_all(root.join("custom-agents")).expect("custom agents");
-    std::fs::write(root.join("custom-agents/unreadable.toml"), [0xff]).expect("bad utf8");
+    write_canonical_agents(&root);
     std::fs::write(
-        root.join("custom-agents/multiline.toml"),
+        root.join(".codex/agents/security-reviewer.toml"),
         r#"
-name = """multiline-string"""
-description = "Specific reviewer"
-developer_instructions = "Do the job."
+name = "security-reviewer"
+description = "Specific reviewer."
+developer_instructions = "Review and write anything."
+sandbox_mode = "workspace-write"
+model_reasoning_effort = "high"
 "#,
     )
-    .expect("multiline toml");
-    std::fs::write(
-        root.join("custom-agents/harness-product-simplicity-falsifier.toml"),
-        r#"
-name = "Wrong Visible Name"
-description = ""
-developer_instructions = ""
-"#,
-    )
-    .expect("reviewer toml");
+    .expect("invalid security reviewer");
+    std::fs::remove_file(root.join(".codex/agents/repo-recon.toml"))
+        .expect("missing canonical reviewer");
+    let mut agents = canonical_agent_rows();
+    agents[0]["path"] = json!("custom-agents/harness-contract-claim-falsifier.toml");
+    agents.push(json!({
+        "name":"seventh-role",
+        "path":".codex/agents/seventh-role.toml"
+    }));
     let manifest = json!({
         "skills": [],
-        "agents": [
-            {
-                "name": "harness-product-simplicity-falsifier",
-                "path": "custom-agents/missing.toml",
-                "app_visible_name": ""
-            },
-            {
-                "name": "harness-contract-claim-falsifier",
-                "path": "custom-agents/unreadable.toml",
-                "app_visible_name": "Unreadable Agent"
-            },
-            {
-                "name": "harness-missing-agent",
-                "path": "custom-agents/missing.toml",
-                "app_visible_name": "Missing Agent"
-            },
-            {
-                "name": "harness-escape-agent",
-                "path": "custom-agents/../escape.toml",
-                "app_visible_name": "Escaping Agent"
-            },
-            {
-                "name": "harness-multiline-agent",
-                "path": "custom-agents/multiline.toml",
-                "app_visible_name": "multiline-string"
-            },
-            {
-                "name": "harness-security-trust-boundary-falsifier",
-                "path": "custom-agents/harness-product-simplicity-falsifier.toml",
-                "app_visible_name": "Harness Product Simplicity Falsifier"
-            }
-        ],
+        "agents": agents,
         "resources": []
     });
     let mut out = Vec::new();
@@ -71,22 +40,10 @@ developer_instructions = ""
         &mut out,
     );
     let got = errors(&out);
-    assert!(got.contains(&"custom_agent_app_visible_name_missing"));
-    assert!(got.contains(&"custom_agent_toml_unreadable"));
-    assert!(got.contains(&"custom_agent_toml_field_missing"));
-    assert!(
-        out.iter()
-            .any(|failure| failure.error == "custom_agent_toml_unreadable"
-                && failure.detail.contains("missing.toml"))
-    );
-    assert!(
-        out.iter()
-            .any(|failure| failure.error == "custom_agent_toml_unreadable"
-                && failure.detail.contains("escape.toml"))
-    );
-    assert!(got.contains(&"custom_agent_name_mismatch"));
-    assert!(got.contains(&"custom_agent_reasoning_effort_not_high"));
-    assert!(got.contains(&"custom_agent_sandbox_not_read_only"));
+    assert!(got.contains(&"canonical_agent_count_mismatch"));
+    assert!(got.contains(&"canonical_agent_path_mismatch"));
+    assert!(got.contains(&"canonical_agent_manifest_invalid"));
+    assert!(got.contains(&"unexpected_agent_role"));
     assert!(got.contains(&"required_skill_missing"));
     assert!(got.contains(&"plugin_agent_path_missing"));
     std::fs::remove_dir_all(root).expect("cleanup plugin policy");
@@ -138,4 +95,26 @@ fn plugin_policy_reports_resource_purpose_skill_link_and_non_custom_agent_edges(
         assert!(got.contains(&expected), "{expected}: {out:?}");
     }
     std::fs::remove_dir_all(root).expect("cleanup plugin purpose policy");
+}
+
+fn canonical_agent_rows() -> Vec<Value> {
+    crate::agent_roles::CANONICAL_AGENT_ROLES
+        .iter()
+        .map(|role| json!({"name":role.name,"path":role.manifest_path}))
+        .collect()
+}
+
+fn write_canonical_agents(root: &std::path::Path) {
+    for role in crate::agent_roles::CANONICAL_AGENT_ROLES {
+        let path = root.join(role.manifest_path);
+        std::fs::create_dir_all(path.parent().unwrap()).expect("agent root");
+        std::fs::write(
+            path,
+            format!(
+                "name = \"{}\"\ndescription = \"Read only.\"\ndeveloper_instructions = \"Review only.\"\nsandbox_mode = \"read-only\"\n",
+                role.name
+            ),
+        )
+        .expect("canonical agent");
+    }
 }

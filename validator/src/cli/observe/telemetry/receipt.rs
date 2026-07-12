@@ -30,12 +30,15 @@ pub(super) fn base_for_candidate(
         .correlation_id
         .clone()
         .unwrap_or_else(|| identity::id("corr", command.operation.id(), &candidate));
-    let receipt_path = record::redact_sensitive_text(&command.receipt_rel().to_string_lossy());
+    let receipt_path = command
+        .selected_receipt_rel()
+        .map(|path| record::redact_sensitive_text(&path.to_string_lossy()))
+        .unwrap_or_else(|| "none-read-only".to_string());
     let duration_ms = u64::try_from(started.elapsed().as_millis())
         .unwrap_or(u64::MAX)
         .max(1);
     let runtime = record::runtime(command.operation, duration_ms);
-    let event = record::event(
+    let mut event = record::event(
         root,
         command,
         &candidate,
@@ -45,10 +48,17 @@ pub(super) fn base_for_candidate(
         failure,
         runtime,
     );
+    let emit = !command.operation.zero_hidden_write_read();
+    if !emit {
+        event["exporter"] = json!("none_read_only");
+        event["repair_anchor_after"] = json!("read_only_result_built_without_emission");
+    }
     let metric = record::metric(&event, command.operation, status);
     let trace = record::trace(&event, command.operation);
-    spool::write(root, &event)?;
-    exporter::emit(&event, &metric, &trace);
+    if emit {
+        spool::write(root, &event)?;
+        exporter::emit(&event, &metric, &trace);
+    }
     Ok(json!({
         "schema": types::RECEIPT_SCHEMA,
         "status": status,

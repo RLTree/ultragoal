@@ -3,7 +3,7 @@
   "id": "review-round-disk-synced-active-registry-stale",
   "expected_failure": {
     "check_id": "validator-execution-provenance",
-    "error": "review_round_live_registry_agent_missing"
+    "error": "review_round_live_registry_unavailable"
   },
   "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
   "json_patch": [
@@ -15,7 +15,7 @@
     {
       "op": "replace",
       "path": "/live_registry_exposure/digest",
-      "value": "sha256:316c61d988db3ba18184d3caa6adae3ccafa8f28afa0d2afe353ed5d7eab4217"
+      "value": "sha256:a9174e9ca23ce0a341080f7bb056f52f03da2b877e743bb82f24f5a47295b31d"
     }
   ],
   "notes": "disk cache and global TOMLs do not prove already-running Codex sessions expose current custom agent types",

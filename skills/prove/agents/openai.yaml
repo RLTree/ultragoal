@@ -1,0 +1,6 @@
+interface:
+  display_name: "Prove"
+  short_description: "Run claim-specific independent proof"
+  default_prompt: "Use $harness-ultragoal:prove to plan strict proof for this named claim and arrange independent reconciliation."
+policy:
+  allow_implicit_invocation: false

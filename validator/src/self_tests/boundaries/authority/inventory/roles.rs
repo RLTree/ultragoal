@@ -13,7 +13,6 @@ fn foundational_inventory_declares_required_authority_roles() {
         "package_manifest",
         "package_inventory",
         "setup_retrofit_output",
-        "generated_artifact",
         "receipt",
         "standards",
         "source_obligation",
@@ -39,8 +38,9 @@ fn foundational_inventory_declares_required_authority_roles() {
         surfaces.iter().all(|(_, path, _)| {
             !path.starts_with("docs/ultragoal-contract-2026-07/")
                 && !path.contains("parent-session-full-ultragoal")
+                && *path != "docs/generated/observability/command-inventory.json"
         }),
-        "builder-contract docs must not be package evidence surfaces: {surfaces:?}"
+        "builder-contract docs and the deauthorized command inventory must not be package evidence surfaces: {surfaces:?}"
     );
 }
 

@@ -4,37 +4,32 @@ use crate::review::round::ReviewFailure;
 use serde_json::Value;
 use std::path::Path;
 
-const OWNER_PERSONA: &str = "product_simplicity_falsifier";
-const OWNER_AGENT: &str = "harness_product_simplicity_falsifier";
+const OWNER_ROLE: &str = "product-journey-reviewer";
 
 pub(crate) fn disposition_errors(
     root: &Path,
     row: &Value,
     receipt: &Value,
-    persona: &str,
+    role: &str,
     out: &mut Vec<ReviewFailure>,
 ) {
-    if persona != OWNER_PERSONA || !criteria::product_impacting_claims(receipt) {
+    if role != OWNER_ROLE || !criteria::product_impacting_claims(receipt) {
         return;
     }
-    scalar_binding_errors(row, persona, out);
+    scalar_binding_errors(row, role, out);
     let Some(disposition) = row.get("product_fitness_disposition") else {
         push(
             out,
             "review_round_product_fitness_disposition_missing",
-            persona,
+            role,
         );
         return;
     };
-    owner_errors(row, disposition, persona, out);
-    claim_binding_errors(row, disposition, receipt, persona, out);
-    substitution_errors(row, disposition, persona, out);
+    owner_errors(row, disposition, role, out);
+    claim_binding_errors(row, disposition, receipt, role, out);
+    substitution_errors(row, disposition, role, out);
     if receipt_stale(root, row, disposition) {
-        push(
-            out,
-            "review_round_product_fitness_disposition_stale",
-            persona,
-        );
+        push(out, "review_round_product_fitness_disposition_stale", role);
     }
 }
 
@@ -46,7 +41,7 @@ fn scalar_binding_errors(row: &Value, persona: &str, out: &mut Vec<ReviewFailure
             persona,
         );
     }
-    if row.get("product_fitness_owner").and_then(Value::as_str) != Some(OWNER_PERSONA) {
+    if row.get("product_fitness_owner").and_then(Value::as_str) != Some(OWNER_ROLE) {
         push(out, "review_round_product_fitness_owner_missing", persona);
     }
     if row
@@ -64,9 +59,16 @@ fn scalar_binding_errors(row: &Value, persona: &str, out: &mut Vec<ReviewFailure
 }
 
 fn owner_errors(row: &Value, disposition: &Value, persona: &str, out: &mut Vec<ReviewFailure>) {
-    if disposition.get("owner_persona").and_then(Value::as_str) != Some(OWNER_PERSONA)
-        || disposition.get("owner_agent_type").and_then(Value::as_str) != Some(OWNER_AGENT)
-        || row.get("agent_type").and_then(Value::as_str) != Some(OWNER_AGENT)
+    if disposition.get("owner_role").and_then(Value::as_str) != Some(OWNER_ROLE)
+        || row.get("role").and_then(Value::as_str) != Some(OWNER_ROLE)
+        || disposition
+            .get("reviewer_authority")
+            .and_then(Value::as_str)
+            != Some("falsification_evidence_only")
+        || disposition
+            .get("may_raise_claim_ceiling")
+            .and_then(Value::as_bool)
+            != Some(false)
         || disposition
             .get("applies_to_product_impacting_claims")
             .and_then(Value::as_bool)
@@ -115,7 +117,7 @@ fn substitution_errors(
     let reviewed = criteria::string_set(row, "substitution_rejections_reviewed");
     if !criteria::required_substitutions().is_subset(&reviewed)
         || disposition
-            .get("generic_product_simplicity_approval_only")
+            .get("generic_product_approval_only")
             .and_then(Value::as_bool)
             != Some(false)
         || disposition

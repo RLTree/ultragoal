@@ -3,7 +3,7 @@ use serde_json::json;
 use std::fs;
 
 #[test]
-fn observe_prove_rejects_incomplete_command_inventory_after_stack_passes() {
+fn observe_prove_reports_successor_catalog_unavailable_after_stack_passes() {
     let root = super::minimal_root("observe-prove-command-inventory-incomplete");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let health = command(&["observe", "stack", "health"]);
@@ -21,28 +21,19 @@ fn observe_prove_rejects_incomplete_command_inventory_after_stack_passes() {
     crate::json_boundary::write_json(&root.join(smoke.operation.receipt_rel()), &smoke_receipt)
         .expect("write smoke");
     fs::create_dir_all(root.join("docs/generated/observability")).expect("inventory parent");
-    crate::json_boundary::write_json(
-        &root.join("docs/generated/observability/command-inventory.json"),
-        &json!({
-            "commands": ["observe prove"],
-            "command_observability_inventory": {
-                "observe prove": {
-                    "observability_status": "partially_observable",
-                    "missing_surfaces": ["all commands observable"],
-                    "claim_impact": "blocks_observability_product_closure"
-                }
-            }
-        }),
-    )
-    .expect("write incomplete command inventory");
+    let static_inventory = root.join("docs/generated/observability/command-inventory.json");
+    fs::write(&static_inventory, "SECRET_CANARY").expect("static bait");
     let proof =
         observe::telemetry::prove(&root, &command(&["observe", "prove"])).expect("prove receipt");
+    fs::write(&static_inventory, [0xff, 0xfe]).expect("invalid static bait");
+    let mutated =
+        observe::telemetry::prove(&root, &command(&["observe", "prove"])).expect("mutated proof");
     assert_eq!(proof["status"], "fail");
     let why = proof["why_failed"].as_str().unwrap();
-    assert!(why.contains("total_failures="));
-    assert!(why.contains("first_failure=observability_control_board_missing"));
-    assert!(why.contains("control_board_first_incomplete=unknown"));
-    assert!(!why.contains("; observability_command_inventory_missing"));
+    assert!(why.starts_with("HCT-OBSERVE successor catalog unavailable/not adopted"));
+    assert_eq!(proof["why_failed"], mutated["why_failed"]);
+    assert_eq!(proof["claim_ceiling"], mutated["claim_ceiling"]);
+    assert!(!why.contains("SECRET_CANARY"));
     assert_eq!(
         proof["next_repair"],
         "repair the first_failure and control_board_first_incomplete named in why_failed, then rerun observe prove"

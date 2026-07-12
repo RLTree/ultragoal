@@ -79,13 +79,15 @@ Include exact commands, cwd, expected exit, and artifact paths for:
 ## Launch Readiness
 
 - Model/reasoning class and risk justification:
-  - Future Codex app worktree lane owner default: `gpt-5.5`, `low`.
+  - Use the lowest supported reasoning level that fits the named lane risk.
   - Higher lane-owner reasoning requires a named risk and expected payoff.
-  - Reviewer reasoning is separate and remains `high`.
+  - Reviewer reasoning is separate and may be higher.
+  - Record model and reasoning only when Codex exposes them; otherwise use
+    `unknown`.
 - Review cadence:
   - Material sign-off: fresh validator/review-target/archive/registry anchors
-    when relevant, four personas, `gpt-5.5`, `high`, full scope, fresh
-    reviewers.
+    when relevant, four personas, full scope, fresh reviewers, and only
+    runtime-supported model/reasoning configuration.
   - Any `REVISE_BEFORE_NEXT_PHASE` or `BLOCKED` invalidates the round; repair,
     regenerate anchors, close reviewers, and launch a fresh full-scope round.
 - Parent monitoring mode and cadence:

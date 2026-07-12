@@ -17,7 +17,7 @@ pub(super) fn matches(pattern: &str, text: &str) -> bool {
                 || text.contains("VALIDATOR_RECEIPT")
         }
         "^examples/generated/" => text.starts_with("examples/generated/"),
-        "^custom-agents/harness-[a-z-]+\\.toml$" => harness_agent_toml(text),
+        "^\\.codex/agents/[a-z0-9][a-z0-9-]*\\.toml$" => canonical_agent_toml(text),
         "^artifacts/source-snapshots/[a-z0-9][a-z0-9-]*\\.txt$" => source_snapshot_path(text),
         "^validation_artifacts/review/[-A-Za-z0-9._/]+[.]json$" => {
             artifact_json_under("validation_artifacts/review/", text)
@@ -81,8 +81,10 @@ fn strict_kebab_token(text: &str) -> bool {
     kebab_token(text) && text.chars().last().is_some_and(|c| c != '-')
 }
 
-fn harness_agent_toml(text: &str) -> bool {
-    text.starts_with("custom-agents/harness-") && text.ends_with(".toml")
+fn canonical_agent_toml(text: &str) -> bool {
+    crate::agent_roles::CANONICAL_AGENT_ROLES
+        .iter()
+        .any(|role| role.manifest_path == text)
 }
 
 fn source_snapshot_path(text: &str) -> bool {
@@ -165,9 +167,18 @@ mod tests {
             "^examples/generated/",
             "examples/generated/a.json"
         ));
+        let agent_pattern = "^\\.codex/agents/[a-z0-9][a-z0-9-]*\\.toml$";
         assert!(super::matches(
-            "^custom-agents/harness-[a-z-]+\\.toml$",
-            "custom-agents/harness-reviewer.toml"
+            agent_pattern,
+            ".codex/agents/claim-falsifier.toml"
+        ));
+        assert!(!super::matches(
+            agent_pattern,
+            "custom-agents/harness-contract-claim-falsifier.toml"
+        ));
+        assert!(!super::matches(
+            agent_pattern,
+            ".codex/agents/seventh-role.toml"
         ));
         assert!(super::matches(
             "^artifacts/source-snapshots/[a-z0-9][a-z0-9-]*\\.txt$",

@@ -58,6 +58,7 @@ fn generated_artifact_rows(
     collect_json_artifacts(root, &root.join("docs/generated"), &mut out);
     collect_json_artifacts(root, &root.join("examples/generated"), &mut out);
     out.into_iter()
+        .filter(|path| path != super::super::super::inventory::DEAUTHORIZED_COMMAND_INVENTORY)
         .map(|path| authority_row("generated_artifact", &path, true, root, inventory))
         .collect()
 }

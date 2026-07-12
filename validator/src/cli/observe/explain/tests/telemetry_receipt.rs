@@ -1,7 +1,7 @@
 use super::*;
 
 #[test]
-fn explain_fails_when_base_telemetry_receipt_cannot_be_written() {
+fn read_only_explain_ignores_blocked_spool_and_writes_nothing() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "observe-explain-base-receipt-write-failure",
     );
@@ -19,11 +19,32 @@ fn explain_fails_when_base_telemetry_receipt_cannot_be_written() {
             .expect("parse")
             .expect("observe");
 
-    let err = run(&root, &command).expect_err("spool write failure blocks explain receipt");
+    let before = walkdir::WalkDir::new(&root)
+        .into_iter()
+        .map(Result::unwrap)
+        .map(|entry| {
+            let metadata = fs::symlink_metadata(entry.path()).expect("metadata");
+            (
+                entry.path().strip_prefix(&root).unwrap().to_path_buf(),
+                metadata.len(),
+            )
+        })
+        .collect::<Vec<_>>();
+    let receipt = run(&root, &command).expect("read-only explain result");
+    let after = walkdir::WalkDir::new(&root)
+        .into_iter()
+        .map(Result::unwrap)
+        .map(|entry| {
+            let metadata = fs::symlink_metadata(entry.path()).expect("metadata");
+            (
+                entry.path().strip_prefix(&root).unwrap().to_path_buf(),
+                metadata.len(),
+            )
+        })
+        .collect::<Vec<_>>();
 
-    assert!(
-        err.contains("events.jsonl") || err.contains("json") || err.contains("directory"),
-        "{err}"
-    );
+    assert_eq!(receipt["event"]["exporter"], "none_read_only");
+    assert_eq!(receipt["receipt_path"], "none-read-only");
+    assert_eq!(before, after);
     fs::remove_dir_all(root).expect("cleanup explain spool failure");
 }

@@ -7,7 +7,21 @@ use std::path::{Path, PathBuf};
 use std::os::unix::fs::MetadataExt;
 
 const MAX_WALK_DEPTH: usize = 64;
-const MAX_WALK_FILES: usize = 100_000;
+const MAX_WALK_ENTRIES: usize = 100_000;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum CollectionEntryKind {
+    Regular { single_link: bool },
+    Directory,
+    Symlink,
+    Special,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct CollectionEntry {
+    pub(crate) path: PathBuf,
+    pub(crate) kind: CollectionEntryKind,
+}
 
 #[derive(Clone, Copy)]
 enum Profile {
@@ -55,7 +69,7 @@ fn walk(
     reads: &ReadSession,
     start: &Path,
     profile: Profile,
-) -> Result<Vec<PathBuf>, InventoryError> {
+) -> Result<Vec<CollectionEntry>, InventoryError> {
     reads
         .observe_presence_parent(start)
         .map_err(|error| InventoryError::Io {
@@ -65,7 +79,7 @@ fn walk(
     if !start.exists() {
         return Ok(Vec::new());
     }
-    let mut paths = Vec::new();
+    let mut entries = Vec::new();
     #[cfg(unix)]
     let mut directories = Vec::new();
     let walker = walkdir::WalkDir::new(start)
@@ -89,7 +103,7 @@ fn walk(
                 "inventory walk exceeds depth {MAX_WALK_DEPTH}"
             )));
         }
-        if entry.file_type().is_dir() {
+        let kind = if entry.file_type().is_dir() {
             #[cfg(unix)]
             {
                 let metadata = entry.metadata().map_err(|error| InventoryError::Io {
@@ -112,11 +126,30 @@ fn walk(
                 }
                 directories.push(directory_snapshot(entry.path().to_path_buf(), &metadata));
             }
-        } else if entry.file_type().is_file() || entry.file_type().is_symlink() {
-            paths.push(entry.into_path());
-            if paths.len() > MAX_WALK_FILES {
+            CollectionEntryKind::Directory
+        } else if entry.file_type().is_file() {
+            let metadata = entry.metadata().map_err(|error| InventoryError::Io {
+                path: entry.path().to_path_buf(),
+                message: error.to_string(),
+            })?;
+            #[cfg(unix)]
+            let single_link = metadata.nlink() == 1;
+            #[cfg(not(unix))]
+            let single_link = false;
+            CollectionEntryKind::Regular { single_link }
+        } else if entry.file_type().is_symlink() {
+            CollectionEntryKind::Symlink
+        } else {
+            CollectionEntryKind::Special
+        };
+        if entry.depth() != 0 || !matches!(kind, CollectionEntryKind::Directory) {
+            entries.push(CollectionEntry {
+                path: entry.into_path(),
+                kind,
+            });
+            if entries.len() > MAX_WALK_ENTRIES {
                 return Err(InventoryError::InvalidRegistry(format!(
-                    "inventory walk exceeds {MAX_WALK_FILES} files"
+                    "inventory walk exceeds {MAX_WALK_ENTRIES} entries"
                 )));
             }
         }
@@ -134,20 +167,48 @@ fn walk(
             });
         }
     }
-    paths.sort();
-    Ok(paths)
+    entries.sort_by(|left, right| left.path.cmp(&right.path));
+    Ok(entries)
+}
+
+pub(crate) fn collection_entries(
+    reads: &ReadSession,
+    start: &Path,
+) -> Result<Vec<CollectionEntry>, InventoryError> {
+    walk(reads, start, Profile::Collection)
 }
 
 pub(crate) fn collection_files(
     reads: &ReadSession,
     start: &Path,
 ) -> Result<Vec<PathBuf>, InventoryError> {
-    walk(reads, start, Profile::Collection)
+    Ok(collection_entries(reads, start)?
+        .into_iter()
+        .filter(|entry| {
+            matches!(
+                entry.kind,
+                CollectionEntryKind::Regular { .. } | CollectionEntryKind::Symlink
+            )
+        })
+        .map(|entry| entry.path)
+        .collect())
 }
 
 pub(crate) fn repository_files(
     reads: &ReadSession,
     root: &Path,
 ) -> Result<Vec<PathBuf>, InventoryError> {
-    walk(reads, root, Profile::Repository)
+    Ok(walk(reads, root, Profile::Repository)?
+        .into_iter()
+        .filter(|entry| {
+            matches!(
+                entry.kind,
+                CollectionEntryKind::Regular { .. } | CollectionEntryKind::Symlink
+            )
+        })
+        .map(|entry| entry.path)
+        .collect())
 }
+
+#[cfg(test)]
+mod tests;

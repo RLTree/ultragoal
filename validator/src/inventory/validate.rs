@@ -1,7 +1,11 @@
+use super::compatibility::RETAINED_KIND;
 use super::routing::RoutingData;
 use super::types::{ActiveStatus, AuthorityState, InventoryEntry, InventoryFinding};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
+
+mod duplicates;
+use duplicates::{duplicate_paths, duplicate_stable_ids};
 
 fn merge_one(
     entries: &mut BTreeMap<String, InventoryEntry>,
@@ -70,26 +74,6 @@ fn missing_required(
                 Some(&entry.stable_id),
                 Some(&entry.relative_path),
                 "required contract component was not discovered".to_owned(),
-            ));
-        }
-    }
-}
-
-fn duplicate_paths(
-    entries: &BTreeMap<String, InventoryEntry>,
-    findings: &mut Vec<InventoryFinding>,
-) {
-    let mut paths: BTreeMap<&str, &str> = BTreeMap::new();
-    for entry in entries.values() {
-        if entry.relative_path.contains("#/") || entry.kind == "source-symbol-implementation" {
-            continue;
-        }
-        if let Some(prior) = paths.insert(&entry.relative_path, &entry.stable_id) {
-            findings.push(InventoryFinding::error(
-                "duplicate_component_path",
-                Some(&entry.stable_id),
-                Some(&entry.relative_path),
-                format!("path is also owned by {prior}"),
             ));
         }
     }
@@ -172,30 +156,45 @@ fn unresolved_references(
 fn parallel_authority(
     entries: &BTreeMap<String, InventoryEntry>,
     findings: &mut Vec<InventoryFinding>,
+    verified_pending_authority: &BTreeSet<String>,
 ) {
     for legacy in entries.values().filter(|entry| {
         entry.authority_state == AuthorityState::Legacy
             && entry.active_status == ActiveStatus::Active
+            && entry.kind != RETAINED_KIND
     }) {
-        findings.push(InventoryFinding::error(
-            "parallel_authority",
-            Some(&legacy.stable_id),
-            Some(&legacy.relative_path),
-            "legacy surface remains authoritative without an adopted disposition".to_owned(),
-        ));
+        if verified_pending_authority.contains(&legacy.stable_id) {
+            findings.push(InventoryFinding::warning(
+                "sole_current_authority_pending_migration",
+                Some(&legacy.stable_id),
+                Some(&legacy.relative_path),
+                "one active legacy implementation is verified and its successor is definition-only; migration and retirement remain open"
+                    .to_owned(),
+            ));
+        } else {
+            findings.push(InventoryFinding::error(
+                "parallel_authority",
+                Some(&legacy.stable_id),
+                Some(&legacy.relative_path),
+                "legacy surface remains authoritative without an adopted disposition".to_owned(),
+            ));
+        }
     }
-    let plugin = entries.get("PLUGIN-MANIFEST");
-    let draft = entries
+}
+
+fn candidate_components(
+    entries: &BTreeMap<String, InventoryEntry>,
+    findings: &mut Vec<InventoryFinding>,
+) {
+    for entry in entries
         .values()
-        .find(|entry| entry.relative_path == "plugin-manifest-draft.json");
-    if let (Some(plugin), Some(draft)) = (plugin, draft)
-        && plugin.digest_sha256 != draft.digest_sha256
+        .filter(|entry| entry.active_status == ActiveStatus::Candidate)
     {
-        findings.push(InventoryFinding::error(
-            "projection_drift",
-            Some(&plugin.stable_id),
-            Some(&plugin.relative_path),
-            "live plugin projection differs from legacy manifest draft".to_owned(),
+        findings.push(InventoryFinding::warning(
+            "candidate_component_not_active",
+            Some(&entry.stable_id),
+            Some(&entry.relative_path),
+            "compiled component exists but is not an adopted live product route".to_owned(),
         ));
     }
 }
@@ -205,18 +204,26 @@ pub(crate) fn reconcile(
     groups: Vec<Vec<InventoryEntry>>,
     mut findings: Vec<InventoryFinding>,
     routing: &RoutingData,
+    verified_pending_authority: &BTreeSet<String>,
 ) -> (Vec<InventoryEntry>, Vec<InventoryFinding>) {
+    let duplicate_stable_id_conflicts = duplicate_stable_ids(&groups);
+    let duplicate_path_conflicts = duplicate_paths(&groups, &mut findings);
     let mut entries = BTreeMap::new();
     for group in groups {
         for entry in group {
             merge_one(&mut entries, entry, &mut findings);
         }
     }
-    routing.apply(&mut entries, &mut findings);
+    routing.apply(
+        &mut entries,
+        &mut findings,
+        &duplicate_stable_id_conflicts,
+        &duplicate_path_conflicts,
+    );
     missing_required(&mut entries, &mut findings);
-    duplicate_paths(&entries, &mut findings);
     unresolved_references(root, &entries, &mut findings);
-    parallel_authority(&entries, &mut findings);
+    candidate_components(&entries, &mut findings);
+    parallel_authority(&entries, &mut findings, verified_pending_authority);
     let mut entries = entries.into_values().collect::<Vec<_>>();
     entries.sort_by(|left, right| {
         left.stable_id

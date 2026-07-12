@@ -1,5 +1,5 @@
 use serde_json::{Value, json};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 fn write_json(path: &Path, value: &Value) {
@@ -7,14 +7,6 @@ fn write_json(path: &Path, value: &Value) {
         std::fs::create_dir_all(parent).expect("parent");
     }
     std::fs::write(path, serde_json::to_vec(value).expect("json")).expect("write json");
-}
-
-fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
-    crate::Args {
-        root,
-        command: crate::parse_command(&raw.iter().map(|s| s.to_string()).collect::<Vec<_>>())
-            .expect("parse command"),
-    }
 }
 
 fn stamp() -> u128 {
@@ -32,13 +24,13 @@ fn rel(root: &Path, path: &Path) -> String {
 }
 
 #[test]
-fn command_run_accepts_current_review_round_anchors() {
+fn command_run_rejects_self_authored_noncanonical_review_round_anchors() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let out_dir = root
         .join("validation_artifacts/review")
         .join(format!("review-round-command-{}", stamp()));
     std::fs::create_dir_all(&out_dir).expect("review round output dir");
-    let package_digest = crate::package::inventory::package_digest(&root).expect("package digest");
+    let package_digest = crate::self_tests::boundaries::workspace_fixtures::sha('e');
     let validator_path = out_dir.join("validator-receipt.json");
     write_json(
         &validator_path,
@@ -138,38 +130,19 @@ fn command_run_accepts_current_review_round_anchors() {
     }
     let receipt_path = out_dir.join("review-round-receipt.json");
     write_json(&receipt_path, &receipt);
-    let observability_receipt = rel(&root, &out_dir.join("review-round-observability.json"));
-
-    let code = crate::command_run::run_with_exit_code(args(
-        root.clone(),
-        &[
-            "review-round",
-            "verify",
-            "--receipt",
-            receipt_path.to_str().expect("receipt"),
-            "--validator-receipt",
-            validator_path.to_str().expect("validator"),
-            "--review-target-receipt",
-            review_target_path.to_str().expect("target"),
-            "--archive-receipt",
-            archive_path.to_str().expect("archive"),
-            "--observability-receipt",
-            &observability_receipt,
-        ],
-    ))
-    .expect("review round command");
-    assert_eq!(code, 0);
-    let observability =
-        crate::json_boundary::read_json(&root.join(&observability_receipt)).expect("observability");
-    assert_eq!(observability["status"], "pass");
-    assert_eq!(observability["operation"], "review-round.verify");
-    assert_eq!(
-        observability["check_id"],
-        "review-round-verify-observability-binding"
-    );
-    assert_eq!(
-        observability["claim_id"],
-        "review_round_source_local_observability"
+    let error = crate::review::round::validate_files(
+        &root,
+        &receipt_path,
+        &crate::review::round::AnchorPaths {
+            validator_receipt: validator_path,
+            review_target_receipt: review_target_path,
+            archive_receipt: archive_path,
+        },
+    )
+    .expect_err("noncanonical anchors rejected");
+    assert!(
+        error.contains("review_round_trusted_anchor_source_unavailable"),
+        "{error}"
     );
     std::fs::remove_dir_all(out_dir).expect("cleanup review round command");
 }

@@ -164,43 +164,45 @@ fn package_run_semantic_fixture_reports_absolute_outside_paths() {
 }
 
 #[test]
-fn package_run_ready_artifacts_are_digest_bound_and_filtered() {
+fn package_run_static_ready_examples_never_become_current_artifacts() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("package-run-ready-artifacts");
     std::fs::create_dir_all(root.join("examples/generated")).expect("generated");
+    std::fs::create_dir_all(root.join("fixtures/valid")).expect("fixtures");
     write_json(
         &root.join("examples/generated/READY_FOR_MERGE-b.json"),
-        &json!({"id":"b"}),
+        &json!({
+            "lane_id":"duplicate",
+            "ready":true,
+            "commit":"abcdef0",
+            "validator_run_id":"future-run",
+            "input_manifest_digest":crate::digest::ZERO,
+            "claim_ceiling":[{"status":"proven_live"}]
+        }),
     );
     write_json(
         &root.join("examples/generated/READY_FOR_MERGE-a.json"),
-        &json!({"id":"a"}),
+        &json!({
+            "lane_id":"duplicate",
+            "ready":true,
+            "commit":"abcdef0",
+            "validator_run_id":"run-current",
+            "input_manifest_digest":crate::digest::ZERO,
+            "claim_ceiling":[{"status":"proven_live"}]
+        }),
     );
+    std::fs::write(
+        root.join("examples/generated/READY_FOR_MERGE-malformed.json"),
+        "{",
+    )
+    .expect("malformed static example");
     write_json(
-        &root.join("examples/generated/READY_FOR_REVIEW-a.json"),
-        &json!({"id":"ignored"}),
+        &root.join("fixtures/valid/embedded.json"),
+        &json!({"ready_for_merge":{"lane_id":"different","ready":false}}),
     );
 
-    let artifacts = crate::audit::package::run::ready_artifacts(&root, "run-current");
-    assert_eq!(artifacts.len(), 2);
-    assert_eq!(
-        artifacts
-            .iter()
-            .map(|row| row["path"].as_str().unwrap_or_default())
-            .collect::<Vec<_>>(),
-        vec![
-            "examples/generated/READY_FOR_MERGE-a.json",
-            "examples/generated/READY_FOR_MERGE-b.json"
-        ]
-    );
-    assert!(artifacts.iter().all(|row| {
-        row["validator_run_id"] == "run-current"
-            && row["artifact_type"] == "ready_for_merge"
-            && row["digest"]
-                .as_str()
-                .unwrap_or_default()
-                .starts_with("sha256:")
-    }));
+    assert!(crate::audit::package::run::ready_artifacts(&root, "run-current").is_empty());
+    assert!(crate::audit::package::run::ready_artifacts(&root, "future-run").is_empty());
     std::fs::remove_dir_all(root).expect("cleanup ready artifacts");
 }
 
@@ -212,4 +214,44 @@ fn package_run_ready_artifacts_missing_directory_is_empty() {
     std::fs::create_dir_all(&root).expect("root");
     assert!(crate::audit::package::run::ready_artifacts(&root, "run").is_empty());
     std::fs::remove_dir_all(root).expect("cleanup no ready artifacts");
+}
+
+#[test]
+fn package_run_requires_real_ready_output_when_dependency_needs_it() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "package-run-real-ready-required",
+    );
+    std::fs::create_dir_all(root.join("examples/generated")).expect("generated");
+    std::fs::create_dir_all(root.join("fixtures/valid")).expect("fixtures");
+    write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":[]}),
+    );
+    let bundle: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../../fixtures/valid/two-lane-ready-dependency.json"
+    ))
+    .expect("two-lane fixture");
+    let fixture = root.join("fixtures/valid/two-lane-ready-dependency.json");
+    write_json(&fixture, &bundle);
+    write_json(
+        &root.join("examples/generated/READY_FOR_MERGE-two-lane-ready-dependency.json"),
+        &bundle["ready_for_merge_receipts"][0],
+    );
+
+    let mut failures = BTreeMap::new();
+    crate::audit::package::run::semantic_valid_fixture_check(
+        &root,
+        &BTreeMap::new(),
+        &[],
+        &mut failures,
+        &fixture,
+    );
+    assert!(
+        failures
+            .values()
+            .flatten()
+            .any(|failure| failure.contains("ready_receipt_not_validator_output")),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup real ready requirement");
 }

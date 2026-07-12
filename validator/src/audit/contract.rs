@@ -5,28 +5,23 @@ pub const VERSION: &str = "0.1.0";
 pub use crate::contract_check_ids::CHECK_IDS;
 
 pub const REQUIRED_SKILLS: &[&str] = &[
-    "ultragoal",
-    "harness-engineering",
-    "agent-first-repo-init",
-    "agent-first-repo-retrofit",
-    "agent-runtime-legibility",
-    "agent-observability-stack",
-    "product-cohesion-gate",
-    "product-fitness-gate",
-    "execplan-lane",
-    "orchestrator-reconciler",
-    "proof-gate",
-    "standards-gardener",
+    "harness-ultragoal",
+    "repository-fit",
+    "routine-work",
+    "diagnose-and-observe",
+    "goal-run",
+    "prove",
+    "improve-and-maintain",
+    "product-journey-review",
 ];
 
 pub const REQUIRED_AGENTS: &[&str] = &[
-    "harness-contract-claim-falsifier",
-    "harness-orchestration-recovery-falsifier",
-    "harness-security-trust-boundary-falsifier",
-    "harness-product-simplicity-falsifier",
-    "harness-material-review-scope-gatekeeper",
-    "harness-repo-initializer",
-    "harness-retrofit-planner",
+    "claim-falsifier",
+    "orchestration-recovery-reviewer",
+    "product-journey-reviewer",
+    "repo-recon",
+    "research-verifier",
+    "security-reviewer",
 ];
 
 pub const GOOD_STATUSES: &[&str] = &["proven_live", "proven_static"];

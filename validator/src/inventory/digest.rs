@@ -75,8 +75,29 @@ pub(crate) fn file_identity(
     reads: &ReadSession,
     path: &Path,
 ) -> Result<(String, Option<u32>), InventoryError> {
+    file_identity_with_symlink_policy(reads, path, false)
+}
+
+pub(crate) fn file_identity_regular(
+    reads: &ReadSession,
+    path: &Path,
+) -> Result<(String, Option<u32>), InventoryError> {
+    file_identity_with_symlink_policy(reads, path, true)
+}
+
+fn file_identity_with_symlink_policy(
+    reads: &ReadSession,
+    path: &Path,
+    reject_symlink: bool,
+) -> Result<(String, Option<u32>), InventoryError> {
     let metadata = fs::symlink_metadata(path).map_err(|error| io(path, error))?;
     let (digest, mode) = if metadata.file_type().is_symlink() {
+        if reject_symlink {
+            return Err(io(
+                path,
+                "inventory target must remain a regular non-symlink file",
+            ));
+        }
         #[cfg(unix)]
         let before = snapshot(&metadata);
         let target = fs::read_link(path).map_err(|error| io(path, error))?;

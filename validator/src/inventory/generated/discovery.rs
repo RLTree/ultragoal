@@ -1,12 +1,47 @@
 use super::authority;
-use super::metadata::{self, GeneratedMetadata};
+use super::authority::SurfaceSpec;
+use super::metadata;
+use super::retained;
 use crate::context::ReadSession;
-use crate::inventory::fs::{check_symlink, physical_entry, regular_files, relative};
+use crate::inventory::fs::{
+    check_symlink, physical_entry, physical_regular_entry, regular_files, relative,
+};
 use crate::inventory::types::{
     ActiveStatus, AuthorityState, InventoryEntry, InventoryError, InventoryFinding,
 };
 use std::collections::BTreeSet;
+use std::fs;
 use std::path::Path;
+
+fn error(findings: &mut Vec<InventoryFinding>, code: &str, relative: &str, message: &str) {
+    findings.push(InventoryFinding::error(
+        code,
+        Some(&format!("GENERATED:{relative}")),
+        Some(relative),
+        message.to_owned(),
+    ));
+}
+
+fn retained_absence(root: &Path, output: &str) -> (&'static str, &'static str) {
+    match fs::symlink_metadata(root.join(output)) {
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => (
+            "retained_context_output_missing",
+            "retained generated context output is missing",
+        ),
+        Ok(metadata) if metadata.file_type().is_symlink() => (
+            "retained_context_output_symlink",
+            "retained generated context output must not be a symlink",
+        ),
+        Ok(metadata) if !metadata.is_file() => (
+            "retained_context_output_not_regular",
+            "retained generated context output is not a regular file",
+        ),
+        _ => (
+            "retained_context_output_unavailable",
+            "retained generated context output was not safely discovered",
+        ),
+    }
+}
 
 pub(crate) fn discover(
     reads: &ReadSession,
@@ -22,23 +57,48 @@ pub(crate) fn discover(
         for path in regular_files(reads, root, directory)? {
             let confined = check_symlink(root, &path, findings)?;
             let rel = relative(root, &path)?;
+            if !confined {
+                continue;
+            }
             seen.insert(rel.clone());
-            let metadata = if confined {
-                metadata::inspect(reads, root, &path, authority.get(&rel))
-            } else {
-                GeneratedMetadata {
-                    generator: None,
-                    inputs: Vec::new(),
-                    problems: Vec::new(),
+            if let Some(SurfaceSpec::RetainedContext {
+                sha256,
+                replacement_targets,
+                ..
+            }) = authority.get(&rel)
+            {
+                let inspected = retained::inspect(reads, &path, sha256, replacement_targets);
+                for (code, message) in &inspected.problems {
+                    error(findings, code, &rel, message);
                 }
-            };
+                let (authority_state, active_status, references) = if inspected.problems.is_empty()
+                {
+                    (
+                        AuthorityState::Context,
+                        ActiveStatus::ContextOnly,
+                        inspected.replacement_targets,
+                    )
+                } else {
+                    (AuthorityState::Legacy, ActiveStatus::Active, Vec::new())
+                };
+                entries.push(physical_regular_entry(
+                    reads,
+                    root,
+                    &path,
+                    format!("GENERATED:{rel}"),
+                    "generated-surface",
+                    "OWN-ULTRA-ROOT",
+                    authority_state,
+                    active_status,
+                    None,
+                    vec![authority::REGISTRY_PATH.to_owned()],
+                    references,
+                )?);
+                continue;
+            }
+            let metadata = metadata::inspect(reads, root, &path, authority.get(&rel));
             for (code, message) in &metadata.problems {
-                findings.push(InventoryFinding::error(
-                    code,
-                    Some(&format!("GENERATED:{rel}")),
-                    Some(&rel),
-                    (*message).to_owned(),
-                ));
+                error(findings, code, &rel, message);
             }
             if metadata.generator.is_none() {
                 findings.push(InventoryFinding::warning(
@@ -63,13 +123,22 @@ pub(crate) fn discover(
             )?);
         }
     }
-    for output in authority.keys().filter(|output| !seen.contains(*output)) {
-        findings.push(InventoryFinding::error(
-            "registered_generated_surface_missing",
-            Some(&format!("GENERATED:{output}")),
-            Some(output),
-            "externally authorized generated output is missing".to_owned(),
-        ));
+    for (output, spec) in authority
+        .iter()
+        .filter(|(output, _)| !seen.contains(*output))
+    {
+        match spec {
+            SurfaceSpec::CanonicalProjection { .. } => error(
+                findings,
+                "registered_generated_surface_missing",
+                output,
+                "externally authorized generated output is missing",
+            ),
+            SurfaceSpec::RetainedContext { .. } => {
+                let (code, message) = retained_absence(root, output);
+                error(findings, code, output, message);
+            }
+        }
     }
     Ok(())
 }

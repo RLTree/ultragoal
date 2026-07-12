@@ -1,7 +1,6 @@
 use serde_json::Value;
 
 const LAW: &str = "full-local-observability-stack-integration-non-opaque-failure";
-const COMMAND_INVENTORY: &str = "docs/generated/observability/command-inventory.json";
 const FINAL_PACKET_FIELD: &str = "observability_status";
 const UPDATE_GOAL_BLOCKER: &str = "observability_product_closure_incomplete";
 
@@ -62,7 +61,7 @@ pub(super) fn row_failures(id: &str, row: &Value) -> Vec<String> {
     }
     if !array(row, "package_inventory_paths")
         .iter()
-        .any(|path| path == COMMAND_INVENTORY || path.starts_with("schemas/observability-"))
+        .any(|path| path.starts_with("schemas/observability-"))
     {
         out.push(format!(
             "research_trace_observability_binding_package_path_missing:{id}"

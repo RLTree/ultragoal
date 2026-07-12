@@ -3,6 +3,7 @@ use std::collections::BTreeSet;
 use std::path::Path;
 mod cargo;
 mod document;
+mod generated;
 mod inventory_resource;
 mod module_ownership;
 mod proof_binding;
@@ -34,7 +35,16 @@ pub(super) fn failures(root: &Path, inventory: &BTreeSet<String>) -> Vec<(String
         );
         Vec::new()
     });
-    let rows = rows_from_paths(root, inventory, &source_paths);
+    let generated = generated::State::build(root, inventory);
+    for (surface, why) in generated.failures() {
+        push(
+            &mut out,
+            &surface,
+            &why,
+            "adopt a valid digest-bound generated disposition or repair the canonical projection",
+        );
+    }
+    let rows = rows_from_paths(root, inventory, &source_paths, &generated);
     for rel in &source_paths {
         if let Err(err) = source::symbols(root, rel) {
             push(
@@ -171,13 +181,15 @@ pub(super) fn summary_value(
 
 pub(super) fn rows(root: &Path, inventory: &BTreeSet<String>) -> Vec<row::PackageSurfaceRow> {
     let source_paths = source::actual_paths(root).unwrap_or_default();
-    rows_from_paths(root, inventory, &source_paths)
+    let generated = generated::State::build(root, inventory);
+    rows_from_paths(root, inventory, &source_paths, &generated)
 }
 
 fn rows_from_paths(
     root: &Path,
     inventory: &BTreeSet<String>,
     source_paths: &[String],
+    generated: &generated::State,
 ) -> Vec<row::PackageSurfaceRow> {
     let bins = cargo::bins(root);
     let mut rows = Vec::new();
@@ -217,7 +229,13 @@ fn rows_from_paths(
     }
     for rel in inventory {
         if !rel.ends_with(".rs") {
-            rows.push(row::package_resource(rel));
+            rows.push(
+                if crate::package::inventory::generated_disposition::generated_path(rel) {
+                    generated.row(rel)
+                } else {
+                    row::package_resource(rel)
+                },
+            );
         }
     }
     rows.sort_by(|left, right| {

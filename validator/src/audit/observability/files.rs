@@ -6,7 +6,6 @@ pub(super) const REQUIRED_FILES: &[&str] = &[
     "dev/observability/otel-collector/config.yaml",
     "dev/observability/vector/vector.yaml",
     "dev/observability/grafana/provisioning/datasources/datasources.yml",
-    "docs/generated/observability/command-inventory.json",
     "schemas/observability-event.schema.json",
     "schemas/observability-metric.schema.json",
     "schemas/observability-trace.schema.json",

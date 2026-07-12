@@ -2,6 +2,9 @@ use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
 
+pub(super) const DEAUTHORIZED_COMMAND_INVENTORY: &str =
+    "docs/generated/observability/command-inventory.json";
+
 pub(super) fn generated_failures(
     root: &Path,
     inventory: &BTreeSet<String>,
@@ -17,6 +20,9 @@ pub(super) fn generated_failures(
         }
     }
     for rel in generated_files(root) {
+        if rel == DEAUTHORIZED_COMMAND_INVENTORY {
+            continue;
+        }
         let value = crate::json_boundary::read_json(&root.join(&rel)).unwrap_or(Value::Null);
         if missing_generated_provenance(&value) {
             push(

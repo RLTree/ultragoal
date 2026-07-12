@@ -1,0 +1,6 @@
+interface:
+  display_name: "Routine Work"
+  short_description: "Run conservative dirty-tree-safe checks"
+  default_prompt: "Use $harness-ultragoal:routine-work to select and run the smallest conservative checks for my current repository changes."
+policy:
+  allow_implicit_invocation: false

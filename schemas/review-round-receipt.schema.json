@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://harness-ultragoal.local/schemas/review-round-receipt.schema.json",
-  "title": "Harness Ultragoal Four-Persona Review Round Receipt",
+  "title": "Harness Ultragoal Canonical Falsification Review Round Receipt",
+  "description": "Static receipt shape for falsification evidence. Live materiality remains blocked until candidate-bound change and executed-gate observations exist; runtime discovery remains unavailable.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -11,34 +12,44 @@
     "anchor_policy",
     "status",
     "generated_at",
+    "review_authority",
+    "runtime_metadata_ceiling",
     "validator_receipt",
     "live_registry_exposure",
     "review_target",
     "archive",
     "materiality_gate",
     "claim_ceiling",
+    "prior_round_reviewer_agent_ids",
     "reviewers"
   ],
   "properties": {
     "schema": {
-      "const": "harness-ultragoal.review-round-receipt.v1"
+      "const": "harness-ultragoal.review-round-receipt.v2"
     },
     "round_id": {
       "type": "string",
       "minLength": 1
     },
     "review_stage": {
-      "const": "sign_off"
+      "const": "falsification"
     },
     "anchor_policy": {
       "const": "validator_review_target_archive"
     },
     "status": {
-      "const": "pass"
+      "const": "evidence_complete"
     },
     "generated_at": {
       "type": "string",
       "minLength": 20
+    },
+    "review_authority": {
+      "const": "falsification_evidence_only"
+    },
+    "runtime_metadata_ceiling": {
+      "description": "No host model, mode, reasoning, discovery, or spawn provenance is established by inline receipt values.",
+      "const": "unavailable_no_runtime_configuration_claim"
     },
     "validator_receipt": {
       "$ref": "#/$defs/boundArtifact"
@@ -53,6 +64,7 @@
       "$ref": "#/$defs/boundArtifact"
     },
     "materiality_gate": {
+      "description": "Live Rust validation ignores receipt-declared lower-scope trigger and gate-name authority and fails closed without trusted observations.",
       "$ref": "review-materiality-gate.schema.json"
     },
     "claim_ceiling": {
@@ -96,10 +108,23 @@
           "$ref": "#/$defs/sha256"
         },
         "run_id": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "package_digest": {
           "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "runtimeMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exposure"
+      ],
+      "properties": {
+        "exposure": {
+          "const": "unavailable"
         }
       }
     },
@@ -107,22 +132,19 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "persona",
-        "agent_type",
-        "persona_prompt_path",
-        "persona_prompt_digest",
-        "custom_agent_path",
-        "custom_agent_digest",
+        "role",
+        "agent_manifest_path",
+        "agent_manifest_digest",
         "prompt_packet",
-        "model",
-        "reasoning_effort",
+        "runtime_metadata",
         "sandbox_mode",
+        "reviewer_authority",
         "live_spawn_receipt",
         "reviewer_agent_id",
         "fresh_context",
         "reused_reviewer",
         "review_scope",
-        "verdict",
+        "falsification_result",
         "validator_receipt_digest",
         "review_target_digest",
         "archive_digest",
@@ -137,123 +159,55 @@
         "completed_at"
       ],
       "properties": {
-        "persona": {
+        "role": {
           "enum": [
-            "contract_claim_falsifier",
-            "orchestration_recovery_falsifier",
-            "security_trust_boundary_falsifier",
-            "product_simplicity_falsifier"
+            "claim-falsifier",
+            "orchestration-recovery-reviewer",
+            "security-reviewer",
+            "product-journey-reviewer"
           ]
         },
-        "agent_type": {
+        "agent_manifest_path": {
           "enum": [
-            "harness_contract_claim_falsifier",
-            "harness_orchestration_recovery_falsifier",
-            "harness_security_trust_boundary_falsifier",
-            "harness_product_simplicity_falsifier"
+            ".codex/agents/claim-falsifier.toml",
+            ".codex/agents/orchestration-recovery-reviewer.toml",
+            ".codex/agents/security-reviewer.toml",
+            ".codex/agents/product-journey-reviewer.toml"
           ]
         },
-        "persona_prompt_path": {
-          "type": "string"
-        },
-        "persona_prompt_digest": {
-          "$ref": "#/$defs/sha256"
-        },
-        "custom_agent_path": {
-          "type": "string",
-          "pattern": "^custom-agents/harness-[a-z-]+\\.toml$"
-        },
-        "custom_agent_digest": {
+        "agent_manifest_digest": {
           "$ref": "#/$defs/sha256"
         },
         "prompt_packet": {
           "$ref": "#/$defs/boundArtifact"
         },
-        "model": {
-          "const": "gpt-5.5"
-        },
-        "reasoning_effort": {
-          "const": "high"
+        "runtime_metadata": {
+          "$ref": "#/$defs/runtimeMetadata"
         },
         "sandbox_mode": {
           "const": "read-only"
         },
+        "reviewer_authority": {
+          "const": "falsification_only_cannot_raise_claims"
+        },
         "live_spawn_receipt": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "tool",
-            "source_thread_id",
-            "tool_invocation_id",
-            "round_id",
-            "captured_at",
-            "agent_type",
-            "spawned_reviewer_agent_id",
-            "model",
-            "reasoning_effort",
-            "status"
-          ],
-          "properties": {
-            "tool": {
-              "const": "multi_agent_v1.spawn_agent"
-            },
-            "source_thread_id": {
-              "type": "string",
-              "minLength": 1
-            },
-            "tool_invocation_id": {
-              "type": "string",
-              "minLength": 1
-            },
-            "round_id": {
-              "type": "string",
-              "minLength": 1
-            },
-            "captured_at": {
-              "type": "string",
-              "minLength": 20
-            },
-            "agent_type": {
-              "type": "string",
-              "minLength": 1
-            },
-            "spawned_reviewer_agent_id": {
-              "type": "string",
-              "minLength": 1
-            },
-            "model": {
-              "type": "string",
-              "minLength": 1
-            },
-            "reasoning_effort": {
-              "const": "high"
-            },
-            "status": {
-              "enum": [
-                "spawned",
-                "failed"
-              ]
-            },
-            "error": {
-              "type": "string"
-            }
-          }
+          "$ref": "#/$defs/liveSpawnReceipt"
         },
         "reviewer_agent_id": {
           "type": "string",
           "minLength": 1
         },
         "fresh_context": {
-          "type": "boolean"
+          "const": true
         },
         "reused_reviewer": {
-          "type": "boolean"
+          "const": false
         },
         "review_scope": {
           "const": "full_current_scope"
         },
-        "verdict": {
-          "const": "SIGN_OFF"
+        "falsification_result": {
+          "const": "no_material_finding"
         },
         "validator_receipt_digest": {
           "$ref": "#/$defs/sha256"
@@ -275,6 +229,7 @@
         },
         "counterexamples_attempted": {
           "type": "array",
+          "minItems": 3,
           "uniqueItems": true,
           "items": {
             "$ref": "#/$defs/counterexampleProbe"
@@ -282,23 +237,25 @@
         },
         "proof_anchors_checked": {
           "type": "array",
+          "minItems": 6,
           "uniqueItems": true,
           "items": {
             "$ref": "#/$defs/boundArtifact"
           }
         },
         "claim_ceiling_assessment": {
-          "$ref": "#/$defs/claimCeiling"
+          "$ref": "#/$defs/reviewerClaimAssessment"
         },
         "required_next_repairs": {
           "type": "array",
+          "minItems": 1,
           "items": {
             "$ref": "#/$defs/nextRepair"
           }
         },
         "evidence_paths_checked": {
           "type": "array",
-          "minItems": 3,
+          "minItems": 6,
           "uniqueItems": true,
           "items": {
             "type": "string",
@@ -308,6 +265,7 @@
         "evidence_artifacts_checked": {
           "type": "array",
           "minItems": 6,
+          "uniqueItems": true,
           "items": {
             "$ref": "#/$defs/boundArtifact"
           }
@@ -320,7 +278,7 @@
           "const": true
         },
         "product_fitness_owner": {
-          "const": "product_simplicity_falsifier"
+          "const": "product-journey-reviewer"
         },
         "product_fitness_receipt_digest": {
           "$ref": "#/$defs/sha256"
@@ -361,10 +319,13 @@
         {
           "if": {
             "properties": {
-              "persona": {
-                "const": "product_simplicity_falsifier"
+              "role": {
+                "const": "product-journey-reviewer"
               }
-            }
+            },
+            "required": [
+              "role"
+            ]
           },
           "then": {
             "required": [
@@ -379,12 +340,78 @@
         }
       ]
     },
+    "liveSpawnReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "source_thread_id",
+        "tool_invocation_id",
+        "round_id",
+        "captured_at",
+        "role",
+        "spawned_reviewer_agent_id",
+        "sandbox_mode",
+        "runtime_metadata",
+        "status"
+      ],
+      "properties": {
+        "tool": {
+          "const": "multi_agent_v1.spawn_agent"
+        },
+        "source_thread_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tool_invocation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "round_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "captured_at": {
+          "type": "string",
+          "minLength": 20
+        },
+        "role": {
+          "enum": [
+            "claim-falsifier",
+            "orchestration-recovery-reviewer",
+            "security-reviewer",
+            "product-journey-reviewer"
+          ]
+        },
+        "spawned_reviewer_agent_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sandbox_mode": {
+          "const": "read-only"
+        },
+        "runtime_metadata": {
+          "$ref": "#/$defs/runtimeMetadata"
+        },
+        "status": {
+          "enum": [
+            "spawned",
+            "failed"
+          ]
+        },
+        "error": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
     "productFitnessDisposition": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "owner_persona",
-        "owner_agent_type",
+        "owner_role",
+        "reviewer_authority",
+        "may_raise_claim_ceiling",
         "applies_to_product_impacting_claims",
         "status",
         "receipt",
@@ -392,14 +419,17 @@
         "claim_ids_reviewed",
         "dimensions_checked",
         "substitution_rejection",
-        "generic_product_simplicity_approval_only"
+        "generic_product_approval_only"
       ],
       "properties": {
-        "owner_persona": {
-          "const": "product_simplicity_falsifier"
+        "owner_role": {
+          "const": "product-journey-reviewer"
         },
-        "owner_agent_type": {
-          "const": "harness_product_simplicity_falsifier"
+        "reviewer_authority": {
+          "const": "falsification_evidence_only"
+        },
+        "may_raise_claim_ceiling": {
+          "const": false
         },
         "applies_to_product_impacting_claims": {
           "const": true
@@ -449,7 +479,7 @@
         "substitution_rejection": {
           "const": true
         },
-        "generic_product_simplicity_approval_only": {
+        "generic_product_approval_only": {
           "const": false
         }
       }
@@ -464,12 +494,43 @@
       "properties": {
         "supported": {
           "type": "array",
+          "uniqueItems": true,
           "items": {
             "$ref": "#/$defs/claimCeilingEntry"
           }
         },
         "unsupported": {
           "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/claimCeilingEntry"
+          }
+        }
+      }
+    },
+    "reviewerClaimAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "not_disproven",
+        "challenged"
+      ],
+      "properties": {
+        "authority": {
+          "const": "falsification_only_cannot_raise"
+        },
+        "not_disproven": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/claimCeilingEntry"
+          }
+        },
+        "challenged": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
           "items": {
             "$ref": "#/$defs/claimCeilingEntry"
           }

@@ -2,7 +2,7 @@
 fn generated_artifact_inventory_rows_require_provenance_and_reject_hand_edits() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("generated-row-provenance");
-    let rel = "docs/generated/observability/command-inventory.json";
+    let rel = "docs/generated/observability/other-generated.json";
     std::fs::create_dir_all(root.join("docs/generated/observability")).expect("generated dir");
     std::fs::write(
         root.join(rel),
@@ -21,7 +21,7 @@ fn generated_artifact_inventory_rows_require_provenance_and_reject_hand_edits() 
     );
     assert!(
         failures.iter().any(|(_, failure)| failure.contains(
-            "generated_inventory_row_missing_provenance:docs/generated/observability/command-inventory.json:command_observability_inventory:package digest"
+            "generated_inventory_row_missing_provenance:docs/generated/observability/other-generated.json:command_observability_inventory:package digest"
         )),
         "{failures:?}"
     );
@@ -47,13 +47,13 @@ fn generated_artifact_inventory_rows_require_provenance_and_reject_hand_edits() 
     );
     assert!(
         failures.iter().any(|(_, failure)| failure.contains(
-            "generated_inventory_row_missing_provenance:docs/generated/observability/command-inventory.json:command_observability_inventory:package digest"
+            "generated_inventory_row_missing_provenance:docs/generated/observability/other-generated.json:command_observability_inventory:package digest"
         )),
         "check-only generated rows must not pass as provenance: {failures:?}"
     );
     assert!(
         failures.iter().any(|(_, failure)| failure.contains(
-            "generated_inventory_row_missing_provenance:docs/generated/observability/command-inventory.json:command_observability_inventory:source audit"
+            "generated_inventory_row_missing_provenance:docs/generated/observability/other-generated.json:command_observability_inventory:source audit"
         )),
         "owner-only generated rows must not pass as provenance: {failures:?}"
     );
@@ -77,13 +77,13 @@ fn generated_artifact_inventory_rows_require_provenance_and_reject_hand_edits() 
     );
     assert!(
         failures.iter().any(|(_, failure)| failure.contains(
-            "generated_inventory_row_missing_provenance:docs/generated/observability/command-inventory.json:surface_inventory:validator check families"
+            "generated_inventory_row_missing_provenance:docs/generated/observability/other-generated.json:surface_inventory:validator check families"
         )),
         "{failures:?}"
     );
     assert!(
         failures.iter().any(|(_, failure)| failure.contains(
-            "generated_inventory_row_missing_provenance:docs/generated/observability/command-inventory.json:new_product_inventory:future family"
+            "generated_inventory_row_missing_provenance:docs/generated/observability/other-generated.json:new_product_inventory:future family"
         )),
         "{failures:?}"
     );
@@ -126,7 +126,7 @@ fn generated_artifact_inventory_rows_require_provenance_and_reject_hand_edits() 
 fn generated_artifacts_reject_product_opaque_artifact_path_segments() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("generated-path-segment");
-    let rel = "docs/generated/observability/command-inventory.json";
+    let rel = "docs/generated/observability/other-generated.json";
     std::fs::create_dir_all(root.join("docs/generated/observability")).expect("generated dir");
     let product_opaque_root = ascii(&[102, 105, 116]);
     let process_noun = format!("{product_opaque_root}ting");
@@ -212,7 +212,7 @@ fn generated_artifacts_reject_product_opaque_artifact_path_segments() {
 fn generated_artifacts_reject_runtime_normalized_fixture_truth() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("runtime-normalized-fixture");
-    let rel = "docs/generated/observability/command-inventory.json";
+    let rel = "docs/generated/observability/other-generated.json";
     std::fs::create_dir_all(root.join("docs/generated/observability")).expect("generated dir");
     std::fs::write(
         root.join(rel),

@@ -68,6 +68,8 @@ fn report_text_errors(text: &str, persona: &str, out: &mut Vec<ReviewFailure>) {
         "recommended next stage",
         "sign off",
         "sign-off",
+        "approved",
+        "approval",
     ] {
         if scan_text.contains(phrase) {
             out.push(failure("review_round_report_authority_prose", persona));
@@ -125,10 +127,10 @@ fn required_paths(receipt: &Value, row: &Value, persona: &str) -> Vec<String> {
         pointer(receipt, "/validator_receipt/path"),
         pointer(receipt, "/review_target/path"),
         pointer(receipt, "/archive/path"),
-        string(row, "persona_prompt_path"),
-        string(row, "custom_agent_path"),
+        string(row, "agent_manifest_path"),
+        pointer(row, "/prompt_packet/path"),
     ];
-    if let Some(spec) = crate::review::round::config::persona_spec(persona) {
+    if let Some(spec) = crate::review::round::config::review_role_spec(persona) {
         paths.push(spec.focus_path.to_string());
     }
     paths

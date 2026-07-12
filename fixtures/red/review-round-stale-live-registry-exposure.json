@@ -15,7 +15,7 @@
     {
       "op": "replace",
       "path": "/live_registry_exposure/digest",
-      "value": "sha256:1f80d68ae589f9c1573ee5fe0f188d6d1f27524f748d6da4ccd0a3d46d33db7e"
+      "value": "sha256:6215f1308c0e09748945232dc75b2de9c07d229d9c65dfc01c2dd574d64a7821"
     }
   ],
   "notes": "live registry exposure must bind to the same review round",

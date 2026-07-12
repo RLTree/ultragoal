@@ -1,6 +1,9 @@
 use serde_json::{Value, json};
 use std::path::Path;
 
+#[cfg(unix)]
+mod reader;
+
 fn write_json(path: &Path, value: &Value) {
     if let Some(parent) = path.parent() {
         std::fs::create_dir_all(parent).expect("parent");
@@ -12,151 +15,151 @@ fn errors(out: &[crate::review::round::ReviewFailure]) -> Vec<&str> {
     out.iter().map(|failure| failure.error.as_str()).collect()
 }
 
-fn current_agent_types() -> Vec<Value> {
-    crate::review::round::config::PERSONAS
-        .iter()
-        .map(|spec| {
-            json!({
-                "agent_type": spec.agent_type,
-                "persona": spec.persona,
-                "custom_agent_path": spec.custom_path,
-                "exposed": true,
-                "disk_cache_synced": true,
-                "global_toml_present": true
-            })
-        })
-        .collect()
+fn copy_bound_inputs(root: &Path) {
+    let live = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    for relative in std::iter::once("schemas/codex-registry-exposure.schema.json").chain(
+        crate::review::round::config::REVIEW_ROLES
+            .iter()
+            .map(|spec| spec.agent_manifest_path),
+    ) {
+        let target = root.join(relative);
+        std::fs::create_dir_all(target.parent().unwrap()).expect("bound input parent");
+        std::fs::copy(live.join(relative), target).expect("bound input");
+    }
+}
+
+fn fail_exposure() -> Value {
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    crate::json_boundary::read_json(
+        &root.join("fixtures/review-round/anchors/live-registry-exposure.json"),
+    )
+    .expect("fail-only registry fixture")
+}
+
+fn direct_errors(root: &Path, exposure: &Value) -> Vec<crate::review::round::ReviewFailure> {
+    let path = root.join("validation_artifacts/exposure.json");
+    write_json(&path, exposure);
+    let digest = crate::digest::file(&path).expect("exposure digest");
+    let mut out = Vec::new();
+    crate::review::round::registry::exposure_errors(
+        root,
+        &json!({
+            "generated_at":"2026-06-18T00:00:00Z",
+            "round_id":"fixture-canonical-falsification-round",
+            "live_registry_exposure":{"path":"validation_artifacts/exposure.json","digest":digest}
+        }),
+        &mut out,
+    );
+    out
 }
 
 #[test]
-fn live_registry_exposure_rejects_stale_malformed_and_shape_substitutes() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-registry-branches");
-    std::fs::create_dir_all(root.join("validation_artifacts")).expect("registry dir");
-    let exposure_path = root.join("validation_artifacts/exposure.json");
-    let agent_types = crate::review::round::config::PERSONAS
-        .iter()
-        .map(|spec| {
-            json!({
-                "agent_type": spec.agent_type,
-                "persona": "wrong-persona",
-                "custom_agent_path": "wrong.toml",
-                "exposed": true,
-                "disk_cache_synced": false,
-                "global_toml_present": false
-            })
-        })
-        .collect::<Vec<_>>();
-    write_json(
-        &exposure_path,
-        &json!({
-            "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
-            "source": "disk-cache-snapshot",
-            "captured_at": "2026-06-25T00:00:01Z",
-            "session_id": "",
-            "round_id": "other-round",
-            "agent_types": agent_types
-        }),
-    );
-    let digest = crate::digest::file(&exposure_path).expect("digest");
-    let mut out = Vec::new();
-    crate::review::round::registry::exposure_errors(
-        &root,
-        &json!({
-            "generated_at": "2026-06-25T00:00:00Z",
-            "round_id": "round-1",
-            "live_registry_exposure": {"path":"validation_artifacts/exposure.json","digest":digest},
-            "reviewers": [{"persona":"contract_claim_falsifier","live_spawn_receipt":{"source_thread_id":"other-session"}}]
-        }),
-        &mut out,
-    );
-    let got = errors(&out);
-    assert!(got.contains(&"review_round_live_registry_stale"), "{got:?}");
-    assert!(
-        got.contains(&"review_round_live_registry_agent_mismatch"),
-        "{got:?}"
-    );
-    assert!(
-        got.contains(&"review_round_live_registry_disk_sync_missing"),
-        "{got:?}"
-    );
-
-    out.clear();
-    crate::review::round::registry::row_agent_type_error(
-        &json!({"agent_type":"wrong"}),
-        "contract_claim_falsifier",
-        &mut out,
-    );
-    assert_eq!(out[0].error, "review_round_live_registry_agent_mismatch");
-
-    out.clear();
-    crate::review::round::registry::exposure_errors(
-        &root,
-        &json!({"live_registry_exposure":{"path":"validation_artifacts/exposure.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('0')}}),
-        &mut out,
-    );
-    assert_eq!(out[0].error, "review_round_live_registry_artifact_mismatch");
-
-    std::fs::write(&exposure_path, "{").expect("malformed exposure");
-    let digest = crate::digest::file(&exposure_path).expect("malformed digest");
-    out.clear();
-    crate::review::round::registry::exposure_errors(
-        &root,
-        &json!({"live_registry_exposure":{"path":"validation_artifacts/exposure.json","digest":digest}}),
-        &mut out,
-    );
+fn schema_valid_unavailable_registry_blocks_and_positive_substitutes_cannot_pass() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("registry-fail-only");
+    copy_bound_inputs(&root);
+    let fail = direct_errors(&root, &fail_exposure());
     assert_eq!(
-        out[0].error,
-        "review_round_live_registry_artifact_malformed"
+        fail.first().map(|failure| failure.error.as_str()),
+        Some("review_round_live_registry_unavailable")
     );
-    std::fs::remove_dir_all(root).expect("cleanup registry branches");
+
+    let mut claimed_pass = fail_exposure();
+    claimed_pass["status"] = json!("pass");
+    claimed_pass["issuer"] = json!({"tool":"multi_agent_v1","authority":"tool_registry"});
+    claimed_pass["tool_call"]["name"] = json!("multi_agent_v1.tool_registry");
+    claimed_pass["capture_method"] = json!("live_tool_registry_query");
+    claimed_pass["source"] = json!("multi_agent_v1.tool_registry");
+    claimed_pass["claim_ceiling"] = json!("live_registry_reviewer_exposure_proven");
+    let pass_errors = direct_errors(&root, &claimed_pass);
+    assert!(
+        errors(&pass_errors).contains(&"review_round_live_registry_artifact_malformed"),
+        "{:?}",
+        errors(&pass_errors)
+    );
+    assert!(!pass_errors.is_empty());
+
+    let mut exposed = claimed_pass;
+    for row in exposed["agent_types"].as_array_mut().unwrap() {
+        row["exposed"] = json!(true);
+    }
+    let exposed_errors = direct_errors(&root, &exposed);
+    assert_eq!(
+        exposed_errors.first().map(|failure| failure.error.as_str()),
+        Some("review_round_live_registry_artifact_malformed")
+    );
+    std::fs::remove_dir_all(root).expect("cleanup fail-only registry");
 }
 
 #[test]
 fn live_registry_exposure_uses_typed_current_run_freshness_window() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-registry-freshness");
-    std::fs::create_dir_all(root.join("validation_artifacts")).expect("registry dir");
-    let exposure_path = root.join("validation_artifacts/exposure.json");
-    let base_receipt = json!({
-        "generated_at": "2026-06-25T00:05:00Z",
-        "round_id": "round-1",
-        "reviewers": [{
-            "persona": "contract_claim_falsifier",
-            "live_spawn_receipt": {"source_thread_id": "session-1"}
-        }]
-    });
-
-    for (captured_at, should_fail) in [
-        ("2026-06-25T00:00:00Z", false),
-        ("2026-06-24T23:59:59Z", true),
-        ("2026-06-25T00:05:01Z", true),
-        ("not-a-time", true),
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("registry-freshness");
+    copy_bound_inputs(&root);
+    for (captured_at, stale) in [
+        ("2026-06-18T00:00:00Z", false),
+        ("2026-06-17T23:54:59Z", true),
+        ("2026-06-18T00:00:01Z", true),
+        ("not-a-time-0000000000", true),
     ] {
-        write_json(
-            &exposure_path,
-            &json!({
-                "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
-                "source": "multi_agent_v1.tool_registry",
-                "captured_at": captured_at,
-                "session_id": "session-1",
-                "round_id": "round-1",
-                "agent_types": current_agent_types()
-            }),
+        let mut exposure = fail_exposure();
+        exposure["captured_at"] = json!(captured_at);
+        let out = direct_errors(&root, &exposure);
+        assert_eq!(
+            errors(&out).contains(&"review_round_live_registry_stale"),
+            stale,
+            "{captured_at}: {:?}",
+            errors(&out)
         );
-        let digest = crate::digest::file(&exposure_path).expect("digest");
-        let mut receipt = base_receipt.clone();
-        receipt["live_registry_exposure"] =
-            json!({"path":"validation_artifacts/exposure.json","digest":digest});
+        assert!(errors(&out).contains(&"review_round_live_registry_unavailable"));
+    }
+    std::fs::remove_dir_all(root).expect("cleanup registry freshness");
+}
+
+#[test]
+fn canonical_registry_negative_anchors_preserve_their_causal_first_failure() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let base = crate::json_boundary::read_json(
+        &root.join("fixtures/review-round/valid/review-round-receipt.json"),
+    )
+    .expect("review receipt");
+    for (name, expected) in [
+        (
+            "live-registry-exposure-stale.json",
+            "review_round_live_registry_stale",
+        ),
+        (
+            "live-registry-exposure-stale-captured-at.json",
+            "review_round_live_registry_stale",
+        ),
+        (
+            "live-registry-exposure-disk-synced-active-stale.json",
+            "review_round_live_registry_unavailable",
+        ),
+    ] {
+        let rel = format!("fixtures/review-round/anchors/{name}");
+        let mut receipt = base.clone();
+        receipt["live_registry_exposure"] = json!({
+            "path":rel.clone(),
+            "digest":crate::digest::file(&root.join(&rel)).expect("anchor digest")
+        });
         let mut out = Vec::new();
         crate::review::round::registry::exposure_errors(&root, &receipt, &mut out);
-        let got = errors(&out);
         assert_eq!(
-            got.contains(&"review_round_live_registry_stale"),
-            should_fail,
-            "{captured_at}: {got:?}"
+            out.first().map(|failure| failure.error.as_str()),
+            Some(expected),
+            "{name}: {:?}",
+            errors(&out)
         );
     }
+}
 
-    std::fs::remove_dir_all(root).expect("cleanup registry freshness");
+#[test]
+fn registry_role_mismatch_uses_fixed_non_echo_detail() {
+    let mut out = Vec::new();
+    crate::review::round::registry::row_agent_role_error(
+        &json!({"role":"SECRET_CANARY"}),
+        "claim-falsifier",
+        &mut out,
+    );
+    assert_eq!(out[0].error, "review_round_live_registry_agent_mismatch");
+    assert_eq!(out[0].detail, "reviewer-role");
 }

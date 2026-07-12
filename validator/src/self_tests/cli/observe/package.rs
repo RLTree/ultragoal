@@ -5,7 +5,7 @@ use std::fs;
 use std::path::Path;
 
 #[test]
-fn observability_package_audit_reports_config_receipt_and_registry_edges() {
+fn observability_package_audit_deauthorizes_static_inventory_and_preserves_other_failures() {
     let root = super::minimal_root("observe-package-audit");
     fs::create_dir_all(root.join("dev/observability")).expect("obs dir");
     fs::write(
@@ -13,11 +13,10 @@ fn observability_package_audit_reports_config_receipt_and_registry_edges() {
         "services:\n  victoriametrics:\n    image: victoriametrics/victoria-metrics:latest\n    ports:\n      - \"0.0.0.0:8428:8428\"\n",
     )
     .expect("compose");
-    crate::json_boundary::write_json(
-        &root.join("docs/generated/observability/command-inventory.json"),
-        &json!({"commands":["observe prove"],"row_requirements":{"log_instrumentation":true}}),
-    )
-    .expect("inventory");
+    let static_inventory = root.join("docs/generated/observability/command-inventory.json");
+    fs::create_dir_all(static_inventory.parent().expect("inventory parent"))
+        .expect("inventory parent");
+    fs::write(&static_inventory, "SECRET_CANARY").expect("static bait");
     write_law_rows(&root);
     let prove_path = root.join("validation_artifacts/observability/observe-prove.json");
     fs::create_dir_all(prove_path.parent().unwrap()).expect("prove parent");
@@ -27,6 +26,12 @@ fn observability_package_audit_reports_config_receipt_and_registry_edges() {
     )
     .expect("bad proof");
     let failures = crate::audit::observability::package_failures(&root);
+    fs::write(&static_inventory, [0xff, 0xfe]).expect("invalid static bait");
+    let mutated_failures = crate::audit::observability::package_failures(&root);
+    fs::remove_file(&static_inventory).expect("remove static bait");
+    let missing_failures = crate::audit::observability::package_failures(&root);
+    assert_eq!(failures, mutated_failures);
+    assert_eq!(mutated_failures, missing_failures);
     assert!(
         failures
             .iter()
@@ -45,8 +50,9 @@ fn observability_package_audit_reports_config_receipt_and_registry_edges() {
     assert!(
         failures
             .iter()
-            .any(|item| item.starts_with("observability_command_inventory_missing:"))
+            .any(|item| item == "HCT-OBSERVE successor catalog unavailable/not adopted")
     );
+    assert!(!failures.join("\n").contains("SECRET_CANARY"));
     fs::remove_dir_all(root).expect("cleanup observe package");
 }
 

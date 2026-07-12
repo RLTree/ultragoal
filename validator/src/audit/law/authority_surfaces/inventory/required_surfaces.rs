@@ -128,10 +128,6 @@ pub(super) const REQUIRED_SURFACES: &[RequiredSurface] = &[
         ".codex/automations/ultragoal-orchestrator/transition-receipt.json",
     ),
     package("setup_retrofit_output", ".codex/setup-worktree-env.sh"),
-    package(
-        "generated_artifact",
-        "docs/generated/observability/command-inventory.json",
-    ),
     runtime(
         "receipt",
         "validation_artifacts/ultragoal-audit/validator-receipt.json",

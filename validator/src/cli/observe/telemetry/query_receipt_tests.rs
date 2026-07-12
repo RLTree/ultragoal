@@ -135,7 +135,7 @@ fn query_receipts_project_specific_failure_class_to_stdout_surface() {
 }
 
 #[test]
-fn query_receipt_for_candidate_fails_closed_when_spool_authority_is_unwritable() {
+fn read_only_query_receipt_ignores_unwritable_spool_authority() {
     let root = temp_root("query-base-receipt-spool-blocked");
     write_minimal_manifest(&root);
     std::fs::create_dir_all(root.join("validation_artifacts/observability"))
@@ -146,7 +146,7 @@ fn query_receipt_for_candidate_fails_closed_when_spool_authority_is_unwritable()
     )
     .expect("blocked spool path");
 
-    let err = query_result_for_candidate(
+    let receipt = query_result_for_candidate(
         &root,
         &command(ObserveOperation::LogsQuery),
         "logs",
@@ -156,11 +156,17 @@ fn query_receipt_for_candidate_fails_closed_when_spool_authority_is_unwritable()
         Some("observability query returned no matching rows"),
         "sha256:test-candidate".to_string(),
     )
-    .expect_err("unwritable spool blocks query receipt");
+    .expect("read-only query result");
 
+    assert_eq!(receipt["status"], "fail");
+    assert_eq!(
+        std::fs::read(root.join("validation_artifacts/observability/spool")).expect("blocker"),
+        b"not a dir"
+    );
     assert!(
-        err.contains("spool") || err.contains("Not a directory"),
-        "{err}"
+        !root
+            .join("validation_artifacts/observability/spool/events.jsonl")
+            .exists()
     );
     std::fs::remove_dir_all(root).expect("cleanup blocked spool");
 }

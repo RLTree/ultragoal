@@ -18,6 +18,7 @@ pub enum AuthorityState {
 #[serde(rename_all = "kebab-case")]
 pub enum ActiveStatus {
     Active,
+    Candidate,
     Definition,
     Required,
     Missing,

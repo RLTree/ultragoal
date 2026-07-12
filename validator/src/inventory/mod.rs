@@ -3,19 +3,33 @@
 //! The builder performs read-only, path-confined discovery. Generated and handwritten
 //! projections are observations only and cannot author the returned catalog.
 
+mod agent_reader_guard_digests;
 mod builder;
+mod compatibility;
 mod component_expectations;
 mod components;
+mod context_scopes;
 mod digest;
 mod discovery;
 mod fs;
 mod generated;
 mod legacy;
+mod plugin_hooks;
+mod plugin_manifest;
+mod plugin_manifest_hook_document;
+mod plugin_manifest_hook_matcher;
+mod plugin_manifest_hooks;
+mod plugin_manifest_interface;
+mod plugin_manifest_json;
+mod plugin_manifest_path;
+mod plugin_manifest_semver;
 mod projection;
 #[cfg(test)]
 mod race_tests;
 mod registry;
+mod retained_routes;
 mod routing;
+mod routing_state;
 mod schema_references;
 mod types;
 mod validate;

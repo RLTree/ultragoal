@@ -151,20 +151,22 @@ fn semantic_review_and_red_observation_edges_cover_success_paths() {
         &ceiling,
         &crate::self_tests::review::claim_ceiling::anchors(),
         &json!({"claim_ceiling_assessment":{
-            "supported":[
+            "authority":"falsification_only_cannot_raise",
+            "not_disproven":[
                 {"claim_id":"package_static_fixture_proof"},
                 {"claim_id":"detached_review_target_archive_identity"}
             ],
-            "unsupported":[
+            "challenged":[
                 {"claim_id":"plugins_ui_visibility"},
                 {"claim_id":"install_button_success"},
                 {"claim_id":"workspace_public_marketplace_publication"},
                 {"claim_id":"real_multilane_dogfood"},
                 {"claim_id":"production_readiness"},
-                {"claim_id":"external_product_ux_improvement"}
+                {"claim_id":"external_product_ux_improvement"},
+                {"claim_id":"reviewer_runtime_configuration"}
             ]
         }}),
-        "contract_claim_falsifier",
+        "claim-falsifier",
         &mut review,
     );
     assert!(

@@ -27,10 +27,10 @@ credentials, and mutable runtime state.
   the Codex app.
 - This preference is conditional. If the active goal, spine, parent contract,
   or phase order blocks worktrees, no standard here permits launching them.
-- Future Codex app worktree lane owners default to `gpt-5.5` with `low`
-  reasoning to control cost. Raise reasoning only when the lane contract names
-  a concrete risk that requires it. Material reviewers remain separate and use
-  `gpt-5.5` with `high`.
+- Future Codex app worktree lane owners use the lowest supported reasoning
+  level that fits the named risk. Raise reasoning only when the lane contract
+  names a concrete risk that requires it. Material reviewers remain separate
+  and may use higher reasoning. Record model and reasoning only when exposed.
 - Branch first, worktree second. The orchestrator must ensure the branch ref
   exists before requesting an app worktree from that branch.
 - Repo-managed Codex app environments should create ignored per-worktree state
@@ -62,8 +62,9 @@ Organize substantial work around deliverables and proof, not chat sessions.
   complete.
 - Macro-lane owners should be app-visible Codex worktree threads when the work
   needs independent continuation, app sidebar visibility, or user handoff.
-- The launch prompt or thread setup records the lane-owner model and reasoning;
-  default lane owners use `gpt-5.5` with `low`, not the reviewer settings.
+- The launch prompt or thread setup records the lane-owner model and reasoning
+  only when Codex exposes them; otherwise it records `unknown`. Lane owners use
+  the lowest supported reasoning that fits the risk, not reviewer settings.
 - Hidden subagents are not substitutes for app-visible macro-lane owners when
   the user expects to inspect or continue the lane in Codex.
 - Lane completion is not root completion. A lane-ready claim must be joined to

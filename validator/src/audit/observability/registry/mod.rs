@@ -1,44 +1,35 @@
 use serde_json::Value;
 use std::path::Path;
 
-mod command_inventory;
-mod control;
-mod dimension_ids;
-mod dimensions;
-mod metric;
-mod operating;
-mod proof;
-mod proof_receipt;
-mod research_inputs;
-mod row_contract;
-mod surfaces;
-
 #[cfg(test)]
 mod tests;
 
+pub(crate) const SUCCESSOR_CATALOG_UNAVAILABLE: &str =
+    "HCT-OBSERVE successor catalog unavailable/not adopted";
+
 pub(super) fn check(root: &Path, out: &mut Vec<String>) {
     require_law_rows(root, out);
-    require_command_inventory(root, out);
+    out.push(SUCCESSOR_CATALOG_UNAVAILABLE.to_owned());
 }
 
 #[cfg(test)]
 pub(crate) fn required_commands() -> &'static [&'static str] {
-    command_inventory::REQUIRED_COMMANDS
+    &[]
 }
 
 #[cfg(test)]
 pub(crate) fn required_surfaces() -> &'static [&'static str] {
-    surfaces::REQUIRED_SURFACES
+    &[]
 }
 
 #[cfg(test)]
 pub(crate) fn required_loop_stages() -> &'static [&'static str] {
-    operating::REQUIRED_LOOP_STAGES
+    &[]
 }
 
 #[cfg(test)]
 pub(crate) fn required_signal_classes() -> &'static [&'static str] {
-    operating::REQUIRED_SIGNAL_CLASSES
+    &[]
 }
 
 #[cfg(test)]
@@ -48,23 +39,11 @@ pub(crate) fn required_dimension_families() -> Vec<(
     &'static str,
     &'static [&'static str],
 )> {
-    dimension_ids::inventory_families()
-        .into_iter()
-        .map(|family| {
-            (
-                family.board_key,
-                family.list_key,
-                family.inventory_key,
-                family.ids,
-            )
-        })
-        .collect()
+    Vec::new()
 }
 
-pub(crate) fn command_inventory_failures(root: &Path) -> Vec<String> {
-    let mut out = Vec::new();
-    require_command_inventory(root, &mut out);
-    out
+pub(crate) fn command_inventory_failures(_root: &Path) -> Vec<String> {
+    vec![SUCCESSOR_CATALOG_UNAVAILABLE.to_owned()]
 }
 
 fn require_law_rows(root: &Path, out: &mut Vec<String>) {
@@ -93,15 +72,6 @@ fn require_law_rows(root: &Path, out: &mut Vec<String>) {
     if !root.join(&valid).is_file() {
         out.push(format!("observability_missing_valid_fixture:{valid}"));
     }
-}
-
-fn require_command_inventory(root: &Path, out: &mut Vec<String>) {
-    let value = super::read::json(root, "docs/generated/observability/command-inventory.json");
-    control::check(&value, out);
-    command_inventory::check(root, &value, out);
-    surfaces::check(root, &value, out);
-    operating::check(root, &value, out);
-    dimensions::check(root, &value, out);
 }
 
 fn has_law_id(root: &Path, rel: &str, key: &str) -> bool {

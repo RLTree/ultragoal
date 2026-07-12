@@ -1,26 +1,16 @@
-# Product Fitness Gate
+---
+name: product-fitness-gate
+description: Deprecated compatibility alias for explicit `$harness-ultragoal:product-fitness-gate` requests. Preserve the request and route it to `$harness-ultragoal:prove`; do not use this alias as independent workflow authority.
+---
 
-Use this skill when a claim says a product, workflow, control surface,
-developer-tool entrypoint, install surface, marketplace surface, dashboard,
-run console, or daily-driver flow is successful, ready, fit, useful, adopted, or
-phase-advancing.
+# Deprecated Compatibility Route
 
-## Gate
+> Compatibility warning: this legacy alias is not an independent workflow or authority. Its canonical target is `$harness-ultragoal:prove`.
 
-1. Classify whether the claim is product-impacting.
-2. If the claim is product-impacting, require
-   `../../validation_artifacts/harness/product-fitness-receipt.json`.
-3. Verify the receipt binds the exact claim id, audience, job, context, desired
-   outcome, quality-in-use metrics, accessibility, cognitive-load, recovery, and
-   continuance when repeated use is claimed.
-4. Reject substitutions: reviewer agreement, install success, smoke tests, test
-   pass counts, fixture pass counts, package publication, first use, feature
-   delivery, and Product Cohesion alone.
-5. If proof is unavailable, withhold the claim with blocker, owner, reason,
-   affected claim ids, required follow-up, and claim ceiling.
-
-## Claim Ceiling
-
-Package/static/fixture Product Fitness proof proves only the enforcement
-contract. Live product success requires fresh same-surface Product Fitness
-receipts from the target product and context of use.
+1. Preserve the user's full request, context, constraints, and authorized effects unchanged.
+2. Before routing, inspect the request and supplied context for Harness Ultragoal skill tokens. If it contains another distinct explicit Harness Ultragoal skill token or selects multiple compatibility routes, report a causal compatibility-route conflict and perform no routing or effect.
+3. Invoke `$harness-ultragoal:prove` with that preserved input.
+4. Follow only the canonical target's current contract. Do not restore or apply legacy lane, gate, receipt, finalizer, command, tool, helper, schema, state-store, or generated authority from this wrapper.
+5. Perform no hidden writes or external effects while resolving the route. Any later effect must remain authorized by the original request and the canonical target.
+6. Fail closed if the canonical target is unavailable: report the exact blocker and do not fall back, infer semantic equivalence, or claim adoption, discovery, runtime behavior, retirement, readiness, release, or completion.
+7. Never substitute documentation, tests, receipts, generated rows, telemetry, signatures, or provenance for the requested product behavior.

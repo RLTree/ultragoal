@@ -48,7 +48,7 @@ fn repo_owned_path(path: &str) -> bool {
         "validator/",
         "schemas/",
         "skills/",
-        "custom-agents/",
+        ".codex/agents/",
         "connectors/",
         "templates/scripts/",
     ]
@@ -62,4 +62,18 @@ fn str_field(value: &Value, key: &str) -> String {
         .and_then(Value::as_str)
         .unwrap_or("")
         .to_string()
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn only_current_agent_manifests_are_coverage_owned() {
+        assert!(super::repo_owned_path(".codex/agents/claim-falsifier.toml"));
+        assert!(!super::repo_owned_path(
+            "custom-agents/harness-contract-claim-falsifier.toml"
+        ));
+        assert!(!super::repo_owned_path(
+            "agents/contract-claim-falsifier.md"
+        ));
+    }
 }

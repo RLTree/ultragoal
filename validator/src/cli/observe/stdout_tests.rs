@@ -89,7 +89,9 @@ fn stdout_failure_hint_uses_command_specific_query_contract() {
     print_failure(
         &command(ObserveOperation::ExplainFailure),
         &value,
-        std::path::Path::new("validation_artifacts/observability/explain.json"),
+        Some(std::path::Path::new(
+            "validation_artifacts/observability/explain.json",
+        )),
     );
 }
 

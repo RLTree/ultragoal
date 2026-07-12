@@ -1,0 +1,409 @@
+{
+  "schema_version": "HarnessPluginRootWiringRequest-v1",
+  "authoritative": false,
+  "apply_only_after": "independent source acceptance and root live-preimage revalidation",
+  "descriptor_membership_authority": "plugin-manifest-draft.json /agents must contain exactly these six name/path rows; descriptor bytes remain separate candidate artifacts and package inputs",
+  "descriptor_bindings": [
+    {
+      "name": "claim-falsifier",
+      "path": ".codex/agents/claim-falsifier.toml",
+      "sha256": "sha256:6ecb0324f07793dd2c8581cd82b83ae6086095fea5d4715c550076211c324e6f",
+      "byte_length": 450,
+      "line_count": 4
+    },
+    {
+      "name": "orchestration-recovery-reviewer",
+      "path": ".codex/agents/orchestration-recovery-reviewer.toml",
+      "sha256": "sha256:da39757a9d58499821f6c11863d1f6bb1d64e015826837ead3962de9c0e6fb75",
+      "byte_length": 446,
+      "line_count": 4
+    },
+    {
+      "name": "product-journey-reviewer",
+      "path": ".codex/agents/product-journey-reviewer.toml",
+      "sha256": "sha256:9d5f4955afbf33a0965676ad00474aabe4843b3345e901fa0e518b0c9daf6a32",
+      "byte_length": 466,
+      "line_count": 4
+    },
+    {
+      "name": "repo-recon",
+      "path": ".codex/agents/repo-recon.toml",
+      "sha256": "sha256:4272e86928d359a867da83491497ee163a1f66c9cf99683df69bec7d55b91f9c",
+      "byte_length": 382,
+      "line_count": 4
+    },
+    {
+      "name": "research-verifier",
+      "path": ".codex/agents/research-verifier.toml",
+      "sha256": "sha256:47ee7d30b1052e1c990bc65f9dcaefb77f341b80d1dcbe0fd2d024daeb5901ee",
+      "byte_length": 424,
+      "line_count": 4
+    },
+    {
+      "name": "security-reviewer",
+      "path": ".codex/agents/security-reviewer.toml",
+      "sha256": "sha256:20efde18349120ad57c938a678ea7e6fa076dd454201ec2ec6e3d9d6fe670b65",
+      "byte_length": 460,
+      "line_count": 4
+    }
+  ],
+  "candidate_closure": {
+    "schema_version": "HarnessPluginCandidateClosure-v1",
+    "artifact_set_formula": "Sort paths; concatenate each path, one TAB byte, lowercase SHA-256 without prefix, and one LF byte; SHA-256 the result.",
+    "worker_result_self_exclusion": "The WorkerResult is excluded from every candidate aggregate.",
+    "members": [
+      {
+        "path": ".agents/plugins/marketplace.json",
+        "authority": "protected_root_metadata"
+      },
+      {
+        "path": ".codex-plugin/plugin.json",
+        "authority": "root_read"
+      },
+      {
+        "path": ".codex/agents/claim-falsifier.toml",
+        "authority": "protected_root_metadata"
+      },
+      {
+        "path": ".codex/agents/orchestration-recovery-reviewer.toml",
+        "authority": "protected_root_metadata"
+      },
+      {
+        "path": ".codex/agents/product-journey-reviewer.toml",
+        "authority": "protected_root_metadata"
+      },
+      {
+        "path": ".codex/agents/repo-recon.toml",
+        "authority": "protected_root_metadata"
+      },
+      {
+        "path": ".codex/agents/research-verifier.toml",
+        "authority": "protected_root_metadata"
+      },
+      {
+        "path": ".codex/agents/security-reviewer.toml",
+        "authority": "protected_root_metadata"
+      },
+      {
+        "path": "README.md",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "docs/install-and-visibility.md",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "docs/plugin-resource-map.md",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "fixtures/plugin-product/journey-controls.tsv",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "fixtures/plugin-product/root-wiring-request.json",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "fixtures/plugin-product/route-cases.tsv",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "plugin-manifest-draft.json",
+        "authority": "root_read"
+      },
+      {
+        "path": "skills/diagnose-and-observe/SKILL.md",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "skills/goal-run/SKILL.md",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "skills/harness-ultragoal/SKILL.md",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "skills/improve-and-maintain/SKILL.md",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "skills/product-journey-review/SKILL.md",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "skills/prove/SKILL.md",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "skills/repository-fit/SKILL.md",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "skills/routine-work/SKILL.md",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "validator/src/cli/successor/catalog.rs",
+        "authority": "root_read"
+      },
+      {
+        "path": "validator/tests/plugin_product_contract/dependency_closure.rs",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "validator/tests/plugin_product_contract/main.rs",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "validator/tests/plugin_product_contract/route_contract.rs",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "validator/tests/plugin_product_contract/source_contract.rs",
+        "authority": "worker_owned"
+      },
+      {
+        "path": "validator/tests/plugin_product_contract/zero_write.rs",
+        "authority": "worker_owned"
+      }
+    ],
+    "executable_read_operations": [
+      {
+        "id": "help-json",
+        "args": ["--json", "--help"],
+        "source_marker": "ultragoal --json --help"
+      },
+      {
+        "id": "inspect-capabilities",
+        "args": ["--json", "inspect", "capabilities"],
+        "source_marker": "ultragoal --json inspect capabilities"
+      },
+      {
+        "id": "inspect-context",
+        "args": ["--json", "inspect", "context"],
+        "source_marker": "ultragoal --json inspect context"
+      },
+      {
+        "id": "inspect-inventory",
+        "args": ["--json", "inspect", "inventory"],
+        "source_marker": "ultragoal --json inspect inventory"
+      },
+      {
+        "id": "inspect-findings",
+        "args": ["--json", "inspect", "findings"],
+        "source_marker": "ultragoal --json inspect findings"
+      },
+      {
+        "id": "inspect-claims",
+        "args": ["--json", "inspect", "claims"],
+        "source_marker": "ultragoal --json inspect claims"
+      },
+      {
+        "id": "next",
+        "args": ["--json", "next"],
+        "source_marker": "ultragoal --json next"
+      },
+      {
+        "id": "fit-inspect",
+        "args": ["--json", "fit", "inspect", "--target", "private-target-closure-018"],
+        "source_marker": "ultragoal --json fit inspect"
+      },
+      {
+        "id": "fit-plan",
+        "args": ["--json", "fit", "plan", "--target", "private-target-closure-018"],
+        "source_marker": "ultragoal --json fit plan"
+      },
+      {
+        "id": "fit-verify",
+        "args": ["--json", "fit", "verify", "--target", "private-target-closure-018"],
+        "source_marker": "ultragoal --json fit verify"
+      },
+      {
+        "id": "observe-query",
+        "args": ["--json", "observe", "query"],
+        "source_marker": "ultragoal --json observe query"
+      },
+      {
+        "id": "observe-query-filtered",
+        "args": ["--json", "observe", "query", "--filter", "check.routine"],
+        "source_marker": "ultragoal --json observe query --filter"
+      },
+      {
+        "id": "diagnose-finding",
+        "args": ["--json", "diagnose", "--finding", "private-finding-closure-018"],
+        "source_marker": "ultragoal --json diagnose --finding"
+      },
+      {
+        "id": "eval-audit",
+        "args": ["--json", "eval", "audit", "--spec", "private-spec-closure-018.json"],
+        "source_marker": "ultragoal --json eval audit --spec"
+      },
+      {
+        "id": "migrate-plan",
+        "args": ["--json", "migrate", "plan", "--registry", "private-registry-closure-018.json"],
+        "source_marker": "ultragoal --json migrate plan --registry"
+      },
+      {
+        "id": "migrate-verify",
+        "args": ["--json", "migrate", "verify", "--registry", "private-registry-closure-018.json"],
+        "source_marker": "ultragoal --json migrate verify --registry"
+      }
+    ]
+  },
+  "changes": [
+    {
+      "path": ".codex-plugin/plugin.json",
+      "preimage_sha256": "sha256:12c123fa9442dbf9e2eb7877b6fd1c4446ffc04a26d37727dddc0fb3877b06da",
+      "operations": [
+        {
+          "op": "replace",
+          "pointer": "/version",
+          "value": "0.0.12"
+        }
+      ],
+      "postimage_sha256": "sha256:9a8beb3bea1e104eb82e31b591d546075402e460334b04da5b67c6976d86f067",
+      "postimage_bytes": 1083,
+      "postimage_lines": 31
+    },
+    {
+      "path": "plugin-manifest-draft.json",
+      "preimage_sha256": "sha256:8494432c2ad67b679a75634fad68562e6a79dd3fcb3b76e756d020d88e33ad38",
+      "operations": [
+        {
+          "op": "remove_value",
+          "pointer": "/resources",
+          "value": "skills/agent-improvement-loop/SKILL.md"
+        },
+        {
+          "op": "replace",
+          "pointer": "/skills",
+          "value": [
+            {
+              "name": "harness-ultragoal",
+              "path": "skills/harness-ultragoal/SKILL.md",
+              "role": "Single front door, deterministic intent classification, effect disclosure, and route selection"
+            },
+            {
+              "name": "repository-fit",
+              "path": "skills/repository-fit/SKILL.md",
+              "role": "Fresh setup and existing-repository retrofit through inspect, plan, accepted apply, and verify"
+            },
+            {
+              "name": "routine-work",
+              "path": "skills/routine-work/SKILL.md",
+              "role": "Dirty-tree-safe affected validation, verified reuse, and exact execution reporting"
+            },
+            {
+              "name": "diagnose-and-observe",
+              "path": "skills/diagnose-and-observe/SKILL.md",
+              "role": "Causal diagnosis, bounded local semantic observation, repair planning, and deterministic next action"
+            },
+            {
+              "name": "goal-run",
+              "path": "skills/goal-run/SKILL.md",
+              "role": "Durable dependency-closed orchestration, independent review, reconciliation, and recovery"
+            },
+            {
+              "name": "product-journey-review",
+              "path": "skills/product-journey-review/SKILL.md",
+              "role": "Independent fresh-operator, security, recovery, falsification, and quality-in-use review"
+            },
+            {
+              "name": "prove",
+              "path": "skills/prove/SKILL.md",
+              "role": "One named claim, dependency-closed strict proof, false-pass controls, and independent reconciliation"
+            },
+            {
+              "name": "improve-and-maintain",
+              "path": "skills/improve-and-maintain/SKILL.md",
+              "role": "Evaluation, research refresh, compatibility, migration verification, and approved retirement"
+            }
+          ]
+        },
+        {
+          "op": "replace",
+          "pointer": "/purpose",
+          "value": "Repository fit, routine work, diagnosis, orchestration, strict proof, product-journey review, evaluation, and migration through one Harness Ultragoal front door."
+        },
+        {
+          "op": "replace",
+          "pointer": "/version",
+          "value": "0.0.12"
+        },
+        {
+          "op": "assert_exact",
+          "pointer": "/agents",
+          "value": [
+            {
+              "name": "claim-falsifier",
+              "path": ".codex/agents/claim-falsifier.toml"
+            },
+            {
+              "name": "orchestration-recovery-reviewer",
+              "path": ".codex/agents/orchestration-recovery-reviewer.toml"
+            },
+            {
+              "name": "product-journey-reviewer",
+              "path": ".codex/agents/product-journey-reviewer.toml"
+            },
+            {
+              "name": "repo-recon",
+              "path": ".codex/agents/repo-recon.toml"
+            },
+            {
+              "name": "research-verifier",
+              "path": ".codex/agents/research-verifier.toml"
+            },
+            {
+              "name": "security-reviewer",
+              "path": ".codex/agents/security-reviewer.toml"
+            }
+          ]
+        }
+      ],
+      "canonicalization": "jq 1.7 pretty JSON with two-space indentation, preserved object key order, and one terminal LF",
+      "postimage_sha256": "sha256:2f3a38df105f14f01285bc5f35fbe41143148adfd36d0f452f56295b667f7cca",
+      "postimage_bytes": 403196,
+      "postimage_lines": 5182
+    },
+    {
+      "path": ".agents/plugins/marketplace.json",
+      "precondition": "path_absent",
+      "preimage_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "operation": "create_exact",
+      "value": {
+        "name": "harness-ultragoal-local",
+        "interface": {
+          "displayName": "Harness Ultragoal Local"
+        },
+        "plugins": [
+          {
+            "name": "harness-ultragoal",
+            "source": {
+              "source": "local",
+              "path": "./plugins/harness-ultragoal"
+            },
+            "policy": {
+              "installation": "AVAILABLE",
+              "authentication": "ON_INSTALL"
+            },
+            "category": "Productivity"
+          }
+        ]
+      },
+      "canonicalization": "jq 1.7 pretty JSON with two-space indentation and one terminal LF",
+      "postimage_sha256": "sha256:fda926319866f7bc020af59f0d4a0021111953ceab5a2a2e5bb51fb2f2823734",
+      "postimage_bytes": 410,
+      "postimage_lines": 20
+    }
+  ],
+  "required_root_follow_up": [
+    "Revalidate all three preconditions against the live candidate immediately before application.",
+    "Keep packaged discovery to the canonical eight skills and six current project agents; do not package compatibility sources as active skills.",
+    "Materialize the exact accepted package at the repository marketplace relative source before any catalog or install claim.",
+    "Build and independently compare two current HUGPKG artifacts, then separately prove install, cache, app registry, Plugins UI, new-task discovery, runtime identity, and representative product behavior."
+  ],
+  "claim_ceiling": "Non-authoritative exact root-change request only; no source acceptance, package, marketplace, install, discovery, runtime, journey, readiness, release, or completion claim."
+}

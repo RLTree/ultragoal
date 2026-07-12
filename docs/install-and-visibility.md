@@ -1,86 +1,125 @@
 # Install And Visibility
 
-This package follows the Codex plugin shape:
+This document separates source layout from package, marketplace, installed
+bytes, host discovery, and runtime behavior. It is source guidance only; it is
+not evidence that any live Codex host has installed or loaded this candidate.
+
+## Supported source shape
+
+The current product shape is:
 
 ```text
 .codex-plugin/plugin.json
-skills/
-custom-agents/
-install/personal-marketplace.example.json
+.agents/plugins/marketplace.json       # root-owned repository catalog
+.codex/agents/*.toml                   # six project-scoped read-only roles
+skills/harness-ultragoal/SKILL.md      # single front door
+skills/<seven-specialized-routes>/SKILL.md
 ```
 
-## Personal Plugin Install
+The canonical specialized routes are `repository-fit`, `routine-work`,
+`diagnose-and-observe`, `goal-run`, `prove`, `improve-and-maintain`, and
+`product-journey-review`. Root-owned package inventory must include those eight
+skills and the six `.codex/agents` files, and must exclude compatibility
+sources from active packaged discovery unless the migration registry explicitly
+adopts a bounded compatibility route.
 
-The official local plugin route is a personal marketplace:
+## Repository marketplace
 
-1. Copy this package to `~/.codex/plugins/harness-ultragoal`.
-2. Add or update `~/.agents/plugins/marketplace.json` using
-   `install/personal-marketplace.example.json`.
-3. Restart Codex.
-4. Open Plugins, choose the local marketplace, and install/enable
-   `harness-ultragoal`.
+The supported repository catalog path is `.agents/plugins/marketplace.json`.
+Its local plugin source is relative to the marketplace root and begins with
+`./`. The reserved 0.0.12 root integration uses the package materialization
+path `./plugins/harness-ultragoal`; catalog bytes are invalid evidence until
+that relative target exists and its package identity is independently
+reconciled.
 
-In the personal marketplace example, `source.path` is
-`./.codex/plugins/harness-ultragoal`. This is the official personal-marketplace
-pattern and resolves from `$HOME`, so it points at
-`$HOME/.codex/plugins/harness-ultragoal`.
-
-The local copy/cache sync surface is narrower than app install. It may prove
-that the package was copied into the Codex plugin source/cache locations and
-that current custom-agent TOMLs were mirrored globally. It does not prove that
-the Codex app UI shows or enables the plugin.
-
-The next app-install phase must produce a post-copy smoke receipt that verifies:
-
-- `.codex-plugin/plugin.json` parses;
-- `skills/` exists at the plugin root;
-- `custom-agents/*.toml` parse and contain `name`, `description`, and
-  `developer_instructions`;
-- the personal marketplace JSON entry points at the copied plugin directory.
-
-The current proof surface may include detached file-copy/cache/global-agent
-sync receipts when they are freshly generated against the current package. Those
-receipts support only local staging and active registry exposure. They do not
-support install-button success, Plugins UI visibility, workspace/public
-marketplace listing, or production readiness. The marketplace example in this
-package is:
+A repository marketplace is non-default host configuration. After the root has
+accepted the catalog and materialized the exact package, an authorized operator
+may plan these host effects:
 
 ```text
-install/personal-marketplace.example.json
+codex plugin marketplace add <repository-root>
+codex plugin add harness-ultragoal@<repository-marketplace-name>
 ```
 
-## Custom Agent Install
+Do not execute those commands during source validation. They mutate host state
+and require the selected repository marketplace, package bytes, and authority
+to be current.
 
-Codex custom agents are TOML files. Copy only the packaged current TOML files
-from:
+## Personal marketplace
+
+The default personal marketplace file is
+`~/.agents/plugins/marketplace.json`. It is discovered implicitly; do not add
+it through `codex plugin marketplace add`. A personal entry must point at the
+actual authorized local plugin source and include installation,
+authentication, and category policy.
+
+For an already configured local marketplace, first confirm through the host's
+supported marketplace-listing surface which marketplace currently surfaces the
+plugin. Reinstall only after that observation:
 
 ```text
-custom-agents/*.toml
+codex plugin add harness-ultragoal@<confirmed-local-marketplace>
 ```
 
-to:
+Use a new Codex task after an authorized reinstall so discovery can be observed
+without stale task context. Never hand-edit host marketplace or cache state as
+a substitute for the supported install path.
+
+## Project-scoped agents
+
+The current agent sources are:
 
 ```text
-~/.codex/agents/
+.codex/agents/claim-falsifier.toml
+.codex/agents/orchestration-recovery-reviewer.toml
+.codex/agents/product-journey-reviewer.toml
+.codex/agents/repo-recon.toml
+.codex/agents/research-verifier.toml
+.codex/agents/security-reviewer.toml
 ```
 
-New sessions can then spawn the named agents. Already-open sessions may need a
-restart or reload before the new agent definitions appear.
+They remain project-scoped. Do not direct operators to copy them into a global
+agent directory. Source presence proves neither package membership nor current
+host discovery. A supported new task must independently observe the exact agent
+names and read-only effect boundary before a discovery claim can rise.
 
-The current material review team is the four falsifier agents named in
-`docs/review-loop-record.md` and `templates/agent-standards/05-review-and-completion.md`.
-Retired legacy reviewer TOMLs are historical context only and must not be
-packaged under `custom-agents/` or installed as current review controls.
+## Verification ladder
 
-Disk files are not active registry proof. A material review round also needs a
-`harness-ultragoal.multi-agent-registry-exposure.v1` receipt showing the
-running Codex session can discover and spawn the current custom agent types.
-See `docs/codex-custom-agent-registry-preflight.md`.
+Verify each layer independently against the same candidate:
 
-## Claim Ceiling
+1. **Source:** parse the root manifest, validate exactly eight canonical skill
+   identities and six project agent manifests, and reject unknown or duplicate
+   active routes. Bind every direct semantic-test input, including the typed
+   successor catalog, into the same invalidation closure.
+2. **Package:** build two HUGPKG artifacts from the root-owned inventory and
+   compare their bytes, inventory, version, and provenance inputs.
+3. **Marketplace:** validate the selected catalog path and relative source,
+   while proving nothing about installation or host registration.
+4. **Install:** materialize the authorized package and compare installed bytes
+   with the package identity.
+5. **Cache:** observe the selected cache separately and reconcile it to the
+   installed package; do not infer hidden cache state.
+6. **App registry and Plugins UI:** use only host-exposed observations in a
+   current task. Record unsupported surfaces explicitly.
+7. **Discovery:** start a fresh task and observe the front-door skill and all
+   six agent identities.
+8. **Runtime:** invoke representative canonical routes and inspect their real
+   effects, failures, recovery, and zero-write read behavior.
+9. **Product journey:** independently review fresh setup, retrofit, routine
+   repeat use, diagnosis, interrupted recovery, proof, and migration.
 
-Copying files plus smoke checks proves local install staging only. Active
-multi-agent registry exposure requires a separate live registry exposure
-receipt. Neither surface proves public publishing, workspace sharing,
-marketplace install-button success, Plugins UI visibility, or visibility inside
-already-open Codex threads. Those require separate app-level confirmation.
+Every executable source-level read, help, or query probe is run against an
+isolated dirty repository. The before/after oracle recursively compares bytes,
+object type, Unix mode, modification time, and Git porcelain status; a delta or
+an operator canary echoed by a failure blocks reuse of the result.
+
+Package, marketplace, install, cache, app registry, Plugins UI, discovery, and
+runtime are not synonyms. A successful lower layer does not raise a higher claim.
+
+## Safe failure
+
+Stop the dependent layer when the required package, marketplace, host command,
+agent discovery, or runtime route is unavailable or mismatched. Preserve source
+and host state, name the exact unsupported surface, and give the exact next
+authorized action. Do not fall back to global agent copying, a stale cache,
+source inspection, or documentation as proof of live behavior.

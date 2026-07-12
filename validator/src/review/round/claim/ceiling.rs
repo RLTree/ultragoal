@@ -14,6 +14,8 @@ const UNSUPPORTED: &[&str] = &[
     "real_multilane_dogfood",
     "production_readiness",
     "external_product_ux_improvement",
+    "reviewer_runtime_configuration",
+    "custom_agent_runtime_discovery",
 ];
 
 pub(crate) fn row_authority_errors(
@@ -78,9 +80,14 @@ fn proof_anchor_errors(
         .iter()
         .filter_map(|row| row.get("path").and_then(Value::as_str))
         .collect::<BTreeSet<_>>();
-    let Some(spec) = crate::review::round::config::persona_spec(persona) else {
+    let Some(spec) = crate::review::round::config::review_role_spec(persona) else {
         return;
     };
+    let agent_role = crate::review::round::config::agent_role(spec);
+    let prompt_packet = row
+        .pointer("/prompt_packet/path")
+        .and_then(Value::as_str)
+        .unwrap_or("");
     let external_anchors = [
         (&anchors.validator_path, &anchors.validator_digest),
         (&anchors.review_target_path, &anchors.review_target_digest),
@@ -101,8 +108,8 @@ fn proof_anchor_errors(
         anchors.validator_path.as_str(),
         anchors.review_target_path.as_str(),
         anchors.archive_path.as_str(),
-        spec.prompt_path,
-        spec.custom_path,
+        agent_role.manifest_path,
+        prompt_packet,
         spec.focus_path,
     ];
     for required in required_anchors {
@@ -150,21 +157,31 @@ fn claim_ceiling_errors(receipt: &Value, row: &Value, persona: &str, out: &mut V
         out.push(failure("review_round_claim_ceiling_missing", persona));
         return;
     };
+    if assessment.get("authority").and_then(Value::as_str)
+        != Some("falsification_only_cannot_raise")
+    {
+        out.push(failure(
+            "review_round_claim_ceiling_authority_invalid",
+            persona,
+        ));
+        return;
+    }
     let top_supported = claim_ids(&receipt["claim_ceiling"], "supported");
     let top_unsupported = claim_ids(&receipt["claim_ceiling"], "unsupported");
-    let row_supported = claim_ids(assessment, "supported");
-    let row_unsupported = claim_ids(assessment, "unsupported");
-    if row_supported.is_empty() || row_unsupported.is_empty() {
+    let row_not_disproven = claim_ids(assessment, "not_disproven");
+    let row_challenged = claim_ids(assessment, "challenged");
+    if row_challenged.is_empty() {
         out.push(failure("review_round_claim_ceiling_missing", persona));
         return;
     }
-    if has_duplicates(assessment, "supported") || has_duplicates(assessment, "unsupported") {
+    if has_duplicates(assessment, "not_disproven") || has_duplicates(assessment, "challenged") {
         out.push(failure("review_round_claim_ceiling_duplicate", persona));
         return;
     }
     if unsupported_claim_in_supported(&top_supported)
-        || unsupported_claim_in_supported(&row_supported)
+        || unsupported_claim_in_supported(&row_not_disproven)
         || !same_set(&top_supported, SUPPORTED)
+        || !row_not_disproven.is_subset(&top_supported)
     {
         out.push(failure("review_round_claim_ceiling_overclaim", persona));
         return;
@@ -173,8 +190,17 @@ fn claim_ceiling_errors(receipt: &Value, row: &Value, persona: &str, out: &mut V
         out.push(failure("review_round_claim_ceiling_missing", persona));
         return;
     }
-    if !same_values(&top_supported, &row_supported)
-        || !same_values(&top_unsupported, &row_unsupported)
+    let all_top = top_supported
+        .union(&top_unsupported)
+        .copied()
+        .collect::<BTreeSet<_>>();
+    let all_row = row_not_disproven
+        .union(&row_challenged)
+        .copied()
+        .collect::<BTreeSet<_>>();
+    if !top_unsupported.is_subset(&row_challenged)
+        || !all_top.is_subset(&all_row)
+        || !row_not_disproven.is_disjoint(&row_challenged)
     {
         out.push(failure("review_round_claim_ceiling_mismatch", persona));
     }
@@ -200,10 +226,6 @@ fn has_duplicates(value: &Value, key: &str) -> bool {
         .map(normalize)
         .collect::<Vec<_>>();
     values.len() != values.iter().collect::<BTreeSet<_>>().len()
-}
-
-fn same_values(left: &BTreeSet<&str>, right: &BTreeSet<&str>) -> bool {
-    left == right
 }
 
 fn same_set(values: &BTreeSet<&str>, expected: &[&str]) -> bool {

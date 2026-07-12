@@ -1,39 +1,16 @@
 ---
 name: agent-runtime-legibility
-description: Use when a repo contains an app, service, workflow engine, CLI, or UI that agents must run, inspect, debug, or prove end-to-end.
+description: Deprecated compatibility alias for explicit `$harness-ultragoal:agent-runtime-legibility` requests. Preserve the request and route it to `$harness-ultragoal:routine-work`; do not use this alias as independent workflow authority.
 ---
 
-# Agent Runtime Legibility
+# Deprecated Compatibility Route
 
-Use this when static files are not enough. Agents need observable runtime
-truth: commands, health, logs, state, receipts, and UI proof that map to user
-claims.
+> Compatibility warning: this legacy alias is not an independent workflow or authority. Its canonical target is `$harness-ultragoal:routine-work`.
 
-## Required Surfaces
-
-- Local run command with expected readiness signal.
-- Health or smoke command that exits nonzero on failure.
-- Log location with stable names and scrubbed secrets.
-- State root, cleanup rules, and isolation strategy.
-- CLI help or API docs generated from the real entrypoint.
-- UI proof path when users interact through UI.
-- Receipt format for runtime runs and failures.
-
-## Procedure
-
-1. List each user-facing workflow and its strongest proof surface.
-2. Add a cheap smoke path before adding broad e2e paths.
-3. Make all runtime commands use local/loopback-safe defaults.
-4. Ensure failures include actionable diagnostics, not generic "failed".
-5. Capture receipts under `validation_artifacts/`.
-6. Separate claims by surface: static, fixture, API, CLI, UI, package, live-use.
-7. Add live beneficial e2e only when the feature itself is being claimed.
-
-## Acceptance
-
-Accepted only when a fresh agent can:
-
-- start or intentionally skip the runtime with a named blocker;
-- find logs and state without asking the user;
-- prove one meaningful workflow through the strongest available surface;
-- avoid using fixture or smoke proof for live-use claims.
+1. Preserve the user's full request, context, constraints, and authorized effects unchanged.
+2. Before routing, inspect the request and supplied context for Harness Ultragoal skill tokens. If it contains another distinct explicit Harness Ultragoal skill token or selects multiple compatibility routes, report a causal compatibility-route conflict and perform no routing or effect.
+3. Invoke `$harness-ultragoal:routine-work` with that preserved input.
+4. Follow only the canonical target's current contract. Do not restore or apply legacy lane, gate, receipt, finalizer, command, tool, helper, schema, state-store, or generated authority from this wrapper.
+5. Perform no hidden writes or external effects while resolving the route. Any later effect must remain authorized by the original request and the canonical target.
+6. Fail closed if the canonical target is unavailable: report the exact blocker and do not fall back, infer semantic equivalence, or claim adoption, discovery, runtime behavior, retirement, readiness, release, or completion.
+7. Never substitute documentation, tests, receipts, generated rows, telemetry, signatures, or provenance for the requested product behavior.

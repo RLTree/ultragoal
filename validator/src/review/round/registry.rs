@@ -1,192 +1,205 @@
-use crate::{digest, review::round::ReviewFailure};
+use crate::review::round::ReviewFailure;
 use serde_json::Value;
-use std::collections::BTreeSet;
+use std::collections::BTreeMap;
 use std::path::Path;
 
-const MAX_REGISTRY_CAPTURE_AGE_SECONDS: i64 = 5 * 60;
+mod reader;
+mod semantics;
+mod validation;
 
-pub(crate) fn exposure_errors(root: &Path, receipt: &Value, out: &mut Vec<ReviewFailure>) {
+const MAX_AGENT_MANIFEST_BYTES: u64 = 64 * 1024;
+
+#[cfg(all(test, unix))]
+pub(crate) use reader::{set_after_read_hook, set_before_final_revalidate_hook};
+
+#[derive(Default)]
+pub(crate) struct RegistrySnapshot {
+    stable: bool,
+    manifest_digests: BTreeMap<&'static str, String>,
+}
+
+impl RegistrySnapshot {
+    pub(crate) fn manifest_digest(&self, role: &str, path: &str) -> Option<&str> {
+        self.stable
+            .then(|| self.manifest_digests.get(role))
+            .flatten()
+            .filter(|_| {
+                crate::review::round::config::review_role_spec(role)
+                    .is_some_and(|spec| spec.agent_manifest_path == path)
+            })
+            .map(String::as_str)
+    }
+}
+
+pub(crate) fn exposure_errors(
+    root: &Path,
+    receipt: &Value,
+    out: &mut Vec<ReviewFailure>,
+) -> RegistrySnapshot {
     let Some(artifact) = receipt.get("live_registry_exposure") else {
         out.push(failure(
             "review_round_live_registry_exposure_missing",
             "receipt",
         ));
-        return;
+        return RegistrySnapshot::default();
     };
-    let Some(exposure) = read_exposure(root, artifact, out) else {
-        return;
-    };
-    exposure_shape_errors(&exposure, out);
-    exposure_identity_errors(receipt, &exposure, out);
-    spawn_session_errors(receipt, &exposure, out);
-    let exposed = exposed_agent_types(&exposure);
-    for spec in crate::review::round::config::PERSONAS {
-        if !exposed.contains(spec.agent_type) {
-            out.push(failure(
-                "review_round_live_registry_agent_missing",
-                spec.persona,
-            ));
-        }
-    }
-}
-
-fn exposure_identity_errors(receipt: &Value, exposure: &Value, out: &mut Vec<ReviewFailure>) {
-    if exposure.get("source").and_then(Value::as_str) != Some("multi_agent_v1.tool_registry") {
-        out.push(failure("review_round_live_registry_stale", "registry"));
-    }
-    if exposure
-        .get("session_id")
-        .and_then(Value::as_str)
-        .unwrap_or("")
-        .is_empty()
-    {
-        out.push(failure("review_round_live_registry_stale", "registry"));
-    }
-    if exposure.get("round_id").and_then(Value::as_str)
-        != receipt.get("round_id").and_then(Value::as_str)
-    {
-        out.push(failure("review_round_live_registry_stale", "registry"));
-    }
-    if !registry_capture_is_current(receipt, exposure) {
-        out.push(failure("review_round_live_registry_stale", "registry"));
-    }
-}
-
-fn registry_capture_is_current(receipt: &Value, exposure: &Value) -> bool {
-    let Some(round_generated) = receipt
-        .get("generated_at")
-        .and_then(Value::as_str)
-        .and_then(crate::audit::clock::parse_iso_seconds)
-    else {
-        return false;
-    };
-    let Some(captured) = exposure
-        .get("captured_at")
-        .and_then(Value::as_str)
-        .and_then(crate::audit::clock::parse_iso_seconds)
-    else {
-        return false;
-    };
-    captured <= round_generated && round_generated - captured <= MAX_REGISTRY_CAPTURE_AGE_SECONDS
-}
-
-fn spawn_session_errors(receipt: &Value, exposure: &Value, out: &mut Vec<ReviewFailure>) {
-    let session = exposure
-        .get("session_id")
-        .and_then(Value::as_str)
-        .unwrap_or("");
-    for row in receipt
-        .get("reviewers")
-        .and_then(Value::as_array)
-        .into_iter()
-        .flatten()
-    {
-        if row
-            .pointer("/live_spawn_receipt/source_thread_id")
-            .and_then(Value::as_str)
-            != Some(session)
-        {
-            out.push(failure(
-                "review_round_live_registry_stale",
-                row.get("persona")
-                    .and_then(Value::as_str)
-                    .unwrap_or("reviewer"),
-            ));
-        }
-    }
-}
-
-pub(crate) fn row_agent_type_error(row: &Value, persona: &str, out: &mut Vec<ReviewFailure>) {
-    let Some(spec) = crate::review::round::config::persona_spec(persona) else {
-        return;
-    };
-    if row.get("agent_type").and_then(Value::as_str) != Some(spec.agent_type) {
-        out.push(failure(
-            "review_round_live_registry_agent_mismatch",
-            persona,
-        ));
-    }
-}
-
-fn read_exposure(root: &Path, artifact: &Value, out: &mut Vec<ReviewFailure>) -> Option<Value> {
     let rel = artifact.get("path").and_then(Value::as_str).unwrap_or("");
     if crate::package::inventory::package_path_error(root, rel).is_some() {
-        out.push(failure("review_round_live_registry_artifact_invalid", rel));
-        return None;
+        out.push(failure(
+            "review_round_live_registry_artifact_invalid",
+            "registry-exposure",
+        ));
+        return RegistrySnapshot::default();
     }
-    let path = root.join(rel);
-    let want = artifact.get("digest").and_then(Value::as_str).unwrap_or("");
-    let got = digest::file(&path).unwrap_or_else(|_| digest::ZERO.to_string());
-    if got != want {
-        out.push(failure("review_round_live_registry_artifact_mismatch", rel));
-        return None;
-    }
-    match crate::json_boundary::read_json(&path) {
-        Ok(value) => Some(value),
+    let mut session = match reader::Session::new(root) {
+        Ok(session) => session,
         Err(_) => {
             out.push(failure(
+                "review_round_live_registry_artifact_invalid",
+                "registry-exposure",
+            ));
+            return RegistrySnapshot::default();
+        }
+    };
+    let Some(exposure) = read_exposure(&mut session, rel, artifact, out) else {
+        return RegistrySnapshot::default();
+    };
+    let Some(schema) = read_schema(&mut session, out) else {
+        return RegistrySnapshot::default();
+    };
+    let schema_errors = semantics::schema_errors(&schema.bytes, &schema.value, &exposure);
+    if !schema_errors.is_empty() {
+        out.push(failure(
+            "review_round_live_registry_artifact_malformed",
+            "registry-exposure-schema",
+        ));
+        return RegistrySnapshot::default();
+    }
+    let Some(mut snapshot) = read_manifests(&mut session, out) else {
+        return RegistrySnapshot::default();
+    };
+    if session.revalidate().is_err() {
+        out.push(failure(
+            "review_round_live_registry_artifact_mismatch",
+            "registry-read-session-identity",
+        ));
+        return RegistrySnapshot::default();
+    }
+    snapshot.stable = true;
+    validation::exposure_shape_errors(&snapshot, &exposure, out);
+    validation::exposure_identity_errors(receipt, &exposure, out);
+    validation::spawn_session_errors(receipt, &exposure, out);
+    if exposure.get("status").and_then(Value::as_str) != Some("fail")
+        || exposure.get("claim_ceiling").and_then(Value::as_str) != Some("withheld_or_blocked")
+    {
+        out.push(failure(
+            "review_round_live_registry_artifact_malformed",
+            "registry-positive-proof-impossible",
+        ));
+    }
+    out.push(failure(
+        "review_round_live_registry_unavailable",
+        "runtime-and-discovery",
+    ));
+    snapshot
+}
+
+fn read_exposure(
+    session: &mut reader::Session,
+    rel: &str,
+    artifact: &Value,
+    out: &mut Vec<ReviewFailure>,
+) -> Option<Value> {
+    let bounded = match session.read_json(rel) {
+        Ok(bounded) => bounded,
+        Err(reader::Error::Invalid) => {
+            out.push(failure(
+                "review_round_live_registry_artifact_invalid",
+                "registry-exposure",
+            ));
+            return None;
+        }
+        Err(reader::Error::Changed) => {
+            out.push(failure(
+                "review_round_live_registry_artifact_mismatch",
+                "registry-exposure-identity",
+            ));
+            return None;
+        }
+        Err(reader::Error::Malformed) => {
+            out.push(failure(
                 "review_round_live_registry_artifact_malformed",
-                rel,
+                "registry-exposure-json",
+            ));
+            return None;
+        }
+    };
+    let want = artifact.get("digest").and_then(Value::as_str).unwrap_or("");
+    if crate::digest::bytes(&bounded.bytes) != want {
+        out.push(failure(
+            "review_round_live_registry_artifact_mismatch",
+            "registry-exposure-digest",
+        ));
+        return None;
+    }
+    Some(bounded.value)
+}
+
+fn read_schema(
+    session: &mut reader::Session,
+    out: &mut Vec<ReviewFailure>,
+) -> Option<reader::Artifact> {
+    match session.read_json(semantics::SCHEMA_PATH) {
+        Ok(schema) => Some(schema),
+        Err(_) => {
+            out.push(failure(
+                "review_round_live_registry_schema_unavailable",
+                "registry-schema",
             ));
             None
         }
     }
 }
 
-fn exposed_agent_types(value: &Value) -> BTreeSet<String> {
-    value
-        .get("agent_types")
-        .and_then(Value::as_array)
-        .into_iter()
-        .flatten()
-        .filter(|row| row.get("exposed").and_then(Value::as_bool) == Some(true))
-        .filter_map(|row| row.get("agent_type").and_then(Value::as_str))
-        .map(str::to_string)
-        .collect()
-}
-
-fn exposure_shape_errors(value: &Value, out: &mut Vec<ReviewFailure>) {
-    if value.get("schema").and_then(Value::as_str)
-        != Some("harness-ultragoal.multi-agent-registry-exposure.v1")
-    {
-        out.push(failure(
-            "review_round_live_registry_artifact_malformed",
-            "schema",
-        ));
-    }
-    for spec in crate::review::round::config::PERSONAS {
-        let rows = value
-            .get("agent_types")
-            .and_then(Value::as_array)
-            .into_iter()
-            .flatten()
-            .filter(|row| row.get("agent_type").and_then(Value::as_str) == Some(spec.agent_type))
-            .collect::<Vec<_>>();
-        if rows.len() != 1 {
-            out.push(failure(
-                "review_round_live_registry_agent_missing",
-                spec.persona,
-            ));
-            continue;
-        }
-        let row = rows[0];
-        if row.get("persona").and_then(Value::as_str) != Some(spec.persona)
-            || row.get("custom_agent_path").and_then(Value::as_str) != Some(spec.custom_path)
-        {
+fn read_manifests(
+    session: &mut reader::Session,
+    out: &mut Vec<ReviewFailure>,
+) -> Option<RegistrySnapshot> {
+    let mut snapshot = RegistrySnapshot::default();
+    for spec in crate::review::round::config::REVIEW_ROLES {
+        let bytes = match session.read_bytes(spec.agent_manifest_path, MAX_AGENT_MANIFEST_BYTES) {
+            Ok(bytes) => bytes,
+            Err(reader::Error::Changed) => {
+                out.push(failure(
+                    "review_round_live_registry_artifact_mismatch",
+                    "registry-read-session-identity",
+                ));
+                return None;
+            }
+            Err(_) => {
+                out.push(failure(
+                    "review_round_live_registry_agent_mismatch",
+                    spec.role_name,
+                ));
+                return None;
+            }
+        };
+        if !semantics::manifest_is_current(&bytes, spec.role_name) {
             out.push(failure(
                 "review_round_live_registry_agent_mismatch",
-                spec.persona,
+                spec.role_name,
             ));
+            return None;
         }
-        if row.get("disk_cache_synced").and_then(Value::as_bool) != Some(true)
-            || row.get("global_toml_present").and_then(Value::as_bool) != Some(true)
-        {
-            out.push(failure(
-                "review_round_live_registry_disk_sync_missing",
-                spec.persona,
-            ));
-        }
+        snapshot
+            .manifest_digests
+            .insert(spec.role_name, crate::digest::bytes(&bytes));
     }
+    Some(snapshot)
+}
+
+pub(crate) fn row_agent_role_error(row: &Value, role: &str, out: &mut Vec<ReviewFailure>) {
+    validation::row_agent_role_error(row, role, out);
 }
 
 fn failure(code: &str, detail: impl Into<String>) -> ReviewFailure {

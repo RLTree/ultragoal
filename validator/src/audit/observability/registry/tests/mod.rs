@@ -1,225 +1,143 @@
 use super::*;
 use serde_json::json;
 use std::fs;
+use std::path::{Path, PathBuf};
 
-mod dimension_inventory;
-mod inventory_fixtures;
-mod proof;
-mod receipts;
-mod shape;
-use inventory_fixtures::*;
+const STATIC_REL: &str = "docs/generated/observability/command-inventory.json";
 
-#[test]
-fn observability_registry_accepts_fully_observable_inventory() {
-    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-registry");
-    write_registry_root(&root, observable_inventory());
-    let mut failures = Vec::new();
-    check(&root, &mut failures);
-    assert_eq!(
-        failures,
-        vec![format!(
-            "observability_missing_valid_fixture:fixtures/mandatory-law-surfaces/valid/{}.json",
+fn root(label: &str) -> PathBuf {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
+    fs::create_dir_all(&root).expect("root");
+    root
+}
+
+fn write_law_rows(root: &Path) {
+    for (rel, key, row_key) in [
+        ("templates/agent-standards/enforcement.json", "rows", "id"),
+        (
+            "docs/source-obligation-matrix.json",
+            "obligations",
+            "obligation_id",
+        ),
+        (
+            "docs/foundational-law-traceability.json",
+            "entries",
+            "obligation_id",
+        ),
+    ] {
+        let value = match (key, row_key) {
+            ("rows", "id") => json!({"rows": [{"id": super::super::LAW}]}),
+            ("obligations", "obligation_id") => {
+                json!({"obligations": [{"obligation_id": super::super::LAW}]})
+            }
+            ("entries", "obligation_id") => {
+                json!({"entries": [{"obligation_id": super::super::LAW}]})
+            }
+            _ => unreachable!("fixed law row"),
+        };
+        crate::json_boundary::write_json(&root.join(rel), &value).expect("law row");
+    }
+    fs::create_dir_all(root.join("fixtures/mandatory-law-surfaces/valid"))
+        .expect("fixture directory");
+    fs::write(
+        root.join(format!(
+            "fixtures/mandatory-law-surfaces/valid/{}.json",
             super::super::LAW
-        )]
-    );
-    write_valid_fixture(&root);
-    failures.clear();
-    check(&root, &mut failures);
-    assert!(failures.is_empty(), "{failures:?}");
-    fs::remove_dir_all(root).expect("cleanup registry");
+        )),
+        "{}",
+    )
+    .expect("fixture");
 }
 
-#[test]
-fn observability_registry_rejects_unobservable_and_row_shape_inventory() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-roundtrip-registry");
-    let mut inventory = observable_inventory();
-    inventory["command_observability_inventory"]["package digest"] = json!({
-        "observability_status": "unobservable",
-        "observed_surfaces": [],
-        "missing_surfaces": ["log"],
-        "validator_check_id": super::super::LAW,
-        "focused_tests": [],
-        "receipt_paths": [],
-        "live_query_proof_paths": [],
-        "claim_impact": "blocks_observability_product_closure"
-    });
-    write_registry_root(&root, inventory);
-    write_valid_fixture(&root);
-    let mut failures = Vec::new();
-    check(&root, &mut failures);
-    assert!(failures.iter().any(|item| {
-        item == "observability_command_telemetry_unobservable:package digest:unobservable"
-    }));
-
-    let mut row_shape = observable_inventory();
-    row_shape["command_observability_inventory"]["source audit"] = json!({
-        "observability_status": "observable",
-        "observed_surfaces": ["log"],
-        "missing_surfaces": [],
-        "validator_check_id": super::super::LAW,
-        "focused_tests": [],
-        "receipt_paths": ["validation_artifacts/ultragoal-audit/validator-receipt.json"],
-        "live_query_proof_paths": [],
-        "claim_impact": "claims_complete"
-    });
-    write_inventory(&root, row_shape);
-    failures.clear();
-    check(&root, &mut failures);
-    assert!(
-        failures
-            .iter()
-            .any(|item| { item == "observability_command_telemetry_row_shape_only:source audit" })
-    );
-
-    let mut surface_shape = observable_inventory();
-    surface_shape["surface_inventory"]["validator check families"] = json!({
-        "observability_status": "observable",
-        "observed_surfaces": ["log"],
-        "missing_surfaces": [],
-        "validator_check_id": super::super::LAW,
-        "focused_tests": [],
-        "receipt_paths": ["validation_artifacts/observability/command-roundtrip/surface-validator-check-families.json"],
-        "live_query_proof_paths": [],
-        "claim_impact": "claims_complete"
-    });
-    write_inventory(&root, surface_shape);
-    failures.clear();
-    check(&root, &mut failures);
-    assert!(failures.iter().any(|item| {
-        item == "observability_surface_telemetry_row_shape_only:validator check families"
-    }));
-
-    let mut loop_shape = observable_inventory();
-    loop_shape["operating_loop_inventory"]["query_logs_metrics_traces_by_run_id"] = json!({
-        "observability_status": "observable",
-        "observed_surfaces": ["log"],
-        "missing_surfaces": [],
-        "validator_check_id": super::super::LAW,
-        "focused_tests": [],
-        "receipt_paths": ["validation_artifacts/observability/command-roundtrip/loop-query_logs_metrics_traces_by_run_id.json"],
-        "live_query_proof_paths": [],
-        "claim_impact": "claims_complete"
-    });
-    write_inventory(&root, loop_shape);
-    failures.clear();
-    check(&root, &mut failures);
-    assert!(failures.iter().any(|item| {
-        item == "observability_loop_telemetry_row_shape_only:query_logs_metrics_traces_by_run_id"
-    }));
-
-    let mut signal_unobservable = observable_inventory();
-    signal_unobservable["signal_inventory"]["saturation"] = json!({
-        "observability_status": "partially_observable",
-        "observed_surfaces": ["metric names"],
-        "missing_surfaces": ["queue and cache saturation query proof"],
-        "validator_check_id": super::super::LAW,
-        "focused_tests": [],
-        "receipt_paths": [],
-        "live_query_proof_paths": [],
-        "claim_impact": "blocks_observability_product_closure"
-    });
-    write_inventory(&root, signal_unobservable);
-    failures.clear();
-    check(&root, &mut failures);
-    assert!(failures.iter().any(|item| {
-        item == "observability_signal_telemetry_unobservable:saturation:partially_observable"
-    }));
-    fs::remove_dir_all(root).expect("cleanup fit registry");
-}
-
-#[test]
-fn observability_registry_rejects_pass_shaped_control_board() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-control-board");
-    let mut inventory = observable_inventory();
-    inventory["command_observability_inventory"]["source audit"] = json!({
-        "observability_status": "partially_observable",
-        "observed_surfaces": ["log"],
-        "missing_surfaces": ["metrics", "traces"],
-        "validator_check_id": super::super::LAW,
-        "focused_tests": ["source_audit_observability_receipt_blocks_claims_on_failed_audit"],
-        "receipt_paths": [],
-        "live_query_proof_paths": [],
-        "current_owner_surface": "command:source audit",
-        "next_unobservable_surface": "metrics",
-        "claim_impact": "blocks_observability_product_closure"
-    });
-    inventory["observability_control_board"]["status"] = json!("observable");
-    inventory["observability_control_board"]["families"]["commands"]["observable"] =
-        json!(super::command_inventory::REQUIRED_COMMANDS.len());
-    inventory["observability_control_board"]["families"]["commands"]["partially_observable"] =
-        json!(0);
-    write_registry_root(&root, inventory);
-    write_valid_fixture(&root);
-    let mut failures = Vec::new();
-    check(&root, &mut failures);
-    assert!(
-        failures
-            .iter()
-            .any(|item| { item == "observability_control_board_status_mismatch:blocked" })
-    );
-    assert!(
-        failures.iter().any(|item| {
-            item == "observability_control_board_count_mismatch:commands:observable"
+fn metadata_snapshot(root: &Path) -> Vec<(PathBuf, u64, bool)> {
+    let mut rows = walkdir::WalkDir::new(root)
+        .follow_links(false)
+        .into_iter()
+        .map(Result::unwrap)
+        .map(|entry| {
+            let metadata = fs::symlink_metadata(entry.path()).expect("metadata");
+            (
+                entry
+                    .path()
+                    .strip_prefix(root)
+                    .expect("relative")
+                    .to_path_buf(),
+                metadata.len(),
+                metadata.file_type().is_symlink(),
+            )
         })
-    );
-    assert!(failures.iter().any(|item| {
-        item == "observability_control_board_first_incomplete_missing:commands:source audit"
-    }));
-    fs::remove_dir_all(root).expect("cleanup control board");
+        .collect::<Vec<_>>();
+    rows.sort();
+    rows
 }
 
 #[test]
-fn observability_control_board_uses_required_command_order() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-control-board-order");
-    let mut inventory = observable_inventory();
-    inventory["command_observability_inventory"]["source audit"] = json!({
-        "observability_status": "partially_observable",
-        "observed_surfaces": ["log", "receipt", "query"],
-        "missing_surfaces": ["pass/fail stdout contract"],
-        "validator_check_id": super::super::LAW,
-        "focused_tests": ["source_audit_observability_receipt_blocks_claims_on_failed_audit"],
-        "receipt_paths": [],
-        "live_query_proof_paths": [],
-        "current_owner_surface": "command:source audit",
-        "next_unobservable_surface": "pass/fail stdout contract",
-        "claim_impact": "blocks_observability_product_closure"
-    });
-    inventory["command_observability_inventory"]["archive build"] = json!({
-        "observability_status": "unobservable",
-        "observed_surfaces": [],
-        "missing_surfaces": ["log"],
-        "validator_check_id": super::super::LAW,
-        "focused_tests": [],
-        "receipt_paths": [],
-        "live_query_proof_paths": [],
-        "current_owner_surface": "command:archive build",
-        "next_unobservable_surface": "log",
-        "claim_impact": "blocks_observability_product_closure"
-    });
-    inventory["observability_control_board"]["status"] = json!("blocked");
-    inventory["observability_control_board"]["families"]["commands"]["observable"] =
-        json!(super::command_inventory::REQUIRED_COMMANDS.len() - 2);
-    inventory["observability_control_board"]["families"]["commands"]["partially_observable"] =
-        json!(1);
-    inventory["observability_control_board"]["families"]["commands"]["unobservable"] = json!(1);
-    inventory["observability_control_board"]["first_incomplete"] = json!({
-        "family": "commands",
-        "id": "source audit",
-        "observability_status": "partially_observable",
-        "next_unobservable_surface": "pass/fail stdout contract"
-    });
-    write_registry_root(&root, inventory);
-    write_valid_fixture(&root);
+fn registry_preserves_law_checks_but_never_accepts_a_static_successor_catalog() {
+    let root = root("observe-registry-unavailable");
     let mut failures = Vec::new();
     check(&root, &mut failures);
+    assert!(failures.contains(&SUCCESSOR_CATALOG_UNAVAILABLE.to_string()));
     assert!(
-        !failures
+        failures
             .iter()
-            .any(|item| item.starts_with("observability_control_board_")),
-        "{failures:?}"
+            .any(|row| row.starts_with("observability_missing_"))
     );
-    fs::remove_dir_all(root).expect("cleanup control board order");
+
+    write_law_rows(&root);
+    failures.clear();
+    check(&root, &mut failures);
+    assert_eq!(failures, vec![SUCCESSOR_CATALOG_UNAVAILABLE.to_string()]);
+    fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
+fn command_inventory_bytes_paths_and_absence_have_one_non_echoing_result() {
+    let root = root("observe-static-inventory-bait");
+    let path = root.join(STATIC_REL);
+    fs::create_dir_all(path.parent().expect("parent")).expect("parent");
+    let expected = vec![SUCCESSOR_CATALOG_UNAVAILABLE.to_string()];
+
+    assert_eq!(command_inventory_failures(&root), expected);
+    fs::write(&path, "SECRET_CANARY").expect("bait");
+    assert_eq!(command_inventory_failures(&root), expected);
+    fs::write(&path, [0xff, 0xfe]).expect("invalid bait");
+    assert_eq!(command_inventory_failures(&root), expected);
+    fs::remove_file(&path).expect("remove bait");
+    assert_eq!(command_inventory_failures(&root), expected);
+    assert!(!expected.join("\n").contains("SECRET_CANARY"));
+    fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[cfg(unix)]
+#[test]
+fn static_symlink_and_fifo_are_unread_and_registry_checks_write_nothing() {
+    use std::ffi::CString;
+    use std::os::unix::ffi::OsStrExt;
+
+    let root = root("observe-static-special-bait");
+    write_law_rows(&root);
+    let path = root.join(STATIC_REL);
+    fs::create_dir_all(path.parent().expect("parent")).expect("parent");
+    let outside = root.with_file_name("observe-static-special-secret");
+    fs::write(&outside, "SECRET_CANARY").expect("outside canary");
+    std::os::unix::fs::symlink(&outside, &path).expect("symlink");
+    let before = metadata_snapshot(&root);
+    let mut symlink_failures = Vec::new();
+    check(&root, &mut symlink_failures);
+    assert_eq!(before, metadata_snapshot(&root));
+    assert_eq!(
+        symlink_failures,
+        vec![SUCCESSOR_CATALOG_UNAVAILABLE.to_string()]
+    );
+    assert!(!symlink_failures.join("\n").contains("SECRET_CANARY"));
+
+    fs::remove_file(&path).expect("remove symlink");
+    let name = CString::new(path.as_os_str().as_bytes()).expect("fifo name");
+    assert_eq!(unsafe { libc::mkfifo(name.as_ptr(), 0o600) }, 0);
+    assert_eq!(
+        command_inventory_failures(&root),
+        vec![SUCCESSOR_CATALOG_UNAVAILABLE.to_string()]
+    );
+    fs::remove_file(outside).expect("outside cleanup");
+    fs::remove_dir_all(root).expect("cleanup");
 }

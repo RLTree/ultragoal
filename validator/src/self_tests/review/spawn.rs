@@ -11,7 +11,7 @@ fn review_round_spawn_receipts_fail_missing_failed_unknown_and_stale_paths() {
     crate::review::round::spawn::receipts::spawn_receipt_errors(
         &receipt,
         &json!({}),
-        "contract_claim_falsifier",
+        "claim-falsifier",
         &mut failures,
     );
     assert!(has_fail(&failures, "review_round_live_spawn_missing"));
@@ -21,28 +21,28 @@ fn review_round_spawn_receipts_fail_missing_failed_unknown_and_stale_paths() {
         &receipt,
         &json!({
             "reviewer_agent_id":"agent-1",
-            "model":"gpt-5",
-            "reasoning_effort":"high",
+            "runtime_metadata":{"exposure":"unavailable"},
+            "sandbox_mode":"read-only",
             "live_spawn_receipt":{
                 "status":"failed",
-                "error":"unknown_agent_type",
+                "error":"unknown_agent_role",
                 "tool":"wrong",
                 "round_id":"wrong",
-                "agent_type":"wrong",
+                "role":"wrong",
                 "spawned_reviewer_agent_id":"wrong",
-                "model":"wrong",
-                "reasoning_effort":"low",
+                "runtime_metadata":{"exposure":"unavailable"},
+                "sandbox_mode":"workspace-write",
                 "captured_at":"stale",
                 "source_thread_id":"",
                 "tool_invocation_id":""
             }
         }),
-        "contract_claim_falsifier",
+        "claim-falsifier",
         &mut failures,
     );
     assert!(has_fail(
         &failures,
-        "review_round_live_spawn_unknown_agent_type"
+        "review_round_live_spawn_unknown_agent_role"
     ));
     assert!(has_fail(&failures, "review_round_live_spawn_stale"));
 
@@ -51,29 +51,29 @@ fn review_round_spawn_receipts_fail_missing_failed_unknown_and_stale_paths() {
         &receipt,
         &json!({
             "reviewer_agent_id":"agent-1",
-            "model":"gpt-5",
-            "reasoning_effort":"high",
+            "runtime_metadata":{"exposure":"unavailable"},
+            "sandbox_mode":"read-only",
             "live_spawn_receipt":{
                 "status":"failed",
                 "error":"timeout",
                 "tool":"multi_agent_v1.spawn_agent",
                 "round_id":"round-1",
-                "agent_type":"harness_contract_claim_falsifier",
+                "role":"claim-falsifier",
                 "spawned_reviewer_agent_id":"agent-1",
-                "model":"gpt-5",
-                "reasoning_effort":"high",
+                "runtime_metadata":{"exposure":"unavailable"},
+                "sandbox_mode":"read-only",
                 "captured_at":"2026-06-26T09:00:00Z",
                 "source_thread_id":"source-thread",
                 "tool_invocation_id":"tool-call"
             }
         }),
-        "contract_claim_falsifier",
+        "claim-falsifier",
         &mut failures,
     );
     assert!(has_fail(&failures, "review_round_live_spawn_failed"));
     assert!(!has_fail(
         &failures,
-        "review_round_live_spawn_unknown_agent_type"
+        "review_round_live_spawn_unknown_agent_role"
     ));
 
     failures.clear();
@@ -81,11 +81,11 @@ fn review_round_spawn_receipts_fail_missing_failed_unknown_and_stale_paths() {
         &receipt,
         &json!({
             "reviewer_agent_id":"agent-1",
-            "model":"gpt-5",
-            "reasoning_effort":"high",
+            "runtime_metadata":{"exposure":"unavailable"},
+            "sandbox_mode":"read-only",
             "live_spawn_receipt":{"status":"failed","error":"timeout"}
         }),
-        "unknown_persona",
+        "unknown-role",
         &mut failures,
     );
     assert!(failures.is_empty());

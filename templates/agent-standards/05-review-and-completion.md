@@ -59,7 +59,8 @@ Cadence:
 
 - Every material review round is a sign-off attempt: regenerate validator,
   review-target, archive, and registry receipts first when relevant.
-- Use all four installed personas with `gpt-5.5` and `high`.
+- Use all four installed personas with runtime-supported model and reasoning
+  configuration, recording those values only when Codex exposes them.
 - Give every reviewer the full current scope, current anchors, and current
   claim ceiling.
 - Use fresh reviewers every round. Do not reuse agents across rounds.

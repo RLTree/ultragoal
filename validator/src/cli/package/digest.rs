@@ -1,8 +1,6 @@
 use std::path::Path;
 use std::time::Instant;
 
-const RECEIPT_REL: &str = "validation_artifacts/observability/package-digest.json";
-
 pub(crate) fn run(root: &Path) -> Result<i32, String> {
     let started = Instant::now();
     let digest_result = crate::package::inventory::package_digest(root);
@@ -46,7 +44,7 @@ pub(crate) fn run(root: &Path) -> Result<i32, String> {
             check_id: "package-digest-observability-binding",
             claim_id: "source_package_digest",
             artifact_path: "plugin-manifest-draft.json",
-            receipt_path: RECEIPT_REL,
+            receipt_path: "none-read-only",
             status,
             failure_class,
             why_failed: &why_failed,
@@ -56,16 +54,10 @@ pub(crate) fn run(root: &Path) -> Result<i32, String> {
             blocked_claims: blocked_claims(),
             supported_claims,
             runtime: Some(runtime(started)),
-            emit: true,
+            emit: false,
         },
         candidate,
     )?;
-    let receipt_path = crate::output_path::literal_claim_artifact_path(
-        root,
-        RECEIPT_REL,
-        "package digest receipt",
-    );
-    crate::json_boundary::write_json(&receipt_path, &value)?;
     print_receipt(&value);
     Ok(i32::from(status != "pass"))
 }
@@ -76,11 +68,6 @@ fn print_receipt(value: &serde_json::Value) {
     }
 }
 
-#[cfg(test)]
-pub(crate) fn stdout_contract_for_test(value: &serde_json::Value) -> Vec<String> {
-    stdout_contract(value)
-}
-
 fn stdout_contract(value: &serde_json::Value) -> Vec<String> {
     let status = value["status"].as_str().unwrap_or("fail");
     let digest = value["candidate_digest"].as_str().unwrap_or("<missing>");
@@ -89,7 +76,7 @@ fn stdout_contract(value: &serde_json::Value) -> Vec<String> {
         lines.push(digest.to_string());
     }
     lines.push(format!(
-        "ultragoal-package-digest {status} proven={} candidate={digest} receipt={RECEIPT_REL} run_id={} correlation_id={} claim_impact={} supported_claims={} unsupported_claims={}",
+        "ultragoal-package-digest {status} proven={} candidate={digest} receipt=none-read-only run_id={} correlation_id={} claim_impact={} supported_claims={} unsupported_claims={}",
         if status == "pass" { "source_package_digest" } else { "none" },
         value["run_id"].as_str().unwrap_or("<missing>"),
         value["correlation_id"].as_str().unwrap_or("<missing>"),
@@ -127,7 +114,7 @@ fn runtime(started: Instant) -> crate::cli::observe::telemetry::RuntimeTelemetry
         backoff_ms: 0,
         saturation_status: "serial_command_typed".to_string(),
         repair_anchor_before: "package_digest_command_start".to_string(),
-        repair_anchor_after: "package_digest_observability_emit".to_string(),
+        repair_anchor_after: "package_digest_result_built_without_emission".to_string(),
     }
 }
 

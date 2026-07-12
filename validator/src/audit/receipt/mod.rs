@@ -219,18 +219,6 @@ pub(crate) fn current_exe_result(result: io::Result<PathBuf>) -> Result<PathBuf,
     result.map_err(|err| format!("current executable lookup failed: {err}"))
 }
 
-pub(crate) fn generated_dir_entries(
-    result: io::Result<std::fs::ReadDir>,
-) -> Result<std::fs::ReadDir, String> {
-    result.map_err(|err| format!("read generated dir: {err}"))
-}
-
-pub(crate) fn generated_entry_path(
-    result: io::Result<std::fs::DirEntry>,
-) -> Result<std::fs::DirEntry, String> {
-    result.map_err(|err| format!("read generated entry: {err}"))
-}
-
 pub(crate) fn canonical_or_original(path: &Path) -> PathBuf {
     match path.canonicalize() {
         Ok(canonical) => canonical,

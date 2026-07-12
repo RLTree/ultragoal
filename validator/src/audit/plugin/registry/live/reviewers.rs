@@ -1,22 +1,48 @@
-pub(super) const REQUIRED_REVIEWERS: &[(&str, &str, &str)] = &[
+pub(super) const REQUIRED_REVIEWERS: &[(&str, &str)] = &[
     (
-        "harness_contract_claim_falsifier",
-        "contract_claim_falsifier",
-        "custom-agents/harness-contract-claim-falsifier.toml",
+        crate::agent_roles::CANONICAL_AGENT_ROLES[0].name,
+        crate::agent_roles::CANONICAL_AGENT_ROLES[0].manifest_path,
     ),
     (
-        "harness_orchestration_recovery_falsifier",
-        "orchestration_recovery_falsifier",
-        "custom-agents/harness-orchestration-recovery-falsifier.toml",
+        crate::agent_roles::CANONICAL_AGENT_ROLES[1].name,
+        crate::agent_roles::CANONICAL_AGENT_ROLES[1].manifest_path,
     ),
     (
-        "harness_security_trust_boundary_falsifier",
-        "security_trust_boundary_falsifier",
-        "custom-agents/harness-security-trust-boundary-falsifier.toml",
+        crate::agent_roles::CANONICAL_AGENT_ROLES[5].name,
+        crate::agent_roles::CANONICAL_AGENT_ROLES[5].manifest_path,
     ),
     (
-        "harness_product_simplicity_falsifier",
-        "product_simplicity_falsifier",
-        "custom-agents/harness-product-simplicity-falsifier.toml",
+        crate::agent_roles::CANONICAL_AGENT_ROLES[2].name,
+        crate::agent_roles::CANONICAL_AGENT_ROLES[2].manifest_path,
     ),
 ];
+
+#[cfg(test)]
+mod tests {
+    use std::collections::BTreeSet;
+
+    #[test]
+    fn registry_reviewers_are_exact_canonical_review_subset() {
+        let got = super::REQUIRED_REVIEWERS
+            .iter()
+            .map(|(role, path)| {
+                assert_eq!(
+                    crate::agent_roles::by_name(role).unwrap().manifest_path,
+                    *path
+                );
+                *role
+            })
+            .collect::<BTreeSet<_>>();
+        let expected = [
+            "claim-falsifier",
+            "orchestration-recovery-reviewer",
+            "security-reviewer",
+            "product-journey-reviewer",
+        ]
+        .into_iter()
+        .collect::<BTreeSet<_>>();
+        assert_eq!(got, expected);
+        assert!(!got.contains("repo-recon"));
+        assert!(!got.contains("research-verifier"));
+    }
+}

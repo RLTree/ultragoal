@@ -1,0 +1,66 @@
+{
+  "schema_version": "NonAuthoritativeContextRegistry-v2",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "contexts": [
+    {
+      "context_id": "successor-candidate-v1",
+      "root": "docs/ultragoal-contract-2026-07-successor-candidate-v1",
+      "zip_include_manifest_sha256": "2fb9b8e68c105ff92d6436801bf205d4cc528dd330292c89b0005909aab5231c",
+      "content_set_digest": "f450645e73f0c324b2c9d8ca041142fff3ed4535c815ac80f87ed39c8a72d795",
+      "contract_manifest_sha256": "7489750e9a42ed6c50b64ec07c30242302b501956fdf4726ce56bbf6e680d91d",
+      "candidate_contract_id": "harness-ultragoal-successor-contract-candidate-v1",
+      "authority": {
+        "binding": false
+      },
+      "active_contract_replaced": false,
+      "status": "candidate_for_independent_review"
+    }
+  ],
+  "exact_contexts": [
+    {
+      "context_id": "predecessor-contract-2026-07",
+      "root": "docs/ultragoal-contract-2026-07",
+      "content_set_digest": "73271242afceda73d9ec73f9b2ba3c72026cdcbc0dfed3372f991585434115c6",
+      "files": [
+        {"path":"01-prompt-product-doctrine-and-base-contract.md","sha256":"3a2f4d6ee7c881ab822373add66b20a3b917c7e2683ef8b9802bdb66cca15afa"},
+        {"path":"02-prompt-gates-089-091-cli-rust.md","sha256":"a95da99b5c04aa7bc4ac1f60eef1c54b24515abd42a42535272311342f1a3d89"},
+        {"path":"03-prompt-gate-092-observability-fast-loop.md","sha256":"faaaecc9d071b51e27219e40553eb8d89ab663087e5a0c89f175148b9f707b16"},
+        {"path":"04-prompt-gates-093-105-research-product-evolution.md","sha256":"2f58ef19b7ea2683b22c1ac5208c82c6a07f2870df8a1bdbac10a6e9010250ea"},
+        {"path":"05-prompt-update-goal-stop-conditions.md","sha256":"d3b28c2923d4f389cb741950cdae072e990f83ba24a8b64280edeca1506f24b7"},
+        {"path":"10-spine-operating-rules-and-doctrine.md","sha256":"2717bb0d3be7f4c06383ce3cf9728170c22aa8bfdca8830e7b018b0498c06511"},
+        {"path":"11-spine-phase-order.md","sha256":"3c4305b2b6f718873e8429e1da53986648ff061ac644883c8a85f644dced0349"},
+        {"path":"12-spine-lane-forbidden-parallel-rules.md","sha256":"652977cbab3b06cb47f118b9e3717347e4ff246af38cf8c373247b6707247e0b"},
+        {"path":"MIGRATION-INDEX.md","sha256":"5541fd021f894d0e78a7df617eb9e20836d389b5a533971023d6746d1da051a4"},
+        {"path":"README.md","sha256":"2f894949d5a1724f0848a35d55e650c1340c5890bb502c417fd14e283d902ed0"},
+        {"path":"checklist/20-checklist-context-ledger-and-gates-000-088.md","sha256":"bbeda202c14c3ec4c3d593ecba9268640ab5f5d5d450ff89284f58b48095bebe"},
+        {"path":"checklist/21-checklist-gate-089-cli-control-plane.md","sha256":"20e9e25c5f2b92bff3d64ea70577c5b00e9f36fa83b257349dd4c3c989fc3843"},
+        {"path":"checklist/22-checklist-gates-090-091-namespace-rust-gc.md","sha256":"75faee250fb6de75bbbe46402c75d76bc0fcdc79c48e4b0e00041bb12e0425ea"},
+        {"path":"checklist/23-checklist-gate-092-observability-fast-loop.md","sha256":"10e62690d706d063f9aaaa290b4f415174f9df1733189b45c808a52d2eaaed06"},
+        {"path":"checklist/24-checklist-gates-093-105-research-product-evolution.md","sha256":"11b99c658234d427a3aa0641381a81178868dbd74e7bd0af67514967ad4d818f"},
+        {"path":"checklist/25-checklist-validation-update-goal-final-stop.md","sha256":"d3508cc3cac6093299a01a549dda1f56dbe4211c6be50e4fadffc132e51a6a2b"}
+      ],
+      "authority": {"binding": false},
+      "active_contract_replaced": true,
+      "replacement_contract_id": "harness-ultragoal-successor-contract-v2",
+      "status": "replaced_historical_context"
+    }
+  ],
+  "evidence_contexts": [
+    {
+      "context_id": "successor-worker-results",
+      "root": "docs/ultragoal-successor-live/worker-results",
+      "path_policy": "lease-json-worker-result-v1",
+      "schema_ref": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json#/worker_output_schema",
+      "historical_content_set_digest": "0055b9045e3631cad124e4e194985af11137a47d597f60657255e432b53e2f8a",
+      "historical_files": [
+        {"path":"LEASE-N03-CAPTURE-001.json","sha256":"3dde558f1ff010b4a773287a4ec6bab2e2a6b0351b31ca03f407090e96560315"},
+        {"path":"LEASE-N03-CAPTURE-002.json","sha256":"c7d9eb9cb283756036e3e64600d4e57de23c183a45c00dd8c15fb6f94d0d94d4"},
+        {"path":"LEASE-N03-CAPTURE-003.json","sha256":"e55a026b7993efc08403bede6ff74623c09dea7344d07dfd6531753b8ab2215f"},
+        {"path":"LEASE-N03-STATE-001.json","sha256":"1b6e01b3afcc8b668cd970f227e22c5bb8200fe3b41f14410816b8f219b769d3"},
+        {"path":"LEASE-N03-STATE-002.json","sha256":"1efad6e43cefdb3c6765be3a617b5e4c196940edb0ee11302305d4049611a813"}
+      ],
+      "authority": {"binding": false},
+      "status": "run_scoped_evidence_only"
+    }
+  ]
+}

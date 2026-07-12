@@ -1,26 +1,16 @@
-# Harness Improvement Loop
+---
+name: agent-improvement-loop
+description: Deprecated compatibility alias for explicit `$harness-ultragoal:agent-improvement-loop` requests. Preserve the request and route it to `$harness-ultragoal:improve-and-maintain`; do not use this alias as independent workflow authority.
+---
 
-Use this skill when a Harness Ultragoal run, review, eval, product check, or validator failure should become durable harness improvement rather than another local fix.
+# Deprecated Compatibility Route
 
-## Operating Loop
+> Compatibility warning: this legacy alias is not an independent workflow or authority. Its canonical target is `$harness-ultragoal:improve-and-maintain`.
 
-1. Capture the current same-candidate run through `ultragoal observe` or the law-bearing command receipt.
-2. Bind feedback to exact run, span, check, law, claim, artifact, and candidate digest.
-3. Cluster repeated failures into a stable failure mode.
-4. Generate evals, red fixtures, green fixtures, tamper fixtures, or validator tests from the cluster.
-5. Rank candidate repairs only through a governed HALO adapter or fail-closed manual observation.
-6. Build a Codex handoff with exact files, commands, expected outputs, forbidden shortcuts, and claim ceiling.
-7. Implement the smallest repair, rerun narrow proof, compare before/after telemetry, then rerun broad validation.
-8. Promote repeated fixes into standards, schemas, fixtures, validators, setup/retrofit templates, package inventory, and claim guards.
-
-Raw traces, feedback, model output, promptfoo output, HALO output, reviewer agreement, checklist prose, and hand-authored receipts are observations only. They cannot close an improvement loop.
-
-## Required Command
-
-Run:
-
-```bash
-ultragoal --root . improvement-loop prove --receipt validation_artifacts/improvement-loop/loop-closure-receipt.json
-```
-
-The receipt is authoritative only when it is current, same-candidate, schema-valid, observability-bound, and all required stages are complete.
+1. Preserve the user's full request, context, constraints, and authorized effects unchanged.
+2. Before routing, inspect the request and supplied context for Harness Ultragoal skill tokens. If it contains another distinct explicit Harness Ultragoal skill token or selects multiple compatibility routes, report a causal compatibility-route conflict and perform no routing or effect.
+3. Invoke `$harness-ultragoal:improve-and-maintain` with that preserved input.
+4. Follow only the canonical target's current contract. Do not restore or apply legacy lane, gate, receipt, finalizer, command, tool, helper, schema, state-store, or generated authority from this wrapper.
+5. Perform no hidden writes or external effects while resolving the route. Any later effect must remain authorized by the original request and the canonical target.
+6. Fail closed if the canonical target is unavailable: report the exact blocker and do not fall back, infer semantic equivalence, or claim adoption, discovery, runtime behavior, retirement, readiness, release, or completion.
+7. Never substitute documentation, tests, receipts, generated rows, telemetry, signatures, or provenance for the requested product behavior.

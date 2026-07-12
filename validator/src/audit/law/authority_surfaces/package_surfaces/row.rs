@@ -84,6 +84,28 @@ pub(super) fn package_resource(rel: &str) -> PackageSurfaceRow {
     )
 }
 
+pub(super) fn retained_context(rel: &str, replacement_targets: &[String]) -> PackageSurfaceRow {
+    let mut row = from_parts(
+        "retained_context",
+        rel,
+        "preserved predecessor context with adopted canonical replacements",
+        "retained_context_no_claim",
+        replacement_targets.first().map(String::as_str),
+    );
+    row.canonical_owner = replacement_targets.join(",");
+    row
+}
+
+pub(super) fn invalid_generated_authority(rel: &str) -> PackageSurfaceRow {
+    from_parts(
+        "generated_artifact",
+        rel,
+        "generated package surface with unavailable authority disposition",
+        "invalid_generated_authority",
+        None,
+    )
+}
+
 pub(super) fn value(row: PackageSurfaceRow) -> Value {
     let fixture_ids = proof_binding::fixture_ids(&row);
     let receipt_ids = proof_binding::receipt_ids(&row);
@@ -125,7 +147,7 @@ pub(super) fn claim_surfaces(proof_surface: &str) -> Vec<&'static str> {
     match proof_surface {
         "test_validation" | "fixture_catalog" => vec!["validation"],
         "generated_projection" => vec!["source_local_projection"],
-        "external_debug_no_claim" => Vec::new(),
+        "external_debug_no_claim" | "retained_context_no_claim" | "invalid_no_claim" => Vec::new(),
         _ => vec!["source_local"],
     }
 }
@@ -185,6 +207,8 @@ fn proof_surface(authority_level: &str) -> &'static str {
         "fixture_catalog_materialization" => "fixture_catalog",
         "generated_projection" => "generated_projection",
         "external_debug_no_claim" => "external_debug_no_claim",
+        "retained_context_no_claim" => "retained_context_no_claim",
+        "invalid_generated_authority" => "invalid_no_claim",
         _ => "source",
     }
 }

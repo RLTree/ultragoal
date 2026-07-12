@@ -1,11 +1,10 @@
-persona: product_simplicity_falsifier
-model: gpt-5.5
-reasoning_effort: high
+role: product-journey-reviewer
 sandbox_mode: read-only
-persona_prompt_path: agents/product-simplicity-falsifier.md
-custom_agent_path: custom-agents/harness-product-simplicity-falsifier.toml
+reviewer_authority: falsification_only_cannot_raise_claims
+runtime_metadata_exposure: unavailable
+agent_manifest_path: .codex/agents/product-journey-reviewer.toml
 validator_receipt_digest: sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa
 review_target_digest: sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 archive_digest: sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 scope: full_current_scope
-product_fitness_owner: product_simplicity_falsifier
+product_fitness_owner: product-journey-reviewer

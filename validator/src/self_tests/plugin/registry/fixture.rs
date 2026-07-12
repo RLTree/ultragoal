@@ -92,41 +92,47 @@ pub(crate) fn fail_closed_registry_receipt(current: &str, raw_digest: &str) -> V
     })
 }
 
+pub(crate) fn fail_closed_raw_observation(current: &str) -> Value {
+    json!({
+        "schema": "harness-ultragoal.registry-observation.v1",
+        "status": "fail",
+        "candidate_digest": current,
+        "generated_at": "2026-06-27T00:00:00Z",
+        "observed": "live same-surface registry proof unavailable",
+        "probe": {
+            "source": "ultragoal.registry_probe",
+            "command": "ultragoal registry probe",
+            "capture_method": "fail_closed_no_capability"
+        },
+        "unsupported_claims": [
+            "active_registry_exposure",
+            "reviewer_exposure",
+            "review_readiness",
+            "release_readiness",
+            "completion",
+            "update_goal_eligibility"
+        ]
+    })
+}
+
 fn agent_types() -> Vec<Value> {
-    [
-        (
-            "harness_contract_claim_falsifier",
-            "contract_claim_falsifier",
-            "custom-agents/harness-contract-claim-falsifier.toml",
-        ),
-        (
-            "harness_orchestration_recovery_falsifier",
-            "orchestration_recovery_falsifier",
-            "custom-agents/harness-orchestration-recovery-falsifier.toml",
-        ),
-        (
-            "harness_security_trust_boundary_falsifier",
-            "security_trust_boundary_falsifier",
-            "custom-agents/harness-security-trust-boundary-falsifier.toml",
-        ),
-        (
-            "harness_product_simplicity_falsifier",
-            "product_simplicity_falsifier",
-            "custom-agents/harness-product-simplicity-falsifier.toml",
-        ),
-    ]
-    .into_iter()
-    .map(|(agent_type, persona, custom_agent_path)| {
+    crate::review::round::config::REVIEW_ROLES
+        .iter()
+        .map(|spec| {
         json!({
-            "agent_type": agent_type,
-            "persona": persona,
-            "custom_agent_path": custom_agent_path,
+            "role": spec.role_name,
+            "agent_manifest_path": spec.agent_manifest_path,
+            "agent_manifest_digest": crate::self_tests::boundaries::workspace_fixtures::sha('a'),
+            "source_manifest_present": true,
+            "sandbox_mode": "read-only",
             "disk_cache_synced": true,
             "global_toml_present": true,
-            "exposed": true
+            "runtime_metadata_status": "unavailable",
+            "custom_agent_discovery_status": "unavailable",
+            "exposed": false
         })
-    })
-    .collect()
+        })
+        .collect()
 }
 
 fn capability_gap(raw_digest: &str) -> Value {

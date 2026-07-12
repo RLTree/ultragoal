@@ -17,7 +17,10 @@ pub(super) fn event(
 ) -> Value {
     let failure = failure.map(redact_sensitive_text);
     let failure_class = failure_class::for_observe_failure(command.operation, failure.as_deref());
-    let receipt_path = redact_sensitive_text(&command.receipt_rel().to_string_lossy());
+    let receipt_path = command
+        .selected_receipt_rel()
+        .map(|path| redact_sensitive_text(&path.to_string_lossy()))
+        .unwrap_or_else(|| "none-read-only".to_string());
     let next_repair = claims::next_repair_for(command.operation, status, failure.as_deref());
     let mut event = json!({
         "schema": types::EVENT_SCHEMA,

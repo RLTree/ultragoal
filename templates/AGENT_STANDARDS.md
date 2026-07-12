@@ -61,9 +61,9 @@ record the gap before acting.
 - Coverage proof is a completion obligation for material source claims. Load
   `agent-standards/02-boundaries-validation-and-enforcement.md` and
   `agent-standards/07-cli-authority-and-proof-surfaces.md`.
-- Future Codex app worktree lane owners default to `gpt-5.5` with `low`
-  reasoning unless a lane contract justifies higher reasoning. Material
-  reviewers still use `gpt-5.5` with `high`.
+- Future Codex app worktree lane owners use the lowest supported reasoning level
+  that fits the named risk; material reviewers may require higher reasoning.
+  Record model and reasoning only when Codex exposes them, otherwise as unknown.
 - Branch first, worktree second. A missing branch ref is an orchestration
   failure.
 - Product-surface claims require Product Success Contract lineage, Product
@@ -89,8 +89,9 @@ The canonical material review team is:
 4. Product and Simplicity Falsifier.
 
 Every material review round is a sign-off attempt using all four canonical
-personas with `gpt-5.5`, `high`, full current scope, fresh reviewers, current
-anchors, and the current claim ceiling. All four must return `SIGN_OFF` in the
+personas with full current scope, fresh reviewers, current anchors, and the
+current claim ceiling. Use only runtime-supported model and reasoning
+configuration, and record it only when exposed. All four must return `SIGN_OFF` in the
 same round. Any `REVISE_BEFORE_NEXT_PHASE` or `BLOCKED` invalidates the round;
 repair, regenerate anchors, close reviewers, and start a fresh full-scope
 round.

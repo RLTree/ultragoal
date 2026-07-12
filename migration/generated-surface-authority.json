@@ -1,5 +1,90 @@
 {
-  "schema_version": "GeneratedSurfaceAuthority-v1",
+  "schema_version": "GeneratedSurfaceAuthority-v2",
   "contract_id": "harness-ultragoal-successor-contract-v2",
-  "surfaces": []
+  "surfaces": [
+    {
+      "disposition": "retained_context",
+      "output": "docs/generated/observability/command-inventory.json",
+      "sha256": "4ccb8fb8c3e9f175ed898b497fa4b36ef2642421f424a11e407029e6ad7fd12e",
+      "reason": "Retained predecessor observability catalog; the HCT-OBSERVE successor is unavailable and active package or query authority is forbidden.",
+      "replacement_targets": [
+        "HCT-INVENTORY",
+        "HCT-OBSERVE"
+      ],
+      "preserve": true,
+      "physical_deletion_authorized": false
+    },
+    {
+      "disposition": "retained_context",
+      "output": "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
+      "sha256": "34eae3d4c4cab4de549d0d1f3f37423b6f55ef24cd2e2ac1b6b7ecbe58951814",
+      "reason": "Retained predecessor product-success example; it is not claim authority and HCT-CLAIMS is its canonical replacement.",
+      "replacement_targets": ["HCT-CLAIMS"],
+      "preserve": true,
+      "physical_deletion_authorized": false
+    },
+    {
+      "disposition": "retained_context",
+      "output": "examples/generated/READY_FOR_MERGE-LANE-001.json",
+      "sha256": "cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
+      "reason": "Retained predecessor readiness example; it cannot authorize merge, readiness, release, or completion.",
+      "replacement_targets": ["HCT-CLAIMS"],
+      "preserve": true,
+      "physical_deletion_authorized": false
+    },
+    {
+      "disposition": "retained_context",
+      "output": "examples/generated/READY_FOR_MERGE-minimal-goal-run.json",
+      "sha256": "62267add53035a3dcd9bbc4f4568bc22f0bf12fe0d6d122577b2bf72bbcd2c1d",
+      "reason": "Retained predecessor readiness fixture; typed HCT-CLAIMS decisions replace its static authority.",
+      "replacement_targets": ["HCT-CLAIMS"],
+      "preserve": true,
+      "physical_deletion_authorized": false
+    },
+    {
+      "disposition": "retained_context",
+      "output": "examples/generated/READY_FOR_MERGE-non-product-engineering-language.json",
+      "sha256": "44dd286634c864fedbb306b7e762480d1645e5a834f2547322c6dea1174024aa",
+      "reason": "Retained negative readiness fixture; it is test context and never a product or release decision.",
+      "replacement_targets": ["HCT-CLAIMS"],
+      "preserve": true,
+      "physical_deletion_authorized": false
+    },
+    {
+      "disposition": "retained_context",
+      "output": "examples/generated/READY_FOR_MERGE-non-product-feature-completion.json",
+      "sha256": "8c2a29c76397f43f1012d93b05264feef1e697707abb8611e2903c4e6ecb0b5e",
+      "reason": "Retained negative readiness fixture; it is test context and never a product or release decision.",
+      "replacement_targets": ["HCT-CLAIMS"],
+      "preserve": true,
+      "physical_deletion_authorized": false
+    },
+    {
+      "disposition": "retained_context",
+      "output": "examples/generated/READY_FOR_MERGE-proof-surface-negative-probe.json",
+      "sha256": "8e9aff3a6b22967e9505ba30af80c32714610e2918b9d84763dfa73362c077a4",
+      "reason": "Retained negative proof-surface fixture; only HCT-CLAIMS may emit a claim decision.",
+      "replacement_targets": ["HCT-CLAIMS"],
+      "preserve": true,
+      "physical_deletion_authorized": false
+    },
+    {
+      "disposition": "retained_context",
+      "output": "examples/generated/READY_FOR_MERGE-two-lane-ready-dependency.json",
+      "sha256": "6d455c46377d1c2fdbd87885a37d18b71f3435232cffb9b0268228923d2b3212",
+      "reason": "Retained predecessor lane-readiness fixture; static dependency rows cannot raise a claim ceiling.",
+      "replacement_targets": ["HCT-CLAIMS"],
+      "preserve": true,
+      "physical_deletion_authorized": false
+    },
+    {
+      "disposition": "retained_context",
+      "output": "examples/generated/READY_FOR_MERGE.example.json",
+      "sha256": "cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
+      "reason": "Retained predecessor readiness example; it cannot authorize merge, readiness, release, or completion.",
+      "replacement_targets": ["HCT-CLAIMS"],
+      "preserve": true,
+      "physical_deletion_authorized": false
+    }
+  ]
 }

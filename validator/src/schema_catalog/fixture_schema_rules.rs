@@ -1,4 +1,4 @@
-use crate::audit::contract::{REQUIRED_AGENTS, REQUIRED_SKILLS};
+use crate::audit::contract::REQUIRED_SKILLS;
 use serde_json::Value;
 use std::collections::BTreeSet;
 
@@ -130,7 +130,6 @@ fn backlog_errors(value: &Value) -> Vec<String> {
 fn plugin_manifest_errors(value: &Value) -> Vec<String> {
     let mut errors = Vec::new();
     let skills = names(value, "skills");
-    let agents = names(value, "agents");
     for required in REQUIRED_SKILLS {
         if !skills.contains(*required) {
             errors.push(format!(
@@ -138,10 +137,43 @@ fn plugin_manifest_errors(value: &Value) -> Vec<String> {
             ));
         }
     }
-    for required in REQUIRED_AGENTS {
-        if !agents.contains(*required) {
+    let agents = value
+        .get("agents")
+        .and_then(Value::as_array)
+        .cloned()
+        .unwrap_or_default();
+    let roles = crate::agent_roles::CANONICAL_AGENT_ROLES;
+    if agents.len() != roles.len() {
+        errors.push(format!(
+            "plugin_manifest.agents expected {} canonical roles, found {}",
+            roles.len(),
+            agents.len()
+        ));
+    }
+    for role in roles {
+        let matches = agents
+            .iter()
+            .filter(|row| row.get("name").and_then(Value::as_str) == Some(role.name))
+            .collect::<Vec<_>>();
+        if matches.len() != 1 {
             errors.push(format!(
-                "plugin_manifest.agents missing required {required}"
+                "plugin_manifest.agents missing canonical {}",
+                role.name
+            ));
+            continue;
+        }
+        if matches[0].get("path").and_then(Value::as_str) != Some(role.manifest_path) {
+            errors.push(format!(
+                "plugin_manifest.agents canonical path mismatch {}",
+                role.name
+            ));
+        }
+    }
+    for row in &agents {
+        let name = row.get("name").and_then(Value::as_str).unwrap_or("");
+        if crate::agent_roles::by_name(name).is_none() {
+            errors.push(format!(
+                "plugin_manifest.agents unexpected canonical role {name}"
             ));
         }
     }
@@ -156,4 +188,44 @@ fn names<'a>(value: &'a Value, key: &str) -> BTreeSet<&'a str> {
         .flatten()
         .filter_map(|row| row.get("name").and_then(Value::as_str))
         .collect()
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    #[test]
+    fn plugin_manifest_agent_rules_bind_exact_six_names_and_paths() {
+        let canonical = json!({
+            "skills": crate::audit::contract::REQUIRED_SKILLS.iter()
+                .map(|name| json!({"name":name})).collect::<Vec<_>>(),
+            "agents": crate::agent_roles::CANONICAL_AGENT_ROLES.iter()
+                .map(|role| json!({"name":role.name,"path":role.manifest_path}))
+                .collect::<Vec<_>>()
+        });
+        assert!(super::plugin_manifest_errors(&canonical).is_empty());
+
+        let mut substituted = canonical;
+        substituted["agents"][0]["path"] =
+            json!("custom-agents/harness-contract-claim-falsifier.toml");
+        substituted["agents"].as_array_mut().unwrap().push(json!({
+            "name":"seventh-role", "path":".codex/agents/seventh-role.toml"
+        }));
+        let errors = super::plugin_manifest_errors(&substituted);
+        assert!(
+            errors
+                .iter()
+                .any(|error| error.contains("expected 6 canonical roles"))
+        );
+        assert!(
+            errors
+                .iter()
+                .any(|error| error.contains("canonical path mismatch"))
+        );
+        assert!(
+            errors
+                .iter()
+                .any(|error| error.contains("unexpected canonical role"))
+        );
+    }
 }

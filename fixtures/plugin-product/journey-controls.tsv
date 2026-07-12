@@ -1,0 +1,11 @@
+control_id	journey	required_source_rule
+fresh-setup	fresh repository	inspect and plan are zero-write; apply requires the accepted unchanged plan; verify checks real behavior
+partial-retrofit	partial or conflicting repository	preserve all unrelated state and keep unresolved ownership conflicts visible
+routine-dirty-tree	routine affected validation	never stash clean reset checkout stage commit or rewrite unrelated files
+routine-repeat-use	unchanged second run	report executed and verified-reused work separately using current candidate keys
+failure-diagnosis	failed command	separate observed fact from inference and return one causal repair plus exact rerun
+interrupted-recovery	durable goal after interruption	recompute live leases and candidate before resuming and preserve unique uncommitted state
+strict-proof	one named claim	bind positive and false-pass controls to the exact truth surface and independent reviewer
+improvement-migration	evaluation and migration	audit tasks and scorers then inventory readers and writers and prove no duplicate authority before retirement
+fresh-agent-comprehension	new task without implementer context	enter through one front door select one primary route and disclose effects and unavailable capabilities
+source-layer-ceiling	all source fixtures	source docs and tests never prove package install discovery runtime journey readiness release or completion

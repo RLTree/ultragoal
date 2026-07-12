@@ -1,4 +1,4 @@
-use super::digest::{file_identity, set_test_pauses};
+use super::digest::{file_identity, file_identity_regular, set_test_pauses};
 use crate::context::{BuildRequest, LiveContext};
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -115,6 +115,30 @@ fn regular_file_swap_between_identity_and_open_is_rejected() {
             .to_string()
             .contains("file identity changed")
     );
+}
+
+#[cfg(unix)]
+#[test]
+fn plugin_regular_identity_rejects_manifest_and_hook_symlink_swaps() {
+    for (label, relative) in [
+        ("plugin-manifest-symlink-swap", ".codex-plugin/plugin.json"),
+        ("plugin-hook-symlink-swap", "hooks/hooks.json"),
+    ] {
+        let repo = Repo::new(label, &[(relative, b"{}\n")]);
+        let context = LiveContext::build(BuildRequest::new(&repo.root)).unwrap();
+        let reads = context.begin_read_session().unwrap();
+        let target = repo.root.join(relative);
+        let swap_target = target.clone();
+        set_test_pauses(150, 0);
+        let swap = std::thread::spawn(move || {
+            std::thread::sleep(Duration::from_millis(30));
+            fs::rename(&swap_target, swap_target.with_extension("original")).unwrap();
+            std::os::unix::fs::symlink("/dev/null", &swap_target).unwrap();
+        });
+        let result = file_identity_regular(&reads, &target);
+        swap.join().unwrap();
+        assert!(result.is_err(), "{relative} symlink swap was accepted");
+    }
 }
 
 #[test]

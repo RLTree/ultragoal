@@ -8,43 +8,83 @@ mod specialized;
 #[cfg(test)]
 mod tests;
 
+pub(crate) fn parse_public_args_from(mut raw: Vec<String>) -> Result<Args, String> {
+    let root = extract_root(&mut raw)?;
+    let outcome = cli::successor_public::parse_public(&raw)?;
+    Ok(Args {
+        root: root.into_path_buf(),
+        command: Command::Successor(outcome),
+    })
+}
+
+#[cfg(test)]
 pub(crate) fn parse_args_from(mut raw: Vec<String>) -> Result<Args, String> {
-    let started = std::time::Instant::now();
+    let root = extract_root(&mut raw)?;
     if raw.is_empty() {
         return Err(usage());
     }
-    let mut root = authority::CliRoot::workspace_default();
-    let mut i = 0;
-    while i < raw.len() {
-        match raw[i].as_str() {
-            "--root" => {
-                let value_index = i + 1;
-                if value_index >= raw.len() {
-                    return Err("missing value for --root".to_string());
-                }
-                root = authority::CliRoot::from_option_value(&raw[value_index])?;
-                raw.drain(i..=i + 1);
-            }
-            _ => i += 1,
-        }
-    }
-    if raw.is_empty() {
-        return Err(usage());
-    }
-    let command = parse_command(&raw).map_err(|err| {
-        let elapsed_ms = u64::try_from(started.elapsed().as_millis())
-            .unwrap_or(u64::MAX)
-            .max(1);
-        let _ = cli::audit::emit_parse_error_observability(root.as_path(), &raw, &err, elapsed_ms);
-        err
-    })?;
+    let command = parse_command(&raw)?;
     Ok(Args {
         root: root.into_path_buf(),
         command,
     })
 }
 
+fn extract_root(raw: &mut Vec<String>) -> Result<authority::CliRoot, String> {
+    let mut root = authority::CliRoot::workspace_default();
+    let output_mode = if raw.iter().any(|value| value == "--json") {
+        cli::successor::OutputMode::Json
+    } else {
+        cli::successor::OutputMode::Human
+    };
+    let mut root_seen = false;
+    let mut i = 0;
+    while i < raw.len() {
+        match raw[i].as_str() {
+            "--root" => {
+                let value_index = i + 1;
+                if root_seen {
+                    return Err(root_parse_failure(
+                        cli::successor::ParseErrorId::DuplicateOption,
+                        output_mode,
+                    ));
+                }
+                if value_index >= raw.len() || raw[value_index].starts_with('-') {
+                    return Err(root_parse_failure(
+                        cli::successor::ParseErrorId::MissingOptionValue,
+                        output_mode,
+                    ));
+                }
+                if raw[value_index].len() > cli::successor::MAX_ARGUMENT_BYTES {
+                    return Err(root_parse_failure(
+                        cli::successor::ParseErrorId::ArgumentTooLarge,
+                        output_mode,
+                    ));
+                }
+                root = authority::CliRoot::from_option_value(&raw[value_index]).map_err(|_| {
+                    root_parse_failure(cli::successor::ParseErrorId::InvalidPath, output_mode)
+                })?;
+                root_seen = true;
+                raw.drain(i..=i + 1);
+            }
+            _ => i += 1,
+        }
+    }
+    Ok(root)
+}
+
+fn root_parse_failure(
+    id: cli::successor::ParseErrorId,
+    output_mode: cli::successor::OutputMode,
+) -> String {
+    cli::successor::ParseFailure::new(id, output_mode).render()
+}
+
+#[cfg(test)]
 pub(crate) fn parse_command(raw: &[String]) -> Result<Command, String> {
+    if successor_test_intent(raw) {
+        return cli::successor_public::parse_public(raw).map(Command::Successor);
+    }
     if help_request::is_help_request(raw) {
         return Ok(Command::Help);
     }
@@ -117,6 +157,35 @@ pub(crate) fn parse_command(raw: &[String]) -> Result<Command, String> {
         }
         _ => specialized::parse(raw)?,
     })
+}
+
+#[cfg(test)]
+fn successor_test_intent(raw: &[String]) -> bool {
+    let positional = raw
+        .iter()
+        .filter(|token| token.as_str() != "--json")
+        .take(2)
+        .map(String::as_str)
+        .collect::<Vec<_>>();
+    let Some(head) = positional.first().copied() else {
+        return false;
+    };
+    if matches!(head, "--help" | "-h" | "--version") {
+        return true;
+    }
+    let Some(group) = cli::successor::Group::parse(head) else {
+        return false;
+    };
+    match group {
+        cli::successor::Group::Observe => {
+            matches!(positional.get(1).copied(), Some("query" | "export"))
+        }
+        cli::successor::Group::Package => matches!(
+            positional.get(1).copied(),
+            Some("build" | "verify" | "install-test" | "publish")
+        ),
+        _ => true,
+    }
 }
 
 fn strip_build_or_verify(args: &[String]) -> &[String] {

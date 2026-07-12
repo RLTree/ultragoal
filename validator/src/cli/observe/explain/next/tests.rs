@@ -1,47 +1,62 @@
-use super::{inventory_row, missing_surfaces};
+use super::plan;
+use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 
-#[test]
-fn inventory_row_routes_each_control_board_family_to_product_inventory() {
-    let inventory = json!({
-        "command_observability_inventory": {"row": {"family": "commands"}},
-        "surface_inventory": {"row": {"family": "surfaces"}},
-        "operating_loop_inventory": {"row": {"family": "operating_loop"}},
-        "signal_inventory": {"row": {"family": "signals"}},
-        "validator_check_inventory": {"row": {"family": "validator_checks"}},
-        "receipt_proof_inventory": {"row": {"family": "receipts"}},
-        "fixture_report_inventory": {"row": {"family": "fixtures"}},
-        "package_plugin_setup_retrofit_inventory": {"row": {"family": "package_setup"}},
-        "long_running_path_inventory": {"row": {"family": "long_running"}},
-        "external_live_path_inventory": {"row": {"family": "external_live"}},
-        "claim_guard_inventory": {"row": {"family": "claim_guards"}}
-    });
-
-    for family in [
-        "commands",
-        "surfaces",
-        "operating_loop",
-        "signals",
-        "validator_checks",
-        "receipts",
-        "fixtures",
-        "package_setup",
-        "long_running",
-        "external_live",
-        "claim_guards",
-    ] {
-        assert_eq!(inventory_row(&inventory, family, "row")["family"], family);
+fn command() -> ObserveCommand {
+    ObserveCommand {
+        operation: ObserveOperation::ExplainNext,
+        receipt: None,
+        query: None,
+        run_id: None,
+        correlation_id: None,
+        claim_id: None,
+        check_id: None,
+        law_id: None,
+        target_command: None,
+        target_family: None,
+        row_limit: 100,
+        byte_limit: 4096,
+        timeout_ms: 1000,
     }
-    assert!(inventory_row(&inventory, "unknown", "row").is_null());
 }
 
 #[test]
-fn missing_surfaces_falls_back_to_first_incomplete_next_surface() {
-    let missing = missing_surfaces(
-        &json!({}),
-        &json!({"next_unobservable_surface": "same-candidate trace proof"}),
-    );
+fn next_plan_is_an_explicit_unavailable_blocker_with_no_supported_claims() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("next-unavailable");
+    std::fs::create_dir_all(&root).expect("root");
+    let state = json!({"candidate_digest":"sha256:current"});
+    let value = plan(&root, &command(), &state).expect("bounded unavailable plan");
 
-    assert_eq!(missing, vec!["same-candidate trace proof".to_string()]);
-    assert!(missing_surfaces(&json!({}), &json!({})).is_empty());
+    assert_eq!(value["status"], "fail");
+    assert_eq!(value["target_row"], "HCT-OBSERVE");
+    assert_eq!(
+        value["why_failed"],
+        "HCT-OBSERVE successor catalog unavailable/not adopted"
+    );
+    assert_eq!(value["supported_claims"], json!([]));
+    assert_eq!(value["required_query_commands"], json!([]));
+    assert!(!root.join("validation_artifacts").exists());
+    std::fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
+fn next_plan_is_identical_across_static_inventory_mutations_and_writes_nothing() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("next-static-bait");
+    let directory = root.join("docs/generated/observability");
+    std::fs::create_dir_all(&directory).expect("directory");
+    let path = directory.join("command-inventory.json");
+    let state = json!({"candidate_digest":"sha256:current"});
+
+    std::fs::write(&path, "SECRET_CANARY").expect("bait");
+    let first = plan(&root, &command(), &state).expect("first plan");
+    std::fs::write(&path, [0xff, 0xfe]).expect("invalid bytes");
+    let second = plan(&root, &command(), &state).expect("second plan");
+    std::fs::remove_file(&path).expect("remove bait");
+    let missing = plan(&root, &command(), &state).expect("missing plan");
+
+    assert_eq!(first, second);
+    assert_eq!(second, missing);
+    assert!(!first.to_string().contains("SECRET_CANARY"));
+    assert!(!root.join("validation_artifacts").exists());
+    std::fs::remove_dir_all(root).expect("cleanup");
 }

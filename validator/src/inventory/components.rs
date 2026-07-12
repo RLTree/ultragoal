@@ -1,3 +1,4 @@
+use super::compatibility::{STRUCTURAL_WITNESS_KIND, by_legacy_name, inspect_wrapper};
 use super::component_expectations::expected_names;
 use super::fs::{check_symlink, component_name, physical_entry, regular_files, relative};
 use super::registry::RegistryData;
@@ -62,10 +63,10 @@ pub(crate) fn discover_skills(
                 InventoryError::InvalidRegistry(format!("invalid skill path {}", path.display()))
             })?
             .to_owned();
-        let Some(declared) = confined
-            .then(|| component_name(reads, &path, true))
-            .flatten()
-        else {
+        if !confined {
+            continue;
+        }
+        let Some(declared) = component_name(reads, &path, true) else {
             record_invalid_metadata(
                 reads,
                 root,
@@ -80,6 +81,22 @@ pub(crate) fn discover_skills(
         };
         let legacy = registry.legacy_skills.contains_key(&declared)
             || registry.legacy_skills.contains_key(&directory_name);
+        let route_expected = legacy
+            .then(|| by_legacy_name(&declared).or_else(|| by_legacy_name(&directory_name)))
+            .flatten();
+        let route_witness = if route_expected.is_some() {
+            inspect_wrapper(reads, root, &path, &directory_name, &declared)?
+        } else {
+            None
+        };
+        if route_expected.is_some() && route_witness.is_none() {
+            findings.push(InventoryFinding::error(
+                "invalid_compatibility_route_wrapper",
+                Some(&format!("LEGACY-SKILL:{declared}")),
+                Some(&relative(root, &path)?),
+                "legacy skill is not the exact explicit-only compatibility wrapper".to_owned(),
+            ));
+        }
         let (stable_id, authority) = if legacy {
             (format!("LEGACY-SKILL:{declared}"), AuthorityState::Legacy)
         } else {
@@ -92,18 +109,29 @@ pub(crate) fn discover_skills(
                 },
             )
         };
+        let kind = if route_witness.is_some() {
+            STRUCTURAL_WITNESS_KIND
+        } else {
+            "skill"
+        };
+        let provenance = route_witness
+            .map(|route| vec![route.metadata_path()])
+            .unwrap_or_default();
+        let references = route_witness
+            .map(|route| vec![route.canonical_id()])
+            .unwrap_or_default();
         entries.push(physical_entry(
             reads,
             root,
             &path,
             stable_id,
-            "skill",
+            kind,
             "OWN-PLUGIN-PRODUCT",
             authority,
             ActiveStatus::Active,
             None,
-            Vec::new(),
-            Vec::new(),
+            provenance,
+            references,
         )?);
     }
     Ok(())
@@ -126,10 +154,17 @@ pub(crate) fn discover_agents(
                 InventoryError::InvalidRegistry(format!("invalid agent path {}", path.display()))
             })?
             .to_owned();
-        let Some(declared) = confined
-            .then(|| component_name(reads, &path, false))
-            .flatten()
-        else {
+        if !confined {
+            continue;
+        }
+        let declared = crate::agent_manifest::inspect(reads, &path, &stem);
+        let Some(declared) = declared.ok() else {
+            findings.push(InventoryFinding::error(
+                "invalid_agent_manifest",
+                Some(&format!("INVALID-AGENT:{stem}")),
+                Some(&relative(root, &path)?),
+                "project agent manifest does not satisfy the current read-only schema".to_owned(),
+            ));
             record_invalid_metadata(
                 reads,
                 root,

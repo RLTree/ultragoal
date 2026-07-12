@@ -93,37 +93,9 @@ fn runtime_bound_fixture(root: &Path, value: &Value, validator_artifacts: &[Valu
     bound
 }
 
-pub(crate) fn ready_artifacts(root: &Path, run_id: &str) -> Vec<Value> {
-    let Ok(entries) = std::fs::read_dir(root.join("examples/generated")) else {
-        return Vec::new();
-    };
-    let mut out = entries
-        .flatten()
-        .filter_map(|entry| {
-            let path = entry.path();
-            let name = path.file_name()?.to_str()?;
-            if !name.starts_with("READY_FOR_MERGE") || !name.ends_with(".json") {
-                return None;
-            }
-            let rel = path
-                .strip_prefix(root)
-                .ok()?
-                .to_string_lossy()
-                .replace('\\', "/");
-            Some(json!({
-                "artifact_type": "ready_for_merge",
-                "path": rel,
-                "digest": crate::digest::file(&path).unwrap_or_default(),
-                "validator_run_id": run_id
-            }))
-        })
-        .collect::<Vec<_>>();
-    out.sort_by(|a, b| {
-        a.get("path")
-            .and_then(Value::as_str)
-            .cmp(&b.get("path").and_then(Value::as_str))
-    });
-    out
+pub(crate) fn ready_artifacts(_root: &Path, _run_id: &str) -> Vec<Value> {
+    // Packaged examples are retained context, not candidate-bound HCT-CLAIMS output.
+    Vec::new()
 }
 
 fn push_semantic_failures(

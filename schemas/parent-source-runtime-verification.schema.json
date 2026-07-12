@@ -4,7 +4,7 @@
   "additionalProperties": false,
   "properties": {
     "candidate_digest": {
-      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256Digest"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "cli_pass_alone_rejected": {
       "const": true

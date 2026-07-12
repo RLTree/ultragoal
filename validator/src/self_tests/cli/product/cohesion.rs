@@ -34,6 +34,31 @@ fn copied_valid_cohesion_fixture() -> PathBuf {
         &repo.join("fixtures/target-repo/valid-product-cohesion"),
         &target,
     );
+    let generated =
+        std::fs::read(target.join("docs/generated/index.md")).expect("generated cohesion index");
+    let digest = crate::digest::bytes(&generated)
+        .strip_prefix("sha256:")
+        .expect("digest prefix")
+        .to_string();
+    std::fs::create_dir_all(target.join("migration")).expect("migration directory");
+    std::fs::write(
+        target.join("migration/generated-surface-authority.json"),
+        serde_json::to_vec(&serde_json::json!({
+            "schema_version": "GeneratedSurfaceAuthority-v2",
+            "contract_id": "harness-ultragoal-successor-contract-v2",
+            "surfaces": [{
+                "disposition": "retained_context",
+                "output": "docs/generated/index.md",
+                "sha256": digest,
+                "reason": "ephemeral product-cohesion fixture context",
+                "replacement_targets": ["HCT-INVENTORY"],
+                "preserve": true,
+                "physical_deletion_authorized": false
+            }]
+        }))
+        .expect("generated authority fixture"),
+    )
+    .expect("write generated authority fixture");
     let mut resources = Vec::new();
     collect_files(&target, Path::new(""), &mut resources);
     resources.sort();

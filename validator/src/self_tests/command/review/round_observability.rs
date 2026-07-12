@@ -67,7 +67,9 @@ fn review_round_command_emits_fail_closed_observability_for_stale_anchors() {
         text(&receipt, "failure_class"),
         "review_round_validation_failure"
     );
-    assert!(text(&receipt, "why_failed").contains("review_round_anchor_source_mismatch"));
+    assert!(
+        text(&receipt, "why_failed").contains("review_round_trusted_anchor_source_unavailable")
+    );
     assert!(
         receipt["blocked_claims"]
             .as_array()

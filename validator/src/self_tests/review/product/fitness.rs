@@ -49,18 +49,19 @@ fn dimensions() -> Vec<&'static str> {
 
 fn row(path: &str, digest: &str, generated_at: &str) -> Value {
     json!({
-        "agent_type":"harness_product_simplicity_falsifier",
+        "role":"product-journey-reviewer",
         "product_fitness_required":true,
-        "product_fitness_owner":"product_simplicity_falsifier",
+        "product_fitness_owner":"product-journey-reviewer",
         "product_fitness_receipt_digest":digest,
         "product_fitness_claim_ids":["production_readiness"],
         "substitution_rejections_reviewed":required_substitutions(),
         "product_fitness_disposition":{
-            "owner_persona":"product_simplicity_falsifier",
-            "owner_agent_type":"harness_product_simplicity_falsifier",
+            "owner_role":"product-journey-reviewer",
+            "reviewer_authority":"falsification_evidence_only",
+            "may_raise_claim_ceiling":false,
             "applies_to_product_impacting_claims":true,
             "claim_ids_reviewed":["production_readiness"],
-            "generic_product_simplicity_approval_only":false,
+            "generic_product_approval_only":false,
             "substitution_rejection":true,
             "dimensions_checked":dimensions(),
             "receipt":{"path":path,"digest":digest},
@@ -75,7 +76,7 @@ fn pf_errors(root: &Path, row: &Value) -> Vec<String> {
         root,
         row,
         &receipt(),
-        "product_simplicity_falsifier",
+        "product-journey-reviewer",
         &mut out,
     );
     out.into_iter().map(|failure| failure.error).collect()
@@ -163,9 +164,9 @@ fn product_fitness_review_disposition_rejects_missing_unowned_and_substituted_pa
         &crate::self_tests::boundaries::workspace_fixtures::sha('a'),
         "2026-06-26T00:00:00Z",
     );
-    unowned["agent_type"] = json!("wrong_agent");
-    unowned["product_fitness_disposition"]["owner_persona"] = json!("wrong_persona");
-    unowned["product_fitness_disposition"]["owner_agent_type"] = json!("wrong_agent");
+    unowned["role"] = json!("wrong-role");
+    unowned["product_fitness_disposition"]["owner_role"] = json!("wrong-role");
+    unowned["product_fitness_disposition"]["may_raise_claim_ceiling"] = json!(true);
     unowned["product_fitness_disposition"]["applies_to_product_impacting_claims"] = json!(false);
     let got = pf_errors(&root, &unowned);
     assert!(got.contains(&"review_round_product_fitness_disposition_unowned".to_string()));
@@ -187,8 +188,7 @@ fn product_fitness_review_disposition_rejects_missing_unowned_and_substituted_pa
     );
     substituted["substitution_rejections_reviewed"] =
         json!(["generic_product_simplicity_approval"]);
-    substituted["product_fitness_disposition"]["generic_product_simplicity_approval_only"] =
-        json!(true);
+    substituted["product_fitness_disposition"]["generic_product_approval_only"] = json!(true);
     substituted["product_fitness_disposition"]["substitution_rejection"] = json!(false);
     substituted["product_fitness_disposition"]["dimensions_checked"] = json!(["audience"]);
     let got = pf_errors(&root, &substituted);
@@ -206,7 +206,7 @@ fn product_fitness_review_disposition_rejects_missing_unowned_and_substituted_pa
         &root,
         &ignored,
         &json!({"claim_ceiling":{"unsupported":[]},"materiality_gate":{"claims":["docs only"]}}),
-        "contract_claim_falsifier",
+        "claim-falsifier",
         &mut out,
     );
     assert_eq!(out.len(), 0);
@@ -224,7 +224,7 @@ fn review_round_artifact_binding_rejects_shallow_or_duplicate_evidence() {
             "review_report":{"path":"custom-agents/harness-product-simplicity-falsifier.toml","digest":crate::digest::file(&root.join("custom-agents/harness-product-simplicity-falsifier.toml")).unwrap()},
             "evidence_paths_checked":["README.md","README.md"]
         }),
-        "product_simplicity_falsifier",
+        "product-journey-reviewer",
         &mut failures,
     );
     assert!(

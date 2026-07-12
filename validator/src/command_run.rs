@@ -118,6 +118,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::TypedBoundaries(command) => crate::cli::typed_boundaries::run(&root, &command),
         Command::PackageInventory(command) => crate::cli::package::inventory::run(&root, &command),
         Command::PackageDigest => crate::cli::package::digest::run(&root),
+        Command::Successor(outcome) => crate::cli::successor_public::run_public(&root, outcome),
         Command::Help => {
             println!("{}", crate::cli::usage::text());
             Ok(0)

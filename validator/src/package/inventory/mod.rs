@@ -1,10 +1,13 @@
 use crate::digest;
-use crate::json_boundary;
 use serde_json::Value;
 use std::path::{Component, Path, PathBuf};
+use std::sync::Arc;
 
+pub(crate) mod anchored;
 pub(crate) mod closure;
+pub(crate) mod generated_disposition;
 pub(crate) mod payload;
+pub(crate) mod snapshot;
 
 pub use closure::{final_bytecode_failures, inventory_closure_failures};
 pub(crate) use payload::stable_package_payload;
@@ -13,6 +16,7 @@ pub const PACKAGE_DIGEST_EXCLUDED_PREFIXES: &[&str] = &["validation_artifacts/"]
 pub const PACKAGE_DIGEST_EXCLUDED_PATHS: &[&str] = &[];
 const BUILDER_CONTRACT_COMPAT_PREFIX: &str = "docs/parent-session-full-ultragoal-";
 const BUILDER_CONTRACT_MODULE_DIR: &str = "docs/ultragoal-contract-2026-07/";
+const MANIFEST_PATH: &str = "plugin-manifest-draft.json";
 
 pub fn inventory_paths(manifest: &Value) -> Vec<String> {
     let mut out = Vec::new();
@@ -47,22 +51,8 @@ pub fn inventory_paths(manifest: &Value) -> Vec<String> {
 }
 
 pub fn package_path_error(root: &Path, rel: &str) -> Option<String> {
-    if rel.is_empty() {
-        return Some("package path is not a non-empty string".to_string());
-    }
-    if builder_contract_resource_path(rel) {
-        return Some(format!(
-            "builder contract resource is not a package resource: {rel}"
-        ));
-    }
-    if Path::new(rel).is_absolute() {
-        return Some(format!("package path is absolute: {rel}"));
-    }
-    if Path::new(rel)
-        .components()
-        .any(|part| !matches!(part, Component::Normal(_)))
-    {
-        return Some(format!("package path escapes package root: {rel}"));
+    if let Some(error) = package_path_syntax_error(rel) {
+        return Some(error);
     }
     let root_abs = root.canonicalize().unwrap_or_else(|_| root.to_path_buf());
     if symlink_component_error(&root_abs, rel).is_some() {
@@ -114,31 +104,87 @@ pub fn package_digest_excluded(rel: &str) -> bool {
 }
 
 pub fn package_digest(root: &Path) -> Result<String, String> {
-    let manifest = json_boundary::read_json(&root.join("plugin-manifest-draft.json"))?;
+    let mut session = anchored::Session::open(root)
+        .map_err(|error| format!("{MANIFEST_PATH}: package manifest unavailable: {error}"))?;
+    let manifest_bytes = session
+        .read(MANIFEST_PATH, anchored::MAX_MANIFEST_BYTES)
+        .map_err(|error| format!("{MANIFEST_PATH}: package manifest unavailable: {error}"))?;
+    let manifest = anchored::parse_unique_json(&manifest_bytes)?;
     let mut paths = inventory_paths(&manifest)
         .into_iter()
         .filter(|rel| !package_digest_excluded(rel))
         .collect::<Vec<_>>();
     paths.sort();
-    let mut payload = Vec::new();
+    if paths.windows(2).any(|pair| pair[0] == pair[1]) {
+        return Err("package manifest contains a duplicate inventory path".to_string());
+    }
+    let dispositions = generated_disposition::Catalog::for_manifest_in(&mut session, &paths)?;
+    let mut rows = Vec::new();
+    if let Some(catalog) = dispositions.as_ref() {
+        rows.push((
+            generated_disposition::REGISTRY_PATH.to_string(),
+            Arc::<[u8]>::from(catalog.registry_bytes()),
+        ));
+    }
     for rel in paths {
+        if generated_disposition::generated_path(&rel) {
+            let catalog = dispositions
+                .as_ref()
+                .expect("generated path requires a disposition catalog");
+            match catalog.classify_in(&mut session, &rel)? {
+                generated_disposition::Classification::CanonicalProjection { bytes } => {
+                    rows.push((rel, bytes));
+                }
+                generated_disposition::Classification::RetainedContext { .. } => continue,
+            }
+            continue;
+        }
+        if rel == generated_disposition::REGISTRY_PATH && dispositions.is_some() {
+            continue;
+        }
+        let bytes = Arc::<[u8]>::from(package_resource_bytes(&mut session, &rel)?);
+        rows.push((rel, bytes));
+    }
+    session.finish()?;
+    rows.sort_by(|left, right| left.0.cmp(&right.0));
+    let mut payload = Vec::new();
+    for (rel, bytes) in rows {
         payload.extend_from_slice(rel.as_bytes());
         payload.push(0);
-        let bytes = match resolve(root, &rel) {
-            Ok(path) if path.is_file() => crate::digest::read_file_bytes(&path)
-                .map_err(|err| format!("{}: package digest read failed: {err}", path.display()))?,
-            Ok(path) => {
-                return Err(format!(
-                    "{}: package digest manifest path is missing",
-                    path.display()
-                ));
-            }
-            Err(err) => return Err(format!("{rel}: package digest path invalid: {err}")),
-        };
-        payload.extend_from_slice(&payload::stable_package_payload(&rel, &bytes)?);
+        payload.extend_from_slice(&payload::stable_package_payload(&rel, bytes.as_ref())?);
         payload.push(0);
     }
     Ok(digest::bytes(&payload))
+}
+
+fn package_resource_bytes(session: &mut anchored::Session, rel: &str) -> Result<Vec<u8>, String> {
+    if let Some(error) = package_path_syntax_error(rel) {
+        return Err(format!("package digest path invalid: {error}"));
+    }
+    session
+        .read(rel, anchored::MAX_RESOURCE_BYTES)
+        .map_err(|error| format!("package digest resource unavailable: {error}"))
+}
+
+fn package_path_syntax_error(rel: &str) -> Option<String> {
+    if rel.is_empty() {
+        return Some("package path is not a non-empty string".to_string());
+    }
+    if builder_contract_resource_path(rel) {
+        return Some(format!(
+            "builder contract resource is not a package resource: {rel}"
+        ));
+    }
+    if Path::new(rel).is_absolute() {
+        return Some(format!("package path is absolute: {rel}"));
+    }
+    if Path::new(rel)
+        .components()
+        .any(|part| !matches!(part, Component::Normal(_)))
+    {
+        return Some(format!("package path escapes package root: {rel}"));
+    }
+    None
 }
 
 #[cfg(test)]

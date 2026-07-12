@@ -221,5 +221,5 @@ fn review_round_validate_files_reports_anchor_failures() {
         },
     )
     .expect_err("stale review round rejected");
-    assert!(err.contains("review_round_anchor_source_mismatch"));
+    assert!(err.contains("review_round_trusted_anchor_source_unavailable"));
 }

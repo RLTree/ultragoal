@@ -9,6 +9,19 @@ use std::sync::{Arc, Mutex, MutexGuard};
 use std::time::Duration;
 use ultragoal::context::{BuildRequest, ContextError, EffectClass, LiveContext};
 
+mod context {
+    pub use ultragoal::context::*;
+}
+
+#[path = "cli_contract/capture/mod.rs"]
+mod successor_capture;
+
+#[path = "cli_contract/state/mod.rs"]
+mod state_contract;
+
+#[path = "cli_contract/successor/mod.rs"]
+mod successor_cli_contract;
+
 static NEXT_DIR: AtomicU64 = AtomicU64::new(0);
 static SERIAL: Mutex<()> = Mutex::new(());
 

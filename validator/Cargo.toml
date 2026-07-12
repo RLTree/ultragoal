@@ -5,9 +5,12 @@ edition = "2024"
 license = "MIT"
 
 [dependencies]
+clap = { version = "4.6.1", default-features = false, features = ["error-context", "help", "std", "usage"] }
+libc = "0.2.186"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.150"
 sha2 = "0.10.9"
+toml = { version = "1.1.2", default-features = false, features = ["parse", "serde", "std"] }
 walkdir = "2.5.0"
 
 [[bin]]

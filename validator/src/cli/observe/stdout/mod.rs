@@ -10,15 +10,21 @@ pub(super) fn write_and_print(
     command: &ObserveCommand,
     value: &Value,
 ) -> Result<i32, String> {
-    let receipt = command.receipt_rel();
-    let absolute = crate::output_path::claim_artifact_path(root, &receipt, "observe receipt")?;
-    crate::json_boundary::write_json(&absolute, value)?;
+    let receipt = command.selected_receipt_rel();
+    if let Some(relative) = receipt.as_ref() {
+        let absolute = crate::output_path::claim_artifact_path(root, relative, "observe receipt")?;
+        crate::json_boundary::write_json(&absolute, value)?;
+    }
+    let receipt_text = receipt
+        .as_ref()
+        .map(|path| path.display().to_string())
+        .unwrap_or_else(|| "none-read-only".to_string());
     let status = text(value, "status", "fail");
     println!(
         "ultragoal-observe {status} operation={} candidate={} receipt={} run_id={} correlation_id={} trace_id={} failure_class={} claim_impact={} supported_claims={} unsupported_claims={}",
         command.operation.id(),
         text(value, "candidate_digest", "<missing>"),
-        receipt.display(),
+        receipt_text,
         text(value, "run_id", "<missing>"),
         text(value, "correlation_id", "<missing>"),
         text(value, "trace_id", "<missing>"),
@@ -37,7 +43,7 @@ pub(super) fn write_and_print(
         roundtrip::print(value);
     }
     if status != "pass" {
-        print_failure(command, value, &receipt);
+        print_failure(command, value, receipt.as_deref());
     }
     Ok(i32::from(status != "pass"))
 }
@@ -81,7 +87,7 @@ fn print_metrics_query(value: &Value) {
     );
 }
 
-fn print_failure(command: &ObserveCommand, value: &Value, receipt: &std::path::Path) {
+fn print_failure(command: &ObserveCommand, value: &Value, receipt: Option<&std::path::Path>) {
     let metric_query = query_hint::failure_metric_query(command, value);
     println!(
         "failed_check={} failure_class={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} trace_id={} query_logs='ultragoal observe logs query --run-id {} --correlation-id {} --limit 100' query_metrics='ultragoal observe metrics query --run-id {} --correlation-id {} --query '{}' --limit 100' query_traces='ultragoal observe traces query --run-id {} --correlation-id {} --limit 100'",
@@ -91,7 +97,9 @@ fn print_failure(command: &ObserveCommand, value: &Value, receipt: &std::path::P
         text(value, "where_failed", "observe command"),
         claim_impact(value),
         text(value, "next_repair", "run observe stack health and smoke"),
-        receipt.display(),
+        receipt
+            .map(|path| path.display().to_string())
+            .unwrap_or_else(|| "none-read-only".to_string()),
         text(value, "run_id", "unknown"),
         text(value, "correlation_id", "unknown"),
         text(value, "trace_id", "unknown"),

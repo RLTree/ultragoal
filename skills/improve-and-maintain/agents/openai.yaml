@@ -1,0 +1,6 @@
+interface:
+  display_name: "Improve and Maintain"
+  short_description: "Evaluate, migrate, and retire old surfaces"
+  default_prompt: "Use $harness-ultragoal:improve-and-maintain to evaluate this behavior and plan a measured migration or improvement."
+policy:
+  allow_implicit_invocation: false

@@ -140,7 +140,7 @@ fn red_fixture_results_cover_patch_missing_invalid_and_materialized_rows() {
 }
 
 #[test]
-fn review_round_personas_reject_reuse_duplicates_unknown_and_identity_substitutes() {
+fn review_round_roles_reject_reuse_duplicates_unknown_and_manifest_substitutes() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let anchors = crate::review::round::anchor::values::AnchorValues {
         validator_path: "validator.json".into(),
@@ -152,27 +152,24 @@ fn review_round_personas_reject_reuse_duplicates_unknown_and_identity_substitute
         validator_run_id: "run".into(),
         package_digest: crate::self_tests::boundaries::workspace_fixtures::sha('4'),
         source_errors: Vec::new(),
+        materiality_anchors: Vec::new(),
     };
     let receipt = json!({
         "prior_round_reviewer_agent_ids":["prior-agent","dupe-agent"],
         "reviewers":[
             {
-                "persona":"contract_claim_falsifier",
+                "role":"claim-falsifier",
                 "reviewer_agent_id":"dupe-agent",
-                "persona_prompt_path":"wrong.md",
-                "persona_prompt_digest":crate::self_tests::boundaries::workspace_fixtures::sha('a'),
-                "custom_agent_path":"wrong.toml",
-                "custom_agent_digest":crate::self_tests::boundaries::workspace_fixtures::sha('b')
+                "agent_manifest_path":"agents/contract-claim-falsifier.md",
+                "agent_manifest_digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')
             },
             {
-                "persona":"contract_claim_falsifier",
+                "role":"claim-falsifier",
                 "reviewer_agent_id":"dupe-agent",
-                "persona_prompt_path":"wrong.md",
-                "persona_prompt_digest":crate::self_tests::boundaries::workspace_fixtures::sha('c'),
-                "custom_agent_path":"wrong.toml",
-                "custom_agent_digest":crate::self_tests::boundaries::workspace_fixtures::sha('d')
+                "agent_manifest_path":"custom-agents/harness-contract-claim-falsifier.toml",
+                "agent_manifest_digest":crate::self_tests::boundaries::workspace_fixtures::sha('c')
             },
-            {"persona":"unknown_persona","reviewer_agent_id":"prior-agent"}
+            {"role":"unknown-role","reviewer_agent_id":"prior-agent"}
         ]
     });
     let mut out = Vec::new();
@@ -182,22 +179,20 @@ fn review_round_personas_reject_reuse_duplicates_unknown_and_identity_substitute
         .map(|failure| failure.error.as_str())
         .collect::<Vec<_>>();
     for expected in [
-        "review_round_wrong_persona_count",
-        "review_round_missing_persona",
+        "review_round_wrong_role_count",
+        "review_round_missing_role",
         "review_round_reused_reviewer",
-        "review_round_duplicate_persona",
-        "review_round_substituted_persona_prompt",
-        "review_round_custom_agent_mismatch",
+        "review_round_duplicate_role",
+        "review_round_agent_manifest_mismatch",
     ] {
         assert!(errors.contains(&expected), "{expected}: {errors:?}");
     }
 }
 
 #[test]
-fn review_round_personas_reject_missing_prompt_and_agent_files() {
-    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
-        "review-persona-missing-files",
-    );
+fn review_round_roles_reject_missing_canonical_manifest_files() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-role-missing-files");
     std::fs::create_dir_all(&root).expect("root");
     let anchors = crate::review::round::anchor::values::AnchorValues {
         validator_path: "validator.json".into(),
@@ -209,16 +204,15 @@ fn review_round_personas_reject_missing_prompt_and_agent_files() {
         validator_run_id: "run".into(),
         package_digest: crate::self_tests::boundaries::workspace_fixtures::sha('4'),
         source_errors: Vec::new(),
+        materiality_anchors: Vec::new(),
     };
     let receipt = json!({
         "prior_round_reviewer_agent_ids":[],
         "reviewers":[{
-            "persona":"contract_claim_falsifier",
+            "role":"claim-falsifier",
             "reviewer_agent_id":"fresh-agent",
-            "persona_prompt_path":"agents/contract-claim-falsifier.md",
-            "persona_prompt_digest":crate::self_tests::boundaries::workspace_fixtures::sha('a'),
-            "custom_agent_path":"custom-agents/harness-contract-claim-falsifier.toml",
-            "custom_agent_digest":crate::self_tests::boundaries::workspace_fixtures::sha('b')
+            "agent_manifest_path":".codex/agents/claim-falsifier.toml",
+            "agent_manifest_digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')
         }]
     });
     let mut out = Vec::new();
@@ -228,12 +222,8 @@ fn review_round_personas_reject_missing_prompt_and_agent_files() {
         .map(|failure| failure.error.as_str())
         .collect::<Vec<_>>();
     assert!(
-        errors.contains(&"review_round_substituted_persona_prompt"),
+        errors.contains(&"review_round_agent_manifest_mismatch"),
         "{errors:?}"
     );
-    assert!(
-        errors.contains(&"review_round_custom_agent_mismatch"),
-        "{errors:?}"
-    );
-    std::fs::remove_dir_all(root).expect("cleanup missing persona files");
+    std::fs::remove_dir_all(root).expect("cleanup missing role files");
 }

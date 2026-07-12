@@ -1,67 +1,28 @@
 {
   "agents": [
     {
-      "name": "contract-claim-falsifier",
-      "path": "agents/contract-claim-falsifier.md"
+      "name": "claim-falsifier",
+      "path": ".codex/agents/claim-falsifier.toml"
     },
     {
-      "name": "material-review-scope-gatekeeper",
-      "path": "agents/material-review-scope-gatekeeper.md"
+      "name": "orchestration-recovery-reviewer",
+      "path": ".codex/agents/orchestration-recovery-reviewer.toml"
     },
     {
-      "name": "orchestration-recovery-falsifier",
-      "path": "agents/orchestration-recovery-falsifier.md"
+      "name": "product-journey-reviewer",
+      "path": ".codex/agents/product-journey-reviewer.toml"
     },
     {
-      "name": "plugin-scout",
-      "path": "agents/plugin-scout.md"
+      "name": "repo-recon",
+      "path": ".codex/agents/repo-recon.toml"
     },
     {
-      "name": "product-simplicity-falsifier",
-      "path": "agents/product-simplicity-falsifier.md"
+      "name": "research-verifier",
+      "path": ".codex/agents/research-verifier.toml"
     },
     {
-      "name": "security-trust-boundary-falsifier",
-      "path": "agents/security-trust-boundary-falsifier.md"
-    },
-    {
-      "name": "standards-extractor",
-      "path": "agents/standards-extractor.md"
-    },
-    {
-      "app_visible_name": "harness_contract_claim_falsifier",
-      "name": "harness-contract-claim-falsifier",
-      "path": "custom-agents/harness-contract-claim-falsifier.toml"
-    },
-    {
-      "app_visible_name": "harness_material_review_scope_gatekeeper",
-      "name": "harness-material-review-scope-gatekeeper",
-      "path": "custom-agents/harness-material-review-scope-gatekeeper.toml"
-    },
-    {
-      "app_visible_name": "harness_orchestration_recovery_falsifier",
-      "name": "harness-orchestration-recovery-falsifier",
-      "path": "custom-agents/harness-orchestration-recovery-falsifier.toml"
-    },
-    {
-      "app_visible_name": "harness_product_simplicity_falsifier",
-      "name": "harness-product-simplicity-falsifier",
-      "path": "custom-agents/harness-product-simplicity-falsifier.toml"
-    },
-    {
-      "app_visible_name": "harness_repo_initializer",
-      "name": "harness-repo-initializer",
-      "path": "custom-agents/harness-repo-initializer.toml"
-    },
-    {
-      "app_visible_name": "harness_retrofit_planner",
-      "name": "harness-retrofit-planner",
-      "path": "custom-agents/harness-retrofit-planner.toml"
-    },
-    {
-      "app_visible_name": "harness_security_trust_boundary_falsifier",
-      "name": "harness-security-trust-boundary-falsifier",
-      "path": "custom-agents/harness-security-trust-boundary-falsifier.toml"
+      "name": "security-reviewer",
+      "path": ".codex/agents/security-reviewer.toml"
     }
   ],
   "authorable_templates": [
@@ -3784,6 +3745,7 @@
     "fixtures/red/validator-theater-miswire-resistance-fallback-overclaim-red.json",
     "fixtures/red/validator-theater-miswire-resistance-generic-output-only-red.json",
     "install/personal-marketplace.example.json",
+    "migration/generated-surface-authority.json",
     "package.json",
     "plugin-manifest-draft.json",
     "pnpm-lock.yaml",
@@ -3856,6 +3818,9 @@
     "validator/src/audit/law/authority_surfaces/authority_labels.rs",
     "validator/src/audit/law/authority_surfaces/package_surfaces/cargo.rs",
     "validator/src/audit/law/authority_surfaces/package_surfaces/document.rs",
+    "validator/src/audit/law/authority_surfaces/package_surfaces/generated.rs",
+    "validator/src/audit/law/authority_surfaces/package_surfaces/generated_batch_tests.rs",
+    "validator/src/audit/law/authority_surfaces/package_surfaces/generated_tests.rs",
     "validator/src/audit/law/authority_surfaces/package_surfaces/inventory_resource.rs",
     "validator/src/audit/law/authority_surfaces/package_surfaces/module_ownership.rs",
     "validator/src/audit/law/authority_surfaces/package_surfaces/mod.rs",
@@ -4552,11 +4517,32 @@
     "validator/src/output_path.rs",
     "validator/src/package/artifact/mod.rs",
     "validator/src/package/artifact/refs.rs",
+    "validator/src/package/inventory/anchored/json.rs",
+    "validator/src/package/inventory/anchored/mod.rs",
+    "validator/src/package/inventory/anchored/session.rs",
+    "validator/src/package/inventory/anchored/session/tree.rs",
+    "validator/src/package/inventory/anchored/snapshot.rs",
+    "validator/src/package/inventory/anchored/sys.rs",
+    "validator/src/package/inventory/anchored/test_hooks.rs",
     "validator/src/package/inventory/closure/package_entries.rs",
     "validator/src/package/inventory/closure/mod.rs",
+    "validator/src/package/inventory/generated_disposition/anchored.rs",
+    "validator/src/package/inventory/generated_disposition/hardening_tests.rs",
+    "validator/src/package/inventory/generated_disposition/mod.rs",
+    "validator/src/package/inventory/generated_disposition/schema.rs",
+    "validator/src/package/inventory/generated_disposition/tests.rs",
+    "validator/src/package/inventory/generated_disposition/unique_json.rs",
     "validator/src/package/inventory/mod.rs",
     "validator/src/package/inventory/payload.rs",
+    "validator/src/package/inventory/snapshot/capture.rs",
+    "validator/src/package/inventory/snapshot/identity.rs",
+    "validator/src/package/inventory/snapshot/mod.rs",
+    "validator/src/package/inventory/snapshot/tests.rs",
+    "validator/src/package/inventory/snapshot/tree.rs",
     "validator/src/package/inventory/tests.rs",
+    "validator/src/package/inventory/tests/bounds.rs",
+    "validator/src/package/inventory/tests/security.rs",
+    "validator/src/package/inventory/tests/support.rs",
     "validator/src/package/mod.rs",
     "validator/src/package/resource/mod.rs",
     "validator/src/package/resource/purpose.rs",
@@ -4978,7 +4964,99 @@
     "validator/src/target_repo/receipt.rs",
     "validator/src/target_repo/safe_fs.rs",
     "validator/src/target_repo/worktree_env_contract.rs",
-    "validator/tests/cli_surface.rs"
+    "validator/tests/cli_surface.rs",
+    "validator/src/context/authorized_io.rs",
+    "validator/src/context/build.rs",
+    "validator/src/context/capability.rs",
+    "validator/src/context/configuration.rs",
+    "validator/src/context/digest.rs",
+    "validator/src/context/effects.rs",
+    "validator/src/context/error.rs",
+    "validator/src/context/git.rs",
+    "validator/src/context/mod.rs",
+    "validator/src/context/path.rs",
+    "validator/src/context/process.rs",
+    "validator/src/context/read_budget.rs",
+    "validator/src/context/read_observation.rs",
+    "validator/src/context/read_revalidation.rs",
+    "validator/src/context/read_session.rs",
+    "validator/src/context/read_session_tests.rs",
+    "validator/src/context/read_snapshot.rs",
+    "validator/src/context/request.rs",
+    "validator/src/context/revalidate.rs",
+    "validator/src/context/tests.rs",
+    "validator/src/context/types.rs",
+    "validator/src/context/zero_write_tests.rs",
+    "validator/src/inventory/agent_reader_guard_digests.rs",
+    "validator/src/inventory/agent_reader_guard_manifest_digests.rs",
+    "validator/src/inventory/agent_reader_guard_package_digests.rs",
+    "validator/src/inventory/builder.rs",
+    "validator/src/inventory/compatibility/agent_specs.rs",
+    "validator/src/inventory/compatibility/agent_witness.rs",
+    "validator/src/inventory/compatibility/mod.rs",
+    "validator/src/inventory/compatibility/reader_witness.rs",
+    "validator/src/inventory/compatibility/reader_witness/scan.rs",
+    "validator/src/inventory/compatibility/reader_witness/scan/literals.rs",
+    "validator/src/inventory/compatibility/reader_witness/scan/unicode.rs",
+    "validator/src/inventory/compatibility/reader_witness/tests.rs",
+    "validator/src/inventory/compatibility/reader_witness_specs.rs",
+    "validator/src/inventory/compatibility/specs.rs",
+    "validator/src/inventory/compatibility/witness.rs",
+    "validator/src/inventory/component_expectations.rs",
+    "validator/src/inventory/components.rs",
+    "validator/src/inventory/context_scopes.rs",
+    "validator/src/inventory/context_scopes/evidence.rs",
+    "validator/src/inventory/context_scopes/exact_set.rs",
+    "validator/src/inventory/context_scopes/manifest.rs",
+    "validator/src/inventory/digest.rs",
+    "validator/src/inventory/discovery.rs",
+    "validator/src/inventory/fs.rs",
+    "validator/src/inventory/generated/authority.rs",
+    "validator/src/inventory/generated/discovery.rs",
+    "validator/src/inventory/generated/json.rs",
+    "validator/src/inventory/generated/metadata.rs",
+    "validator/src/inventory/generated/mod.rs",
+    "validator/src/inventory/generated/retained.rs",
+    "validator/src/inventory/legacy.rs",
+    "validator/src/inventory/legacy/matchers.rs",
+    "validator/src/inventory/legacy/scope.rs",
+    "validator/src/inventory/mod.rs",
+    "validator/src/inventory/plugin_hooks.rs",
+    "validator/src/inventory/plugin_manifest.rs",
+    "validator/src/inventory/plugin_manifest_hook_document.rs",
+    "validator/src/inventory/plugin_manifest_hook_matcher.rs",
+    "validator/src/inventory/plugin_manifest_hooks.rs",
+    "validator/src/inventory/plugin_manifest_interface.rs",
+    "validator/src/inventory/plugin_manifest_json.rs",
+    "validator/src/inventory/plugin_manifest_path.rs",
+    "validator/src/inventory/plugin_manifest_semver.rs",
+    "validator/src/inventory/projection.rs",
+    "validator/src/inventory/race_tests.rs",
+    "validator/src/inventory/registry/data.rs",
+    "validator/src/inventory/registry/integrity.rs",
+    "validator/src/inventory/registry/mod.rs",
+    "validator/src/inventory/registry/semantic.rs",
+    "validator/src/inventory/registry/sources.rs",
+    "validator/src/inventory/registry/topology.rs",
+    "validator/src/inventory/retained_routes/claims.rs",
+    "validator/src/inventory/retained_routes/commands.rs",
+    "validator/src/inventory/retained_routes/lanes.rs",
+    "validator/src/inventory/retained_routes/manifest.rs",
+    "validator/src/inventory/retained_routes/mod.rs",
+    "validator/src/inventory/retained_routes/model.rs",
+    "validator/src/inventory/retained_routes/specs.rs",
+    "validator/src/inventory/retained_routes/verify.rs",
+    "validator/src/inventory/routing.rs",
+    "validator/src/inventory/routing_apply.rs",
+    "validator/src/inventory/routing_pending.rs",
+    "validator/src/inventory/routing_state.rs",
+    "validator/src/inventory/schema_references.rs",
+    "validator/src/inventory/types.rs",
+    "validator/src/inventory/validate.rs",
+    "validator/src/inventory/validate/duplicates.rs",
+    "validator/src/inventory/walk.rs",
+    "validator/src/inventory/walk/tests.rs",
+    "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
   ],
   "schema_catalog": "schemas/schema-catalog.json",
   "schemas": [

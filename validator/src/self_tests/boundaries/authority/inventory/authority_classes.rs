@@ -13,7 +13,7 @@ fn authority_surface_inventory_discovers_required_authority_classes() {
         "docs/source-obligation-matrix.json",
         "docs/source-obligation-matrix.md",
         "docs/foundational-law-traceability.json",
-        "docs/generated/observability/command-inventory.json",
+        "docs/generated/observability/other-generated.json",
         "plugin-manifest-draft.json",
         "docs/plugin-cohesion-manifest.json",
         ".codex-plugin/plugin.json",
@@ -114,7 +114,7 @@ fn required_authority_rows(runtime_receipt: &str) -> Vec<(&'static str, &str, bo
         ),
         (
             "generated_artifact",
-            "docs/generated/observability/command-inventory.json",
+            "docs/generated/observability/other-generated.json",
             true,
         ),
         ("claim_guard", "validator/src/cli/package/digest.rs", true),

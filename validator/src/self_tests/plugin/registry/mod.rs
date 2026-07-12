@@ -3,8 +3,13 @@ use std::path::Path;
 
 mod fixture;
 mod guard;
+#[cfg(unix)]
+mod raw_reader;
 
-pub(super) use fixture::{fail_closed_registry_receipt, live_registry_receipt, raw_observation};
+pub(super) use fixture::{
+    fail_closed_raw_observation, fail_closed_registry_receipt, live_registry_receipt,
+    raw_observation,
+};
 
 fn write_json(path: &Path, value: &Value) {
     if let Some(parent) = path.parent() {
@@ -29,7 +34,19 @@ fn active_registry_exposure_requires_live_same_surface_observation_provenance() 
     let store = crate::schema_catalog::load(
         &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
     );
-    assert!(crate::audit::plugin::registry::value_failures(&root, &store, &receipt).is_empty());
+    let failures = crate::audit::plugin::registry::value_failures(&root, &store, &receipt);
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure == "plugin_self_law_registry_positive_status_forbidden"),
+        "{failures:?}"
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure.contains("schema") && failure.contains("status")),
+        "{failures:?}"
+    );
 
     write_json(
         &raw_path,
@@ -99,17 +116,14 @@ fn active_registry_exposure_requires_live_same_surface_observation_provenance() 
     assert!(
         failures
             .iter()
-            .any(|failure| failure.contains("raw_observation_agent_not_exposed")),
+            .any(|failure| failure.contains("positive_proof_forbidden")),
         "{failures:?}"
     );
     write_json(&raw_path, &raw_observation(&current));
 
     let fail_raw_path =
         root.join("validation_artifacts/ultragoal-audit/active-registry-observation-current.json");
-    write_json(
-        &fail_raw_path,
-        &json!({"status":"fail","candidate_digest":current,"observed":"no live registry"}),
-    );
+    write_json(&fail_raw_path, &fail_closed_raw_observation(&current));
     let fail_raw_digest = crate::digest::file(&fail_raw_path).expect("fail raw digest");
     let fail_closed = fail_closed_registry_receipt(&current, &fail_raw_digest);
     let schema_errors = crate::schema_catalog::schema_errors(
@@ -119,17 +133,81 @@ fn active_registry_exposure_requires_live_same_surface_observation_provenance() 
     );
     assert!(schema_errors.is_empty(), "{schema_errors:?}");
     let failures = crate::audit::plugin::registry::value_failures(&root, &store, &fail_closed);
-    assert!(
-        failures
-            .iter()
-            .any(|failure| failure == "plugin_self_law_registry_status_not_pass"),
-        "{failures:?}"
-    );
-    assert!(
-        failures
-            .iter()
-            .any(|failure| failure == "plugin_self_law_registry_claim_ceiling_not_live_surface"),
+    assert_eq!(
+        failures,
+        vec!["plugin_self_law_registry_live_exposure_unavailable"],
         "{failures:?}"
     );
     std::fs::remove_dir_all(root).expect("cleanup live registry proof");
+}
+
+#[test]
+fn registry_rows_reject_legacy_mixed_duplicate_and_host_asserted_authority() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "plugin-registry-canonical-rows",
+    );
+    write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":[]}),
+    );
+    let current = crate::package::inventory::package_digest(&root).expect("digest");
+    let raw_path = root.join("validation_artifacts/ultragoal-audit/live-registry-raw.json");
+    write_json(&raw_path, &raw_observation(&current));
+    let raw_digest = crate::digest::file(&raw_path).expect("raw digest");
+    let receipt = live_registry_receipt(&current, &raw_digest);
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
+
+    let mut legacy = receipt.clone();
+    legacy["agent_types"][0]["agent_type"] = json!("claim-falsifier");
+    legacy["agent_types"][0]["persona"] = json!("claim-falsifier");
+    legacy["agent_types"][0]["custom_agent_path"] =
+        json!("custom-agents/harness-contract-claim-falsifier.toml");
+    let failures = crate::audit::plugin::registry::value_failures(&root, &store, &legacy);
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure.contains("agent_legacy_keys")),
+        "{failures:?}"
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure.contains("schema") && failure.contains("additional property")),
+        "{failures:?}"
+    );
+
+    let mut duplicate = receipt.clone();
+    duplicate["agent_types"][1] = duplicate["agent_types"][0].clone();
+    let failures = crate::audit::plugin::registry::value_failures(&root, &store, &duplicate);
+    assert!(
+        failures.iter().any(|failure| {
+            failure.contains("duplicate_path") || failure.contains("agent_missing")
+        }),
+        "{failures:?}"
+    );
+
+    let mut substituted = receipt.clone();
+    substituted["agent_types"][0]["agent_manifest_path"] =
+        json!(".codex/agents/security-reviewer.toml");
+    let failures = crate::audit::plugin::registry::value_failures(&root, &store, &substituted);
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure.contains("agent_mismatch")),
+        "{failures:?}"
+    );
+
+    let mut host_asserted = receipt;
+    host_asserted["agent_types"][0]["runtime_metadata_status"] = json!("host_exposed");
+    host_asserted["agent_types"][0]["model"] = json!("gpt-inferred");
+    let failures = crate::audit::plugin::registry::value_failures(&root, &store, &host_asserted);
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure.contains("agent_runtime_unverified")),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup canonical registry rows");
 }

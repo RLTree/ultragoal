@@ -1,6 +1,9 @@
 use super::{role, row::PackageSurfaceRow};
 
 pub(super) fn contract_failure(row: &PackageSurfaceRow) -> Option<&'static str> {
+    if row.authority_level == "invalid_generated_authority" {
+        return Some("generated_surface_missing_valid_adopted_disposition");
+    }
     if role::weak_product_role(&row.product_role) {
         return Some("surface_product_role_is_goal_or_path_shape_not_product_behavior");
     }
@@ -34,7 +37,7 @@ pub(super) fn fixture_ids(row: &PackageSurfaceRow) -> Vec<&'static str> {
         "generated_projection" => {
             vec!["validator-theater-miswire-resistance-row-shape-only-mechanization-red"]
         }
-        "external_debug_no_claim" => Vec::new(),
+        "external_debug_no_claim" | "retained_context_no_claim" => Vec::new(),
         "compatibility_alias" => vec!["namespace-external-compatibility-authority-missing"],
         _ => vec![
             "namespace-validator-source-generated-class-red",
@@ -45,7 +48,7 @@ pub(super) fn fixture_ids(row: &PackageSurfaceRow) -> Vec<&'static str> {
 
 pub(super) fn receipt_ids(row: &PackageSurfaceRow) -> Vec<&'static str> {
     match row.authority_level.as_str() {
-        "external_debug_no_claim" => Vec::new(),
+        "external_debug_no_claim" | "retained_context_no_claim" => Vec::new(),
         "test_only_validation_surface" => {
             vec!["validation_artifacts/ultragoal-audit/red-fixture-report.json"]
         }

@@ -189,7 +189,7 @@ fn default_runtime(duration_ms: u64) -> RuntimeTelemetry {
 
 fn exporter(root: &Path, candidate: &str, status: &str, emit: bool) -> &'static str {
     if !emit {
-        "receipt"
+        "none_read_only"
     } else if status == "pass" || super::live_stack_receipts_current(root, candidate) {
         "victorialogs"
     } else {

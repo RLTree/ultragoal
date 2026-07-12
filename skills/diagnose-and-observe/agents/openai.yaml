@@ -1,0 +1,6 @@
+interface:
+  display_name: "Diagnose and Observe"
+  short_description: "Diagnose causes and query local product state"
+  default_prompt: "Use $harness-ultragoal:diagnose-and-observe to explain this failure and identify one exact safe next action."
+policy:
+  allow_implicit_invocation: false

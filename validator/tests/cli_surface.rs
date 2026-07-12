@@ -1,552 +1,387 @@
+use sha2::{Digest, Sha256};
+use std::collections::BTreeSet;
+use std::fs;
 use std::path::{Path, PathBuf};
-use std::process::Command;
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::process::{Command, Output};
+use std::sync::atomic::{AtomicU64, Ordering};
 
-fn repo_root() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .expect("validator has repo parent")
-        .to_path_buf()
+#[cfg(unix)]
+use std::os::unix::ffi::OsStrExt;
+#[cfg(unix)]
+use std::os::unix::fs::MetadataExt;
+
+static NEXT: AtomicU64 = AtomicU64::new(0);
+
+const PRIVATE_CANARY: &str = "NEVER_ECHO_PUBLIC_DISPATCH_CANARY_8841";
+const LEGACY_USAGE_MARKER: &str = "Current-state and completion evidence";
+
+#[derive(Debug, Eq, PartialEq)]
+struct SnapshotRow {
+    relative_path: PathBuf,
+    kind: &'static str,
+    byte_length: u64,
+    content_sha256: String,
+    unix_mode: u32,
+    modified_seconds: i64,
+    modified_nanoseconds: i64,
 }
 
-fn temp_root(root: &Path) -> PathBuf {
-    let stamp = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .expect("clock")
-        .as_nanos();
-    root.join("target")
-        .join(format!("ultragoal-cli-surface-{stamp}"))
+#[derive(Debug, Eq, PartialEq)]
+struct Observation {
+    tree: Vec<SnapshotRow>,
+    status: Vec<u8>,
 }
 
-fn ultragoal() -> &'static str {
-    env!("CARGO_BIN_EXE_ultragoal")
+struct Repository {
+    root: PathBuf,
 }
 
-fn run(root: &Path, args: &[String]) -> std::process::Output {
-    run_bin(ultragoal(), root, args)
+impl Repository {
+    #[cfg(unix)]
+    fn new(label: &str) -> Self {
+        let live = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .expect("validator has repository parent");
+        let root = std::env::temp_dir().join(format!(
+            "hul-successor-cli-surface-{label}-{}-{}",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
+        ));
+        fs::create_dir_all(&root).expect("create fixture root");
+        let root = fs::canonicalize(root).expect("canonical fixture root");
+        git(&root, &["init", "-q"]);
+        git(
+            &root,
+            &["config", "user.email", "successor@example.invalid"],
+        );
+        git(&root, &["config", "user.name", "Successor CLI"]);
+        git(&root, &["config", "commit.gpgsign", "false"]);
+        copy_authority_inputs(live, &root);
+        fs::write(root.join(".gitignore"), b"validation_artifacts/\n").expect("gitignore");
+        fs::write(root.join("tracked.txt"), b"tracked baseline\n").expect("tracked file");
+        git(&root, &["add", "-A"]);
+        git(&root, &["commit", "-qm", "successor fixture"]);
+        fs::write(root.join("tracked.txt"), b"tracked dirty state retained\n")
+            .expect("dirty tracked file");
+        fs::write(root.join("private-canary.txt"), PRIVATE_CANARY).expect("private canary");
+        Self { root }
+    }
+
+    fn run(&self, args: &[&str]) -> Output {
+        let mut command = Command::new(env!("CARGO_BIN_EXE_ultragoal"));
+        command
+            .env_clear()
+            .env("LC_ALL", "C")
+            .env("LANG", "C")
+            .env("PATH", "/usr/bin:/bin")
+            .env("GIT_CONFIG_GLOBAL", "/dev/null")
+            .env("GIT_CONFIG_NOSYSTEM", "1")
+            .env("GIT_OPTIONAL_LOCKS", "0")
+            .env("GIT_TERMINAL_PROMPT", "0")
+            .current_dir(&self.root)
+            .arg("--root")
+            .arg(&self.root)
+            .args(args);
+        command.output().expect("successor CLI executes")
+    }
 }
 
-fn run_bin(bin: &str, root: &Path, args: &[String]) -> std::process::Output {
-    Command::new(bin)
-        .current_dir(root)
+impl Drop for Repository {
+    fn drop(&mut self) {
+        let _ = fs::remove_dir_all(&self.root);
+    }
+}
+
+fn copy_authority_inputs(live: &Path, root: &Path) {
+    let source = live.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
+    let target = root.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
+    fs::create_dir_all(&target).expect("contract target");
+    let mut files = fs::read_dir(&source)
+        .expect("contract directory")
+        .map(|entry| entry.expect("contract entry").path())
+        .filter(|path| path.is_file())
+        .collect::<Vec<_>>();
+    files.sort();
+    for path in files {
+        fs::copy(&path, target.join(path.file_name().expect("contract name")))
+            .expect("copy contract file");
+    }
+    for name in ["FINAL-HANDOFF-MANIFEST.sha256", "README.md"] {
+        fs::copy(
+            source.parent().expect("contract parent").join(name),
+            target.parent().expect("target parent").join(name),
+        )
+        .expect("copy handoff input");
+    }
+    fs::create_dir_all(root.join("migration")).expect("migration directory");
+    for name in ["authority-routes.json", "generated-surface-authority.json"] {
+        fs::copy(
+            live.join("migration").join(name),
+            root.join("migration").join(name),
+        )
+        .expect("copy migration input");
+    }
+    fs::create_dir_all(root.join(".codex-plugin")).expect("plugin directory");
+    fs::write(
+        root.join(".codex-plugin/plugin.json"),
+        b"{\"name\":\"harness-ultragoal\",\"version\":\"0.0.0-test\"}\n",
+    )
+    .expect("plugin descriptor");
+}
+
+fn git(root: &Path, args: &[&str]) -> Output {
+    let output = Command::new("/usr/bin/git")
         .args(args)
+        .env_clear()
+        .env("LC_ALL", "C")
+        .env("LANG", "C")
+        .env("PATH", "/usr/bin:/bin")
+        .env("GIT_CONFIG_GLOBAL", "/dev/null")
+        .env("GIT_CONFIG_NOSYSTEM", "1")
+        .env("GIT_OPTIONAL_LOCKS", "0")
+        .env("GIT_TERMINAL_PROMPT", "0")
+        .current_dir(root)
         .output()
-        .expect("validator command runs")
+        .expect("git executes");
+    assert!(output.status.success(), "git {args:?}: {output:?}");
+    output
 }
 
-fn root_relative(root: &Path, path: &Path) -> String {
-    path.strip_prefix(root)
-        .expect("test output path is inside command root")
-        .to_string_lossy()
-        .into_owned()
+fn digest(bytes: &[u8]) -> String {
+    format!("{:x}", Sha256::digest(bytes))
+}
+
+#[cfg(unix)]
+fn content(path: &Path, metadata: &fs::Metadata) -> Vec<u8> {
+    if metadata.is_file() {
+        fs::read(path).expect("read snapshot file")
+    } else if metadata.file_type().is_symlink() {
+        fs::read_link(path)
+            .expect("read snapshot link")
+            .as_os_str()
+            .as_bytes()
+            .to_vec()
+    } else {
+        Vec::new()
+    }
+}
+
+#[cfg(unix)]
+fn push_row(root: &Path, path: &Path, rows: &mut Vec<SnapshotRow>) {
+    let metadata = fs::symlink_metadata(path).expect("snapshot metadata");
+    let kind = if metadata.is_file() {
+        "file"
+    } else if metadata.is_dir() {
+        "directory"
+    } else if metadata.file_type().is_symlink() {
+        "symlink"
+    } else {
+        "special"
+    };
+    rows.push(SnapshotRow {
+        relative_path: path
+            .strip_prefix(root)
+            .expect("snapshot relative")
+            .to_path_buf(),
+        kind,
+        byte_length: metadata.len(),
+        content_sha256: digest(&content(path, &metadata)),
+        unix_mode: metadata.mode(),
+        modified_seconds: metadata.mtime(),
+        modified_nanoseconds: metadata.mtime_nsec(),
+    });
+    if metadata.is_dir() {
+        let mut entries = fs::read_dir(path)
+            .expect("snapshot directory")
+            .map(|entry| entry.expect("snapshot entry").path())
+            .collect::<Vec<_>>();
+        entries.sort();
+        for entry in entries {
+            push_row(root, &entry, rows);
+        }
+    }
+}
+
+#[cfg(unix)]
+fn observe(root: &Path) -> Observation {
+    let mut tree = Vec::new();
+    push_row(root, root, &mut tree);
+    Observation {
+        tree,
+        status: git(
+            root,
+            &["status", "--porcelain=v1", "-z", "--untracked-files=all"],
+        )
+        .stdout,
+    }
+}
+
+fn emitted(output: &Output) -> Vec<u8> {
+    let mut bytes = output.stdout.clone();
+    bytes.extend_from_slice(&output.stderr);
+    bytes
+}
+
+fn assert_machine_error(output: &Output) {
+    assert_eq!(output.status.code(), Some(2), "{output:?}");
+    let value: serde_json::Value =
+        serde_json::from_slice(&emitted(output)).expect("machine error JSON");
+    assert_eq!(value["schema_version"], "harness-ultragoal.cli-error.v1");
+    assert_eq!(value["exit_code"], 2);
+    let bytes = emitted(output);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(!text.contains(PRIVATE_CANARY));
+    assert!(!text.contains(LEGACY_USAGE_MARKER));
+}
+
+#[cfg(unix)]
+#[test]
+fn public_catalog_is_sole_and_legacy_routes_fail_closed_without_writes() {
+    let repository = Repository::new("sole-catalog");
+    let initial = observe(&repository.root);
+    assert!(!initial.status.is_empty(), "fixture must be dirty");
+
+    for args in [
+        &["--json", PRIVATE_CANARY][..],
+        &["--json", "help"][..],
+        &["--json", "current-state", "--help"][..],
+        &["--json", "observe", "logs", "query", "--help"][..],
+        &["--json", "package", "digest", "--help"][..],
+        &["--json", "source", "audit"][..],
+    ] {
+        let before = observe(&repository.root);
+        let output = repository.run(args);
+        assert_machine_error(&output);
+        assert_eq!(observe(&repository.root), before, "hidden write: {args:?}");
+    }
+
+    let help = repository.run(&["--json", "--help"]);
+    assert_eq!(help.status.code(), Some(0));
+    assert!(help.stderr.is_empty());
+    let value: serde_json::Value = serde_json::from_slice(&help.stdout).expect("help JSON");
+    assert_eq!(value["schema_version"], "harness-ultragoal.cli-help.v1");
+    let groups = value["commands"]
+        .as_array()
+        .expect("command catalog")
+        .iter()
+        .filter_map(|row| row["group"].as_str())
+        .collect::<BTreeSet<_>>();
+    assert_eq!(
+        groups,
+        BTreeSet::from([
+            "check", "diagnose", "eval", "fit", "inspect", "migrate", "next", "observe", "package",
+            "prove"
+        ])
+    );
+    assert_eq!(observe(&repository.root), initial);
+}
+
+#[cfg(unix)]
+#[test]
+fn public_read_help_parse_and_query_paths_are_recursively_zero_write() {
+    let repository = Repository::new("read-zero-write");
+    let initial = observe(&repository.root);
+    for args in [
+        &["--json", "--version"][..],
+        &["--json", "inspect", "context"][..],
+        &["--json", "inspect", "inventory"][..],
+        &["--json", "inspect"][..],
+        &["--json", "next"][..],
+        &["--json", "diagnose"][..],
+        &["--json", "observe", "query"][..],
+    ] {
+        let before = observe(&repository.root);
+        let output = repository.run(args);
+        assert!(
+            matches!(output.status.code(), Some(0 | 1 | 3 | 4)),
+            "{args:?}: {output:?}"
+        );
+        let value: serde_json::Value =
+            serde_json::from_slice(&emitted(&output)).expect("versioned JSON output");
+        assert!(
+            value["schema_version"]
+                .as_str()
+                .is_some_and(|schema| schema.ends_with("-v1") || schema.ends_with(".v1")),
+            "{args:?}: {value}"
+        );
+        assert!(!String::from_utf8_lossy(&emitted(&output)).contains(PRIVATE_CANARY));
+        assert_eq!(observe(&repository.root), before, "hidden write: {args:?}");
+    }
+    assert_eq!(observe(&repository.root), initial);
+}
+
+#[cfg(unix)]
+#[test]
+fn unavailable_effectful_routes_refuse_before_repository_mutation_or_path_echo() {
+    let repository = Repository::new("effect-refusal");
+    let initial = observe(&repository.root);
+    for args in [
+        &[
+            "--json",
+            "package",
+            "build",
+            "--output",
+            "private-output.json",
+        ][..],
+        &[
+            "--json",
+            "prove",
+            "--claim",
+            "private-claim",
+            "--output",
+            "private-proof.json",
+        ][..],
+        &[
+            "--json",
+            "migrate",
+            "apply",
+            "--plan",
+            "private-plan.json",
+            "--accept-plan",
+            "private-plan-id",
+        ][..],
+    ] {
+        let before = observe(&repository.root);
+        let output = repository.run(args);
+        assert_eq!(output.status.code(), Some(4), "{args:?}: {output:?}");
+        let value: serde_json::Value =
+            serde_json::from_slice(&emitted(&output)).expect("authority refusal JSON");
+        assert_eq!(value["exit_class"], "unsupported_capability");
+        let bytes = emitted(&output);
+        let text = String::from_utf8_lossy(&bytes);
+        for private in [
+            "private-output.json",
+            "private-claim",
+            "private-proof.json",
+            "private-plan.json",
+            "private-plan-id",
+        ] {
+            assert!(!text.contains(private), "private argument echo: {private}");
+        }
+        assert_eq!(observe(&repository.root), before, "hidden write: {args:?}");
+    }
+    assert_eq!(observe(&repository.root), initial);
 }
 
 #[test]
-fn cli_surface_commands_execute() {
-    let root = repo_root();
-    let temp = temp_root(&root);
-    std::fs::create_dir_all(&temp).expect("create temp root");
-
-    for args in [Vec::<String>::new(), vec!["unknown".into()]] {
-        assert_eq!(run(&root, &args).status.code(), Some(2));
-    }
-    assert_eq!(run(&root, &["--root".into()]).status.code(), Some(2));
-    assert_eq!(
-        run(&root, &["--root".into(), "audit".into()]).status.code(),
-        Some(2)
-    );
-    assert_eq!(run(&root, &["review-target".into()]).status.code(), Some(2));
-    assert_eq!(
-        run(
-            &root,
-            &["--root".into(), ".".into(), "source".into(), "audit".into(),],
-        )
-        .status
-        .code(),
-        Some(2)
-    );
+fn malformed_root_options_use_the_typed_machine_contract() {
+    let binary = env!("CARGO_BIN_EXE_ultragoal");
     for args in [
-        vec![
-            "--root".into(),
-            ".".into(),
-            "archive".into(),
-            "build".into(),
-            "--receipt".into(),
-            temp.join("archive-missing-zip.json").display().to_string(),
-        ],
-        vec![
-            "--root".into(),
-            ".".into(),
-            "archive".into(),
-            "build".into(),
-            "--zip".into(),
-            temp.join("archive-missing-receipt.zip")
-                .display()
-                .to_string(),
-        ],
-        vec![
-            "--root".into(),
-            ".".into(),
-            "review-round".into(),
-            "verify".into(),
-            "--receipt".into(),
-            temp.join("review-round-missing-anchor.json")
-                .display()
-                .to_string(),
-        ],
-        vec![
-            "--root".into(),
-            ".".into(),
-            "semantic-receipts".into(),
-            "--out-dir".into(),
-            temp.join("semantic-missing-input").display().to_string(),
-        ],
-        vec![
-            "--root".into(),
-            ".".into(),
-            "semantic-receipts".into(),
-            "--input".into(),
-            "fixtures/valid/minimal-goal-run.json".into(),
-        ],
+        &["--json", "--root"][..],
+        &[
+            "--json",
+            "--root",
+            "private-root-one",
+            "--root",
+            "private-root-two",
+            "inspect",
+        ][..],
     ] {
-        assert_eq!(run(&root, &args).status.code(), Some(2));
+        let output = Command::new(binary).args(args).output().expect("CLI runs");
+        assert_machine_error(&output);
+        let bytes = emitted(&output);
+        let text = String::from_utf8_lossy(&bytes);
+        assert!(!text.contains("private-root-one"));
+        assert!(!text.contains("private-root-two"));
     }
-
-    let review_round_parse_success = vec![
-        "--root".into(),
-        ".".into(),
-        "review-round".into(),
-        "verify".into(),
-        "--receipt".into(),
-        temp.join("review-round-missing-input.json")
-            .display()
-            .to_string(),
-        "--validator-receipt".into(),
-        "fixtures/review-round/anchors/validator-receipt.json".into(),
-        "--review-target-receipt".into(),
-        "fixtures/review-round/anchors/review-target-receipt.json".into(),
-        "--archive-receipt".into(),
-        "fixtures/review-round/anchors/archive-receipt.json".into(),
-    ];
-    assert_eq!(
-        run(&root, &review_round_parse_success).status.code(),
-        Some(1)
-    );
-
-    let digest = run(
-        &root,
-        &[
-            "--root".into(),
-            ".".into(),
-            "package".into(),
-            "digest".into(),
-        ],
-    );
-    assert!(digest.status.success(), "package digest failed: {digest:?}");
-    let digest_stdout = String::from_utf8_lossy(&digest.stdout);
-    assert!(
-        digest_stdout.lines().next().is_some_and(|line| {
-            line.starts_with("sha256:") && line.len() == "sha256:".len() + 64
-        }),
-        "package digest first line is not raw digest: {digest_stdout}"
-    );
-    assert!(
-        digest_stdout.contains("receipt=validation_artifacts/observability/package-digest.json")
-    );
-    assert!(digest_stdout.contains("run_id=run-"));
-
-    let pid = std::process::id();
-    let product_receipt_dir = PathBuf::from(format!(
-        "validation_artifacts/product/cli-surface-receipts-{pid}"
-    ));
-    let product = run(
-        &root,
-        &[
-            "--root".into(),
-            ".".into(),
-            "product".into(),
-            "prove-fitness".into(),
-            "--receipt-dir".into(),
-            product_receipt_dir.display().to_string(),
-        ],
-    );
-    assert!(
-        product.status.success(),
-        "product prove-fitness failed: {product:?}"
-    );
-    assert!(
-        root.join(&product_receipt_dir)
-            .join("product-fitness-receipt.json")
-            .is_file()
-    );
-    assert_eq!(
-        run(
-            &root,
-            &[
-                "--root".into(),
-                ".".into(),
-                "product".into(),
-                "prove-fitness".into(),
-                "--receipt".into(),
-                temp.join("product-control.json").display().to_string(),
-            ],
-        )
-        .status
-        .code(),
-        Some(2)
-    );
-    assert_eq!(
-        run(
-            &root,
-            &[
-                "--root".into(),
-                ".".into(),
-                "product".into(),
-                "unknown".into(),
-            ],
-        )
-        .status
-        .code(),
-        Some(2)
-    );
-
-    let target_parse_root = temp.join("target-parse-observability");
-    std::fs::create_dir_all(&target_parse_root).expect("target parse root");
-    std::fs::write(
-        target_parse_root.join("plugin-manifest-draft.json"),
-        r#"{"resources":[]}"#,
-    )
-    .expect("target parse manifest");
-    let target_parse = run(
-        &root,
-        &[
-            "--root".into(),
-            target_parse_root.display().to_string(),
-            "target-repo".into(),
-            "audit".into(),
-            "--receipt".into(),
-            "validation_artifacts/ultragoal-audit/target-receipt.json".into(),
-        ],
-    );
-    assert_eq!(target_parse.status.code(), Some(2));
-    let target_parse_obs =
-        target_parse_root.join("validation_artifacts/observability/target-repo-audit.json");
-    let target_parse_value: serde_json::Value =
-        serde_json::from_slice(&std::fs::read(&target_parse_obs).expect("target parse obs"))
-            .expect("target parse obs json");
-    assert_eq!(target_parse_value["operation"], "target-repo.audit");
-    assert_eq!(
-        target_parse_value["event"]["where_failed"],
-        "target-repo.audit.parse"
-    );
-
-    std::fs::write(
-        temp.join("plugin-manifest-draft.json"),
-        r#"{"version":"0.0.0-test","resources":[]}"#,
-    )
-    .expect("write temp manifest");
-    std::fs::create_dir_all(temp.join("fixtures/valid")).expect("valid fixtures");
-    std::fs::create_dir_all(temp.join("fixtures/red")).expect("red fixtures");
-    std::fs::create_dir_all(temp.join("templates")).expect("templates");
-    std::fs::write(
-        temp.join("fixtures/valid/minimal-goal-run.json"),
-        r#"{"claims":[]}"#,
-    )
-    .expect("base fixture");
-    std::fs::write(
-        temp.join("fixtures/red/missing-patch.json"),
-        r#"{
-  "expected_failure": {
-    "check_id": "red-fixture-coverage",
-    "error": "red_fixture_json_patch_missing"
-  },
-  "base_fixture_path": "fixtures/valid/minimal-goal-run.json"
-}"#,
-    )
-    .expect("red packet");
-    std::fs::write(
-        temp.join("templates/RED_FIXTURES.json"),
-        r#"[{
-  "id": "missing-patch",
-  "packet_path": "fixtures/red/missing-patch.json",
-  "expected_failure": {
-    "check_id": "red-fixture-coverage",
-    "error": "red_fixture_json_patch_missing"
-  }
-}]"#,
-    )
-    .expect("red catalog");
-    let red_report = temp.join("validation_artifacts/ultragoal-audit/red-fixture-report.json");
-    std::fs::create_dir_all(red_report.parent().expect("red report parent"))
-        .expect("red report dir");
-    let red_report_run = run(
-        &root,
-        &[
-            "--root".into(),
-            temp.display().to_string(),
-            "red-fixture-report".into(),
-            "--report".into(),
-            root_relative(&temp, &red_report),
-        ],
-    );
-    assert!(
-        red_report_run.status.success(),
-        "red fixture report failed: {red_report_run:?}"
-    );
-    let red_observe = temp.join("validation_artifacts/observability/red-fixture-report.json");
-    let red_value: serde_json::Value =
-        serde_json::from_slice(&std::fs::read(&red_observe).expect("red observe"))
-            .expect("red observe json");
-    assert_eq!(red_value["operation"], "red_fixture.report");
-    assert_eq!(red_value["event"]["command"], "ultragoal red");
-
-    let performance_receipt = root.join(format!(
-        "validation_artifacts/cli/cli-surface-performance-{pid}.json"
-    ));
-    let performance = run(
-        &root,
-        &[
-            "--root".into(),
-            ".".into(),
-            "self".into(),
-            "performance".into(),
-            "prove".into(),
-            "--receipt".into(),
-            root_relative(&root, &performance_receipt),
-        ],
-    );
-    assert_eq!(
-        performance.status.code(),
-        Some(1),
-        "performance command should fail closed without node speed evidence: {performance:?}"
-    );
-    let performance_value: serde_json::Value =
-        serde_json::from_slice(&std::fs::read(&performance_receipt).expect("performance receipt"))
-            .expect("performance receipt json");
-    assert_eq!(
-        performance_value["failure"]["id"],
-        "cli_performance_missing_node_speed_proof"
-    );
-
-    let rust_fast_receipt = root.join(format!(
-        "validation_artifacts/rust/cli-surface-fast-{pid}.json"
-    ));
-    let rust_fast = run(
-        &root,
-        &[
-            "--root".into(),
-            ".".into(),
-            "rust".into(),
-            "fast".into(),
-            "--receipt".into(),
-            root_relative(&root, &rust_fast_receipt),
-        ],
-    );
-    assert!(
-        rust_fast.status.success(),
-        "rust fast failed: {rust_fast:?}"
-    );
-
-    let gc_plan_receipt = root.join(format!(
-        "validation_artifacts/gc/cli-surface-plan-{pid}.json"
-    ));
-    let gc_plan = run(
-        &root,
-        &[
-            "--root".into(),
-            ".".into(),
-            "gc".into(),
-            "plan".into(),
-            "--receipt".into(),
-            root_relative(&root, &gc_plan_receipt),
-        ],
-    );
-    assert!(gc_plan.status.success(), "gc plan failed: {gc_plan:?}");
-
-    let update_goal_receipt = temp.join("validation_artifacts/cli/update-goal-eligibility.json");
-    let update_goal = run(
-        &root,
-        &[
-            "--root".into(),
-            temp.display().to_string(),
-            "update-goal".into(),
-            "eligibility".into(),
-            "--receipt".into(),
-            "validation_artifacts/cli/update-goal-eligibility.json".into(),
-        ],
-    );
-    assert_eq!(update_goal.status.code(), Some(1));
-    assert_fail_closed_cli_receipt(&update_goal_receipt, "update_goal_eligibility");
-
-    let self_receipt = temp.join("validation_artifacts/cli/self-law-receipt.json");
-    let self_law = run(
-        &root,
-        &[
-            "--root".into(),
-            temp.display().to_string(),
-            "self".into(),
-            "update-goal".into(),
-            "eligibility".into(),
-            "--receipt".into(),
-            "validation_artifacts/cli/self-law-receipt.json".into(),
-        ],
-    );
-    assert_eq!(self_law.status.code(), Some(1));
-    assert_fail_closed_cli_receipt(&self_receipt, "self_update_goal_eligibility");
-
-    assert_eq!(
-        run(
-            &root,
-            &[
-                "--root".into(),
-                temp.display().to_string(),
-                "transaction".into(),
-                "finalize".into(),
-            ],
-        )
-        .status
-        .code(),
-        Some(2)
-    );
-
-    let transaction_receipt = temp.join("validation_artifacts/cli/transactional-finalization.json");
-    let transaction = run(
-        &root,
-        &[
-            "--root".into(),
-            temp.display().to_string(),
-            "transaction".into(),
-            "finalize".into(),
-            "--receipt".into(),
-            "validation_artifacts/cli/transactional-finalization.json".into(),
-        ],
-    );
-    assert_eq!(transaction.status.code(), Some(1));
-    assert_fail_closed_transaction_receipt(&transaction_receipt);
-
-    let review_target = root.join(format!(
-        "validation_artifacts/review/cli-surface-review-target-{pid}.json"
-    ));
-    let review_target_args = vec![
-        "--root".into(),
-        ".".into(),
-        "review-target".into(),
-        "--receipt".into(),
-        root_relative(&root, &review_target),
-    ];
-    assert!(run(&root, &review_target_args).status.success());
-
-    let archive_args = vec![
-        "--root".into(),
-        ".".into(),
-        "archive".into(),
-        "--zip".into(),
-        format!("validation_artifacts/review/cli-surface-candidate-{pid}.zip"),
-        "--receipt".into(),
-        format!("validation_artifacts/review/cli-surface-archive-{pid}.json"),
-    ];
-    assert!(run(&root, &archive_args).status.success());
-
-    let semantic_args = vec![
-        "--root".into(),
-        ".".into(),
-        "semantic-receipts".into(),
-        "--input".into(),
-        "fixtures/valid/minimal-goal-run.json".into(),
-        "--out-dir".into(),
-        format!("validation_artifacts/semantic/cli-surface-normal-{pid}"),
-    ];
-    assert!(run(&root, &semantic_args).status.success());
-
-    let refused_model = vec![
-        "--root".into(),
-        ".".into(),
-        "semantic-receipts".into(),
-        "--input".into(),
-        "fixtures/valid/minimal-goal-run.json".into(),
-        "--out-dir".into(),
-        format!("validation_artifacts/semantic/cli-surface-model-refusal-{pid}"),
-        "--implementation-kind".into(),
-        "model".into(),
-        "--provider".into(),
-        "test-provider".into(),
-        "--model".into(),
-        "test-model".into(),
-        "--prompt-contract-digest".into(),
-        "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa".into(),
-    ];
-    assert_eq!(run(&root, &refused_model).status.code(), Some(2));
-
-    let red_semantic_args = vec![
-        "--root".into(),
-        ".".into(),
-        "semantic-receipts".into(),
-        "--input".into(),
-        "fixtures/red/semantic-classification-receipt-wrong-claim.json".into(),
-        "--out-dir".into(),
-        format!("validation_artifacts/semantic/cli-surface-red-{pid}"),
-    ];
-    assert_ne!(run(&root, &red_semantic_args).status.code(), None);
-
-    for (fixture, receipt_name) in [
-        (
-            "fixtures/target-repo/valid-product-cohesion",
-            "target-valid.json",
-        ),
-        (
-            "fixtures/target-repo/red/missing-product-cohesion",
-            "target-red.json",
-        ),
-    ] {
-        let target_args = vec![
-            "--root".into(),
-            ".".into(),
-            "audit".into(),
-            "--target-repo".into(),
-            fixture.into(),
-            "--receipt".into(),
-            format!("validation_artifacts/target-repo/cli-surface-{pid}-{receipt_name}"),
-            "--require-observability".into(),
-            "--require-product-cohesion".into(),
-        ];
-        assert_ne!(run(&root, &target_args).status.code(), None);
-    }
-
-    std::fs::remove_dir_all(&temp).expect("remove temp root");
-}
-
-fn assert_fail_closed_cli_receipt(path: &Path, operation: &str) {
-    let value: serde_json::Value =
-        serde_json::from_slice(&std::fs::read(path).expect("read cli receipt"))
-            .expect("parse cli receipt");
-    assert_eq!(
-        value["schema"],
-        "harness-ultragoal.cli-control-plane-receipt.v1"
-    );
-    assert_eq!(value["status"], "fail");
-    assert_eq!(value["operation"], operation);
-    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
-    let expected_law = if operation == "self_update_goal_eligibility" {
-        "cli-self-law-compliance"
-    } else {
-        "cli-control-plane-authority"
-    };
-    assert_eq!(value["failure"]["law_id"], expected_law);
-}
-
-fn assert_fail_closed_transaction_receipt(path: &Path) {
-    let value: serde_json::Value =
-        serde_json::from_slice(&std::fs::read(path).expect("read transaction receipt"))
-            .expect("parse transaction receipt");
-    assert_eq!(
-        value["schema"],
-        "harness-ultragoal.cli-transactional-finalization-receipt.v1"
-    );
-    assert_eq!(value["status"], "fail");
-    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
-    assert!(
-        value["failure"]["observed_failures"]
-            .as_array()
-            .is_some_and(|items| !items.is_empty())
-    );
 }

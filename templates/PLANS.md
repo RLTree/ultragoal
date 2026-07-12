@@ -41,9 +41,9 @@ For macro-lanes, also include:
 - owner thread type, usually a Codex app-managed worktree thread for
   long-running macro-lanes that need sidebar visibility, resumability, or user
   handoff;
-- lane-owner model and reasoning, defaulting future Codex app worktree lane
-  owners to `gpt-5.5` with `low` reasoning unless a specific lane risk
-  justifies more;
+- lane-owner model and reasoning when Codex exposes them, using the lowest
+  supported reasoning level that fits the named risk and recording `unknown`
+  rather than inferring unavailable metadata;
 - launch prompt path or exact prompt text used to bind the lane agent to this
   ExecPlan;
 - branch and worktree creation order, including the rule that branch refs are
@@ -67,8 +67,9 @@ For macro-lanes, also include:
 - ready receipt path;
 - review cadence and required reviewer personas when the lane is material;
 - review model and reasoning: every material sign-off round uses the four
-  merged canonical personas with `gpt-5.5` and `high` against the current
-  validator, review-target, archive, registry, and claim-ceiling anchors;
+  merged canonical personas against the current validator, review-target,
+  archive, registry, and claim-ceiling anchors, with runtime-supported
+  configuration recorded only when exposed;
 - parent-thread completion message contract;
 - teardown condition, including what proves the branch tip is preserved, the
   worktree is clean, evidence has been captured, and the worktree can be closed.
@@ -96,10 +97,10 @@ worktree thread. A failed worktree initialization caused by a missing branch is
 an orchestration defect that must be recorded in `Surprises & Discoveries` and
 fixed before the lane can proceed.
 
-Future lane-owner threads should be launched with `gpt-5.5` and `low`
-reasoning by default. Do not copy reviewer reasoning onto implementation lane
+Future lane-owner threads should use the lowest supported reasoning level that
+fits the lane risk. Do not copy reviewer reasoning onto implementation lane
 owners. Increase lane-owner reasoning only when the ExecPlan names the risk,
-scope, and expected payoff.
+scope, and expected payoff. Record model and reasoning only when exposed.
 
 ## Lane Ready Message
 

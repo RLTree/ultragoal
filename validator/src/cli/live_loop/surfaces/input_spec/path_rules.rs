@@ -22,8 +22,6 @@ pub(super) fn is_package_owned_source(path: &str) -> bool {
         || path.starts_with("schemas/")
         || path.starts_with("templates/")
         || path.starts_with("skills/")
-        || path.starts_with("agents/")
-        || path.starts_with("custom-agents/")
         || path.starts_with("connectors/")
         || path.starts_with("dev/observability/")
         || path.starts_with("scripts/")
@@ -32,7 +30,7 @@ pub(super) fn is_package_owned_source(path: &str) -> bool {
         || path.starts_with("examples/")
         || path.starts_with("install/")
         || path.starts_with(".cargo/")
-        || path.starts_with(".codex/")
+        || path.starts_with(".codex/agents/")
         || path.starts_with(".harness/")
         || path.starts_with(".codex-plugin/")
         || path.starts_with("fixtures/")
@@ -229,4 +227,23 @@ fn is_rust_build_input(path: &str) -> bool {
 
 fn is_json_surface(path: &str) -> bool {
     path.ends_with(".json") || path.ends_with(".jsonl")
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn package_source_agent_authority_is_current_and_narrow() {
+        assert!(super::is_package_owned_source(
+            ".codex/agents/claim-falsifier.toml"
+        ));
+        assert!(!super::is_package_owned_source(
+            "custom-agents/harness-contract-claim-falsifier.toml"
+        ));
+        assert!(!super::is_package_owned_source(
+            "agents/contract-claim-falsifier.md"
+        ));
+        assert!(!super::is_package_owned_source(
+            ".codex/lane-registry/lane-001-launch-status.json"
+        ));
+    }
 }

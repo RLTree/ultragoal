@@ -1,6 +1,11 @@
 use serde_json::json;
 use std::path::Path;
 
+mod bounds;
+#[cfg(unix)]
+mod security;
+mod support;
+
 fn write_manifest(root: &std::path::Path, resources: serde_json::Value) {
     std::fs::write(
         root.join("plugin-manifest-draft.json"),
@@ -37,14 +42,14 @@ fn package_digest_rejects_missing_directories_and_invalid_paths() {
     assert!(
         super::package_digest(&root)
             .expect_err("directory rejected")
-            .contains("package digest manifest path is missing")
+            .contains("target is not a regular file")
     );
 
     write_manifest(&root, json!(["docs/missing.txt"]));
     assert!(
         super::package_digest(&root)
             .expect_err("missing file rejected")
-            .contains("package digest manifest path is missing")
+            .contains("component metadata failed")
     );
 
     write_manifest(&root, json!(["../escape.txt"]));
@@ -54,6 +59,17 @@ fn package_digest_rejects_missing_directories_and_invalid_paths() {
             .contains("package digest path invalid")
     );
     std::fs::remove_dir_all(root).expect("cleanup package inventory");
+}
+
+#[test]
+fn missing_package_root_is_reported_at_the_manifest_boundary() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "package-inventory-missing-root",
+    );
+    let error = super::package_digest(&root).expect_err("missing root");
+    assert!(error.contains("plugin-manifest-draft.json"), "{error}");
+    assert!(error.contains("package manifest unavailable"), "{error}");
+    assert!(error.contains("anchored package root"), "{error}");
 }
 
 #[test]

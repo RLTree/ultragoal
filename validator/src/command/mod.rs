@@ -84,5 +84,6 @@ pub(crate) enum Command {
     TypedBoundaries(crate::cli::typed_boundaries::TypedBoundariesCommand),
     PackageInventory(crate::cli::package::inventory::PackageInventoryCommand),
     PackageDigest,
+    Successor(crate::cli::successor::ParseOutcome),
     Help,
 }

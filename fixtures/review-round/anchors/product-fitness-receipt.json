@@ -141,7 +141,7 @@
     },
     "recovery_path": "Withhold the claim and add blocker when Product Fitness proof is missing"
   },
-  "reviewer_actor_id": "harness-product-simplicity-falsifier",
+  "reviewer_actor_id": "product-journey-reviewer",
   "schema": "harness-ultragoal.product-fitness-receipt.v1",
   "substitution_rejections": [
     {

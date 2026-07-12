@@ -11,11 +11,6 @@ fn live_loop_run_refreshes_node_timing_or_stays_on_reconciliation_failure() {
     )
     .expect("manifest");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
-    crate::json_boundary::write_json(
-        &root.join("docs/generated/observability/command-inventory.json"),
-        &json!({"observability_control_board": {"status": "observable"}}),
-    )
-    .expect("board");
     for path in [
         "validation_artifacts/coverage/coverage-receipt.json",
         "validation_artifacts/ultragoal-audit/validator-receipt.json",
@@ -87,6 +82,7 @@ fn live_loop_run_refreshes_node_timing_or_stays_on_reconciliation_failure() {
             assert_ne!(fmt_node["status"], "fail");
         }
         "fail" => assert_temp_root_format_check_blocked(fmt_node),
+        "missing" => assert_missing_current_measurement(fmt_node),
         other => panic!("unexpected fmt validation status: {other}"),
     }
     let build_node = receipt["nodes"]
@@ -107,12 +103,11 @@ fn live_loop_run_refreshes_node_timing_or_stays_on_reconciliation_failure() {
         ("build_check", "live_loop_speedup_target_missed") => {
             assert_executed_timing_refresh_blocked(build_node, "cargo build");
         }
+        ("fmt_check", "live_loop_high_frequency_measurement_missing") => {
+            assert_missing_current_measurement(fmt_node)
+        }
         ("build_check", "live_loop_high_frequency_measurement_missing") => {
-            assert_eq!(
-                build_node["baseline_measurement_state"],
-                "missing_current_full_command_baseline"
-            );
-            assert_eq!(build_node["proof_kind"], "missing");
+            assert_missing_current_measurement(build_node)
         }
         ("fmt_check", "live_loop_telemetry_reconciliation_missing") => {
             assert_reconciliation_failed(fmt_node);
@@ -153,11 +148,21 @@ fn live_loop_run_refreshes_node_timing_or_stays_on_reconciliation_failure() {
         "{}",
         receipt["first_control_board_blocker"]
     );
+    assert_eq!(receipt["first_control_board_blocker"]["id"], "HCT-OBSERVE");
     assert_eq!(
         receipt["observability"]["event"]["failure_class"],
         receipt["first_blocker"]["failure_class"]
     );
     std::fs::remove_dir_all(root).expect("cleanup live loop pass");
+}
+
+fn assert_missing_current_measurement(node: &serde_json::Value) {
+    assert_eq!(
+        node["baseline_measurement_state"],
+        "missing_current_full_command_baseline"
+    );
+    assert_eq!(node["validation_status"], "missing");
+    assert_eq!(node["proof_kind"], "missing");
 }
 
 fn assert_executed_timing_refresh_blocked(node: &serde_json::Value, command_fragment: &str) {

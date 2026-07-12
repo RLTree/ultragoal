@@ -1,0 +1,61 @@
+//! Candidate-bound capture machinery and immutable artifact storage.
+//!
+//! On supported macOS hosts, crate-internal typed-catalog permits can execute a
+//! narrow allowlist of pinned, root-owned native read probes under the host
+//! sandbox. Shells, wrappers, unprotected programs, writes, network access, and
+//! process forking remain unavailable.
+//! Without an accepted typed-catalog token and binding, every caller-supplied
+//! `CommandSpec` fails before context revalidation or descriptor access.
+//! Secret values are never inferred.
+
+mod artifact;
+mod artifact_model;
+mod artifact_safety;
+mod descriptor;
+#[cfg(test)]
+mod descriptor_race_control;
+mod environment;
+mod filesystem;
+// The legacy capture integration harness imports this module by path into a
+// reduced test crate.  Its root deliberately has no scheduler authority, so
+// the scheduler-only adapter is compiled only in the real crate.
+#[cfg(not(test))]
+mod fixture;
+mod inputs;
+mod output;
+mod process;
+mod program;
+mod run;
+mod sandbox;
+mod spec;
+mod tree;
+mod util;
+
+pub use artifact_model::{ArtifactDisposition, ArtifactRef, ArtifactResolver, CapturedArtifact};
+#[cfg(not(test))]
+pub(crate) use fixture::FixtureCaptureAdapter;
+pub use inputs::{PublicArg, PublicArtifact, PublicEnv, SecretArg, SecretArtifact, SecretEnv};
+#[allow(unused_imports)]
+pub use run::CapturedRun;
+#[allow(unused_imports)]
+pub(crate) use spec::CatalogPermit;
+pub use spec::CommandSpec;
+
+#[cfg(test)]
+#[allow(unused_imports)]
+pub(crate) use artifact::{capture_public_for_test, capture_spec_artifacts_for_test};
+#[cfg(test)]
+#[allow(unused_imports)]
+pub(crate) use artifact_safety::finalize_for_test;
+#[cfg(test)]
+#[allow(unused_imports)]
+pub(crate) use descriptor::{
+    reset_test_descriptor_bytes_read, reset_test_file_open_attempts, test_descriptor_bytes_read,
+    test_file_open_attempts,
+};
+#[cfg(test)]
+#[allow(unused_imports)]
+pub(crate) use descriptor_race_control::{set_test_preopen_pause_ms, test_preopen_is_paused};
+#[cfg(test)]
+#[allow(unused_imports)]
+pub(crate) use filesystem::{set_test_artifact_pause_ms, test_artifact_is_paused};

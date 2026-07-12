@@ -1,5 +1,6 @@
-use crate::audit::contract::{Failure, REQUIRED_AGENTS, REQUIRED_SKILLS};
+use crate::audit::contract::{Failure, REQUIRED_SKILLS};
 use crate::claim_semantics::str_field;
+use serde::Deserialize;
 use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
@@ -28,7 +29,10 @@ pub(crate) fn check_plugin_with_cache(
 }
 
 fn check_plugin_manifest(manifest: &Value, root: &Path, out: &mut Vec<Failure>) {
-    let plugin_paths = crate::package::inventory::inventory_paths(manifest);
+    let plugin_paths = crate::package::inventory::inventory_paths(manifest)
+        .into_iter()
+        .filter(|path| !legacy_agent_path(path))
+        .collect::<Vec<_>>();
     super::retired_reviewer_policy::check_packaged_paths(&plugin_paths, out);
     for failure in crate::package::resource::purpose::failures(root, manifest) {
         out.push(Failure::new(
@@ -56,8 +60,7 @@ fn check_plugin_manifest(manifest: &Value, root: &Path, out: &mut Vec<Failure>) 
         }
     }
     required_skill_checks(manifest, out);
-    required_agent_checks(manifest, out);
-    custom_agent_checks(manifest, root, out);
+    required_agent_checks(manifest, root, out);
     for failure in crate::skill_links::manifest_failures(root, manifest) {
         out.push(Failure::new(
             "skill-inventory-closure",
@@ -65,6 +68,10 @@ fn check_plugin_manifest(manifest: &Value, root: &Path, out: &mut Vec<Failure>) 
             failure.detail,
         ));
     }
+}
+
+fn legacy_agent_path(path: &str) -> bool {
+    path.starts_with("agents/") || path.starts_with("custom-agents/")
 }
 
 fn required_skill_checks(manifest: &Value, out: &mut Vec<Failure>) {
@@ -86,146 +93,90 @@ fn required_skill_checks(manifest: &Value, out: &mut Vec<Failure>) {
     }
 }
 
-fn custom_agent_checks(manifest: &Value, root: &Path, out: &mut Vec<Failure>) {
-    for entry in manifest
-        .get("agents")
-        .and_then(Value::as_array)
-        .into_iter()
-        .flatten()
-    {
-        let path = str_field(entry, "path");
-        if !path.starts_with("custom-agents/") {
-            continue;
-        }
-        let expected = str_field(entry, "app_visible_name");
-        if expected.trim().is_empty() {
-            out.push(Failure::new(
-                "plugin-inventory-closure",
-                "custom_agent_app_visible_name_missing",
-                path,
-            ));
-            continue;
-        }
-        let full = match crate::package::inventory::resolve(root, &path) {
-            Ok(path) => path,
-            Err(err) => {
-                out.push(Failure::new(
-                    "plugin-inventory-closure",
-                    "custom_agent_toml_unreadable",
-                    format!("{path}: {err}"),
-                ));
-                continue;
-            }
-        };
-        let bytes = match crate::digest::read_file_bytes(&full) {
-            Ok(bytes) => bytes,
-            Err(err) => {
-                out.push(Failure::new(
-                    "plugin-inventory-closure",
-                    "custom_agent_toml_unreadable",
-                    format!("{path}: {err}"),
-                ));
-                continue;
-            }
-        };
-        let text = match String::from_utf8(bytes) {
-            Ok(text) => text,
-            Err(err) => {
-                out.push(Failure::new(
-                    "plugin-inventory-closure",
-                    "custom_agent_toml_unreadable",
-                    format!("{path}: {err}"),
-                ));
-                continue;
-            }
-        };
-        custom_agent_field_checks(&path, &text, &expected, out);
-    }
-}
-
-fn custom_agent_field_checks(path: &str, text: &str, expected: &str, out: &mut Vec<Failure>) {
-    for key in ["name", "description", "developer_instructions"] {
-        if toml_string_field(text, key)
-            .unwrap_or_default()
-            .trim()
-            .is_empty()
-        {
-            out.push(Failure::new(
-                "plugin-inventory-closure",
-                "custom_agent_toml_field_missing",
-                format!("{path}:{key}"),
-            ));
-        }
-    }
-    if toml_string_field(text, "name").unwrap_or_default() != expected {
-        out.push(Failure::new(
-            "plugin-inventory-closure",
-            "custom_agent_name_mismatch",
-            path,
-        ));
-    }
-    reviewer_agent_runtime_checks(path, text, out);
-}
-
-fn reviewer_agent_runtime_checks(path: &str, text: &str, out: &mut Vec<Failure>) {
-    if !crate::review::round::config::PERSONAS
-        .iter()
-        .any(|spec| spec.custom_path == path)
-    {
-        return;
-    }
-    for (key, want, code) in [
-        (
-            "model_reasoning_effort",
-            "high",
-            "custom_agent_reasoning_effort_not_high",
-        ),
-        (
-            "sandbox_mode",
-            "read-only",
-            "custom_agent_sandbox_not_read_only",
-        ),
-    ] {
-        if toml_string_field(text, key).unwrap_or_default() != want {
-            out.push(Failure::new("plugin-inventory-closure", code, path));
-        }
-    }
-}
-
-fn toml_string_field(text: &str, key: &str) -> Option<String> {
-    let prefix = format!("{key} =");
-    for line in text.lines() {
-        let trimmed = line.trim();
-        let Some(rest) = trimmed.strip_prefix(&prefix) else {
-            continue;
-        };
-        let value = rest.trim();
-        if value.starts_with("\"\"\"") {
-            return Some("multiline-string".to_string());
-        }
-        if let Some(value) = value.strip_prefix('"').and_then(|s| s.split('"').next()) {
-            return Some(value.to_string());
-        }
-    }
-    None
-}
-
-fn required_agent_checks(manifest: &Value, out: &mut Vec<Failure>) {
+fn required_agent_checks(manifest: &Value, root: &Path, out: &mut Vec<Failure>) {
     let agents = manifest
         .get("agents")
         .and_then(Value::as_array)
         .into_iter()
         .flatten()
-        .map(|row| str_field(row, "name"))
-        .collect::<BTreeSet<_>>();
-    for required in REQUIRED_AGENTS {
-        if !agents.contains(*required) {
+        .collect::<Vec<_>>();
+    let roles = crate::agent_roles::CANONICAL_AGENT_ROLES;
+    if agents.len() != roles.len() {
+        out.push(Failure::new(
+            "plugin-inventory-closure",
+            "canonical_agent_count_mismatch",
+            agents.len().to_string(),
+        ));
+    }
+    for role in roles {
+        let matches = agents
+            .iter()
+            .filter(|row| str_field(row, "name") == role.name)
+            .collect::<Vec<_>>();
+        if matches.len() != 1 {
             out.push(Failure::new(
                 "plugin-inventory-closure",
-                "plugin_agent_path_missing",
-                *required,
+                "canonical_agent_missing",
+                role.name,
+            ));
+            continue;
+        }
+        let path = str_field(matches[0], "path");
+        if path != role.manifest_path {
+            out.push(Failure::new(
+                "plugin-inventory-closure",
+                "canonical_agent_path_mismatch",
+                format!("{}:{path}", role.name),
+            ));
+            continue;
+        }
+        inspect_agent_manifest(root, role, out);
+    }
+    for row in agents {
+        let name = str_field(row, "name");
+        if crate::agent_roles::by_name(&name).is_none() {
+            out.push(Failure::new(
+                "plugin-inventory-closure",
+                "unexpected_agent_role",
+                name,
             ));
         }
+    }
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct ProjectAgentManifest {
+    name: String,
+    description: String,
+    developer_instructions: String,
+    sandbox_mode: String,
+}
+
+fn inspect_agent_manifest(
+    root: &Path,
+    role: crate::agent_roles::AgentRole,
+    out: &mut Vec<Failure>,
+) {
+    let result = crate::package::inventory::resolve(root, role.manifest_path)
+        .map_err(|error| error.to_string())
+        .and_then(|path| crate::digest::read_file_bytes(&path).map_err(|error| error.to_string()))
+        .and_then(|bytes| String::from_utf8(bytes).map_err(|error| error.to_string()))
+        .and_then(|text| {
+            toml::from_str::<ProjectAgentManifest>(&text).map_err(|error| error.to_string())
+        });
+    let valid = result.is_ok_and(|manifest| {
+        manifest.name == role.name
+            && !manifest.description.trim().is_empty()
+            && !manifest.developer_instructions.trim().is_empty()
+            && manifest.sandbox_mode == "read-only"
+    });
+    if !valid {
+        out.push(Failure::new(
+            "plugin-inventory-closure",
+            "canonical_agent_manifest_invalid",
+            role.manifest_path,
+        ));
     }
 }
 

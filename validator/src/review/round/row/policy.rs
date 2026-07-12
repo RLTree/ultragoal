@@ -14,8 +14,8 @@ pub(crate) fn row_policy_errors(
         .unwrap_or("");
     freshness_errors(row, persona, out);
     scope_error(row, persona, out);
-    verdict_error(row, review_stage, persona, out);
-    runtime_config_errors(row, review_stage, persona, out);
+    falsification_result_error(row, review_stage, persona, out);
+    reviewer_authority_errors(row, persona, out);
     anchor_digest_errors(row, receipt, anchors, persona, out);
 }
 
@@ -41,34 +41,29 @@ fn scope_error(row: &Value, persona: &str, out: &mut Vec<ReviewFailure>) {
     }
 }
 
-fn verdict_error(row: &Value, review_stage: &str, persona: &str, out: &mut Vec<ReviewFailure>) {
-    if row.get("verdict").and_then(Value::as_str)
-        != Some(crate::review::round::config::expected_verdict(review_stage))
+fn falsification_result_error(
+    row: &Value,
+    review_stage: &str,
+    role: &str,
+    out: &mut Vec<ReviewFailure>,
+) {
+    if row.get("falsification_result").and_then(Value::as_str)
+        != Some(crate::review::round::config::expected_result(review_stage))
     {
         out.push(ReviewFailure::new(
             "validator-execution-provenance",
-            "review_round_wrong_review_stage_verdict",
-            persona,
+            "review_round_wrong_falsification_result",
+            role,
         ));
     }
 }
 
-fn runtime_config_errors(
-    row: &Value,
-    review_stage: &str,
-    persona: &str,
-    out: &mut Vec<ReviewFailure>,
-) {
+fn reviewer_authority_errors(row: &Value, role: &str, out: &mut Vec<ReviewFailure>) {
     for (key, want, code) in [
         (
-            "model",
-            crate::review::round::config::expected_model(review_stage),
-            "review_round_model_mismatch",
-        ),
-        (
-            "reasoning_effort",
-            "high",
-            "review_round_reviewer_effort_mismatch",
+            "reviewer_authority",
+            "falsification_only_cannot_raise_claims",
+            "review_round_reviewer_authority_invalid",
         ),
         ("sandbox_mode", "read-only", "review_round_sandbox_mismatch"),
     ] {
@@ -76,7 +71,7 @@ fn runtime_config_errors(
             out.push(ReviewFailure::new(
                 "validator-execution-provenance",
                 code,
-                persona,
+                role,
             ));
         }
     }

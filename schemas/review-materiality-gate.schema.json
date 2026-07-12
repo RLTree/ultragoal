@@ -1,11 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://harness-ultragoal.local/schemas/review-materiality-gate.schema.json",
-  "title": "Harness Ultragoal Material Review Scope Gate",
+  "title": "Harness Ultragoal Deterministic Material Review Scope Gate",
+  "description": "DELTA and ADVISORY are static fixture vocabulary only. Live validation blocks until candidate-bound change and executed-gate observations are available; receipt-declared trigger and gate names are never live authority.",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schema",
+    "decision_authority",
+    "reviewer_output_authority",
     "decision",
     "confidence",
     "reason",
@@ -21,7 +24,13 @@
   ],
   "properties": {
     "schema": {
-      "const": "harness-ultragoal.review-materiality-gate.v1"
+      "const": "harness-ultragoal.review-materiality-gate.v2"
+    },
+    "decision_authority": {
+      "const": "deterministic_rust"
+    },
+    "reviewer_output_authority": {
+      "const": "falsification_only_cannot_raise_claims"
     },
     "decision": {
       "enum": [
@@ -40,13 +49,30 @@
     },
     "reason": {
       "type": "string",
-      "minLength": 1
+      "minLength": 1,
+      "maxLength": 1024
     },
     "material_triggers": {
+      "description": "Static fixture vocabulary. Live Rust validation does not derive authority from this caller-supplied array.",
       "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
       "items": {
-        "type": "string",
-        "minLength": 1
+        "enum": [
+          "material_claim_boundary",
+          "phase_advancement",
+          "proof_anchor_change",
+          "reviewer_registry_change",
+          "persona_contract_change",
+          "material_code_runtime_change",
+          "prior_revise_or_blocked_repair",
+          "regenerated_anchor_repair",
+          "security_privacy_trust_boundary_change",
+          "package_runtime_visibility_surface_change",
+          "stale_anchor",
+          "narrow_validator_only_change",
+          "advisory_only_no_candidate_change"
+        ]
       },
       "uniqueItems": true
     },
@@ -54,10 +80,13 @@
       "$ref": "#/$defs/gateList"
     },
     "deterministic_gates_run": {
+      "description": "Static fixture vocabulary. A copied name list is not an executed-gate observation for live validation.",
       "$ref": "#/$defs/gateList"
     },
     "anchors_checked": {
       "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
       "items": {
         "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
       },
@@ -67,16 +96,18 @@
       "type": "array",
       "items": {
         "enum": [
-          "contract_claim_falsifier",
-          "orchestration_recovery_falsifier",
-          "security_trust_boundary_falsifier",
-          "product_simplicity_falsifier"
+          "claim-falsifier",
+          "orchestration-recovery-reviewer",
+          "security-reviewer",
+          "product-journey-reviewer"
         ]
       },
       "uniqueItems": true
     },
     "reviewer_registry_evidence": {
       "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
       "items": {
         "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
       },
@@ -84,9 +115,11 @@
     },
     "validator_repairs_recommended": {
       "type": "array",
+      "maxItems": 16,
       "items": {
         "type": "string",
-        "minLength": 1
+        "minLength": 1,
+        "maxLength": 256
       },
       "uniqueItems": true
     },
@@ -111,17 +144,19 @@
       }
     },
     "output_may_be_used_for_material_signoff": {
-      "type": "boolean"
+      "const": false
     }
   },
   "$defs": {
     "gateList": {
       "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
       "items": {
         "enum": [
           "anchor_existence_and_digest",
           "validator_receipt_status",
-          "reviewer_registry_model_persona_exposure",
+          "reviewer_registry_role_exposure",
           "stale_receipt_check",
           "package_private_artifact_hygiene",
           "readiness_validator",
@@ -133,6 +168,7 @@
     },
     "claimList": {
       "type": "array",
+      "maxItems": 64,
       "items": {
         "type": "string",
         "minLength": 1

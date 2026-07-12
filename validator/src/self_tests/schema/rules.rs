@@ -160,7 +160,7 @@ fn fixture_bundle_rules_reject_claim_lane_backlog_and_manifest_gaps() {
         "root_verification_stages.final_all_lanes_gate is required",
         "verification_backlog.rows[0].attempts is required",
         "plugin_manifest.skills missing required agent-first-repo-init",
-        "plugin_manifest.agents missing required harness-contract-claim-falsifier",
+        "plugin_manifest.agents missing canonical claim-falsifier",
     ] {
         assert!(
             errors.iter().any(|err| err == expected),
@@ -173,9 +173,9 @@ fn fixture_bundle_rules_reject_claim_lane_backlog_and_manifest_gaps() {
             .iter()
             .map(|name| json!({"name": name}))
             .collect::<Vec<_>>(),
-        "agents": crate::audit::contract::REQUIRED_AGENTS
+        "agents": crate::agent_roles::CANONICAL_AGENT_ROLES
             .iter()
-            .map(|name| json!({"name": name}))
+            .map(|role| json!({"name": role.name, "path": role.manifest_path}))
             .collect::<Vec<_>>()
     });
     let complete_errors =
@@ -187,9 +187,12 @@ fn fixture_bundle_rules_reject_claim_lane_backlog_and_manifest_gaps() {
         "{complete_errors:?}"
     );
     assert!(
-        !complete_errors
-            .iter()
-            .any(|err| err.contains("plugin_manifest.agents missing required")),
+        !complete_errors.iter().any(
+            |err| err.contains("plugin_manifest.agents missing canonical")
+                || err.contains("plugin_manifest.agents canonical path mismatch")
+                || err.contains("plugin_manifest.agents unexpected canonical role")
+                || err.contains("plugin_manifest.agents expected")
+        ),
         "{complete_errors:?}"
     );
     assert!(

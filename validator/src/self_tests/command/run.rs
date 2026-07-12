@@ -126,13 +126,14 @@ fn command_run_propagates_package_and_packet_builder_errors() {
     let code = crate::command_run::run_with_exit_code(args(root.clone(), &["package", "digest"]))
         .expect("missing manifest returns package digest fail code");
     assert_eq!(code, 1);
-    let receipt = crate::json_boundary::read_json(
-        &root.join("validation_artifacts/observability/package-digest.json"),
-    )
-    .expect("package digest fail receipt");
-    assert_eq!(receipt["status"], "fail");
-    let why_failed = receipt["why_failed"].as_str().unwrap();
-    assert!(why_failed.contains("json read failed"));
+    assert!(
+        !root.exists(),
+        "read-only package digest failure must not create its package root or a receipt"
+    );
+    let error = crate::package::inventory::package_digest(&root)
+        .expect_err("missing manifest remains a stable failure");
+    assert!(error.contains("plugin-manifest-draft.json"), "{error}");
+    assert!(error.contains("package manifest unavailable"), "{error}");
 
     write_json(
         &root.join("plugin-manifest-draft.json"),

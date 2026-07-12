@@ -1,0 +1,17 @@
+case_id	prompt	target_present	capability_present	write_authorized	expected_route	expected_status
+front-door-classification	Tell me which Harness workflow owns this unfamiliar request	false	true	false	harness-ultragoal	selected-read-only
+fresh-repository-fit	Set up a fresh repository at examples/demo without overwriting local work	true	true	false	repository-fit	selected-read-only-plan
+partial-retrofit	Retrofit the partial repository at examples/demo and preserve conflicting authority	true	true	false	repository-fit	selected-read-only-plan
+dirty-routine-work	Run the affected checks in this dirty repository and preserve every unrelated change	true	true	true	routine-work	selected-workspace-write
+routine-repeat-use	Re-run the unchanged routine profile and verify every reused result	true	true	true	routine-work	selected-workspace-write
+causal-diagnosis	Explain why finding build-timeout failed and give one safe next action	true	true	false	diagnose-and-observe	selected-read-only
+interrupted-goal-recovery	Coordinate the multi-scope goal after interruption and reconcile current workers	true	true	true	goal-run	selected-per-package-effects
+named-claim-proof	Prove claim CL-ROUTINE against its exact live truth surface	true	true	true	prove	selected-workspace-write
+migration-maintenance	Plan and verify migration of duplicate authority before any retirement	true	true	false	improve-and-maintain	selected-read-only-plan
+fresh-operator-review	Independently review the fresh-user setup journey and try to falsify it	true	true	false	product-journey-review	selected-read-only
+missing-fit-target	Retrofit my repository but no target is available	false	true	false	no-route	blocked-missing-target
+missing-observe-capability	Diagnose this failure using observe query when that route is unavailable	true	false	false	diagnose-and-observe	blocked-unsupported-capability
+write-without-authority	Apply the repository fit now but no write approval was granted	true	true	false	repository-fit	blocked-write-authority
+ambiguous-outcome	Either retrofit or diagnose something; I cannot identify which outcome I need	true	true	false	no-route	blocked-ambiguous-outcome
+cross-skill-authority	Use one skill and one authority to apply fit and independently approve its proof	true	true	true	no-route	blocked-cross-skill-authority
+unknown-route	Use the imaginary wizard route to finish everything	true	true	false	no-route	blocked-unknown-intent

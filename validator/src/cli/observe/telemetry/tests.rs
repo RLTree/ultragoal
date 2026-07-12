@@ -21,40 +21,23 @@ fn command(operation: ObserveOperation) -> ObserveCommand {
 }
 
 #[test]
-fn command_inventory_summary_names_first_blocker_and_family_counts() {
+fn successor_catalog_unavailable_is_stable_and_does_not_read_static_inventory() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-telemetry-summary");
     let inventory = root.join("docs/generated/observability");
     std::fs::create_dir_all(&inventory).expect("inventory dir");
-    crate::json_boundary::write_json(
-        &inventory.join("command-inventory.json"),
-        &json!({
-            "observability_control_board": {
-                "status": "fail",
-                "first_incomplete": {
-                    "family": "commands",
-                    "id": "coverage.prove",
-                    "observability_status": "partial",
-                    "next_unobservable_surface": "traces_query"
-                },
-                "families": {
-                    "commands": {"total": 2, "observable": 1, "partially_observable": 1, "unobservable": 0},
-                    "claims": {"total": 1, "observable": 0, "partially_observable": 0, "unobservable": 1}
-                }
-            }
-        }),
-    )
-    .expect("inventory");
+    let path = inventory.join("command-inventory.json");
+    std::fs::write(&path, "SECRET_CANARY").expect("attacker bytes");
+    let first = inventory_status::complete(&root).expect_err("catalog unavailable");
+    std::fs::write(&path, [0xff, 0xfe]).expect("non-json bytes");
+    let second = inventory_status::complete(&root).expect_err("catalog unavailable");
+    std::fs::remove_file(&path).expect("remove attacker file");
+    let missing = inventory_status::complete(&root).expect_err("catalog unavailable");
 
-    let summary = inventory_status::failure_summary(
-        &root,
-        &["observability_command_telemetry_query_not_current:coverage.prove".to_string()],
-    );
-
-    assert!(summary.contains("control_board_first_family=commands"));
-    assert!(summary.contains("control_board_first_incomplete=coverage.prove"));
-    assert!(summary.contains("claims=1/0/0/1"));
-    assert_eq!(inventory_status::family_counts(&json!({})), "unavailable");
+    assert_eq!(first, second);
+    assert_eq!(second, missing);
+    assert!(first.starts_with("HCT-OBSERVE successor catalog unavailable/not adopted"));
+    assert!(!first.contains("SECRET_CANARY"));
     std::fs::remove_dir_all(root).expect("cleanup");
 }
 

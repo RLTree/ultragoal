@@ -23,7 +23,7 @@ fn copy_schema_catalog(root: &Path) {
 }
 
 #[test]
-fn registry_probe_preserves_existing_live_same_surface_pass() {
+fn registry_probe_rejects_unbound_same_surface_fixture_and_fails_closed() {
     let root = workspace_fixtures::temp_root("cli-registry-preserve-pass");
     copy_schema_catalog(&root);
     write_json(
@@ -49,10 +49,17 @@ fn registry_probe_preserves_existing_live_same_surface_pass() {
     .expect("registry mint");
 
     let after = crate::digest::file(&root.join(active_rel)).expect("after digest");
-    assert_eq!(after, before);
+    assert_ne!(after, before);
+    let active = crate::json_boundary::read_json(&root.join(active_rel)).expect("active receipt");
+    assert_eq!(active["status"], json!("fail"));
+    assert_eq!(active["capture_method"], json!("fail_closed_no_capability"));
+    assert!(active["agent_types"].as_array().unwrap().iter().all(|row| {
+        row["runtime_metadata_status"] == json!("unavailable")
+            && row["custom_agent_discovery_status"] == json!("unavailable")
+            && row["exposed"] == json!(false)
+    }));
     assert!(
-        !root
-            .join("validation_artifacts/ultragoal-audit/active-registry-observation-current.json")
+        root.join("validation_artifacts/ultragoal-audit/active-registry-observation-current.json")
             .exists()
     );
     std::fs::remove_dir_all(root).expect("cleanup cli registry preserve");
@@ -134,29 +141,38 @@ fn registry_probe_fail_closed_rows_report_local_disk_and_global_truth() {
         &root.join(".codex-plugin/plugin.json"),
         &json!({"name":"harness-ultragoal","version":"0.0.0-test"}),
     );
-    for (_, _, custom_agent_path) in reviewer_specs() {
-        let source = root.join(custom_agent_path);
+    for (role, manifest_path) in reviewer_specs() {
+        let source = root.join(manifest_path);
         let install = home
             .join(".codex/plugins/harness-ultragoal")
-            .join(custom_agent_path);
+            .join(manifest_path);
         let cache = home
             .join(".codex/plugins/cache/local-harness-plugins/harness-ultragoal/0.0.0-test")
-            .join(custom_agent_path);
-        let global = home.join(".codex/agents").join(
-            Path::new(custom_agent_path)
-                .file_name()
-                .expect("agent file"),
+            .join(manifest_path);
+        let global = home
+            .join(".codex/agents")
+            .join(Path::new(manifest_path).file_name().expect("agent file"));
+        let bytes = format!(
+            "name = \"{role}\"\ndescription = \"Review.\"\ndeveloper_instructions = \"Review only.\"\nsandbox_mode = \"read-only\"\n"
         );
         for path in [&source, &install, &cache, &global] {
             std::fs::create_dir_all(path.parent().expect("parent")).expect("mkdir");
-            std::fs::write(path, format!("name = \"{}\"\n", custom_agent_path)).expect("write");
+            std::fs::write(path, &bytes).expect("write");
         }
     }
 
     let rows = crate::cli::control::plane::registry::agent_types_for_home(&root, Some(home));
+    assert_eq!(rows.len(), 4);
     assert!(rows.iter().all(|row| {
-        row["disk_cache_synced"] == json!(true)
+        row.get("agent_type").is_none()
+            && row["agent_manifest_path"]
+                .as_str()
+                .is_some_and(|path| path.starts_with(".codex/agents/"))
+            && row["sandbox_mode"] == json!("read-only")
+            && row["disk_cache_synced"] == json!(true)
             && row["global_toml_present"] == json!(true)
+            && row["runtime_metadata_status"] == json!("unavailable")
+            && row["custom_agent_discovery_status"] == json!("unavailable")
             && row["exposed"] == json!(false)
     }));
 
@@ -207,42 +223,26 @@ fn raw_observation(current: &str) -> Value {
 fn agent_types() -> Vec<Value> {
     reviewer_specs()
         .into_iter()
-        .map(|(agent_type, persona, custom_agent_path)| {
+        .map(|(role, agent_manifest_path)| {
             json!({
-                "agent_type": agent_type,
-                "persona": persona,
-                "custom_agent_path": custom_agent_path,
+                "role": role,
+                "agent_manifest_path": agent_manifest_path,
+                "agent_manifest_digest": workspace_fixtures::sha('a'),
+                "source_manifest_present": true,
+                "sandbox_mode": "read-only",
                 "disk_cache_synced": true,
                 "global_toml_present": true,
+                "runtime_metadata_status": "unavailable",
+                "custom_agent_discovery_status": "unavailable",
                 "exposed": true
             })
         })
         .collect()
 }
 
-fn reviewer_specs() -> Vec<(&'static str, &'static str, &'static str)> {
-    [
-        (
-            "harness_contract_claim_falsifier",
-            "contract_claim_falsifier",
-            "custom-agents/harness-contract-claim-falsifier.toml",
-        ),
-        (
-            "harness_orchestration_recovery_falsifier",
-            "orchestration_recovery_falsifier",
-            "custom-agents/harness-orchestration-recovery-falsifier.toml",
-        ),
-        (
-            "harness_security_trust_boundary_falsifier",
-            "security_trust_boundary_falsifier",
-            "custom-agents/harness-security-trust-boundary-falsifier.toml",
-        ),
-        (
-            "harness_product_simplicity_falsifier",
-            "product_simplicity_falsifier",
-            "custom-agents/harness-product-simplicity-falsifier.toml",
-        ),
-    ]
-    .into_iter()
-    .collect()
+fn reviewer_specs() -> Vec<(&'static str, &'static str)> {
+    crate::review::round::config::REVIEW_ROLES
+        .iter()
+        .map(|spec| (spec.role_name, spec.agent_manifest_path))
+        .collect()
 }

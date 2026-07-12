@@ -1,23 +1,23 @@
 {
   "name": "harness-ultragoal",
   "version": "0.0.11",
-  "description": "Agent-first repo harnessing, ultragoal contracts, ExecPlan lanes, observability, product cohesion, and proof gates.",
+  "description": "Repository fit, routine work, diagnosis, proof, orchestration, evaluation, and migration through one Harness Ultragoal front door.",
   "author": {
     "name": "Terry Noblin"
   },
   "license": "UNLICENSED",
   "keywords": [
-    "harness-engineering",
     "agent-first",
-    "goals",
-    "execplans",
-    "verification"
+    "repository-fit",
+    "typed-cli",
+    "verification",
+    "migration"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Harness Ultragoal",
-    "shortDescription": "Fit a repo to the Harness Ultragoal agent-first workflow.",
-    "longDescription": "Starts with the harness-ultragoal:fit-repo entry contract, then routes into ultragoal contracts, harness engineering, fresh repo initialization, existing repo retrofit, agent-facing observability, product cohesion gates, macro ExecPlan lanes, orchestration, and proof gates for high-trust Codex work.",
+    "shortDescription": "Route repository work through one evidence-bound front door.",
+    "longDescription": "Classifies repository work, discloses effects and authority needs, and routes explicitly to repository fit, routine work, diagnosis, goal orchestration, proof, maintenance, or independent journey review.",
     "developerName": "Terry Noblin",
     "category": "Productivity",
     "capabilities": [
@@ -25,11 +25,7 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Use harness-ultragoal:fit-repo to classify this repo and install or verify the correct Harness Ultragoal setup surfaces.",
-      "Use harness-ultragoal:fit-repo before choosing init, retrofit, ultragoal, proof-gate, or product-cohesion follow-on skills.",
-      "Use harness-ultragoal:fit-repo to emit the typed fit-repo receipt and claim ceiling before setup completion claims.",
-      "Use harness-ultragoal:fit-repo to refuse unsupported install, app-registry, marketplace, runtime, or dogfood claims without same-surface proof.",
-      "Use harness-ultragoal:product-fitness-gate for product-impacting success, readiness, release, daily-driver, or material product sign-off claims; Product Cohesion alone is not Product Fitness proof."
+      "Use $harness-ultragoal:harness-ultragoal to classify this request and route it to the smallest authoritative workflow."
     ]
   }
 }
