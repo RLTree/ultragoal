@@ -1,0 +1,128 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "SUPPORTED-HOST-DISTRIBUTION-EFFECT-AUTHORITY-REWORK-049",
+  "candidate": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "7c4ab7f2617a383dc731ff7ebadcdee792daf609",
+    "head_tree": "320cf0047469a5610d9b175fe8ed34e37df04c9e",
+    "dirty_scope": [
+      "custom-agent-authority-discovery-048",
+      "successor-cli-read-path-closure-047"
+    ]
+  },
+  "node_scope": "supported-host-distribution-transaction-authority",
+  "root_decision": "rework_before_any_live_host_adapter_or_effect_claim",
+  "material_findings": [
+    {
+      "severity": "high",
+      "surface": "validator/src/distribution/host.rs",
+      "finding": "HostAuthorization is public, Clone, caller-constructible from known digests, reusable by reference, and accepted by a generic caller-supplied executor. It cannot be the live-host authorization boundary."
+    },
+    {
+      "severity": "high",
+      "surface": "validator/src/plugin_product/host_lifecycle/effect_request.rs",
+      "finding": "PreparedExternalHostEffect::into_plan advances the session to observation-ready before an external effect has a durable outcome or exact post-state reconciliation."
+    },
+    {
+      "severity": "high",
+      "surface": "validator/src/plugin_product/host_lifecycle/issuance.rs",
+      "finding": "Session issuance uses a process-local counter and can reproduce issuance commitments after restart."
+    },
+    {
+      "severity": "high",
+      "surface": "host command execution and target binding",
+      "finding": "The plan binds raw path text and the name codex but no retained executable identity, target generation, write-ahead outcome, or partial two-command reconciliation."
+    },
+    {
+      "severity": "medium",
+      "surface": "permit authentication",
+      "finding": "A live permit requires a vetted fixed-size MAC over an explicit canonical preimage and must remain opaque, non-Clone, and non-deserializable until a separate transport envelope is independently adopted."
+    }
+  ],
+  "required_root_owned_authority": {
+    "workspace_dependencies": [
+      "hmac 0.12.1",
+      "getrandom 0.4.3"
+    ],
+    "types": [
+      "HostEffectAuthority",
+      "HostEffectPermit",
+      "HostEffectDecision",
+      "PinnedHostExecutable",
+      "DurableHostEffectLedger",
+      "AuthorizedHostEffect",
+      "HostEffectOutcome"
+    ],
+    "binding_dimensions": [
+      "issuer root actor key and ledger identities",
+      "context and candidate",
+      "complete PackageIdentity including source catalog inventory tree and archive identities",
+      "journey binding and CSPRNG-backed session issuance",
+      "lifecycle plan authorization intent expected pre-state expected post-state rollback and reconciliation policy",
+      "host scope home project host capability declaration and required capability set",
+      "external request ordered command plan exact argv limits and no-shell policy",
+      "retained executable content and object identity",
+      "typed personal or repository target and current target generation",
+      "issued and expiry time CSPRNG nonce durable ledger expected head and complete effect decision"
+    ],
+    "durable_states": [
+      "Reserved",
+      "InFlight",
+      "Settled",
+      "Failed",
+      "Ambiguous"
+    ]
+  },
+  "integration_invariants": [
+    "Permit issuance atomically reserves both nonce and semantic effect key in a cross-process write-ahead ledger.",
+    "Every invalid expired replayed unsupported unpinned or stale-target refusal causes zero process spawns zero host effects and zero additional ledger writes.",
+    "Execution consumes PreparedExternalHostEffect by value and cannot release observation eligibility until the durable outcome and exact post-state are reconciled.",
+    "A crash or partial command sequence remains Ambiguous and restart reconciliation never automatically reruns it.",
+    "Execution uses a retained immutable executable object with exact argv no shell cleared environment bounded output and bounded time.",
+    "A live Codex adapter returns ObservationTransactionUnsupported unless the host supplies a real generation-stable transaction through coordinator close.",
+    "The activation commit deauthorizes HostAuthorization HostAuthorization::new execute_authorized generic production HostExecutor and PreparedExternalHostEffect::into_plan so no duplicate effect authority remains."
+  ],
+  "required_test_classes": [
+    "positive personal and repository install remove update rollback stale-cache recovery and repeat-use reconciliation",
+    "individual mutation of every authority package session scope capability request plan argv executable target decision time nonce ledger-head and MAC field",
+    "old missing unknown duplicate malformed oversized truncated cross-key and cross-ledger refusal",
+    "compile-fail non-Clone non-Copy non-public-construction and non-deserialization proofs",
+    "sequential concurrent and two-process replay nonce collision expiry-claim and one-winner races",
+    "ledger tamper truncation rollback reorder duplicate stale snapshot key rotation restart and InFlight recovery",
+    "crash injection before spawn during every command after child exit before persistence and after persistence before response",
+    "executable and target symlink hardlink FIFO socket chmod content rename ancestor leaf and mutate-restore substitution",
+    "nonzero exit timeout oversized output partial command success rollback failure and non-echo canary handling",
+    "recursive zero-write and zero-spawn proof for every refusal and read-only path",
+    "false-pass controls for successful command or receipt without exact byte identity at all eight host layers"
+  ],
+  "worker_safe_follow_on": {
+    "lease_id": "SUPPORTED-HOST-DISTRIBUTION-TRANSACTION-ADAPTER-050",
+    "state": "blocked_until_root_effect_authority_interface_freezes",
+    "maximum_claim_ceiling": "production-compiled source-local adapter protocol and isolated durable-transaction behavior only"
+  },
+  "explicitly_withheld": [
+    "live host adapter",
+    "current package",
+    "install",
+    "cache",
+    "marketplace",
+    "app registry",
+    "Plugins UI",
+    "discovery",
+    "runtime",
+    "representative supported-host journey",
+    "readiness",
+    "release",
+    "node closure",
+    "goal completion"
+  ],
+  "review": {
+    "reviewer": "/root/distribution_effect_permit_security_reviewer",
+    "mode": "independent_read_only_current_source_security_review",
+    "verdict": "rework",
+    "blocking_findings": 4,
+    "executed_supported_host_proof": false
+  },
+  "no_claim_statement": "This decision rejects the current live-host authorization shape and does not claim a supported package, host effect, installed runtime, representative journey, readiness, release, node closure, or goal completion."
+}
