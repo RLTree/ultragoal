@@ -14,3 +14,9 @@ pub mod source_closure;
 // including every integration test through the library, expose the adapter.
 #[cfg(not(test))]
 pub mod distribution_adapter;
+
+// Host lifecycle composition is production-compiled after independent source
+// acceptance, but remains crate-private until a supported-host adapter and
+// root-owned effect authorization are separately adopted.
+#[cfg(not(test))]
+pub(crate) mod host_lifecycle;

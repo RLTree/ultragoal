@@ -6,7 +6,14 @@ use ultragoal::distribution::{
     DiscoveryObservation, DistributionReport, InstallPlan, InstallSnapshot, MarketplaceSnapshot,
     PackageIdentity, PackagePlan, PackageSnapshot, RuntimeObservation, SurfaceIdentity,
 };
+use ultragoal::evaluation::{
+    EvaluationRun, EvaluationSpec, FailureCase, PromotionDecision, TaskAudit,
+};
 use ultragoal::inventory::{AuthorityCatalog, GeneratedSurfaceIndex, InventoryBuilder};
+use ultragoal::migration::{
+    CompatibilityRoute, MigrationPlan, MigrationPlanProjection, RetirementDecision,
+    RetirementTarget, RetirementTargetProjection,
+};
 use ultragoal::observability::{
     CausalExplanation, EventQuery, EventStore, ExportAdapter, SemanticEvent,
 };
@@ -79,4 +86,15 @@ fn contract_public_api_witness_compiles_outside_the_library_crate() {
     require_public_type::<ProductState>();
     require_public_type::<NextAction>();
     require_public_type::<ClaimCeiling>();
+    require_public_type::<EvaluationSpec>();
+    require_public_type::<TaskAudit>();
+    require_public_type::<EvaluationRun>();
+    require_public_type::<FailureCase>();
+    require_public_type::<PromotionDecision>();
+    require_public_type::<MigrationPlan>();
+    require_public_type::<MigrationPlanProjection>();
+    require_public_type::<CompatibilityRoute>();
+    require_public_type::<RetirementTarget>();
+    require_public_type::<RetirementTargetProjection>();
+    require_public_type::<RetirementDecision>();
 }
