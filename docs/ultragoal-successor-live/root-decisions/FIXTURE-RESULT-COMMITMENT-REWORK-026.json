@@ -1,0 +1,32 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "FIXTURE-RESULT-COMMITMENT-REWORK-026",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only_artifact_commitment_falsification",
+  "reviewer": "/root/fixture_cleanup_recovery_engineer",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/FIXTURE-RECOVERY-STATE-CORRECTION-019.json",
+    "sha256": "ee6e35abaa2a2f23681dee4e2d67ab335df5f9e0a9d094539c20d5464a119532",
+    "source_artifact_set_sha256": "sha256:34f5233bb9a913fc1b71de7d0b35e574d40844aef7d84760f4791c7249882f8b",
+    "five_artifact_set_sha256": "sha256:1f36bc714bb88986e5c63b0dd53ff8cbbb8f478e810c6621da85f5d9e59df658"
+  },
+  "independent_verification": {
+    "focused_fixture_behavior": "24 passed; 0 failed",
+    "persisted_worker_result_tests": "2 passed; 0 failed",
+    "dependency_closed_target": "34 passed; 13 sandbox-denied; no semantic failure attributed to the correction",
+    "freebsd_success_path": "unexecuted"
+  },
+  "material_findings": [
+    {
+      "severity": "material",
+      "class": "worker_result_commitment_omits_changed_fixtures",
+      "cause": "The result declares only lease.rs and scheduler.rs in touched_paths and artifacts, leaves fixtures empty, and moves three changed fixture rows into opaque final_state metadata. ArtifactWorkspace and ResultCommitment therefore bind two records while the result claims a five-artifact set."
+    }
+  ],
+  "corrective_action": "Declare all five changed files in touched_paths and artifacts, declare the three fixture paths in fixtures, remove the opaque fixture verification substitute, recompute the canonical artifact identity and result commitment, and rerun artifact mutation controls plus focused behavior tests.",
+  "root_disposition": {
+    "accepted_artifact_sets": [],
+    "highest_honest_ceiling": "Darwin source and focused fixture behavior only; no root acceptance, FreeBSD execution, node closure, readiness, release, or completion claim."
+  },
+  "no_claim_statement": "This decision does not claim fixture root acceptance, node closure, readiness, release, or goal completion."
+}

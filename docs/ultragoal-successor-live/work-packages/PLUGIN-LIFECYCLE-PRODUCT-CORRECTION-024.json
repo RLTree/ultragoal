@@ -1,0 +1,194 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+    "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+    "head_commit": "e6427ae4d0c1bdfa191356bd082abadf5f723903",
+    "head_tree": "dfe8437fcb4756d74477ffd4d6867c43f55c1788",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": false
+  },
+  "work_package": {
+    "node_id": "plugin-lifecycle-product-closure",
+    "dependencies": ["plugin-transitive-product-fitness-rework-020"],
+    "required_tools": ["cargo-nextest", "rustfmt", "shasum"],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "Cargo.lock",
+      "Cargo.toml",
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/root-decisions/CANONICAL-PLUGIN-TRANSITIVE-PRODUCT-FITNESS-REWORK-020.json",
+      "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-DEPENDENCY-CLOSURE-018.json",
+      "schemas/product-fitness-receipt.schema.json",
+      "validator/Cargo.toml",
+      "validator/src/audit/product/fitness",
+      "validator/src/cli/successor/catalog.rs",
+      "validator/src/distribution",
+      "validator/src/orchestration/model.rs",
+      "validator/src/orchestration/worker.rs",
+      "validator/src/review/round/product/fitness"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/install-and-visibility.md",
+        "docs/plugin-resource-map.md",
+        "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-PRODUCT-CORRECTION-024.json",
+        "validator/src/plugin_product"
+      ],
+      "semantic_symbols": [
+        "plugin_product::journey_matrix",
+        "plugin_product::lifecycle",
+        "plugin_product::product_fitness",
+        "plugin_product::source_closure"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/plugin-product/journey-controls.tsv",
+        "fixtures/plugin-product/lifecycle-cases.json",
+        "fixtures/plugin-product/product-fitness-cases.json",
+        "fixtures/plugin-product/root-wiring-request.json",
+        "fixtures/plugin-product/route-cases.tsv",
+        "skills/diagnose-and-observe/SKILL.md",
+        "skills/goal-run/SKILL.md",
+        "skills/harness-ultragoal/SKILL.md",
+        "skills/improve-and-maintain/SKILL.md",
+        "skills/product-journey-review/SKILL.md",
+        "skills/prove/SKILL.md",
+        "skills/repository-fit/SKILL.md",
+        "skills/routine-work/SKILL.md",
+        "validator/tests/plugin_product_contract/dependency_closure.rs",
+        "validator/tests/plugin_product_contract/host_truth_layers.rs",
+        "validator/tests/plugin_product_contract/lifecycle_contract.rs",
+        "validator/tests/plugin_product_contract/main.rs",
+        "validator/tests/plugin_product_contract/product_fitness_contract.rs",
+        "validator/tests/plugin_product_contract/route_contract.rs",
+        "validator/tests/plugin_product_contract/source_contract.rs",
+        "validator/tests/plugin_product_contract/zero_write.rs"
+      ],
+      "effects": [
+        {"class":"workspace_write","target":"plugin-lifecycle-product-source"},
+        {"class":"fixture_write","target":"plugin-lifecycle-product-tests"},
+        {"class":"process","target":"offline-plugin-product-validation"}
+      ]
+    },
+    "prerequisites": ["adopted-contract", "independent-product-rework"],
+    "outputs": [
+      "build-closure-v1-candidate",
+      "plugin-lifecycle-coordinator-candidate",
+      "product-fitness-disposition-candidate",
+      "worker-result-v1"
+    ],
+    "acceptance": [
+      "eight-lifecycle-states-have-typed-plan-apply-verify-recover-semantics",
+      "failed-update-and-stale-cache-preserve-prior-authority",
+      "product-fitness-disposition-binds-five-required-dimensions",
+      "transitive-source-closure-rejects-unknown-missing-alias-and-special-rows",
+      "mutation-race-security-resource-and-false-pass-controls-pass",
+      "read-plan-and-query-surfaces-are-recursively-zero-write",
+      "host-truth-layers-remain-distinct-and-lower-unsupported-ceilings",
+      "independent-review-and-root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "PLUGIN-LIFECYCLE-PRODUCT-CORRECTION-024",
+    "run_id": "ultragoal-successor-live-20260711",
+    "node_id": "plugin-lifecycle-product-closure",
+    "principal": "worker",
+    "owner": "/root/plugin_lifecycle_product_engineer",
+    "binding": {
+      "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+      "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "Cargo.lock",
+      "Cargo.toml",
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/root-decisions/CANONICAL-PLUGIN-TRANSITIVE-PRODUCT-FITNESS-REWORK-020.json",
+      "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-DEPENDENCY-CLOSURE-018.json",
+      "schemas/product-fitness-receipt.schema.json",
+      "validator/Cargo.toml",
+      "validator/src/audit/product/fitness",
+      "validator/src/cli/successor/catalog.rs",
+      "validator/src/distribution",
+      "validator/src/orchestration/model.rs",
+      "validator/src/orchestration/worker.rs",
+      "validator/src/review/round/product/fitness"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/install-and-visibility.md",
+        "docs/plugin-resource-map.md",
+        "docs/ultragoal-successor-live/worker-results/PLUGIN-LIFECYCLE-PRODUCT-CORRECTION-024.json",
+        "validator/src/plugin_product"
+      ],
+      "semantic_symbols": [
+        "plugin_product::journey_matrix",
+        "plugin_product::lifecycle",
+        "plugin_product::product_fitness",
+        "plugin_product::source_closure"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/plugin-product/journey-controls.tsv",
+        "fixtures/plugin-product/lifecycle-cases.json",
+        "fixtures/plugin-product/product-fitness-cases.json",
+        "fixtures/plugin-product/root-wiring-request.json",
+        "fixtures/plugin-product/route-cases.tsv",
+        "skills/diagnose-and-observe/SKILL.md",
+        "skills/goal-run/SKILL.md",
+        "skills/harness-ultragoal/SKILL.md",
+        "skills/improve-and-maintain/SKILL.md",
+        "skills/product-journey-review/SKILL.md",
+        "skills/prove/SKILL.md",
+        "skills/repository-fit/SKILL.md",
+        "skills/routine-work/SKILL.md",
+        "validator/tests/plugin_product_contract/dependency_closure.rs",
+        "validator/tests/plugin_product_contract/host_truth_layers.rs",
+        "validator/tests/plugin_product_contract/lifecycle_contract.rs",
+        "validator/tests/plugin_product_contract/main.rs",
+        "validator/tests/plugin_product_contract/product_fitness_contract.rs",
+        "validator/tests/plugin_product_contract/route_contract.rs",
+        "validator/tests/plugin_product_contract/source_contract.rs",
+        "validator/tests/plugin_product_contract/zero_write.rs"
+      ],
+      "effects": [
+        {"class":"workspace_write","target":"plugin-lifecycle-product-source"},
+        {"class":"fixture_write","target":"plugin-lifecycle-product-tests"},
+        {"class":"process","target":"offline-plugin-product-validation"}
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "plugin-transitive-product-fitness-rework-020": "sha256:00009f4db0183d6766a5bd52f7e12347c7c91a5ebf6c5baeb5d60383176cb2ac"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "rustfmt": "sha256:aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "adopted-contract": "sha256:d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51",
+        "independent-product-rework": "sha256:00009f4db0183d6766a5bd52f7e12347c7c91a5ebf6c5baeb5d60383176cb2ac"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "prohibited_surfaces": [
+    ".codex-plugin/plugin.json, plugin-manifest-draft.json, and marketplace authority",
+    ".codex/agents and host plugin, cache, config, app-registry, or Plugins UI state",
+    "Cargo.toml, Cargo.lock, .cargo/config.toml, and rust-toolchain.toml",
+    "validator/src/lib.rs, public command catalog, parser, dispatcher, and command_run",
+    "shared schemas, adopted manifests, migration and claim registries, generated authority, acceptance, board, release state",
+    "network, package publication, Git writes, destructive cleanup, and external effects"
+  ],
+  "root_validation_obligations": [
+    "independently-review-the-exact-corrected-artifact-set",
+    "recompute-dep-info-binary-and-candidate-identity-after-root-integration",
+    "apply-no-manifest-marketplace-public-cli-claim-or-release-wiring-before-acceptance"
+  ],
+  "no_claim_statement": "This root-issued envelope grants no root authority and raises no source, package, marketplace, install, cache, app-registry, Plugins UI, discovery, runtime, lifecycle, Product Fitness, readiness, release, or completion claim."
+}
