@@ -1,0 +1,29 @@
+{
+  "schema_version": "EvaluationEngineRedCases-v1",
+  "cases": [
+    "stale-candidate",
+    "mutate-restore-spec",
+    "dataset-path-escape",
+    "dataset-symlink",
+    "dataset-hardlink",
+    "dataset-special-file",
+    "oversized-input",
+    "dataset-contamination",
+    "nondeterministic-replay",
+    "grader-disagreement",
+    "self-review",
+    "caller-asserted-independent-boolean",
+    "same-review-source-principal",
+    "same-review-session",
+    "stale-review-binding",
+    "substituted-journey-evidence",
+    "review-attestation-replay",
+    "zero-work-observation",
+    "metric-gain-without-behavior",
+    "verbosity-reward",
+    "proof-artifact-reward",
+    "receipt-production-reward",
+    "test-manipulation-reward",
+    "score-only-promotion"
+  ]
+}

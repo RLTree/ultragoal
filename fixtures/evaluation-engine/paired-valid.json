@@ -1,0 +1,15 @@
+{
+  "schema_version": "EvaluationEngineFixture-v1",
+  "fixture_id": "paired-representative-improvement",
+  "task_ids": ["task-core", "task-recovery"],
+  "required_controls": [
+    "verbosity",
+    "proof-artifact",
+    "receipt-production",
+    "test-manipulation",
+    "score-only"
+  ],
+  "baseline": {"failed_tasks": ["task-core"], "score": [12, 20]},
+  "candidate": {"failed_tasks": [], "score": [20, 20]},
+  "expected_ceiling": "improvement_candidate_not_product_completion"
+}

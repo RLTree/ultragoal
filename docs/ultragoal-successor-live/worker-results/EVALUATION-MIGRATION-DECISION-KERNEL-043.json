@@ -1,0 +1,329 @@
+{
+  "worker": "/root/inventory_activation_guard_engineer",
+  "lease_id": "EVALUATION-MIGRATION-DECISION-KERNEL-043",
+  "context_id": "sha256:7fc09e13b0c37c2be72b5d96962657ae24f5cc7541a93b781df582b60426dd19",
+  "candidate_identity": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "base_head_commit": "a77becd62cc7a699aa469558462bbaa0967b3003",
+    "base_head_tree": "ee152cd8b900a0e2712fb4986d585218a3697022",
+    "envelope_candidate_id": "sha256:6d5e3e7cc1820a09849510c1e5469f8328afd1d91258437bfbf856a3aa29f37f",
+    "leased_artifact_set_sha256": "sha256:8d63c551734abf74761a4b7014f7a7bdddd5ef2b028136d6ced4d5eeaab43d6c"
+  },
+  "base_state": {
+    "head_commit": "a77becd62cc7a699aa469558462bbaa0967b3003",
+    "head_tree": "ee152cd8b900a0e2712fb4986d585218a3697022",
+    "branch": "codex/successor-contract-v2-live-product",
+    "product_source_changes": "none",
+    "root_coordination_artifacts_preserved": [
+      "docs/ultragoal-successor-live/task-envelopes/EVALUATION-MIGRATION-DECISION-KERNEL-043.json",
+      "docs/ultragoal-successor-live/task-envelopes/ORCHESTRATION-RUNTIME-ADAPTER-RECOVERY-045.json",
+      "docs/ultragoal-successor-live/task-envelopes/SUPPORTED-HOST-PLUGIN-LIFECYCLE-COORDINATOR-044.json",
+      "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/__pycache__/verify-agent-task-envelope.cpython-314.pyc"
+    ],
+    "frozen_input_artifact_set_sha256": "sha256:3b82e8b479a00eb370f2f3821c361fafae66b3df798384ff4d8517a7e84dff51"
+  },
+  "final_state": {
+    "head_commit": "a77becd62cc7a699aa469558462bbaa0967b3003",
+    "head_tree": "ee152cd8b900a0e2712fb4986d585218a3697022",
+    "git_metadata_mutated": false,
+    "leased_artifact_count_excluding_self_referential_worker_result": 8,
+    "leased_artifact_bytes": 267730,
+    "leased_artifact_lines": 7843,
+    "leased_artifact_set_sha256": "sha256:8d63c551734abf74761a4b7014f7a7bdddd5ef2b028136d6ced4d5eeaab43d6c",
+    "public_api_or_command_activation": "not_attempted_root_owned",
+    "migration_or_retirement_effect": "none"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/EVALUATION-MIGRATION-DECISION-KERNEL-043.json",
+    "fixtures/evaluation-engine/paired-valid.json",
+    "fixtures/evaluation-engine/red-cases.json",
+    "fixtures/migration-engine/current-valid.json",
+    "fixtures/migration-engine/red-cases.json",
+    "validator/src/evaluation/mod.rs",
+    "validator/src/migration/mod.rs",
+    "validator/tests/evaluation_contract.rs",
+    "validator/tests/migration_contract.rs"
+  ],
+  "touched_semantics": [
+    "compatibility-route-validation",
+    "destructive-effect-authorization",
+    "failure-case-harvesting",
+    "independent-promotion-reconciliation",
+    "inventory-bound-migration-planner",
+    "atomic-final-reconciliation-winner",
+    "one-shot-replacement-evidence-ledger",
+    "one-shot-review-attestation",
+    "one-shot-retirement-authority",
+    "od009-preservation-decision",
+    "opaque-retirement-review-issuance",
+    "opaque-root-observed-replacement-evidence",
+    "opaque-authority-redacted-debug",
+    "opaque-promotion-review-redacted-debug",
+    "persistent-plan-target-replacement-ledger",
+    "private-nonclone-nonserde-consumed-evidence-ledger",
+    "safe-migration-plan-inspection-projection",
+    "replacement-equivalence-observation-binding",
+    "retirement-decision-reconciliation",
+    "sealed-independent-review-issuance",
+    "vendor-neutral-evaluation-kernel"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/evaluation-engine/paired-valid.json",
+    "fixtures/evaluation-engine/red-cases.json",
+    "fixtures/migration-engine/current-valid.json",
+    "fixtures/migration-engine/red-cases.json",
+    "validator/tests/evaluation_contract.rs",
+    "validator/tests/migration_contract.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "scope": "leased evaluation and migration source, tests, fixtures, and WorkerResult only",
+      "external_effect": false
+    },
+    {
+      "class": "process",
+      "scope": "locked offline Rust formatting and focused tests",
+      "cargo_target_dir": "/tmp/hul-evaluation-migration-043-rework6",
+      "jobs": 16,
+      "test_threads": 16
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "git",
+      "performed": false
+    },
+    {
+      "class": "migration_or_retirement",
+      "performed": false
+    }
+  ],
+  "requirements": [],
+  "dependency_nodes": [
+    "N02-INVENTORY"
+  ],
+  "changes": [
+    {
+      "area": "vendor-neutral evaluation",
+      "summary": "Adds immutable candidate-bound specs and audits, dataset provenance and contamination checks, crate-controlled observed execution with session binding, complete deterministic run commitments, causal failure harvesting, replay and grader controls, and paired promotion reconciliation issued only by an opaque crate-controlled independent-review authority. PromotionReview Debug is a bounded constant-redacted surface that cannot echo reviewer, authority, session, candidate, run, spec, journey, rollback, artifact, binding, review, or attestation fields."
+    },
+    {
+      "area": "migration and retirement",
+      "summary": "Adds exact inventory snapshots, compatibility-route validation, and deterministic migration plans whose replacement/equivalence evidence is opaque, non-Clone, non-Serialize, non-Deserialize, and crate-issued only from root-observed behavior, representative journey, every named causal false-pass control, rollback execution, independent reviewer/session attestation, exact candidate/catalog/read-session inventory binding, bounded expiry/nonce, and a one-shot evidence ledger. Consumed evidence now lives only in a private non-clonable, non-serde plan ledger; public RetirementTarget contains one domain-separated replacement summary commitment and no token. MigrationPlan and RetirementTarget are themselves non-clonable and non-serde and expose deliberate cloneable/serde inspection DTOs that contain only counts, stable surface IDs, and domain-separated commitments and cannot reconstruct authority. Final reconciliation still uses the original private token and originating live ledger, atomically elects one winner, and revalidates around review and destructive-effect consumption."
+    },
+    {
+      "area": "adversarial controls",
+      "summary": "Covers positive, negative, race/mutation, external replacement/review/effect mint-clone-deserialize attempts, compile failures for consumed-token/plan/target Clone+Serialize+Deserialize and projection-to-plan conversion, sentinel JSON non-traversal of every private consumed field, safe DTO roundtrip, projection substitution refusal, private-ledger mutation refusal, Arc-shared concurrent reconciliation without plan cloning, caller-supplied authority proxies, repeated-hash evidence, missing controls, dropped or rolled-back ledgers, revocation, cross-adapter replay, concurrent losers, post-check drift, bounded redacted Debug, mutate-restore, one-shot replay, expiry, effect conflicts, special-file, hardlink, path escape, contamination, nondeterminism, reward hacking, self-review, active authority, unauthorized retirement, and recursive zero-write cases."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 schema plus semantic_validate for EVALUATION-MIGRATION-DECISION-KERNEL-043.json",
+      "exit_code": 0,
+      "result": "AgentTaskEnvelope-v1 schema and semantic resolution accepted; all seven frozen artifact rows and aggregate matched."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 rustfmt --edition 2024 --check validator/src/evaluation/mod.rs validator/src/migration/mod.rs validator/tests/evaluation_contract.rs validator/tests/migration_contract.rs",
+      "exit_code": 0,
+      "result": "All leased Rust files formatted."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-evaluation-migration-043-rework6 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test evaluation_contract --test migration_contract --quiet -- --test-threads=16",
+      "exit_code": 0,
+      "result": "59 passed; 0 failed across evaluation and migration: 25 evaluation tests retain every-private-field PromotionReview Debug non-echo, and 34 migration tests add strict consumed-token/plan/target trait refusal plus safe projection JSON/roundtrip/substitution/private-mutation controls while retaining the persistent-ledger, atomic-winner, retirement/destructive authority, and zero-write controls."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-evaluation-migration-043-rework6 NEXTEST_TEST_THREADS=16 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline -j 16 --test evaluation_contract --test migration_contract",
+      "exit_code": 0,
+      "result": "Nextest run 93f23563-1a6f-4594-a2fc-b2e4bd576671: 59 passed; 0 skipped; 0 failed in 4.582s."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-evaluation-migration-043-rework6 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test claims_contract --quiet -- --test-threads=16",
+      "exit_code": 0,
+      "result": "45 passed; 0 failed in the relevant claims dependency binary."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-evaluation-migration-043-rework6 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test inventory_contract --quiet -- --test-threads=16",
+      "exit_code": 101,
+      "result": "89 passed; five git-backed cases encountered Bad file descriptor probes under concurrent process pressure and current_live_catalog_reports_contract_definitions_and_missing_topology refused Activation(StaleInput). No evaluation/migration assertion failed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-evaluation-migration-043-rework6 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test inventory_contract --quiet current_live_catalog_reports_contract_definitions_and_missing_topology -- --exact --test-threads=16",
+      "exit_code": 0,
+      "result": "The exact stale live-catalog case passed: 1 passed; 94 filtered out."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-evaluation-migration-043-rework6 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test inventory_contract --quiet schema_references::missing_internal_and_relative_json_pointer_targets_fail_without_echo -- --exact --test-threads=16",
+      "exit_code": 0,
+      "result": "The exact schema-reference git-probe test passed on immediate rerun: 1 passed; 94 filtered out."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-evaluation-migration-043-rework6 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test inventory_contract --quiet agent_routes::reader_false_pass::unrelated_literal_and_comment_controls_do_not_block_legacy_demotion -- --exact --test-threads=16",
+      "exit_code": 0,
+      "result": "The exact unrelated-reader-literal git-probe test passed: 1 passed; 94 filtered out."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-evaluation-migration-043-rework6 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test inventory_contract --quiet agent_routes::reader_false_pass::constructed_agent_paths_cannot_bypass_the_reader_guard -- --exact --test-threads=16",
+      "exit_code": 0,
+      "result": "The exact constructed-reader-path git-probe test passed: 1 passed; 94 filtered out."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-evaluation-migration-043-rework6 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test inventory_contract --quiet plugin_manifest::canonical_hook_companion_is_validated_and_prefixless_or_malformed_hooks_fail -- --exact --test-threads=16",
+      "exit_code": 0,
+      "result": "The exact plugin-manifest git-probe test passed: 1 passed; 94 filtered out."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-evaluation-migration-043-rework6 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test inventory_contract --quiet generated_disposition::generated_authority_v2_rejects_mixed_unknown_duplicate_and_unsafe_rows -- --exact --test-threads=16",
+      "exit_code": 0,
+      "result": "The exact generated-authority git-probe test passed: 1 passed; 94 filtered out."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-evaluation-migration-043-rework6 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test inventory_contract --quiet routing_transitions::live_exact_sources_are_sole_current_and_pending_migration -- --exact --test-threads=16",
+      "exit_code": 0,
+      "result": "The exact routing-transition test passed against the same observed candidate: 1 passed; 94 filtered out."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-evaluation-migration-043-rework2 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test fixture_scheduler_contract --quiet -- --test-threads=16",
+      "exit_code": 101,
+      "result": "42 passed; 5 failed independently of leased paths: execution_adapter::nonzero_capture_adapter_preserves_the_bound_causal_control, execution_adapter::pinned_capture_adapter_executes_inside_the_confinement_plan, isolation::concurrent_duplicate_fixture_lease_is_rejected_and_recovery_releases_it, isolation::newly_scheduled_lease_is_returned_even_when_another_lease_sorts_later, and isolation::parallel_leases_have_disjoint_roots_and_all_resource_namespaces."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-evaluation-migration-043-rework6 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test fixture_scheduler_contract --quiet execution_adapter::pinned_capture_adapter_executes_inside_the_confinement_plan -- --exact --test-threads=16",
+      "exit_code": 101,
+      "result": "The exact singleton reproduction failed with CleanupFailure instead of Accepted; 0 passed, 1 failed, 46 filtered out."
+    },
+    {
+      "command": "jq empty fixtures/evaluation-engine/*.json fixtures/migration-engine/*.json",
+      "exit_code": 0,
+      "result": "All four leased JSON fixtures parse."
+    },
+    {
+      "command": "WorkerResult-v1 schema, regular-file artifact rows, path-tab-digest-LF aggregate, HEAD/tree, branch, and AgentTaskEnvelope semantic revalidation",
+      "exit_code": 0,
+      "result": "All eight artifact rows and aggregate reconcile exactly; WorkerResult schema and frozen task-envelope semantics accept the final candidate."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/evaluation-engine/paired-valid.json",
+      "sha256": "sha256:5a4c39670bd5ef396d01851ce314c140a2789ae67b064992daedaa1878a91a3d",
+      "bytes": 481,
+      "lines": 15
+    },
+    {
+      "path": "fixtures/evaluation-engine/red-cases.json",
+      "sha256": "sha256:161880ce8132e389a1871d6905f59edf0491ec2c591ac6c8c65542d5510e11c4",
+      "bytes": 766,
+      "lines": 29
+    },
+    {
+      "path": "fixtures/migration-engine/current-valid.json",
+      "sha256": "sha256:58cf338a4f80c6c9e260a5630c033be33829fd1b1773dbee19c9f4c678d7f7f5",
+      "bytes": 420,
+      "lines": 13
+    },
+    {
+      "path": "fixtures/migration-engine/red-cases.json",
+      "sha256": "sha256:071759edfdce301776e9ae55de6a6c7d2df449aa2a081ae87de612b8a843a5ea",
+      "bytes": 1914,
+      "lines": 60
+    },
+    {
+      "path": "validator/src/evaluation/mod.rs",
+      "sha256": "sha256:4f1769314be5764dc2907e412d1d83cb0554aa2c5af8313ca11a4211b6d20a19",
+      "bytes": 51744,
+      "lines": 1449
+    },
+    {
+      "path": "validator/src/migration/mod.rs",
+      "sha256": "sha256:ab686f6cd55cd84c63d84c20f86e1549823fe2260d5153b2d39a9ffc95ec6d4a",
+      "bytes": 106200,
+      "lines": 2919
+    },
+    {
+      "path": "validator/tests/evaluation_contract.rs",
+      "sha256": "sha256:9e96429da53000fedccf28ded01c99306b2a6f7dda931602a59e19bde2b7d284",
+      "bytes": 29184,
+      "lines": 923
+    },
+    {
+      "path": "validator/tests/migration_contract.rs",
+      "sha256": "sha256:96f3e0069242bafa9de7c7702ee7dbb449e592226d43b19357db6b9230cf7ad1",
+      "bytes": 77021,
+      "lines": 2435
+    }
+  ],
+  "findings": [
+    {
+      "severity": "information",
+      "code": "evaluation-migration-source-local-only",
+      "detail": "The nine required API types exist and compile through leased integration witnesses, but root exports and public API witnesses are intentionally absent."
+    },
+    {
+      "severity": "information",
+      "code": "root-coordination-artifacts-excluded",
+      "detail": "Concurrent root task envelopes, other-lane candidates, and the root-owned verifier pycache were preserved untouched and excluded from this worker artifact set."
+    },
+    {
+      "severity": "high",
+      "code": "fixture-scheduler-current-candidate-dependency-red",
+      "detail": "The prior broad fixture_scheduler_contract run independently failed five cleanup/integrity tests, and the pinned capture adapter failure still reproduces on the current candidate alone as CleanupFailure instead of Accepted. No leased evaluation or migration path touches fixture-scheduler implementation; dependency-closed fixture/evaluation elevation is withheld pending root repair and fresh broad rerun."
+    },
+    {
+      "severity": "information",
+      "code": "inventory-current-input-drift-observed",
+      "detail": "The broad 95-test inventory binary encountered Bad file descriptor errors in five git probes during concurrent process pressure and one live-catalog StaleInput refusal; all six exact failures plus the live routing-transition test passed against stable observations. This is recorded as concurrency-sensitive current-input evidence, not inventory closure."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent review of the exact eight-artifact implementation set",
+    "repair and fresh dependency-closed rerun of the current fixture-scheduler cleanup and integrity failures",
+    "root public module and API witness integration",
+    "root-owned crate adapters from LiveContext, AuthorityCatalog, ReadSession, FixtureScheduler, capture, claims, sealed replacement-evidence authority, sealed independent-promotion-review authority, sealed retirement-review authority, distinct destructive-effect authority, durable one-shot ledgers including exact persistent plan-target replacement authority and atomic final-winner claims, current time, and effect permits",
+    "root command handler integration for eval and migrate",
+    "root adoption or rejection of migration registry and retirement decisions",
+    "fresh inventory and dependent claim recomputation after integration"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/lib.rs",
+      "request": "After independent acceptance, add public evaluation and migration modules; do not activate a claim from visibility alone."
+    },
+    {
+      "path": "validator/src/api_witness.rs",
+      "request": "After public integration, compile-witness EvaluationSpec, TaskAudit, EvaluationRun, FailureCase, PromotionDecision, MigrationPlan, MigrationPlanProjection, CompatibilityRoute, RetirementTarget, RetirementTargetProjection, and RetirementDecision and add only the identifiers the adopted public API permits."
+    },
+    {
+      "path": "validator/tests/public_api_witness.rs",
+      "request": "Add external-crate compile witnesses for the same accepted public record types while preserving the absence of any public ReplacementEvidence constructor/issuer or MigrationPlan builder, any public PromotionReview or RetirementReview constructor/issuer/reconciler, any DestructiveAuthorization constructor/issuer, caller-supplied digest/independence/destructive-authority proxies, and Clone/Serialize/Deserialize implementations on consumed replacement evidence, MigrationPlan, RetirementTarget, replacement, review, or destructive authority tokens. Permit serde roundtrip only for MigrationPlanProjection and RetirementTargetProjection, with no projection-to-authority conversion."
+    },
+    {
+      "path": "root-owned runtime adapters",
+      "request": "Bind evaluation execution to the crate-controlled FixtureScheduler and capture substrate with a root-issued unique current execution session. Implement PromotionReviewAuthority only inside the crate from current LiveContext/candidate state, a distinct authority-bound reviewer principal, a distinct root-issued review session, root-observed journey/rollback/artifact evidence, and a durable one-shot consumed-review ledger; never forward caller-authored independence, reviewer identity, evidence truth, or session authority. Bind migration inputs to one current LiveContext, AuthorityCatalog, and ReadSession. Implement ReplacementEvidenceAuthority only inside the crate from root-observed old/new behavior identities and results, executed representative journey, all five named causal false-pass control results, executed rollback, authenticated independent reviewer/session attestation, current time, bounded expiry/nonce, and a durable transactional one-shot evidence ledger; never accept caller-authored digests or equivalence assertions. Keep that originating authority alive through final reconciliation, persist every kernel-issued plan-target binding by exact context/candidate/catalog/read-session/inventory/plan/route/target/evidence commitments, verify current unrevoked consumption atomically, and permit exactly one final winner across processes. Implement RetirementReviewAuthority and DestructiveEffectAuthority as separate root-owned adapters with authenticated distinct principals and sessions, root-derived OD-009 decision, exact plan/target/inventory/catalog/effect scope, bounded expiry and nonces, durable one-shot ledgers, transactional fail-closed consumption, and final revalidation; never forward caller booleans or claimed authorization."
+    },
+    {
+      "path": "root-owned public command dispatcher and handler witness",
+      "request": "Wire eval and migrate routes only after real adapters and effect permits are independently accepted; refusal-only or catalog-only branches must remain Candidate."
+    },
+    {
+      "path": "root-owned migration registry and generated authority",
+      "request": "Adopt or reject exact routes and retirement decisions only after root issuance and one-shot consumption of replacement evidence, persistent exact plan-target ledger verification, atomic final-winner reconciliation, and the separate retirement-review/destructive-effect authorities; the worker kernel performs no adoption, retirement, deletion, or effect. Preserve OD-009 physical artifacts unless the exact deletion path is independently authorized, then recompute HCT-INVENTORY without altering the accepted 22-source activation closure by prose alone."
+    }
+  ],
+  "limitations": [
+    "The leased modules are not exported from the library root and therefore make no public API activation claim.",
+    "The public eval and migrate command groups remain unwired and Candidate.",
+    "Evaluation execution and sealed review issuance are source-local behind crate-controlled traits; the required root adapters, durable replay ledger, optional vendor adapter, and representative live product journey were not exercised.",
+    "Migration planning, private non-serde consumed-evidence storage, safe inspection projection, persistent plan-target ledger binding, atomic final-winner reconciliation, opaque retirement-review issuance, destructive-effect authorization, and retirement reconciliation perform no apply, registry, generated-authority, compatibility-window, archival, deletion, or destructive effect; root adapters and durable ledgers remain unwired.",
+    "Structured MigrationInventory is an adapter boundary; root must prove its exact same-session derivation from the live AuthorityCatalog and ReadSession.",
+    "The current shared fixture-scheduler dependency is red on five cleanup/integrity tests, so no dependency-closed fixture/evaluation ceiling is claimed from the green leased tests.",
+    "Focused contract tests are source behavior proof only, not inventory closure, migration adoption, journey, readiness, release, or completion proof.",
+    "Repository-wide compiler warnings predate this leased integration-test surface and were not modified or treated as completion evidence."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

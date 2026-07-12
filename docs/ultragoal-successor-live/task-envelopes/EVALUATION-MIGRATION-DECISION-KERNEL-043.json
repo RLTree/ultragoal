@@ -1,0 +1,355 @@
+{
+  "authority_binding": {
+    "captured_at": "2026-07-12T12:28:46Z",
+    "ids": {
+      "claims": [],
+      "decisions": [],
+      "migration_routes": [],
+      "nodes": [
+        "N02-INVENTORY"
+      ],
+      "requirements": [],
+      "surfaces": [],
+      "tools": []
+    },
+    "resolution": {
+      "ambiguous_count": 0,
+      "conflict_count": 0,
+      "duplicate_count": 0,
+      "final_session_revalidation": "required",
+      "resolved_set_sha256": "sha256:79f5a75ed76c5f5833ff9a2f41975fc91ae1fcc8f09bed6aa04701f785fe7b15",
+      "unknown_count": 0
+    },
+    "resolved_rows": [
+      {
+        "row_sha256": "sha256:c4c85bbbb962f6f3b9c0addc8af6c708b3767e4f5e7388c6e0075392edf8121b",
+        "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "stable_id": "N02-INVENTORY"
+      }
+    ],
+    "session_id": "sha256:2e2b2e4fe39d20eb9a618e4bd5da77e2107fe9912662add7857ebdf99a9c756f",
+    "sources": [
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+      }
+    ]
+  },
+  "candidate_identity": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "candidate_id": "sha256:6d5e3e7cc1820a09849510c1e5469f8328afd1d91258437bfbf856a3aa29f37f",
+    "captured_at": "2026-07-12T12:28:46Z",
+    "context_id": "sha256:7fc09e13b0c37c2be72b5d96962657ae24f5cc7541a93b781df582b60426dd19",
+    "dirty": false,
+    "freeze": {
+      "artifact_count": 7,
+      "artifact_set_sha256": "sha256:3b82e8b479a00eb370f2f3821c361fafae66b3df798384ff4d8517a7e84dff51",
+      "artifacts": [
+        {
+          "bytes": 20505,
+          "lines": 776,
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+          "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+        },
+        {
+          "bytes": 3479,
+          "lines": 72,
+          "path": "docs/ultragoal-successor-live/acceptance/CLAIM-MODEL-BOUNDARY-CORRECTION-032.json",
+          "sha256": "sha256:87afd2b3fdf3465d0b101d179a18dc47cf46ebf1788b981e89bcf5b01280875e"
+        },
+        {
+          "bytes": 3894,
+          "lines": 67,
+          "path": "docs/ultragoal-successor-live/acceptance/INVENTORY-ACTIVATION-CLOSURE-GUARD-INTEGRATION-040.json",
+          "sha256": "sha256:6782d954ef05279ea31dcd4f833fadbb44635ddc90832eba1bcbb914cde08d8c"
+        },
+        {
+          "bytes": 23425,
+          "lines": 747,
+          "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+          "sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604"
+        },
+        {
+          "bytes": 2176,
+          "lines": 53,
+          "path": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+          "sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5"
+        },
+        {
+          "bytes": 555,
+          "lines": 11,
+          "path": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+          "sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74"
+        },
+        {
+          "bytes": 8577,
+          "lines": 190,
+          "path": "docs/ultragoal-successor-live/work-packages/EVALUATION-MIGRATION-DECISION-KERNEL-043.json",
+          "sha256": "sha256:c37c6b34e7288bf8988e98571f74efdf0a66f682199a9dfa1314a3853e891dd8"
+        }
+      ],
+      "bytes": 62611,
+      "kind": "artifact_set",
+      "lines": 1916
+    },
+    "head_commit": "a77becd62cc7a699aa469558462bbaa0967b3003",
+    "head_tree": "ee152cd8b900a0e2712fb4986d585218a3697022",
+    "repository": {
+      "canonical_root_sha256": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170",
+      "root_uri": "repo://harness-ultragoal-plugin-proposal"
+    }
+  },
+  "effects": {
+    "candidate_source": "bounded_workspace_write",
+    "destructive_actions": "forbidden",
+    "external_systems": "forbidden",
+    "git_metadata": "read_only_no_mutation",
+    "network": "forbidden",
+    "scratch": "bounded_read_write",
+    "secrets": "forbidden",
+    "shared_root_authority": "forbidden"
+  },
+  "evidence": {
+    "implementation_conclusions_are_authority": false,
+    "primary_references": [
+      {
+        "candidate_bound": true,
+        "kind": "authority",
+        "path": "docs/ultragoal-successor-live/work-packages/EVALUATION-MIGRATION-DECISION-KERNEL-043.json",
+        "sha256": "sha256:c37c6b34e7288bf8988e98571f74efdf0a66f682199a9dfa1314a3853e891dd8"
+      },
+      {
+        "candidate_bound": true,
+        "kind": "authority",
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+      },
+      {
+        "candidate_bound": true,
+        "kind": "review",
+        "path": "docs/ultragoal-successor-live/acceptance/INVENTORY-ACTIVATION-CLOSURE-GUARD-INTEGRATION-040.json",
+        "sha256": "sha256:6782d954ef05279ea31dcd4f833fadbb44635ddc90832eba1bcbb914cde08d8c"
+      },
+      {
+        "candidate_bound": true,
+        "kind": "review",
+        "path": "docs/ultragoal-successor-live/acceptance/CLAIM-MODEL-BOUNDARY-CORRECTION-032.json",
+        "sha256": "sha256:87afd2b3fdf3465d0b101d179a18dc47cf46ebf1788b981e89bcf5b01280875e"
+      }
+    ],
+    "unsupported_truth_surfaces": [
+      "journey",
+      "readiness",
+      "release",
+      "completion"
+    ]
+  },
+  "goal": "Implement vendor-neutral evaluation and inventory-bound migration and retirement kernels without activating public APIs or commands.",
+  "no_claim_statement": "This agent does not claim readiness, release, node closure, or goal completion.",
+  "output_contract": {
+    "required_sections": [
+      "candidate-identity",
+      "touched-paths",
+      "commands-and-tests",
+      "artifacts",
+      "findings",
+      "requested-root-changes",
+      "limitations",
+      "no-claim-statement"
+    ],
+    "result_target": "docs/ultragoal-successor-live/worker-results/EVALUATION-MIGRATION-DECISION-KERNEL-043.json",
+    "schema_id": "WorkerResult-v1",
+    "schema_ref": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+    "schema_sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5"
+  },
+  "role_binding": {
+    "may_exercise_root_authority": false,
+    "role_id": "implementation-worker",
+    "sandbox_mode": "workspace-write",
+    "source_kind": "runtime_agent_type_receipt",
+    "source_ref": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+    "source_sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74"
+  },
+  "schema_version": "AgentTaskEnvelope-v1",
+  "scope": {
+    "artifact_paths": [
+      {
+        "access": "read",
+        "path": "docs/ultragoal-successor-live/work-packages/EVALUATION-MIGRATION-DECISION-KERNEL-043.json"
+      },
+      {
+        "access": "read",
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT"
+      },
+      {
+        "access": "read",
+        "path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md"
+      },
+      {
+        "access": "read",
+        "path": "docs/ultragoal-successor-live/acceptance/INVENTORY-ACTIVATION-CLOSURE-GUARD-INTEGRATION-040.json"
+      },
+      {
+        "access": "read",
+        "path": "docs/ultragoal-successor-live/acceptance/CLAIM-MODEL-BOUNDARY-CORRECTION-032.json"
+      },
+      {
+        "access": "read",
+        "path": "validator/src/claims"
+      },
+      {
+        "access": "read",
+        "path": "validator/src/context"
+      },
+      {
+        "access": "read",
+        "path": "validator/src/fixture_scheduler"
+      },
+      {
+        "access": "read",
+        "path": "validator/src/inventory"
+      },
+      {
+        "access": "read",
+        "path": "validator/tests/claims_contract"
+      },
+      {
+        "access": "read",
+        "path": "validator/tests/fixture_scheduler_contract"
+      },
+      {
+        "access": "write",
+        "path": "docs/ultragoal-successor-live/worker-results/EVALUATION-MIGRATION-DECISION-KERNEL-043.json"
+      },
+      {
+        "access": "write",
+        "path": "validator/src/evaluation"
+      },
+      {
+        "access": "write",
+        "path": "validator/src/migration"
+      }
+    ],
+    "external_effects": [],
+    "fixtures": [
+      {
+        "access": "write",
+        "path": "fixtures/evaluation-engine"
+      },
+      {
+        "access": "write",
+        "path": "fixtures/migration-engine"
+      },
+      {
+        "access": "write",
+        "path": "validator/tests/evaluation_contract.rs"
+      },
+      {
+        "access": "write",
+        "path": "validator/tests/evaluation_contract"
+      },
+      {
+        "access": "write",
+        "path": "validator/tests/migration_contract.rs"
+      },
+      {
+        "access": "write",
+        "path": "validator/tests/migration_contract"
+      }
+    ],
+    "forbidden_paths": [
+      ".git/config",
+      "Cargo.lock",
+      "validator/src/lib.rs",
+      "validator/src/api_witness.rs",
+      "validator/tests/public_api_witness.rs",
+      "validator/src/command_witness.rs",
+      "validator/src/inventory/registry/command_activation.rs"
+    ],
+    "generated_outputs": [],
+    "path_resolution": {
+      "policy": "candidate-relative-no-follow-v1",
+      "post_freeze_revalidation": "required",
+      "resolved_scope_sha256": "sha256:9d900d607a30bd89a8fae3604c561ecb1dc92662a9865d0c286c570691cad1ab",
+      "session_id": "sha256:020ae37c774b143a414bc03102b789b150927bac1303f604d9fcedb8e26124ab",
+      "special_files": "reject",
+      "symlinks": "reject"
+    },
+    "scratch_uris": [
+      "scratch://evaluation-migration-043/cargo-target",
+      "scratch://evaluation-migration-043/isolated-repositories"
+    ],
+    "semantic_symbols": [
+      "vendor-neutral-evaluation-kernel",
+      "failure-case-harvesting",
+      "independent-promotion-reconciliation",
+      "inventory-bound-migration-planner",
+      "compatibility-route-validation",
+      "retirement-decision-reconciliation"
+    ]
+  },
+  "stop_rule": "Stop after the first lease escape, caller-authored outcome authority, stale final-session acceptance, unauthorized migration effect, or retirement false-pass; otherwise finish the exact kernels, fixtures, and WorkerResult-v1.",
+  "success": [
+    "Evaluation audit, execution, failure harvesting, and promotion decisions derive from observed candidate-bound behavior.",
+    "Migration plans, compatibility routes, and retirement decisions bind current inventory readers, writers, routes, and replacement behavior.",
+    "A schema-valid WorkerResult-v1 requests exact root export, witness, command, registry, and generated-authority wiring without exercising it."
+  ],
+  "task_id": "evaluation-migration-decision-kernel-043",
+  "verification": {
+    "false_pass": {
+      "controls": [
+        {
+          "control_id": "CTRL-EVAL-MIGRATION-FALSE-PASS",
+          "evidence_kind": "test",
+          "expected": "No proxy substitutes for representative behavior, independent reconciliation, or verified replacement and retirement.",
+          "procedure": "Offer metric gain, verbose output, receipts, generated artifacts, manipulated tests, and renamed-only replacements as completion proof."
+        }
+      ],
+      "status": "required"
+    },
+    "negative": {
+      "controls": [
+        {
+          "control_id": "CTRL-EVAL-MIGRATION-NEGATIVE",
+          "evidence_kind": "test",
+          "expected": "Every case refuses causally before promotion, migration effects, or retirement.",
+          "procedure": "Inject invalid specs, contamination, stale candidates, self-review, unknown routes, active readers and writers, and missing replacement behavior."
+        }
+      ],
+      "status": "required"
+    },
+    "positive": {
+      "controls": [
+        {
+          "control_id": "CTRL-EVAL-MIGRATION-POSITIVE",
+          "evidence_kind": "test",
+          "expected": "Observed behavior produces deterministic audits, failures, promotion decisions, plans, and blocked or eligible retirement decisions.",
+          "procedure": "Run paired candidate-bound evaluation and current-inventory migration planning fixtures."
+        }
+      ],
+      "status": "required"
+    },
+    "race_or_mutation": {
+      "controls": [
+        {
+          "control_id": "CTRL-EVAL-MIGRATION-RACE-OR-MUTATION",
+          "evidence_kind": "test",
+          "expected": "Drift invalidates the run or plan and no stale output is reused.",
+          "procedure": "Mutate and restore fixtures, scorer identity, inventory, registry, routes, and candidate inputs across final revalidation."
+        }
+      ],
+      "status": "required"
+    },
+    "security": {
+      "controls": [
+        {
+          "control_id": "CTRL-EVAL-MIGRATION-SECURITY",
+          "evidence_kind": "test",
+          "expected": "Unsafe inputs fail without writes, authority expansion, or attacker-value echo.",
+          "procedure": "Exercise path escape, symlinks, hardlinks, special files, oversized inputs, forged reviewers, and unauthorized retirement."
+        }
+      ],
+      "status": "required"
+    }
+  }
+}

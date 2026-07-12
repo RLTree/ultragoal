@@ -1,0 +1,13 @@
+{
+  "schema_version": "MigrationEngineFixture-v1",
+  "fixture_id": "current-inventory-retirement-candidate",
+  "source_id": "LEGACY-SKILL:old",
+  "canonical_target_id": "SKILL:current",
+  "active_readers": [],
+  "active_writers": [],
+  "public_routes": [],
+  "generated_outputs": [],
+  "observed_invocations": 0,
+  "compatibility_window_complete": true,
+  "expected_status": "non_authoritative_preservation_candidate"
+}
