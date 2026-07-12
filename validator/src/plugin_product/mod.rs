@@ -9,6 +9,11 @@ pub mod lifecycle;
 pub mod product_fitness;
 pub mod source_closure;
 
+// Production-compile the independently reviewed verifier without granting it
+// command, route, registry, host-adapter, or claim authority.
+#[cfg(not(test))]
+pub(crate) mod agent_discovery;
+
 // The legacy source-closure contract compiles this module directly inside an
 // integration-test crate that has no distribution kernel. Production builds,
 // including every integration test through the library, expose the adapter.
