@@ -1,0 +1,65 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N10-ORCHESTRATION",
+  "root_decision": "accepted_source_local_state_and_interrupted_preview_authority_overlay",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-PUBLIC-STATE-JOURNEY-042.json",
+    "sha256": "5cb0eace41a55157a39bbdf8b3f9c805ddcd2b5588230b290384f7359991bf36",
+    "artifact_count": 20,
+    "artifact_set_sha256": "45f1f1d2e696dab67f6079cdedac34b50bd3e40a7887ddd753c88512f8b7c6cb"
+  },
+  "rework_history": [
+    "Public deserializable state views originally revalidated only workspace and journal head, permitting whole-view substitution",
+    "InterruptedRecoveryView then remained unsealed, permitting lease and result target stripping with a recomputed action_id",
+    "The corrected overlay seals and rederives the complete state and interrupted preview before validation or any root issuer"
+  ],
+  "independent_review": {
+    "reviewer": "/root/distribution_lifecycle_adapter_engineer",
+    "verdict": "pass",
+    "review_mode": "independent_read_only_corrected_set",
+    "focused_nextest_run_id": "49587299-af6e-4e4d-8d19-76ce3901838e",
+    "focused_result": "21 passed; 0 failed",
+    "product_nextest_run_id": "c6d63bb3-4cec-4074-b4c4-bc2c78d7aa7d",
+    "product_result": "21 passed; 0 failed",
+    "kernel_nextest_run_id": "296552e0-465e-4857-8648-3b0fba954ac8",
+    "kernel_result": "163 passed; 0 failed",
+    "production_library_check": "passed",
+    "blocking_review_findings": 0
+  },
+  "root_integration": {
+    "commit": "2c5b20c5b",
+    "integrated_head": "2c5b20c5b2165eb0fed40edb1c9b2e6cce3b03f8",
+    "integrated_tree": "9808b52d3675d02d59d32510d6f39b0bde150465",
+    "committed_nextest_run_id": "1cb31a75-602c-43ef-9174-1c83f2a172b5",
+    "committed_result": "205 passed; 0 failed",
+    "production_library_and_example_check": "passed with 16 build jobs under --locked --offline"
+  },
+  "closed_findings": [
+    "inspect next and diagnose require a private full-state authority seal and current source revalidation",
+    "serialized or cloned state substitutions cannot forge ready nodes findings root actions snapshot or state_id",
+    "interrupted recovery validation seals and rederives prior and prospective heads full snapshot snapshot_id exact target and complete action",
+    "empty or alternate lease and result target substitutions reject before permit issuance with zero writes",
+    "legitimate exact interrupted previews validate while fixed errors remain bounded and non-echoing"
+  ],
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-ORCHESTRATION-001",
+      "state": "production-compiled state projection and interrupted-preview validation accepted",
+      "blocker": "Root public command wiring permit issuance and representative live interruption recovery journeys remain unproved."
+    }
+  ],
+  "root_acceptance_limit": "Production-compiled source-local orchestration command overlay, deterministic zero-write read views, and sealed interrupted-preview validation.",
+  "explicitly_withheld": [
+    "public successor command dispatch",
+    "root permit issuance",
+    "representative fresh-process interruption restart ambiguity reconciliation and recovery journey",
+    "sudden power-loss durability",
+    "orchestration node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any change to an accepted command-overlay artifact, orchestration dependency, task or work envelope, WorkerResult, module wiring, fixture, or named test harness immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim public command behavior, permit issuance, representative journey completion, readiness, release, node closure, or goal completion."
+}

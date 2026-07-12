@@ -1,0 +1,67 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N02-INVENTORY-GENERATED-AUTHORITY",
+  "root_decision": "accepted_current_source_activation_guard_with_honest_open_closure",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/INVENTORY-ACTIVATION-CLOSURE-GUARD-040.json",
+    "sha256": "29f2ec92058e58a0d185b4e7fc81860af3a94612a2ecfb33d040a9cf465de0e7",
+    "artifact_count": 14,
+    "artifact_set_sha256": "d75f64b10cca13aea038a01e8d3d4bb2aeccd7dab14ba2b0e38fe4ea02b859f4"
+  },
+  "rework_history": [
+    "registry/semantic.rs was added after independent review proved that Active API construction was outside the original current-source guard",
+    "validator/src/lib.rs and validator/tests/public_api_witness.rs were added after independent review proved that internal witnesses could outlive public export authority"
+  ],
+  "independent_review": {
+    "reviewer": "/root/distribution_lifecycle_adapter_engineer",
+    "verdict": "pass",
+    "review_mode": "independent_read_only_corrected_set",
+    "focused_nextest_run_id": "4e52344e-d7ec-4709-80c0-51156320f04a",
+    "focused_result": "5 passed; 0 failed",
+    "external_public_witness_run_id": "4e4e1bac-c333-4974-95cd-5a26b5160090",
+    "external_public_witness_result": "1 passed; 0 failed",
+    "full_nextest_run_id": "638dcf5d-6ca9-49da-9c27-2927c127a278",
+    "full_result": "95 passed; 0 failed",
+    "race_context_zero_write_run_id": "77eeb070-4c23-49f5-a4b3-f8dfd7c1363e",
+    "race_context_zero_write_result": "14 passed; 0 failed",
+    "current_summary_sha256": "2bca91997c2da3d6397575f703e908da8b9946810abe1be697437a369f3d2827",
+    "current_summary_entry_count": 4123,
+    "current_summary_blocker_count": 90,
+    "blocking_review_findings": 0
+  },
+  "root_integration": {
+    "commit": "27419969b",
+    "integrated_head": "2c5b20c5b2165eb0fed40edb1c9b2e6cce3b03f8",
+    "integrated_tree": "9808b52d3675d02d59d32510d6f39b0bde150465",
+    "committed_nextest_run_id": "d30cb86b-f4d3-4839-b900-203a1d5ffb48",
+    "committed_result": "96 passed; 0 failed",
+    "production_library_and_example_check": "passed with 16 build jobs under --locked --offline"
+  },
+  "closed_findings": [
+    "Active API rows require the exact current 22-source creator gate finalizer status projection export and summary closure",
+    "root public export authority and the external-crate visibility witness are current-byte bound",
+    "missing unknown duplicate conflicting stale mutate-restore symlink hardlink FIFO and private-export substitutions fail before catalog or summary emission",
+    "command definitions remain Candidate until current compiled handlers are activated",
+    "two current summaries are byte-identical and recursively zero-write while reporting the same open closure"
+  ],
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-INVENTORY-001",
+      "state": "current-source activation and typed closure enforcement accepted",
+      "blocker": "The live catalog still reports 90 material closure blockers."
+    }
+  ],
+  "root_acceptance_limit": "Production-compiled inventory activation guard, exact current-source reconciliation, typed closure blockers, and deterministic zero-write summary behavior.",
+  "explicitly_withheld": [
+    "inventory closure",
+    "zero parallel authority",
+    "zero missing required components",
+    "migration and retirement completion",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any change to an accepted artifact, one of the 22 activation-bearing sources, task or work envelope, WorkerResult, inventory source registry, projection, public export, external visibility witness, or named test harness immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim inventory closure, readiness, release, node closure, or goal completion."
+}

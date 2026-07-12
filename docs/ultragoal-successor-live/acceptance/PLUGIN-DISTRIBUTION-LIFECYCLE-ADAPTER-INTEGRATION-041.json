@@ -1,0 +1,68 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N08-PLUGIN-PRODUCT",
+  "root_decision": "accepted_confined_source_local_distribution_lifecycle_adapter",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041.json",
+    "sha256": "d42d57b1e833969ce8a2b5762b4d79004845a3e94abfd3296fdd13fb2fda0bb5",
+    "artifact_count": 15,
+    "artifact_set_sha256": "162193c53f2d3d882a685dbe517d7a38159b931a1bfca9e309b47f5cd132e1b1"
+  },
+  "rework_history": [
+    "The initial adapter retained only deterministic plan_id, allowing independently issued identical sealed plans and recovery tokens to cross operation and root boundaries",
+    "The corrected adapter retains the exact sealed LifecyclePlan and permits only its owning operation to mint and consume one exact RecoveryToken"
+  ],
+  "independent_review": {
+    "reviewer": "/root/orchestration_state_journey_engineer",
+    "verdict": "pass",
+    "review_mode": "independent_read_only_corrected_set",
+    "focused_nextest_run_id": "9fe7c103-3c45-45f6-bbf7-39c59d0ca9c3",
+    "focused_result": "14 passed; 0 failed",
+    "dependency_nextest_run_id": "70348be2-0722-43a6-864a-f669f5e39d56",
+    "dependency_result": "185 passed; 0 failed",
+    "production_library_check": "passed",
+    "blocking_review_findings": 0
+  },
+  "root_integration": {
+    "commit": "8b4409300",
+    "integrated_head": "2c5b20c5b2165eb0fed40edb1c9b2e6cce3b03f8",
+    "integrated_tree": "9808b52d3675d02d59d32510d6f39b0bde150465",
+    "committed_nextest_run_id": "2f5efde6-2d92-4656-a60b-c63f675a162b",
+    "committed_result": "199 passed; 0 failed",
+    "required_repository_root_binding": "HUL_REPO_ROOT"
+  },
+  "closed_findings": [
+    "PackagePlan PackageSnapshot and LifecyclePlan identities are bound before effects",
+    "install and cache mutations are confined compare-and-swap effects with exact completed-prefix rollback",
+    "independently issued sibling plans and same-root or cross-root sibling tokens reject before effects observe or restore",
+    "verify and distribution-identity probe failures remain zero-write and never arm restore",
+    "legitimate bound apply and recovery complete exactly once"
+  ],
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-PRODUCT-001",
+      "state": "production-compiled confined distribution lifecycle adapter accepted",
+      "blocker": "Supported package bytes and real host installation discovery runtime and lifecycle journeys remain unproved."
+    },
+    {
+      "requirement_id": "REQ-SUPPLY-004",
+      "state": "source-local package snapshot lifecycle and adapter identity are bound",
+      "blocker": "Marketplace cache app-registry Plugins UI discovery and runtime identity remain separate unsupported surfaces."
+    }
+  ],
+  "root_acceptance_limit": "Production-compiled descriptor-confined isolated-filesystem distribution lifecycle adapter behavior with exact sealed operation authority.",
+  "explicitly_withheld": [
+    "supported package and HUGPKG bytes",
+    "marketplace installation and cache state",
+    "app-registry and Plugins UI state",
+    "host discovery and runtime execution",
+    "fresh update rollback reinstall uninstall stale-cache and repeat-use host journeys",
+    "plugin product node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any change to an accepted adapter artifact, lifecycle or distribution dependency, task or work envelope, WorkerResult, module wiring, fixture, or named test harness immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim package, install, discovery, runtime, journey, readiness, release, node closure, or goal completion."
+}
