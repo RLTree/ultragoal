@@ -1,0 +1,10 @@
+{
+  "schema_version": "OrchestrationProductFixture-v1",
+  "case": "clean-start",
+  "operation": "plan",
+  "expected": {
+    "ready": ["node-a"],
+    "writes": 0,
+    "diagnostic": null
+  }
+}

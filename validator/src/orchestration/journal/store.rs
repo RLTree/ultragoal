@@ -229,15 +229,14 @@ impl Store {
                 .map_err(|_| OrchestrationError::JournalIo)?;
             file.sync_all().map_err(|_| OrchestrationError::JournalIo)?;
             self.verify_root()?;
+            self.sync_root()?;
+            self.verify_root()?;
             if self.exact_stat(name)? != target_before {
                 return Err(OrchestrationError::JournalConflict);
             }
+            #[cfg(test)]
+            super::test_hook::run();
             super::sys::rename_relative(&self.directory, &temp_name, name)?;
-            if !self.exact_entry(name)? {
-                return Err(OrchestrationError::JournalCorrupt);
-            }
-            self.sync_root()?;
-            self.verify_root()?;
             Ok(())
         })();
         if result.is_err() {

@@ -1,0 +1,99 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "orchestration_recovery_premutation_guard_reconciliation",
+  "candidate_state": "root_module_wired_for_independent_final_revalidation",
+  "base_head": "b729c497fa54f52854ee396b86be61ed115c96f1",
+  "base_tree": "50b8caa02e3a6c86cb08bd3b0a65ab82f27c4942",
+  "corrects_decision": {
+    "path": "docs/ultragoal-successor-live/root-decisions/ORCHESTRATION-RECOVERY-POSTMUTATION-REWORK-036.json",
+    "sha256": "9419d7ca59b384783cf74e4c1719260c31130600e4354fbe67da954ebee18a8e"
+  },
+  "historical_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-RECOVERY-PRODUCT-CORRECTION-029.json",
+    "sha256": "ee0b7a3a4702cee974aec3a212828a4a2c9422e09c1a2b569683dd17a31876a3",
+    "status": "structurally_valid_historical_input_superseded_by_root_correction"
+  },
+  "artifact_enumeration": {
+    "paths": [
+      "validator/tests/orchestration_contract.rs"
+    ],
+    "recursive_rust_roots": [
+      "validator/src/orchestration",
+      "validator/tests/orchestration_contract",
+      "validator/tests/orchestration_product_contract"
+    ],
+    "recursive_json_roots": [
+      "fixtures/orchestration-product"
+    ],
+    "ordering": "bytewise path sort",
+    "row_formula": "path, one TAB byte, lowercase SHA-256 without prefix, one LF byte"
+  },
+  "artifact_set_sha256": "72d48aed74a5d5eebeb62fb45d65b69bf3bb23139e652b77bb8944328b126d12",
+  "artifact_count": 88,
+  "total_bytes": 457351,
+  "total_lines": 13505,
+  "maximum_file_lines": 298,
+  "root_correction_paths": [
+    "fixtures/orchestration-product/mutation-controls.json",
+    "validator/src/orchestration/engine_query.rs",
+    "validator/src/orchestration/journal/mod.rs",
+    "validator/src/orchestration/journal/recovery.rs",
+    "validator/src/orchestration/journal/store.rs",
+    "validator/src/orchestration/journal/test_hook.rs",
+    "validator/src/orchestration/mod.rs",
+    "validator/src/orchestration/product/recover.rs",
+    "validator/tests/orchestration_contract/journal_publication_recovery.rs",
+    "validator/tests/orchestration_product_contract/fixtures.rs",
+    "validator/tests/orchestration_product_contract/main.rs",
+    "validator/tests/orchestration_product_contract/publication_recovery.rs",
+    "validator/tests/orchestration_product_contract/resume_recovery.rs",
+    "validator/tests/orchestration_product_contract/worker_result.rs"
+  ],
+  "corrective_behavior": [
+    "the exact interrupted append is authenticated and replayed through a read-only verified snapshot before journal publication",
+    "ambiguous and pending-integration recovery refuses causally before publication, while stale expired and orphaned leases return their distinct stable diagnostics",
+    "the existing locked repair primitive revalidates the exact prior head event log and recovered binding immediately before publication",
+    "preview and commit share one consuming directory-descriptor-anchored handle, so regular root substitution cannot redirect the authorized publication",
+    "all fallible path checks and directory synchronization precede the atomic rename commit point, with no ordinary error path after successful publication",
+    "the recovery outcome binds the permit-authenticated workspace identity and explicitly reports whether its supplied path still resolves to that identity after commit",
+    "the independently accepted product boundary is wired through the production orchestration module without adding command or claim authority",
+    "concurrent recovery has one exact committed head and one causal concurrent-update refusal",
+    "successful recovery returns the exact committed head and the prevalidated current snapshot",
+    "the historical worker result remains structurally lease-bound but is not used as current-byte proof after root correction"
+  ],
+  "durability_ceiling": "Successful atomic rename is the process-visible commit boundary. The verified scope covers process death, interrupted publication, trusted restart, and exact repair; it does not claim sudden host or power-loss persistence after rename and before filesystem metadata persistence.",
+  "root_verification": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-orchestration-root-037 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_product_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "result": "21 passed; 0 failed",
+      "run_id": "abdd23cf-b44c-4af2-95a7-1298b8c1a8ae"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-orchestration-root-037 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_contract --build-jobs 16 --test-threads 16 -E 'not test(unix_socket_special_file_fails_before_artifact_open)' --no-fail-fast",
+      "result": "162 passed; 0 failed; one managed-host permission probe explicitly excluded",
+      "run_id": "f1a7989a-0199-466f-aad0-2612787c8b13"
+    }
+  ],
+  "root_integration": {
+    "path": "validator/src/orchestration/mod.rs",
+    "change": "pub mod product;",
+    "library_check": "passed with 16 build jobs under --locked --offline",
+    "claim_effect": "none"
+  },
+  "independent_review": {
+    "status": "pending",
+    "required_reviewer": "independent_read_only_orchestration_reviewer"
+  },
+  "explicitly_withheld": [
+    "root acceptance before independent rereview",
+    "public command-catalog and CLI integration",
+    "representative fresh-process interruption and recovery journey",
+    "sudden host or power-loss durability beyond the exercised process-death boundary",
+    "orchestration node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any byte change, added or removed file under the enumerated roots, harness change, unsafe file type, link-count change, or path identity ambiguity immediately reopens this candidate.",
+  "no_claim_statement": "This corrected candidate does not claim orchestration product acceptance, public integration, readiness, release, node closure, or goal completion."
+}

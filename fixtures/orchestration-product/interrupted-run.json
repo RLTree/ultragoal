@@ -1,0 +1,10 @@
+{
+  "schema_version": "OrchestrationProductFixture-v1",
+  "case": "interrupted-run",
+  "operation": "resume",
+  "expected": {
+    "root_recovered": true,
+    "journal_advance": 1,
+    "preserve": ["candidate", "lease", "result_commitment"]
+  }
+}

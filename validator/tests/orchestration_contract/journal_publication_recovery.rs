@@ -33,12 +33,19 @@ fn initialized(label: &str) -> (JournalRoot, JournalHead, EventLog, Orchestratio
 }
 
 fn publish_interrupted_manually(root: &JournalRoot, log: &EventLog, event: &OrchestrationEvent) {
+    #[derive(serde::Serialize)]
+    struct Frame<'a> {
+        schema_version: &'static str,
+        event: &'a OrchestrationEvent,
+    }
     let mut bytes = fs::read(root.path().join("events.jsonl")).unwrap();
-    let frame = serde_json::json!({
-        "schema_version": "OrchestrationJournalFrame-v1",
-        "event": event,
-    });
-    bytes.extend(serde_json::to_vec(&frame).unwrap());
+    bytes.extend(
+        serde_json::to_vec(&Frame {
+            schema_version: "OrchestrationJournalFrame-v1",
+            event,
+        })
+        .unwrap(),
+    );
     bytes.push(b'\n');
     assert_eq!(
         log.events().len() + 1,
@@ -179,6 +186,39 @@ fn extra_truncated_substituted_or_noncanonical_publications_never_repair() {
         assert_eq!(fs::read(root.path().join("events.jsonl")).unwrap(), bytes);
         assert_eq!(fs::read(root.path().join("head.json")).unwrap(), head);
     }
+}
+
+#[test]
+fn prepared_recovery_cannot_follow_a_regular_root_substitution() {
+    let (root, prior, log, event) = initialized("prepared-root-substitution");
+    publish_interrupted_manually(&root, &log, &event);
+    let prepared =
+        FileJournal::prepare_interrupted_append(root.path(), &prior, &event.event_id, &binding())
+            .unwrap();
+    let names = ["events.jsonl", "head.json", "journal.lock"];
+    let original_before = names.map(|name| fs::read(root.path().join(name)).unwrap());
+    let moved = root.path().with_extension("anchored");
+    fs::rename(root.path(), &moved).unwrap();
+    fs::create_dir(root.path()).unwrap();
+    for name in names {
+        fs::copy(moved.join(name), root.path().join(name)).unwrap();
+    }
+    let replacement_before = names.map(|name| fs::read(root.path().join(name)).unwrap());
+
+    assert_eq!(
+        prepared.commit().unwrap_err(),
+        OrchestrationError::JournalCorrupt
+    );
+    for (index, name) in names.into_iter().enumerate() {
+        assert_eq!(fs::read(moved.join(name)).unwrap(), original_before[index]);
+        assert_eq!(
+            fs::read(root.path().join(name)).unwrap(),
+            replacement_before[index]
+        );
+    }
+
+    fs::remove_dir_all(root.path()).unwrap();
+    fs::rename(moved, root.path()).unwrap();
 }
 
 #[cfg(unix)]

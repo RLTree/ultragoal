@@ -5,7 +5,67 @@ use super::{FileJournal, JournalSnapshot};
 use crate::orchestration::{Binding, EventKind, EventLog, OrchestrationError};
 use std::path::Path;
 
+#[derive(Debug)]
+pub(crate) struct InterruptedAppend {
+    journal: FileJournal,
+    prospective: JournalSnapshot,
+    expected_prior: JournalHead,
+    expected_event_id: String,
+    recovered_binding: Binding,
+}
+
+impl InterruptedAppend {
+    pub(crate) fn prospective(&self) -> &JournalSnapshot {
+        &self.prospective
+    }
+
+    pub(crate) fn commit(self) -> Result<JournalSnapshot, OrchestrationError> {
+        self.journal.repair_one(
+            &self.expected_prior,
+            &self.expected_event_id,
+            &self.recovered_binding,
+        )
+    }
+}
+
 impl FileJournal {
+    /// Opens and anchors one exact interrupted append for a later consuming
+    /// commit. Preview and commit use the same directory descriptor, so path
+    /// substitution cannot redirect the authorized publication.
+    pub(crate) fn prepare_interrupted_append(
+        root: impl AsRef<Path>,
+        expected_prior: &JournalHead,
+        expected_event_id: &str,
+        recovered_binding: &Binding,
+    ) -> Result<InterruptedAppend, OrchestrationError> {
+        let journal = Self {
+            store: Store::open(root.as_ref())?,
+        };
+        journal.store.validate_journal_entries()?;
+        let prospective =
+            journal.inspect_one(expected_prior, expected_event_id, recovered_binding)?;
+        Ok(InterruptedAppend {
+            journal,
+            prospective,
+            expected_prior: expected_prior.clone(),
+            expected_event_id: expected_event_id.to_owned(),
+            recovered_binding: recovered_binding.clone(),
+        })
+    }
+
+    /// Read-only preview of exactly one interrupted append. The returned
+    /// snapshot reflects the verified log and its prospective recovered head,
+    /// but this method never publishes that head.
+    pub fn inspect_interrupted_append(
+        root: impl AsRef<Path>,
+        expected_prior: &JournalHead,
+        expected_event_id: &str,
+        recovered_binding: &Binding,
+    ) -> Result<JournalSnapshot, OrchestrationError> {
+        Self::prepare_interrupted_append(root, expected_prior, expected_event_id, recovered_binding)
+            .map(|prepared| prepared.prospective)
+    }
+
     /// Read-only authorization of exactly one expected append beyond a trusted
     /// prior head. This covers a crash after the journal/head commit but before
     /// the caller can retain the returned head.
@@ -36,11 +96,13 @@ impl FileJournal {
         expected_event_id: &str,
         recovered_binding: &Binding,
     ) -> Result<JournalSnapshot, OrchestrationError> {
-        let journal = Self {
-            store: Store::open(root.as_ref())?,
-        };
-        journal.store.validate_journal_entries()?;
-        journal.repair_one(expected_prior, expected_event_id, recovered_binding)
+        Self::prepare_interrupted_append(
+            root,
+            expected_prior,
+            expected_event_id,
+            recovered_binding,
+        )?
+        .commit()
     }
 
     fn repair_one(
@@ -60,12 +122,31 @@ impl FileJournal {
         let recovered =
             verify_one_more(&log, expected_prior, expected_event_id, recovered_binding)?;
         self.write_head(&recovered)?;
-        let snapshot = self.inspect_unlocked()?;
-        if snapshot.head != recovered || snapshot.log != log {
-            return Err(OrchestrationError::JournalCorrupt);
-        }
+        Ok(JournalSnapshot {
+            head: recovered,
+            log,
+        })
+    }
+
+    fn inspect_one(
+        &self,
+        expected_prior: &JournalHead,
+        expected_event_id: &str,
+        recovered_binding: &Binding,
+    ) -> Result<JournalSnapshot, OrchestrationError> {
         self.store.validate_journal_entries()?;
-        Ok(snapshot)
+        let current_head = decode_head(&self.store.read("head.json", 64 * 1024)?)?;
+        if &current_head != expected_prior {
+            return Err(OrchestrationError::JournalConflict);
+        }
+        let log = decode_log(&self.store.read_log()?)?;
+        let recovered =
+            verify_one_more(&log, expected_prior, expected_event_id, recovered_binding)?;
+        self.store.validate_journal_entries()?;
+        Ok(JournalSnapshot {
+            head: recovered,
+            log,
+        })
     }
 }
 

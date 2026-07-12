@@ -23,6 +23,7 @@ mod integration_transition;
 mod journal;
 mod lease;
 mod model;
+pub mod product;
 mod reconcile;
 mod recovery;
 mod replay;

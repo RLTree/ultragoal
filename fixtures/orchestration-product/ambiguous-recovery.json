@@ -1,0 +1,10 @@
+{
+  "schema_version": "OrchestrationProductFixture-v1",
+  "case": "ambiguous-recovery",
+  "operation": "resume",
+  "expected": {
+    "error_code": "HUL-ORCH-PROD-010",
+    "writes": 0,
+    "requires": "explicit-reconciliation"
+  }
+}

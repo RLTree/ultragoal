@@ -1,0 +1,303 @@
+{
+  "worker": "/root/orchestration_recovery_product_engineer",
+  "lease_id": "ORCHESTRATION-RECOVERY-PRODUCT-CORRECTION-029",
+  "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+  "candidate_identity": {
+    "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+    "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+    "head_commit": "b729c497fa54f52854ee396b86be61ed115c96f1",
+    "head_tree": "50b8caa02e3a6c86cb08bd3b0a65ab82f27c4942",
+    "branch": "codex/successor-contract-v2-live-product",
+    "issued_dirty": true,
+    "issued_work_envelope": "docs/ultragoal-successor-live/work-packages/ORCHESTRATION-RECOVERY-PRODUCT-CORRECTION-029.json",
+    "issued_work_envelope_sha256": "sha256:887d3b8bfff8e2c3cc68e71b0b281b6f4444cc8a909dadadff5c6718607be6fc"
+  },
+  "base_state": {
+    "status": "root-issued-product-correction",
+    "accepted_durable_kernel": "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-DURABLE-RECOVERY-KERNEL.json",
+    "accepted_scope_kernel": "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-SCOPE-AUTHORITY.json",
+    "public_product_state": "accepted kernel had no product plan, query, resume, reconcile, or recover boundary"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "proposal_status": "source-and-fixture-orchestration-product-candidate",
+    "artifact_count": 24,
+    "artifact_total_bytes": 82452,
+    "artifact_total_lines": 2468,
+    "artifact_set_sha256": "sha256:c6af6a2a2c6b6a893240e2afbee03974b594a4dae03b6f485cad1005cb9aaec6",
+    "focused_controls": "18 passed; 0 failed",
+    "accepted_kernel_regression": "161 passed; 0 failed; 1 sandbox-denied Unix-socket probe excluded after an exact 161-of-162 diagnostic run",
+    "public_module_wiring": "requested-root-only",
+    "independent_review": "pending-root-assignment",
+    "claim_effect": "none"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-RECOVERY-PRODUCT-CORRECTION-029.json",
+    "fixtures/orchestration-product/ambiguous-recovery.json",
+    "fixtures/orchestration-product/clean-start.json",
+    "fixtures/orchestration-product/concurrent-reconcile.json",
+    "fixtures/orchestration-product/interrupted-run.json",
+    "fixtures/orchestration-product/mutation-controls.json",
+    "validator/src/orchestration/product/authority.rs",
+    "validator/src/orchestration/product/context.rs",
+    "validator/src/orchestration/product/error.rs",
+    "validator/src/orchestration/product/mod.rs",
+    "validator/src/orchestration/product/plan.rs",
+    "validator/src/orchestration/product/query.rs",
+    "validator/src/orchestration/product/reconcile.rs",
+    "validator/src/orchestration/product/recover.rs",
+    "validator/src/orchestration/product/resume.rs",
+    "validator/src/orchestration/product/snapshot.rs",
+    "validator/tests/orchestration_product_contract/authority_controls.rs",
+    "validator/tests/orchestration_product_contract/fixtures.rs",
+    "validator/tests/orchestration_product_contract/main.rs",
+    "validator/tests/orchestration_product_contract/mutation_security.rs",
+    "validator/tests/orchestration_product_contract/plan_query.rs",
+    "validator/tests/orchestration_product_contract/reconciliation.rs",
+    "validator/tests/orchestration_product_contract/resume_recovery.rs",
+    "validator/tests/orchestration_product_contract/support.rs",
+    "validator/tests/orchestration_product_contract/worker_result.rs"
+  ],
+  "touched_semantics": [
+    "orchestration-product-plan",
+    "orchestration-product-query",
+    "orchestration-product-resume",
+    "orchestration-product-reconcile",
+    "orchestration-product-recover"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/orchestration-product/ambiguous-recovery.json",
+    "fixtures/orchestration-product/clean-start.json",
+    "fixtures/orchestration-product/concurrent-reconcile.json",
+    "fixtures/orchestration-product/interrupted-run.json",
+    "fixtures/orchestration-product/mutation-controls.json",
+    "validator/tests/orchestration_product_contract/authority_controls.rs",
+    "validator/tests/orchestration_product_contract/fixtures.rs",
+    "validator/tests/orchestration_product_contract/main.rs",
+    "validator/tests/orchestration_product_contract/mutation_security.rs",
+    "validator/tests/orchestration_product_contract/plan_query.rs",
+    "validator/tests/orchestration_product_contract/reconciliation.rs",
+    "validator/tests/orchestration_product_contract/resume_recovery.rs",
+    "validator/tests/orchestration_product_contract/support.rs",
+    "validator/tests/orchestration_product_contract/worker_result.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "orchestration-product-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "orchestration-product-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-orchestration-product-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "REQ-ORCH-004",
+    "REQ-ORCH-005",
+    "REQ-ORCH-007",
+    "REQ-ORCH-008",
+    "REQ-SECURITY-001",
+    "REQ-SECURITY-004",
+    "REQ-SECURITY-006",
+    "REQ-SECURITY-007"
+  ],
+  "dependency_nodes": [
+    "orchestration-durable-recovery-kernel",
+    "orchestration-scope-authority"
+  ],
+  "changes": [
+    {
+      "area": "product-read-boundary",
+      "result": "Added candidate-bound plan and query APIs that anchor one exact journal workspace, replay the accepted kernel, reject unknown workers and artifacts, and remain recursively zero-write."
+    },
+    {
+      "area": "root-authority-boundary",
+      "result": "Added short-lived operation-specific root permits bound to root actor, candidate, workspace identity, journal head, lease, result commitment, operation, nonce, and expiry without serializing or echoing root secret material."
+    },
+    {
+      "area": "resume-reconcile-recover",
+      "result": "Added authorized interrupted-root resume, exactly-once concurrent effect reconciliation, and exact single-frame interrupted-publication recovery over the accepted durable kernel."
+    },
+    {
+      "area": "security-and-false-pass-controls",
+      "result": "Added current behavior controls for stale candidates, expired leases, unknown workers/artifacts/effects/frames, substitution, symlink, hardlink, special files, ancestor/workspace swaps, path escape, hidden writes, orphaned effects, and receipt-only false passes."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-orchestration-product-029 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_product_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "status": "pass-18-of-18",
+      "run_id": "c72e13f8-0f11-4ae5-9d89-a8105051b5d3"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-orchestration-product-029 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "status": "diagnostic-161-of-162",
+      "run_id": "f665d30f-8567-4958-9ce4-ebef08d088f6",
+      "failure": "artifact_live::unix_socket_special_file_fails_before_artifact_open could not bind a Unix socket because the managed outer sandbox returned Operation not permitted before product code ran"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-orchestration-product-029 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_contract --build-jobs 16 --test-threads 16 -E 'not test(unix_socket_special_file_fails_before_artifact_open)' --no-fail-fast",
+      "status": "pass-161-of-161-with-one-explicitly-excluded-permission-probe",
+      "run_id": "b21c7af8-d932-41a4-888d-2396128c6f9b"
+    },
+    {
+      "command": "rustfmt --edition 2024 validator/src/orchestration/product/*.rs validator/tests/orchestration_product_contract/*.rs",
+      "status": "pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/orchestration-product/ambiguous-recovery.json",
+      "sha256": "sha256:ba517c499fa95e1a7c430bdd623171b7fbf400f46998e20e9873e93b849f4d30",
+      "byte_length": 233
+    },
+    {
+      "path": "fixtures/orchestration-product/clean-start.json",
+      "sha256": "sha256:93930ed616f67981bb69e1c27ac3505dd19cbc0671a8d05e8bd4b86af69502b0",
+      "byte_length": 191
+    },
+    {
+      "path": "fixtures/orchestration-product/concurrent-reconcile.json",
+      "sha256": "sha256:e1d8281bc20a9faca2d61ff2be2c71b659b4928c191c66806893a3aea4339b31",
+      "byte_length": 230
+    },
+    {
+      "path": "fixtures/orchestration-product/interrupted-run.json",
+      "sha256": "sha256:803d381f030e08729afbec3fcd950b496a72f8b54f07337ed043337ba0637090",
+      "byte_length": 246
+    },
+    {
+      "path": "fixtures/orchestration-product/mutation-controls.json",
+      "sha256": "sha256:31e7db51cebc54aa5d194dd8ca2f5e02bc9006457e281cb5780c83b7c2279340",
+      "byte_length": 561
+    },
+    {
+      "path": "validator/src/orchestration/product/authority.rs",
+      "sha256": "sha256:2def1fcb3ca45381ee5bafa285bdabf0c7ed7d0829cd09589a87bbaaf74050b7",
+      "byte_length": 9175
+    },
+    {
+      "path": "validator/src/orchestration/product/context.rs",
+      "sha256": "sha256:18f83f83f9490c332b182409f44e65e90454357295aa9f35046a26cd9ae78042",
+      "byte_length": 5279
+    },
+    {
+      "path": "validator/src/orchestration/product/error.rs",
+      "sha256": "sha256:1e6092d7d1f036a57c36fb8d4900db2592403af102a268c176703e51b94bfd37",
+      "byte_length": 5786
+    },
+    {
+      "path": "validator/src/orchestration/product/mod.rs",
+      "sha256": "sha256:4c8731942d5f3e3fa077255de995584e26bd44478f0fca4bbbeeb03f8620103a",
+      "byte_length": 1036
+    },
+    {
+      "path": "validator/src/orchestration/product/plan.rs",
+      "sha256": "sha256:05da87f4355955242c1574385a785b8d9e0a82d53bac455755bd0694dbe61c7b",
+      "byte_length": 1682
+    },
+    {
+      "path": "validator/src/orchestration/product/query.rs",
+      "sha256": "sha256:1684e986bb24495aa9c3fcf0efc2555d5890c648abc0c99a8c60cbb0a9454ff5",
+      "byte_length": 828
+    },
+    {
+      "path": "validator/src/orchestration/product/reconcile.rs",
+      "sha256": "sha256:546ee35ffe7d3de8335ed9cdb5ad3e6f60503f7014a82ac4ad0b0a951eef4564",
+      "byte_length": 2898
+    },
+    {
+      "path": "validator/src/orchestration/product/recover.rs",
+      "sha256": "sha256:a3dc4731210a570cba34001b48f56b63408c4b3063d3f0cf317152b94490fa5a",
+      "byte_length": 3159
+    },
+    {
+      "path": "validator/src/orchestration/product/resume.rs",
+      "sha256": "sha256:dfcd252bc9fc9d26e78f9faaf01ed71778de6902d2775fb8900efdc349747119",
+      "byte_length": 2645
+    },
+    {
+      "path": "validator/src/orchestration/product/snapshot.rs",
+      "sha256": "sha256:8925d25bd273df578e666c5eb4ce2c43c8d4772d0e1abaa7a96b44e8701ff1ca",
+      "byte_length": 6015
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/authority_controls.rs",
+      "sha256": "sha256:10d6dca11f063bb529a478e031da1f655e3c0ad4af8665c6ce6c117c22e47cba",
+      "byte_length": 5264
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/fixtures.rs",
+      "sha256": "sha256:e87eb37178e0f7789be5b3d745d8b7e4de7ac71d5d0744fc0d03b109518f5e4f",
+      "byte_length": 2462
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/main.rs",
+      "sha256": "sha256:145958786448d922bf8685f78d8c84104867cf40a3e9e4dee2d289d24e70ebf9",
+      "byte_length": 329
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/mutation_security.rs",
+      "sha256": "sha256:534314de370ca427c2efa39dece678cbc8950c9462a0b5b99eada9643ec57b0b",
+      "byte_length": 7182
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/plan_query.rs",
+      "sha256": "sha256:6059dd1bfb2cf8a894650625c3cc7efe61791b73cf6f5a0ca181d42d6f9efe22",
+      "byte_length": 2984
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/reconciliation.rs",
+      "sha256": "sha256:6cc7cb19feb7adcd9f826f27b138691a59de5b81b489698461e8c1ec15c3e34f",
+      "byte_length": 5300
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/resume_recovery.rs",
+      "sha256": "sha256:44bee35da54b121e0ae2a0c2649490bc634b0f06f2ee638f0c924b9777cb45c9",
+      "byte_length": 7258
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/support.rs",
+      "sha256": "sha256:6eb1125b59dcbe0754c3ca37e82892625473f917830c7b98c9101f69c356589c",
+      "byte_length": 9307
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/worker_result.rs",
+      "sha256": "sha256:3f75c9101900a99fdcbefc4a732dc29b902e9c5cfa4a58da0e06d2ab5128f4f6",
+      "byte_length": 2402
+    }
+  ],
+  "findings": [
+    {
+      "severity": "known-environment-gap",
+      "finding": "The managed outer sandbox denies Unix-socket bind before the existing kernel special-file probe runs; the product candidate's symlink, hardlink, FIFO, and workspace-swap controls pass, but the excluded socket probe still requires a permission-capable rerun."
+    },
+    {
+      "severity": "root-integration-pending",
+      "finding": "The product module is intentionally not wired into validator/src/orchestration/mod.rs because that shared public authority is root-only."
+    }
+  ],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/orchestration/mod.rs",
+      "expected_sha256": "sha256:ce8b7a3888ef3ef2ca2047c88677b2ab015e22f303b6a15f1207a74b8f63371a",
+      "request": "After independent review of this exact artifact set, add exactly `pub mod product;` to the orchestration module declarations, retain RootAuthority::from_secret and RootAuthority::issue as crate-private root capabilities, and rerun the focused product and full orchestration contract suites. Do not add a new public CLI command group or raise a product claim in this wiring change."
+    }
+  ],
+  "limitations": [
+    "Independent review, root acceptance, shared module wiring, public command routing, and integrated candidate recomputation remain root-only and have not occurred.",
+    "The focused tests exercise isolated supported-host product behavior; they do not substitute for the root's candidate-bound live interruption, restart, reconciliation, and recovery journey.",
+    "The managed outer sandbox denied the existing Unix-socket special-file probe before product code ran; a permission-capable rerun remains required for that exact surface.",
+    "No orchestration node, product, claim, readiness, release, or completion decision is made by this worker."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

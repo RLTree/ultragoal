@@ -1,0 +1,94 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N10-ORCHESTRATION",
+  "root_decision": "accepted_process_death_recovery_head_product_library_integration",
+  "accepted_candidate": {
+    "path": "docs/ultragoal-successor-live/root-decisions/ORCHESTRATION-RECOVERY-PREMUTATION-CANDIDATE-037.json",
+    "sha256": "87b06a26217328b48de082e638b4f789412e422a90fe7ad9bd6ca1ef4431c9f5",
+    "artifact_set_sha256": "72d48aed74a5d5eebeb62fb45d65b69bf3bb23139e652b77bb8944328b126d12",
+    "artifact_count": 88,
+    "total_bytes": 457351,
+    "total_lines": 13505,
+    "maximum_file_lines": 298,
+    "base_head": "b729c497fa54f52854ee396b86be61ed115c96f1"
+  },
+  "historical_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-RECOVERY-PRODUCT-CORRECTION-029.json",
+    "sha256": "ee0b7a3a4702cee974aec3a212828a4a2c9422e09c1a2b569683dd17a31876a3",
+    "status": "structurally_valid_historical_input_superseded_by_reviewed_root_corrections"
+  },
+  "independent_review": {
+    "reviewer": "/root/plugin_plan_authorization_engineer/orchestration_product_candidate_reviewer",
+    "source_candidate_verdict": "pass_at_lowered_process_death_recovery_head_ceiling",
+    "source_candidate_sha256": "a8f72e33a780adfc546abe04358e01c4c64f4cd5cf05459a89a20786e9e0ac9d",
+    "source_artifact_set_sha256": "eb9da22404ef522c2b950c92644da16e7a353fb8be939e2ab52baa20b2739f2f",
+    "source_product_nextest_run_id": "c02acd20-5fd5-417c-a723-13afde6c98a8",
+    "source_product_result": "21 passed; 0 failed",
+    "source_kernel_nextest_run_id": "8370bb16-966f-4e9e-988b-ff08b4660790",
+    "source_kernel_result": "162 passed; 0 failed; one managed-host permission probe explicitly excluded",
+    "blocking_findings": 0
+  },
+  "independent_integration_review": {
+    "reviewer": "/root/plugin_plan_authorization_engineer/orchestration_product_candidate_reviewer",
+    "subreviewer": "/root/plugin_plan_authorization_engineer/orchestration_product_candidate_reviewer/postcommit_semantics",
+    "verdict": "pass_at_production_library_exposure_ceiling",
+    "final_candidate_sha256": "87b06a26217328b48de082e638b4f789412e422a90fe7ad9bd6ca1ef4431c9f5",
+    "final_artifact_set_sha256": "72d48aed74a5d5eebeb62fb45d65b69bf3bb23139e652b77bb8944328b126d12",
+    "focused_product_nextest_run_id": "584e2386-2dbc-40aa-9df6-4405f8a7a4f8",
+    "focused_product_result": "21 passed; 0 failed",
+    "production_library_check": "passed",
+    "command_or_claim_authority_added": false,
+    "permit_minting_authority_added": false
+  },
+  "root_integration": {
+    "path": "validator/src/orchestration/mod.rs",
+    "sha256": "bbeead142b56d91af5fd491340155587d1064b221667feb6d6e037be8132502d",
+    "change": "pub mod product;",
+    "library_root_path": "validator/src/lib.rs",
+    "library_root_sha256": "4785a21515ab1cf0ad52606f60ed0e0235cb4ed05a0fa9d80dff0835495330ba",
+    "root_product_nextest_run_id": "abdd23cf-b44c-4af2-95a7-1298b8c1a8ae",
+    "root_product_result": "21 passed; 0 failed",
+    "root_kernel_nextest_run_id": "f1a7989a-0199-466f-aad0-2612787c8b13",
+    "root_kernel_result": "162 passed; 0 failed; one managed-host permission probe explicitly excluded"
+  },
+  "commit_revalidation": {
+    "parent_head": "75008b5b2e5c54cd84b69a9432653665f0c4b8d3",
+    "orchestration_module_sha256": "bbeead142b56d91af5fd491340155587d1064b221667feb6d6e037be8132502d",
+    "library_root_sha256": "4785a21515ab1cf0ad52606f60ed0e0235cb4ed05a0fa9d80dff0835495330ba",
+    "product_nextest_run_id": "d45e43b1-5ca8-44b5-b69c-e30637ed1830",
+    "product_result": "21 passed; 0 failed",
+    "kernel_nextest_run_id": "6753cd43-3e96-4eb6-a1e8-13f75675426c",
+    "kernel_result": "163 passed; 0 failed",
+    "test_jobs": 16
+  },
+  "closed_findings": [
+    "recovery no longer publishes before semantic stale expired orphaned ambiguous and pending-integration checks",
+    "preview and commit share one consuming directory-descriptor-anchored handle",
+    "regular root substitution cannot redirect the permit-bound publication",
+    "successful recovery-head rename has no subsequent ordinary error or debug panic path",
+    "postcommit path drift is returned as an explicit observation bound to the permit-authenticated workspace identity",
+    "historical WorkerResult metadata is not used as current-byte proof after root correction"
+  ],
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-ORCH-008",
+      "state": "compiled process-death interrupted-publication recovery product boundary",
+      "blocker": "Public command integration and representative fresh-process interruption restart reconciliation and recovery journeys remain open."
+    }
+  ],
+  "root_acceptance_limit": "Exact production Rust library exposure for process-death interrupted publication, trusted restart, prepublication semantic refusal, recovery-head commit identity, and explicit postcommit path-current observation.",
+  "explicitly_withheld": [
+    "transaction-wide create and append no-error-after-any-mutation guarantees",
+    "future stability of the supplied workspace path",
+    "sudden host or power-loss persistence after rename",
+    "public command catalog and CLI behavior",
+    "representative fresh-process interruption restart ambiguity reconciliation and recovery journey",
+    "orchestration node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any byte change, added or removed file under the candidate enumeration, module-wiring change, unsafe file type, link-count change, path identity ambiguity, harness change, or broadened durability claim immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim CLI behavior, representative journey completion, node closure, readiness, release, or goal completion."
+}

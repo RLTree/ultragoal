@@ -1,7 +1,7 @@
 use super::{
     Actor, Binding, BootstrapEvidence, EffectSink, EventKind, EventLog, FileJournal, JournalHead,
-    OrchestrationError, OrchestrationEvent, Orchestrator, Plan, ScopePolicy, WorkGraph,
-    WorkProgress,
+    JournalSnapshot, OrchestrationError, OrchestrationEvent, Orchestrator, Plan, ScopePolicy,
+    WorkGraph, WorkProgress,
 };
 use std::path::Path;
 
@@ -110,6 +110,34 @@ impl<S: EffectSink> Orchestrator<S> {
             projection,
             sink,
             journal: Some(journal),
+            journal_head: Some(snapshot.head),
+        })
+    }
+
+    /// Replays a journal snapshot that was already authenticated by the
+    /// durable journal reader without attaching any write capability.
+    pub(crate) fn restart_verified_snapshot(
+        graph: WorkGraph,
+        policy: ScopePolicy,
+        root: Actor,
+        snapshot: JournalSnapshot,
+        sink: S,
+    ) -> Result<Self, OrchestrationError> {
+        snapshot.head.binding.validate()?;
+        policy.validate()?;
+        let binding = snapshot.head.binding.clone();
+        let projection = snapshot
+            .log
+            .replay_persisted(&binding, &root, &graph, &policy)?;
+        Ok(Self {
+            graph,
+            policy,
+            binding,
+            root,
+            log: snapshot.log,
+            projection,
+            sink,
+            journal: None,
             journal_head: Some(snapshot.head),
         })
     }

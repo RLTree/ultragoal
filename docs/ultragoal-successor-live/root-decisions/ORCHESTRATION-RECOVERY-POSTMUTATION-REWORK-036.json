@@ -1,0 +1,31 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "ORCHESTRATION-RECOVERY-POSTMUTATION-REWORK-036",
+  "node_id": "orchestration-recovery-product-closure",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-RECOVERY-PRODUCT-CORRECTION-029.json",
+    "sha256": "ee0b7a3a4702cee974aec3a212828a4a2c9422e09c1a2b569683dd17a31876a3",
+    "artifact_count": 24,
+    "matching_artifact_count": 24,
+    "artifact_set_sha256": "c6af6a2a2c6b6a893240e2afbee03974b594a4dae03b6f485cad1005cb9aaec6"
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "error_after_authoritative_journal_mutation",
+    "cause": "The product recover path publishes the repaired journal head before checking ambiguous operations, pending integration, stale leases, expired leases, and orphaned leases. A reachable orphaned-lease recovery therefore returns only an error after advancing authority, and retrying the prior head conflicts."
+  },
+  "false_pass_control": {
+    "product_nextest_run_id": "d0a39752-4774-4718-bc3e-7e1fd60ed365",
+    "product_tests_passed": 18,
+    "kernel_nextest_run_id": "795b4e82-f513-402e-acae-3923ab0b2971",
+    "kernel_tests_passed": 161,
+    "kernel_test_excluded": "artifact_live::unix_socket_special_file_fails_before_artifact_open",
+    "missing_behavior": "The suite names an orphaned-effect mutation but does not execute the recovery path with an orphaned active lease or prove recursive zero-write rejection before journal publication."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_action": "Preview and replay the exact authenticated interrupted append without writing, reject stale, expired, orphaned, ambiguous, pending-integration, substituted-target, and workspace-change states before publication, then use the existing locked repair primitive to revalidate and commit the same append. Add positive, negative, race, mutation, and recursive zero-write tests, including the concrete orphaned-live-worker case and a concurrent-head change between preview and commit.",
+  "claim_ceiling": "The orchestration product candidate remains under REWORK. Product recovery, interruption/restart journey, node closure, readiness, release, and completion claims remain withheld.",
+  "no_claim_statement": "This decision does not claim readiness, release, or completion."
+}

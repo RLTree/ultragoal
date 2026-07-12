@@ -1,0 +1,27 @@
+{
+  "schema_version": "OrchestrationProductFixture-v1",
+  "case": "mutation-controls",
+  "controls": [
+    "result-substitution",
+    "journal-frame-mutation",
+    "artifact-digest-mutation",
+    "authority-token-mutation",
+    "symlink",
+    "hardlink",
+    "special-file",
+    "ancestor-swap",
+    "path-escape",
+    "secret-non-echo",
+    "receipt-without-behavior",
+    "green-query-with-hidden-write",
+    "recovery-with-orphaned-effect",
+    "orphaned-recovery-premutation-zero-write",
+    "concurrent-recovery-single-commit",
+    "preview-commit-regular-root-substitution",
+    "replay-with-stale-candidate"
+  ],
+  "expected": {
+    "fail_closed": true,
+    "unknown_rows_accepted": 0
+  }
+}

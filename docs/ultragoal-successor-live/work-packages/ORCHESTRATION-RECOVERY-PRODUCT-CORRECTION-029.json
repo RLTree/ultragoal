@@ -1,0 +1,223 @@
+{
+  "schema_version": "RootIssuedWorkEnvelope-v1",
+  "issued_from_live_context": {
+    "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+    "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e",
+    "head_commit": "b729c497fa54f52854ee396b86be61ed115c96f1",
+    "head_tree": "50b8caa02e3a6c86cb08bd3b0a65ab82f27c4942",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true
+  },
+  "work_package": {
+    "node_id": "orchestration-recovery-product-closure",
+    "dependencies": [
+      "orchestration-durable-recovery-kernel",
+      "orchestration-scope-authority"
+    ],
+    "required_tools": [
+      "cargo-nextest",
+      "rustfmt",
+      "shasum"
+    ],
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-DURABLE-RECOVERY-KERNEL.json",
+      "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-SCOPE-AUTHORITY.json",
+      "validator/src/cli/successor/catalog.rs",
+      "validator/src/cli/successor/command_run.rs",
+      "validator/src/orchestration/artifact.rs",
+      "validator/src/orchestration/effect.rs",
+      "validator/src/orchestration/effect_transition.rs",
+      "validator/src/orchestration/engine.rs",
+      "validator/src/orchestration/engine_effect.rs",
+      "validator/src/orchestration/engine_integration.rs",
+      "validator/src/orchestration/engine_query.rs",
+      "validator/src/orchestration/engine_submission.rs",
+      "validator/src/orchestration/error.rs",
+      "validator/src/orchestration/event.rs",
+      "validator/src/orchestration/graph.rs",
+      "validator/src/orchestration/integration.rs",
+      "validator/src/orchestration/integration_transition.rs",
+      "validator/src/orchestration/journal",
+      "validator/src/orchestration/lease.rs",
+      "validator/src/orchestration/mod.rs",
+      "validator/src/orchestration/model.rs",
+      "validator/src/orchestration/reconcile.rs",
+      "validator/src/orchestration/recovery.rs",
+      "validator/src/orchestration/replay.rs",
+      "validator/src/orchestration/scope.rs",
+      "validator/src/orchestration/scope_policy.rs",
+      "validator/src/orchestration/transition.rs",
+      "validator/src/orchestration/worker.rs",
+      "validator/src/orchestration/workspace",
+      "validator/tests/orchestration_contract"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-RECOVERY-PRODUCT-CORRECTION-029.json",
+        "validator/src/orchestration/product"
+      ],
+      "semantic_symbols": [
+        "orchestration-product-plan",
+        "orchestration-product-query",
+        "orchestration-product-resume",
+        "orchestration-product-reconcile",
+        "orchestration-product-recover"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/orchestration-product",
+        "validator/tests/orchestration_product_contract"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "orchestration-product-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "orchestration-product-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-orchestration-product-validation"
+        }
+      ]
+    },
+    "prerequisites": [
+      "accepted-durable-recovery-kernel",
+      "accepted-orchestration-scope-authority"
+    ],
+    "outputs": [
+      "typed-orchestration-product-api-candidate",
+      "interruption-restart-reconciliation-recovery-fixtures",
+      "public-root-wiring-request",
+      "orchestration-recovery-worker-result-v1"
+    ],
+    "acceptance": [
+      "plan-and-query-are-recursively-zero-write",
+      "effectful-resume-reconcile-and-recover-require-root-issued-authority",
+      "interruption-and-restart-preserve-candidate-lease-and-result-binding",
+      "ambiguous-or-stale-recovery-fails-closed-with-stable-causal-diagnostics",
+      "concurrent-reconciliation-has-one-authoritative-outcome-and-no-orphans",
+      "unknown-workers-artifacts-effects-and-journal-frames-are-rejected",
+      "positive-negative-race-mutation-security-and-false-pass-controls-pass",
+      "worker-result-binds-every-owned-artifact",
+      "independent-review-and-root-reconciliation"
+    ],
+    "claim_effect": "none"
+  },
+  "lease": {
+    "lease_id": "ORCHESTRATION-RECOVERY-PRODUCT-CORRECTION-029",
+    "run_id": "ultragoal-successor-live-20260712",
+    "node_id": "orchestration-recovery-product-closure",
+    "principal": "worker",
+    "owner": "/root/orchestration_recovery_product_engineer",
+    "binding": {
+      "context_id": "sha256:d8e64dce3fdd4ba8d58570d081a37dc298411f4ff921c676a74d63a07b9fc69a",
+      "candidate_id": "sha256:fa5ebea77793fe008f6ad0d4549b9ed2ef7fcd317c890c28444f41abfcae094e"
+    },
+    "safety_class": "isolated_workspace_write",
+    "read_paths": [
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-DURABLE-RECOVERY-KERNEL.json",
+      "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-SCOPE-AUTHORITY.json",
+      "validator/src/cli/successor/catalog.rs",
+      "validator/src/cli/successor/command_run.rs",
+      "validator/src/orchestration/artifact.rs",
+      "validator/src/orchestration/effect.rs",
+      "validator/src/orchestration/effect_transition.rs",
+      "validator/src/orchestration/engine.rs",
+      "validator/src/orchestration/engine_effect.rs",
+      "validator/src/orchestration/engine_integration.rs",
+      "validator/src/orchestration/engine_query.rs",
+      "validator/src/orchestration/engine_submission.rs",
+      "validator/src/orchestration/error.rs",
+      "validator/src/orchestration/event.rs",
+      "validator/src/orchestration/graph.rs",
+      "validator/src/orchestration/integration.rs",
+      "validator/src/orchestration/integration_transition.rs",
+      "validator/src/orchestration/journal",
+      "validator/src/orchestration/lease.rs",
+      "validator/src/orchestration/mod.rs",
+      "validator/src/orchestration/model.rs",
+      "validator/src/orchestration/reconcile.rs",
+      "validator/src/orchestration/recovery.rs",
+      "validator/src/orchestration/replay.rs",
+      "validator/src/orchestration/scope.rs",
+      "validator/src/orchestration/scope_policy.rs",
+      "validator/src/orchestration/transition.rs",
+      "validator/src/orchestration/worker.rs",
+      "validator/src/orchestration/workspace",
+      "validator/tests/orchestration_contract"
+    ],
+    "owned_scope": {
+      "paths": [
+        "docs/ultragoal-successor-live/worker-results/ORCHESTRATION-RECOVERY-PRODUCT-CORRECTION-029.json",
+        "validator/src/orchestration/product"
+      ],
+      "semantic_symbols": [
+        "orchestration-product-plan",
+        "orchestration-product-query",
+        "orchestration-product-resume",
+        "orchestration-product-reconcile",
+        "orchestration-product-recover"
+      ],
+      "generated_outputs": [],
+      "fixtures": [
+        "fixtures/orchestration-product",
+        "validator/tests/orchestration_product_contract"
+      ],
+      "effects": [
+        {
+          "class": "workspace_write",
+          "target": "orchestration-product-source"
+        },
+        {
+          "class": "fixture_write",
+          "target": "orchestration-product-tests"
+        },
+        {
+          "class": "process",
+          "target": "offline-orchestration-product-validation"
+        }
+      ]
+    },
+    "prerequisite_evidence": {
+      "dependency_nodes": {
+        "orchestration-durable-recovery-kernel": "sha256:3bc2df9f76d7c0283832432826ba7d91945910f3adaebd8901bea34b50c35976",
+        "orchestration-scope-authority": "sha256:93ced76c81f81cf614de177429042b123ee764b6553e515fe22478c8db28fd9e"
+      },
+      "required_tools": {
+        "cargo-nextest": "sha256:cfafea1e5e009132e924118271dfa3dd4c963d628c5d74001df3cece316d366f",
+        "rustfmt": "sha256:aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1",
+        "shasum": "sha256:0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3"
+      },
+      "prerequisites": {
+        "accepted-durable-recovery-kernel": "sha256:3bc2df9f76d7c0283832432826ba7d91945910f3adaebd8901bea34b50c35976",
+        "accepted-orchestration-scope-authority": "sha256:93ced76c81f81cf614de177429042b123ee764b6553e515fe22478c8db28fd9e"
+      }
+    },
+    "issued_tick": 1,
+    "heartbeat_deadline_tick": 1000000,
+    "max_retries": 2
+  },
+  "prohibited_surfaces": [
+    "Cargo.toml, Cargo.lock, .cargo/config.toml, and rust-toolchain.toml",
+    "validator/src/orchestration/mod.rs and every existing orchestration kernel file",
+    "validator/src/lib.rs, public command catalog, parser, dispatcher, and command_run",
+    "plugin-product, claims, inventory, observability, package, and repository-fit paths",
+    "shared schemas, adopted manifests, migration and claim registries, generated authority, acceptance, board, release state",
+    "network, Git writes, external product effects, destructive cleanup, and host state"
+  ],
+  "root_validation_obligations": [
+    "independently-review-exact-artifact-set",
+    "apply-only-reviewed-module-and-public-command-wiring",
+    "run-candidate-bound-live-interruption-restart-and-recovery-journey",
+    "recompute-candidate-and-dependent-proof-after-integration"
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

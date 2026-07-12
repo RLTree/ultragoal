@@ -3,6 +3,8 @@ mod lock;
 mod recovery;
 mod store;
 mod sys;
+#[cfg(test)]
+mod test_hook;
 
 pub use frame::{JournalHead, JournalSnapshot};
 
@@ -33,11 +35,6 @@ impl FileJournal {
         let head = head_for(binding, log, &bytes)?;
         journal.store.write_atomic("events.jsonl", &bytes)?;
         journal.write_head(&head)?;
-        journal.store.validate_journal_entries()?;
-        let observed = journal.inspect_unlocked()?;
-        if observed.head != head || observed.log != *log {
-            return Err(OrchestrationError::JournalCorrupt);
-        }
         Ok((journal, head))
     }
 
@@ -69,10 +66,6 @@ impl FileJournal {
         let (bytes, next) = self.prepare_append(expected, binding, log)?;
         self.store.write_atomic("events.jsonl", &bytes)?;
         self.write_head(&next)?;
-        let observed = self.inspect_unlocked()?;
-        if observed.head != next || observed.log != *log {
-            return Err(OrchestrationError::JournalCorrupt);
-        }
         Ok(next)
     }
 
@@ -141,5 +134,10 @@ impl FileJournal {
         let mut bytes = serde_json::to_vec(head).map_err(|_| OrchestrationError::JournalCorrupt)?;
         bytes.push(b'\n');
         self.store.write_atomic("head.json", &bytes)
+    }
+
+    #[cfg(test)]
+    pub(crate) fn set_test_pre_publication_hook(hook: impl FnOnce() + 'static) {
+        test_hook::set(hook);
     }
 }
