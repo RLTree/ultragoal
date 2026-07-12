@@ -1,0 +1,69 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "PLUGIN-ACQUISITION-DISCOVERY-REWORK",
+  "node_id": "N08-PLUGIN-PRODUCT",
+  "root_decision": "rework",
+  "reviewed_at": "2026-07-12T05:03:42Z",
+  "review_mode": "independent_read_only_product_surface_audit",
+  "candidate_anchor": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "dirty": true,
+    "source_plugin_manifest_sha256": "12c123fa9442dbf9e2eb7877b6fd1c4446ffc04a26d37727dddc0fb3877b06da",
+    "source_package_manifest_sha256": "8494432c2ad67b679a75634fad68562e6a79dd3fcb3b76e756d020d88e33ad38"
+  },
+  "decisive_findings": [
+    {
+      "severity": "critical",
+      "class": "equal_version_source_installed_cache_byte_divergence",
+      "detail": "Source, installed, and cache all declare 0.0.11, but the source manifests differ from the byte-identical installed/cache manifests.",
+      "installed_plugin_manifest_sha256": "8e93403398fe1ccf6c93dcd15f2143677e1ab47c65b7ee59f53e051e5f7ffcb6",
+      "installed_package_manifest_sha256": "5254a77c3b0d3ac723bb9bdf8d0a54d17585b99e5cad49a9a8768b3809e8478f",
+      "cache_plugin_manifest_sha256": "8e93403398fe1ccf6c93dcd15f2143677e1ab47c65b7ee59f53e051e5f7ffcb6",
+      "cache_package_manifest_sha256": "5254a77c3b0d3ac723bb9bdf8d0a54d17585b99e5cad49a9a8768b3809e8478f"
+    },
+    {
+      "severity": "critical",
+      "class": "package_manifest_omits_canonical_product_topology",
+      "detail": "The live source has 22 skill directories and six current project-agent manifests, while plugin-manifest-draft.json lists 13 legacy skills and omits all eight canonical skills. Installed and cache trees contain 13 legacy skills and no current .codex/agents manifests."
+    },
+    {
+      "severity": "high",
+      "class": "fresh_operator_and_runtime_route_not_current",
+      "detail": "Source guidance still routes fresh operators through proposal-era lanes, legacy skills, and global custom-agent copying. No current HUGPKG, repo-scoped marketplace catalog, PATH executable, plugin command, or MCP runtime registration proves the current source product."
+    },
+    {
+      "severity": "high",
+      "class": "host_list_probe_has_hidden_write_attempt",
+      "detail": "The host plugin-list probe observed enabled installed 0.0.11 but attempted PATH-alias creation and was denied; it is not accepted as a zero-effect read proof. App-registry, Plugins UI, and neutral-root fresh-session discovery remain unobserved."
+    }
+  ],
+  "surface_ceilings": {
+    "source": "rework",
+    "package": "withheld_no_current_hugpkg",
+    "marketplace": "catalog_observation_only",
+    "install": "older_installed_bytes_only",
+    "cache": "older_cache_bytes_only",
+    "host_listing": "older_listing_only_hidden_write_attempt_not_accepted",
+    "app_registry": "unproven",
+    "plugins_ui": "unproven",
+    "discovery": "older_session_legacy_discovery_only",
+    "runtime": "withheld",
+    "custom_agents": "project_scoped_source_discovery_only",
+    "product_behavior": "withheld"
+  },
+  "corrective_actions": {
+    "implementation_lease": "canonical_plugin_product_builder",
+    "worker_result_path": "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-PRODUCT-CORRECTION-015.json",
+    "root_actions_after_independent_acceptance": [
+      "reserve and apply unique source version 0.0.12",
+      "close the root-owned manifest and package inventory over the canonical eight skills and six current agents",
+      "adopt or reject the repo-scoped marketplace catalog through root manifest authority",
+      "build and independently compare two current HUGPKG artifacts",
+      "separately prove isolated install, installed/cache byte identity, app registry, Plugins UI, neutral-root discovery, runtime identity, and representative product behavior"
+    ]
+  },
+  "claim_ceiling": "No current source, package, install, cache, marketplace, app-registry, Plugins UI, discovery, runtime, product, readiness, release, node, or completion claim is raised.",
+  "no_claim_statement": "This decision does not claim plugin-product acceptance, installation, discovery, runtime behavior, readiness, release, node closure, or goal completion."
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "workstream": "routine_live_authority",
+  "decision": "REWORK",
+  "review_route": {
+    "model": "gpt-5.6-sol",
+    "reasoning": "ultra",
+    "rationale": "A forged dirty snapshot can omit affected work while retaining a current candidate binding and can therefore produce a false conservative-plan result."
+  },
+  "reviewed_candidate": {
+    "worker_result": "docs/ultragoal-successor-live/worker-results/ROUTINE-LIVE-AUTHORITY-CORRECTION-001.json",
+    "worker_result_sha256": "98bc20ec1315d727fab7d5f165becc9735670456b5b0d1d33d9504314f233e2c",
+    "artifact_set_sha256": "cd0d2320c64b411c393ba0e19e1e465e834f4fe44267817e22b7addeae2e20b9",
+    "artifact_count": 23,
+    "identity_revalidated": true
+  },
+  "independent_review": {
+    "scratch_record": "/tmp/hul-routine-live-authority-review-001/review-record.md",
+    "scratch_record_sha256": "ad745c2e6c2359e114fc06d8a73ad4b1af0c8ee310a40c3a42eecfc212230361",
+    "termination": "first_decisive_material_defect"
+  },
+  "material_finding": {
+    "id": "routine-public-dirty-snapshot-forgery",
+    "severity": "critical",
+    "source": [
+      "validator/src/routine_work/snapshot.rs",
+      "validator/src/routine_work/plan/mod.rs"
+    ],
+    "summary": "DirtySnapshot::new is public while RoutineBinding and DirtyChange are cloneable and publicly observable. A caller can capture a legitimate current snapshot, clone its binding, retain only a nonempty subset of changes, mint a structurally valid replacement snapshot, and make plan_routine omit affected checks.",
+    "contract_impact": "LiveContext revalidation proves that the cloned binding is current but does not prove that the caller-supplied change set is the complete captured dirty state. Conservative affected-set behavior and verified routine reuse therefore remain false-passable."
+  },
+  "required_correction": [
+    "make dirty snapshot construction crate-confined or require opaque capture provenance that planning validates against the complete live capture",
+    "prevent public clone or serde surfaces from minting an accepted partial snapshot",
+    "add an external compile-fail control for DirtySnapshot construction and a behavioral partial-change forgery control",
+    "rerun the exact routine contract suite and both prior forged-authority probes against the corrected current set"
+  ],
+  "verification_state": {
+    "identity_gate": "pass",
+    "cargo_suite": "withheld_after_decisive_rework",
+    "negative_probes": "withheld_after_decisive_rework"
+  },
+  "accepted_artifact_sets": [],
+  "highest_defensible_ceiling": "Source correction intent only. Routine behavior, verified reuse, public integration, and routine completion remain unaccepted.",
+  "no_claim_statement": "This decision does not claim acceptance, public integration, readiness, release, node closure, or goal completion."
+}

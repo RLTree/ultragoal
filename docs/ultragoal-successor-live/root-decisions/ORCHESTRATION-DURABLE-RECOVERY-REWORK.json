@@ -1,0 +1,52 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "ORCHESTRATION-DURABLE-RECOVERY-REWORK",
+  "node_id": "N10-ORCHESTRATION",
+  "root_decision": "rework",
+  "review_mode": "independent_production_recovery_falsification",
+  "accepted_parent": {
+    "path": "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-SCOPE-AUTHORITY.json",
+    "sha256": "93ced76c81f81cf614de177429042b123ee764b6553e515fe22478c8db28fd9e",
+    "artifact_set_sha256": "c61319d3b2475e1dab9a8ce687e6aac5140e3ccfcadabd6fe333a0547062ec2b",
+    "status": "accepted_internal_scope_authority_kernel"
+  },
+  "decisive_findings": [
+    {
+      "severity": "critical",
+      "class": "non_durable_restart",
+      "cause": "Orchestrator::restart consumes an already materialized in-memory EventLog. No durable store, expected-head anchor, child-process loader, or crash-safe journal publication exists."
+    },
+    {
+      "severity": "critical",
+      "class": "effect_application_crash_ambiguity",
+      "cause": "EffectSink::apply mutates before EffectApplied is appended. A crash between those operations cannot distinguish unapplied from applied-but-unrecorded and may double-apply on retry."
+    },
+    {
+      "severity": "material",
+      "class": "unanchored_valid_prefix",
+      "cause": "Deleting a complete tail event can leave a structurally valid prefix because replay has no independently persisted expected head."
+    }
+  ],
+  "preserved_acceptance": "The exact typed lease/scope/artifact authority kernel remains accepted and is not invalidated by these production-recovery findings.",
+  "corrective_lease": "ROOT-LEASE-ORCHESTRATION-DURABLE-RECOVERY-001",
+  "root_owned_paths": [
+    "validator/src/orchestration/journal/**",
+    "validator/src/orchestration/{mod,event,engine,engine_query,effect,replay,recovery,transition,reconcile,error}.rs",
+    "validator/tests/orchestration_contract/**",
+    "validator/tests/orchestration_contract.rs"
+  ],
+  "corrective_scope": [
+    "Implement a versioned, bounded, candidate/context-bound journal with exclusive expected-head append, crash-safe frame publication, durable head anchoring, read-only inspection, and explicit repair classification.",
+    "Persist effect intent before invoking the sink. After ambiguous interruption, prohibit blind retry and require exact applied/not-applied reconciliation evidence before commit or safe reapplication.",
+    "Persist root-integration intent before root writes and classify none, full, partial, conflicting, stale, or substituted observed digests after restart.",
+    "Exercise child-process interruption/restart, duplicate/reordered/deleted/truncated/corrupt frames, concurrent append, stale bindings, special files and aliases, effect crash points, partial root changes, and zero-write inspect/recovery."
+  ],
+  "prohibited_root_changes_until_shared_freeze_resolves": [
+    "validator/src/lib.rs",
+    "public command catalog and dispatcher",
+    "Cargo.toml and Cargo.lock",
+    "distribution candidate artifacts"
+  ],
+  "claim_ceiling": "Only the accepted internal scope/artifact authority kernel is supported. Durable restart, effect recovery, root integration recovery, public orchestration behavior, workstream closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim orchestration completion, readiness, release, or goal completion."
+}

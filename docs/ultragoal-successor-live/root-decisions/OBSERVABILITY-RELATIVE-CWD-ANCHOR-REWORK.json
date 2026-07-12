@@ -1,0 +1,44 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "OBSERVABILITY-RELATIVE-CWD-ANCHOR-REWORK",
+  "workstream": "observability",
+  "decision": "REWORK",
+  "acceptance_check": "AC-OBSERVABILITY-POST-ACCEPTANCE-DRIFT-007-PREFLIGHT",
+  "reviewed_candidate": {
+    "drift_decision_sha256": "d6018e40c2e27ef0f21e5d066330f559cfaa04b330c87764707acbf2a23610e7",
+    "artifact_set_sha256": "d264da50b7f9449afa0bb713eec2d6310bbed1f64e205e9b85be7b4cd1f2a14d",
+    "artifact_count": 22,
+    "artifact_total_bytes": 101922,
+    "artifact_total_lines": 3128,
+    "semantic_delta_from_prior_acceptance": "none; four changed rows are Rust-2024 formatting only"
+  },
+  "independent_review": {
+    "reviewer": "/root/observability_public_integration_reviewer",
+    "requested_route": "gpt-5.6-terra/medium",
+    "effective_route": "unverified",
+    "verdict": "REWORK",
+    "full_suite": "27 passed",
+    "relative_cwd_probe": "unsafe_cases=5/5"
+  },
+  "decisive_finding": {
+    "class": "relative_cwd_anchor_substitution_false_pass",
+    "cause": "Relative open_verified_parent retains the bind-time '.' descriptor with no parent attachment, while revalidate checks only descendant directory pairs and never proves that anchor remains the current working-directory path.",
+    "observed": [
+      "create succeeded and mutated the detached retained tree",
+      "append succeeded and mutated the retained tree",
+      "query read the retained event",
+      "clear succeeded and mutated the retained tree",
+      "recovery succeeded and mutated the retained tree"
+    ],
+    "preservation": "The replacement tree remained unchanged, but operations continued on an authority path no longer attached to the requested relative location.",
+    "impact": "A relative store path can silently follow a detached bind-time working directory after pathname substitution, violating exact live path identity and fail-closed behavior."
+  },
+  "required_correction": [
+    "Either reject relative store paths or lexically anchor them to a bind-time absolute working-directory descriptor chain without following symlinks.",
+    "Revalidate the complete absolute attachment, including the working-directory anchor, before and after create, append, query, clear, and recovery.",
+    "Add subprocess-isolated working-directory replacement tests for all five lifecycle paths and require errors with both replacement and retained trees unchanged.",
+    "Rerun full 22-file identity, typed WorkerResult, 27+ behavior, privacy/export, special-file, and zero-write proof before public integration."
+  ],
+  "claim_ceiling": "No current observability source acceptance, public integration, product behavior, readiness, release, node closure, or completion.",
+  "no_claim_statement": "This decision does not claim observability behavior, public integration, readiness, release, node closure, or goal completion."
+}

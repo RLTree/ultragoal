@@ -1,0 +1,68 @@
+{
+  "schema_version": "RootCandidateManifest-v1",
+  "workstream": "repository_fit_error_accounting",
+  "candidate_status": "pending_independent_rereview",
+  "corrects_decision": {
+    "path": "docs/ultragoal-successor-live/root-decisions/REPOSITORY-FIT-ERROR-ACCOUNTING-REWORK.json",
+    "sha256": "3da6ced761aafccd30ec7b150959217081ead68c1b0ad863a5f8ad965f3350d2"
+  },
+  "base_membership": {
+    "path": "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-ENUMERATION-BUDGET-CORRECTION-001.json",
+    "sha256": "95652aa3a3f2abf15f43468dc98f1e142c1b3c2714053f8ba017e75187d3fccd",
+    "json_pointer": "/artifacts",
+    "rule": "Use all 21 artifact paths from the base membership and replace the identity rows for the two exact paths in updated_artifacts. Unknown, missing, duplicate, or additional paths invalidate the candidate."
+  },
+  "updated_artifacts": [
+    {
+      "path": "validator/src/repository_fit/local/sys.rs",
+      "sha256": "a2035cb473a67db78f81cc5dacf2e1c72311c5c5298186cbf51de7033cd416bd",
+      "byte_length": 9168,
+      "lines": 296
+    },
+    {
+      "path": "validator/src/repository_fit/local/sys_tests.rs",
+      "sha256": "bc76e91da0d4befd31b2915848426b111d10727135bcec2774cd528b416915de",
+      "byte_length": 8029,
+      "lines": 249
+    }
+  ],
+  "artifact_set_formula": "Resolve the effective 21 rows using base_membership plus exact updated_artifacts. Sort by path. For each row concatenate path, one TAB byte, lowercase sha256 without a prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "eeac95a57b4a88a32699e11b60d1c0a54e205eec70c7aae52b4eb6be7bc5a49a",
+  "artifact_count": 21,
+  "artifact_bytes": 130610,
+  "artifact_lines": 4081,
+  "maximum_file_lines": 300,
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "correction": {
+    "behavior": "Every non-EOF EntrySource observation is charged before classification. Errors consume one entry and zero name bytes; a boundary-crossing error returns ResourceLimit, otherwise its original content-free failure is preserved.",
+    "tests_added": 3,
+    "boundaries": [
+      "per-scan exact and one-over error observation",
+      "cumulative exact and one-over error observation",
+      "error after exact per-scan name-byte consumption"
+    ]
+  },
+  "current_verification": {
+    "rustfmt_check": "pass",
+    "sandbox_diagnostic": "55 passed; AF_UNIX fixture denied by sandbox before product behavior",
+    "exact_supported_host_suite": {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fit-error-budget-root/target CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo test --manifest-path validator/Cargo.toml --test repository_fit_contract --locked --offline -j16 -- --test-threads=16",
+      "result": "56 passed; 0 failed",
+      "scope": "macOS execution outside the socket-restricting sandbox"
+    },
+    "preserved_prior_linearization_proof": {
+      "transcript_sha256": "ed4eb19480863abe5de9c1e90f6ff42f424d025a6368eb56088ca71f4256d91e",
+      "reason_not_rerun": "The corrected bytes change only generic enumeration accounting and tests; Apple F_GETPATH and attachment semantics are byte-identical to the reviewed set."
+    }
+  },
+  "review_scope": [
+    "effective artifact identity and exact membership",
+    "all error observations are budgeted before propagation",
+    "EOF remains uncharged and partial classifications remain discarded",
+    "directory streams close exactly once on every outcome",
+    "prior exact-name, F_GETPATH, special-file, zero-write, apply, and rollback behavior remains unchanged"
+  ],
+  "support_limit": "Finite state at the final completed path/identity observation only; no eternal namespace or function-return-state guarantee.",
+  "no_claim_statement": "This manifest does not accept the candidate or claim public integration, repository-fit completion, readiness, release, node closure, or goal completion."
+}

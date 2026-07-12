@@ -1,0 +1,131 @@
+{
+  "schema_version": "DistributionVersionIdentityCandidate-v1",
+  "frozen_at_utc": "2026-07-11T09:51:22Z",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "supersedes_rejected_artifact_set_sha256": "81590c4c4f861f9f66320f281e9855295a27fa04e4a083c1111c00bcaf13740d",
+  "scope": "distribution package/install kernel plus shared canonical semantic-version identity and downgrade correction",
+  "whole_worktree_status": "concurrent-disjoint-lanes-active; only this exact artifact set is frozen",
+  "artifact_set_sha256": "370f81cee224a9fee98461e62c9bb6b3dbf2cfe51bc32acb4c83e1c0c12d4a59",
+  "artifact_count": 25,
+  "rust_source_line_ceiling": 300,
+  "verification": [
+    {
+      "command": "env CARGO_TARGET_DIR=/tmp/hul-shared-version-root cargo test --manifest-path validator/Cargo.toml --lib plugin_manifest::version::tests --locked --offline -j 16 -- --test-threads=16",
+      "result": "2 passed; 0 failed"
+    },
+    {
+      "command": "env CARGO_TARGET_DIR=/tmp/hul-distribution-version-root cargo test --manifest-path validator/Cargo.toml --test distribution_contract version_identity --locked --offline -j 16 -- --test-threads=16",
+      "result": "4 passed; 0 failed"
+    },
+    {
+      "command": "env CARGO_TARGET_DIR=/tmp/hul-distribution-version-root cargo test --manifest-path validator/Cargo.toml --test distribution_contract --locked --offline -j 16 -- --test-threads=16",
+      "result": "61 passed; 0 failed; 0.35s"
+    }
+  ],
+  "supported_scope_ceiling": "Corrected source identity SemVer validation and precedence behavior plus previously frozen offline kernel behavior, pending independent review.",
+  "unsupported_scope": "No live package, marketplace, install, cache, app-registry, Plugins UI, discovery, runtime, readiness, release, or completion claim.",
+  "artifacts": [
+    {
+      "path": "validator/src/distribution/cache.rs",
+      "sha256": "abc056caff0acaee711dab989fa8d1d6285387e22c8f7b32a620817d42e3399e"
+    },
+    {
+      "path": "validator/src/distribution/host.rs",
+      "sha256": "bc4c3cd56711dc1777ca0ca07855799d10c462dab71b581f29f2076f516ffc92"
+    },
+    {
+      "path": "validator/src/distribution/identity.rs",
+      "sha256": "07243dd22521e6cad1b35b9bc8dc71bd4eec98d9023e747dcfe21e756e3d3df8"
+    },
+    {
+      "path": "validator/src/distribution/install.rs",
+      "sha256": "e4c99a252da434035d8ff3771037328b63631137d12cb065eb5fad52375d8e85"
+    },
+    {
+      "path": "validator/src/distribution/marketplace.rs",
+      "sha256": "f181006416ccebb688b3d22cdda676244f24d3414200ea5bfc601dd81545cfcd"
+    },
+    {
+      "path": "validator/src/distribution/mod.rs",
+      "sha256": "1a2ba23d8a78abf5f30d0960cbc0a9a603c200c40f61fba2e19f737a2bdd31f2"
+    },
+    {
+      "path": "validator/src/distribution/model.rs",
+      "sha256": "059c124c5b27b7f46f3b7f6fba6a9e75ceaef28a9d07c63a884fd78f7e5de6d2"
+    },
+    {
+      "path": "validator/src/distribution/package/archive.rs",
+      "sha256": "42893230c1e0b7beaedd64b9e98828753bbfbda3f0a310ba8d5f070502b15e8c"
+    },
+    {
+      "path": "validator/src/distribution/package/materialize.rs",
+      "sha256": "f10c6e0cf317d9f0103100a66861660f35f68b641edf146677eb9a4b6275a666"
+    },
+    {
+      "path": "validator/src/distribution/package/mod.rs",
+      "sha256": "3d33d8073e2e03b4f8e81c2cd78c4e9c20f9143d94cca43b7235546ded964dfd"
+    },
+    {
+      "path": "validator/src/distribution/package/plan.rs",
+      "sha256": "f3229621155cd4db95636244f31aa308204b2840c4a37d565e384bb2eafdbff3"
+    },
+    {
+      "path": "validator/src/distribution/package/snapshot.rs",
+      "sha256": "6ec63cd265080e71ef3abab3a5722e66f1a2eb1787f2589c7040bc2d890295ae"
+    },
+    {
+      "path": "validator/src/distribution/package/source.rs",
+      "sha256": "e726b0d540d37c82560463c224c26860acb1e0fe63459bba6d3d8a4d5ab0261a"
+    },
+    {
+      "path": "validator/src/distribution/spec.rs",
+      "sha256": "8065df5f492794864059aba6f5b6fd19294b3c6071b0bb122e7d7667c3ee51a4"
+    },
+    {
+      "path": "validator/src/distribution/verify.rs",
+      "sha256": "2af4b397569c39584f75c6375fbe976831b729c6393b29ae7a7900add73371f2"
+    },
+    {
+      "path": "validator/src/inventory/plugin_manifest_semver.rs",
+      "sha256": "7ecbf26d11e217ff53597a75b9fdb6f084acdc8f28acf79740691cef2727a717"
+    },
+    {
+      "path": "validator/src/plugin_manifest/mod.rs",
+      "sha256": "7ebdab7bd9aebbec95e4f6b7a6942e05f60dd107e70f7d98140ed279baa83e5f"
+    },
+    {
+      "path": "validator/src/plugin_manifest/validation.rs",
+      "sha256": "521037a48e1e274d1cdf73ebd064278ad2abad9e359f47e0383fbcad0ddbf2d5"
+    },
+    {
+      "path": "validator/src/plugin_manifest/version.rs",
+      "sha256": "499355ad98021afd2a9c45cd974bd86446c722bd9169035a596b99f9a6467f0e"
+    },
+    {
+      "path": "validator/tests/distribution_contract.rs",
+      "sha256": "64ad878c6aa248a37133cc462da210d6de1a750573f605216dd3f8e2b40d1970"
+    },
+    {
+      "path": "validator/tests/distribution_contract/cache_host_kernel.rs",
+      "sha256": "5929c997886da2289fb51bc881a6402834f57f6cab21665ae34117842d604b19"
+    },
+    {
+      "path": "validator/tests/distribution_contract/identity_ladder.rs",
+      "sha256": "7f3ea0f8168b963e0cc206580e1867ca190d8e836d3023bece104d37d487d25a"
+    },
+    {
+      "path": "validator/tests/distribution_contract/marketplace_install_kernel.rs",
+      "sha256": "89461d48fd0c2a0195a2643e02d96e426277339197d6b3c5c35d6f8a108cb394"
+    },
+    {
+      "path": "validator/tests/distribution_contract/package_identity.rs",
+      "sha256": "44d45773bfa580e442ed37d057711427ac5778594e42377b760e5c6f52bd2104"
+    },
+    {
+      "path": "validator/tests/distribution_contract/version_identity.rs",
+      "sha256": "ade970b312aa26e63c3621c6aea6b281a30fd69a9d0990bc33e1d029d5c2564b"
+    }
+  ],
+  "no_claim_statement": "This root-frozen candidate does not claim readiness, release, node closure, or goal completion."
+}

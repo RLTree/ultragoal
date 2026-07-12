@@ -1,0 +1,47 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N03-NODE-006-STALE",
+  "node_id": "N03-CLI-STATE",
+  "root_decision": "rework",
+  "review_mode": "independent_exact_set_reconciliation",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-006.json",
+    "sha256": "6d7b446f459e7d878abe9e7e4456d40bbbd851506f3487899ee8c83b4b7419ba",
+    "artifact_set_sha256": "b348e5a4a188ac0b9e7a8429a81ac6dd6d368878b8ca31d6ffe87113c29e7704",
+    "artifact_count": 70,
+    "total_bytes": 346777,
+    "total_lines": 10130,
+    "maximum_rust_file_lines": 299
+  },
+  "identity_reconciliation": "fail",
+  "decisive_finding": {
+    "severity": "material",
+    "class": "post_freeze_artifact_drift",
+    "cause": "The implementation worker continued changing a leased artifact after emitting NODE-006. validator/tests/cli_contract/capture/artifact_secrets.rs no longer matches its frozen row, so the receipt does not bind current behavior.",
+    "frozen_row": {
+      "sha256": "06d63a84e83d6f5ed44621abb10bd59b6e1b6c43fb8f40c84fa9fdf340259f74",
+      "byte_length": 8921
+    },
+    "current_row_at_review": {
+      "sha256": "af8a94838fb32e91cec09ce30376341ad8e57ca95079f384679c2ac9191cdcbb",
+      "byte_length": 9413
+    }
+  },
+  "current_observed_set": {
+    "artifact_set_sha256": "580bf9b3d64041b6cbf3d8bcadd9dca65e60d758420461bcf5250e91f0140611",
+    "artifact_count": 70,
+    "total_bytes": 347269,
+    "total_lines": 10140,
+    "stability_observation": "Two consecutive reviewer snapshots were byte-identical. The prior worker process was then terminated before corrective work was leased."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N03-CLI-STATE-NODE-007",
+  "corrective_scope": [
+    "Reconcile every post-freeze change against the NODE-006 intent and root decision, then stabilize the complete current N03 capture artifact set.",
+    "Exercise secret non-disclosure across both streams, all retained representations, shared-budget finalization order, scan limits, proper prefixes, raw digests, and special-file/path-swap controls.",
+    "Repair any falsified behavior within the leased N03 capture paths, then run focused and dependency-closed checks at 16 jobs in an isolated target.",
+    "Freeze a new exact current WorkerResult-v1 only after all leased writes and verification finish."
+  ],
+  "claim_ceiling": "NODE-006 is historical unaccepted context only. Current N03 behavior is unbound; public integration, zero-write journeys, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N03 completion, readiness, release, or goal completion."
+}

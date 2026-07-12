@@ -1,0 +1,81 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "typed_product_state_repair_next_and_claim_ceiling_kernel",
+  "candidate_state": "frozen_for_independent_review",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "accepted_dependency": {
+    "path": "docs/ultragoal-successor-live/acceptance/CAPTURE-SECRET-BOUNDARY-KERNEL.json",
+    "artifact_set_sha256": "40b3d72f91a185864d0bed591c894da67b31d3ceb09427fe25fbb01f7207610c",
+    "scope_note": "The accepted capture set contains the current state source bytes but did not accept HCT-STATE semantics; this candidate requests that independent semantic review separately."
+  },
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "fed9ad3bb86b143e838c2517596c0f2e17d9548b24a1406ff73e0a663ad7460c",
+  "artifact_count": 33,
+  "total_bytes": 145836,
+  "total_lines": 4350,
+  "maximum_file_lines": 297,
+  "artifacts": [
+    {"path":"validator/src/cli/successor/runtime/state_view.rs","sha256":"sha256:b026417ae4f50ed168e43d267da6e3d50f9fa7809a44b2a68f8140380ec3d63b","byte_length":588,"line_count":24},
+    {"path":"validator/src/lib.rs","sha256":"sha256:1ce48b296ee27c59e3fe74e7b7de1355f7dd25dfe435bb878a0c7e366a72cad2","byte_length":1191,"line_count":59},
+    {"path":"validator/src/state/catalog.rs","sha256":"sha256:7294b6d825455e1004be5efda6c5ba6370e16e98ce92845d09d26bb66efcca42","byte_length":5489,"line_count":176},
+    {"path":"validator/src/state/ceiling.rs","sha256":"sha256:44fe67e5db53a07253f711ad3247f169f4127c5ce4f3a03fb8b339b8a92a0703","byte_length":2157,"line_count":73},
+    {"path":"validator/src/state/engine.rs","sha256":"sha256:3e40246ef3290fb682de511f4077c6ce5a64cf8ae509f55222a0e4d31c20d688","byte_length":10351,"line_count":292},
+    {"path":"validator/src/state/findings.rs","sha256":"sha256:ef65571919e3f379b6295d569f236888e78f54043c426ce03c2e4c57fd4e5861","byte_length":4379,"line_count":129},
+    {"path":"validator/src/state/identity.rs","sha256":"sha256:40a33bc3220b861ce0716fb12b45266936c9e8973d55b735dcbc0b95b36ddc29","byte_length":1085,"line_count":30},
+    {"path":"validator/src/state/limits.rs","sha256":"sha256:fe3af08f6830605a9ac5280d359211677793a0e42bf3b686b45dd0742e55e285","byte_length":9907,"line_count":297},
+    {"path":"validator/src/state/mod.rs","sha256":"sha256:6adbbd7875497aef619e378b0389241c781731aaf89526afa9dc667b3c4276ad","byte_length":1193,"line_count":39},
+    {"path":"validator/src/state/next.rs","sha256":"sha256:b28fd9a5e19da14e758a31442d2a96e4f7f7d148ea284cf0cdc9a762c86941b5","byte_length":5307,"line_count":151},
+    {"path":"validator/src/state/normalize.rs","sha256":"sha256:e47c7f5f5ccccd5284b1b40ea467ff714fc252d63c4b4bdafecda3d976b0a0fd","byte_length":2001,"line_count":56},
+    {"path":"validator/src/state/observations.rs","sha256":"sha256:3fbcd30ca154c254d800c4f45c4c8ef67d447b9d6ce8cc4f90814aba962a8187","byte_length":2173,"line_count":63},
+    {"path":"validator/src/state/policy.rs","sha256":"sha256:63f7d9a53d701af94b23ee527b60da1ddb05576be84c4869cda1177cd983707d","byte_length":7740,"line_count":230},
+    {"path":"validator/src/state/policy_action.rs","sha256":"sha256:f7beb5452fc878c1f9ced5ee2886fd2430026549320e34a17d25bd2fcb5097f7","byte_length":4174,"line_count":112},
+    {"path":"validator/src/state/policy_repair.rs","sha256":"sha256:cb617b259a49a99dd299721144b19451b48769326e4ba05c682c695a5486ace0","byte_length":3508,"line_count":99},
+    {"path":"validator/src/state/projection.rs","sha256":"sha256:28cf07c26f5777b4de93667189b9927b031a7ff3f6cf1021217205743b3ff4fb","byte_length":7181,"line_count":215},
+    {"path":"validator/src/state/provenance.rs","sha256":"sha256:05557bdc169861d42b34cacd63bebe10e778298c9a5f0b2b51bb808c8db40f71","byte_length":4979,"line_count":181},
+    {"path":"validator/src/state/reduce.rs","sha256":"sha256:d7eec1cc0d272f1a24cd945336c73cd02b0d79e1c734af9c02a410d0ff6121d9","byte_length":798,"line_count":26},
+    {"path":"validator/src/state/snapshot.rs","sha256":"sha256:9af7f30e89852fdec4a148d44fa553082649eb327f01b658f81c2821de72e5cb","byte_length":4419,"line_count":121},
+    {"path":"validator/src/state/tests/engine_cases.rs","sha256":"sha256:e8fc68ff6f0368ad40e85e6f65fd37ea3160e2aa1e6ae97df5a1429da8f2d93a","byte_length":8220,"line_count":226},
+    {"path":"validator/src/state/tests/fixture.rs","sha256":"sha256:44544ea322817adc2d033d6d8ce850c855b817a6b40704c95c304f946ba46c63","byte_length":4381,"line_count":123},
+    {"path":"validator/src/state/tests/mod.rs","sha256":"sha256:514d0effbdbf2b61077d806dc8528e9149edac03b34efa258f10db9514e2bbd1","byte_length":128,"line_count":7},
+    {"path":"validator/src/state/tests/ordering_cases.rs","sha256":"sha256:5da5125f3191f0bad275cdcda0fb78f86a49a5bf9e78900b4121373539c7c85a","byte_length":4033,"line_count":105},
+    {"path":"validator/src/state/tests/policy_cases.rs","sha256":"sha256:3574cd2aaf46a812357cf2f9c89440358411e3d14c10e155db1caeea6c09f8d6","byte_length":8251,"line_count":246},
+    {"path":"validator/src/state/tests/projection_cases.rs","sha256":"sha256:8855176f9c25173a8890cdc535ba77ee52c670447d1deba9d54754efab59336e","byte_length":3589,"line_count":99},
+    {"path":"validator/src/state/tests/review_cases.rs","sha256":"sha256:9b29b6dcaaa20b80ac13770db93339b066b0be67446888e4b19a33d07ee91406","byte_length":5949,"line_count":185},
+    {"path":"validator/src/state/tests/runtime_cases.rs","sha256":"sha256:2b1ff4ca257dd8431ae3e4742e8ba84eec5ee9e69bf9c19b1b2efa4ae90df047","byte_length":4729,"line_count":134},
+    {"path":"validator/src/state/types.rs","sha256":"sha256:c6e79d626a24d42f6c5d9dabef65c0017248280825b24c31a5535d756059f239","byte_length":6142,"line_count":224},
+    {"path":"validator/tests/cli_contract.rs","sha256":"sha256:8ed849e3eddcbcb6a22b03c6f026c5f7c9755be05228cac8c6edd517c1681e2c","byte_length":9787,"line_count":297},
+    {"path":"validator/tests/cli_contract/state/fixture.rs","sha256":"sha256:e69ab36610202accca116d86268d90034c2293f9efd204b608d3ef415bfce4f5","byte_length":3863,"line_count":102},
+    {"path":"validator/tests/cli_contract/state/mod.rs","sha256":"sha256:584e0f97d1954146bee2f5ad57727a3f7c54bae150ca8a7dbda842d782b2be7e","byte_length":48,"line_count":3},
+    {"path":"validator/tests/cli_contract/state/mutation.rs","sha256":"sha256:81f9634bc6c9a4262362bcf99f84c6b74c1f958fa01958ed15ddf1840872799f","byte_length":4524,"line_count":129},
+    {"path":"validator/tests/cli_contract/state/public_boundary.rs","sha256":"sha256:e2a29c5a7fdcd8443ff5596c01e19c299a615b9b3a2fd7bed89d3edf7706d834","byte_length":3572,"line_count":97}
+  ],
+  "behavior_contract": [
+    "Finding Repair ProductState NextAction and ClaimCeiling are public typed HCT-STATE interfaces",
+    "state identity binds one live context candidate catalog runtime observation set policy and projection",
+    "contradictions unsupported capabilities missing provenance stale identity and unavailable authority lower only justified claim dimensions",
+    "repair and next select one deterministic legal action or an explicit no-op or no-route result",
+    "destructive and external actions preserve root or human authority",
+    "projections are versioned deterministic JSON and read-only queries write nothing",
+    "untrusted catalog runtime repair and projection inputs are bounded validated and non-echo"
+  ],
+  "root_verification": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-public-registry-correction cargo test --manifest-path validator/Cargo.toml --lib state::tests --locked --offline -j 16 -- --test-threads=16",
+      "result": "39 state-filtered tests passed; 0 failed"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-public-registry-correction cargo test --manifest-path validator/Cargo.toml --test cli_contract state_contract --locked --offline -j 16 -- --test-threads=16",
+      "result": "4 public state boundary tests passed; 0 failed"
+    }
+  ],
+  "explicitly_withheld": [
+    "root acceptance before independent full-set falsification",
+    "canonical HCT-STATE compiled API witness and inventory-active rows",
+    "public CLI dispatcher catalog and stable machine-output integration",
+    "representative failure diagnosis repair and next product journeys",
+    "state or CLI node closure",
+    "readiness release or goal completion"
+  ],
+  "no_claim_statement": "This frozen candidate requests independent review of the current typed product-state kernel only; it does not claim acceptance, public command behavior, readiness, release, or goal completion."
+}

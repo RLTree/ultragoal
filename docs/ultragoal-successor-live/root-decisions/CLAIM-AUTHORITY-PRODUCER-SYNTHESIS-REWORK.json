@@ -1,0 +1,43 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "CLAIM-AUTHORITY-PRODUCER-SYNTHESIS-REWORK",
+  "workstream": "claim_authority",
+  "decision": "REWORK",
+  "acceptance_check": "AC-CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-REVIEW-006",
+  "reviewed_candidate": {
+    "binding_sha256": "8442ed3ef1b2562d93cdedb0e3af8ceabae1e42d4dc83feb9288382254a4495b",
+    "artifact_set_sha256": "d912b28970843e74b22a44907fa111310ac0cde3f29601d879422726b507c669",
+    "artifact_count": 15,
+    "artifact_total_bytes": 94301,
+    "artifact_total_lines": 2694,
+    "worker_result_sha256": "16511627b90527393d8d25f8524ecf87c07baece437f8ac7294e40f859a96e78",
+    "declared_result_id": "sha256:533330e797a54e8ccd91f5eb23660f837460c8a848601813516cf1e44030d7f2",
+    "registry_sha256": "67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc"
+  },
+  "independent_review": {
+    "reviewer": "/root/claim_execution_provenance_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "verdict": "REWORK",
+    "candidate_identity_verified": true,
+    "baseline_suite": "21 passed",
+    "typed_worker_result_verified": true,
+    "stopped_after_first_material_defect": true
+  },
+  "decisive_finding": {
+    "class": "producer_can_synthesize_execution_and_observer_authority",
+    "cause": "FalsePassExecution::observe accepts caller-supplied executor, observer, control, stimulus, tool, timestamps, outcome, output, and artifact data and seals only by hashing those same fields. EvidenceEnvelope embeds the resulting observation without verifying an authority, capability, signature, execution receipt, or captured process result.",
+    "independent_probe": "A standalone producer fabricated distinct executor and observer identities plus every required digest without executing a control; CL-PACKAGE elevated with DecisionStatus::Passed.",
+    "preserved_probe": "/tmp/claim-exec-review-006.GsELWv/probe/tests/producer_synthesis.rs",
+    "impact": "A producer can reward-hack a passed false-pass control using structurally complete self-authored metadata, so no execution-bound claim elevation is proven."
+  },
+  "required_correction": [
+    "Remove every public or producer-accessible constructor that can mint an accepted execution receipt or observer attestation from caller-supplied fields.",
+    "Make accepted evidence originate from an authority-separated execution path that actually runs the named negative control and captures its causal result, output, artifact, time, context, and candidate bindings.",
+    "Keep validated receipt and attestation fields private and non-deserializable into an accepted state; verify authority and freshness at decision time.",
+    "Add the preserved producer-synthesis regression and reject same-producer, fabricated-distinct-identity, replayed, substituted, stale, cross-context, cross-candidate, omitted-field, and report-only cases across PACKAGE, INSTALL, ORCHESTRATION, RELEASE, and COMPLETION.",
+    "Preserve exact obligation coverage, DAG closure, repair invalidation, rejected-evidence visibility, deterministic projection, and zero-write reads."
+  ],
+  "claim_ceiling": "No HCT-CLAIMS source acceptance, public integration, passed live claim, readiness, release, node closure, or completion.",
+  "no_claim_statement": "This decision does not claim claim-authority behavior, public integration, readiness, release, node closure, or goal completion."
+}

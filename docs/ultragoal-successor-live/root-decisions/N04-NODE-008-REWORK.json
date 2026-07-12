@@ -1,0 +1,33 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N04-NODE-008-REWORK",
+  "node_id": "N04-DISTRIBUTION",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-008.json",
+    "sha256": "275e60a07c78f1e47512ec782491b059be78df510f5942b5b2308a56a3a7406a",
+    "artifact_set_sha256": "6564ec051ffe95f4a21aa9fab14a999811a9153a09b947d2165edb9ec144bced",
+    "artifact_count": 53,
+    "total_bytes": 229150,
+    "total_lines": 6924,
+    "maximum_file_lines": 299
+  },
+  "identity_reconciliation": "pass",
+  "decisive_finding": {
+    "severity": "critical",
+    "class": "canonical_mcp_key_grammar_false_pass",
+    "cause": "The canonical MCP validator applies generic bounded-text map-key validation to both environment variable names and HTTP field names. BAD KEY, A=B, A:B, X Header, X=Header, and X:Header therefore enter supported manifest authority through both N02 and N04.",
+    "typed_boundary": "validator/src/plugin_manifest/validation.rs:33"
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N04-DISTRIBUTION-NODE-009",
+  "corrective_scope": [
+    "Define distinct adopted ASCII environment-variable and HTTP field-name grammars in the sole canonical plugin-manifest semantic module.",
+    "Preserve bounded values, case-insensitive duplicate rejection, CR/LF rejection, MCP server shape, URL, prompt, metadata, package reachability, and legacy-context boundaries.",
+    "Add paired N02 inventory and N04 distribution negative controls for whitespace, equals, colon, CR/LF, and case aliases, plus positive controls for supported env and HTTP field names.",
+    "Run focused paired and full distribution verification with cargo-nextest at 16 jobs in isolated targets, then freeze a new exact WorkerResult-v1 for independent rereview."
+  ],
+  "claim_ceiling": "N04 remains an unaccepted internal distribution candidate. Canonical MCP semantics, real package/install/discovery/runtime proof, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N04 completion, readiness, release, or goal completion."
+}

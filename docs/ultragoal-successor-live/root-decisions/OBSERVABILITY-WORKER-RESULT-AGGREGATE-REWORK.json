@@ -1,0 +1,42 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "OBSERVABILITY-WORKER-RESULT-AGGREGATE-REWORK",
+  "workstream": "observability",
+  "decision": "REWORK",
+  "acceptance_check": "AC-OBSERVABILITY-KERNEL-003",
+  "rejected_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-STRUCTURE-CORRECTION-003.json",
+    "sha256": "0544f12e4f260b2cea13f494b61d429a6e36d0f97762a6c844ed4148ae868601",
+    "candidate_id": "sha256:ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e"
+  },
+  "decisive_finding": {
+    "class": "proof_integrity_self_contradiction",
+    "claimed_artifact_total_bytes": 94418,
+    "derived_artifact_total_bytes": 94784,
+    "difference_bytes": 366,
+    "artifact_rows_matching_current_sha256_and_length": "21 of 21",
+    "artifact_set_sha256_recomputed": "ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e"
+  },
+  "independent_review": {
+    "reviewer": "/root/observability_structure_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "record": "docs/ultragoal-successor-live/reviews/OBSERVABILITY-STRUCTURE-REVIEW-003.json",
+    "record_sha256": "6910c718650dbf12a89dd9b70d832410f07fba148eff446f275f49ff373b6381"
+  },
+  "corrective_boundary": {
+    "source_behavior_changes_allowed": false,
+    "write_scope": [
+      "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-STRUCTURE-PROOF-RECONCILIATION-004.json"
+    ],
+    "read_scope": "the exact unchanged 21-artifact observability set and prior result/review/root-decision chain",
+    "required_invariants": [
+      "derive count, bytes, lines, per-row lengths, and set digest mechanically",
+      "reject unknown, duplicate, missing, mismatched, or special-file rows",
+      "bind the reconciliation result to its actual result-only lease",
+      "do not claim source authorship or runtime behavior"
+    ]
+  },
+  "claim_ceiling": "No observability source acceptance or behavior claim is supported until a truthful reconciliation result and full independent behavior review pass.",
+  "no_claim_statement": "This decision does not claim public integration, product behavior, readiness, release, node closure, or goal completion."
+}

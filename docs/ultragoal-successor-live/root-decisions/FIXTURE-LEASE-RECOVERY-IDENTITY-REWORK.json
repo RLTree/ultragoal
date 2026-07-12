@@ -1,0 +1,49 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "FIXTURE-LEASE-RECOVERY-IDENTITY-REWORK",
+  "node_id": "N11-EVAL-RESEARCH",
+  "root_decision": "rework",
+  "reviewed_at": "2026-07-12T05:03:42Z",
+  "review_mode": "independent_executable_security_falsification",
+  "candidate": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "binding_sha256": "1ccee324d5e063de2dc60895c3cfabc7bcf6104711be81335bd41a02d19e3831",
+    "artifact_set_sha256": "c7112cc044beef3b82e41215efa59c6798d4c5510deadaf30f957173f0d87863",
+    "artifact_count": 26,
+    "artifact_bytes": 94974,
+    "artifact_lines": 2995,
+    "changed_subset_sha256": "86c0685a6e316e21a1aa3a47888befa0f3b626f98fb52863a18ed950659c3673",
+    "worker_result_sha256": "c03b71d758b0141607daca09dd2bd96c025d1f91bdd7ca296b4710452e986c63",
+    "start_end_revalidation": "byte_identical"
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "lease_root_replacement_causes_unrelated_recursive_deletion",
+    "affected_symbols": [
+      "validator/src/fixture_scheduler/lease.rs:22-31",
+      "validator/src/fixture_scheduler/lease.rs:83-90",
+      "validator/src/fixture_scheduler/lease.rs:109-152",
+      "validator/src/fixture_scheduler/scheduler.rs:174-180"
+    ],
+    "cause": "IsolationLease retains only a PathBuf. Cleanup and recovery recursively remove whichever regular directory currently occupies that path without comparing the acquired lease root device and inode or using no-follow descriptor-relative traversal.",
+    "impact": "An attacker or race can replace the lease path with unrelated data and cause recovery to delete it. Collision, cleanup, recovery, filesystem-race, and data-loss confinement semantics therefore remain false."
+  },
+  "executable_reproduction": {
+    "attack": "rename the real lease root aside; create an unrelated replacement directory and sentinel at the original path; invoke recover",
+    "observed": "recover returned CausalFailure and deleted the unrelated replacement sentinel",
+    "result": "adversarial_test_failed_0_passed_1_failed",
+    "baseline": "The independently reproduced Darwin suite passed 29 of 29, proving the accepted-looking suite omitted this attack.",
+    "decisive_file_sha256": {
+      "validator/src/fixture_scheduler/lease.rs": "e73403d7ae9769840f9771cde61546a927b03ab4ebfa9be100f12f8e72c1dd2b",
+      "validator/src/fixture_scheduler/scheduler.rs": "385438e71c0e0bc9ee81f2228a4b451b758e26699f3bef71eb722b22550ac36b"
+    }
+  },
+  "corrective_lease": {
+    "task_name": "fixture_recovery_identity_builder",
+    "result_path": "docs/ultragoal-successor-live/worker-results/FIXTURE-LEASE-IDENTITY-RECOVERY-CORRECTION-014.json",
+    "required_result": "Pin the acquired lease-root identity and perform no-follow race-safe cleanup/recovery that refuses replacement roots and child substitutions; add deterministic root and concurrent swap red controls."
+  },
+  "claim_ceiling": "The fixture candidate remains unaccepted private source. No HCT-FIXTURES public integration, routine, strict, readiness, release, node, or completion claim is raised.",
+  "no_claim_statement": "This decision does not claim fixture acceptance, public integration, readiness, release, node closure, or goal completion."
+}

@@ -1,0 +1,69 @@
+{
+  "schema_version": "RootBinding-v1",
+  "binding_id": "CLAIM-AUTHORITY-FREEZE-BINDING",
+  "workstream": "claim_authority",
+  "acceptance_check": "AC-CLAIM-AUTHORITY-IMPLEMENTATION-001",
+  "requested_route": "gpt-5.6-terra/high",
+  "effective_route": "unverified",
+  "candidate_id": "sha256:b377a1f7156fd8bdb7999eafbcd862d3f65b9d9465d245cff5c10b93bd700215",
+  "candidate_membership": {
+    "artifact_count": 6,
+    "artifact_total_bytes": 35473,
+    "artifact_total_lines": 1089,
+    "formula": "Sort path; append path, TAB, lowercase SHA-256 without prefix, LF; SHA-256 the concatenation.",
+    "artifacts": [
+      {"path":"validator/src/claims/decision.rs","sha256":"1af18afbbe79b6be83be76917c02ecd8155249611e9a4c1f525eac9c1d0ce8d3","byte_length":4430,"line_count":136},
+      {"path":"validator/src/claims/definition.rs","sha256":"a3c5d4d7163a20b3778f2a1966ae8f503f65f1a6375c0c67d17c2c755952f2eb","byte_length":5787,"line_count":158},
+      {"path":"validator/src/claims/evidence.rs","sha256":"43e878e80cca85991e292f3a280e8be8bc21827c650384475cc070729d5267b8","byte_length":3370,"line_count":111},
+      {"path":"validator/src/claims/guard.rs","sha256":"400778258659448c09c9acdad47c06e4bb3bfd78c8e177aa9e183d0bb67cb366","byte_length":7354,"line_count":221},
+      {"path":"validator/src/claims/mod.rs","sha256":"e15bf14463bb15f3ae73cb9d0706a26255d6a308583a055a829d59fd18cc6b9c","byte_length":388,"line_count":11},
+      {"path":"validator/tests/claims_contract.rs","sha256":"0169731c5517aa50904e99d1175321caac8ccd29c1443bedac7681753e27c618","byte_length":14144,"line_count":452}
+    ]
+  },
+  "adopted_inputs": [
+    {"path":"docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json","sha256":"67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc"},
+    {"path":"docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json","sha256":"03073c8ee853d02be0776443cf39828d0630d3e1389d69be7817b201fc971fb7"},
+    {"path":"docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/05-PROOF-CLAIMS-AND-COMPLETION.md","sha256":"1d31a306d723a309f1a05d95d8e3f2ce1c329346ecaf853856ee2d8ddb83eb61"}
+  ],
+  "required_public_api": [
+    "ClaimDefinition",
+    "EvidenceEnvelope",
+    "Observation",
+    "ClaimDecision",
+    "ClaimGuard"
+  ],
+  "worker_envelope": {
+    "worker": "/root/claim_authority_builder",
+    "lease_id": "CLAIM-AUTHORITY-IMPLEMENTATION-001",
+    "node_id": "claim-authority",
+    "dependency_nodes": ["hct-context","hct-inventory","hct-capture","hct-state"],
+    "semantic_symbols": ["claims::definition","claims::evidence","claims::observation","claims::decision","claims::guard"],
+    "safety_class": "isolated_workspace_write",
+    "owned_paths": [
+      "validator/src/claims/decision.rs",
+      "validator/src/claims/definition.rs",
+      "validator/src/claims/evidence.rs",
+      "validator/src/claims/guard.rs",
+      "validator/src/claims/mod.rs",
+      "validator/tests/claims_contract.rs",
+      "docs/ultragoal-successor-live/worker-results/CLAIM-AUTHORITY-IMPLEMENTATION-001.json"
+    ],
+    "performed_effects": [
+      {"class":"workspace_write","target":"claim-authority-source"},
+      {"class":"fixture_write","target":"claim-authority-tests"},
+      {"class":"process","target":"offline-claim-authority-validation"}
+    ]
+  },
+  "required_behavior": [
+    "Adopt the exact 14-claim DAG from the current registry and reject unknown, duplicate, missing, cyclic, or tampered definitions.",
+    "Bind evidence to producer, method, context, candidate, freshness, inputs, environment/tools, effects, outputs, artifacts, limitations, truth surface, and ceiling.",
+    "Reject stale, wrong-context, wrong-candidate, wrong-surface, unsupported-ceiling, self-authored, materially scored, contradictory, partial, surrogate, and reward-hacking evidence before elevation.",
+    "Require prerequisite closure and the designated independent reconciler; preserve rejected observations with reasons.",
+    "Invalidate only dependent decisions on repair/rerun and generate deterministic zero-write projections."
+  ],
+  "root_integration_state": "definition-only; validator/src/lib.rs and the external public API witness remain root-owned and intentionally unchanged until independent source review passes",
+  "aggregate_note": "Root independently rederived every regular-file row, total, and the six-artifact candidate digest. Worker-reported intermediate set digests used a different formula and are not authority. WorkerResult-v1 is not claimed to enforce aggregate fields.",
+  "required_no_claim_statement": "This worker does not claim readiness, release, or completion.",
+  "invalidation_rule": "Any artifact, membership, adopted input, dependency, context, semantic behavior, or effect change reopens this binding.",
+  "no_claim_statement": "This binding does not claim public HCT-CLAIMS integration, any passed live claim, readiness, release, node closure, or goal completion."
+}

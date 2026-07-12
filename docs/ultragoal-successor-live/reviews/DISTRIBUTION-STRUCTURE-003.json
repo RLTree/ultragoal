@@ -1,0 +1,55 @@
+{
+  "review_id": "REVIEW-DISTRIBUTION-STRUCTURE-003",
+  "reviewer": "/root/distribution_structure_falsifier",
+  "verdict": "PASS",
+  "acceptance_check": "AC-DISTRIBUTION-STRUCTURE-003",
+  "acceptance_check_status": "provisional",
+  "worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/DISTRIBUTION-STRUCTURE-CORRECTION-003.json",
+    "sha256": "sha256:246d19cf36ab20fc11be17bc360a35b18cd7d0afc8decddbeb292b66ab41afab",
+    "worker": "/root/distribution_structure_refactorer"
+  },
+  "candidate": {
+    "artifact_count": 73,
+    "artifact_set_sha256": "sha256:e3d2c3bbc060de4a8db6e6f4ae21543f0baafe85be9cef960fcb39eae7fcf60a",
+    "result_id": "sha256:eef18d10ad3f52fc661206339ab4d35053eba9f9d037433ea77a5ad69e596602",
+    "artifact_rows_mismatched": 0
+  },
+  "validation": {
+    "public_worker_result_parse": "PASS",
+    "actual_scope_validate_for": "PASS",
+    "artifact_workspace_verify": "PASS",
+    "artifact_workspace_count": 73,
+    "locked_distribution_suite": "PASS: 101 passed, 0 failed",
+    "ancestor_relocation_file": "PASS",
+    "ancestor_relocation_tree": "PASS",
+    "scoped_rustfmt": "PASS",
+    "external_public_distribution_api_witness": "PASS"
+  },
+  "semantic_assessment": {
+    "public_surface": "PASS: filesystem public exports remain ScopedFile, ScopedInstall, ConfinedRoot, and ScopedTree; new siblings are private modules with pub(super) functions only.",
+    "error_effect_rollback_syscall": "PASS: review found descriptor re-resolution remains before each rename/unlink mutation; rename flags and platform selection stay in the extracted private syscall module; transition rollback and DistributionError mapping remain in their prior call sequence.",
+    "residual_concurrency_assumption": "The final fstatat-to-unlinkat interval assumes no arbitrary same-UID actor renames entries in the retained parent. Existing race tests cover substitutions at explicit quarantine boundaries; they do not claim protection against a malicious scheduler in that final interval."
+  },
+  "loc": {
+    "production_files_over_300": [],
+    "split_files": {
+      "descriptor/directory.rs": 259,
+      "descriptor/directory_names.rs": 72,
+      "descriptor/mutation.rs": 264,
+      "descriptor/mutation_syscall.rs": 95,
+      "file.rs": 176,
+      "file_transition.rs": 240
+    },
+    "test_exemption": "validator/tests/distribution_contract/descriptor_races.rs:460 is the root-decision adversarial test exception."
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/hul-distribution-structure-review-build cargo check --offline --locked --manifest-path validator/Cargo.toml --jobs 16",
+    "CARGO_TARGET_DIR=/tmp/hul-distribution-structure-review-build cargo test --offline --locked --manifest-path validator/Cargo.toml --test distribution_contract --jobs 16 -- --test-threads=16",
+    "CARGO_TARGET_DIR=/tmp/hul-distribution-structure-review-build cargo test --offline --locked --manifest-path validator/Cargo.toml --test distribution_contract --jobs 16 descriptor_races::regular_ancestor_substitution_then_relocation_is_rejected_before_effect_boundary -- --test-threads=16",
+    "CARGO_TARGET_DIR=/tmp/hul-distribution-structure-review-build cargo test --offline --locked --manifest-path validator/Cargo.toml --test distribution_contract --jobs 16 descriptor_races::directory_ancestor_substitution_then_relocation_preserves_outside_tree -- --test-threads=16",
+    "rustfmt --edition 2024 --check scoped distribution split and descriptor_races files",
+    "CARGO_TARGET_DIR=/tmp/hul-distribution-structure-review-build cargo test --offline --locked --manifest-path validator/Cargo.toml --test public_api_witness --jobs 16 -- --test-threads=16"
+  ],
+  "claim_ceiling": "This PASS supports only the exact source-size and distribution-confinement structural acceptance check. It is not acceptance, integration, package/install/cache/marketplace/app/discovery/runtime proof, readiness, release, node closure, or completion."
+}

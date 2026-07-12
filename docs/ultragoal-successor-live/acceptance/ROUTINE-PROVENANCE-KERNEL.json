@@ -1,0 +1,63 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "ROUTINE-PROVENANCE-KERNEL",
+  "workstream": "routine_work",
+  "decision": "ACCEPT",
+  "evidence_state": "superseded_for_current_source_identity",
+  "superseded_by": "docs/ultragoal-successor-live/acceptance/ROUTINE-CAPTURE-IMPACT-PUBLIC-KERNEL.json",
+  "accepted_candidate": {
+    "artifact_set_sha256": "e025e59afa8e7b948ae20500e469ec082664e803a3f874c08c178be62b9b7b1b",
+    "artifact_count": 46,
+    "artifact_bytes": 194356,
+    "artifact_lines": 6061,
+    "reconciliation_result": "docs/ultragoal-successor-live/worker-results/ROUTINE-PROVENANCE-RECONCILIATION-002.json",
+    "reconciliation_result_sha256": "b2c64ed385d6b95972600e33827f77d8e2f463046161cae83aa3147a88c6cb88",
+    "result_id": "sha256:238297991eab33e8738e9dab3e99cb7bfb3c84e2bb20103fb19d57276cd05fde"
+  },
+  "provenance_disposition": {
+    "original_implementation_worker": "/root/routine_snapshot_provenance_corrector",
+    "reconciliation_worker": "/root/routine_candidate_provenance_reconciler",
+    "reconciliation_scope": "one result output plus 46 read-only candidate artifacts",
+    "superseded_invalid_packets": [
+      "docs/ultragoal-successor-live/worker-results/ROUTINE-SNAPSHOT-PROVENANCE-CORRECTION-001.json"
+    ],
+    "root_decisions": [
+      "docs/ultragoal-successor-live/root-decisions/ROUTINE-WORKER-RESULT-V1-REWORK.json",
+      "docs/ultragoal-successor-live/root-decisions/ROUTINE-WORKER-OWNERSHIP-REWORK.json"
+    ]
+  },
+  "independent_review": {
+    "reviewer": "/root/routine_provenance_falsifier",
+    "requested_route": "gpt-5.6-luna/high",
+    "effective_route": "unverified",
+    "acceptance_check_id": "AC-ROUTINE-PROVENANCE-RECONCILIATION-002",
+    "verdict": "PASS",
+    "record": "/tmp/hul-routine-provenance-review-002/review-record.md",
+    "record_sha256": "989006840976b50c3c89e9a691ddd641bd953c013b3bdbcfab7f0531cea4ec9b"
+  },
+  "verification": {
+    "focused_suite": "66 passed; 0 failed",
+    "public_consumers": "read-only control accepted; constructor, partial-snapshot, deserialize, evidence-reconstruction, forged-reuse, and stale-session authority probes rejected",
+    "result_boundary": "WorkerResultV1 parse_json, actual result-only validate_for, ArtifactWorkspace verify 46, and result_id passed",
+    "false_pass_controls": "wrong worker, lease, context, scope, effect, artifact, no-claim, and retroactive source ownership rejected",
+    "final_identity": "two same-session freezes matched 46 files / 194356 bytes / 6061 lines / e025e59afa8e7b948ae20500e469ec082664e803a3f874c08c178be62b9b7b1b"
+  },
+  "accepted_scope": [
+    "capture-confined dirty snapshot provenance",
+    "conservative impact planning and uncertainty expansion",
+    "opaque executed-result and reuse evidence",
+    "candidate/context/source revalidation before planning and reconciliation",
+    "truthful separation of implementation, verification, and root acceptance authority"
+  ],
+  "root_integration": {
+    "required": true,
+    "actions": [
+      "publish validator::routine_work",
+      "witness CommandSpec CapturedRun ArtifactRef ArtifactResolver",
+      "witness ImpactGraph AffectedSet ReuseDecision CoverageDimensions",
+      "rerun public API and inventory activation gates"
+    ]
+  },
+  "support_limit": "Internal source/test kernel only. Public library wiring, command behavior, HCT-FIXTURES, live dirty/repeat-use journeys, readiness, release, node closure, and completion are not accepted.",
+  "no_claim_statement": "This acceptance does not claim public integration, product journeys, readiness, release, node closure, or goal completion."
+}

@@ -1,0 +1,60 @@
+{
+  "schema_version": "RootOrchestrationDecision-v1",
+  "decision_id": "GPT56-ROUTING-RECONCILIATION-002",
+  "guidance_source": {
+    "path": "/Users/terrynoblin/.codex/AGENTS.md",
+    "sha256": "e6b2a6e4280b78b2ef320362a74a4428179c69f6837846562373cc72dfb1656c",
+    "section": "GPT-5.6 Routing And Prompt Law"
+  },
+  "session_boundary": {
+    "active_child_agents_observed_before_dispatch": 0,
+    "unfinished_bytes_preserved": true,
+    "accepted_work_restarted": false,
+    "parent_model": "not exposed",
+    "parent_reasoning": "not exposed"
+  },
+  "dispatches": [
+    {
+      "agent": "/root/distribution_relocation_falsifier",
+      "requested_model": "gpt-5.6-terra",
+      "requested_reasoning": "high",
+      "effective_route": "unverified; launch payload proves requested route only",
+      "acceptance_check_id": "AC-DISTRIBUTION-RELOCATION-002",
+      "acceptance_check_state": "provisional",
+      "objective": "independent exact-candidate confinement falsification",
+      "ownership": "read-only workspace; scratch-only verification",
+      "cheaper_route_limit": "Terra medium does not cover the interacting descriptor-adoption, namespace-relocation, rollback, and outside-byte-preservation judgment boundary.",
+      "stop_condition": "first material defect or concrete supported-host primitive contradiction",
+      "proof_surface": "exact WorkerResult/artifact identity, 101-test suite, chained relocation attack, outside-byte false-pass control"
+    },
+    {
+      "agent": "/root/observability_kernel_finisher",
+      "requested_model": "gpt-5.6-terra",
+      "requested_reasoning": "high",
+      "effective_route": "unverified; launch payload proves requested route only",
+      "acceptance_check_id": "AC-OBSERVABILITY-KERNEL-001",
+      "acceptance_check_state": "provisional",
+      "objective": "finish the bounded HCT-OBSERVE implementation and exact WorkerResultV1",
+      "ownership": "validator observability source/tests plus one WorkerResult",
+      "cheaper_route_limit": "Terra medium does not cover concurrent persistence, privacy, query purity, causal semantics, and export gating together.",
+      "stop_condition": "upstream interface drift or concrete adopted-law contradiction",
+      "proof_surface": "owned suite, zero-write query, redaction/export/race/claim false-pass controls, exact WorkerResult/artifact verification"
+    },
+    {
+      "agent": "/root/routine_candidate_provenance_reconciler",
+      "requested_model": "gpt-5.6-terra",
+      "requested_reasoning": "high",
+      "effective_route": "unverified; launch payload proves requested route only",
+      "acceptance_check_id": "AC-ROUTINE-PROVENANCE-RECONCILIATION-002",
+      "acceptance_check_state": "provisional",
+      "objective": "truthful lease-bound reconciliation of the unchanged routine candidate",
+      "ownership": "one new WorkerResult write; 46 source/test artifacts read-only",
+      "cheaper_route_limit": "Terra medium does not cover runtime identity, dispatched ownership, read-only artifact evidence, self-reference exclusion, and validate_for false-pass semantics together.",
+      "stop_condition": "source drift or inability of WorkerResultV1 to encode the truthful scope",
+      "proof_surface": "66 tests, public forgery probes, exact artifact identity, actual-dispatch validate_for, retroactive-lease negative control"
+    }
+  ],
+  "prompt_shape": "lean Goal Success Context Constraints Output Verification",
+  "claim_ceiling": "These records prove requested dispatch configuration and bounded contracts only. Effective routes, implementation behavior, acceptance, readiness, release, and completion require their named proof surfaces.",
+  "no_claim_statement": "This routing reconciliation raises no product, release, or completion claim."
+}

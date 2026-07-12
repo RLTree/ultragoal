@@ -1,0 +1,29 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "DISTRIBUTION-SOURCE-SIZE-REWORK",
+  "workstream": "distribution",
+  "root_decision": "REWORK",
+  "behavior_candidate": {
+    "worker_result": "docs/ultragoal-successor-live/worker-results/DISTRIBUTION-ANCESTOR-RELOCATION-CORRECTION-002.json",
+    "worker_result_sha256": "9561aa9ade79d22c322cde33c0aa22847f738a837fdf50837b076a80a9d50353",
+    "artifact_set_sha256": "f9d7aeee5cfd170e4ad5822e720442dfd0f31e2989971de7a2be2e770ada9359",
+    "artifact_count": 70,
+    "independent_review": "/tmp/hul-distribution-relocation-review-002/REVIEW-DISTRIBUTION-RELOCATION-002.json",
+    "independent_review_sha256": "456e5923194eb1ae543221d22feed21900a027a37f737a2a57953a5c8faa73a6",
+    "behavior_verdict": "PASS: 101/101 and chained ancestor relocation rejected before effect with outside bytes unchanged"
+  },
+  "decisive_finding": {
+    "severity": "material_quality_gate",
+    "class": "unapproved_production_file_hard_cap",
+    "paths": [
+      "validator/src/distribution/filesystem/descriptor/directory.rs:322",
+      "validator/src/distribution/filesystem/descriptor/mutation.rs:342",
+      "validator/src/distribution/filesystem/file.rs:359"
+    ],
+    "cause": "Three hand-written production files exceed the 300-line hard cap and the candidate supplies no root-approved exception. Their descriptor, syscall, rollback, and adapter responsibilities have clear private split boundaries.",
+    "test_exception": "validator/tests/distribution_contract/descriptor_races.rs is 460 lines but is an adversarial table/fixture surface; it is exempt from this production-source correction if readability remains intact."
+  },
+  "corrective_action": "Perform a behavior-preserving private-module split that brings each hand-written production file to 300 lines or fewer without changing public APIs, transaction ordering, syscall behavior, errors, or claim ceiling. Preserve the exact 101-test suite and ancestor-relocation false-pass controls, then freeze and independently review the corrected full distribution set.",
+  "claim_ceiling": "Security behavior is independently supported on the exact prior set, but source acceptance remains withheld until the structural correction receives exact current proof. Package/install/cache/marketplace/app/discovery/runtime, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This REWORK preserves the passing security finding and rejects only the unapproved production-source size gate."
+}

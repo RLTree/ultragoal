@@ -1,0 +1,82 @@
+{
+  "schema_version": "ContractChangeRequest-v1",
+  "change_id": "CCR-GPT56-PROMPT-CONTEXT-001",
+  "status": "proposed_non_authoritative_root_review_required",
+  "requested_owner": "OWN-ULTRA-ROOT",
+  "captured_at": "2026-07-11T06:25:21Z",
+  "candidate_identity": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "dirty": true,
+    "status_sha256_before_request": "95b10c23817bd8a1396a7556101f88cfbcfea505e807714af4b58171b29e5d5a",
+    "tracked_worktree_diff_sha256_before_request": "bfc0f7c87dc78bba700d01ada1d72f9cd37c8b49747d6e4d25f96b8488e2ca0b",
+    "staged_diff_sha256_before_request": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "artifact_set": {
+    "artifact_count_excluding_request": 10,
+    "bytes": 71493,
+    "lines": 1079,
+    "sha256": "0616cf5c1156805567941f73f777b4432aeb0b3d2762b2aac5092be9b9715051",
+    "formula": "SHA-256 of bytewise-sorted path<TAB>sha256-without-prefix<LF>; ROOT-CHANGE-REQUEST.json excluded."
+  },
+  "artifacts": [
+    {"path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/00-ROOT-READ-ME.md", "sha256": "sha256:85c2591d62e111fea9016e4fcf55e1160de22ed8e94ace9720134bba8c580d9d", "bytes": 2720, "lines": 40},
+    {"path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json", "sha256": "sha256:69934aa7144ea7137e817cdf3901919b00ac8650c19760552c932b7e199714fe", "bytes": 5334, "lines": 147},
+    {"path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/ASSESSMENT.md", "sha256": "sha256:02e97aebd52c26ee3aecd208618c15a6ccece7d48d8815ecfa8e3d0f2017e7f8", "bytes": 6935, "lines": 64},
+    {"path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/CODEX-ULTRA-BOOTSTRAP.md", "sha256": "sha256:c10c7d0a5fbb995a7c976b63930fcdee3ca4cd0ca83b62ada00231e6891f5071", "bytes": 4298, "lines": 45},
+    {"path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/CODEX-ULTRA-GOAL.md", "sha256": "sha256:e1a57bd12f77c5303db7dc937c5b5e423d81b74ce3f530a4683e1a26c8320af1", "bytes": 2787, "lines": 13},
+    {"path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/CONTEXT-ROUTING-MAP.json", "sha256": "sha256:7ac07d8e5b9aa1bed675fe332ebdf0453b6b36a35676800f56ee73e9c871b2f7", "bytes": 9579, "lines": 151},
+    {"path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/MODEL-ADAPTIVE-PROMPT-AND-CONTEXT-CONTRACT.md", "sha256": "sha256:d37b0c3e088e3e1d16ce267cd18b0296a59ebe5ee319d1c061dcfda6090c41a3", "bytes": 11212, "lines": 168},
+    {"path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/REPO-PROPAGATION-PLAN.md", "sha256": "sha256:42dc0c8114cbf0d0e6177d2b395feae6a07eeb1756511a5cae27d1685e4a49ac", "bytes": 11954, "lines": 226},
+    {"path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/REQUIREMENT-TRACE-PATCH.json", "sha256": "sha256:34b5e176b68c71271256abdf0a464618f225f3cd52c8285b7eb9ab824b3c8b17", "bytes": 14407, "lines": 195},
+    {"path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/ULTRAGOAL-ORCHESTRATOR-PROMPT.md", "sha256": "sha256:1c73f3c90cd4aeb1e56d3ea254d24645ef9dcec5bc3de5cbed8f8d780b8c307a", "bytes": 2267, "lines": 30}
+  ],
+  "assessment": {
+    "highest_confidence_findings": [
+      "The current 417-word goal is strong; the 25,656-word prescribed startup load is the primary context-cost defect.",
+      "Repeated prompt laws across contract, standards, skills, legacy wrappers, agents, review packets, and validators create duplicate instruction authority and drift risk.",
+      "Four-person full-scope review is appropriate for named final boundaries but excessive for rolling artifact-set acceptance.",
+      "Read-only candidate review and scratch-only executable verification need distinct authority contracts.",
+      "Compatibility prompt bodies currently exceed the canonical skill bodies in aggregate and should remain temporary non-authoritative migration routes.",
+      "Prompt and context quality requires representative behavioral evaluation; schemas, digests, and source review alone cannot prove it."
+    ],
+    "uncertainty": "No representative cross-configuration model evaluation was run. Model-specific behavior and performance effects remain unverified until HCT-EVAL executes the proposed matrix."
+  },
+  "requested_root_changes": [
+    {
+      "decision": "Review the proposed model-adaptive prompt/context contract and choose ACCEPT, REWORK, REJECT, or DEFER with one decisive evidence-backed reason."
+    },
+    {
+      "decision": "If accepted, adopt the selected goal, bootstrap, context router, task-envelope schema, and requirement changes through root-owned contract and manifest authority."
+    },
+    {
+      "decision": "Propagate accepted rules through plugin routing, canonical skills, compatibility migration, current agents, review packets, scratch verification, review cadence, CLI validation, automation, and HCT-EVAL using REPO-PROPAGATION-PLAN.md."
+    },
+    {
+      "decision": "Recompute manifests, digests, generated projections, package inputs, candidate identity, and every proof surface invalidated by adoption before raising any claim."
+    }
+  ],
+  "forbidden_direct_actions": [
+    "Do not treat this proposal as adopted law.",
+    "Do not overwrite root-owned authority without independent review and manifest reconciliation.",
+    "Do not use the proposed model/task labels as runtime metadata.",
+    "Do not raise source, package, install, discovery, runtime, journey, release, node, or completion claims from these files."
+  ],
+  "verification_completed": [
+    "All proposed JSON documents parse with jq.",
+    "CONTEXT-ROUTING-MAP.json contains every current N00-N17 graph node exactly once with no unknown profile.",
+    "All eight added requirement IDs are new; the replaced REQ-GOAL-001 exists; no proposed ID is duplicated.",
+    "All proposed source, owner, law, product-surface, custom-tool, and claim IDs resolve against the current adopted registries.",
+    "No adopted FINAL-CONTRACT file, manifest, critical-path board, claim, migration registry, plugin manifest, canonical skill, agent manifest, CLI source, Git state, or external system was modified by this request."
+  ],
+  "required_independent_review": [
+    "Falsify context selection against a complete-registry oracle for all node profiles.",
+    "Review prompt-law ownership and identify any weakened existing invariant.",
+    "Review scratch-verification authority for path escape, stale target, candidate mutation, and provenance gaps.",
+    "Review requirement IDs, law mappings, and invalidation consequences before adoption.",
+    "Run representative prompt and context evaluations before promotion."
+  ],
+  "claim_ceiling": "proposal_source_only_not_adopted",
+  "no_claim_statement": "This change request does not claim implementation, adoption, model or runtime configuration, readiness, release, node closure, or goal completion."
+}

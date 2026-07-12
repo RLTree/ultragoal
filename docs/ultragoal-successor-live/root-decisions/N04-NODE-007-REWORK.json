@@ -1,0 +1,38 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N04-NODE-007-REWORK",
+  "node_id": "N04-DISTRIBUTION",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-007.json",
+    "sha256": "28c19a5cc78caac2fbb7887087ac903150e661028972e42628e81b0f6449fea5",
+    "artifact_set_sha256": "649c94ab3a470d895ca86a2f181f6b011107ff5a43f9d5a6cce245c1ef02b78a",
+    "artifact_count": 46,
+    "bytes": 207812,
+    "lines": 6314,
+    "maximum_file_lines": 299
+  },
+  "identity_reconciliation": "pass",
+  "decisive_finding": {
+    "severity": "high",
+    "class": "split_supported_manifest_semantic_authority",
+    "cause": "N02 inventory validates inline MCP servers only for collection bounds and bounded names, while N04 distribution separately validates server kind, command and URL exclusivity, HTTPS, arguments, environment, headers, executable binding, and roles. Sharing the decoder and primitive helpers therefore leaves contradictory supported-manifest decisions.",
+    "source_boundaries": [
+      "validator/src/inventory/plugin_manifest.rs:101",
+      "validator/src/distribution/package/manifest.rs:152"
+    ],
+    "false_pass_example": "An inline server with name Bad Name, type bogus, and an insecure HTTP URL passes N02 structural semantics but fails N04."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N04-DISTRIBUTION-NODE-008",
+  "corrective_scope": [
+    "Move supported MCP metadata, interface, and shared manifest-intrinsic semantics into the canonical plugin_manifest module.",
+    "Require N02 inventory and N04 package planning to consume the same canonical validation result and issue taxonomy.",
+    "Keep filesystem existence, package reachability, archive role binding, and unreferenced-byte closure N04-specific.",
+    "Add paired N02 and N04 positive and negative controls proving malformed kind, command and URL exclusivity, HTTPS, names, arguments, environment, headers, prompt limits, metadata, and interface semantics cannot diverge.",
+    "Preserve legacy hook discovery as unsupported migration context and keep the two independent N02 routing failures open."
+  ],
+  "claim_ceiling": "N04 remains an internal distribution candidate. The NODE-007 structural parser refactor is not accepted as canonical semantic authority; production package, install, discovery, runtime, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N04 completion, readiness, release, or goal completion."
+}

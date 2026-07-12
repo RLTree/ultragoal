@@ -1,0 +1,50 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "OBSERVABILITY-PUBLIC-INTEGRATION",
+  "workstream": "observability_public_integration",
+  "decision": "ACCEPT",
+  "evidence_state": "current_public_source_acceptance",
+  "accepted_candidate": {
+    "candidate_record": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-PUBLIC-INTEGRATION-RECONCILED-CANDIDATE.json",
+    "candidate_record_sha256": "1f9545a21d7631284da0721cc6ae5ea361808860959f63c77befe5f8e549ea27",
+    "artifact_set_sha256": "e6d31b510340258e131a08e37fab9e25c0bba885859530640a176f2aae540a4f",
+    "artifact_count": 4,
+    "artifact_bytes": 12959,
+    "artifact_lines": 327,
+    "source_acceptance": "docs/ultragoal-successor-live/acceptance/OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION.json",
+    "source_acceptance_sha256": "9198ccc93d1a201470c4a3c149309d538c57e4f7df2669369f04c3beae8350cd",
+    "private_source_set_sha256": "1c811d9b0f27545239d2e38c4b1c9ed28a634b018015f5d4f8f76eba864b0649",
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "independent_review": {
+    "reviewer": "/root/observability_public_api_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "acceptance_check_id": "AC-OBSERVABILITY-PUBLIC-INTEGRATION-010",
+    "verdict": "ACCEPT",
+    "record": "docs/ultragoal-successor-live/reviews/OBSERVABILITY-PUBLIC-INTEGRATION-REVIEW-010.json",
+    "record_sha256": "dc2e76800e3c2ff7f22f33be32f62f27b30d11ef12ad4a8b247f310b28b66de9"
+  },
+  "verification": {
+    "artifact_reconciliation": "four of four integration rows and exact aggregate independently matched",
+    "public_api_witness": "external public witness compiled and passed 1/1",
+    "observability_contract": "29/29 passed at 16 build jobs and 16 test threads",
+    "catalog_authority": "five exact identifiers occur once in the adopted contract and compiled API witness with no second owner",
+    "read_guard": "12/12 current-state tests and query purity remain fail-closed and zero-write"
+  },
+  "accepted_scope": [
+    "public validator::observability library module",
+    "SemanticEvent, EventStore, EventQuery, CausalExplanation, and ExportAdapter public API",
+    "compiled HCT-INVENTORY visibility for the five adopted identifiers"
+  ],
+  "explicitly_withheld": [
+    "observe and diagnose command product wiring",
+    "representative local-store and causal diagnosis journeys",
+    "optional export configuration and collector runtime",
+    "observability claim elevation",
+    "node closure, readiness, release, or goal completion"
+  ],
+  "invalidation_rule": "Any byte change to the accepted four-artifact integration, 22-file source dependency, five identifiers, or single-owner catalog mapping reopens this acceptance.",
+  "no_claim_statement": "This acceptance is public source-level only and does not claim CLI or supported-host product behavior, readiness, release, node closure, or goal completion."
+}

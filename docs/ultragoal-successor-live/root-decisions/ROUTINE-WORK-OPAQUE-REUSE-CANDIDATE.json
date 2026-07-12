@@ -1,0 +1,40 @@
+{
+  "schema_version": "RootCandidateManifest-v1",
+  "workstream": "routine_work_verified_reuse_authority",
+  "candidate_status": "pending_independent_review",
+  "corrects_decision": "docs/ultragoal-successor-live/root-decisions/ROUTINE-WORK-FORGED-REUSE-REWORK.json",
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without a prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "4f6cf79ac463f6e1b4c777f5d9872e20a196aca3ebdcb3f527ea298e9ec64476",
+  "artifact_count": 16,
+  "artifact_lines": 2282,
+  "artifact_bytes": 75560,
+  "maximum_file_lines": 274,
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "artifacts": [
+    {"path":"validator/src/routine_work/mod.rs","sha256":"ccdaa5dab7f51cc3d945d8519687873f46d1d5e2f246b1d7267a51bac7a0950b","bytes":1214,"lines":36},
+    {"path":"validator/src/routine_work/report.rs","sha256":"ea6757ae1194d3c5ece9748bb139fdc9cea33093fec421e4fdf5304d16ff67dd","bytes":6595,"lines":217},
+    {"path":"validator/src/routine_work/reuse/artifact.rs","sha256":"2d8d4d61e6d6afd21c0fcfb18410f88e59d282f27d865a9b341661540851fd19","bytes":7312,"lines":212},
+    {"path":"validator/src/routine_work/reuse/decision.rs","sha256":"4bfd945e141c716db73360e3b574396c837d66274e4b3e4af2c184f513383acd","bytes":4711,"lines":121},
+    {"path":"validator/src/routine_work/reuse/mod.rs","sha256":"d0cb8d8aff04fca708b59138b0f777c1fe6d40477378bcc06761f9e2da7cfa45","bytes":387,"lines":11},
+    {"path":"validator/src/routine_work/reuse/model.rs","sha256":"1de53716c14cd926603a81e5caee4128837e6f542dc246e424847882a6cf2fcd","bytes":8288,"lines":251},
+    {"path":"validator/src/routine_work/reuse/receipt.rs","sha256":"15a4faa9c4c97a70ac0033e0d60407547db1c94f0378d5c4fea08daa72c14646","bytes":4702,"lines":144},
+    {"path":"validator/src/routine_work/reuse/witness.rs","sha256":"90d18e0b1c0476604ffc92c9090b6c671b5b1b1402ba9afa626109dcb35eafc7","bytes":3015,"lines":108},
+    {"path":"validator/tests/routine_work_contract.rs","sha256":"8f911c81ce8935ccc66bc16e7bfe61d77cb7a1733cc12948bbd8a19fb17c303f","bytes":622,"lines":26},
+    {"path":"validator/tests/routine_work_contract/report.rs","sha256":"73968086f930bde91fd9e39e3dcc88e13b022607ac553e90cb141dbb5c2b5758","bytes":5508,"lines":158},
+    {"path":"validator/tests/routine_work_contract/reuse/authority.rs","sha256":"5a5327cb9b1ac9de99c8a2ae93abdde37ff1c96cf5f4a6b616aca0d14895ad60","bytes":7273,"lines":186},
+    {"path":"validator/tests/routine_work_contract/reuse/common.rs","sha256":"a1f4dede12f69da87ca46508c7dceea60ce8c60b66c0ec29236a48b57590544a","bytes":6290,"lines":207},
+    {"path":"validator/tests/routine_work_contract/reuse/integrity.rs","sha256":"e508377e09d03614d97fec5d7b36f6f082cc4db4659d129de2e7f02708c2967a","bytes":5203,"lines":143},
+    {"path":"validator/tests/routine_work_contract/reuse/matching.rs","sha256":"94115a994409e3b624041fd1098dfde498aa0995f6ce3869caa944ecfad83f55","bytes":6769,"lines":184},
+    {"path":"validator/tests/routine_work_contract/reuse/mod.rs","sha256":"0f846c59295b5929e671f0b3e8cfff33ebbe5be3a187ae8cfefd16c037100872","bytes":67,"lines":4},
+    {"path":"validator/tests/routine_work_contract/support.rs","sha256":"543f6855ad235248da25c87764d5768d98bd0654872d218364184f8a5817e5c8","bytes":7604,"lines":274}
+  ],
+  "review_scope": [
+    "opaque executed-work, observed-result, captured-execution, verified-reuse, and dependency-result authority",
+    "exact context, candidate, root, configuration, inputs, tool, graph, plan, coverage, node, dependency, result, artifact, and program bindings",
+    "missing, unknown, duplicate, stale, substituted, special-file, mutation, race, and false-pass controls",
+    "truthful complete-execution reporting and recursively zero-write reuse assessment"
+  ],
+  "support_limit": "Internal candidate-bound routine execution/reuse evidence only. Public command integration, HCT-FIXTURES, real repeat-use journeys, and claim decisions remain unproven.",
+  "no_claim_statement": "This manifest does not accept the candidate or claim public integration, readiness, release, node closure, or goal completion."
+}

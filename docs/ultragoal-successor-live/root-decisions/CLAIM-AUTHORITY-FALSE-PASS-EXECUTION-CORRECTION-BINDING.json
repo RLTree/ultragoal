@@ -1,0 +1,79 @@
+{
+  "schema_version": "RootBinding-v1",
+  "binding_id": "CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-CORRECTION-BINDING",
+  "workstream": "claim_authority",
+  "acceptance_check": "AC-CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-005",
+  "requested_route": "gpt-5.6-terra/high",
+  "effective_route": "unverified",
+  "rework_dependency": {
+    "path": "docs/ultragoal-successor-live/root-decisions/CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-PROVENANCE-REWORK.json",
+    "sha256": "c5818acd471b6a65fc5dc6935ba31a67690d6aa313bfdaf9bc7a0030a4d425fd"
+  },
+  "candidate_id": "sha256:d912b28970843e74b22a44907fa111310ac0cde3f29601d879422726b507c669",
+  "candidate_membership": {
+    "artifact_count": 15,
+    "artifact_total_bytes": 94301,
+    "artifact_total_lines": 2694,
+    "formula": "Sort path; append path, TAB, lowercase SHA-256 without prefix, LF; SHA-256 the concatenation.",
+    "artifacts": [
+      {"path":"validator/src/claims/coverage.rs","sha256":"c0369c21cd187f96a8dfbef0ad96e1e99ddd751cd477f5641bbdfd11dff63853","byte_length":7649,"line_count":208},
+      {"path":"validator/src/claims/decision.rs","sha256":"9429db50de57af8401d04a93e2ba8f7fefedd32c2d1b4a4206750fa6b2570aa7","byte_length":5297,"line_count":149},
+      {"path":"validator/src/claims/definition.rs","sha256":"509fcc4c3c1f999095f45c55eab13faa4fdd0c8d9b52011e36842b4ba73187a6","byte_length":7696,"line_count":216},
+      {"path":"validator/src/claims/evidence.rs","sha256":"f02c9f2a18b79d6e90bd7ebe8265563950b44d39d2329140276a80d116ac68fa","byte_length":6317,"line_count":208},
+      {"path":"validator/src/claims/false_pass.rs","sha256":"2654407f0c0612d5d73f8ffb22f8dfa3e2e469ac5b54ff6537ddbbf700b934c3","byte_length":6535,"line_count":215},
+      {"path":"validator/src/claims/false_pass_guard.rs","sha256":"76e3fac5d6f399d847d56680a14db56a3a97d6f0d47d272fb53d3f066a74d603","byte_length":4054,"line_count":109},
+      {"path":"validator/src/claims/guard.rs","sha256":"0e12fd3de565a6cc534c4db9a4f9c4422a4be650301d7cabb5d3dc5190491075","byte_length":7347,"line_count":218},
+      {"path":"validator/src/claims/mod.rs","sha256":"1de2062bf950ac9900401ef45fbcee8a4b02f0440facb8ac6cc5099e0fa1b523","byte_length":584,"line_count":18},
+      {"path":"validator/tests/claims_contract.rs","sha256":"7c6c3ffca05bea5fbffc853056262d5024ace348d69d4ed114c2cb6aa507ab25","byte_length":402,"line_count":15},
+      {"path":"validator/tests/claims_contract/adoption.rs","sha256":"648f6b11d182753e391488399dfa77da8f079637326479c315097882458063b1","byte_length":2013,"line_count":48},
+      {"path":"validator/tests/claims_contract/exact_sets.rs","sha256":"e47c6942bf35a5f94b8969372beabd481e0b22d7fbbd0b6394da76e81c3ffb8c","byte_length":11208,"line_count":300},
+      {"path":"validator/tests/claims_contract/false_pass_execution.rs","sha256":"1e3781b8d6b2bdd83b2eeea18b61fe649414a0df0f686ab8c2ece5107d179ba8","byte_length":17348,"line_count":455},
+      {"path":"validator/tests/claims_contract/lifecycle.rs","sha256":"0c395ee0d4059dcbfda89e028c54600a02260667adf4a8f0ab228d3a38639952","byte_length":3919,"line_count":113},
+      {"path":"validator/tests/claims_contract/rejections.rs","sha256":"ef292fe9c5b280d1e8e729d747c5977f2dbc4ae61097847745e9ff3815f6e201","byte_length":5739,"line_count":179},
+      {"path":"validator/tests/claims_contract/support.rs","sha256":"822cfce3c06042cf134cbd01823546cb97ff68790e04739ac6a76837f0d4fd17","byte_length":8193,"line_count":243}
+    ]
+  },
+  "worker_envelope": {
+    "worker": "/root/claim_authority_builder",
+    "lease_id": "CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-CORRECTION-005",
+    "node_id": "claim-authority-false-pass-execution",
+    "dependency_nodes": ["claim-authority-false-pass-execution-provenance-rework","hct-context","hct-inventory","hct-capture","hct-state"],
+    "semantic_symbols": ["claims::definition","claims::evidence","claims::obligation_coverage","claims::false_pass_execution","claims::observation","claims::decision","claims::guard"],
+    "safety_class": "isolated_workspace_write",
+    "owned_paths": [
+      "validator/src/claims/coverage.rs",
+      "validator/src/claims/decision.rs",
+      "validator/src/claims/definition.rs",
+      "validator/src/claims/evidence.rs",
+      "validator/src/claims/false_pass.rs",
+      "validator/src/claims/false_pass_guard.rs",
+      "validator/src/claims/guard.rs",
+      "validator/src/claims/mod.rs",
+      "validator/tests/claims_contract.rs",
+      "validator/tests/claims_contract/adoption.rs",
+      "validator/tests/claims_contract/exact_sets.rs",
+      "validator/tests/claims_contract/false_pass_execution.rs",
+      "validator/tests/claims_contract/lifecycle.rs",
+      "validator/tests/claims_contract/rejections.rs",
+      "validator/tests/claims_contract/support.rs",
+      "docs/ultragoal-successor-live/worker-results/CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-CORRECTION-005.json"
+    ],
+    "performed_effects": [
+      {"class":"workspace_write","target":"claim-authority-source"},
+      {"class":"fixture_write","target":"claim-authority-tests"},
+      {"class":"process","target":"offline-claim-authority-validation"}
+    ]
+  },
+  "required_behavior": [
+    "False-pass controls use a separately sealed executor/observer causal record bound to exact control, negative stimulus, expected named failure, tool, time range, actual outcome, outputs, artifacts, context, candidate, freshness, surface, and ceiling.",
+    "Report-only, producer-synthesized, unexecuted, arbitrary-code, missing-stimulus, missing-executor, missing-observation, replayed-artifact, stale, self-authored, or cross-candidate controls reject before elevation.",
+    "Actual outcome must match the named expected causal failure and accepted artifacts cannot be replayed as a distinct control.",
+    "Exact obligation coverage, all 109 one-item omissions, DAG closure, repair/invalidation, rejected evidence visibility, and zero-write projection remain intact."
+  ],
+  "verification_checkpoint": "Locked/offline suite 21/21 passed. It includes 140 one-field omission and 125 one-field substitution probes across CL-PACKAGE, CL-INSTALL, CL-ORCHESTRATION, CL-RELEASE, and CL-COMPLETION, the exact report-only false-pass, and separated executor/observer positive controls. Maximum production file is 218 lines; false_pass_execution.rs is a 455-line adversarial-test exception.",
+  "root_integration_state": "definition-only; no validator/src/lib.rs or public witness integration before independent review",
+  "aggregate_note": "Root independently rederived all 15 regular rows, totals, and candidate digest. WorkerResult-v1 is not claimed to enforce aggregate fields.",
+  "required_no_claim_statement": "This worker does not claim readiness, release, or completion.",
+  "invalidation_rule": "Any artifact, membership, registry, execution provenance, obligation semantics, dependency, context, effect, or result change reopens this binding.",
+  "no_claim_statement": "This binding does not claim public HCT-CLAIMS integration, any passed live claim, readiness, release, node closure, or goal completion."
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": "RootLeaseAmendment-v1",
+  "decision_id": "ROUTINE-PUBLIC-WRAPPER-SCOPE-AMENDMENT",
+  "workstream": "routine_work_public_integration",
+  "amends_dispatch": "/root/routine_public_import_corrector",
+  "acceptance_check_id": "AC-ROUTINE-PUBLIC-IMPORT-003",
+  "reason": "The external-consumer harness compiles routine_work/mod.rs as a standalone crate. Once production code correctly uses crate::capture, the wrapper must expose a local capture module that reexports ultragoal::capture; otherwise it no longer models the real library boundary.",
+  "additional_owned_path": "validator/tests/routine_work_contract/provenance.rs",
+  "authorized_change": "Add only the wrapper-local `pub mod capture { pub use ultragoal::capture::*; }` surface needed to model the real crate-owned capture module. Preserve all consumer probes and expected diagnostics.",
+  "prohibited": [
+    "changes to consumer probe source files",
+    "changes to expected privacy/provenance semantics",
+    "changes outside the two reuse imports, provenance wrapper, and owned WorkerResult"
+  ],
+  "verification": [
+    "public_api_witness",
+    "routine_work_contract 66/66",
+    "capture-focused CLI tests",
+    "all public construction/deserialization/evidence forgery probes"
+  ],
+  "claim_ceiling": "Lease amendment only; no source acceptance, public integration, journey, readiness, release, or completion claim.",
+  "no_claim_statement": "This amendment authorizes one test-harness boundary correction and no broader behavior change."
+}

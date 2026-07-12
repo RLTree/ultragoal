@@ -1,0 +1,40 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "OBSERVABILITY-WORKER-RESULT-CONTRACT-REWORK",
+  "workstream": "observability",
+  "decision": "REWORK",
+  "acceptance_check": "AC-OBSERVABILITY-KERNEL-003-R2",
+  "rejected_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-STRUCTURE-PROOF-RECONCILIATION-004.json",
+    "sha256": "09c6f23398f5da4b3ccc153199c3a9182709e534fa28a736f5cbe07cf561204e",
+    "candidate_id": "sha256:ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e"
+  },
+  "independent_review": {
+    "reviewer": "/root/observability_structure_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "record": "/tmp/hul-observability-structure-review-003-r2/OBSERVABILITY-STRUCTURE-REVIEW-003-R2.json",
+    "record_sha256": "491cb2508756cadbd6170bac49485436af591464c55baa5285ac4637de14f390"
+  },
+  "root_correction": {
+    "prior_error": "Root required a broader literal no-claim value that the public WorkerResult-v1 validator necessarily rejects.",
+    "public_contract": "validator/src/orchestration/worker.rs requires the canonical exact sentence and remains authoritative.",
+    "required_no_claim_statement": "This worker does not claim readiness, release, or completion.",
+    "expanded_ceiling_location": "Keep the broader source, behavior, public-integration, product, node, readiness, release, and completion ceiling in limitations and final_state.product_no_claim."
+  },
+  "false_receipt_correction": [
+    {
+      "command_record": "WorkerResultV1::parse_json and exact result-only validate_for",
+      "required_status": "not_run_parent_required",
+      "required_result": "Mechanical JSON and artifact derivation passed; the worker did not execute the typed validate_for or mutation harness."
+    },
+    {
+      "command_record": "ArtifactWorkspace::verify and computed result_id",
+      "required_status": "not_run_parent_required",
+      "required_result": "The worker derived the artifact set externally but did not execute ArtifactWorkspace verification; independent review must do so."
+    }
+  ],
+  "corrective_scope": "The original reconciliation worker may change only no_claim_statement and the two false command records. All artifact rows, membership, aggregates, candidate/context identity, dependencies, semantics, and effects remain frozen.",
+  "claim_ceiling": "No observability source or behavior acceptance until the canonical packet passes actual typed validation and full independent review.",
+  "no_claim_statement": "This decision does not claim public integration, product behavior, readiness, release, node closure, or goal completion."
+}

@@ -1,0 +1,62 @@
+{
+  "schema_version": "OrchestrationDurableRecoveryCandidate-v2",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "scope": "internal durable orchestration, live root observation, trusted restart, crash recovery, exact journal authority names, and zero-write queries",
+  "whole_worktree_status": "concurrent disjoint workstreams active; only the exact enumerated artifact set is frozen",
+  "artifact_enumeration": {
+    "paths": [
+      "validator/tests/orchestration_contract.rs"
+    ],
+    "recursive_rust_roots": [
+      "validator/src/orchestration",
+      "validator/tests/orchestration_contract"
+    ],
+    "ordering": "bytewise path sort",
+    "row_formula": "path, one TAB byte, lowercase SHA-256 without prefix, one LF byte"
+  },
+  "artifact_set_sha256": "7e5333911ff7a1e33ccec554fc6e963590a3b2c049a3388c591a99a1da06826e",
+  "artifact_count": 61,
+  "total_bytes": 361427,
+  "total_lines": 10652,
+  "maximum_file_lines": 298,
+  "structural_state": {
+    "regular_single_link_files": 61,
+    "unsafe_or_multilink_files": 0,
+    "case_alias_duplicate_paths": 0
+  },
+  "builder_verification": {
+    "focused_command": "env CARGO_TARGET_DIR=/tmp/hul-orchestration-exact-name-builder cargo test --manifest-path validator/Cargo.toml --test orchestration_contract journal_exact_names --locked --offline -j 16 -- --test-threads=16",
+    "focused_result": "5 passed; 0 failed",
+    "full_command": "env CARGO_TARGET_DIR=/tmp/hul-orchestration-exact-name-builder cargo test --manifest-path validator/Cargo.toml --test orchestration_contract --locked --offline -j 16 -- --test-threads=16",
+    "full_result": "161 passed; 0 failed; 3.26s"
+  },
+  "independent_review": {
+    "reviewer": "/root/orchestration_recovery_falsifier",
+    "verdict": "pass",
+    "focused_result": "5 passed; 0 failed; 156 filtered; 0.42s",
+    "full_result": "161 passed; 0 failed; 3.45s",
+    "artifact_identity_before_after": "byte-identical",
+    "blocking_findings": 0
+  },
+  "closed_findings": [
+    "caller-synthesized or serialized Full integration observations cannot complete",
+    "non-durable replay requires live provenance",
+    "durable restart requires exact trusted persisted head",
+    "interrupted log publication is recoverable after process death",
+    "wrong head binding event extra frame truncation substitution and noncanonical encoding do not repair",
+    "events.jsonl head.json and journal.lock require exact raw names on the supported case-insensitive host",
+    "create open inspect append lock and recovery reject case aliases and enumeration-to-open mutation"
+  ],
+  "explicitly_withheld": [
+    "cross-platform filesystem behavior beyond the exercised supported host",
+    "public library and command-catalog integration",
+    "end-to-end plugin product behavior",
+    "orchestration node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any byte change, added or removed Rust file under either recursive root, harness change, unsafe type, link-count change, or path case collision immediately reopens this candidate.",
+  "no_claim_statement": "This candidate records accepted review evidence only for the exact internal orchestration set and does not claim readiness, release, or goal completion."
+}

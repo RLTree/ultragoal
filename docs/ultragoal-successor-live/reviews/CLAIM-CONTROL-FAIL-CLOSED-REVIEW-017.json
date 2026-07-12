@@ -1,0 +1,74 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "CLAIM-CONTROL-FAIL-CLOSED-REVIEW-017",
+  "reviewer": "/root/claim_control_fail_closed_reviewer",
+  "review_mode": "independent claim falsification and public refusal verification",
+  "verdict": "accept_at_lowered_ceiling",
+  "candidate": {
+    "binding": "docs/ultragoal-successor-live/root-decisions/CLAIM-CONTROL-FAIL-CLOSED-TRANSPORT-BINDING.json",
+    "artifact_set_sha256": "d89dfe0b3285d3451f29b6db94012ad006eeb43ca310e023011bfc6483622db8",
+    "artifact_count": 17,
+    "artifact_bytes": 139196,
+    "artifact_lines": 3948,
+    "start_end_revalidation": "byte_identical"
+  },
+  "independent_verification": [
+    {
+      "surface": "exact candidate identity",
+      "result": "all 17 rows matched current bytes and the raw-byte-sorted aggregate reproduced at start and end"
+    },
+    {
+      "surface": "claims contract",
+      "command": "fresh isolated Cargo target; cargo test --locked --offline -j16 --manifest-path validator/Cargo.toml --test claims_contract -- --test-threads=16",
+      "result": "42 passed; 0 failed; 69.80 seconds"
+    },
+    {
+      "surface": "outer managed sandbox",
+      "result": "nested sandbox-exec returned status 71; explicitly excluded from positive evidence"
+    },
+    {
+      "surface": "live public refusal",
+      "commands": [
+        "/tmp/hul-successor-observe-freeze-017/debug/ultragoal --root /private/tmp/hul-observe-journey-017.sx8hl3 --json prove --claim CL-COMPLETION --output claim-completion-canary.json",
+        "/tmp/hul-successor-observe-freeze-017/debug/ultragoal --root /private/tmp/hul-observe-journey-017.sx8hl3 --json prove --claim CL-ARBITRARY --output claim-arbitrary-canary.json"
+      ],
+      "result": "both exit 4 with successor_runtime_downstream_tool_unavailable on HCT-CLAIMS; no output artifact; recursive content/mode/mtime and Git status remained byte-identical"
+    },
+    {
+      "surface": "caller authority injection",
+      "options": [
+        "--control",
+        "--context",
+        "--candidate",
+        "--surface",
+        "--ceiling"
+      ],
+      "result": "each exit 2 with CLI_UNKNOWN_OPTION and no write"
+    },
+    {
+      "surface": "claim projection",
+      "command": "/tmp/hul-successor-observe-freeze-017/debug/ultragoal --root /private/tmp/hul-observe-journey-017.sx8hl3 --json inspect claims",
+      "result": "14 claim rows; zero nonempty dimensions; all rows explicitly withheld; recursive content/mode/mtime and Git status unchanged"
+    }
+  ],
+  "falsification_result": [
+    "generic /usr/bin/false and arbitrary command/spec substitutions reject before receipt issuance",
+    "stale, wrong-context, wrong-candidate, wrong-surface, wrong-ceiling, replay, report-only, producer-synthesis, cross-claim, registry-drift, and lifecycle substitutions reject",
+    "the non-test execute_claim branch returns the unavailable-catalog error before receipt creation",
+    "test-only shell transport cannot be reached by the public production runtime"
+  ],
+  "blocker_validation": {
+    "claim_registry_sha256": "67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc",
+    "result": "14 claims and 69 unique control labels exist, but no executor/spec identity, causal rejection code, repair/pass condition, or sealed permit exists",
+    "contract_ceiling": "REQ-PROOF-006 prohibits a wrong-surface failure from substituting for intended fail-then-repair behavior",
+    "proposal_note": "ClaimControlExecutorCatalog-v1 and any requested field layout remain non-adopted implementation proposals"
+  },
+  "accepted_scope": "exact private source/test fail-closed transport and current public refusal behavior",
+  "withheld_scope": [
+    "named product negative-control execution",
+    "HCT-CLAIMS output",
+    "any claim elevation",
+    "readiness, release, node closure, or goal completion"
+  ],
+  "no_claim_statement": "This review accepts only the stated lowered ceiling and does not claim HCT-CLAIMS behavior, a passed live claim, readiness, release, node closure, or completion."
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "CLAIM-AUTHORITY-REQUIRED-OBLIGATIONS-REWORK",
+  "workstream": "claim_authority",
+  "decision": "REWORK",
+  "acceptance_check": "AC-CLAIM-AUTHORITY-REVIEW-002",
+  "reviewed_candidate": {
+    "binding_sha256": "097aa5974881f5eefc35c10f9c54cafe0f698a087a14fbac9666011d77a70d67",
+    "artifact_set_sha256": "b377a1f7156fd8bdb7999eafbcd862d3f65b9d9465d245cff5c10b93bd700215",
+    "artifact_count": 6,
+    "artifact_total_bytes": 35473,
+    "artifact_total_lines": 1089,
+    "worker_result_sha256": "a003d3b07d0e6bd5020a6743ca8153026d750ade8bae884f9c2f236cf024826a",
+    "declared_result_id": "sha256:b57c53cb5df76a344d18f44bbf54e079578ae90c6a7d02f41182b72314609f42",
+    "registry_sha256": "67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc"
+  },
+  "independent_review": {
+    "reviewer": "/root/claim_authority_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "verdict": "REWORK",
+    "candidate_identity_verified": true,
+    "registry_dag_verified": true,
+    "stopped_after_first_material_defect": true
+  },
+  "decisive_finding": {
+    "class": "required_claim_obligations_are_parsed_but_not_enforced",
+    "evidence": [
+      "ClaimDefinition retains required_evidence, required_surface_ids, required_tool_ids, required_decision_ids, and false_pass_controls.",
+      "ClaimGuard never consumes those fields and checks only nonempty generic envelope maps plus matching context/candidate/surface/ceiling strings.",
+      "One generic DirectObservation passes CL-PACKAGE, CL-INSTALL, and CL-ORCHESTRATION despite their distinct multi-item evidence and closure requirements.",
+      "The locked/offline 4/4 suite encodes this false-pass rather than rejecting omitted or partial obligations."
+    ],
+    "impact": "A claim can elevate without its registry-required behavior, surfaces, tools, decisions, or false-pass controls, defeating the exact claim ceiling contract."
+  },
+  "required_correction": [
+    "Represent every registry-required evidence item, surface, tool, decision, and false-pass control as an exact candidate-bound observed obligation rather than a generic nonempty map.",
+    "Require complete exact-set coverage before decision elevation and reject unknown, duplicate, omitted, partial, contradicted, stale, wrong-surface, or cross-candidate obligation evidence.",
+    "Bind each satisfied obligation to method, independent producer/reviewer, artifact/output digest, freshness, context, candidate, and supported ceiling; a bare asserted identifier is not sufficient.",
+    "Preserve rejected obligation evidence and causal reasons in deterministic projections.",
+    "Add per-claim false-pass matrices proving CL-PACKAGE, CL-INSTALL, CL-ORCHESTRATION, CL-RELEASE, and CL-COMPLETION cannot pass with one generic observation or any one omitted required item."
+  ],
+  "preserved_evidence": [
+    "Exact six-file identity and 14-node registry DAG were independently reproduced.",
+    "Focused 4/4 tests pass but are insufficient because they encode the false-pass.",
+    "Typed WorkerResult acceptance remains withheld because review stopped after the material semantic defect."
+  ],
+  "claim_ceiling": "No HCT-CLAIMS source acceptance, public integration, passed live claim, readiness, release, node closure, or completion.",
+  "no_claim_statement": "This decision does not claim claim-authority behavior, public integration, readiness, release, node closure, or goal completion."
+}

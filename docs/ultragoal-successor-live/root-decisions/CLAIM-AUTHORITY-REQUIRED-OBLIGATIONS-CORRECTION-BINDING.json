@@ -1,0 +1,76 @@
+{
+  "schema_version": "RootBinding-v1",
+  "binding_id": "CLAIM-AUTHORITY-REQUIRED-OBLIGATIONS-CORRECTION-BINDING",
+  "workstream": "claim_authority",
+  "acceptance_check": "AC-CLAIM-AUTHORITY-REQUIRED-OBLIGATIONS-003",
+  "requested_route": "gpt-5.6-terra/high",
+  "effective_route": "unverified",
+  "rework_dependency": {
+    "path": "docs/ultragoal-successor-live/root-decisions/CLAIM-AUTHORITY-REQUIRED-OBLIGATIONS-REWORK.json",
+    "sha256": "aadb8e1b926bfd6b7278712466529027399e72f667916bd849a79c494390b600"
+  },
+  "candidate_id": "sha256:0c30f37411cf4a51b06e6f3e8bb73e6e8bfd12104a73690e47f5a85e481615f8",
+  "candidate_membership": {
+    "artifact_count": 12,
+    "artifact_total_bytes": 57752,
+    "artifact_total_lines": 1685,
+    "formula": "Sort path; append path, TAB, lowercase SHA-256 without prefix, LF; SHA-256 the concatenation.",
+    "artifacts": [
+      {"path":"validator/src/claims/coverage.rs","sha256":"ca17f5cae8d405a7a0bf8f44cc531d4dcbb686fb6c73dfdda58e077632a96e11","byte_length":3512,"line_count":92},
+      {"path":"validator/src/claims/decision.rs","sha256":"b63f2aefd2998e81548489fe6aa895f616c23006301c398a933f9a2fe697dc97","byte_length":4702,"line_count":139},
+      {"path":"validator/src/claims/definition.rs","sha256":"509fcc4c3c1f999095f45c55eab13faa4fdd0c8d9b52011e36842b4ba73187a6","byte_length":7696,"line_count":216},
+      {"path":"validator/src/claims/evidence.rs","sha256":"bd33d7e82aebb21703608d909fcb89b7fad3612afa886620652dba971e7a79ca","byte_length":6057,"line_count":201},
+      {"path":"validator/src/claims/guard.rs","sha256":"2ef555cb8d16ca4d019373f29dd01beb0e3f41ded5213fdd43677122fe7ed5bf","byte_length":6729,"line_count":197},
+      {"path":"validator/src/claims/mod.rs","sha256":"f74b8a8d5725603459767cce47f79bfb5cdb221cbc3c167576dc20eea998e4d9","byte_length":464,"line_count":15},
+      {"path":"validator/tests/claims_contract.rs","sha256":"d2ab91e992431e8a22eb6d45e37e5c55ae46c259966df4f778494beb656130e3","byte_length":324,"line_count":13},
+      {"path":"validator/tests/claims_contract/adoption.rs","sha256":"648f6b11d182753e391488399dfa77da8f079637326479c315097882458063b1","byte_length":2013,"line_count":48},
+      {"path":"validator/tests/claims_contract/exact_sets.rs","sha256":"916fbb2fb4f29806f57259def881813b1fe36b02cf975f91722272cffe31a555","byte_length":11097,"line_count":296},
+      {"path":"validator/tests/claims_contract/lifecycle.rs","sha256":"0c395ee0d4059dcbfda89e028c54600a02260667adf4a8f0ab228d3a38639952","byte_length":3919,"line_count":113},
+      {"path":"validator/tests/claims_contract/rejections.rs","sha256":"ef292fe9c5b280d1e8e729d747c5977f2dbc4ae61097847745e9ff3815f6e201","byte_length":5739,"line_count":179},
+      {"path":"validator/tests/claims_contract/support.rs","sha256":"0413e87524207374c173a11ddb3db72c480007c1c3d30fb392e6da613461ddf2","byte_length":5500,"line_count":176}
+    ]
+  },
+  "source_set": {"artifact_count":6,"artifact_total_bytes":29160,"artifact_total_lines":860,"artifact_set_sha256":"31a2f6f4301c23359aab852de79d4cfc71a573398be0c05ae51fd4ac0807a5da"},
+  "test_set": {"artifact_count":6,"artifact_total_bytes":28592,"artifact_total_lines":825,"artifact_set_sha256":"dc5164496abcd80d1bc432519c2d403c8126c5b78a3698afefcd55a5560adb4a"},
+  "worker_envelope": {
+    "worker": "/root/claim_authority_builder",
+    "lease_id": "CLAIM-AUTHORITY-REQUIRED-OBLIGATIONS-CORRECTION-003",
+    "node_id": "claim-authority-required-obligations",
+    "dependency_nodes": ["claim-authority-required-obligations-rework","hct-context","hct-inventory","hct-capture","hct-state"],
+    "semantic_symbols": ["claims::definition","claims::evidence","claims::obligation_coverage","claims::observation","claims::decision","claims::guard"],
+    "safety_class": "isolated_workspace_write",
+    "owned_paths": [
+      "validator/src/claims/coverage.rs",
+      "validator/src/claims/decision.rs",
+      "validator/src/claims/definition.rs",
+      "validator/src/claims/evidence.rs",
+      "validator/src/claims/guard.rs",
+      "validator/src/claims/mod.rs",
+      "validator/tests/claims_contract.rs",
+      "validator/tests/claims_contract/adoption.rs",
+      "validator/tests/claims_contract/exact_sets.rs",
+      "validator/tests/claims_contract/lifecycle.rs",
+      "validator/tests/claims_contract/rejections.rs",
+      "validator/tests/claims_contract/support.rs",
+      "docs/ultragoal-successor-live/worker-results/CLAIM-AUTHORITY-REQUIRED-OBLIGATIONS-CORRECTION-003.json"
+    ],
+    "performed_effects": [
+      {"class":"workspace_write","target":"claim-authority-source"},
+      {"class":"fixture_write","target":"claim-authority-tests"},
+      {"class":"process","target":"offline-claim-authority-validation"}
+    ]
+  },
+  "required_behavior": [
+    "Complete exact-set coverage of every registry-required evidence item, surface, tool, decision, and false-pass control before elevation.",
+    "Every covered obligation is bound to method, independent actor, context, candidate, freshness, truth surface, ceiling, artifact/output digest, and observed result.",
+    "Unknown, duplicate, omitted, partial, contradicted, stale, cross-candidate, self-authored, materially-scored, reviewer-only, or bare-asserted obligations reject before elevation.",
+    "Repair invalidates only affected decision evidence and old observations cannot re-elevate the repaired claim.",
+    "Rejected evidence and reasons remain visible in deterministic zero-write projections."
+  ],
+  "verification_checkpoint": "Locked/offline 16/16 passed, including 109 one-item omission cases; scoped rustfmt and diff check passed; maximum production file 216 lines.",
+  "root_integration_state": "definition-only; no validator/src/lib.rs or public witness integration before independent review",
+  "aggregate_note": "Root independently rederived all 12 regular rows, phase totals, and candidate digest. WorkerResult-v1 is not claimed to enforce aggregate fields.",
+  "required_no_claim_statement": "This worker does not claim readiness, release, or completion.",
+  "invalidation_rule": "Any artifact, membership, adopted registry, obligation semantics, dependency, context, effect, or result change reopens this binding.",
+  "no_claim_statement": "This binding does not claim public HCT-CLAIMS integration, any passed live claim, readiness, release, node closure, or goal completion."
+}

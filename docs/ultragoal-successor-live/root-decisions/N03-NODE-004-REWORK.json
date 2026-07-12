@@ -1,0 +1,31 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N03-NODE-004-REWORK",
+  "node_id": "N03-CLI-STATE",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-004.json",
+    "sha256": "b09e595207b3fc07b18154cd2a5654dc0e748d9b8ccf18685dd585651efcbe35",
+    "artifact_set_sha256": "1b7ce62f111eb90a6c534c476a9759727472f8d5cbe6e17e1a2fb19f3f922ef5",
+    "artifact_count": 64
+  },
+  "identity_reconciliation": "pass",
+  "decisive_finding": {
+    "severity": "high",
+    "class": "worker_result_root_change_shape_false_pass",
+    "cause": "All three requested_root_changes omit expected_sha256 and use prose labels rather than canonical repository paths. The exact result passes the permissive embedded schema but cannot deserialize through the live typed RootChangeRequest boundary.",
+    "typed_boundary": "validator/src/orchestration/mod.rs:47"
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N03-CLI-STATE-NODE-005",
+  "corrective_scope": [
+    "Regenerate the WorkerResult so requested_root_changes contains only exact canonical paths and expected post-change SHA-256 values.",
+    "Move review instructions, unresolved public dispatcher/schema work, and claim-ceiling statements to their proper findings, unresolved_dependencies, limitations, and commands_and_tests fields instead of encoding them as root changes.",
+    "If no exact postimage is available, request no root change; do not fabricate a digest or convert prose into a path.",
+    "Preserve and revalidate the exact 64-artifact implementation set, parent identity, limitations, and no-claim statement, then repeat independent review from the corrected result."
+  ],
+  "verification_observation": "A root scratch run independently exercised 16 focused capture/security tests with cargo-nextest at 16 jobs: 16 passed. This supports the unchanged implementation bytes but does not accept the malformed WorkerResult or close N03.",
+  "claim_ceiling": "N03 remains an unaccepted internal CLI/capture candidate. Public dispatcher/schema/migration integration, complete zero-write CLI journeys, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N03 completion, readiness, release, or goal completion."
+}

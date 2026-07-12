@@ -1,0 +1,47 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "candidate_id": "OBSERVABILITY-PUBLIC-INTEGRATION-RECONCILED-CANDIDATE",
+  "workstream": "observability_public_integration",
+  "candidate_state": "awaiting_independent_review",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "depends_on_acceptance": {
+    "path": "docs/ultragoal-successor-live/acceptance/OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION.json",
+    "sha256": "9198ccc93d1a201470c4a3c149309d538c57e4f7df2669369f04c3beae8350cd",
+    "accepted_private_candidate": "1c811d9b0f27545239d2e38c4b1c9ed28a634b018015f5d4f8f76eba864b0649"
+  },
+  "acceptance_check": "AC-OBSERVABILITY-PUBLIC-INTEGRATION-010",
+  "requested_review_route": "gpt-5.6-terra/high",
+  "effective_review_route": "unverified",
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, lowercase SHA-256 without prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "e6d31b510340258e131a08e37fab9e25c0bba885859530640a176f2aae540a4f",
+  "artifact_count": 4,
+  "artifact_bytes": 12959,
+  "artifact_lines": 327,
+  "artifacts": [
+    {"path":"docs/ultragoal-successor-live/acceptance/OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION.json","sha256":"9198ccc93d1a201470c4a3c149309d538c57e4f7df2669369f04c3beae8350cd","byte_length":3608,"line_count":59},
+    {"path":"validator/src/api_witness.rs","sha256":"83f3263f717bfa6badade0898dede618cb2a29578ab62e418e80e7abcfd6972f","byte_length":4453,"line_count":123},
+    {"path":"validator/src/lib.rs","sha256":"9e778144797940207cd63b014e1e73e0b03dd75376fb431120e40e1c93fe0629","byte_length":1283,"line_count":63},
+    {"path":"validator/tests/public_api_witness.rs","sha256":"b3ca7050888377bfa26b07d8bdf24dc4549841292c042134745a5fc0198af3c7","byte_length":3615,"line_count":82}
+  ],
+  "integration_behavior": [
+    "validator::observability is publicly exported from the library entrypoint",
+    "internal and external witnesses name SemanticEvent, EventStore, EventQuery, CausalExplanation, and ExportAdapter exactly",
+    "implemented_public_apis reports those five adopted HCT-OBSERVE identifiers",
+    "public activation remains separate from observe/diagnose CLI wiring and supported-host product journey proof"
+  ],
+  "root_verification": [
+    {"command":"rustfmt --edition 2024 --check validator/src/lib.rs validator/src/api_witness.rs validator/tests/public_api_witness.rs","result":"pass"},
+    {"command":"CARGO_TARGET_DIR=/tmp/hul-observability-public-root-20260711 cargo test --locked --offline -j16 --manifest-path validator/Cargo.toml --test public_api_witness -- --test-threads=16","result":"1 passed; 0 failed"},
+    {"command":"CARGO_TARGET_DIR=/tmp/hul-observability-public-contract-20260711 cargo test --locked --offline -j16 --manifest-path validator/Cargo.toml --test observability_contract -- --test-threads=16","result":"29 passed; 0 failed"}
+  ],
+  "explicitly_withheld": [
+    "observe and diagnose command wiring",
+    "live local-store product journey",
+    "optional export configuration or external collector behavior",
+    "CL-OBSERVABILITY elevation",
+    "node closure, readiness, release, or goal completion"
+  ],
+  "invalidation_rule": "Any byte change to the four-artifact integration set, the accepted 22-file implementation, or the five public API identifiers reopens review.",
+  "no_claim_statement": "This is a public-integration candidate awaiting independent review. It does not claim product behavior, readiness, release, node closure, or goal completion."
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "repository_fit",
+  "corrects_candidate_sha256": "f3ef0bf904093b14393f2dfc80f00de8ae655b7d18e9acd51e59d8d1f2f6009e",
+  "corrects_finding": "repository-fit-caller-controlled-generated-ownership",
+  "candidate_state": "frozen_for_independent_rereview",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "artifact_set_sha256": "30cf737b14c6e55dcd69ec199c6d324db39b8dde4a8fe0c6b7dee5e4d7e2f121",
+  "artifact_count": 16,
+  "total_bytes": 76449,
+  "total_lines": 2444,
+  "maximum_file_lines": 297,
+  "artifacts": [
+    {"path":"validator/src/repository_fit/apply.rs","sha256":"sha256:6a22343d1a5c732bcfeb0056669abc6318b7505ae23f2266262c056403243f78","byte_length":6391},
+    {"path":"validator/src/repository_fit/error.rs","sha256":"sha256:ca4c06db9ce2d203612fa183f5467510c2f714957c4deb56b4f018967b2a0fe1","byte_length":1524},
+    {"path":"validator/src/repository_fit/inspect.rs","sha256":"sha256:b140aa44c8245d7ca381ccdab265c81314c3d89bc01eca3bd3721a63f8ad2288","byte_length":10174},
+    {"path":"validator/src/repository_fit/local/mod.rs","sha256":"sha256:f1d49253bebc8a031f04581732bf7dd7e17cbc4a7304aefb61cbc87b12498f6b","byte_length":1402},
+    {"path":"validator/src/repository_fit/local/sys.rs","sha256":"sha256:b357e6b7d87cde44a04cb94ad07e82df4d8991558e13bdb414c366c6bcab9ba5","byte_length":3556},
+    {"path":"validator/src/repository_fit/local/unix.rs","sha256":"sha256:c25411c8524035bf95618a719acd3dd8153c28d42e9e4e45f66dacd5dd3d2cf2","byte_length":8077},
+    {"path":"validator/src/repository_fit/mod.rs","sha256":"sha256:77c8720c618c3f2a07fd38ccc536f7c90d91967f373ecb8b98c779bb2a502faf","byte_length":1104},
+    {"path":"validator/src/repository_fit/model.rs","sha256":"sha256:f80283a192513038c47e32278eeefcacb376e5ecbe4d614706d924cf8cdfcd3b","byte_length":6617},
+    {"path":"validator/src/repository_fit/ownership.rs","sha256":"sha256:8631977f153e3458697fa97ea5140df39d7dba15823930b989830e59e64ece7b","byte_length":3366},
+    {"path":"validator/src/repository_fit/path.rs","sha256":"sha256:dda9b100450082345d7f1bd9bc08dd90fab995471a162d1a74ffb4b21560c2b7","byte_length":1720},
+    {"path":"validator/src/repository_fit/state.rs","sha256":"sha256:a37bf5a72b5607591c259199be63e221ebd0b96b8725efca3fba63ac8f93cea3","byte_length":7373},
+    {"path":"validator/tests/repository_fit_contract.rs","sha256":"sha256:84e0a1ac236beabf9d4ded8e2f442cf9937af3be52bf94645ca69a8a91fd4814","byte_length":338},
+    {"path":"validator/tests/repository_fit_contract/engine.rs","sha256":"sha256:4e24fd5abf4e5bbf97a10df3d5ed0a2a5bbdb1cd1517536bbd8a5ad1fd7daf80","byte_length":9946},
+    {"path":"validator/tests/repository_fit_contract/local_read.rs","sha256":"sha256:ddbeab4a7195f88523d3c64b1ce3fbbc98ece4836527bc8fffc62916f468d467","byte_length":6946},
+    {"path":"validator/tests/repository_fit_contract/spec.rs","sha256":"sha256:a9f62b0e7cc42f2f30989517a089cef7bc3732619cd87d39c881e91a0d7307eb","byte_length":3496},
+    {"path":"validator/tests/repository_fit_contract/support.rs","sha256":"sha256:457aedb67ceec4751c92b821812c5811603809aad282d4b331858cfb49deacfc","byte_length":4419}
+  ],
+  "corrective_behavior": [
+    "public callers can construct only user-owned desired files",
+    "Harness-generated desired files require a crate-authority-bound adopted manifest provenance",
+    "managed prior proof is opaque and binds context candidate root path current digest and adopted provenance",
+    "known prior digest without the exact opaque state proof remains a conflict",
+    "stale duplicate unknown or unmatched managed proofs are rejected",
+    "inspection plan mutation conflict and postcondition rows retain provenance and proof identity"
+  ],
+  "verification": {
+    "command": "CARGO_TARGET_DIR=/tmp/hul-repository-fit-root cargo test --manifest-path validator/Cargo.toml --test repository_fit_contract --locked --offline -j 16 -- --test-threads=16",
+    "result": "22 passed; 0 failed"
+  },
+  "explicitly_withheld": [
+    "public library and command-catalog integration",
+    "canonical desired-state and HCT-STATE proof issuer wiring",
+    "concrete local compare-exchange writer",
+    "host loaded-behavior probe",
+    "legacy init retrofit and fit retirement",
+    "repository-fit claim acceptance",
+    "readiness release or goal completion"
+  ],
+  "no_claim_statement": "This corrected internal kernel candidate does not claim repository-fit acceptance, readiness, release, or goal completion."
+}

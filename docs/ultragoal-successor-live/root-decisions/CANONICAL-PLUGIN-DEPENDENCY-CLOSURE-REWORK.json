@@ -1,0 +1,55 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "CANONICAL-PLUGIN-DEPENDENCY-CLOSURE-REWORK",
+  "workstream": "canonical plugin product",
+  "root_decision": "REWORK",
+  "reviewed_candidate": {
+    "candidate_id": "sha256:dc175f51deb82aded394d72d1a63773360e191624fc274ef655ae2cac20ad55b",
+    "artifact_count": 23,
+    "artifact_bytes": 81057,
+    "artifact_lines": 1899,
+    "worker_subset_id": "sha256:a57da99f35c540cc7658bb8c61eae32ebeca6d13550477d4f910b72284076472",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-DESCRIPTOR-BINDING-CORRECTION-017.json",
+    "worker_result_sha256": "c14492869349d604eaa8b5359c96bcae4af18eb9285b304b01271b41f49548ba"
+  },
+  "independent_review": {
+    "reviewer": "/root/canonical_plugin_product_acceptance_reviewer",
+    "verdict": "REWORK",
+    "row_reconciliation": "23 of 23 rows, totals, and both aggregates matched live bytes",
+    "focused_tests": "13 passed, but their result is not candidate-bound"
+  },
+  "decisive_findings": [
+    {
+      "severity": "material",
+      "class": "unbound_semantic_test_dependency",
+      "path": "validator/src/cli/successor/catalog.rs",
+      "sha256": "ae5958c7260ea274eb53aaeede6c9856ab0ec61ac84fd322d054885addec82b3",
+      "detail": "validator/tests/plugin_product_contract/source_contract.rs reads this file, but the 23-file candidate and root-wiring request bind neither its bytes nor its invalidation. The candidate can remain byte-identical while the reported semantic test result changes."
+    },
+    {
+      "severity": "material",
+      "class": "worker_envelope_not_reproducible",
+      "detail": "No persisted LeaseSpec or WorkPackage exists for correction 017, so typed validate_for cannot be independently reproduced without inventing authority."
+    },
+    {
+      "severity": "material",
+      "class": "zero_write_assertion_is_prose_only",
+      "detail": "The focused source test checks documentation tokens rather than executing recursive before/after operation probes."
+    }
+  ],
+  "root_wiring": {
+    "disposition": "WITHHOLD_DO_NOT_APPLY",
+    "plugin_manifest_postimage_sha256": "9a8beb3bea1e104eb82e31b591d546075402e460334b04da5b67c6976d86f067",
+    "package_manifest_postimage_sha256": "2f3a38df105f14f01285bc5f35fbe41143148adfd36d0f452f56295b667f7cca",
+    "marketplace_postimage_sha256": "fda926319866f7bc020af59f0d4a0021111953ceab5a2a2e5bb51fb2f2823734",
+    "note": "The exact requested postimages remain non-authoritative until a dependency-closed source candidate is accepted."
+  },
+  "required_correction": [
+    "bind every semantic test input, including the complete typed successor catalog source dependency, into candidate and invalidation closure",
+    "persist the exact root-issued LeaseSpec and WorkPackage dependency set before implementation",
+    "replace prose-only zero-write assertions with recursive operation probes",
+    "rederive and independently rereview the corrected exact candidate before any root manifest, package, marketplace, install, or discovery wiring"
+  ],
+  "claim_ceiling": "Exact current observation of 23 source files and a non-authoritative postimage proposal only. Source acceptance, package, marketplace application, install, cache, app registry, Plugins UI, discovery, runtime, product behavior, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim plugin source acceptance, product behavior, readiness, release, node closure, or goal completion."
+}

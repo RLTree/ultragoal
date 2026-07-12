@@ -1,0 +1,23 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N04-NODE-004-REWORK",
+  "node_id": "N04-DISTRIBUTION",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-004.json",
+    "sha256": "725ae9bc19baa9a7bbb9d4b6d6a82692eddb2b0afb183691ed3ddc79911775b2",
+    "artifact_set_sha256": "79e15e948f17fd0031a2aa306499832994a7b356c1e512b1ec349f9cdf82b003",
+    "artifact_count": 26
+  },
+  "identity_reconciliation": "pass",
+  "decisive_finding": {
+    "severity": "high",
+    "class": "package_manifest_closure_false_pass",
+    "cause": "Package planning accepted an untyped plugin manifest after checking only name and version, so missing description, unsupported fields, missing or escaping component references, role mismatch, and unreferenced package content could pass."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N04-DISTRIBUTION-NODE-005",
+  "claim_ceiling": "Only previously reviewed context remains; no N04 package, install, discovery, runtime, product, readiness, release, or completion claim is accepted.",
+  "no_claim_statement": "This decision does not claim N04 completion, readiness, release, or goal completion."
+}

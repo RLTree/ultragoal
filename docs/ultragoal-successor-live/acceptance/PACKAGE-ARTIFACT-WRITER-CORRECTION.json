@@ -1,0 +1,62 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "PACKAGE-ARTIFACT-WRITER-CORRECTION",
+  "workstream": "distribution",
+  "decision": "ACCEPT",
+  "evidence_state": "accepted_exact_source_candidate",
+  "accepted_candidate": {
+    "artifact_set_sha256": "1c9912016f77a6a90bba51a050354fc1c1dbb7d6a7cb775a14e986994d310e82",
+    "artifact_count": 4,
+    "artifact_bytes": 21725,
+    "artifact_lines": 617,
+    "maximum_production_file_lines": 256,
+    "binding": "docs/ultragoal-successor-live/root-decisions/PACKAGE-ARTIFACT-WRITER-CORRECTION-BINDING.json",
+    "binding_sha256": "63bb6604d0dd7e070cb85e5724c90747cb9267491b6bdf8d0d46671151ba8d96",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/PACKAGE-ARTIFACT-WRITER-CORRECTION-002.json",
+    "worker_result_sha256": "bbe04cb526d57a3c1705e9e6b1a9f121ac4dde2e9bdba1fb03352ee3246bce2f",
+    "result_id": "sha256:ba0f9e9e9d7cec3926206a10c23efc7d15c58d133e219d5b5e108de7929f1421",
+    "root_reexport_sha256": "61d148dc4d8f4611d7ad616e53909ddb749dcca61eee4d47d64de1e7336d7429",
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "supersedes_rejected_candidate": {
+    "artifact_set_sha256": "3bf86feb2f8055204ca92e8904e6a7ee309be224c3d8e102fa9cdda220773de7",
+    "decision": "docs/ultragoal-successor-live/root-decisions/PACKAGE-ARTIFACT-FULL-IDENTITY-REWORK.json"
+  },
+  "independent_review": {
+    "reviewer": "/root/package_identity_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "acceptance_check_id": "AC-PACKAGE-ARTIFACT-WRITER-REVIEW-003",
+    "verdict": "PASS",
+    "record": "docs/ultragoal-successor-live/reviews/PACKAGE-ARTIFACT-WRITER-REVIEW-003.json",
+    "record_sha256": "f5f36218b2f98187211d171f244597124ae95fbe4ba985085715bf8be6a76e17"
+  },
+  "verification": {
+    "artifact_reconciliation": "4 of 4 current regular-file rows, totals, and set digest independently matched before and after review",
+    "worker_result_boundary": "WorkerResultV1 parse_json, least-privilege validate_for, ArtifactWorkspace verify, and result ID passed",
+    "focused_package_output": "6 passed; 0 failed",
+    "locked_distribution_suite": "106 passed; 0 failed",
+    "external_authority_witness": "rustdoc and explicit rustc witnesses rejected external issue with E0624",
+    "false_pass_control": "wrong catalog and accepted-inventory package reused another snapshot permit and failed with zero reads and zero transitions"
+  },
+  "accepted_scope": [
+    "complete nine-dimensional package-artifact binding",
+    "crate-private package publication permit",
+    "pre-effect identity rejection",
+    "exact two-file publication, reconciliation, rollback, and interrupted recovery"
+  ],
+  "parent_acceptance_state": "The broader 73-artifact distribution acceptance remains reopened until all current distribution source changes are re-frozen and reviewed together.",
+  "explicitly_withheld": [
+    "built package identity",
+    "plugin version adoption",
+    "installed-byte identity",
+    "marketplace, cache, app-registry, or Plugins UI reconciliation",
+    "host discovery",
+    "representative runtime behavior",
+    "distribution node closure",
+    "readiness, release, or goal completion"
+  ],
+  "invalidation_rule": "Any byte or membership change to the four-artifact set, root reexport, identity dimensions, construction authority, or publication effect ordering reopens this acceptance.",
+  "no_claim_statement": "This acceptance is source-level only and does not claim a built package, install, discovery, runtime, readiness, release, node closure, or goal completion."
+}

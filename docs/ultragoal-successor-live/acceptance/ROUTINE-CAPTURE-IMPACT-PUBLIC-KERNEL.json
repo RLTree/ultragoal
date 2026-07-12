@@ -1,0 +1,88 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "ROUTINE-CAPTURE-IMPACT-PUBLIC-KERNEL",
+  "workstream": "routine_work",
+  "decision": "ACCEPT",
+  "evidence_state": "reopened_by_authority_bearing_edit",
+  "reopened_by": "private fixture-scheduler integration and fixture-specific capture adapter changed the accepted public-wiring/capture source boundary",
+  "accepted_candidate": {
+    "routine_artifact_set_sha256": "cc4f3589b288f4717697996d7a8f6eb8d09b2488d2f414ae301edf58ba562add",
+    "routine_artifact_count": 46,
+    "routine_artifact_bytes": 194402,
+    "routine_artifact_lines": 6061,
+    "correction_worker_result": "docs/ultragoal-successor-live/worker-results/ROUTINE-PUBLIC-IMPORT-CORRECTION-003.json",
+    "correction_worker_result_sha256": "8d37470c26a0ede0bc5049c544f92c8f53b677ce52458c0c4983fc7d34565914",
+    "correction_result_id": "sha256:b7a2ad85c3e6070a1c5a9d3813b77db77bfdc14597542891d63ed9aa245f1d95",
+    "root_public_wiring_set_sha256": "7fef47630eb8b3a23128bcbbbc1b558191dfed20d18d8c4b1e1ddf3ea887142e",
+    "root_public_wiring_artifact_count": 3,
+    "root_public_wiring_bytes": 8535,
+    "root_public_wiring_lines": 245,
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "root_public_wiring": [
+    {
+      "path": "validator/src/api_witness.rs",
+      "sha256": "32eb5fedeb116ad99212cac0e60f0b75eb97b4098bb88a9921d050cd8ae61b49"
+    },
+    {
+      "path": "validator/src/lib.rs",
+      "sha256": "544e97fd6877ebdd7eff7dcb3d2fdef2be02a3ad740ee7bc0b92c25226dbf601"
+    },
+    {
+      "path": "validator/tests/public_api_witness.rs",
+      "sha256": "4f7f253b1fb17fd6c30ae548338aa9b2b78feea6f936660cb39351601a72262f"
+    }
+  ],
+  "supersedes_for_current_source_identity": [
+    "docs/ultragoal-successor-live/acceptance/ROUTINE-PROVENANCE-KERNEL.json"
+  ],
+  "independent_review": {
+    "reviewer": "/root/routine_public_import_falsifier",
+    "requested_route": "gpt-5.6-luna/high",
+    "effective_route": "unverified",
+    "acceptance_check_id": "AC-ROUTINE-PUBLIC-IMPORT-003",
+    "verdict": "PASS",
+    "record": "docs/ultragoal-successor-live/reviews/ROUTINE-PUBLIC-IMPORT-003.md",
+    "record_sha256": "c8bbcf2678b8877266ecefea65ff3cbdb49bf92a526f531a18bbe8af6820e600"
+  },
+  "root_verification": {
+    "public_and_routine_command": "CARGO_TARGET_DIR=/tmp/hul-root-routine-public-003 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo test --manifest-path validator/Cargo.toml --locked --offline -j16 --test public_api_witness --test routine_work_contract -- --test-threads=16",
+    "public_and_routine_result": "public witness 1 passed; routine contract 66 passed; 0 failed",
+    "capture_command": "CARGO_TARGET_DIR=/tmp/hul-root-capture-focused-003 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo test --manifest-path validator/Cargo.toml --locked --offline -j16 --lib cli::capture -- --test-threads=16",
+    "capture_result": "13 passed; 0 failed",
+    "inventory_checkpoint": "Expected nonzero while open findings remain; 4108 entries and 95 findings, including 23 missing required components; all eight HCT-CAPTURE/HCT-IMPACT APIs canonical and compiled-active",
+    "inventory_checkpoint_sha256": "51e806c4e104610d7ef3d7f730e3e6dc9881d7f48fc2f09b72d4e1a0ae45494b",
+    "inventory_catalog_id": "sha256:e5b27e4182f94fc0469eaecf89a54c311e6b82634b85e25de672299e526fedfc",
+    "inventory_context_id": "sha256:edbfbfc514631703d1a7d10b376549a393fea6f8643926c40d2e08cafbd72f19",
+    "inventory_checkpoint_limit": "Rolling checkpoint only; later evidence and concurrent worker writes invalidate it as final same-session proof."
+  },
+  "active_public_apis": [
+    "CommandSpec",
+    "CapturedRun",
+    "ArtifactRef",
+    "ArtifactResolver",
+    "ImpactGraph",
+    "AffectedSet",
+    "ReuseDecision",
+    "CoverageDimensions"
+  ],
+  "accepted_scope": [
+    "public source-level HCT-CAPTURE and HCT-IMPACT library boundary",
+    "dirty-tree snapshot provenance and conservative impact planning kernel",
+    "candidate/context/source-bound executed-result and verified-reuse evidence",
+    "external consumers can inspect but cannot construct, deserialize, subset, or reconstruct opaque provenance",
+    "correct same-crate public import behavior"
+  ],
+  "explicitly_withheld": [
+    "HCT-FIXTURES implementation and public integration",
+    "broad CLI check route",
+    "live dirty-tree and repeat-use product journeys",
+    "routine node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any byte change to the 46 routine artifacts or three public-wiring artifacts reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim HCT-FIXTURES, product journeys, readiness, release, node closure, or goal completion."
+}

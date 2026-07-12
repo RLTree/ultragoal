@@ -1,0 +1,23 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N10-NODE-004-REWORK",
+  "node_id": "N10-ORCHESTRATION",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-004.json",
+    "sha256": "84b082bdd47b44fbec3db8ce49df1293168748d889989654ef6ef5ca80367ac7",
+    "artifact_set_sha256": "fa7c951083cd0982cdce9c07a8fe8dc737c7e12fa92dee3cd0a201bc7df3d4e4",
+    "artifact_count": 28
+  },
+  "identity_reconciliation": "pass",
+  "decisive_finding": {
+    "severity": "high",
+    "class": "root_change_reconciliation_substitution",
+    "cause": "CandidateRebound validated the accepted request digest and count but required only a non-empty applied_changes map, allowing unrelated content, omitted requests, or wrong cardinality to complete and rebind the lease."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N10-ORCHESTRATION-NODE-005",
+  "claim_ceiling": "N10 root integration remains unaccepted; orchestration verification, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N10 completion, readiness, release, or goal completion."
+}

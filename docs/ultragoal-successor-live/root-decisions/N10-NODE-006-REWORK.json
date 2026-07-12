@@ -1,0 +1,54 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N10-NODE-006-REWORK",
+  "node_id": "N10-ORCHESTRATION",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-006.json",
+    "sha256": "f59bb87bea10d15133cf3b34a47aab606b3e144dbb5ce048ce85efeb60df5469",
+    "artifact_set_sha256": "de8c5d6b300be0d5aa0698eda1aa3551b58d2aa1befaf99e632f737c794a1fb5",
+    "artifact_count": 29,
+    "total_bytes": 210427,
+    "total_lines": 6181,
+    "maximum_rust_file_lines": 300
+  },
+  "identity_reconciliation": "pass",
+  "decisive_findings": [
+    {
+      "severity": "critical",
+      "class": "changed_artifact_reclassified_as_read_only",
+      "cause": "WorkerResultV1 trusts touched_paths as the complete write declaration. An owned source artifact can be removed from touched_paths and still validate when an overlapping read_path covers it, so a changed owned artifact can be relabeled as read-only evidence.",
+      "typed_boundary": "validator/src/orchestration/worker.rs:95"
+    },
+    {
+      "severity": "critical",
+      "class": "case_alias_duplicate_artifact",
+      "cause": "Path authorization accepts exact-case strings separately while duplicate detection compares raw path strings. On the current case-insensitive host, validator/src/orchestration/worker.rs and validator/src/orchestration/WORKER.rs resolve to the same inode and can both enter one result.",
+      "typed_boundary": "validator/src/orchestration/worker.rs:153"
+    },
+    {
+      "severity": "material",
+      "class": "stale_positive_frozen_fixture",
+      "cause": "The positive broad-frozen test still parses NODE-005 and asserts 28 artifacts, so it does not prove the exact NODE-006 29-artifact submission it claims to freeze.",
+      "typed_boundary": "validator/tests/orchestration_contract/artifact_evidence.rs:172"
+    }
+  ],
+  "accepted_artifact_sets": [],
+  "rejected_root_changes": [
+    {
+      "path": "validator/src/lib.rs",
+      "reason": "The request is stale and NODE-006 is not independently accepted. Root wiring remains unapplied."
+    }
+  ],
+  "corrective_lease": "LEASE-N10-ORCHESTRATION-NODE-007",
+  "corrective_scope": [
+    "Add explicit typed provenance that distinguishes changed/write artifacts from frozen read-only evidence; do not infer writes solely from worker prose. Every changed artifact must remain touched and owned, while read-only evidence must be exact-current and covered by the current lease read set.",
+    "Reject case-fold, Unicode-normalization, hardlink, symlink, and filesystem-identity aliases before result commitment. Duplicate detection must use a stable canonical identity appropriate to the validated host boundary, not only raw strings.",
+    "Preserve host-protected denial, traversal and ancestor rejection, generated-output and fixture touched requirements, exact digest commitments, requested-root-change binding, replay identity, and no-event-on-rejection behavior.",
+    "Replace the stale NODE-005 positive fixture with the exact NODE-006 parent result and assert 29 artifacts, while retaining a separate historical NODE-005 regression only if it has a distinct honest name.",
+    "Run focused and full N10 tests with cargo-nextest at 16 jobs in an isolated target directory, then return a new exact WorkerResult-v1. Request but never apply root-owned module wiring."
+  ],
+  "claim_ceiling": "N10 remains an unaccepted internal orchestration candidate. Root module wiring, production execution adapter, persisted recovery journey, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N10 completion, readiness, release, or goal completion."
+}

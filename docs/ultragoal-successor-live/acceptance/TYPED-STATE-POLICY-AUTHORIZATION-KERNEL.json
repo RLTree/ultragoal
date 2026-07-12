@@ -1,0 +1,66 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "workstream": "typed_product_state_root_policy_authority",
+  "root_decision": "accepted_corrected_internal_policy_authorization_boundary",
+  "accepted_candidate": {
+    "path": "docs/ultragoal-successor-live/root-decisions/TYPED-STATE-POLICY-AUTHORITY-CANDIDATE.json",
+    "sha256": "a8edcbe67efb53789bbaef6c0c96995da33bfe0ccf939552fdb230a80aee368e",
+    "artifact_set_sha256": "9f149356d7a726916bf4ca0c6b7ccc939b8a03f8766763ee2b1fdf6bedf97c40",
+    "artifact_count": 35,
+    "bytes": 169938,
+    "lines": 5123,
+    "maximum_file_lines": 299,
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "independent_review": {
+    "reviewer": "/root/typed_state_claim_ceiling_falsifier",
+    "route": "gpt-5.6-sol/max",
+    "verdict": "PASS",
+    "artifact_identity_revalidated_before_and_after": true,
+    "blocking_findings": 0,
+    "external_exploit_result": "a self-digested caller policy that shunts 114 current inventory findings to a decoy cannot obtain a permit and is rejected with policy-authority-missing"
+  },
+  "independent_execution": [
+    {"surface":"state-filtered library tests","result":"45 passed; 0 failed; 34 exact state and 11 incidental current_state"},
+    {"surface":"policy-authority cases","result":"6 passed; 0 failed"},
+    {"surface":"external CLI state contract","result":"3 passed; 0 failed"},
+    {"surface":"exact external forgery exploit","result":"1 passed; 0 failed"},
+    {"surface":"focused rustfmt","result":"passed"},
+    {"surface":"candidate state clippy spans","result":"zero warnings; no repository-wide green claim"}
+  ],
+  "accepted_behavior": [
+    "public caller-authored dependency/action catalogs remain untrusted and cannot initialize any claim ceiling",
+    "an opaque non-deserializable permit binds accepted policy to claim-registry context authority-catalog candidate and spec identities",
+    "unknown missing extra duplicate conflicting or decoy-shunted claims dimensions and inventory impacts fail closed",
+    "permit spec catalog context candidate and same-session substitutions are rejected before ceiling initialization",
+    "StateEngine revalidates live context and policy authority before and after derivation",
+    "no active production caller or issuer bypasses the gate"
+  ],
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-STATE-001",
+      "state": "corrected internal typed state policy authorization kernel",
+      "blocker": "actual adopted claim-registry byte loader canonical production issuer public command route and representative product proof remain absent"
+    }
+  ],
+  "root_acceptance_limit": "Exact corrected internal typed-state authorization boundary only. It proves external self-authored policy cannot initialize ceilings; it does not establish an authorized production state route or any claim ceiling.",
+  "root_integration_required": [
+    "verify the actual adopted CLAIM_REGISTRY.json bytes against the adopted contract manifest and derive the exact 14 claim and allowed-ceiling pairs",
+    "build one current-context policy with exact current AuthorityCatalog finding-code coverage",
+    "issue the catalog through the crate-private root authority and route all live state consumers through it",
+    "compile-witness exactly Finding Repair ProductState NextAction and ClaimCeiling and rerun current inventory",
+    "execute representative zero-write inspect findings claims diagnose repair and next journeys"
+  ],
+  "explicitly_withheld": [
+    "actual claim-ceiling authority",
+    "authorized production ProductState construction",
+    "public CLI state repair and next behavior",
+    "compiled exact-five HCT-STATE inventory-active proof",
+    "representative live product journeys",
+    "readiness release node closure or goal completion"
+  ],
+  "invalidation_rule": "Any byte change to the accepted candidate manifest or its 35 listed artifacts reopens this internal acceptance until a superseding integrated candidate is independently reviewed.",
+  "no_claim_statement": "This acceptance does not claim public product state authority, readiness, release, node closure, or goal completion."
+}

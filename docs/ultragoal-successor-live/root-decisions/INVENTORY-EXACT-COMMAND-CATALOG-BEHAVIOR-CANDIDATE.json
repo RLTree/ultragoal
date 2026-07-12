@@ -1,0 +1,36 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "inventory_exact_legacy_command_catalog_behavior",
+  "candidate_state": "frozen_for_independent_rereview",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "corrects_manifest": "docs/ultragoal-successor-live/root-decisions/INVENTORY-EXACT-COMMAND-CATALOG-DISCOVERY-CANDIDATE.json",
+  "corrects_finding": "repository-local HCT catalog and context IDs are self-invalidating when embedded in a root-decision file that participates in dirty candidate identity",
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "320d80c75e3299b2c0bcb256de1ddb6dac974ea9067a4f9af56d3d89fad784f8",
+  "artifact_count": 2,
+  "artifacts": [
+    {"path":"validator/src/inventory/legacy/matchers.rs","sha256":"sha256:f76f67e15fbdf1805ed42b4ec685b576a99f2efaf22c146b66285cabc0facc05","byte_length":3274,"line_count":95},
+    {"path":"validator/tests/inventory_contract_cases/routing_transitions.rs","sha256":"sha256:a20d859b22c0d6267851e32451296b0e3ce443ff279b8d916d139846fa904ba9","byte_length":7742,"line_count":192}
+  ],
+  "behavior_contract": [
+    "only the exact command-catalog.json leaf spelling enters the new discovery route",
+    "root decisions documentation and arbitrary names containing command-catalog do not self-classify",
+    "the isolated unknown command-catalog fixture fails pending-authority verification closed and remains active parallel authority",
+    "command-inventory and command_catalog discovery remain unchanged",
+    "no retirement compatibility migration or full-inventory claim is inferred"
+  ],
+  "focused_verification": {
+    "command": "CARGO_TARGET_DIR=/tmp/hul-live-inventory-root cargo test --manifest-path validator/Cargo.toml --test inventory_contract routing_transitions::declared_routes_do_not_suppress_live_legacy_authority --locked --offline -j 16 -- --test-threads=16",
+    "result": "1 passed; 0 failed"
+  },
+  "rolling_inventory_proof_rule": "Current full-catalog IDs, context IDs, status digests, and summary digests must be recorded outside this candidate after its bytes freeze. They are not embedded here because doing so would change the dirty candidate they identify. Counts and finding classes are revalidated in the same external review session and again by root after integration.",
+  "explicitly_withheld": [
+    "acceptance of this exact behavior correction",
+    "current full-catalog identity until external same-session review",
+    "closure of remaining live inventory findings",
+    "migration or retirement of any discovered authority",
+    "readiness release or goal completion"
+  ],
+  "no_claim_statement": "This candidate binds only the exact two-file discovery behavior set; it does not claim current full-inventory identity, inventory closure, readiness, release, or completion."
+}

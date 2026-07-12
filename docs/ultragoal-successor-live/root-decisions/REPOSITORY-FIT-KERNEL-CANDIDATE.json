@@ -1,0 +1,62 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "repository_fit",
+  "candidate_state": "frozen_for_independent_review",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "artifact_set_sha256": "85c18077b62278720cc07a616cc70fd06e98233df85c6390521ab8a4fbd461c6",
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without a prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_count": 15,
+  "total_bytes": 64799,
+  "total_lines": 2080,
+  "maximum_file_lines": 258,
+  "artifacts": [
+    {"path":"validator/src/repository_fit/apply.rs","sha256":"sha256:6a22343d1a5c732bcfeb0056669abc6318b7505ae23f2266262c056403243f78","byte_length":6391},
+    {"path":"validator/src/repository_fit/error.rs","sha256":"sha256:ca4c06db9ce2d203612fa183f5467510c2f714957c4deb56b4f018967b2a0fe1","byte_length":1524},
+    {"path":"validator/src/repository_fit/inspect.rs","sha256":"sha256:dd1707e37aa0a17560b37f1b28fd7d839f148ecc3ae3e26602de2b7e9e994877","byte_length":7554},
+    {"path":"validator/src/repository_fit/local/mod.rs","sha256":"sha256:f1d49253bebc8a031f04581732bf7dd7e17cbc4a7304aefb61cbc87b12498f6b","byte_length":1402},
+    {"path":"validator/src/repository_fit/local/sys.rs","sha256":"sha256:b357e6b7d87cde44a04cb94ad07e82df4d8991558e13bdb414c366c6bcab9ba5","byte_length":3556},
+    {"path":"validator/src/repository_fit/local/unix.rs","sha256":"sha256:c25411c8524035bf95618a719acd3dd8153c28d42e9e4e45f66dacd5dd3d2cf2","byte_length":8077},
+    {"path":"validator/src/repository_fit/mod.rs","sha256":"sha256:54bed0b3da25266e4b67848afc933f95d23c95ebbabea308ad66bd9d78e21060","byte_length":946},
+    {"path":"validator/src/repository_fit/model.rs","sha256":"sha256:1f19acf2f8207f7b5acd3ce46cdfe83e940daf28457a1e55b0524a3dd43fc8cb","byte_length":4906},
+    {"path":"validator/src/repository_fit/path.rs","sha256":"sha256:dda9b100450082345d7f1bd9bc08dd90fab995471a162d1a74ffb4b21560c2b7","byte_length":1720},
+    {"path":"validator/src/repository_fit/state.rs","sha256":"sha256:29e0f8623a1c3e9ba219ced80f8218b01cb1e73eccb5319ed0ac21dc87dc5926","byte_length":6392},
+    {"path":"validator/tests/repository_fit_contract.rs","sha256":"sha256:84e0a1ac236beabf9d4ded8e2f442cf9937af3be52bf94645ca69a8a91fd4814","byte_length":338},
+    {"path":"validator/tests/repository_fit_contract/engine.rs","sha256":"sha256:1b208d30ef98b625e34ef70b2aa5691a02f7ca151f26c04309f2158896f40612","byte_length":7889},
+    {"path":"validator/tests/repository_fit_contract/local_read.rs","sha256":"sha256:ddbeab4a7195f88523d3c64b1ce3fbbc98ece4836527bc8fffc62916f468d467","byte_length":6946},
+    {"path":"validator/tests/repository_fit_contract/spec.rs","sha256":"sha256:e38abfc2bc419b755bbfecee683521df61ab3a5813ea4501aec0e087c3e60515","byte_length":3509},
+    {"path":"validator/tests/repository_fit_contract/support.rs","sha256":"sha256:1d9f277bd2da881b0aae604d6a9f7d34016954433ac4de8f539ba752b28853b5","byte_length":3649}
+  ],
+  "verification": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-repository-fit-root cargo test --manifest-path validator/Cargo.toml --test repository_fit_contract --locked --offline -j 16 -- --test-threads=16",
+      "result": "20 passed; 0 failed"
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/repository_fit/*.rs validator/src/repository_fit/local/*.rs validator/tests/repository_fit_contract.rs validator/tests/repository_fit_contract/*.rs",
+      "result": "pass"
+    }
+  ],
+  "implemented_scope": [
+    "typed fresh and retrofit inspection classifications",
+    "candidate context root inspection and plan binding",
+    "explicit ownership and known-generated-prior semantics",
+    "bounded deterministic mutations conflicts rollback and verification",
+    "injected atomic compare-exchange effect contract",
+    "precondition and postcondition revalidation",
+    "anchored exact-name read-only local repository observer",
+    "user-change preservation idempotency race failure and rollback controls",
+    "case-alias traversal symlink hardlink FIFO socket root-swap and resource-limit rejection",
+    "recursive-tree zero-write inspect plan and verify proof"
+  ],
+  "explicitly_withheld": [
+    "public library and command-catalog integration",
+    "concrete local compare-exchange writer",
+    "template and desired-state authority adoption",
+    "host loaded-behavior probe",
+    "retirement of legacy init retrofit and fit authorities",
+    "representative product journey acceptance",
+    "repository-fit claim acceptance",
+    "readiness release or goal completion"
+  ],
+  "no_claim_statement": "This frozen internal kernel candidate does not claim repository-fit acceptance, readiness, release, or goal completion."
+}

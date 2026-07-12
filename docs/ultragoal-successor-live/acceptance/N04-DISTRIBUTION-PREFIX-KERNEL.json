@@ -1,0 +1,68 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N04-DISTRIBUTION",
+  "root_decision": "accepted_internal_kernel",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-006.json",
+    "sha256": "9b18ff09979462fa6e3ba8d77f50f1464ec48151ce793ca2176c03daa2b285af",
+    "artifact_set_sha256": "b0bfe557b4a16bbff2b8cd54154c55c082b97bba83a2f0740689e9e3cb619409",
+    "artifact_count": 29,
+    "bytes": 155487,
+    "lines": 4696,
+    "maximum_file_lines": 299
+  },
+  "independent_source_review": {
+    "reviewer": "/root/n04_node006_reviewer",
+    "verdict": "pass",
+    "scope": "Exact-set integrity, segment-boundary prefix safety, both insertion orders, ASCII-case aliases, multi-segment ancestry, equal aliases, safe siblings, and zero-write planning rejection.",
+    "result_identity_revalidated": true
+  },
+  "independent_execution": {
+    "executor_session": "019f4fee-41c5-7201-9f9a-c2967652655d",
+    "runtime_exposed": {
+      "model": "gpt-5.6-sol",
+      "provider": "openai",
+      "reasoning_effort": "ultra",
+      "sandbox": "workspace-write [workdir, /tmp, $TMPDIR]"
+    },
+    "target_dir": "/private/tmp/hug-n04-node006-independentverify-v1",
+    "target_absent_before_first_run": true,
+    "command": "CARGO_TARGET_DIR=/private/tmp/hug-n04-node006-independentverify-v1 cargo nextest run --offline --locked --manifest-path validator/Cargo.toml --jobs 16 --test distribution_contract",
+    "result": "34 passed; 0 failed; 0 skipped; 0.327 seconds after incremental rerun",
+    "worker_result_unchanged": true,
+    "artifact_set_unchanged": true,
+    "branch_head_tree_unchanged": true,
+    "global_status_observation": "The repository-wide untracked status digest changed during concurrent disjoint root/N03/N10 work. The tracked worktree diff, staged diff, branch, HEAD, tree, WorkerResult, and every N04 candidate artifact remained unchanged. Root therefore binds this rolling acceptance only to the exact path-bound N04 candidate, not to the broader moving dirty tree."
+  },
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-SUPPLY-001",
+      "state": "internal_package_planning_kernel_only",
+      "blocker": "No shared canonical manifest authority, production filesystem effect adapter, supported-host package, install, discovery, or runtime identity ladder is accepted."
+    },
+    {
+      "requirement_id": "REQ-SECURITY-001",
+      "state": "prefix_collision_and_zero_write_rejection_only",
+      "blocker": "Supported-host adversarial materialization and complete product trust-boundary proof remain open."
+    }
+  ],
+  "root_acceptance_limit": "Exact prefix-safe typed package and injected distribution-effect kernel only. This does not export public authority or close N04.",
+  "explicitly_withheld": [
+    "shared N02/N04 plugin-manifest schema authority",
+    "public distribution module and dispatcher wiring",
+    "production package and filesystem effect adapter",
+    "source package identity",
+    "installed bytes",
+    "marketplace and cache identity",
+    "app registry and Plugins UI identity",
+    "host discovery",
+    "runtime identity",
+    "N04 completion",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any byte change to the accepted WorkerResult or its 29-artifact set immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim N04 completion, readiness, release, or goal completion."
+}

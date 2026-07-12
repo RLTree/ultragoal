@@ -1,0 +1,60 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "CANONICAL-PLUGIN-TRANSITIVE-PRODUCT-FITNESS-REWORK-020",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only_product_and_dependency_falsification",
+  "reviewer": "/root/canonical_plugin_product_dependency_reviewer",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-DEPENDENCY-CLOSURE-018.json",
+    "sha256": "9d72810e66e14784ea485cfb1f2cc6969d8252180b95d4685373dca8ab02ef61",
+    "worker_artifact_set_sha256": "sha256:3f540fa8ce0d0efdbec03b53d5ae606b1fcdaf917aa04d75031225b45bcf3393",
+    "root_extension_set_sha256": "sha256:29d72c82291fffa1223894169703488b1d9ebbb6fa5010a5e01d4934c5eb5bc5"
+  },
+  "independent_verification": {
+    "declared_rows_exact": "29 of 29",
+    "protected_descriptor_rows_exact": "6 of 6",
+    "marketplace_precondition": "path absent",
+    "plugin_product_contract": "21 passed; 0 failed",
+    "nextest_run_id": "57ab9205-ef7f-40c8-a61a-a4f4c2500dea"
+  },
+  "material_findings": [
+    {
+      "severity": "material",
+      "class": "transitive_behavior_inputs_excluded",
+      "cause": "The declared aggregate binds the plugin tests and successor catalog but excludes implementation and build inputs executed by those tests. The recursive operation probe launches the compiled ultragoal binary, and typed WorkerResult verification executes orchestration code. Changes to Cargo metadata, the library/public dispatcher, successor runtime, or artifact verifier can change the claimed behavior without changing the declared root-extension identity.",
+      "minimum_named_inputs": [
+        "Cargo.lock",
+        "validator/Cargo.toml",
+        "validator/src/lib.rs",
+        "validator/src/command_run.rs",
+        "validator/src/cli/successor_public/mod.rs",
+        "validator/src/orchestration/artifact.rs",
+        "validator/src/orchestration/worker.rs"
+      ]
+    },
+    {
+      "severity": "material",
+      "class": "product_fitness_and_lifecycle_incomplete",
+      "cause": "The review skill can return generic journey prose without one typed Product Fitness disposition covering accessibility, cognitive load, recovery burden, continuance, and real-use evidence. Lifecycle fixtures omit update, downgrade or rollback, reinstall, uninstall or teardown, stale-cache, and failed-update behavior. Passing source tests therefore cannot support Product Fitness or lifecycle acceptance."
+    }
+  ],
+  "product_fitness_disposition": {
+    "claim_id": "PF-CANONICAL-PLUGIN-SOURCE-018",
+    "disposition": "REVISE_BEFORE_NEXT_PHASE",
+    "supported_scope": "current source-tree snapshot with passing static and CLI contract checks",
+    "accessibility": "withheld",
+    "cognitive_load": "partially addressed by one front door",
+    "recovery_burden": "not closed for install, update, or teardown",
+    "continuance": "withheld",
+    "real_use_evidence": "none"
+  },
+  "root_disposition": {
+    "accepted_artifact_sets": [],
+    "plugin_descriptor_postimage": "withheld",
+    "package_manifest_postimage": "withheld",
+    "marketplace_postimage": "withheld",
+    "highest_honest_ceiling": "Current source-tree snapshot only; no dependency-closed source acceptance and no package, install, discovery, runtime, journey, Product Fitness, readiness, release, or completion claim."
+  },
+  "corrective_action": "Bind a reproducible validator/binary identity plus every transitive build, source, runtime-authority, and verifier input; prove representative mutations change the candidate anchor; require one typed Product Fitness disposition; and add bounded update, rollback, reinstall, uninstall, stale-cache, and failed-update journeys before exact re-review.",
+  "no_claim_statement": "This decision does not claim source acceptance, package materialization, marketplace visibility, installation, cache or app-registry state, Plugins UI visibility, discovery, runtime behavior, Product Fitness, journey acceptance, readiness, release, or goal completion."
+}

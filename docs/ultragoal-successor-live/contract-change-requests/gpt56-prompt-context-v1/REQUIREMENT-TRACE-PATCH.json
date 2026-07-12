@@ -1,0 +1,195 @@
+{
+  "schema_version": "ContractRequirementPatch-v1",
+  "status": "proposed_root_adoption_required",
+  "base_contract_id": "harness-ultragoal-successor-contract-v2",
+  "base_requirement_count": 105,
+  "operations": [
+    {
+      "operation": "replace_fields",
+      "requirement_id": "REQ-GOAL-001",
+      "fields": {
+        "statement": "The implementation handoff begins with one lean outcome-first `/goal` that references adopted local authority and uses deterministic progressive disclosure instead of requiring all registries in startup context.",
+        "validator": "Goal length, required-section, authority-reference, context-router, duplicate-rule, and wholesale-registry-load checks.",
+        "independent_proof": "A fresh root reconstructs the active-node authority set and begins correct work without hidden chat or loading unrelated registries.",
+        "completion_blockers": [
+          "goal copies granular registries or repeated laws",
+          "startup requires full requirement, surface, tool, or claim registries without a global-boundary reason",
+          "fresh root misses required authority because routing is incomplete"
+        ]
+      }
+    },
+    {
+      "operation": "add",
+      "requirement": {
+        "requirement_id": "REQ-GOAL-005",
+        "law_id": "HUL-GOAL-001",
+        "statement": "A versioned context-routing map selects exact node, requirement, surface, tool, claim, migration, research, decision, and evidence rows by stable ID while unloaded adopted rows remain authoritative.",
+        "normative_status": "proposed_amendment_not_adopted",
+        "live_adoption_status": "not_adopted",
+        "snapshot_implementation_status": "not_verified",
+        "source_ids": ["SRC-OAI-MODEL-GUIDANCE", "SRC-OAI-PROMPT-CACHE", "SRC-USER-MISSION"],
+        "owner": "OWN-GOAL-INTEGRATION",
+        "product_surfaces": ["PS-SOURCE", "PS-GOAL", "PS-ORCHESTRATION"],
+        "custom_tools": ["HCT-CONTEXT", "HCT-INVENTORY", "HCT-STATE"],
+        "claim_ids": ["CL-SOURCE", "CL-ORCHESTRATION"],
+        "implementation_scope": "goal bootstrap, context routing, and stable-ID selection",
+        "validator": "Routing-map schema, graph-closure, stable-ID resolution, deterministic ordering, unknown-row, duplicate-row, conflict, and same-session revalidation checks.",
+        "independent_proof": "For representative active-node sets, selected rows equal the dependency-closed oracle and unrelated registries are not loaded.",
+        "completion_blockers": ["missing selected authority", "unknown or duplicate stable ID accepted", "unloaded row treated as non-authoritative", "selection not rebound before claim use"]
+      }
+    },
+    {
+      "operation": "add",
+      "requirement": {
+        "requirement_id": "REQ-ORCH-009",
+        "law_id": "HUL-ORCHESTRATION-001",
+        "statement": "The root allocates substantial dependency-closed work packages, permits at most one implementation lane per node, and uses small slices only for dangerous boundaries, shared typed interfaces, multi-node unblockers, or falsified assumptions.",
+        "normative_status": "proposed_amendment_not_adopted",
+        "live_adoption_status": "not_adopted",
+        "snapshot_implementation_status": "not_verified",
+        "source_ids": ["SRC-OAI-SUBAGENTS", "SRC-OAI-HARNESS", "SRC-USER-MISSION"],
+        "owner": "OWN-ULTRA-ROOT",
+        "product_surfaces": ["PS-ORCHESTRATION", "PS-GOAL"],
+        "custom_tools": ["HCT-STATE", "HCT-CLAIMS"],
+        "claim_ids": ["CL-ORCHESTRATION"],
+        "implementation_scope": "root planning, lease allocation, lane ownership, and integration cadence",
+        "validator": "Active-lease node ownership, overlap, dependency-closure, package-size rationale, and root-integration-latency checks.",
+        "independent_proof": "Interrupted, blocked, and concurrent scenarios show one implementation owner per node, useful concurrency on independent nodes, and prompt root integration of accepted sets.",
+        "completion_blockers": ["two implementation lanes own one node", "micro-slicing has no allowed rationale", "accepted candidate waits behind administrative integration", "busywork created to simulate concurrency"]
+      }
+    },
+    {
+      "operation": "add",
+      "requirement": {
+        "requirement_id": "REQ-REVIEW-005",
+        "law_id": "HUL-REVIEW-001",
+        "statement": "Rolling review is frozen-artifact-set-specific and returns REWORK after the first decisive material defect; comprehensive multi-role full-scope review runs only at the exact integrated claim boundary that requires it.",
+        "normative_status": "proposed_amendment_not_adopted",
+        "live_adoption_status": "not_adopted",
+        "snapshot_implementation_status": "not_verified",
+        "source_ids": ["SRC-OAI-SUBAGENTS", "SRC-OAI-HARNESS", "SRC-USER-MISSION"],
+        "owner": "OWN-INDEPENDENT-REVIEW",
+        "product_surfaces": ["PS-PROOF", "PS-ORCHESTRATION"],
+        "custom_tools": ["HCT-CAPTURE", "HCT-CLAIMS"],
+        "claim_ids": ["CL-STRICT", "CL-ORCHESTRATION", "CL-COMPLETION"],
+        "implementation_scope": "review materiality, early termination, corrective review, and final integrated falsification",
+        "validator": "Review-stage, artifact-set, first-material-defect, reviewer-independence, corrected-set identity, and exact-boundary full-team checks.",
+        "independent_proof": "A seeded material defect stops redundant review, correction receives fresh exact-set review, and final integrated sign-off still invokes every contract-required role.",
+        "completion_blockers": ["review continues after decisive REWORK without a separate purpose", "corrected bytes reuse stale review", "final required role omitted", "routine patch forced through completion-wide review"]
+      }
+    },
+    {
+      "operation": "add",
+      "requirement": {
+        "requirement_id": "REQ-REVIEW-006",
+        "law_id": "HUL-REVIEW-001",
+        "statement": "Candidate-source review remains read-only; executable reproduction that needs writes uses a separate independent ephemeral scratch-only verification lease, and unavailable scratch execution is labeled supplied-only with a lower ceiling.",
+        "normative_status": "proposed_amendment_not_adopted",
+        "live_adoption_status": "not_adopted",
+        "snapshot_implementation_status": "not_verified",
+        "source_ids": ["SRC-OAI-SUBAGENTS", "SRC-OAI-SECURITY", "SRC-RUST-CARGO-TEST"],
+        "owner": "OWN-INDEPENDENT-REVIEW",
+        "product_surfaces": ["PS-AGENTS", "PS-PROOF", "PS-ORCHESTRATION"],
+        "custom_tools": ["HCT-CAPTURE", "HCT-CLAIMS"],
+        "claim_ids": ["CL-STRICT", "CL-ORCHESTRATION"],
+        "implementation_scope": "review sandbox, scratch target isolation, executable evidence, and supplied-only ceilings",
+        "validator": "Candidate-write denial, scratch allowlist, isolated CARGO_TARGET_DIR, candidate binding, cleanup, provenance, and supplied-only ceiling checks.",
+        "independent_proof": "A verifier reproduces focused tests without changing candidate bytes or Git state; denied scratch capability cannot be misreported as independently reproduced.",
+        "completion_blockers": ["reviewer writes candidate source", "scratch output escapes lease", "supplied test output called independent reproduction", "build evidence not bound to frozen candidate"]
+      }
+    },
+    {
+      "operation": "add",
+      "requirement": {
+        "requirement_id": "REQ-PLUGIN-008",
+        "law_id": "HUL-PLUGIN-001",
+        "statement": "Static project-agent prompts contain only stable role and least-privilege invariants; every invocation binds an exact AgentTaskEnvelope-v1 rather than copying node, claim, or review authority into the role prompt.",
+        "normative_status": "proposed_amendment_not_adopted",
+        "live_adoption_status": "not_adopted",
+        "snapshot_implementation_status": "not_verified",
+        "source_ids": ["SRC-OAI-SUBAGENTS", "SRC-OAI-AGENTS-MD", "SRC-OAI-BEST-PRACTICES"],
+        "owner": "OWN-PLUGIN-PRODUCT",
+        "product_surfaces": ["PS-AGENTS", "PS-ENTRY"],
+        "custom_tools": ["HCT-INVENTORY", "HCT-CAPTURE"],
+        "claim_ids": ["CL-SOURCE", "CL-ORCHESTRATION", "CL-REAL-JOURNEY"],
+        "implementation_scope": "agent manifests, task envelopes, review packets, and discovery",
+        "validator": "AgentTaskEnvelope-v1 schema, exact-scope expansion, role identity, forbidden duplicate authority, private-data leakage, and opaque-scope rejection checks.",
+        "independent_proof": "Each canonical agent receives two different exact tasks without changing its static role prompt and rejects missing, stale, ambiguous, or over-authorized envelopes.",
+        "completion_blockers": ["static prompt duplicates registry law", "full_current_scope has no exact expansion", "task envelope omits effects or false-pass controls", "agent conclusion treated as claim authority"]
+      }
+    },
+    {
+      "operation": "add",
+      "requirement": {
+        "requirement_id": "REQ-MAINT-007",
+        "law_id": "HUL-MAINTENANCE-001",
+        "statement": "Compatibility skill and agent prompts are generated from one minimal non-authoritative route template, excluded from canonical workflow counts, and retired under measured migration proof.",
+        "normative_status": "proposed_amendment_not_adopted",
+        "live_adoption_status": "not_adopted",
+        "snapshot_implementation_status": "not_verified",
+        "source_ids": ["SRC-OAI-SKILLS", "SRC-OAI-PLUGINS", "SRC-USER-MISSION"],
+        "owner": "OWN-MAINTENANCE",
+        "product_surfaces": ["PS-SKILLS", "PS-AGENTS", "PS-UPGRADE"],
+        "custom_tools": ["HCT-INVENTORY", "HCT-MIGRATE"],
+        "claim_ids": ["CL-SOURCE", "CL-REAL-JOURNEY"],
+        "implementation_scope": "compatibility prompt generation, routing, discovery classification, measurement, and retirement",
+        "validator": "Single-template generation, canonical-count exclusion, target availability, ambiguity rejection, no-hidden-effect, active-reference, compatibility-window, and retirement checks.",
+        "independent_proof": "Legacy invocations preserve input and reach one canonical route during the adopted window; ordinary discovery selects canonical skills; retired aliases have no active reader or writer.",
+        "completion_blockers": ["wrapper defines independent workflow authority", "wrapper prose drifts from generator", "legacy route wins canonical selection", "alias removed before adopted retirement proof"]
+      }
+    },
+    {
+      "operation": "add",
+      "requirement": {
+        "requirement_id": "REQ-EVAL-007",
+        "law_id": "HUL-EVAL-001",
+        "statement": "Prompt and context changes are promoted only after representative evaluations compare the same outcome contract across supported task-shape configurations and measure behavior, false passes, cost, and context load.",
+        "normative_status": "proposed_amendment_not_adopted",
+        "live_adoption_status": "not_adopted",
+        "snapshot_implementation_status": "not_verified",
+        "source_ids": ["SRC-OAI-MODEL-GUIDANCE", "SRC-OAI-AGENT-EVALS", "SRC-OAI-REWARD-HACKING"],
+        "owner": "OWN-AGENT-QUALITY",
+        "product_surfaces": ["PS-EVAL", "PS-SKILLS", "PS-AGENTS", "PS-ORCHESTRATION"],
+        "custom_tools": ["HCT-EVAL", "HCT-CAPTURE"],
+        "claim_ids": ["CL-EVAL-IMPROVEMENT", "CL-REAL-JOURNEY"],
+        "implementation_scope": "prompt evaluation matrix, routing accuracy, behavior quality, cost, context load, and promotion",
+        "validator": "Prompt identity, runtime-metadata provenance, representative task coverage, paired comparison, negative-control, scorer-validity, cost, and guarded non-regression checks.",
+        "independent_proof": "Typed-transform, routine-engineering, deep-judgment, and parallel-orchestration tasks show supported behavior without model-name inference or prompt-specific scoring rewards.",
+        "completion_blockers": ["static prompt review substituted for behavior eval", "different prompts confound model comparison", "runtime label inferred", "score improves while representative behavior regresses"]
+      }
+    },
+    {
+      "operation": "add",
+      "requirement": {
+        "requirement_id": "REQ-CLI-008",
+        "law_id": "HUL-CLI-001",
+        "statement": "The CLI validates prompt, skill, agent, task-envelope, context-route, and automation structure for exact ownership, resolved authority, least privilege, private-data safety, and false-pass controls rather than accepting non-empty prose alone.",
+        "normative_status": "proposed_amendment_not_adopted",
+        "live_adoption_status": "not_adopted",
+        "snapshot_implementation_status": "not_verified",
+        "source_ids": ["SRC-OAI-AGENTS-MD", "SRC-OAI-SKILLS", "SRC-OAI-SECURITY", "SRC-OAI-HARNESS"],
+        "owner": "OWN-CLI",
+        "product_surfaces": ["PS-CLI", "PS-SKILLS", "PS-AGENTS", "PS-ORCHESTRATION"],
+        "custom_tools": ["HCT-INVENTORY", "HCT-CAPTURE", "HCT-STATE"],
+        "claim_ids": ["CL-SOURCE", "CL-STRICT", "CL-ORCHESTRATION"],
+        "implementation_scope": "typed prompt and routing validation plus red fixtures",
+        "validator": "Schema, stable-ID, duplicate-law, opaque-scope, inferred-runtime, sandbox/effect, private-data, generated-template, stale-candidate, and false-pass checks.",
+        "independent_proof": "Malformed, vague, contradictory, over-authorized, leaking, stale, and prompt-inferred fixtures fail causally while exact lean envelopes pass without requiring verbose prose.",
+        "completion_blockers": ["non-empty prompt accepted despite missing task contract", "duplicate law owner accepted", "private prompt or sensitive path packaged", "prompt text used as runtime proof"]
+      }
+    }
+  ],
+  "adoption_effect": {
+    "new_requirement_count": 8,
+    "replaced_requirement_count": 1,
+    "resulting_requirement_count": 113,
+    "required_root_actions": [
+      "review IDs and law ownership",
+      "apply selected rows to REQUIREMENT_TRACE.json",
+      "update CONTRACT_MANIFEST.json requirement_count and digest",
+      "regenerate dependent projections",
+      "reopen affected evidence and run independent review"
+    ]
+  },
+  "no_claim_statement": "This proposed patch is not adopted authority and does not claim implementation, readiness, release, node closure, or goal completion."
+}

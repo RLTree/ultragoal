@@ -1,0 +1,63 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "workstream": "repository_fit_postwrite_error_rollback_reconciliation",
+  "decision": "REWORK",
+  "review_route": {
+    "model": "gpt-5.6-sol",
+    "reasoning": "ultra",
+    "rationale": "High-risk rollback and foreign-data-preservation boundary where a false clean result can leave candidate writes behind."
+  },
+  "reviewed_candidate": {
+    "manifest": "docs/ultragoal-successor-live/root-decisions/REPOSITORY-FIT-POSTWRITE-ROLLBACK-CANDIDATE.json",
+    "root_revalidated_manifest_sha256": "6f909aca932772a73ec4d9e9c85c4f3270a866b05f4c735d4d9d31646269438e",
+    "artifact_set_sha256": "44ab5cdc3000341082e3e58f3c9ed6cdd679bbf58a31375dd753bede50d10d6b",
+    "artifact_count": 18,
+    "membership_differences": 0,
+    "digest_length_line_mismatches": 0,
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "material_finding": {
+    "id": "repository-fit-final-rollback-sweep-missing",
+    "summary": "Each restored path is verified immediately, but no final read-only sweep rechecks every current and older mutation after all rollback effects. A later rollback can therefore race an earlier verified path and ordinary EffectFailed can be returned with exact replacement bytes still present.",
+    "source_evidence": [
+      "validator/src/repository_fit/apply.rs:155 restores and immediately verifies the current mutation before older rollback effects run",
+      "validator/src/repository_fit/apply.rs:175 restores only the supplied older slice and ends with root validation",
+      "validator/src/repository_fit/apply.rs:193 verifies each mutation only immediately after its own compare-exchange"
+    ],
+    "external_reproduction": {
+      "ephemeral_source_was_read_before_target_cleanup": true,
+      "command": "CARGO_TARGET_DIR=/tmp/hul-repository-fit-rereview cargo run --manifest-path /tmp/hul-repository-fit-rereview/rollback-probe/Cargo.toml --offline --quiet",
+      "exit_code": 0,
+      "output": [
+        "error=EffectFailed",
+        "cas_calls=4",
+        "A=None",
+        "B=Some([98])"
+      ],
+      "sequence": "Call 2 lands B and reports EffectFailed; call 3 restores and verifies B; call 4 restores A while a concurrent actor recreates exact replacement B after B's only verification."
+    },
+    "contract_impact": "The candidate's assertion that ordinary EffectFailed is returned only when no partial write remains is false under a cross-mutation rollback race."
+  },
+  "required_correction": [
+    "after every current and older rollback attempt, revalidate the exact root and perform a read-only final reconciliation across every attempted mutation against its exact prior state, including absence",
+    "classify any replacement, foreign, unreadable, missing-when-prior, present-when-absent, or root-changed final state as RollbackFailed without overwriting foreign bytes",
+    "preserve continued safe restoration of older mutations after intermediate failure",
+    "add a negative test that recreates the current replacement during a later older rollback after the current mutation's immediate verification"
+  ],
+  "review_verification": [
+    {"command":"full repository_fit_contract with -j 16 and --test-threads=16","result":"38 passed; 0 failed"},
+    {"command":"focused apply_failures with -j 16 and --test-threads=16","result":"11 passed; 0 failed; 27 filtered"},
+    {"command":"rustfmt check over exact 18-file set","result":"passed"},
+    {"command":"targeted clippy with -j 16","result":"passed with existing repository warnings"}
+  ],
+  "accepted_requirements": [],
+  "highest_defensible_ceiling": "The frozen internal set compiles and its existing per-mutation rollback controls pass, but post-write rollback reconciliation is not accepted.",
+  "explicitly_withheld": [
+    "repository-fit internal acceptance",
+    "public HCT-FIT integration",
+    "supported-host writer and live journey proof",
+    "legacy fit-route retirement",
+    "readiness release node closure or goal completion"
+  ]
+}

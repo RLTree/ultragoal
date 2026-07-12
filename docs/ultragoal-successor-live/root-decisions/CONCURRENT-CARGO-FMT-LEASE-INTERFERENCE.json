@@ -1,0 +1,35 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "CONCURRENT-CARGO-FMT-LEASE-INTERFERENCE",
+  "workstream": "orchestration",
+  "decision": "CORRECTIVE_ROUTING_APPLIED",
+  "observed_effect": {
+    "class": "out_of_lease_format_write",
+    "writer_lane": "/root/fixture_execution_scheduler_builder",
+    "command_pattern": "cargo fmt -- <apparent file paths>",
+    "explanation": "The apparent paths were passed as rustfmt arguments after Cargo had already discovered crate targets; files outside the fixture lease that needed formatting were rewritten.",
+    "first_observed_mtime": "2026-07-11T17:28:25-0700",
+    "second_observed_mtime": "2026-07-11T18:02:19-0700",
+    "affected_observability_paths": [
+      "validator/src/observability/filesystem/anchors.rs",
+      "validator/src/observability/filesystem/confinement.rs",
+      "validator/src/observability/lifecycle.rs",
+      "validator/tests/observability_contract/races_paths.rs"
+    ]
+  },
+  "impact": [
+    "An accepted observability source identity and its first public-integration review were invalidated.",
+    "A replacement observability binding was invalidated after freeze when races_paths.rs was reformatted again.",
+    "No semantic change was attributed to the formatter rewrites, but current evidence had to be reopened and rebound."
+  ],
+  "root_disposition": [
+    "Preserved current bytes and never restored old hashes destructively.",
+    "Recomputed full current source sets and rebound only after semantic and behavior checks.",
+    "Prohibited cargo fmt in concurrent implementation lanes.",
+    "Required exact-path rustfmt --edition 2024 with --check for verification and exact leased files only for formatting.",
+    "Worker acknowledged the command-boundary correction and stopped unscoped formatting."
+  ],
+  "orchestration_law": "A command whose apparent arguments do not constrain the tool's discovery scope is not a disjoint lease. Root and workers must prove the actual mutation set before using it concurrently.",
+  "claim_ceiling": "This incident record supports orchestration diagnosis only and does not accept observability, fixture, readiness, release, node closure, or completion.",
+  "no_claim_statement": "This decision does not claim readiness, release, node closure, or goal completion."
+}

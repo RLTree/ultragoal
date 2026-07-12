@@ -1,0 +1,52 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "OBSERVABILITY-DEPENDENCY-CLOSURE-REWORK-021",
+  "workstream": "local causal observability and diagnosis",
+  "root_decision": "REWORK",
+  "reviewed_candidate": {
+    "packet": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-LOCAL-CAUSAL-DIAGNOSIS-CANDIDATE-020.json",
+    "packet_sha256": "bab61c51197e100a1228841c03d7531537531139d39758a97f2023c1247893db",
+    "candidate_id": "sha256:5ea6a56b6217c81bc25ba97ee5bd05be6d313fa4f3eb4497b6b3719e8c52f38a",
+    "artifact_count": 60,
+    "artifact_bytes": 270577,
+    "artifact_lines": 8162,
+    "row_mismatches": 0
+  },
+  "independent_review": {
+    "reviewer": "/root/local_observability_privacy_acceptance_reviewer",
+    "verdict": "REWORK",
+    "candidate_scoped_revalidation": "all 60 content, mode, and mtime rows stayed identical",
+    "focused_tests": "81 passed; 0 failed; 2268 skipped with an isolated target and 16 jobs",
+    "fresh_full_tree_binary_sha256": "f27e5e485cacce35ced92a73a0c73de412c06b12daf98d34edfd76e8a62cabc0"
+  },
+  "decisive_findings": [
+    {
+      "severity": "material",
+      "class": "typed_state_dependency_reopened",
+      "detail": "The typed-state acceptance invalidates on any byte change to its 35 artifacts. Its accepted validator/src/lib.rs digest is 1ce48b296ee27c59e3fe74e7b7de1355f7dd25dfe435bb878a0c7e366a72cad2, while the current observability candidate binds 9e778144797940207cd63b014e1e73e0b03dd75376fb431120e40e1c93fe0629. The acceptance also withholds authorized production ProductState construction and public diagnosis journeys."
+    },
+    {
+      "severity": "material",
+      "class": "inventory_dependency_reopened",
+      "detail": "N02 tool acceptance requires its implementation set to have no tracked or staged diff. The live inventory implementation has 17 tracked modified files and 24 untracked entries, and public diagnosis invokes InventoryBuilder directly."
+    },
+    {
+      "severity": "material",
+      "class": "dependency_order_violation",
+      "detail": "The adopted graph requires the successor CLI/state node before observability, and PS-DIAGNOSE requires HCT-STATE, HCT-OBSERVE, and HCT-CAPTURE. Those prerequisite product surfaces are not closed."
+    },
+    {
+      "severity": "proof_ceiling",
+      "class": "full_tree_binary_not_candidate_closed",
+      "detail": "The fresh binary changed from the packet binary because non-candidate dependencies drifted; green focused tests cannot establish a 60-file runtime identity."
+    }
+  ],
+  "root_disposition": {
+    "local_source_bytes": "preserve as unaccepted source candidate",
+    "observability_claim": "withheld",
+    "configured_export": "disabled under OD-004 and OD-007 safe defaults",
+    "next_dependency_action": "finish and independently accept the whole successor CLI/state/capture/inventory-backed diagnosis surface before refreezing observability"
+  },
+  "claim_ceiling": "Exact current observation of the 60-file local observability source delta only. REQ-OBSERVE-001 through REQ-OBSERVE-006, HCT-OBSERVE, PS-DIAGNOSE, CL-OBSERVABILITY, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim observability-node acceptance, configured export, CL-OBSERVABILITY elevation, readiness, release, or goal completion."
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "FIXTURE-SCHEDULER-DETACHED-DESCENDANT-REWORK",
+  "workstream": "fixture_scheduler",
+  "decision": "REWORK",
+  "acceptance_check": "AC-FIXTURE-SCHEDULER-DESCENDANT-REAP-REVIEW-008",
+  "reviewed_candidate": {
+    "binding_sha256": "a33f19a1fbf72a35c17a0b1324919fda41f0cba4b46eeb8be4ea7d049fec0c7e",
+    "artifact_set_sha256": "69769cb581756bb9432762bda2c4bf834e01effcb30ac8be7f7216c611600b49",
+    "artifact_count": 25,
+    "artifact_total_bytes": 91462,
+    "artifact_total_lines": 2875,
+    "changed_set_sha256": "3acf087d62bd1ee1069bdd9a1f831641c17d6a3c2c7a4121f6b91edb48645a64",
+    "changed_artifact_count": 5,
+    "changed_artifact_total_bytes": 27254,
+    "changed_artifact_total_lines": 817,
+    "worker_result_sha256": "2d2cbe19e77da070d4c713ce18b84a8427644029a79b1dc5d747c93540fe6143",
+    "declared_result_id": "sha256:d8dacf7d6165f010ef9152c9e60d956c757e09767eb4b64cffec5db2e5d86331"
+  },
+  "independent_review": {
+    "reviewer": "/root/fixture_descendant_reap_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "verdict": "REWORK",
+    "candidate_identity_verified": true,
+    "baseline_suite": "26 passed",
+    "typed_worker_result_verified": true,
+    "stopped_after_first_material_defect": true
+  },
+  "decisive_finding": {
+    "class": "descendant_can_escape_process_group_and_outlive_adapter",
+    "cause": "Termination, escalation, and absence proof track only the direct child's original process group while the Darwin sandbox policy allows process operations. A descendant can call setsid(), detach its standard streams, ignore SIGTERM, and leave that group.",
+    "independent_probe": "The real adapter returned in 198 ms with the original group absent while the detached descendant remained alive.",
+    "impact": "Process-group absence does not prove descendant absence; wall-time and resource-confinement behavior can return success while work continues outside the tracked group."
+  },
+  "required_correction": [
+    "Add the actual-adapter setsid descendant regression and require it to fail before the correction and pass afterward without reviewer cleanup.",
+    "Enforce containment beyond mutable process-group membership, or enforceably prohibit session/process-group escape on the supported host; do not infer descendant absence from original group absence.",
+    "Prove multiple descendants, rapid reparenting, direct-child early exit, ignored SIGTERM, interrupt, output limit, wall timeout, and already-exited cases leave no live process.",
+    "Preserve network, filesystem, CPU, file-size, address-space, backend-integrity, policy-digest, collision, recovery, and supplied-outcome controls; keep Darwin RLIMIT_DATA explicitly unclaimed.",
+    "Do not broaden supported fixture behavior merely to retain tests; state any enforceable child-process restriction as product behavior and verify it through the real adapter."
+  ],
+  "claim_ceiling": "No fixture resource-confinement acceptance, public HCT-FIXTURES integration, routine/strict journey, readiness, release, node closure, or completion.",
+  "no_claim_statement": "This decision does not claim fixture confinement, public integration, readiness, release, node closure, or goal completion."
+}

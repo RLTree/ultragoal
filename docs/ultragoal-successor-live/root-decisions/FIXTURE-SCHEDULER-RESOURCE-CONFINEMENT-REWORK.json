@@ -1,0 +1,52 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "FIXTURE-SCHEDULER-RESOURCE-CONFINEMENT-REWORK",
+  "workstream": "fixture_scheduler",
+  "decision": "REWORK",
+  "acceptance_check": "AC-FIXTURE-SCHEDULER-REVIEW-004",
+  "reviewed_candidate": {
+    "binding_sha256": "278823db36451b0534d4166413b348e451232b18a0582ce5350f61d456d0e623",
+    "artifact_set_sha256": "e510a8883cabc31db814d583adc63bfbb4641c47c1ecc4821b905dc70eedd65c",
+    "artifact_count": 15,
+    "artifact_total_bytes": 52172,
+    "artifact_total_lines": 1611,
+    "worker_result_sha256": "8de2f590f7127d9e4b4782fe9166860b5cc062a6d2e7f8b045feffc4a87148d1",
+    "root_private_wiring_sha256": "82b56623257e231b5a95036fab234cb937bd983f92c8e8f48b94a96f71ddfbe7"
+  },
+  "independent_review": {
+    "reviewer": "/root/fixture_execution_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "verdict": "REWORK",
+    "candidate_identity_verified": true,
+    "stopped_after_first_material_defect": true
+  },
+  "decisive_finding": {
+    "class": "declared_process_resources_are_coordinated_but_not_confined",
+    "evidence": [
+      "ResourceKind contains file, environment, process, port, cache, telemetry, and install labels but no CPU, memory, wall-time, or outbound-network confinement contract.",
+      "IsolationLease creates per-resource directories and holds one loopback listener; these prevent some collisions but do not constrain child resource use.",
+      "The child process receives a clean environment, private working directory, process group, wall-clock poll, and output budget, but no CPU or address-space limit and no outbound-network denial backend."
+    ],
+    "impact": "A fixture can exhaust host CPU or memory until the polling timeout and can make arbitrary network connections, so cross-test process/network isolation is not enforced."
+  },
+  "contract_basis": {
+    "tool": "HCT-FIXTURES",
+    "implementation_contract": "Each fixture declares isolation needs and cleanup.",
+    "external_substrate": "process/resource allocators",
+    "proof_requirement": "Cross-test environment, process, port, cache, telemetry, install leakage and cleanup failure must be falsified."
+  },
+  "required_correction": [
+    "Represent CPU, memory, wall-time, and outbound-network isolation needs explicitly in the fixture specification or an equally typed fail-closed policy.",
+    "Apply OS-enforced CPU and address-space limits before exec and retain the existing wall-clock kill/reap boundary.",
+    "On the supported macOS host, deny outbound network through a verified fail-closed sandbox backend; do not substitute environment labels for enforcement.",
+    "Fail closed when a requested confinement backend is unavailable or cannot be applied.",
+    "Add positive and false-pass subprocess probes for applied limits, outbound-network denial, timeout/reap, collision, cleanup, and supplied-outcome rejection."
+  ],
+  "preserved_evidence": [
+    "Exact 15-file candidate identity and private root wiring were independently reproduced.",
+    "The implementation contains a real process execution path and the public caller-supplied outcome path is rejected."
+  ],
+  "claim_ceiling": "No fixture scheduler source acceptance, public HCT-FIXTURES integration, routine or strict proof, readiness, release, node closure, or completion.",
+  "no_claim_statement": "This decision does not claim fixture behavior, public integration, readiness, release, node closure, or goal completion."
+}

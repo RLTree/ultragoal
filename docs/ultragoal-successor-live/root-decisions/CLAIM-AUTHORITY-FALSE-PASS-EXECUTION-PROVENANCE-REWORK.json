@@ -1,0 +1,46 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "CLAIM-AUTHORITY-FALSE-PASS-EXECUTION-PROVENANCE-REWORK",
+  "workstream": "claim_authority",
+  "decision": "REWORK",
+  "acceptance_check": "AC-CLAIM-AUTHORITY-REQUIRED-OBLIGATIONS-REVIEW-004",
+  "reviewed_candidate": {
+    "binding_sha256": "bd19f0b1846f733b73eaac076e4244d6511e293ecb574791ac29425f17de2df8",
+    "artifact_set_sha256": "0c30f37411cf4a51b06e6f3e8bb73e6e8bfd12104a73690e47f5a85e481615f8",
+    "artifact_count": 12,
+    "artifact_total_bytes": 57752,
+    "artifact_total_lines": 1685,
+    "worker_result_sha256": "2935775c363e6433914c9b643055f5797a8805bd75defc388188bc44a167ac3c",
+    "declared_result_id": "sha256:17e40cf1c1da110e4ac156fa0d26045fecae57c9efeaebbaa71202db243a47b5",
+    "registry_sha256": "67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc"
+  },
+  "independent_review": {
+    "reviewer": "/root/claim_obligation_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "verdict": "REWORK",
+    "candidate_identity_verified": true,
+    "baseline_suite": "16 passed",
+    "stopped_after_first_material_defect": true
+  },
+  "decisive_finding": {
+    "class": "false_pass_control_is_self_reported_not_execution_bound",
+    "cause": "Obligation coverage accepts any ObservedFailure with arbitrary nonempty failure_code and result digest; no guard binds the negative stimulus, expected failure, executable control identity, execution method, or actual observed outcome.",
+    "independent_probe": "A report-only envelope with generic input/tool data, no negative stimulus, and an arbitrary self-reported failure elevated CL-PACKAGE with Passed and no reasons.",
+    "test_false_pass": "The positive test fixture fabricates the same ObservedFailure status rather than executing and observing a control.",
+    "impact": "A producer can assert that a false-pass control ran and passed without executing it, allowing claim elevation from reward-hacked report metadata."
+  },
+  "required_correction": [
+    "Represent a false-pass control as an execution-bound record containing exact control ID, negative stimulus digest, expected failure contract, executor/method identity, start/end observation, actual causal outcome, artifact/output digests, and freshness/context/candidate binding.",
+    "Require actual outcome to match the named expected failure and reject report-only, arbitrary-code, missing stimulus, missing executor, missing observation, reused artifact, stale, self-authored, or cross-candidate controls.",
+    "Do not allow an EvidenceEnvelope producer to synthesize the final observed-control status without a separately bound execution observation.",
+    "Add independent negative probes for CL-PACKAGE, CL-INSTALL, CL-ORCHESTRATION, CL-RELEASE, and CL-COMPLETION where each execution-provenance field is omitted or substituted one at a time."
+  ],
+  "preserved_evidence": [
+    "Exact 12-file identity, source/test aggregates, and registry were independently reproduced.",
+    "The locked/offline 16/16 suite passes but does not prove false-pass execution provenance.",
+    "Typed WorkerResult acceptance remains withheld because review stopped after the semantic defect."
+  ],
+  "claim_ceiling": "No HCT-CLAIMS source acceptance, public integration, passed live claim, readiness, release, node closure, or completion.",
+  "no_claim_statement": "This decision does not claim claim-authority behavior, public integration, readiness, release, node closure, or goal completion."
+}

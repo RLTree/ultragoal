@@ -1,0 +1,54 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "observability_public_integration",
+  "candidate_state": "retracted_after_dependency_drift",
+  "retraction": {
+    "decision": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-POST-ACCEPTANCE-DRIFT-REWORK.json",
+    "reason": "Four accepted observability dependency rows changed before public-integration acceptance; root removed the unaccepted public export and witnesses pending replacement source proof.",
+    "current_root_artifacts": {
+      "validator/src/lib.rs": "9d7c8c528dbe211feb51a868bb6c37bd49c6ac233638cbb774cafc1c626e1526",
+      "validator/src/api_witness.rs": "32eb5fedeb116ad99212cac0e60f0b75eb97b4098bb88a9921d050cd8ae61b49",
+      "validator/tests/public_api_witness.rs": "4f7f253b1fb17fd6c30ae548338aa9b2b78feea6f936660cb39351601a72262f"
+    }
+  },
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "depends_on_acceptance": {
+    "path": "docs/ultragoal-successor-live/acceptance/OBSERVABILITY-CONFINEMENT-CORRECTION.json",
+    "sha256": "e9b090f4d5791199ebe3f6e3873fb6dc5263c01a029bbda7e160d90e613250c6"
+  },
+  "acceptance_check": "AC-OBSERVABILITY-PUBLIC-INTEGRATION-001",
+  "requested_review_route": "gpt-5.6-terra/high",
+  "effective_review_route": "unverified",
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, lowercase SHA-256 without prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "08ad69f6d7b528644f0871b04be16286416cf5c5b36db7cc26e377083f7ebcde",
+  "artifact_count": 4,
+  "artifact_bytes": 12962,
+  "artifact_lines": 326,
+  "artifacts": [
+    {"path":"docs/ultragoal-successor-live/acceptance/OBSERVABILITY-CONFINEMENT-CORRECTION.json","sha256":"e9b090f4d5791199ebe3f6e3873fb6dc5263c01a029bbda7e160d90e613250c6","byte_length":3611,"line_count":58},
+    {"path":"validator/src/api_witness.rs","sha256":"83f3263f717bfa6badade0898dede618cb2a29578ab62e418e80e7abcfd6972f","byte_length":4453,"line_count":123},
+    {"path":"validator/src/lib.rs","sha256":"9e778144797940207cd63b014e1e73e0b03dd75376fb431120e40e1c93fe0629","byte_length":1283,"line_count":63},
+    {"path":"validator/tests/public_api_witness.rs","sha256":"b3ca7050888377bfa26b07d8bdf24dc4549841292c042134745a5fc0198af3c7","byte_length":3615,"line_count":82}
+  ],
+  "integration_behavior": [
+    "validator::observability is publicly exported from the library entrypoint",
+    "internal and external witnesses name SemanticEvent, EventStore, EventQuery, CausalExplanation, and ExportAdapter exactly",
+    "implemented_public_apis reports those five adopted HCT-OBSERVE identifiers",
+    "public activation remains separate from CLI observe/diagnose wiring and supported-host product journey proof"
+  ],
+  "verification": [
+    {"command":"rustfmt --edition 2024 --check validator/src/lib.rs validator/src/api_witness.rs validator/tests/public_api_witness.rs","result":"pass"},
+    {"command":"CARGO_TARGET_DIR=/tmp/hul-observability-public-root cargo test --locked --offline -j16 --manifest-path validator/Cargo.toml --test public_api_witness -- --test-threads=16","result":"1 passed; 0 failed"},
+    {"command":"CARGO_TARGET_DIR=/tmp/hul-observability-public-contract cargo test --locked --offline -j16 --manifest-path validator/Cargo.toml --test observability_contract -- --test-threads=16","result":"27 passed; 0 failed"}
+  ],
+  "explicitly_withheld": [
+    "observe and diagnose command wiring",
+    "live local-store product journey",
+    "optional export configuration or external collector behavior",
+    "CL-OBSERVABILITY elevation",
+    "node closure, readiness, release, or goal completion"
+  ],
+  "invalidation_rule": "Any byte change to the four-artifact integration set, the accepted 22-file implementation, or the five public API identifiers reopens review.",
+  "no_claim_statement": "This is a public-integration candidate awaiting independent review. It does not claim product behavior, readiness, release, node closure, or goal completion."
+}

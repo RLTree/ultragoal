@@ -1,0 +1,26 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N02-AGENT-ROUTE-WITNESS-002-REWORK",
+  "node_id": "N02-INVENTORY",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only_external_ephemeral",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-ROUTE-WITNESS-002.json",
+    "sha256": "e2eb9dd39777be4704a63c3d488503041a33de3bc0f56ebbecfadf1bb747d505",
+    "declared_artifact_set_sha256": "d8e4e0b8365531e04fdf30ea3668cea95ee2f96b1e29294aea04ceaef6c00c57",
+    "current_artifact_set_sha256": "a5b32e04824528017e6710ea47d65ca5d1ebd85347c710756fdfd2ee994d0b3b",
+    "artifact_count": 21,
+    "matching_artifact_count": 6,
+    "drifted_artifact_count": 15
+  },
+  "identity_reconciliation": "fail",
+  "decisive_finding": {
+    "severity": "material",
+    "class": "stale_artifact_set_identity",
+    "cause": "Fifteen of twenty-one declared artifacts no longer match their recorded SHA-256, byte, and line identities; two consecutive current set recomputations were byte-identical but differed from the declared context-bound set."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_action": "Regenerate a fresh exact agent-route witness from current implementation bytes, independently review that exact set, and only then consider the requested atomic migration-registry replacement.",
+  "claim_ceiling": "The stale packet proves no current route transition. The broad live legacy-agent registry row remains authoritative and N02, migration, runtime discovery, readiness, release, and completion remain open.",
+  "no_claim_statement": "This decision does not claim N02 completion, migration adoption, readiness, release, or goal completion."
+}

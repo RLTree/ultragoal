@@ -1,0 +1,46 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "OBSERVABILITY-PUBLIC-INTEGRATION-REVIEW-010",
+  "reviewer": "/root/observability_public_api_falsifier",
+  "requested_route": "gpt-5.6-terra/high",
+  "effective_route": "unverified",
+  "verdict": "ACCEPT",
+  "acceptance_check": "AC-OBSERVABILITY-PUBLIC-INTEGRATION-010",
+  "verified_at": "2026-07-12T01:46:23Z",
+  "reviewed_identity": {
+    "candidate_record": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-PUBLIC-INTEGRATION-RECONCILED-CANDIDATE.json",
+    "candidate_record_sha256": "1f9545a21d7631284da0721cc6ae5ea361808860959f63c77befe5f8e549ea27",
+    "artifact_set_sha256": "e6d31b510340258e131a08e37fab9e25c0bba885859530640a176f2aae540a4f",
+    "artifact_count": 4,
+    "artifact_total_bytes": 12959,
+    "artifact_total_lines": 327,
+    "source_acceptance_sha256": "9198ccc93d1a201470c4a3c149309d538c57e4f7df2669369f04c3beae8350cd",
+    "accepted_private_source_set_sha256": "1c811d9b0f27545239d2e38c4b1c9ed28a634b018015f5d4f8f76eba864b0649",
+    "accepted_private_source_bytes": 107366,
+    "accepted_private_source_lines": 3271
+  },
+  "validation": {
+    "independent_artifact_reconciliation": "PASS: all four rows, 12,959 bytes, 327 lines, and set SHA independently matched",
+    "source_dependency_revalidation": "PASS: the exact accepted 22-file private implementation remains unchanged",
+    "external_public_api": "PASS: validator::observability and SemanticEvent, EventStore, EventQuery, CausalExplanation, and ExportAdapter compile outside the library crate",
+    "catalog_exactness": "PASS: the adopted HCT-OBSERVE contract and implemented_public_apis name the five identifiers exactly once with no second catalog owner or extra public observability export",
+    "format": "PASS: exact-path Rust-2024 format check",
+    "public_api_suite": "PASS: 1 passed; 0 failed with isolated locked/offline 16-job build",
+    "observability_suite": "PASS: 29 passed; 0 failed with isolated locked/offline 16-job build and 16 test threads",
+    "current_state_guard": "PASS: 12 focused current-state tests; default state remains read-only and fail-closed without an observability product claim",
+    "query_purity": "PASS: query and explain no-write behavior remains exercised"
+  },
+  "supported_scope": [
+    "public library export of the exact accepted HCT-OBSERVE source implementation",
+    "five exact compile-visible adopted HCT-OBSERVE identifiers",
+    "single-owner source catalog integration without duplicate observability authority"
+  ],
+  "explicitly_withheld": [
+    "observe or diagnose CLI wiring",
+    "supported-host local-store product journey",
+    "optional exporter or collector runtime",
+    "CL-OBSERVABILITY elevation",
+    "node closure, readiness, release, or goal completion"
+  ],
+  "no_claim_statement": "This review accepts only public HCT-OBSERVE source integration and does not claim product behavior, readiness, release, node closure, or goal completion."
+}

@@ -1,0 +1,81 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_ids": [
+    "N04-DISTRIBUTION",
+    "N10-ORCHESTRATION"
+  ],
+  "root_decision": "accepted_public_distribution_api_and_orchestration_library_kernel",
+  "accepted_candidate": {
+    "path": "docs/ultragoal-successor-live/root-decisions/PUBLIC-KERNEL-CANONICAL-DISTRIBUTION-API-CANDIDATE.json",
+    "sha256": "238e82a95061385ca856ffbc50f9e70feac4e6f6251ded40607a21a5caeed35b",
+    "artifact_set_sha256": "8994759dfa8cae15e5519a94e0c35ec7e9bf52f0d50b8a2d49beebb09867419b",
+    "artifact_count": 5,
+    "bytes": 18821,
+    "lines": 604,
+    "maximum_file_lines": 258,
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "independent_review": {
+    "reviewer": "/root/contract_api_reconciliation_reviewer",
+    "verdict": "pass",
+    "prior_findings_closed": [
+      "public distribution and orchestration modules absent from library entrypoint",
+      "public WorkerSubmitted field exposed a private ResultCommitment type",
+      "unadopted substitute type names promoted into custom-tool API accounting",
+      "all five canonical HCT-DISTRIBUTION APIs omitted from the external and semantic witnesses"
+    ],
+    "artifact_identity_revalidated": true,
+    "blocking_findings": 0
+  },
+  "independent_execution": {
+    "command": "CARGO_TARGET_DIR=/tmp/hul-contract-api-reconciliation-review cargo test --manifest-path validator/Cargo.toml --test public_api_witness --test distribution_contract --test orchestration_contract --locked --offline -j 16 -- --test-threads=16",
+    "result": "1 public API witness, 63 distribution tests, and 161 orchestration tests passed; 0 failed",
+    "inventory_result": "Two byte-identical current HCT-INVENTORY summaries; the five canonical HCT-DISTRIBUTION APIs were active compiled rows; 42 unrelated required APIs remained missing; expected exit 1 because open findings remain."
+  },
+  "root_reconciliation": {
+    "candidate_manifest_sha256_revalidated": "238e82a95061385ca856ffbc50f9e70feac4e6f6251ded40607a21a5caeed35b",
+    "artifact_rows_revalidated": "5 of 5",
+    "artifact_set_sha256_revalidated": "8994759dfa8cae15e5519a94e0c35ec7e9bf52f0d50b8a2d49beebb09867419b",
+    "regular_single_link_exact_case_rows": "5 of 5",
+    "unknown_rows_accepted": 0,
+    "pre_acceptance_inventory_observation": {
+      "entry_count": 4108,
+      "finding_count": 114,
+      "missing_required_component": 42,
+      "canonical_distribution_apis_active": 5,
+      "byte_identical_pair": true,
+      "status_before_after_identical": true,
+      "identity_scope": "External reviewer and root observations made after the five-artifact candidate froze and before this acceptance file was written. Repository-local full-catalog IDs are intentionally not embedded as current because this acceptance changes the dirty candidate; final integrated proof must revalidate them externally in one stable session."
+    }
+  },
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-PLUGIN-001",
+      "state": "public_behavior_backed_source_level_HCT_DISTRIBUTION_API",
+      "blocker": "Supported-host package adoption, installation, marketplace, cache, discovery, runtime, and Plugins UI proof remain open."
+    },
+    {
+      "requirement_id": "REQ-ORCH-001",
+      "state": "public_library_orchestration_kernel_with_nameable_result_commitment",
+      "blocker": "Public command integration and representative interrupted product journeys remain open."
+    }
+  ],
+  "root_acceptance_limit": "Exact public Rust library visibility for the behavior-backed distribution and orchestration kernels, including the five adopted HCT-DISTRIBUTION API identifiers and fail-closed exact custom-tool API accounting.",
+  "explicitly_withheld": [
+    "public CLI dispatcher and command-catalog wiring",
+    "canonical package version adoption",
+    "live package materialization installation marketplace and cache identity",
+    "application registry and Plugins UI exposure",
+    "host discovery and runtime identity",
+    "representative end-to-end interruption and recovery journeys",
+    "closure of the remaining inventory findings and missing custom tools",
+    "distribution or orchestration node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any byte change to the accepted candidate manifest or any of its five artifact rows immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim live installation, marketplace, cache, discovery, runtime, end-to-end orchestration, readiness, release, or goal completion."
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N04-NODE-010-REWORK",
+  "node_id": "N04-DISTRIBUTION",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-010.json",
+    "sha256": "39be8ebb1f8b939d33a71e83d67f3b866fa9a319cb5478cce334a61cc036fa99",
+    "artifact_set_sha256": "0ada2767b6c0e5da334f3ea3e0c9cfc9086064e88649d0ff91f3beada8528a01",
+    "artifact_count": 54,
+    "total_bytes": 235054,
+    "total_lines": 7065,
+    "maximum_file_lines": 299
+  },
+  "identity_reconciliation": "pass",
+  "accepted_corrections": [
+    "Distinct canonical environment-variable and HTTP field-name grammars.",
+    "Canonical and alternative numeric IP authority rejection for URL and email."
+  ],
+  "decisive_finding": {
+    "severity": "material",
+    "class": "reserved_example_domain_false_pass",
+    "cause": "The shared public DNS classifier rejects example.com and subdomains but admits RFC 2606 documentation domains example.net, example.org, and their subdomains through both HTTPS and email semantics.",
+    "typed_boundary": "validator/src/plugin_manifest/network.rs:66"
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N04-DISTRIBUTION-NODE-011",
+  "corrective_scope": [
+    "Reject exact and subdomain forms of example.com, example.net, and example.org through one shared public DNS classifier.",
+    "Retain numeric-IP, reserved-suffix, local authority, URL, email, MCP key/shape, prompt, metadata, and package-reachability behavior.",
+    "Add URL/email unit controls and paired N02/N04 consumer controls for exact and subdomain documentation domains.",
+    "Run focused, full distribution, inventory, and all-target checks with 16 jobs, then freeze exact NODE-011 for independent rereview."
+  ],
+  "claim_ceiling": "N04 numeric-IP and MCP-key semantics are corrected, but complete canonical manifest semantics and all package/install/discovery/runtime claims remain unaccepted. N04 closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N04 completion, readiness, release, or goal completion."
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "inventory_exact_legacy_command_catalog_discovery",
+  "candidate_state": "frozen_for_independent_rereview",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "corrects_manifest": "docs/ultragoal-successor-live/root-decisions/INVENTORY-COMMAND-CATALOG-DISCOVERY-CANDIDATE.json",
+  "corrects_manifest_sha256": "a9f358fda5ade134177b420b0c708be50c4504a6aba84d289805e4272eeaae1f",
+  "corrects_finding": "substring command-catalog matching classified the candidate manifest itself as live legacy authority",
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "320d80c75e3299b2c0bcb256de1ddb6dac974ea9067a4f9af56d3d89fad784f8",
+  "artifact_count": 2,
+  "artifacts": [
+    {"path":"validator/src/inventory/legacy/matchers.rs","sha256":"sha256:f76f67e15fbdf1805ed42b4ec685b576a99f2efaf22c146b66285cabc0facc05","byte_length":3274,"line_count":95},
+    {"path":"validator/tests/inventory_contract_cases/routing_transitions.rs","sha256":"sha256:a20d859b22c0d6267851e32451296b0e3ce443ff279b8d916d139846fa904ba9","byte_length":7742,"line_count":192}
+  ],
+  "corrective_behavior": [
+    "only the exact command-catalog.json leaf spelling enters the new discovery route",
+    "root decisions documentation and arbitrary names containing command-catalog do not self-classify",
+    "the isolated unknown command-catalog fixture fails pending-authority verification closed and remains active parallel authority",
+    "the current live catalog retains 33 exact sole-current pending-migration rows and 14 actual parallel-authority rows",
+    "no retirement compatibility or migration claim is inferred"
+  ],
+  "verification": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-live-inventory-root cargo test --manifest-path validator/Cargo.toml --test inventory_contract routing_transitions::declared_routes_do_not_suppress_live_legacy_authority --locked --offline -j 16 -- --test-threads=16",
+      "result": "1 passed; 0 failed"
+    },
+    {
+      "command": "/tmp/hul-live-inventory-root/debug/examples/hct_inventory --summary .",
+      "result": "two byte-identical current summaries with unchanged Git status; 4108 entries; 114 findings; expected exit 1",
+      "canonical_json_sha256": "87763fac46d8b11ee378faf3465883941e44deae93a9a5f9242aafc928866cd4",
+      "catalog_id": "sha256:093d40edd71652cd0b52d5dbe6e535b8792eb2603904eaa2f7f472691c6c83a5",
+      "findings_by_code": {
+        "candidate_component_not_active": 10,
+        "compatibility_route_retained": 14,
+        "missing_required_component": 42,
+        "parallel_authority": 14,
+        "projection_requires_canonical_reconciliation": 1,
+        "sole_current_authority_pending_migration": 33
+      }
+    }
+  ],
+  "explicitly_withheld": [
+    "acceptance of this exact correction",
+    "closure of remaining live inventory findings",
+    "migration or retirement of any discovered authority",
+    "readiness release or goal completion"
+  ],
+  "no_claim_statement": "This corrected candidate closes one exact-name discovery false-negative without broad substring authority; it does not claim inventory closure, readiness, release, or completion."
+}

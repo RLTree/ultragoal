@@ -1,0 +1,47 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "workstream": "repository_fit_supported_host_linearization",
+  "decision": "REWORK",
+  "review_route": {
+    "model": "gpt-5.6-sol",
+    "reasoning": "ultra",
+    "rationale": "The supported-host reader must remain bounded under adversarial repository population and churn."
+  },
+  "reviewed_candidate": {
+    "manifest": "docs/ultragoal-successor-live/root-decisions/REPOSITORY-FIT-LINEARIZATION-CANDIDATE.json",
+    "manifest_sha256": "c2819e8ff6f239213e059c554716c0b6cf91a71662ccfd0863be338281ed8d1d",
+    "artifact_set_sha256": "f63ef0412a81840bdd3b2c65d02f6e74b2b688cbc185cb243ff877bc062b4b81",
+    "artifact_count": 20,
+    "artifact_bytes": 118962,
+    "artifact_lines": 3745,
+    "identity_revalidated": true
+  },
+  "material_finding": {
+    "id": "repository-fit-unbounded-directory-enumeration",
+    "severity": "high",
+    "summary": "Exact-name enumeration loops readdir to EOF with no per-scan or cumulative operation budget and is repeated across ancestors and final Apple checks.",
+    "source": [
+      "validator/src/repository_fit/local/sys.rs:116",
+      "validator/src/repository_fit/local/sys.rs:134",
+      "validator/src/repository_fit/local/unix.rs:83",
+      "validator/src/repository_fit/local/apple_path.rs:82"
+    ],
+    "impact": "An untrusted large or continuously churning directory can force arbitrarily large CPU and filesystem work."
+  },
+  "required_correction": [
+    "hard per-scan and cumulative per-operation enumeration budgets",
+    "content-free ResourceLimit failure with no partial success",
+    "at-limit, one-over, repeated-ancestor, churn, alias-boundary, and zero-write tests",
+    "preserve the Apple F_GETPATH finite linearization semantics"
+  ],
+  "verification_gap": "Exact suite and LLDB rereview were unavailable because ENOSPC occurred before tests; no stale binary was cited.",
+  "active_corrective_lease": {
+    "agent": "repository_fit_enumeration_budget_corrector",
+    "model": "gpt-5.6-terra",
+    "reasoning": "xhigh",
+    "rationale": "The correction is a precise bounded resource-control change with deterministic tests; Terra xhigh shortens the lane without changing the high-risk architecture."
+  },
+  "accepted_artifact_sets": [],
+  "highest_defensible_ceiling": "Apple F_GETPATH logic remains source-reviewed candidate behavior only; no behavioral acceptance is granted.",
+  "no_claim_statement": "No public integration, readiness, release, node closure, or goal completion is claimed."
+}

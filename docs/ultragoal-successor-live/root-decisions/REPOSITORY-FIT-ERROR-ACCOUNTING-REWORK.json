@@ -1,0 +1,51 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "workstream": "repository_fit_bounded_linearization",
+  "decision": "REWORK",
+  "review_route": {
+    "model": "gpt-5.6-sol",
+    "reasoning": "ultra",
+    "rationale": "Supported-host active-path linearization and deterministic enumeration limits are repeatedly falsified security and correctness boundaries."
+  },
+  "reviewed_candidate": {
+    "worker_result": "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-ENUMERATION-BUDGET-CORRECTION-001.json",
+    "worker_result_sha256": "95652aa3a3f2abf15f43468dc98f1e142c1b3c2714053f8ba017e75187d3fccd",
+    "root_freeze": "docs/ultragoal-successor-live/root-decisions/REPOSITORY-FIT-BOUNDED-LINEARIZATION-CANDIDATE.json",
+    "root_freeze_sha256": "8a7a60f2c8616deaec21e67eff2f0a1d1d7604355bece5fa0015f74283941de3",
+    "artifact_set_sha256": "b15bb0d19063bf4419d339c32d9d92bb5f296472f22647e834f1299c4e7511e7",
+    "artifact_count": 21,
+    "identity_revalidated_before_and_after": true
+  },
+  "material_finding": {
+    "id": "repository-fit-enumeration-error-not-accounted",
+    "severity": "high",
+    "source": [
+      "validator/src/repository_fit/local/sys.rs",
+      "validator/src/repository_fit/local/sys_tests.rs"
+    ],
+    "summary": "The enumeration loop propagates EntrySource/readdir errors through entries.next()? before incrementing the per-scan count, adding name bytes, or charging the cumulative EnumerationBudget. At an exhausted cumulative boundary, a subsequent error therefore returns ReadFailed instead of the required counted ResourceLimit.",
+    "contract_impact": "The candidate terminates and does not expose content, but it fails the adopted deterministic resource semantics and the explicit requirement that every non-EOF source observation, including errors, is accounted before outcome classification."
+  },
+  "required_correction": [
+    "charge every non-EOF source observation, including errors, before propagating its outcome",
+    "preserve partial-observation discard and guaranteed directory-stream close behavior",
+    "add exact per-scan and cumulative boundary-error controls",
+    "rerun the exact 53-test repository-fit boundary and independently recheck the corrected set"
+  ],
+  "preserved_current_evidence": {
+    "exact_suite": {
+      "result": "53 passed",
+      "transcript": "/tmp/hul-fit-budget-review-001/repository-fit-contract-escalated.transcript",
+      "sha256": "8e180f490b295761734a7c54ff65f8561677eeae2acecb9b206bdf3786a752ec"
+    },
+    "supported_host_linearization": {
+      "result": "RENAME_SWAP produced active foreign bytes; the probe returned StaleBinding and exited zero",
+      "transcript": "/tmp/hul-fit-budget-review-001/lldb-rename-swap-final.transcript",
+      "sha256": "ed4eb19480863abe5de9c1e90f6ff42f424d025a6368eb56088ca71f4256d91e",
+      "ceiling": "Sequential final completed observation only; no function-return-state or permanent namespace guarantee."
+    }
+  },
+  "accepted_artifact_sets": [],
+  "highest_defensible_ceiling": "The supported-host active-path race correction and prior finite budgets are supported, but repository-fit acceptance remains withheld until source errors are budget-accounted and the exact corrected set is independently verified.",
+  "no_claim_statement": "This decision does not claim public integration, repository-fit completion, readiness, release, node closure, or goal completion."
+}

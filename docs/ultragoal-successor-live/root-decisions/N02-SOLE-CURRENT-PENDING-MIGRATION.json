@@ -1,0 +1,35 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N02-SOLE-CURRENT-PENDING-MIGRATION",
+  "node_id": "N02-INVENTORY",
+  "policy_state": "adopted_by_ultra_root",
+  "implementation_state": "candidate_pending_independent_review",
+  "classification": "sole-current-authority-pending-migration",
+  "finding": {
+    "code": "sole_current_authority_pending_migration",
+    "severity": "warning"
+  },
+  "qualification_gate": [
+    "the complete raw source set for the four covered authority kinds matches the exact compiled catalog",
+    "every source stable ID, kind, path, catalog digest, and same-session current-byte digest matches",
+    "the exact root registry subset matches with no unknown, broad, ambiguous, duplicate, or conflicting row",
+    "each canonical target is the exact current canonical definition and remains definition-only",
+    "no active canonical implementation exists for the target",
+    "the candidate read session revalidates after reconciliation"
+  ],
+  "preserved_truth": [
+    "the source remains legacy authority",
+    "the source remains active",
+    "the source kind, path, bytes, and stable identity are not changed",
+    "no compatibility, equivalence, retirement, readiness, release, or completion claim is raised",
+    "N14 migration and N15 retirement obligations remain open"
+  ],
+  "failure_behavior": "Any gate failure rejects partial classification, emits pending_authority_verification_failed, and leaves affected active legacy sources under parallel_authority.",
+  "registry_rule": "Registry prose or membership never proves sole-current status. The current source set, current definitions, current registry rows, and current bytes must pass together in one read session.",
+  "prior_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N02-PENDING-AUTHORITY-006.json",
+    "disposition": "provenance_and_counterexample_context_only_not_live_proof"
+  },
+  "claim_ceiling": "N02 remains open until independent review, two byte-identical live summaries, exact agent-route reconciliation, and all material inventory findings are reconciled.",
+  "no_claim_statement": "This decision does not claim package, install, discovery, runtime, journey, readiness, release, N02 completion, or goal completion."
+}

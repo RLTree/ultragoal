@@ -1,0 +1,55 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "REPOSITORY-FIT-BOUNDED-LINEARIZATION-KERNEL",
+  "workstream": "repository_fit",
+  "decision": "ACCEPT",
+  "accepted_candidate": {
+    "manifest": "docs/ultragoal-successor-live/root-decisions/REPOSITORY-FIT-ERROR-ACCOUNTING-CANDIDATE.json",
+    "manifest_sha256": "c96d75d184712e27039efc19843157e3352ab5fb1dacb033bdd003341a8b54b4",
+    "artifact_set_sha256": "eeac95a57b4a88a32699e11b60d1c0a54e205eec70c7aae52b4eb6be7bc5a49a",
+    "artifact_count": 21,
+    "artifact_bytes": 130610,
+    "artifact_lines": 4081
+  },
+  "independent_review": {
+    "route": {
+      "model": "gpt-5.6-sol",
+      "reasoning": "ultra",
+      "rationale": "The final review covered repeatedly falsified active-path, rollback, resource-bound, and foreign-data-preservation boundaries."
+    },
+    "record": "/tmp/hul-fit-error-budget-rereview-001/review-record.json",
+    "record_sha256": "63ff3d6b34afffbc4bedf09ee5c53c9a1bc5b06de4604962af186c781df788be",
+    "verdict": "PASS"
+  },
+  "verification": {
+    "exact_suite": {
+      "result": "56 passed; 0 failed",
+      "transcript": "/tmp/hul-fit-error-budget-rereview-001/repository-fit-contract-56.transcript",
+      "transcript_sha256": "af53e0e0977a7ce0371c4ce6142bef059f2cf7528759c635ed4bcd250484e7ec"
+    },
+    "supported_host_race": {
+      "result": "Apple RENAME_SWAP placed foreign bytes on the active path; the observer returned StaleBinding",
+      "transcript": "/tmp/hul-fit-budget-review-001/lldb-rename-swap-final.transcript",
+      "transcript_sha256": "ed4eb19480863abe5de9c1e90f6ff42f424d025a6368eb56088ca71f4256d91e",
+      "scope": "Unchanged Apple F_GETPATH and attachment logic only"
+    },
+    "resource_boundary": "Every non-EOF observation, including errors, is charged before outcome propagation; EOF is uncharged; per-scan and cumulative exact/one-over controls pass."
+  },
+  "accepted_scope": [
+    "typed repository-fit inspect, plan, apply, verify, ownership, and rollback kernel",
+    "descriptor-confined exact-name observation and special-file rejection",
+    "bounded per-scan and cumulative enumeration with deterministic error accounting",
+    "Apple/Darwin active-path F_GETPATH attachment at the final completed sequential observation",
+    "zero-write inspect, plan, and verify behavior"
+  ],
+  "support_limit": "Finite Apple/Darwin state at the final completed sequential path-and-identity observation. No function-return-state, eternal namespace, non-Apple runtime, plugin journey, readiness, release, node-closure, or completion claim is accepted.",
+  "root_integration": {
+    "required": true,
+    "actions": [
+      "publish the repository_fit module from validator/src/lib.rs",
+      "add exact HCT-FIT public API witnesses",
+      "rerun the public API and inventory activation gates against the integrated candidate"
+    ]
+  },
+  "no_claim_statement": "This acceptance is limited to the exact internal kernel and named supported-host evidence. It does not claim product journeys, readiness, release, node closure, or goal completion."
+}

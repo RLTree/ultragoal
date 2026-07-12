@@ -1,0 +1,73 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "public_kernel_contract_api_reconciliation",
+  "candidate_state": "frozen_for_independent_rereview",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "supersedes_manifest": "docs/ultragoal-successor-live/root-decisions/PUBLIC-KERNEL-INTEGRATION-CANDIDATE.json",
+  "superseded_artifact_set_sha256": "842372f0209a989329a47f1db721acc0e486d22e3e4ab562b3804b0ae416d773",
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "2f7160cbddf2d5ef824f68f8799e14256d4ec6e57624ff8af185a9668c1a3c71",
+  "artifact_count": 5,
+  "artifacts": [
+    {
+      "path": "validator/src/api_witness.rs",
+      "sha256": "sha256:be817f33de7d6a6c846bde6a16bd1ae9ac887af5457b0f9d0fe2ff05c7894f23",
+      "byte_length": 2087,
+      "line_count": 55
+    },
+    {
+      "path": "validator/src/lib.rs",
+      "sha256": "sha256:1ce48b296ee27c59e3fe74e7b7de1355f7dd25dfe435bb878a0c7e366a72cad2",
+      "byte_length": 1191,
+      "line_count": 59
+    },
+    {
+      "path": "validator/src/orchestration/event.rs",
+      "sha256": "sha256:3cf214bcda06a94db0d1f00013e77ccccc4ac50a6515110f54328221b112d3d8",
+      "byte_length": 7491,
+      "line_count": 258
+    },
+    {
+      "path": "validator/src/orchestration/mod.rs",
+      "sha256": "sha256:ce8b7a3888ef3ef2ca2047c88677b2ab015e22f303b6a15f1207a74b8f63371a",
+      "byte_length": 5507,
+      "line_count": 172
+    },
+    {
+      "path": "validator/tests/public_api_witness.rs",
+      "sha256": "sha256:739eb5f000be2f15379ee03f35e5b0c3e76066c20c7c263ba9db26e8327f0ed7",
+      "byte_length": 1742,
+      "line_count": 43
+    }
+  ],
+  "root_reconciliation": {
+    "material_finding": "The prior compile witness promoted unadopted distribution and orchestration type names into the exact custom-tool API registry, causing HCT-INVENTORY to fail closed before enumeration.",
+    "repair": "Keep compile-visibility witnesses for the public kernel types while returning only exact adopted custom-tool API identifiers from implemented_public_apis.",
+    "claim_effect": "The canonical HCT-DISTRIBUTION API remains missing until PackageSnapshot, InstallSnapshot, MarketplaceSnapshot, DiscoveryObservation, and RuntimeObservation exist. Orchestration visibility is not relabeled as a custom-tool API claim."
+  },
+  "accepted_dependencies": [
+    {
+      "path": "docs/ultragoal-successor-live/acceptance/DISTRIBUTION-PACKAGE-INSTALL-KERNEL.json",
+      "accepted_set_sha256": "bad5ac53fe279e79d23f8ce191e301d04d6a1247c552584e3a46b1cea3177dde"
+    },
+    {
+      "path": "docs/ultragoal-successor-live/acceptance/ORCHESTRATION-DURABLE-RECOVERY-KERNEL.json",
+      "prior_accepted_set_sha256": "7e5333911ff7a1e33ccec554fc6e963590a3b2c049a3388c591a99a1da06826e",
+      "reopened_by_public_type_visibility_change": true
+    }
+  ],
+  "verification": {
+    "command": "CARGO_TARGET_DIR=/tmp/hul-public-registry-correction cargo test --manifest-path validator/Cargo.toml --test public_api_witness --test distribution_contract --test orchestration_contract --locked --offline -j 16 -- --test-threads=16",
+    "result": "public API witness 1 passed; distribution 63 passed; orchestration 161 passed; 0 failed",
+    "wall_time_seconds": 6.624270167
+  },
+  "explicitly_withheld": [
+    "canonical HCT-DISTRIBUTION public API implementation",
+    "public CLI dispatcher and command catalog wiring",
+    "live package installation discovery and runtime behavior",
+    "end-to-end orchestration product journeys",
+    "readiness release or goal completion"
+  ],
+  "no_claim_statement": "This corrected candidate proves only compile-visible public kernel integration with exact adopted custom-tool API accounting; it does not claim product readiness, release, or completion."
+}

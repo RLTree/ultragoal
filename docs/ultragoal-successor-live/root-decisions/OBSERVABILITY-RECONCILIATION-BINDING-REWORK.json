@@ -1,0 +1,35 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "OBSERVABILITY-RECONCILIATION-BINDING-REWORK",
+  "workstream": "observability",
+  "decision": "REWORK",
+  "evidence_state": "superseded_by_public_worker_result_contract_correction",
+  "superseded_by": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-WORKER-RESULT-CONTRACT-REWORK.json",
+  "acceptance_check": "AC-OBSERVABILITY-PROOF-004",
+  "rejected_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-STRUCTURE-PROOF-RECONCILIATION-004.json",
+    "sha256": "e5506d6ea42db3c27d38579a1626e97d17d49e60754b3005fe605e8474f30bb9",
+    "artifact_set_sha256": "ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e"
+  },
+  "accepted_truthful_aggregates": {
+    "artifact_count": 21,
+    "artifact_total_bytes": 94784,
+    "artifact_total_lines": 2906
+  },
+  "binding_defects": [
+    {
+      "field": "effects.workspace_write.target",
+      "root_issued": "observability-proof-reconciliation-result",
+      "result_value": "observability-structure-proof-reconciliation-result"
+    },
+    {
+      "field": "no_claim_statement",
+      "root_issued_scope": "withhold source authorship, source acceptance, observability behavior, public integration, product behavior, node closure, readiness, release, and goal completion",
+      "result_value": "withholds readiness, release, and completion only"
+    }
+  ],
+  "corrective_scope": "The original reconciliation worker may change only the rejected result file to match the exact issued binding. No artifact row, source/test byte, membership, aggregate, candidate ID, context ID, semantic symbol, dependency, or other effect target may change.",
+  "required_no_claim_statement": "This reconciliation does not claim source authorship, source acceptance, observability behavior, public integration, product behavior, node closure, readiness, release, or goal completion.",
+  "claim_ceiling": "No observability source or behavior acceptance until exact binding validation and full independent review pass.",
+  "no_claim_statement": "This decision does not claim public integration, product behavior, readiness, release, node closure, or goal completion."
+}

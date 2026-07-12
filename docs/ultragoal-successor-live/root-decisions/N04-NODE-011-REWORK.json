@@ -1,0 +1,36 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N04-NODE-011-REWORK",
+  "node_id": "N04-DISTRIBUTION",
+  "root_decision": "rework",
+  "review_mode": "independent_exact_set_and_semantic_falsification",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-011.json",
+    "sha256": "c7514577026dbdc4b903f7966b28164ff86a9044e8e8b90b5d7cc9a1fc78346a",
+    "artifact_set_sha256": "86a5310b028fdc1a309499cb3b13e27b6b0ef341f412af0e39b9793fe769ca62",
+    "artifact_count": 54,
+    "total_bytes": 236547,
+    "total_lines": 7103,
+    "maximum_file_lines": 299
+  },
+  "identity_reconciliation": "pass",
+  "decisive_finding": {
+    "severity": "material",
+    "class": "exact_reserved_authority_false_pass",
+    "cause": "The shared public DNS classifier rejects subdomains of home.arpa through a leading-dot suffix but accepts exact home.arpa. HTTPS and email therefore share the same false pass across N02 and N04.",
+    "typed_boundary": "validator/src/plugin_manifest/network.rs"
+  },
+  "accepted_artifact_sets": [],
+  "preserved_corrections": [
+    "Complete example.com, example.net, and example.org exact/subdomain rejection passed review.",
+    "Environment/header, numeric-authority, MCP-key, label-boundary, and paired-consumer corrections remain preserved context."
+  ],
+  "corrective_lease": "LEASE-N04-DISTRIBUTION-NODE-012",
+  "corrective_scope": [
+    "Replace fragmented exact and suffix reserved-authority checks with one label-boundary-safe exact-or-below classifier for every adopted reserved DNS authority.",
+    "Add direct and paired N02/N04 HTTPS/email controls for exact home.arpa, its subdomains, case and port forms, and non-colliding suffix lookalikes.",
+    "Run paired semantics, full distribution, focused inventory manifest, and all-target checks at 16 jobs before freezing the exact current set."
+  ],
+  "claim_ceiling": "NODE-011 is an unaccepted internal semantic candidate. Complete canonical manifest semantics, package, install, discovery, runtime, N04 closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N04 completion, readiness, release, or goal completion."
+}

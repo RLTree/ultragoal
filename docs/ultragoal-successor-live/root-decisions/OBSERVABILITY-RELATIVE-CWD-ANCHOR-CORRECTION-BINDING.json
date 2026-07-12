@@ -1,0 +1,87 @@
+{
+  "schema_version": "RootBinding-v1",
+  "binding_id": "OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION-BINDING",
+  "workstream": "observability",
+  "acceptance_check": "AC-OBSERVABILITY-RELATIVE-CWD-ANCHOR-008",
+  "requested_route": "gpt-5.6-terra/high",
+  "effective_route": "unverified",
+  "rework_dependency": {
+    "path": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-RELATIVE-CWD-ANCHOR-REWORK.json",
+    "sha256": "31e0da2b73608c759356aa6470446c8ced38da77b853ca88a52204f5f60acd8c"
+  },
+  "interference_reconciliation": "A concurrent fixture lane used cargo fmt with apparent file arguments; Cargo formatted crate targets and rewrote only races_paths.rs. The rewrite is Rust-2024 formatting-only, the writer stopped unscoped cargo fmt, and root rebound the current bytes without reverting them.",
+  "candidate_id": "sha256:1c811d9b0f27545239d2e38c4b1c9ed28a634b018015f5d4f8f76eba864b0649",
+  "candidate_membership": {
+    "artifact_count": 22,
+    "artifact_total_bytes": 107366,
+    "artifact_total_lines": 3271,
+    "formula": "Sort path; append path, TAB, lowercase SHA-256 without prefix, LF; SHA-256 the concatenation.",
+    "artifacts": [
+      {"path":"validator/src/observability/binding.rs","sha256":"dd0a419531c1490fb2950db3ea0d0ce4a6fd5c61adfe6e248c1dd335b87f9475","byte_length":824,"line_count":26},
+      {"path":"validator/src/observability/event.rs","sha256":"9f0788f199dc15cc7368137527c33ed4109fed950cf771871169efe871b3f42b","byte_length":10360,"line_count":298},
+      {"path":"validator/src/observability/explain.rs","sha256":"8972df827dfc9a89f1e254ef36746aeb8c96b76a569fcf7dd7fad4f3a2a902be","byte_length":5542,"line_count":160},
+      {"path":"validator/src/observability/export.rs","sha256":"e62cfd30411471171b546d1137ed65c99ef6cc27611c60fbce4faf328f57965f","byte_length":4448,"line_count":117},
+      {"path":"validator/src/observability/filesystem.rs","sha256":"39502b0b20c705283e00b15a528f50ceaf5b2b69a72fca0f9bab6d2828ab2398","byte_length":4857,"line_count":181},
+      {"path":"validator/src/observability/filesystem/anchors.rs","sha256":"95e3f33c5b3bb9e6bf953c07993b4c9fb5d2818f4b7e94ff1f12bb7d2f9c8e9a","byte_length":2635,"line_count":77},
+      {"path":"validator/src/observability/filesystem/confinement.rs","sha256":"3b60a42464566976579dbe56e3d379ac96aad3f327ea3d4e58393b6a0a420b18","byte_length":9433,"line_count":300},
+      {"path":"validator/src/observability/format.rs","sha256":"0dd9cbe2b91ad6b8ba07b4cb3df17e3fd215cbd2391c6f19302d1435121e87b3","byte_length":3465,"line_count":94},
+      {"path":"validator/src/observability/identity.rs","sha256":"2bdcaf69a53a9cc0138cfcee3c81b98428a6802af070e6a2e950ef0cfa464f71","byte_length":2282,"line_count":66},
+      {"path":"validator/src/observability/lifecycle.rs","sha256":"796e46e87684e4c7a45a5a10ef13d4f1dc91d3f4e9f1c8777d797b55dde9bc83","byte_length":2561,"line_count":63},
+      {"path":"validator/src/observability/limits.rs","sha256":"e5c63cb8a0e386a31d091ee604d7af246b672d00a15bc643b23fc6ea2a2007fc","byte_length":739,"line_count":16},
+      {"path":"validator/src/observability/mod.rs","sha256":"b8bff1fda74040af8e2f53a401785dcafa69793ba289541d82a4c16f84bf1b48","byte_length":627,"line_count":24},
+      {"path":"validator/src/observability/privacy.rs","sha256":"1043892bf26c20ca8af11b108dfa859e02d9113e3e42c63283ddeb78bf6dc6f0","byte_length":5782,"line_count":195},
+      {"path":"validator/src/observability/query.rs","sha256":"d573d619c27c57fbefb85ccef3b53612366dc441786bb1fe937bad144204c87f","byte_length":3821,"line_count":120},
+      {"path":"validator/src/observability/store.rs","sha256":"13658db933416577c0263d139fb186bb7e4163d583847fc2c0918ab1808e5dad","byte_length":9168,"line_count":254},
+      {"path":"validator/tests/observability_contract.rs","sha256":"2d381508d3ca7795f69f5ae7be69232b373d0d4f79c288fb6c7890472677636a","byte_length":619,"line_count":24},
+      {"path":"validator/tests/observability_contract/corruption.rs","sha256":"67e082ff607a7e07d2271885237660fce70d88b5849b1c88fa865c828b985cd5","byte_length":6445,"line_count":214},
+      {"path":"validator/tests/observability_contract/limits_false_pass.rs","sha256":"7de92445764f210d8146a49509487b12ccacadb5bcdfc36d574024e4d5a2dcf8","byte_length":4683,"line_count":158},
+      {"path":"validator/tests/observability_contract/local_store.rs","sha256":"c61e7c0d02d9dc66166619d66eba1c06751289710d68435fb23deb05e04a6cdc","byte_length":3331,"line_count":103},
+      {"path":"validator/tests/observability_contract/privacy_export.rs","sha256":"0c041b7763875677afe9131487ab55492734e53dcdb578101df2bad836c6f834","byte_length":6335,"line_count":208},
+      {"path":"validator/tests/observability_contract/races_paths.rs","sha256":"819fae8869b7b766eb205b165017647464f02cdb82f5ed3f25afd1728135b5af","byte_length":13850,"line_count":371},
+      {"path":"validator/tests/observability_contract/support.rs","sha256":"2f9b51c05bd75c0b9d460cc8a9d3fe65958391a299f8025e6bcaad7e1ea464a6","byte_length":5559,"line_count":202}
+    ]
+  },
+  "changed_subset": {
+    "artifact_count": 3,
+    "artifact_total_bytes": 25918,
+    "artifact_total_lines": 748,
+    "artifact_set_sha256": "1202f5b55aa627138292d689f1872804b3dac13001154bff08ad48cc32ba1b1d",
+    "paths": [
+      "validator/src/observability/filesystem/anchors.rs",
+      "validator/src/observability/filesystem/confinement.rs",
+      "validator/tests/observability_contract/races_paths.rs"
+    ]
+  },
+  "worker_envelope": {
+    "worker": "/root/observability_absent_store_corrector",
+    "lease_id": "OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION-008",
+    "node_id": "observability-relative-cwd-anchor",
+    "dependency_nodes": ["observability-relative-cwd-anchor-rework"],
+    "dependency_digests": {"observability-relative-cwd-anchor-rework":"31e0da2b73608c759356aa6470446c8ced38da77b853ca88a52204f5f60acd8c"},
+    "semantic_symbols": ["observability::absolute_cwd_attachment","observability::retained_ancestor_binding","observability::confined_store_lifecycle"],
+    "safety_class": "isolated_workspace_write",
+    "owned_paths": [
+      "validator/src/observability/filesystem/anchors.rs",
+      "validator/src/observability/filesystem/confinement.rs",
+      "validator/tests/observability_contract/races_paths.rs",
+      "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION-008.json"
+    ],
+    "performed_effects": [
+      {"class":"workspace_write","target":"observability-confinement-source"},
+      {"class":"fixture_write","target":"observability-relative-cwd-tests"},
+      {"class":"process","target":"offline-observability-validation"}
+    ]
+  },
+  "required_behavior": [
+    "Relative paths are lexically attached at bind time to an absolute root-to-CWD retained descriptor and identity chain without canonicalizing through untrusted symlinks.",
+    "The absolute CWD descriptor identity is verified against retained '.' during binding and the full attachment is revalidated around every lifecycle operation.",
+    "Replacing the working-directory anchor makes create, append, query, clear, and recovery fail while both replacement and detached retained trees remain unchanged.",
+    "Absolute-path ordinary/symlink substitution, corruption, privacy/export, special-file, and zero-write query controls remain intact."
+  ],
+  "verification_checkpoint": "Locked/offline observability suite 29/29 passed at 16 test threads; relative-CWD subprocess covers all five operations; scoped Rust-2024 format check passed; maximum production file is 300 lines and races_paths.rs is a 371-line adversarial-test exception.",
+  "public_integration_state": "retracted pending this replacement source acceptance and a new root-owned public integration candidate",
+  "aggregate_note": "Root independently rederived all 22 regular rows, totals, full candidate digest, and three-row changed subset. WorkerResult-v1 is not claimed to enforce aggregate fields.",
+  "required_no_claim_statement": "This worker does not claim readiness, release, or completion.",
+  "invalidation_rule": "Any artifact, membership, CWD/root attachment, dependency, context, behavior, or effect change reopens this binding.",
+  "no_claim_statement": "This binding does not claim public HCT-OBSERVE integration, product behavior, readiness, release, node closure, or goal completion."
+}

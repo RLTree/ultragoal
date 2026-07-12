@@ -1,0 +1,47 @@
+{
+  "schema_version": "RootOrchestrationDecision-v1",
+  "decision_id": "ULTRA-ROUTING-SELF-CHECK-001",
+  "guidance_source": {
+    "path": "/Users/terrynoblin/.codex/AGENTS.md",
+    "sha256": "e940983e6d15c0de18acbb35bde4662b692b85b7b046849a3595b4d5b349637f",
+    "section": "Ultra Orchestration Routing Law"
+  },
+  "finding": "Three unfinished lanes had been uniformly routed to gpt-5.6-sol/ultra. The updated law makes that invalid because parent Ultra mode is not a child default and the bounded tasks can be decomposed to cheaper sufficient routes.",
+  "action": {
+    "interrupted_without_revert": [
+      "/root/routine_snapshot_provenance_corrector",
+      "/root/distribution_descriptor_candidate_finisher",
+      "/root/semantic_observability_store_builder"
+    ],
+    "successor_routes": [
+      {
+        "agent": "/root/routine_worker_result_encoder",
+        "model": "gpt-5.6-luna",
+        "reasoning": "high",
+        "task_shape": "deterministic WorkerResultV1 encoding and mechanical envelope/artifact verification",
+        "sufficiency": "The source set is frozen and independently exercised; only exact typed transformation and verification remain.",
+        "escalation": "Escalate only if current LeaseSpec or WorkPackage interfaces create genuine validation ambiguity."
+      },
+      {
+        "agent": "/root/distribution_confinement_corrector",
+        "model": "gpt-5.6-terra",
+        "reasoning": "xhigh",
+        "task_shape": "complex multi-file concurrency and filesystem-confinement correction",
+        "sufficiency": "Terra xhigh covers the reproduced two-hook ancestor relocation race and cross-module transaction redesign; Sol is unnecessary unless supported-host primitives create a contradictory contract.",
+        "cheaper_route_limit": "Terra high is insufficient for the interacting descriptor adoption, namespace restoration, outside mutation, rollback, recovery, and post-effect false-pass boundary."
+      },
+      {
+        "agent": "/root/semantic_observability_store_finisher",
+        "model": "gpt-5.6-terra",
+        "reasoning": "xhigh",
+        "task_shape": "complex multi-file durable observability, privacy, concurrency, causal query, and optional export implementation",
+        "sufficiency": "Terra xhigh covers the interacting local durability, redaction, query purity, causal semantics, and export gates; Sol is unnecessary absent a concrete contract contradiction.",
+        "cheaper_route_limit": "Terra high is insufficient while reconciling a partial owned tree across five interacting trust boundaries."
+      }
+    ]
+  },
+  "accepted_work_restarted": false,
+  "sol_lanes_after_reconciliation": 0,
+  "claim_ceiling": "Routing metadata is runtime-exposed dispatch evidence only. It does not prove implementation behavior, review acceptance, readiness, release, or completion.",
+  "no_claim_statement": "This decision corrects orchestration routing only and raises no product or completion claim."
+}

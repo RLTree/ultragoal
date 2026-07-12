@@ -1,0 +1,23 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N04-NODE-005-REWORK",
+  "node_id": "N04-DISTRIBUTION",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-005.json",
+    "sha256": "8314fe7d15d45a6fcd14ec05fabd69bd066bc9ae094062565fd50db06750db3f",
+    "artifact_set_sha256": "18ed54615c18f3aafbab261ee6186f0d30a4833332163e9569205cbe3a603f54",
+    "artifact_count": 28
+  },
+  "identity_reconciliation": "pass",
+  "decisive_finding": {
+    "severity": "high",
+    "class": "archive_target_prefix_collision",
+    "cause": "Case-folded ancestor/descendant component roots and package target paths were not rejected, allowing a file target to coexist with a child path that a safe archive cannot represent."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N04-DISTRIBUTION-NODE-006",
+  "claim_ceiling": "N04 remains an unaccepted injected distribution candidate; supported-host package, install, discovery, runtime, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N04 completion, readiness, release, or goal completion."
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "ROUTINE-WORKER-OWNERSHIP-REWORK",
+  "workstream": "routine_work",
+  "root_decision": "REWORK",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/ROUTINE-SNAPSHOT-PROVENANCE-CORRECTION-001.json",
+    "sha256": "9ad29edae7cea2bf900c71d0926ae0616eabee228929fcce2caa2e5c049c07ba",
+    "worker": "/root/routine_worker_result_encoder",
+    "declared_artifact_set_sha256": "e025e59afa8e7b948ae20500e469ec082664e803a3f874c08c178be62b9b7b1b",
+    "declared_artifact_count": 46
+  },
+  "durable_dispatch_evidence": {
+    "routing_record": "docs/ultragoal-successor-live/root-decisions/ULTRA-ROUTING-SELF-CHECK-001.json",
+    "routing_record_sha256_before_this_decision": "96cc0dea2591987098d33b0e45f2453a09fc09fdd31cdfa3396691db5748905f",
+    "critical_path_row": "N06",
+    "authorized_task_shape": "deterministic WorkerResultV1 encoding and result-only correction",
+    "source_implementation_author": "/root/routine_snapshot_provenance_corrector"
+  },
+  "decisive_finding": {
+    "severity": "material",
+    "class": "worker_ownership_and_lease_mismatch",
+    "cause": "The result encoder's packet declares all 46 routine source/test files as touched paths and validates only against a reconstructed lease that grants those paths. The durable root dispatch record authorized deterministic result encoding, not retroactive authorship or ownership of the implementation set.",
+    "false_pass": "WorkerResultV1::validate_for proves consistency with the supplied lease object; it does not prove that the supplied lease is the one the root actually dispatched. An after-the-fact expanded lease can therefore make a structurally valid packet pass while misattributing work."
+  },
+  "preserved_evidence": {
+    "source_test_set_sha256": "e025e59afa8e7b948ae20500e469ec082664e803a3f874c08c178be62b9b7b1b",
+    "artifact_count": 46,
+    "artifact_bytes": 194356,
+    "artifact_lines": 6061,
+    "prior_independent_review": "/tmp/hul-routine-provenance-review-001/review-record.md",
+    "prior_independent_review_sha256": "4e578b72c2b8edc633e9ed40fb4c22e334fe2e01573c988c70ed967206da24d1",
+    "prior_behavioral_diagnostics": "66/66 and all named public forgery probes passed on the exact unchanged source/test set; these remain evidence but do not repair result provenance."
+  },
+  "corrective_action": "Do not rewrite or impersonate the original worker. Issue a new compact root dispatch record to a correctly routed candidate-provenance reconciler. That worker may read and independently verify the 46-artifact candidate and write only a new reconciliation WorkerResultV1 whose touched paths and effects match its actual lease. Root acceptance must explicitly distinguish implementation bytes, verifier evidence, and worker provenance.",
+  "claim_ceiling": "Routine behavior remains an unaccepted source candidate with strong behavioral diagnostics. WorkerResult-backed acceptance, public HCT-CAPTURE/HCT-IMPACT integration, product journeys, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This REWORK rejects the packet's ownership provenance, not the frozen source behavior, and raises no product or completion claim."
+}

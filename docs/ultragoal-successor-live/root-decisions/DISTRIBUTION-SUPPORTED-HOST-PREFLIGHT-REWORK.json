@@ -1,0 +1,74 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "DISTRIBUTION-SUPPORTED-HOST-PREFLIGHT-REWORK",
+  "workstream": "distribution",
+  "decision": "REWORK",
+  "acceptance_check": "AC-SUPPORTED-HOST-PREFLIGHT-001",
+  "preflight": {
+    "reviewer": "/root/supported_host_identity_scout",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "mode": "read-only",
+    "repo_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "shell_codex": "codex-cli 0.144.1",
+    "desktop_app": "ChatGPT/Codex 26.707.41301 build 5103",
+    "embedded_codex": "codex-cli 0.144.0-alpha.4"
+  },
+  "source_observation": {
+    "plugin_id": "harness-ultragoal",
+    "version": "0.0.11",
+    "plugin_manifest_path": ".codex-plugin/plugin.json",
+    "plugin_manifest_sha256": "12c123fa9442dbf9e2eb7877b6fd1c4446ffc04a26d37727dddc0fb3877b06da",
+    "package_inventory_path": "plugin-manifest-draft.json",
+    "package_inventory_sha256": "8494432c2ad67b679a75634fad68562e6a79dd3fcb3b76e756d020d88e33ad38",
+    "skill_directory_count": 22,
+    "repo_local_agent_count": 6
+  },
+  "installed_observation": {
+    "installed_path": "/Users/terrynoblin/.codex/plugins/harness-ultragoal",
+    "cache_path": "/Users/terrynoblin/.codex/plugins/cache/local-harness-plugins/harness-ultragoal/0.0.11",
+    "version": "0.0.11",
+    "plugin_manifest_sha256": "8e93403398fe1ccf6c93dcd15f2143677e1ab47c65b7ee59f53e051e5f7ffcb6",
+    "package_inventory_sha256": "5254a77c3b0d3ac723bb9bdf8d0a54d17585b99e5cad49a9a8768b3809e8478f",
+    "normalized_tree_formula": "sorted regular-file relative path, TAB, lowercase file SHA-256, LF; SHA-256 the concatenation",
+    "normalized_tree_sha256": "ffc405aa7333ba11010620db6916da7d57247a7d121438e1a8882fe06cb48dd2",
+    "regular_file_count": 4411,
+    "regular_file_bytes": 51465948,
+    "installed_cache_equal": true,
+    "skill_directory_count": 13,
+    "repo_local_agent_count": 0
+  },
+  "marketplace_observation": {
+    "path": "/Users/terrynoblin/.agents/plugins/marketplace.json",
+    "sha256": "42f83f69426f6b2c9adb8650ef8ef09238698101454bad7ecda34a2e3647e8c3",
+    "root_resolution": "The personal marketplace root is coherent for the existing installed copy.",
+    "candidate_binding": "The marketplace resolves to the older installed bytes, not the live repository candidate.",
+    "codex_list": "harness-ultragoal@local-harness-plugins is installed and enabled at version 0.0.11"
+  },
+  "decisive_findings": [
+    "Source and installed/cache all declare 0.0.11 but their plugin manifest and package inventory bytes differ; equal-version different-byte reuse is rejected by the distribution kernel.",
+    "No HUGPKG artifact exists for the live candidate.",
+    "No `ultragoal` executable is installed on PATH; a repository target/debug binary is direct development output and cannot prove plugin discovery or current package identity.",
+    "Source has 22 skill directories and six repo-local agents while installed bytes have 13 skills and no repo-local agents.",
+    "Existing-session or repo-local visibility cannot prove neutral-root fresh-session discovery.",
+    "Plugins UI and fresh-session discovery were not observed in this read-only lane."
+  ],
+  "root_version_decision": {
+    "reserved_candidate_version": "0.0.12",
+    "application_state": "deferred_until_active_source_writers_freeze",
+    "reason": "The next installable candidate must have a unique version, but applying the bump before current source increments freeze would churn candidate identity without advancing proof.",
+    "root_owned_paths": [
+      ".codex-plugin/plugin.json",
+      "plugin-manifest-draft.json"
+    ]
+  },
+  "required_sequence": [
+    "Independently accept the enlarged distribution source set and real package-artifact writer.",
+    "Apply 0.0.12 to the two root-owned source manifests and recompute all source/package identities.",
+    "Build HUGPKG plus inventory twice from clean contexts and independently reconcile archive/tree bytes.",
+    "Only then request explicit installed/cache/config writes; snapshot and reconcile every effect.",
+    "Observe Plugins UI, then start a neutral-root fresh task and prove installed discovery before runtime journeys."
+  ],
+  "claim_ceiling": "Current source observation plus a distinct older installed/cache 0.0.11 observation. CL-PACKAGE, CL-INSTALL, CL-DISCOVERY, and CL-RUNTIME remain unevaluated for the live candidate.",
+  "no_claim_statement": "This decision does not claim package identity, install, discovery, runtime, readiness, release, node closure, or goal completion."
+}

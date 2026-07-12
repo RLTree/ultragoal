@@ -1,0 +1,43 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N10-NODE-008-REWORK",
+  "node_id": "N10-ORCHESTRATION",
+  "root_decision": "rework",
+  "review_mode": "root_clean_revalidation_reconciliation",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-008.json",
+    "sha256": "76f93d09e93043aa22e02260115625061380640910734c71663b392c27feba6c",
+    "artifact_set_sha256": "f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "artifact_count": 34,
+    "total_bytes": 230845,
+    "total_lines": 6801,
+    "maximum_rust_file_lines": 300
+  },
+  "identity_reconciliation": "pass",
+  "decisive_finding": {
+    "severity": "material",
+    "class": "owned_artifact_read_authority_alias",
+    "cause": "Lease-owned and explicitly readable paths are validated independently. An ASCII-case alias of an owned path can therefore be authorized as read-only and used to relabel the same host artifact outside the touched owned set.",
+    "typed_boundaries": [
+      "validator/src/orchestration/artifact.rs",
+      "validator/src/orchestration/lease.rs",
+      "validator/src/orchestration/scope.rs",
+      "validator/src/orchestration/scope_policy.rs"
+    ]
+  },
+  "accepted_artifact_sets": [],
+  "preserved_candidate_context": {
+    "artifact_set_sha256": "f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "source_acceptance": "withheld",
+    "test_observation": "25 focused and 127 full N10 tests passed; all targets compiled with 16 jobs. These remain diagnostics only."
+  },
+  "corrective_lease": "LEASE-N10-ORCHESTRATION-NODE-009",
+  "corrective_scope": [
+    "Reject ASCII-case alias overlap between every owned category and read_paths at the typed lease/scope boundary, or conservatively classify such overlap as owned before any read-only authorization.",
+    "Cover exact, ancestor, child, ASCII-case, generated-output, fixture, and positive disjoint read-path relations without weakening existing Unicode, symlink, hardlink, path-swap, or frozen-parent controls.",
+    "Recompute a byte-only corrected artifact set and run focused and full N10 tests plus all-target compilation at 16 jobs in an isolated target directory.",
+    "Emit WorkerResult-v1 only. Do not change root wiring, public commands, shared manifests, claims, migration authority, or release state."
+  ],
+  "claim_ceiling": "N10 NODE-008 proves a clean current byte binding and a material authority defect. Acceptance, root wiring, production recovery, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N10 completion, readiness, release, or goal completion."
+}

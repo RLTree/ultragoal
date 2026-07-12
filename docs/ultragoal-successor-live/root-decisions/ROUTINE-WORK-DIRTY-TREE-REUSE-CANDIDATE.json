@@ -1,0 +1,98 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "routine_work_dirty_tree_verified_reuse",
+  "candidate_state": "frozen_for_independent_review",
+  "lane_route": {
+    "model": "gpt-5.6-sol",
+    "reasoning": "xhigh",
+    "rationale": "Critical-path Rust behavior spanning conservative impact closure, Git/filesystem races, verified reuse, false-pass controls, and security boundaries."
+  },
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "1a79f8fbf65ebfbb812847704f1c8d3e666f5fc816c199394b06673ad6d06216",
+  "artifact_count": 35,
+  "total_bytes": 143267,
+  "total_lines": 4613,
+  "maximum_file_lines": 291,
+  "artifacts": [
+    {"path":"validator/src/routine_work/binding.rs","sha256":"sha256:fa07c6a68da84de655f260b45fac134e97753d99fb34529405ced2b1892e10da","byte_length":5997,"line_count":200},
+    {"path":"validator/src/routine_work/digest.rs","sha256":"sha256:914850cf6da654157011b8e6d0bcbddd0acc3f758f76ff6ad42eab8ed6d7be49","byte_length":1110,"line_count":39},
+    {"path":"validator/src/routine_work/error.rs","sha256":"sha256:73ce4d6c286e57f5bcccdebcc9ce3814ba1dcc072d966466b0cffd648ec59fea","byte_length":2799,"line_count":100},
+    {"path":"validator/src/routine_work/local/file.rs","sha256":"sha256:638dac86b313c9f4db2ba8ebd9ba41c6d52c583979383b1c1afda4e7b4644d0d","byte_length":6158,"line_count":186},
+    {"path":"validator/src/routine_work/local/git/command.rs","sha256":"sha256:88c5dc2dd2b6fbe9c808343fd4cb9f80839994d40c7f3fd94683ad79cb7fcddf","byte_length":4547,"line_count":143},
+    {"path":"validator/src/routine_work/local/git/mod.rs","sha256":"sha256:08d6d4992db21ecad1f93eaa973991f9ff41c1df2d00d255daa205164105c69e","byte_length":120,"line_count":5},
+    {"path":"validator/src/routine_work/local/git/porcelain.rs","sha256":"sha256:421646d3c96b0ea97d8ba644953db1a17931420b148219b6bbf897cf4379a255","byte_length":8530,"line_count":263},
+    {"path":"validator/src/routine_work/local/mod.rs","sha256":"sha256:87000d72342b141d9c146fcba594bd48c9b182ad1a62e7bdbab236eb3eb9d3d9","byte_length":1936,"line_count":56},
+    {"path":"validator/src/routine_work/local/tree.rs","sha256":"sha256:ea079bd8f02a62f00831d4b705e00c04aa3c4c53a7414717e7e91cfbe6c9e78a","byte_length":4132,"line_count":115},
+    {"path":"validator/src/routine_work/mod.rs","sha256":"sha256:9231a1d2cbdef43fbbc49d8463fc5723df639170c6353662154695ada4513aa5","byte_length":1142,"line_count":35},
+    {"path":"validator/src/routine_work/path.rs","sha256":"sha256:17fbf9a5a37219ac338e3ceb44e2ce1fada9d6b86976597bd590a04194b2c2ea","byte_length":1621,"line_count":56},
+    {"path":"validator/src/routine_work/plan/mod.rs","sha256":"sha256:58a06790f0d5495a31ec135bbbeea0403c40fcef9c57c2d37a84612b5a3fb515","byte_length":3868,"line_count":129},
+    {"path":"validator/src/routine_work/plan/model.rs","sha256":"sha256:18b6f51f4f645ce39b7b6fa66b5fccbb1ffa3b89db03ac76170d7d41f29efcfe","byte_length":5345,"line_count":233},
+    {"path":"validator/src/routine_work/plan/order.rs","sha256":"sha256:df3f2bc5cc3aa51e2410fe5c6db0e87c30e97813e7d779dd7f9181acbd190f95","byte_length":1118,"line_count":36},
+    {"path":"validator/src/routine_work/plan/selection.rs","sha256":"sha256:6c640ffa3cc362b2a2e4bc8cc3ff504f788aadba6beac482e7d8540d02e4ab4a","byte_length":7319,"line_count":216},
+    {"path":"validator/src/routine_work/registry/mod.rs","sha256":"sha256:f432127de595014a427e4c68fb2fb807e03d27488196b51c250a3bd3a786a8ff","byte_length":139,"line_count":6},
+    {"path":"validator/src/routine_work/registry/model.rs","sha256":"sha256:dc7674de38c7bb9f97f5f723bea1f57dc8175a3d271f69a42ec9f6a530cfdcfe","byte_length":6613,"line_count":249},
+    {"path":"validator/src/routine_work/registry/validation.rs","sha256":"sha256:30e56a5c369877e21a15d1e0a396691b633a34f1f7f84d3dcec6b7b5954229be","byte_length":4852,"line_count":163},
+    {"path":"validator/src/routine_work/report.rs","sha256":"sha256:7515bed77a0c61b14fb31896f87a57ef0d47dc97fe872a8659b8edf8d6aa8e98","byte_length":5665,"line_count":192},
+    {"path":"validator/src/routine_work/reuse/decision.rs","sha256":"sha256:336fc772fd1fd4de62ea1b2d3599c84b16d071714e8e9b8c290c473332b54a2b","byte_length":4535,"line_count":122},
+    {"path":"validator/src/routine_work/reuse/mod.rs","sha256":"sha256:c59c5d84dbc2d8935c0c1c7700cc0c5436568dfa6038f8f35070ffebf7b11ccd","byte_length":264,"line_count":10},
+    {"path":"validator/src/routine_work/reuse/model.rs","sha256":"sha256:161cf054ad2d1f7a5ed45c6596c1f1702423ac12a371e40dcc01ea8b6c52657b","byte_length":8182,"line_count":291},
+    {"path":"validator/src/routine_work/reuse/receipt.rs","sha256":"sha256:0499374ec17964ddac48f14c02170de25ee043ae0369d554387b5b59e88ef726","byte_length":5120,"line_count":154},
+    {"path":"validator/src/routine_work/snapshot.rs","sha256":"sha256:e5a5f70ce4708311f7b7a8d2cf3a938ae27736b0529df7ba634263104baecc12","byte_length":5417,"line_count":185},
+    {"path":"validator/tests/routine_work_contract.rs","sha256":"sha256:5804cd90f7050f59a68b4b5c32f444f7f3778bb0b1c9cdfbf7cbd62d3206b84b","byte_length":570,"line_count":23},
+    {"path":"validator/tests/routine_work_contract/contract.rs","sha256":"sha256:f93f11a0025d72a91f955d6eff856aa5f4ebfc32f9bec7640000bf83ade8f44c","byte_length":462,"line_count":13},
+    {"path":"validator/tests/routine_work_contract/local_capture.rs","sha256":"sha256:7c3ccaca52afe70e3b44717d7a37b8e2d6f13ed6b8f0d42cf95c9f61b4dbb208","byte_length":7206,"line_count":207},
+    {"path":"validator/tests/routine_work_contract/planning.rs","sha256":"sha256:b2ae1a06f1c4133dc01a14582bd8732152f9c3020bef0402adac32a9fa767636","byte_length":7639,"line_count":212},
+    {"path":"validator/tests/routine_work_contract/report.rs","sha256":"sha256:2e535828fbaaffc6acff7343779743ffd3b2f67f4f3c273531351220fb043794","byte_length":4002,"line_count":119},
+    {"path":"validator/tests/routine_work_contract/reuse/common.rs","sha256":"sha256:c5d649646e5c9549890697d0896a039cf092f38d23159d3e23e46655cf702524","byte_length":2388,"line_count":73},
+    {"path":"validator/tests/routine_work_contract/reuse/integrity.rs","sha256":"sha256:c0683a4257cd7012760c2579086f1d01797169276743521d8c3de5036fa49d6a","byte_length":4764,"line_count":133},
+    {"path":"validator/tests/routine_work_contract/reuse/matching.rs","sha256":"sha256:66a367ba7ce37e4df6a1f1a324ee5125e429dd7354337753f425f533a6570625","byte_length":5267,"line_count":161},
+    {"path":"validator/tests/routine_work_contract/reuse/mod.rs","sha256":"sha256:96293c36629471622684a01f2228e25725244222de19b0e68afedc3e1fa318c4","byte_length":41,"line_count":3},
+    {"path":"validator/tests/routine_work_contract/security.rs","sha256":"sha256:6e1a6a835a83f575da986dde0196342e7e427cedd2533803940a8bb2175e1652","byte_length":6530,"line_count":202},
+    {"path":"validator/tests/routine_work_contract/support.rs","sha256":"sha256:a6f5cbcbca82e63ef7be417c25c42dd209166a432f10c48a9a7f7a4e725e2d19","byte_length":7869,"line_count":283}
+  ],
+  "implemented_behavior": [
+    "conservative clean dirty renamed deleted untracked unknown conflict partial and strict-boundary planning",
+    "deterministic dependency and downstream closure using the exact HCT-IMPACT API names",
+    "context candidate root configuration selected-input tool-set graph plan coverage node tool input dependency-result and result-scope reuse binding",
+    "opaque VerifiedReuse prevents callers from fabricating reused report rows",
+    "canonical receipt parsing rejects unknown fields duplicate rows noncanonical bytes stale evidence substitutions and oversized inputs",
+    "anchored bounded twice-observed worktree shape prevents Git-status false passes for FIFO socket symlink hardlink and submodule states",
+    "bound absolute Git execution clears environment suppresses optional locks and applies time output and row limits",
+    "confined exact file reads use ancestor validation O_NOFOLLOW single-link regular-file enforcement double hashing and final root revalidation",
+    "read and capture verification compares recursive tree bytes and Git status before and after"
+  ],
+  "worker_verification": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-routine-dirty-tree-builder cargo test --manifest-path validator/Cargo.toml --test routine_work_contract --locked --offline -j 16 -- --test-threads=16",
+      "result": "40 passed; 0 failed; 13.65 seconds"
+    },
+    {
+      "command": "owned-path rustfmt --check",
+      "result": "passed"
+    },
+    {
+      "command": "full cargo fmt --check",
+      "result": "failed only on pre-existing validator/tests/inventory_contract_cases/routing_transitions.rs outside this lease"
+    },
+    {
+      "command": "clippy integration attempt",
+      "result": "stopped by 123 pre-existing library-wide clippy::all failures before checking the leased integration target; no routine-work diagnostic observed"
+    }
+  ],
+  "root_integration_requests": [
+    "after independent acceptance add pub mod routine_work to validator/src/lib.rs",
+    "after independent acceptance witness ImpactGraph AffectedSet CoverageDimensions ReuseDecision VerifiedReuse LocalDirtyTree plan_routine assess_reuse and reconcile_report",
+    "route adopted routine commands through these APIs without a parallel planner reuse or report authority"
+  ],
+  "explicitly_withheld": [
+    "root acceptance before independent review",
+    "validator/src/lib.rs integration",
+    "public HCT-IMPACT and HCT-FIXTURES API witness integration",
+    "public command catalog and dispatcher routing",
+    "executed-work and verified-reuse product journeys",
+    "readiness release node closure or goal completion"
+  ],
+  "no_claim_statement": "This internal routine-work candidate does not claim root acceptance, public integration, installation, discovery, runtime product behavior, readiness, release, node closure, or goal completion."
+}

@@ -1,0 +1,138 @@
+{
+  "schema_version": "ContractChangeRequest-v1",
+  "change_id": "CCR-GPT56-PROMPT-CONTEXT-002",
+  "supersedes_change_id": "CCR-GPT56-PROMPT-CONTEXT-001",
+  "status": "corrected_proposed_non_authoritative_root_review_required",
+  "requested_owner": "OWN-ULTRA-ROOT",
+  "captured_at": "2026-07-12T05:03:42Z",
+  "prior_disposition": {
+    "decision_path": "docs/ultragoal-successor-live/root-decisions/CCR-GPT56-PROMPT-CONTEXT-001-REWORK.json",
+    "decision_sha256": "sha256:1b0cdad54b5bb5dde394e2bd87534fa46b3d72f033eddf2bd791252ffad68534",
+    "root_decision": "rework",
+    "decisive_class": "task_envelope_authority_and_confinement_false_pass"
+  },
+  "candidate_identity": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "dirty": true,
+    "proposal_artifact_set_sha256": "sha256:14a36b6dee353dd77f4c16a60770239ee8d1f7bc57797fd13ce4ba78dbbab4a9"
+  },
+  "artifact_set": {
+    "artifact_count_excluding_request_files": 12,
+    "bytes": 119657,
+    "lines": 2440,
+    "sha256": "14a36b6dee353dd77f4c16a60770239ee8d1f7bc57797fd13ce4ba78dbbab4a9",
+    "formula": "SHA-256 of bytewise-sorted path<TAB>sha256-without-prefix<LF>; ROOT-CHANGE-REQUEST.json and ROOT-CHANGE-REQUEST-002.json excluded."
+  },
+  "artifacts": [
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/00-ROOT-READ-ME.md",
+      "sha256": "sha256:85c2591d62e111fea9016e4fcf55e1160de22ed8e94ace9720134bba8c580d9d",
+      "bytes": 2720,
+      "lines": 40
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE-RED-FIXTURES.json",
+      "sha256": "sha256:c62aff83ecddb16a5156c404d76543de369d33d4ee9ca6c3234213396245ebc8",
+      "bytes": 13318,
+      "lines": 413
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+      "sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604",
+      "bytes": 23425,
+      "lines": 747
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/ASSESSMENT.md",
+      "sha256": "sha256:02e97aebd52c26ee3aecd208618c15a6ccece7d48d8815ecfa8e3d0f2017e7f8",
+      "bytes": 6935,
+      "lines": 64
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/CODEX-ULTRA-BOOTSTRAP.md",
+      "sha256": "sha256:c10c7d0a5fbb995a7c976b63930fcdee3ca4cd0ca83b62ada00231e6891f5071",
+      "bytes": 4298,
+      "lines": 45
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/CODEX-ULTRA-GOAL.md",
+      "sha256": "sha256:e1a57bd12f77c5303db7dc937c5b5e423d81b74ce3f530a4683e1a26c8320af1",
+      "bytes": 2787,
+      "lines": 13
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/CONTEXT-ROUTING-MAP.json",
+      "sha256": "sha256:7ac07d8e5b9aa1bed675fe332ebdf0453b6b36a35676800f56ee73e9c871b2f7",
+      "bytes": 9579,
+      "lines": 151
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/MODEL-ADAPTIVE-PROMPT-AND-CONTEXT-CONTRACT.md",
+      "sha256": "sha256:1b7e0c91a86598286b393597fd1bd220091ea127717a9c01d084607778639837",
+      "bytes": 13310,
+      "lines": 182
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/REPO-PROPAGATION-PLAN.md",
+      "sha256": "sha256:f24593806fca9fb7624be2263f06ca8665715f84050c549d7fdeb2c68db0f931",
+      "bytes": 13148,
+      "lines": 231
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/REQUIREMENT-TRACE-PATCH.json",
+      "sha256": "sha256:34b5e176b68c71271256abdf0a464618f225f3cd52c8285b7eb9ab824b3c8b17",
+      "bytes": 14407,
+      "lines": 195
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/ULTRAGOAL-ORCHESTRATOR-PROMPT.md",
+      "sha256": "sha256:1c73f3c90cd4aeb1e56d3ea254d24645ef9dcec5bc3de5cbed8f8d780b8c307a",
+      "bytes": 2267,
+      "lines": 30
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/verify-agent-task-envelope.py",
+      "sha256": "sha256:d1f73f367094c865ea4cd0397cc38f9c72bf388af50adb93ab4725fc4ac1239b",
+      "bytes": 13463,
+      "lines": 329
+    }
+  ],
+  "corrections": [
+    "Candidate identity now requires a canonical repository binding, digest-shaped context and candidate IDs, HEAD/tree, and an exact dirty-set or artifact-set freeze.",
+    "Role IDs are closed, root authority is non-delegable, project-role source bytes are bound, and read-only reviewer roles require read-only candidate effects.",
+    "Candidate paths are repository-relative, scratch uses logical scratch URIs, symlinks and special files reject, and end-of-session path revalidation is mandatory.",
+    "A single-valued effect matrix makes allowed/forbidden overlap impossible and schema conditionals reject scope/effect mismatches.",
+    "Stable IDs carry immutable authority-source digests and exact resolved-row digests; schema-valid unknown IDs still fail the same-session semantic resolver.",
+    "Evidence and unsupported truth surfaces are nonempty, typed output schema bytes must resolve, and all five verification categories require controls or typed inapplicability.",
+    "Sixteen deterministic adversarial fixtures now reject, including the two cases that require semantic rather than schema rejection."
+  ],
+  "verification_completed": [
+    {
+      "command": "python3 docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/verify-agent-task-envelope.py",
+      "result": "valid baseline accepted; 16 of 16 red fixtures rejected; unknown node and unknown output schema rejected by semantic resolver; claim_effect none"
+    },
+    {
+      "command": "jsonschema.Draft202012Validator.check_schema(AGENT-TASK-ENVELOPE.schema.json)",
+      "result": "pass"
+    },
+    {
+      "command": "jq parse of every proposal JSON document",
+      "result": "pass"
+    }
+  ],
+  "remaining_required_independent_review": [
+    "Recompute all twelve artifact rows and the aggregate from live bytes.",
+    "Falsify candidate and context ID formulas, stable-ID resolver completeness, role binding, path confinement, effect consistency, output-schema resolution, post-freeze mutation, and private-data leakage.",
+    "Review all other proposal artifacts not reached after the first v1 decisive defect.",
+    "Do not adopt until equivalent validation exists in the canonical Rust product boundary and representative prompt/context evaluations pass."
+  ],
+  "forbidden_direct_actions": [
+    "Do not treat this corrected proposal or its Python harness as adopted contract or product authority.",
+    "Do not overwrite FINAL-CONTRACT, manifests, package inputs, claims, migration authority, or release state without a fresh root ACCEPT decision and full invalidation reconciliation.",
+    "Do not infer model, mode, permissions, install, discovery, runtime, readiness, release, or completion from this request."
+  ],
+  "claim_ceiling": "corrected_proposal_source_only_not_adopted",
+  "no_claim_statement": "This corrected change request does not claim implementation, adoption, model or runtime configuration, readiness, release, node closure, or goal completion."
+}

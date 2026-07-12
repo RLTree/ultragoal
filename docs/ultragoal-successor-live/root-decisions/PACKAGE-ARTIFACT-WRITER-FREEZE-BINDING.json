@@ -1,0 +1,78 @@
+{
+  "schema_version": "RootBinding-v1",
+  "binding_id": "PACKAGE-ARTIFACT-WRITER-FREEZE-BINDING",
+  "workstream": "distribution",
+  "acceptance_check": "AC-PACKAGE-ARTIFACT-WRITER-001",
+  "evidence_state": "rejected_by_independent_full_identity_review",
+  "superseded_by": "docs/ultragoal-successor-live/root-decisions/PACKAGE-ARTIFACT-FULL-IDENTITY-REWORK.json",
+  "requested_route": "gpt-5.6-terra/high",
+  "effective_route": "unverified",
+  "candidate_id": "sha256:3bf86feb2f8055204ca92e8904e6a7ee309be224c3d8e102fa9cdda220773de7",
+  "candidate_membership": {
+    "artifact_count": 4,
+    "artifact_total_bytes": 17114,
+    "artifact_total_lines": 509,
+    "formula": "Sort path; append path, TAB, lowercase SHA-256 without prefix, LF; SHA-256 the concatenation.",
+    "artifacts": [
+      {
+        "path": "validator/src/distribution/package/mod.rs",
+        "sha256": "8382067960a16b703934a5571c5d89131d7edb2139fd2a5b0ed155d2f7a530a5",
+        "byte_length": 2133,
+        "line_count": 70
+      },
+      {
+        "path": "validator/src/distribution/package/output.rs",
+        "sha256": "d196bbd8293bc8f6b0c7a1ef209177ed08efafd0bc7399b7a7069c61d3219c01",
+        "byte_length": 6336,
+        "line_count": 192
+      },
+      {
+        "path": "validator/tests/distribution_contract.rs",
+        "sha256": "76ac1be7c03baffc777af10cafd8975f30a7c112b0903ce2a863ea52e3ed707f",
+        "byte_length": 2048,
+        "line_count": 58
+      },
+      {
+        "path": "validator/tests/distribution_contract/package_output.rs",
+        "sha256": "a62c805e1da9a2c3de8dd4e810b4645349093a9a1794a97ff4f2bf885ff4b0aa",
+        "byte_length": 6597,
+        "line_count": 189
+      }
+    ]
+  },
+  "root_integration_artifact": {
+    "path": "validator/src/distribution/mod.rs",
+    "sha256": "72e77951163ce4aa184494cde655e6be3221bc14dd4d92a59cf188dd1a34c7b6",
+    "ownership": "root",
+    "worker_touched": false
+  },
+  "worker_envelope": {
+    "worker": "/root/package_artifact_writer_builder",
+    "lease_id": "PACKAGE-ARTIFACT-WRITER-IMPLEMENTATION-001",
+    "node_id": "package-artifact-writer",
+    "dependency_nodes": [
+      "distribution-confinement-kernel"
+    ],
+    "dependency_digest": "adf95dfa0931c4b6ec1a42c8667ccac40fb37e66f453e2d8434eda381d5900e9",
+    "semantic_symbol": "distribution::package_artifact_writer",
+    "safety_class": "isolated_workspace_write",
+    "performed_effects": [
+      {
+        "class": "workspace_write",
+        "target": "package-artifact-writer-source"
+      },
+      {
+        "class": "fixture_write",
+        "target": "package-artifact-writer-tests"
+      },
+      {
+        "class": "process",
+        "target": "offline-package-artifact-writer-validation"
+      }
+    ]
+  },
+  "required_no_claim_statement": "This worker does not claim readiness, release, or completion.",
+  "broader_limit": "The result must separately withhold built live package, install, discovery, runtime, source acceptance beyond the prior ceiling, node closure, readiness, release, and goal completion.",
+  "invalidation_rule": "Any byte, membership, effect, dependency, context, or root-integration change reopens this binding before validation.",
+  "no_claim_statement": "This binding does not claim package identity, install, discovery, runtime, readiness, release, node closure, or goal completion."
+}

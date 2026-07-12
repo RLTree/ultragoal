@@ -1,0 +1,67 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N10-ORCHESTRATION",
+  "root_decision": "accepted_internal_durable_orchestration_recovery_kernel",
+  "accepted_candidate": {
+    "path": "docs/ultragoal-successor-live/root-decisions/ORCHESTRATION-DURABLE-RECOVERY-EXACT-NAME-CANDIDATE.json",
+    "sha256": "eef65a21c1ffc24be257a0814dd53684f1010f36b4a62cde29694d5805162459",
+    "artifact_set_sha256": "7e5333911ff7a1e33ccec554fc6e963590a3b2c049a3388c591a99a1da06826e",
+    "artifact_count": 61,
+    "bytes": 361427,
+    "lines": 10652,
+    "maximum_file_lines": 298,
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a"
+  },
+  "independent_review": {
+    "reviewer": "/root/orchestration_recovery_falsifier",
+    "verdict": "pass",
+    "prior_findings_closed": [
+      "synthetic live integration observation",
+      "unreachable interrupted-publication repair after process death",
+      "case-aliased journal authority on the supported case-insensitive host"
+    ],
+    "artifact_identity_revalidated": true,
+    "blocking_findings": 0
+  },
+  "independent_execution": {
+    "focused_command": "env CARGO_TARGET_DIR=/tmp/hul-orchestration-exact-name-falsifier cargo test --manifest-path validator/Cargo.toml --test orchestration_contract journal_exact_names --locked --offline -j 16 -- --test-threads=16",
+    "focused_result": "5 passed; 0 failed; 156 filtered; 0.42s",
+    "full_command": "env CARGO_TARGET_DIR=/tmp/hul-orchestration-exact-name-falsifier cargo test --manifest-path validator/Cargo.toml --test orchestration_contract --locked --offline -j 16 -- --test-threads=16",
+    "full_result": "161 passed; 0 failed; 3.45s"
+  },
+  "root_reconciliation": {
+    "candidate_manifest_sha256_revalidated": true,
+    "artifact_rows_recomputed_from_exact_enumeration": "61 of 61",
+    "artifact_set_sha256_revalidated": "7e5333911ff7a1e33ccec554fc6e963590a3b2c049a3388c591a99a1da06826e",
+    "regular_single_link_rows": "61 of 61",
+    "aggregate_bytes": 361427,
+    "aggregate_lines": 10652,
+    "maximum_file_lines": 298,
+    "unknown_rows_accepted": 0
+  },
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-ORCH-001",
+      "state": "internal_durable_candidate_bound_orchestration_and_recovery_kernel",
+      "blocker": "Public command integration and representative interrupted product journeys remain open."
+    },
+    {
+      "requirement_id": "REQ-SECURITY-001",
+      "state": "supported_host_exact_name_anchoring_and_live_observation",
+      "blocker": "Final integrated security reconciliation and cross-surface product proof remain open."
+    }
+  ],
+  "root_acceptance_limit": "Exact internal orchestration candidate on the supported case-insensitive APFS host: candidate-bound leases and events, anchored live root observation, trusted restart, recoverable interrupted publication, exact journal authority names, and zero-write journal queries.",
+  "explicitly_withheld": [
+    "cross-platform filesystem behavior beyond the exercised host",
+    "public module and command-catalog integration",
+    "representative end-to-end interruption and recovery journey",
+    "orchestration node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any change covered by the candidate enumeration rule immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim public orchestration behavior, product readiness, release, or goal completion."
+}

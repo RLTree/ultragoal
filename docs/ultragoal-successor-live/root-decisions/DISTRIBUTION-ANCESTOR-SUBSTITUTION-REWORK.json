@@ -1,0 +1,47 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "workstream": "distribution_identity_ladder",
+  "decision": "REWORK",
+  "review_route": {
+    "model": "gpt-5.6-sol",
+    "reasoning": "ultra",
+    "rationale": "Package and installation effects must never escape their confined authority root."
+  },
+  "reviewed_candidate": {
+    "manifest": "docs/ultragoal-successor-live/root-decisions/DISTRIBUTION-IDENTITY-LADDER-CORRECTED-CANDIDATE.json",
+    "manifest_sha256": "bf165de87aac6748fd29900c0c3e27b31f48ee69670c66f766ea4fa7af7bab96",
+    "artifact_set_sha256": "11c31a8265252b6a2f71076e019f544d82a8fd26c3577afebbb706e6080d9767",
+    "artifact_count": 20,
+    "artifact_bytes": 108614,
+    "artifact_lines": 3292,
+    "identity_revalidated": true
+  },
+  "material_finding": {
+    "id": "distribution-pathname-ancestor-substitution",
+    "severity": "high",
+    "summary": "Ancestor validation is pathname-only, while later rename/remove effects follow a substituted symlink and can mutate outside the confined root before the post-check reports failure.",
+    "source": [
+      "validator/src/distribution/filesystem/root.rs:59",
+      "validator/src/distribution/filesystem/root.rs:74",
+      "validator/src/distribution/filesystem/file.rs:51",
+      "validator/src/distribution/filesystem/file.rs:69",
+      "validator/src/distribution/filesystem/tree.rs:81"
+    ],
+    "result": "A product-created stage pathname was renamed through a substituted ancestor; the outside escaped leaf existed afterward while the authorized original remained absent."
+  },
+  "required_correction": [
+    "hold trusted root and ancestor directory descriptors through the exact effect syscall",
+    "use descriptor-relative open, mkdir, rename, unlink, lock, stage, cleanup, and rollback operations",
+    "prove every outside tree remains byte-identical across root and ancestor substitutions",
+    "preserve exact JourneyBinding and zero-write observation behavior"
+  ],
+  "verification_gap": "The dependency-closed 76-test rerun was withheld after the decisive defect and ENOSPC stop.",
+  "active_corrective_lease": {
+    "agent": "distribution_descriptor_writer_corrector",
+    "model": "gpt-5.6-sol",
+    "reasoning": "ultra"
+  },
+  "accepted_artifact_sets": [],
+  "highest_defensible_ceiling": "Previously accepted offline/public distribution kernels only. The identity-ladder effect adapter remains unaccepted.",
+  "no_claim_statement": "No live install, marketplace, cache, app-registry, Plugins UI, discovery, runtime, readiness, release, node closure, or goal completion is claimed."
+}

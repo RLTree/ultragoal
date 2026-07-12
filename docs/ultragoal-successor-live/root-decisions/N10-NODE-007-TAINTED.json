@@ -1,0 +1,38 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N10-NODE-007-TAINTED",
+  "node_id": "N10-ORCHESTRATION",
+  "root_decision": "rework",
+  "review_mode": "root_lease_compliance_reconciliation",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-007.json",
+    "sha256": "4568df7164b726819c5f7c9f2b584f6e2aa462375784dd390ddbee7925d68312",
+    "artifact_set_sha256": "f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "artifact_count": 34,
+    "total_bytes": 230845,
+    "total_lines": 6801,
+    "maximum_rust_file_lines": 300
+  },
+  "identity_reconciliation": "pass_for_candidate_context_only",
+  "decisive_finding": {
+    "severity": "material",
+    "class": "run_scoped_lease_violation",
+    "cause": "The worker executed prohibited read-only Git preflight commands. No Git write or Git-derived candidate identity was used, but the explicit lease was violated and the run cannot produce an acceptable WorkerResult.",
+    "worker_disclosure": "complete"
+  },
+  "accepted_artifact_sets": [],
+  "preserved_candidate_context": {
+    "artifact_set_sha256": "f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
+    "source_acceptance": "withheld",
+    "test_observation": "25 focused and 127 full N10 tests passed; all targets compiled with 16 jobs. These remain diagnostics only."
+  },
+  "corrective_lease": "LEASE-N10-ORCHESTRATION-NODE-008",
+  "corrective_scope": [
+    "Use a fresh N10-specific agent with no Git operations and no Git-derived identity.",
+    "Recompute and validate the exact current 34-artifact set from file bytes only; reject any drift from the tainted context or document it as a new candidate.",
+    "Independently falsify owned-artifact relabeling, case/Unicode/symlink/hardlink/path-swap aliases, frozen NODE-006 binding, no-event rejection, replay, root changes, and persisted recovery boundaries.",
+    "Run focused and full N10 tests plus all-target compilation at 16 jobs in an isolated target. Emit a clean WorkerResult-v1 only; do not apply root wiring or claim acceptance."
+  ],
+  "claim_ceiling": "N10 NODE-007 is tainted candidate context only. Acceptance, root wiring, production recovery, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N10 completion, readiness, release, or goal completion."
+}

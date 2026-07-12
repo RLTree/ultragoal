@@ -1,0 +1,38 @@
+{
+  "schema_version": "RootCandidateManifest-v1",
+  "workstream": "repository_fit_supported_host_bounded_linearization",
+  "candidate_status": "pending_independent_review",
+  "corrects_decision": "docs/ultragoal-successor-live/root-decisions/REPOSITORY-FIT-ENUMERATION-BOUNDS-REWORK.json",
+  "artifact_membership_source": {
+    "path": "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-ENUMERATION-BUDGET-CORRECTION-001.json",
+    "sha256": "95652aa3a3f2abf15f43468dc98f1e142c1b3c2714053f8ba017e75187d3fccd",
+    "json_pointer": "/artifacts",
+    "rule": "The exact candidate membership and per-artifact path, sha256, byte_length, and lines are the ordered artifacts array in this immutable WorkerResult."
+  },
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, lowercase sha256 without the sha256 prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "b15bb0d19063bf4419d339c32d9d92bb5f296472f22647e834f1299c4e7511e7",
+  "artifact_count": 21,
+  "artifact_bytes": 128138,
+  "artifact_lines": 4016,
+  "maximum_file_lines": 300,
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "resource_budget": {
+    "entries_per_scan": 256,
+    "name_bytes_per_scan": 65536,
+    "entries_per_read": 4096,
+    "name_bytes_per_read": 1048576,
+    "on_exceed": "content-free ResourceLimit with no partial success"
+  },
+  "supported_host": "Apple/Darwin with F_GETPATH",
+  "unsupported_host_behavior": "Other Unix hosts fail closed with UnsupportedHost.",
+  "review_scope": [
+    "exact per-scan and cumulative enumeration bounds under large directories and churn",
+    "finite final descriptor path and identity observation for present and absent paths",
+    "root, ancestor, alias, symlink, hardlink, special-file, recreation, substitution, and mutation controls",
+    "zero-write inspect, plan, and verify; apply failure and rollback"
+  ],
+  "known_proof_gap": "The worker's 53-pass suite predates a three-blank-line final-byte drift. Exact-current suite and LLDB proof remain required.",
+  "support_limit": "Finite state at the final completed path/identity observation only; no eternal namespace or function-return-state guarantee.",
+  "no_claim_statement": "This manifest does not accept the candidate or claim public integration, readiness, release, node closure, or goal completion."
+}

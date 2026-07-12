@@ -1,0 +1,73 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "repository_fit_fail_closed_enumeration_confinement",
+  "candidate_state": "frozen_for_independent_rereview",
+  "lane_route": "gpt-5.6-sol/ultra",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "corrects_manifest": "docs/ultragoal-successor-live/root-decisions/REPOSITORY-FIT-EXACT-NAME-CONFINEMENT-CANDIDATE.json",
+  "corrects_manifest_sha256": "b123ca7b0111a258b7677320c82c0dbcbe200e048cae176d646cb73b0739e499",
+  "corrects_finding": "repository-fit exact-name enumeration classified partial observations after libc readdir returned an error",
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "4c5f7e6d4d9f82433e3d0b211862fe0efa90103779b48308762f34c50bc495a4",
+  "artifact_count": 17,
+  "total_bytes": 85559,
+  "total_lines": 2761,
+  "maximum_file_lines": 297,
+  "artifacts": [
+    {"path":"validator/src/repository_fit/apply.rs","sha256":"sha256:6a22343d1a5c732bcfeb0056669abc6318b7505ae23f2266262c056403243f78","byte_length":6391,"line_count":196},
+    {"path":"validator/src/repository_fit/error.rs","sha256":"sha256:ca4c06db9ce2d203612fa183f5467510c2f714957c4deb56b4f018967b2a0fe1","byte_length":1524,"line_count":59},
+    {"path":"validator/src/repository_fit/inspect.rs","sha256":"sha256:b140aa44c8245d7ca381ccdab265c81314c3d89bc01eca3bd3721a63f8ad2288","byte_length":10174,"line_count":290},
+    {"path":"validator/src/repository_fit/local/mod.rs","sha256":"sha256:f1d49253bebc8a031f04581732bf7dd7e17cbc4a7304aefb61cbc87b12498f6b","byte_length":1402,"line_count":57},
+    {"path":"validator/src/repository_fit/local/sys.rs","sha256":"sha256:0ebca4d849235ec4c9e94a647f44f578da3064af6443a1a4d1320d94496ac82b","byte_length":6625,"line_count":223},
+    {"path":"validator/src/repository_fit/local/sys_tests.rs","sha256":"sha256:5ae9184ec5bbf4cafec4fee41d07cedffb3efa4fd3c394250806ef11cc6abe8d","byte_length":3048,"line_count":113},
+    {"path":"validator/src/repository_fit/local/unix.rs","sha256":"sha256:c25411c8524035bf95618a719acd3dd8153c28d42e9e4e45f66dacd5dd3d2cf2","byte_length":8077,"line_count":217},
+    {"path":"validator/src/repository_fit/mod.rs","sha256":"sha256:77c8720c618c3f2a07fd38ccc536f7c90d91967f373ecb8b98c779bb2a502faf","byte_length":1104,"line_count":39},
+    {"path":"validator/src/repository_fit/model.rs","sha256":"sha256:f80283a192513038c47e32278eeefcacb376e5ecbe4d614706d924cf8cdfcd3b","byte_length":6617,"line_count":223},
+    {"path":"validator/src/repository_fit/ownership.rs","sha256":"sha256:8631977f153e3458697fa97ea5140df39d7dba15823930b989830e59e64ece7b","byte_length":3366,"line_count":123},
+    {"path":"validator/src/repository_fit/path.rs","sha256":"sha256:dda9b100450082345d7f1bd9bc08dd90fab995471a162d1a74ffb4b21560c2b7","byte_length":1720,"line_count":62},
+    {"path":"validator/src/repository_fit/state.rs","sha256":"sha256:a37bf5a72b5607591c259199be63e221ebd0b96b8725efca3fba63ac8f93cea3","byte_length":7373,"line_count":286},
+    {"path":"validator/tests/repository_fit_contract.rs","sha256":"sha256:84e0a1ac236beabf9d4ded8e2f442cf9937af3be52bf94645ca69a8a91fd4814","byte_length":338,"line_count":13},
+    {"path":"validator/tests/repository_fit_contract/engine.rs","sha256":"sha256:4e24fd5abf4e5bbf97a10df3d5ed0a2a5bbdb1cd1517536bbd8a5ad1fd7daf80","byte_length":9946,"line_count":297},
+    {"path":"validator/tests/repository_fit_contract/local_read.rs","sha256":"sha256:02be1dea003ae7ab625dfe6a6fc7a0cc23a3b711b65b57efb2fc7fce4f05f4cd","byte_length":9939,"line_count":294},
+    {"path":"validator/tests/repository_fit_contract/spec.rs","sha256":"sha256:a9f62b0e7cc42f2f30989517a089cef7bc3732619cd87d39c881e91a0d7307eb","byte_length":3496,"line_count":118},
+    {"path":"validator/tests/repository_fit_contract/support.rs","sha256":"sha256:457aedb67ceec4751c92b821812c5811603809aad282d4b331858cfb49deacfc","byte_length":4419,"line_count":151}
+  ],
+  "corrective_behavior": [
+    "thread-local errno is cleared immediately before every supported-host readdir call",
+    "null readdir with errno zero is EOF and null with nonzero errno is a typed read failure",
+    "exact alias and other partial observations are discarded after any enumeration error",
+    "the directory stream closes on success and failure with a drop fallback",
+    "invalid UTF-8 and close failures remain typed and non-echo",
+    "unsupported Unix errno access fails closed",
+    "ownership provenance exact-name conflict rollback mutation and zero-write controls remain intact"
+  ],
+  "worker_verification": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-repository-fit-case-fixer cargo test --manifest-path validator/Cargo.toml --test repository_fit_contract --locked --offline -j 16 -- --test-threads=16",
+      "result": "27 passed; 0 failed"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-repository-fit-case-fixer cargo test --manifest-path validator/Cargo.toml --test repository_fit_contract --locked --offline -j 16 repository_fit::local::sys::tests -- --test-threads=16",
+      "result": "3 passed; 0 failed; 24 filtered"
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/repository_fit/local/sys.rs validator/src/repository_fit/local/sys_tests.rs",
+      "result": "passed"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-repository-fit-case-fixer cargo clippy --manifest-path validator/Cargo.toml --test repository_fit_contract --locked --offline --no-deps -j 16",
+      "result": "exit 0 with pre-existing repository warnings and no enumeration-state-machine finding"
+    }
+  ],
+  "explicitly_withheld": [
+    "root acceptance before independent full-set rereview",
+    "public HCT-FIT API witness integration",
+    "canonical desired-state and HCT-STATE proof issuer wiring",
+    "concrete local compare-exchange writer",
+    "supported-host loaded-behavior journey",
+    "legacy fit-route retirement",
+    "readiness release or goal completion"
+  ],
+  "no_claim_statement": "This corrected internal kernel candidate does not claim repository-fit acceptance, public integration, readiness, release, or goal completion."
+}

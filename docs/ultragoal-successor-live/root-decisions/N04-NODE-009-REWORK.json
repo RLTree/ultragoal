@@ -1,0 +1,34 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N04-NODE-009-REWORK",
+  "node_id": "N04-DISTRIBUTION",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-009.json",
+    "sha256": "812c57b2f7852194e3f52d8d83caecb6f8a7cd29158b16eed737f0db4088b3e1",
+    "artifact_set_sha256": "8732f3bec9c11fcbbc53097dcec928d98c33401318b81c3e2f05fd339f7d539f",
+    "artifact_count": 53,
+    "total_bytes": 232952,
+    "total_lines": 7002,
+    "maximum_file_lines": 299
+  },
+  "identity_reconciliation": "pass",
+  "accepted_correction": "The distinct canonical environment-variable and HTTP field-name grammars and paired consumer controls satisfy NODE-008's requested correction.",
+  "decisive_finding": {
+    "severity": "critical",
+    "class": "alternative_numeric_ip_authority_false_pass",
+    "cause": "Public DNS validation recognizes only four-label all-decimal IPv4 literals. Alternative numeric IPv4 forms such as 127.1 and 0177.1 therefore enter supported HTTPS URL and author-email authority even though common networking stacks can resolve them as local or ambiguous IP addresses.",
+    "typed_boundary": "validator/src/plugin_manifest/validation.rs:127"
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N04-DISTRIBUTION-NODE-010",
+  "corrective_scope": [
+    "Replace the ad hoc numeric-host decision with one bounded standards-aware authority classifier that distinguishes public DNS names from canonical and alternative numeric IP forms.",
+    "Reject decimal, leading-zero, hexadecimal, single-integer, shortened, canonical IPv4, bracketed IPv6, and other ambiguous numeric authorities before supported URL or email acceptance.",
+    "Retain valid public DNS, port, path, query, fragment, URL userinfo, reserved suffix, key-grammar, prompt, metadata, MCP shape, and package reachability behavior.",
+    "Add unit and paired N02/N04 controls for alternative numeric authorities, then run 16-job focused, full distribution, inventory, and all-target checks before exact freeze and rereview."
+  ],
+  "claim_ceiling": "N04 environment/header semantics are corrected, but complete canonical manifest semantics and all package/install/discovery/runtime claims remain unaccepted. N04 closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N04 completion, readiness, release, or goal completion."
+}

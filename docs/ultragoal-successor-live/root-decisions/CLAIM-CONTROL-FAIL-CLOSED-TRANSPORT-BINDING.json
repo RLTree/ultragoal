@@ -1,0 +1,52 @@
+{
+  "schema_version": "RootBinding-v1",
+  "binding_id": "CLAIM-CONTROL-FAIL-CLOSED-TRANSPORT-BINDING",
+  "workstream": "claim-specific negative-control authority and fail-closed transport",
+  "candidate_id": "sha256:d89dfe0b3285d3451f29b6db94012ad006eeb43ca310e023011bfc6483622db8",
+  "rework_dependency": {
+    "path": "docs/ultragoal-successor-live/root-decisions/CLAIM-NAMED-CONTROL-AUTHORITY-REWORK.json",
+    "required_disposition": "rework"
+  },
+  "candidate_membership": {
+    "artifact_count": 17,
+    "artifact_total_bytes": 139196,
+    "artifact_total_lines": 3948,
+    "formula": "Sort path by raw path bytes; append path, TAB, lowercase SHA-256 without prefix, LF; SHA-256 the concatenation.",
+    "row_authority": "Use the exact 17 artifact rows in the WorkerResult; root independently re-read every current regular file, matched every digest and byte length, recomputed every line count, and reproduced the aggregate.",
+    "root_recomputed_set_sha256": "d89dfe0b3285d3451f29b6db94012ad006eeb43ca310e023011bfc6483622db8"
+  },
+  "worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/CLAIM-NAMED-CONTROL-AUTHORITY-CORRECTION-013.json",
+    "sha256": "ed730e049b746ea1dd4fea5ce9fca4e02bbf85abc21bedd06c5cd3d773a7664c",
+    "status": "worker_blocked",
+    "root_reconciliation": "all 17 current rows, totals, and the path-bound aggregate match; the blocked status is preserved"
+  },
+  "accepted_candidate_behavior": [
+    "caller-selected control, context, candidate, truth-surface, and ceiling strings cannot mint authority",
+    "receipt fields require a private authority capability and remain non-deserializable",
+    "production execution refuses before receipt creation because no adopted product executor catalog exists",
+    "local shell execution is confined to test behavior and cannot raise product proof",
+    "generic failure, argument/spec substitution, stale, replayed, cross-claim, cross-candidate, report-only, producer-synthesized, and wrong-surface evidence are rejected"
+  ],
+  "exact_blocker": {
+    "claim_registry_sha256": "67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc",
+    "registry_state": "14 adopted claims and 69 unique false-pass labels, with no executable/spec identity fields",
+    "requirement": "REQ-PROOF-006 requires the intended causal failure on the correct surface and pass-after-causal-repair behavior",
+    "missing_authority": [
+      "adopted per-control executable or immutable fixture-spec binding",
+      "authority-issued fixture-scheduler permit",
+      "upstream product negative-control implementations"
+    ]
+  },
+  "required_review": [
+    "recompute every current artifact row and the raw-byte-sorted aggregate",
+    "prove generic or caller-selected failures cannot elevate any adopted claim",
+    "prove production refuses before receipt creation while test-only transport remains non-elevating",
+    "verify the upstream catalog blocker from adopted contract bytes rather than implementation proposal prose",
+    "keep HCT-CLAIMS output, named product controls, claim elevation, readiness, release, node closure, and completion withheld"
+  ],
+  "requested_route": "fresh independent claim falsification of the exact 17-file fail-closed candidate",
+  "invalidation_rule": "Any change to the 17 WorkerResult artifact paths, the WorkerResult, the adopted CLAIM_REGISTRY or REQ-PROOF-006 authority, this binding, or a new production claim-control wiring path invalidates review and acceptance.",
+  "claim_ceiling": "private source/test transport plus live public refusal behavior only; no named product negative-control behavior or HCT-CLAIMS output",
+  "no_claim_statement": "This binding does not claim named-control product behavior, HCT-CLAIMS acceptance, any passed claim, readiness, release, node closure, or goal completion."
+}

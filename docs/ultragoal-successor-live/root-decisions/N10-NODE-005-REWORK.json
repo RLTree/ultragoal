@@ -1,0 +1,31 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N10-NODE-005-REWORK",
+  "node_id": "N10-ORCHESTRATION",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-005.json",
+    "sha256": "acff16f3164915d4f628b102b97f4008c688736ef2716d135ca831e8b5b5891e",
+    "artifact_set_sha256": "e5a7ff3f9ee4a3aec95978c57802cdf99b36bee73f0302b091e681475b047d5e",
+    "artifact_count": 28
+  },
+  "identity_reconciliation": "pass",
+  "decisive_finding": {
+    "severity": "critical",
+    "class": "worker_result_unreachable_typed_submission",
+    "cause": "The exact WorkerResult records 28 frozen artifacts but only its actual implementation writes in touched_paths. WorkerResultV1::validate_for currently requires every artifact to be touched, so 18 read-only evidence artifacts are rejected before a result commitment can exist. The candidate therefore cannot reach review persistence, acceptance, replay, CandidateRebound, or completion through its own typed protocol.",
+    "typed_boundary": "validator/src/orchestration/worker.rs:133"
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N10-ORCHESTRATION-NODE-006",
+  "corrective_scope": [
+    "Separate write evidence from read-only frozen evidence without weakening scope confinement: changed artifacts must be touched and owned; observed artifacts must be covered by the exact lease read scope.",
+    "Reject artifacts outside both touched owned scope and lease read scope, including ancestor, case-alias, traversal, host-protected, and cross-lease substitutions.",
+    "Preserve generated-output and fixture touched-path requirements, exact digest commitments, requested-root-change binding, replay identity, and no-event-on-rejection behavior.",
+    "Add a typed submission fixture for the exact broad frozen artifact-set pattern used by current WorkerResult-v1 receipts and prove it reaches commitment only under an exact read lease.",
+    "Return a new exact WorkerResult-v1 and request, but do not apply, root-owned module wiring."
+  ],
+  "claim_ceiling": "N10 remains an unaccepted internal orchestration candidate. Root module wiring, production execution adapter, persisted recovery journey, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N10 completion, readiness, release, or goal completion."
+}

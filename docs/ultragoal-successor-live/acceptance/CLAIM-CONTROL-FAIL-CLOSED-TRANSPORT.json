@@ -1,0 +1,48 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "CLAIM-CONTROL-FAIL-CLOSED-TRANSPORT",
+  "workstream": "claim-specific negative-control authority",
+  "root_disposition": "accepted_at_lowered_ceiling",
+  "candidate": {
+    "artifact_set_sha256": "d89dfe0b3285d3451f29b6db94012ad006eeb43ca310e023011bfc6483622db8",
+    "artifact_count": 17,
+    "artifact_bytes": 139196,
+    "artifact_lines": 3948,
+    "binding": {
+      "path": "docs/ultragoal-successor-live/root-decisions/CLAIM-CONTROL-FAIL-CLOSED-TRANSPORT-BINDING.json",
+      "sha256": "880eb10f9904c23e8f891d8c7cefbe0d7b017d3758915050938f18739ea7d47e"
+    },
+    "worker_result": {
+      "path": "docs/ultragoal-successor-live/worker-results/CLAIM-NAMED-CONTROL-AUTHORITY-CORRECTION-013.json",
+      "sha256": "ed730e049b746ea1dd4fea5ce9fca4e02bbf85abc21bedd06c5cd3d773a7664c",
+      "status": "worker_blocked"
+    }
+  },
+  "independent_review": {
+    "path": "docs/ultragoal-successor-live/reviews/CLAIM-CONTROL-FAIL-CLOSED-REVIEW-017.json",
+    "sha256": "bc266aec6f5c680b02f4d7f6e124c939a1d5a8b717b5beac8c1055f11b28cf34",
+    "verdict": "accept_at_lowered_ceiling"
+  },
+  "accepted_behavior": [
+    "the prior generic-failure arbitrary-claim elevation path is closed",
+    "caller-selected authority dimensions cannot enter the public or production path",
+    "production refuses before receipt issuance while adopted product control authority is absent",
+    "the exact private test transport supports confinement and receipt-integrity falsification without product claim effect",
+    "current public prove calls and inspect claims preserve zero-write behavior and withhold all claim dimensions"
+  ],
+  "active_blocker": {
+    "id": "adopted-claim-control-product-executors-absent",
+    "cause": "The adopted registry supplies 69 labels but no immutable executable/spec identities or upstream product control implementations, while REQ-PROOF-006 requires intended causal fail-then-repair behavior on the correct surface.",
+    "exact_next_authority": "Adopt or implement dependency-closed per-control product behavior and sealed execution authority without treating proposal fields, tests, receipts, or generic failures as the behavior."
+  },
+  "highest_honest_ceiling": "accepted private source/test transport plus live public refusal behavior only",
+  "explicitly_withheld": [
+    "named product negative-control behavior",
+    "HCT-CLAIMS output or acceptance",
+    "any passed or elevated claim",
+    "claim-node closure",
+    "readiness, release, or goal completion"
+  ],
+  "invalidation_rule": "Any change named by the binding invalidation rule reopens this acceptance immediately.",
+  "no_claim_statement": "This acceptance is not HCT-CLAIMS acceptance and does not claim a passed claim, node closure, readiness, release, or goal completion."
+}

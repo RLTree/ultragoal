@@ -1,0 +1,45 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "DISTRIBUTION-ANCESTOR-RELOCATION-REWORK",
+  "workstream": "distribution",
+  "root_decision": "REWORK",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/DISTRIBUTION-DESCRIPTOR-WRITER-CORRECTION-001.json",
+    "sha256": "57777b88358edf9f20f281c08722f87a567010a877467b66ad2063dc1a784aba",
+    "result_id": "sha256:7d1d0da039cb854fc8a4cd831648f3a701837ad6db4c3c7edf6840de23e881ac",
+    "artifact_set_sha256": "2ea50b21aaaf36cc1dfcd7b1b16dac73084f7db37be19fe1478c85a36bd805be",
+    "artifact_count": 70,
+    "artifact_bytes": 406282,
+    "artifact_lines": 12196
+  },
+  "independent_reproduction": {
+    "focused_suite": "98 passed; 0 failed; 2.72 seconds",
+    "command": "CARGO_TARGET_DIR=/tmp/hul-distribution-descriptor-review-target CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo test --manifest-path /tmp/hul-distribution-descriptor-review-001/probe/Cargo.toml --offline --locked -j16 --test ancestor_escape regular_ancestor_substitution_then_relocation_mutates_outside_after_effect_boundary -- --nocapture --test-threads=16",
+    "probe": "/tmp/hul-distribution-descriptor-review-001/probe/tests/ancestor_escape.rs",
+    "probe_sha256": "6e46f6496a7afa70d234de370f07e4e45bbe8dd54717c48d816f56bd2dc2aea0",
+    "observed_error": "ObjectChanged",
+    "outside_before_effect": "same-prior",
+    "outside_after_effect": "candidate"
+  },
+  "decisive_finding": {
+    "severity": "critical",
+    "class": "ancestor_relocation_outside_write",
+    "cause": "A regular-directory ancestor substituted at OpenDirectory is adopted as trusted. At the later Rename boundary it can be relocated outside while the original ancestor is restored; descriptor-relative rename_swap then mutates the relocated outside directory before post-effect identity checking reports ObjectChanged.",
+    "causal_locations": [
+      "validator/src/distribution/filesystem/descriptor/directory.rs:112",
+      "validator/src/distribution/filesystem/root.rs:104",
+      "validator/src/distribution/filesystem/file.rs:85",
+      "validator/src/distribution/filesystem/file.rs:150",
+      "validator/src/distribution/filesystem/descriptor/mutation.rs:49"
+    ],
+    "violated_invariants": [
+      "outside-byte-preservation",
+      "same-parent ancestor-substitution safety",
+      "fail-before-effect confinement"
+    ],
+    "scope": "Broader than the disclosed fstatat-to-unlinkat interval; the escape occurs at rename_swap and post-effect detection cannot undo the outside mutation."
+  },
+  "corrective_action": "Redesign the write path so an ancestor adopted from a substituted name can never become a mutation authority after relocation. Add the exact chained OpenDirectory-plus-Rename probe to the owned contract suite, preserve outside bytes on every rejected path, and re-review the entire corrected 70-artifact distribution boundary. If the supported POSIX host cannot enforce that property against an actor with rename authority, fail closed or lower the product contract through root authority; do not hide the assumption as an unlink-only residual.",
+  "claim_ceiling": "The distribution source remains an unaccepted corrective candidate. Source/package/install/cache/marketplace/app-registry/Plugins UI/discovery/runtime, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision records one decisive outside-write defect and stops broader review. It does not accept or integrate the candidate."
+}

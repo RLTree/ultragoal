@@ -1,0 +1,66 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N04-DISTRIBUTION",
+  "root_decision": "accepted_internal_shared_manifest_network_authority",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-013.json",
+    "sha256": "4d293a77536b8b164bfb0a01c8517177a43f37bb9cc17d3bb0c5b33c344be23c",
+    "artifact_set_sha256": "aef7cd61e4cac3ecdd62979a8ba5a04a2f235f70235271d8517a6f804e09ea64",
+    "artifact_count": 54,
+    "bytes": 238480,
+    "lines": 7156,
+    "maximum_file_lines": 299
+  },
+  "independent_source_review": {
+    "reviewer": "/root/distribution_authority_reviewer",
+    "verdict": "clean_pass",
+    "scope": "Exact set, parent and corrective bindings, paired mixed-case email and port-bearing HTTPS home.arpa controls, exact/subdomain/suffix boundaries, direct controls, numeric authorities, environment/header grammar, MCP semantics, and shared inventory/distribution consumers.",
+    "result_identity_revalidated": true,
+    "review_snapshot_sha256": "97387ef5ec00d384d13ef367e347e9d5d940daf4d83779f56e8e868f2141cfdb",
+    "review_path_count": 65,
+    "review_byte_size_mtime_changes": 0,
+    "blocking_findings": 0
+  },
+  "independent_execution": {
+    "reviewer_tests": "not rerun because exact source delta was decisive",
+    "root_focused_consumer_parity": "7 passed; 0 failed; 126 skipped; 16 jobs; 4.895 seconds",
+    "root_full_distribution": "43 passed; 0 failed; 0 skipped; 16 jobs; 0.336 seconds",
+    "root_focused_inventory_manifest": "13 passed; 0 failed; 77 skipped; 16 jobs; 10.513 seconds"
+  },
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-PLUGIN-001",
+      "state": "shared_intrinsic_manifest_network_semantics",
+      "blocker": "Complete manifest/package generation, supported host ingestion, and discovery remain open."
+    },
+    {
+      "requirement_id": "REQ-SECURITY-001",
+      "state": "bounded_offline_authority_filter",
+      "blocker": "Real install, cache, application, runtime, and host trust-boundary proof remain open."
+    }
+  ],
+  "root_acceptance_limit": "Exact shared offline plugin-manifest intrinsic network-authority semantics across inventory and distribution consumers only.",
+  "explicitly_withheld": [
+    "deterministic live package bytes",
+    "repository and personal marketplace ingestion",
+    "installed bytes and cache identity",
+    "application registry and Plugins UI exposure",
+    "host discovery",
+    "runtime identity and representative invocation",
+    "distribution completion",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "observed_live_mismatch": {
+    "source_manifest_sha256": "12c123fa9442dbf9e2eb7877b6fd1c4446ffc04a26d37727dddc0fb3877b06da",
+    "local_and_cache_manifest_sha256": "8e93403398fe1ccf6c93dcd15f2143677e1ab47c65b7ee59f53e051e5f7ffcb6",
+    "version_on_all_observed_surfaces": "0.0.11",
+    "effect": "Package, install, cache, discovery, and runtime claims remain withheld until versioned byte reconciliation succeeds."
+  },
+  "preserved_review_incident": "DISTRIBUTION-REVIEW-PROCESS-TAINT remains non-authoritative context; its ten incidental outputs are not acceptance evidence.",
+  "integration_hold": "Shared validator/src/lib.rs remains unchanged until the durable orchestration kernel freezes; one later public-wiring edit will reopen and revalidate this exact acceptance once instead of repeatedly.",
+  "invalidation_rule": "Any byte change to the accepted WorkerResult or its 54-artifact set immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim distribution completion, readiness, release, or goal completion."
+}

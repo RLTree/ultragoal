@@ -1,0 +1,57 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "ROUTINE-WORKER-RESULT-V1-REWORK",
+  "workstream": "routine_work",
+  "root_decision": "REWORK",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/ROUTINE-SNAPSHOT-PROVENANCE-CORRECTION-001.json",
+    "sha256": "f6f69f79af45acb472400798883835f6ba2e90c5ce27d55031553954099e9c58",
+    "declared_schema": "WorkerResult-v1"
+  },
+  "authoritative_parser": {
+    "path": "validator/src/orchestration/worker.rs",
+    "sha256": "b084ba517bfae0a991102e3b522d371bcda2b297f931622da9c9f5d6aa688d92",
+    "type": "WorkerResultV1",
+    "boundary": "serde deny_unknown_fields with every struct field required"
+  },
+  "decisive_finding": {
+    "severity": "material",
+    "class": "invalid_required_worker_result_v1",
+    "cause": "The emitted JSON is a narrative result packet rather than the adopted WorkerResultV1 wire shape. It has missing required fields and unknown fields that the authoritative parser rejects.",
+    "missing_required_keys": [
+      "context_id",
+      "final_state",
+      "touched_paths",
+      "touched_semantics",
+      "generated_outputs",
+      "fixtures",
+      "requirements",
+      "dependency_nodes",
+      "changes",
+      "commands_and_tests",
+      "findings",
+      "unresolved_dependencies",
+      "requested_root_changes",
+      "limitations"
+    ],
+    "rejected_unknown_keys": [
+      "claim_ceiling",
+      "correction",
+      "lease_boundary",
+      "performance",
+      "quality",
+      "residual_gaps",
+      "result_status",
+      "root_requests",
+      "route",
+      "schema_version",
+      "security",
+      "verification",
+      "workstream"
+    ]
+  },
+  "evidence_command": "jq --argjson required '<WorkerResultV1 exact field list>' '($required - keys) as $missing | (keys - $required) as $extra | {missing_required_keys:$missing,unknown_keys_rejected_by_deny_unknown_fields:$extra}' docs/ultragoal-successor-live/worker-results/ROUTINE-SNAPSHOT-PROVENANCE-CORRECTION-001.json",
+  "corrective_action": "Preserve the frozen 46 source/test artifacts unchanged. Replace only the required WorkerResult path with an exact WorkerResultV1 document, parse it through WorkerResultV1::parse_json, validate it against a current exact lease/work-package envelope, verify all artifact rows from the live filesystem, compute its result_id, and obtain fresh independent review before acceptance.",
+  "claim_ceiling": "The routine source/test set remains an unaccepted corrective candidate. No WorkerResult-backed acceptance, public integration, product journey, node closure, readiness, release, or completion claim can be raised.",
+  "no_claim_statement": "This REWORK decision does not reject or accept the source correction; it rejects the required worker output shape and preserves every downstream claim as withheld."
+}

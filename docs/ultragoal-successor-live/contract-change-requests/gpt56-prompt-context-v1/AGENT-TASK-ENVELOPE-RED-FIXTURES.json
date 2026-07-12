@@ -1,0 +1,413 @@
+{
+  "schema_version": "AgentTaskEnvelopeRedFixtures-v1",
+  "valid_baseline": {
+    "schema_version": "AgentTaskEnvelope-v1",
+    "task_id": "agent-task-envelope-red-fixture-baseline",
+    "role_binding": {
+      "role_id": "repo-recon",
+      "source_kind": "project_agent_manifest",
+      "source_ref": ".codex/agents/repo-recon.toml",
+      "source_sha256": "sha256:4272e86928d359a867da83491497ee163a1f66c9cf99683df69bec7d55b91f9c",
+      "sandbox_mode": "read-only",
+      "may_exercise_root_authority": false
+    },
+    "goal": "Validate one exact current task envelope without changing candidate authority.",
+    "success": [
+      "The exact bound envelope passes schema and same-session semantic resolution."
+    ],
+    "candidate_identity": {
+      "repository": {
+        "root_uri": "repo://harness-ultragoal-plugin-proposal",
+        "canonical_root_sha256": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170"
+      },
+      "context_id": "sha256:365c0ad4353c5f3078e28faefeafd1685fe5d4a7b603c4b48d5ba00539b067ed",
+      "candidate_id": "sha256:8c633bfa0acaa1225a6777ceecfcc618a472c555e42178c5c456af7119e2081c",
+      "branch": "codex/successor-contract-v2-live-product",
+      "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+      "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+      "dirty": true,
+      "captured_at": "2026-07-12T05:03:42Z",
+      "freeze": {
+        "kind": "artifact_set",
+        "artifact_set_sha256": "sha256:e40eb20c5ec2d6b6b6308e8eebd7609de9c4fa31eef90d8b410864406d5bcbc5",
+        "artifact_count": 3,
+        "bytes": 44312,
+        "lines": 1527,
+        "artifacts": [
+          {
+            "path": ".codex/agents/repo-recon.toml",
+            "sha256": "sha256:4272e86928d359a867da83491497ee163a1f66c9cf99683df69bec7d55b91f9c",
+            "bytes": 382,
+            "lines": 4
+          },
+          {
+            "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+            "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+            "bytes": 20505,
+            "lines": 776
+          },
+          {
+            "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+            "sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604",
+            "bytes": 23425,
+            "lines": 747
+          }
+        ]
+      }
+    },
+    "scope": {
+      "artifact_paths": [
+        {
+          "path": ".codex/agents/repo-recon.toml",
+          "access": "read"
+        },
+        {
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+          "access": "read"
+        },
+        {
+          "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+          "access": "read"
+        }
+      ],
+      "semantic_symbols": [
+        "AgentTaskEnvelope-v1",
+        "N07-OBSERVABILITY"
+      ],
+      "generated_outputs": [],
+      "fixtures": [],
+      "external_effects": [],
+      "scratch_uris": [],
+      "forbidden_paths": [
+        "Cargo.lock",
+        ".git/config"
+      ],
+      "path_resolution": {
+        "policy": "candidate-relative-no-follow-v1",
+        "session_id": "sha256:7b254240f67795f81539fadd75e654be336893d0630d43d081c782670eb49715",
+        "resolved_scope_sha256": "sha256:3cd6181711d83308cb2e3d8dc3769b2812c998b332434d20ed57a64f36b538cc",
+        "symlinks": "reject",
+        "special_files": "reject",
+        "post_freeze_revalidation": "required"
+      }
+    },
+    "authority_binding": {
+      "session_id": "sha256:1daf33d0eca7db6f1a3ddd3d88bacbe9abcc45b0f846308437815d1eebbaf2d0",
+      "captured_at": "2026-07-12T05:03:42Z",
+      "sources": [
+        {
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+          "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+        }
+      ],
+      "ids": {
+        "nodes": [
+          "N07-OBSERVABILITY"
+        ],
+        "requirements": [],
+        "surfaces": [],
+        "tools": [],
+        "claims": [],
+        "migration_routes": [],
+        "decisions": []
+      },
+      "resolved_rows": [
+        {
+          "stable_id": "N07-OBSERVABILITY",
+          "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+          "row_sha256": "sha256:07161748e34bc754078ba9d5d88cdd8f87d5b0d7ae958457944ff29213522e29"
+        }
+      ],
+      "resolution": {
+        "resolved_set_sha256": "sha256:f8bdd6e9b34b73a4c879153d7ced45b939aaa2ef8ba78b502a45f7349dfffac0",
+        "unknown_count": 0,
+        "duplicate_count": 0,
+        "ambiguous_count": 0,
+        "conflict_count": 0,
+        "final_session_revalidation": "required"
+      }
+    },
+    "evidence": {
+      "primary_references": [
+        {
+          "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+          "sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604",
+          "kind": "authority",
+          "candidate_bound": true
+        },
+        {
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+          "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+          "kind": "authority",
+          "candidate_bound": true
+        }
+      ],
+      "unsupported_truth_surfaces": [
+        "package",
+        "install",
+        "discovery",
+        "runtime",
+        "journey",
+        "readiness",
+        "release",
+        "completion"
+      ],
+      "implementation_conclusions_are_authority": false
+    },
+    "effects": {
+      "candidate_source": "read_only",
+      "git_metadata": "read_only_no_mutation",
+      "shared_root_authority": "forbidden",
+      "scratch": "forbidden",
+      "network": "forbidden",
+      "external_systems": "forbidden",
+      "destructive_actions": "forbidden",
+      "secrets": "forbidden"
+    },
+    "output_contract": {
+      "schema_id": "AgentTaskEnvelope-v1",
+      "schema_ref": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+      "schema_sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604",
+      "result_target": "message://final",
+      "required_sections": [
+        "schema_version",
+        "candidate_identity",
+        "authority_binding"
+      ]
+    },
+    "verification": {
+      "positive": {
+        "status": "required",
+        "controls": [
+          {
+            "control_id": "CTRL-BASELINE-POSITIVE",
+            "procedure": "Run the bound deterministic control.",
+            "expected": "The named boundary rejects false passes.",
+            "evidence_kind": "test"
+          }
+        ]
+      },
+      "negative": {
+        "status": "required",
+        "controls": [
+          {
+            "control_id": "CTRL-BASELINE-NEGATIVE",
+            "procedure": "Run the bound deterministic control.",
+            "expected": "The named boundary rejects false passes.",
+            "evidence_kind": "test"
+          }
+        ]
+      },
+      "race_or_mutation": {
+        "status": "required",
+        "controls": [
+          {
+            "control_id": "CTRL-BASELINE-MUTATION",
+            "procedure": "Run the bound deterministic control.",
+            "expected": "The named boundary rejects false passes.",
+            "evidence_kind": "test"
+          }
+        ]
+      },
+      "security": {
+        "status": "required",
+        "controls": [
+          {
+            "control_id": "CTRL-BASELINE-SECURITY",
+            "procedure": "Run the bound deterministic control.",
+            "expected": "The named boundary rejects false passes.",
+            "evidence_kind": "test"
+          }
+        ]
+      },
+      "false_pass": {
+        "status": "required",
+        "controls": [
+          {
+            "control_id": "CTRL-BASELINE-FALSE-PASS",
+            "procedure": "Run the bound deterministic control.",
+            "expected": "The named boundary rejects false passes.",
+            "evidence_kind": "test"
+          }
+        ]
+      }
+    },
+    "stop_rule": "Stop after the first material mismatch and return REWORK.",
+    "no_claim_statement": "This agent does not claim readiness, release, node closure, or goal completion."
+  },
+  "red_cases": [
+    {
+      "case_id": "arbitrary-candidate-identity",
+      "expected_rejection": "closed_candidate_identity_required",
+      "mutations": [
+        {
+          "pointer": "/candidate_identity",
+          "value": {"candidate_id": "arbitrary"}
+        }
+      ]
+    },
+    {
+      "case_id": "non-digest-context-identity",
+      "expected_rejection": "context_digest_required",
+      "mutations": [
+        {
+          "pointer": "/candidate_identity/context_id",
+          "value": "context-current"
+        }
+      ]
+    },
+    {
+      "case_id": "valid-looking-unknown-node-id",
+      "expected_rejection": "same_session_stable_id_resolution_required",
+      "mutations": [
+        {
+          "pointer": "/authority_binding/ids/nodes/0",
+          "value": "N17-NOT-REAL"
+        }
+      ]
+    },
+    {
+      "case_id": "root-role-spoof",
+      "expected_rejection": "root_authority_is_not_delegable",
+      "mutations": [
+        {
+          "pointer": "/role_binding/role_id",
+          "value": "ultra-root"
+        },
+        {
+          "pointer": "/role_binding/may_exercise_root_authority",
+          "value": true
+        }
+      ]
+    },
+    {
+      "case_id": "overlapping-allowed-forbidden-effects",
+      "expected_rejection": "single_valued_effect_matrix_required",
+      "mutations": [
+        {
+          "pointer": "/effects/allowed",
+          "value": ["candidate-write"]
+        },
+        {
+          "pointer": "/effects/forbidden",
+          "value": ["candidate-write"]
+        }
+      ]
+    },
+    {
+      "case_id": "candidate-root-used-as-scratch",
+      "expected_rejection": "logical_ephemeral_scratch_uri_required",
+      "mutations": [
+        {
+          "pointer": "/scope/scratch_uris",
+          "value": ["/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal"]
+        }
+      ]
+    },
+    {
+      "case_id": "scope-effect-mismatch",
+      "expected_rejection": "generated_candidate_output_requires_bounded_write",
+      "mutations": [
+        {
+          "pointer": "/scope/generated_outputs",
+          "value": ["generated/out.json"]
+        }
+      ]
+    },
+    {
+      "case_id": "empty-primary-evidence",
+      "expected_rejection": "primary_evidence_required",
+      "mutations": [
+        {
+          "pointer": "/evidence/primary_references",
+          "value": []
+        }
+      ]
+    },
+    {
+      "case_id": "empty-unsupported-truth-surfaces",
+      "expected_rejection": "unsupported_surface_ceiling_required",
+      "mutations": [
+        {
+          "pointer": "/evidence/unsupported_truth_surfaces",
+          "value": []
+        }
+      ]
+    },
+    {
+      "case_id": "unknown-output-schema",
+      "expected_rejection": "output_schema_must_resolve_to_bound_authority",
+      "mutations": [
+        {
+          "pointer": "/output_contract/schema_id",
+          "value": "UnknownOutput-v1"
+        }
+      ]
+    },
+    {
+      "case_id": "empty-output-sections",
+      "expected_rejection": "nonempty_output_sections_required",
+      "mutations": [
+        {
+          "pointer": "/output_contract/required_sections",
+          "value": []
+        }
+      ]
+    },
+    {
+      "case_id": "empty-negative-controls",
+      "expected_rejection": "negative_control_or_typed_inapplicability_required",
+      "mutations": [
+        {
+          "pointer": "/verification/negative/controls",
+          "value": []
+        }
+      ]
+    },
+    {
+      "case_id": "empty-security-controls",
+      "expected_rejection": "security_control_or_typed_inapplicability_required",
+      "mutations": [
+        {
+          "pointer": "/verification/security/controls",
+          "value": []
+        }
+      ]
+    },
+    {
+      "case_id": "empty-false-pass-controls",
+      "expected_rejection": "false_pass_control_or_typed_inapplicability_required",
+      "mutations": [
+        {
+          "pointer": "/verification/false_pass/controls",
+          "value": []
+        }
+      ]
+    },
+    {
+      "case_id": "absolute-artifact-path",
+      "expected_rejection": "candidate_artifacts_must_be_relative",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths/0/path",
+          "value": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/Cargo.lock"
+        }
+      ]
+    },
+    {
+      "case_id": "generated-output-path-escape",
+      "expected_rejection": "generated_output_traversal_rejected",
+      "mutations": [
+        {
+          "pointer": "/scope/generated_outputs",
+          "value": ["../escape.json"]
+        },
+        {
+          "pointer": "/effects/candidate_source",
+          "value": "bounded_workspace_write"
+        }
+      ]
+    }
+  ],
+  "claim_effect": "none"
+}

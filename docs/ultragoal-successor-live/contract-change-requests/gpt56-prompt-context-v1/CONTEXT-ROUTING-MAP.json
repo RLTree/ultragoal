@@ -1,0 +1,151 @@
+{
+  "schema_version": "PromptContextRouting-v1",
+  "status": "proposed_root_adoption_required",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "purpose": "Deterministically select the smallest complete authority set for active nodes without treating unloaded contract rows as non-authoritative.",
+  "authority_sources": {
+    "node_graph": "FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+    "requirements": "FINAL-CONTRACT/REQUIREMENT_TRACE.json",
+    "surfaces": "FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json",
+    "tools": "FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json",
+    "claims": "FINAL-CONTRACT/CLAIM_REGISTRY.json",
+    "migration": "FINAL-CONTRACT/MIGRATION-AND-RETIREMENT.md",
+    "research": "FINAL-CONTRACT/RESEARCH_SOURCE_REGISTRY.json",
+    "decisions": "FINAL-CONTRACT/OPEN-DECISIONS.md"
+  },
+  "startup_set": [
+    "FINAL-CONTRACT/00-READ-ME-FIRST.md",
+    "FINAL-CONTRACT/CONTRACT_MANIFEST.json#metadata-and-contract_entries",
+    "FINAL-CONTRACT/01-AUTHORITY-AND-PRODUCT-LAWS.md",
+    "FINAL-CONTRACT/MODEL-ADAPTIVE-PROMPT-AND-CONTEXT-CONTRACT.md",
+    "FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json#root_authority-and-active-node-rows",
+    "FINAL-CONTRACT/OPEN-DECISIONS.md#unresolved-rows-affecting-active-nodes",
+    "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+    "docs/ultragoal-successor-live/acceptance/#active-node-evidence",
+    "docs/ultragoal-successor-live/root-decisions/#active-node-decisions",
+    "docs/ultragoal-successor-live/worker-results/#active-or-frozen-worker-results"
+  ],
+  "selection_algorithm": [
+    "Resolve active node IDs from the current live critical-path board; reject unknown or duplicate IDs.",
+    "Select each active node row and recursively select depends_on rows from the adopted dependency graph.",
+    "Collect owner, required_tools, and surfaces from selected node rows.",
+    "Select tool rows whose tool_id is collected and recursively select their dependencies.",
+    "Select surface rows whose surface_id is collected.",
+    "Select requirement rows when owner matches a selected node owner or when product_surfaces, custom_tools, or claim_ids intersects a selected ID set.",
+    "Select claim rows when required_surface_ids, required_tool_ids, or requirement_ids intersects a selected row, then recursively select prerequisite_claim_ids.",
+    "Expand requirement selection for every requirement_id named by a selected claim.",
+    "Select migration rows only for selected legacy surfaces, active compatibility routes, or N14/N15 work.",
+    "Select research rows only for mutable external facts used by selected requirements or N11 work.",
+    "Select unresolved decisions that intersect selected nodes, claims, surfaces, tools, external effects, release, or completion.",
+    "Sort selected stable IDs bytewise, reject missing references and conflicts, and record the exact selected-ID set with the context ID.",
+    "Revalidate selected rows against the same live session before using them for a claim or root decision."
+  ],
+  "full_registry_load_conditions": [
+    "contract adoption or manifest reconciliation",
+    "global duplicate-ID or cross-registry invariant investigation",
+    "N14 migration-wide route reconciliation",
+    "N15 zero-active-reader-writer and duplicate-authority proof",
+    "N16 release proof",
+    "N17 completion audit",
+    "an unknown, missing, ambiguous, or conflicting selected reference"
+  ],
+  "node_profiles": [
+    {
+      "node_id": "N00-LIVE-BASELINE",
+      "prose_modules": ["00-READ-ME-FIRST.md", "01-AUTHORITY-AND-PRODUCT-LAWS.md", "04-ORCHESTRATION-AND-WRITE-SCOPES.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": ["OPEN-DECISIONS.md"]
+    },
+    {
+      "node_id": "N01-CONTEXT-EFFECT",
+      "prose_modules": ["01-AUTHORITY-AND-PRODUCT-LAWS.md", "03-CLI-KERNEL-AND-CUSTOM-TOOLS.md", "04-ORCHESTRATION-AND-WRITE-SCOPES.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": []
+    },
+    {
+      "node_id": "N02-INVENTORY",
+      "prose_modules": ["01-AUTHORITY-AND-PRODUCT-LAWS.md", "02-PLUGIN-PRODUCT-AND-JOURNEYS.md", "03-CLI-KERNEL-AND-CUSTOM-TOOLS.md", "04-ORCHESTRATION-AND-WRITE-SCOPES.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": ["MIGRATION-AND-RETIREMENT.md"]
+    },
+    {
+      "node_id": "N03-CLI-STATE",
+      "prose_modules": ["03-CLI-KERNEL-AND-CUSTOM-TOOLS.md", "04-ORCHESTRATION-AND-WRITE-SCOPES.md", "05-PROOF-CLAIMS-AND-COMPLETION.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": []
+    },
+    {
+      "node_id": "N04-DISTRIBUTION",
+      "prose_modules": ["02-PLUGIN-PRODUCT-AND-JOURNEYS.md", "03-CLI-KERNEL-AND-CUSTOM-TOOLS.md", "05-PROOF-CLAIMS-AND-COMPLETION.md", "06-SECURITY-SUPPLY-AND-PRIVACY.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": ["OPEN-DECISIONS.md"]
+    },
+    {
+      "node_id": "N05-FIT",
+      "prose_modules": ["02-PLUGIN-PRODUCT-AND-JOURNEYS.md", "03-CLI-KERNEL-AND-CUSTOM-TOOLS.md", "04-ORCHESTRATION-AND-WRITE-SCOPES.md", "05-PROOF-CLAIMS-AND-COMPLETION.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": []
+    },
+    {
+      "node_id": "N06-ROUTINE",
+      "prose_modules": ["02-PLUGIN-PRODUCT-AND-JOURNEYS.md", "03-CLI-KERNEL-AND-CUSTOM-TOOLS.md", "04-ORCHESTRATION-AND-WRITE-SCOPES.md", "05-PROOF-CLAIMS-AND-COMPLETION.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": []
+    },
+    {
+      "node_id": "N07-OBSERVABILITY",
+      "prose_modules": ["02-PLUGIN-PRODUCT-AND-JOURNEYS.md", "03-CLI-KERNEL-AND-CUSTOM-TOOLS.md", "06-SECURITY-SUPPLY-AND-PRIVACY.md", "07-OBSERVABILITY-EVALUATION-AND-RESEARCH.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": ["OPEN-DECISIONS.md"]
+    },
+    {
+      "node_id": "N08-PLUGIN-PRODUCT",
+      "prose_modules": ["02-PLUGIN-PRODUCT-AND-JOURNEYS.md", "03-CLI-KERNEL-AND-CUSTOM-TOOLS.md", "05-PROOF-CLAIMS-AND-COMPLETION.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": ["MIGRATION-AND-RETIREMENT.md"]
+    },
+    {
+      "node_id": "N09-AGENTS-REPO",
+      "prose_modules": ["02-PLUGIN-PRODUCT-AND-JOURNEYS.md", "04-ORCHESTRATION-AND-WRITE-SCOPES.md", "06-SECURITY-SUPPLY-AND-PRIVACY.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": ["MIGRATION-AND-RETIREMENT.md"]
+    },
+    {
+      "node_id": "N10-ORCHESTRATION",
+      "prose_modules": ["04-ORCHESTRATION-AND-WRITE-SCOPES.md", "05-PROOF-CLAIMS-AND-COMPLETION.md", "06-SECURITY-SUPPLY-AND-PRIVACY.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": []
+    },
+    {
+      "node_id": "N11-EVAL-RESEARCH",
+      "prose_modules": ["02-PLUGIN-PRODUCT-AND-JOURNEYS.md", "07-OBSERVABILITY-EVALUATION-AND-RESEARCH.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": ["RESEARCH_SOURCE_REGISTRY.json"]
+    },
+    {
+      "node_id": "N12-CLAIMS",
+      "prose_modules": ["01-AUTHORITY-AND-PRODUCT-LAWS.md", "03-CLI-KERNEL-AND-CUSTOM-TOOLS.md", "04-ORCHESTRATION-AND-WRITE-SCOPES.md", "05-PROOF-CLAIMS-AND-COMPLETION.md", "06-SECURITY-SUPPLY-AND-PRIVACY.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": []
+    },
+    {
+      "node_id": "N13-REAL-JOURNEYS",
+      "prose_modules": ["02-PLUGIN-PRODUCT-AND-JOURNEYS.md", "04-ORCHESTRATION-AND-WRITE-SCOPES.md", "05-PROOF-CLAIMS-AND-COMPLETION.md", "06-SECURITY-SUPPLY-AND-PRIVACY.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": []
+    },
+    {
+      "node_id": "N14-MIGRATION",
+      "prose_modules": ["02-PLUGIN-PRODUCT-AND-JOURNEYS.md", "03-CLI-KERNEL-AND-CUSTOM-TOOLS.md", "04-ORCHESTRATION-AND-WRITE-SCOPES.md", "05-PROOF-CLAIMS-AND-COMPLETION.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": ["MIGRATION-AND-RETIREMENT.md"]
+    },
+    {
+      "node_id": "N15-RETIREMENT",
+      "prose_modules": ["01-AUTHORITY-AND-PRODUCT-LAWS.md", "02-PLUGIN-PRODUCT-AND-JOURNEYS.md", "03-CLI-KERNEL-AND-CUSTOM-TOOLS.md", "04-ORCHESTRATION-AND-WRITE-SCOPES.md", "05-PROOF-CLAIMS-AND-COMPLETION.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": ["MIGRATION-AND-RETIREMENT.md"]
+    },
+    {
+      "node_id": "N16-RELEASE",
+      "prose_modules": ["02-PLUGIN-PRODUCT-AND-JOURNEYS.md", "03-CLI-KERNEL-AND-CUSTOM-TOOLS.md", "05-PROOF-CLAIMS-AND-COMPLETION.md", "06-SECURITY-SUPPLY-AND-PRIVACY.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": ["OPEN-DECISIONS.md"]
+    },
+    {
+      "node_id": "N17-COMPLETION",
+      "prose_modules": ["01-AUTHORITY-AND-PRODUCT-LAWS.md", "02-PLUGIN-PRODUCT-AND-JOURNEYS.md", "03-CLI-KERNEL-AND-CUSTOM-TOOLS.md", "04-ORCHESTRATION-AND-WRITE-SCOPES.md", "05-PROOF-CLAIMS-AND-COMPLETION.md", "06-SECURITY-SUPPLY-AND-PRIVACY.md", "07-OBSERVABILITY-EVALUATION-AND-RESEARCH.md", "08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md"],
+      "conditional_sources": ["MIGRATION-AND-RETIREMENT.md", "RESEARCH_SOURCE_REGISTRY.json", "OPEN-DECISIONS.md"]
+    }
+  ],
+  "invariants": [
+    "Unloaded adopted rows remain authoritative.",
+    "A routed subset cannot raise a claim beyond the complete dependency-closed registry result.",
+    "Generated summaries and selected-row projections never become independent authority.",
+    "Selection, revalidation, and claim evaluation use one immutable live context.",
+    "Unknown, missing, duplicate, ambiguous, or conflicting stable IDs fail closed."
+  ]
+}

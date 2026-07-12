@@ -1,0 +1,59 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION",
+  "workstream": "observability",
+  "decision": "ACCEPT",
+  "evidence_state": "current_private_source_acceptance",
+  "accepted_candidate": {
+    "artifact_set_sha256": "1c811d9b0f27545239d2e38c4b1c9ed28a634b018015f5d4f8f76eba864b0649",
+    "artifact_count": 22,
+    "artifact_bytes": 107366,
+    "artifact_lines": 3271,
+    "maximum_production_file_lines": 300,
+    "changed_set_sha256": "1202f5b55aa627138292d689f1872804b3dac13001154bff08ad48cc32ba1b1d",
+    "changed_count": 3,
+    "changed_bytes": 25918,
+    "changed_lines": 748,
+    "binding": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION-BINDING.json",
+    "binding_sha256": "10301d644e632d2d7f199fd97dc7f599089fca5702134432c168eb8b9b5b5732",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION-008.json",
+    "worker_result_sha256": "566912bd675acc2187f5ed96fcdd64fc87c9249291777794161faab5db7b5877",
+    "result_id": "sha256:622ec85da718fb9b17ef7ed3e4aa3f8d91f572acb59e5bfdb3ffc0f493a6ffeb",
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "supersedes": {
+    "acceptance": "docs/ultragoal-successor-live/acceptance/OBSERVABILITY-CONFINEMENT-CORRECTION.json",
+    "state": "reopened_by_post_acceptance_source_drift_and_relative_cwd_rework"
+  },
+  "independent_review": {
+    "reviewer": "/root/observability_metadata_reconciler",
+    "requested_route": "gpt-5.6-terra/medium",
+    "effective_route": "unverified",
+    "acceptance_check_id": "OBS-CWD-ANCHOR-REVIEW-002",
+    "verdict": "ACCEPT",
+    "record": "docs/ultragoal-successor-live/reviews/OBSERVABILITY-RELATIVE-CWD-ANCHOR-REVIEW-009.json",
+    "record_sha256": "4893ce116aff2c3743abcae9a9b8d6a0961df52ab0e166d82cd5c0888e5c1f62"
+  },
+  "verification": {
+    "artifact_reconciliation": "all 22 current rows and all three changed rows independently matched",
+    "worker_result_boundary": "WorkerResultV1 parse, work-package and lease validation, validate_for, ArtifactWorkspace verify, and exact result ID passed",
+    "locked_observability_suite": "29 passed; 0 failed at 16 build jobs and 16 test threads",
+    "relative_cwd_false_pass": "create, append, query, clear, and recover reject detached working-directory ancestry while preserving both trees",
+    "metadata_reconciliation": "current 371-line adversarial test row and all candidate aggregates match; stale 367-line prose is absent"
+  },
+  "accepted_scope": [
+    "definition-level SemanticEvent, EventStore, EventQuery, CausalExplanation, and ExportAdapter implementation",
+    "retained absolute descriptor-chain identity for absolute and relative store paths through all local lifecycle operations",
+    "zero-write local query, bounded privacy, explicit export, corruption, and special-file controls"
+  ],
+  "explicitly_withheld": [
+    "public library integration",
+    "observe and diagnose CLI wiring",
+    "representative supported-host product behavior",
+    "observability claim elevation",
+    "node closure, readiness, release, or goal completion"
+  ],
+  "invalidation_rule": "Any byte or membership change to the accepted 22-artifact set, attachment lifecycle, query purity, privacy/export boundary, or special-file behavior reopens this acceptance.",
+  "no_claim_statement": "This acceptance is private source-level only and does not claim public product behavior, readiness, release, node closure, or goal completion."
+}

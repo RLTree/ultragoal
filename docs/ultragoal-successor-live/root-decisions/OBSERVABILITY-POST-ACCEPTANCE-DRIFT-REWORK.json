@@ -1,0 +1,49 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "OBSERVABILITY-POST-ACCEPTANCE-DRIFT-REWORK",
+  "workstream": "observability",
+  "decision": "REWORK",
+  "acceptance_check": "AC-OBSERVABILITY-PUBLIC-INTEGRATION-001",
+  "accepted_dependency": {
+    "acceptance_path": "docs/ultragoal-successor-live/acceptance/OBSERVABILITY-CONFINEMENT-CORRECTION.json",
+    "acceptance_sha256": "e9b090f4d5791199ebe3f6e3873fb6dc5263c01a029bbda7e160d90e613250c6",
+    "artifact_set_sha256": "88da28607cb2adefb7b428f3f6222caf10b47bbdcf3856d078e766babe30a331",
+    "artifact_count": 22,
+    "artifact_total_bytes": 101858,
+    "artifact_total_lines": 3124
+  },
+  "public_integration_candidate": {
+    "record_path": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-PUBLIC-INTEGRATION-CANDIDATE.json",
+    "record_sha256": "f009f3ccbaf95a39961f464944d8def9a30929d0e4bf9782765d0e741c4a27d1",
+    "artifact_set_sha256": "08ad69f6d7b528644f0871b04be16286416cf5c5b36db7cc26e377083f7ebcde",
+    "state": "four integration artifacts exact; dependency stale"
+  },
+  "independent_review": {
+    "reviewer": "/root/observability_public_integration_reviewer",
+    "requested_route": "gpt-5.6-terra/medium",
+    "effective_route": "unverified",
+    "verdict": "REWORK",
+    "stopped_on_dependency_drift": true
+  },
+  "current_unaccepted_source": {
+    "artifact_set_sha256": "d264da50b7f9449afa0bb713eec2d6310bbed1f64e205e9b85be7b4cd1f2a14d",
+    "artifact_count": 22,
+    "artifact_total_bytes": 101922,
+    "artifact_total_lines": 3128,
+    "common_mtime": "2026-07-11T17:28:25-0700",
+    "changed_rows": [
+      {"path":"validator/src/observability/filesystem/anchors.rs","accepted_sha256":"4e29362092d49f161ad3e5c8f5abd2acfef5358c78bf9e5a0181f006a7e21875","current_sha256":"96ef6f64eda8eea547ae52093c5cbfa4b0a2aea2b3c00b077f1165b656c3926a","byte_length":1412,"line_count":44},
+      {"path":"validator/src/observability/filesystem/confinement.rs","accepted_sha256":"50014354f51efa444272fa39e9e0fdb08ec263e793e433fa770d790cf0c3bcc6","current_sha256":"c93123135c0c7538a196f8ca00779e343c2d9dd6b179153dfb84baf0bab23cfd","byte_length":9052,"line_count":291},
+      {"path":"validator/src/observability/lifecycle.rs","accepted_sha256":"d5339e13553354b1489d719df0ead3f3bd988674947e6510999fb011bc917d5a","current_sha256":"796e46e87684e4c7a45a5a10ef13d4f1dc91d3f4e9f1c8777d797b55dde9bc83","byte_length":2561,"line_count":63},
+      {"path":"validator/tests/observability_contract/races_paths.rs","accepted_sha256":"4e003e7cead8fc25b0b4ae52d91146124416ba41b288e808804b12947cabe344","current_sha256":"dad2d01a9da1fc7984410dafb939124e8b3d13521aa9ff1b2a8387e909078f8c","byte_length":10010,"line_count":270}
+    ]
+  },
+  "disposition": [
+    "Preserve the current bytes; authorship and semantic intent are not inferred and no accepted bytes are restored destructively.",
+    "Treat both the prior definition acceptance and the four-file public integration candidate as reopened for current identity.",
+    "Reconcile the four-row delta, rerun the full typed result, 27-test behavior, ordinary/relative-ancestor, privacy/export, special-file, and zero-write controls, then freeze a replacement 22-file candidate.",
+    "Require a replacement WorkerResult, independent semantic review, and a recomputed public-integration candidate before any HCT-OBSERVE integration ceiling is restored."
+  ],
+  "claim_ceiling": "No current observability source acceptance, public integration, product behavior, readiness, release, node closure, or completion.",
+  "no_claim_statement": "This decision does not claim observability behavior, public integration, readiness, release, node closure, or goal completion."
+}

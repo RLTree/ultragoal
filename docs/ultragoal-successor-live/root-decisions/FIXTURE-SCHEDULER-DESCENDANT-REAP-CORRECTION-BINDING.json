@@ -1,0 +1,106 @@
+{
+  "schema_version": "RootBinding-v1",
+  "binding_id": "FIXTURE-SCHEDULER-DESCENDANT-REAP-CORRECTION-BINDING",
+  "workstream": "fixture_scheduler",
+  "acceptance_check": "AC-FIXTURE-SCHEDULER-DESCENDANT-REAP-007",
+  "requested_route": "gpt-5.6-terra/high",
+  "effective_route": "unverified",
+  "rework_dependency": {
+    "path": "docs/ultragoal-successor-live/root-decisions/FIXTURE-SCHEDULER-DESCENDANT-REAP-REWORK.json",
+    "sha256": "befd85c3eb51c82ae84337f50fc938f3162197aa1ee02ce8330fd9e137b0507e"
+  },
+  "candidate_id": "sha256:69769cb581756bb9432762bda2c4bf834e01effcb30ac8be7f7216c611600b49",
+  "candidate_membership": {
+    "artifact_count": 25,
+    "artifact_total_bytes": 91462,
+    "artifact_total_lines": 2875,
+    "formula": "Sort path; append path, TAB, lowercase SHA-256 without prefix, LF; SHA-256 the concatenation.",
+    "base_membership": {
+      "path": "docs/ultragoal-successor-live/root-decisions/FIXTURE-SCHEDULER-RESOURCE-CONFINEMENT-FINAL-BINDING.json",
+      "sha256": "5411de4eb5f955f12a21f4e257c3d2403efb5d61bbcf0548820785c5d7007ea3",
+      "rule": "Use its exact 24 candidate rows; replace the four rows below and add the one new row, then sort all 25 paths."
+    },
+    "replaced_rows": [
+      {"path":"validator/src/cli/capture/fixture/execute.rs","prior_sha256":"52544250ba6e532dfcf81d242ae83eeb61842faaf967cfccda60ef76a8f9e348","sha256":"847abcef14ad98d770d43cd0db161379d89a70a8b61f9f926e619370a3a7b101","byte_length":6979,"line_count":189},
+      {"path":"validator/tests/fixture_scheduler_contract/execution_adapter.rs","prior_sha256":"d83c977b789302a37cbc5b8b26446cb42dda15339db741247770a451a47c251d","sha256":"54bfc4565c1fa4d924799bd9ce0e340e50f24925e4976817c54ea10aa1dc1a68","byte_length":2481,"line_count":90},
+      {"path":"validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs","prior_sha256":"c02adfd36041c695055a04c236a875ae1163058ecde62cbaf393c4a1373626e6","sha256":"004f9f44cf33d6f5288af2a7f471b2f0d39247f602e8d2b8bda3167a9ebfaa44","byte_length":3541,"line_count":112},
+      {"path":"validator/tests/fixture_scheduler_contract/worker_result.rs","prior_sha256":"705f6b6a8f613f5149bcf7bbcd5a35a53c2492b6bcfeb70e88ff61cbec2148dd","sha256":"043de93793faa71881d68887d3b4feedc7570385c2f5e91d90e4442e91a652e7","byte_length":7020,"line_count":164}
+    ],
+    "added_row": {"path":"validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs","sha256":"7c6c53a8c3d21e27211c77cf6b3bf30730d6adf741045934d50153478acdc186","byte_length":7233,"line_count":262},
+    "root_recomputed_set_sha256": "69769cb581756bb9432762bda2c4bf834e01effcb30ac8be7f7216c611600b49"
+  },
+  "changed_subset": {
+    "artifact_count": 5,
+    "artifact_total_bytes": 27254,
+    "artifact_total_lines": 817,
+    "artifact_set_sha256": "3acf087d62bd1ee1069bdd9a1f831641c17d6a3c2c7a4121f6b91edb48645a64",
+    "paths": [
+      "validator/src/cli/capture/fixture/execute.rs",
+      "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+      "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs",
+      "validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs",
+      "validator/tests/fixture_scheduler_contract/worker_result.rs"
+    ]
+  },
+  "worker_envelope": {
+    "worker": "/root/fixture_execution_scheduler_builder",
+    "lease_id": "FIXTURE-SCHEDULER-DESCENDANT-REAP-CORRECTION-007",
+    "node_id": "fixture-scheduler-descendant-reap-correction",
+    "dependency_nodes": ["fixture-scheduler-descendant-reap-rework","fixture-scheduler-resource-confinement"],
+    "dependency_digests": {
+      "fixture-scheduler-descendant-reap-rework": "befd85c3eb51c82ae84337f50fc938f3162197aa1ee02ce8330fd9e137b0507e",
+      "fixture-scheduler-resource-confinement": "5411de4eb5f955f12a21f4e257c3d2403efb5d61bbcf0548820785c5d7007ea3"
+    },
+    "semantic_symbols": ["fixture_scheduler::descendant_reap_correction"],
+    "safety_class": "isolated_workspace_write",
+    "owned_paths": [
+      "validator/src/cli/capture/fixture/execute.rs",
+      "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+      "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs",
+      "validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs",
+      "validator/tests/fixture_scheduler_contract/worker_result.rs",
+      "docs/ultragoal-successor-live/worker-results/FIXTURE-SCHEDULER-DESCENDANT-REAP-CORRECTION-007.json"
+    ],
+    "read_paths": [
+      "validator/src/cli/capture/fixture.rs",
+      "validator/src/cli/capture/fixture/permit.rs",
+      "validator/src/cli/capture/mod.rs",
+      "validator/src/fixture_scheduler/confinement/backend.rs",
+      "validator/src/fixture_scheduler/confinement/mod.rs",
+      "validator/src/fixture_scheduler/confinement/policy.rs",
+      "validator/src/fixture_scheduler/error.rs",
+      "validator/src/fixture_scheduler/lease.rs",
+      "validator/src/fixture_scheduler/mod.rs",
+      "validator/src/fixture_scheduler/outcome.rs",
+      "validator/src/fixture_scheduler/scheduler.rs",
+      "validator/src/fixture_scheduler/spec.rs",
+      "validator/tests/fixture_scheduler_contract.rs",
+      "validator/tests/fixture_scheduler_contract/adversarial.rs",
+      "validator/tests/fixture_scheduler_contract/confinement.rs",
+      "validator/tests/fixture_scheduler_contract/execution_adapter/capture.rs",
+      "validator/tests/fixture_scheduler_contract/execution_adapter/fixture.rs",
+      "validator/tests/fixture_scheduler_contract/execution_adapter/output.rs",
+      "validator/tests/fixture_scheduler_contract/isolation.rs",
+      "validator/tests/fixture_scheduler_contract/scheduling.rs",
+      "validator/src/cli/capture/environment.rs",
+      "validator/src/cli/capture/output.rs"
+    ],
+    "performed_effects": [
+      {"class":"workspace_write","target":"fixture-scheduler-descendant-reap-source"},
+      {"class":"fixture_write","target":"fixture-scheduler-descendant-reap-tests"},
+      {"class":"process","target":"offline-fixture-scheduler-descendant-reap-validation"}
+    ]
+  },
+  "required_behavior": [
+    "The actual adapter timeout escalates the entire process group to SIGKILL after grace even when the direct child already exited.",
+    "The direct child is reaped safely and bounded process-group absence is proven before timeout returns.",
+    "Signal-resistant descendants, multiple descendants, already-exited groups, interrupt, output-limit, and wall-time paths cannot leak a process.",
+    "All prior CPU/address-space/file/sandbox/network/backend/collision/cleanup/supplied-outcome controls remain intact."
+  ],
+  "verification_checkpoint": "TDD RED reproduced a live descendant group through the actual adapter; GREEN removed it. Non-receipt suite passed 25/25 at 16 threads, four process-group controls passed three repeated parallel runs, exact five-file Rust-2024 format check passed, and no confinement probe remained.",
+  "root_integration_artifact": {"path":"validator/src/lib.rs","sha256":"9d7c8c528dbe211feb51a868bb6c37bd49c6ac233638cbb774cafc1c626e1526","state":"fixture_scheduler remains private"},
+  "aggregate_note": "Root independently derives the 25-file candidate from the exact prior 24-row binding plus four replacements and one addition. WorkerResult artifacts cover only the five changed paths; WorkerResult-v1 is not claimed to enforce the full aggregate.",
+  "required_no_claim_statement": "This worker does not claim readiness, release, or completion.",
+  "invalidation_rule": "Any candidate, changed subset, process-group behavior, dependency, root visibility, context, or effect change reopens this binding.",
+  "no_claim_statement": "This binding does not claim public HCT-FIXTURES integration, routine or strict behavior, readiness, release, node closure, or goal completion."
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": "RootBinding-v1",
+  "binding_id": "FIXTURE-SCHEDULER-DETACHED-DESCENDANT-CORRECTION-BINDING",
+  "workstream": "fixture_scheduler",
+  "acceptance_check": "AC-FIXTURE-SCHEDULER-DETACHED-DESCENDANT-010",
+  "requested_route": "gpt-5.6-sol/high",
+  "effective_route": "unverified",
+  "rework_dependency": {
+    "path": "docs/ultragoal-successor-live/root-decisions/FIXTURE-SCHEDULER-DETACHED-DESCENDANT-REWORK.json",
+    "sha256": "f78a70f87a5f9dd9ea3afd2afabcc8ef1feac9cdae36bfc2942b292a8a54e1fa"
+  },
+  "candidate_id": "sha256:c7112cc044beef3b82e41215efa59c6798d4c5510deadaf30f957173f0d87863",
+  "candidate_membership": {
+    "artifact_count": 26,
+    "artifact_total_bytes": 94974,
+    "artifact_total_lines": 2995,
+    "formula": "Sort path; append path, TAB, lowercase SHA-256 without prefix, LF; SHA-256 the concatenation.",
+    "base_membership": {
+      "path": "docs/ultragoal-successor-live/root-decisions/FIXTURE-SCHEDULER-DESCENDANT-REAP-CORRECTION-BINDING.json",
+      "sha256": "a33f19a1fbf72a35c17a0b1324919fda41f0cba4b46eeb8be4ea7d049fec0c7e",
+      "rule": "Use its exact 25 current rows; replace the eight rows below and add the detached-descendant regression row, then sort all 26 paths."
+    },
+    "replaced_rows": [
+      {"path":"validator/src/cli/capture/fixture/execute.rs","prior_sha256":"847abcef14ad98d770d43cd0db161379d89a70a8b61f9f926e619370a3a7b101","sha256":"3e161671a5b0d99b3232a322aa72d32f8644b00e972c2595696795f097776d67","byte_length":7833,"line_count":217},
+      {"path":"validator/src/fixture_scheduler/confinement/backend.rs","prior_sha256":"a370496b9a2c80bb686ef17cd116d5485f731d9346dfe68592460fde3793ad32","sha256":"92d3e51e1fc4894b011c22d684e0ed4c222254f4b3c296b937f2979575908a43","byte_length":8093,"line_count":238},
+      {"path":"validator/src/fixture_scheduler/confinement/policy.rs","prior_sha256":"1825856086d368d45d6a1ef694944d3dd1b07348a9a30c5230ece64589d3c9c6","sha256":"c52b274991a94e4705c4cacd7050599647b229c6be8abcba0c6af1f3cecb9e1d","byte_length":2349,"line_count":75},
+      {"path":"validator/tests/fixture_scheduler_contract/confinement.rs","prior_sha256":"4628d52a2e4d6ab54a69eea27fc5dc5b79326e602f09c69598f9d49ab0b66c1f","sha256":"0a4e535dd4c63145c8fb3d636f6f5809b3d94d937e21f7a16669353e9463bb0c","byte_length":6134,"line_count":204},
+      {"path":"validator/tests/fixture_scheduler_contract/execution_adapter.rs","prior_sha256":"54bfc4565c1fa4d924799bd9ce0e340e50f24925e4976817c54ea10aa1dc1a68","sha256":"c74e8fcdb245d6d7408a25055d75a4eaa1b36f8672cd399374e706c05a85fafc","byte_length":2559,"line_count":92},
+      {"path":"validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs","prior_sha256":"7c6c53a8c3d21e27211c77cf6b3bf30730d6adf741045934d50153478acdc186","sha256":"aaa6293e3fb075b95b389b26fa4f00c577ede36680435ee961683e4dafd980cb","byte_length":7623,"line_count":276},
+      {"path":"validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs","prior_sha256":"004f9f44cf33d6f5288af2a7f471b2f0d39247f602e8d2b8bda3167a9ebfaa44","sha256":"0833a7f369fbfc092a9f49e99bc21f0c341f65cef4250c118ed2fd69d14eccf6","byte_length":5510,"line_count":169},
+      {"path":"validator/tests/fixture_scheduler_contract/worker_result.rs","prior_sha256":"043de93793faa71881d68887d3b4feedc7570385c2f5e91d90e4442e91a652e7","sha256":"a4be7e0f8a52709ffc9077698cb00ab3fcc1684b99c04a25c26e186982d42630","byte_length":6103,"line_count":149}
+    ],
+    "added_row": {"path":"validator/tests/fixture_scheduler_contract/execution_adapter/detached_descendant.rs","sha256":"1af7f0fa4dae551c18b3f555e46a119cec3fd6ea6cce1fb788c0214269191fb2","byte_length":1822,"line_count":60},
+    "root_recomputed_set_sha256": "c7112cc044beef3b82e41215efa59c6798d4c5510deadaf30f957173f0d87863"
+  },
+  "changed_subset": {
+    "artifact_count": 9,
+    "artifact_total_bytes": 48026,
+    "artifact_total_lines": 1480,
+    "artifact_set_sha256": "86c0685a6e316e21a1aa3a47888befa0f3b626f98fb52863a18ed950659c3673",
+    "worker_reported_stream_digest": "64ae845b113f0e7c40276daa1bede5626d8253f36262f4fc10602f178425e079",
+    "worker_reported_stream_digest_note": "Diagnostic only: it hashes shasum command output and is not the root candidate-set formula.",
+    "paths": [
+      "validator/src/cli/capture/fixture/execute.rs",
+      "validator/src/fixture_scheduler/confinement/backend.rs",
+      "validator/src/fixture_scheduler/confinement/policy.rs",
+      "validator/tests/fixture_scheduler_contract/confinement.rs",
+      "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+      "validator/tests/fixture_scheduler_contract/execution_adapter/detached_descendant.rs",
+      "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs",
+      "validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs",
+      "validator/tests/fixture_scheduler_contract/worker_result.rs"
+    ]
+  },
+  "worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/FIXTURE-DETACHED-DESCENDANT-CONFINEMENT-CORRECTION-009.json",
+    "sha256": "c03b71d758b0141607daca09dd2bd96c025d1f91bdd7ca296b4710452e986c63",
+    "typed_result_id": "PENDING_INDEPENDENT_REVIEW"
+  },
+  "worker_envelope": {
+    "worker": "/root/detached_descendant_confinement_builder",
+    "lease_id": "FIXTURE-DETACHED-DESCENDANT-CONFINEMENT-CORRECTION-009",
+    "node_id": "fixture-detached-descendant-confinement",
+    "dependency_nodes": ["fixture-scheduler-detached-descendant-rework"],
+    "semantic_symbols": ["fixture_scheduler::detached_descendant_confinement"],
+    "safety_class": "isolated_workspace_write",
+    "owned_paths": [
+      "validator/src/cli/capture/fixture/execute.rs",
+      "validator/src/fixture_scheduler/confinement/backend.rs",
+      "validator/src/fixture_scheduler/confinement/policy.rs",
+      "validator/tests/fixture_scheduler_contract/confinement.rs",
+      "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+      "validator/tests/fixture_scheduler_contract/execution_adapter/detached_descendant.rs",
+      "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs",
+      "validator/tests/fixture_scheduler_contract/helpers/confinement_probe.rs",
+      "validator/tests/fixture_scheduler_contract/worker_result.rs",
+      "docs/ultragoal-successor-live/worker-results/FIXTURE-DETACHED-DESCENDANT-CONFINEMENT-CORRECTION-009.json"
+    ],
+    "performed_effects": [
+      {"class":"workspace_write","target":"fixture-detached-source"},
+      {"class":"fixture_write","target":"fixture-detached-tests"},
+      {"class":"process","target":"fixture-detached-validation"}
+    ]
+  },
+  "required_behavior": [
+    "The supported Darwin backend enforceably denies fixture child-process creation, including fork plus setsid escape, through the real fixed sandbox profile.",
+    "The actual adapter still signals the direct PID and original process group, safely reaps the direct child, escalates signal-resistant work, and proves original-group absence before return.",
+    "Rapid reparenting, multiple attempted descendants, direct-child early exit, ignored SIGTERM, interrupt, output limit, wall timeout, and already-exited paths leave no live tagged process.",
+    "Network and outside-write denial, CPU/address-space/file-size limits, backend integrity, policy digest, collision, recovery, and supplied-outcome controls remain intact.",
+    "Fixtures that require subprocess creation are explicitly unsupported on the Darwin confinement backend; Darwin RLIMIT_DATA is unclaimed and memory enforcement is RLIMIT_AS."
+  ],
+  "verification_checkpoint": "Worker reports real-adapter RED with three detached descendants, GREEN with all three child-creation attempts denied, locked/offline 29/29, cargo check, exact-path Rust-2024 format, and zero tagged survivors. All require independent reproduction.",
+  "root_integration_artifact": {"path":"validator/src/lib.rs","sha256":"9e778144797940207cd63b014e1e73e0b03dd75376fb431120e40e1c93fe0629","state":"fixture_scheduler remains private; unrelated accepted observability public integration is present"},
+  "aggregate_note": "Root independently derives the 26-file candidate from the exact prior 25-row binding plus eight replacements and one addition. WorkerResult artifacts cover only the nine changed paths; WorkerResult-v1 is not claimed to enforce the full aggregate.",
+  "required_no_claim_statement": "This worker does not claim readiness, release, or completion.",
+  "invalidation_rule": "Any candidate, changed subset, child-process policy, process-lifecycle behavior, dependency, root visibility, context, effect, or result change reopens this binding.",
+  "no_claim_statement": "This binding does not claim public HCT-FIXTURES integration, routine or strict behavior, readiness, release, node closure, or goal completion."
+}

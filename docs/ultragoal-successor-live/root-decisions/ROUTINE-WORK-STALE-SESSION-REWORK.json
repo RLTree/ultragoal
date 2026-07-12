@@ -1,0 +1,48 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "workstream": "routine_work_verified_reuse_authority",
+  "decision": "REWORK",
+  "review_route": {
+    "model": "gpt-5.6-sol",
+    "reasoning": "ultra",
+    "rationale": "Forged reuse can skip current execution and falsely report CompleteExecution."
+  },
+  "reviewed_candidate": {
+    "manifest": "docs/ultragoal-successor-live/root-decisions/ROUTINE-WORK-OPAQUE-REUSE-CANDIDATE.json",
+    "manifest_sha256": "1330a0088027bd5167e2baeb39fecebaa26ef8bb1261212ed7620101d437cdc3",
+    "artifact_set_sha256": "4f6cf79ac463f6e1b4c777f5d9872e20a196aca3ebdcb3f527ea298e9ec64476",
+    "artifact_count": 16,
+    "artifact_bytes": 75560,
+    "artifact_lines": 2282,
+    "identity_revalidated": true
+  },
+  "material_finding": {
+    "id": "routine-work-caller-supplied-stale-session",
+    "severity": "critical",
+    "summary": "Public caller-implementable RoutineSession can return an old binding after real candidate mutation, so valid prior evidence can still produce VerifiedReuse and CompleteExecution.",
+    "source": [
+      "validator/src/routine_work/binding.rs:185",
+      "validator/src/routine_work/mod.rs:17",
+      "validator/src/routine_work/reuse/decision.rs:6",
+      "validator/src/routine_work/report.rs:144"
+    ],
+    "probe_path": "/tmp/hul-routine-review-stale-session.rs",
+    "probe_sha256": "b41646efda9eac8cdb36587b5886e5f1cfb8d14ed573d89e799bd06238f79dc4",
+    "result": "Real LiveContext revalidation failed after tracked mutation, while FrozenSession(old binding) returned Hit and CompleteExecution."
+  },
+  "required_correction": [
+    "remove caller-implementable current-binding authority",
+    "use concrete LiveContext or an opaque sealed live session at every authority boundary",
+    "bind report completion to a freshly revalidated current candidate",
+    "preserve the opaque executed and reuse evidence correction"
+  ],
+  "verification_gap": "A reused-target full suite attempt failed ENOSPC; existing test-binary output had no captured terminal status and is not counted as proof.",
+  "active_corrective_lease": {
+    "agent": "routine_live_authority_corrector",
+    "model": "gpt-5.6-sol",
+    "reasoning": "ultra"
+  },
+  "accepted_artifact_sets": [],
+  "highest_defensible_ceiling": "The original caller-authored result/observer forgery is closed. Current-candidate verified reuse and truthful CompleteExecution remain unsupported.",
+  "no_claim_statement": "No public integration, readiness, release, node closure, or goal completion is claimed."
+}

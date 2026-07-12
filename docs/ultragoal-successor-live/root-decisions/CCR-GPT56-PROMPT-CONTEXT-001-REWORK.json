@@ -1,0 +1,80 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "CCR-GPT56-PROMPT-CONTEXT-001-REWORK",
+  "node_id": "ROOT-CONTRACT-AUTHORITY",
+  "change_id": "CCR-GPT56-PROMPT-CONTEXT-001",
+  "root_decision": "rework",
+  "review_mode": "ultra_root_independent_review",
+  "reviewed_change_request": {
+    "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/ROOT-CHANGE-REQUEST.json",
+    "sha256": "dce1ce32e79c8dfb616a2c4c386ab5f018c85bb6dace4f191fd0262a3ee2218c",
+    "artifact_set_sha256": "0616cf5c1156805567941f73f777b4432aeb0b3d2762b2aac5092be9b9715051",
+    "artifact_count_excluding_request": 10,
+    "artifact_bytes": 71493,
+    "artifact_lines": 1079
+  },
+  "identity_reconciliation": {
+    "status": "pass",
+    "result": "Every listed artifact is a regular file and matches its SHA-256, byte count, and line count. The bytewise path-bound set digest, count, aggregate bytes, aggregate lines, and directory membership reconcile exactly."
+  },
+  "decisive_finding": {
+    "severity": "critical",
+    "class": "task_envelope_authority_and_confinement_false_pass",
+    "artifact": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+    "cause": "AgentTaskEnvelope-v1 validates shape but does not bind candidate identity, stable authority IDs, roles, path confinement, effect consistency, scratch confinement, evidence, output schema, or all named verification controls. An envelope can therefore look typed while granting ambiguous or contradictory authority against an unrelated or stale candidate.",
+    "conflicting_adopted_laws": [
+      "HUL-STATE-001",
+      "HUL-CLI-001",
+      "HUL-ORCHESTRATION-001",
+      "HUL-REVIEW-001",
+      "HUL-SECURITY-001",
+      "HUL-PROOF-001"
+    ]
+  },
+  "false_pass_reproduction": {
+    "validator": "jsonschema.Draft202012Validator",
+    "workers": 16,
+    "cases": 16,
+    "unexpectedly_accepted": 16,
+    "accepted_classes": [
+      "arbitrary candidate identity",
+      "non-digest context identity",
+      "unknown node ID",
+      "root-role spoofing",
+      "overlapping allowed and forbidden effects",
+      "candidate repository root used as scratch",
+      "scope and allowed-effect mismatch",
+      "empty primary evidence",
+      "empty unsupported truth surfaces",
+      "unknown output schema",
+      "empty output sections",
+      "empty negative controls",
+      "empty security controls",
+      "empty false-pass controls",
+      "absolute root artifact path",
+      "generated-output path escape"
+    ]
+  },
+  "accepted_artifact_sets": [],
+  "adoption_actions_performed": [],
+  "corrective_scope": {
+    "required_artifacts": [
+      "AGENT-TASK-ENVELOPE.schema.json",
+      "MODEL-ADAPTIVE-PROMPT-AND-CONTEXT-CONTRACT.md",
+      "REPO-PROPAGATION-PLAN.md",
+      "ROOT-CHANGE-REQUEST.json"
+    ],
+    "required_corrections": [
+      "Define a closed candidate identity with required repository, immutable context, HEAD/tree, dirty-set or artifact-set, and digest syntax; reject arbitrary labels and stale substitution.",
+      "Resolve role and every stable authority ID against one immutable adopted read session; reject unknown, duplicate, ambiguous, conflicting, or root-spoofed authority.",
+      "Constrain artifact, fixture, generated-output, and scratch paths; reject absolute candidate paths, traversal, symlink substitution, special files, candidate-root scratch, and post-freeze mutation.",
+      "Require allowed and forbidden effects to be disjoint and consistent with scoped external effects; bind scratch authority separately from candidate-source authority.",
+      "Require non-empty bound evidence, a resolvable typed output contract, and explicit positive, negative, race-or-mutation, security, and false-pass controls or a typed inapplicability reason.",
+      "Add deterministic red fixtures for every accepted adversarial class above and prove they fail causally before any worker or verifier starts.",
+      "Recompute the complete proposal artifact set and submit a new immutable root change request for fresh independent review."
+    ]
+  },
+  "review_termination": "Other proposal reviews were stopped after this first decisive material defect; their incomplete work is not evidence for or against a corrected proposal.",
+  "claim_ceiling": "The proposal remains non-authoritative source context only. No adopted contract, manifest, requirement, routing, prompt, agent, package, install, discovery, runtime, journey, release, node, or completion ceiling changed.",
+  "no_claim_statement": "This decision does not claim adoption, implementation, readiness, release, node closure, or goal completion."
+}

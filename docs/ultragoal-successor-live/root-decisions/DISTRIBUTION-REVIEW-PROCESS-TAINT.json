@@ -1,0 +1,43 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "DISTRIBUTION-REVIEW-PROCESS-TAINT",
+  "node_id": "N04-DISTRIBUTION",
+  "root_decision": "rework",
+  "review_mode": "root_review_lease_reconciliation",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-012.json",
+    "sha256": "426d558ed5864ea7d8d664fc46ceec76c54b4a07cc0e4617326c1eb05990a232",
+    "artifact_set_sha256": "acc7f1bcb5b6db6bbb7a9fee504c8ac9601ef8fc6eac0ce5c06f2a0e5a032a38",
+    "artifact_count": 54,
+    "total_bytes": 237976,
+    "total_lines": 7144,
+    "maximum_rust_file_lines": 299
+  },
+  "candidate_identity_reconciliation": "pass",
+  "review_disposition": "tainted_no_semantic_disposition",
+  "decisive_finding": {
+    "severity": "material",
+    "class": "read_only_review_lease_violation",
+    "command": "CARGO_TARGET_DIR=/private/tmp/hug-distribution-authority-review-20260711-01 cargo nextest run --offline --locked --manifest-path validator/Cargo.toml --jobs 16 --lib --test distribution_contract --no-fail-fast",
+    "result": "1586 tests; 1551 passed; 35 unrelated/current failures",
+    "cause": "The unintended --lib selector ran repository-writing library tests under a read-only reviewer lease. The review cannot support acceptance even though the frozen distribution set remained unchanged."
+  },
+  "incidental_preserved_paths": [
+    "validation_artifacts/observability/product-observability-fail-87262-31.json",
+    "validation_artifacts/observability/product-observability-fail-87262-85.json",
+    "validation_artifacts/observability/product-prove-fitness.json",
+    "validation_artifacts/observability/spool/events.jsonl",
+    "validation_artifacts/package/foundational-surface-inventory.json",
+    "validation_artifacts/package/package-surface-inventory.json",
+    "validation_artifacts/performance/cli-performance-test-1783759004611071000.json",
+    "validation_artifacts/rust/rust-parent-file",
+    "validation_artifacts/rust/rust-run-receipt.json",
+    "validation_artifacts/typed-boundaries/typed-boundaries-pass.json"
+  ],
+  "cleanup_decision": "preserve_without_revert",
+  "cleanup_reason": "The broader worktree was already dirty and no pre-run byte snapshot exists for these paths. Reverting or deleting them could destroy prior user state; they remain non-authoritative incidental outputs pending later global reconciliation.",
+  "accepted_artifact_sets": [],
+  "corrective_review": "clean_distribution_authority_rereview",
+  "claim_ceiling": "The frozen 54-artifact distribution candidate remains current but unaccepted. The tainted review raises no semantic claim and the ten incidental validation artifacts prove nothing.",
+  "no_claim_statement": "This decision does not claim distribution completion, readiness, release, or goal completion."
+}

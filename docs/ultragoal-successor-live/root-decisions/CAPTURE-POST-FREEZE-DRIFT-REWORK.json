@@ -1,0 +1,46 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "CAPTURE-POST-FREEZE-DRIFT-REWORK",
+  "node_id": "N03-CLI-STATE",
+  "root_decision": "rework",
+  "review_mode": "root_current_byte_reconciliation",
+  "superseded_result_observation": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-006.json",
+    "current_sha256": "5e673bd21d1578e561b361d983276cd5bae4b4fa8107c3ba9841f661b9a860c6",
+    "claimed_artifact_set_sha256": "580bf9b3d64041b6cbf3d8bcadd9dca65e60d758420461bcf5250e91f0140611",
+    "claimed_artifact_count": 70,
+    "claimed_total_bytes": 347269,
+    "claimed_total_lines": 10140
+  },
+  "current_source_observation": {
+    "artifact_set_sha256": "09a37e91969fcd8fc9e72faacce288497d3daf20f758e7fa9192f2524b624e7d",
+    "artifact_count": 70,
+    "total_bytes": 352204,
+    "total_lines": 10272,
+    "maximum_rust_file_lines": 299,
+    "mismatched_rows": [
+      "validator/src/cli/capture/artifact_safety.rs",
+      "validator/src/cli/capture/filesystem.rs",
+      "validator/src/cli/capture/mod.rs",
+      "validator/tests/cli_contract/capture/artifact_secret_policy.rs",
+      "validator/tests/cli_contract/capture/artifact_secrets.rs",
+      "validator/tests/cli_contract/capture/artifact_special_files.rs",
+      "validator/tests/cli_contract/capture/mod.rs",
+      "validator/tests/cli_contract/capture/shared_budget.rs"
+    ]
+  },
+  "decisive_finding": {
+    "severity": "material",
+    "class": "repeated_post_freeze_mutation",
+    "cause": "The prior capture worker rewrote its result after root had already bound the earlier receipt, then additional leased source and test bytes changed without a replacement WorkerResult. Neither form of the prior receipt binds the current capture candidate."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-CAPTURE-SECRET-BOUNDARY-STABILIZATION-001",
+  "corrective_scope": [
+    "Reconcile all eight current drift rows and retain only behavior that strengthens the adopted secret, resource, and special-file boundaries.",
+    "Exercise both output streams, both finalization orders, global and local truncation, every retained representation, scan limits, proper secret prefixes, raw digests, and special-file/path-substitution controls.",
+    "Finish every source and fixture write before two identical byte snapshots, then emit one final WorkerResult-v1 and exit without further mutation."
+  ],
+  "claim_ceiling": "Current secret-safe capture behavior is unbound. The prior receipts are superseded context only; public CLI integration, representative zero-write behavior, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim CLI-state completion, readiness, release, or goal completion."
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "ROUTINE-PUBLIC-SELF-IMPORT-REWORK",
+  "workstream": "routine_work_public_integration",
+  "root_decision": "REWORK",
+  "accepted_internal_dependency": {
+    "acceptance": "docs/ultragoal-successor-live/acceptance/ROUTINE-PROVENANCE-KERNEL.json",
+    "artifact_set_sha256": "e025e59afa8e7b948ae20500e469ec082664e803a3f874c08c178be62b9b7b1b"
+  },
+  "root_integration_attempt": {
+    "paths": [
+      "validator/src/lib.rs",
+      "validator/src/api_witness.rs",
+      "validator/tests/public_api_witness.rs"
+    ],
+    "command": "CARGO_TARGET_DIR=/tmp/hul-root-routine-public-integration CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo test --manifest-path validator/Cargo.toml --locked --offline -j16 --test public_api_witness --test routine_work_contract -- --test-threads=16",
+    "exit_code": 101
+  },
+  "decisive_finding": {
+    "severity": "material",
+    "class": "public_library_self_import_failure",
+    "cause": "Two non-test routine reuse modules import `ultragoal::capture` while compiling inside the `ultragoal` library crate. No linked external crate by that name exists at this boundary, so public module wiring fails with E0433.",
+    "paths": [
+      "validator/src/routine_work/reuse/artifact.rs:8",
+      "validator/src/routine_work/reuse/receipt.rs:7"
+    ],
+    "compiler_error": "cannot find module or crate `ultragoal` in this scope"
+  },
+  "corrective_action": "Use the crate-owned public capture module at the internal library boundary while preserving the existing test-wrapper behavior. Re-run the exact 66 routine tests, public external witness, capture-focused tests, and public compile false-pass before re-freezing the routine set.",
+  "claim_ceiling": "The internal provenance/impact kernel acceptance remains evidence for its exact prior set. Public HCT-CAPTURE/HCT-IMPACT visibility, inventory activation, product journeys, readiness, release, node closure, and completion remain withheld.",
+  "no_claim_statement": "This REWORK records a public integration compile failure and raises no public or completion claim."
+}

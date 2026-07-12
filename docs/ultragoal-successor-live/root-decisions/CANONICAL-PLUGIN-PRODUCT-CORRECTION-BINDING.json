@@ -1,0 +1,66 @@
+{
+  "schema_version": "RootBinding-v1",
+  "binding_id": "CANONICAL-PLUGIN-PRODUCT-CORRECTION-BINDING",
+  "workstream": "canonical plugin product source and fresh-operator guidance",
+  "candidate_id": "sha256:443e0f9d745786daa81723241b06c139b1fddba240c9e2bc1b3c0e8fd4e5035a",
+  "rework_dependency": {
+    "path": "docs/ultragoal-successor-live/root-decisions/PLUGIN-ACQUISITION-DISCOVERY-REWORK.json",
+    "sha256": "296cdd9053bbb3319e0b917db239bc25e3e6457453292203655fa143f11f6d00",
+    "required_disposition": "rework"
+  },
+  "candidate_membership": {
+    "artifact_count": 17,
+    "artifact_total_bytes": 63008,
+    "artifact_total_lines": 1475,
+    "formula": "Sort path; append path, TAB, lowercase SHA-256 without prefix, LF; SHA-256 the concatenation.",
+    "artifact_paths": [
+      "README.md",
+      "docs/install-and-visibility.md",
+      "docs/plugin-resource-map.md",
+      "fixtures/plugin-product/journey-controls.tsv",
+      "fixtures/plugin-product/root-wiring-request.json",
+      "fixtures/plugin-product/route-cases.tsv",
+      "skills/diagnose-and-observe/SKILL.md",
+      "skills/goal-run/SKILL.md",
+      "skills/harness-ultragoal/SKILL.md",
+      "skills/improve-and-maintain/SKILL.md",
+      "skills/product-journey-review/SKILL.md",
+      "skills/prove/SKILL.md",
+      "skills/repository-fit/SKILL.md",
+      "skills/routine-work/SKILL.md",
+      "validator/tests/plugin_product_contract/main.rs",
+      "validator/tests/plugin_product_contract/route_contract.rs",
+      "validator/tests/plugin_product_contract/source_contract.rs"
+    ],
+    "row_authority": "Use the exact artifact rows in the WorkerResult below; root independently re-read every regular file and matched all 17 digests and byte lengths, derived every line count, and recomputed this aggregate.",
+    "root_recomputed_set_sha256": "443e0f9d745786daa81723241b06c139b1fddba240c9e2bc1b3c0e8fd4e5035a"
+  },
+  "worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-PRODUCT-CORRECTION-015.json",
+    "sha256": "db3d647c04245d284f88c32004c90e5ee479fd3acd0ae60d834113feeb0eea7d",
+    "typed_result_id": "sha256:3f8a2ebe15becb2ba77ad217cf15df9a9eec79568e406d56866367f0bf4caf7f",
+    "root_reconciliation": "all 17 rows and the path-bound aggregate match current bytes"
+  },
+  "root_wiring_request": {
+    "path": "fixtures/plugin-product/root-wiring-request.json",
+    "sha256": "f23801ce42ff42a29638d3af4819743e70ec34c2befbb2ba5bec13d03f4a687b",
+    "status": "unapplied_non_authoritative_request",
+    "reserved_version": "0.0.12",
+    "root_owned_paths": [
+      ".codex-plugin/plugin.json",
+      "plugin-manifest-draft.json",
+      ".agents/plugins/marketplace.json"
+    ]
+  },
+  "required_review": [
+    "exactly one canonical front door and seven specialized canonical skills select without ambiguous or duplicate authority",
+    "all eight source routes preserve effect, capability, dirty-tree, failure, recovery, and proof ceilings",
+    "fresh-operator docs contain no proposal-era lane/gate or global custom-agent setup authority",
+    "source fixtures do not substitute for a fresh task, package, install, discovery, runtime, or product journey",
+    "the exact root-wiring request is deterministic, least-authority, current-preimage bound, package-closed, and does not activate compatibility aliases as canonical"
+  ],
+  "requested_route": "fresh independent plugin-product source review before any root manifest or marketplace change",
+  "invalidation_rule": "Any change to the 17 candidate paths, WorkerResult, root-wiring request, or this binding invalidates the review.",
+  "claim_ceiling": "source candidate pending independent review; package, install, discovery, runtime, journey, readiness, release, node, and completion claims remain withheld",
+  "no_claim_statement": "This binding does not claim source acceptance, package/install/discovery/runtime behavior, readiness, release, node closure, or goal completion."
+}

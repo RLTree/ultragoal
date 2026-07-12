@@ -1,0 +1,44 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "FIXTURE-SCHEDULER-DESCENDANT-REAP-REWORK",
+  "workstream": "fixture_scheduler",
+  "decision": "REWORK",
+  "acceptance_check": "AC-FIXTURE-SCHEDULER-RESOURCE-CONFINEMENT-REVIEW-006",
+  "reviewed_candidate": {
+    "binding_sha256": "5411de4eb5f955f12a21f4e257c3d2403efb5d61bbcf0548820785c5d7007ea3",
+    "artifact_set_sha256": "c3f3d440f446e328f73eba5044a2609c9277b1ae085873e8c6539e3f60ff2826",
+    "artifact_count": 24,
+    "artifact_total_bytes": 80071,
+    "artifact_total_lines": 2500,
+    "owned_set_sha256": "5268897db1d387d7dcf0244d69a22caa76256c5e66f146f2d264c882deee226f",
+    "worker_result_sha256": "2748c840651ed548bfec80aa6973667f12b14cae27b3982a2bf9afd30aab79ff",
+    "worker_result_id": "sha256:2482754b49fd01d4c86792ef094c7fc22084373ac10f882430b1ba123c29c712",
+    "root_lib_sha256": "9d7c8c528dbe211feb51a868bb6c37bd49c6ac233638cbb774cafc1c626e1526"
+  },
+  "independent_review": {
+    "reviewer": "/root/fixture_resource_confinement_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "verdict": "REWORK",
+    "stopped_after_first_material_defect": true
+  },
+  "decisive_finding": {
+    "class": "signal_resistant_descendant_survives_wall_timeout",
+    "cause": "terminate_and_reap sends process-group SIGTERM but returns immediately when the direct child exits, skipping group SIGKILL while another group member may remain alive.",
+    "independent_probe": "The actual run_confined timeout path produced descendant_alive_after_timeout=true for a child that exited on SIGTERM and a descendant that ignored SIGTERM.",
+    "test_false_pass": "The green timeout test manually sent process-group SIGKILL instead of exercising terminate_and_reap, so it could not detect the leak.",
+    "impact": "A fixture can retain a descendant beyond its immutable wall-time budget and escape process-lifetime/resource confinement."
+  },
+  "required_correction": [
+    "After the grace period, send SIGKILL to the process group regardless of whether the direct child already exited.",
+    "Reap the direct child without double-wait errors and verify no process-group member remains before reporting termination.",
+    "Exercise the actual run_confined or adapter timeout path with a descendant that ignores SIGTERM; do not manually substitute the kill sequence in the test.",
+    "Preserve CPU, address-space, file, sandbox/network, backend, collision, cleanup, and supplied-outcome behavior."
+  ],
+  "preserved_evidence": [
+    "Exact 24-file and 20-owned identities, private visibility, and typed WorkerResult were independently verified.",
+    "The locked/offline 22/22 suite passes but the timeout test is insufficient for the claimed descendant guarantee."
+  ],
+  "claim_ceiling": "No fixture resource-confinement acceptance, public HCT-FIXTURES, routine, strict, readiness, release, node closure, or completion.",
+  "no_claim_statement": "This decision does not claim fixture behavior, public integration, readiness, release, node closure, or goal completion."
+}

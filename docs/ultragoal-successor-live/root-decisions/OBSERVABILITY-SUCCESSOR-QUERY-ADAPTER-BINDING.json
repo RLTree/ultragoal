@@ -1,0 +1,139 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "candidate_id": "sha256:0a79a5d19c190240a2d67456991075d5ef0855fc534f1abedcf777ef9f83669a",
+  "workstream": "successor public local-observability query adapter",
+  "candidate_state": "awaiting_independent_review",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "accepted_dependency": {
+    "path": "docs/ultragoal-successor-live/acceptance/OBSERVABILITY-PUBLIC-INTEGRATION.json",
+    "scope": "accepted private event-store kernel and exact five-symbol public library integration only"
+  },
+  "successor_dependency": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-001.json",
+    "scope": "current typed successor grammar and runtime context candidate",
+    "status": "not node-accepted; this binding cannot raise its ceiling"
+  },
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, lowercase SHA-256 without prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "0a79a5d19c190240a2d67456991075d5ef0855fc534f1abedcf777ef9f83669a",
+  "artifact_count": 7,
+  "artifact_bytes": 50219,
+  "artifact_lines": 1423,
+  "artifacts": [
+    {
+      "path": "validator/src/argument_parser/mod.rs",
+      "sha256": "87d7c890ab485e0f7b083a227d2a3a9c831949cf1a34776686a5235464b4cce7",
+      "byte_length": 8601,
+      "line_count": 212
+    },
+    {
+      "path": "validator/src/cli/mod.rs",
+      "sha256": "a5a693484b37dd641c8675ea7db3271175f0a3a9cc4388a336d7db874f0b9961",
+      "byte_length": 928,
+      "line_count": 35
+    },
+    {
+      "path": "validator/src/cli/successor/diagnostics/model.rs",
+      "sha256": "896208ad93c19f5683b14e8f42cd454e31b6f17ea29445798f7cf84321be296b",
+      "byte_length": 4266,
+      "line_count": 134
+    },
+    {
+      "path": "validator/src/cli/successor_public/mod.rs",
+      "sha256": "7310f1179ed685a53aece92cb2bfa0729bbc72b5fcc30bb50160158555579bc1",
+      "byte_length": 7527,
+      "line_count": 223
+    },
+    {
+      "path": "validator/src/cli/successor_public/observe.rs",
+      "sha256": "51fd07827cb60e3561f788d26d8fae569d8878b1e157961116a43f798a07c6cb",
+      "byte_length": 8076,
+      "line_count": 250
+    },
+    {
+      "path": "validator/src/cli/successor_public/tests.rs",
+      "sha256": "b909b5a768ba5f6ece30b881e14cb218539883dc9cdc47148a746c102ea459e7",
+      "byte_length": 13660,
+      "line_count": 387
+    },
+    {
+      "path": "validator/src/command_run.rs",
+      "sha256": "5c9e1dbc2e4998e4651e0e4f66c8784b4ef90c122cc8be055e45a560c57f8bb5",
+      "byte_length": 7161,
+      "line_count": 182
+    }
+  ],
+  "implemented_behavior": [
+    "exact successor observe query routes through the public dispatcher while legacy observe logs query and observe explain-failure remain unshadowed",
+    "query binds the accepted EventStore and EventQuery to one current LiveContext, candidate id, and successor-runtime source id",
+    "missing stores return an explicit empty result without creation",
+    "valid stores support one exact operation filter and return ObservabilityQuery-v1 with causal_status not_evaluated and claim_effect none",
+    "corrupt, symlinked, nested-symlink, substituted, and special-file store boundaries fail closed without path echo",
+    "observe export is parsed as external-write and fails before repository access or output effect until an explicit configured adapter authority exists"
+  ],
+  "root_verification": [
+    {
+      "command": "cargo fmt --manifest-path validator/Cargo.toml -- --check",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check -- validator/src/cli/mod.rs validator/src/cli/successor validator/src/cli/successor_public validator/src/argument_parser/mod.rs validator/src/command_run.rs",
+      "result": "pass"
+    },
+    {
+      "command": "cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --target-dir /tmp/hul-successor-observe-root-012 -j16 -E 'binary(observability_contract) | binary(public_api_witness) | test(/successor_cli_contract/)'",
+      "result": "65 passed; 0 failed; 2271 skipped; 3.322 seconds"
+    },
+    {
+      "command": "cargo build --manifest-path validator/Cargo.toml --locked --offline --target-dir /tmp/hul-successor-observe-freeze-017 -j16",
+      "result": "fresh binary built successfully"
+    }
+  ],
+  "representative_fresh_binary_journeys": {
+    "repository_root": "/private/tmp/hul-observe-journey-017.sx8hl3",
+    "binary": "/tmp/hul-successor-observe-freeze-017/debug/ultragoal",
+    "zero_write_oracle": "recursive path/type/mode/owner/size/mtime rows, regular-file SHA-256 rows, and git status were captured before and after at the same scope and were byte-identical",
+    "cases": [
+      {
+        "case": "absent store",
+        "result": "exit 0; store_status absent; event_count 0; claim_effect none; zero-write oracle pass"
+      },
+      {
+        "case": "current-candidate filtered event",
+        "result": "exit 0; exactly one check.routine event; claim_effect none; zero-write oracle pass"
+      },
+      {
+        "case": "direct spool symlink",
+        "result": "exit 4; successor_runtime_observability_unavailable; no outside-path echo; root and outside snapshots unchanged"
+      },
+      {
+        "case": "nested observability ancestor symlink",
+        "result": "exit 4; successor_runtime_observability_unavailable; no outside-path echo; root and outside snapshots unchanged"
+      },
+      {
+        "case": "malformed persisted row",
+        "result": "exit 4; stable bounded diagnostic; zero-write oracle pass"
+      },
+      {
+        "case": "FIFO store leaf",
+        "result": "exit 4 before opening the special file; zero-write oracle pass"
+      },
+      {
+        "case": "unconfigured export",
+        "result": "exit 3 successor_runtime_authority_required before output creation; output value not echoed; zero-write oracle pass"
+      }
+    ]
+  },
+  "required_independent_review": [
+    "recompute every row, total, and the path-bound aggregate from live regular files",
+    "rebuild a fresh binary after verifying the exact set and reproduce absent, valid, corrupt, substitution, special-file, and export behavior",
+    "falsify zero-write behavior with recursive content, mode, mtime, and Git status comparison",
+    "verify current context, candidate, source, filter, and store identity cannot be substituted between validation and use",
+    "verify no legacy route is shadowed and no read/help/parse/query route writes",
+    "keep configured export, causal diagnosis, claim elevation, successor-node closure, readiness, release, and completion withheld"
+  ],
+  "requested_route": "fresh independent runtime and trust-boundary review of the exact seven-file adapter candidate",
+  "invalidation_rule": "Any byte change to the seven candidate paths, the accepted observability kernel/public integration, the typed successor dependency, or this binding invalidates review and fresh-binary evidence.",
+  "claim_ceiling": "current private source and fresh local-query product candidate pending independent review; configured export, causal diagnosis, claim elevation, node closure, readiness, release, and completion remain withheld",
+  "no_claim_statement": "This binding does not claim observability-node acceptance, configured export behavior, claim elevation, readiness, release, or goal completion."
+}

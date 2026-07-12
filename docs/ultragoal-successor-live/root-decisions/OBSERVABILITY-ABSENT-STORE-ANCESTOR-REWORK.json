@@ -1,0 +1,48 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "OBSERVABILITY-ABSENT-STORE-ANCESTOR-REWORK",
+  "workstream": "observability",
+  "decision": "REWORK",
+  "acceptance_check": "AC-OBSERVABILITY-KERNEL-003-R3",
+  "reviewed_candidate": {
+    "artifact_set_sha256": "ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e",
+    "artifact_count": 21,
+    "artifact_total_bytes": 94784,
+    "artifact_total_lines": 2906,
+    "result_sha256": "35a8bb56dd58e8f26486667e21fc40b6fe79b1e141712b64851aebca36bc87f8"
+  },
+  "independent_review": {
+    "reviewer": "/root/observability_structure_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "verdict": "REWORK",
+    "record": "/tmp/hul-observability-structure-review-003-r3/OBSERVABILITY-STRUCTURE-REVIEW-003-R3.json",
+    "record_sha256": "409d3e803530daa9258d317a7c3e072249206b7819f5c7fcaec56372b526d5ac"
+  },
+  "accepted_pre_stop_evidence": [
+    "Exact result-only WorkerResult parse, validate_for, ArtifactWorkspace, and result ID passed.",
+    "All 21 current regular artifact rows and aggregate evidence matched.",
+    "The 25-test observability suite and three existing qualified controls passed.",
+    "All production files were at most 298 physical lines."
+  ],
+  "decisive_finding": {
+    "class": "absent_store_ordinary_ancestor_replacement_redirects_creation",
+    "reproducer": [
+      "Bind an absent store under outer/nested.",
+      "Rename the original outer directory.",
+      "Create a different ordinary outer/nested path.",
+      "Append the first event."
+    ],
+    "observed": "append returned Ok(true) and created the store under the replacement ancestor",
+    "cause": "open_bound retains no ancestor descriptor/identity for an absent leaf; first creation reopens the current path and binds only after redirected creation.",
+    "false_pass_gap": "The existing post-binding test substitutes only a symlink, which O_NOFOLLOW rejects and therefore does not exercise ordinary-directory replacement."
+  },
+  "required_correction": [
+    "Retain the bound ancestor descriptor or exact ancestor identity chain through first creation.",
+    "Create the absent store only through the retained parent, not by reopening the mutable path.",
+    "Revalidate ancestor identity before and after creation.",
+    "Add the ordinary-directory replacement regression and prove no replacement/outside store is created."
+  ],
+  "claim_ceiling": "No observability source acceptance, public integration, product behavior, readiness, release, node closure, or completion.",
+  "no_claim_statement": "This decision does not claim observability behavior, public integration, readiness, release, node closure, or goal completion."
+}

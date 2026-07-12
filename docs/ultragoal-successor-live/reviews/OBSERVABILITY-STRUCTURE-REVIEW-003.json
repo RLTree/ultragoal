@@ -1,0 +1,115 @@
+{
+  "schema_version": "SecurityTrustBoundaryReview-v1",
+  "review_id": "OBSERVABILITY-STRUCTURE-REVIEW-003",
+  "verdict": "REWORK",
+  "acceptance_check": "AC-OBSERVABILITY-KERNEL-003",
+  "review_scope": {
+    "candidate_id": "sha256:ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e",
+    "context_id": "sha256:58c67c44d7da257142f7e2fce95e896a86a489defc32504391d351bc22b8c292",
+    "worker_result_path": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-STRUCTURE-CORRECTION-003.json",
+    "worker_result_sha256": "sha256:0544f12e4f260b2cea13f494b61d429a6e36d0f97762a6c844ed4148ae868601",
+    "root_decision_path": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-SOURCE-SIZE-REWORK.json",
+    "root_decision_sha256": "sha256:58c67c44d7da257142f7e2fce95e896a86a489defc32504391d351bc22b8c292",
+    "actual_dispatch": {
+      "worker": "/root/observability_structure_refactorer",
+      "requested_route": "gpt-5.6-terra/medium priority",
+      "effective_route": "unverified",
+      "write_ownership": [
+        "validator/src/observability/filesystem.rs",
+        "new private submodules directly under validator/src/observability/filesystem/",
+        "validator/src/observability/mod.rs only if unavoidable",
+        "observability-specific tests only if relocation required import adjustment",
+        "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-STRUCTURE-CORRECTION-003.json"
+      ]
+    },
+    "exclusions_after_decisive_failure": [
+      "fresh cargo/rustfmt/LOC behavior verification",
+      "deep ancestor-symlink and post-binding substitution execution",
+      "zero-write query/explain execution",
+      "privacy/redaction and cleanup/error execution",
+      "public-surface source inspection",
+      "WorkerResult validator and mutation suite"
+    ]
+  },
+  "trust_boundaries": [
+    "WorkerResult proof metadata to root acceptance",
+    "artifact rows to current workspace files",
+    "descriptor-anchored filesystem confinement to attacker-controlled path topology",
+    "read-only query/explain to durable observability storage",
+    "event privacy/redaction to exported or queried data",
+    "private Rust module split to unchanged public exports"
+  ],
+  "findings": [
+    {
+      "severity": "high",
+      "class": "proof_integrity_self_contradiction",
+      "affected_contract": "OBSERVABILITY-STRUCTURE-CORRECTION-003 candidate identity",
+      "trigger": "Sum the 21 artifacts[].byte_length values or sum current file bytes after every row hash and byte length matches its artifact row.",
+      "impact": "The WorkerResult's candidate identity metadata is internally false and cannot support AC-OBSERVABILITY-KERNEL-003 acceptance as written.",
+      "exploitability": "Any stale or manually mistyped aggregate can survive because the artifact-set digest authenticates path and SHA-256 only, not artifact_total_bytes. A verifier trusting the summary accepts a false proof field.",
+      "evidence": {
+        "claimed_artifact_total_bytes": 94418,
+        "sum_of_declared_row_byte_lengths": 94784,
+        "sum_of_current_file_bytes": 94784,
+        "difference_bytes": 366,
+        "artifact_rows_matching_sha256_and_byte_length": "21/21",
+        "computed_artifact_set_sha256": "ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e",
+        "source_locations": [
+          "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-STRUCTURE-CORRECTION-003.json:12",
+          "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-STRUCTURE-CORRECTION-003.json:70"
+        ]
+      }
+    }
+  ],
+  "exploitability": "Proof-integrity failure, not a demonstrated runtime confinement exploit. The false aggregate is reproducible without mutation and is decisive under the exact-identity acceptance contract.",
+  "approval_boundaries": {
+    "root_acceptance": "withheld",
+    "public_wiring": "not reviewed and remains root-owned",
+    "repo_mutations": "none performed by reviewer",
+    "external_effects": "none"
+  },
+  "mitigations": [
+    "Correct artifact_total_bytes to the mechanically derived sum or regenerate the artifact rows and summary together.",
+    "Recompute the WorkerResult SHA-256 after correction.",
+    "Add a deterministic validator invariant that artifact_total_bytes equals the sum of artifacts[].byte_length so this false-pass is rejected before review.",
+    "Rerun the full independent AC-OBSERVABILITY-KERNEL-003 review against the new exact identity."
+  ],
+  "verification": [
+    {
+      "command": "shasum -a 256 docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-SOURCE-SIZE-REWORK.json docs/ultragoal-successor-live/worker-results/OBSERVABILITY-STRUCTURE-CORRECTION-003.json",
+      "result": "root decision 58c67c44d7da257142f7e2fce95e896a86a489defc32504391d351bc22b8c292; WorkerResult 0544f12e4f260b2cea13f494b61d429a6e36d0f97762a6c844ed4148ae868601"
+    },
+    {
+      "command": "For each artifacts[] row, compare shasum -a 256 and wc -c with declared sha256 and byte_length",
+      "result": "21/21 rows matched"
+    },
+    {
+      "command": "Sort artifact paths; emit path TAB lowercase current SHA-256 LF; SHA-256 the stream",
+      "result": "ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e"
+    },
+    {
+      "command": "jq '[.artifacts[].byte_length] | add' WorkerResult; jq '.candidate_identity.artifact_total_bytes' WorkerResult",
+      "result": "94784 versus 94418"
+    },
+    {
+      "command": "Sum wc -c and physical-line counts for all artifacts[].path",
+      "result": "count=21 bytes=94784 physical_lines=2906"
+    }
+  ],
+  "residual_risk": {
+    "security": "Descriptor confinement, deep ancestor-symlink rejection, post-binding substitution rejection, privacy/redaction, cleanup/error semantics, and zero-write behavior were not freshly rerun after the decisive proof failure. No positive security acceptance is supported.",
+    "performance": "No fresh timing or resource-use check was run. The private split appears behavior-preserving only by worker claim, not this review.",
+    "route": "Reviewer requested route was gpt-5.6-terra/high; effective runtime route is unverified. Worker dispatch requested gpt-5.6-terra/medium; effective worker route is unverified."
+  },
+  "suppressed_non_issues": [
+    "The 21 current artifact hashes and per-row byte lengths match the rows.",
+    "The recomputed path-plus-digest artifact-set SHA-256 matches the candidate ID.",
+    "The WorkerResult SHA-256 and root-decision SHA-256 match the supplied identities.",
+    "The WorkerResult declares only dispatch-owned touched paths and withholds root acceptance, readiness, release, and completion."
+  ],
+  "evidence": {
+    "review_stop_rule": "Stopped at the first decisive material failure as required.",
+    "smallest_safe_verification_step": "Regenerate only the WorkerResult aggregate metadata from its artifact rows, rehash the WorkerResult, then first assert sum(artifacts[].byte_length) == candidate_identity.artifact_total_bytes before rerunning the full independent review.",
+    "supported_claim_ceiling": "The current 21 files match their artifact rows and recompute to candidate sha256:ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e, but the signed WorkerResult is internally inconsistent. AC-OBSERVABILITY-KERNEL-003 remains REWORK. No source acceptance, runtime security, public wiring, CLI/product behavior, live export, node closure, readiness, release, or completion claim is supported."
+  }
+}

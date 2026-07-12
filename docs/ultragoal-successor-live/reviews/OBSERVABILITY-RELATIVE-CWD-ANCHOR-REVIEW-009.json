@@ -1,0 +1,46 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "OBSERVABILITY-RELATIVE-CWD-ANCHOR-REVIEW-009",
+  "reviewer": "/root/observability_metadata_reconciler",
+  "requested_route": "gpt-5.6-terra/medium",
+  "effective_route": "unverified",
+  "verdict": "ACCEPT",
+  "acceptance_check": "OBS-CWD-ANCHOR-REVIEW-002",
+  "verified_at": "2026-07-12T01:36:46Z",
+  "reviewed_identity": {
+    "binding_path": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION-BINDING.json",
+    "binding_sha256": "10301d644e632d2d7f199fd97dc7f599089fca5702134432c168eb8b9b5b5732",
+    "worker_result_path": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-RELATIVE-CWD-ANCHOR-CORRECTION-008.json",
+    "worker_result_sha256": "566912bd675acc2187f5ed96fcdd64fc87c9249291777794161faab5db7b5877",
+    "worker_result_id": "sha256:622ec85da718fb9b17ef7ed3e4aa3f8d91f572acb59e5bfdb3ffc0f493a6ffeb",
+    "artifact_set_sha256": "1c811d9b0f27545239d2e38c4b1c9ed28a634b018015f5d4f8f76eba864b0649",
+    "artifact_count": 22,
+    "artifact_total_bytes": 107366,
+    "artifact_total_lines": 3271,
+    "changed_set_sha256": "1202f5b55aa627138292d689f1872804b3dac13001154bff08ad48cc32ba1b1d",
+    "changed_count": 3,
+    "changed_total_bytes": 25918,
+    "changed_total_lines": 748
+  },
+  "validation": {
+    "independent_artifact_reconciliation": "PASS: all 22 source/test rows and all three changed rows matched; both set identities and all aggregates were independently recomputed",
+    "corrected_metadata": "PASS: races_paths.rs is 13,850 bytes, 371 lines, SHA-256 819fae8869b7b766eb205b165017647464f02cdb82f5ed3f25afd1728135b5af; no stale 367-line claim remains",
+    "worker_result": "PASS: parse_json, WorkPackage and LeaseSpec validation, validate_for, ArtifactWorkspace verification, exact result ID, and three result artifacts",
+    "locked_observability_suite": "PASS: 29 passed; 0 failed with isolated target, locked/offline, 16 build jobs, and 16 test threads",
+    "relative_cwd_behavior": "PASS: the current suite covers create, append, query, clear, and recover after relative working-directory replacement and preserves both trees",
+    "public_integration_state": "PASS: validator/src/lib.rs, validator/src/api_witness.rs, and validator/tests/public_api_witness.rs still contain no public observability export or five HCT-OBSERVE witnesses"
+  },
+  "supported_scope": [
+    "exact private 22-artifact local observability implementation",
+    "absolute and relative working-directory attachment revalidation through all five lifecycle operations",
+    "typed candidate and WorkerResult metadata reconciliation",
+    "local query, privacy, explicit export, corruption, and special-file controls exercised by the 29-test contract suite"
+  ],
+  "explicitly_withheld": [
+    "public HCT-OBSERVE integration",
+    "observe or diagnose CLI product behavior",
+    "supported-host product journey or optional external collector behavior",
+    "claim elevation, readiness, release, node closure, or goal completion"
+  ],
+  "no_claim_statement": "This review accepts only the exact private observability source candidate and does not claim public integration, product behavior, readiness, release, node closure, or goal completion."
+}

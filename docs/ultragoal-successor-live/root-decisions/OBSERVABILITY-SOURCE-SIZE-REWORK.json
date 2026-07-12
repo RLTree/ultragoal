@@ -1,0 +1,22 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "OBSERVABILITY-SOURCE-SIZE-REWORK",
+  "workstream": "observability",
+  "root_decision": "REWORK",
+  "behavior_candidate": {
+    "worker_result": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-ANCESTOR-SYMLINK-CORRECTION-002.json",
+    "worker_result_sha256": "d7e54e444082a616baa6c014bbe63c247577740adde2183d757c8859d802313c",
+    "artifact_set_sha256": "6ca48a49298dc0e4317e27a25fc81f3f2762ecdf22d582b9a372e803cd0dac70",
+    "artifact_count": 20,
+    "focused_diagnostics": "25 passed; 0 failed; exact deep-ancestor reproducer rejected before creation"
+  },
+  "decisive_finding": {
+    "severity": "material_quality_gate",
+    "class": "unapproved_production_file_hard_cap",
+    "path": "validator/src/observability/filesystem.rs:361",
+    "cause": "The new descriptor-ancestor traversal, leaf identity, bounded-read, and file-operation responsibilities coexist in one hand-written production file above the 300-line hard cap and have a clear private split boundary."
+  },
+  "corrective_action": "Extract private ancestor/path-confinement logic into a focused submodule while preserving every syscall flag, error, binding, creation-order, and zero-write invariant. Keep every observability production file at or below 300 lines, rerun all 25 tests and the exact deep-ancestor/post-binding false-pass, then freeze and independently review the complete corrected set.",
+  "claim_ceiling": "The ancestor-symlink behavior is a passing worker diagnostic only. Source acceptance, public wiring, CLI/product behavior, live export, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This REWORK preserves the security correction and rejects only the unapproved production-source size gate."
+}

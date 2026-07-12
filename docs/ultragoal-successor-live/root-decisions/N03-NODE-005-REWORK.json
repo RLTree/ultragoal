@@ -1,0 +1,39 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N03-NODE-005-REWORK",
+  "node_id": "N03-CLI-STATE",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-005.json",
+    "sha256": "4cec98bf8f7d52b197b38c2954f26992eef6c8a519f02e278e0ebe55d0697bf0",
+    "artifact_set_sha256": "1b7ce62f111eb90a6c534c476a9759727472f8d5cbe6e17e1a2fb19f3f922ef5",
+    "artifact_count": 64,
+    "bytes": 321295,
+    "lines": 9448,
+    "maximum_file_lines": 299
+  },
+  "identity_reconciliation": "pass",
+  "decisive_finding": {
+    "severity": "critical",
+    "class": "captured_artifact_secret_disclosure",
+    "cause": "The capture run binds explicit secrets for stdout and stderr redaction but does not pass that secret set into artifact capture. A public artifact can therefore retain the bound secret bytes, expose them through derived Debug output, and publish their exact digest through artifact and canonical run JSON.",
+    "source_boundaries": [
+      "validator/src/cli/capture/run.rs:183",
+      "validator/src/cli/capture/artifact.rs:23",
+      "validator/src/cli/capture/artifact.rs:202",
+      "validator/src/cli/capture/run.rs:28"
+    ]
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N03-CLI-STATE-NODE-006",
+  "corrective_scope": [
+    "Bind the exact explicit-secret set into artifact finalization before artifact bytes or digests become observable.",
+    "Fail closed or emit a secret-safe representation for any full-secret or proper-prefix artifact ambiguity; artifact labeling must never bypass argument or environment secret policy.",
+    "Prove raw secret bytes and their exact raw digest are absent from artifact bytes, Debug, ArtifactRef, artifact JSON, and canonical CapturedRun JSON.",
+    "Cover both complete secrets and bounded proper prefixes, multiple secrets, deterministic ordering, candidate binding, malformed and special files, read substitution, and existing zero-write behavior.",
+    "Freeze a typed WorkerResult-v1 with no prose root changes and repeat independent review from the corrected exact set."
+  ],
+  "claim_ceiling": "N03 remains an unaccepted internal CLI, state, and capture candidate. Public dispatcher/schema/migration integration, representative zero-write CLI journeys, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim N03 completion, readiness, release, or goal completion."
+}

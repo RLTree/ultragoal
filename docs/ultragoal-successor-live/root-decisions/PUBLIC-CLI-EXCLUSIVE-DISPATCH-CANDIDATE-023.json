@@ -1,0 +1,60 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "PUBLIC-CLI-EXCLUSIVE-DISPATCH-CANDIDATE-023",
+  "root_decision": "candidate_pending_independent_review",
+  "issued_from_live_context": {
+    "context_id": "sha256:00f57f6d0a1c060e5f3effeb0fbed7d22d4243d1c7bf16f633173e3e7caac92a",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+    "branch": "codex/successor-contract-v2-live-product",
+    "dirty": true
+  },
+  "artifact_set": [
+    {"path":"validator/src/argument_parser/mod.rs","sha256":"2c57b102a69a9704f5b36a5a5b7c6206222425040f326a1f917b5b24b5c2ecf0"},
+    {"path":"validator/src/argument_parser/tests.rs","sha256":"3761b5e9c2df5b2ca1100130e0ca3ba158fafa7ad1fac355b0a3a2801c1bb10b"},
+    {"path":"validator/src/cli/successor/mod.rs","sha256":"22775ba77050483557b17ef264ff96ff7b9db950c6c014969dd06e6fc18b2da1"},
+    {"path":"validator/src/cli/successor_public/mod.rs","sha256":"f31f94b50e243e20e02d9e42ea8daf02795c44c14937501eac09cd984bec0ba0"},
+    {"path":"validator/src/cli/successor_public/tests.rs","sha256":"2d685c3218ff3e4011ed86b359b89fa0733c1de583d4a3707607c140917a133e"},
+    {"path":"validator/src/inventory/retained_routes/commands.rs","sha256":"3d9b0fedb0bbb268d843f22c567a6998c818b08b32294d5130224005082417f6"},
+    {"path":"validator/src/lib.rs","sha256":"17974c7f87b8ecc9433ec2b73269617d37c7adfc5bffe07f8b6e338711466bdc"},
+    {"path":"validator/tests/cli_surface.rs","sha256":"878698ac744fcb2d89e480fd3e54e8af15c1f42746d6b06906a64934bdbc760d"}
+  ],
+  "compiled_candidate": {
+    "binary_path": "/tmp/hul-successor-cli-proof-023/debug/ultragoal",
+    "binary_sha256": "3f01e3fd7bc9d9c9bbc6dac0fc43b5bd10649bea0dbb9d7f61e1ab39d490b44c",
+    "dep_info_path": "/tmp/hul-successor-cli-proof-023/debug/ultragoal.d",
+    "dep_info_sha256": "564ff520640b83171344b2c67f971d9056e6800a3beb1722e727de707feca874",
+    "repository_dependency_count": 963,
+    "sorted_dependency_content_rows_sha256": "1b0cbda607c7d48f2c80ed1a50f12eec95c8853fed9a39bbd27a94625ac2f793",
+    "cargo_lock_sha256": "e480d056ee0faeac0d7cb7e426a8a8073aa2a8eaed07e9b2da9c415fe7269e02",
+    "validator_manifest_sha256": "bd30f4a997bd0f7d4ed8a1db4527e6f7a283a9b02a970c390e84e5426acf0053"
+  },
+  "verification": {
+    "cli_surface": {"nextest_run_id":"8628890e-aca0-414b-b5ec-6368141631fd","passed":4,"failed":0},
+    "argument_parser_and_successor_public": {"nextest_run_id":"7b6d45b4-79ba-40ef-8e83-0fb603d90652","passed":26,"failed":0},
+    "retained_route_contract": {"nextest_run_id":"ecaf9901-635d-44cd-865e-2879ffa676e9","passed":12,"failed":0},
+    "selected_inventory_routes": {"nextest_run_id":"719abc87-6d47-4d88-863b-796883637940","passed":21,"failed":0,"excluded_host_control":"Unix-domain socket construction is denied by the managed sandbox; the same control remains unaccepted pending authorized execution."},
+    "process_probes": {
+      "successor_catalog_exit": 0,
+      "unknown_canary_exit": 2,
+      "legacy_current_state_exit": 2,
+      "legacy_observe_logs_exit": 2,
+      "legacy_package_digest_exit": 2,
+      "inspect_context_exit": 0,
+      "unknown_and_legacy_outputs": "typed harness-ultragoal.cli-error.v1 without argument echo"
+    },
+    "zero_write_scope": "recursive repository tree plus Git status across public help, malformed parse, legacy refusal, inspect context, observe query, diagnose, and unavailable effectful routes"
+  },
+  "candidate_behavior": {
+    "public_entry": "all production invocations are parsed as the ten-group successor grammar",
+    "legacy_fallback": "absent from the production entry; legacy parser helpers remain test-only pending migration retirement",
+    "unavailable_successor_groups": "typed fail-closed unsupported-capability diagnostics",
+    "private_argument_echo": "rejected by focused and process-level controls"
+  },
+  "root_disposition": {
+    "accepted_artifact_sets": [],
+    "review_required": true,
+    "highest_honest_ceiling": "Exact source and fresh-binary candidate for exclusive successor public dispatch. No downstream tool behavior, migration completion, inventory closure, readiness, release, or goal-completion claim is raised."
+  },
+  "no_claim_statement": "This candidate does not accept itself and does not claim CLI node completion, downstream product behavior, migration completion, readiness, release, or goal completion."
+}

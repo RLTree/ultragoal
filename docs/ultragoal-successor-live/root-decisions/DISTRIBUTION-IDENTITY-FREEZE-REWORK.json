@@ -1,0 +1,38 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "workstream": "distribution_identity_ladder",
+  "decision": "REWORK",
+  "review_route": {
+    "model": "gpt-5.6-sol",
+    "reasoning": "ultra",
+    "rationale": "Critical-path supply-chain, confinement, lifecycle, and runtime-identity boundary."
+  },
+  "submitted_candidate": {
+    "artifact_count": 20,
+    "artifact_lines": 3292,
+    "artifact_bytes": 108614,
+    "claimed_artifact_set_sha256": "4f298e785c50e3cbdbae0164b62759feb150dd44fa65d1623473aa659928c164",
+    "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without a prefix, and one LF byte; SHA-256 the concatenation.",
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "decisive_finding": {
+    "id": "distribution-candidate-identity-mismatch",
+    "severity": "material",
+    "summary": "The exact submitted 20-path membership has the claimed line and byte counts but not the claimed aggregate digest.",
+    "root_recomputed_artifact_set_sha256": "11c31a8265252b6a2f71076e019f544d82a8fd26c3577afebbb706e6080d9767",
+    "independent_recomputed_artifact_set_sha256": "11c31a8265252b6a2f71076e019f544d82a8fd26c3577afebbb706e6080d9767",
+    "review_disposition": "Substantive source, test, and adversarial review stopped at the identity gate."
+  },
+  "corrective_candidate": {
+    "path": "docs/ultragoal-successor-live/root-decisions/DISTRIBUTION-IDENTITY-LADDER-CORRECTED-CANDIDATE.json",
+    "artifact_set_sha256": "11c31a8265252b6a2f71076e019f544d82a8fd26c3577afebbb706e6080d9767"
+  },
+  "accepted_artifact_sets": [],
+  "highest_defensible_ceiling": "Previously accepted distribution library APIs remain accepted. The new isolated identity-ladder behavior is an unaccepted corrected candidate only.",
+  "explicitly_withheld": [
+    "distribution identity-ladder acceptance",
+    "actual marketplace, cache, app-registry, Plugins UI, discovery, or runtime proof",
+    "installation, readiness, release, node closure, or goal completion"
+  ]
+}

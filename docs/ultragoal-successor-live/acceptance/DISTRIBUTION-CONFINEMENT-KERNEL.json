@@ -1,0 +1,61 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "DISTRIBUTION-CONFINEMENT-KERNEL",
+  "workstream": "distribution",
+  "decision": "ACCEPT",
+  "evidence_state": "reopened_by_authority_bearing_edit",
+  "reopened_by": "active package-artifact writer implementation changed the accepted distribution source set",
+  "accepted_candidate": {
+    "artifact_set_sha256": "e3d2c3bbc060de4a8db6e6f4ae21543f0baafe85be9cef960fcb39eae7fcf60a",
+    "artifact_count": 73,
+    "artifact_bytes": 416991,
+    "artifact_lines": 12496,
+    "maximum_production_file_lines": 298,
+    "worker_result": "docs/ultragoal-successor-live/worker-results/DISTRIBUTION-STRUCTURE-CORRECTION-003.json",
+    "worker_result_sha256": "246d19cf36ab20fc11be17bc360a35b18cd7d0afc8decddbeb292b66ab41afab",
+    "result_id": "sha256:eef18d10ad3f52fc661206339ab4d35053eba9f9d037433ea77a5ad69e596602",
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "supersedes_for_current_source_identity": [
+    "docs/ultragoal-successor-live/acceptance/DISTRIBUTION-PACKAGE-INSTALL-KERNEL.json"
+  ],
+  "independent_review": {
+    "reviewer": "/root/distribution_structure_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "acceptance_check_id": "AC-DISTRIBUTION-STRUCTURE-003",
+    "verdict": "PASS",
+    "record": "docs/ultragoal-successor-live/reviews/DISTRIBUTION-STRUCTURE-003.json",
+    "record_sha256": "6bff86eec822f9fe311c53cb11a53f75be674373975fc5ec3c2d771962980e44"
+  },
+  "verification": {
+    "artifact_reconciliation": "73 of 73 current rows rehashed; no missing, extra, or mismatched row",
+    "worker_result_boundary": "WorkerResultV1 parse_json, actual-scope validate_for, ArtifactWorkspace verify, and computed result ID passed",
+    "locked_distribution_suite": "101 passed; 0 failed",
+    "public_api_witness": "external distribution API witness compiled and passed",
+    "ancestor_relocation_controls": "file and directory chained ancestor relocation rejected before effect and preserved outside bytes",
+    "source_structure": "all hand-written production files <=300 physical lines; descriptor_races.rs is the accepted 460-line adversarial-test exception"
+  },
+  "accepted_scope": [
+    "current source-level deterministic package, marketplace, install, cache, host-plan, version, and identity-ladder kernel",
+    "descriptor-anchored distribution reads and writes with pre-effect ancestor relocation rejection",
+    "private structural split preserving error mapping, syscall flags, effect ordering, and rollback semantics",
+    "source-level public distribution API witness"
+  ],
+  "residual_security_assumption": "The final fstatat-to-unlinkat interval assumes no arbitrary same-UID actor renames entries in the retained parent; the accepted ceiling does not claim protection from a malicious scheduler in that interval.",
+  "explicitly_withheld": [
+    "built package identity",
+    "installed-byte identity",
+    "marketplace and cache reconciliation on the live host",
+    "application registry and Plugins UI exposure",
+    "new-session host discovery",
+    "representative runtime behavior",
+    "distribution node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any byte change to the 73-artifact set, public distribution witness, or confinement behavior reopens this acceptance.",
+  "no_claim_statement": "This acceptance is source-level only and does not claim package, install, discovery, runtime, readiness, release, node closure, or goal completion."
+}

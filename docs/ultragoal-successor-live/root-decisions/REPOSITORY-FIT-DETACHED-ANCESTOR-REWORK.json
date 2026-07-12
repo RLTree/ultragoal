@@ -1,0 +1,65 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "workstream": "repository_fit_active_path_confinement",
+  "decision": "REWORK",
+  "review_route": {
+    "model": "gpt-5.6-sol",
+    "reasoning": "ultra",
+    "rationale": "High-risk rollback and path-confinement boundary where a detached-tree observation can be mistaken for current repository truth."
+  },
+  "reviewed_candidate": {
+    "manifest": "docs/ultragoal-successor-live/root-decisions/REPOSITORY-FIT-FINAL-SWEEP-CANDIDATE.json",
+    "manifest_sha256": "a0dae98e6149077f57d467a0b957ca749d4e8fde9146ab1b4bed7695429bf32e",
+    "artifact_set_sha256": "465a02eace5736de97d16a839b0b49d09b7b6bbb5da00c47297249bcc9a59047",
+    "artifact_count": 18,
+    "membership_differences": 0,
+    "digest_length_line_mismatches": 0,
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "material_finding": {
+    "id": "repository-fit-detached-ancestor-read",
+    "summary": "LocalRepository validates stored ancestors root-to-leaf and then rechecks only the root. A previously checked first ancestor can be persistently rename-swapped while a deeper scan continues through already-open old descriptors, allowing original bytes from the detached tree to return while the active path contains foreign bytes.",
+    "source_evidence": [
+      "validator/src/repository_fit/local/unix.rs:104-110 validates stored ancestors in root-to-leaf order",
+      "validator/src/repository_fit/local/unix.rs:166-183 then verifies only the repository root inode and canonical path"
+    ],
+    "external_reproduction": {
+      "ephemeral_source_was_read_before_target_cleanup": true,
+      "platform": "macOS renameatx_np RENAME_SWAP",
+      "fixture": "root/a/b/FILE with 40000 entries under root/a; alternate/b/FILE contains foreign bytes",
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fit-final-sweep-review cargo run --manifest-path /tmp/hul-fit-final-sweep-review/external-probe/Cargo.toml --bin ancestor_race --offline --quiet",
+      "exit_code": 0,
+      "output": [
+        "baseline_us=62901",
+        "DETACHED_SUCCESS percent=59 call_us=68787 swap_before_return_us=21478"
+      ],
+      "interpretation": "The active first ancestor contained foreign bytes for 21478 microseconds before read_file returned, but read_file returned the detached original bytes."
+    },
+    "contract_impact": "Exact active-path confinement is false, so inspect or verify can authorize state from a detached repository tree."
+  },
+  "required_correction": [
+    "revalidate the complete attachment chain leaf-to-root so the root-most descendant attachment is checked last, then revalidate the exact root boundary",
+    "fail closed for persistent first and intermediate ancestor substitution without following the substitute",
+    "do not add unbounded retries or weaken exact-name symlink special-file enumeration or root checks",
+    "add deterministic first-ancestor and intermediate-ancestor substitution controls plus a supported-host external race reproduction"
+  ],
+  "preserved_corrected_behavior": {
+    "final_rollback_sweep": "the prior exact-replacement race and a managed-prior missing-state variant now return RollbackFailed with four CAS calls and four writes; the read-only sweep adds no mutation"
+  },
+  "review_verification": [
+    {"command":"full repository_fit_contract with -j 16 and --test-threads=16","result":"41 passed; 0 failed"},
+    {"command":"focused apply_failures with -j 16 and --test-threads=16","result":"14 passed; 0 failed; 27 filtered"},
+    {"command":"rustfmt over exact frozen set","result":"passed"},
+    {"command":"targeted clippy --no-deps with -j 16","result":"passed with existing repository warnings"}
+  ],
+  "accepted_requirements": [],
+  "highest_defensible_ceiling": "The bounded final rollback sweep correction is supported, but full repository-fit internal acceptance is withheld because active-path confinement can observe a detached tree.",
+  "explicitly_withheld": [
+    "repository-fit internal acceptance",
+    "public HCT-FIT integration",
+    "supported-host writer and live journey matrix",
+    "legacy fit-route retirement",
+    "readiness release node closure or goal completion"
+  ]
+}

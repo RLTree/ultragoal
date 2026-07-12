@@ -1,0 +1,37 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "DISTRIBUTION-PAIRED-HOME-ARPA-PROOF-REWORK",
+  "node_id": "N04-DISTRIBUTION",
+  "root_decision": "rework",
+  "review_mode": "clean_independent_exact_set_and_proof_coverage_review",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N04-DISTRIBUTION-NODE-012.json",
+    "sha256": "426d558ed5864ea7d8d664fc46ceec76c54b4a07cc0e4617326c1eb05990a232",
+    "artifact_set_sha256": "acc7f1bcb5b6db6bbb7a9fee504c8ac9601ef8fc6eac0ce5c06f2a0e5a032a38",
+    "artifact_count": 54,
+    "total_bytes": 237976,
+    "total_lines": 7144,
+    "maximum_rust_file_lines": 299
+  },
+  "identity_reconciliation": "pass",
+  "clean_review_snapshot": {
+    "path_count": 65,
+    "before_after_sha256": "e626145184ac92c418bd61b798d80adebd950b98092e0d9587010cfaebea16bb",
+    "zero_byte_size_or_mtime_changes": true,
+    "tainted_execution_reused": false
+  },
+  "decisive_finding": {
+    "severity": "material",
+    "class": "paired_consumer_proof_gap",
+    "cause": "Direct network controls reject mixed-case email and port-bearing HTTPS home.arpa forms, but both inventory and distribution consumer fixtures cover only exact, subdomain, and suffix-lookalike forms. The corrective contract requires paired proof at those consumers."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N04-DISTRIBUTION-NODE-013",
+  "corrective_scope": [
+    "Add mixed-case home.arpa email rejection and mixed-case valid-port HTTPS home.arpa rejection to both paired consumer fixtures.",
+    "Rerun only the paired semantics, full distribution, focused inventory manifest, exact format, and current-set reconciliation checks at 16 jobs.",
+    "Freeze and cleanly rereview the exact corrected set without any repository-writing library selector."
+  ],
+  "claim_ceiling": "The single-table implementation appears structurally correct but remains an unaccepted internal semantic candidate until paired consumer proof is complete. All real distribution and product claims remain withheld.",
+  "no_claim_statement": "This decision does not claim distribution completion, readiness, release, or goal completion."
+}

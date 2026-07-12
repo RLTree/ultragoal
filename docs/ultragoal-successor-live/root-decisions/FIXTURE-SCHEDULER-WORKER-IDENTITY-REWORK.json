@@ -1,0 +1,40 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "FIXTURE-SCHEDULER-WORKER-IDENTITY-REWORK",
+  "workstream": "fixture_scheduler",
+  "decision": "REWORK",
+  "acceptance_check": "AC-FIXTURE-SCHEDULER-001",
+  "rejected_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/FIXTURE-SCHEDULER-IMPLEMENTATION-001.json",
+    "sha256": "11241b4f9df7a8ac5686e8c244ef7e454c80be3ce35920a7da90ffa06f51c0b5",
+    "worker": "/root/fixture_scheduler_builder"
+  },
+  "decisive_finding": {
+    "class": "synthetic_candidate_and_context_identity",
+    "declared_candidate_id": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "declared_context_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "mechanically_derived_artifact_set_sha256": "3460ee75cc217b20d37dc4ef389b3b44f374b7396678d2d89a47ffd4169cae68",
+    "artifact_count": 11,
+    "artifact_total_bytes": 36814,
+    "artifact_total_lines": 1103,
+    "artifact_rows_matching_current_files": "11 of 11"
+  },
+  "root_assessment": "A syntactically valid sha256-shaped placeholder is not candidate or context identity. Passing WorkerResult parsing and a test constructed around those placeholders is a false pass and cannot support independent semantic review or root acceptance.",
+  "corrective_boundary": {
+    "source_behavior_changes_allowed": false,
+    "write_scope": [
+      "docs/ultragoal-successor-live/worker-results/FIXTURE-SCHEDULER-PROVENANCE-RECONCILIATION-002.json"
+    ],
+    "read_scope": "the exact unchanged 11 fixture-scheduler source/test artifacts and the rejected WorkerResult",
+    "required_invariants": [
+      "bind candidate identity to the mechanically derived sorted path-and-digest set",
+      "bind context identity to this root-issued correction decision",
+      "derive count, bytes, and lines mechanically",
+      "separate original implementation authorship from result-only reconciliation",
+      "validate against the actual result-only lease",
+      "reject synthetic, unknown, duplicate, missing, special, or mismatched rows"
+    ]
+  },
+  "claim_ceiling": "The source/test candidate remains unaccepted and unreviewed. No HCT-FIXTURES, public API, routine, strict-proof, readiness, release, node-closure, or completion claim is supported.",
+  "no_claim_statement": "This decision does not claim source acceptance, public integration, product behavior, readiness, release, node closure, or goal completion."
+}

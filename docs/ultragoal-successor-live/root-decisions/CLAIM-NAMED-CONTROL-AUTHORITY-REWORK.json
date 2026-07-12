@@ -1,0 +1,57 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "CLAIM-NAMED-CONTROL-AUTHORITY-REWORK",
+  "node_id": "N12-CLAIMS",
+  "root_decision": "rework",
+  "reviewed_at": "2026-07-12T05:03:42Z",
+  "review_mode": "independent_executable_false_pass_falsification",
+  "candidate": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "artifact_set_sha256": "9685464f61a97110e7fe43de0b21634a40aa4059467d21e9b5e2b2a9cefabcb2",
+    "artifact_count": 17,
+    "artifact_bytes": 97888,
+    "artifact_lines": 2803,
+    "claim_registry_sha256": "67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc",
+    "start_end_revalidation": "byte_identical"
+  },
+  "decisive_finding": {
+    "severity": "critical",
+    "class": "generic_failure_substitution_allows_arbitrary_claim_elevation",
+    "affected_symbols": [
+      "validator/src/claims/false_pass.rs:9-143",
+      "validator/src/claims/coverage.rs:130-205"
+    ],
+    "cause": "FalsePassControlRequest::new accepts caller-selected control, context, candidate, truth surface, and ceiling values. LocalNegativeControlAuthority::execute always runs /usr/bin/false and derives the named failure contract and actor identities from those untrusted values.",
+    "impact": "One unrelated generic failure minted fresh-looking control receipts that elevated every adopted claim, including CL-RELEASE and CL-COMPLETION. Receipt freshness and private fields do not repair the missing causal and authority binding because the producer can request a new receipt for any selected target."
+  },
+  "executable_reproduction": {
+    "command": "CARGO_TARGET_DIR=/tmp/hul-claim-authority-review-012/target cargo test --manifest-path /tmp/hul-claim-authority-review-012/probe/Cargo.toml --locked --offline -j16 --test arbitrary_authority generic_false_can_authorize_every_adopted_claim -- --nocapture --test-threads=16",
+    "result": "pass_1_of_1_adversarial_false_pass_confirmed",
+    "probe_sha256": "ab7fd03bc921e80716d6400f9f14e55fc9f258057d36641e2572bd0b74faffb1",
+    "generic_tool_sha256": "da9eca96bf192c456f054ab0d05fd32f99b4a6caf6dbb203fe53047a44728e0a",
+    "elevated_claim_ids": [
+      "CL-SOURCE",
+      "CL-ORCHESTRATION",
+      "CL-PACKAGE",
+      "CL-STRICT",
+      "CL-INSTALL",
+      "CL-DISCOVERY",
+      "CL-RUNTIME",
+      "CL-EVAL-IMPROVEMENT",
+      "CL-FIT",
+      "CL-OBSERVABILITY",
+      "CL-ROUTINE",
+      "CL-REAL-JOURNEY",
+      "CL-RELEASE",
+      "CL-COMPLETION"
+    ]
+  },
+  "corrective_lease": {
+    "task_name": "claim_specific_control_authority_builder",
+    "result_path": "docs/ultragoal-successor-live/worker-results/CLAIM-NAMED-CONTROL-AUTHORITY-CORRECTION-013.json",
+    "required_result": "Derive control semantics and target ceiling from one closed adopted definition; consume authority-originated actual named-control execution; reject generic, fabricated, replayed, stale, substituted, cross-claim, cross-candidate, report-only, and self-authored evidence."
+  },
+  "claim_ceiling": "The claim candidate remains unaccepted private source. No HCT-CLAIMS public integration or positive source, package, install, discovery, runtime, journey, readiness, release, node, or completion claim is raised.",
+  "no_claim_statement": "This decision does not claim claim-authority acceptance, public integration, readiness, release, node closure, or goal completion."
+}

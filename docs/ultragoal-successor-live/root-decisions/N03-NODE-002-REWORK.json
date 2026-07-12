@@ -1,0 +1,23 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N03-NODE-002-REWORK",
+  "node_id": "N03-CLI-STATE",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-002.json",
+    "sha256": "acffa4800350cbc1f35154c801d5abaaa183690353e489cc7ac9c0f85f0a813b",
+    "artifact_set_sha256": "9b6994dc5bf26519947259515aa384af116cd44c1e741c09bb04f6715a34d197",
+    "artifact_count": 63
+  },
+  "identity_reconciliation": "pass",
+  "decisive_finding": {
+    "severity": "high",
+    "class": "secret_boundary_disclosure",
+    "cause": "Observation-limit truncation finalized an undecidable redaction tail as true EOF, allowing a proper prefix of a bound secret and its raw digest to enter canonical captured output."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N03-CLI-STATE-NODE-003",
+  "claim_ceiling": "N03 remains unaccepted and internal-only; public CLI, state, product, readiness, release, and completion claims remain withheld.",
+  "no_claim_statement": "This decision does not claim N03 completion, readiness, release, or goal completion."
+}

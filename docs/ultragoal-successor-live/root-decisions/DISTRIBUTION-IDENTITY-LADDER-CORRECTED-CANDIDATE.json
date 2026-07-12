@@ -1,0 +1,43 @@
+{
+  "schema_version": "RootCandidateManifest-v1",
+  "workstream": "distribution_identity_ladder",
+  "candidate_status": "corrected_identity_pending_independent_review",
+  "corrects_decision": "docs/ultragoal-successor-live/root-decisions/DISTRIBUTION-IDENTITY-FREEZE-REWORK.json",
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without a prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "11c31a8265252b6a2f71076e019f544d82a8fd26c3577afebbb706e6080d9767",
+  "artifact_count": 20,
+  "artifact_lines": 3292,
+  "artifact_bytes": 108614,
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "artifacts": [
+    {"path":"validator/src/distribution/cache_observation.rs","sha256":"130d74e35ac54c4a29614ce48986a8619b1bec912634caf15d163bacb8652019","bytes":1250,"lines":33},
+    {"path":"validator/src/distribution/filesystem/file.rs","sha256":"37ece07532050afa615259570d6548644c9d5fd00eb2f4dcb0101d1106ff62f3","bytes":6215,"lines":188},
+    {"path":"validator/src/distribution/filesystem/mod.rs","sha256":"213f1f012a007e5575085dbdf9d6320d8d8f78d9a038a195378c55e68ff7f5df","bytes":138,"lines":8},
+    {"path":"validator/src/distribution/filesystem/root.rs","sha256":"cbdee51a1e20cd5f3d72603da968ce791f5ebdbc8267d6333f318b2d5666f8a2","bytes":4362,"lines":134},
+    {"path":"validator/src/distribution/filesystem/tree.rs","sha256":"a02bb7938fa7a1c8801f77948f718746b62c95ad26c81e7cf44894119867e946","bytes":7300,"lines":187},
+    {"path":"validator/src/distribution/filesystem/walk.rs","sha256":"19d6e4001fa69b814c02807486541219367de38aeff9e7d16f6f9a7fffb5b7bc","bytes":6837,"lines":221},
+    {"path":"validator/src/distribution/host_capability.rs","sha256":"a06c6d8f591f8b6340071ae7bce93fd993853fffae3e594bbdae8356403ce724","bytes":8886,"lines":273},
+    {"path":"validator/src/distribution/identity.rs","sha256":"02ee91b85a7a88fa4160af52654b1ae6efcccfc35cf78d3bbcd1d2f7f322e7bf","bytes":8366,"lines":283},
+    {"path":"validator/src/distribution/marketplace_observation.rs","sha256":"865423bd9fe0d7ba6fef446beb0b8e4036594d0add564a5057b8bd3040063003","bytes":1034,"lines":32},
+    {"path":"validator/src/distribution/mod.rs","sha256":"fe39e24be800984177bfe313e5339dd56cf1ae88578d2a7f1b98d5229aabbd8d","bytes":2626,"lines":65},
+    {"path":"validator/src/distribution/observations.rs","sha256":"a6221f067a9364e9c7cf2fbbcee13e853946c33acfe3e316b220f387f57d9ca4","bytes":3139,"lines":90},
+    {"path":"validator/src/distribution/package/materialize.rs","sha256":"e36bcdeb62bbc40a19c8a3fd12f4393bd706d02ec953fc56960510ee3d5d30ff","bytes":7859,"lines":266},
+    {"path":"validator/src/distribution/registry_observation.rs","sha256":"37246e6c3d7ca79b9406fb247bbe9a67044e819564ebc8165998e5a269bbf8c5","bytes":9801,"lines":292},
+    {"path":"validator/src/distribution/runtime_probe.rs","sha256":"ecd5353497fd1628501906f2acb617f822ff0bc33d500e6b2e1debd846f9b96a","bytes":9803,"lines":274},
+    {"path":"validator/tests/distribution_contract.rs","sha256":"3c650a0ad0ec3d581142073f022896c45ea6d84d63905abda71107a08b4a4aef","bytes":1668,"lines":48},
+    {"path":"validator/tests/distribution_contract/isolated_journey.rs","sha256":"1c74d9dffca33cbdf8058498c80bae74e57c7c7baf4018be10107e424349ca26","bytes":7097,"lines":197},
+    {"path":"validator/tests/distribution_contract/journey_adversarial.rs","sha256":"23be17397a2a9618bf0fde16faf47d61e6b3213ec9dce24b626360a6a5912f1c","bytes":8574,"lines":254},
+    {"path":"validator/tests/distribution_contract/journey_support.rs","sha256":"d70b781d04a7ce902cba97cbfd2bec61dacc329957fd138b98ab532cf031e33f","bytes":4281,"lines":147},
+    {"path":"validator/tests/distribution_contract/observation_races.rs","sha256":"4642cf7e3319237262e35b60f3474fa9da4944e3e1d4969f6ae165dbc4883706","bytes":3183,"lines":103},
+    {"path":"validator/tests/distribution_contract/runtime_session.rs","sha256":"028a9fe0192ab2030f7f028dd92a55535b21dcc8065755220905fd39aacab919","bytes":6195,"lines":197}
+  ],
+  "review_scope": [
+    "confined source, package, installation, marketplace, cache, app-registry, discovery, and runtime identity binding",
+    "supported, unsupported, and absent host capability honesty",
+    "mutation, substitution, race, rollback, recovery, version collision, and false-pass controls",
+    "zero-write observation paths and bounded runtime probes"
+  ],
+  "support_limit": "Isolated adapter candidate only. Actual user-home marketplace/cache/app state, Plugins UI, and supported-host Codex runtime proof remain external and unproven.",
+  "no_claim_statement": "This manifest does not accept the candidate or claim installation, discovery, runtime behavior, readiness, release, node closure, or goal completion."
+}

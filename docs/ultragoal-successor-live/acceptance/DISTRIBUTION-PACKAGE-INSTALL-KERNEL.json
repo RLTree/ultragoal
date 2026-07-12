@@ -1,0 +1,79 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N04-DISTRIBUTION",
+  "root_decision": "accepted_internal_offline_distribution_package_install_kernel",
+  "evidence_state": "superseded_for_current_source_identity",
+  "superseded_by": "docs/ultragoal-successor-live/acceptance/DISTRIBUTION-CONFINEMENT-KERNEL.json",
+  "accepted_candidate": {
+    "path": "docs/ultragoal-successor-live/root-decisions/DISTRIBUTION-VERSION-COLLISION-CANDIDATE.json",
+    "sha256": "7947ca3fc7a94c6f434d6ad827fa42f6a03f17f386f0eaf56df6e6d0f5a5769a",
+    "artifact_set_sha256": "bad5ac53fe279e79d23f8ce191e301d04d6a1247c552584e3a46b1cea3177dde",
+    "artifact_count": 26,
+    "bytes": 150964,
+    "lines": 4877,
+    "maximum_file_lines": 300,
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a"
+  },
+  "independent_review": {
+    "reviewer": "/root/distribution_install_falsifier",
+    "verdict": "pass",
+    "prior_findings_closed": [
+      "duplicate weak version grammar",
+      "numeric-core-only downgrade comparison",
+      "equal-precedence build-metadata content substitution",
+      "deserialized invalid identity plan entry"
+    ],
+    "artifact_identity_revalidated": true,
+    "blocking_findings": 0
+  },
+  "independent_execution": {
+    "distribution_command": "env CARGO_TARGET_DIR=/tmp/hul-distribution-version-collision-review cargo test --manifest-path validator/Cargo.toml --test distribution_contract --locked --offline -j 16 -- --test-threads=16",
+    "distribution_result": "63 passed; 0 failed; 0 ignored; 0.36s",
+    "inventory_command": "env CARGO_TARGET_DIR=/tmp/hul-distribution-version-collision-review cargo test --manifest-path validator/Cargo.toml --test inventory_contract plugin_manifest --locked --offline -j 16 -- --test-threads=16",
+    "inventory_result": "13 passed; 0 failed; 77 filtered; 10.66s",
+    "process_note": "One accidental ordinary-target compile was interrupted before tests and is non-proof. All accepted execution evidence used the isolated target."
+  },
+  "root_reconciliation": {
+    "candidate_manifest_sha256_revalidated": true,
+    "artifact_rows_revalidated": "26 of 26",
+    "artifact_set_sha256_revalidated": "bad5ac53fe279e79d23f8ce191e301d04d6a1247c552584e3a46b1cea3177dde",
+    "unknown_rows_accepted": 0
+  },
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-PLUGIN-001",
+      "state": "typed_deterministic_offline_package_marketplace_install_cache_identity_kernel",
+      "blocker": "Canonical versioned package adoption, real filesystem adapter, and supported-host ingestion/discovery/runtime proof remain open."
+    },
+    {
+      "requirement_id": "REQ-SECURITY-001",
+      "state": "canonical_version_collision_and_injected_effect_boundary",
+      "blocker": "Live host effects and final integrated security reconciliation remain open."
+    }
+  ],
+  "root_acceptance_limit": "Exact offline source-set, package/archive/materialization, marketplace, install, cache, host-plan, shared semantic-version, and identity-ladder kernel only.",
+  "explicitly_withheld": [
+    "canonical product-version bump or adoption",
+    "root-adopted live package-source inventory",
+    "real filesystem materialization adapter",
+    "repository and personal marketplace mutation",
+    "installed bytes and cache identity on the live host",
+    "application registry and Plugins UI exposure",
+    "host discovery and runtime identity",
+    "public library wiring",
+    "distribution completion",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "observed_live_mismatch": {
+    "source_manifest_sha256": "12c123fa9442dbf9e2eb7877b6fd1c4446ffc04a26d37727dddc0fb3877b06da",
+    "installed_and_cache_manifest_sha256": "8e93403398fe1ccf6c93dcd15f2143677e1ab47c65b7ee59f53e051e5f7ffcb6",
+    "version_on_observed_surfaces": "0.0.11",
+    "effect": "Package, install, cache, discovery, and runtime claims remain withheld until versioned byte reconciliation succeeds."
+  },
+  "public_integration": "Accepted separately in acceptance/PUBLIC-DISTRIBUTION-ORCHESTRATION-KERNEL.json; live package, install, marketplace, cache, discovery, and runtime ceilings remain withheld.",
+  "invalidation_rule": "Any byte change to the accepted candidate manifest or its 26-artifact set immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim live package identity, installation, discovery, runtime behavior, distribution completion, readiness, release, or goal completion."
+}

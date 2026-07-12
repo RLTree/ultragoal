@@ -1,0 +1,77 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "workstream": "repository_fit_active_path_linearization",
+  "decision": "REWORK",
+  "review_route": {
+    "model": "gpt-5.6-sol",
+    "reasoning": "max",
+    "rationale": "Independent falsification of a high-risk supported-host path boundary where sequential descriptor checks can be mistaken for one active namespace observation."
+  },
+  "reviewed_candidate": {
+    "manifest": "docs/ultragoal-successor-live/root-decisions/REPOSITORY-FIT-ATTACHMENT-CHAIN-CANDIDATE.json",
+    "manifest_sha256": "90be7c0288bfe8673058c9c6941dc1a9ef317ed7d383cab04cdc42babe9d6896",
+    "artifact_set_sha256": "fc6c95c723af73dda57f1ba00224496dff2b545ee85490f863a640d7a195a84b",
+    "artifact_count": 19,
+    "artifact_bytes": 108799,
+    "artifact_lines": 3485,
+    "maximum_file_lines": 297,
+    "membership_differences": 0,
+    "digest_byte_line_mismatches": 0,
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "material_finding": {
+    "id": "repository-fit-post-final-attachment-swap",
+    "severity": "high",
+    "summary": "The reverse attachment chain is ordered leaf-to-root, but after the root-most descendant's final stat only the repository root is verified. An atomic swap in that interval lets read_file return descriptor-pinned original bytes while the active repository path contains foreign bytes.",
+    "source_evidence": [
+      "validator/src/repository_fit/local/unix.rs:103-107 reads the descriptor-pinned leaf",
+      "validator/src/repository_fit/local/unix.rs:108-116 performs reverse attachment checks",
+      "validator/src/repository_fit/local/unix.rs:119 performs only repository-root verification",
+      "validator/src/repository_fit/local/unix.rs:176-193 does not bind the root-most descendant"
+    ],
+    "normal_production_reproduction": {
+      "source_sha256": "73bcd10af7297fd8a5bca501a3481b5503bc69c93679167f1662dff388116529",
+      "mechanism": "LLDB stopped the non-cfg(test) binary at unix.rs line 119; macOS renameatx_np RENAME_SWAP atomically swapped repo/a with alternate before resuming",
+      "exit_code": 0,
+      "duration_seconds": 0.36,
+      "returned": "original",
+      "active_path_before_return": "foreign"
+    },
+    "deterministic_control": "Depth-one and deep-path post-attachment swaps reproduced 2/2.",
+    "contract_impact": "Inspect, verify, apply preconditions and postconditions, and rollback reconciliation can consume detached bytes as current repository truth."
+  },
+  "required_correction": [
+    "establish one supported-host linearization point that binds the opened leaf or parent descriptor to the complete expected absolute path, root, and identity immediately before return",
+    "use an OS-backed whole-path descriptor primitive such as macOS F_GETPATH when supportable; fail closed when the host cannot prove the binding",
+    "retain exact leaf or parent descriptors until final binding and handle present and absent observations honestly",
+    "reject every swap before the final whole-path observation without following or accepting the substitute",
+    "state a finite linearization semantic and do not claim eternal or post-return namespace state",
+    "preserve descriptor anchoring O_NOFOLLOW exact names enumeration bounds special-file rejection and zero-write behavior without retries or assumed cooperative locks"
+  ],
+  "review_verification": [
+    {
+      "command": "normal non-cfg(test) external production harness plus LLDB and macOS RENAME_SWAP",
+      "result": "detached original bytes returned while active path was foreign"
+    },
+    {
+      "command": "deterministic depth-one and deep reviewer controls",
+      "result": "2 passed and both reproduced the false pass"
+    },
+    {
+      "command": "full repository_fit_contract after decisive finding",
+      "result": "blocked by concurrent out-of-set distribution compile errors and not used against the frozen set"
+    }
+  ],
+  "accepted_requirements": [],
+  "highest_defensible_ceiling": "Descriptor anchoring, bounded reads, reverse point checks, redacted errors, and read-only effects remain supported; complete active-path linearization and repository-fit acceptance are withheld.",
+  "explicitly_withheld": [
+    "repository-fit internal acceptance",
+    "active-path confinement at return",
+    "public HCT-FIT wiring",
+    "production state and CLI route",
+    "concrete supported-host writer",
+    "live fresh partial conflict dirty rollback journeys",
+    "migration retirement readiness release contract-node closure and goal completion"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "repository_fit_public_integration",
+  "candidate_state": "frozen_for_independent_review",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "depends_on_acceptance": {
+    "path": "docs/ultragoal-successor-live/acceptance/REPOSITORY-FIT-BOUNDED-LINEARIZATION-KERNEL.json",
+    "sha256": "ccb86bc0b296e0ec402914c25930323ebbdd80b156afe345cda916a5326a9c55"
+  },
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "3a594cb9dd2e0567b46bc788574327463e80faf0ed87e3671acb7d9cd1809547",
+  "artifact_count": 4,
+  "artifact_bytes": 10380,
+  "artifact_lines": 271,
+  "artifacts": [
+    {
+      "path": "docs/ultragoal-successor-live/acceptance/REPOSITORY-FIT-BOUNDED-LINEARIZATION-KERNEL.json",
+      "sha256": "sha256:ccb86bc0b296e0ec402914c25930323ebbdd80b156afe345cda916a5326a9c55",
+      "byte_length": 3077,
+      "line_count": 55
+    },
+    {
+      "path": "validator/src/api_witness.rs",
+      "sha256": "sha256:0335ffd81fda0677f1477fe49df759864536a22dd321fbb74b8e1ec3e452e97b",
+      "byte_length": 3354,
+      "line_count": 92
+    },
+    {
+      "path": "validator/src/lib.rs",
+      "sha256": "sha256:acbf0ee7320344ff620530cb956d7152a442e63e9c9c1114427867c17a56a019",
+      "byte_length": 1215,
+      "line_count": 60
+    },
+    {
+      "path": "validator/tests/public_api_witness.rs",
+      "sha256": "sha256:80717bdd1a591707f25264d3bef211753acc2bfc30f7504efb693b95e1ad20a7",
+      "byte_length": 2734,
+      "line_count": 64
+    }
+  ],
+  "integration_behavior": [
+    "validator::repository_fit is publicly exported from the library entrypoint",
+    "the external-crate witness names FitInspection FitPlan Mutation Ownership RollbackPlan and FitVerification exactly",
+    "implemented_public_apis reports those six exact adopted HCT-FIT identifiers",
+    "source-level public activation remains separate from fresh-repository retrofit conflict dirty rollback and supported-host journey proof"
+  ],
+  "verification": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-root-public-integration-v2 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo test --manifest-path validator/Cargo.toml --test public_api_witness --locked --offline -j16 -- --test-threads=16",
+      "result": "1 passed; 0 failed"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-root-fit-inventory-v1 CARGO_INCREMENTAL=0 CARGO_PROFILE_DEV_DEBUG=0 cargo run --quiet --manifest-path validator/Cargo.toml --locked --offline -j16 -- --json inspect inventory",
+      "result": "expected exit 1 with open findings; 4108 entries; 103 findings; missing_required_component reduced from 37 to 31; all six HCT-FIT API rows canonical and active",
+      "output": "/tmp/hul-root-fit-inventory-v1.json",
+      "output_sha256": "9dceaddf91259a254a3b116ee96b6731ed1ac69f5376007224226b6d27138abf",
+      "catalog_id": "sha256:06e663fc02967987483fa4f97aab009be3da1e3cce91f1561552d97ac999720c",
+      "context_id": "sha256:7ef7ff46e2218ced6380e676df0919d47eccc426e5844be96f4aa4c0b44ce84e"
+    }
+  ],
+  "explicitly_withheld": [
+    "fresh repository product journey",
+    "partial retrofit conflict dirty-tree rollback and repeat-use product journeys",
+    "non-Apple runtime behavior",
+    "function-return-state or eternal namespace guarantee",
+    "closure of remaining inventory findings",
+    "repository-fit node closure",
+    "readiness release or goal completion"
+  ],
+  "no_claim_statement": "This is a root integration candidate awaiting independent review. It does not accept public integration or claim product journeys, node closure, readiness, release, or goal completion."
+}

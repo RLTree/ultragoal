@@ -1,0 +1,52 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "PACKAGE-ARTIFACT-FULL-IDENTITY-REWORK",
+  "workstream": "distribution",
+  "decision": "REWORK",
+  "acceptance_check": "AC-PACKAGE-ARTIFACT-WRITER-001",
+  "rejected_candidate": {
+    "binding_sha256": "9df50a7689d65b6790e0cf0c2479b3969b7c58dffe1b8490c8ab08aa2d3c802a",
+    "worker_result_sha256": "092bc729b9a05ecd6f1f66f0ad704a0870b72a7549a0c83480ccefdd1e9f16eb",
+    "artifact_set_sha256": "3bf86feb2f8055204ca92e8904e6a7ee309be224c3d8e102fa9cdda220773de7",
+    "artifact_count": 4,
+    "artifact_total_bytes": 17114,
+    "artifact_total_lines": 509,
+    "root_reexport_sha256": "72e77951163ce4aa184494cde655e6be3221bc14dd4d92a59cf188dd1a34c7b6"
+  },
+  "independent_review": {
+    "reviewer": "/root/package_artifact_writer_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "verdict": "REWORK",
+    "record": "/tmp/hul-package-artifact-writer-review-001/REVIEW.json",
+    "record_sha256": "82ddbf61abae8d2a6d4db4719b48264948e17d9a899d189f044c31a7b4f316b2"
+  },
+  "decisive_finding": {
+    "class": "incomplete_package_identity_binding",
+    "accepted_wrong_packages": [
+      "wrong catalog plus wrong accepted-inventory digest",
+      "expected catalog plus wrong accepted-inventory digest"
+    ],
+    "impact": "A permit created for the expected snapshot authorized publication of distinct package trees from the wrong adopted package authority."
+  },
+  "required_binding_dimensions": [
+    "context_id",
+    "candidate_id",
+    "plugin_id",
+    "version",
+    "catalog_id",
+    "accepted_inventory_sha256",
+    "source_tree_sha256",
+    "package_sha256",
+    "inventory_sha256"
+  ],
+  "authority_requirement": "The binding constructor must not be publicly forgeable. Issue it only through a crate-internal/root-controlled package authority after all dimensions are fixed.",
+  "proof_integrity_finding": {
+    "class": "worker_result_aggregate_not_schema_enforced",
+    "evidence": "Removing one artifact while leaving declared artifact_count=4 still passed WorkerResultV1::validate_for and ArtifactWorkspace::verify.",
+    "disposition": "Do not claim aggregate enforcement by WorkerResult-v1; independently derive candidate membership and aggregates."
+  },
+  "corrective_scope": "Correct package/output implementation and tests, freeze a new exact source set, then obtain a new root binding and full independent review. Root public reexports, manifest/version, install effects, and claims remain root-owned.",
+  "claim_ceiling": "No package-artifact writer acceptance or live package identity. Source, install, discovery, runtime, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This decision does not claim package, install, discovery, runtime, readiness, release, node closure, or goal completion."
+}

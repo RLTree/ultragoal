@@ -1,0 +1,59 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "OBSERVABILITY-CONFINEMENT-CORRECTION",
+  "workstream": "observability",
+  "decision": "ACCEPT",
+  "evidence_state": "reopened_by_post_acceptance_source_drift",
+  "reopened_by": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-POST-ACCEPTANCE-DRIFT-REWORK.json",
+  "accepted_candidate": {
+    "artifact_set_sha256": "88da28607cb2adefb7b428f3f6222caf10b47bbdcf3856d078e766babe30a331",
+    "artifact_count": 22,
+    "artifact_bytes": 101858,
+    "artifact_lines": 3124,
+    "maximum_production_file_lines": 298,
+    "changed_set_sha256": "d1e4a1d8cd5e1b57ecc9959c8168d6e93f0c4ba219ba64ab8acadbf08e4ebdf6",
+    "changed_count": 7,
+    "binding": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-ABSENT-STORE-CORRECTION-BINDING.json",
+    "binding_sha256": "ee775df9f1c208cb4d5ca0c37eae9f807efaf890e47367d9aa872d9180ce5db4",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-ABSENT-STORE-CORRECTION-005.json",
+    "worker_result_sha256": "7454300ee12aa3def6a632379d95538c59af141d32c5b8c75eadb65bcc084c45",
+    "result_id": "sha256:55da8d139e1eedcc248af0891d105df62197c4e34313a8fe2a48ba5920c7068d",
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "supersedes_reworked_candidate": {
+    "artifact_set_sha256": "ba22d5f72eefd30e60592e009a6e803dc032e782a21f7fa56b98ce4ea6430c8e",
+    "decision": "docs/ultragoal-successor-live/root-decisions/OBSERVABILITY-ABSENT-STORE-ANCESTOR-REWORK.json"
+  },
+  "independent_review": {
+    "reviewer": "/root/observability_confinement_falsifier",
+    "requested_route": "gpt-5.6-terra/high",
+    "effective_route": "unverified",
+    "acceptance_check_id": "AC-OBSERVABILITY-ABSENT-STORE-REVIEW-006-RERUN",
+    "verdict": "PASS",
+    "record": "docs/ultragoal-successor-live/reviews/OBSERVABILITY-ABSENT-STORE-REVIEW-006.json",
+    "record_sha256": "042b60120634643011d694a050f1926933870d81e4b7b68f1707cf0d945b3e89"
+  },
+  "verification": {
+    "artifact_reconciliation": "22 of 22 current rows and seven changed rows independently matched",
+    "worker_result_boundary": "WorkerResultV1 parse_json, least-privilege validate_for, ArtifactWorkspace verify, and result ID passed",
+    "locked_observability_suite": "27 passed; 0 failed",
+    "ordinary_ancestor_false_pass": "create, append, read, clear, and recover rejected substituted ancestry before mutation and preserved both trees",
+    "zero_write_query": "recursive content/mode/mtime tree and repository status were identical before and after query",
+    "security_privacy": "privacy, explicit export, outage/timeout/acknowledgement, symlink, hardlink, special-file, and corruption controls passed"
+  },
+  "accepted_scope": [
+    "definition-level SemanticEvent, EventStore, EventQuery, CausalExplanation, and ExportAdapter implementation",
+    "retained-descriptor store identity through all local lifecycle operations",
+    "zero-write local query, bounded privacy, explicit export, corruption, and special-file controls"
+  ],
+  "explicitly_withheld": [
+    "public library integration",
+    "observe and diagnose CLI wiring",
+    "representative supported-host product behavior",
+    "observability claim elevation",
+    "node closure, readiness, release, or goal completion"
+  ],
+  "invalidation_rule": "Any byte or membership change to the 22-artifact set, retained-descriptor lifecycle, query purity, privacy/export boundary, or special-file behavior reopens this acceptance.",
+  "no_claim_statement": "This acceptance is definition-level only and does not claim public product behavior, readiness, release, node closure, or goal completion."
+}

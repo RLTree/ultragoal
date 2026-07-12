@@ -1,0 +1,91 @@
+{
+  "schema_version": "RootBinding-v1",
+  "binding_id": "FIXTURE-LEASE-IDENTITY-RECOVERY-CORRECTION-BINDING",
+  "workstream": "fixture scheduler recovery and cleanup confinement",
+  "candidate_id": "sha256:50b2f5eb360d30390bacc11e9570ce8624c93e7a8e6f8fe7df287d49b12d9593",
+  "rework_dependency": {
+    "path": "docs/ultragoal-successor-live/root-decisions/FIXTURE-LEASE-RECOVERY-IDENTITY-REWORK.json",
+    "required_disposition": "rework"
+  },
+  "candidate_membership": {
+    "artifact_count": 27,
+    "artifact_total_bytes": 128559,
+    "artifact_total_lines": 3999,
+    "formula": "Sort path; append path, TAB, lowercase SHA-256 without prefix, LF; SHA-256 the concatenation.",
+    "base_membership": {
+      "path": "docs/ultragoal-successor-live/root-decisions/FIXTURE-SCHEDULER-DETACHED-DESCENDANT-CORRECTION-BINDING.json",
+      "sha256": "1ccee324d5e063de2dc60895c3cfabc7bcf6104711be81335bd41a02d19e3831",
+      "rule": "Use its exact 26 current rows; replace the five rows below and add the lease-identity WorkerResult control row, then sort all 27 paths."
+    },
+    "replaced_rows": [
+      {
+        "path": "validator/src/fixture_scheduler/lease.rs",
+        "prior_sha256": "e73403d7ae9769840f9771cde61546a927b03ab4ebfa9be100f12f8e72c1dd2b",
+        "sha256": "23e8ec3213062c0c8c90c0ab75d6e6480664fade86c2e8ced7353395e9d26bda",
+        "byte_length": 20610,
+        "line_count": 653
+      },
+      {
+        "path": "validator/src/fixture_scheduler/mod.rs",
+        "prior_sha256": "5a9a724b26483b9e15b7f716902f90b5ed7dea902a1a85b8001ee1a50271d619",
+        "sha256": "6e8e5123adb8268e6d3e1d6694d1434a9503c14bb11157c1e4beeb55ecbf9069",
+        "byte_length": 879,
+        "line_count": 23
+      },
+      {
+        "path": "validator/src/fixture_scheduler/scheduler.rs",
+        "prior_sha256": "385438e71c0e0bc9ee81f2228a4b451b758e26699f3bef71eb722b22550ac36b",
+        "sha256": "7c3efc093d4965a7f9018ba916ed5a2cb5a6558bbe0556c37ecaf86fdff3f758",
+        "byte_length": 7543,
+        "line_count": 224
+      },
+      {
+        "path": "validator/tests/fixture_scheduler_contract.rs",
+        "prior_sha256": "81ec9a16847ff061dc40f7eb6c721f365ce3c4b3b588cb47ce04614a2d83ba06",
+        "sha256": "feb7eb7f191b7f44301948ae470c3f6fef4bb58c2976c6db5d3eb307b1dfc3c8",
+        "byte_length": 709,
+        "line_count": 21
+      },
+      {
+        "path": "validator/tests/fixture_scheduler_contract/adversarial.rs",
+        "prior_sha256": "a7ecb66302e5eac3424846d262081311509c3be9ccb9df59f32d94f6c1301abd",
+        "sha256": "4c06bc23097c8d326451bb09cea8273f0fb64a1d0c8e743139612d563cc38a68",
+        "byte_length": 16686,
+        "line_count": 512
+      }
+    ],
+    "added_row": {
+      "path": "validator/tests/fixture_scheduler_contract/lease_identity_worker_result.rs",
+      "sha256": "79460cbe0efd23711ded74d3c723dac5ab3bf44d9a5387b0c671fe47b3e893cb",
+      "byte_length": 5382,
+      "line_count": 140
+    },
+    "unchanged_row_revalidation": "All 21 unchanged rows matched the prior binding exactly in the same root session.",
+    "root_recomputed_set_sha256": "50b2f5eb360d30390bacc11e9570ce8624c93e7a8e6f8fe7df287d49b12d9593"
+  },
+  "changed_subset": {
+    "artifact_count": 6,
+    "artifact_total_bytes": 51809,
+    "artifact_total_lines": 1573,
+    "root_recomputed_set_sha256": "d321e3163f45cd849593bf91d308e0d99a4bdfd1cfffd957d1ecc506e9e6d1b6",
+    "worker_reported_set_sha256": "73b94df9886df2f3d3ddac5af3eefb813337c1f41bddeba2a7206ee984723d8f",
+    "aggregate_note": "WorkerResult-v1 does not enforce this aggregate field. Root independently derived membership, rows, totals, and the path-bound set digest; review and any acceptance must use the root values."
+  },
+  "worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/FIXTURE-LEASE-IDENTITY-RECOVERY-CORRECTION-014.json",
+    "sha256": "0b41d26bb1fb16c727bb7cecff4574ae0c17babd3589598c9f0f172042a68117",
+    "typed_result_id": "sha256:c2de65949a60c3c34c848604f7a5bf7de843890c9bd95ed6b1ffac9376720934",
+    "status": "typed_result_and_workspace_rows_verified_root_aggregate_independent"
+  },
+  "required_behavior": [
+    "lease-root and every scheduler-created child identity remain pinned across cleanup and recovery",
+    "root, directory, regular-file, symlink, and special-file substitutions fail closed without deleting replacement or outside data",
+    "check/use swaps after public-name validation cannot redirect deletion",
+    "failed recovery retains a causal retry handle and successful retry remains idempotent",
+    "detached-descendant, network, outside-write, resource, output, backend, policy, and supplied-outcome controls remain intact"
+  ],
+  "requested_route": "fresh independent security and recovery review of the exact 27-file candidate",
+  "invalidation_rule": "Any change to the 27 candidate paths, this binding, the WorkerResult, or the referenced base binding invalidates the review.",
+  "claim_ceiling": "private source candidate pending independent review; no public integration or product claim",
+  "no_claim_statement": "This binding does not claim fixture acceptance, public integration, readiness, release, node closure, or goal completion."
+}

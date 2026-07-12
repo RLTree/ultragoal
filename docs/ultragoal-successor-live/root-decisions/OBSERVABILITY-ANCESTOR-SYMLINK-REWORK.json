@@ -1,0 +1,29 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "OBSERVABILITY-ANCESTOR-SYMLINK-REWORK",
+  "workstream": "observability",
+  "root_decision": "REWORK",
+  "reviewed_candidate": {
+    "worker_result": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-EVENT-STORE-NODE-001.json",
+    "worker_result_sha256": "e227b73401757866cd46e571ca48c6c25effe175ef79affc0180a7d86b98bf93",
+    "artifact_set_sha256": "a852e518d0a9fa8a4594e182706f1376eca2b89ff247c238a7fbc95e590dc905",
+    "artifact_count": 20,
+    "focused_suite": "23 passed; 0 failed"
+  },
+  "decisive_finding": {
+    "severity": "critical",
+    "class": "ancestor_symlink_path_escape",
+    "cause": "EventStore::open_bound rejects a symlinked file and immediate parent but accepts a symlink in an earlier ancestor. The resulting store path resolves through attacker-controlled ancestry instead of failing closed.",
+    "causal_path": "validator/src/observability/filesystem.rs:139",
+    "coverage_gap": "validator/tests/observability_contract/races_paths.rs covers only the file and immediate-parent symlink cases",
+    "observed": "ancestor_symlink_opened=/tmp/hul-observability-review-001/ancestor-path/outer/link/nested/events.jsonl"
+  },
+  "reproducer": {
+    "path": "/tmp/hul-observability-review-001/src/bin/ancestor_symlink.rs",
+    "sha256": "ea31bcfb540a884ee8b7bf3a26c511c8fdada5c0db944abd5412e7523331b294",
+    "command": "CARGO_TARGET_DIR=/tmp/hul-observability-review-target cargo run --offline --locked --manifest-path /tmp/hul-observability-review-001/Cargo.toml --bin ancestor_symlink --jobs 16"
+  },
+  "corrective_action": "Validate the complete existing ancestor chain without following symlinks before binding or creating a store, add the exact nested-ancestor regression plus substitution controls, and re-run all local/query/privacy/export/race tests. Do not rely on canonicalization that silently follows the symlink.",
+  "claim_ceiling": "The observability bytes remain an unaccepted source candidate. Public API/CLI/product wiring, live export, node closure, readiness, release, and completion remain withheld.",
+  "no_claim_statement": "This REWORK stops at the first material filesystem trust-boundary defect and raises no product or completion claim."
+}

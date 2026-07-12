@@ -1,0 +1,56 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N10-ORCHESTRATION",
+  "root_decision": "accepted_internal_scope_authority_kernel",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-009.json",
+    "sha256": "d23df48e6f1ac0b1a22b296c188b330511e78ce7ddfd2b230d75cb3fa8d80ca2",
+    "artifact_set_sha256": "c61319d3b2475e1dab9a8ce687e6aac5140e3ccfcadabd6fe333a0547062ec2b",
+    "artifact_count": 35,
+    "bytes": 236879,
+    "lines": 6980,
+    "maximum_file_lines": 300
+  },
+  "independent_source_review": {
+    "reviewer": "/root/orchestration_scope_falsifier",
+    "verdict": "pass",
+    "scope": "Exact-set identity; typed read-versus-owned authority across source, generated, and fixture categories; exact, ancestor, child, and ASCII-case aliases; artifact relabeling; mutation; deterministic diagnostics; disjoint positives; Unicode, symlink, hardlink, special-file, path-swap, frozen-parent, no-event, replay, recovery, effect, and root-reconciliation controls.",
+    "result_identity_revalidated": true,
+    "blocking_findings": 0
+  },
+  "independent_execution": {
+    "target_scope": "isolated scratch Cargo target",
+    "command": "cargo nextest run --offline --locked --jobs 16 --test orchestration_contract",
+    "result": "136 passed; 0 failed; 0 skipped",
+    "all_targets_check": "pass with 16 jobs",
+    "rustfmt_check": "pass",
+    "repository_writes": false,
+    "git_or_metadata_inspection": false
+  },
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-ORCH-004",
+      "state": "typed_lease_scope_and_artifact_authority_kernel",
+      "blocker": "Root module wiring and representative production persisted interruption/recovery remain open."
+    },
+    {
+      "requirement_id": "HUL-SECURITY-001",
+      "state": "owned_read_alias_and_live_artifact_confinement",
+      "blocker": "Integrated supported-host orchestration and final security reconciliation remain open."
+    }
+  ],
+  "root_acceptance_limit": "Exact internal typed lease, scope, WorkerResult, artifact-authority, recovery, replay, and reconciliation kernel only.",
+  "explicitly_withheld": [
+    "root public module and command wiring",
+    "production persisted interruption and recovery journey",
+    "current whole-candidate orchestration proof",
+    "orchestration completion",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "integration_hold": "validator/src/lib.rs is a shared root-owned artifact inside the concurrently frozen distribution candidate. Public module wiring waits only until that exact distribution review is reconciled, preventing an avoidable post-freeze mutation.",
+  "invalidation_rule": "Any byte change to the accepted WorkerResult or its 35-artifact set immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim orchestration completion, readiness, release, or goal completion."
+}

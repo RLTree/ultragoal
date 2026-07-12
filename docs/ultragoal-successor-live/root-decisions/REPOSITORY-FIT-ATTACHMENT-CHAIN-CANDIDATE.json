@@ -1,0 +1,195 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "repository_fit_complete_attachment_chain",
+  "candidate_state": "frozen_for_independent_rereview",
+  "lane_route": {
+    "model": "gpt-5.6-sol",
+    "reasoning": "ultra",
+    "rationale": "Critical-path mutation, rollback, race, and foreign-data boundary where a false clean return can leave candidate writes behind."
+  },
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "corrects_decision": "docs/ultragoal-successor-live/root-decisions/REPOSITORY-FIT-FINAL-SWEEP-REWORK.json",
+  "corrects_decision_sha256": "ca8ee778eec941136c18a2e163068eda6ec29692cdc7dc47db764d76be977131",
+  "corrects_manifest": "docs/ultragoal-successor-live/root-decisions/REPOSITORY-FIT-POSTWRITE-ROLLBACK-CANDIDATE.json",
+  "corrects_manifest_sha256": "6f909aca932772a73ec4d9e9c85c4f3270a866b05f4c735d4d9d31646269438e",
+  "corrects_artifact_set_sha256": "44ab5cdc3000341082e3e58f3c9ed6cdd679bbf58a31375dd753bede50d10d6b",
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "fc6c95c723af73dda57f1ba00224496dff2b545ee85490f863a640d7a195a84b",
+  "artifact_count": 19,
+  "total_bytes": 108799,
+  "total_lines": 3485,
+  "maximum_file_lines": 297,
+  "artifacts": [
+    {
+      "path": "validator/src/repository_fit/apply.rs",
+      "sha256": "sha256:70df0f417dbf57edda9be4929017d2e16377c1949749e1c94f6d5d1df5658ec2",
+      "byte_length": 9208,
+      "line_count": 282
+    },
+    {
+      "path": "validator/src/repository_fit/error.rs",
+      "sha256": "sha256:ca4c06db9ce2d203612fa183f5467510c2f714957c4deb56b4f018967b2a0fe1",
+      "byte_length": 1524,
+      "line_count": 59
+    },
+    {
+      "path": "validator/src/repository_fit/inspect.rs",
+      "sha256": "sha256:b140aa44c8245d7ca381ccdab265c81314c3d89bc01eca3bd3721a63f8ad2288",
+      "byte_length": 10174,
+      "line_count": 290
+    },
+    {
+      "path": "validator/src/repository_fit/local/mod.rs",
+      "sha256": "sha256:f1d49253bebc8a031f04581732bf7dd7e17cbc4a7304aefb61cbc87b12498f6b",
+      "byte_length": 1402,
+      "line_count": 57
+    },
+    {
+      "path": "validator/src/repository_fit/local/sys.rs",
+      "sha256": "sha256:0ebca4d849235ec4c9e94a647f44f578da3064af6443a1a4d1320d94496ac82b",
+      "byte_length": 6625,
+      "line_count": 223
+    },
+    {
+      "path": "validator/src/repository_fit/local/sys_tests.rs",
+      "sha256": "sha256:5ae9184ec5bbf4cafec4fee41d07cedffb3efa4fd3c394250806ef11cc6abe8d",
+      "byte_length": 3048,
+      "line_count": 113
+    },
+    {
+      "path": "validator/src/repository_fit/local/unix.rs",
+      "sha256": "sha256:73bcd10af7297fd8a5bca501a3481b5503bc69c93679167f1662dff388116529",
+      "byte_length": 8594,
+      "line_count": 231
+    },
+    {
+      "path": "validator/src/repository_fit/local/unix_tests.rs",
+      "sha256": "sha256:fdb94070fc71543731c31be8e4a0e1c7c4193860c51f6e27e22ff587e165ebb2",
+      "byte_length": 8813,
+      "line_count": 292
+    },
+    {
+      "path": "validator/src/repository_fit/mod.rs",
+      "sha256": "sha256:77c8720c618c3f2a07fd38ccc536f7c90d91967f373ecb8b98c779bb2a502faf",
+      "byte_length": 1104,
+      "line_count": 39
+    },
+    {
+      "path": "validator/src/repository_fit/model.rs",
+      "sha256": "sha256:f80283a192513038c47e32278eeefcacb376e5ecbe4d614706d924cf8cdfcd3b",
+      "byte_length": 6617,
+      "line_count": 223
+    },
+    {
+      "path": "validator/src/repository_fit/ownership.rs",
+      "sha256": "sha256:8631977f153e3458697fa97ea5140df39d7dba15823930b989830e59e64ece7b",
+      "byte_length": 3366,
+      "line_count": 123
+    },
+    {
+      "path": "validator/src/repository_fit/path.rs",
+      "sha256": "sha256:dda9b100450082345d7f1bd9bc08dd90fab995471a162d1a74ffb4b21560c2b7",
+      "byte_length": 1720,
+      "line_count": 62
+    },
+    {
+      "path": "validator/src/repository_fit/state.rs",
+      "sha256": "sha256:a37bf5a72b5607591c259199be63e221ebd0b96b8725efca3fba63ac8f93cea3",
+      "byte_length": 7373,
+      "line_count": 286
+    },
+    {
+      "path": "validator/tests/repository_fit_contract.rs",
+      "sha256": "sha256:73c1af1fd8867dd5702f7551a8ab845ff4b515cd67b526f0f23991b7fed9f294",
+      "byte_length": 412,
+      "line_count": 15
+    },
+    {
+      "path": "validator/tests/repository_fit_contract/apply_failures.rs",
+      "sha256": "sha256:053a079b109052abb23f3751f51002d15b06523d4e0d06ada436681448c7ede5",
+      "byte_length": 9789,
+      "line_count": 295
+    },
+    {
+      "path": "validator/tests/repository_fit_contract/engine.rs",
+      "sha256": "sha256:4e24fd5abf4e5bbf97a10df3d5ed0a2a5bbdb1cd1517536bbd8a5ad1fd7daf80",
+      "byte_length": 9946,
+      "line_count": 297
+    },
+    {
+      "path": "validator/tests/repository_fit_contract/local_read.rs",
+      "sha256": "sha256:02be1dea003ae7ab625dfe6a6fc7a0cc23a3b711b65b57efb2fc7fce4f05f4cd",
+      "byte_length": 9939,
+      "line_count": 294
+    },
+    {
+      "path": "validator/tests/repository_fit_contract/spec.rs",
+      "sha256": "sha256:a9f62b0e7cc42f2f30989517a089cef7bc3732619cd87d39c881e91a0d7307eb",
+      "byte_length": 3496,
+      "line_count": 118
+    },
+    {
+      "path": "validator/tests/repository_fit_contract/support.rs",
+      "sha256": "sha256:3f3324d15faf9b6a091773a7a656af389c17a9a8e6841a633ee3a8e3d944ea2b",
+      "byte_length": 5649,
+      "line_count": 186
+    }
+  ],
+  "corrective_behavior": [
+    "restoration effects and final reconciliation execute as separate phases",
+    "ordinary rollback and effect-error rollback end with exact-root validation plus one read-only sweep over every attempted current and older mutation",
+    "the sweep compares exact prior bytes or exact absence and continues reading all paths after per-path read failures",
+    "replacement foreign missing unexpected-present unreadable and root-ambiguous final states return RollbackFailed without further writes",
+    "ordinary EffectFailed is returned only when all attempted paths were observed at exact prior state under the bracketed root boundary",
+    "the sweep adds no compare-exchange write or retry loop and remains bounded by the 512-mutation cap"
+  ],
+  "worker_verification": [
+    {
+      "command": "focused deterministic Unix attachment controls with -j 16 and --test-threads=16",
+      "result": "4 passed; 0 failed; 41 filtered"
+    },
+    {
+      "command": "focused local reader contract with -j 16 and --test-threads=16",
+      "result": "6 passed; 0 failed; 39 filtered"
+    },
+    {
+      "command": "full repository_fit_contract with -j 16 and --test-threads=16",
+      "result": "45 passed; 0 failed"
+    },
+    {
+      "command": "supported-host macOS RENAME_SWAP probe",
+      "result": "baseline_us=54954; five pre-return active-foreign observations; detached_successes=0"
+    },
+    {
+      "command": "rustfmt check over exact touched files",
+      "result": "passed"
+    },
+    {
+      "command": "targeted clippy --no-deps with -j 16",
+      "result": "passed with existing repository warnings"
+    }
+  ],
+  "residual_ceiling": "The final sweep is a bounded sequence of reads, not an atomic filesystem snapshot. It proves only the exact prior states observed under the validated root boundary and does not claim eternal post-return state.",
+  "explicitly_withheld": [
+    "root acceptance before independent exact-set rereview",
+    "public HCT-FIT API witness integration",
+    "canonical desired-state and state-policy production wiring",
+    "concrete supported-host compare-exchange writer",
+    "fresh partial conflict dirty rollback live journey matrix",
+    "legacy fit-route retirement",
+    "readiness release contract-node closure or goal completion"
+  ],
+  "no_claim_statement": "This corrected internal repository-fit candidate does not claim root acceptance, public integration, readiness, release, contract-node closure, or goal completion.",
+  "implemented_behavior": [
+    "revalidates every stored attachment leaf-to-root and checks the root-most descendant immediately before exact root revalidation",
+    "preserves descriptor anchoring O_NOFOLLOW exact-name enumeration special-file rejection and no-retry fail-closed behavior",
+    "adds deterministic first and intermediate ancestor substitution controls before open during traversal between leaf reads during reverse attachment validation and before final root verification",
+    "exercises a supported-host macOS RENAME_SWAP race with active-foreign pre-return observations and zero detached successes"
+  ],
+  "root_integration_requests": [
+    "independently rereview the exact 19-file set before root acceptance",
+    "after independent acceptance add public HCT-FIT API witness and canonical state/CLI routing",
+    "retain the finite ordered-read ceiling: no atomic or post-return namespace snapshot is claimed"
+  ]
+}

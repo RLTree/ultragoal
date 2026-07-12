@@ -1,0 +1,60 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N02-INVENTORY",
+  "root_decision": "accepted_exact_legacy_command_catalog_discovery_behavior",
+  "accepted_candidate": {
+    "path": "docs/ultragoal-successor-live/root-decisions/INVENTORY-EXACT-COMMAND-CATALOG-BEHAVIOR-CANDIDATE.json",
+    "sha256": "bec49bd976d76eeeb6e1a6fde982d9fcbf0db0d4f707491e73e8e5baac1a2cf8",
+    "artifact_set_sha256": "320d80c75e3299b2c0bcb256de1ddb6dac974ea9067a4f9af56d3d89fad784f8",
+    "artifact_count": 2,
+    "bytes": 11016,
+    "lines": 287,
+    "maximum_file_lines": 192,
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "independent_review": {
+    "reviewer": "/root/legacy_command_discovery_reviewer",
+    "lane_route": "gpt-5.6-terra/high",
+    "verdict": "pass",
+    "prior_findings_closed": [
+      "command-catalog.json discovery false-negative",
+      "broad substring matcher self-classified root-decision filenames",
+      "repository-local candidate manifest embedded self-invalidating current catalog IDs"
+    ],
+    "artifact_identity_revalidated": true,
+    "blocking_findings": 0
+  },
+  "independent_execution": {
+    "focused_result": "1 passed; 0 failed",
+    "behavior_probe": "5 positive routes, 7 substring/case/suffix/prefix/nested baits, and prose-content bait passed",
+    "rolling_inventory_observation": "Two byte-identical post-freeze summaries with unchanged status; expected exit 1; 4108 entries, 114 findings, 14 parallel authority, 33 sole-current pending migrations, and zero pending-authority verification failure. Exact rolling IDs remain external because writing this acceptance changes dirty candidate identity."
+  },
+  "root_reconciliation": {
+    "candidate_manifest_sha256_revalidated": "bec49bd976d76eeeb6e1a6fde982d9fcbf0db0d4f707491e73e8e5baac1a2cf8",
+    "artifact_rows_revalidated": "2 of 2",
+    "artifact_set_sha256_revalidated": "320d80c75e3299b2c0bcb256de1ddb6dac974ea9067a4f9af56d3d89fad784f8",
+    "regular_single_link_exact_case_rows": "2 of 2",
+    "unknown_rows_accepted": 0
+  },
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-INVENTORY-001",
+      "state": "exact_command_catalog_leaf_discovery_without_substring_authority",
+      "blocker": "The remaining current inventory findings and all actual parallel authority still require reconciliation."
+    }
+  ],
+  "root_acceptance_limit": "Exact discovery and fail-closed routing behavior for a `command-catalog.json` legacy authority leaf, including rejection of substring and documentation bait.",
+  "explicitly_withheld": [
+    "full scanner or routing closure",
+    "migration or retirement of any discovered authority",
+    "closure of the remaining live inventory findings",
+    "inventory node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any byte change to the accepted candidate manifest or either artifact row immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim full inventory closure, migration completion, readiness, release, or goal completion."
+}

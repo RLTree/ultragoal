@@ -1,0 +1,24 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "N10-NODE-003-REWORK",
+  "node_id": "N10-ORCHESTRATION",
+  "root_decision": "rework",
+  "review_mode": "independent_read_only",
+  "reviewed_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-003.json",
+    "sha256": "128e350014b5340359823f0c9c1b5f9200edbaf5b8bc6c2a4ff09cee0abe418c",
+    "artifact_set_sha256": "b8b4da4558edc35a0d3bf1f66a3ffb6238ad231da56f52ea5afd70771433d6ff",
+    "artifact_count": 28
+  },
+  "identity_reconciliation": "pass",
+  "decisive_finding": {
+    "severity": "high",
+    "class": "reviewed_result_commitment_bypass",
+    "cause": "Acceptance compared result and review identifiers but did not compare artifact or requested-root-change commitments, allowing a forged proposal to alter reviewed content and complete through replay."
+  },
+  "accepted_artifact_sets": [],
+  "corrective_lease": "LEASE-N10-ORCHESTRATION-NODE-004",
+  "integration_note": "A later isolated root all-target check passed after N04 froze, clearing the transient compile blocker without changing this REWORK decision.",
+  "claim_ceiling": "The N10 kernel remains unaccepted; persisted orchestration, recovery, product, readiness, release, and completion claims remain withheld.",
+  "no_claim_statement": "This decision does not claim N10 completion, readiness, release, or goal completion."
+}

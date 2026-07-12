@@ -1,0 +1,79 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "workstream": "routine_work_verified_reuse_authority",
+  "decision": "REWORK",
+  "review_route": {
+    "model": "gpt-5.6-sol",
+    "reasoning": "ultra",
+    "rationale": "High-risk execution and reuse authority where a forged reuse hit can skip required work and falsely report complete execution."
+  },
+  "reviewed_candidate": {
+    "manifest": "docs/ultragoal-successor-live/root-decisions/ROUTINE-WORK-DIRTY-TREE-REUSE-CANDIDATE.json",
+    "manifest_sha256": "c01f0f2fe56a9bcc0b45d12a04412fc29654d66e069e34eefd192b916928834f",
+    "artifact_set_sha256": "1a79f8fbf65ebfbb812847704f1c8d3e666f5fc816c199394b06673ad6d06216",
+    "artifact_count": 35,
+    "artifact_bytes": 143267,
+    "artifact_lines": 4613,
+    "maximum_file_lines": 291,
+    "membership_differences": 0,
+    "digest_length_line_mismatches": 0,
+    "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+    "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22"
+  },
+  "material_finding": {
+    "id": "routine-work-self-certified-reuse",
+    "severity": "critical",
+    "summary": "A caller can construct a passed CurrentResult, implement ResultObserver to echo it, construct a matching complete receipt, mint opaque VerifiedReuse through equality-only assessment, and make reconciliation report CompleteExecution without executing a check or reading an independently anchored result artifact.",
+    "source_evidence": [
+      "validator/src/routine_work/reuse/model.rs:145-173 exposes caller construction of CurrentResult",
+      "validator/src/routine_work/reuse/model.rs:200-202 permits caller implementation of ResultObserver",
+      "validator/src/routine_work/reuse/receipt.rs:53-68 permits caller construction of complete reuse evidence",
+      "validator/src/routine_work/reuse/decision.rs:7-48 validates only equality between caller-controlled values",
+      "validator/src/routine_work/report.rs:128-154 reports complete execution without an opaque executed-work witness"
+    ],
+    "external_reproduction": {
+      "probe_path": "/tmp/hul-routine-forged-reuse.rs",
+      "probe_sha256": "78a055705da4349c8847553af00ac927fcc5a51d8c4f05d208eb3364c3bcee43",
+      "executed_check": false,
+      "read_result_artifact": false,
+      "output": "FORGED_REUSE_HIT status=CompleteExecution reused=[\"syntax\"]"
+    },
+    "contract_impact": "Verified reuse and complete-execution reporting are false-passable, so the internal HCT-IMPACT/routine kernel cannot be accepted and repeat-use work cannot be skipped safely."
+  },
+  "required_correction": [
+    "make executed-result and observation evidence opaque and issue it only from a concrete trusted capture or anchored-artifact boundary",
+    "bind evidence to the exact context candidate root configuration plan check scope tool input and result identities",
+    "remove caller-implemented observation and caller-authored complete-receipt authority",
+    "require an opaque executed-work witness for executed report rows and opaque VerifiedReuse for reused rows",
+    "reject unknown duplicate stale tampered wrong-scope wrong-candidate wrong-tool wrong-input missing and substituted evidence",
+    "reproduce the external false-pass probe and prove it fails to compile or is rejected without hidden writes"
+  ],
+  "review_verification": [
+    {
+      "command": "full routine_work_contract with -j 16 and --test-threads=16",
+      "result": "40 passed; 0 failed; 17.05 seconds"
+    },
+    {
+      "command": "focused local_capture security reuse and planning suites",
+      "result": "10 plus 7 plus 10 plus 7 passed; 0 failed"
+    },
+    {
+      "command": "owned rustfmt check",
+      "result": "passed"
+    },
+    {
+      "command": "targeted clippy",
+      "result": "exit 0 with pre-existing library warnings and two candidate style warnings"
+    }
+  ],
+  "accepted_requirements": [],
+  "highest_defensible_ceiling": "The exact candidate identity, structural suites, and exercised filesystem rejection mechanics are supported; verified reuse and truthful complete-execution reporting are withheld.",
+  "explicitly_withheld": [
+    "internal HCT-IMPACT and routine-work acceptance",
+    "safe verified reuse",
+    "HCT-FIXTURES",
+    "public routine APIs and command integration",
+    "executed-work and repeat-use journeys",
+    "readiness release contract-node closure or goal completion"
+  ]
+}

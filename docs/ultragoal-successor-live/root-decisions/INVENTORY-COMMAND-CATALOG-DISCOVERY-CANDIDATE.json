@@ -1,0 +1,33 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "inventory_legacy_command_catalog_discovery",
+  "candidate_state": "frozen_for_independent_review",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "0aa0b83a38419799a306d85ed0df97b3b6e45584b6c45eec09a85649c0d343ab",
+  "artifact_count": 2,
+  "artifacts": [
+    {"path":"validator/src/inventory/legacy/matchers.rs","sha256":"sha256:f4dfe3e6a966d13bdb89002bd52cdeaa57892f99342d30f8137248f1fec42afd","byte_length":3277,"line_count":95},
+    {"path":"validator/tests/inventory_contract_cases/routing_transitions.rs","sha256":"sha256:a20d859b22c0d6267851e32451296b0e3ce443ff279b8d916d139846fa904ba9","byte_length":7742,"line_count":192}
+  ],
+  "material_finding": "The legacy scanner recognized command-inventory and command_catalog spellings but omitted command-catalog, allowing a plausible live command authority to disappear from the inventory.",
+  "corrective_behavior": [
+    "command-catalog path spelling is discovered as legacy command authority",
+    "an unknown discovered command authority cannot reuse the exact sole-current catalog",
+    "pending authority verification fails closed",
+    "the unknown live surface remains active parallel authority rather than being suppressed by a broad route",
+    "no retirement or compatibility claim is inferred"
+  ],
+  "verification": {
+    "command": "CARGO_TARGET_DIR=/tmp/hul-live-inventory-root cargo test --manifest-path validator/Cargo.toml --test inventory_contract routing_transitions::declared_routes_do_not_suppress_live_legacy_authority --locked --offline -j 16 -- --test-threads=16",
+    "result": "1 passed; 0 failed"
+  },
+  "explicitly_withheld": [
+    "acceptance of this exact correction",
+    "closure of remaining live inventory findings",
+    "migration or retirement of the discovered authority",
+    "readiness release or goal completion"
+  ],
+  "no_claim_statement": "This candidate closes one discovery false-negative only; it does not claim inventory closure, readiness, release, or completion."
+}

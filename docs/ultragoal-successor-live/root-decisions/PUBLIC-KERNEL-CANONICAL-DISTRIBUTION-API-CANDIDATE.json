@@ -1,0 +1,49 @@
+{
+  "schema_version": "RootCandidate-v1",
+  "workstream": "public_kernel_canonical_distribution_api",
+  "candidate_state": "frozen_for_independent_rereview",
+  "base_head": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
+  "base_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+  "corrects_manifest": "docs/ultragoal-successor-live/root-decisions/PUBLIC-KERNEL-CONTRACT-API-RECONCILIATION-CANDIDATE.json",
+  "corrects_manifest_sha256": "db2e3390309e2d8d7e5bdd6934457aafa55dfcac79cf2419d2646814c4796907",
+  "corrects_review_finding": "canonical HCT-DISTRIBUTION APIs omitted from implemented_public_apis and external compile witness",
+  "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
+  "artifact_set_sha256": "8994759dfa8cae15e5519a94e0c35ec7e9bf52f0d50b8a2d49beebb09867419b",
+  "artifact_count": 5,
+  "artifacts": [
+    {"path":"validator/src/api_witness.rs","sha256":"sha256:e075eba39384c96562027d6449066dd5d983505fa3e1e53b80233dc53a5fcaea","byte_length":2547,"line_count":66},
+    {"path":"validator/src/lib.rs","sha256":"sha256:1ce48b296ee27c59e3fe74e7b7de1355f7dd25dfe435bb878a0c7e366a72cad2","byte_length":1191,"line_count":59},
+    {"path":"validator/src/orchestration/event.rs","sha256":"sha256:3cf214bcda06a94db0d1f00013e77ccccc4ac50a6515110f54328221b112d3d8","byte_length":7491,"line_count":258},
+    {"path":"validator/src/orchestration/mod.rs","sha256":"sha256:ce8b7a3888ef3ef2ca2047c88677b2ab015e22f303b6a15f1207a74b8f63371a","byte_length":5507,"line_count":172},
+    {"path":"validator/tests/public_api_witness.rs","sha256":"sha256:eb28e53f32bde246eb67d2a64c5eb632a9109fca92c51b3d9cf96461c51405ae","byte_length":2085,"line_count":49}
+  ],
+  "corrective_behavior": [
+    "the external-crate witness names PackageSnapshot InstallSnapshot MarketplaceSnapshot DiscoveryObservation and RuntimeObservation exactly",
+    "implemented_public_apis reports those five exact adopted HCT-DISTRIBUTION identifiers",
+    "additional distribution and orchestration types remain compile-visibility witnesses without inventing custom-tool API identifiers",
+    "unknown custom-tool API identifiers still fail closed in semantic inventory reconciliation",
+    "source-level public API existence remains separate from live install discovery runtime journey and release claims"
+  ],
+  "verification": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-public-registry-correction cargo test --manifest-path validator/Cargo.toml --test public_api_witness --test distribution_contract --test orchestration_contract --locked --offline -j 16 -- --test-threads=16",
+      "result": "public API witness 1 passed; distribution 63 passed; orchestration 161 passed; 0 failed",
+      "wall_time_seconds": 7.628544959
+    },
+    {
+      "command": "/tmp/hul-live-inventory-root/debug/examples/hct_inventory --summary .",
+      "result": "two byte-identical current summaries; 4108 entries; 114 findings; missing_required_component reduced from 47 to 42; expected exit 1",
+      "summary_sha256": "7c1b0a59179ea5d0f80c7b55e0d88c6c85dc1bcc21b5f8ab5a45c65c9c7bf804",
+      "catalog_id": "sha256:03bb59bb0768a0de18a3e3028d859438e5f6dff73664d9e1bd7688999b9c1a32",
+      "status_before_after_identical": true
+    }
+  ],
+  "explicitly_withheld": [
+    "live package installation marketplace cache discovery and runtime behavior",
+    "public CLI dispatcher and command catalog wiring",
+    "end-to-end orchestration product journeys",
+    "closure of the remaining 114 inventory findings",
+    "readiness release or goal completion"
+  ],
+  "no_claim_statement": "This corrected candidate proves source-level public API accounting and dependency-closed kernel behavior only; it does not claim product readiness, release, or completion."
+}
