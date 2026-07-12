@@ -1,0 +1,302 @@
+{
+  "worker": "/root/distribution_lifecycle_adapter_engineer",
+  "lease_id": "PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041",
+  "context_id": "sha256:d70edd9d09913af66f980ccecca17bcaa5414ebfe19e84f3e70b5951660f49ea",
+  "candidate_identity": {
+    "candidate_id": "sha256:162193c53f2d3d882a685dbe517d7a38159b931a1bfca9e309b47f5cd132e1b1",
+    "task_envelope_candidate_id": "sha256:e746bd3597d0e8f6e1d48eaa182665feadd2e300805674c8330f53d7dfb07c37",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "9f7cae29124f98b37b632afb48aa52d27dc250d2",
+    "head_tree": "47effd7288abb44454606eac64cede41a70b6a20",
+    "worker_owned_artifact_set_sha256": "sha256:162193c53f2d3d882a685dbe517d7a38159b931a1bfca9e309b47f5cd132e1b1",
+    "worker_owned_artifact_count": 15,
+    "worker_owned_artifact_total_bytes": 56955,
+    "worker_owned_artifact_total_lines": 1710,
+    "worker_result_self_excluded": true
+  },
+  "base_state": {
+    "status": "accepted-lifecycle-and-package-kernels-without-real-adapter",
+    "agent_task_envelope": "docs/ultragoal-successor-live/task-envelopes/PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041.json",
+    "agent_task_envelope_head": "9f7cae29124f98b37b632afb48aa52d27dc250d2",
+    "work_envelope": "docs/ultragoal-successor-live/work-packages/PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041.json",
+    "work_envelope_sha256": "sha256:b78aaf502c8d693ab505a27bc8e58af655cbd5e002fd64fb2ccb137a5391cd93",
+    "work_envelope_original_head": "dcf85216566e69d10ba4c2b16c20a88af2d86884",
+    "accepted_lifecycle_source_sha256": "sha256:8c8ae1d9ce6c5cb6769408e8dff2bf3db463e2788439c8b6f21caf1b70e10955",
+    "accepted_package_artifact_writer_sha256": "sha256:41c4b6c3e83173240658b3d115df5404bf28397c0e0994a6d3b6feaf75752853",
+    "corrective_lease_id": "distribution-authority-substitution-correction-041-r1",
+    "prior_candidate_id": "sha256:675ee00faa7e44670fcb990ad1f0bee6f8515e5b0892abd2e3711bd6ec3c5419",
+    "prior_worker_result_sha256": "sha256:22e2e6c261077ad9a1c7258940b8d1d9b87bd8cc72d2dad2b5a7f9ea420e9435",
+    "rework_finding": "A deterministic plan_id did not distinguish independently issued sealed plans, and an operation did not own one exact recovery-token issuance."
+  },
+  "final_state": {
+    "status": "corrected_candidate_for_independent_review",
+    "adapter_scope": "descriptor-confined-isolated-filesystem",
+    "package_plan_snapshot_lifecycle_binding": true,
+    "real_distribution_kernel_effects": true,
+    "fixed_installed_and_cache_paths": true,
+    "read_only_failure_adapter_mutations": 0,
+    "plan_authority": "full-sealed-plan-issuance-bound",
+    "recovery_authority": "effect-owning-operation-and-single-token-issuance-bound",
+    "lifecycle_intents_exercised": 8,
+    "source_maximum_line_count": 298,
+    "artifact_set_frozen": true,
+    "claim_effect": "none"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041.json",
+    "fixtures/plugin-distribution-adapter/scenarios.json",
+    "validator/src/plugin_product/distribution_adapter/binding.rs",
+    "validator/src/plugin_product/distribution_adapter/effects.rs",
+    "validator/src/plugin_product/distribution_adapter/error.rs",
+    "validator/src/plugin_product/distribution_adapter/mod.rs",
+    "validator/src/plugin_product/distribution_adapter/mutation.rs",
+    "validator/src/plugin_product/distribution_adapter/observation.rs",
+    "validator/src/plugin_product/mod.rs",
+    "validator/tests/plugin_distribution_adapter_contract.rs",
+    "validator/tests/plugin_distribution_adapter_contract/fixture_contract.rs",
+    "validator/tests/plugin_distribution_adapter_contract/negative.rs",
+    "validator/tests/plugin_distribution_adapter_contract/positive.rs",
+    "validator/tests/plugin_distribution_adapter_contract/recovery.rs",
+    "validator/tests/plugin_distribution_adapter_contract/security.rs",
+    "validator/tests/plugin_distribution_adapter_contract/support.rs"
+  ],
+  "touched_semantics": [
+    "plugin-distribution-effect-adapter",
+    "plugin-installed-cache-observation",
+    "plugin-lifecycle-effect-prefix-recovery",
+    "plugin-lifecycle-operation-owned-recovery-token",
+    "plugin-lifecycle-plan-issuance-binding",
+    "plugin-package-plan-snapshot-binding"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/plugin-distribution-adapter/scenarios.json",
+    "validator/tests/plugin_distribution_adapter_contract.rs",
+    "validator/tests/plugin_distribution_adapter_contract"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "plugin-distribution-adapter-source",
+      "performed": true,
+      "scope": "leased-paths-only"
+    },
+    {
+      "class": "fixture_write",
+      "target": "plugin-distribution-adapter-tests",
+      "performed": true,
+      "scope": "leased-fixtures-only"
+    },
+    {
+      "class": "process",
+      "target": "offline-isolated-filesystem-adapter-validation",
+      "performed": true,
+      "network": false,
+      "external_systems": false
+    }
+  ],
+  "requirements": [
+    "CTRL-PLUGIN-DISTRIBUTION-POSITIVE",
+    "CTRL-PLUGIN-DISTRIBUTION-NEGATIVE",
+    "CTRL-PLUGIN-DISTRIBUTION-RACE",
+    "CTRL-PLUGIN-DISTRIBUTION-SECURITY",
+    "CTRL-PLUGIN-DISTRIBUTION-FALSE-PASS",
+    "adapter-executes-real-distribution-kernel-effects-in-an-isolated-filesystem",
+    "package-plan-snapshot-and-lifecycle-authority-bind-one-candidate",
+    "independently-issued-identical-plans-refuse-before-effects",
+    "recovery-token-authority-binds-one-effect-owning-operation-and-one-issuance",
+    "read-only-verify-and-probe-failures-never-restore-or-write",
+    "partial-effect-failure-arms-only-the-observed-recovery-prefix",
+    "worker-result-v1",
+    "independent-review-and-root-reconciliation"
+  ],
+  "dependency_nodes": [
+    "N04-DISTRIBUTION",
+    "accepted-package-artifact-writer",
+    "accepted-plugin-lifecycle-source"
+  ],
+  "changes": [
+    {
+      "area": "package-and-lifecycle-binding",
+      "result": "Bind re-verifies exact PackagePlan archive bytes into the supplied PackageSnapshot, derives the only permitted PackageAuthority, validates and retains the full sealed LifecyclePlan issuance, and refuses independently issued identical plans plus substituted package, inventory, candidate, version, intent, effect order, or token state before adapter effects."
+    },
+    {
+      "area": "real-isolated-effects",
+      "result": "Fresh install, update, authorized rollback, failed-update recovery, stale-cache refresh, and teardown use the existing InstallPlan, ScopedInstall, ScopedFile, compare-exchange, verification, and rollback kernels against one descriptor-confined fixture root."
+    },
+    {
+      "area": "prefix-bound-recovery",
+      "result": "The adapter retains only transactions for effects that actually completed, marks only the operation that entered effects as the execution owner, mints and stores one exact recovery-token issuance for that operation, verifies the current physical state before recovery, reverses those transactions in order, and rejects cross-root or sibling substitutions before observation or restore."
+    },
+    {
+      "area": "read-only-boundary",
+      "result": "Repeat use and idempotent reinstall execute installed-byte verification followed by a separate zero-write distribution identity probe; failures at either point produce no adapter mutations and lifecycle restore is never invoked."
+    },
+    {
+      "area": "adversarial-controls",
+      "result": "Controls cover independent identical-plan substitution, cross-root and same-root sibling recovery-token substitution, concurrent plan and token replay, package and state substitution, ancestor replacement, partial failure, symlink and special-file substitution, oversized input, stable non-echo diagnostics, and false-pass claim separation."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -c '<load exact verifier; validate schema and semantic resolver for PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041>'",
+      "status": "pass",
+      "result": "AgentTaskEnvelope-v1 schema-and-semantic-revalidation:pass"
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <all leased Rust artifacts> && git diff --check -- <leased artifact set>",
+      "status": "pass",
+      "result": "source maximum 298 lines; no whitespace errors"
+    },
+    {
+      "command": "CARGO_BUILD_JOBS=16 CARGO_TARGET_DIR=/tmp/hul-plugin-distribution-041-r1 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline -j 16 --test plugin_distribution_adapter_contract",
+      "status": "pass-14-of-14",
+      "run_id": "dfc4fced-5c28-48bc-94a5-beb1c555b1c4",
+      "result": "All six corrective authority controls and the existing positive, negative, recovery, race, security, and false-pass controls passed."
+    },
+    {
+      "command": "HUL_REPO_ROOT=<repo> CARGO_BUILD_JOBS=16 CARGO_TARGET_DIR=/tmp/hul-plugin-distribution-041-r1 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline -j 16 --no-fail-fast --test plugin_product_contract --test distribution_contract",
+      "status": "pass-185-of-185-with-one-leaky-signal",
+      "run_id": "1f4bdb17-5bdd-449d-9ea5-82c13840e8d3",
+      "result": "185 passed; descriptor_cas absent-target-stage control was marked leaky by nextest and immediately rechecked alone."
+    },
+    {
+      "command": "HUL_REPO_ROOT=<repo> CARGO_BUILD_JOBS=16 CARGO_TARGET_DIR=/tmp/hul-plugin-distribution-041-r1 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline -j 16 --test distribution_contract -E 'test(descriptor_cas::absent_target_stage_substitution_restores_absence_and_preserves_both_files)'",
+      "status": "pass-1-of-1-no-leak",
+      "run_id": "89127729-9077-4c21-ac7d-d6f2961bb459"
+    },
+    {
+      "command": "CARGO_BUILD_JOBS=16 CARGO_TARGET_DIR=/tmp/hul-plugin-distribution-041-r1-check CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline --lib -j 16",
+      "status": "pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/plugin-distribution-adapter/scenarios.json",
+      "sha256": "sha256:3c175a2138270b6194d90d554345a8cc562a5cc4adeaf5681f057e59f9c0a17b",
+      "byte_length": 785
+    },
+    {
+      "path": "validator/src/plugin_product/distribution_adapter/binding.rs",
+      "sha256": "sha256:35638593854f58ba7f5959218e37272eac4efcb47cbea295b16f87a32504c53e",
+      "byte_length": 3122
+    },
+    {
+      "path": "validator/src/plugin_product/distribution_adapter/effects.rs",
+      "sha256": "sha256:f7d6107031f2869bfdc45a7f626ed9b9a247bbf1978a98039d0a9d3a3e9754b5",
+      "byte_length": 10743
+    },
+    {
+      "path": "validator/src/plugin_product/distribution_adapter/error.rs",
+      "sha256": "sha256:212951c25eeb1aa41514abeaa6c3afc03c7cbb583bb939a48158c78b7a36cb55",
+      "byte_length": 1420
+    },
+    {
+      "path": "validator/src/plugin_product/distribution_adapter/mod.rs",
+      "sha256": "sha256:65122c439547d175544d8877b9cdb3bbe2450c46b31ae248059de0e6dac384ed",
+      "byte_length": 3144
+    },
+    {
+      "path": "validator/src/plugin_product/distribution_adapter/mutation.rs",
+      "sha256": "sha256:c091f6ecd412ad0792516b2d25a2362cc0599560e2d11d51de12cca6a8cd6cc3",
+      "byte_length": 357
+    },
+    {
+      "path": "validator/src/plugin_product/distribution_adapter/observation.rs",
+      "sha256": "sha256:5f3d686f14c769f07b8d5a6a414403ba3f180cf1d41629f2c4ed3a8d4fd08120",
+      "byte_length": 3341
+    },
+    {
+      "path": "validator/src/plugin_product/mod.rs",
+      "sha256": "sha256:d61365374fdba170a1a39f23845f4dc3f1ce6d40871a30adc748aceda45022b7",
+      "byte_length": 693
+    },
+    {
+      "path": "validator/tests/plugin_distribution_adapter_contract.rs",
+      "sha256": "sha256:c7ebcd0ff7400dffaf7f97ad73fd40be03daa06e546ca2947858ccb1e94d8b98",
+      "byte_length": 464
+    },
+    {
+      "path": "validator/tests/plugin_distribution_adapter_contract/fixture_contract.rs",
+      "sha256": "sha256:918b817bd4376aff0f5c4730ff4d03154b538611a33bcdec3755bf84736504fe",
+      "byte_length": 1317
+    },
+    {
+      "path": "validator/tests/plugin_distribution_adapter_contract/negative.rs",
+      "sha256": "sha256:bdcec5641b91944f91abc4caec66efad792b82bd857cbe7f13219cd7b2c609aa",
+      "byte_length": 5690
+    },
+    {
+      "path": "validator/tests/plugin_distribution_adapter_contract/positive.rs",
+      "sha256": "sha256:824a43b9c2cdd21561a26feb4a4a281635edd1e3c69384d5b147bc232280bd9d",
+      "byte_length": 4630
+    },
+    {
+      "path": "validator/tests/plugin_distribution_adapter_contract/recovery.rs",
+      "sha256": "sha256:6c4fcea9676fd616ef52885406307483f3e3679e906836091a002166193fcdea",
+      "byte_length": 10202
+    },
+    {
+      "path": "validator/tests/plugin_distribution_adapter_contract/security.rs",
+      "sha256": "sha256:e4d1bac71c9c08adc37a41d426e334e2473ad1335b576659e454ae7880dc08f7",
+      "byte_length": 3594
+    },
+    {
+      "path": "validator/tests/plugin_distribution_adapter_contract/support.rs",
+      "sha256": "sha256:eac7654f47a7007ef4af7c6d069b01b966f9a3512bd0ac57cab7b9a62864e6f1",
+      "byte_length": 7453
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material-rework-corrected",
+      "finding": "The first 15-artifact candidate bound DistributionLifecycleOperation only to deterministic plan_id and accepted any valid recovery token for that plan, allowing independently issued structurally identical plans and same-plan sibling tokens to cross operation or root boundaries. The corrected candidate binds full sealed-plan issuance, effect ownership, and one exact operation-minted token issuance."
+    },
+    {
+      "severity": "material-corrected",
+      "finding": "The accepted lifecycle kernel previously had no real distribution adapter; this candidate now couples its sealed effects to exact package and descriptor-confined distribution transactions."
+    },
+    {
+      "severity": "material-corrected",
+      "finding": "Read-only verification and probe failures cannot enter adapter restore and the adapter exposes no public raw LifecycleEffectAdapter implementation that callers could invoke outside the sealed lifecycle operation."
+    },
+    {
+      "severity": "diagnostic-reconciled",
+      "finding": "The 185-test concurrent dependency run marked one pre-existing distribution descriptor race test leaky while still passing it; the exact test then passed alone without a leak signal. No adapter artifact was changed in response."
+    },
+    {
+      "severity": "claim-ceiling",
+      "finding": "The candidate proves source-local confined adapter behavior only. Fixture effects, tests, package metadata, receipts, and the zero-write identity probe do not prove host installation, cache visibility, discovery, runtime loading, or product journeys."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-review-of-sha256-162193c53f2d3d882a685dbe517d7a38159b931a1bfca9e309b47f5cd132e1b1",
+    "root-candidate-reconciliation-and-commit",
+    "root-owned-plugin-source-and-package-closure-regeneration",
+    "supported-host-install-discovery-runtime-and-product-journey-proof"
+  ],
+  "requested_root_changes": [
+    {
+      "request": "Independently review the corrected exact 15-artifact set bound by sha256:162193c53f2d3d882a685dbe517d7a38159b931a1bfca9e309b47f5cd132e1b1, specifically falsifying independent identical-plan, cross-root token, same-root sibling operation, and token replay boundaries, then either accept it unchanged or return the first material defect for rework.",
+      "authority": "root-review-and-reconciliation"
+    },
+    {
+      "request": "If accepted, update root-owned plugin dependency closure, package membership, generated authority, and candidate identity to include the adapter source, fixture, and contract target; do not infer host proof from membership.",
+      "authority": "root-generated-and-package-authority"
+    },
+    {
+      "request": "After integration, run separately bound supported-host installation, cache, discovery, runtime, and representative product journeys before changing any claim ceiling.",
+      "authority": "root-claim-and-product-proof"
+    }
+  ],
+  "limitations": [
+    "The operation accepts only a distribution ConfinedRoot and uses fixed fixture paths; it does not access or mutate live Codex plugin, cache, marketplace, registry, UI, or runtime state.",
+    "The LifecycleEffect::ProbeRuntime implementation is deliberately a second zero-write distribution identity observation. It is not a process execution and provides no runtime-loading proof.",
+    "The adapter re-verifies the supplied PackagePlan and PackageSnapshot but does not itself decide that either is adopted; root must supply and reconcile accepted package authority.",
+    "Prior installed or cache bytes that differ from the bound target are matched to the sealed lifecycle authority by exact SHA-256 only; the target package is the sole fully re-encoded PackagePlan and PackageSnapshot binding.",
+    "The public adapter is compiled in production and integration-test library builds. The legacy plugin_product source-inclusion test has no distribution module, so plugin_product/mod.rs conditionally excludes this adapter only when that file is compiled directly under cfg(test).",
+    "The first corrective dependency-suite invocation omitted HUL_REPO_ROOT and failed the plugin_product_contract startup assertion before candidate behavior; it is non-proof. The corrected candidate-bound invocation passed all 185 live dependency tests.",
+    "No package, install, cache, marketplace, app-registry, Plugins UI, discovery, runtime, journey, node closure, readiness, release, or completion claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.plugin-distribution-adapter-fixture.v1",
+  "isolated_paths": [
+    "installed/harness-ultragoal.hugpkg",
+    "cache/harness-ultragoal.hugpkg"
+  ],
+  "lifecycle_intents": [
+    "fresh_install",
+    "monotonic_update",
+    "failed_update_recovery",
+    "authorized_rollback",
+    "idempotent_reinstall",
+    "uninstall_teardown",
+    "stale_cache_recovery",
+    "repeat_use"
+  ],
+  "false_pass_inputs": [
+    "fixture",
+    "manifest",
+    "package_metadata",
+    "receipt",
+    "read_only_probe"
+  ],
+  "forbidden_claims": [
+    "package",
+    "install",
+    "cache",
+    "marketplace",
+    "app_registry",
+    "plugins_ui",
+    "discovery",
+    "runtime",
+    "journey",
+    "readiness",
+    "release",
+    "completion"
+  ],
+  "claim_effect": "none"
+}

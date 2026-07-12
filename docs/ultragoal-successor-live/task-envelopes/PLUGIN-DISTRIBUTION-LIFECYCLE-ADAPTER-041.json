@@ -1,0 +1,328 @@
+{
+  "schema_version": "AgentTaskEnvelope-v1",
+  "task_id": "plugin-distribution-lifecycle-adapter-041",
+  "role_binding": {
+    "role_id": "implementation-worker",
+    "source_kind": "runtime_agent_type_receipt",
+    "source_ref": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+    "source_sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+    "sandbox_mode": "workspace-write",
+    "may_exercise_root_authority": false
+  },
+  "goal": "Implement a real isolated-filesystem distribution lifecycle adapter that binds accepted package identity to accepted lifecycle authority.",
+  "success": [
+    "The adapter executes real distribution-kernel effects without touching live host plugin state.",
+    "Install, update, rollback, reinstall, uninstall, stale-cache, failure-recovery, and repeat-use controls preserve exact identity and effect prefixes.",
+    "A schema-valid WorkerResult-v1 requests any root-only exports or wiring without claiming host behavior."
+  ],
+  "candidate_identity": {
+    "repository": {
+      "root_uri": "repo://harness-ultragoal-plugin-proposal",
+      "canonical_root_sha256": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170"
+    },
+    "context_id": "sha256:d70edd9d09913af66f980ccecca17bcaa5414ebfe19e84f3e70b5951660f49ea",
+    "candidate_id": "sha256:e746bd3597d0e8f6e1d48eaa182665feadd2e300805674c8330f53d7dfb07c37",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "9f7cae29124f98b37b632afb48aa52d27dc250d2",
+    "head_tree": "47effd7288abb44454606eac64cede41a70b6a20",
+    "dirty": false,
+    "captured_at": "2026-07-12T10:08:48Z",
+    "freeze": {
+      "kind": "artifact_set",
+      "artifact_set_sha256": "sha256:71495c205f04e548ba8853d51e05e1d46b0453871ebc8161b99cdd02588adc4c",
+      "artifact_count": 7,
+      "bytes": 62861,
+      "lines": 1895,
+      "artifacts": [
+        {
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+          "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+          "bytes": 20505,
+          "lines": 776
+        },
+        {
+          "path": "docs/ultragoal-successor-live/acceptance/PACKAGE-ARTIFACT-WRITER-CORRECTION.json",
+          "sha256": "sha256:41c4b6c3e83173240658b3d115df5404bf28397c0e0994a6d3b6feaf75752853",
+          "bytes": 3680,
+          "lines": 62
+        },
+        {
+          "path": "docs/ultragoal-successor-live/acceptance/PLUGIN-LIFECYCLE-SOURCE-INTEGRATION-039.json",
+          "sha256": "sha256:8c8ae1d9ce6c5cb6769408e8dff2bf3db463e2788439c8b6f21caf1b70e10955",
+          "bytes": 4629,
+          "lines": 91
+        },
+        {
+          "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+          "sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604",
+          "bytes": 23425,
+          "lines": 747
+        },
+        {
+          "path": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+          "sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+          "bytes": 2176,
+          "lines": 53
+        },
+        {
+          "path": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+          "sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+          "bytes": 555,
+          "lines": 11
+        },
+        {
+          "path": "docs/ultragoal-successor-live/work-packages/PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041.json",
+          "sha256": "sha256:b78aaf502c8d693ab505a27bc8e58af655cbd5e002fd64fb2ccb137a5391cd93",
+          "bytes": 7891,
+          "lines": 155
+        }
+      ]
+    }
+  },
+  "scope": {
+    "artifact_paths": [
+      {
+        "path": "docs/ultragoal-successor-live/work-packages/PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041.json",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/distribution",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/plugin_product/lifecycle",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/plugin_product/distribution_adapter",
+        "access": "write"
+      },
+      {
+        "path": "validator/src/plugin_product/mod.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/tests/distribution_contract.rs",
+        "access": "read"
+      },
+      {
+        "path": "validator/tests/distribution_contract",
+        "access": "read"
+      },
+      {
+        "path": "validator/tests/plugin_product_contract",
+        "access": "read"
+      },
+      {
+        "path": "docs/ultragoal-successor-live/worker-results/PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041.json",
+        "access": "write"
+      }
+    ],
+    "semantic_symbols": [
+      "plugin-distribution-effect-adapter",
+      "plugin-package-plan-snapshot-binding",
+      "plugin-installed-cache-observation",
+      "plugin-lifecycle-effect-prefix-recovery"
+    ],
+    "generated_outputs": [],
+    "fixtures": [
+      {
+        "path": "fixtures/plugin-distribution-adapter",
+        "access": "write"
+      },
+      {
+        "path": "validator/tests/plugin_distribution_adapter_contract.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/tests/plugin_distribution_adapter_contract",
+        "access": "write"
+      }
+    ],
+    "external_effects": [],
+    "scratch_uris": [
+      "scratch://plugin-distribution-041/cargo-target",
+      "scratch://plugin-distribution-041/isolated-homes"
+    ],
+    "forbidden_paths": [
+      ".codex-plugin/plugin.json",
+      ".git/config",
+      "Cargo.lock",
+      "plugin-manifest-draft.json",
+      "validator/src/lib.rs",
+      "validator/src/inventory"
+    ],
+    "path_resolution": {
+      "policy": "candidate-relative-no-follow-v1",
+      "session_id": "sha256:602d003b42a5e7c7af56e0eabe102ebeb3306983a6022e47a8839bd84f99ce02",
+      "resolved_scope_sha256": "sha256:15877b7ed175e3c2b777a4cbf6061eaa1c34fa9783c53d45f513d61e3123a66e",
+      "symlinks": "reject",
+      "special_files": "reject",
+      "post_freeze_revalidation": "required"
+    }
+  },
+  "authority_binding": {
+    "session_id": "sha256:bde05f0955c4355d1b9c97c7bd27fc42c374ce2ce9537e2c2bf4447cdeda3b00",
+    "captured_at": "2026-07-12T10:08:48Z",
+    "sources": [
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+      }
+    ],
+    "ids": {
+      "nodes": [
+        "N04-DISTRIBUTION"
+      ],
+      "requirements": [],
+      "surfaces": [],
+      "tools": [],
+      "claims": [],
+      "migration_routes": [],
+      "decisions": []
+    },
+    "resolved_rows": [
+      {
+        "stable_id": "N04-DISTRIBUTION",
+        "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "row_sha256": "sha256:62ede0939b520d0ebaabe31ae58d96438b4cf6c5ce648e126d88dfdc4f8173a6"
+      }
+    ],
+    "resolution": {
+      "resolved_set_sha256": "sha256:d9e28668156824be89dbbea9a25f1f5be68f51e02cb528f967dd2ee0d57a35c5",
+      "unknown_count": 0,
+      "duplicate_count": 0,
+      "ambiguous_count": 0,
+      "conflict_count": 0,
+      "final_session_revalidation": "required"
+    }
+  },
+  "evidence": {
+    "primary_references": [
+      {
+        "path": "docs/ultragoal-successor-live/work-packages/PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041.json",
+        "sha256": "sha256:b78aaf502c8d693ab505a27bc8e58af655cbd5e002fd64fb2ccb137a5391cd93",
+        "kind": "authority",
+        "candidate_bound": true
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+        "kind": "authority",
+        "candidate_bound": true
+      },
+      {
+        "path": "docs/ultragoal-successor-live/acceptance/PLUGIN-LIFECYCLE-SOURCE-INTEGRATION-039.json",
+        "sha256": "sha256:8c8ae1d9ce6c5cb6769408e8dff2bf3db463e2788439c8b6f21caf1b70e10955",
+        "kind": "review",
+        "candidate_bound": true
+      },
+      {
+        "path": "docs/ultragoal-successor-live/acceptance/PACKAGE-ARTIFACT-WRITER-CORRECTION.json",
+        "sha256": "sha256:41c4b6c3e83173240658b3d115df5404bf28397c0e0994a6d3b6feaf75752853",
+        "kind": "review",
+        "candidate_bound": true
+      }
+    ],
+    "unsupported_truth_surfaces": [
+      "package",
+      "install",
+      "cache",
+      "marketplace",
+      "app_registry",
+      "plugins_ui",
+      "discovery",
+      "runtime",
+      "journey",
+      "readiness",
+      "release",
+      "completion"
+    ],
+    "implementation_conclusions_are_authority": false
+  },
+  "effects": {
+    "candidate_source": "bounded_workspace_write",
+    "git_metadata": "read_only_no_mutation",
+    "shared_root_authority": "forbidden",
+    "scratch": "bounded_read_write",
+    "network": "forbidden",
+    "external_systems": "forbidden",
+    "destructive_actions": "forbidden",
+    "secrets": "forbidden"
+  },
+  "output_contract": {
+    "schema_id": "WorkerResult-v1",
+    "schema_ref": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+    "schema_sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+    "result_target": "docs/ultragoal-successor-live/worker-results/PLUGIN-DISTRIBUTION-LIFECYCLE-ADAPTER-041.json",
+    "required_sections": [
+      "candidate-identity",
+      "touched-paths",
+      "commands-and-tests",
+      "artifacts",
+      "findings",
+      "requested-root-changes",
+      "limitations",
+      "no-claim-statement"
+    ]
+  },
+  "verification": {
+    "positive": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-PLUGIN-DISTRIBUTION-POSITIVE",
+          "procedure": "Run isolated install, update, rollback, reinstall, uninstall, stale-cache, and repeat-use journeys through the real adapter.",
+          "expected": "Observed distribution effects and lifecycle outcomes share one exact package and candidate identity.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "negative": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-PLUGIN-DISTRIBUTION-NEGATIVE",
+          "procedure": "Substitute package plans, snapshots, installed bytes, cache bytes, versions, intents, and recovery tokens.",
+          "expected": "Every substitution refuses before unauthorized effects.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "race_or_mutation": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-PLUGIN-DISTRIBUTION-RACE",
+          "procedure": "Race plan use, filesystem replacement, partial effects, restore, and concurrent replay.",
+          "expected": "Exactly one authorized transition wins and recovery binds only the observed effect prefix.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "security": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-PLUGIN-DISTRIBUTION-SECURITY",
+          "procedure": "Exercise links, special files, ancestor swaps, path escape, oversized inputs, and attacker-value diagnostics.",
+          "expected": "Unsafe inputs fail closed without host writes or secret/path echo.",
+          "evidence_kind": "test"
+        }
+      ]
+    },
+    "false_pass": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-PLUGIN-DISTRIBUTION-FALSE-PASS",
+          "procedure": "Offer fixtures, manifests, package metadata, receipts, and read-only probes as live install or runtime proof.",
+          "expected": "None raises package, host, discovery, runtime, or journey ceilings.",
+          "evidence_kind": "test"
+        }
+      ]
+    }
+  },
+  "stop_rule": "Stop after the first host-state access, lease escape, identity bypass, or recovery-prefix defect; otherwise finish the exact adapter and WorkerResult-v1.",
+  "no_claim_statement": "This agent does not claim readiness, release, node closure, or goal completion."
+}
