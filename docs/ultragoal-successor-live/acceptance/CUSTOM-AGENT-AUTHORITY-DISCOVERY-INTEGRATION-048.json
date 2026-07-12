@@ -1,0 +1,79 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N09-CUSTOM-AGENTS",
+  "root_decision": "accepted_production_compiled_fail_closed_custom_agent_authority_verifier",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/CUSTOM-AGENT-AUTHORITY-DISCOVERY-048.json",
+    "sha256": "c16ff30e9abf7ae1a40171ec02d699911b5a7a2cd62aada759f2231e3823a336",
+    "artifact_count": 16,
+    "artifact_set_sha256": "5b4137fcc924192c4475773aac9e95d068ccdb27171a209b09d60b9d46bac6de",
+    "artifact_bytes": 134750,
+    "artifact_lines": 3894
+  },
+  "rework_history": [
+    "The first verifier recognized harness- but not the seven exact live harness_ legacy identifiers.",
+    "The namespace correction still reopened source ancestors by path and could consume outside bytes during a swap-read-restore race.",
+    "The retained-handle correction enumerated and read an unbounded number of untrusted directory entries before exact-set rejection.",
+    "The bounded scanner treated every null readdir result as EOF, so an EIO after expected rows could hide a later extra authority.",
+    "The accepted scanner retains directory handles, uses no-follow relative operations, bounds metadata work, validates exact names before body reads, distinguishes EOF from errno failures, and terminalizes failed streams."
+  ],
+  "independent_review": {
+    "reviewer": "/root/custom_agent_authority_reviewer",
+    "verdict": "pass",
+    "review_mode": "independent_read_only_exact_rework4_artifact_set",
+    "focused_nextest_run_id": "93be4706-e052-4f0f-8613-aebd1d44f7ab",
+    "focused_result": "39 passed; 0 failed",
+    "dependency_nextest_run_id": "0d38b43a-fde5-45af-9931-bee8fd31aa34",
+    "dependency_result": "11 passed; 0 failed",
+    "targeted_readdir_run_id": "cf79e7db-0ad3-42fc-9b91-86f21d22ce8e",
+    "targeted_readdir_result": "3 passed; 0 failed",
+    "production_check": "passed",
+    "blocking_review_findings": 0
+  },
+  "root_integration": {
+    "implementation_commit": "1e231d89739f658e7f1c72f10fb5a0c2028c8253",
+    "implementation_tree": "d2fdbb85aa820cdd3832adc3a26f091c0f5473b8",
+    "module_wiring_commit": "9a38af6474c484dcf590fdb151ee1d303d43d63e",
+    "module_wiring_tree": "ae92feaa79d832c990ddba7c69a61d5a89134831",
+    "integrated_nextest_run_id": "f4344d2d-46b6-444d-b3f8-f85c7ffb4d5d",
+    "integrated_result": "50 passed; 0 failed",
+    "production_library_check": "passed under locked offline 16-job build"
+  },
+  "closed_findings": [
+    "Both harness_ and harness- namespaces fail closed and every one of the seven exact live underscore identifiers blocks independently.",
+    "Retained no-follow directory handles and relative reads reject ancestor, leaf, symlink, special-file, hardlink, persistent-replacement, and swap-read-restore substitution.",
+    "Agent and plugin entry sets are bounded and validated before source body reads; unknown large, Unicode, oversized, or special entries reject with bounded metadata-only work.",
+    "Null readdir is EOF only when errno is zero; EIO, EINTR, and every enumeration error fail closed without retry, body reads, writes, path echo, or failed-stream reuse.",
+    "Candidate, source, package, install, cache, host-session, sandbox-policy, and two-round catalog identity remain bound without claim or route-adoption effect."
+  ],
+  "current_live_blockers": [
+    "Seven legacy contract descriptors remain byte-identical across source custom-agents, global agents, installed plugin, and cache; two omit sandbox_mode.",
+    "Two additional exposed global harness-prefixed agents omit sandbox_mode.",
+    "Installed and cache manifest sha256:8e93403398fe1ccf6c93dcd15f2143677e1ab47c65b7ee59f53e051e5f7ffcb differs from source sha256:12c123fa9442dbf9e2eb7877b6fd1c4446ffc04a26d37727dddc0fb3877b06da at version 0.0.11.",
+    "Installed and cached packages contain zero project-scoped .codex/agents descriptors.",
+    "No supported-host generation-stable agent authority reader or independent fresh-session proof exists."
+  ],
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-PLUGIN-006",
+      "state": "production-compiled source-local custom-agent authority verifier accepted",
+      "blocker": "Current live authority is ineligible and no route adoption, legacy retirement, supported-host discovery, sandbox enforcement, or fresh-agent comprehension proof exists."
+    }
+  ],
+  "root_acceptance_limit": "Production-compiled source-local verifier protocol, fail-closed source capture, exact live blocker observation, and fixture-backed transaction semantics. The verifier is not a supported-host adapter.",
+  "explicitly_withheld": [
+    "supported-host agent authority adapter",
+    "route adoption",
+    "legacy global installed or cache retirement",
+    "live host discovery",
+    "sandbox enforcement",
+    "fresh-agent comprehension",
+    "agent node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any change to the accepted verifier source, fixtures, contract tests, task envelope, WorkerResult, module wiring, exact canonical agent set, or named source/package/install/cache dependencies immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim route adoption, legacy retirement, supported-host discovery, sandbox enforcement, fresh-agent comprehension, readiness, release, node closure, or goal completion."
+}

@@ -1,0 +1,87 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N03-CLI-STATE",
+  "root_decision": "accepted_current_source_and_cargo_binary_successor_read_path_controls",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/SUCCESSOR-CLI-READ-PATH-CLOSURE-047.json",
+    "sha256": "2811d3b9e880c9b5d79110e9d9c14c55a717b0d0c12291c6ea37d23495b5a7b0",
+    "artifact_count": 10,
+    "artifact_set_sha256": "d7e7db34d1f0c8a811a33bead90e738aa493ff420d0afd58be1eb5cb6d8b03e3",
+    "artifact_bytes": 78558,
+    "artifact_lines": 2024
+  },
+  "rework_history": [
+    "The cache replay fixture referenced command-observation authority without materializing the exact receipt.",
+    "Root widened the lease to two stale test-only command fixtures after the dependency suite exposed them.",
+    "The first line-cap refusal test opportunistically launched the current lib-test executable on a fresh target and observed exit 101 instead of the intended typed public refusal.",
+    "The accepted correction performs direct replay rejection and production parser calls under panic containment, proving exact CLI_UNKNOWN_SUBCOMMAND exit class 2 without discovering or launching a guessed executable."
+  ],
+  "independent_review": {
+    "reviewer": "/root/successor_cli_read_path_reviewer",
+    "verdict": "pass",
+    "review_mode": "independent_read_only_fresh_target_corrected_artifact_set",
+    "focused_nextest_run_id": "48b49c2f-fc62-4810-9c47-67221a80adde",
+    "focused_result": "25 passed; 0 failed",
+    "dependency_nextest_run_id": "0ac5d7b2-5aaf-447f-b151-e8db7a2e92e1",
+    "dependency_result": "94 passed; 0 failed",
+    "integration_nextest_run_id": "666a7a05-2251-4622-b44b-56c0d607c376",
+    "integration_result": "143 passed; 0 failed",
+    "production_check": "passed",
+    "blocking_review_findings": 0
+  },
+  "diagnostic_classification": {
+    "worker_run": "0b75cfe4-5d88-458f-b491-9d8591ac0b49",
+    "signal": "detects_concurrent_candidate_mutation reported as a passing leaky test",
+    "classification": "non_reproduced_harness_diagnostic_not_clean_lifecycle_proof",
+    "independent_integrated_result": "passed without leak",
+    "exact_reruns": [
+      "136414cf-9ec0-41cd-a868-a0327a2e8d38",
+      "c43c0846-44a6-4ff6-aca6-b4b7d057af96",
+      "bf7bcbbf-f66c-4399-9be8-8f5dd53b3002",
+      "cb2c80a8-95ab-47fe-bec7-6c63789a1260",
+      "405878c6-ed66-42c9-a01d-a7a520203630"
+    ]
+  },
+  "root_integration": {
+    "commit": "e64a5268ea3497df2587a718fd29b338e9e15250",
+    "integrated_tree": "2b233559ba8b32b2c5b385d63b72f77a2c4785f2",
+    "current_candidate_head": "9a38af6474c484dcf590fdb151ee1d303d43d63e",
+    "current_candidate_tree": "ae92feaa79d832c990ddba7c69a61d5a89134831",
+    "focused_nextest_run_id": "100c3ed2-9197-4372-b110-b0bb21233826",
+    "focused_result": "25 passed; 0 failed",
+    "dependency_nextest_run_id": "1e93b201-a58a-473f-bcaa-15337f3115ed",
+    "dependency_result": "94 passed; 0 failed",
+    "integration_nextest_run_id": "e50ec29a-e9f8-4963-af0e-9ad20792fe1d",
+    "integration_result": "143 passed; 0 failed",
+    "production_library_check": "passed under locked offline 16-job build"
+  },
+  "closed_findings": [
+    "Cache replay accepts only an exact materialized external command-observation receipt and rejects missing, inline, unsafe, mismatched, stale, post-binding-mutated, or semantically substituted authority.",
+    "The legacy line-cap summary cannot become successor command replay authority and the production parser rejects the retired route with stable typed exit class 2, no echo, no panic, and no cache hit.",
+    "Cargo-provided fresh binaries classify clean, dirty, conflicting-authority, failed-diagnosis, repair, next, repeat-read, stream, and exit-class fixtures.",
+    "Help, version, malformed parse, inspect, capabilities, inventory, state, claims, next, diagnose, and observe query preserve recursive type, bytes, permissions, and Git porcelain at the tested scope.",
+    "Machine stdout and stderr remain separated, versioned, bounded, non-echoing, and fail closed."
+  ],
+  "ceiling_correction": "The WorkerResult mentions link-count comparison, but its snapshots do not record link count. Accepted zero-write proof is limited to recursive entry type, bytes, permissions, and Git status equality.",
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-CLI-001",
+      "state": "current-source successor read-path and Cargo-built binary controls accepted",
+      "blocker": "Root public candidate refreeze, effectful successor command adapters, installed runtime identity, and the full representative product journey matrix remain incomplete."
+    }
+  ],
+  "root_acceptance_limit": "Current-source test controls and Cargo-built process evidence for successor read parsing, state projections, diagnosis, next, query, replay refusal, stable machine errors, and bounded recursive zero-write comparison.",
+  "explicitly_withheld": [
+    "public command catalog or dispatcher adoption from this increment",
+    "effectful successor command behavior",
+    "installed or supported-host runtime identity",
+    "full representative product journeys",
+    "CLI and state node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any change to the accepted cache fixtures, process journey fixtures, contract tests, task envelope, WorkerResult, public parser, successor runtime, state, diagnosis, inventory, observability, or fresh-binary build dependencies immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim public catalog or dispatcher adoption, effectful command behavior, installed runtime, full representative journeys, readiness, release, node closure, or goal completion."
+}
