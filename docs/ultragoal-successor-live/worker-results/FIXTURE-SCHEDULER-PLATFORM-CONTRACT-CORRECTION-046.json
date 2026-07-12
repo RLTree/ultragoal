@@ -1,0 +1,210 @@
+{
+  "worker": "/root/fixture_scheduler_platform_engineer",
+  "lease_id": "FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046",
+  "context_id": "sha256:be2c86ec67893967702f13232a818254969c5d08ba461c22167a39d0b1613b2d",
+  "candidate_identity": {
+    "candidate_id": "sha256:d0827d3a77ca3af028985a9ad0a9c822ca803eff180137afe2c22a5763a802e5",
+    "context_id": "sha256:be2c86ec67893967702f13232a818254969c5d08ba461c22167a39d0b1613b2d",
+    "branch": "codex/successor-contract-v2-live-product",
+    "root_issued_head_commit": "f98d93bc10dd6873c690e21fedab181f9ed1f676",
+    "root_issued_head_tree": "e06522e42e22c87a93711f78c9bd41cf7253c614",
+    "corrective_lease_commit": "b1441c2d97ff549c65f72ae5e5ce152dfa4bc9df",
+    "final_session_head_commit": "771f6bcc3a2602c30259d5f3133b42f6076ecbb6",
+    "final_session_head_tree": "23d4ef9db3073676971464cc3a4333b175972423",
+    "worker_owned_artifact_set_sha256": "sha256:74b13af6a1ddde61817db455a879e320b82bb962e980c58aa1a863c243ab1fcb",
+    "worker_owned_artifact_count": 4,
+    "worker_owned_artifact_total_bytes": 39688,
+    "worker_result_self_excluded": true
+  },
+  "base_state": {
+    "status": "five-stale-platform-expectations-and-one-historical-receipt-self-check",
+    "agent_task_envelope": "docs/ultragoal-successor-live/task-envelopes/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json",
+    "agent_task_envelope_sha256": "sha256:173a94dee3891f5534444d33a0249ae725b29a458a8fa93432f6a7a965bf8442",
+    "work_envelope": "docs/ultragoal-successor-live/work-packages/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json",
+    "work_envelope_sha256": "sha256:c52aae526befe4800da397017881dfa13510e0e5b44520f740405a74db7146c4",
+    "darwin_baseline": "42-of-47",
+    "darwin_baseline_run_id": "df827b0c-8906-45a7-9e5f-15664c7f9ead",
+    "corrected-five_pre_receipt_run": "46-of-47",
+    "corrected-five_pre_receipt_run_id": "5f2cd328-7db7-45ba-9966-5d19a5721379",
+    "independent_rework": "synthetic-current-subject-reconstruction-omitted-root-issued-prerequisite-evidence-and-six-acceptance-rows"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "root_acceptance": "withheld",
+    "darwin_fixture_scheduler_contract": "pass-47-of-47",
+    "worker_final_run_id": "96479d51-506d-45d6-96e9-b2f237f4df83",
+    "root_transient_classification_exact_rerun": "pass-1-of-1:05a8115c-2c25-4525-b507-e2c04d74ec3f",
+    "root_transient_classification_full_rerun": "pass-47-of-47:8b41913c-9fb5-4b90-9109-d7b1734e4b86",
+    "product_ceiling": "Darwin test-contract correction only; FreeBSD identity-conditioned deletion remains unexecuted and no product, journey, readiness, release, node-closure, or completion claim is raised.",
+    "lease_no_claim_statement": "This worker does not claim readiness, release, node closure, or goal completion.",
+    "worker_owned_artifact_set_sha256": "sha256:74b13af6a1ddde61817db455a879e320b82bb962e980c58aa1a863c243ab1fcb"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/task-envelopes/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json",
+    "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+    "validator/tests/fixture_scheduler_contract/isolation.rs",
+    "validator/tests/fixture_scheduler_contract/worker_result.rs"
+  ],
+  "touched_semantics": [
+    "fixture-scheduler-platform-conditioned-cleanup-expectations",
+    "fixture-scheduler-exact-retained-lease-paths",
+    "fixture-scheduler-observed-outcome-preservation",
+    "fixture-scheduler-historical-worker-result-staleness"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+    "validator/tests/fixture_scheduler_contract/isolation.rs",
+    "validator/tests/fixture_scheduler_contract/worker_result.rs"
+  ],
+  "effects": [
+    {
+      "class": "fixture_write",
+      "target": "fixture-scheduler-contract-expectations",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-isolated-fixture-scheduler-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "fixture-platform-current-cleanup-result",
+    "fixture-retained-recovery-required-state",
+    "fixture-exact-digest-bearing-paths",
+    "fixture-observed-execution-preservation",
+    "fixture-historical-receipt-staleness",
+    "fixture-current-receipt-verification"
+  ],
+  "dependency_nodes": [
+    "current-fixture-recovery-state-correction"
+  ],
+  "changes": [
+    {
+      "area": "platform-conditioned-expectations",
+      "result": "Five stale tests now distinguish FreeBSD successful identity-conditioned cleanup from Darwin and other unsupported-platform CleanupFailure retention."
+    },
+    {
+      "area": "exact-lease-identity",
+      "result": "Assertions bind digest-bearing lease roots, every resource namespace and environment key, retained marker bytes, active counts, and repeated recovery behavior."
+    },
+    {
+      "area": "observed-execution",
+      "result": "A recording executor proves the adapter returned the exact pass or causal-failure observation before cleanup failed and retained the lease."
+    },
+    {
+      "area": "historical-receipt-staleness",
+      "result": "The preserved 009 result remains parseable and structurally lease-bound but is required to fail current artifact verification; the current 046 result is verified separately."
+    },
+    {
+      "area": "exact-root-issued-subject-binding",
+      "result": "The current receipt harness now deserializes the exact lease and work_package objects from the digest-bound root work envelope, validates their complete scopes and prerequisite evidence, and rejects cloned subjects with dependency, tool, prerequisite, or acceptance rows omitted."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-platform-contract-046 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test fixture_scheduler_contract --no-fail-fast",
+      "status": "expected-red-42-of-47-baseline",
+      "run_id": "df827b0c-8906-45a7-9e5f-15664c7f9ead"
+    },
+    {
+      "command": "same dependency-closed command after the five platform expectation corrections but before historical receipt staleness correction",
+      "status": "expected-intermediate-46-of-47",
+      "run_id": "5f2cd328-7db7-45ba-9966-5d19a5721379"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 AgentTaskEnvelope-v1 schema and semantic validation",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-platform-contract-046 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline --test fixture_scheduler_contract --jobs 16",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-platform-contract-046 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test fixture_scheduler_contract --no-fail-fast",
+      "status": "pass-47-of-47",
+      "run_id": "ce15876d-8df4-4edf-a806-da55dd345657",
+      "result": "All five corrected platform cases, the preserved historical receipt staleness control, the current 046 receipt verification, and every existing race, mutation, confinement, security, process-group, and false-pass control passed in 0.613 seconds."
+    },
+    {
+      "command": "Independent review of frozen 046 current-subject verification",
+      "status": "rework",
+      "result": "The synthetic current_subject reconstruction omitted all root-issued prerequisite-evidence rows and six of nine acceptance rows, so prior proof did not use the exact authorized subject."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-fixture-platform-contract-046-rework CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test fixture_scheduler_contract --no-fail-fast",
+      "status": "pass-47-of-47",
+      "run_id": "96479d51-506d-45d6-96e9-b2f237f4df83",
+      "result": "The exact root-issued subject, every omission red control, all five platform corrections, historical staleness, current receipt verification, and all dependency-closed confinement and security controls passed in 0.622 seconds."
+    },
+    {
+      "command": "First full isolated corrective suite after exact-subject binding",
+      "status": "transient-environmental-failure-46-of-47",
+      "run_id": "1b8a7dc2-0170-49c3-80fc-02551a3d7894",
+      "result": "Only confinement::sandbox_allows_only_lease_writes_and_denies_loopback failed when the inside-lease probe returned non-success; all 046 receipt and platform controls passed."
+    },
+    {
+      "command": "Root exact rerun of confinement::sandbox_allows_only_lease_writes_and_denies_loopback",
+      "status": "pass-1-of-1",
+      "run_id": "05a8115c-2c25-4525-b507-e2c04d74ec3f",
+      "result": "The same candidate passed without an edit, classifying the prior miss as transient."
+    },
+    {
+      "command": "Root full isolated fixture scheduler contract rerun after transient classification",
+      "status": "pass-47-of-47",
+      "run_id": "8b41913c-9fb5-4b90-9109-d7b1734e4b86",
+      "result": "The unchanged candidate passed the complete dependency-closed suite."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/ultragoal-successor-live/task-envelopes/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json",
+      "sha256": "sha256:173a94dee3891f5534444d33a0249ae725b29a458a8fa93432f6a7a965bf8442",
+      "byte_length": 12390
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+      "sha256": "sha256:347ef425384e7288806f389ed4026d1b761bbb7043b8dd1ebacd8b1b3fb9166a",
+      "byte_length": 6007
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/isolation.rs",
+      "sha256": "sha256:3ac8e01986e5759351b0082a3aa27882375a6e58a6ad91caac29cea5a122f39e",
+      "byte_length": 8323
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/worker_result.rs",
+      "sha256": "sha256:7f3f5e45b1c5f8872822e01e7496387b7f3dcb83097c0887060233c39b8569f0",
+      "byte_length": 12968
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material-corrected",
+      "finding": "Five tests encoded successful cleanup outcomes on Darwin even though the production deletion boundary intentionally returns Unsupported and retains RecoveryRequired."
+    },
+    {
+      "severity": "false-pass-corrected",
+      "finding": "The isolation test probed root/alpha rather than the actual alpha-digest lease root."
+    },
+    {
+      "severity": "evidence-staleness-corrected",
+      "finding": "The historical 009 self-check incorrectly expected artifact verification to remain current after its execution-adapter artifact changed."
+    },
+    {
+      "severity": "material-corrected",
+      "finding": "The prior current receipt test reconstructed a reduced lease and package instead of deserializing the exact root-issued work envelope; reduced prerequisite-evidence and acceptance subjects now fail exact-subject binding with StaleBinding."
+    }
+  ],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [],
+  "limitations": [
+    "The FreeBSD funlinkat branch is represented by cfg-specific assertions but was not compiled or executed on this Darwin host.",
+    "Darwin and Linux intentionally cannot claim successful identity-conditioned deletion under the retained attacker model.",
+    "The schema literal no-claim statement is shorter than the lease ceiling; final_state retains the exact lease no-claim statement.",
+    "This worker does not claim readiness, release, node closure, or goal completion.",
+    "Current receipt verification binds the complete root-issued subject by exact deserialization and equality before WorkerResult and ArtifactWorkspace validation; reduced subject clones are explicitly rejected."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

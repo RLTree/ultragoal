@@ -1,0 +1,297 @@
+{
+  "schema_version": "AgentTaskEnvelope-v1",
+  "task_id": "fixture-scheduler-platform-contract-correction-046",
+  "role_binding": {
+    "role_id": "implementation-worker",
+    "source_kind": "runtime_agent_type_receipt",
+    "source_ref": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+    "source_sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+    "sandbox_mode": "workspace-write",
+    "may_exercise_root_authority": false
+  },
+  "goal": "Correct all five stale platform-specific fixture scheduler expectations, preserve historical receipt staleness, and verify the current correction against the exact deserialized root-issued lease and work package.",
+  "success": [
+    "The exact five Darwin failures assert CleanupFailure, RecoveryRequired retention, exact digest-bearing paths and namespaces, repeated recovery, and observed execution.",
+    "The historical detached-descendant result remains parseable and structurally lease-bound but fails current artifact verification as stale.",
+    "The current correction result validates and verifies against the exact deserialized widened root-issued lease and work package without changing production source.",
+    "Subjects with omitted prerequisite-evidence or acceptance rows differ from and cannot substitute for the exact bound root-issued subject."
+  ],
+  "candidate_identity": {
+    "repository": {
+      "root_uri": "repo://harness-ultragoal-plugin-proposal",
+      "canonical_root_sha256": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170"
+    },
+    "context_id": "sha256:74c101887280cb061b1ef25ff596ceaf3fa1e686dd3505b8f6d447bf60064a12",
+    "candidate_id": "sha256:c945656f4f264680a0957647172305c7a55cefc6e113b37026d8a11a08cfef40",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "b1441c2d97ff549c65f72ae5e5ce152dfa4bc9df",
+    "head_tree": "337f9585d359eab40fb90ba8bec9383d161c6557",
+    "dirty": true,
+    "captured_at": "2026-07-12T15:56:27Z",
+    "freeze": {
+      "kind": "artifact_set",
+      "artifact_set_sha256": "sha256:ca95b84a67c6037b17da8057ffcf2e71f00b1bb792626a94f8e6d2c46c3bb5af",
+      "artifact_count": 6,
+      "bytes": 66374,
+      "lines": 1952,
+      "artifacts": [
+        {
+          "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+          "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+          "bytes": 20505,
+          "lines": 776
+        },
+        {
+          "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+          "sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604",
+          "bytes": 23425,
+          "lines": 747
+        },
+        {
+          "path": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+          "sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+          "bytes": 2176,
+          "lines": 53
+        },
+        {
+          "path": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+          "sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+          "bytes": 555,
+          "lines": 11
+        },
+        {
+          "path": "docs/ultragoal-successor-live/work-packages/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json",
+          "sha256": "sha256:c52aae526befe4800da397017881dfa13510e0e5b44520f740405a74db7146c4",
+          "bytes": 7720,
+          "lines": 163
+        },
+        {
+          "path": "docs/ultragoal-successor-live/worker-results/FIXTURE-RECOVERY-STATE-CORRECTION-019.json",
+          "sha256": "sha256:682ab9a880d691a93fd0771a572614542e71ba03ad9327001fe238cd655051ec",
+          "bytes": 11993,
+          "lines": 202
+        }
+      ]
+    }
+  },
+  "scope": {
+    "artifact_paths": [
+      {
+        "path": "docs/ultragoal-successor-live/work-packages/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json",
+        "access": "read"
+      },
+      {
+        "path": "docs/ultragoal-successor-live/worker-results/FIXTURE-RECOVERY-STATE-CORRECTION-019.json",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/fixture_scheduler",
+        "access": "read"
+      },
+      {
+        "path": "validator/src/cli/capture/fixture",
+        "access": "read"
+      },
+      {
+        "path": "docs/ultragoal-successor-live/task-envelopes/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json",
+        "access": "write"
+      },
+      {
+        "path": "docs/ultragoal-successor-live/worker-results/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json",
+        "access": "write"
+      }
+    ],
+    "semantic_symbols": [
+      "fixture-scheduler-platform-conditioned-cleanup-expectations",
+      "fixture-scheduler-exact-retained-lease-paths",
+      "fixture-scheduler-observed-outcome-preservation",
+      "fixture-scheduler-historical-worker-result-staleness"
+    ],
+    "generated_outputs": [],
+    "fixtures": [
+      {
+        "path": "validator/tests/fixture_scheduler_contract/execution_adapter.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/tests/fixture_scheduler_contract/isolation.rs",
+        "access": "write"
+      },
+      {
+        "path": "validator/tests/fixture_scheduler_contract/worker_result.rs",
+        "access": "write"
+      }
+    ],
+    "external_effects": [],
+    "scratch_uris": [
+      "scratch://fixture-scheduler-platform-046/cargo-target"
+    ],
+    "forbidden_paths": [
+      ".git/config",
+      "Cargo.lock",
+      "validator/src/fixture_scheduler/lease.rs",
+      "validator/src/fixture_scheduler/scheduler.rs",
+      "validator/src/lib.rs",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md"
+    ],
+    "path_resolution": {
+      "policy": "candidate-relative-no-follow-v1",
+      "session_id": "sha256:b499afe8d3861fb4982b34c52df062a1934ee86dbb699d6977fb512d0ecd98bf",
+      "resolved_scope_sha256": "sha256:bd0662c6e629c99d31bb22b8e802fc3552e48f0f66b697ab7023528d297f4232",
+      "symlinks": "reject",
+      "special_files": "reject",
+      "post_freeze_revalidation": "required"
+    }
+  },
+  "authority_binding": {
+    "session_id": "sha256:571efbd5c1b048b8db53fbad3cf05c86fb4d027e1ae27f0979b93fa1566e8d36",
+    "captured_at": "2026-07-12T15:56:27Z",
+    "sources": [
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+      }
+    ],
+    "ids": {
+      "nodes": [
+        "N06-ROUTINE"
+      ],
+      "requirements": [],
+      "surfaces": [],
+      "tools": [],
+      "claims": [],
+      "migration_routes": [],
+      "decisions": []
+    },
+    "resolved_rows": [
+      {
+        "stable_id": "N06-ROUTINE",
+        "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "row_sha256": "sha256:103d2082b477d88cf6a2e36c46e6843fb1b9557256413e8391e2f42853d37fdd"
+      }
+    ],
+    "resolution": {
+      "resolved_set_sha256": "sha256:28d1b12a61736a2ae5205bf7f3f89b5a98c16bfd8ec2776527f38248b2feae40",
+      "unknown_count": 0,
+      "duplicate_count": 0,
+      "ambiguous_count": 0,
+      "conflict_count": 0,
+      "final_session_revalidation": "required"
+    }
+  },
+  "evidence": {
+    "primary_references": [
+      {
+        "path": "docs/ultragoal-successor-live/work-packages/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json",
+        "sha256": "sha256:c52aae526befe4800da397017881dfa13510e0e5b44520f740405a74db7146c4",
+        "kind": "authority",
+        "candidate_bound": true
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+        "kind": "authority",
+        "candidate_bound": true
+      },
+      {
+        "path": "docs/ultragoal-successor-live/worker-results/FIXTURE-RECOVERY-STATE-CORRECTION-019.json",
+        "sha256": "sha256:682ab9a880d691a93fd0771a572614542e71ba03ad9327001fe238cd655051ec",
+        "kind": "receipt",
+        "candidate_bound": true
+      }
+    ],
+    "unsupported_truth_surfaces": [
+      "runtime",
+      "journey",
+      "readiness",
+      "release",
+      "completion"
+    ],
+    "implementation_conclusions_are_authority": false
+  },
+  "effects": {
+    "candidate_source": "bounded_workspace_write",
+    "git_metadata": "read_only_no_mutation",
+    "shared_root_authority": "forbidden",
+    "network": "forbidden",
+    "external_systems": "forbidden",
+    "destructive_actions": "forbidden",
+    "secrets": "forbidden",
+    "scratch": "bounded_read_write"
+  },
+  "output_contract": {
+    "schema_id": "WorkerResult-v1",
+    "schema_ref": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+    "schema_sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+    "result_target": "docs/ultragoal-successor-live/worker-results/FIXTURE-SCHEDULER-PLATFORM-CONTRACT-CORRECTION-046.json",
+    "required_sections": [
+      "candidate-identity",
+      "touched-paths",
+      "commands-and-tests",
+      "artifacts",
+      "findings",
+      "requested-root-changes",
+      "limitations",
+      "no-claim-statement"
+    ]
+  },
+  "verification": {
+    "positive": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-FIXTURE-PLATFORM-POSITIVE",
+          "evidence_kind": "test",
+          "expected": "All five corrected cases pass on Darwin with exact retained state and current receipt verification against the deserialized root-issued subject.",
+          "procedure": "Run the full fixture scheduler contract with 16 build jobs and 16 test threads."
+        }
+      ]
+    },
+    "negative": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-FIXTURE-PLATFORM-NEGATIVE",
+          "evidence_kind": "test",
+          "expected": "Unsupported cleanup never becomes Accepted, CausalFailure, or deleted state on Darwin.",
+          "procedure": "Exercise caller finish, adapter execution, collision recovery, and repeated recovery."
+        }
+      ]
+    },
+    "race_or_mutation": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-FIXTURE-PLATFORM-RACE-OR-MUTATION",
+          "evidence_kind": "test",
+          "expected": "Historical artifact substitution remains stale, reduced current subjects cannot replace the exact root-issued subject, and existing race controls remain green.",
+          "procedure": "Verify the preserved 009 result against current bytes, clone the exact 046 subject with prerequisite-evidence or acceptance rows omitted, require StaleBinding, and run all mutation controls."
+        }
+      ]
+    },
+    "security": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-FIXTURE-PLATFORM-SECURITY",
+          "evidence_kind": "test",
+          "expected": "No production authority, special-file, symlink, hardlink, sandbox, network, or process-group control is weakened.",
+          "procedure": "Run the dependency-closed scheduler suite without production edits."
+        }
+      ]
+    },
+    "false_pass": {
+      "status": "required",
+      "controls": [
+        {
+          "control_id": "CTRL-FIXTURE-PLATFORM-FALSE-PASS",
+          "evidence_kind": "test",
+          "expected": "Raw fixture IDs, historical receipts, and synthetic or reduced lease subjects cannot substitute for exact current digest-bearing evidence.",
+          "procedure": "Probe exact lease paths, deserialize the root work envelope, bind its digest, and require current WorkerResult artifact verification with the complete subject."
+        }
+      ]
+    }
+  },
+  "stop_rule": "Stop after any production-source need, owned preimage drift, new dependency failure, weakened control, root-authority need, or inability to verify the exact current result.",
+  "no_claim_statement": "This agent does not claim readiness, release, node closure, or goal completion."
+}
