@@ -1,0 +1,45 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "INVENTORY-LIVE-READER-AND-TOPOLOGY-RECONCILIATION-INTEGRATION-054",
+  "workstream": "canonical-inventory-and-generated-authority",
+  "decision": "ACCEPT",
+  "accepted_candidate": {
+    "implementation_commit": "3fe06575f6a4488913224d07070fb84509ef327e",
+    "implementation_tree": "6fcf7292c84d137155b12d9f1ad244db45753457",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/INVENTORY-LIVE-READER-AND-TOPOLOGY-RECONCILIATION-054.json",
+    "worker_result_sha256": "sha256:984238e8c7c078df3396bf02ea91f7cdcea9d64837ca81f08add58e1348e3212",
+    "artifact_set_sha256": "sha256:1a3f2a268fc4710405f8a9f1260a1a299992afb82c4cc085887651d9b7af5b28",
+    "artifact_count": 4,
+    "artifact_bytes": 36671,
+    "artifact_lines": 1081
+  },
+  "independent_root_review": {
+    "artifact_recomputation": "all four digests byte counts line counts and the standard path-bound aggregate matched live bytes",
+    "worker_result_schema": "WORKER-RESULT-v1 Draft 2020-12 validation passed",
+    "dependency_run_id": "f6536eec-c963-43f3-8ab3-36cd3af86389",
+    "dependency_result": "15 passed; 0 failed; 1687 skipped",
+    "build_jobs": 16,
+    "test_threads": 16,
+    "reviewed_controls": [
+      "host model and source production readers are exact compile-time byte bindings",
+      "all three readers remain positive rather than negative-only authority readers",
+      "omission and byte mutation keep legacy authority active with blocking findings",
+      "generic package consumers constructed paths and allowlist drift remain rejected",
+      "EvaluationSpec Active status is supported by the compiled API witness public export and production type"
+    ]
+  },
+  "accepted_scope": [
+    "bind the current host model and source custom-agent discovery readers into the exact positive-reader guard",
+    "reject omission or mutation of any bound current custom-agent discovery reader",
+    "repair the stale EvaluationSpec current-topology test expectation without creating new activation authority"
+  ],
+  "open_reconciliation": [
+    "all fourteen live legacy-agent authorities remain open",
+    "host install cache marketplace app-registry Plugins UI discovery and runtime proof remain open",
+    "migration retirement and compatibility-route obligations remain open",
+    "rebuild current HCT-INVENTORY after later authority integration",
+    "run final two byte-identical HCT-INVENTORY summaries only after the last authority-bearing edit"
+  ],
+  "claim_ceiling": "Accepted exact reader-binding and stale topology-test reconciliation only. Inventory closure and every product or runtime ceiling remain open.",
+  "no_claim_statement": "This acceptance does not claim agent migration, retirement, installation, discovery, runtime eligibility, inventory closure, readiness, release, node closure, or goal completion."
+}
