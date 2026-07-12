@@ -1,0 +1,462 @@
+{
+  "worker": "/root/distribution_lifecycle_adapter_engineer",
+  "lease_id": "SUPPORTED-HOST-PLUGIN-LIFECYCLE-COORDINATOR-044",
+  "context_id": "sha256:ee1a2aa60db952d48a846e7241773162c33aa303853bbb80006aafa2bf9e646f",
+  "candidate_identity": {
+    "candidate_id": "sha256:9504905134ef556288958ce90387014851c0832327952af2aae8f0a50904426e",
+    "task_envelope_candidate_id": "sha256:9d38844e816cb46a503f5e56024192045be813464ba7364b22860deafbfef4d6",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "a77becd62cc7a699aa469558462bbaa0967b3003",
+    "head_tree": "ee152cd8b900a0e2712fb4986d585218a3697022",
+    "worker_owned_artifact_set_sha256": "sha256:9504905134ef556288958ce90387014851c0832327952af2aae8f0a50904426e",
+    "worker_owned_artifact_count": 18,
+    "worker_owned_artifact_total_bytes": 218896,
+    "worker_owned_artifact_total_lines": 6414,
+    "worker_result_self_excluded": true
+  },
+  "base_state": {
+    "status": "accepted-package-lifecycle-and-confined-distribution-authority-without-supported-host-coordinator",
+    "agent_task_envelope": "docs/ultragoal-successor-live/task-envelopes/SUPPORTED-HOST-PLUGIN-LIFECYCLE-COORDINATOR-044.json",
+    "agent_task_envelope_sha256": "sha256:9c592539c6f1d3997ae8d7ac9cf48bf9d5a70c5c75a307605d1317e09194f6d5",
+    "agent_task_envelope_head": "a77becd62cc7a699aa469558462bbaa0967b3003",
+    "work_envelope": "docs/ultragoal-successor-live/work-packages/SUPPORTED-HOST-PLUGIN-LIFECYCLE-COORDINATOR-044.json",
+    "work_envelope_sha256": "sha256:46afb0d03a64faa31b1df99dc6e2fffa438365437db562fa648a667d04ff2d8e",
+    "work_envelope_original_head": "049c48143aeab5f887c7c93c617252ccb01328b7",
+    "accepted_distribution_adapter_sha256": "sha256:dc2ff3ce1c3829c212adaf3e832b67f0f60de03392860467bd410f00b9581132",
+    "accepted_plugin_lifecycle_sha256": "sha256:8c8ae1d9ce6c5cb6769408e8dff2bf3db463e2788439c8b6f21caf1b70e10955",
+    "initial_candidate_id": "sha256:6fcc1c24817fbd8c7444972e14850d4fd5d39229fa3232dc8836191edbada600",
+    "initial_worker_result_sha256": "sha256:80bb7bdc7cf659ad906094975c8b50854203418b50b053e34a724454b0c950ff",
+    "first_rework_finding": "ExternalHostEffectRequest was deterministically bound only to lifecycle intent, journey binding, and host plan, so same-plan sibling sessions exposed identical cloneable requests without one-use session eligibility.",
+    "first_corrected_candidate_id": "sha256:884c657bef144df4f03d6f11890d84594e7bd35a7cc3d909e52d823c41ad6d44",
+    "first_corrected_worker_result_sha256": "sha256:c44750ccffbc2940b5f72ff0698f299707ceefec22478f5ff9e631a46e1eda96",
+    "second_rework_finding": "The corrected session issuance still advanced unsupported HostCapabilityDeclaration values to EffectEligible, allowing unavailable Codex hosts to release a runnable HostCommandPlan.",
+    "second_corrected_candidate_id": "sha256:4c784b2e130107166128fdf1bba6f5fd647aff30cf62f2544edc96587cc023cd",
+    "second_corrected_worker_result_sha256": "sha256:67ebf2bcb6e3dededf58314fa73bcd56caa6a984074b488ef5c31d108eba27dc",
+    "third_rework_finding": "The independently accepted MarketplaceScope and HostEffectScope inputs could contradict one another, so marketplace observation authority and effect command authority were not derived from one candidate-bound host-scope authority.",
+    "third_corrected_candidate_id": "sha256:c3b56f1e6960a25a00a770b5e0d78f82e7dfedf3624cc51be62aaf76779ac100",
+    "third_corrected_worker_result_sha256": "sha256:dd13a9906571f8024b8b005f13c6dff9fc7dc644c727a38649cefc7eb3dc35db",
+    "fourth_rework_finding": "Raw HostObservationExpectations and capture_host_observations were publicly re-exported, and HostObservationFrame carried only a journey-binding digest, so independent marketplace, cache, host, and scope evidence could be constructed or substituted across personal, repository, and sibling sessions.",
+    "fourth_corrected_candidate_id": "sha256:dfda86fff99ba3b1fa48b6dc9e773bb478d7e4f42521243d30fe1222953f5e1f",
+    "fourth_corrected_worker_result_sha256": "sha256:e7bec71fefa57614e74b2804ff7583d589c997e490e3772e29fca6a5577167b3",
+    "fifth_rework_finding": "The public capture-then-verify split accepted a sealed frame without re-reading host surfaces, so marketplace, installed state, cache, app registry, Plugins UI, discovery, or runtime could drift after capture while stale Verified layers were still closed.",
+    "fifth_corrected_candidate_id": "sha256:fe15e121d775974fbad5f940bc0f39f8f4c71caed0c33355ad4ea828929a9915",
+    "fifth_corrected_worker_result_sha256": "sha256:a0a4eff3d5339715efc588f7d71dbd096480f6e6a0dbc843a4be63b978a5dcf9",
+    "sixth_rework_finding": "After the final HostSurfaceReader sample returned, host state could still mutate before report construction and issuance close. The correction requires a reader-owned transaction and generation lease to remain live through all reads, report construction, exact final currentness validation, and session close.",
+    "sixth_corrected_candidate_id": "sha256:01d14bc00b7f15d9e8758280bb0639b07c788d4a7e31001ebaa60407f4582ff9",
+    "sixth_corrected_worker_result_sha256": "sha256:c6ac19f68a8290376e8e08412f22e938c991a3202437b73b289e65abe8d44839",
+    "seventh_rework_finding": "capture_and_verify issued a private transaction request and invoked HostSurfaceReader before checking local capability, scope, session stage, lifecycle, and confined-state eligibility, so invalid sessions leaked private digests to an adapter and returned the adapter error instead of the causal local error."
+  },
+  "final_state": {
+    "status": "seventh_corrected_candidate_for_exact_independent_re_review",
+    "coordinator_scope": "source-local-and-descriptor-confined",
+    "host_truth_layers": 8,
+    "lifecycle_intents_exercised": 8,
+    "live_host_mutations": 0,
+    "external_host_effect_authorizations": 0,
+    "session_issuance_binding": "exact-private-seal-and-full-lifecycle-issuance",
+    "external_effect_eligibility": "one-use-state-machine",
+    "host_scope_authority": "single-candidate-bound-source-for-marketplace-effect-repository-cache-and-capability-scope",
+    "host_effect_capability_gate": "intent-and-unified-scope-specific-with-final-revalidation",
+    "observation_capture_authority": "single-public-session-capture-and-verify-under-reader-owned-transaction",
+    "observation_frame_binding": "exact-private-host-scope-and-session-issuance-arcs-plus-committed-digests",
+    "final_surface_reobservation": "byte-exact-reader-provenance-bound-complete-reread-plus-confined-state-recheck-under-one-generation-stable-transaction-through-close",
+    "observation_transaction_lease": "private-non-clone-non-deserialize-scope-session-provenance-and-start-generation-bound",
+    "observation_local_preflight": "capability-scope-session-lifecycle-and-confined-state-validated-before-request-issuance-or-adapter-contact",
+    "public_two_step_observation_api": false,
+    "unsupported_host_plan_handoffs": 0,
+    "request_clone_authority": false,
+    "observation_frame_clone_authority": false,
+    "observation_frame_deserialize_authority": false,
+    "request_command_exposure_before_consumption": false,
+    "claim_effect": "none",
+    "root_module_wired": false,
+    "artifact_set_frozen": true
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/SUPPORTED-HOST-PLUGIN-LIFECYCLE-COORDINATOR-044.json",
+    "fixtures/plugin-host-lifecycle/scenarios.json",
+    "validator/src/plugin_product/host_lifecycle/capability_gate.rs",
+    "validator/src/plugin_product/host_lifecycle/effect_request.rs",
+    "validator/src/plugin_product/host_lifecycle/error.rs",
+    "validator/src/plugin_product/host_lifecycle/issuance.rs",
+    "validator/src/plugin_product/host_lifecycle/mod.rs",
+    "validator/src/plugin_product/host_lifecycle/model.rs",
+    "validator/src/plugin_product/host_lifecycle/observation.rs",
+    "validator/src/plugin_product/host_lifecycle/scope.rs",
+    "validator/src/plugin_product/host_lifecycle/session.rs",
+    "validator/src/plugin_product/host_lifecycle/verify.rs",
+    "validator/tests/plugin_host_lifecycle_contract.rs",
+    "validator/tests/plugin_host_lifecycle_contract/capability.rs",
+    "validator/tests/plugin_host_lifecycle_contract/false_pass.rs",
+    "validator/tests/plugin_host_lifecycle_contract/journeys.rs",
+    "validator/tests/plugin_host_lifecycle_contract/negative.rs",
+    "validator/tests/plugin_host_lifecycle_contract/security.rs",
+    "validator/tests/plugin_host_lifecycle_contract/support.rs"
+  ],
+  "touched_semantics": [
+    "external-host-effect-request",
+    "external-host-effect-one-use-eligibility",
+    "host-effect-capability-gate",
+    "host-effect-scope-binding",
+    "unified-host-scope-authority",
+    "host-identity-chain-verification",
+    "host-lifecycle-report",
+    "host-lifecycle-session",
+    "host-lifecycle-session-issuance",
+    "host-observation-frame",
+    "host-observation-session-scope-seal",
+    "host-observation-transaction",
+    "host-observation-transaction-generation-lease",
+    "host-observation-local-preflight",
+    "host-surface-final-reobservation",
+    "host-surface-reader-provenance",
+    "raw-observation-capture-retirement",
+    "host-surface-reader",
+    "plugins-ui-observation"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/plugin-host-lifecycle/scenarios.json",
+    "validator/tests/plugin_host_lifecycle_contract.rs",
+    "validator/tests/plugin_host_lifecycle_contract"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "plugin-host-lifecycle-coordinator-source",
+      "performed": true,
+      "scope": "leased-paths-only"
+    },
+    {
+      "class": "fixture_write",
+      "target": "plugin-host-lifecycle-contract-tests",
+      "performed": true,
+      "scope": "leased-fixtures-only"
+    },
+    {
+      "class": "process",
+      "target": "offline-confined-host-lifecycle-validation",
+      "performed": true,
+      "network": false,
+      "external_systems": false,
+      "live_host_mutation": false
+    }
+  ],
+  "requirements": [
+    "CTRL-HOST-LIFECYCLE-POSITIVE",
+    "CTRL-HOST-LIFECYCLE-NEGATIVE",
+    "CTRL-HOST-LIFECYCLE-RACE-OR-MUTATION",
+    "CTRL-HOST-LIFECYCLE-SECURITY",
+    "CTRL-HOST-LIFECYCLE-FALSE-PASS",
+    "coordinator-reuses-accepted-package-lifecycle-and-distribution-authority-without-parallel-implementation",
+    "every-host-truth-layer-remains-separate-candidate-and-version-bound",
+    "conflict-and-unsupported-capability-states-fail-closed-before-external-effects",
+    "effectful-intents-require-exact-supported-install-and-marketplace-capabilities",
+    "repository-effect-scope-additionally-requires-filesystem-and-exact-project-identity",
+    "marketplace-observation-cache-effect-command-and-capability-scope-derive-from-one-host-scope-authority",
+    "marketplace-name-and-repository-root-mismatch-reject-before-operation-bind-or-request-issuance",
+    "host-observation-capture-is-only-available-through-the-exact-session",
+    "observation-frames-bind-private-scope-and-session-issuance-identity-through-final-verification",
+    "raw-frame-construction-clone-deserialize-and-cross-session-substitution-fail-closed",
+    "one-public-capture-and-verify-transaction-eliminates-stale-frame-acceptance",
+    "every-host-surface-and-confined-installed-state-is-reread-and-byte-compared-before-close",
+    "reader-owned-transaction-remains-held-through-report-construction-final-generation-check-and-session-close",
+    "invalid-local-observation-eligibility-produces-zero-request-adapter-provenance-generation-and-read-invocations",
+    "reader-provenance-is-binding-derived-stable-and-revalidated-through-final-compare",
+    "capability-and-scope-drift-rejects-and-closes-session-before-plan-release",
+    "read-plan-observe-and-verify-paths-are-recursively-zero-write",
+    "update-failure-rollback-uninstall-stale-cache-and-repeat-use-preserve-exact-prior-state",
+    "positive-negative-race-mutation-security-and-false-pass-controls-pass",
+    "worker-result-binds-every-owned-artifact",
+    "independent-review-and-root-reconciliation"
+  ],
+  "dependency_nodes": [
+    "N04-DISTRIBUTION",
+    "accepted-confined-distribution-adapter",
+    "accepted-source-local-plugin-lifecycle"
+  ],
+  "changes": [
+    {
+      "area": "host-lifecycle-coordination",
+      "result": "HostLifecycleSession binds one exact PackagePlan, PackageSnapshot, sealed LifecyclePlan issuance, HostCapabilityDeclaration, MarketplacePlan, unified HostScopeAuthority, JourneyBinding, and confined DistributionLifecycleOperation before any local effect. Marketplace observation scope, cache expectation, effect command scope, required capabilities, and repository identity derive from that one authority."
+    },
+    {
+      "area": "separate-truth-layers",
+      "result": "Package, marketplace, installed artifact, cache, app registry, Plugins UI, discovery, and runtime remain eight separately classified layers; unsupported, absent, conflicting, hidden, stale, duplicate, or unavailable states cannot be promoted by lower-layer evidence."
+    },
+    {
+      "area": "external-effect-boundary",
+      "result": "Install, update, rollback, recovery, refresh, and teardown produce non-Clone ExternalHostEffectRequest values bound to one private session issuance, the full sealed LifecyclePlan issuance, and one accepted HostCommandPlan. A request is unavailable before successful local apply, can be taken once, can be consumed only by its exact session, and releases its plan once before observations become eligible."
+    },
+    {
+      "area": "reviewed-session-authority-correction",
+      "result": "The prior deterministic request clone path was removed. A private Arc identity plus monotonic issuance digest and atomic Bound-to-Closed state machine now reject cloned-plan siblings, independently issued siblings, wrong-session requests, stale state, repeated take, repeated consume, and observations before effect-plan handoff without local or host writes."
+    },
+    {
+      "area": "reviewed-host-capability-correction",
+      "result": "Every effectful personal intent now requires exact Supported Install and Marketplace states; repository effects additionally require Supported Filesystem plus a current repository-root identity equal to the declared project identity. The same private gate is revalidated before confined apply, request take, exact-session consume, HostCommandPlan release, observation capture, and verification. Any failure atomically rejects the session and cannot be revived."
+    },
+    {
+      "area": "reviewed-unified-host-scope-correction",
+      "result": "The independent MarketplaceScope and HostEffectScope pair was removed from HostLifecycleSession::bind. BoundHostScope derives both views, required capabilities, repository identity, cache expectation, and request and gate digests from one HostScopeAuthority. Marketplace-name substitution and repository-root substitution reject before distribution operation bind, issuance, or request creation; later scope mutation and cross-session scope requests reject without reviving the session."
+    },
+    {
+      "area": "reviewed-observation-authority-correction",
+      "result": "Raw HostObservationExpectations and capture_host_observations are no longer public exports. HostLifecycleSession is the sole public capture path. Each non-Clone, non-Deserialize HostObservationFrame privately retains the exact Arc<BoundHostScope> and Arc<SessionIssuance> plus committed digests; capture and final verification require private Arc identity, same_scope, same_issuance, digest equality, current repository identity, and observation-ready state. Personal-to-repository, repository-to-personal, and same-scope sibling substitution reject and close the target session without writes or path echo."
+    },
+    {
+      "area": "reviewed-final-host-reobservation-correction",
+      "result": "The public capture_observations plus verify_observations split was replaced by one capture_and_verify transaction. It seals one complete raw observation digest and binding-derived reader provenance, revalidates scope and issuance before and between reads, captures the complete surface set again, requires byte-identical raw and parsed layer identity, rechecks confined installed state, scope, issuance, and provenance before and after final compare, and closes only after a last confined-state check. Drift returns without a report or raised layer verdict."
+    },
+    {
+      "area": "reviewed-transactional-close-correction",
+      "result": "HostSurfaceReader now opens one opaque reader-owned transaction for the exact scope and session issuance. A private non-Clone, non-Deserialize lease binds reader provenance, exact scope, exact issuance, and start generation; every surface read, both full captures, confined-state checks, report construction, final generation equality check, and issuance close occur before the reader callback releases the transaction. Unsupported transaction capability returns a bounded Unsupported result without a Verified report or session close."
+    },
+    {
+      "area": "reviewed-local-preflight-correction",
+      "result": "capture_and_verify now completes a local-only capability, scope, exact session-stage, lifecycle, and twice-stable confined-state preflight before constructing HostObservationTransactionRequest or invoking HostSurfaceReader. Closed, rejected, pre-apply, effect-not-ready, unsupported-capability, stale-scope, wrong-confined-state, and replay states return their bounded causal error with zero adapter, provenance, generation, or read invocations. Equivalent scope, issuance, capability, confined-state, transaction-identity, and generation checks remain inside the reader-owned transaction to reject mutations after preflight without surface reads. Production HostLifecycleSession exposes no public scope or issuance digest getter."
+    },
+    {
+      "area": "stable-observation-and-identity",
+      "result": "Host observations are captured twice and rejected on drift, Plugins UI rows require one exact visible candidate/version/package identity, runtime must be a current execution, and a complete chain reuses accepted bound-surface verification."
+    },
+    {
+      "area": "journey-and-adversarial-controls",
+      "result": "Controls exercise all eight lifecycle intents plus clean, dirty, partial, conflict, stale cache, repeat use, teardown, mutation, replay, cloned-plan sibling rejection, independently issued sibling separation, cross-session request and scope rejection, absent and unsupported capability classification, unavailable declarations across six effectful intents, both marketplace/effect mismatch directions, marketplace-name and repository-root substitution, personal-to-repository and repository-to-personal frame substitution, same-scope sibling frame substitution, capture and verify scope races, post-capture drift for marketplace, installed state, cache, app registry, Plugins UI, discovery, runtime and reader provenance, disappear-reappear, mutate-restore, same-byte wrong provenance, reader substitution, concurrent winner-loser closure, external raw-capture/two-step/Clone/Deserialize compile rejection, take-consume-release races, pre-apply and pre-consumption refusal, oversized input, link, hardlink, FIFO, socket, zero-write, non-echo, and false-pass cases."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -c '<validate exact task envelope against AgentTaskEnvelope-v1 schema and semantic resolver>'",
+      "status": "pass",
+      "result": "AgentTaskEnvelope-v1 schema-and-semantic-revalidation:pass"
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <all leased Rust artifacts>; git diff --check -- <leased artifact set>",
+      "status": "pass",
+      "result": "No formatting or whitespace errors."
+    },
+    {
+      "command": "HUL_REPO_ROOT=<repo> CARGO_TARGET_DIR=/tmp/hul-plugin-host-lifecycle-044-rework7 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test plugin_host_lifecycle_contract --no-fail-fast",
+      "status": "pass-44-of-44",
+      "run_id": "9f0533ab-b6a8-43fc-b659-078a0d5c9173",
+      "result": "All prior controls plus closed, rejected, unsupported-capability, pre-apply, effect-not-ready, wrong-confined-state, stale-scope, effect-replay, concurrent confined-state mutation, concurrent scope mutation, and concurrent issuance mutation preflight controls passed. Every invalid local preflight recorded exactly zero adapter, provenance, generation, and read invocations; concurrent post-preflight mutation failed before surface reads; public session digest getters are absent; no leak signal appeared in 6.748 seconds."
+    },
+    {
+      "command": "HUL_REPO_ROOT=<repo> CARGO_TARGET_DIR=/tmp/hul-plugin-host-lifecycle-044-rework7 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test plugin_distribution_adapter_contract --test distribution_contract --test plugin_product_contract --no-fail-fast",
+      "status": "pass-199-of-199",
+      "run_id": "5be86572-ab82-4985-a867-3228203cc268",
+      "result": "Accepted distribution, adapter, and plugin-product dependency surface remained green without a leak signal in 11.758 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-plugin-host-lifecycle-044-rework7-lib CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline --lib --jobs 16",
+      "status": "pass",
+      "result": "Production library compiled offline; root-owned host_lifecycle module wiring is intentionally still absent."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-plugin-host-lifecycle-044-rework7-warnings CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo check --manifest-path validator/Cargo.toml --locked --offline --test plugin_host_lifecycle_contract --jobs 16",
+      "status": "pass-with-diagnostics",
+      "result": "The direct-path contract target compiled. It reports existing crate-wide warnings and expected unused direct-module API diagnostics; no warning was treated as product proof."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/plugin-host-lifecycle/scenarios.json",
+      "sha256": "sha256:a0a9c488c2910ae7c6e5476e0c201140217b8450b04e4f251e3ee69b40a10bdd",
+      "byte_length": 2247,
+      "line_count": 25
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/capability_gate.rs",
+      "sha256": "sha256:aa13af59df066addde88da93de108711ede8cefd517c97a6aa49db3f9111ca86",
+      "byte_length": 3549,
+      "line_count": 119
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/effect_request.rs",
+      "sha256": "sha256:e019faaf156dbb4e201566d1c0a69dfd1926c48978b747f35a08550b29fbe01c",
+      "byte_length": 11184,
+      "line_count": 328
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/error.rs",
+      "sha256": "sha256:b36ce13d475afcb93fb647662a9b083900c1668bcadfe41251e53e941786cd65",
+      "byte_length": 2869,
+      "line_count": 77
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/issuance.rs",
+      "sha256": "sha256:b7f713723fe61d6823fa77c40adab9d7074aede8fcd389b471cffe64bd787554",
+      "byte_length": 7175,
+      "line_count": 234
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/mod.rs",
+      "sha256": "sha256:ce3e389bf91d6a9b62f2b19f6dfede22117e1e3d6e6a8eedc3e6053c979d8fa1",
+      "byte_length": 1168,
+      "line_count": 32
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/model.rs",
+      "sha256": "sha256:db5f63deb297117108059057c8539df76fed97c66301cbf996ec65ff62afb4a0",
+      "byte_length": 4352,
+      "line_count": 186
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/observation.rs",
+      "sha256": "sha256:e05b5939af59c745e2edac06a0f0624ff45d06674e4b295cb2e00e0418fbfadd",
+      "byte_length": 24036,
+      "line_count": 695
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/scope.rs",
+      "sha256": "sha256:7c01b52bfac125e1ec58fb80dee895db7f51a9ff15f816f02e41d9ba35b32c04",
+      "byte_length": 4957,
+      "line_count": 159
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/session.rs",
+      "sha256": "sha256:c808c4b68650693b68f08f6b2864872b9ecf2ca1c8e7d9e197d0dd3a89499e4b",
+      "byte_length": 25139,
+      "line_count": 689
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/verify.rs",
+      "sha256": "sha256:17a357878a3f3a0746f971af8608695aded0b22f325b4850aaec5ec26ea7c095",
+      "byte_length": 1827,
+      "line_count": 52
+    },
+    {
+      "path": "validator/tests/plugin_host_lifecycle_contract.rs",
+      "sha256": "sha256:f7da62bac1168839ac49ad664baac0fbd13419a26db4554697799aae09d30de4",
+      "byte_length": 801,
+      "line_count": 28
+    },
+    {
+      "path": "validator/tests/plugin_host_lifecycle_contract/capability.rs",
+      "sha256": "sha256:16e027a19029105f79f61777370aa9577598e12ae886e2f2560e5c9c235502f3",
+      "byte_length": 16925,
+      "line_count": 476
+    },
+    {
+      "path": "validator/tests/plugin_host_lifecycle_contract/false_pass.rs",
+      "sha256": "sha256:3260d9be216dc60d7d8b1bb01a5695151c95c380de1033b689f22dd07837ee88",
+      "byte_length": 4636,
+      "line_count": 121
+    },
+    {
+      "path": "validator/tests/plugin_host_lifecycle_contract/journeys.rs",
+      "sha256": "sha256:5152ee40c6efd2af0549517902969b6b3b60ff16b17b7be2320941ee76a447b4",
+      "byte_length": 11886,
+      "line_count": 357
+    },
+    {
+      "path": "validator/tests/plugin_host_lifecycle_contract/negative.rs",
+      "sha256": "sha256:71cee39f937832f9e0bb49b15e530d94f543de0a1e803840f586efa3ed9d287e",
+      "byte_length": 6809,
+      "line_count": 200
+    },
+    {
+      "path": "validator/tests/plugin_host_lifecycle_contract/security.rs",
+      "sha256": "sha256:75fc28d228f661e1dcafc59df9102bb01610e967904108a302d59711ff33d1f9",
+      "byte_length": 71525,
+      "line_count": 2100
+    },
+    {
+      "path": "validator/tests/plugin_host_lifecycle_contract/support.rs",
+      "sha256": "sha256:ec3030b3f29c930e090f4cf3b481446a8092f116f8ea3345f2b522c891b8f4b4",
+      "byte_length": 17811,
+      "line_count": 536
+    }
+  ],
+  "findings": [
+    {
+      "severity": "high-seventh-rework-corrected-pending-re-review",
+      "finding": "Exact re-review confirmed all six prior corrections, then proved capture_and_verify constructed HostObservationTransactionRequest and invoked HostSurfaceReader before local eligibility checks. Invalid sessions therefore exposed private scope and issuance digests and returned adapter Unsupported instead of the causal local error. The seventh correction completes local capability, scope, session-stage, lifecycle, and stable confined-state preflight before request issuance or adapter contact, while preserving equivalent in-transaction race checks."
+    },
+    {
+      "severity": "high-sixth-rework-corrected-confirmed-by-exact-re-review",
+      "finding": "Exact re-review confirmed all five prior fixes, then reproduced a TOCTOU gap after the final HostSurfaceReader sample and before issuance close. The sixth correction requires one reader-owned transaction and private generation lease across every read, report construction, the exact final generation check, and session close; unsupported transaction capability stays bounded and cannot issue a Verified report."
+    },
+    {
+      "severity": "high-fifth-rework-corrected-confirmed-by-exact-re-review",
+      "finding": "Exact re-review confirmed all four prior corrections, then proved verify_observations accepted a sealed frame without a HostSurfaceReader or fresh host reads. Any host layer could drift after capture while stale Verified rows were still accepted and the session closed. The fifth correction removes the public two-step path and makes one capture_and_verify transaction re-read the complete byte-exact surface set and confined installed state under the same binding-derived reader provenance, private scope, and private issuance immediately before comparison and close."
+    },
+    {
+      "severity": "high-fourth-rework-corrected-confirmed-by-exact-re-review",
+      "finding": "Exact re-review confirmed the direct scope-conflict correction and all prior replay and capability fixes, then proved raw HostObservationExpectations and capture_host_observations remained publicly exported while HostObservationFrame carried only binding_sha256. A repository session could therefore accept personal evidence and the inverse when journey bytes matched. The fourth correction removes the raw exports, makes session capture the sole public construction path, and binds each non-Clone frame to exact private scope and session-issuance Arc identity plus committed digests through final revalidation."
+    },
+    {
+      "severity": "high-third-rework-corrected-confirmed-by-exact-re-review",
+      "finding": "Exact re-review confirmed the sibling/session replay and unsupported-host corrections, then proved HostLifecycleSession independently accepted MarketplaceScope and HostEffectScope. Contradictory values could therefore bind marketplace observations and effect commands to different authorities. The third correction removes that pair and derives marketplace observation scope, cache expectation, effect command scope, required capabilities, repository identity, and request and gate digests from one candidate-bound HostScopeAuthority before operation bind, issuance, or request creation."
+    },
+    {
+      "severity": "high-second-rework-corrected-confirmed-by-exact-re-review",
+      "finding": "Exact re-review confirmed the second correction rejects unavailable, absent, unsupported, conflicting, or repository-mismatched host capabilities before confined apply or HostCommandPlan release and cannot revive the rejected session."
+    },
+    {
+      "severity": "high-rework-corrected-confirmed-by-exact-re-review",
+      "finding": "Independent review proved the prior request digest and Clone implementation were deterministic across same-plan sibling sessions, while HostLifecycleSession exposed each request immediately at bind. A sibling whose shared sealed plan later rejected could therefore hold the same request as the successful owner. The corrected candidate removes request cloning and early access, binds one private session and full lifecycle issuance, gates take and consume once, refuses cross-session Arc identity, and withholds HostCommandPlan until exact-session consumption."
+    },
+    {
+      "severity": "material-corrected",
+      "finding": "The accepted package, lifecycle, and distribution adapter authorities previously had no one-session coordinator that kept all eight host truth layers separate. This candidate adds that composition without replacing any accepted planner, package writer, adapter, verifier, parser, or permit."
+    },
+    {
+      "severity": "security-boundary",
+      "finding": "ExternalHostEffectRequest is a candidate-bound request only. No live-host authorization, command execution, marketplace mutation, plugin install, cache write, registry write, UI action, discovery mutation, runtime load, or claim decision exists in this artifact set."
+    },
+    {
+      "severity": "claim-ceiling",
+      "finding": "The maximum current ceiling is source-local coordinator behavior plus isolated confined distribution behavior. Tests, fixtures, typed requests, observation documents, and an identity-chain digest do not prove package adoption, host install, cache visibility, marketplace registration, app-registry visibility, Plugins UI visibility, discovery, runtime loading, representative journeys, readiness, release, or completion."
+    }
+  ],
+  "unresolved_dependencies": [
+    "exact-independent-re-review-of-sha256-9504905134ef556288958ce90387014851c0832327952af2aae8f0a50904426e",
+    "root-module-wiring-and-candidate-reconciliation",
+    "root-version-manifest-marketplace-package-and-hugpkg-adoption",
+    "root-authorized-supported-host-effects-and-observation-adapters",
+    "supported-host-clean-update-recovery-rollback-reinstall-uninstall-stale-cache-repeat-use-journeys",
+    "candidate-bound-package-install-cache-marketplace-app-registry-plugins-ui-discovery-runtime-and-journey-proof"
+  ],
+  "requested_root_changes": [
+    {
+      "request": "Independently re-review the seventh corrected exact 18-artifact set bound by sha256:9504905134ef556288958ce90387014851c0832327952af2aae8f0a50904426e. Confirm complete local capability, scope, session-stage, lifecycle, and stable confined-state eligibility precedes HostObservationTransactionRequest construction, private digest exposure, and every HostSurfaceReader method, and confirm HostLifecycleSession exposes no public scope or issuance digest getter. Reproduce closed, rejected, unsupported-capability, pre-apply, effect-not-ready, wrong-confined-state, stale-scope, stale-issuance, and replay states and require exactly zero adapter, provenance, generation, and read invocations with stable bounded non-echo errors and zero writes. Mutate confined state, scope, and issuance after preflight and require the retained in-transaction checks to fail before surface reads. Then recheck the private transaction lease, exact final generation-to-close boundary, all six prior corrections, and remaining authority and false-pass surfaces. Accept unchanged or return the first material defect for rework.",
+      "authority": "root-review-and-reconciliation"
+    },
+    {
+      "request": "Only after independent PASS, add `#[cfg(not(test))] pub(crate) mod host_lifecycle;` to validator/src/plugin_product/mod.rs, compile the production library, and recompute the integrated candidate identity. Do not broaden the module to public command or claim authority.",
+      "authority": "root-shared-module-authority"
+    },
+    {
+      "request": "Separately adopt the root-owned version, supported plugin manifests, repository marketplace, package membership, generated closure, and HUGPKG bytes; then bind the exact adopted PackagePlan and PackageSnapshot into this coordinator.",
+      "authority": "root-manifest-package-and-generated-authority"
+    },
+    {
+      "request": "Provide a separately reviewed authorization adapter that consumes PreparedExternalHostEffect by value, independently revalidates the exact capability declaration and repository scope at the host execution boundary, separately authorizes the released HostCommandPlan, and separately supplies host-exposed marketplace, cache, app-registry, Plugins UI, discovery, and current-runtime observations. Keep read, help, parse, query, and observe paths zero-write; do not accept serialized request metadata or this source-local gate as live host eligibility proof.",
+      "authority": "root-external-effect-and-host-adapter-authority"
+    },
+    {
+      "request": "Run candidate-bound supported-host clean, dirty, partial, conflict, update, failed-update recovery, rollback, reinstall, uninstall, stale-cache, and repeat-use journeys before raising any package, install, cache, marketplace, app-registry, Plugins UI, discovery, runtime, journey, readiness, release, or completion claim.",
+      "authority": "root-product-proof-and-claim-authority"
+    }
+  ],
+  "limitations": [
+    "The module is not wired into validator/src/plugin_product/mod.rs; the direct-path contract target compiles and exercises it without changing root-owned shared authority.",
+    "The coordinator applies only the accepted descriptor-confined distribution operation. It never accesses or mutates live Codex plugin, marketplace, cache, app-registry, Plugins UI, discovery, or runtime state.",
+    "ExternalHostEffectRequest serializes identity, host-scope, session-issuance, lifecycle-plan, and host-plan digests but deliberately omits the HostCommandPlan, has no Deserialize or Clone authority, and withholds host-effect authorization and execution.",
+    "The one-use request state ends at a released HostCommandPlan. HostCommandPlan execution still requires separately adopted root authorization and a supported-host adapter; this worker does not grant or exercise either authority.",
+    "The source-local unified HostScopeAuthority and capability gate are not live-host proof. They validate the supplied immutable HostCapabilityDeclaration, derive marketplace and effect scope together, and reobserve repository identity immediately before each handoff boundary. They cannot prevent a later host-path swap after HostCommandPlan release; the root execution adapter must independently revalidate the exact released plan and unified scope at its own effect boundary.",
+    "BoundHostScope reads the marketplace name only from the already accepted, non-publicly-constructible MarketplacePlan replacement and separately checks its package identity. This remains source-local typed composition, not supported-host marketplace proof.",
+    "The private scope- and issuance-bound HostObservationFrame prevents source-local raw construction and sibling substitution but does not make supplied marketplace, cache, registry, UI, discovery, or runtime bytes live-host proof. A supported-host observation adapter must still perform and bind the actual reads at its own boundary.",
+    "HostSurfaceReader provenance is required to equal the candidate and host bound JourneyBinding digest and remain stable throughout the transaction, but this source-local public trait cannot authenticate an untrusted implementer that deliberately forges that value. Root must supply and independently review the supported-host adapter; declared provenance and byte equality are not live-host proof by themselves.",
+    "The source-local reader contract requires a real adapter-owned transaction or generation lease that excludes writers through issuance close. Fixture adapters exercise this contract, including a mutex-backed concurrent writer, but no supported-host adapter lock, snapshot generation, installation, discovery, or runtime behavior is proven by this worker.",
+    "The local preflight prevents invalid source-local sessions from exposing transaction digests or contacting a host adapter. It validates only the bound capability declaration, repository scope, private session state, lifecycle expectation, and descriptor-confined installed/cache state; it is not supported-host installation, marketplace, discovery, Plugins UI, or runtime proof.",
+    "Unsupported Install and Marketplace states are exercised through the exact state classifier because the accepted HostCapabilityDeclaration constructors currently expose those two capabilities as either Supported or Absent. The full unavailable_codex_app declaration path exercises Absent across every effectful intent.",
+    "Plugins UI evidence is an exact parser over supplied candidate-bound observation bytes, not a live UI read. The isolated host capability declaration therefore reports that surface unsupported in complete fixture sessions.",
+    "Runtime proof in fixtures reuses the accepted current-execution probe and remains test-runtime evidence, not supported-host plugin loading proof.",
+    "The production library check does not compile this unwired module; the focused direct-path contract target is the current compilation proof for the coordinator source.",
+    "No package, install, cache, marketplace, app-registry, Plugins UI, discovery, runtime, journey, node closure, readiness, release, or completion claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}
