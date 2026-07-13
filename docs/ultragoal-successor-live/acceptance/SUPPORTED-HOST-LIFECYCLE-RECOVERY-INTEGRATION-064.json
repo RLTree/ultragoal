@@ -1,0 +1,46 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "SUPPORTED-HOST-LIFECYCLE-RECOVERY-INTEGRATION-064",
+  "workstream": "supported-host-lifecycle-classification-and-recovery",
+  "decision": "ACCEPT_SOURCE_LOCAL_LIFECYCLE_AND_PROPOSAL_PROTOCOL",
+  "integration_commit": "23320f47e3eb69a9b84e2ce1ce5b7b596b4142a7",
+  "integration_tree": "bc97a472df9b3f49408ef958e1069f2bc7d76148",
+  "accepted_artifact_set": {
+    "worker_result": "docs/ultragoal-successor-live/worker-results/SUPPORTED-HOST-LIFECYCLE-ADAPTER-063.json",
+    "worker_result_sha256": "sha256:691a749864e4dc26ec1b0bc06a4a952e0f05f9661ed422a22e7616c4e0351b63",
+    "sha256": "sha256:9a2727a8d3af3fffb2f9abed670e98ea3b1ed74d096b13c9f6079e093acc108a",
+    "artifact_count": 7,
+    "bytes": 180398,
+    "lines": 5553,
+    "root_compile_adjunct_sha256": "sha256:a27ec67cb737649041c0c9423294056cf72df491df6f1b0cc3772af40fe3a645"
+  },
+  "independent_review": {
+    "record": "docs/ultragoal-successor-live/reviews/SUPPORTED-HOST-LIFECYCLE-RECOVERY-REVIEW-064.json",
+    "record_sha256": "sha256:cd753dba059af8c3b79032ec7e48309cbc1c83d37e9956430f2218567c20b0fb",
+    "reviewer": "/root/publication_ledger_generation_security_reviewer",
+    "verdict": "PASS",
+    "focused_lifecycle": "16/16",
+    "host_effect_dependency_closure": "36/36 plus one intentional helper ignored",
+    "static_integration": "4/4",
+    "jobs": 16,
+    "test_threads": 16
+  },
+  "accepted_behavior": [
+    "the lifecycle coordinator retains root plan custody until a valid authorized host-effect object exists",
+    "publication expectations bind the declared prior, next, and temporary object state",
+    "canonical acknowledgement evidence binds effect identity, publication identity, and exact ledger head",
+    "recovery authorization v2 binds classification, coordinator, complete ledger head, trusted-time window, and nonce",
+    "generation-only, digest-only, mixed, stale, malformed, special-object, race, and false-receipt substitutions fail closed",
+    "recovery remains proposal-only and automatic cleanup remains disabled"
+  ],
+  "withheld": [
+    "production filesystem ownership and object-identity policy",
+    "live executor and production adapter",
+    "target lease trusted clock and recovery mutation",
+    "crash restart and power-loss recovery journeys",
+    "package marketplace install cache app-registry Plugins UI discovery and runtime proof",
+    "readiness release node closure and goal completion"
+  ],
+  "claim_ceiling": "internal production-compiled source-local lifecycle classification and proposal protocol only",
+  "no_claim_statement": "This acceptance does not claim a live host effect, recovery mutation, installed product behavior, readiness, release, node closure, or goal completion."
+}
