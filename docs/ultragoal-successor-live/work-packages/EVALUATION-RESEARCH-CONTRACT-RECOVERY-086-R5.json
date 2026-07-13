@@ -1,0 +1,32 @@
+{
+  "schema_version": "UltraLeaseAmendment-v1",
+  "amendment_id": "EVALUATION-RESEARCH-CONTRACT-RECOVERY-086-R5",
+  "base_work_package": "docs/ultragoal-successor-live/work-packages/EVALUATION-RESEARCH-CONTRACT-RECOVERY-086-R4.json",
+  "base_work_package_sha256": "sha256:7eb801a34b4d971c18ced82ff3080db64148b305744b2bd5ea9471b0941a68ae",
+  "issued_candidate": {
+    "head_commit": "c93e7230fc7f74bb66c5161a3e130dc4623af0a2",
+    "head_tree": "d7d5b39c16f9065fb0dec0613ec8706fb493f603",
+    "note": "R5 changes only WorkerResult field placement to satisfy adopted schema authority. All R4 research behavior, paths, controls, effects, prohibitions, and claim ceilings remain exact."
+  },
+  "owner_override": "/root/evaluation_research_false_pass_repair_engineer",
+  "lease_id_override": "EVALUATION-RESEARCH-CONTRACT-RECOVERY-086-R5",
+  "inherit_all_r4_paths_symbols_outputs_effects_prohibitions_tests_and_verification": true,
+  "receipt_authority_reconciliation": {
+    "schema_path": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+    "schema_sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+    "schema_no_claim_statement": "This worker does not claim readiness, release, or completion.",
+    "required_field_placement": {
+      "no_claim_statement": "Use the adopted schema const exactly.",
+      "final_state.lease_exact_no_claim_statement": "This worker does not claim root adoption, public evaluation command availability, installed runtime behavior, representative product journeys, claim elevation, readiness, release, or completion."
+    },
+    "required_limitations": "Repeat the lease-exact ceiling in limitations and keep every public-command, installed-runtime, journey, claim, readiness, release, and completion surface explicit.",
+    "authority_rule": "The adopted WorkerResult schema controls top-level shape. The more specific lease ceiling remains binding in final_state and limitations; this relocation authorizes no claim."
+  },
+  "worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/EVALUATION-PRODUCTION-RUNTIME-086.json",
+    "worker": "/root/evaluation_research_false_pass_repair_engineer",
+    "lease_id": "EVALUATION-RESEARCH-CONTRACT-RECOVERY-086-R5",
+    "required": true,
+    "no_claim_statement": "This worker does not claim readiness, release, or completion."
+  }
+}
