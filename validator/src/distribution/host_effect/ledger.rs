@@ -43,11 +43,20 @@ pub(crate) struct FileHostEffectLedger {
     local: Mutex<ObservedHead>,
     #[cfg(test)]
     lock_open_hook: Mutex<Option<LockOpenHook>>,
+    #[cfg(test)]
+    key_open_hook: Mutex<Option<KeyOpenHook>>,
 }
 
 #[cfg(test)]
 #[derive(Clone)]
 struct LockOpenHook {
+    reached: Arc<std::sync::Barrier>,
+    release: Arc<std::sync::Barrier>,
+}
+
+#[cfg(test)]
+#[derive(Clone)]
+struct KeyOpenHook {
     reached: Arc<std::sync::Barrier>,
     release: Arc<std::sync::Barrier>,
 }
@@ -108,6 +117,8 @@ impl FileHostEffectLedger {
             }),
             #[cfg(test)]
             lock_open_hook: Mutex::new(None),
+            #[cfg(test)]
+            key_open_hook: Mutex::new(None),
         };
         ledger.verify_store()?;
         Ok(ledger)
@@ -124,7 +135,7 @@ impl FileHostEffectLedger {
         let guard = ProcessLock::acquire(lock)?;
         require_lock_identity(&store, &guard, lock_identity)?;
         store.validate_complete(lock_identity)?;
-        let (key, key_identity) = store.open_existing_key()?;
+        let (key, key_identity) = store.open_existing_key(|| Ok(()))?;
         let key_id = digest(&key.0);
         let bytes = store.read_exact_file(STATE_NAME, MAX_LEDGER_BYTES, 0o600)?;
         let payload = decode_snapshot(&bytes, &key, &ledger_id, &key_id)?;
@@ -145,6 +156,8 @@ impl FileHostEffectLedger {
             }),
             #[cfg(test)]
             lock_open_hook: Mutex::new(None),
+            #[cfg(test)]
+            key_open_hook: Mutex::new(None),
         };
         ledger.verify_store()?;
         Ok(ledger)
@@ -171,7 +184,7 @@ impl FileHostEffectLedger {
         require_lock_identity(&store, &guard, self.lock_identity)?;
         self.verify_store()?;
         store.validate_complete(self.lock_identity)?;
-        let (key, identity) = store.open_existing_key()?;
+        let (key, identity) = store.open_existing_key(|| self.after_key_identity())?;
         if identity != self.key_identity {
             return Err(tampered());
         }
@@ -240,6 +253,16 @@ impl FileHostEffectLedger {
     }
 
     #[cfg(test)]
+    fn install_key_open_hook(&self, hook: KeyOpenHook) -> Result<(), HostEffectLedgerError> {
+        let mut slot = self.key_open_hook.lock().map_err(|_| ledger_io())?;
+        if slot.is_some() {
+            return Err(invalid_record());
+        }
+        *slot = Some(hook);
+        Ok(())
+    }
+
+    #[cfg(test)]
     fn pause_after_lock_open(&self) -> Result<(), HostEffectLedgerError> {
         let hook = self.lock_open_hook.lock().map_err(|_| ledger_io())?.take();
         if let Some(hook) = hook {
@@ -247,6 +270,18 @@ impl FileHostEffectLedger {
             hook.release.wait();
         }
         process_test_barrier()
+    }
+
+    fn after_key_identity(&self) -> Result<(), HostEffectLedgerError> {
+        #[cfg(test)]
+        {
+            let hook = self.key_open_hook.lock().map_err(|_| ledger_io())?.take();
+            if let Some(hook) = hook {
+                hook.reached.wait();
+                hook.release.wait();
+            }
+        }
+        Ok(())
     }
 }
 
@@ -1125,16 +1160,20 @@ impl Store {
                 unsafe { std::ptr::write_volatile(byte, 0) };
             }
         }
-        self.open_existing_key()
+        self.open_existing_key(|| Ok(()))
     }
 
-    fn open_existing_key(&self) -> Result<(LedgerKey, FileIdentity), HostEffectLedgerError> {
-        let file = self.open_existing(KEY_NAME, KEY_BYTES as u64)?;
+    fn open_existing_key(
+        &self,
+        after_identity: impl FnOnce() -> Result<(), HostEffectLedgerError>,
+    ) -> Result<(LedgerKey, FileIdentity), HostEffectLedgerError> {
+        let mut file = self.open_existing(KEY_NAME, KEY_BYTES as u64)?;
         let identity = exact_identity(self, KEY_NAME, &file, KEY_BYTES as u64)?;
         if identity.length != KEY_BYTES as u64 {
             return Err(tampered());
         }
-        let bytes = self.read_exact_file(KEY_NAME, KEY_BYTES as u64, 0o600)?;
+        after_identity()?;
+        let bytes = self.read_bound_file(KEY_NAME, &mut file, identity, KEY_BYTES as u64, 0o600)?;
         let key: [u8; KEY_BYTES] = bytes.try_into().map_err(|_| tampered())?;
         Ok((LedgerKey(key), identity))
     }
@@ -1146,16 +1185,29 @@ impl Store {
         required_mode: u32,
     ) -> Result<Vec<u8>, HostEffectLedgerError> {
         self.verify_root()?;
-        let named_before = self.exact_stat(name)?.ok_or_else(tampered)?;
         let mut file = self.open_existing(name, max_bytes)?;
+        let identity = exact_identity(self, name, &file, max_bytes)?;
+        self.read_bound_file(name, &mut file, identity, max_bytes, required_mode)
+    }
+
+    fn read_bound_file(
+        &self,
+        name: &str,
+        file: &mut File,
+        expected_identity: FileIdentity,
+        max_bytes: u64,
+        required_mode: u32,
+    ) -> Result<Vec<u8>, HostEffectLedgerError> {
+        self.verify_root()?;
         let descriptor_before =
             FileIdentity::from_metadata(&file.metadata().map_err(|_| ledger_io())?);
+        let named_before = self.exact_stat(name)?.ok_or_else(tampered)?;
         validate_regular(descriptor_before, max_bytes, required_mode)?;
-        if named_before != descriptor_before {
+        if descriptor_before != expected_identity || named_before != expected_identity {
             return Err(tampered());
         }
-        let mut bytes = Vec::with_capacity(descriptor_before.length.min(max_bytes) as usize);
-        Read::by_ref(&mut file)
+        let mut bytes = Vec::with_capacity(expected_identity.length.min(max_bytes) as usize);
+        Read::by_ref(file)
             .take(max_bytes.saturating_add(1))
             .read_to_end(&mut bytes)
             .map_err(|_| ledger_io())?;
@@ -1164,7 +1216,7 @@ impl Store {
         let named_after = self.exact_stat(name)?.ok_or_else(tampered)?;
         if bytes.len() as u64 > max_bytes
             || bytes.len() as u64 != descriptor_after.length
-            || descriptor_before != descriptor_after
+            || descriptor_after != expected_identity
             || descriptor_after != named_after
         {
             return Err(tampered());
@@ -1718,6 +1770,60 @@ mod tests {
     }
 
     #[test]
+    fn key_replacement_between_identity_and_read_cannot_splice_state() {
+        let fixture = LedgerFixture::new();
+        let ledger = Arc::new(
+            FileHostEffectLedger::create(&fixture.root, "host-ledger".to_owned()).unwrap(),
+        );
+        let reached = Arc::new(std::sync::Barrier::new(2));
+        let release = Arc::new(std::sync::Barrier::new(2));
+        ledger
+            .install_key_open_hook(KeyOpenHook {
+                reached: Arc::clone(&reached),
+                release: Arc::clone(&release),
+            })
+            .unwrap();
+
+        let contender = Arc::clone(&ledger);
+        let worker = thread::spawn(move || contender.head());
+        reached.wait();
+
+        let named_key = fixture.root.join(KEY_NAME);
+        let held_key = fixture.root.with_extension("held-key");
+        fs::rename(&named_key, &held_key).unwrap();
+        let replacement_bytes = [7_u8; KEY_BYTES];
+        let mut replacement = OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .mode(0o600)
+            .open(&named_key)
+            .unwrap();
+        replacement.write_all(&replacement_bytes).unwrap();
+        replacement.sync_all().unwrap();
+
+        let replacement_key = LedgerKey(replacement_bytes);
+        let payload = initial_payload(
+            "host-ledger",
+            &digest(&replacement_key.0),
+            ledger.lock_identity,
+        )
+        .unwrap();
+        let replacement_state = encode_snapshot(&payload, &replacement_key).unwrap();
+        overwrite(&fixture.root.join(STATE_NAME), &replacement_state);
+        release.wait();
+
+        assert_eq!(
+            worker.join().unwrap().unwrap_err().id(),
+            HostEffectLedgerErrorId::Tampered
+        );
+        assert_eq!(fs::read(named_key).unwrap(), replacement_bytes);
+        assert_eq!(
+            fs::read(fixture.root.join(STATE_NAME)).unwrap(),
+            replacement_state
+        );
+    }
+
+    #[test]
     fn lock_replacement_after_prelock_check_cannot_split_serialization() {
         let fixture = LedgerFixture::new();
         let ledger = Arc::new(
@@ -1959,6 +2065,7 @@ mod tests {
         fn drop(&mut self) {
             let _ = fs::remove_dir_all(&self.root);
             let _ = fs::remove_file(self.root.with_extension("held-lock"));
+            let _ = fs::remove_file(self.root.with_extension("held-key"));
             let _ = fs::remove_dir_all(self.root.with_extension("process-barrier"));
         }
     }
