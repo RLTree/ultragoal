@@ -1,0 +1,45 @@
+{
+  "schema_version": "UltraLeaseAmendment-v1",
+  "amendment_id": "REPOSITORY-FIT-OWNER-BOUND-RECOVERY-085-R4",
+  "base_work_package": "docs/ultragoal-successor-live/work-packages/REPOSITORY-FIT-OWNER-BOUND-RECOVERY-085-R3.json",
+  "base_work_package_sha256": "sha256:30d142f106505d5050bd17626d12c39fe2f0aa88072d98649a46f31facd5769c",
+  "issued_candidate": {
+    "head_commit": "c9f475d5a1e90a9543fa8bb72c7db5f2a633af99",
+    "head_tree": "4dedd4e074d7ce490e154a4a0c271e5b96d07950",
+    "note": "Disjoint evaluation and supported-package changes remain in progress and are not part of this lease. Preserve them and freeze only the exact repository-fit correction set."
+  },
+  "owner_override": "/root/repository_fit_proof_recovery_engineer",
+  "lease_id_override": "REPOSITORY-FIT-OWNER-BOUND-RECOVERY-085-R4",
+  "writable_paths_override": [
+    "validator/src/repository_fit/product_adapter/authority.rs",
+    "validator/src/repository_fit/product_adapter/ledger.rs",
+    "validator/src/repository_fit/product_adapter/root_permit.rs",
+    "validator/src/repository_fit/product_adapter/tests/production_authority.rs",
+    "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-PRODUCTION-AUTHORITY-085.json"
+  ],
+  "decisive_rework_finding": {
+    "class": "crash_recovery_managed_ancestor_false_commit",
+    "independent_result": "The exact frozen R3 set passed 29 of 29 focused controls, but EffectStarted recovery classifies Postimage from desired leaf digest and mode only and can terminalize Committed after a managed ancestor is replaced or changes mode.",
+    "required_correction": "Bind the recovery intent to the same descriptor-bound target and managed-ancestor identity, uid, gid, mode, and containment contract required by normal success. Recovery may classify Committed only when that complete contract and every desired leaf postimage match in one stable observation; ancestor substitution, aliasing, ownership drift, or mode drift must remain ambiguous or refused."
+  },
+  "required_controls": [
+    "Deterministic crash-after-effect recovery with an existing managed ancestor replaced while preserving identical desired leaf bytes and modes must not commit.",
+    "Deterministic crash-after-effect recovery with managed-ancestor mode, uid, gid, identity, or containment drift must not commit wherever the host can represent the mutation.",
+    "The ordinary success path and recovery path must share one canonical ancestor contract rather than independently approximating it.",
+    "Exact valid ancestor state plus exact leaf postimages may recover Committed after expiry; preimage may recover Interrupted; every mixed or other state remains Ambiguous or refused.",
+    "Re-run owner-bound live-winner, expiry, descriptor-bound authority replacement, nonce/intent, two-process terminal settlement, missing-store zero-write, and WorkerResult receipt controls with 16 build jobs and 16 test threads."
+  ],
+  "prohibited_shared_changes": [
+    "validator/src/repository_fit/product_adapter.rs",
+    "validator/src/repository_fit/mod.rs",
+    "validator/src/repository_fit/local/**",
+    "public command catalog, dispatcher, manifests, migration and retirement registry, acceptance, board, claims, release state, Git, network, or host state"
+  ],
+  "worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-PRODUCTION-AUTHORITY-085.json",
+    "worker": "/root/repository_fit_proof_recovery_engineer",
+    "lease_id": "REPOSITORY-FIT-OWNER-BOUND-RECOVERY-085-R4",
+    "required": true,
+    "no_claim_statement": "This worker does not claim readiness, release, or completion."
+  }
+}
