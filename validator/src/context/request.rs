@@ -45,6 +45,18 @@ impl BuildRequest {
         self
     }
 
+    /// Root-owned construction seam for the sole public workspace writer.
+    /// Issuing this structural grant performs no effect; the selected scope is
+    /// still captured and revalidated by `LiveContext::build`.
+    pub(crate) fn with_root_workspace_grant(mut self, write_scope: impl Into<PathBuf>) -> Self {
+        self.effect = EffectClass::WorkspaceWrite;
+        self.root_grant = Some(RootEffectGrant::issue(
+            EffectClass::WorkspaceWrite,
+            vec![write_scope.into()],
+        ));
+        self
+    }
+
     pub fn bind_non_secret_configuration(
         mut self,
         key: impl Into<String>,

@@ -17,16 +17,19 @@ use serde::{Deserialize, Serialize};
 use super::{FitError, FitErrorId};
 
 pub(in crate::repository_fit) use authority::LocalMutationGrant;
+#[cfg(test)]
+pub(crate) use authority::after_effect_before_terminal_for_test;
 pub(crate) use authority::{
-    execute_prepared_apply, RepositoryFitApplyNonce, RepositoryFitAuthorityStore,
-    RepositoryFitProductionOutcome, RepositoryFitTrustedClock,
+    RepositoryFitApplyNonce, RepositoryFitAuthorityStore, RepositoryFitProductionOutcome,
+    RepositoryFitRecoveryIntent, RepositoryFitTrustedClock, execute_prepared_apply,
+    parse_recovery_intent, prepare_recovery_intent, recover_prepared_apply,
 };
 pub(crate) use model::{
     FitApplyPreparationProjection, FitInspectProjection, FitPlanRecord, FitVerificationProjection,
 };
 pub(crate) use protocol::{
-    inspect_target, plan_target, prepare_apply_request, verify_target, OpaqueFitApplyRequest,
-    PreparedFitApply,
+    OpaqueFitApplyRequest, PreparedFitApply, inspect_target, plan_target, prepare_apply_request,
+    verify_target,
 };
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -66,6 +69,10 @@ impl FitAdapterError {
 
     pub(crate) const fn kernel_error_id(self) -> Option<FitErrorId> {
         self.kernel_error_id
+    }
+
+    pub(crate) const fn trusted_clock_unavailable() -> Self {
+        adapter_error(AdapterErrorId::ApplyPermitExpired)
     }
 
     pub(crate) const fn cause(self) -> &'static str {

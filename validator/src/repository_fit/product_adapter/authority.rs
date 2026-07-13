@@ -35,8 +35,7 @@ const DEFAULT_PERMIT_LIFETIME: u64 = 60;
 const MAX_OUTCOME_BYTES: usize = 16 * 1024;
 const MAX_RECOVERY_INTENT_BYTES: usize = 64 * 1024;
 const MAX_RECOVERY_ROWS: usize = 128;
-const SUPPORT_LIMIT: &str =
-    "source-local production authority candidate; root host policy and public dispatch absent";
+const SUPPORT_LIMIT: &str = "source-built Darwin public fit apply; installed host provisioning and representative live-user proof remain separate";
 
 /// One-use activation token for the concrete repository-fit writer. The type
 /// is nameable only where the local effect adapter must consume it, while its
@@ -73,6 +72,7 @@ pub(crate) trait RepositoryFitTrustedClock {
 pub(crate) trait RepositoryFitAuthorityStore {
     fn protected_root(&self) -> &Path;
     fn store_id(&self) -> &str;
+    fn revalidate_protected_root(&self) -> bool;
 }
 
 /// One-use high-entropy nonce carrier. It is non-cloneable, non-serializable,
@@ -244,6 +244,13 @@ impl RepositoryFitProductionOutcome {
 
     pub(crate) const fn rollback_complete(&self) -> bool {
         self.rollback_complete
+    }
+
+    /// A durable recovery envelope must be retained only while the ledger has
+    /// not reached a terminal state. Callers must not infer this from status
+    /// prose or from whether an effect was observed.
+    pub(crate) fn recovery_required(&self) -> bool {
+        matches!(self.ledger_state, "reserved" | "effect_started")
     }
 
     pub(crate) fn to_machine_bytes(&self) -> Result<Vec<u8>, FitAdapterError> {
@@ -419,16 +426,28 @@ struct SealedProductionAuthority {
 
 impl SealedProductionAuthority {
     fn open(store: &impl RepositoryFitAuthorityStore) -> Result<Self, LedgerError> {
+        if !store.revalidate_protected_root() {
+            return Err(LedgerError::authority_invariant());
+        }
         let ledger =
             FileRepositoryFitLedger::open_or_initialize(store.protected_root(), store.store_id())?;
+        if !store.revalidate_protected_root() {
+            return Err(LedgerError::authority_invariant());
+        }
         let identity = production_authority_identity(ledger.authority_id().to_owned())
             .map_err(|_| LedgerError::authority_invariant())?;
         Ok(Self { ledger, identity })
     }
 
     fn open_existing(store: &impl RepositoryFitAuthorityStore) -> Result<Self, LedgerError> {
+        if !store.revalidate_protected_root() {
+            return Err(LedgerError::authority_invariant());
+        }
         let ledger =
             FileRepositoryFitLedger::open_existing(store.protected_root(), store.store_id())?;
+        if !store.revalidate_protected_root() {
+            return Err(LedgerError::authority_invariant());
+        }
         let identity = production_authority_identity(ledger.authority_id().to_owned())
             .map_err(|_| LedgerError::authority_invariant())?;
         Ok(Self { ledger, identity })
@@ -693,6 +712,15 @@ fn execute_supported(
             );
         }
     };
+    if !store.revalidate_protected_root() {
+        return settle_pre_effect_failure(
+            &authority.ledger,
+            token,
+            request_id,
+            adapter_error(AdapterErrorId::ApplyPermitInvalid),
+            effect_tick,
+        );
+    }
     let owner = match authority.ledger.begin_effect(token, effect_tick) {
         Ok(owner) => owner,
         Err(error) => {
@@ -1078,7 +1106,7 @@ pub(super) fn after_effect_start_before_apply_for_test(action: impl FnOnce() + '
 }
 
 #[cfg(test)]
-pub(super) fn after_effect_before_terminal_for_test(action: impl FnOnce() + 'static) {
+pub(crate) fn after_effect_before_terminal_for_test(action: impl FnOnce() + 'static) {
     AFTER_EFFECT_BEFORE_TERMINAL.with(|slot| {
         let prior = slot.borrow_mut().replace(Box::new(action));
         assert!(prior.is_none(), "an after-effect action is already armed");
@@ -1126,7 +1154,7 @@ fn settle_pre_effect_failure(
         Err(ledger_error) => RepositoryFitProductionOutcome::terminal_failure(
             request_id,
             ledger_error.adapter_error(),
-            RepositoryFitLedgerState::Ambiguous,
+            RepositoryFitLedgerState::Reserved,
             false,
             false,
         ),
@@ -1146,7 +1174,7 @@ fn settle_success(
             return RepositoryFitProductionOutcome::terminal_failure(
                 request_id,
                 adapter_error(AdapterErrorId::ApplyOutcomeAmbiguous),
-                RepositoryFitLedgerState::Ambiguous,
+                RepositoryFitLedgerState::EffectStarted,
                 true,
                 false,
             );
@@ -1162,7 +1190,7 @@ fn settle_success(
         Err(_) => RepositoryFitProductionOutcome::terminal_failure(
             request_id,
             adapter_error(AdapterErrorId::ApplyOutcomeAmbiguous),
-            RepositoryFitLedgerState::Ambiguous,
+            RepositoryFitLedgerState::EffectStarted,
             true,
             false,
         ),
@@ -1209,7 +1237,7 @@ fn settle_failure<E: super::root_permit::RepositoryFitPermitEffects>(
             } else {
                 AdapterErrorId::ApplyOutcomeInvalid
             }),
-            RepositoryFitLedgerState::Ambiguous,
+            RepositoryFitLedgerState::EffectStarted,
             effect_started,
             false,
         ),

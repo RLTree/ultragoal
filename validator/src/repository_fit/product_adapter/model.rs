@@ -7,8 +7,7 @@ pub(super) const PLAN_SCHEMA: &str = "RepositoryFitPlan-v1";
 pub(super) const VERIFY_SCHEMA: &str = "RepositoryFitVerification-v1";
 pub(super) const APPLY_PREPARATION_SCHEMA: &str = "RepositoryFitApplyPreparation-v1";
 pub(super) const CLAIM_EFFECT: &str = "none";
-pub(super) const SUPPORT_LIMIT: &str =
-    "candidate-bound source adapter only; no public activation or live-repository authority";
+pub(super) const SUPPORT_LIMIT: &str = "source-built public repository-fit adapter; effectful apply requires a supported Darwin host and preprovisioned owner-only local authority state; install and live-user proof remain separate";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]

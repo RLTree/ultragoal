@@ -1,0 +1,137 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "REPOSITORY-FIT-PUBLIC-AUTHORITY-REVIEW-092-R2",
+  "reviewer": "/root/supported_host_transaction_security_reviewer",
+  "review_route": "independent public repository-fit authority security review",
+  "effective_model_metadata": "not exposed",
+  "verdict": "ACCEPT",
+  "reviewed_at_date": "2026-07-13",
+  "reviewed_identity": {
+    "freeze_head_commit": "27f5fa890118b390ac303a39dae35462f75fa9b2",
+    "freeze_head_tree": "a1b40d086d87449a8b56cea6fac972d3129dbeed",
+    "review_overlay": "/private/tmp/hul-root-public-fit-review-27f5fa",
+    "review_target": "/private/tmp/hul-root-public-fit-092-r2-review-target",
+    "artifact_set_sha256": "sha256:2f166bc81ecb15d51477928420a7cb081903e943c64a08406f598ff69d540f4a",
+    "artifact_count": 14,
+    "artifact_bytes": 266955
+  },
+  "artifact_set": [
+    {
+      "path": "fixtures/repository-fit-live-journeys/cases.json",
+      "sha256": "sha256:6d9b2336e5429f22bcf3c9d1201312088bace157c60a2a43cc1a4966a905b400",
+      "byte_length": 3708
+    },
+    {
+      "path": "validator/src/cli/successor_public/fit.rs",
+      "sha256": "sha256:1e89ed0ee0224a33bb0d53f750ea07fc1af23a306bd70ae3b3d895a339f06035",
+      "byte_length": 11851
+    },
+    {
+      "path": "validator/src/cli/successor_public/fit/authority.rs",
+      "sha256": "sha256:db6a6ca8a92ddba29ee4e3219a9cf02717785c06cecd48276f4fd8625569e7d6",
+      "byte_length": 37508
+    },
+    {
+      "path": "validator/src/cli/successor_public/mod.rs",
+      "sha256": "sha256:ff36490abbe03e5254fb872b0921239d10ce4123c1d5d5bbc3b53ce4f93a6400",
+      "byte_length": 9337
+    },
+    {
+      "path": "validator/src/cli/successor_public/tests.rs",
+      "sha256": "sha256:5fdba60a1be39b34bd40f403a7cf21da099f271dda5b8d48eec9cdf2394fc6d4",
+      "byte_length": 22323
+    },
+    {
+      "path": "validator/src/context/request.rs",
+      "sha256": "sha256:9020762d9ce327f0060b57331aec000862b1799b298ba0d2af97081b3bdb015e",
+      "byte_length": 3473
+    },
+    {
+      "path": "validator/src/repository_fit/mod.rs",
+      "sha256": "sha256:c816caf8cf0b47c3c8c821e75aa30b9462baf8915f6efa08f534fafcfade686d",
+      "byte_length": 1793
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter.rs",
+      "sha256": "sha256:d43f402ef129c95e38fa17d8dc561193106cd9f6be303141e5e22ea580adde18",
+      "byte_length": 6441
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter/authority.rs",
+      "sha256": "sha256:efa5e582cd6dbd763cb1b5d1d050cc793402060218844f4f1c4e5194132b8efa",
+      "byte_length": 42944
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter/model.rs",
+      "sha256": "sha256:5f136627db9a2e8097127f847062836f60800c93696e94cb3120c134c92c0327",
+      "byte_length": 10014
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter/tests/production_authority.rs",
+      "sha256": "sha256:c7e8dae60bd33bef06d79dab4e5a4e9e9f5c7ac42ee83cacaf564f597a56a14e",
+      "byte_length": 82523
+    },
+    {
+      "path": "validator/tests/repository_fit_live_journeys_contract.rs",
+      "sha256": "sha256:0b1b455464d1c89411ffc58a215af2a8d103d3cde851ead3f8eba7774586cd1b",
+      "byte_length": 12844
+    },
+    {
+      "path": "validator/tests/repository_fit_public_adapter_contract.rs",
+      "sha256": "sha256:cf5c745ed10e00a17a62dab51f8a4c2f08f23b63eab987c8f26ac37188fb2ccb",
+      "byte_length": 7329
+    },
+    {
+      "path": "validator/tests/repository_fit_public_apply_contract.rs",
+      "sha256": "sha256:553f620b92772005ce9497cc944cc9a27f8fc7d9e1289f273b232819ee896d03",
+      "byte_length": 14867
+    }
+  ],
+  "reconciliation": {
+    "artifact_identity": "PASS: all 14 rows matched digest, byte length, regular-file type, single-link identity, and aggregate digest before and after review",
+    "public_effect_route": "PASS: the public fit apply command enters the sealed production authority, persists pending recovery authority before the workspace effect, and returns stable machine diagnostics",
+    "recovery_order": "PASS: pending recovery is serviced before stale or conflicting accepted-plan validation can block the recovery route",
+    "zero_write_reads": "PASS: public read routes and apply refusals with no pending record did not initialize host authority state or mutate the workspace",
+    "candidate_stability": "PASS: independent review left the frozen candidate identity unchanged"
+  },
+  "verification": [
+    {
+      "surface": "crash, target drift, and old accepted-plan replay",
+      "result": "1 passed; replay refused with apply_lease_invalid while retaining pending recovery authority"
+    },
+    {
+      "surface": "public binary plan, apply, verify, repeat, stale-plan, and refusal contracts",
+      "result": "11 passed; 0 failed"
+    },
+    {
+      "surface": "public CLI fit unit contracts",
+      "result": "5 passed; 0 failed"
+    },
+    {
+      "surface": "production authority functional matrix",
+      "result": "38 passed; 0 failed after excluding one deliberately stale prior-candidate receipt assertion"
+    },
+    {
+      "surface": "false-pass control",
+      "result": "the unfiltered prior WorkerResult assertion failed because its product_adapter.rs byte length was stale; that older receipt was not reused as current proof"
+    }
+  ],
+  "supported_scope": [
+    "source-built Darwin public fit apply route through the sealed repository-fit production authority",
+    "preprovisioned owner-only POSIX host authority and pending-recovery state",
+    "candidate-bound plan acceptance, crash recovery, replay refusal, stable diagnostics, and read-path non-mutation"
+  ],
+  "residual_risks": [
+    "persisted CLOCK_MONOTONIC ticks are not bound to a boot-session identity, so cross-reboot recovery is unproven",
+    "macOS ACL and file-flag identity and enforcement are unproven",
+    "an actively hostile same-UID actor across final syscall windows remains outside the accepted scope"
+  ],
+  "explicitly_withheld": [
+    "installed package, cache, marketplace, app-registry, Plugins UI, and runtime discovery behavior",
+    "representative fresh-user live journeys",
+    "cross-reboot recovery",
+    "readiness, release, node closure, and goal completion"
+  ],
+  "claim_ceiling": "independently accepted source-built Darwin public fit apply behavior with preprovisioned owner-only POSIX host state only",
+  "no_claim_statement": "This review does not claim installed, cache, marketplace, app-registry, Plugins UI, runtime discovery, cross-reboot, live-user, readiness, release, node closure, or goal completion behavior."
+}

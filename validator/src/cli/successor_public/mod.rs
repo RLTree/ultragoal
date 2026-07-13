@@ -9,7 +9,7 @@ use crate::inventory::{
     InventoryBuilder,
 };
 use std::io::{self, Write};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 const MAX_PUBLIC_OUTPUT: usize = 16 * 1024 * 1024;
 
@@ -34,11 +34,24 @@ fn run_invocation(root: &Path, invocation: ParsedInvocation) -> Result<i32, Stri
 }
 
 fn execute_invocation(root: &Path, invocation: ParsedInvocation) -> RuntimeOutcome {
-    if invocation.effect != EffectClass::Read {
+    let home = std::env::var_os("HOME").map(PathBuf::from);
+    execute_invocation_with_home(root, invocation, home.as_deref())
+}
+
+fn execute_invocation_with_home(
+    root: &Path,
+    invocation: ParsedInvocation,
+    home: Option<&Path>,
+) -> RuntimeOutcome {
+    let public_fit_apply = invocation.command == SuccessorCommand::Fit(FitAction::Apply)
+        && invocation.effect == EffectClass::WorkspaceWrite;
+    if invocation.effect != EffectClass::Read && !public_fit_apply {
         return crate::cli::successor::runtime::unavailable(&invocation);
     }
     let context_root = match invocation.command {
-        SuccessorCommand::Fit(FitAction::Inspect | FitAction::Plan | FitAction::Verify) => {
+        SuccessorCommand::Fit(
+            FitAction::Inspect | FitAction::Plan | FitAction::Apply | FitAction::Verify,
+        ) => {
             match fit::target_root(root, &invocation) {
                 Ok(target) => target,
                 Err(outcome) => return outcome,
@@ -46,7 +59,15 @@ fn execute_invocation(root: &Path, invocation: ParsedInvocation) -> RuntimeOutco
         }
         _ => root.to_path_buf(),
     };
-    let context = match read_context(&context_root) {
+    // Plan and apply intentionally share one effect-bound context identity. The
+    // plan route still performs only reads and issues no mutation permit.
+    let context_result = match invocation.command {
+        SuccessorCommand::Fit(FitAction::Plan | FitAction::Apply) => {
+            workspace_context(&context_root)
+        }
+        _ => read_context(&context_root),
+    };
+    let context = match context_result {
         Ok(context) => context,
         Err(()) => return context_unavailable(),
     };
@@ -68,6 +89,7 @@ fn execute_invocation(root: &Path, invocation: ParsedInvocation) -> RuntimeOutco
         }
         SuccessorCommand::Fit(FitAction::Inspect) => fit::inspect(&context, &invocation),
         SuccessorCommand::Fit(FitAction::Plan) => fit::plan(&context, &invocation),
+        SuccessorCommand::Fit(FitAction::Apply) => fit::apply(&context, &invocation, home),
         SuccessorCommand::Fit(FitAction::Verify) => fit::verify(&context, &invocation),
         SuccessorCommand::Diagnose => match InventoryBuilder::new(&context).build() {
             Ok(inventory) => match crate::state::derive_adopted(&context, &inventory) {
@@ -94,6 +116,18 @@ fn read_context(root: &Path) -> Result<LiveContext, ()> {
     LiveContext::build(
         BuildRequest::new(root)
             .with_effect(EffectClass::Read)
+            .bind_non_secret_configuration(
+                ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
+                ADOPTED_HANDOFF_MANIFEST_SHA256,
+            ),
+    )
+    .map_err(|_| ())
+}
+
+fn workspace_context(root: &Path) -> Result<LiveContext, ()> {
+    LiveContext::build(
+        BuildRequest::new(root)
+            .with_root_workspace_grant(root)
             .bind_non_secret_configuration(
                 ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
                 ADOPTED_HANDOFF_MANIFEST_SHA256,
@@ -137,7 +171,7 @@ fn public_output_allowed(bytes: usize) -> bool {
 fn context_unavailable() -> RuntimeOutcome {
     failure(
         DiagnosticId::ContextUnavailable,
-        "a current read-only LiveContext could not be constructed",
+        "a current candidate-bound LiveContext could not be constructed",
         "live repository context",
         "verify the root and retry against one stable Git candidate",
         "context and dependent claims remain unavailable",

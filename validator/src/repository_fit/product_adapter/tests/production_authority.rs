@@ -203,6 +203,40 @@ impl RepositoryFitAuthorityStore for TestStore {
     fn store_id(&self) -> &str {
         &self.id
     }
+
+    fn revalidate_protected_root(&self) -> bool {
+        true
+    }
+}
+
+struct RevalidationStore<'a> {
+    inner: &'a TestStore,
+    calls: AtomicU64,
+    accepted_calls: u64,
+}
+
+impl<'a> RevalidationStore<'a> {
+    fn new(inner: &'a TestStore, accepted_calls: u64) -> Self {
+        Self {
+            inner,
+            calls: AtomicU64::new(0),
+            accepted_calls,
+        }
+    }
+}
+
+impl RepositoryFitAuthorityStore for RevalidationStore<'_> {
+    fn protected_root(&self) -> &Path {
+        &self.inner.root
+    }
+
+    fn store_id(&self) -> &str {
+        &self.inner.id
+    }
+
+    fn revalidate_protected_root(&self) -> bool {
+        self.calls.fetch_add(1, Ordering::SeqCst) < self.accepted_calls
+    }
 }
 
 struct TestClock {
@@ -524,6 +558,58 @@ fn fresh_exact_apply_commits_and_repeat_is_idempotent() {
 }
 
 #[test]
+fn failed_terminal_validation_retains_recovery_authority_until_reconciled() {
+    let fixture = Fixture::new("terminal-validation-recovery-retained");
+    let context = fixture.context();
+    let prepared = fixture.prepared(&context);
+    let recovery_intent = prepare_recovery_intent(&context, &prepared).unwrap();
+    let intent_bytes = recovery_intent.to_machine_bytes();
+    let store_root = fixture.store.root.clone();
+    after_effect_before_terminal_for_test(move || {
+        before_atomic_publish_for_test(move || {
+            fs::set_permissions(&store_root, fs::Permissions::from_mode(0o777)).unwrap();
+        });
+    });
+
+    let outcome = execute_prepared_apply(
+        &context,
+        prepared,
+        recovery_intent,
+        &TestClock::new([10, 11, 12]),
+        &fixture.store,
+        nonce("terminal-validation-recovery-retained"),
+    );
+
+    assert_eq!(outcome.status(), "ambiguous");
+    assert_eq!(
+        outcome.error_id(),
+        Some(AdapterErrorId::ApplyOutcomeAmbiguous)
+    );
+    assert!(outcome.effect_started());
+    assert!(outcome.recovery_required());
+    fs::set_permissions(&fixture.store.root, fs::Permissions::from_mode(0o700)).unwrap();
+
+    let recovered = recover_prepared_apply(
+        &context,
+        &intent_bytes,
+        &TestClock::new([73]),
+        &fixture.store,
+        nonce("terminal-validation-recovery-retained"),
+    );
+    assert_eq!(
+        recovered.error_id(),
+        Some(AdapterErrorId::ApplyPermitReplayed)
+    );
+    assert!(!recovered.recovery_required());
+    for row in CANONICAL_TEMPLATES {
+        assert_eq!(
+            fs::read(fixture.root.join(row.target_path)).unwrap(),
+            row.bytes
+        );
+    }
+}
+
+#[test]
 fn partial_dirty_target_preserves_user_bytes_and_applies_only_plan() {
     let fixture = Fixture::new("partial-dirty");
     fixture.write("USER-NOTES.txt", b"keep these user bytes\n");
@@ -664,6 +750,36 @@ fn stale_target_and_invalid_clock_refuse_before_authority_store_write() {
     assert_eq!(result.error_id(), Some(AdapterErrorId::ApplyPermitExpired));
     assert_eq!(expired.store_names(), Vec::<String>::new());
     assert_eq!(snapshot(&expired.root), before);
+}
+
+#[test]
+fn protected_store_drift_after_reservation_refuses_before_workspace_effect() {
+    let fixture = Fixture::new("protected-store-drift-before-effect");
+    let context = fixture.context();
+    let prepared = fixture.prepared(&context);
+    let recovery_intent = prepare_recovery_intent(&context, &prepared).unwrap();
+    let target_before = snapshot(&fixture.root);
+    let store = RevalidationStore::new(&fixture.store, 2);
+
+    let outcome = execute_prepared_apply(
+        &context,
+        prepared,
+        recovery_intent,
+        &TestClock::new([10, 11, 12]),
+        &store,
+        nonce("protected-store-drift-before-effect"),
+    );
+
+    assert_eq!(store.calls.load(Ordering::SeqCst), 3);
+    assert_eq!(outcome.status(), "refused");
+    assert_eq!(outcome.error_id(), Some(AdapterErrorId::ApplyPermitInvalid));
+    assert!(!outcome.effect_started());
+    assert_eq!(snapshot(&fixture.root), target_before);
+    assert!(
+        String::from_utf8(fs::read(fixture.store.root.join("authority-ledger.json")).unwrap())
+            .unwrap()
+            .contains("rejected")
+    );
 }
 
 #[test]

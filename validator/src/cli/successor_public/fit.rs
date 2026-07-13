@@ -1,9 +1,8 @@
-//! Candidate repository-fit public adapter surface.
+//! Root-owned repository-fit public adapter surface.
 //!
-//! Root integration exposes inspect, plan, and verify through the sole public
-//! dispatcher. Apply preparation remains undispatched: it performs no
-//! workspace effect and issues no
-//! root grant or permit.
+//! Read routes remain projection-only. Apply consumes one exact accepted plan,
+//! persists restart authority in preprovisioned owner-only host state, and then
+//! enters the sealed repository-fit production kernel.
 
 use crate::cli::successor::runtime::{Diagnostic, DiagnosticId, RuntimeOutcome};
 use crate::cli::successor::{
@@ -28,6 +27,9 @@ pub(super) fn target_root(
             (OptionName::Target, ParsedValue::RelativePath(path)) if target.is_none() => {
                 target = Some(path.as_str())
             }
+            (OptionName::Plan, ParsedValue::RelativePath(_))
+            | (OptionName::AcceptPlan, ParsedValue::Identifier(_))
+                if invocation.command == SuccessorCommand::Fit(FitAction::Apply) => {}
             _ => return Err(invalid_invocation()),
         }
     }
@@ -113,13 +115,48 @@ pub(super) fn verify(context: &LiveContext, invocation: &ParsedInvocation) -> Ru
     }
 }
 
+pub(super) fn apply(
+    context: &LiveContext,
+    invocation: &ParsedInvocation,
+    home: Option<&Path>,
+) -> RuntimeOutcome {
+    let arguments = match apply_arguments(invocation) {
+        Ok(arguments) => arguments,
+        Err(outcome) => return outcome,
+    };
+    let Some(home) = home else {
+        return authority::host_state_unavailable();
+    };
+    match authority::recover_pending(context, home) {
+        Ok(Some(outcome)) => return outcome,
+        Ok(None) => {}
+        Err(outcome) => return outcome,
+    }
+    let prepared = match prepare_apply_with_arguments(context, arguments) {
+        Ok(prepared) => prepared,
+        Err(outcome) => return outcome,
+    };
+    authority::execute(context, prepared, home)
+}
+
+struct ApplyArguments<'a> {
+    plan_path: &'a str,
+    accepted_plan: &'a str,
+}
+
 /// Reads one descriptor-anchored bounded plan record and returns an opaque
-/// request. The caller still needs a separately designed root-owned apply
-/// permit and effect executor.
+/// request. The shell-facing JSON renderer adds exactly one LF; accepting only
+/// that framing in addition to canonical bytes keeps ordinary redirection
+/// usable without accepting general whitespace or alternate encodings.
 pub(super) fn prepare_apply(
     context: &LiveContext,
     invocation: &ParsedInvocation,
 ) -> Result<PreparedFitApply, RuntimeOutcome> {
+    let arguments = apply_arguments(invocation)?;
+    prepare_apply_with_arguments(context, arguments)
+}
+
+fn apply_arguments(invocation: &ParsedInvocation) -> Result<ApplyArguments<'_>, RuntimeOutcome> {
     if invocation.command != SuccessorCommand::Fit(FitAction::Apply)
         || invocation.effect != EffectClass::WorkspaceWrite
     {
@@ -142,13 +179,28 @@ pub(super) fn prepare_apply(
     let (Some(plan_path), Some(accepted_plan)) = (plan_path, accepted_plan) else {
         return Err(invalid_invocation());
     };
+    Ok(ApplyArguments {
+        plan_path,
+        accepted_plan,
+    })
+}
+
+fn prepare_apply_with_arguments(
+    context: &LiveContext,
+    arguments: ApplyArguments<'_>,
+) -> Result<PreparedFitApply, RuntimeOutcome> {
     let reads = context.begin_read_session().map_err(|_| stale_context())?;
-    let absolute = reads.root().join(plan_path);
+    let absolute = reads.root().join(arguments.plan_path);
     let bytes = reads
         .read_bounded(&absolute, MAX_PLAN_RECORD_BYTES)
         .map_err(|_| invalid_plan())?;
     reads.revalidate().map_err(|_| stale_context())?;
-    prepare_apply_request(context, &bytes, accepted_plan).map_err(adapter_failure)
+    let canonical = if bytes.ends_with(b"\n") && !bytes[..bytes.len() - 1].ends_with(b"\n") {
+        &bytes[..bytes.len() - 1]
+    } else {
+        bytes.as_slice()
+    };
+    prepare_apply_request(context, canonical, arguments.accepted_plan).map_err(adapter_failure)
 }
 
 fn valid_read_invocation(invocation: &ParsedInvocation, action: FitAction) -> bool {
@@ -264,3 +316,5 @@ fn adapter_failure(failure: FitAdapterError) -> RuntimeOutcome {
         ),
     )
 }
+
+mod authority;

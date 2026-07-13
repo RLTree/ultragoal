@@ -250,9 +250,12 @@ fn fixture_catalog_names_the_exact_below_root_journey_matrix() {
     );
     assert_eq!(catalog.temporary_root, BASE);
     assert_eq!(catalog.supported_host, "darwin");
-    assert_eq!(catalog.claim_effect, "none");
-    assert_eq!(catalog.production_permit_issuer, "absent");
-    assert_eq!(catalog.public_apply_dispatch, "absent");
+    assert_eq!(catalog.claim_effect, "workspace_write");
+    assert_eq!(
+        catalog.production_permit_issuer,
+        "darwin-owner-only-host-state"
+    );
+    assert_eq!(catalog.public_apply_dispatch, "successor-fit-apply");
     let observed = catalog
         .cases
         .iter()
@@ -270,6 +273,8 @@ fn fixture_catalog_names_the_exact_below_root_journey_matrix() {
         "no-effect-success-substitution",
         "partial-retrofit",
         "plan-command-zero-write",
+        "public-authority-refusals",
+        "public-binary-apply",
         "recovery-replan",
         "repeat-use-idempotence",
         "replay-refusal",

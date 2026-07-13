@@ -137,25 +137,37 @@ fn canonical_template_bytes_are_compile_time_bound_and_manifest_checked() {
 }
 
 #[test]
-fn root_owned_public_wiring_activates_only_read_routes() {
+fn root_owned_public_wiring_activates_read_routes_and_one_effectful_fit_route() {
     let public_mod = source("validator/src/cli/successor_public/mod.rs");
     let library = source("validator/src/lib.rs");
     assert!(public_mod.lines().any(|line| line.trim() == "mod fit;"));
     assert!(public_mod.contains("fit::inspect"));
     assert!(public_mod.contains("fit::plan"));
     assert!(public_mod.contains("fit::verify"));
-    assert!(!public_mod.contains("fit::prepare_apply"));
+    assert!(public_mod.contains("fit::apply"));
+    assert!(public_mod.contains("with_root_workspace_grant"));
+    assert!(public_mod.contains("public_fit_apply"));
     assert!(library.contains("pub mod repository_fit;"));
 }
 
 #[test]
-fn public_fit_candidate_is_projection_and_preparation_only() {
+fn public_fit_apply_uses_the_sealed_kernel_and_durable_host_recovery() {
     let fit = source("validator/src/cli/successor_public/fit.rs");
+    let authority = source("validator/src/cli/successor_public/fit/authority.rs");
     assert!(fit.contains("pub(super) fn inspect"));
     assert!(fit.contains("pub(super) fn plan"));
     assert!(fit.contains("pub(super) fn verify"));
     assert!(fit.contains("pub(super) fn prepare_apply"));
+    assert!(fit.contains("pub(super) fn apply"));
+    assert!(fit.contains("bytes.ends_with(b\"\\n\")"));
     assert!(!fit.contains("repository_fit::apply("));
     assert!(!fit.contains("LocalEffects"));
-    assert!(fit.contains("issues no\n//! root grant or permit"));
+    assert!(authority.contains("execute_prepared_apply"));
+    assert!(authority.contains("recover_prepared_apply"));
+    assert!(authority.contains("clock_gettime(libc::CLOCK_MONOTONIC"));
+    assert!(authority.contains("libc::O_NOFOLLOW"));
+    assert!(authority.contains("libc::RENAME_EXCL"));
+    assert!(authority.contains("recovery_required"));
+    assert!(!authority.contains("create_dir"));
+    assert!(!authority.contains("Command::new"));
 }

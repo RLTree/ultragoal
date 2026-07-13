@@ -40,10 +40,13 @@ pub(crate) use error::error;
 #[cfg(unix)]
 pub(crate) use local::LocalEffects;
 pub(crate) use ownership::issue_managed_prior_proof;
+#[cfg(test)]
+pub(crate) use product_adapter::after_effect_before_terminal_for_test;
 pub(crate) use product_adapter::{
-    execute_prepared_apply, inspect_target, plan_target, prepare_apply_request, verify_target,
     AdapterErrorId, FitAdapterError, FitApplyPreparationProjection, FitInspectProjection,
     FitPlanRecord, FitVerificationProjection, OpaqueFitApplyRequest, PreparedFitApply,
     RepositoryFitApplyNonce, RepositoryFitAuthorityStore, RepositoryFitProductionOutcome,
-    RepositoryFitTrustedClock,
+    RepositoryFitRecoveryIntent, RepositoryFitTrustedClock, execute_prepared_apply, inspect_target,
+    parse_recovery_intent, plan_target, prepare_apply_request, prepare_recovery_intent,
+    recover_prepared_apply, verify_target,
 };
