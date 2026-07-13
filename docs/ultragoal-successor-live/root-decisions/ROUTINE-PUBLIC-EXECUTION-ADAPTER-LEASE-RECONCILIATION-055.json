@@ -1,0 +1,31 @@
+{
+  "schema_version": "RootLeaseReconciliation-v1",
+  "reconciliation_id": "ROUTINE-PUBLIC-EXECUTION-ADAPTER-LEASE-RECONCILIATION-055",
+  "workstream": "routine-impact-capture-fixtures-and-verified-reuse",
+  "original_work_envelope": {
+    "path": "docs/ultragoal-successor-live/work-packages/ROUTINE-PUBLIC-EXECUTION-ADAPTER-PROTOCOL-055.json",
+    "sha256": "sha256:b44e685967fcefffe1b5f275148540de1748df139f6e1927b7fc91d3966269cf",
+    "issued_owner": "/root/routine_public_execution_adapter_engineer",
+    "issued_candidate_id": "sha256:226efc689750528e7c253b4f67f6bd3428a5b1c1faaa06bc420ed3d83d3473bd"
+  },
+  "root_reconciliation": {
+    "reason": "The Ultra root continued the same routine node through the existing routine worker after the issued worker was unavailable; no second implementation lane or overlapping authority was created.",
+    "runtime_worker": "/root/routine_reuse_dependency_engineer",
+    "context_id": "sha256:11a7bc336aad017e4e242bd651c0a620bfe5a52e4bb2c8daacffa5daea4a8579",
+    "candidate_id": "sha256:2a8ebcab7e3c0278445b2b3d77325846fb49085916e32b95c515e1a14453b0db",
+    "freeze_head_commit": "cb5275c50e4a0e7acc90e135db9b1a1a616919e0",
+    "freeze_head_tree": "c8d541626ec10b80a804353a31d720e809fe0387",
+    "scope": "The original leased paths, semantic symbols, fixtures, generated outputs, effects, prohibitions, acceptance controls, and no-claim boundary remain unchanged.",
+    "authority_effect": "Rebind only the truthful worker principal and exact reviewed candidate for canonical WorkerResult validation."
+  },
+  "corrected_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/ROUTINE-PUBLIC-EXECUTION-ADAPTER-PROTOCOL-055.json",
+    "file_sha256": "sha256:125627cc1c1d3a8a46340e6ff8c853c2c061d4f70a67c90c9a2baf8bd63145f6",
+    "rust_result_id": "sha256:50125957016f471a01db1710a197ae0987977b9d4ab98ac15095e4d6b778df0d",
+    "canonical_parse": "pass",
+    "reconciled_validate_for": "pass"
+  },
+  "review_required": "Independent review must revalidate the corrected WorkerResult and this exact root reconciliation before acceptance.",
+  "claim_ceiling": "Root reconciliation changes lease provenance only. The candidate remains an internal protocol with no effect or public product authority.",
+  "no_claim_statement": "This reconciliation does not claim workspace effects, public activation, installed product behavior, node closure, readiness, release, or goal completion."
+}

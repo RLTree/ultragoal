@@ -22,6 +22,8 @@ mod provenance;
 mod report;
 #[path = "routine_work_contract/reuse/mod.rs"]
 mod reuse;
+#[path = "routine_work_contract/runtime_adapter.rs"]
+mod runtime_adapter;
 #[path = "routine_work_contract/security.rs"]
 mod security;
 #[path = "routine_work_contract/support.rs"]

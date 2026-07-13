@@ -13,6 +13,7 @@ mod plan;
 mod registry;
 mod report;
 mod reuse;
+mod runtime_adapter;
 mod snapshot;
 
 pub use binding::{BoundTool, RoutineBinding};
@@ -35,6 +36,16 @@ pub use reuse::{
     capture_executed_result, observe_result_artifact,
 };
 pub use snapshot::{ChangeKind, DirtyChange, DirtySnapshot};
+
+pub(crate) use runtime_adapter::{
+    PreparedRoutineExecution, RoutineAdapterSpec, RoutineEffectIntent, RoutineEffectRequest,
+    RoutineInvocationSpec, RoutineMediatedExpectation, RoutineMediatedIntent,
+    RoutineMediatedOutcome, RoutineMediatedWitness, RoutineMediationAuthority,
+    RoutineMediationBatch, RoutineNoOpProjection, begin_routine_mediation,
+    bind_mediated_expectation, bind_mediated_witness, bind_routine_invocation,
+    observe_mediated_incomplete, observe_mediated_outcome, prepare_routine_execution,
+    reconcile_routine_execution,
+};
 
 #[cfg(test)]
 pub(crate) use authority::set_test_live_authority_hook;

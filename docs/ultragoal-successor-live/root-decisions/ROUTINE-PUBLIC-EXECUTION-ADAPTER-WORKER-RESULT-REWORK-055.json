@@ -1,0 +1,26 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "decision_id": "ROUTINE-PUBLIC-EXECUTION-ADAPTER-WORKER-RESULT-REWORK-055",
+  "workstream": "routine-impact-capture-fixtures-and-verified-reuse",
+  "decision": "REWORK",
+  "reviewed_candidate": {
+    "artifact_set_sha256": "sha256:2a8ebcab7e3c0278445b2b3d77325846fb49085916e32b95c515e1a14453b0db",
+    "artifact_count": 6,
+    "artifact_bytes": 89818,
+    "artifact_lines": 2720,
+    "worker_result_sha256": "sha256:5bdd2282e44bdbddb0b7b949df6f446032cca6d58a0d7df3d45aa105eb3de13d"
+  },
+  "decisive_finding": {
+    "class": "worker_result_canonical_parser_mismatch",
+    "evidence": "The repository-standard Rust WorkerResultV1 parser rejected unknown EffectUse fields and unsupported effect-class values even though the permissive generated JSON schema accepted them.",
+    "affected_surface": "docs/ultragoal-successor-live/worker-results/ROUTINE-PUBLIC-EXECUTION-ADAPTER-PROTOCOL-055.json",
+    "implementation_bytes_affected": false
+  },
+  "correction_required": [
+    "Preserve the exact six implementation artifacts and aggregate.",
+    "Make the WorkerResult parse under the canonical Rust type and retain truthful effects and no-claim fields.",
+    "Reconcile the truthful runtime worker and current candidate through root authority rather than rewriting issuance history."
+  ],
+  "claim_ceiling": "Internal protocol candidate only; no workspace effect, public activation, installed behavior, node closure, readiness, release, or completion is accepted.",
+  "no_claim_statement": "This REWORK decision raises no product, readiness, release, node-closure, or goal-completion claim."
+}

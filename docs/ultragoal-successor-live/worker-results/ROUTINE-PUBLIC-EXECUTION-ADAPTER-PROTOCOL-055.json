@@ -1,0 +1,308 @@
+{
+  "worker": "/root/routine_reuse_dependency_engineer",
+  "lease_id": "ROUTINE-PUBLIC-EXECUTION-ADAPTER-PROTOCOL-055",
+  "context_id": "sha256:11a7bc336aad017e4e242bd651c0a620bfe5a52e4bb2c8daacffa5daea4a8579",
+  "candidate_identity": {
+    "candidate_id": "sha256:2a8ebcab7e3c0278445b2b3d77325846fb49085916e32b95c515e1a14453b0db",
+    "context_id": "sha256:11a7bc336aad017e4e242bd651c0a620bfe5a52e4bb2c8daacffa5daea4a8579",
+    "issued_candidate_id": "sha256:226efc689750528e7c253b4f67f6bd3428a5b1c1faaa06bc420ed3d83d3473bd",
+    "branch": "codex/successor-contract-v2-live-product",
+    "issued_head_commit": "8451ccf61ed986f474a451eab5423c6b2294d44a",
+    "issued_head_tree": "814eb609a822a33aabfe0dcdd1ae2119cddf38e0",
+    "freeze_head_commit": "cb5275c50e4a0e7acc90e135db9b1a1a616919e0",
+    "freeze_head_tree": "c8d541626ec10b80a804353a31d720e809fe0387",
+    "worker_owned_artifact_set_sha256": "sha256:2a8ebcab7e3c0278445b2b3d77325846fb49085916e32b95c515e1a14453b0db",
+    "worker_owned_artifact_set_formula": "Sort artifact rows by UTF-8 path bytes, serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>, concatenate, then SHA-256 the resulting bytes.",
+    "worker_owned_artifact_count": 6,
+    "worker_owned_artifact_total_bytes": 89818,
+    "worker_owned_artifact_total_lines": 2720,
+    "worker_result_self_excluded": true,
+    "concurrent_unowned_changes_preserved": true
+  },
+  "base_state": {
+    "work_envelope": "docs/ultragoal-successor-live/work-packages/ROUTINE-PUBLIC-EXECUTION-ADAPTER-PROTOCOL-055.json",
+    "work_envelope_sha256": "sha256:b44e685967fcefffe1b5f275148540de1748df139f6e1927b7fc91d3966269cf",
+    "declared_lease_owner": "/root/routine_public_execution_adapter_engineer",
+    "runtime_worker_assignment": "/root/routine_reuse_dependency_engineer",
+    "assignment_disposition": "Root explicitly continued the same routine node through the current routine worker; the WorkerResult reports the runtime worker truthfully.",
+    "accepted_routine_reuse": "docs/ultragoal-successor-live/acceptance/ROUTINE-REUSE-DEPENDENCY-AND-INTERRUPTION-INTEGRATION-051.json",
+    "accepted_routine_reuse_sha256": "sha256:1b30cdf207dbbadda7cfd66a8c61a90c4e6b93329204a34346351a855467d3d8",
+    "accepted_routine_reuse_worker_result_sha256": "sha256:deec5e9cea4eeb0eda2be71f28bf702a1f8c56b4dba6a523aca122f8987465b5",
+    "existing_plan_authority": "RoutinePlan already bound candidate, context, graph, snapshot, ordered nodes, dependencies, selected tool, full ToolCapability digest, fallback use, and input identity.",
+    "missing_protocol_authority": "RoutinePlan intentionally did not define argv, working directory, environment isolation, timeout, output budget, declared output scopes, effect-request issuance, or outcome ordering.",
+    "root_owned_surfaces_not_modified": [
+      "successor public command catalog, parser, help, runtime dispatcher, successor_public, command_run, and binary entrypoints",
+      "workspace effect grants, capture sandbox, root mediator, Cargo manifests, workspace dependencies, and Cargo.lock",
+      "public library exports, public API witnesses, generated authority, acceptance, board, claims, migration, release, and completion state",
+      "Git metadata, network, host-global state, external systems, receipts, caches, and telemetry"
+    ]
+  },
+  "final_state": {
+    "status": "worker_blocked",
+    "implementation_scope": "internal candidate-bound routine adapter protocol and direct-path contract tests only",
+    "protocol_module_visibility": "crate-only",
+    "public_command_activated": false,
+    "workspace_effect_mediator_implemented": false,
+    "workspace_effects_executed": 0,
+    "process_spawns_by_preparation_or_pre_report_refusal": 0,
+    "workspace_writes_by_preparation_or_pre_report_refusal": 0,
+    "receipt_cache_telemetry_or_git_writes": 0,
+    "fixture_case_count": 8,
+    "focused_controls": "10 passed; 0 failed; twice",
+    "dependency_closed_controls": "249 passed; 0 failed; twice under root reconciliation; one run was clean and one carried two unrelated nextest leak diagnostics",
+    "claim_effect": false,
+    "current_ceiling": "Protocol-only source candidate. A future root-owned mediator must revalidate the exact context, candidate, selected tool, executable content and metadata, working directory, and declared output scopes immediately before any effect. Public activation, installed product behavior, node closure, readiness, release, and completion remain unproven.",
+    "lease_no_claim_statement": "This worker implements an internal routine adapter protocol only. It does not execute workspace effects, activate the public command, prove installed product behavior, close the routine node, or claim readiness, release, or completion."
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/ROUTINE-PUBLIC-EXECUTION-ADAPTER-PROTOCOL-055.json",
+    "fixtures/routine-public-adapter/cases.json",
+    "validator/src/routine_work/mod.rs",
+    "validator/src/routine_work/runtime_adapter.rs",
+    "validator/src/routine_work/runtime_adapter/model.rs",
+    "validator/tests/routine_work_contract.rs",
+    "validator/tests/routine_work_contract/runtime_adapter.rs"
+  ],
+  "touched_semantics": [
+    "candidate-bound-routine-adapter-session",
+    "exact-runner-and-tool-identity-binding",
+    "ordered-routine-execution-request",
+    "opaque-one-use-workspace-effect-request",
+    "post-execution-report-reconciliation",
+    "root-public-dispatch-change-request"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/routine-public-adapter/cases.json",
+    "validator/tests/routine_work_contract.rs",
+    "validator/tests/routine_work_contract/runtime_adapter.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "leased-internal-adapter-source-tests-fixture-and-worker-result",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "locked-offline-cargo-validation",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "adapter-preparation-or-refusal-process",
+      "performed": false
+    },
+    {
+      "class": "workspace_write",
+      "target": "adapter-workspace-effect",
+      "performed": false
+    },
+    {
+      "class": "network",
+      "target": "network-or-external-system",
+      "performed": false
+    },
+    {
+      "class": "workspace_write",
+      "target": "git-mutation",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-CLI-007",
+    "REQ-PROOF-001",
+    "REQ-PROOF-005",
+    "REQ-PROOF-006",
+    "REQ-ROUTINE-001",
+    "REQ-ROUTINE-002",
+    "REQ-ROUTINE-003",
+    "REQ-ROUTINE-004",
+    "REQ-ROUTINE-005",
+    "REQ-ROUTINE-006",
+    "REQ-SECURITY-002",
+    "REQ-STATE-001",
+    "REQ-STATE-003",
+    "CTRL-ROUTINE-ADAPTER-POSITIVE",
+    "CTRL-ROUTINE-ADAPTER-NEGATIVE",
+    "CTRL-ROUTINE-ADAPTER-RACE",
+    "CTRL-ROUTINE-ADAPTER-MUTATION",
+    "CTRL-ROUTINE-ADAPTER-REPLAY",
+    "CTRL-ROUTINE-ADAPTER-ZERO-EFFECT"
+  ],
+  "dependency_nodes": [
+    "accepted-routine-capture-impact-kernel",
+    "accepted-routine-reuse-dependency-and-interruption-closure",
+    "accepted-successor-cli-typed-grammar",
+    "root-owned-workspace-effect-mediator-remains-pending"
+  ],
+  "changes": [
+    {
+      "area": "exact-runner-protocol",
+      "result": "Added a crate-only invocation binder that derives selected tool and executable identity from the exact plan and LiveContext, then binds caller-supplied argv and bounded execution policy without reconstructing authority from digests."
+    },
+    {
+      "area": "candidate-bound-preparation",
+      "result": "Preparation structurally matches the read-only context binding, graph, complete snapshot, plan, selected set, and exact invocation order. It performs only serialization and digest work and emits no process or workspace effect."
+    },
+    {
+      "area": "opaque-one-use-request",
+      "result": "Nonempty plans produce deterministic intent commitments under a unique atomic issuance and private seal. RoutineEffectRequest has private fields and constructor, is not serializable or deserializable, and is consumed exactly once into sealed mediation authority plus ordered non-Clone intent tokens."
+    },
+    {
+      "area": "issuance-sealed-witness-transition",
+      "result": "Expectation binding copies the opaque issuance seal into a non-Clone mediated expectation. Only consuming that expectation can bind an executed or reused witness, and only the exact matching intent token can observe it. Structurally identical requests, copied IDs, replayed transitions, and prior-request executed or reused witnesses fail closed."
+    },
+    {
+      "area": "effect-intent-completeness",
+      "result": "Each intent records protocol and intent IDs, plan order, node, selected tool and full capability identity, program path hex, program content digest, byte length and mode, argv, canonical worktree cwd, fixed clear environment policy, timeout, output budget, output scopes, dependency node expectations, input identity, and mandatory root mediation preflight."
+    },
+    {
+      "area": "causal-outcome-refusal",
+      "result": "Adapter validation rejects cardinality, duplicate, unknown, issuance, session, order, observation, witness, skip, and failure defects before report delegation. Validation is phased so a decisive structural defect is not masked by a later incomplete disposition."
+    },
+    {
+      "area": "accepted-report-delegation",
+      "result": "Only an exact complete observed set becomes ReportRecords. Existing reconcile_report then revalidates live authority and exact executed or reused dependency artifact chains; the adapter cannot mint reuse evidence or complete status itself."
+    },
+    {
+      "area": "zero-effect-and-representative-controls",
+      "result": "Ten direct controls cover clean no-op, dirty and strict ordered preparation, runner and policy substitution, stale context graph snapshot and plan, partial reordered and copied-ID outcomes, repeated transitions, prior-request intents and executed or reused witnesses, genuine completion, dependency artifact substitution, concurrent mutation, and source-level effect primitive absence."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-routine-public-adapter-055-corrective CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test routine_work_contract -E 'test(/runtime_adapter/)' --no-fail-fast",
+      "status": "pass-10-of-10-twice",
+      "run_ids": [
+        "180e7e55-5444-4354-987b-f243514b630f",
+        "f741d41d-5682-45e4-a86a-fa0b3e41393a"
+      ],
+      "result": "Two clean final-candidate runs passed all ten adapter controls with 68 unrelated controls skipped."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-routine-public-adapter-055-corrective CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --lib --test cli_contract --test routine_work_contract --test routine_recovery_reuse_journey_contract --test fixture_scheduler_contract --test public_api_witness -E 'test(/cli::capture/) | test(/successor_capture/) | binary(routine_work_contract) | binary(routine_recovery_reuse_journey_contract) | binary(fixture_scheduler_contract) | binary(public_api_witness)' --no-fail-fast",
+      "status": "pass-249-of-249-twice",
+      "executor": "/root root-reconciliation runs on the unchanged worker freeze",
+      "run_ids": [
+        "2b9e627e-7359-4eb5-9425-2897feee159b",
+        "60451a5b-e1f0-498c-baa1-fe0d90ed773c"
+      ],
+      "result": "Two root-reconciliation dependency-closed runs on the unchanged six-artifact freeze passed 249 controls with 1,639 out-of-scope controls skipped. Run 2b9e627e-7359-4eb5-9425-2897feee159b was clean. Run 60451a5b-e1f0-498c-baa1-fe0d90ed773c reported two unrelated nextest leak diagnostics. No test failed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-routine-public-adapter-055-corrective CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo check --manifest-path validator/Cargo.toml --locked --offline --lib --jobs 16",
+      "status": "pass-with-diagnostics",
+      "result": "Production library check passed. The aggregate crate emitted 735 warnings, including expected dead-code diagnostics because root-owned public mediation and activation remain intentionally absent; warning count is not completion evidence."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <leased Rust artifacts>; jq -e . fixtures/routine-public-adapter/cases.json; git diff --check -- <leased artifacts>",
+      "status": "pass",
+      "result": "All leased Rust files are formatted, the fixture catalog is valid JSON, and the leased diff has no whitespace errors."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/routine-public-adapter/cases.json",
+      "sha256": "sha256:2d69eb416a12c05a514436a93c52910cab94d2ab108557b9ade2c05d04aa26e2",
+      "byte_length": 1718
+    },
+    {
+      "path": "validator/src/routine_work/mod.rs",
+      "sha256": "sha256:8228c0a49f779545939aa49b0400880455a9e35dc1ea08fd292a2e391a288b1a",
+      "byte_length": 1865
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter.rs",
+      "sha256": "sha256:654819c3ac3e1bb62c6a097a9db732a3a603d62e61219b8fa4cac84d9a1dbdc0",
+      "byte_length": 27704
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/model.rs",
+      "sha256": "sha256:f413c59dc606b2a013e93c59a2e329cf9102fa16b96e118661b7f37b6ee9ac19",
+      "byte_length": 23836
+    },
+    {
+      "path": "validator/tests/routine_work_contract.rs",
+      "sha256": "sha256:fd7ece58c7da6571cdf8a37fbf95e661f91f6319f646973d6699ef831746962b",
+      "byte_length": 760
+    },
+    {
+      "path": "validator/tests/routine_work_contract/runtime_adapter.rs",
+      "sha256": "sha256:4b56c6a7d28fb1916552547ff87307de4dec1c3a807a8e1d4152f149c6f8bf1d",
+      "byte_length": 33935
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material-corrected",
+      "class": "routine-plan-does-not-own-execution-policy",
+      "finding": "The accepted plan has tool-selection authority but intentionally lacks argv, cwd, environment, timeout, budget, and output-scope semantics. The adapter now requires a separate exact invocation spec instead of fabricating those values from plan prose or digests."
+    },
+    {
+      "severity": "authoring-corrected",
+      "class": "causal-outcome-error-masked-by-incomplete-disposition",
+      "finding": "The first validation loop examined disposition completeness before reaching a later duplicate row. Validation now completes cardinality, duplicate, session, unknown, order, and observation checks for the entire set before inspecting dispositions."
+    },
+    {
+      "severity": "material-corrected",
+      "class": "structural-equality-cross-request-restamping",
+      "finding": "Independent review proved that a borrowed request plus structurally equal intent could restamp a prior request's witness with new string IDs. The borrowed constructor was removed. Request mediation now consumes by value and carries one opaque Arc-backed issuance through ordered intent, expectation, witness, outcome, and final authority transitions; copied IDs and prior-request executed or reused witnesses fail closed."
+    },
+    {
+      "severity": "ceiling-withheld",
+      "class": "root-workspace-effect-mediator-pending",
+      "finding": "No effect grant or mediator exists in this candidate. The request can only describe intended work; a separately reviewed root mediator must take ownership by value and revalidate every bound authority immediately before effects."
+    },
+    {
+      "severity": "ceiling-withheld",
+      "class": "public-command-not-activated",
+      "finding": "No public catalog, parser, dispatcher, help, successor_public, command_run, or binary route imports this crate-only protocol."
+    },
+    {
+      "severity": "diagnostic-only",
+      "class": "nextest-transient-leak-flags",
+      "finding": "One of the two root-reconciliation dependency-closed runs reported two unrelated nextest LEAK diagnostics under parallel load. The other root-reconciliation dependency run and both worker focused runs were clean, all 249 controls passed twice under root reconciliation, and no test failed."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-six-artifact-protocol-falsification",
+    "root-owned-workspace-effect-mediator",
+    "root-owned-public-command-activation",
+    "installed-runtime-representative-journeys",
+    "supported-freebsd-cleanup-execution",
+    "root-only-node-claim-decisions"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "docs/ultragoal-successor-live/reviews/ROUTINE-PUBLIC-EXECUTION-ADAPTER-PROTOCOL-055.json",
+      "expected_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "request": "Assign independent read-only falsification of opaque request construction, one-use and replay semantics, exact runner and execution-policy binding, outcome validation ordering, zero-effect preparation and refusal, and accepted report delegation."
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator.rs",
+      "expected_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "request": "Implement a separately leased mediator that accepts RoutineEffectRequest by value, revalidates every intent's context candidate tool executable cwd and output scopes immediately before each effect, enforces environment timeout output and confinement limits, and returns only genuine opaque outcomes."
+    },
+    {
+      "path": "validator/src/cli/routine.rs",
+      "expected_sha256": "sha256:26692d2efbe50d708c721bcababb2a00d5c8a016ac83537905b8772546f3ffcc",
+      "request": "After mediator PASS, wire the accepted protocol and mediator through the root-owned public catalog parser help dispatcher and successor_public surfaces without adding a second command authority."
+    },
+    {
+      "path": "docs/ultragoal-successor-live/acceptance/ROUTINE-PUBLIC-EXECUTION-ADAPTER-PROTOCOL-055.json",
+      "expected_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "request": "Keep all product ceilings withheld until installed-runtime representative journeys and current candidate-bound falsification pass."
+    }
+  ],
+  "limitations": [
+    "The standard six-artifact aggregate excludes this WorkerResult by design; the WorkerResult is separately digestible after creation.",
+    "Preparation validates the exact supplied immutable context and plan objects but intentionally performs no live Git or process revalidation. Every intent binds a mandatory future-mediator preflight, and no effect is authorized before that root-owned check exists.",
+    "Static intents can bind exact dependency node expectations but not upstream result artifact digests that do not exist before execution. Exact result digests are enforced after observation by accepted report reconciliation.",
+    "The internal API enforces move-only request, intent, expectation, witness, outcome, and reconciliation transitions. A future mediator must preserve those types by value; this worker does not implement or authorize effects.",
+    "Output scopes are validated repository-relative, bounded, sorted, and case-unique, but actual filesystem confinement and immediate identity revalidation belong to the pending mediator.",
+    "The crate-only adapter is direct-path tested and intentionally has no production caller until root mediation and public activation are accepted.",
+    "The WorkerResult schema requires its shorter literal no-claim value; the stronger lease ceiling remains binding verbatim: This worker implements an internal routine adapter protocol only. It does not execute workspace effects, activate the public command, prove installed product behavior, close the routine node, or claim readiness, release, or completion."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

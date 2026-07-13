@@ -1,0 +1,55 @@
+{
+  "schema_version": "RoutinePublicAdapterCases-v1",
+  "claim_effect": "none",
+  "no_claim_statement": "These fixtures cover an internal effect-request protocol only. They do not execute workspace effects, activate a public command, prove installed product behavior, close the routine node, or claim readiness, release, or completion.",
+  "cases": [
+    {
+      "id": "clean-no-op-adapter-request",
+      "expected": "non-effectful-projection",
+      "process_spawns": 0,
+      "workspace_writes": 0
+    },
+    {
+      "id": "dirty-dependency-closed-ordered-request",
+      "expected": "opaque-one-use-effect-request",
+      "process_spawns": 0,
+      "workspace_writes": 0
+    },
+    {
+      "id": "strict-expansion-request",
+      "expected": "complete-plan-order-bound",
+      "process_spawns": 0,
+      "workspace_writes": 0
+    },
+    {
+      "id": "missing-or-substituted-tool-identity",
+      "expected": "fail-closed-before-request",
+      "process_spawns": 0,
+      "workspace_writes": 0
+    },
+    {
+      "id": "stale-context-plan-snapshot-or-runner",
+      "expected": "fail-closed-before-request",
+      "process_spawns": 0,
+      "workspace_writes": 0
+    },
+    {
+      "id": "duplicate-unknown-reordered-or-partial-outcomes",
+      "expected": "fail-closed-before-report",
+      "process_spawns": 0,
+      "workspace_writes": 0
+    },
+    {
+      "id": "request-replay-or-cross-session-substitution",
+      "expected": "fail-closed-before-report",
+      "process_spawns": 0,
+      "workspace_writes": 0
+    },
+    {
+      "id": "zero-write-zero-spawn-preparation-and-refusal",
+      "expected": "recursive-tree-and-status-identical",
+      "process_spawns": 0,
+      "workspace_writes": 0
+    }
+  ]
+}
