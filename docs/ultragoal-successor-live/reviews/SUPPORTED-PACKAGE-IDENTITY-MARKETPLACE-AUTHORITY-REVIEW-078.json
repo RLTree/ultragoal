@@ -1,0 +1,39 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "SUPPORTED-PACKAGE-IDENTITY-MARKETPLACE-AUTHORITY-REVIEW-078",
+  "reviewer": "/root/package_cache_identity_proof_reviewer",
+  "review_route": "security-trust-boundary-reviewer",
+  "verdict": "REWORK",
+  "reviewed_identity": {
+    "candidate_binding_commit": "3517bb5e1a4368970ab8716d58fc736a6086ee1b",
+    "candidate_binding_tree": "50b46a3bd390031495a0835047569336626e090a",
+    "context_id": "sha256:f17041b3d20ce0a21c3fa4b7384a4d7e5f41599ab0c9ee0c662f174763a85b94",
+    "candidate_id": "sha256:48737329aef4224be6457de8575c1bfc4f5125f8b6a77e1c39c5623216da170e",
+    "worker_result_sha256": "sha256:5d57b8c357ee1931f020551f51b0ef6ac90781904b885f9638efe2e0c7d2f30c",
+    "canonical_result_id": "sha256:842f949a4eb3682f27bfc7f9f9caa33506619a2b3c99cdae568affd4dae44a31",
+    "artifact_set_sha256": "sha256:4c9394cc33ad97ce73394d2530997e6632cd11a33033705d51fa1303b66760a6",
+    "artifact_count": 8,
+    "artifact_bytes": 105433
+  },
+  "decisive_finding": {
+    "severity": "blocker",
+    "class": "caller_selected_marketplace_authority_laundering",
+    "affected_paths": [
+      "validator/src/distribution/cache.rs",
+      "validator/src/distribution/identity.rs",
+      "validator/src/distribution/host_capability.rs",
+      "validator/tests/supported_package_identity_contract.rs"
+    ],
+    "cause": "CacheSnapshot retains marketplace identity, but cache promotion never compares it with marketplace authority and JourneyBinding carries no marketplace identity.",
+    "reproduction": "A self-consistent attacker-marketplace observation and expectation for the canonical package, version, home, tree, context, and candidate promoted into the canonical journey.",
+    "observed_result": "The locked and offline probe exited 42 with FALSE_PASS after successful promotion.",
+    "impact": "Caller-selected marketplace provenance can be laundered into a package- and journey-bound cache identity."
+  },
+  "smallest_safe_correction": [
+    "Bind canonical marketplace identity into JourneyBinding from accepted host scope authority.",
+    "Require CacheSnapshot marketplace equality with the bound journey before cache SurfaceIdentity construction.",
+    "Add a self-consistent wrong-marketplace negative and rerun the full package identity review."
+  ],
+  "claim_ceiling": "The package/cache identity candidate remains REWORK; only receipt and exact-set integrity were established.",
+  "no_claim_statement": "This review does not claim package identity acceptance, installation, cache, marketplace, app-registry, Plugins UI, discovery, runtime, readiness, release, node closure, or completion."
+}

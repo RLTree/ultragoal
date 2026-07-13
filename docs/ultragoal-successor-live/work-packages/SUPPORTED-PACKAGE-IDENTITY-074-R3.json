@@ -1,0 +1,50 @@
+{
+  "schema_version": "RootOwnedCorrectiveWorkPackage-v1",
+  "work_package_id": "SUPPORTED-PACKAGE-IDENTITY-074-R3",
+  "workstream": "marketplace-bound-distribution-journey",
+  "issued_from_live_context": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "11cb8e27082e68d93e4d899cadac14d8f7d29919",
+    "head_tree": "f9471fc190e18a04064605d1ef164d847dbbcb6d",
+    "rework_artifact_set_sha256": "sha256:4c9394cc33ad97ce73394d2530997e6632cd11a33033705d51fa1303b66760a6"
+  },
+  "ownership": {
+    "principal": "/root",
+    "reason": "JourneyBinding is shared distribution authority reserved to the Ultra root.",
+    "root_owned_symbols": [
+      "JourneyBinding marketplace identity and binding digest",
+      "SurfaceIdentity::from_verified_cache marketplace join",
+      "HostLifecycleSession marketplace-bound journey construction"
+    ],
+    "generated_outputs": "WorkerResult only",
+    "git_authority": "root only",
+    "external_effects": "locked and offline local validation in isolated /private/tmp roots only"
+  },
+  "required_behavior": [
+    "Every production distribution journey binds one validated canonical marketplace name into its identity digest.",
+    "The marketplace comes from the already validated host-scope and marketplace-plan join, not CacheExpectation.",
+    "Cache promotion rejects absent, malformed, mismatched, or self-consistently substituted marketplace identity.",
+    "Package, version, home, tree, context, candidate, observation, and journey guards remain exact.",
+    "Read, reconcile, and query paths remain recursively zero-write."
+  ],
+  "expected_paths": [
+    "validator/src/distribution/host_capability.rs",
+    "validator/src/distribution/identity.rs",
+    "validator/src/plugin_product/host_lifecycle/session.rs",
+    "validator/tests/supported_package_identity_contract.rs",
+    "validator/tests/distribution_contract/isolated_journey.rs",
+    "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-IDENTITY-074.json"
+  ],
+  "permitted_dependency_updates": "Only direct JourneyBinding construction sites whose compilation or exact marketplace semantics require migration; no manifest, Cargo.lock, public command, migration registry, generated authority, claim, or release edit.",
+  "required_validation": [
+    "canonical marketplace positive",
+    "self-consistent attacker marketplace negative",
+    "wrong version, plugin, home, tree, context, candidate, observation, and journey negatives",
+    "host-scope versus marketplace-plan mismatch negative",
+    "zero hidden writes",
+    "focused suite twice, dependency-closed distribution and host-lifecycle suites, full distribution, all targets, receipt parser, exact artifact set, and false-pass controls with 16 jobs and threads"
+  ],
+  "stop_rule": "Stop on ambiguous marketplace authority, unbounded compatibility fallback, any external mutation, or any required root-owned surface outside this dependency-closed journey schema.",
+  "no_claim_statement": "This root correction does not claim package identity acceptance, installation, cache, marketplace, app-registry, Plugins UI, discovery, runtime, readiness, release, node closure, or completion."
+}
