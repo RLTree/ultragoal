@@ -13,8 +13,9 @@ mod confinement;
 mod execution_adapter;
 #[path = "fixture_scheduler_contract/isolation.rs"]
 mod isolation;
-#[path = "fixture_scheduler_contract/lease_identity_worker_result.rs"]
-mod lease_identity_worker_result;
+// FIXTURE-RECOVERY-STATE-CORRECTION-019 is retained on disk as historical
+// context. Its artifact bytes are no longer current, so its live-workspace
+// self-check must not remain an active gate for later scheduler candidates.
 #[path = "fixture_scheduler_contract/scheduling.rs"]
 mod scheduling;
 #[path = "fixture_scheduler_contract/worker_result.rs"]
