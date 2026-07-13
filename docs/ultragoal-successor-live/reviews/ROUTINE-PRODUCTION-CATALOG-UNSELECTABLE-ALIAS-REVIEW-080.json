@@ -1,0 +1,34 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "ROUTINE-PRODUCTION-CATALOG-UNSELECTABLE-ALIAS-REVIEW-080",
+  "reviewer": "/root/routine_catalog_case_authority_reviewer",
+  "review_route": "scoped-adversarial-reviewer",
+  "verdict": "REWORK",
+  "reviewed_identity": {
+    "source_commit": "11cb8e27082e68d93e4d899cadac14d8f7d29919",
+    "artifact_set_sha256": "sha256:c48e497a15eb2026ba1810e284d570de4526f41787c24a7dfc508d8c54e4163c",
+    "artifact_count": 4,
+    "artifact_bytes": 113600,
+    "worker_result_sha256": "sha256:8c41a277555314fc8e666c229dc7d2e2c0bc9e4dc153116ed948b2dbee31050d",
+    "canonical_result_id": "sha256:cf1c025a1cea2799151e9b2dba5fe5beefa7a9bf6d6821af68ed438696be7a0f"
+  },
+  "decisive_finding": {
+    "severity": "blocker",
+    "class": "accepted_but_unselectable_same_authority_case_alias",
+    "affected_paths": [
+      "validator/src/routine_work/catalog.rs",
+      "validator/tests/routine_production_catalog_contract.rs"
+    ],
+    "cause": "Catalog validation permits cross-definition true/TRUE aliases when authority matches, but request construction rejects the two case-aliased observations and exact lookup stays case-sensitive.",
+    "reproduction": "A catalog with identical /usr/bin/true authority under true and TRUE loaded, but selecting both failed with catalog-runner-observation-ambiguous.",
+    "impact": "The catalog accepts an unusable state and the receipt overstates supported identical-authority alias reuse.",
+    "run_id": "4b49fa29-bb0e-43c4-b401-9617811295ed"
+  },
+  "smallest_safe_correction": [
+    "Reject every cross-definition symbolic-tool case alias during catalog validation.",
+    "Preserve exact same-spelling same-authority reuse and prove it end to end through selection and binding.",
+    "Update receipt language and refreeze the exact set."
+  ],
+  "claim_ceiling": "The routine catalog remains a source-local REWORK candidate.",
+  "no_claim_statement": "This review does not claim source acceptance, public execution, installation, runtime behavior, node closure, readiness, release, or completion."
+}

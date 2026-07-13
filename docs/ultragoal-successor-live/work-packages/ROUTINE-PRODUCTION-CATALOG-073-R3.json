@@ -1,0 +1,47 @@
+{
+  "schema_version": "RootIssuedCorrectiveWorkPackage-v1",
+  "work_package_id": "ROUTINE-PRODUCTION-CATALOG-073-R3",
+  "workstream": "routine-catalog-single-spelling-symbolic-authority",
+  "issued_from_live_context": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "ca094292a",
+    "source_commit": "11cb8e27082e68d93e4d899cadac14d8f7d29919",
+    "prior_artifact_set_sha256": "sha256:c48e497a15eb2026ba1810e284d570de4526f41787c24a7dfc508d8c54e4163c"
+  },
+  "lease": {
+    "principal": "/root/routine_catalog_single_spelling_engineer",
+    "write_paths": [
+      "validator/src/routine_work/catalog.rs",
+      "validator/tests/routine_production_catalog_contract.rs",
+      "fixtures/routine-production-catalog/cases.json",
+      "docs/ultragoal-successor-live/worker-results/ROUTINE-PRODUCTION-CATALOG-073.json"
+    ],
+    "write_symbols": [
+      "validate_global_runner_compatibility",
+      "cross-definition case-alias controls",
+      "WorkerResult-v1 corrected claim"
+    ],
+    "fixtures": "Only the named case matrix",
+    "generated_outputs": "WorkerResult only",
+    "git_mutation": "forbidden",
+    "root_owned_surfaces": "public dispatcher, grants, manifests, migrations, generated authority, claims, acceptance, and release are forbidden",
+    "external_effects": "locked and offline tests in isolated /private/tmp roots only"
+  },
+  "required_behavior": [
+    "One canonical symbolic identity has exactly one accepted spelling across the complete catalog.",
+    "Any cross-definition case alias is rejected even when executable authority is byte-identical.",
+    "Exact same-spelling same-authority reuse remains selectable and binds both definitions with one exact observation.",
+    "Differing authority, primary/fallback alias, executable substitution, and zero-write controls remain intact."
+  ],
+  "required_validation": [
+    "cross-definition same-authority true/TRUE rejection",
+    "cross-definition different-authority true/TRUE rejection",
+    "end-to-end exact true reuse across both definitions",
+    "primary/fallback case alias rejection",
+    "existing executable path/content/length/mode and catalog drift controls",
+    "focused suite twice, dependency closure, lib check, zero-write, receipt parser, exact set, and false-pass controls with 16 jobs and threads"
+  ],
+  "stop_rule": "Stop on any accepted case alias, loss of exact same-spelling reuse, scope expansion, public effect, or stale receipt identity.",
+  "no_claim_statement": "This work package does not claim source acceptance, public execution, installation, runtime behavior, node closure, readiness, release, or completion."
+}
