@@ -7,11 +7,13 @@
 //! before reservation, spawn, or host mutation.
 
 mod authority;
+mod ledger;
 
 pub(crate) use authority::{
     HostEffectAuthority, HostEffectAuthorityError, HostEffectAuthorityErrorId, HostEffectDecision,
     HostEffectPermit, HostEffectPermitBinding,
 };
+pub(crate) use ledger::FileHostEffectLedger;
 
 use super::HostCommandPlan;
 use serde::Serialize;
