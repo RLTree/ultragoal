@@ -1,0 +1,21 @@
+{
+  "schema_version": "RoutineProductionCatalogCases-v1",
+  "claim_effect": "none",
+  "cases": [
+    {"id": "valid-primary-exact-input-join", "expected": "bound"},
+    {"id": "valid-conservative-fallback", "expected": "bound"},
+    {"id": "unknown-duplicate-ambiguous-missing-definition", "expected": "refused"},
+    {"id": "catalog-or-candidate-drift-after-parse", "expected": "refused"},
+    {"id": "path-escape-symlink-hardlink-special-non-utf8", "expected": "refused"},
+    {"id": "oversized-catalog-argv-env-read-and-output-scope", "expected": "refused"},
+    {"id": "unsafe-runner-workdir-environment", "expected": "refused"},
+    {"id": "receipt-fixture-prose-digest-only-or-definition-only-substitution", "expected": "refused"},
+    {"id": "symbolic-tool-executable-content-mode-identity-substitution", "expected": "refused"},
+    {"id": "primary-fallback-case-aliased-symbolic-tool", "expected": "refused"},
+    {"id": "cross-definition-case-alias-conflicting-authority", "expected": "refused"},
+    {"id": "omitted-transitive-input", "expected": "refused"},
+    {"id": "repeated-parse-and-bind-determinism", "expected": "bound-identically"},
+    {"id": "parse-query-and-refusal-zero-write", "expected": "unchanged-tree"}
+  ],
+  "no_claim": "These fixtures exercise a source-local catalog boundary and do not activate public dispatch or any effect."
+}

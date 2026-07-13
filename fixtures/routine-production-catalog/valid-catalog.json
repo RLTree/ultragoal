@@ -1,0 +1,60 @@
+{
+  "schema_version": "RoutineProductionCatalog-v1",
+  "graph_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "routines": [
+    {
+      "definition_id": "routine.syntax.v1",
+      "node_id": "syntax",
+      "depends_on": [],
+      "working_directory": ".",
+      "runner_policy": "immutable-single-process-exact-executable-v1",
+      "read_policy": "selected-transitive-exact-regular-files-v1",
+      "read_sources": ["src/input.txt"],
+      "environment": {"ROUTINE_MODE": "bounded"},
+      "timeout_ms": 60000,
+      "output_budget_bytes": 4194304,
+      "output_scopes": ["target/routine-syntax"],
+      "primary": {
+        "tool": "true",
+        "tool_identity_sha256": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+        "executable_path": "/usr/bin/true",
+        "program_sha256": "sha256:b9b54a7e5d45dda1aca284b454829f7f0bc76a827565f32418db2fb7869970eb",
+        "program_byte_length": 84032,
+        "program_unix_mode": 33261,
+        "arguments": ["--version"]
+      }
+    },
+    {
+      "definition_id": "routine.verify.v1",
+      "node_id": "verify",
+      "depends_on": ["syntax"],
+      "working_directory": ".",
+      "runner_policy": "immutable-single-process-exact-executable-v1",
+      "read_policy": "selected-transitive-exact-regular-files-v1",
+      "read_sources": ["src/input.txt", "tests/input.txt"],
+      "environment": {"ROUTINE_MODE": "bounded"},
+      "timeout_ms": 120000,
+      "output_budget_bytes": 8388608,
+      "output_scopes": ["target/routine-verify"],
+      "primary": {
+        "tool": "true",
+        "tool_identity_sha256": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+        "executable_path": "/usr/bin/true",
+        "program_sha256": "sha256:b9b54a7e5d45dda1aca284b454829f7f0bc76a827565f32418db2fb7869970eb",
+        "program_byte_length": 84032,
+        "program_unix_mode": 33261,
+        "arguments": ["--version"]
+      },
+      "fallback": {
+        "tool": "false",
+        "tool_identity_sha256": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+        "executable_path": "/usr/bin/false",
+        "program_sha256": "sha256:0c5fb690df52f914a97ef76bc50baebba4e506511844d618e1ddf0611db1df22",
+        "program_byte_length": 84032,
+        "program_unix_mode": 33261,
+        "arguments": ["--version"],
+        "equivalence": "same-node-semantics-v1"
+      }
+    }
+  ]
+}
