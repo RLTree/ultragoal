@@ -1,0 +1,65 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "ROUTINE-PUBLIC-EXECUTION-ADAPTER-PROTOCOL-INTEGRATION-055",
+  "workstream": "routine-impact-capture-fixtures-and-verified-reuse",
+  "decision": "ACCEPT",
+  "accepted_candidate": {
+    "implementation_commit": "f21188a064654a5a2978030c18999df45c0353fe",
+    "implementation_tree": "2592557fa93594cb2fe40392ead04851952d0396",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/ROUTINE-PUBLIC-EXECUTION-ADAPTER-PROTOCOL-055.json",
+    "worker_result_sha256": "sha256:125627cc1c1d3a8a46340e6ff8c853c2c061d4f70a67c90c9a2baf8bd63145f6",
+    "worker_result_rust_id": "sha256:50125957016f471a01db1710a197ae0987977b9d4ab98ac15095e4d6b778df0d",
+    "artifact_set_sha256": "sha256:2a8ebcab7e3c0278445b2b3d77325846fb49085916e32b95c515e1a14453b0db",
+    "artifact_count": 6,
+    "artifact_bytes": 89818,
+    "artifact_lines": 2720
+  },
+  "review_history": {
+    "initial_decision": "REWORK",
+    "initial_worker_result_sha256": "sha256:5bdd2282e44bdbddb0b7b949df6f446032cca6d58a0d7df3d45aa105eb3de13d",
+    "decisive_finding": "The required WorkerResult used effect fields and classes rejected by the canonical Rust parser.",
+    "correction": "The implementation bytes stayed frozen; the WorkerResult was corrected to the canonical Rust shape and the truthful runtime worker/current candidate were reconciled through root authority.",
+    "final_decision": "PASS"
+  },
+  "independent_review": {
+    "artifact_recomputation": "All six hashes, byte counts, line counts, and the standard path-bound aggregate matched live committed bytes.",
+    "draft_schema": "pass",
+    "production_rust_parse": "pass",
+    "reconciled_validate_for": "pass",
+    "original_issued_validate_for": "StaleBinding",
+    "fresh_production_library_build": "pass",
+    "replay_falsification": [
+      "opaque Arc-backed issuance identity prevents structurally identical cross-request restamping",
+      "request-specific execution result scope rejects executed and reused witnesses from another request",
+      "copied IDs, repeated transition, reorder, partial outcomes, and candidate mutation fail closed",
+      "genuine same-request ordered completion remains accepted"
+    ]
+  },
+  "verification": {
+    "focused_run_ids": [
+      "180e7e55-5444-4354-987b-f243514b630f",
+      "f741d41d-5682-45e4-a86a-fa0b3e41393a"
+    ],
+    "focused_result": "10 passed; 0 failed; twice",
+    "dependency_run_ids": [
+      "2b9e627e-7359-4eb5-9425-2897feee159b",
+      "60451a5b-e1f0-498c-baa1-fe0d90ed773c"
+    ],
+    "dependency_result": "249 passed; 0 failed; twice; the first run was clean and the second reported two unrelated nextest leak diagnostics"
+  },
+  "accepted_scope": [
+    "crate-private candidate-bound routine effect-intent preparation",
+    "opaque one-use mediation authority and per-request execution result scope",
+    "exact runner, invocation, output-scope, dependency, and ordered outcome binding",
+    "zero-effect clean no-op and fail-closed preparation/refusal behavior"
+  ],
+  "open_reconciliation": [
+    "root-owned workspace effect mediator with immediate pre-effect authority revalidation",
+    "root-owned public successor command catalog and dispatcher activation",
+    "installed-runtime clean dirty conflict fallback recovery and repeat-use journeys",
+    "supported FreeBSD execution before any cross-platform cleanup claim",
+    "candidate-wide claim and release reconciliation"
+  ],
+  "claim_ceiling": "Accepted internal routine mediation protocol only. No workspace effect, public command, installed product behavior, node closure, readiness, release, or completion is proven.",
+  "no_claim_statement": "This acceptance does not claim workspace effects, public activation, installed product behavior, node closure, readiness, release, or goal completion."
+}
