@@ -91,7 +91,10 @@ pub fn publish_package_artifact(
     let replacement = expected_pair(snapshot)?;
     let previous = read(effects)?;
     let previous_sha256 = previous.as_deref().map(tree_sha256).transpose()?;
-    if !expected_matches(expected, previous_sha256.as_deref())
+    if previous
+        .as_deref()
+        .is_some_and(|rows| !is_complete_artifact_pair(rows))
+        || !expected_matches(expected, previous_sha256.as_deref())
         || collides(previous.as_deref(), &replacement)
     {
         return Err(error(DistributionErrorId::InstallConflict));
@@ -221,6 +224,19 @@ fn collides(previous: Option<&[TreeObject]>, replacement: &[TreeObject]) -> bool
             })
         })
     })
+}
+
+fn is_complete_artifact_pair(rows: &[TreeObject]) -> bool {
+    if rows.len() != OUTPUT_ENTRY_LIMIT {
+        return false;
+    }
+    let package = rows
+        .iter()
+        .find_map(|row| row.path().strip_suffix(".hugpkg"));
+    let inventory = rows
+        .iter()
+        .find_map(|row| row.path().strip_suffix(".inventory.json"));
+    matches!((package, inventory), (Some(left), Some(right)) if !left.is_empty() && left == right)
 }
 
 fn read(

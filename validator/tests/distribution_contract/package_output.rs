@@ -146,6 +146,36 @@ fn mismatched_binding_partial_pair_and_extra_or_executable_rows_fail_without_wri
 }
 
 #[test]
+fn digest_matched_partial_pair_is_not_completed_or_replaced() {
+    let fixture = JourneyFixture::new("package-output-partial-pair");
+    let snapshot = fixture.build("build/one.hugpkg");
+    let partial = vec![TreeObject::regular(
+        "harness-ultragoal-0.0.11.hugpkg".into(),
+        0o644,
+        snapshot.archive().to_vec(),
+    )];
+    let partial_sha256 = tree_sha256(&partial).unwrap();
+    let mut effects = CorruptAfterWrite {
+        rows: Some(partial.clone()),
+        ..CorruptAfterWrite::default()
+    };
+
+    assert_eq!(
+        publish_package_artifact(
+            &snapshot,
+            &binding(&snapshot),
+            &ExpectedTree::ExactDigest(partial_sha256),
+            &mut effects,
+        )
+        .unwrap_err()
+        .id(),
+        ErrorId::InstallConflict
+    );
+    assert_eq!(effects.rows, Some(partial));
+    assert_eq!(effects.reads, 1);
+}
+
+#[test]
 fn every_identity_dimension_is_checked_before_any_effect() {
     let fixture = JourneyFixture::new("package-output-full-identity");
     let snapshot = fixture.build("build/one.hugpkg");
