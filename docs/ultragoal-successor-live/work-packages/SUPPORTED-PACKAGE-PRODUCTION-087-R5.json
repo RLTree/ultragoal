@@ -1,0 +1,31 @@
+{
+  "schema_version": "UltraLeaseAmendment-v1",
+  "amendment_id": "SUPPORTED-PACKAGE-PRODUCTION-087-R5",
+  "base_work_package": "docs/ultragoal-successor-live/work-packages/SUPPORTED-PACKAGE-PRODUCTION-087-R4.json",
+  "base_work_package_sha256": "sha256:9d8c41d96db388d2cb9f4ac1df705f2b3e70e245836a1d5f419fbcf0d5a9f452",
+  "issued_candidate": {
+    "head_commit": "0e7dafc96848421f78899c0d1a54904fc4ef6f32",
+    "head_tree": "bef8688cf5a584aaea8a2e0183ccb7826e810e18",
+    "note": "R5 changes only the WorkerResult field placement needed to satisfy adopted schema authority. It does not weaken R4 behavior, paths, tests, effects, prohibitions, or claim ceilings."
+  },
+  "owner_override": "/root/supported_package_publication_and_proof_engineer",
+  "lease_id_override": "SUPPORTED-PACKAGE-PRODUCTION-087-R5",
+  "inherit_all_r4_paths_symbols_outputs_effects_prohibitions_tests_and_verification": true,
+  "receipt_authority_reconciliation": {
+    "schema_path": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+    "schema_sha256": "sha256:1053645c069e6305b10dea0e5ba3c5000b64bce6b1ea04b385aaa0f8272049c5",
+    "schema_no_claim_statement": "This worker does not claim readiness, release, or completion.",
+    "required_field_placement": {
+      "no_claim_statement": "Use the adopted schema const exactly.",
+      "final_state.lease_exact_no_claim_statement": "Candidate source implementation only. No claim of root adoption, public package command availability, repository package output, installed bytes, marketplace state, cache state, app registration, Plugins UI visibility, discovery, runtime, representative user journey, claim elevation, node closure, readiness, release, or completion."
+    },
+    "required_limitations": "Repeat the lease-exact ceiling in limitations and keep every unsupported package/install/host/runtime surface explicit.",
+    "authority_rule": "The adopted WorkerResult schema is authoritative for top-level field shape. Moving the more specific ceiling into final_state and limitations preserves both schema validity and the stricter lease meaning; it does not authorize any claim."
+  },
+  "worker_result_contract": {
+    "schema": "WorkerResult-v1",
+    "lease_id": "SUPPORTED-PACKAGE-PRODUCTION-087-R5",
+    "required": true,
+    "no_claim_statement": "This worker does not claim readiness, release, or completion."
+  }
+}
