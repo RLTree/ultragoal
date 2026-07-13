@@ -1,0 +1,59 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N04-PACKAGE-IDENTITY",
+  "root_decision": "accepted_deterministic_supported_source_package",
+  "accepted_worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-PRODUCTION-087.json",
+    "sha256": "ac06816a5cc340e56ad9f4a3a274ba1560709db7f21293d7f16409ab1df088e7",
+    "artifact_count": 9,
+    "artifact_set_sha256": "6f81ce81a6bfecac5183b77f2c709930ac066c3aba1b11ccd95c34b368735db8"
+  },
+  "independent_review": {
+    "reviewer": "/root/supported_package_security_and_publication_reviewer",
+    "verdict": "pass",
+    "review_mode": "independent_read_only_r6_frozen_set",
+    "product_contract": "161 passed; 0 failed; 1 unrelated helper ignored",
+    "package_identity": "4 passed; 0 failed",
+    "package_output": "7 passed; 0 failed",
+    "supported_identity": "4 passed; 0 failed",
+    "artifact_reconciliation": "9 of 9 exact rows and aggregate passed",
+    "zero_write_closure": "6313 files remained byte-identical at sha256:56fed28e8d165b3842e05e662ac0610a3f0bcc1793142246d27368959c3bd974",
+    "blocking_review_findings": 0
+  },
+  "root_integration": {
+    "implementation_commit": "cc2909f4fce00b80d6e48002f764285d9987b597",
+    "implementation_tree": "e85714fc361110a691b22e4cd681f0b76d0f28cd",
+    "acceptance_basis_head": "6bbd91fec65584c3f2e42ca8584fe732665b3ad3",
+    "acceptance_basis_tree": "bd6755c28802c7915eac968ef84b1bc4854ef6fc",
+    "live_artifact_revalidation": "all nine committed artifact digests and byte lengths matched the independently reviewed receipt"
+  },
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-SUPPLY-001",
+      "state": "deterministic descriptor-held supported source package accepted",
+      "blocker": "No repository package artifact, host installation, cache, marketplace, app-registry, Plugins UI, discovery, or runtime proof is accepted."
+    },
+    {
+      "requirement_id": "REQ-PRODUCT-001",
+      "state": "canonical 0.0.12 source package closure accepted",
+      "blocker": "The supported-host transaction adapter, public route, installed runtime, and representative live-user journeys remain open."
+    }
+  ],
+  "root_acceptance_limit": "Deterministic source-local package capture and verification for the exact canonical 0.0.12 package set, with retained-descriptor source binding and atomic confined package publication.",
+  "explicitly_withheld": [
+    "public package command availability",
+    "repository package artifact adoption",
+    "real host installation or cache state",
+    "marketplace or app-registry state",
+    "Plugins UI visibility",
+    "current host discovery or runtime identity",
+    "representative live-user journey",
+    "node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "invalidation_rule": "Any change to an accepted package artifact, package inventory dependency, canonical manifest input, WorkerResult, package schema, or named product contract immediately reopens this acceptance.",
+  "no_claim_statement": "This acceptance does not claim a repository package artifact, public package route, host installation, cache, marketplace, app-registry, Plugins UI, discovery, runtime, representative journey, readiness, release, node closure, or goal completion."
+}
