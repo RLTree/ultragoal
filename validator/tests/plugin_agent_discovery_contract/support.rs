@@ -3,7 +3,7 @@
 use crate::agent_discovery::{
     AgentAuthorityLayer, HostAgentAuthorityReader, HostAgentAuthorityRequest,
     HostAgentAuthorityTransaction, HostAgentAuthorityTransactionError, ReadOnlyEffectEnforcement,
-    ReadOnlyEffectRequest, SourceAgentCatalog,
+    ReadOnlyEffectRequest, SourceAgentCatalog, SupportedHostAgentRoots,
 };
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
@@ -76,6 +76,87 @@ impl Drop for TempRepo {
     fn drop(&mut self) {
         let _ = fs::remove_dir_all(&self.root);
     }
+}
+
+pub struct SupportedHostFixture {
+    pub root: PathBuf,
+    pub package: PathBuf,
+    pub installed: PathBuf,
+    pub cache: PathBuf,
+    pub global: PathBuf,
+    pub project: PathBuf,
+}
+
+impl SupportedHostFixture {
+    pub fn exact(source: &SourceAgentCatalog) -> Self {
+        #[cfg(unix)]
+        let scratch = PathBuf::from("/tmp");
+        #[cfg(not(unix))]
+        let scratch = std::env::temp_dir();
+        let root = scratch.join(format!(
+            "hul-supported-agent-reader-{}-{}",
+            std::process::id(),
+            NEXT_TEMP.fetch_add(1, Ordering::Relaxed)
+        ));
+        let package = root.join("package");
+        let installed = root.join("installed");
+        let cache = root.join("cache");
+        let global = root.join("global");
+        let project = root.join("project");
+        for plugin_root in [&package, &installed, &cache, &project] {
+            write_exact_plugin_root(plugin_root, source);
+        }
+        fs::create_dir_all(global.join(".codex/agents")).unwrap();
+        Self {
+            root,
+            package,
+            installed,
+            cache,
+            global,
+            project,
+        }
+    }
+
+    pub fn roots(&self) -> SupportedHostAgentRoots {
+        SupportedHostAgentRoots::new(
+            &self.package,
+            &self.installed,
+            &self.cache,
+            &self.global,
+            &self.project,
+        )
+    }
+
+    pub fn write(&self, root: &Path, relative: &str, bytes: impl AsRef<[u8]>) {
+        let path = root.join(relative);
+        if let Some(parent) = path.parent() {
+            fs::create_dir_all(parent).unwrap();
+        }
+        fs::write(path, bytes).unwrap();
+    }
+}
+
+impl Drop for SupportedHostFixture {
+    fn drop(&mut self) {
+        let _ = fs::remove_dir_all(&self.root);
+    }
+}
+
+fn write_exact_plugin_root(root: &Path, source: &SourceAgentCatalog) {
+    fs::create_dir_all(root.join(".codex/agents")).unwrap();
+    fs::create_dir_all(root.join(".codex-plugin")).unwrap();
+    for name in canonical_names() {
+        fs::write(
+            root.join(format!(".codex/agents/{name}.toml")),
+            source.descriptor_bytes(name).unwrap(),
+        )
+        .unwrap();
+    }
+    fs::write(
+        root.join(".codex-plugin/plugin.json"),
+        source.plugin_manifest_bytes(),
+    )
+    .unwrap();
 }
 
 pub fn canonical_names() -> [&'static str; 6] {
@@ -305,6 +386,8 @@ pub fn catalog_bytes(
     layer: AgentAuthorityLayer,
     global_agents: Vec<Value>,
 ) -> Vec<u8> {
+    let authority_root_sha256 = digest(format!("fixture-root:{layer:?}").as_bytes());
+    let authority_generation_sha256 = digest(b"fixture-generation:7");
     let agents = if layer == AgentAuthorityLayer::Global {
         global_agents
     } else {
@@ -338,6 +421,9 @@ pub fn catalog_bytes(
         "session_id": request.session_id(),
         "session_issuance_sha256": request.session_issuance_sha256(),
         "observation_nonce_sha256": request.observation_nonce_sha256(),
+        "authority_root_sha256": authority_root_sha256,
+        "authority_generation_sha256": authority_generation_sha256,
+        "transaction_provenance_sha256": request.provenance_sha256(),
         "new_session": true,
         "agents": agents
     }))

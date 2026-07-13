@@ -1,0 +1,223 @@
+{
+  "worker": "/root/agent_authority_global_sandbox_engineer",
+  "lease_id": "SUPPORTED-AGENT-AUTHORITY-READER-075-R3",
+  "context_id": "sha256:4105d7d5678028d07b413d07aac591201a78aa6aad92d898289a76b418629bba",
+  "candidate_identity": {
+    "candidate_id": "sha256:1b97701a1ffe1f6e2bc62d06a922eaf4b85d0fa3162df806491292bd7b883f2e",
+    "context_id": "sha256:4105d7d5678028d07b413d07aac591201a78aa6aad92d898289a76b418629bba",
+    "artifact_set_sha256": "sha256:1b97701a1ffe1f6e2bc62d06a922eaf4b85d0fa3162df806491292bd7b883f2e",
+    "artifact_count": 11,
+    "artifact_bytes": 147079,
+    "artifact_lines_diagnostic": 4389,
+    "artifact_set_formula": "Sort repository-relative artifact paths; for each append path, one TAB, lowercase SHA-256 without a prefix, and one LF; SHA-256 the concatenation.",
+    "context_formula": "SHA-256 of LF-terminated ordered fields lease_id, repo URI, branch, full root commit, global-agent-sandbox-fail-closed.",
+    "root_head": "1750d586f6561d9d6ba64887cdafa6a36f23e41e",
+    "root_tree": "bf2d3e53c4b9410df41fb94ddf9b56ea4cf1e58a",
+    "work_package_path": "docs/ultragoal-successor-live/work-packages/SUPPORTED-AGENT-AUTHORITY-READER-075-R3.json",
+    "work_package_sha256": "sha256:54c60e48b8be97ed684eb27b65b0a54dea253acbb22a41d2d17f0670869dc13d",
+    "review_path": "docs/ultragoal-successor-live/reviews/SUPPORTED-AGENT-AUTHORITY-GLOBAL-SANDBOX-REVIEW-079.json",
+    "review_sha256": "sha256:682b39e0acc2c1eb1d5dcdaac0d08cbe0bbcb995b8c09e3e366f08b76b72b7d9",
+    "worker_result_self_excluded": true
+  },
+  "base_state": {
+    "status": "review_rework_required",
+    "decisive_finding": "The Global branch returned before sandbox_mode enforcement, allowing an unrelated workspace-write descriptor to reach AgentRouteEligibility construction.",
+    "prior_source_artifact_set_sha256": "sha256:943c5d212ac38e8bf666ff5659ee7e5f68e29daf97fefe7a2e9f59adac68c3f0",
+    "prior_receipt_sha256": "sha256:81836ae02b31026228a40d7061c3670549e4d7a6e5764b43bf2c35c318dafbf2",
+    "work_package_source_head": "6b237ed33",
+    "root_work_package_commit": "ca094292ab55eb321925c55dcfe780dc07f85638",
+    "root_disjoint_movement": "Root advanced through routine-catalog review records to 1750d586f6561d9d6ba64887cdafa6a36f23e41e while this lane changed only its leased agent-authority files and receipt."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "receipt_status": "r3-global-sandbox-candidate-for-independent-rereview",
+    "source_candidate_id": "sha256:1b97701a1ffe1f6e2bc62d06a922eaf4b85d0fa3162df806491292bd7b883f2e",
+    "route_eligible": false,
+    "new_session_observed": false,
+    "live_host_observed": false,
+    "claim_effect": false,
+    "exact_ceiling": "This candidate rejects parsed write-capable descriptors before layer-specific continuation and proves that boundary only in source-local fixtures and the supported-host adapter. It does not establish acceptance, route eligibility, a live host, a fresh session, readiness, release, node closure, or completion."
+  },
+  "touched_paths": [
+    "validator/src/plugin_product/agent_discovery/host.rs",
+    "validator/tests/plugin_agent_discovery_contract/negative.rs",
+    "validator/tests/plugin_agent_discovery_contract/supported_host.rs",
+    "docs/ultragoal-successor-live/worker-results/SUPPORTED-AGENT-AUTHORITY-READER-075.json"
+  ],
+  "touched_semantics": [
+    "agent-discovery::verify-catalog-sandbox-ordering",
+    "agent-discovery::supported-host-global-sandbox-controls",
+    "worker-result::exact-agent-authority-source-set"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/SUPPORTED-AGENT-AUTHORITY-READER-075.json"
+  ],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "supported-agent-authority-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "isolated-agent-authority-fixtures",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "REQ-PROOF-001",
+    "REQ-PROOF-007",
+    "CTRL-GLOBAL-SANDBOX-READ-ONLY",
+    "CTRL-WORKER-RESULT-EXACT-SET"
+  ],
+  "dependency_nodes": [
+    "reviewed-r2-receipt-integrity",
+    "root-issued-global-agent-sandbox-rework"
+  ],
+  "changes": [
+    {
+      "area": "global-sandbox-ordering",
+      "result": "Moved sandbox_mode enforcement immediately after successful descriptor parsing and exact descriptor-name matching, before the Global branch or any later layer-specific continuation."
+    },
+    {
+      "area": "fixture-false-pass-control",
+      "result": "Added a caller-fixture workspace-write global descriptor control that requires SandboxPolicyRejected before any effect probe or eligibility value can be produced."
+    },
+    {
+      "area": "supported-host-controls",
+      "result": "Added recursive zero-write supported-host controls for a rejected workspace-write unrelated global descriptor and an observed read-only unrelated global descriptor that remains ineligible and claim-free."
+    },
+    {
+      "area": "diagnostic-ordering",
+      "result": "Updated the existing same-version write-capable installed-descriptor control to require the now-earlier stable SandboxPolicyRejected class while preserving the WriteCapableSandbox report finding."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/plugin_product/agent_discovery/host.rs validator/tests/plugin_agent_discovery_contract/negative.rs validator/tests/plugin_agent_discovery_contract/supported_host.rs",
+      "status": "pass",
+      "result": "All changed Rust files were already formatted."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-agent-authority-r3-target CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test plugin_agent_discovery_contract --test-threads 16",
+      "status": "pass",
+      "result": "Focused run b1d12472-5bb6-4b63-868d-c33f2b85aadd passed 60 of 60; independent repeat 4d32b70f-71f5-4424-84b6-34af67a6f5a7 passed 60 of 60."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-agent-authority-r3-target CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test inventory_contract --test-threads 16 agent_routes::",
+      "status": "pass",
+      "result": "Final dependency run 31155049-a55e-402d-872c-b0570a58e0ef passed 12 of 12 with 85 skipped and two pre-existing leaky-process diagnostics."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-agent-authority-r3-target CARGO_BUILD_JOBS=16 cargo check --manifest-path validator/Cargo.toml --locked --offline --lib",
+      "status": "pass",
+      "result": "Production library check completed successfully in 11.06 seconds; existing repository warnings remain diagnostic-only."
+    },
+    {
+      "command": "Exact eleven-artifact SHA-256 snapshot before and after focused run 64dfa7e4-732c-47e9-b446-cd67db62a85d",
+      "status": "pass",
+      "result": "The lane-local snapshot remained sha256:32d7a24cdec767860bc1e58ab7bcb7ac8cef99596a1630c29bd6003dbf54ea2a and the focused suite passed 60 of 60; the new supported-host tests separately compare recursive source and host trees before and after verification."
+    },
+    {
+      "command": "WorkerResultV1::parse_json, reconstructed typed R3 WorkPackage and LeaseSpec validation, ArtifactWorkspace verification, exact eleven-row equality, canonical result_id, and receipt mutation controls",
+      "status": "pass",
+      "result": "The authoritative parser accepted the typed R3 package, scope policy, lease, effects, exact eleven-artifact set, and candidate aggregate; ArtifactWorkspace verified every source byte, and all nine missing, substituted, duplicate, reordered, context, candidate, effect, no-claim, and unknown-field mutation controls were rejected."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/plugin_product/agent_discovery/error.rs",
+      "sha256": "sha256:b0ab5f5b425e19dabe6ade4fe9a2d4acbdc3f8ff7bd49329a41b85d26c23ef98",
+      "byte_length": 3623
+    },
+    {
+      "path": "validator/src/plugin_product/agent_discovery/filesystem.rs",
+      "sha256": "sha256:071cbf7c700c29897bc6ea5d84d5e999621a0aa77fc348ff9666caa95307ed7b",
+      "byte_length": 32039
+    },
+    {
+      "path": "validator/src/plugin_product/agent_discovery/host.rs",
+      "sha256": "sha256:f1246ef1324099d0c37f780c9b2a18f6209e708e375fea6b772b2c2423d6ac7c",
+      "byte_length": 17374
+    },
+    {
+      "path": "validator/src/plugin_product/agent_discovery/mod.rs",
+      "sha256": "sha256:cb2292cfee1d60681d1fb35c1fd26a91bee3ab7c654d89dda5ba24874ff54ede",
+      "byte_length": 1261
+    },
+    {
+      "path": "validator/src/plugin_product/agent_discovery/model.rs",
+      "sha256": "sha256:462470f406b1593077760d5d773f7451e6a62ecb019b87c251bdf7cbc4468bdd",
+      "byte_length": 6688
+    },
+    {
+      "path": "validator/src/plugin_product/agent_discovery/session.rs",
+      "sha256": "sha256:9b9c92bf3eede7517260a76a0254170b8a542741da51e00102b312d31e8687a6",
+      "byte_length": 7716
+    },
+    {
+      "path": "validator/src/plugin_product/agent_discovery/supported.rs",
+      "sha256": "sha256:0e31b4738812abbdac5370553ae439d810a8770011f575e8f2753849849eb26b",
+      "byte_length": 31290
+    },
+    {
+      "path": "validator/tests/plugin_agent_discovery_contract.rs",
+      "sha256": "sha256:5e036ff3811dcdd45e93f27517fe0d74823eadd0f4e9a3c6c2bfa8a927ca5da3",
+      "byte_length": 626
+    },
+    {
+      "path": "validator/tests/plugin_agent_discovery_contract/negative.rs",
+      "sha256": "sha256:9a4cb9c728875b67bc791155ca48ec6583832da55fc2bfe705c03dd296061236",
+      "byte_length": 9809
+    },
+    {
+      "path": "validator/tests/plugin_agent_discovery_contract/support.rs",
+      "sha256": "sha256:55504a9fafecfae559342b9c84ecf572a8f876aa9c9376f7b796a1e35261a62a",
+      "byte_length": 15237
+    },
+    {
+      "path": "validator/tests/plugin_agent_discovery_contract/supported_host.rs",
+      "sha256": "sha256:af5e95bc2425ead162c74f73ba38fb17440c3092e74f3160a5deabef9c633975",
+      "byte_length": 21416
+    }
+  ],
+  "findings": [
+    {
+      "severity": "reconciled-rework",
+      "class": "global-write-capable-authority-false-pass",
+      "finding": "The Global continuation no longer bypasses sandbox enforcement; fixture and supported-host controls now return SandboxPolicyRejected without eligibility."
+    },
+    {
+      "severity": "diagnostic",
+      "class": "concurrent-disjoint-worktree-movement",
+      "finding": "A repository-wide recursive snapshot changed while package and routine workers wrote disjoint paths. It was not used as proof; the exact eleven-artifact lane snapshot and isolated fixture trees remained byte-identical across the zero-write run."
+    },
+    {
+      "severity": "ceiling-withheld",
+      "class": "fresh-session-and-live-host-proof-absent",
+      "finding": "The supported adapter continues to report new_session_observed=false and route_eligible=false; no installed live Codex session was observed."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-r3-global-sandbox-rereview",
+    "root-acceptance-or-corrective-rework",
+    "supported-live-root-observation",
+    "fresh-session-runtime-proof",
+    "authorized-legacy-retirement-and-route-adoption"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "The corrected source-local and supported-host controls do not establish that a current installed Codex process consumed the observed descriptor bytes.",
+    "The WorkerResult excludes itself from the eleven-artifact aggregate; its file digest and canonical result_id are frozen separately after final emission.",
+    "Generic WorkerResultV1 row validation is not exact membership authority; final receipt verification composes it with equality against the eleven explicit artifact paths and current rows.",
+    "Repository-wide zero-write comparison was invalidated by concurrent disjoint lane writes and is not claimed; lane-local artifact identity and the tests' recursive isolated-tree comparisons are the proof surface.",
+    "This work package does not claim source acceptance, route eligibility, live-host or fresh-session behavior, readiness, release, node closure, or completion."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

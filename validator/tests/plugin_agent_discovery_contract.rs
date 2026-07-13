@@ -15,3 +15,5 @@ mod race;
 mod security;
 #[path = "plugin_agent_discovery_contract/support.rs"]
 mod support;
+#[path = "plugin_agent_discovery_contract/supported_host.rs"]
+mod supported_host;

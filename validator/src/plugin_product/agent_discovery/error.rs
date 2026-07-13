@@ -33,6 +33,26 @@ impl AgentDiscoveryError {
     }
 }
 
+impl AgentDiscoveryErrorId {
+    pub const fn code(self) -> &'static str {
+        match self {
+            Self::InvalidBinding => "invalid-binding",
+            Self::InvalidSourceCatalog => "invalid-source-catalog",
+            Self::UnsafeFilesystemEntry => "unsafe-filesystem-entry",
+            Self::InputTooLarge => "input-too-large",
+            Self::ObservationUnavailable => "observation-unavailable",
+            Self::ObservationChanged => "observation-changed",
+            Self::ObservationConflict => "observation-conflict",
+            Self::IdentityMismatch => "identity-mismatch",
+            Self::LegacyAuthorityActive => "legacy-authority-active",
+            Self::CollidingAuthorityActive => "colliding-authority-active",
+            Self::SandboxPolicyRejected => "sandbox-policy-rejected",
+            Self::SessionStateRejected => "session-state-rejected",
+            Self::SessionReplay => "session-replay",
+        }
+    }
+}
+
 impl fmt::Display for AgentDiscoveryError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         let message = match self.id {

@@ -11,7 +11,7 @@ mod anchored {
     use std::fs::{File, Metadata};
     use std::io::Read;
     use std::os::fd::{AsRawFd, FromRawFd, RawFd};
-    use std::os::unix::ffi::OsStrExt;
+    use std::os::unix::ffi::{OsStrExt, OsStringExt};
     use std::os::unix::fs::MetadataExt;
     use std::path::PathBuf;
     use std::sync::Arc;
@@ -158,6 +158,13 @@ mod anchored {
             &self.root_path
         }
 
+        pub(crate) fn identity_sha256(&self) -> String {
+            directory_identity_sha256(
+                self.root_path.as_os_str().as_bytes(),
+                &self.directory.fingerprint,
+            )
+        }
+
         pub(crate) fn revalidate(&self) -> Result<(), AgentDiscoveryError> {
             self.directory.revalidate()?;
             let current = open_directory_path(&self.root_path)?;
@@ -262,6 +269,50 @@ mod anchored {
             scanner.close()?;
             self.revalidate()?;
             scan
+        }
+
+        pub(crate) fn bounded_regular_files(
+            &self,
+            maximum_entries: usize,
+            maximum_file_bytes: usize,
+        ) -> Result<Vec<(OsString, SecureFile)>, AgentDiscoveryError> {
+            if maximum_entries == 0 || maximum_entries > 128 {
+                return Err(invalid_source());
+            }
+            self.revalidate()?;
+            let mut scanner = DirectoryScanner::open(self.handle.file.as_raw_fd())?;
+            let scan = (|| {
+                let mut names = BTreeSet::new();
+                while let Some(bytes) = scanner.next()? {
+                    if bytes.is_empty() || bytes.contains(&b'/') || bytes.contains(&0) {
+                        return Err(unsafe_entry());
+                    }
+                    if bytes.len() > MAX_DIRECTORY_ENTRY_NAME_BYTES {
+                        return Err(too_large());
+                    }
+                    if names.len() == maximum_entries {
+                        return Err(too_large());
+                    }
+                    let name = OsString::from_vec(bytes);
+                    let component = component(&name)?;
+                    require_regular_single_link_at(self.handle.file.as_raw_fd(), &component)?;
+                    if !names.insert(name) {
+                        return Err(unsafe_entry());
+                    }
+                }
+                let mut files = Vec::with_capacity(names.len());
+                for name in names {
+                    files.push((name.clone(), self.read_file(&name, maximum_file_bytes)?));
+                }
+                Ok(files)
+            })();
+            scanner.close()?;
+            self.revalidate()?;
+            scan
+        }
+
+        pub(crate) fn identity_sha256(&self) -> String {
+            directory_identity_sha256(b"anchored-child", &self.fingerprint)
         }
 
         pub(crate) fn read_file(
@@ -545,6 +596,18 @@ mod anchored {
         left.device == right.device && left.inode == right.inode
     }
 
+    fn directory_identity_sha256(label: &[u8], fingerprint: &DirectoryFingerprint) -> String {
+        let mut bytes = Vec::with_capacity(label.len() + 56);
+        bytes.extend_from_slice(label);
+        bytes.extend_from_slice(&fingerprint.modified_seconds.to_le_bytes());
+        bytes.extend_from_slice(&fingerprint.modified_nanos.to_le_bytes());
+        bytes.extend_from_slice(&fingerprint.changed_seconds.to_le_bytes());
+        bytes.extend_from_slice(&fingerprint.changed_nanos.to_le_bytes());
+        bytes.extend_from_slice(&fingerprint.device.to_le_bytes());
+        bytes.extend_from_slice(&fingerprint.inode.to_le_bytes());
+        digest(&bytes)
+    }
+
     fn require_regular_single_link(
         metadata: &Metadata,
         maximum: usize,
@@ -796,6 +859,9 @@ mod anchored {
         pub(crate) fn canonical_path(&self) -> &Path {
             Path::new("")
         }
+        pub(crate) fn identity_sha256(&self) -> String {
+            digest(b"unsupported-root")
+        }
         pub(crate) fn revalidate(&self) -> Result<(), AgentDiscoveryError> {
             Err(unsafe_entry())
         }
@@ -823,6 +889,16 @@ mod anchored {
             _expected: &std::collections::BTreeSet<OsString>,
         ) -> Result<bool, AgentDiscoveryError> {
             Err(unsafe_entry())
+        }
+        pub(crate) fn bounded_regular_files(
+            &self,
+            _maximum_entries: usize,
+            _maximum_file_bytes: usize,
+        ) -> Result<Vec<(OsString, SecureFile)>, AgentDiscoveryError> {
+            Err(unsafe_entry())
+        }
+        pub(crate) fn identity_sha256(&self) -> String {
+            digest(b"unsupported-directory")
         }
         pub(crate) fn read_file(
             &self,

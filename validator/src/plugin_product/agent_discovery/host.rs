@@ -1,5 +1,5 @@
 use super::error::{AgentDiscoveryError, AgentDiscoveryErrorId};
-use super::filesystem::{digest, parse_descriptor, safe_relative};
+use super::filesystem::{digest, parse_descriptor, safe_relative, valid_sha256};
 use super::model::{
     AgentAuthorityLayer, AgentLayerObservation, HostFileKind, MAX_CATALOG_BYTES, PLUGIN_NAME,
     PluginManifest, RawAgentRow, RawLayerCatalog,
@@ -320,6 +320,24 @@ pub(crate) fn parse_and_verify_capture(
     if seen_layers != AgentAuthorityLayer::ALL.into_iter().collect() {
         return Err(conflict());
     }
+    let roots = observations
+        .iter()
+        .map(AgentLayerObservation::authority_root_sha256)
+        .collect::<BTreeSet<_>>();
+    let generations = observations
+        .iter()
+        .map(AgentLayerObservation::authority_generation_sha256)
+        .collect::<BTreeSet<_>>();
+    let session_freshness = observations
+        .iter()
+        .map(AgentLayerObservation::new_session_observed)
+        .collect::<BTreeSet<_>>();
+    if roots.len() != AgentAuthorityLayer::ALL.len()
+        || generations.len() != 1
+        || session_freshness.len() != 1
+    {
+        return Err(identity());
+    }
     Ok(observations)
 }
 
@@ -342,7 +360,9 @@ fn verify_catalog(
         || catalog.session_id != request.session_id
         || catalog.session_issuance_sha256 != request.session_issuance_sha256
         || catalog.observation_nonce_sha256 != request.observation_nonce_sha256
-        || !catalog.new_session
+        || !valid_sha256(&catalog.authority_root_sha256)
+        || !valid_sha256(&catalog.authority_generation_sha256)
+        || catalog.transaction_provenance_sha256 != request.provenance_sha256
     {
         return Err(identity());
     }
@@ -397,6 +417,11 @@ fn verify_catalog(
         if descriptor.name != row.name {
             return Err(conflict());
         }
+        if descriptor.sandbox_mode != "read-only" {
+            return Err(AgentDiscoveryError::new(
+                AgentDiscoveryErrorId::SandboxPolicyRejected,
+            ));
+        }
 
         if expected_layer == AgentAuthorityLayer::Global {
             let normalized_name = normalized_name(&row.name);
@@ -416,11 +441,6 @@ fn verify_catalog(
         {
             return Err(identity());
         }
-        if descriptor.sandbox_mode != "read-only" {
-            return Err(AgentDiscoveryError::new(
-                AgentDiscoveryErrorId::SandboxPolicyRejected,
-            ));
-        }
         canonical_rows.push(expected_row.clone());
     }
 
@@ -435,6 +455,10 @@ fn verify_catalog(
     Ok(AgentLayerObservation::new(
         expected_layer,
         digest(raw_bytes),
+        catalog.authority_root_sha256.clone(),
+        catalog.authority_generation_sha256.clone(),
+        catalog.transaction_provenance_sha256.clone(),
+        catalog.new_session,
         canonical_rows,
     ))
 }

@@ -1,0 +1,34 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "reviewer": "/root/agent_authority_reader_proof_reviewer",
+  "verdict": "ACCEPT",
+  "candidate_binding": {
+    "candidate_id": "sha256:1b97701a1ffe1f6e2bc62d06a922eaf4b85d0fa3162df806491292bd7b883f2e",
+    "artifact_count": 11,
+    "artifact_bytes": 147079,
+    "artifact_lines": 4389,
+    "work_package_sha256": "sha256:54c60e48b8be97ed684eb27b65b0a54dea253acbb22a41d2d17f0670869dc13d",
+    "review_sha256": "sha256:682b39e0acc2c1eb1d5dcdaac0d08cbe0bbcb995b8c09e3e366f08b76b72b7d9",
+    "worker_result_sha256": "sha256:0e3dc341bce08bb28b0450d3d4f426b01d32525386b95f904ac1efa1490fa073",
+    "canonical_result_id": "sha256:164dfc545101dc0423470df2b1aaaac07e0c72af5dd8f4f7ac455d33a66bc64e",
+    "disjoint_root_commit_after_freeze": "464884803270be4e076bd7f8209a2c185ce9f594"
+  },
+  "verified_behavior": [
+    "The corrected prior review attributes its reproduction to the fresh fixture transaction and explicitly withholds supported-host and fresh-session proof.",
+    "verify_catalog enforces exact read-only sandbox policy before Global continuation.",
+    "Fixture and supported-host workspace-write globals reject as SandboxPolicyRejected before effect probes.",
+    "An unrelated read-only global descriptor remains legal, observed, route-ineligible, and claim-free."
+  ],
+  "verification": {
+    "typed_boundary": "authoritative WorkerResult parser, canonical result ID, WorkPackage, LeaseSpec, ScopePolicy, ArtifactWorkspace, exact regular single-link rows, and 10/10 mutations passed",
+    "focused_twice": "60/60 each; runs 6693592b-9c22-4b07-894f-0386e650c659 and 0c9f40f4-8ab5-47e8-a2d2-d137e47fb4df",
+    "dependency_routes": "12/12 with 85 skipped; run a98d748f-dbd1-492f-b906-a79e4d71df4b",
+    "additional": "locked and offline production library check, rustfmt check, post-run digest revalidation, and recursive source and host zero-write controls passed"
+  },
+  "material_findings": [],
+  "diagnostics": [
+    "The second focused run emitted one nondeterministic nextest LEAK diagnostic on a test containing no process spawn; both focused runs passed 60/60 and the first emitted no leak."
+  ],
+  "claim_ceiling": "Accepted exact 11-artifact source-local supported agent-authority reader and rebound WorkerResult only.",
+  "no_claim_statement": "This review does not claim live-host or fresh-session behavior, route adoption, legacy retirement, readiness, release, node closure, or completion."
+}

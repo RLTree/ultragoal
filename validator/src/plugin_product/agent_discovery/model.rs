@@ -74,6 +74,10 @@ impl CanonicalAgentObservation {
 pub struct AgentLayerObservation {
     layer: AgentAuthorityLayer,
     catalog_sha256: String,
+    authority_root_sha256: String,
+    authority_generation_sha256: String,
+    transaction_provenance_sha256: String,
+    new_session_observed: bool,
     canonical_agents: Vec<CanonicalAgentObservation>,
 }
 
@@ -81,11 +85,19 @@ impl AgentLayerObservation {
     pub(crate) fn new(
         layer: AgentAuthorityLayer,
         catalog_sha256: String,
+        authority_root_sha256: String,
+        authority_generation_sha256: String,
+        transaction_provenance_sha256: String,
+        new_session_observed: bool,
         canonical_agents: Vec<CanonicalAgentObservation>,
     ) -> Self {
         Self {
             layer,
             catalog_sha256,
+            authority_root_sha256,
+            authority_generation_sha256,
+            transaction_provenance_sha256,
+            new_session_observed,
             canonical_agents,
         }
     }
@@ -96,6 +108,22 @@ impl AgentLayerObservation {
 
     pub fn catalog_sha256(&self) -> &str {
         &self.catalog_sha256
+    }
+
+    pub fn authority_root_sha256(&self) -> &str {
+        &self.authority_root_sha256
+    }
+
+    pub fn authority_generation_sha256(&self) -> &str {
+        &self.authority_generation_sha256
+    }
+
+    pub fn transaction_provenance_sha256(&self) -> &str {
+        &self.transaction_provenance_sha256
+    }
+
+    pub const fn new_session_observed(&self) -> bool {
+        self.new_session_observed
     }
 
     pub fn canonical_agents(&self) -> &[CanonicalAgentObservation] {
@@ -116,12 +144,13 @@ pub struct AgentRouteEligibility {
 }
 
 impl AgentRouteEligibility {
-    pub(crate) fn verified(
+    pub(crate) fn observed(
         binding_sha256: String,
         source_catalog_sha256: String,
         package_version: String,
         layers: Vec<AgentLayerObservation>,
         sandbox_effect_sha256: String,
+        new_session_observed: bool,
     ) -> Self {
         Self {
             binding_sha256,
@@ -129,8 +158,8 @@ impl AgentRouteEligibility {
             package_version,
             layers,
             sandbox_effect_sha256,
-            new_session_observed: true,
-            route_eligible: true,
+            new_session_observed,
+            route_eligible: new_session_observed,
             claim_effect: false,
         }
     }
@@ -215,6 +244,9 @@ pub(crate) struct RawLayerCatalog {
     pub(crate) session_id: String,
     pub(crate) session_issuance_sha256: String,
     pub(crate) observation_nonce_sha256: String,
+    pub(crate) authority_root_sha256: String,
+    pub(crate) authority_generation_sha256: String,
+    pub(crate) transaction_provenance_sha256: String,
     pub(crate) new_session: bool,
     pub(crate) agents: Vec<RawAgentRow>,
 }

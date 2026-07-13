@@ -10,6 +10,7 @@ mod host;
 mod model;
 mod session;
 mod source;
+mod supported;
 
 #[cfg(all(test, unix))]
 pub(crate) use filesystem::{
@@ -27,3 +28,8 @@ pub use model::{
 };
 pub use session::AgentDiscoverySession;
 pub use source::SourceAgentCatalog;
+pub use supported::{
+    SupportedAgentAuthorityFinding, SupportedAgentAuthorityFindingKind,
+    SupportedAgentAuthorityObservation, SupportedHostAgentAuthorityReader,
+    SupportedHostAgentAuthorityReport, SupportedHostAgentRoots,
+};

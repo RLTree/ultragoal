@@ -152,6 +152,25 @@ fn omitted_sandbox_and_write_capable_effect_observations_block_eligibility() {
 }
 
 #[test]
+fn write_capable_unrelated_global_authority_cannot_produce_eligibility() {
+    let repo = TempRepo::canonical();
+    let source = repo.capture();
+    let session = AgentDiscoverySession::bind(source.clone()).unwrap();
+    let mut reader = FixtureReader::exact(&source);
+    reader.configure(|transaction| {
+        transaction.add_global_agent("unrelated-observer", Some("workspace-write"));
+    });
+
+    let result = session.verify(&mut reader);
+
+    assert_eq!(
+        result.unwrap_err().id(),
+        AgentDiscoveryErrorId::SandboxPolicyRejected
+    );
+    assert_eq!(reader.transaction().probes, 0);
+}
+
+#[test]
 fn package_install_cache_and_discovery_bind_exact_current_bytes() {
     for layer in [
         AgentAuthorityLayer::Package,
@@ -212,4 +231,40 @@ fn transaction_level_identity_mismatch_stops_before_catalog_reads() {
         AgentDiscoveryErrorId::ObservationChanged
     );
     assert_eq!(reader.transaction().reads, 0);
+}
+
+#[test]
+fn authority_roots_generation_and_transaction_provenance_are_not_interchangeable() {
+    assert_eq!(
+        verify_with(|transaction| {
+            let package: serde_json::Value =
+                serde_json::from_slice(&transaction.catalogs[&AgentAuthorityLayer::Package])
+                    .unwrap();
+            let package_root = package["authority_root_sha256"].clone();
+            transaction.mutate_catalog(AgentAuthorityLayer::Installed, |catalog| {
+                catalog["authority_root_sha256"] = package_root;
+            });
+        }),
+        AgentDiscoveryErrorId::IdentityMismatch
+    );
+    assert_eq!(
+        verify_with(|transaction| {
+            transaction.mutate_catalog(AgentAuthorityLayer::Cache, |catalog| {
+                catalog["authority_generation_sha256"] = json!(
+                    "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+                );
+            });
+        }),
+        AgentDiscoveryErrorId::IdentityMismatch
+    );
+    assert_eq!(
+        verify_with(|transaction| {
+            transaction.mutate_catalog(AgentAuthorityLayer::Discovery, |catalog| {
+                catalog["transaction_provenance_sha256"] = json!(
+                    "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+                );
+            });
+        }),
+        AgentDiscoveryErrorId::IdentityMismatch
+    );
 }

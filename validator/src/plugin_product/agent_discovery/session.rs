@@ -130,9 +130,31 @@ impl AgentDiscoverySession {
             }
             transaction.require_current(&self.request)?;
             let layers = parse_and_verify_capture(&first, &self.source, &self.request)?;
+            let host_binding_rows = layers
+                .iter()
+                .map(|layer| {
+                    (
+                        layer.layer(),
+                        layer.catalog_sha256(),
+                        layer.authority_root_sha256(),
+                        layer.authority_generation_sha256(),
+                        layer.transaction_provenance_sha256(),
+                    )
+                })
+                .collect::<Vec<_>>();
+            let verified_binding_sha256 = serde_json::to_vec(&(
+                "VerifiedHostAgentAuthorityBinding-v1",
+                &self.binding_sha256,
+                host_binding_rows,
+            ))
+            .map(|bytes| digest(&bytes))
+            .map_err(|_| invalid())?;
             self.source.revalidate()?;
-            let sandbox_effect_sha256 =
-                transaction.enforce_effects(&self.source, &self.binding_sha256, &self.request)?;
+            let sandbox_effect_sha256 = transaction.enforce_effects(
+                &self.source,
+                &verified_binding_sha256,
+                &self.request,
+            )?;
             self.source.revalidate()?;
             transaction.require_current(&self.request)?;
             if self.issuance.issuance_sha256 != self.request.session_issuance_sha256()
@@ -148,12 +170,16 @@ impl AgentDiscoverySession {
                 })?;
             self.source.revalidate()?;
             transaction.require_current(&self.request)?;
-            Ok(AgentRouteEligibility::verified(
-                self.binding_sha256.clone(),
+            let new_session_observed = layers
+                .first()
+                .is_some_and(|layer| layer.new_session_observed());
+            Ok(AgentRouteEligibility::observed(
+                verified_binding_sha256,
                 self.source.catalog_sha256().to_owned(),
                 self.source.plugin_version().to_owned(),
                 layers,
                 sandbox_effect_sha256,
+                new_session_observed,
             ))
         })
     }
