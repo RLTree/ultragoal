@@ -3,6 +3,7 @@ mod cache_observation;
 mod error;
 mod filesystem;
 mod host;
+pub(crate) mod host_effect;
 mod host_capability;
 mod install;
 mod json;

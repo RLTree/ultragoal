@@ -1,0 +1,51 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "SUPPORTED-HOST-DISTRIBUTION-DARWIN-EXECUTION-UNSUPPORTED-060",
+  "workstream": "supported-host-distribution-transaction-authority",
+  "candidate_before_interface_edits": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "fd927ba277f46eebad44ba32bebdc17446502039",
+    "head_tree": "7ab48785661020c5b2710f2e154821e95d767f70",
+    "dirty": false
+  },
+  "observed_runtime": {
+    "kernel": "Darwin 27.0.0 arm64",
+    "rustc": "1.95.0 (59807616e 2026-04-14)",
+    "rust_host": "aarch64-apple-darwin",
+    "macos_sdk": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+  },
+  "current_primary_surface_probes": [
+    {
+      "command": "rg -n '\\b(fexecve|execveat)\\b' <MacOSX.sdk>/usr/include <MacOSX.sdk>/System/Library/Frameworks",
+      "result": "no declarations"
+    },
+    {
+      "command": "rg -n '\\b(fexecve|execveat)\\b' <cargo-registry>/libc-0.2.186/src",
+      "result": "declarations exist for AIX Solaris FreeBSD Hurd newlib Fuchsia Cygwin and Linux; none exist in the Apple target modules"
+    },
+    {
+      "command": "rg -n '\\b(fexecve|execveat|posix_spawn)\\b' <rust-src>/library/std/src/sys/process",
+      "result": "the Darwin-capable standard process implementation exposes pathname-based posix_spawn behavior and no descriptor-execution primitive"
+    }
+  ],
+  "decision": "DESCRIPTOR_STABLE_EXTERNAL_HOST_EXECUTION_UNSUPPORTED_ON_DARWIN",
+  "required_behavior": [
+    "return a typed Unsupported result before durable ledger reservation",
+    "perform zero process spawns and zero host effects",
+    "perform zero ledger writes or state transitions",
+    "retain descriptor-stable file identity and read verification only at their narrower truth layer",
+    "do not raise package install discovery runtime or supported-host journey claims"
+  ],
+  "implementation_state": {
+    "root_authority_interface": "candidate source now states the zero-reservation zero-spawn Unsupported boundary",
+    "durable_ledger_adapter": "not implemented",
+    "darwin_executor_adapter": "not implemented",
+    "legacy_host_authorization": "still active pending reviewed activation and retirement",
+    "runtime_probe": "still pathname-spawn based pending reviewed routing through the new boundary",
+    "live_host_effect": "not authorized"
+  },
+  "future_platform_ceiling": "A Linux or FreeBSD descriptor-execution adapter remains unproved until separately implemented and executed on that supported platform.",
+  "claim_ceiling": "Source-local authority-interface candidate and current-host unsupported capability decision only.",
+  "no_claim_statement": "This decision does not claim a live host adapter, package, marketplace, install, cache, app registry, Plugins UI, discovery, runtime, representative journey, readiness, release, node closure, or goal completion."
+}
