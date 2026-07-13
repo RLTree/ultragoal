@@ -1,0 +1,344 @@
+{
+  "worker": "/root/evaluation_research_authority_repair_engineer",
+  "lease_id": "EVALUATION-RESEARCH-AUTHORITY-BINDING-086-R7",
+  "context_id": "sha256:d09776fb1f03ca676320ab7c1d8f6f7b29a79c3fcc28299cc0d931c86a063ac8",
+  "candidate_identity": {
+    "artifact_bytes": 469743,
+    "artifact_count": 18,
+    "artifact_lines_diagnostic": 13475,
+    "artifact_set_formula": "Sort repository-relative artifact paths; for each append path, one TAB, lowercase SHA-256 without a prefix, and one LF; SHA-256 the concatenation.",
+    "artifact_set_sha256": "sha256:0fac4e045fccea0ed46097a7c84e8a68921ae2d60887a9f87b34690182c097fc",
+    "candidate_id": "sha256:0fac4e045fccea0ed46097a7c84e8a68921ae2d60887a9f87b34690182c097fc",
+    "context_id": "sha256:d09776fb1f03ca676320ab7c1d8f6f7b29a79c3fcc28299cc0d931c86a063ac8",
+    "frozen_source_file_count_self_excluded": 6323,
+    "frozen_source_formula": "In the frozen scratch root, sort regular-file paths bytewise; exclude this WorkerResult; emit shasum -a 256 output for each path; SHA-256 the emitted stream.",
+    "frozen_source_sha256_self_excluded": "sha256:c7e6afc57bb00137894dbf1b8eaed797f32a628e1d5158ee38b7f77091aa9c30",
+    "frozen_scratch_root": "/private/tmp/hul-evaluation-r7-frozen-ade32d749-authority",
+    "frozen_behavior_proof_pre_post_sha256": "sha256:c7e6afc57bb00137894dbf1b8eaed797f32a628e1d5158ee38b7f77091aa9c30",
+    "root_head": "ade32d749b80836900f99049cb31d8fb6713f985",
+    "root_tree": "15078d6a3d94b68b8df25505ec2ee13c954757fa",
+    "work_package_path": "docs/ultragoal-successor-live/work-packages/EVALUATION-PRODUCTION-RUNTIME-086.json",
+    "work_package_sha256": "sha256:e25071e2bc634e5edd41bedce2d8495b4c2d1263b3ce322a050c943874dcc5dc",
+    "amendment_path": "docs/ultragoal-successor-live/work-packages/EVALUATION-RESEARCH-CONTRACT-RECOVERY-086-R5.json",
+    "amendment_sha256": "sha256:9bfe6b7d009cb4e0c4184fe98ab9431ae81872c13191648a76488e9b499e7d79",
+    "prior_amendment_path": "docs/ultragoal-successor-live/work-packages/EVALUATION-RESEARCH-CONTRACT-RECOVERY-086-R4.json",
+    "prior_amendment_sha256": "sha256:7eb801a34b4d971c18ced82ff3080db64148b305744b2bd5ea9471b0941a68ae",
+    "worker_result_self_excluded": true
+  },
+  "base_state": {
+    "accepted_ceiling": "Accepted immutable evaluation and promotion decision kernel, Darwin fixture-scheduler platform contract, and source-local observability boundary.",
+    "issued_context_id": "sha256:d09776fb1f03ca676320ab7c1d8f6f7b29a79c3fcc28299cc0d931c86a063ac8",
+    "issued_head_commit": "ade32d749b80836900f99049cb31d8fb6713f985",
+    "status": "root-issued-r7-research-authority-binding-corrective-lease"
+  },
+  "final_state": {
+    "actual_darwin_scheduler_terminal_run": false,
+    "claim_effect": false,
+    "exact_ceiling": "Source-local evaluation, research, execution-ledger, promotion-ledger, scheduler-adapter, compatibility, and false-pass candidate only. Public dispatch, root principals and sessions, shared authority adoption, observability writer integration, representative product journeys, cross-platform cleanup proof, acceptance, readiness, release, and completion remain withheld.",
+    "fixture_dependency_closure": "46 of 46 fixture-scheduler contract tests passed in the exact corrected R7 frozen scratch candidate after root retired the historical live-self-check gate and R3 corrected readiness-prefix handling.",
+    "public_eval_commands_wired": false,
+    "source_candidate_id": "sha256:0fac4e045fccea0ed46097a7c84e8a68921ae2d60887a9f87b34690182c097fc",
+    "lease_exact_no_claim_statement": "This worker does not claim root adoption, public evaluation command availability, installed runtime behavior, representative product journeys, claim elevation, readiness, release, or completion.",
+    "status": "candidate_for_root_acceptance",
+    "supported_cross_platform_proof": false
+  },
+  "touched_paths": [
+    "fixtures/evaluation-engine/paired-valid.json",
+    "fixtures/evaluation-engine/red-cases.json",
+    "validator/src/cli/capture/fixture.rs",
+    "validator/src/cli/capture/fixture/execute.rs",
+    "validator/src/cli/capture/fixture/permit.rs",
+    "validator/src/evaluation/ledger.rs",
+    "validator/src/evaluation/mod.rs",
+    "validator/src/evaluation/promotion_ledger.rs",
+    "validator/src/evaluation/records.rs",
+    "validator/src/evaluation/research.rs",
+    "validator/src/evaluation/runtime.rs",
+    "validator/src/fixture_scheduler/mod.rs",
+    "validator/src/fixture_scheduler/outcome.rs",
+    "validator/src/fixture_scheduler/scheduler.rs",
+    "validator/tests/evaluation_contract.rs",
+    "validator/tests/evaluation_runtime_contract.rs",
+    "validator/tests/fixture_scheduler_contract/execution_adapter/detached_descendant.rs",
+    "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs",
+    "docs/ultragoal-successor-live/worker-results/EVALUATION-PRODUCTION-RUNTIME-086.json"
+  ],
+  "touched_semantics": [
+    "evaluation-runtime::production-test-issuance-boundary",
+    "evaluation-runtime::causal-terminal-outcomes",
+    "evaluation-runtime::authenticated-execution-ledger",
+    "evaluation-runtime::authenticated-promotion-ledger",
+    "evaluation-runtime::final-descriptor-revalidation",
+    "evaluation-runtime::canonical-bound-research-source-record",
+    "evaluation-runtime::typed-research-classification-boundaries",
+    "evaluation-runtime::policy-derived-research-freshness",
+    "evaluation-runtime::caller-unmintable-research-authority-binding",
+    "evaluation-runtime::root-only-law-change-analysis",
+    "evaluation-runtime::research-substitution-and-zero-write-controls",
+    "fixture-scheduler::readiness-prefix-protocol",
+    "worker-result::exact-r7-source-set"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/EVALUATION-PRODUCTION-RUNTIME-086.json"
+  ],
+  "fixtures": [
+    "fixtures/evaluation-engine/paired-valid.json",
+    "fixtures/evaluation-engine/red-cases.json"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "evaluation-production-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "evaluation-engine-fixtures",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-evaluation-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "REQ-EVAL-001",
+    "REQ-EVAL-002",
+    "REQ-EVAL-003",
+    "REQ-EVAL-004",
+    "REQ-EVAL-005",
+    "REQ-EVAL-006",
+    "REQ-RESEARCH-001",
+    "REQ-RESEARCH-002",
+    "REQ-RESEARCH-003",
+    "REQ-RESEARCH-004"
+  ],
+  "dependency_nodes": [
+    "accepted-evaluation-promotion-decision-kernel",
+    "accepted-darwin-fixture-scheduler-platform-contract",
+    "accepted-source-local-observability-boundary",
+    "root-retained-evaluation-product-authorities"
+  ],
+  "changes": [
+    {
+      "area": "issuance-boundary",
+      "result": "Separated the fixed production executable allowlist from a test-only native issuance path and rejected copied, symlinked, and public shell-substrate substitution."
+    },
+    {
+      "area": "causal-execution",
+      "result": "Captured exact bounded script bytes and preserved causal timeout, interruption, output-limit, process-group, and detached-descendant outcomes."
+    },
+    {
+      "area": "authenticated-ledgers",
+      "result": "Added stable-inode authenticated journals, deterministic per-root pause controls, rollback and crash-tail recovery, semantic no-op generation repair, component-by-component no-follow root resolution, descriptor-bound fail-closed directory enumeration, and final root, lock, anchor, state, and journal revalidation."
+    },
+    {
+      "area": "research-controls",
+      "result": "Bound canonical typed source-record bytes to exact path, digest, and length; kept fact, requirement, advice, hypothesis, and rejection fields distinct; correlated checked UTC date to observation time; applied the same code-derived 30-day and current-primary policy to every externally supplied verified fact; and made public-constructor sources explicitly unverified so caller-rebound source class, temporal scope, observation time, validity, and canonical digest cannot mint research eligibility. The only positive authority-binding seam is cfg(test), private to the crate, and binds the exact record digest and policy fields. Production SystemTime remains internal, invalid or unavailable clocks fail closed, complete proposal analyses remain required, and read, parse, query, and audit paths remain zero-write."
+    },
+    {
+      "area": "fixture-compatibility",
+      "result": "Applied exactly four test-only native substitutions and made only exact prefixes of ready newline remain pending while rejecting unexpected bytes and unsafe file types."
+    },
+    {
+      "area": "receipt-integrity",
+      "result": "Added an exact self-excluding WorkerResult source-set test over regular single-link files, per-file digests and lengths, and the aggregate identity formula."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-evaluation-r7-authority-repair-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 RUST_TEST_THREADS=16 RUSTFLAGS=-Awarnings cargo test --locked --offline --manifest-path validator/Cargo.toml -j 16 --test evaluation_runtime_contract -- --test-threads=16",
+      "result": "From frozen scratch base ade32d749b80836900f99049cb31d8fb6713f985 plus the exact 18-artifact overlay, the ten focused research tests passed twice consecutively and the complete runtime contract passed 52 of 52 once. The research controls include the exact full public-constructor rebound from old VendorDocumentation plus Stable into current PrimarySpecification plus MutableCapability, separate source-class, temporal-policy, observation-time, canonical-recompute, mixed-fact, same-record-validity, invalid-clock, production-SystemTime, and zero-write cases. External verified facts remain ineligible without a non-caller authority binding.",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-evaluation-r7-authority-repair-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 RUST_TEST_THREADS=16 RUSTFLAGS=-Awarnings cargo test --locked --offline --manifest-path validator/Cargo.toml -j 16 --test evaluation_contract -- --test-threads=16",
+      "result": "The exact corrected R7 frozen-scratch candidate passed all 25 immutable evaluation and promotion decision-kernel tests once.",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-evaluation-r7-authority-repair-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 RUST_TEST_THREADS=16 RUSTFLAGS=-Awarnings cargo test --locked --offline --manifest-path validator/Cargo.toml -j 16 --test fixture_scheduler_contract -- --test-threads=16",
+      "result": "The exact corrected R7 frozen-scratch dependency closure passed 46 of 46 once after root retired the historical live-self-check gate and R3 corrected readiness-prefix handling.",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-evaluation-r7-authority-repair-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 RUSTFLAGS=-Awarnings cargo check --locked --offline --manifest-path validator/Cargo.toml -j 16 --lib",
+      "result": "The frozen-scratch production library check passed with the required locked offline dependency set and a scratch-specific isolated target directory.",
+      "status": "pass"
+    },
+    {
+      "command": "rustfmt --edition 2024 --config skip_children=true --check <exact 16 leased Rust files>",
+      "result": "All 16 exact leased Rust files passed the non-recursive rustfmt check in the corrected R7 frozen scratch candidate after final proof; cargo fmt was not used.",
+      "status": "pass"
+    },
+    {
+      "command": "Sorted per-file SHA-256 closure over /private/tmp/hul-evaluation-r7-frozen-ade32d749-authority before and after proof, excluding the self-referential WorkerResult",
+      "result": "The 6,323-file self-excluded frozen source tree was byte-identical across both focused research rounds, the three complete behavior suites, the production external-crate rebound probe, the library check, and rustfmt at sha256:c7e6afc57bb00137894dbf1b8eaed797f32a628e1d5158ee38b7f77091aa9c30.",
+      "status": "pass"
+    },
+    {
+      "command": "Frozen-scratch exact test evaluation_worker_result_is_exact_typed_and_self_excluded after final WorkerResult injection",
+      "result": "The final self-excluded WorkerResult deserialized as WorkerResultV1 and reconciled its exact top-level keys, R7 worker lease, generic schema no-claim statement, long exact lease ceiling, 18 regular single-link artifact rows, per-file bytes and digests, touched paths, fixtures, aggregate identity, corrected R7 candidate identity, and final frozen-source closure.",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-evaluation-r7-external-probe-target CARGO_BUILD_JOBS=16 cargo run --offline -j 16 in /private/tmp/hul-evaluation-external-rebound-probe against the frozen production library",
+      "result": "A separate downstream crate used only public constructors to fully rebound an old VendorDocumentation plus Stable source into a current PrimarySpecification plus MutableCapability record, recomputed canonical bytes and digest, and still received research-source-authority-binding-required with no eligible proposals.",
+      "status": "pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/evaluation-engine/paired-valid.json",
+      "sha256": "sha256:5a4c39670bd5ef396d01851ce314c140a2789ae67b064992daedaa1878a91a3d",
+      "byte_length": 481
+    },
+    {
+      "path": "fixtures/evaluation-engine/red-cases.json",
+      "sha256": "sha256:36d98ae658af7eedcd585aead93f39aea722ed7b0ce9bfebccd9df348f7d9b60",
+      "byte_length": 1277
+    },
+    {
+      "path": "validator/src/cli/capture/fixture.rs",
+      "sha256": "sha256:1a417ff004a5349f52c1b23c91d8eb0f9c3ebd8a4df09144b5d911cc72c02e5b",
+      "byte_length": 10843
+    },
+    {
+      "path": "validator/src/cli/capture/fixture/execute.rs",
+      "sha256": "sha256:f9330e3c7a6cca1565b4dd8b2c167f00241c66f0c486be9127f4f7924d94ab22",
+      "byte_length": 21654
+    },
+    {
+      "path": "validator/src/cli/capture/fixture/permit.rs",
+      "sha256": "sha256:4cf7b73b904b2a2d2bdac736e81827a76d940418bd01c50f26299ca3f7fad757",
+      "byte_length": 17806
+    },
+    {
+      "path": "validator/src/evaluation/ledger.rs",
+      "sha256": "sha256:6f2d94d2aafaac912cf0e6838088ffbffb716a3d22e0a5b1f936f5ff809e2c12",
+      "byte_length": 59661
+    },
+    {
+      "path": "validator/src/evaluation/mod.rs",
+      "sha256": "sha256:4bc409378a510733d151c19cd5ca466000a9fd7e1ee21018de0871399ff96b5b",
+      "byte_length": 59594
+    },
+    {
+      "path": "validator/src/evaluation/promotion_ledger.rs",
+      "sha256": "sha256:f79c15d5a3c9b128bec94a7a803187b76d4a4a2b78ce49dae0b58e088e5a429a",
+      "byte_length": 52451
+    },
+    {
+      "path": "validator/src/evaluation/records.rs",
+      "sha256": "sha256:106422bc5715b8e2bc4c66c5448a9a30980f085d8b979c5e953406092bbcc07b",
+      "byte_length": 9559
+    },
+    {
+      "path": "validator/src/evaluation/research.rs",
+      "sha256": "sha256:740967e15a8b91009f3621589e82ea06eae95635776e31a697cb938efc37458f",
+      "byte_length": 49231
+    },
+    {
+      "path": "validator/src/evaluation/runtime.rs",
+      "sha256": "sha256:b4fd4bb45452c54bd4842cd31239c81b9755b8f49533fa64ca3f21d3b8a8ff31",
+      "byte_length": 7440
+    },
+    {
+      "path": "validator/src/fixture_scheduler/mod.rs",
+      "sha256": "sha256:e98c2c077abf54dcc8847e70369c5f93fa3b0c007580947bd1cc0984efb6c633",
+      "byte_length": 1043
+    },
+    {
+      "path": "validator/src/fixture_scheduler/outcome.rs",
+      "sha256": "sha256:b121561df7076676bc51762f32043142cdca92e1c657d8f3bfd26d574602d175",
+      "byte_length": 9064
+    },
+    {
+      "path": "validator/src/fixture_scheduler/scheduler.rs",
+      "sha256": "sha256:990ec4666e52ba9c3d53ff3162a97153382d627c7e02f6375f1f32920bcb6b9b",
+      "byte_length": 10264
+    },
+    {
+      "path": "validator/tests/evaluation_contract.rs",
+      "sha256": "sha256:f94574db5846714d6fccb983834027ca0860093c0360784d5425370db015aaa2",
+      "byte_length": 28184
+    },
+    {
+      "path": "validator/tests/evaluation_runtime_contract.rs",
+      "sha256": "sha256:2a08b852d9a2a676ba03b92b2eee50b1cce768fee123475ab0f468275dc99972",
+      "byte_length": 119136
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/execution_adapter/detached_descendant.rs",
+      "sha256": "sha256:f7a8897d8b1d5dd70a2a8202e36673e04bd50d6258a8c0579cf2bc358352594f",
+      "byte_length": 1834
+    },
+    {
+      "path": "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs",
+      "sha256": "sha256:cc5c27535ec2211b589d660ff542b3da7b4554d5fd6155b61acc0c06c44869a0",
+      "byte_length": 10221
+    }
+  ],
+  "findings": [
+    {
+      "status": "resolved",
+      "finding": "Production issuance previously exposed an overly broad native executable route; R3 now confines production to the fixed allowlist and moves arbitrary native probes behind a test-only API."
+    },
+    {
+      "status": "resolved",
+      "finding": "Process-global deterministic pause state could cross-contaminate concurrent tests; controls are now isolated per ledger root."
+    },
+    {
+      "status": "resolved",
+      "finding": "An empty readiness file was incorrectly classified as a terminal mismatch under parallel load; exact ready-newline prefixes now remain pending."
+    },
+    {
+      "status": "resolved",
+      "finding": "Path-based authority-root enumeration and final-component-only no-follow opening could miss descriptor-root entries or accept symlinked ancestors; both ledgers now resolve every component without following links and enumerate from the already-open root descriptor with mutation detection."
+    },
+    {
+      "status": "resolved",
+      "finding": "The R3 research record omitted REQ-RESEARCH-001/002/004 content and allowed incomplete inputs to become eligible; R5 binds a complete canonical typed source record and complete proposal analyses while preserving a no-authority output."
+    },
+    {
+      "status": "resolved",
+      "finding": "The first R5 draft let uncorrelated checked dates and caller-chosen validity satisfy freshness; checked date now equals the observation epoch UTC day and mutable/version validity is exactly a code-derived 30-day window, with rebound semantic tamper controls."
+    },
+    {
+      "status": "resolved",
+      "finding": "Independent R5 review proved that a caller could relabel an old non-primary capability fact as stable to select a longer policy; the corrected candidate now applies a fixed 30-day and current-primary policy to every external verified fact, rejects every unsealed stable label with a typed no-authority finding, and covers exact public-API, mixed-fact, rebound, and self-consistent substitutions."
+    },
+    {
+      "status": "resolved",
+      "finding": "Root pre-freeze falsification proved that the public audit epoch let a caller move now backward; production audit now reads SystemTime directly, deterministic raw epochs are cfg(test)-only, unavailable and invalid clocks fail closed, and old-source backdating, future time, zero, maximum, failure, and same-record validity rebound are covered."
+    },
+    {
+      "status": "resolved",
+      "finding": "Independent R6 review proved that canonical consistency alone let a public caller simultaneously rebound source class, temporal scope, observation date and time, validity, bytes, and digest into an eligible proposal. R7 separates caller bytes from a private typed authority binding; every production source created through public constructors is conservatively ineligible, while the cfg(test)-only adopted seam binds the exact record digest and all policy-bearing fields. A real downstream-crate probe reproduces the full attack and receives the typed authority-binding-required finding."
+    },
+    {
+      "status": "withheld",
+      "finding": "No supported FreeBSD cleanup or real terminal scheduler run is proven by this Darwin source-local candidate."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-root-review",
+    "root-principal-session-issuance",
+    "public-eval-dispatch",
+    "shared-schema-catalog-adoption",
+    "observability-writer-integration",
+    "legacy-route-adoption-retirement",
+    "representative-product-journeys",
+    "freebsd-cleanup-proof"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "This worker does not claim root adoption, public evaluation command availability, installed runtime behavior, representative product journeys, claim elevation, readiness, release, or completion.",
+    "The candidate has no authority to edit the public command catalog, dispatcher, shared schemas, manifests, migration registry, claims, release state, or Git history.",
+    "The production library check proves compilation only; it does not prove installation, discovery, public dispatch, Plugins UI, or representative real use.",
+    "The fixture-scheduler closure is Darwin-local and does not prove supported FreeBSD cleanup behavior.",
+    "The retired historical fixture WorkerResult remains context only and is not current proof for this candidate."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

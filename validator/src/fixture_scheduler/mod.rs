@@ -17,7 +17,12 @@ pub use error::FixtureScheduleError;
 #[cfg(all(test, unix))]
 pub(crate) use lease::set_before_capture_hook;
 pub use lease::{IsolationLease, LeaseDisposition, ResourceBinding};
-pub use outcome::{ExpectedOutcome, ObservedOutcome, OutcomeVerdict};
-pub(crate) use scheduler::FixtureExecutor;
+pub(crate) use outcome::ExecutedFixture;
+pub use outcome::{
+    ExpectedOutcome, FixtureExecutionBinding, FixtureExecutionRecord, ObservedOutcome,
+    OutcomeVerdict,
+};
+pub(crate) use scheduler::{FixtureExecutor, RecordedFixtureExecutor};
 pub use scheduler::{FixtureRun, FixtureScheduler, RunDisposition};
+pub(crate) use spec::stable_digest;
 pub use spec::{FixtureKind, FixtureSpec, ResourceKind};

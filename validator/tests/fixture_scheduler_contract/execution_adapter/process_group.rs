@@ -89,17 +89,26 @@ pub(super) fn read_process_record(path: &Path) -> ProcessRecord {
 }
 
 fn wait_for_readiness(path: &Path) {
+    const READY: &[u8] = b"ready\n";
     let deadline = Instant::now() + Duration::from_secs(3);
     loop {
-        match std::fs::read(path) {
-            Ok(bytes) => {
-                assert_eq!(bytes, b"ready\n");
-                let metadata = std::fs::symlink_metadata(path).unwrap();
-                assert!(metadata.is_file());
-                return;
+        match std::fs::symlink_metadata(path) {
+            Ok(metadata) => {
+                assert!(
+                    metadata.file_type().is_file(),
+                    "readiness handshake is not a regular file"
+                );
+                let bytes = std::fs::read(path).expect("read readiness handshake");
+                assert!(
+                    READY.starts_with(&bytes),
+                    "unexpected readiness handshake bytes: {bytes:?}"
+                );
+                if bytes == READY {
+                    return;
+                }
             }
             Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
-            Err(error) => panic!("read readiness handshake: {error}"),
+            Err(error) => panic!("inspect readiness handshake: {error}"),
         }
         assert!(
             Instant::now() < deadline,
@@ -173,7 +182,7 @@ fn actual_adapter_termination(
     } else {
         4096
     };
-    let adapter = FixtureCaptureAdapter::issue(
+    let adapter = FixtureCaptureAdapter::issue_test_native(
         &fixture,
         probe,
         [
@@ -238,7 +247,7 @@ fn interrupt_before_readiness_is_deterministic_without_a_process_record() {
         .root()
         .join("file/pids");
     let readiness_path = record_path.with_extension("ready");
-    let adapter = FixtureCaptureAdapter::issue(
+    let adapter = FixtureCaptureAdapter::issue_test_native(
         &fixture,
         probe,
         [
@@ -321,7 +330,7 @@ fn already_exited_process_group_is_absent_after_adapter_return() {
         .lease
         .root()
         .join("file/pids");
-    let adapter = FixtureCaptureAdapter::issue(
+    let adapter = FixtureCaptureAdapter::issue_test_native(
         &fixture,
         probe,
         ["exit-record", record_path.to_str().unwrap()]

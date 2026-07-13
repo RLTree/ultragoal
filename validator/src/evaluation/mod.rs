@@ -4,10 +4,36 @@
 //! evaluation inputs and inspect records, but they cannot implement the sealed
 //! executor or mint captured task observations.
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
+
+mod ledger;
+mod promotion_ledger;
+mod records;
+mod research;
+pub(crate) mod runtime;
+
+pub use ledger::{
+    EvaluationExecutionBinding, EvaluationLedgerError, EvaluationLedgerState,
+    FileEvaluationExecutionLedger,
+};
+pub use promotion_ledger::{
+    FilePromotionReviewLedger, PromotionLedgerBinding, PromotionLedgerState,
+};
+pub use records::{
+    CanonicalEvaluationFailure, CanonicalEvaluationReview, CanonicalEvaluationRun,
+    ConfigurationExposure, ConfigurationSource, EvaluationEventKind, PrivacySafeEvaluationEvent,
+    RuntimeConfiguration,
+};
+pub use research::{
+    AdvisoryPractice, AuthorityAnalysis, BindingProductRequirement, ExperimentalHypothesis,
+    FactTemporalScope, ImpactAnalysis, LawChangeProposal, MigrationAnalysis, ProofAnalysis,
+    ProposalAnalyses, RejectedRecommendation, ResearchAudit, ResearchFinding, ResearchSource,
+    ResearchSourceClass, ResearchSourceRecord, VerifiedSourceFact,
+};
+pub use runtime::{ProductionEvaluationRun, ProductionRuntimeError};
 
 const MAX_TASKS: usize = 1_024;
 const MAX_INPUT_BYTES: u64 = 64 * 1024 * 1024;
@@ -37,7 +63,7 @@ impl fmt::Display for EvaluationError {
 
 impl std::error::Error for EvaluationError {}
 
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum InputKind {
     Regular,
@@ -122,7 +148,7 @@ impl BoundInput {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum PerturbationControl {
     Verbosity,
@@ -165,6 +191,154 @@ pub struct EvaluationTask {
     scorer_digest_sha256: String,
     perturbation_controls: BTreeSet<PerturbationControl>,
     representative: bool,
+    data_controls: EvaluationDataControls,
+}
+
+/// Auditable data-quality facts used to reject leakage and ambiguous labels.
+///
+/// These are part of the immutable spec digest. They are not grader results and
+/// cannot be supplied after an evaluation has run.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct EvaluationDataControls {
+    objective: String,
+    success_criterion: String,
+    failure_criterion: String,
+    split_id: String,
+    training_split_ids: BTreeSet<String>,
+    semantic_fingerprint_sha256: String,
+    near_duplicate_group_sha256: String,
+    known_training_fingerprint_sha256s: BTreeSet<String>,
+    declared_label: String,
+    verified_label: String,
+    sampled_population: String,
+    target_population: String,
+}
+
+impl EvaluationDataControls {
+    #[allow(clippy::too_many_arguments)]
+    pub fn new(
+        objective: impl Into<String>,
+        success_criterion: impl Into<String>,
+        failure_criterion: impl Into<String>,
+        split_id: impl Into<String>,
+        training_split_ids: BTreeSet<String>,
+        semantic_fingerprint_sha256: impl Into<String>,
+        near_duplicate_group_sha256: impl Into<String>,
+        known_training_fingerprint_sha256s: BTreeSet<String>,
+        declared_label: impl Into<String>,
+        verified_label: impl Into<String>,
+        sampled_population: impl Into<String>,
+        target_population: impl Into<String>,
+    ) -> Self {
+        Self {
+            objective: objective.into(),
+            success_criterion: success_criterion.into(),
+            failure_criterion: failure_criterion.into(),
+            split_id: split_id.into(),
+            training_split_ids,
+            semantic_fingerprint_sha256: semantic_fingerprint_sha256.into(),
+            near_duplicate_group_sha256: near_duplicate_group_sha256.into(),
+            known_training_fingerprint_sha256s,
+            declared_label: declared_label.into(),
+            verified_label: verified_label.into(),
+            sampled_population: sampled_population.into(),
+            target_population: target_population.into(),
+        }
+    }
+
+    fn defaults(task_id: &str, behavior_id: &str, dataset_digest: &str) -> Self {
+        Self::new(
+            format!("observe-{behavior_id}"),
+            format!("{behavior_id}-passes"),
+            format!("{behavior_id}-fails"),
+            format!("eval-{task_id}"),
+            BTreeSet::new(),
+            digest(format!("semantic|{task_id}|{dataset_digest}").as_bytes()),
+            digest(format!("near-duplicate|{task_id}|{dataset_digest}").as_bytes()),
+            BTreeSet::new(),
+            behavior_id,
+            behavior_id,
+            "representative-population",
+            "representative-population",
+        )
+    }
+
+    fn findings(&self) -> Vec<String> {
+        let mut findings = Vec::new();
+        if !valid_identifier(&self.objective)
+            || !valid_identifier(&self.success_criterion)
+            || !valid_identifier(&self.failure_criterion)
+            || self.success_criterion == self.failure_criterion
+        {
+            findings.push("evaluation-task-ambiguous".to_owned());
+        }
+        if !valid_identifier(&self.split_id)
+            || self
+                .training_split_ids
+                .iter()
+                .any(|split| !valid_identifier(split))
+            || self.training_split_ids.contains(&self.split_id)
+        {
+            findings.push("evaluation-split-leakage-detected".to_owned());
+        }
+        if !valid_sha256(&self.semantic_fingerprint_sha256)
+            || !valid_sha256(&self.near_duplicate_group_sha256)
+            || self
+                .known_training_fingerprint_sha256s
+                .iter()
+                .any(|value| !valid_sha256(value))
+        {
+            findings.push("evaluation-data-fingerprint-invalid".to_owned());
+        }
+        if self
+            .known_training_fingerprint_sha256s
+            .contains(&self.semantic_fingerprint_sha256)
+            || self
+                .known_training_fingerprint_sha256s
+                .contains(&self.near_duplicate_group_sha256)
+        {
+            findings.push("evaluation-near-duplicate-leakage-detected".to_owned());
+        }
+        if !valid_identifier(&self.declared_label)
+            || !valid_identifier(&self.verified_label)
+            || self.declared_label != self.verified_label
+        {
+            findings.push("evaluation-label-mismatch".to_owned());
+        }
+        if !valid_identifier(&self.sampled_population)
+            || !valid_identifier(&self.target_population)
+            || self.sampled_population != self.target_population
+        {
+            findings.push("evaluation-unrepresentative-data".to_owned());
+        }
+        findings
+    }
+
+    fn digest_fragment(&self) -> String {
+        format!(
+            "{}|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}",
+            self.objective,
+            self.success_criterion,
+            self.failure_criterion,
+            self.split_id,
+            self.training_split_ids
+                .iter()
+                .cloned()
+                .collect::<Vec<_>>()
+                .join(","),
+            self.semantic_fingerprint_sha256,
+            self.near_duplicate_group_sha256,
+            self.known_training_fingerprint_sha256s
+                .iter()
+                .cloned()
+                .collect::<Vec<_>>()
+                .join(","),
+            self.declared_label,
+            self.verified_label,
+            self.sampled_population,
+            self.target_population,
+        )
+    }
 }
 
 impl EvaluationTask {
@@ -211,10 +385,14 @@ impl EvaluationTask {
         perturbation_controls: BTreeSet<PerturbationControl>,
         representative: bool,
     ) -> Self {
+        let task_id = task_id.into();
+        let behavior_id = behavior_id.into();
+        let data_controls =
+            EvaluationDataControls::defaults(&task_id, &behavior_id, dataset.digest_sha256());
         Self {
-            task_id: task_id.into(),
+            task_id,
             requirement_id: requirement_id.into(),
-            behavior_id: behavior_id.into(),
+            behavior_id,
             fixture_id: fixture_id.into(),
             dataset,
             dataset_provenance_sha256: dataset_provenance_sha256.into(),
@@ -223,7 +401,13 @@ impl EvaluationTask {
             scorer_digest_sha256: scorer_digest_sha256.into(),
             perturbation_controls,
             representative,
+            data_controls,
         }
+    }
+
+    pub fn with_data_controls(mut self, data_controls: EvaluationDataControls) -> Self {
+        self.data_controls = data_controls;
+        self
     }
 
     pub fn task_id(&self) -> &str {
@@ -248,6 +432,7 @@ impl EvaluationTask {
             }
         }
         findings.extend(self.dataset.findings("evaluation-dataset"));
+        findings.extend(self.data_controls.findings());
         if !valid_sha256(&self.dataset_provenance_sha256)
             || self
                 .known_training_corpus_sha256s
@@ -285,7 +470,7 @@ impl EvaluationTask {
             .collect::<Vec<_>>()
             .join(",");
         format!(
-            "{}|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}",
+            "{}|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}",
             self.task_id,
             self.requirement_id,
             self.behavior_id,
@@ -300,7 +485,8 @@ impl EvaluationTask {
             self.scorer_id,
             self.scorer_digest_sha256,
             controls,
-            self.representative
+            self.representative,
+            self.data_controls.digest_fragment(),
         )
     }
 }
@@ -369,6 +555,9 @@ impl EvaluationSpec {
         let mut task_ids = BTreeSet::new();
         let mut fixture_ids = BTreeSet::new();
         let mut dataset_digests = BTreeMap::<&str, &str>::new();
+        let mut unique_dataset_digests = BTreeSet::new();
+        let mut semantic_fingerprints = BTreeSet::new();
+        let mut near_duplicate_groups = BTreeSet::new();
         let mut representative = 0usize;
         for task in &self.tasks {
             if !task_ids.insert(task.task_id.as_str()) {
@@ -385,6 +574,19 @@ impl EvaluationSpec {
                 && existing != task.dataset.digest_sha256()
             {
                 findings.push("evaluation-dataset-path-conflict".to_owned());
+            }
+            if !unique_dataset_digests.insert(task.dataset.digest_sha256()) {
+                findings.push("evaluation-duplicate-dataset".to_owned());
+            }
+            if !semantic_fingerprints
+                .insert(task.data_controls.semantic_fingerprint_sha256.as_str())
+            {
+                findings.push("evaluation-duplicate-example".to_owned());
+            }
+            if !near_duplicate_groups
+                .insert(task.data_controls.near_duplicate_group_sha256.as_str())
+            {
+                findings.push("evaluation-near-duplicate-example".to_owned());
             }
             findings.extend(task.findings());
         }
@@ -479,7 +681,7 @@ impl TaskAudit {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum BehaviorOutcome {
     Passed,

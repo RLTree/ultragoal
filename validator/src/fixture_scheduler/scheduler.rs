@@ -1,7 +1,7 @@
 use super::lease::isolated_environment;
 use super::{
-    ExpectedOutcome, FixtureScheduleError, FixtureSpec, IsolationLease, LeaseDisposition,
-    ObservedOutcome,
+    ExecutedFixture, ExpectedOutcome, FixtureExecutionRecord, FixtureScheduleError, FixtureSpec,
+    IsolationLease, LeaseDisposition, ObservedOutcome,
 };
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
@@ -18,6 +18,18 @@ pub(crate) trait FixtureExecutor {
         lease: &IsolationLease,
         environment: &BTreeMap<String, String>,
     ) -> Result<ObservedOutcome, FixtureScheduleError>;
+}
+
+/// Narrow extension used only when the crate must retain a bounded execution
+/// record before cleanup. Keeping this separate preserves the established
+/// executor contract for scheduler callers that need only a derived outcome.
+pub(crate) trait RecordedFixtureExecutor: FixtureExecutor {
+    fn execute_recorded(
+        &self,
+        fixture: &FixtureSpec,
+        lease: &IsolationLease,
+        environment: &BTreeMap<String, String>,
+    ) -> Result<ExecutedFixture, FixtureScheduleError>;
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -153,6 +165,45 @@ impl FixtureScheduler {
                 .ok_or_else(|| FixtureScheduleError::UnknownLease(lease_id.to_owned()))?;
             executor.execute(&fixture, &run.lease, &environment)?
         };
+        fixture.validate()?;
+        if lease
+            != self
+                .active
+                .get(lease_id)
+                .ok_or_else(|| FixtureScheduleError::UnknownLease(lease_id.to_owned()))?
+                .lease
+                .root()
+        {
+            return Err(FixtureScheduleError::Integrity(
+                "fixture lease changed during execution".to_owned(),
+            ));
+        }
+        self.finish_observed(lease_id, observed)
+    }
+
+    pub(crate) fn execute_recorded<E: RecordedFixtureExecutor>(
+        &mut self,
+        lease_id: &str,
+        executor: &E,
+    ) -> Result<(RunDisposition, FixtureExecutionRecord), FixtureScheduleError> {
+        let (fixture, lease, environment) = {
+            let run = self
+                .active
+                .get(lease_id)
+                .ok_or_else(|| FixtureScheduleError::UnknownLease(lease_id.to_owned()))?;
+            (
+                run.fixture.clone(),
+                run.lease.root().to_path_buf(),
+                run.environment.clone(),
+            )
+        };
+        let executed = {
+            let run = self
+                .active
+                .get(lease_id)
+                .ok_or_else(|| FixtureScheduleError::UnknownLease(lease_id.to_owned()))?;
+            executor.execute_recorded(&fixture, &run.lease, &environment)?
+        };
         // Bind the adapter result to the immutable fixture after execution,
         // before any cleanup can discard the evidence substrate.
         fixture.validate()?;
@@ -168,7 +219,17 @@ impl FixtureScheduler {
                 "fixture lease changed during execution".to_owned(),
             ));
         }
-        self.finish_observed(lease_id, observed)
+        if executed.record.fixture_id != fixture.id
+            || executed.record.fixture_digest_sha256 != fixture.metadata_digest
+            || executed.record.lease_id != lease_id
+            || executed.record.outcome != executed.observed
+        {
+            return Err(FixtureScheduleError::Integrity(
+                "fixture execution record does not bind the active lease".to_owned(),
+            ));
+        }
+        let disposition = self.finish_observed(lease_id, executed.observed)?;
+        Ok((disposition, executed.record))
     }
 
     pub fn recover(&mut self, lease_id: &str) -> Result<RunDisposition, FixtureScheduleError> {

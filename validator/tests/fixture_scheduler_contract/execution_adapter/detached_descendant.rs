@@ -22,7 +22,7 @@ fn actual_adapter_contains_rapidly_reparented_setsid_descendants() {
         .lease
         .root()
         .join("file/pids");
-    let adapter = FixtureCaptureAdapter::issue(
+    let adapter = FixtureCaptureAdapter::issue_test_native(
         &fixture,
         probe,
         [

@@ -1,0 +1,73 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "EVALUATION-RESEARCH-AUTHORITY-REVIEW-086-R7",
+  "reviewer": "/root/evaluation_research_authority_reviewer",
+  "review_route": "independent evaluation research-authority falsification",
+  "effective_model_metadata": "not exposed",
+  "verdict": "ACCEPT",
+  "reviewed_at_date": "2026-07-13",
+  "reviewed_identity": {
+    "freeze_head_commit": "ade32d749b80836900f99049cb31d8fb6713f985",
+    "freeze_head_tree": "15078d6a3d94b68b8df25505ec2ee13c954757fa",
+    "review_overlay": "/private/tmp/hul-evaluation-r7-frozen-ade32d749-authority",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/EVALUATION-PRODUCTION-RUNTIME-086.json",
+    "worker_result_sha256": "sha256:ec317d1a09dc8eed983cc9bb4ecf5cc2cac05f1e9c8fde3f197ae6aded3b1a01",
+    "artifact_set_sha256": "sha256:0fac4e045fccea0ed46097a7c84e8a68921ae2d60887a9f87b34690182c097fc",
+    "artifact_count": 18,
+    "artifact_bytes": 469743,
+    "artifact_lines_diagnostic": 13475,
+    "source_closure_count": 6323,
+    "source_closure_sha256": "sha256:c7e6afc57bb00137894dbf1b8eaed797f32a628e1d5158ee38b7f77091aa9c30"
+  },
+  "reconciliation": {
+    "artifact_identity": "PASS: all eighteen rows matched digest, byte length, regular-file type, and single-link identity; the aggregate, source closure, and WorkerResult digests recomputed exactly",
+    "public_constructor_rebound": "PASS: an independent downstream crate rebound vendor documentation, stable temporal policy, old observation, date, and validity into a current primary specification with mutable capability and recomputed canonical bytes and digest; the candidate remained ineligible with the typed authority-binding-required finding",
+    "authority_confinement": "PASS: public from_bound_record construction remains explicitly unverified; the adopted binding constructor is crate-private and cfg(test)-only",
+    "positive_and_negative_controls": "PASS: adopted positive plus source-class, temporal, observation, canonical-recompute, mixed-fact, validity, absent, untrusted, forged, rebound, restart, replay, tamper, special-file, alias, race, mutation, and deterministic-receipt controls passed",
+    "candidate_stability": "PASS: review operated only on the frozen scratch and the source closure was byte-identical before and after validation"
+  },
+  "verification": [
+    {
+      "surface": "independent public downstream rebound probe",
+      "result": "two byte-identical runs; eligible=0; findings included research-source-authority-binding-required"
+    },
+    {
+      "surface": "focused research authority controls",
+      "result": "10 passed; 0 failed, twice, with 16 build jobs and 16 test threads"
+    },
+    {
+      "surface": "evaluation runtime closure",
+      "result": "52 passed; 0 failed with 16 build jobs and 16 test threads"
+    },
+    {
+      "surface": "immutable evaluation kernel closure",
+      "result": "25 passed; 0 failed with 16 build jobs and 16 test threads"
+    },
+    {
+      "surface": "fixture scheduler closure",
+      "result": "46 passed; 0 failed with 16 build jobs and 16 test threads"
+    },
+    {
+      "surface": "library and formatting boundary",
+      "result": "locked offline library check passed and all sixteen Rust artifacts passed rustfmt check"
+    }
+  ],
+  "supported_scope": [
+    "source-local research-source authority binding and evaluation eligibility enforcement",
+    "durable evaluation and promotion ledger controls included in the frozen artifact set",
+    "scheduler and compatibility behavior exercised by the exact closure"
+  ],
+  "residual_risks": [
+    "the frozen scratch is not itself a Git checkout; root reconciled its exact artifact bytes against the committed freeze identity",
+    "public evaluation dispatch and installed runtime behavior remain unintegrated",
+    "representative live-user evaluation journeys remain unproven"
+  ],
+  "explicitly_withheld": [
+    "public evaluation command behavior",
+    "installed runtime behavior",
+    "representative live-user journeys",
+    "claim elevation readiness release and goal completion"
+  ],
+  "claim_ceiling": "independently accepted source-local evaluation research-authority correction and exact frozen closure only",
+  "no_claim_statement": "This review does not claim public evaluation dispatch, installed runtime behavior, representative journeys, claim elevation, readiness, release, node closure, or goal completion."
+}

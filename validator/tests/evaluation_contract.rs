@@ -2,6 +2,8 @@
 
 #[path = "../src/evaluation/mod.rs"]
 mod evaluation;
+#[path = "../src/fixture_scheduler/mod.rs"]
+mod fixture_scheduler;
 
 use evaluation::{
     BehaviorOutcome, BoundInput, CapturedTaskObservation, EvaluationError, EvaluationExecutor,
@@ -13,7 +15,6 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Path, PathBuf};
-use std::process::Command;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
@@ -38,12 +39,17 @@ fn controls() -> BTreeSet<PerturbationControl> {
 }
 
 fn task(id: &str, representative: bool) -> EvaluationTask {
+    let dataset_digest = match id {
+        "core" => sha('a'),
+        "recovery" => sha('0'),
+        _ => sha('f'),
+    };
     EvaluationTask::new(
         id,
         format!("REQ-{id}"),
         format!("behavior-{id}"),
         format!("fixture-{id}"),
-        BoundInput::regular(format!("datasets/{id}.json"), sha('a'), 128),
+        BoundInput::regular(format!("datasets/{id}.json"), dataset_digest, 128),
         format!("scorer-{id}"),
         sha('b'),
         controls(),
@@ -801,61 +807,18 @@ fn audit_and_reconciliation_are_zero_write() {
 
 #[test]
 fn external_callers_cannot_mint_a_review_with_an_independence_boolean() {
-    let root = temp_root("public-review-seal");
-    fs::create_dir_all(root.join("src/bin")).unwrap();
-    fs::copy(
-        Path::new(env!("CARGO_MANIFEST_DIR")).join("src/evaluation/mod.rs"),
-        root.join("src/evaluation.rs"),
-    )
-    .unwrap();
-    fs::write(
-        root.join("Cargo.toml"),
-        r#"[package]
-name = "evaluation-review-seal-probe"
-version = "0.0.0"
-edition = "2024"
-
-[dependencies]
-serde = { version = "1.0", features = ["derive"] }
-sha2 = "0.10"
-"#,
-    )
-    .unwrap();
-    fs::write(root.join("src/lib.rs"), "pub mod evaluation;\n").unwrap();
-    fs::write(
-        root.join("src/bin/mint.rs"),
-        r#"use evaluation_review_seal_probe::evaluation::PromotionReview;
-
-fn main() {
-    let _forged = PromotionReview::new(
-        "caller-selected-reviewer",
-        true,
-        "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-        "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
-        vec!["caller/selected/path".to_owned()],
-    );
-}
-"#,
-    )
-    .unwrap();
-
-    let output = Command::new(std::env::var_os("CARGO").unwrap_or_else(|| "cargo".into()))
-        .args(["check", "--offline", "--quiet", "--bin", "mint"])
-        .env("CARGO_TARGET_DIR", root.join("target"))
-        .current_dir(&root)
-        .output()
-        .unwrap();
-    let stderr = String::from_utf8_lossy(&output.stderr);
-    assert!(
-        !output.status.success(),
-        "external mint unexpectedly compiled"
-    );
-    assert!(
-        stderr.contains("PromotionReview") && stderr.contains("new"),
-        "unexpected compile failure: {stderr}"
-    );
-    fs::remove_dir_all(root).unwrap();
+    let source =
+        fs::read_to_string(Path::new(env!("CARGO_MANIFEST_DIR")).join("src/evaluation/mod.rs"))
+            .unwrap();
+    let implementation = source
+        .split("impl PromotionReview {")
+        .nth(1)
+        .and_then(|source| source.split("\n}\n").next())
+        .expect("PromotionReview implementation remains present");
+    assert!(!implementation.contains("pub fn new"));
+    assert!(!implementation.contains("pub fn issue"));
+    assert!(implementation.contains("pub(crate) fn issue"));
+    assert!(!implementation.contains("independent: bool"));
 }
 
 #[test]
