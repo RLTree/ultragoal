@@ -1,0 +1,46 @@
+{
+  "schema_version": "UltraLeaseAmendment-v1",
+  "amendment_id": "SUPPORTED-PACKAGE-PRODUCTION-087-R2",
+  "base_work_package": "docs/ultragoal-successor-live/work-packages/SUPPORTED-PACKAGE-PRODUCTION-087.json",
+  "base_work_package_sha256": "sha256:9bb15c9fc7b238475e9ffce1bcad92da25c53091f04df952a78607f8b38ff41a",
+  "base_candidate": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "07f051125fb23027d4d047a02e1b52b7fd634d77",
+    "head_tree": "8877862e1c0fb880aa416455c428aea2359bda44",
+    "dirty_tree_note": "Disjoint repository-fit and evaluation correction leases are active. Preserve every path outside the base 087 writable set and accommodate concurrent root integrations."
+  },
+  "owner_override": "/root/supported_package_security_and_product_engineer",
+  "scope": {
+    "inherit_all_paths_symbols_outputs_effects_prohibitions_tests_and_verification": true,
+    "worker_result_path": "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-PRODUCTION-087.json",
+    "root_owned_surfaces_remain_prohibited": true
+  },
+  "decisive_rework_findings": [
+    {
+      "id": "undeclared-skill-subtree-payload",
+      "severity": "material-security",
+      "finding": "The committed capture walks every regular single-link file below each canonical skill root and package_role accepts otherwise undeclared paths as Data, so .env, editor-local, secret-shaped, and arbitrary extra files can enter a HUGPKG.",
+      "required_correction": "Derive and enforce one exact canonical supported member set. Reject every unknown, extra, ambiguous, case-colliding, ancestor-colliding, local-only, secret-shaped, unsafe, or missing member before any archive or inventory is accepted; registry prose or a generic Data role is not membership authority."
+    },
+    {
+      "id": "incomplete-product-proof-surface",
+      "severity": "material-proof",
+      "finding": "The named supported_package_product_contract target, WorkerResult-v1, confined output-pair verification, writer conflict controls, and most required mutation/security cases are absent.",
+      "required_correction": "Complete the entire base 087 behavior and test matrix, freeze every leased artifact in WorkerResult-v1, and leave every install, marketplace, discovery, runtime, readiness, release, and completion claim withheld."
+    }
+  ],
+  "additional_required_controls": [
+    "A .env or secret-shaped file placed anywhere below a canonical skill root must cause typed package refusal and its bytes, digest, and path must not appear in produced output or diagnostics.",
+    "An arbitrary benign-looking undeclared file below a canonical skill root must cause typed package refusal rather than being laundered as PackageRole::Data.",
+    "The exact current supported source closes to .codex-plugin/plugin.json plus SKILL.md and agents/openai.yaml for each of the eight canonical skills unless another member has explicit adopted package membership authority.",
+    "Read, capture, inventory, decode, and verify paths must preserve recursive source bytes and Git status; publication may write only through the already accepted confined test-owned output transaction.",
+    "The named product contract must cover complete positive, negative, race, mutation, security, and false-pass behavior from the base work package with 16 build jobs and 16 test threads."
+  ],
+  "worker_result_contract": {
+    "schema": "WorkerResult-v1",
+    "lease_id": "SUPPORTED-PACKAGE-PRODUCTION-087-R2",
+    "required": true,
+    "no_claim_statement": "Candidate source implementation only. No claim of root adoption, public package command availability, repository package output, installed bytes, marketplace state, cache state, app registration, Plugins UI visibility, discovery, runtime, representative user journey, claim elevation, node closure, readiness, release, or completion."
+  }
+}
