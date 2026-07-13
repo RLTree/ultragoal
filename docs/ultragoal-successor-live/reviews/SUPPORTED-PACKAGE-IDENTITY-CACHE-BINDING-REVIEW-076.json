@@ -1,0 +1,46 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "SUPPORTED-PACKAGE-IDENTITY-CACHE-BINDING-REVIEW-076",
+  "reviewer": "/root/package_identity_rereviewer",
+  "review_route": "security-trust-boundary-reviewer",
+  "verdict": "REWORK",
+  "reviewed_at_date": "2026-07-13",
+  "reviewed_identity": {
+    "candidate_binding_commit": "473f19198fb2c3df2de50b10cd52fb264bcc9029",
+    "candidate_binding_tree": "d32eaa3867549d53381d4444339c8f996a14f864",
+    "context_id": "sha256:35f8484ca06b9773b37b9bce7b71704aefd456b6da10330ce4816a1133a4b29c",
+    "candidate_id": "sha256:28127990ad394f7e2e7b33e3e0126c08ef73ee0919c3fb6174ff03592d852c93",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-IDENTITY-074.json",
+    "worker_result_sha256": "sha256:39afbb5dfd5455a781df8f5a0ed369790e57bde3af4cc1d1d052d0bea19b63bd",
+    "declared_result_id": "sha256:cd1e4935ed2b75f85ea18fec9a1d8b4ea8a1ef1b153f7ca021c6f4e00b32b755",
+    "artifact_set_sha256": "sha256:1f0be84cc067a38f2486a717b7e9917012c3412f4e30755a3dd7807f153f1ddb",
+    "artifact_count": 8,
+    "artifact_bytes": 94127
+  },
+  "decisive_finding": {
+    "severity": "blocker",
+    "class": "cache_version_and_root_provenance_laundering",
+    "affected_paths": [
+      "validator/src/distribution/cache.rs",
+      "validator/src/distribution/identity.rs"
+    ],
+    "affected_symbols": [
+      "CacheExpectation::new",
+      "CacheSnapshot",
+      "reconcile_cache_read_only",
+      "SurfaceIdentity::from_verified_cache"
+    ],
+    "cause": "CacheSnapshot discards plugin_id, version, marketplace, and cache_root_id after reconciling caller-authored expectations; from_verified_cache then compares only context, candidate, and tree identity.",
+    "reproduction": "A version 0.0.11 package accepted an exact version 9.9.9 cache observation with matching context, candidate, and tree and promoted it into a journey-bound Cache SurfaceIdentity.",
+    "impact": "A caller-selected wrong-version or wrong-root cache observation can be laundered into a package- and journey-bound identity.",
+    "result": "Material false-pass; acceptance is blocked."
+  },
+  "verified_non_issue": "The corrected marketplace snapshot retains plugin_id and version and rejected the corresponding 9.9.9 marketplace substitution.",
+  "smallest_safe_correction": [
+    "Retain canonical plugin_id and version in CacheSnapshot and compare them with PackageIdentity::source before promotion.",
+    "Retain cache_root_id and compare it with JourneyBinding::home_id before promotion.",
+    "Add locked and offline same-tree wrong-version and wrong-root controls and repeat the full independent package review."
+  ],
+  "claim_ceiling": "The source-local package identity candidate remains REWORK; only artifact reconciliation and the marketplace-version guard were established.",
+  "no_claim_statement": "This review does not claim package identity acceptance, installation, cache, marketplace, app-registry, Plugins UI, discovery, runtime, readiness, release, node closure, or completion."
+}

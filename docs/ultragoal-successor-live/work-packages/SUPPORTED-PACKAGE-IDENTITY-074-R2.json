@@ -1,0 +1,52 @@
+{
+  "schema_version": "RootIssuedCorrectiveWorkPackage-v1",
+  "work_package_id": "SUPPORTED-PACKAGE-IDENTITY-074-R2",
+  "workstream": "supported-package-cache-identity-binding",
+  "issued_from_live_context": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "cd036f4509dd5ed41b563c4658cb82755eb80757",
+    "head_tree": "2d91a1fffb34ec4067fe2ebabe3e850f5cd3e7fa",
+    "context_id": "sha256:9316af00efbd44253795ef5dc9d884b070cd6d64e1b5069c4e6715537214288c",
+    "rework_artifact_set_sha256": "sha256:1f0be84cc067a38f2486a717b7e9917012c3412f4e30755a3dd7807f153f1ddb"
+  },
+  "lease": {
+    "principal": "/root/package_cache_identity_engineer",
+    "write_paths": [
+      "validator/src/distribution/cache.rs",
+      "validator/src/distribution/identity.rs",
+      "validator/tests/supported_package_identity_contract.rs",
+      "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-IDENTITY-074.json"
+    ],
+    "write_symbols": [
+      "CacheSnapshot",
+      "reconcile_cache_read_only",
+      "SurfaceIdentity::from_verified_cache",
+      "cache version and root substitution controls"
+    ],
+    "generated_outputs": "WorkerResult only",
+    "fixtures": "No fixture writes authorized",
+    "git_mutation": "forbidden",
+    "root_owned_surfaces": "Cargo manifests, Cargo.lock, public command catalog, dispatcher, plugin manifests, marketplaces, migration registry, generated authority, claims, release state, and acceptance records are forbidden",
+    "external_effects": "Only locked and offline Cargo builds/tests in isolated /private/tmp target and scratch roots are authorized"
+  },
+  "required_behavior": [
+    "CacheSnapshot retains the canonical plugin_id, version, marketplace identity, and cache_root_id established by read-only reconciliation.",
+    "Cache promotion compares plugin_id and version with the bound package source and cache_root_id with the journey home identity before constructing SurfaceIdentity.",
+    "Unknown, absent, malformed, substituted, or ambiguous identity components fail closed without writes.",
+    "No alternate caller-authored expectation can substitute for package or journey authority."
+  ],
+  "required_validation": [
+    "positive exact same-package same-home cache promotion",
+    "same-tree wrong-version rejection",
+    "wrong-plugin rejection",
+    "wrong-home or cache-root rejection",
+    "marketplace identity drift rejection",
+    "tree, context, candidate, observation, and journey substitution rejection",
+    "zero hidden writes for read and reconciliation paths",
+    "focused package identity suite twice, dependency-closed distribution suite, full distribution suite, all-targets check, and authoritative WorkerResult-v1 validation with 16 jobs and threads"
+  ],
+  "worker_result_requirements": "Freeze exact regular single-link artifact rows, sorted artifact aggregate, bytes, context and candidate binding, exact commands and outcomes, negative controls, authorized effects, requested root-only changes, unsupported claims, and the exact no-claim statement.",
+  "stop_rule": "Stop on any need to alter shared or root-owned authority, any effect outside isolated local test roots, or any inability to bind package version and journey root before promotion.",
+  "no_claim_statement": "This corrective work package does not claim package identity acceptance, installation, cache, marketplace, app-registry, Plugins UI, discovery, runtime, readiness, release, node closure, or completion."
+}
