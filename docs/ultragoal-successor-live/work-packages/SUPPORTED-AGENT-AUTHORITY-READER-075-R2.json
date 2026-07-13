@@ -1,0 +1,54 @@
+{
+  "schema_version": "RootIssuedCorrectiveWorkPackage-v1",
+  "work_package_id": "SUPPORTED-AGENT-AUTHORITY-READER-075-R2",
+  "workstream": "supported-host-agent-authority-reader-receipt",
+  "issued_from_live_context": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "3914d6b6444e2af4192f030fad92c79bccbd13c3",
+    "head_tree": "635d5be38a4b5911ba47e71464ccdaa5c4ab75d9",
+    "context_id": "sha256:6e53edcc8d88d222ea7a9c3b4f46cf671af3b4b4dfd21003c0172db4969e0d88",
+    "candidate_id": "sha256:943c5d212ac38e8bf666ff5659ee7e5f68e29daf97fefe7a2e9f59adac68c3f0"
+  },
+  "lease": {
+    "principal": "/root/supported_agent_authority_reader_engineer",
+    "only_write_path": "docs/ultragoal-successor-live/worker-results/SUPPORTED-AGENT-AUTHORITY-READER-075.json",
+    "source_edits": "forbidden",
+    "git_mutation": "forbidden",
+    "host_or_external_effects": "forbidden",
+    "scratch_roots": [
+      "/private/tmp/hul-supported-agent-reader-075-r2-scratch",
+      "/private/tmp/hul-supported-agent-reader-075-r2-target"
+    ]
+  },
+  "exact_expected_artifact_set": {
+    "formula": "Sort each exact row by UTF-8 path bytes; serialize path, TAB, lowercase SHA-256 without prefix, LF; hash the concatenation with SHA-256.",
+    "artifact_set_sha256": "sha256:943c5d212ac38e8bf666ff5659ee7e5f68e29daf97fefe7a2e9f59adac68c3f0",
+    "artifact_count": 11,
+    "artifact_bytes": 143847,
+    "artifact_lines": 4304,
+    "artifacts": [
+      {"path": "validator/src/plugin_product/agent_discovery/error.rs", "sha256": "sha256:b0ab5f5b425e19dabe6ade4fe9a2d4acbdc3f8ff7bd49329a41b85d26c23ef98", "bytes": 3623},
+      {"path": "validator/src/plugin_product/agent_discovery/filesystem.rs", "sha256": "sha256:071cbf7c700c29897bc6ea5d84d5e999621a0aa77fc348ff9666caa95307ed7b", "bytes": 32039},
+      {"path": "validator/src/plugin_product/agent_discovery/host.rs", "sha256": "sha256:a7443de090ba3903323d61ebf908171e701645924c2c5b53da2cdc9b88670e74", "bytes": 17374},
+      {"path": "validator/src/plugin_product/agent_discovery/mod.rs", "sha256": "sha256:cb2292cfee1d60681d1fb35c1fd26a91bee3ab7c654d89dda5ba24874ff54ede", "bytes": 1261},
+      {"path": "validator/src/plugin_product/agent_discovery/model.rs", "sha256": "sha256:462470f406b1593077760d5d773f7451e6a62ecb019b87c251bdf7cbc4468bdd", "bytes": 6688},
+      {"path": "validator/src/plugin_product/agent_discovery/session.rs", "sha256": "sha256:9b9c92bf3eede7517260a76a0254170b8a542741da51e00102b312d31e8687a6", "bytes": 7716},
+      {"path": "validator/src/plugin_product/agent_discovery/supported.rs", "sha256": "sha256:0e31b4738812abbdac5370553ae439d810a8770011f575e8f2753849849eb26b", "bytes": 31290},
+      {"path": "validator/tests/plugin_agent_discovery_contract.rs", "sha256": "sha256:5e036ff3811dcdd45e93f27517fe0d74823eadd0f4e9a3c6c2bfa8a927ca5da3", "bytes": 626},
+      {"path": "validator/tests/plugin_agent_discovery_contract/negative.rs", "sha256": "sha256:193c71f30363dc7870a7dc23594a90929eb67939ad5002db9968094311e8dc26", "bytes": 9192},
+      {"path": "validator/tests/plugin_agent_discovery_contract/support.rs", "sha256": "sha256:55504a9fafecfae559342b9c84ecf572a8f876aa9c9376f7b796a1e35261a62a", "bytes": 15237},
+      {"path": "validator/tests/plugin_agent_discovery_contract/supported_host.rs", "sha256": "sha256:6c4d6eb1e1a9e740ac0a8e532d35ae7c4d5d08a00707f15132f844d61aea9087", "bytes": 18801}
+    ]
+  },
+  "required_validation": [
+    "WorkerResultV1::parse_json and exact canonical result identifier",
+    "typed validate_for against this receipt-only corrective lease",
+    "ArtifactWorkspace::verify for every row listed in the receipt",
+    "separate equality of the verified artifact paths digests count bytes and aggregate against exact_expected_artifact_set",
+    "missing extra substituted duplicate and reordered artifact mutation controls against the exact expected set",
+    "no assertion that generic validate_for or ArtifactWorkspace alone rejects omission of a permitted artifact"
+  ],
+  "stop_rule": "Stop on any source edit, broadened artifact membership, Git or host effect, public route, registry or migration change, claim change, or inability to prove exact expected-set equality.",
+  "no_claim_statement": "This corrective work package authorizes one receipt replacement only and does not claim source acceptance, route eligibility, live-host or fresh-session behavior, readiness, release, node closure, or completion."
+}
