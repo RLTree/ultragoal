@@ -1,0 +1,45 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "REPOSITORY-FIT-APPLY-MEDIATION-INTEGRATION-066",
+  "workstream": "repository-fit-apply-mediation-and-rollback-attribution",
+  "decision": "ACCEPT_INTERNAL_APPLY_MEDIATION_AND_EXACT_ROLLBACK_ATTRIBUTION",
+  "integration_commit": "5315015023f643d7717a06090187ca1333ae8eee",
+  "integration_tree": "aee2de2f0b80a2d1b858c04fdf279d036a4db199",
+  "accepted_artifact_set": {
+    "worker_result": "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-APPLY-MEDIATION-058.json",
+    "worker_result_sha256": "sha256:4d3b97bcf84505f32748792c8c668fcf3d88fffba6abe5702f37b8f919e5eafe",
+    "four_leased_sha256": "sha256:9c6315b3f4695185e8cebc1ab83b53ee30b232d57d07320f6b31c7b1c7c84ffa",
+    "seven_implementation_sha256": "sha256:bfd9f98526e53d903dc2d5239f5047bc51b4df17ac43bf8ab4642cba02665d81",
+    "nine_integration_sha256": "sha256:3441b1681dd2e0db30eb56c71e27eaf779479715f74ec50e60cfbade6b5f8906",
+    "artifact_count": 9,
+    "bytes": 293311,
+    "lines": 7714
+  },
+  "independent_review": {
+    "record": "docs/ultragoal-successor-live/reviews/REPOSITORY-FIT-APPLY-MEDIATION-REVIEW-066.json",
+    "record_sha256": "sha256:2351133ee9fe33e88d701f6f7537d09814b269353325eafbf5b13007bff897b3",
+    "reviewer": "/root/repository_apply_attribution_security_reviewer",
+    "verdict": "PASS",
+    "decisive_three_gap_control": "1/1",
+    "focused_permit_closure": "46/46",
+    "isolated_leak_reconciliation": "1/1 without leak classification",
+    "jobs": 16,
+    "test_threads": 16
+  },
+  "accepted_behavior": [
+    "the internal apply mediator consumes exact sealed request, permit, lease, target, protected-state, and root bindings",
+    "rollback attribution retains the exact ctime-bound authorized target snapshot",
+    "both later complete target captures must equal that exact authorized snapshot before semantic prior-state equivalence can authorize complete rollback",
+    "same-inode same-length mutation and restoration in any of the three final reconciliation gaps fails closed as an ambiguous outcome",
+    "complete rollback attribution remains withheld whenever causal ownership cannot be proven"
+  ],
+  "withheld": [
+    "production root permit issuer",
+    "public apply dispatch and public mutation authority",
+    "non-Apple runtime behavior",
+    "fresh partial conflict dirty rollback ambiguity replay and repeat-use live journeys",
+    "installed product behavior readiness release node closure and goal completion"
+  ],
+  "claim_ceiling": "internal Darwin source-local apply mediation and exact rollback-attribution correction only",
+  "no_claim_statement": "This acceptance does not claim a production issuer, public apply behavior, installed behavior, live-user proof, readiness, release, node closure, or goal completion."
+}

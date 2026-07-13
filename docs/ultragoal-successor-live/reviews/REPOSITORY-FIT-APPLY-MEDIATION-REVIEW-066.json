@@ -1,0 +1,80 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "REPOSITORY-FIT-APPLY-MEDIATION-REVIEW-066",
+  "reviewer": "/root/repository_apply_attribution_security_reviewer",
+  "review_route": "security-trust-boundary-reviewer",
+  "effective_model_metadata": "not exposed",
+  "verdict": "ACCEPT",
+  "reviewed_at_date": "2026-07-13",
+  "reviewed_identity": {
+    "freeze_head_commit": "a8a5366d59208fa0cd67e86a66a70938b1e9daa0",
+    "freeze_head_tree": "991efb969cf2c6b04e75fa3c03beb8336bcf5e86",
+    "source_commit": "5315015023f643d7717a06090187ca1333ae8eee",
+    "source_tree": "aee2de2f0b80a2d1b858c04fdf279d036a4db199",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-APPLY-MEDIATION-058.json",
+    "worker_result_sha256": "sha256:4d3b97bcf84505f32748792c8c668fcf3d88fffba6abe5702f37b8f919e5eafe",
+    "four_leased_artifacts_sha256": "sha256:9c6315b3f4695185e8cebc1ab83b53ee30b232d57d07320f6b31c7b1c7c84ffa",
+    "four_leased_artifact_count": 4,
+    "four_leased_bytes": 242667,
+    "four_leased_lines": 6330,
+    "seven_implementation_artifacts_sha256": "sha256:bfd9f98526e53d903dc2d5239f5047bc51b4df17ac43bf8ab4642cba02665d81",
+    "nine_integration_artifacts_sha256": "sha256:3441b1681dd2e0db30eb56c71e27eaf779479715f74ec50e60cfbade6b5f8906",
+    "nine_integration_artifact_count": 9,
+    "nine_integration_bytes": 293311,
+    "nine_integration_lines": 7714
+  },
+  "reconciliation": {
+    "artifact_identity": "PASS: all nine artifact digests, aggregate digests, byte counts, line counts, regular-file types, and the WorkerResult digest matched before and after review",
+    "authorized_snapshot_retention": "PASS: reconcile_prior retains the exact ctime-bound authorized target snapshot and requires both later complete captures to equal it",
+    "three_gap_attribution": "PASS: same-inode and same-length mutate-restore at each of the three reconciliation hooks changed ctime and returned ApplyOutcomeAmbiguous with rollback_complete false",
+    "boundary_controls": "PASS: focused closure covered coherent target capture, prior ctime, special files, substitutions, false-pass controls, undeclared writes, protected-state races, root replacement, and secret non-echo",
+    "concurrent_work_exclusion": "PASS: unrelated routine and supported-host transaction work remained outside the reviewed artifact set"
+  },
+  "closed_findings": [
+    {
+      "class": "rollback-attribution-after-authorized-target-aba",
+      "correction": "causal reconciliation now retains the exact authorized snapshot and rejects all later ctime-divergent target captures"
+    },
+    {
+      "class": "incomplete-reconciliation-gap-coverage",
+      "correction": "one exact control iterates and consumes hooks after authorized revalidation, after the first target capture, and after protected-after capture"
+    }
+  ],
+  "verification": [
+    {
+      "surface": "decisive three-gap control",
+      "result": "1 passed; 0 failed; run 4a4b254f-89ab-4306-814a-961f05377db1"
+    },
+    {
+      "surface": "focused permit closure",
+      "result": "46 passed; 0 failed; run e2ac364e-277f-4fab-89a7-6c44e6a14b62"
+    },
+    {
+      "surface": "leak-marker reconciliation",
+      "result": "the exact isolated test passed 1 of 1 without a leak classification; run d11a54f6-2f03-4416-a7b4-24ae3eefb33a; no process survived"
+    },
+    {
+      "surface": "candidate stability",
+      "result": "status and artifact hashes were unchanged and no review fixture or process remained"
+    }
+  ],
+  "supported_scope": [
+    "internal Darwin source-local repository-fit apply mediation protocol",
+    "exact ctime-bound rollback attribution across all three final reconciliation observation gaps",
+    "fail-closed ambiguous outcome when complete rollback cannot be causally attributed"
+  ],
+  "residual_risks": [
+    "the production root permit issuer and public apply dispatch are not implemented or accepted",
+    "non-Apple runtime behavior was not independently executed",
+    "fresh, partial, conflict, dirty, rollback, ambiguity, and repeat-use live product journeys remain unproved"
+  ],
+  "explicitly_withheld": [
+    "production issuer and public apply dispatch",
+    "installed and live-user behavior",
+    "non-Apple runtime behavior",
+    "representative product journeys",
+    "readiness release node closure and goal completion"
+  ],
+  "claim_ceiling": "internal Darwin source-local apply mediation and exact rollback-attribution correction only",
+  "no_claim_statement": "This review does not accept a production issuer, public apply behavior, installed behavior, live-user proof, readiness, release, node closure, or goal completion."
+}
