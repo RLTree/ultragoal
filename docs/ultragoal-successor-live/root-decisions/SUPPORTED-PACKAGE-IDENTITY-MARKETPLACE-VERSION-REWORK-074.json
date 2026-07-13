@@ -1,0 +1,53 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "decision_id": "SUPPORTED-PACKAGE-IDENTITY-MARKETPLACE-VERSION-REWORK-074",
+  "workstream": "deterministic-package-and-identity-ladder",
+  "root_decision": "REWORK_MARKETPLACE_VERSION_BINDING",
+  "reviewed_at_date": "2026-07-13",
+  "reviewer": "/root/package_identity_security_reviewer",
+  "reviewed_identity": {
+    "base_commit": "005061557dc6f6251f0a40ed3d26189a8f829358",
+    "base_tree": "783d5bf48d7809d1263fa546bf0f53c1daf297e9",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-IDENTITY-074.json",
+    "worker_result_sha256": "sha256:3c4dd14022e6238129d44ece220ae9c29d69c5fee150d0ec40d05d14ea0db3a2",
+    "artifact_set_sha256": "sha256:f161bb204bfe11972ea9dc7fb3aa91b86bd30cb685b627ac900246cb6f6688b0",
+    "artifact_count": 7,
+    "artifact_bytes": 76912,
+    "artifact_lines": 2250
+  },
+  "decisive_finding": {
+    "class": "marketplace-version-identity-substitution",
+    "severity": "high",
+    "detail": "MarketplaceExpectation verifies a version but MarketplaceSnapshot drops it. A marketplace catalog advertising version 9.9.9 with the exact context, candidate, and archive digest of a 0.0.11 package produced a verified marketplace identity and entered the bound surface chain.",
+    "reviewer_control": "review_marketplace_version_substitution_must_not_bind_to_package_identity",
+    "observed_result": "expected ProvenanceMismatch but received a bound Marketplace SurfaceIdentity"
+  },
+  "preserved_evidence": {
+    "worker_result_schema_and_identity": "JSON schema, all seven rows, totals, regular single-link identities, and aggregate matched",
+    "lease_restoration": "validator/tests/distribution_contract/isolated_journey.rs is byte-identical to commit 005061557 and excluded from the candidate",
+    "root_authority_unchanged": "no version reservation manifest adoption package publication host mutation public dispatcher generated claim authority or release decision was added"
+  },
+  "corrective_lease": {
+    "lease_id": "SUPPORTED-PACKAGE-IDENTITY-074-R1",
+    "write_paths": [
+      "validator/src/distribution/marketplace.rs",
+      "validator/src/distribution/identity.rs",
+      "validator/tests/supported_package_identity_contract.rs",
+      "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-IDENTITY-074.json"
+    ],
+    "required_behavior": [
+      "retain canonical plugin and version identity in the verified marketplace snapshot",
+      "reject marketplace version mismatch before SurfaceIdentity promotion",
+      "cover same-digest different-version and expectation-drift false passes",
+      "validate the corrected receipt with the authoritative Rust WorkerResultV1 parser"
+    ]
+  },
+  "claim_ceiling": "exact proof-integrity reconciliation of the seven-artifact input only; deterministic package and identity-ladder behavior remains unaccepted pending correction and rereview",
+  "explicitly_withheld": [
+    "candidate source-behavior acceptance",
+    "package install cache marketplace app-registry Plugins UI discovery and runtime behavior",
+    "leak-diagnostic non-materiality",
+    "readiness release node closure and completion"
+  ],
+  "no_claim_statement": "This REWORK decision makes no package, install, cache, marketplace, app-registry, Plugins UI, discovery, runtime, real-user, readiness, release, node, or completion claim."
+}
