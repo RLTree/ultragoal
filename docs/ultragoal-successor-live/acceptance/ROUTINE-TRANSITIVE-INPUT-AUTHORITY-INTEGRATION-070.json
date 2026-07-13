@@ -1,0 +1,41 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "ROUTINE-TRANSITIVE-INPUT-AUTHORITY-INTEGRATION-070",
+  "workstream": "routine-transitive-input-authority-and-process-local-reuse",
+  "decision": "ACCEPT_INTERNAL_BOUND_SOURCE_EXECUTION_MEDIATOR",
+  "integration_commit": "8978cd6bb3c62990fcea996e8778585acf4b237f",
+  "integration_tree": "d60bb1784f6c1f73ca12385629c70bd1a4044b8b",
+  "accepted_artifact_set": {
+    "worker_result": "docs/ultragoal-successor-live/worker-results/ROUTINE-PUBLIC-EXECUTION-MEDIATOR-059.json",
+    "worker_result_sha256": "sha256:d11eb09a1b8d954c5b2bf938ecb9aa83aaf1b9fc8d66e1678d2c3f41363e9fda",
+    "sha256": "sha256:4e5e29b187505a727749a23b049dd1e581933d48ff2e049d2e181126eb2bbde0",
+    "artifact_count": 11,
+    "bytes": 343261,
+    "lines": 9810
+  },
+  "independent_review": {
+    "record": "docs/ultragoal-successor-live/reviews/ROUTINE-TRANSITIVE-INPUT-AUTHORITY-REVIEW-070.json",
+    "record_sha256": "sha256:49f6b6e30054f2ab5765a5bdeb29aef41be299d631b8d9e18f7a602c315f925a",
+    "reviewer": "/root/routine_bound_source_security_reviewer",
+    "verdict": "PASS",
+    "external_source_exploit": "1/1 refused",
+    "runtime_adapter": "15/15",
+    "runtime_mediator": "33/33",
+    "jobs": 16,
+    "test_threads": 16
+  },
+  "accepted_behavior": [
+    "the internal mediator binds and revalidates declared worktree-relative regular read sources before execution, after output and report capture, and before reuse",
+    "unbound external interpreted sources, startup-loader environments, special or aliased sources, different executable objects, user-owned executable mappings, and process creation fail closed",
+    "the prior external dash-source substitution cannot execute or seed authenticated reuse",
+    "successful single-process runs mint only process-local result and reuse artifacts after exact report, source, output, cleanup, and context reconciliation"
+  ],
+  "withheld": [
+    "production root grant issuer and public command dispatch",
+    "durable or cross-process grant reuse and recovery state",
+    "installed and real-user behavior",
+    "readiness release node closure and goal completion"
+  ],
+  "claim_ceiling": "internal non-root macOS Seatbelt single-process routine mediation with bound transitive read sources and process-local reuse only",
+  "no_claim_statement": "This acceptance does not claim a public issuer or dispatch route, durable registry, installation, readiness, release, node closure, completion, or real-user operation."
+}

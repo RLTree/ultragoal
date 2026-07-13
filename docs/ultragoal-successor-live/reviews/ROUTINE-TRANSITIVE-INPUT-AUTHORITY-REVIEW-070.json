@@ -1,0 +1,71 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "ROUTINE-TRANSITIVE-INPUT-AUTHORITY-REVIEW-070",
+  "reviewer": "/root/routine_bound_source_security_reviewer",
+  "review_route": "security-trust-boundary-reviewer",
+  "effective_model_metadata": "not exposed",
+  "verdict": "ACCEPT",
+  "reviewed_at_date": "2026-07-13",
+  "reviewed_identity": {
+    "freeze_head_commit": "d36cfbf5c552fb6c88b8ae7387bfdd79f2b640db",
+    "freeze_head_tree": "5a70c841168b12cd51c63cd76ea7e23137514242",
+    "source_commit": "8978cd6bb3c62990fcea996e8778585acf4b237f",
+    "source_tree": "d60bb1784f6c1f73ca12385629c70bd1a4044b8b",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/ROUTINE-PUBLIC-EXECUTION-MEDIATOR-059.json",
+    "worker_result_sha256": "sha256:d11eb09a1b8d954c5b2bf938ecb9aa83aaf1b9fc8d66e1678d2c3f41363e9fda",
+    "artifact_set_sha256": "sha256:4e5e29b187505a727749a23b049dd1e581933d48ff2e049d2e181126eb2bbde0",
+    "artifact_count": 11,
+    "artifact_bytes": 343261,
+    "artifact_lines": 9810
+  },
+  "reconciliation": {
+    "artifact_identity": "PASS: all eleven regular single-link artifact rows, aggregate, byte and line totals, WorkerResult digest, base identity, and empty staged digest matched",
+    "prior_exploit": "PASS: replacement of an external user-owned dash source could not execute, write effects, mint CompleteExecution, or seed reuse",
+    "bound_source_authority": "PASS: worktree-relative regular sources bind path, object identity, ownership, mode, size, timestamps, content, and ancestor identities and are revalidated across execution and reuse",
+    "transitive_load_falsification": "PASS: the writable System Volumes Data alias could not bypass canonicalized file-read denial",
+    "native_controls": "PASS: executable mapping, real fork-family, exact reexec, cleanup, report, output, and reuse controls remained green",
+    "concurrent_work_exclusion": "PASS: supported-host and observability changes stayed outside the reviewed artifact set"
+  },
+  "verification": [
+    {
+      "surface": "external dash-source exploit regression",
+      "result": "1 passed; 0 failed"
+    },
+    {
+      "surface": "runtime adapter closure",
+      "result": "15 passed; 0 failed"
+    },
+    {
+      "surface": "runtime mediator closure",
+      "result": "33 passed; 0 failed; 83 filtered; 200.33 seconds; 16 jobs and test threads"
+    },
+    {
+      "surface": "independent alias falsification",
+      "result": "unbound source open through /System/Volumes/Data/Users failed with Operation not permitted and exit 2"
+    },
+    {
+      "surface": "process cleanup",
+      "result": "no review or mediator child process survived"
+    }
+  ],
+  "supported_scope": [
+    "source and isolated runtime proof for non-root macOS Seatbelt single-process routine mediation",
+    "explicit descriptor-opened and identity-bound worktree-relative read sources",
+    "default-deny unbound reads, startup-loader environments, process forks, different executable objects, user-owned executable mappings, and external interpreted sources",
+    "process-local authenticated result and reuse artifacts only after post-execution source and output revalidation"
+  ],
+  "residual_risks": [
+    "a more-privileged actor can race pathname-based program or source reopening after preflight; post-execution validation refuses result and reuse but cannot prove no transient child effect occurred",
+    "system runtime roots are policy-authorized rather than individually digest-pinned",
+    "repeated hashing and revalidation can read up to 64 MiB several times and ancestor metadata churn can cause safe false refusals",
+    "grant reuse and recovery state remain process-local and are not durable across crash or restart"
+  ],
+  "explicitly_withheld": [
+    "production root grant issuer and public dispatch",
+    "durable or cross-process reuse and recovery",
+    "installed and real-user behavior",
+    "readiness release node closure and goal completion"
+  ],
+  "claim_ceiling": "internal non-root macOS Seatbelt single-process routine mediation with bound transitive read sources and process-local reuse only",
+  "no_claim_statement": "This review does not accept a public issuer or dispatch route, durable registry, installation, readiness, release, node closure, completion, or real-user operation."
+}
