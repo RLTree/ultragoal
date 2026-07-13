@@ -18,9 +18,9 @@ use std::sync::{Arc, Mutex};
 
 type HmacSha256 = Hmac<Sha256>;
 
-const LEDGER_SCHEMA: &str = "harness-ultragoal.host-effect-ledger.v1";
-const EVENT_SCHEMA: &str = "harness-ultragoal.host-effect-ledger-event.v1";
-const INITIAL_HEAD_SCHEMA: &str = "harness-ultragoal.host-effect-ledger-initial-head.v1";
+const LEDGER_SCHEMA: &str = "harness-ultragoal.host-effect-ledger.v2";
+const EVENT_SCHEMA: &str = "harness-ultragoal.host-effect-ledger-event.v2";
+const INITIAL_HEAD_SCHEMA: &str = "harness-ultragoal.host-effect-ledger-initial-head.v2";
 const KEY_BYTES: usize = 32;
 const MAX_LEDGER_BYTES: u64 = 64 * 1024 * 1024;
 const MAX_EVENTS: usize = 100_000;
@@ -41,6 +41,15 @@ pub(crate) struct FileHostEffectLedger {
     lock_identity: FileIdentity,
     ledger_id: String,
     local: Mutex<ObservedHead>,
+    #[cfg(test)]
+    lock_open_hook: Mutex<Option<LockOpenHook>>,
+}
+
+#[cfg(test)]
+#[derive(Clone)]
+struct LockOpenHook {
+    reached: Arc<std::sync::Barrier>,
+    release: Arc<std::sync::Barrier>,
 }
 
 #[derive(Clone, Debug)]
@@ -60,21 +69,29 @@ impl FileHostEffectLedger {
         let store = Store::open(root)?;
         let lock = store.open_or_create_lock()?;
         let lock_identity = exact_identity(&store, LOCK_NAME, &lock, 0)?;
-        let _guard = ProcessLock::acquire(lock)?;
+        let guard = ProcessLock::acquire(lock)?;
+        require_lock_identity(&store, &guard, lock_identity)?;
         let (key, key_identity) = store.open_or_create_key()?;
         let key_id = digest(&key.0);
-        let initial = initial_payload(&ledger_id, &key_id)?;
+        let initial = initial_payload(&ledger_id, &key_id, lock_identity)?;
         match store.exact_stat(STATE_NAME)? {
             Some(_) => {
                 let bytes = store.read_exact_file(STATE_NAME, MAX_LEDGER_BYTES, 0o600)?;
                 let payload = decode_snapshot(&bytes, &key, &ledger_id, &key_id)?;
+                require_payload_lock(&payload, lock_identity)?;
                 replay(&payload)?;
             }
-            None => store.write_atomic(STATE_NAME, &encode_snapshot(&initial, &key)?)?,
+            None => store.write_atomic(
+                STATE_NAME,
+                &encode_snapshot(&initial, &key)?,
+                &guard,
+                lock_identity,
+            )?,
         }
-        store.validate_complete()?;
+        store.validate_complete(lock_identity)?;
         let bytes = store.read_exact_file(STATE_NAME, MAX_LEDGER_BYTES, 0o600)?;
         let payload = decode_snapshot(&bytes, &key, &ledger_id, &key_id)?;
+        require_payload_lock(&payload, lock_identity)?;
         replay(&payload)?;
         let ledger = Self {
             root: store.root.clone(),
@@ -89,6 +106,8 @@ impl FileHostEffectLedger {
                 generation: payload.generation,
                 head_sha256: payload.head_sha256,
             }),
+            #[cfg(test)]
+            lock_open_hook: Mutex::new(None),
         };
         ledger.verify_store()?;
         Ok(ledger)
@@ -102,12 +121,14 @@ impl FileHostEffectLedger {
         let store = Store::open(root)?;
         let lock = store.open_existing(LOCK_NAME, 0)?;
         let lock_identity = exact_identity(&store, LOCK_NAME, &lock, 0)?;
-        let _guard = ProcessLock::acquire(lock)?;
-        store.validate_complete()?;
+        let guard = ProcessLock::acquire(lock)?;
+        require_lock_identity(&store, &guard, lock_identity)?;
+        store.validate_complete(lock_identity)?;
         let (key, key_identity) = store.open_existing_key()?;
         let key_id = digest(&key.0);
         let bytes = store.read_exact_file(STATE_NAME, MAX_LEDGER_BYTES, 0o600)?;
         let payload = decode_snapshot(&bytes, &key, &ledger_id, &key_id)?;
+        require_payload_lock(&payload, lock_identity)?;
         replay(&payload)?;
         let ledger = Self {
             root: store.root.clone(),
@@ -122,6 +143,8 @@ impl FileHostEffectLedger {
                 generation: payload.generation,
                 head_sha256: payload.head_sha256,
             }),
+            #[cfg(test)]
+            lock_open_hook: Mutex::new(None),
         };
         ledger.verify_store()?;
         Ok(ledger)
@@ -142,9 +165,12 @@ impl FileHostEffectLedger {
         if exact_identity(&store, LOCK_NAME, &lock, 0)? != self.lock_identity {
             return Err(tampered());
         }
-        let _guard = ProcessLock::acquire(lock)?;
+        #[cfg(test)]
+        self.pause_after_lock_open()?;
+        let guard = ProcessLock::acquire(lock)?;
+        require_lock_identity(&store, &guard, self.lock_identity)?;
         self.verify_store()?;
-        store.validate_complete()?;
+        store.validate_complete(self.lock_identity)?;
         let (key, identity) = store.open_existing_key()?;
         if identity != self.key_identity {
             return Err(tampered());
@@ -152,6 +178,7 @@ impl FileHostEffectLedger {
         let key_id = digest(&key.0);
         let bytes = store.read_exact_file(STATE_NAME, MAX_LEDGER_BYTES, 0o600)?;
         let mut payload = decode_snapshot(&bytes, &key, &self.ledger_id, &key_id)?;
+        require_payload_lock(&payload, self.lock_identity)?;
         let replayed = replay(&payload)?;
         require_not_rolled_back(&local, &payload)?;
         let (value, changed) = operation(&mut payload, &replayed, &key)?;
@@ -159,15 +186,21 @@ impl FileHostEffectLedger {
             if payload.events.len() > MAX_EVENTS {
                 return Err(invalid_record());
             }
-            store.write_atomic(STATE_NAME, &encode_snapshot(&payload, &key)?)?;
+            store.write_atomic(
+                STATE_NAME,
+                &encode_snapshot(&payload, &key)?,
+                &guard,
+                self.lock_identity,
+            )?;
             let published = store.read_exact_file(STATE_NAME, MAX_LEDGER_BYTES, 0o600)?;
             let confirmed = decode_snapshot(&published, &key, &self.ledger_id, &key_id)?;
+            require_payload_lock(&confirmed, self.lock_identity)?;
             replay(&confirmed)?;
             if confirmed != payload {
                 return Err(tampered());
             }
         }
-        store.validate_complete()?;
+        store.validate_complete(self.lock_identity)?;
         local.initialized = true;
         local.generation = payload.generation;
         local.head_sha256.clone_from(&payload.head_sha256);
@@ -189,6 +222,29 @@ impl FileHostEffectLedger {
         store.verify_root()?;
         if store.directory_identity != self.directory_identity {
             return Err(tampered());
+        }
+        if store.exact_stat(LOCK_NAME)? != Some(self.lock_identity) {
+            return Err(tampered());
+        }
+        Ok(())
+    }
+
+    #[cfg(test)]
+    fn install_lock_open_hook(&self, hook: LockOpenHook) -> Result<(), HostEffectLedgerError> {
+        let mut slot = self.lock_open_hook.lock().map_err(|_| ledger_io())?;
+        if slot.is_some() {
+            return Err(invalid_record());
+        }
+        *slot = Some(hook);
+        Ok(())
+    }
+
+    #[cfg(test)]
+    fn pause_after_lock_open(&self) -> Result<(), HostEffectLedgerError> {
+        let hook = self.lock_open_hook.lock().map_err(|_| ledger_io())?.take();
+        if let Some(hook) = hook {
+            hook.reached.wait();
+            hook.release.wait();
         }
         Ok(())
     }
@@ -322,6 +378,7 @@ struct SnapshotPayload {
     schema: String,
     ledger_id: String,
     ledger_key_id: String,
+    lock_identity: FileIdentity,
     generation: u64,
     head_sha256: String,
     events: Vec<PersistedEvent>,
@@ -423,22 +480,26 @@ impl PersistedReservation {
 fn initial_payload(
     ledger_id: &str,
     key_id: &str,
+    lock_identity: FileIdentity,
 ) -> Result<SnapshotPayload, HostEffectLedgerError> {
     #[derive(Serialize)]
     struct InitialHead<'a> {
         schema: &'static str,
         ledger_id: &'a str,
         ledger_key_id: &'a str,
+        lock_identity: FileIdentity,
     }
     let head_sha256 = digest_json(&InitialHead {
         schema: INITIAL_HEAD_SCHEMA,
         ledger_id,
         ledger_key_id: key_id,
+        lock_identity,
     })?;
     Ok(SnapshotPayload {
         schema: LEDGER_SCHEMA.to_owned(),
         ledger_id: ledger_id.to_owned(),
         ledger_key_id: key_id.to_owned(),
+        lock_identity,
         generation: 0,
         head_sha256,
         events: Vec::new(),
@@ -492,6 +553,7 @@ fn event(
         schema: &'static str,
         ledger_id: &'a str,
         ledger_key_id: &'a str,
+        lock_identity: FileIdentity,
         generation: u64,
         prior_head_sha256: &'a str,
         permit_id: &'a str,
@@ -504,6 +566,7 @@ fn event(
         schema: EVENT_SCHEMA,
         ledger_id: &payload.ledger_id,
         ledger_key_id: &payload.ledger_key_id,
+        lock_identity: payload.lock_identity,
         generation,
         prior_head_sha256: &payload.head_sha256,
         permit_id: &permit_id,
@@ -517,15 +580,17 @@ fn event(
         schema: &'static str,
         ledger_id: &'a str,
         ledger_key_id: &'a str,
+        lock_identity: FileIdentity,
         generation: u64,
         prior_head_sha256: &'a str,
         permit_id: &'a str,
         record_sha256: &'a str,
     }
     let current_head_sha256 = digest_json(&HeadPreimage {
-        schema: "harness-ultragoal.host-effect-ledger-head.v1",
+        schema: "harness-ultragoal.host-effect-ledger-head.v2",
         ledger_id: &payload.ledger_id,
         ledger_key_id: &payload.ledger_key_id,
+        lock_identity: payload.lock_identity,
         generation,
         prior_head_sha256: &payload.head_sha256,
         permit_id: &permit_id,
@@ -549,13 +614,18 @@ fn replay(payload: &SnapshotPayload) -> Result<ReplayState, HostEffectLedgerErro
     if payload.schema != LEDGER_SCHEMA
         || !valid_id(&payload.ledger_id)
         || !is_digest(&payload.ledger_key_id)
+        || validate_lock_identity(payload.lock_identity).is_err()
         || !is_digest(&payload.head_sha256)
         || payload.events.len() > MAX_EVENTS
         || payload.generation != payload.events.len() as u64
     {
         return Err(tampered());
     }
-    let initial = initial_payload(&payload.ledger_id, &payload.ledger_key_id)?;
+    let initial = initial_payload(
+        &payload.ledger_id,
+        &payload.ledger_key_id,
+        payload.lock_identity,
+    )?;
     let mut expected_head = initial.head_sha256;
     let mut state = ReplayState::default();
     for (index, row) in payload.events.iter().enumerate() {
@@ -580,6 +650,7 @@ fn replay(payload: &SnapshotPayload) -> Result<ReplayState, HostEffectLedgerErro
                 schema: payload.schema.clone(),
                 ledger_id: payload.ledger_id.clone(),
                 ledger_key_id: payload.ledger_key_id.clone(),
+                lock_identity: payload.lock_identity,
                 generation: generation - 1,
                 head_sha256: expected_head.clone(),
                 events: Vec::new(),
@@ -817,7 +888,8 @@ impl Drop for LedgerKey {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
 struct FileIdentity {
     device: u64,
     inode: u64,
@@ -903,7 +975,10 @@ impl Store {
         Ok(())
     }
 
-    fn validate_complete(&self) -> Result<(), HostEffectLedgerError> {
+    fn validate_complete(
+        &self,
+        expected_lock_identity: FileIdentity,
+    ) -> Result<(), HostEffectLedgerError> {
         self.verify_root()?;
         let mut observed = BTreeSet::new();
         for entry in fs::read_dir(&self.root).map_err(|_| ledger_io())? {
@@ -915,8 +990,8 @@ impl Store {
             let identity = self.exact_stat(&name)?.ok_or_else(tampered)?;
             match name.as_str() {
                 LOCK_NAME => {
-                    validate_regular(identity, 0, 0o600)?;
-                    if identity.length != 0 {
+                    validate_lock_identity(identity)?;
+                    if identity != expected_lock_identity {
                         return Err(tampered());
                     }
                 }
@@ -1049,7 +1124,13 @@ impl Store {
         Ok(bytes)
     }
 
-    fn write_atomic(&self, name: &str, bytes: &[u8]) -> Result<(), HostEffectLedgerError> {
+    fn write_atomic(
+        &self,
+        name: &str,
+        bytes: &[u8],
+        lock: &ProcessLock,
+        expected_lock_identity: FileIdentity,
+    ) -> Result<(), HostEffectLedgerError> {
         if bytes.is_empty() || bytes.len() as u64 > MAX_LEDGER_BYTES {
             return Err(invalid_record());
         }
@@ -1073,8 +1154,10 @@ impl Store {
             if self.exact_stat(name)? != target_before {
                 return Err(stale_head());
             }
+            require_lock_identity(self, lock, expected_lock_identity)?;
             rename_relative(&self.directory, &temp_name, name)?;
             self.directory.sync_all().map_err(|_| ledger_io())?;
+            require_lock_identity(self, lock, expected_lock_identity)?;
             self.verify_root()?;
             Ok(())
         })();
@@ -1129,6 +1212,10 @@ impl ProcessLock {
         }
         Ok(Self { file })
     }
+
+    fn file(&self) -> &File {
+        &self.file
+    }
 }
 
 impl Drop for ProcessLock {
@@ -1171,6 +1258,38 @@ fn validate_regular(
         || identity.length > max_bytes
         || identity.permissions() != required_mode
     {
+        return Err(tampered());
+    }
+    Ok(())
+}
+
+fn validate_lock_identity(identity: FileIdentity) -> Result<(), HostEffectLedgerError> {
+    validate_regular(identity, 0, 0o600)?;
+    if identity.length != 0 {
+        return Err(tampered());
+    }
+    Ok(())
+}
+
+fn require_payload_lock(
+    payload: &SnapshotPayload,
+    expected: FileIdentity,
+) -> Result<(), HostEffectLedgerError> {
+    validate_lock_identity(payload.lock_identity)?;
+    if payload.lock_identity != expected {
+        return Err(tampered());
+    }
+    Ok(())
+}
+
+fn require_lock_identity(
+    store: &Store,
+    lock: &ProcessLock,
+    expected: FileIdentity,
+) -> Result<(), HostEffectLedgerError> {
+    let observed = exact_identity(store, LOCK_NAME, lock.file(), 0)?;
+    validate_lock_identity(observed)?;
+    if observed != expected {
         return Err(tampered());
     }
     Ok(())
@@ -1550,6 +1669,58 @@ mod tests {
     }
 
     #[test]
+    fn lock_replacement_after_prelock_check_cannot_split_serialization() {
+        let fixture = LedgerFixture::new();
+        let ledger = Arc::new(
+            FileHostEffectLedger::create(&fixture.root, "host-ledger".to_owned()).unwrap(),
+        );
+        let state_before = fs::read(fixture.root.join(STATE_NAME)).unwrap();
+        let reached = Arc::new(std::sync::Barrier::new(2));
+        let release = Arc::new(std::sync::Barrier::new(2));
+        ledger
+            .install_lock_open_hook(LockOpenHook {
+                reached: Arc::clone(&reached),
+                release: Arc::clone(&release),
+            })
+            .unwrap();
+
+        let contender = Arc::clone(&ledger);
+        let worker = thread::spawn(move || contender.head());
+        reached.wait();
+
+        let named_lock = fixture.root.join(LOCK_NAME);
+        let held_lock = fixture.root.with_extension("held-lock");
+        fs::rename(&named_lock, &held_lock).unwrap();
+        let replacement = OpenOptions::new()
+            .read(true)
+            .write(true)
+            .create_new(true)
+            .mode(0o600)
+            .open(&named_lock)
+            .unwrap();
+        replacement.sync_all().unwrap();
+        release.wait();
+
+        assert_eq!(
+            worker.join().unwrap().unwrap_err().id(),
+            HostEffectLedgerErrorId::Tampered
+        );
+        assert_eq!(
+            fs::read(fixture.root.join(STATE_NAME)).unwrap(),
+            state_before
+        );
+        let reopened = FileHostEffectLedger::open(&fixture.root, "host-ledger".to_owned());
+        assert!(matches!(
+            reopened,
+            Err(error) if error.id() == HostEffectLedgerErrorId::Tampered
+        ));
+        assert_eq!(
+            fs::read(fixture.root.join(STATE_NAME)).unwrap(),
+            state_before
+        );
+    }
+
+    #[test]
     fn unknown_and_special_ledger_entries_fail_closed_without_cleanup() {
         let fixture = LedgerFixture::new();
         let ledger = FileHostEffectLedger::create(&fixture.root, "host-ledger".to_owned()).unwrap();
@@ -1710,6 +1881,7 @@ mod tests {
     impl Drop for LedgerFixture {
         fn drop(&mut self) {
             let _ = fs::remove_dir_all(&self.root);
+            let _ = fs::remove_file(self.root.with_extension("held-lock"));
         }
     }
 }
