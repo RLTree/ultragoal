@@ -1,0 +1,35 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "reviewer": "/root/package_identity_rereviewer",
+  "verdict": "ACCEPT",
+  "candidate_binding": {
+    "root_commit": "1750d586f6561d9d6ba64887cdafa6a36f23e41e",
+    "root_tree": "bf2d3e53c4b9410df41fb94ddf9b56ea4cf1e58a",
+    "artifact_set_sha256": "sha256:c3620309c5036901f945b65a9d1dd4f4df5a80160c1222d6f5e31920b122c162",
+    "artifact_count": 18,
+    "artifact_bytes": 370042,
+    "work_package_sha256": "sha256:a786a53849d5503b76908c6e0e2a4ec1a421be8f68d0180934bbe3746149c6b0",
+    "worker_result_sha256": "sha256:eb086b591a888fa18731fba4dca86bd93a00fbcc9f0c978025c9fb512dec345b",
+    "canonical_result_id": "sha256:f539086935bec4af044316697bdd16c941c4bf455996ac709c75f9578f9c4781"
+  },
+  "verified_behavior": [
+    "Validated host-scope authority supplies the marketplace identity carried by JourneyBinding.",
+    "Marketplace identity participates in the journey digest and cache-promotion comparison.",
+    "A self-consistent wrong-marketplace substitution is rejected before surface promotion.",
+    "Accepted host effects rejoin package, journey, host capability, project or home scope, marketplace, and exact plan before issuance.",
+    "Read-only, zero-write, substitution, observation-race, executable-mutation, special-file, and no-claim controls remain closed."
+  ],
+  "verification": {
+    "focused_twice": "4/4 each",
+    "typed_receipt": "exact-set verification passed and emitted sha256:f539086935bec4af044316697bdd16c941c4bf455996ac709c75f9578f9c4781",
+    "dependency_closure": "220/220 distribution and host-lifecycle tests passed with one intentional skipped child control",
+    "transient_diagnostic": "one nextest LEAK marker did not reproduce in three isolated reruns"
+  },
+  "material_findings": [],
+  "residual_risks": [
+    "The independent all-target check could not start because the volume reached ENOSPC; root had already completed a fresh locked and offline all-target check against the same frozen source set.",
+    "The accepted source-local set does not prove installation, live cache or marketplace state, app registration, Plugins UI, discovery, real-host runtime use, release readiness, or node completion."
+  ],
+  "claim_ceiling": "Accepted exact frozen source-local marketplace-bound distribution journey only; root reconciliation remains separate.",
+  "no_claim_statement": "This review does not claim installation, live cache, marketplace, app-registry, Plugins UI, discovery, runtime, readiness, release, node closure, or completion."
+}

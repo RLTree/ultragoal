@@ -4,6 +4,7 @@ use crate::distribution::host_capability::{
 };
 use crate::distribution::json;
 use crate::distribution::model::Capability;
+use crate::distribution::model::{IdentitySurface, SurfaceIdentity};
 use crate::distribution::observations::RuntimeObservation;
 use crate::distribution::reader::sha256;
 use serde::Deserialize;
@@ -65,6 +66,21 @@ impl RuntimeProbePlan {
             session_nonce,
             timeout,
         })
+    }
+
+    pub fn execute_bound(self) -> Result<(RuntimeObservation, SurfaceIdentity), DistributionError> {
+        let observation = execute_runtime_probe(&self)?;
+        let output_sha256 = observation
+            .output_sha256()
+            .ok_or_else(|| error(DistributionErrorId::ProvenanceMismatch))?;
+        let surface = SurfaceIdentity::new(
+            self.binding.package().clone(),
+            IdentitySurface::Runtime,
+            output_sha256.into(),
+            None,
+        )?
+        .bind_journey(&self.binding)?;
+        Ok((observation, surface))
     }
 }
 

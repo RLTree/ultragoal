@@ -203,11 +203,33 @@ impl CacheExpectation {
 pub struct CacheSnapshot {
     context_id: String,
     candidate_id: String,
+    cache_root_id: String,
+    marketplace: String,
+    plugin_id: String,
+    version: String,
     observation_sha256: String,
     package_tree_sha256: String,
 }
 
 impl CacheSnapshot {
+    pub fn context_id(&self) -> &str {
+        &self.context_id
+    }
+    pub fn candidate_id(&self) -> &str {
+        &self.candidate_id
+    }
+    pub fn cache_root_id(&self) -> &str {
+        &self.cache_root_id
+    }
+    pub fn marketplace(&self) -> &str {
+        &self.marketplace
+    }
+    pub fn plugin_id(&self) -> &str {
+        &self.plugin_id
+    }
+    pub fn version(&self) -> &str {
+        &self.version
+    }
     pub fn observation_sha256(&self) -> &str {
         &self.observation_sha256
     }
@@ -267,18 +289,23 @@ pub fn reconcile_cache_read_only(
         if row.plugin_id == expectation.plugin_id {
             plugin_versions += 1;
             if row.marketplace == expectation.marketplace && row.version == expectation.version {
-                matched = Some(row.package_tree_sha256);
+                matched = Some(row);
             }
         }
     }
-    if plugin_versions != 1 || matched.as_deref() != Some(&expectation.package_tree_sha256) {
+    let matched = matched.ok_or_else(|| error(DistributionErrorId::InstallConflict))?;
+    if plugin_versions != 1 || matched.package_tree_sha256 != expectation.package_tree_sha256 {
         return Err(error(DistributionErrorId::InstallConflict));
     }
     Ok(CacheSnapshot {
-        context_id: expectation.context_id.clone(),
-        candidate_id: expectation.candidate_id.clone(),
+        context_id: observation.context_id,
+        candidate_id: observation.candidate_id,
+        cache_root_id: observation.cache_root_id,
+        marketplace: matched.marketplace,
+        plugin_id: matched.plugin_id,
+        version: matched.version,
         observation_sha256: sha256(bytes),
-        package_tree_sha256: expectation.package_tree_sha256.clone(),
+        package_tree_sha256: matched.package_tree_sha256,
     })
 }
 

@@ -52,7 +52,8 @@ fn cache_and_registry_substitution_during_final_revalidation_fail_closed() {
         Some(&executable),
     )
     .unwrap();
-    let binding = JourneyBinding::new(package.identity().clone(), &host).unwrap();
+    let binding =
+        JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
     let cache = |tree: &str| {
         serde_json::to_vec(&json!({
             "schema":"harness-ultragoal.codex-cache-observation.v1",

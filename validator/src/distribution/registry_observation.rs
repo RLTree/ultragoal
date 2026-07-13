@@ -89,6 +89,15 @@ impl DiscoveryObservation {
     pub fn observation_sha256(&self) -> Option<&str> {
         self.observation_sha256.as_deref()
     }
+    pub fn context_id(&self) -> &str {
+        &self.context_id
+    }
+    pub fn candidate_id(&self) -> &str {
+        &self.candidate_id
+    }
+    pub fn binding_sha256(&self) -> Option<&str> {
+        self.binding_sha256.as_deref()
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

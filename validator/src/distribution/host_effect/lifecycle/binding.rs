@@ -180,6 +180,9 @@ impl AcceptedHostScope {
         marketplace: String,
     ) -> Result<Self, SupportedHostLifecycleError> {
         validate_name(&marketplace)?;
+        if marketplace != journey.marketplace() {
+            return Err(invalid());
+        }
         Ok(Self::Personal {
             home_id: journey.home_id().to_owned(),
             host_id: journey.host_id().to_owned(),
@@ -192,6 +195,9 @@ impl AcceptedHostScope {
         marketplace: String,
     ) -> Result<Self, SupportedHostLifecycleError> {
         validate_name(&marketplace)?;
+        if marketplace != journey.marketplace() {
+            return Err(invalid());
+        }
         Ok(Self::Repository {
             home_id: journey.home_id().to_owned(),
             project_id: journey.project_id().to_owned(),
@@ -217,6 +223,7 @@ impl AcceptedHostScope {
         validate_name(marketplace)?;
         if home_id != journey.home_id()
             || host_id != journey.host_id()
+            || marketplace != journey.marketplace()
             || project_id.is_some_and(|value| value != journey.project_id())
         {
             return Err(invalid());

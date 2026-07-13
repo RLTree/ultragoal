@@ -1,9 +1,28 @@
+use super::insert_prefix_free_path;
 use super::plan::{PackageEntry, PackagePlan};
+use super::spec::{ENTRY_LIMIT, PACKAGE_LIMIT, PackageRole};
 use crate::distribution::error::{DistributionError, DistributionErrorId, error};
-use crate::distribution::reader::sha256;
+use crate::distribution::reader::{sha256, validate_relative_path};
+use crate::distribution::spec::digest;
+use crate::plugin_manifest::Version;
 use serde::Serialize;
+use std::collections::BTreeSet;
 
 const MAGIC: &[u8; 8] = b"HUGPKG1\0";
+const ARCHIVE_OVERHEAD_LIMIT: usize = 1024 * 1024;
+const ENTRY_COUNT_LIMIT: usize = 4096;
+
+pub(crate) struct DecodedArchive {
+    pub(crate) context_id: String,
+    pub(crate) candidate_id: String,
+    pub(crate) plugin_id: String,
+    pub(crate) version: String,
+    pub(crate) catalog_id: String,
+    pub(crate) accepted_inventory_sha256: String,
+    pub(crate) source_tree_sha256: String,
+    pub(crate) source_date_epoch: u64,
+    pub(crate) entries: Vec<PackageEntry>,
+}
 
 pub(crate) fn encode(plan: &PackagePlan) -> Result<Vec<u8>, DistributionError> {
     let mut bytes = Vec::new();
@@ -28,7 +47,118 @@ pub(crate) fn encode(plan: &PackagePlan) -> Result<Vec<u8>, DistributionError> {
     Ok(bytes)
 }
 
-pub(crate) fn inventory(plan: &PackagePlan) -> Result<(Vec<u8>, String), DistributionError> {
+pub(crate) fn decode(bytes: &[u8]) -> Result<DecodedArchive, DistributionError> {
+    if bytes.len() > PACKAGE_LIMIT + ARCHIVE_OVERHEAD_LIMIT {
+        return Err(error(DistributionErrorId::ObjectTooLarge));
+    }
+    let mut reader = Reader::new(bytes);
+    if reader.take(MAGIC.len())? != MAGIC {
+        return Err(error(DistributionErrorId::ArchiveMismatch));
+    }
+    let context_id = reader.string(128)?;
+    let candidate_id = reader.string(128)?;
+    let plugin_id = reader.string(128)?;
+    let version = reader.string(128)?;
+    let catalog_id = reader.string(128)?;
+    let accepted_inventory_sha256 = reader.string(128)?;
+    let source_tree_sha256 = reader.string(128)?;
+    if !digest(&context_id)
+        || !digest(&candidate_id)
+        || plugin_id != "harness-ultragoal"
+        || Version::parse(&version).is_none()
+        || !digest(&catalog_id)
+        || !digest(&accepted_inventory_sha256)
+        || !digest(&source_tree_sha256)
+    {
+        return Err(error(DistributionErrorId::ArchiveMismatch));
+    }
+    let source_date_epoch = reader.u64()?;
+    let entry_count = reader.u32()? as usize;
+    if entry_count == 0 {
+        return Err(error(DistributionErrorId::ArchiveMismatch));
+    }
+    if entry_count > ENTRY_COUNT_LIMIT {
+        return Err(error(DistributionErrorId::ObjectTooLarge));
+    }
+    let mut entries = Vec::with_capacity(entry_count);
+    let mut targets = BTreeSet::new();
+    let mut prior: Option<String> = None;
+    let mut total = 0usize;
+    for _ in 0..entry_count {
+        let path = reader.string(512)?;
+        validate_relative_path(&path)?;
+        let mode = reader.u32()?;
+        let role = decode_role(reader.u8()?)?;
+        let byte_length = usize::try_from(reader.u64()?)
+            .map_err(|_| error(DistributionErrorId::ObjectTooLarge))?;
+        let declared_sha256 = reader.string(128)?;
+        if byte_length > ENTRY_LIMIT {
+            return Err(error(DistributionErrorId::ObjectTooLarge));
+        }
+        if prior.as_deref().is_some_and(|value| value >= path.as_str())
+            || !insert_prefix_free_path(&mut targets, &path)
+            || !matches!(mode, 0o644 | 0o755)
+            || (role == PackageRole::Executable) != (mode == 0o755)
+            || (path == ".codex-plugin/plugin.json") != (role == PackageRole::Manifest)
+            || !digest(&declared_sha256)
+        {
+            return Err(error(DistributionErrorId::ArchiveMismatch));
+        }
+        total = total
+            .checked_add(byte_length)
+            .ok_or_else(|| error(DistributionErrorId::ObjectTooLarge))?;
+        if total > PACKAGE_LIMIT {
+            return Err(error(DistributionErrorId::ObjectTooLarge));
+        }
+        let entry_bytes = reader.take(byte_length)?.to_vec();
+        if sha256(&entry_bytes) != declared_sha256 {
+            return Err(error(DistributionErrorId::ArchiveMismatch));
+        }
+        prior = Some(path.clone());
+        entries.push(PackageEntry {
+            path,
+            mode,
+            role,
+            sha256: declared_sha256,
+            bytes: entry_bytes,
+        });
+    }
+    if !reader.finished() || !targets.contains(".codex-plugin/plugin.json") {
+        return Err(error(DistributionErrorId::ArchiveMismatch));
+    }
+    Ok(DecodedArchive {
+        context_id,
+        candidate_id,
+        plugin_id,
+        version,
+        catalog_id,
+        accepted_inventory_sha256,
+        source_tree_sha256,
+        source_date_epoch,
+        entries,
+    })
+}
+
+pub(crate) fn verify_plan(
+    archive: &DecodedArchive,
+    plan: &PackagePlan,
+) -> Result<(), DistributionError> {
+    if archive.context_id != plan.context_id
+        || archive.candidate_id != plan.candidate_id
+        || archive.plugin_id != plan.plugin_id
+        || archive.version != plan.version
+        || archive.catalog_id != plan.catalog_id
+        || archive.accepted_inventory_sha256 != plan.accepted_inventory_sha256
+        || archive.source_tree_sha256 != plan.source_tree_sha256
+        || archive.source_date_epoch != plan.source_date_epoch
+        || archive.entries != plan.entries
+    {
+        return Err(error(DistributionErrorId::ArchiveMismatch));
+    }
+    Ok(())
+}
+
+pub(crate) fn inventory(archive: &DecodedArchive) -> Result<(Vec<u8>, String), DistributionError> {
     #[derive(Serialize)]
     struct Inventory<'a> {
         schema: &'static str,
@@ -51,7 +181,7 @@ pub(crate) fn inventory(plan: &PackagePlan) -> Result<(Vec<u8>, String), Distrib
         byte_length: u64,
         role: super::spec::PackageRole,
     }
-    let entries = plan
+    let entries = archive
         .entries
         .iter()
         .map(|entry| InventoryEntry {
@@ -65,14 +195,14 @@ pub(crate) fn inventory(plan: &PackagePlan) -> Result<(Vec<u8>, String), Distrib
         .collect();
     let bytes = serde_json::to_vec(&Inventory {
         schema: "harness-ultragoal.package-inventory.v1",
-        context_id: &plan.context_id,
-        candidate_id: &plan.candidate_id,
-        plugin_id: &plan.plugin_id,
-        version: &plan.version,
-        catalog_id: &plan.catalog_id,
-        accepted_inventory_sha256: &plan.accepted_inventory_sha256,
-        source_tree_sha256: &plan.source_tree_sha256,
-        source_date_epoch: plan.source_date_epoch,
+        context_id: &archive.context_id,
+        candidate_id: &archive.candidate_id,
+        plugin_id: &archive.plugin_id,
+        version: &archive.version,
+        catalog_id: &archive.catalog_id,
+        accepted_inventory_sha256: &archive.accepted_inventory_sha256,
+        source_tree_sha256: &archive.source_tree_sha256,
+        source_date_epoch: archive.source_date_epoch,
         entries,
     })
     .map_err(|_| error(DistributionErrorId::InvalidSpec))?;
@@ -80,13 +210,78 @@ pub(crate) fn inventory(plan: &PackagePlan) -> Result<(Vec<u8>, String), Distrib
     Ok((bytes, digest))
 }
 
-pub(crate) fn entry_views(entries: &[PackageEntry]) -> Vec<PackageEntry> {
-    entries.to_vec()
-}
-
 fn push_string(bytes: &mut Vec<u8>, value: &str) -> Result<(), DistributionError> {
     let length = u16::try_from(value.len()).map_err(|_| error(DistributionErrorId::InvalidSpec))?;
     bytes.extend_from_slice(&length.to_be_bytes());
     bytes.extend_from_slice(value.as_bytes());
     Ok(())
+}
+
+fn decode_role(code: u8) -> Result<PackageRole, DistributionError> {
+    match code {
+        1 => Ok(PackageRole::Manifest),
+        2 => Ok(PackageRole::Skill),
+        3 => Ok(PackageRole::Agent),
+        4 => Ok(PackageRole::Documentation),
+        5 => Ok(PackageRole::Executable),
+        6 => Ok(PackageRole::Data),
+        _ => Err(error(DistributionErrorId::ArchiveMismatch)),
+    }
+}
+
+struct Reader<'a> {
+    bytes: &'a [u8],
+    offset: usize,
+}
+
+impl<'a> Reader<'a> {
+    const fn new(bytes: &'a [u8]) -> Self {
+        Self { bytes, offset: 0 }
+    }
+
+    fn take(&mut self, length: usize) -> Result<&'a [u8], DistributionError> {
+        let end = self
+            .offset
+            .checked_add(length)
+            .ok_or_else(|| error(DistributionErrorId::ObjectTooLarge))?;
+        let value = self
+            .bytes
+            .get(self.offset..end)
+            .ok_or_else(|| error(DistributionErrorId::ArchiveMismatch))?;
+        self.offset = end;
+        Ok(value)
+    }
+
+    fn string(&mut self, maximum: usize) -> Result<String, DistributionError> {
+        let length = self.u16()? as usize;
+        if length > maximum {
+            return Err(error(DistributionErrorId::ObjectTooLarge));
+        }
+        std::str::from_utf8(self.take(length)?)
+            .map(str::to_owned)
+            .map_err(|_| error(DistributionErrorId::ArchiveMismatch))
+    }
+
+    fn u8(&mut self) -> Result<u8, DistributionError> {
+        self.take(1).map(|bytes| bytes[0])
+    }
+
+    fn u16(&mut self) -> Result<u16, DistributionError> {
+        self.take(2)
+            .map(|bytes| u16::from_be_bytes([bytes[0], bytes[1]]))
+    }
+
+    fn u32(&mut self) -> Result<u32, DistributionError> {
+        self.take(4)
+            .map(|bytes| u32::from_be_bytes(bytes.try_into().expect("four bytes")))
+    }
+
+    fn u64(&mut self) -> Result<u64, DistributionError> {
+        self.take(8)
+            .map(|bytes| u64::from_be_bytes(bytes.try_into().expect("eight bytes")))
+    }
+
+    fn finished(&self) -> bool {
+        self.offset == self.bytes.len()
+    }
 }

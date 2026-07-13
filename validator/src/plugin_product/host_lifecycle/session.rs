@@ -55,10 +55,14 @@ impl HostLifecycleSession {
         {
             return Err(invalid());
         }
-        let binding =
-            JourneyBinding::new(package.identity().clone(), &host).map_err(|_| invalid())?;
         let host_scope =
             BoundHostScope::bind(package.identity(), &host, &marketplace_plan, host_scope)?;
+        let binding = JourneyBinding::new(
+            package.identity().clone(),
+            &host,
+            host_scope.authority().marketplace(),
+        )
+        .map_err(|_| invalid())?;
         let operation =
             DistributionLifecycleOperation::bind(root, package_plan, package, &lifecycle)
                 .map_err(|_| invalid())?;

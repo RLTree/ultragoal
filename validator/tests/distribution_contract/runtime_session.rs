@@ -116,7 +116,8 @@ fn stale_subprocess_receipt_and_dormant_report_cannot_become_runtime_proof() {
         Some(&executable),
     )
     .unwrap();
-    let binding = JourneyBinding::new(package.identity().clone(), &host).unwrap();
+    let binding =
+        JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
     let stale = RuntimeProbePlan::new(
         binding.clone(),
         &host,
@@ -148,7 +149,8 @@ fn unavailable_runtime_lowers_only_runtime_surface() {
         "codex-app-api-unavailable",
     )
     .unwrap();
-    let binding = JourneyBinding::new(package.identity().clone(), &host).unwrap();
+    let binding =
+        JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
     let observation = RuntimeObservation::unavailable(&binding, &host).unwrap();
     assert_eq!(observation.runtime_verdict(), RuntimeVerdict::Unsupported);
     assert!(!observation.is_current_execution());
@@ -171,7 +173,8 @@ fn executable_substitution_during_probe_fails_final_revalidation() {
         Some(&copied),
     )
     .unwrap();
-    let binding = JourneyBinding::new(package.identity().clone(), &host).unwrap();
+    let binding =
+        JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
     let plan = RuntimeProbePlan::new(
         binding,
         &host,

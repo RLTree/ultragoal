@@ -100,7 +100,7 @@ impl Fixture {
             Some(&self.executable),
         )
         .unwrap();
-        let journey = JourneyBinding::new(package, &host).unwrap();
+        let journey = JourneyBinding::new(package, &host, "fixture-marketplace").unwrap();
         let scope =
             AcceptedHostScope::personal(&journey, "fixture-marketplace".to_owned()).unwrap();
         let (target, identity) =

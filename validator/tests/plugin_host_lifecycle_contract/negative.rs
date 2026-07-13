@@ -117,9 +117,12 @@ fn plugins_ui_requires_one_exact_visible_identity() {
     let fixture = Fixture::new("ui-observation");
     let bundle = fixture.bundle("0.0.12");
     let host = fixture.host();
-    let binding =
-        crate::distribution::JourneyBinding::new(bundle.snapshot.identity().clone(), &host)
-            .unwrap();
+    let binding = crate::distribution::JourneyBinding::new(
+        bundle.snapshot.identity().clone(),
+        &host,
+        "local-harness-plugins",
+    )
+    .unwrap();
     let bytes = ui_document(&binding);
     let observed = observe_plugins_ui(&bytes, &binding).unwrap();
     assert_eq!(observed.verdict(), HostLayerVerdict::Verified);

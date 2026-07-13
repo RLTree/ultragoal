@@ -166,6 +166,7 @@ impl HostCapabilityDeclaration {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct JourneyBinding {
     package: PackageIdentity,
+    marketplace: String,
     home_id: String,
     project_id: String,
     host_id: String,
@@ -177,15 +178,19 @@ impl JourneyBinding {
     pub fn new(
         package: PackageIdentity,
         host: &HostCapabilityDeclaration,
+        marketplace: impl Into<String>,
     ) -> Result<Self, DistributionError> {
         package.validate()?;
+        let marketplace = marketplace.into();
         if !digest(host.home_id()) || !digest(host.project_id()) || !digest(host.host_id()) {
             return Err(error(DistributionErrorId::InvalidSpec));
         }
+        validate_marketplace_name(&marketplace)?;
         #[derive(Serialize)]
         struct Raw<'a> {
             schema: &'static str,
             package: &'a PackageIdentity,
+            marketplace: &'a str,
             home_id: &'a str,
             project_id: &'a str,
             host_id: &'a str,
@@ -194,6 +199,7 @@ impl JourneyBinding {
         let binding_sha256 = serde_json::to_vec(&Raw {
             schema: "harness-ultragoal.distribution-journey-binding.v1",
             package: &package,
+            marketplace: &marketplace,
             home_id: host.home_id(),
             project_id: host.project_id(),
             host_id: host.host_id(),
@@ -203,6 +209,7 @@ impl JourneyBinding {
         .map_err(|_| error(DistributionErrorId::InvalidSpec))?;
         Ok(Self {
             package,
+            marketplace,
             home_id: host.home_id().into(),
             project_id: host.project_id().into(),
             host_id: host.host_id().into(),
@@ -213,6 +220,9 @@ impl JourneyBinding {
 
     pub fn package(&self) -> &PackageIdentity {
         &self.package
+    }
+    pub fn marketplace(&self) -> &str {
+        &self.marketplace
     }
     pub fn home_id(&self) -> &str {
         &self.home_id
@@ -229,6 +239,18 @@ impl JourneyBinding {
     pub fn binding_sha256(&self) -> &str {
         &self.binding_sha256
     }
+}
+
+fn validate_marketplace_name(value: &str) -> Result<(), DistributionError> {
+    if value.is_empty()
+        || value.len() > 128
+        || !value.bytes().all(|byte| {
+            byte.is_ascii_lowercase() || byte.is_ascii_digit() || matches!(byte, b'-' | b'_')
+        })
+    {
+        return Err(error(DistributionErrorId::InvalidSpec));
+    }
+    Ok(())
 }
 
 fn directory_id(path: &Path) -> Result<String, DistributionError> {

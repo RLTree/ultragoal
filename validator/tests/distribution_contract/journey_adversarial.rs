@@ -21,7 +21,8 @@ fn wrong_scope_identity_duplicates_and_registered_hidden_fail_closed() {
         Some(&executable),
     )
     .unwrap();
-    let binding = JourneyBinding::new(package.identity().clone(), &host).unwrap();
+    let binding =
+        JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
     let valid = registry_document(&binding, true, true).unwrap();
     let value: Value = serde_json::from_slice(&valid).unwrap();
     for (pointer, replacement) in [
@@ -112,7 +113,8 @@ fn unsupported_app_surfaces_cannot_be_promoted_by_supplied_bytes() {
         "codex-app-api-unavailable",
     )
     .unwrap();
-    let binding = JourneyBinding::new(package.identity().clone(), &host).unwrap();
+    let binding =
+        JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
     let registry = registry_document(&binding, true, true).unwrap();
     assert_eq!(
         observe_app_registry(None, &binding, &host)

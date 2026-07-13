@@ -1,0 +1,271 @@
+{
+  "worker": "/root",
+  "lease_id": "SUPPORTED-PACKAGE-IDENTITY-074-R3",
+  "context_id": "sha256:94705c615b06f6c59c08a3234713d0cf6c57b12d557bffe8121e7a8d18ae5168",
+  "candidate_identity": {
+    "candidate_id": "sha256:2f1c22491962bd8f3211d4b71709f98406c318b42bcacc48e8c9ff5fb2773ce1",
+    "context_id": "sha256:94705c615b06f6c59c08a3234713d0cf6c57b12d557bffe8121e7a8d18ae5168",
+    "root_head": "1750d586f6561d9d6ba64887cdafa6a36f23e41e",
+    "root_tree": "bf2d3e53c4b9410df41fb94ddf9b56ea4cf1e58a",
+    "context_formula": "SHA-256 of LF-terminated ordered fields lease_id, repo URI, branch, full root commit, marketplace-journey-binding",
+    "candidate_formula": "SHA-256 of LF-terminated ordered fields repo URI, branch, full root commit, full root tree",
+    "work_package_path": "docs/ultragoal-successor-live/work-packages/SUPPORTED-PACKAGE-IDENTITY-074-R3.json",
+    "work_package_sha256": "sha256:a786a53849d5503b76908c6e0e2a4ec1a421be8f68d0180934bbe3746149c6b0",
+    "review_path": "docs/ultragoal-successor-live/reviews/SUPPORTED-PACKAGE-IDENTITY-MARKETPLACE-AUTHORITY-REVIEW-078.json",
+    "precommit_issuance_disposition": "Root owns the shared JourneyBinding schema and issued the final R3 binding after committing the marketplace-authority review and work package.",
+    "rework_artifact_set_sha256": "sha256:4c9394cc33ad97ce73394d2530997e6632cd11a33033705d51fa1303b66760a6",
+    "corrected_artifact_set_sha256": "sha256:c3620309c5036901f945b65a9d1dd4f4df5a80160c1222d6f5e31920b122c162",
+    "artifact_set_formula": "Sort artifact paths; for each append path, one TAB, lowercase SHA-256 without a prefix, and one LF; SHA-256 the concatenation.",
+    "artifact_count": 18,
+    "artifact_bytes": 370042,
+    "artifact_lines_diagnostic": 10850,
+    "worker_result_self_excluded": true
+  },
+  "base_state": {
+    "status": "review_rework_required",
+    "issued_start_head": "1750d586f6561d9d6ba64887cdafa6a36f23e41e",
+    "issued_start_tree": "bf2d3e53c4b9410df41fb94ddf9b56ea4cf1e58a",
+    "root_disjoint_movement": "Agent-authority and routine-catalog corrections remained disjoint while root integrated the shared marketplace-bound JourneyBinding schema.",
+    "review_finding": "A self-consistent caller-selected marketplace could promote into a canonical package journey because JourneyBinding carried no marketplace authority.",
+    "marketplace_guard_preserved": "The independently established MarketplaceSnapshot plugin and version guard remains byte-for-byte in the corrected eight-artifact source set."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "cache_snapshot_identity": "The read-only snapshot retains observed context, candidate, cache root, marketplace, plugin, version, observation digest, and package tree.",
+    "cache_promotion_guard": "Promotion requires exact package context, candidate, plugin, version, tree, journey-home cache root, and journey-bound marketplace identity before constructing SurfaceIdentity.",
+    "journey_identity": "JourneyBinding includes one validated marketplace name in its canonical binding digest and supported host lifecycle construction derives it from the validated host-scope and marketplace-plan join.",
+    "receipt_validation": "The authoritative WorkerResultV1 parser, typed R3 root lease, ArtifactWorkspace verification, and a separate exact 18-artifact equality guard are exercised.",
+    "corrective_no_claim_statement": "This corrective work package does not claim package identity acceptance, installation, cache, marketplace, app-registry, Plugins UI, discovery, runtime, readiness, release, node closure, or completion.",
+    "live_integrated_rerun": "required after independent review and root reconciliation",
+    "claim_effect": "none"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-IDENTITY-074.json",
+    "validator/src/distribution/cache.rs",
+    "validator/src/distribution/host_capability.rs",
+    "validator/src/distribution/host_effect/executor/tests.rs",
+    "validator/src/distribution/host_effect/lifecycle/binding.rs",
+    "validator/src/distribution/host_effect/lifecycle/tests.rs",
+    "validator/src/distribution/identity.rs",
+    "validator/src/distribution/marketplace.rs",
+    "validator/src/distribution/package/archive.rs",
+    "validator/src/distribution/package/snapshot.rs",
+    "validator/src/distribution/registry_observation.rs",
+    "validator/src/distribution/runtime_probe.rs",
+    "validator/src/plugin_product/host_lifecycle/session.rs",
+    "validator/tests/distribution_contract/isolated_journey.rs",
+    "validator/tests/distribution_contract/journey_adversarial.rs",
+    "validator/tests/distribution_contract/observation_races.rs",
+    "validator/tests/distribution_contract/runtime_session.rs",
+    "validator/tests/plugin_host_lifecycle_contract/negative.rs",
+    "validator/tests/supported_package_identity_contract.rs"
+  ],
+  "touched_semantics": [
+    "distribution::supported-package-cache-identity",
+    "distribution::marketplace-bound-journey-identity",
+    "plugin_product::supported-host-marketplace-join"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "supported-package-identity-source",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "REQ-SUPPLY-001",
+    "REQ-SUPPLY-002",
+    "REQ-SUPPLY-004",
+    "cache-version-bound",
+    "cache-root-bound",
+    "marketplace-drift-rejected",
+    "marketplace-journey-bound",
+    "typed-worker-result-exact-set-verified",
+    "zero-write-read-paths"
+  ],
+  "dependency_nodes": [
+    "accepted-distribution-package-install-kernel",
+    "accepted-supported-host-plugin-lifecycle-coordinator"
+  ],
+  "changes": [
+    {
+      "area": "cache-observation-identity",
+      "result": "CacheSnapshot retains the exact observed plugin, canonical version, marketplace, and cache-root identity after reconciliation instead of retaining only caller expectation context, candidate, and tree."
+    },
+    {
+      "area": "cache-to-package-and-journey-join",
+      "result": "SurfaceIdentity::from_verified_cache rejects plugin or version mismatch with PackageIdentity::source, cache-root mismatch with JourneyBinding::home_id, and marketplace mismatch with JourneyBinding::marketplace before promotion."
+    },
+    {
+      "area": "marketplace-bound-journey-authority",
+      "result": "JourneyBinding carries one validated marketplace identity in its canonical digest, and supported host lifecycle construction derives it from the already validated host-scope marketplace authority."
+    },
+    {
+      "area": "host-effect-marketplace-join",
+      "result": "Accepted personal and repository host scopes require their marketplace authority to equal the journey marketplace before any effect plan can be accepted or validated."
+    },
+    {
+      "area": "false-pass-controls",
+      "result": "The dedicated contract rejects exact 0.0.11 package versus 9.9.9 cache, wrong plugin, wrong home/root, marketplace drift, same-path tree substitution, context/candidate/journey substitution, and ambiguous cache rows while preserving the positive exact join."
+    },
+    {
+      "area": "typed-receipt",
+      "result": "The receipt is bound to the root-issued R3 package and review digests and enforces exact equality with the frozen eighteen-artifact source set in addition to generic typed validation."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "HUL_SUPPORTED_PACKAGE_SCRATCH_ROOT=/private/tmp/hul-supported-package-identity-074-r3-scratch/test-fixtures CARGO_TARGET_DIR=/private/tmp/hul-supported-package-identity-074-r3-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test supported_package_identity_contract --no-fail-fast",
+      "status": "pass-4-of-4-twice",
+      "run_ids": [
+        "0709c2da-2e80-4fea-8691-5dc2dd0d026b",
+        "17cc416e-a45e-43de-9c8e-ab7e2d6d1837"
+      ],
+      "result": "The focused suite passed twice with no skipped tests, including positive promotion plus wrong marketplace, version, plugin, root, tree, context, candidate, ambiguity, journey, zero-write, archive-mutation, and typed-receipt controls."
+    },
+    {
+      "command": "HUL_SUPPORTED_PACKAGE_SCRATCH_ROOT=/private/tmp/hul-supported-package-identity-074-r3-scratch/test-fixtures CARGO_TARGET_DIR=/private/tmp/hul-supported-package-identity-074-r3-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test supported_package_identity_contract -E 'test(corrective_worker_result_is_typed_lease_bound_and_exact_set_verified)' --no-fail-fast",
+      "status": "pass-1-of-1",
+      "run_id": "7518ff12-3ccc-4ccb-a70b-004daaa489fd",
+      "result": "The exact corrected work-package digest, authoritative WorkerResultV1 parser, typed lease and scope policy, regular-file ArtifactWorkspace verification, canonical result identifier, zero-write comparison, and missing/replaced exact-set controls passed."
+    },
+    {
+      "command": "HUL_SUPPORTED_PACKAGE_SCRATCH_ROOT=/private/tmp/hul-supported-package-identity-074-r3-scratch/test-fixtures CARGO_TARGET_DIR=/private/tmp/hul-supported-package-identity-074-r3-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test distribution_contract --test plugin_host_lifecycle_contract --no-fail-fast",
+      "status": "pass-220-of-220",
+      "run_id": "792fbe89-0a5c-47e7-80f2-ef09da32c38f",
+      "result": "The complete distribution and supported host-lifecycle closure passed with 220 tests and one intentional skipped child control."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-supported-package-identity-074-r3-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline --all-targets --jobs 16",
+      "status": "pass",
+      "result": "All validator targets compiled locked and offline with 16 jobs."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/distribution/cache.rs",
+      "sha256": "sha256:612b8237b8483f216cdffcb51d2c66504ba8f74ab95fb1cb159f2a4be1b22cc6",
+      "byte_length": 9946
+    },
+    {
+      "path": "validator/src/distribution/host_capability.rs",
+      "sha256": "sha256:0fb59bc2e664e1592dab7563391fe9484bd9fed5af724ddeb1b660cde3c9df27",
+      "byte_length": 9578
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/tests.rs",
+      "sha256": "sha256:731517afaae7de20129a1d7fe170497844da87f01b9488d75cd114244154169b",
+      "byte_length": 94551
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/binding.rs",
+      "sha256": "sha256:4615a8b193ef3ea3e0b4e6654b5a2ae9e67ffc915f7118759478a19c9dd76b1c",
+      "byte_length": 29675
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/tests.rs",
+      "sha256": "sha256:8de6d1ebcd2d40b479d5b9d469150abca9abdda6ff6721372ba011b482dcf4cd",
+      "byte_length": 70859
+    },
+    {
+      "path": "validator/src/distribution/identity.rs",
+      "sha256": "sha256:fd7a7d3e0057efc502a62b875e0a8c3085079cb882acd6b13afd4e33699c6c57",
+      "byte_length": 12678
+    },
+    {
+      "path": "validator/src/distribution/marketplace.rs",
+      "sha256": "sha256:f319bc6beed460e8de475fda82963b632fe29ef143d37971558ad54a059aa678",
+      "byte_length": 8970
+    },
+    {
+      "path": "validator/src/distribution/package/archive.rs",
+      "sha256": "sha256:f234e35042415335620ef5f03004fd69702d74338552ef8590135f544be79807",
+      "byte_length": 10199
+    },
+    {
+      "path": "validator/src/distribution/package/snapshot.rs",
+      "sha256": "sha256:47c5ad67c49ba15b559fba9c1d8d4dba0d5aa06b8de61e6c948e4bdb52336875",
+      "byte_length": 6035
+    },
+    {
+      "path": "validator/src/distribution/registry_observation.rs",
+      "sha256": "sha256:06a045128e740d23943e1fb59798996f7f73074876a6cfa9e8c2666272360900",
+      "byte_length": 10041
+    },
+    {
+      "path": "validator/src/distribution/runtime_probe.rs",
+      "sha256": "sha256:486119f912a0389429986771934fe8b8e6cbd53240138253e224353603690f89",
+      "byte_length": 10445
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/session.rs",
+      "sha256": "sha256:c636db0d0d6697de8daf60811986ef2705fd2f3b56d63c227337e13a394993e6",
+      "byte_length": 25221
+    },
+    {
+      "path": "validator/tests/distribution_contract/isolated_journey.rs",
+      "sha256": "sha256:5e2d90e24b5d898df4243cb562f38ba180c93618fd5e6a67769a232e8e5e6b9c",
+      "byte_length": 7130
+    },
+    {
+      "path": "validator/tests/distribution_contract/journey_adversarial.rs",
+      "sha256": "sha256:eef17c8f435de23b961a4bcb6032132666aad113057a3a8e6fbc7edef39fb706",
+      "byte_length": 8768
+    },
+    {
+      "path": "validator/tests/distribution_contract/observation_races.rs",
+      "sha256": "sha256:7c930eab9fee316b9bb46b2d3fd86770e85f3a6440c48e9394f8bd8932e55ed6",
+      "byte_length": 3216
+    },
+    {
+      "path": "validator/tests/distribution_contract/runtime_session.rs",
+      "sha256": "sha256:4bc895295da44316fc6cf8df3be56c7aef88954985bde191330054241c19cc97",
+      "byte_length": 6294
+    },
+    {
+      "path": "validator/tests/plugin_host_lifecycle_contract/negative.rs",
+      "sha256": "sha256:641ddc3c309f1587e874cd21a5a6aa02bb91d5cf5974b6eab244e50ac2b63b88",
+      "byte_length": 6849
+    },
+    {
+      "path": "validator/tests/supported_package_identity_contract.rs",
+      "sha256": "sha256:56128602e096bdfbca9fef473e1aa2472a4404a2fc58ae6b869fb8085edc1cee",
+      "byte_length": 39587
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material-rework-corrected",
+      "finding": "Same-tree cache version and root substitutions bypassed package and journey binding because CacheSnapshot discarded those identities; the snapshot now retains and promotion checks them."
+    },
+    {
+      "severity": "material-rework-corrected",
+      "finding": "A self-consistent caller-selected marketplace bypassed journey authority because JourneyBinding carried no marketplace; the journey digest and supported host-scope join now bind it."
+    },
+    {
+      "severity": "preserved",
+      "finding": "The prior marketplace-version promotion guard and all preserved package, registry, runtime, host-scope, and host-effect source artifacts remain in the frozen source set."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-r3-review",
+    "live-integrated-rerun",
+    "root-acceptance-reconciliation",
+    "supported-host-product-proof"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "This is a source-local corrective candidate and isolated-test receipt, not live integrated candidate proof.",
+    "No version was reserved and no manifest, marketplace installation, cache, app registry, Plugins UI, discovery session, runtime, public route, generated authority, or claim decision was mutated.",
+    "The eighteen-artifact aggregate includes every source and test path affected by the marketplace-bound journey schema plus the preserved package-identity inputs; the WorkerResult self-excludes.",
+    "Independent review, root reconciliation, and live candidate-bound proof remain mandatory."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

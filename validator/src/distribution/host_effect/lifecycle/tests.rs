@@ -83,7 +83,7 @@ impl Fixture {
             Some(&executable),
         )
         .unwrap();
-        let journey = JourneyBinding::new(package.clone(), &host).unwrap();
+        let journey = JourneyBinding::new(package.clone(), &host, "local-marketplace").unwrap();
         let lifecycle = lifecycle(&package);
         let scope = AcceptedHostScope::personal(&journey, "local-marketplace".to_owned()).unwrap();
         let plan = HostCommandPlan::personal_install(&package, "local-marketplace").unwrap();
@@ -870,7 +870,8 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
         "host-lifecycle-063-v1",
     )
     .unwrap();
-    let unavailable_journey = JourneyBinding::new(fixture.package.clone(), &unavailable).unwrap();
+    let unavailable_journey =
+        JourneyBinding::new(fixture.package.clone(), &unavailable, "local-marketplace").unwrap();
     let unavailable_scope =
         AcceptedHostScope::personal(&unavailable_journey, "local-marketplace".to_owned()).unwrap();
     let unavailable_target = ObservedTargetIdentity::new(

@@ -74,6 +74,8 @@ pub struct MarketplaceSnapshot {
     context_id: String,
     candidate_id: String,
     scope: MarketplaceScope,
+    plugin_id: String,
+    version: String,
     verdict: MarketplaceVerdict,
     catalog_sha256: Option<String>,
     package_sha256: String,
@@ -88,6 +90,12 @@ impl MarketplaceSnapshot {
     }
     pub const fn scope(&self) -> MarketplaceScope {
         self.scope
+    }
+    pub fn plugin_id(&self) -> &str {
+        &self.plugin_id
+    }
+    pub fn version(&self) -> &str {
+        &self.version
     }
     pub const fn verdict(&self) -> MarketplaceVerdict {
         self.verdict
@@ -109,6 +117,8 @@ pub(crate) fn snapshot(
         context_id: expected.context_id.clone(),
         candidate_id: expected.candidate_id.clone(),
         scope: expected.scope,
+        plugin_id: expected.plugin_id.clone(),
+        version: expected.version.clone(),
         verdict,
         catalog_sha256,
         package_sha256: expected.package_sha256.clone(),

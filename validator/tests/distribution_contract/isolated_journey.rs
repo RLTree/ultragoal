@@ -95,7 +95,8 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
         host.state(Capability::PluginsUi),
         HostCapabilityState::Unsupported,
     );
-    let binding = JourneyBinding::new(first.identity().clone(), &host).unwrap();
+    let binding =
+        JourneyBinding::new(first.identity().clone(), &host, "local-harness-plugins").unwrap();
     let cache_bytes = serde_json::to_vec(&json!({
         "schema":"harness-ultragoal.codex-cache-observation.v1",
         "context_id":first.context_id(), "candidate_id":first.candidate_id(),

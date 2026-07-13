@@ -115,12 +115,12 @@ pub fn verify_package(
     plan: &PackagePlan,
     archive_bytes: &[u8],
 ) -> Result<PackageSnapshot, DistributionError> {
-    if archive_bytes.len() > PACKAGE_LIMIT + 1024 * 1024
-        || archive::encode(plan)?.as_slice() != archive_bytes
-    {
-        return Err(error(DistributionErrorId::ArchiveMismatch));
+    if archive_bytes.len() > PACKAGE_LIMIT + 1024 * 1024 {
+        return Err(error(DistributionErrorId::ObjectTooLarge));
     }
-    let (inventory, inventory_sha256) = archive::inventory(plan)?;
+    let decoded = archive::decode(archive_bytes)?;
+    archive::verify_plan(&decoded, plan)?;
+    let (inventory, inventory_sha256) = archive::inventory(&decoded)?;
     let package_sha256 = sha256(archive_bytes);
     let identity = PackageIdentity::new(
         SourceIdentity::new(
@@ -144,7 +144,7 @@ pub fn verify_package(
         inventory_sha256,
         inventory,
         archive: archive_bytes.to_vec(),
-        entries: archive::entry_views(&plan.entries),
+        entries: decoded.entries,
         identity,
     })
 }

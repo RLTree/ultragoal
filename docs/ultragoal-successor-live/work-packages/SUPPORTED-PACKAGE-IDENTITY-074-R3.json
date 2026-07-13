@@ -15,7 +15,8 @@
     "root_owned_symbols": [
       "JourneyBinding marketplace identity and binding digest",
       "SurfaceIdentity::from_verified_cache marketplace join",
-      "HostLifecycleSession marketplace-bound journey construction"
+      "HostLifecycleSession marketplace-bound journey construction",
+      "AcceptedHostScope marketplace-to-journey validation"
     ],
     "generated_outputs": "WorkerResult only",
     "git_authority": "root only",
@@ -29,12 +30,30 @@
     "Read, reconcile, and query paths remain recursively zero-write."
   ],
   "expected_paths": [
+    "validator/src/distribution/cache.rs",
     "validator/src/distribution/host_capability.rs",
+    "validator/src/distribution/host_effect/executor/tests.rs",
+    "validator/src/distribution/host_effect/lifecycle/binding.rs",
+    "validator/src/distribution/host_effect/lifecycle/tests.rs",
     "validator/src/distribution/identity.rs",
+    "validator/src/distribution/marketplace.rs",
+    "validator/src/distribution/package/archive.rs",
+    "validator/src/distribution/package/snapshot.rs",
+    "validator/src/distribution/registry_observation.rs",
+    "validator/src/distribution/runtime_probe.rs",
     "validator/src/plugin_product/host_lifecycle/session.rs",
-    "validator/tests/supported_package_identity_contract.rs",
     "validator/tests/distribution_contract/isolated_journey.rs",
+    "validator/tests/distribution_contract/journey_adversarial.rs",
+    "validator/tests/distribution_contract/observation_races.rs",
+    "validator/tests/distribution_contract/runtime_session.rs",
+    "validator/tests/plugin_host_lifecycle_contract/negative.rs",
+    "validator/tests/supported_package_identity_contract.rs",
     "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-IDENTITY-074.json"
+  ],
+  "semantic_symbols": [
+    "distribution::supported-package-cache-identity",
+    "distribution::marketplace-bound-journey-identity",
+    "plugin_product::supported-host-marketplace-join"
   ],
   "permitted_dependency_updates": "Only direct JourneyBinding construction sites whose compilation or exact marketplace semantics require migration; no manifest, Cargo.lock, public command, migration registry, generated authority, claim, or release edit.",
   "required_validation": [
