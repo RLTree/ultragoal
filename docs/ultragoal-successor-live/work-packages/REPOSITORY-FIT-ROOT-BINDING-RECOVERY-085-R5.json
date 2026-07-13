@@ -1,0 +1,47 @@
+{
+  "schema_version": "UltraLeaseAmendment-v1",
+  "amendment_id": "REPOSITORY-FIT-ROOT-BINDING-RECOVERY-085-R5",
+  "base_work_package": "docs/ultragoal-successor-live/work-packages/REPOSITORY-FIT-OWNER-BOUND-RECOVERY-085-R4.json",
+  "base_work_package_sha256": "sha256:0cfaa7db68e2157981faf48ee412818c2e3b872f8a5cb800c6a34983039886fa",
+  "issued_candidate": {
+    "head_commit": "abf0d3ed85731c865b7d460739329573ff3393cb",
+    "head_tree": "c059d9eefc02edc2cc3769165bb79a6229a81352",
+    "note": "R4 frozen behavior remains at artifact aggregate sha256:575a052c079a9b6fa3d97c8fbce0f45affa56e64f78a496f73c517149f70acce. R5 corrects the independently falsified whole-root containment binding and preserves all other R4 controls."
+  },
+  "owner_override": "/root/repository_fit_proof_recovery_engineer",
+  "lease_id_override": "REPOSITORY-FIT-ROOT-BINDING-RECOVERY-085-R5",
+  "inherit_all_r4_paths_symbols_outputs_effects_prohibitions_tests_and_verification": true,
+  "independent_rework": {
+    "reviewer": "/root/evaluation_research_false_pass_repair_engineer/repository_fit_authority_reviewer",
+    "reviewed_artifact_set_sha256": "sha256:575a052c079a9b6fa3d97c8fbce0f45affa56e64f78a496f73c517149f70acce",
+    "reviewed_worker_result_sha256": "sha256:7d310ab15148b0f051ca9e3843d66fee4b048f0ca52ad5ea957f6ab7ba0a61ec",
+    "verdict": "REWORK",
+    "decisive_finding": "Expired recovery observed leaf and ancestor state through the supplied context but never compared that descriptor-stable observation to the persisted recovery.root_binding. Renaming the entire repository root changed containment binding while preserving device, inode, and exact leaf postimages, yet recovery returned recovered/committed."
+  },
+  "required_correction": [
+    "Return the canonical repository root binding from the same retained-descriptor recovery observation that supplies leaf and managed-ancestor state.",
+    "Before preimage, postimage, or ambiguous target classification, require exact equality between that observed binding, the current prepared/context binding, and the persisted recovery.root_binding. Never trust path text or a separately timed context value as a substitute.",
+    "On any root-binding or containment mismatch, fail closed with a typed non-committed outcome and no repository mutation. The ledger may record only the exact adopted non-committed recovery terminal permitted by the existing state machine; it must never append Committed.",
+    "Add a deterministic fresh-process regression that crashes after the exact effect, renames the whole repository root while preserving device/inode and all leaf bytes/modes, rebuilds context at the renamed containment, proves the binding changed, and verifies recovery cannot become Committed.",
+    "Preserve every R4 owner lock, expiry, nonce/intent, existing-only zero-write, root/ancestor identity-mode-uid-gid-containment, pre/post/partial/ambiguous, two-process, process-cleanup, and receipt control."
+  ],
+  "verification": {
+    "jobs": 16,
+    "test_threads": 16,
+    "required": [
+      "focused repository-fit production-authority controls twice",
+      "whole-root rename counterexample and same-binding positive recovery",
+      "repository-fit library and four named integration closures",
+      "cargo check --lib",
+      "post-proof process/open-writer absence",
+      "WorkerResult-v1 exact R5 artifact freeze and receipt self-test"
+    ]
+  },
+  "worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-PRODUCTION-AUTHORITY-085.json",
+    "worker": "/root/repository_fit_proof_recovery_engineer",
+    "lease_id": "REPOSITORY-FIT-ROOT-BINDING-RECOVERY-085-R5",
+    "required": true,
+    "no_claim_statement": "This worker does not claim readiness, release, or completion."
+  }
+}
