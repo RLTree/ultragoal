@@ -1,0 +1,63 @@
+{
+  "schema_version": "RootDecisionHistory-v1",
+  "decision_id": "LIVE-CONTEXT-ENVELOPE-CONFINEMENT-REWORK-HISTORY-052",
+  "workstream": "model-adaptive-prompt-and-context-contract-change",
+  "reviewed_change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
+  "disposition": "REWORK_ACTIVE_EFFECT_APPROVAL_AUTHORITY_CORRECTION",
+  "candidate_identity": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "4c8a25705abf6f68b0f6db0cfdf449fd59c1fdb6",
+    "head_tree": "b513d7dc3d92a732ef5d307ad7dc6b9a0abdfdac",
+    "proposal_artifact_set_sha256": "sha256:136847c4d18fef949cfa0091275423708151fba6051a33edbf47f4821c80e11c"
+  },
+  "material_findings": [
+    {
+      "sequence": 1,
+      "class": "protected_authority_hardlink_alias_false_pass",
+      "source": "LIVE-CONTEXT-ENVELOPE-FILESYSTEM-ALIAS-REWORK-052",
+      "correction": "Reject hardlinks, filesystem aliases, symlinks, special files, cross-device objects, and post-validation identity changes within bounded proposed-write sets."
+    },
+    {
+      "sequence": 2,
+      "class": "host_worktree_protection_gap",
+      "source": "root_reproduction",
+      "correction": "Protect .codex-worktree as a canonical host root across artifacts, fixtures, and generated outputs with case-folded matching."
+    },
+    {
+      "sequence": 3,
+      "class": "write_scope_registry_authority_gap",
+      "source": "root_reproduction",
+      "correction": "Require exact same-session registry resolution and digest binding for write scope and root-only authority, including the shared schema root."
+    },
+    {
+      "sequence": 4,
+      "class": "root_owned_leaf_casefold_gap",
+      "source": "root_reproduction",
+      "correction": "Reject case-folded root-owned leaf aliases anywhere in proposed write paths."
+    },
+    {
+      "sequence": 5,
+      "class": "output_evidence_context_binding_false_pass",
+      "source": "independent_falsification",
+      "correction": "Commit the complete closed envelope except context_id into context identity and confine persistent result targets to exact delegated generated outputs or exact bounded scratch targets."
+    },
+    {
+      "sequence": 6,
+      "class": "external_effect_and_approval_authority_false_pass",
+      "source": "LIVE-CONTEXT-ENVELOPE-EFFECT-APPROVAL-REWORK-052",
+      "correction": "Pending: resolve every named external effect and approval exactly once from immutable protected same-session authority and reject unknown, duplicate, stale, substituted, mismatched, reused, or mutated rows."
+    }
+  ],
+  "corrected_proof": {
+    "deterministic_runs": 2,
+    "byte_identical_outputs": true,
+    "run_id": "sha256:99d99e530ec2164d1b423c7206c27fd60eaa7757feeeb6f91269caf1361aa570",
+    "valid_envelopes": 4,
+    "red_fixtures_rejected": 57,
+    "schema_rejections": 18,
+    "semantic_rejections": 39,
+    "claim_effect": "none"
+  },
+  "root_boundary": "The proposal remains non-authoritative and in REWORK. Adoption is withheld until effect and approval authority is corrected and independently reviewed, and later until an equivalent canonical Rust resolver, a root-owned workspace effect mediator, and representative prompt and context evaluations exist and pass fresh reconciliation.",
+  "no_claim_statement": "This correction history changes no adopted contract, product behavior, claim ceiling, readiness, release, node closure, or goal-completion state."
+}

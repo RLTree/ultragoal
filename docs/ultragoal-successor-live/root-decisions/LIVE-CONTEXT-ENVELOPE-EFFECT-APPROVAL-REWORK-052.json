@@ -1,0 +1,33 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "LIVE-CONTEXT-ENVELOPE-EFFECT-APPROVAL-REWORK-052",
+  "workstream": "model-adaptive-prompt-and-context-contract-change",
+  "decision": "REWORK",
+  "reviewed_candidate": {
+    "change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
+    "proposal_artifact_set_sha256": "sha256:136847c4d18fef949cfa0091275423708151fba6051a33edbf47f4821c80e11c",
+    "artifact_count": 12,
+    "bytes": 180496,
+    "lines": 3977,
+    "verifier_run_id": "sha256:99d99e530ec2164d1b423c7206c27fd60eaa7757feeeb6f91269caf1361aa570"
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "external_effect_and_approval_authority_false_pass",
+    "observed": [
+      "A re-bound envelope declared EFFECT-UNAUTHORIZED-DELETE for provider github and action delete-repository.",
+      "The envelope referenced nonexistent APPROVAL-DOES-NOT-EXIST and set external_systems to approved_named_only.",
+      "Draft schema validation returned no errors and semantic validation accepted the envelope under context_id sha256:80d716ec...8cf."
+    ],
+    "cause": "The resolver committed external effect fields into context identity but did not resolve the effect or approval against exact immutable same-session current authority rows."
+  },
+  "required_correction": [
+    "resolve every effect and approval exactly once from a protected current authority namespace",
+    "bind effect identity provider action target approval link source digest row digest and current approval state",
+    "reject unknown missing duplicate ambiguous stale revoked expired substituted mismatched reused and unreferenced rows",
+    "revalidate effect and approval authority at session end",
+    "add positive exact-authority and negative substitution mutation and false-pass controls"
+  ],
+  "root_disposition": "The proposal remains non-authoritative and deferred. No external effect is authorized by an AgentTaskEnvelope until the corrected set passes independent review and later canonical Rust and root-owned mediator prerequisites exist.",
+  "no_claim_statement": "This REWORK decision authorizes no external effect and changes no adopted contract, product behavior, claim ceiling, readiness, release, node closure, or goal-completion state."
+}
