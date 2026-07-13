@@ -1,0 +1,337 @@
+{
+  "schema_version": "WorkerResult-v1",
+  "worker": "/root/host_permit_coherence_corrector",
+  "lease_id": "SUPPORTED-HOST-EFFECT-EXECUTOR-065",
+  "finding_id": "SUPPORTED-HOST-EXECUTOR-POST-RESERVATION-PERMIT-COHERENCE-006",
+  "recorded_at_utc": "2026-07-13T12:09:28Z",
+  "status": "corrected_source_candidate_for_root_review_and_wiring",
+  "provenance": {
+    "assignment_source": "Direct root run-scoped correction lease for the supported-host executor wrong-permit post-reservation evidence defect; no persisted WorkPackage-v1 or AgentTaskEnvelope-v1 was supplied.",
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "assignment_start_head_commit": "d19c52e995bb3163e0e638f9ac542a7382eed898",
+    "assignment_start_head_tree": "f4588382e96ce9d42d223f5c108bce2c5c1d0df4",
+    "freeze_head_commit": "d19c52e995bb3163e0e638f9ac542a7382eed898",
+    "freeze_head_tree": "f4588382e96ce9d42d223f5c108bce2c5c1d0df4",
+    "current_root_integration_head_commit": "5ed7cf21a9cedee1ec8c6f93be46d17edd7f0cfc",
+    "current_root_integration_head_tree": "ef9676ce191b90bf08591c0f3536e1ff1f21aa4a",
+    "concurrent_head_movement": "Root advanced the branch after this lane froze through disjoint observability commits 4680b43f3e86b3fdecc7dc7cde2608b47d626613 and 5ed7cf21a9cedee1ec8c6f93be46d17edd7f0cfc. The host artifact set remained untracked and disjoint, the root-owned host module and lifecycle preimages remained unchanged, and no observability path is included in this host aggregate.",
+    "scratch_root": "/private/tmp/hul-permit-coherence-006-scratch",
+    "scratch_wiring_only": true,
+    "isolated_debug_target": "/private/tmp/hul-permit-coherence-006-debug-target",
+    "isolated_release_target": "/private/tmp/hul-permit-coherence-006-release-target",
+    "isolated_executor_target": "/private/tmp/hul-permit-coherence-006-executor-target",
+    "isolated_contract_target": "/private/tmp/hul-permit-coherence-006-contract-target",
+    "isolated_host_effect_target": "/private/tmp/hul-permit-coherence-006-host-effect-target",
+    "isolated_check_target": "/private/tmp/hul-permit-coherence-006-check-target",
+    "build_jobs": 16,
+    "test_threads": 16,
+    "offline_locked_validation": true,
+    "warning_suppression_used_for_behavior_tests": true,
+    "warning_suppression_used_for_unsuppressed_compile_check": false,
+    "git_operations_performed": false,
+    "git_staging_performed": false,
+    "git_commit_performed": false,
+    "external_host_effects_performed": false,
+    "concurrent_unowned_changes_preserved": true
+  },
+  "input_candidate": {
+    "worker_result_sha256": "sha256:75bcdf008b9482c48b33b7cfe5d61c28c33636184d3c99bad3aeb272aae79c18",
+    "complete_artifact_set_sha256": "sha256:2d7362fb547fa5fb7ea27b3856cace89538d8a939adb3929cc1c0ce660c8528d",
+    "complete_artifact_count": 7,
+    "complete_artifact_total_bytes": 272165,
+    "complete_artifact_total_lines": 7434,
+    "correction_artifact_set_sha256": "sha256:1717b58b1d431ddcc9aa1ed5ce2ba7ad749d35a0d999bbf10aa2690bc3fee1d6",
+    "correction_artifact_count": 5,
+    "correction_artifact_total_bytes": 219622,
+    "correction_artifact_total_lines": 5917,
+    "role": "Verified immediate predecessor input carrying the terminal ledger-head coherence and ordered originating-error-chain corrections; not reclassified as current output."
+  },
+  "corrected_candidate_identity": {
+    "candidate_id": "sha256:2f7437f171fcf1cbeddfeeaaf024944bd8b05ea62e3b0aeb71884a642b6879e9",
+    "complete_artifact_set_sha256": "sha256:2f7437f171fcf1cbeddfeeaaf024944bd8b05ea62e3b0aeb71884a642b6879e9",
+    "complete_artifact_count": 7,
+    "complete_artifact_total_bytes": 300079,
+    "complete_artifact_total_lines": 8197,
+    "maximum_file_lines": 2599,
+    "correction_artifact_set_sha256": "sha256:7d3f37cc7c841eb9c3e57f625077be168e0a7a989a52655ebf0e033b8c0b9618",
+    "correction_artifact_count": 4,
+    "correction_artifact_total_bytes": 199271,
+    "correction_artifact_total_lines": 5367,
+    "worker_result_self_excluded": true,
+    "worker_result_self_hash_reporting": "Computed only after the final write and reported out of band to avoid recursive self-reference.",
+    "artifact_set_formula": "Sort the named non-self-referential artifact rows by UTF-8 path bytes; serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>; concatenate; SHA-256 the resulting bytes.",
+    "path_identity_check": "Seven regular single-link files on device 16777229 with seven distinct inode numbers; no symlink, hardlink alias, special file, missing path, or duplicate inode was accepted.",
+    "freeze_head_commit": "d19c52e995bb3163e0e638f9ac542a7382eed898",
+    "freeze_head_tree": "f4588382e96ce9d42d223f5c108bce2c5c1d0df4",
+    "current_root_integration_head_commit": "5ed7cf21a9cedee1ec8c6f93be46d17edd7f0cfc",
+    "current_root_integration_head_tree": "ef9676ce191b90bf08591c0f3536e1ff1f21aa4a"
+  },
+  "owned_paths": [
+    "docs/ultragoal-successor-live/worker-results/SUPPORTED-HOST-EFFECT-EXECUTOR-065.json",
+    "fixtures/supported-host-effect-executor/cases.json",
+    "validator/src/distribution/host_effect/executor.rs",
+    "validator/src/distribution/host_effect/executor/model.rs",
+    "validator/src/distribution/host_effect/executor/process.rs",
+    "validator/src/distribution/host_effect/executor/target.rs",
+    "validator/src/distribution/host_effect/executor/tests.rs",
+    "validator/tests/supported_host_effect_executor_contract.rs"
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/supported-host-effect-executor/cases.json",
+      "sha256": "sha256:53ff40348b6cf33298a8617b85b28da891fd6647f21ed0e773857ad4047b8fb2",
+      "byte_length": 12113,
+      "line_count": 347,
+      "device": 16777229,
+      "inode": 1098717710,
+      "hard_links": 1,
+      "lease_role": "corrected"
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor.rs",
+      "sha256": "sha256:fc1b8061a277e1c800e1ed2e7239042461de19a407ba6da6171d0c8369c6c46b",
+      "byte_length": 55929,
+      "line_count": 1463,
+      "device": 16777229,
+      "inode": 1098625607,
+      "hard_links": 1,
+      "lease_role": "corrected"
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/model.rs",
+      "sha256": "sha256:8f1e4dee7c568f0a601db14cdfa678156e1f6251563d85c7b73154898e8f5486",
+      "byte_length": 48265,
+      "line_count": 1313,
+      "device": 16777229,
+      "inode": 1098546766,
+      "hard_links": 1,
+      "lease_role": "retained-input"
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/process.rs",
+      "sha256": "sha256:bdf9ea2832edebaa514a26a4a238bdaa3cc0d9a995619d3a1ed2cc15b5e7cd3e",
+      "byte_length": 13957,
+      "line_count": 414,
+      "device": 16777229,
+      "inode": 1098554933,
+      "hard_links": 1,
+      "lease_role": "retained-input"
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/target.rs",
+      "sha256": "sha256:7f0c5838436e5f371eaeb42bb00bb6875137a77b19568823eaa0e684a384fcef",
+      "byte_length": 38586,
+      "line_count": 1103,
+      "device": 16777229,
+      "inode": 1098586676,
+      "hard_links": 1,
+      "lease_role": "retained-input"
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/tests.rs",
+      "sha256": "sha256:cae664e19db7d24d9c9bc443d75f22f2c7dccd043ef7462eac69ff051cda766c",
+      "byte_length": 94528,
+      "line_count": 2599,
+      "device": 16777229,
+      "inode": 1098677961,
+      "hard_links": 1,
+      "lease_role": "corrected"
+    },
+    {
+      "path": "validator/tests/supported_host_effect_executor_contract.rs",
+      "sha256": "sha256:165a51db3031e2531f37159befbe289171f3c93b3471981506a221deb23ef308",
+      "byte_length": 36701,
+      "line_count": 958,
+      "device": 16777229,
+      "inode": 1098717711,
+      "hard_links": 1,
+      "lease_role": "corrected"
+    }
+  ],
+  "identity_only_unowned_dependencies": [
+    {
+      "path": "validator/src/distribution/host_effect/mod.rs",
+      "sha256": "sha256:a27ec67cb737649041c0c9423294056cf72df491df6f1b0cc3772af40fe3a645",
+      "use": "Root-owned live module remains unchanged and does not wire the executor candidate."
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle.rs",
+      "sha256": "sha256:38d2f25583122d0b2854d61939396bc492e9618f478d623a48e7587d15e027d1",
+      "use": "Root-owned live lifecycle module remains unchanged and does not expose the restricted recovery identities needed by the executor candidate."
+    }
+  ],
+  "root_wiring_request": {
+    "status": "unchanged_by_post_reservation_permit_coherence_correction_and_still_required_before_live_source_compilation",
+    "correction_contract": "No additional root reexport is required. Root must wire this exact seven-artifact candidate identity; the post-reservation recovery guard remains crate-private and preserves the existing HostEffectRecoveryHandoff surface.",
+    "host_effect_mod": {
+      "add_module": "mod executor;",
+      "add_crate_private_reexports": [
+        "ConfinedHostEffectTarget",
+        "ConfinedHostEffectTargetObserver",
+        "HostEffectCancellation",
+        "HostEffectExecutionPolicy",
+        "HostEffectExecutionReceipt",
+        "HostEffectExecutorErrorId",
+        "HostEffectExecutorFailure",
+        "HostEffectPostPublicationRecoveryClassification",
+        "HostEffectPostReservationLedgerClassification",
+        "HostEffectPostReservationPublicationClassification",
+        "HostEffectRecoveryHandoff",
+        "HostEffectTerminalRecoveryClassification",
+        "NativeRetainedDescriptorProcessBackend",
+        "RetainedDescriptorProcessBackend",
+        "SupportedHostEffectExecutor"
+      ]
+    },
+    "lifecycle_mod": {
+      "visibility": "pub(in crate::distribution::host_effect)",
+      "add_reexports": [
+        "ExpectedPublicationObjectIdentity",
+        "PublicationAcknowledgementIdentity",
+        "PublicationExpectation"
+      ]
+    },
+    "public_cli_or_product_route": "not requested and not authorized"
+  },
+  "correction": {
+    "finding": "reobserve_post_reservation accepted a stable record returned from the recovering permit lookup without first proving that the record reservation belonged to the recovering permit. A coherent wrong-permit record therefore reached exact ObservationRejected evidence, panicked at the debug verify_binding assertion, or escaped optimized builds with verify_binding false. The same helper also needed the retained record-head coherence guard before exact classification to satisfy its right-record/wrong-head contract.",
+    "result": "Every stable post-reservation observation must now prove head_after equals record_after.current_head() and record_after.reservation().permit_id() equals effect.permit().permit_id() before StillInFlight, TerminalObserved, or ObservationRejected. A mismatch exhausts the bounded observation attempts and falls back to the accepted reservation record and head as identity-bearing ObservationUnavailable evidence with exact_current_ledger_observation=false.",
+    "originating_error_chain": "The predecessor ordered cause-chain correction is preserved. Stable coherence refusals do not fabricate an observation error; direct transition failures remain exactly [Timeout, LedgerSubstitution], replay remains exactly [Replay], and an actual read error appends LedgerSubstitution after Timeout.",
+    "head_coherence": "The post-reservation helper now applies the same head_after equals record_after.current_head invariant already enforced by the terminal reobservation helper. Right-record/wrong-head observations exhaust and fall back rather than becoming exact evidence.",
+    "sibling_reobservation_audit": "reobserve_terminal_failure already enforces stability, record-head coherence, and recovering-permit coherence before every exact branch. Target publication reobservation helpers do not consume ledger records. No sibling code change was required.",
+    "positive_controls": "Stable correct-permit InFlight, terminal Ambiguous, and deliberately rejected nonterminal records still produce exact binding-valid StillInFlight, TerminalObserved, and ObservationRejected controls respectively.",
+    "wrong_permit_controls": "Stable wrong-permit InFlight, terminal, and rejected-shape records each consumed all three observation attempts, returned the accepted recovering reservation record and head, withheld terminal and publication evidence, and verified their recovery binding in debug and optimized profiles.",
+    "replay_and_error_controls": "The replay preflight route retained Replay identity while a later wrong-permit observation fell back unavailable. A real repeated read error retained Timeout then appended LedgerSubstitution and returned the same binding-valid unavailable evidence.",
+    "mutation_controls": "The static contract rejects removal, relocation after exact classification, head_before substitution, record_before head substitution, record_before permit comparison, effect-record self-comparison, and constant-false replacements. Runtime permit substitution without rebinding is rejected for every unavailable handoff.",
+    "terminal_claim": false,
+    "publication_or_acknowledgement_claim": false,
+    "success_claim": false,
+    "automatic_retry": false,
+    "automatic_cleanup": false,
+    "public_route_added": false,
+    "installed_product_changed": false,
+    "claim_effect": "none"
+  },
+  "named_test_coverage": {
+    "unit_test_count": 34,
+    "static_contract_test_count": 7,
+    "wrong_permit_debug_and_release": [
+      "wrong_permit_post_reservation_still_in_flight_observation_falls_back_bound_unavailable",
+      "wrong_permit_post_reservation_terminal_observation_falls_back_bound_unavailable",
+      "wrong_permit_post_reservation_rejected_observation_falls_back_bound_unavailable"
+    ],
+    "repeated_stable_and_coherence": [
+      "Each direct wrong-permit test asserts six head and six read calls, proving three complete stable attempts before fallback.",
+      "post_reservation_right_record_wrong_head_falls_back_bound_unavailable"
+    ],
+    "correct_permit_positive_controls": [
+      "post_reservation_correct_permit_still_in_flight_positive_control_is_exact_and_bound",
+      "post_reservation_correct_permit_terminal_positive_control_is_exact_and_bound",
+      "post_reservation_correct_permit_rejected_positive_control_is_exact_and_bound"
+    ],
+    "replay_and_observation_error": [
+      "wrong_permit_post_reservation_replay_preflight_route_falls_back_bound_unavailable",
+      "post_reservation_observation_error_falls_back_bound_unavailable_and_preserves_chain"
+    ],
+    "mutation_security_false_pass": [
+      "post_reservation_reobservation_requires_coherent_head_and_recovering_permit_before_exact_classification",
+      "runtime substitute_permit_without_rebinding_for_test rejection within every unavailable post-reservation helper assertion",
+      "mutation_of_recovery_error_chain_order_length_and_members_is_detected"
+    ]
+  },
+  "commands_and_results": [
+    {
+      "command": "env CARGO_TARGET_DIR=/private/tmp/hul-permit-coherence-006-debug-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo test --manifest-path /private/tmp/hul-permit-coherence-006-scratch/validator/Cargo.toml --locked --offline --lib post_reservation --jobs 16 -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Debug profile: 9 passed; 0 failed; 0 ignored; 1785 filtered out. Wrong-permit InFlight, terminal, rejected-shape, right-record/wrong-head, replay, observation-error, and correct-permit controls all returned normally; every asserted handoff verified its binding."
+    },
+    {
+      "command": "env CARGO_TARGET_DIR=/private/tmp/hul-permit-coherence-006-release-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo test --manifest-path /private/tmp/hul-permit-coherence-006-scratch/validator/Cargo.toml --locked --offline --release --lib post_reservation --jobs 16 -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Optimized profile: 9 passed; 0 failed; 0 ignored; 1785 filtered out. No release path returned a handoff with verify_binding false."
+    },
+    {
+      "command": "env CARGO_TARGET_DIR=/private/tmp/hul-permit-coherence-006-executor-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo test --manifest-path /private/tmp/hul-permit-coherence-006-scratch/validator/Cargo.toml --locked --offline --lib distribution::host_effect::executor --jobs 16 -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "First full executor pass: 34 passed; 0 failed; 0 ignored; 1760 filtered out."
+    },
+    {
+      "command": "Deterministic repeat of the exact isolated full-executor command",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Second full executor pass: 34 passed; 0 failed; 0 ignored; 1760 filtered out."
+    },
+    {
+      "command": "env CARGO_TARGET_DIR=/private/tmp/hul-permit-coherence-006-contract-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo test --manifest-path /private/tmp/hul-permit-coherence-006-scratch/validator/Cargo.toml --locked --offline --test supported_host_effect_executor_contract --jobs 16 -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "7 passed; 0 failed; 0 ignored. Static mutants fail if either guard is removed, moved after an exact branch, or compares the wrong head, record, or permit object."
+    },
+    {
+      "command": "env CARGO_TARGET_DIR=/private/tmp/hul-permit-coherence-006-host-effect-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo test --manifest-path /private/tmp/hul-permit-coherence-006-scratch/validator/Cargo.toml --locked --offline --lib distribution::host_effect --jobs 16 -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "70 passed; 0 failed; 1 deliberately ignored subprocess helper; 1723 filtered out."
+    },
+    {
+      "command": "env CARGO_TARGET_DIR=/private/tmp/hul-permit-coherence-006-check-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo check --manifest-path /private/tmp/hul-permit-coherence-006-scratch/validator/Cargo.toml --locked --offline --lib --jobs 16 --message-format=short",
+      "status": "pass_with_repository_warnings",
+      "exit_code": 0,
+      "result": "Unsuppressed scratch-wired library check completed successfully with 1308 library warnings plus one build-script warning. This is compile-success evidence, not a warning-free claim."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check over the six leased Rust files; jq empty over the fixture and WorkerResult; live-to-scratch byte comparison over all four corrected non-receipt artifacts; trailing-whitespace scan; exact artifact digest, size, line, inode, set, root-preimage, HEAD/tree, and no-claim reconciliation",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Formatting, JSON parsing, whitespace, scratch identity, path identity, root-preimage, artifact aggregate, and receipt reconciliation passed. The final WorkerResult SHA-256 is reported out of band to avoid recursive self-reference."
+    }
+  ],
+  "effects": {
+    "source_files_changed": 1,
+    "test_files_changed": 2,
+    "fixture_files_changed": 1,
+    "worker_result_files_changed": 1,
+    "retained_owned_files_unchanged": 3,
+    "root_owned_source_files_changed": 0,
+    "public_or_generated_claim_surfaces_changed": 0,
+    "external_process_execution_by_executor": 0,
+    "external_host_mutations": 0,
+    "automatic_retry_paths_added": 0,
+    "automatic_cleanup_paths_added": 0,
+    "git_operations": 0
+  },
+  "security_implications": [
+    "A stable ledger response is no longer exact post-reservation evidence unless both the global head and the observed record's authenticated head agree and the observed reservation belongs to the recovering permit.",
+    "Wrong-permit InFlight, terminal, and rejected-shape records cannot cross the post-reservation recovery boundary as exact/current evidence.",
+    "Wrong-permit, incoherent-head, substituted, or unavailable observations fail closed to an identity-bearing unavailable classification whose binding verifies against the accepted recovering reservation.",
+    "The exact original and follow-on error identities remain ordered and bound; no terminal, publication, acknowledgement, success, retry, or cleanup claim is synthesized."
+  ],
+  "performance_implications": {
+    "observation_attempt_bound": 3,
+    "reads_per_attempt": "head, recovering-permit record, recovering-permit record, head",
+    "added_work_per_stable_attempt": "One HostEffectLedgerHead equality comparison and one permit-id equality comparison before exact classification.",
+    "additional_io": false,
+    "additional_retry": false,
+    "benchmark_claim": false
+  },
+  "limitations": [
+    "The complete seven-artifact aggregate excludes this WorkerResult by design; the WorkerResult is separately hashed after its final write and reported to root.",
+    "The two root-owned wiring dependencies were copied and patched only in /private/tmp for compilation; their live repository files were neither modified nor claimed.",
+    "The candidate remains unwired in live root source. All Rust behavior and compile evidence is from the exact scratch-wired artifact identities reported here.",
+    "The real macOS publication proof uses an in-process scripted command backend. It does not prove external Codex process execution.",
+    "Linux and FreeBSD descriptor-execution code compiled on macOS under conditional source selection; neither platform path executed in this lease.",
+    "When global head and recovering-permit record are individually stable but incoherent, or when the returned record belongs to another permit, recovery intentionally withholds exact current ledger and terminal-state classifications and retains only the accepted reservation record and head as non-current defensible evidence.",
+    "No public command catalog, manifest, board, claim, migration, release, repository-fit, routine-work, process backend, target backend, root module, lifecycle source, or concurrent unowned path was edited by this correction worker.",
+    "No Git command, staging, commit, branch mutation, or external host effect was performed."
+  ],
+  "unresolved_dependencies": [
+    "Root review and the unchanged root_wiring_request are required before any live-source compilation or runtime claim.",
+    "Representative Linux and FreeBSD retained-descriptor runtime proof remains absent.",
+    "Installed-product and real-user journey proof remain absent."
+  ],
+  "no_claim_statement": "Exact no-claim statement: This correction makes no public-route, install, runtime, readiness, release, acceptance, node-closure, or completion claim."
+}

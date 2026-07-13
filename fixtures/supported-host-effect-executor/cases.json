@@ -1,0 +1,347 @@
+{
+  "schema_version": "SupportedHostEffectExecutorCases-v1",
+  "activation": {
+    "module_visibility": "crate-private",
+    "public_constructor_count": 0,
+    "root_module_wiring_required": true,
+    "lifecycle_recovery_reexports_required": [
+      "ExpectedPublicationObjectIdentity",
+      "PublicationAcknowledgementIdentity",
+      "PublicationExpectation"
+    ],
+    "public_cli_route_added": false,
+    "darwin_external_process_execution": "unsupported-before-fork-spawn-write",
+    "darwin_descriptor_relative_publication_tested_with_in_process_backend": true
+  },
+  "supported_process_platforms": [
+    {
+      "platform": "linux",
+      "primitive": "execveat-empty-path",
+      "live_platform_tested": false
+    },
+    {
+      "platform": "freebsd",
+      "primitive": "fexecve",
+      "live_platform_tested": false
+    }
+  ],
+  "transaction_order": [
+    "validate-current-in-flight-ledger-record-and-head",
+    "revalidate-retained-target-and-executable-authority",
+    "execute-exact-argv-with-empty-environment-and-bounded-capture",
+    "write-exclusive-descriptor-relative-temporary-object",
+    "fsync-temporary-object",
+    "rename-no-replace-within-retained-directory",
+    "fsync-retained-directory",
+    "classify-committed-before-acknowledgement",
+    "transition-durable-ledger-to-settled",
+    "construct-and-canonical-round-trip-full-ledger-head-acknowledgement",
+    "reobserve-acknowledged-committed-publication",
+    "return-settled-receipt"
+  ],
+  "execution_bounds": {
+    "environment_inherited": false,
+    "accepted_environment_entries": 0,
+    "stdout_limit_bytes": 1048576,
+    "stderr_limit_bytes": 1048576,
+    "maximum_timeout_ms": 300000,
+    "shell_execution": false,
+    "process_group_containment": true,
+    "target_root_parent": "/private/tmp",
+    "target_root_mode": "0700",
+    "publication_mode": "0400",
+    "publication_hard_links": 1,
+    "publication_maximum_bytes": 1048576
+  },
+  "terminal_transition_recovery": {
+    "identity_bearing_handoff": true,
+    "effect_identity_bound": true,
+    "permit_id_bound": true,
+    "current_ledger_record_and_head_bound_when_observable": true,
+    "intended_outcome_bound": true,
+    "originating_error_bound": true,
+    "classification_bound": true,
+    "post_publication_prior_evidence_bound": true,
+    "post_publication_transition_cause_bound": true,
+    "post_publication_current_observation_unavailable_explicit": true,
+    "post_publication_terminal_state_claim": false,
+    "post_publication_acknowledgement_claim": false,
+    "post_publication_success_claim": false,
+    "post_publication_automatic_retry": false,
+    "post_publication_automatic_cleanup": false,
+    "stable_observation_attempts": 3,
+    "global_head_record_coherence_required": true,
+    "record_permit_coherence_required": true,
+    "mismatched_head_record_exact_classification": false,
+    "mismatched_head_record_fallback": "ledger-observation-unavailable",
+    "classifications": [
+      "still-in-flight",
+      "terminal-committed-and-verified",
+      "terminal-committed-but-unverifiable",
+      "ledger-observation-rejected",
+      "ledger-observation-unavailable"
+    ],
+    "post_publication_classifications": [
+      "committed-before-terminal-transition-observation-unavailable"
+    ],
+    "post_reservation_ledger_classifications": [
+      "still-in-flight",
+      "terminal-observed",
+      "observation-rejected",
+      "observation-unavailable"
+    ],
+    "post_reservation_publication_classifications": [
+      "no-publication-evidence",
+      "publication-evidence-unavailable",
+      "publication-identity-only-current-observation-unavailable",
+      "prior-observation-current-observation-unavailable"
+    ],
+    "bare_ledger_substitution_after_opaque_handoff": false,
+    "bare_post_publication_reobservation_failure_after_opaque_handoff": false,
+    "guarded_post_reservation_error_boundary": true,
+    "identity_free_returns_after_guard": 0,
+    "terminal_only_returns_after_guard": 0,
+    "complete_error_chain_bound": true,
+    "ordered_error_chain_bound": true,
+    "terminal_transition_error_bound": true,
+    "duplicate_error_ids_rejected": true,
+    "synthetic_recovery_error_id_rejected": true,
+    "maximum_originating_error_chain_length": 4
+  },
+  "terminal_state_matrix": [
+    {
+      "case": "success-after-publication-ledger-and-ack-reobservation",
+      "command_started": true,
+      "publication_may_exist": true,
+      "state": "settled",
+      "recovery_required": false
+    },
+    {
+      "case": "refusal-before-first-command",
+      "command_started": false,
+      "publication_may_exist": false,
+      "state": "failed",
+      "recovery_required": false
+    },
+    {
+      "case": "failure-after-command-start-before-publication",
+      "command_started": true,
+      "publication_may_exist": false,
+      "state": "ambiguous",
+      "recovery_required": false
+    },
+    {
+      "case": "started-backend-failure-terminal-transition-failed-before-mutation",
+      "command_started": true,
+      "publication_may_exist": false,
+      "state": "in-flight",
+      "recovery_required": true
+    },
+    {
+      "case": "started-backend-failure-terminal-transition-committed-but-unverifiable",
+      "command_started": true,
+      "publication_may_exist": false,
+      "state": "ambiguous",
+      "recovery_required": true
+    },
+    {
+      "case": "started-backend-failure-terminal-record-mutation-rejected",
+      "command_started": true,
+      "publication_may_exist": false,
+      "state": "terminal-claim-withheld",
+      "recovery_required": true
+    },
+    {
+      "case": "failure-during-publication",
+      "command_started": true,
+      "publication_may_exist": true,
+      "state": "ambiguous",
+      "recovery_required": true
+    },
+    {
+      "case": "failure-during-publication-terminal-ledger-transition-failed",
+      "command_started": true,
+      "publication_may_exist": true,
+      "state": "in-flight",
+      "recovery_required": true
+    },
+    {
+      "case": "publication-committed-terminal-ledger-transition-failed",
+      "command_started": true,
+      "publication_may_exist": true,
+      "state": "in-flight",
+      "recovery_required": true
+    },
+    {
+      "case": "publication-committed-terminal-transition-and-target-reobservation-failed",
+      "command_started": true,
+      "publication_may_exist": true,
+      "state": "terminal-claim-withheld",
+      "recovery_required": true
+    },
+    {
+      "case": "publication-failure-terminal-commit-target-reobservation-unavailable",
+      "command_started": true,
+      "publication_may_exist": true,
+      "state": "ambiguous",
+      "recovery_required": true
+    },
+    {
+      "case": "committed-publication-terminal-commit-target-reobservation-unavailable",
+      "command_started": true,
+      "publication_may_exist": true,
+      "state": "settled",
+      "recovery_required": true
+    },
+    {
+      "case": "publication-failure-terminal-io-target-reobservation-unavailable",
+      "command_started": true,
+      "publication_may_exist": true,
+      "state": "in-flight",
+      "recovery_required": true
+    },
+    {
+      "case": "acknowledgement-invalid-after-settlement",
+      "command_started": true,
+      "publication_may_exist": true,
+      "state": "settled",
+      "recovery_required": true
+    },
+    {
+      "case": "unrelated-permit-global-head-advance-with-still-in-flight-record",
+      "command_started": true,
+      "publication_may_exist": false,
+      "state": "terminal-claim-withheld",
+      "recovery_required": true
+    },
+    {
+      "case": "repeated-unrelated-head-advances-after-terminal-commit",
+      "command_started": true,
+      "publication_may_exist": false,
+      "state": "terminal-claim-withheld",
+      "recovery_required": true
+    },
+    {
+      "case": "unrelated-head-advance-record-substitution",
+      "command_started": true,
+      "publication_may_exist": false,
+      "state": "terminal-claim-withheld",
+      "recovery_required": true
+    },
+    {
+      "case": "head-rollback-after-terminal-and-unrelated-advance",
+      "command_started": true,
+      "publication_may_exist": false,
+      "state": "terminal-claim-withheld",
+      "recovery_required": true
+    },
+    {
+      "case": "observation-error-after-unrelated-head-advance",
+      "command_started": true,
+      "publication_may_exist": false,
+      "state": "terminal-claim-withheld",
+      "recovery_required": true
+    },
+    {
+      "case": "post-reservation-wrong-permit-in-flight-observation",
+      "command_started": true,
+      "publication_may_exist": false,
+      "state": "terminal-claim-withheld",
+      "recovery_required": true
+    },
+    {
+      "case": "post-reservation-wrong-permit-terminal-observation",
+      "command_started": true,
+      "publication_may_exist": false,
+      "state": "terminal-claim-withheld",
+      "recovery_required": true
+    },
+    {
+      "case": "post-reservation-wrong-permit-rejected-observation",
+      "command_started": true,
+      "publication_may_exist": false,
+      "state": "terminal-claim-withheld",
+      "recovery_required": true
+    },
+    {
+      "case": "post-reservation-right-record-wrong-head-observation",
+      "command_started": true,
+      "publication_may_exist": false,
+      "state": "terminal-claim-withheld",
+      "recovery_required": true
+    }
+  ],
+  "required_refusal_cases": [
+    "replay-after-terminal-record",
+    "ledger-substitution",
+    "ledger-rollback-or-stale-head",
+    "target-substitution",
+    "target-path-swap",
+    "executable-mutation-before-first-command",
+    "executable-mutation-between-commands",
+    "nonempty-environment",
+    "invalid-timeout",
+    "cancel-before-first-command",
+    "cancel-after-process-start",
+    "process-spawn-failure",
+    "nonzero-process-exit",
+    "stdout-overflow",
+    "stderr-overflow",
+    "timeout-after-process-start",
+    "preexisting-final-object",
+    "preexisting-temporary-object",
+    "symlink-object",
+    "hardlinked-object",
+    "fifo-object",
+    "socket-object",
+    "device-object",
+    "directory-object",
+    "temporary-write-failure",
+    "temporary-fsync-failure",
+    "rename-race",
+    "directory-fsync-failure",
+    "prepublication-terminal-transition-failure-before-mutation",
+    "prepublication-terminal-transition-committed-but-unverifiable",
+    "terminal-recovery-binding-mutation",
+    "terminal-record-state-mutation",
+    "terminal-ledger-transition-failure-after-publication",
+    "terminal-ledger-transition-and-target-reobservation-failure-after-publication",
+    "publication-failure-terminal-commit-target-reobservation-loss",
+    "committed-publication-terminal-commit-target-reobservation-loss",
+    "publication-failure-terminal-transition-io-target-reobservation-loss",
+    "unrelated-permit-global-head-advance",
+    "repeated-global-head-advance",
+    "recovery-record-substitution",
+    "recovery-head-rollback-staleness",
+    "recovery-observation-error-after-head-advance",
+    "post-reservation-wrong-permit-record",
+    "post-reservation-right-record-wrong-head",
+    "partial-acknowledgement",
+    "false-pass-acknowledgement",
+    "darwin-native-process-backend"
+  ],
+  "production_source_contract": {
+    "retained_executable_descriptor_only": true,
+    "exact_accepted_argv_only": true,
+    "path_lookup_or_shell_fallback": false,
+    "descriptor_relative_target_operations": true,
+    "no_follow_and_exclusive_creation": true,
+    "rename_no_replace": true,
+    "file_and_directory_fsync": true,
+    "publication_before_terminal_ledger_transition": true,
+    "terminal_ledger_transition_before_acknowledgement": true,
+    "bare_boolean_acknowledgement": false,
+    "automatic_ambiguous_retry": false
+  },
+  "claim_ceiling": {
+    "source_candidate": true,
+    "macos_descriptor_relative_publication_unit_proof": true,
+    "macos_external_process_execution": false,
+    "linux_external_process_runtime_proof": false,
+    "freebsd_external_process_runtime_proof": false,
+    "public_route": false,
+    "installed_runtime": false,
+    "representative_real_host_journey": false,
+    "acceptance_or_release": false
+  }
+}

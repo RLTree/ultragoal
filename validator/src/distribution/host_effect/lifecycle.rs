@@ -1,8 +1,9 @@
 //! Root-coordinated supported-host lifecycle boundary.
 //!
-//! This module is crate-private and intentionally exposes no live host
-//! executor. A platform adapter must be selected before authority issuance or
-//! durable-ledger reservation; unsupported platforms fail at that boundary.
+//! This module is crate-private. The parent module wires an internal transaction
+//! executor, but a retained-descriptor platform adapter must still be selected
+//! before authority issuance or durable-ledger reservation; unsupported
+//! platforms fail at that boundary.
 
 use serde::Serialize;
 
@@ -19,6 +20,9 @@ pub(crate) use coordinator::{
     DescriptorExecutionAdapter, DescriptorExecutionCapability, DescriptorExecutionHandoff,
     DescriptorExecutionPlatform, DescriptorExecutionPrimitive, HostTargetLease, HostTargetObserver,
     RootTrustedClock, SupportedHostLifecycleCoordinator, TrustedTimeSample,
+};
+pub(in crate::distribution::host_effect) use recovery::{
+    ExpectedPublicationObjectIdentity, PublicationAcknowledgementIdentity, PublicationExpectation,
 };
 pub(crate) use recovery::{
     PublicationClassification, PublicationClassificationId, PublicationInventoryObservation,

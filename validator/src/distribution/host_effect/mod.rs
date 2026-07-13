@@ -1,18 +1,29 @@
 //! Root-owned authority boundary for supported-host distribution effects.
 //!
-//! This module freezes the typed authority and durable-ledger interfaces. It
-//! deliberately supplies no live executor, no host adapter, and no public
-//! construction route. Platform adapters remain separate reviewed work, and a
-//! platform that cannot execute a retained descriptor must fail as unsupported
-//! before reservation, spawn, or host mutation.
+//! This module freezes the typed authority, durable-ledger, and crate-private
+//! transaction-executor interfaces. It deliberately supplies no public
+//! construction route and no Darwin external-process adapter. Platform adapters
+//! remain separate reviewed work, and a platform that cannot execute a retained
+//! descriptor must fail as unsupported before reservation, spawn, or host
+//! mutation.
 
 mod authority;
+mod executor;
 mod ledger;
 mod lifecycle;
 
 pub(crate) use authority::{
     HostEffectAuthority, HostEffectAuthorityError, HostEffectAuthorityErrorId, HostEffectDecision,
     HostEffectPermit, HostEffectPermitBinding,
+};
+pub(crate) use executor::{
+    ConfinedHostEffectTarget, ConfinedHostEffectTargetObserver, HostEffectCancellation,
+    HostEffectExecutionPolicy, HostEffectExecutionReceipt, HostEffectExecutorErrorId,
+    HostEffectExecutorFailure, HostEffectPostPublicationRecoveryClassification,
+    HostEffectPostReservationLedgerClassification,
+    HostEffectPostReservationPublicationClassification, HostEffectRecoveryHandoff,
+    HostEffectTerminalRecoveryClassification, NativeRetainedDescriptorProcessBackend,
+    RetainedDescriptorProcessBackend, SupportedHostEffectExecutor,
 };
 pub(crate) use ledger::FileHostEffectLedger;
 
