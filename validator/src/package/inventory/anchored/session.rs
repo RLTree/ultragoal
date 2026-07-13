@@ -52,6 +52,15 @@ impl Session {
     }
 
     pub(crate) fn read(&mut self, relative: &str, maximum: u64) -> Result<Vec<u8>, String> {
+        self.read_with_mode(relative, maximum)
+            .map(|(bytes, _)| bytes)
+    }
+
+    pub(crate) fn read_with_mode(
+        &mut self,
+        relative: &str,
+        maximum: u64,
+    ) -> Result<(Vec<u8>, u32), String> {
         if maximum == 0 || maximum > MAX_FILE_BYTES {
             return Err("anchored package file limit is invalid".to_string());
         }
@@ -108,7 +117,7 @@ impl Session {
         name: &std::ffi::OsStr,
         baseline: Snapshot,
         maximum: u64,
-    ) -> Result<Vec<u8>, String> {
+    ) -> Result<(Vec<u8>, u32), String> {
         validate_regular(baseline, maximum)?;
         if self
             .bytes
@@ -149,7 +158,7 @@ impl Session {
             return Err("anchored package session exceeds its byte limit".to_string());
         }
         self.verify_root_descriptor()?;
-        Ok(bytes)
+        Ok((bytes, baseline.unix_mode()))
     }
 
     fn observe(&mut self, relative: &Path, snapshot: Snapshot) -> Result<(), String> {

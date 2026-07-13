@@ -85,4 +85,8 @@ impl Snapshot {
     pub(super) fn size(self) -> i64 {
         self.size
     }
+
+    pub(super) fn unix_mode(self) -> u32 {
+        self.mode & 0o777
+    }
 }

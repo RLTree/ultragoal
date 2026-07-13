@@ -18,6 +18,7 @@ pub(crate) struct PackageCapture {
 struct CachedSource<'session> {
     session: &'session mut Session,
     bytes: BTreeMap<String, Arc<[u8]>>,
+    unix_modes: BTreeMap<String, u32>,
 }
 
 struct PackageRead {
@@ -44,16 +45,24 @@ impl PackageCapture {
         let mut source = CachedSource {
             session: &mut session,
             bytes: BTreeMap::new(),
+            unix_modes: BTreeMap::new(),
         };
         let package = read_package(&tree, &mut source)?;
         cache_rust_sources(&tree, &mut source)?;
-        let bytes = source.bytes;
-        let dependency_paths = bytes.keys().cloned().collect::<Vec<_>>();
         let unix_modes = package
             .packaged_paths
             .iter()
-            .map(|path| source_mode(context.worktree_root(), path).map(|mode| (path.clone(), mode)))
+            .map(|path| {
+                source
+                    .unix_modes
+                    .get(path)
+                    .copied()
+                    .map(|mode| (path.clone(), mode))
+                    .ok_or_else(|| "package snapshot packaged mode is unavailable".to_string())
+            })
             .collect::<Result<BTreeMap<_, _>, _>>()?;
+        let bytes = source.bytes;
+        let dependency_paths = bytes.keys().cloned().collect::<Vec<_>>();
         let tree_sha256 = identity::tree(&tree);
         let dependency_sha256 = identity::dependencies(&bytes);
         let snapshot_id = identity::snapshot(
@@ -105,11 +114,18 @@ impl Source for CachedSource<'_> {
         if super::super::package_path_syntax_error(relative).is_some() {
             return Err("package snapshot path is invalid".to_string());
         }
-        let bytes: Arc<[u8]> = self
+        let (bytes, unix_mode) = self
             .session
-            .read(relative, maximum)
-            .map(Arc::from)
+            .read_with_mode(relative, maximum)
             .map_err(|_| "package snapshot file is unavailable".to_string())?;
+        let bytes: Arc<[u8]> = Arc::from(bytes);
+        if self
+            .unix_modes
+            .insert(relative.to_string(), unix_mode)
+            .is_some()
+        {
+            return Err("package snapshot mode was captured more than once".to_string());
+        }
         self.bytes.insert(relative.to_string(), Arc::clone(&bytes));
         Ok(bytes)
     }
@@ -230,16 +246,7 @@ fn capture_supported_package_paths(
 
     let mut packaged = vec![supported_manifest.to_string()];
     for (path, kind) in tree {
-        let exact_root = roots
-            .iter()
-            .find(|root| path.starts_with(&(root.to_string() + "/")));
-        let folded = path.to_ascii_lowercase();
-        let folded_root = roots
-            .iter()
-            .find(|root| folded.starts_with(&(root.to_ascii_lowercase() + "/")));
-        if exact_root.is_none() && folded_root.is_some() {
-            return Err("package snapshot skill subtree has a case collision".to_string());
-        }
+        let exact_root = supported_skill_root(path, &roots)?;
         if exact_root.is_none() {
             continue;
         }
@@ -276,15 +283,21 @@ fn capture_supported_package_paths(
     Ok(packaged)
 }
 
-#[cfg(unix)]
-fn source_mode(root: &std::path::Path, path: &str) -> Result<u32, String> {
-    use std::os::unix::fs::MetadataExt;
-    let metadata = std::fs::symlink_metadata(root.join(path))
-        .map_err(|_| "package snapshot packaged mode is unavailable".to_string())?;
-    if !metadata.is_file() || metadata.nlink() != 1 {
-        return Err("package snapshot packaged mode is unsafe".to_string());
+pub(super) fn supported_skill_root<'a>(
+    path: &str,
+    roots: &'a [String],
+) -> Result<Option<&'a str>, String> {
+    let exact_root = roots
+        .iter()
+        .find(|root| path.starts_with(&(root.to_string() + "/")));
+    let folded = path.to_ascii_lowercase();
+    let folded_root = roots
+        .iter()
+        .find(|root| folded.starts_with(&(root.to_ascii_lowercase() + "/")));
+    if exact_root.is_none() && folded_root.is_some() {
+        return Err("package snapshot skill subtree has a case collision".to_string());
     }
-    Ok(metadata.mode() & 0o777)
+    Ok(exact_root.map(String::as_str))
 }
 
 fn digest_rows(rows: &[(String, Arc<[u8]>)]) -> Result<String, String> {

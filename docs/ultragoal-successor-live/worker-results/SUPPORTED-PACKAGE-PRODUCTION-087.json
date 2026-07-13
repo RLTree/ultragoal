@@ -1,0 +1,310 @@
+{
+  "worker": "/root/supported_package_publication_and_proof_engineer",
+  "lease_id": "SUPPORTED-PACKAGE-PRODUCTION-087-R6",
+  "context_id": "sha256:d15bea90719a5ba0041419cc238ce07fb40a2b5bdf87e7abc15494ade4fcdde5",
+  "candidate_identity": {
+    "artifact_bytes": 100130,
+    "artifact_count": 9,
+    "artifact_lines_diagnostic": 2801,
+    "artifact_set_formula": "Sort repository-relative artifact paths by UTF-8 path bytes; for each append path, one TAB, lowercase SHA-256 without a prefix, and one LF; SHA-256 the concatenation.",
+    "artifact_set_sha256": "sha256:6f81ce81a6bfecac5183b77f2c709930ac066c3aba1b11ccd95c34b368735db8",
+    "candidate_id": "sha256:6f81ce81a6bfecac5183b77f2c709930ac066c3aba1b11ccd95c34b368735db8",
+    "context_formula": "SHA-256 of LF-terminated ordered fields lease_id, repo URI, branch, full root commit, and artifact_set_sha256.",
+    "context_id": "sha256:d15bea90719a5ba0041419cc238ce07fb40a2b5bdf87e7abc15494ade4fcdde5",
+    "frozen_source_file_count_self_excluded": 6313,
+    "frozen_source_formula": "In the frozen scratch root, bytewise-sort all regular-file paths excluding .git and only docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-PRODUCTION-087.json; run shasum -a 256 on each retained path and SHA-256 the emitted stream.",
+    "frozen_source_sha256_self_excluded": "sha256:56fed28e8d165b3842e05e662ac0610a3f0bcc1793142246d27368959c3bd974",
+    "frozen_scratch_root": "/private/tmp/hul-supported-package-production-087-freeze-r6-abf0d3ed",
+    "frozen_target_dir": "/private/tmp/hul-supported-package-production-087-freeze-target-r6-abf0d3ed",
+    "frozen_status_sha256_pre_post": "sha256:8a27027fcd82e3ff15f7119742e1533759d74b812a2b0434b58c63f7c865d01f",
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "root_head": "abf0d3ed85731c865b7d460739329573ff3393cb",
+    "root_tree": "c059d9eefc02edc2cc3769165bb79a6229a81352",
+    "work_package_path": "docs/ultragoal-successor-live/work-packages/SUPPORTED-PACKAGE-PRODUCTION-087.json",
+    "work_package_sha256": "sha256:9bb15c9fc7b238475e9ffce1bcad92da25c53091f04df952a78607f8b38ff41a",
+    "r2_amendment_sha256": "sha256:cc3cea07dad5be443186b6e70a2551e278beef56e8dcca278218c31ab890dc67",
+    "r3_amendment_sha256": "sha256:bfd38c1fe57b45790476205d929a40b7db4956793eecf619883c10b6e203609c",
+    "r4_amendment_sha256": "sha256:9d8c41d96db388d2cb9f4ac1df705f2b3e70e245836a1d5f419fbcf0d5a9f452",
+    "r5_amendment_path": "docs/ultragoal-successor-live/work-packages/SUPPORTED-PACKAGE-PRODUCTION-087-R5.json",
+    "r5_amendment_sha256": "sha256:a485487e96225a95155c37d4a691c7df5160db83bf5c5a3a2eafdf24c83e3167",
+    "r6_amendment_path": "docs/ultragoal-successor-live/work-packages/SUPPORTED-PACKAGE-PRODUCTION-087-R6.json",
+    "r6_amendment_sha256": "sha256:155d56bb0e01fc65567d1588acf29cfc83842b7f9d3643e422a256203eaa55e8",
+    "worker_result_canonical_path": "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-PRODUCTION-087.json",
+    "worker_result_self_excluded": true
+  },
+  "base_state": {
+    "original_issued_head_commit": "0449b6e612b9012756a2fb2f5bea126eb7cba785",
+    "r4_corrective_head_commit": "dbe3b4d58c2b5812dd0ec9e6df6fca363b6cbe13",
+    "r5_receipt_authority_head_commit": "c93e7230fc7f74bb66c5161a3e130dc4623af0a2",
+    "r6_proof_envelope_head_commit": "abf0d3ed85731c865b7d460739329573ff3393cb",
+    "accepted_dependencies": [
+      "package-snapshot-and-generated-disposition-capture",
+      "deterministic-hugpkg-encoder-and-verifier",
+      "confined-package-artifact-writer",
+      "marketplace-bound-package-identity-kernel",
+      "source-version-0.0.12",
+      "canonical-authority-catalog-identity-helper"
+    ],
+    "status": "root-issued-r6-proof-envelope-correction"
+  },
+  "final_state": {
+    "status": "candidate_for_independent_review_and_root_acceptance",
+    "source_candidate_id": "sha256:6f81ce81a6bfecac5183b77f2c709930ac066c3aba1b11ccd95c34b368735db8",
+    "root_candidate_commit": "abf0d3ed85731c865b7d460739329573ff3393cb",
+    "source_behavior_proven": true,
+    "source_zero_write_proven": true,
+    "repository_package_output_proven": false,
+    "install_or_host_runtime_proven": false,
+    "claim_effect": false,
+    "lease_exact_no_claim_statement": "Candidate source implementation only. No claim of root adoption, public package command availability, repository package output, installed bytes, marketplace state, cache state, app registration, Plugins UI visibility, discovery, runtime, representative user journey, claim elevation, node closure, readiness, release, or completion."
+  },
+  "touched_paths": [
+    "validator/src/distribution/package/product.rs",
+    "validator/src/distribution/package/product/tests.rs",
+    "validator/src/package/inventory/anchored/session.rs",
+    "validator/src/package/inventory/anchored/snapshot.rs",
+    "validator/src/package/inventory/snapshot/capture.rs",
+    "validator/src/package/inventory/snapshot/tests.rs",
+    "validator/tests/supported_package_product_contract.rs",
+    "validator/tests/supported_package_product_contract/cases.rs",
+    "validator/tests/supported_package_product_contract/inventory.rs",
+    "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-PRODUCTION-087.json"
+  ],
+  "touched_semantics": [
+    "supported-package::production-session",
+    "supported-package::candidate-context-catalog-binding",
+    "supported-package::closed-active-member-plan",
+    "supported-package::independent-archive-reinventory",
+    "supported-package::confined-atomic-pair-publication",
+    "supported-package::post-effect-rollback",
+    "package-capture::descriptor-bound-byte-and-mode-observation",
+    "package-capture::root-ancestor-member-substitution-rejection",
+    "supported-package-proof::positive-negative-race-mutation-security-false-pass-matrix"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-PRODUCTION-087.json"
+  ],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "exact-supported-package-source-and-test-artifact-set",
+      "performed": true
+    },
+    {
+      "class": "test_owned_local_write",
+      "target": "/private/tmp/hul-distribution-supported-package-*",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "locked-offline-cargo-tests-with-16-build-jobs-and-16-test-threads",
+      "performed": true
+    },
+    {
+      "class": "repository_package_output",
+      "target": "live-repository",
+      "performed": false
+    },
+    {
+      "class": "external_or_host_mutation",
+      "target": "install-cache-marketplace-app-registry-plugins-ui-discovery-runtime",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "stable-canonical-package-source-capture",
+    "exact-0.0.12-dual-manifest-agreement",
+    "exact-candidate-context-catalog-source-artifact-binding",
+    "closed-17-member-supported-package",
+    "independent-hugpkg-decode-and-reinventory",
+    "zero-write-read-capture-inventory-and-verify",
+    "confined-atomic-output-pair-publication-and-rollback",
+    "descriptor-bound-byte-and-mode-observation",
+    "positive-negative-race-mutation-security-and-false-pass-matrix"
+  ],
+  "dependency_nodes": [
+    "package-snapshot-and-generated-disposition-capture",
+    "deterministic-hugpkg-encoder-and-verifier",
+    "confined-package-artifact-writer",
+    "marketplace-bound-package-identity-kernel",
+    "canonical-authority-catalog-identity"
+  ],
+  "changes": [
+    {
+      "area": "production-publication-boundary",
+      "result": "ProductionPackageArtifact::publish now requires current LiveContext and canonical AuthorityCatalog witnesses, authenticates both before any output, publishes one confined exact pair, revalidates source, context, catalog, and artifact after the effect, and rolls the pair back on any drift or failure."
+    },
+    {
+      "area": "descriptor-bound-source-observation",
+      "result": "PackageCapture now derives member bytes and Unix mode from the same retained-descriptor session. Member, ancestor, and root swap-restore controls prove replacement metadata cannot be mixed into an otherwise anchored capture."
+    },
+    {
+      "area": "closed-package-membership",
+      "result": "The effective product plan is exactly the supported plugin manifest plus SKILL.md and agents/openai.yaml for all eight canonical skills, with exact role and mode checks and refusal of undeclared, retained-context, secret-shaped, local-only, ambiguous, or unsafe rows."
+    },
+    {
+      "area": "independent-verification",
+      "result": "Verification decodes the finished HUGPKG, independently reinventories archive members, compares the complete fresh production artifact and plan field-by-field, and rejects partial or producer-metadata-only false passes."
+    },
+    {
+      "area": "security-race-and-failure-controls",
+      "result": "The production matrix covers deterministic rebuilds, malformed and duplicate JSON, path and case collisions, hardlinks, symlinks, sockets, unsafe modes, oversize, substitutions, mutate-restore, two-writer conflict, corrupt post-write rollback, same-version byte conflict, and every artifact or plan binding substitution."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-supported-package-production-087-freeze-target-r6-abf0d3ed CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 RUST_TEST_THREADS=16 cargo test --quiet --offline --locked -j16 --manifest-path validator/Cargo.toml --test supported_package_product_contract -- --test-threads=16",
+      "result": "On the frozen root candidate abf0d3ed plus the exact nine-artifact overlay and canonical R6 WorkerResult bytes, 161 tests passed, 0 failed, 1 unrelated subprocess helper was ignored, and 0 were filtered. The target source-includes the production package, context, inventory, generated-disposition, authority-catalog, HUGPKG, and confined output implementations.",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-supported-package-production-087-freeze-target-r6-abf0d3ed CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 RUST_TEST_THREADS=16 cargo test --quiet --offline --locked -j16 --manifest-path validator/Cargo.toml --test distribution_contract package_identity -- --test-threads=16",
+      "result": "4 package-identity dependency-closure tests passed, 0 failed, and 174 unrelated tests were filtered.",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-supported-package-production-087-freeze-target-r6-abf0d3ed CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 RUST_TEST_THREADS=16 cargo test --quiet --offline --locked -j16 --manifest-path validator/Cargo.toml --test distribution_contract package_output -- --test-threads=16",
+      "result": "7 confined package-output dependency-closure tests passed, 0 failed, and 171 unrelated tests were filtered.",
+      "status": "pass"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-supported-package-production-087-freeze-target-r6-abf0d3ed CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 RUST_TEST_THREADS=16 cargo test --quiet --offline --locked -j16 --manifest-path validator/Cargo.toml --test supported_package_identity_contract -- --test-threads=16",
+      "result": "All 4 supported package-identity contract tests passed with no failures, ignores, or filters.",
+      "status": "pass"
+    },
+    {
+      "command": "rustfmt --edition 2024 --config skip_children=true --check <exact nine leased Rust files>",
+      "result": "All exact leased Rust artifacts passed the non-recursive format check after final behavior proof.",
+      "status": "pass"
+    },
+    {
+      "command": "Frozen-scratch self-excluding whole-source and Git-status closure before and after the final R6 proof matrix",
+      "result": "With the canonical WorkerResult present but self-excluded, the 6,313-file whole scratch source closure remained byte-identical at sha256:56fed28e8d165b3842e05e662ac0610a3f0bcc1793142246d27368959c3bd974, and the exact Git porcelain closure including its canonical untracked path remained byte-identical at sha256:8a27027fcd82e3ff15f7119742e1533759d74b812a2b0434b58c63f7c865d01f.",
+      "status": "pass"
+    },
+    {
+      "command": "Final immutable-scratch WorkerResult-v1 receipt reconciliation",
+      "result": "The exact canonical receipt was present as a regular single-link file and independently reconciled for SHA-256, byte length, adopted Draft 2020-12 schema, R6 lease and context binding, nine exact artifact rows, declared self-excluding closure formula, explicit limitations, generic schema no-claim statement, and lease-exact no-claim ceiling. Its non-self-referential digest and byte length are bound separately in the reviewer handoff.",
+      "status": "pass"
+    },
+    {
+      "command": "git diff --check in the frozen scratch candidate",
+      "result": "No whitespace errors were reported before or after final proof.",
+      "status": "pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/distribution/package/product.rs",
+      "sha256": "sha256:d1bf7e37536a50449e51f0b7e2b0e4c9ea4abe32e46184bf27ae143d593537cf",
+      "byte_length": 17554,
+      "line_count_diagnostic": 494
+    },
+    {
+      "path": "validator/src/distribution/package/product/tests.rs",
+      "sha256": "sha256:d48ea99028d6d810cad10b7136a80258a25a4a8de55c4d84aeb2c7f1f39507bd",
+      "byte_length": 33910,
+      "line_count_diagnostic": 936
+    },
+    {
+      "path": "validator/src/package/inventory/anchored/session.rs",
+      "sha256": "sha256:0635f2ee4b62a325b4d291ae67e23f585ef0e0b1ce899d848f793527fccdb8d2",
+      "byte_length": 10142,
+      "line_count_diagnostic": 286
+    },
+    {
+      "path": "validator/src/package/inventory/anchored/snapshot.rs",
+      "sha256": "sha256:5f58b5fedef485aae92cf4ff5a6e7aed22d26e88ace9693ff465e56133310572",
+      "byte_length": 2620,
+      "line_count_diagnostic": 92
+    },
+    {
+      "path": "validator/src/package/inventory/snapshot/capture.rs",
+      "sha256": "sha256:dfeefaff9539baaca3ebfda6e8dd853b17d242dcfd584b504a7ad5d437293e33",
+      "byte_length": 13916,
+      "line_count_diagnostic": 375
+    },
+    {
+      "path": "validator/src/package/inventory/snapshot/tests.rs",
+      "sha256": "sha256:5067e7d22984a63381c87e396a74303c3cad7dde063e19ab4051132634492055",
+      "byte_length": 15504,
+      "line_count_diagnostic": 414
+    },
+    {
+      "path": "validator/tests/supported_package_product_contract.rs",
+      "sha256": "sha256:373994e3759061a7d9ce0a06027f79d0ef9255d5ba0c4298386aec8c9dd20dbf",
+      "byte_length": 1526,
+      "line_count_diagnostic": 56
+    },
+    {
+      "path": "validator/tests/supported_package_product_contract/cases.rs",
+      "sha256": "sha256:b8329c34f52778d57aaa6fbb8dad32da85d83e89cb71b3f546840a773a67112d",
+      "byte_length": 4684,
+      "line_count_diagnostic": 138
+    },
+    {
+      "path": "validator/tests/supported_package_product_contract/inventory.rs",
+      "sha256": "sha256:ffbbdaf876af2c98d9353bbdf23611d9e649191620a445768e0a3c47316f726b",
+      "byte_length": 274,
+      "line_count_diagnostic": 10
+    }
+  ],
+  "findings": [
+    {
+      "status": "resolved",
+      "finding": "Package mode metadata was path-based outside the retained-descriptor session; bytes and mode now come from one descriptor-bound observation with deterministic member, ancestor, and root swap-restore rejection."
+    },
+    {
+      "status": "resolved",
+      "finding": "Publication could previously rely on pre-effect binding only; current context, catalog, source, and complete artifact identity are now checked both before and after the confined output effect with rollback on drift."
+    },
+    {
+      "status": "resolved",
+      "finding": "Package membership is now a closed exact 17-member production set instead of an open generic-role projection."
+    },
+    {
+      "status": "resolved",
+      "finding": "The independently falsified R5 proof envelope omitted the canonical WorkerResult from the immutable scratch. R6 carries the exact finalized receipt bytes at their canonical path while excluding only that path from the declared whole-source digest and reconciling the receipt independently."
+    },
+    {
+      "status": "platform_limit",
+      "finding": "The current case-insensitive Darwin filesystem cannot represent two simultaneously distinct live entries that differ only by case. The production case-collision classifier is therefore exercised through a synthetic exact-row control, while the live filesystem branch rejects or observes the host refusal."
+    },
+    {
+      "status": "withheld",
+      "finding": "No repository package output, installed bytes, marketplace, cache, app-registry, Plugins UI, discovery, runtime, or representative live-user surface was exercised by this source-local lease."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-review-of-exact-r6-candidate",
+    "root-acceptance-and-post-integration-revalidation",
+    "root-owned-production-interface-reexport",
+    "root-owned-package-command-and-dispatcher-wiring",
+    "migration-and-retirement-reconciliation",
+    "representative-package-install-discovery-runtime-journeys",
+    "root-claim-and-release-decisions"
+  ],
+  "requested_root_changes": [
+    {
+      "request": "After independent PASS, reexport the accepted crate-private production package interface through the root-owned distribution module without introducing duplicate package authority.",
+      "authority": "root-only",
+      "applied_by_worker": false
+    },
+    {
+      "request": "Wire the root-owned public package command and dispatcher only after their proof, claim, and migration dependencies are satisfied; do not infer public product behavior from this source candidate.",
+      "authority": "root-only",
+      "applied_by_worker": false
+    }
+  ],
+  "limitations": [
+    "Candidate source implementation only. No claim of root adoption, public package command availability, repository package output, installed bytes, marketplace state, cache state, app registration, Plugins UI visibility, discovery, runtime, representative user journey, claim elevation, node closure, readiness, release, or completion.",
+    "The candidate is source-local and Darwin/Unix-specific where descriptor and Unix-mode behavior is exercised; it does not establish support on an untested host platform.",
+    "The current case-insensitive filesystem cannot materialize a distinct case-only alias, so the exact production classifier provides the synthetic negative control while the live branch records the host refusal.",
+    "One unrelated subprocess helper in the source-included contract target is ignored; 161 actual package and dependency-closure tests ran and passed.",
+    "The frozen scratch root and isolated Cargo target are retained temporarily for independent review and may be removed by root after acceptance and preservation checks.",
+    "This worker did not edit the public command catalog, dispatcher, manifests, generated authority, migration registry, claims, release state, or Git history."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

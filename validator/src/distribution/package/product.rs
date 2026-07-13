@@ -1,7 +1,10 @@
 use super::archive;
 use super::manifest;
 use super::materialize::{ExpectedTree, MaterializeEffects};
-use super::output::{PackageArtifactBinding, PackageArtifactTransaction, publish_package_artifact};
+use super::output::{
+    PackageArtifactBinding, PackageArtifactTransaction, publish_package_artifact,
+    rollback_package_artifact,
+};
 use super::plan::{PackageEntry, PackagePlan, entry_tree_sha256};
 use super::snapshot::{PackageSnapshot, verify_package};
 use super::spec::PackageRole;
@@ -13,12 +16,11 @@ use crate::package::inventory::snapshot::{
 };
 use crate::plugin_manifest;
 use serde::Serialize;
-use std::sync::Arc;
 
-const PLUGIN_ID: &str = "harness-ultragoal";
-const SUPPORTED_VERSION: &str = "0.0.12";
-const SUPPORTED_MANIFEST_PATH: &str = ".codex-plugin/plugin.json";
-const CANONICAL_SKILLS: [&str; 8] = [
+pub(super) const PLUGIN_ID: &str = "harness-ultragoal";
+pub(super) const SUPPORTED_VERSION: &str = "0.0.12";
+pub(super) const SUPPORTED_MANIFEST_PATH: &str = ".codex-plugin/plugin.json";
+pub(super) const CANONICAL_SKILLS: [&str; 8] = [
     "harness-ultragoal",
     "repository-fit",
     "routine-work",
@@ -98,12 +100,7 @@ impl ProductionPackageSession {
         context: &LiveContext,
         catalog: &AuthorityCatalog,
     ) -> Result<Self, ProductionPackageError> {
-        context
-            .revalidate()
-            .map_err(|_| failure(ProductionPackageErrorId::ContextUnavailable))?;
-        if catalog.context_id() != context.context_id() {
-            return Err(failure(ProductionPackageErrorId::CatalogMismatch));
-        }
+        validate_context_catalog(context, catalog)?;
         let capture = PackageCapture::begin(context)
             .map_err(|_| failure(ProductionPackageErrorId::SourceUnavailable))?;
         Ok(Self {
@@ -121,7 +118,7 @@ impl ProductionPackageSession {
         self.context
             .revalidate()
             .map_err(|_| failure(ProductionPackageErrorId::ContextUnavailable))?;
-        let artifact = build_artifact(&self.context, &self.catalog_id, source)?;
+        let artifact = build_artifact(&self.context, &self.catalog_id, source.as_ref())?;
         self.context
             .revalidate()
             .map_err(|_| failure(ProductionPackageErrorId::ContextUnavailable))?;
@@ -168,11 +165,27 @@ impl ProductionPackageArtifact {
 
     pub(crate) fn publish(
         &self,
+        context: &LiveContext,
+        catalog: &AuthorityCatalog,
         expected: &ExpectedTree,
         effects: &mut impl MaterializeEffects,
     ) -> Result<PackageArtifactTransaction, ProductionPackageError> {
-        publish_package_artifact(&self.snapshot, &self.binding, expected, effects)
-            .map_err(|_| failure(ProductionPackageErrorId::OutputFailed))
+        verify_product_package(self, context, catalog)?;
+        let guard = PackageCapture::begin(context)
+            .map_err(|_| failure(ProductionPackageErrorId::SourceUnavailable))?;
+        let transaction =
+            publish_package_artifact(&self.snapshot, &self.binding, expected, effects)
+                .map_err(|_| failure(ProductionPackageErrorId::OutputFailed))?;
+        let post_effect = guard
+            .finish()
+            .map_err(|_| failure(ProductionPackageErrorId::SourceUnavailable))
+            .and_then(|_| verify_product_package(self, context, catalog));
+        if let Err(problem) = post_effect {
+            rollback_package_artifact(transaction, effects)
+                .map_err(|_| failure(ProductionPackageErrorId::OutputFailed))?;
+            return Err(problem);
+        }
+        Ok(transaction)
     }
 }
 
@@ -188,14 +201,25 @@ pub(crate) fn verify_product_package(
     context: &LiveContext,
     catalog: &AuthorityCatalog,
 ) -> Result<(), ProductionPackageError> {
-    context
-        .revalidate()
-        .map_err(|_| failure(ProductionPackageErrorId::ContextUnavailable))?;
+    validate_context_catalog(context, catalog)?;
+    let source = PackageCapture::begin(context)
+        .map_err(|_| failure(ProductionPackageErrorId::SourceUnavailable))?
+        .finish()
+        .map_err(|_| failure(ProductionPackageErrorId::SourceUnavailable))?;
+    verify_artifact_against_source(artifact, context, catalog, source.as_ref())
+}
+
+fn verify_artifact_against_source(
+    artifact: &ProductionPackageArtifact,
+    context: &LiveContext,
+    catalog: &AuthorityCatalog,
+    source: &SourcePackageSnapshot,
+) -> Result<(), ProductionPackageError> {
+    validate_context_catalog(context, catalog)?;
     let current_candidate = candidate_id(context)?;
     if artifact.context_id != context.context_id()
         || artifact.candidate_id != current_candidate
         || artifact.catalog_id != catalog.catalog_id()
-        || catalog.context_id() != context.context_id()
     {
         return Err(failure(ProductionPackageErrorId::CatalogMismatch));
     }
@@ -215,24 +239,49 @@ pub(crate) fn verify_product_package(
         return Err(failure(ProductionPackageErrorId::InventoryMismatch));
     }
 
-    let fresh = capture_product_package(context, catalog)?;
-    if fresh.source_snapshot_id != artifact.source_snapshot_id
-        || fresh.source_inventory != artifact.source_inventory
-        || fresh.plan.entries != artifact.plan.entries
-        || fresh.snapshot != artifact.snapshot
-        || fresh.binding != artifact.binding
-    {
+    let fresh = build_artifact(context, catalog.catalog_id(), source)?;
+    if !same_artifact(artifact, &fresh) {
         return Err(failure(ProductionPackageErrorId::SourceUnavailable));
     }
+    validate_context_catalog(context, catalog)
+}
+
+fn same_artifact(expected: &ProductionPackageArtifact, actual: &ProductionPackageArtifact) -> bool {
+    expected.context_id == actual.context_id
+        && expected.candidate_id == actual.candidate_id
+        && expected.catalog_id == actual.catalog_id
+        && expected.source_snapshot_id == actual.source_snapshot_id
+        && expected.source_inventory == actual.source_inventory
+        && expected.plan.context_id == actual.plan.context_id
+        && expected.plan.candidate_id == actual.plan.candidate_id
+        && expected.plan.plugin_id == actual.plan.plugin_id
+        && expected.plan.version == actual.plan.version
+        && expected.plan.source_date_epoch == actual.plan.source_date_epoch
+        && expected.plan.catalog_id == actual.plan.catalog_id
+        && expected.plan.accepted_inventory_sha256 == actual.plan.accepted_inventory_sha256
+        && expected.plan.source_tree_sha256 == actual.plan.source_tree_sha256
+        && expected.plan.entries == actual.plan.entries
+        && expected.snapshot == actual.snapshot
+        && expected.binding == actual.binding
+}
+
+fn validate_context_catalog(
+    context: &LiveContext,
+    catalog: &AuthorityCatalog,
+) -> Result<(), ProductionPackageError> {
     context
         .revalidate()
-        .map_err(|_| failure(ProductionPackageErrorId::ContextUnavailable))
+        .map_err(|_| failure(ProductionPackageErrorId::ContextUnavailable))?;
+    if catalog.context_id() != context.context_id() || catalog.revalidate_identity().is_err() {
+        return Err(failure(ProductionPackageErrorId::CatalogMismatch));
+    }
+    Ok(())
 }
 
 fn build_artifact(
     context: &LiveContext,
     catalog_id: &str,
-    source: Arc<SourcePackageSnapshot>,
+    source: &SourcePackageSnapshot,
 ) -> Result<ProductionPackageArtifact, ProductionPackageError> {
     if source.context_id() != context.context_id() {
         return Err(failure(ProductionPackageErrorId::ContextUnavailable));
@@ -363,25 +412,20 @@ fn packaged_entries(
 fn package_role(path: &str, mode: u32) -> Result<PackageRole, ProductionPackageError> {
     let role = if path == SUPPORTED_MANIFEST_PATH {
         PackageRole::Manifest
-    } else if path.starts_with("skills/") && path.ends_with("/SKILL.md") {
+    } else if CANONICAL_SKILLS
+        .iter()
+        .any(|name| path == format!("skills/{name}/SKILL.md"))
+    {
         PackageRole::Skill
-    } else if path.starts_with("skills/") && path.contains("/agents/") {
+    } else if CANONICAL_SKILLS
+        .iter()
+        .any(|name| path == format!("skills/{name}/agents/openai.yaml"))
+    {
         PackageRole::Agent
-    } else if path.starts_with("skills/") && path.contains("/scripts/") {
-        PackageRole::Executable
-    } else if path.starts_with("skills/") && path.contains("/references/") {
-        PackageRole::Documentation
-    } else if path.starts_with("skills/") {
-        PackageRole::Data
     } else {
         return Err(failure(ProductionPackageErrorId::MembershipMismatch));
     };
-    let expected_mode = if role == PackageRole::Executable {
-        0o755
-    } else {
-        0o644
-    };
-    if mode != expected_mode {
+    if mode != 0o644 {
         return Err(failure(ProductionPackageErrorId::MembershipMismatch));
     }
     Ok(role)
