@@ -3556,7 +3556,7 @@
     "playwright",
     "proof"
   ],
-  "purpose": "Reusable high-tier goal-run harness for contract-bound, lane-based, proof-driven Codex work.",
+  "purpose": "Repository fit, routine work, diagnosis, orchestration, strict proof, product-journey review, evaluation, and migration through one Harness Ultragoal front door.",
   "resources": [
     ".cargo/config.toml",
     ".codex-plugin/plugin.json",
@@ -3763,7 +3763,6 @@
     "scripts/check-agent-standards",
     "scripts/check-coverage-fast",
     "scripts/check-coverage-full",
-    "skills/agent-improvement-loop/SKILL.md",
     "validator/Cargo.toml",
     "validator/src/argument_parser/mod.rs",
     "validator/src/argument_parser/authority.rs",
@@ -5138,69 +5137,44 @@
   ],
   "skills": [
     {
-      "name": "agent-first-repo-init",
-      "path": "skills/agent-first-repo-init/SKILL.md",
-      "role": "Fresh repo/workspace initialization into an agent-first baseline"
+      "name": "harness-ultragoal",
+      "path": "skills/harness-ultragoal/SKILL.md",
+      "role": "Single front door, deterministic intent classification, effect disclosure, and route selection"
     },
     {
-      "name": "agent-first-repo-retrofit",
-      "path": "skills/agent-first-repo-retrofit/SKILL.md",
-      "role": "Existing repo conversion without losing current truth or behavior"
+      "name": "repository-fit",
+      "path": "skills/repository-fit/SKILL.md",
+      "role": "Fresh setup and existing-repository retrofit through inspect, plan, accepted apply, and verify"
     },
     {
-      "name": "agent-observability-stack",
-      "path": "skills/agent-observability-stack/SKILL.md",
-      "role": "Agent-facing logs, metrics, traces, run ledger, and context summary for runnable repos"
+      "name": "routine-work",
+      "path": "skills/routine-work/SKILL.md",
+      "role": "Dirty-tree-safe affected validation, verified reuse, and exact execution reporting"
     },
     {
-      "name": "agent-runtime-legibility",
-      "path": "skills/agent-runtime-legibility/SKILL.md",
-      "role": "Runtime, UI, CLI, service, and workflow-engine proof surfaces"
+      "name": "diagnose-and-observe",
+      "path": "skills/diagnose-and-observe/SKILL.md",
+      "role": "Causal diagnosis, bounded local semantic observation, repair planning, and deterministic next action"
     },
     {
-      "name": "execplan-lane",
-      "path": "skills/execplan-lane/SKILL.md",
-      "role": "Macro-lane ExecPlan authoring and launch readiness"
+      "name": "goal-run",
+      "path": "skills/goal-run/SKILL.md",
+      "role": "Durable dependency-closed orchestration, independent review, reconciliation, and recovery"
     },
     {
-      "name": "fit-repo",
-      "path": "skills/fit-repo/SKILL.md",
-      "role": "Mandatory target-repo fit assessment and init/retrofit entry contract"
+      "name": "product-journey-review",
+      "path": "skills/product-journey-review/SKILL.md",
+      "role": "Independent fresh-operator, security, recovery, falsification, and quality-in-use review"
     },
     {
-      "name": "harness-engineering",
-      "path": "skills/harness-engineering/SKILL.md",
-      "role": "Repo standards, agent legibility, and mechanical gate setup"
+      "name": "prove",
+      "path": "skills/prove/SKILL.md",
+      "role": "One named claim, dependency-closed strict proof, false-pass controls, and independent reconciliation"
     },
     {
-      "name": "orchestrator-reconciler",
-      "path": "skills/orchestrator-reconciler/SKILL.md",
-      "role": "Parent-session orchestration, reconciliation, and stale-state cleanup"
-    },
-    {
-      "name": "product-cohesion-gate",
-      "path": "skills/product-cohesion-gate/SKILL.md",
-      "role": "Consumer-facing product journey, positioning, UI proof, and human-attention policy gate"
-    },
-    {
-      "name": "proof-gate",
-      "path": "skills/proof-gate/SKILL.md",
-      "role": "Claim/evidence validation and false-completion rejection"
-    },
-    {
-      "name": "standards-gardener",
-      "path": "skills/standards-gardener/SKILL.md",
-      "role": "Recurring entropy cleanup and standards drift prevention"
-    },
-    {
-      "name": "ultragoal",
-      "path": "skills/ultragoal/SKILL.md",
-      "role": "Goal contract hardening and runtime goal binding"
-    },
-    {
-      "name": "product-fitness-gate",
-      "path": "skills/product-fitness-gate/SKILL.md",
-      "role": "enforces Product Fitness and Quality-In-Use proof for product-impacting claims"
+      "name": "improve-and-maintain",
+      "path": "skills/improve-and-maintain/SKILL.md",
+      "role": "Evaluation, research refresh, compatibility, migration verification, and approved retirement"
     }
   ],
   "status": "implementation",
