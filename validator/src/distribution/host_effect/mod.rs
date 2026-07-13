@@ -15,7 +15,14 @@ pub(crate) use authority::{
 
 use super::HostCommandPlan;
 use serde::Serialize;
-use std::fs::File;
+use sha2::{Digest, Sha256};
+use std::fs::{self, File, OpenOptions};
+use std::path::Path;
+
+#[cfg(unix)]
+use std::os::unix::fs::{FileExt, MetadataExt, OpenOptionsExt};
+
+const MAX_PINNED_EXECUTABLE_BYTES: u64 = 512 * 1024 * 1024;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "kebab-case")]
@@ -154,8 +161,13 @@ impl HostEffectTransition {
         expected_head: HostEffectLedgerHead,
         outcome_sha256: Option<String>,
     ) -> Result<Self, HostEffectLedgerError> {
+        let requires_outcome = matches!(
+            next_state,
+            HostEffectState::Settled | HostEffectState::Failed | HostEffectState::Ambiguous
+        );
         if !is_digest(&permit_id)
             || outcome_sha256.as_ref().is_some_and(|row| !is_digest(row))
+            || outcome_sha256.is_some() != requires_outcome
             || !allowed_transition(expected_state, next_state)
         {
             return Err(HostEffectLedgerError::new(
@@ -223,7 +235,30 @@ pub(crate) struct PinnedHostExecutableIdentity {
     device: u64,
     inode: u64,
     mode: u32,
+    uid: u32,
+    gid: u32,
+    hard_links: u64,
     size: u64,
+    modified_seconds: i64,
+    modified_nanoseconds: i64,
+    changed_seconds: i64,
+    changed_nanoseconds: i64,
+}
+
+impl PinnedHostExecutableIdentity {
+    pub(crate) fn binding_sha256(&self) -> Result<String, HostEffectLedgerError> {
+        #[derive(Serialize)]
+        struct Binding<'a> {
+            schema: &'static str,
+            identity: &'a PinnedHostExecutableIdentity,
+        }
+        serde_json::to_vec(&Binding {
+            schema: "harness-ultragoal.pinned-host-executable.v1",
+            identity: self,
+        })
+        .map(|bytes| format!("sha256:{:x}", Sha256::digest(bytes)))
+        .map_err(|_| HostEffectLedgerError::new(HostEffectLedgerErrorId::InvalidRecord))
+    }
 }
 
 /// Owns the open executable object. It is intentionally neither Clone nor
@@ -234,19 +269,28 @@ pub(crate) struct PinnedHostExecutable {
 }
 
 impl PinnedHostExecutable {
-    pub(in crate::distribution::host_effect) fn new(
-        file: File,
-        identity: PinnedHostExecutableIdentity,
+    pub(in crate::distribution::host_effect) fn pin(
+        path: &Path,
     ) -> Result<Self, HostEffectLedgerError> {
-        if !identity.canonical_path.starts_with('/')
-            || !is_digest(&identity.content_sha256)
-            || identity.size == 0
+        #[cfg(unix)]
         {
-            return Err(HostEffectLedgerError::new(
-                HostEffectLedgerErrorId::InvalidRecord,
-            ));
+            let canonical = fs::canonicalize(path).map_err(|_| ledger_io())?;
+            if !canonical.is_absolute() {
+                return Err(invalid_record());
+            }
+            let mut options = OpenOptions::new();
+            options
+                .read(true)
+                .custom_flags(libc::O_CLOEXEC | libc::O_NOFOLLOW | libc::O_NONBLOCK);
+            let file = options.open(&canonical).map_err(|_| ledger_io())?;
+            let identity = capture_executable_identity(&file, &canonical)?;
+            Ok(Self { file, identity })
         }
-        Ok(Self { file, identity })
+        #[cfg(not(unix))]
+        {
+            let _ = path;
+            Err(invalid_record())
+        }
     }
 
     pub(in crate::distribution::host_effect) fn file(&self) -> &File {
@@ -256,6 +300,144 @@ impl PinnedHostExecutable {
     pub(crate) fn identity(&self) -> &PinnedHostExecutableIdentity {
         &self.identity
     }
+
+    pub(in crate::distribution::host_effect) fn revalidate(
+        &self,
+    ) -> Result<(), HostEffectLedgerError> {
+        #[cfg(unix)]
+        {
+            let current =
+                capture_executable_identity(&self.file, Path::new(&self.identity.canonical_path))?;
+            if current != self.identity {
+                return Err(HostEffectLedgerError::new(
+                    HostEffectLedgerErrorId::Tampered,
+                ));
+            }
+            Ok(())
+        }
+        #[cfg(not(unix))]
+        {
+            Err(invalid_record())
+        }
+    }
+}
+
+#[cfg(unix)]
+fn capture_executable_identity(
+    file: &File,
+    canonical_path: &Path,
+) -> Result<PinnedHostExecutableIdentity, HostEffectLedgerError> {
+    let path_before = fs::symlink_metadata(canonical_path).map_err(|_| ledger_io())?;
+    let descriptor_before = file.metadata().map_err(|_| ledger_io())?;
+    validate_executable_metadata(&path_before)?;
+    validate_executable_metadata(&descriptor_before)?;
+    if !same_executable_object(&path_before, &descriptor_before) {
+        return Err(tampered());
+    }
+
+    let mut hasher = Sha256::new();
+    let mut offset = 0_u64;
+    let mut buffer = [0_u8; 64 * 1024];
+    while offset < descriptor_before.len() {
+        let remaining = (descriptor_before.len() - offset).min(buffer.len() as u64) as usize;
+        let count = read_at_retry(file, &mut buffer[..remaining], offset)?;
+        if count == 0 {
+            return Err(tampered());
+        }
+        hasher.update(&buffer[..count]);
+        offset = offset
+            .checked_add(count as u64)
+            .ok_or_else(invalid_record)?;
+    }
+    let mut extra = [0_u8; 1];
+    if read_at_retry(file, &mut extra, descriptor_before.len())? != 0 {
+        return Err(tampered());
+    }
+
+    let descriptor_after = file.metadata().map_err(|_| ledger_io())?;
+    let path_after = fs::symlink_metadata(canonical_path).map_err(|_| ledger_io())?;
+    validate_executable_metadata(&descriptor_after)?;
+    validate_executable_metadata(&path_after)?;
+    if !same_executable_object(&descriptor_before, &descriptor_after)
+        || !same_executable_object(&descriptor_after, &path_after)
+        || fs::canonicalize(canonical_path).map_err(|_| ledger_io())? != canonical_path
+    {
+        return Err(tampered());
+    }
+    let canonical_path = canonical_path
+        .to_str()
+        .ok_or_else(invalid_record)?
+        .to_owned();
+    Ok(PinnedHostExecutableIdentity {
+        canonical_path,
+        content_sha256: format!("sha256:{:x}", hasher.finalize()),
+        device: descriptor_after.dev(),
+        inode: descriptor_after.ino(),
+        mode: descriptor_after.mode(),
+        uid: descriptor_after.uid(),
+        gid: descriptor_after.gid(),
+        hard_links: descriptor_after.nlink(),
+        size: descriptor_after.len(),
+        modified_seconds: descriptor_after.mtime(),
+        modified_nanoseconds: descriptor_after.mtime_nsec(),
+        changed_seconds: descriptor_after.ctime(),
+        changed_nanoseconds: descriptor_after.ctime_nsec(),
+    })
+}
+
+#[cfg(unix)]
+fn validate_executable_metadata(metadata: &fs::Metadata) -> Result<(), HostEffectLedgerError> {
+    if !metadata.file_type().is_file()
+        || metadata.len() == 0
+        || metadata.len() > MAX_PINNED_EXECUTABLE_BYTES
+        || metadata.nlink() != 1
+        || metadata.mode() & 0o111 == 0
+    {
+        return Err(invalid_record());
+    }
+    Ok(())
+}
+
+#[cfg(unix)]
+fn same_executable_object(left: &fs::Metadata, right: &fs::Metadata) -> bool {
+    left.dev() == right.dev()
+        && left.ino() == right.ino()
+        && left.mode() == right.mode()
+        && left.uid() == right.uid()
+        && left.gid() == right.gid()
+        && left.nlink() == right.nlink()
+        && left.len() == right.len()
+        && left.mtime() == right.mtime()
+        && left.mtime_nsec() == right.mtime_nsec()
+        && left.ctime() == right.ctime()
+        && left.ctime_nsec() == right.ctime_nsec()
+}
+
+#[cfg(unix)]
+fn read_at_retry(
+    file: &File,
+    buffer: &mut [u8],
+    offset: u64,
+) -> Result<usize, HostEffectLedgerError> {
+    loop {
+        match file.read_at(buffer, offset) {
+            Ok(count) => return Ok(count),
+            Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
+            Err(_) => return Err(ledger_io()),
+        }
+    }
+}
+
+fn invalid_record() -> HostEffectLedgerError {
+    HostEffectLedgerError::new(HostEffectLedgerErrorId::InvalidRecord)
+}
+
+fn tampered() -> HostEffectLedgerError {
+    HostEffectLedgerError::new(HostEffectLedgerErrorId::Tampered)
+}
+
+fn ledger_io() -> HostEffectLedgerError {
+    HostEffectLedgerError::new(HostEffectLedgerErrorId::Io)
 }
 
 /// A ledger-reserved effect. Construction remains confined to reviewed
@@ -378,6 +560,13 @@ fn is_digest(value: &str) -> bool {
 mod tests {
     use super::*;
 
+    #[cfg(unix)]
+    use std::io::Write;
+    #[cfg(unix)]
+    use std::os::unix::fs::PermissionsExt;
+    #[cfg(unix)]
+    use std::sync::atomic::{AtomicU64, Ordering};
+
     fn d(byte: char) -> String {
         format!("sha256:{}", byte.to_string().repeat(64))
     }
@@ -394,7 +583,8 @@ mod tests {
             (HostEffectState::Ambiguous, HostEffectState::Settled),
             (HostEffectState::Ambiguous, HostEffectState::Failed),
         ] {
-            HostEffectTransition::new(d('2'), from, to, head.clone(), None).unwrap();
+            let outcome = (to != HostEffectState::InFlight).then(|| d('3'));
+            HostEffectTransition::new(d('2'), from, to, head.clone(), outcome).unwrap();
         }
         for (from, to) in [
             (HostEffectState::InFlight, HostEffectState::Reserved),
@@ -409,6 +599,117 @@ mod tests {
                     .id(),
                 HostEffectLedgerErrorId::InvalidTransition
             );
+        }
+        assert_eq!(
+            HostEffectTransition::new(
+                d('2'),
+                HostEffectState::Reserved,
+                HostEffectState::InFlight,
+                head.clone(),
+                Some(d('3')),
+            )
+            .unwrap_err()
+            .id(),
+            HostEffectLedgerErrorId::InvalidTransition
+        );
+        assert_eq!(
+            HostEffectTransition::new(
+                d('2'),
+                HostEffectState::InFlight,
+                HostEffectState::Settled,
+                head,
+                None,
+            )
+            .unwrap_err()
+            .id(),
+            HostEffectLedgerErrorId::InvalidTransition
+        );
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn pinned_executable_revalidates_exact_object_and_content() {
+        let fixture = ExecutableFixture::new(b"#!/bin/sh\nexit 0\n");
+        let pinned = PinnedHostExecutable::pin(&fixture.path).unwrap();
+        assert!(is_digest(&pinned.identity().binding_sha256().unwrap()));
+        pinned.revalidate().unwrap();
+
+        let mut changed = OpenOptions::new().write(true).open(&fixture.path).unwrap();
+        changed.write_all(b"#!/bin/sh\nexit 9\n").unwrap();
+        changed.sync_all().unwrap();
+        assert_eq!(
+            pinned.revalidate().unwrap_err().id(),
+            HostEffectLedgerErrorId::Tampered
+        );
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn pinned_executable_rejects_named_replacement_and_hardlinks() {
+        let fixture = ExecutableFixture::new(b"#!/bin/sh\nexit 0\n");
+        let pinned = PinnedHostExecutable::pin(&fixture.path).unwrap();
+        let held = fixture.root.join("held");
+        fs::rename(&fixture.path, &held).unwrap();
+        fixture.write_executable(&fixture.path, b"#!/bin/sh\nexit 1\n");
+        assert_eq!(
+            pinned.revalidate().unwrap_err().id(),
+            HostEffectLedgerErrorId::Tampered
+        );
+
+        let hardlink = fixture.root.join("hardlink");
+        fs::hard_link(&fixture.path, &hardlink).unwrap();
+        let error = match PinnedHostExecutable::pin(&fixture.path) {
+            Ok(_) => panic!("hard-linked executable unexpectedly pinned"),
+            Err(error) => error,
+        };
+        assert_eq!(error.id(), HostEffectLedgerErrorId::InvalidRecord);
+    }
+
+    #[cfg(unix)]
+    struct ExecutableFixture {
+        root: std::path::PathBuf,
+        path: std::path::PathBuf,
+    }
+
+    #[cfg(unix)]
+    impl ExecutableFixture {
+        fn new(bytes: &[u8]) -> Self {
+            static NEXT: AtomicU64 = AtomicU64::new(0);
+            let base = std::env::temp_dir();
+            let root = loop {
+                let attempt = NEXT.fetch_add(1, Ordering::Relaxed);
+                let candidate = base.join(format!(
+                    "hul-host-effect-pin-{}-{attempt}",
+                    std::process::id()
+                ));
+                match fs::create_dir(&candidate) {
+                    Ok(()) => break candidate,
+                    Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
+                    Err(error) => panic!("create executable fixture: {error}"),
+                }
+            };
+            let path = root.join("executable");
+            let fixture = Self { root, path };
+            fixture.write_executable(&fixture.path, bytes);
+            fixture
+        }
+
+        fn write_executable(&self, path: &Path, bytes: &[u8]) {
+            let mut file = OpenOptions::new()
+                .create_new(true)
+                .write(true)
+                .open(path)
+                .unwrap();
+            file.write_all(bytes).unwrap();
+            file.sync_all().unwrap();
+            fs::set_permissions(path, fs::Permissions::from_mode(0o700)).unwrap();
+        }
+    }
+
+    #[cfg(unix)]
+    impl Drop for ExecutableFixture {
+        fn drop(&mut self) {
+            let _ = fs::remove_dir_all(&self.root);
         }
     }
 }
