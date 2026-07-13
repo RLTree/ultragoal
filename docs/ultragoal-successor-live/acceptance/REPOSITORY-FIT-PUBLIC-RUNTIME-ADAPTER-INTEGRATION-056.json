@@ -1,0 +1,49 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "REPOSITORY-FIT-PUBLIC-RUNTIME-ADAPTER-INTEGRATION-056",
+  "workstream": "repository-fit-public-runtime-adapter",
+  "decision": "ACCEPT_INTERNAL_ADAPTER_CANDIDATE",
+  "integration_commit": "98fa0dc3c29629a7dda7a832ea0e127246e04451",
+  "integration_tree": "e346d033ffa6c29a2499fb4e17632aedb1fd24a9",
+  "worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-PUBLIC-RUNTIME-ADAPTER-056.json",
+    "sha256": "sha256:6a8213aecb113017d5c4909978ad8b588777b9191a06ea22a5c30a1f7d22514a",
+    "result_id": "sha256:f3381e76ebea07c908e788097af29ecbbd17ceddfb588a2370b15a0252b1e9f0"
+  },
+  "accepted_artifact_set": {
+    "sha256": "sha256:70e5612395536e64fa609788b22f8bb3d1d407037e19d1f0553c3426a9211626",
+    "artifact_count": 17,
+    "bytes": 214163,
+    "lines": 5821
+  },
+  "independent_review": {
+    "reviewer": "/root/repository_fit_public_adapter_reviewer",
+    "verdict": "PASS",
+    "focused_adapter": "57/57",
+    "public_boundary": "5/5",
+    "repository_fit_closure": "72/72",
+    "jobs": 16,
+    "test_threads": 16,
+    "artifact_workspace": "17/17"
+  },
+  "accepted_behavior": [
+    "production template sources are descriptor-classified and privately staged before embedding",
+    "real special linked cross-device substituted and mutated sources fail closed",
+    "final source-set membership and original identity are revalidated before catalog emission",
+    "catalog and staging outputs are removed before validation and after every failed or caught-panic path",
+    "inspect plan and verify protocols remain internal and production mutation starts unauthorized"
+  ],
+  "withheld": [
+    "root-owned public catalog and dispatcher activation",
+    "root-issued one-use workspace mutation authority",
+    "fresh partial dirty conflict rollback and repeat-use live repository journeys",
+    "non-Apple supported-host behavior",
+    "installation",
+    "readiness",
+    "release",
+    "node closure",
+    "goal completion"
+  ],
+  "claim_ceiling": "production-compiled internal repository-fit adapter and source-authority staging only",
+  "no_claim_statement": "This acceptance does not claim public command activation, workspace effect execution, installed behavior, representative journey closure, readiness, release, node closure, or goal completion."
+}

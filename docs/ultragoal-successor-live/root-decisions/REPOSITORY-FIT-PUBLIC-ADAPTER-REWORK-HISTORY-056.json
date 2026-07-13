@@ -24,10 +24,19 @@
       "finding": "The build classifier compared manifest and source sets only before the mutation hook. Adding a new real template after inspection left the stale observed map accepted and staged one authorized row while an unknown live source existed.",
       "reproduction": "An isolated hook added templates/B.md after initial parity; stage_manifest_sources_with_hook returned success with one staged row.",
       "required_correction": "Re-enumerate before generated embedding and require exact final path-set equality plus every original per-path identity and mode; reject additions, removals, renames, aliases, substitutions, and metadata mutations."
+    },
+    {
+      "sequence": 3,
+      "candidate_artifact_set_sha256": "sha256:a34ba129b6197bf0e20feaeb7cb781f70800089d3976ed86e7723132a9ce3b1b",
+      "class": "early_failure_stale_staging_false_pass",
+      "finding": "An early real-source validation failure removed the generated catalog but could leave preexisting staged template bytes in the authority-bearing output directory.",
+      "required_correction": "Clean catalog and staging before validation and after every failure or caught panic, and fail closed if cleanup itself cannot complete."
     }
   ],
-  "current_state": "second_correction_active_not_reviewable",
-  "claim_ceiling": "internal_unaccepted_adapter_candidate_only",
+  "current_state": "accepted_internal_adapter_candidate_at_98fa0dc3c29629a7dda7a832ea0e127246e04451",
+  "accepted_artifact_set_sha256": "sha256:70e5612395536e64fa609788b22f8bb3d1d407037e19d1f0553c3426a9211626",
+  "acceptance_record": "docs/ultragoal-successor-live/acceptance/REPOSITORY-FIT-PUBLIC-RUNTIME-ADAPTER-INTEGRATION-056.json",
+  "claim_ceiling": "production_compiled_internal_adapter_only",
   "withheld": [
     "root public module and dispatcher wiring",
     "workspace mutation authority",
