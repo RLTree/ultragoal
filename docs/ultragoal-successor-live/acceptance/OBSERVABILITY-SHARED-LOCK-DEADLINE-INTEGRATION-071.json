@@ -1,0 +1,47 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "OBSERVABILITY-SHARED-LOCK-DEADLINE-INTEGRATION-071",
+  "workstream": "local-observability-shared-lock-acquisition-and-causal-query",
+  "decision": "ACCEPT_SOURCE_LOCAL_BOUNDED_LOCK_ACQUISITION",
+  "integration_commit": "4680b43f3e86b3fdecc7dc7cde2608b47d626613",
+  "integration_tree": "3f945a25e8794db9dad5445d3571cff527a61328",
+  "accepted_artifact_set": {
+    "worker_result": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-LOCAL-DIAGNOSIS-069.json",
+    "worker_result_sha256": "sha256:67f10a0cc7482b32dfd96cdea28d5a2c5585ebf3eae09288d1e07fc8afb62ee1",
+    "worker_owned_sha256": "sha256:0c89f2ecc1a15ebd2c2b22d9037a8ef0f51362c63a3025a7166907d89ed639da",
+    "worker_owned_artifact_count": 9,
+    "worker_owned_bytes": 76088,
+    "worker_owned_lines": 2236,
+    "dependency_sha256": "sha256:e414064caa4dd9390273063854547536b3234795b6ee3ae0eb16ab0f5de4f37c",
+    "dependency_artifact_count": 291,
+    "runtime_input_sha256": "sha256:202a259f433c0410db901e070d9304b96f104271d1cbb2c8d3d753c9c943c9f6",
+    "runtime_input_count": 29
+  },
+  "independent_review": {
+    "record": "docs/ultragoal-successor-live/reviews/OBSERVABILITY-SHARED-LOCK-DEADLINE-REVIEW-071.json",
+    "record_sha256": "sha256:5516017358505260f4d55c54b9b14c79a85376e51cd61cdfc6d928b00942933d",
+    "reviewer": "/root/observability_full_envelope_reviewer",
+    "verdict": "PASS",
+    "focused": "44/44",
+    "dependency_closed": "536/536",
+    "shared_deadline_controls": "7/7",
+    "source_built_public_timeout": "1/1",
+    "jobs": 16,
+    "test_threads": 16
+  },
+  "accepted_behavior": [
+    "append, query, explain, export-read, clear, and recovery share one monotonic acquisition budget across the per-store identity mutex and operating-system file lock",
+    "same-process, operating-system, and mixed contention expire with one deterministic typed timeout and do not reset the budget",
+    "public local query reports the typed timeout while preserving store bytes, recursive target state, Git status, and the zero-write read boundary",
+    "privacy, explicit deletion, bounded retention, and disabled external-export defaults remain fail closed"
+  ],
+  "withheld": [
+    "a deadline over filesystem I/O, decoding, durability synchronization, or lock-hold duration after acquisition",
+    "configured external adapter execution",
+    "installed package and runtime identity",
+    "real-user operation",
+    "readiness release node closure and goal completion"
+  ],
+  "claim_ceiling": "sealed source-local event-store behavior with bounded lock acquisition and deterministic zero-write local query timeout",
+  "no_claim_statement": "This acceptance does not claim external-adapter execution, installation, real-user operation, readiness, release, node closure, or completion."
+}
