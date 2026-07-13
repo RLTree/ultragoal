@@ -1,0 +1,45 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "SUPPORTED-AGENT-AUTHORITY-GLOBAL-SANDBOX-REVIEW-079",
+  "reviewer": "/root/agent_authority_reader_proof_reviewer",
+  "review_route": "security-trust-boundary-reviewer",
+  "verdict": "REWORK",
+  "reviewed_identity": {
+    "source_artifact_set_sha256": "sha256:943c5d212ac38e8bf666ff5659ee7e5f68e29daf97fefe7a2e9f59adac68c3f0",
+    "artifact_count": 11,
+    "receipt_sha256": "sha256:81836ae02b31026228a40d7061c3670549e4d7a6e5764b43bf2c35c318dafbf2",
+    "result_id": "sha256:7bce1df6a0d64e19a4adfbd08633de6ab29d4e64fd9a3048638daa1dc605d2d3",
+    "work_package_sha256": "sha256:d36975137529bb362f146ce72b6e5969ad8449fd83b2d7a0a9c7864b376e0e65"
+  },
+  "decisive_finding": {
+    "severity": "blocker",
+    "class": "global_write_capable_authority_false_pass",
+    "affected_paths": [
+      "validator/src/plugin_product/agent_discovery/host.rs",
+      "validator/src/plugin_product/agent_discovery/supported.rs",
+      "validator/tests/plugin_agent_discovery_contract/negative.rs",
+      "validator/tests/plugin_agent_discovery_contract/supported_host.rs"
+    ],
+    "affected_symbols": [
+      "verify_catalog",
+      "SupportedTransaction::enforce_read_only",
+      "record_layer",
+      "AgentRouteEligibility::observed"
+    ],
+    "cause": "The Global branch continues before the sandbox_mode read-only gate; supported reporting records WriteCapableSandbox but does not reject.",
+    "reproduction": "A valid unrelated global descriptor with sandbox_mode workspace-write passed a fresh supported-host transaction and returned route_eligible true.",
+    "impact": "Write-capable global authority can be treated as safe read-only routing authority."
+  },
+  "completed_proof": [
+    "Exact 11-artifact set, receipt parser, canonical result, typed lease, workspace rows, and composed mutation controls passed.",
+    "Focused suite passed 57/57 twice; dependency agent routes passed 12/12; production library check passed.",
+    "The lower-layer ten-row omission limit was correctly disclosed and the composed verifier rejected it."
+  ],
+  "smallest_safe_correction": [
+    "Reject every parsed descriptor whose sandbox_mode is not read-only before any layer-specific early exit.",
+    "Add fixture and supported-host write-capable global negatives that require SandboxPolicyRejected and no eligibility.",
+    "Refreeze the changed source set and issue a new exact receipt."
+  ],
+  "claim_ceiling": "The supported agent authority reader remains REWORK; receipt integrity alone is established.",
+  "no_claim_statement": "This review does not claim source acceptance, route eligibility, live-host or fresh-session behavior, readiness, release, node closure, or completion."
+}

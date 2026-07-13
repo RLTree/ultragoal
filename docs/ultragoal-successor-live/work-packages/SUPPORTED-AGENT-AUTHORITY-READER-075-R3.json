@@ -1,0 +1,47 @@
+{
+  "schema_version": "RootIssuedCorrectiveWorkPackage-v1",
+  "work_package_id": "SUPPORTED-AGENT-AUTHORITY-READER-075-R3",
+  "workstream": "global-agent-sandbox-fail-closed",
+  "issued_from_live_context": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "6b237ed33",
+    "prior_source_artifact_set_sha256": "sha256:943c5d212ac38e8bf666ff5659ee7e5f68e29daf97fefe7a2e9f59adac68c3f0",
+    "prior_receipt_sha256": "sha256:81836ae02b31026228a40d7061c3670549e4d7a6e5764b43bf2c35c318dafbf2"
+  },
+  "lease": {
+    "principal": "/root/agent_authority_global_sandbox_engineer",
+    "write_paths": [
+      "validator/src/plugin_product/agent_discovery/host.rs",
+      "validator/src/plugin_product/agent_discovery/supported.rs",
+      "validator/tests/plugin_agent_discovery_contract/negative.rs",
+      "validator/tests/plugin_agent_discovery_contract/supported_host.rs",
+      "docs/ultragoal-successor-live/worker-results/SUPPORTED-AGENT-AUTHORITY-READER-075.json"
+    ],
+    "write_symbols": [
+      "verify_catalog sandbox ordering",
+      "supported-host global sandbox refusal controls",
+      "WorkerResult-v1 exact source set"
+    ],
+    "fixtures": "Only ephemeral isolated test fixtures",
+    "generated_outputs": "WorkerResult only",
+    "git_mutation": "forbidden",
+    "root_owned_surfaces": "public routes, manifests, agent registries, migration, generated authority, claims, acceptance, and release are forbidden",
+    "external_effects": "locked and offline local tests in isolated /private/tmp roots only"
+  },
+  "required_behavior": [
+    "Every parsed global, repository, built-in, and generated descriptor is read-only before it can affect verification or eligibility.",
+    "Layer classification cannot bypass sandbox enforcement.",
+    "Write-capable global authority returns the stable SandboxPolicyRejected class and cannot produce eligibility.",
+    "Existing exact global allowlist, unexpected-row reporting, source-role effects, and zero-write behavior remain intact."
+  ],
+  "required_validation": [
+    "fixture global workspace-write negative",
+    "supported-host transaction global workspace-write negative",
+    "positive unrelated global read-only descriptor",
+    "case, symlink, special-file, substitution, TOCTOU, unknown, ambiguous, and route false-pass controls",
+    "focused suite twice, dependency agent routes, production library check, zero-write proof, authoritative receipt parser, exact artifact set, and mutation controls with 16 jobs and threads"
+  ],
+  "stop_rule": "Stop on any path expansion, public or host mutation, unstable error class, loss of unexpected-global reporting, or inability to prove no eligibility after rejection.",
+  "no_claim_statement": "This work package does not claim source acceptance, route eligibility, live-host or fresh-session behavior, readiness, release, node closure, or completion."
+}
