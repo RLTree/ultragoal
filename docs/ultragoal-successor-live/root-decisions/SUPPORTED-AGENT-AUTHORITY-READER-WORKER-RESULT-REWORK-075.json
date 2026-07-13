@@ -1,0 +1,49 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "decision_id": "SUPPORTED-AGENT-AUTHORITY-READER-WORKER-RESULT-REWORK-075",
+  "workstream": "supported-host-agent-authority-reader",
+  "root_decision": "REWORK_RECEIPT_ONLY",
+  "reviewed_at_date": "2026-07-13",
+  "reviewer": "/root/agent_authority_reader_security_reviewer",
+  "reviewed_identity": {
+    "base_commit": "005061557dc6f6251f0a40ed3d26189a8f829358",
+    "base_tree": "783d5bf48d7809d1263fa546bf0f53c1daf297e9",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/SUPPORTED-AGENT-AUTHORITY-READER-075.json",
+    "worker_result_sha256": "sha256:37d7d4f9f4e4dfa03d5dbeaea4068d709209b7c6bb9e3e790328ab6f5a344e88",
+    "source_artifact_set_sha256": "sha256:943c5d212ac38e8bf666ff5659ee7e5f68e29daf97fefe7a2e9f59adac68c3f0",
+    "source_artifact_count": 11,
+    "source_bytes": 143847,
+    "source_lines": 4304
+  },
+  "decisive_finding": {
+    "class": "invalid-required-worker-result-v1",
+    "severity": "material-blocker",
+    "detail": "The exact receipt is rejected by the authoritative WorkerResultV1 parser: artifact rows add forbidden line_count fields, effect rows use invalid classes and shapes, requested root changes omit expected_sha256, candidate identity omits context_id, and final status is outside the closed accepted enum."
+  },
+  "preserved_candidate": {
+    "source_rows": "11 of 11 artifact digests, byte and line totals, regular single-link identities, and the path-bound aggregate independently matched",
+    "disjointness": "only the critical-path board changed between issued and freeze Git identities",
+    "source_edits_authorized": false,
+    "receipt_only_correction": true
+  },
+  "corrective_lease": {
+    "lease_id": "SUPPORTED-AGENT-AUTHORITY-READER-075-R1",
+    "only_write_path": "docs/ultragoal-successor-live/worker-results/SUPPORTED-AGENT-AUTHORITY-READER-075.json",
+    "required_validation": [
+      "WorkerResultV1::parse_json",
+      "ArtifactWorkspace::verify for all 11 unchanged source artifacts",
+      "exact result identifier verification",
+      "typed validate_for against the corrective lease and work package",
+      "unknown-field, effect-shape, missing-digest, identity, artifact-set, and status mutation controls"
+    ]
+  },
+  "claim_ceiling": "identity-consistent crate-private source and test candidate pending a parser-valid corrected receipt and independent rereview",
+  "explicitly_withheld": [
+    "source acceptance",
+    "route eligibility and public adoption",
+    "live-host and fresh-session behavior",
+    "installation package replacement migration and retirement",
+    "readiness release node closure and completion"
+  ],
+  "no_claim_statement": "This REWORK decision does not claim source acceptance, route eligibility, live-host correctness, fresh-session discovery, readiness, release, node closure, or completion."
+}
