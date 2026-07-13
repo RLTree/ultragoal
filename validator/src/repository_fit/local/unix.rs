@@ -2,7 +2,6 @@ use super::super::{CanonicalPath, FitError, FitErrorId, error};
 use super::sys::{
     EntryMatch, EnumerationBudget, PathStat, duplicate, exact_entry, open_at, stat_at,
 };
-use sha2::{Digest, Sha256};
 use std::fs::{self, File, OpenOptions};
 use std::io::{Read, Seek, SeekFrom};
 use std::os::unix::ffi::OsStrExt;
@@ -42,7 +41,8 @@ impl Workspace {
             return Err(error(FitErrorId::UnsafeObject));
         }
         let canonical = fs::canonicalize(path).map_err(|_| error(FitErrorId::ReadFailed))?;
-        let binding = binding(&canonical, metadata.dev(), metadata.ino());
+        let binding =
+            super::root_binding_from_canonical_path(&canonical, metadata.dev(), metadata.ino());
         let value = Self {
             path: path.to_path_buf(),
             canonical,
@@ -285,14 +285,6 @@ fn identity(metadata: &fs::Metadata) -> PathStat {
         changed_nanoseconds: metadata.ctime_nsec(),
         regular: metadata.is_file(),
     }
-}
-
-fn binding(path: &Path, device: u64, inode: u64) -> String {
-    let mut hasher = Sha256::new();
-    hasher.update(device.to_le_bytes());
-    hasher.update(inode.to_le_bytes());
-    hasher.update(path.as_os_str().as_bytes());
-    format!("sha256:{:x}", hasher.finalize())
 }
 
 #[cfg(all(test, target_vendor = "apple"))]

@@ -5,7 +5,11 @@ mod sys;
 #[cfg(unix)]
 mod unix;
 
-use super::{error, CanonicalPath, FitError, FitErrorId, FitReader};
+use super::{CanonicalPath, FitError, FitErrorId, FitReader, error};
+#[cfg(unix)]
+use sha2::{Digest, Sha256};
+#[cfg(unix)]
+use std::os::unix::ffi::OsStrExt;
 use std::path::Path;
 
 #[cfg(unix)]
@@ -16,6 +20,19 @@ pub(crate) use effects::LocalEffects;
 pub struct LocalRepository {
     #[cfg(unix)]
     inner: unix::Workspace,
+}
+
+#[cfg(unix)]
+pub(crate) fn root_binding_from_canonical_path(
+    canonical: &Path,
+    device: u64,
+    inode: u64,
+) -> String {
+    let mut hasher = Sha256::new();
+    hasher.update(device.to_le_bytes());
+    hasher.update(inode.to_le_bytes());
+    hasher.update(canonical.as_os_str().as_bytes());
+    format!("sha256:{:x}", hasher.finalize())
 }
 
 impl LocalRepository {
