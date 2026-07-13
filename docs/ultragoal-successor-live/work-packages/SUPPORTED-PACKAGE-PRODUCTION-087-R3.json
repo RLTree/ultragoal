@@ -1,0 +1,33 @@
+{
+  "schema_version": "UltraLeaseAmendment-v1",
+  "amendment_id": "SUPPORTED-PACKAGE-PRODUCTION-087-R3",
+  "base_work_package": "docs/ultragoal-successor-live/work-packages/SUPPORTED-PACKAGE-PRODUCTION-087-R2.json",
+  "base_work_package_sha256": "sha256:cc3cea07dad5be443186b6e70a2551e278beef56e8dcca278218c31ab890dc67",
+  "base_candidate": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "2cb70fc08a137db0edf362b0a36d64683185e4d4",
+    "head_tree": "679231055f296e3c11791dd2ea061ec41e0fbbbd",
+    "dirty_tree_note": "Disjoint repository-fit independent review and evaluation correction leases are active. Preserve every path outside the inherited supported-package writable set and bind the final freeze to the then-current root HEAD."
+  },
+  "owner_override": "/root/supported_package_publication_and_proof_engineer",
+  "scope": {
+    "inherit_all_paths_symbols_outputs_effects_prohibitions_tests_and_verification": true,
+    "inherit_decisive_findings_and_controls_from": "SUPPORTED-PACKAGE-PRODUCTION-087-R2",
+    "worker_result_path": "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-PRODUCTION-087.json",
+    "root_owned_surfaces_remain_prohibited": true
+  },
+  "required_corrections": [
+    "Bind package publication to the exact current LiveContext, authority catalog, source capture, candidate, and artifact before and after the confined output effect; roll back the output transaction on drift or failed final reconciliation.",
+    "Reject stale artifacts before publication and reject source mutate-restore or candidate/catalog substitution across publication.",
+    "Keep active package membership closed to the exact R2 canonical member set; no generic Data, Documentation, Executable, or generated role may create membership authority.",
+    "Complete the named supported_package_product_contract behavior target and the inherited positive, negative, race, mutation, security, zero-write, writer-conflict, and false-pass matrix with 16 build jobs and 16 test threads.",
+    "Freeze the exact leased artifact set in WorkerResult-v1 under this R3 owner and lease identity."
+  ],
+  "worker_result_contract": {
+    "schema": "WorkerResult-v1",
+    "lease_id": "SUPPORTED-PACKAGE-PRODUCTION-087-R3",
+    "required": true,
+    "no_claim_statement": "Candidate source implementation only. No claim of root adoption, public package command availability, repository package output, installed bytes, marketplace state, cache state, app registration, Plugins UI visibility, discovery, runtime, representative user journey, claim elevation, node closure, readiness, release, or completion."
+  }
+}
