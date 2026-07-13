@@ -1,5 +1,5 @@
 use serde::Serialize;
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
 use std::sync::atomic::{AtomicU8, AtomicUsize, Ordering};
 
@@ -7,6 +7,39 @@ use crate::routine_work::{
     RepoPath, ReportDisposition, ReportStatus, ReuseExpectation, RoutineBinding, RoutineError,
     RoutineErrorId,
 };
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub(super) struct RoutineReadAncestor {
+    pub(super) relative_directory: String,
+    pub(super) device: u64,
+    pub(super) inode: u64,
+    pub(super) unix_mode: u32,
+    pub(super) owner_user_id: u32,
+    pub(super) owner_group_id: u32,
+    pub(super) link_count: u64,
+    pub(super) modified_seconds: i64,
+    pub(super) modified_nanos: i64,
+    pub(super) changed_seconds: i64,
+    pub(super) changed_nanos: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub(super) struct RoutineReadSource {
+    pub(super) relative_path: RepoPath,
+    pub(super) device: u64,
+    pub(super) inode: u64,
+    pub(super) unix_mode: u32,
+    pub(super) owner_user_id: u32,
+    pub(super) owner_group_id: u32,
+    pub(super) link_count: u64,
+    pub(super) byte_length: u64,
+    pub(super) modified_seconds: i64,
+    pub(super) modified_nanos: i64,
+    pub(super) changed_seconds: i64,
+    pub(super) changed_nanos: i64,
+    pub(super) sha256: String,
+    pub(super) ancestors: Vec<RoutineReadAncestor>,
+}
 
 #[derive(Debug, Eq, PartialEq, Serialize)]
 pub(crate) struct RoutineInvocationSpec {
@@ -18,6 +51,12 @@ pub(crate) struct RoutineInvocationSpec {
     pub(super) program_byte_length: u64,
     pub(super) program_unix_mode: Option<u32>,
     pub(super) arguments: Vec<String>,
+    pub(super) environment_sha256: String,
+    #[serde(skip)]
+    pub(super) environment: BTreeMap<String, String>,
+    pub(super) read_authority_sha256: String,
+    #[serde(skip)]
+    pub(super) read_sources: Vec<RoutineReadSource>,
     pub(super) timeout_ms: u64,
     pub(super) output_budget_bytes: u64,
     pub(super) declared_output_scopes: Vec<RepoPath>,
@@ -34,6 +73,10 @@ impl RoutineInvocationSpec {
         program_byte_length: u64,
         program_unix_mode: Option<u32>,
         arguments: Vec<String>,
+        environment_sha256: String,
+        environment: BTreeMap<String, String>,
+        read_authority_sha256: String,
+        read_sources: Vec<RoutineReadSource>,
         timeout_ms: u64,
         output_budget_bytes: u64,
         declared_output_scopes: Vec<RepoPath>,
@@ -47,6 +90,10 @@ impl RoutineInvocationSpec {
             program_byte_length,
             program_unix_mode,
             arguments,
+            environment_sha256,
+            environment,
+            read_authority_sha256,
+            read_sources,
             timeout_ms,
             output_budget_bytes,
             declared_output_scopes,
@@ -78,6 +125,27 @@ impl RoutineInvocationSpec {
     #[cfg(test)]
     pub(crate) fn test_with_arguments(mut self, arguments: Vec<String>) -> Self {
         self.arguments = arguments;
+        self
+    }
+
+    #[cfg(test)]
+    pub(crate) fn test_with_environment(mut self, environment: BTreeMap<String, String>) -> Self {
+        self.environment = environment;
+        self
+    }
+
+    #[cfg(test)]
+    pub(crate) fn test_with_read_sources(mut self, read_sources: Vec<RoutineReadSource>) -> Self {
+        self.read_sources = read_sources;
+        self
+    }
+
+    #[cfg(test)]
+    pub(crate) fn test_with_read_authority_sha256(
+        mut self,
+        read_authority_sha256: impl Into<String>,
+    ) -> Self {
+        self.read_authority_sha256 = read_authority_sha256.into();
         self
     }
 
@@ -118,7 +186,7 @@ impl RoutineAdapterSpec {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub(crate) struct RoutineEffectIntent {
     protocol_id: String,
     intent_id: String,
@@ -133,6 +201,15 @@ pub(crate) struct RoutineEffectIntent {
     argv: Vec<String>,
     working_directory: String,
     environment_policy: &'static str,
+    environment_keys: Vec<String>,
+    environment_sha256: String,
+    #[serde(skip)]
+    environment: BTreeMap<String, String>,
+    read_authority_policy: &'static str,
+    read_source_paths: Vec<RepoPath>,
+    read_authority_sha256: String,
+    #[serde(skip)]
+    read_sources: Vec<RoutineReadSource>,
     mediation_preflight: &'static str,
     timeout_ms: u64,
     output_budget_bytes: u64,
@@ -156,6 +233,10 @@ impl RoutineEffectIntent {
         program_unix_mode: Option<u32>,
         argv: Vec<String>,
         working_directory: String,
+        environment_sha256: String,
+        environment: BTreeMap<String, String>,
+        read_authority_sha256: String,
+        read_sources: Vec<RoutineReadSource>,
         timeout_ms: u64,
         output_budget_bytes: u64,
         declared_output_scopes: Vec<RepoPath>,
@@ -175,8 +256,18 @@ impl RoutineEffectIntent {
             program_unix_mode,
             argv,
             working_directory,
-            environment_policy: "clear-all-no-inheritance-v1",
-            mediation_preflight: "revalidate-context-candidate-tool-executable-output-scopes-before-effect-v1",
+            environment_policy: "clear-all-allowlisted-v1",
+            environment_keys: environment.keys().cloned().collect(),
+            environment_sha256,
+            environment,
+            read_authority_policy: "default-deny-exact-bound-read-v1",
+            read_source_paths: read_sources
+                .iter()
+                .map(|source| source.relative_path.clone())
+                .collect(),
+            read_authority_sha256,
+            read_sources,
+            mediation_preflight: "revalidate-context-candidate-tool-executable-read-sources-output-scopes-before-and-after-effect-v1",
             timeout_ms,
             output_budget_bytes,
             declared_output_scopes,
@@ -223,6 +314,27 @@ impl RoutineEffectIntent {
     }
     pub(crate) fn environment_policy(&self) -> &'static str {
         self.environment_policy
+    }
+    pub(crate) fn environment_keys(&self) -> &[String] {
+        &self.environment_keys
+    }
+    pub(crate) fn environment_sha256(&self) -> &str {
+        &self.environment_sha256
+    }
+    pub(super) fn environment(&self) -> &BTreeMap<String, String> {
+        &self.environment
+    }
+    pub(crate) fn read_authority_policy(&self) -> &'static str {
+        self.read_authority_policy
+    }
+    pub(crate) fn read_source_paths(&self) -> &[RepoPath] {
+        &self.read_source_paths
+    }
+    pub(crate) fn read_authority_sha256(&self) -> &str {
+        &self.read_authority_sha256
+    }
+    pub(super) fn read_sources(&self) -> &[RoutineReadSource] {
+        &self.read_sources
     }
     pub(crate) fn mediation_preflight(&self) -> &'static str {
         self.mediation_preflight
@@ -481,6 +593,21 @@ impl RoutineEffectRequest {
     #[cfg(test)]
     pub(crate) fn test_mark_transitioned(&self) -> Result<(), RoutineError> {
         self.seal.begin_mediation()
+    }
+
+    #[cfg(test)]
+    pub(crate) fn test_duplicate(&self) -> Self {
+        Self {
+            request_id: self.request_id.clone(),
+            protocol_id: self.protocol_id.clone(),
+            binding: self.binding.clone(),
+            graph_id: self.graph_id.clone(),
+            snapshot_id: self.snapshot_id.clone(),
+            plan_id: self.plan_id.clone(),
+            result_scope: self.result_scope.clone(),
+            intents: self.intents.clone(),
+            seal: Arc::clone(&self.seal),
+        }
     }
 }
 

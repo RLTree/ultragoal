@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 use super::context::{BuildRequest, LiveContext};
 use super::reuse::common::{capture_guard, capture_receipt, issue_execution, observe_execution};
@@ -9,8 +9,9 @@ use super::routine_work::{
     RoutineInvocationSpec, RoutineMediatedIntent, RoutineMediatedOutcome,
     RoutineMediationAuthority, RoutineMediationBatch, RoutinePlan, SkipReason, assess_reuse,
     begin_routine_mediation, bind_mediated_expectation, bind_mediated_witness,
-    bind_routine_invocation, observe_mediated_incomplete, observe_mediated_outcome, plan_routine,
-    prepare_routine_execution, reconcile_routine_execution, set_test_live_authority_hook,
+    bind_routine_invocation, bind_routine_invocation_with_environment, observe_mediated_incomplete,
+    observe_mediated_outcome, plan_routine, prepare_routine_execution, reconcile_routine_execution,
+    set_test_live_authority_hook,
 };
 use super::support::{TempRepo, fallback_graph, graph, node, path, route, sha};
 
@@ -317,10 +318,18 @@ fn dirty_and_strict_preparation_bind_deterministic_complete_intents_without_effe
             intent.working_directory(),
             fixture.context.worktree_root().to_str().unwrap()
         );
-        assert_eq!(intent.environment_policy(), "clear-all-no-inheritance-v1");
+        assert_eq!(intent.environment_policy(), "clear-all-allowlisted-v1");
+        assert_eq!(intent.environment_keys(), ["LANG", "LC_ALL", "PATH"]);
+        assert!(intent.environment_sha256().starts_with("sha256:"));
+        assert_eq!(
+            intent.read_authority_policy(),
+            "default-deny-exact-bound-read-v1"
+        );
+        assert!(intent.read_source_paths().is_empty());
+        assert!(intent.read_authority_sha256().starts_with("sha256:"));
         assert_eq!(
             intent.mediation_preflight(),
-            "revalidate-context-candidate-tool-executable-output-scopes-before-effect-v1"
+            "revalidate-context-candidate-tool-executable-read-sources-output-scopes-before-and-after-effect-v1"
         );
         assert_eq!(intent.timeout_ms(), 60_000);
         assert_eq!(intent.output_budget_bytes(), 4 * 1024 * 1024);
@@ -470,6 +479,23 @@ fn malformed_invocation_sets_and_stale_bindings_refuse_without_writes() {
         "adapter-runner-binding-mismatch"
     );
 
+    let mut read_authority_substitution = invocation_specs(&fixture.context, &fixture.plan);
+    let first = read_authority_substitution
+        .remove(0)
+        .test_with_read_authority_sha256(format!("sha256:{}", "2".repeat(64)));
+    read_authority_substitution.insert(0, first);
+    assert_eq!(
+        preparation_error(prepare_routine_execution(
+            &fixture.context,
+            &fixture.graph,
+            &fixture.snapshot,
+            &fixture.plan,
+            RoutineAdapterSpec::new("routine", read_authority_substitution),
+        ))
+        .cause(),
+        "adapter-runner-binding-mismatch"
+    );
+
     let mut hostile_argv = invocation_specs(&fixture.context, &fixture.plan);
     let first = hostile_argv
         .remove(0)
@@ -485,6 +511,43 @@ fn malformed_invocation_sets_and_stale_bindings_refuse_without_writes() {
         ))
         .cause(),
         "adapter-argv-invalid"
+    );
+
+    let mut environment_substitution = invocation_specs(&fixture.context, &fixture.plan);
+    let first = environment_substitution
+        .remove(0)
+        .test_with_environment(BTreeMap::from([
+            ("LANG".to_owned(), "C".to_owned()),
+            ("LC_ALL".to_owned(), "C".to_owned()),
+            ("PATH".to_owned(), "/unbound".to_owned()),
+        ]));
+    environment_substitution.insert(0, first);
+    assert_eq!(
+        preparation_error(prepare_routine_execution(
+            &fixture.context,
+            &fixture.graph,
+            &fixture.snapshot,
+            &fixture.plan,
+            RoutineAdapterSpec::new("routine", environment_substitution),
+        ))
+        .cause(),
+        "adapter-runner-binding-mismatch"
+    );
+
+    assert_eq!(
+        bind_routine_invocation_with_environment(
+            &fixture.context,
+            &fixture.plan,
+            "syntax",
+            vec!["--reserved-environment".to_owned()],
+            BTreeMap::from([("HUL_ROUTINE_REQUEST_ID".to_owned(), "forged".to_owned())]),
+            1_000,
+            1_024,
+            vec![path("target/routine")],
+        )
+        .unwrap_err()
+        .cause(),
+        "adapter-environment-invalid"
     );
 
     assert_eq!(
@@ -540,6 +603,49 @@ fn malformed_invocation_sets_and_stale_bindings_refuse_without_writes() {
     );
     assert_eq!(fixture.repo.tree(), before_tree);
     assert_eq!(fixture.repo.status(), before_status);
+}
+
+#[test]
+fn startup_loader_environment_variables_are_rejected_at_binding() {
+    let fixture = dirty_fixture("adapter-startup-loader-environment");
+    for key in [
+        "ENV",
+        "BASH_ENV",
+        "RUBYOPT",
+        "RUBYLIB",
+        "PYTHONPATH",
+        "PYTHONSTARTUP",
+        "PERL5OPT",
+        "PERL5LIB",
+        "NODE_OPTIONS",
+        "NODE_PATH",
+        "CLASSPATH",
+        "JAVA_TOOL_OPTIONS",
+        "LD_PRELOAD",
+        "DYLD_INSERT_LIBRARIES",
+        "PHPRC",
+        "ZDOTDIR",
+    ] {
+        let error = bind_routine_invocation_with_environment(
+            &fixture.context,
+            &fixture.plan,
+            "syntax",
+            vec!["--loader-environment".to_owned()],
+            BTreeMap::from([
+                ("LANG".to_owned(), "C".to_owned()),
+                (key.to_owned(), "/tmp/unbound-startup-code".to_owned()),
+            ]),
+            1_000,
+            1_024,
+            vec![path("target/routine")],
+        )
+        .unwrap_err();
+        assert_eq!(
+            error.cause(),
+            "adapter-environment-startup-loader-refused",
+            "key={key}"
+        );
+    }
 }
 
 #[test]

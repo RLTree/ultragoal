@@ -1,0 +1,246 @@
+{
+  "schema_version": "WorkerResult-v1",
+  "worker": "/root/routine_transitive_input_authority_corrector",
+  "lease_id": "ROUTINE-PUBLIC-EXECUTION-MEDIATOR-059-R7",
+  "supersedes_lease_id": "ROUTINE-PUBLIC-EXECUTION-MEDIATOR-059-R6",
+  "result_status": "corrective_candidate_only_pending_independent_falsification",
+  "context_id": "sha256:a77d51e7155c39fed646edf70d9335c488a9b1d7e5058b777339348350cf00d8",
+  "candidate_identity": {
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "frozen_candidate_head_commit": "c5c251b9b874c2296125a973da7bcbcccff8ee0a",
+    "frozen_candidate_head_tree": "09a9fe3395734635ca96b71eeb896a999eb56d06",
+    "final_observed_head_commit": "d36cfbf5c552fb6c88b8ae7387bfdd79f2b640db",
+    "final_observed_head_tree": "5a70c841168b12cd51c63cd76ea7e23137514242",
+    "head_commits_performed_by_worker": false,
+    "head_advanced_during_lane_by_disjoint_repository_fit_integration": true,
+    "staged_diff_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "status_sha256_before_self_referential_result_rewrite": "sha256:e19235a74232894b7ac76ecc5a6527cd4e7606ae9d13ec33010614313e6e4714",
+    "untracked_content_sha256_before_self_referential_result_rewrite": "sha256:9138d4cff5ef488e878320c3fa7801373cfe2e946012bcd681bdbc0b7de9a37c",
+    "worktree_diff_sha256_before_self_referential_result_rewrite": "sha256:e24f9d66f955571ebfbe2b16152e2e0e6eee1c048caa2c60b33f1b47ef3a009f",
+    "context_inspector": "/private/tmp/hul-routine-r7-read-authority/debug/ultragoal --json inspect context",
+    "worker_owned_artifact_set_formula": "Sort artifact rows by UTF-8 path bytes, serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>, concatenate, then SHA-256 the resulting bytes.",
+    "worker_owned_artifact_count": 11,
+    "worker_owned_artifact_total_bytes": 343261,
+    "worker_owned_artifact_total_lines": 9810,
+    "worker_owned_artifact_set_sha256": "sha256:4e5e29b187505a727749a23b049dd1e581933d48ff2e049d2e181126eb2bbde0",
+    "worker_result_self_excluded": true,
+    "concurrent_disjoint_repository_fit_host_executor_and_observability_bytes_preserved": true
+  },
+  "predecessor": {
+    "lease_id": "ROUTINE-PUBLIC-EXECUTION-MEDIATOR-059-R6",
+    "freeze_head_commit": "c5c251b9b874c2296125a973da7bcbcccff8ee0a",
+    "freeze_head_tree": "09a9fe3395734635ca96b71eeb896a999eb56d06",
+    "worker_owned_artifact_set_sha256": "sha256:b20afb2a2d77cd5ebcbaf65477e3e70c598195a071b2bd2f9ecc2b4c5cae5df7",
+    "worker_result_sha256": "sha256:c616e9cc4a6ecc2bc49a811ac3638691c6d5f6a58db9805cacace43d8d7ba7f6",
+    "decisive_rework": "R6 confined process-exec and executable mappings but retained default file-read authority. A pinned /bin/dash invocation could therefore read an unbound mutable command.sh as data, execute replacement commands under the pinned interpreter, emit a canonical passed report, and seed CompleteExecution plus authenticated reuse."
+  },
+  "lease_boundary": {
+    "allowed_paths": [
+      "validator/src/routine_work/mod.rs",
+      "validator/src/routine_work/runtime_adapter.rs",
+      "validator/src/routine_work/runtime_adapter/model.rs",
+      "validator/src/routine_work/runtime_adapter/mediator.rs",
+      "validator/src/routine_work/runtime_adapter/mediator/filesystem.rs",
+      "validator/src/routine_work/runtime_adapter/mediator/model.rs",
+      "validator/src/routine_work/runtime_adapter/mediator/process.rs",
+      "validator/tests/routine_work_contract.rs",
+      "validator/tests/routine_work_contract/runtime_adapter.rs",
+      "validator/tests/routine_work_contract/runtime_mediator.rs",
+      "fixtures/routine-public-mediator/cases.json",
+      "docs/ultragoal-successor-live/worker-results/ROUTINE-PUBLIC-EXECUTION-MEDIATOR-059.json"
+    ],
+    "other_worker_paths_modified": false,
+    "staged_or_committed_by_worker": false,
+    "public_route_or_grant_issuer_added": false,
+    "durable_ledger_added": false,
+    "install_or_readiness_surface_modified": false,
+    "claim_or_node_state_modified": false
+  },
+  "implementation": {
+    "read_authority_policy": "default-deny-exact-bound-read-v1",
+    "read_source_binding": "Explicit worktree-relative RepoPath sources are normalized and deduplicated, descriptor-opened component by component with O_NOFOLLOW, limited to same-device regular files with one link, and bound to path, device, inode, UID, GID, mode, link count, size, mtime, ctime, SHA-256, and every ancestor directory identity plus mtime and ctime.",
+    "read_source_bounds": {
+      "maximum_source_count": 128,
+      "maximum_total_source_bytes": 67108864
+    },
+    "read_authority_protocol_binding": "The canonical read-authority digest and normalized source paths are bound into each invocation, effect intent, request, result artifact, reuse artifact, witness, and protocol identity.",
+    "read_revalidation": "Bound source descriptors, content digests, pathname identities, and ancestor identities are revalidated at preparation, request preflight, before reuse acceptance, before execution, after child/report/output capture, and before result or reuse minting. Mutation or replacement returns incomplete recovery-required mediation after spawn and cannot mint a result or reuse artifact.",
+    "sandbox_read_policy": "Seatbelt denies file-read by default. It allows the exact pinned program, exact bound source literals including canonical /private aliases, exact output-scope metadata needed for writes, the root directory literal required by dyld startup, and immutable system runtime roots /System, /usr/lib, and /private/var/db/dyld.",
+    "startup_loader_environment_policy": "Known shell, language-runtime, JVM, Node, Perl, PHP, Python, Ruby, ELF, and Darwin startup-loader environment keys are refused during invocation binding before authority or spawn.",
+    "process_exec_policy": "After sandbox activation process-exec remains denied by default and allowed only for the literal pinned executable path used for launch.",
+    "file_map_executable_policy": "file-map-executable remains denied by default; only immutable system-library roots /System and /usr/lib are allowed for platform dynamic startup.",
+    "process_fork_policy": "process-fork remains denied with send-signal SIGKILL.",
+    "preserved_controls": [
+      "direct Child PID kill and reap fallback after PGID migration",
+      "process-group cleanup and absence checks",
+      "executable path immutability and effective-UID refusal",
+      "exact argv and clear-all allowlisted environment binding",
+      "canonical correlated report parsing",
+      "descriptor-anchored output confinement and shared output budget",
+      "authenticated exact reuse and explicit ambiguity recovery",
+      "exact same-executable reexec",
+      "effective-user-owned executable mapping refusal"
+    ],
+    "fixture_case_count": 46,
+    "fixture_unique_case_count": 46,
+    "claim_effect": false
+  },
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 RUSTFLAGS=-Awarnings cargo test --manifest-path validator/Cargo.toml --locked --offline --jobs 16 --test routine_work_contract runtime_mediator::external_dash_script_replacement_cannot_execute_or_seed_reuse -- --test-threads=16",
+      "status": "pass-1-of-1",
+      "result": "Passed in 3.66 seconds. The exact /bin/dash external command.sh replacement route produced no effect, result SHA, or reuse; recovery retry spawned and failed rather than reusing."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... runtime_mediator::bound_dash_source_executes_reuses_exactly_and_mutation_invalidates_reuse -- --test-threads=16",
+      "status": "pass-1-of-1",
+      "result": "Passed in 6.38 seconds. An explicitly bound worktree script executed, exact repeat reused without spawning, and mutation changed protocol identity so old reuse was rejected and execution failed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... runtime_adapter::startup_loader_environment_variables_are_rejected_at_binding -- --test-threads=16",
+      "status": "pass-1-of-1",
+      "result": "Passed in 1.07 seconds across 16 startup-loader environment controls, all refused at binding."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... runtime_mediator::read_source_binding_refuses_symlinks_hardlinks_special_files_and_capture_races -- --test-threads=16",
+      "status": "pass-1-of-1",
+      "result": "Passed in 4.41 seconds. Symlink, hardlink, FIFO, and capture-time replacement or mutation were refused."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... runtime_mediator::read_source_aba_before_spawn_is_refused_without_effect -- --test-threads=16",
+      "status": "pass-1-of-1",
+      "result": "Passed in 1.81 seconds. Mutate-and-restore before spawn was detected through ctime and ancestor binding with no effect or spawn."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... runtime_mediator::passing_report_cannot_hide_post_spawn_read_source_mutation -- --test-threads=16",
+      "status": "pass-1-of-1",
+      "result": "Passed in 2.36 seconds. A canonical passed report followed by source mutate-and-restore returned MEDIATOR-READ-SOURCE-CHANGED, incomplete recovery-required mediation, and no result or reuse artifact."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... runtime_mediator::dynamic_library_mapping_is_confined_to_the_exact_pinned_image -- --test-threads=16",
+      "status": "pass-1-of-1",
+      "result": "Passed in 2.45 seconds after canonical /private output-scope alias handling; the intended Ruby Fiddle mapping remained denied."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... runtime_mediator::fork_family_bypasses_are_killed_before_success_or_reuse -- --test-threads=16",
+      "status": "pass-1-of-1",
+      "result": "Passed in 12.35 seconds. Fork, new PGID, new session, posix_spawn, vfork, and raw-fork routes remained killed before success or reuse."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... runtime_mediator::exact_same_executable_reexec_remains_single_process_and_can_complete -- --test-threads=16",
+      "status": "pass-1-of-1",
+      "result": "Passed in 3.80 seconds; exact same-executable reexec remained a supported single-process completion route."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... runtime_mediator::post_spawn_setup_failures_cleanup_every_resource_and_require_exact_recovery -- --test-threads=16",
+      "status": "pass-1-of-1",
+      "result": "Passed in 48.30 seconds after the test helper was made self-contained; all five setup-failure points retained exact recovery and cleanup behavior without undeclared reads."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... cargo test --manifest-path validator/Cargo.toml --locked --offline --jobs 16 --test routine_work_contract 'runtime_adapter::' -- --test-threads=16",
+      "status": "pass-15-of-15",
+      "result": "15 passed, 0 failed or ignored, 101 filtered, in 17.64 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... cargo test --manifest-path validator/Cargo.toml --locked --offline --jobs 16 --test routine_work_contract 'runtime_mediator::' -- --test-threads=16",
+      "status": "pass-33-of-33-final-artifact-digest",
+      "result": "33 passed, 0 failed or ignored, 83 filtered, in 205.86 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... cargo test --manifest-path validator/Cargo.toml --locked --offline --jobs 16 --test routine_work_contract -- --test-threads=16",
+      "status": "pass-116-of-116-final-artifact-digest",
+      "result": "116 passed, 0 failed, ignored, or filtered, in 286.92 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... cargo test --manifest-path validator/Cargo.toml --locked --offline --jobs 16 --test routine_recovery_reuse_journey_contract -- --test-threads=16",
+      "status": "pass-26-of-26-final-artifact-digest",
+      "result": "26 passed, 0 failed, ignored, or filtered, in 13.33 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority ... cargo test --manifest-path validator/Cargo.toml --locked --offline --jobs 16 --test successor_cli_state_journey_contract help_parse_inspect_next_diagnose_and_query_are_recursively_zero_write -- --exact --nocapture --test-threads=16",
+      "status": "pass-1-of-1-final-artifact-digest",
+      "result": "1 passed, 0 failed or ignored, 3 filtered, in 17.59 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-r7-read-authority CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_DEV_DEBUG=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline --lib --jobs 16",
+      "status": "pass-final-artifact-digest",
+      "result": "Exited 0 in 12.84 seconds."
+    },
+    {
+      "command": "rustfmt --edition 2024 on the ten leased Rust files; jq exact fixture schema and 46-of-46 unique-case check; exact 11-artifact SHA-256 aggregation",
+      "status": "pass",
+      "result": "Formatting completed, fixture JSON parsed with 46 unique cases, and the self-excluding artifact aggregate is sha256:4e5e29b187505a727749a23b049dd1e581933d48ff2e049d2e181126eb2bbde0."
+    },
+    {
+      "command": "/private/tmp/hul-routine-r7-read-authority/debug/ultragoal --json inspect context",
+      "status": "pass-current-committed-base-before-worker-result-rewrite",
+      "result": "Observed final disjoint-integrated HEAD d36cfbf5c552fb6c88b8ae7387bfdd79f2b640db, tree 5a70c841168b12cd51c63cd76ea7e23137514242, and context sha256:a77d51e7155c39fed646edf70d9335c488a9b1d7e5058b777339348350cf00d8 before the self-referential WorkerResult rewrite."
+    },
+    {
+      "command": "ps -axo pid=,ppid=,pgid=,sess=,etime=,command= filtered for routine-mediator, read, fork, mapping, timeout, setup, sandbox, mapping.effect, attempt.returned, and report.emitted adversaries",
+      "status": "pass-no-matches",
+      "result": "No matching adversary or routine mediator process remained after final runtime gates."
+    }
+  ],
+  "artifacts": [
+    {"path": "fixtures/routine-public-mediator/cases.json", "sha256": "sha256:ae14a048030870e840cb6d6d35e6da0a58a02506273a3cce69728805a8054e3d", "byte_length": 5180, "line_count": 55},
+    {"path": "validator/src/routine_work/mod.rs", "sha256": "sha256:e3b01394128db1a2f1ec5b36cf338c07bdb8f1bbd305bc879b493e362e6060ab", "byte_length": 2517, "line_count": 61},
+    {"path": "validator/src/routine_work/runtime_adapter.rs", "sha256": "sha256:9cef9f2debb644829418582cf6e7f1f2a1328e3465f2e81d3e00d3dfbd97c757", "byte_length": 37923, "line_count": 1083},
+    {"path": "validator/src/routine_work/runtime_adapter/mediator.rs", "sha256": "sha256:e174b2bc0d006d9c3b8a58a06c55b6de5960263401052ea27dafe7063cc98573", "byte_length": 41498, "line_count": 1141},
+    {"path": "validator/src/routine_work/runtime_adapter/mediator/filesystem.rs", "sha256": "sha256:0674bd7f2de006ac113f59d0d6b781e6ab7022f3a56165d788201039899dce38", "byte_length": 44378, "line_count": 1302},
+    {"path": "validator/src/routine_work/runtime_adapter/mediator/model.rs", "sha256": "sha256:e7fdd9d6f63553242e9a9c120da10057cce44f4d6bd399e9485e69cb57ba9cab", "byte_length": 9516, "line_count": 311},
+    {"path": "validator/src/routine_work/runtime_adapter/mediator/process.rs", "sha256": "sha256:ef37ddb2bcea2735948d12bf7ce158e8009d54463d99830d4ddc059b59c9ffbd", "byte_length": 28928, "line_count": 856},
+    {"path": "validator/src/routine_work/runtime_adapter/model.rs", "sha256": "sha256:dbf02a97950b331782c5e824c31c0353897214e5781c728507a3ca2ec07c5497", "byte_length": 28133, "line_count": 944},
+    {"path": "validator/tests/routine_work_contract.rs", "sha256": "sha256:10e4b4eec84994243a68a7f0636e4501722e3e73d6a139b75beb4b8de1901062", "byte_length": 836, "line_count": 32},
+    {"path": "validator/tests/routine_work_contract/runtime_adapter.rs", "sha256": "sha256:d53ef18c07dd74afea39a8e1810cc1817a17c299c807b0b7e5aa8416bfa74a76", "byte_length": 37398, "line_count": 1088},
+    {"path": "validator/tests/routine_work_contract/runtime_mediator.rs", "sha256": "sha256:15c59b85da4f095fc9c4d352f65bae953035269c6e784d0b83283f81d6eb4b82", "byte_length": 106954, "line_count": 2937}
+  ],
+  "findings": [
+    {
+      "severity": "decisive-rework-corrected",
+      "class": "transitive-interpreted-source-authority",
+      "finding": "The exact external /bin/dash command.sh replacement exploit is refused without effect, result, or reuse. Interpreted sources must be explicit worktree-relative bound inputs, and exact identity plus content is carried into protocol and reuse identity."
+    },
+    {
+      "severity": "material-corrected",
+      "class": "source-mutation-and-aba",
+      "finding": "Descriptor capture, ctime and ancestor binding, pre/post execution revalidation, and result/reuse binding detect replacement, mutate-and-restore, special files, aliases, and capture races. A passed child report cannot override changed read authority."
+    },
+    {
+      "severity": "material-corrected",
+      "class": "startup-loader-environment",
+      "finding": "Known startup-loader environment channels are rejected at binding, before authority consumption or spawn."
+    },
+    {
+      "severity": "preservation-proved",
+      "class": "process-exec-map-and-fork-controls",
+      "finding": "Exact reexec, pinned system startup, user-owned mapping refusal, fork-family termination, PID/PGID cleanup, output confinement, recovery, and exact reuse remained green in focused and full dependency-closure suites."
+    },
+    {
+      "severity": "ceiling-withheld",
+      "class": "path-spawn-read-race-and-system-root-allowance",
+      "finding": "Child launch and source open remain pathname-based. Revalidation prevents success and reuse after tested mutation, but does not prove that a more privileged post-preflight race cannot cause an external effect before refusal. System runtime roots and exact output-scope metadata/write exceptions are policy-authorized rather than individually digest-pinned."
+    },
+    {
+      "severity": "ceiling-withheld",
+      "class": "canonical-grant-durability-public-and-installed-surfaces",
+      "finding": "RoutineRootGrant still has no production issuer; grant, artifact, and recovery state remain process-local; public dispatch, installed behavior, and real-user behavior are absent."
+    }
+  ],
+  "limitations": [
+    "The exact 11-artifact aggregate excludes this self-referential WorkerResult; the WorkerResult is separately hashed after creation.",
+    "The corrective lane froze R6 at c5c251b9b874c2296125a973da7bcbcccff8ee0a. Disjoint repository-fit integration advanced committed HEAD to d36cfbf5c552fb6c88b8ae7387bfdd79f2b640db; this worker preserved those bytes and bound final artifact evidence to that current base.",
+    "The context and status digests were captured before the unavoidable self-referential WorkerResult rewrite and therefore do not describe the WorkerResult's own final bytes.",
+    "The supported execution model is macOS Seatbelt and one process. Process creation kills the runner.",
+    "Unbound reads and external interpreted sources are unsupported. Bound sources are limited to 128 worktree-relative, same-device, one-link regular files totaling at most 64 MiB; directories, symlinks, hardlinks, and special files are refused.",
+    "Source ancestor ctime is deliberately pinned. Concurrent directory churn can therefore cause a safe false refusal.",
+    "Read-authority validation rehashes up to 64 MiB at multiple pre/post execution and reuse boundaries; this is bounded O(total bound source bytes) overhead.",
+    "The root directory literal, immutable system runtime roots, exact pinned program, bound source literals, and exact output-scope metadata/write paths remain deliberate read-policy exceptions; system roots are not individually digest-pinned.",
+    "Final executable launch and child source open are pathname-based. A more privileged post-preflight race is not excluded, and a child may cause an external effect before post-spawn revalidation refuses result and reuse minting.",
+    "Apple /bin/sh remains unsupported because it substitutes /bin/bash after sandbox activation.",
+    "RoutineRootGrant has no production issuer, and process-local grant, artifact, and recovery state is lost on crash or restart.",
+    "No public command, public API, canonical grant issuer, durable ledger, install surface, acceptance, readiness, release, node closure, completion, installed-behavior, or real-user surface was modified."
+  ],
+  "no_claim_statement": "This worker makes no acceptance, readiness, release, node-closure, completion, production-grant, public-dispatch, durable-mediation, installed-behavior, or real-user claim."
+}

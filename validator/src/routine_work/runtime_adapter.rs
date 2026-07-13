@@ -5,10 +5,12 @@
 //! and performs no workspace, receipt, cache, telemetry, network, or external
 //! write.
 
+mod mediator;
 mod model;
 
 use serde::Serialize;
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
+use std::path::Path;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 use crate::context::{EffectClass, LiveContext, ToolCapability};
@@ -20,6 +22,17 @@ use super::{
     RoutineErrorId, RoutinePlan, RoutineReport, RunOutcome, reconcile_report,
 };
 
+pub(crate) use mediator::{
+    RoutineCancellation, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
+    RoutineNodeMediation, RoutineReuseInput, RoutineRootGrant, mediate_prepared_routine_execution,
+};
+#[cfg(test)]
+pub(crate) use mediator::{
+    TestProcessSetupFailure, set_test_mediator_finish_failure, set_test_mediator_post_spawn_hook,
+    set_test_mediator_pre_spawn_hook, set_test_output_capture_hook, set_test_process_setup_failure,
+    set_test_read_source_capture_hook, test_spawn_count,
+};
+use model::RoutineReadSource;
 pub(crate) use model::{
     PreparedRoutineExecution, RoutineAdapterSpec, RoutineEffectIntent, RoutineEffectRequest,
     RoutineInvocationSpec, RoutineMediatedExpectation, RoutineMediatedIntent,
@@ -30,6 +43,9 @@ pub(crate) use model::{
 const MAX_SELECTED_CHECKS: usize = 4_096;
 const MAX_ARGUMENTS: usize = 128;
 const MAX_ARGUMENT_BYTES: usize = 64 * 1024;
+const MAX_ENVIRONMENT_ENTRIES: usize = 64;
+const MAX_ENVIRONMENT_BYTES: usize = 64 * 1024;
+const MAX_READ_SOURCES: usize = 128;
 const MAX_OUTPUT_SCOPES: usize = 128;
 const MAX_TIMEOUT_MS: u64 = 3_600_000;
 const MAX_OUTPUT_BUDGET_BYTES: u64 = 64 * 1024 * 1024;
@@ -51,6 +67,15 @@ struct BoundIntent {
     argv: Vec<String>,
     working_directory: String,
     environment_policy: &'static str,
+    environment_keys: Vec<String>,
+    environment_sha256: String,
+    #[serde(skip)]
+    environment: BTreeMap<String, String>,
+    read_authority_policy: &'static str,
+    read_source_paths: Vec<RepoPath>,
+    read_authority_sha256: String,
+    #[serde(skip)]
+    read_sources: Vec<RoutineReadSource>,
     mediation_preflight: &'static str,
     timeout_ms: u64,
     output_budget_bytes: u64,
@@ -94,6 +119,7 @@ struct RunnerIdentity {
     program_sha256: String,
     program_byte_length: u64,
     program_unix_mode: Option<u32>,
+    program_path: String,
 }
 
 pub(crate) fn bind_routine_invocation(
@@ -110,9 +136,124 @@ pub(crate) fn bind_routine_invocation(
         .check(node_id)
         .ok_or_else(|| adapter_error("adapter-invocation-node-unknown"))?;
     let runner = exact_runner(context, check)?;
+    let environment = default_environment(&runner)?;
+    bind_routine_invocation_with_environment_inner(
+        binding,
+        check,
+        runner,
+        arguments,
+        environment,
+        Vec::new(),
+        timeout_ms,
+        output_budget_bytes,
+        declared_output_scopes,
+    )
+}
+
+pub(crate) fn bind_routine_invocation_with_environment(
+    context: &LiveContext,
+    plan: &RoutinePlan,
+    node_id: &str,
+    arguments: Vec<String>,
+    environment: BTreeMap<String, String>,
+    timeout_ms: u64,
+    output_budget_bytes: u64,
+    declared_output_scopes: Vec<RepoPath>,
+) -> Result<RoutineInvocationSpec, RoutineError> {
+    let binding = structural_binding(context, plan, "adapter-invocation-plan-binding-is-stale")?;
+    let check = plan
+        .check(node_id)
+        .ok_or_else(|| adapter_error("adapter-invocation-node-unknown"))?;
+    let runner = exact_runner(context, check)?;
+    bind_routine_invocation_with_environment_inner(
+        binding,
+        check,
+        runner,
+        arguments,
+        environment,
+        Vec::new(),
+        timeout_ms,
+        output_budget_bytes,
+        declared_output_scopes,
+    )
+}
+
+pub(crate) fn bind_routine_invocation_with_read_sources(
+    context: &LiveContext,
+    plan: &RoutinePlan,
+    node_id: &str,
+    arguments: Vec<String>,
+    read_sources: Vec<RepoPath>,
+    timeout_ms: u64,
+    output_budget_bytes: u64,
+    declared_output_scopes: Vec<RepoPath>,
+) -> Result<RoutineInvocationSpec, RoutineError> {
+    let binding = structural_binding(context, plan, "adapter-invocation-plan-binding-is-stale")?;
+    let check = plan
+        .check(node_id)
+        .ok_or_else(|| adapter_error("adapter-invocation-node-unknown"))?;
+    let runner = exact_runner(context, check)?;
+    let environment = default_environment(&runner)?;
+    bind_routine_invocation_with_environment_inner(
+        binding,
+        check,
+        runner,
+        arguments,
+        environment,
+        read_sources,
+        timeout_ms,
+        output_budget_bytes,
+        declared_output_scopes,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn bind_routine_invocation_with_environment_and_read_sources(
+    context: &LiveContext,
+    plan: &RoutinePlan,
+    node_id: &str,
+    arguments: Vec<String>,
+    environment: BTreeMap<String, String>,
+    read_sources: Vec<RepoPath>,
+    timeout_ms: u64,
+    output_budget_bytes: u64,
+    declared_output_scopes: Vec<RepoPath>,
+) -> Result<RoutineInvocationSpec, RoutineError> {
+    let binding = structural_binding(context, plan, "adapter-invocation-plan-binding-is-stale")?;
+    let check = plan
+        .check(node_id)
+        .ok_or_else(|| adapter_error("adapter-invocation-node-unknown"))?;
+    let runner = exact_runner(context, check)?;
+    bind_routine_invocation_with_environment_inner(
+        binding,
+        check,
+        runner,
+        arguments,
+        environment,
+        read_sources,
+        timeout_ms,
+        output_budget_bytes,
+        declared_output_scopes,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+fn bind_routine_invocation_with_environment_inner(
+    binding: RoutineBinding,
+    check: &PlannedCheck,
+    runner: RunnerIdentity,
+    arguments: Vec<String>,
+    environment: BTreeMap<String, String>,
+    read_source_paths: Vec<RepoPath>,
+    timeout_ms: u64,
+    output_budget_bytes: u64,
+    declared_output_scopes: Vec<RepoPath>,
+) -> Result<RoutineInvocationSpec, RoutineError> {
     let declared_output_scopes = normalized_output_scopes(declared_output_scopes)?;
+    let read_source_paths = normalized_read_source_paths(read_source_paths)?;
     validate_execution_policy(
         &arguments,
+        &environment,
         timeout_ms,
         output_budget_bytes,
         &declared_output_scopes,
@@ -120,8 +261,10 @@ pub(crate) fn bind_routine_invocation(
     if binding.worktree_root().to_str().is_none() {
         return Err(adapter_error("adapter-working-directory-not-utf8"));
     }
+    let read_sources = mediator::bind_read_sources(binding.worktree_root(), &read_source_paths)?;
+    let read_authority_sha256 = read_authority_digest(&read_sources)?;
     Ok(RoutineInvocationSpec::bound(
-        node_id.to_owned(),
+        check.node_id().to_owned(),
         runner.tool_name,
         runner.tool_identity_sha256,
         runner.program_path_hex,
@@ -129,6 +272,10 @@ pub(crate) fn bind_routine_invocation(
         runner.program_byte_length,
         runner.program_unix_mode,
         arguments,
+        environment_digest(&environment)?,
+        environment,
+        read_authority_sha256,
+        read_sources,
         timeout_ms,
         output_budget_bytes,
         declared_output_scopes,
@@ -201,6 +348,7 @@ pub(crate) fn prepare_routine_execution(
         .enumerate()
     {
         let runner = exact_runner(context, check)?;
+        mediator::validate_read_sources(binding.worktree_root(), &invocation.read_sources)?;
         validate_bound_invocation(&invocation, &runner, check)?;
         let invocation = validate_and_normalize_bound_invocation(invocation)?;
         let mut argv = Vec::with_capacity(invocation.arguments.len() + 1);
@@ -217,9 +365,20 @@ pub(crate) fn prepare_routine_execution(
             program_unix_mode: invocation.program_unix_mode,
             argv,
             working_directory: working_directory.clone(),
-            environment_policy: "clear-all-no-inheritance-v1",
+            environment_policy: "clear-all-allowlisted-v1",
+            environment_keys: invocation.environment.keys().cloned().collect(),
+            environment_sha256: invocation.environment_sha256.clone(),
+            environment: invocation.environment,
+            read_authority_policy: "default-deny-exact-bound-read-v1",
+            read_source_paths: invocation
+                .read_sources
+                .iter()
+                .map(|source| source.relative_path.clone())
+                .collect(),
+            read_authority_sha256: invocation.read_authority_sha256.clone(),
+            read_sources: invocation.read_sources,
             mediation_preflight:
-                "revalidate-context-candidate-tool-executable-output-scopes-before-effect-v1",
+                "revalidate-context-candidate-tool-executable-read-sources-output-scopes-before-and-after-effect-v1",
             timeout_ms: invocation.timeout_ms,
             output_budget_bytes: invocation.output_budget_bytes,
             declared_output_scopes: invocation.declared_output_scopes,
@@ -258,6 +417,10 @@ pub(crate) fn prepare_routine_execution(
                 intent.program_unix_mode,
                 intent.argv,
                 intent.working_directory,
+                intent.environment_sha256,
+                intent.environment,
+                intent.read_authority_sha256,
+                intent.read_sources,
                 intent.timeout_ms,
                 intent.output_budget_bytes,
                 intent.declared_output_scopes,
@@ -385,14 +548,33 @@ pub(crate) fn bind_mediated_expectation(
         || token.intent.expected_dependency_nodes()
             != check.depends_on().iter().cloned().collect::<Vec<_>>()
         || Some(token.intent.working_directory()) != plan.binding().worktree_root().to_str()
-        || token.intent.environment_policy() != "clear-all-no-inheritance-v1"
+        || token.intent.environment_policy() != "clear-all-allowlisted-v1"
+        || token.intent.environment_keys()
+            != token
+                .intent
+                .environment()
+                .keys()
+                .cloned()
+                .collect::<Vec<_>>()
+        || environment_digest(token.intent.environment())? != token.intent.environment_sha256()
+        || token.intent.read_authority_policy() != "default-deny-exact-bound-read-v1"
+        || token.intent.read_source_paths()
+            != token
+                .intent
+                .read_sources()
+                .iter()
+                .map(|source| source.relative_path.clone())
+                .collect::<Vec<_>>()
+        || read_authority_digest(token.intent.read_sources())?
+            != token.intent.read_authority_sha256()
         || token.intent.mediation_preflight()
-            != "revalidate-context-candidate-tool-executable-output-scopes-before-effect-v1"
+            != "revalidate-context-candidate-tool-executable-read-sources-output-scopes-before-and-after-effect-v1"
     {
         return Err(adapter_error("adapter-mediated-intent-binding-invalid"));
     }
     validate_execution_policy(
         arguments,
+        token.intent.environment(),
         token.intent.timeout_ms(),
         token.intent.output_budget_bytes(),
         token.intent.declared_output_scopes(),
@@ -679,6 +861,7 @@ fn runner_identity(
         program_sha256,
         program_byte_length,
         program_unix_mode: tool.unix_mode,
+        program_path: executable.to_owned(),
     })
 }
 
@@ -694,6 +877,8 @@ fn validate_bound_invocation(
         || invocation.program_sha256 != runner.program_sha256
         || invocation.program_byte_length != runner.program_byte_length
         || invocation.program_unix_mode != runner.program_unix_mode
+        || environment_digest(&invocation.environment)? != invocation.environment_sha256
+        || read_authority_digest(&invocation.read_sources)? != invocation.read_authority_sha256
     {
         return Err(adapter_error("adapter-runner-binding-mismatch"));
     }
@@ -707,6 +892,7 @@ fn validate_and_normalize_bound_invocation(
         normalized_output_scopes(invocation.declared_output_scopes)?;
     validate_execution_policy(
         &invocation.arguments,
+        &invocation.environment,
         invocation.timeout_ms,
         invocation.output_budget_bytes,
         &invocation.declared_output_scopes,
@@ -716,6 +902,7 @@ fn validate_and_normalize_bound_invocation(
 
 fn validate_execution_policy(
     arguments: &[String],
+    environment: &BTreeMap<String, String>,
     timeout_ms: u64,
     output_budget_bytes: u64,
     output_scopes: &[RepoPath],
@@ -731,6 +918,7 @@ fn validate_execution_policy(
     {
         return Err(adapter_error("adapter-argv-invalid"));
     }
+    validate_environment(environment)?;
     if timeout_ms == 0 || timeout_ms > MAX_TIMEOUT_MS {
         return Err(adapter_error("adapter-timeout-invalid"));
     }
@@ -741,6 +929,116 @@ fn validate_execution_policy(
         return Err(adapter_error("adapter-output-scope-limit-exceeded"));
     }
     Ok(())
+}
+
+fn default_environment(runner: &RunnerIdentity) -> Result<BTreeMap<String, String>, RoutineError> {
+    let parent = Path::new(&runner.program_path)
+        .parent()
+        .and_then(Path::to_str)
+        .ok_or_else(|| adapter_error("adapter-runner-program-parent-invalid"))?;
+    Ok(BTreeMap::from([
+        ("LANG".to_owned(), "C".to_owned()),
+        ("LC_ALL".to_owned(), "C".to_owned()),
+        ("PATH".to_owned(), parent.to_owned()),
+    ]))
+}
+
+fn validate_environment(environment: &BTreeMap<String, String>) -> Result<(), RoutineError> {
+    let total_bytes = environment
+        .iter()
+        .map(|(key, value)| key.len().saturating_add(value.len()))
+        .sum::<usize>();
+    if environment.len() > MAX_ENVIRONMENT_ENTRIES
+        || total_bytes > MAX_ENVIRONMENT_BYTES
+        || environment.iter().any(|(key, value)| {
+            key.is_empty()
+                || key.len() > 128
+                || key.starts_with("HUL_ROUTINE_")
+                || !key
+                    .bytes()
+                    .all(|byte| byte.is_ascii_uppercase() || byte.is_ascii_digit() || byte == b'_')
+                || value.len() > 4_096
+                || value
+                    .bytes()
+                    .any(|byte| byte == 0 || byte.is_ascii_control())
+        })
+    {
+        return Err(adapter_error("adapter-environment-invalid"));
+    }
+    if environment
+        .keys()
+        .any(|key| startup_loader_environment_key(key))
+    {
+        return Err(adapter_error("adapter-environment-startup-loader-refused"));
+    }
+    Ok(())
+}
+
+fn startup_loader_environment_key(key: &str) -> bool {
+    const EXACT: &[&str] = &[
+        "BASH_ENV",
+        "BASH_LOADABLES_PATH",
+        "CLASSPATH",
+        "ENV",
+        "GEM_HOME",
+        "GEM_PATH",
+        "JDK_JAVA_OPTIONS",
+        "LD_AUDIT",
+        "LD_LIBRARY_PATH",
+        "LD_PRELOAD",
+        "LIBPATH",
+        "NODE_OPTIONS",
+        "NODE_PATH",
+        "PERL5LIB",
+        "PERL5OPT",
+        "PERLLIB",
+        "PHP_INI_SCAN_DIR",
+        "PHPRC",
+        "PYTHONBREAKPOINT",
+        "PYTHONHOME",
+        "PYTHONINSPECT",
+        "PYTHONPATH",
+        "PYTHONSTARTUP",
+        "PYTHONUSERBASE",
+        "RUBYLIB",
+        "RUBYOPT",
+        "RUBYPATH",
+        "SHLIB_PATH",
+        "ZDOTDIR",
+    ];
+    EXACT.contains(&key)
+        || key.starts_with("DYLD_")
+        || key.starts_with("LD_PRELOAD_")
+        || key.ends_with("_STARTUP")
+        || key.ends_with("_TOOL_OPTIONS")
+}
+
+pub(super) fn environment_digest(
+    environment: &BTreeMap<String, String>,
+) -> Result<String, RoutineError> {
+    validate_environment(environment)?;
+    digest_of(environment)
+}
+
+pub(super) fn read_authority_digest(
+    read_sources: &[RoutineReadSource],
+) -> Result<String, RoutineError> {
+    digest_of(read_sources)
+}
+
+fn normalized_read_source_paths(mut sources: Vec<RepoPath>) -> Result<Vec<RepoPath>, RoutineError> {
+    if sources.len() > MAX_READ_SOURCES {
+        return Err(adapter_error("adapter-read-source-limit-exceeded"));
+    }
+    sources.sort_by(|left, right| left.as_str().cmp(right.as_str()));
+    let mut case_keys = BTreeSet::new();
+    if sources
+        .iter()
+        .any(|source| !case_keys.insert(source.case_key()))
+    {
+        return Err(adapter_error("adapter-read-source-duplicated"));
+    }
+    Ok(sources)
 }
 
 fn normalized_output_scopes(mut scopes: Vec<RepoPath>) -> Result<Vec<RepoPath>, RoutineError> {

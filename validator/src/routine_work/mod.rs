@@ -38,14 +38,24 @@ pub use reuse::{
 pub use snapshot::{ChangeKind, DirtyChange, DirtySnapshot};
 
 pub(crate) use runtime_adapter::{
-    PreparedRoutineExecution, RoutineAdapterSpec, RoutineEffectIntent, RoutineEffectRequest,
-    RoutineInvocationSpec, RoutineMediatedExpectation, RoutineMediatedIntent,
+    PreparedRoutineExecution, RoutineAdapterSpec, RoutineCancellation, RoutineEffectIntent,
+    RoutineEffectRequest, RoutineInvocationSpec, RoutineMediatedExpectation, RoutineMediatedIntent,
     RoutineMediatedOutcome, RoutineMediatedWitness, RoutineMediationAuthority,
-    RoutineMediationBatch, RoutineNoOpProjection, begin_routine_mediation,
-    bind_mediated_expectation, bind_mediated_witness, bind_routine_invocation,
+    RoutineMediationBatch, RoutineMediationResult, RoutineMediatorStatus, RoutineNoOpProjection,
+    RoutineNodeDisposition, RoutineNodeMediation, RoutineReuseInput, RoutineRootGrant,
+    begin_routine_mediation, bind_mediated_expectation, bind_mediated_witness,
+    bind_routine_invocation, bind_routine_invocation_with_environment,
+    bind_routine_invocation_with_environment_and_read_sources,
+    bind_routine_invocation_with_read_sources, mediate_prepared_routine_execution,
     observe_mediated_incomplete, observe_mediated_outcome, prepare_routine_execution,
     reconcile_routine_execution,
 };
 
 #[cfg(test)]
 pub(crate) use authority::set_test_live_authority_hook;
+#[cfg(test)]
+pub(crate) use runtime_adapter::{
+    TestProcessSetupFailure, set_test_mediator_finish_failure, set_test_mediator_post_spawn_hook,
+    set_test_mediator_pre_spawn_hook, set_test_output_capture_hook, set_test_process_setup_failure,
+    set_test_read_source_capture_hook, test_spawn_count,
+};
