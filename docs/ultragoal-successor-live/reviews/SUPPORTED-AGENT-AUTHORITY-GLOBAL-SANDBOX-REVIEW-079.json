@@ -27,7 +27,7 @@
       "AgentRouteEligibility::observed"
     ],
     "cause": "The Global branch continues before the sandbox_mode read-only gate; supported reporting records WriteCapableSandbox but does not reject.",
-    "reproduction": "A valid unrelated global descriptor with sandbox_mode workspace-write passed a fresh supported-host transaction and returned route_eligible true.",
+    "reproduction": "A valid unrelated global descriptor with sandbox_mode workspace-write passed a fresh fixture HostAgentAuthorityTransaction and returned route_eligible true.",
     "impact": "Write-capable global authority can be treated as safe read-only routing authority."
   },
   "completed_proof": [

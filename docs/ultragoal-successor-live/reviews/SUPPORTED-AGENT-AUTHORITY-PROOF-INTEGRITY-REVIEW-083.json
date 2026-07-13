@@ -1,0 +1,31 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "reviewer": "/root/agent_authority_reader_proof_reviewer",
+  "verdict": "REWORK",
+  "reviewed_identity": {
+    "candidate_id": "sha256:1b97701a1ffe1f6e2bc62d06a922eaf4b85d0fa3162df806491292bd7b883f2e",
+    "artifact_count": 11,
+    "artifact_bytes": 147079,
+    "artifact_lines": 4389,
+    "receipt_sha256": "sha256:661d522d5ff288e80629ca2a70bcc60a77da4b89ec689005866de4b78847aa5d"
+  },
+  "decisive_finding": {
+    "severity": "blocker",
+    "class": "proof-surface-misattribution",
+    "affected_path": "docs/ultragoal-successor-live/reviews/SUPPORTED-AGENT-AUTHORITY-GLOBAL-SANDBOX-REVIEW-079.json",
+    "cause": "The prior review described its FixtureReader reproduction as a fresh supported-host transaction even though the supported adapter emits new_session false and cannot return route eligibility.",
+    "impact": "The bound review asserted a supported-host and fresh-session proof surface that its own ceiling explicitly withheld.",
+    "source_disposition": "The source correction was not rejected by this finding; sandbox rejection structurally precedes Global continuation and both fixture and supported-host regression controls are present."
+  },
+  "smallest_safe_correction": [
+    "Attribute the reproduction to the fresh fixture HostAgentAuthorityTransaction.",
+    "Preserve the explicit absence of supported-host fresh-session proof.",
+    "Recompute the review digest, rebind the WorkerResult, and independently reverify the typed receipt and exact source set."
+  ],
+  "completed_proof": [
+    "The exact 11 artifact rows, byte total, line diagnostic, and aggregate matched the frozen receipt.",
+    "No build or repository mutation occurred before the decisive finding."
+  ],
+  "claim_ceiling": "The R3 source candidate remains pending independent rereview; no supported-host or fresh-session claim is established.",
+  "no_claim_statement": "This review does not claim source acceptance, route eligibility, supported-host or fresh-session behavior, readiness, release, node closure, or completion."
+}
