@@ -1,0 +1,127 @@
+{
+  "schema_version": "RootIssuedWorkPackage-v1",
+  "work_package_id": "EVALUATION-PRODUCTION-RUNTIME-086",
+  "workstream": "evaluation-runtime-and-independent-promotion",
+  "issued_from_live_context": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "c6dd44264b557eb541d8e658839ffab6d51bf291",
+    "head_tree": "77e957e4cb081473647709574f0975a4ec167e48",
+    "context_id": "sha256:d09776fb1f03ca676320ab7c1d8f6f7b29a79c3fcc28299cc0d931c86a063ac8",
+    "candidate_id": "sha256:febe336285481c9a8421767690705bf97c60e9f8a7e5b9100b8f109236421143"
+  },
+  "path_reallocation": {
+    "reason": "The adopted workstream path hint names validator/src/eval, while the accepted canonical authority is validator/src/evaluation.",
+    "authority": "Ultra root run-scoped extension of the accepted evaluation authority plus a narrow fixture and capture bridge; no parallel eval module or adopted contract change is authorized.",
+    "semantic_scope": "Production-confined evaluation execution, durable execution and review state, recovery, negative controls, and non-authoritative promotion proposals."
+  },
+  "lease": {
+    "principal": "/root/evaluation_production_runtime_engineer",
+    "write_paths": [
+      "validator/src/evaluation/mod.rs",
+      "validator/src/evaluation/runtime.rs",
+      "validator/src/evaluation/ledger.rs",
+      "validator/src/evaluation/promotion_ledger.rs",
+      "validator/src/evaluation/records.rs",
+      "validator/src/evaluation/research.rs",
+      "validator/src/fixture_scheduler/mod.rs",
+      "validator/src/fixture_scheduler/scheduler.rs",
+      "validator/src/fixture_scheduler/outcome.rs",
+      "validator/src/cli/capture/fixture.rs",
+      "validator/src/cli/capture/fixture/permit.rs",
+      "validator/src/cli/capture/fixture/execute.rs",
+      "validator/tests/evaluation_contract.rs",
+      "validator/tests/evaluation_runtime_contract.rs",
+      "validator/tests/evaluation_runtime_contract",
+      "fixtures/evaluation-engine",
+      "docs/ultragoal-successor-live/worker-results/EVALUATION-PRODUCTION-RUNTIME-086.json"
+    ],
+    "write_symbols": [
+      "RuntimeConfiguration exposed-or-unknown provenance",
+      "production FixtureScheduler-backed EvaluationExecutor",
+      "bounded FixtureExecutionRecord",
+      "FileEvaluationExecutionLedger",
+      "FilePromotionReviewLedger",
+      "recovery-required evaluation state machine",
+      "vendor-neutral canonical run failure and review records",
+      "privacy-safe semantic event projection",
+      "non-authoritative research-source audit and law-change proposals",
+      "WorkerResult-v1 exact artifact set"
+    ],
+    "generated_outputs": [
+      "docs/ultragoal-successor-live/worker-results/EVALUATION-PRODUCTION-RUNTIME-086.json"
+    ],
+    "fixtures": "Only leased fixtures/evaluation-engine candidate inputs and ephemeral isolated execution, ledger, review, and recovery roots under /private/tmp.",
+    "external_effects": "Locked and offline local validation, confined fixture subprocesses, and test-owned temporary ledger writes only.",
+    "git_mutation": "forbidden"
+  },
+  "dependencies": [
+    "accepted immutable evaluation and promotion decision kernel",
+    "accepted Darwin fixture scheduler platform contract",
+    "accepted source-local observability event and query boundary",
+    "root retains public eval commands, principals, sessions, schemas, global generated catalog, observability writer join, migration, claims, installation, and release"
+  ],
+  "required_interfaces": [
+    "Represent runtime and tool configuration only as explicitly exposed provenance or an explicit Unknown value; prompt text, routing labels, and expected configuration cannot populate it.",
+    "Execute one audited EvaluationSpec through the confined FixtureScheduler and capture adapter while preserving exact context, candidate, spec, task, executable, session, and artifact identity.",
+    "Return a bounded FixtureExecutionRecord carrying actual artifact and outcome identity before cleanup, without exposing secrets or raw unbounded process output.",
+    "Persist execution reservation, result publication, interruption, recovery-required, and terminal states in a descriptor-confined authenticated durable ledger with one cross-process winner.",
+    "Persist independent promotion-review issuance and one-shot consumption in a distinct ledger that rejects self-review, session reuse, stale binding, and replay.",
+    "Emit vendor-neutral canonical run, failure, review, and privacy-safe event projections; no event may carry claim authority.",
+    "Audit research-source inputs and produce only bounded non-authoritative findings or law-change proposals; never mutate adopted laws or registries."
+  ],
+  "required_validation": {
+    "positive": [
+      "confined local execution from an audited immutable spec",
+      "stable canonical replay and failure harvesting",
+      "explicit unknown runtime metadata",
+      "paired baseline and candidate improvement proposal",
+      "durable restart and recovery-required reconciliation",
+      "same-context privacy-safe event projection"
+    ],
+    "negative_and_false_pass": [
+      "ambiguous task, duplicate, near-duplicate, split leakage, mislabeled, and unrepresentative data reject",
+      "prompt-derived runtime metadata rejects",
+      "verbosity, proof artifact, receipt production, test manipulation, and score-only perturbations cannot promote",
+      "metric gain with behavioral regression, missing journey, missing rollback, missing artifact, self-review, stale binding, attestation replay, and unresolved recovery cannot promote"
+    ],
+    "race_and_mutation": [
+      "two-process execution reservation and review consumption have exactly one winner",
+      "lock, key, state, executable, artifact, spec, task, context, candidate, and session substitution fail closed",
+      "truncated ledger, rollback, stale head, crash before and after publication, and mutate-restore are detected"
+    ],
+    "security_and_privacy": [
+      "path escape, symlink, hardlink, special, oversized, world-writable, and swapped executable inputs reject",
+      "secret-shaped output is redacted and unbounded output is refused",
+      "claim-authority event fields and external adapter execution without permit reject",
+      "read, audit, inspect, query, and recovery-preview paths are recursively zero-write"
+    ],
+    "commands": "Use exact-file rustfmt, focused tests twice, evaluation plus fixture and capture dependency closure, production library check, typed receipt, exact rows, two-process race controls, and zero-write snapshots with 16 build jobs and 16 test threads."
+  },
+  "prohibited_surfaces": [
+    "validator/src/cli/successor/catalog.rs",
+    "validator/src/cli/successor_public",
+    "validator/src/observability",
+    "validator/Cargo.toml",
+    "Cargo.lock",
+    "schemas",
+    "generated/eval-task-catalog.json",
+    "FINAL-CONTRACT and adopted registries",
+    "public command, principal, session, manifest, global generated authority, migration, claim, acceptance, board, installation, release, and completion state",
+    "network, vendor account, live host installation, or destructive cleanup"
+  ],
+  "requested_root_changes": [
+    "Root must issue production execution and review principals and sessions after independent review.",
+    "Root must wire public eval audit, run, harvest, promote, and adapter commands plus effect permits, exits, diagnostics, and output policy.",
+    "Root must review and adopt any shared schema or generated task catalog candidate rather than allowing the worker to mutate those authorities.",
+    "Root must add the observability writer join and adopt measured legacy compatibility routes only after representative replacement journeys."
+  ],
+  "worker_result": {
+    "schema": "WorkerResult-v1",
+    "required": true,
+    "artifact_rule": "Freeze every leased source, fixture, test, and receipt input except the self-excluded WorkerResult; reject missing, unknown, duplicate, overlapping, special, or changed rows.",
+    "no_claim_statement": "This worker does not claim readiness, release, or completion."
+  },
+  "stop_rule": "Stop on any need for public dispatch, shared schema, global generated catalog, observability writer mutation, dependency change, live host, network, migration, claim, installation, destructive cleanup, or cross-platform proof; request root wiring instead.",
+  "claim_effect": "none"
+}
