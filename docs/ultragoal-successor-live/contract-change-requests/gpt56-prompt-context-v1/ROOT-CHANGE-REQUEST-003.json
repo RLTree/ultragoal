@@ -1,0 +1,176 @@
+{
+  "schema_version": "ContractChangeRequest-v1",
+  "change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
+  "supersedes_change_id": "CCR-GPT56-PROMPT-CONTEXT-002",
+  "status": "corrected_proposed_non_authoritative_root_review_required",
+  "requested_owner": "OWN-ULTRA-ROOT",
+  "captured_at": "2026-07-13T04:38:25Z",
+  "prior_review": {
+    "reviewed_change_id": "CCR-GPT56-PROMPT-CONTEXT-002",
+    "request_path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/ROOT-CHANGE-REQUEST-002.json",
+    "request_sha256": "sha256:9820df7235249b4cb323a229a044123c770bddc13a8f90d23eefecde80ad06bb",
+    "independent_verdict": "rework",
+    "root_decision": "pending",
+    "decisive_class": "task_envelope_role_path_and_effect_confinement_false_pass",
+    "reproduced_false_pass": "An implementation-worker envelope granted .git/config write access while the same path remained forbidden, git_metadata remained read_only_no_mutation, and shared_root_authority remained forbidden; schema and semantic validation both accepted it."
+  },
+  "subsequent_rework_findings": [
+    {
+      "class": "host_worktree_protection",
+      "correction": "Added .codex-worktree as a canonical protected host root across artifacts, fixtures, and generated outputs with case-folded controls."
+    },
+    {
+      "class": "canonical_write_scope_and_shared_schema",
+      "correction": "Required same-session exact registry resolution for write scope and root-only authority, including shared schema authority, before any propose-write envelope validates."
+    },
+    {
+      "class": "root_owned_leaf_casefold",
+      "correction": "Rejected case-folded root-owned leaf aliases such as agents.MD anywhere in a proposed write path."
+    },
+    {
+      "class": "output_evidence_context_binding",
+      "correction": "Committed evidence, ceilings, effects, output contract, verification, stop rule, and no-claim fields into context identity and confined persistent result targets to exact delegated generated outputs."
+    },
+    {
+      "class": "external_effect_and_approval_authority",
+      "correction": "Every named effect and approval now resolves exactly once from immutable protected same-session authority with exact identity, link, state, validity, single-use, source, row-digest, exact-set, and final revalidation checks; absent live authority fails closed."
+    }
+  ],
+  "candidate_identity": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "c1792695eb2dfe88afeda6efc3d6d892f1bb64f4",
+    "head_tree": "c826b42b09cf6133c7a311be77fb0c8e03bb49d7",
+    "dirty": true,
+    "proposal_artifact_set_sha256": "sha256:0c5def6d2af6b8fdee2903f1ed13fcd51ff03d37e3a96a13ad224885a6dbc76c"
+  },
+  "artifact_set": {
+    "artifact_count_excluding_request_files": 12,
+    "bytes": 370546,
+    "lines": 8204,
+    "sha256": "0c5def6d2af6b8fdee2903f1ed13fcd51ff03d37e3a96a13ad224885a6dbc76c",
+    "formula": "SHA-256 of bytewise-sorted path<TAB>sha256-without-prefix<LF>; every ROOT-CHANGE-REQUEST*.json file excluded."
+  },
+  "artifacts": [
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/00-ROOT-READ-ME.md",
+      "sha256": "sha256:21ed0ccc8e23b63ce3b1653a3b84c1743a4301ee5840390c09e056890d27d0a0",
+      "bytes": 7253,
+      "lines": 43
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE-RED-FIXTURES.json",
+      "sha256": "sha256:6ded55db103ed877b0abc10bba817dc716d33a252607367cea5ae903069aa70a",
+      "bytes": 56722,
+      "lines": 1694
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
+      "sha256": "sha256:53596b243271e7afef8c18e6a9c9de6c6886ecf3c4d81908229d0fa65d8a1a84",
+      "bytes": 34433,
+      "lines": 1065
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/ASSESSMENT.md",
+      "sha256": "sha256:02e97aebd52c26ee3aecd208618c15a6ccece7d48d8815ecfa8e3d0f2017e7f8",
+      "bytes": 6935,
+      "lines": 64
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/CODEX-ULTRA-BOOTSTRAP.md",
+      "sha256": "sha256:c10c7d0a5fbb995a7c976b63930fcdee3ca4cd0ca83b62ada00231e6891f5071",
+      "bytes": 4298,
+      "lines": 45
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/CODEX-ULTRA-GOAL.md",
+      "sha256": "sha256:e1a57bd12f77c5303db7dc937c5b5e423d81b74ce3f530a4683e1a26c8320af1",
+      "bytes": 2787,
+      "lines": 13
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/CONTEXT-ROUTING-MAP.json",
+      "sha256": "sha256:7ac07d8e5b9aa1bed675fe332ebdf0453b6b36a35676800f56ee73e9c871b2f7",
+      "bytes": 9579,
+      "lines": 151
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/MODEL-ADAPTIVE-PROMPT-AND-CONTEXT-CONTRACT.md",
+      "sha256": "sha256:596af9170cc0746527b53b29ec3dc0d87c53c9fcbe209c95751de584242db63b",
+      "bytes": 21446,
+      "lines": 190
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/REPO-PROPAGATION-PLAN.md",
+      "sha256": "sha256:9dc3ff5d67485f05473fdc5e10bff69065267dbf5d496479bb84f511487ee1c4",
+      "bytes": 20244,
+      "lines": 244
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/REQUIREMENT-TRACE-PATCH.json",
+      "sha256": "sha256:34b5e176b68c71271256abdf0a464618f225f3cd52c8285b7eb9ab824b3c8b17",
+      "bytes": 14407,
+      "lines": 195
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/ULTRAGOAL-ORCHESTRATOR-PROMPT.md",
+      "sha256": "sha256:1c73f3c90cd4aeb1e56d3ea254d24645ef9dcec5bc3de5cbed8f8d780b8c307a",
+      "bytes": 2267,
+      "lines": 30
+    },
+    {
+      "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/verify-agent-task-envelope.py",
+      "sha256": "sha256:822a3a9ef257ad3a472d424e7cb0b9795ba7605277ad0d95db8769086eed4c80",
+      "bytes": 190175,
+      "lines": 4470
+    }
+  ],
+  "corrections": [
+    "Allowed and forbidden candidate paths reject exact ancestor descendant and case-folded overlap.",
+    "The canonical host-protected roots .git .codex .agents and .codex-worktree reject case-folded proposed writes across artifact fixture and generated-output categories.",
+    "Candidate changes are instruction-only propose_write scope; AgentTaskEnvelope-v1 grants no workspace effect and requires a separately adopted root-owned mediator before any write.",
+    "Proposed Git metadata host configuration adopted authority root decision generated authority runtime capability work package and other shared-root paths reject regardless of worker sandbox capability.",
+    "Bounded existing proposed-write objects reject symlinks special files cross-device objects hardlinks and filesystem aliases and bind an identity set for final revalidation.",
+    "Runtime roles resolve only from root-owned typed receipts that exactly bind role runtime agent type sandbox and no-root-authority fields.",
+    "Context identity commits the complete closed envelope except the context_id field itself, including goal, role, scope, authority, evidence, ceilings, effects, output contract, verification, stop rule, and exact no-claim text; live candidate, authority sources, output schema, and proposed-write identity set revalidate at session end.",
+    "Persistent output targets reject protected or undelegated repository paths, generated output targets must exactly match a delegated output, and scratch output targets must exactly match the scoped scratch URI and bounded effect.",
+    "Named external effects and approvals resolve exactly once under docs/ultragoal-successor-live/root-decisions/effect-authority with exact identity, approval link, current state, validity, single-use, source and row digests, exact-set membership, and final-session revalidation; no live authority row means fail closed.",
+    "Protected effect-authority sources are opened descriptor-first without following links, require repository-device single-link bounded regular objects, bind object identity and content into the session, and reopen and revalidate the same identity at final session.",
+    "Nonempty external-effect validation requires one descriptor-safe protected root session receipt bound to repository, candidate, main authority session, exact effect-source set, issue time, nonce, issuer, source identity, and single-use state; approval freshness uses mediator-supplied trusted time and final checks reject rollback or expiry.",
+    "Final mediation requires an exact in-process prior trusted-time observation bound to repository, candidate, authority sessions, effect-source set, receipt, and initial result; missing forged mismatched stale rolled-back or reused observations reject, and successful final validation consumes once.",
+    "One mediator instance now performs the complete successful initial validation before internally minting a closure-private object-identity capability; no module builder registration ledger or token type exists, and final validation accepts and consumes only that same instance-owned token.",
+    "All mediator instances share a factory-private lock-protected consumed-authorization registry; successful final validation atomically consumes the complete approval member set, session receipt identity, authorization-set binding, and token, while failed final validation consumes nothing.",
+    "Stable repository-scoped tombstones for approval_id and receipt_id are independent of mutable source row nonce session candidate context and digest fields, so authority substitution cannot revive a consumed ID; legitimate reissue requires a new stable ID.",
+    "Semantic validation and mediation share one no-alias canonical repository resolver; actual root URI and digest are derived internally and must match candidate fields before token mint, tombstone lookup, or consumption.",
+    "Canonical repository resolution opens the root directory descriptor-first without following links, binds device inode and directory type into initial validation and the mediator token, and reopens and revalidates the exact same root object before final authorization consumption.",
+    "Python reflection is explicitly not an adopted security boundary; this is a non-authoritative API model pending a canonical implementation and root-owned mediator.",
+    "The corpus contains 154 causal red fixtures including exact .codex-worktree controls, effect/approval/source/session-time controls, capability and atomic consumption controls, stable-ID revival, same-root caller-substituted identity, symlink lexical missing non-directory special-file different-path and same-path physical-root-swap controls, two-real-root separation, failed-root-swap non-consumption, and concurrent one-winner controls, one isolated exact-authority positive, and four zero-effect live variants."
+  ],
+  "verification_completed": [
+    {
+      "command": "two concurrent PYTHONDONTWRITEBYTECODE=1 executions of verify-agent-task-envelope.py",
+      "result": "valid_baseline, valid_scoped_implementation, valid_scoped_cli_implementation, and valid_scoped_generated_output accepted; 154 of 154 red fixtures rejected causally (18 schema, 136 semantic); isolated exact-authority, trusted-time, mediator-owned capability, distinct-authorization, two-real-root, unchanged-root, failed-root-swap non-consumption, and concurrent one-winner positives accepted; byte-identical output sha256:75d8caafbf2b0f569c1591ec74b49442af453451c50ebfbd14f117b7704f3aa7; run_id sha256:c787cc9bd68030b69029524576aec4fbd408756f0f5b3bae9da6df55c2847670; claim_effect none"
+    },
+    {
+      "command": "jsonschema.Draft202012Validator.check_schema(AGENT-TASK-ENVELOPE.schema.json)",
+      "result": "pass"
+    },
+    {
+      "command": "independent bytewise artifact row and standard path-bound aggregate recomputation",
+      "result": "12 artifacts; 370546 bytes; 8204 lines; sha256:0c5def6d2af6b8fdee2903f1ed13fcd51ff03d37e3a96a13ad224885a6dbc76c"
+    }
+  ],
+  "remaining_required_independent_review": [
+    "Recompute all twelve artifact rows and the aggregate from live bytes.",
+    "Independently reproduce protected lexical paths hardlinks directory aliases symlinks special files post-validation alias insertion full-envelope substitution output-target escape and external-effect approval substitution controls and verify the instruction-only effect ceiling.",
+    "Verify the isolated exact-authority positive without accepting proposal-local authority and confirm absent live effect authority fails closed.",
+    "Review protected-path classification, proposed-write object bounds, complete context commitment, and persistent output confinement for underreach overreach and legitimate read compatibility.",
+    "Do not adopt until equivalent behavior exists in the canonical Rust boundary a root-owned effect mediator exists and representative prompt and context evaluations pass."
+  ],
+  "forbidden_direct_actions": [
+    "Do not treat this proposal, schema, Python harness, task envelope, or WorkerResult as adopted contract or product authority.",
+    "Do not overwrite FINAL-CONTRACT, manifests, package inputs, claims, migration authority, generated authority, root decisions, or release state without a fresh root ACCEPT decision and invalidation reconciliation.",
+    "Do not infer model, mode, permissions, install, discovery, runtime, readiness, release, node closure, or completion from this request."
+  ],
+  "claim_ceiling": "corrected_proposal_source_only_not_adopted",
+  "no_claim_statement": "This corrected change request does not claim implementation, adoption, model or runtime configuration, readiness, release, node closure, or goal completion."
+}

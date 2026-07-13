@@ -54,7 +54,7 @@
                 "contains": {
                   "type": "object",
                   "required": ["access"],
-                  "properties": {"access": {"const": "write"}}
+                  "properties": {"access": {"const": "propose_write"}}
                 }
               }
             }
@@ -64,7 +64,7 @@
       "then": {
         "properties": {
           "effects": {
-            "properties": {"candidate_source": {"const": "bounded_workspace_write"}}
+            "properties": {"candidate_source": {"const": "instruction_only_no_effect"}}
           }
         }
       }
@@ -78,7 +78,7 @@
                 "contains": {
                   "type": "object",
                   "required": ["access"],
-                  "properties": {"access": {"const": "write"}}
+                  "properties": {"access": {"const": "propose_write"}}
                 }
               }
             }
@@ -88,7 +88,7 @@
       "then": {
         "properties": {
           "effects": {
-            "properties": {"candidate_source": {"const": "bounded_workspace_write"}}
+            "properties": {"candidate_source": {"const": "instruction_only_no_effect"}}
           }
         }
       }
@@ -102,7 +102,7 @@
       "then": {
         "properties": {
           "effects": {
-            "properties": {"candidate_source": {"const": "bounded_workspace_write"}}
+            "properties": {"candidate_source": {"const": "instruction_only_no_effect"}}
           }
         }
       }
@@ -122,7 +122,7 @@
                   "contains": {
                     "type": "object",
                     "required": ["access"],
-                    "properties": {"access": {"const": "write"}}
+                    "properties": {"access": {"const": "propose_write"}}
                   }
                 }
               },
@@ -131,7 +131,7 @@
                   "contains": {
                     "type": "object",
                     "required": ["access"],
-                    "properties": {"access": {"const": "write"}}
+                    "properties": {"access": {"const": "propose_write"}}
                   }
                 }
               },
@@ -273,7 +273,36 @@
         "source_sha256": {"$ref": "#/$defs/sha256"},
         "sandbox_mode": {"enum": ["read-only", "workspace-write"]},
         "may_exercise_root_authority": {"const": false}
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "source_kind": {"const": "runtime_agent_type_receipt"}
+            }
+          },
+          "then": {
+            "properties": {
+              "source_ref": {
+                "pattern": "^docs/ultragoal-successor-live/runtime-capabilities/[A-Z0-9][A-Z0-9._-]*\\.json$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "role_id": {"enum": ["implementation-worker", "verification-executor"]}
+            }
+          },
+          "then": {
+            "properties": {
+              "source_kind": {"const": "runtime_agent_type_receipt"},
+              "sandbox_mode": {"const": "workspace-write"}
+            }
+          }
+        }
+      ]
     },
     "candidateIdentity": {
       "type": "object",
@@ -372,7 +401,7 @@
       "required": ["path", "access"],
       "properties": {
         "path": {"$ref": "#/$defs/relativePath"},
-        "access": {"enum": ["read", "write"]}
+        "access": {"enum": ["read", "propose_write"]}
       }
     },
     "scope": {
@@ -386,6 +415,7 @@
         "external_effects",
         "scratch_uris",
         "forbidden_paths",
+        "write_scope_binding",
         "path_resolution"
       ],
       "anyOf": [
@@ -415,6 +445,26 @@
           }
         },
         "forbidden_paths": {"$ref": "#/$defs/relativePathSet"},
+        "write_scope_binding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope_id",
+            "owner",
+            "source_path",
+            "write_scope_row_sha256",
+            "root_only_authority_sha256",
+            "resolution"
+          ],
+          "properties": {
+            "scope_id": {"type": "string", "pattern": "^WS-[A-Z0-9][A-Z0-9-]{0,79}$"},
+            "owner": {"type": "string", "pattern": "^OWN-[A-Z0-9][A-Z0-9-]{0,79}$"},
+            "source_path": {"$ref": "#/$defs/relativePath"},
+            "write_scope_row_sha256": {"$ref": "#/$defs/sha256"},
+            "root_only_authority_sha256": {"$ref": "#/$defs/sha256"},
+            "resolution": {"const": "exact-single-row-and-root-authority-v1"}
+          }
+        },
         "path_resolution": {
           "type": "object",
           "additionalProperties": false,
@@ -424,15 +474,27 @@
             "resolved_scope_sha256",
             "symlinks",
             "special_files",
-            "post_freeze_revalidation"
+            "post_freeze_revalidation",
+            "forbidden_overlap_policy",
+            "protected_write_policy",
+            "proposed_write_object_policy",
+            "proposed_write_object_set_sha256",
+            "proposed_write_object_count",
+            "max_existing_descendants"
           ],
           "properties": {
-            "policy": {"const": "candidate-relative-no-follow-v1"},
+            "policy": {"const": "candidate-relative-no-follow-v2"},
             "session_id": {"$ref": "#/$defs/sha256"},
             "resolved_scope_sha256": {"$ref": "#/$defs/sha256"},
             "symlinks": {"const": "reject"},
             "special_files": {"const": "reject"},
-            "post_freeze_revalidation": {"const": "required"}
+            "post_freeze_revalidation": {"const": "required"},
+            "forbidden_overlap_policy": {"const": "exact-ancestor-descendant-casefold-reject-v1"},
+            "protected_write_policy": {"const": "git-host-root-authority-reject-v1"},
+            "proposed_write_object_policy": {"const": "lstat-no-follow-bounded-identity-set-v1"},
+            "proposed_write_object_set_sha256": {"$ref": "#/$defs/sha256"},
+            "proposed_write_object_count": {"type": "integer", "minimum": 0, "maximum": 4096},
+            "max_existing_descendants": {"const": 4096}
           }
         }
       }
@@ -453,7 +515,15 @@
     "authorityBinding": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["session_id", "captured_at", "sources", "ids", "resolved_rows", "resolution"],
+      "required": [
+        "session_id",
+        "captured_at",
+        "sources",
+        "ids",
+        "resolved_rows",
+        "external_effect_authority",
+        "resolution"
+      ],
       "properties": {
         "session_id": {"$ref": "#/$defs/sha256"},
         "captured_at": {"type": "string", "format": "date-time"},
@@ -501,6 +571,7 @@
             }
           }
         },
+        "external_effect_authority": {"$ref": "#/$defs/externalEffectAuthorityBinding"},
         "resolution": {
           "type": "object",
           "additionalProperties": false,
@@ -521,6 +592,250 @@
             "final_session_revalidation": {"const": "required"}
           }
         }
+      }
+    },
+    "externalEffectAuthorityBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "namespace",
+        "session_id",
+        "sources",
+        "effect_rows",
+        "approval_rows",
+        "session_receipt",
+        "resolution"
+      ],
+      "properties": {
+        "namespace": {
+          "const": "docs/ultragoal-successor-live/root-decisions/effect-authority"
+        },
+        "session_id": {"$ref": "#/$defs/sha256"},
+        "sources": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/externalEffectAuthoritySourceBinding"}
+        },
+        "effect_rows": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/resolvedExternalEffect"}
+        },
+        "approval_rows": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/resolvedExternalEffectApproval"}
+        },
+        "session_receipt": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/externalEffectSessionReceiptBinding"}
+          ]
+        },
+        "resolution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "resolved_set_sha256",
+            "unknown_count",
+            "duplicate_count",
+            "ambiguous_count",
+            "conflict_count",
+            "unreferenced_count",
+            "final_session_revalidation"
+          ],
+          "properties": {
+            "resolved_set_sha256": {"$ref": "#/$defs/sha256"},
+            "unknown_count": {"const": 0},
+            "duplicate_count": {"const": 0},
+            "ambiguous_count": {"const": 0},
+            "conflict_count": {"const": 0},
+            "unreferenced_count": {"const": 0},
+            "final_session_revalidation": {"const": "required"}
+          }
+        }
+      }
+    },
+    "externalEffectSessionReceiptBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "namespace",
+        "receipt_id",
+        "sources",
+        "resolved_receipt",
+        "resolution"
+      ],
+      "properties": {
+        "namespace": {
+          "const": "docs/ultragoal-successor-live/root-decisions/effect-authority/session-receipts"
+        },
+        "receipt_id": {
+          "type": "string",
+          "pattern": "^EFFECT-SESSION-[A-Z0-9][A-Z0-9-]{0,99}$"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {"$ref": "#/$defs/externalEffectAuthoritySourceBinding"}
+        },
+        "resolved_receipt": {"$ref": "#/$defs/resolvedExternalEffectSessionReceipt"},
+        "resolution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "resolved_set_sha256",
+            "unknown_count",
+            "duplicate_count",
+            "ambiguous_count",
+            "conflict_count",
+            "unreferenced_count",
+            "final_session_revalidation"
+          ],
+          "properties": {
+            "resolved_set_sha256": {"$ref": "#/$defs/sha256"},
+            "unknown_count": {"const": 0},
+            "duplicate_count": {"const": 0},
+            "ambiguous_count": {"const": 0},
+            "conflict_count": {"const": 0},
+            "unreferenced_count": {"const": 0},
+            "final_session_revalidation": {"const": "required"}
+          }
+        }
+      }
+    },
+    "resolvedExternalEffectSessionReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt_id",
+        "session_id",
+        "nonce",
+        "issuer",
+        "issued_at",
+        "expires_at",
+        "permitted_skew_seconds",
+        "repository_root_sha256",
+        "candidate_id",
+        "authority_session_id",
+        "effect_authority_sources_sha256",
+        "single_use",
+        "usage_count",
+        "consumed_by_context_id",
+        "source_path",
+        "source_sha256",
+        "source_identity",
+        "row_sha256"
+      ],
+      "properties": {
+        "receipt_id": {
+          "type": "string",
+          "pattern": "^EFFECT-SESSION-[A-Z0-9][A-Z0-9-]{0,99}$"
+        },
+        "session_id": {"$ref": "#/$defs/sha256"},
+        "nonce": {"$ref": "#/$defs/sha256"},
+        "issuer": {"const": "OWN-ULTRA-ROOT"},
+        "issued_at": {"type": "string", "format": "date-time"},
+        "expires_at": {"type": "string", "format": "date-time"},
+        "permitted_skew_seconds": {"type": "integer", "minimum": 0, "maximum": 5},
+        "repository_root_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_id": {"$ref": "#/$defs/sha256"},
+        "authority_session_id": {"$ref": "#/$defs/sha256"},
+        "effect_authority_sources_sha256": {"$ref": "#/$defs/sha256"},
+        "single_use": {"const": true},
+        "usage_count": {"const": 0},
+        "consumed_by_context_id": {"type": "null"},
+        "source_path": {"$ref": "#/$defs/relativePath"},
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "source_identity": {"$ref": "#/$defs/externalEffectAuthoritySourceIdentity"},
+        "row_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "resolvedExternalEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effect_id",
+        "kind",
+        "provider",
+        "action",
+        "target_sha256",
+        "effect_sha256",
+        "source_path",
+        "source_sha256",
+        "source_identity",
+        "row_sha256"
+      ],
+      "properties": {
+        "effect_id": {"type": "string", "pattern": "^EFFECT-[A-Z0-9][A-Z0-9-]{0,119}$"},
+        "kind": {"enum": ["network", "external_write"]},
+        "provider": {"$ref": "#/$defs/identifier"},
+        "action": {"$ref": "#/$defs/identifier"},
+        "target_sha256": {"$ref": "#/$defs/sha256"},
+        "effect_sha256": {"$ref": "#/$defs/sha256"},
+        "source_path": {"$ref": "#/$defs/relativePath"},
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "source_identity": {"$ref": "#/$defs/externalEffectAuthoritySourceIdentity"},
+        "row_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "resolvedExternalEffectApproval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approval_id",
+        "effect_id",
+        "status",
+        "valid_from",
+        "expires_at",
+        "source_path",
+        "source_sha256",
+        "source_identity",
+        "row_sha256"
+      ],
+      "properties": {
+        "approval_id": {"type": "string", "pattern": "^APPROVAL-[A-Z0-9][A-Z0-9-]{0,119}$"},
+        "effect_id": {"type": "string", "pattern": "^EFFECT-[A-Z0-9][A-Z0-9-]{0,119}$"},
+        "status": {"const": "approved"},
+        "valid_from": {"type": "string", "format": "date-time"},
+        "expires_at": {"type": "string", "format": "date-time"},
+        "source_path": {"$ref": "#/$defs/relativePath"},
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "source_identity": {"$ref": "#/$defs/externalEffectAuthoritySourceIdentity"},
+        "row_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "externalEffectAuthoritySourceBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "identity"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "identity": {"$ref": "#/$defs/externalEffectAuthoritySourceIdentity"}
+      }
+    },
+    "externalEffectAuthoritySourceIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "device",
+        "inode",
+        "mode",
+        "link_count",
+        "size",
+        "mtime_ns",
+        "ctime_ns"
+      ],
+      "properties": {
+        "device": {"type": "integer", "minimum": 0},
+        "inode": {"type": "integer", "minimum": 0},
+        "mode": {"type": "integer", "minimum": 0, "maximum": 4095},
+        "link_count": {"const": 1},
+        "size": {"type": "integer", "minimum": 0, "maximum": 1048576},
+        "mtime_ns": {"type": "integer", "minimum": 0},
+        "ctime_ns": {"type": "integer", "minimum": 0}
       }
     },
     "sourceBinding": {
@@ -593,17 +908,19 @@
         "network",
         "external_systems",
         "destructive_actions",
-        "secrets"
+        "secrets",
+        "workspace_effect_mediator"
       ],
       "properties": {
-        "candidate_source": {"enum": ["read_only", "bounded_workspace_write"]},
+        "candidate_source": {"enum": ["read_only", "instruction_only_no_effect"]},
         "git_metadata": {"const": "read_only_no_mutation"},
         "shared_root_authority": {"const": "forbidden"},
         "scratch": {"enum": ["forbidden", "bounded_read_write"]},
         "network": {"enum": ["forbidden", "approved_named_only"]},
         "external_systems": {"enum": ["forbidden", "approved_named_only"]},
         "destructive_actions": {"const": "forbidden"},
-        "secrets": {"enum": ["forbidden", "named_source_no_value_exposure"]}
+        "secrets": {"enum": ["forbidden", "named_source_no_value_exposure"]},
+        "workspace_effect_mediator": {"const": "required_before_any_workspace_effect"}
       }
     },
     "outputContract": {
@@ -699,6 +1016,7 @@
     "pathGrantSet": {
       "type": "array",
       "maxItems": 10000,
+      "uniqueItems": true,
       "items": {"$ref": "#/$defs/pathGrant"}
     },
     "nodeIdSet": {

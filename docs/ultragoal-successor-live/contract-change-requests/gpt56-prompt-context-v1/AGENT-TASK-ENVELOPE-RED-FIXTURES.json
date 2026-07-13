@@ -1,5 +1,6 @@
 {
   "schema_version": "AgentTaskEnvelopeRedFixtures-v1",
+  "expected_red_count": 154,
   "valid_baseline": {
     "schema_version": "AgentTaskEnvelope-v1",
     "task_id": "agent-task-envelope-red-fixture-baseline",
@@ -20,19 +21,19 @@
         "root_uri": "repo://harness-ultragoal-plugin-proposal",
         "canonical_root_sha256": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170"
       },
-      "context_id": "sha256:365c0ad4353c5f3078e28faefeafd1685fe5d4a7b603c4b48d5ba00539b067ed",
-      "candidate_id": "sha256:8c633bfa0acaa1225a6777ceecfcc618a472c555e42178c5c456af7119e2081c",
+      "context_id": "sha256:99144202f769cef9fb86afaa0a66cea909cc8703869a5caca212e59f310e2989",
+      "candidate_id": "sha256:ceb6b8aee5658739d0622dfb7eff8472fb1806d11794c677170be6331f7e2b1d",
       "branch": "codex/successor-contract-v2-live-product",
-      "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
-      "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
+      "head_commit": "c1792695eb2dfe88afeda6efc3d6d892f1bb64f4",
+      "head_tree": "c826b42b09cf6133c7a311be77fb0c8e03bb49d7",
       "dirty": true,
-      "captured_at": "2026-07-12T05:03:42Z",
+      "captured_at": "2026-07-13T04:38:25Z",
       "freeze": {
         "kind": "artifact_set",
-        "artifact_set_sha256": "sha256:e40eb20c5ec2d6b6b6308e8eebd7609de9c4fa31eef90d8b410864406d5bcbc5",
-        "artifact_count": 3,
-        "bytes": 44312,
-        "lines": 1527,
+        "artifact_set_sha256": "sha256:d030e0a3035c78f64c04cc900f8a58aadb869542a90426462be1488250ba1159",
+        "artifact_count": 4,
+        "bytes": 55875,
+        "lines": 1856,
         "artifacts": [
           {
             "path": ".codex/agents/repo-recon.toml",
@@ -48,9 +49,15 @@
           },
           {
             "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
-            "sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604",
-            "bytes": 23425,
-            "lines": 747
+            "sha256": "sha256:53596b243271e7afef8c18e6a9c9de6c6886ecf3c4d81908229d0fa65d8a1a84",
+            "bytes": 34433,
+            "lines": 1065
+          },
+          {
+            "path": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+            "sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+            "bytes": 555,
+            "lines": 11
           }
         ]
       }
@@ -82,18 +89,32 @@
         "Cargo.lock",
         ".git/config"
       ],
+      "write_scope_binding": {
+        "scope_id": "WS-OBSERVE",
+        "owner": "OWN-OBSERVABILITY",
+        "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "write_scope_row_sha256": "sha256:8c8ffde2f4929c60665aabdd3be5c12b1b8077eaa3de7cec793e2d23228c6ecc",
+        "root_only_authority_sha256": "sha256:75b59ee60e68494657db1d7440b3b9a7180e4a85c7cac2c645c226c7739016b9",
+        "resolution": "exact-single-row-and-root-authority-v1"
+      },
       "path_resolution": {
-        "policy": "candidate-relative-no-follow-v1",
-        "session_id": "sha256:7b254240f67795f81539fadd75e654be336893d0630d43d081c782670eb49715",
-        "resolved_scope_sha256": "sha256:3cd6181711d83308cb2e3d8dc3769b2812c998b332434d20ed57a64f36b538cc",
+        "policy": "candidate-relative-no-follow-v2",
+        "session_id": "sha256:3cbb652562effeed91060491d1da481f9f7c7f32c8cc0fedf2ac416b500d5b1f",
+        "resolved_scope_sha256": "sha256:a51dc1e68803222092669805a43f7009c3b55c930cf6736470c4f7b281935f52",
         "symlinks": "reject",
         "special_files": "reject",
-        "post_freeze_revalidation": "required"
+        "post_freeze_revalidation": "required",
+        "forbidden_overlap_policy": "exact-ancestor-descendant-casefold-reject-v1",
+        "protected_write_policy": "git-host-root-authority-reject-v1",
+        "proposed_write_object_policy": "lstat-no-follow-bounded-identity-set-v1",
+        "proposed_write_object_set_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "proposed_write_object_count": 0,
+        "max_existing_descendants": 4096
       }
     },
     "authority_binding": {
       "session_id": "sha256:1daf33d0eca7db6f1a3ddd3d88bacbe9abcc45b0f846308437815d1eebbaf2d0",
-      "captured_at": "2026-07-12T05:03:42Z",
+      "captured_at": "2026-07-13T04:38:25Z",
       "sources": [
         {
           "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
@@ -118,6 +139,23 @@
           "row_sha256": "sha256:07161748e34bc754078ba9d5d88cdd8f87d5b0d7ae958457944ff29213522e29"
         }
       ],
+      "external_effect_authority": {
+        "namespace": "docs/ultragoal-successor-live/root-decisions/effect-authority",
+        "session_id": "sha256:7811b7328b0981ad74d953622cccb50d1ccf577c6798200ee4a4c728d3675955",
+        "sources": [],
+        "effect_rows": [],
+        "approval_rows": [],
+        "session_receipt": null,
+        "resolution": {
+          "resolved_set_sha256": "sha256:14ea3101172fe24367dfa92f08da461235924536d4313c15a4792710cd755226",
+          "unknown_count": 0,
+          "duplicate_count": 0,
+          "ambiguous_count": 0,
+          "conflict_count": 0,
+          "unreferenced_count": 0,
+          "final_session_revalidation": "required"
+        }
+      },
       "resolution": {
         "resolved_set_sha256": "sha256:f8bdd6e9b34b73a4c879153d7ced45b939aaa2ef8ba78b502a45f7349dfffac0",
         "unknown_count": 0,
@@ -131,7 +169,7 @@
       "primary_references": [
         {
           "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
-          "sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604",
+          "sha256": "sha256:53596b243271e7afef8c18e6a9c9de6c6886ecf3c4d81908229d0fa65d8a1a84",
           "kind": "authority",
           "candidate_bound": true
         },
@@ -162,12 +200,13 @@
       "network": "forbidden",
       "external_systems": "forbidden",
       "destructive_actions": "forbidden",
-      "secrets": "forbidden"
+      "secrets": "forbidden",
+      "workspace_effect_mediator": "required_before_any_workspace_effect"
     },
     "output_contract": {
       "schema_id": "AgentTaskEnvelope-v1",
       "schema_ref": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json",
-      "schema_sha256": "sha256:5338d2772a0140f647b3887d057e4396c6e927ff6ac69d8bb0ae92d66fc77604",
+      "schema_sha256": "sha256:53596b243271e7afef8c18e6a9c9de6c6886ecf3c4d81908229d0fa65d8a1a84",
       "result_target": "message://final",
       "required_sections": [
         "schema_version",
@@ -235,6 +274,159 @@
     "stop_rule": "Stop after the first material mismatch and return REWORK.",
     "no_claim_statement": "This agent does not claim readiness, release, node closure, or goal completion."
   },
+  "valid_variants": [
+    {
+      "variant_id": "valid_scoped_implementation",
+      "mutations": [
+        {
+          "pointer": "/task_id",
+          "value": "agent-task-envelope-scoped-implementation-baseline"
+        },
+        {
+          "pointer": "/role_binding",
+          "value": {
+            "role_id": "implementation-worker",
+            "source_kind": "runtime_agent_type_receipt",
+            "source_ref": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+            "source_sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+            "sandbox_mode": "workspace-write",
+            "may_exercise_root_authority": false
+          }
+        },
+        {
+        "pointer": "/scope/artifact_paths",
+        "value": [
+          {
+            "path": "schemas/observability",
+            "access": "propose_write"
+          }
+        ]
+        },
+        {
+        "pointer": "/scope/semantic_symbols",
+        "value": [
+          "AgentTaskEnvelope-v1",
+          "scoped-observability-schema-proposal"
+        ]
+        },
+        {
+          "pointer": "/scope/forbidden_paths",
+          "value": [
+            ".agents",
+            ".codex",
+            ".git",
+            "Cargo.lock",
+            "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT",
+            "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+            "docs/ultragoal-successor-live/generated-authority",
+            "docs/ultragoal-successor-live/root-decisions"
+          ]
+        },
+        {
+          "pointer": "/effects/candidate_source",
+          "value": "instruction_only_no_effect"
+        }
+      ]
+    },
+    {
+      "variant_id": "valid_scoped_cli_implementation",
+      "mutations": [
+        {
+          "pointer": "/task_id",
+          "value": "agent-task-envelope-scoped-cli-implementation-baseline"
+        },
+        {
+          "pointer": "/authority_binding/ids/nodes",
+          "value": [
+            "N03-CLI-STATE"
+          ]
+        },
+        {
+          "pointer": "/role_binding",
+          "value": {
+            "role_id": "implementation-worker",
+            "source_kind": "runtime_agent_type_receipt",
+            "source_ref": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+            "source_sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+            "sandbox_mode": "workspace-write",
+            "may_exercise_root_authority": false
+          }
+        },
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": "validator/src/cli/internal-proposal.rs",
+              "access": "propose_write"
+            }
+          ]
+        },
+        {
+          "pointer": "/scope/semantic_symbols",
+          "value": [
+            "AgentTaskEnvelope-v1",
+            "scoped-cli-internal-proposal"
+          ]
+        },
+        {
+          "pointer": "/scope/write_scope_binding",
+          "value": {
+            "scope_id": "WS-CLI-CORE",
+            "owner": "OWN-CLI",
+            "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+            "write_scope_row_sha256": "sha256:1ea52f272ff3465a58b0a4de2dae3e20b9d4008338f1df11c04b96c66a237033",
+            "root_only_authority_sha256": "sha256:75b59ee60e68494657db1d7440b3b9a7180e4a85c7cac2c645c226c7739016b9",
+            "resolution": "exact-single-row-and-root-authority-v1"
+          }
+        },
+        {
+          "pointer": "/effects/candidate_source",
+          "value": "instruction_only_no_effect"
+        }
+      ]
+    },
+    {
+      "variant_id": "valid_scoped_generated_output",
+      "mutations": [
+        {
+          "pointer": "/task_id",
+          "value": "agent-task-envelope-scoped-generated-output-baseline"
+        },
+        {
+          "pointer": "/role_binding",
+          "value": {
+            "role_id": "implementation-worker",
+            "source_kind": "runtime_agent_type_receipt",
+            "source_ref": "docs/ultragoal-successor-live/runtime-capabilities/IMPLEMENTATION-WORKER-RUNTIME-AGENT-TYPE-20260712.json",
+            "source_sha256": "sha256:cddf0a94e120d1dba1a2c7f88a72cef777f89f9d714efa65231801e989531a74",
+            "sandbox_mode": "workspace-write",
+            "may_exercise_root_authority": false
+          }
+        },
+        {
+          "pointer": "/scope/generated_outputs",
+          "value": [
+            "generated/event-catalog.json"
+          ]
+        },
+        {
+          "pointer": "/scope/semantic_symbols",
+          "value": [
+            "AgentTaskEnvelope-v1",
+            "scoped-observability-generated-output-proposal"
+          ]
+        },
+        {
+          "pointer": "/effects/candidate_source",
+          "value": "instruction_only_no_effect"
+        },
+        {
+          "pointer": "/output_contract/result_target",
+          "value": "generated/event-catalog.json"
+        }
+      ]
+    }
+  ],
   "red_cases": [
     {
       "case_id": "arbitrary-candidate-identity",
@@ -242,7 +434,9 @@
       "mutations": [
         {
           "pointer": "/candidate_identity",
-          "value": {"candidate_id": "arbitrary"}
+          "value": {
+            "candidate_id": "arbitrary"
+          }
         }
       ]
     },
@@ -259,6 +453,7 @@
     {
       "case_id": "valid-looking-unknown-node-id",
       "expected_rejection": "same_session_stable_id_resolution_required",
+      "expected_layer": "semantic_resolver",
       "mutations": [
         {
           "pointer": "/authority_binding/ids/nodes/0",
@@ -286,11 +481,15 @@
       "mutations": [
         {
           "pointer": "/effects/allowed",
-          "value": ["candidate-write"]
+          "value": [
+            "candidate-write"
+          ]
         },
         {
           "pointer": "/effects/forbidden",
-          "value": ["candidate-write"]
+          "value": [
+            "candidate-write"
+          ]
         }
       ]
     },
@@ -300,7 +499,9 @@
       "mutations": [
         {
           "pointer": "/scope/scratch_uris",
-          "value": ["/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal"]
+          "value": [
+            "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal"
+          ]
         }
       ]
     },
@@ -310,7 +511,9 @@
       "mutations": [
         {
           "pointer": "/scope/generated_outputs",
-          "value": ["generated/out.json"]
+          "value": [
+            "generated/out.json"
+          ]
         }
       ]
     },
@@ -337,6 +540,7 @@
     {
       "case_id": "unknown-output-schema",
       "expected_rejection": "output_schema_must_resolve_to_bound_authority",
+      "expected_layer": "semantic_resolver",
       "mutations": [
         {
           "pointer": "/output_contract/schema_id",
@@ -400,13 +604,1090 @@
       "mutations": [
         {
           "pointer": "/scope/generated_outputs",
-          "value": ["../escape.json"]
+          "value": [
+            "../escape.json"
+          ]
         },
+        {
+          "pointer": "/effects/candidate_source",
+          "value": "instruction_only_no_effect"
+        }
+      ]
+    },
+    {
+      "case_id": "stale-current-candidate-head",
+      "expected_rejection": "stale_candidate_identity",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/candidate_identity/head_commit",
+          "value": "0000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "case_id": "exact-allowed-forbidden-path-overlap",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "forbidden_scope_path_overlap",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/forbidden_paths",
+          "value": [
+            "schemas/observability"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "forbidden-descendant-under-allowed-ancestor",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "forbidden_scope_path_overlap",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/forbidden_paths",
+          "value": [
+            "schemas/observability/private"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "allowed-descendant-under-forbidden-ancestor",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "forbidden_scope_path_overlap",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": "schemas/observability/private/result.json",
+              "access": "propose_write"
+            }
+          ]
+        },
+        {
+          "pointer": "/scope/forbidden_paths",
+          "value": [
+            "schemas/observability/private"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "git-metadata-write-despite-read-only-effect",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "git_metadata_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": ".git/config",
+              "access": "propose_write"
+            }
+          ]
+        },
+        {
+          "pointer": "/scope/forbidden_paths",
+          "value": [
+            "Cargo.lock"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "casefolded-git-metadata-write",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "git_metadata_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": ".GIT/config",
+              "access": "propose_write"
+            }
+          ]
+        },
+        {
+          "pointer": "/scope/forbidden_paths",
+          "value": [
+            "Cargo.lock"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "host-protected-agent-config-write",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "shared_root_authority_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": ".codex/agents/new-worker.toml",
+              "access": "propose_write"
+            }
+          ]
+        },
+        {
+          "pointer": "/scope/forbidden_paths",
+          "value": [
+            "Cargo.lock"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "host-protected-worktree-artifact-write",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "shared_root_authority_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": ".CODEX-WORKTREE/env.sh",
+              "access": "propose_write"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "host-protected-worktree-fixture-write",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "shared_root_authority_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/fixtures",
+          "value": [
+            {
+              "path": ".codex-worktree/fixture.json",
+              "access": "propose_write"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "host-protected-worktree-generated-output",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "shared_root_authority_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/generated_outputs",
+          "value": [
+            ".codex-worktree/result.json"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "shared-schema-outside-canonical-write-scope",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "shared_root_authority_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": "schemas/goal-binding.schema.json",
+              "access": "propose_write"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "root-owned-leaf-inside-delegated-schema-scope",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "shared_root_authority_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": "schemas/observability/Cargo.toml",
+              "access": "propose_write"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "casefolded-root-owned-leaf-inside-delegated-schema-scope",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "shared_root_authority_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": "schemas/observability/agents.MD",
+              "access": "propose_write"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "unknown-canonical-write-scope",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "same_session_write_scope_resolution_required",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/write_scope_binding/scope_id",
+          "value": "WS-UNKNOWN"
+        }
+      ]
+    },
+    {
+      "case_id": "substituted-canonical-write-scope-row",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "write_scope_binding_mismatch",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/write_scope_binding/scope_id",
+          "value": "WS-FIT"
+        }
+      ]
+    },
+    {
+      "case_id": "canonical-write-scope-node-owner-mismatch",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "write_scope_node_owner_mismatch",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/write_scope_binding",
+          "value": {
+            "scope_id": "WS-CLI-CORE",
+            "owner": "OWN-CLI",
+            "source_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+            "write_scope_row_sha256": "sha256:1ea52f272ff3465a58b0a4de2dae3e20b9d4008338f1df11c04b96c66a237033",
+            "root_only_authority_sha256": "sha256:75b59ee60e68494657db1d7440b3b9a7180e4a85c7cac2c645c226c7739016b9",
+            "resolution": "exact-single-row-and-root-authority-v1"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "candidate-write-outside-bound-canonical-scope",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "write_scope_path_not_delegated",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": "docs/worker-output.md",
+              "access": "propose_write"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "generated-output-file-authority-descendant-expansion",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "write_scope_path_not_delegated",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": []
+        },
+        {
+          "pointer": "/scope/generated_outputs",
+          "value": [
+            "generated/event-catalog.json/child"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "root-owned-public-command-catalog",
+      "base": "valid_scoped_cli_implementation",
+      "expected_rejection": "shared_root_authority_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": "validator/src/cli/successor/catalog.rs",
+              "access": "propose_write"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "root-owned-public-command-dispatcher",
+      "base": "valid_scoped_cli_implementation",
+      "expected_rejection": "shared_root_authority_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": "validator/src/cli/successor/runtime/dispatch.rs",
+              "access": "propose_write"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "root-owned-public-module-export",
+      "base": "valid_scoped_cli_implementation",
+      "expected_rejection": "shared_root_authority_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": "validator/src/lib.rs",
+              "access": "propose_write"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "overbroad-root-authority-ancestor-write",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "shared_root_authority_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": "docs/ultragoal-successor-live",
+              "access": "propose_write"
+            }
+          ]
+        },
+        {
+          "pointer": "/scope/forbidden_paths",
+          "value": [
+            "Cargo.lock"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "protected-repository-output-target",
+      "expected_rejection": "git_metadata_write_forbidden",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/output_contract/result_target",
+          "value": ".git/config"
+        }
+      ]
+    },
+    {
+      "case_id": "undelegated-repository-output-target",
+      "expected_rejection": "output_target_not_delegated",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/output_contract/result_target",
+          "value": "docs/unbound-result.json"
+        }
+      ]
+    },
+    {
+      "case_id": "scratch-output-target-without-grant",
+      "expected_rejection": "output_target_not_delegated",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/output_contract/result_target",
+          "value": "scratch://context/output.json"
+        }
+      ]
+    },
+    {
+      "case_id": "evidence-reference-substitution",
+      "expected_rejection": "context_identity_mismatch",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/evidence/primary_references",
+          "value": [
+            {
+              "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+              "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+              "kind": "authority",
+              "candidate_bound": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "unsupported-surface-ceiling-substitution",
+      "expected_rejection": "context_identity_mismatch",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/evidence/unsupported_truth_surfaces",
+          "value": [
+            "source"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "required-output-section-substitution",
+      "expected_rejection": "context_identity_mismatch",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/output_contract/required_sections",
+          "value": [
+            "schema_version"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "goal-substitution",
+      "expected_rejection": "context_identity_mismatch",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/goal",
+          "value": "Substituted goal with the same candidate identity."
+        }
+      ]
+    },
+    {
+      "case_id": "verification-procedure-substitution",
+      "expected_rejection": "context_identity_mismatch",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/verification/positive/controls/0/procedure",
+          "value": "Skip the bound control."
+        }
+      ]
+    },
+    {
+      "case_id": "effect-matrix-substitution",
+      "expected_rejection": "context_identity_mismatch",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/effects/secrets",
+          "value": "named_source_no_value_exposure"
+        }
+      ]
+    },
+    {
+      "case_id": "no-claim-statement-substitution",
+      "expected_rejection": "exact_no_claim_statement_required",
+      "mutations": [
+        {
+          "pointer": "/no_claim_statement",
+          "value": "This substituted envelope claims completion."
+        }
+      ]
+    },
+    {
+      "case_id": "runtime-role-receipt-file-substitution",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "runtime_role_receipt_source_required",
+      "mutations": [
+        {
+          "pointer": "/role_binding/source_ref",
+          "value": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/AGENT-TASK-ENVELOPE.schema.json"
+        }
+      ]
+    },
+    {
+      "case_id": "runtime-role-receipt-identity-substitution",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "runtime_role_receipt_identity_mismatch",
+      "expected_layer": "semantic_resolver",
+      "mutations": [
+        {
+          "pointer": "/role_binding/role_id",
+          "value": "verification-executor"
+        }
+      ]
+    },
+    {
+      "case_id": "duplicate-normalized-scope-path",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "duplicate_scope_path_rejected",
+      "mutations": [
+        {
+          "pointer": "/scope/artifact_paths",
+          "value": [
+            {
+              "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1",
+              "access": "propose_write"
+            },
+            {
+              "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1",
+              "access": "propose_write"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "unmediated-workspace-write-authority",
+      "base": "valid_scoped_implementation",
+      "expected_rejection": "unmediated_workspace_write_authority_rejected",
+      "mutations": [
         {
           "pointer": "/effects/candidate_source",
           "value": "bounded_workspace_write"
         }
       ]
+    }
+  ],
+  "external_effect_authority_cases": [
+    {
+      "case_id": "fabricated-destructive-effect-without-authority",
+      "setup": "fabricated-effect-without-authority",
+      "expected_rejection": "external_effect_authority_resolution_required"
+    },
+    {
+      "case_id": "missing-effect-authority-source",
+      "setup": "missing-authority-source",
+      "expected_rejection": "external_effect_authority_resolution_required"
+    },
+    {
+      "case_id": "unknown-effect-id",
+      "setup": "unknown-effect-id",
+      "expected_rejection": "external_effect_authority_resolution_required"
+    },
+    {
+      "case_id": "unknown-approval-id",
+      "setup": "unknown-approval-id",
+      "expected_rejection": "external_effect_authority_resolution_required"
+    },
+    {
+      "case_id": "duplicate-effect-authority-row",
+      "setup": "duplicate-authority-row",
+      "expected_rejection": "external_effect_authority_duplicate_id"
+    },
+    {
+      "case_id": "ambiguous-effect-authority-source",
+      "setup": "ambiguous-authority-row",
+      "expected_rejection": "external_effect_authority_ambiguous_id"
+    },
+    {
+      "case_id": "revoked-effect-authority-row",
+      "setup": "revoked-effect",
+      "expected_rejection": "external_effect_authority_not_current"
+    },
+    {
+      "case_id": "revoked-effect-approval-row",
+      "setup": "revoked-approval",
+      "expected_rejection": "external_effect_approval_not_current"
+    },
+    {
+      "case_id": "expired-effect-approval-row",
+      "setup": "expired-approval",
+      "expected_rejection": "external_effect_approval_not_current"
+    },
+    {
+      "case_id": "not-yet-valid-effect-approval-row",
+      "setup": "not-yet-valid-approval",
+      "expected_rejection": "external_effect_approval_not_current"
+    },
+    {
+      "case_id": "external-effect-provider-substitution",
+      "setup": "provider-substitution",
+      "expected_rejection": "external_effect_identity_mismatch"
+    },
+    {
+      "case_id": "external-effect-action-substitution",
+      "setup": "action-substitution",
+      "expected_rejection": "external_effect_identity_mismatch"
+    },
+    {
+      "case_id": "external-effect-target-substitution",
+      "setup": "target-substitution",
+      "expected_rejection": "external_effect_identity_mismatch"
+    },
+    {
+      "case_id": "external-effect-kind-substitution",
+      "setup": "kind-substitution",
+      "expected_rejection": "external_effect_identity_mismatch"
+    },
+    {
+      "case_id": "external-effect-approval-link-substitution",
+      "setup": "approval-link-substitution",
+      "expected_rejection": "external_effect_approval_link_mismatch"
+    },
+    {
+      "case_id": "external-effect-approval-reused-by-two-effects",
+      "setup": "approval-reuse",
+      "expected_rejection": "external_effect_approval_reuse_rejected"
+    },
+    {
+      "case_id": "consumed-effect-approval-row",
+      "setup": "consumed-approval",
+      "expected_rejection": "external_effect_approval_reuse_rejected"
+    },
+    {
+      "case_id": "unreferenced-effect-authority-row",
+      "setup": "unreferenced-source-row",
+      "expected_rejection": "external_effect_authority_unreferenced_row"
+    },
+    {
+      "case_id": "effect-authority-source-namespace-substitution",
+      "setup": "source-namespace-substitution",
+      "expected_rejection": "external_effect_authority_source_required"
+    },
+    {
+      "case_id": "effect-authority-source-digest-substitution",
+      "setup": "source-digest-substitution",
+      "expected_rejection": "external_effect_authority_source_digest_mismatch"
+    },
+    {
+      "case_id": "effect-authority-resolved-row-substitution",
+      "setup": "resolved-row-substitution",
+      "expected_rejection": "external_effect_authority_binding_mismatch"
+    },
+    {
+      "case_id": "unreferenced-effect-binding-row",
+      "setup": "unreferenced-binding-row",
+      "expected_rejection": "external_effect_authority_binding_mismatch"
+    },
+    {
+      "case_id": "future-effect-authority-source",
+      "setup": "future-authority-source",
+      "expected_rejection": "external_effect_authority_not_current"
+    },
+    {
+      "case_id": "final-session-effect-authority-mutation",
+      "setup": "final-session-authority-mutation",
+      "expected_rejection": "external_effect_authority_final_revalidation_failed"
+    },
+    {
+      "case_id": "protected-namespace-hardlink-authority-alias",
+      "setup": "protected-hardlink-alias",
+      "expected_rejection": "external_effect_authority_alias_rejected"
+    },
+    {
+      "case_id": "proposal-local-same-inode-authority-alias",
+      "setup": "proposal-local-hardlink-alias",
+      "expected_rejection": "external_effect_authority_alias_rejected"
+    },
+    {
+      "case_id": "post-validation-authority-hardlink-insertion",
+      "setup": "post-validation-hardlink-insertion",
+      "expected_rejection": "external_effect_authority_final_revalidation_failed"
+    },
+    {
+      "case_id": "final-session-authority-rename-replacement",
+      "setup": "rename-replacement",
+      "expected_rejection": "external_effect_authority_final_revalidation_failed"
+    },
+    {
+      "case_id": "final-session-authority-mutate-restore",
+      "setup": "mutate-restore",
+      "expected_rejection": "external_effect_authority_final_revalidation_failed"
+    },
+    {
+      "case_id": "effect-authority-ancestor-symlink",
+      "setup": "ancestor-symlink",
+      "expected_rejection": "external_effect_authority_symlink_rejected"
+    },
+    {
+      "case_id": "effect-authority-leaf-symlink",
+      "setup": "leaf-symlink",
+      "expected_rejection": "external_effect_authority_symlink_rejected"
+    },
+    {
+      "case_id": "effect-authority-special-file",
+      "setup": "special-file",
+      "expected_rejection": "external_effect_authority_special_file_rejected"
+    },
+    {
+      "case_id": "effect-authority-size-bound",
+      "setup": "oversized-source",
+      "expected_rejection": "external_effect_authority_size_limit_exceeded"
+    },
+    {
+      "case_id": "missing-effect-session-receipt",
+      "setup": "missing-session-receipt",
+      "expected_rejection": "external_effect_session_receipt_required"
+    },
+    {
+      "case_id": "unknown-effect-session-receipt",
+      "setup": "unknown-session-receipt",
+      "expected_rejection": "external_effect_session_receipt_required"
+    },
+    {
+      "case_id": "duplicate-effect-session-receipt-row",
+      "setup": "duplicate-session-receipt",
+      "expected_rejection": "external_effect_session_receipt_duplicate"
+    },
+    {
+      "case_id": "ambiguous-effect-session-receipt-source",
+      "setup": "ambiguous-session-receipt",
+      "expected_rejection": "external_effect_session_receipt_ambiguous"
+    },
+    {
+      "case_id": "effect-session-receipt-source-substitution",
+      "setup": "session-receipt-source-substitution",
+      "expected_rejection": "external_effect_session_receipt_source_required"
+    },
+    {
+      "case_id": "backdated-effect-session-receipt",
+      "setup": "backdated-session-receipt",
+      "expected_rejection": "external_effect_session_receipt_stale"
+    },
+    {
+      "case_id": "future-effect-session-receipt",
+      "setup": "future-session-receipt",
+      "expected_rejection": "external_effect_session_receipt_future"
+    },
+    {
+      "case_id": "effect-session-receipt-candidate-substitution",
+      "setup": "receipt-candidate-mismatch",
+      "expected_rejection": "external_effect_session_receipt_binding_mismatch"
+    },
+    {
+      "case_id": "effect-session-receipt-authority-session-substitution",
+      "setup": "receipt-authority-session-mismatch",
+      "expected_rejection": "external_effect_session_receipt_binding_mismatch"
+    },
+    {
+      "case_id": "effect-session-receipt-repository-substitution",
+      "setup": "receipt-repository-mismatch",
+      "expected_rejection": "external_effect_session_receipt_binding_mismatch"
+    },
+    {
+      "case_id": "effect-session-envelope-capture-skew",
+      "setup": "receipt-skew-violation",
+      "expected_rejection": "external_effect_session_receipt_skew_violation"
+    },
+    {
+      "case_id": "effect-approval-expired-at-trusted-time",
+      "setup": "approval-expired-at-trusted-time",
+      "expected_rejection": "external_effect_approval_not_current"
+    },
+    {
+      "case_id": "effect-approval-expires-before-final-mediation-check",
+      "setup": "approval-expiry-between-checks",
+      "expected_rejection": "external_effect_approval_not_current"
+    },
+    {
+      "case_id": "effect-session-trusted-clock-rollback",
+      "setup": "clock-rollback",
+      "expected_rejection": "external_effect_clock_rollback_rejected"
+    },
+    {
+      "case_id": "final-trusted-time-observation-omitted",
+      "setup": "final-observation-omitted",
+      "expected_rejection": "external_effect_mediator_token_required"
+    },
+    {
+      "case_id": "rolled-back-final-trusted-time-observation-omitted",
+      "setup": "rolled-back-final-observation-omitted",
+      "expected_rejection": "external_effect_mediator_token_required"
+    },
+    {
+      "case_id": "forged-prior-trusted-time-observation",
+      "setup": "forged-prior-observation",
+      "expected_rejection": "external_effect_mediator_token_invalid"
+    },
+    {
+      "case_id": "prior-trusted-time-observation-candidate-substitution",
+      "setup": "prior-observation-candidate-mismatch",
+      "expected_rejection": "external_effect_mediator_token_binding_mismatch"
+    },
+    {
+      "case_id": "prior-trusted-time-observation-session-substitution",
+      "setup": "prior-observation-session-mismatch",
+      "expected_rejection": "external_effect_mediator_token_binding_mismatch"
+    },
+    {
+      "case_id": "prior-trusted-time-observation-receipt-substitution",
+      "setup": "prior-observation-receipt-mismatch",
+      "expected_rejection": "external_effect_mediator_token_binding_mismatch"
+    },
+    {
+      "case_id": "prior-trusted-time-observation-after-current-time",
+      "setup": "prior-observation-after-current",
+      "expected_rejection": "external_effect_clock_rollback_rejected"
+    },
+    {
+      "case_id": "stale-prior-trusted-time-observation",
+      "setup": "stale-prior-observation",
+      "expected_rejection": "external_effect_mediator_token_stale"
+    },
+    {
+      "case_id": "duplicate-final-trusted-time-observation-reuse",
+      "setup": "duplicate-final-observation-reuse",
+      "expected_rejection": "external_effect_mediator_token_reuse_rejected"
+    },
+    {
+      "case_id": "same-mediator-approval-and-receipt-reuse",
+      "setup": "same-mediator-authorization-reuse",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "fresh-mediator-approval-and-receipt-reuse",
+      "setup": "fresh-mediator-authorization-reuse",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "failed-final-does-not-consume-authorization",
+      "setup": "failed-final-does-not-consume",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "distinct-authorization-proceeds-before-own-reuse-rejection",
+      "setup": "distinct-authorization-proceeds",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "multiple-approval-atomic-consumption-first-member",
+      "setup": "multiple-approval-atomic-first",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "multiple-approval-atomic-consumption-second-member",
+      "setup": "multiple-approval-atomic-second",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "consumed-approval-source-identity-substitution",
+      "setup": "consumed-approval-source-identity-substitution",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "consumed-receipt-identity-substitution",
+      "setup": "consumed-receipt-identity-substitution",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "same-root-caller-substituted-repository-digest",
+      "setup": "same-root-caller-digest-substitution",
+      "expected_rejection": "canonical_repository_identity_mismatch"
+    },
+    {
+      "case_id": "same-root-caller-substituted-repository-uri",
+      "setup": "same-root-caller-uri-substitution",
+      "expected_rejection": "canonical_repository_identity_mismatch"
+    },
+    {
+      "case_id": "nonexistent-repository-root",
+      "setup": "nonexistent-repository-root",
+      "expected_rejection": "canonical_repository_missing"
+    },
+    {
+      "case_id": "non-directory-repository-root",
+      "setup": "non-directory-repository-root",
+      "expected_rejection": "canonical_repository_not_directory"
+    },
+    {
+      "case_id": "special-file-repository-root",
+      "setup": "special-file-repository-root",
+      "expected_rejection": "canonical_repository_special_file_rejected"
+    },
+    {
+      "case_id": "symlink-alias-repository-root",
+      "setup": "symlink-alias-repository-root",
+      "expected_rejection": "canonical_repository_symlink_rejected"
+    },
+    {
+      "case_id": "lexical-alias-repository-root",
+      "setup": "lexical-alias-repository-root",
+      "expected_rejection": "canonical_repository_alias_rejected"
+    },
+    {
+      "case_id": "repository-root-swap-between-initial-and-final",
+      "setup": "repository-root-swap-between-checks",
+      "expected_rejection": "canonical_repository_identity_mismatch"
+    },
+    {
+      "case_id": "same-path-repository-root-rename-and-replacement",
+      "setup": "same-path-root-rename-replacement",
+      "expected_rejection": "canonical_repository_object_mismatch"
+    },
+    {
+      "case_id": "root-replacement-failure-does-not-consume",
+      "setup": "root-replacement-failure-does-not-consume",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "repository-identity-mismatch-does-not-consume",
+      "setup": "repository-mismatch-does-not-consume",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "receipt-id-revival-with-distinct-unused-approval",
+      "setup": "receipt-id-revival-with-distinct-approval",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "approval-id-revival-with-distinct-unused-receipt-and-effect",
+      "setup": "approval-id-revival-with-distinct-receipt",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "consumed-approval-relocated-within-protected-namespace",
+      "setup": "consumed-approval-protected-source-relocation",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "consumed-receipt-id-row-mutation",
+      "setup": "consumed-receipt-row-mutation",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "consumed-receipt-id-session-mutation",
+      "setup": "consumed-receipt-session-mutation",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "consumed-receipt-id-nonce-mutation",
+      "setup": "consumed-receipt-nonce-mutation",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "same-stable-ids-cross-repository-non-overconsumption",
+      "setup": "cross-repository-non-overconsumption",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "concurrent-authorization-final-one-winner",
+      "setup": "concurrent-authorization-one-winner",
+      "expected_rejection": "external_effect_authorization_reuse_rejected"
+    },
+    {
+      "case_id": "retired-public-builder-and-fresh-ledger-exploit",
+      "setup": "retired-public-builder-ledger-exploit",
+      "expected_rejection": "external_effect_mediator_token_invalid"
+    },
+    {
+      "case_id": "cross-mediator-capability-token",
+      "setup": "cross-mediator-token",
+      "expected_rejection": "external_effect_mediator_token_invalid"
+    },
+    {
+      "case_id": "caller-created-mediator-state-injection",
+      "setup": "caller-created-mediator-state-injection",
+      "expected_rejection": "external_effect_mediator_state_injection_rejected"
+    },
+    {
+      "case_id": "direct-capability-token-construction",
+      "setup": "direct-token-construction",
+      "expected_rejection": "external_effect_mediator_token_construction_rejected"
+    },
+    {
+      "case_id": "capability-token-shallow-copy",
+      "setup": "token-shallow-copy",
+      "expected_rejection": "external_effect_mediator_token_clone_rejected"
+    },
+    {
+      "case_id": "capability-token-deep-copy",
+      "setup": "token-deep-copy",
+      "expected_rejection": "external_effect_mediator_token_clone_rejected"
+    },
+    {
+      "case_id": "capability-token-pickle-serialization",
+      "setup": "token-pickle-serialization",
+      "expected_rejection": "external_effect_mediator_token_serialization_rejected"
+    },
+    {
+      "case_id": "capability-token-json-serialization",
+      "setup": "token-json-serialization",
+      "expected_rejection": "external_effect_mediator_token_serialization_rejected"
+    },
+    {
+      "case_id": "caller-supplied-wrong-initial-result",
+      "setup": "wrong-initial-result-token-substitution",
+      "expected_rejection": "external_effect_mediator_token_invalid"
+    },
+    {
+      "case_id": "consumed-effect-session-receipt",
+      "setup": "session-receipt-reuse",
+      "expected_rejection": "external_effect_session_receipt_reuse_rejected"
+    },
+    {
+      "case_id": "final-session-time-source-mutation",
+      "setup": "time-source-mutation",
+      "expected_rejection": "external_effect_session_receipt_source_digest_mismatch"
+    },
+    {
+      "case_id": "effect-session-id-substitution",
+      "setup": "receipt-session-id-substitution",
+      "expected_rejection": "external_effect_session_receipt_session_mismatch"
+    },
+    {
+      "case_id": "effect-session-receipt-effect-source-substitution",
+      "setup": "receipt-effect-source-mismatch",
+      "expected_rejection": "external_effect_session_receipt_binding_mismatch"
+    },
+    {
+      "case_id": "external-effect-without-mediator-trusted-time",
+      "setup": "missing-trusted-mediator-time",
+      "expected_rejection": "external_effect_trusted_time_unavailable"
+    }
+  ],
+  "filesystem_red_cases": [
+    {
+      "case_id": "existing-writable-regular-file-hardlink",
+      "setup": "hardlink-target",
+      "proposed_path": "allowed/alias.toml",
+      "expected_rejection": "writable_regular_file_hardlink_rejected"
+    },
+    {
+      "case_id": "writable-directory-hardlink-descendant",
+      "setup": "hardlink-descendant",
+      "proposed_path": "allowed",
+      "expected_rejection": "writable_regular_file_hardlink_rejected"
+    },
+    {
+      "case_id": "writable-directory-symlink-descendant",
+      "setup": "symlink-descendant",
+      "proposed_path": "allowed",
+      "expected_rejection": "writable_symlink_rejected"
+    },
+    {
+      "case_id": "writable-directory-special-descendant",
+      "setup": "special-descendant",
+      "proposed_path": "allowed",
+      "expected_rejection": "writable_special_file_rejected"
+    },
+    {
+      "case_id": "post-validation-hardlink-insertion",
+      "setup": "post-validation-hardlink-insertion",
+      "proposed_path": "allowed/target.toml",
+      "expected_rejection": "writable_regular_file_hardlink_rejected"
     }
   ],
   "claim_effect": "none"
