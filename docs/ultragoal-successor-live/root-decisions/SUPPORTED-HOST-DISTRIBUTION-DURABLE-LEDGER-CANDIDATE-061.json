@@ -89,7 +89,7 @@
     "authority_interface": "production-compiled internal source candidate",
     "durable_ledger": "production-compiled internal source candidate",
     "live_executor": "not implemented",
-    "darwin_descriptor_execution": "typed Unsupported before reservation, spawn, or effect",
+    "darwin_descriptor_execution": "source-local unsupported policy decision only; typed executor adapter not implemented",
     "host_lifecycle_integration": "not implemented",
     "legacy_effect_authority": "still active pending reviewed activation and retirement"
   },
