@@ -72,6 +72,7 @@ impl FileHostEffectLedger {
             }
             None => store.write_atomic(STATE_NAME, &encode_snapshot(&initial, &key)?)?,
         }
+        store.validate_complete()?;
         let bytes = store.read_exact_file(STATE_NAME, MAX_LEDGER_BYTES, 0o600)?;
         let payload = decode_snapshot(&bytes, &key, &ledger_id, &key_id)?;
         replay(&payload)?;
@@ -102,6 +103,7 @@ impl FileHostEffectLedger {
         let lock = store.open_existing(LOCK_NAME, 0)?;
         let lock_identity = exact_identity(&store, LOCK_NAME, &lock, 0)?;
         let _guard = ProcessLock::acquire(lock)?;
+        store.validate_complete()?;
         let (key, key_identity) = store.open_existing_key()?;
         let key_id = digest(&key.0);
         let bytes = store.read_exact_file(STATE_NAME, MAX_LEDGER_BYTES, 0o600)?;
@@ -142,6 +144,7 @@ impl FileHostEffectLedger {
         }
         let _guard = ProcessLock::acquire(lock)?;
         self.verify_store()?;
+        store.validate_complete()?;
         let (key, identity) = store.open_existing_key()?;
         if identity != self.key_identity {
             return Err(tampered());
@@ -164,6 +167,7 @@ impl FileHostEffectLedger {
                 return Err(tampered());
             }
         }
+        store.validate_complete()?;
         local.initialized = true;
         local.generation = payload.generation;
         local.head_sha256.clone_from(&payload.head_sha256);
@@ -899,6 +903,50 @@ impl Store {
         Ok(())
     }
 
+    fn validate_complete(&self) -> Result<(), HostEffectLedgerError> {
+        self.verify_root()?;
+        let mut observed = BTreeSet::new();
+        for entry in fs::read_dir(&self.root).map_err(|_| ledger_io())? {
+            let entry = entry.map_err(|_| ledger_io())?;
+            let name = entry.file_name().into_string().map_err(|_| tampered())?;
+            if !observed.insert(name.clone()) {
+                return Err(tampered());
+            }
+            let identity = self.exact_stat(&name)?.ok_or_else(tampered)?;
+            match name.as_str() {
+                LOCK_NAME => {
+                    validate_regular(identity, 0, 0o600)?;
+                    if identity.length != 0 {
+                        return Err(tampered());
+                    }
+                }
+                KEY_NAME => {
+                    validate_regular(identity, KEY_BYTES as u64, 0o600)?;
+                    if identity.length != KEY_BYTES as u64 {
+                        return Err(tampered());
+                    }
+                }
+                STATE_NAME => {
+                    validate_regular(identity, MAX_LEDGER_BYTES, 0o600)?;
+                    if identity.length == 0 {
+                        return Err(tampered());
+                    }
+                }
+                _ => return Err(tampered()),
+            }
+        }
+        let expected = BTreeSet::from([
+            KEY_NAME.to_owned(),
+            LOCK_NAME.to_owned(),
+            STATE_NAME.to_owned(),
+        ]);
+        self.verify_root()?;
+        if observed != expected {
+            return Err(tampered());
+        }
+        Ok(())
+    }
+
     fn open_or_create_lock(&self) -> Result<File, HostEffectLedgerError> {
         self.verify_root()?;
         let file = open_relative(
@@ -1281,6 +1329,7 @@ fn ledger_io() -> HostEffectLedgerError {
 mod tests {
     use super::*;
     use std::os::unix::fs::PermissionsExt;
+    use std::os::unix::fs::symlink;
     use std::process::{Command, Stdio};
     use std::sync::atomic::{AtomicU64, Ordering};
     use std::thread;
@@ -1497,6 +1546,36 @@ mod tests {
         assert_eq!(
             ledger.head().unwrap_err().id(),
             HostEffectLedgerErrorId::Tampered
+        );
+    }
+
+    #[test]
+    fn unknown_and_special_ledger_entries_fail_closed_without_cleanup() {
+        let fixture = LedgerFixture::new();
+        let ledger = FileHostEffectLedger::create(&fixture.root, "host-ledger".to_owned()).unwrap();
+        let unknown = fixture.root.join("unknown.json");
+        fs::write(&unknown, b"{}\n").unwrap();
+        fs::set_permissions(&unknown, fs::Permissions::from_mode(0o600)).unwrap();
+        assert_eq!(
+            ledger.head().unwrap_err().id(),
+            HostEffectLedgerErrorId::Tampered
+        );
+        assert!(unknown.exists());
+        fs::remove_file(&unknown).unwrap();
+
+        let state = fixture.root.join(STATE_NAME);
+        let held = fixture.root.join("held-state");
+        fs::rename(&state, &held).unwrap();
+        symlink(&held, &state).unwrap();
+        assert_eq!(
+            ledger.head().unwrap_err().id(),
+            HostEffectLedgerErrorId::Tampered
+        );
+        assert!(
+            fs::symlink_metadata(&state)
+                .unwrap()
+                .file_type()
+                .is_symlink()
         );
     }
 
