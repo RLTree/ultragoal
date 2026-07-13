@@ -1,0 +1,54 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "SUPPORTED-HOST-AUTHORITY-LEDGER-INTEGRATION-062",
+  "workstream": "supported-host-distribution-transaction-authority",
+  "decision": "ACCEPT_INTERNAL_AUTHORITY_AND_DURABLE_LEDGER_CANDIDATE",
+  "integration_commit": "1badef92c4cdf81e08f98513cd5a558ef327033c",
+  "integration_tree": "56651003c6e05bd114d35c25e55f6d41c11e51fe",
+  "authority_decision": {
+    "path": "docs/ultragoal-successor-live/root-decisions/SUPPORTED-HOST-DISTRIBUTION-DURABLE-LEDGER-CANDIDATE-061.json",
+    "revision": 2,
+    "sha256": "sha256:c36681aca15945ce8c1c3f2628302ad73d841ec7998aac65132cb4c7c9ea6bb1"
+  },
+  "accepted_artifact_set": {
+    "source_commit": "ad639233db066345e4de2899a59f166116d19040",
+    "source_tree": "8ee58380cb882d7bb98352c05610c986876469bf",
+    "sha256": "sha256:91a3059e2cb6a23b1612191e20d60ccbea6632ba6a010575ca64657a93dfe97e",
+    "artifact_count": 6,
+    "bytes": 138144,
+    "lines": 4033
+  },
+  "independent_review": {
+    "record": "docs/ultragoal-successor-live/reviews/SUPPORTED-HOST-AUTHORITY-LEDGER-REVIEW-062.json",
+    "record_sha256": "sha256:e6229710cc6199e443077620e5726d4b0d372c82473909934535bbb283f5dea0",
+    "reviewer": "/root/host_effect_authority_security_reviewer",
+    "verdict": "PASS",
+    "closed_source_findings": 4,
+    "closed_proof_and_ceiling_findings": 2,
+    "exact_source_tests": "20/20",
+    "jobs": 16,
+    "test_threads": 16
+  },
+  "accepted_behavior": [
+    "opaque root-held authority binds complete host-effect permits without exposing key material",
+    "AuthorizedHostEffect requires the exact live pinned executable and permit-derived reservation",
+    "ledger v2 authenticates the coordination lock identity and validates it around publication",
+    "key bytes are read from the same identity-bound descriptor and revalidated against the named object",
+    "nonce and semantic-effect reservations plus state transitions are durable and fail closed",
+    "sixteen fresh processes reach a pre-flock barrier before simultaneous contention",
+    "unknown special substituted and rollback-shaped local ledger objects fail closed",
+    "Darwin remains a source-local unsupported policy only"
+  ],
+  "withheld": [
+    "typed Darwin executor adapter",
+    "crash and power-loss recovery",
+    "fresh-process rollback protection without an external monotonic anchor",
+    "live host executor and host-lifecycle mediation",
+    "legacy host-authority retirement",
+    "package marketplace install cache app-registry Plugins UI discovery and runtime proof",
+    "representative journeys",
+    "readiness release node closure and goal completion"
+  ],
+  "claim_ceiling": "internal production-compiled source-local host-effect authority-interface and durable-ledger candidate only",
+  "no_claim_statement": "This acceptance does not claim a live host effect, typed Darwin adapter, installed product behavior, readiness, release, node closure, or goal completion."
+}

@@ -1,0 +1,80 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "SUPPORTED-HOST-AUTHORITY-LEDGER-REVIEW-062",
+  "reviewer": "/root/host_effect_authority_security_reviewer",
+  "review_route": "security-trust-boundary-reviewer",
+  "effective_model_metadata": "not exposed",
+  "verdict": "ACCEPT",
+  "reviewed_at_date": "2026-07-12",
+  "reviewed_identity": {
+    "head_commit": "1badef92c4cdf81e08f98513cd5a558ef327033c",
+    "head_tree": "56651003c6e05bd114d35c25e55f6d41c11e51fe",
+    "decision_path": "docs/ultragoal-successor-live/root-decisions/SUPPORTED-HOST-DISTRIBUTION-DURABLE-LEDGER-CANDIDATE-061.json",
+    "decision_revision": 2,
+    "decision_sha256": "sha256:c36681aca15945ce8c1c3f2628302ad73d841ec7998aac65132cb4c7c9ea6bb1",
+    "source_commit": "ad639233db066345e4de2899a59f166116d19040",
+    "source_tree": "8ee58380cb882d7bb98352c05610c986876469bf",
+    "source_artifact_set_sha256": "sha256:91a3059e2cb6a23b1612191e20d60ccbea6632ba6a010575ca64657a93dfe97e",
+    "source_artifact_count": 6,
+    "source_bytes": 138144,
+    "source_lines": 4033,
+    "dependent_decision_sha256": "sha256:58dbb8bf7745471ebbda91da5083fbe944d4f98fcc44f0a39482a9d68c89d058"
+  },
+  "reconciliation": {
+    "artifact_rows": "PASS: all six source hashes, byte counts, line counts, and aggregate reproduced exactly",
+    "authority_record": "PASS: revision 2 is the sole current decision and explicitly supersedes the stale first revision",
+    "exact_source_receipt": "PASS: detached candidate run dd3e9d0f-eabf-42f6-86b5-5e09279a9f6b records 20 passed, 0 failed, 1666 skipped",
+    "darwin_ceiling": "PASS: unsupported is a source-local policy decision; typed executor adapter is explicitly unimplemented",
+    "dirty_worktree_overlap": "PASS: concurrent repository-fit and routine paths do not overlap the frozen host-effect artifacts"
+  },
+  "closed_findings": [
+    {
+      "class": "executable-identity-not-enforced",
+      "correction_commit": "cdc3386f03ad45adb0b99d7b7bdbc103708f6edf"
+    },
+    {
+      "class": "replacement-lock-split-serialization",
+      "correction_commit": "3e966bc009e93285c9fd8628af8734ab2ac312a4"
+    },
+    {
+      "class": "sequential-cross-process-false-pass",
+      "correction_commit": "576ec747f660e2690987b3f7d9c4cf3825bdfdaa"
+    },
+    {
+      "class": "key-identity-byte-splice",
+      "correction_commit": "ad639233db066345e4de2899a59f166116d19040"
+    },
+    {
+      "class": "stale-authority-record",
+      "correction_commit": "fe0de6fcc304c130c9e18b3f6e48ed86f0d7e86a"
+    },
+    {
+      "class": "darwin-runtime-overstatement",
+      "correction_commit": "1badef92c4cdf81e08f98513cd5a558ef327033c"
+    }
+  ],
+  "supported_scope": [
+    "production-compiled internal root-held host-effect permit authority interface",
+    "production-compiled internal durable authenticated one-use host-effect ledger",
+    "exact executable and permit-derived reservation binding at AuthorizedHostEffect construction",
+    "descriptor-bound lock key state and ledger-root substitution controls",
+    "real sixteen-process pre-flock contention proof",
+    "source-local Darwin unsupported policy decision"
+  ],
+  "residual_risks": [
+    "crash-injection and power-loss recovery are unproved",
+    "interrupted pre-publication temp-file recovery is unimplemented",
+    "fresh-process full directory key and authenticated-state rollback requires an external monotonic anchor",
+    "the adjacent ledger key is not hardware-backed"
+  ],
+  "explicitly_withheld": [
+    "typed Darwin executor adapter",
+    "live host executor and host lifecycle mediation",
+    "legacy host-authority retirement",
+    "package marketplace install cache app-registry Plugins UI discovery and runtime behavior",
+    "representative product journeys",
+    "readiness release node closure and goal completion"
+  ],
+  "claim_ceiling": "internal production-compiled source-local host-effect authority-interface and durable-ledger candidate only",
+  "no_claim_statement": "This review does not accept a typed Darwin adapter, live host effect, product installation or runtime behavior, readiness, release, node closure, or goal completion."
+}
