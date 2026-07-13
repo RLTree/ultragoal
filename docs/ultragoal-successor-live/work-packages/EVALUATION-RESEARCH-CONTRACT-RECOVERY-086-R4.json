@@ -1,0 +1,72 @@
+{
+  "schema_version": "UltraLeaseAmendment-v1",
+  "amendment_id": "EVALUATION-RESEARCH-CONTRACT-RECOVERY-086-R4",
+  "base_work_package": "docs/ultragoal-successor-live/work-packages/EVALUATION-FALSE-PASS-RECOVERY-086-R3.json",
+  "base_work_package_sha256": "sha256:1e24f65335530db5a0b73c4e12ad38e91d482473fbce2f939d7913c8c246b4c1",
+  "issued_candidate": {
+    "head_commit": "4e037ac043aea5e4e4a4b4cb2865e1bfd5330802",
+    "head_tree": "e276df74ff3c4d1c81eccea33d1b69b2b1e6938c",
+    "note": "The exact rejected 18-artifact evaluation set remains live and disjoint from concurrent repository-fit and supported-package leases. Preserve all non-evaluation paths and bind the corrected freeze to the then-current root HEAD."
+  },
+  "owner_override": "/root/evaluation_research_false_pass_repair_engineer",
+  "lease_id_override": "EVALUATION-RESEARCH-CONTRACT-RECOVERY-086-R4",
+  "inherit_r3_write_paths_symbols_outputs_fixtures_effects_and_git_prohibition": true,
+  "independent_rework": {
+    "reviewer": "/root/evaluation_runtime_and_research_authority_reviewer",
+    "reviewed_artifact_set_sha256": "sha256:c285e8df4e36bde3e8a4e9ebddf5af703d6341fd94d6de7a3188c01632a35f88",
+    "worker_result_sha256": "sha256:6de6a238bf28fbdc2cd736e2d547f834f78f6b99dec9d8b4527eac576a285c0c",
+    "verdict": "REWORK",
+    "decisive_finding": "ResearchSource and LawChangeProposal omit binding REQ-RESEARCH-001, REQ-RESEARCH-002, and REQ-RESEARCH-004 fields, while ResearchAudit validates only metadata, freshness, duplication, and support links. The 47-of-47 happy path therefore proves an incomplete research source and proposal can become eligible."
+  },
+  "required_corrections": [
+    "Represent and validate one bounded typed source record with publisher, URL, source class, checked date, verified source facts, limitations, and mapped law identifiers.",
+    "Keep verified source facts, binding product requirements, advisory practices, experimental hypotheses, and rejected recommendations in distinct typed fields. No vendor capability, advice, hypothesis, or rejected recommendation may become a fact or binding requirement by inference.",
+    "Bind the canonical typed source-record bytes exactly to BoundInput path, digest, and byte length; ResearchAudit must reject missing content, noncanonical content, digest or length mismatch, unsafe references, duplicate classification rows, and unsupported fact-to-source mappings.",
+    "Preserve and test current-primary-source freshness behavior for mutable capability and version claims under REQ-RESEARCH-003; stale or non-primary evidence cannot support an implementation or release decision.",
+    "Require every eligible law-change proposal to carry bounded typed impact, migration, proof, and authority analyses, plus exact source and mapped-law references. An advisory source update alone must remain unable to change active requirement state.",
+    "Keep the entire research output non-authoritative. This lease may produce only reviewed proposal candidates and findings; it may not mutate adopted laws, registries, manifests, claims, migration state, or release state."
+  ],
+  "required_controls": {
+    "positive": [
+      "complete primary source record with canonical bound bytes and all five distinct classification fields",
+      "current source and complete proposal with impact, migration, proof, and authority analysis remains non-authoritative but eligible for later root review"
+    ],
+    "negative_and_false_pass": [
+      "omit or empty each required source field independently",
+      "source bytes, digest, length, URL, checked date, source class, limitation, fact, or mapped-law substitution",
+      "advisory practice or hypothesis laundered as verified fact or binding requirement",
+      "vendor documentation used as primary evidence when the decision requires a current primary source",
+      "omit or empty each proposal analysis independently",
+      "supporting source or mapped-law mismatch",
+      "complete research records still cannot mutate or claim adopted law"
+    ],
+    "mutation_and_zero_write": [
+      "mutate-restore of the bound source record rejects",
+      "audit and proposal eligibility paths preserve the recursive source tree and Git status"
+    ]
+  },
+  "verification": {
+    "jobs": 16,
+    "test_threads": 16,
+    "cargo_target_dir": "/private/tmp/hul-evaluation-research-false-pass-repair-target",
+    "requirements": [
+      "focused research contract tests twice",
+      "evaluation_runtime_contract complete named target",
+      "evaluation_contract and fixture-scheduler dependency closure",
+      "cargo check --lib",
+      "exact-file rustfmt with skip_children",
+      "WorkerResult-v1 exact corrected artifact set and final same-session revalidation"
+    ]
+  },
+  "worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/EVALUATION-PRODUCTION-RUNTIME-086.json",
+    "worker": "/root/evaluation_research_false_pass_repair_engineer",
+    "lease_id": "EVALUATION-RESEARCH-CONTRACT-RECOVERY-086-R4",
+    "required": true,
+    "no_claim_statement": "This worker does not claim root adoption, public evaluation command availability, installed runtime behavior, representative product journeys, claim elevation, readiness, release, or completion."
+  },
+  "prohibited_changes": [
+    "public command catalog, dispatcher, schemas, manifests, generated authority, migration and retirement registry, acceptance, board, claims, release state, Git, network, or host state",
+    "weakening the already frozen descriptor, journal, race, recovery, fixture, privacy, or false-pass controls to make the corrected research tests pass"
+  ]
+}
