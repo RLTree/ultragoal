@@ -14,6 +14,8 @@ mod corruption;
 mod limits_false_pass;
 #[path = "observability_contract/local_store.rs"]
 mod local_store;
+#[path = "observability_contract/lock_deadline.rs"]
+mod lock_deadline;
 #[path = "../src/observability/mod.rs"]
 mod observability;
 #[path = "observability_contract/privacy_export.rs"]

@@ -2,10 +2,12 @@ use super::filesystem;
 use super::format;
 use super::identity::BoundStoreIdentity;
 use super::limits::{HARD_MAX_EVENTS, HARD_MAX_RESULTS, HARD_MAX_SCAN_ROWS, HARD_MAX_STORE_BYTES};
+use super::locking::{
+    LOCK_TIMEOUT_ERROR, LockDeadline, STORE_LOCK_TIMEOUT, lock_exclusive, lock_shared,
+};
 use super::privacy;
 use super::{CausalExplanation, EventQuery, SemanticEvent};
 use crate::context::LiveContext;
-use std::fs::File;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
@@ -37,6 +39,14 @@ impl EventStore {
 
     pub const fn supported_result_limit() -> usize {
         HARD_MAX_RESULTS
+    }
+
+    pub const fn supported_lock_timeout_millis() -> u64 {
+        STORE_LOCK_TIMEOUT.as_millis() as u64
+    }
+
+    pub fn is_lock_timeout_error(error: &str) -> bool {
+        error == LOCK_TIMEOUT_ERROR
     }
 
     pub fn open_bound(
@@ -126,9 +136,10 @@ impl EventStore {
         event.validate()?;
         self.validate_event_binding(event)?;
         let row = format::encode(event)?;
-        let mut file = self.identity.open_for_append()?;
-        lock_exclusive(&file)?;
-        self.identity.validate_bound(&self.path, &file)?;
+        let deadline = LockDeadline::for_store_operation()?;
+        let (mut file, expected) = self.identity.open_for_append(&deadline)?;
+        lock_exclusive(&file, &deadline)?;
+        self.identity.validate_bound(&self.path, &file, expected)?;
         let bytes = filesystem::read_bounded(&mut file, self.max_store_bytes)?;
         let decoded = format::decode(&bytes, self.max_scan_rows)?;
         self.validate_rows(&decoded.events)?;
@@ -154,13 +165,13 @@ impl EventStore {
         if next_size as u64 > self.max_store_bytes {
             return Err("observe-store-limit: append would exceed byte bound".to_owned());
         }
-        self.identity.validate_bound(&self.path, &file)?;
+        self.identity.validate_bound(&self.path, &file, expected)?;
         file.write_all(&row).map_err(|_| {
             "observe-append-interrupted: partial tail may require recovery".to_owned()
         })?;
         file.sync_data()
             .map_err(|_| "observe-append-durability-failed".to_owned())?;
-        self.identity.validate_bound(&self.path, &file)?;
+        self.identity.validate_bound(&self.path, &file, expected)?;
         Ok(true)
     }
 
@@ -206,18 +217,34 @@ impl EventStore {
     }
 
     pub(super) fn read_events(&self) -> Result<Vec<SemanticEvent>, String> {
-        let Some(mut file) =
-            filesystem::open_read(self.identity.parent(), self.identity.expected()?)?
+        let deadline = LockDeadline::for_store_operation()?;
+        let initial_expected = self.identity.expected(&deadline)?;
+        let Some(mut file) = filesystem::open_read(self.identity.parent(), initial_expected)?
         else {
             return Ok(Vec::new());
         };
-        lock_shared(&file)?;
-        self.identity.validate_bound(&self.path, &file)?;
+        lock_shared(&file, &deadline)?;
+        let expected = match initial_expected {
+            Some(expected) => expected,
+            None => self.identity.expected(&deadline)?.ok_or_else(|| {
+                "observe-store-path-denied: store materialized outside append".to_owned()
+            })?,
+        };
+        self.identity.validate_bound(&self.path, &file, expected)?;
         let bytes = filesystem::read_bounded(&mut file, self.max_store_bytes)?;
-        self.identity.validate_bound(&self.path, &file)?;
+        self.identity.validate_bound(&self.path, &file, expected)?;
         let decoded = format::decode(&bytes, self.max_scan_rows)?;
         self.validate_decoded(&decoded)?;
         Ok(decoded.events)
+    }
+
+    #[cfg(test)]
+    pub fn hold_identity_mutex_for_test(
+        &self,
+        ready: std::sync::mpsc::Sender<()>,
+        release: std::sync::mpsc::Receiver<()>,
+    ) -> Result<(), String> {
+        self.identity.hold_mutex_for_test(ready, release)
     }
 
     fn validate_event_binding(&self, event: &SemanticEvent) -> Result<(), String> {
@@ -257,14 +284,4 @@ fn stable_sort(events: &mut [SemanticEvent]) {
             right.event_id(),
         ))
     });
-}
-
-fn lock_shared(file: &File) -> Result<(), String> {
-    file.lock_shared()
-        .map_err(|_| "observe-store-lock-failed".to_owned())
-}
-
-fn lock_exclusive(file: &File) -> Result<(), String> {
-    file.lock()
-        .map_err(|_| "observe-store-lock-failed".to_owned())
 }

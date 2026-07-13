@@ -1,0 +1,94 @@
+{
+  "schema_version": "ObservabilityLocalDiagnosisFixtures-v1",
+  "temporary_root": "/tmp/hul-observability-local-diagnosis-069",
+  "source_id": "successor-runtime",
+  "claim_effect": "none",
+  "external_export_default": "disabled-safe-default-OD-004-OD-007",
+  "cases": [
+    {
+      "id": "append-query-causal-diagnosis",
+      "class": "positive",
+      "expect": "candidate-bound local events retain stable parent correlation and the source-built public diagnosis returns the matching repair without raising a claim"
+    },
+    {
+      "id": "absent-store-read",
+      "class": "negative",
+      "expect": "query returns an empty absent store and selected diagnosis withholds causality without creating the store"
+    },
+    {
+      "id": "bound-leaf-substitution",
+      "class": "race",
+      "expect": "a store leaf replaced after binding is rejected before the replacement is interpreted or mutated"
+    },
+    {
+      "id": "truncated-tail-recovery",
+      "class": "mutation",
+      "expect": "read paths expose truncation without repair and only the explicit recovery API removes the incomplete final row"
+    },
+    {
+      "id": "symlink-and-fifo-refusal",
+      "class": "security",
+      "expect": "ancestor symlinks and special-file leaves refuse promptly without path disclosure or outside effects"
+    },
+    {
+      "id": "sensitive-attribute-redaction",
+      "class": "privacy",
+      "expect": "tokens private paths and personal identifiers are removed before persistence and public output"
+    },
+    {
+      "id": "receipt-only-cause-refusal",
+      "class": "false-pass",
+      "expect": "a receipt-shaped event carrying current finding and repair references cannot substitute for an observed causal event"
+    },
+    {
+      "id": "stale-candidate-store-refusal",
+      "class": "stale-candidate",
+      "expect": "events bound before a tracked candidate change are not interpreted by the new candidate"
+    },
+    {
+      "id": "unknown-row-refusal",
+      "class": "unknown-row",
+      "expect": "a complete row with an unknown field is preserved as corruption and never accepted or rewritten"
+    },
+    {
+      "id": "help-query-diagnose-zero-write",
+      "class": "read",
+      "expect": "help query and diagnosis preserve the recursive filesystem and Git status at each command scope"
+    },
+    {
+      "id": "disabled-export-no-network",
+      "class": "network",
+      "expect": "default read paths and the unauthorized export route make no connection and create no export output"
+    },
+    {
+      "id": "exclusive-lock-deadline",
+      "class": "race",
+      "expect": "a source-built public query under an external exclusive lock emits one deterministic fail-closed diagnostic at the declared monotonic deadline without filesystem Git network or export effects"
+    },
+    {
+      "id": "shared-lock-and-interruption",
+      "class": "mutation",
+      "expect": "shared readers remain compatible while blocked writers and interrupted lock waits leave retained event bytes unchanged"
+    },
+    {
+      "id": "lock-release-negative-control",
+      "class": "false-pass",
+      "expect": "releasing the same lock before the deadline restores a successful query so a generic failure cannot satisfy the contention regression"
+    },
+    {
+      "id": "same-process-identity-lock-deadline",
+      "class": "race",
+      "expect": "query append clear recovery and export all time out deterministically when another thread holds the shared in-process store identity mutex and leave retained bytes unchanged"
+    },
+    {
+      "id": "shared-identity-file-lock-budget",
+      "class": "false-pass",
+      "expect": "identity-mutex wait and operating-system file-lock wait consume one monotonic budget so neither layer can reset the deadline"
+    },
+    {
+      "id": "identity-holder-cancellation",
+      "class": "mutation",
+      "expect": "cancelling and joining an in-process identity holder releases the mutex and leaves subsequent query behavior and retained bytes intact"
+    }
+  ]
+}

@@ -1,0 +1,2348 @@
+{
+  "worker": "/root/observability_shared_deadline_corrector",
+  "lease_id": "OBSERVABILITY-LOCAL-DIAGNOSIS-069",
+  "context_id": "sha256:81a3ff7211e804df4d8320ed94fffacab6de9425280ad17bc9fc8afcbad4c974",
+  "candidate_identity": {
+    "schema_version": "ObservabilityCorrectiveCandidateIdentity-v1",
+    "candidate_id": "sha256:e414064caa4dd9390273063854547536b3234795b6ee3ae0eb16ab0f5de4f37c",
+    "worker_owned_aggregate_sha256": "sha256:0c89f2ecc1a15ebd2c2b22d9037a8ef0f51362c63a3025a7166907d89ed639da",
+    "base_head_commit": "d19c52e995bb3163e0e638f9ac542a7382eed898",
+    "base_head_tree": "f4588382e96ce9d42d223f5c108bce2c5c1d0df4",
+    "identity_method": "SHA-256 current bytes per exact repository-relative regular-file row; symlinks, special files, link counts other than one, duplicate device/inode aliases, missing or unknown paths, duplicate rows, and cross-set overlap inconsistencies are rejected; every path/hash/byte/line tuple must match. Aggregate is SHA-256 of UTF-8 path<TAB>lowercase digest without prefix<LF>, sorted by UTF-8 path.",
+    "identity_rows": [
+      {
+        "path": "Cargo.lock",
+        "sha256": "sha256:50c62aba5befb46bd7b8d304911e696be58ee235fa2402d7154ea4e03666c26d",
+        "byte_length": 9835,
+        "line_count": 380,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/00-READ-ME-FIRST.md",
+        "sha256": "sha256:09a5552c4c7d23eb63b2e01874b55e01356ce4da56d549278de1609956b774ed",
+        "byte_length": 3716,
+        "line_count": 62,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/01-AUTHORITY-AND-PRODUCT-LAWS.md",
+        "sha256": "sha256:c62a97fd359b8191a88313892b793865fd25879635dbdf50f6eb9e71f6a46f2d",
+        "byte_length": 6441,
+        "line_count": 45,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/02-PLUGIN-PRODUCT-AND-JOURNEYS.md",
+        "sha256": "sha256:fbe22493a64da7feb3a0482dcc11cb31e9796ce99c5eee2ae0c61c0fd16cf389",
+        "byte_length": 12617,
+        "line_count": 83,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/03-CLI-KERNEL-AND-CUSTOM-TOOLS.md",
+        "sha256": "sha256:22e7c53e6e67d406e0de252bd8211e794ef0c032c393beec1fa6a3fcc79ff134",
+        "byte_length": 5328,
+        "line_count": 45,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/04-ORCHESTRATION-AND-WRITE-SCOPES.md",
+        "sha256": "sha256:e5218498da2ae1c7bd7cf0d6704c52d1753ef270c7804584b7427948db2e11fc",
+        "byte_length": 10346,
+        "line_count": 75,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/05-PROOF-CLAIMS-AND-COMPLETION.md",
+        "sha256": "sha256:1d31a306d723a309f1a05d95d8e3f2ce1c329346ecaf853856ee2d8ddb83eb61",
+        "byte_length": 5848,
+        "line_count": 40,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/06-SECURITY-SUPPLY-AND-PRIVACY.md",
+        "sha256": "sha256:abaac2e7dceb0de22c050024878954881ccf1f6a15426138542fb5fe3a900a1d",
+        "byte_length": 1907,
+        "line_count": 24,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/07-OBSERVABILITY-EVALUATION-AND-RESEARCH.md",
+        "sha256": "sha256:8d12e912335057eac0f8d91ce512da9dfc31ddf09eeb90447d05de386299c0fa",
+        "byte_length": 10859,
+        "line_count": 65,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/08-IMPLEMENTATION-VALIDATION-AND-QUALITY.md",
+        "sha256": "sha256:8fe85ba8a49c4bf19aa6263256b4f35c696d8c17e17da31d82e0a385ca66e5b0",
+        "byte_length": 3377,
+        "line_count": 41,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/BUNDLE-VALIDATION-REPORT.json",
+        "sha256": "sha256:7a00b39bfa674f8a669ce411c2fa0294b5f7ea6a87b3d961cde7254ea32c6ccc",
+        "byte_length": 2826,
+        "line_count": 93,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json",
+        "sha256": "sha256:67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc",
+        "byte_length": 35911,
+        "line_count": 956,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CODEX-ULTRA-BOOTSTRAP.md",
+        "sha256": "sha256:efcc73d3b40dccbfda925d759ee2c7221e4e7fffb84ab2957ac4e8954be55467",
+        "byte_length": 3375,
+        "line_count": 41,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CODEX-ULTRA-GOAL.md",
+        "sha256": "sha256:7e992a7eec84d937968aa45a3907698d070e8aa7e86eeb971032786dabb1f34f",
+        "byte_length": 3580,
+        "line_count": 11,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CONTRACT_MANIFEST.json",
+        "sha256": "sha256:390138fa292fffa6975f501acd1570be6d32b8498f33651d44596009b900a130",
+        "byte_length": 10432,
+        "line_count": 312,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json",
+        "sha256": "sha256:03073c8ee853d02be0776443cf39828d0630d3e1389d69be7817b201fc971fb7",
+        "byte_length": 22485,
+        "line_count": 662,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        "sha256": "sha256:a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f",
+        "byte_length": 20505,
+        "line_count": 776,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/MIGRATION-AND-RETIREMENT.md",
+        "sha256": "sha256:17cc0ac6ac74fbafc3518dd8040cc78918ab5d6c0450f95e51d0c1b9d5364b20",
+        "byte_length": 20411,
+        "line_count": 119,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/OPEN-DECISIONS.md",
+        "sha256": "sha256:ac806088630d09b9ce15b6ca31c6e3022bdca996f87202213ccfd5c80be0d46f",
+        "byte_length": 2690,
+        "line_count": 18,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRO-ADVERSARIAL-REVIEW.md",
+        "sha256": "sha256:c72d7cda7d2136e818cf55778477e37c00cbef48ed2f44199308e9a2a2dfd4b5",
+        "byte_length": 13271,
+        "line_count": 88,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json",
+        "sha256": "sha256:410fa8b0ff620d085e37ee83aae8e7c7407bb702f88afe51abe89dc5b8c1d0fb",
+        "byte_length": 36878,
+        "line_count": 990,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/REQUIREMENT_TRACE.json",
+        "sha256": "sha256:07ae7af84eada1ea5889f52a0a6707e339e3e0cbaff65ac7b7d3bace72076af8",
+        "byte_length": 126109,
+        "line_count": 3552,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/RESEARCH_SOURCE_REGISTRY.json",
+        "sha256": "sha256:be7797fc857f69dbada671664404f184e8ea35a27350c6b6d59b4ee97842ee87",
+        "byte_length": 44287,
+        "line_count": 1043,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/RESOLVED-FINDINGS.json",
+        "sha256": "sha256:a953ee693df54624b7f6fe166344ebd5b1aa72687a673cd10d1a999ae386115b",
+        "byte_length": 18434,
+        "line_count": 332,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/SNAPSHOT-INTEGRITY-REPORT.json",
+        "sha256": "sha256:8784531d3adea2444ec23de6c5afa7053150564cff65f80453a2dc800b06bcf5",
+        "byte_length": 2504,
+        "line_count": 61,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/ULTRA-INPUT-MANIFEST.json",
+        "sha256": "sha256:cbcb6ef2d69165c3bc6e21efbcde9114cf67875dd02b12493a43aa3076ba07f2",
+        "byte_length": 3002,
+        "line_count": 58,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-HANDOFF-MANIFEST.sha256",
+        "sha256": "sha256:d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51",
+        "byte_length": 2959,
+        "line_count": 28,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "docs/ultragoal-contract-2026-07-successor-v2/README.md",
+        "sha256": "sha256:33d1875bea594743ff56d06c8f9b190e02133b7727e62a3f211364f0eea01310",
+        "byte_length": 677,
+        "line_count": 15,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "fixtures/observability-local-diagnosis/cases.json",
+        "sha256": "sha256:ac58f8294a0c1255c5223ce1a7a720467d4da5f2eda2c31b7e1d79f01f8ae79d",
+        "byte_length": 4023,
+        "line_count": 94,
+        "in_worker_owned_candidate": true
+      },
+      {
+        "path": "migration/authority-routes.json",
+        "sha256": "sha256:d5097c25585974e875a28e20e6f5dd9a82fee64e1d3bbdce2f8a030b43d5f6f4",
+        "byte_length": 50042,
+        "line_count": 1166,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "migration/generated-surface-authority.json",
+        "sha256": "sha256:f25ebf2c3d3bb8281dbd77720b6e62c1ce4df94a910833b20c12669c1d92ef6a",
+        "byte_length": 4243,
+        "line_count": 90,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/Cargo.toml",
+        "sha256": "sha256:8cce2e391fd34161097a4b6e964e0a6ee3bb11691a1e41e6d5bb869931c4a2eb",
+        "byte_length": 603,
+        "line_count": 20,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/api_witness.rs",
+        "sha256": "sha256:488b8b92187072d8c6fd26b67d2089d3a68e59517ab12fa8874c4dd3a0c0394f",
+        "byte_length": 5392,
+        "line_count": 148,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/bin/ultragoal.rs",
+        "sha256": "sha256:92fde06c5cece43a2e0ed81763959a81b8dd552167ab8eb4fffd56eb7e7bb5a5",
+        "byte_length": 63,
+        "line_count": 3,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/artifact.rs",
+        "sha256": "sha256:6cd1cced0713b6052437b02a424e24fcf9e888cead3923447d1e892f3d89a431",
+        "byte_length": 7286,
+        "line_count": 196,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/artifact_model.rs",
+        "sha256": "sha256:5e4526416c69bcd497488c1b576ba0ca1a48513087c5f102f5d0ad4aaf6ae9c9",
+        "byte_length": 4696,
+        "line_count": 160,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/artifact_safety.rs",
+        "sha256": "sha256:ddf9dadb1c2ff4094b14edf953b48a4b92e37b793280462c4d2319c984ad9fa2",
+        "byte_length": 1303,
+        "line_count": 43,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/descriptor.rs",
+        "sha256": "sha256:a1be6bbc493735dc2f6963b07ba057de198d0795f138d9ca1060fa85a536bc7d",
+        "byte_length": 8026,
+        "line_count": 274,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/descriptor_race_control.rs",
+        "sha256": "sha256:f00eb04da0657d8d3352400109c52431b96a22c1ae5acfe72a103d97763bd3e5",
+        "byte_length": 801,
+        "line_count": 24,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/environment.rs",
+        "sha256": "sha256:fca54533d1fc26b43dc7714e97c0498ca16a7108d22f0bac1cf8d3f9bf0fa76f",
+        "byte_length": 9832,
+        "line_count": 276,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/filesystem.rs",
+        "sha256": "sha256:4e287d45bec75d8b3dd862efaad78f9ca3ab95a84b40112834251830f46eb1c2",
+        "byte_length": 9511,
+        "line_count": 291,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/fixture.rs",
+        "sha256": "sha256:f9c1546559abc73eb19175fd19bb24572a22c7369ad5db6490c9baab0385461c",
+        "byte_length": 2972,
+        "line_count": 94,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/fixture/execute.rs",
+        "sha256": "sha256:3e161671a5b0d99b3232a322aa72d32f8644b00e972c2595696795f097776d67",
+        "byte_length": 7833,
+        "line_count": 217,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/fixture/permit.rs",
+        "sha256": "sha256:2d5690879d393d77be5c1a6ab61e30ca3db8c066b8f7fce173aedef93653acb0",
+        "byte_length": 4598,
+        "line_count": 137,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/inputs.rs",
+        "sha256": "sha256:4b5e53531a491738ec31cf3b4a05d2527d7a5138379ade6283af990d60a53234",
+        "byte_length": 2294,
+        "line_count": 112,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/mod.rs",
+        "sha256": "sha256:592a372f71124fb808401cb8ec72480aa8171d89e360728f1f51268596f211d6",
+        "byte_length": 2099,
+        "line_count": 61,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/output.rs",
+        "sha256": "sha256:f38b9cd2d70e9f8f5b07ed5f8218b7e025cd6e94f2b78d5ed74a3ed0d18c9ad4",
+        "byte_length": 6657,
+        "line_count": 227,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/process.rs",
+        "sha256": "sha256:87aa9a157531d7860b7256942e57e651d9872e845aeb8759a812e2b3f81b3422",
+        "byte_length": 10405,
+        "line_count": 298,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/program.rs",
+        "sha256": "sha256:5b7dee7ba67bbea303cb31c5cfea0c7a435e9859c6e02373e3309491fa5be7cb",
+        "byte_length": 4828,
+        "line_count": 156,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/run.rs",
+        "sha256": "sha256:b8434730096dfe21b1c7fdc04f3e5d1bab18613d96f9a63a5aee1f96335430e7",
+        "byte_length": 8877,
+        "line_count": 254,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/sandbox.rs",
+        "sha256": "sha256:853e1b0a7d62f4819894c27f1b8cdbc5c075fe511369ada617c7e4d56658aac3",
+        "byte_length": 7570,
+        "line_count": 213,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/spec.rs",
+        "sha256": "sha256:3f58ca0f539220993c1ee882c08f036a03eee247485f5f8ff8ce60ae25318a20",
+        "byte_length": 10979,
+        "line_count": 299,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/tree.rs",
+        "sha256": "sha256:50a2d76e714ae80accb631b68b1753a892e0b0a9771ba3368882ff381e85d13f",
+        "byte_length": 3754,
+        "line_count": 125,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/capture/util.rs",
+        "sha256": "sha256:30cbefc48612a11982ee899823529cba3389433a310d7cc7433ddaaea10b91fd",
+        "byte_length": 2782,
+        "line_count": 95,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/catalog.rs",
+        "sha256": "sha256:ae5958c7260ea274eb53aaeede6c9856ab0ec61ac84fd322d054885addec82b3",
+        "byte_length": 9914,
+        "line_count": 293,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/clap_error.rs",
+        "sha256": "sha256:1cde01772b038338053701332170e1e4d40de2d28fb5f120b1773e54e45d2c43",
+        "byte_length": 3296,
+        "line_count": 95,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/clap_grammar.rs",
+        "sha256": "sha256:1642c6d3c5b899df67b2f285dcfc9b9e6b933d1e8a201a9b972af189eec2e45a",
+        "byte_length": 3492,
+        "line_count": 104,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/diagnostics/mod.rs",
+        "sha256": "sha256:ec082e0c79d42c13721e9278a3a1e127279ec515e43f2b3015f17ec3ae59e633",
+        "byte_length": 106,
+        "line_count": 4,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/diagnostics/model.rs",
+        "sha256": "sha256:896208ad93c19f5683b14e8f42cd454e31b6f17ea29445798f7cf84321be296b",
+        "byte_length": 4266,
+        "line_count": 134,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/diagnostics/render.rs",
+        "sha256": "sha256:7f1a18bdfcac71b0898959d124df337439c7ae3e7353d11e58f7573902677e93",
+        "byte_length": 1496,
+        "line_count": 40,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/error.rs",
+        "sha256": "sha256:214229baf123356b302efcf984727258946c8d2aa7012a01777c103dad1231d5",
+        "byte_length": 5468,
+        "line_count": 138,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/help.rs",
+        "sha256": "sha256:351985d36f4615087835129df78f20a28ea4143d0ede176668ffed32aca01120",
+        "byte_length": 4533,
+        "line_count": 121,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/input.rs",
+        "sha256": "sha256:ce68590351b4e245a3dfce7dcdfa4e540dbd696198298c9754ada83ae9008ff7",
+        "byte_length": 4984,
+        "line_count": 154,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/mod.rs",
+        "sha256": "sha256:22775ba77050483557b17ef264ff96ff7b9db950c6c014969dd06e6fc18b2da1",
+        "byte_length": 1126,
+        "line_count": 31,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/model.rs",
+        "sha256": "sha256:d077a52a9725ad9c3d31a2083ed695bab2cfcce9db4795192e3aef9f5fca860a",
+        "byte_length": 6331,
+        "line_count": 287,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/parser.rs",
+        "sha256": "sha256:0c603d9a928a8736988ab0d9ffc5bfe2a802b4538261fa5dd6e0cb46a06a9b83",
+        "byte_length": 3766,
+        "line_count": 107,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/runtime/dispatch.rs",
+        "sha256": "sha256:d00860d9ff177b6fb284b7cb8311c3b96368cb6fa3389ab542e52c64b19c66cc",
+        "byte_length": 8518,
+        "line_count": 236,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/runtime/error.rs",
+        "sha256": "sha256:59ff3865abc74004064297519bb76caa80cd182258294459826a7fae0d2b50cb",
+        "byte_length": 1587,
+        "line_count": 56,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/runtime/failures.rs",
+        "sha256": "sha256:be793a547928f941f846fbf065e6d8dd41eecd916e093d9de48f04c3955d2855",
+        "byte_length": 5742,
+        "line_count": 169,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/runtime/inspect_context.rs",
+        "sha256": "sha256:a35ee2601bdafef5f06231c0835044561cfb2121c17b0f8087c64e95e3a4c918",
+        "byte_length": 1032,
+        "line_count": 27,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/runtime/mod.rs",
+        "sha256": "sha256:c5a8591d2e4c650981ece8fe9c47402349e466127be6742cb9d632ee11f1a57d",
+        "byte_length": 646,
+        "line_count": 18,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/runtime/state_view.rs",
+        "sha256": "sha256:b026417ae4f50ed168e43d267da6e3d50f9fa7809a44b2a68f8140380ec3d63b",
+        "byte_length": 588,
+        "line_count": 24,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor/value.rs",
+        "sha256": "sha256:ca043c30d1f88ae57edf58a05ba51093db82abe1d63ee56f127e9cf42204f4f9",
+        "byte_length": 1807,
+        "line_count": 54,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor_public/diagnose.rs",
+        "sha256": "sha256:27482b36ff4dd81bd5a04d1d01e0433aad561d16a36ff9b58d0b181825f04bf7",
+        "byte_length": 9257,
+        "line_count": 270,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor_public/diagnose_boundary_tests.rs",
+        "sha256": "sha256:91f93077b8243c28799c36dae1a885597203b0fe854ea22b72ae6378838108e5",
+        "byte_length": 2027,
+        "line_count": 49,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor_public/diagnose_tests.rs",
+        "sha256": "sha256:9053f93ebe682e43388c1d2feafde2908bdaa882db09f575230e8cc17ef15087",
+        "byte_length": 9508,
+        "line_count": 274,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor_public/fit.rs",
+        "sha256": "sha256:bbfcdec882f839befcf2b60114fc7ed2aad22c49d7ef694f4cf43caf287e916a",
+        "byte_length": 10054,
+        "line_count": 266,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor_public/local_store.rs",
+        "sha256": "sha256:7aa3c5f84a0e14170989c19e3c5c02dddc0ef63e199f1a302893efbe3dc4bf00",
+        "byte_length": 4543,
+        "line_count": 159,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor_public/mod.rs",
+        "sha256": "sha256:7bc5795554494678cfc07110446e7cd0acc328c76a3c5125b26b71f0eca76d36",
+        "byte_length": 8030,
+        "line_count": 230,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor_public/observe.rs",
+        "sha256": "sha256:ecdd09733e1411f8dcd6e2f2f04ed69fad4f93b8d997c7e95a711bf807cb65e3",
+        "byte_length": 6356,
+        "line_count": 175,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor_public/public_context.rs",
+        "sha256": "sha256:c0d185b846e837b65d54d7d44d1ac3e1ee4a5482067450a61f84f6e126deac9b",
+        "byte_length": 3589,
+        "line_count": 106,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor_public/test_support.rs",
+        "sha256": "sha256:c0b2d1b5352a2a505246dcb9ded3abab770a64959679ee6477d332ffe022860f",
+        "byte_length": 4425,
+        "line_count": 130,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/cli/successor_public/tests.rs",
+        "sha256": "sha256:90bd83637a7679fff3e98b4c70c964b4b39822aac7b1fde0db84bc6d0096b9b9",
+        "byte_length": 14461,
+        "line_count": 388,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/authorized_io.rs",
+        "sha256": "sha256:d8c56c9957efda0b1f75a180bc46174a36646d9cfbd1e51de60a98a635d624dc",
+        "byte_length": 9569,
+        "line_count": 287,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/build.rs",
+        "sha256": "sha256:95a43677b0e2c14a62b65d9097d85e7dd2707b7fd02777a4d08e26bc56bb465e",
+        "byte_length": 9365,
+        "line_count": 269,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/capability.rs",
+        "sha256": "sha256:724902b2763a2884d79f85688564a5f84837fdbd9a4ebf050b4fa89819179bd8",
+        "byte_length": 5080,
+        "line_count": 174,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/configuration.rs",
+        "sha256": "sha256:4f2a8033de6a3f57e914236cb7e24de1be189175cdabebd702f5d39674b479f8",
+        "byte_length": 2194,
+        "line_count": 67,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/digest.rs",
+        "sha256": "sha256:96a22487deca8a0d072537e26afc712d1e6112bf5d8fd7b7058a6dbb49628f63",
+        "byte_length": 329,
+        "line_count": 12,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/effects.rs",
+        "sha256": "sha256:2a0a5d0be98a30bd799816f078019b1985be5b9743cc2c1a9ec61fe21fd901a2",
+        "byte_length": 861,
+        "line_count": 23,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/error.rs",
+        "sha256": "sha256:344fda946d2473edff504599a78867daca25d4cd05c3b4f70979ab9f11c74626",
+        "byte_length": 2401,
+        "line_count": 76,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/git.rs",
+        "sha256": "sha256:a0866e0e6790af3ff5816726c6c10388ec20e1254b12b97cb393dbd8861f1b0f",
+        "byte_length": 6957,
+        "line_count": 230,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/mod.rs",
+        "sha256": "sha256:ba5d912639bccdc661bb1c010c9a03031318f3ee5f71a45ad2694dc6664bc873",
+        "byte_length": 1008,
+        "line_count": 42,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/path.rs",
+        "sha256": "sha256:d83530fd1946a6633d1af66a8a77bcecce2958417e7b28fe8ed6c1d36e23a44a",
+        "byte_length": 10423,
+        "line_count": 295,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/process.rs",
+        "sha256": "sha256:1a8650309f613054ce5d6ebbd9126371b9809dcc7f93abd0d99e9ac6b6b20c65",
+        "byte_length": 4355,
+        "line_count": 135,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/read_budget.rs",
+        "sha256": "sha256:e36b6092818a6243ddb8bed5eff1092e0af3e10ff40bd0a005a4c654c6ebe4f1",
+        "byte_length": 1384,
+        "line_count": 41,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/read_observation.rs",
+        "sha256": "sha256:97acb5bdb744021c936986c11598b59ad04f83a8fcc951333b2346627b0aa913",
+        "byte_length": 8102,
+        "line_count": 251,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/read_revalidation.rs",
+        "sha256": "sha256:17bd0945b92ebac5c8c95768b10e458aedda05e429e09be48c2b1d8bbbe39f9f",
+        "byte_length": 3053,
+        "line_count": 92,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/read_session.rs",
+        "sha256": "sha256:05221088fcb859a892b7572793f81eec89804096b1715b76561054663e9c1292",
+        "byte_length": 11021,
+        "line_count": 291,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/read_session_tests.rs",
+        "sha256": "sha256:4b52c8e9cc532c7d37fc394a156e660d8bc5d870e63d9594467b697e39be7dc8",
+        "byte_length": 9224,
+        "line_count": 224,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/read_snapshot.rs",
+        "sha256": "sha256:441eb307daa8257c67f7742f08480d8dd2b1fd21acf88cf13d6e0d1978bcd4ba",
+        "byte_length": 787,
+        "line_count": 33,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/request.rs",
+        "sha256": "sha256:1975936fd9e7ead420c5d53efcde4dee1342c2b2c5e1c81582b21abab869fe05",
+        "byte_length": 2940,
+        "line_count": 106,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/revalidate.rs",
+        "sha256": "sha256:c066e60078583688960bb184f7805234bc5b3aacad1679595782c457a3b82ccd",
+        "byte_length": 2514,
+        "line_count": 65,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/tests.rs",
+        "sha256": "sha256:41c4d36e5cdcb5574e44c161d56c480660929a949308d0245f9083716d63c5ed",
+        "byte_length": 7536,
+        "line_count": 226,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/types.rs",
+        "sha256": "sha256:49b674217384c8dbd0e574384998780e75bca85f0cc733d0dd40c1f0dc6abcdb",
+        "byte_length": 6179,
+        "line_count": 212,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/context/zero_write_tests.rs",
+        "sha256": "sha256:4a4f791a15e11b5114eae5cd268a3083e01a3c8530687f447e9e31c87fdf0dfc",
+        "byte_length": 3964,
+        "line_count": 140,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/agent_reader_guard_digests.rs",
+        "sha256": "sha256:629f838743b9278358538cdd00f43548179bdf0a54fa2e8dfb01ff23576aaf80",
+        "byte_length": 8966,
+        "line_count": 304,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/agent_reader_guard_manifest_digests.rs",
+        "sha256": "sha256:f4f667d3089ff7972a61c779c175c03e356d28229cbc5f2418a3c2efcbabb392",
+        "byte_length": 711,
+        "line_count": 25,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/agent_reader_guard_package_digests.rs",
+        "sha256": "sha256:e4ef4f673faa25a7cc0f1ae324ac96c51e0c764fd2181be8d750284bd4700280",
+        "byte_length": 2381,
+        "line_count": 70,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/builder.rs",
+        "sha256": "sha256:f881d930ebee9c5f2e676cbcc1d5b8c3e6c6098493cbf052f175a8a5c7cfd408",
+        "byte_length": 5425,
+        "line_count": 139,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/compatibility/agent_specs.rs",
+        "sha256": "sha256:d357c99a7eb74aedea24a9a3be56bc0445d978edc0fa00dac9bb6ad4bfe8cdb8",
+        "byte_length": 8958,
+        "line_count": 171,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/compatibility/agent_witness.rs",
+        "sha256": "sha256:b9ebcfe6d256003fd12919ae6bd4184f2ce2899d6d82bdbf221c1c0e92ae74d6",
+        "byte_length": 9054,
+        "line_count": 238,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/compatibility/mod.rs",
+        "sha256": "sha256:737b3f126e0ed63033820af1f3041fecae086eb4bc51ac9681c5a2c5a8f52546",
+        "byte_length": 469,
+        "line_count": 15,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/compatibility/reader_witness.rs",
+        "sha256": "sha256:475a5147cdadb827aaf11e43f40349f993c20e8b43d43344b26776fd80424ed2",
+        "byte_length": 6370,
+        "line_count": 173,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/compatibility/reader_witness/scan.rs",
+        "sha256": "sha256:4b98af8fe18e04273bf35af9561c881b607cf5afb739415251d75fef8095c7ec",
+        "byte_length": 6831,
+        "line_count": 207,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/compatibility/reader_witness/scan/literals.rs",
+        "sha256": "sha256:3bf8f183f82568453dd90e82305dbe7c1f8668dfdba2e016486b22ac9f06b0dc",
+        "byte_length": 7544,
+        "line_count": 236,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/compatibility/reader_witness/scan/unicode.rs",
+        "sha256": "sha256:a5d72b8a2885479fbbf6eff5119b90d75f99c4a253c79911979a8b046e25e7f8",
+        "byte_length": 4030,
+        "line_count": 121,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/compatibility/reader_witness/tests.rs",
+        "sha256": "sha256:5213a279cab50abdc19117afd43170f733cc474fd566e8914dc9d5e884f2e84c",
+        "byte_length": 5245,
+        "line_count": 101,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/compatibility/reader_witness_specs.rs",
+        "sha256": "sha256:30d223cc6b266f0dd9eeabcde6bef6ede8b82150b7ec353f6e972f0c324cae16",
+        "byte_length": 3578,
+        "line_count": 84,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/compatibility/specs.rs",
+        "sha256": "sha256:9586daa6e2c0e9a77e98a3356eaecc8edb0174bec154cb488c2b6b9fbb775f5a",
+        "byte_length": 4210,
+        "line_count": 127,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/compatibility/witness.rs",
+        "sha256": "sha256:556060b059db6094862c8342d322e0cec19ed71913405b7da8f6c8356820e43c",
+        "byte_length": 6899,
+        "line_count": 145,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/component_expectations.rs",
+        "sha256": "sha256:e0fccdd14209ad562a28810b9960e75fcb25a713748ed175a528078b4d0921e7",
+        "byte_length": 493,
+        "line_count": 17,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/components.rs",
+        "sha256": "sha256:b4c40bfe71bf1e9a1f276071629ca6e8788f4bc290ffc0762d819d8f7727fbac",
+        "byte_length": 6436,
+        "line_count": 199,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/context_scopes.rs",
+        "sha256": "sha256:fa1dbd506e92527227f468953c53df284d4bc7596938e97026a313c56f6239e8",
+        "byte_length": 9853,
+        "line_count": 296,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/context_scopes/evidence.rs",
+        "sha256": "sha256:91a8a72de9ed8223b96e53d4c645c63caa323f59acb05e2728dc35f0dcf6fc25",
+        "byte_length": 9597,
+        "line_count": 267,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/context_scopes/exact_set.rs",
+        "sha256": "sha256:53930fa7f135cc4465fd2bf66639de506655d7dc96b49f2787adbd10e9dad299",
+        "byte_length": 7037,
+        "line_count": 209,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/context_scopes/manifest.rs",
+        "sha256": "sha256:3c283907fbee8b2122d878c78d672e104c90bf64621b6517b0d31ed9084645c9",
+        "byte_length": 9398,
+        "line_count": 248,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/digest.rs",
+        "sha256": "sha256:5137058afbce65de6d4acb9fea67ee6b174916b8c48de8c871bc3a92b409af41",
+        "byte_length": 6143,
+        "line_count": 184,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/discovery.rs",
+        "sha256": "sha256:c7321372616c16272816f4a85ba20a87ee204582fd876574414e5cdeff50b15c",
+        "byte_length": 6465,
+        "line_count": 203,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/fs.rs",
+        "sha256": "sha256:8d1a756f5ff4bdce8b6b757a50624407bfc80157a912bde2ec0532dc80567aae",
+        "byte_length": 5814,
+        "line_count": 204,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/generated/authority.rs",
+        "sha256": "sha256:1fc63a14f5f9476e4394c228844feb9535be6b50fc1844d006a10e5cc3a9de37",
+        "byte_length": 8401,
+        "line_count": 255,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/generated/discovery.rs",
+        "sha256": "sha256:658c9fc61a53461bda777623b0d0b87142a9f35af040a348ba22612a66acffed",
+        "byte_length": 5304,
+        "line_count": 144,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/generated/json.rs",
+        "sha256": "sha256:a292c1b17ff8bf908a8fee8f806f550bc951d6dcbdc95835b1266fa6a0eb954c",
+        "byte_length": 2514,
+        "line_count": 99,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/generated/metadata.rs",
+        "sha256": "sha256:40e9a43add1521e354e96891471698d81825a08a3c4294a854c9ffe0afd2d38c",
+        "byte_length": 4624,
+        "line_count": 155,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/generated/mod.rs",
+        "sha256": "sha256:eeb6c82842ba73c5a424b24bff496d85807878d0ac2903f896c15cf82ba35589",
+        "byte_length": 105,
+        "line_count": 7,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/generated/retained.rs",
+        "sha256": "sha256:fba9b53a2644fdd4ff78ac5a71bddff025d882e5b307d372ea1faf648fc0bb0a",
+        "byte_length": 4374,
+        "line_count": 135,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/legacy.rs",
+        "sha256": "sha256:cc6b64948f84fca03c33b12f9c522d646218edbe3bd7eedc9976b0a0d3533b21",
+        "byte_length": 2455,
+        "line_count": 83,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/legacy/matchers.rs",
+        "sha256": "sha256:f76f67e15fbdf1805ed42b4ec685b576a99f2efaf22c146b66285cabc0facc05",
+        "byte_length": 3274,
+        "line_count": 95,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/legacy/scope.rs",
+        "sha256": "sha256:15c17223eaae472be835c36ec50fff599cd150b53c42f1e70b46bf189e5e4222",
+        "byte_length": 889,
+        "line_count": 22,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/mod.rs",
+        "sha256": "sha256:544253e20b95570116b736d2b8cce7c2bdda18ace6fee282b762e42983058f19",
+        "byte_length": 1273,
+        "line_count": 46,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/plugin_hooks.rs",
+        "sha256": "sha256:e00edd1eaf68522a21c65e29f5782957c58ef6d2445592cee632417130eea4ad",
+        "byte_length": 4469,
+        "line_count": 151,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/plugin_manifest.rs",
+        "sha256": "sha256:9bd4d8049fd026b3d78ad9b6b22f0262eae87c62f3a8b759f9118c6a8a65df93",
+        "byte_length": 6001,
+        "line_count": 171,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/plugin_manifest_hook_document.rs",
+        "sha256": "sha256:0f3107ab29b0c9b4c46f074cb083f4f34b121fdb87b119ecf95acf14c0d166b8",
+        "byte_length": 1459,
+        "line_count": 49,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/plugin_manifest_hook_matcher.rs",
+        "sha256": "sha256:98b4b54790d81ceb834128fefd9727352f985eb8520d06c713612d5b6bd63b2e",
+        "byte_length": 1690,
+        "line_count": 54,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/plugin_manifest_hooks.rs",
+        "sha256": "sha256:b2406b7a8499bc28ed8573feaedd0bfb1f2a2b959c9a7351a6c736f464a3a063",
+        "byte_length": 8463,
+        "line_count": 258,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/plugin_manifest_interface.rs",
+        "sha256": "sha256:7d37c0fafab80bc25531502d58293e2a2f961d0d928dea96f3425f253a81fd9a",
+        "byte_length": 988,
+        "line_count": 37,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/plugin_manifest_json.rs",
+        "sha256": "sha256:a1f4b23c0c9178d9ebc773880b827708a57ed6a3ff4b217b6439d922c59e895a",
+        "byte_length": 335,
+        "line_count": 12,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/plugin_manifest_path.rs",
+        "sha256": "sha256:c6a61c25149405f8b2de19669cbaaad0fa5e175867a7f1802a7c5e26dd1ef9d6",
+        "byte_length": 2090,
+        "line_count": 70,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/plugin_manifest_semver.rs",
+        "sha256": "sha256:7ecbf26d11e217ff53597a75b9fdb6f084acdc8f28acf79740691cef2727a717",
+        "byte_length": 401,
+        "line_count": 16,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/projection.rs",
+        "sha256": "sha256:280af528fa64978de62cd03c261d4c0dc8af19010763e1241f1b54a8ead52f06",
+        "byte_length": 5357,
+        "line_count": 152,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/race_tests.rs",
+        "sha256": "sha256:9173fbed5cf2238dbc4b0e3625068244fa27d7bf6c850dfa1b19f8d3165b0613",
+        "byte_length": 5825,
+        "line_count": 168,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/registry/command_activation.rs",
+        "sha256": "sha256:db1ab71ceeece14324e5927143fe0bef1e1431ac402ea8812deb1d0889c2771f",
+        "byte_length": 20479,
+        "line_count": 621,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/registry/data.rs",
+        "sha256": "sha256:1907d4bc12458f7dbbfec9a53190baf7e0e684fd0d0fca725e2ba2dbb367b0bc",
+        "byte_length": 744,
+        "line_count": 21,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/registry/integrity.rs",
+        "sha256": "sha256:62f7c37b5761500c34b0be351195cdfb09770c3c281fb5da7bcd5e5427aa9957",
+        "byte_length": 8736,
+        "line_count": 242,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/registry/mod.rs",
+        "sha256": "sha256:02e979e18c9939a15180d4db45092115faccb6a1c910883fb91a463c368dca9f",
+        "byte_length": 9277,
+        "line_count": 295,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/registry/semantic.rs",
+        "sha256": "sha256:318300ced6aaf5fd1936cda69d55cdb581f6d8a27708857c6e9efe6e1c607e30",
+        "byte_length": 5010,
+        "line_count": 133,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/registry/sources.rs",
+        "sha256": "sha256:101f6658bf8524a35c0cb6bdb78279a5f7a5c079907355bf72fd7be57e211a62",
+        "byte_length": 3503,
+        "line_count": 103,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/registry/topology.rs",
+        "sha256": "sha256:dfbc845b6f2d7e3ddee985995b2cac01e81fcb68b4d2930b221131e383f7a274",
+        "byte_length": 4886,
+        "line_count": 129,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/retained_routes/claims.rs",
+        "sha256": "sha256:e4bb7a599022a07b21835f4ac53ec154e1187df1c39c011fc522a3bf0e7e5c91",
+        "byte_length": 4000,
+        "line_count": 102,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/retained_routes/commands.rs",
+        "sha256": "sha256:3d9b0fedb0bbb268d843f22c567a6998c818b08b32294d5130224005082417f6",
+        "byte_length": 1901,
+        "line_count": 54,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/retained_routes/lanes.rs",
+        "sha256": "sha256:331b4cc8b65f0758c84854262b663af60003d520394be46c0d79e76847086ae5",
+        "byte_length": 4474,
+        "line_count": 118,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/retained_routes/manifest.rs",
+        "sha256": "sha256:85364df3c049915fcb14380a40025037bc73fe501c661a7aa5f46cfad6d0bde0",
+        "byte_length": 391,
+        "line_count": 10,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/retained_routes/mod.rs",
+        "sha256": "sha256:0d598736e80f180ef0490f2265ff33e2428ef51159f44a299c01985f97843c1b",
+        "byte_length": 820,
+        "line_count": 24,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/retained_routes/model.rs",
+        "sha256": "sha256:e73961191d664c2f88b2b5f8306a1bb650a454555a37b70724c64fe148d512b5",
+        "byte_length": 4897,
+        "line_count": 133,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/retained_routes/specs.rs",
+        "sha256": "sha256:7a5bc35ca95207905a61689a4da8e601a35da31a1d2f86dab23ce3f50bc1c472",
+        "byte_length": 1236,
+        "line_count": 40,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/retained_routes/verify.rs",
+        "sha256": "sha256:491dc18cda71865fd88f5a73096a665e16fb79303e9ffa08d3ecafbf343afbcc",
+        "byte_length": 8306,
+        "line_count": 232,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/routing.rs",
+        "sha256": "sha256:fa22daabdfc024f936de15b3d483f67d9f616ebd5fa667716999ccdb78007d05",
+        "byte_length": 8262,
+        "line_count": 255,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/routing_apply.rs",
+        "sha256": "sha256:3d7e78aee8582e5467d14b9c0efabe082a5696acad5a1820f85a1b9b7e573759",
+        "byte_length": 3745,
+        "line_count": 85,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/routing_pending.rs",
+        "sha256": "sha256:36a02682dec9b852c91c1a6ffe8a18f69a54dfb9f3e962276e15ace696f61ea6",
+        "byte_length": 9473,
+        "line_count": 256,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/routing_state.rs",
+        "sha256": "sha256:cabd6625fcc8a7ae05f844bc7eb06ac2978b588d967af0407b802b7f4a23bfa1",
+        "byte_length": 7085,
+        "line_count": 191,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/schema_references.rs",
+        "sha256": "sha256:e020ba51b578942fda161382b4d971cdd01624203e5b7c948c1c321c740602f3",
+        "byte_length": 4821,
+        "line_count": 140,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/types.rs",
+        "sha256": "sha256:d050779ccf535c1f571bdf273eab5ee73b0148c97c795fb4ebdc47a9ef33f0d8",
+        "byte_length": 9766,
+        "line_count": 338,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/validate.rs",
+        "sha256": "sha256:8e5108b57722fc19f8e5e1d27eb5ae16edaed65d64309f4f45d94bcafdef49a4",
+        "byte_length": 11071,
+        "line_count": 320,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/validate/duplicates.rs",
+        "sha256": "sha256:e17441fff63fcddcd203eb4c21649baf78598c5be5b1e6b90b9625258a2f2c82",
+        "byte_length": 5342,
+        "line_count": 150,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/walk.rs",
+        "sha256": "sha256:2ce16ebce7c3aaf0f9bbe3ff1290162c53fa431f99f101ecc492e8b549fe703e",
+        "byte_length": 6709,
+        "line_count": 214,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/inventory/walk/tests.rs",
+        "sha256": "sha256:5ed30bfc08088bc6743645741cee24f70033d092fd82bc0bbdb6043e60833153",
+        "byte_length": 4412,
+        "line_count": 133,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/lib.rs",
+        "sha256": "sha256:acb4f3c32ec2727966ec767c52ca84efbfbeeb83422b24984955bb53b9fa7590",
+        "byte_length": 1365,
+        "line_count": 67,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/observability/binding.rs",
+        "sha256": "sha256:dd0a419531c1490fb2950db3ea0d0ce4a6fd5c61adfe6e248c1dd335b87f9475",
+        "byte_length": 824,
+        "line_count": 26,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/observability/event.rs",
+        "sha256": "sha256:70c673a6913772065665cb917e858ba6afaa7a58b7fe09e74d5921a846745608",
+        "byte_length": 10532,
+        "line_count": 304,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/observability/explain.rs",
+        "sha256": "sha256:8972df827dfc9a89f1e254ef36746aeb8c96b76a569fcf7dd7fad4f3a2a902be",
+        "byte_length": 5542,
+        "line_count": 160,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/observability/export.rs",
+        "sha256": "sha256:e62cfd30411471171b546d1137ed65c99ef6cc27611c60fbce4faf328f57965f",
+        "byte_length": 4448,
+        "line_count": 117,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/observability/filesystem.rs",
+        "sha256": "sha256:39502b0b20c705283e00b15a528f50ceaf5b2b69a72fca0f9bab6d2828ab2398",
+        "byte_length": 4857,
+        "line_count": 181,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/observability/filesystem/anchors.rs",
+        "sha256": "sha256:95e3f33c5b3bb9e6bf953c07993b4c9fb5d2818f4b7e94ff1f12bb7d2f9c8e9a",
+        "byte_length": 2635,
+        "line_count": 77,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/observability/filesystem/confinement.rs",
+        "sha256": "sha256:3b60a42464566976579dbe56e3d379ac96aad3f327ea3d4e58393b6a0a420b18",
+        "byte_length": 9433,
+        "line_count": 300,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/observability/format.rs",
+        "sha256": "sha256:0dd9cbe2b91ad6b8ba07b4cb3df17e3fd215cbd2391c6f19302d1435121e87b3",
+        "byte_length": 3465,
+        "line_count": 94,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/observability/identity.rs",
+        "sha256": "sha256:0285ea69b79b8f8f2cb5aa8d88a9c78794f2f462c8e258c72be54a22c29f760d",
+        "byte_length": 2823,
+        "line_count": 86,
+        "in_worker_owned_candidate": true
+      },
+      {
+        "path": "validator/src/observability/lifecycle.rs",
+        "sha256": "sha256:15fc63cc78f274859c1cd2a8132680229732241a2713c076e2afc2c8433c4811",
+        "byte_length": 3401,
+        "line_count": 77,
+        "in_worker_owned_candidate": true
+      },
+      {
+        "path": "validator/src/observability/limits.rs",
+        "sha256": "sha256:e5c63cb8a0e386a31d091ee604d7af246b672d00a15bc643b23fc6ea2a2007fc",
+        "byte_length": 739,
+        "line_count": 16,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/observability/locking.rs",
+        "sha256": "sha256:8ef60cdaa9f58e2fcdf288dee2b7aa66de066f249caaf4ae3095515ca82b9e73",
+        "byte_length": 3365,
+        "line_count": 114,
+        "in_worker_owned_candidate": true
+      },
+      {
+        "path": "validator/src/observability/mod.rs",
+        "sha256": "sha256:3af59c2ec10d06514c9494e4ab702a9c1282c571939dc813d48f85581a21c960",
+        "byte_length": 640,
+        "line_count": 25,
+        "in_worker_owned_candidate": true
+      },
+      {
+        "path": "validator/src/observability/privacy.rs",
+        "sha256": "sha256:1043892bf26c20ca8af11b108dfa859e02d9113e3e42c63283ddeb78bf6dc6f0",
+        "byte_length": 5782,
+        "line_count": 195,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/observability/query.rs",
+        "sha256": "sha256:d573d619c27c57fbefb85ccef3b53612366dc441786bb1fe937bad144204c87f",
+        "byte_length": 3821,
+        "line_count": 120,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/observability/store.rs",
+        "sha256": "sha256:080ad121ac54339042910a60dcd53ea7bdebc5a5e8d2e49612232feb7766c88a",
+        "byte_length": 10340,
+        "line_count": 287,
+        "in_worker_owned_candidate": true
+      },
+      {
+        "path": "validator/src/state/adopted.rs",
+        "sha256": "sha256:65652e54cb7aef04ad10acf752868a08d014a776649b6109b5af5271269765a8",
+        "byte_length": 5659,
+        "line_count": 157,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/adopted_registry.rs",
+        "sha256": "sha256:f61c84f313a30d8f6a9065ae7c2b2bbbaf6cabdcc2f0e1d44952faa13cf6c1b0",
+        "byte_length": 5193,
+        "line_count": 160,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/catalog.rs",
+        "sha256": "sha256:a01e50cbba57a94651358191c4025e6b7066fdd716a328e9e9c5263ebc53494b",
+        "byte_length": 9619,
+        "line_count": 290,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/ceiling.rs",
+        "sha256": "sha256:44fe67e5db53a07253f711ad3247f169f4127c5ce4f3a03fb8b339b8a92a0703",
+        "byte_length": 2157,
+        "line_count": 73,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/engine.rs",
+        "sha256": "sha256:3b17f95dfaf9ba632724c26c92d7057fcc7ce7dc081776b77b52897faf99d7d0",
+        "byte_length": 10433,
+        "line_count": 297,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/findings.rs",
+        "sha256": "sha256:ef65571919e3f379b6295d569f236888e78f54043c426ce03c2e4c57fd4e5861",
+        "byte_length": 4379,
+        "line_count": 129,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/identity.rs",
+        "sha256": "sha256:40a33bc3220b861ce0716fb12b45266936c9e8973d55b735dcbc0b95b36ddc29",
+        "byte_length": 1085,
+        "line_count": 30,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/limits.rs",
+        "sha256": "sha256:fe3af08f6830605a9ac5280d359211677793a0e42bf3b686b45dd0742e55e285",
+        "byte_length": 9907,
+        "line_count": 297,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/mod.rs",
+        "sha256": "sha256:b366df2502224890780c5b40bd904be8e5af5f8507a824603db4197d673ee784",
+        "byte_length": 1318,
+        "line_count": 43,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/next.rs",
+        "sha256": "sha256:b28fd9a5e19da14e758a31442d2a96e4f7f7d148ea284cf0cdc9a762c86941b5",
+        "byte_length": 5307,
+        "line_count": 151,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/normalize.rs",
+        "sha256": "sha256:e47c7f5f5ccccd5284b1b40ea467ff714fc252d63c4b4bdafecda3d976b0a0fd",
+        "byte_length": 2001,
+        "line_count": 56,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/observations.rs",
+        "sha256": "sha256:3fbcd30ca154c254d800c4f45c4c8ef67d447b9d6ce8cc4f90814aba962a8187",
+        "byte_length": 2173,
+        "line_count": 63,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/policy.rs",
+        "sha256": "sha256:63f7d9a53d701af94b23ee527b60da1ddb05576be84c4869cda1177cd983707d",
+        "byte_length": 7740,
+        "line_count": 230,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/policy_action.rs",
+        "sha256": "sha256:f7beb5452fc878c1f9ced5ee2886fd2430026549320e34a17d25bd2fcb5097f7",
+        "byte_length": 4174,
+        "line_count": 112,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/policy_authority.rs",
+        "sha256": "sha256:65489e77d942104f83b8f1277d0ceefbda5cfbc5fe669d839a0a7e16853fb26d",
+        "byte_length": 9768,
+        "line_count": 299,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/policy_repair.rs",
+        "sha256": "sha256:cb617b259a49a99dd299721144b19451b48769326e4ba05c682c695a5486ace0",
+        "byte_length": 3508,
+        "line_count": 99,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/projection.rs",
+        "sha256": "sha256:28cf07c26f5777b4de93667189b9927b031a7ff3f6cf1021217205743b3ff4fb",
+        "byte_length": 7181,
+        "line_count": 215,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/provenance.rs",
+        "sha256": "sha256:05557bdc169861d42b34cacd63bebe10e778298c9a5f0b2b51bb808c8db40f71",
+        "byte_length": 4979,
+        "line_count": 181,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/reduce.rs",
+        "sha256": "sha256:d7eec1cc0d272f1a24cd945336c73cd02b0d79e1c734af9c02a410d0ff6121d9",
+        "byte_length": 798,
+        "line_count": 26,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/snapshot.rs",
+        "sha256": "sha256:9af7f30e89852fdec4a148d44fa553082649eb327f01b658f81c2821de72e5cb",
+        "byte_length": 4419,
+        "line_count": 121,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/tests/adopted_cases.rs",
+        "sha256": "sha256:3edd8296d1004f2c2c64a67d34bf782713bd8639cdb3a782f9bae4547d0a7376",
+        "byte_length": 5730,
+        "line_count": 159,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/tests/authority_cases.rs",
+        "sha256": "sha256:dea0273bbf152d158467a73bb7569c10021f752c83398b05b2a44e6b8897936c",
+        "byte_length": 7945,
+        "line_count": 254,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/tests/engine_cases.rs",
+        "sha256": "sha256:4068ab398d07858c5d4eacc65d7545b2d91a234d0afcf7dc71f7deaebbf783d7",
+        "byte_length": 8041,
+        "line_count": 227,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/tests/fixture.rs",
+        "sha256": "sha256:ba243bfecf269a37d0c97140e40af187360276f153c5a80c6bfe7e32984f47a4",
+        "byte_length": 5747,
+        "line_count": 166,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/tests/mod.rs",
+        "sha256": "sha256:0952f82a3377bec537bc5f6c6df1c106146d644851fdbb6149e9ec9582d6cec0",
+        "byte_length": 168,
+        "line_count": 9,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/tests/ordering_cases.rs",
+        "sha256": "sha256:5da5125f3191f0bad275cdcda0fb78f86a49a5bf9e78900b4121373539c7c85a",
+        "byte_length": 4033,
+        "line_count": 105,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/tests/policy_cases.rs",
+        "sha256": "sha256:06652e1b1d253cc3a743255a407c95963c7cb539e71e340ec085146d4b5f7cb1",
+        "byte_length": 8281,
+        "line_count": 246,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/tests/projection_cases.rs",
+        "sha256": "sha256:8855176f9c25173a8890cdc535ba77ee52c670447d1deba9d54754efab59336e",
+        "byte_length": 3589,
+        "line_count": 99,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/tests/review_cases.rs",
+        "sha256": "sha256:5eb545a6032b80b05fd3da356be946124842dc5f2fbd8f9ebcfab95a200e756e",
+        "byte_length": 5790,
+        "line_count": 182,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/tests/runtime_cases.rs",
+        "sha256": "sha256:119b24de476c47dbac3a5799e02bc7a90788e66ad3f49410c1c1b4e32a7f0b36",
+        "byte_length": 4958,
+        "line_count": 144,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/src/state/types.rs",
+        "sha256": "sha256:c6e79d626a24d42f6c5d9dabef65c0017248280825b24c31a5535d756059f239",
+        "byte_length": 6142,
+        "line_count": 224,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract.rs",
+        "sha256": "sha256:8ed849e3eddcbcb6a22b03c6f026c5f7c9755be05228cac8c6edd517c1681e2c",
+        "byte_length": 9787,
+        "line_count": 297,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/artifact_secret_policy.rs",
+        "sha256": "sha256:a01f6a74e95fc27604c555fefd72a74b06d334f8659c8809ccb244e36650c21f",
+        "byte_length": 5471,
+        "line_count": 133,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/artifact_secret_safety.rs",
+        "sha256": "sha256:98c1dad9caea33ea0b9aa58aec099e596b2c5991aacfaef85f75fdf61871cf3b",
+        "byte_length": 1479,
+        "line_count": 41,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/artifact_secret_support.rs",
+        "sha256": "sha256:ca7968dfa76151e9327fdc803d00716f3248af829b395777e627f161c9d1b0b8",
+        "byte_length": 3872,
+        "line_count": 110,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/artifact_secrets.rs",
+        "sha256": "sha256:52eaa17e030ce7af9aeeef97f0924f7194066b8c82e24a1f82104dc8833a0481",
+        "byte_length": 10090,
+        "line_count": 240,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/artifact_special_files.rs",
+        "sha256": "sha256:6d3063b2f42e27df6b0df035f002c1df9b8ff2814efddce4b5c588ffb75429cb",
+        "byte_length": 5044,
+        "line_count": 112,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/artifacts.rs",
+        "sha256": "sha256:cf7c21db256487a42965609a865ac111d12e8a03a20b783b186ce7361bae5029",
+        "byte_length": 8357,
+        "line_count": 220,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/bounds.rs",
+        "sha256": "sha256:e5f7fdf2e0f51b15a5f742fa33fb55aeca89ab127f76d61826b17aeb17a13505",
+        "byte_length": 9816,
+        "line_count": 267,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/enforcement.rs",
+        "sha256": "sha256:6b09ab92cf47a4ddf1efcf3efaa985bb9e9c49c2f903b281db78eb369d95c331",
+        "byte_length": 9846,
+        "line_count": 281,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/fixture.rs",
+        "sha256": "sha256:2b91c2c4ee4c6e04faa0db6610c62887c554c75db351e61e269861a5ffb0c7b2",
+        "byte_length": 2911,
+        "line_count": 91,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/mod.rs",
+        "sha256": "sha256:89b15f6da46e31f330aa9afbc0d354d0d3ccca71ad824a5ec248311f2c4665f0",
+        "byte_length": 598,
+        "line_count": 22,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/output_runtime_secret_safety.rs",
+        "sha256": "sha256:c558c102434b5b6804cf7a91487d76cdc094e5fa3e5d22e041bbaee45a74ed02",
+        "byte_length": 2251,
+        "line_count": 57,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/output_secret_safety.rs",
+        "sha256": "sha256:9861989295130ac2eca5912c65b911fbd9e4203a9186dce4c2b9383d46388253",
+        "byte_length": 6054,
+        "line_count": 161,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/process.rs",
+        "sha256": "sha256:a158e7f6946367ac6f5bef4dae9242f2222355a205d23f757af7830e4ed3a994",
+        "byte_length": 11317,
+        "line_count": 300,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/program_security.rs",
+        "sha256": "sha256:9c072e30e50065ac5835b55ac4d40917ce70e89b1602185d2b4e96889a94906f",
+        "byte_length": 1964,
+        "line_count": 58,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/secret_length_oracle.rs",
+        "sha256": "sha256:1ce91195d54011357489a422f61f9fe461f8479370659006a2488b65dc9e7310",
+        "byte_length": 10690,
+        "line_count": 253,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/security.rs",
+        "sha256": "sha256:f07c65f1d01eecd0614fc79fd57981a9738ca520937c9e389fa149e6fa65b1de",
+        "byte_length": 5247,
+        "line_count": 149,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/shared_budget.rs",
+        "sha256": "sha256:f05f6e32ae6aeacbc50b989f774e44414a960a8695c216fc973843b6e80eb245",
+        "byte_length": 8563,
+        "line_count": 234,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/transformed_secret_artifacts.rs",
+        "sha256": "sha256:5e9a12306352baaad3aafde54f1a85a41adb928ff7ebbc4f301121349896b42a",
+        "byte_length": 4551,
+        "line_count": 117,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/transformed_secret_metadata.rs",
+        "sha256": "sha256:3d93d24dd57dc0fb7170d4aa08ce83d530e5fb5a937bae8b7309505ec4130bc2",
+        "byte_length": 4562,
+        "line_count": 109,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/capture/transformed_secret_safety.rs",
+        "sha256": "sha256:fc0650c2c100128a3147b4b52eb121ba9ffec8a5571391f7ef37264519303a4a",
+        "byte_length": 12713,
+        "line_count": 300,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/state/fixture.rs",
+        "sha256": "sha256:b7e00073ca455b152efb10da419eb16b53c6b839cca71cc0ac194fdd0fdc18aa",
+        "byte_length": 5648,
+        "line_count": 166,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/state/mod.rs",
+        "sha256": "sha256:584e0f97d1954146bee2f5ad57727a3f7c54bae150ca8a7dbda842d782b2be7e",
+        "byte_length": 48,
+        "line_count": 3,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/state/mutation.rs",
+        "sha256": "sha256:e4a2329f49570ba3c54d2547b590c1ae88b3edbcc61895ea890f8ce2df995fd9",
+        "byte_length": 4534,
+        "line_count": 129,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/state/public_boundary.rs",
+        "sha256": "sha256:1936df386f9931bf420bbe48a617feab680f14f4a84092165111f11157d4d7f6",
+        "byte_length": 2613,
+        "line_count": 81,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/successor/boundaries.rs",
+        "sha256": "sha256:12131727572bd1273046adfe99b9eed39721228638361f29fa13f83909c4f31e",
+        "byte_length": 3675,
+        "line_count": 115,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/successor/catalog.rs",
+        "sha256": "sha256:ca1b0241ba8145734df08a2e933fccf916d95e0da068c3f7cc9425cf2eeae37d",
+        "byte_length": 9613,
+        "line_count": 249,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/successor/goldens/root-help.json",
+        "sha256": "sha256:f47a75e3dc0f0d966d747fea8e0e8f848ac940a41b48ab2f2e185088002599a8",
+        "byte_length": 6941,
+        "line_count": 1,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/successor/goldens/root-help.txt",
+        "sha256": "sha256:e59eb8343f4ef822b43f5de0afcbfde3ccc539dedfe5d63850b982c0f9a2a3a9",
+        "byte_length": 3841,
+        "line_count": 67,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/successor/help_boundaries.rs",
+        "sha256": "sha256:e1f5f72303572f56bcf42987f72aac640e2ca6a74bca68039e43c7f78a416bcf",
+        "byte_length": 3830,
+        "line_count": 131,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/successor/mod.rs",
+        "sha256": "sha256:ece7f32c2cfe7f16fe3d24c39827a14e2904e8e0dbf5d142467a97bb60144c3e",
+        "byte_length": 330,
+        "line_count": 11,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/successor/node_n03.rs",
+        "sha256": "sha256:60d062ef7c61cc6285ae163ecaad83ced1c965d78ff540230673682cd6346903",
+        "byte_length": 6671,
+        "line_count": 178,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/successor/parsing.rs",
+        "sha256": "sha256:0c2012e53c9a1caadc387af75086699f0956858a7fc743d68823dc7a69d8ac41",
+        "byte_length": 4844,
+        "line_count": 154,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/successor/runtime_context.rs",
+        "sha256": "sha256:cd96ca3b3ca4700a7cefbb08f42432335a3d4d1f6e4ba2efc3019481057082cf",
+        "byte_length": 7097,
+        "line_count": 196,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/successor/security.rs",
+        "sha256": "sha256:c37174afa5cec40321382a6aeae30db1b85d5a3b1015c2f202ad43ee0775c0e7",
+        "byte_length": 5386,
+        "line_count": 180,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/cli_contract/successor/standalone.rs",
+        "sha256": "sha256:3e36d49433ed45f29f07173969c68f93b5015cb852021abacebc0c6050958b51",
+        "byte_length": 216,
+        "line_count": 14,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract.rs",
+        "sha256": "sha256:6eb77ffbdd1cee7913f3ad89952b9aacdfd4c1e53f2a5277acb722b2cfeb9101",
+        "byte_length": 8093,
+        "line_count": 256,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/agent_manifest.rs",
+        "sha256": "sha256:a753dfb8ad974882fa3ffc4b97b98b281f34d154f7a0f9846d15fbb260e00575",
+        "byte_length": 2726,
+        "line_count": 72,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/agent_routes.rs",
+        "sha256": "sha256:1fa2b9fad27a82354be7e654cb609e264c43df41fa4697d83332038f0c2816b6",
+        "byte_length": 6318,
+        "line_count": 166,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/agent_routes/reader_false_pass.rs",
+        "sha256": "sha256:0c7a4d08b12beed6fe0106ee88fae21626edbb00ff8764ac89426bfe07c2b37d",
+        "byte_length": 13294,
+        "line_count": 355,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/agent_routes/support.rs",
+        "sha256": "sha256:d36f2e024213674d9152a7b52a0e64f77b291965677b9a404470e7887ec56ca5",
+        "byte_length": 9706,
+        "line_count": 265,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/command_activation.rs",
+        "sha256": "sha256:52dfcb09629d4c80629765ca6247a17985ccee4d00e8e373fe5e147d289314ce",
+        "byte_length": 13364,
+        "line_count": 392,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/compatibility_routes.rs",
+        "sha256": "sha256:e36c98d61285a976f6571aa0d7140841c2c7959edf1952316eea1438674da593",
+        "byte_length": 12126,
+        "line_count": 289,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/context_scopes.rs",
+        "sha256": "sha256:7b9965f4c29997f669074dcc180373b33740db98b4333c2c83a224bf423034e3",
+        "byte_length": 8872,
+        "line_count": 257,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/context_scopes/v2.rs",
+        "sha256": "sha256:59d6fdd9b14805a8a4d28db089bef923a7b51458e1d25cf42dc1e9944256f2b0",
+        "byte_length": 5639,
+        "line_count": 169,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/context_scopes/v2/evidence.rs",
+        "sha256": "sha256:b898b3bf619f0715b048f4857f24ddc3122c23b05e40615351f2a7c552a0c563",
+        "byte_length": 6352,
+        "line_count": 180,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/contract_integrity.rs",
+        "sha256": "sha256:97a3e5f8dd9f7deed3a276b93fe87a86b47abb277e4ded49f96415c3530d84ef",
+        "byte_length": 2387,
+        "line_count": 61,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/fixtures.rs",
+        "sha256": "sha256:484b0223c460613123eebe1ca71b868b2eb67368ac7e1151376ae8ead4e633df",
+        "byte_length": 10993,
+        "line_count": 274,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/generated_disposition.rs",
+        "sha256": "sha256:f2323089d02a3242ec15db1ce286818833fd17b6130e3bc959fea38d36a583b4",
+        "byte_length": 12449,
+        "line_count": 304,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/generated_regeneration.rs",
+        "sha256": "sha256:14aaf1ab1d033bf51919b3b4fb9d84f1d3d5a4c69f70a6ff9e11596c04179548",
+        "byte_length": 4726,
+        "line_count": 112,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/legacy_limits.rs",
+        "sha256": "sha256:926d7795f2c9f322a473b381cbf07398f6ed8b1ddd7ae84d622da9a600eeb087",
+        "byte_length": 691,
+        "line_count": 16,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/legacy_scope.rs",
+        "sha256": "sha256:f2c69d39cc024fae5f0edcd988bc2e54459b8b1534ab1ce1e24f384914ac8630",
+        "byte_length": 8197,
+        "line_count": 250,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/plugin_hooks.rs",
+        "sha256": "sha256:ad8a92ca75a0a4a68916f14a423c82637708a1b77b937f4c309d2f16da0d526c",
+        "byte_length": 4508,
+        "line_count": 133,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/plugin_manifest.rs",
+        "sha256": "sha256:ae5ec3e3a03a1bb4e794fe629931f1766d91bd146d84d41d583be84e0d022e6f",
+        "byte_length": 10999,
+        "line_count": 298,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/plugin_manifest_semantics.rs",
+        "sha256": "sha256:1bc62f2467f4be31ccc5232e111f3baf94656b31e22af69d68e9cb9ea0f37447",
+        "byte_length": 9747,
+        "line_count": 244,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/repository_fixture.rs",
+        "sha256": "sha256:736bb483e1e16cfaf22f2d87bf3d93e4d54351ba46cad8fe6c5e55c2e147477b",
+        "byte_length": 6677,
+        "line_count": 208,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/routing_transitions.rs",
+        "sha256": "sha256:515109097bec2b3e22930882ac11276cf208a0b5b986057e8e9ca0f076d6d68c",
+        "byte_length": 10423,
+        "line_count": 266,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/inventory_contract_cases/schema_references.rs",
+        "sha256": "sha256:12d36904d97f553e3feb0cf8291022d45a0a76ff4476e5dd30e3291d0cbfa562",
+        "byte_length": 1218,
+        "line_count": 34,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/observability_contract.rs",
+        "sha256": "sha256:9bc1544860301ebaead905c0d94f933ed9c7f021037a166e608b65e74f4e1281",
+        "byte_length": 690,
+        "line_count": 26,
+        "in_worker_owned_candidate": true
+      },
+      {
+        "path": "validator/tests/observability_contract/corruption.rs",
+        "sha256": "sha256:67e082ff607a7e07d2271885237660fce70d88b5849b1c88fa865c828b985cd5",
+        "byte_length": 6445,
+        "line_count": 214,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/observability_contract/limits_false_pass.rs",
+        "sha256": "sha256:7de92445764f210d8146a49509487b12ccacadb5bcdfc36d574024e4d5a2dcf8",
+        "byte_length": 4683,
+        "line_count": 158,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/observability_contract/local_store.rs",
+        "sha256": "sha256:c61e7c0d02d9dc66166619d66eba1c06751289710d68435fb23deb05e04a6cdc",
+        "byte_length": 3331,
+        "line_count": 103,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/observability_contract/lock_deadline.rs",
+        "sha256": "sha256:420e7995010b9da80036929491c19c94a7955531009cd8de76eef03e9b5fa3b8",
+        "byte_length": 13835,
+        "line_count": 418,
+        "in_worker_owned_candidate": true
+      },
+      {
+        "path": "validator/tests/observability_contract/privacy_export.rs",
+        "sha256": "sha256:0c041b7763875677afe9131487ab55492734e53dcdb578101df2bad836c6f834",
+        "byte_length": 6335,
+        "line_count": 208,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/observability_contract/races_paths.rs",
+        "sha256": "sha256:819fae8869b7b766eb205b165017647464f02cdb82f5ed3f25afd1728135b5af",
+        "byte_length": 13850,
+        "line_count": 371,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/observability_contract/support.rs",
+        "sha256": "sha256:2f9b51c05bd75c0b9d460cc8a9d3fe65958391a299f8025e6bcaad7e1ea464a6",
+        "byte_length": 5559,
+        "line_count": 202,
+        "in_worker_owned_candidate": false
+      },
+      {
+        "path": "validator/tests/observability_live_journey_contract.rs",
+        "sha256": "sha256:d93626b48737391674face765e71c75e8f93432717fac8b86f312c3fc14d3fdb",
+        "byte_length": 36971,
+        "line_count": 1109,
+        "in_worker_owned_candidate": true
+      },
+      {
+        "path": "validator/tests/public_api_witness.rs",
+        "sha256": "sha256:39c2182c32695d60d467636ce3266a8f4937f1008a0a8d6a0e9cc77ca648aa14",
+        "byte_length": 4409,
+        "line_count": 100,
+        "in_worker_owned_candidate": false
+      }
+    ],
+    "artifact_sets": [
+      {
+        "set_id": "worker-owned-current-candidate-artifacts",
+        "artifact_count": 9,
+        "total_bytes": 76088,
+        "total_lines": 2236,
+        "aggregate_sha256": "sha256:0c89f2ecc1a15ebd2c2b22d9037a8ef0f51362c63a3025a7166907d89ed639da",
+        "membership": "nine non-WorkerResult in-scope candidate artifacts"
+      },
+      {
+        "set_id": "current-observability-source-test-fixture-and-public-adapter-artifacts",
+        "artifact_count": 31,
+        "total_bytes": 200060,
+        "total_lines": 6009,
+        "aggregate_sha256": "sha256:c72592bc084f225c4005bbe138557b7bd04d608ddf04571922e0605b3f1a9ce2",
+        "membership": "observability source/tests/fixture plus five public adapter rows"
+      },
+      {
+        "set_id": "current-typed-state-artifacts",
+        "artifact_count": 35,
+        "total_bytes": 175065,
+        "total_lines": 5223,
+        "aggregate_sha256": "sha256:f2016eacb40a2f1201cb163d36a93f0d7ea4371ff3582726327d25ff9bc3f043",
+        "membership": "typed-state dependency rows"
+      },
+      {
+        "set_id": "current-capture-artifacts",
+        "artifact_count": 40,
+        "total_bytes": 242499,
+        "total_lines": 6807,
+        "aggregate_sha256": "sha256:b5a7c761638da65f0fe631e9964d9ef4e4e2b0f636f6e663b512be2ff93e8b26",
+        "membership": "capture dependency rows"
+      },
+      {
+        "set_id": "current-inventory-artifacts",
+        "artifact_count": 92,
+        "total_bytes": 531049,
+        "total_lines": 15102,
+        "aggregate_sha256": "sha256:b7a71192dc5f18f273b4e3c8ec33fc808cc1445119b35f013cac425b7d7967a7",
+        "membership": "inventory dependency rows"
+      },
+      {
+        "set_id": "current-observability-live-journey-authority-inputs",
+        "artifact_count": 29,
+        "total_bytes": 485060,
+        "total_lines": 10891,
+        "aggregate_sha256": "sha256:202a259f433c0410db901e070d9304b96f104271d1cbb2c8d3d753c9c943c9f6",
+        "membership": "every current immediate regular file selected from FINAL-CONTRACT plus both handoff and both migration inputs copied by copy_authority_inputs"
+      },
+      {
+        "set_id": "current-dependency-closed-observability-artifacts",
+        "artifact_count": 291,
+        "total_bytes": 1936134,
+        "total_lines": 52846,
+        "aggregate_sha256": "sha256:e414064caa4dd9390273063854547536b3234795b6ee3ae0eb16ab0f5de4f37c",
+        "membership": "all 291 identity rows, including every repository input copied by the source-built observability live journey; this WorkerResult is excluded"
+      }
+    ],
+    "worker_result_exclusion": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-LOCAL-DIAGNOSIS-069.json"
+  },
+  "base_state": {
+    "repo_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "d19c52e995bb3163e0e638f9ac542a7382eed898",
+    "head_tree": "f4588382e96ce9d42d223f5c108bce2c5c1d0df4",
+    "working_tree_at_start": "Observability candidate and root-owned adapter were already dirty; unrelated concurrent work was preserved.",
+    "defect_at_start": "identity mutex acquisition was unbounded and OS file-lock acquisition established a fresh deadline"
+  },
+  "final_state": {
+    "head_commit": "d19c52e995bb3163e0e638f9ac542a7382eed898",
+    "head_tree": "f4588382e96ce9d42d223f5c108bce2c5c1d0df4",
+    "git_mutations": "none",
+    "candidate_state": "corrective packet for independent root review",
+    "proof_ceiling": "current source identity plus named local source-built tests/checks only",
+    "claim_effect": "none",
+    "lock_contract": {
+      "deadline_origin": "before identity acquisition",
+      "identity_acquisition": "bounded monotonic try_lock loop",
+      "file_acquisition": "same remaining deadline",
+      "timeout_identity": "observe-store-lock-timeout",
+      "timeout_ms": 1000
+    }
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-LOCAL-DIAGNOSIS-069.json",
+    "fixtures/observability-local-diagnosis/cases.json",
+    "validator/src/observability/identity.rs",
+    "validator/src/observability/lifecycle.rs",
+    "validator/src/observability/locking.rs",
+    "validator/src/observability/mod.rs",
+    "validator/src/observability/store.rs",
+    "validator/tests/observability_contract.rs",
+    "validator/tests/observability_contract/lock_deadline.rs",
+    "validator/tests/observability_live_journey_contract.rs"
+  ],
+  "touched_semantics": [
+    "bounded monotonic identity mutex acquisition",
+    "one shared remaining budget for identity and OS file-lock acquisition",
+    "one deterministic timeout identity across query append clear recovery and export-backed reads",
+    "zero writes on contention timeout",
+    "shared-reader compatibility and exclusive-writer refusal",
+    "pre-deadline release and cancelled-holder recovery"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-LOCAL-DIAGNOSIS-069.json"
+  ],
+  "fixtures": [
+    "fixtures/observability-local-diagnosis/cases.json"
+  ],
+  "effects": [
+    {
+      "surface": "repository",
+      "effect": "in-scope local source test fixture and WorkerResult writes"
+    },
+    {
+      "surface": "/tmp",
+      "effect": "isolated Cargo and nextest target/test-fixture writes"
+    },
+    {
+      "surface": "git",
+      "effect": "read-only inspection only; no stage commit branch reset checkout or clean"
+    },
+    {
+      "surface": "network-and-external-services",
+      "effect": "none; Cargo was offline/locked and export stayed disabled"
+    }
+  ],
+  "requirements": [
+    "REQ-OBSERVE-001",
+    "REQ-OBSERVE-002",
+    "REQ-OBSERVE-003",
+    "REQ-OBSERVE-004",
+    "REQ-OBSERVE-005",
+    "REQ-OBSERVE-006",
+    "HCT-OBSERVE",
+    "PS-DIAGNOSE"
+  ],
+  "dependency_nodes": [
+    "N01-CONTEXT",
+    "N02-INVENTORY",
+    "N03-CAPTURE",
+    "N03-STATE",
+    "N03-SUCCESSOR-CLI"
+  ],
+  "changes": [
+    {
+      "paths": [
+        "validator/src/observability/identity.rs",
+        "validator/src/observability/locking.rs"
+      ],
+      "change": "bounded identity acquisition and one monotonic operation deadline"
+    },
+    {
+      "paths": [
+        "validator/src/observability/store.rs",
+        "validator/src/observability/lifecycle.rs"
+      ],
+      "change": "carry the same remaining deadline through every identity/file-lock acquisition chain"
+    },
+    {
+      "paths": [
+        "validator/tests/observability_contract/lock_deadline.rs",
+        "fixtures/observability-local-diagnosis/cases.json"
+      ],
+      "change": "same-process OS mixed-layer release cancellation zero-write Git and deadline-reset controls"
+    },
+    {
+      "paths": [
+        "validator/src/observability/mod.rs",
+        "validator/tests/observability_contract.rs",
+        "validator/tests/observability_live_journey_contract.rs"
+      ],
+      "change": "retained and verified inherited in-scope wiring; no authorship of pre-existing bytes asserted"
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-observability-shared-deadline-corrector-focus CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --test observability_contract -E 'test(lock_deadline)'",
+      "status": "pass",
+      "run_id": "1d9fef11-ea5a-4172-93a4-4aa6acd4f05c",
+      "result": "7 passed, 0 failed, 29 skipped in 5.152 seconds"
+    },
+    {
+      "command": "same exact lock-deadline selection on /tmp/hul-observability-shared-deadline-corrector-20260713-final/target",
+      "status": "pass-deterministic-repeat",
+      "run_id": "8559944f-239f-4519-b98e-4ed6a6eb7248",
+      "result": "7 passed, 0 failed, 29 skipped in 5.297 seconds"
+    },
+    {
+      "command": "cargo nextest: observability_contract plus observability_live_journey_contract, offline/locked, build-jobs 16, test-threads 16",
+      "status": "pass-focused-source-built",
+      "run_id": "075c804c-caaf-470b-aea3-8a31a4d7d3c6",
+      "result": "44 passed, 0 failed, 0 skipped in 18.506 seconds"
+    },
+    {
+      "command": "cargo nextest dependency-closed observability/public-state/inventory filter, offline/locked, build-jobs 16, test-threads 16",
+      "status": "pass-dependency-closed",
+      "result": "536 passed, 0 failed, 2573 skipped in 76.396 seconds; no leak flag"
+    },
+    {
+      "command": "cargo check --manifest-path validator/Cargo.toml --all-targets --offline --locked --jobs 16",
+      "status": "pass-with-existing-unsuppressed-warnings",
+      "result": "exit 0 in 16.69 seconds"
+    },
+    {
+      "command": "rustfmt --edition 2024 --check; jq -e fixture; scoped git diff --check; rg blocking mutex forms",
+      "status": "pass",
+      "result": "all exit 0; blocking-lock scan had no match"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/observability-local-diagnosis/cases.json",
+      "sha256": "sha256:ac58f8294a0c1255c5223ce1a7a720467d4da5f2eda2c31b7e1d79f01f8ae79d",
+      "byte_length": 4023,
+      "line_count": 94
+    },
+    {
+      "path": "validator/src/observability/identity.rs",
+      "sha256": "sha256:0285ea69b79b8f8f2cb5aa8d88a9c78794f2f462c8e258c72be54a22c29f760d",
+      "byte_length": 2823,
+      "line_count": 86
+    },
+    {
+      "path": "validator/src/observability/lifecycle.rs",
+      "sha256": "sha256:15fc63cc78f274859c1cd2a8132680229732241a2713c076e2afc2c8433c4811",
+      "byte_length": 3401,
+      "line_count": 77
+    },
+    {
+      "path": "validator/src/observability/locking.rs",
+      "sha256": "sha256:8ef60cdaa9f58e2fcdf288dee2b7aa66de066f249caaf4ae3095515ca82b9e73",
+      "byte_length": 3365,
+      "line_count": 114
+    },
+    {
+      "path": "validator/src/observability/mod.rs",
+      "sha256": "sha256:3af59c2ec10d06514c9494e4ab702a9c1282c571939dc813d48f85581a21c960",
+      "byte_length": 640,
+      "line_count": 25
+    },
+    {
+      "path": "validator/src/observability/store.rs",
+      "sha256": "sha256:080ad121ac54339042910a60dcd53ea7bdebc5a5e8d2e49612232feb7766c88a",
+      "byte_length": 10340,
+      "line_count": 287
+    },
+    {
+      "path": "validator/tests/observability_contract.rs",
+      "sha256": "sha256:9bc1544860301ebaead905c0d94f933ed9c7f021037a166e608b65e74f4e1281",
+      "byte_length": 690,
+      "line_count": 26
+    },
+    {
+      "path": "validator/tests/observability_contract/lock_deadline.rs",
+      "sha256": "sha256:420e7995010b9da80036929491c19c94a7955531009cd8de76eef03e9b5fa3b8",
+      "byte_length": 13835,
+      "line_count": 418
+    },
+    {
+      "path": "validator/tests/observability_live_journey_contract.rs",
+      "sha256": "sha256:d93626b48737391674face765e71c75e8f93432717fac8b86f312c3fc14d3fdb",
+      "byte_length": 36971,
+      "line_count": 1109
+    }
+  ],
+  "findings": [
+    {
+      "id": "OBSERVE-SHARED-DEADLINE-CORRECTIVE-CANDIDATE",
+      "status": "current-source-and-test-evidence",
+      "finding": "one monotonic budget now spans identity and OS file-lock acquisition for every store operation"
+    },
+    {
+      "id": "OBSERVE-CONTENTION-ZERO-WRITE",
+      "status": "focused-and-source-built-test-evidence",
+      "finding": "same-process external shared mixed-layer release and cancellation controls passed with deterministic timeout and retained bytes/tree/Git invariants"
+    },
+    {
+      "id": "OBSERVE-PUBLIC-WIRING-BOUNDARY",
+      "status": "root-owned-adjunct-observed-not-edited",
+      "finding": "current root-owned observe adapter exercised the bounded store path in the source-built journey"
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent root review and concurrent-tree reconciliation",
+    "root-owned public observe adapter was not edited by this worker",
+    "install external runtime configured export and real-user proof were not exercised"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "source-built local evidence only",
+    "WorkerResult excluded from its own 291-row identity",
+    "textual run-scoped ownership; no separate typed LeaseSpec supplied",
+    "unrelated concurrent edits preserved and excluded",
+    "no Git mutations"
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

@@ -13,6 +13,7 @@ mod format;
 mod identity;
 mod lifecycle;
 mod limits;
+mod locking;
 mod privacy;
 mod query;
 mod store;

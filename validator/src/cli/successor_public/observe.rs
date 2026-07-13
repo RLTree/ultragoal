@@ -63,9 +63,12 @@ pub(super) fn query_local(
         Ok(store) => store,
         Err(()) => return observability_unavailable(),
     };
-    let events = match store.query(&query) {
+    let events = match store.query_diagnostic(&query) {
         Ok(events) => events,
-        Err(()) => return observability_unavailable(),
+        Err(error) if EventStore::is_lock_timeout_error(&error) => {
+            return observability_lock_timeout();
+        }
+        Err(_) => return observability_unavailable(),
     };
     if !store.revalidate() {
         return observability_unavailable();
@@ -92,6 +95,7 @@ pub(super) fn query_local(
             "event_limit": EventStore::supported_event_limit(),
             "scan_row_limit": EventStore::supported_scan_limit(),
             "query_result_limit": EventStore::supported_result_limit(),
+            "lock_timeout_millis": EventStore::supported_lock_timeout_millis(),
             "deletion": "explicit-clear-api",
             "external_export": "disabled-safe-default-OD-004-OD-007"
         }
@@ -150,6 +154,22 @@ fn observability_unavailable() -> RuntimeOutcome {
             "read",
             "ultragoal --json observe query",
             "observability and dependent claims remain withheld",
+        ),
+    )
+}
+
+fn observability_lock_timeout() -> RuntimeOutcome {
+    RuntimeOutcome::failure(
+        ExitClass::ActionableFinding,
+        Diagnostic::new(
+            DiagnosticId::ObservabilityUnavailable,
+            ExitClass::ActionableFinding,
+            "the bounded local event store lock deadline expired before a stable query could begin",
+            "HCT-OBSERVE local store lock",
+            "retry after the current local writer finishes or diagnose the process holding the confined store lock",
+            "read",
+            "ultragoal --json observe query",
+            "observability and dependent claims remain withheld until one bounded query succeeds",
         ),
     )
 }
