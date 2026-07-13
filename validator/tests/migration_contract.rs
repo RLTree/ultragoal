@@ -2140,11 +2140,21 @@ fn authority_mutation_during_one_shot_consumption_is_revalidated() {
 fn external_callers_cannot_mint_clone_or_deserialize_replacement_or_retirement_authority() {
     let root = temp_root("public-retirement-seal");
     fs::create_dir_all(root.join("src/bin")).unwrap();
+    fs::create_dir_all(root.join("src/migration/product")).unwrap();
     fs::copy(
         Path::new(env!("CARGO_MANIFEST_DIR")).join("src/migration/mod.rs"),
         root.join("src/migration.rs"),
     )
     .unwrap();
+    for name in ["mod.rs", "model.rs", "registry.rs", "runtime.rs"] {
+        fs::copy(
+            Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("src/migration/product")
+                .join(name),
+            root.join("src/migration/product").join(name),
+        )
+        .unwrap();
+    }
     fs::write(
         root.join("Cargo.toml"),
         r#"[package]
@@ -2154,6 +2164,7 @@ edition = "2024"
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 sha2 = "0.10"
 "#,
     )

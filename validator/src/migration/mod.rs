@@ -10,6 +10,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 
+pub(crate) mod product;
+
 const MAX_SURFACES: usize = 16_384;
 const MAX_ROUTES: usize = 4_096;
 const MAX_REFS_PER_SURFACE: usize = 4_096;
@@ -56,7 +58,7 @@ pub enum SurfaceFileKind {
     Special,
 }
 
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum SurfaceStatus {
     Active,
@@ -121,7 +123,7 @@ impl InventorySurface {
 
     fn findings(&self) -> Vec<String> {
         let mut findings = Vec::new();
-        if !valid_identifier(&self.stable_id) || !valid_identifier(&self.kind) {
+        if !valid_stable_identifier(&self.stable_id) || !valid_identifier(&self.kind) {
             findings.push("migration-surface-identity-invalid".to_owned());
         }
         if !safe_relative_path(&self.relative_path) {
@@ -2892,6 +2894,21 @@ fn valid_identifier(value: &str) -> bool {
         && value
             .bytes()
             .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'-' | b'_' | b'.' | b':'))
+}
+
+fn valid_stable_identifier(value: &str) -> bool {
+    !value.is_empty()
+        && value.len() <= MAX_IDENTIFIER_BYTES
+        && !value.starts_with('/')
+        && !value.contains('\\')
+        && !value.contains("../")
+        && !value.contains("/..")
+        && value.bytes().all(|byte| {
+            byte.is_ascii_alphanumeric() || matches!(byte, b'-' | b'_' | b'.' | b':' | b'/')
+        })
+        && value
+            .split('/')
+            .all(|component| !component.is_empty() && component != "." && component != "..")
 }
 
 fn safe_reference(value: &str) -> bool {

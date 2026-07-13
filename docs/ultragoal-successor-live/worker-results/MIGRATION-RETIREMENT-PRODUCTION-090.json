@@ -1,0 +1,173 @@
+{
+  "worker": "/root/routine_execution_authority_reviewer",
+  "lease_id": "MIGRATION-COMPATIBILITY-BOUNDARY-100",
+  "context_id": "sha256:d22c99c02f9bcaee1d92cf72eda2ae14c3c8afa3d34e0fbaee5c88dda0171b9d",
+  "candidate_identity": {
+    "candidate_id": "sha256:48d01c461b14a1b424b704ee48c2355d349d7349c4f539f7ea112832c5ecf001",
+    "context_id": "sha256:d22c99c02f9bcaee1d92cf72eda2ae14c3c8afa3d34e0fbaee5c88dda0171b9d",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "freeze_head_commit": "117c6f76d49754567af221a70a455bd4c50ef0f0",
+    "freeze_head_tree": "eed77a4dabc4d19d643df12a13f7c2327e46d12e",
+    "correction_artifact_count": 9,
+    "correction_artifact_total_bytes": 250635,
+    "correction_artifact_total_lines": 6904,
+    "correction_artifact_set_sha256": "sha256:73aa883160304617434efd5ec26a6e7a98688742dcf283656047383a79a1f886",
+    "artifact_set_formula": "Sort the nine artifact rows by UTF-8 path bytes; serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>; concatenate; SHA-256 the resulting bytes.",
+    "artifact_identity_rows": [
+      {"path":"fixtures/migration-engine/product-cases.json","file_kind":"regular","link_count":1,"byte_length":3302},
+      {"path":"validator/src/migration/product/model.rs","file_kind":"regular","link_count":1,"byte_length":55247},
+      {"path":"validator/src/migration/product/registry.rs","file_kind":"regular","link_count":1,"byte_length":22442},
+      {"path":"validator/src/migration/product/runtime.rs","file_kind":"regular","link_count":1,"byte_length":70631},
+      {"path":"validator/tests/migration_product_contract.rs","file_kind":"regular","link_count":1,"byte_length":2222},
+      {"path":"validator/tests/migration_product_contract/adversarial.rs","file_kind":"regular","link_count":1,"byte_length":47117},
+      {"path":"validator/tests/migration_product_contract/positive.rs","file_kind":"regular","link_count":1,"byte_length":9828},
+      {"path":"validator/tests/migration_product_contract/recovery.rs","file_kind":"regular","link_count":1,"byte_length":10933},
+      {"path":"validator/tests/migration_product_contract/support.rs","file_kind":"regular","link_count":1,"byte_length":28913}
+    ],
+    "worker_result_self_excluded": true,
+    "isolated_target_directory": "/private/tmp/hul-migration-boundary-100-target"
+  },
+  "base_state": {
+    "status": "migration-production-candidate-rework",
+    "decisive_review": "docs/ultragoal-successor-live/reviews/MIGRATION-RETIREMENT-PRODUCTION-REVIEW-090-R1.json",
+    "decisive_requirement": "REQ-MAINT-002",
+    "defect": "Compatibility deadline and product-version gates were registry-only plan data; authorization and effect execution did not consult sealed trusted current time or current product version."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "proposal_status": "trusted-compatibility-boundary-correction-pending-independent-review",
+    "artifact_count": 9,
+    "artifact_total_bytes": 250635,
+    "artifact_set_sha256": "sha256:73aa883160304617434efd5ec26a6e7a98688742dcf283656047383a79a1f886",
+    "dependency_closed_tests": "73 passed; 0 failed",
+    "library_check": "pass",
+    "independent_review": "pending-root-assignment",
+    "claim_effect": "none"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/MIGRATION-RETIREMENT-PRODUCTION-090.json",
+    "fixtures/migration-engine/product-cases.json",
+    "validator/src/migration/product/model.rs",
+    "validator/src/migration/product/registry.rs",
+    "validator/src/migration/product/runtime.rs",
+    "validator/tests/migration_product_contract.rs",
+    "validator/tests/migration_product_contract/adversarial.rs",
+    "validator/tests/migration_product_contract/positive.rs",
+    "validator/tests/migration_product_contract/recovery.rs",
+    "validator/tests/migration_product_contract/support.rs"
+  ],
+  "touched_semantics": [
+    "trusted-compatibility-boundary-authority",
+    "trusted-current-time-and-version-observation",
+    "migration-product-effect-identity",
+    "migration-product-authorization-binding",
+    "migration-product-journal-and-effect-permit-binding",
+    "migration-product-recovery-reconciliation",
+    "migration-product-confined-effect-input"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/migration-engine/product-cases.json"
+  ],
+  "effects": [
+    {"class":"workspace_write","target":"migration-compatibility-source-tests","performed":true},
+    {"class":"fixture_write","target":"migration-product-cases","performed":true},
+    {"class":"process","target":"offline-migration-validation","performed":true},
+    {"class":"network","target":"external-system","performed":false},
+    {"class":"external_write","target":"installed-runtime","performed":false},
+    {"class":"destructive","target":"legacy-physical-bytes","performed":false},
+    {"class":"root_authority","target":"adopted-registry","performed":false}
+  ],
+  "requirements": [
+    "REQ-MAINT-002",
+    "OD-009"
+  ],
+  "dependency_nodes": [
+    "migration-retirement-production"
+  ],
+  "changes": [
+    {
+      "area": "trusted-boundary-authority",
+      "result": "Added sealed deny-unknown-fields observations binding authority and source identity, monotonic sequence, trusted observed time, trusted current product version, observation digest, and authority seal. Deadline comparison is current trusted time strictly before the deadline; version comparison is trusted current product version strictly before the target version."
+    },
+    {
+      "area": "plan-and-authorization-binding",
+      "result": "Bound the initial trusted observation and per-effect compatibility policy into deterministic plan projection and identity, then bound plan, effect set, boundary policy, and authorization-time observation into the non-clone non-serializable ApplyAuthorization and durable authorization record."
+    },
+    {
+      "area": "immediate-effect-revalidation",
+      "result": "Revalidates source identity, monotonic progress, and the exact effect boundary immediately before each compatibility effect; equal, expired, crossed, rolled-back-version, or substituted observations reject without that effect."
+    },
+    {
+      "area": "durable-permit-and-recovery",
+      "result": "Persists a digest-validated typed effect permit before invocation and requires the effect backend to retain its digest with state. Recovery refuses crossed pre-effect work, reconciles an exact pre-boundary completed effect without duplication, and terminates ambiguous or substituted timing as Ambiguous."
+    },
+    {
+      "area": "rollback-concurrency-mutation-controls",
+      "result": "Proved crossed later compatibility work rolls back prior retirement work, concurrent authorizations produce one bound effect, and projection, journal, authority source, current-version, and permit substitutions fail closed while prerequisite, OD-009, replay, crash, and false-pass controls remain intact."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-migration-boundary-100-target CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test migration_contract --test migration_product_contract -- --test-threads=16",
+      "status": "pass-73-of-73",
+      "result": "Migration kernel 34/34 and migration product contract 39/39 passed, including authoritative WorkerResultV1 parsing and live artifact identity verification."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-migration-boundary-100-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline -j 16 --lib",
+      "status": "pass"
+    },
+    {
+      "command": "rustfmt --edition 2021 --check <eight leased Rust implementation and test files>; jq -e . <fixture and WorkerResult>; git diff --no-index --check whitespace scan <nine correction artifacts>",
+      "status": "pass"
+    }
+  ],
+  "artifacts": [
+    {"path":"fixtures/migration-engine/product-cases.json","sha256":"sha256:106b7391112850ef0755e4111ce7a08c5bac5742d2e4dbcab1bb2be5440a1f77","byte_length":3302},
+    {"path":"validator/src/migration/product/model.rs","sha256":"sha256:b3a37254dfb350d0549337e8b060b83ab3faeb2d091ad6c47794bf582b96124f","byte_length":55247},
+    {"path":"validator/src/migration/product/registry.rs","sha256":"sha256:c1f543807a0e3260eeb00ebfc42096cee027425b774175f0e9a4528f5f5bdcd2","byte_length":22442},
+    {"path":"validator/src/migration/product/runtime.rs","sha256":"sha256:88cf4c5be7d429e22fcf759f442f7a104270a280264dac2e38091ed42c80289a","byte_length":70631},
+    {"path":"validator/tests/migration_product_contract.rs","sha256":"sha256:e8d5824d5578c2063513aaaf88c8ef09e7e1c7a33087181027c9d97fb19dd948","byte_length":2222},
+    {"path":"validator/tests/migration_product_contract/adversarial.rs","sha256":"sha256:2a162ba6c77a74a427ac37c4f1c0bb31d92ed3736507fee211728fe2ee614396","byte_length":47117},
+    {"path":"validator/tests/migration_product_contract/positive.rs","sha256":"sha256:1d0ad1f2889320ec8c157c6ed658ef2d1f2647eaa1f56072502855ce6c0adb05","byte_length":9828},
+    {"path":"validator/tests/migration_product_contract/recovery.rs","sha256":"sha256:3345215d6f9dc79a601a0a2bd143832440b217995a04061bdf857df9b1442df6","byte_length":10933},
+    {"path":"validator/tests/migration_product_contract/support.rs","sha256":"sha256:744bf1933dd035bf469cc148c96a17dc1f577fd1994d1b83faa4e9d94633903b","byte_length":28913}
+  ],
+  "findings": [
+    {
+      "severity": "corrected",
+      "requirement": "REQ-MAINT-002",
+      "finding": "The prior candidate could authorize and execute compatibility work after its deadline because the registry measurement window was treated as the only current time, and no trusted current product version was consulted.",
+      "resolution": "Planning, authorization, immediate pre-effect execution, and recovery now consume sealed trusted boundary observations; crossed or substituted state fails closed, and exact pre-boundary completion is durably reconcilable."
+    },
+    {
+      "severity": "corrected",
+      "requirement": "REQ-MAINT-002",
+      "finding": "A permit-bearing effect that became ambiguous could transition to a journal shape rejected by the store, masking ambiguity as a generic interruption.",
+      "resolution": "Ambiguous journals now retain and validate the pending typed permit so timing evidence remains durable and the outcome is explicitly Ambiguous."
+    },
+    {
+      "severity": "ceiling-withheld",
+      "finding": "The live registry contains no adopted effect and this lease did not wire a root source, store, boundary authority, public command, or installed effect adapter.",
+      "resolution": "No current route adoption, retirement, runtime, install, readiness, release, or completion claim is raised."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-review",
+    "root-candidate-reconciliation",
+    "root-production-adapters",
+    "trusted-production-boundary-source",
+    "current-observability-evidence",
+    "representative-legacy-route-journey",
+    "public-installed-runtime-proof"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "The exact nine-artifact aggregate excludes this self-referential WorkerResult and is a correction overlay, not a replacement for the broader original migration candidate aggregate.",
+    "The typed authority is an interface contract exercised with test authority and effect adapters; no production boundary source or installed effect adapter was added by this lease.",
+    "Typed boundary enforcement does not itself prove warning emission, usage capture, route equivalence, live retirement, installation, or real-user behavior.",
+    "No public CLI, adopted registry, physical cleanup, installed runtime, claim state, node state, readiness state, release state, or completion state changed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}
