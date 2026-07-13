@@ -1,0 +1,48 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "REPOSITORY-FIT-PUBLIC-READ-ROUTES-INTEGRATION-057",
+  "workstream": "repository-fit-public-read-routing",
+  "decision": "ACCEPT_PUBLIC_SOURCE_READ_ROUTES",
+  "integration_commit": "b735757abc7539189af8e7314991927692ca05b9",
+  "integration_tree": "bb1101a6fc9a561f4827bfa0366fb10bd33c8d2a",
+  "dependency_acceptance": "docs/ultragoal-successor-live/acceptance/REPOSITORY-FIT-PUBLIC-RUNTIME-ADAPTER-INTEGRATION-056.json",
+  "accepted_routes": [
+    "fit inspect",
+    "fit plan",
+    "fit verify"
+  ],
+  "route_boundary": {
+    "sole_dispatcher": "validator/src/cli/successor_public/mod.rs",
+    "optional_target": "resolved to the selected repository root rather than ignored",
+    "fit_apply": "undispatched_and_unavailable_without_root_effect_authority",
+    "claim_effect": "none"
+  },
+  "independent_review": {
+    "reviewer": "/root/repository_fit_public_read_router_reviewer",
+    "verdict": "PASS",
+    "focused_tests": "3/3",
+    "adapter_contract_tests": "5/5",
+    "process_exit_codes": {
+      "inspect": 0,
+      "plan": 0,
+      "verify": 1,
+      "apply": 4
+    },
+    "zero_write": "recursive bytes permissions directory modes and Git status unchanged",
+    "jobs": 16,
+    "test_threads": 16
+  },
+  "withheld": [
+    "fit apply preparation dispatch",
+    "root-issued one-use mutation permit",
+    "workspace effect execution",
+    "representative live repository journey closure",
+    "installation",
+    "readiness",
+    "release",
+    "node closure",
+    "goal completion"
+  ],
+  "claim_ceiling": "public source-level repository-fit inspect plan and verify routes only",
+  "no_claim_statement": "This acceptance does not claim fit apply, workspace effects, installed behavior, readiness, release, node closure, or goal completion."
+}
