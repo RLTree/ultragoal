@@ -1,3 +1,4 @@
+use super::digest::sha256_hex;
 use serde::Serialize;
 use std::collections::BTreeMap;
 use std::fmt;
@@ -212,7 +213,74 @@ pub struct AuthorityCatalog {
     generated_surfaces: GeneratedSurfaceIndex,
 }
 
+#[derive(Serialize)]
+struct CatalogIdentity<'a> {
+    schema_version: &'static str,
+    context_id: &'a str,
+    contract_id: &'a str,
+    counts: &'a BTreeMap<String, usize>,
+    entries: &'a [InventoryEntry],
+    findings: &'a [InventoryFinding],
+}
+
+pub(crate) fn catalog_identity_id(
+    context_id: &str,
+    contract_id: &str,
+    counts: &BTreeMap<String, usize>,
+    entries: &[InventoryEntry],
+    findings: &[InventoryFinding],
+) -> Result<String, InventoryError> {
+    let bytes = serde_json::to_vec(&CatalogIdentity {
+        schema_version: "AuthorityCatalog-v1",
+        context_id,
+        contract_id,
+        counts,
+        entries,
+        findings,
+    })
+    .map_err(|error| InventoryError::Serialization(error.to_string()))?;
+    if bytes.len() > MAX_CATALOG_BYTES {
+        return Err(InventoryError::Serialization(format!(
+            "catalog identity exceeds {MAX_CATALOG_BYTES} bytes"
+        )));
+    }
+    Ok(format!("sha256:{}", sha256_hex(&bytes)))
+}
+
 impl AuthorityCatalog {
+    #[cfg(test)]
+    pub(crate) fn canonical_for_test(
+        context_id: String,
+        contract_id: String,
+        source_registry_counts: BTreeMap<String, usize>,
+        entries: Vec<InventoryEntry>,
+        findings: Vec<InventoryFinding>,
+    ) -> Result<Self, InventoryError> {
+        let generated_surfaces = GeneratedSurfaceIndex::new(
+            entries
+                .iter()
+                .filter(|entry| entry.kind == "generated-surface")
+                .cloned()
+                .collect(),
+        );
+        let catalog_id = catalog_identity_id(
+            &context_id,
+            &contract_id,
+            &source_registry_counts,
+            &entries,
+            &findings,
+        )?;
+        Ok(Self::new(
+            catalog_id,
+            context_id,
+            contract_id,
+            source_registry_counts,
+            entries,
+            findings,
+            generated_surfaces,
+        ))
+    }
+
     pub fn catalog_id(&self) -> &str {
         &self.catalog_id
     }
@@ -248,6 +316,34 @@ impl AuthorityCatalog {
             )));
         }
         Ok(bytes)
+    }
+
+    pub(crate) fn revalidate_identity(&self) -> Result<(), InventoryError> {
+        let expected_generated = self
+            .entries
+            .iter()
+            .filter(|entry| entry.kind == "generated-surface")
+            .cloned()
+            .collect::<Vec<_>>();
+        if self.generated_surfaces.entries() != expected_generated {
+            return Err(InventoryError::InvalidRegistry(
+                "authority catalog generated surfaces are not the canonical entry projection"
+                    .to_owned(),
+            ));
+        }
+        let current = catalog_identity_id(
+            &self.context_id,
+            &self.contract_id,
+            &self.source_registry_counts,
+            &self.entries,
+            &self.findings,
+        )?;
+        if current != self.catalog_id {
+            return Err(InventoryError::InvalidRegistry(
+                "authority catalog identity does not match its canonical contents".to_owned(),
+            ));
+        }
+        Ok(())
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -336,3 +432,81 @@ impl fmt::Display for InventoryError {
 }
 
 impl std::error::Error for InventoryError {}
+
+#[cfg(test)]
+mod catalog_identity_tests {
+    use super::*;
+
+    fn catalog(catalog_id: String, generated_surfaces: GeneratedSurfaceIndex) -> AuthorityCatalog {
+        AuthorityCatalog::new(
+            catalog_id,
+            "sha256:context".to_owned(),
+            "test-contract".to_owned(),
+            BTreeMap::new(),
+            Vec::new(),
+            Vec::new(),
+            generated_surfaces,
+        )
+    }
+
+    #[test]
+    fn one_canonical_identity_helper_issues_and_revalidates_catalogs() {
+        let id = catalog_identity_id(
+            "sha256:context",
+            "test-contract",
+            &BTreeMap::new(),
+            &[],
+            &[],
+        )
+        .expect("catalog identity");
+        let catalog = AuthorityCatalog::canonical_for_test(
+            "sha256:context".to_owned(),
+            "test-contract".to_owned(),
+            BTreeMap::new(),
+            Vec::new(),
+            Vec::new(),
+        )
+        .expect("canonical test catalog");
+        assert_eq!(catalog.catalog_id(), id);
+        catalog.revalidate_identity().expect("canonical catalog");
+    }
+
+    #[test]
+    fn forged_id_and_noncanonical_generated_projection_fail_closed() {
+        assert!(
+            catalog(
+                format!("sha256:{}", "1".repeat(64)),
+                GeneratedSurfaceIndex::new(Vec::new()),
+            )
+            .revalidate_identity()
+            .is_err()
+        );
+
+        let id = catalog_identity_id(
+            "sha256:context",
+            "test-contract",
+            &BTreeMap::new(),
+            &[],
+            &[],
+        )
+        .expect("catalog identity");
+        let forged_projection = InventoryEntry {
+            stable_id: "GEN:forged".to_owned(),
+            kind: "generated-surface".to_owned(),
+            owner_role: "OWN-TEST".to_owned(),
+            relative_path: "generated/forged.json".to_owned(),
+            digest_sha256: "0".repeat(64),
+            unix_mode: None,
+            authority_state: AuthorityState::Projection,
+            active_status: ActiveStatus::Candidate,
+            generator: Some("test".to_owned()),
+            input_provenance: Vec::new(),
+            references: Vec::new(),
+        };
+        assert!(
+            catalog(id, GeneratedSurfaceIndex::new(vec![forged_projection]),)
+                .revalidate_identity()
+                .is_err()
+        );
+    }
+}

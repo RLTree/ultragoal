@@ -1,27 +1,15 @@
-use super::digest::sha256_hex;
 use super::types::{
     ActiveStatus, AuthorityCatalog, AuthorityState, GeneratedSurfaceIndex, InventoryEntry,
-    InventoryError, MAX_CATALOG_BYTES,
+    InventoryError, catalog_identity_id,
 };
 use super::{
     ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, context_scopes, discovery, legacy, registry, routing,
     validate,
 };
 use crate::context::LiveContext;
-use serde::Serialize;
 
 pub struct InventoryBuilder<'context> {
     context: &'context LiveContext,
-}
-
-#[derive(Serialize)]
-struct CatalogIdentity<'a> {
-    schema_version: &'static str,
-    context_id: &'a str,
-    contract_id: &'a str,
-    counts: &'a std::collections::BTreeMap<String, usize>,
-    entries: &'a [InventoryEntry],
-    findings: &'a [super::types::InventoryFinding],
 }
 
 impl<'context> InventoryBuilder<'context> {
@@ -106,23 +94,15 @@ impl<'context> InventoryBuilder<'context> {
                 .cloned()
                 .collect(),
         );
-        let identity = CatalogIdentity {
-            schema_version: "AuthorityCatalog-v1",
-            context_id: self.context.context_id(),
-            contract_id: &registry.contract_id,
-            counts: &registry.counts,
-            entries: &entries,
-            findings: &findings,
-        };
-        let bytes = serde_json::to_vec(&identity)
-            .map_err(|error| InventoryError::Serialization(error.to_string()))?;
-        if bytes.len() > MAX_CATALOG_BYTES {
-            return Err(InventoryError::Serialization(format!(
-                "catalog identity exceeds {MAX_CATALOG_BYTES} bytes"
-            )));
-        }
+        let catalog_id = catalog_identity_id(
+            self.context.context_id(),
+            &registry.contract_id,
+            &registry.counts,
+            &entries,
+            &findings,
+        )?;
         let catalog = AuthorityCatalog::new(
-            format!("sha256:{}", sha256_hex(&bytes)),
+            catalog_id,
             self.context.context_id().to_owned(),
             registry.contract_id,
             registry.counts,
