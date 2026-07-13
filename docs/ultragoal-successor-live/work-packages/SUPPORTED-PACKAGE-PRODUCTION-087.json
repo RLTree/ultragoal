@@ -1,0 +1,152 @@
+{
+  "schema_version": "UltraWorkPackage-v1",
+  "work_package_id": "SUPPORTED-PACKAGE-PRODUCTION-087",
+  "lane": "complete-plugin-product",
+  "objective": "Implement one production package session that derives the complete current plugin product from the canonical source snapshot, binds it to the current LiveContext and authority catalog, emits deterministic HUGPKG plus generated inventory bytes, and independently re-verifies the pair without installing or publishing it.",
+  "base_candidate": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "0449b6e612b9012756a2fb2f5bea126eb7cba785",
+    "head_tree": "24a91d6553e18fefc3221dea07bc18e4f1e5bf5d",
+    "note": "The shared worktree also contains disjoint in-progress repository-fit and evaluation leases. Preserve them and bind the final freeze to the then-current root HEAD."
+  },
+  "dependencies": [
+    "accepted package snapshot and generated-disposition capture",
+    "accepted deterministic HUGPKG encoder and verifier",
+    "accepted confined package-artifact writer",
+    "accepted marketplace-bound package identity kernel",
+    "root-adopted source version 0.0.12"
+  ],
+  "lease": {
+    "owner": "/root/supported_package_production_engineer",
+    "writable_paths": [
+      "validator/src/package/inventory/snapshot/mod.rs",
+      "validator/src/package/inventory/snapshot/capture.rs",
+      "validator/src/package/inventory/snapshot/identity.rs",
+      "validator/src/package/inventory/snapshot/tests.rs",
+      "validator/src/distribution/package/mod.rs",
+      "validator/src/distribution/package/product.rs",
+      "validator/src/distribution/package/product/**",
+      "validator/tests/supported_package_product_contract.rs",
+      "validator/tests/supported_package_product_contract/**",
+      "fixtures/supported-package-product/**",
+      "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-PRODUCTION-087.json"
+    ],
+    "semantic_symbols": [
+      "PackageSnapshot effective packaged rows distinct from dependency-cache rows",
+      "ProductionPackageSession",
+      "ProductionPackageArtifact",
+      "capture_product_package",
+      "verify_product_package"
+    ],
+    "generated_outputs": [
+      "test-owned HUGPKG and generated inventory pairs below /private/tmp/hul-distribution-supported-package-087-* only",
+      "fixture rows below fixtures/supported-package-product only"
+    ],
+    "authorized_effects": [
+      "source edits within the exact writable paths",
+      "read-only current repository and Git candidate inspection",
+      "offline Cargo builds and tests with CARGO_TARGET_DIR=/private/tmp/hul-supported-package-production-087-target",
+      "test-owned local process execution",
+      "test-owned writes below /private/tmp/hul-distribution-supported-package-087-*"
+    ],
+    "prohibited_paths": [
+      ".codex-plugin/plugin.json",
+      "plugin-manifest-draft.json",
+      "Cargo.toml",
+      "Cargo.lock",
+      "validator/Cargo.toml",
+      "validator/src/distribution/mod.rs",
+      "validator/src/cli/**",
+      "validator/src/inventory/**",
+      "generated/**",
+      "marketplace/**",
+      "install/**",
+      "docs/ultragoal-contract-2026-07-successor-v2/**",
+      "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md",
+      "docs/ultragoal-successor-live/acceptance/**",
+      "docs/ultragoal-successor-live/reviews/**",
+      "docs/ultragoal-successor-live/root-decisions/**"
+    ],
+    "prohibited_effects": [
+      "staging, committing, rebasing, merging, or changing branches",
+      "repository package output or generated-authority adoption",
+      "host plugin install, cache, marketplace, app-registry, Plugins UI, discovery, or runtime mutation",
+      "network, publication, signing, release, destructive cleanup, or deletion",
+      "public command catalog, parser, dispatcher, claim, migration, or release-state changes",
+      "repo-local target writes"
+    ]
+  },
+  "required_behavior": [
+    "Capture one stable canonical package source through the accepted PackageCapture boundary and retain the exact effective packaged rows separately from dependency-cache rows.",
+    "Require exact 0.0.12 agreement between plugin-manifest-draft.json and .codex-plugin/plugin.json; neither document alone may establish package authority.",
+    "Bind context id, canonical candidate id, current authority catalog id, effective source rows, version, roles, modes, generated-disposition decisions, source tree digest, archive digest, and generated inventory digest in one immutable production artifact.",
+    "Include every effective current plugin member exactly once, include the supported plugin manifest as the sole Manifest role, preserve executable modes only for actual executable members, and reject unknown, duplicate, ambiguous, retained-context, unsafe, or missing rows.",
+    "Build HUGPKG and generated inventory byte-identically from independent clean captures of the same candidate, then decode and reinventory the artifact without trusting producer metadata.",
+    "Revalidate source, root, LiveContext, candidate, and catalog at finalization; reject mutate-restore, candidate drift, and mixed-session composition.",
+    "Keep inventory derivation and verification read-only. Package materialization may target only an already opened test-owned confined output root in this lease.",
+    "Expose one narrow crate-private integration interface and request, but do not apply, root reexports or public command wiring."
+  ],
+  "required_tests": {
+    "positive": [
+      "complete representative plugin source capture",
+      "two independent clean-context builds are byte-identical",
+      "HUGPKG decode plus independent reinventory matches every row and digest",
+      "supported manifest and draft version agreement",
+      "canonical skill, agent, executable, documentation, data, and generated-projection role mapping",
+      "bounded confined output pair publication and exact replay verification",
+      "inventory and verify paths preserve recursive tree and Git status"
+    ],
+    "negative": [
+      "missing or mismatched supported manifest and draft version",
+      "duplicate, case-colliding, ancestor-colliding, unknown, missing, or extra package member",
+      "retained context promoted as product content",
+      "noncanonical or duplicate-key JSON",
+      "symlink, hardlink, special file, unsafe mode, oversized entry, oversized package, and path escape",
+      "partial HUGPKG or inventory pair and same-version different-byte reuse"
+    ],
+    "race_and_mutation": [
+      "source mutate-restore and manifest swap during capture",
+      "root or ancestor substitution",
+      "generated-disposition registry or projection substitution",
+      "candidate or catalog change before finalization",
+      "two package writers yield one exact winner or typed conflict",
+      "archive, inventory, context, candidate, catalog, version, mode, and row substitution"
+    ],
+    "security_and_false_pass": [
+      "secret-shaped and local-only paths never enter packaged rows",
+      "producer metadata cannot replace independent archive decode and reinventory",
+      "green source inventory without HUGPKG is insufficient",
+      "green HUGPKG without matching generated inventory is insufficient",
+      "package bytes never imply install, marketplace, discovery, runtime, readiness, or release"
+    ]
+  },
+  "verification": {
+    "jobs": 16,
+    "test_threads": 16,
+    "cargo_target_dir": "/private/tmp/hul-supported-package-production-087-target",
+    "commands": [
+      "cargo test --offline --locked -j16 --manifest-path validator/Cargo.toml --test supported_package_product_contract -- --test-threads=16",
+      "cargo test --offline --locked -j16 --manifest-path validator/Cargo.toml --test distribution_contract package_identity -- --test-threads=16",
+      "cargo test --offline --locked -j16 --manifest-path validator/Cargo.toml --test distribution_contract package_output -- --test-threads=16",
+      "cargo test --offline --locked -j16 --manifest-path validator/Cargo.toml --test supported_package_identity_contract -- --test-threads=16"
+    ],
+    "format": "Run rustfmt --edition 2024 --check only on leased Rust files.",
+    "storage": "Do not use the repository target directory. Stop and report immediately on ENOSPC; do not delete or clean any path."
+  },
+  "worker_result": {
+    "schema": "WorkerResult-v1",
+    "required_fields": [
+      "lease and base/final candidate binding",
+      "exact touched paths and semantic symbols",
+      "artifact-set formula and current SHA-256 values",
+      "generated outputs and fixtures",
+      "effects performed and effects withheld",
+      "exact commands, pass counts, failures, skips, and platform limits",
+      "requested root changes",
+      "unresolved dependencies and limitations",
+      "no-claim statement"
+    ],
+    "no_claim_statement": "Candidate source implementation only. No claim of root adoption, public package command availability, repository package output, installed bytes, marketplace state, cache state, app registration, Plugins UI visibility, discovery, runtime, representative user journey, claim elevation, node closure, readiness, release, or completion."
+  }
+}
