@@ -459,9 +459,13 @@ impl AuthorizedHostEffect {
         executable: PinnedHostExecutable,
         plan: HostCommandPlan,
     ) -> Result<Self, HostEffectLedgerError> {
+        executable.revalidate()?;
+        let executable_identity_sha256 = executable.identity().binding_sha256()?;
+        let expected_reservation = HostEffectReservation::from_permit(&permit);
         if record.state != HostEffectState::InFlight
-            || record.reservation.permit_id != permit.permit_id()
+            || record.reservation != expected_reservation
             || plan.plan_sha256() != permit.binding().command_plan_sha256
+            || executable_identity_sha256 != permit.binding().executable_identity_sha256
         {
             return Err(HostEffectLedgerError::new(
                 HostEffectLedgerErrorId::InvalidRecord,
@@ -561,6 +565,7 @@ fn is_digest(value: &str) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::distribution::{PackageIdentity, SourceIdentity};
 
     #[cfg(unix)]
     use std::io::Write;
@@ -571,6 +576,62 @@ mod tests {
 
     fn d(byte: char) -> String {
         format!("sha256:{}", byte.to_string().repeat(64))
+    }
+
+    fn package() -> PackageIdentity {
+        let source = SourceIdentity::new(
+            d('1'),
+            d('2'),
+            "harness-ultragoal".to_owned(),
+            "0.0.11".to_owned(),
+            d('3'),
+            d('4'),
+        )
+        .unwrap();
+        PackageIdentity::new(source, d('5'), d('6')).unwrap()
+    }
+
+    fn permit_binding(
+        plan: &HostCommandPlan,
+        executable: &PinnedHostExecutable,
+    ) -> HostEffectPermitBinding {
+        HostEffectPermitBinding {
+            context_id: d('1'),
+            candidate_id: d('2'),
+            package_identity_sha256: d('3'),
+            journey_binding_sha256: d('4'),
+            session_issuance_sha256: d('5'),
+            lifecycle_plan_sha256: d('6'),
+            lifecycle_intent: "install".to_owned(),
+            expected_pre_state_sha256: d('7'),
+            expected_post_state_sha256: d('8'),
+            rollback_policy_sha256: d('9'),
+            reconciliation_policy_sha256: d('a'),
+            host_scope_sha256: d('b'),
+            host_capability_sha256: d('c'),
+            required_capabilities_sha256: d('d'),
+            external_request_sha256: d('e'),
+            command_plan_sha256: plan.plan_sha256().to_owned(),
+            argv_sha256: d('f'),
+            executable_identity_sha256: executable.identity().binding_sha256().unwrap(),
+            target_identity_sha256: d('1'),
+            target_generation: 1,
+            issued_at_unix_ms: 1_000,
+            expires_at_unix_ms: 2_000,
+            expected_head_sha256: d('2'),
+            decision: HostEffectDecision::Authorize,
+        }
+    }
+
+    fn in_flight_record(reservation: HostEffectReservation) -> HostEffectLedgerRecord {
+        HostEffectLedgerRecord {
+            reservation,
+            state: HostEffectState::InFlight,
+            record_sha256: d('3'),
+            prior_head: HostEffectLedgerHead::new(1, d('4')).unwrap(),
+            current_head: HostEffectLedgerHead::new(2, d('5')).unwrap(),
+            outcome_sha256: None,
+        }
     }
 
     #[test]
@@ -665,6 +726,56 @@ mod tests {
             Err(error) => error,
         };
         assert_eq!(error.id(), HostEffectLedgerErrorId::InvalidRecord);
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn authorized_effect_enforces_exact_live_executable_identity() {
+        let first_fixture = ExecutableFixture::new(b"#!/bin/sh\nexit 0\n");
+        let second_fixture = ExecutableFixture::new(b"#!/bin/sh\nexit 0\n");
+        let first = PinnedHostExecutable::pin(&first_fixture.path).unwrap();
+        let second = PinnedHostExecutable::pin(&second_fixture.path).unwrap();
+        let plan = HostCommandPlan::personal_install(&package(), "local-harness").unwrap();
+        let authority =
+            HostEffectAuthority::generate("root-actor".to_owned(), "host-ledger".to_owned())
+                .unwrap();
+        let (permit, reservation) = authority.issue(permit_binding(&plan, &first)).unwrap();
+        authority.verify(&permit, 1_500).unwrap();
+
+        assert_eq!(
+            AuthorizedHostEffect::new(permit, in_flight_record(reservation), second, plan)
+                .err()
+                .unwrap()
+                .id(),
+            HostEffectLedgerErrorId::InvalidRecord
+        );
+
+        let pinned = PinnedHostExecutable::pin(&first_fixture.path).unwrap();
+        let plan = HostCommandPlan::personal_install(&package(), "local-harness").unwrap();
+        let (permit, reservation) = authority.issue(permit_binding(&plan, &pinned)).unwrap();
+        authority.verify(&permit, 1_500).unwrap();
+        let authorized =
+            AuthorizedHostEffect::new(permit, in_flight_record(reservation), pinned, plan).unwrap();
+        authorized.executable().revalidate().unwrap();
+
+        let changed_fixture = ExecutableFixture::new(b"#!/bin/sh\nexit 0\n");
+        let changed = PinnedHostExecutable::pin(&changed_fixture.path).unwrap();
+        let plan = HostCommandPlan::personal_install(&package(), "local-harness").unwrap();
+        let (permit, reservation) = authority.issue(permit_binding(&plan, &changed)).unwrap();
+        authority.verify(&permit, 1_500).unwrap();
+        let mut file = OpenOptions::new()
+            .write(true)
+            .open(&changed_fixture.path)
+            .unwrap();
+        file.write_all(b"#!/bin/sh\nexit 9\n").unwrap();
+        file.sync_all().unwrap();
+        assert_eq!(
+            AuthorizedHostEffect::new(permit, in_flight_record(reservation), changed, plan)
+                .err()
+                .unwrap()
+                .id(),
+            HostEffectLedgerErrorId::Tampered
+        );
     }
 
     #[cfg(unix)]
