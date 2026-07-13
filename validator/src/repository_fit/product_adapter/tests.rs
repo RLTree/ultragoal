@@ -4,6 +4,8 @@ mod catalog;
 mod journeys;
 #[path = "tests/live_journeys.rs"]
 mod live_journeys;
+#[path = "tests/production_authority.rs"]
+mod production_authority;
 #[path = "tests/refusals.rs"]
 mod refusals;
 #[path = "tests/root_permit.rs"]

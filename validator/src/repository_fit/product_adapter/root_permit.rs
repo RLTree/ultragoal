@@ -27,21 +27,21 @@ use std::os::unix::fs::{FileTypeExt, MetadataExt, OpenOptionsExt};
 
 use crate::context::{BuildRequest, LiveContext};
 use crate::repository_fit::{
-    CanonicalPath, ExpectedContent, FitEffects, FitError, FitErrorId, FitReader, FitVerification,
-    apply, digest, rollback, verify,
+    apply, digest, rollback, valid_digest, verify, CanonicalPath, ExpectedContent, FitEffects,
+    FitError, FitErrorId, FitReader, FitVerification,
 };
 
 #[cfg(unix)]
 use crate::repository_fit::LocalEffects;
 
-use super::protocol::{ApplyRequestSeal, OpaqueFitApplyRequest, revalidate_apply_request};
-use super::{AdapterErrorId, FitAdapterError, adapter_error};
+use super::protocol::{revalidate_apply_request, ApplyRequestSeal, OpaqueFitApplyRequest};
+use super::{adapter_error, AdapterErrorId, FitAdapterError};
 
 const PERMIT_DOMAIN: &str = "repository-fit-root-apply-permit-v1";
 const AUTHORITY_DOMAIN: &str = "repository-fit-root-apply-authority-v1";
 const ROLLBACK_POLICY: &str = "complete-exact-prestate-or-ambiguous-v1";
-const MAX_PERMIT_LIFETIME: u64 = 300;
-const MIN_NONCE_BYTES: usize = 32;
+pub(super) const MAX_PERMIT_LIFETIME: u64 = 300;
+pub(super) const MIN_NONCE_BYTES: usize = 32;
 const MAX_FENCE_ENTRIES: usize = 100_000;
 const MAX_FENCE_DEPTH: usize = 64;
 const MAX_FENCE_FILE_BYTES: u64 = 64 * 1024 * 1024;
@@ -144,7 +144,7 @@ struct PermitBinding {
     protected_prestate_sha256: String,
 }
 
-struct AuthorityIdentity {
+pub(super) struct AuthorityIdentity {
     authority_id: String,
 }
 
@@ -154,6 +154,54 @@ impl Debug for AuthorityIdentity {
             .debug_struct("AuthorityIdentity")
             .field("authority_id", &"[bound]")
             .finish()
+    }
+}
+
+impl AuthorityIdentity {
+    pub(super) fn id(&self) -> &str {
+        &self.authority_id
+    }
+}
+
+/// Descriptor-bound pre-effect material prepared before the durable store is
+/// initialized. Keeping the descriptor chains alive closes target replacement
+/// between validation, reservation, and production lease activation.
+pub(super) struct PreparedProductionPermit {
+    binding: PermitBinding,
+    target_prestate: TargetSnapshot,
+    target_chain: TargetDescriptorChain,
+    protected_prestate: ProtectedSnapshot,
+}
+
+/// Bounded durable identifiers for one exact permit reservation. No raw nonce,
+/// path, target bytes, or authority key material crosses this projection.
+pub(super) struct ProductionReservationBinding {
+    binding_sha256: String,
+    semantic_effect_id: String,
+    target_scope_id: String,
+    permit_id: String,
+    nonce_sha256: String,
+}
+
+impl ProductionReservationBinding {
+    pub(super) fn binding_sha256(&self) -> &str {
+        &self.binding_sha256
+    }
+
+    pub(super) fn semantic_effect_id(&self) -> &str {
+        &self.semantic_effect_id
+    }
+
+    pub(super) fn target_scope_id(&self) -> &str {
+        &self.target_scope_id
+    }
+
+    pub(super) fn permit_id(&self) -> &str {
+        &self.permit_id
+    }
+
+    pub(super) fn nonce_sha256(&self) -> &str {
+        &self.nonce_sha256
     }
 }
 
@@ -1120,8 +1168,8 @@ fn terminal_after_started_failure<E: RepositoryFitPermitEffects>(
     }
 }
 
-fn terminal_ambiguous<E: RepositoryFitPermitEffects>()
--> Result<RepositoryFitApplyOutcome, RepositoryFitApplyFailure<E>> {
+fn terminal_ambiguous<E: RepositoryFitPermitEffects>(
+) -> Result<RepositoryFitApplyOutcome, RepositoryFitApplyFailure<E>> {
     Err(RepositoryFitApplyFailure::Terminal(TerminalApplyFailure {
         error: adapter_error(AdapterErrorId::ApplyOutcomeAmbiguous),
         effect_started: true,
@@ -1207,7 +1255,8 @@ fn success_outcome(
         status,
         effect: "workspace_write",
         claim_effect: "none",
-        support_limit: "internal permit mediation only; root issuance and public apply dispatch absent",
+        support_limit:
+            "internal permit mediation only; root issuance and public apply dispatch absent",
     }
 }
 
@@ -2586,6 +2635,187 @@ fn object_identity(metadata: &fs::Metadata) -> (u64, u64, u64, u32, u32, u32, u6
         metadata.ctime(),
         metadata.ctime_nsec(),
     )
+}
+
+pub(super) fn production_authority_identity(
+    authority_id: String,
+) -> Result<Arc<AuthorityIdentity>, FitAdapterError> {
+    if !valid_digest(&authority_id) {
+        return Err(adapter_error(AdapterErrorId::ApplyPermitInvalid));
+    }
+    Ok(Arc::new(AuthorityIdentity { authority_id }))
+}
+
+/// Performs every deterministic request, context, target, and protected-tree
+/// refusal before the authority store may be opened or initialized.
+pub(super) fn prepare_production_permit(
+    context: &LiveContext,
+    request: &OpaqueFitApplyRequest,
+) -> Result<PreparedProductionPermit, FitAdapterError> {
+    let protected_prestate = capture_protected(
+        context.worktree_root(),
+        request,
+        ProtectedCaptureBoundary::PermitIssuance,
+    )?;
+    revalidate_apply_request(context, request)?;
+    let permit_target = capture_target_descriptor_chain(context.worktree_root(), request)?;
+    let target_prestate = permit_target.snapshot.clone();
+    revalidate_apply_request(context, request)?;
+    let protected_recheck = capture_protected(
+        context.worktree_root(),
+        request,
+        ProtectedCaptureBoundary::PermitIssuanceRecheck,
+    )?;
+    let target_recheck = capture_target(context.worktree_root(), request)?;
+    if target_recheck != target_prestate || protected_recheck != protected_prestate {
+        return Err(adapter_error(AdapterErrorId::StalePlan));
+    }
+    let binding = permit_binding(request, &target_prestate, &protected_prestate)?;
+    Ok(PreparedProductionPermit {
+        binding,
+        target_prestate,
+        target_chain: permit_target.chain,
+        protected_prestate,
+    })
+}
+
+pub(super) fn production_reservation_binding(
+    prepared: &PreparedProductionPermit,
+    authority: &Arc<AuthorityIdentity>,
+    issued_tick: u64,
+    expires_tick: u64,
+    nonce_sha256: String,
+) -> Result<ProductionReservationBinding, FitAdapterError> {
+    if !valid_digest(&nonce_sha256)
+        || expires_tick < issued_tick
+        || expires_tick.saturating_sub(issued_tick) > MAX_PERMIT_LIFETIME
+    {
+        return Err(adapter_error(AdapterErrorId::ApplyPermitInvalid));
+    }
+    let binding_sha256 = digest(
+        &serde_json::to_vec(&("repository-fit-production-binding-v1", &prepared.binding))
+            .map_err(|_| adapter_error(AdapterErrorId::ProjectionFailed))?,
+    );
+    let semantic_effect_id = digest(
+        &serde_json::to_vec(&(
+            "repository-fit-production-semantic-effect-v1",
+            &prepared.binding.context_id,
+            &prepared.binding.candidate_id,
+            &prepared.binding.repository_root_id,
+            &prepared.binding.worktree_root_id,
+            &prepared.binding.root_binding,
+            &prepared.binding.plan_record_sha256,
+            &prepared.binding.plan_sha256,
+            &prepared.binding.accepted_plan_sha256,
+            &prepared.binding.desired_state_sha256,
+            &prepared.binding.source_authority_sha256,
+            &prepared.binding.target_prestate_sha256,
+            &prepared.binding.allowed_mutation_set_sha256,
+            &prepared.binding.rollback_policy_sha256,
+            &prepared.binding.protected_prestate_sha256,
+        ))
+        .map_err(|_| adapter_error(AdapterErrorId::ProjectionFailed))?,
+    );
+    let target_scope_id = digest(
+        &serde_json::to_vec(&(
+            "repository-fit-production-target-scope-v1",
+            &prepared.binding.repository_root_id,
+            &prepared.binding.worktree_root_id,
+            &prepared.binding.root_binding,
+        ))
+        .map_err(|_| adapter_error(AdapterErrorId::ProjectionFailed))?,
+    );
+    let permit_id = permit_id(
+        authority.id(),
+        &prepared.binding,
+        issued_tick,
+        expires_tick,
+        &nonce_sha256,
+    )?;
+    Ok(ProductionReservationBinding {
+        binding_sha256,
+        semantic_effect_id,
+        target_scope_id,
+        permit_id,
+        nonce_sha256,
+    })
+}
+
+/// Rechecks the complete pre-reservation state and moves the concrete effect
+/// adapter into exactly one permit/lease pair. A post-reservation race can only
+/// yield a terminal ledger rejection; it cannot reach the mutation kernel.
+pub(super) fn activate_production_permit<E: RepositoryFitPermitEffects>(
+    context: &LiveContext,
+    request: &OpaqueFitApplyRequest,
+    mut prepared: PreparedProductionPermit,
+    mut effects: E,
+    authority: Arc<AuthorityIdentity>,
+    issued_tick: u64,
+    expires_tick: u64,
+    nonce_sha256: String,
+) -> Result<(RepositoryFitApplyPermit, RepositoryFitMutationLease<E>), FitAdapterError> {
+    let reservation = production_reservation_binding(
+        &prepared,
+        &authority,
+        issued_tick,
+        expires_tick,
+        nonce_sha256.clone(),
+    )?;
+    if reservation.binding_sha256
+        != digest(
+            &serde_json::to_vec(&("repository-fit-production-binding-v1", &prepared.binding))
+                .map_err(|_| adapter_error(AdapterErrorId::ProjectionFailed))?,
+        )
+    {
+        return Err(adapter_error(AdapterErrorId::ApplyPermitInvalid));
+    }
+    prepared
+        .target_chain
+        .revalidate()
+        .map_err(|_| adapter_error(AdapterErrorId::StalePlan))?;
+    revalidate_apply_request(context, request)?;
+    require_root_binding(&mut effects, &request.root_binding)?;
+    let effects_target = capture_target_descriptor_chain(context.worktree_root(), request)?;
+    let protected_recheck = capture_protected(
+        context.worktree_root(),
+        request,
+        ProtectedCaptureBoundary::PermitIssuanceRecheck,
+    )?;
+    let target_recheck = capture_target(context.worktree_root(), request)?;
+    if effects_target.snapshot != prepared.target_prestate
+        || target_recheck != prepared.target_prestate
+        || effects_target.snapshot != target_recheck
+        || protected_recheck != prepared.protected_prestate
+    {
+        return Err(adapter_error(AdapterErrorId::StalePlan));
+    }
+    let lease = RepositoryFitMutationLease {
+        binding_id: prepared.binding.plan_record_sha256.clone(),
+        authority: Arc::clone(&authority),
+        seal: Arc::clone(&request.seal),
+        effects: ScopedEffects::new(
+            effects,
+            request,
+            context.worktree_root(),
+            prepared.target_prestate.clone(),
+            effects_target,
+        ),
+    };
+    Ok((
+        RepositoryFitApplyPermit {
+            permit_id: reservation.permit_id,
+            binding: prepared.binding,
+            issued_tick,
+            expires_tick,
+            nonce_sha256,
+            authority,
+            seal: Arc::clone(&request.seal),
+            target_prestate: prepared.target_prestate,
+            target_chain: prepared.target_chain,
+            protected_prestate: prepared.protected_prestate,
+        },
+        lease,
+    ))
 }
 
 #[cfg(test)]

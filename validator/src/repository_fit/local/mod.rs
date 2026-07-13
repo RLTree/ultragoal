@@ -5,7 +5,7 @@ mod sys;
 #[cfg(unix)]
 mod unix;
 
-use super::{CanonicalPath, FitError, FitErrorId, FitReader, error};
+use super::{error, CanonicalPath, FitError, FitErrorId, FitReader};
 use std::path::Path;
 
 #[cfg(unix)]

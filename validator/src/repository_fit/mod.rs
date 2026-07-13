@@ -41,7 +41,9 @@ pub(crate) use error::error;
 pub(crate) use local::LocalEffects;
 pub(crate) use ownership::issue_managed_prior_proof;
 pub(crate) use product_adapter::{
+    execute_prepared_apply, inspect_target, plan_target, prepare_apply_request, verify_target,
     AdapterErrorId, FitAdapterError, FitApplyPreparationProjection, FitInspectProjection,
     FitPlanRecord, FitVerificationProjection, OpaqueFitApplyRequest, PreparedFitApply,
-    inspect_target, plan_target, prepare_apply_request, verify_target,
+    RepositoryFitApplyNonce, RepositoryFitAuthorityStore, RepositoryFitProductionOutcome,
+    RepositoryFitTrustedClock,
 };

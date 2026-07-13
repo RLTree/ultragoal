@@ -5,24 +5,31 @@
 //! apply request. It owns no public route, root effect grant, apply permit, or
 //! live-repository authority.
 
+mod authority;
 mod catalog;
+mod ledger;
 mod model;
 mod protocol;
 mod root_permit;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use super::{FitError, FitErrorId};
 
+pub(in crate::repository_fit) use authority::LocalMutationGrant;
+pub(crate) use authority::{
+    execute_prepared_apply, RepositoryFitApplyNonce, RepositoryFitAuthorityStore,
+    RepositoryFitProductionOutcome, RepositoryFitTrustedClock,
+};
 pub(crate) use model::{
     FitApplyPreparationProjection, FitInspectProjection, FitPlanRecord, FitVerificationProjection,
 };
 pub(crate) use protocol::{
-    OpaqueFitApplyRequest, PreparedFitApply, inspect_target, plan_target, prepare_apply_request,
-    verify_target,
+    inspect_target, plan_target, prepare_apply_request, verify_target, OpaqueFitApplyRequest,
+    PreparedFitApply,
 };
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum AdapterErrorId {
     ContextStale,

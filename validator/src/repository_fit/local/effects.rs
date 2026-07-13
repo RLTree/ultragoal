@@ -7,11 +7,12 @@
 #[cfg(target_vendor = "apple")]
 mod supported {
     use super::super::sys::{
-        EntryMatch, EnumerationBudget, PathStat, duplicate, exact_entry, open_at, stat_at,
+        duplicate, exact_entry, open_at, stat_at, EntryMatch, EnumerationBudget, PathStat,
     };
+    use crate::repository_fit::product_adapter::LocalMutationGrant;
     use crate::repository_fit::{
-        CanonicalPath, ExpectedContent, FitEffects, FitError, FitErrorId, FitReader,
-        LocalRepository, digest, error,
+        digest, error, CanonicalPath, ExpectedContent, FitEffects, FitError, FitErrorId, FitReader,
+        LocalRepository,
     };
     use std::collections::BTreeMap;
     #[cfg(test)]
@@ -150,6 +151,19 @@ mod supported {
             };
             value.binding = value.reader.root_binding()?;
             value.verify_root()?;
+            Ok(value)
+        }
+
+        /// Activates exactly one production mutation capability. Ordinary
+        /// construction remains read-only; only the sealed repository-fit
+        /// authority can obtain and move the grant consumed here.
+        pub(in crate::repository_fit) fn open_with_mutation_grant(
+            root: impl AsRef<Path>,
+            unix_modes: BTreeMap<String, u32>,
+            _grant: LocalMutationGrant,
+        ) -> Result<Self, FitError> {
+            let mut value = Self::open(root, unix_modes)?;
+            value.mutation_lease = true;
             Ok(value)
         }
 
@@ -1283,8 +1297,9 @@ mod supported {
 
 #[cfg(not(target_vendor = "apple"))]
 mod supported {
+    use crate::repository_fit::product_adapter::LocalMutationGrant;
     use crate::repository_fit::{
-        CanonicalPath, ExpectedContent, FitEffects, FitError, FitErrorId, FitReader, error,
+        error, CanonicalPath, ExpectedContent, FitEffects, FitError, FitErrorId, FitReader,
     };
     use std::collections::BTreeMap;
     use std::path::Path;
@@ -1295,6 +1310,14 @@ mod supported {
         pub(crate) fn open(
             _root: impl AsRef<Path>,
             _unix_modes: BTreeMap<String, u32>,
+        ) -> Result<Self, FitError> {
+            Err(error(FitErrorId::UnsupportedHost))
+        }
+
+        pub(in crate::repository_fit) fn open_with_mutation_grant(
+            _root: impl AsRef<Path>,
+            _unix_modes: BTreeMap<String, u32>,
+            _grant: LocalMutationGrant,
         ) -> Result<Self, FitError> {
             Err(error(FitErrorId::UnsupportedHost))
         }

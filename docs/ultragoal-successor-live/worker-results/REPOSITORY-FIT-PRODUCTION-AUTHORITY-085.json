@@ -1,0 +1,288 @@
+{
+  "worker": "/root/repository_fit_production_authority_engineer",
+  "lease_id": "REPOSITORY-FIT-PRODUCTION-AUTHORITY-085",
+  "context_id": "sha256:6b5a138e5c17ce9b6cfe2141a933f76035ee8500a34a01dec52afbca40352705",
+  "candidate_identity": {
+    "artifact_set_formula": "Sort artifact rows by UTF-8 path bytes, serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>, concatenate, then SHA-256 the resulting bytes.",
+    "artifact_set_sha256": "sha256:74652c6c772760d80fdea2a434d7b6fd5df95a7b86a2493e11f96ea375b4cf1d",
+    "candidate_id": "sha256:130095a7d25b932aff254983250db3ff4f148373f405abccf3ff534d21029fd1",
+    "context_id": "sha256:6b5a138e5c17ce9b6cfe2141a933f76035ee8500a34a01dec52afbca40352705",
+    "validation_source_head_commit": "465773dafb10f879cdced325ca54c59f8483ab39",
+    "validation_source_head_tree": "e9a624ecd12760e188dd3f205e2005c82297920f"
+  },
+  "base_state": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "issued_head_commit": "37d8ef7cdcbce1b0e900dd1b2cc68489303bfa6d",
+    "issued_head_tree": "f5c573c51abbc6ce61f7a0cc8caae8d47ea25cfc",
+    "status": "root_issued_reallocated_lease"
+  },
+  "final_state": {
+    "artifact_count": 9,
+    "artifact_set_sha256": "sha256:74652c6c772760d80fdea2a434d7b6fd5df95a7b86a2493e11f96ea375b4cf1d",
+    "blocker": "current_candidate_validation_enospc",
+    "current_candidate_proof": "not_established",
+    "public_apply_dispatch": "unwired_root_only",
+    "status": "worker_blocked"
+  },
+  "touched_paths": [
+    "validator/src/repository_fit/product_adapter.rs",
+    "validator/src/repository_fit/product_adapter/root_permit.rs",
+    "validator/src/repository_fit/product_adapter/authority.rs",
+    "validator/src/repository_fit/product_adapter/ledger.rs",
+    "validator/src/repository_fit/product_adapter/tests.rs",
+    "validator/src/repository_fit/product_adapter/tests/production_authority.rs",
+    "validator/src/repository_fit/mod.rs",
+    "validator/src/repository_fit/local/mod.rs",
+    "validator/src/repository_fit/local/effects.rs",
+    "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-PRODUCTION-AUTHORITY-085.json"
+  ],
+  "touched_semantics": [
+    "repository_fit::production_authority",
+    "repository_fit::durable_reservation_ledger",
+    "repository_fit::exclusive_local_mutation_grant",
+    "repository_fit::canonical_production_outcome"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-PRODUCTION-AUTHORITY-085.json"
+  ],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "repository-fit-production-authority",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "private-tmp-repository-fit-authority",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-cargo-validation",
+      "performed": true
+    }
+  ],
+  "requirements": [
+    "repository-fit-production-authority",
+    "durable-reservation-before-mutation",
+    "terminal-ledger-settlement",
+    "zero-write-read-separation",
+    "canonical-redacted-outcome"
+  ],
+  "dependency_nodes": [
+    "accepted-repository-fit-apply-mediator-and-rollback-attribution",
+    "accepted-source-built-repository-fit-journeys",
+    "accepted-successor-public-fit-inspect-plan-and-verify-reads",
+    "root-retains-public-catalog-dispatcher-host-policy-and-release"
+  ],
+  "changes": [
+    {
+      "change": "Added a sealed crate-private production authority that validates trusted time, exact prepared request bindings, target state, and durable reservation state before opening mutation authority.",
+      "paths": [
+        "validator/src/repository_fit/product_adapter/authority.rs",
+        "validator/src/repository_fit/product_adapter/root_permit.rs"
+      ]
+    },
+    {
+      "change": "Added an owner-only descriptor-bound HMAC-authenticated process-shared ledger with unique nonce and semantic-effect reservation, active target leases, hash-chain replay, atomic fsync publication, and explicit terminal states.",
+      "path": "validator/src/repository_fit/product_adapter/ledger.rs"
+    },
+    {
+      "change": "Restricted LocalEffects mutation construction to a private non-cloneable production grant while preserving ordinary read-only construction.",
+      "paths": [
+        "validator/src/repository_fit/local/mod.rs",
+        "validator/src/repository_fit/local/effects.rs"
+      ]
+    },
+    {
+      "change": "Moved the only mutation-grant constructor into the sealed production authority, exposed only the opaque unconstructible type to the local consumer, removed the local mint, and added an exact source guard for the sole private mint.",
+      "paths": [
+        "validator/src/repository_fit/product_adapter/authority.rs",
+        "validator/src/repository_fit/product_adapter.rs",
+        "validator/src/repository_fit/local/mod.rs",
+        "validator/src/repository_fit/local/effects.rs",
+        "validator/src/repository_fit/product_adapter/tests/production_authority.rs"
+      ]
+    },
+    {
+      "change": "Added production authority, interruption, rollback, mutation, tamper, race, replay, redaction, exact artifact, and recursive zero-write controls.",
+      "paths": [
+        "validator/src/repository_fit/product_adapter/tests.rs",
+        "validator/src/repository_fit/product_adapter/tests/production_authority.rs"
+      ]
+    },
+    {
+      "change": "Aligned the exact-artifact receipt self-test with the explicit ENOSPC-blocked state and the canonical sorted path-and-digest artifact-set formula while preserving per-row, exact-set, regular-file, single-link, and no-claim checks.",
+      "path": "validator/src/repository_fit/product_adapter/tests/production_authority.rs"
+    },
+    {
+      "change": "Exposed the production path only crate-privately; no public catalog or dispatcher surface was edited.",
+      "paths": [
+        "validator/src/repository_fit/product_adapter.rs",
+        "validator/src/repository_fit/mod.rs"
+      ]
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rustfmt --edition 2021 --config skip_children=true validator/src/repository_fit/product_adapter.rs validator/src/repository_fit/product_adapter/root_permit.rs validator/src/repository_fit/product_adapter/authority.rs validator/src/repository_fit/product_adapter/ledger.rs validator/src/repository_fit/product_adapter/tests.rs validator/src/repository_fit/product_adapter/tests/production_authority.rs validator/src/repository_fit/mod.rs validator/src/repository_fit/local/mod.rs validator/src/repository_fit/local/effects.rs",
+      "exit_code": 0,
+      "result": "Final exact leased-file formatting completed without following child modules."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-production-authority-085-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --lib -E 'test(/repository_fit::product_adapter::tests::production_authority/)' --no-fail-fast",
+      "exit_code": 100,
+      "result": "Pre-integration evidence only on the c0ca9fefe12592c53098b3a68f73917c4d1f113d base. Initial diagnostic run: 4 passed and 11 failed because repeated directory enumeration reused an exhausted duplicated descriptor offset. The implementation was corrected to open an independent directory descriptor for every integrity scan."
+    },
+    {
+      "command": "Focused production-authority nextest pass 1 after correction; same exact command as the preceding focused row.",
+      "exit_code": 0,
+      "result": "Pre-integration evidence only on the c0ca9fefe12592c53098b3a68f73917c4d1f113d base. Nextest run a7df3a53-620b-4cc1-9690-36fc531762c0: 15 passed, 0 failed, 1794 skipped; nextest marked one process-output leak without a test failure."
+    },
+    {
+      "command": "Focused production-authority nextest pass 2 after correction; same exact command as the preceding focused row.",
+      "exit_code": 0,
+      "result": "Pre-integration evidence only on the c0ca9fefe12592c53098b3a68f73917c4d1f113d base. Nextest run 3ce42cf3-e328-4861-91a4-4b44da79a342: 15 passed, 0 failed, 1794 skipped; nextest marked two process-output leaks without a test failure."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-production-authority-085-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --lib -E 'test(/repository_fit/)' --no-fail-fast",
+      "exit_code": 0,
+      "result": "Pre-integration evidence only on the c0ca9fefe12592c53098b3a68f73917c4d1f113d base. Nextest run 92e687cc-574f-4007-a206-485bda714d97: 141 passed, 0 failed, 1668 skipped."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-production-authority-085-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test repository_fit_contract --test repository_fit_apply_mediation_contract --test repository_fit_public_adapter_contract --test repository_fit_live_journeys_contract --no-fail-fast",
+      "exit_code": 0,
+      "result": "Pre-integration evidence only on the c0ca9fefe12592c53098b3a68f73917c4d1f113d base. Nextest run 2521aede-eb2a-4886-b97a-c521dc70efce: 212 passed, 0 failed, 0 skipped across four dependency-closed integration binaries."
+    },
+    {
+      "command": "Reverse each rustfmt-only out-of-lease hunk through apply_patch, then inspect git diff --name-only under validator/src/repository_fit and validator/build_support/repository_fit_template_sources.rs against the ten-path lease allowlist.",
+      "exit_code": 0,
+      "result": "Nineteen child-module formatting diffs were restored to exact c0ca9fefe12592c53098b3a68f73917c4d1f113d HEAD bytes; zero out-of-scope repository-fit or build-support paths remained. Other concurrent lanes were untouched."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-production-authority-085-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --lib -E 'test(/repository_fit::product_adapter::tests::production_authority/)' --no-fail-fast",
+      "exit_code": 0,
+      "result": "Pre-integration evidence only on the c0ca9fefe12592c53098b3a68f73917c4d1f113d base. Grant-correction pass 1, nextest run 4978d827-8184-41c4-adf7-82507601ed05: 17 passed, 0 failed, 1794 skipped; five tests received non-failing LEAK process-output-handle annotations."
+    },
+    {
+      "command": "Grant-correction focused pass 2; same exact command as the preceding focused row.",
+      "exit_code": 0,
+      "result": "Pre-integration evidence only on the c0ca9fefe12592c53098b3a68f73917c4d1f113d base. Grant-correction pass 2, nextest run a15a6d90-c8c6-4cff-bbc7-3f60a529fc71: 17 passed, 0 failed, 1794 skipped; one test received a non-failing LEAK process-output-handle annotation."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-production-authority-085-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo check --manifest-path validator/Cargo.toml --locked --offline --lib --jobs 16",
+      "exit_code": 0,
+      "result": "Pre-integration evidence only on the c0ca9fefe12592c53098b3a68f73917c4d1f113d base. Production library check completed successfully; repository-wide pre-existing warnings remained."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-production-authority-085-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --lib -E 'test(/repository_fit::product_adapter::tests::production_authority/)' --no-fail-fast",
+      "exit_code": 104,
+      "result": "Current-HEAD 465773dafb10f879cdced325ca54c59f8483ab39 candidate proof failed before test listing: rust-objcopy reported 'LLVM ERROR: IO failure on output stream: No space left on device'; nextest then received Permission denied for the incomplete non-executable test binary. No current-candidate test executed, and the worker stopped without cleanup or fallback."
+    },
+    {
+      "command": "rustfmt --edition 2021 --config skip_children=true validator/src/repository_fit/product_adapter/tests/production_authority.rs",
+      "exit_code": 0,
+      "result": "Post-ENOSPC receipt self-test correction formatted only the exact leased source path and did not follow child modules; no build, cleanup, or fallback validation was attempted."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/repository_fit/product_adapter.rs",
+      "sha256": "sha256:cbe9a9d765e66c1aa78a5f3960f9208d6a2a360b4b4e3ecc724f9aea42b1dcc8",
+      "byte_length": 6131
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter/root_permit.rs",
+      "sha256": "sha256:8a1508190e89cf415124af2ed074469072e7eec4c000f581ce83780b44d07cad",
+      "byte_length": 110427
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter/authority.rs",
+      "sha256": "sha256:8dffc0185c731eef257bee5b6a985fe3678ba5aa4705c6702c79e2e2b4471881",
+      "byte_length": 21033
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter/ledger.rs",
+      "sha256": "sha256:049e1356f6db810750e519d60b07ea7cf29b113f967919a27ad5bae051d335f8",
+      "byte_length": 52840
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter/tests.rs",
+      "sha256": "sha256:2284a243e2fbec7c951f483618ee6c0fbc451302c8f13e59d8a68afaebbe1cca",
+      "byte_length": 344
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter/tests/production_authority.rs",
+      "sha256": "sha256:759aeacc9b2447ca2af50075049af53a46dd75d4d3c43effdd295511bf2e4a19",
+      "byte_length": 32369
+    },
+    {
+      "path": "validator/src/repository_fit/mod.rs",
+      "sha256": "sha256:74ddf1957190b2aa35f7c592ec027b3af87d510aff9a5bf017c5254c855f0c59",
+      "byte_length": 1604
+    },
+    {
+      "path": "validator/src/repository_fit/local/mod.rs",
+      "sha256": "sha256:83f83b54427f3c68d7bc56f275cac13eef4833ba1aa5e7038f113f59166e2ab9",
+      "byte_length": 1480
+    },
+    {
+      "path": "validator/src/repository_fit/local/effects.rs",
+      "sha256": "sha256:e6a901db246ccb1348ca9c2500ae6edb58e16d90b67e6fe7034d107831c91c11",
+      "byte_length": 53207
+    }
+  ],
+  "findings": [
+    {
+      "finding": "The first focused execution exposed that fcntl-duplicated directory descriptors shared the consumed enumeration offset, causing a false tamper classification on a fresh store.",
+      "resolution": "Store::names now opens an independent descriptor-relative directory handle for every bounded integrity scan; both focused passes and all dependency-closed suites passed afterward."
+    },
+    {
+      "finding": "The public successor dispatcher still rejects every non-read effect before context construction.",
+      "resolution": "Preserved intentionally because public dispatcher, trusted host policy, and static unavailable-control replacement are root-owned prohibited surfaces."
+    },
+    {
+      "finding": "Independent root review found that the first grant placement allowed any repository-fit sibling to call the local minting function.",
+      "resolution": "The grant and its sole private constructor now live in product_adapter::authority; local effects can consume the opaque type but no sibling has a safe constructor or minting function."
+    },
+    {
+      "finding": "The fresh current-HEAD 465773daf candidate-bound focused run exhausted the mandated target volume while rust-objcopy was writing the test binary.",
+      "resolution": "Worker stopped as required. Current-candidate proof is not established; no cleanup, alternate target, or fallback validation was attempted."
+    },
+    {
+      "finding": "The reporting-only transition to worker_blocked and the canonical row aggregate made the earlier exact-artifact self-test expectations stale.",
+      "resolution": "Root authorized one narrow same-node correction: the self-test now accepts only the explicit ENOSPC-blocked tuple and recomputes the declared canonical sorted path<TAB>digest-without-prefix<LF> aggregate. It was formatted but not executed because the ENOSPC stop remains in force."
+    }
+  ],
+  "unresolved_dependencies": [
+    "current-candidate-proof-enospc",
+    "root-trusted-time-and-authority-store-policy",
+    "root-public-workspace-write-dispatch",
+    "root-static-apply-control-replacement"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/cli/successor_public/fit.rs",
+      "expected_sha256": "sha256:bbfcdec882f839befcf2b60114fc7ed2aad22c49d7ef694f4cf43caf287e916a",
+      "request": "Select and independently review the trusted-time implementation and host-protected authority-store policy, then adapt the crate-private execute_prepared_apply outcome without exposing nonce or absolute-path material."
+    },
+    {
+      "path": "validator/src/cli/successor_public/mod.rs",
+      "expected_sha256": "sha256:7bc5795554494678cfc07110446e7cd0acc328c76a3c5125b26b71f0eca76d36",
+      "request": "After source acceptance, route only fit apply through the sole public dispatcher under an exact WorkspaceWrite LiveContext while keeping help, version, parse, inspect, plan, and verify independent of authority initialization."
+    },
+    {
+      "path": "validator/src/cli/successor_public/tests.rs",
+      "expected_sha256": "sha256:90bd83637a7679fff3e98b4c70c964b4b39822aac7b1fde0db84bc6d0096b9b9",
+      "request": "Replace the static apply-unavailable control only after the public effect route, trusted host policies, canonical outcome, failure controls, and recursive zero-write read separation are candidate-bound."
+    }
+  ],
+  "limitations": [
+    "The current artifact set freezes the nine crate-private source artifacts, but current-candidate behavior proof is not established; the successful isolated source-copy tests below are pre-integration evidence only and do not prove the current HEAD, public dispatcher, installed runtime, live user repository, or host policy behavior.",
+    "Non-Apple execution is represented by compile-time UnsupportedHost branches but was not runtime-executed on a non-Apple host in this worker environment.",
+    "Pre-integration nextest leak markers were 1 and 2 before the mutation-grant rework and 5 and 1 afterward; all were non-failing, nondeterministic process-output-handle annotations and do not establish a product correctness defect.",
+    "The final isolated validation source was exported from current commit 465773dafb10f879cdced325ca54c59f8483ab39 and overlaid with exactly the nine leased Rust artifacts to avoid concurrent disjoint workspace edits, but the mandated target exhausted disk during rust-objcopy before any current-candidate test executed; the worker stopped without cleanup or fallback."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}
