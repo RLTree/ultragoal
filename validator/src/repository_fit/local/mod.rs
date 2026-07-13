@@ -1,10 +1,15 @@
 #[cfg(unix)]
+mod effects;
+#[cfg(unix)]
 mod sys;
 #[cfg(unix)]
 mod unix;
 
 use super::{CanonicalPath, FitError, FitErrorId, FitReader, error};
 use std::path::Path;
+
+#[cfg(unix)]
+pub(crate) use effects::LocalEffects;
 
 /// Anchored, read-only repository observer. Opening, binding, and reading never
 /// create files, locks, directories, receipts, or other workspace state.

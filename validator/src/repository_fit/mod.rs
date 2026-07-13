@@ -5,6 +5,7 @@ mod local;
 mod model;
 mod ownership;
 mod path;
+mod product_adapter;
 mod state;
 
 use sha2::{Digest, Sha256};
@@ -36,4 +37,11 @@ pub(crate) fn valid_digest(value: &str) -> bool {
 }
 
 pub(crate) use error::error;
+#[cfg(unix)]
+pub(crate) use local::LocalEffects;
 pub(crate) use ownership::issue_managed_prior_proof;
+pub(crate) use product_adapter::{
+    AdapterErrorId, FitAdapterError, FitApplyPreparationProjection, FitInspectProjection,
+    FitPlanRecord, FitVerificationProjection, OpaqueFitApplyRequest, PreparedFitApply,
+    inspect_target, plan_target, prepare_apply_request, verify_target,
+};
