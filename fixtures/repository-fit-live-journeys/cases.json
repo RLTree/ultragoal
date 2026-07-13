@@ -1,0 +1,31 @@
+{
+  "schema_version": "RepositoryFitLiveJourneyFixtureCatalog-v1",
+  "temporary_root": "/tmp/hul-repository-fit-live-journeys-067",
+  "supported_host": "darwin",
+  "claim_effect": "none",
+  "production_permit_issuer": "absent",
+  "public_apply_dispatch": "absent",
+  "cases": [
+    {"id": "fresh-setup", "class": "positive", "expect": "the accepted mediator installs every canonical template through descriptor-anchored local effects"},
+    {"id": "partial-retrofit", "class": "positive", "expect": "the accepted mediator completes a candidate-bound retrofit without changing unrelated user bytes"},
+    {"id": "dirty-tree-preservation", "class": "mutation", "expect": "tracked and untracked user work remains byte-identical across the planned fit effect"},
+    {"id": "conflict-refusal", "class": "negative", "expect": "user-owned authority conflict remains causal and never reaches permit issuance"},
+    {"id": "complete-rollback", "class": "mutation", "expect": "a started effect restores the exact recursive tree and Git status or reports no complete rollback"},
+    {"id": "ambiguous-outcome", "class": "race", "expect": "an unmediated target change after the effect prevents any green or rolled-back result"},
+    {"id": "replay-refusal", "class": "security", "expect": "a settled request seal cannot be consumed by duplicated permit and lease material"},
+    {"id": "repeat-use-idempotence", "class": "positive", "expect": "a fresh candidate-bound repeat request reports zero mutations and an idempotent terminal state"},
+    {"id": "recovery-replan", "class": "recovery", "expect": "a new context and plan recover an observable partial target after an ambiguous terminal result"},
+    {"id": "link-and-case-alias-refusal", "class": "security", "expect": "symlink hardlink and ASCII-case target substitution refuse without effects"},
+    {"id": "fifo-target-refusal", "class": "special-file", "expect": "a named pipe at a managed target refuses before any read can block or any effect can start"},
+    {"id": "no-effect-success-substitution", "class": "false-pass", "expect": "an effect adapter that reports success without mutation cannot produce an applied outcome"},
+    {"id": "verify-as-apply-substitution", "class": "false-pass", "expect": "read-only verification neither consumes nor substitutes for the sealed apply request"},
+    {"id": "inspect-command-zero-write", "class": "read", "expect": "the public inspect command preserves the exact recursive tree and Git status"},
+    {"id": "plan-command-zero-write", "class": "read", "expect": "the public plan command preserves the exact recursive tree and Git status"},
+    {"id": "verify-command-zero-write", "class": "read", "expect": "the public verify command preserves the exact recursive tree and Git status"}
+  ],
+  "read_operations": [
+    {"id": "inspect-command-zero-write", "args": ["--json", "fit", "inspect"], "schema_version": "RepositoryFitInspect-v1", "exit_code": 0},
+    {"id": "plan-command-zero-write", "args": ["--json", "fit", "plan"], "schema_version": "RepositoryFitPlan-v1", "exit_code": 0},
+    {"id": "verify-command-zero-write", "args": ["--json", "fit", "verify"], "schema_version": "RepositoryFitVerification-v1", "exit_code": 1}
+  ]
+}

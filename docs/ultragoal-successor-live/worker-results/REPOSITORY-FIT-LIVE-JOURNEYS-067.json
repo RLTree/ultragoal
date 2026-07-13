@@ -1,0 +1,233 @@
+{
+  "worker": "/root/repository_fit_live_journey_builder",
+  "lease_id": "REPOSITORY-FIT-LIVE-JOURNEYS-067",
+  "context_id": "sha256:dfdec79862ba383c1b9926107637b67fdee8b85ea8a14cad6dd323978f65e315",
+  "candidate_identity": {
+    "schema_id": "WorkerResult-v1",
+    "candidate_id": "sha256:fd0e4e4c37a58c7db86ecf5b5b1c6716edd427c7664ef3548dc057217e5745de",
+    "context_id": "sha256:dfdec79862ba383c1b9926107637b67fdee8b85ea8a14cad6dd323978f65e315",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "c5c251b9b874c2296125a973da7bcbcccff8ee0a",
+    "head_tree": "09a9fe3395734635ca96b71eeb896a999eb56d06",
+    "context_formula": "SHA-256 of lease_id<TAB>head_commit<TAB>head_tree<LF>.",
+    "artifact_set_formula": "Sort rows by UTF-8 path bytes; serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>; concatenate; SHA-256 the resulting bytes.",
+    "worker_result_self_excluded": true,
+    "artifact_sets": [
+      {
+        "set_id": "four-worker-owned-implementation-artifacts",
+        "artifact_count": 4,
+        "total_bytes": 34671,
+        "total_lines": 953,
+        "aggregate_sha256": "sha256:40fa8648cfd6aaf857c5bb73466ac567f1b53142e51e169b3698fef04f2acfdf",
+        "paths": [
+          "fixtures/repository-fit-live-journeys/cases.json",
+          "validator/src/repository_fit/product_adapter/tests.rs",
+          "validator/src/repository_fit/product_adapter/tests/live_journeys.rs",
+          "validator/tests/repository_fit_live_journeys_contract.rs"
+        ]
+      },
+      {
+        "set_id": "ten-source-command-and-mediation-identity-artifacts",
+        "artifact_count": 10,
+        "total_bytes": 239519,
+        "total_lines": 6550,
+        "aggregate_sha256": "sha256:fd0e4e4c37a58c7db86ecf5b5b1c6716edd427c7664ef3548dc057217e5745de",
+        "paths": [
+          "fixtures/repository-fit-live-journeys/cases.json",
+          "validator/src/cli/successor_public/fit.rs",
+          "validator/src/repository_fit/local/effects.rs",
+          "validator/src/repository_fit/product_adapter.rs",
+          "validator/src/repository_fit/product_adapter/protocol.rs",
+          "validator/src/repository_fit/product_adapter/root_permit.rs",
+          "validator/src/repository_fit/product_adapter/tests.rs",
+          "validator/src/repository_fit/product_adapter/tests/live_journeys.rs",
+          "validator/tests/repository_fit_contract.rs",
+          "validator/tests/repository_fit_live_journeys_contract.rs"
+        ]
+      }
+    ],
+    "identity_rows": [
+      {"path": "fixtures/repository-fit-live-journeys/cases.json", "sha256": "sha256:07c0f6bfe22bea1918788911f095d2d002b4c1e19c59f7215bcc97061043be3d", "byte_length": 3231, "line_count": 31, "edited_by_worker": true},
+      {"path": "validator/src/cli/successor_public/fit.rs", "sha256": "sha256:bbfcdec882f839befcf2b60114fc7ed2aad22c49d7ef694f4cf43caf287e916a", "byte_length": 10054, "line_count": 266, "edited_by_worker": false},
+      {"path": "validator/src/repository_fit/local/effects.rs", "sha256": "sha256:4b5cf2ca2271df2156e70a2f7eca2f65eedaea800db2e89c17fe5e8a9551cc55", "byte_length": 52200, "line_count": 1344, "edited_by_worker": false},
+      {"path": "validator/src/repository_fit/product_adapter.rs", "sha256": "sha256:32be7af421cc97268667436fa54b470fd83c51295b9be685043ec8479c402f98", "byte_length": 5835, "line_count": 162, "edited_by_worker": false},
+      {"path": "validator/src/repository_fit/product_adapter/protocol.rs", "sha256": "sha256:f9b869ae7e3bc024b5fc18ec0ea4a9aa45c4d394ad8f67e0acff70d6d1e3e5f6", "byte_length": 34005, "line_count": 926, "edited_by_worker": false},
+      {"path": "validator/src/repository_fit/product_adapter/root_permit.rs", "sha256": "sha256:04d75292296ab4a16dd923a667e44ec4954e1386cf69e680ca0e4f2f723d2d43", "byte_length": 102226, "line_count": 2879, "edited_by_worker": false},
+      {"path": "validator/src/repository_fit/product_adapter/tests.rs", "sha256": "sha256:e82b046efa0fbb62d94102abb0db1c5f7058866f6a8aa40d7a38fee1b74adec9", "byte_length": 276, "line_count": 12, "edited_by_worker": true},
+      {"path": "validator/src/repository_fit/product_adapter/tests/live_journeys.rs", "sha256": "sha256:f4ec670f435af671423196ee249dfde5c5eac1b68cc8787878207dec7c4de014", "byte_length": 18456, "line_count": 521, "edited_by_worker": true},
+      {"path": "validator/tests/repository_fit_contract.rs", "sha256": "sha256:19f012362cefd1582c419e71ebfd34824beec7191f1cb4e7e9f5a07f1000361e", "byte_length": 528, "line_count": 20, "edited_by_worker": false},
+      {"path": "validator/tests/repository_fit_live_journeys_contract.rs", "sha256": "sha256:1e18f91450d645eb8071aa45fd4cc848bb6bbfed5eab439784b6f8a27b3bcefb", "byte_length": 12708, "line_count": 389, "edited_by_worker": true}
+    ]
+  },
+  "base_state": {
+    "status": "accepted-internal-mediation-and-read-routes-with-live-journeys-withheld",
+    "apply_mediation_integration_commit": "5315015023f643d7717a06090187ca1333ae8eee",
+    "lane_base_commit": "c5c251b9b874c2296125a973da7bcbcccff8ee0a",
+    "production_permit_issuer": "absent",
+    "public_apply_dispatch": "absent",
+    "worker_git_operations_performed": false,
+    "concurrent_routine_and_supported_host_transaction_changes_preserved": true
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "result_status": "candidate_pending_independent_review_and_root_reconciliation",
+    "claim_effect": "none",
+    "claim_ceiling": "source-local Darwin direct-product repository-fit journeys plus public inspect-plan-verify command non-mutation only",
+    "production_permit_issuer": "absent",
+    "public_apply_dispatch": "absent",
+    "staged_or_committed_by_worker": false,
+    "exact_task_no_claim": "This candidate does not mint production root authority, activate public apply, mutate a user repository, prove installed behavior, close the repository-fit node, or claim readiness, release, or completion."
+  },
+  "touched_paths": [
+    "fixtures/repository-fit-live-journeys/cases.json",
+    "validator/src/repository_fit/product_adapter/tests.rs",
+    "validator/src/repository_fit/product_adapter/tests/live_journeys.rs",
+    "validator/tests/repository_fit_live_journeys_contract.rs",
+    "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-LIVE-JOURNEYS-067.json"
+  ],
+  "touched_semantics": [
+    "repository_fit::live_journeys",
+    "repository_fit::read_command_zero_write",
+    "repository_fit::journey_fixture_catalog"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/repository-fit-live-journeys/cases.json"
+  ],
+  "effects": [
+    {"class": "workspace_write", "target": "repository-fit-live-journeys-source", "performed": true},
+    {"class": "fixture_write", "target": "repository-fit-live-journeys-scratch", "performed": true},
+    {"class": "process", "target": "offline-repository-fit-live-journeys-validation", "performed": true},
+    {"class": "network", "target": "repository-fit-live-journeys-network", "performed": false},
+    {"class": "external_write", "target": "repository-fit-live-user-repository", "performed": false},
+    {"class": "destructive", "target": "repository-fit-live-destructive-operation", "performed": false},
+    {"class": "root_authority", "target": "repository-fit-production-permit", "performed": false}
+  ],
+  "requirements": [
+    "REQ-FIT-001",
+    "REQ-FIT-002",
+    "REQ-FIT-003",
+    "REQ-FIT-004",
+    "REQ-FIT-005"
+  ],
+  "dependency_nodes": [
+    "accepted-repository-fit-public-runtime-adapter",
+    "accepted-repository-fit-public-read-routes",
+    "accepted-repository-fit-apply-mediation"
+  ],
+  "changes": [
+    {
+      "area": "supported-host direct-product journeys",
+      "result": "Eight named Darwin tests drive the accepted apply_with_root_permit mediator with actual descriptor-anchored LocalEffects and a cfg(test)-only issuer; no production issuer or public apply route was added."
+    },
+    {
+      "area": "positive and recovery journeys",
+      "result": "Fresh setup, partial retrofit, dirty user-state preservation, exact complete rollback, ambiguous post-effect outcome, fresh replanning recovery, and repeat-use idempotence are exercised in isolated temporary Git repositories."
+    },
+    {
+      "area": "negative security and false-pass journeys",
+      "result": "Conflict, settled-request replay, symlink, hardlink, ASCII-case alias, FIFO, verify-as-apply substitution, and no-effect success substitution fail closed without fabricated applied outcomes."
+    },
+    {
+      "area": "command-scope read non-mutation",
+      "result": "Public fit inspect, plan, and verify are each run twice against a dirty temporary Git repository and preserve a recursive type, identity, ownership, mode, link-count, byte, content, mtime, ctime, and Git-status observation."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-repository-fit-live-journeys-067/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --lib -E 'test(/repository_fit::product_adapter::tests::live_journeys/)' --no-fail-fast",
+      "status": "pass-initial",
+      "run_id": "ff282ab1-3f38-49fa-a119-df0f018b1c8a",
+      "result": "8 passed, 0 failed, 1752 skipped in 26.347 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-repository-fit-live-journeys-067/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --test repository_fit_live_journeys_contract --no-fail-fast",
+      "status": "pass-initial",
+      "run_id": "4810aeca-7d48-4b75-acd4-6989f0c1829b",
+      "result": "3 passed, 0 failed in 5.207 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-repository-fit-live-journeys-067/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --lib -E 'test(/repository_fit/)' --no-fail-fast",
+      "status": "pass-dependency-closure",
+      "run_id": "175de577-4108-460a-88f0-9266c558562e",
+      "result": "126 passed, 0 failed, 1634 skipped, 3 slow in 126.504 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-repository-fit-live-journeys-067/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --test repository_fit_contract --test repository_fit_public_adapter_contract --test repository_fit_apply_mediation_contract --test repository_fit_live_journeys_contract --no-fail-fast",
+      "status": "pass-combined-contract-closure",
+      "run_id": "a1d064e2-1250-4bde-9416-1c8b659f70ec",
+      "result": "197 passed, 0 failed, 3 slow in 203.404 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-repository-fit-live-journeys-067/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo check --manifest-path validator/Cargo.toml --offline --locked --all-targets -j16",
+      "status": "pass-with-existing-unsuppressed-warnings",
+      "result": "Exit 0 in 46.98 seconds; repository warnings remained visible and were not suppressed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-repository-fit-live-journeys-067/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --lib -E 'test(/repository_fit::product_adapter::tests::live_journeys/)' --no-fail-fast",
+      "status": "pass-final-frozen-source",
+      "run_id": "97dc34be-18d6-4918-a6d7-dba40257c46b",
+      "result": "8 passed, 0 failed, 1752 skipped in 50.935 seconds."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-repository-fit-live-journeys-067/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --test repository_fit_live_journeys_contract --no-fail-fast",
+      "status": "pass-final-frozen-source",
+      "run_id": "43e31b54-3dc1-45fa-8713-03a1f105fb5d",
+      "result": "3 passed, 0 failed in 7.910 seconds."
+    },
+    {
+      "command": "rustfmt --edition 2024 on the three leased Rust files; jq -e on the fixture and WorkerResult; scoped git diff --check; exact path-bound artifact reconciliation",
+      "status": "pass",
+      "result": "Rust formatting, JSON parsing, whitespace checks, four owned rows, ten identity rows, totals, and both aggregates reconcile exactly."
+    }
+  ],
+  "artifacts": [
+    {"path": "fixtures/repository-fit-live-journeys/cases.json", "sha256": "sha256:07c0f6bfe22bea1918788911f095d2d002b4c1e19c59f7215bcc97061043be3d", "byte_length": 3231},
+    {"path": "validator/src/repository_fit/product_adapter/tests.rs", "sha256": "sha256:e82b046efa0fbb62d94102abb0db1c5f7058866f6a8aa40d7a38fee1b74adec9", "byte_length": 276},
+    {"path": "validator/src/repository_fit/product_adapter/tests/live_journeys.rs", "sha256": "sha256:f4ec670f435af671423196ee249dfde5c5eac1b68cc8787878207dec7c4de014", "byte_length": 18456},
+    {"path": "validator/tests/repository_fit_live_journeys_contract.rs", "sha256": "sha256:1e18f91450d645eb8071aa45fd4cc848bb6bbfed5eab439784b6f8a27b3bcefb", "byte_length": 12708}
+  ],
+  "findings": [
+    {
+      "severity": "withheld-root-authority",
+      "finding": "RepositoryFitPermitAuthority remains cfg(test)-only and public fit apply dispatch remains absent; this worker did not mint or activate either surface."
+    },
+    {
+      "severity": "supported-host-only",
+      "finding": "Direct effect journeys execute on Darwin only; no non-Apple effect behavior is claimed."
+    },
+    {
+      "severity": "proof-surface-boundary",
+      "finding": "The command proof establishes source-built inspect, plan, and verify non-mutation in isolated repositories, not package installation, plugin discovery, loaded skill behavior, or real-user operation."
+    }
+  ],
+  "unresolved_dependencies": [
+    "production-repository-fit-permit-issuer",
+    "public-fit-apply-dispatch",
+    "independent-repository-fit-live-journey-review",
+    "installed-repository-fit-product-journey"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/repository_fit/product_adapter/root_permit.rs",
+      "expected_sha256": "sha256:04d75292296ab4a16dd923a667e44ec4954e1386cf69e680ca0e4f2f723d2d43",
+      "request": "After independent review, design and own the production permit issuer and exclusive LocalEffects mutation-lease activation. Do not promote TestRepositoryFitPermitAuthority."
+    },
+    {
+      "path": "validator/src/cli/successor_public/fit.rs",
+      "expected_sha256": "sha256:bbfcdec882f839befcf2b60114fc7ed2aad22c49d7ef694f4cf43caf287e916a",
+      "request": "After root-owned permit issuance exists, wire fit apply through the sole public dispatcher with the exact WorkspaceWrite grant, then run a clean candidate-bound journey review."
+    }
+  ],
+  "limitations": [
+    "The exact artifact aggregates exclude this self-referential WorkerResult.",
+    "The production permit issuer is absent; the direct journey issuer is cfg(test)-only.",
+    "Public fit apply dispatch and public mutation authority remain absent.",
+    "Direct LocalEffects journeys are supported-host Darwin tests only.",
+    "All mutations were confined to worker-owned source paths, isolated temporary repositories, and an isolated Cargo target; no live user repository or host configuration was changed.",
+    "Inspect, plan, and verify command non-mutation is source-built command proof, not installed plugin or real-user proof.",
+    "Independent review, root reconciliation, clean integrated journeys, installation, plugin discovery, loaded behavior, readiness, release, node closure, and completion remain withheld."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}
