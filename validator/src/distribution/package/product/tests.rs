@@ -198,6 +198,65 @@ fn legacy_skill_source_is_not_active_package_membership() {
 }
 
 #[test]
+fn undeclared_secret_local_and_benign_skill_members_fail_closed() {
+    for (label, relative, bytes) in [
+        (
+            "secret",
+            "skills/prove/.env",
+            b"TOKEN=secret-package-canary\n".as_slice(),
+        ),
+        (
+            "local",
+            "skills/prove/.DS_Store",
+            b"local-only\n".as_slice(),
+        ),
+        (
+            "benign",
+            "skills/prove/notes.txt",
+            b"undeclared\n".as_slice(),
+        ),
+    ] {
+        let repo = Repo::new(&format!("supported-package-product-unknown-{label}"));
+        fs::write(repo.root.join(relative), bytes).expect("undeclared member");
+        let context = repo.context();
+        let error = capture_product_package(&context, &catalog(&context))
+            .expect_err("undeclared package member accepted");
+        assert_eq!(error.id(), ProductionPackageErrorId::SourceUnavailable);
+        let diagnostic = error.to_string();
+        assert!(!diagnostic.contains(relative));
+        assert!(!diagnostic.contains("secret-package-canary"));
+    }
+}
+
+#[test]
+fn missing_or_unsafe_canonical_agent_member_fails_closed() {
+    let missing = Repo::new("supported-package-product-missing-agent");
+    fs::remove_file(missing.root.join("skills/prove/agents/openai.yaml"))
+        .expect("remove canonical agent");
+    let context = missing.context();
+    assert_eq!(
+        capture_product_package(&context, &catalog(&context))
+            .expect_err("missing canonical agent accepted")
+            .id(),
+        ProductionPackageErrorId::SourceUnavailable
+    );
+
+    let linked = Repo::new("supported-package-product-linked-agent");
+    fs::hard_link(
+        linked.root.join("skills/prove/agents/openai.yaml"),
+        linked.root.join("skills/prove/agents/duplicate.yaml"),
+    )
+    .expect("hard-linked agent");
+    let context = linked.context();
+    assert_eq!(
+        capture_product_package(&context, &catalog(&context))
+            .expect_err("hard-linked canonical agent accepted")
+            .id(),
+        ProductionPackageErrorId::SourceUnavailable
+    );
+}
+
+#[test]
 fn version_drift_and_mutate_restore_fail_closed() {
     let repo = Repo::new("supported-package-product-version-drift");
     write_draft(&repo.root, "0.0.13");

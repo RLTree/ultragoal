@@ -3,7 +3,7 @@ use crate::context::{EffectClass, LiveContext};
 use crate::package::inventory::anchored::{self, Session};
 use crate::package::inventory::generated_disposition::{self, Catalog, Classification, Source};
 use sha2::{Digest, Sha256};
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
 
 const MANIFEST_PATH: &str = "plugin-manifest-draft.json";
@@ -213,24 +213,48 @@ fn capture_supported_package_paths(
         roots.push(root);
     }
     roots.sort();
-    if roots.windows(2).any(|pair| pair[0] == pair[1]) {
+    let mut folded_roots = BTreeSet::new();
+    if roots.windows(2).any(|pair| pair[0] == pair[1])
+        || roots
+            .iter()
+            .any(|root| !folded_roots.insert(root.to_ascii_lowercase()))
+    {
         return Err("package snapshot skill roots are not unique".to_string());
+    }
+
+    let mut required = BTreeSet::from([supported_manifest.to_string()]);
+    for root in &roots {
+        required.insert(format!("{root}/SKILL.md"));
+        required.insert(format!("{root}/agents/openai.yaml"));
     }
 
     let mut packaged = vec![supported_manifest.to_string()];
     for (path, kind) in tree {
-        if !roots
+        let exact_root = roots
             .iter()
-            .any(|root| path.starts_with(&(root.clone() + "/")))
-        {
+            .find(|root| path.starts_with(&(root.to_string() + "/")));
+        let folded = path.to_ascii_lowercase();
+        let folded_root = roots
+            .iter()
+            .find(|root| folded.starts_with(&(root.to_ascii_lowercase() + "/")));
+        if exact_root.is_none() && folded_root.is_some() {
+            return Err("package snapshot skill subtree has a case collision".to_string());
+        }
+        if exact_root.is_none() {
             continue;
+        }
+        if matches!(kind, PackageEntryKind::Directory) {
+            continue;
+        }
+        if !required.contains(path) {
+            return Err("package snapshot skill subtree contains an unknown member".to_string());
         }
         match kind {
             PackageEntryKind::Regular { single_link: true } => {
                 source.read(path, anchored::MAX_RESOURCE_BYTES)?;
                 packaged.push(path.clone());
             }
-            PackageEntryKind::Directory => {}
+            PackageEntryKind::Directory => unreachable!("directories are handled above"),
             PackageEntryKind::Regular { single_link: false }
             | PackageEntryKind::Symlink
             | PackageEntryKind::Special => {
@@ -242,11 +266,12 @@ fn capture_supported_package_paths(
     if packaged.windows(2).any(|pair| pair[0] == pair[1]) {
         return Err("package snapshot packaged paths are not unique".to_string());
     }
-    for root in roots {
-        let entry = format!("{root}/SKILL.md");
-        if !packaged.iter().any(|path| path == &entry) {
-            return Err("package snapshot canonical skill is missing".to_string());
-        }
+    if packaged.len() != required.len()
+        || required
+            .iter()
+            .any(|expected| packaged.binary_search(expected).is_err())
+    {
+        return Err("package snapshot canonical package member is missing".to_string());
     }
     Ok(packaged)
 }
