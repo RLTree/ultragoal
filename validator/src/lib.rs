@@ -1,3 +1,13 @@
+macro_rules! include_production_package_module {
+    () => {
+        mod product;
+        pub(crate) use product::{
+            ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
+            ProductionPackageSession, capture_product_package, verify_product_package,
+        };
+    };
+}
+
 mod agent_manifest;
 mod agent_roles;
 mod api_witness;

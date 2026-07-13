@@ -1,3 +1,7 @@
+macro_rules! include_production_package_module {
+    () => {};
+}
+
 #[path = "../src/plugin_manifest/mod.rs"]
 mod plugin_manifest;
 
