@@ -1,39 +1,40 @@
 {
-  "worker": "/root",
-  "lease_id": "ROUTINE-PRODUCTION-CATALOG-073-R2",
-  "context_id": "sha256:1fa067e7d7102cd21fc7aa6cc74d86ba93513ddf2ffc0cd0ec292c64e5e4f1bc",
+  "worker": "/root/routine_catalog_single_spelling_engineer",
+  "lease_id": "ROUTINE-PRODUCTION-CATALOG-073-R3",
+  "context_id": "sha256:063fba8de7f4c543180c5842169a9c0915c25aa6d98199eeeae37ef4a62b0132",
   "candidate_identity": {
-    "candidate_id": "sha256:f886187cd97f046aba70035e6940e87cdb96581e7f751c9f4458e9404bd22b98",
-    "context_id": "sha256:1fa067e7d7102cd21fc7aa6cc74d86ba93513ddf2ffc0cd0ec292c64e5e4f1bc",
-    "issued_root_commit": "9827c817a3fd42a098b97fb7cd3f2de87dfcea67",
-    "issued_root_tree": "0edb0ab5b74bfecb62c438815f69c0ed3a81eeed",
-    "final_observed_disjoint_root_commit": "9827c817a3fd42a098b97fb7cd3f2de87dfcea67",
-    "final_observed_disjoint_root_tree": "0edb0ab5b74bfecb62c438815f69c0ed3a81eeed",
+    "candidate_id": "sha256:f4228656572628dd481187f62513dfd277526f8d910e782b3d673460521043e6",
+    "context_id": "sha256:063fba8de7f4c543180c5842169a9c0915c25aa6d98199eeeae37ef4a62b0132",
+    "issued_root_commit": "1750d586f6561d9d6ba64887cdafa6a36f23e41e",
+    "issued_root_tree": "bf2d3e53c4b9410df41fb94ddf9b56ea4cf1e58a",
+    "work_package_sha256": "sha256:5c60b9b3c4622eb5f7f0d2d3e5a8c0610896cb9a31a0db97f1d6b6a6e04d1ab1",
+    "final_observed_disjoint_root_commit": "1750d586f6561d9d6ba64887cdafa6a36f23e41e",
+    "final_observed_disjoint_root_tree": "bf2d3e53c4b9410df41fb94ddf9b56ea4cf1e58a",
     "disjoint_root_history": [
-      "3517bb5e1a4368970ab8716d58fc736a6086ee1b",
-      "9827c817a3fd42a098b97fb7cd3f2de87dfcea67"
+      "11cb8e27082e68d93e4d899cadac14d8f7d29919",
+      "1750d586f6561d9d6ba64887cdafa6a36f23e41e"
     ],
-    "context_formula": "SHA-256 of LF-terminated ordered fields lease id, repo URI, branch, full root commit, case-normalized-symbolic-authority",
-    "candidate_formula": "SHA-256 of LF-terminated ordered fields repo URI, branch, full root commit, full root tree, routine-production-catalog-r2",
-    "prior_artifact_set_sha256": "sha256:d93002a8be84751ccfb02ae8ce1fc94a35ffb2248414ac17816e109b7c6756a2",
-    "corrected_artifact_set_sha256": "sha256:c48e497a15eb2026ba1810e284d570de4526f41787c24a7dfc508d8c54e4163c",
-    "artifact_count": 4,
-    "artifact_bytes": 113600,
-    "artifact_lines_diagnostic": 3351,
+    "context_formula": "SHA-256 of LF-terminated ordered fields lease id, repo URI, branch, full root commit, single-spelling-symbolic-authority",
+    "candidate_formula": "SHA-256 of LF-terminated ordered fields repo URI, branch, full root commit, full root tree, routine-production-catalog-r3",
+    "prior_artifact_set_sha256": "sha256:c48e497a15eb2026ba1810e284d570de4526f41787c24a7dfc508d8c54e4163c",
+    "corrected_artifact_set_sha256": "sha256:06310a4c3a3479686ef5e8c3db58b513742c74e1943321545624e706769fd995",
+    "artifact_count": 3,
+    "artifact_bytes": 114695,
+    "artifact_lines_diagnostic": 3384,
     "worker_result_self_excluded": true
   },
   "base_state": {
     "status": "review_rework_required",
-    "review_finding": "Case-aliased symbolic tool names could carry different executable authorities because catalog equality was case-sensitive while request ambiguity checks were case-insensitive.",
-    "prior_source_sha256": "sha256:cb891fb774a6f52f76edb0fb6b14bb092112e911dc5f2d6381c2e7816d9b270f",
-    "prior_test_sha256": "sha256:88a78cacd45ce7eb96a9f3e19553e54929adf85cc6c6a2b6dbcacaf4dc37a44e",
-    "root_disjoint_movement": "Root accepted the corrective lease at commit 9827c817a3fd42a098b97fb7cd3f2de87dfcea67; concurrent package and agent-reader bytes remained disjoint and uncommitted.",
-    "root_takeover": "The Ultra root implemented this isolated correction because all worker slots were occupied; the committed work-package scope and root-only prohibitions remained unchanged."
+    "review_finding": "The R2 catalog accepted cross-definition true/TRUE aliases with identical authority, but request construction rejected the observations and exact lookup could not select the accepted spelling.",
+    "prior_source_sha256": "sha256:1700ef1b0c88cf8021f55680923a936d9fe594df088b564470d236e979d13569",
+    "prior_test_sha256": "sha256:da1b326aa2261d842cd98f8218ea9bac4bb1fca9e07dbd62c32f2f33df4f68de",
+    "root_disjoint_movement": "Root advanced from source commit 11cb8e27082e68d93e4d899cadac14d8f7d29919 to the R3 issuing commit 1750d586f6561d9d6ba64887cdafa6a36f23e41e only through disjoint review and work-package records; package and agent-reader candidate bytes remain excluded.",
+    "root_takeover": "The named R3 worker applied only the four root-issued leased paths; root-owned public, claim, generated, migration, integration, and release authority remained untouched."
   },
   "final_state": {
     "status": "candidate_for_root_acceptance",
     "symbolic_tool_authority": "Each catalog recipe binds tool identity, absolute executable path, program digest, byte length, and Unix mode.",
-    "binding_guard": "Selected and observed runner authority must exactly match the adopted catalog recipe before executable capture, and symbolic authority is globally keyed by canonical ASCII case identity.",
+    "binding_guard": "Selected and observed runner authority must exactly match the adopted catalog recipe before executable capture, and every canonical ASCII case identity has exactly one accepted catalog spelling.",
     "receipt_validation": "Authoritative WorkerResultV1 parse, typed validate_for, ArtifactWorkspace verification, and exact result_id equality are exercised by the corrective contract.",
     "public_dispatch": "not activated",
     "root_effect_grant_issuer": "not activated",
@@ -42,7 +43,6 @@
   "touched_paths": [
     "docs/ultragoal-successor-live/worker-results/ROUTINE-PRODUCTION-CATALOG-073.json",
     "fixtures/routine-production-catalog/cases.json",
-    "fixtures/routine-production-catalog/valid-catalog.json",
     "validator/src/routine_work/catalog.rs",
     "validator/tests/routine_production_catalog_contract.rs"
   ],
@@ -51,8 +51,7 @@
   ],
   "generated_outputs": [],
   "fixtures": [
-    "fixtures/routine-production-catalog/cases.json",
-    "fixtures/routine-production-catalog/valid-catalog.json"
+    "fixtures/routine-production-catalog/cases.json"
   ],
   "effects": [
     {
@@ -98,11 +97,15 @@
     },
     {
       "area": "global-consistency",
-      "result": "One canonical case-insensitive symbolic tool identity cannot carry conflicting executable authorities across routine definitions."
+      "result": "One canonical case-insensitive symbolic tool identity has exactly one accepted spelling and one executable authority across the complete catalog."
     },
     {
       "area": "case-alias-refusal",
-      "result": "Primary and fallback case aliases are rejected during adoption and definition validation; cross-definition case aliases may reuse only an identical complete executable authority."
+      "result": "Primary and fallback case aliases are rejected during adoption and definition validation; every cross-definition case alias is rejected even when its complete executable authority is identical."
+    },
+    {
+      "area": "exact-reuse",
+      "result": "Two definitions using the exact same true spelling and authority select and bind end to end from one exact runner observation."
     },
     {
       "area": "false-pass-controls",
@@ -115,57 +118,52 @@
   ],
   "commands_and_tests": [
     {
-      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-production-catalog-073-r2-root-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test routine_production_catalog_contract -E test(unknown_duplicate_ambiguous_and_missing_definitions_fail_closed) --no-fail-fast",
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-production-catalog-073-r3-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test routine_production_catalog_contract -E 'test(exact_same_spelling_same_authority_reuse_selects_and_binds_both_definitions) | test(unknown_duplicate_ambiguous_and_missing_definitions_fail_closed)' --no-fail-fast",
       "status": "pass",
-      "result": "The exact reviewer substitution and related runner-authority controls passed in the isolated corrective projection."
+      "result": "Run 67b01e72-ff29-4838-a6ff-a2504ba55bcf passed both decisive case-alias refusals and the exact same-spelling end-to-end reuse control: 2/2."
     },
     {
-      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-production-catalog-073-r2-root-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test routine_production_catalog_contract --no-fail-fast",
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-production-catalog-073-r3-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test routine_production_catalog_contract --no-fail-fast",
       "status": "pass-twice",
-      "result": "All corrective production-catalog contract tests passed twice on the frozen artifact bytes."
+      "result": "Runs 2a26926a-ad98-4678-b5f6-5fdffd95dff1 and c263e9db-d50c-46ed-9f0d-dcf79d4f5925 each passed 14/14 focused R3 tests on the frozen three-artifact set."
     },
     {
-      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-production-catalog-073-r2-root-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test routine_production_catalog_contract --test routine_work_contract --test routine_recovery_reuse_journey_contract --no-fail-fast",
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-production-catalog-073-r3-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --build-jobs 16 --test-threads 16 --test routine_production_catalog_contract --test routine_work_contract --test routine_recovery_reuse_journey_contract --no-fail-fast",
       "status": "pass",
-      "result": "The dependency-closed routine suite passed on the frozen artifact bytes."
+      "result": "Run 6fb6b6bc-d14f-4ed1-9e4f-f83528a8b9c6 passed 156/156 dependency-closed routine tests with 16 build jobs and 16 test threads."
     },
     {
       "command": "WorkerResultV1::parse_json, typed LeaseSpec and WorkPackage validate_for, ArtifactWorkspace::verify, exact result_id equality, plus receipt and fixture substitutions",
       "status": "pass",
-      "result": "The authoritative Rust receipt boundary accepted the exact receipt and four artifacts; unknown fields, stale candidate, artifact digest substitution, and fixture digest substitution were rejected."
+      "result": "The R3 contract accepted the authoritative receipt and composes the generic typed boundary with exact three-path membership, byte total, path-bound aggregate, missing-row, allowed-path replacement, digest, fixture, candidate, and unknown-field controls."
     },
     {
-      "command": "rustfmt --edition 2024 --check on both leased Rust files; jq parse both fixtures; live-to-scratch byte comparison; recursive tree and Git status comparison for zero-write paths",
+      "command": "rustfmt --edition 2024 --check on both leased Rust files; jq parse the leased case fixture; cargo check --lib; recursive tree and Git status comparison for zero-write paths",
       "status": "pass",
-      "result": "Formatting, fixture parsing, projection identity, and zero-write checks passed on the frozen bytes."
+      "result": "Formatting and fixture parsing passed, cargo check --lib passed with 16 jobs, and the focused recursive tree plus Git-status zero-write controls passed twice."
     }
   ],
   "artifacts": [
     {
       "path": "fixtures/routine-production-catalog/cases.json",
-      "sha256": "sha256:0f61f333896659e450db78f10d9fbf279b4b582869d1c7ba014604c17ea5e44b",
-      "byte_length": 1361
-    },
-    {
-      "path": "fixtures/routine-production-catalog/valid-catalog.json",
-      "sha256": "sha256:ada9a1244614d2ca69d15b4eca2dcd6b358a0763e1674565b9ea9b2718041564",
-      "byte_length": 2448
+      "sha256": "sha256:0f90fabf9e9b12ad9f1d85acc1630cb51fe4c8940c9f40ddd135e8c5131c5724",
+      "byte_length": 1535
     },
     {
       "path": "validator/src/routine_work/catalog.rs",
-      "sha256": "sha256:1700ef1b0c88cf8021f55680923a936d9fe594df088b564470d236e979d13569",
-      "byte_length": 65784
+      "sha256": "sha256:b1763e1972411a45ed1ea43c7459114404a345644f44aaffe7520e07384a4060",
+      "byte_length": 66107
     },
     {
       "path": "validator/tests/routine_production_catalog_contract.rs",
-      "sha256": "sha256:da1b326aa2261d842cd98f8218ea9bac4bb1fca9e07dbd62c32f2f33df4f68de",
-      "byte_length": 44007
+      "sha256": "sha256:5ad070025714689233854afe7d6ca9a101382a243651cafcf6c2848f07ff034b",
+      "byte_length": 47053
     }
   ],
   "findings": [
     {
       "severity": "decisive-rework-corrected",
-      "finding": "The true/TRUE primary-fallback alias is rejected and cross-definition case aliases with different executable authorities collide on one canonical global key."
+      "finding": "The true/TRUE primary-fallback alias and all cross-definition case aliases are rejected, including the exact reviewer reproduction with identical executable authority."
     },
     {
       "severity": "authority-preserved",
@@ -189,8 +187,8 @@
   ],
   "requested_root_changes": [],
   "limitations": [
-    "The corrected four-artifact aggregate excludes this self-referential WorkerResult; its file digest and canonical result_id are frozen separately after emission.",
-    "Proof is bound to the exact R2 root-issued context with the five leased paths overlaid; concurrent package and agent-reader candidates are excluded.",
+    "The corrected three-artifact aggregate excludes this self-referential WorkerResult; its file digest and canonical result_id are frozen separately after emission.",
+    "Proof is bound to the exact R3 root-issued context and work-package digest with the four leased write paths overlaid; concurrent package and agent-reader candidates are excluded.",
     "The catalog explicitly adopts the current macOS /usr/bin/true and /usr/bin/false identities. Other hosts or changed system binaries safely refuse until root adopts a separately verified catalog for that host.",
     "No root-owned module, dependency, dispatcher, generated authority, migration registry, public command, effect grant, claim registry, install surface, release surface, or node state was edited.",
     "REQ-ROUTINE-004 reporting behavior is outside this source-local catalog lease and is not claimed.",

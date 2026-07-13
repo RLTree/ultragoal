@@ -39,12 +39,16 @@ const FALSE_PROGRAM_SHA256: &str =
     "sha256:0c5fb690df52f914a97ef76bc50baebba4e506511844d618e1ddf0611db1df22";
 const SYSTEM_PROGRAM_BYTE_LENGTH: u64 = 84_032;
 const SYSTEM_PROGRAM_UNIX_MODE: u32 = 0o100755;
-const R2_CONTEXT_ID: &str =
-    "sha256:1fa067e7d7102cd21fc7aa6cc74d86ba93513ddf2ffc0cd0ec292c64e5e4f1bc";
-const R2_CANDIDATE_ID: &str =
-    "sha256:f886187cd97f046aba70035e6940e87cdb96581e7f751c9f4458e9404bd22b98";
-const R2_RESULT_PATH: &str =
+const R3_CONTEXT_ID: &str =
+    "sha256:063fba8de7f4c543180c5842169a9c0915c25aa6d98199eeeae37ef4a62b0132";
+const R3_CANDIDATE_ID: &str =
+    "sha256:f4228656572628dd481187f62513dfd277526f8d910e782b3d673460521043e6";
+const R3_RESULT_PATH: &str =
     "docs/ultragoal-successor-live/worker-results/ROUTINE-PRODUCTION-CATALOG-073.json";
+const R3_WORK_PACKAGE_PATH: &str =
+    "docs/ultragoal-successor-live/work-packages/ROUTINE-PRODUCTION-CATALOG-073-R3.json";
+const R3_WORK_PACKAGE_SHA256: &str =
+    "sha256:5c60b9b3c4622eb5f7f0d2d3e5a8c0610896cb9a31a0db97f1d6b6a6e04d1ab1";
 const VALID_CATALOG: &[u8] =
     include_bytes!("../../fixtures/routine-production-catalog/valid-catalog.json");
 
@@ -58,7 +62,7 @@ impl TestRoot {
     fn new(label: &str, catalog_bytes: &[u8]) -> Self {
         let sequence = NEXT.fetch_add(1, Ordering::Relaxed);
         let path = PathBuf::from(format!(
-            "/private/tmp/hul-routine-production-catalog-073-r2-root-scratch/test-fixtures/{label}-{}-{sequence}",
+            "/private/tmp/hul-routine-production-catalog-073-r3-scratch/test-fixtures/{label}-{}-{sequence}",
             std::process::id()
         ));
         fs::create_dir_all(path.join("config")).unwrap();
@@ -331,14 +335,14 @@ fn fixture_catalog_declares_the_exact_adversarial_matrix_without_claim_effect() 
     .unwrap();
     assert_eq!(cases["schema_version"], "RoutineProductionCatalogCases-v1");
     assert_eq!(cases["claim_effect"], "none");
-    assert_eq!(cases["cases"].as_array().unwrap().len(), 14);
+    assert_eq!(cases["cases"].as_array().unwrap().len(), 16);
     let ids = cases["cases"]
         .as_array()
         .unwrap()
         .iter()
         .map(|row| row["id"].as_str().unwrap())
         .collect::<std::collections::BTreeSet<_>>();
-    assert_eq!(ids.len(), 14);
+    assert_eq!(ids.len(), 16);
 }
 
 #[cfg(unix)]
@@ -396,6 +400,26 @@ fn conservative_fallback_requires_the_adopted_equivalent_recipe_and_exact_runner
         .unwrap();
     assert_eq!(bound.invocations()[0].selected_tool(), "true");
     assert_eq!(bound.invocations()[1].selected_tool(), "false");
+}
+
+#[cfg(unix)]
+#[test]
+fn exact_same_spelling_same_authority_reuse_selects_and_binds_both_definitions() {
+    let root = TestRoot::new("exact-runner-reuse", VALID_CATALOG);
+    let before = tree(root.path());
+    let catalog = load_full(&root, CANDIDATE_ID);
+    let bound = catalog
+        .bind_selected(request(&catalog, &root, CANDIDATE_ID, false))
+        .unwrap();
+
+    assert_eq!(bound.invocations().len(), 2);
+    assert!(
+        bound
+            .invocations()
+            .iter()
+            .all(|invocation| invocation.selected_tool() == "true")
+    );
+    assert_eq!(tree(root.path()), before);
 }
 
 #[test]
@@ -494,13 +518,14 @@ fn unknown_duplicate_ambiguous_and_missing_definitions_fail_closed() {
         .unwrap()
     };
     let root = TestRoot::new("case-alias-same-authority", &case_alias_same_authority);
-    let catalog = load_production_catalog(
-        root.path(),
-        Path::new("config/routines.json"),
-        case_alias_adoption(&case_alias_same_authority),
-    )
-    .unwrap();
-    assert_eq!(catalog.definition_count(), 2);
+    assert_eq!(
+        load_raw(
+            &root,
+            &case_alias_same_authority,
+            case_alias_adoption(&case_alias_same_authority),
+        ),
+        "catalog-runner-spelling-ambiguous"
+    );
 
     let mut case_alias_conflicting_authority: serde_json::Value =
         serde_json::from_slice(&case_alias_same_authority).unwrap();
@@ -518,7 +543,7 @@ fn unknown_duplicate_ambiguous_and_missing_definitions_fail_closed() {
             &case_alias_conflicting_authority,
             case_alias_adoption(&case_alias_conflicting_authority),
         ),
-        "catalog-runner-authority-ambiguous"
+        "catalog-runner-spelling-ambiguous"
     );
 }
 
@@ -1144,7 +1169,12 @@ fn parse_query_and_refusal_paths_are_recursively_zero_write() {
 #[test]
 fn corrective_worker_result_is_typed_bound_artifact_verified_and_substitution_safe() {
     let repository_root = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
-    let result_bytes = fs::read(repository_root.join(R2_RESULT_PATH)).unwrap();
+    assert_eq!(
+        file_sha(&repository_root.join(R3_WORK_PACKAGE_PATH)),
+        R3_WORK_PACKAGE_SHA256,
+        "receipt is bound to the exact root-issued R3 work package"
+    );
+    let result_bytes = fs::read(repository_root.join(R3_RESULT_PATH)).unwrap();
     let result =
         WorkerResultV1::parse_json(&result_bytes).expect("authoritative WorkerResultV1 parser");
     let (package, lease, policy) = corrective_lease();
@@ -1173,17 +1203,22 @@ fn corrective_worker_result_is_typed_bound_artifact_verified_and_substitution_sa
         .expect("ArtifactWorkspace exact artifact verification");
     let result_id = result.result_id().expect("canonical result identity");
     assert_eq!(verified.result_id(), result_id);
-    assert_eq!(verified.artifact_count(), 4);
-    assert_eq!(result.context_id, R2_CONTEXT_ID);
-    assert_eq!(result.candidate_identity["context_id"], R2_CONTEXT_ID);
-    assert_eq!(result.candidate_identity["candidate_id"], R2_CANDIDATE_ID);
+    assert_eq!(verified.artifact_count(), 3);
+    assert!(r3_artifact_set_is_exact(&result));
+    assert_eq!(result.context_id, R3_CONTEXT_ID);
+    assert_eq!(result.candidate_identity["context_id"], R3_CONTEXT_ID);
+    assert_eq!(result.candidate_identity["candidate_id"], R3_CANDIDATE_ID);
     assert_eq!(
         result.candidate_identity["issued_root_commit"],
-        "9827c817a3fd42a098b97fb7cd3f2de87dfcea67"
+        "1750d586f6561d9d6ba64887cdafa6a36f23e41e"
     );
     assert_eq!(
         result.candidate_identity["issued_root_tree"],
-        "0edb0ab5b74bfecb62c438815f69c0ed3a81eeed"
+        "bf2d3e53c4b9410df41fb94ddf9b56ea4cf1e58a"
+    );
+    assert_eq!(
+        result.candidate_identity["work_package_sha256"],
+        R3_WORK_PACKAGE_SHA256
     );
     let after = result
         .artifacts
@@ -1208,6 +1243,20 @@ fn corrective_worker_result_is_typed_bound_artifact_verified_and_substitution_sa
     );
     assert!(stale_candidate.validate_for(&lease, &package).is_err());
 
+    let mut missing_artifact = result.clone();
+    missing_artifact.artifacts.remove(0);
+    assert!(
+        !r3_artifact_set_is_exact(&missing_artifact),
+        "composed exact-set validation rejects a missing artifact row"
+    );
+
+    let mut replaced_artifact = result.clone();
+    replaced_artifact.artifacts[0].path = R3_RESULT_PATH.to_owned();
+    assert!(
+        !r3_artifact_set_is_exact(&replaced_artifact),
+        "composed exact-set validation rejects an allowed-path substitution"
+    );
+
     let mut substituted_artifact = result.clone();
     substituted_artifact.artifacts[0].sha256 = sha(b"substituted artifact receipt");
     assert!(
@@ -1228,19 +1277,56 @@ fn corrective_worker_result_is_typed_bound_artifact_verified_and_substitution_sa
             .verify(&substituted_fixture, &lease, &package)
             .is_err()
     );
-    eprintln!("ROUTINE_PRODUCTION_CATALOG_R2_RESULT_ID={result_id}");
+    eprintln!("ROUTINE_PRODUCTION_CATALOG_R3_RESULT_ID={result_id}");
+}
+
+fn r3_artifact_set_is_exact(result: &WorkerResultV1) -> bool {
+    let expected_paths = BTreeSet::from([
+        "fixtures/routine-production-catalog/cases.json",
+        "validator/src/routine_work/catalog.rs",
+        "validator/tests/routine_production_catalog_contract.rs",
+    ]);
+    let actual_paths = result
+        .artifacts
+        .iter()
+        .map(|row| row.path.as_str())
+        .collect::<BTreeSet<_>>();
+    let declared_count = result.candidate_identity["artifact_count"].as_u64();
+    let declared_bytes = result.candidate_identity["artifact_bytes"].as_u64();
+    let declared_aggregate = result.candidate_identity["corrected_artifact_set_sha256"].as_str();
+    let actual_bytes = result
+        .artifacts
+        .iter()
+        .map(|row| row.byte_length)
+        .sum::<u64>();
+    let mut aggregate_rows = result
+        .artifacts
+        .iter()
+        .map(|row| {
+            format!(
+                "{}\t{}\n",
+                row.path,
+                row.sha256.strip_prefix("sha256:").unwrap_or_default()
+            )
+        })
+        .collect::<Vec<_>>();
+    aggregate_rows.sort();
+    let actual_aggregate = sha(aggregate_rows.concat().as_bytes());
+
+    actual_paths == expected_paths
+        && declared_count == Some(3)
+        && result.artifacts.len() == 3
+        && declared_bytes == Some(actual_bytes)
+        && declared_aggregate == Some(actual_aggregate.as_str())
 }
 
 fn corrective_lease() -> (WorkPackage, LeaseSpec, ScopePolicy) {
     let owned_paths = canonical_paths(&[
-        R2_RESULT_PATH,
+        R3_RESULT_PATH,
         "validator/src/routine_work/catalog.rs",
         "validator/tests/routine_production_catalog_contract.rs",
     ]);
-    let fixtures = canonical_paths(&[
-        "fixtures/routine-production-catalog/cases.json",
-        "fixtures/routine-production-catalog/valid-catalog.json",
-    ]);
+    let fixtures = canonical_paths(&["fixtures/routine-production-catalog/cases.json"]);
     let semantic_symbols = BTreeSet::from(["routine-work::production-catalog".to_owned()]);
     let effects = BTreeSet::from([
         EffectGrant::new(
@@ -1278,7 +1364,7 @@ fn corrective_lease() -> (WorkPackage, LeaseSpec, ScopePolicy) {
         read_paths: BTreeSet::new(),
         owned_scope: owned_scope.clone(),
         prerequisites: BTreeSet::from([
-            "preserve-prior-four-artifact-candidate".to_owned(),
+            "preserve-prior-r2-candidate".to_owned(),
             "root-retains-public-dispatch-and-effect-grant-authority".to_owned(),
         ]),
         outputs: BTreeSet::from([
@@ -1292,12 +1378,12 @@ fn corrective_lease() -> (WorkPackage, LeaseSpec, ScopePolicy) {
         claim_effect: "none".to_owned(),
     };
     let lease = LeaseSpec {
-        lease_id: "ROUTINE-PRODUCTION-CATALOG-073-R2".to_owned(),
-        run_id: "ultragoal-successor-live-20260713-routine-production-catalog-r2-root".to_owned(),
+        lease_id: "ROUTINE-PRODUCTION-CATALOG-073-R3".to_owned(),
+        run_id: "ultragoal-successor-live-20260713-routine-production-catalog-r3".to_owned(),
         node_id: package.node_id.clone(),
         principal: Principal::Worker,
-        owner: Actor::parse("/root").unwrap(),
-        binding: Binding::new(R2_CONTEXT_ID, R2_CANDIDATE_ID).unwrap(),
+        owner: Actor::parse("/root/routine_catalog_single_spelling_engineer").unwrap(),
+        binding: Binding::new(R3_CONTEXT_ID, R3_CANDIDATE_ID).unwrap(),
         safety_class: SafetyClass::IsolatedWorkspaceWrite,
         read_paths: BTreeSet::new(),
         owned_scope,

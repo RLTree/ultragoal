@@ -1102,7 +1102,7 @@ fn absolute_program_path(value: String) -> CatalogResult<PathBuf> {
 fn validate_global_runner_compatibility(
     definitions: &BTreeMap<String, RoutineDefinition>,
 ) -> CatalogResult<()> {
-    let mut authorities = BTreeMap::<String, (&str, &Path, &str, u64, u32)>::new();
+    let mut authorities = BTreeMap::<String, (&str, (&str, &Path, &str, u64, u32))>::new();
     for recipe in definitions.values().flat_map(|definition| {
         std::iter::once(&definition.primary).chain(definition.fallback.as_ref())
     }) {
@@ -1113,11 +1113,16 @@ fn validate_global_runner_compatibility(
             recipe.program_byte_length,
             recipe.program_unix_mode,
         );
-        if authorities
-            .insert(recipe.tool.to_ascii_lowercase(), authority)
-            .is_some_and(|prior| prior != authority)
-        {
-            return Err(error("catalog-runner-authority-ambiguous"));
+        let canonical_tool = recipe.tool.to_ascii_lowercase();
+        if let Some((accepted_spelling, accepted_authority)) = authorities.get(&canonical_tool) {
+            if *accepted_spelling != recipe.tool {
+                return Err(error("catalog-runner-spelling-ambiguous"));
+            }
+            if *accepted_authority != authority {
+                return Err(error("catalog-runner-authority-ambiguous"));
+            }
+        } else {
+            authorities.insert(canonical_tool, (recipe.tool.as_str(), authority));
         }
     }
     Ok(())

@@ -1,0 +1,29 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "reviewer": "/root/routine_catalog_case_authority_reviewer",
+  "verdict": "ACCEPT",
+  "candidate_binding": {
+    "root_commit": "1750d586f6561d9d6ba64887cdafa6a36f23e41e",
+    "root_tree": "bf2d3e53c4b9410df41fb94ddf9b56ea4cf1e58a",
+    "artifact_set_sha256": "sha256:06310a4c3a3479686ef5e8c3db58b513742c74e1943321545624e706769fd995",
+    "artifact_count": 3,
+    "artifact_bytes": 114695,
+    "worker_result_sha256": "sha256:889c7dda12af4f9171c27ff3c7a19113ae1ff6af2b2d48f2f49d4631d698b63e",
+    "canonical_result_id": "sha256:40aca475b3a7fb7046be2bda829bbf37cf1dc740c8175c4be7fe6e694395142f"
+  },
+  "verified_behavior": [
+    "All cross-definition symbolic case aliases reject regardless of authority.",
+    "Exact same-spelling, same-authority reuse selects and binds both definitions through one observation.",
+    "Same-spelling conflicting authority, primary and fallback aliases, executable substitution, drift, mutation, and zero-write controls remain closed."
+  ],
+  "verification": {
+    "decisive_controls": "2/2; run 48bf8e0e-b77a-4d4c-9d63-f2b3f93ec2a3",
+    "focused_twice": "14/14 each; runs 4d1c2bb6-940c-49b5-beda-208e0d4d2f79 and 92a54c24-03e9-46fa-a22b-a115a0cba3a8",
+    "dependency_closure": "156/156; run 97b4fc12-0ec1-4953-ad9f-d7b570ed07d6",
+    "receipt": "1/1; run a8156fa2-802b-459f-b1b1-1e7d1e047aa5",
+    "additional": "library check, rustfmt, JSON parsing, diff check, exact-byte revalidation, and zero-write comparison passed"
+  },
+  "material_findings": [],
+  "claim_ceiling": "Accepted source-local routine-catalog candidate only.",
+  "no_claim_statement": "This review does not claim public execution, grants, installation, runtime behavior, node closure, readiness, release, or completion."
+}

@@ -13,6 +13,8 @@
     {"id": "symbolic-tool-executable-content-mode-identity-substitution", "expected": "refused"},
     {"id": "primary-fallback-case-aliased-symbolic-tool", "expected": "refused"},
     {"id": "cross-definition-case-alias-conflicting-authority", "expected": "refused"},
+    {"id": "cross-definition-case-alias-identical-authority", "expected": "refused"},
+    {"id": "cross-definition-exact-spelling-identical-authority", "expected": "bound"},
     {"id": "omitted-transitive-input", "expected": "refused"},
     {"id": "repeated-parse-and-bind-determinism", "expected": "bound-identically"},
     {"id": "parse-query-and-refusal-zero-write", "expected": "unchanged-tree"}
