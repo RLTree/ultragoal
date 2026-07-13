@@ -6,10 +6,10 @@
   "change_request": {
     "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/ROOT-CHANGE-REQUEST-003.json",
     "change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
-    "proposal_artifact_set_sha256": "sha256:136847c4d18fef949cfa0091275423708151fba6051a33edbf47f4821c80e11c",
+    "proposal_artifact_set_sha256": "sha256:e32e85fd132a24d16730c2acafa39a99dc9b4a42833f0241fa2053885393aba2",
     "artifact_count_excluding_request_files": 12,
-    "bytes": 180496,
-    "lines": 3977
+    "bytes": 221791,
+    "lines": 4947
   },
   "freeze_identity": {
     "repository": "repo://harness-ultragoal-plugin-proposal",
@@ -23,7 +23,7 @@
     "schema_check": "pass",
     "deterministic_runs": 2,
     "byte_identical_outputs": true,
-    "run_id": "sha256:99d99e530ec2164d1b423c7206c27fd60eaa7757feeeb6f91269caf1361aa570",
+    "run_id": "sha256:9507d09281d5f8564b890151ca7d92a248ccd20c93921b3209b3261b32e035b4",
     "valid_envelopes": [
       "valid_baseline",
       "valid_scoped_implementation",
@@ -31,10 +31,10 @@
       "valid_scoped_generated_output"
     ],
     "red_fixtures": {
-      "rejected": 57,
-      "total": 57,
+      "rejected": 81,
+      "total": 81,
       "schema": 18,
-      "semantic_resolver": 39
+      "semantic_resolver": 63
     },
     "claim_effect": "none"
   },
@@ -51,23 +51,26 @@
       "identity-set binding and final session revalidation",
       "complete closed-envelope context commitment except context_id",
       "exact delegated generated-output confinement",
-      "exact bounded scratch-target confinement"
+      "exact bounded scratch-target confinement",
+      "protected exact same-session external-effect authority",
+      "protected exact same-session approval authority",
+      "effect and approval source row and final-session revalidation"
     ]
   },
   "independent_review_required": [
     "recompute every proposal artifact row and the standard aggregate from live bytes",
-    "reproduce protected lexical path hardlink directory alias symlink special-file post-validation alias insertion full-envelope substitution and output-target escape controls",
+    "reproduce protected lexical path hardlink directory alias symlink special-file post-validation alias insertion full-envelope substitution output-target escape and effect-approval authority controls",
     "confirm valid read-only, scoped propose-write, scoped CLI, and scoped generated-output envelopes remain accepted",
+    "confirm the isolated exact-authority positive and live absent-authority fail-closed behavior",
     "falsify the instruction-only effect ceiling and root-owned mediator requirement",
     "review protected-path coverage and scan bounds for material underreach or false authority"
   ],
-  "root_disposition": "REWORK_EXTERNAL_EFFECT_AND_APPROVAL_AUTHORITY_BINDING",
+  "root_disposition": "REWORK_PROTECTED_EFFECT_AUTHORITY_FILESYSTEM_IDENTITY",
   "adoption_ceiling": "corrected_proposal_source_only_not_adopted",
   "withheld_until_later_authority": [
     "canonical Rust resolver behavior",
     "root-owned workspace effect mediator",
     "representative prompt and context evaluations",
-    "exact same-session external-effect and approval authority resolution",
     "fresh root adoption and invalidation reconciliation"
   ],
   "no_claim_statement": "This root correction candidate changes no adopted contract, product behavior, claim ceiling, readiness, release, node closure, or goal-completion state."

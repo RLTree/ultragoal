@@ -1,0 +1,29 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "LIVE-CONTEXT-ENVELOPE-EFFECT-AUTHORITY-ALIAS-REWORK-052",
+  "workstream": "model-adaptive-prompt-and-context-contract-change",
+  "decision": "REWORK",
+  "reviewed_candidate": {
+    "change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
+    "proposal_artifact_set_sha256": "sha256:e32e85fd132a24d16730c2acafa39a99dc9b4a42833f0241fa2053885393aba2",
+    "artifact_count": 12,
+    "bytes": 221791,
+    "lines": 4947,
+    "verifier_run_id": "sha256:9507d09281d5f8564b890151ca7d92a248ccd20c93921b3209b3261b32e035b4"
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "protected_external_effect_authority_hardlink_alias_false_pass",
+    "reproduction": "A proposal-local fabricated authority file was hardlinked into docs/ultragoal-successor-live/root-decisions/effect-authority. The protected pathname and digest were bound, both names had link count two, and semantic validation accepted the external effect.",
+    "cause": "Effect-authority loading trusted a protected pathname plus content digest while accepting multi-link regular files and did not bind or revalidate descriptor identity."
+  },
+  "required_correction": [
+    "open authority sources without following links and require repository-device single-link regular files",
+    "bind device inode link mode size content and protected relative path into the authority session",
+    "reject proposal-local aliases and initial or post-validation hardlink insertion",
+    "revalidate identical source identity at final session close",
+    "add rename replacement mutate-restore symlink special-file and cross-device controls"
+  ],
+  "root_disposition": "The proposal remains non-authoritative and in REWORK. No external effect is authorized by the protected pathname until descriptor identity correction passes independent review.",
+  "no_claim_statement": "This REWORK decision authorizes no external effect and changes no adopted contract, product behavior, claim ceiling, readiness, release, node closure, or goal-completion state."
+}
