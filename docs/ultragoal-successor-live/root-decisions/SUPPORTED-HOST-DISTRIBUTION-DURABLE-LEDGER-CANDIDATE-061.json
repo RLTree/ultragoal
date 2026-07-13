@@ -1,102 +1,160 @@
 {
   "schema_version": "RootDecision-v1",
   "decision_id": "SUPPORTED-HOST-DISTRIBUTION-DURABLE-LEDGER-CANDIDATE-061",
+  "revision": 2,
   "workstream": "supported-host-distribution-transaction-authority",
-  "candidate_base": {
+  "supersedes_revision": {
+    "sha256": "sha256:3b0538efc6a68666cb7d288dc4f8fad3f38c67ebcd69e4b943b3e9df4e8854cc",
+    "reason": "The first revision bound the pre-review authority and ledger blobs. Four independent REWORK rounds changed the executable boundary, lock serialization, cross-process contention proof, and key read boundary, so that revision is retained only in Git history and is no longer current authority."
+  },
+  "source_candidate": {
     "repository": "repo://harness-ultragoal-plugin-proposal",
     "branch": "codex/successor-contract-v2-live-product",
-    "head_commit": "f51a3aa1e",
-    "head_tree": "a621f2cbeae48a2c8b9d64aa50219fe969948710"
+    "head_commit": "ad639233db066345e4de2899a59f166116d19040",
+    "head_tree": "8ee58380cb882d7bb98352c05610c986876469bf",
+    "dirty_for_artifact_set": false
   },
-  "artifact_set": [
+  "artifact_set": {
+    "sha256": "sha256:91a3059e2cb6a23b1612191e20d60ccbea6632ba6a010575ca64657a93dfe97e",
+    "formula": "Sort rows by UTF-8 path bytes, serialize path<TAB>lowercase-sha256<LF>, concatenate, then SHA-256.",
+    "artifact_count": 6,
+    "total_bytes": 138144,
+    "total_lines": 4033,
+    "artifacts": [
+      {
+        "path": "Cargo.lock",
+        "sha256": "sha256:50c62aba5befb46bd7b8d304911e696be58ee235fa2402d7154ea4e03666c26d",
+        "bytes": 9835,
+        "lines": 380
+      },
+      {
+        "path": "validator/Cargo.toml",
+        "sha256": "sha256:8cce2e391fd34161097a4b6e964e0a6ee3bb11691a1e41e6d5bb869931c4a2eb",
+        "bytes": 603,
+        "lines": 20
+      },
+      {
+        "path": "validator/src/distribution/mod.rs",
+        "sha256": "sha256:a300a1793558c00e11ad78fad70e4b72f835ae05a56775cbf705f37d4ab780cb",
+        "bytes": 2985,
+        "lines": 73
+      },
+      {
+        "path": "validator/src/distribution/host_effect/mod.rs",
+        "sha256": "sha256:d5eabba2e64b8759acaf3440ee756face1d8d7408fba758e9b2116cd27feaff9",
+        "bytes": 28042,
+        "lines": 828
+      },
+      {
+        "path": "validator/src/distribution/host_effect/authority.rs",
+        "sha256": "sha256:89448bd64b02d55c93f31e9f1a5da837d97e33534fdf83e0780b8f0d19cac9f2",
+        "bytes": 24724,
+        "lines": 660
+      },
+      {
+        "path": "validator/src/distribution/host_effect/ledger.rs",
+        "sha256": "sha256:f33ddf4247f5710ce649c30f31cd5564b1094791ef97865f1884b4d3cdb4b003",
+        "bytes": 71955,
+        "lines": 2072
+      }
+    ]
+  },
+  "dependent_decision": {
+    "path": "docs/ultragoal-successor-live/root-decisions/SUPPORTED-HOST-DISTRIBUTION-DARWIN-EXECUTION-UNSUPPORTED-060.json",
+    "sha256": "sha256:58dbb8bf7745471ebbda91da5083fbe944d4f98fcc44f0a39482a9d68c89d058"
+  },
+  "correction_history": [
     {
-      "path": "validator/src/distribution/host_effect/mod.rs",
-      "sha256": "909521922a827a4857aa9eafbefbee7c3089f26bc366fa9f425ddea96a57e5e3",
-      "lines": 717
+      "commit": "cdc3386f03ad45adb0b99d7b7bdbc103708f6edf",
+      "finding": "AuthorizedHostEffect authenticated executable identity but did not enforce equality with the live pinned executable.",
+      "correction": "Revalidate and compare the exact executable binding plus the complete permit-derived reservation before construction."
     },
     {
-      "path": "validator/src/distribution/host_effect/ledger.rs",
-      "sha256": "0468d5c4d16d887270d4b4168cee2007bb62c655a6a0db1d28fa1d46c67fe524",
-      "lines": 1715
+      "commit": "3e966bc009e93285c9fd8628af8734ab2ac312a4",
+      "finding": "Replacement of ledger.lock after the pre-lock check could split processes across distinct flock inodes.",
+      "correction": "Authenticate the lock identity in ledger v2 state and event heads and revalidate the held and named inode around publication."
+    },
+    {
+      "commit": "576ec747f660e2690987b3f7d9c4cf3825bdfdaa",
+      "finding": "The sixteen-process one-winner test allowed a fully sequential schedule.",
+      "correction": "Require sixteen ready markers after pre-lock validation and release every process together before flock."
+    },
+    {
+      "commit": "ad639233db066345e4de2899a59f166116d19040",
+      "finding": "Key identity and key bytes came from two separate file opens.",
+      "correction": "Read the key through the retained identity-validated descriptor and revalidate the same descriptor against the named object after reading."
     }
   ],
   "implementation_state": {
-    "authority_interface": "candidate from commits 2831c6d27 and f51a3aa1e",
-    "durable_ledger": "candidate source implemented",
+    "authority_interface": "production-compiled internal source candidate",
+    "durable_ledger": "production-compiled internal source candidate",
     "live_executor": "not implemented",
-    "darwin_descriptor_execution": "unsupported before reservation or spawn",
+    "darwin_descriptor_execution": "typed Unsupported before reservation, spawn, or effect",
     "host_lifecycle_integration": "not implemented",
     "legacy_effect_authority": "still active pending reviewed activation and retirement"
   },
   "implemented_behavior": [
-    "a mode-0700 descriptor-bound ledger directory with mode-0600 single-link lock key and state objects",
-    "cross-process flock serialization plus an in-process mutex",
-    "CSPRNG ledger key generation with best-effort volatile key erasure",
+    "root-held non-cloneable HMAC authority and opaque one-use permit bound to the complete host effect",
+    "pinned executable identity revalidated and enforced at AuthorizedHostEffect construction",
+    "mode-0700 descriptor-bound ledger directory with exact mode-0600 single-link lock key and state objects",
+    "authenticated ledger v2 snapshots and event heads bound to the exact coordination lock inode",
+    "cross-process flock serialization with held-versus-named lock revalidation before and after atomic publication",
+    "key identity and key bytes obtained from one retained descriptor with post-read named-object revalidation",
     "canonical HMAC-authenticated snapshots with an ordered hash-chained event log",
     "atomic same-directory publication with file and directory fsync before acknowledgement",
     "atomic nonce and semantic-effect-key reservation with exact expected-head comparison",
     "Reserved InFlight Settled Failed and Ambiguous transition enforcement without automatic ambiguous retry or terminal revival",
     "bounded canonical decoding with unknown-field rejection and exact re-encoding",
-    "an exact three-object ledger-directory inventory that rejects unknown orphan and special-file entries without hidden cleanup",
-    "descriptor and named-object revalidation for root lock key and state files",
+    "exact three-object ledger inventory rejecting unknown orphan and special-file entries without hidden cleanup",
     "same-process rollback detection after a newer head has been observed",
-    "read and head paths that do not alter ledger file bytes modes or entries"
+    "read and head paths that do not alter ledger bytes modes or entries"
   ],
   "verification": [
     {
-      "command": "CARGO_TARGET_DIR=/tmp/hul-ledger-compile-target CARGO_INCREMENTAL=0 cargo test --manifest-path validator/Cargo.toml --offline --locked -j16 --lib host_effect -- --test-threads=16",
-      "candidate_surface": "isolated linked worktree at f51a3aa1e plus exact ledger candidate bytes",
-      "result": "14 passed 0 failed 1665 filtered"
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-host-effect-ad63923-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --lib -E 'test(/host_effect/)' --no-fail-fast",
+      "candidate": "exact detached worktree at ad639233db066345e4de2899a59f166116d19040",
+      "run_id": "dd3e9d0f-eabf-42f6-86b5-5e09279a9f6b",
+      "result": "20 passed; 0 failed; 1666 skipped"
     },
     {
-      "command": "CARGO_TARGET_DIR=/tmp/hul-ledger-live-target CARGO_INCREMENTAL=0 cargo test --manifest-path validator/Cargo.toml --offline --locked -j16 --lib host_effect -- --test-threads=16",
-      "candidate_surface": "live shared source after ledger activation",
-      "result": "14 passed 0 failed 1684 filtered"
-    },
-    {
-      "command": "CARGO_TARGET_DIR=/tmp/hul-ledger-key-test CARGO_INCREMENTAL=0 cargo test --manifest-path validator/Cargo.toml --offline --locked -j16 --lib ledger_and_key_identity_substitution_fail_closed -- --test-threads=16",
-      "candidate_surface": "live shared source after key-identity negative control",
-      "result": "1 passed 0 failed 1698 filtered"
-    },
-    {
-      "command": "CARGO_TARGET_DIR=/tmp/hul-ledger-process-test CARGO_INCREMENTAL=0 cargo test --manifest-path validator/Cargo.toml --offline --locked -j16 --lib separate_process_reservation_race_has_one_winner -- --test-threads=16",
-      "candidate_surface": "live shared source with sixteen fresh child processes opening and contending on one initial ledger head",
-      "result": "1 parent test passed 16 child helpers reconciled exactly one winner 0 failures 1701 filtered"
-    },
-    {
-      "command": "CARGO_TARGET_DIR=/tmp/hul-ledger-process-test CARGO_INCREMENTAL=0 cargo test --manifest-path validator/Cargo.toml --offline --locked -j16 --lib unknown_and_special_ledger_entries_fail_closed_without_cleanup -- --test-threads=16",
-      "candidate_surface": "live shared source after strict ledger-directory inventory enforcement",
-      "result": "1 passed 0 failed 1701 filtered"
+      "command": "git diff --quiet ad639233db066345e4de2899a59f166116d19040 -- <six artifact paths>",
+      "candidate": "source candidate before this authority-record reconciliation",
+      "result": "all six artifact paths byte-clean"
     }
   ],
-  "validated_controls": [
-    "restart open and state replay",
-    "one-winner concurrent reservation",
-    "sixteen-process one-winner reservation with fresh-process ledger open and replay",
-    "duplicate nonce and semantic-key rejection",
-    "stale-head rejection",
-    "authenticated content tamper rejection",
-    "same-session valid-snapshot rollback rejection",
-    "ledger identity and key-object substitution rejection",
-    "unknown-entry and symlinked-state rejection without automatic cleanup",
+  "validated_false_pass_controls": [
+    "every permit-binding dimension mutation and wrong authority",
+    "A-permit with B-executable substitution and post-pin executable mutation",
+    "duplicate nonce semantic key and stale head",
+    "same-process authenticated-state rollback",
+    "lock replacement exactly after pre-lock identity validation and before flock",
+    "sixteen fresh child processes all ready before simultaneous release to flock",
+    "key A identity with key B bytes and matching B-signed state replacement",
+    "key object state object ledger root unknown entry and special-file substitution",
     "zero-byte-change read and head operations",
     "exact transition outcome requirements and terminal-state refusal"
   ],
+  "independent_review": {
+    "reviewer": "/root/host_effect_authority_security_reviewer",
+    "status": "REVIEW_REQUIRED_AFTER_AUTHORITY_RECORD_RECONCILIATION",
+    "source_findings_closed": 4,
+    "remaining_finding": "The prior committed decision bound stale blobs and receipts; this revision supplies the exact current source candidate and receipt."
+  },
   "explicit_limitations": [
-    "the candidate has not yet received independent security review",
-    "crash-injection and power-loss suites have not yet executed",
-    "an interrupted pre-publication temp file fails the strict directory inventory and requires a separately reviewed recovery operation that is not yet implemented",
-    "a same-account adversary able to replace both the complete ledger directory and its key with an older internally consistent copy cannot be detected after a fresh process without an external monotonic anchor",
-    "the adjacent key protects corruption and object substitution within the descriptor-bound local trust boundary; it is not a hardware-backed secret",
+    "this revised decision requires a fresh independent verdict before root acceptance",
+    "crash-injection and power-loss suites have not executed",
+    "an interrupted pre-publication temp file fails the strict directory inventory and requires a separately reviewed recovery operation that is not implemented",
+    "a same-account adversary able to replace the complete ledger directory key and authenticated state with an internally consistent older set cannot be detected after a fresh process without an external monotonic anchor",
+    "the adjacent key protects corruption and object substitution within the descriptor-bound local trust boundary; it is not hardware-backed",
     "no live host command executor host-lifecycle mediator package install marketplace cache registry Plugins UI discovery runtime or representative journey is implemented or proven"
   ],
   "required_next_proof": [
-    "independent security review of the authority pinning and ledger artifact set",
+    "independent review of this exact revised decision and its six source artifacts",
     "crash injection before and after atomic publication plus recovery classification",
-    "state key lock directory symlink hardlink FIFO socket truncation reorder duplicate and permission mutation controls",
+    "state key lock directory symlink hardlink FIFO socket truncation reorder duplicate and permission mutation controls not already covered",
     "root-owned host-lifecycle mediation and typed Darwin Unsupported activation",
     "deauthorization or routing of HostAuthorization execute_authorized HostExecutor and PreparedExternalHostEffect::into_plan"
   ],
-  "claim_ceiling": "production-compiled source-local durable-ledger candidate behavior only",
-  "no_claim_statement": "This candidate does not prove a live host effect supported package install cache marketplace app registry Plugins UI discovery runtime representative journey readiness release node closure or goal completion."
+  "claim_ceiling": "production-compiled source-local authority-interface and durable-ledger candidate behavior only",
+  "no_claim_statement": "This decision does not prove a live host effect supported package install cache marketplace app registry Plugins UI discovery runtime representative journey readiness release node closure or goal completion."
 }
