@@ -1,0 +1,54 @@
+{
+  "schema_version": "RootReviewDecision-v1",
+  "decision_id": "ROUTINE-PRODUCTION-CATALOG-RUNNER-SUBSTITUTION-REWORK-073",
+  "workstream": "production-routine-catalog",
+  "root_decision": "REWORK_RUNNER_IDENTITY_BINDING",
+  "reviewed_at_date": "2026-07-13",
+  "reviewer": "/root/routine_catalog_adversarial_reviewer",
+  "reviewed_identity": {
+    "base_commit": "005061557dc6f6251f0a40ed3d26189a8f829358",
+    "base_tree": "783d5bf48d7809d1263fa546bf0f53c1daf297e9",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/ROUTINE-PRODUCTION-CATALOG-073.json",
+    "worker_result_sha256": "sha256:3b7f38de60d53434c5ce2735669f688ad3190d65693f0cf378d500504c521cf8",
+    "artifact_set_sha256": "sha256:4ec80dc475c03b3969e1705bd86b46202b2ee92b36d08e5e7bc8c07cd988ab12",
+    "artifact_count": 4,
+    "artifact_bytes": 94908,
+    "artifact_lines": 2851
+  },
+  "decisive_finding": {
+    "class": "symbolic-tool-executable-substitution",
+    "severity": "material-blocker",
+    "detail": "RunnerObservation accepts caller-supplied symbolic identity, executable path, digest, length, and mode. Binding compares that observation only with a selected identity derived from the same caller-controlled values, so a selected tool named true with the real identity of /usr/bin/false is accepted.",
+    "reviewer_control": "reviewer_runner_substitution",
+    "observed_result": "bind_selected returned Ok for symbolic tool true backed by /usr/bin/false; the refusal assertion failed"
+  },
+  "preserved_evidence": {
+    "candidate_identity": "all four rows, permissions, regular single-link identities, totals, aggregate, and JSON schema validation matched",
+    "source_proof": "the exact candidate compiled and the existing inconsistent-digest mutation control remains useful but incomplete",
+    "root_authority_unchanged": "no public command process execution root grant durable registry installed behavior or claim authority was added"
+  },
+  "corrective_lease": {
+    "lease_id": "ROUTINE-PRODUCTION-CATALOG-073-R1",
+    "write_paths": [
+      "validator/src/routine_work/catalog.rs",
+      "validator/tests/routine_production_catalog_contract.rs",
+      "fixtures/routine-production-catalog/cases.json",
+      "fixtures/routine-production-catalog/valid-catalog.json",
+      "docs/ultragoal-successor-live/worker-results/ROUTINE-PRODUCTION-CATALOG-073.json"
+    ],
+    "required_behavior": [
+      "anchor each adopted symbolic tool to exact executable and content authority independent of caller observation",
+      "reject same-name different-path and caller-consistent different-executable substitutions",
+      "preserve exact positive runner and unsupported-host refusal behavior",
+      "validate the corrected receipt with the authoritative Rust WorkerResultV1 parser"
+    ]
+  },
+  "claim_ceiling": "identity-frozen source-local catalog candidate that compiles but is not an exact production runner boundary pending correction and rereview",
+  "explicitly_withheld": [
+    "source-local catalog acceptance and mediator compatibility",
+    "public execution process effects and root grants",
+    "durable registry installed and real-user behavior",
+    "readiness release node closure and completion"
+  ],
+  "no_claim_statement": "This REWORK decision does not claim source acceptance, public execution, installation, real-user behavior, readiness, release, node closure, or completion."
+}
