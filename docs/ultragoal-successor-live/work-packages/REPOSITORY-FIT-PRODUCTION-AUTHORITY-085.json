@@ -1,0 +1,111 @@
+{
+  "schema_version": "RootIssuedWorkPackage-v1",
+  "work_package_id": "REPOSITORY-FIT-PRODUCTION-AUTHORITY-085",
+  "workstream": "repository-fit-production-effect-authority",
+  "issued_from_live_context": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "37d8ef7cdcbce1b0e900dd1b2cc68489303bfa6d",
+    "head_tree": "f5c573c51abbc6ce61f7a0cc8caae8d47ea25cfc",
+    "context_id": "sha256:6b5a138e5c17ce9b6cfe2141a933f76035ee8500a34a01dec52afbca40352705",
+    "candidate_id": "sha256:130095a7d25b932aff254983250db3ff4f148373f405abccf3ff534d21029fd1"
+  },
+  "path_reallocation": {
+    "reason": "The adopted workstream path hints name obsolete validator/src/fit, templates/repository-fit, and tests/fit locations; the live canonical implementation is validator/src/repository_fit.",
+    "authority": "Ultra root run-scoped reallocation only; no adopted contract row or public authority changes.",
+    "semantic_scope": "Production root authorization and durable mediation for the already accepted repository-fit apply kernel."
+  },
+  "lease": {
+    "principal": "/root/repository_fit_production_authority_engineer",
+    "write_paths": [
+      "validator/src/repository_fit/product_adapter.rs",
+      "validator/src/repository_fit/product_adapter/root_permit.rs",
+      "validator/src/repository_fit/product_adapter/authority.rs",
+      "validator/src/repository_fit/product_adapter/ledger.rs",
+      "validator/src/repository_fit/product_adapter/tests.rs",
+      "validator/src/repository_fit/product_adapter/tests/production_authority.rs",
+      "validator/src/repository_fit/mod.rs",
+      "validator/src/repository_fit/local/mod.rs",
+      "validator/src/repository_fit/local/effects.rs",
+      "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-PRODUCTION-AUTHORITY-085.json"
+    ],
+    "write_symbols": [
+      "sealed repository-fit production permit authority",
+      "trusted clock and authority-store contracts",
+      "durable nonce and semantic-effect reservation ledger",
+      "terminal apply and recovery transitions",
+      "exclusive LocalEffects mutation lease",
+      "crate-private execute_prepared_apply production entry",
+      "canonical machine apply outcome projection",
+      "WorkerResult-v1 exact artifact set"
+    ],
+    "generated_outputs": [
+      "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-PRODUCTION-AUTHORITY-085.json"
+    ],
+    "fixtures": "Ephemeral isolated repositories and authority stores under /private/tmp only; no retained repository fixture is authorized.",
+    "external_effects": "Locked and offline local validation in one isolated CARGO_TARGET_DIR plus isolated fixture writes only.",
+    "git_mutation": "forbidden"
+  },
+  "dependencies": [
+    "accepted repository-fit apply mediator and rollback attribution",
+    "accepted source-built repository-fit journeys",
+    "accepted successor public fit inspect, plan, and verify reads",
+    "root retains public catalog, dispatcher, trusted host-store policy, dependencies, claims, installation, and release"
+  ],
+  "required_interfaces": [
+    "Consume one exact PreparedFitApply and opaque request already bound to context, candidate, target, plan, and accepted-plan digest.",
+    "Issue non-forgeable bounded permits only through a sealed production authority using root-supplied trusted time and an explicit host-protected authority-store root.",
+    "Reserve nonce and semantic effect durably across processes before mutation and reconcile committed, rolled-back, rejected, interrupted, and ambiguous terminal states.",
+    "Open a production LocalEffects mutation lease only through the accepted authority and exact target scope; preserve descriptor confinement and Darwin-only support.",
+    "Return one bounded canonical machine outcome without secrets, nonce material, or absolute-path echo.",
+    "Keep help, version, parse, inspect, plan, and verify independent of authority initialization and recursively zero-write."
+  ],
+  "required_validation": {
+    "positive": [
+      "fresh exact apply commits and verifies",
+      "partial dirty target preserves user bytes and applies only accepted mutations",
+      "idempotent repeat use performs no additional mutation",
+      "exact failure rolls back exact prior bytes",
+      "interrupted effect reconciles through the durable terminal ledger"
+    ],
+    "negative": [
+      "stale context, candidate, target, plan, accepted-plan digest, permit, expiry, and lease reject before effect",
+      "forged success and verify-as-apply cannot become terminal success",
+      "non-Apple construction and execution fail UnsupportedHost",
+      "secret, nonce, absolute path, and raw backend output canaries do not appear in public machine outcomes"
+    ],
+    "race_and_mutation": [
+      "two processes racing one nonce or semantic effect have exactly one reservation winner",
+      "ledger, key, lock, authority root, executable target, and terminal-record substitution fail closed",
+      "target mutation before and after reservation cannot escape the accepted plan",
+      "same-session rollback, stale-head replay, truncation, unknown rows, special files, symlinks, hardlinks, and ancestor replacement fail closed"
+    ],
+    "zero_write": [
+      "help, version, parse, inspect, plan, and verify leave both target and authority-store trees byte-identical",
+      "refused and unsupported paths create no ledger, key, lock, temp, telemetry, or target files"
+    ],
+    "commands": "Use exact-file rustfmt, focused tests twice, dependency-closed repository-fit suites, production library check, authoritative typed receipt verification, mutation controls, and regular single-link artifact checks with 16 build jobs and 16 test threads."
+  },
+  "prohibited_surfaces": [
+    "validator/src/cli/successor/catalog.rs",
+    "validator/src/cli/successor_public",
+    "validator/src/command_run.rs",
+    "validator/Cargo.toml",
+    "Cargo.lock",
+    "live user repositories or host configuration",
+    "public command, manifest, registry, generated authority, migration, claim, acceptance, board, installation, release, and completion state"
+  ],
+  "requested_root_changes": [
+    "Root must select the trusted-time implementation and host-protected authority-store policy after independent review.",
+    "Root must wire fit apply through the sole public dispatcher under an exact WorkspaceWrite context after source acceptance.",
+    "Root must replace static apply-unavailable controls only when public effect behavior and zero-write read separation are candidate-bound."
+  ],
+  "worker_result": {
+    "schema": "WorkerResult-v1",
+    "required": true,
+    "artifact_rule": "Freeze every leased source, test, and generated receipt input except the self-excluded WorkerResult; reject missing, unknown, duplicate, overlapping, special, or changed rows.",
+    "no_claim_statement": "This worker does not claim readiness, release, or completion."
+  },
+  "stop_rule": "Stop on any need for public dispatcher, dependency, live-host, manifest, registry, migration, claim, external installation, destructive cleanup, or unspecified authority-store policy changes; request root wiring instead.",
+  "claim_effect": "none"
+}
