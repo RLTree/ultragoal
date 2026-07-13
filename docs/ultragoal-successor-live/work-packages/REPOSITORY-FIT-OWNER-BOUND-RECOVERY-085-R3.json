@@ -1,0 +1,39 @@
+{
+  "schema_version": "UltraLeaseAmendment-v1",
+  "amendment_id": "REPOSITORY-FIT-OWNER-BOUND-RECOVERY-085-R3",
+  "base_work_package": "docs/ultragoal-successor-live/work-packages/REPOSITORY-FIT-PRODUCTION-AUTHORITY-085.json",
+  "base_work_package_sha256": "sha256:f1f064002fd1da31cdce7e2d4f97e0229a9ef34c3f6df1308fdcd80d3fd295ed",
+  "issued_candidate": {
+    "head_commit": "9cfa7a4c8e68a275345f13dcfdeb0c6e879c70ea",
+    "head_tree": "4f7b4427d22f79ca061233b8b16eb8a5c2da5e2a",
+    "note": "Disjoint evaluation changes remain in progress and are not part of this lease."
+  },
+  "owner_override": "/root/repository_fit_proof_recovery_engineer",
+  "lease_id_override": "REPOSITORY-FIT-OWNER-BOUND-RECOVERY-085-R3",
+  "writable_paths_override": [
+    "validator/src/repository_fit/product_adapter/authority.rs",
+    "validator/src/repository_fit/product_adapter/ledger.rs",
+    "validator/src/repository_fit/product_adapter/tests/production_authority.rs",
+    "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-PRODUCTION-AUTHORITY-085.json"
+  ],
+  "authorized_semantics": [
+    "owner-held process-shared reservation and effect authority through terminal settlement",
+    "canonical pre-reservation recovery intent and exact nonce binding",
+    "expiry-only Reserved and EffectStarted recovery classification",
+    "existing-only descriptor-bound authority open with zero initialization on recovery",
+    "deterministic process races, authority substitution, missing-ledger zero-write, crash, rollback, replay, and stale-owner controls",
+    "WorkerResult-v1 exact corrected artifact set"
+  ],
+  "prohibited_shared_changes": [
+    "validator/src/repository_fit/product_adapter.rs",
+    "validator/src/repository_fit/mod.rs",
+    "public command catalog, dispatcher, manifests, migration and retirement registry, acceptance, board, claims, release state, Git, network, or host state"
+  ],
+  "worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-PRODUCTION-AUTHORITY-085.json",
+    "worker": "/root/repository_fit_proof_recovery_engineer",
+    "lease_id": "REPOSITORY-FIT-OWNER-BOUND-RECOVERY-085-R3",
+    "required": true,
+    "no_claim_statement": "This worker does not claim readiness, release, or completion."
+  }
+}

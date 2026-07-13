@@ -1,0 +1,38 @@
+{
+  "schema_version": "UltraLeaseAmendment-v1",
+  "amendment_id": "EVALUATION-FALSE-PASS-RECOVERY-086-R3",
+  "base_work_package": "docs/ultragoal-successor-live/work-packages/EVALUATION-PRODUCTION-RUNTIME-086.json",
+  "base_work_package_sha256": "sha256:e25071e2bc634e5edd41bedce2d8495b4c2d1263b3ce322a050c943874dcc5dc",
+  "issued_candidate": {
+    "head_commit": "9cfa7a4c8e68a275345f13dcfdeb0c6e879c70ea",
+    "head_tree": "4f7b4427d22f79ca061233b8b16eb8a5c2da5e2a",
+    "note": "Disjoint repository-fit changes remain in progress and are not part of this lease."
+  },
+  "owner_override": "/root/evaluation_research_false_pass_repair_engineer",
+  "lease_id_override": "EVALUATION-FALSE-PASS-RECOVERY-086-R3",
+  "inherit_base_write_paths_symbols_outputs_fixtures_effects_and_git_prohibition": true,
+  "additional_writable_paths": [
+    "validator/tests/fixture_scheduler_contract/execution_adapter/detached_descendant.rs",
+    "validator/tests/fixture_scheduler_contract/execution_adapter/process_group.rs"
+  ],
+  "additional_authorized_semantics": [
+    "replace exactly four test-only compiled-native probe issuances with issue_test_native",
+    "make wait_for_readiness treat only exact prefixes of ready newline as pending while rejecting unexpected bytes and unsafe file types",
+    "per-root deterministic pause controls",
+    "final named root, lock, anchor, state, and journal revalidation",
+    "stable-inode authenticated execution and promotion journals with rollback and crash-tail controls",
+    "WorkerResult-v1 exact corrected artifact set"
+  ],
+  "prohibited_changes": [
+    "production native-executable expansion beyond the fixed supported allowlist",
+    "any other fixture scheduler test semantics",
+    "public command catalog, dispatcher, manifests, migration and retirement registry, acceptance, board, claims, release state, Git, network, or host state"
+  ],
+  "worker_result": {
+    "path": "docs/ultragoal-successor-live/worker-results/EVALUATION-PRODUCTION-RUNTIME-086.json",
+    "worker": "/root/evaluation_research_false_pass_repair_engineer",
+    "lease_id": "EVALUATION-FALSE-PASS-RECOVERY-086-R3",
+    "required": true,
+    "no_claim_statement": "This worker does not claim readiness, release, or completion."
+  }
+}
