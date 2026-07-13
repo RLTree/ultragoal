@@ -1,0 +1,55 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "SUPPORTED-HOST-EXECUTOR-RECOVERY-BINDING-INTEGRATION-072",
+  "workstream": "supported-host-transaction-execution-and-recovery-binding",
+  "decision": "ACCEPT_CRATE_PRIVATE_SOURCE_LOCAL_HOST_TRANSACTION_EXECUTOR",
+  "integration_commit": "cca4c84c77e9727f9cc3d1afc696e01a3a9a70f6",
+  "integration_tree": "b916b7c111884b4d56a8caf0b6d94cdf7a1184c9",
+  "accepted_artifact_set": {
+    "worker_result": "docs/ultragoal-successor-live/worker-results/SUPPORTED-HOST-EFFECT-EXECUTOR-065.json",
+    "worker_result_sha256": "sha256:80fa4f52e242ca756d537e0ee3ef924d10e3dd5690ba1703b19fa5b0c9a10c49",
+    "worker_candidate_sha256": "sha256:2f7437f171fcf1cbeddfeeaaf024944bd8b05ea62e3b0aeb71884a642b6879e9",
+    "worker_candidate_artifact_count": 7,
+    "worker_candidate_bytes": 300079,
+    "worker_candidate_lines": 8197,
+    "corrected_sha256": "sha256:7d3f37cc7c841eb9c3e57f625077be168e0a7a989a52655ebf0e033b8c0b9618",
+    "corrected_artifact_count": 4,
+    "integrated_sha256": "sha256:9ad24bb21b6a25f26061c59a096f08b4fa834e1674ba1a84163fcf4e320a6ce4",
+    "integrated_artifact_count": 9,
+    "integrated_bytes": 331072,
+    "integrated_lines": 9107,
+    "root_host_effect_module_sha256": "sha256:5880e397ed2aa3f8dd6bccb2f3c17934e7ba335a46d21625695d72c896c1816b",
+    "root_lifecycle_module_sha256": "sha256:51b82a1fb3d5bdc677a0afffd768dfe1708dec05c22e56b4037294cddf5dc01d"
+  },
+  "independent_review": {
+    "record": "docs/ultragoal-successor-live/reviews/SUPPORTED-HOST-EXECUTOR-RECOVERY-BINDING-REVIEW-072.json",
+    "record_sha256": "sha256:1052de8921fe93b2dcc6c46f3d9a84e507e0e3d2064c102d5a3b602e74a0f686",
+    "reviewer": "/root/host_recovery_binding_final_reviewer",
+    "verdict": "PASS",
+    "corrected_debug": "9/9",
+    "corrected_release": "9/9",
+    "root_integrated_selection": "147/147",
+    "worker_executor_repeat": "34/34 twice",
+    "worker_static_false_pass": "7/7",
+    "worker_host_effect_closure": "70 passed and 1 ignored",
+    "jobs": 16,
+    "test_threads": 16
+  },
+  "accepted_behavior": [
+    "an accepted host-effect handoff can enter one crate-private transaction executor with durable reservation-ledger publication acknowledgement and recovery classification",
+    "exact post-reservation recovery evidence requires stable record-head coherence and the recovering permit identity before terminal still-in-flight or rejected evidence can escape",
+    "coherence failure exhausts bounded reobservation and falls back to binding-valid observation-unavailable evidence without fabricating terminal publication acknowledgement success retry or cleanup",
+    "originating transition causes remain ordered when ledger substitution is appended",
+    "root wiring exposes no public command product or installation route"
+  ],
+  "withheld": [
+    "external Codex process execution on macOS",
+    "executed Linux and FreeBSD native retained-descriptor behavior",
+    "a production routine catalog root grant issuer or public dispatcher",
+    "installed package discovery and runtime identity",
+    "real-user operation",
+    "readiness release node closure and goal completion"
+  ],
+  "claim_ceiling": "crate-private source-local supported-host transaction executor with binding-valid recovery evidence",
+  "no_claim_statement": "This acceptance does not claim public execution, installed behavior, external macOS Codex execution, Linux or FreeBSD runtime behavior, readiness, release, node closure, or completion."
+}
