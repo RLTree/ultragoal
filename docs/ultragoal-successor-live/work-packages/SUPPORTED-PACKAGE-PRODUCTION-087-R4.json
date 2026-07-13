@@ -1,0 +1,54 @@
+{
+  "schema_version": "UltraLeaseAmendment-v1",
+  "amendment_id": "SUPPORTED-PACKAGE-PRODUCTION-087-R4",
+  "base_work_package": "docs/ultragoal-successor-live/work-packages/SUPPORTED-PACKAGE-PRODUCTION-087-R3.json",
+  "base_work_package_sha256": "sha256:bfd38c1fe57b45790476205d929a40b7db4956793eecf619883c10b6e203609c",
+  "base_candidate": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "dbe3b4d58c2b5812dd0ec9e6df6fca363b6cbe13",
+    "head_tree": "bd2e6892d407a42d31f078f3d79f4751a1b2c4ed",
+    "dirty_tree_note": "Disjoint repository-fit recovery and evaluation correction leases are active. Root-owned authority-catalog identity centralization is also in progress. Preserve every path outside the inherited supported-package writable set plus the two exact extensions below, and bind the final freeze to the then-current root HEAD."
+  },
+  "owner_override": "/root/supported_package_publication_and_proof_engineer",
+  "scope": {
+    "inherit_all_paths_symbols_outputs_effects_prohibitions_tests_and_verification": true,
+    "inherit_decisive_findings_and_controls_from": "SUPPORTED-PACKAGE-PRODUCTION-087-R3",
+    "worker_result_path": "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-PRODUCTION-087.json",
+    "root_owned_surfaces_remain_prohibited": true
+  },
+  "lease_extension": {
+    "writable_paths": [
+      "validator/src/package/inventory/anchored/session.rs",
+      "validator/src/package/inventory/anchored/snapshot.rs"
+    ],
+    "semantic_symbols": [
+      "Session::read_with_mode",
+      "Session::read",
+      "Session::read_leaf",
+      "Snapshot::unix_mode"
+    ],
+    "authorized_effects": [
+      "source edits within the two exact extension paths",
+      "the inherited deterministic test-owned component hook for retained-descriptor substitution controls"
+    ]
+  },
+  "decisive_rework_finding": {
+    "id": "path-based-package-mode-observation",
+    "severity": "material-security",
+    "finding": "PackageCapture derived packaged unix modes with symlink_metadata(root.join(path)) outside the retained-descriptor session, allowing a same-path root or ancestor substitution to mix replacement mode metadata with bytes from the anchored source when the path was restored before final reconciliation.",
+    "required_correction": "Derive every packaged member mode from the same retained-descriptor observation that authenticates its bytes. Remove the path-based source_mode helper, preserve the existing byte-only Session::read behavior, and deterministically reject root, ancestor, or member substitution during the descriptor-bound read-with-mode sequence."
+  },
+  "required_controls": [
+    "The production package source snapshot must bind member bytes and unix mode to one retained-descriptor observation.",
+    "A replacement root, ancestor, or canonical member must not contribute mode metadata even if the path is restored before finalization.",
+    "No public API or additional package membership authority may be introduced.",
+    "Complete the inherited positive, negative, race, mutation, security, zero-write, writer-conflict, and false-pass matrix with 16 build jobs and 16 test threads."
+  ],
+  "worker_result_contract": {
+    "schema": "WorkerResult-v1",
+    "lease_id": "SUPPORTED-PACKAGE-PRODUCTION-087-R4",
+    "required": true,
+    "no_claim_statement": "Candidate source implementation only. No claim of root adoption, public package command availability, repository package output, installed bytes, marketplace state, cache state, app registration, Plugins UI visibility, discovery, runtime, representative user journey, claim elevation, node closure, readiness, release, or completion."
+  }
+}
