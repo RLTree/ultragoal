@@ -53,6 +53,73 @@ fn public_router_adopts_only_live_successor_authority() {
 }
 
 #[test]
+fn fit_read_routes_are_public_and_zero_write() {
+    for (action, schema) in [
+        ("inspect", "RepositoryFitInspect-v1"),
+        ("plan", "RepositoryFitPlan-v1"),
+        ("verify", "RepositoryFitVerification-v1"),
+    ] {
+        let repo = Repository::new(&format!("fit-{action}"));
+        let before_tree = tree(&repo.root);
+        let before_status = repo.status();
+        let ParseOutcome::Invocation(invocation) = parse_args(["--json", "fit", action]).unwrap()
+        else {
+            panic!("expected fit invocation")
+        };
+        let streams = execute_invocation(&repo.root, invocation).render(OutputMode::Json);
+        assert!(matches!(streams.exit_code, 0 | 1), "{action}");
+        assert!(streams.stderr.is_empty(), "{action}");
+        let value: serde_json::Value = serde_json::from_slice(&streams.stdout).unwrap();
+        assert_eq!(value["schema_version"], schema, "{action}");
+        assert_eq!(tree(&repo.root), before_tree, "{action}");
+        assert_eq!(repo.status(), before_status, "{action}");
+    }
+}
+
+#[test]
+fn fit_target_option_selects_the_context_root_instead_of_being_ignored() {
+    let ParseOutcome::Invocation(invocation) =
+        parse_args(["--json", "fit", "inspect", "--target", "nested"]).unwrap()
+    else {
+        panic!("expected fit invocation")
+    };
+    let base = Path::new("/tmp/hul-fit-public-target-root");
+    assert_eq!(
+        super::fit::target_root(base, &invocation).unwrap(),
+        base.join("nested")
+    );
+}
+
+#[test]
+fn fit_apply_remains_unavailable_without_root_effect_authority() {
+    let repo = Repository::new("fit-apply-unavailable");
+    let before_tree = tree(&repo.root);
+    let before_status = repo.status();
+    let ParseOutcome::Invocation(invocation) = parse_args([
+        "--json",
+        "fit",
+        "apply",
+        "--plan",
+        "plan.json",
+        "--accept-plan",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    ])
+    .unwrap() else {
+        panic!("expected fit apply invocation")
+    };
+    let streams = execute_invocation(&repo.root, invocation).render(OutputMode::Json);
+    assert_eq!(streams.exit_code, 4);
+    assert!(streams.stdout.is_empty());
+    let value: serde_json::Value = serde_json::from_slice(&streams.stderr).unwrap();
+    assert_eq!(
+        value["diagnostic_id"],
+        "successor_runtime_downstream_tool_unavailable"
+    );
+    assert_eq!(tree(&repo.root), before_tree);
+    assert_eq!(repo.status(), before_status);
+}
+
+#[test]
 fn accepted_observe_query_reads_current_local_events_without_writes() {
     let repo = Repository::new("observe-query");
     let spool = repo.root.join("validation_artifacts/observability/spool");

@@ -1,9 +1,8 @@
 //! Candidate repository-fit public adapter surface.
 //!
-//! This file is deliberately not declared by `successor_public::mod`; root
-//! integration must review and wire it through the sole dispatcher. In
-//! particular, apply preparation performs no workspace effect and issues no
-//! root grant or permit.
+//! Root integration exposes inspect, plan, and verify through the sole public
+//! dispatcher. Apply preparation remains undispatched: it performs no
+//! workspace effect and issues no root grant or permit.
 
 use crate::cli::successor::runtime::{Diagnostic, DiagnosticId, RuntimeOutcome};
 use crate::cli::successor::{
@@ -14,8 +13,25 @@ use crate::repository_fit::{
     AdapterErrorId, FitAdapterError, PreparedFitApply, inspect_target, plan_target,
     prepare_apply_request, verify_target,
 };
+use std::path::{Path, PathBuf};
 
 const MAX_PLAN_RECORD_BYTES: u64 = 16 * 1024 * 1024;
+
+pub(super) fn target_root(
+    root: &Path,
+    invocation: &ParsedInvocation,
+) -> Result<PathBuf, RuntimeOutcome> {
+    let mut target = None;
+    for argument in &invocation.arguments {
+        match (&argument.name, &argument.value) {
+            (OptionName::Target, ParsedValue::RelativePath(path)) if target.is_none() => {
+                target = Some(path.as_str())
+            }
+            _ => return Err(invalid_invocation()),
+        }
+    }
+    Ok(target.map_or_else(|| root.to_path_buf(), |path| root.join(path)))
+}
 
 pub(super) fn inspect(context: &LiveContext, invocation: &ParsedInvocation) -> RuntimeOutcome {
     if !valid_read_invocation(invocation, FitAction::Inspect) {

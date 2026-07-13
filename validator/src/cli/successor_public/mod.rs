@@ -1,6 +1,6 @@
 use crate::cli::successor::runtime::{Diagnostic, DiagnosticId, RuntimeOutcome, RuntimeSession};
 use crate::cli::successor::{
-    EffectClass, ExitClass, InspectTarget, OutputMode, ParseOutcome, ParsedInvocation,
+    EffectClass, ExitClass, FitAction, InspectTarget, OutputMode, ParseOutcome, ParsedInvocation,
     SuccessorCommand, parse_args, render_help, version_text,
 };
 use crate::context::{BuildRequest, LiveContext};
@@ -37,7 +37,16 @@ fn execute_invocation(root: &Path, invocation: ParsedInvocation) -> RuntimeOutco
     if invocation.effect != EffectClass::Read {
         return crate::cli::successor::runtime::unavailable(&invocation);
     }
-    let context = match read_context(root) {
+    let context_root = match invocation.command {
+        SuccessorCommand::Fit(FitAction::Inspect | FitAction::Plan | FitAction::Verify) => {
+            match fit::target_root(root, &invocation) {
+                Ok(target) => target,
+                Err(outcome) => return outcome,
+            }
+        }
+        _ => root.to_path_buf(),
+    };
+    let context = match read_context(&context_root) {
         Ok(context) => context,
         Err(()) => return context_unavailable(),
     };
@@ -57,6 +66,9 @@ fn execute_invocation(root: &Path, invocation: ParsedInvocation) -> RuntimeOutco
         SuccessorCommand::Observe(crate::cli::successor::ObserveAction::Query) => {
             observe::query_local(root, &context, &invocation)
         }
+        SuccessorCommand::Fit(FitAction::Inspect) => fit::inspect(&context, &invocation),
+        SuccessorCommand::Fit(FitAction::Plan) => fit::plan(&context, &invocation),
+        SuccessorCommand::Fit(FitAction::Verify) => fit::verify(&context, &invocation),
         SuccessorCommand::Diagnose => match InventoryBuilder::new(&context).build() {
             Ok(inventory) => match crate::state::derive_adopted(&context, &inventory) {
                 Ok(state) => diagnose::diagnose_local(root, &context, &state, &invocation),
@@ -197,6 +209,7 @@ fn write_all(mut output: impl Write, bytes: &[u8]) -> Result<(), String> {
 }
 
 mod diagnose;
+mod fit;
 mod local_store;
 mod observe;
 mod public_context;

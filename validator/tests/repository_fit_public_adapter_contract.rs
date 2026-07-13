@@ -137,11 +137,13 @@ fn canonical_template_bytes_are_compile_time_bound_and_manifest_checked() {
 }
 
 #[test]
-fn root_owned_public_wiring_remains_unmodified_by_the_candidate() {
+fn root_owned_public_wiring_activates_only_read_routes() {
     let public_mod = source("validator/src/cli/successor_public/mod.rs");
     let library = source("validator/src/lib.rs");
-    assert!(!public_mod.lines().any(|line| line.trim() == "mod fit;"));
-    assert!(!public_mod.contains("fit::inspect"));
+    assert!(public_mod.lines().any(|line| line.trim() == "mod fit;"));
+    assert!(public_mod.contains("fit::inspect"));
+    assert!(public_mod.contains("fit::plan"));
+    assert!(public_mod.contains("fit::verify"));
     assert!(!public_mod.contains("fit::prepare_apply"));
     assert!(library.contains("pub mod repository_fit;"));
 }
