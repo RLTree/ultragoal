@@ -8,6 +8,7 @@
 mod catalog;
 mod model;
 mod protocol;
+mod root_permit;
 
 use serde::Serialize;
 
@@ -34,6 +35,15 @@ pub(crate) enum AdapterErrorId {
     PlanConflict,
     UnsupportedHost,
     EffectFailed,
+    ApplyPermitMissing,
+    ApplyPermitInvalid,
+    ApplyPermitExpired,
+    ApplyPermitReplayed,
+    ApplyLeaseInvalid,
+    ApplyMutationScopeViolation,
+    ApplyOutcomeInvalid,
+    ApplyRolledBack,
+    ApplyOutcomeAmbiguous,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
@@ -80,6 +90,33 @@ impl FitAdapterError {
             }
             AdapterErrorId::EffectFailed => {
                 "the descriptor-bound local repository effect failed closed"
+            }
+            AdapterErrorId::ApplyPermitMissing => {
+                "the exact root-issued repository-fit apply permit is missing"
+            }
+            AdapterErrorId::ApplyPermitInvalid => {
+                "the repository-fit apply permit does not bind this exact opaque request"
+            }
+            AdapterErrorId::ApplyPermitExpired => {
+                "the repository-fit apply permit is outside its bounded validity window"
+            }
+            AdapterErrorId::ApplyPermitReplayed => {
+                "the repository-fit apply authority was already started or consumed"
+            }
+            AdapterErrorId::ApplyLeaseInvalid => {
+                "the exclusive repository-fit mutation lease is missing or mismatched"
+            }
+            AdapterErrorId::ApplyMutationScopeViolation => {
+                "the repository-fit effect attempted a mutation outside the accepted plan"
+            }
+            AdapterErrorId::ApplyOutcomeInvalid => {
+                "the repository-fit effect outcome did not reconcile to an exact terminal state"
+            }
+            AdapterErrorId::ApplyRolledBack => {
+                "the repository-fit effect failed and the exact prior state was restored"
+            }
+            AdapterErrorId::ApplyOutcomeAmbiguous => {
+                "the repository-fit effect started but exact rollback could not be proved"
             }
         }
     }

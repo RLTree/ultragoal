@@ -1,5 +1,8 @@
 #![allow(dead_code, unused_imports)]
 
+#[path = "../src/context/mod.rs"]
+mod context;
+
 #[path = "../src/repository_fit/mod.rs"]
 mod repository_fit;
 

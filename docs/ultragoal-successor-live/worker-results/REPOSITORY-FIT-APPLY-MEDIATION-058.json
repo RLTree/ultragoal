@@ -1,0 +1,386 @@
+{
+  "schema_version": "WorkerResult-v1",
+  "worker": "/root/repository_rollback_attribution_corrector",
+  "lease_id": "REPOSITORY-ROLLBACK-ATTRIBUTION-CORRECTION-058-R6",
+  "supersedes": "REPOSITORY-TARGET-SNAPSHOT-LINEARIZATION-058-R5",
+  "result_status": "corrective_candidate_pending_independent_review_and_root_reconciliation",
+  "context_id": "sha256:7082f45f04714e18e0d69c0354b99969cbea62941b573d95c101e90491fac195",
+  "base_state": {
+    "head_commit": "a8a5366d59208fa0cd67e86a66a70938b1e9daa0",
+    "head_tree": "991efb969cf2c6b04e75fa3c03beb8336bcf5e86",
+    "branch": "codex/successor-contract-v2-live-product",
+    "context_formula": "SHA-256 of lease_id<TAB>head_commit<TAB>head_tree<LF>.",
+    "starting_finding": "R5 revalidated the exact ctime-bound authorized target before reconciliation but discarded that snapshot. An unmediated same-inode same-length mutate-restore in the following gap could advance ctime, after which two equal later target observations plus ctime-tolerant semantic rollback equivalence could falsely return ApplyRolledBack with rollback_complete true."
+  },
+  "prior_r5_identity": {
+    "lease_id": "REPOSITORY-TARGET-SNAPSHOT-LINEARIZATION-058-R5",
+    "four_artifact_set_sha256": "sha256:8555e9506109d78326fb1b3896b9bf657d67f61ac20f4e7968704662ad39a909",
+    "seven_implementation_artifact_set_sha256": "sha256:0c16898e4d89774636f378836e1d88a2317ac7c303b24d466ed0bcba9fa00fd3",
+    "nine_source_integration_artifact_set_sha256": "sha256:71a2ceb5a4171dfd367e44b8750f8a08c909025268a59bd849ad143350cf7aa0",
+    "worker_result_sha256": "sha256:2aad3588fe9f6b27ebd8da185241b410f80447805b19cc65c41da36ca2283667"
+  },
+  "lease_boundary": {
+    "owned_paths": [
+      "validator/src/repository_fit/product_adapter/root_permit.rs",
+      "validator/src/repository_fit/product_adapter/tests/root_permit.rs",
+      "validator/tests/repository_fit_apply_mediation_contract.rs",
+      "fixtures/repository-fit-apply-mediation/cases.json",
+      "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-APPLY-MEDIATION-058.json"
+    ],
+    "identity_only_unedited_paths": [
+      "validator/src/repository_fit/product_adapter.rs",
+      "validator/src/repository_fit/product_adapter/protocol.rs",
+      "validator/src/repository_fit/product_adapter/tests.rs",
+      "validator/src/cli/successor_public/fit.rs",
+      "validator/tests/repository_fit_contract.rs"
+    ],
+    "forbidden_surfaces_modified": false,
+    "shared_or_adjunct_files_modified_by_this_worker": false,
+    "cargo_manifests_or_lockfile_modified": false,
+    "generated_authority_or_claim_files_modified": false,
+    "git_operations_performed": false,
+    "network_performed": false,
+    "external_effects_performed": false
+  },
+  "candidate": {
+    "artifact_set_formula": "For each named set, sort its artifact rows by UTF-8 path bytes; serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>; concatenate; SHA-256 the resulting bytes.",
+    "worker_result_self_excluded": true,
+    "candidate_status": "unaccepted",
+    "concurrent_unowned_changes_preserved": true,
+    "artifact_sets": [
+      {
+        "set_id": "four-leased-correction-artifacts",
+        "artifact_count": 4,
+        "total_bytes": 242667,
+        "total_lines": 6330,
+        "aggregate_sha256": "sha256:9c6315b3f4695185e8cebc1ab83b53ee30b232d57d07320f6b31c7b1c7c84ffa",
+        "paths": [
+          "fixtures/repository-fit-apply-mediation/cases.json",
+          "validator/src/repository_fit/product_adapter/root_permit.rs",
+          "validator/src/repository_fit/product_adapter/tests/root_permit.rs",
+          "validator/tests/repository_fit_apply_mediation_contract.rs"
+        ]
+      },
+      {
+        "set_id": "seven-implementation-artifacts",
+        "artifact_count": 7,
+        "total_bytes": 282729,
+        "total_lines": 7428,
+        "aggregate_sha256": "sha256:bfd9f98526e53d903dc2d5239f5047bc51b4df17ac43bf8ab4642cba02665d81",
+        "paths": [
+          "fixtures/repository-fit-apply-mediation/cases.json",
+          "validator/src/repository_fit/product_adapter.rs",
+          "validator/src/repository_fit/product_adapter/protocol.rs",
+          "validator/src/repository_fit/product_adapter/root_permit.rs",
+          "validator/src/repository_fit/product_adapter/tests.rs",
+          "validator/src/repository_fit/product_adapter/tests/root_permit.rs",
+          "validator/tests/repository_fit_apply_mediation_contract.rs"
+        ]
+      },
+      {
+        "set_id": "nine-source-integration-artifacts",
+        "artifact_count": 9,
+        "total_bytes": 293311,
+        "total_lines": 7714,
+        "aggregate_sha256": "sha256:3441b1681dd2e0db30eb56c71e27eaf779479715f74ec50e60cfbade6b5f8906",
+        "paths": [
+          "fixtures/repository-fit-apply-mediation/cases.json",
+          "validator/src/cli/successor_public/fit.rs",
+          "validator/src/repository_fit/product_adapter.rs",
+          "validator/src/repository_fit/product_adapter/protocol.rs",
+          "validator/src/repository_fit/product_adapter/root_permit.rs",
+          "validator/src/repository_fit/product_adapter/tests.rs",
+          "validator/src/repository_fit/product_adapter/tests/root_permit.rs",
+          "validator/tests/repository_fit_apply_mediation_contract.rs",
+          "validator/tests/repository_fit_contract.rs"
+        ]
+      }
+    ]
+  },
+  "changes": [
+    {
+      "area": "rollback attribution",
+      "paths": [
+        "validator/src/repository_fit/product_adapter/root_permit.rs"
+      ],
+      "result": "reconcile_prior retains the exact TargetSnapshot returned by revalidate_authorized_target. Both later complete reconciliation target captures must equal that snapshot exactly, including Darwin ctime, before semantic rollback equivalence is evaluated against permit prestate."
+    },
+    {
+      "area": "deterministic reconciliation controls",
+      "paths": [
+        "validator/src/repository_fit/product_adapter/root_permit.rs",
+        "validator/src/repository_fit/product_adapter/tests/root_permit.rs"
+      ],
+      "result": "A cfg(test)-only three-phase reconciliation hook deterministically injects same-inode same-length mutate-restore ABA after authorized revalidation before the first target capture, between the two reconciliation target captures, and after protected-after. Every attack terminates ApplyOutcomeAmbiguous with rollback_complete false."
+    },
+    {
+      "area": "mediator-owned rollback compatibility",
+      "paths": [
+        "validator/src/repository_fit/product_adapter/tests/root_permit.rs"
+      ],
+      "result": "The existing mode rollback control remains ApplyRolledBack with rollback_complete true even though the mediator's own rollback advances ctime, because ScopedEffects already records that post-rollback state in authorized_target before reconciliation."
+    },
+    {
+      "area": "static and fixture contract",
+      "paths": [
+        "validator/tests/repository_fit_apply_mediation_contract.rs",
+        "fixtures/repository-fit-apply-mediation/cases.json"
+      ],
+      "result": "The static contract requires retained authorized-target equality before semantic rollback equivalence, and the fixture catalog contains 107 unique cases including the reconciliation gap control."
+    }
+  ],
+  "verification": {
+    "isolated_target": "/private/tmp/hul-repository-fit-rollback-attribution-r6/target",
+    "build_jobs": 16,
+    "test_threads": 16,
+    "commands": [
+      {
+        "surface": "R5 decisive red control",
+        "command": "cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --lib -E 'test(/reconciliation_binds_every_target_collect_to_the_authorized_snapshot/)' --no-fail-fast",
+        "exit_code": 100,
+        "run_id": "4ccb70ae-2405-4fa7-9810-8f37a4468d50",
+        "result": "The R5 production guard plus the test-only R6 control returned ApplyRolledBack instead of ApplyOutcomeAmbiguous for the exact post-authorized-revalidation gap; 0 passed and 1 failed."
+      },
+      {
+        "surface": "corrected decisive final candidate",
+        "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-rollback-attribution-r6/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --lib -E 'test(/reconciliation_binds_every_target_collect_to_the_authorized_snapshot/)' --no-fail-fast",
+        "exit_code": 0,
+        "run_id": "46c3ce8c-3338-4531-91d3-145c3ad6d6ca",
+        "result": "1 passed; 0 failed; 1751 skipped"
+      },
+      {
+        "surface": "focused permit closure",
+        "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-rollback-attribution-r6/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --lib -E 'test(/repository_fit::product_adapter::tests::root_permit/)' --no-fail-fast",
+        "exit_code": 0,
+        "run_id": "b9f2d16c-1cad-446e-9ca7-ab69e8a80a98",
+        "result": "46 passed; 0 failed; 1706 skipped; one slow classification"
+      },
+      {
+        "surface": "repository-fit dependency closure",
+        "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-rollback-attribution-r6/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --lib -E 'test(/repository_fit/)' --no-fail-fast",
+        "exit_code": 0,
+        "result": "118 passed; 0 failed; 1634 skipped; three slow classifications and one transient nextest leaky classification"
+      },
+      {
+        "surface": "static mediation contract",
+        "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-rollback-attribution-r6/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --test repository_fit_apply_mediation_contract --no-fail-fast",
+        "exit_code": 0,
+        "run_id": "615569da-8f65-4bb9-bab3-b0e22c2f33cf",
+        "result": "6 passed; 0 failed; 0 skipped"
+      },
+      {
+        "surface": "standalone repository-fit contract",
+        "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-rollback-attribution-r6/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --test repository_fit_contract --no-fail-fast",
+        "exit_code": 0,
+        "run_id": "ee47b452-2ec3-494f-a384-dae3b2949a48",
+        "result": "175 passed; 0 failed; 0 skipped; two slow classifications"
+      },
+      {
+        "surface": "public adapter contract",
+        "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-rollback-attribution-r6/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --test repository_fit_public_adapter_contract --no-fail-fast",
+        "exit_code": 0,
+        "run_id": "d72a70f2-8cbb-44bf-af8e-82499a8684b7",
+        "result": "5 passed; 0 failed; 0 skipped"
+      },
+      {
+        "surface": "unsuppressed all-targets check",
+        "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-rollback-attribution-r6/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo check --manifest-path validator/Cargo.toml --offline --locked --all-targets -j16",
+        "exit_code": 0,
+        "result": "All targets checked successfully with existing repository warnings visible and unsuppressed."
+      },
+      {
+        "surface": "leaky-marker reconciliation",
+        "command": "CARGO_TARGET_DIR=/private/tmp/hul-repository-fit-rollback-attribution-r6/target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 cargo nextest run --manifest-path validator/Cargo.toml --offline --locked --build-jobs 16 --test-threads 16 --lib -E 'test(/atomic_swap_before_binding_fails_but_post_binding_mutation_is_outside_the_read/)' --no-fail-fast",
+        "exit_code": 0,
+        "run_id": "84d42570-5ed0-4a7c-8d5e-9af1989aef29",
+        "result": "The exact test passed 1 of 1 without a LEAK marker; immediate process-table audit found no surviving nextest, test-binary, repository_fit_contract, or hul-repository-fit process."
+      }
+    ],
+    "nonpassing_attempts_not_used_as_positive_evidence": [
+      {
+        "surface": "R5 decisive negative control",
+        "result": "Intentional red control reproduced the false ApplyRolledBack outcome and is retained only as negative evidence."
+      },
+      {
+        "surface": "first corrected assertion shape",
+        "result": "The corrected guard returned ApplyOutcomeAmbiguous, but the test compared the post-rollback inode with the pre-effect inode. The assertion was narrowed to same-inode identity across the unmediated mutate-restore itself, after which the final decisive and broader runs passed."
+      }
+    ]
+  },
+  "controls_added": [
+    "reconciliation_binds_every_target_collect_to_the_authorized_snapshot"
+  ],
+  "fixture_ids_added": [
+    "target-reconciliation-authorized-snapshot-gaps"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "performed": true,
+      "scope": "the five leased paths only"
+    },
+    {
+      "class": "bounded_test_fixture",
+      "performed": true,
+      "scope": "/tmp/hul-repository-fit-apply-mediation-058 test directories managed by fixture Drop"
+    },
+    {
+      "class": "cargo_target_write",
+      "performed": true,
+      "scope": "/private/tmp/hul-repository-fit-rollback-attribution-r6/target"
+    },
+    {
+      "class": "process_table_read",
+      "performed": true,
+      "scope": "read-only post-test proof that no nextest or repository-fit test process survived"
+    },
+    {
+      "class": "network_or_external_write",
+      "performed": false,
+      "scope": "no network, Git mutation, host configuration, or live user repository effect"
+    }
+  ],
+  "artifact_rows": [
+    {
+      "path": "fixtures/repository-fit-apply-mediation/cases.json",
+      "sha256": "sha256:52338cfded18d071a986253cae0c15ab522c769257a1a3e96413a542add64b91",
+      "byte_length": 17781,
+      "lines": 117,
+      "membership": [
+        "four-leased-correction-artifacts",
+        "seven-implementation-artifacts",
+        "nine-source-integration-artifacts"
+      ],
+      "edited_by_this_worker": true
+    },
+    {
+      "path": "validator/src/cli/successor_public/fit.rs",
+      "sha256": "sha256:bbfcdec882f839befcf2b60114fc7ed2aad22c49d7ef694f4cf43caf287e916a",
+      "byte_length": 10054,
+      "lines": 266,
+      "membership": [
+        "nine-source-integration-artifacts"
+      ],
+      "edited_by_this_worker": false
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter.rs",
+      "sha256": "sha256:32be7af421cc97268667436fa54b470fd83c51295b9be685043ec8479c402f98",
+      "byte_length": 5835,
+      "lines": 162,
+      "membership": [
+        "seven-implementation-artifacts",
+        "nine-source-integration-artifacts"
+      ],
+      "edited_by_this_worker": false
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter/protocol.rs",
+      "sha256": "sha256:f9b869ae7e3bc024b5fc18ec0ea4a9aa45c4d394ad8f67e0acff70d6d1e3e5f6",
+      "byte_length": 34005,
+      "lines": 926,
+      "membership": [
+        "seven-implementation-artifacts",
+        "nine-source-integration-artifacts"
+      ],
+      "edited_by_this_worker": false
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter/root_permit.rs",
+      "sha256": "sha256:04d75292296ab4a16dd923a667e44ec4954e1386cf69e680ca0e4f2f723d2d43",
+      "byte_length": 102226,
+      "lines": 2879,
+      "membership": [
+        "four-leased-correction-artifacts",
+        "seven-implementation-artifacts",
+        "nine-source-integration-artifacts"
+      ],
+      "edited_by_this_worker": true
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter/tests.rs",
+      "sha256": "sha256:fa93a38f73f2f37c2e7ee109ab40c1c2f03f901dce2bb00fedb4825754ed9b74",
+      "byte_length": 222,
+      "lines": 10,
+      "membership": [
+        "seven-implementation-artifacts",
+        "nine-source-integration-artifacts"
+      ],
+      "edited_by_this_worker": false
+    },
+    {
+      "path": "validator/src/repository_fit/product_adapter/tests/root_permit.rs",
+      "sha256": "sha256:a3580b12b140c951f63270055d104639dc81be835854e56093c0593beae62fe3",
+      "byte_length": 99272,
+      "lines": 2857,
+      "membership": [
+        "four-leased-correction-artifacts",
+        "seven-implementation-artifacts",
+        "nine-source-integration-artifacts"
+      ],
+      "edited_by_this_worker": true
+    },
+    {
+      "path": "validator/tests/repository_fit_apply_mediation_contract.rs",
+      "sha256": "sha256:6c6058652731c0d381a2ba0c6d567204daaae2a552401f0b50605097c80922da",
+      "byte_length": 23388,
+      "lines": 477,
+      "membership": [
+        "four-leased-correction-artifacts",
+        "seven-implementation-artifacts",
+        "nine-source-integration-artifacts"
+      ],
+      "edited_by_this_worker": true
+    },
+    {
+      "path": "validator/tests/repository_fit_contract.rs",
+      "sha256": "sha256:19f012362cefd1582c419e71ebfd34824beec7191f1cb4e7e9f5a07f1000361e",
+      "byte_length": 528,
+      "lines": 20,
+      "membership": [
+        "nine-source-integration-artifacts"
+      ],
+      "edited_by_this_worker": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material-corrected",
+      "class": "rollback-causal-attribution",
+      "finding": "Every reconciliation target observation is now exactly tied to the retained ctime-bound authorized snapshot before semantic prior-state equivalence can support complete rollback attribution."
+    },
+    {
+      "severity": "control-proved",
+      "class": "post-authorization-target-aba",
+      "finding": "The frozen R5 guard false-passed the decisive post-authorized-revalidation ABA, while the R6 candidate returns ApplyOutcomeAmbiguous at that boundary and the two later reconciliation gaps."
+    },
+    {
+      "severity": "compatibility-proved",
+      "class": "mediator-owned-ctime",
+      "finding": "Exact authorized-snapshot binding does not reject the mediator's own ctime-changing rollback because the authorized snapshot is updated by the mediated rollback transition."
+    },
+    {
+      "severity": "review-pending",
+      "class": "independent-corrective-falsification",
+      "finding": "This WorkerResult records source and runtime candidate evidence only. It does not independently accept R6 or close the repository-fit node."
+    }
+  ],
+  "security_and_performance": {
+    "security": "The correction closes a causal rollback-attribution gap by binding all later observations to the last authorized ctime-bound target state. External and model-provided input remains untrusted and existing descriptor-relative mutation confinement is unchanged.",
+    "performance": "Production reconciliation performs the same observations as R5 and adds two exact in-memory TargetSnapshot comparisons. The phase hook exists only under cfg(test)."
+  },
+  "limitations": [
+    "The production permit issuer, trusted clock, durable nonce and semantic reservation ledger, and production exclusive LocalEffects lease remain absent.",
+    "No public apply dispatch is activated and no live user repository was mutated.",
+    "Darwin ctime behavior is exercised on the current Apple host. Non-Apple target change-version behavior remains fail closed and was not runtime-tested in this lane.",
+    "The WorkerResult is excluded from all three artifact-set aggregates and must be hashed separately by the root reconciler.",
+    "The five identity-only adjunct files were read and frozen but not edited by this worker; concurrent unowned worktree changes were preserved.",
+    "The closure run emitted one transient nextest LEAK classification for an unrelated local-reader test. The exact isolated rerun passed without LEAK and a process-table audit found no surviving process."
+  ],
+  "root_requests": [
+    "Recompute all three artifact-set aggregates and hash this self-excluded WorkerResult before integrating concurrent changes.",
+    "Assign fresh independent falsification of retained authorized-target equality, all three reconciliation hook phases, mediator-owned rollback ctime compatibility, and the deterministic red-to-green control.",
+    "Do not promote production issuer, public apply, installed behavior, readiness, release, node closure, or completion claims from this candidate."
+  ],
+  "no_claim_statement": "No production issuer, public apply behavior, installed behavior, live-user proof, readiness, release, node closure, or goal completion is claimed."
+}

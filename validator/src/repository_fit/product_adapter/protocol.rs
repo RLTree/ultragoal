@@ -1,6 +1,8 @@
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
+use std::sync::Arc;
+use std::sync::atomic::{AtomicU8, AtomicU64, Ordering};
 
 use crate::context::LiveContext;
 
@@ -22,6 +24,13 @@ use crate::repository_fit::{
 };
 
 const MAX_PLAN_RECORD_BYTES: usize = 16 * 1024 * 1024;
+const REQUEST_STAGE_PREPARED: u8 = 0;
+const REQUEST_STAGE_IN_FLIGHT: u8 = 1;
+const REQUEST_STAGE_SETTLED: u8 = 2;
+const REQUEST_STAGE_ROLLED_BACK: u8 = 3;
+const REQUEST_STAGE_AMBIGUOUS: u8 = 4;
+
+static NEXT_APPLY_REQUEST_ISSUANCE: AtomicU64 = AtomicU64::new(1);
 
 struct CurrentPlan {
     target: TargetProjection,
@@ -31,17 +40,91 @@ struct CurrentPlan {
     plan: FitPlan,
 }
 
+/// Process-local capability state shared only by one prepared request, its
+/// root-issued permit, and its exclusive mutation lease. The stage transition
+/// is the one linearization point for apply authority.
+pub(super) struct ApplyRequestSeal {
+    issuance: u64,
+    seal_id: String,
+    stage: AtomicU8,
+}
+
+impl ApplyRequestSeal {
+    fn new(issuance: u64, seal_id: String) -> Self {
+        Self {
+            issuance,
+            seal_id,
+            stage: AtomicU8::new(REQUEST_STAGE_PREPARED),
+        }
+    }
+
+    pub(super) const fn issuance(&self) -> u64 {
+        self.issuance
+    }
+
+    pub(super) fn matches(&self, expected: &str) -> bool {
+        self.seal_id == expected
+    }
+
+    pub(super) fn begin(&self) -> Result<(), FitAdapterError> {
+        self.stage
+            .compare_exchange(
+                REQUEST_STAGE_PREPARED,
+                REQUEST_STAGE_IN_FLIGHT,
+                Ordering::AcqRel,
+                Ordering::Acquire,
+            )
+            .map(|_| ())
+            .map_err(|_| adapter_error(AdapterErrorId::ApplyPermitReplayed))
+    }
+
+    pub(super) fn settle(&self) -> Result<(), FitAdapterError> {
+        self.transition(REQUEST_STAGE_SETTLED)
+    }
+
+    pub(super) fn rolled_back(&self) -> Result<(), FitAdapterError> {
+        self.transition(REQUEST_STAGE_ROLLED_BACK)
+    }
+
+    pub(super) fn ambiguous(&self) -> Result<(), FitAdapterError> {
+        self.transition(REQUEST_STAGE_AMBIGUOUS)
+    }
+
+    fn transition(&self, next: u8) -> Result<(), FitAdapterError> {
+        self.stage
+            .compare_exchange(
+                REQUEST_STAGE_IN_FLIGHT,
+                next,
+                Ordering::AcqRel,
+                Ordering::Acquire,
+            )
+            .map(|_| ())
+            .map_err(|_| adapter_error(AdapterErrorId::ApplyOutcomeInvalid))
+    }
+
+    #[cfg(test)]
+    pub(super) fn stage_for_test(&self) -> u8 {
+        self.stage.load(Ordering::Acquire)
+    }
+}
+
 /// A one-use, non-cloneable accepted-plan carrier. No method on this type
 /// performs an effect; a separate root-owned permit boundary must consume it.
 pub(crate) struct OpaqueFitApplyRequest {
-    request_id: String,
-    context_id: String,
-    candidate_id: String,
-    root_binding: String,
-    desired: DesiredState,
-    plan: FitPlan,
-    authorization: PlanAuthorization,
-    unix_modes: BTreeMap<String, u32>,
+    pub(super) request_id: String,
+    pub(super) context_id: String,
+    pub(super) candidate_id: String,
+    pub(super) root_binding: String,
+    pub(super) accepted_plan_sha256: String,
+    pub(super) plan_record_bytes: Vec<u8>,
+    pub(super) target: TargetProjection,
+    pub(super) authority: super::model::TemplateAuthorityProjection,
+    pub(super) desired: DesiredState,
+    pub(super) observed_modes: BTreeMap<String, Option<u32>>,
+    pub(super) plan: FitPlan,
+    pub(super) authorization: PlanAuthorization,
+    pub(super) unix_modes: BTreeMap<String, u32>,
+    pub(super) seal: Arc<ApplyRequestSeal>,
 }
 
 impl OpaqueFitApplyRequest {
@@ -67,6 +150,39 @@ impl OpaqueFitApplyRequest {
 
     pub(crate) fn unix_modes(&self) -> &BTreeMap<String, u32> {
         &self.unix_modes
+    }
+
+    pub(super) fn seal_matches(&self, expected: &str) -> bool {
+        self.seal.matches(expected)
+    }
+
+    pub(super) fn seal_id(&self) -> String {
+        request_seal_id(
+            &self.request_id,
+            &self.context_id,
+            &self.candidate_id,
+            self.seal.issuance(),
+        )
+    }
+
+    #[cfg(test)]
+    pub(super) fn duplicate_for_test(&self) -> Self {
+        Self {
+            request_id: self.request_id.clone(),
+            context_id: self.context_id.clone(),
+            candidate_id: self.candidate_id.clone(),
+            root_binding: self.root_binding.clone(),
+            accepted_plan_sha256: self.accepted_plan_sha256.clone(),
+            plan_record_bytes: self.plan_record_bytes.clone(),
+            target: self.target.clone(),
+            authority: self.authority.clone(),
+            desired: self.desired.clone(),
+            observed_modes: self.observed_modes.clone(),
+            plan: self.plan.clone(),
+            authorization: self.authorization.clone(),
+            unix_modes: self.unix_modes.clone(),
+            seal: Arc::clone(&self.seal),
+        }
     }
 
     #[cfg(test)]
@@ -256,9 +372,14 @@ pub(crate) fn prepare_apply_request(
         current.plan.plan_sha256.clone(),
     )
     .map_err(kernel_error)?;
+    let issuance = NEXT_APPLY_REQUEST_ISSUANCE
+        .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |value| {
+            value.checked_add(1)
+        })
+        .map_err(|_| adapter_error(AdapterErrorId::ProjectionFailed))?;
     let request_id = digest(
         &serde_json::to_vec(&(
-            "repository-fit-opaque-apply-request-v1",
+            "repository-fit-opaque-apply-request-v2",
             &current.target.context_id,
             &current.target.candidate.candidate_id,
             &current.inspection.root_binding,
@@ -266,6 +387,7 @@ pub(crate) fn prepare_apply_request(
             &current.plan.plan_sha256,
             accepted_plan_sha256,
             &current.bundle.authority.authority_sha256,
+            issuance,
         ))
         .map_err(|_| adapter_error(AdapterErrorId::ProjectionFailed))?,
     );
@@ -284,11 +406,25 @@ pub(crate) fn prepare_apply_request(
         support_limit: SUPPORT_LIMIT.to_owned(),
     };
     let request = OpaqueFitApplyRequest {
+        seal: Arc::new(ApplyRequestSeal::new(
+            issuance,
+            request_seal_id(
+                &request_id,
+                &current.target.context_id,
+                &current.target.candidate.candidate_id,
+                issuance,
+            ),
+        )),
         request_id,
-        context_id: current.target.context_id,
-        candidate_id: current.target.candidate.candidate_id,
-        root_binding: current.inspection.root_binding,
+        context_id: current.target.context_id.clone(),
+        candidate_id: current.target.candidate.candidate_id.clone(),
+        root_binding: current.inspection.root_binding.clone(),
+        accepted_plan_sha256: accepted_plan_sha256.to_owned(),
+        plan_record_bytes: supplied_canonical,
+        target: current.target,
+        authority: current.bundle.authority,
         desired: current.bundle.desired,
+        observed_modes: current.observed_modes,
         plan: current.plan,
         authorization,
         unix_modes: current.bundle.unix_modes,
@@ -297,6 +433,75 @@ pub(crate) fn prepare_apply_request(
         request,
         projection,
     })
+}
+
+/// Rebuilds every authority-bearing adapter dimension from the live target.
+/// The opaque request is accepted only when its exact internal plan, desired
+/// bytes, source authority, modes, and canonical plan record still match.
+pub(super) fn revalidate_apply_request(
+    context: &LiveContext,
+    request: &OpaqueFitApplyRequest,
+) -> Result<(), FitAdapterError> {
+    context
+        .revalidate()
+        .map_err(|_| adapter_error(AdapterErrorId::ContextStale))?;
+    if request.context_id != context.context_id()
+        || !request.seal_matches(&request.seal_id())
+        || request.accepted_plan_sha256 != request.plan.plan_sha256()
+        || !request.authorization.matches(&request.plan)
+    {
+        return Err(adapter_error(AdapterErrorId::ApplyPermitInvalid));
+    }
+
+    let rebuilt_desired = DesiredState::new(
+        request.desired.context_id.clone(),
+        request.desired.candidate_id.clone(),
+        request.desired.files.clone(),
+    )
+    .map_err(kernel_error)?;
+    if rebuilt_desired.state_sha256 != request.desired.state_sha256 {
+        return Err(adapter_error(AdapterErrorId::InvalidTemplateCatalog));
+    }
+
+    let current = current_plan(context)?;
+    let current_record = plan_record(&current)?;
+    let current_bytes = current_record.to_machine_bytes()?;
+    let request_plan =
+        plan_projection(&request.plan, &request.observed_modes, &request.unix_modes)?;
+    if current_bytes != request.plan_record_bytes
+        || request.target != current.target
+        || request.authority != current.bundle.authority
+        || request.desired.state_sha256 != current.bundle.desired.state_sha256
+        || request.observed_modes != current.observed_modes
+        || request.unix_modes != current.bundle.unix_modes
+        || request_plan != current_record.plan
+        || request.root_binding != current.inspection.root_binding
+        || request.candidate_id != current.target.candidate.candidate_id
+        || request.accepted_plan_sha256 != current.plan.plan_sha256
+    {
+        return Err(adapter_error(AdapterErrorId::StalePlan));
+    }
+    context
+        .revalidate()
+        .map_err(|_| adapter_error(AdapterErrorId::ContextStale))
+}
+
+fn request_seal_id(
+    request_id: &str,
+    context_id: &str,
+    candidate_id: &str,
+    issuance: u64,
+) -> String {
+    digest(
+        &serde_json::to_vec(&(
+            "repository-fit-opaque-apply-request-seal-v1",
+            request_id,
+            context_id,
+            candidate_id,
+            issuance,
+        ))
+        .expect("fixed request seal payload is serializable"),
+    )
 }
 
 fn current_plan(context: &LiveContext) -> Result<CurrentPlan, FitAdapterError> {

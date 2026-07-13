@@ -4,5 +4,7 @@ mod catalog;
 mod journeys;
 #[path = "tests/refusals.rs"]
 mod refusals;
+#[path = "tests/root_permit.rs"]
+mod root_permit;
 #[path = "tests/support.rs"]
 mod support;

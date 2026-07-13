@@ -2,7 +2,8 @@
 //!
 //! Root integration exposes inspect, plan, and verify through the sole public
 //! dispatcher. Apply preparation remains undispatched: it performs no
-//! workspace effect and issues no root grant or permit.
+//! workspace effect and issues no
+//! root grant or permit.
 
 use crate::cli::successor::runtime::{Diagnostic, DiagnosticId, RuntimeOutcome};
 use crate::cli::successor::{
@@ -231,10 +232,21 @@ fn adapter_failure(failure: FitAdapterError) -> RuntimeOutcome {
             ExitClass::UnsupportedCapability,
             DiagnosticId::DownstreamToolUnavailable,
         ),
+        AdapterErrorId::ApplyPermitMissing
+        | AdapterErrorId::ApplyPermitInvalid
+        | AdapterErrorId::ApplyPermitExpired
+        | AdapterErrorId::ApplyPermitReplayed
+        | AdapterErrorId::ApplyLeaseInvalid
+        | AdapterErrorId::ApplyMutationScopeViolation
+        | AdapterErrorId::ApplyOutcomeAmbiguous => {
+            (ExitClass::BlockedAuthority, DiagnosticId::AuthorityRequired)
+        }
         AdapterErrorId::InvalidTemplateCatalog
         | AdapterErrorId::TargetUnavailable
         | AdapterErrorId::ProjectionFailed
-        | AdapterErrorId::EffectFailed => {
+        | AdapterErrorId::EffectFailed
+        | AdapterErrorId::ApplyOutcomeInvalid
+        | AdapterErrorId::ApplyRolledBack => {
             (ExitClass::InternalFailure, DiagnosticId::ProjectionFailed)
         }
     };
