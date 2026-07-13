@@ -1,0 +1,48 @@
+{
+  "schema_version": "UltraLeaseAmendment-v1",
+  "amendment_id": "SUPPORTED-PACKAGE-PRODUCTION-087-R6",
+  "base_work_package": "docs/ultragoal-successor-live/work-packages/SUPPORTED-PACKAGE-PRODUCTION-087-R5.json",
+  "base_work_package_sha256": "sha256:a485487e96225a95155c37d4a691c7df5160db83bf5c5a3a2eafdf24c83e3167",
+  "issued_candidate": {
+    "head_commit": "360422d1a554ce6ef7ae95ab62f46d00ae60d1b2",
+    "head_tree": "2f54ab7d06a35919a9e706f94dc8037d0b66cb67",
+    "note": "The R5 code and tests remain frozen at artifact aggregate sha256:6f81ce81a6bfecac5183b77f2c709930ac066c3aba1b11ccd95c34b368735db8. R6 repairs the independently falsified proof envelope; it does not authorize weaker behavior or claims."
+  },
+  "owner_override": "/root/supported_package_publication_and_proof_engineer",
+  "lease_id_override": "SUPPORTED-PACKAGE-PRODUCTION-087-R6",
+  "inherit_all_r5_paths_symbols_outputs_effects_prohibitions_tests_and_verification": true,
+  "independent_rework": {
+    "reviewer": "/root/supported_package_security_and_publication_reviewer",
+    "reviewed_artifact_set_sha256": "sha256:6f81ce81a6bfecac5183b77f2c709930ac066c3aba1b11ccd95c34b368735db8",
+    "reviewed_worker_result_sha256": "sha256:69d990be0542d9da35b3eec5b0f3f83691afe5492dc44ad7e4347e8fd4641aa9",
+    "verdict": "REWORK",
+    "decisive_finding": "The immutable R5 scratch omitted the required WorkerResult path, so independent review could not hash, schema-validate, or reconcile the receipt that carried the closure formula, lease/candidate binding, artifact rows, limitations, and exact no-claim ceilings."
+  },
+  "required_correction": [
+    "Create a new immutable scratch from the current root HEAD plus only the exact R6 leased source/test artifacts and the exact finalized WorkerResult bytes at their canonical repository-relative path.",
+    "Keep the WorkerResult self-excluded from the whole-source closure to avoid self-reference, but require the file to exist in the frozen scratch as a regular single-link file and verify its exact independent SHA-256, byte length, adopted WorkerResult-v1 schema, R6 lease id, candidate binding, nine artifact rows, closure formula, limitations, and both no-claim ceilings.",
+    "Recompute the whole-source closure with the declared self-exclusion before and after proof, and separately bind the receipt digest to the reviewer handoff. Reject absent, stale, substituted, duplicate, special, hardlinked, or noncanonical receipt bytes.",
+    "Bind the corrected scratch to the then-current root HEAD/tree. Rerun the exact named product matrix because the product candidate identity includes the root candidate, even though the behavioral code is unchanged.",
+    "Preserve the exact R5 descriptor, membership, catalog, publication, rollback, conflict, security, zero-write, and false-pass behavior. Do not edit any root-owned surface or raise any package/install/runtime claim."
+  ],
+  "verification": {
+    "jobs": 16,
+    "test_threads": 16,
+    "required": [
+      "named source-included supported_package_product_contract",
+      "distribution package_identity and package_output closures",
+      "supported_package_identity_contract",
+      "adopted WorkerResult-v1 schema validation",
+      "receipt-present and receipt-digest reconciliation from the final immutable scratch",
+      "whole-source and Git-status pre/post closure",
+      "exact-file nonrecursive rustfmt and diff-check"
+    ]
+  },
+  "worker_result_contract": {
+    "schema": "WorkerResult-v1",
+    "lease_id": "SUPPORTED-PACKAGE-PRODUCTION-087-R6",
+    "required": true,
+    "no_claim_statement": "This worker does not claim readiness, release, or completion.",
+    "lease_exact_no_claim_field": "final_state.lease_exact_no_claim_statement"
+  }
+}
