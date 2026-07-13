@@ -246,7 +246,56 @@ impl FileHostEffectLedger {
             hook.reached.wait();
             hook.release.wait();
         }
-        Ok(())
+        process_test_barrier()
+    }
+}
+
+#[cfg(test)]
+fn process_test_barrier() -> Result<(), HostEffectLedgerError> {
+    let Some(root) = std::env::var_os("HUL_LEDGER_CHILD_BARRIER") else {
+        return Ok(());
+    };
+    let root = PathBuf::from(root);
+    if !root.is_absolute() {
+        return Err(invalid_record());
+    }
+    let root_identity =
+        FileIdentity::from_metadata(&fs::symlink_metadata(&root).map_err(|_| ledger_io())?);
+    validate_directory(root_identity)?;
+    let value = std::env::var("HUL_LEDGER_CHILD_VALUE").map_err(|_| invalid_record())?;
+    if value.len() != 1 || !value.bytes().all(|byte| byte.is_ascii_hexdigit()) {
+        return Err(invalid_record());
+    }
+    let ready = root.join(format!("ready-{value}"));
+    let file = OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .mode(0o600)
+        .open(&ready)
+        .map_err(|_| ledger_io())?;
+    file.sync_all().map_err(|_| ledger_io())?;
+    let ready_identity = FileIdentity::from_metadata(&file.metadata().map_err(|_| ledger_io())?);
+    validate_regular(ready_identity, 0, 0o600)?;
+    let release = root.join("release");
+    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(15);
+    loop {
+        match fs::symlink_metadata(&release) {
+            Ok(metadata) => {
+                let identity = FileIdentity::from_metadata(&metadata);
+                validate_regular(identity, 0, 0o600)?;
+                if identity.length != 0 {
+                    return Err(tampered());
+                }
+                return Ok(());
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
+                if std::time::Instant::now() >= deadline {
+                    return Err(ledger_io());
+                }
+                std::thread::sleep(std::time::Duration::from_millis(1));
+            }
+            Err(_) => return Err(ledger_io()),
+        }
     }
 }
 
@@ -1757,6 +1806,8 @@ mod tests {
         let initial = ledger.head().unwrap();
         let executable = std::env::current_exe().unwrap();
         let hex = b"0123456789abcdef";
+        let barrier = fixture.root.with_extension("process-barrier");
+        fs::DirBuilder::new().mode(0o700).create(&barrier).unwrap();
         let mut children = Vec::new();
         for value in hex {
             let child = Command::new(&executable)
@@ -1771,12 +1822,38 @@ mod tests {
                     initial.generation().to_string(),
                 )
                 .env("HUL_LEDGER_CHILD_VALUE", char::from(*value).to_string())
+                .env("HUL_LEDGER_CHILD_BARRIER", &barrier)
                 .stdout(Stdio::piped())
                 .stderr(Stdio::piped())
                 .spawn()
                 .unwrap();
             children.push(child);
         }
+        let deadline = std::time::Instant::now() + std::time::Duration::from_secs(15);
+        loop {
+            let ready = fs::read_dir(&barrier)
+                .unwrap()
+                .map(|entry| entry.unwrap().file_name().into_string().unwrap())
+                .filter(|name| name.starts_with("ready-"))
+                .collect::<BTreeSet<_>>();
+            if ready.len() == hex.len() {
+                break;
+            }
+            assert!(
+                std::time::Instant::now() < deadline,
+                "only {} of {} child processes reached the pre-flock barrier",
+                ready.len(),
+                hex.len()
+            );
+            thread::sleep(std::time::Duration::from_millis(1));
+        }
+        let release = OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .mode(0o600)
+            .open(barrier.join("release"))
+            .unwrap();
+        release.sync_all().unwrap();
         let outputs = children
             .into_iter()
             .map(|child| child.wait_with_output().unwrap())
@@ -1882,6 +1959,7 @@ mod tests {
         fn drop(&mut self) {
             let _ = fs::remove_dir_all(&self.root);
             let _ = fs::remove_file(self.root.with_extension("held-lock"));
+            let _ = fs::remove_dir_all(self.root.with_extension("process-barrier"));
         }
     }
 }
