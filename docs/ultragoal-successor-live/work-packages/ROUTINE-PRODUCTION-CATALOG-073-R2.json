@@ -1,0 +1,52 @@
+{
+  "schema_version": "RootIssuedCorrectiveWorkPackage-v1",
+  "work_package_id": "ROUTINE-PRODUCTION-CATALOG-073-R2",
+  "workstream": "routine-production-catalog-case-normalized-authority",
+  "issued_from_live_context": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "3517bb5e1a4368970ab8716d58fc736a6086ee1b",
+    "head_tree": "50b46a3bd390031495a0835047569336626e090a",
+    "rework_artifact_set_sha256": "sha256:d93002a8be84751ccfb02ae8ce1fc94a35ffb2248414ac17816e109b7c6756a2"
+  },
+  "lease": {
+    "principal": "/root/routine_catalog_case_authority_engineer",
+    "write_paths": [
+      "validator/src/routine_work/catalog.rs",
+      "validator/tests/routine_production_catalog_contract.rs",
+      "fixtures/routine-production-catalog/valid-catalog.json",
+      "fixtures/routine-production-catalog/cases.json",
+      "docs/ultragoal-successor-live/worker-results/ROUTINE-PRODUCTION-CATALOG-073.json"
+    ],
+    "write_symbols": [
+      "AdoptedRoutineNode::new",
+      "validate_raw_catalog primary and fallback identity",
+      "validate_global_runner_compatibility",
+      "case-alias controls"
+    ],
+    "generated_outputs": "WorkerResult only",
+    "fixtures": "Only the two named routine-production-catalog fixtures",
+    "git_mutation": "forbidden",
+    "root_owned_surfaces": "Cargo manifests, Cargo.lock, public catalog/dispatcher, grants, migration registry, generated authority, claims, release and acceptance records are forbidden",
+    "external_effects": "Only locked and offline Cargo builds/tests in isolated /private/tmp roots are authorized"
+  },
+  "required_behavior": [
+    "Use one canonical case identity consistently for symbolic tool equality and authority lookup.",
+    "Reject primary/fallback tools that differ only by case before catalog adoption.",
+    "Reject cross-definition case aliases carrying different authorities.",
+    "Permit intentional repeated use only when canonical symbolic identity and complete executable authority are identical.",
+    "Retain the exact executable-path, content, length, and mode binding already established by R1."
+  ],
+  "required_validation": [
+    "positive same-symbol same-authority reuse",
+    "primary/fallback true versus TRUE rejection",
+    "cross-definition case-alias different-authority rejection",
+    "case-alias same-authority behavior explicitly adopted and tested",
+    "exact true to /usr/bin/false substitution rejection",
+    "path, content, length, mode, catalog, and observation drift controls",
+    "focused suite twice, dependency-closed routine suite, production library check, zero-hidden-write comparison, and authoritative WorkerResult-v1 validation with 16 jobs and threads"
+  ],
+  "worker_result_requirements": "Freeze exact regular single-link artifact rows, aggregate, bytes, final root binding, commands/outcomes, effects, requested root changes, unsupported claims, and exact no-claim statement.",
+  "stop_rule": "Stop on any shared/root-only change, widened effect, ambiguous canonical identity, regression in executable binding, or inability to prove read-only paths have zero hidden writes.",
+  "no_claim_statement": "This corrective work package does not claim source acceptance, public execution, installation, runtime behavior, node closure, readiness, release, or completion."
+}

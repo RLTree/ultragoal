@@ -1,0 +1,50 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "ROUTINE-PRODUCTION-CATALOG-CASE-ALIAS-REVIEW-077",
+  "reviewer": "/root/routine_catalog_binding_reviewer",
+  "review_route": "scoped-adversarial-reviewer",
+  "verdict": "REWORK",
+  "reviewed_at_date": "2026-07-13",
+  "candidate_binding": {
+    "issued_root_commit": "473f19198fb2c3df2de50b10cd52fb264bcc9029",
+    "issued_root_tree": "d32eaa3867549d53381d4444339c8f996a14f864",
+    "review_observed_root_commit": "3517bb5e1a4368970ab8716d58fc736a6086ee1b",
+    "review_observed_root_tree": "50b46a3bd390031495a0835047569336626e090a",
+    "artifact_set_sha256": "sha256:d93002a8be84751ccfb02ae8ce1fc94a35ffb2248414ac17816e109b7c6756a2",
+    "artifact_count": 4,
+    "artifact_bytes": 111097,
+    "worker_result_sha256": "sha256:04b91bb22a84f018b49a77fb632f8fd9f3d22a32042519d7e02ef281ac6ac136",
+    "result_id": "sha256:7332738670b8e4daa9d969e80848e0de88422b6b86ab42e2f7e61954427c64d2"
+  },
+  "decisive_finding": {
+    "severity": "blocker",
+    "class": "case_aliased_symbolic_runner_authority",
+    "affected_paths": [
+      "validator/src/routine_work/catalog.rs",
+      "validator/tests/routine_production_catalog_contract.rs"
+    ],
+    "affected_symbols": [
+      "AdoptedRoutineNode::new",
+      "validate_raw_catalog",
+      "validate_global_runner_compatibility"
+    ],
+    "cause": "Catalog adoption and global authority use case-sensitive tool identity while request observations reject tool-name ambiguity case-insensitively.",
+    "reproduction": "Primary true and fallback TRUE can carry different executable authorities, survive catalog validation as separate map keys, and bind independently when either route is selected alone.",
+    "impact": "One symbolic tool can acquire multiple executable authorities through case aliases, defeating the global consistency and ambiguity-refusal contract.",
+    "result": "Material false-pass; source-local catalog acceptance is blocked."
+  },
+  "verification": {
+    "artifact_identity": "4/4 regular single-link rows matched",
+    "targeted_runner_substitution": "1/1 passed",
+    "focused_suite": "13/13 passed twice",
+    "dependency_closed_suite": "155/155 passed; 0 skipped; run 9a482e08-b8e9-4e5a-9646-ab5aea0f3267",
+    "receipt_and_zero_write": "passed on exercised surfaces"
+  },
+  "smallest_safe_correction": [
+    "Reject case-aliased primary and fallback tools during adoption and definition validation.",
+    "Key global symbolic-tool authority by one canonical case identity.",
+    "Add primary/fallback and cross-definition case-alias negatives while preserving exact same-authority reuse."
+  ],
+  "claim_ceiling": "The routine production catalog remains a source-local REWORK candidate.",
+  "no_claim_statement": "This review does not claim source acceptance, public execution, installation, runtime behavior, node closure, readiness, release, or completion."
+}
