@@ -1,0 +1,42 @@
+{
+  "schema_version": "RootDecisionHistory-v1",
+  "decision_id": "REPOSITORY-FIT-PUBLIC-ADAPTER-REWORK-HISTORY-056",
+  "workstream": "repository-fit-public-runtime-adapter",
+  "decision": "REWORK",
+  "baseline": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "b39119815eafb88efba95291a795d8fe68ad2ada",
+    "head_tree": "7fbc2d4487c64df5dfbf7edbd8f81d088a9331d7"
+  },
+  "material_findings": [
+    {
+      "sequence": 1,
+      "candidate_artifact_set_sha256": "sha256:8f34008883378ef4db4dfc1588b2f80e4f860e682676cddff289382b00504b20",
+      "class": "production_template_source_classification_false_pass",
+      "finding": "Production include_bytes sources were unconditionally labeled Regular while special-source tests constructed only synthetic enum variants. A real symlink or hardlink could be followed and a FIFO could block compilation.",
+      "required_correction": "Classify and privately stage actual manifest-authorized source paths before rustc embedding, rejecting non-regular, linked, cross-device, unbounded, or mutated sources."
+    },
+    {
+      "sequence": 2,
+      "candidate_artifact_set_sha256": "sha256:f14190103515bbb30edaaa4cc9d711893f75872bd619b45d6a38b67b8ce07ce3",
+      "worker_result_sha256": "sha256:040c0e5ee02230ec68352535100a24f02f931f87e7873907d43e7aea73500b12",
+      "class": "post_inspection_template_source_set_growth_false_pass",
+      "finding": "The build classifier compared manifest and source sets only before the mutation hook. Adding a new real template after inspection left the stale observed map accepted and staged one authorized row while an unknown live source existed.",
+      "reproduction": "An isolated hook added templates/B.md after initial parity; stage_manifest_sources_with_hook returned success with one staged row.",
+      "required_correction": "Re-enumerate before generated embedding and require exact final path-set equality plus every original per-path identity and mode; reject additions, removals, renames, aliases, substitutions, and metadata mutations."
+    }
+  ],
+  "current_state": "second_correction_active_not_reviewable",
+  "claim_ceiling": "internal_unaccepted_adapter_candidate_only",
+  "withheld": [
+    "root public module and dispatcher wiring",
+    "workspace mutation authority",
+    "representative repository journeys",
+    "installation",
+    "readiness",
+    "release",
+    "node closure",
+    "goal completion"
+  ],
+  "no_claim_statement": "This REWORK history accepts no repository-fit adapter or product behavior and changes no public authority, claim ceiling, readiness, release, node closure, or goal-completion state."
+}
