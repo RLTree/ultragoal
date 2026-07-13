@@ -1,0 +1,243 @@
+{
+  "schema_version": "WorkerResult-v1",
+  "worker": "/root/publication_recovery_ledger_binding_corrector",
+  "lease_id": "PUBLICATION-RECOVERY-LEDGER-HEAD-BINDING-063-R3",
+  "context_id": "sha256:fae8ca32bf965c917bb32d4d007c7f325eff6c1390bc159243dbdb82b19e5f40",
+  "provenance": {
+    "assignment_source": "Direct root corrective lease PUBLICATION-RECOVERY-LEDGER-HEAD-BINDING-063-R3; no persisted WorkPackage-v1 or AgentTaskEnvelope-v1 was supplied.",
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "base_head_commit": "19f6e999eacfc515823950dc34a75566e63dbbaa",
+    "base_head_tree": "44bdeb41d0d3e2294d6efd727fd15e2b41d9c0fe",
+    "context_id_formula": "SHA-256 of lease_id, branch, base_head_commit, and base_head_tree, each UTF-8 encoded and LF terminated in that order.",
+    "isolated_target_directory": "/private/tmp/hul-host-lifecycle-r3-ledger-head",
+    "build_jobs": 16,
+    "test_threads": 16,
+    "offline_locked_validation": true,
+    "warning_suppression_used": false,
+    "git_staging_performed": false,
+    "git_commit_performed": false,
+    "concurrent_unowned_changes_preserved": true
+  },
+  "supersedes": {
+    "worker": "/root/publication_recovery_exactness_corrector",
+    "lease_id": "PUBLICATION-RECOVERY-EXACTNESS-063-R2",
+    "candidate_id": "sha256:ac463dbdd11e43750f04ce76d23225846827418e169d38c55855c6ce87939a57",
+    "receipt_sha256": "sha256:cd723aad7b54a14440bc9d2c0c7cbfef19c1854777d63fe263c3695a2b6eeb53",
+    "status": "superseded_false_pass",
+    "reason": "R2 serialized, digested, issued, and validated recovery authority through ledger_head_sha256 alone. A HostEffectLedgerHead generation 0 to 1 substitution with the digest unchanged therefore returned an accepted RecoveryProposal. R2 and its receipt must not be used as proof."
+  },
+  "candidate_identity": {
+    "candidate_id": "sha256:9a2727a8d3af3fffb2f9abed670e98ea3b1ed74d096b13c9f6079e093acc108a",
+    "artifact_set_sha256": "sha256:9a2727a8d3af3fffb2f9abed670e98ea3b1ed74d096b13c9f6079e093acc108a",
+    "artifact_set_formula": "Sort the seven artifact rows by UTF-8 path bytes; serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>; concatenate; SHA-256 the resulting bytes.",
+    "artifact_count": 7,
+    "artifact_total_bytes": 180398,
+    "artifact_total_lines": 5553,
+    "maximum_file_lines": 2233,
+    "worker_result_self_excluded": true,
+    "path_identity_check": "Seven regular single-link files on device 16777229 with seven distinct inode numbers; no symlink, hardlink alias, special file, missing path, or duplicate inode was accepted.",
+    "freeze_head_commit": "19f6e999eacfc515823950dc34a75566e63dbbaa",
+    "freeze_head_tree": "44bdeb41d0d3e2294d6efd727fd15e2b41d9c0fe"
+  },
+  "owned_paths": [
+    "docs/ultragoal-successor-live/worker-results/SUPPORTED-HOST-LIFECYCLE-ADAPTER-063.json",
+    "fixtures/supported-host-lifecycle-adapter/cases.json",
+    "validator/src/distribution/host_effect/lifecycle/recovery.rs",
+    "validator/src/distribution/host_effect/lifecycle/tests.rs",
+    "validator/tests/supported_host_lifecycle_adapter_contract.rs"
+  ],
+  "identity_only_unowned_artifacts": [
+    "validator/src/distribution/host_effect/lifecycle.rs",
+    "validator/src/distribution/host_effect/lifecycle/binding.rs",
+    "validator/src/distribution/host_effect/lifecycle/coordinator.rs"
+  ],
+  "correction": {
+    "status": "corrective_candidate_for_root_review",
+    "publication_identity_preserved": "Expected prior, next, and temporary publication identities and PublicationAcknowledgementIdentity remain unchanged. Acknowledgement remains canonical evidence bound to the full ledger head; it is not keyed recovery authorization.",
+    "authorization_record": "RecoveryAuthorization now stores the canonical schema version and the exact full HostEffectLedgerHead, including generation and head_sha256, rather than a flattened digest-only field.",
+    "authorization_digest": "The v2 authorization digest serializes the nested full HostEffectLedgerHead and validates the exact schema, classification digest, coordinator binding digest, ledger digest, fixed 60000 millisecond lifetime, and nonce digest before issuance or proposal validation.",
+    "issuance_and_validation": "Issuance clones the exact ledger head into the opaque authorization. Proposal validation recomputes the v2 digest from that full record and requires exact HostEffectLedgerHead equality with the current coordinator ledger head.",
+    "proposal_proof": "The v2 proposal proof serializes authorized_ledger_head in addition to the classification and authorization digests. automatic_cleanup remains false.",
+    "negative_controls": "Generation-only substitution with an unchanged digest, digest-only substitution, combined or mixed head substitution, stale prior head use, classification substitution, expiry, malformed digests, malformed schema controls, and unknown schema controls fail closed.",
+    "recovery_boundary": "Recovery remains classification-and-proposal only. No cleanup, retry, executor, adapter, recovery mutation, or host mutation is performed.",
+    "host_mutations_performed": 0,
+    "claim_effect": "none"
+  },
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-host-lifecycle-r3-ledger-head CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo test --manifest-path validator/Cargo.toml --locked --offline --lib distribution::host_effect::lifecycle::tests::recovery_authorization_rejects_generation_only_ledger_head_substitution --jobs 16 -- --exact --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "1 passed; 0 failed; 0 ignored; 1745 filtered out. The decisive unchanged-digest generation 0 to 1 substitution is rejected."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-host-lifecycle-r3-ledger-head CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo test --manifest-path validator/Cargo.toml --locked --offline --lib distribution::host_effect::lifecycle::tests::recovery_authorization_rejects_classification_head_and_expiry_substitution --jobs 16 -- --exact --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "1 passed; 0 failed; 0 ignored; 1745 filtered out. Classification, digest-only head, combined head, stale head, and expiry substitutions are rejected."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-host-lifecycle-r3-ledger-head CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo test --manifest-path validator/Cargo.toml --locked --offline --lib distribution::host_effect::lifecycle::recovery::authorization_digest_tests::malformed_or_unknown_canonical_authorization_controls_fail_closed --jobs 16 -- --exact --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "1 passed; 0 failed; 0 ignored; 1745 filtered out. Unknown or malformed schema, digest, and lifetime controls are rejected."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-host-lifecycle-r3-ledger-head CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo test --manifest-path validator/Cargo.toml --locked --offline --lib distribution::host_effect::lifecycle --jobs 16 -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "16 passed; 0 failed; 0 ignored; 1730 filtered out."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-host-lifecycle-r3-ledger-head CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo test --manifest-path validator/Cargo.toml --locked --offline --lib distribution::host_effect --jobs 16 -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "36 passed; 0 failed; 1 intentionally ignored subprocess helper; 1709 filtered out."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-host-lifecycle-r3-ledger-head CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo test --manifest-path validator/Cargo.toml --locked --offline --test supported_host_lifecycle_adapter_contract --jobs 16 -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "4 passed; 0 failed; 0 ignored."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-host-lifecycle-r3-ledger-head CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo check --manifest-path validator/Cargo.toml --locked --offline --lib --jobs 16",
+      "status": "pass_with_existing_warnings",
+      "exit_code": 0,
+      "result": "Unsuppressed library check finished successfully in 8.84 seconds. Cargo reported 1205 existing crate-wide warnings. This is not warning-free proof."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/distribution/host_effect/lifecycle/recovery.rs validator/src/distribution/host_effect/lifecycle/tests.rs validator/tests/supported_host_lifecycle_adapter_contract.rs",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "All three owned Rust files match rustfmt."
+    },
+    {
+      "command": "jq empty fixtures/supported-host-lifecycle-adapter/cases.json and jq empty docs/ultragoal-successor-live/worker-results/SUPPORTED-HOST-LIFECYCLE-ADAPTER-063.json",
+      "status": "pass_after_final_receipt_write",
+      "exit_code": 0,
+      "result": "Both owned JSON files parse after the R3 WorkerResult replacement."
+    },
+    {
+      "command": "Trailing-whitespace and regular-file identity checks over the five owned paths, plus exact SHA-256, byte, line, inode, and sorted path-bound aggregate reconstruction over the seven non-self-referential artifacts",
+      "status": "pass_after_final_receipt_write",
+      "exit_code": 0,
+      "result": "Seven regular single-link unique-inode artifacts; 180398 bytes; 5553 lines; aggregate sha256:9a2727a8d3af3fffb2f9abed670e98ea3b1ed74d096b13c9f6079e093acc108a."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/supported-host-lifecycle-adapter/cases.json",
+      "sha256": "sha256:f96fdd3d0be12116c2da7d8f087f2bc7c296796b3d882bae0759e640db9222d8",
+      "byte_length": 9502,
+      "line_count": 312,
+      "device": 16777229,
+      "inode": 1097940371,
+      "hard_links": 1
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle.rs",
+      "sha256": "sha256:38d2f25583122d0b2854d61939396bc492e9618f478d623a48e7587d15e027d1",
+      "byte_length": 2107,
+      "line_count": 66,
+      "device": 16777229,
+      "inode": 1097867626,
+      "hard_links": 1
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/binding.rs",
+      "sha256": "sha256:0b1898a2ab65aeff8ad52cab28ec389dc2248d474ee1ea7633ab6bb3fdd7f167",
+      "byte_length": 29433,
+      "line_count": 877,
+      "device": 16777229,
+      "inode": 1097921815,
+      "hard_links": 1
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/coordinator.rs",
+      "sha256": "sha256:c5088fd1a31de20e9cc2a21fe1c2d41be528f085f77715aad632520e4f2e445e",
+      "byte_length": 20830,
+      "line_count": 619,
+      "device": 16777229,
+      "inode": 1097923214,
+      "hard_links": 1
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/recovery.rs",
+      "sha256": "sha256:63768bf1a1851db6185167168ab509f901b884106a97cfe167d3338310c946f7",
+      "byte_length": 29177,
+      "line_count": 848,
+      "device": 16777229,
+      "inode": 1097923378,
+      "hard_links": 1
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/tests.rs",
+      "sha256": "sha256:43a4d2702cb06ddbdd3098b1ae476768ca5dcb706200ed18fd4490f2ab9daded",
+      "byte_length": 70809,
+      "line_count": 2233,
+      "device": 16777229,
+      "inode": 1097932536,
+      "hard_links": 1
+    },
+    {
+      "path": "validator/tests/supported_host_lifecycle_adapter_contract.rs",
+      "sha256": "sha256:027b4fe8dc893458aae06be80bb751d9d4eca45427c23600a0d53fdcf486624a",
+      "byte_length": 18540,
+      "line_count": 598,
+      "device": 16777229,
+      "inode": 1097940372,
+      "hard_links": 1
+    }
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "five leased recovery-ledger binding paths",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "locked offline sixteen-job validation in isolated target directory",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "external network or system",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "live user, host product, installed product, or remote state",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "destructive or irreversible effect",
+      "performed": false
+    },
+    {
+      "class": "git_mutation",
+      "target": "stage, commit, branch, reset, or checkout",
+      "performed": false
+    }
+  ],
+  "unresolved_dependencies": [
+    "Independent root review and acceptance of this corrective candidate.",
+    "Production Linux or FreeBSD descriptor adapter, target lease, trusted clock, recovery executor, and terminal reconciliation remain outside this lease.",
+    "Legacy public and pathname-based executor routes remain outside this lease.",
+    "Installed-runtime and representative real-host journey proof remain absent.",
+    "Repository-wide warning debt remains: the fresh unsuppressed library check reports 1205 warnings."
+  ],
+  "limitations": [
+    "The seven-artifact aggregate excludes this WorkerResult by design; this WorkerResult is separately hashed after creation and reported in the parent handoff.",
+    "The lifecycle facade, binding, and coordinator are included in the coupled artifact identity but were not owned or modified by this corrective worker.",
+    "No live executor, process spawn, execveat, fexecve, production descriptor adapter, production target lease, production trusted clock, environment confinement, output capture, process cleanup, terminal transition, recovery mutation, or host mutation is implemented or proven here.",
+    "PublicationAcknowledgementIdentity remains canonical evidence only. It is not a MAC, signature, keyed authentication token, or recovery authorization.",
+    "Recovery classification and proposals are pure and non-mutating; automatic_cleanup remains false.",
+    "Linux and FreeBSD remain protocol-level capability candidates only; Darwin remains intentionally unsupported.",
+    "No public route, package, install, cache, marketplace, app registry, Plugins UI, discovery, runtime, acceptance, board, node closure, readiness, release, or completion surface was changed or proven by this corrective worker."
+  ],
+  "no_claim_statement": "Corrective source, fixture, and test evidence only. This WorkerResult makes no executor, adapter, recovery-mutation, public-route, install, installed-product, runtime, acceptance, readiness, release, node-closure, or completion claim."
+}

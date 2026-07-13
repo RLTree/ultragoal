@@ -8,6 +8,7 @@
 
 mod authority;
 mod ledger;
+mod lifecycle;
 
 pub(crate) use authority::{
     HostEffectAuthority, HostEffectAuthorityError, HostEffectAuthorityErrorId, HostEffectDecision,

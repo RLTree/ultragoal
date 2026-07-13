@@ -1,0 +1,312 @@
+{
+  "schema_version": "SupportedHostLifecycleAdapterCases-v3",
+  "binding_dimensions": [
+    "context_id",
+    "candidate_id",
+    "package_identity_sha256",
+    "journey_binding_sha256",
+    "session_issuance_sha256",
+    "lifecycle_plan_sha256",
+    "lifecycle_intent",
+    "expected_pre_state_sha256",
+    "expected_post_state_sha256",
+    "rollback_policy_sha256",
+    "reconciliation_policy_sha256",
+    "host_scope_sha256",
+    "host_capability_sha256",
+    "required_capabilities_sha256",
+    "external_request_sha256",
+    "command_plan_sha256",
+    "argv_sha256",
+    "executable_identity_sha256",
+    "target_identity_sha256",
+    "target_generation",
+    "issued_at_unix_ms",
+    "expires_at_unix_ms",
+    "expected_head_sha256",
+    "decision"
+  ],
+  "publication_identity_dimensions": [
+    "effect_identity_sha256",
+    "prior.name",
+    "prior.kind",
+    "prior.byte_length",
+    "prior.mode",
+    "prior.hard_links",
+    "prior.content_sha256",
+    "prior.data_synced",
+    "next.name",
+    "next.kind",
+    "next.byte_length",
+    "next.mode",
+    "next.hard_links",
+    "next.content_sha256",
+    "next.data_synced",
+    "temporary.name",
+    "temporary.kind",
+    "temporary.byte_length",
+    "temporary.mode",
+    "temporary.hard_links",
+    "temporary.content_sha256",
+    "temporary.data_synced"
+  ],
+  "inventory_identity_dimensions": [
+    "scan_generation_before",
+    "scan_generation_after",
+    "target.object_generation",
+    "temporary_objects[].object_generation",
+    "target.exact_observed_identity",
+    "temporary_objects[].exact_observed_identity",
+    "current_ledger_head.generation",
+    "current_ledger_head.head_sha256"
+  ],
+  "acknowledgement_identity_dimensions": [
+    "schema_version",
+    "effect_identity_sha256",
+    "publication_identity_sha256",
+    "ledger_head.generation",
+    "ledger_head.head_sha256",
+    "acknowledgement_sha256"
+  ],
+  "recovery_authorization_identity_dimensions": [
+    "schema_version",
+    "classification_sha256",
+    "coordinator_binding_sha256",
+    "ledger_head.generation",
+    "ledger_head.head_sha256",
+    "issued_at_unix_ms",
+    "expires_at_unix_ms",
+    "nonce_sha256",
+    "authorization_sha256"
+  ],
+  "recovery_authorization_refusal_cases": [
+    "classification-substitution",
+    "coordinator-substitution",
+    "ledger-generation-only-substitution",
+    "ledger-digest-only-substitution",
+    "stale-or-replayed-ledger-head",
+    "mixed-ledger-head",
+    "expired-authorization",
+    "malformed-canonical-control",
+    "unknown-canonical-control",
+    "noncanonical-digest"
+  ],
+  "refusal_cases": [
+    "wrong-package",
+    "wrong-journey",
+    "wrong-session",
+    "wrong-lifecycle",
+    "no-effect-lifecycle-intent",
+    "wrong-host-scope",
+    "wrong-capability",
+    "wrong-required-capability-set",
+    "wrong-descriptor-primitive",
+    "wrong-command-plan",
+    "scope-plan-marketplace-mismatch",
+    "repository-root-plan-mismatch",
+    "repository-root-path-alias",
+    "wrong-exact-argv",
+    "wrong-executable-object",
+    "final-executable-race-after-inflight",
+    "wrong-target-object",
+    "wrong-target-generation",
+    "untrusted-time",
+    "expired-time",
+    "stale-ledger-head",
+    "authority-substitution",
+    "authority-key-substitution",
+    "ledger-substitution",
+    "target-race"
+  ],
+  "darwin": {
+    "result": "unsupported-platform",
+    "repeated_attempts": 2,
+    "expected_clock_samples": 0,
+    "expected_target_observations": 0,
+    "expected_descriptor_adapter_calls": 0,
+    "expected_ledger_reservations": 0,
+    "expected_ledger_transitions": 0,
+    "expected_process_spawns": 0,
+    "expected_host_effects": 0,
+    "expected_plan_releases": 0,
+    "proof": "recursive byte-and-metadata snapshot equality for ledger and containing fixture tree"
+  },
+  "publication_crash_cases": [
+    {
+      "id": "before-temp-write",
+      "target": "exact-prior-missing-or-synced-read-only-regular",
+      "temp": "exact-name-mode-link-empty-unsynced-regular",
+      "expected": "interrupted-before-temp-write"
+    },
+    {
+      "id": "during-temp-fsync",
+      "target": "exact-prior-synced-read-only-regular",
+      "temp": "exact-name-mode-link-unconfirmed-regular",
+      "expected": "interrupted-during-temp-fsync"
+    },
+    {
+      "id": "before-rename",
+      "target": "exact-prior-synced-read-only-regular",
+      "temp": "exact-expected-temporary-identity",
+      "expected": "interrupted-before-rename"
+    },
+    {
+      "id": "after-rename",
+      "target": "exact-next-synced-read-only-regular",
+      "temp": "absent",
+      "expected": "committed-before-acknowledgement"
+    },
+    {
+      "id": "before-acknowledgement",
+      "target": "exact-next-synced-read-only-regular",
+      "temp": "absent",
+      "expected": "committed-before-acknowledgement"
+    },
+    {
+      "id": "orphan-temp-after-publication",
+      "target": "exact-next-synced-read-only-regular",
+      "temp": "present",
+      "expected": "orphaned-temporary-object"
+    }
+  ],
+  "unsafe_publication_cases": [
+    "multiple-temp-objects",
+    "fifo-temp",
+    "socket-temp",
+    "device-temp",
+    "directory-temp",
+    "symlink-temp",
+    "hardlinked-temp",
+    "unknown-target-object",
+    "scan-generation-race",
+    "target-object-generation-race",
+    "temporary-object-generation-race"
+  ],
+  "exactness_refusal_cases": [
+    "prior-digest-drift",
+    "prior-byte-length-drift",
+    "prior-mode-drift",
+    "prior-writable-mode",
+    "prior-link-count-drift",
+    "prior-unsynced",
+    "next-digest-drift",
+    "next-byte-length-drift",
+    "next-mode-drift",
+    "next-writable-mode",
+    "next-link-count-drift",
+    "next-unsynced",
+    "temporary-name-substitution",
+    "temporary-digest-drift",
+    "temporary-byte-length-drift",
+    "temporary-mode-drift",
+    "temporary-writable-mode",
+    "temporary-link-count-drift",
+    "temporary-synced-corrupt-content",
+    "target-special-object",
+    "multiple-temporary-objects",
+    "scan-generation-race",
+    "target-object-generation-race",
+    "temporary-object-generation-race"
+  ],
+  "canonical_acknowledgement_refusal_cases": [
+    "bare-boolean-acknowledgement",
+    "missing-acknowledgement-identity",
+    "unknown-field",
+    "missing-field",
+    "extra-field",
+    "duplicate-field",
+    "reordered-fields",
+    "surrounding-whitespace",
+    "noncanonical-digest",
+    "stale-ledger-generation",
+    "stale-ledger-head",
+    "foreign-effect-identity",
+    "foreign-publication-identity",
+    "target-mode-drift",
+    "target-byte-length-drift",
+    "target-unsynced",
+    "orphan-temporary-object"
+  ],
+  "false_pass_cases": [
+    {
+      "acknowledgement": "canonical-identity",
+      "substitution": "prior-target",
+      "target": "prior",
+      "expected": "false-pass-receipt"
+    },
+    {
+      "acknowledgement": "canonical-identity",
+      "substitution": "missing-target",
+      "target": "missing",
+      "expected": "false-pass-receipt"
+    },
+    {
+      "acknowledgement": "canonical-identity",
+      "substitution": "orphan-temporary-object",
+      "target": "exact-next-with-orphan-temp",
+      "expected": "false-pass-receipt"
+    },
+    {
+      "acknowledgement": "foreign-effect-identity",
+      "substitution": "effect-identity",
+      "target": "exact-next",
+      "expected": "false-pass-receipt"
+    },
+    {
+      "acknowledgement": "foreign-publication-identity",
+      "substitution": "publication-identity",
+      "target": "exact-next",
+      "expected": "false-pass-receipt"
+    },
+    {
+      "acknowledgement": "stale-ledger-head",
+      "substitution": "ledger-head",
+      "target": "exact-next",
+      "expected": "false-pass-receipt"
+    },
+    {
+      "acknowledgement": "canonical-identity",
+      "substitution": "writable-target-mode",
+      "target": "exact-next-digest-length-but-writable",
+      "expected": "false-pass-receipt"
+    },
+    {
+      "acknowledgement": "canonical-identity",
+      "substitution": "unsynced-target",
+      "target": "exact-next-digest-length-mode-but-unsynced",
+      "expected": "false-pass-receipt"
+    }
+  ],
+  "recovery_contract": {
+    "classification_is_read_only": true,
+    "expected_prior_object_is_exact": true,
+    "expected_next_object_is_exact": true,
+    "expected_temporary_object_is_exact": true,
+    "writable_expected_targets_are_rejected": true,
+    "acknowledgement_is_bare_boolean": false,
+    "acknowledgement_requires_canonical_bytes": true,
+    "acknowledgement_binds_effect_identity": true,
+    "acknowledgement_binds_publication_identity": true,
+    "acknowledgement_binds_current_ledger_head": true,
+    "acknowledgement_is_recovery_authorization": false,
+    "unknown_missing_extra_or_ambiguous_fields_are_rejected": true,
+    "separate_authorization_required": true,
+    "authorization_binds_coordinator": true,
+    "authorization_binds_current_ledger_head": true,
+    "authorization_binds_ledger_generation": true,
+    "authorization_binds_ledger_digest": true,
+    "authorization_rejects_stale_or_replayed_head": true,
+    "authorization_rejects_malformed_or_unknown_canonical_controls": true,
+    "proposal_proof_binds_authorized_ledger_head": true,
+    "authorization_expires": true,
+    "proposal_performs_cleanup": false,
+    "automatic_ambiguous_retry": false
+  },
+  "public_api_contract": {
+    "module_visibility": "crate-private",
+    "public_constructors": 0,
+    "cloneable_permit_or_handoff": false,
+    "deserializable_permit_or_handoff": false,
+    "production_descriptor_executor_implemented": false
+  }
+}
