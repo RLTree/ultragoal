@@ -7,12 +7,30 @@
 
 use serde::{Deserialize, Serialize};
 
-use super::{adapter_error, AdapterErrorId, FitAdapterError};
+use super::root_permit::ManagedAncestorContract;
+use super::{AdapterErrorId, FitAdapterError, adapter_error};
+
+pub(super) const RECOVERY_INTENT_SCHEMA: &str = "RepositoryFitRecoveryIntent-v2";
+
+#[derive(Serialize)]
+struct CanonicalRecoveryIntent<'a> {
+    schema_version: &'static str,
+    recovery: &'a RecoveryTargetSpec,
+}
+
+pub(super) fn canonical_recovery_intent_bytes(recovery: &RecoveryTargetSpec) -> Option<Vec<u8>> {
+    serde_json::to_vec(&CanonicalRecoveryIntent {
+        schema_version: RECOVERY_INTENT_SCHEMA,
+        recovery,
+    })
+    .ok()
+}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub(super) enum RepositoryFitLedgerState {
     Reserved,
+    EffectStarted,
     Committed,
     RolledBack,
     Rejected,
@@ -24,6 +42,7 @@ impl RepositoryFitLedgerState {
     pub(super) const fn name(self) -> &'static str {
         match self {
             Self::Reserved => "reserved",
+            Self::EffectStarted => "effect_started",
             Self::Committed => "committed",
             Self::RolledBack => "rolled_back",
             Self::Rejected => "rejected",
@@ -32,9 +51,28 @@ impl RepositoryFitLedgerState {
         }
     }
 
-    const fn terminal(self) -> bool {
-        !matches!(self, Self::Reserved)
+    pub(super) const fn terminal(self) -> bool {
+        !matches!(self, Self::Reserved | Self::EffectStarted)
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(super) struct RecoveryTargetSpec {
+    pub(super) request_id: String,
+    pub(super) root_binding: String,
+    pub(super) ancestors: ManagedAncestorContract,
+    pub(super) rows: Vec<RecoveryTargetRow>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(super) struct RecoveryTargetRow {
+    pub(super) path: String,
+    pub(super) pre_sha256: Option<String>,
+    pub(super) pre_mode: Option<u32>,
+    pub(super) post_sha256: String,
+    pub(super) post_mode: u32,
 }
 
 pub(super) struct ReservationRequest<'a> {
@@ -43,8 +81,10 @@ pub(super) struct ReservationRequest<'a> {
     pub(super) target_scope_id: &'a str,
     pub(super) permit_id: &'a str,
     pub(super) nonce_sha256: &'a str,
+    pub(super) recovery_intent_sha256: &'a str,
     pub(super) issued_tick: u64,
     pub(super) expires_tick: u64,
+    pub(super) recovery: &'a RecoveryTargetSpec,
 }
 
 pub(super) struct ReservationToken {
@@ -54,6 +94,7 @@ pub(super) struct ReservationToken {
     target_scope_id: String,
     permit_id: String,
     nonce_sha256: String,
+    recovery_intent_sha256: String,
 }
 
 impl std::fmt::Debug for ReservationToken {
@@ -71,8 +112,11 @@ impl std::fmt::Debug for ReservationToken {
 }
 
 pub(super) struct ExistingReservation {
-    token: ReservationToken,
+    reservation_id: String,
     state: RepositoryFitLedgerState,
+    expires_tick: u64,
+    recovery_intent_sha256: String,
+    recovery: RecoveryTargetSpec,
     terminal_sha256: Option<String>,
 }
 
@@ -81,14 +125,39 @@ impl ExistingReservation {
         self.state
     }
 
-    pub(super) fn token(self) -> ReservationToken {
-        self.token
+    pub(super) const fn expires_tick(&self) -> u64 {
+        self.expires_tick
+    }
+
+    pub(super) fn request_id(&self) -> &str {
+        &self.recovery.request_id
+    }
+
+    pub(super) fn matches_intent(
+        &self,
+        recovery_intent_sha256: &str,
+        recovery: &RecoveryTargetSpec,
+    ) -> bool {
+        self.recovery_intent_sha256 == recovery_intent_sha256 && self.recovery == *recovery
     }
 
     #[cfg(test)]
     pub(super) fn terminal_sha256(&self) -> Option<&str> {
         self.terminal_sha256.as_deref()
     }
+}
+
+pub(super) struct RecoveryTerminal {
+    pub(super) state: RepositoryFitLedgerState,
+    pub(super) terminal_sha256: String,
+    pub(super) error_id: Option<AdapterErrorId>,
+}
+
+pub(super) struct EffectOwner<'a> {
+    #[cfg(target_vendor = "apple")]
+    inner: supported::EffectOwner<'a>,
+    #[cfg(not(target_vendor = "apple"))]
+    _marker: std::marker::PhantomData<&'a ()>,
 }
 
 pub(super) enum ReservationDecision {
@@ -160,6 +229,21 @@ impl FileRepositoryFitLedger {
         }
     }
 
+    pub(super) fn open_existing(
+        root: &std::path::Path,
+        store_id: &str,
+    ) -> Result<Self, LedgerError> {
+        #[cfg(target_vendor = "apple")]
+        {
+            supported::FileLedger::open_existing(root, store_id).map(|inner| Self { inner })
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (root, store_id);
+            Err(LedgerError::new(LedgerErrorId::UnsupportedHost))
+        }
+    }
+
     pub(super) fn authority_id(&self) -> &str {
         #[cfg(target_vendor = "apple")]
         {
@@ -182,6 +266,64 @@ impl FileRepositoryFitLedger {
         #[cfg(not(target_vendor = "apple"))]
         {
             let _ = request;
+            Err(LedgerError::new(LedgerErrorId::UnsupportedHost))
+        }
+    }
+
+    pub(super) fn lookup_by_nonce(
+        &self,
+        nonce_sha256: &str,
+    ) -> Result<Option<ExistingReservation>, LedgerError> {
+        #[cfg(target_vendor = "apple")]
+        {
+            self.inner.lookup_by_nonce(nonce_sha256)
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = nonce_sha256;
+            Err(LedgerError::new(LedgerErrorId::UnsupportedHost))
+        }
+    }
+
+    pub(super) fn begin_effect(
+        &self,
+        token: ReservationToken,
+        tick: u64,
+    ) -> Result<EffectOwner<'_>, LedgerError> {
+        #[cfg(target_vendor = "apple")]
+        {
+            self.inner
+                .begin_effect(token, tick)
+                .map(|inner| EffectOwner { inner })
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (token, tick);
+            Err(LedgerError::new(LedgerErrorId::UnsupportedHost))
+        }
+    }
+
+    pub(super) fn reconcile_expired(
+        &self,
+        existing: ExistingReservation,
+        recovery_intent_sha256: &str,
+        recovery: &RecoveryTargetSpec,
+        tick: u64,
+        reconcile: impl FnOnce(RepositoryFitLedgerState, &RecoveryTargetSpec) -> RecoveryTerminal,
+    ) -> Result<RepositoryFitLedgerState, LedgerError> {
+        #[cfg(target_vendor = "apple")]
+        {
+            self.inner.reconcile_expired(
+                existing,
+                recovery_intent_sha256,
+                recovery,
+                tick,
+                reconcile,
+            )
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (existing, recovery_intent_sha256, recovery, tick, reconcile);
             Err(LedgerError::new(LedgerErrorId::UnsupportedHost))
         }
     }
@@ -219,17 +361,54 @@ impl FileRepositoryFitLedger {
     }
 }
 
+impl EffectOwner<'_> {
+    pub(super) fn terminal(
+        self,
+        state: RepositoryFitLedgerState,
+        terminal_sha256: &str,
+        error_id: Option<AdapterErrorId>,
+        tick: u64,
+    ) -> Result<(), LedgerError> {
+        #[cfg(target_vendor = "apple")]
+        {
+            self.inner.terminal(state, terminal_sha256, error_id, tick)
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (self, state, terminal_sha256, error_id, tick);
+            Err(LedgerError::new(LedgerErrorId::UnsupportedHost))
+        }
+    }
+}
+
+#[cfg(all(test, target_vendor = "apple"))]
+pub(super) fn before_lock_acquire_for_test(action: impl FnOnce() + 'static) {
+    supported::before_lock_acquire_for_test(action);
+}
+
+#[cfg(all(test, target_vendor = "apple"))]
+pub(super) fn before_atomic_publish_for_test(action: impl FnOnce() + 'static) {
+    supported::before_atomic_publish_for_test(action);
+}
+
+#[cfg(all(test, target_vendor = "apple"))]
+pub(super) fn before_existing_open_for_test(action: impl FnOnce() + 'static) {
+    supported::before_existing_open_for_test(action);
+}
+
 #[cfg(target_vendor = "apple")]
 mod supported {
     use super::{
-        AdapterErrorId, ExistingReservation, LedgerError, LedgerErrorId, RepositoryFitLedgerState,
-        ReservationDecision, ReservationRequest, ReservationToken,
+        AdapterErrorId, ExistingReservation, LedgerError, LedgerErrorId, RecoveryTargetSpec,
+        RecoveryTerminal, RepositoryFitLedgerState, ReservationDecision, ReservationRequest,
+        ReservationToken, canonical_recovery_intent_bytes,
     };
-    use crate::repository_fit::{digest, valid_digest};
+    use crate::repository_fit::{CanonicalPath, digest, valid_digest};
     use getrandom::fill;
     use hmac::{Hmac, Mac};
     use serde::{Deserialize, Serialize};
     use sha2::Sha256;
+    use std::cell::RefCell;
     use std::collections::{BTreeMap, BTreeSet};
     use std::ffi::{CStr, CString, OsStr};
     use std::fs::{self, File, OpenOptions};
@@ -242,19 +421,93 @@ mod supported {
 
     type HmacSha256 = Hmac<Sha256>;
 
-    const LEDGER_SCHEMA: &str = "harness-ultragoal.repository-fit-authority-ledger.v1";
-    const ENVELOPE_SCHEMA: &str = "harness-ultragoal.repository-fit-authority-ledger-envelope.v1";
-    const EVENT_DOMAIN: &str = "repository-fit-authority-ledger-event-v1";
-    const INITIAL_HEAD_DOMAIN: &str = "repository-fit-authority-ledger-initial-head-v1";
-    const AUTHORITY_DOMAIN: &str = "repository-fit-production-authority-v1";
-    const LOCK_MARKER: &[u8] = b"repository-fit-authority-lock-v1\n";
+    const LEDGER_SCHEMA: &str = "harness-ultragoal.repository-fit-authority-ledger.v3";
+    const ENVELOPE_SCHEMA: &str = "harness-ultragoal.repository-fit-authority-ledger-envelope.v3";
+    const EVENT_DOMAIN: &str = "repository-fit-authority-ledger-event-v3";
+    const INITIAL_HEAD_DOMAIN: &str = "repository-fit-authority-ledger-initial-head-v3";
+    const AUTHORITY_DOMAIN: &str = "repository-fit-production-authority-v3";
+    const LOCK_MARKER: &[u8] = b"repository-fit-authority-lock-v3\n";
     const KEY_BYTES: usize = 32;
     const MAX_LEDGER_BYTES: u64 = 64 * 1024 * 1024;
     const MAX_EVENTS: usize = 100_000;
+    const MAX_RECOVERY_ROWS: usize = 512;
     const MAX_STORE_ENTRIES: usize = 4;
     const KEY_NAME: &str = "authority.key";
     const LOCK_NAME: &str = "authority.lock";
     const STATE_NAME: &str = "authority-ledger.json";
+
+    #[cfg(test)]
+    thread_local! {
+        static BEFORE_LOCK_ACQUIRE: RefCell<Option<Box<dyn FnOnce()>>> = RefCell::new(None);
+        static BEFORE_ATOMIC_PUBLISH: RefCell<Option<Box<dyn FnOnce()>>> = RefCell::new(None);
+        static BEFORE_EXISTING_OPEN: RefCell<Option<Box<dyn FnOnce()>>> = RefCell::new(None);
+    }
+
+    #[cfg(test)]
+    pub(super) fn before_lock_acquire_for_test(action: impl FnOnce() + 'static) {
+        BEFORE_LOCK_ACQUIRE.with(|slot| {
+            let prior = slot.borrow_mut().replace(Box::new(action));
+            assert!(prior.is_none(), "a lock-acquire test hook is already armed");
+        });
+    }
+
+    #[cfg(test)]
+    pub(super) fn before_atomic_publish_for_test(action: impl FnOnce() + 'static) {
+        BEFORE_ATOMIC_PUBLISH.with(|slot| {
+            let prior = slot.borrow_mut().replace(Box::new(action));
+            assert!(
+                prior.is_none(),
+                "an atomic-publish test hook is already armed"
+            );
+        });
+    }
+
+    #[cfg(test)]
+    pub(super) fn before_existing_open_for_test(action: impl FnOnce() + 'static) {
+        BEFORE_EXISTING_OPEN.with(|slot| {
+            let prior = slot.borrow_mut().replace(Box::new(action));
+            assert!(
+                prior.is_none(),
+                "an existing-open test hook is already armed"
+            );
+        });
+    }
+
+    #[cfg(test)]
+    fn test_before_lock_acquire() {
+        BEFORE_LOCK_ACQUIRE.with(|slot| {
+            if let Some(action) = slot.borrow_mut().take() {
+                action();
+            }
+        });
+    }
+
+    #[cfg(not(test))]
+    const fn test_before_lock_acquire() {}
+
+    #[cfg(test)]
+    fn test_before_atomic_publish() {
+        BEFORE_ATOMIC_PUBLISH.with(|slot| {
+            if let Some(action) = slot.borrow_mut().take() {
+                action();
+            }
+        });
+    }
+
+    #[cfg(not(test))]
+    const fn test_before_atomic_publish() {}
+
+    #[cfg(test)]
+    fn test_before_existing_open() {
+        BEFORE_EXISTING_OPEN.with(|slot| {
+            if let Some(action) = slot.borrow_mut().take() {
+                action();
+            }
+        });
+    }
+
+    #[cfg(not(test))]
+    const fn test_before_existing_open() {}
 
     pub(super) struct FileLedger {
         store: Store,
@@ -337,8 +590,10 @@ mod supported {
         target_scope_id: String,
         permit_id: String,
         nonce_sha256: String,
+        recovery_intent_sha256: String,
         issued_tick: u64,
         expires_tick: u64,
+        recovery: RecoveryTargetSpec,
         state: RepositoryFitLedgerState,
         terminal_sha256: Option<String>,
         error_id: Option<AdapterErrorId>,
@@ -358,6 +613,12 @@ mod supported {
 
     struct ProcessLock(File);
 
+    pub(super) struct EffectOwner<'a> {
+        ledger: &'a FileLedger,
+        guard: ProcessLock,
+        token: ReservationToken,
+    }
+
     impl Drop for ProcessLock {
         fn drop(&mut self) {
             let _ = unsafe { libc::flock(self.0.as_raw_fd(), libc::LOCK_UN) };
@@ -370,16 +631,26 @@ mod supported {
                 return Err(invalid_store());
             }
             let store = Store::open(root)?;
-            let initial_names = store.names()?;
-            let lock = if initial_names.is_empty() {
-                store.open_or_create_lock()?
-            } else if initial_names.contains(LOCK_NAME) {
-                store.open_existing(LOCK_NAME, libc::O_RDWR)?
-            } else {
-                return Err(tampered());
+            store.verify_root()?;
+            let lock = match store.exact_stat(LOCK_NAME)? {
+                Some(_) => store.open_existing(LOCK_NAME, libc::O_RDWR)?,
+                None => {
+                    let was_empty_before_lock = store.is_empty_unclassified()?;
+                    if store.exact_stat(LOCK_NAME)?.is_some() {
+                        store.open_existing(LOCK_NAME, libc::O_RDWR)?
+                    } else {
+                        if !was_empty_before_lock {
+                            return Err(tampered());
+                        }
+                        store.open_or_create_lock()?
+                    }
+                }
             };
+            let _ = exact_identity(&store, LOCK_NAME, &lock, 0o600)?;
+            test_before_lock_acquire();
             let guard = ProcessLock::acquire(lock)?;
             store.verify_root()?;
+            let locked_identity = exact_identity(&store, LOCK_NAME, &guard.0, 0o600)?;
             let marker = read_bounded(&guard.0, LOCK_MARKER.len() as u64)?;
             let names = store.names()?;
             let fresh = marker.is_empty() && names == BTreeSet::from([LOCK_NAME.to_owned()]);
@@ -425,7 +696,42 @@ mod supported {
             {
                 return Err(tampered());
             }
+            let lock_identity = locked_identity;
+            let key_file = store.open_existing(KEY_NAME, libc::O_RDONLY)?;
+            let key_identity = exact_identity(&store, KEY_NAME, &key_file, 0o600)?;
+            let key = read_key(&key_file)?;
+            Self::finish_open(store, store_id, key, key_identity, lock_identity)
+        }
+
+        pub(super) fn open_existing(root: &Path, store_id: &str) -> Result<Self, LedgerError> {
+            if !valid_digest(store_id) {
+                return Err(invalid_store());
+            }
+            let store = Store::open(root)?;
+            store.verify_root()?;
+            match store.exact_stat(LOCK_NAME)? {
+                Some(_) => {}
+                None if store.is_empty_unclassified()? => return Err(replay_error()),
+                None => return Err(tampered()),
+            }
+            test_before_existing_open();
+            let lock = store.open_existing(LOCK_NAME, libc::O_RDWR)?;
+            let unlocked_identity = exact_identity(&store, LOCK_NAME, &lock, 0o600)?;
+            test_before_lock_acquire();
+            let guard = ProcessLock::acquire(lock)?;
+            store.verify_root()?;
             let lock_identity = exact_identity(&store, LOCK_NAME, &guard.0, 0o600)?;
+            if lock_identity != unlocked_identity
+                || read_bounded(&guard.0, LOCK_MARKER.len() as u64)? != LOCK_MARKER
+                || store.names()?
+                    != BTreeSet::from([
+                        KEY_NAME.to_owned(),
+                        LOCK_NAME.to_owned(),
+                        STATE_NAME.to_owned(),
+                    ])
+            {
+                return Err(tampered());
+            }
             let key_file = store.open_existing(KEY_NAME, libc::O_RDONLY)?;
             let key_identity = exact_identity(&store, KEY_NAME, &key_file, 0o600)?;
             let key = read_key(&key_file)?;
@@ -480,7 +786,10 @@ mod supported {
             self.with_snapshot(|payload, replayed| {
                 if let Some(owner) = replayed.nonce_owner.get(request.nonce_sha256) {
                     let current = replayed.records.get(owner).ok_or_else(tampered)?;
-                    if current.semantic_effect_id != request.semantic_effect_id {
+                    if current.semantic_effect_id != request.semantic_effect_id
+                        || current.recovery_intent_sha256 != request.recovery_intent_sha256
+                        || current.recovery != *request.recovery
+                    {
                         return Err(replay_error());
                     }
                     return Ok((ReservationDecision::Existing(existing(current)), false));
@@ -497,13 +806,14 @@ mod supported {
                 }
                 let reservation_id = digest(
                     &serde_json::to_vec(&(
-                        "repository-fit-ledger-reservation-v1",
+                        "repository-fit-ledger-reservation-v3",
                         &self.authority_id,
                         request.binding_sha256,
                         request.semantic_effect_id,
                         request.target_scope_id,
                         request.permit_id,
                         request.nonce_sha256,
+                        request.recovery_intent_sha256,
                     ))
                     .map_err(|_| invalid_transition())?,
                 );
@@ -515,8 +825,10 @@ mod supported {
                     request.target_scope_id,
                     request.permit_id,
                     request.nonce_sha256,
+                    request.recovery_intent_sha256,
                     request.issued_tick,
                     request.expires_tick,
+                    request.recovery,
                     RepositoryFitLedgerState::Reserved,
                     None,
                     None,
@@ -531,35 +843,51 @@ mod supported {
                         target_scope_id: request.target_scope_id.to_owned(),
                         permit_id: request.permit_id.to_owned(),
                         nonce_sha256: request.nonce_sha256.to_owned(),
+                        recovery_intent_sha256: request.recovery_intent_sha256.to_owned(),
                     }),
                     true,
                 ))
             })
         }
 
-        pub(super) fn terminal(
+        pub(super) fn lookup_by_nonce(
             &self,
-            token: ReservationToken,
-            state: RepositoryFitLedgerState,
-            terminal_sha256: &str,
-            error_id: Option<AdapterErrorId>,
-            tick: u64,
-        ) -> Result<(), LedgerError> {
-            if !state.terminal() || !valid_digest(terminal_sha256) {
+            nonce_sha256: &str,
+        ) -> Result<Option<ExistingReservation>, LedgerError> {
+            if !valid_digest(nonce_sha256) {
                 return Err(invalid_transition());
             }
-            self.with_snapshot(|payload, replayed| {
+            self.with_snapshot(|_, replayed| {
+                let existing = replayed
+                    .nonce_owner
+                    .get(nonce_sha256)
+                    .map(|owner| {
+                        replayed
+                            .records
+                            .get(owner)
+                            .map(existing)
+                            .ok_or_else(tampered)
+                    })
+                    .transpose()?;
+                Ok((existing, false))
+            })
+        }
+
+        pub(super) fn begin_effect(
+            &self,
+            token: ReservationToken,
+            tick: u64,
+        ) -> Result<EffectOwner<'_>, LedgerError> {
+            let guard = self.acquire_process_lock()?;
+            self.with_held_snapshot(&guard, |payload, replayed| {
                 let current = replayed
                     .records
                     .get(&token.reservation_id)
                     .ok_or_else(invalid_transition)?;
-                if current.state != RepositoryFitLedgerState::Reserved
-                    || current.binding_sha256 != token.binding_sha256
-                    || current.semantic_effect_id != token.semantic_effect_id
-                    || current.target_scope_id != token.target_scope_id
-                    || current.permit_id != token.permit_id
-                    || current.nonce_sha256 != token.nonce_sha256
-                    || tick < current.issued_tick
+                if !token_matches(&token, current)
+                    || current.state != RepositoryFitLedgerState::Reserved
+                    || tick < current.transition_tick
+                    || tick > current.expires_tick
                 {
                     return Err(invalid_transition());
                 }
@@ -571,8 +899,131 @@ mod supported {
                     &token.target_scope_id,
                     &token.permit_id,
                     &token.nonce_sha256,
+                    &token.recovery_intent_sha256,
                     current.issued_tick,
                     current.expires_tick,
+                    &current.recovery,
+                    RepositoryFitLedgerState::EffectStarted,
+                    None,
+                    None,
+                    tick,
+                )?;
+                append(payload, event)?;
+                Ok(((), true))
+            })?;
+            Ok(EffectOwner {
+                ledger: self,
+                guard,
+                token,
+            })
+        }
+
+        pub(super) fn reconcile_expired(
+            &self,
+            existing: ExistingReservation,
+            recovery_intent_sha256: &str,
+            recovery: &RecoveryTargetSpec,
+            tick: u64,
+            reconcile: impl FnOnce(RepositoryFitLedgerState, &RecoveryTargetSpec) -> RecoveryTerminal,
+        ) -> Result<RepositoryFitLedgerState, LedgerError> {
+            let guard = self.acquire_process_lock()?;
+            self.with_held_snapshot(&guard, |payload, replayed| {
+                let current = replayed
+                    .records
+                    .get(&existing.reservation_id)
+                    .ok_or_else(invalid_transition)?;
+                if current.expires_tick != existing.expires_tick
+                    || current.recovery_intent_sha256 != recovery_intent_sha256
+                    || current.recovery != *recovery
+                    || current.recovery != existing.recovery
+                {
+                    return Err(invalid_transition());
+                }
+                if current.state.terminal() {
+                    return Err(replay_error());
+                }
+                if tick <= current.expires_tick || tick < current.transition_tick {
+                    return Err(active_lease());
+                }
+                let terminal = reconcile(current.state, &current.recovery);
+                let allowed = match current.state {
+                    RepositoryFitLedgerState::Reserved => {
+                        terminal.state == RepositoryFitLedgerState::Interrupted
+                    }
+                    RepositoryFitLedgerState::EffectStarted => matches!(
+                        terminal.state,
+                        RepositoryFitLedgerState::Interrupted
+                            | RepositoryFitLedgerState::Committed
+                            | RepositoryFitLedgerState::Ambiguous
+                    ),
+                    _ => false,
+                };
+                if !allowed
+                    || !valid_digest(&terminal.terminal_sha256)
+                    || (terminal.state == RepositoryFitLedgerState::Committed
+                        && terminal.error_id.is_some())
+                    || (terminal.state != RepositoryFitLedgerState::Committed
+                        && terminal.error_id.is_none())
+                {
+                    return Err(invalid_transition());
+                }
+                let event = next_event(
+                    payload,
+                    &current.reservation_id,
+                    &current.binding_sha256,
+                    &current.semantic_effect_id,
+                    &current.target_scope_id,
+                    &current.permit_id,
+                    &current.nonce_sha256,
+                    &current.recovery_intent_sha256,
+                    current.issued_tick,
+                    current.expires_tick,
+                    &current.recovery,
+                    terminal.state,
+                    Some(&terminal.terminal_sha256),
+                    terminal.error_id,
+                    tick,
+                )?;
+                append(payload, event)?;
+                Ok((terminal.state, true))
+            })
+        }
+
+        pub(super) fn terminal(
+            &self,
+            token: ReservationToken,
+            state: RepositoryFitLedgerState,
+            terminal_sha256: &str,
+            error_id: Option<AdapterErrorId>,
+            tick: u64,
+        ) -> Result<(), LedgerError> {
+            if state != RepositoryFitLedgerState::Rejected || !valid_digest(terminal_sha256) {
+                return Err(invalid_transition());
+            }
+            self.with_snapshot(|payload, replayed| {
+                let current = replayed
+                    .records
+                    .get(&token.reservation_id)
+                    .ok_or_else(invalid_transition)?;
+                if current.state != RepositoryFitLedgerState::Reserved
+                    || !token_matches(&token, current)
+                    || tick < current.transition_tick
+                    || tick > current.expires_tick
+                {
+                    return Err(invalid_transition());
+                }
+                let event = next_event(
+                    payload,
+                    &token.reservation_id,
+                    &token.binding_sha256,
+                    &token.semantic_effect_id,
+                    &token.target_scope_id,
+                    &token.permit_id,
+                    &token.nonce_sha256,
+                    &token.recovery_intent_sha256,
+                    current.issued_tick,
+                    current.expires_tick,
+                    &current.recovery,
                     state,
                     Some(terminal_sha256),
                     error_id,
@@ -587,13 +1038,34 @@ mod supported {
             &self,
             operation: impl FnOnce(&mut SnapshotPayload, &ReplayState) -> Result<(T, bool), LedgerError>,
         ) -> Result<T, LedgerError> {
-            let mut local = self.local.lock().map_err(|_| ledger_io())?;
-            self.verify_store()?;
+            let guard = self.acquire_process_lock()?;
+            self.with_held_snapshot(&guard, operation)
+        }
+
+        fn acquire_process_lock(&self) -> Result<ProcessLock, LedgerError> {
+            self.store.verify_root()?;
             let lock = self.store.open_existing(LOCK_NAME, libc::O_RDWR)?;
             if exact_identity(&self.store, LOCK_NAME, &lock, 0o600)? != self.lock_identity {
                 return Err(tampered());
             }
-            let _guard = ProcessLock::acquire(lock)?;
+            test_before_lock_acquire();
+            let guard = ProcessLock::acquire(lock)?;
+            if exact_identity(&self.store, LOCK_NAME, &guard.0, 0o600)? != self.lock_identity {
+                return Err(tampered());
+            }
+            self.verify_store()?;
+            Ok(guard)
+        }
+
+        fn with_held_snapshot<T>(
+            &self,
+            guard: &ProcessLock,
+            operation: impl FnOnce(&mut SnapshotPayload, &ReplayState) -> Result<(T, bool), LedgerError>,
+        ) -> Result<T, LedgerError> {
+            if exact_identity(&self.store, LOCK_NAME, &guard.0, 0o600)? != self.lock_identity {
+                return Err(tampered());
+            }
+            let mut local = self.local.lock().map_err(|_| ledger_io())?;
             self.verify_store()?;
             let key_file = self.store.open_existing(KEY_NAME, libc::O_RDONLY)?;
             if exact_identity(&self.store, KEY_NAME, &key_file, 0o600)? != self.key_identity {
@@ -654,6 +1126,52 @@ mod supported {
         pub(super) fn snapshot_for_test(&self) -> Result<Vec<u8>, LedgerError> {
             self.verify_store()?;
             self.store.read_state()
+        }
+    }
+
+    impl EffectOwner<'_> {
+        pub(super) fn terminal(
+            self,
+            state: RepositoryFitLedgerState,
+            terminal_sha256: &str,
+            error_id: Option<AdapterErrorId>,
+            tick: u64,
+        ) -> Result<(), LedgerError> {
+            if !state.terminal() || !valid_digest(terminal_sha256) {
+                return Err(invalid_transition());
+            }
+            self.ledger
+                .with_held_snapshot(&self.guard, |payload, replayed| {
+                    let current = replayed
+                        .records
+                        .get(&self.token.reservation_id)
+                        .ok_or_else(invalid_transition)?;
+                    if current.state != RepositoryFitLedgerState::EffectStarted
+                        || !token_matches(&self.token, current)
+                        || tick < current.transition_tick
+                    {
+                        return Err(invalid_transition());
+                    }
+                    let event = next_event(
+                        payload,
+                        &self.token.reservation_id,
+                        &self.token.binding_sha256,
+                        &self.token.semantic_effect_id,
+                        &self.token.target_scope_id,
+                        &self.token.permit_id,
+                        &self.token.nonce_sha256,
+                        &self.token.recovery_intent_sha256,
+                        current.issued_tick,
+                        current.expires_tick,
+                        &current.recovery,
+                        state,
+                        Some(terminal_sha256),
+                        error_id,
+                        tick,
+                    )?;
+                    append(payload, event)?;
+                    Ok(((), true))
+                })
         }
     }
 
@@ -767,6 +1285,49 @@ mod supported {
             result
         }
 
+        fn is_empty_unclassified(&self) -> Result<bool, LedgerError> {
+            self.verify_root()?;
+            let descriptor = unsafe {
+                libc::openat(
+                    self.directory.as_raw_fd(),
+                    c".".as_ptr(),
+                    libc::O_RDONLY
+                        | libc::O_DIRECTORY
+                        | libc::O_CLOEXEC
+                        | libc::O_NOFOLLOW
+                        | libc::O_NONBLOCK,
+                )
+            };
+            if descriptor < 0 {
+                return Err(ledger_io());
+            }
+            let stream = unsafe { libc::fdopendir(descriptor) };
+            if stream.is_null() {
+                unsafe { libc::close(descriptor) };
+                return Err(ledger_io());
+            }
+            let result = loop {
+                unsafe { *libc::__error() = 0 };
+                let entry = unsafe { libc::readdir(stream) };
+                if entry.is_null() {
+                    break if unsafe { *libc::__error() } == 0 {
+                        Ok(true)
+                    } else {
+                        Err(ledger_io())
+                    };
+                }
+                let bytes = unsafe { CStr::from_ptr((*entry).d_name.as_ptr()) }.to_bytes();
+                if !matches!(bytes, b"." | b"..") {
+                    break Ok(false);
+                }
+            };
+            if unsafe { libc::closedir(stream) } != 0 {
+                return Err(ledger_io());
+            }
+            self.verify_root()?;
+            result
+        }
+
         fn open_or_create_lock(&self) -> Result<File, LedgerError> {
             match self.create_exclusive(LOCK_NAME, 0o600) {
                 Ok(file) => {
@@ -863,6 +1424,7 @@ mod supported {
                 {
                     return Err(tampered());
                 }
+                test_before_atomic_publish();
                 rename_relative(&self.directory, &temporary, STATE_NAME)?;
                 self.directory.sync_all().map_err(|_| ledger_io())?;
                 let state = self.open_existing(STATE_NAME, libc::O_RDONLY)?;
@@ -1068,6 +1630,20 @@ mod supported {
                         .active_targets
                         .insert(event.target_scope_id.clone(), event.reservation_id.clone());
                 }
+                RepositoryFitLedgerState::EffectStarted => {
+                    let prior = state
+                        .records
+                        .get(&event.reservation_id)
+                        .ok_or_else(tampered)?;
+                    if prior.state != RepositoryFitLedgerState::Reserved
+                        || !same_reservation(prior, event)
+                        || event.transition_tick < prior.transition_tick
+                        || state.active_targets.get(&event.target_scope_id)
+                            != Some(&event.reservation_id)
+                    {
+                        return Err(tampered());
+                    }
+                }
                 terminal => {
                     if !terminal.terminal() {
                         return Err(tampered());
@@ -1076,8 +1652,12 @@ mod supported {
                         .records
                         .get(&event.reservation_id)
                         .ok_or_else(tampered)?;
-                    if prior.state != RepositoryFitLedgerState::Reserved
-                        || !same_reservation(prior, event)
+                    if !matches!(
+                        prior.state,
+                        RepositoryFitLedgerState::Reserved
+                            | RepositoryFitLedgerState::EffectStarted
+                    ) || !same_reservation(prior, event)
+                        || event.transition_tick < prior.transition_tick
                         || state.active_targets.get(&event.target_scope_id)
                             != Some(&event.reservation_id)
                     {
@@ -1106,10 +1686,21 @@ mod supported {
             && valid_digest(&event.target_scope_id)
             && valid_digest(&event.permit_id)
             && valid_digest(&event.nonce_sha256)
+            && valid_digest(&event.recovery_intent_sha256)
+            && recovery_intent_matches(&event.recovery, &event.recovery_intent_sha256)
             && event.expires_tick >= event.issued_tick
+            && valid_recovery(&event.recovery)
+            && event.transition_tick >= event.issued_tick
             && match event.state {
                 RepositoryFitLedgerState::Reserved => {
-                    event.terminal_sha256.is_none() && event.error_id.is_none()
+                    event.transition_tick == event.issued_tick
+                        && event.terminal_sha256.is_none()
+                        && event.error_id.is_none()
+                }
+                RepositoryFitLedgerState::EffectStarted => {
+                    event.transition_tick <= event.expires_tick
+                        && event.terminal_sha256.is_none()
+                        && event.error_id.is_none()
                 }
                 RepositoryFitLedgerState::Committed => {
                     event.terminal_sha256.as_deref().is_some_and(valid_digest)
@@ -1126,8 +1717,10 @@ mod supported {
             && left.target_scope_id == right.target_scope_id
             && left.permit_id == right.permit_id
             && left.nonce_sha256 == right.nonce_sha256
+            && left.recovery_intent_sha256 == right.recovery_intent_sha256
             && left.issued_tick == right.issued_tick
             && left.expires_tick == right.expires_tick
+            && left.recovery == right.recovery
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -1139,8 +1732,10 @@ mod supported {
         target_scope_id: &str,
         permit_id: &str,
         nonce_sha256: &str,
+        recovery_intent_sha256: &str,
         issued_tick: u64,
         expires_tick: u64,
+        recovery: &RecoveryTargetSpec,
         state: RepositoryFitLedgerState,
         terminal_sha256: Option<&str>,
         error_id: Option<AdapterErrorId>,
@@ -1149,7 +1744,7 @@ mod supported {
         let sequence = payload.generation.checked_add(1).ok_or_else(tampered)?;
         let event_id = digest(
             &serde_json::to_vec(&(
-                "repository-fit-ledger-event-id-v1",
+                "repository-fit-ledger-event-id-v2",
                 &payload.authority_id,
                 sequence,
                 reservation_id,
@@ -1167,8 +1762,10 @@ mod supported {
             target_scope_id: target_scope_id.to_owned(),
             permit_id: permit_id.to_owned(),
             nonce_sha256: nonce_sha256.to_owned(),
+            recovery_intent_sha256: recovery_intent_sha256.to_owned(),
             issued_tick,
             expires_tick,
+            recovery: recovery.clone(),
             state,
             terminal_sha256: terminal_sha256.map(str::to_owned),
             error_id,
@@ -1194,12 +1791,16 @@ mod supported {
             &event.target_scope_id,
             &event.permit_id,
             &event.nonce_sha256,
+            &event.recovery_intent_sha256,
             event.issued_tick,
             event.expires_tick,
-            event.state,
-            &event.terminal_sha256,
-            event.error_id,
-            event.transition_tick,
+            (
+                &event.recovery,
+                event.state,
+                &event.terminal_sha256,
+                event.error_id,
+                event.transition_tick,
+            ),
         ))
         .map(|bytes| digest(&bytes))
         .map_err(|_| invalid_transition())
@@ -1217,15 +1818,11 @@ mod supported {
 
     fn existing(event: &LedgerEvent) -> ExistingReservation {
         ExistingReservation {
-            token: ReservationToken {
-                reservation_id: event.reservation_id.clone(),
-                binding_sha256: event.binding_sha256.clone(),
-                semantic_effect_id: event.semantic_effect_id.clone(),
-                target_scope_id: event.target_scope_id.clone(),
-                permit_id: event.permit_id.clone(),
-                nonce_sha256: event.nonce_sha256.clone(),
-            },
+            reservation_id: event.reservation_id.clone(),
             state: event.state,
+            expires_tick: event.expires_tick,
+            recovery_intent_sha256: event.recovery_intent_sha256.clone(),
+            recovery: event.recovery.clone(),
             terminal_sha256: event.terminal_sha256.clone(),
         }
     }
@@ -1237,14 +1834,57 @@ mod supported {
             request.target_scope_id,
             request.permit_id,
             request.nonce_sha256,
+            request.recovery_intent_sha256,
         ]
         .iter()
         .any(|value| !valid_digest(value))
             || request.expires_tick < request.issued_tick
+            || !valid_recovery(&request.recovery)
+            || !recovery_intent_matches(request.recovery, request.recovery_intent_sha256)
         {
             return Err(invalid_transition());
         }
         Ok(())
+    }
+
+    fn valid_recovery(recovery: &RecoveryTargetSpec) -> bool {
+        let leaf_paths = recovery
+            .rows
+            .iter()
+            .map(|row| row.path.clone())
+            .collect::<Vec<_>>();
+        valid_digest(&recovery.request_id)
+            && valid_digest(&recovery.root_binding)
+            && recovery.rows.len() <= MAX_RECOVERY_ROWS
+            && recovery.ancestors.valid_for_leaf_paths(&leaf_paths)
+            && recovery.rows.iter().all(|row| {
+                CanonicalPath::parse(&row.path).is_ok()
+                    && row.pre_sha256.as_deref().is_none_or(valid_digest)
+                    && row
+                        .pre_mode
+                        .is_none_or(|mode| matches!(mode, 0o644 | 0o755))
+                    && row.pre_sha256.is_some() == row.pre_mode.is_some()
+                    && valid_digest(&row.post_sha256)
+                    && matches!(row.post_mode, 0o644 | 0o755)
+            })
+            && recovery
+                .rows
+                .windows(2)
+                .all(|rows| rows[0].path.as_bytes() < rows[1].path.as_bytes())
+    }
+
+    fn recovery_intent_matches(recovery: &RecoveryTargetSpec, expected: &str) -> bool {
+        canonical_recovery_intent_bytes(recovery).is_some_and(|bytes| digest(&bytes) == expected)
+    }
+
+    fn token_matches(token: &ReservationToken, event: &LedgerEvent) -> bool {
+        event.reservation_id == token.reservation_id
+            && event.binding_sha256 == token.binding_sha256
+            && event.semantic_effect_id == token.semantic_effect_id
+            && event.target_scope_id == token.target_scope_id
+            && event.permit_id == token.permit_id
+            && event.nonce_sha256 == token.nonce_sha256
+            && event.recovery_intent_sha256 == token.recovery_intent_sha256
     }
 
     fn exact_identity(

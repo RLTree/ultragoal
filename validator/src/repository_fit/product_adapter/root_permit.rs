@@ -3,10 +3,10 @@
 //! This module is intentionally internal. Permit issuance and public apply
 //! dispatch remain root-owned and are not activated by this increment.
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 #[cfg(unix)]
-use std::ffi::{CStr, CString};
+use std::ffi::{CStr, CString, OsStr};
 use std::fmt::{Debug, Formatter};
 use std::fs::{self, File, OpenOptions};
 use std::io::{Read, Seek, SeekFrom};
@@ -23,19 +23,23 @@ use std::mem::MaybeUninit;
 #[cfg(unix)]
 use std::os::fd::{AsRawFd, FromRawFd, IntoRawFd};
 #[cfg(unix)]
+use std::os::unix::ffi::OsStrExt;
+#[cfg(unix)]
 use std::os::unix::fs::{FileTypeExt, MetadataExt, OpenOptionsExt};
 
 use crate::context::{BuildRequest, LiveContext};
+#[cfg(unix)]
+use crate::repository_fit::local::root_binding_from_canonical_path;
 use crate::repository_fit::{
-    apply, digest, rollback, valid_digest, verify, CanonicalPath, ExpectedContent, FitEffects,
-    FitError, FitErrorId, FitReader, FitVerification,
+    CanonicalPath, ExpectedContent, FitEffects, FitError, FitErrorId, FitReader, FitVerification,
+    apply, digest, rollback, valid_digest, verify,
 };
 
 #[cfg(unix)]
 use crate::repository_fit::LocalEffects;
 
-use super::protocol::{revalidate_apply_request, ApplyRequestSeal, OpaqueFitApplyRequest};
-use super::{adapter_error, AdapterErrorId, FitAdapterError};
+use super::protocol::{ApplyRequestSeal, OpaqueFitApplyRequest, revalidate_apply_request};
+use super::{AdapterErrorId, FitAdapterError, adapter_error};
 
 const PERMIT_DOMAIN: &str = "repository-fit-root-apply-permit-v1";
 const AUTHORITY_DOMAIN: &str = "repository-fit-root-apply-authority-v1";
@@ -49,6 +53,7 @@ const MAX_FENCE_TOTAL_BYTES: u64 = 256 * 1024 * 1024;
 const CREATED_MANAGED_ANCESTOR_MODE: u32 = 0o755;
 const MAX_TARGET_ENTRY_SCAN: usize = 4 * 1024;
 const MAX_TARGET_NAME_BYTES: usize = 1024 * 1024;
+const MAX_MANAGED_ANCESTOR_CONTRACT_ROWS: usize = 512;
 
 #[cfg(test)]
 thread_local! {
@@ -534,6 +539,101 @@ struct ObjectRow {
     byte_length: u64,
     payload_sha256: Option<String>,
     change_version: ProtectedChangeVersion,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(super) struct ManagedAncestorContract {
+    rows: Vec<ManagedAncestorContractRow>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct ManagedAncestorContractRow {
+    path: String,
+    expectation: ManagedAncestorExpectation,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "state", rename_all = "snake_case", deny_unknown_fields)]
+enum ManagedAncestorExpectation {
+    Existing {
+        device: u64,
+        inode: u64,
+        uid: u32,
+        gid: u32,
+        mode: u32,
+    },
+    Missing,
+}
+
+pub(super) struct RecoveryTargetContractObservation {
+    pub(super) root_binding: String,
+    pub(super) ancestor_preimage: bool,
+    pub(super) ancestor_postimage: bool,
+    pub(super) leaves: Vec<RecoveryLeafObservation>,
+}
+
+pub(super) struct RecoveryLeafObservation {
+    pub(super) path: String,
+    pub(super) payload_sha256: Option<String>,
+    pub(super) mode: Option<u32>,
+    pub(super) valid_managed_leaf: bool,
+}
+
+impl ManagedAncestorContract {
+    pub(super) fn valid_for_leaf_paths(&self, leaf_paths: &[String]) -> bool {
+        if self.rows.is_empty() || self.rows.len() > MAX_MANAGED_ANCESTOR_CONTRACT_ROWS {
+            return false;
+        }
+        let targets = match leaf_paths
+            .iter()
+            .map(|path| CanonicalPath::parse(path))
+            .collect::<Result<Vec<_>, _>>()
+        {
+            Ok(targets) => targets,
+            Err(_) => return false,
+        };
+        let expected_paths = managed_ancestor_paths_for_targets(&targets);
+        if self
+            .rows
+            .iter()
+            .map(|row| row.path.as_str())
+            .ne(expected_paths.iter().map(String::as_str))
+        {
+            return false;
+        }
+        self.rows.iter().enumerate().all(|(index, row)| {
+            if index == 0 && row.path != "" {
+                return false;
+            }
+            match row.expectation {
+                ManagedAncestorExpectation::Existing {
+                    device,
+                    inode,
+                    mode,
+                    ..
+                } => device != 0 && inode != 0 && mode & 0o170000 == 0o040000,
+                ManagedAncestorExpectation::Missing => !row.path.is_empty(),
+            }
+        })
+    }
+}
+
+#[cfg(test)]
+pub(super) fn managed_ancestor_contract_for_ledger_test() -> ManagedAncestorContract {
+    ManagedAncestorContract {
+        rows: vec![ManagedAncestorContractRow {
+            path: String::new(),
+            expectation: ManagedAncestorExpectation::Existing {
+                device: 1,
+                inode: 1,
+                uid: 0,
+                gid: 0,
+                mode: 0o040755,
+            },
+        }],
+    }
 }
 
 impl ObjectRow {
@@ -1168,8 +1268,8 @@ fn terminal_after_started_failure<E: RepositoryFitPermitEffects>(
     }
 }
 
-fn terminal_ambiguous<E: RepositoryFitPermitEffects>(
-) -> Result<RepositoryFitApplyOutcome, RepositoryFitApplyFailure<E>> {
+fn terminal_ambiguous<E: RepositoryFitPermitEffects>()
+-> Result<RepositoryFitApplyOutcome, RepositoryFitApplyFailure<E>> {
     Err(RepositoryFitApplyFailure::Terminal(TerminalApplyFailure {
         error: adapter_error(AdapterErrorId::ApplyOutcomeAmbiguous),
         effect_started: true,
@@ -1255,8 +1355,7 @@ fn success_outcome(
         status,
         effect: "workspace_write",
         claim_effect: "none",
-        support_limit:
-            "internal permit mediation only; root issuance and public apply dispatch absent",
+        support_limit: "internal permit mediation only; root issuance and public apply dispatch absent",
     }
 }
 
@@ -1979,44 +2078,216 @@ fn validate_managed_ancestors(
     expected: &TargetSnapshot,
     request: &OpaqueFitApplyRequest,
 ) -> Result<(), FitAdapterError> {
+    let contract = managed_ancestor_contract(expected, request)?;
+    let (_, postimage) = classify_managed_ancestor_contract(current, &contract)?;
+    if postimage {
+        Ok(())
+    } else {
+        Err(adapter_error(AdapterErrorId::ApplyOutcomeInvalid))
+    }
+}
+
+fn managed_ancestor_contract(
+    snapshot: &TargetSnapshot,
+    request: &OpaqueFitApplyRequest,
+) -> Result<ManagedAncestorContract, FitAdapterError> {
+    let target_paths = request
+        .desired
+        .files
+        .iter()
+        .map(|file| file.path.clone())
+        .collect::<Vec<_>>();
+    let paths = managed_ancestor_paths_for_targets(&target_paths);
+    let snapshot_rows = snapshot
+        .rows
+        .iter()
+        .map(|row| (row.path.as_str(), &row.state))
+        .collect::<BTreeMap<_, _>>();
+    let mut rows = Vec::with_capacity(paths.len());
+    for path in paths {
+        let expectation = match snapshot_rows.get(path.as_str()) {
+            Some(TargetState::Present(object)) if object.kind == "directory" => {
+                ManagedAncestorExpectation::Existing {
+                    device: object.device,
+                    inode: object.inode,
+                    uid: object.uid,
+                    gid: object.gid,
+                    mode: object.mode,
+                }
+            }
+            Some(TargetState::Missing) if !path.is_empty() => ManagedAncestorExpectation::Missing,
+            _ => return Err(adapter_error(AdapterErrorId::ApplyOutcomeInvalid)),
+        };
+        rows.push(ManagedAncestorContractRow { path, expectation });
+    }
+    let contract = ManagedAncestorContract { rows };
+    let leaf_paths = target_paths
+        .iter()
+        .map(|path| path.as_str().to_owned())
+        .collect::<Vec<_>>();
+    if contract.valid_for_leaf_paths(&leaf_paths) {
+        Ok(contract)
+    } else {
+        Err(adapter_error(AdapterErrorId::ApplyOutcomeInvalid))
+    }
+}
+
+fn classify_managed_ancestor_contract(
+    current: &TargetSnapshot,
+    contract: &ManagedAncestorContract,
+) -> Result<(bool, bool), FitAdapterError> {
     let current_rows = current
         .rows
         .iter()
         .map(|row| (row.path.as_str(), &row.state))
         .collect::<BTreeMap<_, _>>();
-    let expected_rows = expected
+    let current_root = present_target_row(&current_rows, "")
+        .ok_or_else(|| adapter_error(AdapterErrorId::ApplyOutcomeInvalid))?;
+    let mut preimage = true;
+    let mut postimage = true;
+    for row in &contract.rows {
+        let current_state = current_rows
+            .get(row.path.as_str())
+            .copied()
+            .ok_or_else(|| adapter_error(AdapterErrorId::ApplyOutcomeInvalid))?;
+        match (&row.expectation, current_state) {
+            (
+                ManagedAncestorExpectation::Existing {
+                    device,
+                    inode,
+                    uid,
+                    gid,
+                    mode,
+                },
+                TargetState::Present(object),
+            ) => {
+                let exact = object.kind == "directory"
+                    && object.device == *device
+                    && object.inode == *inode
+                    && object.uid == *uid
+                    && object.gid == *gid
+                    && object.mode == *mode;
+                preimage &= exact;
+                postimage &= exact;
+            }
+            (ManagedAncestorExpectation::Missing, TargetState::Missing) => {
+                postimage = false;
+            }
+            (ManagedAncestorExpectation::Missing, TargetState::Present(object)) => {
+                preimage = false;
+                postimage &= object.valid_created_managed_ancestor(current_root);
+            }
+            _ => {
+                preimage = false;
+                postimage = false;
+            }
+        }
+    }
+    Ok((preimage, postimage))
+}
+
+pub(super) fn observe_recovery_target_contract(
+    root: &Path,
+    leaf_paths: &[CanonicalPath],
+    contract: &ManagedAncestorContract,
+) -> Result<RecoveryTargetContractObservation, FitAdapterError> {
+    let leaf_path_strings = leaf_paths
+        .iter()
+        .map(|path| path.as_str().to_owned())
+        .collect::<Vec<_>>();
+    if !contract.valid_for_leaf_paths(&leaf_path_strings) {
+        return Err(adapter_error(AdapterErrorId::ApplyPermitInvalid));
+    }
+    let mut capture = capture_target_descriptor_chain_for_paths(root, leaf_paths)?;
+    capture.chain.revalidate()?;
+    let retained_root_path = retained_descriptor_path(&capture.chain.root)?;
+    let (ancestor_preimage, ancestor_postimage) =
+        classify_managed_ancestor_contract(&capture.snapshot, contract)?;
+    let rows = capture
+        .snapshot
         .rows
         .iter()
         .map(|row| (row.path.as_str(), &row.state))
         .collect::<BTreeMap<_, _>>();
-    if current_rows.len() != expected_rows.len() || current_rows.keys().ne(expected_rows.keys()) {
-        return Err(adapter_error(AdapterErrorId::ApplyOutcomeInvalid));
-    }
-    let current_root = present_target_row(&current_rows, "")
+    let root_object = present_target_row(&rows, "")
         .ok_or_else(|| adapter_error(AdapterErrorId::ApplyOutcomeInvalid))?;
-    for path in managed_ancestor_paths(request) {
-        let current_object = present_target_row(&current_rows, &path)
-            .ok_or_else(|| adapter_error(AdapterErrorId::ApplyOutcomeInvalid))?;
-        let valid = match expected_rows.get(path.as_str()) {
-            Some(TargetState::Present(expected_object)) => {
-                current_object.managed_ancestor_equivalent(expected_object)
-            }
-            Some(TargetState::Missing) => {
-                current_object.valid_created_managed_ancestor(current_root)
-            }
-            None => false,
-        };
-        if !valid {
-            return Err(adapter_error(AdapterErrorId::ApplyOutcomeInvalid));
-        }
+    let leaves = leaf_paths
+        .iter()
+        .map(|path| {
+            let state = rows
+                .get(path.as_str())
+                .copied()
+                .ok_or_else(|| adapter_error(AdapterErrorId::ApplyOutcomeInvalid))?;
+            Ok(match state {
+                TargetState::Missing => RecoveryLeafObservation {
+                    path: path.as_str().to_owned(),
+                    payload_sha256: None,
+                    mode: None,
+                    valid_managed_leaf: false,
+                },
+                TargetState::Present(object) => RecoveryLeafObservation {
+                    path: path.as_str().to_owned(),
+                    payload_sha256: object.payload_sha256.clone(),
+                    mode: Some(object.mode & 0o7777),
+                    valid_managed_leaf: object.kind == "regular"
+                        && object.device == root_object.device
+                        && object.links == 1
+                        && object.uid == root_object.uid
+                        && object.gid == root_object.gid,
+                },
+            })
+        })
+        .collect::<Result<Vec<_>, FitAdapterError>>()?;
+    capture.chain.revalidate()?;
+    if retained_descriptor_path(&capture.chain.root)? != retained_root_path {
+        return Err(adapter_error(AdapterErrorId::TargetUnavailable));
     }
-    Ok(())
+    let root_binding = root_binding_from_canonical_path(
+        &retained_root_path,
+        root_object.device,
+        root_object.inode,
+    );
+    Ok(RecoveryTargetContractObservation {
+        root_binding,
+        ancestor_preimage,
+        ancestor_postimage,
+        leaves,
+    })
+}
+
+#[cfg(target_vendor = "apple")]
+fn retained_descriptor_path(root: &File) -> Result<PathBuf, FitAdapterError> {
+    let mut buffer = [0 as libc::c_char; libc::PATH_MAX as usize];
+    if unsafe { libc::fcntl(root.as_raw_fd(), libc::F_GETPATH, buffer.as_mut_ptr()) } < 0 {
+        return Err(adapter_error(AdapterErrorId::TargetUnavailable));
+    }
+    let bytes = unsafe { CStr::from_ptr(buffer.as_ptr()) }.to_bytes();
+    if bytes.first() != Some(&b'/') {
+        return Err(adapter_error(AdapterErrorId::TargetUnavailable));
+    }
+    Ok(PathBuf::from(OsStr::from_bytes(bytes)))
+}
+
+#[cfg(not(target_vendor = "apple"))]
+fn retained_descriptor_path(root: &File) -> Result<PathBuf, FitAdapterError> {
+    let _ = root;
+    Err(adapter_error(AdapterErrorId::UnsupportedHost))
 }
 
 fn managed_ancestor_paths(request: &OpaqueFitApplyRequest) -> BTreeSet<String> {
+    let target_paths = request
+        .desired
+        .files
+        .iter()
+        .map(|file| file.path.clone())
+        .collect::<Vec<_>>();
+    managed_ancestor_paths_for_targets(&target_paths)
+}
+
+fn managed_ancestor_paths_for_targets(target_paths: &[CanonicalPath]) -> BTreeSet<String> {
     let mut paths = BTreeSet::from([String::new()]);
-    for file in &request.desired.files {
-        let components = file.path.components().collect::<Vec<_>>();
+    for path in target_paths {
+        let components = path.components().collect::<Vec<_>>();
         let mut relative = String::new();
         for component in &components[..components.len() - 1] {
             if !relative.is_empty() {
@@ -2677,6 +2948,29 @@ pub(super) fn prepare_production_permit(
         target_chain: permit_target.chain,
         protected_prestate,
     })
+}
+
+pub(super) fn prepare_recovery_managed_ancestor_contract(
+    context: &LiveContext,
+    request: &OpaqueFitApplyRequest,
+) -> Result<ManagedAncestorContract, FitAdapterError> {
+    revalidate_apply_request(context, request)?;
+    let mut capture = capture_target_descriptor_chain(context.worktree_root(), request)?;
+    let snapshot = capture.snapshot.clone();
+    capture.chain.revalidate()?;
+    revalidate_apply_request(context, request)?;
+    let recheck = capture_target(context.worktree_root(), request)?;
+    if recheck != snapshot {
+        return Err(adapter_error(AdapterErrorId::StalePlan));
+    }
+    managed_ancestor_contract(&snapshot, request)
+}
+
+pub(super) fn prepared_managed_ancestor_contract(
+    prepared: &PreparedProductionPermit,
+    request: &OpaqueFitApplyRequest,
+) -> Result<ManagedAncestorContract, FitAdapterError> {
+    managed_ancestor_contract(&prepared.target_prestate, request)
 }
 
 pub(super) fn production_reservation_binding(

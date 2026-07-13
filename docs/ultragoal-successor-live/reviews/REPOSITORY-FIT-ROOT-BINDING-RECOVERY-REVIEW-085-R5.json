@@ -1,0 +1,65 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "REPOSITORY-FIT-ROOT-BINDING-RECOVERY-REVIEW-085-R5",
+  "reviewer": "/root/evaluation_research_false_pass_repair_engineer/repository_fit_authority_reviewer",
+  "review_route": "independent repository-fit authority re-review",
+  "effective_model_metadata": "not exposed",
+  "verdict": "ACCEPT",
+  "reviewed_at_date": "2026-07-13",
+  "reviewed_identity": {
+    "freeze_head_commit": "7b832340c4bddba12e4e92e7116aa526818d32d0",
+    "freeze_head_tree": "a1ef56d16aedcce89379de18459bd658e087fa37",
+    "review_overlay": "/private/tmp/hul-repository-fit-r5-frozen-review.jhGE86",
+    "worker_result": "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-PRODUCTION-AUTHORITY-085.json",
+    "worker_result_sha256": "sha256:5806bf2f5ac0a3a0945cd5e18e06b5983f400ca7a38655aa55204403c3079387",
+    "artifact_set_sha256": "sha256:923dade4a1d412ee8291690cbefeeda14ed4e682a724d0a610e0b2723ac1a886",
+    "artifact_count": 10,
+    "artifact_bytes": 392757,
+    "artifact_lines_diagnostic": 10782
+  },
+  "reconciliation": {
+    "artifact_identity": "PASS: all ten rows matched digest, byte length, regular-file type, and single-link identity; the aggregate and WorkerResult digests recomputed exactly",
+    "retained_descriptor_binding": "PASS: the retained F_GETPATH observation plus device and inode feed the shared canonical root-binding helper",
+    "persisted_recovery_binding": "PASS: recovery requires the observed root binding to equal both the prepared binding and the persisted recovery binding before classification",
+    "whole_root_rename_false_pass": "PASS: an independent external helper preserved device, inode, leaf bytes, and clean status while changing the canonical binding; recovery returned Ambiguous with effect none and committed_count zero",
+    "same_root_positive": "PASS: the unchanged-root exact postimage recovered as committed",
+    "candidate_stability": "PASS: review did not mutate the live or frozen candidate and left no surviving helper, test process, or open fixture handle"
+  },
+  "verification": [
+    {
+      "surface": "decisive rename and same-root controls",
+      "result": "2 passed; 0 failed; run 26a67abf-7ce6-4bea-94c0-3305dcf17cee"
+    },
+    {
+      "surface": "independent whole-root rename probe",
+      "result": "device and inode remained 16777229:1103124542; binding changed; target digest and Git status remained identical; terminal classification was Ambiguous with zero commits"
+    },
+    {
+      "surface": "production-authority closure",
+      "result": "37 passed; 0 failed; 1812 skipped; run 014de541-95f2-4407-b7a3-c205117c71de with 16 build jobs and 16 test threads"
+    },
+    {
+      "surface": "process and fixture reconciliation",
+      "result": "no surviving helper or test process and no open fixture handles; the same five pre-existing inert crash fixtures remained before and after review"
+    }
+  ],
+  "supported_scope": [
+    "source-local Darwin repository-fit production authority and durable recovery protocol",
+    "canonical root-binding equality across prepared, persisted, and descriptor-stable recovery observations",
+    "fail-closed ambiguity after whole-root rename even when device, inode, and exact leaf postimage remain unchanged"
+  ],
+  "residual_risks": [
+    "root crate-private recovery reexports are not integrated",
+    "trusted host time and authority-store policy are not selected",
+    "public fit apply and restart recovery dispatch are not integrated",
+    "non-Apple runtime behavior and uid drift were not independently executed"
+  ],
+  "explicitly_withheld": [
+    "public apply and installed behavior",
+    "representative live-user journeys",
+    "claim elevation and node closure",
+    "readiness release and goal completion"
+  ],
+  "claim_ceiling": "independently accepted source-local Darwin repository-fit production authority and canonical root-binding recovery only",
+  "no_claim_statement": "This review does not claim root integration, public apply, installed behavior, representative journeys, claim elevation, readiness, release, node closure, or goal completion."
+}
