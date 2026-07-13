@@ -4,6 +4,7 @@ mod manifest_bind;
 mod materialize;
 mod output;
 mod plan;
+mod product;
 mod snapshot;
 mod source;
 mod spec;
@@ -22,6 +23,10 @@ pub use output::{
 pub use plan::{
     PackageEffects, PackageEntry, PackagePlan, PackageSnapshot, build_package, plan_package,
     plan_package_from_inventory, verify_package,
+};
+pub(crate) use product::{
+    ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
+    ProductionPackageSession, capture_product_package, verify_product_package,
 };
 pub use spec::PackageRole;
 

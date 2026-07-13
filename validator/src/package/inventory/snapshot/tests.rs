@@ -12,6 +12,12 @@ struct Repo {
 impl Repo {
     fn new(label: &str) -> Self {
         let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
+        fs::create_dir_all(root.join(".codex-plugin")).expect("plugin manifest dir");
+        fs::write(
+            root.join(".codex-plugin/plugin.json"),
+            br#"{"name":"snapshot-test","version":"0.0.0","skills":"./skills/"}"#,
+        )
+        .expect("plugin manifest");
         fs::create_dir_all(root.join("schemas")).expect("schema dir");
         fs::write(root.join("schemas/catalog.json"), "{}\n").expect("catalog");
         fs::write(root.join("resource.txt"), "trusted\n").expect("resource");
@@ -110,6 +116,9 @@ fn snapshot_is_context_bound_deterministic_and_digest_compatible() {
     );
     assert!(finished.manifest().is_object());
     assert_eq!(finished.listed_paths().len(), 3);
+    assert_eq!(finished.packaged_paths(), [".codex-plugin/plugin.json"]);
+    assert!(finished.dependency_paths().len() >= finished.listed_paths().len());
+    assert_eq!(finished.unix_mode(".codex-plugin/plugin.json"), Some(0o644));
     assert_eq!(
         finished.bytes("validator/src/unlisted.rs"),
         Some("fn unlisted() {}\n".as_bytes())
