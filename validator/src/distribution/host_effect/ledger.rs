@@ -1281,6 +1281,7 @@ fn ledger_io() -> HostEffectLedgerError {
 mod tests {
     use super::*;
     use std::os::unix::fs::PermissionsExt;
+    use std::process::{Command, Stdio};
     use std::sync::atomic::{AtomicU64, Ordering};
     use std::thread;
 
@@ -1497,6 +1498,84 @@ mod tests {
             ledger.head().unwrap_err().id(),
             HostEffectLedgerErrorId::Tampered
         );
+    }
+
+    #[test]
+    fn separate_process_reservation_race_has_one_winner() {
+        let fixture = LedgerFixture::new();
+        let ledger = FileHostEffectLedger::create(&fixture.root, "host-ledger".to_owned()).unwrap();
+        let initial = ledger.head().unwrap();
+        let executable = std::env::current_exe().unwrap();
+        let hex = b"0123456789abcdef";
+        let mut children = Vec::new();
+        for value in hex {
+            let child = Command::new(&executable)
+                .arg("--ignored")
+                .arg("--exact")
+                .arg("distribution::host_effect::ledger::tests::subprocess_reserve_helper")
+                .arg("--nocapture")
+                .env("HUL_LEDGER_CHILD_ROOT", &fixture.root)
+                .env("HUL_LEDGER_CHILD_HEAD", initial.head_sha256())
+                .env(
+                    "HUL_LEDGER_CHILD_GENERATION",
+                    initial.generation().to_string(),
+                )
+                .env("HUL_LEDGER_CHILD_VALUE", char::from(*value).to_string())
+                .stdout(Stdio::piped())
+                .stderr(Stdio::piped())
+                .spawn()
+                .unwrap();
+            children.push(child);
+        }
+        let outputs = children
+            .into_iter()
+            .map(|child| child.wait_with_output().unwrap())
+            .collect::<Vec<_>>();
+        for output in &outputs {
+            assert!(
+                output.status.success(),
+                "child failed: {}",
+                String::from_utf8_lossy(&output.stderr)
+            );
+        }
+        let winners = outputs
+            .iter()
+            .filter(|output| {
+                String::from_utf8_lossy(&output.stdout).contains("HUL_LEDGER_CHILD_RESULT=winner")
+            })
+            .count();
+        assert_eq!(winners, 1);
+        assert_eq!(ledger.head().unwrap().generation(), 1);
+    }
+
+    #[test]
+    #[ignore = "subprocess helper invoked only by separate_process_reservation_race_has_one_winner"]
+    fn subprocess_reserve_helper() {
+        let root = PathBuf::from(std::env::var_os("HUL_LEDGER_CHILD_ROOT").unwrap());
+        let head_sha256 = std::env::var("HUL_LEDGER_CHILD_HEAD").unwrap();
+        let generation = std::env::var("HUL_LEDGER_CHILD_GENERATION")
+            .unwrap()
+            .parse::<u64>()
+            .unwrap();
+        let value = std::env::var("HUL_LEDGER_CHILD_VALUE")
+            .unwrap()
+            .chars()
+            .next()
+            .unwrap();
+        let ledger = FileHostEffectLedger::open(&root, "host-ledger".to_owned()).unwrap();
+        let head = HostEffectLedgerHead::new(generation, head_sha256).unwrap();
+        match ledger.reserve(reservation(&head, value, value, 'f')) {
+            Ok(_) => println!("HUL_LEDGER_CHILD_RESULT=winner"),
+            Err(error)
+                if matches!(
+                    error.id(),
+                    HostEffectLedgerErrorId::StaleHead | HostEffectLedgerErrorId::Replay
+                ) =>
+            {
+                println!("HUL_LEDGER_CHILD_RESULT=refused")
+            }
+            Err(error) => panic!("unexpected child ledger error: {:?}", error.id()),
+        }
     }
 
     fn overwrite(path: &Path, bytes: &[u8]) {

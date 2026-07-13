@@ -16,8 +16,8 @@
     },
     {
       "path": "validator/src/distribution/host_effect/ledger.rs",
-      "sha256": "2d53b66edfcf285339102cccba227ba84b1d067205b0e3d54556281d4d463e7b",
-      "lines": 1557
+      "sha256": "ae37afdcdc529e6d1bce70bfbac11161f2acb79d8cb7f6cc13ea85027dc34423",
+      "lines": 1636
     }
   ],
   "implementation_state": {
@@ -56,11 +56,17 @@
       "command": "CARGO_TARGET_DIR=/tmp/hul-ledger-key-test CARGO_INCREMENTAL=0 cargo test --manifest-path validator/Cargo.toml --offline --locked -j16 --lib ledger_and_key_identity_substitution_fail_closed -- --test-threads=16",
       "candidate_surface": "live shared source after key-identity negative control",
       "result": "1 passed 0 failed 1698 filtered"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-ledger-process-test CARGO_INCREMENTAL=0 cargo test --manifest-path validator/Cargo.toml --offline --locked -j16 --lib separate_process_reservation_race_has_one_winner -- --test-threads=16",
+      "candidate_surface": "live shared source with sixteen fresh child processes opening and contending on one initial ledger head",
+      "result": "1 parent test passed 16 child helpers reconciled exactly one winner 0 failures 1700 filtered"
     }
   ],
   "validated_controls": [
     "restart open and state replay",
     "one-winner concurrent reservation",
+    "sixteen-process one-winner reservation with fresh-process ledger open and replay",
     "duplicate nonce and semantic-key rejection",
     "stale-head rejection",
     "authenticated content tamper rejection",
@@ -71,14 +77,13 @@
   ],
   "explicit_limitations": [
     "the candidate has not yet received independent security review",
-    "a separate subprocess race crash-injection and power-loss suite has not yet executed",
+    "crash-injection and power-loss suites have not yet executed",
     "a same-account adversary able to replace both the complete ledger directory and its key with an older internally consistent copy cannot be detected after a fresh process without an external monotonic anchor",
     "the adjacent key protects corruption and object substitution within the descriptor-bound local trust boundary; it is not a hardware-backed secret",
     "no live host command executor host-lifecycle mediator package install marketplace cache registry Plugins UI discovery runtime or representative journey is implemented or proven"
   ],
   "required_next_proof": [
     "independent security review of the authority pinning and ledger artifact set",
-    "separate-process reservation race and restart replay",
     "crash injection before and after atomic publication plus recovery classification",
     "state key lock directory symlink hardlink FIFO socket truncation reorder duplicate and permission mutation controls",
     "root-owned host-lifecycle mediation and typed Darwin Unsupported activation",
