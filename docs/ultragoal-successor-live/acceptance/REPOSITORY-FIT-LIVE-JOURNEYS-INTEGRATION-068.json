@@ -1,0 +1,41 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "acceptance_id": "REPOSITORY-FIT-LIVE-JOURNEYS-INTEGRATION-068",
+  "workstream": "repository-fit-direct-journeys-and-zero-write-reads",
+  "decision": "ACCEPT_SOURCE_BUILT_DIRECT_JOURNEYS_AND_ZERO_WRITE_READS",
+  "integration_commit": "c409e0e85c4a1747b4919d965c5c7e1b6badf43a",
+  "integration_tree": "2ef512e8d9c227974432210c1141fc2713309a8d",
+  "accepted_artifact_set": {
+    "worker_result": "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-LIVE-JOURNEYS-067.json",
+    "worker_result_sha256": "sha256:d23ea75b619f9b858c6461ea831316272b6bb00e717dce8ba3095a3d2e7ea310",
+    "worker_artifacts_sha256": "sha256:40fa8648cfd6aaf857c5bb73466ac567f1b53142e51e169b3698fef04f2acfdf",
+    "source_command_mediation_sha256": "sha256:fd0e4e4c37a58c7db86ecf5b5b1c6716edd427c7664ef3548dc057217e5745de",
+    "artifact_count": 10,
+    "bytes": 239519,
+    "lines": 6550
+  },
+  "independent_review": {
+    "record": "docs/ultragoal-successor-live/reviews/REPOSITORY-FIT-LIVE-JOURNEYS-REVIEW-068.json",
+    "record_sha256": "sha256:426fd6418b18be6caf5de94360d49820a789d3899e748a2d2bd657a8ba49e787",
+    "reviewer": "/root/repository_fit_journey_product_reviewer",
+    "verdict": "PASS",
+    "direct_journeys": "8/8",
+    "journey_contract": "3/3",
+    "actual_binary_invocations": 6,
+    "jobs": 16,
+    "test_threads": 16
+  },
+  "accepted_behavior": [
+    "real Darwin LocalEffects direct-product journeys cover fresh and repeat setup, partial dirty retrofit, conflict and replay refusal, rollback and recovery, ambiguous outcome and replan, link case FIFO and false-pass controls",
+    "actual source-built public inspect plan and verify commands operate on a dirty repository without changing recursive filesystem identity or Git status",
+    "repeated public read invocations produce deterministic machine output without leaking the private canary or absolute fixture root"
+  ],
+  "withheld": [
+    "production permit issuer and public apply mutation authority",
+    "package installation discovery and loaded-plugin behavior",
+    "real-user and non-Darwin behavior",
+    "readiness release node closure and goal completion"
+  ],
+  "claim_ceiling": "source-built Darwin direct-product repository-fit journeys and public inspect plan verify zero-write behavior only",
+  "no_claim_statement": "This acceptance does not claim production issuance, public apply, installation, readiness, release, node closure, or goal completion."
+}
