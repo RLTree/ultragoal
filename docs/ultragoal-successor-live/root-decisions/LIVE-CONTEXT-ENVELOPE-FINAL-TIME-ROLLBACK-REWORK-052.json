@@ -1,0 +1,28 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "LIVE-CONTEXT-ENVELOPE-FINAL-TIME-ROLLBACK-REWORK-052",
+  "workstream": "model-adaptive-prompt-and-context-contract-change",
+  "decision": "REWORK",
+  "reviewed_candidate": {
+    "change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
+    "proposal_artifact_set_sha256": "sha256:abbf5722656542e067d0e2e248846247b877e30ebe2f247d127acc0daba9a71c",
+    "artifact_count": 12,
+    "bytes": 275697,
+    "lines": 6174,
+    "verifier_run_id": "sha256:7803f79c28094ffb185119bcd29e4a93cd50874aa0f8675f0b65ecf5eab23916"
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "optional_prior_trusted_time_rollback_bypass",
+    "reproduction": "Initial validation at 00:40 succeeded; final validation at rolled-back 00:30 also succeeded when final_revalidation was true but prior_trusted_time was omitted.",
+    "cause": "The final boundary rejected rollback only when an optional prior trusted-time argument happened to be present."
+  },
+  "required_correction": [
+    "require a bound prior trusted-time observation for every nonempty final revalidation",
+    "bind prior observation to repository candidate authority sessions effect-source set receipt and exact initial result",
+    "reject missing forged mismatched stale rolled-back or reused prior observations",
+    "prove final time is nondecreasing and consume a successful final observation once"
+  ],
+  "root_disposition": "The proposal remains non-authoritative. Final mediation cannot proceed without an exact prior observation and nondecreasing trusted current time.",
+  "no_claim_statement": "This REWORK decision authorizes no external effect and changes no adopted contract, product behavior, claim ceiling, readiness, release, node closure, or goal-completion state."
+}

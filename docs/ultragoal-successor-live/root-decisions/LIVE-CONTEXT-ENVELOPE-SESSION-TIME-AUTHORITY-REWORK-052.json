@@ -1,0 +1,29 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "LIVE-CONTEXT-ENVELOPE-SESSION-TIME-AUTHORITY-REWORK-052",
+  "workstream": "model-adaptive-prompt-and-context-contract-change",
+  "decision": "REWORK",
+  "reviewed_candidate": {
+    "change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
+    "proposal_artifact_set_sha256": "sha256:28a756d263251f376af50660a2133217f8a738cedc14f19ef05f027d8cd2fb6b",
+    "artifact_count": 12,
+    "bytes": 239098,
+    "lines": 5335,
+    "verifier_run_id": "sha256:4a9899a0b28e52f19a76ac0b8ab903c48574e9813abcf86e004c82e619a0eab0"
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "attacker_selected_approval_freshness_time_false_pass",
+    "reproduction": "A 2020 authority source and approval were accepted in 2026 after the envelope backdated authority_binding.captured_at into the historic approval window.",
+    "cause": "Approval freshness used envelope-supplied session time rather than a trusted root-issued same-session time source and did not require final mediator-time revalidation."
+  },
+  "required_correction": [
+    "bind one descriptor-safe root-issued session receipt to repository candidate authority session effect-source set issue time nonce issuer and single-use state",
+    "enforce bounded issue skew and reject missing duplicate substituted stale backdated or future receipts",
+    "use mediator-supplied trusted current time for approval freshness",
+    "reject clock rollback and expiry between validation and mediation",
+    "keep every live nonempty external-effect envelope fail closed until a trusted receipt and mediator exist"
+  ],
+  "root_disposition": "The proposal remains non-authoritative. Envelope validation alone never authorizes execution, and no live nonempty external effect is accepted without trusted root time and a separately adopted mediator.",
+  "no_claim_statement": "This REWORK decision authorizes no external effect and changes no adopted contract, product behavior, claim ceiling, readiness, release, node closure, or goal-completion state."
+}

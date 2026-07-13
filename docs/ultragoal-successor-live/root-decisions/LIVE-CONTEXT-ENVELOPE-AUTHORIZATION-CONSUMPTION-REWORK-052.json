@@ -1,0 +1,29 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "LIVE-CONTEXT-ENVELOPE-AUTHORIZATION-CONSUMPTION-REWORK-052",
+  "workstream": "model-adaptive-prompt-and-context-contract-change",
+  "decision": "REWORK",
+  "reviewed_candidate": {
+    "change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
+    "proposal_artifact_set_sha256": "sha256:15cfde502fd7e29eece8f5cdd6b0d79b3ea486f3de04abec839a9db341ceab19",
+    "artifact_count": 12,
+    "bytes": 305100,
+    "lines": 6823,
+    "verifier_run_id": "sha256:3f6e02977125155620b5c5014cec8ec90b89890d4c4ebfef36ed3e7727d93dd5"
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "single_use_authorization_identity_reuse_false_pass",
+    "reproduction": "After one successful initial-to-final flow, the same mediator and then a fresh mediator each accepted another flow using the unchanged single-use approval and session receipt.",
+    "cause": "Final validation consumed only the instance-local token and never centrally recorded approval and receipt identities as consumed."
+  },
+  "required_correction": [
+    "share one mediator-factory-private consumed-authorization registry across instances",
+    "atomically consume the complete approval member set receipt identity authorization-set binding and token on successful final validation",
+    "consume nothing on any precommit validation failure",
+    "reject same-mediator and fresh-mediator reuse while allowing distinct authorization identities",
+    "withhold cross-process restart and crash durability until a canonical durable root mediator exists"
+  ],
+  "root_disposition": "The proposal remains non-authoritative. The correction models only in-process atomic consumption; durable cross-process single-use authority remains unproved and blocks adoption.",
+  "no_claim_statement": "This REWORK decision authorizes no external effect and changes no adopted contract, product behavior, claim ceiling, readiness, release, node closure, or goal-completion state."
+}

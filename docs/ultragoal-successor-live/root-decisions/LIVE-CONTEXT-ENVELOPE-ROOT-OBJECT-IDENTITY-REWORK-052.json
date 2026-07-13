@@ -1,0 +1,29 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "LIVE-CONTEXT-ENVELOPE-ROOT-OBJECT-IDENTITY-REWORK-052",
+  "workstream": "model-adaptive-prompt-and-context-contract-change",
+  "decision": "REWORK",
+  "reviewed_candidate": {
+    "change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
+    "proposal_artifact_set_sha256": "sha256:db2857c2d7ee2d2eb34e1f85f44bcfe81956bf673b78c440b31681e5b6a3cbae",
+    "artifact_count": 12,
+    "bytes": 355986,
+    "lines": 7900,
+    "verifier_run_id": "sha256:8bdb35d2c54a312f440d0cdb074cb1000141f02bad8ac4bc9e6ef8ca576183dc"
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "same_path_repository_root_object_replacement_false_pass",
+    "reproduction": "After initial mediation against physical root R, the reviewer renamed R aside, created a different directory at the exact same R pathname, moved the original authority subtree into the replacement so authority-leaf identities remained stable, and final mediation accepted the unchanged candidate and root pathname.",
+    "cause": "Canonical repository identity bound the absolute resolved pathname but not the opened root directory object, and the existing root-swap control changed the pathname rather than replacing the object at the same name."
+  },
+  "required_correction": [
+    "open the canonical root descriptor-first without following links and require a directory object",
+    "bind root device and inode identity during initial semantic validation and token mint",
+    "retain or reopen and revalidate the exact root directory object at final mediation before authorization consumption",
+    "reject same-path rename-and-replace while consuming no approval receipt or token authority",
+    "add a causal control that preserves the original authority-leaf identities across the root replacement"
+  ],
+  "root_disposition": "The proposal remains non-authoritative and under REWORK. Canonical path identity is insufficient for workspace-effect mediation; equivalent durable root-object enforcement remains required before adoption.",
+  "no_claim_statement": "This REWORK decision authorizes no external effect and changes no adopted contract, product behavior, claim ceiling, readiness, release, node closure, or goal-completion state."
+}

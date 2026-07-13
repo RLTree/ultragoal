@@ -1,0 +1,29 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "LIVE-CONTEXT-ENVELOPE-CANONICAL-ROOT-PARTITION-REWORK-052",
+  "workstream": "model-adaptive-prompt-and-context-contract-change",
+  "decision": "REWORK",
+  "reviewed_candidate": {
+    "change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
+    "proposal_artifact_set_sha256": "sha256:ea0e8e573e977c96484d6949f94db25032f792befab37b4fb124a8a616ee5ad8",
+    "artifact_count": 12,
+    "bytes": 342607,
+    "lines": 7625,
+    "verifier_run_id": "sha256:16b1850a18d2ac954ae67e7440597ae03dbf961475e9951c82d7f5ddb3a213cf"
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "caller_selected_repository_replay_partition_false_pass",
+    "reproduction": "After consuming IDs in physical root R, a caller kept the same root and IDs but substituted candidate repository digest and rebound the receipt; a fresh mediator accepted the same IDs in the caller-selected partition.",
+    "cause": "Tombstones partitioned on candidate-supplied repository identity that mediation did not derive or verify against the actual root."
+  },
+  "required_correction": [
+    "derive canonical repository URI and digest internally from the actual root before mint final lookup or consumption",
+    "share one no-alias canonical resolver between semantic validation and mediation",
+    "reject candidate URI or digest mismatch symlink alias lexical alias missing or non-directory roots",
+    "reject root swap between initial and final without consuming authority",
+    "prove separation only with two independently canonicalized real roots"
+  ],
+  "root_disposition": "The proposal remains non-authoritative. Canonical root derivation is modeled in process; canonical durable runtime enforcement remains required before adoption.",
+  "no_claim_statement": "This REWORK decision authorizes no external effect and changes no adopted contract, product behavior, claim ceiling, readiness, release, node closure, or goal-completion state."
+}

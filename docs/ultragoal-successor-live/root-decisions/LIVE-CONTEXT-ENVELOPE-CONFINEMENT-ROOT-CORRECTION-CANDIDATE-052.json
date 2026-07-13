@@ -6,16 +6,16 @@
   "change_request": {
     "path": "docs/ultragoal-successor-live/contract-change-requests/gpt56-prompt-context-v1/ROOT-CHANGE-REQUEST-003.json",
     "change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
-    "proposal_artifact_set_sha256": "sha256:e32e85fd132a24d16730c2acafa39a99dc9b4a42833f0241fa2053885393aba2",
+    "proposal_artifact_set_sha256": "sha256:0c5def6d2af6b8fdee2903f1ed13fcd51ff03d37e3a96a13ad224885a6dbc76c",
     "artifact_count_excluding_request_files": 12,
-    "bytes": 221791,
-    "lines": 4947
+    "bytes": 370546,
+    "lines": 8204
   },
   "freeze_identity": {
     "repository": "repo://harness-ultragoal-plugin-proposal",
     "branch": "codex/successor-contract-v2-live-product",
-    "head_commit": "4c8a25705abf6f68b0f6db0cfdf449fd59c1fdb6",
-    "head_tree": "b513d7dc3d92a732ef5d307ad7dc6b9a0abdfdac",
+    "head_commit": "c1792695eb2dfe88afeda6efc3d6d892f1bb64f4",
+    "head_tree": "c826b42b09cf6133c7a311be77fb0c8e03bb49d7",
     "dirty": true,
     "freeze_kind": "exact_path_bound_proposal_artifact_set"
   },
@@ -23,7 +23,7 @@
     "schema_check": "pass",
     "deterministic_runs": 2,
     "byte_identical_outputs": true,
-    "run_id": "sha256:9507d09281d5f8564b890151ca7d92a248ccd20c93921b3209b3261b32e035b4",
+    "run_id": "sha256:c787cc9bd68030b69029524576aec4fbd408756f0f5b3bae9da6df55c2847670",
     "valid_envelopes": [
       "valid_baseline",
       "valid_scoped_implementation",
@@ -31,10 +31,10 @@
       "valid_scoped_generated_output"
     ],
     "red_fixtures": {
-      "rejected": 81,
-      "total": 81,
+      "rejected": 154,
+      "total": 154,
       "schema": 18,
-      "semantic_resolver": 63
+      "semantic_resolver": 136
     },
     "claim_effect": "none"
   },
@@ -54,7 +54,18 @@
       "exact bounded scratch-target confinement",
       "protected exact same-session external-effect authority",
       "protected exact same-session approval authority",
-      "effect and approval source row and final-session revalidation"
+      "effect and approval source row and final-session revalidation",
+      "repository-device single-link protected authority source identity",
+      "descriptor-first authority source open and final-session reopen",
+      "protected root-issued same-session time receipt",
+      "mediator-supplied trusted current time and final expiry revalidation",
+      "mandatory bound prior trusted-time observation",
+      "nondecreasing final time and one-use final observation",
+      "mediator-owned opaque capability minted only after successful initial validation",
+      "factory-private atomic approval and receipt identity consumption across mediators",
+      "repository-scoped immutable approval_id and receipt_id replay tombstones",
+      "internally derived no-alias canonical repository identity",
+      "descriptor-bound canonical repository root object identity"
     ]
   },
   "independent_review_required": [
@@ -65,7 +76,7 @@
     "falsify the instruction-only effect ceiling and root-owned mediator requirement",
     "review protected-path coverage and scan bounds for material underreach or false authority"
   ],
-  "root_disposition": "REWORK_PROTECTED_EFFECT_AUTHORITY_FILESYSTEM_IDENTITY",
+  "root_disposition": "DEFER_CANONICAL_RUNTIME_AND_DURABLE_MEDIATOR_REQUIRED",
   "adoption_ceiling": "corrected_proposal_source_only_not_adopted",
   "withheld_until_later_authority": [
     "canonical Rust resolver behavior",

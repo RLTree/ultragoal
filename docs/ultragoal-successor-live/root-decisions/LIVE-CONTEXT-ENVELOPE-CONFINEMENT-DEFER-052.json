@@ -1,0 +1,59 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "LIVE-CONTEXT-ENVELOPE-CONFINEMENT-DEFER-052",
+  "workstream": "model-adaptive-prompt-and-context-contract-change",
+  "reviewed_change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
+  "decision": "DEFER_ADOPTION",
+  "reviewed_candidate": {
+    "repository": "repo://harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "c1792695eb2dfe88afeda6efc3d6d892f1bb64f4",
+    "head_tree": "c826b42b09cf6133c7a311be77fb0c8e03bb49d7",
+    "proposal_artifact_set_sha256": "sha256:0c5def6d2af6b8fdee2903f1ed13fcd51ff03d37e3a96a13ad224885a6dbc76c",
+    "artifact_count": 12,
+    "bytes": 370546,
+    "lines": 8204
+  },
+  "committed_proposal": {
+    "commit": "8cad69db4dec4fec04837749b74d292f0fe1cf23",
+    "tree": "0ecb72c3802832b403449682f7a4989c9cbfa387",
+    "artifact_set_matches_reviewed_candidate": true,
+    "adoption_effect": "none"
+  },
+  "independent_review": {
+    "reviewer": "/root/context_mediation_capability_falsifier",
+    "verdict": "PASS_PROPOSAL_MODEL_CEILING_ONLY",
+    "verifier_runs": 2,
+    "byte_identical_outputs": true,
+    "run_id": "sha256:c787cc9bd68030b69029524576aec4fbd408756f0f5b3bae9da6df55c2847670",
+    "output_sha256": "sha256:75d8caafbf2b0f569c1591ec74b49442af453451c50ebfbd14f117b7704f3aa7",
+    "red_fixtures_rejected": 154,
+    "schema_rejections": 18,
+    "semantic_rejections": 136,
+    "targeted_adversarial_cases": 20,
+    "decisive_control": "Same-path physical root rename-and-replace with preserved authority-leaf device and inode identities rejected canonical_repository_object_mismatch before authorization consumption; restored original root completed the original token and fresh reuse rejected.",
+    "descriptor_lifecycle": "The retained root descriptor remained live across recoverable failure and closed after successful final mediation or mediator garbage collection."
+  },
+  "accepted_ceiling": "Non-authoritative proposal-source model for in-process same-factory task-envelope and external-effect mediation semantics only.",
+  "adoption_blockers": [
+    "equivalent canonical Rust repository resolver and descriptor-bound root-object enforcement",
+    "root-owned workspace effect mediator integrated with live authority rather than proposal-local synthetic sources",
+    "durable cross-process restart crash and replay consumption with atomic recovery",
+    "representative prompt and context evaluations against the real product and runtime",
+    "fresh root adoption and invalidation reconciliation across dependent contract and proof surfaces"
+  ],
+  "explicitly_unproved": [
+    "Python reflection as a security boundary",
+    "cross-process single-use authority",
+    "restart or crash durability",
+    "canonical Rust enforcement",
+    "workspace effect execution",
+    "product behavior",
+    "adoption",
+    "readiness",
+    "release",
+    "node closure",
+    "goal completion"
+  ],
+  "no_claim_statement": "This decision accepts only the corrected proposal model for future implementation guidance. It changes no adopted contract, live authority, product behavior, claim ceiling, readiness, release, node closure, or goal-completion state."
+}

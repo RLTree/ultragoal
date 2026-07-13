@@ -3,12 +3,12 @@
   "decision_id": "LIVE-CONTEXT-ENVELOPE-CONFINEMENT-REWORK-HISTORY-052",
   "workstream": "model-adaptive-prompt-and-context-contract-change",
   "reviewed_change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
-  "disposition": "REWORK_ACTIVE_EFFECT_AUTHORITY_FILESYSTEM_IDENTITY_CORRECTION",
+  "disposition": "CORRECTED_PROPOSAL_REVIEW_PASS_ADOPTION_DEFERRED",
   "candidate_identity": {
     "branch": "codex/successor-contract-v2-live-product",
-    "head_commit": "4c8a25705abf6f68b0f6db0cfdf449fd59c1fdb6",
-    "head_tree": "b513d7dc3d92a732ef5d307ad7dc6b9a0abdfdac",
-    "proposal_artifact_set_sha256": "sha256:e32e85fd132a24d16730c2acafa39a99dc9b4a42833f0241fa2053885393aba2"
+    "head_commit": "c1792695eb2dfe88afeda6efc3d6d892f1bb64f4",
+    "head_tree": "c826b42b09cf6133c7a311be77fb0c8e03bb49d7",
+    "proposal_artifact_set_sha256": "sha256:0c5def6d2af6b8fdee2903f1ed13fcd51ff03d37e3a96a13ad224885a6dbc76c"
   },
   "material_findings": [
     {
@@ -51,19 +51,61 @@
       "sequence": 7,
       "class": "protected_external_effect_authority_hardlink_alias_false_pass",
       "source": "LIVE-CONTEXT-ENVELOPE-EFFECT-AUTHORITY-ALIAS-REWORK-052",
-      "correction": "Pending: require repository-device single-link descriptor identity for protected authority sources and reject initial or post-validation aliases, replacement, or mutation."
+      "correction": "Required repository-device single-link descriptor identity for protected authority sources and rejected initial or post-validation aliases, replacement, mutation, symlinks, special files, and cross-device objects."
+    },
+    {
+      "sequence": 8,
+      "class": "attacker_selected_approval_freshness_time_false_pass",
+      "source": "LIVE-CONTEXT-ENVELOPE-SESSION-TIME-AUTHORITY-REWORK-052",
+      "correction": "Required a protected root-issued same-session receipt and mediator-supplied trusted time, with bounded skew, candidate and authority correlation, clock-rollback rejection, and final expiry revalidation."
+    },
+    {
+      "sequence": 9,
+      "class": "optional_prior_trusted_time_rollback_bypass",
+      "source": "LIVE-CONTEXT-ENVELOPE-FINAL-TIME-ROLLBACK-REWORK-052",
+      "correction": "Required one exact bound prior trusted-time observation for every final nonempty-effect validation, rejected substitution or omission, proved nondecreasing time, and consumed the successful final observation once."
+    },
+    {
+      "sequence": 10,
+      "class": "caller_minted_final_mediation_capability_false_pass",
+      "source": "LIVE-CONTEXT-ENVELOPE-MEDIATOR-CAPABILITY-MINT-REWORK-052",
+      "correction": "Removed the separate public builder and registration ledger; one mediator instance now mints an object-identity capability only after complete successful initial validation and consumes it once at final validation."
+    },
+    {
+      "sequence": 11,
+      "class": "single_use_authorization_identity_reuse_false_pass",
+      "source": "LIVE-CONTEXT-ENVELOPE-AUTHORIZATION-CONSUMPTION-REWORK-052",
+      "correction": "Added factory-private atomic consumption of the complete approval member set, receipt identity, authorization-set binding, and token across mediator instances; durable cross-process consumption remains explicitly withheld."
+    },
+    {
+      "sequence": 12,
+      "class": "consumed_stable_id_revived_by_mutable_row_substitution",
+      "source": "LIVE-CONTEXT-ENVELOPE-AUTHORIZATION-TOMBSTONE-REWORK-052",
+      "correction": "Added immutable repository-scoped approval_id and receipt_id tombstones independent of mutable row, source, session, nonce, candidate, context, and digest fields; legitimate reissue requires a new stable ID."
+    },
+    {
+      "sequence": 13,
+      "class": "caller_selected_repository_replay_partition_false_pass",
+      "source": "LIVE-CONTEXT-ENVELOPE-CANONICAL-ROOT-PARTITION-REWORK-052",
+      "correction": "Derived canonical root URI and digest internally through one no-alias resolver shared by semantic validation and mediation, and rejected caller mismatch, aliases, missing roots, non-directories, and initial-to-final root swaps."
+    },
+    {
+      "sequence": 14,
+      "class": "same_path_repository_root_object_replacement_false_pass",
+      "source": "LIVE-CONTEXT-ENVELOPE-ROOT-OBJECT-IDENTITY-REWORK-052",
+      "correction": "Bound descriptor-opened root device inode and directory type at initial mediation, retained and independently reopened the root, and revalidated the exact same directory object before final authorization consumption; same-path replacement fails without consuming authority."
     }
   ],
   "corrected_proof": {
     "deterministic_runs": 2,
     "byte_identical_outputs": true,
-    "run_id": "sha256:9507d09281d5f8564b890151ca7d92a248ccd20c93921b3209b3261b32e035b4",
+    "run_id": "sha256:c787cc9bd68030b69029524576aec4fbd408756f0f5b3bae9da6df55c2847670",
     "valid_envelopes": 4,
-    "red_fixtures_rejected": 81,
+    "red_fixtures_rejected": 154,
     "schema_rejections": 18,
-    "semantic_rejections": 63,
+    "semantic_rejections": 136,
     "claim_effect": "none"
   },
-  "root_boundary": "The proposal remains non-authoritative and in REWORK for protected-authority filesystem identity. Adoption is later withheld until an equivalent canonical Rust resolver, a root-owned workspace effect mediator, and representative prompt and context evaluations exist and pass fresh reconciliation.",
+  "root_boundary": "Independent review passed the corrected in-process proposal model. Adoption remains deferred until an equivalent canonical Rust resolver and root-object binding, a root-owned workspace effect mediator, durable cross-process replay enforcement, and representative prompt and context evaluations exist and pass fresh reconciliation.",
   "no_claim_statement": "This correction history changes no adopted contract, product behavior, claim ceiling, readiness, release, node closure, or goal-completion state."
 }

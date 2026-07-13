@@ -1,0 +1,29 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "LIVE-CONTEXT-ENVELOPE-MEDIATOR-CAPABILITY-MINT-REWORK-052",
+  "workstream": "model-adaptive-prompt-and-context-contract-change",
+  "decision": "REWORK",
+  "reviewed_candidate": {
+    "change_id": "CCR-GPT56-PROMPT-CONTEXT-003",
+    "proposal_artifact_set_sha256": "sha256:2e4f45e4cda190afbe88a61674d5a7fec3afcf64932b988b9a3e512ea7c629ca",
+    "artifact_count": 12,
+    "bytes": 299012,
+    "lines": 6694,
+    "verifier_run_id": "sha256:da9a33495abef792ab099adda87d66f32f86b174200158638ba5fbb0431fe115"
+  },
+  "decisive_finding": {
+    "severity": "high",
+    "class": "caller_minted_final_mediation_capability_false_pass",
+    "reproduction": "Without initial validation, a caller invoked the public observation builder, constructed a public ledger, registered the byte-perfect observation, and final validation accepted and consumed it.",
+    "cause": "Capability construction and registration were separate callable APIs rather than an internal result of one mediator instance's successful initial-validation branch."
+  },
+  "required_correction": [
+    "remove public observation builders registration ledgers and token types",
+    "mint one opaque object-identity capability only inside successful initial validation",
+    "bind token ownership to one mediator instance and exact repository candidate authority receipt time and initial result",
+    "reject direct construction registration cross-mediator substitution copy serialization injection rollback and reuse",
+    "consume one successful final validation exactly once"
+  ],
+  "root_disposition": "The proposal remains non-authoritative. Python reflection is not an adopted security boundary, and canonical runtime enforcement remains required before adoption.",
+  "no_claim_statement": "This REWORK decision authorizes no external effect and changes no adopted contract, product behavior, claim ceiling, readiness, release, node closure, or goal-completion state."
+}
