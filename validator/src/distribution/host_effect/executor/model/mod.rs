@@ -1,6 +1,5 @@
 use super::super::lifecycle::{
-    PublicationAcknowledgementIdentity, PublicationClassification, PublicationClassificationId,
-    PublicationInventoryObservation,
+    PublicationAcknowledgementIdentity, PublicationClassification, PublicationInventoryObservation,
 };
 use super::super::{
     HostEffectLedgerHead, HostEffectLedgerRecord, HostEffectOutcome, HostEffectState, is_digest,
@@ -11,7 +10,6 @@ use std::sync::{
     Arc,
     atomic::{AtomicBool, Ordering},
 };
-use std::time::Duration;
 
 include!("exact_output_limit_bytes.rs");
 

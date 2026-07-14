@@ -17,6 +17,5 @@ pub use tree::ScopedTree;
 
 #[cfg(all(test, unix))]
 pub(crate) use hooks::{
-    EffectPoint, assert_test_effect_hook_consumed, set_test_effect_hook,
-    set_test_effect_hook_matching,
+    EffectPoint, assert_test_effect_hook_consumed, set_test_effect_hook_matching,
 };

@@ -2,7 +2,7 @@
 
 use crate::distribution::{
     DistributionErrorId as ErrorId, EffectPoint, ScopedFile, ScopedTree,
-    assert_test_effect_hook_consumed, set_test_effect_hook, set_test_effect_hook_matching,
+    assert_test_effect_hook_consumed, set_test_effect_hook_matching,
 };
 use crate::distribution_fixture::digest;
 use crate::package_journey_fixture::{JourneyFixture, write_scoped};
@@ -17,7 +17,7 @@ fn exact_pre_rename_content_substitution_is_a_cas_conflict_and_is_not_overwritte
     let file = write_scoped(fixture.confined(), "state/value.bin", b"expected");
     let target = fixture.root.join("state/value.bin");
     let replacement = fixture.root.join("state/concurrent.bin");
-    set_test_effect_hook(EffectPoint::Rename, move |_| {
+    set_test_effect_hook_matching(EffectPoint::Rename, "", move |_| {
         fs::write(&replacement, b"concurrent").unwrap();
         fs::rename(&replacement, &target).unwrap();
     });

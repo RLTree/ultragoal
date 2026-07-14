@@ -73,7 +73,6 @@ pub(crate) struct Request {
     pub(crate) context_id: String,
     pub(crate) candidate_id: String,
     pub(crate) platform: String,
-    pub(crate) capabilities: BTreeMap<Capability, CapabilityState>,
     pub(crate) layers: BTreeMap<Layer, LayerSpec>,
 }
 
@@ -149,7 +148,6 @@ pub(crate) fn parse_request(bytes: &[u8]) -> Result<Request, DistributionError> 
         context_id: raw.context_id,
         candidate_id: raw.candidate_id,
         platform: raw.host.platform,
-        capabilities,
         layers,
     })
 }

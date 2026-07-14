@@ -8,9 +8,6 @@ impl HostEffectRecoveryHandoff {
             | Self::TerminalTransition {
                 permit_id: current, ..
             }
-            | Self::PostPublicationTerminalTransition {
-                permit_id: current, ..
-            }
             | Self::PostReservation {
                 permit_id: current, ..
             } => *current = permit_id,
@@ -26,9 +23,6 @@ impl HostEffectRecoveryHandoff {
             Self::Publication { ledger_head, .. }
             | Self::TerminalTransition { ledger_head, .. }
             | Self::PostReservation { ledger_head, .. } => *ledger_head = replacement,
-            Self::PostPublicationTerminalTransition {
-                prior_ledger_head, ..
-            } => *prior_ledger_head = replacement,
         }
     }
 
@@ -43,10 +37,6 @@ impl HostEffectRecoveryHandoff {
                 ..
             }
             | Self::TerminalTransition {
-                originating_error_ids,
-                ..
-            }
-            | Self::PostPublicationTerminalTransition {
                 originating_error_ids,
                 ..
             }
@@ -133,9 +123,9 @@ impl CommandCapture {
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub(crate) struct HostEffectExecutionPolicy {
-    timeout_ms: u64,
-    stdout_limit_bytes: usize,
-    stderr_limit_bytes: usize,
+    descriptor_timeout_ms: u64,
+    descriptor_stdout_limit_bytes: usize,
+    descriptor_stderr_limit_bytes: usize,
     inherited_environment: bool,
     environment_entries: usize,
     environment_sha256: String,

@@ -68,7 +68,7 @@ fn direct_post_reservation_failure(
     originating_error_ids: Vec<HostEffectExecutorErrorId>,
 ) -> HostEffectExecutorFailure {
     let mut backend = ScriptedBackend::success();
-    let mut executor = SupportedHostEffectExecutor::new(
+    let executor = SupportedHostEffectExecutor::new(
         ledger,
         target,
         &mut backend,

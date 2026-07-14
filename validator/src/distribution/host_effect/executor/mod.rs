@@ -12,8 +12,6 @@ mod model;
 mod process;
 mod target;
 
-#[cfg(test)]
-pub(crate) use model::HostEffectPostPublicationRecoveryClassification;
 pub(crate) use model::{
     HostEffectCancellation, HostEffectExecutionPolicy, HostEffectExecutionReceipt,
     HostEffectExecutorErrorId, HostEffectExecutorFailure,
@@ -25,8 +23,6 @@ pub(crate) use model::{
 use process::NativeRetainedDescriptorProcessBackend;
 use process::RetainedDescriptorProcessBackend;
 pub(crate) use target::ConfinedHostEffectTarget;
-#[cfg(test)]
-pub(crate) use target::ConfinedHostEffectTargetObserver;
 
 use self::model::{
     CommandCaptureDigest, PostReservationRecoveryRequest, TerminalTransitionRecoveryRequest,

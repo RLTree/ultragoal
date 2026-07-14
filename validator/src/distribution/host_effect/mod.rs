@@ -16,17 +16,6 @@ pub(crate) use authority::{
     HostEffectAuthority, HostEffectDecision, HostEffectPermit, HostEffectPermitBinding,
 };
 #[cfg(test)]
-pub(crate) use authority::{HostEffectAuthorityError, HostEffectAuthorityErrorId};
-#[cfg(test)]
-pub(crate) use executor::{
-    ConfinedHostEffectTarget, ConfinedHostEffectTargetObserver, HostEffectCancellation,
-    HostEffectExecutionPolicy, HostEffectExecutionReceipt, HostEffectExecutorErrorId,
-    HostEffectExecutorFailure, HostEffectPostPublicationRecoveryClassification,
-    HostEffectPostReservationLedgerClassification,
-    HostEffectPostReservationPublicationClassification, HostEffectRecoveryHandoff,
-    HostEffectTerminalRecoveryClassification, SupportedHostEffectExecutor,
-};
-#[cfg(test)]
 pub(crate) use ledger::FileHostEffectLedger;
 
 use super::HostCommandPlan;

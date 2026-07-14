@@ -50,9 +50,9 @@ impl HostEffectExecutionPolicy {
             process_group_containment: true,
         })?;
         Ok(Self {
-            timeout_ms,
-            stdout_limit_bytes: EXACT_OUTPUT_LIMIT_BYTES,
-            stderr_limit_bytes: EXACT_OUTPUT_LIMIT_BYTES,
+            descriptor_timeout_ms: timeout_ms,
+            descriptor_stdout_limit_bytes: EXACT_OUTPUT_LIMIT_BYTES,
+            descriptor_stderr_limit_bytes: EXACT_OUTPUT_LIMIT_BYTES,
             inherited_environment: false,
             environment_entries: 0,
             environment_sha256,
@@ -60,16 +60,19 @@ impl HostEffectExecutionPolicy {
         })
     }
 
-    pub(super) const fn timeout(&self) -> Duration {
-        Duration::from_millis(self.timeout_ms)
+    #[cfg(any(target_os = "linux", target_os = "freebsd"))]
+    pub(super) const fn timeout(&self) -> std::time::Duration {
+        std::time::Duration::from_millis(self.descriptor_timeout_ms)
     }
 
+    #[cfg(any(target_os = "linux", target_os = "freebsd"))]
     pub(super) const fn stdout_limit(&self) -> usize {
-        self.stdout_limit_bytes
+        self.descriptor_stdout_limit_bytes
     }
 
+    #[cfg(any(target_os = "linux", target_os = "freebsd"))]
     pub(super) const fn stderr_limit(&self) -> usize {
-        self.stderr_limit_bytes
+        self.descriptor_stderr_limit_bytes
     }
 
     pub(crate) fn environment_sha256(&self) -> &str {

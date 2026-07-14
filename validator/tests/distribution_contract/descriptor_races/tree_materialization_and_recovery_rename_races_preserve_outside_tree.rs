@@ -15,7 +15,7 @@ fn tree_materialization_and_recovery_rename_races_preserve_outside_tree() {
     let installed_for_hook = installed.clone();
     let original_for_hook = original.clone();
     let outside_installed = outside.0.join("installed");
-    set_test_effect_hook(EffectPoint::Rename, move |_| {
+    set_test_effect_hook_matching(EffectPoint::Rename, "", move |_| {
         fs::rename(&installed_for_hook, &original_for_hook).unwrap();
         symlink(&outside_installed, &installed_for_hook).unwrap();
     });
@@ -38,7 +38,7 @@ fn tree_materialization_and_recovery_rename_races_preserve_outside_tree() {
     let root_for_hook = fixture.root.clone();
     let moved_for_hook = moved.clone();
     let outside_path = outside.0.clone();
-    set_test_effect_hook(EffectPoint::Rename, move |_| {
+    set_test_effect_hook_matching(EffectPoint::Rename, "", move |_| {
         fs::rename(&root_for_hook, &moved_for_hook).unwrap();
         symlink(&outside_path, &root_for_hook).unwrap();
     });

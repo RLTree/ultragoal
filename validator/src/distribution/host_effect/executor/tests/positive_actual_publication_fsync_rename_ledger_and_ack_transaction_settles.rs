@@ -11,6 +11,7 @@ fn positive_actual_publication_fsync_rename_ledger_and_ack_transaction_settles()
     let mut backend = ScriptedBackend::success();
     let policy = HostEffectExecutionPolicy::strict(10_000, &[]).unwrap();
     let mut executor = SupportedHostEffectExecutor::new(&ledger, target, &mut backend, policy);
+    let expected_effect_identity = executor.effect_identity(&capability(), &effect).unwrap();
     let receipt = executor
         .execute_authorized_for_test(
             &capability(),
@@ -24,6 +25,8 @@ fn positive_actual_publication_fsync_rename_ledger_and_ack_transaction_settles()
         receipt.publication_classification().id(),
         PublicationClassificationId::AcknowledgedCommitted
     );
+    assert_eq!(receipt.effect_identity_sha256(), expected_effect_identity);
+    assert_eq!(receipt.outcome().state, HostEffectState::Settled);
     assert_eq!(receipt.command_output_sha256().len(), 1);
     assert_eq!(
         PublicationAcknowledgementIdentity::from_canonical_json(receipt.acknowledgement_json())

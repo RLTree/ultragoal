@@ -37,11 +37,6 @@ impl AcceptedHostEffect {
             decision: HostEffectDecision::Authorize,
         })
     }
-
-    #[cfg(test)]
-    pub(super) fn host_scope(&self) -> &AcceptedHostScope {
-        &self.scope
-    }
 }
 
 pub(crate) struct RootPlanCustody {

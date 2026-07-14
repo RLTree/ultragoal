@@ -21,7 +21,7 @@ fn directory_ancestor_substitution_then_relocation_preserves_outside_tree() {
         let rename_installed = hook_installed.clone();
         let rename_original = hook_original.clone();
         let rename_outside = hook_outside.clone();
-        set_test_effect_hook(EffectPoint::Rename, move |_| {
+        set_test_effect_hook_matching(EffectPoint::Rename, "", move |_| {
             fs::rename(&rename_installed, &rename_outside).unwrap();
             fs::rename(&rename_original, &rename_installed).unwrap();
         });
@@ -63,7 +63,7 @@ fn regular_ancestor_relocation_rejects_file_removal_before_fallback_rename() {
         let rename_original = hook_original.clone();
         let rename_outside = hook_outside.clone();
         let rename_observed = Rc::clone(&observed);
-        set_test_effect_hook(EffectPoint::Rename, move |_| {
+        set_test_effect_hook_matching(EffectPoint::Rename, "", move |_| {
             fs::rename(&rename_root_inside, &rename_outside).unwrap();
             fs::rename(&rename_original, &rename_root_inside).unwrap();
             rename_observed.replace(Some(fs::read(rename_outside.join("value.bin")).unwrap()));
@@ -166,7 +166,7 @@ fn parent_recreation_before_rename_is_not_treated_as_the_opened_parent() {
     let observed = recreated_at_effect.clone();
     let inside_for_hook = inside.clone();
     let original_for_hook = original.clone();
-    set_test_effect_hook(EffectPoint::Rename, move |_| {
+    set_test_effect_hook_matching(EffectPoint::Rename, "", move |_| {
         fs::rename(&inside_for_hook, &original_for_hook).unwrap();
         fs::create_dir(&inside_for_hook).unwrap();
         fs::write(inside_for_hook.join("sentinel"), b"recreated").unwrap();

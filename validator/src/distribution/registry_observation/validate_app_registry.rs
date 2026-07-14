@@ -1,13 +1,4 @@
-#[derive(Clone, Copy)]
-struct RegistryState {
-    registered: bool,
-    visible: bool,
-}
-
-fn validate_registry(
-    bytes: &[u8],
-    binding: &JourneyBinding,
-) -> Result<RegistryState, DistributionError> {
+fn validate_registry(bytes: &[u8], binding: &JourneyBinding) -> Result<(), DistributionError> {
     let document: RegistryDocument = json::parse(bytes, REGISTRY_LIMIT)?;
     let source = binding.package().source();
     if document.schema != "harness-ultragoal.isolated-app-registry.v1"
@@ -46,8 +37,5 @@ fn validate_registry(
     {
         return Err(error(DistributionErrorId::InstallConflict));
     }
-    Ok(RegistryState {
-        registered: row.registered,
-        visible: row.visible,
-    })
+    Ok(())
 }

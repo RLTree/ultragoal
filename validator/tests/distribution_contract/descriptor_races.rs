@@ -2,8 +2,7 @@
 
 use crate::distribution::{
     DistributionErrorId as ErrorId, EffectPoint, ExpectedTree, ScopedFile, ScopedTree,
-    assert_test_effect_hook_consumed, materialize_package, set_test_effect_hook,
-    set_test_effect_hook_matching,
+    assert_test_effect_hook_consumed, materialize_package, set_test_effect_hook_matching,
 };
 use crate::distribution_fixture::{digest, tree};
 use crate::package_journey_fixture::{JourneyFixture, renamed, write_scoped};

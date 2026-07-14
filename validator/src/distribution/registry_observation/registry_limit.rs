@@ -1,5 +1,4 @@
 const REGISTRY_LIMIT: usize = 4 * 1024 * 1024;
-const INSTALLED_PACKAGE_LIMIT: usize = 65 * 1024 * 1024;
 const APP_REGISTRY_PATH: &str = "app/registry.json";
 const DISCOVERY_PATH: &str = "host/discovery.json";
 const SUPPORTED_INSTALL_TARGET: &str = "plugins/harness-ultragoal.hugpkg";

@@ -49,7 +49,7 @@ fn ancestor_symlink_swap_before_file_rename_never_mutates_outside_leaf() {
         let outside_path = outside.0.clone();
         let inside_for_hook = inside.clone();
         let original_for_hook = original.clone();
-        set_test_effect_hook(EffectPoint::Rename, move |_| {
+        set_test_effect_hook_matching(EffectPoint::Rename, "", move |_| {
             fs::rename(&inside_for_hook, &original_for_hook).unwrap();
             symlink(&outside_path, &inside_for_hook).unwrap();
         });
@@ -74,7 +74,7 @@ fn root_swap_before_file_rename_keeps_overwrite_in_original_descriptor_tree() {
     let root_for_hook = fixture.root.clone();
     let moved_for_hook = moved.clone();
     let outside_path = outside.0.clone();
-    set_test_effect_hook(EffectPoint::Rename, move |_| {
+    set_test_effect_hook_matching(EffectPoint::Rename, "", move |_| {
         fs::rename(&root_for_hook, &moved_for_hook).unwrap();
         symlink(&outside_path, &root_for_hook).unwrap();
     });
@@ -163,7 +163,7 @@ fn regular_ancestor_substitution_then_relocation_is_rejected_before_effect_bound
         let rename_original = hook_original.clone();
         let rename_outside = hook_outside.clone();
         let rename_observed = Rc::clone(&observed);
-        set_test_effect_hook(EffectPoint::Rename, move |_| {
+        set_test_effect_hook_matching(EffectPoint::Rename, "", move |_| {
             fs::rename(&rename_root_inside, &rename_outside).unwrap();
             fs::rename(&rename_original, &rename_root_inside).unwrap();
             rename_observed.replace(Some(fs::read(rename_outside.join("value.bin")).unwrap()));

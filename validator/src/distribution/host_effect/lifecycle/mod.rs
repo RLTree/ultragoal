@@ -30,6 +30,8 @@ pub(crate) use coordinator::{
     DescriptorExecutionCapability, DescriptorExecutionHandoff, DescriptorExecutionPlatform,
     HostTargetLease, HostTargetObserver, RootTrustedClock,
 };
+#[cfg(test)]
+pub(crate) use recovery::RecoveryProposalAction;
 pub(in crate::distribution::host_effect) use recovery::{
     ExpectedPublicationObjectIdentity, ExpectedRegularPublicationObject,
     PublicationAcknowledgementIdentity, PublicationExpectation,
@@ -39,8 +41,6 @@ pub(crate) use recovery::{
     PublicationClassification, PublicationClassificationId, PublicationInventoryObservation,
     PublicationObjectKind, PublicationObjectObservation,
 };
-#[cfg(test)]
-pub(crate) use recovery::{RecoveryProposal, RecoveryProposalAction};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "kebab-case")]

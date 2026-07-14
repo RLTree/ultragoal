@@ -110,7 +110,6 @@ impl AcceptedHostEffect {
         Ok(Self {
             package,
             lifecycle,
-            scope,
             expected_target,
             expected_head,
             coordinator_binding_sha256,

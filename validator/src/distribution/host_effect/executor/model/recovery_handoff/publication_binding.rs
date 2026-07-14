@@ -77,47 +77,6 @@ impl HostEffectRecoveryHandoff {
         .expect("terminal recovery binding serialization is infallible")
     }
 
-    fn post_publication_binding_sha256(&self) -> String {
-        let Self::PostPublicationTerminalTransition {
-            effect_identity_sha256,
-            permit_id,
-            prior_ledger_head,
-            publication_identity_sha256,
-            prior_publication_observation,
-            exact_current_publication_observation,
-            originating_error_ids,
-            classification,
-            ..
-        } = self
-        else {
-            return String::new();
-        };
-        #[derive(Serialize)]
-        struct Binding<'a> {
-            schema: &'static str,
-            effect_identity_sha256: &'a str,
-            permit_id: &'a str,
-            prior_ledger_head: &'a HostEffectLedgerHead,
-            publication_identity_sha256: &'a str,
-            prior_publication_observation: &'a PublicationInventoryObservation,
-            exact_current_publication_observation: bool,
-            originating_error_ids: &'a [HostEffectExecutorErrorId],
-            classification: HostEffectPostPublicationRecoveryClassification,
-        }
-        digest_json(&Binding {
-            schema: "harness-ultragoal.host-effect-post-publication-terminal-recovery.v2",
-            effect_identity_sha256,
-            permit_id,
-            prior_ledger_head,
-            publication_identity_sha256,
-            prior_publication_observation,
-            exact_current_publication_observation: *exact_current_publication_observation,
-            originating_error_ids,
-            classification: *classification,
-        })
-        .expect("post-publication recovery binding serialization is infallible")
-    }
-
     fn post_reservation_binding_sha256(&self) -> String {
         let Self::PostReservation {
             effect_identity_sha256,

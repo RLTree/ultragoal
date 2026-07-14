@@ -16,18 +16,6 @@ thread_local! {
 }
 
 #[cfg(test)]
-pub(crate) fn set_test_effect_hook(point: EffectPoint, hook: impl FnOnce(&str) + 'static) {
-    HOOK.with(|slot| {
-        assert!(
-            slot.borrow_mut()
-                .replace((point, None, Box::new(hook)))
-                .is_none(),
-            "only one descriptor-effect hook may be armed per thread",
-        );
-    });
-}
-
-#[cfg(test)]
 pub(crate) fn set_test_effect_hook_matching(
     point: EffectPoint,
     detail_fragment: &str,

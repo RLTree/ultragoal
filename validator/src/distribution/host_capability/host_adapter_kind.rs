@@ -189,9 +189,6 @@ impl HostCapabilityDeclaration {
         }
         Ok(())
     }
-    pub(crate) fn runtime_program_id(&self) -> Option<&str> {
-        self.runtime_program_id.as_deref()
-    }
     pub(crate) fn matches_runtime_program(&self, path: &Path) -> Result<bool, DistributionError> {
         let current = executable_identity(path)?;
         Ok(self.runtime_program_id.as_deref() == Some(current.as_str()))

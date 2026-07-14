@@ -41,12 +41,6 @@ pub(crate) enum HostEffectTerminalRecoveryClassification {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "kebab-case")]
-pub(crate) enum HostEffectPostPublicationRecoveryClassification {
-    CommittedBeforeTerminalTransitionObservationUnavailable,
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
-#[serde(rename_all = "kebab-case")]
 pub(crate) enum HostEffectPostReservationLedgerClassification {
     StillInFlight,
     TerminalObserved,
@@ -134,17 +128,6 @@ pub(crate) enum HostEffectRecoveryHandoff {
         outcome: HostEffectOutcome,
         originating_error_ids: Vec<HostEffectExecutorErrorId>,
         classification: HostEffectTerminalRecoveryClassification,
-        binding_sha256: String,
-    },
-    PostPublicationTerminalTransition {
-        effect_identity_sha256: String,
-        permit_id: String,
-        prior_ledger_head: HostEffectLedgerHead,
-        publication_identity_sha256: String,
-        prior_publication_observation: PublicationInventoryObservation,
-        exact_current_publication_observation: bool,
-        originating_error_ids: Vec<HostEffectExecutorErrorId>,
-        classification: HostEffectPostPublicationRecoveryClassification,
         binding_sha256: String,
     },
     PostReservation {

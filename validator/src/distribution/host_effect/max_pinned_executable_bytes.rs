@@ -75,18 +75,6 @@ impl HostEffectReservation {
         &self.permit_id
     }
 
-    pub(crate) fn issuer_id(&self) -> &str {
-        &self.issuer_id
-    }
-
-    pub(crate) fn ledger_id(&self) -> &str {
-        &self.ledger_id
-    }
-
-    pub(crate) fn key_id(&self) -> &str {
-        &self.key_id
-    }
-
     pub(crate) fn semantic_key_sha256(&self) -> &str {
         &self.semantic_key_sha256
     }

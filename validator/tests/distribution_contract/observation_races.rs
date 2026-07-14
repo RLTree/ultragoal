@@ -1,7 +1,7 @@
+use crate::distribution::registry_observation::{RegistryReader, observe_registry_reader};
 use crate::distribution::{
     CacheExpectation, CacheReader, DistributionErrorId as ErrorId, HostCapabilityDeclaration,
-    JourneyBinding, RegistryReader, observe_registry_reader, reconcile_cache_file,
-    registry_document,
+    JourneyBinding, reconcile_cache_file, registry_document,
 };
 use crate::distribution_fixture::{PLUGIN_ID, VERSION};
 use crate::package_journey_fixture::JourneyFixture;

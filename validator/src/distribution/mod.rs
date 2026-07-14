@@ -14,7 +14,7 @@ mod model;
 mod observations;
 mod package;
 mod reader;
-mod registry_observation;
+pub(crate) mod registry_observation;
 mod runtime_probe;
 mod spec;
 mod supply;
@@ -26,8 +26,7 @@ pub use error::{DistributionError, DistributionErrorId};
 pub use filesystem::{ConfinedRoot, ScopedFile, ScopedInstall, ScopedTree};
 #[cfg(all(test, unix))]
 pub(crate) use filesystem::{
-    EffectPoint, assert_test_effect_hook_consumed, set_test_effect_hook,
-    set_test_effect_hook_matching,
+    EffectPoint, assert_test_effect_hook_consumed, set_test_effect_hook_matching,
 };
 pub use host::{
     CommandOutput, HostAuthorization, HostCommand, HostCommandPlan, HostExecutionSnapshot,
@@ -71,8 +70,6 @@ pub use registry_observation::{
     RegistryObservations, observe_app_registry, observe_discovery, observe_discovery_file,
     observe_registry_file, observe_supported_host_discovery, registry_document,
 };
-#[cfg(test)]
-pub(crate) use registry_observation::{RegistryReader, observe_registry_reader};
 pub use runtime_probe::{RuntimeProbePlan, execute_runtime_probe};
 pub use supply::{
     ProvenanceExpectation, ProvenanceSnapshot, SignatureExpectation, SignatureSnapshot,
