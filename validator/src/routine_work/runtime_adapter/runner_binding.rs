@@ -40,8 +40,12 @@ pub(crate) fn validate_bound_invocation(
     runner: &RunnerIdentity,
     check: &PlannedCheck,
 ) -> Result<(), RoutineError> {
-    if ![EXTERNAL_PROCESS_EXIT_BEHAVIOR, RUST_SOURCE_SYNTAX_BEHAVIOR]
-        .contains(&invocation.behavior_id.as_str())
+    let expected_environment = default_environment(runner)?;
+    if invocation.behavior_id != RUST_SOURCE_SYNTAX_BEHAVIOR
+        || invocation.tool_name != "ultragoal"
+        || invocation.arguments != RUST_SOURCE_SYNTAX_ARGUMENTS
+        || invocation.environment != expected_environment
+        || invocation.read_sources.is_empty()
         || invocation.node_id != check.node_id()
         || invocation.tool_name != runner.tool_name
         || invocation.tool_identity_sha256 != runner.tool_identity_sha256
@@ -69,6 +73,13 @@ pub(crate) fn validate_and_normalize_bound_invocation(
         invocation.output_budget_bytes,
         &invocation.declared_output_scopes,
     )?;
+    if invocation.behavior_id != RUST_SOURCE_SYNTAX_BEHAVIOR
+        || invocation.tool_name != "ultragoal"
+        || invocation.arguments != RUST_SOURCE_SYNTAX_ARGUMENTS
+        || invocation.read_sources.is_empty()
+    {
+        return Err(adapter_error("adapter-closed-behavior-binding-invalid"));
+    }
     Ok(invocation)
 }
 

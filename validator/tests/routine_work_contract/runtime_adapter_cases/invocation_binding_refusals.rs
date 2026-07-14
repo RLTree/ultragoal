@@ -21,11 +21,11 @@ pub(crate) fn malformed_invocation_sets_and_stale_bindings_refuse_without_writes
     );
 
     let mut duplicate = invocation_specs(&fixture.context, &fixture.plan);
-    duplicate[1] = bind_routine_invocation(
+    duplicate[1] = bind_rust_source_syntax_invocation(
         &fixture.context,
         &fixture.plan,
         "syntax",
-        vec!["--duplicate".to_owned()],
+        vec![path("src/lib.rs")],
         60_000,
         1024,
         Vec::new(),
@@ -137,7 +137,7 @@ pub(crate) fn malformed_invocation_sets_and_stale_bindings_refuse_without_writes
             RoutineAdapterSpec::new("routine", hostile_argv),
         ))
         .cause(),
-        "adapter-argv-invalid"
+        "adapter-runner-binding-mismatch"
     );
 
     let mut environment_substitution = invocation_specs(&fixture.context, &fixture.plan);
@@ -159,22 +159,6 @@ pub(crate) fn malformed_invocation_sets_and_stale_bindings_refuse_without_writes
         ))
         .cause(),
         "adapter-runner-binding-mismatch"
-    );
-
-    assert_eq!(
-        bind_routine_invocation_with_environment(
-            &fixture.context,
-            &fixture.plan,
-            "syntax",
-            vec!["--reserved-environment".to_owned()],
-            BTreeMap::from([("HUL_ROUTINE_REQUEST_ID".to_owned(), "forged".to_owned())]),
-            1_000,
-            1_024,
-            vec![path("target/routine")],
-        )
-        .unwrap_err()
-        .cause(),
-        "adapter-environment-invalid"
     );
 
     assert_eq!(

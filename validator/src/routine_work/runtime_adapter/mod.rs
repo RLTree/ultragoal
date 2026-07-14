@@ -32,7 +32,7 @@ pub(crate) use execution_authority::{
 };
 pub(crate) use mediator::{
     RoutineCancellation, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutineNodeMediation, RoutineReuseInput, RoutineRootGrant, mediate_prepared_routine_execution,
+    RoutineReuseInput,
 };
 #[cfg(test)]
 pub(crate) use mediator::{
@@ -41,8 +41,7 @@ pub(crate) use mediator::{
     set_test_read_source_capture_hook, test_spawn_count,
 };
 pub(crate) use production::{
-    ProductionRoutineIssuer, RoutineRecoveryAuthority,
-    mediate_prepared_routine_execution_production,
+    ProductionRoutineIssuer, mediate_prepared_routine_execution_production,
 };
 
 #[path = "execution_preparation.rs"]

@@ -73,8 +73,6 @@ pub(crate) fn bind_public_invocation(
         context,
         plan,
         invocation.node_id(),
-        invocation.arguments().to_vec(),
-        invocation.environment().clone(),
         reads,
         invocation.timeout_ms(),
         invocation.output_budget_bytes(),

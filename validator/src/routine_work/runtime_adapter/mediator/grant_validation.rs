@@ -1,4 +1,6 @@
-use super::super::{EXTERNAL_PROCESS_EXIT_BEHAVIOR, RUST_SOURCE_SYNTAX_BEHAVIOR};
+use super::super::{
+    RUST_SOURCE_SYNTAX_ARGUMENTS, RUST_SOURCE_SYNTAX_BEHAVIOR, default_environment, exact_runner,
+};
 use super::*;
 
 pub(crate) fn validate_grant(
@@ -144,12 +146,15 @@ pub(crate) fn validate_intent(
         .tool(check.selected_tool())
         .filter(|tool| tool.available)
         .ok_or_else(|| mediator_error("mediator-runner-unavailable"))?;
-    let behavior_valid = intent.behavior_id() == EXTERNAL_PROCESS_EXIT_BEHAVIOR
-        || (intent.behavior_id() == RUST_SOURCE_SYNTAX_BEHAVIOR
-            && intent.selected_tool() == "ultragoal"
-            && intent.argv() == ["ultragoal", "--json", "check", "routine"]
-            && !intent.read_sources().is_empty());
-    if !behavior_valid
+    let expected_environment = default_environment(&exact_runner(context, check)?)?;
+    let expected_argv = std::iter::once("ultragoal")
+        .chain(RUST_SOURCE_SYNTAX_ARGUMENTS)
+        .collect::<Vec<_>>();
+    if intent.behavior_id() != RUST_SOURCE_SYNTAX_BEHAVIOR
+        || intent.selected_tool() != "ultragoal"
+        || intent.argv() != expected_argv
+        || intent.environment() != &expected_environment
+        || intent.read_sources().is_empty()
         || intent.selected_tool() != check.selected_tool()
         || intent.tool_identity_sha256() != check.selected_tool_identity()
         || digest_of(tool)? != intent.tool_identity_sha256()

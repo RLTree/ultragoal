@@ -130,6 +130,24 @@ pub fn evaluate_rust_source_syntax_frame(frame: &[u8]) -> RustSourceSyntaxOutcom
     }
 }
 
+pub(crate) fn trusted_rust_source_execution_observed(
+    frame: Option<&[u8]>,
+    exit_code: i32,
+    stdout: &[u8],
+    stderr_is_empty: bool,
+) -> bool {
+    let Some(frame) = frame else {
+        return false;
+    };
+    let RustSourceSyntaxOutcome::Passed(observation) = evaluate_rust_source_syntax_frame(frame)
+    else {
+        return false;
+    };
+    let mut expected = rust_source_syntax_observation_json(&observation);
+    expected.push(b'\n');
+    exit_code == 0 && stdout == expected && stderr_is_empty
+}
+
 fn evaluate(frame: &[u8]) -> Result<RustSourceSyntaxObservation, RustSourceSyntaxError> {
     let sources = parse_frame(frame)?;
     let mut total_source_bytes = 0_u64;
@@ -156,4 +174,62 @@ fn evaluate(frame: &[u8]) -> Result<RustSourceSyntaxObservation, RustSourceSynta
 
 fn digest(bytes: &[u8]) -> String {
     format!("sha256:{:x}", Sha256::digest(bytes))
+}
+
+#[cfg(test)]
+mod execution_observation_tests {
+    use super::*;
+    use crate::routine_work::{RustSourceFrameInput, encode_rust_source_syntax_frame};
+
+    fn frame_and_stdout() -> (Vec<u8>, Vec<u8>) {
+        let source = b"pub fn value() -> u8 { 1 }\n";
+        let digest = format!("sha256:{:x}", Sha256::digest(source));
+        let frame = encode_rust_source_syntax_frame(&[RustSourceFrameInput::new(
+            "src/lib.rs",
+            &digest,
+            source.len() as u64,
+            source,
+        )])
+        .unwrap();
+        let RustSourceSyntaxOutcome::Passed(observation) =
+            evaluate_rust_source_syntax_frame(&frame)
+        else {
+            panic!("canonical frame refused");
+        };
+        let mut stdout = rust_source_syntax_observation_json(&observation);
+        stdout.push(b'\n');
+        (frame, stdout)
+    }
+
+    #[test]
+    fn only_exact_framed_exit_zero_observation_passes() {
+        let (frame, stdout) = frame_and_stdout();
+        assert!(trusted_rust_source_execution_observed(
+            Some(&frame),
+            0,
+            &stdout,
+            true
+        ));
+        assert!(!trusted_rust_source_execution_observed(
+            None, 0, &stdout, true
+        ));
+        assert!(!trusted_rust_source_execution_observed(
+            Some(&frame),
+            0,
+            b"{}\n",
+            true
+        ));
+        assert!(!trusted_rust_source_execution_observed(
+            Some(&frame),
+            0,
+            &stdout,
+            false
+        ));
+        assert!(!trusted_rust_source_execution_observed(
+            Some(&frame),
+            7,
+            &stdout,
+            true
+        ));
+    }
 }

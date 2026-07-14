@@ -170,6 +170,9 @@ pub(crate) fn exact_runner(
     context: &LiveContext,
     check: &PlannedCheck,
 ) -> Result<RunnerIdentity, RoutineError> {
+    if check.selected_tool() != "ultragoal" {
+        return Err(adapter_error("adapter-closed-runner-required"));
+    }
     let tool = context
         .capabilities()
         .tool(check.selected_tool())
@@ -189,5 +192,12 @@ pub(crate) fn exact_runner(
             None,
         ));
     }
-    runner_identity(tool, tool_identity_sha256)
+    let runner = runner_identity(tool, tool_identity_sha256)?;
+    let expected = std::env::current_exe()
+        .and_then(std::fs::canonicalize)
+        .map_err(|_| adapter_error("adapter-current-runner-unavailable"))?;
+    if Path::new(&runner.program_path) != expected {
+        return Err(adapter_error("adapter-current-runner-substituted"));
+    }
+    Ok(runner)
 }

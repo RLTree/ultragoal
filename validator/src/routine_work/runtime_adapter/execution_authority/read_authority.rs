@@ -118,6 +118,18 @@ impl RoutineInvocationSpec {
     }
 
     #[cfg(test)]
+    pub(crate) fn test_with_program_path_hex(mut self, path: impl Into<String>) -> Self {
+        self.program_path_hex = path.into();
+        self
+    }
+
+    #[cfg(test)]
+    pub(crate) fn test_with_behavior_id(mut self, behavior: impl Into<String>) -> Self {
+        self.behavior_id = behavior.into();
+        self
+    }
+
+    #[cfg(test)]
     pub(crate) fn test_with_arguments(mut self, arguments: Vec<String>) -> Self {
         self.arguments = arguments;
         self

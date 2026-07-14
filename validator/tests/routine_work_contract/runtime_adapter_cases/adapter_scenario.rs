@@ -9,11 +9,12 @@ pub(crate) struct AdapterFixture {
 }
 
 pub(crate) fn adapter_context(repo: &TempRepo, profile: &str) -> LiveContext {
+    expose_current_ultragoal();
     LiveContext::build(
         BuildRequest::new(repo.root())
             .bind_non_secret_configuration("profile", profile)
             .probe_tool("sandbox-exec")
-            .probe_tool("true"),
+            .probe_tool("ultragoal"),
     )
     .unwrap()
 }
@@ -21,9 +22,15 @@ pub(crate) fn adapter_context(repo: &TempRepo, profile: &str) -> LiveContext {
 pub(crate) fn adapter_graph() -> ImpactGraph {
     ImpactGraph::new(
         vec![
-            node("syntax", &[], CheckClass::Routine, "true", None),
-            node("compile", &["syntax"], CheckClass::Routine, "true", None),
-            node("unit", &["compile"], CheckClass::Routine, "true", None),
+            node("syntax", &[], CheckClass::Routine, "ultragoal", None),
+            node(
+                "compile",
+                &["syntax"],
+                CheckClass::Routine,
+                "ultragoal",
+                None,
+            ),
+            node("unit", &["compile"], CheckClass::Routine, "ultragoal", None),
         ],
         vec![route(
             "route-src",
@@ -83,11 +90,11 @@ pub(crate) fn invocation_specs(
     plan.checks()
         .iter()
         .map(|check| {
-            bind_routine_invocation(
+            bind_rust_source_syntax_invocation(
                 context,
                 plan,
                 check.node_id(),
-                vec![format!("--check={}", check.node_id())],
+                vec![path("src/lib.rs")],
                 60_000,
                 4 * 1024 * 1024,
                 vec![path("target/routine")],

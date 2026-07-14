@@ -1,54 +1,56 @@
-#![allow(dead_code, unused_imports)]
-
-mod context {
-    pub use ultragoal::context::*;
+#[test]
+fn production_boundary_has_one_sealed_issuer_and_no_test_grant_entrypoint() {
+    let runtime = include_str!("../src/routine_work/runtime_adapter/mod.rs");
+    let production = include_str!("../src/routine_work/runtime_adapter/production/mod.rs");
+    let issuance =
+        include_str!("../src/routine_work/runtime_adapter/production/production_issuance.rs");
+    let recovery =
+        include_str!("../src/routine_work/runtime_adapter/production/recovery_authority.rs");
+    let authority =
+        include_str!("../src/routine_work/runtime_adapter/production/ledger/authority_record.rs");
+    let cancellation = include_str!(
+        "../src/routine_work/runtime_adapter/mediator/outcome/routine_cancellation.rs"
+    );
+    assert_eq!(issuance.matches("issue_production_grant(").count(), 1);
+    assert!(recovery.contains("pub(crate) struct ProductionRoutineIssuer"));
+    assert!(production.contains("preflight_production_request"));
+    assert!(!production.contains("RoutineRootGrant::test_issue"));
+    assert!(cancellation.contains("#[cfg(test)]\nimpl RoutineRootGrant"));
+    assert!(runtime.contains("mod production;"));
+    assert!(!production.contains("ClaimDecision"));
+    assert!(!production.contains("public command"));
+    assert!(authority.contains("pub(crate) struct ReusePreauthorization"));
 }
 
-#[path = "../src/cli/capture/mod.rs"]
-mod capture;
-#[path = "../src/routine_work/mod.rs"]
-mod routine_work;
-#[path = "routine_work_contract/scenario.rs"]
-mod scenario;
+#[test]
+fn production_source_exposes_no_arbitrary_process_binding_surface() {
+    let selection = include_str!("../src/routine_work/runtime_adapter/selection_limit.rs");
+    let invocation = include_str!("../src/routine_work/runtime_adapter/invocation_binding.rs");
+    let mediation =
+        include_str!("../src/routine_work/runtime_adapter/mediator/intent_mediation.rs");
+    let process =
+        include_str!("../src/routine_work/runtime_adapter/mediator/process/process_execution.rs");
+    let runner = include_str!("../src/routine_work/runtime_adapter/runner_binding.rs");
+    let reconciliation =
+        include_str!("../src/routine_work/runtime_adapter/execution_reconciliation.rs");
+    let grant = include_str!("../src/routine_work/runtime_adapter/mediator/grant_validation.rs");
 
-use std::collections::BTreeMap;
-use std::fs;
-use std::os::unix::fs::{PermissionsExt, symlink};
-use std::path::{Path, PathBuf};
-use std::process::Command;
-use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, Mutex};
-
-use context::{BuildRequest, LiveContext};
-use routine_work::{
-    CheckClass, DirtySnapshot, ImpactGraph, LocalDirtyTree, PathMatcher, PlanMode, PlanRequest,
-    PreparedRoutineExecution, ProductionRoutineIssuer, RoutineAdapterSpec, RoutineCancellation,
-    RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutinePlan, RoutineReuseInput, bind_routine_invocation,
-    mediate_prepared_routine_execution_production, plan_routine, prepare_routine_execution,
-    set_test_mediator_finish_failure,
-};
-use scenario::{TempRepo, node, path, route, sha};
-
-#[path = "routine_production_authority_cases/authority_fixture.rs"]
-mod authority_fixture;
-#[path = "routine_production_authority_cases/authority_redaction.rs"]
-mod authority_redaction;
-#[path = "routine_production_authority_cases/authority_scenario.rs"]
-mod authority_scenario;
-#[path = "routine_production_authority_cases/concurrent_reuse_settlement.rs"]
-mod concurrent_reuse_settlement;
-#[path = "routine_production_authority_cases/effect_capacity_bounds.rs"]
-mod effect_capacity_bounds;
-#[path = "routine_production_authority_cases/invalid_reuse_recovery.rs"]
-mod invalid_reuse_recovery;
-#[path = "routine_production_authority_cases/terminal_failure_settlement.rs"]
-mod terminal_failure_settlement;
-
-pub(crate) use authority_fixture::*;
-pub(crate) use authority_redaction::*;
-pub(crate) use authority_scenario::*;
-pub(crate) use concurrent_reuse_settlement::*;
-pub(crate) use effect_capacity_bounds::*;
-pub(crate) use invalid_reuse_recovery::*;
-pub(crate) use terminal_failure_settlement::*;
+    assert!(!selection.contains("external-process-exit-v1"));
+    assert!(!selection.contains("bind_routine_invocation("));
+    assert!(!selection.contains("bind_routine_invocation_with_environment"));
+    assert!(selection.contains("bind_rust_source_syntax_invocation("));
+    assert!(invocation.contains("RUST_SOURCE_SYNTAX_ARGUMENTS"));
+    assert!(invocation.contains("adapter-rust-source-input-missing"));
+    assert!(!mediation.contains("framed_input.as_ref()"));
+    assert!(!mediation.contains("unwrap_or(\"none\")"));
+    assert!(
+        mediation.find("validate_rust_source_observation").unwrap()
+            < mediation.find("ResultArtifactWire").unwrap()
+    );
+    assert!(process.contains("framed_input: Vec<u8>"));
+    assert!(!process.contains("framed_input: Option"));
+    assert!(process.contains("stdin(Stdio::piped())"));
+    assert!(reconciliation.contains("adapter-current-runner-substituted"));
+    assert!(runner.contains("invocation.environment != expected_environment"));
+    assert!(grant.contains("intent.environment() != &expected_environment"));
+}

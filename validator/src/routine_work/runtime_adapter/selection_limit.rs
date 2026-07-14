@@ -11,8 +11,8 @@ pub(crate) const MAX_TIMEOUT_MS: u64 = 3_600_000;
 pub(crate) const MAX_OUTPUT_BUDGET_BYTES: u64 = 64 * 1024 * 1024;
 pub(crate) const REQUEST_DOMAIN: &[u8] = b"routine-effect-request-v1";
 pub(crate) const REQUEST_SEAL_DOMAIN: &[u8] = b"routine-effect-request-seal-v1";
-pub(crate) const EXTERNAL_PROCESS_EXIT_BEHAVIOR: &str = "external-process-exit-v1";
 pub(crate) const RUST_SOURCE_SYNTAX_BEHAVIOR: &str = "rust-source-syntax-v1";
+pub(crate) const RUST_SOURCE_SYNTAX_ARGUMENTS: [&str; 3] = ["--json", "check", "routine"];
 
 pub(crate) static NEXT_REQUEST_ISSUANCE: AtomicU64 = AtomicU64::new(1);
 
@@ -85,148 +85,27 @@ pub(crate) struct RunnerIdentity {
     pub(crate) program_path: String,
 }
 
-pub(crate) fn bind_routine_invocation(
-    context: &LiveContext,
-    plan: &RoutinePlan,
-    node_id: &str,
-    arguments: Vec<String>,
-    timeout_ms: u64,
-    output_budget_bytes: u64,
-    declared_output_scopes: Vec<RepoPath>,
-) -> Result<RoutineInvocationSpec, RoutineError> {
-    let binding = structural_binding(context, plan, "adapter-invocation-plan-binding-is-stale")?;
-    let check = plan
-        .check(node_id)
-        .ok_or_else(|| adapter_error("adapter-invocation-node-unknown"))?;
-    let runner = exact_runner(context, check)?;
-    let environment = default_environment(&runner)?;
-    bind_routine_invocation_with_environment_inner(
-        binding,
-        check,
-        runner,
-        EXTERNAL_PROCESS_EXIT_BEHAVIOR.to_owned(),
-        arguments,
-        environment,
-        Vec::new(),
-        timeout_ms,
-        output_budget_bytes,
-        declared_output_scopes,
-    )
-}
-
-pub(crate) fn bind_routine_invocation_with_environment(
-    context: &LiveContext,
-    plan: &RoutinePlan,
-    node_id: &str,
-    arguments: Vec<String>,
-    environment: BTreeMap<String, String>,
-    timeout_ms: u64,
-    output_budget_bytes: u64,
-    declared_output_scopes: Vec<RepoPath>,
-) -> Result<RoutineInvocationSpec, RoutineError> {
-    let binding = structural_binding(context, plan, "adapter-invocation-plan-binding-is-stale")?;
-    let check = plan
-        .check(node_id)
-        .ok_or_else(|| adapter_error("adapter-invocation-node-unknown"))?;
-    let runner = exact_runner(context, check)?;
-    bind_routine_invocation_with_environment_inner(
-        binding,
-        check,
-        runner,
-        EXTERNAL_PROCESS_EXIT_BEHAVIOR.to_owned(),
-        arguments,
-        environment,
-        Vec::new(),
-        timeout_ms,
-        output_budget_bytes,
-        declared_output_scopes,
-    )
-}
-
-pub(crate) fn bind_routine_invocation_with_read_sources(
-    context: &LiveContext,
-    plan: &RoutinePlan,
-    node_id: &str,
-    arguments: Vec<String>,
-    read_sources: Vec<RepoPath>,
-    timeout_ms: u64,
-    output_budget_bytes: u64,
-    declared_output_scopes: Vec<RepoPath>,
-) -> Result<RoutineInvocationSpec, RoutineError> {
-    let binding = structural_binding(context, plan, "adapter-invocation-plan-binding-is-stale")?;
-    let check = plan
-        .check(node_id)
-        .ok_or_else(|| adapter_error("adapter-invocation-node-unknown"))?;
-    let runner = exact_runner(context, check)?;
-    let environment = default_environment(&runner)?;
-    bind_routine_invocation_with_environment_inner(
-        binding,
-        check,
-        runner,
-        EXTERNAL_PROCESS_EXIT_BEHAVIOR.to_owned(),
-        arguments,
-        environment,
-        read_sources,
-        timeout_ms,
-        output_budget_bytes,
-        declared_output_scopes,
-    )
-}
-
-#[allow(clippy::too_many_arguments)]
-pub(crate) fn bind_routine_invocation_with_environment_and_read_sources(
-    context: &LiveContext,
-    plan: &RoutinePlan,
-    node_id: &str,
-    arguments: Vec<String>,
-    environment: BTreeMap<String, String>,
-    read_sources: Vec<RepoPath>,
-    timeout_ms: u64,
-    output_budget_bytes: u64,
-    declared_output_scopes: Vec<RepoPath>,
-) -> Result<RoutineInvocationSpec, RoutineError> {
-    let binding = structural_binding(context, plan, "adapter-invocation-plan-binding-is-stale")?;
-    let check = plan
-        .check(node_id)
-        .ok_or_else(|| adapter_error("adapter-invocation-node-unknown"))?;
-    let runner = exact_runner(context, check)?;
-    bind_routine_invocation_with_environment_inner(
-        binding,
-        check,
-        runner,
-        EXTERNAL_PROCESS_EXIT_BEHAVIOR.to_owned(),
-        arguments,
-        environment,
-        read_sources,
-        timeout_ms,
-        output_budget_bytes,
-        declared_output_scopes,
-    )
-}
-
-#[allow(clippy::too_many_arguments)]
 pub(crate) fn bind_rust_source_syntax_invocation(
     context: &LiveContext,
     plan: &RoutinePlan,
     node_id: &str,
-    arguments: Vec<String>,
-    environment: BTreeMap<String, String>,
     read_sources: Vec<RepoPath>,
     timeout_ms: u64,
     output_budget_bytes: u64,
     declared_output_scopes: Vec<RepoPath>,
 ) -> Result<RoutineInvocationSpec, RoutineError> {
-    let mut invocation = bind_routine_invocation_with_environment_and_read_sources(
-        context,
-        plan,
-        node_id,
-        arguments,
-        environment,
+    let binding = structural_binding(context, plan, "adapter-invocation-plan-binding-is-stale")?;
+    let check = plan
+        .check(node_id)
+        .ok_or_else(|| adapter_error("adapter-invocation-node-unknown"))?;
+    let runner = exact_runner(context, check)?;
+    bind_closed_rust_source_invocation(
+        binding,
+        check,
+        runner,
         read_sources,
         timeout_ms,
         output_budget_bytes,
         declared_output_scopes,
-    )?;
-    invocation.behavior_id = RUST_SOURCE_SYNTAX_BEHAVIOR.to_owned();
-    Ok(invocation)
+    )
 }

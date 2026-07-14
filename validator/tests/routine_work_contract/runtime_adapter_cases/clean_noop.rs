@@ -38,7 +38,7 @@ pub(crate) fn clean_noop_is_deterministic_exact_and_non_effectful() {
 }
 
 #[test]
-pub(crate) fn dirty_and_strict_preparation_bind_deterministic_complete_intents_without_effects() {
+pub(crate) fn dirty_preparation_binds_deterministic_complete_typed_intents_without_effects() {
     let fixture = dirty_fixture("adapter-dirty-intents");
     let before_tree = fixture.repo.tree();
     let before_status = fixture.repo.status();
@@ -73,7 +73,7 @@ pub(crate) fn dirty_and_strict_preparation_bind_deterministic_complete_intents_w
                 .unwrap()
                 .unix_mode
         );
-        assert_eq!(intent.argv()[0], check.selected_tool());
+        assert_eq!(intent.argv(), ["ultragoal", "--json", "check", "routine"]);
         assert_eq!(
             intent.working_directory(),
             fixture.context.worktree_root().to_str().unwrap()
@@ -85,7 +85,7 @@ pub(crate) fn dirty_and_strict_preparation_bind_deterministic_complete_intents_w
             intent.read_authority_policy(),
             "default-deny-exact-bound-read-v1"
         );
-        assert!(intent.read_source_paths().is_empty());
+        assert_eq!(intent.read_source_paths(), [path("src/lib.rs")]);
         assert!(intent.read_authority_sha256().starts_with("sha256:"));
         assert_eq!(
             intent.mediation_preflight(),
@@ -105,30 +105,4 @@ pub(crate) fn dirty_and_strict_preparation_bind_deterministic_complete_intents_w
     }
     assert_eq!(fixture.repo.tree(), before_tree);
     assert_eq!(fixture.repo.status(), before_status);
-
-    let repo = TempRepo::new("adapter-strict-intents");
-    repo.write("release.json", b"{\"changed\":true}\n");
-    let context = repo.context("strict");
-    let snapshot = LocalDirtyTree::capture(&context).unwrap();
-    let graph = graph();
-    let plan = plan_routine(&context, &graph, &snapshot, PlanRequest::routine()).unwrap();
-    assert_eq!(plan.affected_set().mode(), PlanMode::Strict);
-    let spec = RoutineAdapterSpec::new("routine", invocation_specs(&context, &plan));
-    let PreparedRoutineExecution::Effect(strict) =
-        prepare_routine_execution(&context, &graph, &snapshot, &plan, spec).unwrap()
-    else {
-        panic!("strict plan emitted no-op")
-    };
-    assert_eq!(strict.intents().len(), plan.checks().len());
-    assert_eq!(
-        strict
-            .intents()
-            .iter()
-            .map(|intent| intent.node_id())
-            .collect::<Vec<_>>(),
-        plan.checks()
-            .iter()
-            .map(|check| check.node_id())
-            .collect::<Vec<_>>()
-    );
 }

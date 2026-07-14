@@ -18,6 +18,7 @@ mod reuse;
 mod runtime_adapter;
 mod snapshot;
 
+pub(crate) use behavior::trusted_rust_source_execution_observed;
 pub use behavior::{
     RustSourceFrameInput, RustSourceSyntaxError, RustSourceSyntaxErrorKind,
     RustSourceSyntaxObservation, RustSourceSyntaxOutcome, encode_rust_source_syntax_frame,

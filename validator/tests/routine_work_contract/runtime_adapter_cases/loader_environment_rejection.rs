@@ -1,7 +1,7 @@
 use super::*;
 
 #[test]
-pub(crate) fn startup_loader_environment_variables_are_rejected_at_binding() {
+pub(crate) fn startup_loader_environment_substitutions_are_rejected_at_preparation() {
     let fixture = dirty_fixture("adapter-startup-loader-environment");
     for key in [
         "ENV",
@@ -21,23 +21,24 @@ pub(crate) fn startup_loader_environment_variables_are_rejected_at_binding() {
         "PHPRC",
         "ZDOTDIR",
     ] {
-        let error = bind_routine_invocation_with_environment(
-            &fixture.context,
-            &fixture.plan,
-            "syntax",
-            vec!["--loader-environment".to_owned()],
-            BTreeMap::from([
+        let invocation = invocation_specs(&fixture.context, &fixture.plan)
+            .remove(0)
+            .test_with_environment(BTreeMap::from([
                 ("LANG".to_owned(), "C".to_owned()),
                 (key.to_owned(), "/tmp/unbound-startup-code".to_owned()),
-            ]),
-            1_000,
-            1_024,
-            vec![path("target/routine")],
-        )
-        .unwrap_err();
+            ]));
+        let mut invocations = invocation_specs(&fixture.context, &fixture.plan);
+        invocations[0] = invocation;
+        let error = preparation_error(prepare_routine_execution(
+            &fixture.context,
+            &fixture.graph,
+            &fixture.snapshot,
+            &fixture.plan,
+            RoutineAdapterSpec::new("routine", invocations),
+        ));
         assert_eq!(
             error.cause(),
-            "adapter-environment-startup-loader-refused",
+            "adapter-runner-binding-mismatch",
             "key={key}"
         );
     }

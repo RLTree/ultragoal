@@ -7,7 +7,7 @@ pub(crate) fn execute<F>(
     reads: &ReadConfinement,
     argv: &[String],
     environment: &BTreeMap<String, String>,
-    framed_input: Option<Vec<u8>>,
+    framed_input: Vec<u8>,
     timeout: Duration,
     output_budget: u64,
     cancellation: &RoutineCancellation,
@@ -64,7 +64,7 @@ where
             .current_dir(root.path())
             .env_clear()
             .envs(environment)
-            .stdin(input_stdio(framed_input.is_some()))
+            .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .stderr(Stdio::piped());
         let cwd_fd = root.raw_fd();
@@ -167,13 +167,11 @@ where
                 })
                 .map_err(|_| mediator_error("mediator-stderr-reader-start-failed"))?,
         );
-        if let Some(bytes) = framed_input {
-            let stdin = setup
-                .stdin
-                .take()
-                .ok_or_else(|| mediator_error("mediator-stdin-unavailable"))?;
-            setup.stdin_writer = Some(start_input_writer(stdin, bytes)?);
-        }
+        let stdin = setup
+            .stdin
+            .take()
+            .ok_or_else(|| mediator_error("mediator-stdin-unavailable"))?;
+        setup.stdin_writer = Some(start_input_writer(stdin, framed_input)?);
         let mut running = setup.into_running();
         let deadline = started_at + timeout;
         let observed_termination = loop {

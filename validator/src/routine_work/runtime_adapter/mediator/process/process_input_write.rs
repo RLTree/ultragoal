@@ -1,13 +1,5 @@
 use super::*;
 
-pub(crate) fn input_stdio(has_input: bool) -> Stdio {
-    if has_input {
-        Stdio::piped()
-    } else {
-        Stdio::null()
-    }
-}
-
 pub(crate) fn start_input_writer(
     mut stdin: ChildStdin,
     bytes: Vec<u8>,
