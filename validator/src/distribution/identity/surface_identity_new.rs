@@ -124,29 +124,6 @@ impl SurfaceIdentity {
         .bind_journey(binding)
     }
 
-    pub fn from_verified_install(
-        snapshot: &crate::distribution::install::InstallSnapshot,
-        binding: &crate::distribution::host_capability::JourneyBinding,
-    ) -> Result<Self, DistributionError> {
-        let package = binding.package();
-        let source = package.source();
-        if snapshot.context_id() != source.context_id()
-            || snapshot.candidate_id() != source.candidate_id()
-            || snapshot.package_sha256() != package.archive_sha256()
-        {
-            return Err(error(DistributionErrorId::ProvenanceMismatch));
-        }
-        let serialized = serde_json::to_vec(snapshot)
-            .map_err(|_| error(DistributionErrorId::ProvenanceMismatch))?;
-        Self::new(
-            package.clone(),
-            IdentitySurface::Installed,
-            crate::distribution::reader::sha256(&serialized),
-            Some(package.tree_sha256().into()),
-        )?
-        .bind_journey(binding)
-    }
-
     pub fn from_verified_cache(
         snapshot: &crate::distribution::cache::CacheSnapshot,
         binding: &crate::distribution::host_capability::JourneyBinding,

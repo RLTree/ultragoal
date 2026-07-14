@@ -9,6 +9,8 @@ include!("identity_surface.rs");
 
 include!("surface_identity_new.rs");
 
+include!("surface_identity_install.rs");
+
 include!("verify_bound_surface_chain.rs");
 
 #[cfg(test)]

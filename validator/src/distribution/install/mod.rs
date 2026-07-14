@@ -5,6 +5,10 @@ use crate::distribution::reader::{sha256, validate_relative_path};
 use crate::distribution::spec::digest;
 use serde::Serialize;
 
+include!("postimage.rs");
+
+include!("snapshot.rs");
+
 include!("install_limit.rs");
 
 include!("uninstall.rs");

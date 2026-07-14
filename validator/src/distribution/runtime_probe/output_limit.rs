@@ -31,12 +31,14 @@ impl RuntimeProbePlan {
         binding: JourneyBinding,
         host: &HostCapabilityDeclaration,
         install: &InstallSnapshot,
+        effects: &mut impl crate::distribution::install::InstallEffects,
         package: &PackageSnapshot,
         program: &Path,
         argv: Vec<String>,
         timeout: Duration,
     ) -> Result<Self, DistributionError> {
         host.ensure_binding(&binding)?;
+        install.revalidate_current(&binding, effects)?;
         let executable = PinnedRuntimeExecutable::open(program)?;
         let executable_sha256 = executable.sha256().to_owned();
         let runtime_entry = package

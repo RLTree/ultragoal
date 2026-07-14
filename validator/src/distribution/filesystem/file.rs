@@ -3,7 +3,7 @@ use super::owned::OwnedFile;
 use super::root::ConfinedRoot;
 use crate::distribution::cache::MarketplaceEffects;
 use crate::distribution::error::{DistributionError, DistributionErrorId, error};
-use crate::distribution::install::{ExpectedPrior, InstallEffects};
+use crate::distribution::install::{ExpectedPrior, InstallEffects, InstalledPostimage};
 use crate::distribution::package::PackageEffects;
 use crate::distribution::reader::sha256;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -41,6 +41,47 @@ impl ScopedFile {
 
     #[cfg(unix)]
     pub fn inspect(&self, maximum: usize) -> Result<Option<Vec<u8>>, DistributionError> {
+        Ok(self
+            .inspect_snapshot(maximum)?
+            .map(|snapshot| snapshot.bytes))
+    }
+
+    #[cfg(unix)]
+    pub(crate) fn installed_postimage(
+        &self,
+        maximum: usize,
+    ) -> Result<Option<InstalledPostimage>, DistributionError> {
+        let Some(snapshot) = self.inspect_snapshot(maximum)? else {
+            return Ok(None);
+        };
+        Ok(Some(InstalledPostimage::new(
+            self.root_id().into(),
+            self.relative_path(),
+            sha256(&snapshot.bytes),
+            sha256(
+                format!(
+                    "{}\0{}\0{}\0{}\0{}\0{}\0{}\0{}",
+                    snapshot.identity.device,
+                    snapshot.identity.inode,
+                    snapshot.identity.length,
+                    snapshot.identity.modified_seconds,
+                    snapshot.identity.modified_nanos,
+                    snapshot.identity.changed_seconds,
+                    snapshot.identity.changed_nanos,
+                    snapshot.mode
+                )
+                .as_bytes(),
+            ),
+            snapshot.identity.length,
+            snapshot.mode,
+        )))
+    }
+
+    #[cfg(unix)]
+    fn inspect_snapshot(
+        &self,
+        maximum: usize,
+    ) -> Result<Option<super::descriptor::FileSnapshot>, DistributionError> {
         let (parent, name) = match self.root.parent(&self.relative, false) {
             Ok(value) => value,
             Err(failure) if failure.id() == DistributionErrorId::ObjectUnavailable => {
@@ -50,11 +91,19 @@ impl ScopedFile {
         };
         let snapshot = read_file(&parent, &name, maximum)?;
         self.root.revalidate_parent(&self.relative, &parent)?;
-        Ok(snapshot.map(|row| row.bytes))
+        Ok(snapshot)
     }
 
     #[cfg(not(unix))]
     pub fn inspect(&self, _maximum: usize) -> Result<Option<Vec<u8>>, DistributionError> {
+        Err(error(DistributionErrorId::CapabilityMismatch))
+    }
+
+    #[cfg(not(unix))]
+    pub(crate) fn installed_postimage(
+        &self,
+        _maximum: usize,
+    ) -> Result<Option<InstalledPostimage>, DistributionError> {
         Err(error(DistributionErrorId::CapabilityMismatch))
     }
 
@@ -164,6 +213,16 @@ impl InstallEffects for ScopedInstall {
     fn read_installed(&mut self, target: &str, maximum: usize) -> Result<Option<Vec<u8>>, ()> {
         ScopedFile::new(self.root.clone(), target)
             .and_then(|row| row.inspect(maximum))
+            .map_err(|_| ())
+    }
+
+    fn installed_postimage(
+        &mut self,
+        target: &str,
+        maximum: usize,
+    ) -> Result<Option<InstalledPostimage>, ()> {
+        ScopedFile::new(self.root.clone(), target)
+            .and_then(|row| row.installed_postimage(maximum))
             .map_err(|_| ())
     }
 

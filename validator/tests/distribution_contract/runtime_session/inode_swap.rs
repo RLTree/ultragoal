@@ -11,7 +11,7 @@ fn runtime_fixture(
 ) {
     let fixture = JourneyFixture::new(label);
     let package = fixture.build("packages/runtime.hugpkg");
-    let installed = install_for_runtime(&fixture, &package);
+    let mut installed = install_for_runtime(&fixture, &package);
     let executable = installed_program(&fixture.root);
     let host = HostCapabilityDeclaration::isolated(
         &fixture.root,
@@ -22,6 +22,7 @@ fn runtime_fixture(
     .unwrap();
     let binding =
         JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
+    installed.bind_journey(&binding).unwrap();
     (fixture, package, installed, executable, host, binding)
 }
 
@@ -35,7 +36,11 @@ fn replace_with_same_bytes(path: &std::path::Path, suffix: &str) {
     ));
     let bytes = std::fs::read(path).unwrap();
     std::fs::write(&replacement, bytes).unwrap();
-    std::fs::set_permissions(&replacement, std::fs::Permissions::from_mode(0o755)).unwrap();
+    std::fs::set_permissions(
+        &replacement,
+        std::fs::Permissions::from_mode(before.mode() & 0o777),
+    )
+    .unwrap();
     let replacement_meta = std::fs::symlink_metadata(&replacement).unwrap();
     assert_ne!(
         (before.dev(), before.ino()),
@@ -51,12 +56,14 @@ fn replace_with_same_bytes(path: &std::path::Path, suffix: &str) {
 #[cfg(unix)]
 #[test]
 fn same_byte_inode_swap_before_spawn_never_launches_or_accepts() {
-    let (_fixture, package, installed, executable, host, binding) =
+    let (fixture, package, installed, executable, host, binding) =
         runtime_fixture("runtime-same-byte-before-spawn");
+    let mut install_effects = ScopedInstall::new(fixture.confined());
     let plan = RuntimeProbePlan::from_installed_package(
         binding,
         &host,
         installed.snapshot(),
+        &mut install_effects,
         &package,
         &executable,
         valid_args(),
@@ -75,12 +82,14 @@ fn same_byte_inode_swap_before_spawn_never_launches_or_accepts() {
 #[cfg(unix)]
 #[test]
 fn same_byte_inode_swap_during_execution_is_not_accepted() {
-    let (_fixture, package, installed, executable, host, binding) =
+    let (fixture, package, installed, executable, host, binding) =
         runtime_fixture("runtime-same-byte-during-exec");
+    let mut install_effects = ScopedInstall::new(fixture.confined());
     let plan = RuntimeProbePlan::from_installed_package(
         binding,
         &host,
         installed.snapshot(),
+        &mut install_effects,
         &package,
         &executable,
         slow_args(),
@@ -104,6 +113,7 @@ fn same_byte_inode_swap_during_execution_is_not_accepted() {
 fn sibling_wrong_route_and_replaced_object_regressions_fail_closed() {
     let (fixture, package, installed, executable, host, binding) =
         runtime_fixture("runtime-wrong-route-regressions");
+    let mut install_effects = ScopedInstall::new(fixture.confined());
     let sibling = fixture.root.join("runtime/sibling-runtime-probe-bin");
     std::fs::copy(&executable, &sibling).unwrap();
     assert_eq!(
@@ -111,6 +121,7 @@ fn sibling_wrong_route_and_replaced_object_regressions_fail_closed() {
             binding.clone(),
             &host,
             installed.snapshot(),
+            &mut install_effects,
             &package,
             &sibling,
             valid_args(),
@@ -122,12 +133,14 @@ fn sibling_wrong_route_and_replaced_object_regressions_fail_closed() {
     );
 
     replace_with_same_bytes(&executable, "same-bytes-before-plan");
+    let mut replaced_install_effects = ScopedInstall::new(fixture.confined());
 
     assert_eq!(
         RuntimeProbePlan::from_installed_package(
             binding,
             &host,
             installed.snapshot(),
+            &mut replaced_install_effects,
             &package,
             &executable,
             valid_args(),

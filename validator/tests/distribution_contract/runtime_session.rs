@@ -1,7 +1,8 @@
 use crate::distribution::{
-    DistributionErrorId as ErrorId, ExpectedPrior, HostCapabilityDeclaration, InstallPlan,
-    InstallScope, InstallTransaction, JourneyBinding, PackageSnapshot, RuntimeObservation,
-    RuntimeProbePlan, RuntimeVerdict, ScopedInstall, execute_runtime_probe, install,
+    DistributionErrorId as ErrorId, ExpectedPrior, HostCapabilityDeclaration, InstallEffects,
+    InstallPlan, InstallScope, InstallTransaction, JourneyBinding, PackageSnapshot,
+    RuntimeObservation, RuntimeProbePlan, RuntimeVerdict, ScopedInstall, SurfaceIdentity,
+    execute_runtime_probe, install,
 };
 use crate::distribution_fixture::Fixture;
 use crate::package_journey_fixture::{JourneyFixture, runtime_probe_bytes};
@@ -93,7 +94,7 @@ fn install_for_runtime(fixture: &JourneyFixture, package: &PackageSnapshot) -> I
 fn stale_subprocess_receipt_and_dormant_report_cannot_become_runtime_proof() {
     let fixture = JourneyFixture::new("runtime-stale");
     let package = fixture.build("package/runtime.hugpkg");
-    let installed = install_for_runtime(&fixture, &package);
+    let mut installed = install_for_runtime(&fixture, &package);
     let executable = installed_program(&fixture.root);
     let host = HostCapabilityDeclaration::isolated(
         &fixture.root,
@@ -104,10 +105,13 @@ fn stale_subprocess_receipt_and_dormant_report_cannot_become_runtime_proof() {
     .unwrap();
     let binding =
         JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
+    installed.bind_journey(&binding).unwrap();
+    let mut install_effects = ScopedInstall::new(fixture.confined());
     let stale = RuntimeProbePlan::from_installed_package(
         binding.clone(),
         &host,
         installed.snapshot(),
+        &mut install_effects,
         &package,
         &executable,
         stale_args(),
@@ -150,7 +154,7 @@ fn executable_substitution_during_probe_fails_final_revalidation() {
     use std::os::unix::fs::PermissionsExt;
     let fixture = JourneyFixture::new("runtime-executable-race");
     let package = fixture.build("packages/runtime.hugpkg");
-    let installed = install_for_runtime(&fixture, &package);
+    let mut installed = install_for_runtime(&fixture, &package);
     let copied = installed_program(&fixture.root);
     let host = HostCapabilityDeclaration::isolated(
         &fixture.root,
@@ -161,10 +165,13 @@ fn executable_substitution_during_probe_fails_final_revalidation() {
     .unwrap();
     let binding =
         JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
+    installed.bind_journey(&binding).unwrap();
+    let mut install_effects = ScopedInstall::new(fixture.confined());
     let plan = RuntimeProbePlan::from_installed_package(
         binding,
         &host,
         installed.snapshot(),
+        &mut install_effects,
         &package,
         &copied,
         slow_args(),
@@ -188,3 +195,5 @@ fn executable_substitution_during_probe_fails_final_revalidation() {
 }
 
 include!("runtime_session/inode_swap.rs");
+
+include!("runtime_session/install_authority.rs");

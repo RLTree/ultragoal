@@ -66,67 +66,16 @@ impl InstallPlan {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
-pub struct InstallSnapshot {
-    context_id: String,
-    candidate_id: String,
-    scope: InstallScope,
-    target_id: String,
-    package_sha256: String,
-    replaced_existing: bool,
-}
-
-impl InstallSnapshot {
-    pub fn context_id(&self) -> &str {
-        &self.context_id
-    }
-
-    pub fn candidate_id(&self) -> &str {
-        &self.candidate_id
-    }
-
-    pub const fn scope(&self) -> InstallScope {
-        self.scope
-    }
-
-    pub fn package_sha256(&self) -> &str {
-        &self.package_sha256
-    }
-
-    pub fn target_id(&self) -> &str {
-        &self.target_id
-    }
-
-    pub const fn replaced_existing(&self) -> bool {
-        self.replaced_existing
-    }
-}
-
-pub struct InstallTransaction {
-    snapshot: InstallSnapshot,
-    target: String,
-    previous: Option<Vec<u8>>,
-}
-
-impl std::fmt::Debug for InstallTransaction {
-    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        formatter
-            .debug_struct("InstallTransaction")
-            .field("snapshot", &self.snapshot)
-            .field("target_id", &sha256(self.target.as_bytes()))
-            .field("had_previous", &self.previous.is_some())
-            .finish()
-    }
-}
-
-impl InstallTransaction {
-    pub fn snapshot(&self) -> &InstallSnapshot {
-        &self.snapshot
-    }
-}
-
 pub trait InstallEffects {
     fn read_installed(&mut self, target: &str, maximum: usize) -> Result<Option<Vec<u8>>, ()>;
+
+    fn installed_postimage(
+        &mut self,
+        _target: &str,
+        _maximum: usize,
+    ) -> Result<Option<InstalledPostimage>, ()> {
+        Err(())
+    }
 
     /// Atomically compares the current destination with `expected` and, only
     /// when it matches, replaces it with `replacement` (`None` removes it).
@@ -188,8 +137,15 @@ pub fn install(
             candidate_id: plan.candidate_id.clone(),
             scope: plan.scope,
             target_id: sha256(plan.target.as_bytes()),
+            target: plan.target.clone(),
             package_sha256: plan.package_sha256.clone(),
             replaced_existing: previous.is_some(),
+            postimage: effects
+                .installed_postimage(&plan.target, INSTALL_LIMIT)
+                .ok()
+                .flatten()
+                .filter(|row| row.object_sha256 == plan.package_sha256),
+            journey_binding_sha256: None,
         },
         target: plan.target.clone(),
         previous,

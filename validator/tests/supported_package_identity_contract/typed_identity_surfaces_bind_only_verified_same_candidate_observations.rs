@@ -40,7 +40,14 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
         ExpectedPrior::Absent,
     )
     .unwrap();
-    let installed = install(&install_plan, &package, &mut Installed::default()).unwrap();
+    let confined = ConfinedRoot::open(&fixture.0).unwrap();
+    let mut installed = install(
+        &install_plan,
+        &package,
+        &mut ScopedInstall::new(confined.clone()),
+    )
+    .unwrap();
+    installed.bind_journey(&binding).unwrap();
 
     let cache_bytes = serde_json::to_vec(&json!({
         "schema":"harness-ultragoal.codex-cache-observation.v1",
@@ -84,6 +91,7 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
         binding.clone(),
         &host,
         installed.snapshot(),
+        &mut ScopedInstall::new(confined.clone()),
         &package,
         &runtime_program,
         Vec::new(),
@@ -93,7 +101,12 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
     let (_, runtime) = runtime_plan.execute_bound().unwrap();
 
     let surfaces = [
-        SurfaceIdentity::from_verified_install(installed.snapshot(), &binding).unwrap(),
+        SurfaceIdentity::from_verified_install(
+            installed.snapshot(),
+            &binding,
+            &mut ScopedInstall::new(confined.clone()),
+        )
+        .unwrap(),
         SurfaceIdentity::from_verified_cache(&cache, &binding).unwrap(),
         SurfaceIdentity::from_verified_marketplace(&marketplace, &binding).unwrap(),
         SurfaceIdentity::from_verified_app_registry(&app_registry, &binding).unwrap(),
@@ -121,7 +134,11 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
     let wrong_binding = JourneyBinding::new(substituted, &host, "local-harness-plugins").unwrap();
     for result in [
         SurfaceIdentity::from_verified_marketplace(&marketplace, &wrong_binding),
-        SurfaceIdentity::from_verified_install(installed.snapshot(), &wrong_binding),
+        SurfaceIdentity::from_verified_install(
+            installed.snapshot(),
+            &wrong_binding,
+            &mut ScopedInstall::new(confined.clone()),
+        ),
         SurfaceIdentity::from_verified_app_registry(&app_registry, &wrong_binding),
     ] {
         assert_eq!(

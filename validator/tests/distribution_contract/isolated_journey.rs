@@ -63,7 +63,7 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
     )
     .unwrap();
     let mut install_effects = ScopedInstall::new(fixture.confined());
-    let install = install(&install_plan, &first, &mut install_effects).unwrap();
+    let mut install = install(&install_plan, &first, &mut install_effects).unwrap();
     let installed = ScopedFile::new(fixture.confined(), "plugins/harness-ultragoal.hugpkg")
         .unwrap()
         .inspect(65 * 1024 * 1024)
@@ -97,6 +97,7 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
     );
     let binding =
         JourneyBinding::new(first.identity().clone(), &host, "local-harness-plugins").unwrap();
+    install.bind_journey(&binding).unwrap();
     let cache_bytes = serde_json::to_vec(&json!({
         "schema":"harness-ultragoal.codex-cache-observation.v1",
         "context_id":first.context_id(), "candidate_id":first.candidate_id(),
@@ -149,6 +150,7 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
         binding.clone(),
         &host,
         install.snapshot(),
+        &mut ScopedInstall::new(fixture.confined()),
         &first,
         &executable,
         valid_args(),
@@ -166,7 +168,12 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
     );
 
     let observed_surfaces = [
-        SurfaceIdentity::from_verified_install(install.snapshot(), &binding).unwrap(),
+        SurfaceIdentity::from_verified_install(
+            install.snapshot(),
+            &binding,
+            &mut ScopedInstall::new(fixture.confined()),
+        )
+        .unwrap(),
         SurfaceIdentity::from_verified_cache(&cache, &binding).unwrap(),
         SurfaceIdentity::from_verified_marketplace(&marketplace, &binding).unwrap(),
         SurfaceIdentity::from_verified_app_registry(&app, &binding).unwrap(),
