@@ -58,8 +58,9 @@ pub(crate) const MAP: &[Mapping] = &[
         CHILD_LIFECYCLE_BLOCKER,
         RECOVERY,
     ),
-    routed(
+    blocked(
         "runtime_mediator_cases/setup_failure_recovery.rs::missing_forged_and_replayed_root_authority_fail_closed",
+        CHILD_SUCCESS_BLOCKER,
         BROKER,
     ),
     routed(
