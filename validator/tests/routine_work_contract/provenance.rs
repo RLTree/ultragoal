@@ -1,12 +1,11 @@
 use std::fs;
-use std::path::{Path, PathBuf};
-use std::process::Output;
+use std::path::Path;
+use std::process::{Command, Output};
 
-use super::provenance_compile::{compile_consumer, compile_surface};
+use super::issuer_api_compilation::{check, prepare};
+use super::owned_compile_scratch::OwnedCompileScratch;
 use super::routine_work::{LocalDirtyTree, PlanRequest, RoutineErrorId};
 use super::scenario::{TempRepo, graph};
-
-const SCRATCH: &str = "/tmp/hul-routine-snapshot-provenance-001/consumer-probe";
 
 #[test]
 fn structurally_valid_subset_without_capture_provenance_is_rejected() {
@@ -36,24 +35,12 @@ fn structurally_valid_subset_without_capture_provenance_is_rejected() {
 
 #[test]
 fn external_consumer_can_inspect_but_cannot_construct_or_deserialize_snapshot() {
-    let scratch = PathBuf::from(SCRATCH);
-    let _ = fs::remove_dir_all(&scratch);
-    fs::create_dir_all(&scratch).unwrap();
-    let dependencies = std::env::current_exe()
-        .unwrap()
-        .parent()
-        .unwrap()
-        .to_path_buf();
-    let surface = compile_surface(&scratch, &dependencies);
+    let owned = OwnedCompileScratch::claim("routine-snapshot-provenance");
+    let scratch = owned.path();
     let probes = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/routine_work_contract/probes");
+    prepare(scratch, &probes);
 
-    let control = compile_consumer(
-        &probes.join("read_only_snapshot_consumer.rs"),
-        "routine_snapshot_read_control",
-        &scratch,
-        &dependencies,
-        &surface,
-    );
+    let control = check(scratch, "routine_snapshot_read_control");
     fs::write(scratch.join("read-control.stderr"), &control.stderr).unwrap();
     assert!(
         control.status.success(),
@@ -61,13 +48,7 @@ fn external_consumer_can_inspect_but_cannot_construct_or_deserialize_snapshot() 
         String::from_utf8_lossy(&control.stderr)
     );
 
-    let constructor = compile_consumer(
-        &probes.join("snapshot_constructor_consumer.rs"),
-        "routine_snapshot_constructor_attack",
-        &scratch,
-        &dependencies,
-        &surface,
-    );
+    let constructor = check(scratch, "routine_snapshot_constructor_attack");
     fs::write(scratch.join("constructor.stderr"), &constructor.stderr).unwrap();
     assert!(
         !constructor.status.success(),
@@ -75,24 +56,12 @@ fn external_consumer_can_inspect_but_cannot_construct_or_deserialize_snapshot() 
     );
     assert_specific_failure(&constructor, "E0624", "private");
 
-    let subset = compile_consumer(
-        &probes.join("partial_snapshot_consumer.rs"),
-        "routine_partial_snapshot_attack",
-        &scratch,
-        &dependencies,
-        &surface,
-    );
+    let subset = check(scratch, "routine_partial_snapshot_attack");
     fs::write(scratch.join("partial-snapshot.stderr"), &subset.stderr).unwrap();
     assert!(!subset.status.success(), "partial snapshot attack compiled");
     assert_specific_failure(&subset, "E0451", "private");
 
-    let deserialize = compile_consumer(
-        &probes.join("snapshot_deserialize_consumer.rs"),
-        "routine_snapshot_deserialize_attack",
-        &scratch,
-        &dependencies,
-        &surface,
-    );
+    let deserialize = check(scratch, "routine_snapshot_deserialize_attack");
     fs::write(scratch.join("deserialize.stderr"), &deserialize.stderr).unwrap();
     assert!(
         !deserialize.status.success(),
@@ -100,13 +69,7 @@ fn external_consumer_can_inspect_but_cannot_construct_or_deserialize_snapshot() 
     );
     assert_specific_failure(&deserialize, "E0277", "Deserialize");
 
-    let evidence = compile_consumer(
-        &probes.join("evidence_reconstruction_consumer.rs"),
-        "routine_evidence_reconstruction_attack",
-        &scratch,
-        &dependencies,
-        &surface,
-    );
+    let evidence = check(scratch, "routine_evidence_reconstruction_attack");
     fs::write(scratch.join("evidence.stderr"), &evidence.stderr).unwrap();
     assert!(
         !evidence.status.success(),
@@ -115,9 +78,47 @@ fn external_consumer_can_inspect_but_cannot_construct_or_deserialize_snapshot() 
     assert_specific_failure(&evidence, "E0451", "private");
 }
 
+#[test]
+fn concurrent_external_consumers_use_disjoint_owned_scratch() {
+    let owned = OwnedCompileScratch::claim("routine-snapshot-provenance-concurrency");
+    let scratch = owned.path().join("scratch");
+    let tmp = owned.path().join("tmp");
+    fs::create_dir(&scratch).unwrap();
+    fs::create_dir(&tmp).unwrap();
+    let sentinel = scratch.join("parent-owned-sentinel");
+    fs::write(&sentinel, b"must survive consumer cleanup\n").unwrap();
+    let executable = std::env::current_exe().unwrap();
+    let mut children = (0..2)
+        .map(|_| {
+            Command::new(&executable)
+                .args([
+                    "provenance::external_consumer_can_inspect_but_cannot_construct_or_deserialize_snapshot",
+                    "--exact",
+                ])
+                .env("CODEX_WORKTREE_SCRATCH", &scratch)
+                .env("CODEX_WORKTREE_TMP", &tmp)
+                .spawn()
+                .unwrap()
+        })
+        .collect::<Vec<_>>();
+    for child in &mut children {
+        assert!(child.wait().unwrap().success());
+    }
+    assert_eq!(
+        fs::read(&sentinel).unwrap(),
+        b"must survive consumer cleanup\n"
+    );
+    fs::remove_file(sentinel).unwrap();
+    assert_eq!(fs::read_dir(scratch).unwrap().count(), 0);
+    assert_eq!(fs::read_dir(tmp).unwrap().count(), 0);
+}
+
 fn assert_specific_failure(output: &Output, code: &str, reason: &str) {
     let diagnostic = String::from_utf8_lossy(&output.stderr);
-    assert!(diagnostic.contains(code) && diagnostic.contains(reason));
+    assert!(
+        diagnostic.contains(code) && diagnostic.contains(reason),
+        "unexpected consumer diagnostic: {diagnostic}"
+    );
     for incidental in [
         "unresolved import",
         "can't find crate",

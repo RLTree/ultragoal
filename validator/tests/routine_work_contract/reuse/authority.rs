@@ -2,6 +2,7 @@ use super::super::capture::{
     CommandSpec, PublicArtifact, capture_public_for_test, reset_test_file_open_attempts,
     set_test_artifact_pause_ms, test_artifact_is_paused, test_file_open_attempts,
 };
+use super::super::configured_path_alias::ConfiguredPathAlias;
 use super::super::routine_work::{
     ReuseDecision, RoutineErrorId, assess_reuse, capture_executed_result, observe_result_artifact,
     set_test_live_authority_hook,
@@ -12,7 +13,6 @@ use super::execution_fixture::{
     syntax_evidence,
 };
 use std::fs;
-use std::path::PathBuf;
 use std::time::{Duration, Instant};
 
 #[cfg(target_os = "macos")]
@@ -155,15 +155,9 @@ fn special_result_artifacts_fail_before_evidence_minting() {
     let fifo = repo.root().join("routine-cache/fifo");
     let name = CString::new(fifo.as_os_str().as_bytes()).unwrap();
     assert_eq!(unsafe { libc::mkfifo(name.as_ptr(), 0o600) }, 0);
-    let alias = std::env::temp_dir().join(format!("result-alias-{}", std::process::id()));
-    std::os::unix::fs::symlink(repo.root().join("routine-cache"), &alias).unwrap();
-    let current = std::env::current_dir().unwrap();
-    let bind_path = if let Ok(relative) = alias.strip_prefix(&current) {
-        relative.to_path_buf()
-    } else {
-        PathBuf::from("..").join(alias.strip_prefix(current.parent().unwrap()).unwrap())
-    }
-    .join("socket");
+    let alias =
+        ConfiguredPathAlias::claim("routine-result-socket", &repo.root().join("routine-cache"));
+    let bind_path = alias.child_from_current_dir("socket");
     let socket = UnixListener::bind(&bind_path).unwrap();
     for path in ["link", "hard", "real", "fifo", "socket"] {
         assert!(
@@ -176,7 +170,7 @@ fn special_result_artifacts_fail_before_evidence_minting() {
         );
     }
     drop(socket);
-    fs::remove_file(alias).unwrap();
+    drop(alias);
 }
 
 #[cfg(target_os = "macos")]

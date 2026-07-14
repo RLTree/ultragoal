@@ -1,12 +1,12 @@
 use std::fs;
 use std::os::unix::fs::symlink;
 use std::os::unix::net::UnixListener;
-use std::sync::atomic::{AtomicU64, Ordering};
 
-use super::current_path_fixture::repo_path;
+use super::configured_path_alias::ConfiguredPathAlias;
+use super::routine_plan_fixture::repo_path;
 use super::routine_work::{
-    RoutineErrorId, set_test_output_capture_hook, test_probe_output_confinement,
-    test_probe_read_confinement,
+    RoutineErrorId, set_test_output_capture_hook, validate_output_confinement_after,
+    validate_read_confinement_after_bind,
 };
 use super::scenario::TempRepo;
 
@@ -21,16 +21,8 @@ fn root(label: &str) -> (TempRepo, std::path::PathBuf) {
     (repo, root)
 }
 
-fn short_alias(repo: &TempRepo) -> std::path::PathBuf {
-    static NEXT: AtomicU64 = AtomicU64::new(0);
-    let alias = std::path::PathBuf::from(format!(
-        "/tmp/hul-n06-{}-{}",
-        std::process::id(),
-        NEXT.fetch_add(1, Ordering::Relaxed)
-    ));
-    let _ = fs::remove_file(&alias);
-    symlink(repo.root(), &alias).unwrap();
-    alias
+fn short_alias(repo: &TempRepo) -> ConfiguredPathAlias {
+    ConfiguredPathAlias::claim("routine-filesystem", repo.root())
 }
 
 #[test]
@@ -42,7 +34,7 @@ fn output_symlink_hardlink_fifo_socket_and_stale_files_refuse_exact_capture() {
 
     symlink(&outside, repo.root().join("target/routine/link")).unwrap();
     assert_eq!(
-        cause(test_probe_output_confinement(
+        cause(validate_output_confinement_after(
             &root,
             &[scope.clone()],
             1024,
@@ -59,7 +51,7 @@ fn output_symlink_hardlink_fifo_socket_and_stale_files_refuse_exact_capture() {
     )
     .unwrap();
     assert_eq!(
-        cause(test_probe_output_confinement(
+        cause(validate_output_confinement_after(
             &root,
             &[scope.clone()],
             1024,
@@ -74,7 +66,7 @@ fn output_symlink_hardlink_fifo_socket_and_stale_files_refuse_exact_capture() {
     let fifo_c = std::ffi::CString::new(fifo.to_str().unwrap()).unwrap();
     assert_eq!(unsafe { libc::mkfifo(fifo_c.as_ptr(), 0o600) }, 0);
     assert_eq!(
-        cause(test_probe_output_confinement(
+        cause(validate_output_confinement_after(
             &root,
             &[scope.clone()],
             1024,
@@ -86,9 +78,10 @@ fn output_symlink_hardlink_fifo_socket_and_stale_files_refuse_exact_capture() {
 
     let alias = short_alias(&repo);
     let socket = repo.root().join("target/routine/socket");
-    let listener = UnixListener::bind(alias.join("target/routine/socket")).unwrap();
+    let listener =
+        UnixListener::bind(alias.child_from_current_dir("target/routine/socket")).unwrap();
     assert_eq!(
-        cause(test_probe_output_confinement(
+        cause(validate_output_confinement_after(
             &root,
             &[scope.clone()],
             1024,
@@ -98,11 +91,16 @@ fn output_symlink_hardlink_fifo_socket_and_stale_files_refuse_exact_capture() {
     );
     drop(listener);
     fs::remove_file(&socket).unwrap();
-    fs::remove_file(alias).unwrap();
+    drop(alias);
 
     fs::write(repo.root().join("target/routine/stale"), b"stale").unwrap();
     assert_eq!(
-        cause(test_probe_output_confinement(&root, &[scope], 1024, || {})),
+        cause(validate_output_confinement_after(
+            &root,
+            &[scope],
+            1024,
+            || {}
+        )),
         "mediator-output-scope-not-empty"
     );
 }
@@ -123,7 +121,7 @@ fn output_nested_swap_and_create_delete_restore_refuse_final_validation() {
         }
     });
     assert_eq!(
-        test_probe_output_confinement(&root, &[scope.clone()], 1024, || {})
+        validate_output_confinement_after(&root, &[scope.clone()], 1024, || {})
             .unwrap_err()
             .id(),
         RoutineErrorId::ConcurrentMutation
@@ -132,7 +130,7 @@ fn output_nested_swap_and_create_delete_restore_refuse_final_validation() {
     fs::rename(&held, &current).unwrap();
 
     assert_eq!(
-        test_probe_output_confinement(&root, &[scope], 1024, || {
+        validate_output_confinement_after(&root, &[scope], 1024, || {
             let transient = repo.root().join("target/routine/transient");
             fs::write(&transient, b"transient").unwrap();
             fs::remove_file(transient).unwrap();
@@ -148,30 +146,36 @@ fn read_symlink_hardlink_fifo_socket_ancestor_swap_and_restore_refuse() {
     let (repo, root) = root("read-object-refusals");
     let source = repo.root().join("src/lib.rs");
     symlink("lib.rs", repo.root().join("src/link.rs")).unwrap();
-    assert!(test_probe_read_confinement(&root, &[repo_path("src/link.rs")], || {}).is_err());
+    assert!(
+        validate_read_confinement_after_bind(&root, &[repo_path("src/link.rs")], || {}).is_err()
+    );
     fs::remove_file(repo.root().join("src/link.rs")).unwrap();
 
     fs::hard_link(&source, repo.root().join("src/hard.rs")).unwrap();
-    assert!(test_probe_read_confinement(&root, &[repo_path("src/hard.rs")], || {}).is_err());
+    assert!(
+        validate_read_confinement_after_bind(&root, &[repo_path("src/hard.rs")], || {}).is_err()
+    );
     fs::remove_file(repo.root().join("src/hard.rs")).unwrap();
 
     let fifo = repo.root().join("src/fifo");
     let fifo_c = std::ffi::CString::new(fifo.to_str().unwrap()).unwrap();
     assert_eq!(unsafe { libc::mkfifo(fifo_c.as_ptr(), 0o600) }, 0);
-    assert!(test_probe_read_confinement(&root, &[repo_path("src/fifo")], || {}).is_err());
+    assert!(validate_read_confinement_after_bind(&root, &[repo_path("src/fifo")], || {}).is_err());
     fs::remove_file(&fifo).unwrap();
 
     let alias = short_alias(&repo);
     let socket = repo.root().join("src/socket");
-    let listener = UnixListener::bind(alias.join("src/socket")).unwrap();
-    assert!(test_probe_read_confinement(&root, &[repo_path("src/socket")], || {}).is_err());
+    let listener = UnixListener::bind(alias.child_from_current_dir("src/socket")).unwrap();
+    assert!(
+        validate_read_confinement_after_bind(&root, &[repo_path("src/socket")], || {}).is_err()
+    );
     drop(listener);
     fs::remove_file(&socket).unwrap();
-    fs::remove_file(alias).unwrap();
+    drop(alias);
 
     let original = fs::read(&source).unwrap();
     assert_eq!(
-        test_probe_read_confinement(&root, &[repo_path("src/lib.rs")], || {
+        validate_read_confinement_after_bind(&root, &[repo_path("src/lib.rs")], || {
             fs::write(&source, b"mutated\n").unwrap();
             fs::write(&source, &original).unwrap();
         })
@@ -182,7 +186,7 @@ fn read_symlink_hardlink_fifo_socket_ancestor_swap_and_restore_refuse() {
 
     let held = repo.root().join("src-held");
     assert_eq!(
-        test_probe_read_confinement(&root, &[repo_path("src/lib.rs")], || {
+        validate_read_confinement_after_bind(&root, &[repo_path("src/lib.rs")], || {
             fs::rename(repo.root().join("src"), &held).unwrap();
             fs::create_dir(repo.root().join("src")).unwrap();
             fs::write(repo.root().join("src/lib.rs"), &original).unwrap();

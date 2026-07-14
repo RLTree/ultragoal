@@ -1,6 +1,6 @@
-extern crate routine_surface;
+extern crate ultragoal;
 
-use routine_surface::routine_work::DirtySnapshot;
+use ultragoal::routine_work::DirtySnapshot;
 
 fn deserialize(bytes: &[u8]) -> DirtySnapshot {
     serde_json::from_slice(bytes).unwrap()

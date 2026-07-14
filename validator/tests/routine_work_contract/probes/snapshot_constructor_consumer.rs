@@ -1,6 +1,6 @@
-extern crate routine_surface;
+extern crate ultragoal;
 
-use routine_surface::routine_work::{DirtyChange, DirtySnapshot, RoutineBinding, RoutineError};
+use ultragoal::routine_work::{DirtyChange, DirtySnapshot, RoutineBinding, RoutineError};
 
 fn construct(
     binding: RoutineBinding,

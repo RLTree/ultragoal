@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 use std::fs;
 use std::os::unix::fs::symlink;
 
-use super::current_path_fixture::{CurrentPathFixture, authority_path, repo_path};
+use super::routine_plan_fixture::{RoutinePlanFixture, authority_path, repo_path};
 use super::routine_work::{
     PreparedRoutineExecution, RoutineCancellation, RoutineReuseInput,
     mediate_prepared_routine_execution_production, test_probe_execute_without_root_broker,
@@ -15,7 +15,7 @@ fn cause<T>(result: Result<T, super::routine_work::RoutineError>) -> &'static st
 
 #[test]
 fn closed_binding_refuses_loader_child_argv_program_and_policy_mutations() {
-    let fixture = CurrentPathFixture::new("current-binding-mutations");
+    let fixture = RoutinePlanFixture::new("typed-binding-mutations");
     let replace_first = |first| {
         let mut invocations = fixture.invocations();
         invocations[0] = first;
@@ -69,7 +69,7 @@ fn closed_binding_refuses_loader_child_argv_program_and_policy_mutations() {
 
 #[test]
 fn read_source_alias_special_and_mutate_restore_refuse_before_effect() {
-    let fixture = CurrentPathFixture::new("current-read-refusals");
+    let fixture = RoutinePlanFixture::new("bound-read-refusals");
     let source = fixture.repo.root().join("src/lib.rs");
 
     symlink("lib.rs", fixture.repo.root().join("src/link.rs")).unwrap();
@@ -114,7 +114,7 @@ fn read_source_alias_special_and_mutate_restore_refuse_before_effect() {
 
 #[test]
 fn context_mutation_refuses_before_authority_creation() {
-    let fixture = CurrentPathFixture::new("current-context-mutation");
+    let fixture = RoutinePlanFixture::new("context-mutation");
     let prepared = fixture.prepare().unwrap();
     let authority = authority_path(&fixture);
     fixture.repo.write("src/lib.rs", b"context mutation\n");
@@ -137,7 +137,7 @@ fn context_mutation_refuses_before_authority_creation() {
 
 #[test]
 fn root_broker_gate_refuses_before_spawn_and_writes() {
-    let fixture = CurrentPathFixture::new("root-broker-pre-spawn-gate");
+    let fixture = RoutinePlanFixture::new("root-broker-pre-spawn-refusal");
     let authority = authority_path(&fixture);
     let before = fixture.repo.tree();
     assert_eq!(test_spawn_count(), 0);

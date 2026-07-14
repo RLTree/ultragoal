@@ -20,6 +20,9 @@ use crate::routine_work::{RepoPath, RoutineError, RoutineErrorId};
 use super::super::execution_authority::{RoutineReadAncestor, RoutineReadSource};
 use super::outcome::OutputFileRecord;
 
+#[cfg(test)]
+#[path = "confinement_transitions.rs"]
+mod confinement_transitions;
 #[path = "directory_read_failure.rs"]
 mod directory_read_failure;
 #[path = "executable_identity.rs"]
@@ -40,10 +43,9 @@ mod read_confinement;
 mod read_source_opening;
 #[path = "source_revalidation.rs"]
 mod source_revalidation;
-#[cfg(test)]
-#[path = "test_probes.rs"]
-mod test_probes;
 
+#[cfg(test)]
+pub(crate) use confinement_transitions::*;
 pub(crate) use directory_read_failure::*;
 #[cfg(test)]
 pub(crate) use executable_identity::validate_execution_path_immutability;
@@ -53,5 +55,3 @@ pub(crate) use output_tree_capture::*;
 pub(crate) use ownership_rejection::*;
 pub(crate) use read_source_opening::*;
 pub(crate) use source_revalidation::*;
-#[cfg(test)]
-pub(crate) use test_probes::*;

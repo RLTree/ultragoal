@@ -1,14 +1,16 @@
-use super::invariant_control_map::{
+//! Retired reuse/output invariants and their bounded current routes.
+
+use super::retired_behavior_routes::{
     CHILD_LIFECYCLE_BLOCKER, CHILD_SUCCESS_BLOCKER, Mapping, blocked, routed,
 };
 
 const BROKER: &[&str] =
-    &["current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"];
+    &["broker_binding_controls::root_broker_gate_refuses_before_spawn_and_writes"];
 const BINDING: &[&str] = &[
-    "current_path_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations",
+    "broker_binding_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations",
 ];
 const CONTEXT: &[&str] =
-    &["current_path_controls::context_mutation_refuses_before_authority_creation"];
+    &["broker_binding_controls::context_mutation_refuses_before_authority_creation"];
 const OUTPUTS: &[&str] = &[
     "filesystem_controls::output_symlink_hardlink_fifo_socket_and_stale_files_refuse_exact_capture",
     "filesystem_controls::output_nested_swap_and_create_delete_restore_refuse_final_validation",

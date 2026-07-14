@@ -1,10 +1,10 @@
-use super::invariant_control_map::{Mapping, routed};
+use super::retired_behavior_routes::{Mapping, routed};
 
 const BINDING: &[&str] = &[
-    "current_path_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations",
+    "broker_binding_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations",
 ];
 const CONTEXT: &[&str] =
-    &["current_path_controls::context_mutation_refuses_before_authority_creation"];
+    &["broker_binding_controls::context_mutation_refuses_before_authority_creation"];
 const REPORT_ROWS: &[&str] = &[
     "report::mixed_witness_completion::unknown_duplicate_wrong_scope_and_invalid_failure_rows_are_rejected",
 ];

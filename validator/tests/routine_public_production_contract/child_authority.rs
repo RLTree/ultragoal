@@ -1,11 +1,11 @@
+#[path = "child_refusal_process.rs"]
+mod refusal_process;
 #[cfg(target_os = "macos")]
 #[path = "child_authority_same_executable_parent.rs"]
 mod same_executable_parent;
-#[path = "child_authority_support.rs"]
-mod support;
 
 use super::scenario::tree;
-use support::*;
+use refusal_process::*;
 
 #[test]
 fn direct_public_binary_cannot_select_child_behavior_from_legacy_environment() {
@@ -35,7 +35,7 @@ fn copied_or_replayed_descriptor_selector_is_refusal_only() {
         let mut command = fixture.base_command();
         command
             .args(["--json", "check", "routine"])
-            .env("HUL_ROUTINE_CHILD_FD", CAPABILITY_FD.to_string());
+            .env("HUL_ROUTINE_CHILD_FD", CHILD_CHANNEL_FD.to_string());
         assert_child_refused(&run_with_frame(command, frame(&fixture)));
     }
     assert_eq!(tree(&fixture.root), before_root);

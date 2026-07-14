@@ -1,6 +1,6 @@
-extern crate routine_surface;
+extern crate ultragoal;
 
-use routine_surface::routine_work::{
+use ultragoal::routine_work::{
     CapturedExecution, DependencyResult, ExecutedWork, ObservedResult, ReportStatus, RoutineReport,
     VerifiedReuse,
 };

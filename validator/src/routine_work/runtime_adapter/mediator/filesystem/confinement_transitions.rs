@@ -2,7 +2,7 @@ use super::*;
 
 /// Exercises the descriptor-held output preparation and final validation used
 /// by mediation without constructing or consuming execution authority.
-pub(crate) fn test_probe_output_confinement(
+pub(crate) fn validate_output_confinement_after(
     root: &Path,
     scopes: &[RepoPath],
     budget_bytes: u64,
@@ -17,7 +17,7 @@ pub(crate) fn test_probe_output_confinement(
 
 /// Binds exact read descriptors, permits mutation at the real between-bind
 /// boundary, then reopens and validates the production records.
-pub(crate) fn test_probe_read_confinement(
+pub(crate) fn validate_read_confinement_after_bind(
     root: &Path,
     sources: &[RepoPath],
     after_bind: impl FnOnce(),

@@ -41,8 +41,8 @@ pub(crate) use mediator::{
     TestProcessSetupFailure, set_test_mediator_finish_failure, set_test_mediator_post_spawn_hook,
     set_test_mediator_pre_spawn_hook, set_test_output_capture_hook, set_test_process_setup_failure,
     set_test_read_source_capture_hook, test_probe_execute_without_root_broker,
-    test_probe_output_confinement, test_probe_read_confinement,
-    test_require_root_broker_before_spawn, test_spawn_count,
+    test_require_root_broker_before_spawn, test_spawn_count, validate_output_confinement_after,
+    validate_read_confinement_after_bind,
 };
 pub(crate) use production::{
     ProductionRoutineIssuer, mediate_prepared_routine_execution_production,

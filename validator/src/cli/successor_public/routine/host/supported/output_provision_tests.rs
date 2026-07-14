@@ -8,12 +8,22 @@ struct Root(PathBuf);
 
 impl Root {
     fn new(label: &str) -> Self {
-        let path = std::env::temp_dir().join(format!(
-            "hul-output-provision-{label}-{}-{}",
-            std::process::id(),
-            NEXT.fetch_add(1, Ordering::Relaxed)
-        ));
-        fs::create_dir_all(&path).unwrap();
+        let root = std::env::var_os("CODEX_WORKTREE_SCRATCH")
+            .map(PathBuf::from)
+            .unwrap_or_else(|| panic!("CODEX_WORKTREE_SCRATCH is required"));
+        let root = fs::canonicalize(root).expect("configured worktree scratch is unavailable");
+        let path = loop {
+            let candidate = root.join(format!(
+                "routine-output-provision-{label}-{}-{}",
+                std::process::id(),
+                NEXT.fetch_add(1, Ordering::Relaxed)
+            ));
+            match fs::create_dir(&candidate) {
+                Ok(()) => break candidate,
+                Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
+                Err(error) => panic!("output provision fixture claim failed: {error}"),
+            }
+        };
         Self(fs::canonicalize(path).unwrap())
     }
 }

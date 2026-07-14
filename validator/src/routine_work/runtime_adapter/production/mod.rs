@@ -29,13 +29,13 @@ use ledger::{
     ReuseArtifactClaim,
 };
 
+#[cfg(test)]
+#[path = "authority_capacity_seed.rs"]
+mod authority_capacity_seed;
 #[path = "production_issuance.rs"]
 mod production_issuance;
 #[path = "production_mediation.rs"]
 mod production_mediation;
-#[cfg(test)]
-#[path = "production_test_support.rs"]
-mod production_test_support;
 #[path = "recovery_authority.rs"]
 mod recovery_authority;
 

@@ -4,11 +4,23 @@ use std::sync::atomic::{AtomicU64, Ordering};
 static NEXT: AtomicU64 = AtomicU64::new(0);
 
 fn root(label: &str) -> PathBuf {
-    let path = std::env::temp_dir().join(format!(
-        "hul-output-confinement-{label}-{}-{}",
-        std::process::id(),
-        NEXT.fetch_add(1, Ordering::Relaxed)
-    ));
+    let configured = std::env::var_os("CODEX_WORKTREE_SCRATCH")
+        .map(PathBuf::from)
+        .unwrap_or_else(|| panic!("CODEX_WORKTREE_SCRATCH is required"));
+    let configured =
+        fs::canonicalize(configured).expect("configured worktree scratch is unavailable");
+    let path = loop {
+        let candidate = configured.join(format!(
+            "routine-output-confinement-{label}-{}-{}",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
+        ));
+        match fs::create_dir(&candidate) {
+            Ok(()) => break candidate,
+            Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
+            Err(error) => panic!("output confinement fixture claim failed: {error}"),
+        }
+    };
     fs::create_dir_all(path.join("target/routine/compile")).unwrap();
     fs::canonicalize(path).unwrap()
 }

@@ -8,7 +8,7 @@ use std::process::{Output, Stdio};
 use std::time::{Duration, Instant};
 use ultragoal::routine_work::{RustSourceFrameInput, encode_rust_source_syntax_frame};
 
-pub(super) const CAPABILITY_FD: i32 = 198;
+pub(super) const CHILD_CHANNEL_FD: i32 = 198;
 
 pub(super) fn run_with_prebuffered_channel(fixture: &Fixture, payload: &[u8]) -> Output {
     let (mut peer, child_endpoint) = UnixStream::pair().unwrap();
@@ -17,17 +17,18 @@ pub(super) fn run_with_prebuffered_channel(fixture: &Fixture, payload: &[u8]) ->
     let mut command = fixture.base_command();
     command
         .args(["--json", "check", "routine"])
-        .env("HUL_ROUTINE_CHILD_FD", CAPABILITY_FD.to_string())
+        .env("HUL_ROUTINE_CHILD_FD", CHILD_CHANNEL_FD.to_string())
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
     unsafe {
         command.pre_exec(move || {
-            if libc::dup2(source_fd, CAPABILITY_FD) < 0 {
+            if libc::dup2(source_fd, CHILD_CHANNEL_FD) < 0 {
                 return Err(std::io::Error::last_os_error());
             }
-            let flags = libc::fcntl(CAPABILITY_FD, libc::F_GETFD);
-            if flags < 0 || libc::fcntl(CAPABILITY_FD, libc::F_SETFD, flags & !libc::FD_CLOEXEC) < 0
+            let flags = libc::fcntl(CHILD_CHANNEL_FD, libc::F_GETFD);
+            if flags < 0
+                || libc::fcntl(CHILD_CHANNEL_FD, libc::F_SETFD, flags & !libc::FD_CLOEXEC) < 0
             {
                 return Err(std::io::Error::last_os_error());
             }
@@ -45,17 +46,18 @@ pub(super) fn run_with_blocking_socket_and_stdin(fixture: &Fixture) -> Output {
     let mut command = fixture.base_command();
     command
         .args(["--json", "check", "routine"])
-        .env("HUL_ROUTINE_CHILD_FD", CAPABILITY_FD.to_string())
+        .env("HUL_ROUTINE_CHILD_FD", CHILD_CHANNEL_FD.to_string())
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
     unsafe {
         command.pre_exec(move || {
-            if libc::dup2(source_fd, CAPABILITY_FD) < 0 {
+            if libc::dup2(source_fd, CHILD_CHANNEL_FD) < 0 {
                 return Err(std::io::Error::last_os_error());
             }
-            let flags = libc::fcntl(CAPABILITY_FD, libc::F_GETFD);
-            if flags < 0 || libc::fcntl(CAPABILITY_FD, libc::F_SETFD, flags & !libc::FD_CLOEXEC) < 0
+            let flags = libc::fcntl(CHILD_CHANNEL_FD, libc::F_GETFD);
+            if flags < 0
+                || libc::fcntl(CHILD_CHANNEL_FD, libc::F_SETFD, flags & !libc::FD_CLOEXEC) < 0
             {
                 return Err(std::io::Error::last_os_error());
             }

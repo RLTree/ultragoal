@@ -57,7 +57,9 @@ mod reuse_input_index;
 mod rust_source_observation;
 
 #[cfg(test)]
-pub(crate) use filesystem::{test_probe_output_confinement, test_probe_read_confinement};
+pub(crate) use filesystem::{
+    validate_output_confinement_after, validate_read_confinement_after_bind,
+};
 pub(crate) use grant_scope::*;
 pub(crate) use grant_validation::*;
 pub(crate) use incomplete_outcome::*;

@@ -1,76 +1,6 @@
-use std::fs::{self, OpenOptions};
-use std::io::Write;
-use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
+use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
-use std::sync::atomic::{AtomicU64, Ordering};
-
-static NEXT_SCRATCH: AtomicU64 = AtomicU64::new(0);
-pub(crate) const FAILURE_MARKER: &[u8] = b"issuer visibility build removed after induced failure\n";
-
-pub(crate) struct OwnedScratch {
-    path: PathBuf,
-    failure_marker: PathBuf,
-}
-
-impl OwnedScratch {
-    pub(crate) fn claim(label: &str) -> Self {
-        let root = configured_root("CODEX_WORKTREE_SCRATCH");
-        let _ = configured_root("CODEX_WORKTREE_TMP");
-        for _ in 0..64 {
-            let nonce = NEXT_SCRATCH.fetch_add(1, Ordering::Relaxed);
-            let path = root.join(format!("{label}-{}-{nonce}", std::process::id()));
-            match fs::create_dir(&path) {
-                Ok(()) => {
-                    fs::set_permissions(&path, fs::Permissions::from_mode(0o700)).unwrap();
-                    fs::write(
-                        path.join("OWNERSHIP.txt"),
-                        b"issuer visibility scratch; retained only if the owning test fails\n",
-                    )
-                    .expect("issuer scratch ownership marker");
-                    let failure_marker = root.join(format!(
-                        "{}.failure.txt",
-                        path.file_name().unwrap().to_string_lossy()
-                    ));
-                    return Self {
-                        path,
-                        failure_marker,
-                    };
-                }
-                Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
-                Err(error) => panic!("issuer scratch claim failed: {error}"),
-            }
-        }
-        panic!("issuer scratch claim collisions exhausted")
-    }
-
-    pub(crate) fn path(&self) -> &Path {
-        &self.path
-    }
-
-    pub(crate) fn failure_marker(&self) -> &Path {
-        &self.failure_marker
-    }
-}
-
-impl Drop for OwnedScratch {
-    fn drop(&mut self) {
-        let panicking = std::thread::panicking();
-        let removed = fs::remove_dir_all(&self.path);
-        if !panicking {
-            removed.expect("owned issuer scratch cleanup");
-            return;
-        }
-        if removed.is_ok() {
-            let _ = OpenOptions::new()
-                .write(true)
-                .create_new(true)
-                .mode(0o600)
-                .open(&self.failure_marker)
-                .and_then(|mut marker| marker.write_all(FAILURE_MARKER));
-        }
-    }
-}
 
 const BINS: &[(&str, &str)] = &[
     (
@@ -94,12 +24,32 @@ const BINS: &[(&str, &str)] = &[
         "production_private_grant_consumer",
         "production_private_grant_consumer.rs",
     ),
+    (
+        "routine_snapshot_read_control",
+        "read_only_snapshot_consumer.rs",
+    ),
+    (
+        "routine_snapshot_constructor_attack",
+        "snapshot_constructor_consumer.rs",
+    ),
+    (
+        "routine_partial_snapshot_attack",
+        "partial_snapshot_consumer.rs",
+    ),
+    (
+        "routine_snapshot_deserialize_attack",
+        "snapshot_deserialize_consumer.rs",
+    ),
+    (
+        "routine_evidence_reconstruction_attack",
+        "evidence_reconstruction_consumer.rs",
+    ),
 ];
 
 pub(crate) fn prepare(scratch: &Path, probes: &Path) {
     let validator = Path::new(env!("CARGO_MANIFEST_DIR"));
     let mut manifest = format!(
-        "[workspace]\n\n[package]\nname = \"n06-issuer-visibility\"\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[lib]\nname = \"public_surface\"\npath = \"public_surface.rs\"\n\n[dependencies]\nultragoal = {{ path = {:?} }}\n",
+        "[workspace]\n\n[package]\nname = \"n06-issuer-visibility\"\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[lib]\nname = \"public_surface\"\npath = \"public_surface.rs\"\n\n[dependencies]\nserde_json = \"1\"\nultragoal = {{ path = {:?} }}\n",
         validator
     );
     for (name, file) in BINS {

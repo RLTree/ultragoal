@@ -1,11 +1,15 @@
 //! Exact routed-control ledger for behavioral tests retired by `67eabfb0`.
 //!
-//! This is routing metadata, not proof. Each routed name is run separately;
-//! broker-blocked rows name the exact post-authorization gap and a pre-broker
-//! control that still runs on the fail-closed path.
+//! Routed names are unverified candidates, not proof. The sole
+//! `ExecutedEquivalent` row invokes its bound control in this target;
+//! broker-blocked rows name an unavailable post-authorization surface.
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy)]
 pub(crate) enum Status {
+    ExecutedEquivalent {
+        control_id: &'static str,
+        execute: fn(),
+    },
     Routed(&'static [&'static str]),
     BrokerBlocked {
         cause: &'static str,
@@ -28,6 +32,20 @@ pub(crate) const fn routed(retired: &'static str, controls: &'static [&'static s
     }
 }
 
+pub(crate) const fn executed(
+    retired: &'static str,
+    control_id: &'static str,
+    execute: fn(),
+) -> Mapping {
+    Mapping {
+        retired,
+        status: Status::ExecutedEquivalent {
+            control_id,
+            execute,
+        },
+    }
+}
+
 pub(crate) const fn blocked(
     retired: &'static str,
     cause: &'static str,
@@ -43,24 +61,42 @@ pub(crate) const fn blocked(
 }
 
 #[test]
-fn every_retired_behavior_has_unique_routing_or_a_causal_broker_blocker() {
-    let rows = super::invariant_control_map_adapter::MAP
+fn retired_behavior_routes_preserve_exact_claim_ceiling() {
+    let rows = super::retired_adapter_routes::MAP
         .iter()
-        .chain(super::invariant_control_map_authority::MAP)
-        .chain(super::invariant_control_map_mediator_a::MAP)
-        .chain(super::invariant_control_map_mediator_b::MAP)
+        .chain(super::retired_authority_routes::MAP)
+        .chain(super::retired_process_lifecycle_routes::MAP)
+        .chain(super::retired_reuse_output_routes::MAP)
         .collect::<Vec<_>>();
     let mut retired = rows.iter().map(|row| row.retired).collect::<Vec<_>>();
     retired.sort_unstable();
     retired.dedup();
     assert_eq!(retired.len(), rows.len(), "retired invariant mapped twice");
+    let mut executed_count = 0;
+    let mut routed_count = 0;
+    let mut blocked_count = 0;
     for row in rows {
         match row.status {
-            Status::Routed(controls) => assert!(!controls.is_empty(), "{}", row.retired),
+            Status::ExecutedEquivalent {
+                control_id,
+                execute,
+            } => {
+                executed_count += 1;
+                assert_eq!(
+                    control_id,
+                    "issuer_api_visibility::sealed_issuer_and_grant_entrypoints_are_not_externally_callable"
+                );
+                execute();
+            }
+            Status::Routed(controls) => {
+                routed_count += 1;
+                assert!(!controls.is_empty(), "{}", row.retired);
+            }
             Status::BrokerBlocked {
                 cause,
                 pre_broker_controls,
             } => {
+                blocked_count += 1;
                 assert!(
                     cause == CHILD_LIFECYCLE_BLOCKER || cause == CHILD_SUCCESS_BLOCKER,
                     "unbounded blocker: {}",
@@ -70,4 +106,5 @@ fn every_retired_behavior_has_unique_routing_or_a_causal_broker_blocker() {
             }
         }
     }
+    assert_eq!((executed_count, routed_count, blocked_count), (1, 41, 23));
 }

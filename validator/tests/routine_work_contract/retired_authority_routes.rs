@@ -1,11 +1,11 @@
-use super::invariant_control_map::{
-    CHILD_LIFECYCLE_BLOCKER, CHILD_SUCCESS_BLOCKER, Mapping, blocked, routed,
+use super::retired_behavior_routes::{
+    CHILD_LIFECYCLE_BLOCKER, CHILD_SUCCESS_BLOCKER, Mapping, blocked, executed, routed,
 };
 
 const BROKER_GATE: &[&str] =
-    &["current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"];
+    &["broker_binding_controls::root_broker_gate_refuses_before_spawn_and_writes"];
 const ISSUER_VISIBILITY: &[&str] =
-    &["issuer_visibility::sealed_issuer_and_grant_entrypoints_are_not_externally_callable"];
+    &["issuer_api_visibility::sealed_issuer_and_grant_entrypoints_are_not_externally_callable"];
 const CAPACITY: &[&str] = &[
     "routine_work::runtime_adapter::production::ledger::tests::protocol_effect_and_consumed_grant_capacity_refuse_real_next_reservation_transactionally",
 ];
@@ -34,9 +34,10 @@ pub(crate) const MAP: &[Mapping] = &[
         "routine_production_authority_cases/authority_redaction.rs::secrets_paths_and_raw_output_are_absent_from_authority_and_diagnostics",
         REDACTION,
     ),
-    routed(
+    executed(
         "routine_production_authority_cases/authority_redaction.rs::production_boundary_has_one_sealed_issuer_and_no_test_grant_entrypoint",
-        ISSUER_VISIBILITY,
+        ISSUER_VISIBILITY[0],
+        super::issuer_api_visibility::assert_sealed_issuer_and_grant_entrypoints_are_not_externally_callable,
     ),
     blocked(
         "routine_production_authority_cases/authority_redaction.rs::production_child_race_attempt",

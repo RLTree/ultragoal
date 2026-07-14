@@ -5,14 +5,25 @@ use std::sync::atomic::{AtomicU64, Ordering};
 static NEXT: AtomicU64 = AtomicU64::new(0);
 
 fn fixture() -> (PathBuf, PathBuf) {
-    let parent = std::env::temp_dir().join(format!(
-        "hul-host-cache-{}-{}",
-        std::process::id(),
-        NEXT.fetch_add(1, Ordering::Relaxed)
-    ));
+    let root = std::env::var_os("CODEX_WORKTREE_SCRATCH")
+        .map(PathBuf::from)
+        .unwrap_or_else(|| panic!("CODEX_WORKTREE_SCRATCH is required"));
+    let root = fs::canonicalize(root).expect("configured worktree scratch is unavailable");
+    let parent = loop {
+        let candidate = root.join(format!(
+            "routine-host-cache-{}-{}",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
+        ));
+        match fs::create_dir(&candidate) {
+            Ok(()) => break candidate,
+            Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
+            Err(error) => panic!("host cache fixture claim failed: {error}"),
+        }
+    };
     let home = parent.join("home");
     let target = parent.join("target");
-    fs::create_dir_all(&target).unwrap();
+    fs::create_dir(&target).unwrap();
     let state = home.join(".codex/state/harness-ultragoal/routine-public");
     for path in [
         home.clone(),

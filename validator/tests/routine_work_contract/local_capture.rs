@@ -1,9 +1,8 @@
-use std::fs::{self, OpenOptions};
-use std::path::PathBuf;
-
+use super::configured_path_alias::ConfiguredPathAlias;
 use super::context::{BuildRequest, LiveContext};
 use super::routine_work::{LocalDirtyTree, RoutineErrorId, set_test_live_authority_hook};
 use super::scenario::TempRepo;
+use std::fs::{self, OpenOptions};
 
 #[test]
 fn clean_and_dirty_capture_are_recursively_zero_write() {
@@ -65,20 +64,13 @@ fn fifo_entry_fails_without_blocking_or_reading_it() {
 #[test]
 fn unix_socket_entry_is_not_an_invisible_clean_candidate() {
     let repo = TempRepo::new("socket");
-    let alias = std::env::temp_dir().join(format!("socket-alias-{}", std::process::id()));
-    std::os::unix::fs::symlink(repo.root().join("src"), &alias).unwrap();
-    let current = std::env::current_dir().unwrap();
-    let bind_path = if let Ok(relative) = alias.strip_prefix(&current) {
-        relative.to_path_buf()
-    } else {
-        PathBuf::from("..").join(alias.strip_prefix(current.parent().unwrap()).unwrap())
-    }
-    .join("input.sock");
+    let alias = ConfiguredPathAlias::claim("routine-capture-socket", &repo.root().join("src"));
+    let bind_path = alias.child_from_current_dir("input.sock");
     let socket = std::os::unix::net::UnixListener::bind(&bind_path).unwrap();
     let context = repo.context("routine");
     let error = LocalDirtyTree::capture(&context).unwrap_err();
     drop(socket);
-    fs::remove_file(alias).unwrap();
+    drop(alias);
     assert_eq!(error.id(), RoutineErrorId::UnsupportedEntry);
 }
 
@@ -125,11 +117,9 @@ fn dirty_submodule_is_rejected_instead_of_misread_as_a_regular_file() {
 #[test]
 fn root_alias_is_canonicalized_before_routine_capture() {
     let repo = TempRepo::new("root-alias");
-    let alias = std::env::temp_dir().join(format!("hul-routine-alias-{}", std::process::id()));
-    let _ = fs::remove_file(&alias);
-    std::os::unix::fs::symlink(repo.root(), &alias).unwrap();
-    let context = LiveContext::build(BuildRequest::new(&alias)).unwrap();
-    fs::remove_file(alias).unwrap();
+    let alias = ConfiguredPathAlias::claim("routine-capture-root", repo.root());
+    let context = LiveContext::build(BuildRequest::new(alias.path())).unwrap();
+    drop(alias);
     assert_eq!(context.worktree_root(), repo.root().canonicalize().unwrap());
     assert!(LocalDirtyTree::capture(&context).is_ok());
 }

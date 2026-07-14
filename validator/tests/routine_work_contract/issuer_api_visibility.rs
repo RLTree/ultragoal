@@ -4,17 +4,24 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 
-use super::issuer_compile;
-use super::issuer_hidden_api::{file_has_hidden_public_api, tree_has_hidden_public_api};
+use super::issuer_api_compilation;
+use super::issuer_hidden_surface::{file_has_hidden_public_api, tree_has_hidden_public_api};
+use super::owned_compile_scratch::{
+    FAILURE_MARKER, OwnedCompileScratch, SUBSTITUTION_MARKER, SUBSTITUTION_MARKER_NAME,
+};
 
 #[test]
 fn sealed_issuer_and_grant_entrypoints_are_not_externally_callable() {
-    let owned = issuer_compile::OwnedScratch::claim("routine-issuer-visibility");
+    assert_sealed_issuer_and_grant_entrypoints_are_not_externally_callable();
+}
+
+pub(crate) fn assert_sealed_issuer_and_grant_entrypoints_are_not_externally_callable() {
+    let owned = OwnedCompileScratch::claim("routine-issuer-visibility");
     let scratch = owned.path();
     let probes = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/routine_work_contract/probes");
-    issuer_compile::prepare(&scratch, &probes);
+    issuer_api_compilation::prepare(&scratch, &probes);
 
-    let control = issuer_compile::check(&scratch, "routine_public_api_control");
+    let control = issuer_api_compilation::check(&scratch, "routine_public_api_control");
     assert!(control.status.success(), "{}", diagnostic(&control));
 
     for (probe, code) in [
@@ -24,11 +31,11 @@ fn sealed_issuer_and_grant_entrypoints_are_not_externally_callable() {
         ("production_private_module_consumer.rs", "E0603"),
         ("production_private_grant_consumer.rs", "E0603"),
     ] {
-        let output = issuer_compile::check(&scratch, probe.trim_end_matches(".rs"));
+        let output = issuer_api_compilation::check(&scratch, probe.trim_end_matches(".rs"));
         assert_private_failure(&output, code, probe);
     }
 
-    let docs = issuer_compile::document(&scratch);
+    let docs = issuer_api_compilation::document(&scratch);
     let inventory = public_inventory(&docs);
     let digest = format!("{:x}", Sha256::digest(&inventory));
     assert_eq!(
@@ -65,7 +72,7 @@ fn sealed_issuer_and_grant_entrypoints_are_not_externally_callable() {
         .write_all(b"\nimpl ApiSentinel { pub fn grant(&self) {} pub const GRANT: () = (); }\n")
         .unwrap();
     source.flush().unwrap();
-    let mutated = public_inventory(&issuer_compile::document(&scratch));
+    let mutated = public_inventory(&issuer_api_compilation::document(&scratch));
     assert_ne!(Sha256::digest(&mutated), Sha256::digest(&inventory));
 }
 
@@ -73,7 +80,7 @@ fn sealed_issuer_and_grant_entrypoints_are_not_externally_callable() {
 fn failed_issuer_control_removes_build_tree_and_bounds_marker() {
     let mut owned_paths = None;
     let failure = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let owned = issuer_compile::OwnedScratch::claim("routine-issuer-induced-failure");
+        let owned = OwnedCompileScratch::claim("routine-issuer-induced-failure");
         owned_paths = Some((
             owned.path().to_path_buf(),
             owned.failure_marker().to_path_buf(),
@@ -87,14 +94,42 @@ fn failed_issuer_control_removes_build_tree_and_bounds_marker() {
     let (build_root, marker) = owned_paths.unwrap();
     assert!(!build_root.exists());
     let retained = fs::read(&marker).unwrap();
-    assert_eq!(retained, issuer_compile::FAILURE_MARKER);
+    assert_eq!(retained, FAILURE_MARKER);
     assert!(retained.len() <= 128);
     fs::remove_file(&marker).unwrap();
 }
 
 #[test]
+fn renamed_compile_scratch_preserves_replacement_and_bounds_owned_tree() {
+    let owned = OwnedCompileScratch::claim("routine-issuer-path-substitution");
+    let original = owned.path().to_path_buf();
+    let renamed = original.with_file_name(format!(
+        "{}-renamed",
+        original.file_name().unwrap().to_string_lossy()
+    ));
+    let build = original.join("target/doc/public_surface");
+    fs::create_dir_all(&build).unwrap();
+    fs::write(build.join("large-artifact.bin"), vec![0x5a; 64 * 1024]).unwrap();
+    fs::rename(&original, &renamed).unwrap();
+    fs::create_dir(&original).unwrap();
+    fs::write(original.join("replacement-sentinel"), b"preserve\n").unwrap();
+    drop(owned);
+
+    assert_eq!(
+        fs::read(original.join("replacement-sentinel")).unwrap(),
+        b"preserve\n"
+    );
+    let retained = fs::read(renamed.join(SUBSTITUTION_MARKER_NAME)).unwrap();
+    assert_eq!(retained, SUBSTITUTION_MARKER);
+    assert!(retained.len() <= 128);
+    assert_eq!(fs::read_dir(&renamed).unwrap().count(), 1);
+    fs::remove_dir_all(original).unwrap();
+    fs::remove_dir_all(renamed).unwrap();
+}
+
+#[test]
 fn concurrent_issuer_controls_use_disjoint_authorized_scratch() {
-    let owned = issuer_compile::OwnedScratch::claim("routine-issuer-concurrency");
+    let owned = OwnedCompileScratch::claim("routine-issuer-concurrency");
     let scratch = owned.path().join("scratch");
     let tmp = owned.path().join("tmp");
     fs::create_dir(&scratch).unwrap();
@@ -106,7 +141,7 @@ fn concurrent_issuer_controls_use_disjoint_authorized_scratch() {
         .map(|_| {
             Command::new(&executable)
                 .args([
-                    "issuer_visibility::sealed_issuer_and_grant_entrypoints_are_not_externally_callable",
+                    "issuer_api_visibility::sealed_issuer_and_grant_entrypoints_are_not_externally_callable",
                     "--exact",
                 ])
                 .env("CODEX_WORKTREE_SCRATCH", &scratch)

@@ -1,6 +1,9 @@
 use std::fs;
 use std::io::Write;
 use std::process::{Command, Stdio};
+use std::sync::atomic::{AtomicU64, Ordering};
+
+static NEXT_CHILD_REFUSAL: AtomicU64 = AtomicU64::new(0);
 
 #[test]
 fn production_source_exposes_no_arbitrary_process_binding_surface() {
@@ -57,14 +60,27 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
 
 #[test]
 fn built_public_child_request_refuses_before_input_and_without_writes() {
-    let scratch = std::env::var_os("CODEX_WORKTREE_SCRATCH")
+    let scratch_root = std::env::var_os("CODEX_WORKTREE_SCRATCH")
         .map(std::path::PathBuf::from)
-        .unwrap_or_else(std::env::temp_dir)
-        .join(format!("routine-child-refusal-{}", std::process::id()));
+        .unwrap_or_else(|| panic!("CODEX_WORKTREE_SCRATCH is required"));
+    let scratch_root =
+        fs::canonicalize(scratch_root).expect("configured worktree scratch is unavailable");
+    let scratch = loop {
+        let candidate = scratch_root.join(format!(
+            "routine-child-refusal-{}-{}",
+            std::process::id(),
+            NEXT_CHILD_REFUSAL.fetch_add(1, Ordering::Relaxed)
+        ));
+        match fs::create_dir(&candidate) {
+            Ok(()) => break candidate,
+            Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
+            Err(error) => panic!("child refusal fixture claim failed: {error}"),
+        }
+    };
     let root = scratch.join("root");
     let home = scratch.join("home");
-    fs::create_dir_all(&root).unwrap();
-    fs::create_dir_all(&home).unwrap();
+    fs::create_dir(&root).unwrap();
+    fs::create_dir(&home).unwrap();
 
     let mut child = Command::new(env!("CARGO_BIN_EXE_ultragoal"))
         .args(["--json", "check", "routine"])

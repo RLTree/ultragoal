@@ -1,9 +1,10 @@
 use std::fs;
 use std::os::unix::fs::symlink;
 use std::path::PathBuf;
-use std::sync::OnceLock;
+use std::sync::{Mutex, MutexGuard};
 
 use super::context::{BuildRequest, LiveContext};
+use super::owned_compile_scratch::OwnedCompileScratch;
 use super::routine_work::{
     CheckClass, DirtySnapshot, ImpactGraph, LocalDirtyTree, PathMatcher, PlanRequest,
     PreparedRoutineExecution, RepoPath, RoutineAdapterSpec, RoutineInvocationSpec, RoutinePlan,
@@ -11,24 +12,27 @@ use super::routine_work::{
 };
 use super::scenario::{TempRepo, node, path, route};
 
-pub(crate) struct CurrentPathFixture {
+pub(crate) struct RoutinePlanFixture {
     pub(crate) repo: TempRepo,
     pub(crate) context: LiveContext,
     pub(crate) graph: ImpactGraph,
     pub(crate) snapshot: DirtySnapshot,
     pub(crate) plan: RoutinePlan,
+    _program: OwnedCompileScratch,
+    _path_lock: MutexGuard<'static, ()>,
 }
 
-impl CurrentPathFixture {
+impl RoutinePlanFixture {
     pub(crate) fn new(label: &str) -> Self {
-        expose_current_test_program();
+        let path_lock = program_path_lock().lock().unwrap();
+        let program = expose_current_test_program();
         let repo = TempRepo::new(label);
         repo.write(".git/info/exclude", b"target/\n");
         repo.write("src/lib.rs", b"pub fn value() -> u8 { 9 }\n");
         fs::create_dir_all(repo.root().join("target/routine")).unwrap();
         let context = LiveContext::build(
             BuildRequest::new(repo.root())
-                .bind_non_secret_configuration("profile", "routine-current-path")
+                .bind_non_secret_configuration("profile", "routine-typed-binding")
                 .probe_tool("ultragoal"),
         )
         .unwrap();
@@ -61,6 +65,8 @@ impl CurrentPathFixture {
             graph,
             snapshot,
             plan,
+            _program: program,
+            _path_lock: path_lock,
         }
     }
 
@@ -109,28 +115,26 @@ pub(crate) fn repo_path(value: &str) -> RepoPath {
     path(value)
 }
 
-pub(crate) fn authority_path(fixture: &CurrentPathFixture) -> PathBuf {
+pub(crate) fn authority_path(fixture: &RoutinePlanFixture) -> PathBuf {
     fixture.repo.root().join(".routine-authority")
 }
 
-fn expose_current_test_program() {
-    static PATH_VALUE: OnceLock<std::ffi::OsString> = OnceLock::new();
-    let value = PATH_VALUE.get_or_init(|| {
-        let directory = std::env::temp_dir().join(format!(
-            "hul-routine-current-path-program-{}",
-            std::process::id()
-        ));
-        fs::create_dir_all(&directory).unwrap();
-        let link = directory.join("ultragoal");
-        let target = std::env::current_exe().unwrap();
-        if fs::read_link(&link).ok().as_deref() != Some(target.as_path()) {
-            let _ = fs::remove_file(&link);
-            symlink(target, &link).unwrap();
-        }
-        std::env::join_paths(std::iter::once(directory).chain(std::env::split_paths(
-            &std::env::var_os("PATH").unwrap_or_default(),
-        )))
-        .unwrap()
-    });
+fn expose_current_test_program() -> OwnedCompileScratch {
+    let program = OwnedCompileScratch::claim("routine-plan-program");
+    symlink(
+        std::env::current_exe().unwrap(),
+        program.path().join("ultragoal"),
+    )
+    .unwrap();
+    let value = std::env::join_paths(std::iter::once(program.path().to_path_buf()).chain(
+        std::env::split_paths(&std::env::var_os("PATH").unwrap_or_default()),
+    ))
+    .unwrap();
     unsafe { std::env::set_var("PATH", value) };
+    program
+}
+
+fn program_path_lock() -> &'static Mutex<()> {
+    static LOCK: Mutex<()> = Mutex::new(());
+    &LOCK
 }
