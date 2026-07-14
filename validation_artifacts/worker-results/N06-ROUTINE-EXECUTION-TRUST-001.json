@@ -11,8 +11,8 @@
     "accepted_integration_base": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
     "historical_original_base": "20a11eb981c5db2d2136a555632be9c4e5ab7752",
     "preserved_pre_rework_head": "ad2436dc19a3aa5c33a4468134cb4784deb284ad",
-    "source_head": "1d5583dfadc05c47939e128c412bf69a3caecf2d",
-    "source_tree": "b5b7fbc0c0b0515068cb5be709050bed37985bea",
+    "source_head": "ecd113778bb72ecef1ef5ae4d44a972f2d0f2af4",
+    "source_tree": "2ce07ae5447e6aa35b32891e5606bc2fd00da3b8",
     "source_commit_list": [
       "3ace481d127c4e53d8037397f9704b2b34e39fb3",
       "f57a9c87ad62cf7bfe13b3bd4b87ba0bd870b2bd",
@@ -29,14 +29,50 @@
       "0a38e8056229c5b5ecab9a6b1c0e1dff49678034",
       "0a2af31055cc0d86563a9ba5e60c5c63bb4ab617",
       "a4a2323d4e4d9dc1ebc6bae17fea3234066fc584",
-      "1d5583dfadc05c47939e128c412bf69a3caecf2d"
+      "1d5583dfadc05c47939e128c412bf69a3caecf2d",
+      "9096562df2e14e742fb7b72a2c759bfc9cb8ee38",
+      "1ee5f7d9aaeaee7138c72234da64e662783e8194",
+      "96efe68bf14dbf653c2485923ef557c317c480e0",
+      "ecd113778bb72ecef1ef5ae4d44a972f2d0f2af4"
     ],
     "evidence_head_self_excluded": true,
     "evidence_head_convention": "This receipt binds the clean source head and excludes its own later receipt-only commit; the final handoff names that evidence head and tree externally.",
-    "artifact_count": 110,
-    "artifact_total_bytes": 462991,
-    "artifact_path_sha256_aggregate": "sha256:0e4a25e3c0c10e57067e0c11fd0b0f6d81ce70b8fa57589c960455110b3aa68d",
+    "artifact_count": 112,
+    "artifact_total_bytes": 470191,
+    "artifact_path_sha256_aggregate": "sha256:7889ba454c72829d38f7ff5de26953f5cb143bb5306de18ccab7b2458e493bae",
     "deleted_path_count": 30,
+    "deleted_paths": [
+      "validator/tests/routine_production_authority_cases/authority_fixture.rs",
+      "validator/tests/routine_production_authority_cases/authority_redaction.rs",
+      "validator/tests/routine_production_authority_cases/authority_scenario.rs",
+      "validator/tests/routine_production_authority_cases/concurrent_reuse_settlement.rs",
+      "validator/tests/routine_production_authority_cases/effect_capacity_bounds.rs",
+      "validator/tests/routine_production_authority_cases/invalid_reuse_recovery.rs",
+      "validator/tests/routine_production_authority_cases/terminal_failure_settlement.rs",
+      "validator/tests/routine_production_catalog_cases/artifact_set_contract.rs",
+      "validator/tests/routine_work_contract/runtime_adapter.rs",
+      "validator/tests/routine_work_contract/runtime_adapter_cases/adapter_scenario.rs",
+      "validator/tests/routine_work_contract/runtime_adapter_cases/clean_noop.rs",
+      "validator/tests/routine_work_contract/runtime_adapter_cases/cross_request_rejection.rs",
+      "validator/tests/routine_work_contract/runtime_adapter_cases/invocation_binding_refusals.rs",
+      "validator/tests/routine_work_contract/runtime_adapter_cases/loader_environment_rejection.rs",
+      "validator/tests/routine_work_contract/runtime_adapter_cases/outcome_set_rejection.rs",
+      "validator/tests/routine_work_contract/runtime_mediator.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/cancellation_reaping.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/containment_adversary.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/context_mutation_recovery.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/executable_substitution_rejection.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/fork_bypass_reaping.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/invocation_fixture.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/mapping_adversary.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/mediator_scenario.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/read_source_refusals.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/reuse_integrity.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/script_replacement_rejection.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/setup_failure_recovery.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/system_shell_eligibility.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/unsafe_output_rejection.rs"
+    ],
     "worker_result_self_excluded": true
   },
   "base_state": {
@@ -48,8 +84,8 @@
   },
   "final_state": {
     "status": "worker_blocked",
-    "source_head": "1d5583dfadc05c47939e128c412bf69a3caecf2d",
-    "source_tree": "b5b7fbc0c0b0515068cb5be709050bed37985bea",
+    "source_head": "ecd113778bb72ecef1ef5ae4d44a972f2d0f2af4",
+    "source_tree": "2ce07ae5447e6aa35b32891e5606bc2fd00da3b8",
     "reason": "N06-owned child execution is refusal-only and executable non-external controls pass, but a root-owned broker/signing anchor, immutable installed runtime, managed-temp reconciliation, strict root integration, and shared adoption remain unavailable."
   },
   "touched_paths": [
@@ -58,6 +94,7 @@
     "fixtures/routine-public-production/cases.json",
     "validation_artifacts/worker-results/N06-ROUTINE-EXECUTION-TRUST-001.json",
     "validator/src/cli/successor_public/routine/behavior_child.rs",
+    "validator/src/cli/successor_public/routine/effect_authorization.rs",
     "validator/src/cli/successor_public/routine/host/host_failure.rs",
     "validator/src/cli/successor_public/routine/host/supported/host_state.rs",
     "validator/src/cli/successor_public/routine/host/supported/host_state_tests.rs",
@@ -156,6 +193,7 @@
     "validator/tests/routine_public_production_contract/production_scenario_cases/argument_fixture.rs",
     "validator/tests/routine_public_production_contract/production_scenario_cases/execution_fixture.rs",
     "validator/tests/routine_public_production_contract/production_scenario_cases/scenario_fixture.rs",
+    "validator/tests/routine_public_production_contract/public_effect_refusal.rs",
     "validator/tests/routine_public_production_contract/scenario.rs",
     "validator/tests/routine_public_production_contract/security.rs",
     "validator/tests/routine_work_contract.rs",
@@ -263,6 +301,10 @@
       "result": "All process spawn is structurally gated by a private uninhabited RootBrokerAuthorization with no local constructor, decoder, serializer, key, ledger, or public authority."
     },
     {
+      "area": "public-effect-order",
+      "result": "Every ordinary public routine entry, including clean and dirty candidates, now refuses root-broker-required before target discovery, tool or Git probes, dirty capture, home/HostState open, output provisioning, issuer initialization, durable reservation, descriptor input, Started, or child spawn."
+    },
+    {
       "area": "execution-authority",
       "result": "Arbitrary process and child-authored result authority remain retired; exact framed Rust syntax observation is the only retained behavior shape."
     },
@@ -310,7 +352,12 @@
     {
       "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_public_production_contract",
       "status": "partial_runtime_gap",
-      "result": "14 passed; 0 failed; 4 ignored because root broker and immutable installed runtime are unavailable; exact same-executable fork/exec attack passed its refusal control"
+      "result": "18 passed; 0 failed; 4 ignored; clean and dirty public entry, valid/missing host, legacy manifest, target/catalog substitution, repeat/concurrent attempts, process traps, child prebuffer/replay/fork-exec, and read-only paths executed; broker-positive and immutable-runtime journeys remain unavailable"
+    },
+    {
+      "command": "routine_public_production_contract::public_effect_refusal (within the full target)",
+      "status": "passed_degraded",
+      "result": "4 passed; valid-host, four sequential missing-host, eight concurrent attempts, and PATH-trapped git/ultragoal/cargo/rustc all refused before discovery process spawn, target/output, or authority state changes"
     },
     {
       "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_recovery_reuse_journey_contract",
@@ -325,9 +372,21 @@
       "result": "pre-final-delta broad run was 69 passed and 27 failed: 26 managed-temp secret-path conflicts and one StableCrateId provenance compiler collision; final delta removed one non-causal passing mutant model and was checked by focused controls instead of rerunning the broad audit"
     },
     {
-      "command": "routine_work_contract current_path_controls; filesystem_controls; authority_ledger_controls; capacity; invariant_control_map",
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_recovery_reuse_journey_contract journeys",
+      "status": "blocked_environment",
+      "exit_code": 101,
+      "result": "1 passed; 1 failed at the known managed-temp secret-path conflict; clean/dirty/conflict/fallback preservation passed"
+    },
+    {
+      "command": "routine_work_contract current_path_controls; filesystem_controls; authority_ledger_controls",
       "status": "passed_degraded",
-      "result": "4/4, 3/3, 3/3, 1/1, and 1/1; exact retired audit is 65 unique old tests to 65 ledger rows"
+      "result": "4/4, 3/3, and 3/3; broker gate, binding/context/read/output mutation, filesystem substitution, authenticated state, and exact no-op controls passed"
+    },
+    {
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_work_contract reuse::matching",
+      "status": "blocked_environment",
+      "exit_code": 101,
+      "result": "0 passed; 5 failed before assessment at the known managed-temp secret-path prohibition"
     },
     {
       "command": "source .codex-worktree/env.sh; unset RUSTFLAGS; cargo check --manifest-path validator/Cargo.toml --lib --locked --offline -j16",
@@ -336,9 +395,9 @@
       "result": "649 strict diagnostics; 31 mentions of routine-owned paths"
     },
     {
-      "command": "rustfmt --edition 2024 --check <all changed N06 Rust paths>",
+      "command": "rustfmt --edition 2024 --check <all current-delta Rust paths>; base-to-source changed Rust line cap",
       "status": "passed",
-      "result": "direct formatting check passed after formatting commit; maximum changed Rust file is 245 lines"
+      "result": "direct formatting check passed; 139 base-to-source changed Rust paths checked and maximum retained file is 249 lines"
     },
     {
       "command": "python3 scripts/check-python-source-laws .",
@@ -355,6 +414,21 @@
       "command": "git diff --check",
       "status": "passed",
       "result": "no whitespace errors"
+    },
+    {
+      "command": "python3 .codex-worktree/scratch/validate_n06_receipt.py",
+      "status": "passed",
+      "result": "canonical schema, exact source tree, touched/deleted/artifact set equality, per-artifact hashes and lengths, and aggregate passed: 112 artifacts, 30 deletions, 470191 bytes"
+    },
+    {
+      "command": "rustc parse_worker_result.rs with the current isolated ultragoal rlib; parse_worker_result N06 receipt",
+      "status": "passed",
+      "result": "canonical WorkerResultV1 parser accepted the receipt with 112 artifacts"
+    },
+    {
+      "command": "fresh independent security trust-boundary review of source ecd113778bb72ecef1ef5ae4d44a972f2d0f2af4 tree 2ce07ae5447e6aa35b32891e5606bc2fd00da3b8",
+      "status": "passed",
+      "result": "P0 none; P1 none; P2 none; exact ceiling is source-local pre-discovery/pre-effect refusal, with broker-positive, installed/immutable-runtime, strict integration, readiness, release, completion, and parent acceptance withheld"
     }
   ],
   "artifacts": [
@@ -377,6 +451,11 @@
       "path": "validator/src/cli/successor_public/routine/behavior_child.rs",
       "sha256": "sha256:8b44bc75585c19cc9203bb64dab2fc84bf9f4026a645d3676cd47c6e8bbad8f3",
       "byte_length": 923
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/effect_authorization.rs",
+      "sha256": "sha256:53bdc91dc07c3193f542500eecc47dfffa5958e642274e286ac4626f29366bc2",
+      "byte_length": 372
     },
     {
       "path": "validator/src/cli/successor_public/routine/host/host_failure.rs",
@@ -430,8 +509,8 @@
     },
     {
       "path": "validator/src/cli/successor_public/routine/mod.rs",
-      "sha256": "sha256:266aa67e5aa83d7503659aeb879eac94c82fefaea0fbe65af3e16a79ce7fe994",
-      "byte_length": 1954
+      "sha256": "sha256:c4f77035fe91f9972af9810298b06167198a201153c0851d1bc704e668ed2bdb",
+      "byte_length": 1980
     },
     {
       "path": "validator/src/cli/successor_public/routine/outcome/rerun.rs",
@@ -440,13 +519,13 @@
     },
     {
       "path": "validator/src/cli/successor_public/routine/source_configuration.rs",
-      "sha256": "sha256:8a3c93cb641978f8fd8acf2a0eef6cb742757b15330004f22db545fc261b300a",
-      "byte_length": 8612
+      "sha256": "sha256:7aebacbc0eda6ba12e2e4a733638bdd0553be13fa4e600e9f372d2f60d14401b",
+      "byte_length": 8611
     },
     {
       "path": "validator/src/cli/successor_public/routine/source_selection.rs",
-      "sha256": "sha256:f378b64e953a571b57b5ce17554c34628e8bfed77e6dcbac7b60308a7e95aa14",
-      "byte_length": 6335
+      "sha256": "sha256:2300da0cde8d5089f5d7e1a7216e052650e9df1874100410ca450aa1ea481913",
+      "byte_length": 6392
     },
     {
       "path": "validator/src/routine_work/behavior/child_capability.rs",
@@ -515,8 +594,8 @@
     },
     {
       "path": "validator/src/routine_work/mod.rs",
-      "sha256": "sha256:3a504a4462c800c8f0977cbc8922eeda46a4553d6b3ebe6da82f0df78bd34d7f",
-      "byte_length": 2816
+      "sha256": "sha256:fda6de344a27538cc15c5e67efb0d62799c39615d0865bf515fad93d1100003e",
+      "byte_length": 2915
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/execution_authority/effect_intent.rs",
@@ -580,8 +659,8 @@
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/grant_scope.rs",
-      "sha256": "sha256:749e5d0ed57eb53805ca857595fba77c5130eda2dde3d0bbdc12714b58cd5b65",
-      "byte_length": 9426
+      "sha256": "sha256:412215211d173c4612cb70b614f012313de069065a0412879fa5af795825af13",
+      "byte_length": 9413
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/grant_validation.rs",
@@ -595,8 +674,8 @@
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/mod.rs",
-      "sha256": "sha256:d2fd5485c4734310fcf2558333390e3aaf64f7035d83e6f331472521459a27e6",
-      "byte_length": 2570
+      "sha256": "sha256:719136d55a18aaa4b80c3a1c9a120e27f67b029db473206b2588e958e3008fbf",
+      "byte_length": 2661
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/no_op_mediation.rs",
@@ -615,8 +694,8 @@
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/process/child_authority_channel.rs",
-      "sha256": "sha256:deb4847371cbc14d473d8896de3d014dd06369254809ae913d8dc5fdc9204775",
-      "byte_length": 1114
+      "sha256": "sha256:e5521ab30ae8939ac1d949da8945e8cf39812e37e5445ff0bc241ef450cfa1b6",
+      "byte_length": 1475
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/process/mod.rs",
@@ -655,8 +734,8 @@
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mod.rs",
-      "sha256": "sha256:cf43d7f9dd133430d9490f2aef7626874602f2c433f78b147d5a55b202b053f2",
-      "byte_length": 2694
+      "sha256": "sha256:abff7a7369f3df0caf2ad819b7f0a87d9285e955a039c91a1ae4b9d9d73f8d52",
+      "byte_length": 2786
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/production/ledger/file_authority.rs",
@@ -790,8 +869,8 @@
     },
     {
       "path": "validator/tests/routine_public_production_contract.rs",
-      "sha256": "sha256:cb506810394009b2656652a45dabb72f6ff5276efd558676b9cb96b295f59c13",
-      "byte_length": 156
+      "sha256": "sha256:d8f8e5ca2015229d6cac6292fed1b75039c0149e4e7c683ef53f0fde87649090",
+      "byte_length": 187
     },
     {
       "path": "validator/tests/routine_public_production_contract/child_authority.rs",
@@ -810,8 +889,8 @@
     },
     {
       "path": "validator/tests/routine_public_production_contract/journeys.rs",
-      "sha256": "sha256:bee9e97a540826a28bd184567787bc8fc5dd5d4b9b473f446f031ddeedc6664a",
-      "byte_length": 5787
+      "sha256": "sha256:0e5040c517a3a3d168c11fead8e262b6e5f9eb9257271e9ef649db61801f48d2",
+      "byte_length": 5855
     },
     {
       "path": "validator/tests/routine_public_production_contract/production_scenario_cases/argument_fixture.rs",
@@ -829,14 +908,19 @@
       "byte_length": 5055
     },
     {
+      "path": "validator/tests/routine_public_production_contract/public_effect_refusal.rs",
+      "sha256": "sha256:539f49d75eb1840b4acfda3b9fb568fd0b5875d9e51d95e5e225edb9536666db",
+      "byte_length": 5664
+    },
+    {
       "path": "validator/tests/routine_public_production_contract/scenario.rs",
       "sha256": "sha256:fcb0d47fd57bdf43c1b27f502f9dccd5b7097d7ab5fe3866c7d4fc2a4ae34cc7",
       "byte_length": 812
     },
     {
       "path": "validator/tests/routine_public_production_contract/security.rs",
-      "sha256": "sha256:df4c938683afd5d344cf4ede22ad6993334463109a09f3d3f45f5abb74ce6e16",
-      "byte_length": 7225
+      "sha256": "sha256:3331f45d7c0d35cf9b59d807aeef725c91df750a79311426368028506784d903",
+      "byte_length": 7578
     },
     {
       "path": "validator/tests/routine_work_contract.rs",
@@ -922,8 +1006,18 @@
     },
     {
       "status": "closed_source_local",
+      "class": "public-effect-order",
+      "finding": "The real public binary reaches root-broker-required before execute_inner, so clean and dirty entries cannot discover a target, probe tools or Git, capture dirty state, open HostState, provision outputs, initialize issuer state, reserve, read descriptors, emit Started, or spawn. Valid-host, absent-host repeat, and concurrent attempts preserve recursive workspace/home trees, Git identity, absent target output, and empty authority reservation state."
+    },
+    {
+      "status": "closed_source_local",
       "class": "false-pass",
-      "finding": "The process-path probe enters the real bounded executor with immutable /usr/bin/true and real root/read/output descriptors, observes broker-required before Started, and records zero spawn and unchanged state."
+      "finding": "The real public-path process trap arms a repository-local core.fsmonitor hook that is first proven to execute under pinned Git status, then verifies the broker-refusal path never invokes it; PATH-resolved git, ultragoal, cargo, and rustc marker traps also remain absent, with workspace/home/Git/authority identity unchanged. The lower process-path probe separately observes broker-required before Started with zero spawn."
+    },
+    {
+      "status": "closed_source_local",
+      "class": "independent-security-review",
+      "finding": "Fresh review of exact source ecd113778bb72ecef1ef5ae4d44a972f2d0f2af4 / tree 2ce07ae5447e6aa35b32891e5606bc2fd00da3b8 found no P0, P1, or P2 and independently confirmed pre-discovery/pre-effect refusal plus absence of an N06-mintable broker authority."
     },
     {
       "status": "blocked",
@@ -948,7 +1042,7 @@
     {
       "status": "root_request",
       "request_id": "ROOT-N06-BROKER",
-      "finding": "Replace require_root_broker_before_spawn with a root-owned different-principal broker adapter. It must own non-exportable signing/reservation state, validate the exact durable Reserved record, answer a fresh post-exec challenge directly, bind exact request/protocol/intent/node/program object/parent-child PID/session/frame digest, CAS Reserved to Started once, and only then permit stdin; no file-only same-UID authority is sufficient."
+      "finding": "Replace require_root_broker_for_public_effect and require_root_broker_before_spawn with one root-owned different-principal authorization carried from the pre-discovery public entry through HostState, reservation, and spawn. It must own non-exportable signing/reservation state, validate the exact durable request, answer a fresh post-exec challenge directly, bind request/protocol/intent/node/program object/parent-child PID/session/frame digest, authorize one use before any discovery/process/state/output effect, and only then permit stdin; no file-only same-UID authority is sufficient."
     },
     {
       "status": "root_request",
@@ -1571,9 +1665,9 @@
     }
   ],
   "limitations": [
-    "The source-local ceiling is refusal-only child safety plus executable non-external invariant controls, not broker-backed success.",
+    "The source-local ceiling is pre-discovery public refusal plus refusal-only child safety and executable non-external invariant controls, not broker-backed success or clean no-op behavior.",
     "Four broker-backed immutable-runtime public journeys are ignored and unexecuted.",
-    "Post-spawn cancellation, descendant reaping, setup-failure, sandbox, and legitimate child success remain causally broker-blocked.",
+    "Post-spawn cancellation, descendant reaping, setup-failure, sandbox, legitimate child success, and broker-authorized clean or dirty public behavior remain causally broker-blocked.",
     "Strict, managed-temp, shared schema/migration/export, installed runtime, root integration, readiness, release, completion, and parent acceptance remain withheld."
   ],
   "no_claim_statement": "This worker does not claim readiness, release, or completion."
