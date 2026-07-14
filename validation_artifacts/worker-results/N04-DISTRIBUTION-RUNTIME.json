@@ -8,9 +8,9 @@
     "repository": "repo://harness-ultragoal-plugin-proposal",
     "branch": "codex/n04-distribution-runtime",
     "accepted_integration_base": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
-    "reviewed_rework_head": "663c36bab4a5119cade4a5399a97f3d9ae741abb",
-    "verified_source_head": "f609c1412b9634869b9fd97aa9725cfc5580463a",
-    "verified_source_tree": "e53392fd1d8533b4191857ab1574e4965ac99719",
+    "reviewed_rework_head": "10f8b6c9282a09a007bc4a4b39706d6dc0cecf05",
+    "verified_source_head": "aee40c976e03d1226e607baf330226465e35adf8",
+    "verified_source_tree": "fd5c47a81d88e227c7ee7d6d94961ef4b68047f4",
     "handoff_record_commit": "the commit containing this WorkerResult; final head is intentionally reported by git after commit because a file cannot contain its own commit hash",
     "self_rebased": false,
     "root_adoption": false,
@@ -26,14 +26,16 @@
     {"sha": "383057d5c1e9ca777fc7fee4224647402303744b", "subject": "refresh N04 handoff on accepted integration base"},
     {"sha": "be6bfdbc13a20ac1bd6d7222bc243cb124a25d42", "subject": "Bind N04 runtime identities to confined observations"},
     {"sha": "663c36bab4a5119cade4a5399a97f3d9ae741abb", "subject": "Record N04 runtime authority rework handoff"},
-    {"sha": "f609c1412b9634869b9fd97aa9725cfc5580463a", "subject": "Fail closed N04 host discovery and runtime authority"}
+    {"sha": "f609c1412b9634869b9fd97aa9725cfc5580463a", "subject": "Fail closed N04 host discovery and runtime authority"},
+    {"sha": "10f8b6c9282a09a007bc4a4b39706d6dc0cecf05", "subject": "Refresh N04 runtime rework handoff evidence"},
+    {"sha": "aee40c976e03d1226e607baf330226465e35adf8", "subject": "Pin N04 runtime probe execution to retained descriptor"}
   ],
   "behavior_implemented": [
     "Discovery is no longer minted from package bytes, install state, registry state, expected identity, or caller-written discovery documents. Caller documents and registry-visible substitutions fail closed; the supported-host discovery adapter only accepts an independently observed supported-host route and currently returns ObjectUnavailable when that observation cannot be exercised.",
     "Registry observation remains AppRegistry-only and AppRegistry promotion remains tied to confined file provenance rather than arbitrary caller-owned bytes.",
-    "Runtime plans are issued only through the installed supported runtime route: the executable must be the exact package entry runtime/runtime-probe-bin, match the install snapshot, match the supported host capability, and revalidate after execution. Legacy RuntimeProbePlan::new is fail-closed for direct caller-selected binaries.",
+    "Runtime plans are issued only through the installed supported runtime route: the executable must be the exact package entry runtime/runtime-probe-bin, match the install snapshot, match the supported host capability, and retain an open descriptor-bound executable object. Execution uses the retained descriptor path after immediate object/path revalidation and revalidates after execution; legacy RuntimeProbePlan::new remains fail-closed for direct caller-selected binaries.",
     "Package artifact transactions retain the publication postimage and rollback now revalidates the original transaction root, output path, journey binding, current postimage, and object identities before writing.",
-    "Focused controls cover registry-present/discovery-absent substitution, caller-authored discovery documents, arbitrary runtime echo scripts, sibling/wrong runtime executable routes, replacement executables, same-package cross-journey package publication transplant, and rollback cross-root/path/journey transplants.",
+    "Focused controls cover registry-present/discovery-absent substitution, caller-authored discovery documents, arbitrary runtime echo scripts, sibling/wrong runtime executable routes, replaced runtime objects, same-byte/different-inode swaps before spawn and during execution, same-package cross-journey package publication transplant, and rollback cross-root/path/journey transplants.",
     "Historical supported-package WorkerResult fixture verification now withholds the stale R3 artifact claim when its referenced root-owned artifacts are absent in this refreshed branch."
   ],
   "verification": [
@@ -47,13 +49,19 @@
       "surface": "base/head",
       "command": "git rev-parse --abbrev-ref HEAD; git rev-parse HEAD; git rev-parse 5cc3be5f860de0071837f478bbe3a9de0d6c0e47^{commit}",
       "status": "pass",
-      "result": "Branch codex/n04-distribution-runtime, source head f609c1412b9634869b9fd97aa9725cfc5580463a, accepted integration base 5cc3be5f860de0071837f478bbe3a9de0d6c0e47. No self-rebase performed."
+      "result": "Branch codex/n04-distribution-runtime, source head aee40c976e03d1226e607baf330226465e35adf8, accepted integration base 5cc3be5f860de0071837f478bbe3a9de0d6c0e47. No self-rebase performed."
     },
     {
       "surface": "positive/negative/race/mutation/security/false-pass/repeat-use",
       "command": "source .codex-worktree/env.sh && RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --test distribution_contract --offline --jobs 16 -- --test-threads 16",
       "status": "pass",
-      "result": "181 passed; 0 failed; 1 ignored; finished in 3.51s."
+      "result": "184 passed; 0 failed; 1 ignored; finished in 3.94s."
+    },
+    {
+      "surface": "runtime descriptor same-byte race regression",
+      "command": "source .codex-worktree/env.sh && RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --test distribution_contract runtime_session --offline --jobs 16 -- --test-threads 16",
+      "status": "pass",
+      "result": "9 passed; 0 failed; focused runtime tests include same-byte inode swap before spawn, same-byte inode swap during execution, sibling wrong-route rejection, replaced-object construction rejection, stale nonce rejection, and byte-mutation final revalidation."
     },
     {
       "surface": "supported-package identity",
@@ -83,13 +91,13 @@
       "surface": "line cap",
       "command": "git diff --name-only -- '*.rs' | xargs wc -l; git ls-files --others --exclude-standard -- '*.rs' | xargs wc -l",
       "status": "pass",
-      "result": "All changed authored Rust files remain under 250 lines; largest tracked file 244 lines, largest new file validator/src/distribution/host_effect/executor/target.rs at 234 lines."
+      "result": "All changed authored Rust files remain under 250 lines; largest changed runtime file validator/src/distribution/runtime_probe/pinned_executable.rs is 238 lines and runtime_session/inode_swap.rs is 137 lines."
     },
     {
       "surface": "strict diagnostics",
       "command": "source .codex-worktree/env.sh && cargo check -p ultragoal --lib --offline --jobs 16",
       "status": "blocked",
-      "result": "Exit 101. Strict -D warnings still stops in root/shared warning wall outside this N04 ownership, beginning with unused imports in validator/src/cli/successor/runtime/../diagnostics/mod.rs, validator/src/cli/successor/runtime/mod.rs, validator/src/cli/successor/mod.rs, a context/read_observation visibility mismatch, and many dead-code warnings; cargo reported could not compile ultragoal (lib) due to 660 previous errors. No lint allowance or suppression was applied for this strict diagnostic."
+      "result": "Exit 101. Strict -D warnings still stops in root/shared warning wall outside this N04 ownership, beginning with unused imports in validator/src/cli/successor/runtime/../diagnostics/mod.rs, validator/src/cli/successor/runtime/mod.rs, validator/src/cli/successor/mod.rs, a context/read_observation visibility mismatch, and many dead-code warnings; cargo reported could not compile ultragoal (lib) due to 661 previous errors. A follow-up grep over strict diagnostics for runtime_probe/runtime_session/pinned_executable returned no matches after removing the stale RuntimeProbePlan.program field. No lint allowance or suppression was applied for this strict diagnostic."
     }
   ],
   "claim_ceiling": {
@@ -123,7 +131,7 @@
     }
   ],
   "artifact_hashes": [
-    {"path": "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json", "sha256_before_refresh": "sha256:61dacc4be99a8b60cfed19d4b90b666f4367558e9c6776c1bf63879cb25854c0", "byte_length_before_refresh": 25960},
+    {"path": "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json", "sha256_before_refresh": "sha256:55b4df0332e34b345a3cb67a4bef65623952dcdfa7fbb2026a3ada6d706e680d", "byte_length_before_refresh": 20383},
     {"path": "validator/src/distribution/filesystem/file.rs", "sha256": "sha256:29fd78624853775f37e4bbd32cd5fe7b1ab68b660b820c58786a3964c5b75244", "byte_length": 5883},
     {"path": "validator/src/distribution/filesystem/root/confined_root.rs", "sha256": "sha256:615be37c81cba72ca1bb7532f6a56156ec398ade661551221157925886ade0c3", "byte_length": 4800},
     {"path": "validator/src/distribution/filesystem/root/mod.rs", "sha256": "sha256:f6236f18b851cfa1c16dcc0da465ba2725584dac47b37386022570209d00e066", "byte_length": 5728},
@@ -157,8 +165,10 @@
     {"path": "validator/src/distribution/registry_observation/observe_discovery.rs", "sha256": "sha256:3f214d5d72fad043255298ef3db4e95ca3e61c1b7e3dbf72e3c43793fc633efa", "byte_length": 3708},
     {"path": "validator/src/distribution/registry_observation/registry_limit.rs", "sha256": "sha256:9b2f369b904f764ab822d59d56770896f4e65a764448fa028674418183c5b95c", "byte_length": 7906},
     {"path": "validator/src/distribution/registry_observation/validate_app_registry.rs", "sha256": "sha256:eddb2616de4a7bb310c70737412f2d710827cb62c109f6b710e69125d75c8e9b", "byte_length": 1904},
-    {"path": "validator/src/distribution/runtime_probe/mod.rs", "sha256": "sha256:0fb48659df99c1602f2c39919784519b2ed7557ef2604e64d9cc388ab73c86f1", "byte_length": 879},
-    {"path": "validator/src/distribution/runtime_probe/output_limit.rs", "sha256": "sha256:8d25fd8516800ac0fea38fdbe7bb501d463b6852f312588cefa9cad171405f8b", "byte_length": 5959},
+    {"path": "validator/src/distribution/runtime_probe/mod.rs", "sha256": "sha256:a4565d4811023c148c58c361727a12c8781502973f2d98a1243ac15788225467", "byte_length": 914},
+    {"path": "validator/src/distribution/runtime_probe/output_limit.rs", "sha256": "sha256:f25574b3e290434c58bc2b84105917449097bc8d86b1cde51a43d3e984bd0501", "byte_length": 6058},
+    {"path": "validator/src/distribution/runtime_probe/pinned_executable.rs", "sha256": "sha256:a2662b332904ee4f1646ca96906367f58b8c6967221878d223c654792d43d40e", "byte_length": 7668},
+    {"path": "validator/src/distribution/runtime_probe/unique_marker.rs", "sha256": "sha256:9620cde8f01400ddc46c0958c6c759c4ca3d2e171b26dbe7e8c00f57bd984d42", "byte_length": 1150},
     {"path": "validator/src/distribution/spec/mod.rs", "sha256": "sha256:f1de2f5cb22b1e83102ca042187af40a37998f0524d6e0fdfc29206b64158d10", "byte_length": 321},
     {"path": "validator/src/distribution/spec/validate_layer.rs", "sha256": "sha256:0362c3853f91e4e4fef6ce1e885f9893f40cd55358c698ad31ae476bdc38d0bd", "byte_length": 3705},
     {"path": "validator/src/distribution/verify/mod.rs", "sha256": "sha256:95860fd1035fbb792a44f7aa4809afdea7a3882b6c97a08e944917b68d3a7ee1", "byte_length": 557},
@@ -173,7 +183,8 @@
     {"path": "validator/tests/distribution_contract/package_output.rs", "sha256": "sha256:ac06cb8b4e62cdafeb64ca954074e3a985f2e9e611ea7d2e39e1df47490844ce", "byte_length": 609},
     {"path": "validator/tests/distribution_contract/package_output/corrupt_after_write.rs", "sha256": "sha256:b9641291fcde597bc546d2446c69fe85408723e09764846055256537d55c7e36", "byte_length": 4441},
     {"path": "validator/tests/distribution_contract/package_output/every_identity_dimension_is_checked_before_any_effect.rs", "sha256": "sha256:38b7784a0b3128a9fc0b5a2243e8bb0fd3c3eaf7c1c8d2517e5ccff33cf83ae3", "byte_length": 3813},
-    {"path": "validator/tests/distribution_contract/runtime_session.rs", "sha256": "sha256:cc107265b2142ba37ab211db48f338eef8e6d7faa84f7e2093ce0ec90b507d8f", "byte_length": 6131},
+    {"path": "validator/tests/distribution_contract/runtime_session.rs", "sha256": "sha256:1674a9d447f54151d5060fda341abd2ab60441466dbfd73a81d85dd6a742508d", "byte_length": 6175},
+    {"path": "validator/tests/distribution_contract/runtime_session/inode_swap.rs", "sha256": "sha256:aab557f5533884d95730606bd998d2c0a2f938dbb24a1b22b7dcff2d471420df", "byte_length": 4311},
     {"path": "validator/tests/distribution_contract/version_identity.rs", "sha256": "sha256:29ac626bb91be1bada95908ee0fcbe11f4249dca43b43259719dba4d9bc97852", "byte_length": 6092},
     {"path": "validator/tests/supported_package_identity_contract.rs", "sha256": "sha256:f85afcaec07bb1c956658e33bedf31b7130a7cc2a529882d5e71986735e5fcfc", "byte_length": 1835},
     {"path": "validator/tests/supported_package_identity_contract/confined_registry.rs", "sha256": "sha256:799c5a5a64248c357e378ce6a868a34608ca3cca0b697b6e3ad36cf63cb9ed27", "byte_length": 3374},
