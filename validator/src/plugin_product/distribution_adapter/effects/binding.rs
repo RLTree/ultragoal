@@ -36,6 +36,7 @@ impl Effects {
         &self.effects[..self.next_effect]
     }
 
+    #[cfg(test)]
     pub(super) fn mutation_count(&self) -> usize {
         self.mutations.len()
     }
