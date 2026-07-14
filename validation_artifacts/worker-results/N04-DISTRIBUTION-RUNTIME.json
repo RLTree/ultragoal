@@ -1,15 +1,17 @@
 {
   "worker": "/root",
   "lease_id": "N04-DISTRIBUTION-RUNTIME",
-  "context_id": "n04-distribution-runtime-full-increment-5cc3be5f-to-68ec86e9",
+  "context_id": "n04-distribution-runtime-full-increment-5cc3be5f-to-125f54bcd",
   "candidate_identity": {
     "repository": "repo://harness-ultragoal-plugin-proposal",
     "branch": "codex/n04-distribution-runtime",
     "source_thread_id": "019f5f39-507b-78a2-a96a-0b566a5a2126",
     "accepted_integration_base": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
-    "source_head": "68ec86e95149ec43884d6abaeeff0688054a1dde",
-    "source_tree": "d2989138d24a4717fa19028da0f2a2728b7f4084",
-    "commit_count_after_base": 22,
+    "source_head": "125f54bcd4820497d06ff36d1a90405a39bc1f5a",
+    "source_tree": "b53918ab8ec00c7e84672181693607eb5253841c",
+    "source_parent_acceptance": "parent source ACCEPT on exact source head/tree only",
+    "parent_integration_acceptance_claim": false,
+    "commit_count_after_base": 26,
     "commit_list_after_base": [
       {
         "commit": "b889f9662b99137749087ce3d891ae51668fca87",
@@ -98,30 +100,53 @@
       {
         "commit": "68ec86e95149ec43884d6abaeeff0688054a1dde",
         "subject": "Gate adapter mutation count to tests"
+      },
+      {
+        "commit": "b82c913e1ebc1b8023cab34190c6771e6353fbf1",
+        "subject": "Refresh N04 distribution runtime handoff receipt"
+      },
+      {
+        "commit": "adb24e382549fd63a10390e2451848ef4dd6181b",
+        "subject": "Track confined host target executor authority"
+      },
+      {
+        "commit": "4c8ef3a3d1e9f24d31263aa06e646bc701d1ce06",
+        "subject": "Close host-effect diagnostic debt"
+      },
+      {
+        "commit": "125f54bcd4820497d06ff36d1a90405a39bc1f5a",
+        "subject": "Restore post-publication recovery authority"
       }
     ],
-    "source_rewritten": false,
-    "self_rebased": false,
-    "parent_acceptance_claim": false
+    "changed_path_count": 129,
+    "retained_changed_artifact_count": 128,
+    "deleted_changed_path_count": 1,
+    "artifact_total_bytes": 627644,
+    "artifact_aggregate_sha256": "sha256:8664392077b3a231cc5a627db4334ba873da56b8266c04af2b423d04b0649d67",
+    "changed_path_set_sha256": "sha256:6d2c20a0146ab4db9220dbd0b62757821b735b84fe286d9543f8656db2df090b",
+    "worker_result_path": "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json",
+    "worker_result_self_excluded_from_final_identity": true
   },
   "base_state": {
     "accepted_integration_base": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
     "branch": "codex/n04-distribution-runtime",
     "receipt_schema": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
-    "previous_source_head": "c78af5702a85a4eedbd7b336967f18ff9e766d4c",
-    "parent_rework": "Production adapter consumed RollbackInstallError::Refused after popping Mutation::Installed; final source also gates private mutation_count to tests."
+    "source_parent": "125f54bcd4820497d06ff36d1a90405a39bc1f5a",
+    "source_parent_tree": "b53918ab8ec00c7e84672181693607eb5253841c",
+    "parent_review": "ACCEPT source only; regenerate canonical WorkerResult only."
   },
   "final_state": {
-    "status": "source_rework_plus_full_increment_worker_result",
-    "source_head": "68ec86e95149ec43884d6abaeeff0688054a1dde",
-    "source_tree": "d2989138d24a4717fa19028da0f2a2728b7f4084",
+    "status": "receipt_only_refresh_pending_commit",
+    "source_head": "125f54bcd4820497d06ff36d1a90405a39bc1f5a",
+    "source_tree": "b53918ab8ec00c7e84672181693607eb5253841c",
     "final_evidence_head": "self-excluded; report committed evidence head after this file is committed",
     "final_evidence_tree": "self-excluded; report committed evidence tree after this file is committed",
-    "worker_result_final_hash": "self-excluded; report sha256/bytes after commit",
-    "self_exclusion_convention": "Source increment is inventoried at source head; WorkerResult is rewritten afterward and cannot embed its own final hash/commit.",
-    "changed_path_count": 88,
-    "retained_changed_artifact_count": 87,
-    "deleted_changed_path_count": 1,
+    "worker_result_final_sha256": "self-excluded; report sha256/bytes after commit",
+    "self_exclusion_convention": "WorkerResult inventories source-parent increment and is rewritten in the final receipt-only commit; final receipt commit/tree/hash cannot be embedded in this self-referential file.",
+    "final_commit_expected_parent": "125f54bcd4820497d06ff36d1a90405a39bc1f5a",
+    "final_commit_expected_changed_paths": [
+      "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json"
+    ],
     "changed_paths": [
       {
         "status": "A",
@@ -138,6 +163,14 @@
       {
         "status": "A",
         "path": "validator/src/distribution/filesystem/file/scoped_install.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/filesystem/hooks.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/filesystem/mod.rs"
       },
       {
         "status": "M",
@@ -168,8 +201,124 @@
         "path": "validator/src/distribution/host_effect/executor/mod.rs"
       },
       {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/executor/model/execution_policy/strict.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/executor/model/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/executor/model/recovery_handoff/substitution_test.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/executor/publication/failure.rs"
+      },
+      {
         "status": "A",
         "path": "validator/src/distribution/host_effect/executor/target.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/host_effect/executor/target_confinement/binding.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/host_effect/executor/target_confinement/name_validation.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/host_effect/executor/target_confinement/names.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/host_effect/executor/target_confinement/observation_generation.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/host_effect/executor/target_confinement/publication.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/host_effect/executor/target_confinement/reobservation_failure.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/host_effect/executor/target_confinement/root_prefix.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/host_effect/executor/target_confinement/run_fault.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/executor/tests/dual_failure_after_committed_publication_retains_identity_when_reobservation_is_unavailable.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/executor/tests/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/executor/tests/positive_actual_publication_fsync_rename_ledger_and_ack_transaction_settles.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/executor/tests/unrelated_record.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/host_effect/executor/tests/wrong_platform_handoff_never_executes_backend.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/host_effect_ledger_error_new.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/lifecycle/binding/accepted/derived_binding.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/lifecycle/binding/accepted/effect.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/lifecycle/coordinator/supported/recovery_proposal.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/lifecycle/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/lifecycle/tests/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/lifecycle/tests/probe_target_lease_identity.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/lifecycle/tests/recording_ledger_head.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/lifecycle/tests/wrong/package_plan.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/lifecycle/tests/wrong/rejected_primitive_adapters.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/max_pinned_executable_bytes.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/mod.rs"
       },
       {
         "status": "M",
@@ -248,6 +397,10 @@
         "path": "validator/src/distribution/package/product/plugin_id.rs"
       },
       {
+        "status": "A",
+        "path": "validator/src/distribution/package/product/tests/artifact_identity_fields.rs"
+      },
+      {
         "status": "D",
         "path": "validator/src/distribution/package/product/tests/concurrent_output.rs"
       },
@@ -289,6 +442,10 @@
       },
       {
         "status": "A",
+        "path": "validator/src/distribution/registry_observation/registry_reader_race_tests.rs"
+      },
+      {
+        "status": "A",
         "path": "validator/src/distribution/registry_observation/validate_app_registry.rs"
       },
       {
@@ -310,6 +467,10 @@
       {
         "status": "M",
         "path": "validator/src/distribution/spec/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/spec/request_limit.rs"
       },
       {
         "status": "M",
@@ -346,6 +507,26 @@
       {
         "status": "M",
         "path": "validator/src/plugin_product/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/descriptor_cas.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/descriptor_races.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/descriptor_races/directory_ancestor_substitution_then_relocation_preserves_outside_tree.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/descriptor_races/next_outside.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/descriptor_races/tree_materialization_and_recovery_rename_races_preserve_outside_tree.rs"
       },
       {
         "status": "M",
@@ -453,6 +634,14 @@
       },
       {
         "status": "M",
+        "path": "validator/tests/supported_host_effect_executor_contract/cases.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/supported_host_effect_executor_contract/executor_orders_command_publication_ledger_and_acknowledgement.rs"
+      },
+      {
+        "status": "M",
         "path": "validator/tests/supported_package_identity_contract.rs"
       },
       {
@@ -476,23 +665,23 @@
         "path": "validator/tests/supported_package_identity_contract/typed_identity_surfaces_bind_only_verified_same_candidate_observations.rs"
       }
     ],
-    "deleted_paths": [
-      "validator/src/distribution/package/product/tests/concurrent_output.rs"
-    ],
-    "changed_path_set_sha256": "bd0ee5a39e266b5eb5903961c2c4c01f76ff478deb97249a35bcc7d3df9e6584",
-    "artifact_aggregate_sha256": "c819d8047aa07bc1c263ec8618169e49559ba768d209e272976b16e824f73984",
-    "aggregate_encoding": "status<TAB>path<TAB>source_head_sha256|deleted<TAB>source_head_bytes|deleted<TAB>regular_file|deleted<TAB>worktree_link_count|deleted<LF> in git diff --name-status order.",
-    "focused_tests_executed": true,
-    "strict_root_shared_warning_wall": true,
-    "live_host_proof": false,
-    "root_adoption": false,
-    "parent_acceptance_claim": false
+    "changed_path_count": 129,
+    "retained_changed_artifact_count": 128,
+    "deleted_changed_path_count": 1,
+    "changed_path_set_sha256": "sha256:6d2c20a0146ab4db9220dbd0b62757821b735b84fe286d9543f8656db2df090b",
+    "artifact_aggregate_sha256": "sha256:8664392077b3a231cc5a627db4334ba873da56b8266c04af2b423d04b0649d67",
+    "aggregate_encoding": "For each base..source path in git diff order: path NUL status NUL source-head-sha-or-deleted NUL source-head-bytes newline.",
+    "live_host_proof": "withheld",
+    "root_adoption": "not claimed",
+    "parent_acceptance_claim": "not claimed"
   },
   "touched_paths": [
     "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json",
     "validator/src/distribution/filesystem/file.rs",
     "validator/src/distribution/filesystem/file/install_postimage_cas.rs",
     "validator/src/distribution/filesystem/file/scoped_install.rs",
+    "validator/src/distribution/filesystem/hooks.rs",
+    "validator/src/distribution/filesystem/mod.rs",
     "validator/src/distribution/filesystem/root/confined_root.rs",
     "validator/src/distribution/filesystem/root/mod.rs",
     "validator/src/distribution/filesystem/tree.rs",
@@ -500,7 +689,36 @@
     "validator/src/distribution/host_capability/mod.rs",
     "validator/src/distribution/host_capability/supported_runtime_route.rs",
     "validator/src/distribution/host_effect/executor/mod.rs",
+    "validator/src/distribution/host_effect/executor/model/execution_policy/strict.rs",
+    "validator/src/distribution/host_effect/executor/model/mod.rs",
+    "validator/src/distribution/host_effect/executor/model/recovery_handoff/substitution_test.rs",
+    "validator/src/distribution/host_effect/executor/publication/failure.rs",
     "validator/src/distribution/host_effect/executor/target.rs",
+    "validator/src/distribution/host_effect/executor/target_confinement/binding.rs",
+    "validator/src/distribution/host_effect/executor/target_confinement/name_validation.rs",
+    "validator/src/distribution/host_effect/executor/target_confinement/names.rs",
+    "validator/src/distribution/host_effect/executor/target_confinement/observation_generation.rs",
+    "validator/src/distribution/host_effect/executor/target_confinement/publication.rs",
+    "validator/src/distribution/host_effect/executor/target_confinement/reobservation_failure.rs",
+    "validator/src/distribution/host_effect/executor/target_confinement/root_prefix.rs",
+    "validator/src/distribution/host_effect/executor/target_confinement/run_fault.rs",
+    "validator/src/distribution/host_effect/executor/tests/dual_failure_after_committed_publication_retains_identity_when_reobservation_is_unavailable.rs",
+    "validator/src/distribution/host_effect/executor/tests/mod.rs",
+    "validator/src/distribution/host_effect/executor/tests/positive_actual_publication_fsync_rename_ledger_and_ack_transaction_settles.rs",
+    "validator/src/distribution/host_effect/executor/tests/unrelated_record.rs",
+    "validator/src/distribution/host_effect/executor/tests/wrong_platform_handoff_never_executes_backend.rs",
+    "validator/src/distribution/host_effect/host_effect_ledger_error_new.rs",
+    "validator/src/distribution/host_effect/lifecycle/binding/accepted/derived_binding.rs",
+    "validator/src/distribution/host_effect/lifecycle/binding/accepted/effect.rs",
+    "validator/src/distribution/host_effect/lifecycle/coordinator/supported/recovery_proposal.rs",
+    "validator/src/distribution/host_effect/lifecycle/mod.rs",
+    "validator/src/distribution/host_effect/lifecycle/tests/mod.rs",
+    "validator/src/distribution/host_effect/lifecycle/tests/probe_target_lease_identity.rs",
+    "validator/src/distribution/host_effect/lifecycle/tests/recording_ledger_head.rs",
+    "validator/src/distribution/host_effect/lifecycle/tests/wrong/package_plan.rs",
+    "validator/src/distribution/host_effect/lifecycle/tests/wrong/rejected_primitive_adapters.rs",
+    "validator/src/distribution/host_effect/max_pinned_executable_bytes.rs",
+    "validator/src/distribution/host_effect/mod.rs",
     "validator/src/distribution/identity/identity_surface.rs",
     "validator/src/distribution/identity/mixed_journey_tests.rs",
     "validator/src/distribution/identity/mod.rs",
@@ -520,6 +738,7 @@
     "validator/src/distribution/package/output/output_entry_limit.rs",
     "validator/src/distribution/package/product/mod.rs",
     "validator/src/distribution/package/product/plugin_id.rs",
+    "validator/src/distribution/package/product/tests/artifact_identity_fields.rs",
     "validator/src/distribution/package/product/tests/concurrent_output.rs",
     "validator/src/distribution/package/product/tests/every_artifact_binding_dimension_is_checked_before_output_effects.rs",
     "validator/src/distribution/package/product/tests/mod.rs",
@@ -530,12 +749,14 @@
     "validator/src/distribution/registry_observation/mod.rs",
     "validator/src/distribution/registry_observation/observe_discovery.rs",
     "validator/src/distribution/registry_observation/registry_limit.rs",
+    "validator/src/distribution/registry_observation/registry_reader_race_tests.rs",
     "validator/src/distribution/registry_observation/validate_app_registry.rs",
     "validator/src/distribution/runtime_probe/mod.rs",
     "validator/src/distribution/runtime_probe/output_limit.rs",
     "validator/src/distribution/runtime_probe/pinned_executable.rs",
     "validator/src/distribution/runtime_probe/unique_marker.rs",
     "validator/src/distribution/spec/mod.rs",
+    "validator/src/distribution/spec/request_limit.rs",
     "validator/src/distribution/spec/validate_layer.rs",
     "validator/src/distribution/verify/mod.rs",
     "validator/src/distribution/verify/observations_disagree.rs",
@@ -545,6 +766,11 @@
     "validator/src/plugin_product/distribution_adapter/effects/restoration_tests.rs",
     "validator/src/plugin_product/distribution_adapter/mod.rs",
     "validator/src/plugin_product/mod.rs",
+    "validator/tests/distribution_contract/descriptor_cas.rs",
+    "validator/tests/distribution_contract/descriptor_races.rs",
+    "validator/tests/distribution_contract/descriptor_races/directory_ancestor_substitution_then_relocation_preserves_outside_tree.rs",
+    "validator/tests/distribution_contract/descriptor_races/next_outside.rs",
+    "validator/tests/distribution_contract/descriptor_races/tree_materialization_and_recovery_rename_races_preserve_outside_tree.rs",
     "validator/tests/distribution_contract/identity_ladder.rs",
     "validator/tests/distribution_contract/install.rs",
     "validator/tests/distribution_contract/install/automatic_and_explicit_rollbacks_preserve_concurrent_mutation.rs",
@@ -571,6 +797,8 @@
     "validator/tests/plugin_distribution_adapter_contract/recovery/partial_cache_failure_rolls_back_only_the_completed_install_prefix.rs",
     "validator/tests/plugin_distribution_adapter_contract/recovery/same_root_sibling_operation_cannot_issue_or_use_owner_token.rs",
     "validator/tests/plugin_distribution_adapter_contract/security.rs",
+    "validator/tests/supported_host_effect_executor_contract/cases.rs",
+    "validator/tests/supported_host_effect_executor_contract/executor_orders_command_publication_ledger_and_acknowledgement.rs",
     "validator/tests/supported_package_identity_contract.rs",
     "validator/tests/supported_package_identity_contract/confined_registry.rs",
     "validator/tests/supported_package_identity_contract/context.rs",
@@ -579,21 +807,33 @@
     "validator/tests/supported_package_identity_contract/typed_identity_surfaces_bind_only_verified_same_candidate_observations.rs"
   ],
   "touched_semantics": [
-    "adapter-rollback-refusal-requeues-authority",
-    "lossy-rollback-error-conversion-avoided",
-    "public-debug-mutation-count-surface-removed",
-    "private-mutation-count-gated-to-tests",
-    "canonical-cfg-test-adapter-proof",
-    "deterministic-source-package-kernel-preserved",
-    "sealed-confined-install-postimage-authority",
-    "runtime-install-authority-revalidation-preserved",
-    "descriptor-pinned-runtime-executable-authority-preserved",
-    "worker-result-v1-full-increment-inventory"
+    "deterministic repository package output",
+    "package/app-registry/discovery/install/cache/runtime identity separation",
+    "confined package publication and rollback authority",
+    "registry and discovery provenance separation",
+    "runtime descriptor pinning and current-install revalidation",
+    "adapter rollback refusal requeues exact authority",
+    "post-publication recovery authority restoration",
+    "host target confinement tracked source dependency",
+    "zero-write read/query/verification surfaces",
+    "source/package/distribution contract fixtures",
+    "receipt-only finalization self-exclusion"
   ],
   "generated_outputs": [
     "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json"
   ],
   "fixtures": [
+    "validator/src/distribution/host_effect/executor/tests/dual_failure_after_committed_publication_retains_identity_when_reobservation_is_unavailable.rs",
+    "validator/src/distribution/host_effect/executor/tests/mod.rs",
+    "validator/src/distribution/host_effect/executor/tests/positive_actual_publication_fsync_rename_ledger_and_ack_transaction_settles.rs",
+    "validator/src/distribution/host_effect/executor/tests/unrelated_record.rs",
+    "validator/src/distribution/host_effect/executor/tests/wrong_platform_handoff_never_executes_backend.rs",
+    "validator/src/distribution/host_effect/lifecycle/tests/mod.rs",
+    "validator/src/distribution/host_effect/lifecycle/tests/probe_target_lease_identity.rs",
+    "validator/src/distribution/host_effect/lifecycle/tests/recording_ledger_head.rs",
+    "validator/src/distribution/host_effect/lifecycle/tests/wrong/package_plan.rs",
+    "validator/src/distribution/host_effect/lifecycle/tests/wrong/rejected_primitive_adapters.rs",
+    "validator/src/distribution/package/product/tests/artifact_identity_fields.rs",
     "validator/src/distribution/package/product/tests/concurrent_output.rs",
     "validator/src/distribution/package/product/tests/every_artifact_binding_dimension_is_checked_before_output_effects.rs",
     "validator/src/distribution/package/product/tests/mod.rs",
@@ -601,6 +841,11 @@
     "validator/src/distribution/package/product/tests/repo.rs",
     "validator/src/distribution/package/product/tests/source_mutate_restore_during_publication_rolls_back_output.rs",
     "validator/src/distribution/package/product/tests/undeclared_secret_local_and_benign_skill_members_fail_closed.rs",
+    "validator/tests/distribution_contract/descriptor_cas.rs",
+    "validator/tests/distribution_contract/descriptor_races.rs",
+    "validator/tests/distribution_contract/descriptor_races/directory_ancestor_substitution_then_relocation_preserves_outside_tree.rs",
+    "validator/tests/distribution_contract/descriptor_races/next_outside.rs",
+    "validator/tests/distribution_contract/descriptor_races/tree_materialization_and_recovery_rename_races_preserve_outside_tree.rs",
     "validator/tests/distribution_contract/identity_ladder.rs",
     "validator/tests/distribution_contract/install.rs",
     "validator/tests/distribution_contract/install/automatic_and_explicit_rollbacks_preserve_concurrent_mutation.rs",
@@ -627,6 +872,8 @@
     "validator/tests/plugin_distribution_adapter_contract/recovery/partial_cache_failure_rolls_back_only_the_completed_install_prefix.rs",
     "validator/tests/plugin_distribution_adapter_contract/recovery/same_root_sibling_operation_cannot_issue_or_use_owner_token.rs",
     "validator/tests/plugin_distribution_adapter_contract/security.rs",
+    "validator/tests/supported_host_effect_executor_contract/cases.rs",
+    "validator/tests/supported_host_effect_executor_contract/executor_orders_command_publication_ledger_and_acknowledgement.rs",
     "validator/tests/supported_package_identity_contract.rs",
     "validator/tests/supported_package_identity_contract/confined_registry.rs",
     "validator/tests/supported_package_identity_contract/context.rs",
@@ -637,141 +884,201 @@
   "effects": [
     {
       "class": "workspace_write",
-      "target": "validator/src/plugin_product/distribution_adapter/**",
+      "target": "validator/src/distribution/**",
       "performed": true,
-      "scope": "authorized N04 production-caller repair"
+      "scope": "owned N04 distribution/package source repairs through accepted source head"
     },
     {
       "class": "workspace_write",
-      "target": "validator/tests/plugin_distribution_adapter_contract/**",
+      "target": "validator/src/package/**",
+      "performed": false,
+      "scope": "owned but not needed in final source increment"
+    },
+    {
+      "class": "workspace_write",
+      "target": "validator/tests/** distribution/package contracts",
       "performed": true,
-      "scope": "section-exclusive adapter tests"
+      "scope": "section-exclusive focused contracts and fixtures"
+    },
+    {
+      "class": "workspace_write",
+      "target": "validator/src/plugin_product/distribution_adapter/**",
+      "performed": true,
+      "scope": "explicit parent scope refresh for minimal production-caller rollback authority preservation"
     },
     {
       "class": "workspace_write",
       "target": "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json",
       "performed": true,
-      "scope": "evidence handoff receipt"
+      "scope": "receipt-only final WorkerResult refresh"
     },
     {
-      "class": "process",
-      "target": ".codex-worktree isolated Cargo target",
-      "performed": true
-    },
-    {
-      "class": "external_write",
-      "target": "live macOS package/install/cache/marketplace/app-registry/discovery/runtime surfaces",
-      "performed": false
+      "class": "external_or_live_host_effect",
+      "target": "macOS package/install/cache/marketplace/app-registry/discovery/runtime",
+      "performed": false,
+      "scope": "withheld; tests/source are not substituted for live surface proof"
     }
   ],
   "requirements": [
-    "exact accepted-base-to-source-head commit list",
-    "exact changed path inventory with deletions",
-    "every retained artifact sha256 and byte length",
+    "exact accepted base/source/final identity binding",
+    "coherent full commit list after accepted base",
+    "exact base-to-source changed path inventory with deletion rows",
+    "single-link regular-file artifact rows for retained source-head artifacts",
+    "reproducible path-bound aggregate hash",
+    "focused positive/negative/adversarial/race/interruption/recovery/repeat-use/security/false-pass evidence",
     "schema-valid WorkerResult-v1",
-    "adapter refusal requeues exact rollback transaction",
-    "same-operation retry after refusal",
-    "no public debug mutation-count surface",
-    "no custom cfg or duplicate module identity",
-    "focused positive negative race mutation security false-pass interruption recovery repeat-use checks",
-    "no readiness release completion claim"
+    "receipt-only final commit with accepted source as single parent",
+    "no source modification after parent source ACCEPT",
+    "explicit no readiness/release/completion/parent acceptance ceiling"
   ],
   "dependency_nodes": [
-    "accepted-integration-base-5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
-    "source-head-68ec86e95149ec43884d6abaeeff0688054a1dde",
+    "accepted-integration-base:5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
+    "source-parent:125f54bcd4820497d06ff36d1a90405a39bc1f5a",
+    "source-tree:b53918ab8ec00c7e84672181693607eb5253841c",
     "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
-    ".codex-worktree/env.sh"
+    ".codex-worktree/env.sh",
+    "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json"
   ],
   "changes": [
     {
-      "area": "adapter rollback refusal",
-      "result": "Production adapter restoration matches RollbackInstallError::Refused and pushes exact Mutation::Installed back before bounded AdapterError."
+      "area": "package identity",
+      "result": "Package publication authority sealed to verified repository output and journey binding; caller-forged package rows rejected."
     },
     {
-      "area": "adapter committed rollback failure",
-      "result": "RollbackInstallError::Committed maps to bounded adapter error without requeue."
+      "area": "app registry identity",
+      "result": "AppRegistry authority requires confined registry file observation; arbitrary in-memory bytes cannot promote identity."
     },
     {
-      "area": "lossy conversion removal",
-      "result": "AdapterError::distribution accepts DistributionError, avoiding authority-dropping From<RollbackInstallError> conversion."
+      "area": "discovery identity",
+      "result": "Discovery separated from AppRegistry and registry-visible substitution rejected in source contracts; live host discovery remains withheld."
     },
     {
-      "area": "public debug surface",
-      "result": "Removed DistributionLifecycleOperation::observed_mutation_count; adapter tests use state/tree/recovery assertions."
+      "area": "install/runtime authority",
+      "result": "Install snapshot retains confined postimage authority; runtime plan revalidates current install authority and pinned executable before/after execution."
     },
     {
-      "area": "private helper strictness",
-      "result": "Effects::mutation_count is cfg(test) only."
+      "area": "rollback authority",
+      "result": "Rollback refusal preserves authority for origin retry; adapter requeues refused mutation and distinguishes committed failures."
     },
     {
-      "area": "canonical cfg(test) proof",
-      "result": "plugin_product::distribution_adapter is available to canonical lib unit tests under cfg(test); no duplicate integration module identity or custom cfg."
+      "area": "host target source closure",
+      "result": "Ignored target/ implementation reconciled into tracked target.rs plus target_confinement modules."
     },
     {
-      "area": "adapter fixtures",
-      "result": "Adapter fixture uses CODEX_WORKTREE_TMP and FIFO special-object control."
+      "area": "post-publication recovery",
+      "result": "Restored typed post-publication terminal-transition observation-unavailable recovery handoff with binding verification and behavioral contract coverage."
+    },
+    {
+      "area": "receipt",
+      "result": "This WorkerResult refresh inventories all 129 base-to-source changed paths and self-excludes final receipt commit identity."
     }
   ],
   "commands_and_tests": [
     {
-      "command": ".codex/setup-worktree-env.sh && source .codex-worktree/env.sh",
+      "command": ".codex/setup-worktree-env.sh; source .codex-worktree/env.sh",
       "status": "pass",
-      "result": "Worktree env initialized; focused checks used isolated .codex-worktree roots."
+      "result": "Worktree environment existed and all verification commands were run from isolated .codex-worktree cargo/state/tmp roots.",
+      "surface": "environment"
     },
     {
-      "command": "git rev-parse HEAD && git rev-parse HEAD^{tree}",
+      "command": "git rev-parse HEAD && git rev-parse HEAD^{tree} && git status --short",
       "status": "pass",
-      "result": "Source head 68ec86e95149ec43884d6abaeeff0688054a1dde; source tree d2989138d24a4717fa19028da0f2a2728b7f4084."
+      "result": "Source freeze verified clean at 125f54bcd4820497d06ff36d1a90405a39bc1f5a / tree b53918ab8ec00c7e84672181693607eb5253841c before receipt generation.",
+      "surface": "source_identity"
     },
     {
-      "command": "git diff --name-status 5cc3be5f860de0071837f478bbe3a9de0d6c0e47..68ec86e95149ec43884d6abaeeff0688054a1dde",
+      "command": "git diff --name-status 5cc3be5f860de0071837f478bbe3a9de0d6c0e47..125f54bcd4820497d06ff36d1a90405a39bc1f5a",
       "status": "pass",
-      "result": "88 changed paths inventoried exactly; 1 deletion rows explicit."
+      "result": "129 changed paths inventoried from accepted base to source head; 1 deletion row explicit.",
+      "surface": "inventory"
     },
     {
-      "command": "source .codex-worktree/env.sh && RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --lib restore_refusal_requeues_installed_mutation_for_same_operation_retry --offline --jobs 16 -- --test-threads 1",
+      "command": "RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --test distribution_contract --offline --jobs 16",
       "status": "pass",
-      "result": "1 passed; 0 failed; 0 ignored; canonical cfg(test) adapter module proof only."
+      "result": "206 passed; 0 failed; 1 ignored; finished in 4.67s. Covers focused distribution positive/negative/race/runtime-session/source-law controls available under cap-lints.",
+      "surface": "focused_distribution_contract",
+      "log": "/tmp/n04_distribution_contract.log"
     },
     {
-      "command": "source .codex-worktree/env.sh && RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --test plugin_distribution_adapter_contract --offline --jobs 16 -- --test-threads 16",
+      "command": "RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --test plugin_distribution_adapter_contract --offline --jobs 16",
       "status": "pass",
-      "result": "14 passed; 0 failed; 0 ignored."
+      "result": "14 passed; 0 failed; 0 ignored; adapter refusal/recovery/security/repeat-use matrix passed.",
+      "surface": "adapter_contract",
+      "log": "/tmp/n04_plugin_distribution_adapter_contract.log"
     },
     {
-      "command": "source .codex-worktree/env.sh && RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --test distribution_contract --offline --jobs 16 -- --test-threads 16",
+      "command": "RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --test supported_package_identity_contract --offline --jobs 16",
       "status": "pass",
-      "result": "203 passed; 0 failed; 1 ignored."
+      "result": "4 passed; 0 failed; 0 ignored; supported package identity/decoder/typed surfaces passed.",
+      "surface": "package_identity_contract",
+      "log": "/tmp/n04_supported_package_identity_contract.log"
     },
     {
-      "command": "source .codex-worktree/env.sh && RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --test supported_package_identity_contract --offline --jobs 16 -- --test-threads 16",
+      "command": "RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --test supported_host_effect_executor_contract --offline --jobs 16",
       "status": "pass",
-      "result": "4 passed; 0 failed; 0 ignored."
+      "result": "7 passed; 0 failed; 0 ignored; restored post-publication recovery binding and split target source expansion passed.",
+      "surface": "host_effect_executor_contract",
+      "log": "/tmp/n04_supported_host_effect_executor_contract.log"
     },
     {
-      "command": "rustfmt --check over retained changed Rust paths",
+      "command": "RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --lib restore_refusal_requeues_installed_mutation_for_same_operation_retry --offline --jobs 16",
       "status": "pass",
-      "result": "86 retained changed Rust files formatted; no line-cap violations."
+      "result": "1 passed; 0 failed; exact adapter rollback refusal requeues installed mutation for retry.",
+      "surface": "rollback_recovery",
+      "log": "/tmp/n04_rollback_retry.log"
     },
     {
-      "command": "git diff --check -- scoped paths",
+      "command": "RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --lib executor_refuses_foreign_platform_handoff_without_backend_start --offline --jobs 16",
       "status": "pass",
-      "result": "No whitespace errors."
+      "result": "1 passed; 0 failed; foreign-platform descriptor handoff refuses with zero backend calls.",
+      "surface": "security_false_pass",
+      "log": "/tmp/n04_executor_handoff.log"
     },
     {
-      "command": "python3 scripts/check-python-source-laws .",
+      "command": "RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --lib registry_reader_race_refuses_changed_rows --offline --jobs 16",
       "status": "pass",
-      "result": "python source laws pass: 27 typed sources."
+      "result": "1 passed; 0 failed; test-only registry reader seam refuses changed rows without production visibility widening.",
+      "surface": "race_false_pass",
+      "log": "/tmp/n04_registry_reader_race.log"
     },
     {
-      "command": "read-only review after 499ea6210",
-      "status": "rework_then_repaired",
-      "result": "Reviewer found private mutation_count strict-warning issue; 68ec86e9 gates it with cfg(test)."
+      "command": "cargo fmt --manifest-path validator/Cargo.toml --check",
+      "status": "pass",
+      "result": "No rustfmt output.",
+      "surface": "formatting",
+      "log": "/tmp/n04_rustfmt_check.log"
     },
     {
-      "command": "candidate-wide strict cargo check",
+      "command": "python3 line cap scan over changed validator/*.rs files",
+      "status": "pass",
+      "result": "27 changed Rust files scanned; no file over 250 lines.",
+      "surface": "source_law"
+    },
+    {
+      "command": "rg -n 'validator/src/(distribution|package)/' /tmp/n04_lib_no_run_strict_current.log",
+      "status": "pass",
+      "result": "No N04-owned distribution/package diagnostics after strict lib no-run; strict command itself exits 101 on root/shared warning wall.",
+      "surface": "strict_partition",
+      "log": "/tmp/n04_lib_no_run_strict_current.log"
+    },
+    {
+      "command": "cargo test -p ultragoal --lib --no-run --offline --jobs 16",
       "status": "blocked",
-      "result": "Known root/shared diagnostic wall remains outside N04 scope; broad gates deferred to dependency-closed root checkpoint."
+      "result": "Exited 101 with 659 root/shared warning-as-error diagnostics outside N04-owned distribution/package scope.",
+      "surface": "strict_root_shared_wall",
+      "log": "/tmp/n04_lib_no_run_strict_current.log"
+    },
+    {
+      "command": "rg suppression/custom-cfg/public-debug scan across validator/src/distribution validator/src/package validator/tests/supported_host_effect_executor_contract",
+      "status": "pass",
+      "result": "No allow/expect/custom-cfg/observed_mutation_count/include target scan hits.",
+      "surface": "source_law"
+    },
+    {
+      "command": "git ls-files -o -i --exclude-standard validator/src/distribution validator/src/package",
+      "status": "pass",
+      "result": "No ignored untracked N04 source dependencies.",
+      "surface": "inventory"
     }
   ],
   "artifacts": [
@@ -780,25 +1087,27 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "d870e46a019f63b35df583879ef3921d1648ade522087619570638885e461c08",
-      "source_head_blob_bytes": 74464,
+      "source_head_blob_sha256": "sha256:f0faa9ae1835e7ec833046f071afaded8bc4759178b60b30602cff053bafeb16",
+      "source_head_blob_bytes": 78601,
       "file_type": "regular_file",
-      "worktree_inventory_file_type": "regular_file",
-      "worktree_inventory_link_count": 1,
-      "single_link_regular_file_verified": true,
+      "source_head_regular_file": true,
       "final_evidence_self_excluded": true,
-      "self_exclusion_reason": "WorkerResult is rewritten after source head; final evidence commit/tree/hash are reported outside this self-referential file."
+      "self_exclusion_reason": "WorkerResult is rewritten after source head; final evidence commit/tree/hash are reported outside this self-referential file.",
+      "source_head_blob_is_superseded_receipt_bytes": true
     },
     {
       "path": "validator/src/distribution/filesystem/file.rs",
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "156dc8a308602df59b3341c2cdc82d33ccacb1eeb3116e9fd37024b066038794",
+      "source_head_blob_sha256": "sha256:156dc8a308602df59b3341c2cdc82d33ccacb1eeb3116e9fd37024b066038794",
       "source_head_blob_bytes": 7223,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7223,
+      "worktree_inventory_sha256": "sha256:156dc8a308602df59b3341c2cdc82d33ccacb1eeb3116e9fd37024b066038794",
       "single_link_regular_file_verified": true
     },
     {
@@ -806,11 +1115,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "ba80c80e8cd7c7f61eecb2033ec24d385f156aac6fc9b4c8f0ac2e84c7141788",
+      "source_head_blob_sha256": "sha256:ba80c80e8cd7c7f61eecb2033ec24d385f156aac6fc9b4c8f0ac2e84c7141788",
       "source_head_blob_bytes": 8043,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 8043,
+      "worktree_inventory_sha256": "sha256:ba80c80e8cd7c7f61eecb2033ec24d385f156aac6fc9b4c8f0ac2e84c7141788",
       "single_link_regular_file_verified": true
     },
     {
@@ -818,11 +1130,44 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "c27cae7c48492e69b94273f2e8f7797ba328565d3000f20936ae20f523b99a2a",
+      "source_head_blob_sha256": "sha256:c27cae7c48492e69b94273f2e8f7797ba328565d3000f20936ae20f523b99a2a",
       "source_head_blob_bytes": 2249,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2249,
+      "worktree_inventory_sha256": "sha256:c27cae7c48492e69b94273f2e8f7797ba328565d3000f20936ae20f523b99a2a",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/filesystem/hooks.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:54e77044017f9dc1c6849bbafcac4f506912cfb6a1e5180b12810402a6680bfc",
+      "source_head_blob_bytes": 1614,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 1614,
+      "worktree_inventory_sha256": "sha256:54e77044017f9dc1c6849bbafcac4f506912cfb6a1e5180b12810402a6680bfc",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/filesystem/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:329b273232f3ed5bcfc708859884539c81bdd65b80578242777ac081ea4c15d0",
+      "source_head_blob_bytes": 383,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 383,
+      "worktree_inventory_sha256": "sha256:329b273232f3ed5bcfc708859884539c81bdd65b80578242777ac081ea4c15d0",
       "single_link_regular_file_verified": true
     },
     {
@@ -830,11 +1175,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "615be37c81cba72ca1bb7532f6a56156ec398ade661551221157925886ade0c3",
+      "source_head_blob_sha256": "sha256:615be37c81cba72ca1bb7532f6a56156ec398ade661551221157925886ade0c3",
       "source_head_blob_bytes": 4800,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 4800,
+      "worktree_inventory_sha256": "sha256:615be37c81cba72ca1bb7532f6a56156ec398ade661551221157925886ade0c3",
       "single_link_regular_file_verified": true
     },
     {
@@ -842,11 +1190,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "f6236f18b851cfa1c16dcc0da465ba2725584dac47b37386022570209d00e066",
+      "source_head_blob_sha256": "sha256:f6236f18b851cfa1c16dcc0da465ba2725584dac47b37386022570209d00e066",
       "source_head_blob_bytes": 5728,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 5728,
+      "worktree_inventory_sha256": "sha256:f6236f18b851cfa1c16dcc0da465ba2725584dac47b37386022570209d00e066",
       "single_link_regular_file_verified": true
     },
     {
@@ -854,11 +1205,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "c22b5c9c0752fb9458114bf48cffc23c2e974f2dce351bfe238b2166db72d5da",
+      "source_head_blob_sha256": "sha256:c22b5c9c0752fb9458114bf48cffc23c2e974f2dce351bfe238b2166db72d5da",
       "source_head_blob_bytes": 8132,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 8132,
+      "worktree_inventory_sha256": "sha256:c22b5c9c0752fb9458114bf48cffc23c2e974f2dce351bfe238b2166db72d5da",
       "single_link_regular_file_verified": true
     },
     {
@@ -866,11 +1220,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "6e9c3705682e84d0d896ca6b7694850fb29adccfeb90042fa2dafd0664c37803",
-      "source_head_blob_bytes": 8219,
+      "source_head_blob_sha256": "sha256:603599c1e69acbbf764c6612f2b273258cb4226ba06fd2c0436a42da3ddf0b6a",
+      "source_head_blob_bytes": 8108,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 8108,
+      "worktree_inventory_sha256": "sha256:603599c1e69acbbf764c6612f2b273258cb4226ba06fd2c0436a42da3ddf0b6a",
       "single_link_regular_file_verified": true
     },
     {
@@ -878,11 +1235,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "32b229059578d2bae133f758b858f3565225e00f5ea80868826590f3c9051a46",
+      "source_head_blob_sha256": "sha256:32b229059578d2bae133f758b858f3565225e00f5ea80868826590f3c9051a46",
       "source_head_blob_bytes": 412,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 412,
+      "worktree_inventory_sha256": "sha256:32b229059578d2bae133f758b858f3565225e00f5ea80868826590f3c9051a46",
       "single_link_regular_file_verified": true
     },
     {
@@ -890,11 +1250,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "e235090ee87e02c31a11bd2d036a4f4812a41e097e7a73793b3c60159a769c77",
+      "source_head_blob_sha256": "sha256:e235090ee87e02c31a11bd2d036a4f4812a41e097e7a73793b3c60159a769c77",
       "source_head_blob_bytes": 549,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 549,
+      "worktree_inventory_sha256": "sha256:e235090ee87e02c31a11bd2d036a4f4812a41e097e7a73793b3c60159a769c77",
       "single_link_regular_file_verified": true
     },
     {
@@ -902,11 +1265,74 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "e716eb5945d9b29931bccc17987fd200d57fe3e1ea7743df7a6d97f102c7debd",
-      "source_head_blob_bytes": 2763,
+      "source_head_blob_sha256": "sha256:f415e8f703acd6eaa88c20df323ed3e90ba3406929dcc617786bc79c096b24ef",
+      "source_head_blob_bytes": 2427,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2427,
+      "worktree_inventory_sha256": "sha256:f415e8f703acd6eaa88c20df323ed3e90ba3406929dcc617786bc79c096b24ef",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/model/execution_policy/strict.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:805495c8121049fc01d99baf89b6ea03b148fb7f11db573998617ef7494c4db6",
+      "source_head_blob_bytes": 6244,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 6244,
+      "worktree_inventory_sha256": "sha256:805495c8121049fc01d99baf89b6ea03b148fb7f11db573998617ef7494c4db6",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/model/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:28b6f685f0738132c9abdfb218b45a0649cf10fbde1af68ba68460d498b01549",
+      "source_head_blob_bytes": 790,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 790,
+      "worktree_inventory_sha256": "sha256:28b6f685f0738132c9abdfb218b45a0649cf10fbde1af68ba68460d498b01549",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/model/recovery_handoff/substitution_test.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:f1ee79912a4d3035a491bf714bf93f4525cf55963002a20fab1c3e968b64124b",
+      "source_head_blob_bytes": 4392,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 4392,
+      "worktree_inventory_sha256": "sha256:f1ee79912a4d3035a491bf714bf93f4525cf55963002a20fab1c3e968b64124b",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/publication/failure.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:718ce72fb9519dbb39d7421ee1d45016d3e4d52fd7ca18a8e036dd5492b57d39",
+      "source_head_blob_bytes": 7435,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7435,
+      "worktree_inventory_sha256": "sha256:718ce72fb9519dbb39d7421ee1d45016d3e4d52fd7ca18a8e036dd5492b57d39",
       "single_link_regular_file_verified": true
     },
     {
@@ -914,11 +1340,389 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "4f94cc10e1332c23e2d9bdec7d275328c46ea0253a3430cb25f3f2034cf7c89a",
-      "source_head_blob_bytes": 8808,
+      "source_head_blob_sha256": "sha256:f86dce63b04b06ae03f3b5fd699c4d066465c869e37745f2fee322978d712baf",
+      "source_head_blob_bytes": 1296,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 1296,
+      "worktree_inventory_sha256": "sha256:f86dce63b04b06ae03f3b5fd699c4d066465c869e37745f2fee322978d712baf",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/target_confinement/binding.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:d03270dc79c9e18de1e025581615c8483376b2c35f44dfd4de429c42a4786206",
+      "source_head_blob_bytes": 7166,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7166,
+      "worktree_inventory_sha256": "sha256:d03270dc79c9e18de1e025581615c8483376b2c35f44dfd4de429c42a4786206",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/target_confinement/name_validation.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:88be531b1c894e7c68f9dee6cd9c0e87a6b9e46f5bf7a501eac1385b24c601be",
+      "source_head_blob_bytes": 2851,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2851,
+      "worktree_inventory_sha256": "sha256:88be531b1c894e7c68f9dee6cd9c0e87a6b9e46f5bf7a501eac1385b24c601be",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/target_confinement/names.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:c4954767130e9a2c92935f7946f506783c74ef4a4809f5dd13494cbb028ae533",
+      "source_head_blob_bytes": 6391,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 6391,
+      "worktree_inventory_sha256": "sha256:c4954767130e9a2c92935f7946f506783c74ef4a4809f5dd13494cbb028ae533",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/target_confinement/observation_generation.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:88c379b97f6a0da2d2db0ad8a88f39b10d5b1f6a1dfc8a3be9e7dd39f539994d",
+      "source_head_blob_bytes": 5592,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 5592,
+      "worktree_inventory_sha256": "sha256:88c379b97f6a0da2d2db0ad8a88f39b10d5b1f6a1dfc8a3be9e7dd39f539994d",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/target_confinement/publication.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:c423561c0bf7cf66e95df86e34e7cfbb22ba3cd8ed20d4ca208a4b2b4d2844bb",
+      "source_head_blob_bytes": 7654,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7654,
+      "worktree_inventory_sha256": "sha256:c423561c0bf7cf66e95df86e34e7cfbb22ba3cd8ed20d4ca208a4b2b4d2844bb",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/target_confinement/reobservation_failure.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:f5f3a74b27266b4c1fe5294883d008a4cdffc468c2556d64207deada5d8ddc77",
+      "source_head_blob_bytes": 7341,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7341,
+      "worktree_inventory_sha256": "sha256:f5f3a74b27266b4c1fe5294883d008a4cdffc468c2556d64207deada5d8ddc77",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/target_confinement/root_prefix.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:28ccbd615cbd01ff8fd9529d200e6b4558191eb6904fd33f7e6e1054ab5db987",
+      "source_head_blob_bytes": 1709,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 1709,
+      "worktree_inventory_sha256": "sha256:28ccbd615cbd01ff8fd9529d200e6b4558191eb6904fd33f7e6e1054ab5db987",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/target_confinement/run_fault.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:f35d88daf78a1330ba5cbfcd4767005d80c3ea1a78dfdafd4172cfcdd0a4e737",
+      "source_head_blob_bytes": 581,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 581,
+      "worktree_inventory_sha256": "sha256:f35d88daf78a1330ba5cbfcd4767005d80c3ea1a78dfdafd4172cfcdd0a4e737",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/tests/dual_failure_after_committed_publication_retains_identity_when_reobservation_is_unavailable.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:dfca4b64e0849c19540cab3ebcce7ba974841cf7bdda38598cbc46c1eac8b157",
+      "source_head_blob_bytes": 7905,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7905,
+      "worktree_inventory_sha256": "sha256:dfca4b64e0849c19540cab3ebcce7ba974841cf7bdda38598cbc46c1eac8b157",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/tests/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:e5e6bd4986f846c3718385ad5f273cac1f53a8f159b646f8f485e4bd3df34d15",
+      "source_head_blob_bytes": 2794,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2794,
+      "worktree_inventory_sha256": "sha256:e5e6bd4986f846c3718385ad5f273cac1f53a8f159b646f8f485e4bd3df34d15",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/tests/positive_actual_publication_fsync_rename_ledger_and_ack_transaction_settles.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:03f631cb7dbfccb2fa6be73af609aecd5f6d187b4ab577517458b639db1daa4e",
+      "source_head_blob_bytes": 6322,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 6322,
+      "worktree_inventory_sha256": "sha256:03f631cb7dbfccb2fa6be73af609aecd5f6d187b4ab577517458b639db1daa4e",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/tests/unrelated_record.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:4cad672026a4bc284b4d151920471c90a050caf11358aa484f0a9412b56dce05",
+      "source_head_blob_bytes": 5883,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 5883,
+      "worktree_inventory_sha256": "sha256:4cad672026a4bc284b4d151920471c90a050caf11358aa484f0a9412b56dce05",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/tests/wrong_platform_handoff_never_executes_backend.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:3a8cd7bf869e08f49f8c58bc698baab3eeba49484fb29713eca4a918d02576e0",
+      "source_head_blob_bytes": 4441,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 4441,
+      "worktree_inventory_sha256": "sha256:3a8cd7bf869e08f49f8c58bc698baab3eeba49484fb29713eca4a918d02576e0",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/host_effect_ledger_error_new.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:a17f6c38bd4ebecf532db5c3963bc07fc55ecac8c1722f687c0c1b8424ea5ed5",
+      "source_head_blob_bytes": 6023,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 6023,
+      "worktree_inventory_sha256": "sha256:a17f6c38bd4ebecf532db5c3963bc07fc55ecac8c1722f687c0c1b8424ea5ed5",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/binding/accepted/derived_binding.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:44b48b4fface71a730b6d631b5fbb1c0ab32a493145c90c872ea0cdc37a343a3",
+      "source_head_blob_bytes": 6346,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 6346,
+      "worktree_inventory_sha256": "sha256:44b48b4fface71a730b6d631b5fbb1c0ab32a493145c90c872ea0cdc37a343a3",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/binding/accepted/effect.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:c182568e3eb48839f7652bca2ddc25b837d485b8e4ed0ba819ab38ed06711780",
+      "source_head_blob_bytes": 7645,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7645,
+      "worktree_inventory_sha256": "sha256:c182568e3eb48839f7652bca2ddc25b837d485b8e4ed0ba819ab38ed06711780",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/coordinator/supported/recovery_proposal.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:ad9feb86117e11a9cb1228c09c12e042b69867fd836b69e093c38440cfd882a9",
+      "source_head_blob_bytes": 4528,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 4528,
+      "worktree_inventory_sha256": "sha256:ad9feb86117e11a9cb1228c09c12e042b69867fd836b69e093c38440cfd882a9",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:08a34c57853dbbc44945cf0da324d3521848a4e0d2c4148c9997f513049d7798",
+      "source_head_blob_bytes": 2731,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2731,
+      "worktree_inventory_sha256": "sha256:08a34c57853dbbc44945cf0da324d3521848a4e0d2c4148c9997f513049d7798",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/tests/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:6128efe60d14ddb75ee44f0dc00f2d97db8805ab0562946fe400776541c4f92d",
+      "source_head_blob_bytes": 1505,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 1505,
+      "worktree_inventory_sha256": "sha256:6128efe60d14ddb75ee44f0dc00f2d97db8805ab0562946fe400776541c4f92d",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/tests/probe_target_lease_identity.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:bf2e5b0eef39bf58f02afd45275482a7dce81ac5405c86f733e82baa190e7186",
+      "source_head_blob_bytes": 7769,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7769,
+      "worktree_inventory_sha256": "sha256:bf2e5b0eef39bf58f02afd45275482a7dce81ac5405c86f733e82baa190e7186",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/tests/recording_ledger_head.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:c76a85a018ca0acdf81e47b19471c9201a72b7aad25dab0b4bf30b3325db5644",
+      "source_head_blob_bytes": 5222,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 5222,
+      "worktree_inventory_sha256": "sha256:c76a85a018ca0acdf81e47b19471c9201a72b7aad25dab0b4bf30b3325db5644",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/tests/wrong/package_plan.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:c4ebffed08ff39c7ac2eebaca90545f3f751032c4e7d143c860dacab85e336f4",
+      "source_head_blob_bytes": 8551,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 8551,
+      "worktree_inventory_sha256": "sha256:c4ebffed08ff39c7ac2eebaca90545f3f751032c4e7d143c860dacab85e336f4",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/lifecycle/tests/wrong/rejected_primitive_adapters.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:0c26232a3f708b91ada6f91c913b267440599de5bc8c4c806c4bcbe28cba29f0",
+      "source_head_blob_bytes": 837,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 837,
+      "worktree_inventory_sha256": "sha256:0c26232a3f708b91ada6f91c913b267440599de5bc8c4c806c4bcbe28cba29f0",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/max_pinned_executable_bytes.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:31234e8ecdc54e0d6a027915578010c29db004f582fd3d864798741de06ba07a",
+      "source_head_blob_bytes": 5404,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 5404,
+      "worktree_inventory_sha256": "sha256:31234e8ecdc54e0d6a027915578010c29db004f582fd3d864798741de06ba07a",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:fec1c7b434ba15087ac8e45b8e8011dab89518c2d48b6dc6b6702ce18d1b1b48",
+      "source_head_blob_bytes": 1089,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 1089,
+      "worktree_inventory_sha256": "sha256:fec1c7b434ba15087ac8e45b8e8011dab89518c2d48b6dc6b6702ce18d1b1b48",
       "single_link_regular_file_verified": true
     },
     {
@@ -926,11 +1730,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "98b2075924dac523611a5d4a64a65dfbbd400ddb0f31fac5730aadbd94b18117",
+      "source_head_blob_sha256": "sha256:98b2075924dac523611a5d4a64a65dfbbd400ddb0f31fac5730aadbd94b18117",
       "source_head_blob_bytes": 4417,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 4417,
+      "worktree_inventory_sha256": "sha256:98b2075924dac523611a5d4a64a65dfbbd400ddb0f31fac5730aadbd94b18117",
       "single_link_regular_file_verified": true
     },
     {
@@ -938,11 +1745,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "aed9d56f3cf8f33d5aeb18086532aeacfd630f39652d85876496657b9943db93",
+      "source_head_blob_sha256": "sha256:aed9d56f3cf8f33d5aeb18086532aeacfd630f39652d85876496657b9943db93",
       "source_head_blob_bytes": 2867,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2867,
+      "worktree_inventory_sha256": "sha256:aed9d56f3cf8f33d5aeb18086532aeacfd630f39652d85876496657b9943db93",
       "single_link_regular_file_verified": true
     },
     {
@@ -950,11 +1760,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "d20f16225cab874bd8e804ae93f126be64e533897166982af3078ff9e58cc3d9",
+      "source_head_blob_sha256": "sha256:d20f16225cab874bd8e804ae93f126be64e533897166982af3078ff9e58cc3d9",
       "source_head_blob_bytes": 447,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 447,
+      "worktree_inventory_sha256": "sha256:d20f16225cab874bd8e804ae93f126be64e533897166982af3078ff9e58cc3d9",
       "single_link_regular_file_verified": true
     },
     {
@@ -962,11 +1775,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "042893a28223759cdbf1af5af2202a316aef0aceea8aa7a9ca8689894883c1e7",
+      "source_head_blob_sha256": "sha256:042893a28223759cdbf1af5af2202a316aef0aceea8aa7a9ca8689894883c1e7",
       "source_head_blob_bytes": 1377,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 1377,
+      "worktree_inventory_sha256": "sha256:042893a28223759cdbf1af5af2202a316aef0aceea8aa7a9ca8689894883c1e7",
       "single_link_regular_file_verified": true
     },
     {
@@ -974,11 +1790,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "d4cb86e11c539c405a0ebedf0a246f5a9aad8880936c04be982245bb9f55af31",
+      "source_head_blob_sha256": "sha256:d4cb86e11c539c405a0ebedf0a246f5a9aad8880936c04be982245bb9f55af31",
       "source_head_blob_bytes": 8463,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 8463,
+      "worktree_inventory_sha256": "sha256:d4cb86e11c539c405a0ebedf0a246f5a9aad8880936c04be982245bb9f55af31",
       "single_link_regular_file_verified": true
     },
     {
@@ -986,11 +1805,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "49ae1726475d955441fb70c8605c243c0e665b4cd14faa6fdf924b9156dd235f",
+      "source_head_blob_sha256": "sha256:49ae1726475d955441fb70c8605c243c0e665b4cd14faa6fdf924b9156dd235f",
       "source_head_blob_bytes": 2206,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2206,
+      "worktree_inventory_sha256": "sha256:49ae1726475d955441fb70c8605c243c0e665b4cd14faa6fdf924b9156dd235f",
       "single_link_regular_file_verified": true
     },
     {
@@ -998,11 +1820,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "73437080623cac5cbf8670b7e582a6d73cc9b9643f3da5a2637c63690a72db6b",
+      "source_head_blob_sha256": "sha256:73437080623cac5cbf8670b7e582a6d73cc9b9643f3da5a2637c63690a72db6b",
       "source_head_blob_bytes": 5217,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 5217,
+      "worktree_inventory_sha256": "sha256:73437080623cac5cbf8670b7e582a6d73cc9b9643f3da5a2637c63690a72db6b",
       "single_link_regular_file_verified": true
     },
     {
@@ -1010,11 +1835,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "3f76acb2bfc8fe1d44dce04f5183bb87bd3a09f32fffbc73dc025a9e36a747dd",
+      "source_head_blob_sha256": "sha256:3f76acb2bfc8fe1d44dce04f5183bb87bd3a09f32fffbc73dc025a9e36a747dd",
       "source_head_blob_bytes": 478,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 478,
+      "worktree_inventory_sha256": "sha256:3f76acb2bfc8fe1d44dce04f5183bb87bd3a09f32fffbc73dc025a9e36a747dd",
       "single_link_regular_file_verified": true
     },
     {
@@ -1022,11 +1850,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "0d9d445af44e4316b94433381706acf5032b538a0738d793f6c3ad75efd6e403",
+      "source_head_blob_sha256": "sha256:0d9d445af44e4316b94433381706acf5032b538a0738d793f6c3ad75efd6e403",
       "source_head_blob_bytes": 1127,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 1127,
+      "worktree_inventory_sha256": "sha256:0d9d445af44e4316b94433381706acf5032b538a0738d793f6c3ad75efd6e403",
       "single_link_regular_file_verified": true
     },
     {
@@ -1034,11 +1865,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "7833fa0f4dddb58b53c024964523d1f0d2484d42703fd1cbcd12dc242e8a26a3",
+      "source_head_blob_sha256": "sha256:7833fa0f4dddb58b53c024964523d1f0d2484d42703fd1cbcd12dc242e8a26a3",
       "source_head_blob_bytes": 7961,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7961,
+      "worktree_inventory_sha256": "sha256:7833fa0f4dddb58b53c024964523d1f0d2484d42703fd1cbcd12dc242e8a26a3",
       "single_link_regular_file_verified": true
     },
     {
@@ -1046,11 +1880,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "adddd17ab5f4545a8bb3153ff58d4cc54276cdafb5c3325b09fa322985772689",
+      "source_head_blob_sha256": "sha256:adddd17ab5f4545a8bb3153ff58d4cc54276cdafb5c3325b09fa322985772689",
       "source_head_blob_bytes": 5270,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 5270,
+      "worktree_inventory_sha256": "sha256:adddd17ab5f4545a8bb3153ff58d4cc54276cdafb5c3325b09fa322985772689",
       "single_link_regular_file_verified": true
     },
     {
@@ -1058,11 +1895,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "c7fc5aa9a39d2e59cfa19eb924a31dfba74d2202ed987a464fc1aa9eeed4c13d",
-      "source_head_blob_bytes": 3333,
+      "source_head_blob_sha256": "sha256:aef3b8355fe2565e81c7f49c6976e607aaa69c4edf398155281e01594a9cf0cd",
+      "source_head_blob_bytes": 3282,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 3282,
+      "worktree_inventory_sha256": "sha256:aef3b8355fe2565e81c7f49c6976e607aaa69c4edf398155281e01594a9cf0cd",
       "single_link_regular_file_verified": true
     },
     {
@@ -1070,11 +1910,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "0da774c5bf7516018153a42174240edb981e2aa412f2e4fe31338a43f3b80647",
+      "source_head_blob_sha256": "sha256:0da774c5bf7516018153a42174240edb981e2aa412f2e4fe31338a43f3b80647",
       "source_head_blob_bytes": 6350,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 6350,
+      "worktree_inventory_sha256": "sha256:0da774c5bf7516018153a42174240edb981e2aa412f2e4fe31338a43f3b80647",
       "single_link_regular_file_verified": true
     },
     {
@@ -1082,11 +1925,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "84b4a1e79796c9357ca380318d6fccdaa053c7b0ae373963186e571b201707f0",
+      "source_head_blob_sha256": "sha256:84b4a1e79796c9357ca380318d6fccdaa053c7b0ae373963186e571b201707f0",
       "source_head_blob_bytes": 3178,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 3178,
+      "worktree_inventory_sha256": "sha256:84b4a1e79796c9357ca380318d6fccdaa053c7b0ae373963186e571b201707f0",
       "single_link_regular_file_verified": true
     },
     {
@@ -1094,11 +1940,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "ffe1f5aec4a6efa61531d7922ca53de5c806b804f07b2ad4653e097cfcd19f49",
+      "source_head_blob_sha256": "sha256:ffe1f5aec4a6efa61531d7922ca53de5c806b804f07b2ad4653e097cfcd19f49",
       "source_head_blob_bytes": 2915,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2915,
+      "worktree_inventory_sha256": "sha256:ffe1f5aec4a6efa61531d7922ca53de5c806b804f07b2ad4653e097cfcd19f49",
       "single_link_regular_file_verified": true
     },
     {
@@ -1106,11 +1955,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "d55b252285dc7ad0084b92fd1b7856a279f5b6e35994c27b7febce547721d35d",
+      "source_head_blob_sha256": "sha256:d55b252285dc7ad0084b92fd1b7856a279f5b6e35994c27b7febce547721d35d",
       "source_head_blob_bytes": 2371,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2371,
+      "worktree_inventory_sha256": "sha256:d55b252285dc7ad0084b92fd1b7856a279f5b6e35994c27b7febce547721d35d",
       "single_link_regular_file_verified": true
     },
     {
@@ -1118,11 +1970,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "986866a522e082baa205db33e201ed8f691470a14ef1c562f5d7dfa2b2f90a7c",
+      "source_head_blob_sha256": "sha256:986866a522e082baa205db33e201ed8f691470a14ef1c562f5d7dfa2b2f90a7c",
       "source_head_blob_bytes": 9041,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 9041,
+      "worktree_inventory_sha256": "sha256:986866a522e082baa205db33e201ed8f691470a14ef1c562f5d7dfa2b2f90a7c",
       "single_link_regular_file_verified": true
     },
     {
@@ -1130,11 +1985,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "d65594e4ee01504031e9f45b474b4e31ec72c809895c77670f97986bb6d6f81c",
+      "source_head_blob_sha256": "sha256:d65594e4ee01504031e9f45b474b4e31ec72c809895c77670f97986bb6d6f81c",
       "source_head_blob_bytes": 880,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 880,
+      "worktree_inventory_sha256": "sha256:d65594e4ee01504031e9f45b474b4e31ec72c809895c77670f97986bb6d6f81c",
       "single_link_regular_file_verified": true
     },
     {
@@ -1142,11 +2000,29 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "db23a2562269dee7276535609b499ae4ce4debcf337ef2de66177dd7ff7dd963",
+      "source_head_blob_sha256": "sha256:db23a2562269dee7276535609b499ae4ce4debcf337ef2de66177dd7ff7dd963",
       "source_head_blob_bytes": 6240,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 6240,
+      "worktree_inventory_sha256": "sha256:db23a2562269dee7276535609b499ae4ce4debcf337ef2de66177dd7ff7dd963",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/package/product/tests/artifact_identity_fields.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:c72b286450cc2e2082c9d643a43844a45b272385fe2d9563efe0592a5a17bb18",
+      "source_head_blob_bytes": 769,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 769,
+      "worktree_inventory_sha256": "sha256:c72b286450cc2e2082c9d643a43844a45b272385fe2d9563efe0592a5a17bb18",
       "single_link_regular_file_verified": true
     },
     {
@@ -1154,21 +2030,24 @@
       "status": "D",
       "retained": false,
       "deleted": true,
-      "source_head_blob_sha256": "deleted",
-      "source_head_blob_bytes": "deleted",
+      "source_head_blob_sha256": null,
+      "source_head_blob_bytes": 0,
       "file_type": "deleted",
-      "single_link_regular_file_verified": "deleted"
+      "single_link_regular_file_verified": false
     },
     {
       "path": "validator/src/distribution/package/product/tests/every_artifact_binding_dimension_is_checked_before_output_effects.rs",
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "45634c86280db61d5c1e4c83ba0aae6ca4e656889c8245313ab1e86dc0d731bb",
+      "source_head_blob_sha256": "sha256:45634c86280db61d5c1e4c83ba0aae6ca4e656889c8245313ab1e86dc0d731bb",
       "source_head_blob_bytes": 7515,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7515,
+      "worktree_inventory_sha256": "sha256:45634c86280db61d5c1e4c83ba0aae6ca4e656889c8245313ab1e86dc0d731bb",
       "single_link_regular_file_verified": true
     },
     {
@@ -1176,11 +2055,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "c5c19df0173e6d1b02075df8071ae102a4548338bc550f63badae5a171ecfeb0",
-      "source_head_blob_bytes": 1043,
+      "source_head_blob_sha256": "sha256:405f89d045c5cbd51ea3922e6d93a123883d7b3b3e7298fce7754698c0c79b11",
+      "source_head_blob_bytes": 1085,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 1085,
+      "worktree_inventory_sha256": "sha256:405f89d045c5cbd51ea3922e6d93a123883d7b3b3e7298fce7754698c0c79b11",
       "single_link_regular_file_verified": true
     },
     {
@@ -1188,11 +2070,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "5337cf18fb0d82de0845a01f0538924c072f8e93f2c0b6068633f4ea8467e3cd",
+      "source_head_blob_sha256": "sha256:5337cf18fb0d82de0845a01f0538924c072f8e93f2c0b6068633f4ea8467e3cd",
       "source_head_blob_bytes": 2322,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2322,
+      "worktree_inventory_sha256": "sha256:5337cf18fb0d82de0845a01f0538924c072f8e93f2c0b6068633f4ea8467e3cd",
       "single_link_regular_file_verified": true
     },
     {
@@ -1200,11 +2085,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "925f04bd5f3d18efbb18da536c3c087adc57a31e3ab3cdda00d6bc4bf217704a",
+      "source_head_blob_sha256": "sha256:925f04bd5f3d18efbb18da536c3c087adc57a31e3ab3cdda00d6bc4bf217704a",
       "source_head_blob_bytes": 5097,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 5097,
+      "worktree_inventory_sha256": "sha256:925f04bd5f3d18efbb18da536c3c087adc57a31e3ab3cdda00d6bc4bf217704a",
       "single_link_regular_file_verified": true
     },
     {
@@ -1212,11 +2100,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "4515ec43a09752bebde53eb61ee5fb45206ca88f74ca46ea18a69cb4b71e86e9",
+      "source_head_blob_sha256": "sha256:4515ec43a09752bebde53eb61ee5fb45206ca88f74ca46ea18a69cb4b71e86e9",
       "source_head_blob_bytes": 5942,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 5942,
+      "worktree_inventory_sha256": "sha256:4515ec43a09752bebde53eb61ee5fb45206ca88f74ca46ea18a69cb4b71e86e9",
       "single_link_regular_file_verified": true
     },
     {
@@ -1224,11 +2115,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "058b2274f9341bfc697d4222475c6b2dc436e31beb1ea7f437727505107aef0a",
+      "source_head_blob_sha256": "sha256:058b2274f9341bfc697d4222475c6b2dc436e31beb1ea7f437727505107aef0a",
       "source_head_blob_bytes": 8287,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 8287,
+      "worktree_inventory_sha256": "sha256:058b2274f9341bfc697d4222475c6b2dc436e31beb1ea7f437727505107aef0a",
       "single_link_regular_file_verified": true
     },
     {
@@ -1236,11 +2130,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "2d20e465f7ed8ca140c134ba71be20198a37262f43bbaf077f91d5d3f136df0a",
-      "source_head_blob_bytes": 567,
+      "source_head_blob_sha256": "sha256:d03d0a9087359a99743811db3ecb64b3297be7db57f7777c24f37fb5cefc2f54",
+      "source_head_blob_bytes": 613,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 613,
+      "worktree_inventory_sha256": "sha256:d03d0a9087359a99743811db3ecb64b3297be7db57f7777c24f37fb5cefc2f54",
       "single_link_regular_file_verified": true
     },
     {
@@ -1248,11 +2145,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "3f214d5d72fad043255298ef3db4e95ca3e61c1b7e3dbf72e3c43793fc633efa",
+      "source_head_blob_sha256": "sha256:3f214d5d72fad043255298ef3db4e95ca3e61c1b7e3dbf72e3c43793fc633efa",
       "source_head_blob_bytes": 3708,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 3708,
+      "worktree_inventory_sha256": "sha256:3f214d5d72fad043255298ef3db4e95ca3e61c1b7e3dbf72e3c43793fc633efa",
       "single_link_regular_file_verified": true
     },
     {
@@ -1260,11 +2160,29 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "9b2f369b904f764ab822d59d56770896f4e65a764448fa028674418183c5b95c",
-      "source_head_blob_bytes": 7906,
+      "source_head_blob_sha256": "sha256:7120fb515c0668c4a3e084e223b2e189903ea4a54eebe38e654bacda138aa48e",
+      "source_head_blob_bytes": 7849,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7849,
+      "worktree_inventory_sha256": "sha256:7120fb515c0668c4a3e084e223b2e189903ea4a54eebe38e654bacda138aa48e",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/registry_observation/registry_reader_race_tests.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:20c99eab937843e38a6bc6756590857e5fea03e8032d0f5e9ad10e3cfe6ef114",
+      "source_head_blob_bytes": 2478,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2478,
+      "worktree_inventory_sha256": "sha256:20c99eab937843e38a6bc6756590857e5fea03e8032d0f5e9ad10e3cfe6ef114",
       "single_link_regular_file_verified": true
     },
     {
@@ -1272,11 +2190,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "eddb2616de4a7bb310c70737412f2d710827cb62c109f6b710e69125d75c8e9b",
-      "source_head_blob_bytes": 1904,
+      "source_head_blob_sha256": "sha256:88d2d490aacfea495f891f4bde8a8200288c836346ac44528760a9dcacb71f78",
+      "source_head_blob_bytes": 1707,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 1707,
+      "worktree_inventory_sha256": "sha256:88d2d490aacfea495f891f4bde8a8200288c836346ac44528760a9dcacb71f78",
       "single_link_regular_file_verified": true
     },
     {
@@ -1284,11 +2205,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "13a43033e6781569c5a75dfe08720fe369141f9affae1d485e5b07410af2db65",
+      "source_head_blob_sha256": "sha256:13a43033e6781569c5a75dfe08720fe369141f9affae1d485e5b07410af2db65",
       "source_head_blob_bytes": 941,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 941,
+      "worktree_inventory_sha256": "sha256:13a43033e6781569c5a75dfe08720fe369141f9affae1d485e5b07410af2db65",
       "single_link_regular_file_verified": true
     },
     {
@@ -1296,11 +2220,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "07102c09bcdc6363dae891000f9fb8d1a3a32d87734f313d3237f65cc63cd7ff",
+      "source_head_blob_sha256": "sha256:07102c09bcdc6363dae891000f9fb8d1a3a32d87734f313d3237f65cc63cd7ff",
       "source_head_blob_bytes": 6499,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 6499,
+      "worktree_inventory_sha256": "sha256:07102c09bcdc6363dae891000f9fb8d1a3a32d87734f313d3237f65cc63cd7ff",
       "single_link_regular_file_verified": true
     },
     {
@@ -1308,11 +2235,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "e5e7be2422e0c4a813d3a6e59bfb585a4e2f8cc99b6b032ba7c497044b4ca381",
+      "source_head_blob_sha256": "sha256:e5e7be2422e0c4a813d3a6e59bfb585a4e2f8cc99b6b032ba7c497044b4ca381",
       "source_head_blob_bytes": 7693,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7693,
+      "worktree_inventory_sha256": "sha256:e5e7be2422e0c4a813d3a6e59bfb585a4e2f8cc99b6b032ba7c497044b4ca381",
       "single_link_regular_file_verified": true
     },
     {
@@ -1320,11 +2250,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "9620cde8f01400ddc46c0958c6c759c4ca3d2e171b26dbe7e8c00f57bd984d42",
+      "source_head_blob_sha256": "sha256:9620cde8f01400ddc46c0958c6c759c4ca3d2e171b26dbe7e8c00f57bd984d42",
       "source_head_blob_bytes": 1150,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 1150,
+      "worktree_inventory_sha256": "sha256:9620cde8f01400ddc46c0958c6c759c4ca3d2e171b26dbe7e8c00f57bd984d42",
       "single_link_regular_file_verified": true
     },
     {
@@ -1332,11 +2265,29 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "f1de2f5cb22b1e83102ca042187af40a37998f0524d6e0fdfc29206b64158d10",
+      "source_head_blob_sha256": "sha256:f1de2f5cb22b1e83102ca042187af40a37998f0524d6e0fdfc29206b64158d10",
       "source_head_blob_bytes": 321,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 321,
+      "worktree_inventory_sha256": "sha256:f1de2f5cb22b1e83102ca042187af40a37998f0524d6e0fdfc29206b64158d10",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/spec/request_limit.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:fff6aab50d7e899bcba15fbd55939e0f467ced01515b9a62ceeaa2a657d215eb",
+      "source_head_blob_bytes": 4344,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 4344,
+      "worktree_inventory_sha256": "sha256:fff6aab50d7e899bcba15fbd55939e0f467ced01515b9a62ceeaa2a657d215eb",
       "single_link_regular_file_verified": true
     },
     {
@@ -1344,11 +2295,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "0362c3853f91e4e4fef6ce1e885f9893f40cd55358c698ad31ae476bdc38d0bd",
+      "source_head_blob_sha256": "sha256:0362c3853f91e4e4fef6ce1e885f9893f40cd55358c698ad31ae476bdc38d0bd",
       "source_head_blob_bytes": 3705,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 3705,
+      "worktree_inventory_sha256": "sha256:0362c3853f91e4e4fef6ce1e885f9893f40cd55358c698ad31ae476bdc38d0bd",
       "single_link_regular_file_verified": true
     },
     {
@@ -1356,11 +2310,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "95860fd1035fbb792a44f7aa4809afdea7a3882b6c97a08e944917b68d3a7ee1",
+      "source_head_blob_sha256": "sha256:95860fd1035fbb792a44f7aa4809afdea7a3882b6c97a08e944917b68d3a7ee1",
       "source_head_blob_bytes": 557,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 557,
+      "worktree_inventory_sha256": "sha256:95860fd1035fbb792a44f7aa4809afdea7a3882b6c97a08e944917b68d3a7ee1",
       "single_link_regular_file_verified": true
     },
     {
@@ -1368,11 +2325,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "526612a9909224b7079155b7fb4a24d9167ac01268596c874ba24d100bc18546",
+      "source_head_blob_sha256": "sha256:526612a9909224b7079155b7fb4a24d9167ac01268596c874ba24d100bc18546",
       "source_head_blob_bytes": 1985,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 1985,
+      "worktree_inventory_sha256": "sha256:526612a9909224b7079155b7fb4a24d9167ac01268596c874ba24d100bc18546",
       "single_link_regular_file_verified": true
     },
     {
@@ -1380,11 +2340,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "c939606016492b3d2ac3cf9b04cd67199cd849c25584d89b689c5a26d426a36a",
+      "source_head_blob_sha256": "sha256:c939606016492b3d2ac3cf9b04cd67199cd849c25584d89b689c5a26d426a36a",
       "source_head_blob_bytes": 6585,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 6585,
+      "worktree_inventory_sha256": "sha256:c939606016492b3d2ac3cf9b04cd67199cd849c25584d89b689c5a26d426a36a",
       "single_link_regular_file_verified": true
     },
     {
@@ -1392,11 +2355,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "65363a37395fc7c511b2a8dbeedba4d8801879419956a90c62f8979bc1c68ae4",
+      "source_head_blob_sha256": "sha256:65363a37395fc7c511b2a8dbeedba4d8801879419956a90c62f8979bc1c68ae4",
       "source_head_blob_bytes": 625,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 625,
+      "worktree_inventory_sha256": "sha256:65363a37395fc7c511b2a8dbeedba4d8801879419956a90c62f8979bc1c68ae4",
       "single_link_regular_file_verified": true
     },
     {
@@ -1404,11 +2370,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "169f74a53f3f703e29c5d7035f6331a073784eb2bc8795dfd9386da14a11ffe7",
+      "source_head_blob_sha256": "sha256:169f74a53f3f703e29c5d7035f6331a073784eb2bc8795dfd9386da14a11ffe7",
       "source_head_blob_bytes": 3974,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 3974,
+      "worktree_inventory_sha256": "sha256:169f74a53f3f703e29c5d7035f6331a073784eb2bc8795dfd9386da14a11ffe7",
       "single_link_regular_file_verified": true
     },
     {
@@ -1416,11 +2385,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "b26c5bc1d3e05f4e3de4dd9aaa4de0f273303ab06f321e5564a35a06d31e754c",
+      "source_head_blob_sha256": "sha256:b26c5bc1d3e05f4e3de4dd9aaa4de0f273303ab06f321e5564a35a06d31e754c",
       "source_head_blob_bytes": 6920,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 6920,
+      "worktree_inventory_sha256": "sha256:b26c5bc1d3e05f4e3de4dd9aaa4de0f273303ab06f321e5564a35a06d31e754c",
       "single_link_regular_file_verified": true
     },
     {
@@ -1428,11 +2400,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "3c8a744df241ee9be0941f580bc3a4e443f87e2da6c4f81cc5b67b8ea5bcdae9",
+      "source_head_blob_sha256": "sha256:3c8a744df241ee9be0941f580bc3a4e443f87e2da6c4f81cc5b67b8ea5bcdae9",
       "source_head_blob_bytes": 3046,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 3046,
+      "worktree_inventory_sha256": "sha256:3c8a744df241ee9be0941f580bc3a4e443f87e2da6c4f81cc5b67b8ea5bcdae9",
       "single_link_regular_file_verified": true
     },
     {
@@ -1440,11 +2415,89 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "aaf6b3ef8e8e319e1bb8125d865e3b1b991fb254af7a9ecb07716421e6269239",
+      "source_head_blob_sha256": "sha256:aaf6b3ef8e8e319e1bb8125d865e3b1b991fb254af7a9ecb07716421e6269239",
       "source_head_blob_bytes": 943,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 943,
+      "worktree_inventory_sha256": "sha256:aaf6b3ef8e8e319e1bb8125d865e3b1b991fb254af7a9ecb07716421e6269239",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/descriptor_cas.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:18f6cf15620500370dfb4df09777721267813b36fbf60018a86bb061e5f7c118",
+      "source_head_blob_bytes": 4675,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 4675,
+      "worktree_inventory_sha256": "sha256:18f6cf15620500370dfb4df09777721267813b36fbf60018a86bb061e5f7c118",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/descriptor_races.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:df5cc2785387ee94c814b0784d9d27479c96babf2c6ea42b029d12d5b8744014",
+      "source_head_blob_bytes": 747,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 747,
+      "worktree_inventory_sha256": "sha256:df5cc2785387ee94c814b0784d9d27479c96babf2c6ea42b029d12d5b8744014",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/descriptor_races/directory_ancestor_substitution_then_relocation_preserves_outside_tree.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:0ca69c69d4cb59eb8b9640223a295e000908d8f698f67b63a22f3436cea1427e",
+      "source_head_blob_bytes": 7766,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7766,
+      "worktree_inventory_sha256": "sha256:0ca69c69d4cb59eb8b9640223a295e000908d8f698f67b63a22f3436cea1427e",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/descriptor_races/next_outside.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:9182dccd785048bbf221b4f78e529c515d8d8dd00fc325bbd1b3b0369d198feb",
+      "source_head_blob_bytes": 7977,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7977,
+      "worktree_inventory_sha256": "sha256:9182dccd785048bbf221b4f78e529c515d8d8dd00fc325bbd1b3b0369d198feb",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/descriptor_races/tree_materialization_and_recovery_rename_races_preserve_outside_tree.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:836eda6bcec0428280e2bfbdd9ea4fb328713fcb04d9dcbc983ee871f78b2c8c",
+      "source_head_blob_bytes": 2940,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2940,
+      "worktree_inventory_sha256": "sha256:836eda6bcec0428280e2bfbdd9ea4fb328713fcb04d9dcbc983ee871f78b2c8c",
       "single_link_regular_file_verified": true
     },
     {
@@ -1452,11 +2505,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "cc8b67347568ce34b8b2c97cb3703086c37cbf960c49afd7a51f05b8143e4744",
+      "source_head_blob_sha256": "sha256:cc8b67347568ce34b8b2c97cb3703086c37cbf960c49afd7a51f05b8143e4744",
       "source_head_blob_bytes": 2398,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2398,
+      "worktree_inventory_sha256": "sha256:cc8b67347568ce34b8b2c97cb3703086c37cbf960c49afd7a51f05b8143e4744",
       "single_link_regular_file_verified": true
     },
     {
@@ -1464,11 +2520,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "b9006a72a82f73edcc11e2d4b48139a0433db383c20e58e6c79cdb70141648bf",
+      "source_head_blob_sha256": "sha256:b9006a72a82f73edcc11e2d4b48139a0433db383c20e58e6c79cdb70141648bf",
       "source_head_blob_bytes": 689,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 689,
+      "worktree_inventory_sha256": "sha256:b9006a72a82f73edcc11e2d4b48139a0433db383c20e58e6c79cdb70141648bf",
       "single_link_regular_file_verified": true
     },
     {
@@ -1476,11 +2535,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "c9b4d3728e290c954ebebac55caf29718823063530d079412628d93764456fce",
+      "source_head_blob_sha256": "sha256:c9b4d3728e290c954ebebac55caf29718823063530d079412628d93764456fce",
       "source_head_blob_bytes": 2695,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2695,
+      "worktree_inventory_sha256": "sha256:c9b4d3728e290c954ebebac55caf29718823063530d079412628d93764456fce",
       "single_link_regular_file_verified": true
     },
     {
@@ -1488,11 +2550,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "c7db3e859b4908b3a063c75d83d3637588f54ffdcd30110b4a413b33a405c001",
+      "source_head_blob_sha256": "sha256:c7db3e859b4908b3a063c75d83d3637588f54ffdcd30110b4a413b33a405c001",
       "source_head_blob_bytes": 7540,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7540,
+      "worktree_inventory_sha256": "sha256:c7db3e859b4908b3a063c75d83d3637588f54ffdcd30110b4a413b33a405c001",
       "single_link_regular_file_verified": true
     },
     {
@@ -1500,11 +2565,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "0108c6f7dfcdda5882a283b2b1f10466335bbf7b8d5d3966f9ca0fc6bd9fbd0e",
+      "source_head_blob_sha256": "sha256:0108c6f7dfcdda5882a283b2b1f10466335bbf7b8d5d3966f9ca0fc6bd9fbd0e",
       "source_head_blob_bytes": 7638,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7638,
+      "worktree_inventory_sha256": "sha256:0108c6f7dfcdda5882a283b2b1f10466335bbf7b8d5d3966f9ca0fc6bd9fbd0e",
       "single_link_regular_file_verified": true
     },
     {
@@ -1512,11 +2580,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "bb05e7d8f7bea63babf94f315587591ed10358a6076d5ca88bf6ed7fa96bfd8b",
+      "source_head_blob_sha256": "sha256:bb05e7d8f7bea63babf94f315587591ed10358a6076d5ca88bf6ed7fa96bfd8b",
       "source_head_blob_bytes": 2147,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2147,
+      "worktree_inventory_sha256": "sha256:bb05e7d8f7bea63babf94f315587591ed10358a6076d5ca88bf6ed7fa96bfd8b",
       "single_link_regular_file_verified": true
     },
     {
@@ -1524,11 +2595,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "f877a5e4ad38295ce32f0bbce6f097d07713fd671a0f5b7d91ffabe4cec7e808",
+      "source_head_blob_sha256": "sha256:f877a5e4ad38295ce32f0bbce6f097d07713fd671a0f5b7d91ffabe4cec7e808",
       "source_head_blob_bytes": 7388,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7388,
+      "worktree_inventory_sha256": "sha256:f877a5e4ad38295ce32f0bbce6f097d07713fd671a0f5b7d91ffabe4cec7e808",
       "single_link_regular_file_verified": true
     },
     {
@@ -1536,11 +2610,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "e50ad44b9e69b605de58b53d7454f7835d350b2f4be7750a63dffeb5ba02ab87",
+      "source_head_blob_sha256": "sha256:e50ad44b9e69b605de58b53d7454f7835d350b2f4be7750a63dffeb5ba02ab87",
       "source_head_blob_bytes": 718,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 718,
+      "worktree_inventory_sha256": "sha256:e50ad44b9e69b605de58b53d7454f7835d350b2f4be7750a63dffeb5ba02ab87",
       "single_link_regular_file_verified": true
     },
     {
@@ -1548,11 +2625,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "f5c16c605c712061ae7492dc22cd477a5bb50ad0b7fdd27e9c29564d21262e35",
+      "source_head_blob_sha256": "sha256:f5c16c605c712061ae7492dc22cd477a5bb50ad0b7fdd27e9c29564d21262e35",
       "source_head_blob_bytes": 2350,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2350,
+      "worktree_inventory_sha256": "sha256:f5c16c605c712061ae7492dc22cd477a5bb50ad0b7fdd27e9c29564d21262e35",
       "single_link_regular_file_verified": true
     },
     {
@@ -1560,11 +2640,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "144cfc3d88d2f217ca7e8d10158646956d63d7bce18afbdcdf5f55ad462fc633",
+      "source_head_blob_sha256": "sha256:144cfc3d88d2f217ca7e8d10158646956d63d7bce18afbdcdf5f55ad462fc633",
       "source_head_blob_bytes": 4280,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 4280,
+      "worktree_inventory_sha256": "sha256:144cfc3d88d2f217ca7e8d10158646956d63d7bce18afbdcdf5f55ad462fc633",
       "single_link_regular_file_verified": true
     },
     {
@@ -1572,11 +2655,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "c12e2e3eed68aa0f5e8622e6147bf033043183facba0c03c75c3afd7617833c9",
-      "source_head_blob_bytes": 3176,
+      "source_head_blob_sha256": "sha256:7a04cf181858b8e06ab8a9e0d5f18be42fd82778c66313c5e944b19dca7b4276",
+      "source_head_blob_bytes": 3221,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 3221,
+      "worktree_inventory_sha256": "sha256:7a04cf181858b8e06ab8a9e0d5f18be42fd82778c66313c5e944b19dca7b4276",
       "single_link_regular_file_verified": true
     },
     {
@@ -1584,11 +2670,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "9d51aa49947bc6a8fcb75700f52c6dc836a30c63025298b48e5a6d4a7a294324",
+      "source_head_blob_sha256": "sha256:9d51aa49947bc6a8fcb75700f52c6dc836a30c63025298b48e5a6d4a7a294324",
       "source_head_blob_bytes": 5511,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 5511,
+      "worktree_inventory_sha256": "sha256:9d51aa49947bc6a8fcb75700f52c6dc836a30c63025298b48e5a6d4a7a294324",
       "single_link_regular_file_verified": true
     },
     {
@@ -1596,11 +2685,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "ac06cb8b4e62cdafeb64ca954074e3a985f2e9e611ea7d2e39e1df47490844ce",
+      "source_head_blob_sha256": "sha256:ac06cb8b4e62cdafeb64ca954074e3a985f2e9e611ea7d2e39e1df47490844ce",
       "source_head_blob_bytes": 609,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 609,
+      "worktree_inventory_sha256": "sha256:ac06cb8b4e62cdafeb64ca954074e3a985f2e9e611ea7d2e39e1df47490844ce",
       "single_link_regular_file_verified": true
     },
     {
@@ -1608,11 +2700,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "b9641291fcde597bc546d2446c69fe85408723e09764846055256537d55c7e36",
+      "source_head_blob_sha256": "sha256:b9641291fcde597bc546d2446c69fe85408723e09764846055256537d55c7e36",
       "source_head_blob_bytes": 4441,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 4441,
+      "worktree_inventory_sha256": "sha256:b9641291fcde597bc546d2446c69fe85408723e09764846055256537d55c7e36",
       "single_link_regular_file_verified": true
     },
     {
@@ -1620,11 +2715,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "38b7784a0b3128a9fc0b5a2243e8bb0fd3c3eaf7c1c8d2517e5ccff33cf83ae3",
+      "source_head_blob_sha256": "sha256:38b7784a0b3128a9fc0b5a2243e8bb0fd3c3eaf7c1c8d2517e5ccff33cf83ae3",
       "source_head_blob_bytes": 3813,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 3813,
+      "worktree_inventory_sha256": "sha256:38b7784a0b3128a9fc0b5a2243e8bb0fd3c3eaf7c1c8d2517e5ccff33cf83ae3",
       "single_link_regular_file_verified": true
     },
     {
@@ -1632,11 +2730,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "a7274a34c00a6713fd1d80980d8bf9b5da242e3196e1d46f3140d75b6c46b92e",
+      "source_head_blob_sha256": "sha256:a7274a34c00a6713fd1d80980d8bf9b5da242e3196e1d46f3140d75b6c46b92e",
       "source_head_blob_bytes": 6627,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 6627,
+      "worktree_inventory_sha256": "sha256:a7274a34c00a6713fd1d80980d8bf9b5da242e3196e1d46f3140d75b6c46b92e",
       "single_link_regular_file_verified": true
     },
     {
@@ -1644,11 +2745,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "229b0d8be5aa6d358a4b7ec904033df3f2ced6587cab6c423b01ed57356ba759",
+      "source_head_blob_sha256": "sha256:229b0d8be5aa6d358a4b7ec904033df3f2ced6587cab6c423b01ed57356ba759",
       "source_head_blob_bytes": 4852,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 4852,
+      "worktree_inventory_sha256": "sha256:229b0d8be5aa6d358a4b7ec904033df3f2ced6587cab6c423b01ed57356ba759",
       "single_link_regular_file_verified": true
     },
     {
@@ -1656,11 +2760,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "946c73dd747c16459739fd8e8be6f29e5b0008dd6d44ab3c3bc1549c6a714e90",
+      "source_head_blob_sha256": "sha256:946c73dd747c16459739fd8e8be6f29e5b0008dd6d44ab3c3bc1549c6a714e90",
       "source_head_blob_bytes": 7942,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7942,
+      "worktree_inventory_sha256": "sha256:946c73dd747c16459739fd8e8be6f29e5b0008dd6d44ab3c3bc1549c6a714e90",
       "single_link_regular_file_verified": true
     },
     {
@@ -1668,11 +2775,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "202256eaca12af1e9996bcfcd79a5a3e2f1b9994d5eb612376731b99599d2697",
+      "source_head_blob_sha256": "sha256:202256eaca12af1e9996bcfcd79a5a3e2f1b9994d5eb612376731b99599d2697",
       "source_head_blob_bytes": 3827,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 3827,
+      "worktree_inventory_sha256": "sha256:202256eaca12af1e9996bcfcd79a5a3e2f1b9994d5eb612376731b99599d2697",
       "single_link_regular_file_verified": true
     },
     {
@@ -1680,11 +2790,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "29ac626bb91be1bada95908ee0fcbe11f4249dca43b43259719dba4d9bc97852",
+      "source_head_blob_sha256": "sha256:29ac626bb91be1bada95908ee0fcbe11f4249dca43b43259719dba4d9bc97852",
       "source_head_blob_bytes": 6092,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 6092,
+      "worktree_inventory_sha256": "sha256:29ac626bb91be1bada95908ee0fcbe11f4249dca43b43259719dba4d9bc97852",
       "single_link_regular_file_verified": true
     },
     {
@@ -1692,11 +2805,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "e0a0f8d365de12b9a7902da1d67ba83ecc3f60a8e91d7893b153d5b363b84c36",
+      "source_head_blob_sha256": "sha256:e0a0f8d365de12b9a7902da1d67ba83ecc3f60a8e91d7893b153d5b363b84c36",
       "source_head_blob_bytes": 7621,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7621,
+      "worktree_inventory_sha256": "sha256:e0a0f8d365de12b9a7902da1d67ba83ecc3f60a8e91d7893b153d5b363b84c36",
       "single_link_regular_file_verified": true
     },
     {
@@ -1704,11 +2820,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "a272c4c2bcbc6967b4beb0cf86cf796d61a4ac41821cd6eee21e79ecaa55122c",
+      "source_head_blob_sha256": "sha256:a272c4c2bcbc6967b4beb0cf86cf796d61a4ac41821cd6eee21e79ecaa55122c",
       "source_head_blob_bytes": 5591,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 5591,
+      "worktree_inventory_sha256": "sha256:a272c4c2bcbc6967b4beb0cf86cf796d61a4ac41821cd6eee21e79ecaa55122c",
       "single_link_regular_file_verified": true
     },
     {
@@ -1716,11 +2835,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "64ed91afa66c48dd6490d0de55e8fe469fe7ac527ba09c81af5c3a1dc5f6a20f",
+      "source_head_blob_sha256": "sha256:64ed91afa66c48dd6490d0de55e8fe469fe7ac527ba09c81af5c3a1dc5f6a20f",
       "source_head_blob_bytes": 4580,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 4580,
+      "worktree_inventory_sha256": "sha256:64ed91afa66c48dd6490d0de55e8fe469fe7ac527ba09c81af5c3a1dc5f6a20f",
       "single_link_regular_file_verified": true
     },
     {
@@ -1728,11 +2850,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "5f0afe3153220a435c77a911a290b241359673b3002345c3baca7e984d10679b",
+      "source_head_blob_sha256": "sha256:5f0afe3153220a435c77a911a290b241359673b3002345c3baca7e984d10679b",
       "source_head_blob_bytes": 5360,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 5360,
+      "worktree_inventory_sha256": "sha256:5f0afe3153220a435c77a911a290b241359673b3002345c3baca7e984d10679b",
       "single_link_regular_file_verified": true
     },
     {
@@ -1740,11 +2865,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "d79a14f47fa0f8e326b00655097094a94ec57ef8233bcaf0ff939fa5728cdce6",
+      "source_head_blob_sha256": "sha256:d79a14f47fa0f8e326b00655097094a94ec57ef8233bcaf0ff939fa5728cdce6",
       "source_head_blob_bytes": 4269,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 4269,
+      "worktree_inventory_sha256": "sha256:d79a14f47fa0f8e326b00655097094a94ec57ef8233bcaf0ff939fa5728cdce6",
       "single_link_regular_file_verified": true
     },
     {
@@ -1752,11 +2880,44 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "4ed96230df76fcab277e01ccdcd701d49f4eae56bc7c7b861df9a80755518b49",
+      "source_head_blob_sha256": "sha256:4ed96230df76fcab277e01ccdcd701d49f4eae56bc7c7b861df9a80755518b49",
       "source_head_blob_bytes": 3700,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 3700,
+      "worktree_inventory_sha256": "sha256:4ed96230df76fcab277e01ccdcd701d49f4eae56bc7c7b861df9a80755518b49",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/supported_host_effect_executor_contract/cases.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:6e2791a6d83c3bbee8af05eb489eb00fee64c1f91c8de882ab158c6613b0acde",
+      "source_head_blob_bytes": 7042,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 7042,
+      "worktree_inventory_sha256": "sha256:6e2791a6d83c3bbee8af05eb489eb00fee64c1f91c8de882ab158c6613b0acde",
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/supported_host_effect_executor_contract/executor_orders_command_publication_ledger_and_acknowledgement.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "sha256:633cfbed70faf57034e9cbf08da13e91a6d716b8b8928f107460a83085d3ac9a",
+      "source_head_blob_bytes": 8029,
+      "file_type": "regular_file",
+      "source_head_regular_file": true,
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 8029,
+      "worktree_inventory_sha256": "sha256:633cfbed70faf57034e9cbf08da13e91a6d716b8b8928f107460a83085d3ac9a",
       "single_link_regular_file_verified": true
     },
     {
@@ -1764,11 +2925,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "26ea0dbaf25ffd1c210c083309c2ff69eda0c83cf1df4f193d9baa74f4b03cc8",
+      "source_head_blob_sha256": "sha256:26ea0dbaf25ffd1c210c083309c2ff69eda0c83cf1df4f193d9baa74f4b03cc8",
       "source_head_blob_bytes": 1850,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 1850,
+      "worktree_inventory_sha256": "sha256:26ea0dbaf25ffd1c210c083309c2ff69eda0c83cf1df4f193d9baa74f4b03cc8",
       "single_link_regular_file_verified": true
     },
     {
@@ -1776,11 +2940,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "799c5a5a64248c357e378ce6a868a34608ca3cca0b697b6e3ad36cf63cb9ed27",
+      "source_head_blob_sha256": "sha256:799c5a5a64248c357e378ce6a868a34608ca3cca0b697b6e3ad36cf63cb9ed27",
       "source_head_blob_bytes": 3374,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 3374,
+      "worktree_inventory_sha256": "sha256:799c5a5a64248c357e378ce6a868a34608ca3cca0b697b6e3ad36cf63cb9ed27",
       "single_link_regular_file_verified": true
     },
     {
@@ -1788,11 +2955,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "ef7bd54bbd5a47232ce6866a14e4bc3b8ef8a7e19383822ed50c1ccf2ac9e4a2",
+      "source_head_blob_sha256": "sha256:ef7bd54bbd5a47232ce6866a14e4bc3b8ef8a7e19383822ed50c1ccf2ac9e4a2",
       "source_head_blob_bytes": 6735,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 6735,
+      "worktree_inventory_sha256": "sha256:ef7bd54bbd5a47232ce6866a14e4bc3b8ef8a7e19383822ed50c1ccf2ac9e4a2",
       "single_link_regular_file_verified": true
     },
     {
@@ -1800,11 +2970,14 @@
       "status": "A",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "c7b61eb98185b0dcd43ed05d95c66f76c146ce2bb0d75c7850e2d01c05f320ee",
+      "source_head_blob_sha256": "sha256:c7b61eb98185b0dcd43ed05d95c66f76c146ce2bb0d75c7850e2d01c05f320ee",
       "source_head_blob_bytes": 2962,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 2962,
+      "worktree_inventory_sha256": "sha256:c7b61eb98185b0dcd43ed05d95c66f76c146ce2bb0d75c7850e2d01c05f320ee",
       "single_link_regular_file_verified": true
     },
     {
@@ -1812,11 +2985,14 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "2873549cf870f01c88e1d8f6d8e2809383b12bafb97c7465048d1463971a2289",
+      "source_head_blob_sha256": "sha256:2873549cf870f01c88e1d8f6d8e2809383b12bafb97c7465048d1463971a2289",
       "source_head_blob_bytes": 8446,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 8446,
+      "worktree_inventory_sha256": "sha256:2873549cf870f01c88e1d8f6d8e2809383b12bafb97c7465048d1463971a2289",
       "single_link_regular_file_verified": true
     },
     {
@@ -1824,64 +3000,114 @@
       "status": "M",
       "retained": true,
       "deleted": false,
-      "source_head_blob_sha256": "3d2933aa7a199a667d45cad9f3854d461ed092881d6c3ff5e8a3e12683ca854d",
+      "source_head_blob_sha256": "sha256:3d2933aa7a199a667d45cad9f3854d461ed092881d6c3ff5e8a3e12683ca854d",
       "source_head_blob_bytes": 5749,
       "file_type": "regular_file",
+      "source_head_regular_file": true,
       "worktree_inventory_file_type": "regular_file",
       "worktree_inventory_link_count": 1,
+      "worktree_inventory_bytes": 5749,
+      "worktree_inventory_sha256": "sha256:3d2933aa7a199a667d45cad9f3854d461ed092881d6c3ff5e8a3e12683ca854d",
       "single_link_regular_file_verified": true
     }
   ],
   "findings": [
     {
-      "id": "adapter-refused-rollback-authority-drop",
+      "id": "caller-forged-package-appregistry",
       "status": "repaired",
-      "evidence": "restoration.rs requeues Refused transaction; filtered lib proof passes."
+      "evidence": "authority issuance tests and supported_package_identity_contract pass"
     },
     {
-      "id": "public-debug-mutation-count-surface",
-      "status": "removed",
-      "evidence": "rg observed_mutation_count returns no matches."
-    },
-    {
-      "id": "private-mutation-count-warning",
+      "id": "mixed-journey-chain",
       "status": "repaired",
-      "evidence": "binding.rs gates mutation_count with cfg(test); adapter integration target compiles/passes."
+      "evidence": "verify-bound surface chain tests included in distribution_contract pass"
     },
     {
-      "id": "broad-strict-wall",
-      "status": "known_blocker",
-      "evidence": "Candidate-wide strict checks deferred by parent cadence; not claimed."
+      "id": "registry-visible-discovery-substitution",
+      "status": "repaired_source_contract",
+      "evidence": "distribution_contract journey_adversarial and observation tests pass; live discovery proof withheld"
+    },
+    {
+      "id": "runtime-same-bytes-inode-swap",
+      "status": "repaired",
+      "evidence": "distribution_contract runtime_session same-byte inode swap controls pass"
+    },
+    {
+      "id": "runtime-plan-stale-install",
+      "status": "repaired",
+      "evidence": "distribution_contract runtime_session install staleness controls pass"
+    },
+    {
+      "id": "rollback-cross-root-transplant",
+      "status": "repaired",
+      "evidence": "distribution_contract install rollback_authority controls pass"
+    },
+    {
+      "id": "rollback-refusal-authority-drop",
+      "status": "repaired",
+      "evidence": "restore_refusal_requeues_installed_mutation_for_same_operation_retry passes"
+    },
+    {
+      "id": "ignored-host-target-source-dependency",
+      "status": "repaired",
+      "evidence": "git ls-files ignored scan clean for N04 source dependencies"
+    },
+    {
+      "id": "deleted-post-publication-recovery-authority",
+      "status": "repaired",
+      "evidence": "supported_host_effect_executor_contract 7/7 and source parent ACCEPT"
+    },
+    {
+      "id": "N04-owned-strict-diagnostics",
+      "status": "repaired",
+      "evidence": "strict log grep for validator/src/(distribution|package)/ returns no hits"
+    },
+    {
+      "id": "root-shared-strict-wall",
+      "status": "unresolved_root_owned",
+      "evidence": "strict no-run exits 101 with 659 root/shared warnings outside N04 scope"
     }
   ],
   "unresolved_dependencies": [
     "Root-owned production reachability through plugin_product/host_lifecycle/verify.rs remains unedited.",
-    "Live macOS package/install/cache/marketplace/app-registry/discovery/runtime exercise remains absent.",
-    "Parent/root must run broad dependency-closed candidate gates."
+    "No live macOS package/install/cache/marketplace/app-registry/discovery/runtime journey was executed by this exact candidate.",
+    "Root/shared strict warning wall remains outside N04-owned distribution/package scope.",
+    "Parent/root must run broad dependency-closed candidate gates and integration acceptance review."
   ],
   "requested_root_changes": [
     {
-      "path": "validator/src/plugin_product/distribution_adapter/**",
-      "change": "Parent scope refresh authorized minimal N04 production-caller edit. Applied."
-    },
-    {
-      "path": "validator/src/plugin_product/mod.rs",
-      "change": "Parent architectural steer authorized canonical cfg(test) adapter module exposure for exact filtered lib proof. Production non-test builds still expose adapter; no custom cfg or duplicate module identity."
-    },
-    {
-      "path": "validator/tests/plugin_distribution_adapter_contract/**",
-      "change": "Parent scope refresh authorized section-exclusive adapter tests. Updated fixtures/assertions."
-    },
-    {
       "path": "validator/src/plugin_product/host_lifecycle/verify.rs",
-      "change": "Root-owned synthetic caller still needs production reachability wiring for full seven-row chain; not edited."
+      "change": "Replace synthetic caller-built rows with production-reachable seven-row package/install/cache/marketplace/app-registry/discovery/runtime chain once root-owned wiring is ready.",
+      "why": "N04 source contracts do not make the root plugin host lifecycle verifier production-reachable."
+    },
+    {
+      "path": "public CLI catalog/dispatcher",
+      "change": "Root to wire supported distribution runtime surfaces if product route is adopted.",
+      "why": "N04 was not authorized to edit public CLI catalog or dispatcher."
+    },
+    {
+      "path": "shared generated authority / manifests / registries",
+      "change": "Root to refresh generated authority or manifests only if this source is integrated.",
+      "why": "N04 WorkerResult changes do not modify generated-authority schema or public manifest authority."
+    },
+    {
+      "path": "root/shared strict diagnostics outside validator/src/distribution and validator/src/package",
+      "change": "Root-owned lanes to close 659 warning-as-error diagnostics.",
+      "why": "Parent cadence explicitly moved broad exact-candidate gates to dependency-closed root checkpoint."
     }
   ],
   "limitations": [
-    "No live macOS package/install/cache/marketplace/app-registry/discovery/runtime journey was executed or claimed.",
-    "No readiness, release, completion, or parent-acceptance claim is made.",
-    "Broad candidate-wide strict gates remain withheld behind known root/shared diagnostic wall per parent cadence.",
-    "WorkerResult self-excludes final evidence commit/tree/hash; final response reports those after commit."
+    "This receipt does not claim live macOS package behavior.",
+    "This receipt does not claim live install behavior.",
+    "This receipt does not claim live cache behavior.",
+    "This receipt does not claim live marketplace behavior.",
+    "This receipt does not claim live app-registry behavior.",
+    "This receipt does not claim live host discovery behavior.",
+    "This receipt does not claim live runtime behavior.",
+    "Source contracts and tests are not substitutes for installed/live/release proof.",
+    "Strict all-lib no-run remains blocked by root/shared diagnostics outside N04 scope.",
+    "Parent source ACCEPT is recorded, but parent integration acceptance is not claimed.",
+    "No readiness, release, or completion claim is made."
   ],
   "no_claim_statement": "This worker does not claim readiness, release, or completion."
 }
