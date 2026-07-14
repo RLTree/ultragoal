@@ -1,42 +1,444 @@
 {
   "worker": "/root",
   "lease_id": "N04-DISTRIBUTION-RUNTIME",
-  "context_id": "n04-distribution-runtime-702556f454b8b0633e1949ceb577d83b49825e0e",
+  "context_id": "n04-distribution-runtime-full-increment-5cc3be5f-to-18ecfc1de",
   "candidate_identity": {
     "repository": "repo://harness-ultragoal-plugin-proposal",
     "branch": "codex/n04-distribution-runtime",
     "source_thread_id": "019f5f39-507b-78a2-a96a-0b566a5a2126",
     "accepted_integration_base": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
-    "install_authority_source_head": "47be0435070df0d40ef45ee3ca7186c05d3e30a3",
-    "runtime_install_revalidation_source_head": "702556f454b8b0633e1949ceb577d83b49825e0e",
-    "runtime_install_revalidation_source_tree": "7273f78d5297bca3f6816d97d9c8f6aa6e86ffbb",
-    "semantic_descriptor_source_head": "aee40c976e03d1226e607baf330226465e35adf8",
-    "handoff_record_commit": "self-excluded; final evidence commit is reported by git after this file is committed because a committed file cannot contain its own commit hash",
+    "source_head": "18ecfc1de7e7c70886c81a17b801a89800cf6973",
+    "source_tree": "6348adbf5f006f78f6545d9bcdf49e6eb92ccf84",
+    "commit_count_after_base": 18,
+    "commit_list_after_base": [
+      {
+        "commit": "b889f9662b99137749087ce3d891ae51668fca87",
+        "subject": "bind package and registry identities into host ladder"
+      },
+      {
+        "commit": "ba19502c2e5c04ec0b1408a60625f93da284ad9b",
+        "subject": "record blocked N04 distribution handoff"
+      },
+      {
+        "commit": "b95c7f46d2389377136473460d30531904fbdb48",
+        "subject": "seal distribution identity issuance against caller forgery"
+      },
+      {
+        "commit": "7a6170d58d5f6acb7703e13481583e0c44dfecff",
+        "subject": "record N04 identity authority rework handoff"
+      },
+      {
+        "commit": "443de84a49cbc1f474dee7a2a61eaf738f6e1675",
+        "subject": "bind registry authority and chains to one host journey"
+      },
+      {
+        "commit": "69900991b8ca80f6e8161cf8ee44310457e807e0",
+        "subject": "record confined registry authority rework handoff"
+      },
+      {
+        "commit": "383057d5c1e9ca777fc7fee4224647402303744b",
+        "subject": "refresh N04 handoff on accepted integration base"
+      },
+      {
+        "commit": "be6bfdbc13a20ac1bd6d7222bc243cb124a25d42",
+        "subject": "Bind N04 runtime identities to confined observations"
+      },
+      {
+        "commit": "663c36bab4a5119cade4a5399a97f3d9ae741abb",
+        "subject": "Record N04 runtime authority rework handoff"
+      },
+      {
+        "commit": "f609c1412b9634869b9fd97aa9725cfc5580463a",
+        "subject": "Fail closed N04 host discovery and runtime authority"
+      },
+      {
+        "commit": "10f8b6c9282a09a007bc4a4b39706d6dc0cecf05",
+        "subject": "Refresh N04 runtime rework handoff evidence"
+      },
+      {
+        "commit": "aee40c976e03d1226e607baf330226465e35adf8",
+        "subject": "Pin N04 runtime probe execution to retained descriptor"
+      },
+      {
+        "commit": "19107b6d1d865bc9fe90a30e9eca76476eb0d2e3",
+        "subject": "Refresh N04 descriptor runtime handoff evidence"
+      },
+      {
+        "commit": "52fe2eeac7e5f50e276a808c7ebd098c5e520e45",
+        "subject": "Format N04 descriptor runtime sources"
+      },
+      {
+        "commit": "47be0435070df0d40ef45ee3ca7186c05d3e30a3",
+        "subject": "Seal N04 install authority against transplants"
+      },
+      {
+        "commit": "702556f454b8b0633e1949ceb577d83b49825e0e",
+        "subject": "Revalidate N04 runtime install authority at execution"
+      },
+      {
+        "commit": "058adc6b5acbe28d1cb03c57e87062c729f8e29d",
+        "subject": "Refresh N04 runtime install authority handoff"
+      },
+      {
+        "commit": "18ecfc1de7e7c70886c81a17b801a89800cf6973",
+        "subject": "Seal N04 rollback authority to confined postimages"
+      }
+    ],
+    "source_commit_subjects_after_base": [
+      "bind package and registry identities into host ladder",
+      "record blocked N04 distribution handoff",
+      "seal distribution identity issuance against caller forgery",
+      "record N04 identity authority rework handoff",
+      "bind registry authority and chains to one host journey",
+      "record confined registry authority rework handoff",
+      "refresh N04 handoff on accepted integration base",
+      "Bind N04 runtime identities to confined observations",
+      "Record N04 runtime authority rework handoff",
+      "Fail closed N04 host discovery and runtime authority",
+      "Refresh N04 runtime rework handoff evidence",
+      "Pin N04 runtime probe execution to retained descriptor",
+      "Refresh N04 descriptor runtime handoff evidence",
+      "Format N04 descriptor runtime sources",
+      "Seal N04 install authority against transplants",
+      "Revalidate N04 runtime install authority at execution",
+      "Refresh N04 runtime install authority handoff",
+      "Seal N04 rollback authority to confined postimages"
+    ],
     "self_rebased": false,
+    "source_rewritten": false,
     "root_adoption": false,
     "parent_acceptance_claim": false
   },
   "base_state": {
+    "accepted_integration_base": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
     "branch": "codex/n04-distribution-runtime",
-    "base_commit": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
-    "pre_runtime_staleness_rework_head": "47be0435070df0d40ef45ee3ca7186c05d3e30a3",
-    "pre_runtime_staleness_rework_tree": "e14de57c61464238198c666f472e869558ddce6e",
-    "preserved_dirty_worker_result_sha256": "sha256:7c1047e022948458876319b1abba78f93efa1e0618c8bf96cc5cb36734a4a7db",
-    "preserved_dirty_worker_result_bytes": 18241,
-    "receipt_schema": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
-    "parent_rework": "Independent parent falsification found runtime plans stale after issuance: installed archive was revalidated only during RuntimeProbePlan construction, not at execution or cloned replay."
+    "source_head_before_rollback_rework": "702556f454b8b0633e1949ceb577d83b49825e0e",
+    "source_head_after_rollback_rework": "18ecfc1de7e7c70886c81a17b801a89800cf6973",
+    "source_tree_after_rollback_rework": "6348adbf5f006f78f6545d9bcdf49e6eb92ccf84",
+    "parent_handoff_rework": "Source REWORK after evidence-only draft: rollback authority could be transplanted across confined roots by target+digest. This receipt supersedes the prior 20-path and 69-path drafts and inventories the full branch increment through the new source head.",
+    "receipt_schema": "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json"
   },
   "final_state": {
-    "status": "schema_validated_worker_result_refresh_after_runtime_install_revalidation_rework",
-    "source_head": "702556f454b8b0633e1949ceb577d83b49825e0e",
-    "source_tree": "7273f78d5297bca3f6816d97d9c8f6aa6e86ffbb",
-    "source_commit_subjects": [
-      "Seal N04 install authority against transplants",
-      "Revalidate N04 runtime install authority at execution"
+    "status": "source_rework_plus_evidence_only_worker_result_full_increment_inventory",
+    "source_head": "18ecfc1de7e7c70886c81a17b801a89800cf6973",
+    "source_tree": "6348adbf5f006f78f6545d9bcdf49e6eb92ccf84",
+    "final_evidence_head": "self-excluded; report the committed evidence head from git after this file is committed",
+    "final_evidence_tree": "self-excluded; report the committed evidence tree from git after this file is committed",
+    "worker_result_final_hash": "self-excluded; report sha256/bytes from filesystem after this file is committed",
+    "self_exclusion_convention": "The source increment is inventoried at the source head above. The WorkerResult file is then rewritten as evidence; its final commit/tree/hash cannot be embedded in itself and must be reported by final handoff.",
+    "changed_path_count": 75,
+    "retained_changed_artifact_count": 74,
+    "deleted_changed_path_count": 1,
+    "changed_paths": [
+      {
+        "status": "A",
+        "path": "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/filesystem/file.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/filesystem/file/install_postimage_cas.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/filesystem/file/scoped_install.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/filesystem/root/confined_root.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/filesystem/root/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/filesystem/tree.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_capability/host_adapter_kind.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_capability/mod.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/host_capability/supported_runtime_route.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/host_effect/executor/mod.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/host_effect/executor/target.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/identity/identity_surface.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/identity/mixed_journey_tests.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/identity/mod.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/identity/surface_identity_install.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/identity/surface_identity_new.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/identity/verify_bound_surface_chain.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/install/install_limit.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/install/mod.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/install/postimage.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/install/snapshot.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/install/uninstall.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/model.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/observations.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/package/manifest_bind.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/package/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/package/output/output_entry_limit.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/package/product/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/package/product/plugin_id.rs"
+      },
+      {
+        "status": "D",
+        "path": "validator/src/distribution/package/product/tests/concurrent_output.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/package/product/tests/every_artifact_binding_dimension_is_checked_before_output_effects.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/package/product/tests/mod.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/package/product/tests/package_surface_identity.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/package/product/tests/repo.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/package/product/tests/source_mutate_restore_during_publication_rolls_back_output.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/package/product/tests/undeclared_secret_local_and_benign_skill_members_fail_closed.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/registry_observation/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/registry_observation/observe_discovery.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/registry_observation/registry_limit.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/registry_observation/validate_app_registry.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/runtime_probe/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/runtime_probe/output_limit.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/src/distribution/runtime_probe/pinned_executable.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/runtime_probe/unique_marker.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/spec/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/spec/validate_layer.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/verify/mod.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/src/distribution/verify/observations_disagree.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/identity_ladder.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/install.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/install/automatic_and_explicit_rollbacks_preserve_concurrent_mutation.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/install/external_mutation.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/tests/distribution_contract/install/rollback_authority.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/isolated_journey.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/journey_adversarial.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/journey_adversarial/scoped_reads_reject_symlink_hardlink_and_special_file_substitution.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/journey_adversarial/wrong_scope_identity_duplicates_and_registered_hidden_fail_closed.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/observation_races.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/package_journey_fixture.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/package_output.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/package_output/corrupt_after_write.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/package_output/every_identity_dimension_is_checked_before_any_effect.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/runtime_session.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/tests/distribution_contract/runtime_session/inode_swap.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/tests/distribution_contract/runtime_session/install_authority.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/tests/distribution_contract/runtime_session/install_staleness.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/distribution_contract/version_identity.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/supported_package_identity_contract.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/tests/supported_package_identity_contract/confined_registry.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/supported_package_identity_contract/context.rs"
+      },
+      {
+        "status": "A",
+        "path": "validator/tests/supported_package_identity_contract/host_surface_substitution_controls.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/supported_package_identity_contract/independent_decoder_reinventories_without_writes_and_rejects_every_structural_substitution.rs"
+      },
+      {
+        "status": "M",
+        "path": "validator/tests/supported_package_identity_contract/typed_identity_surfaces_bind_only_verified_same_candidate_observations.rs"
+      }
     ],
     "deleted_paths": [
       "validator/src/distribution/package/product/tests/concurrent_output.rs"
     ],
+    "changed_path_set_sha256": "36b310ac192469127d8eb57875f9f9c20cdcbe31f3dbd0cfb886298e8fbb5efd",
+    "artifact_aggregate_sha256": "28408a80476fb81483e3413ea24659729f0aa94f9bf661e5ed6f016246f223c2",
+    "aggregate_encoding": "For each git diff --name-status row in order: status<TAB>path<TAB>source_head_sha256|deleted<TAB>source_head_bytes|deleted<TAB>regular_file|deleted<TAB>1|deleted<LF>.",
+    "worker_result_source_head_blob_sha256": "2e9a8715a3c8c886152c8607271c99a3e181b0b06cf1362a3056f845fa7aa667",
+    "worker_result_source_head_blob_bytes": 17834,
     "focused_tests_executed": true,
     "strict_root_shared_warning_wall": true,
     "live_host_proof": false,
@@ -46,140 +448,270 @@
   "touched_paths": [
     "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json",
     "validator/src/distribution/filesystem/file.rs",
+    "validator/src/distribution/filesystem/file/install_postimage_cas.rs",
     "validator/src/distribution/filesystem/file/scoped_install.rs",
+    "validator/src/distribution/filesystem/root/confined_root.rs",
+    "validator/src/distribution/filesystem/root/mod.rs",
+    "validator/src/distribution/filesystem/tree.rs",
+    "validator/src/distribution/host_capability/host_adapter_kind.rs",
+    "validator/src/distribution/host_capability/mod.rs",
+    "validator/src/distribution/host_capability/supported_runtime_route.rs",
+    "validator/src/distribution/host_effect/executor/mod.rs",
+    "validator/src/distribution/host_effect/executor/target.rs",
+    "validator/src/distribution/identity/identity_surface.rs",
+    "validator/src/distribution/identity/mixed_journey_tests.rs",
     "validator/src/distribution/identity/mod.rs",
     "validator/src/distribution/identity/surface_identity_install.rs",
     "validator/src/distribution/identity/surface_identity_new.rs",
+    "validator/src/distribution/identity/verify_bound_surface_chain.rs",
     "validator/src/distribution/install/install_limit.rs",
     "validator/src/distribution/install/mod.rs",
     "validator/src/distribution/install/postimage.rs",
     "validator/src/distribution/install/snapshot.rs",
+    "validator/src/distribution/install/uninstall.rs",
+    "validator/src/distribution/mod.rs",
+    "validator/src/distribution/model.rs",
+    "validator/src/distribution/observations.rs",
+    "validator/src/distribution/package/manifest_bind.rs",
+    "validator/src/distribution/package/mod.rs",
+    "validator/src/distribution/package/output/output_entry_limit.rs",
+    "validator/src/distribution/package/product/mod.rs",
+    "validator/src/distribution/package/product/plugin_id.rs",
+    "validator/src/distribution/package/product/tests/concurrent_output.rs",
+    "validator/src/distribution/package/product/tests/every_artifact_binding_dimension_is_checked_before_output_effects.rs",
+    "validator/src/distribution/package/product/tests/mod.rs",
+    "validator/src/distribution/package/product/tests/package_surface_identity.rs",
+    "validator/src/distribution/package/product/tests/repo.rs",
+    "validator/src/distribution/package/product/tests/source_mutate_restore_during_publication_rolls_back_output.rs",
+    "validator/src/distribution/package/product/tests/undeclared_secret_local_and_benign_skill_members_fail_closed.rs",
+    "validator/src/distribution/registry_observation/mod.rs",
+    "validator/src/distribution/registry_observation/observe_discovery.rs",
+    "validator/src/distribution/registry_observation/registry_limit.rs",
+    "validator/src/distribution/registry_observation/validate_app_registry.rs",
     "validator/src/distribution/runtime_probe/mod.rs",
     "validator/src/distribution/runtime_probe/output_limit.rs",
+    "validator/src/distribution/runtime_probe/pinned_executable.rs",
+    "validator/src/distribution/runtime_probe/unique_marker.rs",
+    "validator/src/distribution/spec/mod.rs",
+    "validator/src/distribution/spec/validate_layer.rs",
+    "validator/src/distribution/verify/mod.rs",
+    "validator/src/distribution/verify/observations_disagree.rs",
+    "validator/tests/distribution_contract/identity_ladder.rs",
+    "validator/tests/distribution_contract/install.rs",
+    "validator/tests/distribution_contract/install/automatic_and_explicit_rollbacks_preserve_concurrent_mutation.rs",
+    "validator/tests/distribution_contract/install/external_mutation.rs",
+    "validator/tests/distribution_contract/install/rollback_authority.rs",
     "validator/tests/distribution_contract/isolated_journey.rs",
+    "validator/tests/distribution_contract/journey_adversarial.rs",
+    "validator/tests/distribution_contract/journey_adversarial/scoped_reads_reject_symlink_hardlink_and_special_file_substitution.rs",
+    "validator/tests/distribution_contract/journey_adversarial/wrong_scope_identity_duplicates_and_registered_hidden_fail_closed.rs",
+    "validator/tests/distribution_contract/observation_races.rs",
+    "validator/tests/distribution_contract/package_journey_fixture.rs",
+    "validator/tests/distribution_contract/package_output.rs",
+    "validator/tests/distribution_contract/package_output/corrupt_after_write.rs",
+    "validator/tests/distribution_contract/package_output/every_identity_dimension_is_checked_before_any_effect.rs",
     "validator/tests/distribution_contract/runtime_session.rs",
     "validator/tests/distribution_contract/runtime_session/inode_swap.rs",
     "validator/tests/distribution_contract/runtime_session/install_authority.rs",
     "validator/tests/distribution_contract/runtime_session/install_staleness.rs",
+    "validator/tests/distribution_contract/version_identity.rs",
     "validator/tests/supported_package_identity_contract.rs",
-    "validator/tests/supported_package_identity_contract/typed_identity_surfaces_bind_only_verified_same_candidate_observations.rs",
-    "validator/src/distribution/package/product/tests/concurrent_output.rs"
+    "validator/tests/supported_package_identity_contract/confined_registry.rs",
+    "validator/tests/supported_package_identity_contract/context.rs",
+    "validator/tests/supported_package_identity_contract/host_surface_substitution_controls.rs",
+    "validator/tests/supported_package_identity_contract/independent_decoder_reinventories_without_writes_and_rejects_every_structural_substitution.rs",
+    "validator/tests/supported_package_identity_contract/typed_identity_surfaces_bind_only_verified_same_candidate_observations.rs"
   ],
   "touched_semantics": [
+    "deterministic-source-package-kernel-preserved",
+    "sealed-package-publication-authority",
     "sealed-confined-install-postimage-authority",
     "install-journey-binding-before-identity-issuance",
     "current-installed-object-revalidation",
     "runtime-plan-retains-current-install-authority",
     "runtime-execution-revalidates-install-before-spawn",
     "runtime-execution-revalidates-install-after-subprocess",
+    "descriptor-pinned-runtime-executable-authority",
     "stale-runtime-plan-replay-rejection",
-    "in-memory-install-effects-rejected-for-authority",
-    "cross-root-install-transplant-rejection",
-    "wrong-target-install-authority-rejection",
-    "same-bytes-installed-object-replacement-rejection",
-    "missing-installed-object-rejection",
-    "mutate-restore-stale-install-snapshot-rejection",
-    "descriptor-pinned-runtime-execution-retained",
-    "worker-result-v1-schema-conformance"
+    "caller-forged-package-and-app-registry-rejection",
+    "registry-authority-confined-to-app-registry",
+    "discovery-not-minted-from-registry-package-or-expected-identity",
+    "single-journey-bound-surface-chain-verification",
+    "rollback-requires-scoped-confined-postimage-authority",
+    "rollback-revalidates-current-installed-object-before-cas",
+    "rollback-rejects-cross-root-cross-scope-cross-target-journey-and-replacement-transplants",
+    "rollback-preserves-concurrent-target-replacement",
+    "worker-result-v1-full-increment-inventory"
   ],
-  "generated_outputs": [],
+  "generated_outputs": [
+    "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json"
+  ],
   "fixtures": [
+    "validator/src/distribution/package/product/tests/concurrent_output.rs",
+    "validator/src/distribution/package/product/tests/every_artifact_binding_dimension_is_checked_before_output_effects.rs",
+    "validator/src/distribution/package/product/tests/mod.rs",
+    "validator/src/distribution/package/product/tests/package_surface_identity.rs",
+    "validator/src/distribution/package/product/tests/repo.rs",
+    "validator/src/distribution/package/product/tests/source_mutate_restore_during_publication_rolls_back_output.rs",
+    "validator/src/distribution/package/product/tests/undeclared_secret_local_and_benign_skill_members_fail_closed.rs",
+    "validator/tests/distribution_contract/identity_ladder.rs",
+    "validator/tests/distribution_contract/install.rs",
+    "validator/tests/distribution_contract/install/automatic_and_explicit_rollbacks_preserve_concurrent_mutation.rs",
+    "validator/tests/distribution_contract/install/external_mutation.rs",
+    "validator/tests/distribution_contract/install/rollback_authority.rs",
+    "validator/tests/distribution_contract/isolated_journey.rs",
+    "validator/tests/distribution_contract/journey_adversarial.rs",
+    "validator/tests/distribution_contract/journey_adversarial/scoped_reads_reject_symlink_hardlink_and_special_file_substitution.rs",
+    "validator/tests/distribution_contract/journey_adversarial/wrong_scope_identity_duplicates_and_registered_hidden_fail_closed.rs",
+    "validator/tests/distribution_contract/observation_races.rs",
+    "validator/tests/distribution_contract/package_journey_fixture.rs",
+    "validator/tests/distribution_contract/package_output.rs",
+    "validator/tests/distribution_contract/package_output/corrupt_after_write.rs",
+    "validator/tests/distribution_contract/package_output/every_identity_dimension_is_checked_before_any_effect.rs",
+    "validator/tests/distribution_contract/runtime_session.rs",
+    "validator/tests/distribution_contract/runtime_session/inode_swap.rs",
     "validator/tests/distribution_contract/runtime_session/install_authority.rs",
     "validator/tests/distribution_contract/runtime_session/install_staleness.rs",
-    "validator/tests/distribution_contract/runtime_session/inode_swap.rs"
+    "validator/tests/distribution_contract/version_identity.rs",
+    "validator/tests/supported_package_identity_contract.rs",
+    "validator/tests/supported_package_identity_contract/confined_registry.rs",
+    "validator/tests/supported_package_identity_contract/context.rs",
+    "validator/tests/supported_package_identity_contract/host_surface_substitution_controls.rs",
+    "validator/tests/supported_package_identity_contract/independent_decoder_reinventories_without_writes_and_rejects_every_structural_substitution.rs",
+    "validator/tests/supported_package_identity_contract/typed_identity_surfaces_bind_only_verified_same_candidate_observations.rs"
   ],
   "effects": [
     {
       "class": "workspace_write",
-      "target": "n04-owned-source-tests-worker-result",
-      "performed": true
+      "target": "validator/src/distribution/** and validator/tests/distribution_contract/install**",
+      "performed": true,
+      "scope": "N04 source rollback repair"
+    },
+    {
+      "class": "workspace_write",
+      "target": "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json",
+      "performed": true,
+      "scope": "evidence-only handoff receipt"
     },
     {
       "class": "process",
-      "target": "isolated-cargo-verification",
+      "target": "isolated Cargo target under .codex-worktree",
       "performed": true
     },
     {
       "class": "network",
-      "target": "external-network",
+      "target": "external network",
       "performed": false
     },
     {
       "class": "external_write",
-      "target": "host-distribution-surfaces",
+      "target": "macOS package/install/cache/marketplace/app-registry/discovery/runtime live host surfaces",
       "performed": false
     }
   ],
   "requirements": [
-    "n04-install-authority-provenance",
-    "n04-runtime-current-install-authority",
-    "n04-runtime-plan-staleness-rejection",
-    "n04-seven-surface-identity",
-    "n04-false-pass-rejection",
-    "n04-zero-write-read-boundary",
-    "n04-one-journey-canonical-verification",
-    "worker-result-v1-schema-validation"
+    "accepted-base-to-source-head-exact-commit-list",
+    "accepted-base-to-source-head-exact-changed-path-diff",
+    "explicit-deletion-row",
+    "retained-artifact-sha256-and-byte-inventory",
+    "path-bound-artifact-aggregate",
+    "rollback-cross-root-transplant-rejection",
+    "rollback-same-byte-different-object-rejection",
+    "rollback-mutate-restore-rejection",
+    "rollback-wrong-scope-target-and-journey-rejection",
+    "rollback-concurrent-replacement-preservation",
+    "production-scope-core-rollback-authority-positive",
+    "worker-result-v1-schema-validation",
+    "independent-set-equality-against-git-diff",
+    "full-artifact-reinventory",
+    "no-readiness-release-completion-claim"
   ],
   "dependency_nodes": [
-    "n02-inventory",
-    "n03-cli-state"
+    "accepted-integration-base-5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
+    "source-head-18ecfc1de7e7c70886c81a17b801a89800cf6973",
+    "docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+    ".codex-worktree/env.sh"
   ],
   "changes": [
     {
-      "area": "install-authority",
-      "result": "InstallSnapshot carries sealed installed postimage authority only when effects expose a confined descriptor-backed postimage; in-memory/default effects cannot issue Installed or Runtime authority."
+      "area": "rollback-authority",
+      "result": "Public rollback now consumes ScopedInstall and validates the transaction target, scope, unbound journey state, root/target postimage location, package digest, and exact current InstalledPostimage before mutation."
     },
     {
-      "area": "runtime-plan-lifetime",
-      "result": "RuntimeProbePlan now retains a CurrentInstallAuthority derived from the bound install snapshot and confined ScopedInstall, and execute_runtime_probe revalidates it immediately before launch and again before accepting output."
+      "area": "install-postimage-capture",
+      "result": "ScopedInstall captures the post-rename object identity created by descriptor CAS and uses it for the transaction snapshot, closing same-byte replacement between install write and postimage observation."
     },
     {
-      "area": "runtime-replay",
-      "result": "Cloned runtime plans fail after uninstall and after uninstall/reinstall because the retained install postimage identity no longer matches the current installed object."
+      "area": "rollback-cas",
+      "result": "Rollback mutation uses crate-private exact-postimage CAS on ScopedInstall instead of target+digest authorization."
+    },
+    {
+      "area": "scope-authority",
+      "result": "ScopedInstall carries scope; public new preserves the existing PersonalFixture product path while crate-private for_scope supports production-scope core authority without public widening."
     },
     {
       "area": "tests",
-      "result": "Added deterministic after-plan stale controls for deleted installed archive, same-byte replacement, mutate/restore, during-execution replacement, and cloned-plan replay after uninstall/reinstall while preserving descriptor-pinned executable controls."
+      "result": "Added rollback authority controls for cross-root same digest, wrong scope, wrong target, journey-bound rollback refusal, same-byte different-object replacement, mutate/restore, concurrent rollback-boundary replacement, public constructor restoration, and Personal/Repository production-scope core authority."
     },
     {
-      "area": "strict-partition",
-      "result": "New private-interface diagnostic from CurrentInstallAuthority was removed; strict diagnostics returned to the pre-existing root/shared 660-error wall outside N04 ownership."
+      "area": "receipt-inventory",
+      "result": "WorkerResult inventories the full base..source diff and artifacts after the rollback source repair, superseding the receipt-only draft."
     },
     {
-      "area": "receipt-schema",
-      "result": "WorkerResult uses the canonical closed WORKER-RESULT-v1 top-level fields and constant no_claim_statement."
+      "area": "claim-ceiling",
+      "result": "Live macOS package/install/cache/marketplace/app-registry/discovery/runtime, readiness, release, completion, and parent acceptance claims remain withheld."
     }
   ],
   "commands_and_tests": [
     {
       "command": ".codex/setup-worktree-env.sh && source .codex-worktree/env.sh",
       "status": "pass",
-      "result": "Worktree-local Cargo/state/home/tmp/scratch roots initialized and used for checks."
+      "result": "Worktree-local Cargo target and tmp roots used. TMPDIR and CODEX_WORKTREE_TMP resolve under .codex-worktree/tmp."
     },
     {
-      "command": "git rev-parse HEAD && git rev-parse HEAD^{tree} && git rev-parse 5cc3be5f860de0071837f478bbe3a9de0d6c0e47^{commit}",
+      "command": "git rev-parse --abbrev-ref HEAD && git rev-parse HEAD && git rev-parse HEAD^{tree}",
       "status": "pass",
-      "result": "Source head 702556f454b8b0633e1949ceb577d83b49825e0e, source tree 7273f78d5297bca3f6816d97d9c8f6aa6e86ffbb, accepted integration base 5cc3be5f860de0071837f478bbe3a9de0d6c0e47. No self-rebase performed."
+      "result": "Branch codex/n04-distribution-runtime; source head 18ecfc1de7e7c70886c81a17b801a89800cf6973; source tree 6348adbf5f006f78f6545d9bcdf49e6eb92ccf84."
     },
     {
-      "command": "source .codex-worktree/env.sh && RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --test distribution_contract runtime_session --offline --jobs 16 -- --test-threads 16",
+      "command": "git diff --name-status 5cc3be5f860de0071837f478bbe3a9de0d6c0e47..HEAD",
       "status": "pass",
-      "result": "19 passed; 0 failed; 0 ignored; includes stale runtime plan controls for deleted install, same-byte installed archive replacement, mutate/restore, during-execution replacement, and cloned replay after uninstall/reinstall."
+      "result": "75 changed paths captured in touched_paths/final_state.changed_paths; 1 deletion captured explicitly."
+    },
+    {
+      "command": "source .codex-worktree/env.sh && RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --test distribution_contract install:: --offline --jobs 16 -- --test-threads 1",
+      "status": "pass",
+      "result": "14 passed; 0 failed; 0 ignored. Covers rollback cross-root, wrong-scope, wrong-target, journey-bound, same-byte replacement, mutate/restore, concurrent replacement, public constructor restoration, and Personal/Repository core authority."
     },
     {
       "command": "source .codex-worktree/env.sh && RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --test distribution_contract --offline --jobs 16 -- --test-threads 16",
       "status": "pass",
-      "result": "194 passed; 0 failed; 1 ignored; finished in 4.09s. The ignored test is distribution::host_effect::ledger::tests::subprocess_reservation_entrypoint, a subprocess helper invoked by the passing separate_process_reservation_race_has_one_winner parent race test."
+      "result": "203 passed; 0 failed; 1 ignored; finished in 4.91s. Ignored helper is subprocess_reservation_entrypoint invoked by the passing separate_process_reservation_race_has_one_winner test."
     },
     {
       "command": "source .codex-worktree/env.sh && RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --test supported_package_identity_contract --offline --jobs 16 -- --test-threads 16",
       "status": "pass",
-      "result": "4 passed; 0 failed; 0 ignored; finished in 0.06s."
+      "result": "4 passed; 0 failed; 0 ignored; finished in 0.13s."
     },
     {
-      "command": "source .codex-worktree/env.sh && rustfmt --check --edition 2024 --config skip_children=true <changed N04 Rust files>",
+      "command": "source .codex-worktree/env.sh && RUSTFLAGS='--cap-lints allow' cargo test -p ultragoal --lib distribution::filesystem::file::tests::exact_postimage_cas_rejects_same_bytes_different_object --offline --jobs 16 -- --test-threads 1",
       "status": "pass",
-      "result": "rustfmt --check passed for changed and new N04 distribution/package Rust files."
+      "result": "1 passed; 0 failed; 0 ignored; finished in 0.03s."
+    },
+    {
+      "command": "source .codex-worktree/env.sh && xargs rustfmt --check --edition 2024 --config skip_children=true < /tmp/n04_changed_rs_current_sorted.txt",
+      "status": "pass",
+      "result": "Changed N04 Rust files are rustfmt-clean."
+    },
+    {
+      "command": "line-cap source law over retained changed Rust paths",
+      "status": "pass",
+      "result": "All retained changed Rust files are <=250 lines; maximum observed 247 lines in validator/tests/distribution_contract/runtime_session/install_authority.rs."
+    },
+    {
+      "command": "git diff --check -- validator/src/distribution validator/tests/distribution_contract",
+      "status": "pass",
+      "result": "No source-scoped whitespace errors."
     },
     {
       "command": "source .codex-worktree/env.sh && python3 scripts/check-python-source-laws .",
@@ -187,148 +719,980 @@
       "result": "python source laws pass: 27 typed sources."
     },
     {
-      "command": "git diff --check",
-      "status": "pass",
-      "result": "No whitespace errors."
-    },
-    {
-      "command": "(git diff --name-only -- '*.rs'; git ls-files --others --exclude-standard -- '*.rs') | sort -u | xargs wc -l",
-      "status": "pass",
-      "result": "All changed/new Rust files are under 250 lines in the final source diff; runtime_session/install_authority.rs is 247 lines and filesystem/file.rs is 214 lines."
-    },
-    {
       "command": "source .codex-worktree/env.sh && cargo check -p ultragoal --lib --offline --jobs 16",
       "status": "blocked",
-      "result": "Exit 101. Strict -D warnings remains blocked by the existing root/shared warning wall outside this N04 ownership; current final probe reports could not compile ultragoal (lib) due to 660 previous errors and no CurrentInstallAuthority/private-interface owned diagnostic remains."
+      "result": "Known root/shared strict diagnostic wall remains outside N04 scope: could not compile ultragoal (lib) due to 660 previous errors. Broad exact-candidate gates are deferred to dependency-closed root checkpoint per parent cadence update."
     },
     {
-      "command": "python3 -m json.tool validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json >/dev/null",
-      "status": "pass",
-      "result": "WorkerResult JSON parsed before schema validation."
+      "command": "WorkerResult schema validation after rewrite",
+      "status": "pending",
+      "result": "To be executed after this evidence rewrite."
     },
     {
-      "command": "python3 - <<'PY' import json,jsonschema; schema=json.load(open('docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json')); data=json.load(open('validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json')); jsonschema.Draft202012Validator(schema).validate(data); print('schema ok') PY",
-      "status": "pass",
-      "result": "schema ok; closed top-level WorkerResult-v1 validation passed."
+      "command": "WorkerResult set equality and artifact re-inventory after rewrite",
+      "status": "pending",
+      "result": "To be executed after this evidence rewrite."
     }
   ],
   "artifacts": [
     {
       "path": "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json",
-      "sha256_self_excluded": true,
-      "hash_reported_by_final_handoff_after_commit": true
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "2e9a8715a3c8c886152c8607271c99a3e181b0b06cf1362a3056f845fa7aa667",
+      "source_head_blob_bytes": 17834,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true,
+      "final_evidence_self_excluded": true,
+      "self_exclusion_reason": "This path is the WorkerResult being refreshed after source head; its committed evidence hash/head must be reported outside the file because a file cannot contain its own final hash or commit."
     },
     {
       "path": "validator/src/distribution/filesystem/file.rs",
-      "sha256": "sha256:7694056897783a5ca03e29e72741197424f4d32eb945a2e8b06c6f9de79d7744",
-      "byte_length": 6754
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "156dc8a308602df59b3341c2cdc82d33ccacb1eeb3116e9fd37024b066038794",
+      "source_head_blob_bytes": 7223,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/filesystem/file/install_postimage_cas.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "c829cfbb7018642a61c56463e22dbb533f1113d4a7eda52f8d90c1fc1939d4c4",
+      "source_head_blob_bytes": 8009,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
     },
     {
       "path": "validator/src/distribution/filesystem/file/scoped_install.rs",
-      "sha256": "sha256:9dde5b144e0064661cb3119fd456e8f792b09ff41f4f88417fa5ed340c4cb49e",
-      "byte_length": 1446
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "c27cae7c48492e69b94273f2e8f7797ba328565d3000f20936ae20f523b99a2a",
+      "source_head_blob_bytes": 2249,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/filesystem/root/confined_root.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "615be37c81cba72ca1bb7532f6a56156ec398ade661551221157925886ade0c3",
+      "source_head_blob_bytes": 4800,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/filesystem/root/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "f6236f18b851cfa1c16dcc0da465ba2725584dac47b37386022570209d00e066",
+      "source_head_blob_bytes": 5728,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/filesystem/tree.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "c22b5c9c0752fb9458114bf48cffc23c2e974f2dce351bfe238b2166db72d5da",
+      "source_head_blob_bytes": 8132,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_capability/host_adapter_kind.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "6e9c3705682e84d0d896ca6b7694850fb29adccfeb90042fa2dafd0664c37803",
+      "source_head_blob_bytes": 8219,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_capability/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "32b229059578d2bae133f758b858f3565225e00f5ea80868826590f3c9051a46",
+      "source_head_blob_bytes": 412,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_capability/supported_runtime_route.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "e235090ee87e02c31a11bd2d036a4f4812a41e097e7a73793b3c60159a769c77",
+      "source_head_blob_bytes": 549,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "e716eb5945d9b29931bccc17987fd200d57fe3e1ea7743df7a6d97f102c7debd",
+      "source_head_blob_bytes": 2763,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/host_effect/executor/target.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "4f94cc10e1332c23e2d9bdec7d275328c46ea0253a3430cb25f3f2034cf7c89a",
+      "source_head_blob_bytes": 8808,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/identity/identity_surface.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "98b2075924dac523611a5d4a64a65dfbbd400ddb0f31fac5730aadbd94b18117",
+      "source_head_blob_bytes": 4417,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/identity/mixed_journey_tests.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "aed9d56f3cf8f33d5aeb18086532aeacfd630f39652d85876496657b9943db93",
+      "source_head_blob_bytes": 2867,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/identity/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "d20f16225cab874bd8e804ae93f126be64e533897166982af3078ff9e58cc3d9",
+      "source_head_blob_bytes": 447,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/identity/surface_identity_install.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "042893a28223759cdbf1af5af2202a316aef0aceea8aa7a9ca8689894883c1e7",
+      "source_head_blob_bytes": 1377,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/identity/surface_identity_new.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "d4cb86e11c539c405a0ebedf0a246f5a9aad8880936c04be982245bb9f55af31",
+      "source_head_blob_bytes": 8463,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/identity/verify_bound_surface_chain.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "49ae1726475d955441fb70c8605c243c0e665b4cd14faa6fdf924b9156dd235f",
+      "source_head_blob_bytes": 2206,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
     },
     {
       "path": "validator/src/distribution/install/install_limit.rs",
-      "sha256": "sha256:73437080623cac5cbf8670b7e582a6d73cc9b9643f3da5a2637c63690a72db6b",
-      "byte_length": 5217
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "73437080623cac5cbf8670b7e582a6d73cc9b9643f3da5a2637c63690a72db6b",
+      "source_head_blob_bytes": 5217,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/install/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "3f76acb2bfc8fe1d44dce04f5183bb87bd3a09f32fffbc73dc025a9e36a747dd",
+      "source_head_blob_bytes": 478,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/install/postimage.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "0d9d445af44e4316b94433381706acf5032b538a0738d793f6c3ad75efd6e403",
+      "source_head_blob_bytes": 1127,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
     },
     {
       "path": "validator/src/distribution/install/snapshot.rs",
-      "sha256": "sha256:8573b2f787547307038e5a4b69da1d867a0a8dd3a9e197e50d95a593b2730c30",
-      "byte_length": 6430
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "7833fa0f4dddb58b53c024964523d1f0d2484d42703fd1cbcd12dc242e8a26a3",
+      "source_head_blob_bytes": 7961,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/install/uninstall.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "853f80877700b0137ff4b089c393ba3ce4d5abf1c7840db7e11b45583d58bcc7",
+      "source_head_blob_bytes": 3562,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "a949ff00bc3c587bf28abe5ea0f642b7cc942edd632564eda88bc1d575f30785",
+      "source_head_blob_bytes": 3311,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/model.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "0da774c5bf7516018153a42174240edb981e2aa412f2e4fe31338a43f3b80647",
+      "source_head_blob_bytes": 6350,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/observations.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "84b4a1e79796c9357ca380318d6fccdaa053c7b0ae373963186e571b201707f0",
+      "source_head_blob_bytes": 3178,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/package/manifest_bind.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "ffe1f5aec4a6efa61531d7922ca53de5c806b804f07b2ad4653e097cfcd19f49",
+      "source_head_blob_bytes": 2915,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/package/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "d55b252285dc7ad0084b92fd1b7856a279f5b6e35994c27b7febce547721d35d",
+      "source_head_blob_bytes": 2371,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/package/output/output_entry_limit.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "986866a522e082baa205db33e201ed8f691470a14ef1c562f5d7dfa2b2f90a7c",
+      "source_head_blob_bytes": 9041,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/package/product/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "d65594e4ee01504031e9f45b474b4e31ec72c809895c77670f97986bb6d6f81c",
+      "source_head_blob_bytes": 880,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/package/product/plugin_id.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "db23a2562269dee7276535609b499ae4ce4debcf337ef2de66177dd7ff7dd963",
+      "source_head_blob_bytes": 6240,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/package/product/tests/concurrent_output.rs",
+      "status": "D",
+      "retained": false,
+      "deleted": true,
+      "source_head_blob_sha256": null,
+      "source_head_blob_bytes": null,
+      "file_type": "deleted_at_source_head",
+      "link_count": null,
+      "inventory_note": "explicit deletion in git diff accepted-base..source-head"
+    },
+    {
+      "path": "validator/src/distribution/package/product/tests/every_artifact_binding_dimension_is_checked_before_output_effects.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "45634c86280db61d5c1e4c83ba0aae6ca4e656889c8245313ab1e86dc0d731bb",
+      "source_head_blob_bytes": 7515,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/package/product/tests/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "c5c19df0173e6d1b02075df8071ae102a4548338bc550f63badae5a171ecfeb0",
+      "source_head_blob_bytes": 1043,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/package/product/tests/package_surface_identity.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "5337cf18fb0d82de0845a01f0538924c072f8e93f2c0b6068633f4ea8467e3cd",
+      "source_head_blob_bytes": 2322,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/package/product/tests/repo.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "925f04bd5f3d18efbb18da536c3c087adc57a31e3ab3cdda00d6bc4bf217704a",
+      "source_head_blob_bytes": 5097,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/package/product/tests/source_mutate_restore_during_publication_rolls_back_output.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "4515ec43a09752bebde53eb61ee5fb45206ca88f74ca46ea18a69cb4b71e86e9",
+      "source_head_blob_bytes": 5942,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/package/product/tests/undeclared_secret_local_and_benign_skill_members_fail_closed.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "058b2274f9341bfc697d4222475c6b2dc436e31beb1ea7f437727505107aef0a",
+      "source_head_blob_bytes": 8287,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/registry_observation/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "2d20e465f7ed8ca140c134ba71be20198a37262f43bbaf077f91d5d3f136df0a",
+      "source_head_blob_bytes": 567,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/registry_observation/observe_discovery.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "3f214d5d72fad043255298ef3db4e95ca3e61c1b7e3dbf72e3c43793fc633efa",
+      "source_head_blob_bytes": 3708,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/registry_observation/registry_limit.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "9b2f369b904f764ab822d59d56770896f4e65a764448fa028674418183c5b95c",
+      "source_head_blob_bytes": 7906,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/registry_observation/validate_app_registry.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "eddb2616de4a7bb310c70737412f2d710827cb62c109f6b710e69125d75c8e9b",
+      "source_head_blob_bytes": 1904,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
     },
     {
       "path": "validator/src/distribution/runtime_probe/mod.rs",
-      "sha256": "sha256:13a43033e6781569c5a75dfe08720fe369141f9affae1d485e5b07410af2db65",
-      "byte_length": 941
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "13a43033e6781569c5a75dfe08720fe369141f9affae1d485e5b07410af2db65",
+      "source_head_blob_bytes": 941,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
     },
     {
       "path": "validator/src/distribution/runtime_probe/output_limit.rs",
-      "sha256": "sha256:07102c09bcdc6363dae891000f9fb8d1a3a32d87734f313d3237f65cc63cd7ff",
-      "byte_length": 6499
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "07102c09bcdc6363dae891000f9fb8d1a3a32d87734f313d3237f65cc63cd7ff",
+      "source_head_blob_bytes": 6499,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/runtime_probe/pinned_executable.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "e5e7be2422e0c4a813d3a6e59bfb585a4e2f8cc99b6b032ba7c497044b4ca381",
+      "source_head_blob_bytes": 7693,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/runtime_probe/unique_marker.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "9620cde8f01400ddc46c0958c6c759c4ca3d2e171b26dbe7e8c00f57bd984d42",
+      "source_head_blob_bytes": 1150,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/spec/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "f1de2f5cb22b1e83102ca042187af40a37998f0524d6e0fdfc29206b64158d10",
+      "source_head_blob_bytes": 321,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/spec/validate_layer.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "0362c3853f91e4e4fef6ce1e885f9893f40cd55358c698ad31ae476bdc38d0bd",
+      "source_head_blob_bytes": 3705,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/verify/mod.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "95860fd1035fbb792a44f7aa4809afdea7a3882b6c97a08e944917b68d3a7ee1",
+      "source_head_blob_bytes": 557,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/src/distribution/verify/observations_disagree.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "526612a9909224b7079155b7fb4a24d9167ac01268596c874ba24d100bc18546",
+      "source_head_blob_bytes": 1985,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/identity_ladder.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "cc8b67347568ce34b8b2c97cb3703086c37cbf960c49afd7a51f05b8143e4744",
+      "source_head_blob_bytes": 2398,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/install.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "6eb0bc039d2d6b6edb95771eb2a0947972ed84e5f43d945ea2c60f576cbfa863",
+      "source_head_blob_bytes": 615,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/install/automatic_and_explicit_rollbacks_preserve_concurrent_mutation.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "c9b4d3728e290c954ebebac55caf29718823063530d079412628d93764456fce",
+      "source_head_blob_bytes": 2695,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/install/external_mutation.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "c7db3e859b4908b3a063c75d83d3637588f54ffdcd30110b4a413b33a405c001",
+      "source_head_blob_bytes": 7540,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/install/rollback_authority.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "5dc625dd745b6f0c7eff100406e3392693fcf5297208ab87da734886abf653bd",
+      "source_head_blob_bytes": 9054,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/isolated_journey.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "f877a5e4ad38295ce32f0bbce6f097d07713fd671a0f5b7d91ffabe4cec7e808",
+      "source_head_blob_bytes": 7388,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/journey_adversarial.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "e50ad44b9e69b605de58b53d7454f7835d350b2f4be7750a63dffeb5ba02ab87",
+      "source_head_blob_bytes": 718,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/journey_adversarial/scoped_reads_reject_symlink_hardlink_and_special_file_substitution.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "f5c16c605c712061ae7492dc22cd477a5bb50ad0b7fdd27e9c29564d21262e35",
+      "source_head_blob_bytes": 2350,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/journey_adversarial/wrong_scope_identity_duplicates_and_registered_hidden_fail_closed.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "144cfc3d88d2f217ca7e8d10158646956d63d7bce18afbdcdf5f55ad462fc633",
+      "source_head_blob_bytes": 4280,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/observation_races.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "c12e2e3eed68aa0f5e8622e6147bf033043183facba0c03c75c3afd7617833c9",
+      "source_head_blob_bytes": 3176,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/package_journey_fixture.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "9d51aa49947bc6a8fcb75700f52c6dc836a30c63025298b48e5a6d4a7a294324",
+      "source_head_blob_bytes": 5511,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/package_output.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "ac06cb8b4e62cdafeb64ca954074e3a985f2e9e611ea7d2e39e1df47490844ce",
+      "source_head_blob_bytes": 609,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/package_output/corrupt_after_write.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "b9641291fcde597bc546d2446c69fe85408723e09764846055256537d55c7e36",
+      "source_head_blob_bytes": 4441,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/package_output/every_identity_dimension_is_checked_before_any_effect.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "38b7784a0b3128a9fc0b5a2243e8bb0fd3c3eaf7c1c8d2517e5ccff33cf83ae3",
+      "source_head_blob_bytes": 3813,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
     },
     {
       "path": "validator/tests/distribution_contract/runtime_session.rs",
-      "sha256": "sha256:a7274a34c00a6713fd1d80980d8bf9b5da242e3196e1d46f3140d75b6c46b92e",
-      "byte_length": 6627
-    },
-    {
-      "path": "validator/tests/distribution_contract/runtime_session/install_staleness.rs",
-      "sha256": "sha256:202256eaca12af1e9996bcfcd79a5a3e2f1b9994d5eb612376731b99599d2697",
-      "byte_length": 3827
-    },
-    {
-      "path": "validator/tests/distribution_contract/runtime_session/install_authority.rs",
-      "sha256": "sha256:946c73dd747c16459739fd8e8be6f29e5b0008dd6d44ab3c3bc1549c6a714e90",
-      "byte_length": 7942
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "a7274a34c00a6713fd1d80980d8bf9b5da242e3196e1d46f3140d75b6c46b92e",
+      "source_head_blob_bytes": 6627,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
     },
     {
       "path": "validator/tests/distribution_contract/runtime_session/inode_swap.rs",
-      "sha256": "sha256:229b0d8be5aa6d358a4b7ec904033df3f2ced6587cab6c423b01ed57356ba759",
-      "byte_length": 4852
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "229b0d8be5aa6d358a4b7ec904033df3f2ced6587cab6c423b01ed57356ba759",
+      "source_head_blob_bytes": 4852,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/runtime_session/install_authority.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "946c73dd747c16459739fd8e8be6f29e5b0008dd6d44ab3c3bc1549c6a714e90",
+      "source_head_blob_bytes": 7942,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/runtime_session/install_staleness.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "202256eaca12af1e9996bcfcd79a5a3e2f1b9994d5eb612376731b99599d2697",
+      "source_head_blob_bytes": 3827,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/distribution_contract/version_identity.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "29ac626bb91be1bada95908ee0fcbe11f4249dca43b43259719dba4d9bc97852",
+      "source_head_blob_bytes": 6092,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/supported_package_identity_contract.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "26ea0dbaf25ffd1c210c083309c2ff69eda0c83cf1df4f193d9baa74f4b03cc8",
+      "source_head_blob_bytes": 1850,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/supported_package_identity_contract/confined_registry.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "799c5a5a64248c357e378ce6a868a34608ca3cca0b697b6e3ad36cf63cb9ed27",
+      "source_head_blob_bytes": 3374,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/supported_package_identity_contract/context.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "ef7bd54bbd5a47232ce6866a14e4bc3b8ef8a7e19383822ed50c1ccf2ac9e4a2",
+      "source_head_blob_bytes": 6735,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/supported_package_identity_contract/host_surface_substitution_controls.rs",
+      "status": "A",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "c7b61eb98185b0dcd43ed05d95c66f76c146ce2bb0d75c7850e2d01c05f320ee",
+      "source_head_blob_bytes": 2962,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/supported_package_identity_contract/independent_decoder_reinventories_without_writes_and_rejects_every_structural_substitution.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "2873549cf870f01c88e1d8f6d8e2809383b12bafb97c7465048d1463971a2289",
+      "source_head_blob_bytes": 8446,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
+    },
+    {
+      "path": "validator/tests/supported_package_identity_contract/typed_identity_surfaces_bind_only_verified_same_candidate_observations.rs",
+      "status": "M",
+      "retained": true,
+      "deleted": false,
+      "source_head_blob_sha256": "3d2933aa7a199a667d45cad9f3854d461ed092881d6c3ff5e8a3e12683ca854d",
+      "source_head_blob_bytes": 5749,
+      "file_type": "regular_file",
+      "worktree_inventory_file_type": "regular_file",
+      "worktree_inventory_link_count": 1,
+      "single_link_regular_file_verified": true
     }
   ],
   "findings": [
     {
-      "id": "parent-runtime-plan-staleness",
-      "status": "repaired-in-source-head-702556f45",
-      "finding": "Runtime plans revalidated installed archive only at construction, allowing delete, same-byte replacement, mutate/restore, concurrent replacement, and cloned replay after uninstall to still mint Runtime.",
-      "evidence": "RuntimeProbePlan retains CurrentInstallAuthority and execute_runtime_probe revalidates before spawn and after subprocess output; runtime_session/install_staleness.rs covers deterministic negatives."
+      "severity": "corrected",
+      "finding": "Rollback authority no longer authorizes mutation by target string plus installed package digest; it requires exact confined ScopedInstall authority and current InstalledPostimage equality."
     },
     {
-      "id": "parent-install-authority-transplant",
-      "status": "remains-repaired-in-source-head-47be04350",
-      "finding": "InstallSnapshot previously carried no confined root/object/journey authority, allowing same-package cross-root install snapshot transplant into Installed and Runtime identity issuance.",
-      "evidence": "Install authority controls remain passing in runtime_session focused target."
+      "severity": "corrected",
+      "finding": "Install transaction postimage capture is tied to the descriptor-moved object, closing same-byte replacement between install CAS and transaction authority capture."
     },
     {
-      "id": "declared-existing-deletion",
-      "status": "declared",
-      "finding": "The branch deletes validator/src/distribution/package/product/tests/concurrent_output.rs relative to the accepted integration base.",
-      "evidence": "The deletion is declared in final_state.deleted_paths and touched_paths."
+      "severity": "corrected",
+      "finding": "Cross-root same-digest, same-byte different-object, mutate/restore, wrong scope, wrong target, journey-bound, concurrent replacement, and production-scope core authority controls are present and passing under the required worktree env."
     },
     {
-      "id": "strict-check-wall",
-      "status": "unresolved-outside-owned-scope",
-      "finding": "Strict cargo check remains blocked by root/shared diagnostics outside N04-owned distribution/package surfaces.",
-      "evidence": "Final cargo check -p ultragoal --lib --offline --jobs 16 reports could not compile ultragoal (lib) due to 660 previous errors."
+      "severity": "blocker",
+      "finding": "Root-owned production lifecycle callers still need explicit adoption of crate-private production-scope ScopedInstall authority; N04 core provides the authority but did not edit root-owned plugin_product wiring."
+    },
+    {
+      "severity": "claim_ceiling",
+      "finding": "No live macOS package/install/cache/marketplace/AppRegistry/discovery/runtime journey was exercised; those surfaces remain unclaimed."
     }
   ],
   "unresolved_dependencies": [
-    "strict-root-shared-warning-wall-outside-n04-ownership",
-    "root-owned-plugin-product-host-lifecycle-production-chain",
-    "live-supported-host-discovery-enumerator-or-prober",
-    "live-supported-host-runtime-proof"
+    "Root-owned plugin_product/host_lifecycle/verify.rs remains a synthetic five-row caller and does not make the N04 seven-surface chain production-reachable.",
+    "Root-owned plugin_product/distribution_adapter/effects/binding.rs and restoration.rs should adopt exact crate-private production scope authority instead of relying on the fixture default where applicable.",
+    "No live macOS supported-host package/install/cache/marketplace/AppRegistry/discovery/runtime journey has been exercised in this worker.",
+    "Strict cargo check remains blocked by the root/shared warning wall reporting 660 previous errors.",
+    "Parent acceptance, integration, rebase, publication, and release state remain root-owned and unclaimed."
   ],
   "requested_root_changes": [
     {
-      "surface": "plugin_product/host_lifecycle/verify.rs:7-48",
-      "request": "Replace the synthetic five-row caller chain with a production-reachable seven-row chain that obtains package, install, cache, marketplace, AppRegistry, Discovery, and Runtime rows only from accepted authority adapters.",
-      "why": "Root owns plugin_product/host_lifecycle/verify.rs and public production reachability; this N04 branch cannot edit it."
+      "path": "validator/src/plugin_product/host_lifecycle/verify.rs",
+      "requested_change": "Replace the synthetic five-row caller with root-owned production wiring that makes the N04 seven-surface chain reachable through the supported host lifecycle.",
+      "why": "N04 can provide sealed package/install/registry/discovery/runtime authorities, but root-owned product lifecycle wiring determines production reachability."
     },
     {
-      "surface": "strict root/shared warning wall",
-      "request": "Resolve root/shared -D warnings outside validator/src/distribution/**, validator/src/package/**, and distribution/package-exclusive tests so strict cargo check can complete without cap-lints.",
-      "why": "Focused N04 tests run to completion with cap-lints behavior execution, but strict library diagnostics still fail before whole-lib proof."
+      "path": "validator/src/plugin_product/distribution_adapter/effects/binding.rs",
+      "requested_change": "Adopt crate-private production-scope ScopedInstall authority for Personal/Repository installation routes instead of fixture-default construction where the product route is production-scoped.",
+      "why": "Rollback now requires exact scope authority; N04 owned core exposes crate-private scope authority, but root-owned product adapter must thread the real product scope."
     },
     {
-      "surface": "live supported-host discovery/runtime route",
-      "request": "Provide or route a supported-host enumerator/prober that can independently observe actual host-visible registration in a fresh session and connect it to the root-owned installed journey.",
-      "why": "N04 refuses discovery/runtime substitution; without live host observation, Discovery and Runtime claims remain withheld."
+      "path": "validator/src/plugin_product/distribution_adapter/effects/restoration.rs",
+      "requested_change": "Thread the original transaction scope into rollback restoration by constructing the matching crate-private scoped install authority.",
+      "why": "Prevents production rollback from relying on fixture defaults and makes root-owned restoration compatible with exact scope validation."
+    },
+    {
+      "path": "root-owned strict warning wall",
+      "requested_change": "Resolve the non-N04 strict cargo check warning/error wall currently reporting 660 previous errors.",
+      "why": "This worker cannot claim strict workspace cleanliness while root/shared diagnostics remain outside owned scope."
     }
   ],
   "limitations": [
-    "This worker does not claim N04 acceptance.",
-    "This worker does not claim parent acceptance.",
-    "This worker does not claim live macOS package, install, cache, marketplace, app-registry, discovery, or runtime behavior.",
-    "This worker does not claim runtime readiness.",
-    "This worker does not claim release readiness.",
-    "This worker does not claim completion.",
-    "Focused tests exercise source and fixture behavior only; they do not prove a live macOS host journey.",
-    "Discovery remains withheld unless fresh supported-host registration or visibility can be independently enumerated or probed.",
-    "Runtime identity is source/fixture hardened but not live-host proven.",
-    "Strict whole-lib proof remains blocked by the existing root/shared 660-error warning wall outside N04 ownership."
+    "WorkerResult final evidence commit/tree/hash are self-excluded from the file and must be reported by final handoff after commit.",
+    "Artifact hashes and bytes are for blobs at source head before the final evidence commit; the WorkerResult path also has final evidence bytes after this rewrite.",
+    "Independent reviewers continued to flag root-owned production caller adoption as REWORK; N04 records it as a requested root change because plugin_product surfaces are explicitly outside owned write scope.",
+    "No readiness, release, completion, live macOS runtime, parent acceptance, or root adoption claim is made."
   ],
   "no_claim_statement": "This worker does not claim readiness, release, or completion."
 }
