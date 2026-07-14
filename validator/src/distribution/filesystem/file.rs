@@ -4,7 +4,8 @@ use super::root::ConfinedRoot;
 use crate::distribution::cache::MarketplaceEffects;
 use crate::distribution::error::{DistributionError, DistributionErrorId, error};
 use crate::distribution::install::{
-    CurrentInstallAuthority, ExpectedPrior, InstallEffects, InstallSnapshot, InstalledPostimage,
+    CurrentInstallAuthority, ExpectedPrior, InstallEffects, InstallScope, InstallSnapshot,
+    InstalledPostimage,
 };
 use crate::distribution::package::PackageEffects;
 use crate::distribution::reader::sha256;
@@ -203,12 +204,27 @@ impl MarketplaceEffects for ScopedFile {
 #[derive(Clone, Debug)]
 pub struct ScopedInstall {
     root: ConfinedRoot,
+    scope: Option<InstallScope>,
+    last_postimage: Option<(String, InstalledPostimage)>,
 }
 
 impl ScopedInstall {
     pub fn new(root: ConfinedRoot) -> Self {
-        Self { root }
+        Self::for_scope(root, InstallScope::PersonalFixture)
+    }
+
+    pub(crate) fn for_scope(root: ConfinedRoot, scope: InstallScope) -> Self {
+        Self {
+            root,
+            scope: Some(scope),
+            last_postimage: None,
+        }
+    }
+
+    pub(crate) fn scope(&self) -> Option<InstallScope> {
+        self.scope
     }
 }
 
+include!("file/install_postimage_cas.rs");
 include!("file/scoped_install.rs");

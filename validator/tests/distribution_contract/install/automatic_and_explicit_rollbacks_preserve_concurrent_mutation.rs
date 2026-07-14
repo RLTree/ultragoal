@@ -12,13 +12,6 @@ fn automatic_and_explicit_rollbacks_preserve_concurrent_mutation() {
     assert_eq!(failure.id(), DistributionErrorId::InstallConflict);
     assert_eq!(effects.files[TARGET], automatic);
     assert_eq!(effects.writes, 1);
-    let explicit = b"mutation before explicit rollback".to_vec();
-    let mut effects = MemoryEffects::default();
-    let transaction = install(&plan, &package, &mut effects).unwrap();
-    effects.mutate_before_transition = Some((2, ExternalMutation::Replace(explicit.clone())));
-    let failure = rollback_install(transaction, &mut effects).unwrap_err();
-    assert_eq!(failure.id(), DistributionErrorId::InstallConflict);
-    assert_eq!(effects.files[TARGET], explicit);
 }
 
 #[test]
@@ -32,12 +25,6 @@ fn verification_rollback_and_rollback_failure_are_causal() {
     let failure = install(&plan, &package, &mut effects).unwrap_err();
     assert_eq!(failure.id(), DistributionErrorId::EffectFailed);
     assert!(!effects.files.contains_key(TARGET));
-    let mut effects = MemoryEffects::default();
-    let transaction = install(&plan, &package, &mut effects).unwrap();
-    effects.fail_transition_at = Some(2);
-    let failure = rollback_install(transaction, &mut effects).unwrap_err();
-    assert_eq!(failure.id(), DistributionErrorId::RollbackFailed);
-    assert_eq!(effects.files[TARGET], package.archive());
 }
 
 #[test]

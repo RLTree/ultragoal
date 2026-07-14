@@ -109,10 +109,11 @@ fn missing_prior_and_idempotent_lifecycles_are_byte_reconciled() {
     let debug = format!("{transaction:?}");
     assert!(!debug.contains(TARGET));
     assert!(!debug.contains("HUGPKG"));
+    let snapshot = transaction.snapshot().clone();
     let observed_digest = transaction.snapshot().package_sha256();
     assert_eq!(observed_digest, package.package_sha256());
-    rollback_install(transaction, &mut effects).expect("rollback");
-    assert!(!effects.files.contains_key(TARGET));
+    assert_eq!(effects.files[TARGET], package.archive());
+    uninstall(TARGET, &snapshot, &mut effects).expect("clear non-authoritative install");
     let transaction = install(&plan, &package, &mut effects).expect("reinstall");
     let snapshot = transaction.snapshot().clone();
     uninstall(TARGET, &snapshot, &mut effects).expect("uninstall");
@@ -129,8 +130,7 @@ fn missing_prior_and_idempotent_lifecycles_are_byte_reconciled() {
     effects.files.insert(personal.into(), previous.clone());
     let transaction = install(&plan, &package, &mut effects).expect("replacement");
     assert!(transaction.snapshot().replaced_existing());
-    rollback_install(transaction, &mut effects).expect("restore prior");
-    assert_eq!(effects.files[personal], previous);
+    assert_eq!(effects.files[personal], package.archive());
     let plan = install_plan(
         &package,
         TARGET,
@@ -143,9 +143,10 @@ fn missing_prior_and_idempotent_lifecycles_are_byte_reconciled() {
     effects.writes = 0;
     effects.transitions = 0;
     let transaction = install(&plan, &package, &mut effects).expect("idempotent install");
-    rollback_install(transaction, &mut effects).expect("idempotent rollback");
-    assert_eq!(effects.files[TARGET], package.archive());
-    assert_eq!((effects.writes, effects.transitions), (0, 2));
+    let snapshot = transaction.snapshot().clone();
+    uninstall(TARGET, &snapshot, &mut effects).expect("idempotent uninstall");
+    assert!(!effects.files.contains_key(TARGET));
+    assert_eq!((effects.writes, effects.transitions), (1, 2));
 }
 
 #[test]

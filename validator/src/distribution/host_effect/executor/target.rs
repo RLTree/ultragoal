@@ -54,7 +54,10 @@ impl PublicationFailure {
             observation: None,
         }
     }
-    fn observed(id: HostEffectExecutorErrorId, observation: PublicationInventoryObservation) -> Self {
+    fn observed(
+        id: HostEffectExecutorErrorId,
+        observation: PublicationInventoryObservation,
+    ) -> Self {
         Self {
             id,
             observation: Some(observation),
@@ -73,10 +76,14 @@ impl ConfinedHostEffectTarget {
         name: &str,
     ) -> Result<(), PublicationFailure> {
         if unsafe_name(name) {
-            return Err(PublicationFailure::new(HostEffectExecutorErrorId::InvalidTargetRoot));
+            return Err(PublicationFailure::new(
+                HostEffectExecutorErrorId::InvalidTargetRoot,
+            ));
         }
         if self.root.join(name).exists() {
-            return Err(PublicationFailure::new(HostEffectExecutorErrorId::UnsafeObject));
+            return Err(PublicationFailure::new(
+                HostEffectExecutorErrorId::UnsafeObject,
+            ));
         }
         if fs::read_dir(&self.root)
             .map_err(|_| PublicationFailure::new(HostEffectExecutorErrorId::InvalidTargetRoot))?
@@ -86,7 +93,9 @@ impl ConfinedHostEffectTarget {
                     .is_some_and(|value| value.starts_with(&format!(".{name}.")))
             })
         {
-            return Err(PublicationFailure::new(HostEffectExecutorErrorId::TempCollision));
+            return Err(PublicationFailure::new(
+                HostEffectExecutorErrorId::TempCollision,
+            ));
         }
         Ok(())
     }
@@ -105,7 +114,9 @@ impl ConfinedHostEffectTarget {
         let temporary = expected_regular(&temp_name, bytes.len() as u64, &content_sha256)?;
         let expectation =
             PublicationExpectation::new(effect_identity_sha256.into(), prior, next, temporary)
-                .map_err(|_| PublicationFailure::new(HostEffectExecutorErrorId::FalsePassReceipt))?;
+                .map_err(|_| {
+                    PublicationFailure::new(HostEffectExecutorErrorId::FalsePassReceipt)
+                })?;
         Ok(PreparedPublication {
             name: name.into(),
             temp_name,
@@ -219,12 +230,12 @@ impl ConfinedHostEffectTarget {
     }
 
     fn identity(&self) -> Result<ObservedTargetIdentity, SupportedHostLifecycleError> {
-        let object = HostObjectIdentity::from_metadata(&fs::symlink_metadata(&self.root).map_err(
-            |_| lifecycle_error(SupportedHostLifecycleErrorId::TargetSubstitution),
-        )?)?;
+        let object = HostObjectIdentity::from_metadata(
+            &fs::symlink_metadata(&self.root)
+                .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::TargetSubstitution))?,
+        )?;
         ObservedTargetIdentity::new(&self.scope, self.generation, object)
     }
-
 }
 
 include!("target/observation_method.rs");

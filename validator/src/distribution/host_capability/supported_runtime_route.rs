@@ -1,6 +1,9 @@
 pub(crate) const SUPPORTED_RUNTIME_PROGRAM: &str = "runtime/runtime-probe-bin";
 
-pub(crate) fn supported_runtime_program(path: &Path, home: &Path) -> Result<bool, DistributionError> {
+pub(crate) fn supported_runtime_program(
+    path: &Path,
+    home: &Path,
+) -> Result<bool, DistributionError> {
     let canonical = path
         .canonicalize()
         .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;

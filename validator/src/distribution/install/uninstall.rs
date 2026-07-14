@@ -25,14 +25,37 @@ pub fn uninstall(
 
 pub fn rollback_install(
     transaction: InstallTransaction,
-    effects: &mut impl InstallEffects,
+    effects: &mut ScopedInstall,
 ) -> Result<(), DistributionError> {
-    restore_if_candidate(
-        effects,
+    transaction.revalidate_for_rollback(effects)?;
+    let expected = transaction
+        .snapshot
+        .postimage()
+        .ok_or_else(|| error(DistributionErrorId::ProvenanceMismatch))?;
+    match effects.compare_exchange_installed_postimage(
         &transaction.target,
-        &transaction.snapshot.package_sha256,
+        expected,
         transaction.previous.as_deref(),
-    )
+    ) {
+        Ok(true) => {}
+        Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
+        Err(_) => return Err(error(DistributionErrorId::RollbackFailed)),
+    }
+    let restored = read(effects, &transaction.target)
+        .map_err(|_| error(DistributionErrorId::RollbackFailed))?;
+    if restored.as_deref() != transaction.previous.as_deref() {
+        return Err(error(DistributionErrorId::RollbackFailed));
+    }
+    Ok(())
+}
+
+pub(super) fn restore_if_candidate(
+    effects: &mut impl InstallEffects,
+    target: &str,
+    installed_sha256: &str,
+    previous: Option<&[u8]>,
+) -> Result<(), DistributionError> {
+    restore_if_digest_candidate(effects, target, installed_sha256, previous)
 }
 
 fn read(
@@ -60,7 +83,7 @@ fn prior_matches(expected: &ExpectedPrior, actual: Option<&[u8]>) -> bool {
     }
 }
 
-fn restore_if_candidate(
+fn restore_if_digest_candidate(
     effects: &mut impl InstallEffects,
     target: &str,
     installed_sha256: &str,

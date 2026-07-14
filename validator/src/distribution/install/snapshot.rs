@@ -55,6 +55,9 @@ impl InstallSnapshot {
     pub(crate) fn root_id(&self) -> Option<&str> {
         self.postimage.as_ref().map(|row| row.root_id.as_str())
     }
+    pub(crate) fn postimage(&self) -> Option<&InstalledPostimage> {
+        self.postimage.as_ref()
+    }
     pub(crate) fn journey_binding_sha256(&self) -> Option<&str> {
         self.journey_binding_sha256.as_deref()
     }
@@ -182,5 +185,39 @@ impl InstallTransaction {
         binding: &crate::distribution::host_capability::JourneyBinding,
     ) -> Result<(), DistributionError> {
         self.snapshot.bind_journey(binding)
+    }
+
+    pub(crate) fn revalidate_for_rollback(
+        &self,
+        effects: &mut ScopedInstall,
+    ) -> Result<(), DistributionError> {
+        validate_relative_path(&self.target)?;
+        if self.snapshot.journey_binding_sha256.is_some() {
+            return Err(error(DistributionErrorId::ProvenanceMismatch));
+        }
+        if effects.scope() != Some(self.snapshot.scope) {
+            return Err(error(DistributionErrorId::ProvenanceMismatch));
+        }
+        if self.snapshot.target_id != sha256(self.target.as_bytes()) {
+            return Err(error(DistributionErrorId::ProvenanceMismatch));
+        }
+        let expected = self
+            .snapshot
+            .postimage()
+            .ok_or_else(|| error(DistributionErrorId::ProvenanceMismatch))?;
+        if expected.object_sha256() != self.snapshot.package_sha256 {
+            return Err(error(DistributionErrorId::ProvenanceMismatch));
+        }
+        let current = effects
+            .installed_postimage(&self.target, INSTALL_LIMIT)
+            .map_err(|_| error(DistributionErrorId::ProvenanceMismatch))?
+            .ok_or_else(|| error(DistributionErrorId::ObjectUnavailable))?;
+        if !current.same_location(expected) {
+            return Err(error(DistributionErrorId::ProvenanceMismatch));
+        }
+        if &current != expected {
+            return Err(error(DistributionErrorId::ObjectChanged));
+        }
+        Ok(())
     }
 }

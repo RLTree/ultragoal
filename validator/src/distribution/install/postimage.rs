@@ -26,4 +26,16 @@ impl InstalledPostimage {
             mode,
         }
     }
+
+    pub(crate) fn same_location(&self, other: &Self) -> bool {
+        self.root_id == other.root_id && self.target_id == other.target_id
+    }
+
+    pub(crate) fn matches_target(&self, root_id: &str, target: &str) -> bool {
+        self.root_id == root_id && self.target_id == sha256(target.as_bytes())
+    }
+
+    pub(crate) fn object_sha256(&self) -> &str {
+        &self.object_sha256
+    }
 }

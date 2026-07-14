@@ -1,4 +1,5 @@
 use crate::distribution::error::{DistributionError, DistributionErrorId, error};
+use crate::distribution::filesystem::ScopedInstall;
 use crate::distribution::marketplace::MarketplacePlan;
 use crate::distribution::package::PackageSnapshot;
 use crate::distribution::reader::{sha256, validate_relative_path};

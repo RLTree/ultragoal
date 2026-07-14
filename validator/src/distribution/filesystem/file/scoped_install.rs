@@ -10,6 +10,13 @@ impl InstallEffects for ScopedInstall {
         target: &str,
         maximum: usize,
     ) -> Result<Option<InstalledPostimage>, ()> {
+        if self
+            .last_postimage
+            .as_ref()
+            .is_some_and(|(stored, _)| stored == target)
+        {
+            return Ok(self.last_postimage.take().map(|(_, row)| row));
+        }
         ScopedFile::new(self.root.clone(), target)
             .and_then(|row| row.installed_postimage(maximum))
             .map_err(|_| ())
@@ -31,12 +38,30 @@ impl InstallEffects for ScopedInstall {
         expected: &ExpectedPrior,
         replacement: Option<&[u8]>,
     ) -> Result<bool, ()> {
+        self.last_postimage = None;
         let expected = match expected {
             ExpectedPrior::Absent => None,
             ExpectedPrior::ExactDigest(value) => Some(value.as_str()),
         };
-        ScopedFile::new(self.root.clone(), target)
-            .and_then(|row| row.apply(expected, replacement))
-            .map_err(|_| ())
+        let result = ScopedFile::new(self.root.clone(), target)
+            .and_then(|row| row.apply_with_postimage(expected, replacement))
+            .map_err(|_| ())?;
+        if result.0 {
+            if let Some(postimage) = result.1 {
+                self.last_postimage = Some((target.into(), postimage));
+            }
+        }
+        Ok(result.0)
+    }
+}
+
+impl ScopedInstall {
+    pub(crate) fn compare_exchange_installed_postimage(
+        &mut self,
+        target: &str,
+        expected: &InstalledPostimage,
+        replacement: Option<&[u8]>,
+    ) -> Result<bool, DistributionError> {
+        ScopedFile::new(self.root.clone(), target)?.apply_postimage(expected, replacement)
     }
 }
