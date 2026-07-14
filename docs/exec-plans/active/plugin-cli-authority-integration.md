@@ -35,6 +35,9 @@ increment through root-owned review, wiring, proof, and claim decisions.
   contract, claim, graph, migration, and safe open-decision surfaces.
 - [x] Bound the durable host goal with `create_goal`.
 - [x] Rejected stale WorkerResult and board rows as current proof.
+- [x] Restored a clean root at `20a11eb98` and launched four disjoint,
+  dependency-ready Codex-managed worktree sessions at that exact base after the
+  user explicitly directed immediate worktree orchestration.
 - [ ] Reconcile formatting, authored-file size, warning-free compilation,
   standards digests, and the routine false-pass defect.
 - [ ] Run fresh focused candidate checks, coverage authority, public self-law,
@@ -63,14 +66,19 @@ increment through root-owned review, wiring, proof, and claim decisions.
   behavior. This remains decisive REWORK.
 - `CRITICAL-PATH-BOARD.md` and the plugin-delivery WorkerResult are anchored to
   `40982060a`; both require current-candidate reconciliation.
+- An isolated legacy-command `cfg(test)` retirement is invalid. It would bypass
+  N14 compatibility authority and disconnect a graph with about 3,000 dormant
+  warnings. Compatibility routing and authority-registry reconciliation must
+  precede production deauthorization.
 
 ## Decision Log
 
 - Preserve commits `1594ded64`, `a16753a66`, and `e60fc9897` as intentional
   development history. Repair forward; do not rewrite or squash them.
-- Do not launch implementation worktrees until the self-law candidate has a
-  clean compile, focused behavior proof, current evidence, and independent
-  root acceptance.
+- The user explicitly superseded the earlier launch hold on 2026-07-14. Four
+  source/product repair worktrees now run from clean exact base `20a11eb98`;
+  their outputs remain ineligible for integration or claim elevation until the
+  root independently reviews them and the original checkpoint gates pass.
 - Keep incomplete product candidates test-only or otherwise outside the
   production module graph until a real public caller exists. Do not use
   `allow(dead_code)`, dummy references, or broad public visibility as proof.
@@ -118,26 +126,31 @@ product-role branches before requesting Codex app worktrees. Candidate sections
 are delivery/runtime, orchestration/goal, evaluation/research, then proof and
 migration. Final ownership and paths come from the refreshed graph.
 
-Pending session contracts are deliberately unlaunched until checkpoint
-acceptance. Unknown runtime fields must be resolved by these exact probes:
+Session contracts were launched from the clean exact base at the user's
+explicit direction. Unknown runtime fields were resolved by these exact probes:
 `git rev-parse HEAD`, `git status --porcelain=v2`, `git worktree list
 --porcelain`, `codex_app__list_projects({})`, branch creation from the accepted
 HEAD, then `codex_app__create_thread` with `startingState.type=branch`. The
 create-thread result supplies thread and worktree identity; model and reasoning
 remain `unknown` unless the host exposes them.
 
-- Delivery runtime: branch `codex/successor-delivery-runtime`; owns
-  distribution, package, plugin-product, install, and matching fixtures; starts
-  first; ready record `worker-results/DELIVERY-RUNTIME-WORKTREE.json`.
-- Orchestration goal: branch `codex/successor-orchestration-goal`; owns
-  orchestration product/recovery and matching fixtures; depends on delivery;
-  ready record `worker-results/ORCHESTRATION-GOAL-WORKTREE.json`.
-- Evaluation research: branch `codex/successor-eval-research`; owns evaluation,
-  fixture-scheduler, and matching fixtures; depends on delivery and may run
-  beside orchestration; ready record `worker-results/EVAL-RESEARCH-WORKTREE.json`.
-- Proof migration: branch `codex/successor-proof-migration`; owns claims,
-  migration implementation, and matching fixtures; depends on orchestration and
-  evaluation; ready record `worker-results/PROOF-MIGRATION-WORKTREE.json`.
+- Distribution runtime: thread `019f5fa2-0bc3-7a50-9c2f-c377d88c60e4`, branch
+  `codex/n04-distribution-runtime`, worktree `.codex/worktrees/45df`; owns only
+  distribution/package behavior and matching tests/fixtures.
+- Routine execution trust: thread `019f5fa2-5206-7da1-ad4f-8bb5ca580012`,
+  branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
+  owns routine kernel/public adapter behavior and matching tests/fixtures.
+- Orchestration authority: thread `019f5fa2-923f-7770-9a89-83ed713ac1f3`,
+  branch `codex/n10-orchestration-authority`, worktree `.codex/worktrees/cb63`;
+  owns orchestration issuer/replay/recovery behavior and matching tests/fixtures.
+- Evaluation reliability: thread `019f5fa2-cace-7361-a3e7-6102a3dc1224`,
+  branch `codex/n11-evaluation-reliability`, worktree `.codex/worktrees/bd86`;
+  owns evaluation, fixture-scheduler, capture bridge, and matching tests/fixtures.
+
+The exact lane contracts are the sibling active ExecPlans named
+`successor-worktree-{distribution,routine,orchestration,evaluation}.md`.
+Proof/migration remains unlaunched behind upstream integration and root claim
+authority.
 
 All sessions forbid contracts, Cargo files, `.codex-plugin`, `.codex/agents`,
 public catalog/dispatcher, global generated authority, migration/claim registry,
