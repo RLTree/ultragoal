@@ -134,11 +134,7 @@ fn observation(
         score_earned: score,
         score_possible: 10,
         work_units: 3,
-        artifact: BoundInput::regular(
-            format!("artifacts/{id}.json"),
-            sha(digest_byte),
-            96,
-        ),
+        artifact: BoundInput::regular(format!("artifacts/{id}.json"), sha(digest_byte), 96),
         replay_artifact_digest_sha256: sha(digest_byte),
         producer_id: format!("executor-{id}"),
         observer_id: format!("observer-{id}"),

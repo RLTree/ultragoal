@@ -30,9 +30,7 @@ pub struct EvaluationExecutionBindingRequest {
 }
 
 impl EvaluationExecutionBinding {
-    pub fn new(
-        request: EvaluationExecutionBindingRequest,
-    ) -> Result<Self, EvaluationLedgerError> {
+    pub fn new(request: EvaluationExecutionBindingRequest) -> Result<Self, EvaluationLedgerError> {
         let EvaluationExecutionBindingRequest {
             live_context_id,
             candidate_id,

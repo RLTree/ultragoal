@@ -140,11 +140,7 @@ fn registry(
                 None,
             ),
             discovery: None,
-            discovery_report: report(
-                HostLayer::Discovery,
-                HostLayerVerdict::ObservedAbsent,
-                None,
-            ),
+            discovery_report: report(HostLayer::Discovery, HostLayerVerdict::ObservedAbsent, None),
         });
     }
     let app = observe_app_registry(

@@ -118,7 +118,8 @@ fn require_query_receipts(
 }
 
 fn explain_current(value: &Value, candidate: &str, run_id: &str) -> bool {
-    value.get("schema").and_then(Value::as_str) == Some(crate::cli::observe::command::RECEIPT_SCHEMA)
+    value.get("schema").and_then(Value::as_str)
+        == Some(crate::cli::observe::command::RECEIPT_SCHEMA)
         && value.get("status").and_then(Value::as_str) == Some("pass")
         && value.get("candidate_digest").and_then(Value::as_str) == Some(candidate)
         && value.get("operation").and_then(Value::as_str) == Some("observe.explain-failure")

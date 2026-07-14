@@ -65,7 +65,11 @@ fn durable_ledger_reopens_and_enforces_the_exact_state_graph() {
 
     let reopened = FileHostEffectLedger::open(&fixture.root, "host-ledger".to_owned()).unwrap();
     assert_eq!(
-        reopened.read(&repeated_digest('1')).unwrap().unwrap().state(),
+        reopened
+            .read(&repeated_digest('1'))
+            .unwrap()
+            .unwrap()
+            .state(),
         HostEffectState::Ambiguous
     );
     let settled = reopened

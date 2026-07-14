@@ -1,5 +1,5 @@
 impl ReplacementEvidenceAuthority for TestReplacementAuthority {
-fn authority_id(&self) -> &str {
+    fn authority_id(&self) -> &str {
         &self.authority_id
     }
 

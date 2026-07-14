@@ -87,8 +87,8 @@ impl<'a> SupportedHostEffectExecutor<'a> {
                 HostEffectPostReservationPublicationClassification::NoPublicationEvidence,
             ),
         };
-        let recovery = HostEffectRecoveryHandoff::post_reservation(
-            PostReservationRecoveryRequest {
+        let recovery =
+            HostEffectRecoveryHandoff::post_reservation(PostReservationRecoveryRequest {
                 effect_identity_sha256: effect_identity_sha256.to_owned(),
                 permit_id: effect.permit().permit_id().to_owned(),
                 reservation_ledger_head: effect.record().current_head().clone(),
@@ -101,8 +101,7 @@ impl<'a> SupportedHostEffectExecutor<'a> {
                 originating_error_ids,
                 ledger_classification: ledger.classification,
                 publication_classification,
-            },
-        );
+            });
         debug_assert!(recovery.verify_binding());
         HostEffectExecutorFailure::with_recovery(returned_error_id, ledger.terminal_state, recovery)
     }

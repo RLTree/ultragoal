@@ -12,8 +12,11 @@ use std::sync::OnceLock;
 
 #[path = "scenario_components/claim_binding_fixture.rs"]
 mod claim_binding_fixture;
+#[path = "scenario_components/claim_observation_fixture.rs"]
+mod claim_observation_fixture;
 #[path = "scenario_components/submission_fixture.rs"]
 mod submission_fixture;
 
 pub(crate) use claim_binding_fixture::*;
+pub(crate) use claim_observation_fixture::*;
 pub(crate) use submission_fixture::*;

@@ -112,10 +112,8 @@ fn validate_authorization(
             binding.binding_sha256() == binding_sha256
                 && binding.initial_observation().seal_verified_by(authority)
                 && observation.seal_verified_by(authority)
-                && binding.observation_follows_source_history(
-                    observation,
-                    binding.initial_observation(),
-                )
+                && binding
+                    .observation_follows_source_history(observation, binding.initial_observation())
                 && binding.all_effects_open_at(plan.effects(), observation)
         }
         (None, None, None) => true,

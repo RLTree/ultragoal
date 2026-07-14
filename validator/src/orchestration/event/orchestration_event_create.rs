@@ -77,5 +77,4 @@ impl EventLog {
             event,
         )
     }
-
 }

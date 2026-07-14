@@ -38,7 +38,8 @@ fn toctou_mutation_between_journal_and_effect_fails_closed_with_stable_surface_d
 #[test]
 fn mutation_between_idle_admission_and_reservation_refuses_without_a_journal_then_allows_use() {
     let fixture = Fixture::new("idle-admission-reservation-mutation");
-    let terminal = fixture.bundle_with_candidate("0.0.12", crate::transaction_fixture::FOREIGN_CANDIDATE);
+    let terminal =
+        fixture.bundle_with_candidate("0.0.12", crate::transaction_fixture::FOREIGN_CANDIDATE);
     let substituted = fixture.bundle("0.0.12");
     fixture
         .adapter
@@ -90,7 +91,8 @@ fn concurrent_mutation_after_reservation_is_removed_without_an_effect_then_allow
     let fixture = Fixture::new("post-reservation-concurrent-mutation");
     let target = fixture.bundle("0.0.12");
     let stale = fixture.bundle("0.0.11");
-    let substituted = fixture.bundle_with_candidate("0.0.12", crate::transaction_fixture::FOREIGN_CANDIDATE);
+    let substituted =
+        fixture.bundle_with_candidate("0.0.12", crate::transaction_fixture::FOREIGN_CANDIDATE);
     fixture
         .adapter
         .execute(&fixture.install_plan(&target))
@@ -166,7 +168,8 @@ fn repair_non_step_mutation_at_effect_boundary_refuses_then_recovers() {
     let fixture = Fixture::new("repair-effect-boundary-mutation");
     let target = fixture.bundle("0.0.12");
     let stale = fixture.bundle("0.0.11");
-    let substituted = fixture.bundle_with_candidate("0.0.12", crate::transaction_fixture::FOREIGN_CANDIDATE);
+    let substituted =
+        fixture.bundle_with_candidate("0.0.12", crate::transaction_fixture::FOREIGN_CANDIDATE);
     fixture
         .adapter
         .execute(&fixture.install_plan(&target))

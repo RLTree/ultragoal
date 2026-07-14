@@ -142,9 +142,7 @@ fn aggregate(
                     .protected_root_inputs
                     .iter()
                     .find(|input| input.path == member.path)
-                    .unwrap_or_else(|| {
-                        panic!("protected metadata member {} missing", member.path)
-                    })
+                    .unwrap_or_else(|| panic!("protected metadata member {} missing", member.path))
                     .sha256
                     .trim_start_matches("sha256:")
                     .to_owned()

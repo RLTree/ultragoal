@@ -9,8 +9,8 @@ impl<'a> SupportedHostEffectExecutor<'a> {
         originating_error_ids: Vec<HostEffectExecutorErrorId>,
     ) -> HostEffectExecutorFailure {
         let terminal_state = terminal.state();
-        let recovery = HostEffectRecoveryHandoff::terminal_transition(
-            TerminalTransitionRecoveryRequest {
+        let recovery =
+            HostEffectRecoveryHandoff::terminal_transition(TerminalTransitionRecoveryRequest {
                 effect_identity_sha256: effect_identity_sha256.to_owned(),
                 permit_id: effect.permit().permit_id().to_owned(),
                 ledger_head: terminal.current_head().clone(),
@@ -20,8 +20,7 @@ impl<'a> SupportedHostEffectExecutor<'a> {
                 originating_error_ids,
                 classification:
                     HostEffectTerminalRecoveryClassification::TerminalCommittedAndVerified,
-            },
-        );
+            });
         debug_assert!(recovery.verify_binding());
         HostEffectExecutorFailure::with_recovery(returned_error_id, Some(terminal_state), recovery)
     }
@@ -44,8 +43,8 @@ impl<'a> SupportedHostEffectExecutor<'a> {
                     None,
                 )
             });
-        let recovery = HostEffectRecoveryHandoff::terminal_transition(
-            TerminalTransitionRecoveryRequest {
+        let recovery =
+            HostEffectRecoveryHandoff::terminal_transition(TerminalTransitionRecoveryRequest {
                 effect_identity_sha256: effect_identity_sha256.to_owned(),
                 permit_id: effect.permit().permit_id().to_owned(),
                 ledger_head,
@@ -54,8 +53,7 @@ impl<'a> SupportedHostEffectExecutor<'a> {
                 outcome,
                 originating_error_ids,
                 classification,
-            },
-        );
+            });
         debug_assert!(recovery.verify_binding());
         HostEffectExecutorFailure::with_recovery(
             HostEffectExecutorErrorId::RecoveryRequired,
@@ -81,8 +79,8 @@ impl<'a> SupportedHostEffectExecutor<'a> {
         .expect("preflight recovery outcome serialization is infallible");
         let outcome = terminal_outcome(effect, HostEffectState::Failed, &[], outcome_sha256, 0)
             .expect("preflight recovery outcome construction is infallible");
-        let recovery = HostEffectRecoveryHandoff::terminal_transition(
-            TerminalTransitionRecoveryRequest {
+        let recovery =
+            HostEffectRecoveryHandoff::terminal_transition(TerminalTransitionRecoveryRequest {
                 effect_identity_sha256: effect_identity_sha256.to_owned(),
                 permit_id: effect.permit().permit_id().to_owned(),
                 ledger_head: effect.record().current_head().clone(),
@@ -92,8 +90,7 @@ impl<'a> SupportedHostEffectExecutor<'a> {
                 originating_error_ids: vec![originating_error_id],
                 classification:
                     HostEffectTerminalRecoveryClassification::LedgerObservationUnavailable,
-            },
-        );
+            });
         debug_assert!(recovery.verify_binding());
         HostEffectExecutorFailure::with_recovery(
             HostEffectExecutorErrorId::RecoveryRequired,

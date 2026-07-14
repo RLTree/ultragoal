@@ -36,9 +36,7 @@ pub struct PrivacySafeEvaluationEventRecord {
 }
 
 impl PrivacySafeEvaluationEvent {
-    pub fn new(
-        record: PrivacySafeEvaluationEventRecord,
-    ) -> Result<Self, EvaluationError> {
+    pub fn new(record: PrivacySafeEvaluationEventRecord) -> Result<Self, EvaluationError> {
         let PrivacySafeEvaluationEventRecord {
             event_kind,
             live_context_id,

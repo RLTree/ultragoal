@@ -65,8 +65,8 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
             request.plan = &wrong_marketplace;
             coordinator.accept(request)
         }
-            .unwrap_err()
-            .id(),
+        .unwrap_err()
+        .id(),
         SupportedHostLifecycleErrorId::PlanSubstitution
     );
 
@@ -94,8 +94,8 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
             request.expected_target = repository_target.clone();
             coordinator.accept(request)
         }
-            .unwrap_err()
-            .id(),
+        .unwrap_err()
+        .id(),
         SupportedHostLifecycleErrorId::InvalidAcceptedIdentity
     );
     #[cfg(unix)]
@@ -116,8 +116,8 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
                 request.expected_target = repository_target.clone();
                 coordinator.accept(request)
             }
-                .unwrap_err()
-                .id(),
+            .unwrap_err()
+            .id(),
             SupportedHostLifecycleErrorId::InvalidAcceptedIdentity
         );
     }
@@ -154,8 +154,8 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
                 request.lifecycle = no_effect;
                 coordinator.accept(request)
             }
-                .unwrap_err()
-                .id(),
+            .unwrap_err()
+            .id(),
             SupportedHostLifecycleErrorId::InvalidAcceptedIdentity
         );
     }
