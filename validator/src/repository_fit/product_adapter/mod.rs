@@ -21,11 +21,8 @@ pub(in crate::repository_fit) use authority::LocalMutationGrant;
 pub(crate) use authority::after_effect_before_terminal_for_test;
 pub(crate) use authority::{
     RepositoryFitApplyNonce, RepositoryFitAuthorityStore, RepositoryFitProductionOutcome,
-    RepositoryFitRecoveryIntent, RepositoryFitTrustedClock, execute_prepared_apply,
-    parse_recovery_intent, prepare_recovery_intent, recover_prepared_apply,
-};
-pub(crate) use projection::{
-    FitApplyPreparationProjection, FitInspectProjection, FitPlanRecord, FitVerificationProjection,
+    RepositoryFitTrustedClock, execute_prepared_apply, prepare_recovery_intent,
+    recover_prepared_apply,
 };
 pub(crate) use protocol::{
     OpaqueFitApplyRequest, PreparedFitApply, inspect_target, plan_target, prepare_apply_request,
@@ -65,10 +62,6 @@ pub(crate) struct FitAdapterError {
 impl FitAdapterError {
     pub(crate) const fn id(self) -> AdapterErrorId {
         self.id
-    }
-
-    pub(crate) const fn kernel_error_id(self) -> Option<FitErrorId> {
-        self.kernel_error_id
     }
 
     pub(crate) const fn trusted_clock_unavailable() -> Self {

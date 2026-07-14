@@ -145,9 +145,7 @@ pub(crate) fn settle_failure<E: super::super::root_permit::RepositoryFitPermitEf
     failure: RepositoryFitApplyFailure<E>,
     tick: u64,
 ) -> RepositoryFitProductionOutcome {
-    let error = failure.error();
-    let effect_started = failure.effect_started();
-    let rollback_complete = failure.rollback_complete();
+    let (error, effect_started, rollback_complete) = failure.into_settlement();
     let state = if !effect_started {
         RepositoryFitLedgerState::Rejected
     } else if rollback_complete {

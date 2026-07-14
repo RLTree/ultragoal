@@ -1,10 +1,6 @@
 use super::*;
 
-impl RepositoryFitPermitEffects for UndeclaredWrite {
-    fn read_unix_mode(&mut self, path: &CanonicalPath) -> Result<Option<u32>, FitError> {
-        self.inner.read_unix_mode(path)
-    }
-}
+impl RepositoryFitPermitEffects for UndeclaredWrite {}
 
 #[test]
 pub(crate) fn green_receipt_without_effect_and_undeclared_write_cannot_fabricate_success() {

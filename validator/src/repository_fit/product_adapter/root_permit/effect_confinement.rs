@@ -87,11 +87,7 @@ impl<E: RepositoryFitPermitEffects> FitEffects for ScopedEffects<E> {
     }
 }
 
-impl<E: RepositoryFitPermitEffects> RepositoryFitPermitEffects for ScopedEffects<E> {
-    fn read_unix_mode(&mut self, path: &CanonicalPath) -> Result<Option<u32>, FitError> {
-        self.inner.read_unix_mode(path)
-    }
-}
+impl<E: RepositoryFitPermitEffects> RepositoryFitPermitEffects for ScopedEffects<E> {}
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub(crate) struct TargetSnapshot {

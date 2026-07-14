@@ -1,6 +1,7 @@
 use super::*;
 
 pub(crate) const PERMIT_DOMAIN: &str = "repository-fit-root-apply-permit-v1";
+#[cfg(test)]
 pub(crate) const AUTHORITY_DOMAIN: &str = "repository-fit-root-apply-authority-v1";
 pub(crate) const ROLLBACK_POLICY: &str = "complete-exact-prestate-or-ambiguous-v1";
 pub(crate) const MAX_PERMIT_LIFETIME: u64 = 300;

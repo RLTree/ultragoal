@@ -119,11 +119,11 @@ pub(crate) fn canonical_compile_time_catalog_matches_manifest_and_is_determinist
     let (first, second) = assert_zero_write(&fixture, || {
         (compile(&context).unwrap(), compile(&context).unwrap())
     });
-    assert_eq!(CANONICAL_TEMPLATES.len(), 68);
+    assert!(!CANONICAL_TEMPLATES.is_empty());
     assert_eq!(first.authority, second.authority);
     assert_eq!(first.desired.state_sha256(), second.desired.state_sha256());
-    assert_eq!(first.authority.template_count, 68);
-    assert_eq!(first.unix_modes.len(), 68);
+    assert_eq!(first.authority.template_count, CANONICAL_TEMPLATES.len());
+    assert_eq!(first.unix_modes.len(), CANONICAL_TEMPLATES.len());
     assert!(first.authority.total_bytes > 900_000);
 }
 

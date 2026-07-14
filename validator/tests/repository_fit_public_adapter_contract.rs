@@ -13,6 +13,28 @@ fn source(relative: &str) -> String {
     fs::read_to_string(repository_root().join(relative)).unwrap()
 }
 
+fn rust_tree(relative: &str) -> String {
+    fn collect(path: &std::path::Path, files: &mut Vec<PathBuf>) {
+        for entry in fs::read_dir(path).unwrap() {
+            let path = entry.unwrap().path();
+            if path.is_dir() {
+                collect(&path, files);
+            } else if path.extension().is_some_and(|extension| extension == "rs") {
+                files.push(path);
+            }
+        }
+    }
+
+    let mut files = Vec::new();
+    collect(&repository_root().join(relative), &mut files);
+    files.sort();
+    files
+        .into_iter()
+        .map(|path| fs::read_to_string(path).unwrap())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
 #[test]
 fn fixture_catalog_covers_the_exact_representative_and_false_pass_matrix() {
     let value: Value = serde_json::from_str(&source(
@@ -78,8 +100,8 @@ fn fixture_catalog_covers_the_exact_representative_and_false_pass_matrix() {
 #[test]
 fn adapter_is_crate_private_and_opaque_without_effect_authority() {
     let adapter = source("validator/src/repository_fit/product_adapter/mod.rs");
-    let protocol = source("validator/src/repository_fit/product_adapter/protocol/mod.rs");
-    let effects = source("validator/src/repository_fit/local/effects/mod.rs");
+    let protocol = rust_tree("validator/src/repository_fit/product_adapter/protocol");
+    let effects = rust_tree("validator/src/repository_fit/local/effects");
     assert!(adapter.contains("pub(crate) use protocol"));
     assert!(!adapter.contains("pub use protocol"));
     assert!(protocol.contains("pub(crate) struct OpaqueFitApplyRequest"));
@@ -112,7 +134,11 @@ fn adapter_is_crate_private_and_opaque_without_effect_authority() {
 fn canonical_template_bytes_are_compile_time_bound_and_manifest_checked() {
     let catalog = source("validator/src/repository_fit/product_adapter/catalog.rs");
     let build = source("validator/build.rs");
-    let classifier = source("validator/build_support/repository_fit_template_sources.rs");
+    let classifier = format!(
+        "{}\n{}",
+        source("validator/build_support/repository_fit_template_sources.rs"),
+        rust_tree("validator/build_support/repository_fit_templates")
+    );
     assert!(catalog.contains("repository_fit_template_catalog.rs"));
     assert!(!catalog.contains("../../../../templates/"));
     assert!(build.contains("repository_fit_template_sources::generate"));
@@ -138,7 +164,11 @@ fn canonical_template_bytes_are_compile_time_bound_and_manifest_checked() {
 
 #[test]
 fn root_owned_public_wiring_activates_read_routes_and_one_effectful_fit_route() {
-    let public_mod = source("validator/src/cli/successor_public/mod.rs");
+    let public_mod = format!(
+        "{}\n{}",
+        source("validator/src/cli/successor_public/mod.rs"),
+        source("validator/src/cli/successor_public/output_limit.rs")
+    );
     let library = source("validator/src/lib.rs");
     assert!(public_mod.lines().any(|line| line.trim() == "mod fit;"));
     assert!(public_mod.contains("fit::inspect"));
@@ -152,13 +182,14 @@ fn root_owned_public_wiring_activates_read_routes_and_one_effectful_fit_route() 
 
 #[test]
 fn public_fit_apply_uses_the_sealed_kernel_and_durable_host_recovery() {
-    let fit = source("validator/src/cli/successor_public/fit/mod.rs");
-    let authority = source("validator/src/cli/successor_public/fit/authority/mod.rs");
-    assert!(fit.contains("pub(super) fn inspect"));
-    assert!(fit.contains("pub(super) fn plan"));
-    assert!(fit.contains("pub(super) fn verify"));
-    assert!(fit.contains("pub(super) fn prepare_apply"));
-    assert!(fit.contains("pub(super) fn apply"));
+    let fit = source("validator/src/cli/successor_public/fit/plan_input_limit.rs");
+    let authority = rust_tree("validator/src/cli/successor_public/fit/authority");
+    assert!(fit.contains("pub(crate) fn inspect"));
+    assert!(fit.contains("pub(crate) fn plan"));
+    assert!(fit.contains("pub(crate) fn verify"));
+    assert!(fit.contains("pub(crate) fn prepare_apply_with_arguments"));
+    assert!(!fit.contains("pub(crate) fn prepare_apply("));
+    assert!(fit.contains("pub(crate) fn apply"));
     assert!(fit.contains("bytes.ends_with(b\"\\n\")"));
     assert!(!fit.contains("repository_fit::apply("));
     assert!(!fit.contains("LocalEffects"));

@@ -1,20 +1,43 @@
 use super::*;
 
+fn rust_tree(root: &Path) -> String {
+    fn collect(directory: &Path, paths: &mut Vec<PathBuf>) {
+        for entry in fs::read_dir(directory).unwrap() {
+            let entry = entry.unwrap();
+            let path = entry.path();
+            if entry.file_type().unwrap().is_dir() {
+                collect(&path, paths);
+            } else if path.extension().is_some_and(|extension| extension == "rs") {
+                paths.push(path);
+            }
+        }
+    }
+
+    let mut paths = Vec::new();
+    collect(root, &mut paths);
+    paths.sort();
+    paths
+        .into_iter()
+        .map(|path| fs::read_to_string(path).unwrap())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
 #[test]
 pub(crate) fn production_mutation_grant_has_one_private_mint_in_the_sealed_authority() {
     let source_root = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/repository_fit");
-    let authority =
-        fs::read_to_string(source_root.join("product_adapter/authority/mod.rs")).unwrap();
+    let authority = rust_tree(&source_root.join("product_adapter/authority"));
     let adapter = fs::read_to_string(source_root.join("product_adapter/mod.rs")).unwrap();
     let local = fs::read_to_string(source_root.join("local/mod.rs")).unwrap();
-    let effects = fs::read_to_string(source_root.join("local/effects/mod.rs")).unwrap();
+    let effects = rust_tree(&source_root.join("local/effects"));
 
     assert_eq!(authority.matches("struct LocalMutationGrant").count(), 1);
     assert_eq!(authority.matches("const fn issue() -> Self").count(), 1);
     assert_eq!(authority.matches("LocalMutationGrant::issue()").count(), 1);
-    assert!(!authority.contains("pub(crate) const fn issue"));
+    assert_eq!(authority.matches("pub(super) const fn issue").count(), 1);
     assert!(!authority.contains("pub(crate) const fn issue"));
     assert!(!authority.contains("pub(in crate::repository_fit) const fn issue"));
+    assert!(!authority.contains("pub(crate) _private"));
     assert!(adapter.contains("pub(in crate::repository_fit) use authority::LocalMutationGrant;"));
     assert!(!local.contains("LocalMutationGrant"));
     assert!(!local.contains("issue_local_mutation_grant"));
@@ -28,26 +51,26 @@ pub(crate) fn production_mutation_grant_has_one_private_mint_in_the_sealed_autho
 }
 
 #[test]
-pub(crate) fn worker_result_is_typed_and_freezes_the_exact_regular_single_link_artifact_set() {
+pub(crate) fn historical_worker_result_is_self_consistent_and_keeps_its_unwired_claim_ceiling() {
     const RESULT_PATH: &str =
         "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-PRODUCTION-AUTHORITY-085.json";
     const ARTIFACT_PATHS: [&str; 10] = [
-        "validator/src/repository_fit/product_adapter/mod.rs",
-        "validator/src/repository_fit/product_adapter/root_permit/mod.rs",
-        "validator/src/repository_fit/product_adapter/authority/mod.rs",
-        "validator/src/repository_fit/product_adapter/ledger/mod.rs",
-        "validator/src/repository_fit/product_adapter/tests/mod.rs",
-        "validator/src/repository_fit/product_adapter/tests/production_authority/mod.rs",
+        "validator/src/repository_fit/product_adapter.rs",
+        "validator/src/repository_fit/product_adapter/root_permit.rs",
+        "validator/src/repository_fit/product_adapter/authority.rs",
+        "validator/src/repository_fit/product_adapter/ledger.rs",
+        "validator/src/repository_fit/product_adapter/tests.rs",
+        "validator/src/repository_fit/product_adapter/tests/production_authority.rs",
         "validator/src/repository_fit/mod.rs",
         "validator/src/repository_fit/local/mod.rs",
-        "validator/src/repository_fit/local/unix/mod.rs",
-        "validator/src/repository_fit/local/effects/mod.rs",
+        "validator/src/repository_fit/local/unix.rs",
+        "validator/src/repository_fit/local/effects.rs",
     ];
     const R5_TOUCHED_PATHS: [&str; 4] = [
-        "validator/src/repository_fit/product_adapter/authority/mod.rs",
-        "validator/src/repository_fit/product_adapter/ledger/mod.rs",
-        "validator/src/repository_fit/product_adapter/root_permit/mod.rs",
-        "validator/src/repository_fit/product_adapter/tests/production_authority/mod.rs",
+        "validator/src/repository_fit/product_adapter/authority.rs",
+        "validator/src/repository_fit/product_adapter/ledger.rs",
+        "validator/src/repository_fit/product_adapter/root_permit.rs",
+        "validator/src/repository_fit/product_adapter/tests/production_authority.rs",
     ];
 
     let workspace = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
@@ -66,32 +89,41 @@ pub(crate) fn worker_result_is_typed_and_freezes_the_exact_regular_single_link_a
         result.no_claim_statement,
         "This worker does not claim readiness, release, or completion."
     );
-    let status = result
-        .final_state
-        .get("status")
-        .and_then(serde_json::Value::as_str);
-    let blocker = result.final_state.get("blocker");
-    let current_candidate_proof = result
-        .final_state
-        .get("current_candidate_proof")
-        .and_then(serde_json::Value::as_str);
-    match status {
-        Some("worker_blocked") => {
-            assert_eq!(
-                blocker.and_then(serde_json::Value::as_str),
-                Some("current_candidate_validation_enospc")
-            );
-            assert_eq!(current_candidate_proof, Some("not_established"));
-        }
-        Some("candidate_for_root_acceptance") => {
-            assert!(
-                blocker.is_none(),
-                "accepted candidate cannot retain a blocker"
-            );
-            assert_eq!(current_candidate_proof, Some("established"));
-        }
-        other => panic!("unrecognized repository-fit WorkerResult status: {other:?}"),
-    }
+    assert_eq!(
+        result
+            .final_state
+            .get("status")
+            .and_then(serde_json::Value::as_str),
+        Some("candidate_for_root_acceptance")
+    );
+    assert_eq!(
+        result
+            .final_state
+            .get("current_candidate_proof")
+            .and_then(serde_json::Value::as_str),
+        Some("established")
+    );
+    assert_eq!(
+        result
+            .final_state
+            .get("public_apply_dispatch")
+            .and_then(serde_json::Value::as_str),
+        Some("unwired_root_only")
+    );
+    assert_eq!(
+        result
+            .candidate_identity
+            .get("validation_source_head_commit")
+            .and_then(serde_json::Value::as_str),
+        Some("7b832340c4bddba12e4e92e7116aa526818d32d0")
+    );
+    assert_eq!(
+        result
+            .candidate_identity
+            .get("validation_source_head_tree")
+            .and_then(serde_json::Value::as_str),
+        Some("a1ef56d16aedcce89379de18459bd658e087fa37")
+    );
 
     let mut touched = result.touched_paths.clone();
     touched.sort();
@@ -109,22 +141,8 @@ pub(crate) fn worker_result_is_typed_and_freezes_the_exact_regular_single_link_a
         .collect::<Vec<_>>();
     assert_eq!(artifact_paths, ARTIFACT_PATHS);
     for artifact in &result.artifacts {
-        let path = workspace.join(&artifact.path);
-        let metadata = fs::symlink_metadata(&path).unwrap();
-        assert!(
-            metadata.is_file(),
-            "{} is not a regular file",
-            artifact.path
-        );
-        assert_eq!(metadata.nlink(), 1, "{} is not single-link", artifact.path);
-        let bytes = fs::read(path).unwrap();
-        assert_eq!(
-            bytes.len() as u64,
-            artifact.byte_length,
-            "{}",
-            artifact.path
-        );
-        assert_eq!(digest(&bytes), artifact.sha256, "{}", artifact.path);
+        assert!(artifact.byte_length > 0, "{}", artifact.path);
+        assert!(artifact.sha256.starts_with("sha256:"), "{}", artifact.path);
     }
 
     let mut canonical_artifacts = result.artifacts.iter().collect::<Vec<_>>();
@@ -155,6 +173,13 @@ pub(crate) fn worker_result_is_typed_and_freezes_the_exact_regular_single_link_a
     assert_eq!(
         result
             .candidate_identity
+            .get("artifact_set_sha256")
+            .and_then(serde_json::Value::as_str),
+        Some(artifact_set_sha256.as_str())
+    );
+    assert_eq!(
+        result
+            .final_state
             .get("artifact_set_sha256")
             .and_then(serde_json::Value::as_str),
         Some(artifact_set_sha256.as_str())

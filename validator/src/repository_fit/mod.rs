@@ -2,7 +2,7 @@ mod apply;
 mod error;
 mod inspect;
 mod local;
-mod ownership;
+pub(crate) mod ownership;
 mod path;
 mod product_adapter;
 mod repository_contract;
@@ -39,7 +39,6 @@ pub(crate) fn valid_digest(value: &str) -> bool {
 pub(crate) use error::error;
 #[cfg(unix)]
 pub(crate) use local::LocalEffects;
-pub(crate) use ownership::issue_managed_prior_proof;
 #[cfg(test)]
 pub(crate) use product_adapter::after_effect_before_terminal_for_test;
 pub(crate) use product_adapter::{

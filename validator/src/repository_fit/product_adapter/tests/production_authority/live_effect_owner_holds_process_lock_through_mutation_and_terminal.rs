@@ -92,11 +92,7 @@ pub(crate) fn two_processes_racing_one_nonce_and_semantic_effect_have_one_ledger
                 }
             }
             Command::new(std::env::current_exe().unwrap())
-                .args([
-                    "--exact",
-                    "repository_fit::product_adapter::tests::production_authority::subprocess_reservation_helper",
-                    "--nocapture",
-                ])
+                .args(["subprocess_reservation_helper", "--nocapture"])
                 .env("HUL_FIT_AUTHORITY_SUBPROCESS", "1")
                 .env("HUL_FIT_AUTHORITY_STORE", root)
                 .env("HUL_FIT_AUTHORITY_STORE_ID", id)

@@ -93,7 +93,7 @@ pub(crate) fn stale_or_unknown_managed_proof_is_rejected_not_silently_ignored() 
         Ownership::HarnessGenerated,
         &[prior],
     );
-    let stale = super::super::repository_fit::issue_managed_prior_proof(
+    let stale = super::super::repository_fit::ownership::issue_managed_prior_proof(
         sha(b'a'),
         sha(b'b'),
         sha(b'd'),

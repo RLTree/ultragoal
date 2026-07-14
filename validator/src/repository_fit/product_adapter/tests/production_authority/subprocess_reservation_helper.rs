@@ -12,7 +12,6 @@ pub(crate) fn subprocess_reservation_helper() {
         ReservationDecision::Acquired(_) => println!("RESERVATION-WINNER"),
         ReservationDecision::Existing(existing) => {
             assert_eq!(existing.state(), RepositoryFitLedgerState::Reserved);
-            assert_eq!(existing.terminal_sha256(), None);
             println!("RESERVATION-EXISTING");
         }
     }

@@ -140,11 +140,7 @@ impl FitEffects for SameInodeAbaThenFail {
     }
 }
 
-impl RepositoryFitPermitEffects for SameInodeAbaThenFail {
-    fn read_unix_mode(&mut self, path: &CanonicalPath) -> Result<Option<u32>, FitError> {
-        self.inner.read_unix_mode(path)
-    }
-}
+impl RepositoryFitPermitEffects for SameInodeAbaThenFail {}
 
 #[test]
 pub(crate) fn rollback_withholds_attribution_after_unmediated_same_inode_target_aba() {

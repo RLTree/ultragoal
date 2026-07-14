@@ -110,11 +110,7 @@ impl FitEffects for NoEffectSuccess {
     }
 }
 
-impl RepositoryFitPermitEffects for NoEffectSuccess {
-    fn read_unix_mode(&mut self, path: &CanonicalPath) -> Result<Option<u32>, FitError> {
-        self.inner.read_unix_mode(path)
-    }
-}
+impl RepositoryFitPermitEffects for NoEffectSuccess {}
 
 #[test]
 pub(crate) fn false_pass_no_effect_success_and_verify_cannot_substitute_for_apply() {

@@ -34,7 +34,7 @@ pub fn managed_proof(path: &str, current: &[u8]) -> super::repository_fit::Manag
         Ownership::HarnessGenerated,
         &[current],
     );
-    super::repository_fit::issue_managed_prior_proof(
+    super::repository_fit::ownership::issue_managed_prior_proof(
         sha(b'a'),
         sha(b'b'),
         sha(b'c'),

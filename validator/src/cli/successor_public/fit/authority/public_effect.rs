@@ -91,6 +91,7 @@ pub(crate) fn production_outcome(outcome: RepositoryFitProductionOutcome) -> Run
 
 #[derive(Clone, Copy, Debug)]
 pub(crate) enum HostFailure {
+    #[cfg(not(target_vendor = "apple"))]
     Unsupported,
     Unavailable,
     Invalid,
@@ -101,6 +102,7 @@ pub(crate) enum HostFailure {
 
 pub(crate) fn host_failure(failure: HostFailure) -> RuntimeOutcome {
     let (class, id, cause, repair, effect, ceiling) = match failure {
+        #[cfg(not(target_vendor = "apple"))]
         HostFailure::Unsupported => (
             ExitClass::UnsupportedCapability,
             DiagnosticId::DownstreamToolUnavailable,

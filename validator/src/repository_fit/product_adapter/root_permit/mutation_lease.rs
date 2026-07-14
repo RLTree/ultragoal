@@ -20,16 +20,10 @@ impl<E: RepositoryFitPermitEffects> Debug for RepositoryFitMutationLease<E> {
     }
 }
 
-pub(crate) trait RepositoryFitPermitEffects: FitEffects {
-    fn read_unix_mode(&mut self, path: &CanonicalPath) -> Result<Option<u32>, FitError>;
-}
+pub(crate) trait RepositoryFitPermitEffects: FitEffects {}
 
 #[cfg(unix)]
-impl RepositoryFitPermitEffects for LocalEffects {
-    fn read_unix_mode(&mut self, path: &CanonicalPath) -> Result<Option<u32>, FitError> {
-        LocalEffects::read_unix_mode(self, path)
-    }
-}
+impl RepositoryFitPermitEffects for LocalEffects {}
 
 pub(crate) struct ScopedEffects<E> {
     pub(crate) inner: E,

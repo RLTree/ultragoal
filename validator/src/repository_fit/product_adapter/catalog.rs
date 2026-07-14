@@ -15,11 +15,17 @@ const MAX_TEMPLATE_ROWS: usize = 512;
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(super) enum TemplateSourceKind {
     Regular,
+    #[cfg(test)]
     Symlink,
+    #[cfg(test)]
     Hardlink,
+    #[cfg(test)]
     Directory,
+    #[cfg(test)]
     Fifo,
+    #[cfg(test)]
     Socket,
+    #[cfg(test)]
     CrossDevice,
 }
 

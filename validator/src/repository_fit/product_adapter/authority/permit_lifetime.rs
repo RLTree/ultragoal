@@ -10,11 +10,11 @@ pub(crate) const SUPPORT_LIMIT: &str = "source-built Darwin public fit apply; in
 /// is nameable only where the local effect adapter must consume it, while its
 /// sole constructor remains private to this sealed authority module.
 pub(in crate::repository_fit) struct LocalMutationGrant {
-    pub(crate) _private: (),
+    _private: (),
 }
 
 impl LocalMutationGrant {
-    pub(crate) const fn issue() -> Self {
+    pub(super) const fn issue() -> Self {
         Self { _private: () }
     }
 }

@@ -46,6 +46,7 @@ impl RepositoryFitApplyOutcome {
         self.mutation_count
     }
 
+    #[cfg(test)]
     pub(crate) fn status(&self) -> &str {
         self.status
     }
@@ -61,6 +62,7 @@ pub(crate) enum RepositoryFitApplyFailure<E: RepositoryFitPermitEffects> {
 }
 
 impl<E: RepositoryFitPermitEffects> RepositoryFitApplyFailure<E> {
+    #[cfg(test)]
     pub(crate) fn error(&self) -> FitAdapterError {
         match self {
             Self::PreEffect(failure) => failure.error,
@@ -68,18 +70,40 @@ impl<E: RepositoryFitPermitEffects> RepositoryFitApplyFailure<E> {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn effect_started(&self) -> bool {
         matches!(self, Self::Terminal(failure) if failure.effect_started)
     }
 
+    #[cfg(test)]
     pub(crate) fn rollback_complete(&self) -> bool {
         matches!(self, Self::Terminal(failure) if failure.rollback_complete)
     }
 
+    #[cfg(test)]
     pub(crate) fn into_pre_effect(self) -> Option<PreEffectFailure<E>> {
         match self {
             Self::PreEffect(failure) => Some(failure),
             Self::Terminal(_) => None,
+        }
+    }
+
+    pub(crate) fn into_settlement(self) -> (FitAdapterError, bool, bool) {
+        match self {
+            Self::PreEffect(PreEffectFailure {
+                error,
+                request,
+                permit,
+                lease,
+            }) => {
+                drop((request, permit, lease));
+                (error, false, false)
+            }
+            Self::Terminal(failure) => (
+                failure.error,
+                failure.effect_started,
+                failure.rollback_complete,
+            ),
         }
     }
 }
@@ -92,6 +116,7 @@ pub(crate) struct PreEffectFailure<E: RepositoryFitPermitEffects> {
 }
 
 impl<E: RepositoryFitPermitEffects> PreEffectFailure<E> {
+    #[cfg(test)]
     pub(crate) fn into_parts(
         self,
     ) -> (

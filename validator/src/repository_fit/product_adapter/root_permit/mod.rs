@@ -42,6 +42,7 @@ use super::protocol::{ApplyRequestSeal, OpaqueFitApplyRequest, revalidate_apply_
 use super::{AdapterErrorId, FitAdapterError, adapter_error};
 
 #[path = "authorization_test_hooks.rs"]
+#[cfg(test)]
 mod authorization_test_hooks;
 #[path = "change_version.rs"]
 mod change_version;

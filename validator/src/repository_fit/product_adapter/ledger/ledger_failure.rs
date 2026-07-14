@@ -15,6 +15,7 @@ impl LedgerError {
 
     pub(crate) const fn adapter_error(&self) -> FitAdapterError {
         let id = match self.id {
+            #[cfg(not(target_vendor = "apple"))]
             LedgerErrorId::UnsupportedHost => AdapterErrorId::UnsupportedHost,
             LedgerErrorId::InvalidStore => AdapterErrorId::ApplyPermitInvalid,
             LedgerErrorId::Replay => AdapterErrorId::ApplyPermitReplayed,

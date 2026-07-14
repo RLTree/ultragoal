@@ -18,7 +18,7 @@ pub(crate) fn mode_drift_invalidates_the_mode_bound_adapter_verification_proof()
     let drifted = verify_target(&fixture.context()).unwrap();
 
     assert!(!drifted.idempotent());
-    assert_eq!(drifted.matched_files(), 67);
+    assert_eq!(drifted.matched_files(), CANONICAL_TEMPLATES.len() - 1);
     assert!(drifted.verification_sha256.is_none());
     assert!(drifted.byte_verification_sha256.is_none());
     assert_ne!(drifted.inspection_sha256, accepted_inspection);
@@ -52,7 +52,7 @@ pub(crate) fn mismatch_verify_reports_causal_files_and_preserves_every_recursive
     let failure = verification.failure.unwrap();
     assert_eq!(failure.error_id, "HUFIT-011");
     assert_eq!(failure.classification, "partial");
-    assert_eq!(failure.causal_files.len(), 67);
+    assert_eq!(failure.causal_files.len(), CANONICAL_TEMPLATES.len() - 1);
 }
 
 #[test]

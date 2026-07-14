@@ -107,7 +107,6 @@ pub(crate) struct ExistingReservation {
     pub(crate) expires_tick: u64,
     pub(crate) recovery_intent_sha256: String,
     pub(crate) recovery: RecoveryTargetSpec,
-    pub(crate) terminal_sha256: Option<String>,
 }
 
 impl ExistingReservation {
@@ -129,11 +128,6 @@ impl ExistingReservation {
         recovery: &RecoveryTargetSpec,
     ) -> bool {
         self.recovery_intent_sha256 == recovery_intent_sha256 && self.recovery == *recovery
-    }
-
-    #[cfg(test)]
-    pub(crate) fn terminal_sha256(&self) -> Option<&str> {
-        self.terminal_sha256.as_deref()
     }
 }
 
@@ -157,6 +151,7 @@ pub(crate) enum ReservationDecision {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum LedgerErrorId {
+    #[cfg(not(target_vendor = "apple"))]
     UnsupportedHost,
     InvalidStore,
     Tampered,

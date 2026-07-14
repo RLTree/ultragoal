@@ -176,8 +176,6 @@ pub fn plan(inspection: &FitInspection, desired: &DesiredState) -> Result<FitPla
         context_id: desired.context_id.clone(),
         candidate_id: desired.candidate_id.clone(),
         root_binding: inspection.root_binding.clone(),
-        desired_state_sha256: desired.state_sha256.clone(),
-        inspection_sha256: inspection.inspection_sha256.clone(),
         checks,
         rollback: RollbackPlan {
             mutation_count: mutations.len(),

@@ -129,18 +129,6 @@ pub(crate) struct ApplyArguments<'a> {
     pub(crate) accepted_plan: &'a str,
 }
 
-/// Reads one descriptor-anchored bounded plan record and returns an opaque
-/// request. The shell-facing JSON renderer adds exactly one LF; accepting only
-/// that framing in addition to canonical bytes keeps ordinary redirection
-/// usable without accepting general whitespace or alternate encodings.
-pub(crate) fn prepare_apply(
-    context: &LiveContext,
-    invocation: &ParsedInvocation,
-) -> Result<PreparedFitApply, RuntimeOutcome> {
-    let arguments = apply_arguments(invocation)?;
-    prepare_apply_with_arguments(context, arguments)
-}
-
 pub(crate) fn apply_arguments(
     invocation: &ParsedInvocation,
 ) -> Result<ApplyArguments<'_>, RuntimeOutcome> {
@@ -172,6 +160,10 @@ pub(crate) fn apply_arguments(
     })
 }
 
+/// Reads one descriptor-anchored bounded plan record and returns an opaque
+/// request. The shell-facing JSON renderer adds exactly one LF; accepting only
+/// that framing in addition to canonical bytes keeps ordinary redirection
+/// usable without accepting general whitespace or alternate encodings.
 pub(crate) fn prepare_apply_with_arguments(
     context: &LiveContext,
     arguments: ApplyArguments<'_>,

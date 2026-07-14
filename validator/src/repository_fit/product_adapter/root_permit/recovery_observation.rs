@@ -88,16 +88,6 @@ pub(crate) fn retained_descriptor_path(root: &File) -> Result<PathBuf, FitAdapte
     Err(adapter_error(AdapterErrorId::UnsupportedHost))
 }
 
-pub(crate) fn managed_ancestor_paths(request: &OpaqueFitApplyRequest) -> BTreeSet<String> {
-    let target_paths = request
-        .desired
-        .files
-        .iter()
-        .map(|file| file.path.clone())
-        .collect::<Vec<_>>();
-    managed_ancestor_paths_for_targets(&target_paths)
-}
-
 pub(crate) fn managed_ancestor_paths_for_targets(
     target_paths: &[CanonicalPath],
 ) -> BTreeSet<String> {

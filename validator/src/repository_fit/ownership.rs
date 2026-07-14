@@ -1,4 +1,6 @@
-use super::{CanonicalPath, FitError, FitErrorId, digest, error, valid_digest};
+#[cfg(test)]
+use super::digest;
+use super::{CanonicalPath, FitError, FitErrorId, error, valid_digest};
 use serde::Serialize;
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
@@ -86,6 +88,7 @@ impl ManagedPriorProof {
     }
 }
 
+#[cfg(test)]
 pub(crate) fn issue_managed_prior_proof(
     context_id: String,
     candidate_id: String,
@@ -120,4 +123,25 @@ pub(crate) fn issue_managed_prior_proof(
         provenance,
         proof_sha256: digest(&encoded),
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn managed_prior_test_issuer_rejects_user_declared_provenance() {
+        let digest = format!("sha256:{}", "a".repeat(64));
+        let error = issue_managed_prior_proof(
+            digest.clone(),
+            digest.clone(),
+            digest.clone(),
+            CanonicalPath::parse("generated.md").unwrap(),
+            digest,
+            OwnershipProvenance::UserDeclared,
+        )
+        .unwrap_err();
+
+        assert_eq!(error.id(), FitErrorId::InvalidSpec);
+    }
 }

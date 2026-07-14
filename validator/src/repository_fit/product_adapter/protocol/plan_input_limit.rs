@@ -109,18 +109,16 @@ impl OpaqueFitApplyRequest {
         &self.request_id
     }
 
+    #[cfg(test)]
     pub(crate) fn context_id(&self) -> &str {
         &self.context_id
-    }
-
-    pub(crate) fn candidate_id(&self) -> &str {
-        &self.candidate_id
     }
 
     pub(crate) fn root_binding(&self) -> &str {
         &self.root_binding
     }
 
+    #[cfg(test)]
     pub(crate) fn plan_sha256(&self) -> &str {
         self.plan.plan_sha256()
     }
@@ -174,6 +172,7 @@ impl OpaqueFitApplyRequest {
 
 pub(crate) struct PreparedFitApply {
     pub(crate) request: OpaqueFitApplyRequest,
+    #[cfg(test)]
     pub(crate) projection: FitApplyPreparationProjection,
 }
 
@@ -182,6 +181,7 @@ impl PreparedFitApply {
         &self.request
     }
 
+    #[cfg(test)]
     pub(crate) fn projection(&self) -> &FitApplyPreparationProjection {
         &self.projection
     }

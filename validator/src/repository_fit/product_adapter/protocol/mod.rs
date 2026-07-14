@@ -7,13 +7,14 @@ use std::sync::atomic::{AtomicU8, AtomicU64, Ordering};
 use crate::context::LiveContext;
 
 use super::catalog::{DesiredBundle, compile};
+#[cfg(test)]
+use super::projection::{APPLY_PREPARATION_SCHEMA, FitApplyPreparationProjection};
 use super::projection::{
-    APPLY_PREPARATION_SCHEMA, CLAIM_EFFECT, CandidateProjection, CheckProjection,
-    ConflictProjection, DesiredProjection, ExpectedProjection, FitApplyPreparationProjection,
-    FitInspectProjection, FitPlanRecord, FitVerificationProjection, INSPECT_SCHEMA,
-    InspectionProjection, MutationProjection, ObservedFileProjection, PLAN_SCHEMA, PlanProjection,
-    ProvenanceProjection, RollbackEntryProjection, SUPPORT_LIMIT, TargetProjection, VERIFY_SCHEMA,
-    VerificationFailureProjection,
+    CLAIM_EFFECT, CandidateProjection, CheckProjection, ConflictProjection, DesiredProjection,
+    ExpectedProjection, FitInspectProjection, FitPlanRecord, FitVerificationProjection,
+    INSPECT_SCHEMA, InspectionProjection, MutationProjection, ObservedFileProjection, PLAN_SCHEMA,
+    PlanProjection, ProvenanceProjection, RollbackEntryProjection, SUPPORT_LIMIT, TargetProjection,
+    VERIFY_SCHEMA, VerificationFailureProjection,
 };
 use super::{AdapterErrorId, FitAdapterError, adapter_error, kernel_error};
 use crate::repository_fit::LocalEffects;

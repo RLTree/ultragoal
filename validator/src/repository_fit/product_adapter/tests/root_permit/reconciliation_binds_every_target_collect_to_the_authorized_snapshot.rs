@@ -99,11 +99,7 @@ impl FitEffects for NoEffect {
     }
 }
 
-impl RepositoryFitPermitEffects for NoEffect {
-    fn read_unix_mode(&mut self, path: &CanonicalPath) -> Result<Option<u32>, FitError> {
-        self.inner.read_unix_mode(path)
-    }
-}
+impl RepositoryFitPermitEffects for NoEffect {}
 
 pub(crate) struct RootSwapAfterFirstEffect {
     pub(crate) inner: LocalEffects,
@@ -143,11 +139,7 @@ impl FitEffects for RootSwapAfterFirstEffect {
     }
 }
 
-impl RepositoryFitPermitEffects for RootSwapAfterFirstEffect {
-    fn read_unix_mode(&mut self, path: &CanonicalPath) -> Result<Option<u32>, FitError> {
-        self.inner.read_unix_mode(path)
-    }
-}
+impl RepositoryFitPermitEffects for RootSwapAfterFirstEffect {}
 
 pub(crate) struct UndeclaredWrite {
     pub(crate) inner: LocalEffects,

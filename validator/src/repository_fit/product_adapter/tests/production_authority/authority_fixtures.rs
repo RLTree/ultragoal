@@ -163,7 +163,7 @@ pub(crate) fn authority_scenario_command_at_root(
     let intent_path = recovery_intent_path(fixture, nonce_label);
     let mut command = Command::new(std::env::current_exe().unwrap());
     command
-        .args(["--exact", AUTHORITY_SCENARIO_HELPER, "--nocapture"])
+        .args([AUTHORITY_SCENARIO_HELPER, "--nocapture"])
         .env("HUL_FIT_AUTHORITY_SCENARIO", role)
         .env("HUL_FIT_AUTHORITY_REPO", repository_root)
         .env("HUL_FIT_AUTHORITY_STORE", &fixture.store.root)

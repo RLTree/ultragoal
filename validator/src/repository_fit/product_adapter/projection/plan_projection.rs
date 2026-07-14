@@ -76,6 +76,7 @@ impl FitVerificationProjection {
     }
 }
 
+#[cfg(test)]
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct FitApplyPreparationProjection {
@@ -91,11 +92,4 @@ pub(crate) struct FitApplyPreparationProjection {
     pub(crate) effect: String,
     pub(crate) claim_effect: String,
     pub(crate) support_limit: String,
-}
-
-impl FitApplyPreparationProjection {
-    pub(crate) fn to_machine_bytes(&self) -> Result<Vec<u8>, super::super::FitAdapterError> {
-        serde_json::to_vec(self)
-            .map_err(|_| super::super::adapter_error(AdapterErrorId::ProjectionFailed))
-    }
 }

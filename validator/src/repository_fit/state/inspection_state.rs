@@ -183,8 +183,6 @@ pub struct FitPlan {
     pub(crate) context_id: String,
     pub(crate) candidate_id: String,
     pub(crate) root_binding: String,
-    pub(crate) desired_state_sha256: String,
-    pub(crate) inspection_sha256: String,
     pub(crate) checks: Vec<FitCheck>,
     pub(crate) mutations: Vec<Mutation>,
     pub(crate) conflicts: Vec<FitConflict>,

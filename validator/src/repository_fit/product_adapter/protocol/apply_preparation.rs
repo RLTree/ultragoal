@@ -58,6 +58,7 @@ pub(crate) fn prepare_apply_request(
         ))
         .map_err(|_| adapter_error(AdapterErrorId::ProjectionFailed))?,
     );
+    #[cfg(test)]
     let projection = FitApplyPreparationProjection {
         schema_version: APPLY_PREPARATION_SCHEMA.to_owned(),
         request_id: request_id.clone(),
@@ -98,6 +99,7 @@ pub(crate) fn prepare_apply_request(
     };
     Ok(PreparedFitApply {
         request,
+        #[cfg(test)]
         projection,
     })
 }

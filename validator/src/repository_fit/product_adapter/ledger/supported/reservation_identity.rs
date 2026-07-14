@@ -113,7 +113,6 @@ pub(crate) fn existing(event: &LedgerEvent) -> ExistingReservation {
         expires_tick: event.expires_tick,
         recovery_intent_sha256: event.recovery_intent_sha256.clone(),
         recovery: event.recovery.clone(),
-        terminal_sha256: event.terminal_sha256.clone(),
     }
 }
 

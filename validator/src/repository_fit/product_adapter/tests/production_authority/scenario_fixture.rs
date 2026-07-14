@@ -3,7 +3,7 @@ use super::*;
 pub(crate) const BASE: &str = "/private/tmp/hul-repository-fit-production-authority-085-fixtures";
 pub(crate) static NEXT_FIXTURE: AtomicU64 = AtomicU64::new(1);
 
-pub(crate) const AUTHORITY_SCENARIO_HELPER: &str = "repository_fit::product_adapter::tests::production_authority::subprocess_authority_scenario_helper";
+pub(crate) const AUTHORITY_SCENARIO_HELPER: &str = "subprocess_authority_scenario_helper";
 
 pub(crate) struct ChildGuard(Option<Child>);
 

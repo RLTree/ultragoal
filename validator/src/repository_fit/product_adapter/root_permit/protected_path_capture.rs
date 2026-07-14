@@ -147,33 +147,6 @@ pub(crate) fn open_target_at_bytes(
 }
 
 #[cfg(target_vendor = "apple")]
-pub(crate) fn named_object_at_bytes(
-    parent: &File,
-    name: &[u8],
-    payload_sha256: Option<String>,
-) -> Result<Option<ObjectRow>, FitAdapterError> {
-    let name = CString::new(name).map_err(|_| adapter_error(AdapterErrorId::TargetUnavailable))?;
-    let mut stat = MaybeUninit::<libc::stat>::zeroed();
-    let result = unsafe {
-        libc::fstatat(
-            parent.as_raw_fd(),
-            name.as_ptr(),
-            stat.as_mut_ptr(),
-            libc::AT_SYMLINK_NOFOLLOW,
-        )
-    };
-    if result != 0 {
-        return if last_errno() == libc::ENOENT {
-            Ok(None)
-        } else {
-            Err(adapter_error(AdapterErrorId::TargetUnavailable))
-        };
-    }
-    let stat = unsafe { stat.assume_init() };
-    Ok(Some(stat_object(&stat, payload_sha256)?))
-}
-
-#[cfg(target_vendor = "apple")]
 pub(crate) fn named_versioned_object_at_bytes(
     parent: &File,
     name: &[u8],

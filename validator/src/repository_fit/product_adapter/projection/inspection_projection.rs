@@ -3,6 +3,7 @@ use super::*;
 pub(crate) const INSPECT_SCHEMA: &str = "RepositoryFitInspect-v1";
 pub(crate) const PLAN_SCHEMA: &str = "RepositoryFitPlan-v1";
 pub(crate) const VERIFY_SCHEMA: &str = "RepositoryFitVerification-v1";
+#[cfg(test)]
 pub(crate) const APPLY_PREPARATION_SCHEMA: &str = "RepositoryFitApplyPreparation-v1";
 pub(crate) const CLAIM_EFFECT: &str = "none";
 pub(crate) const SUPPORT_LIMIT: &str = "source-built public repository-fit adapter; effectful apply requires a supported Darwin host and preprovisioned owner-only local authority state; install and live-user proof remain separate";
