@@ -1,0 +1,243 @@
+{
+  "worker": "/root/migration_compatibility_contract_engineer",
+  "lease_id": "ROUTINE-REUSE-PREAUTH-099",
+  "context_id": "sha256:1285dd17ab1457985f5e4eb33a576907f8ef5871308449efcd1156601a31b077",
+  "candidate_identity": {
+    "candidate_id": "sha256:29f147eddb3f01ba48fd1e6fcf64dbb917aeaff94d696500e713a41227ef50ce",
+    "context_id": "sha256:1285dd17ab1457985f5e4eb33a576907f8ef5871308449efcd1156601a31b077",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "base_head_commit": "117c6f76d49754567af221a70a455bd4c50ef0f0",
+    "base_head_tree": "eed77a4dabc4d19d643df12a13f7c2327e46d12e",
+    "immutable_validation_worktree": "/private/tmp/hul-routine-reuse-preauth-099-freeze",
+    "isolated_target_directory": "/private/tmp/hul-routine-reuse-preauth-099-freeze-target",
+    "artifact_set_formula": "Sort the nine artifact rows by UTF-8 path bytes; serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>; concatenate; SHA-256 the resulting bytes.",
+    "artifact_count": 9,
+    "artifact_total_bytes": 249021,
+    "artifact_total_lines_diagnostic": 6772,
+    "artifact_set_sha256": "sha256:29f147eddb3f01ba48fd1e6fcf64dbb917aeaff94d696500e713a41227ef50ce",
+    "worker_result_self_excluded": true,
+    "staged_or_committed_by_worker": false
+  },
+  "base_state": {
+    "status": "material_behavioral_rework",
+    "review_id": "ROUTINE-PRODUCTION-AUTHORITY-BEHAVIORAL-REVIEW-098-R1",
+    "prior_candidate_id": "sha256:e4fe97fcbfb760202898c7c18c009b3a41f9e2e12d7ea90593c44b6bbdcfd134",
+    "defect": "A canonical self-consistent reuse artifact from a foreign Complete record was authenticated only after reservation inserted a consumed grant and published a ledger generation.",
+    "impact": "Repeated forged artifacts could exhaust the consumed-grant ceiling and deny later exact reuse despite preserving the Complete protocol record.",
+    "required_boundary": "Authenticate supplied reuse read-only against the exact current Complete record before any durable byte transition, then revalidate the exact authorization during reservation CAS."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "status_scope": "Frozen source-local routine reuse preauthorization correction pending a different independent reviewer and root reconciliation.",
+    "preauthorization": "Opaque, non-Clone, non-Serialize authority bound to the exact store identity, semantic binding, generation, Complete record digest, result artifact, and witness.",
+    "pre_reservation_authentication": "Canonical supplied reuse is checked through an existing-only read path before reservation, generation change, consumed-grant insertion, workspace effect, or other durable transition.",
+    "reservation_revalidation": "Reservation CAS rechecks store identity, generation, canonical Complete-record digest, exact binding, artifact cardinality, result digest, and witness before mutation.",
+    "refusal_behavior": "Malformed, noncanonical, binding-invalid, foreign-record, substituted-record, replayed, or stale-generation reuse fails closed with exact authority bytes and workspace state preserved at the applicable observation boundary.",
+    "aggregate_test_result": "195 passed; 0 failed; 1 intentionally ignored child-process helper.",
+    "claim_effect": "none",
+    "public_dispatch_proved": false,
+    "installation_or_runtime_proved": false,
+    "readiness_release_or_completion_proved": false
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/ROUTINE-REUSE-PREAUTH-099.json",
+    "fixtures/routine-production-authority/cases.json",
+    "validator/src/routine_work/runtime_adapter/mediator.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/model.rs",
+    "validator/src/routine_work/runtime_adapter/production.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger.rs",
+    "validator/tests/routine_production_authority_contract.rs"
+  ],
+  "touched_semantics": [
+    "production-reuse-structural-preflight",
+    "production-reuse-read-only-preauthorization",
+    "production-reuse-reservation-cas",
+    "production-ledger-existing-only-open",
+    "production-reuse-adversarial-controls"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/ROUTINE-REUSE-PREAUTH-099.json"
+  ],
+  "fixtures": [
+    "fixtures/routine-production-authority/cases.json"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "routine-reuse-preauthorization",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "routine-reuse-adversarial-cases",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "isolated-cargo-validation",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "external-system",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "live-user-state",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "irreversible-action",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "reuse-read-only-authentication-before-reservation",
+    "opaque-exact-store-bound-preauthorization",
+    "reservation-cas-revalidation",
+    "forged-reuse-zero-transition",
+    "repeated-forgery-no-capacity-exhaustion",
+    "max-boundary-preservation",
+    "forged-valid-concurrency-order-independence",
+    "generation-race-replay-reopen-and-substitution-controls",
+    "worker-result-v1"
+  ],
+  "dependency_nodes": [],
+  "changes": [
+    {
+      "area": "structural-preflight",
+      "result": "Production reuse preflight now emits a private preflight object carrying exact protocol, intent, artifact, result, and witness commitments instead of treating request-shaped JSON as authenticated reuse."
+    },
+    {
+      "area": "read-only-ledger-authentication",
+      "result": "An existing-only ledger path authenticates supplied reuse against the exact current Complete record without creating the root, lock, key, state, generation, grant, or workspace effect."
+    },
+    {
+      "area": "opaque-preauthorization",
+      "result": "A private non-Clone and non-serializable authorization binds store identity, semantic effect, generation, canonical record digest, exact result artifact, and witness."
+    },
+    {
+      "area": "reservation-cas",
+      "result": "Reservation revalidates the authorization and current Complete record before inserting the consumed grant; stale generation or record substitution fails with routine-production-reuse-preauthorization-stale before reservation mutation."
+    },
+    {
+      "area": "existing-store-concurrency",
+      "result": "Existing-only open acquires the existing lock before directory enumeration, preventing atomic publication temporaries from being misclassified as unknown authority entries during concurrency."
+    },
+    {
+      "area": "adversarial-contract",
+      "result": "Focused controls cover pre-open forgery, foreign Complete-record substitution, 64 repeated forgeries, exact max and max-plus-one behavior, both forged-versus-valid orders, generation race, reopen, replay, mutation, workspace zero-transition, and later exact reuse."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-reuse-preauth-099-freeze-target CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test routine_production_authority_contract reuse -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Frozen candidate: 6 focused reuse tests passed, 0 failed, 34 filtered; all spawned child controls passed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-reuse-preauth-099-freeze-target CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test routine_production_authority_contract --test routine_production_catalog_contract --test routine_recovery_reuse_journey_contract --test routine_work_contract -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Frozen dependency closure: production authority 39 passed with one intentionally ignored helper; catalog 14 passed; recovery and reuse 26 passed; routine-work 116 passed. Total 195 passed, 0 failed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-reuse-preauth-099-freeze-target CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --lib --locked --offline -j 16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "The frozen library candidate compiled successfully."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check --config skip_children=true on the six routine Rust candidate paths",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Every leased or candidate-relevant Rust artifact passed exact-file formatting validation without formatting unrelated modules."
+    },
+    {
+      "command": "jq -e fixtures/routine-production-authority/cases.json; git diff --check; exact nine-path regular-file, link-count, digest, byte, line, aggregate, and live-to-freeze cmp reconciliation",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Fixture JSON and whitespace checks passed; all nine files are regular single-link files and live bytes match the immutable freeze; 249021 bytes, 6772 diagnostic lines, aggregate sha256:29f147eddb3f01ba48fd1e6fcf64dbb917aeaff94d696500e713a41227ef50ce."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/routine-production-authority/cases.json",
+      "sha256": "sha256:bc1de5e5007dde3870dd12dee044c1f9c5fe26f7e950949abc16ab5b6d22e650",
+      "byte_length": 1300
+    },
+    {
+      "path": "validator/src/routine_work/mod.rs",
+      "sha256": "sha256:111dc887a68ddc778192e75cb50edc5b37296499102518e2dca9be2fa5f2be36",
+      "byte_length": 2619
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter.rs",
+      "sha256": "sha256:4feef4d4b049f3631fc58ef8059d46eba043a14c87ea9f0257a5467bd5797725",
+      "byte_length": 38077
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator.rs",
+      "sha256": "sha256:a1164df7a48562fc3d91490b4d5ad97f0aa88deb7803af0b4dd707f721277e99",
+      "byte_length": 51916
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/model.rs",
+      "sha256": "sha256:ba7eb0ca1cc874999f766bbdddfc62f42a5ddfdb3992877cfb29b21dae459a85",
+      "byte_length": 9874
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production.rs",
+      "sha256": "sha256:93243bd06bad4775eb87dc56ae3644cae03d3f80c50c52b8eaa04d985da1cb84",
+      "byte_length": 16433
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/ledger.rs",
+      "sha256": "sha256:a3aba3c5c87eca33efa9447fa29cc7d40e1fae4f3e290b12f3ccfeab41cdca6c",
+      "byte_length": 67982
+    },
+    {
+      "path": "validator/tests/routine_production_authority_contract.rs",
+      "sha256": "sha256:fd00de8b0843f8851f9e7f9c6e9182c53ed3afc3b04abd2aae2bb0e5fc9b3cab",
+      "byte_length": 53000
+    },
+    {
+      "path": "validator/tests/routine_work_contract/provenance.rs",
+      "sha256": "sha256:160173c04aa7562f3afdeb6af34f89b363bafc88f1d62bdfcab55a0ac215ef69",
+      "byte_length": 7820
+    }
+  ],
+  "findings": [
+    {
+      "severity": "high-corrected",
+      "class": "reuse-authentication-after-mutation",
+      "finding": "The reviewed predecessor accepted request-shaped forged reuse far enough to publish a consumed grant before authenticating the completed-record witness.",
+      "resolution": "Read-only exact-record authentication now precedes reservation, and reservation CAS revalidates the opaque authorization before any mutation."
+    },
+    {
+      "severity": "corrected-during-concurrency-validation",
+      "class": "prelock-directory-enumeration-race",
+      "finding": "Existing-only open initially enumerated authority entries before acquiring the existing ledger lock, allowing another process's bounded atomic publication temporary to appear as an unknown entry.",
+      "resolution": "Existing-only open now validates and acquires the pre-existing lock before enumerating the authority directory."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-routine-reuse-preauthorization-review",
+    "root-acceptance-and-reconciliation",
+    "public-dispatch-install-runtime-and-live-user-proof"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "This correction is source-local and crate-private; it does not add or prove public CLI dispatch, package installation, cache, marketplace, discovery, runtime identity, or representative live-user behavior.",
+    "Runtime execution was exercised on target_vendor=apple only. The non-Apple branch remains fail-closed but was not runtime-executed on another host.",
+    "The owner-only signed ledger is not an external monotonic anchor against a malicious account owner replacing the complete key and store after all trusted process state is gone.",
+    "Repository-wide cargo fmt --check observed formatting drift in unrelated concurrent product lanes; exact candidate files passed rustfmt with child traversal disabled.",
+    "The WorkerResult is excluded from the artifact aggregate to avoid recursive self-identity; its independent digest is reported after final validation.",
+    "The immutable validation worktree and target directory are preserved for independent review because this worker was not authorized to perform destructive cleanup."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

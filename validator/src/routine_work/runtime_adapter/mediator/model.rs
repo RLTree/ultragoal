@@ -5,6 +5,8 @@ use std::sync::atomic::{AtomicBool, Ordering};
 
 use crate::routine_work::RepoPath;
 
+use super::DurableAttemptAuthority;
+
 #[cfg(test)]
 use super::super::model::RoutineEffectRequest;
 
@@ -46,6 +48,7 @@ pub(crate) struct RoutineRootGrant {
     pub(super) allowed_output_scopes: Vec<RepoPath>,
     pub(super) recovery_for: Option<String>,
     pub(super) seal: String,
+    pub(super) durable: Option<Arc<dyn DurableAttemptAuthority>>,
 }
 
 #[cfg(test)]
@@ -75,6 +78,7 @@ impl RoutineRootGrant {
             allowed_output_scopes,
             recovery_for,
             seal: String::new(),
+            durable: None,
         };
         grant.grant_id = super::grant_identity(&grant).expect("test grant identity");
         grant.seal = super::grant_seal(&grant).expect("test grant seal");
@@ -94,6 +98,7 @@ impl RoutineRootGrant {
             allowed_output_scopes: self.allowed_output_scopes.clone(),
             recovery_for: self.recovery_for.clone(),
             seal: self.seal.clone(),
+            durable: None,
         }
     }
 
@@ -229,6 +234,14 @@ impl RoutineReuseInput {
 
     pub(super) fn into_artifacts(self) -> Vec<Vec<u8>> {
         self.artifacts
+    }
+
+    pub(super) fn artifacts(&self) -> &[Vec<u8>] {
+        &self.artifacts
+    }
+
+    pub(in crate::routine_work::runtime_adapter) fn is_empty(&self) -> bool {
+        self.artifacts.is_empty()
     }
 }
 

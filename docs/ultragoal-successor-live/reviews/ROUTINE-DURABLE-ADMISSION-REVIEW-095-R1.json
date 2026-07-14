@@ -1,0 +1,30 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "ROUTINE-DURABLE-ADMISSION-REVIEW-095-R1",
+  "reviewer": "/root/routine_execution_authority_reviewer",
+  "verdict": "REWORK",
+  "reviewed_identity": {
+    "freeze_head_commit": "117c6f76d49754567af221a70a455bd4c50ef0f0",
+    "freeze_head_tree": "eed77a4dabc4d19d643df12a13f7c2327e46d12e",
+    "artifact_count": 9,
+    "artifact_bytes": 226468,
+    "artifact_lines_diagnostic": 6240,
+    "artifact_set_sha256": "sha256:e4fe97fcbfb760202898c7c18c009b3a41f9e2e12d7ea90593c44b6bbdcfd134",
+    "routine_production_worker_result_sha256": "sha256:c0639fdeaa6b17c94d208a60d1900ecdd4d1682b1241d677c7709484809530b4",
+    "routine_admission_worker_result_sha256": "sha256:b466f3fa52e959ef135914912f411e9cf5e4edf9cc1e48b82714fb54cc26283a"
+  },
+  "decisive_finding": {
+    "severity": "HIGH",
+    "stage": "proof_integrity",
+    "issue": "ROUTINE-PRODUCTION-AUTHORITY-089.json labels itself WorkerResult-v1 but the repository-authoritative WorkerResultV1 parser rejects its top-level and artifact-record shape.",
+    "evidence": [
+      "ROUTINE-PRODUCTION-AUTHORITY-089.json: InvalidWorkerResult",
+      "ROUTINE-DURABLE-ADMISSION-095.json: accepted by WorkerResultV1::parse_json",
+      "validator/src/orchestration/worker.rs uses deny_unknown_fields for the authoritative typed result"
+    ],
+    "required_fix": "Rewrite only the stale 089 receipt to the exact authoritative WorkerResultV1 key and ArtifactRecord shape, preserve truthful evidence, and validate both routine receipts before behavioral re-review."
+  },
+  "review_limits": "Review stopped at the first material blocker. Routine production behavior, durable admission, recovery, reuse, concurrency, and refusal paths were not independently cleared in this round.",
+  "claim_ceiling": "REWORK; no source-local acceptance or higher claim.",
+  "no_claim_statement": "No claim of integration, public routine behavior, installation, runtime behavior, readiness, release, node closure, or completion."
+}

@@ -153,7 +153,15 @@ fn compile_surface(scratch: &Path, dependencies: &Path) -> PathBuf {
     ]);
     command.arg(&source).arg("-o").arg(&surface);
     dependency_path(&mut command, dependencies);
-    for name in ["ultragoal", "serde", "serde_json", "sha2", "libc"] {
+    for name in [
+        "ultragoal",
+        "serde",
+        "serde_json",
+        "sha2",
+        "libc",
+        "getrandom",
+        "hmac",
+    ] {
         external(&mut command, name, &find_rlib(dependencies, name));
     }
     let output = command.output().unwrap();

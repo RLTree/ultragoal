@@ -1,0 +1,48 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "ROUTINE-REUSE-PREAUTH-REVIEW-099-R2",
+  "reviewer": "/root/supported_host_transaction_security_reviewer",
+  "verdict": "ACCEPT",
+  "reviewed_identity": {
+    "freeze_head_commit": "fccad11f150655772bf01eef031ea3131178d5ca",
+    "freeze_head_tree": "8b7d8755c4ad3037d8ffefda004360c79e571406",
+    "review_overlay": "/private/tmp/hul-routine-reuse-preauth-099-integrated-overlay.lYERtA",
+    "artifact_count": 9,
+    "artifact_bytes": 249021,
+    "artifact_lines_diagnostic": 6772,
+    "artifact_set_sha256": "sha256:29f147eddb3f01ba48fd1e6fcf64dbb917aeaff94d696500e713a41227ef50ce",
+    "routine_production_worker_result_sha256": "sha256:f790eda4f06f62d9e64465d4b97a840c63c87a94173c9f0956b0beb7500165e9",
+    "routine_admission_worker_result_sha256": "sha256:b466f3fa52e959ef135914912f411e9cf5e4edf9cc1e48b82714fb54cc26283a",
+    "routine_reuse_worker_result_sha256": "sha256:6e50eba73f2373d99027cacfea00e3d0d66376a9a19fc2131bb62b2ad9b66684"
+  },
+  "verification": [
+    {
+      "surface": "routine dependency closure",
+      "result": "195 passed; 0 failed; one intentional child-process helper ignored: production authority 39, catalog 14, recovery and reuse 26, routine-work 116"
+    },
+    {
+      "surface": "compile, formatting, and fixture",
+      "result": "cargo check --lib passed; eight Rust artifacts passed exact-file rustfmt check; fixture passed jq"
+    },
+    {
+      "surface": "WorkerResult proof",
+      "result": "all three receipts passed the checked-in Draft 2020-12 schema and WorkerResultV1::parse_json"
+    }
+  ],
+  "accepted_properties": [
+    "Malformed and noncanonical reuse refuses before authority initialization.",
+    "Canonical foreign reuse is authenticated read-only against the exact Complete record before reservation.",
+    "Repeated forged reuse preserves ledger bytes, cardinalities, workspace tree and status, and permits later exact reuse.",
+    "Opaque preauthorization binds store authority, semantic binding, generation, Complete-record digest, artifact set, result digest, and witness.",
+    "Reservation revalidates generation, store identity, record digest, binding, cardinality, artifacts, and witnesses under the publication lock.",
+    "Generation race, record substitution, replay, restart and reopen, recovery, and forged versus valid concurrency in both orders pass.",
+    "The exact consumed-grant maximum remains reopenable and max plus one refuses with unchanged state."
+  ],
+  "findings": [],
+  "residual_risks": [
+    "No public routine route or installed-host execution was attempted.",
+    "Hostile same-UID or kernel-level interference is outside this bounded source-local review."
+  ],
+  "claim_ceiling": "independently accepted source-local owner-only Darwin routine ledger behavior only",
+  "no_claim_statement": "No claim of public dispatch, installation, runtime or live-user behavior, readiness, release, node closure, or completion."
+}

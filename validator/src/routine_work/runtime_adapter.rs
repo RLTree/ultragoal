@@ -7,6 +7,7 @@
 
 mod mediator;
 mod model;
+mod production;
 
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
@@ -38,6 +39,10 @@ pub(crate) use model::{
     RoutineInvocationSpec, RoutineMediatedExpectation, RoutineMediatedIntent,
     RoutineMediatedOutcome, RoutineMediatedWitness, RoutineMediationAuthority,
     RoutineMediationBatch, RoutineNoOpProjection,
+};
+pub(crate) use production::{
+    ProductionRoutineIssuer, RoutineRecoveryAuthority,
+    mediate_prepared_routine_execution_production,
 };
 
 const MAX_SELECTED_CHECKS: usize = 4_096;

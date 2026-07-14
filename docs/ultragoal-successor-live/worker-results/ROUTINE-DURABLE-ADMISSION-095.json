@@ -1,0 +1,230 @@
+{
+  "worker": "/root/migration_retirement_authority_engineer",
+  "lease_id": "ROUTINE-DURABLE-ADMISSION-095",
+  "context_id": "ROUTINE-DURABLE-ADMISSION-095",
+  "candidate_identity": {
+    "result_status": "frozen_candidate_pending_independent_review",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "frozen_candidate_head_commit": "117c6f76d49754567af221a70a455bd4c50ef0f0",
+    "frozen_candidate_head_tree": "eed77a4dabc4d19d643df12a13f7c2327e46d12e",
+    "immutable_validation_worktree": "/private/tmp/hul-routine-admission-095.Lb4AwB",
+    "artifact_set_formula": "Sort rows by UTF-8 path bytes, serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>, concatenate, then SHA-256 the result.",
+    "full_artifact_count": 9,
+    "full_artifact_total_bytes": 226468,
+    "full_artifact_total_lines": 6240,
+    "full_artifact_set_sha256": "sha256:e4fe97fcbfb760202898c7c18c009b3a41f9e2e12d7ea90593c44b6bbdcfd134",
+    "leased_artifact_count": 4,
+    "leased_artifact_total_bytes": 118906,
+    "leased_artifact_total_lines": 3189,
+    "leased_artifact_set_sha256": "sha256:9d1424677a11ac71f656e5ba07176ff610980a15527c037379d8a8aa9783b78c",
+    "leased_artifacts": [
+      {
+        "path": "fixtures/routine-production-authority/cases.json",
+        "sha256": "sha256:1845295620ab2629775706d6ca510d2c2923e3c082f85db192676bdd1e34765f",
+        "byte_length": 1078,
+        "line_count": 39
+      },
+      {
+        "path": "validator/src/routine_work/runtime_adapter/production.rs",
+        "sha256": "sha256:392bc83609b06efb2be5bdd81cffe2d25befbba715381d5fe1d4be965e4e4754",
+        "byte_length": 13861,
+        "line_count": 381
+      },
+      {
+        "path": "validator/src/routine_work/runtime_adapter/production/ledger.rs",
+        "sha256": "sha256:bee51d1f8fde31665fca699a4b23d5a2de0d990902ce15a0c1fba55f3bef7960",
+        "byte_length": 60956,
+        "line_count": 1553
+      },
+      {
+        "path": "validator/tests/routine_production_authority_contract.rs",
+        "sha256": "sha256:95dcfa4f7e8a51916b549c981916c8fbf1230f82feb2ce55f40b77aebc80708f",
+        "byte_length": 43011,
+        "line_count": 1216
+      }
+    ],
+    "worker_result_self_excluded": true,
+    "staged_or_committed_by_worker": false
+  },
+  "base_state": {
+    "development_reproduction_head": "27f5fa890118b390ac303a39dae35462f75fa9b2",
+    "development_reproduction_tree": "a1b40d086d87449a8b56cea6fac972d3129dbeed",
+    "pre_correction_full_artifact_set_sha256": "sha256:46a2ee07ae863a201ab889ac887fa7ad3d845adeaca92744c6a640cb1694253e",
+    "pre_correction_total_bytes": 211388,
+    "acceptance_use": "none; historical development evidence only",
+    "defect": "Reservation mutated consumed grants and potentially protocol and effect maps without validating projected post-operation cardinalities. The first over-limit write could publish state that validation and reopen then rejected."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "status_scope": "Frozen source-local correction pending independent review and root reconciliation only.",
+    "projected_capacity_validation": "Runs before reservation mutation.",
+    "post_operation_validation": "Runs after closure and metadata projection but before encoding or durable publication.",
+    "record_limit": 4096,
+    "consumed_grant_limit": 16384,
+    "maximum_state": "Usable, recoverable, and reopenable.",
+    "first_over_limit_transition": "Rejected with routine-production-authority-capacity-exhausted and exact state bytes unchanged.",
+    "constants_changed": false,
+    "aggregate_test_result": "193 passed; 0 failed; 1 intentionally ignored child-process helper.",
+    "claim_effect": "none"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/ROUTINE-DURABLE-ADMISSION-095.json",
+    "fixtures/routine-production-authority/cases.json",
+    "validator/src/routine_work/runtime_adapter/production.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger.rs",
+    "validator/tests/routine_production_authority_contract.rs"
+  ],
+  "touched_semantics": [
+    "pre-mutation-projected-capacity-admission",
+    "pre-publication-payload-invariant",
+    "valid-signed-pre-boundary-test-fixture",
+    "maximum-capacity-reopen-recovery-and-replay",
+    "concurrent-capacity-admission-zero-transition"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "consumed-grant-max-minus-one-max-max-plus-one",
+    "protocol-effect-max-minus-one-max-max-plus-one",
+    "capacity-concurrent-admission"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "four leased implementation and fixture paths plus this WorkerResult",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "locked offline isolated Cargo validation",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network or external system",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "live-user state or host configuration",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "validate projected protocol effect and consumed-grant counts before durable mutation",
+    "keep the exact maximum usable recoverable and reopenable",
+    "reject the first over-limit operation with zero byte and state transition",
+    "prevent fresh reuse recovery and concurrent paths from publishing invalid state",
+    "preserve MAX_RECORDS=4096 consumed-grant limit=16384 and MAX_STATE_BYTES=16777216",
+    "REQ-WORKER-RESULT-V1"
+  ],
+  "dependency_nodes": [],
+  "changes": [
+    {
+      "area": "durable-reservation-admission",
+      "result": "Projected consumed-grant, protocol, and effect cardinalities are validated before reservation mutation."
+    },
+    {
+      "area": "durable-publication-postcondition",
+      "result": "Every write closure validates the complete projected payload before encoding or atomic state publication."
+    },
+    {
+      "area": "boundary-fixture",
+      "result": "A cfg(test)-only constructor creates valid signed pre-boundary state using the unchanged production constants."
+    },
+    {
+      "area": "boundary-controls",
+      "result": "Fresh, reuse, recovery, reopen, replay, concurrent child-process, exact-byte, mutation, and false-pass paths cover max-minus-one, max, and max-plus-one."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-admission-target.q0eHbg CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 RUSTFLAGS=-Awarnings cargo test --manifest-path validator/Cargo.toml --locked --offline --test routine_production_authority_contract --test routine_production_catalog_contract --test routine_recovery_reuse_journey_contract --test routine_work_contract -j 16 -- --test-threads=16",
+      "exit_code": 0,
+      "result": "Current-base immutable freeze: production authority 37 passed and one child-process helper intentionally ignored; catalog 14 passed; recovery and reuse 26 passed; routine-work 116 passed. Zero failures."
+    },
+    {
+      "command": "rustfmt --check --edition 2024 validator/src/routine_work/runtime_adapter/production.rs validator/src/routine_work/runtime_adapter/production/ledger.rs validator/tests/routine_production_authority_contract.rs",
+      "exit_code": 0,
+      "result": "All three leased Rust artifacts passed exact-final-byte formatting validation."
+    },
+    {
+      "command": "files=(fixtures/routine-production-authority/cases.json validator/src/routine_work/mod.rs validator/src/routine_work/runtime_adapter.rs validator/src/routine_work/runtime_adapter/mediator.rs validator/src/routine_work/runtime_adapter/mediator/model.rs validator/src/routine_work/runtime_adapter/production.rs validator/src/routine_work/runtime_adapter/production/ledger.rs validator/tests/routine_production_authority_contract.rs validator/tests/routine_work_contract/provenance.rs); jq -e . fixtures/routine-production-authority/cases.json >/dev/null; git -C /private/tmp/hul-routine-admission-095.Lb4AwB diff --check; for p in \"${files[@]}\"; do cmp \"$p\" \"/private/tmp/hul-routine-admission-095.Lb4AwB/$p\"; done",
+      "exit_code": 0,
+      "result": "Fixture JSON, tracked whitespace, and final live-to-freeze byte identity passed; both artifact aggregates recomputed exactly."
+    },
+    {
+      "command": "python3 -m json.tool docs/ultragoal-successor-live/worker-results/ROUTINE-DURABLE-ADMISSION-095.json >/dev/null; python3 -c 'import json,pathlib,jsonschema; root=pathlib.Path(\".\"); instance=json.loads((root/\"docs/ultragoal-successor-live/worker-results/ROUTINE-DURABLE-ADMISSION-095.json\").read_text()); schema=json.loads((root/\"docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json\").read_text()); jsonschema.validate(instance=instance, schema=schema)'",
+      "exit_code": 0,
+      "result": "The final WorkerResult parses and validates against WorkerResult-v1; its self-excluded file digest is reported with the handoff."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/routine-production-authority/cases.json",
+      "sha256": "sha256:1845295620ab2629775706d6ca510d2c2923e3c082f85db192676bdd1e34765f",
+      "byte_length": 1078
+    },
+    {
+      "path": "validator/src/routine_work/mod.rs",
+      "sha256": "sha256:111dc887a68ddc778192e75cb50edc5b37296499102518e2dca9be2fa5f2be36",
+      "byte_length": 2619
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter.rs",
+      "sha256": "sha256:4feef4d4b049f3631fc58ef8059d46eba043a14c87ea9f0257a5467bd5797725",
+      "byte_length": 38077
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator.rs",
+      "sha256": "sha256:9477898d73119053b19ed898ceed6ff57be5ea12bb2c2e85f674da8e25195656",
+      "byte_length": 49254
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/model.rs",
+      "sha256": "sha256:064ad7bf75fcfeddec0dc88696a27ed248f6c49a903232a43dd0fba124dc92da",
+      "byte_length": 9792
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production.rs",
+      "sha256": "sha256:392bc83609b06efb2be5bdd81cffe2d25befbba715381d5fe1d4be965e4e4754",
+      "byte_length": 13861
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/ledger.rs",
+      "sha256": "sha256:bee51d1f8fde31665fca699a4b23d5a2de0d990902ce15a0c1fba55f3bef7960",
+      "byte_length": 60956
+    },
+    {
+      "path": "validator/tests/routine_production_authority_contract.rs",
+      "sha256": "sha256:95dcfa4f7e8a51916b549c981916c8fbf1230f82feb2ce55f40b77aebc80708f",
+      "byte_length": 43011
+    },
+    {
+      "path": "validator/tests/routine_work_contract/provenance.rs",
+      "sha256": "sha256:160173c04aa7562f3afdeb6af34f89b363bafc88f1d62bdfcab55a0ac215ef69",
+      "byte_length": 7820
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material-corrected",
+      "class": "durable-capacity-self-poisoning",
+      "finding": "The pre-correction reservation path inserted consumed grants and potentially protocol and effect records without validating projected cardinalities, while the write path did not revalidate the projected payload before publication. The first record or grant beyond the declared maximum could therefore publish a state that immediate validation and reopen rejected.",
+      "resolution": "Reservation now validates projected consumed-grant, protocol, and effect counts before any mutation, and every write closure validates the complete projected payload before durable publication. Max-plus-one controls assert exact state bytes remain unchanged."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent review of the frozen candidate",
+    "root acceptance and reconciliation"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "This is a source-local crate-private owner-only Darwin ledger correction. It does not prove public dispatch, installation, marketplace state, or a representative live-user journey.",
+    "The complete signed store is not an external monotonic anchor against a malicious account owner replacing the entire key and state after all trusted process state is gone.",
+    "The post-operation invariant adds one bounded linear payload-validation pass per durable write; no performance benchmark claim is made.",
+    "The valid pre-boundary state constructor is cfg(test) only and does not create a production authority entrypoint.",
+    "The WorkerResult is excluded from both artifact aggregates to avoid recursive self-identity; its own SHA-256 is reported separately."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

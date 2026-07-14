@@ -1,0 +1,272 @@
+{
+  "worker": "/root/routine_execution_authority_reviewer",
+  "lease_id": "ROUTINE-WORKERRESULT-SCHEMA-097",
+  "context_id": "sha256:c7d0fc34794ca17058849a87786b8cf4d9e2a962879880748f89a157d3d94137",
+  "candidate_identity": {
+    "candidate_id": "sha256:e4fe97fcbfb760202898c7c18c009b3a41f9e2e12d7ea90593c44b6bbdcfd134",
+    "context_id": "sha256:c7d0fc34794ca17058849a87786b8cf4d9e2a962879880748f89a157d3d94137",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "base_head_commit": "117c6f76d49754567af221a70a455bd4c50ef0f0",
+    "base_head_tree": "eed77a4dabc4d19d643df12a13f7c2327e46d12e",
+    "artifact_set_formula": "Sort the nine artifact rows by UTF-8 path bytes; serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>; concatenate; SHA-256 the resulting bytes.",
+    "artifact_count": 9,
+    "artifact_total_bytes": 226468,
+    "artifact_total_lines_diagnostic": 6240,
+    "artifact_set_sha256": "sha256:e4fe97fcbfb760202898c7c18c009b3a41f9e2e12d7ea90593c44b6bbdcfd134",
+    "worker_result_self_excluded": true,
+    "receipt_correction_only": true,
+    "prior_089_receipt_sha256": "sha256:c0639fdeaa6b17c94d208a60d1900ecdd4d1682b1241d677c7709484809530b4",
+    "admission_095_receipt_sha256": "sha256:b466f3fa52e959ef135914912f411e9cf5e4edf9cc1e48b82714fb54cc26283a",
+    "staged_or_committed_by_worker": false
+  },
+  "base_state": {
+    "status": "receipt-schema-reconciliation",
+    "authorization": "ROUTINE-WORKERRESULT-SCHEMA-097 authorizes only this receipt rewrite and read-only validation of the nine-file routine candidate and both routine receipts.",
+    "context_id_formula": "SHA-256 of lease_id, branch, base_head_commit, and base_head_tree, each UTF-8 encoded and LF terminated in that order.",
+    "implementation_provenance": {
+      "original_routine_authority_worker": "/root/routine_execution_authority_engineer",
+      "original_routine_authority_lease": "ROUTINE-PRODUCTION-AUTHORITY-089",
+      "durable_admission_worker": "/root/migration_retirement_authority_engineer",
+      "durable_admission_lease": "ROUTINE-DURABLE-ADMISSION-095",
+      "receipt_schema_encoder": "/root/routine_execution_authority_reviewer",
+      "receipt_schema_lease": "ROUTINE-WORKERRESULT-SCHEMA-097"
+    },
+    "prior_implementation_evidence": {
+      "issuer": "One crate-private ProductionRoutineIssuer is the production constructor for root grants. Callers cannot construct, clone, serialize, or debug recovery authority into a reusable secret.",
+      "durable_authority": "A descriptor-confined owner-only macOS ledger binds root identity, key, lock, canonical signed state, generation, prior head, exact semantic effect, request, grant, expiry, recovery, settlement, and authenticated reuse witnesses.",
+      "effect_binding": "Protocol, context, candidate, plan, snapshot, result scope, and ordered intents are bound into the semantic effect identity before reservation.",
+      "lifecycle": "Fresh reservations move Reserved to Started before spawn and settle Complete, Failed, Cancelled, or Incomplete. Reserved and Started crashes expose only exact bounded recovery authority across process reopen.",
+      "reuse": "Completed effect artifacts are authenticated by the durable ledger. Exact reuse never falls back to spawning when the supplied artifact is absent or fails authentication.",
+      "zero_write": "No-op mediation bypasses authority initialization. Stale and self-inconsistent effect requests are rejected before authority files are initialized; help, read, query, and public dispatch remain outside this increment.",
+      "store_security": "The root must pre-exist as an owner-only 0700 directory. Key, lock, and state files must be owner-only regular single-link files. Unknown entries, symlinks, hardlinks, special files, replacement, truncation, malformed canonical state, rollback observed by a live issuer, and mutate-restore are rejected.",
+      "durable_admission": "The later 095 correction records projected consumed-grant, protocol, and effect cardinality validation before reservation mutation and complete projected-payload validation before durable publication.",
+      "claim_effect": false
+    },
+    "historical_evidence_only": "The implementation and behavioral evidence below comes from the prior 089 and 095 receipts. Lease 097 did not rerun or independently clear routine behavior."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "status_scope": "Exact WorkerResultV1 receipt-shape correction only; routine behavior remains pending a different independent reviewer and root reconciliation.",
+    "authoritative_parser": "Both 089 and 095 receipts accepted by WorkerResultV1::parse_json after this correction.",
+    "checked_in_schema": "Both 089 and 095 receipts accepted by the checked-in Draft 2020-12 WorkerResult-v1 JSON schema after this correction.",
+    "current_candidate_identity": "Nine regular single-link files, 226468 bytes, 6240 diagnostic lines, aggregate sha256:e4fe97fcbfb760202898c7c18c009b3a41f9e2e12d7ea90593c44b6bbdcfd134.",
+    "claim_effect": "none",
+    "public_dispatch_proved": false,
+    "installation_or_marketplace_proved": false,
+    "runtime_or_live_user_behavior_proved": false,
+    "readiness_release_or_completion_proved": false
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/ROUTINE-PRODUCTION-AUTHORITY-089.json"
+  ],
+  "touched_semantics": [
+    "worker-result-v1-schema-reconciliation",
+    "routine-candidate-evidence-provenance"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/ROUTINE-PRODUCTION-AUTHORITY-089.json"
+  ],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "worker-result-receipt",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "receipt-validation",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "external-system",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "live-user-state",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "irreversible-action",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "exact-worker-result-v1-wire-shape",
+    "exact-artifact-record-shape",
+    "canonical-no-claim-constant",
+    "current-nine-file-candidate-identity",
+    "truthful-historical-evidence-provenance",
+    "parser-and-checked-in-schema-validation",
+    "independent-behavioral-rereview-required"
+  ],
+  "dependency_nodes": [],
+  "changes": [
+    {
+      "area": "receipt-wire-shape",
+      "result": "Replaced the narrative packet with the exact repository-authoritative WorkerResultV1 top-level key set and exact ArtifactRecord path, sha256, and byte_length shape."
+    },
+    {
+      "area": "worker-provenance",
+      "result": "Bound this rewrite to encoder lease ROUTINE-WORKERRESULT-SCHEMA-097, listed only the receipt as touched and generated, and preserved implementation authorship as historical evidence rather than retroactive work attribution."
+    },
+    {
+      "area": "candidate-identity",
+      "result": "Recomputed and recorded the complete current nine-file candidate rather than the superseded seven-file worker-owned subset."
+    },
+    {
+      "area": "claim-ceiling",
+      "result": "Restored the canonical no-claim constant and kept all public dispatch, installation, marketplace, runtime, live-user, readiness, release, and completion claims withheld."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "Repository-authoritative WorkerResultV1::parse_json over ROUTINE-PRODUCTION-AUTHORITY-089.json and ROUTINE-DURABLE-ADMISSION-095.json",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Both exact receipt byte streams parsed. No validate_for claim is made because no persisted LeaseSpec or WorkPackage was supplied for textual corrective lease 097."
+    },
+    {
+      "command": "python3 jsonschema.Draft202012Validator against docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json for both 089 and 095 receipts",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "The checked-in schema accepted both receipts."
+    },
+    {
+      "command": "Exact nine-row regular-file, single-link, SHA-256, byte, diagnostic-line, sorted path-bound aggregate, and total reconciliation",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Nine regular single-link files total 226468 bytes and 6240 diagnostic lines with aggregate sha256:e4fe97fcbfb760202898c7c18c009b3a41f9e2e12d7ea90593c44b6bbdcfd134."
+    },
+    {
+      "command": "jq -e on both receipts; git diff --check; single-path scope reconciliation",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Both receipts are valid JSON, no whitespace errors were reported, and lease 097 changed only the 089 receipt."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-production-authority-089-target CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline --test routine_production_authority_contract --test routine_production_catalog_contract --test routine_recovery_reuse_journey_contract --test routine_work_contract -j 16",
+      "status": "historical-prior-089-evidence-not-rerun-by-097",
+      "exit_code": 0,
+      "result": "The prior 089 receipt recorded production authority 32 passed with one child-process helper intentionally ignored, catalog 14 passed, recovery and reuse 26 passed, and routine boundary 116 passed with no failures."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-production-authority-089-target CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --locked --offline --test routine_production_authority_contract -j 16",
+      "status": "historical-prior-089-evidence-not-rerun-by-097",
+      "exit_code": 0,
+      "result": "The prior 089 receipt recorded a second focused pass of 32 passed, 0 failed, and one intentionally ignored helper; both spawned child invocations passed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-production-authority-089-target CARGO_BUILD_JOBS=16 cargo check --manifest-path validator/Cargo.toml --locked --offline --lib -j 16",
+      "status": "historical-prior-089-evidence-not-rerun-by-097",
+      "exit_code": 0,
+      "result": "The prior 089 receipt recorded a passing library check with existing repository-wide warnings retained as diagnostics."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-admission-target.q0eHbg CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 RUSTFLAGS=-Awarnings cargo test --manifest-path validator/Cargo.toml --locked --offline --test routine_production_authority_contract --test routine_production_catalog_contract --test routine_recovery_reuse_journey_contract --test routine_work_contract -j 16 -- --test-threads=16",
+      "status": "historical-prior-095-evidence-not-rerun-by-097",
+      "exit_code": 0,
+      "result": "The 095 receipt recorded production authority 37 passed with one intentionally ignored helper, catalog 14 passed, recovery and reuse 26 passed, and routine work 116 passed with zero failures."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/routine-production-authority/cases.json",
+      "sha256": "sha256:1845295620ab2629775706d6ca510d2c2923e3c082f85db192676bdd1e34765f",
+      "byte_length": 1078
+    },
+    {
+      "path": "validator/src/routine_work/mod.rs",
+      "sha256": "sha256:111dc887a68ddc778192e75cb50edc5b37296499102518e2dca9be2fa5f2be36",
+      "byte_length": 2619
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter.rs",
+      "sha256": "sha256:4feef4d4b049f3631fc58ef8059d46eba043a14c87ea9f0257a5467bd5797725",
+      "byte_length": 38077
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator.rs",
+      "sha256": "sha256:9477898d73119053b19ed898ceed6ff57be5ea12bb2c2e85f674da8e25195656",
+      "byte_length": 49254
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/model.rs",
+      "sha256": "sha256:064ad7bf75fcfeddec0dc88696a27ed248f6c49a903232a43dd0fba124dc92da",
+      "byte_length": 9792
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production.rs",
+      "sha256": "sha256:392bc83609b06efb2be5bdd81cffe2d25befbba715381d5fe1d4be965e4e4754",
+      "byte_length": 13861
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/ledger.rs",
+      "sha256": "sha256:bee51d1f8fde31665fca699a4b23d5a2de0d990902ce15a0c1fba55f3bef7960",
+      "byte_length": 60956
+    },
+    {
+      "path": "validator/tests/routine_production_authority_contract.rs",
+      "sha256": "sha256:95dcfa4f7e8a51916b549c981916c8fbf1230f82feb2ce55f40b77aebc80708f",
+      "byte_length": 43011
+    },
+    {
+      "path": "validator/tests/routine_work_contract/provenance.rs",
+      "sha256": "sha256:160173c04aa7562f3afdeb6af34f89b363bafc88f1d62bdfcab55a0ac215ef69",
+      "byte_length": 7820
+    }
+  ],
+  "findings": [
+    {
+      "severity": "material-corrected-by-097",
+      "class": "worker-result-wire-shape",
+      "finding": "The prior 089 narrative packet labeled itself WorkerResult-v1 but WorkerResultV1::parse_json rejected its unknown top-level fields, missing required fields, extended artifact rows, and noncanonical no-claim text.",
+      "resolution": "Lease 097 replaced only the receipt with the exact authoritative wire keys and ArtifactRecord shape, canonical no-claim constant, current nine-file identity, and provenance-safe touched scope."
+    },
+    {
+      "severity": "historical-corrected",
+      "class": "process-global-test-hook",
+      "finding": "The first concurrent 089 focused run exposed a process-global finish-failure hook that could be consumed by an unrelated test mediation.",
+      "resolution": "The 089 implementation evidence records that the injection became thread-local, retaining deterministic preterminal recovery testing under sixteen test threads."
+    },
+    {
+      "severity": "historical-corrected",
+      "class": "preflight-ordering",
+      "finding": "The first 089 stale-request test showed durable authority files initialized before stale-input refusal.",
+      "resolution": "The 089 implementation evidence records complete preflight before opening the effectful issuer and repeated preflight inside the issuer before reservation."
+    },
+    {
+      "severity": "historical-corrected",
+      "class": "external-consumer-linkage",
+      "finding": "The initial 089 dependency closure failed because the external-consumer rustc probe did not link already-adopted getrandom and hmac rlibs.",
+      "resolution": "The prior root wiring linked the exact two externs without weakening the compile boundary; the 089 receipt records the isolated probe and routine boundary as passing."
+    },
+    {
+      "severity": "historical-material-corrected-by-095",
+      "class": "durable-capacity-self-poisoning",
+      "finding": "The pre-095 reservation path could insert consumed grants and protocol or effect records without validating projected cardinalities, allowing the first over-limit write to publish state that validation and reopen then rejected.",
+      "resolution": "The 095 evidence records projected-capacity validation before mutation and complete projected-payload validation before durable publication, with max-plus-one controls preserving exact state bytes."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-routine-behavioral-rereview",
+    "root-acceptance-and-reconciliation",
+    "public-dispatch-install-runtime-and-live-user-proof"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "Lease 097 changed and validated only this WorkerResult receipt. It did not independently rerun or clear routine implementation behavior; a different reviewer must do so.",
+    "No persisted LeaseSpec or WorkPackage was supplied for textual corrective lease 097, so WorkerResultV1 validate_for and ArtifactWorkspace verification are not claimed.",
+    "The issuer and durable ledger are source-local and crate-private. This result does not add or prove public CLI, catalog, dispatcher, installation, cache, marketplace, discovery, runtime identity, representative live-user journey, or release behavior.",
+    "Runtime execution is supported and historically exercised only on target_vendor=apple. The non-Apple branch fails closed but was not runtime-executed on another host by this correction.",
+    "The owner-only file ledger detects unauthenticated state change and rollback relative to a live issuer. It is not an external monotonic anchor against a malicious account owner that can replace the complete key and signed store after all trusted process state is gone.",
+    "The post-operation invariant adds one bounded linear payload-validation pass per durable write; no performance benchmark claim is made.",
+    "The valid pre-boundary state constructor is cfg(test) only and does not create a production authority entrypoint.",
+    "The WorkerResult is excluded from the artifact aggregate to avoid recursive self-identity; its independent digest must be reported after final validation."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

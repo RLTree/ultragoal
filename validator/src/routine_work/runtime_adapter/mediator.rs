@@ -12,6 +12,7 @@ use serde::Serialize;
 use std::cell::Cell;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
+use std::sync::Arc;
 use std::sync::{Mutex, OnceLock};
 use std::time::Duration;
 
@@ -42,6 +43,208 @@ const GRANT_SEAL_DOMAIN: &[u8] = b"routine-root-grant-seal-v1";
 const RESULT_DOMAIN: &[u8] = b"routine-mediated-result-v1";
 const RECOVERY_DOMAIN: &[u8] = b"routine-mediated-recovery-v1";
 const SUPPORT_LIMIT: &str = "internal macOS single-process routine mediation evidence only; grant replay, reuse authentication, ambiguity recovery, and artifacts are process-local; executable paths must be immutable to this user; after sandbox activation only the exact pinned executable identity may execute, unbound file reads are denied, explicitly bound worktree-relative regular-file reads are identity/content/ctime revalidated, immutable system runtime roots remain policy-authorized, post-activation file-backed executable mapping is limited to immutable system-library roots, and process-fork kills the runner; external interpreted sources, startup-loader environments, executable trampolines, different-object aliases, shebang scripts, descriptor aliases, user-owned executable mappings, and multi-process runners are unsupported; canonical root issuance, durable persistence, public dispatch, installed behavior, and claim decisions remain absent";
+const PRODUCTION_SUPPORT_LIMIT: &str = "source-local production routine mediation on supported macOS hosts only; root grant identity, semantic effect reservation, replay refusal, recovery authority, and reuse authentication are descriptor-confined and durable across processes; executable, source, output, sandbox, dependency, cancellation, and result revalidation remain enforced by the mediator; public dispatch, installed behavior, representative journeys, claim elevation, readiness, release, and completion remain absent";
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(super) enum DurableSettlement {
+    Complete,
+    Failed,
+    Cancelled,
+    Incomplete,
+}
+
+/// Sealed bridge between the process mediator and the durable production
+/// authority. Implementations live only in the sibling production issuer.
+pub(super) trait DurableAttemptAuthority: Send + Sync {
+    fn validate_reserved(&self) -> Result<(), RoutineError>;
+    fn prepare_spawn(&self) -> Result<(), RoutineError>;
+    fn settle(
+        &self,
+        outcome: DurableSettlement,
+        artifacts: &BTreeMap<String, String>,
+    ) -> Result<(), RoutineError>;
+    fn authenticates_artifact(&self, digest: &str, witness: &str) -> Result<bool, RoutineError>;
+    fn recovery_is_durable(&self) -> bool;
+    fn reuse_only(&self) -> bool;
+}
+
+#[derive(Clone)]
+pub(super) struct ProductionGrantBinding {
+    pub(super) session_id: String,
+    pub(super) request_id: String,
+    pub(super) protocol_id: String,
+    pub(super) context_id: String,
+    pub(super) candidate_id: String,
+    pub(super) plan_id: String,
+    pub(super) snapshot_id: String,
+    pub(super) allowed_output_scopes: Vec<RepoPath>,
+    pub(super) recovery_for: Option<String>,
+}
+
+pub(super) fn production_grant_identity(
+    spec: &ProductionGrantBinding,
+) -> Result<String, RoutineError> {
+    let grant = RoutineRootGrant {
+        grant_id: String::new(),
+        session_id: spec.session_id.clone(),
+        request_id: spec.request_id.clone(),
+        protocol_id: spec.protocol_id.clone(),
+        context_id: spec.context_id.clone(),
+        candidate_id: spec.candidate_id.clone(),
+        plan_id: spec.plan_id.clone(),
+        snapshot_id: spec.snapshot_id.clone(),
+        allowed_output_scopes: spec.allowed_output_scopes.clone(),
+        recovery_for: spec.recovery_for.clone(),
+        seal: String::new(),
+        durable: None,
+    };
+    grant_identity(&grant)
+}
+
+pub(super) fn production_recovery_identity(
+    grant_id: &str,
+    protocol_id: &str,
+    request_id: &str,
+) -> String {
+    recovery_identity(grant_id, protocol_id, request_id)
+}
+
+pub(super) fn issue_production_grant(
+    spec: ProductionGrantBinding,
+    durable: Arc<dyn DurableAttemptAuthority>,
+) -> Result<RoutineRootGrant, RoutineError> {
+    let mut grant = RoutineRootGrant {
+        grant_id: String::new(),
+        session_id: spec.session_id,
+        request_id: spec.request_id,
+        protocol_id: spec.protocol_id,
+        context_id: spec.context_id,
+        candidate_id: spec.candidate_id,
+        plan_id: spec.plan_id,
+        snapshot_id: spec.snapshot_id,
+        allowed_output_scopes: spec.allowed_output_scopes,
+        recovery_for: spec.recovery_for,
+        seal: String::new(),
+        durable: Some(durable),
+    };
+    grant.grant_id = grant_identity(&grant)?;
+    grant.seal = grant_seal(&grant)?;
+    Ok(grant)
+}
+
+pub(super) fn preflight_production_request(
+    context: &LiveContext,
+    plan: &RoutinePlan,
+    request: &RoutineEffectRequest,
+) -> Result<(), RoutineError> {
+    preflight_request(context, plan, request)
+}
+
+/// Exact, parsed commitments carried from zero-write input validation into the
+/// durable ledger's read-only reuse authentication. These values are not
+/// authority: only the ledger may turn them into an opaque, one-use
+/// preauthorization bound to its current Complete record.
+pub(super) struct ProductionReuseClaim {
+    pub(super) protocol_id: String,
+    pub(super) intent_id: String,
+    pub(super) artifact_sha256: String,
+    pub(super) result_artifact_sha256: String,
+    pub(super) mediator_witness_sha256: String,
+}
+
+pub(super) struct PreflightedProductionReuse {
+    input: RoutineReuseInput,
+    claims: Vec<ProductionReuseClaim>,
+}
+
+impl PreflightedProductionReuse {
+    pub(super) fn is_empty(&self) -> bool {
+        self.claims.is_empty()
+    }
+
+    pub(super) fn into_parts(self) -> (RoutineReuseInput, Vec<ProductionReuseClaim>) {
+        (self.input, self.claims)
+    }
+}
+
+/// Validates caller-supplied production reuse bytes before durable authority is
+/// opened or reserved. Production input is an exact request-scoped set, not a
+/// permissive cache bag: malformed, non-canonical, foreign, duplicate, and
+/// incomplete exact-reuse sets fail closed without reaching the ledger.
+pub(super) fn preflight_production_reuse_input(
+    input: RoutineReuseInput,
+    request: &RoutineEffectRequest,
+    require_complete_set: bool,
+) -> Result<PreflightedProductionReuse, RoutineError> {
+    if input.is_empty() {
+        return Ok(PreflightedProductionReuse {
+            input,
+            claims: Vec::new(),
+        });
+    }
+    let known = request
+        .intents
+        .iter()
+        .map(|intent| (intent.intent_id(), intent))
+        .collect::<BTreeMap<_, _>>();
+    let mut supplied = BTreeSet::new();
+    let mut claims = Vec::with_capacity(input.artifacts().len());
+    for bytes in input.artifacts() {
+        let wire: ReuseArtifactWire = serde_json::from_slice(bytes)
+            .map_err(|_| mediator_error("mediator-production-reuse-input-malformed"))?;
+        let intent = known.get(wire.intent_id.as_str());
+        if canonical(&wire)?.as_slice() != bytes.as_slice()
+            || wire.schema_version != "RoutineMediatedReuseArtifact-v1"
+            || wire.state != "complete"
+            || wire.protocol_id != request.protocol_id
+            || intent.is_none()
+        {
+            return Err(mediator_error(
+                "mediator-production-reuse-input-binding-invalid",
+            ));
+        }
+        let intent = intent.expect("checked exact request intent");
+        if wire.node_id != intent.node_id()
+            || wire.plan_order != intent.plan_order()
+            || wire.context_id != request.context_id()
+            || wire.candidate_id != request.candidate_id()
+            || wire.plan_id != request.plan_id()
+            || wire.snapshot_id != request.snapshot_id
+            || wire.input_id != intent.input_id()
+            || wire.tool_identity_sha256 != intent.tool_identity_sha256()
+            || wire.program_sha256 != intent.program_sha256()
+            || wire.environment_sha256 != intent.environment_sha256()
+            || wire.read_authority_sha256 != intent.read_authority_sha256()
+        {
+            return Err(mediator_error(
+                "mediator-production-reuse-input-binding-invalid",
+            ));
+        }
+        if wire.mediator_witness_sha256 != reuse_witness(&wire)?
+            || wire.result_artifact_sha256 != sha256(&canonical(&wire.result_artifact)?)
+            || !result_matches_reuse(&wire)
+        {
+            return Err(mediator_error(
+                "mediator-production-reuse-not-authenticated",
+            ));
+        }
+        if !supplied.insert(wire.intent_id.clone()) {
+            return Err(mediator_error("mediator-production-reuse-input-duplicated"));
+        }
+        claims.push(ProductionReuseClaim {
+            protocol_id: wire.protocol_id,
+            intent_id: wire.intent_id,
+            artifact_sha256: sha256(bytes),
+            result_artifact_sha256: wire.result_artifact_sha256,
+            mediator_witness_sha256: wire.mediator_witness_sha256,
+        });
+    }
+    if require_complete_set && supplied.len() != known.len() {
+        return Err(mediator_error("mediator-production-reuse-input-incomplete"));
+    }
+    claims.sort_by(|left, right| left.intent_id.cmp(&right.intent_id));
+    Ok(PreflightedProductionReuse { input, claims })
+}
 
 pub(super) fn bind_read_sources(
     root: &Path,
@@ -93,9 +296,17 @@ struct AttemptReservation {
     prior_recovery_marker: Option<String>,
     started: Cell<bool>,
     settled: Cell<bool>,
+    durable: Option<Arc<dyn DurableAttemptAuthority>>,
 }
 
 impl AttemptReservation {
+    fn prepare_spawn(&self) -> Result<(), RoutineError> {
+        if let Some(durable) = &self.durable {
+            durable.prepare_spawn()?;
+        }
+        Ok(())
+    }
+
     fn mark_started(&self) {
         let mut state = registry()
             .lock()
@@ -106,7 +317,10 @@ impl AttemptReservation {
         self.started.set(true);
     }
 
-    fn settle_success(&self) {
+    fn settle_success(&self, artifacts: &BTreeMap<String, String>) -> Result<(), RoutineError> {
+        if let Some(durable) = &self.durable {
+            durable.settle(DurableSettlement::Complete, artifacts)?;
+        }
         let mut state = registry()
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
@@ -122,19 +336,26 @@ impl AttemptReservation {
             state.ambiguous_protocols.remove(&self.protocol_id);
         }
         self.settled.set(true);
+        Ok(())
     }
 
-    fn settle_incomplete(&self) -> Option<String> {
+    fn settle_incomplete(
+        &self,
+        outcome: DurableSettlement,
+    ) -> Result<Option<String>, RoutineError> {
+        if let Some(durable) = &self.durable {
+            durable.settle(outcome, &BTreeMap::new())?;
+        }
         let mut state = registry()
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         release_active(&mut state, &self.protocol_id, &self.grant_id);
         self.settled.set(true);
-        if self.started.get() {
+        Ok(if self.started.get() {
             Some(self.recovery_marker.clone())
         } else {
             self.prior_recovery_marker.clone()
-        }
+        })
     }
 }
 
@@ -272,6 +493,7 @@ fn mediate_effect(
     reuse: RoutineReuseInput,
 ) -> Result<RoutineMediationResult, RoutineError> {
     let grant = grant.ok_or_else(|| mediator_error("mediator-root-grant-missing"))?;
+    let production = grant.durable.is_some();
     validate_grant(context, plan, &request, &grant)?;
     let supplied_reuse = index_reuse_inputs(reuse, &request)?;
     preflight_request(context, plan, &request)?;
@@ -387,10 +609,19 @@ fn mediate_effect(
     let recovery_marker = if incomplete {
         artifacts.clear();
         generated.clear();
-        attempt.settle_incomplete()
+        attempt.settle_incomplete(if cancelled {
+            DurableSettlement::Cancelled
+        } else if nodes
+            .iter()
+            .any(|node| node.disposition == RoutineNodeDisposition::Failed)
+        {
+            DurableSettlement::Failed
+        } else {
+            DurableSettlement::Incomplete
+        })?
     } else {
-        authenticate_generated(generated);
-        attempt.settle_success();
+        let authenticated = authenticate_generated(generated);
+        attempt.settle_success(&authenticated)?;
         None
     };
     Ok(RoutineMediationResult {
@@ -406,7 +637,11 @@ fn mediate_effect(
         nodes,
         reuse_artifacts: artifacts,
         recovery_marker,
-        support_limit: SUPPORT_LIMIT,
+        support_limit: if production {
+            PRODUCTION_SUPPORT_LIMIT
+        } else {
+            SUPPORT_LIMIT
+        },
     })
 }
 
@@ -445,8 +680,8 @@ fn mediate_intent(
         token.intent().output_budget_bytes(),
     )?;
     let reads = ReadConfinement::open_bound(&root, token.intent().read_sources())?;
-    if let Some(bytes) = reuse
-        && let Some(verified) = verify_reuse_artifact(
+    if let Some(bytes) = reuse {
+        if let Some(verified) = verify_reuse_artifact(
             bytes,
             context,
             plan,
@@ -454,11 +689,28 @@ fn mediate_intent(
             snapshot_id,
             dependencies,
             &outputs,
-        )?
+            attempt,
+        )? {
+            reads.validate(&root)?;
+            return Ok(IntentResult::Reused(verified));
+        }
+        if attempt
+            .durable
+            .as_ref()
+            .is_some_and(|durable| durable.reuse_only())
+        {
+            return Err(mediator_error(
+                "mediator-production-reuse-not-authenticated",
+            ));
+        }
+    } else if attempt
+        .durable
+        .as_ref()
+        .is_some_and(|durable| durable.reuse_only())
     {
-        reads.validate(&root)?;
-        return Ok(IntentResult::Reused(verified));
+        return Err(mediator_error("mediator-production-reuse-artifact-missing"));
     }
+    attempt.prepare_spawn()?;
     let environment = execution_environment(token)?;
     let observation = process::execute(
         &program,
@@ -629,6 +881,9 @@ fn validate_grant(
 }
 
 fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservation, RoutineError> {
+    if let Some(durable) = &grant.durable {
+        durable.validate_reserved()?;
+    }
     let mut state = registry()
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner);
@@ -644,6 +899,11 @@ fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservation, Routine
     ) {
         (Some(expected), Some(actual)) if expected == actual => {}
         (Some(_), _) => return Err(mediator_error("mediator-recovery-authority-required")),
+        (None, Some(_))
+            if grant
+                .durable
+                .as_ref()
+                .is_some_and(|durable| durable.recovery_is_durable()) => {}
         (None, Some(_)) => return Err(mediator_error("mediator-recovery-marker-stale")),
         (None, None) => {}
     }
@@ -658,6 +918,7 @@ fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservation, Routine
         prior_recovery_marker: grant.recovery_for.clone(),
         started: Cell::new(false),
         settled: Cell::new(false),
+        durable: grant.durable.clone(),
     })
 }
 
@@ -834,6 +1095,7 @@ fn verify_reuse_artifact(
     snapshot_id: &str,
     dependencies: &BTreeMap<String, String>,
     outputs: &OutputConfinement,
+    attempt: &AttemptReservation,
 ) -> Result<Option<VerifiedReuseArtifact>, RoutineError> {
     let Ok(wire) = serde_json::from_slice::<ReuseArtifactWire>(bytes) else {
         return Ok(None);
@@ -842,13 +1104,20 @@ fn verify_reuse_artifact(
         return Ok(None);
     }
     let artifact_sha256 = sha256(bytes);
-    let authenticated = registry()
+    let process_authenticated = registry()
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner)
         .authenticated_artifacts
         .get(&artifact_sha256)
         .is_some_and(|witness| witness == &wire.mediator_witness_sha256);
-    if !authenticated
+    let durable_authenticated = if process_authenticated {
+        false
+    } else if let Some(durable) = &attempt.durable {
+        durable.authenticates_artifact(&artifact_sha256, &wire.mediator_witness_sha256)?
+    } else {
+        false
+    };
+    if !(process_authenticated || durable_authenticated)
         || wire.mediator_witness_sha256 != reuse_witness(&wire)?
         || wire.protocol_id != token.protocol_id()
         || wire.intent_id != token.intent().intent_id()
@@ -1016,17 +1285,20 @@ fn incomplete_node(
     }
 }
 
-fn authenticate_generated(values: Vec<(String, Vec<u8>)>) {
+fn authenticate_generated(values: Vec<(String, Vec<u8>)>) -> BTreeMap<String, String> {
     let mut state = registry()
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner);
+    let mut authenticated = BTreeMap::new();
     for (digest, bytes) in values {
         if let Ok(wire) = serde_json::from_slice::<ReuseArtifactWire>(&bytes) {
             state
                 .authenticated_artifacts
-                .insert(digest, wire.mediator_witness_sha256);
+                .insert(digest.clone(), wire.mediator_witness_sha256.clone());
+            authenticated.insert(digest, wire.mediator_witness_sha256);
         }
     }
+    authenticated
 }
 
 fn recovery_identity(grant_id: &str, protocol_id: &str, request_id: &str) -> String {
@@ -1062,9 +1334,11 @@ fn post_spawn_test_hook() -> &'static Mutex<Option<TestHook>> {
 }
 
 #[cfg(test)]
-fn finish_failure_test_hook() -> &'static Mutex<bool> {
-    static HOOK: OnceLock<Mutex<bool>> = OnceLock::new();
-    HOOK.get_or_init(|| Mutex::new(false))
+thread_local! {
+    // This injection is scoped to the calling test thread. A process-global
+    // flag can be consumed by an unrelated concurrent mediation and turn a
+    // deterministic reconciliation test into a race.
+    static FINISH_FAILURE_TEST_HOOK: Cell<bool> = const { Cell::new(false) };
 }
 
 #[cfg(test)]
@@ -1083,9 +1357,7 @@ pub(crate) fn set_test_mediator_post_spawn_hook(hook: impl FnOnce() + Send + 'st
 
 #[cfg(test)]
 pub(crate) fn set_test_mediator_finish_failure() {
-    *finish_failure_test_hook()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner) = true;
+    FINISH_FAILURE_TEST_HOOK.with(|hook| hook.set(true));
 }
 
 #[cfg(test)]
@@ -1112,11 +1384,7 @@ fn run_test_post_spawn_hook() {
 
 #[cfg(test)]
 fn run_test_finish_failure_hook(authority: &RoutineMediationAuthority) {
-    let force = std::mem::take(
-        &mut *finish_failure_test_hook()
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner),
-    );
+    let force = FINISH_FAILURE_TEST_HOOK.with(|hook| hook.replace(false));
     if force {
         authority
             .finish()
