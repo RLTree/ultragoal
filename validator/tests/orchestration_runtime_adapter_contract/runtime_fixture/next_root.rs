@@ -3,24 +3,12 @@ pub fn digest(byte: char) -> String {
     format!("sha256:{}", byte.to_string().repeat(64))
 }
 
-pub fn content_digest(bytes: &[u8]) -> String {
-    format!("sha256:{:x}", Sha256::digest(bytes))
-}
-
 pub fn binding() -> Binding {
     Binding::new(&digest('a'), &digest('b')).unwrap()
 }
 
-pub fn alternate_binding() -> Binding {
-    Binding::new(&digest('c'), &digest('d')).unwrap()
-}
-
 pub fn root_actor() -> Actor {
     Actor::parse("ultra-root").unwrap()
-}
-
-pub fn worker_actor() -> Actor {
-    Actor::parse("worker-a").unwrap()
 }
 
 pub fn canonical_path(value: &str) -> CanonicalPath {
@@ -81,28 +69,6 @@ pub fn bootstrap() -> BootstrapEvidence {
 
 pub fn context() -> ProductContext {
     ProductContext::new(graph(), policy(), binding(), root_actor())
-}
-
-pub fn lease(deadline: u64) -> LeaseSpec {
-    LeaseSpec {
-        lease_id: "lease-001".to_owned(),
-        run_id: "run-001".to_owned(),
-        node_id: "node-a".to_owned(),
-        principal: Principal::Worker,
-        owner: worker_actor(),
-        binding: binding(),
-        safety_class: SafetyClass::IsolatedWorkspaceWrite,
-        read_paths: BTreeSet::from([canonical_path("docs/contract")]),
-        owned_scope: owned_scope(),
-        prerequisite_evidence: PrerequisiteEvidence {
-            dependency_nodes: BTreeMap::new(),
-            required_tools: bootstrap().available_tools,
-            prerequisites: bootstrap().satisfied_prerequisites,
-        },
-        issued_tick: 1,
-        heartbeat_deadline_tick: deadline,
-        max_retries: 2,
-    }
 }
 
 #[derive(Clone, Debug)]

@@ -1,23 +1,23 @@
-pub(crate) struct RootActionPermitVerification<'a> {
-    pub(crate) permit: &'a RootPermit,
-    pub(crate) expected_root: &'a Actor,
-    pub(crate) operation: RootOperation,
-    pub(crate) binding: &'a Binding,
-    pub(crate) workspace_identity: &'a str,
-    pub(crate) journal_head_identity: &'a str,
-    pub(crate) tick: u64,
-    pub(crate) target: &'a PermitTarget,
+struct RootActionPermitVerification<'a> {
+    permit: &'a RootPermit,
+    expected_root: &'a Actor,
+    operation: RootOperation,
+    binding: &'a Binding,
+    workspace_identity: &'a str,
+    journal_head_identity: &'a str,
+    tick: u64,
+    target: &'a PermitTarget,
 }
 
-pub(crate) struct RootReconcilePermitVerification<'a> {
-    pub(crate) permit: &'a RootPermit,
-    pub(crate) expected_root: &'a Actor,
-    pub(crate) binding: &'a Binding,
-    pub(crate) workspace_identity: &'a str,
-    pub(crate) journal_head_identity: &'a str,
-    pub(crate) tick: u64,
-    pub(crate) target: &'a PermitTarget,
-    pub(crate) resolution: &'a EffectResolution,
+struct RootReconcilePermitVerification<'a> {
+    permit: &'a RootPermit,
+    expected_root: &'a Actor,
+    binding: &'a Binding,
+    workspace_identity: &'a str,
+    journal_head_identity: &'a str,
+    tick: u64,
+    target: &'a PermitTarget,
+    resolution: &'a EffectResolution,
 }
 
 struct RootPermitVerification<'a> {
@@ -72,7 +72,7 @@ impl RootAuthority {
         Ok(())
     }
 
-    pub(crate) fn verify_observation(
+    fn verify_observation(
         &self,
         permit: &RootPermit,
         expected_root: &Actor,

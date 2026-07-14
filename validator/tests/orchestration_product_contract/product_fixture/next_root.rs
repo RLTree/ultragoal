@@ -1,6 +1,4 @@
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(1);
-pub const SECRET_CANARY: &[u8] = b"tree-root-secret-canary-0123456789abcdef";
-
 pub fn digest(byte: char) -> String {
     format!("sha256:{}", byte.to_string().repeat(64))
 }
@@ -161,32 +159,4 @@ pub fn durable_engine(label: &str, fail: bool) -> (TestRoot, Orchestrator<TestSi
     )
     .unwrap();
     (root, engine)
-}
-
-pub fn authority() -> RootAuthority {
-    root_authority_for_test(root_actor(), SECRET_CANARY).unwrap()
-}
-
-pub fn permit(
-    authority: &RootAuthority,
-    operation: RootOperation,
-    workspace: &ProductWorkspace,
-    head: &JournalHead,
-    tick: u64,
-    target: PermitTarget,
-) -> RootPermit {
-    issue_action_permit_for_test(
-        authority,
-        RootActionPermitIssuance {
-            operation,
-            binding: binding(),
-            workspace_identity: workspace.identity(),
-            journal_head_identity: &journal_head_identity(head).unwrap(),
-            issued_tick: tick.saturating_sub(1),
-            expires_tick: tick + 10,
-            nonce: b"unique-test-nonce-0123456789",
-            target,
-        },
-    )
-    .unwrap()
 }

@@ -1,8 +1,8 @@
-use crate::orchestration::product::command::{
+use super::super::command::{
     self, CommandProjection, InterruptedRecoveryRequest, InterruptedRecoveryView,
     OrchestrationStateRequest, OrchestrationStateView,
 };
-use crate::orchestration::product::{ProductContext, ProductError, ProductWorkspace};
+use super::super::{ProductContext, ProductError, ProductWorkspace};
 
 /// Process-local adapter bound to one root-supplied context and anchored
 /// durable workspace.

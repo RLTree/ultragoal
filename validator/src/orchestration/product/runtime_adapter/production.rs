@@ -1,12 +1,13 @@
-use super::*;
-use crate::orchestration::product::command::RootActionRequest;
-use crate::orchestration::product::{
-    PermitReplayState, ProductError, ProductionRootAuthority, ReadOnlySink, ReconcileOutcome,
-    ReconcileRequest, ReservationObservation, RootPermit, journal_head_identity, open_engine,
+use super::super::command::RootActionRequest;
+use super::super::{
+    journal_head_identity, open_engine, PermitReplayState, ProductError,
+    ProductionExecutionOutcome, ProductionRootAuthority, ReadOnlySink, ReconcileOutcome,
+    ReconcileRequest, ReservationObservation, RootPermit,
 };
+use super::*;
 use crate::orchestration::{
-    EffectResolution, EventLog, FileJournal, OrchestrationEvent, encode_orchestration_log,
-    orchestration_head_for,
+    encode_orchestration_log, orchestration_head_for, EffectResolution, EventLog, FileJournal,
+    OrchestrationEvent,
 };
 
 impl OrchestrationRuntimeAdapter<'_> {
@@ -62,14 +63,22 @@ impl OrchestrationRuntimeAdapter<'_> {
         permit: &RootPermit,
         request: &RuntimeActionRequest,
     ) -> Result<RuntimeActionOutcome, ProductError> {
-        authority.require_issued_permit(permit)?;
-        let reservation = self.with_journal_lock(|| {
-            let execution = self.prevalidate_action(source, action, authority, permit, request)?;
-            authority.reserve_validated(execution)
-        })?;
-        authority.complete_action(reservation, |root_authority| {
-            self.execute_action(source, action, root_authority, permit, request)
-        })
+        match authority.execute_action(
+            self.context,
+            self.workspace,
+            source,
+            action,
+            permit,
+            request,
+        )? {
+            ProductionExecutionOutcome::Resume(outcome) => {
+                Ok(RuntimeActionOutcome::Resume(outcome))
+            }
+            ProductionExecutionOutcome::Recover(outcome) => {
+                Ok(RuntimeActionOutcome::Recover(outcome))
+            }
+            ProductionExecutionOutcome::Reconcile(_) => Err(ProductError::AuthorityInvalid),
+        }
     }
 
     pub fn execute_production_reconcile(
@@ -80,14 +89,19 @@ impl OrchestrationRuntimeAdapter<'_> {
         permit: &RootPermit,
         request: &ReconcileRequest,
     ) -> Result<ReconcileOutcome, ProductError> {
-        authority.require_issued_permit(permit)?;
-        let reservation = self.with_journal_lock(|| {
-            let execution = self.prevalidate_reconcile(view, action, authority, permit, request)?;
-            authority.reserve_validated(execution)
-        })?;
-        authority.complete_reconcile(reservation, |root_authority| {
-            self.execute_reconcile(view, action, root_authority, permit, request)
-        })
+        match authority.execute_reconcile(
+            self.context,
+            self.workspace,
+            view,
+            action,
+            permit,
+            request,
+        )? {
+            ProductionExecutionOutcome::Reconcile(outcome) => Ok(outcome),
+            ProductionExecutionOutcome::Resume(_) | ProductionExecutionOutcome::Recover(_) => {
+                Err(ProductError::AuthorityInvalid)
+            }
+        }
     }
 
     pub fn reconcile_production_reservation(

@@ -64,9 +64,23 @@ impl Debug for RootPermit {
     }
 }
 
-pub(crate) struct RootAuthority {
+struct RootAuthority {
     root_actor: Actor,
     key: [u8; 32],
+}
+
+pub(crate) struct ExecutionAuthority<'a> {
+    root: &'a RootAuthority,
+}
+
+impl<'a> ExecutionAuthority<'a> {
+    fn new(root: &'a RootAuthority) -> Self {
+        Self { root }
+    }
+
+    pub(crate) fn attest(&self) {
+        let _ = self.root;
+    }
 }
 
 impl Debug for RootAuthority {

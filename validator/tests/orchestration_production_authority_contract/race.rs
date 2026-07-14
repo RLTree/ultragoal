@@ -1,7 +1,7 @@
 use super::fixture::*;
 use std::fs;
 use std::process::Command;
-use ultragoal::orchestration::product::{ProductError, ProductionRootAuthority};
+use ultragoal::orchestration::product::ProductionRootAuthority;
 
 #[test]
 fn separate_processes_cannot_reopen_nonempty_state_without_external_custody() {

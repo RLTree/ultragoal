@@ -85,6 +85,13 @@ pub fn interrupted_root(label: &str) -> (TestRoot, JournalHead) {
     (root, engine.journal_head().unwrap().clone())
 }
 
+pub fn advance_interrupted_root(root: &TestRoot, head: JournalHead, tick: u64) {
+    let mut engine =
+        Orchestrator::restart_durable(graph(), policy(), head, root_actor(), root.path(), NoEffect)
+            .unwrap();
+    engine.recover_root(tick).unwrap();
+}
+
 pub fn ambiguous_effect(label: &str) -> (TestRoot, JournalHead) {
     let root = TestRoot::new(label, 0o700);
     let mut engine = engine(&root);

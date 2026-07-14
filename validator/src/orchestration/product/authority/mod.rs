@@ -12,6 +12,6 @@ include!("root/verification.rs");
 
 mod production;
 pub use production::{PermitReplayState, ProductionRootAuthority};
-pub(crate) use production::{ReservationObservation, ValidatedExecution};
+pub(crate) use production::{ProductionExecutionOutcome, ReservationObservation};
 
 include!("issue_action_permit_for_test.rs");

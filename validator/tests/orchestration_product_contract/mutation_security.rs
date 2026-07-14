@@ -68,7 +68,7 @@ fn unknown_artifact_is_rejected_even_with_a_self_consistent_rewritten_chain() {
     commitment
         .artifact_digests
         .insert("unknown/outside.bin".to_owned(), digest('4'));
-    let result_commitment_id = commitment.commitment_id().unwrap();
+    let result_commitment_id = content_digest(&serde_json::to_vec(&commitment).unwrap());
     event = OrchestrationEvent::create(
         event.sequence,
         event.prior_event_id,
@@ -130,18 +130,16 @@ fn journal_frame_and_artifact_digest_mutation_are_not_receipts() {
         let index = bytes.iter().position(|byte| *byte == b'b').unwrap();
         bytes[index] = b'c';
         fs::write(&events, bytes).unwrap();
-        assert!(
-            query(
-                &context(),
-                &workspace,
-                &QueryRequest {
-                    expected_head: head,
-                    tick: 4,
-                    live_workers: BTreeSet::from(["worker-a".to_owned()]),
-                },
-            )
-            .is_err()
-        );
+        assert!(query(
+            &context(),
+            &workspace,
+            &QueryRequest {
+                expected_head: head,
+                tick: 4,
+                live_workers: BTreeSet::from(["worker-a".to_owned()]),
+            },
+        )
+        .is_err());
     }
 }
 
@@ -164,18 +162,16 @@ fn symlink_hardlink_and_special_journal_entries_are_rejected() {
             }
             _ => unreachable!(),
         }
-        assert!(
-            query(
-                &context(),
-                &workspace,
-                &QueryRequest {
-                    expected_head: head,
-                    tick: 3,
-                    live_workers: BTreeSet::from(["worker-a".to_owned()]),
-                },
-            )
-            .is_err()
-        );
+        assert!(query(
+            &context(),
+            &workspace,
+            &QueryRequest {
+                expected_head: head,
+                tick: 3,
+                live_workers: BTreeSet::from(["worker-a".to_owned()]),
+            },
+        )
+        .is_err());
     }
 }
 

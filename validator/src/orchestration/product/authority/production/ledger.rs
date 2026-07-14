@@ -1,5 +1,6 @@
 use super::{
-    ProductError, ReservedExecution, ValidatedExecution, checkpoint::LedgerCheckpoint, store::Store,
+    checkpoint::LedgerCheckpoint, store::Store, ProductError, ProductionExecutionOutcome,
+    ReservedExecution, RootAuthority, ValidatedExecution,
 };
 use hmac::{Hmac, Mac};
 use serde::{Deserialize, Serialize};
@@ -48,26 +49,26 @@ impl Ledger {
         &self,
         execution: ValidatedExecution<'a>,
     ) -> Result<ReservedExecution<'a>, ProductError> {
-        let (authority, operation, permit_id) = execution.into_parts();
+        let (permit_id, request) = execution.into_parts();
         self.transition(
             &permit_id,
             None,
             Some(LedgerState::Issued),
             LedgerState::Reserved,
         )?;
-        Ok(ReservedExecution::new(authority, operation, permit_id))
+        Ok(ReservedExecution::new(permit_id, request))
     }
 
-    pub(super) fn complete<T>(
+    pub(super) fn complete(
         &self,
         reservation: ReservedExecution<'_>,
-        operation: impl FnOnce() -> Result<T, ProductError>,
-    ) -> Result<T, ProductError> {
-        let permit_id = reservation.permit_id();
-        match operation() {
+        authority: &RootAuthority,
+    ) -> Result<ProductionExecutionOutcome, ProductError> {
+        let permit_id = reservation.permit_id().to_owned();
+        match reservation.execute(authority) {
             Ok(outcome) => {
                 self.transition(
-                    permit_id,
+                    &permit_id,
                     None,
                     Some(LedgerState::Reserved),
                     LedgerState::Committed,
@@ -76,7 +77,7 @@ impl Ledger {
             }
             Err(error) => {
                 self.transition(
-                    permit_id,
+                    &permit_id,
                     None,
                     Some(LedgerState::Reserved),
                     LedgerState::Ambiguous,

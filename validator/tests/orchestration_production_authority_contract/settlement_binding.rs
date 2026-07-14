@@ -7,8 +7,7 @@ use ultragoal::orchestration::product::runtime_adapter::{
     OrchestrationRuntimeAdapter, RuntimeActionOutcome, RuntimeActionRequest, RuntimeActionSource,
 };
 use ultragoal::orchestration::product::{
-    PermitReplayState, ProductError, ProductWorkspace, ProductionRootAuthority, ResumeRequest,
-    RootPermit,
+    PermitReplayState, ProductError, ProductWorkspace, ResumeRequest, RootPermit,
 };
 
 #[test]

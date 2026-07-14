@@ -1,27 +1,3 @@
-pub fn reconcile_permit(
-    authority: &RootAuthority,
-    workspace: &ProductWorkspace,
-    head: &JournalHead,
-    tick: u64,
-    target: PermitTarget,
-    resolution: &EffectResolution,
-) -> RootPermit {
-    issue_reconcile_permit_for_test(
-        authority,
-        RootReconcilePermitIssuance {
-            binding: binding(),
-            workspace_identity: workspace.identity(),
-            journal_head_identity: &journal_head_identity(head).unwrap(),
-            issued_tick: tick.saturating_sub(1),
-            expires_tick: tick + 10,
-            nonce: b"unique-reconcile-nonce-0123456",
-            target,
-            resolution,
-        },
-    )
-    .unwrap()
-}
-
 pub fn worker_result(workspace: &TestRoot) -> WorkerResultV1 {
     let relative = "work/node-a/output.json";
     let bytes = b"{\"result\":\"bounded\"}\n";

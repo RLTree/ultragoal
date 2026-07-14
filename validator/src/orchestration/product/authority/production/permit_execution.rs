@@ -1,107 +1,109 @@
-pub(crate) struct ValidatedExecution<'a> {
-    authority: &'a ProductionRootAuthority,
-    operation: RootOperation,
+struct ValidatedExecution<'a> {
     permit_id: String,
+    request: ExecutionRequest<'a>,
 }
 
-pub(crate) struct ReservedExecution<'a> {
-    authority: &'a ProductionRootAuthority,
-    operation: RootOperation,
+struct ReservedExecution<'a> {
     permit_id: String,
+    request: ExecutionRequest<'a>,
 }
 
 impl<'a> ValidatedExecution<'a> {
-    pub(super) fn into_parts(self) -> (&'a ProductionRootAuthority, RootOperation, String) {
-        (self.authority, self.operation, self.permit_id)
+    fn into_parts(self) -> (String, ExecutionRequest<'a>) {
+        (self.permit_id, self.request)
     }
 }
 
 impl<'a> ReservedExecution<'a> {
-    pub(super) fn new(
-        authority: &'a ProductionRootAuthority,
-        operation: RootOperation,
-        permit_id: String,
-    ) -> Self {
-        Self {
-            authority,
-            operation,
-            permit_id,
-        }
+    fn new(permit_id: String, request: ExecutionRequest<'a>) -> Self {
+        Self { permit_id, request }
     }
 
-    pub(super) fn permit_id(&self) -> &str {
+    fn permit_id(&self) -> &str {
         &self.permit_id
+    }
+
+    fn execute(
+        self,
+        authority: &RootAuthority,
+    ) -> Result<ProductionExecutionOutcome, ProductError> {
+        self.request.execute(authority)
     }
 }
 
 impl ProductionRootAuthority {
-    pub(crate) fn require_issued_permit(&self, permit: &RootPermit) -> Result<(), ProductError> {
-        self.ledger.require_issued(&permit_id(permit)?)
+    pub(crate) fn execute_action<'a>(
+        &'a self,
+        context: &'a super::super::ProductContext,
+        workspace: &'a super::super::ProductWorkspace,
+        source: super::super::runtime_adapter::RuntimeActionSource<'a>,
+        action: &'a super::super::command::RootActionRequest,
+        permit: &'a RootPermit,
+        request: &'a super::super::runtime_adapter::RuntimeActionRequest,
+    ) -> Result<ProductionExecutionOutcome, ProductError> {
+        let execution = match request {
+            super::super::runtime_adapter::RuntimeActionRequest::Resume(request) => {
+                ExecutionRequest::Resume {
+                    context,
+                    workspace,
+                    permit,
+                    source,
+                    action,
+                    request,
+                }
+            }
+            super::super::runtime_adapter::RuntimeActionRequest::Recover(request) => {
+                ExecutionRequest::Recover {
+                    context,
+                    workspace,
+                    permit,
+                    source,
+                    action,
+                    request,
+                }
+            }
+        };
+        self.execute(execution)
     }
 
-    pub(crate) fn validate_action_execution<'a>(
+    pub(crate) fn execute_reconcile<'a>(
         &'a self,
-        verification: super::RootActionPermitVerification<'_>,
-    ) -> Result<ValidatedExecution<'a>, ProductError> {
-        let operation = verification.operation;
-        let permit_id = permit_id(verification.permit)?;
-        self.authority.verify_action(verification)?;
-        Ok(ValidatedExecution {
-            authority: self,
-            operation,
-            permit_id,
+        context: &'a super::super::ProductContext,
+        workspace: &'a super::super::ProductWorkspace,
+        view: &'a super::super::runtime_adapter::CurrentRuntimeView,
+        action: &'a super::super::command::RootActionRequest,
+        permit: &'a RootPermit,
+        request: &'a super::super::ReconcileRequest,
+    ) -> Result<ProductionExecutionOutcome, ProductError> {
+        self.execute(ExecutionRequest::Reconcile {
+            context,
+            workspace,
+            permit,
+            view,
+            action,
+            request,
         })
     }
 
-    pub(crate) fn validate_reconcile_execution<'a>(
+    fn execute<'a>(
         &'a self,
-        verification: super::RootReconcilePermitVerification<'_>,
-    ) -> Result<ValidatedExecution<'a>, ProductError> {
-        let permit_id = permit_id(verification.permit)?;
-        self.authority.verify_reconcile(verification)?;
-        Ok(ValidatedExecution {
-            authority: self,
-            operation: RootOperation::Reconcile,
-            permit_id,
-        })
-    }
-
-    pub(crate) fn reserve_validated<'a>(
-        &'a self,
-        execution: ValidatedExecution<'a>,
-    ) -> Result<ReservedExecution<'a>, ProductError> {
-        if !std::ptr::eq(self, execution.authority) {
-            return Err(ProductError::AuthorityInvalid);
-        }
-        self.ledger.require_issued(&execution.permit_id)?;
-        self.ledger.reserve(execution)
-    }
-
-    pub(crate) fn complete_action<T>(
-        &self,
-        reservation: ReservedExecution<'_>,
-        operation: impl FnOnce(&RootAuthority) -> Result<T, ProductError>,
-    ) -> Result<T, ProductError> {
-        if !std::ptr::eq(self, reservation.authority)
-            || reservation.operation == RootOperation::Reconcile
-        {
-            return Err(ProductError::AuthorityInvalid);
-        }
-        self.ledger
-            .complete(reservation, || operation(&self.authority))
-    }
-
-    pub(crate) fn complete_reconcile<T>(
-        &self,
-        reservation: ReservedExecution<'_>,
-        operation: impl FnOnce(&RootAuthority) -> Result<T, ProductError>,
-    ) -> Result<T, ProductError> {
-        if !std::ptr::eq(self, reservation.authority)
-            || reservation.operation != RootOperation::Reconcile
-        {
-            return Err(ProductError::AuthorityInvalid);
-        }
-        self.ledger
-            .complete(reservation, || operation(&self.authority))
+        request: ExecutionRequest<'a>,
+    ) -> Result<ProductionExecutionOutcome, ProductError> {
+        let permit_id = permit_id(request.permit())?;
+        self.ledger.require_issued(&permit_id)?;
+        let workspace = request.workspace();
+        workspace.verify()?;
+        let reservation = crate::orchestration::FileJournal::with_existing_exclusive_lock(
+            workspace.root(),
+            || {
+                workspace.verify()?;
+                request.prevalidate()?;
+                request.verify(&self.authority)?;
+                let execution = ValidatedExecution { permit_id, request };
+                self.ledger.require_issued(&execution.permit_id)?;
+                self.ledger.reserve(execution)
+            },
+        )?;
+        self.ledger.complete(reservation, &self.authority)
     }
 }

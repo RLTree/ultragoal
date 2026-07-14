@@ -1,9 +1,7 @@
-use super::context::{ReadOnlySink, journal_head_identity};
+use super::authority::ExecutionAuthority;
+use super::context::ReadOnlySink;
 use super::snapshot::snapshot;
-use super::{
-    PermitTarget, ProductContext, ProductError, ProductSnapshot, ProductWorkspace,
-    RootActionPermitVerification, RootAuthority, RootOperation, RootPermit,
-};
+use super::{PermitTarget, ProductContext, ProductError, ProductSnapshot, ProductWorkspace};
 use crate::orchestration::{Binding, FileJournal, JournalHead, Orchestrator};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
@@ -32,26 +30,15 @@ pub struct RecoverOutcome {
 pub(crate) fn recover(
     context: &ProductContext,
     workspace: &ProductWorkspace,
-    authority: &RootAuthority,
-    permit: &RootPermit,
+    authority: ExecutionAuthority<'_>,
     request: &RecoverRequest,
 ) -> Result<RecoverOutcome, ProductError> {
+    authority.attest();
     if request.target.operation_id.as_deref() != Some(&request.expected_event_id)
         || request.target.recovered_binding.as_ref() != Some(&request.recovered_binding)
     {
         return Err(ProductError::AuthorityOperationMismatch);
     }
-    let head_identity = journal_head_identity(&request.expected_prior_head)?;
-    authority.verify_action(RootActionPermitVerification {
-        permit,
-        expected_root: &context.root,
-        operation: RootOperation::Recover,
-        binding: &context.binding,
-        workspace_identity: workspace.identity(),
-        journal_head_identity: &head_identity,
-        tick: request.tick,
-        target: &request.target,
-    })?;
     workspace.verify()?;
     let prepared = FileJournal::prepare_interrupted_append(
         workspace.root(),

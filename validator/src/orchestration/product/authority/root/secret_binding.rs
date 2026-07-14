@@ -149,10 +149,7 @@ impl RootAuthority {
         Ok(permit)
     }
 
-    pub(crate) fn verify_action(
-        &self,
-        request: RootActionPermitVerification<'_>,
-    ) -> Result<(), ProductError> {
+    fn verify_action(&self, request: RootActionPermitVerification<'_>) -> Result<(), ProductError> {
         let RootActionPermitVerification {
             permit,
             expected_root,
@@ -179,7 +176,7 @@ impl RootAuthority {
         })
     }
 
-    pub(crate) fn verify_reconcile(
+    fn verify_reconcile(
         &self,
         request: RootReconcilePermitVerification<'_>,
     ) -> Result<(), ProductError> {

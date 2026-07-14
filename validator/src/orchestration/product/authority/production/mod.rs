@@ -6,6 +6,7 @@
 //! never retried until a fresh sealed view reconciles its observed outcome.
 
 mod checkpoint;
+mod execution_transaction;
 mod ledger;
 mod store;
 
@@ -24,6 +25,9 @@ const MAX_PERMIT_LIFETIME: u64 = 300;
 include!("permit_issuance.rs");
 include!("permit_execution.rs");
 include!("restart_reconciliation.rs");
+
+use execution_transaction::ExecutionRequest;
+pub(crate) use execution_transaction::ProductionExecutionOutcome;
 
 #[cfg(test)]
 mod interruption_tests;

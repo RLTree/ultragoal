@@ -1,9 +1,7 @@
-use super::context::{ReadOnlySink, journal_head_identity, open_engine};
+use super::authority::ExecutionAuthority;
+use super::context::{open_engine, ReadOnlySink};
 use super::snapshot::snapshot;
-use super::{
-    PermitTarget, ProductContext, ProductError, ProductSnapshot, ProductWorkspace,
-    RootActionPermitVerification, RootAuthority, RootOperation, RootPermit,
-};
+use super::{PermitTarget, ProductContext, ProductError, ProductSnapshot, ProductWorkspace};
 use crate::orchestration::JournalHead;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
@@ -29,21 +27,10 @@ pub struct ResumeOutcome {
 pub(crate) fn resume(
     context: &ProductContext,
     workspace: &ProductWorkspace,
-    authority: &RootAuthority,
-    permit: &RootPermit,
+    authority: ExecutionAuthority<'_>,
     request: &ResumeRequest,
 ) -> Result<ResumeOutcome, ProductError> {
-    let head_identity = journal_head_identity(&request.expected_head)?;
-    authority.verify_action(RootActionPermitVerification {
-        permit,
-        expected_root: &context.root,
-        operation: RootOperation::Resume,
-        binding: &context.binding,
-        workspace_identity: workspace.identity(),
-        journal_head_identity: &head_identity,
-        tick: request.tick,
-        target: &request.target,
-    })?;
+    authority.attest();
     let mut engine = open_engine(context, workspace, &request.expected_head, ReadOnlySink)?;
     let before = snapshot(&engine, request.tick, &request.live_workers)?;
     before.require_target(&request.target)?;
