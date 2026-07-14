@@ -1,0 +1,66 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "CLI-LEGACY-GUIDANCE-ACCEPTANCE-001",
+  "root_decision": "accept_bounded_artifact_set",
+  "review_mode": "independent_read_only_cli_compatibility_and_zero_write_falsification",
+  "reviewer": "/root/cli_compatibility_review",
+  "base_head": "4188acb6adb7c2333302d3dbe136bd777ff293a9",
+  "base_tree": "ad3c872074104dee1ffb6b5dcb51b45e9c0971a2",
+  "accepted_head": "f533b54596da114b377484e8bda1f1008195b7d1",
+  "accepted_tree": "2f1562e7b454dbcefcab59c94aee1be7354aad46",
+  "accepted_commits": [
+    "e44747c75 route legacy CLI intent without executing effects",
+    "f533b5459 keep live CLI collisions out of legacy guidance"
+  ],
+  "artifact_set_formula": "Sort paths; for each append path, one TAB, lowercase SHA-256, and one LF; SHA-256 the concatenation.",
+  "artifact_set_sha256": "9844ef373aa19da9ddb8548ec8b542466f65a58b941cac96069e9edcf2501497",
+  "artifact_count": 25,
+  "artifacts": [
+    {"path":"validator/src/argument_parser/public_arguments.rs","sha256":"999ef77ad5451d312f95e30d705459dbe52998cf9738d8546a261325978b79ef"},
+    {"path":"validator/src/argument_parser/tests.rs","sha256":"2f6f455a18902834db7a0b90d4dd5b272d2e7b38bfd8031447c1c6b82632cfdb"},
+    {"path":"validator/src/cli/successor/command_contract/compatibility.rs","sha256":"94160e9b31336f28e590056993bff5851193859a5efdc3cf8a20a092304d5b6f"},
+    {"path":"validator/src/cli/successor/command_contract/invocation.rs","sha256":"e9e901d88d1b0bb35909ce38acc15ffcef9640305fe51d0e0eccdf846144431d"},
+    {"path":"validator/src/cli/successor/command_contract/mod.rs","sha256":"f69407c27f866df844b29f72d5f0e3507b74c3fd24bf1ef63e3f7cff3da571e9"},
+    {"path":"validator/src/cli/successor/compatibility/classification.rs","sha256":"f0c56c0cb87578458baf12520d7bc4ba52a7cf983b960a0fae0aba2efbef0810"},
+    {"path":"validator/src/cli/successor/compatibility/mod.rs","sha256":"40e8a55e298f16cff6bd9c76f0a61d92143da36850e5bc8a5a678fdfc56a58af"},
+    {"path":"validator/src/cli/successor/compatibility/render.rs","sha256":"7288247b24e3212db2304446d214237ddae10dd7845dd80489e9125e27cc21ef"},
+    {"path":"validator/src/cli/successor/compatibility/route_catalog.rs","sha256":"ccbf03ccf19b4de1667046b19a396d13afd19364d4360602af2554a92ae20719"},
+    {"path":"validator/src/cli/successor/compatibility/route_catalog/control.rs","sha256":"6b00d9c6db58de9490d1a15227b5c5b5443f42f9f1fb7f04bb2a80cdd136e495"},
+    {"path":"validator/src/cli/successor/compatibility/route_catalog/core.rs","sha256":"3efca5781a7d0d7948513ea30b8595337cc14ecdceebf962adfb1d5d3ec96c76"},
+    {"path":"validator/src/cli/successor/compatibility/route_catalog/observe.rs","sha256":"a2f50d3b4ba503695bcba2e4d4e915850040107b3ca2a8d123ed40c947663d70"},
+    {"path":"validator/src/cli/successor/compatibility/route_spec.rs","sha256":"aff4a07d0b52cab5745aca49c9c21974ff53714ad5381c0e0136b57754e67746"},
+    {"path":"validator/src/cli/successor/mod.rs","sha256":"cc74b8bc02e6dcd22bbf45e15aaec6b0d76a868a034b7268bc442e42dd426369"},
+    {"path":"validator/src/cli/successor/parser.rs","sha256":"74f4d93f1d90aad2392a5b3c32f93f66e10d1f3897e2a5502f996d27d985b052"},
+    {"path":"validator/src/cli/successor_public/output_emission.rs","sha256":"4d8ee53b19c906a28fdc3bfb3a3b4390b95a37a27c5e5edf38511ff1d7cb8466"},
+    {"path":"validator/src/cli/successor_public/output_limit.rs","sha256":"dbe71f537dce301778134dc17e92ac6018b2f6f4e15730f5d23ed433ed138d35"},
+    {"path":"validator/src/cli/successor_public/tests/public_output_limit_is_inclusive_and_fail_closed.rs","sha256":"1cb9ca09a53c8c2881d4b1434878b1838639d538d5eaa16ccf2e580859f1b788"},
+    {"path":"validator/src/lib.rs","sha256":"60cbcb49242ecdf81d30214bc39a1bbfb4f34c8db72edf8cca6dd2ce32925466"},
+    {"path":"validator/tests/cli_contract/successor/compatibility.rs","sha256":"046922957d11732a53601fc40ff4d916791aa2ebe3a65b974f5db95418edd3e3"},
+    {"path":"validator/tests/cli_contract/successor/mod.rs","sha256":"2a787dce8158abddc82dd4d51f713c79b1c447f08a17f29f86f680224d6950e4"},
+    {"path":"validator/tests/cli_surface.rs","sha256":"bb1031093a1b7f2de01a0a9b50b4a094006119746373885938d484df30554956"},
+    {"path":"validator/tests/cli_surface/catalog_and_reads.rs","sha256":"77de5fedee2f01e08717a7fc1a51298e24d82c583090fd7c01a9ae0487c8ed82"},
+    {"path":"validator/tests/cli_surface/compatibility.rs","sha256":"40a92ccaaca7fdc09760a9517f1c9ea03492992181624fab2fd7b04b4847c48d"},
+    {"path":"validator/tests/cli_surface/scenario.rs","sha256":"4a8c07e4f6aece68694458cf5ac9b5762921b5c271c7126b72ed378acfe13392"}
+  ],
+  "verification": {
+    "compatibility_contract": "3 passed; 0 failed",
+    "cli_surface": "9 passed; 0 failed; sequential recursive filesystem and Git comparison",
+    "non_utf8_actual_binary": "exit 2; exact CLI_NON_UTF8_ARGUMENT JSON; no byte echo; zero write",
+    "format_and_projection": "rustfmt, agent standards, generated authority, and diff checks passed",
+    "strict_library_check": "blocked by the exact 657-diagnostic integration baseline; zero accepted-set diagnostic and no suppression"
+  },
+  "review_history": [
+    "REWORK: std::env::args panicked on non-UTF-8 argv and echoed escaped input",
+    "ACCEPT: args_os typed boundary and actual-binary negative control closed the defect",
+    "ACCEPT: live next and package inventory collisions were removed from the legacy catalog"
+  ],
+  "accepted_scope": "Exact source and actual-binary behavior for bounded guidance-only routing of known legacy CLI intent, typed no-echo rejection of unknown or non-UTF-8 input, zero hidden writes, and no legacy effect execution.",
+  "withheld_scope": [
+    "behavioral equivalence or compatibility completion",
+    "legacy parser dispatcher writer or schema retirement",
+    "successor command activation",
+    "warning-free repository checkpoint",
+    "node closure readiness release or completion"
+  ],
+  "no_claim_statement": "This decision accepts only the bounded guidance increment. It does not claim compatibility completion, retirement, activation, readiness, release, or goal completion."
+}

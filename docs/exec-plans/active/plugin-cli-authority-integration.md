@@ -42,8 +42,8 @@ increment through root-owned review, wiring, proof, and claim decisions.
   standards digests, and the routine false-pass defect.
 - [ ] Run fresh focused candidate checks, coverage authority, public self-law,
   independent review, and record root acceptance for the checkpoint.
-- [ ] Recompute the live graph and launch dependency-ready macro-sessions from
-  the exact accepted checkpoint.
+- [x] Accepted bounded legacy CLI guidance at `f533b5459`; exact live command
+  collisions remain successor-owned and all retirement claims stay withheld.
 - [ ] Integrate accepted sessions one at a time and rerun dependency-closed
   root checks after each landing.
 - [ ] Close installed/runtime journeys, migration/retirement, claims, release,
@@ -70,6 +70,8 @@ increment through root-owned review, wiring, proof, and claim decisions.
   N14 compatibility authority and disconnect a graph with about 3,000 dormant
   warnings. Compatibility routing and authority-registry reconciliation must
   precede production deauthorization.
+- The accepted guidance increment adds no production diagnostic. The strict
+  library gate remains at the exact 657-diagnostic integration baseline.
 
 ## Decision Log
 
@@ -243,5 +245,6 @@ evidence, worktree state, documentation freshness, and claim ceiling.
 ## Outcomes & Retrospective
 
 Open. Update after every accepted integration checkpoint and at final claim
-reconciliation. Until then, the highest honest ceiling is intentional source
-history under REWORK.
+reconciliation. The highest honest new ceiling is accepted guidance-only CLI
+behavior; the integration checkpoint and every product/release claim remain
+under REWORK.
