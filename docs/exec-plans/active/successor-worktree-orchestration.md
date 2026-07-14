@@ -9,7 +9,9 @@ normative, and parent acceptance remains with the root integrator.
 - Thread: `019f5fa2-923f-7770-9a89-83ed713ac1f3`.
 - Worktree: `/Users/terrynoblin/.codex/worktrees/cb63/harness-ultragoal-plugin-proposal`.
 - Branch: `codex/n10-orchestration-authority`.
-- Exact base and initial head: `20a11eb981c5db2d2136a555632be9c4e5ab7752`.
+- Current integration base: `5cc3be5f860de0071837f478bbe3a9de0d6c0e47`;
+  original launch base `20a11eb981c5db2d2136a555632be9c4e5ab7752` is historical.
+- Live state: implementation is active and no handoff has been parent-reviewed.
 - Contract manifest digest: `390138fa292fffa6975f501acd1570be6d32b8498f33651d44596009b900a130`.
 - Dependency graph digest: `a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f`.
 

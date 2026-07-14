@@ -9,7 +9,9 @@ normative, and parent acceptance remains with the root integrator.
 - Thread: `019f5fa2-0bc3-7a50-9c2f-c377d88c60e4`.
 - Worktree: `/Users/terrynoblin/.codex/worktrees/45df/harness-ultragoal-plugin-proposal`.
 - Branch: `codex/n04-distribution-runtime`.
-- Exact base and initial head: `20a11eb981c5db2d2136a555632be9c4e5ab7752`.
+- Current integration base: `5cc3be5f860de0071837f478bbe3a9de0d6c0e47`;
+  original launch base `20a11eb981c5db2d2136a555632be9c4e5ab7752` is historical.
+- Live state: decisive parent REWORK; repair is active and no handoff is accepted.
 - Contract manifest digest: `390138fa292fffa6975f501acd1570be6d32b8498f33651d44596009b900a130`.
 - Dependency graph digest: `a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f`.
 

@@ -8,17 +8,16 @@ contract. Normative authority remains the adopted bundle rooted at
 ## Purpose / Big Picture
 
 Finish the plugin product and typed Rust CLI kernel from current repository
-truth. First reconcile the intentionally committed self-law refactor into a
-warning-free, behaviorally honest integration checkpoint. Then launch a small
-number of dependency-closed Codex worktree sessions and integrate each frozen
-increment through root-owned review, wiring, proof, and claim decisions.
+truth. The intentionally committed self-law refactor now has bounded source
+acceptance; its 609/652 global strict blocker and 110 pending standards audits
+keep warning-free integration open. Drive the four dependency-closed Codex
+worktree sessions through root-owned review, wiring, proof, and claim decisions.
 
 ## Durable Goal Binding
 
 - Runtime goal id and thread id: `019f5f39-507b-78a2-a96a-0b566a5a2126`.
 - Runtime status at binding: `active` via `create_goal`.
-- Binding receipt:
-  `docs/ultragoal-successor-live/root-decisions/HOST-GOAL-BINDING.json`.
+- Binding receipt: `docs/ultragoal-successor-live/root-decisions/HOST-GOAL-BINDING.json`.
 - Binding candidate: branch `codex/successor-contract-v2-live-product`, commit
   `e60fc9897368a946bcdb56c8f5e0c52ab379c39e`, tree
   `1ec0ca72326068177da758fc61c078b63d100e94`.
@@ -35,13 +34,16 @@ increment through root-owned review, wiring, proof, and claim decisions.
   contract, claim, graph, migration, and safe open-decision surfaces.
 - [x] Bound the durable host goal with `create_goal`.
 - [x] Rejected stale WorkerResult and board rows as current proof.
-- [x] Restored a clean root at `20a11eb98` and launched four disjoint,
-  dependency-ready Codex-managed worktree sessions at that exact base after the
-  user explicitly directed immediate worktree orchestration.
-- [ ] Reconcile formatting, authored-file size, warning-free compilation,
-  standards digests, and the routine false-pass defect.
-- [ ] Run fresh focused candidate checks, coverage authority, public self-law,
-  independent review, and record root acceptance for the checkpoint.
+- [x] Launched four disjoint Codex-managed worktree sessions and refreshed their
+  integration base to accepted typed-root commit `5cc3be5f8`.
+- [x] Reconciled formatting, line caps, public self-law, repository-fit
+  authority, and standards projection at clean root `da2994860`, tree
+  `62a21a82`; recorded bounded acceptance in `CLI-SELF-LAW-CHECKPOINT-003`.
+- [x] Preserved the strict claim ceiling: 609 library and 652 library-test
+  diagnostics, zero in accepted paths; invalidated 110 stale audits to pending.
+- [ ] Close the global strict diagnostics, exact coverage, and all pending
+  standards audits without suppression or unsupported PASS restoration.
+- [ ] Accept or return REWORK on each frozen worktree artifact set.
 - [x] Accepted bounded legacy CLI guidance at `f533b5459` and the typed public
   argv/root transition at `8c847e9b0`; dispatcher retirement stays withheld.
 - [ ] Integrate accepted sessions one at a time and rerun dependency-closed
@@ -51,36 +53,35 @@ increment through root-owned review, wiring, proof, and claim decisions.
 
 ## Surprises & Discoveries
 
-- The handoff snapshot was stale: the root was already clean at `e60fc9897`,
-  and the three self-law commits were intentional.
-- The old external `E0521` compile blocker is gone. Fresh library compilation
-  instead fails on 657 candidate-owned diagnostics: 640 dead-code, 16 unused
-  imports, and one private-interface error. Dormant candidates must be kept out
-  of production compilation until a real caller exists; active product code
-  must be wired or retired rather than hidden by lint allowances or visibility
-  widening.
-- Fresh direct formatting fails in 14 Rust files. One authored contract test is
-  251 lines. `scripts/check-agent-standards` also detects a stale audit digest.
-- Public routine success is self-certifying: the child script writes a marker
-  and reports `behavior_observed=true` without running the declared repository
-  behavior. This remains decisive REWORK.
-- `CRITICAL-PATH-BOARD.md` and the plugin-delivery WorkerResult are anchored to
-  `40982060a`; both require current-candidate reconciliation.
+- The old external `E0521` blocker is gone. Current strict compilation stops at
+  609 library and 652 library-test diagnostics; zero accepted self-law path is
+  implicated. Active product code must still be wired or retired, never hidden
+  by lint allowances, dummy reachability, or visibility widening.
+- Formatting, diff hygiene, changed-file line caps, source laws, and public
+  recursively zero-write CLI checks now pass for the bounded root artifact set.
+- All 110 stale standards PASS rows are pending; only 12 rows whose evidence
+  digest matches current bytes retain PASS. This mechanically withholds every
+  affected claim until behavior and evidence are re-audited.
+- N04 remains REWORK for caller-minted discovery/runtime authority, rollback
+  transplantability, and focused compile failures. N06 remains REWORK for
+  cross-request reuse, recovery ordering, output provenance, and false-pass
+  tests. N11 remains REWORK for causal evaluation input, initialization
+  recovery, and forgeable promotion review authority. N10 is active.
 - An isolated legacy-command `cfg(test)` retirement is invalid. It would bypass
   N14 compatibility authority and disconnect a graph with about 3,000 dormant
   warnings. Compatibility routing and authority-registry reconciliation must
   precede production deauthorization.
-- The accepted guidance increment adds no production diagnostic. The strict
-  library gate remains at the exact 657-diagnostic integration baseline.
+- The accepted guidance, typed-root, and self-law increments add no changed-path
+  strict diagnostic. Global warning-free integration remains unaccepted.
 
 ## Decision Log
 
 - Preserve commits `1594ded64`, `a16753a66`, and `e60fc9897` as intentional
   development history. Repair forward; do not rewrite or squash them.
 - The user explicitly superseded the earlier launch hold on 2026-07-14. Four
-  source/product repair worktrees now run from clean exact base `20a11eb98`;
-  their outputs remain ineligible for integration or claim elevation until the
-  root independently reviews them and the original checkpoint gates pass.
+  source/product worktrees were refreshed to exact accepted base `5cc3be5f8`.
+  Their outputs remain ineligible for integration or claim elevation until a
+  clean frozen handoff passes independent root review.
 - Keep incomplete product candidates test-only or otherwise outside the
   production module graph until a real public caller exists. Do not use
   `allow(dead_code)`, dummy references, or broad public visibility as proof.
@@ -106,53 +107,45 @@ increment through root-owned review, wiring, proof, and claim decisions.
 
 ## Plan Of Work
 
-### A. Recover The Integration Checkpoint
+### A. Hold The Root Integration Checkpoint
 
-1. Repair rustfmt and the 250-line authored-file violation without semantic
-   churn.
-2. Classify each production warning as active wiring, safe deletion, or dormant
-   candidate isolation. Preserve no fake production reachability.
-3. Replace the routine marker/report false pass with a typed behavior recipe,
-   trusted outcome derivation, causal failure, interruption, and reuse tests.
-4. Regenerate root-owned standards and generated authority through their
-   canonical projectors.
-5. Run clean compile, focused domain suites, source laws, exact coverage, and
-   the public recursively zero-write self-law command.
-6. Freeze a current WorkerResult, run independent full-scope review, and commit
-   root acceptance or return the exact defect to recovery.
+1. Keep `da2994860` clean while worktrees repair their owned sections.
+2. Preserve the exact 609/652 strict blocker; classify each remaining warning as
+   active wiring, safe deletion, or dormant candidate isolation.
+3. Re-audit the 110 pending standards only after current behavior and exact
+   evidence exist; never restore PASS from a source test alone.
+4. Keep formatting, line caps, source laws, generated authority, coverage
+   ceiling, and recursively zero-write public reads current after every root edit.
 
 ### B. Launch Dependency-Closed Product Sessions
 
-After checkpoint acceptance, recompute the graph and create descriptive
-product-role branches before requesting Codex app worktrees. Candidate sections
-are delivery/runtime, orchestration/goal, evaluation/research, then proof and
-migration. Final ownership and paths come from the refreshed graph.
+The current graph produced four descriptive product-role worktrees for
+delivery/runtime, routine execution, orchestration/goal, and
+evaluation/research. Proof and migration remain behind upstream integration and
+root claim authority.
 
-Session contracts were launched from the clean exact base at the user's
-explicit direction. Unknown runtime fields were resolved by these exact probes:
-`git rev-parse HEAD`, `git status --porcelain=v2`, `git worktree list
---porcelain`, `codex_app__list_projects({})`, branch creation from the accepted
-HEAD, then `codex_app__create_thread` with `startingState.type=branch`. The
-create-thread result supplies thread and worktree identity; model and reasoning
-remain `unknown` unless the host exposes them.
+Session contracts were launched at the user's explicit direction and refreshed
+to exact base `5cc3be5f8`. Git/worktree probes and Codex app thread results bind
+each branch, worktree, and thread identity; unknown host fields stay unknown.
 
 - Distribution runtime: thread `019f5fa2-0bc3-7a50-9c2f-c377d88c60e4`, branch
   `codex/n04-distribution-runtime`, worktree `.codex/worktrees/45df`; owns only
-  distribution/package behavior and matching tests/fixtures.
+  distribution/package behavior and matching tests/fixtures; decisive REWORK.
 - Routine execution trust: thread `019f5fa2-5206-7da1-ad4f-8bb5ca580012`,
   branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
-  owns routine kernel/public adapter behavior and matching tests/fixtures.
+  owns routine kernel/public adapter behavior and matching tests/fixtures;
+  decisive REWORK with repair active.
 - Orchestration authority: thread `019f5fa2-923f-7770-9a89-83ed713ac1f3`,
   branch `codex/n10-orchestration-authority`, worktree `.codex/worktrees/cb63`;
-  owns orchestration issuer/replay/recovery behavior and matching tests/fixtures.
+  owns orchestration issuer/replay/recovery behavior and matching tests/fixtures;
+  implementation active.
 - Evaluation reliability: thread `019f5fa2-cace-7361-a3e7-6102a3dc1224`,
   branch `codex/n11-evaluation-reliability`, worktree `.codex/worktrees/bd86`;
-  owns evaluation, fixture-scheduler, capture bridge, and matching tests/fixtures.
+  owns evaluation, fixture-scheduler, capture bridge, and matching tests/fixtures;
+  decisive REWORK with repair active.
 
-The exact lane contracts are the sibling active ExecPlans named
-`successor-worktree-{distribution,routine,orchestration,evaluation}.md`.
-Proof/migration remains unlaunched behind upstream integration and root claim
-authority.
+Sibling active ExecPlans named `successor-worktree-{distribution,routine,
+orchestration,evaluation}.md` retain the exact lane contracts.
 
 All sessions forbid contracts, Cargo files, `.codex-plugin`, `.codex/agents`,
 public catalog/dispatcher, global generated authority, migration/claim registry,
@@ -162,10 +155,9 @@ a dedicated ExecPlan with exact base/head, launch prompt, owned/forbidden paths,
 digests, verification commands, review cadence, ready receipt, and teardown
 condition. Absence of that file blocks `create_thread`.
 
-Every session starts at the exact accepted commit, owns disjoint paths and
-semantics, uses isolated `.codex-worktree` state and Cargo targets, and returns
-a committed WorkerResult-v1 package without readiness, release, or completion
-claims.
+Every session owns disjoint paths and semantics, uses isolated
+`.codex-worktree` state and Cargo targets, and returns a committed
+WorkerResult-v1 package without readiness, release, or completion claims.
 
 ### C. Integrate Continuously
 
@@ -197,17 +189,23 @@ two byte-identical inventory summaries, and every requirement-to-evidence row.
 - Built `ultragoal --root . check strict --claim cli-self-law-compliance`
   with recursive filesystem and Git comparisons before and after.
 
+At the bounded root freeze, successor CLI was 39/39, built CLI surface 11/11,
+repository-fit 223/223, private-mint/historical controls 2/2, managed-prior 1/1,
+and public adapter 5/5. Strict compilation stopped at 609 library and 652
+library-test diagnostics with zero accepted-path diagnostic. These results do
+not supply coverage or any installed/runtime/product claim.
+
 Use an isolated Cargo target for each concurrent workspace. Broad checks run
 only at dependency-closed freezes.
 
 ## Validation And Acceptance
 
-Checkpoint acceptance requires current-candidate clean compilation, formatting,
-source laws, standards projection, focused positive/negative behavior, exact
-coverage or an explicit withheld material source ceiling, a recursively
-zero-write public self-law run, refreshed WorkerResult, independent review, and
-root acceptance. No source checkpoint proves package, install, discovery,
-runtime, journey, release, or completion.
+Bounded source acceptance requires formatting, source laws, standards
+projection, focused behavior, explicit coverage ceiling, recursively zero-write
+public self-law, and independent review. The warning-free integration checkpoint
+still requires clean compilation, current coverage, and all affected audits.
+Neither source checkpoint proves package, install, discovery, runtime, journey,
+release, or completion.
 
 Final acceptance comes from the current user request interpreted through the
 adopted contract. The host goal mirrors execution intent but is not product or
@@ -229,9 +227,9 @@ worktree, or final reconciliation gap keeps the goal active.
 
 - Durable goal receipt: `docs/ultragoal-successor-live/root-decisions/HOST-GOAL-BINDING.json`.
 - Active state: this ExecPlan.
+- Current bounded root decision: `docs/ultragoal-successor-live/root-decisions/CLI-SELF-LAW-CHECKPOINT-003.json`.
 - Current stale router: `docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md`.
-- Current blocked candidate record:
-  `docs/ultragoal-successor-live/worker-results/PLUGIN-DELIVERY-SELF-LAW-REFACTOR.json`.
+- Historical handoff evidence: `docs/ultragoal-successor-live/worker-results/PLUGIN-DELIVERY-SELF-LAW-REFACTOR.json`.
 - Canonical repository check: `scripts/check`.
 
 ## Interfaces And Dependencies
@@ -244,7 +242,9 @@ evidence, worktree state, documentation freshness, and claim ceiling.
 
 ## Outcomes & Retrospective
 
-Open. Update after every accepted integration checkpoint and at final claim
-reconciliation. The highest honest new ceiling is typed successor argv/root
-parsing plus guidance-only legacy intent; dispatcher retirement and every
-product/release claim remain under REWORK.
+Open. Update after every accepted integration checkpoint and final claim
+reconciliation. The highest honest ceiling is typed successor argv/root plus
+bounded self-law pruning and repository-fit authority. Warning-free integration,
+coverage, 110 pending audits, dispatcher retirement, package, install, cache,
+marketplace, app-registry, discovery, runtime, product, readiness, release, and
+completion remain withheld.
