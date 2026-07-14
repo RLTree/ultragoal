@@ -31,7 +31,7 @@ mod tests {
 
     impl TestRoot {
         fn new(label: &str, mode: u32) -> Self {
-            let path = PathBuf::from("/tmp").join(format!(
+            let path = std::env::temp_dir().join(format!(
                 "hul-distribution-root-authority-{label}-{}-{}",
                 std::process::id(),
                 NEXT_ROOT.fetch_add(1, Ordering::Relaxed),

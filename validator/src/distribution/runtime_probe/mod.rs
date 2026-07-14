@@ -1,4 +1,5 @@
 use crate::distribution::error::{DistributionError, DistributionErrorId, error};
+use crate::distribution::host_capability::SUPPORTED_RUNTIME_PROGRAM;
 use crate::distribution::host_capability::{
     HostCapabilityDeclaration, HostCapabilityState, JourneyBinding,
 };
@@ -7,6 +8,7 @@ use crate::distribution::json;
 use crate::distribution::model::Capability;
 use crate::distribution::model::{IdentitySurface, SurfaceIdentity};
 use crate::distribution::observations::RuntimeObservation;
+use crate::distribution::package::{PackageRole, PackageSnapshot};
 use crate::distribution::reader::sha256;
 use serde::Deserialize;
 use std::io::Read;

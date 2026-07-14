@@ -48,7 +48,7 @@ fn interrupted_tree_materialization_requires_explicit_recovery() {
     assert!(tree.recover_interrupted().unwrap());
     assert_eq!(
         tree.inspect(4096, 64 * 1024 * 1024).unwrap().unwrap().len(),
-        3
+        plan.entries().len()
     );
 
     let stage = fixture.root.join(format!(".hul-tree-{token}-stage-manual"));

@@ -56,16 +56,16 @@ fn host_surface_substitution_controls(
         DistributionErrorId::ProvenanceMismatch
     );
 
-    let hidden_discovery = discovery_document(binding, false).unwrap();
-    fs::write(fixture.0.join("host/discovery.json"), &hidden_discovery).unwrap();
+    let caller_discovery = registry_document(binding, true, true).unwrap();
+    fs::create_dir_all(fixture.0.join("host")).unwrap();
+    fs::write(fixture.0.join("host/discovery.json"), &caller_discovery).unwrap();
     let mut hidden_file = ScopedFile::new(
         ConfinedRoot::open(&fixture.0).unwrap(),
         "host/discovery.json",
     )
     .unwrap();
-    let hidden = observe_discovery_file(&mut hidden_file, binding, host).unwrap();
     assert_eq!(
-        SurfaceIdentity::from_verified_discovery(&hidden, binding)
+        observe_discovery_file(&mut hidden_file, binding, host)
             .unwrap_err()
             .id(),
         DistributionErrorId::ProvenanceMismatch
@@ -75,7 +75,7 @@ fn host_surface_substitution_controls(
         binding.clone(),
         host,
         installed.snapshot(),
-        &fixture.0.join("runtime-probe.sh"),
+        &fixture.0.join("runtime/runtime-probe-bin"),
         vec!["sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd".into()],
         Duration::from_secs(5),
     );

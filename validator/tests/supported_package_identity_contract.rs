@@ -9,9 +9,9 @@ use ultragoal::distribution::{
     CacheExpectation, CodexPlugin, ConfinedRoot, DistributionErrorId, ExpectedPrior,
     HostCapabilityDeclaration, InstallEffects, InstallPlan, InstallScope, InstallTransaction,
     JourneyBinding, MarketplaceScope, PackageEffects, PackageIdentity, PackagePlan,
-    PackageSnapshot, RuntimeProbePlan, ScopedFile, SurfaceIdentity, build_package,
-    discovery_document, install, observe_app_registry, observe_codex_marketplace,
-    observe_discovery_file, observe_registry_file, plan_codex_marketplace,
+    PackageSnapshot, RuntimeProbePlan, ScopedFile, SurfaceIdentity, build_package, install,
+    observe_app_registry, observe_codex_marketplace, observe_discovery_file, observe_registry_file,
+    observe_supported_host_discovery, plan_codex_marketplace, plan_package,
     reconcile_cache_read_only, registry_document, unavailable_marketplace,
     verify_bound_surface_chain, verify_marketplace, verify_package,
 };

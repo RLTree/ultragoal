@@ -163,7 +163,7 @@ impl ProductionPackageArtifact {
             .map_err(|_| failure(ProductionPackageErrorId::SourceUnavailable))
             .and_then(|_| verify_product_package(self, context, catalog));
         if let Err(problem) = post_effect {
-            rollback_package_artifact(transaction, output)
+            rollback_package_artifact(transaction, journey, output)
                 .map_err(|_| failure(ProductionPackageErrorId::OutputFailed))?;
             return Err(problem);
         }

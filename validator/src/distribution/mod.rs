@@ -56,17 +56,20 @@ pub use observations::{RuntimeObservation, RuntimeVerdict};
 pub use package::{
     ExpectedTree, MaterializeEffects, MaterializeTransaction, PackageArtifactBinding,
     PackageArtifactTransaction, PackageEffects, PackageEntry, PackagePlan, PackageRole,
-    PackageSnapshot, ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
-    ProductionPackageSession, TreeObject, TreeObjectKind, build_package, capture_product_package,
-    materialize_package, plan_package, plan_package_from_inventory, publish_package_artifact,
-    reconcile_materialized_tree, reconcile_package_artifact, recover_package_artifact,
-    rollback_materialization, rollback_package_artifact, tree_sha256, verify_package,
-    verify_product_package,
+    PackageSnapshot, TreeObject, TreeObjectKind, build_package, materialize_package, plan_package,
+    plan_package_from_inventory, publish_package_artifact, reconcile_materialized_tree,
+    reconcile_package_artifact, recover_package_artifact, rollback_materialization,
+    rollback_package_artifact, tree_sha256, verify_package,
+};
+#[cfg(not(test))]
+pub use package::{
+    ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
+    ProductionPackageSession, capture_product_package, verify_product_package,
 };
 pub use registry_observation::{
     AppRegistryObservation, AppRegistryVerdict, DiscoveryObservation, DiscoveryVerdict,
-    RegistryObservations, discovery_document, observe_app_registry, observe_discovery,
-    observe_discovery_file, observe_registry_file, registry_document,
+    RegistryObservations, observe_app_registry, observe_discovery, observe_discovery_file,
+    observe_registry_file, observe_supported_host_discovery, registry_document,
 };
 #[cfg(test)]
 pub(crate) use registry_observation::{RegistryReader, observe_registry_reader};

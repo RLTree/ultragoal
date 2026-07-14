@@ -3,7 +3,7 @@
 fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
     let (fixture, plan, archive) = candidate();
     let package = verify_package(&plan, &archive).unwrap();
-    let runtime_program = fixture.0.join("runtime-probe.sh");
+    let runtime_program = fixture.0.join("runtime/runtime-probe-bin");
     let host = HostCapabilityDeclaration::isolated(
         &fixture.0,
         &fixture.0.join("project"),
@@ -77,14 +77,14 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
         package.identity().tree_sha256()
     );
 
-    let observed = confined_registry_observations(&fixture, &binding, &host);
-    let app_registry = observed.app_registry;
-    let discovery = observed.discovery;
+    let app_registry =
+        confined_registry_observation(&fixture, &binding, &host, installed.snapshot());
     let before = snapshot_tree(&fixture.0);
-    let runtime_plan = RuntimeProbePlan::new(
+    let runtime_plan = RuntimeProbePlan::from_installed_package(
         binding.clone(),
         &host,
         installed.snapshot(),
+        &package,
         &runtime_program,
         Vec::new(),
         Duration::from_secs(5),
@@ -97,7 +97,6 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
         SurfaceIdentity::from_verified_cache(&cache, &binding).unwrap(),
         SurfaceIdentity::from_verified_marketplace(&marketplace, &binding).unwrap(),
         SurfaceIdentity::from_verified_app_registry(&app_registry, &binding).unwrap(),
-        SurfaceIdentity::from_verified_discovery(&discovery, &binding).unwrap(),
         runtime,
     ];
     assert_eq!(
@@ -124,7 +123,6 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
         SurfaceIdentity::from_verified_marketplace(&marketplace, &wrong_binding),
         SurfaceIdentity::from_verified_install(installed.snapshot(), &wrong_binding),
         SurfaceIdentity::from_verified_app_registry(&app_registry, &wrong_binding),
-        SurfaceIdentity::from_verified_discovery(&discovery, &wrong_binding),
     ] {
         assert_eq!(
             result.unwrap_err().id(),

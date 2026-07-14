@@ -2,69 +2,30 @@
 fn wrong_scope_identity_duplicates_and_registered_hidden_fail_closed() {
     let fixture = JourneyFixture::new("registry-adversarial");
     let package = fixture.build("packages/current.hugpkg");
-    let executable = crate::runtime_session::program();
     let host = HostCapabilityDeclaration::isolated(
         &fixture.root,
         &fixture.project,
         "isolated-host-v1",
-        Some(&executable),
+        None,
     )
     .unwrap();
     let binding =
         JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
-    let valid = discovery_document(&binding, true).unwrap();
-    let value: Value = serde_json::from_slice(&valid).unwrap();
-    for (pointer, replacement) in [
-        (
-            "/context_id",
-            json!("sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"),
-        ),
-        (
-            "/candidate_id",
-            json!("sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"),
-        ),
-        (
-            "/home_id",
-            json!("sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"),
-        ),
-        (
-            "/project_id",
-            json!("sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"),
-        ),
-        (
-            "/host_id",
-            json!("sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"),
-        ),
-        (
-            "/capability_sha256",
-            json!("sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"),
-        ),
-        ("/entries/0/version", json!("0.0.10")),
-        (
-            "/entries/0/package_sha256",
-            json!("sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"),
-        ),
-        (
-            "/entries/0/installed_tree_sha256",
-            json!("sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"),
-        ),
-    ] {
-        let mut changed = value.clone();
-        *changed.pointer_mut(pointer).unwrap() = replacement;
-        assert!(
-            observe_discovery_file(
-                &mut write_scoped(
-                    fixture.confined(),
-                    "host/discovery.json",
-                    &serde_json::to_vec(&changed).unwrap(),
-                ),
-                &binding,
-                &host,
-            )
-            .is_err(),
-            "{pointer}"
-        );
-    }
+    let registry_as_discovery = registry_document(&binding, true, true).unwrap();
+    assert_eq!(
+        observe_discovery_file(
+            &mut write_scoped(
+                fixture.confined(),
+                "host/discovery.json",
+                &registry_as_discovery,
+            ),
+            &binding,
+            &host,
+        )
+        .unwrap_err()
+        .id(),
+        ErrorId::ProvenanceMismatch
+    );
 
     let hidden_registry = registry_document(&binding, true, false).unwrap();
     assert_eq!(
@@ -73,36 +34,19 @@ fn wrong_scope_identity_duplicates_and_registered_hidden_fail_closed() {
             .verdict(),
         AppRegistryVerdict::Verified,
     );
-    let hidden_discovery = discovery_document(&binding, false).unwrap();
-    let discovery = observe_discovery_file(
-        &mut write_scoped(fixture.confined(), "host/discovery.json", &hidden_discovery),
-        &binding,
-        &host,
-    )
-    .unwrap();
-    assert_eq!(
-        discovery.discovery_verdict(),
-        DiscoveryVerdict::RegisteredHidden
-    );
-    assert!(!discovery.is_current_visible());
-
-    let mut duplicate = value;
-    let mut row = duplicate["entries"][0].clone();
-    row["version"] = json!("0.0.10");
-    duplicate["entries"].as_array_mut().unwrap().push(row);
     assert_eq!(
         observe_discovery_file(
             &mut write_scoped(
                 fixture.confined(),
-                "host/discovery.json",
-                &serde_json::to_vec(&duplicate).unwrap(),
+                "host/hidden-registry.json",
+                &hidden_registry
             ),
             &binding,
             &host,
         )
         .unwrap_err()
         .id(),
-        ErrorId::InstallConflict,
+        ErrorId::ProvenanceMismatch,
     );
 }
 

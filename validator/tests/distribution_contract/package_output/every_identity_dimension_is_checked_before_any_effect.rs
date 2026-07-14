@@ -89,7 +89,7 @@ fn rollback_and_descriptor_recovery_preserve_the_confined_output_pair() {
         &mut output,
     )
     .unwrap();
-    rollback_package_artifact(transaction, &mut output).unwrap();
+    rollback_package_artifact(transaction, &journey, &mut output).unwrap();
     assert!(output.inspect(2, 65 * 1024 * 1024).unwrap().is_none());
 
     let token = &digest(b"repository/packages/harness-ultragoal")[7..];

@@ -114,7 +114,8 @@ impl Fixture {
             b"---\nname: prove\ndescription: Proof workflow\n---\n",
         )
         .unwrap();
-        let runtime = root.join("runtime-probe.sh");
+        fs::create_dir_all(root.join("runtime")).unwrap();
+        let runtime = root.join("runtime/runtime-probe-bin");
         fs::write(
             &runtime,
             br##"#!/bin/sh
@@ -137,6 +138,7 @@ printf '%s\n' "HUL_RUNTIME_OBSERVATION={\"schema\":\"harness-ultragoal.runtime-p
     fn plan(&self) -> PackagePlan {
         let entries = [
             json!({"path":".codex-plugin/plugin.json","source_path":"source/plugin.json","role":"manifest","executable":false}),
+            json!({"path":"runtime/runtime-probe-bin","source_path":"runtime/runtime-probe-bin","role":"executable","executable":true}),
             json!({"path":"skills/harness-ultragoal/SKILL.md","source_path":"source/skill-one.md","role":"skill","executable":false}),
             json!({"path":"skills/prove/SKILL.md","source_path":"source/skill-two.md","role":"skill","executable":false}),
         ];

@@ -45,12 +45,11 @@ impl RegistryReader for MutatingRegistry {
 fn cache_and_registry_substitution_during_final_revalidation_fail_closed() {
     let fixture = JourneyFixture::new("observation-races");
     let package = fixture.build("packages/current.hugpkg");
-    let executable = crate::runtime_session::program();
     let host = HostCapabilityDeclaration::isolated(
         &fixture.root,
         &fixture.project,
         "isolated-host-v1",
-        Some(&executable),
+        None,
     )
     .unwrap();
     let binding =

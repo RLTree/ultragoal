@@ -1,52 +1,3 @@
-#[derive(Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
-struct DiscoveryDocument {
-    schema: String,
-    context_id: String,
-    candidate_id: String,
-    home_id: String,
-    project_id: String,
-    host_id: String,
-    capability_sha256: String,
-    binding_sha256: String,
-    entries: Vec<DiscoveryEntry>,
-}
-
-#[derive(Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
-struct DiscoveryEntry {
-    plugin_id: String,
-    version: String,
-    package_sha256: String,
-    installed_tree_sha256: String,
-    visible: bool,
-}
-
-pub fn discovery_document(
-    binding: &JourneyBinding,
-    visible: bool,
-) -> Result<Vec<u8>, DistributionError> {
-    let source = binding.package().source();
-    serde_json::to_vec(&DiscoveryDocument {
-        schema: "harness-ultragoal.host-discovery.v1".into(),
-        context_id: source.context_id().into(),
-        candidate_id: source.candidate_id().into(),
-        home_id: binding.home_id().into(),
-        project_id: binding.project_id().into(),
-        host_id: binding.host_id().into(),
-        capability_sha256: binding.capability_sha256().into(),
-        binding_sha256: binding.binding_sha256().into(),
-        entries: vec![DiscoveryEntry {
-            plugin_id: source.plugin_id().into(),
-            version: source.version().into(),
-            package_sha256: binding.package().archive_sha256().into(),
-            installed_tree_sha256: binding.package().tree_sha256().into(),
-            visible,
-        }],
-    })
-    .map_err(|_| error(DistributionErrorId::InvalidSpec))
-}
-
 pub fn observe_discovery_file(
     reader: &mut crate::distribution::filesystem::ScopedFile,
     binding: &JourneyBinding,
@@ -56,18 +7,35 @@ pub fn observe_discovery_file(
         return Err(error(DistributionErrorId::ProvenanceMismatch));
     }
     host.ensure_binding(binding)?;
-    let before = reader
-        .inspect(REGISTRY_LIMIT)
-        .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
-    let mut discovery = observe_discovery_inner(before.as_deref(), binding, host)?;
-    let after = reader
-        .inspect(REGISTRY_LIMIT)
-        .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
-    if before != after {
-        return Err(error(DistributionErrorId::ObjectChanged));
+    Err(error(DistributionErrorId::ProvenanceMismatch))
+}
+
+pub fn observe_supported_host_discovery(
+    installed: &mut crate::distribution::filesystem::ScopedFile,
+    binding: &JourneyBinding,
+    host: &HostCapabilityDeclaration,
+    install: &crate::distribution::install::InstallSnapshot,
+    app_registry: &AppRegistryObservation,
+) -> Result<DiscoveryObservation, DistributionError> {
+    if installed.root_id() != binding.home_id()
+        || installed.relative_path() != SUPPORTED_INSTALL_TARGET
+        || host.state(Capability::Discovery) != HostCapabilityState::Supported
+        || host.state(Capability::AppRegistry) != HostCapabilityState::Supported
+        || install.context_id() != binding.package().source().context_id()
+        || install.candidate_id() != binding.package().source().candidate_id()
+        || install.package_sha256() != binding.package().archive_sha256()
+        || install.target_id() != sha256(SUPPORTED_INSTALL_TARGET.as_bytes())
+        || app_registry.context_id() != binding.package().source().context_id()
+        || app_registry.candidate_id() != binding.package().source().candidate_id()
+        || app_registry.binding_sha256() != binding.binding_sha256()
+        || app_registry.verdict() != AppRegistryVerdict::Verified
+        || !app_registry.is_confined_file_observation()
+        || app_registry.observation_sha256().is_none()
+    {
+        return Err(error(DistributionErrorId::ProvenanceMismatch));
     }
-    discovery.confined_file_observation = true;
-    Ok(discovery)
+    host.ensure_binding(binding)?;
+    Err(error(DistributionErrorId::ObjectUnavailable))
 }
 
 pub fn observe_discovery(
@@ -92,18 +60,8 @@ fn observe_discovery_inner(
     host.ensure_binding(binding)?;
     let (verdict, discovery_verdict) = match host.state(Capability::Discovery) {
         HostCapabilityState::Supported => {
-            let visible = validate_discovery(
-                bytes.ok_or_else(|| error(DistributionErrorId::ObjectUnavailable))?,
-                binding,
-            )?;
-            if visible {
-                (LayerVerdict::Verified, DiscoveryVerdict::Visible)
-            } else {
-                (
-                    LayerVerdict::Contradicted,
-                    DiscoveryVerdict::RegisteredHidden,
-                )
-            }
+            let _ = bytes.ok_or_else(|| error(DistributionErrorId::ObjectUnavailable))?;
+            return Err(error(DistributionErrorId::ProvenanceMismatch));
         }
         HostCapabilityState::Unsupported if bytes.is_none() => {
             (LayerVerdict::Unavailable, DiscoveryVerdict::Unsupported)
@@ -122,46 +80,4 @@ fn observe_discovery_inner(
         observation_sha256: bytes.map(sha256),
         confined_file_observation: false,
     })
-}
-
-fn validate_discovery(bytes: &[u8], binding: &JourneyBinding) -> Result<bool, DistributionError> {
-    let document: DiscoveryDocument = json::parse(bytes, REGISTRY_LIMIT)?;
-    let source = binding.package().source();
-    if document.schema != "harness-ultragoal.host-discovery.v1"
-        || document.context_id != source.context_id()
-        || document.candidate_id != source.candidate_id()
-        || document.home_id != binding.home_id()
-        || document.project_id != binding.project_id()
-        || document.host_id != binding.host_id()
-        || document.capability_sha256 != binding.capability_sha256()
-        || document.binding_sha256 != binding.binding_sha256()
-        || document.entries.is_empty()
-        || document.entries.len() > 1024
-    {
-        return Err(error(DistributionErrorId::ProvenanceMismatch));
-    }
-    let mut identities = BTreeSet::new();
-    for row in &document.entries {
-        if row.plugin_id.is_empty()
-            || Version::parse(&row.version).is_none()
-            || !identities.insert((row.plugin_id.as_str(), row.version.as_str()))
-        {
-            return Err(error(DistributionErrorId::InstallConflict));
-        }
-    }
-    let mut matches = document
-        .entries
-        .iter()
-        .filter(|row| row.plugin_id == source.plugin_id());
-    let row = matches
-        .next()
-        .ok_or_else(|| error(DistributionErrorId::InstallConflict))?;
-    if matches.next().is_some()
-        || row.version != source.version()
-        || row.package_sha256 != binding.package().archive_sha256()
-        || row.installed_tree_sha256 != binding.package().tree_sha256()
-    {
-        return Err(error(DistributionErrorId::InstallConflict));
-    }
-    Ok(row.visible)
 }

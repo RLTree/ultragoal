@@ -31,27 +31,42 @@ impl JourneyFixture {
         let source = root.join("source");
         fs::create_dir_all(&project).unwrap();
         fs::create_dir_all(source.join(".codex-plugin")).unwrap();
+        fs::create_dir_all(source.join("runtime")).unwrap();
         fs::create_dir_all(source.join("skills/harness-ultragoal")).unwrap();
         fs::create_dir_all(source.join("skills/prove")).unwrap();
-        let files: [(&str, Vec<u8>, &str); 3] = [
+        let files: [(&str, Vec<u8>, &str, u32); 4] = [
             (
                 ".codex-plugin/plugin.json",
                 serde_json::to_vec(&manifest()).unwrap(),
                 "manifest",
+                0o644,
+            ),
+            (
+                "runtime/runtime-probe-bin",
+                runtime_probe_bytes(),
+                "executable",
+                0o755,
             ),
             (
                 "skills/harness-ultragoal/SKILL.md",
                 b"---\nname: harness-ultragoal\ndescription: Harness front door\n---\n".to_vec(),
                 "skill",
+                0o644,
             ),
             (
                 "skills/prove/SKILL.md",
                 b"---\nname: prove\ndescription: Proof workflow\n---\n".to_vec(),
                 "skill",
+                0o644,
             ),
         ];
-        for (path, bytes, _) in &files {
+        for (path, bytes, _, mode) in &files {
             fs::write(source.join(path), bytes).unwrap();
+            #[cfg(unix)]
+            {
+                use std::os::unix::fs::PermissionsExt;
+                fs::set_permissions(source.join(path), fs::Permissions::from_mode(*mode)).unwrap();
+            }
         }
         let inventory = inventory(&files);
         Self {
@@ -116,13 +131,28 @@ struct Entry<'a> {
     role: &'a str,
 }
 
-fn inventory(files: &[(&str, Vec<u8>, &str)]) -> Vec<u8> {
+pub fn runtime_probe_bytes() -> Vec<u8> {
+    [
+        "#!/bin/sh\n",
+        "case \"$1\" in\n",
+        "  stale) nonce=stale ;;\n",
+        "  slow) sleep 1; nonce=\"$HUL_SESSION_NONCE\" ;;\n",
+        "  \"\"|valid) nonce=\"$HUL_SESSION_NONCE\" ;;\n",
+        "  *) nonce=stale ;;\n",
+        "esac\n",
+        "printf '%s\\n' \"HUL_RUNTIME_OBSERVATION={\\\"schema\\\":\\\"harness-ultragoal.runtime-probe.v1\\\",\\\"session_nonce\\\":\\\"$nonce\\\"}\"\n",
+    ]
+    .concat()
+    .into_bytes()
+}
+
+fn inventory(files: &[(&str, Vec<u8>, &str, u32)]) -> Vec<u8> {
     let entries = files
         .iter()
-        .map(|(path, bytes, role)| Entry {
+        .map(|(path, bytes, role, mode)| Entry {
             path,
             object_type: "regular-file",
-            mode: 0o644,
+            mode: *mode,
             sha256: digest(bytes),
             byte_length: bytes.len() as u64,
             role,

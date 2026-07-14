@@ -39,7 +39,7 @@ impl HostCapabilityDeclaration {
         let home_id = directory_id(&home_canonical)?;
         let project_id = directory_id(project)?;
         let runtime_program_id = match runtime_program {
-            Some(path) if executable(path)? && is_under(path, &home_canonical)? => {
+            Some(path) if supported_runtime_program(path, &home_canonical)? => {
                 Some(executable_identity(path)?)
             }
             Some(_) | None => None,
@@ -207,13 +207,6 @@ pub struct JourneyBinding {
     host_id: String,
     capability_sha256: String,
     binding_sha256: String,
-}
-
-fn is_under(path: &Path, root: &Path) -> Result<bool, DistributionError> {
-    let canonical = path
-        .canonicalize()
-        .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
-    Ok(canonical.starts_with(root))
 }
 
 fn executable_identity(path: &Path) -> Result<String, DistributionError> {

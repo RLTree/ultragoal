@@ -4,19 +4,19 @@ use crate::distribution::{
     RuntimeProbePlan, RuntimeVerdict, ScopedInstall, execute_runtime_probe, install,
 };
 use crate::distribution_fixture::Fixture;
-use crate::package_journey_fixture::JourneyFixture;
+use crate::package_journey_fixture::{JourneyFixture, runtime_probe_bytes};
 use serde_json::json;
 use std::path::PathBuf;
 use std::time::Duration;
 
 pub fn program() -> PathBuf {
-    std::env::current_exe().unwrap()
+    PathBuf::from("runtime/runtime-probe-bin")
 }
 
 pub fn installed_program(root: &std::path::Path) -> PathBuf {
     let target = root.join("runtime/runtime-probe-bin");
     std::fs::create_dir_all(target.parent().unwrap()).unwrap();
-    std::fs::copy(program(), &target).unwrap();
+    std::fs::write(&target, runtime_probe_bytes()).unwrap();
     #[cfg(unix)]
     {
         use std::os::unix::fs::PermissionsExt;
@@ -26,30 +26,15 @@ pub fn installed_program(root: &std::path::Path) -> PathBuf {
 }
 
 pub fn valid_args() -> Vec<String> {
-    vec![
-        "--exact".into(),
-        "runtime_session::runtime_probe_child".into(),
-        "--nocapture".into(),
-        "--test-threads=1".into(),
-    ]
+    vec!["valid".into()]
 }
 
 fn stale_args() -> Vec<String> {
-    vec![
-        "--exact".into(),
-        "runtime_session::runtime_probe_child_stale".into(),
-        "--nocapture".into(),
-        "--test-threads=1".into(),
-    ]
+    vec!["stale".into()]
 }
 
 fn slow_args() -> Vec<String> {
-    vec![
-        "--exact".into(),
-        "runtime_session::runtime_probe_child_slow".into(),
-        "--nocapture".into(),
-        "--test-threads=1".into(),
-    ]
+    vec!["slow".into()]
 }
 
 #[test]
@@ -119,10 +104,11 @@ fn stale_subprocess_receipt_and_dormant_report_cannot_become_runtime_proof() {
     .unwrap();
     let binding =
         JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
-    let stale = RuntimeProbePlan::new(
+    let stale = RuntimeProbePlan::from_installed_package(
         binding.clone(),
         &host,
         installed.snapshot(),
+        &package,
         &executable,
         stale_args(),
         Duration::from_secs(10),
@@ -175,10 +161,11 @@ fn executable_substitution_during_probe_fails_final_revalidation() {
     .unwrap();
     let binding =
         JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
-    let plan = RuntimeProbePlan::new(
+    let plan = RuntimeProbePlan::from_installed_package(
         binding,
         &host,
         installed.snapshot(),
+        &package,
         &copied,
         slow_args(),
         Duration::from_secs(10),

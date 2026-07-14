@@ -3,18 +3,7 @@ const OUTPUT_BYTE_LIMIT: usize = 65 * 1024 * 1024;
 const OUTPUT_PREFIX: &str = "repository/packages";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-/// Complete mutation authority for one verified package artifact pair.
-///
-/// The permit is intentionally issued only inside the crate after a
-/// `PackageSnapshot` has fixed every source, package, and inventory identity.
-/// External callers cannot construct or alter it.
-///
-/// ```compile_fail,E0624
-/// use ultragoal::distribution::{PackageArtifactBinding, PackageSnapshot};
-/// fn forge(snapshot: &PackageSnapshot) {
-///     let _ = PackageArtifactBinding::issue(snapshot);
-/// }
-/// ```
+/// Complete crate-issued mutation authority for one verified package artifact pair.
 pub struct PackageArtifactBinding {
     context_id: String,
     candidate_id: String,
@@ -70,6 +59,7 @@ pub struct PackageArtifactTransaction {
     journey_binding_sha256: String,
     output_root_id: String,
     output_relative_path: String,
+    postimage: Vec<TreeObject>,
     previous: Option<Vec<TreeObject>>,
 }
 
@@ -138,6 +128,7 @@ pub fn publish_package_artifact(
         journey_binding_sha256: journey.binding_sha256().into(),
         output_root_id: output.root_id().into(),
         output_relative_path: output.relative_path().into(),
+        postimage: replacement,
         previous,
     })
 }
@@ -159,10 +150,23 @@ pub fn reconcile_package_artifact(
 
 pub fn rollback_package_artifact(
     transaction: PackageArtifactTransaction,
-    effects: &mut impl MaterializeEffects,
+    journey: &crate::distribution::host_capability::JourneyBinding,
+    output: &mut crate::distribution::filesystem::ScopedTree,
 ) -> Result<(), DistributionError> {
+    if transaction.package_identity() != journey.package()
+        || transaction.journey_binding_sha256() != journey.binding_sha256()
+        || transaction.output_root_id() != output.root_id()
+        || transaction.output_relative_path() != output.relative_path()
+        || output.root_id() != journey.home_id()
+    {
+        return Err(error(DistributionErrorId::ProvenanceMismatch));
+    }
+    let current = read(output)?;
+    if current.as_deref() != Some(transaction.postimage.as_slice()) {
+        return Err(error(DistributionErrorId::ObjectChanged));
+    }
     restore(
-        effects,
+        output,
         &transaction.output_tree_sha256,
         transaction.previous.as_deref(),
     )

@@ -23,8 +23,34 @@ impl RuntimeProbePlan {
         argv: Vec<String>,
         timeout: Duration,
     ) -> Result<Self, DistributionError> {
+        let _ = (binding, host, install, program, argv, timeout);
+        Err(error(DistributionErrorId::CapabilityMismatch))
+    }
+
+    pub fn from_installed_package(
+        binding: JourneyBinding,
+        host: &HostCapabilityDeclaration,
+        install: &InstallSnapshot,
+        package: &PackageSnapshot,
+        program: &Path,
+        argv: Vec<String>,
+        timeout: Duration,
+    ) -> Result<Self, DistributionError> {
         host.ensure_binding(&binding)?;
+        let executable_sha256 = executable_digest(program)?;
+        let runtime_entry = package
+            .entries()
+            .iter()
+            .filter(|row| row.role() == PackageRole::Executable)
+            .collect::<Vec<_>>();
+        let Some(entry) = runtime_entry.first() else {
+            return Err(error(DistributionErrorId::CapabilityMismatch));
+        };
         if host.state(Capability::Runtime) != HostCapabilityState::Supported
+            || runtime_entry.len() != 1
+            || entry.path() != SUPPORTED_RUNTIME_PROGRAM
+            || entry.sha256() != executable_sha256
+            || package.identity() != binding.package()
             || install.context_id() != binding.package().source().context_id()
             || install.candidate_id() != binding.package().source().candidate_id()
             || install.package_sha256() != binding.package().archive_sha256()
@@ -40,7 +66,6 @@ impl RuntimeProbePlan {
         {
             return Err(error(DistributionErrorId::CapabilityMismatch));
         }
-        let executable_sha256 = executable_digest(program)?;
         let session_nonce = sha256(
             format!(
                 "{}\0{}\0{}",

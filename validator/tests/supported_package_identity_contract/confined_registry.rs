@@ -1,8 +1,9 @@
-fn confined_registry_observations(
+fn confined_registry_observation(
     fixture: &Fixture,
     binding: &JourneyBinding,
     host: &HostCapabilityDeclaration,
-) -> ultragoal::distribution::RegistryObservations {
+    install: &ultragoal::distribution::InstallSnapshot,
+) -> ultragoal::distribution::AppRegistryObservation {
     let registry = registry_document(binding, true, true).unwrap();
     let caller_bytes = observe_app_registry(Some(&registry), binding, host).unwrap();
     assert_eq!(
@@ -56,16 +57,29 @@ fn confined_registry_observations(
     fs::remove_dir_all(substitute).unwrap();
     let mut registry_file = ScopedFile::new(confined, "app/registry.json").unwrap();
     let app_registry = observe_registry_file(&mut registry_file, binding, host).unwrap();
-    let discovery = discovery_document(binding, true).unwrap();
-    fs::write(fixture.0.join("host/discovery.json"), &discovery).unwrap();
-    let mut discovery_file = ScopedFile::new(
+    let mut caller_discovery = ScopedFile::new(
         ConfinedRoot::open(&fixture.0).unwrap(),
         "host/discovery.json",
     )
     .unwrap();
-    let discovery = observe_discovery_file(&mut discovery_file, binding, host).unwrap();
-    ultragoal::distribution::RegistryObservations {
-        app_registry,
-        discovery,
-    }
+    assert_eq!(
+        ultragoal::distribution::observe_discovery_file(&mut caller_discovery, binding, host)
+            .unwrap_err()
+            .id(),
+        DistributionErrorId::ProvenanceMismatch,
+        "caller-written discovery documents cannot mint discovery authority"
+    );
+    let mut installed = ScopedFile::new(
+        ConfinedRoot::open(&fixture.0).unwrap(),
+        "plugins/harness-ultragoal.hugpkg",
+    )
+    .unwrap();
+    assert_eq!(
+        observe_supported_host_discovery(&mut installed, binding, host, install, &app_registry)
+            .unwrap_err()
+            .id(),
+        DistributionErrorId::ObjectUnavailable,
+        "package-present and registry-present cannot substitute for host discovery"
+    );
+    app_registry
 }

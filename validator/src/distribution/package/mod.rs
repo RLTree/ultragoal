@@ -24,6 +24,7 @@ pub use plan::{
     plan_package_from_inventory, verify_package,
 };
 include_production_package_module!();
+#[cfg(not(test))]
 pub use product::{
     ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
     ProductionPackageSession, capture_product_package, verify_product_package,
