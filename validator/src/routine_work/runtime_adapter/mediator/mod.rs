@@ -62,7 +62,9 @@ pub(crate) use incomplete_outcome::*;
 pub(crate) use intent_mediation::*;
 pub(crate) use no_op_mediation::*;
 #[cfg(test)]
-pub(crate) use process::test_require_root_broker_before_spawn;
+pub(crate) use process::{
+    test_probe_execute_without_root_broker, test_require_root_broker_before_spawn,
+};
 pub(crate) use read_source_binding::*;
 pub(crate) use reuse_input_index::*;
 pub(crate) use rust_source_observation::*;

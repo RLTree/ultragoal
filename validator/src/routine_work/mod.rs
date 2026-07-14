@@ -59,14 +59,12 @@ pub(crate) use runtime_adapter::{
 };
 
 #[cfg(test)]
-pub(crate) use runtime_adapter::test_require_root_broker_before_spawn;
-
-#[cfg(test)]
 pub(crate) use authority::set_test_live_authority_hook;
 #[cfg(test)]
 pub(crate) use runtime_adapter::{
     TestProcessSetupFailure, set_test_mediator_finish_failure, set_test_mediator_post_spawn_hook,
     set_test_mediator_pre_spawn_hook, set_test_output_capture_hook, set_test_process_setup_failure,
-    set_test_read_source_capture_hook, test_probe_output_confinement, test_probe_read_confinement,
-    test_spawn_count,
+    set_test_read_source_capture_hook, test_probe_execute_without_root_broker,
+    test_probe_output_confinement, test_probe_read_confinement,
+    test_require_root_broker_before_spawn, test_spawn_count,
 };
