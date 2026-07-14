@@ -5,6 +5,7 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 
 use super::issuer_compile;
+use super::issuer_hidden_api::{file_has_hidden_public_api, tree_has_hidden_public_api};
 
 #[test]
 fn sealed_issuer_and_grant_entrypoints_are_not_externally_callable() {
@@ -48,6 +49,15 @@ fn sealed_issuer_and_grant_entrypoints_are_not_externally_callable() {
     assert!(file_has_hidden_public_api(
         &fs::read_to_string(scratch.join("public_surface.rs")).unwrap()
     ));
+    for mutant in [
+        "pub struct Carrier { #[doc(hidden)] pub grant: fn() }",
+        "pub enum Authority { #[doc(hidden)] Grant }",
+        "pub struct Api; impl Api { #[cfg_attr(all(), doc(hidden))] pub fn issue() {} }",
+        "grant_api!();",
+        "unsafe extern \"C\" { #[doc(hidden)] pub fn issue(); }",
+    ] {
+        assert!(file_has_hidden_public_api(mutant), "missed: {mutant}");
+    }
     source
         .write_all(b"\nimpl ApiSentinel { pub fn grant(&self) {} pub const GRANT: () = (); }\n")
         .unwrap();
@@ -111,82 +121,6 @@ fn public_inventory(docs: &Path) -> Vec<u8> {
         bytes.extend(data);
     }
     bytes
-}
-
-fn tree_has_hidden_public_api(root: &Path) -> bool {
-    let mut entries = fs::read_dir(root)
-        .unwrap()
-        .map(|entry| entry.unwrap().path())
-        .collect::<Vec<_>>();
-    entries.sort();
-    entries.into_iter().any(|path| {
-        if path.is_dir() {
-            tree_has_hidden_public_api(&path)
-        } else {
-            path.extension().is_some_and(|value| value == "rs")
-                && file_has_hidden_public_api(&fs::read_to_string(path).unwrap())
-        }
-    })
-}
-
-fn file_has_hidden_public_api(source: &str) -> bool {
-    let file = syn::parse_file(source).expect("issuer visibility source parses");
-    file.items.iter().any(item_has_hidden_public_api)
-}
-
-fn item_has_hidden_public_api(item: &syn::Item) -> bool {
-    use syn::Item;
-    let direct = match item {
-        Item::Const(value) => public(&value.vis) && hidden(&value.attrs),
-        Item::Enum(value) => public(&value.vis) && hidden(&value.attrs),
-        Item::ExternCrate(value) => public(&value.vis) && hidden(&value.attrs),
-        Item::Fn(value) => public(&value.vis) && hidden(&value.attrs),
-        Item::Mod(value) => public(&value.vis) && hidden(&value.attrs),
-        Item::Static(value) => public(&value.vis) && hidden(&value.attrs),
-        Item::Struct(value) => public(&value.vis) && hidden(&value.attrs),
-        Item::Trait(value) => public(&value.vis) && hidden(&value.attrs),
-        Item::TraitAlias(value) => public(&value.vis) && hidden(&value.attrs),
-        Item::Type(value) => public(&value.vis) && hidden(&value.attrs),
-        Item::Union(value) => public(&value.vis) && hidden(&value.attrs),
-        Item::Use(value) => public(&value.vis) && hidden(&value.attrs),
-        _ => false,
-    };
-    if direct {
-        return true;
-    }
-    match item {
-        Item::Impl(value) => value.items.iter().any(|item| match item {
-            syn::ImplItem::Const(value) => public(&value.vis) && hidden(&value.attrs),
-            syn::ImplItem::Fn(value) => public(&value.vis) && hidden(&value.attrs),
-            syn::ImplItem::Type(value) => public(&value.vis) && hidden(&value.attrs),
-            _ => false,
-        }),
-        Item::Mod(value) => value
-            .content
-            .as_ref()
-            .is_some_and(|(_, items)| items.iter().any(item_has_hidden_public_api)),
-        Item::Trait(value) if public(&value.vis) => value.items.iter().any(|item| match item {
-            syn::TraitItem::Const(value) => hidden(&value.attrs),
-            syn::TraitItem::Fn(value) => hidden(&value.attrs),
-            syn::TraitItem::Macro(value) => hidden(&value.attrs),
-            syn::TraitItem::Type(value) => hidden(&value.attrs),
-            _ => false,
-        }),
-        _ => false,
-    }
-}
-
-fn public(visibility: &syn::Visibility) -> bool {
-    matches!(visibility, syn::Visibility::Public(_))
-}
-
-fn hidden(attributes: &[syn::Attribute]) -> bool {
-    attributes.iter().any(|attribute| {
-        let syn::Meta::List(meta) = &attribute.meta else {
-            return false;
-        };
-        meta.path.is_ident("doc") && meta.tokens.to_string() == "hidden"
-    })
 }
 
 fn assert_private_failure(output: &Output, code: &str, probe: &str) {

@@ -20,6 +20,11 @@ impl OwnedScratch {
             match fs::create_dir(&path) {
                 Ok(()) => {
                     fs::set_permissions(&path, fs::Permissions::from_mode(0o700)).unwrap();
+                    fs::write(
+                        path.join("OWNERSHIP.txt"),
+                        b"issuer visibility scratch; retained only if the owning test fails\n",
+                    )
+                    .expect("issuer scratch ownership marker");
                     return Self { path };
                 }
                 Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
@@ -36,12 +41,7 @@ impl OwnedScratch {
 
 impl Drop for OwnedScratch {
     fn drop(&mut self) {
-        if std::thread::panicking() {
-            let _ = fs::write(
-                self.path.join("RETAINED-FAILURE.txt"),
-                b"issuer visibility failure retained under configured scratch\n",
-            );
-        } else {
+        if !std::thread::panicking() {
             fs::remove_dir_all(&self.path).expect("owned issuer scratch cleanup");
         }
     }

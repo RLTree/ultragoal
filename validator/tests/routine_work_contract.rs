@@ -32,6 +32,8 @@ mod invariant_control_map_mediator_a;
 mod invariant_control_map_mediator_b;
 #[path = "routine_work_contract/issuer_compile.rs"]
 mod issuer_compile;
+#[path = "routine_work_contract/issuer_hidden_api.rs"]
+mod issuer_hidden_api;
 #[path = "routine_work_contract/issuer_visibility.rs"]
 mod issuer_visibility;
 #[path = "routine_work_contract/local_capture.rs"]
