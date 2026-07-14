@@ -22,16 +22,16 @@ pub(crate) struct RootReconcilePermitIssuance<'a> {
     pub(crate) resolution: &'a EffectResolution,
 }
 
-struct RootPermitIssuance<'a> {
-    operation: RootOperation,
-    binding: Binding,
-    workspace_identity: &'a str,
-    journal_head_identity: &'a str,
-    issued_tick: u64,
-    expires_tick: u64,
-    nonce: &'a [u8],
-    target: PermitTarget,
-    decision_binding: PermitDecisionBinding,
+pub(super) struct RootPermitIssuance<'a> {
+    pub(super) operation: RootOperation,
+    pub(super) binding: Binding,
+    pub(super) workspace_identity: &'a str,
+    pub(super) journal_head_identity: &'a str,
+    pub(super) issued_tick: u64,
+    pub(super) expires_tick: u64,
+    pub(super) nonce: &'a [u8],
+    pub(super) target: PermitTarget,
+    pub(super) decision_binding: PermitDecisionBinding,
 }
 
 impl RootAuthority {
@@ -111,7 +111,10 @@ impl RootAuthority {
         })
     }
 
-    fn issue(&self, request: RootPermitIssuance<'_>) -> Result<RootPermit, ProductError> {
+    pub(super) fn issue(
+        &self,
+        request: RootPermitIssuance<'_>,
+    ) -> Result<RootPermit, ProductError> {
         let RootPermitIssuance {
             operation,
             binding,
@@ -149,7 +152,10 @@ impl RootAuthority {
         Ok(permit)
     }
 
-    fn verify_action(&self, request: RootActionPermitVerification<'_>) -> Result<(), ProductError> {
+    pub(super) fn verify_action(
+        &self,
+        request: RootActionPermitVerification<'_>,
+    ) -> Result<(), ProductError> {
         let RootActionPermitVerification {
             permit,
             expected_root,
@@ -176,7 +182,7 @@ impl RootAuthority {
         })
     }
 
-    fn verify_reconcile(
+    pub(super) fn verify_reconcile(
         &self,
         request: RootReconcilePermitVerification<'_>,
     ) -> Result<(), ProductError> {

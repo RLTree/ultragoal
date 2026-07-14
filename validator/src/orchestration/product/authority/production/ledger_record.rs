@@ -7,7 +7,7 @@ fn validate_record(
         || record.sequence != prior.len() as u64 + 1
         || record.prior_record_id != prior.last().map(|record| record.record_id.clone())
         || record.record_id != record_id(record)?
-        || !super::super::constant_time_equal(
+        || !super::root_authority::constant_time_equal(
             record.authenticator.as_bytes(),
             authenticate(key, record)?.as_bytes(),
         )
@@ -72,5 +72,5 @@ fn authenticate(key: &[u8; 32], record: &LedgerRecord) -> Result<String, Product
 }
 
 fn validate_digest(value: &str) -> Result<(), ProductError> {
-    super::super::validate_digest(value)
+    super::root_authority::validate_digest(value)
 }

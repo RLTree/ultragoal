@@ -3,17 +3,22 @@ use super::super::super::runtime_adapter::{
     CurrentRuntimeView, OrchestrationRuntimeAdapter, RuntimeActionRequest, RuntimeActionSource,
 };
 use super::super::super::{
-    journal_head_identity, reconcile, recover, resume, ProductContext, ProductWorkspace,
-    ReconcileOutcome, ReconcileRequest, RecoverOutcome, RecoverRequest, ResumeOutcome,
-    ResumeRequest,
+    journal_head_identity, ProductContext, ProductWorkspace, ReconcileOutcome, ReconcileRequest,
+    RecoverOutcome, RecoverRequest, ResumeOutcome, ResumeRequest,
 };
-use super::super::{
-    ExecutionAuthority, RootActionPermitVerification, RootAuthority,
-    RootReconcilePermitVerification,
+use super::root_authority::{
+    RootActionPermitVerification, RootAuthority, RootReconcilePermitVerification,
 };
 use super::{ProductError, RootOperation, RootPermit};
 
-pub(super) enum ExecutionRequest<'a> {
+mod reconcile;
+mod recover;
+mod resume;
+mod route;
+
+pub(super) use route::{ReservedExecution, ValidatedExecution};
+
+enum ExecutionRequest<'a> {
     Resume {
         context: &'a ProductContext,
         workspace: &'a ProductWorkspace,
@@ -47,7 +52,7 @@ pub(crate) enum ProductionExecutionOutcome {
 }
 
 impl<'a> ExecutionRequest<'a> {
-    pub(super) fn workspace(&self) -> &'a ProductWorkspace {
+    fn workspace(&self) -> &'a ProductWorkspace {
         match self {
             Self::Resume { workspace, .. }
             | Self::Recover { workspace, .. }
@@ -55,7 +60,7 @@ impl<'a> ExecutionRequest<'a> {
         }
     }
 
-    pub(super) fn prevalidate(&self) -> Result<(), ProductError> {
+    fn prevalidate(&self) -> Result<(), ProductError> {
         match self {
             Self::Resume {
                 context,
@@ -93,7 +98,7 @@ impl<'a> ExecutionRequest<'a> {
         }
     }
 
-    pub(super) fn permit(&self) -> &'a RootPermit {
+    fn permit(&self) -> &'a RootPermit {
         match self {
             Self::Resume { permit, .. }
             | Self::Recover { permit, .. }
@@ -101,7 +106,7 @@ impl<'a> ExecutionRequest<'a> {
         }
     }
 
-    pub(super) fn verify(&self, authority: &RootAuthority) -> Result<(), ProductError> {
+    fn verify(&self, authority: &RootAuthority) -> Result<(), ProductError> {
         match self {
             Self::Resume {
                 context,
@@ -154,47 +159,30 @@ impl<'a> ExecutionRequest<'a> {
         }
     }
 
-    pub(super) fn execute(
-        self,
-        authority: &RootAuthority,
-    ) -> Result<ProductionExecutionOutcome, ProductError> {
+    fn execute(self) -> Result<ProductionExecutionOutcome, ProductError> {
         match self {
             Self::Resume {
                 context,
                 workspace,
                 request,
                 ..
-            } => resume(
-                context,
-                workspace,
-                ExecutionAuthority::new(authority),
-                request,
-            )
-            .map(ProductionExecutionOutcome::Resume),
+            } => {
+                resume::execute(context, workspace, request).map(ProductionExecutionOutcome::Resume)
+            }
             Self::Recover {
                 context,
                 workspace,
                 request,
                 ..
-            } => recover(
-                context,
-                workspace,
-                ExecutionAuthority::new(authority),
-                request,
-            )
-            .map(ProductionExecutionOutcome::Recover),
+            } => recover::execute(context, workspace, request)
+                .map(ProductionExecutionOutcome::Recover),
             Self::Reconcile {
                 context,
                 workspace,
                 request,
                 ..
-            } => reconcile(
-                context,
-                workspace,
-                ExecutionAuthority::new(authority),
-                request,
-            )
-            .map(ProductionExecutionOutcome::Reconcile),
+            } => reconcile::execute(context, workspace, request)
+                .map(ProductionExecutionOutcome::Reconcile),
         }
     }
 }

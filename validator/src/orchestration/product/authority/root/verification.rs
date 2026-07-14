@@ -1,23 +1,23 @@
-struct RootActionPermitVerification<'a> {
-    permit: &'a RootPermit,
-    expected_root: &'a Actor,
-    operation: RootOperation,
-    binding: &'a Binding,
-    workspace_identity: &'a str,
-    journal_head_identity: &'a str,
-    tick: u64,
-    target: &'a PermitTarget,
+pub(super) struct RootActionPermitVerification<'a> {
+    pub(super) permit: &'a RootPermit,
+    pub(super) expected_root: &'a Actor,
+    pub(super) operation: RootOperation,
+    pub(super) binding: &'a Binding,
+    pub(super) workspace_identity: &'a str,
+    pub(super) journal_head_identity: &'a str,
+    pub(super) tick: u64,
+    pub(super) target: &'a PermitTarget,
 }
 
-struct RootReconcilePermitVerification<'a> {
-    permit: &'a RootPermit,
-    expected_root: &'a Actor,
-    binding: &'a Binding,
-    workspace_identity: &'a str,
-    journal_head_identity: &'a str,
-    tick: u64,
-    target: &'a PermitTarget,
-    resolution: &'a EffectResolution,
+pub(super) struct RootReconcilePermitVerification<'a> {
+    pub(super) permit: &'a RootPermit,
+    pub(super) expected_root: &'a Actor,
+    pub(super) binding: &'a Binding,
+    pub(super) workspace_identity: &'a str,
+    pub(super) journal_head_identity: &'a str,
+    pub(super) tick: u64,
+    pub(super) target: &'a PermitTarget,
+    pub(super) resolution: &'a EffectResolution,
 }
 
 struct RootPermitVerification<'a> {
@@ -72,7 +72,7 @@ impl RootAuthority {
         Ok(())
     }
 
-    fn verify_observation(
+    pub(super) fn verify_observation(
         &self,
         permit: &RootPermit,
         expected_root: &Actor,
@@ -188,7 +188,7 @@ fn validate_identifier(value: &str) -> Result<(), ProductError> {
     Ok(())
 }
 
-fn validate_digest(value: &str) -> Result<(), ProductError> {
+pub(super) fn validate_digest(value: &str) -> Result<(), ProductError> {
     let Some(hex) = value.strip_prefix("sha256:") else {
         return Err(ProductError::AuthorityInvalid);
     };
@@ -206,7 +206,7 @@ fn digest(bytes: &[u8]) -> String {
     format!("sha256:{:x}", Sha256::digest(bytes))
 }
 
-fn constant_time_equal(left: &[u8], right: &[u8]) -> bool {
+pub(super) fn constant_time_equal(left: &[u8], right: &[u8]) -> bool {
     if left.len() != right.len() {
         return false;
     }

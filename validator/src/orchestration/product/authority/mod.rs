@@ -1,16 +1,15 @@
 use super::ProductError;
-use crate::orchestration::{Actor, Binding, EffectResolution};
+use crate::orchestration::Binding;
 use serde::{Deserialize, Serialize};
-use sha2::{Digest, Sha256};
 use std::fmt::{Debug, Formatter};
 
 include!("authority_schema.rs");
 
-include!("root/secret_binding.rs");
-
-include!("root/verification.rs");
-
 mod production;
+#[cfg(test)]
+pub(crate) use production::{
+    root_authority_for_test, RootActionPermitIssuance, RootAuthority, RootReconcilePermitIssuance,
+};
 pub use production::{PermitReplayState, ProductionRootAuthority};
 pub(crate) use production::{ProductionExecutionOutcome, ReservationObservation};
 

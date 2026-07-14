@@ -1,6 +1,6 @@
 use super::fixture::*;
 use std::collections::BTreeSet;
-use ultragoal::orchestration::product::command::OrchestrationStateRequest;
+use ultragoal::orchestration::product::command::{CommandProjection, OrchestrationStateRequest};
 use ultragoal::orchestration::product::runtime_adapter::{
     OrchestrationRuntimeAdapter, RuntimeActionRequest, RuntimeActionSource,
 };
@@ -15,13 +15,21 @@ fn current_and_interrupted_projections_are_recursive_zero_write() {
     let context = context();
     let workspace = ProductWorkspace::open(current.path()).unwrap();
     let adapter = OrchestrationRuntimeAdapter::new(&context, &workspace).unwrap();
-    adapter
+    let current_view = adapter
         .inspect_current(&OrchestrationStateRequest {
             expected_head: head,
             tick: 2,
             live_workers: BTreeSet::new(),
         })
         .unwrap();
+    for projection in [
+        CommandProjection::Inspect,
+        CommandProjection::Next,
+        CommandProjection::Diagnose(None),
+        CommandProjection::Diagnose(Some(digest('f'))),
+    ] {
+        let _ = adapter.project_current(&current_view, &projection).unwrap();
+    }
     assert_eq!(recursive_fingerprint(current.path()), before);
 
     let (interrupted, _, _, request) = interrupted_heartbeat("projection-interrupted");

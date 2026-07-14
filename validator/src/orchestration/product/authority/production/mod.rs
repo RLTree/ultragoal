@@ -8,12 +8,10 @@
 mod checkpoint;
 mod execution_transaction;
 mod ledger;
+mod root_authority;
 mod store;
 
-use super::{
-    PermitDecisionBinding, ProductError, RootAuthority, RootOperation, RootPermit,
-    RootPermitIssuance,
-};
+use super::{PermitDecisionBinding, ProductError, RootOperation, RootPermit};
 use ledger::{Ledger, LedgerState};
 use sha2::{Digest, Sha256};
 use std::fmt::{Debug, Formatter};
@@ -23,11 +21,16 @@ const NONCE_BYTES: usize = 32;
 const MAX_PERMIT_LIFETIME: u64 = 300;
 
 include!("permit_issuance.rs");
-include!("permit_execution.rs");
 include!("restart_reconciliation.rs");
 
-use execution_transaction::ExecutionRequest;
 pub(crate) use execution_transaction::ProductionExecutionOutcome;
+use execution_transaction::{ReservedExecution, ValidatedExecution};
+pub(crate) use root_authority::RootAuthority;
+use root_authority::RootPermitIssuance;
+#[cfg(test)]
+pub(crate) use root_authority::{
+    root_authority_for_test, RootActionPermitIssuance, RootReconcilePermitIssuance,
+};
 
 #[cfg(test)]
 mod interruption_tests;
@@ -50,7 +53,7 @@ impl Debug for ProductionRootAuthority {
     fn fmt(&self, formatter: &mut Formatter<'_>) -> std::fmt::Result {
         formatter
             .debug_struct("ProductionRootAuthority")
-            .field("root_actor", &self.authority.root_actor.as_str())
+            .field("root_actor", &self.authority.root_actor().as_str())
             .field("store", &"[owner-only]")
             .finish()
     }
@@ -75,13 +78,6 @@ impl ProductionRootAuthority {
     ) -> Result<Self, ProductError> {
         let (store, key) = store::Store::open_existing(root, root_actor.as_str())?;
         Ok(Self::new(root_actor, key, Ledger::open(store)?))
-    }
-
-    fn new(root_actor: crate::orchestration::Actor, key: [u8; 32], ledger: Ledger) -> Self {
-        Self {
-            authority: RootAuthority { root_actor, key },
-            ledger,
-        }
     }
 }
 

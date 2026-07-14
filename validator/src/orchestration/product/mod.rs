@@ -26,16 +26,13 @@ pub use authority::{
 };
 pub(crate) use authority::{ProductionExecutionOutcome, ReservationObservation};
 #[cfg(test)]
-pub(crate) use authority::{RootActionPermitIssuance, RootReconcilePermitIssuance};
+pub(crate) use authority::{RootActionPermitIssuance, RootAuthority, RootReconcilePermitIssuance};
 pub use context::{journal_head_identity, ProductContext, ProductWorkspace};
 pub(crate) use context::{open_engine, ReadOnlySink};
 pub use error::ProductError;
 pub use plan::{plan, PlanRequest, ProductPlan};
 pub use query::{query, QueryRequest};
-pub(crate) use reconcile::reconcile;
 pub use reconcile::{ReconcileOutcome, ReconcileRequest};
-pub(crate) use recover::recover;
 pub use recover::{RecoverOutcome, RecoverRequest};
-pub(crate) use resume::resume;
 pub use resume::{ResumeOutcome, ResumeRequest};
 pub use snapshot::{ProductCommitment, ProductSnapshot};

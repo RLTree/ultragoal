@@ -1,13 +1,13 @@
 mod orchestration_production_authority_contract {
     mod authority_boundary;
     mod causal_reconciliation;
-    mod coverage_migration;
     mod decision_binding;
     mod execution_binding;
     mod fixture;
     mod projection_staleness;
     mod race;
     mod reconciliation;
+    mod reconciliation_race;
     mod recovery;
     mod recovery_binding;
     mod rollback_security;
