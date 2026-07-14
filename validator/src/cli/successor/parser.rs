@@ -1,12 +1,12 @@
 use super::catalog::descriptor_for;
 use super::clap_error::map_clap_error;
 use super::clap_grammar::parser_command;
-use super::error::{ParseErrorId, ParseFailure};
-use super::input::{prepare_args, requested_help_target, version_is_standalone};
-use super::model::{
+use super::command_contract::{
     CommandDescriptor, Group, OptionArgument, OutputMode, ParseOutcome, ParsedInvocation,
     ParsedValue, ValueKind,
 };
+use super::error::{ParseErrorId, ParseFailure};
+use super::input::{prepare_args, requested_help_target, version_is_standalone};
 use super::value::parse_value;
 use clap::ArgMatches;
 use clap::error::ErrorKind;

@@ -7,7 +7,7 @@ fn trace_backend_request_uses_direct_lookup_when_target_event_has_trace_id() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-query-bound",
             "correlation_id": "corr-query-bound",
             "candidate_digest": candidate,
@@ -33,7 +33,7 @@ fn trace_backend_request_uses_direct_lookup_when_target_event_has_trace_id() {
 fn trace_transport_bounded_backend_errors_are_agent_legible() {
     let root = prepare_root("trace-transport-bounded-errors");
     let mut command = command();
-    command.operation = crate::cli::observe::types::ObserveOperation::TracesQuery;
+    command.operation = crate::cli::observe::command::ObserveOperation::TracesQuery;
     command.timeout_ms = 1;
 
     let search_error =
@@ -59,7 +59,7 @@ fn traces_query_uses_target_run_and_correlation_tags_when_target_event_exists() 
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     write_trace_target_event(&root, &candidate);
     let mut command = command();
-    command.operation = crate::cli::observe::types::ObserveOperation::TracesQuery;
+    command.operation = crate::cli::observe::command::ObserveOperation::TracesQuery;
 
     let query = super::super::super::transport::trace_query_for_test(&root, &command);
     let operation = super::super::super::transport::trace_operation_for_test(&root, &command);
@@ -90,7 +90,7 @@ fn target_trace_query_uses_exact_backend_trace_id_not_broad_search() {
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     write_trace_target_event(&root, &candidate);
     let mut command = command();
-    command.operation = crate::cli::observe::types::ObserveOperation::TracesQuery;
+    command.operation = crate::cli::observe::command::ObserveOperation::TracesQuery;
 
     let request =
         super::super::super::transport::trace_backend_request_for_test(&root, &command, "{}");
@@ -104,7 +104,7 @@ fn target_trace_query_uses_exact_backend_trace_id_not_broad_search() {
 fn trace_backend_request_uses_bounded_search_when_no_target_event_exists() {
     let root = prepare_root("trace-transport-no-target-search");
     let mut command = command();
-    command.operation = crate::cli::observe::types::ObserveOperation::TracesQuery;
+    command.operation = crate::cli::observe::command::ObserveOperation::TracesQuery;
 
     let request = super::super::super::transport::trace_backend_request_for_test(
         &root,
@@ -123,7 +123,7 @@ fn trace_query_falls_back_to_command_tags_when_target_event_lacks_run_and_correl
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "none",
             "correlation_id": "",
             "candidate_digest": candidate,
@@ -135,7 +135,7 @@ fn trace_query_falls_back_to_command_tags_when_target_event_lacks_run_and_correl
     )
     .expect("target event without query tags");
     let mut command = command();
-    command.operation = crate::cli::observe::types::ObserveOperation::TracesQuery;
+    command.operation = crate::cli::observe::command::ObserveOperation::TracesQuery;
 
     let query = super::super::super::transport::trace_query_for_test(&root, &command);
 
@@ -160,7 +160,7 @@ fn write_trace_target_event(root: &std::path::Path, candidate: &str) {
     crate::cli::observe::telemetry::spool_write_for_test(
         root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-query-bound",
             "correlation_id": "corr-query-bound",
             "candidate_digest": candidate,

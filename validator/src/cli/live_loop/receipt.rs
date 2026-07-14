@@ -32,7 +32,7 @@ pub(crate) fn loop_receipt(
         subcommand: "run",
         operation: "loop.run",
         surface: "live_loop",
-        law_id: crate::cli::observe::types::LAW_ID,
+        law_id: crate::cli::observe::command::LAW_ID,
         check_id: "observability-live-loop-verified-incremental-audit",
         claim_id: "live-loop-hot-repair-feedback",
         artifact_path: "validation_artifacts/current-state.json",

@@ -1,4 +1,4 @@
-use crate::cli::rust::types::RUST_RECEIPT_SCHEMA;
+use crate::cli::rust::operation::RUST_RECEIPT_SCHEMA;
 use serde_json::Value;
 
 pub(crate) fn surface_value_failures(value: &Value, expected_law: &str) -> Vec<String> {

@@ -61,7 +61,7 @@ fn metadata_snapshot(root: &Path) -> Vec<(PathBuf, u64, bool)> {
     rows
 }
 
-fn observe(raw: &[&str]) -> crate::cli::observe::types::ObserveCommand {
+fn observe(raw: &[&str]) -> crate::cli::observe::command::ObserveCommand {
     crate::cli::observe::parse(
         &raw.iter()
             .map(|item| (*item).to_string())

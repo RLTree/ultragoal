@@ -55,7 +55,7 @@ pub(crate) fn run(root: &Path, command: &SourceObligationsCommand) -> Result<i32
             subcommand: "check",
             operation: "source-obligations.check",
             surface: "source_obligations",
-            law_id: crate::cli::observe::types::LAW_ID,
+            law_id: crate::cli::observe::command::LAW_ID,
             check_id: "source-obligations-check-observability-binding",
             claim_id: "source_obligations_check",
             artifact_path: MATRIX_REL,

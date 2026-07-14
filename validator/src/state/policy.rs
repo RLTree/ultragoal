@@ -1,6 +1,6 @@
 use super::catalog::{DependencyActionSpec, DependencyStatus, HostGoalStatus, RuntimeField};
 use super::limits::{valid_id, valid_relative_path, valid_text};
-use super::types::{CeilingReduction, Scope};
+use super::product_state::{CeilingReduction, Scope};
 use std::collections::{BTreeMap, BTreeSet};
 
 pub(crate) fn validate_structure(spec: &DependencyActionSpec) -> Vec<String> {

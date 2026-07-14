@@ -1,4 +1,4 @@
-use crate::cli::rust::types::RustOperation;
+use crate::cli::rust::operation::RustOperation;
 use serde_json::{Value, json};
 use std::path::Path;
 use std::process::Command;

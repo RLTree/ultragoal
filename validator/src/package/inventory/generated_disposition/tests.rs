@@ -8,7 +8,21 @@ const OUTPUT: &str = "docs/generated/observability/command-inventory.json";
 fn root(label: &str) -> PathBuf {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     fs::create_dir_all(root.join("docs/generated/observability")).expect("generated directory");
-    fs::create_dir_all(root.join("migration")).expect("migration directory");
+    fs::create_dir_all(root.join("migration/generated-surface-authority"))
+        .expect("migration directory");
+    fs::create_dir_all(root.join("scripts")).expect("scripts directory");
+    fs::write(
+        root.join("scripts/project-generated-authority"),
+        b"generator",
+    )
+    .expect("registry generator");
+    fs::write(root.join("scripts/project-agent-standards"), b"generator")
+        .expect("projection generator");
+    fs::write(
+        root.join("migration/generated-surface-authority/test-shard.json"),
+        b"{}",
+    )
+    .expect("registry source");
     root
 }
 
@@ -33,8 +47,13 @@ fn retained(output: &str, bytes: &[u8]) -> serde_json::Value {
 
 fn write_registry(root: &Path, surfaces: serde_json::Value) -> Vec<u8> {
     let bytes = serde_json::to_vec(&json!({
-        "schema_version": "GeneratedSurfaceAuthority-v2",
+        "schema_version": "GeneratedSurfaceAuthority-v3",
         "contract_id": "harness-ultragoal-successor-contract-v2",
+        "registry_projection": {
+            "generator": "scripts/project-generated-authority",
+            "canonical_sources": ["migration/generated-surface-authority/test-shard.json"],
+            "regeneration_command": "scripts/project-generated-authority write"
+        },
         "surfaces": surfaces
     }))
     .expect("registry bytes");
@@ -128,7 +147,7 @@ fn retained_context_rejects_symlinks_and_fifos_without_reading_them() {
 }
 
 #[test]
-fn canonical_projection_stays_regeneration_bound_and_identity_bearing() {
+fn source_projection_is_verified_but_cannot_enter_package_identity() {
     let root = root("package-canonical-generated-output");
     let input = "docs/input.txt";
     fs::create_dir_all(root.join("docs")).expect("docs");
@@ -147,22 +166,26 @@ fn canonical_projection_stays_regeneration_bound_and_identity_bearing() {
     write_registry(
         &root,
         json!([{
-            "disposition": "canonical_projection",
+            "disposition": "source_projection",
             "output": OUTPUT,
-            "generator": "HCT-INVENTORY",
-            "recipe": "input-digest-index-v1",
-            "inputs": [input]
+            "generator": "scripts/project-agent-standards",
+            "canonical_sources": [input],
+            "regeneration_command": "scripts/project-agent-standards write",
+            "output_sha256": digest(&output)
         }]),
     );
     write_manifest(&root, &[input, OUTPUT]);
-    let before = super::super::package_digest(&root).expect("canonical identity");
+    assert!(
+        super::super::package_digest(&root)
+            .expect_err("provenance-only output")
+            .contains("provenance-only")
+    );
     fs::write(root.join(OUTPUT), b"drift").expect("drift");
     assert!(
         super::super::package_digest(&root)
-            .expect_err("canonical drift")
-            .contains("output drift")
+            .expect_err("projection drift")
+            .contains("digest mismatch")
     );
-    assert!(before.starts_with("sha256:"));
     fs::remove_dir_all(root).expect("cleanup");
 }
 
@@ -175,7 +198,7 @@ fn malformed_or_duplicate_key_registry_fails_closed() {
     assert!(super::super::package_digest(&root).is_err());
     fs::write(
         root.join(REGISTRY_PATH),
-        br#"{"schema_version":"GeneratedSurfaceAuthority-v2","schema_version":"GeneratedSurfaceAuthority-v2","contract_id":"harness-ultragoal-successor-contract-v2","surfaces":[]}"#,
+        br#"{"schema_version":"GeneratedSurfaceAuthority-v3","schema_version":"GeneratedSurfaceAuthority-v3","contract_id":"harness-ultragoal-successor-contract-v2","registry_projection":{"generator":"scripts/project-generated-authority","canonical_sources":["migration/generated-surface-authority/test-shard.json"],"regeneration_command":"scripts/project-generated-authority write"},"surfaces":[]}"#,
     )
     .expect("duplicate key registry");
     assert!(super::super::package_digest(&root).is_err());

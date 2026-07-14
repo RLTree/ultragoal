@@ -1,5 +1,5 @@
 use crate::audit::observability::specs;
-use crate::cli::observe::types::ObserveCommand;
+use crate::cli::observe::command::ObserveCommand;
 use serde_json::{Value, json};
 use std::path::Path;
 use std::time::Instant;

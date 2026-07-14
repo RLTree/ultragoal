@@ -1,5 +1,5 @@
+use crate::cli::control::plane::operation::ControlOperation;
 use crate::cli::control::plane::surface;
-use crate::cli::control::plane::types::ControlOperation;
 use serde_json::json;
 use std::path::Path;
 

@@ -4,7 +4,7 @@ use crate::state::catalog::{
     ActionDefinition, ActionKind, DependencyFact, DependencyStatus, FactAuthority,
 };
 use crate::state::engine::derive_bound;
-use crate::state::types::{AuthorityRequest, AuthorityRequirement, NextActionKind};
+use crate::state::product_state::{AuthorityRequest, AuthorityRequirement, NextActionKind};
 
 fn missing(id: &str) -> DependencyFact {
     DependencyFact {

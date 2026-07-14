@@ -51,7 +51,7 @@ pub(crate) fn run(root: &Path, command: &MandatoryLawValidationCommand) -> Resul
             subcommand: "validation",
             operation: "mandatory-law.validation",
             surface: "mandatory_law",
-            law_id: crate::cli::observe::types::LAW_ID,
+            law_id: crate::cli::observe::command::LAW_ID,
             check_id: "mandatory-law-validation-observability-binding",
             claim_id: "mandatory_law_validation",
             artifact_path: REGISTRY_REL,

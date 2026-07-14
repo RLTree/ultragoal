@@ -1,0 +1,163 @@
+use super::*;
+
+pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
+    let (class, id, cause, surface, repair, effect, ceiling) = match failure {
+        PublicFailure::InvalidInvocation => (
+            ExitClass::InvalidInvocation,
+            DiagnosticId::UnexpectedArguments,
+            "the routine adapter received arguments outside the exact typed check-routine route",
+            "routine public invocation",
+            "reparse the exact command through the successor grammar",
+            "none",
+            "no workspace or host-state effect is authorized or performed",
+        ),
+        PublicFailure::Manifest(ManifestFailure::MissingOrUnreadable) => (
+            ExitClass::BlockedAuthority,
+            DiagnosticId::AuthorityRequired,
+            "the adopted routine public manifest is missing or cannot be read safely",
+            "routine source authority",
+            "restore the exact bounded config/routine-public.json source and retry",
+            "none",
+            "no routine effect is authorized or performed",
+        ),
+        PublicFailure::Manifest(ManifestFailure::Invalid) | PublicFailure::Catalog(_) => (
+            ExitClass::BlockedAuthority,
+            DiagnosticId::AuthorityRequired,
+            "the routine manifest or production catalog is malformed, substituted, or outside the fixed public policy",
+            "routine source and command authority",
+            "repair the exact adopted manifest and immutable production catalog without broadening runner authority",
+            "none",
+            "no routine effect is authorized or performed",
+        ),
+        PublicFailure::Manifest(ManifestFailure::ConcurrentMutation) => (
+            ExitClass::ActionableFinding,
+            DiagnosticId::StaleContext,
+            "the routine source changed during bounded observation",
+            "routine source authority",
+            "stabilize the target candidate and rerun from a fresh context",
+            "none",
+            "no routine effect is authorized or performed",
+        ),
+        PublicFailure::Context => (
+            ExitClass::ActionableFinding,
+            DiagnosticId::ContextUnavailable,
+            "an exact workspace-write context could not be constructed for the requested target",
+            "routine target binding",
+            "stabilize the exact Git worktree and adopted inputs, then retry",
+            "none",
+            "no routine effect is authorized or performed",
+        ),
+        PublicFailure::Routine(error) => routine_failure(error),
+        PublicFailure::Host(HostFailure::Unsupported) => (
+            ExitClass::UnsupportedCapability,
+            DiagnosticId::DownstreamToolUnavailable,
+            "the routine public production mediator is supported only on a Darwin host",
+            "routine production host",
+            "run the command on the supported Darwin runtime",
+            "none",
+            "routine execution remains unavailable on this host",
+        ),
+        PublicFailure::Host(HostFailure::Unavailable) => (
+            ExitClass::BlockedAuthority,
+            DiagnosticId::AuthorityRequired,
+            "preprovisioned owner-only routine host authority is unavailable",
+            "routine production host authority",
+            "install or repair the owner-only routine-public authority, adapter directory, and lock file",
+            "none",
+            "no routine effect is authorized or performed",
+        ),
+        PublicFailure::Host(HostFailure::Invalid) => (
+            ExitClass::BlockedAuthority,
+            DiagnosticId::AuthorityRequired,
+            "routine host authority or reuse state is aliased, stale, forged, malformed, or unsafe",
+            "routine production host authority",
+            "preserve the ledger, repair the exact owner-only state, and retry only after diagnosis",
+            "none",
+            "no new routine effect is authorized",
+        ),
+        PublicFailure::Host(HostFailure::RandomUnavailable) => (
+            ExitClass::BlockedAuthority,
+            DiagnosticId::AuthorityRequired,
+            "the operating system did not provide a routine authority nonce",
+            "routine production host authority",
+            "restore the host random source and recompute the exact routine request",
+            "none",
+            "no routine effect is authorized or performed",
+        ),
+        PublicFailure::Host(HostFailure::ClockUnavailable) => (
+            ExitClass::BlockedAuthority,
+            DiagnosticId::AuthorityRequired,
+            "the trusted monotonic host clock is unavailable or invalid",
+            "routine production host authority",
+            "restore the Darwin monotonic clock substrate before retrying",
+            "none",
+            "no routine effect is authorized or performed",
+        ),
+        PublicFailure::Host(HostFailure::Persistence) | PublicFailure::PersistenceAfterEffect => (
+            ExitClass::InternalFailure,
+            DiagnosticId::ProjectionFailed,
+            "routine execution returned but exact durable reuse or outcome persistence did not reconcile",
+            "routine production result persistence",
+            "preserve the workspace and owner-only ledger, then diagnose before retrying",
+            "workspace_write_may_have_occurred",
+            "routine success and all dependent claims remain withheld",
+        ),
+    };
+    RuntimeOutcome::failure(
+        class,
+        Diagnostic::new(id, class, cause, surface, repair, effect, RERUN, ceiling),
+    )
+}
+
+pub(crate) fn routine_failure(
+    error: RoutineError,
+) -> (
+    ExitClass,
+    DiagnosticId,
+    &'static str,
+    &'static str,
+    &'static str,
+    &'static str,
+    &'static str,
+) {
+    let (class, id, effect) = match error.id() {
+        RoutineErrorId::ConcurrentMutation | RoutineErrorId::ContextMismatch => (
+            ExitClass::ActionableFinding,
+            DiagnosticId::StaleContext,
+            "none_or_unacknowledged_workspace_request",
+        ),
+        RoutineErrorId::CapabilityUnavailable | RoutineErrorId::UnsupportedEntry => (
+            ExitClass::UnsupportedCapability,
+            DiagnosticId::DownstreamToolUnavailable,
+            "none",
+        ),
+        RoutineErrorId::InvalidRegistry
+        | RoutineErrorId::AmbiguousRegistry
+        | RoutineErrorId::UnknownRegistryRow
+        | RoutineErrorId::InvalidPath
+        | RoutineErrorId::InvalidRequest
+        | RoutineErrorId::InvalidSnapshot
+        | RoutineErrorId::InvalidReceipt => (
+            ExitClass::BlockedAuthority,
+            DiagnosticId::AuthorityRequired,
+            "none",
+        ),
+        RoutineErrorId::CaptureFailed
+        | RoutineErrorId::CaptureLimit
+        | RoutineErrorId::ObservationFailed
+        | RoutineErrorId::Serialization => (
+            ExitClass::InternalFailure,
+            DiagnosticId::ProjectionFailed,
+            "none_or_unacknowledged_workspace_request",
+        ),
+    };
+    (
+        class,
+        id,
+        error.cause(),
+        "routine production mediation",
+        "stabilize the exact target, runner, source, output, and durable authority bindings before retrying",
+        effect,
+        "routine success and all dependent claims remain withheld",
+    )
+}

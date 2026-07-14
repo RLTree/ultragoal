@@ -13,8 +13,8 @@ fn live_reader_guard_has_no_unbound_positive_reader() {
     let context = LiveContext::build(request).unwrap();
     let reads = context.begin_read_session().unwrap();
     assert!(
-        phase_a_context_intact(&reads, root),
-        "Phase A context receipt drift"
+        accepted_context_intact(&reads, root),
+        "accepted context receipt drift"
     );
     assert_eq!(
         read_bounded(&reads, &root.join(GUARD_PATH), MAX_SOURCE_BYTES).unwrap(),

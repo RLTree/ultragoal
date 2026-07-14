@@ -24,9 +24,16 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<LineCapsCommand>, String> {
     if !has_flag(args, "--strict") {
         return Err("line-caps check requires --strict".to_string());
     }
+    if has_flag(args, "--no-write") && opt_string(args, "--receipt").is_some() {
+        return Err("line-caps --no-write conflicts with --receipt".to_string());
+    }
     reject_unknown(args)?;
     Ok(Some(LineCapsCommand {
-        receipt: opt_path(args, "--receipt").unwrap_or_else(|| PathBuf::from(RECEIPT_REL)),
+        receipt: if has_flag(args, "--no-write") {
+            PathBuf::new()
+        } else {
+            opt_path(args, "--receipt").unwrap_or_else(|| PathBuf::from(RECEIPT_REL))
+        },
         jobs: opt_usize(args, "--jobs")?,
     }))
 }
@@ -40,6 +47,16 @@ pub(crate) fn run(root: &Path, command: &LineCapsCommand) -> Result<i32, String>
     } else {
         "fail"
     };
+    if command.receipt.as_os_str().is_empty() {
+        println!(
+            "ultragoal-self-law-registry-integrity {status} failures={}",
+            result.failures.len()
+        );
+        for failure in &result.failures {
+            println!("ultragoal-self-law-registry-integrity finding={failure}");
+        }
+        return Ok(i32::from(status != "pass"));
+    }
     let receipt_rel = command.receipt.to_string_lossy().to_string();
     let why_failed = claims::why_failed(status, &result.failures);
     let mut value = crate::cli::observe::telemetry::command_receipt(
@@ -49,7 +66,7 @@ pub(crate) fn run(root: &Path, command: &LineCapsCommand) -> Result<i32, String>
             subcommand: "check --strict",
             operation: "line-caps.check",
             surface: "line_caps",
-            law_id: crate::cli::observe::types::LAW_ID,
+            law_id: crate::cli::observe::command::LAW_ID,
             check_id: "line-caps-check-observability-binding",
             claim_id: "line_cap_check",
             artifact_path: "validator/src",
@@ -91,15 +108,17 @@ struct ValidationResult {
 }
 
 fn validate(root: &Path, scheduler: SchedulerConfig) -> ValidationResult {
-    let paths = crate::audit::plugin::laws::line_cap_source_paths(root);
-    if paths.is_empty() {
+    let audit = crate::audit::source_governance::audit(root);
+    let inventory = audit.inventory;
+    if inventory.sources.is_empty() {
         return ValidationResult {
             failures: vec!["line_cap_no_source_paths".to_string()],
             scheduler_metrics: Vec::new(),
         };
     }
-    let scheduled = run_line_cap_tasks(root, paths, scheduler);
-    let mut failures = scheduled.values.into_iter().flatten().collect::<Vec<_>>();
+    let scheduled = run_line_cap_tasks(inventory, scheduler);
+    let mut failures = audit.failures;
+    failures.extend(scheduled.values.into_iter().flatten());
     failures.sort();
     failures.dedup();
     ValidationResult {
@@ -108,18 +127,22 @@ fn validate(root: &Path, scheduler: SchedulerConfig) -> ValidationResult {
     }
 }
 
+pub(crate) fn check(root: &Path, jobs: Option<usize>) -> Result<Vec<String>, String> {
+    Ok(validate(root, SchedulerConfig::from_jobs(jobs)?).failures)
+}
+
 fn run_line_cap_tasks(
-    root: &Path,
-    paths: Vec<String>,
+    inventory: crate::audit::source_governance::GovernedInventory,
     scheduler: SchedulerConfig,
 ) -> crate::scheduler::Scheduled<Vec<String>> {
-    let root = root.to_path_buf();
-    let tasks = paths
+    let generated_projections = inventory.generated_projections;
+    let tasks = inventory
+        .sources
         .into_iter()
-        .map(|rel| {
-            let root = root.clone();
+        .filter(|source| !generated_projections.contains(&source.relative))
+        .map(|source| {
             Box::new(move || {
-                crate::audit::plugin::laws::line_cap_failure_for_path(&root, &rel)
+                crate::audit::source_governance::line_cap::failure(&source)
                     .into_iter()
                     .collect::<Vec<_>>()
             }) as Box<dyn FnOnce() -> Vec<String> + Send>
@@ -141,7 +164,7 @@ fn reject_unknown(args: &[String]) -> Result<(), String> {
     let mut index = 0;
     while index < args.len() {
         match args[index].as_str() {
-            "--strict" => index += 1,
+            "--strict" | "--no-write" => index += 1,
             "--receipt" | "--jobs" => {
                 if index + 1 >= args.len() {
                     return Err(format!("missing value for {}", args[index]));

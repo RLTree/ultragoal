@@ -1,10 +1,10 @@
 use super::error::{AgentDiscoveryError, AgentDiscoveryErrorId};
-use super::filesystem::digest;
 use super::host::{
     BoundHostAgentAuthorityTransaction, HostAgentAuthorityReader, HostAgentAuthorityRequest,
     HostAgentAuthorityTransactionError, parse_and_verify_capture,
 };
 use super::model::AgentRouteEligibility;
+use super::protocol_codec::{AgentProtocolCodecRequest, VerifiedLayerBinding, encode_digest};
 use super::source::SourceAgentCatalog;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicU8, AtomicU64, Ordering};
@@ -32,47 +32,43 @@ impl AgentDiscoverySession {
     pub fn bind(source: SourceAgentCatalog) -> Result<Self, AgentDiscoveryError> {
         source.revalidate()?;
         let unique = NEXT_ISSUANCE.fetch_add(1, Ordering::Relaxed);
-        let issuance_sha256 = serde_json::to_vec(&(
-            "AgentDiscoverySessionIssuance-v1",
-            source.project_root_sha256(),
-            source.candidate_id(),
-            source.session_id(),
-            source.catalog_sha256(),
-            std::process::id(),
+        let issuance_sha256 = encode_digest(AgentProtocolCodecRequest::SessionIssuance {
+            project_root_sha256: source.project_root_sha256(),
+            candidate_id: source.candidate_id(),
+            session_id: source.session_id(),
+            catalog_sha256: source.catalog_sha256(),
+            process_id: std::process::id(),
             unique,
-        ))
-        .map(|bytes| digest(&bytes))
+        })
+        .map(|response| response.sha256())
         .map_err(|_| invalid())?;
-        let observation_nonce_sha256 = serde_json::to_vec(&(
-            "AgentDiscoveryObservationNonce-v1",
-            &issuance_sha256,
+        let observation_nonce_sha256 = encode_digest(AgentProtocolCodecRequest::ObservationNonce {
+            issuance_sha256: &issuance_sha256,
             unique,
-        ))
-        .map(|bytes| digest(&bytes))
+        })
+        .map(|response| response.sha256())
         .map_err(|_| invalid())?;
-        let binding_sha256 = serde_json::to_vec(&(
-            "BoundAgentDiscoverySession-v1",
-            source.project_root_sha256(),
-            source.candidate_id(),
-            source.session_id(),
-            source.catalog_sha256(),
-            source.plugin_version(),
-            source.plugin_manifest_sha256(),
-            &issuance_sha256,
-            &observation_nonce_sha256,
-        ))
-        .map(|bytes| digest(&bytes))
+        let binding_sha256 = encode_digest(AgentProtocolCodecRequest::SessionBinding {
+            project_root_sha256: source.project_root_sha256(),
+            candidate_id: source.candidate_id(),
+            session_id: source.session_id(),
+            catalog_sha256: source.catalog_sha256(),
+            plugin_version: source.plugin_version(),
+            plugin_manifest_sha256: source.plugin_manifest_sha256(),
+            issuance_sha256: &issuance_sha256,
+            observation_nonce_sha256: &observation_nonce_sha256,
+        })
+        .map(|response| response.sha256())
         .map_err(|_| invalid())?;
-        let provenance_sha256 = serde_json::to_vec(&(
-            "HostAgentAuthorityTransaction-v1",
-            &binding_sha256,
-            source.project_root_sha256(),
-            source.candidate_id(),
-            source.session_id(),
-            &issuance_sha256,
-            &observation_nonce_sha256,
-        ))
-        .map(|bytes| digest(&bytes))
+        let provenance_sha256 = encode_digest(AgentProtocolCodecRequest::TransactionProvenance {
+            binding_sha256: &binding_sha256,
+            project_root_sha256: source.project_root_sha256(),
+            candidate_id: source.candidate_id(),
+            session_id: source.session_id(),
+            issuance_sha256: &issuance_sha256,
+            observation_nonce_sha256: &observation_nonce_sha256,
+        })
+        .map(|response| response.sha256())
         .map_err(|_| invalid())?;
         let request = HostAgentAuthorityRequest::issue(
             provenance_sha256,
@@ -132,23 +128,21 @@ impl AgentDiscoverySession {
             let layers = parse_and_verify_capture(&first, &self.source, &self.request)?;
             let host_binding_rows = layers
                 .iter()
-                .map(|layer| {
-                    (
-                        layer.layer(),
-                        layer.catalog_sha256(),
-                        layer.authority_root_sha256(),
-                        layer.authority_generation_sha256(),
-                        layer.transaction_provenance_sha256(),
-                    )
+                .map(|layer| VerifiedLayerBinding {
+                    layer: layer.layer(),
+                    catalog_sha256: layer.catalog_sha256(),
+                    authority_root_sha256: layer.authority_root_sha256(),
+                    authority_generation_sha256: layer.authority_generation_sha256(),
+                    transaction_provenance_sha256: layer.transaction_provenance_sha256(),
                 })
                 .collect::<Vec<_>>();
-            let verified_binding_sha256 = serde_json::to_vec(&(
-                "VerifiedHostAgentAuthorityBinding-v1",
-                &self.binding_sha256,
-                host_binding_rows,
-            ))
-            .map(|bytes| digest(&bytes))
-            .map_err(|_| invalid())?;
+            let verified_binding_sha256 =
+                encode_digest(AgentProtocolCodecRequest::VerifiedBinding {
+                    binding_sha256: &self.binding_sha256,
+                    rows: &host_binding_rows,
+                })
+                .map(|response| response.sha256())
+                .map_err(|_| invalid())?;
             self.source.revalidate()?;
             let sandbox_effect_sha256 = transaction.enforce_effects(
                 &self.source,

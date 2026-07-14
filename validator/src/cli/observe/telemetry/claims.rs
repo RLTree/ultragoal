@@ -1,4 +1,4 @@
-use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
+use crate::cli::observe::command::{ObserveCommand, ObserveOperation};
 use serde_json::{Value, json};
 
 pub(super) fn claim_ceiling(operation: ObserveOperation, status: &str) -> &'static str {

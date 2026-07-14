@@ -1,4 +1,4 @@
-use crate::cli::observe::types::ObserveOperation;
+use crate::cli::observe::command::ObserveOperation;
 
 pub(super) fn for_observe_failure(
     operation: ObserveOperation,

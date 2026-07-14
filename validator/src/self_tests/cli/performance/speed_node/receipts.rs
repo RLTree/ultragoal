@@ -1,5 +1,5 @@
+use crate::cli::performance::measurement::{BudgetClass, PERFORMANCE_RECEIPT_SCHEMA};
 use crate::cli::performance::receipt::surface_value_failures;
-use crate::cli::performance::types::{BudgetClass, PERFORMANCE_RECEIPT_SCHEMA};
 use serde_json::{Value, json};
 
 pub(super) fn digest(ch: char) -> String {

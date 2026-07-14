@@ -25,7 +25,7 @@ fn red_catalog_and_audit_outputs_fail_closed() {
     crate::audit::red::catalog::check(&root, &store, &mut failures);
     assert!(has(
         &failures["red-fixture-coverage"],
-        "red catalog must be an array"
+        "red_catalog_fixture_directory_unreadable"
     ));
 
     failures.clear();
@@ -52,16 +52,10 @@ fn red_catalog_and_audit_outputs_fail_closed() {
     );
     crate::audit::red::catalog::check(&root, &store, &mut failures);
     let red_failures = &failures["red-fixture-coverage"];
-    for expected in [
-        "red catalog count or id uniqueness mismatch",
-        "schema-authority-primitives requiredRedFixtureId unavailable",
-        "validator-receipt red_fixtures.required unavailable",
-        "red catalog digest mismatch",
-        "red catalog expected_failure drift",
-        "red catalog invalid path",
-    ] {
-        assert!(has(red_failures, expected), "{expected}: {red_failures:?}");
-    }
+    assert!(
+        has(red_failures, "red_catalog_packet_contract_invalid"),
+        "{red_failures:?}"
+    );
 
     assert_eq!(
         crate::audit::package::outputs::package_status(&failures),

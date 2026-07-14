@@ -1,9 +1,9 @@
 use super::records::sensitive_text;
 use super::{
     BehaviorOutcome, BoundInput, CanonicalEvaluationFailure, CanonicalEvaluationRun,
-    CapturedTaskObservation, EvaluationError, EvaluationEventKind, EvaluationExecutor,
-    EvaluationRun, EvaluationSpec, EvaluationTask, PerturbationControl, PrivacySafeEvaluationEvent,
-    RuntimeConfiguration, TaskAudit,
+    CapturedTaskObservation, CapturedTaskObservationRecord, EvaluationError, EvaluationEventKind,
+    EvaluationExecutor, EvaluationRun, EvaluationSpec, EvaluationTask, PerturbationControl,
+    PrivacySafeEvaluationEvent, PrivacySafeEvaluationEventRecord, RuntimeConfiguration, TaskAudit,
 };
 use crate::fixture_scheduler::{FixtureExecutionBinding, FixtureExecutionRecord};
 use serde::{Deserialize, Serialize};
@@ -155,23 +155,23 @@ impl<B: FixtureEvaluationBridge> EvaluationExecutor for FixtureSchedulerEvaluati
             record.artifact_digest_sha256.clone(),
             record.artifact_byte_length,
         );
-        let observation = CapturedTaskObservation::captured(
-            envelope.task_id,
-            envelope.fixture_id,
-            envelope.outcome,
-            envelope.causal_code,
-            envelope.score_earned,
-            envelope.score_possible,
-            envelope.work_units,
+        let observation = CapturedTaskObservation::captured(CapturedTaskObservationRecord {
+            task_id: envelope.task_id,
+            fixture_id: envelope.fixture_id,
+            outcome: envelope.outcome,
+            causal_code: envelope.causal_code,
+            score_earned: envelope.score_earned,
+            score_possible: envelope.score_possible,
+            work_units: envelope.work_units,
             artifact,
-            record.artifact_digest_sha256.clone(),
-            envelope.producer_id,
-            envelope.observer_id,
-            envelope.independent_grader_id,
-            envelope.independent_score_earned,
-            envelope.independent_score_possible,
-            envelope.passed_perturbations,
-        );
+            replay_artifact_digest_sha256: record.artifact_digest_sha256.clone(),
+            producer_id: envelope.producer_id,
+            observer_id: envelope.observer_id,
+            independent_grader_id: envelope.independent_grader_id,
+            independent_score_earned: envelope.independent_score_earned,
+            independent_score_possible: envelope.independent_score_possible,
+            passed_perturbations: envelope.passed_perturbations,
+        });
         self.records.push(record);
         Ok(observation)
     }
@@ -204,15 +204,15 @@ pub(crate) fn execute_production<B: FixtureEvaluationBridge>(
         .iter()
         .map(CanonicalEvaluationFailure::from)
         .collect();
-    let event = PrivacySafeEvaluationEvent::new(
-        EvaluationEventKind::ExecutionPublished,
-        spec.live_context_id(),
-        spec.candidate_id(),
-        spec.spec_sha256(),
-        &run.execution_session_id,
-        Some(run.run_sha256().to_owned()),
-        None,
-    )?;
+    let event = PrivacySafeEvaluationEvent::new(PrivacySafeEvaluationEventRecord {
+        event_kind: EvaluationEventKind::ExecutionPublished,
+        live_context_id: spec.live_context_id().to_owned(),
+        candidate_id: spec.candidate_id().to_owned(),
+        spec_sha256: spec.spec_sha256().to_owned(),
+        session_id: run.execution_session_id.clone(),
+        run_sha256: Some(run.run_sha256().to_owned()),
+        causal_code: None,
+    })?;
     let canonical_run = CanonicalEvaluationRun::from_parts(&run, runtime_configuration, &records);
     Ok(ProductionEvaluationRun {
         canonical_run,

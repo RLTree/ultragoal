@@ -1,5 +1,5 @@
 use super::ceiling::ClaimCeiling;
-use super::types::{Finding, Repair};
+use super::product_state::{Finding, Repair};
 use std::collections::BTreeMap;
 
 pub(crate) fn apply_reductions(

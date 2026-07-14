@@ -1,5 +1,5 @@
 use super::PerformanceCommand;
-use super::types::{
+use super::measurement::{
     BudgetClass, PERFORMANCE_BUDGET_VERSION, PERFORMANCE_COMMANDS, PERFORMANCE_RECEIPT_SCHEMA,
     PerformanceOperation,
 };

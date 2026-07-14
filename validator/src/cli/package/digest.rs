@@ -40,7 +40,7 @@ pub(crate) fn run(root: &Path) -> Result<i32, String> {
             subcommand: "digest",
             operation: "package.digest",
             surface: "source_package",
-            law_id: crate::cli::observe::types::LAW_ID,
+            law_id: crate::cli::observe::command::LAW_ID,
             check_id: "package-digest-observability-binding",
             claim_id: "source_package_digest",
             artifact_path: "plugin-manifest-draft.json",

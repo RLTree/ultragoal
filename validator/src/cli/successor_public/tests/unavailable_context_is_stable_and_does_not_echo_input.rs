@@ -1,0 +1,77 @@
+use super::*;
+
+#[test]
+pub(crate) fn unavailable_context_is_stable_and_does_not_echo_input() {
+    let canary = "/missing/successor-public-canary-3921";
+    let ParseOutcome::Invocation(invocation) =
+        parse_args(["--json", "inspect", "context"]).unwrap()
+    else {
+        panic!("expected invocation")
+    };
+    let streams = execute_invocation(Path::new(canary), invocation).render(OutputMode::Json);
+    assert_eq!(streams.exit_code, 4);
+    assert!(streams.stdout.is_empty());
+    let text = String::from_utf8(streams.stderr).unwrap();
+    assert!(text.contains("successor_runtime_context_unavailable"));
+    assert!(!text.contains("successor-public-canary-3921"));
+}
+
+#[test]
+pub(crate) fn public_context_uses_opaque_root_ids_and_is_recursively_zero_write() {
+    let repo = Repository::new("public-context-roots");
+    let before_tree = tree(&repo.root);
+    let before_status = repo.status();
+    let ParseOutcome::Invocation(invocation) =
+        parse_args(["--json", "inspect", "context"]).unwrap()
+    else {
+        panic!("expected invocation")
+    };
+
+    let streams = execute_invocation(&repo.root, invocation).render(OutputMode::Json);
+    assert_eq!(streams.exit_code, 0);
+    assert!(streams.stderr.is_empty());
+    let value: serde_json::Value = serde_json::from_slice(&streams.stdout).unwrap();
+    assert_eq!(value["schema_version"], "HarnessPublicContext-v1");
+    for key in ["repository_root_id", "worktree_root_id"] {
+        assert!(
+            value["roots"][key]
+                .as_str()
+                .is_some_and(|id| id.starts_with("sha256:") && id.len() == 71)
+        );
+    }
+    assert!(value["roots"].get("repository_root").is_none());
+    assert!(value["roots"].get("worktree_root").is_none());
+    assert!(!String::from_utf8_lossy(&streams.stdout).contains(repo.root.to_str().unwrap()));
+    assert_eq!(tree(&repo.root), before_tree);
+    assert_eq!(repo.status(), before_status);
+}
+
+#[test]
+pub(crate) fn public_context_output_failure_never_falls_back_to_private_live_context() {
+    let repo = Repository::new("public-context-output-failure");
+    let context = read_context(&repo.root).unwrap();
+    let before_tree = tree(&repo.root);
+    let before_status = repo.status();
+    let ParseOutcome::Invocation(invocation) =
+        parse_args(["--json", "inspect", "context"]).unwrap()
+    else {
+        panic!("expected invocation")
+    };
+
+    let streams = super::super::public_context::project_with_limit(&context, &invocation, 0)
+        .render(OutputMode::Json);
+    assert_eq!(streams.exit_code, 70);
+    assert!(streams.stdout.is_empty());
+    let value: serde_json::Value = serde_json::from_slice(&streams.stderr).unwrap();
+    assert_eq!(value["schema_version"], "HarnessDiagnostic-v1");
+    assert_eq!(
+        value["diagnostic_id"],
+        "successor_runtime_projection_failed"
+    );
+    let output = String::from_utf8(streams.stderr).unwrap();
+    assert!(!output.contains(repo.root.to_str().unwrap()));
+    assert!(!output.contains("repository_root"));
+    assert!(!output.contains("worktree_root"));
+    assert_eq!(tree(&repo.root), before_tree);
+    assert_eq!(repo.status(), before_status);
+}

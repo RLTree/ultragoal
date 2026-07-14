@@ -1,7 +1,7 @@
 use super::catalog::{catalog, descriptor_for};
 use super::clap_grammar::JSON_TOKEN;
+use super::command_contract::{Group, HelpTarget, OutputMode, ValueKind};
 use super::error::{ParseErrorId, ParseFailure};
-use super::model::{Group, HelpTarget, OutputMode, ValueKind};
 use std::ffi::OsString;
 
 pub(crate) const MAX_ARGUMENTS: usize = 256;

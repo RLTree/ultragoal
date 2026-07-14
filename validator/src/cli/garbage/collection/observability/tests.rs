@@ -1,6 +1,6 @@
 use super::*;
 use crate::cli::garbage::collection::GarbageCommand;
-use crate::cli::garbage::collection::types::GarbageOperation;
+use crate::cli::garbage::collection::operation::GarbageOperation;
 use serde_json::json;
 use std::fs;
 use std::path::PathBuf;

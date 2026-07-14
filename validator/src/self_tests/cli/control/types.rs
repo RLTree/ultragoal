@@ -1,4 +1,4 @@
-use crate::cli::control::plane::types::{ControlOperation, REQUIRED_COMMANDS};
+use crate::cli::control::plane::operation::{ControlOperation, REQUIRED_COMMANDS};
 
 #[test]
 fn every_control_operation_has_stable_id() {

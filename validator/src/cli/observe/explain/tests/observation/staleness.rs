@@ -17,7 +17,7 @@ fn explain_does_not_keep_stale_observation_failure_after_later_query_pass() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-observation-later-pass",
             "candidate_digest": candidate,
             "operation": "source.audit",
@@ -33,7 +33,7 @@ fn explain_does_not_keep_stale_observation_failure_after_later_query_pass() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-observation-later-pass",
             "candidate_digest": candidate,
             "operation": "observe.traces.query",
@@ -49,7 +49,7 @@ fn explain_does_not_keep_stale_observation_failure_after_later_query_pass() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-observation-later-pass",
             "candidate_digest": candidate,
             "operation": "observe.traces.query",

@@ -4,6 +4,7 @@ pub(crate) mod claim_ceiling;
 pub(crate) mod materiality;
 pub(crate) mod materiality_live;
 pub(crate) mod product;
+pub(crate) mod product_fitness;
 pub(crate) mod red_fixture;
 pub(crate) mod registry;
 pub(crate) mod report;

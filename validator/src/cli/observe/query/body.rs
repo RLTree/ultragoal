@@ -1,4 +1,4 @@
-use crate::cli::observe::types::ObserveOperation;
+use crate::cli::observe::command::ObserveOperation;
 use serde_json::{Value, json};
 
 const PRIVATE_HOME_MARKER: &str = concat!("/", "Users/");

@@ -6,6 +6,7 @@
 //! observations without executing a live-host command.
 
 mod capability_gate;
+mod darwin;
 mod effect_request;
 mod error;
 mod issuance;
@@ -15,18 +16,34 @@ mod scope;
 mod session;
 mod verify;
 
+#[cfg(test)]
 pub(crate) use capability_gate::{capability_states_supported, required_host_capabilities};
+#[cfg(test)]
+pub use darwin::{
+    DarwinHostDiagnosis, DarwinHostError, DarwinHostErrorId, DarwinHostOperation,
+    DarwinHostSnapshot, DarwinHostSurface, DarwinHostTransactionAdapter,
+    DarwinHostTransactionDisposition, DarwinHostTransactionPlan, DarwinHostTransactionReport,
+    DarwinSurfaceObservation, DarwinSurfaceStatus,
+};
+#[cfg(test)]
+pub use darwin::{DarwinTestControl, DarwinTestPoint};
+#[cfg(test)]
 pub use effect_request::{
     ExternalHostEffectRequest, HostScopeAuthority, PreparedExternalHostEffect,
 };
+#[cfg(test)]
 pub use error::{HostLifecycleError, HostLifecycleErrorId};
+#[cfg(test)]
 pub use model::{
     HostLayer, HostLayerReport, HostLayerVerdict, HostLifecyclePhase, HostLifecycleReport,
     PluginsUiObservation,
 };
+#[cfg(test)]
 pub use observation::{
     HostObservationFrame, HostObservationTransactionRequest, HostSurfaceReader,
     HostSurfaceTransaction, HostSurfaceTransactionError, observe_plugins_ui,
 };
-pub use session::HostLifecycleSession;
+#[cfg(test)]
+pub use session::{HostLifecycleBindRequest, HostLifecycleSession};
+#[cfg(test)]
 pub use verify::verify_host_identity_chain;

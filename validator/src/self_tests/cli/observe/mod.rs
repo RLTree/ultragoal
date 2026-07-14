@@ -1,6 +1,6 @@
 use crate::cli::observe;
+use crate::cli::observe::command::ObserveOperation;
 use crate::cli::observe::query::QueryKind;
-use crate::cli::observe::types::ObserveOperation;
 use serde_json::json;
 use std::fs;
 

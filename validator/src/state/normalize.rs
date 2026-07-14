@@ -1,5 +1,5 @@
 use super::catalog::DependencyActionSpec;
-use super::types::{CeilingReduction, Repair};
+use super::product_state::{CeilingReduction, Repair};
 use serde::Serialize;
 
 pub(crate) fn normalize(spec: &mut DependencyActionSpec) {

@@ -1,10 +1,6 @@
 macro_rules! include_production_package_module {
     () => {
         mod product;
-        pub(crate) use product::{
-            ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
-            ProductionPackageSession, capture_product_package, verify_product_package,
-        };
     };
 }
 
@@ -16,6 +12,7 @@ mod argument_parser;
 mod audit;
 mod claim;
 mod claim_semantics;
+#[cfg(test)]
 mod claims;
 mod cli;
 pub use cli::capture;
@@ -28,6 +25,7 @@ mod digest;
 pub mod distribution;
 pub mod evaluation;
 mod fixture_scheduler;
+mod generated_authority;
 pub mod inventory;
 mod json_boundary;
 pub mod migration;

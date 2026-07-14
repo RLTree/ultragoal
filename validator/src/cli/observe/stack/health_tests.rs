@@ -45,8 +45,8 @@ fn starting_compose_health_retry_is_bounded_by_command_timeout() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("stack-health-retry-timeout");
     std::fs::create_dir_all(&root).expect("root");
-    let command = crate::cli::observe::types::ObserveCommand {
-        operation: crate::cli::observe::types::ObserveOperation::StackHealth,
+    let command = crate::cli::observe::command::ObserveCommand {
+        operation: crate::cli::observe::command::ObserveOperation::StackHealth,
         receipt: None,
         query: None,
         run_id: None,

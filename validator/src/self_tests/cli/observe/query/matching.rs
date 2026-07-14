@@ -1,5 +1,5 @@
 use crate::cli::observe;
-use crate::cli::observe::types::ObserveOperation;
+use crate::cli::observe::command::ObserveOperation;
 use serde_json::json;
 
 #[test]

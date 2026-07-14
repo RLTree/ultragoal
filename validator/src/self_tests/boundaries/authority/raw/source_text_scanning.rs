@@ -5,10 +5,17 @@ fn source_text_scanner_routes_raw_and_output_authority_failures() {
     std::fs::create_dir_all(root.join("validator/src/domain")).expect("source dir");
     std::fs::write(
         root.join("validator/src/domain/claim_core.rs"),
-        "use serde_json::Value;\npub(crate) fn decide(value: Value) -> Value { let receipt = root.join(&command.receipt); crate::json_boundary::write_json(&receipt, &value).unwrap(); value }\n",
+        "#![allow(dead_code)]\nuse serde_json::Value;\npub(crate) fn decide(value: Value) -> Value { let receipt = root.join(&command.receipt); crate::json_boundary::write_json(&receipt, &value).unwrap(); value }\n",
     )
     .expect("raw source");
     let failures = crate::audit::law::authority_surfaces::source_text_failures_for_test(&root);
+    assert!(
+        failures.iter().any(|(check, failure)| {
+            check == "governed-source-inventory"
+                && failure.contains("plugin_self_law_forbidden_lint_allowance")
+        }),
+        "{failures:?}"
+    );
     assert!(
         failures.iter().any(|(check, failure)| {
             check == "typed-records-over-prose"
@@ -147,9 +154,13 @@ fn verifies_nested_status_projection() {\n\
         "non-test-gated sibling modules must remain production authority surfaces: {failures:?}"
     );
     assert!(
-        failures.iter().all(|(_, failure)| !failure
-            .contains("validator/src/cli/final_packet/proof/observability.rs")),
-        "production parser code after cfg(test) module declarations must remain scanned and classified: {failures:?}"
+        failures.iter().any(|(check, failure)| {
+            check == "typed-records-over-prose"
+                && failure.contains(
+                    "raw_authority_unregistered:path=validator/src/cli/final_packet/proof/observability.rs;symbol=failures",
+                )
+        }),
+        "production parser code after cfg(test) module declarations must remain scanned and require an exact typed-boundary registry row: {failures:?}"
     );
     std::fs::remove_dir_all(root).expect("cleanup source scanner test gates");
 }

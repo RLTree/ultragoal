@@ -15,7 +15,7 @@ fn explain_skips_observe_explain_events_when_selecting_target_run() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-observed",
             "candidate_digest": candidate,
             "operation": "source.audit",
@@ -31,7 +31,7 @@ fn explain_skips_observe_explain_events_when_selecting_target_run() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-observed",
             "candidate_digest": candidate,
             "operation": "observe.explain-failure",
@@ -43,7 +43,7 @@ fn explain_skips_observe_explain_events_when_selecting_target_run() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-observed",
             "candidate_digest": candidate,
             "operation": "observe.logs.query",
@@ -84,7 +84,7 @@ fn explain_targets_failed_observation_when_product_event_passed() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-observed-query-failure",
             "candidate_digest": candidate,
             "operation": "source.audit",
@@ -100,7 +100,7 @@ fn explain_targets_failed_observation_when_product_event_passed() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-observed-query-failure",
             "candidate_digest": candidate,
             "operation": "observe.traces.query",
@@ -157,7 +157,7 @@ fn explain_keeps_failed_product_event_ahead_of_failed_observation_event() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-product-failure-first",
             "candidate_digest": candidate,
             "operation": "source.audit",
@@ -173,7 +173,7 @@ fn explain_keeps_failed_product_event_ahead_of_failed_observation_event() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-product-failure-first",
             "candidate_digest": candidate,
             "operation": "observe.metrics.query",

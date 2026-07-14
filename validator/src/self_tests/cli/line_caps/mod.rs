@@ -60,7 +60,7 @@ fn line_caps_command_writes_pass_observability_receipt() {
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     assert_eq!(
         receipt["schema"],
-        crate::cli::observe::types::RECEIPT_SCHEMA
+        crate::cli::observe::command::RECEIPT_SCHEMA
     );
     assert_eq!(receipt["status"], "pass");
     assert_eq!(receipt["candidate_digest"], candidate);
@@ -132,7 +132,7 @@ fn line_caps_command_writes_pass_observability_receipt() {
 
 #[test]
 fn line_caps_command_fails_over_cap_with_repair_fields() {
-    let body = (0..=crate::audit::plugin::laws::MAX_SOURCE_LINES)
+    let body = (0..=crate::audit::source_governance::line_cap::MAX_AUTHORED_LINES)
         .map(|index| format!("// line {index}\n"))
         .collect::<String>();
     let root = package_root("line-caps-fail", &[("validator/src/too_large.rs", body)]);

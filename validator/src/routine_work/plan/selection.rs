@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use super::model::{AffectedSet, CoverageDimensions, PlanMode, PlanRequest, SelectionReason};
+use super::definition::{AffectedSet, CoverageDimensions, PlanMode, PlanRequest, SelectionReason};
 use crate::routine_work::{
     ChangeKind, CheckClass, DirtySnapshot, ImpactGraph, RoutineError, RoutineErrorId,
 };

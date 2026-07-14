@@ -4,7 +4,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use crate::context::LiveContext;
 
-use super::model::{TemplateAuthorityProjection, TemplateRowProjection};
+use super::projection::{TemplateAuthorityProjection, TemplateRowProjection};
 use super::{AdapterErrorId, FitAdapterError, adapter_error};
 use crate::repository_fit::{CanonicalPath, DesiredFile, DesiredState, digest};
 

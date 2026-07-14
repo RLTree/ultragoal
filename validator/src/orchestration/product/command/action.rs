@@ -32,17 +32,27 @@ pub struct RootActionRequest {
     pub target: PermitTarget,
 }
 
+pub(super) struct RootActionRequestDefinition {
+    pub(super) operation: RootOperation,
+    pub(super) reason: RootActionReason,
+    pub(super) authority_binding: Binding,
+    pub(super) workspace_identity: String,
+    pub(super) expected_head: JournalHead,
+    pub(super) snapshot_id: String,
+    pub(super) target: PermitTarget,
+}
+
 impl RootActionRequest {
-    #[allow(clippy::too_many_arguments)]
-    pub(crate) fn new(
-        operation: RootOperation,
-        reason: RootActionReason,
-        authority_binding: Binding,
-        workspace_identity: String,
-        expected_head: JournalHead,
-        snapshot_id: String,
-        target: PermitTarget,
-    ) -> Result<Self, ProductError> {
+    pub(super) fn new(definition: RootActionRequestDefinition) -> Result<Self, ProductError> {
+        let RootActionRequestDefinition {
+            operation,
+            reason,
+            authority_binding,
+            workspace_identity,
+            expected_head,
+            snapshot_id,
+            target,
+        } = definition;
         let journal_head_identity = journal_head_identity(&expected_head)?;
         let mut request = Self {
             schema_version: ACTION_SCHEMA.to_owned(),

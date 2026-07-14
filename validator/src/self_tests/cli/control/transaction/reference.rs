@@ -1,4 +1,4 @@
-use crate::cli::control::plane::{proof, types::ControlOperation};
+use crate::cli::control::plane::{operation::ControlOperation, proof};
 use serde_json::json;
 
 #[test]

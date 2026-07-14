@@ -1,6 +1,6 @@
+use super::bound_context::{CapabilitySet, ToolCapability};
 use super::digest::sha256_hex;
 use super::error::{ContextError, io_error};
-use super::types::{CapabilitySet, ToolCapability};
 use sha2::{Digest, Sha256};
 use std::env;
 use std::ffi::OsStr;

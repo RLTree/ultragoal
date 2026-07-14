@@ -1,5 +1,5 @@
+use crate::cli::observe::command::ObserveCommand;
 use crate::cli::observe::query::trace_tags;
-use crate::cli::observe::types::ObserveCommand;
 use serde::Serialize;
 use serde_json::Value;
 use std::path::Path;

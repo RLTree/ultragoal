@@ -24,6 +24,10 @@ pub use plan::{
     plan_package_from_inventory, verify_package,
 };
 include_production_package_module!();
+pub use product::{
+    ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
+    ProductionPackageSession, capture_product_package, verify_product_package,
+};
 pub use spec::PackageRole;
 
 fn insert_prefix_free_path(paths: &mut BTreeSet<String>, path: &str) -> bool {

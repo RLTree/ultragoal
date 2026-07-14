@@ -5,8 +5,8 @@ use crate::state::catalog::{
     CommandBinding, DependencyActionCatalog, DependencyFact, DependencyStatus, FactAuthority,
 };
 use crate::state::engine::derive_bound;
+use crate::state::product_state::{AuthorityRequirement, StateError};
 use crate::state::snapshot::InventoryObservation;
-use crate::state::types::{AuthorityRequirement, StateError};
 
 fn spec_with_missing() -> crate::state::catalog::DependencyActionSpec {
     let mut spec = spec();

@@ -1,4 +1,4 @@
-use crate::cli::control::plane::types::ControlOperation;
+use crate::cli::control::plane::operation::ControlOperation;
 use serde_json::Value;
 
 pub(super) fn failure_value(operation: ControlOperation, failures: &[String]) -> Value {

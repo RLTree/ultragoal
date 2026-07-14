@@ -1,7 +1,7 @@
 use super::catalog::DependencyActionCatalog;
 use super::findings::finding;
+use super::product_state::{Finding, FindingSeverity, FindingSource};
 use super::snapshot::BoundInputs;
-use super::types::{Finding, FindingSeverity, FindingSource};
 use std::collections::BTreeSet;
 
 pub(crate) fn capability_findings(

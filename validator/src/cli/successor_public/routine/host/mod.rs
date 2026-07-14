@@ -1,0 +1,11 @@
+use serde::{Deserialize, Serialize};
+use std::path::Path;
+
+#[cfg(target_vendor = "apple")]
+#[path = "supported/mod.rs"]
+mod supported;
+
+#[path = "host_failure.rs"]
+mod host_failure;
+
+pub(crate) use host_failure::*;

@@ -34,7 +34,7 @@ fn rust_devx_audit_receipt_edges_are_typed() {
     assert!(
         crate::audit::rust::developer::receipt_failures(
             &json!({
-                "schema": crate::cli::rust::types::RUST_RECEIPT_SCHEMA,
+                "schema": crate::cli::rust::operation::RUST_RECEIPT_SCHEMA,
                 "status":"fail",
                 "claim_ceiling":"withheld_or_blocked",
                 "law_ids":[rust_law.id],
@@ -55,7 +55,7 @@ fn rust_devx_audit_receipt_edges_are_typed() {
     );
     let gc_same = crate::audit::rust::developer::receipt_failures(
         &json!({
-            "schema": crate::cli::garbage::collection::types::GC_RECEIPT_SCHEMA,
+            "schema": crate::cli::garbage::collection::operation::GC_RECEIPT_SCHEMA,
             "status":"pass",
             "law_ids":[gc_law.id],
             "digests":{"candidate":"sha256:same"},

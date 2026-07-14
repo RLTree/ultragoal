@@ -7,7 +7,7 @@ use crate::routine_work::authority::{ensure_unchanged, require_current_binding};
 use crate::routine_work::digest::valid;
 use crate::routine_work::{PlannedCheck, RoutineError, RoutinePlan};
 
-use super::model::{
+use super::reuse_record::{
     DependencyResult, EvidenceBinding, MAX_EVIDENCE_ROWS, ReuseExpectation, expected_program_path,
     receipt_error, semantic_id,
 };

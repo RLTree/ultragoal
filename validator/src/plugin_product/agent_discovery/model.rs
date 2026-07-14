@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+pub(crate) use crate::plugin_manifest::PluginManifest;
+
 pub(crate) const MAX_DESCRIPTOR_BYTES: usize = 64 * 1024;
 pub(crate) const MAX_CATALOG_BYTES: usize = 2 * 1024 * 1024;
 pub(crate) const MAX_MANIFEST_BYTES: usize = 256 * 1024;
@@ -204,19 +206,6 @@ pub(crate) struct ProjectAgentDescriptor {
     pub(crate) description: String,
     pub(crate) developer_instructions: String,
     pub(crate) sandbox_mode: String,
-}
-
-#[derive(Deserialize)]
-#[serde(deny_unknown_fields)]
-pub(crate) struct PluginManifest {
-    pub(crate) name: String,
-    pub(crate) version: String,
-    pub(crate) description: String,
-    pub(crate) author: serde_json::Value,
-    pub(crate) license: String,
-    pub(crate) keywords: Vec<String>,
-    pub(crate) skills: String,
-    pub(crate) interface: serde_json::Value,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]

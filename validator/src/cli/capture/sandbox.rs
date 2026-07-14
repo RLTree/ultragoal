@@ -1,5 +1,5 @@
 use super::environment::InvocationSensitivity;
-use super::util::digest_bytes;
+use super::identity_codec::digest_bytes;
 use crate::context::{EffectClass, LiveContext, ToolCapability};
 use serde::Serialize;
 use std::path::PathBuf;
@@ -25,7 +25,7 @@ pub(super) struct SandboxPlan {
 }
 
 #[derive(Debug, Serialize)]
-pub(super) struct EnforcementRecord {
+pub(crate) struct EnforcementRecord {
     substrate: &'static str,
     executable: String,
     executable_sha256: String,

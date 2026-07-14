@@ -1,6 +1,6 @@
 use sha2::{Digest, Sha256};
 use std::fs::{self, DirEntry};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 #[cfg(unix)]
 use std::os::unix::fs::MetadataExt;

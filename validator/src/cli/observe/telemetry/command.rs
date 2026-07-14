@@ -1,5 +1,5 @@
+use crate::cli::observe::command;
 use crate::cli::observe::telemetry::{RuntimeTelemetry, exporter, identity, record, spool};
-use crate::cli::observe::types;
 use serde_json::{Value, json};
 use std::path::Path;
 use std::time::Instant;
@@ -62,7 +62,7 @@ pub(crate) fn receipt_for_candidate(
         exporter::emit(&event, &metric, &trace);
     }
     Ok(json!({
-        "schema": types::RECEIPT_SCHEMA,
+        "schema": command::RECEIPT_SCHEMA,
         "status": input.status,
         "candidate_digest": candidate,
         "run_id": run_id,
@@ -113,7 +113,7 @@ fn event(
     let where_failed = record::redact_sensitive_text(input.where_failed);
     let next_repair = record::redact_sensitive_text(input.next_repair);
     let mut event = json!({
-        "schema": types::EVENT_SCHEMA,
+        "schema": command::EVENT_SCHEMA,
         "run_id": run_id,
         "correlation_id": correlation_id,
         "trace_id": identity::id("trace", input.operation, candidate),

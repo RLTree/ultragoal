@@ -5,7 +5,7 @@ pub(super) fn receipt_failures(
     root: &Path,
     value: &Value,
     expected_candidate: &str,
-    operation: crate::cli::control::plane::types::ControlOperation,
+    operation: crate::cli::control::plane::operation::ControlOperation,
 ) -> Vec<String> {
     let store = crate::schema_catalog::load(root);
     let mut out = crate::schema_catalog::schema_errors(
@@ -28,7 +28,7 @@ pub(super) fn receipt_failures(
 
 #[cfg(test)]
 mod tests {
-    use crate::cli::control::plane::types::ControlOperation;
+    use crate::cli::control::plane::operation::ControlOperation;
     use serde_json::json;
 
     #[test]

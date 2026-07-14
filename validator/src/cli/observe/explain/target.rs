@@ -1,4 +1,4 @@
-use crate::cli::observe::types::ObserveCommand;
+use crate::cli::observe::command::ObserveCommand;
 use serde_json::{Value, json};
 use std::path::Path;
 
@@ -232,9 +232,10 @@ where
 }
 
 fn is_query_receipt(value: &Value) -> bool {
-    value.get("schema").and_then(Value::as_str) == Some(crate::cli::observe::types::QUERY_SCHEMA)
+    value.get("schema").and_then(Value::as_str) == Some(crate::cli::observe::command::QUERY_SCHEMA)
 }
 
 fn is_observability_receipt(value: &Value) -> bool {
-    value.get("schema").and_then(Value::as_str) == Some(crate::cli::observe::types::RECEIPT_SCHEMA)
+    value.get("schema").and_then(Value::as_str)
+        == Some(crate::cli::observe::command::RECEIPT_SCHEMA)
 }

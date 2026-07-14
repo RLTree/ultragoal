@@ -1,5 +1,5 @@
 use crate::cli::observe;
-use crate::cli::observe::types::ObserveOperation;
+use crate::cli::observe::command::ObserveOperation;
 use serde_json::json;
 use std::fs;
 use std::path::Path;
@@ -141,7 +141,7 @@ fn observability_stack_error_and_non_stack_edges_are_typed() {
     let root = super::minimal_root("observe-stack-edges");
     let non_stack = observe::stack::run(
         &root,
-        &observe::types::ObserveCommand {
+        &observe::command::ObserveCommand {
             operation: ObserveOperation::Prove,
             receipt: None,
             query: None,

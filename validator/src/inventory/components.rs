@@ -1,6 +1,8 @@
 use super::compatibility::{STRUCTURAL_WITNESS_KIND, by_legacy_name, inspect_wrapper};
 use super::component_expectations::expected_names;
-use super::fs::{check_symlink, component_name, physical_entry, regular_files, relative};
+use super::fs::{
+    PhysicalEntryDescriptor, check_symlink, component_name, physical_entry, regular_files, relative,
+};
 use super::registry::RegistryData;
 use super::types::{
     ActiveStatus, AuthorityState, InventoryEntry, InventoryError, InventoryFinding,
@@ -8,17 +10,28 @@ use super::types::{
 use crate::context::ReadSession;
 use std::path::Path;
 
-#[allow(clippy::too_many_arguments)]
-fn record_invalid_metadata(
-    reads: &ReadSession,
-    root: &Path,
-    path: &Path,
+struct InvalidComponentMetadata<'a> {
+    reads: &'a ReadSession,
+    root: &'a Path,
+    path: &'a Path,
     stable_id: String,
-    kind: &str,
-    owner: &str,
-    findings: &mut Vec<InventoryFinding>,
-    entries: &mut Vec<InventoryEntry>,
-) -> Result<(), InventoryError> {
+    kind: &'a str,
+    owner: &'a str,
+    findings: &'a mut Vec<InventoryFinding>,
+    entries: &'a mut Vec<InventoryEntry>,
+}
+
+fn record_invalid_metadata(request: InvalidComponentMetadata<'_>) -> Result<(), InventoryError> {
+    let InvalidComponentMetadata {
+        reads,
+        root,
+        path,
+        stable_id,
+        kind,
+        owner,
+        findings,
+        entries,
+    } = request;
     let relative = relative(root, path)?;
     findings.push(InventoryFinding::error(
         "invalid_component_metadata",
@@ -30,14 +43,16 @@ fn record_invalid_metadata(
         reads,
         root,
         path,
-        stable_id,
-        kind,
-        owner,
-        AuthorityState::Context,
-        ActiveStatus::ContextOnly,
-        None,
-        Vec::new(),
-        Vec::new(),
+        PhysicalEntryDescriptor {
+            stable_id,
+            kind,
+            owner,
+            authority_state: AuthorityState::Context,
+            active_status: ActiveStatus::ContextOnly,
+            generator: None,
+            provenance: Vec::new(),
+            references: Vec::new(),
+        },
     )?);
     Ok(())
 }
@@ -67,16 +82,16 @@ pub(crate) fn discover_skills(
             continue;
         }
         let Some(declared) = component_name(reads, &path, true) else {
-            record_invalid_metadata(
+            record_invalid_metadata(InvalidComponentMetadata {
                 reads,
                 root,
-                &path,
-                format!("INVALID-SKILL:{directory_name}"),
-                "skill",
-                "OWN-PLUGIN-PRODUCT",
+                path: &path,
+                stable_id: format!("INVALID-SKILL:{directory_name}"),
+                kind: "skill",
+                owner: "OWN-PLUGIN-PRODUCT",
                 findings,
                 entries,
-            )?;
+            })?;
             continue;
         };
         let legacy = registry.legacy_skills.contains_key(&declared)
@@ -124,14 +139,16 @@ pub(crate) fn discover_skills(
             reads,
             root,
             &path,
-            stable_id,
-            kind,
-            "OWN-PLUGIN-PRODUCT",
-            authority,
-            ActiveStatus::Active,
-            None,
-            provenance,
-            references,
+            PhysicalEntryDescriptor {
+                stable_id,
+                kind,
+                owner: "OWN-PLUGIN-PRODUCT",
+                authority_state: authority,
+                active_status: ActiveStatus::Active,
+                generator: None,
+                provenance,
+                references,
+            },
         )?);
     }
     Ok(())
@@ -165,34 +182,36 @@ pub(crate) fn discover_agents(
                 Some(&relative(root, &path)?),
                 "project agent manifest does not satisfy the current read-only schema".to_owned(),
             ));
-            record_invalid_metadata(
+            record_invalid_metadata(InvalidComponentMetadata {
                 reads,
                 root,
-                &path,
-                format!("INVALID-AGENT:{stem}"),
-                "agent",
-                "OWN-ULTRA-ROOT",
+                path: &path,
+                stable_id: format!("INVALID-AGENT:{stem}"),
+                kind: "agent",
+                owner: "OWN-ULTRA-ROOT",
                 findings,
                 entries,
-            )?;
+            })?;
             continue;
         };
         entries.push(physical_entry(
             reads,
             root,
             &path,
-            format!("AGENT:{declared}"),
-            "agent",
-            "OWN-ULTRA-ROOT",
-            if required.contains(&declared) {
-                AuthorityState::Canonical
-            } else {
-                AuthorityState::Context
+            PhysicalEntryDescriptor {
+                stable_id: format!("AGENT:{declared}"),
+                kind: "agent",
+                owner: "OWN-ULTRA-ROOT",
+                authority_state: if required.contains(&declared) {
+                    AuthorityState::Canonical
+                } else {
+                    AuthorityState::Context
+                },
+                active_status: ActiveStatus::Active,
+                generator: None,
+                provenance: Vec::new(),
+                references: Vec::new(),
             },
-            ActiveStatus::Active,
-            None,
-            Vec::new(),
-            Vec::new(),
         )?);
     }
     Ok(())

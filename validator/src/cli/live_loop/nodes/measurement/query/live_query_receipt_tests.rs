@@ -90,7 +90,7 @@ fn live_query_receipt_serializes_same_candidate_query_records() {
         "corr-live-query-pass",
     );
     let event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-live-query-pass",
         "correlation_id": "corr-live-query-pass",
         "candidate_digest": candidate,

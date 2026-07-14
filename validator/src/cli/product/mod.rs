@@ -2,7 +2,7 @@ use serde_json::{Value, json};
 use std::path::{Component, Path, PathBuf};
 use std::time::Instant;
 
-pub(crate) use types::{ProductCommand, ProductOperation};
+pub(crate) use command::{ProductCommand, ProductOperation};
 
 pub(crate) fn parse(raw: &[String]) -> Result<Option<ProductCommand>, String> {
     match raw {
@@ -116,6 +116,6 @@ pub(crate) fn receipt_row(path: &str, digest: &str, status: &str) -> Value {
 }
 
 mod cohesion;
+mod command;
 pub(crate) mod receipts;
 mod telemetry;
-mod types;

@@ -1,5 +1,5 @@
+use crate::cli::observe::command::{ObserveCommand, ObserveOperation};
 use crate::cli::observe::query::QueryKind;
-use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 use std::path::Path;
 
@@ -118,7 +118,7 @@ fn metrics_query_reports_target_run_outside_bounded_window() {
 fn write_target_event_with_timestamp(root: &Path, operation: &str, timestamp: &str) {
     let candidate = crate::package::inventory::package_digest(root).expect("candidate");
     let event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-metrics-freshness",
         "candidate_digest": candidate,
         "operation": operation,
@@ -135,7 +135,7 @@ fn write_target_event_with_timestamp(root: &Path, operation: &str, timestamp: &s
 fn write_target_event(root: &Path) {
     let candidate = crate::package::inventory::package_digest(root).expect("candidate");
     let event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-query-bound",
         "correlation_id": "corr-query-bound",
         "candidate_digest": candidate,
@@ -146,9 +146,9 @@ fn write_target_event(root: &Path) {
         "where_failed": "source.audit",
         "next_repair": "rerun source audit for current metrics proof",
         "claim_impact": "readiness_release_completion_update_goal_blocked",
-        "law_id": crate::cli::observe::types::LAW_ID,
-        "check_id": crate::cli::observe::types::CHECK_ID,
-        "claim_id": crate::cli::observe::types::CLAIM_ID,
+        "law_id": crate::cli::observe::command::LAW_ID,
+        "check_id": crate::cli::observe::command::CHECK_ID,
+        "claim_id": crate::cli::observe::command::CLAIM_ID,
         "timestamp": "2026-07-01T19:42:39Z",
         "duration_ms": 130043,
         "task_count": 2695,

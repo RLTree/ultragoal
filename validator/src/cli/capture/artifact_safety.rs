@@ -1,7 +1,7 @@
 use super::artifact_model::ArtifactDisposition;
 #[cfg(test)]
 use super::environment::InvocationSensitivity;
-use super::util::digest_bytes;
+use super::identity_codec::digest_bytes;
 use std::sync::Arc;
 
 pub(super) struct FinalizedArtifact {

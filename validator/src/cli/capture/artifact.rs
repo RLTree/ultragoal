@@ -7,15 +7,16 @@ use super::filesystem;
 use super::filesystem::RootAnchor;
 #[cfg(test)]
 use super::filesystem::validate_context_roots;
+#[cfg(test)]
+use super::identity_codec::context_candidate_id;
+use super::identity_codec::{bytes_hex, valid_sha256};
 use super::inputs::ArtifactExpectation;
 #[cfg(test)]
 use super::inputs::PublicArtifact;
+use super::path_policy::{os_bytes, validate_public_path, validate_relative};
 #[cfg(test)]
 use super::spec::CommandSpec;
 use super::spec::MAX_PATH_BYTES;
-#[cfg(test)]
-use super::util::context_candidate_id;
-use super::util::{bytes_hex, os_bytes, valid_sha256, validate_public_path, validate_relative};
 #[cfg(test)]
 use crate::context::LiveContext;
 use std::collections::BTreeSet;

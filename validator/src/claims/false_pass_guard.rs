@@ -1,4 +1,5 @@
 use super::definition::ClaimDefinition;
+use super::evaluation_request::FalsePassEvaluation;
 use super::evidence::{Actor, ActorRole, EvidenceEnvelope};
 use super::false_pass::{
     MODEL_METHOD, MODEL_OBSERVATION_METHOD, expected_model_observer_id, method_sequence,
@@ -6,18 +7,18 @@ use super::false_pass::{
 };
 use std::collections::BTreeSet;
 
-#[allow(clippy::too_many_arguments)]
-pub(super) fn reasons(
-    registry_digest: &str,
-    definition: &ClaimDefinition,
-    envelope: &EvidenceEnvelope,
-    accepted_artifacts: &BTreeSet<String>,
-    context: &str,
-    candidate: &str,
-    now: u64,
-    reviewer: &Actor,
-    allow_semantic_models: bool,
-) -> Vec<String> {
+pub(super) fn reasons(request: FalsePassEvaluation<'_>) -> Vec<String> {
+    let FalsePassEvaluation {
+        registry_digest,
+        definition,
+        envelope,
+        accepted_artifacts,
+        context,
+        candidate,
+        now,
+        reviewer,
+        allow_semantic_models,
+    } = request;
     let observed = envelope
         .false_pass_model
         .as_ref()

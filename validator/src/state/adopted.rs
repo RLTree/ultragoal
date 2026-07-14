@@ -6,7 +6,7 @@ use super::catalog::{
     InventoryPolicy, RuntimeMetadata,
 };
 use super::policy_authority::PolicyAuthority;
-use super::types::{
+use super::product_state::{
     AuthorityRequirement, CeilingReduction, ProductState, Repair, RepairTarget, RepairTargetKind,
     Scope, StateError,
 };

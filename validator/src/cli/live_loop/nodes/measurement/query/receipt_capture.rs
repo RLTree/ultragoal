@@ -1,6 +1,6 @@
 use crate::cli::live_loop::surfaces::LoopValidationSurface;
+use crate::cli::observe::command::ObserveCommand;
 use crate::cli::observe::query::LiveQueryObservation;
-use crate::cli::observe::types::ObserveCommand;
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 

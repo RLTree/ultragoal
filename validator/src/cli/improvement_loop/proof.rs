@@ -134,7 +134,8 @@ fn require_digest(root: &Path, receipt: &Value, key: &str, rel: &str, out: &mut 
 
 fn check_observability(receipt: &Value, candidate: &str, out: &mut Vec<String>) {
     let obs = receipt.get("observability_receipt").unwrap_or(&Value::Null);
-    if obs.get("schema").and_then(Value::as_str) != Some(crate::cli::observe::types::RECEIPT_SCHEMA)
+    if obs.get("schema").and_then(Value::as_str)
+        != Some(crate::cli::observe::command::RECEIPT_SCHEMA)
         || obs.get("status").and_then(Value::as_str) != Some("pass")
         || obs.get("candidate_digest").and_then(Value::as_str) != Some(candidate)
         || obs.get("law_id").and_then(Value::as_str) != Some(super::LAW_ID)

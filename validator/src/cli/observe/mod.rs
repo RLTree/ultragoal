@@ -1,5 +1,6 @@
 use std::path::{Path, PathBuf};
 
+pub(crate) mod command;
 mod command_roundtrip;
 pub(crate) mod explain;
 pub(crate) mod query;
@@ -7,9 +8,8 @@ mod snapshot;
 pub(crate) mod stack;
 mod stdout;
 pub(crate) mod telemetry;
-pub(crate) mod types;
 
-use types::{ObserveCommand, ObserveOperation};
+use command::{ObserveCommand, ObserveOperation};
 
 pub(crate) fn parse(raw: &[String]) -> Result<Option<ObserveCommand>, String> {
     if raw.first().map(String::as_str) != Some("observe") {

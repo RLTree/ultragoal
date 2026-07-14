@@ -1,11 +1,11 @@
-use crate::cli::rust::types::{RUST_COMMANDS, RUST_POLICY_VERSION, RustOperation};
+use crate::cli::rust::operation::{RUST_COMMANDS, RUST_POLICY_VERSION, RustOperation};
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
 pub(crate) mod observations;
+pub(crate) mod operation;
 pub(crate) mod receipt;
-pub(crate) mod types;
 
 #[derive(Debug)]
 pub(crate) struct RustCommand {
@@ -104,7 +104,7 @@ pub(crate) fn receipt_from_observations(
         "withheld_or_blocked"
     };
     Ok(json!({
-        "schema": types::RUST_RECEIPT_SCHEMA,
+        "schema": operation::RUST_RECEIPT_SCHEMA,
         "schema_version": "v1",
         "issuer": {"tool": "ultragoal", "authority": "cli_control_plane"},
         "generated_at": crate::audit::clock::now_iso(),

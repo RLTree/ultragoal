@@ -1,7 +1,7 @@
+use crate::cli::control::plane::operation::ControlOperation;
 use crate::cli::control::plane::receipt::same_candidate_fail_closed_failures;
 use crate::cli::control::plane::receipt::same_candidate_pass_failures;
 use crate::cli::control::plane::receipt::surface_value_failures;
-use crate::cli::control::plane::types::ControlOperation;
 use crate::cli::control::plane::{RECEIPT_SCHEMA, receipt_from_evidence};
 use serde_json::json;
 

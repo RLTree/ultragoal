@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use super::model::{CheckNode, ClaimBoundary, PathRoute};
+use super::definition::{CheckNode, ClaimBoundary, PathRoute};
 use crate::routine_work::{RoutineError, RoutineErrorId};
 
 const MAX_NODES: usize = 4_096;

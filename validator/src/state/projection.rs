@@ -1,6 +1,8 @@
 use super::catalog::{HostGoalObservation, RuntimeMetadata};
 use super::ceiling::ClaimCeiling;
-use super::types::{Finding, NextAction, ProductGoalState, ProductState, Repair, StateError};
+use super::product_state::{
+    Finding, NextAction, ProductGoalState, ProductState, Repair, StateError,
+};
 use serde::Serialize;
 
 #[derive(Serialize)]
@@ -184,10 +186,12 @@ impl crate::cli::successor::runtime::StateView for ProductState {
     fn disposition(&self) -> crate::cli::successor::runtime::StateDisposition {
         use crate::cli::successor::runtime::StateDisposition;
         match self.next_action.kind {
-            super::types::NextActionKind::NoOp => StateDisposition::NoAction,
-            super::types::NextActionKind::Command => StateDisposition::Action,
-            super::types::NextActionKind::AuthorityRequest => StateDisposition::AuthorityRequest,
-            super::types::NextActionKind::NoLegalRoute => StateDisposition::NoLegalRoute,
+            super::product_state::NextActionKind::NoOp => StateDisposition::NoAction,
+            super::product_state::NextActionKind::Command => StateDisposition::Action,
+            super::product_state::NextActionKind::AuthorityRequest => {
+                StateDisposition::AuthorityRequest
+            }
+            super::product_state::NextActionKind::NoLegalRoute => StateDisposition::NoLegalRoute,
         }
     }
 

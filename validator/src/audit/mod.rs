@@ -24,6 +24,7 @@ pub(crate) mod research;
 pub(crate) mod review_history;
 pub(crate) mod rust;
 pub(crate) mod session;
+pub(crate) mod source_governance;
 pub(crate) use session::log::hardening as session_log_hardening;
 pub(crate) mod source_obligations;
 pub(crate) mod standards_gardening;

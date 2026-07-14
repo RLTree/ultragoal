@@ -3,8 +3,8 @@ use crate::context::EffectClass;
 use crate::inventory::FindingSeverity as InventorySeverity;
 use crate::state::catalog::InventoryPolicy;
 use crate::state::engine::derive_bound;
+use crate::state::product_state::AuthorityRequirement;
 use crate::state::snapshot::InventoryObservation;
-use crate::state::types::AuthorityRequirement;
 use std::fs;
 use std::sync::atomic::{AtomicU64, Ordering};
 

@@ -1,4 +1,4 @@
-use crate::cli::observe::types;
+use crate::cli::observe::command;
 use serde_json::{Value, json};
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -21,7 +21,7 @@ fn prepare_root(label: &str) -> PathBuf {
     root
 }
 
-fn command(run_id: &str) -> types::ObserveCommand {
+fn command(run_id: &str) -> crate::cli::observe::command::ObserveCommand {
     crate::cli::observe::parse(&[
         "observe".to_string(),
         "explain-failure".to_string(),
@@ -39,7 +39,7 @@ fn explain_identifies_stale_missing_and_passed_target_events() {
     write_event(
         &root,
         json!({
-            "schema": types::EVENT_SCHEMA,
+            "schema": command::EVENT_SCHEMA,
             "run_id": "run-stale",
             "candidate_digest": "sha256:old",
             "operation": "coverage.prove",
@@ -75,7 +75,7 @@ fn explain_identifies_stale_missing_and_passed_target_events() {
     write_event(
         &root,
         json!({
-            "schema": types::EVENT_SCHEMA,
+            "schema": command::EVENT_SCHEMA,
             "run_id": "run-missing-candidate",
             "operation": "coverage.prove",
             "status": "fail",
@@ -101,7 +101,7 @@ fn explain_identifies_stale_missing_and_passed_target_events() {
     write_event(
         &root,
         json!({
-            "schema": types::EVENT_SCHEMA,
+            "schema": command::EVENT_SCHEMA,
             "run_id": "run-pass",
             "candidate_digest": candidate,
             "operation": "coverage.prove",
@@ -136,7 +136,7 @@ fn explain_reconciles_query_evidence_by_check_operation_and_failure_class() {
     write_event(
         &root,
         json!({
-            "schema": types::EVENT_SCHEMA,
+            "schema": command::EVENT_SCHEMA,
             "run_id": "run-query-evidence",
             "candidate_digest": candidate,
             "operation": "coverage.prove",
@@ -218,7 +218,7 @@ fn write_query_receipt(
     extra: Value,
 ) {
     let mut value = json!({
-        "schema": types::QUERY_SCHEMA,
+        "schema": command::QUERY_SCHEMA,
         "query_kind": kind,
         "run_id": run_id,
         "candidate_digest": candidate,

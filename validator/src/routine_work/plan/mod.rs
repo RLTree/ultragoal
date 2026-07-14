@@ -1,4 +1,4 @@
-mod model;
+mod definition;
 mod order;
 mod selection;
 
@@ -14,7 +14,7 @@ use super::{CheckNode, DirtySnapshot, ImpactGraph, RoutineBinding, RoutineError,
 use order::topological_order;
 use selection::Selection;
 
-pub use model::{
+pub use definition::{
     AffectedSet, CoverageDimensions, PlanMode, PlanRequest, PlannedCheck, RoutinePlan,
     SelectionReason,
 };

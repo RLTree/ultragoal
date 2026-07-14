@@ -1,6 +1,6 @@
-mod model;
+mod definition;
 mod validation;
 
-pub use model::{
+pub use definition::{
     CheckClass, CheckNode, ClaimBoundary, ImpactGraph, PathMatcher, PathRoute, RunnerSpec,
 };

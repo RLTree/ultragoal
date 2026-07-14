@@ -14,14 +14,23 @@ mod discovery;
 mod fs;
 mod generated;
 mod legacy;
+#[path = "plugin/hooks.rs"]
 mod plugin_hooks;
+#[path = "plugin/manifest/mod.rs"]
 mod plugin_manifest;
+#[path = "plugin/manifest/hook/document.rs"]
 mod plugin_manifest_hook_document;
+#[path = "plugin/manifest/hook/matcher.rs"]
 mod plugin_manifest_hook_matcher;
 mod plugin_manifest_hooks;
+#[path = "plugin/manifest/interface.rs"]
 mod plugin_manifest_interface;
+#[path = "plugin/manifest/json.rs"]
 mod plugin_manifest_json;
+#[path = "plugin/manifest/path.rs"]
 mod plugin_manifest_path;
+#[cfg(test)]
+#[path = "plugin/manifest/semver.rs"]
 mod plugin_manifest_semver;
 mod projection;
 #[cfg(test)]
@@ -29,6 +38,7 @@ mod race_tests;
 mod registry;
 mod retained_routes;
 mod routing;
+#[path = "routing/state.rs"]
 mod routing_state;
 mod schema_references;
 mod types;
@@ -40,6 +50,8 @@ pub const ADOPTED_HANDOFF_MANIFEST_SHA256: &str =
     "d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51";
 
 pub use builder::InventoryBuilder;
+#[cfg(test)]
+pub(crate) use types::AuthorityCatalogDefinition;
 pub use types::{
     ActiveStatus, AuthorityCatalog, AuthorityState, FindingSeverity, GeneratedSurfaceIndex,
     InventoryEntry, InventoryError, InventoryFinding, ProjectionComparison,

@@ -128,7 +128,7 @@ pub(super) fn emit_receipt(root: &Path, fields: ReceiptFields<'_>) -> Result<Val
             subcommand: fields.subcommand,
             operation: fields.operation,
             surface: fields.surface,
-            law_id: crate::cli::observe::types::LAW_ID,
+            law_id: crate::cli::observe::command::LAW_ID,
             check_id: fields.check_id,
             claim_id: fields.claim_id,
             artifact_path: fields.artifact_path,

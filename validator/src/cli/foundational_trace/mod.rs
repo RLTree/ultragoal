@@ -56,7 +56,7 @@ pub(crate) fn run(root: &Path, command: &FoundationalTraceCommand) -> Result<i32
             subcommand: "check",
             operation: "foundational-trace.check",
             surface: "foundational_trace",
-            law_id: crate::cli::observe::types::LAW_ID,
+            law_id: crate::cli::observe::command::LAW_ID,
             check_id: "foundational-trace-check-observability-binding",
             claim_id: "foundational_trace_check",
             artifact_path: TRACE_REL,

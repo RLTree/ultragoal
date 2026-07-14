@@ -184,11 +184,18 @@ fn protected_executable(path: &Path) -> Result<(), FixtureScheduleError> {
 
 #[cfg(target_os = "macos")]
 fn darwin_address_space_limit(budget: u64) -> Result<u64, FixtureScheduleError> {
+    unsafe extern "C" {
+        #[link_name = "mach_task_self_"]
+        static MACH_TASK_SELF_PORT: libc::mach_port_t;
+    }
     let mut info = std::mem::MaybeUninit::<libc::mach_task_basic_info>::zeroed();
     let mut count = libc::MACH_TASK_BASIC_INFO_COUNT;
+    // SAFETY: this copies the process-global Mach task port value; no reference
+    // to the mutable foreign static is created or retained.
+    let task = unsafe { MACH_TASK_SELF_PORT };
     let status = unsafe {
         libc::task_info(
-            libc::mach_task_self(),
+            task,
             libc::MACH_TASK_BASIC_INFO,
             info.as_mut_ptr().cast(),
             &mut count,

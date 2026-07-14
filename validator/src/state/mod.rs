@@ -18,16 +18,16 @@ mod policy;
 mod policy_action;
 pub(crate) mod policy_authority;
 mod policy_repair;
+mod product_state;
 mod projection;
 mod provenance;
 mod reduce;
 mod snapshot;
-mod types;
 
 #[cfg(test)]
 mod tests;
 
-pub(crate) use adopted::{derive_adopted, issue_adopted};
+pub(crate) use adopted::derive_adopted;
 pub use catalog::{
     ActionDefinition, ActionKind, CapabilityRequirement, ClaimSpec, CommandBinding,
     DependencyActionCatalog, DependencyActionSpec, DependencyFact, DependencyStatus, FactAuthority,
@@ -36,7 +36,7 @@ pub use catalog::{
 };
 pub use ceiling::{CeilingRelation, ClaimCeiling};
 pub use engine::StateEngine;
-pub use types::{
+pub use product_state::{
     AuthorityRequest, AuthorityRequirement, CeilingReduction, Finding, FindingSeverity,
     FindingSource, NextAction, NextActionKind, NoLegalRoute, ProductGoalState, ProductState,
     Repair, RepairTarget, RepairTargetKind, Scope, StateError,

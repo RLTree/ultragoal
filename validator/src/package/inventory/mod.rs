@@ -5,11 +5,13 @@ use std::sync::Arc;
 
 pub(crate) mod anchored;
 pub(crate) mod closure;
+pub(crate) mod draft_manifest;
 pub(crate) mod generated_disposition;
 pub(crate) mod payload;
 pub(crate) mod snapshot;
 
 pub use closure::{final_bytecode_failures, inventory_closure_failures};
+pub(crate) use draft_manifest::DraftPackageManifest;
 pub(crate) use payload::stable_package_payload;
 
 pub const PACKAGE_DIGEST_EXCLUDED_PREFIXES: &[&str] = &["validation_artifacts/"];
@@ -131,12 +133,8 @@ pub fn package_digest(root: &Path) -> Result<String, String> {
             let catalog = dispositions
                 .as_ref()
                 .expect("generated path requires a disposition catalog");
-            match catalog.classify_in(&mut session, &rel)? {
-                generated_disposition::Classification::CanonicalProjection { bytes } => {
-                    rows.push((rel, bytes));
-                }
-                generated_disposition::Classification::RetainedContext { .. } => continue,
-            }
+            let generated_disposition::Classification::RetainedContext { .. } =
+                catalog.classify_in(&mut session, &rel)?;
             continue;
         }
         if rel == generated_disposition::REGISTRY_PATH && dispositions.is_some() {
@@ -166,7 +164,7 @@ fn package_resource_bytes(session: &mut anchored::Session, rel: &str) -> Result<
         .map_err(|error| format!("package digest resource unavailable: {error}"))
 }
 
-fn package_path_syntax_error(rel: &str) -> Option<String> {
+pub(crate) fn package_path_syntax_error(rel: &str) -> Option<String> {
     if rel.is_empty() {
         return Some("package path is not a non-empty string".to_string());
     }

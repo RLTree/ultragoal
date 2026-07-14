@@ -1,5 +1,5 @@
+use crate::cli::control::plane::operation::ControlOperation;
 use crate::cli::control::plane::parse;
-use crate::cli::control::plane::types::ControlOperation;
 
 fn args(values: &[&str]) -> Vec<String> {
     values.iter().map(|value| (*value).to_string()).collect()

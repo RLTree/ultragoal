@@ -1,4 +1,4 @@
-use crate::cli::control::plane::types::ControlOperation;
+use crate::cli::control::plane::operation::ControlOperation;
 use crate::self_tests::boundaries::workspace_fixtures;
 use serde_json::{Value, json};
 use std::path::Path;

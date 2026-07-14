@@ -1,5 +1,5 @@
 use super::catalog::{DependencyStatus, FactAuthority};
-use super::types::{
+use super::product_state::{
     AuthorityRequirement, CeilingReduction, Finding, FindingSeverity, FindingSource, Repair,
     RepairTarget, RepairTargetKind, Scope,
 };

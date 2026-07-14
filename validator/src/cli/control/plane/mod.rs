@@ -1,4 +1,4 @@
-use crate::cli::control::plane::types::ControlOperation;
+use crate::cli::control::plane::operation::ControlOperation;
 use serde_json::Value;
 use std::path::{Path, PathBuf};
 
@@ -165,12 +165,12 @@ fn surface_root(args: &[String]) -> Option<PathBuf> {
 
 pub(crate) mod emit;
 pub(crate) mod evidence;
+pub(crate) mod operation;
 pub(crate) mod path;
 pub(crate) mod proof;
 pub(crate) mod receipt;
 pub(crate) mod registry;
 pub(crate) mod surface;
 pub(crate) mod transactional;
-pub(crate) mod types;
 #[cfg(test)]
 pub(crate) use emit::receipt_from_evidence;

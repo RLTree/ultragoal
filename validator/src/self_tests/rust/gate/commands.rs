@@ -1,6 +1,6 @@
 use crate::cli::garbage::collection::{GarbageCommand, parse as parse_gc};
 use crate::cli::rust::observations;
-use crate::cli::rust::types::RustOperation;
+use crate::cli::rust::operation::RustOperation;
 use crate::cli::rust::{RustCommand, parse as parse_rust, receipt_from_observations};
 use serde_json::json;
 #[test]
@@ -60,7 +60,7 @@ fn command_run_routes_rust_and_gc_without_bypass() {
     let gc_code = crate::command_run::run_with_exit_code(crate::Args {
         root,
         command: crate::Command::Garbage(GarbageCommand {
-            operation: crate::cli::garbage::collection::types::GarbageOperation::Plan,
+            operation: crate::cli::garbage::collection::operation::GarbageOperation::Plan,
             receipt: Some(out_rel),
             plan_digest: Some("sha256:test-plan".to_string()),
             apply_receipt_digest: None,

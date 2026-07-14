@@ -9,19 +9,13 @@ pub mod lifecycle;
 pub mod product_fitness;
 pub mod source_closure;
 
-// Production-compile the independently reviewed verifier without granting it
-// command, route, registry, host-adapter, or claim authority.
-#[cfg(not(test))]
-pub(crate) mod agent_discovery;
-
 // The legacy source-closure contract compiles this module directly inside an
 // integration-test crate that has no distribution kernel. Production builds,
 // including every integration test through the library, expose the adapter.
 #[cfg(not(test))]
 pub mod distribution_adapter;
 
-// Host lifecycle composition is production-compiled after independent source
-// acceptance, but remains crate-private until a supported-host adapter and
-// root-owned effect authorization are separately adopted.
-#[cfg(not(test))]
-pub(crate) mod host_lifecycle;
+// Agent-discovery and host-lifecycle candidate sources remain exercised by
+// their path-bound integration contracts. They are intentionally absent from
+// production until a supported host adapter and a real public caller adopt
+// their sealed construction routes.

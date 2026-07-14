@@ -1,4 +1,4 @@
-use super::support::{metadata_snapshot, resource_root, root, write_manifest};
+use super::repository_fixture::{metadata_snapshot, resource_root, root, write_manifest};
 use crate::package::inventory::{anchored, package_digest};
 use std::fs;
 

@@ -154,7 +154,7 @@ fn observability_receipt(
             subcommand: "rebind",
             operation: "standards-gardener.rebind",
             surface: "standards_gardener",
-            law_id: crate::cli::observe::types::LAW_ID,
+            law_id: crate::cli::observe::command::LAW_ID,
             check_id: "standards-gardener-rebind-observability-binding",
             claim_id: "standards_gardener_rebind",
             artifact_path: &artifact_path,

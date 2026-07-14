@@ -2,6 +2,7 @@ use super::context::{ReadOnlySink, journal_head_identity, open_engine};
 use super::snapshot::snapshot;
 use super::{
     PermitTarget, ProductContext, ProductError, ProductWorkspace, RootAuthority, RootPermit,
+    RootReconcilePermitVerification,
 };
 use crate::orchestration::{EffectResolution, JournalHead};
 use serde::{Deserialize, Serialize};
@@ -44,16 +45,16 @@ pub fn reconcile(
         return Err(ProductError::AuthorityOperationMismatch);
     }
     let head_identity = journal_head_identity(&request.expected_head)?;
-    authority.verify_reconcile(
+    authority.verify_reconcile(RootReconcilePermitVerification {
         permit,
-        &context.root,
-        &context.binding,
-        workspace.identity(),
-        &head_identity,
-        request.tick,
-        &request.target,
-        &request.resolution,
-    )?;
+        expected_root: &context.root,
+        binding: &context.binding,
+        workspace_identity: workspace.identity(),
+        journal_head_identity: &head_identity,
+        tick: request.tick,
+        target: &request.target,
+        resolution: &request.resolution,
+    })?;
     let mut engine = open_engine(context, workspace, &request.expected_head, ReadOnlySink)?;
     let before = snapshot(&engine, request.tick, &request.live_workers)?;
     before.require_target(&request.target)?;

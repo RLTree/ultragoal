@@ -1,6 +1,6 @@
 use crate::cli::garbage::collection::{GarbageCommand, receipt as gc_receipt};
 use crate::cli::rust::observations::ObservationSet;
-use crate::cli::rust::types::RustOperation;
+use crate::cli::rust::operation::RustOperation;
 use crate::cli::rust::{RustCommand, receipt_from_observations};
 use serde_json::{Value, json};
 use std::path::Path;
@@ -31,19 +31,19 @@ pub(super) fn write_standards_rust_gc(root: &Path, current: &str) {
     for (name, operation) in [
         (
             "plan",
-            crate::cli::garbage::collection::types::GarbageOperation::Plan,
+            crate::cli::garbage::collection::operation::GarbageOperation::Plan,
         ),
         (
             "dry-run",
-            crate::cli::garbage::collection::types::GarbageOperation::DryRun,
+            crate::cli::garbage::collection::operation::GarbageOperation::DryRun,
         ),
         (
             "apply",
-            crate::cli::garbage::collection::types::GarbageOperation::Apply,
+            crate::cli::garbage::collection::operation::GarbageOperation::Apply,
         ),
         (
             "verify",
-            crate::cli::garbage::collection::types::GarbageOperation::Verify,
+            crate::cli::garbage::collection::operation::GarbageOperation::Verify,
         ),
     ] {
         write_json(
@@ -141,7 +141,7 @@ fn rust_observations(operation: RustOperation) -> ObservationSet {
 
 fn gc_receipt_value(
     root: &Path,
-    operation: crate::cli::garbage::collection::types::GarbageOperation,
+    operation: crate::cli::garbage::collection::operation::GarbageOperation,
 ) -> Value {
     gc_receipt(
         root,

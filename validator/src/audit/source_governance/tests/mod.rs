@@ -1,0 +1,9 @@
+mod dependency_adapter_edges;
+mod fixture;
+mod inventory_edges;
+mod lint_allowance_edges;
+mod production_source_edges;
+mod registry_absence;
+mod standards_fixture;
+mod typed_boundary_edges;
+mod zero_write;

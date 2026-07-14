@@ -3,7 +3,6 @@ use serde_json::Value;
 use std::path::Path;
 
 const COVERAGE_RECEIPT: &str = "validation_artifacts/coverage/coverage-receipt.json";
-pub(crate) const MAX_SOURCE_LINES: usize = 250;
 
 pub fn package_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec<String> {
     let mut out = Vec::new();
@@ -13,6 +12,8 @@ pub fn package_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec
         root, store,
     ));
     out.extend(line_cap_failures(root));
+    out.extend(crate::audit::plugin::dependency_adapter::failures(root));
+    out.extend(crate::audit::plugin::live_repository_routes::failures(root));
     out
 }
 
@@ -85,60 +86,12 @@ fn coverage_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec<St
 }
 
 fn line_cap_failures(root: &Path) -> Vec<String> {
-    line_cap_source_paths(root)
-        .into_iter()
-        .filter_map(|rel| line_cap_failure_for_path(root, &rel))
-        .collect()
-}
-
-pub(crate) fn line_cap_failure_for_path(root: &Path, rel: &str) -> Option<String> {
-    let Ok(text) = std::fs::read_to_string(root.join(rel)) else {
-        return Some(format!("plugin_self_law_line_cap_unreadable:{rel}"));
-    };
-    let lines = text.lines().count();
-    (lines > MAX_SOURCE_LINES).then(|| format!("plugin_self_law_line_cap_exceeded:{rel}:{lines}"))
-}
-
-pub(crate) fn line_cap_source_paths(root: &Path) -> Vec<String> {
-    let mut out = Vec::new();
-    collect(root, "validator/src", ".rs", &mut out);
-    collect(root, ".harness", ".sh", &mut out);
-    for rel in [
-        ".harness/coverage-command",
-        "scripts/check",
-        "scripts/check-agent-standards",
-        "scripts/check-coverage-fast",
-        "scripts/check-coverage-full",
-    ] {
-        if root.join(rel).is_file() {
-            out.push(rel.to_string());
-        }
-    }
-    out.sort();
-    out
-}
-
-fn collect(root: &Path, rel: &str, suffix: &str, out: &mut Vec<String>) {
-    let Ok(entries) = std::fs::read_dir(root.join(rel)) else {
-        return;
-    };
-    for entry in entries.flatten() {
-        let path = entry.path();
-        if path.is_dir() {
-            if let Ok(child) = path.strip_prefix(root) {
-                collect(
-                    root,
-                    &child.to_string_lossy().replace('\\', "/"),
-                    suffix,
-                    out,
-                );
-            }
-        } else if path.to_string_lossy().ends_with(suffix)
-            && let Ok(child) = path.strip_prefix(root)
-        {
-            out.push(child.to_string_lossy().replace('\\', "/"));
-        }
-    }
+    let audit = crate::audit::source_governance::audit(root);
+    let mut failures = audit.failures;
+    failures.extend(crate::audit::source_governance::line_cap_failures(
+        &audit.inventory,
+    ));
+    failures
 }
 
 fn read(root: &Path, rel: &str, out: &mut Vec<String>) -> Option<Value> {

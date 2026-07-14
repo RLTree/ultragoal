@@ -51,13 +51,13 @@ pub(super) fn label_failures(
             root,
             value,
             expected,
-            crate::cli::control::plane::types::ControlOperation::InstallAudit,
+            crate::cli::control::plane::operation::ControlOperation::InstallAudit,
         ),
         "cache_audit" => package_surface_failures(
             root,
             value,
             expected,
-            crate::cli::control::plane::types::ControlOperation::CacheAudit,
+            crate::cli::control::plane::operation::ControlOperation::CacheAudit,
         ),
         label if label.starts_with("rust_") => rust_failures(label, value, expected),
         label if label.starts_with("gc_") => gc_failures(value, expected),
@@ -155,7 +155,7 @@ fn package_surface_failures(
     root: &Path,
     value: &Value,
     expected: &str,
-    operation: crate::cli::control::plane::types::ControlOperation,
+    operation: crate::cli::control::plane::operation::ControlOperation,
 ) -> Vec<String> {
     let store = crate::schema_catalog::load(root);
     let mut out = crate::schema_catalog::schema_errors(

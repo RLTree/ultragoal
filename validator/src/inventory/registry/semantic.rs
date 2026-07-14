@@ -8,16 +8,26 @@ use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
-#[allow(clippy::too_many_arguments)]
-pub(super) fn load(
-    reads: &ReadSession,
-    root: &Path,
-    product: &Value,
-    required_apis: BTreeMap<String, BTreeSet<String>>,
-    entries: &mut Vec<InventoryEntry>,
-    counts: &mut BTreeMap<String, usize>,
-    findings: &mut Vec<InventoryFinding>,
-) -> Result<(), InventoryError> {
+pub(super) struct SemanticRegistryLoad<'a> {
+    pub reads: &'a ReadSession,
+    pub root: &'a Path,
+    pub product: &'a Value,
+    pub required_apis: BTreeMap<String, BTreeSet<String>>,
+    pub entries: &'a mut Vec<InventoryEntry>,
+    pub counts: &'a mut BTreeMap<String, usize>,
+    pub findings: &'a mut Vec<InventoryFinding>,
+}
+
+pub(super) fn load(request: SemanticRegistryLoad<'_>) -> Result<(), InventoryError> {
+    let SemanticRegistryLoad {
+        reads,
+        root,
+        product,
+        required_apis,
+        entries,
+        counts,
+        findings,
+    } = request;
     let journey_count = definition_rows(
         entries,
         product,

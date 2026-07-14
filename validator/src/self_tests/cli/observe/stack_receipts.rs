@@ -131,7 +131,7 @@ fn observe_stack_receipts_report_health_smoke_and_dispatch_boundaries() {
     fs::remove_dir_all(root).expect("cleanup observe stack receipts");
 }
 
-fn command(raw: &[&str]) -> observe::types::ObserveCommand {
+fn command(raw: &[&str]) -> observe::command::ObserveCommand {
     observe::parse(&super::args(raw))
         .expect("parse")
         .expect("observe command")

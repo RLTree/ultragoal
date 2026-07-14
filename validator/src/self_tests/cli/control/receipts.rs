@@ -1,4 +1,4 @@
-use crate::cli::control::plane::types::ControlOperation;
+use crate::cli::control::plane::operation::ControlOperation;
 use crate::cli::control::plane::{
     ControlCommand, RECEIPT_SCHEMA, receipt,
     receipt::{same_candidate_pass_failures, surface_value_failures},

@@ -1,5 +1,5 @@
 use super::limits::{proof_shaped_target, valid_id, valid_text};
-use super::types::{AuthorityRequirement, Repair};
+use super::product_state::{AuthorityRequirement, Repair};
 use crate::context::EffectClass;
 use std::collections::{BTreeMap, BTreeSet};
 

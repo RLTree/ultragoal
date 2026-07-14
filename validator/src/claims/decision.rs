@@ -92,21 +92,21 @@ impl DecisionLedger {
         reviewer: &Actor,
         evidence_ids: &[String],
     ) -> ClaimDecision {
-        let decision = ClaimGuard::evaluate(
+        let decision = ClaimGuard::evaluate(super::evaluation_request::ClaimEvaluation {
             definitions,
-            &self.decisions,
-            &self.accepted_evidence_candidates,
-            &self.accepted_artifact_digests,
-            &self.invalidated_evidence_ids,
-            &self.observations,
+            prior: &self.decisions,
+            accepted_candidates: &self.accepted_evidence_candidates,
+            accepted_artifacts: &self.accepted_artifact_digests,
+            invalidated_evidence: &self.invalidated_evidence_ids,
+            observations: &self.observations,
             claim_id,
-            live_context_id,
-            candidate_id,
-            now_unix_ms,
+            context: live_context_id,
+            candidate: candidate_id,
+            now: now_unix_ms,
             reviewer,
             evidence_ids,
-            self.allow_semantic_models,
-        );
+            allow_semantic_models: self.allow_semantic_models,
+        });
         if decision.status == DecisionStatus::Passed {
             for evidence_id in &decision.evidence_ids {
                 self.accepted_evidence_candidates

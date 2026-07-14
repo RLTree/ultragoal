@@ -78,7 +78,7 @@ pub(in crate::cli::live_loop::nodes::measurement::observation) fn write_unavaila
         "{} backend health probe did not pass within {}ms",
         backend.service, BACKEND_READINESS_TIMEOUT_MS
     );
-    let command = crate::cli::observe::types::ObserveCommand {
+    let command = crate::cli::observe::command::ObserveCommand {
         operation: roundtrip.operation(),
         receipt: Some(receipt.to_path_buf()),
         query: Some(query_text(backend.query, run_id, correlation_id)),
@@ -147,7 +147,7 @@ fn query_text(query: BackendQuery, run_id: &str, correlation_id: &str) -> String
     match query {
         BackendQuery::Logs => format!("_time:5m run_id:{run_id} correlation_id:{correlation_id}"),
         BackendQuery::Metrics => crate::cli::observe::query::bounded_metric_query_for_operation(
-            crate::cli::observe::types::ObserveOperation::MetricsQuery.id(),
+            crate::cli::observe::command::ObserveOperation::MetricsQuery.id(),
         ),
         BackendQuery::Traces => {
             format!("{{run_id=\"{run_id}\", correlation_id=\"{correlation_id}\"}}")

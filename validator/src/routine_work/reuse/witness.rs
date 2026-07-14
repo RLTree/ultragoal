@@ -2,7 +2,9 @@ use std::collections::BTreeMap;
 
 use crate::context::LiveContext;
 
-use super::model::{DependencyResult, EvidenceBinding, ReuseMiss, RunOutcome, receipt_error};
+use super::reuse_record::{
+    DependencyResult, EvidenceBinding, ReuseMiss, RunOutcome, receipt_error,
+};
 #[cfg(test)]
 use crate::routine_work::authority::test_authority_checkpoint;
 use crate::routine_work::authority::{current_binding, ensure_unchanged};

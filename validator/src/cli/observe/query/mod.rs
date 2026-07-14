@@ -1,5 +1,5 @@
+use crate::cli::observe::command::ObserveCommand;
 use crate::cli::observe::telemetry;
-use crate::cli::observe::types::ObserveCommand;
 use serde_json::Value;
 use std::path::Path;
 

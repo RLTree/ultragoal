@@ -5,7 +5,7 @@ mod sys;
 #[cfg(unix)]
 mod unix;
 
-use super::{CanonicalPath, FitError, FitErrorId, FitReader, error};
+use super::{CanonicalPath, FitError, FitReader};
 #[cfg(unix)]
 use sha2::{Digest, Sha256};
 #[cfg(unix)]

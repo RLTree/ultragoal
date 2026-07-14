@@ -1,9 +1,9 @@
-use crate::cli::garbage::collection::types::GarbageOperation;
+use crate::cli::garbage::collection::operation::GarbageOperation;
 use crate::cli::garbage::collection::{
     GarbageCommand, receipt as gc_receipt, run as gc_run, run_with_receipt_value as gc_run_receipt,
 };
 use crate::cli::rust::cache_with_env;
-use crate::cli::rust::types::RustOperation;
+use crate::cli::rust::operation::RustOperation;
 use serde_json::json;
 
 #[test]

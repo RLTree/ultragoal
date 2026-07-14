@@ -1,0 +1,110 @@
+use super::ReaderSpec;
+
+macro_rules! package_reader {
+    ($path:literal, $include:literal) => {
+        ReaderSpec {
+            path: $path,
+            bytes: include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), "/../", $path)),
+            legacy_tokens_are_negative_only: false,
+        }
+    };
+}
+
+pub(crate) const PACKAGE_READERS: &[ReaderSpec] = &[
+    package_reader!(
+        "validator/src/inventory/agent/package_digests.rs",
+        "package_digests.rs"
+    ),
+    package_reader!(
+        "validator/src/package/inventory/anchored/json.rs",
+        "../package/inventory/anchored/json.rs"
+    ),
+    package_reader!(
+        "validator/src/package/inventory/anchored/mod.rs",
+        "../package/inventory/anchored/mod.rs"
+    ),
+    package_reader!(
+        "validator/src/package/inventory/anchored/session/mod.rs",
+        "../package/inventory/anchored/session/mod.rs"
+    ),
+    package_reader!(
+        "validator/src/package/inventory/anchored/snapshot.rs",
+        "../package/inventory/anchored/snapshot.rs"
+    ),
+    package_reader!(
+        "validator/src/package/inventory/anchored/sys.rs",
+        "../package/inventory/anchored/sys.rs"
+    ),
+    package_reader!(
+        "validator/src/package/inventory/closure/mod.rs",
+        "../package/inventory/closure/mod.rs"
+    ),
+    package_reader!(
+        "validator/src/package/inventory/closure/package_entries.rs",
+        "../package/inventory/closure/package_entries.rs"
+    ),
+    package_reader!(
+        "validator/src/package/inventory/generated_disposition/anchored.rs",
+        "../package/inventory/generated_disposition/anchored.rs"
+    ),
+    package_reader!(
+        "validator/src/package/inventory/generated_disposition/mod.rs",
+        "../package/inventory/generated_disposition/mod.rs"
+    ),
+    package_reader!(
+        "validator/src/generated_authority/contracts.rs",
+        "../generated_authority/contracts.rs"
+    ),
+    package_reader!(
+        "validator/src/generated_authority/mod.rs",
+        "../generated_authority/mod.rs"
+    ),
+    package_reader!(
+        "validator/src/generated_authority/parser.rs",
+        "../generated_authority/parser.rs"
+    ),
+    package_reader!(
+        "validator/src/generated_authority/path.rs",
+        "../generated_authority/path.rs"
+    ),
+    package_reader!(
+        "validator/src/generated_authority/shard/contracts.rs",
+        "../generated_authority/shard/contracts.rs"
+    ),
+    package_reader!(
+        "validator/src/generated_authority/shard/mod.rs",
+        "../generated_authority/shard/mod.rs"
+    ),
+    package_reader!(
+        "validator/src/generated_authority/shard/parser.rs",
+        "../generated_authority/shard/parser.rs"
+    ),
+    package_reader!(
+        "validator/src/generated_authority/shard/validation.rs",
+        "../generated_authority/shard/validation.rs"
+    ),
+    package_reader!(
+        "validator/src/generated_authority/validation/mod.rs",
+        "../generated_authority/validation/mod.rs"
+    ),
+    package_reader!(
+        "validator/src/generated_authority/validation/projection.rs",
+        "../generated_authority/validation/projection.rs"
+    ),
+    package_reader!(
+        "validator/src/generated_authority/validation/retained_context.rs",
+        "../generated_authority/validation/retained_context.rs"
+    ),
+    package_reader!(
+        "validator/src/generated_authority/validation/value.rs",
+        "../generated_authority/validation/value.rs"
+    ),
+    package_reader!(
+        "validator/src/package/inventory/payload.rs",
+        "../package/inventory/payload.rs"
+    ),
+    package_reader!(
+        "validator/src/package/inventory/snapshot/capture/mod.rs",
+        "../package/inventory/snapshot/capture/mod.rs"
+    ),
+];

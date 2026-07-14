@@ -162,7 +162,7 @@ fn transaction_finalize_command_writes_fail_closed_receipt_for_missing_refs() {
     );
     let failures = crate::cli::control::plane::proof::failures(
         &root,
-        crate::cli::control::plane::types::ControlOperation::UpdateGoalEligibility,
+        crate::cli::control::plane::operation::ControlOperation::UpdateGoalEligibility,
     );
     assert!(
         !failures

@@ -1,5 +1,5 @@
 use super::QueryKind;
-use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
+use crate::cli::observe::command::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 use std::path::Path;
 
@@ -139,7 +139,7 @@ fn live_result_failure_accepts_non_metric_rows_and_reports_empty_results() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-query-bound",
             "candidate_digest": candidate,
             "operation": "source.audit",
@@ -180,7 +180,7 @@ fn live_result_validator_reconciles_metric_rows_to_current_target() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-query-bound",
             "candidate_digest": candidate,
             "operation": "source.audit",

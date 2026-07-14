@@ -1,4 +1,4 @@
-use crate::cli::control::plane::types::ControlOperation;
+use crate::cli::control::plane::operation::ControlOperation;
 
 pub(crate) fn command_parts(operation: ControlOperation) -> (&'static str, &'static str) {
     match operation {

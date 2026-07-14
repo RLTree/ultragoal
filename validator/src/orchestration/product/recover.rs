@@ -1,8 +1,8 @@
 use super::context::{ReadOnlySink, journal_head_identity};
 use super::snapshot::snapshot;
 use super::{
-    PermitTarget, ProductContext, ProductError, ProductSnapshot, ProductWorkspace, RootAuthority,
-    RootOperation, RootPermit,
+    PermitTarget, ProductContext, ProductError, ProductSnapshot, ProductWorkspace,
+    RootActionPermitVerification, RootAuthority, RootOperation, RootPermit,
 };
 use crate::orchestration::{Binding, FileJournal, JournalHead, Orchestrator};
 use serde::{Deserialize, Serialize};
@@ -42,16 +42,16 @@ pub fn recover(
         return Err(ProductError::AuthorityOperationMismatch);
     }
     let head_identity = journal_head_identity(&request.expected_prior_head)?;
-    authority.verify_action(
+    authority.verify_action(RootActionPermitVerification {
         permit,
-        &context.root,
-        RootOperation::Recover,
-        &context.binding,
-        workspace.identity(),
-        &head_identity,
-        request.tick,
-        &request.target,
-    )?;
+        expected_root: &context.root,
+        operation: RootOperation::Recover,
+        binding: &context.binding,
+        workspace_identity: workspace.identity(),
+        journal_head_identity: &head_identity,
+        tick: request.tick,
+        target: &request.target,
+    })?;
     workspace.verify()?;
     let prepared = FileJournal::prepare_interrupted_append(
         workspace.root(),

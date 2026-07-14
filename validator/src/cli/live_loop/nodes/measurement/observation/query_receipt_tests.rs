@@ -81,7 +81,7 @@ fn backend_unavailable_receipt_queries_are_bounded_by_backend_kind() {
     assert_eq!(
         query_text(BackendQuery::Metrics, "run-metric", "corr-metric"),
         crate::cli::observe::query::bounded_metric_query_for_operation(
-            crate::cli::observe::types::ObserveOperation::MetricsQuery.id()
+            crate::cli::observe::command::ObserveOperation::MetricsQuery.id()
         )
     );
     assert_eq!(

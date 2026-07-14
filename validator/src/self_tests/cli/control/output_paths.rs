@@ -1,5 +1,5 @@
+use crate::cli::control::plane::operation::ControlOperation;
 use crate::cli::control::plane::path::{expected_receipt_path, validate_receipt_path};
-use crate::cli::control::plane::types::ControlOperation;
 use crate::cli::control::plane::{ControlCommand, run};
 use serde_json::json;
 use std::path::{Path, PathBuf};

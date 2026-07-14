@@ -15,15 +15,6 @@ pub const REQUIRED_SKILLS: &[&str] = &[
     "product-journey-review",
 ];
 
-pub const REQUIRED_AGENTS: &[&str] = &[
-    "claim-falsifier",
-    "orchestration-recovery-reviewer",
-    "product-journey-reviewer",
-    "repo-recon",
-    "research-verifier",
-    "security-reviewer",
-];
-
 pub const GOOD_STATUSES: &[&str] = &["proven_live", "proven_static"];
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]

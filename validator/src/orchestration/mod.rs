@@ -11,9 +11,13 @@ mod artifact;
 mod effect;
 mod effect_transition;
 mod engine;
+#[path = "authorized_effect.rs"]
 mod engine_effect;
+#[path = "candidate_integration.rs"]
 mod engine_integration;
+#[path = "query_runtime.rs"]
 mod engine_query;
+#[path = "worker_submission.rs"]
 mod engine_submission;
 mod error;
 mod event;

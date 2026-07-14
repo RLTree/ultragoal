@@ -1,7 +1,8 @@
 #[cfg(unix)]
 use super::descriptor::Snapshot;
 use super::descriptor::read_descriptor;
-use super::util::{digest_bytes, is_prohibited_component};
+use super::identity_codec::digest_bytes;
+use super::path_policy::is_prohibited_component;
 use crate::context::LiveContext;
 use std::ffi::CString;
 use std::fs::File;

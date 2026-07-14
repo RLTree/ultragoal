@@ -1,4 +1,4 @@
-mod model;
+mod record;
 mod render;
 
-pub(crate) use model::{Diagnostic, DiagnosticId, RuntimeOutcome, RuntimeStreams};
+pub(crate) use record::{Diagnostic, DiagnosticId, RuntimeOutcome, RuntimeStreams};

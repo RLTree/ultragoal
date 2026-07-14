@@ -1,4 +1,7 @@
-use super::fs::{check_symlink, physical_entry, physical_regular_entry, regular_files, relative};
+use super::fs::{
+    PhysicalEntryDescriptor, check_symlink, physical_entry, physical_regular_entry, regular_files,
+    relative,
+};
 use super::generated;
 use super::plugin_manifest;
 use super::registry::RegistryData;
@@ -97,14 +100,16 @@ fn discover_plugin(
             reads,
             root,
             &path,
-            "PLUGIN-MANIFEST".to_owned(),
-            "plugin-manifest",
-            "OWN-PLUGIN-PRODUCT",
-            AuthorityState::Projection,
-            ActiveStatus::ContextOnly,
-            Some("plugin packaging projection".to_owned()),
-            Vec::new(),
-            references,
+            PhysicalEntryDescriptor {
+                stable_id: "PLUGIN-MANIFEST".to_owned(),
+                kind: "plugin-manifest",
+                owner: "OWN-PLUGIN-PRODUCT",
+                authority_state: AuthorityState::Projection,
+                active_status: ActiveStatus::ContextOnly,
+                generator: Some("plugin packaging projection".to_owned()),
+                provenance: Vec::new(),
+                references,
+            },
         )?);
     } else {
         findings.push(InventoryFinding::error(
@@ -152,14 +157,16 @@ fn discover_collection(
             reads,
             root,
             &path,
-            format!("{}:{rel}", spec.id_prefix),
-            spec.kind,
-            "OWN-PRODUCT-ARCHITECTURE",
-            spec.authority,
-            ActiveStatus::ContextOnly,
-            None,
-            Vec::new(),
-            references,
+            PhysicalEntryDescriptor {
+                stable_id: format!("{}:{rel}", spec.id_prefix),
+                kind: spec.kind,
+                owner: "OWN-PRODUCT-ARCHITECTURE",
+                authority_state: spec.authority,
+                active_status: ActiveStatus::ContextOnly,
+                generator: None,
+                provenance: Vec::new(),
+                references,
+            },
         )?);
     }
     Ok(())

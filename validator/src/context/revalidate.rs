@@ -1,8 +1,8 @@
+use super::bound_context::{LiveContext, RootIdentity};
 use super::build::{path_text, permissions, selected_inputs};
 use super::capability;
 use super::error::ContextError;
 use super::git;
-use super::types::{LiveContext, RootIdentity};
 use std::path::{Path, PathBuf};
 
 fn changed(dimension: &str) -> ContextError {

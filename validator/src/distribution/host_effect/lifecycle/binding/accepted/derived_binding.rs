@@ -1,0 +1,188 @@
+impl AcceptedHostEffect {
+    pub(super) fn derive_binding(
+        &self,
+        issued_at_unix_ms: u64,
+        expires_at_unix_ms: u64,
+        current_head: &HostEffectLedgerHead,
+    ) -> Result<HostEffectPermitBinding, SupportedHostLifecycleError> {
+        if current_head != &self.expected_head || issued_at_unix_ms >= expires_at_unix_ms {
+            return Err(lifecycle_error(
+                SupportedHostLifecycleErrorId::StaleLedgerHead,
+            ));
+        }
+        Ok(HostEffectPermitBinding {
+            context_id: self.package.source().context_id().to_owned(),
+            candidate_id: self.package.source().candidate_id().to_owned(),
+            package_identity_sha256: self.package_identity_sha256.clone(),
+            journey_binding_sha256: self.journey_binding_sha256.clone(),
+            session_issuance_sha256: self.session_issuance_sha256.clone(),
+            lifecycle_plan_sha256: self.lifecycle.plan_sha256().to_owned(),
+            lifecycle_intent: self.lifecycle.operation().as_str().to_owned(),
+            expected_pre_state_sha256: self.expected_pre_state_sha256.clone(),
+            expected_post_state_sha256: self.expected_post_state_sha256.clone(),
+            rollback_policy_sha256: self.rollback_policy_sha256.clone(),
+            reconciliation_policy_sha256: self.reconciliation_policy_sha256.clone(),
+            host_scope_sha256: self.host_scope_sha256.clone(),
+            host_capability_sha256: self.host_capability_sha256.clone(),
+            required_capabilities_sha256: self.required_capabilities_sha256.clone(),
+            external_request_sha256: self.external_request_sha256.clone(),
+            command_plan_sha256: self.command_plan_sha256.clone(),
+            argv_sha256: self.argv_sha256.clone(),
+            executable_identity_sha256: self.executable_identity_sha256.clone(),
+            target_identity_sha256: self.expected_target.target_sha256().to_owned(),
+            target_generation: self.expected_target.generation(),
+            issued_at_unix_ms,
+            expires_at_unix_ms,
+            expected_head_sha256: current_head.head_sha256().to_owned(),
+            decision: HostEffectDecision::Authorize,
+        })
+    }
+
+    #[cfg(test)]
+    pub(super) fn host_scope(&self) -> &AcceptedHostScope {
+        &self.scope
+    }
+}
+
+pub(crate) struct RootPlanCustody {
+    plan: Option<HostCommandPlan>,
+}
+
+impl std::fmt::Debug for RootPlanCustody {
+    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        formatter
+            .debug_struct("RootPlanCustody")
+            .field("released", &self.is_released())
+            .finish_non_exhaustive()
+    }
+}
+
+impl RootPlanCustody {
+    pub(in crate::distribution::host_effect) fn bind(
+        plan: HostCommandPlan,
+        accepted: &AcceptedHostEffect,
+    ) -> Result<Self, SupportedHostLifecycleError> {
+        if plan.plan_sha256() != accepted.command_plan_sha256 {
+            return Err(lifecycle_error(
+                SupportedHostLifecycleErrorId::PlanSubstitution,
+            ));
+        }
+        Ok(Self { plan: Some(plan) })
+    }
+
+    pub(crate) fn is_released(&self) -> bool {
+        self.plan.is_none()
+    }
+
+    pub(super) fn plan_sha256(&self) -> Option<&str> {
+        self.plan.as_ref().map(HostCommandPlan::plan_sha256)
+    }
+
+    /// Returns non-authoritative plan data for effect construction while this
+    /// custody token remains live. Only `commit_release` consumes authority.
+    pub(super) fn candidate_plan(&self) -> Result<HostCommandPlan, SupportedHostLifecycleError> {
+        self.plan
+            .clone()
+            .ok_or_else(|| lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution))
+    }
+
+    pub(super) fn commit_release(&mut self) -> Result<(), SupportedHostLifecycleError> {
+        self.plan
+            .take()
+            .map(|_| ())
+            .ok_or_else(|| lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution))
+    }
+}
+
+#[derive(Serialize)]
+struct PackageBinding<'a> {
+    schema: &'static str,
+    package: &'a PackageIdentity,
+}
+
+#[derive(Serialize)]
+struct StateBinding<'a> {
+    schema: &'static str,
+    state: &'a AcceptedHostState,
+}
+
+#[derive(Serialize)]
+struct RollbackBinding<'a> {
+    schema: &'static str,
+    rollback_state: &'a AcceptedHostState,
+    policy: AcceptedRollbackPolicy,
+}
+
+#[derive(Serialize)]
+struct ReconciliationBinding<'a> {
+    schema: &'static str,
+    expected_after: &'a AcceptedHostState,
+    policy: AcceptedReconciliationPolicy,
+}
+
+#[derive(Serialize)]
+struct RequiredCapabilityBinding<'a> {
+    schema: &'static str,
+    required: &'a [Capability],
+}
+
+#[derive(Serialize)]
+struct ExternalRequestBinding<'a> {
+    schema: &'static str,
+    coordinator_binding_sha256: &'a str,
+    session_issuance_sha256: &'a str,
+    lifecycle_plan_sha256: &'a str,
+    host_scope_sha256: &'a str,
+    command_plan_sha256: &'a str,
+    argv_sha256: &'a str,
+    target_identity_sha256: &'a str,
+}
+
+fn session_issuance(
+    coordinator_binding_sha256: &str,
+    package_identity_sha256: &str,
+    journey_binding_sha256: &str,
+    lifecycle_plan_sha256: &str,
+    host_scope_sha256: &str,
+) -> Result<String, SupportedHostLifecycleError> {
+    let mut nonce = [0_u8; SESSION_NONCE_BYTES];
+    getrandom::fill(&mut nonce).map_err(|_| invalid())?;
+    #[derive(Serialize)]
+    struct Session<'a> {
+        schema: &'static str,
+        coordinator_binding_sha256: &'a str,
+        package_identity_sha256: &'a str,
+        journey_binding_sha256: &'a str,
+        lifecycle_plan_sha256: &'a str,
+        host_scope_sha256: &'a str,
+        nonce_sha256: String,
+    }
+    let result = digest_json(&Session {
+        schema: "harness-ultragoal.root-host-lifecycle-session.v1",
+        coordinator_binding_sha256,
+        package_identity_sha256,
+        journey_binding_sha256,
+        lifecycle_plan_sha256,
+        host_scope_sha256,
+        nonce_sha256: digest_bytes(&nonce),
+    });
+    nonce.fill(0);
+    result
+}
+
+fn command_plan_sha256(
+    package: &PackageIdentity,
+    plan: &HostCommandPlan,
+) -> Result<String, SupportedHostLifecycleError> {
+    #[derive(Serialize)]
+    struct Binding<'a> {
+        schema: &'static str,
+        package: &'a PackageIdentity,
+        commands: &'a [crate::distribution::HostCommand],
+    }
+    digest_json(&Binding {
+        schema: "harness-ultragoal.host-command-plan.v1",
+        package,
+        commands: plan.commands(),
+    })
+}

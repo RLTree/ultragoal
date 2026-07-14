@@ -1,6 +1,6 @@
-use crate::cli::garbage::collection::types::GarbageOperation;
+use crate::cli::garbage::collection::operation::GarbageOperation;
 use crate::cli::garbage::collection::{GarbageCommand, receipt as gc_receipt};
-use crate::cli::rust::types::RustOperation;
+use crate::cli::rust::operation::RustOperation;
 use crate::cli::rust::{RustCommand, parse, receipt as rust_receipt};
 use serde_json::json;
 

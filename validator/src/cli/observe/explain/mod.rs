@@ -1,5 +1,5 @@
+use crate::cli::observe::command::ObserveCommand;
 use crate::cli::observe::telemetry;
-use crate::cli::observe::types::ObserveCommand;
 use serde_json::{Value, json};
 use std::path::Path;
 
@@ -19,7 +19,7 @@ pub(crate) fn query_evidence_for_target(
 }
 
 pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
-    if command.operation == crate::cli::observe::types::ObserveOperation::ExplainNext {
+    if command.operation == crate::cli::observe::command::ObserveOperation::ExplainNext {
         return next::run(root, command);
     }
     let audit = root.join("validation_artifacts/ultragoal-audit/validator-receipt.json");

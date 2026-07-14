@@ -1,4 +1,4 @@
-use crate::cli::performance::types::{BudgetClass, PerformanceOperation};
+use crate::cli::performance::measurement::{BudgetClass, PerformanceOperation};
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
@@ -76,6 +76,6 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     opt_string(args, key).map(PathBuf::from)
 }
+pub(crate) mod measurement;
 pub(crate) mod proof;
 pub(crate) mod receipt;
-pub(crate) mod types;

@@ -1,5 +1,5 @@
+use super::command_contract::OutputMode;
 use super::error::{ParseErrorId, ParseFailure};
-use super::model::OutputMode;
 use clap::error::{ContextKind, ContextValue, Error, ErrorKind};
 
 pub(crate) fn map_clap_error(error: &Error, output_mode: OutputMode) -> ParseFailure {

@@ -3,11 +3,11 @@ use super::super::catalog::{
     DependencyActionSpec, HostGoalObservation, RuntimeMetadata,
 };
 use super::super::policy_authority::PolicyAuthority;
-use super::super::snapshot::BoundInputs;
-use super::super::types::{
+use super::super::product_state::{
     AuthorityRequest, AuthorityRequirement, CeilingReduction, Repair, RepairTarget,
     RepairTargetKind, Scope,
 };
+use super::super::snapshot::BoundInputs;
 use crate::context::EffectClass;
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -78,7 +78,7 @@ pub(super) fn catalog(spec: DependencyActionSpec) -> DependencyActionCatalog {
 pub(super) fn catalog_for_codes(
     spec: DependencyActionSpec,
     observed_codes: BTreeSet<String>,
-) -> Result<DependencyActionCatalog, super::super::types::StateError> {
+) -> Result<DependencyActionCatalog, super::super::product_state::StateError> {
     catalog_for_binding(
         spec,
         CONTEXT_ID,
@@ -94,7 +94,7 @@ pub(super) fn catalog_for_binding(
     authority_catalog_id: &str,
     candidate_id: &str,
     observed_codes: BTreeSet<String>,
-) -> Result<DependencyActionCatalog, super::super::types::StateError> {
+) -> Result<DependencyActionCatalog, super::super::product_state::StateError> {
     let authority =
         PolicyAuthority::from_adopted_claim_registry(CLAIM_REGISTRY_ID, spec.claims.clone(), spec)?;
     authority.issue_for_test(

@@ -1,4 +1,4 @@
-use crate::cli::observe::types::{self, ObserveCommand, ObserveOperation};
+use crate::cli::observe::command::{self, ObserveCommand, ObserveOperation};
 use serde_json::Value;
 use std::path::Path;
 
@@ -91,7 +91,7 @@ fn print_failure(command: &ObserveCommand, value: &Value, receipt: Option<&std::
     let metric_query = query_hint::failure_metric_query(command, value);
     println!(
         "failed_check={} failure_class={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} trace_id={} query_logs='ultragoal observe logs query --run-id {} --correlation-id {} --limit 100' query_metrics='ultragoal observe metrics query --run-id {} --correlation-id {} --query '{}' --limit 100' query_traces='ultragoal observe traces query --run-id {} --correlation-id {} --limit 100'",
-        text(value, "check_id", types::CHECK_ID),
+        text(value, "check_id", command::CHECK_ID),
         text(value, "failure_class", "none"),
         text(value, "why_failed", "observability proof failed"),
         text(value, "where_failed", "observe command"),

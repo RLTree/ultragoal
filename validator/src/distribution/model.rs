@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[path = "identity.rs"]
+#[path = "identity/mod.rs"]
 mod identity;
 pub use identity::{
     IdentitySurface, PackageIdentity, SourceIdentity, SurfaceIdentity, reject_stale_version_reuse,

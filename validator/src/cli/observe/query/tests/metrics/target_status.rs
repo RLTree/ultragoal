@@ -1,5 +1,5 @@
+use crate::cli::observe::command::ObserveCommand;
 use crate::cli::observe::query::QueryKind;
-use crate::cli::observe::types::ObserveCommand;
 use serde_json::json;
 use std::path::Path;
 
@@ -54,7 +54,7 @@ fn metric_reconciliation_rejects_explicit_query_status_mismatch() {
 fn write_target_event(root: &Path) {
     let candidate = crate::package::inventory::package_digest(root).expect("candidate");
     let event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-metrics-target-status",
         "candidate_digest": candidate,
         "operation": "loop.run",

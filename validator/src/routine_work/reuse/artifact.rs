@@ -7,8 +7,8 @@ use crate::capture::{ArtifactDisposition, ArtifactResolver, CapturedArtifact, Ca
 use crate::capture::{ArtifactDisposition, ArtifactResolver, CapturedArtifact, CapturedRun};
 use crate::context::LiveContext;
 
-use super::model::{EvidenceBinding, ReuseExpectation, RunOutcome, valid_result_map};
 use super::receipt;
+use super::reuse_record::{EvidenceBinding, ReuseExpectation, RunOutcome, valid_result_map};
 use super::witness::{CapturedExecution, ExecutedWork, ObservedResult, ResultFacts};
 #[cfg(test)]
 use crate::routine_work::authority::test_authority_checkpoint;

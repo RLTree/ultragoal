@@ -1,4 +1,4 @@
-use crate::cli::observe::types::ObserveCommand;
+use crate::cli::observe::command::ObserveCommand;
 use std::process::Command;
 
 pub(super) fn curl(url: &str, query: &str, command: &ObserveCommand) -> Result<String, String> {

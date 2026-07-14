@@ -1,5 +1,5 @@
 use super::catalog::catalog;
-use super::model::{CommandDescriptor, HelpTarget, OutputMode, effect_name};
+use super::command_contract::{CommandDescriptor, HelpTarget, OutputMode, effect_name};
 use std::fmt::Write;
 
 pub const HELP_SCHEMA: &str = "harness-ultragoal.cli-help.v1";
@@ -46,7 +46,7 @@ fn human_help(descriptors: &[&CommandDescriptor]) -> String {
             let marker = if option.required { "" } else { "[" };
             let close = if option.required { "" } else { "]" };
             let _ = write!(output, " {marker}{}", option.name.as_str());
-            if option.kind != super::model::ValueKind::Flag {
+            if option.kind != super::command_contract::ValueKind::Flag {
                 output.push_str(" <value>");
             }
             output.push_str(close);
@@ -89,9 +89,9 @@ fn json_help(descriptors: &[&CommandDescriptor]) -> String {
                 "{{\"name\":\"{}\",\"kind\":\"{}\",\"required\":{}}}",
                 option.name.as_str(),
                 match option.kind {
-                    super::model::ValueKind::Flag => "flag",
-                    super::model::ValueKind::Identifier => "identifier",
-                    super::model::ValueKind::RelativePath => "relative-path",
+                    super::command_contract::ValueKind::Flag => "flag",
+                    super::command_contract::ValueKind::Identifier => "identifier",
+                    super::command_contract::ValueKind::RelativePath => "relative-path",
                 },
                 option.required
             );

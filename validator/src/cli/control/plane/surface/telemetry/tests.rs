@@ -1,5 +1,5 @@
 use super::*;
-use crate::cli::control::plane::{ControlCommand, types::ControlOperation};
+use crate::cli::control::plane::{ControlCommand, operation::ControlOperation};
 use serde_json::json;
 use std::fs;
 use std::path::PathBuf;

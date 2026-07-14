@@ -1,5 +1,5 @@
 use super::super::super::OutputMode;
-use super::model::{RuntimeOutcome, RuntimeStreams};
+use super::record::{RuntimeOutcome, RuntimeStreams};
 
 const FALLBACK: &[u8] = b"{\"schema_version\":\"HarnessDiagnostic-v1\",\"diagnostic_id\":\"successor_runtime_projection_failed\",\"exit_class\":\"internal_failure\"}\n";
 

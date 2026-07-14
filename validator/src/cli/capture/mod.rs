@@ -21,19 +21,18 @@ mod filesystem;
 // the scheduler-only adapter is compiled only in the real crate.
 #[cfg(not(test))]
 mod fixture;
+mod identity_codec;
 mod inputs;
 mod output;
+mod path_policy;
 mod process;
 mod program;
 mod run;
 mod sandbox;
 mod spec;
-mod tree;
-mod util;
+mod tree_witness_adapter;
 
 pub use artifact_model::{ArtifactDisposition, ArtifactRef, ArtifactResolver, CapturedArtifact};
-#[cfg(not(test))]
-pub(crate) use fixture::FixtureCaptureAdapter;
 pub use inputs::{PublicArg, PublicArtifact, PublicEnv, SecretArg, SecretArtifact, SecretEnv};
 #[allow(unused_imports)]
 pub use run::CapturedRun;

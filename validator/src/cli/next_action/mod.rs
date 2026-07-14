@@ -20,8 +20,8 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<NextActionCommand>, String>
 
 pub(crate) fn run(root: &Path, command: &NextActionCommand) -> Result<i32, String> {
     let state = crate::cli::current_state::snapshot(root)?;
-    let explain_command = crate::cli::observe::types::ObserveCommand {
-        operation: crate::cli::observe::types::ObserveOperation::ExplainNext,
+    let explain_command = crate::cli::observe::command::ObserveCommand {
+        operation: crate::cli::observe::command::ObserveOperation::ExplainNext,
         receipt: Some("validation_artifacts/observability/observe-explain-next.json".into()),
         query: None,
         run_id: None,

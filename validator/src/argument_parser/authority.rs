@@ -22,11 +22,13 @@ impl CliRoot {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg(test)]
 pub(super) struct CliArtifactPath {
     path: PathBuf,
     product_role: &'static str,
 }
 
+#[cfg(test)]
 impl CliArtifactPath {
     pub(super) fn from_option_value(raw: &str, product_role: &'static str) -> Result<Self, String> {
         typed_path(raw, product_role).map(|path| Self { path, product_role })
@@ -43,11 +45,13 @@ impl CliArtifactPath {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg(test)]
 pub(super) struct CliText {
     value: String,
     product_role: &'static str,
 }
 
+#[cfg(test)]
 impl CliText {
     pub(super) fn from_option_value(raw: &str, product_role: &'static str) -> Result<Self, String> {
         if raw.trim().is_empty() {
@@ -69,6 +73,7 @@ impl CliText {
     }
 }
 
+#[cfg(test)]
 pub(super) fn required_artifact_path(
     args: &[String],
     key: &str,
@@ -78,6 +83,7 @@ pub(super) fn required_artifact_path(
         .ok_or_else(|| format!("missing required argument {key}"))
 }
 
+#[cfg(test)]
 pub(super) fn optional_artifact_path(
     args: &[String],
     key: &str,
@@ -88,6 +94,7 @@ pub(super) fn optional_artifact_path(
         .transpose()
 }
 
+#[cfg(test)]
 pub(super) fn optional_text(
     args: &[String],
     key: &str,
@@ -98,6 +105,7 @@ pub(super) fn optional_text(
         .transpose()?)
 }
 
+#[cfg(test)]
 pub(super) fn option_value<'a>(args: &'a [String], key: &str) -> Option<&'a str> {
     args.windows(2)
         .find(|window| window[0] == key)

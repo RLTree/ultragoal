@@ -12,17 +12,23 @@ mod scheduler;
 mod spec;
 
 pub(crate) use confinement::ConfinementPlan;
-pub use confinement::{ConfinementPolicy, NetworkIsolation};
+pub use confinement::ConfinementPolicy;
+#[cfg(test)]
+pub use confinement::NetworkIsolation;
 pub use error::FixtureScheduleError;
+#[cfg(test)]
+pub use lease::ResourceBinding;
 #[cfg(all(test, unix))]
 pub(crate) use lease::set_before_capture_hook;
-pub use lease::{IsolationLease, LeaseDisposition, ResourceBinding};
-pub(crate) use outcome::ExecutedFixture;
+pub use lease::{IsolationLease, LeaseDisposition};
+pub(crate) use outcome::{ExecutedFixture, FixtureExecutionRecordCapture};
 pub use outcome::{
     ExpectedOutcome, FixtureExecutionBinding, FixtureExecutionRecord, ObservedOutcome,
     OutcomeVerdict,
 };
+#[cfg(test)]
+pub use scheduler::FixtureRun;
 pub(crate) use scheduler::{FixtureExecutor, RecordedFixtureExecutor};
-pub use scheduler::{FixtureRun, FixtureScheduler, RunDisposition};
+pub use scheduler::{FixtureScheduler, RunDisposition};
 pub(crate) use spec::stable_digest;
 pub use spec::{FixtureKind, FixtureSpec, ResourceKind};

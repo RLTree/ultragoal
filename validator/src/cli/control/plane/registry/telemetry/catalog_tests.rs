@@ -1,5 +1,5 @@
 use super::catalog::*;
-use crate::cli::control::plane::types::ControlOperation::*;
+use crate::cli::control::plane::operation::ControlOperation::*;
 
 #[test]
 fn command_parts_cover_every_control_operation() {

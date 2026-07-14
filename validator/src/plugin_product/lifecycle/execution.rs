@@ -82,7 +82,7 @@ pub fn recovery_token(plan: &LifecyclePlan) -> Result<RecoveryToken, LifecycleEr
     if !plan.writes_host_state {
         return Err(LifecycleError::InvalidTransition);
     }
-    let (action_state, recovery_state) = plan.authorization_seal.recovery_gate()?;
+    let (action_state, recovery_state) = plan.authorization_seal.recovery_authority()?;
     Ok(RecoveryToken {
         schema_version: "HarnessPluginLifecycleRecoveryToken-v1".to_owned(),
         plan_id: plan.plan_id.clone(),

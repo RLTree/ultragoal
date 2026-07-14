@@ -1,6 +1,6 @@
 use super::types::{
-    ActiveStatus, AuthorityCatalog, AuthorityState, GeneratedSurfaceIndex, InventoryEntry,
-    InventoryError, catalog_identity_id,
+    ActiveStatus, AuthorityCatalog, AuthorityCatalogDefinition, AuthorityState,
+    GeneratedSurfaceIndex, InventoryEntry, InventoryError, catalog_identity_id,
 };
 use super::{
     ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, context_scopes, discovery, legacy, registry, routing,
@@ -101,15 +101,15 @@ impl<'context> InventoryBuilder<'context> {
             &entries,
             &findings,
         )?;
-        let catalog = AuthorityCatalog::new(
+        let catalog = AuthorityCatalog::new(AuthorityCatalogDefinition {
             catalog_id,
-            self.context.context_id().to_owned(),
-            registry.contract_id,
-            registry.counts,
+            context_id: self.context.context_id().to_owned(),
+            contract_id: registry.contract_id,
+            source_registry_counts: registry.counts,
             entries,
             findings,
-            generated,
-        );
+            generated_surfaces: generated,
+        });
         registry::revalidate_sources(&reads, root, activation_sources_current)?;
         reads
             .revalidate()

@@ -1,4 +1,4 @@
-use crate::cli::control::plane::types::ControlOperation;
+use crate::cli::control::plane::operation::ControlOperation;
 use std::path::{Component, Path, PathBuf};
 
 pub(crate) fn validate_receipt_path(

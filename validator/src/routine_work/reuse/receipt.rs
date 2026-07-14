@@ -6,7 +6,7 @@ use crate::capture::{ArtifactDisposition, ArtifactResolver, CapturedArtifact};
 #[cfg(not(test))]
 use crate::capture::{ArtifactDisposition, ArtifactResolver, CapturedArtifact};
 
-use super::model::{
+use super::reuse_record::{
     EvidenceBinding, ReceiptState, ReuseExpectation, RunOutcome, receipt_error, valid_result_map,
 };
 use super::witness::ExecutedWork;

@@ -1,4 +1,4 @@
-use crate::cli::observe::types::ObserveCommand;
+use crate::cli::observe::command::ObserveCommand;
 use serde_json::Value;
 
 pub(in crate::cli::observe::stdout) fn failure_metric_operation(

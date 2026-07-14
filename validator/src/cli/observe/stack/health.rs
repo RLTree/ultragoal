@@ -1,6 +1,6 @@
+use crate::cli::observe::command::ObserveCommand;
 use crate::cli::observe::stack::{COMPOSE, curl_ok};
 use crate::cli::observe::telemetry;
-use crate::cli::observe::types::ObserveCommand;
 use serde_json::{Value, json};
 use std::io;
 use std::path::Path;

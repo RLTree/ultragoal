@@ -1,4 +1,4 @@
-use serde_json::Value;
+use super::DraftPackageManifest;
 use std::collections::BTreeMap;
 use std::sync::Arc;
 
@@ -24,7 +24,7 @@ pub(crate) struct PackageSnapshot {
     snapshot_id: Arc<str>,
     package_digest: Arc<str>,
     manifest_bytes: Arc<[u8]>,
-    manifest: Arc<Value>,
+    manifest: Arc<DraftPackageManifest>,
     listed_paths: Arc<[String]>,
     packaged_paths: Arc<[String]>,
     dependency_paths: Arc<[String]>,
@@ -50,7 +50,7 @@ impl PackageSnapshot {
         &self.manifest_bytes
     }
 
-    pub(crate) fn manifest(&self) -> &Value {
+    pub(crate) fn manifest(&self) -> &DraftPackageManifest {
         &self.manifest
     }
 

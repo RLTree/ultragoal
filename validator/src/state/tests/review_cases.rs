@@ -3,8 +3,8 @@ use crate::context::EffectClass;
 use crate::inventory::FindingSeverity as InventorySeverity;
 use crate::state::catalog::{DependencyFact, DependencyStatus, FactAuthority};
 use crate::state::engine::derive_bound;
+use crate::state::product_state::{AuthorityRequirement, FindingSource, NextActionKind};
 use crate::state::snapshot::InventoryObservation;
-use crate::state::types::{AuthorityRequirement, FindingSource, NextActionKind};
 use std::collections::BTreeSet;
 
 fn missing(
@@ -50,7 +50,7 @@ fn fatal_input_with_an_otherwise_legal_command_never_operates() {
         .push(command("legal-command", "repair-dep-a", 1));
     assert_eq!(
         derive_bound(inputs, &catalog(spec)),
-        Err(crate::state::types::StateError::InvalidCatalog(
+        Err(crate::state::product_state::StateError::InvalidCatalog(
             "policy-inventory-impact-missing".to_owned()
         ))
     );

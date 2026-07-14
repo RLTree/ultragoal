@@ -3,8 +3,9 @@ mod cache_observation;
 mod error;
 mod filesystem;
 mod host;
-pub(crate) mod host_effect;
 mod host_capability;
+#[cfg(test)]
+pub(crate) mod host_effect;
 mod install;
 mod json;
 mod marketplace;
@@ -55,10 +56,12 @@ pub use observations::{RuntimeObservation, RuntimeVerdict};
 pub use package::{
     ExpectedTree, MaterializeEffects, MaterializeTransaction, PackageArtifactBinding,
     PackageArtifactTransaction, PackageEffects, PackageEntry, PackagePlan, PackageRole,
-    PackageSnapshot, TreeObject, TreeObjectKind, build_package, materialize_package, plan_package,
-    plan_package_from_inventory, publish_package_artifact, reconcile_materialized_tree,
-    reconcile_package_artifact, recover_package_artifact, rollback_materialization,
-    rollback_package_artifact, tree_sha256, verify_package,
+    PackageSnapshot, ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
+    ProductionPackageSession, TreeObject, TreeObjectKind, build_package, capture_product_package,
+    materialize_package, plan_package, plan_package_from_inventory, publish_package_artifact,
+    reconcile_materialized_tree, reconcile_package_artifact, recover_package_artifact,
+    rollback_materialization, rollback_package_artifact, tree_sha256, verify_package,
+    verify_product_package,
 };
 pub use registry_observation::{
     AppRegistryObservation, AppRegistryVerdict, DiscoveryObservation, DiscoveryVerdict,

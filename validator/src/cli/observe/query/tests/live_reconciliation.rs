@@ -6,7 +6,7 @@ fn live_result_failure_accepts_same_candidate_log_rows_after_record_reconciliati
     let root = super::prepare_root("query-live-result-logs-reconcile");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-query-bound",
         "candidate_digest": candidate,
         "operation": "source.audit",

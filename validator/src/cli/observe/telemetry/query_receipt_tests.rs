@@ -1,5 +1,5 @@
 use super::*;
-use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
+use crate::cli::observe::command::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};

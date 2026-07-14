@@ -4,7 +4,8 @@ use super::metadata;
 use super::retained;
 use crate::context::ReadSession;
 use crate::inventory::fs::{
-    check_symlink, physical_entry, physical_regular_entry, regular_files, relative,
+    PhysicalEntryDescriptor, check_symlink, physical_entry, physical_regular_entry, regular_files,
+    relative,
 };
 use crate::inventory::types::{
     ActiveStatus, AuthorityState, InventoryEntry, InventoryError, InventoryFinding,
@@ -67,7 +68,8 @@ pub(crate) fn discover(
                 ..
             }) = authority.get(&rel)
             {
-                let inspected = retained::inspect(reads, &path, sha256, replacement_targets);
+                let sha256 = sha256.lowercase_hex();
+                let inspected = retained::inspect(reads, &path, &sha256, replacement_targets);
                 for (code, message) in &inspected.problems {
                     error(findings, code, &rel, message);
                 }
@@ -85,16 +87,52 @@ pub(crate) fn discover(
                     reads,
                     root,
                     &path,
-                    format!("GENERATED:{rel}"),
-                    "generated-surface",
-                    "OWN-ULTRA-ROOT",
-                    authority_state,
-                    active_status,
-                    None,
-                    vec![authority::REGISTRY_PATH.to_owned()],
-                    references,
+                    PhysicalEntryDescriptor {
+                        stable_id: format!("GENERATED:{rel}"),
+                        kind: "generated-surface",
+                        owner: "OWN-ULTRA-ROOT",
+                        authority_state,
+                        active_status,
+                        generator: None,
+                        provenance: vec![authority::REGISTRY_PATH.to_owned()],
+                        references,
+                    },
                 )?);
                 continue;
+            }
+            if let Some(spec) = authority.get(&rel) {
+                let projection_sources = match spec {
+                    SurfaceSpec::SourceProjection {
+                        canonical_sources, ..
+                    }
+                    | SurfaceSpec::ToolProjection {
+                        canonical_sources, ..
+                    } => Some(
+                        canonical_sources
+                            .iter()
+                            .map(|path| path.as_str().to_owned())
+                            .collect(),
+                    ),
+                    _ => None,
+                };
+                if let Some(provenance) = projection_sources {
+                    entries.push(physical_regular_entry(
+                        reads,
+                        root,
+                        &path,
+                        PhysicalEntryDescriptor {
+                            stable_id: format!("GENERATED:{rel}"),
+                            kind: "provenance-only-projection",
+                            owner: "OWN-ULTRA-ROOT",
+                            authority_state: AuthorityState::Context,
+                            active_status: ActiveStatus::ContextOnly,
+                            generator: None,
+                            provenance,
+                            references: vec![authority::REGISTRY_PATH.to_owned()],
+                        },
+                    )?);
+                    continue;
+                }
             }
             let metadata = metadata::inspect(reads, root, &path, authority.get(&rel));
             for (code, message) in &metadata.problems {
@@ -112,14 +150,16 @@ pub(crate) fn discover(
                 reads,
                 root,
                 &path,
-                format!("GENERATED:{rel}"),
-                "generated-surface",
-                "OWN-PRODUCT-ARCHITECTURE",
-                AuthorityState::Projection,
-                ActiveStatus::ContextOnly,
-                metadata.generator.clone(),
-                metadata.inputs,
-                metadata.generator.into_iter().collect(),
+                PhysicalEntryDescriptor {
+                    stable_id: format!("GENERATED:{rel}"),
+                    kind: "generated-surface",
+                    owner: "OWN-PRODUCT-ARCHITECTURE",
+                    authority_state: AuthorityState::Projection,
+                    active_status: ActiveStatus::ContextOnly,
+                    generator: metadata.generator.clone(),
+                    provenance: metadata.inputs,
+                    references: metadata.generator.into_iter().collect(),
+                },
             )?);
         }
     }
@@ -138,6 +178,7 @@ pub(crate) fn discover(
                 let (code, message) = retained_absence(root, output);
                 error(findings, code, output, message);
             }
+            SurfaceSpec::SourceProjection { .. } | SurfaceSpec::ToolProjection { .. } => {}
         }
     }
     Ok(())

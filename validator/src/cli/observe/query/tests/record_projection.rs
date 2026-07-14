@@ -1,5 +1,5 @@
+use crate::cli::observe::command::ObserveOperation;
 use crate::cli::observe::query::QueryKind;
-use crate::cli::observe::types::ObserveOperation;
 use serde_json::json;
 use std::path::Path;
 
@@ -80,7 +80,7 @@ fn traces_query_projects_span_identity_with_process_candidate_tags() {
 fn target_event(root: &Path, status: &str, failure_class: &str) -> serde_json::Value {
     let candidate = current_digest(root);
     let event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-query-bound",
         "correlation_id": "corr-query-bound",
         "trace_id": "trace-query-bound",
@@ -133,7 +133,7 @@ fn trace_body(root: &Path) -> serde_json::Value {
 
 fn observe_query_event(root: &Path) -> serde_json::Value {
     json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-query-bound",
         "candidate_digest": current_digest(root),
         "operation": "observe.logs.query",

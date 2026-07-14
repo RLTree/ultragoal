@@ -81,9 +81,9 @@ fn branch_arms_close_last_gaps() {
     );
     write_json(&perf.join("plugin-manifest-draft.json"), &json!({}));
     let command = crate::cli::performance::PerformanceCommand {
-        operation: crate::cli::performance::types::PerformanceOperation::Prove,
+        operation: crate::cli::performance::measurement::PerformanceOperation::Prove,
         receipt: None,
-        class: crate::cli::performance::types::BudgetClass::FocusedRepair,
+        class: crate::cli::performance::measurement::BudgetClass::FocusedRepair,
     };
     let missing_perf = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "cli_performance_observability-cli-run-missing",

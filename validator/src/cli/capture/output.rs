@@ -24,7 +24,7 @@ impl OutputDisposition {
 }
 
 #[derive(Debug, serde::Serialize)]
-pub(super) struct CapturedOutput {
+pub(crate) struct CapturedOutput {
     encoding: &'static str,
     content_disposition: OutputDisposition,
     retained_bytes: Vec<u8>,

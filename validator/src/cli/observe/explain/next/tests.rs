@@ -1,5 +1,5 @@
 use super::plan;
-use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
+use crate::cli::observe::command::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 
 fn command() -> ObserveCommand {

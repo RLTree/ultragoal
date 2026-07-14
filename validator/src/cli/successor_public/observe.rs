@@ -1,5 +1,7 @@
-use super::local_store::LocalStore;
+#[cfg(test)]
 pub(super) use super::local_store::store_path;
+use super::local_store::{LocalStore, LocalStoreFailure, local_policy};
+use super::public_output_allowed;
 use crate::cli::successor::runtime::{Diagnostic, DiagnosticId, RuntimeOutcome};
 use crate::cli::successor::{
     EffectClass, ExitClass, ObserveAction, OptionName, ParsedInvocation, ParsedValue,
@@ -47,11 +49,13 @@ pub(super) fn query_local(
         "unknown",
     ) {
         Ok(binding) => binding,
-        Err(_) => return observability_unavailable(),
+        Err(_) => return observability_unavailable(LocalStoreFailure::binding()),
     };
-    let mut query = match EventQuery::for_context(context, SOURCE_ID) {
+    let mut query = match EventQuery::for_context(context, SOURCE_ID)
+        .and_then(|query| query.limit(EventStore::supported_result_limit()))
+    {
         Ok(query) => query,
-        Err(_) => return observability_unavailable(),
+        Err(_) => return observability_unavailable(LocalStoreFailure::binding()),
     };
     if let Some(operation) = filter {
         query = match query.operation(operation) {
@@ -61,17 +65,17 @@ pub(super) fn query_local(
     }
     let store = match LocalStore::open(root, context, SOURCE_ID) {
         Ok(store) => store,
-        Err(()) => return observability_unavailable(),
+        Err(failure) => return observability_unavailable(failure),
     };
     let events = match store.query_diagnostic(&query) {
         Ok(events) => events,
-        Err(error) if EventStore::is_lock_timeout_error(&error) => {
+        Err(failure) if failure.is_lock_timeout() => {
             return observability_lock_timeout();
         }
-        Err(_) => return observability_unavailable(),
+        Err(failure) => return observability_unavailable(failure),
     };
-    if !store.revalidate() {
-        return observability_unavailable();
+    if let Err(failure) = store.revalidate() {
+        return observability_unavailable(failure);
     }
     if context.revalidate().is_err() {
         return stale_context();
@@ -89,24 +93,25 @@ pub(super) fn query_local(
         "events": events,
         "causal_status": "not_evaluated",
         "claim_effect": "none",
-        "local_policy": {
-            "schema_version": "LocalObservabilityPolicy-v1",
-            "store_limit_bytes": EventStore::supported_store_limit_bytes(),
-            "event_limit": EventStore::supported_event_limit(),
-            "scan_row_limit": EventStore::supported_scan_limit(),
-            "query_result_limit": EventStore::supported_result_limit(),
-            "lock_timeout_millis": EventStore::supported_lock_timeout_millis(),
-            "deletion": "explicit-clear-api",
-            "external_export": "disabled-safe-default-OD-004-OD-007"
-        }
+        "query_provenance": {
+            "schema_version": "LocalQueryProvenance-v1",
+            "binding": "context-candidate-source",
+            "ordering": "observed_at_unix_ms-sequence-event_id",
+            "result_count": count,
+            "result_limit": EventStore::supported_result_limit(),
+            "result_window_saturated": count == EventStore::supported_result_limit(),
+            "read_effect": "none",
+            "export_effect": "none"
+        },
+        "local_policy": local_policy()
     }));
     match machine {
-        Ok(machine) => RuntimeOutcome::payload(
+        Ok(machine) if public_output_allowed(machine.len()) => RuntimeOutcome::payload(
             ExitClass::Success,
             machine,
             format!("local semantic events count={count} claim_effect=none"),
         ),
-        Err(_) => observability_unavailable(),
+        _ => observability_unavailable(LocalStoreFailure::projection()),
     }
 }
 
@@ -142,15 +147,15 @@ fn stale_context() -> RuntimeOutcome {
     )
 }
 
-fn observability_unavailable() -> RuntimeOutcome {
+fn observability_unavailable(failure: LocalStoreFailure) -> RuntimeOutcome {
     RuntimeOutcome::failure(
         ExitClass::UnsupportedCapability,
         Diagnostic::new(
             DiagnosticId::ObservabilityUnavailable,
             ExitClass::UnsupportedCapability,
-            "the bounded local event store could not be opened or reconciled with this candidate",
-            "HCT-OBSERVE local store",
-            "repair the confined local store boundary or regenerate current-candidate events",
+            failure.summary(),
+            failure.surface(),
+            failure.repair(),
             "read",
             "ultragoal --json observe query",
             "observability and dependent claims remain withheld",

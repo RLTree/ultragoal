@@ -1,4 +1,4 @@
-use crate::cli::observe::types::ObserveOperation;
+use crate::cli::observe::command::ObserveOperation;
 use serde_json::Value;
 use std::path::Path;
 
@@ -13,7 +13,7 @@ fn receipt_current(root: &Path, operation: ObserveOperation, candidate: &str) ->
         return false;
     };
     if value.get("schema").and_then(Value::as_str)
-        != Some(crate::cli::observe::types::RECEIPT_SCHEMA)
+        != Some(crate::cli::observe::command::RECEIPT_SCHEMA)
         || value.get("status").and_then(Value::as_str) != Some("pass")
         || value.get("candidate_digest").and_then(Value::as_str) != Some(candidate)
         || value.get("operation").and_then(Value::as_str) != Some(operation.id())

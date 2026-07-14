@@ -1,5 +1,5 @@
+use crate::cli::observe::command::{ObserveCommand, ObserveOperation};
 use crate::cli::observe::query::QueryKind;
-use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::{Value, json};
 use std::path::Path;
 
@@ -183,7 +183,7 @@ fn logs_query_fails_when_pass_target_rows_contain_failure_signal() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-records-reconcile",
             "candidate_digest": candidate,
             "operation": "source.audit",
@@ -220,7 +220,7 @@ fn write_target_event(root: &Path, failure_class: &str) -> Value {
 fn event_value(root: &Path, failure_class: &str) -> Value {
     let candidate = crate::package::inventory::package_digest(root).expect("candidate");
     json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-records-reconcile",
         "correlation_id": "corr-records-reconcile",
         "candidate_digest": candidate,
@@ -237,7 +237,7 @@ fn event_value(root: &Path, failure_class: &str) -> Value {
 fn observe_pass_event(root: &Path) -> Value {
     let candidate = crate::package::inventory::package_digest(root).expect("candidate");
     json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-records-reconcile",
         "candidate_digest": candidate,
         "operation": "observe.logs.query",

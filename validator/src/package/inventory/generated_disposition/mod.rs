@@ -3,14 +3,15 @@ use std::path::Path;
 use std::sync::Arc;
 
 use super::anchored::Session;
+use crate::generated_authority::{
+    GeneratedAuthorityParseRequest, GeneratedAuthorityRegistry, GeneratedSurface,
+};
 
 mod anchored;
 #[cfg(test)]
 mod hardening_tests;
-mod schema;
 #[cfg(test)]
 mod tests;
-mod unique_json;
 
 pub(crate) const REGISTRY_PATH: &str = "migration/generated-surface-authority.json";
 const MAX_REGISTRY_BYTES: u64 = 1024 * 1024;
@@ -18,12 +19,11 @@ const MAX_OUTPUT_BYTES: u64 = 64 * 1024 * 1024;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(crate) enum Classification {
-    CanonicalProjection { bytes: Arc<[u8]> },
     RetainedContext { replacement_targets: Vec<String> },
 }
 
 pub(crate) struct Catalog {
-    rows: BTreeMap<String, schema::Row>,
+    rows: BTreeMap<String, GeneratedSurface>,
     registry_bytes: Arc<[u8]>,
 }
 
@@ -84,14 +84,18 @@ impl Catalog {
         let bytes = source
             .read(REGISTRY_PATH, MAX_REGISTRY_BYTES)
             .map_err(|error| format!("generated disposition registry unavailable: {error}"))?;
-        if !unique_json::valid(bytes.as_ref()) {
-            return Err(
-                "generated disposition registry has invalid JSON or duplicate keys".to_string(),
-            );
-        }
-        let rows = schema::parse(bytes.as_ref())?;
+        let parsed = crate::generated_authority::parse(GeneratedAuthorityParseRequest {
+            bytes: bytes.as_ref(),
+        })
+        .map_err(|error| error.stable_text().to_string())?
+        .registry;
+        verify_projections(source, &parsed)?;
         Ok(Self {
-            rows,
+            rows: parsed
+                .surfaces
+                .into_iter()
+                .map(|(output, surface)| (output.as_str().to_owned(), surface))
+                .collect(),
             registry_bytes: bytes,
         })
     }
@@ -146,43 +150,21 @@ impl Catalog {
             .get(relative)
             .ok_or_else(|| "generated package path has no adopted disposition".to_string())?;
         match row {
-            schema::Row::CanonicalProjection { generator, inputs } => {
-                let mut input_rows = Vec::with_capacity(inputs.len());
-                for input in inputs {
-                    let input_bytes = source.read(input, MAX_OUTPUT_BYTES).map_err(|error| {
-                        format!("canonical generated input unavailable: {error}")
-                    })?;
-                    input_rows.push(serde_json::json!({
-                        "path": input,
-                        "sha256": digest_hex(input_bytes.as_ref())
-                    }));
-                }
-                let bytes = source
-                    .read(relative, MAX_OUTPUT_BYTES)
-                    .map_err(|error| format!("canonical generated output unavailable: {error}"))?;
-                let expected = serde_json::to_vec(&serde_json::json!({
-                    "_meta": {
-                        "generator": generator,
-                        "inputs": input_rows,
-                        "recipe": "input-digest-index-v1"
-                    },
-                    "entries": input_rows
-                }))
-                .expect("bounded generated disposition serializes");
-                if bytes.as_ref() != expected.as_slice() {
-                    return Err("canonical generated output drift".to_string());
-                }
-                Ok(Classification::CanonicalProjection { bytes })
-            }
-            schema::Row::RetainedContext {
+            GeneratedSurface::CanonicalProjection { .. }
+            | GeneratedSurface::SourceProjection { .. }
+            | GeneratedSurface::ToolProjection { .. } => Err(
+                "provenance-only projection cannot authorize package classification".to_string(),
+            ),
+            GeneratedSurface::RetainedContext {
                 sha256,
                 replacement_targets,
+                ..
             } => {
                 let bytes = source
                     .read(relative, MAX_OUTPUT_BYTES)
                     .map_err(|error| format!("retained generated context unavailable: {error}"))?;
                 let actual = digest_hex(bytes.as_ref());
-                if &actual != sha256 {
+                if actual != sha256.lowercase_hex() {
                     return Err("retained generated context digest mismatch".to_string());
                 }
                 Ok(Classification::RetainedContext {
@@ -191,6 +173,63 @@ impl Catalog {
             }
         }
     }
+}
+
+fn verify_projections(
+    source: &mut impl Source,
+    parsed: &GeneratedAuthorityRegistry,
+) -> Result<(), String> {
+    source
+        .read(
+            parsed.registry_projection.generator.as_str(),
+            MAX_OUTPUT_BYTES,
+        )
+        .map_err(|_| "generated registry projection generator is unavailable".to_string())?;
+    for canonical_source in &parsed.registry_projection.canonical_sources {
+        source
+            .read(canonical_source.as_str(), MAX_OUTPUT_BYTES)
+            .map_err(|_| {
+                "generated registry projection canonical source is unavailable".to_string()
+            })?;
+    }
+    for (output, row) in &parsed.surfaces {
+        let (generator, canonical_sources, output_sha256) = match row {
+            GeneratedSurface::SourceProjection {
+                generator,
+                canonical_sources,
+                output_sha256,
+                ..
+            } => (Some(generator), canonical_sources, output_sha256),
+            GeneratedSurface::ToolProjection {
+                canonical_sources,
+                output_sha256,
+                ..
+            } => (None, canonical_sources, output_sha256),
+            GeneratedSurface::CanonicalProjection { .. } => {
+                return Err(
+                    "canonical projection cannot authorize current generated authority".to_string(),
+                );
+            }
+            GeneratedSurface::RetainedContext { .. } => continue,
+        };
+        if let Some(generator) = generator {
+            source
+                .read(generator.as_str(), MAX_OUTPUT_BYTES)
+                .map_err(|_| "source projection generator is unavailable".to_string())?;
+        }
+        for canonical_source in canonical_sources {
+            source
+                .read(canonical_source.as_str(), MAX_OUTPUT_BYTES)
+                .map_err(|_| "projection canonical source is unavailable".to_string())?;
+        }
+        let bytes = source
+            .read(output.as_str(), MAX_OUTPUT_BYTES)
+            .map_err(|_| "projection output is unavailable".to_string())?;
+        if digest_hex(bytes.as_ref()) != output_sha256.lowercase_hex() {
+            return Err("projection output digest mismatch".to_string());
+        }
+    }
+    Ok(())
 }
 
 fn digest_hex(bytes: &[u8]) -> String {

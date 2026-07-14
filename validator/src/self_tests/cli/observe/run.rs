@@ -126,7 +126,7 @@ fn observe_run_covers_stack_query_explain_and_receipt_outputs() {
     fs::remove_dir_all(root).expect("cleanup observe run");
 }
 
-fn command(raw: &[&str]) -> observe::types::ObserveCommand {
+fn command(raw: &[&str]) -> observe::command::ObserveCommand {
     observe::parse(&super::args(raw))
         .expect("parse")
         .expect("observe command")

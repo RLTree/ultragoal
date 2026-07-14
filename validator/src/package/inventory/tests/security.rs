@@ -1,4 +1,4 @@
-use super::support::{CANARY, resource_root, root, sibling, write_manifest};
+use super::repository_fixture::{CANARY, resource_root, root, sibling, write_manifest};
 use crate::package::inventory::{anchored::test_hooks, package_digest};
 use std::fs;
 use std::os::unix::net::UnixListener;

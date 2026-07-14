@@ -194,7 +194,8 @@ fn check_observability_binding(
         out.push(format!("{prefix}_receipt_missing_observability_binding"));
         return;
     };
-    if obs.get("schema").and_then(Value::as_str) != Some(crate::cli::observe::types::RECEIPT_SCHEMA)
+    if obs.get("schema").and_then(Value::as_str)
+        != Some(crate::cli::observe::command::RECEIPT_SCHEMA)
         || obs.get("status").and_then(Value::as_str) != Some("pass")
         || obs.get("candidate_digest").and_then(Value::as_str) != Some(candidate)
         || obs.get("law_id").and_then(Value::as_str) != Some(crate::cli::openai::LAW_ID)

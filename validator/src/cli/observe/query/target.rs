@@ -1,4 +1,4 @@
-use crate::cli::observe::types::{ObserveCommand, QUERY_SCHEMA, RECEIPT_SCHEMA};
+use crate::cli::observe::command::{ObserveCommand, QUERY_SCHEMA, RECEIPT_SCHEMA};
 use serde_json::{Value, json};
 use std::path::Path;
 

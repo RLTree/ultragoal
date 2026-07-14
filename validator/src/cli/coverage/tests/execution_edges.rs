@@ -130,12 +130,17 @@ fn coverage_dispatch_and_receipt_write_failures_are_observable() {
 }
 
 #[test]
-fn coverage_authoritative_script_and_package_mutation_are_observed() {
+fn coverage_authoritative_command_and_package_mutation_are_observed() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-authoritative");
     super::write_coverage_root(&root, 100.0, json!([]));
-    fs::create_dir_all(root.join("scripts")).expect("scripts");
-    fs::write(root.join("scripts/check-coverage-full"), "exit 0\n").expect("script");
+    fs::write(root.join(".harness/coverage-command"), "exit 0\n").expect("coverage command");
+    let manifest = crate::json_boundary::read_json(&root.join(".harness/coverage-manifest.json"))
+        .expect("coverage manifest");
+    let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
+    let receipt = super::coverage_receipt(&root, &manifest, 100.0, json!([]), &candidate);
+    crate::json_boundary::write_json(&root.join(COVERAGE_RECEIPT_REL), &receipt)
+        .expect("coverage receipt rebound to command");
     let command = CoverageCommand {
         receipt: PathBuf::from(COVERAGE_RECEIPT_REL),
         jobs: Some(1),

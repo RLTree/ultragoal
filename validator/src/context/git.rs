@@ -1,7 +1,7 @@
+use super::bound_context::CandidateIdentity;
 use super::digest::{add_framed, sha256_hex};
 use super::error::{ContextError, io_error};
 use super::process::{run_bounded, run_bounded_allow_failure};
-use super::types::CandidateIdentity;
 use sha2::{Digest, Sha256};
 use std::ffi::{OsStr, OsString};
 use std::fs::{self, File};

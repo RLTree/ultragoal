@@ -19,7 +19,7 @@ pub(in crate::cli::observe::explain) fn latest_failed_event(
 }
 
 fn is_query_receipt(value: &Value) -> bool {
-    value.get("schema").and_then(Value::as_str) == Some(crate::cli::observe::types::QUERY_SCHEMA)
+    value.get("schema").and_then(Value::as_str) == Some(crate::cli::observe::command::QUERY_SCHEMA)
 }
 
 fn event_from_receipt(root: &Path, path: &Path, value: &Value) -> Value {

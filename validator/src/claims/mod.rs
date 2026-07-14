@@ -3,12 +3,14 @@
 mod coverage;
 mod decision;
 mod definition;
+mod evaluation_request;
 mod evidence;
 mod false_pass;
 mod false_pass_guard;
 mod false_pass_integrity;
 mod false_pass_receipt;
 mod guard;
+mod semantic_control_model_draft;
 
 pub use decision::{ClaimDecision, DecisionLedger, DecisionStatus, Projection};
 pub use definition::{ClaimDefinition, ClaimDefinitions};

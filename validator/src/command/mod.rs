@@ -1,9 +1,5 @@
 use std::path::PathBuf;
 
-// Source-law marker: this enum is the single execution projection after typed CLI parsing.
-#[allow(dead_code)]
-pub const EXECUTION_PROJECTION_ROLE: &str = "execution_projection_from_typed_cli_authority";
-
 #[derive(Debug)]
 pub(crate) struct Args {
     pub(crate) root: PathBuf,
@@ -72,7 +68,7 @@ pub(crate) enum Command {
     MandatoryLawValidation(crate::cli::mandatory_law_validation::MandatoryLawValidationCommand),
     Namespace(crate::cli::namespace::NamespaceCommand),
     NextAction(crate::cli::next_action::NextActionCommand),
-    Observe(crate::cli::observe::types::ObserveCommand),
+    Observe(crate::cli::observe::command::ObserveCommand),
     OpenAi(crate::cli::openai::OpenAiCommand),
     Promptfoo(crate::cli::promptfoo::PromptfooCommand),
     RedReport(crate::cli::red_report::RedReportCommand),

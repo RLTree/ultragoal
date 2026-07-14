@@ -74,7 +74,7 @@ fn write_receipt_set(
     crate::json_boundary::write_json(
         &dir.join(format!("{slug}.json")),
         &json!({
-            "schema": crate::cli::observe::types::RECEIPT_SCHEMA,
+            "schema": crate::cli::observe::command::RECEIPT_SCHEMA,
             "status": "pass",
             "candidate_digest": candidate,
             "operation": operation,
@@ -87,7 +87,7 @@ fn write_receipt_set(
         crate::json_boundary::write_json(
             &dir.join(format!("{slug}-{kind}.json")),
             &json!({
-                "schema": crate::cli::observe::types::QUERY_SCHEMA,
+                "schema": crate::cli::observe::command::QUERY_SCHEMA,
                 "status": "pass",
                 "candidate_digest": candidate,
                 "run_id": run,

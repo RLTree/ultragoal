@@ -78,6 +78,7 @@ fn partial_module_factoring_failures(paths: &BTreeSet<String>) -> Vec<String> {
     paths
         .iter()
         .filter(|path| source_stem(path) != "mod")
+        .filter(|path| !cargo_integration_entrypoint(path))
         .filter_map(|path| {
             let module_dir = path.strip_suffix(".rs")?;
             let child_prefix = format!("{module_dir}/");
@@ -94,6 +95,13 @@ fn partial_module_factoring_failures(paths: &BTreeSet<String>) -> Vec<String> {
             })
         })
         .collect()
+}
+
+fn cargo_integration_entrypoint(path: &str) -> bool {
+    let Some(tail) = path.strip_prefix("validator/tests/") else {
+        return false;
+    };
+    tail.ends_with(".rs") && !tail.contains('/')
 }
 
 fn maximal_factoring_failures(paths: &BTreeSet<String>) -> Vec<String> {

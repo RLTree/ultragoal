@@ -84,7 +84,7 @@ fn write_review_target_pass_receipt(root: &std::path::Path, candidate: &str) -> 
             subcommand: "build",
             operation: "review-target.build",
             surface: "review_target",
-            law_id: observe::types::LAW_ID,
+            law_id: observe::command::LAW_ID,
             check_id: "review-target-build-observability-binding",
             claim_id: "review_target_source_local_observability",
             artifact_path: "validation_artifacts/review/review-target-receipt.json",
@@ -119,7 +119,7 @@ fn write_review_target_pass_receipt(root: &std::path::Path, candidate: &str) -> 
 fn write_pass_queries(root: &std::path::Path, candidate: &str, target: &super::TargetIds) {
     for kind in ["logs", "metrics", "traces"] {
         let mut value = json!({
-            "schema": observe::types::QUERY_SCHEMA,
+            "schema": observe::command::QUERY_SCHEMA,
             "status": "pass",
             "candidate_digest": candidate,
             "run_id": target.run_id,
@@ -150,7 +150,7 @@ fn write_pass_explain(root: &std::path::Path, candidate: &str, target: &super::T
     crate::json_boundary::write_json(
         &root.join("validation_artifacts/observability/review-target-build-explain-failure.json"),
         &json!({
-            "schema": observe::types::RECEIPT_SCHEMA,
+            "schema": observe::command::RECEIPT_SCHEMA,
             "status": "pass",
             "candidate_digest": candidate,
             "operation": "observe.explain-failure",

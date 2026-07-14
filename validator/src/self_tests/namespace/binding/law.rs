@@ -53,6 +53,27 @@ fn namespace_law_rejects_generic_schema_json_authority_names() {
 }
 
 #[test]
+fn missing_class_registry_does_not_hide_other_namespace_findings() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "namespace-missing-registry-complete-audit",
+    );
+    std::fs::create_dir_all(&root).expect("namespace root");
+    let failures = crate::audit::namespace::law::package_failures(
+        &root,
+        &json!({"resources":["schemas/common.json"]}),
+    );
+    assert!(
+        contains(&failures, "namespace_class_registry_file_missing"),
+        "{failures:?}"
+    );
+    assert!(
+        contains(&failures, "namespace_schema_generic_authority_path"),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup missing registry audit");
+}
+
+#[test]
 fn namespace_value_cache_reuses_repo_source_paths() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-value-cache");
@@ -67,6 +88,35 @@ fn namespace_value_cache_reuses_repo_source_paths() {
         crate::audit::namespace::law::value_failures_with_cache(&root, &manifest, &mut cache);
     assert_eq!(first, second);
     std::fs::remove_dir_all(root).expect("cleanup namespace value cache");
+}
+
+#[test]
+fn source_inventory_findings_do_not_hide_semantic_identifier_findings() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "namespace-complete-source-audit",
+    );
+    std::fs::create_dir_all(root.join("validator/src/domain")).expect("validator source");
+    std::fs::write(
+        root.join("validator/src/domain/behavior.rs"),
+        "#![allow(dead_code)]\nfn checkpoint_progress() {}\n",
+    )
+    .expect("source with two independent findings");
+    let failures = crate::audit::namespace::law::value_failures(
+        &root,
+        &json!({"resources":["validator/src/domain/behavior.rs"]}),
+    );
+    assert!(
+        contains(&failures, "plugin_self_law_forbidden_lint_allowance"),
+        "{failures:?}"
+    );
+    assert!(
+        contains(
+            &failures,
+            "namespace_validator_source_product_opaque_goal_work_identifier"
+        ),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup complete namespace audit");
 }
 
 #[test]

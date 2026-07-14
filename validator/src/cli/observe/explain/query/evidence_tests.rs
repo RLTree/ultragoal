@@ -45,7 +45,7 @@ fn evidence_summary_matches_top_level_query_failure_class() {
     crate::json_boundary::write_json(
         &receipt,
         &json!({
-            "schema": crate::cli::observe::types::QUERY_SCHEMA,
+            "schema": crate::cli::observe::command::QUERY_SCHEMA,
             "query_kind": "traces",
             "status": "fail",
             "candidate_digest": candidate,
@@ -229,7 +229,7 @@ fn write_query_receipt(root: &Path, candidate: &str, kind: &str, status: &str, f
     crate::json_boundary::write_json(
         &receipt,
         &json!({
-            "schema": crate::cli::observe::types::QUERY_SCHEMA,
+            "schema": crate::cli::observe::command::QUERY_SCHEMA,
             "query_kind": kind,
             "status": status,
             "candidate_digest": candidate,

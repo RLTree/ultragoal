@@ -33,7 +33,7 @@ fn target_event(
     runtime: Option<RuntimeSignals>,
 ) -> serde_json::Value {
     let mut event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-query-bound",
         "correlation_id": "corr-query-bound",
         "candidate_digest": candidate,
@@ -44,9 +44,9 @@ fn target_event(
         "where_failed": operation,
         "next_repair": "repair the target operation and rerun narrowly",
         "claim_impact": "readiness_release_completion_update_goal_blocked",
-        "law_id": crate::cli::observe::types::LAW_ID,
-        "check_id": crate::cli::observe::types::CHECK_ID,
-        "claim_id": crate::cli::observe::types::CLAIM_ID
+        "law_id": crate::cli::observe::command::LAW_ID,
+        "check_id": crate::cli::observe::command::CHECK_ID,
+        "claim_id": crate::cli::observe::command::CLAIM_ID
     });
     if let Some(runtime) = runtime {
         event["duration_ms"] = json!(runtime.duration_ms);

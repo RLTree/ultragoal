@@ -1,5 +1,5 @@
+use crate::cli::observe::command::{self, ObserveCommand};
 use crate::cli::observe::telemetry::{claims, exporter, identity, record, spool};
-use crate::cli::observe::types::{self, ObserveCommand};
 use serde_json::{Value, json};
 use std::path::Path;
 use std::time::Instant;
@@ -60,7 +60,7 @@ pub(super) fn base_for_candidate(
         exporter::emit(&event, &metric, &trace);
     }
     Ok(json!({
-        "schema": types::RECEIPT_SCHEMA,
+        "schema": command::RECEIPT_SCHEMA,
         "status": status,
         "candidate_digest": candidate,
         "run_id": run_id,
@@ -80,9 +80,9 @@ pub(super) fn base_for_candidate(
         "claim_ceiling": claims::claim_ceiling(command.operation, status),
         "blocked_claims": claims::blocked(command.operation, status),
         "supported_claims": claims::supported(command.operation, status),
-        "law_id": types::LAW_ID,
-        "check_id": types::CHECK_ID,
-        "claim_id": types::CLAIM_ID,
+        "law_id": command::LAW_ID,
+        "check_id": command::CHECK_ID,
+        "claim_id": command::CLAIM_ID,
         "claim_impact": event["claim_impact"],
         "why_failed": event["why_failed"].as_str().unwrap_or(""),
         "where_failed": event["where_failed"].as_str().unwrap_or(""),

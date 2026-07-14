@@ -6,7 +6,7 @@ mod failures;
 mod inspect_context;
 mod state_view;
 
-pub(crate) use diagnostics::{Diagnostic, DiagnosticId, RuntimeOutcome, RuntimeStreams};
+pub(crate) use diagnostics::{Diagnostic, DiagnosticId, RuntimeOutcome};
 pub(crate) use dispatch::RuntimeSession;
 pub(crate) use error::{RuntimeError, RuntimeErrorId};
 pub(crate) use inspect_context::inspect_context;

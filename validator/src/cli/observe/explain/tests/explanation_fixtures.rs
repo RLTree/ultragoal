@@ -64,7 +64,7 @@ pub(super) fn write_query_receipt_event(root: &std::path::Path, run_id: &str) {
     crate::json_boundary::write_json(
         &dir.join("zz-traces-query.json"),
         &json!({
-            "schema": crate::cli::observe::types::QUERY_SCHEMA,
+            "schema": crate::cli::observe::command::QUERY_SCHEMA,
             "run_id": run_id,
             "candidate_digest": candidate,
             "status": "pass",
@@ -91,7 +91,7 @@ pub(super) fn write_failed_metrics_query_receipt(root: &std::path::Path, run_id:
     crate::json_boundary::write_json(
         &dir.join("metrics-query-failed.json"),
         &json!({
-            "schema": crate::cli::observe::types::QUERY_SCHEMA,
+            "schema": crate::cli::observe::command::QUERY_SCHEMA,
             "query_kind": "metrics",
             "run_id": run_id,
             "candidate_digest": candidate,

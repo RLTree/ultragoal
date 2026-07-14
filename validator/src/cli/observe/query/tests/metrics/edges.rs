@@ -1,6 +1,6 @@
 use super::metric_events::{metric_body, metric_body_without_total, pass_metric_body};
+use crate::cli::observe::command::{ObserveCommand, ObserveOperation};
 use crate::cli::observe::query::QueryKind;
-use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 use std::path::Path;
 
@@ -68,7 +68,7 @@ fn target_query_without_target_status_stays_unobservable() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-metrics-edge",
             "candidate_digest": candidate,
             "operation": "coverage.prove",
@@ -179,7 +179,7 @@ fn metrics_reconciliation_ignores_unreported_optional_runtime_signals() {
     crate::cli::observe::telemetry::spool_write_for_test(
         &root,
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-metrics-edge",
             "candidate_digest": candidate,
             "operation": "coverage.prove",
@@ -213,7 +213,7 @@ fn write_target_event_with_status(
         .map(ToOwned::to_owned)
         .unwrap_or_else(|| crate::package::inventory::package_digest(root).expect("candidate"));
     let event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-metrics-edge",
         "candidate_digest": candidate,
         "operation": operation,

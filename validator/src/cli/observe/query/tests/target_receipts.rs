@@ -1,4 +1,4 @@
-use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
+use crate::cli::observe::command::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 use std::path::Path;
 
@@ -28,7 +28,7 @@ fn target_event_skips_query_receipts_and_fails_closed_for_receipt_without_event(
     crate::json_boundary::write_json(
         &dir.join("z-query.json"),
         &json!({
-            "schema": crate::cli::observe::types::QUERY_SCHEMA,
+            "schema": crate::cli::observe::command::QUERY_SCHEMA,
             "run_id": "run-target",
             "operation": "observe.logs.query"
         }),
@@ -37,7 +37,7 @@ fn target_event_skips_query_receipts_and_fails_closed_for_receipt_without_event(
     crate::json_boundary::write_json(
         &dir.join("a-target.json"),
         &json!({
-            "schema": crate::cli::observe::types::RECEIPT_SCHEMA,
+            "schema": crate::cli::observe::command::RECEIPT_SCHEMA,
             "run_id": "run-target",
             "correlation_id": "corr-target",
             "candidate_digest": "sha256:receipt",
@@ -97,7 +97,7 @@ fn target_event_reads_nested_command_observation_receipts() {
     crate::json_boundary::write_json(
         &dir.join("fmt-check-command-observation.json"),
         &json!({
-            "schema": crate::cli::observe::types::RECEIPT_SCHEMA,
+            "schema": crate::cli::observe::command::RECEIPT_SCHEMA,
             "run_id": "run-target",
             "correlation_id": "corr-target",
             "candidate_digest": "sha256:receipt",
@@ -141,7 +141,7 @@ fn target_event_skips_bad_spool_lines_and_prefers_receipt_event_binding() {
     crate::json_boundary::write_json(
         &dir.join("a-target-event.json"),
         &json!({
-            "schema": crate::cli::observe::types::RECEIPT_SCHEMA,
+            "schema": crate::cli::observe::command::RECEIPT_SCHEMA,
             "run_id": "run-target",
             "correlation_id": "corr-target",
             "candidate_digest": "sha256:receipt",

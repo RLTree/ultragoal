@@ -31,16 +31,21 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<TypedBoundariesCommand>, St
     if !has_flag(args, "--strict") {
         return Err("typed-boundaries check requires --strict".to_string());
     }
+    if has_flag(args, "--no-write") && opt_string(args, "--receipt").is_some() {
+        return Err("typed-boundaries --no-write conflicts with --receipt".to_string());
+    }
     reject_unknown(args)?;
     Ok(Some(TypedBoundariesCommand {
-        receipt: opt_path(args, "--receipt").unwrap_or_else(|| PathBuf::from(RECEIPT_REL)),
+        receipt: if has_flag(args, "--no-write") {
+            PathBuf::new()
+        } else {
+            opt_path(args, "--receipt").unwrap_or_else(|| PathBuf::from(RECEIPT_REL))
+        },
         jobs: opt_usize(args, "--jobs")?,
     }))
 }
 
 pub(crate) fn run(root: &Path, command: &TypedBoundariesCommand) -> Result<i32, String> {
-    let receipt_path = artifact::publication::ClaimReceiptPath::new(root, &command.receipt)?;
-    artifact::paths::reject_receipt_collision(&command.receipt)?;
     let started = Instant::now();
     let scheduler = SchedulerConfig::from_jobs(command.jobs)?;
     let result = validate(root, scheduler);
@@ -49,6 +54,18 @@ pub(crate) fn run(root: &Path, command: &TypedBoundariesCommand) -> Result<i32, 
     } else {
         "fail"
     };
+    if command.receipt.as_os_str().is_empty() {
+        println!(
+            "ultragoal-typed-boundaries-no-write {status} failures={}",
+            result.failures.len()
+        );
+        for failure in &result.failures {
+            println!("ultragoal-typed-boundaries-no-write finding={failure}");
+        }
+        return Ok(i32::from(status != "pass"));
+    }
+    let receipt_path = artifact::publication::ClaimReceiptPath::new(root, &command.receipt)?;
+    artifact::paths::reject_receipt_collision(&command.receipt)?;
     let receipt_rel = command.receipt.to_string_lossy().to_string();
     let why_failed = claims::why_failed(status, &result.failures);
     let foundational_surface_artifact =
@@ -148,14 +165,30 @@ fn validate(root: &Path, scheduler: SchedulerConfig) -> ValidationResult {
     }
 }
 
+pub(crate) fn check(root: &Path, jobs: Option<usize>) -> Result<Vec<String>, String> {
+    Ok(validate(root, SchedulerConfig::from_jobs(jobs)?).failures)
+}
+
 fn run_typed_boundary_tasks(
     root: &Path,
     scheduler: SchedulerConfig,
 ) -> crate::scheduler::Scheduled<Vec<(String, String)>> {
     let root = root.to_path_buf();
-    let tasks: Vec<Box<dyn FnOnce() -> Vec<(String, String)> + Send>> = vec![Box::new(move || {
-        crate::audit::law::authority_surfaces::package_failures(&root)
-    })];
+    let authority_root = root.clone();
+    let tasks: Vec<Box<dyn FnOnce() -> Vec<(String, String)> + Send>> = vec![
+        Box::new(move || crate::audit::law::authority_surfaces::package_failures(&authority_root)),
+        Box::new(move || {
+            crate::audit::plugin::dependency_adapter::failures(&root)
+                .into_iter()
+                .map(|failure| {
+                    (
+                        "third-party-dependency-legibility-typed-adapters".to_string(),
+                        failure,
+                    )
+                })
+                .collect()
+        }),
+    ];
     crate::scheduler::run_ordered(scheduler, TaskClass::PureReadParallel, tasks)
 }
 
@@ -167,7 +200,7 @@ fn reject_unknown(args: &[String]) -> Result<(), String> {
     let mut index = 0;
     while index < args.len() {
         match args[index].as_str() {
-            "--strict" => index += 1,
+            "--strict" | "--no-write" => index += 1,
             "--receipt" | "--jobs" => {
                 if index + 1 >= args.len() {
                     return Err(format!("missing value for {}", args[index]));

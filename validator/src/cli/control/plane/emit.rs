@@ -1,7 +1,7 @@
 use crate::cli::control::plane::RECEIPT_SCHEMA;
 use crate::cli::control::plane::evidence;
+use crate::cli::control::plane::operation::{ControlOperation, REQUIRED_COMMANDS};
 use crate::cli::control::plane::proof;
-use crate::cli::control::plane::types::{ControlOperation, REQUIRED_COMMANDS};
 use serde_json::{Value, json};
 use std::path::Path;
 

@@ -1,5 +1,5 @@
+use super::command_contract::{ParsedValue, RelativePath, ValueKind};
 use super::error::ParseErrorId;
-use super::model::{ParsedValue, RelativePath, ValueKind};
 
 const MAX_IDENTIFIER_BYTES: usize = 128;
 const MAX_PATH_BYTES: usize = 4096;

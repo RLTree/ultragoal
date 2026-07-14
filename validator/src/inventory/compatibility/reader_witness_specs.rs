@@ -4,7 +4,7 @@ pub(crate) struct ArtifactSpec {
     pub sha256: &'static str,
 }
 
-pub(crate) const PHASE_A_ARTIFACTS: [ArtifactSpec; 19] = [
+pub(crate) const ACCEPTED_CONTEXT_ARTIFACTS: [ArtifactSpec; 19] = [
     ArtifactSpec {
         path: "schemas/codex-registry-exposure.schema.json",
         sha256: "c6f814afae2631fa02f693d6e9785115dda7331ed5a7a7e7be94955f1e7e4173",

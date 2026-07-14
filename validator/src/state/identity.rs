@@ -1,6 +1,6 @@
 use super::catalog::RuntimeMetadata;
 use super::ceiling::ClaimCeiling;
-use super::types::{Finding, NextAction, ProductGoalState, Repair, StateError};
+use super::product_state::{Finding, NextAction, ProductGoalState, Repair, StateError};
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 

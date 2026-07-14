@@ -1,6 +1,6 @@
 use super::catalog::catalog;
+use super::command_contract::{CommandDescriptor, Group, OptionSpec, ValueKind};
 use super::help::SUCCESSOR_GRAMMAR_VERSION;
-use super::model::{CommandDescriptor, Group, OptionSpec, ValueKind};
 use clap::{Arg, ArgAction, Command, value_parser};
 
 pub(crate) const JSON_ID: &str = "successor-json";

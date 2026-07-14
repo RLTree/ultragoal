@@ -5,6 +5,7 @@
 
 mod authority;
 mod binding;
+mod catalog;
 mod digest;
 mod error;
 mod local;
@@ -37,19 +38,15 @@ pub use reuse::{
 };
 pub use snapshot::{ChangeKind, DirtyChange, DirtySnapshot};
 
+pub(crate) use catalog::{
+    AdoptedRoutineNode, BoundCatalogInvocation, CatalogAdoption, CatalogSelectionRequest,
+    RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation, load_production_catalog,
+};
 pub(crate) use runtime_adapter::{
     PreparedRoutineExecution, ProductionRoutineIssuer, RoutineAdapterSpec, RoutineCancellation,
-    RoutineEffectIntent, RoutineEffectRequest, RoutineInvocationSpec, RoutineMediatedExpectation,
-    RoutineMediatedIntent, RoutineMediatedOutcome, RoutineMediatedWitness,
-    RoutineMediationAuthority, RoutineMediationBatch, RoutineMediationResult,
-    RoutineMediatorStatus, RoutineNoOpProjection, RoutineNodeDisposition, RoutineNodeMediation,
-    RoutineRecoveryAuthority, RoutineReuseInput, RoutineRootGrant, begin_routine_mediation,
-    bind_mediated_expectation, bind_mediated_witness, bind_routine_invocation,
-    bind_routine_invocation_with_environment,
-    bind_routine_invocation_with_environment_and_read_sources,
-    bind_routine_invocation_with_read_sources, mediate_prepared_routine_execution,
-    mediate_prepared_routine_execution_production, observe_mediated_incomplete,
-    observe_mediated_outcome, prepare_routine_execution, reconcile_routine_execution,
+    RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
+    RoutineReuseInput, bind_routine_invocation_with_environment_and_read_sources,
+    mediate_prepared_routine_execution_production, prepare_routine_execution,
 };
 
 #[cfg(test)]

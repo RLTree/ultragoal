@@ -1,4 +1,4 @@
-use crate::cli::performance::types::{BudgetClass, PERFORMANCE_RECEIPT_SCHEMA};
+use crate::cli::performance::measurement::{BudgetClass, PERFORMANCE_RECEIPT_SCHEMA};
 use serde_json::Value;
 
 mod node_speed_evidence;

@@ -1,4 +1,4 @@
-use super::types::EffectClass;
+use super::bound_context::EffectClass;
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 

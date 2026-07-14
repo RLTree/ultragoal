@@ -1,5 +1,5 @@
+use super::bound_context::{ConfigurationIdentity, SecretSourceIdentity};
 use super::error::ContextError;
-use super::types::{ConfigurationIdentity, SecretSourceIdentity};
 use std::collections::BTreeMap;
 
 const PUBLIC_CONFIGURATION_KEYS: &[&str] = &[

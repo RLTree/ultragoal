@@ -37,13 +37,13 @@ pub(super) fn receipt_run(
 
 fn observability_binding(value: &Value) -> Option<&Value> {
     if value.get("schema").and_then(Value::as_str)
-        == Some(crate::cli::observe::types::RECEIPT_SCHEMA)
+        == Some(crate::cli::observe::command::RECEIPT_SCHEMA)
     {
         Some(value)
     } else {
         value.get("observability").filter(|nested| {
             nested.get("schema").and_then(Value::as_str)
-                == Some(crate::cli::observe::types::RECEIPT_SCHEMA)
+                == Some(crate::cli::observe::command::RECEIPT_SCHEMA)
         })
     }
 }

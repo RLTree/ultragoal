@@ -56,14 +56,14 @@ impl BoundInputs {
         }
     }
 
-    pub(crate) fn validate(&self) -> Result<(), super::types::StateError> {
+    pub(crate) fn validate(&self) -> Result<(), super::product_state::StateError> {
         if self.inventory_findings.len() > super::limits::MAX_INVENTORY_FINDINGS {
-            return Err(super::types::StateError::ResourceLimit(
+            return Err(super::product_state::StateError::ResourceLimit(
                 "authority catalog finding count".to_owned(),
             ));
         }
         if self.capabilities.len() > super::limits::MAX_CAPABILITIES {
-            return Err(super::types::StateError::ResourceLimit(
+            return Err(super::product_state::StateError::ResourceLimit(
                 "live capability count".to_owned(),
             ));
         }
@@ -78,7 +78,7 @@ impl BoundInputs {
             })
             .sum::<usize>();
         if observed_bytes > super::limits::MAX_PROJECTION_BYTES {
-            return Err(super::types::StateError::ResourceLimit(
+            return Err(super::product_state::StateError::ResourceLimit(
                 "authority catalog finding bytes".to_owned(),
             ));
         }
@@ -86,7 +86,7 @@ impl BoundInputs {
             || !super::limits::valid_id(&self.authority_catalog_id)
             || !super::limits::valid_id(&self.authority_catalog_context_id)
         {
-            return Err(super::types::StateError::InvalidCatalog(
+            return Err(super::product_state::StateError::InvalidCatalog(
                 "invalid bound identity".to_owned(),
             ));
         }
@@ -102,7 +102,7 @@ impl BoundInputs {
                     .as_deref()
                     .is_some_and(|value| !super::limits::valid_relative_path(value))
             {
-                return Err(super::types::StateError::InvalidCatalog(
+                return Err(super::product_state::StateError::InvalidCatalog(
                     "unsafe authority catalog finding".to_owned(),
                 ));
             }
@@ -112,7 +112,7 @@ impl BoundInputs {
             .keys()
             .any(|name| !super::limits::valid_id(name))
         {
-            return Err(super::types::StateError::InvalidCatalog(
+            return Err(super::product_state::StateError::InvalidCatalog(
                 "invalid capability identity".to_owned(),
             ));
         }

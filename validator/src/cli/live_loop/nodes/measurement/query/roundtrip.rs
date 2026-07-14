@@ -1,4 +1,4 @@
-use crate::cli::observe::types::ObserveOperation;
+use crate::cli::observe::command::ObserveOperation;
 
 pub(in crate::cli::live_loop::nodes::measurement::observation) const EXPLAIN_TIMEOUT_MS: u64 =
     1_000;

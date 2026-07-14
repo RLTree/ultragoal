@@ -1,6 +1,6 @@
+use crate::cli::observe::command::{self, ObserveCommand};
 use crate::cli::observe::query::observed_failure;
 use crate::cli::observe::telemetry::{claims, record};
-use crate::cli::observe::types::{self, ObserveCommand};
 use serde_json::{Value, json};
 use std::path::Path;
 
@@ -69,7 +69,7 @@ pub(super) fn result_for_candidate(
     let observed_claim_impact = observed_failure_text(&observed_failure, "claim_impact");
     let metric_summary = metric_signal::summary(query_kind, &rows);
     let mut receipt = json!({
-        "schema": types::QUERY_SCHEMA,
+        "schema": command::QUERY_SCHEMA,
         "status": effective_status,
         "candidate_digest": candidate,
         "run_id": run_id,

@@ -1,5 +1,5 @@
-use super::model::{EvidenceBinding, ReceiptState, ReuseExpectation, ReuseMiss, RunOutcome};
 use super::receipt::{ReceiptWire, ReuseReceipt};
+use super::reuse_record::{EvidenceBinding, ReceiptState, ReuseExpectation, ReuseMiss, RunOutcome};
 use super::witness::{ObservedResult, ReuseDecision, VerifiedReuse};
 use crate::context::LiveContext;
 use crate::routine_work::RoutineError;

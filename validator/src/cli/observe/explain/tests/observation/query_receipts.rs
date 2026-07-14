@@ -18,7 +18,7 @@ fn explain_targets_failed_durable_query_receipt_when_spool_is_absent() {
     crate::json_boundary::write_json(
         &root.join("validation_artifacts/observability/package-digest.json"),
         &json!({
-            "schema": crate::cli::observe::types::RECEIPT_SCHEMA,
+            "schema": crate::cli::observe::command::RECEIPT_SCHEMA,
             "run_id": "run-durable-query-failure",
             "correlation_id": "corr-durable-query-failure",
             "candidate_digest": candidate,
@@ -47,7 +47,7 @@ fn explain_targets_failed_durable_query_receipt_when_spool_is_absent() {
     crate::json_boundary::write_json(
         &root.join("validation_artifacts/observability/live-loop/commands/traces-query.json"),
         &json!({
-            "schema": crate::cli::observe::types::QUERY_SCHEMA,
+            "schema": crate::cli::observe::command::QUERY_SCHEMA,
             "query_kind": "traces",
             "status": "fail",
             "candidate_digest": candidate,

@@ -2,14 +2,17 @@ use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
+mod current_law;
 mod dependencies;
 mod independent;
 mod production;
 mod registry;
+mod weak_term;
 
 const REGISTRY: &str = "docs/mandatory-law-surfaces.json";
 const REQUIRED_LAWS: &[&str] = crate::audit::mandatory::law::surface::ids::REQUIRED_LAWS;
-const WEAK_TERMS: &str = "partial backlog blocked future follow-up reviewer-only documentation-only prose-only row-shape-only claim-ceiling-only stale-source-backed";
+
+pub(crate) use current_law::package_failures_for_current_law;
 
 pub fn package_failures(root: &Path) -> Vec<String> {
     let registry = match crate::json_boundary::read_json(&root.join(REGISTRY)) {
@@ -102,7 +105,7 @@ pub fn value_failures(root: &Path, value: &Value) -> Vec<String> {
             .get("law_id")
             .and_then(Value::as_str)
             .unwrap_or("unknown");
-        if contains_weak_term(row) {
+        if weak_term::contains(row) {
             out.push(format!("mandatory_law_weak_disposition:{law}"));
         }
         if !registry::standards_row_exists(root, law) {
@@ -227,22 +230,4 @@ pub fn receipt_value_failures_with_candidate(
     }
     out.extend(production::binding_failures(root, value, law));
     out
-}
-
-fn contains_weak_term(value: &Value) -> bool {
-    let text = [
-        "claim_ceiling_guard",
-        "enforcement_status",
-        "validator_check_id",
-        "standards_row_id",
-        "source_obligation_id",
-    ]
-    .iter()
-    .filter_map(|key| value.get(*key).and_then(Value::as_str))
-    .collect::<Vec<_>>()
-    .join(" ")
-    .to_ascii_lowercase();
-    WEAK_TERMS
-        .split_whitespace()
-        .any(|term| text.contains(term))
 }

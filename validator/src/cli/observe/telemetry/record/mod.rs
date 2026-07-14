@@ -1,5 +1,5 @@
+use crate::cli::observe::command::{self, ObserveCommand, ObserveOperation};
 use crate::cli::observe::telemetry::{RuntimeTelemetry, claims, identity};
-use crate::cli::observe::types::{self, ObserveCommand, ObserveOperation};
 use serde_json::{Value, json};
 use std::path::Path;
 
@@ -23,7 +23,7 @@ pub(super) fn event(
         .unwrap_or_else(|| "none-read-only".to_string());
     let next_repair = claims::next_repair_for(command.operation, status, failure.as_deref());
     let mut event = json!({
-        "schema": types::EVENT_SCHEMA,
+        "schema": command::EVENT_SCHEMA,
         "run_id": run_id,
         "correlation_id": correlation_id,
         "trace_id": identity::id("trace", command.operation.id(), candidate),
@@ -33,9 +33,9 @@ pub(super) fn event(
         "subcommand": command.operation.subcommand(),
         "operation": command.operation.id(),
         "surface": "live_stack",
-        "law_id": types::LAW_ID,
-        "check_id": command.check_id.as_deref().unwrap_or(types::CHECK_ID),
-        "claim_id": command.claim_id.as_deref().unwrap_or(types::CLAIM_ID),
+        "law_id": command::LAW_ID,
+        "check_id": command.check_id.as_deref().unwrap_or(command::CHECK_ID),
+        "claim_id": command.claim_id.as_deref().unwrap_or(command::CLAIM_ID),
         "candidate_digest": candidate,
         "target_revision": candidate,
         "artifact_path": "dev/observability",

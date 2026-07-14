@@ -2,10 +2,10 @@ mod apply;
 mod error;
 mod inspect;
 mod local;
-mod model;
 mod ownership;
 mod path;
 mod product_adapter;
+mod repository_contract;
 mod state;
 
 use sha2::{Digest, Sha256};
@@ -14,11 +14,11 @@ pub use apply::{apply, rollback, verify};
 pub use error::{FitError, FitErrorId};
 pub use inspect::{inspect, inspect_with_managed_proofs, plan};
 pub use local::LocalRepository;
-pub use model::{
-    DesiredFile, DesiredState, FitEffects, FitMode, FitReader, Ownership, RepositoryClass,
-};
 pub use ownership::{ManagedPriorProof, OwnershipProvenance};
 pub use path::CanonicalPath;
+pub use repository_contract::{
+    DesiredFile, DesiredState, FitEffects, FitMode, FitReader, Ownership, RepositoryClass,
+};
 pub use state::{
     AppliedFit, ExpectedContent, FitCheck, FitConflict, FitInspection, FitPlan, FitVerification,
     Mutation, ObservedDisposition, PlanAuthorization, RollbackPlan,
@@ -43,10 +43,8 @@ pub(crate) use ownership::issue_managed_prior_proof;
 #[cfg(test)]
 pub(crate) use product_adapter::after_effect_before_terminal_for_test;
 pub(crate) use product_adapter::{
-    AdapterErrorId, FitAdapterError, FitApplyPreparationProjection, FitInspectProjection,
-    FitPlanRecord, FitVerificationProjection, OpaqueFitApplyRequest, PreparedFitApply,
-    RepositoryFitApplyNonce, RepositoryFitAuthorityStore, RepositoryFitProductionOutcome,
-    RepositoryFitRecoveryIntent, RepositoryFitTrustedClock, execute_prepared_apply, inspect_target,
-    parse_recovery_intent, plan_target, prepare_apply_request, prepare_recovery_intent,
-    recover_prepared_apply, verify_target,
+    AdapterErrorId, FitAdapterError, PreparedFitApply, RepositoryFitApplyNonce,
+    RepositoryFitAuthorityStore, RepositoryFitProductionOutcome, RepositoryFitTrustedClock,
+    execute_prepared_apply, inspect_target, plan_target, prepare_apply_request,
+    prepare_recovery_intent, recover_prepared_apply, verify_target,
 };

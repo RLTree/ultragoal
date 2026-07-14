@@ -2,6 +2,9 @@ use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
 
+mod files;
+mod provenance;
+
 pub(super) const DEAUTHORIZED_COMMAND_INVENTORY: &str =
     "docs/generated/observability/command-inventory.json";
 
@@ -24,7 +27,7 @@ pub(super) fn generated_failures(
             continue;
         }
         let value = crate::json_boundary::read_json(&root.join(&rel)).unwrap_or(Value::Null);
-        if missing_generated_provenance(&value) {
+        if provenance::missing_generated_provenance(&value) {
             push(
                 &mut out,
                 "generated-proof-artifact-provenance-anti-fabrication",
@@ -33,14 +36,14 @@ pub(super) fn generated_failures(
         }
         out.extend(generated_row_provenance_failures(&rel, &value));
         out.extend(generated_product_opaque_path_failures(&rel, &value));
-        if runtime_fixture_claims_artifact_truth(&value) {
+        if provenance::runtime_fixture_claims_artifact_truth(&value) {
             push(
                 &mut out,
                 "generated-proof-artifact-provenance-anti-fabrication",
                 format!("runtime_normalized_fixture_used_as_artifact_truth:{rel}"),
             );
         }
-        if hand_edits_allowed(&value) {
+        if provenance::hand_edits_allowed(&value) {
             push(
                 &mut out,
                 "generated-proof-artifact-provenance-anti-fabrication",
@@ -58,41 +61,6 @@ pub(super) fn generated_failures(
     out
 }
 
-fn missing_generated_provenance(value: &Value) -> bool {
-    if value
-        .get("generated_from")
-        .and_then(Value::as_str)
-        .is_some()
-        || value.pointer("/provenance/generated_from").is_some()
-        || value.get("source_spec").is_some()
-    {
-        return false;
-    }
-    let provenance = value.get("provenance").unwrap_or(&Value::Null);
-    !(text(provenance, "generated_artifact_type").is_some()
-        && text(provenance, "validator_run_id").is_some()
-        && text(provenance, "input_manifest_digest").is_some()
-        && provenance.pointer("/validator_receipt/path").is_some()
-        && provenance.pointer("/validator_receipt/digest").is_some())
-}
-
-fn runtime_fixture_claims_artifact_truth(value: &Value) -> bool {
-    value
-        .pointer("/runtime_normalized_fixture/artifact_truth")
-        .and_then(Value::as_bool)
-        == Some(true)
-        || value
-            .get("runtime_normalized_fixture_artifact_truth")
-            .and_then(Value::as_bool)
-            == Some(true)
-}
-
-fn hand_edits_allowed(value: &Value) -> bool {
-    value.get("hand_edited").and_then(Value::as_bool) == Some(true)
-        || value.get("manual_edit").and_then(Value::as_bool) == Some(true)
-        || value.get("manual_edits_allowed").and_then(Value::as_bool) == Some(true)
-}
-
 fn generated_row_provenance_failures(rel: &str, value: &Value) -> Vec<(String, String)> {
     let mut out = Vec::new();
     for key in inventory_map_keys(value) {
@@ -100,14 +68,14 @@ fn generated_row_provenance_failures(rel: &str, value: &Value) -> Vec<(String, S
             continue;
         };
         for (row_id, row) in rows {
-            if !has_row_provenance(row) {
+            if !provenance::has_row_provenance(row) {
                 push(
                     &mut out,
                     "generated-proof-artifact-provenance-anti-fabrication",
                     format!("generated_inventory_row_missing_provenance:{rel}:{key}:{row_id}"),
                 );
             }
-            if hand_edits_allowed(row) {
+            if provenance::hand_edits_allowed(row) {
                 push(
                     &mut out,
                     "generated-proof-artifact-provenance-anti-fabrication",
@@ -147,26 +115,6 @@ fn inventory_map_keys(value: &Value) -> BTreeSet<String> {
         );
     }
     keys
-}
-
-fn has_row_provenance(row: &Value) -> bool {
-    let has_owner_surface = row
-        .get("current_owner_surface")
-        .and_then(Value::as_str)
-        .filter(|value| !value.trim().is_empty())
-        .is_some()
-        || row
-            .get("owner_surface")
-            .and_then(Value::as_str)
-            .filter(|value| !value.trim().is_empty())
-            .is_some();
-    let has_source_binding = row.get("source_spec").is_some()
-        || row
-            .get("validator_check_id")
-            .and_then(Value::as_str)
-            .filter(|value| !value.trim().is_empty())
-            .is_some();
-    has_owner_surface && has_source_binding
 }
 
 fn generated_product_opaque_path_failures(rel: &str, value: &Value) -> Vec<(String, String)> {
@@ -220,35 +168,9 @@ fn looks_like_repo_or_artifact_path(text: &str) -> bool {
 }
 
 fn generated_files(root: &Path) -> Vec<String> {
-    let mut out = Vec::new();
-    collect_json_files(root, &root.join("docs/generated"), &mut out);
-    collect_json_files(root, &root.join("examples/generated"), &mut out);
-    out
-}
-
-fn collect_json_files(root: &Path, dir: &Path, out: &mut Vec<String>) {
-    let Ok(entries) = std::fs::read_dir(dir) else {
-        return;
-    };
-    for entry in entries.flatten() {
-        let path = entry.path();
-        if path.is_dir() {
-            collect_json_files(root, &path, out);
-        } else if path.extension().and_then(|ext| ext.to_str()) == Some("json")
-            && let Ok(rel) = path.strip_prefix(root)
-        {
-            out.push(rel.to_string_lossy().replace('\\', "/"));
-        }
-    }
+    files::generated_files(root)
 }
 
 fn push(out: &mut Vec<(String, String)>, check: &str, detail: String) {
     out.push((check.to_string(), detail));
-}
-
-fn text<'a>(value: &'a Value, key: &str) -> Option<&'a str> {
-    value
-        .get(key)
-        .and_then(Value::as_str)
-        .filter(|text| !text.is_empty())
 }

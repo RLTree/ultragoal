@@ -1,6 +1,7 @@
 use super::evidence::Actor;
 use super::false_pass::ModelAuthority;
 use super::false_pass_integrity::{model_record_digest, seal_digest, validate_model_shape};
+use super::semantic_control_model_draft::SemanticControlModelDraft;
 use serde::{Deserialize, Deserializer, Serialize};
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
@@ -28,49 +29,30 @@ pub struct SemanticControlModel {
 }
 
 impl SemanticControlModel {
-    #[allow(clippy::too_many_arguments)]
     pub(super) fn from_authority(
         _authority: &ModelAuthority,
-        model_id: String,
-        registry_digest: String,
-        claim_id: String,
-        control_id: String,
-        control_definition_digest: String,
-        model_spec_digest: String,
-        authority_nonce: String,
-        negative_stimulus_digest: String,
-        expected_failure_contract: String,
-        modeler: Actor,
-        model_method: String,
-        model_implementation_digest: String,
-        modeled_at_unix_ms: u64,
-        live_context_id: String,
-        candidate_id: String,
-        max_age_ms: u64,
-        truth_surface: String,
-        declared_ceiling: String,
-        modeled_result_digest: String,
+        draft: SemanticControlModelDraft,
     ) -> Result<Self, String> {
         let mut model = Self {
-            model_id,
-            registry_digest,
-            claim_id,
-            control_id,
-            control_definition_digest,
-            model_spec_digest,
-            authority_nonce,
-            negative_stimulus_digest,
-            expected_failure_contract,
-            modeler,
-            model_method,
-            model_implementation_digest,
-            modeled_at_unix_ms,
-            live_context_id,
-            candidate_id,
-            max_age_ms,
-            truth_surface,
-            declared_ceiling,
-            modeled_result_digest,
+            model_id: draft.model_id,
+            registry_digest: draft.registry_digest,
+            claim_id: draft.claim_id,
+            control_id: draft.control_id,
+            control_definition_digest: draft.control_definition_digest,
+            model_spec_digest: draft.model_spec_digest,
+            authority_nonce: draft.authority_nonce,
+            negative_stimulus_digest: draft.negative_stimulus_digest,
+            expected_failure_contract: draft.expected_failure_contract,
+            modeler: draft.modeler,
+            model_method: draft.model_method,
+            model_implementation_digest: draft.model_implementation_digest,
+            modeled_at_unix_ms: draft.modeled_at_unix_ms,
+            live_context_id: draft.live_context_id,
+            candidate_id: draft.candidate_id,
+            max_age_ms: draft.max_age_ms,
+            truth_surface: draft.truth_surface,
+            declared_ceiling: draft.declared_ceiling,
+            modeled_result_digest: draft.modeled_result_digest,
             model_record_digest: String::new(),
         };
         model.model_record_digest = model_record_digest(&model)?;

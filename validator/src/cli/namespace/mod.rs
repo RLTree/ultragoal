@@ -23,9 +23,16 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<NamespaceCommand>, String> 
     if !has_flag(args, "--strict") {
         return Err("namespace check requires --strict".to_string());
     }
+    if has_flag(args, "--no-write") && opt_string(args, "--receipt").is_some() {
+        return Err("namespace --no-write conflicts with --receipt".to_string());
+    }
     reject_unknown(args)?;
     Ok(Some(NamespaceCommand {
-        receipt: opt_path(args, "--receipt").unwrap_or_else(|| PathBuf::from(RECEIPT_REL)),
+        receipt: if has_flag(args, "--no-write") {
+            PathBuf::new()
+        } else {
+            opt_path(args, "--receipt").unwrap_or_else(|| PathBuf::from(RECEIPT_REL))
+        },
         jobs: opt_usize(args, "--jobs")?,
     }))
 }
@@ -39,6 +46,16 @@ pub(crate) fn run(root: &Path, command: &NamespaceCommand) -> Result<i32, String
     } else {
         "fail"
     };
+    if command.receipt.as_os_str().is_empty() {
+        println!(
+            "ultragoal-namespace-no-write {status} failures={}",
+            result.failures.len()
+        );
+        for failure in &result.failures {
+            println!("ultragoal-namespace-no-write finding={failure}");
+        }
+        return Ok(i32::from(status != "pass"));
+    }
     let receipt_rel = command.receipt.to_string_lossy().to_string();
     let why_failed = claims::why_failed(status, &result.failures);
     let value = crate::cli::observe::telemetry::command_receipt(
@@ -111,6 +128,10 @@ fn validate(root: &Path, scheduler: SchedulerConfig) -> ValidationResult {
     }
 }
 
+pub(crate) fn check(root: &Path, jobs: Option<usize>) -> Result<Vec<String>, String> {
+    Ok(validate(root, SchedulerConfig::from_jobs(jobs)?).failures)
+}
+
 fn run_namespace_tasks(
     root: &Path,
     manifest: Value,
@@ -166,7 +187,7 @@ fn reject_unknown(args: &[String]) -> Result<(), String> {
     let mut index = 0;
     while index < args.len() {
         match args[index].as_str() {
-            "--strict" => index += 1,
+            "--strict" | "--no-write" => index += 1,
             "--receipt" | "--jobs" => {
                 if index + 1 >= args.len() {
                     return Err(format!("missing value for {}", args[index]));

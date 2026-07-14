@@ -1,6 +1,6 @@
 use super::receipts::{digest, executed_speed_node, performance_receipt};
+use crate::cli::performance::measurement::BudgetClass;
 use crate::cli::performance::receipt::same_candidate_pass_failures;
-use crate::cli::performance::types::BudgetClass;
 use serde_json::json;
 
 #[test]

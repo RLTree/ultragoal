@@ -17,6 +17,10 @@ mod source;
 mod surface_inventory;
 
 pub(crate) use package_surfaces::InventoryArtifactBinding as PackageSurfaceArtifactBinding;
+#[cfg(test)]
+pub(crate) use source::BoundaryRow;
+#[cfg(test)]
+pub(crate) use source::failures_for_sources_and_rows;
 pub(crate) use surface_inventory::InventoryArtifactBinding as FoundationalSurfaceArtifactBinding;
 
 pub(crate) fn package_failures(root: &Path) -> Vec<(String, String)> {

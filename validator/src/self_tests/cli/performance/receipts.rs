@@ -1,5 +1,5 @@
+use crate::cli::performance::measurement::PERFORMANCE_RECEIPT_SCHEMA;
 use crate::cli::performance::receipt::{same_candidate_pass_failures, surface_value_failures};
-use crate::cli::performance::types::PERFORMANCE_RECEIPT_SCHEMA;
 use serde_json::{Value, json};
 
 fn valid_fail() -> Value {

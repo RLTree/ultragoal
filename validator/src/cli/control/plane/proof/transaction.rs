@@ -1,4 +1,4 @@
-use crate::cli::control::plane::types::ControlOperation;
+use crate::cli::control::plane::operation::ControlOperation;
 use crate::schema_catalog;
 use serde_json::Value;
 use std::path::Path;

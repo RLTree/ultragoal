@@ -1,6 +1,6 @@
 use crate::cli::observe::{
+    command::{ObserveCommand, ObserveOperation},
     query::QueryKind,
-    types::{ObserveCommand, ObserveOperation},
 };
 use serde_json::json;
 use std::path::Path;
@@ -114,7 +114,7 @@ fn pass_target_uses_pass_only_query_and_rejects_error_metrics() {
 fn write_target_event(root: &Path, operation: &str, status: &str, failure_class: &str) {
     let candidate = crate::package::inventory::package_digest(root).expect("candidate");
     let event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-metrics-reconcile",
         "candidate_digest": candidate,
         "operation": operation,
@@ -128,7 +128,7 @@ fn write_target_event(root: &Path, operation: &str, status: &str, failure_class:
 }
 fn write_target_event_without_candidate(root: &Path, operation: &str, failure_class: &str) {
     let event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-metrics-reconcile",
         "operation": operation,
         "status": "fail",

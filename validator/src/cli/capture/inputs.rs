@@ -96,17 +96,17 @@ impl SecretArtifact {
     }
 }
 
-pub(super) enum ArgumentInput {
+pub(crate) enum ArgumentInput {
     Public(PublicArg),
     Secret(SecretArg),
 }
 
-pub(super) enum EnvironmentInput {
+pub(crate) enum EnvironmentInput {
     Public(PublicEnv),
     Secret(SecretEnv),
 }
 
-pub(super) enum ArtifactExpectation {
+pub(crate) enum ArtifactExpectation {
     Public(PublicArtifact),
     Secret(SecretArtifact),
 }

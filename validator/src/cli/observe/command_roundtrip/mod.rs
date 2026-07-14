@@ -1,6 +1,6 @@
 use crate::audit::observability::specs::{self, CommandObservabilitySpec};
+use crate::cli::observe::command::{ObserveCommand, ObserveOperation};
 use crate::cli::observe::query::{self, QueryKind};
-use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::Value;
 use std::path::Path;
 use std::time::Instant;

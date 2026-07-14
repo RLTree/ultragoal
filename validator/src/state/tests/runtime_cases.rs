@@ -2,7 +2,7 @@ use super::fixture::*;
 use crate::context::EffectClass;
 use crate::state::catalog::{RuntimeField, RuntimeRequirement, RuntimeSource, RuntimeValue};
 use crate::state::engine::derive_bound;
-use crate::state::types::AuthorityRequirement;
+use crate::state::product_state::AuthorityRequirement;
 use std::collections::BTreeSet;
 use std::fs;
 use std::process::Command;

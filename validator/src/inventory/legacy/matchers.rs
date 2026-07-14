@@ -37,6 +37,12 @@ pub(super) fn path_match(rel: &Path) -> Option<LegacyMatch> {
         found("contract", "path:adopted-predecessor-contract")
     } else if lower.starts_with("docs/ultragoal-contract-2026-07-successor-candidate-v1/") {
         found("contract", "path:unverified-successor-candidate")
+    } else if file == "REPORT.md"
+        && rel
+            .parent()
+            .is_some_and(|parent| parent.as_os_str().is_empty())
+    {
+        found("proposal", "path:unrouted-predecessor-proposal")
     } else if file == "plugin-manifest-draft.json" {
         found("manifest-projection", "path:legacy-plugin-manifest-draft")
     } else if component(rel, "custom-agents")

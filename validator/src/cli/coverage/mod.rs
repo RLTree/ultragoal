@@ -2,17 +2,25 @@ use serde_json::Value;
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
-use executor::CoverageExecution;
+use coverage_command_effect_adapter::CoverageCommandEffectResponse;
+type CoverageExecution = CoverageCommandEffectResponse;
 #[cfg(test)]
-use executor::{execution_from_output, first_diagnostic, is_noise_diagnostic};
+use coverage_command_effect_adapter::{
+    execution_from_output, first_diagnostic, is_noise_diagnostic,
+};
 
 mod claims;
+mod contract_codec;
+mod coverage_command_effect_adapter;
+mod coverage_tool_effect_adapter;
 pub(crate) mod exact_receipt;
-mod executor;
+mod report_codec_adapter;
 mod routine;
 mod routine_observation;
 mod runtime;
+mod source_digest_adapter;
 mod stdout;
+mod strict_observation;
 pub(crate) mod target_dir;
 #[cfg(test)]
 mod tests;
@@ -44,7 +52,7 @@ impl CoverageMode {
         }
     }
 
-    fn cache_mode(self, execution: &CoverageExecution) -> &'static str {
+    fn cache_mode(self, execution: &CoverageCommandEffectResponse) -> &'static str {
         match self {
             Self::Strict => execution.cache_mode,
             Self::Routine => "coverage_routine_verified_local",
@@ -67,20 +75,24 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<CoverageCommand>, String> {
 }
 
 pub(crate) fn run(root: &Path, command: &CoverageCommand) -> Result<i32, String> {
-    run_with_executor(root, command, executor::execute_authoritative)
+    run_with_executor(
+        root,
+        command,
+        coverage_command_effect_adapter::execute_authoritative,
+    )
 }
 
 fn run_with_executor(
     root: &Path,
     command: &CoverageCommand,
-    executor: fn(&Path, &Path) -> executor::CoverageExecution,
+    executor: fn(&Path, &Path) -> CoverageCommandEffectResponse,
 ) -> Result<i32, String> {
     let started = Instant::now();
     let scheduler = crate::scheduler::SchedulerConfig::from_jobs(command.jobs)?;
     crate::output_path::claim_artifact_path(root, &command.receipt, "coverage receipt")?;
     let before = crate::package::inventory::package_digest(root)?;
     let execution = match (command.validate_existing, command.mode) {
-        (true, _) => CoverageExecution::validate_existing(),
+        (true, _) => CoverageCommandEffectResponse::validate_existing(),
         (false, CoverageMode::Strict) => executor(root, &command.receipt),
         (false, CoverageMode::Routine) => {
             routine_observation::execute(root, &command.receipt, &before)
@@ -97,7 +109,7 @@ fn run_with_executor(
     if execution.code != 0 {
         failures.push(format!(
             "coverage_command_failed:{}",
-            executor::first_diagnostic(&execution)
+            coverage_command_effect_adapter::first_diagnostic(&execution)
         ));
     }
     failures.sort();
@@ -112,7 +124,7 @@ fn run_with_executor(
             subcommand: "prove",
             operation: "coverage.prove",
             surface: "coverage",
-            law_id: crate::cli::observe::types::LAW_ID,
+            law_id: crate::cli::observe::command::LAW_ID,
             check_id: "coverage-prove-observability-binding",
             claim_id: "coverage_prove",
             artifact_path: &artifact_path,
@@ -145,6 +157,24 @@ fn run_with_executor(
     write_observability_receipt(root, &value)?;
     stdout::print(&value);
     Ok(i32::from(status != "pass"))
+}
+
+fn coverage_manifest_path(root: &Path) -> PathBuf {
+    let target = root.join(".harness/coverage-manifest.json");
+    if target.is_file() {
+        target
+    } else {
+        root.join("templates/.harness/coverage-manifest.json")
+    }
+}
+
+fn coverage_command_path(root: &Path) -> PathBuf {
+    let target = root.join(".harness/coverage-command");
+    if target.is_file() {
+        target
+    } else {
+        root.join("templates/.harness/coverage-command")
+    }
 }
 
 fn write_observability_receipt(root: &Path, value: &Value) -> Result<(), String> {

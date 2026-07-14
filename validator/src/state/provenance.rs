@@ -1,4 +1,4 @@
-use super::types::{CeilingReduction, Repair, Scope};
+use super::product_state::{CeilingReduction, Repair, Scope};
 use serde::Serialize;
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]

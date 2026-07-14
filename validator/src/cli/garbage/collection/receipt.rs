@@ -1,4 +1,4 @@
-use crate::cli::garbage::collection::types::GC_RECEIPT_SCHEMA;
+use crate::cli::garbage::collection::operation::GC_RECEIPT_SCHEMA;
 use serde_json::Value;
 
 pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {

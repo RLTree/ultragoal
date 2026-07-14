@@ -6,7 +6,7 @@ use crate::state::catalog::{
 };
 use crate::state::ceiling::{CeilingRelation, ClaimCeiling};
 use crate::state::engine::derive_bound;
-use crate::state::types::{AuthorityRequirement, NextActionKind, ProductGoalState};
+use crate::state::product_state::{AuthorityRequirement, NextActionKind, ProductGoalState};
 
 #[test]
 fn no_findings_is_an_explicit_no_op_not_completion() {
@@ -137,7 +137,7 @@ fn stale_identities_fail_closed_and_do_not_reuse_catalog_state() {
     spec.expected_authority_catalog_id = "sha256:old-catalog".to_owned();
     assert_eq!(
         catalog_for_codes(spec, Default::default()),
-        Err(crate::state::types::StateError::InvalidCatalog(
+        Err(crate::state::product_state::StateError::InvalidCatalog(
             "policy-context-binding-mismatch".to_owned()
         ))
     );
@@ -149,7 +149,7 @@ fn catalog_built_for_another_live_context_is_rejected() {
     inputs.authority_catalog_context_id = "sha256:different-context".to_owned();
     assert_eq!(
         derive_bound(inputs, &catalog(spec())),
-        Err(crate::state::types::StateError::InvalidCatalog(
+        Err(crate::state::product_state::StateError::InvalidCatalog(
             "policy-context-binding-mismatch".to_owned()
         ))
     );

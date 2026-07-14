@@ -88,7 +88,7 @@ fn observe_receipt_blocks_completion_when_live_stack_is_not_proven() {
     fs::remove_dir_all(root).expect("cleanup observe receipt");
 }
 
-fn command(raw: &[&str]) -> observe::types::ObserveCommand {
+fn command(raw: &[&str]) -> observe::command::ObserveCommand {
     observe::parse(&super::args(raw))
         .expect("parse")
         .expect("observe command")

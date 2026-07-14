@@ -1,4 +1,4 @@
-use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
+use crate::cli::observe::command::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 use std::path::PathBuf;
 
@@ -41,7 +41,7 @@ fn roundtrip_root(label: &str) -> (PathBuf, String) {
     .expect("manifest");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-fit",
         "correlation_id": "corr-fit",
         "candidate_digest": candidate,
@@ -52,7 +52,7 @@ fn roundtrip_root(label: &str) -> (PathBuf, String) {
         "where_failed": "none",
         "next_repair": "none",
         "claim_impact": "supports_source_package_digest_only",
-        "law_id": crate::cli::observe::types::LAW_ID,
+        "law_id": crate::cli::observe::command::LAW_ID,
         "check_id": "package-digest-observability-binding",
         "claim_id": "source_package_digest"
     });
@@ -60,7 +60,7 @@ fn roundtrip_root(label: &str) -> (PathBuf, String) {
     crate::json_boundary::write_json(
         &root.join("validation_artifacts/observability/package-digest.json"),
         &json!({
-            "schema": crate::cli::observe::types::RECEIPT_SCHEMA,
+            "schema": crate::cli::observe::command::RECEIPT_SCHEMA,
             "run_id": "run-fit",
             "correlation_id": "corr-fit",
             "candidate_digest": candidate,

@@ -1,5 +1,5 @@
 use crate::cli::observe;
-use crate::cli::observe::types::ObserveOperation;
+use crate::cli::observe::command::ObserveOperation;
 use serde_json::{Value, json};
 use std::fs;
 use std::path::Path;
@@ -109,13 +109,13 @@ fn observe_green_prove_and_query_contracts_are_typed() {
     fs::remove_dir_all(root).expect("cleanup observe green");
 }
 
-pub(super) fn command(raw: &[&str]) -> observe::types::ObserveCommand {
+pub(super) fn command(raw: &[&str]) -> observe::command::ObserveCommand {
     observe::parse(&super::args(raw))
         .expect("parse")
         .expect("observe command")
 }
 
-fn command_with_receipt(raw: &[&str], receipt: &Path) -> observe::types::ObserveCommand {
+fn command_with_receipt(raw: &[&str], receipt: &Path) -> observe::command::ObserveCommand {
     let mut raw_args = super::args(raw);
     raw_args.extend(["--receipt".to_string(), receipt.display().to_string()]);
     observe::parse(&raw_args)
@@ -123,7 +123,7 @@ fn command_with_receipt(raw: &[&str], receipt: &Path) -> observe::types::Observe
         .expect("observe command")
 }
 
-fn write_default_receipt(root: &Path, command: &observe::types::ObserveCommand, status: &str) {
+fn write_default_receipt(root: &Path, command: &observe::command::ObserveCommand, status: &str) {
     let receipt =
         observe::telemetry::base_receipt(root, command, status, None).expect("base receipt");
     let path = root.join(command.operation.receipt_rel());

@@ -10,6 +10,7 @@ pub(crate) struct FixtureSchedulerCommand {
     pub(crate) jobs: Option<usize>,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<FixtureSchedulerCommand>, String> {
     let args = match raw {
         [first, second, third, rest @ ..]
@@ -138,6 +139,7 @@ fn leaks_validation_artifacts(root: &Path) -> Result<bool, String> {
     Ok(worker_marker.exists())
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     args.windows(2)
         .find(|window| window[0] == key)
@@ -156,6 +158,7 @@ fn output_path(root: &Path, path: &Path, label: &str) -> Result<PathBuf, String>
     }
 }
 
+#[cfg(test)]
 fn opt_jobs(args: &[String], key: &str) -> Result<Option<usize>, String> {
     match args
         .windows(2)

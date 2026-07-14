@@ -1,5 +1,7 @@
 use super::catalog::{ActionDefinition, ActionKind, CommandBinding, DependencyStatus};
-use super::types::{AuthorityRequirement, Finding, NextAction, NextActionKind, NoLegalRoute};
+use super::product_state::{
+    AuthorityRequirement, Finding, NextAction, NextActionKind, NoLegalRoute,
+};
 use crate::context::EffectClass;
 use std::cmp::Reverse;
 use std::collections::{BTreeMap, BTreeSet};
@@ -24,7 +26,7 @@ pub(crate) fn select(
         .collect::<BTreeSet<_>>();
     let blocked_repairs = findings
         .iter()
-        .filter(|finding| finding.severity == super::types::FindingSeverity::Blocked)
+        .filter(|finding| finding.severity == super::product_state::FindingSeverity::Blocked)
         .map(|finding| finding.repair.repair_id.as_str())
         .collect::<BTreeSet<_>>();
     let mut legal = actions

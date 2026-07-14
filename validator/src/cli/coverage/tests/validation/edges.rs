@@ -95,7 +95,12 @@ fn coverage_validation_rejects_scalar_completion_and_missing_receipts() {
     ));
     let uncovered = mutated_failures(|receipt| {
         receipt["coverage"]["percent"] = json!(99.0);
-        receipt["uncovered_records"] = json!([{"path":"src/lib.rs"}]);
+        receipt["uncovered_records"] = json!([{
+            "path":"src/lib.rs",
+            "reason":"line coverage 99.00%",
+            "owner":"coverage-test-owner",
+            "blocker_or_debt_id":"coverage-test-gap"
+        }]);
     });
     assert!(has(&uncovered, "coverage_claim_uncovered_code"));
 }
@@ -170,20 +175,10 @@ fn coverage_validation_rejects_digest_report_and_manifest_edges() {
     ));
 
     let digest_error = mutated_root_failures(|root, _receipt| {
-        let manifest = json!({
-            "schema": "harness-ultragoal.coverage-manifest.v1",
-            "required_target_paths": ["src/lib.rs"],
-            "changed_file_coupling_policy": {
-                "required": true,
-                "changed_files": ["missing.rs"]
-            },
-            "required_measured_dimensions_per_root": [{
-                "root": "src",
-                "dimensions": ["line"]
-            }],
-            "source_discovery_rules": {"ignore": []},
-            "exclusions": []
-        });
+        let mut manifest =
+            crate::json_boundary::read_json(&root.join(".harness/coverage-manifest.json"))
+                .expect("manifest");
+        manifest["changed_file_coupling_policy"]["changed_files"] = json!(["missing.rs"]);
         crate::json_boundary::write_json(&root.join(".harness/coverage-manifest.json"), &manifest)
             .expect("manifest with missing changed file");
     });
@@ -193,20 +188,10 @@ fn coverage_validation_rejects_digest_report_and_manifest_edges() {
     ));
 
     let source_digest_error = mutated_root_failures(|root, _receipt| {
-        let manifest = json!({
-            "schema": "harness-ultragoal.coverage-manifest.v1",
-            "required_target_paths": ["../escape.rs"],
-            "changed_file_coupling_policy": {
-                "required": true,
-                "changed_files": ["src/lib.rs"]
-            },
-            "required_measured_dimensions_per_root": [{
-                "root": "src",
-                "dimensions": ["line"]
-            }],
-            "source_discovery_rules": {"ignore": []},
-            "exclusions": []
-        });
+        let mut manifest =
+            crate::json_boundary::read_json(&root.join(".harness/coverage-manifest.json"))
+                .expect("manifest");
+        manifest["required_target_paths"] = json!(["../escape.rs"]);
         crate::json_boundary::write_json(&root.join(".harness/coverage-manifest.json"), &manifest)
             .expect("manifest with missing source file");
     });

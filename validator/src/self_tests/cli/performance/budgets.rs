@@ -1,5 +1,7 @@
+use crate::cli::performance::measurement::{
+    BudgetClass, PERFORMANCE_COMMANDS, PerformanceOperation,
+};
 use crate::cli::performance::parse;
-use crate::cli::performance::types::{BudgetClass, PERFORMANCE_COMMANDS, PerformanceOperation};
 use std::path::PathBuf;
 
 fn args(values: &[&str]) -> Vec<String> {

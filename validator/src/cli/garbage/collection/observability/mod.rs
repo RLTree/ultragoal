@@ -1,5 +1,5 @@
 use super::GarbageCommand;
-use crate::cli::garbage::collection::types::GarbageOperation;
+use crate::cli::garbage::collection::operation::GarbageOperation;
 use serde_json::{Value, json};
 use std::path::Path;
 use std::time::Instant;

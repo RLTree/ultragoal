@@ -19,7 +19,7 @@ fn explain_fails_closed_when_matching_receipt_has_no_event_binding() {
     crate::json_boundary::write_json(
         &dir.join("target-without-event.json"),
         &json!({
-            "schema": crate::cli::observe::types::RECEIPT_SCHEMA,
+            "schema": crate::cli::observe::command::RECEIPT_SCHEMA,
             "run_id": "run-no-event",
             "candidate_digest": candidate,
             "operation": "coverage.prove",

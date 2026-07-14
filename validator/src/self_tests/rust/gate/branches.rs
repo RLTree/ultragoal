@@ -1,7 +1,7 @@
+use crate::cli::garbage::collection::operation::GarbageOperation;
 use crate::cli::garbage::collection::parse as parse_gc;
-use crate::cli::garbage::collection::types::GarbageOperation;
 use crate::cli::rust::observations::{self, Probe};
-use crate::cli::rust::types::RustOperation;
+use crate::cli::rust::operation::RustOperation;
 use crate::cli::rust::{
     RustCommand, receipt as rust_receipt, receipt_from_observations, run as rust_run,
     run_with_receipt_value as rust_run_receipt,
@@ -122,7 +122,7 @@ fn rust_observation_failures_do_not_advance_claims() {
 fn rust_and_gc_receipt_validators_reject_substitution_edges() {
     let receipt = crate::cli::rust::receipt::surface_value_failures(
         &json!({
-            "schema": crate::cli::rust::types::RUST_RECEIPT_SCHEMA,
+            "schema": crate::cli::rust::operation::RUST_RECEIPT_SCHEMA,
             "status": "pass",
             "claim_ceiling": "rust_devx_observation_bound",
             "law_ids": ["rust-command-loop-authority"],

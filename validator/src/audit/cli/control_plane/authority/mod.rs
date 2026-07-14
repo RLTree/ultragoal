@@ -165,14 +165,14 @@ fn require_receipts(root: &Path, out: &mut Vec<String>) {
                         root,
                         &value,
                         &expected_candidate,
-                        crate::cli::control::plane::types::ControlOperation::InstallAudit,
+                        crate::cli::control::plane::operation::ControlOperation::InstallAudit,
                     )
                 } else if operation == "cache_audit" {
                     surface::receipt_failures(
                         root,
                         &value,
                         &expected_candidate,
-                        crate::cli::control::plane::types::ControlOperation::CacheAudit,
+                        crate::cli::control::plane::operation::ControlOperation::CacheAudit,
                     )
                 } else {
                     crate::cli::control::plane::receipt::same_candidate_fail_closed_failures(

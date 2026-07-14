@@ -1,4 +1,4 @@
-use super::model::{ExitClass, OutputMode};
+use super::command_contract::{ExitClass, OutputMode};
 use std::fmt;
 
 pub const MACHINE_ERROR_SCHEMA: &str = "harness-ultragoal.cli-error.v1";

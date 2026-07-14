@@ -1,27 +1,28 @@
 use super::decision::{ClaimDecision, DecisionStatus};
 use super::definition::{ClaimDefinition, ClaimDefinitions};
+use super::evaluation_request::{ClaimEvaluation, EvidenceEvaluation, FalsePassEvaluation};
 use super::evidence::{Actor, ActorRole, EvidenceKind, Observation};
 use std::collections::{BTreeMap, BTreeSet};
 
 pub struct ClaimGuard;
 
 impl ClaimGuard {
-    #[allow(clippy::too_many_arguments)]
-    pub(super) fn evaluate(
-        definitions: &ClaimDefinitions,
-        prior: &BTreeMap<String, ClaimDecision>,
-        accepted_candidates: &BTreeMap<String, String>,
-        accepted_artifacts: &BTreeSet<String>,
-        invalidated_evidence: &BTreeSet<String>,
-        observations: &BTreeMap<String, Observation>,
-        claim_id: &str,
-        context: &str,
-        candidate: &str,
-        now: u64,
-        reviewer: &Actor,
-        evidence_ids: &[String],
-        allow_semantic_models: bool,
-    ) -> ClaimDecision {
+    pub(super) fn evaluate(request: ClaimEvaluation<'_>) -> ClaimDecision {
+        let ClaimEvaluation {
+            definitions,
+            prior,
+            accepted_candidates,
+            accepted_artifacts,
+            invalidated_evidence,
+            observations,
+            claim_id,
+            context,
+            candidate,
+            now,
+            reviewer,
+            evidence_ids,
+            allow_semantic_models,
+        } = request;
         let Some(definition) = definitions.definition(claim_id) else {
             return rejected(
                 claim_id,
@@ -43,8 +44,8 @@ impl ClaimGuard {
         for evidence_id in evidence_ids {
             match observations.get(evidence_id) {
                 Some(observation) => {
-                    reasons.extend(evidence_reasons(
-                        definitions.registry_digest(),
+                    reasons.extend(evidence_reasons(EvidenceEvaluation {
+                        registry_digest: definitions.registry_digest(),
                         definition,
                         observation,
                         accepted_candidates,
@@ -55,7 +56,7 @@ impl ClaimGuard {
                         now,
                         reviewer,
                         allow_semantic_models,
-                    ));
+                    }));
                     selected.push(observation);
                 }
                 None => reasons.push("claims-evidence-missing".to_owned()),
@@ -123,20 +124,20 @@ fn prerequisite_reasons(
         .collect()
 }
 
-#[allow(clippy::too_many_arguments)]
-fn evidence_reasons(
-    registry_digest: &str,
-    definition: &ClaimDefinition,
-    observation: &Observation,
-    accepted: &BTreeMap<String, String>,
-    accepted_artifacts: &BTreeSet<String>,
-    invalidated_evidence: &BTreeSet<String>,
-    context: &str,
-    candidate: &str,
-    now: u64,
-    reviewer: &Actor,
-    allow_semantic_models: bool,
-) -> Vec<String> {
+fn evidence_reasons(request: EvidenceEvaluation<'_>) -> Vec<String> {
+    let EvidenceEvaluation {
+        registry_digest,
+        definition,
+        observation,
+        accepted_candidates,
+        accepted_artifacts,
+        invalidated_evidence,
+        context,
+        candidate,
+        now,
+        reviewer,
+        allow_semantic_models,
+    } = request;
     let envelope = observation.envelope();
     let mut reasons = Vec::new();
     if observation.validate().is_err() {
@@ -178,7 +179,7 @@ fn evidence_reasons(
     {
         reasons.push("claims-self-authored-or-material-score".to_owned());
     }
-    if accepted
+    if accepted_candidates
         .get(observation.evidence_id())
         .is_some_and(|prior| prior != candidate)
     {
@@ -195,7 +196,7 @@ fn evidence_reasons(
         reasons.push("claims-evidence-artifact-replayed".to_owned());
     }
     if envelope.false_pass_model.is_some() {
-        reasons.extend(super::false_pass_guard::reasons(
+        reasons.extend(super::false_pass_guard::reasons(FalsePassEvaluation {
             registry_digest,
             definition,
             envelope,
@@ -205,7 +206,7 @@ fn evidence_reasons(
             now,
             reviewer,
             allow_semantic_models,
-        ));
+        }));
     }
     reasons
 }

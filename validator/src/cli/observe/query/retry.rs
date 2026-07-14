@@ -1,4 +1,4 @@
-use crate::cli::observe::types::ObserveCommand;
+use crate::cli::observe::command::ObserveCommand;
 use std::thread;
 use std::time::{Duration, Instant};
 

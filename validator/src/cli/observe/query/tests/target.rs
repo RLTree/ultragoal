@@ -1,4 +1,4 @@
-use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
+use crate::cli::observe::command::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 use std::path::Path;
 
@@ -56,7 +56,7 @@ fn target_event_uses_latest_non_observation_spool_event() {
     let root = super::prepare_root("observe-query-target-spool");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let target = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-target",
         "correlation_id": "corr-target",
         "candidate_digest": candidate,
@@ -74,7 +74,7 @@ fn target_event_uses_latest_non_observation_spool_event() {
     crate::cli::observe::telemetry::spool_write_for_test(Path::new(&root), &target)
         .expect("target event");
     let observation = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "schema": crate::cli::observe::command::EVENT_SCHEMA,
         "run_id": "run-target",
         "correlation_id": "corr-target",
         "operation": "observe.logs.query",
@@ -98,7 +98,7 @@ fn target_event_with_missing_operation_is_not_misclassified_as_query_observation
     crate::cli::observe::telemetry::spool_write_for_test(
         Path::new(&root),
         &json!({
-            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "schema": crate::cli::observe::command::EVENT_SCHEMA,
             "run_id": "run-target",
             "correlation_id": "corr-target",
             "candidate_digest": candidate,

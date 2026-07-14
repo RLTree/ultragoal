@@ -1,7 +1,7 @@
 use super::catalog::{ActionKind, DependencyActionSpec};
 use super::limits::{valid_argv, valid_id, valid_text};
 use super::next;
-use super::types::{AuthorityRequirement, Repair};
+use super::product_state::{AuthorityRequirement, Repair};
 use crate::context::EffectClass;
 use std::collections::{BTreeMap, BTreeSet};
 

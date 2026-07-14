@@ -1,11 +1,11 @@
-use crate::cli::garbage::collection::types::{GC_POLICY_VERSION, GarbageOperation};
+use crate::cli::garbage::collection::operation::{GC_POLICY_VERSION, GarbageOperation};
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
 mod observability;
+pub(crate) mod operation;
 pub(crate) mod receipt;
-pub(crate) mod types;
 
 #[derive(Debug)]
 pub(crate) struct GarbageCommand {
@@ -91,7 +91,7 @@ pub(crate) fn receipt(root: &Path, command: &GarbageCommand) -> Result<Value, St
         }
     });
     Ok(json!({
-        "schema": types::GC_RECEIPT_SCHEMA,
+        "schema": operation::GC_RECEIPT_SCHEMA,
         "schema_version": "v1",
         "issuer": {"tool": "ultragoal", "authority": "cli_control_plane"},
         "generated_at": crate::audit::clock::now_iso(),

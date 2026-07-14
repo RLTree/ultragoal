@@ -130,7 +130,7 @@ impl ArtifactRef {
 
     fn verify(&self, bytes: &[u8]) -> Result<(), String> {
         if bytes.len() as u64 != self.byte_length
-            || super::util::digest_bytes(bytes) != self.content_sha256
+            || super::identity_codec::digest_bytes(bytes) != self.content_sha256
         {
             return Err("resolved artifact bytes do not match ArtifactRef".to_owned());
         }

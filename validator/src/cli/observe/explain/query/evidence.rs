@@ -38,7 +38,7 @@ fn query_receipts(root: &Path) -> Vec<(PathBuf, Value)> {
         .filter_map(|path| {
             let value = crate::json_boundary::read_json(&path).ok()?;
             (value.get("schema").and_then(Value::as_str)
-                == Some(crate::cli::observe::types::QUERY_SCHEMA))
+                == Some(crate::cli::observe::command::QUERY_SCHEMA))
             .then_some((path, value))
         })
         .collect()
@@ -92,7 +92,8 @@ fn target_query_receipt(
     )
     .ok()?;
     let value = crate::json_boundary::read_json(&path).ok()?;
-    if value.get("schema").and_then(Value::as_str) != Some(crate::cli::observe::types::QUERY_SCHEMA)
+    if value.get("schema").and_then(Value::as_str)
+        != Some(crate::cli::observe::command::QUERY_SCHEMA)
         || value.get("query_kind").and_then(Value::as_str) != Some(kind)
         || value.get("candidate_digest").and_then(Value::as_str) != Some(candidate)
         || value.get("run_id").and_then(Value::as_str) != Some(run_id)

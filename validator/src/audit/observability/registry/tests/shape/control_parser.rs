@@ -29,13 +29,13 @@ fn production_update_goal_inventory_is_bound_to_real_control_parser() {
         crate::cli::control::plane::parse(&args("update-goal eligibility"))
             .expect("update-goal parses")
             .operation,
-        crate::cli::control::plane::types::ControlOperation::UpdateGoalEligibility
+        crate::cli::control::plane::operation::ControlOperation::UpdateGoalEligibility
     );
     assert_eq!(
         crate::cli::control::plane::parse(&args("self update-goal eligibility"))
             .expect("self update-goal parses")
             .operation,
-        crate::cli::control::plane::types::ControlOperation::SelfUpdateGoalEligibility
+        crate::cli::control::plane::operation::ControlOperation::SelfUpdateGoalEligibility
     );
     assert_eq!(
         inventory

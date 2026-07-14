@@ -50,10 +50,7 @@ pub(crate) fn inspect(
     spec: Option<&SurfaceSpec>,
 ) -> GeneratedMetadata {
     let Some(SurfaceSpec::CanonicalProjection {
-        generator,
-        recipe,
-        inputs,
-        ..
+        generator, inputs, ..
     }) = spec
     else {
         return problem(
@@ -64,7 +61,10 @@ pub(crate) fn inspect(
         );
     };
     let generator = Some(generator.clone());
-    let inputs = inputs.clone();
+    let inputs = inputs
+        .iter()
+        .map(|path| path.as_str().to_owned())
+        .collect::<Vec<_>>();
     let Ok(bytes) = read_bounded(reads, path, MAX_METADATA_BYTES) else {
         return problem(
             generator,
@@ -97,7 +97,7 @@ pub(crate) fn inspect(
     if metadata
         .and_then(|metadata| metadata.get("recipe"))
         .and_then(Value::as_str)
-        != Some(recipe.as_str())
+        != Some("input-digest-index-v1")
     {
         return problem(
             generator,

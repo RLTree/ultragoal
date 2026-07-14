@@ -1,4 +1,4 @@
-use crate::cli::performance::types::{
+use crate::cli::performance::measurement::{
     BudgetClass, PERFORMANCE_RECEIPT_SCHEMA, PerformanceOperation,
 };
 use crate::cli::performance::{PerformanceCommand, receipt, run};

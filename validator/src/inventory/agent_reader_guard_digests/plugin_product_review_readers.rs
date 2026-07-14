@@ -1,0 +1,60 @@
+pub(crate) const PLUGIN_PRODUCT_REVIEW_READERS: &[ReaderSpec] = &[
+    // These three production modules jointly read, decode, and validate the
+    // current source and host agent-authority catalogs. They are positive
+    // readers, so their exact bytes are bound without a negative-only escape.
+    reader!(
+        "validator/src/plugin_product/agent_discovery/host/mod.rs",
+        "../plugin_product/agent_discovery/host/mod.rs",
+        false
+    ),
+    reader!(
+        "validator/src/plugin_product/agent_discovery/model.rs",
+        "../plugin_product/agent_discovery/model.rs",
+        false
+    ),
+    reader!(
+        "validator/src/plugin_product/agent_discovery/source/mod.rs",
+        "../plugin_product/agent_discovery/source/mod.rs",
+        false
+    ),
+    reader!(
+        "validator/src/review/round/config.rs",
+        "../review/round/config.rs",
+        false
+    ),
+    reader!(
+        "validator/src/review/round/personas.rs",
+        "../review/round/personas.rs",
+        false
+    ),
+    reader!(
+        "validator/src/review/round/registry/mod.rs",
+        "../review/round/registry/mod.rs",
+        true
+    ),
+    reader!(
+        "validator/src/review/round/registry/reader/mod.rs",
+        "../review/round/registry/reader/mod.rs",
+        false
+    ),
+    reader!(
+        "validator/src/review/round/registry/reader/json.rs",
+        "../review/round/registry/reader/json.rs",
+        false
+    ),
+    reader!(
+        "validator/src/review/round/registry/reader/path.rs",
+        "../review/round/registry/reader/path.rs",
+        false
+    ),
+    reader!(
+        "validator/src/review/round/registry/semantics.rs",
+        "../review/round/registry/semantics.rs",
+        false
+    ),
+    reader!(
+        "validator/src/review/round/registry/validation.rs",
+        "../review/round/registry/validation.rs",
+        true
+    ),
+];

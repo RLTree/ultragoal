@@ -1,5 +1,5 @@
 use crate::cli::observe;
-use crate::cli::observe::types::{QUERY_SCHEMA, RECEIPT_SCHEMA};
+use crate::cli::observe::command::{QUERY_SCHEMA, RECEIPT_SCHEMA};
 use serde_json::{Value, json};
 use std::fs;
 
@@ -113,7 +113,7 @@ pub(super) struct TargetIds {
     pub(super) correlation_id: String,
 }
 
-pub(super) fn command(raw: &[&str]) -> observe::types::ObserveCommand {
+pub(super) fn command(raw: &[&str]) -> observe::command::ObserveCommand {
     observe::parse(&super::args(raw))
         .expect("parse")
         .expect("observe command")
@@ -127,7 +127,7 @@ pub(super) fn write_source_audit_receipt(root: &std::path::Path, candidate: &str
             subcommand: "audit",
             operation: "source.audit",
             surface: "source",
-            law_id: observe::types::LAW_ID,
+            law_id: observe::command::LAW_ID,
             check_id: "source-audit-observability-binding",
             claim_id: "source_audit",
             artifact_path: "validation_artifacts/ultragoal-audit",

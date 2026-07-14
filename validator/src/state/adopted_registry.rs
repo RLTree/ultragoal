@@ -1,5 +1,5 @@
 use super::catalog::ClaimSpec;
-use super::types::StateError;
+use super::product_state::StateError;
 use serde::Deserialize;
 use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;

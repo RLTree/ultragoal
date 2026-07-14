@@ -19,7 +19,10 @@ mod snapshot;
 
 pub use authority::{PermitTarget, RootAuthority, RootOperation, RootPermit};
 #[cfg(test)]
-pub use authority::{
+pub(crate) use authority::{RootActionPermitIssuance, RootReconcilePermitIssuance};
+pub(crate) use authority::{RootActionPermitVerification, RootReconcilePermitVerification};
+#[cfg(test)]
+pub(crate) use authority::{
     issue_action_permit_for_test, issue_reconcile_permit_for_test, root_authority_for_test,
 };
 pub use context::{ProductContext, ProductWorkspace, journal_head_identity};

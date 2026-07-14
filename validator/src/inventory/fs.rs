@@ -60,20 +60,33 @@ pub(crate) fn check_symlink(
     Ok(true)
 }
 
-#[allow(clippy::too_many_arguments)]
+pub(crate) struct PhysicalEntryDescriptor<'a> {
+    pub stable_id: String,
+    pub kind: &'a str,
+    pub owner: &'a str,
+    pub authority_state: AuthorityState,
+    pub active_status: ActiveStatus,
+    pub generator: Option<String>,
+    pub provenance: Vec<String>,
+    pub references: Vec<String>,
+}
+
 pub(crate) fn physical_entry(
     reads: &ReadSession,
     root: &Path,
     path: &Path,
-    stable_id: String,
-    kind: &str,
-    owner: &str,
-    authority_state: AuthorityState,
-    active_status: ActiveStatus,
-    generator: Option<String>,
-    provenance: Vec<String>,
-    references: Vec<String>,
+    descriptor: PhysicalEntryDescriptor<'_>,
 ) -> Result<InventoryEntry, InventoryError> {
+    let PhysicalEntryDescriptor {
+        stable_id,
+        kind,
+        owner,
+        authority_state,
+        active_status,
+        generator,
+        provenance,
+        references,
+    } = descriptor;
     let (digest_sha256, unix_mode) = file_identity(reads, path)?;
     Ok(InventoryEntry {
         stable_id,
@@ -90,20 +103,22 @@ pub(crate) fn physical_entry(
     })
 }
 
-#[allow(clippy::too_many_arguments)]
 pub(crate) fn physical_regular_entry(
     reads: &ReadSession,
     root: &Path,
     path: &Path,
-    stable_id: String,
-    kind: &str,
-    owner: &str,
-    authority_state: AuthorityState,
-    active_status: ActiveStatus,
-    generator: Option<String>,
-    provenance: Vec<String>,
-    references: Vec<String>,
+    descriptor: PhysicalEntryDescriptor<'_>,
 ) -> Result<InventoryEntry, InventoryError> {
+    let PhysicalEntryDescriptor {
+        stable_id,
+        kind,
+        owner,
+        authority_state,
+        active_status,
+        generator,
+        provenance,
+        references,
+    } = descriptor;
     let (digest_sha256, unix_mode) = file_identity_regular(reads, path)?;
     Ok(InventoryEntry {
         stable_id,
@@ -130,14 +145,16 @@ pub(crate) fn contract_source_entry(
         reads,
         root,
         path,
-        format!("CONTRACT-REGISTRY:{name}"),
-        "contract-registry",
-        "OWN-ULTRA-ROOT",
-        AuthorityState::Canonical,
-        ActiveStatus::Active,
-        None,
-        Vec::new(),
-        Vec::new(),
+        PhysicalEntryDescriptor {
+            stable_id: format!("CONTRACT-REGISTRY:{name}"),
+            kind: "contract-registry",
+            owner: "OWN-ULTRA-ROOT",
+            authority_state: AuthorityState::Canonical,
+            active_status: ActiveStatus::Active,
+            generator: None,
+            provenance: Vec::new(),
+            references: Vec::new(),
+        },
     )
 }
 

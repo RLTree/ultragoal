@@ -1,6 +1,9 @@
+mod cache;
 pub(crate) mod path_rules;
+mod plugin_interfaces;
 use crate::audit::namespace::law::path_rules::{mixed_domain_folder, root_route_allowed};
 use crate::json_boundary;
+pub(crate) use cache::ValueCache;
 use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
@@ -9,45 +12,18 @@ const CLASS_REGISTRY_PATH: &str = "docs/namespace-class-registry.json";
 const STANDARD_ID: &str = "namespace-progressive-disclosure";
 const TRACE_OBLIGATION_ID: &str = "namespace-progressive-disclosure";
 
-#[derive(Default)]
-pub(crate) struct ValueCache {
-    actual_files: Option<Vec<String>>,
-    repo_source_paths: Option<Vec<String>>,
-}
-
-impl ValueCache {
-    fn actual_files(&mut self, root: &Path) -> Vec<String> {
-        self.actual_files
-            .get_or_insert_with(|| {
-                crate::package::inventory::closure::actual_files(root).unwrap_or_default()
-            })
-            .clone()
-    }
-
-    fn repo_source_paths(&mut self, root: &Path) -> Vec<String> {
-        if let Some(paths) = &self.repo_source_paths {
-            return paths.clone();
-        }
-        let actual_files = self.actual_files(root);
-        let paths = crate::audit::namespace::source::topology::repo_source_paths_from_actual_files(
-            &actual_files,
-        );
-        self.repo_source_paths = Some(paths.clone());
-        paths
-    }
-}
-
 pub fn package_failures(root: &Path, manifest: &Value) -> Vec<String> {
-    let registry = match json_boundary::read_json(&root.join(CLASS_REGISTRY_PATH)) {
-        Ok(value) => value,
-        Err(err) => return vec![format!("namespace_class_registry_file_missing:{err}")],
-    };
     let mut out = value_failures(root, manifest);
-    out.extend(class_registry_value_failures(root, &registry));
-    out.extend(crate::audit::namespace::classes::resolution_failures(
-        &registry,
-        &crate::package::inventory::inventory_paths(manifest),
-    ));
+    match json_boundary::read_json(&root.join(CLASS_REGISTRY_PATH)) {
+        Ok(registry) => {
+            out.extend(class_registry_value_failures(root, &registry));
+            out.extend(crate::audit::namespace::classes::resolution_failures(
+                &registry,
+                &crate::package::inventory::inventory_paths(manifest),
+            ));
+        }
+        Err(err) => out.push(format!("namespace_class_registry_file_missing:{err}")),
+    }
     out.extend(binding_failures(root));
     out
 }
@@ -64,17 +40,26 @@ pub(crate) fn value_failures_with_cache(
 ) -> Vec<String> {
     let listed = crate::package::inventory::inventory_paths(manifest);
     let mut out = Vec::new();
-    out.extend(path_name_failures(&listed));
+    let (governed, governed_failures) = cache.governed_snapshot(root);
+    let mut namespace_paths = listed.clone();
+    out.extend(governed_failures);
+    namespace_paths.extend(
+        governed
+            .sources
+            .iter()
+            .map(|source| source.relative.clone()),
+    );
+    namespace_paths.sort();
+    namespace_paths.dedup();
+    out.extend(path_name_failures(&namespace_paths));
+    out.extend(plugin_interfaces::failures(&namespace_paths));
     out.extend(
         crate::audit::namespace::source::topology::failures_with_repo_paths(
             &listed,
             &cache.repo_source_paths(root),
         ),
     );
-    out.extend(crate::audit::namespace::source::identifiers::failures(
-        root,
-        &cache.actual_files(root),
-    ));
+    out.extend(crate::audit::namespace::source::identifiers::failures_for_inventory(&governed));
     out.extend(crate::audit::namespace::classes::legacy_surface_failures(
         root, &listed,
     ));
@@ -140,6 +125,11 @@ fn path_name_failures(listed: &[String]) -> Vec<String> {
         }
     }
     out
+}
+
+#[cfg(test)]
+pub(crate) fn path_name_failures_for_test(paths: &[String]) -> Vec<String> {
+    path_name_failures(paths)
 }
 
 fn schema_authority_leaf_label(rel: &str, components: &[&str]) -> Option<&'static str> {
