@@ -2141,6 +2141,7 @@ fn external_callers_cannot_mint_clone_or_deserialize_replacement_or_retirement_a
     let root = temp_root("public-retirement-seal");
     fs::create_dir_all(root.join("src/bin")).unwrap();
     fs::create_dir_all(root.join("src/migration/product")).unwrap();
+    fs::create_dir_all(root.join("src/migration/product/host")).unwrap();
     fs::copy(
         Path::new(env!("CARGO_MANIFEST_DIR")).join("src/migration/mod.rs"),
         root.join("src/migration.rs"),
@@ -2155,6 +2156,27 @@ fn external_callers_cannot_mint_clone_or_deserialize_replacement_or_retirement_a
         )
         .unwrap();
     }
+    fs::copy(
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("src/migration/product/host.rs"),
+        root.join("src/migration/product/host.rs"),
+    )
+    .unwrap();
+    for name in [
+        "authority.rs",
+        "effects.rs",
+        "filesystem.rs",
+        "source.rs",
+        "store.rs",
+        "test_support.rs",
+    ] {
+        fs::copy(
+            Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("src/migration/product/host")
+                .join(name),
+            root.join("src/migration/product/host").join(name),
+        )
+        .unwrap();
+    }
     fs::write(
         root.join("Cargo.toml"),
         r#"[package]
@@ -2163,6 +2185,9 @@ version = "0.0.0"
 edition = "2024"
 
 [dependencies]
+getrandom = { version = "=0.4.3", default-features = false }
+hmac = { version = "=0.12.1", default-features = false }
+libc = "0.2.186"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 sha2 = "0.10"

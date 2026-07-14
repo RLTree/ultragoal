@@ -1,0 +1,298 @@
+{
+  "worker": "/root/migration_retirement_authority_engineer",
+  "lease_id": "MIGRATION-HOST-PRODUCTION-101",
+  "context_id": "sha256:9c15167973386cacc72f2b2abdfd7424e01ab237ba49ee60542e82e7892b516e",
+  "candidate_identity": {
+    "candidate_id": "sha256:6d78431a7478b4b6d0d777601e26ed043cad9d9d6a6e77a86fd21d42e2684924",
+    "context_id": "sha256:9c15167973386cacc72f2b2abdfd7424e01ab237ba49ee60542e82e7892b516e",
+    "context_formula": "SHA-256 of MIGRATION-HOST-PRODUCTION-101|worker|base HEAD|candidate_id.",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "root_branch": "codex/successor-contract-v2-live-product",
+    "freeze_base_head_commit": "860c803d736f7928e1ba5d45b5650513fcbf75eb",
+    "freeze_base_head_tree": "07b8bb10fefd16574db487e7abeadaad7a142560",
+    "overlay_worktree": "/private/tmp/hul-migration-host-production-101",
+    "artifact_count": 14,
+    "artifact_total_bytes": 122154,
+    "artifact_total_lines": 3393,
+    "artifact_set_sha256": "sha256:6d78431a7478b4b6d0d777601e26ed043cad9d9d6a6e77a86fd21d42e2684924",
+    "artifact_set_formula": "Sort the fourteen artifact rows by UTF-8 path bytes; serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>; concatenate; SHA-256 the resulting bytes.",
+    "worker_result_self_excluded": true,
+    "current_base_rebinding": "The leased overlay was mechanically transferred onto and reverified from exact root HEAD 860c803d736f7928e1ba5d45b5650513fcbf75eb; root integration and independent review remain pending."
+  },
+  "base_state": {
+    "status": "migration-host-production-adapters-absent",
+    "decisive_requirement": "REQ-MAINT-002",
+    "preservation_requirement": "OD-009",
+    "defect": "The accepted migration product protocol had no Darwin production source, authorization authority, durable store, or semantically confined effect adapter bound to owner-only host state."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "proposal_status": "current-base-source-candidate-pending-independent-review-and-root-probe-reconciliation",
+    "artifact_count": 14,
+    "artifact_total_bytes": 122154,
+    "artifact_set_sha256": "sha256:6d78431a7478b4b6d0d777601e26ed043cad9d9d6a6e77a86fd21d42e2684924",
+    "dependency_closed_tests": "65 passed; 0 failed",
+    "shared_migration_suite": "33 passed; 1 root-owned probe-copy integration failure",
+    "library_check": "pass",
+    "independent_review": "pending-root-assignment",
+    "root_reconciliation": "pending",
+    "claim_effect": "none"
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/MIGRATION-HOST-PRODUCTION-101.json",
+    "fixtures/migration-host-adapter/cases.json",
+    "validator/src/migration/product/host.rs",
+    "validator/src/migration/product/host/authority.rs",
+    "validator/src/migration/product/host/effects.rs",
+    "validator/src/migration/product/host/filesystem.rs",
+    "validator/src/migration/product/host/source.rs",
+    "validator/src/migration/product/host/store.rs",
+    "validator/src/migration/product/host/test_support.rs",
+    "validator/src/migration/product/mod.rs",
+    "validator/tests/migration_host_adapter_contract.rs",
+    "validator/tests/migration_host_adapter_contract/adversarial.rs",
+    "validator/tests/migration_host_adapter_contract/positive.rs",
+    "validator/tests/migration_host_adapter_contract/recovery.rs",
+    "validator/tests/migration_host_adapter_contract/support.rs"
+  ],
+  "touched_semantics": [
+    "migration-host-descriptor-capture",
+    "migration-host-authorization-authority",
+    "migration-host-durable-store",
+    "migration-host-confined-effects",
+    "migration-host-recovery",
+    "migration-host-product-wiring"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "fixtures/migration-host-adapter/cases.json"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "migration-host-adapter-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "migration-host-adapter-fixture",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "offline-migration-host-validation",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "external-system",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "installed-runtime",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "migration-physical-bytes",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "target": "adopted-registry",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-MAINT-002",
+    "OD-009"
+  ],
+  "dependency_nodes": [
+    "migration-retirement-production"
+  ],
+  "changes": [
+    {
+      "area": "descriptor-anchored-input-source",
+      "result": "Added canonical absolute root anchoring, no-follow and nonblocking descriptor traversal, regular-file owner/type/link/size checks, exact source and registry byte capture, registry inode identity, repository root device/inode scope, and candidate binding."
+    },
+    {
+      "area": "owner-only-host-authority",
+      "result": "Added fixed 0700 state-root and 0600 single-link config, secret, lock, and ledger contracts; nonblocking process locking; OS-random HMAC authorization sessions and nonces; monotonic trusted time anchored to provisioned realtime; and product-version binding."
+    },
+    {
+      "area": "durable-store",
+      "result": "Added canonical digest-validated ledgers, checked revisions and counters, authorization and semantic reservation linkage, atomic 0600 replacement with file and directory fsync, exact compare-and-swap, and canonical reopen validation."
+    },
+    {
+      "area": "semantic-confined-effects",
+      "result": "Added an effect adapter with no path, filesystem, shell, or delete primitive; effects are exact semantic ledger transitions, compatibility requires the typed permit, current registry rows produce zero adopted effects, and OD-009 source digests remain byte-identical."
+    },
+    {
+      "area": "recovery-and-replay",
+      "result": "Recovery reconstructs only a validated durable operation's original random authority identity and verifies its HMAC seal; crash-before-effect, crash-after-effect, crossed-boundary recovery, replay, rollback, and lock contention are exercised across reopen."
+    },
+    {
+      "area": "source-local-product-wiring",
+      "result": "Added crate-private product module wiring and test-only synthetic provisioning without a public CLI, catalog, dispatcher, registry adoption, installed effect, or root claim mutation."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-migration-host-production-101-target-red CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test migration_host_adapter_contract --no-run",
+      "status": "expected-fail-before-implementation",
+      "result": "Test-first baseline failed on unresolved import migration::product::DarwinMigrationHost before the adapter existed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-migration-host-production-101-target-current CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test migration_host_adapter_contract --test migration_product_contract",
+      "status": "pass-65-of-65",
+      "result": "Current-root overlay: migration host adapter 26/26 and migration product 39/39 passed, including authoritative WorkerResult-v1 parsing."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-migration-host-production-101-target-current CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo test --manifest-path validator/Cargo.toml --locked --offline -j 16 --test migration_contract",
+      "status": "expected-root-integration-gap-33-of-34",
+      "result": "All 33 executable kernel checks passed. The external forgery probe failed before its intended assertions with E0583 because the root-owned probe copies a fixed product module list that omits host.rs and host/*.rs."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-migration-host-production-101-target-current CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline -j 16 --lib",
+      "status": "pass",
+      "result": "The current-root library source compiles offline with the locked dependency graph."
+    },
+    {
+      "command": "rustfmt --edition 2024 --config skip_children=true --check <all thirteen leased Rust implementation and test files>",
+      "status": "pass",
+      "result": "Every leased Rust file passed targeted formatting."
+    },
+    {
+      "command": "confined-effect forbidden primitive scan; trusted random, monotonic clock, descriptor and nonblocking lock primitive scan; jq -e . fixtures/migration-host-adapter/cases.json",
+      "status": "pass",
+      "result": "The semantic effect file contains no filesystem, path, shell, rename, unlink, or delete primitive; required host primitives are present and the synthetic fixture JSON parses."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-migration-host-production-101-target-current CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 cargo clippy --manifest-path validator/Cargo.toml --locked --offline -j 16 --lib --tests -- -D warnings",
+      "status": "blocked-by-preexisting-repository-lint",
+      "result": "Strict clippy stops in the unchanged build script at validator/build_support/repository_fit_template_sources.rs:129 because stage_manifest_sources is dead code. Candidate-owned tests and cargo check remain green; no clippy-clean repository claim is made."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/migration-host-adapter/cases.json",
+      "sha256": "sha256:d7f525b629246e5827ff4844124d42113c4eaddfb9ec77f58792b597c34cdca3",
+      "byte_length": 874
+    },
+    {
+      "path": "validator/src/migration/product/host.rs",
+      "sha256": "sha256:8e57d11ee843b9d7f816bdc61a6269aeda09e00111539ff2ab8e9902ba186f42",
+      "byte_length": 19583
+    },
+    {
+      "path": "validator/src/migration/product/host/authority.rs",
+      "sha256": "sha256:ad25188aa7ec57441bab873e982c3d4d4a178ea9674536deee9119ad45e2285a",
+      "byte_length": 12719
+    },
+    {
+      "path": "validator/src/migration/product/host/effects.rs",
+      "sha256": "sha256:ebfc3231588acf2bba089912013fea1ae50568baaa33f97e79481febca4e6763",
+      "byte_length": 6947
+    },
+    {
+      "path": "validator/src/migration/product/host/filesystem.rs",
+      "sha256": "sha256:acc8ea17f25b0a6a001d5c0df52d21dffbe390fb734fbbbdac7d564b64599aab",
+      "byte_length": 18250
+    },
+    {
+      "path": "validator/src/migration/product/host/source.rs",
+      "sha256": "sha256:146bf6871caac5c10e8811f6f36b742ed6a29c59d3533e0eee1141fe98c5673a",
+      "byte_length": 4418
+    },
+    {
+      "path": "validator/src/migration/product/host/store.rs",
+      "sha256": "sha256:440dbd75e15ac066e27e7704c6d550facc40e7220b8af50ef34447ba8c0a85ee",
+      "byte_length": 18575
+    },
+    {
+      "path": "validator/src/migration/product/host/test_support.rs",
+      "sha256": "sha256:d0409a6325e1261fe2e0b6c4c3bc648b78d03e53d067e9e6133b8001d80b590b",
+      "byte_length": 3452
+    },
+    {
+      "path": "validator/src/migration/product/mod.rs",
+      "sha256": "sha256:eb038ded5d369e8175a82c52ee8aec2c85aadbf0b837bcd52dd8a1a2253ad859",
+      "byte_length": 1318
+    },
+    {
+      "path": "validator/tests/migration_host_adapter_contract.rs",
+      "sha256": "sha256:68fccfbbab53a896190e8697943d60c4bcbc5ddffbd6f05c5d9a46a2928cd5b7",
+      "byte_length": 1140
+    },
+    {
+      "path": "validator/tests/migration_host_adapter_contract/adversarial.rs",
+      "sha256": "sha256:abcbb9a6fbdf40feb350bc4a7d558c6125f1afab9b2d18bd95496ac37df3d2e4",
+      "byte_length": 10624
+    },
+    {
+      "path": "validator/tests/migration_host_adapter_contract/positive.rs",
+      "sha256": "sha256:a24aac33edafd9fe0d1824ccdc36ea3b9be33d8bd591a932d940277dfb45c00b",
+      "byte_length": 6123
+    },
+    {
+      "path": "validator/tests/migration_host_adapter_contract/recovery.rs",
+      "sha256": "sha256:084619f8483581ac16b91e0e2ce37d26a3760314e8a266da26bfa8a165345600",
+      "byte_length": 5703
+    },
+    {
+      "path": "validator/tests/migration_host_adapter_contract/support.rs",
+      "sha256": "sha256:8cd20db0490f822fe54fdb33a2818c59dd04572537c6c5ba3a7a1cdc800c65c4",
+      "byte_length": 12428
+    }
+  ],
+  "findings": [
+    {
+      "severity": "corrected",
+      "requirement": "REQ-MAINT-002",
+      "finding": "No Darwin production adapter implemented the accepted migration product protocol.",
+      "resolution": "The leased source candidate now implements descriptor-anchored input, trusted authorization, durable state, semantic effects, and reopen recovery with synthetic contract proof."
+    },
+    {
+      "severity": "corrected",
+      "requirement": "OD-009",
+      "finding": "A host effect boundary could have introduced raw filesystem deletion authority.",
+      "resolution": "The confined adapter stores semantic route state only, rejects physical digest changes, and has no path, filesystem, shell, rename, unlink, or delete primitive."
+    },
+    {
+      "severity": "ceiling-withheld",
+      "class": "shared-probe-not-reconciled",
+      "finding": "The root-owned external privacy probe does not copy the new private host module or declare its exact locked dependencies, so the full migration test target is not green.",
+      "resolution": "An exact digest-bound root change is requested below. Integration, readiness, release, and completion remain unclaimed."
+    },
+    {
+      "severity": "ceiling-withheld",
+      "class": "no-current-adopted-effects",
+      "finding": "The current registry contains no adopted migration effect and this lease did not add public dispatch, registry adoption, installed state, or real-user execution.",
+      "resolution": "Current registry capture yields zero host effects and all public, install, runtime, readiness, release, and completion claims remain withheld."
+    }
+  ],
+  "unresolved_dependencies": [
+    "independent-review",
+    "root-current-base-reconciliation",
+    "shared-migration-probe-repair",
+    "public-route-authority",
+    "representative-real-user-proof"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/tests/migration_contract.rs",
+      "expected_sha256": "sha256:60253bfd96a5fdb089d70b66d2ba5d68bbb9f3de5dc42310bbf38057b8244354",
+      "request": "In external_callers_cannot_mint_clone_or_deserialize_replacement_or_retirement_authority, preserve the existing four product copies, then copy validator/src/migration/product/host.rs and recursively create/copy validator/src/migration/product/host/{authority.rs,effects.rs,filesystem.rs,source.rs,store.rs,test_support.rs} into the temporary probe. In the temporary Cargo.toml dependencies add exactly getrandom = { version = \"=0.4.3\", default-features = false }, hmac = { version = \"=0.12.1\", default-features = false }, and libc = \"0.2.186\". Do not change production Cargo or the intended privacy assertions. Rerun the locked offline migration_contract target and require 34/34."
+    }
+  ],
+  "limitations": [
+    "The exact fourteen-artifact aggregate excludes this self-referential WorkerResult.",
+    "The candidate is frozen as an uncommitted leased overlay on exact root HEAD and tree; root must reconcile it with concurrent work and independently rederive every artifact identity.",
+    "The shared migration_contract target remains 33/34 until root applies the digest-bound probe-copy request.",
+    "Strict repository-wide clippy is blocked by an unchanged build-script dead-code warning before candidate code is linted.",
+    "Synthetic Darwin fixtures do not prove installation, a public command, registry adoption, marketplace or Plugins UI state, real-user execution, or live runtime behavior.",
+    "No public CLI, catalog, dispatcher, adopted registry, physical cleanup, installed runtime, claim state, readiness state, release state, or completion state changed."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

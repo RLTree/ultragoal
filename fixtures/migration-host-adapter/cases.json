@@ -1,0 +1,33 @@
+{
+  "schema_version": "MigrationHostAdapterFixtures-v1",
+  "fixture_scope": "synthetic-only",
+  "real_user_state": false,
+  "destructive_cleanup_authorized": false,
+  "positive_cases": [
+    "descriptor-anchored-capture",
+    "retirement-apply-replay",
+    "compatibility-permit",
+    "durable-reopen-recovery"
+  ],
+  "refusal_cases": [
+    "source-substitution",
+    "registry-substitution",
+    "candidate-substitution",
+    "product-version-substitution",
+    "trusted-time-crossed",
+    "symlink",
+    "hardlink",
+    "special-file",
+    "root-rename",
+    "permission-drift",
+    "maximum-bound"
+  ],
+  "false_pass_controls": [
+    "proof-artifact",
+    "receipt-production",
+    "score-only",
+    "test-manipulation",
+    "verbosity"
+  ],
+  "claim_ceiling": "source_local_migration_host_adapters_only_not_integration_install_runtime_readiness_release_or_completion"
+}
