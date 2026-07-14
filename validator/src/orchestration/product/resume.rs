@@ -26,7 +26,7 @@ pub struct ResumeOutcome {
     pub snapshot: ProductSnapshot,
 }
 
-pub fn resume(
+pub(crate) fn resume(
     context: &ProductContext,
     workspace: &ProductWorkspace,
     authority: &RootAuthority,

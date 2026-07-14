@@ -78,6 +78,7 @@ fn concurrent_reconciliation_has_one_authoritative_outcome_and_no_orphan() {
             },
         ),
     ];
+    let authority = Arc::new(authority);
     let barrier = Arc::new(Barrier::new(2));
     let handles = permits_and_requests
         .into_iter()
@@ -85,10 +86,10 @@ fn concurrent_reconciliation_has_one_authoritative_outcome_and_no_orphan() {
             let barrier = Arc::clone(&barrier);
             let context = context();
             let workspace = workspace.clone();
-            let authority = authority.clone();
+            let authority = Arc::clone(&authority);
             std::thread::spawn(move || {
                 barrier.wait();
-                reconcile(&context, &workspace, &authority, &permit, &request)
+                reconcile(&context, &workspace, authority.as_ref(), &permit, &request)
             })
         })
         .collect::<Vec<_>>();

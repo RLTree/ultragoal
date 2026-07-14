@@ -7,8 +7,8 @@ use orchestration::product::command::{
     CommandProjection, InterruptedRecoveryRequest, OrchestrationStateRequest, RootActionRequest,
 };
 use orchestration::product::{
-    ProductContext, ProductError, ProductWorkspace, ReconcileOutcome, ReconcileRequest,
-    RootAuthority, RootPermit,
+    ProductContext, ProductError, ProductWorkspace, ProductionRootAuthority, ReconcileOutcome,
+    ReconcileRequest, RootPermit,
 };
 use runtime_adapter::{
     CurrentRuntimeView, InterruptedRuntimeView, OrchestrationRuntimeAdapter, RuntimeActionOutcome,
@@ -43,21 +43,21 @@ fn root_wiring_surface_is_typed_without_exposing_authority_construction() {
         adapter: &OrchestrationRuntimeAdapter<'a>,
         source: RuntimeActionSource<'_>,
         action: &RootActionRequest,
-        authority: &RootAuthority,
+        authority: &ProductionRootAuthority,
         permit: &RootPermit,
         request: &RuntimeActionRequest,
     ) -> Result<RuntimeActionOutcome, ProductError> {
-        adapter.execute_action(source, action, authority, permit, request)
+        adapter.execute_production_action(authority, source, action, permit, request)
     }
     fn execute_reconcile<'a>(
         adapter: &OrchestrationRuntimeAdapter<'a>,
         current: &CurrentRuntimeView,
         action: &RootActionRequest,
-        authority: &RootAuthority,
+        authority: &ProductionRootAuthority,
         permit: &RootPermit,
         request: &ReconcileRequest,
     ) -> Result<ReconcileOutcome, ProductError> {
-        adapter.execute_reconcile(current, action, authority, permit, request)
+        adapter.execute_production_reconcile(authority, current, action, permit, request)
     }
 
     let _ = inspect_current;
@@ -139,7 +139,7 @@ fn exact_root_export_compiles_from_an_external_consumer_crate() {
 
     fs::write(
         scratch.0.join("Cargo.toml"),
-        "[workspace]\nmembers = [\"ultragoal\", \"consumer\"]\nresolver = \"3\"\n",
+        "[workspace]\nmembers = [\"ultragoal\", \"consumer\"]\nresolver = \"3\"\n\n[workspace.lints.rust]\nwarnings = \"deny\"\nunsafe_op_in_unsafe_fn = \"deny\"\n\n[workspace.lints.clippy]\nall = \"deny\"\ndbg_macro = \"deny\"\ntodo = \"deny\"\nundocumented_unsafe_blocks = \"deny\"\nunimplemented = \"deny\"\n",
     )
     .unwrap();
     fs::write(
@@ -157,7 +157,7 @@ use ultragoal::orchestration::product::runtime_adapter::{
     RuntimeActionRequest, RuntimeActionSource,
 };
 use ultragoal::orchestration::product::{
-    ProductError, ReconcileOutcome, ReconcileRequest, RootAuthority, RootPermit,
+    ProductError, ProductionRootAuthority, ReconcileOutcome, ReconcileRequest, RootPermit,
 };
 
 fn consume<'a>(
@@ -167,17 +167,17 @@ fn consume<'a>(
     current: &CurrentRuntimeView,
     interrupted: &InterruptedRuntimeView,
     action: &RootActionRequest,
-    authority: &RootAuthority,
+    authority: &ProductionRootAuthority,
     permit: &RootPermit,
     request: &RuntimeActionRequest,
 ) -> Result<(Option<Vec<u8>>, RuntimeActionOutcome), ProductError> {
     let _ = adapter.inspect_current(current_request)?;
     let _ = adapter.inspect_interrupted(interrupted_request)?;
     let projected = adapter.project_current(current, &CommandProjection::Inspect)?;
-    let outcome = adapter.execute_action(
+    let outcome = adapter.execute_production_action(
+        authority,
         RuntimeActionSource::Interrupted(interrupted),
         action,
-        authority,
         permit,
         request,
     )?;
@@ -188,11 +188,11 @@ fn consume_reconcile<'a>(
     adapter: &OrchestrationRuntimeAdapter<'a>,
     current: &CurrentRuntimeView,
     action: &RootActionRequest,
-    authority: &RootAuthority,
+    authority: &ProductionRootAuthority,
     permit: &RootPermit,
     request: &ReconcileRequest,
 ) -> Result<ReconcileOutcome, ProductError> {
-    adapter.execute_reconcile(current, action, authority, permit, request)
+    adapter.execute_production_reconcile(authority, current, action, permit, request)
 }
 
 fn main() {

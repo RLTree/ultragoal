@@ -1,12 +1,12 @@
 use super::*;
 use crate::orchestration::product::command::RootActionRequest;
 use crate::orchestration::product::{
-    journal_head_identity, open_engine, PermitReplayState, ProductError, ProductionRootAuthority,
-    ReadOnlySink, ReconcileOutcome, ReconcileRequest, ReservationObservation, RootPermit,
+    PermitReplayState, ProductError, ProductionRootAuthority, ReadOnlySink, ReconcileOutcome,
+    ReconcileRequest, ReservationObservation, RootPermit, journal_head_identity, open_engine,
 };
 use crate::orchestration::{
-    encode_orchestration_log, orchestration_head_for, EffectResolution, EventLog, FileJournal,
-    OrchestrationEvent,
+    EffectResolution, EventLog, FileJournal, OrchestrationEvent, encode_orchestration_log,
+    orchestration_head_for,
 };
 
 impl OrchestrationRuntimeAdapter<'_> {
@@ -67,8 +67,8 @@ impl OrchestrationRuntimeAdapter<'_> {
             let execution = self.prevalidate_action(source, action, authority, permit, request)?;
             authority.reserve_validated(execution)
         })?;
-        authority.complete_action(reservation, || {
-            self.execute_action(source, action, &authority.authority, permit, request)
+        authority.complete_action(reservation, |root_authority| {
+            self.execute_action(source, action, root_authority, permit, request)
         })
     }
 
@@ -85,8 +85,8 @@ impl OrchestrationRuntimeAdapter<'_> {
             let execution = self.prevalidate_reconcile(view, action, authority, permit, request)?;
             authority.reserve_validated(execution)
         })?;
-        authority.complete_reconcile(reservation, || {
-            self.execute_reconcile(view, action, &authority.authority, permit, request)
+        authority.complete_reconcile(reservation, |root_authority| {
+            self.execute_reconcile(view, action, root_authority, permit, request)
         })
     }
 

@@ -122,18 +122,19 @@ fn concurrent_recovery_publishes_one_exact_head() {
         3,
         BTreeSet::from(["worker-a".to_owned()]),
     );
+    let authority = Arc::new(authority);
     let barrier = Arc::new(Barrier::new(2));
     let handles = (0..2)
         .map(|_| {
             let barrier = Arc::clone(&barrier);
             let context = context();
             let workspace = workspace.clone();
-            let authority = authority.clone();
+            let authority = Arc::clone(&authority);
             let permit = permit.clone();
             let request = request.clone();
             std::thread::spawn(move || {
                 barrier.wait();
-                recover(&context, &workspace, &authority, &permit, &request)
+                recover(&context, &workspace, authority.as_ref(), &permit, &request)
             })
         })
         .collect::<Vec<_>>();

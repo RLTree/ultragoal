@@ -1,10 +1,10 @@
 use super::view::{CurrentRuntimeView, InterruptedRuntimeView, OrchestrationRuntimeAdapter};
 use crate::orchestration::product::command::{RootActionReason, RootActionRequest};
 use crate::orchestration::product::{
-    journal_head_identity, reconcile, recover, resume, ProductError, ProductionRootAuthority,
-    ReconcileOutcome, ReconcileRequest, RecoverOutcome, RecoverRequest, ResumeOutcome,
-    ResumeRequest, RootActionPermitVerification, RootAuthority, RootOperation, RootPermit,
-    RootReconcilePermitVerification, ValidatedExecution,
+    ProductError, ProductionRootAuthority, ReconcileOutcome, ReconcileRequest, RecoverOutcome,
+    RecoverRequest, ResumeOutcome, ResumeRequest, RootActionPermitVerification, RootAuthority,
+    RootOperation, RootPermit, RootReconcilePermitVerification, ValidatedExecution,
+    journal_head_identity, reconcile, recover, resume,
 };
 use serde::{Deserialize, Serialize};
 
@@ -104,7 +104,7 @@ impl OrchestrationRuntimeAdapter<'_> {
     /// Routes an exact action-only root authorization. Reconciliation is kept
     /// on a separate interface because its permit binds the complete effect
     /// resolution rather than only the pre-decision action request.
-    pub fn execute_action(
+    pub(super) fn execute_action(
         &self,
         source: RuntimeActionSource<'_>,
         action: &RootActionRequest,
@@ -134,7 +134,7 @@ impl OrchestrationRuntimeAdapter<'_> {
     /// Executes one exact reconciliation whose supplied permit is verified by
     /// the product boundary against every byte of `request.resolution` before
     /// the journal can be mutated.
-    pub fn execute_reconcile(
+    pub(super) fn execute_reconcile(
         &self,
         view: &CurrentRuntimeView,
         action: &RootActionRequest,

@@ -13,14 +13,7 @@ fn same_inode_valid_prefix_and_mutate_restore_cannot_rollback_committed_tail() {
     let (action, permit, authority) = issue_resume(&authority_root, &journal, head, 2);
     let ledger = authority_root.path().join("replay-ledger.jsonl");
     let issued_prefix = fs::read(&ledger).unwrap();
-    execute_resume(
-        journal.path(),
-        &action,
-        &permit,
-        &authority,
-        2,
-    )
-    .unwrap();
+    execute_resume(journal.path(), &action, &permit, &authority, 2).unwrap();
     let committed_bytes = fs::read(&ledger).unwrap();
     rewrite_same_inode(&ledger, &issued_prefix);
     let before = recursive_fingerprint(authority_root.path());
@@ -60,9 +53,11 @@ fn concurrent_nonempty_reopens_refuse_without_mutation_or_replay() {
         })
         .map(|child| child.join().unwrap())
         .collect::<Vec<_>>();
-    assert!(results
-        .iter()
-        .all(|error| *error == ProductError::AuthorityCheckpointRequired));
+    assert!(
+        results
+            .iter()
+            .all(|error| *error == ProductError::AuthorityCheckpointRequired)
+    );
     assert_eq!(recursive_fingerprint(authority_root.path()), before);
 }
 

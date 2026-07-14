@@ -29,7 +29,7 @@ pub struct RecoverOutcome {
     pub snapshot: ProductSnapshot,
 }
 
-pub fn recover(
+pub(crate) fn recover(
     context: &ProductContext,
     workspace: &ProductWorkspace,
     authority: &RootAuthority,

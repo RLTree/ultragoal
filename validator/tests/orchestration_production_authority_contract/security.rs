@@ -1,7 +1,7 @@
 use super::fixture::*;
 use std::collections::BTreeSet;
 use std::fs;
-use std::os::unix::fs::{symlink, PermissionsExt};
+use std::os::unix::fs::{PermissionsExt, symlink};
 use ultragoal::orchestration::product::command::OrchestrationStateRequest;
 use ultragoal::orchestration::product::runtime_adapter::{
     OrchestrationRuntimeAdapter, RuntimeActionRequest, RuntimeActionSource,

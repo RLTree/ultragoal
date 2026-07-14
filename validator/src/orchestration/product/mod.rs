@@ -17,26 +17,29 @@ mod resume;
 pub mod runtime_adapter;
 mod snapshot;
 
+pub(crate) use authority::ValidatedExecution;
+pub use authority::{
+    PermitReplayState, PermitTarget, ProductionRootAuthority, RootOperation, RootPermit,
+};
+pub(crate) use authority::{
+    ReservationObservation, RootActionPermitVerification, RootAuthority,
+    RootReconcilePermitVerification,
+};
+#[cfg(test)]
+pub(crate) use authority::{RootActionPermitIssuance, RootReconcilePermitIssuance};
 #[cfg(test)]
 pub(crate) use authority::{
     issue_action_permit_for_test, issue_reconcile_permit_for_test, root_authority_for_test,
 };
-pub use authority::{
-    PermitReplayState, PermitTarget, ProductionRootAuthority, RootAuthority, RootOperation,
-    RootPermit,
-};
-pub(crate) use authority::{
-    ReservationObservation, RootActionPermitVerification, RootReconcilePermitVerification,
-};
-pub(crate) use authority::ValidatedExecution;
-#[cfg(test)]
-pub(crate) use authority::{RootActionPermitIssuance, RootReconcilePermitIssuance};
-pub use context::{journal_head_identity, ProductContext, ProductWorkspace};
-pub(crate) use context::{open_engine, ReadOnlySink};
+pub use context::{ProductContext, ProductWorkspace, journal_head_identity};
+pub(crate) use context::{ReadOnlySink, open_engine};
 pub use error::ProductError;
-pub use plan::{plan, PlanRequest, ProductPlan};
-pub use query::{query, QueryRequest};
-pub use reconcile::{reconcile, ReconcileOutcome, ReconcileRequest};
-pub use recover::{recover, RecoverOutcome, RecoverRequest};
-pub use resume::{resume, ResumeOutcome, ResumeRequest};
+pub use plan::{PlanRequest, ProductPlan, plan};
+pub use query::{QueryRequest, query};
+pub(crate) use reconcile::reconcile;
+pub use reconcile::{ReconcileOutcome, ReconcileRequest};
+pub(crate) use recover::recover;
+pub use recover::{RecoverOutcome, RecoverRequest};
+pub(crate) use resume::resume;
+pub use resume::{ResumeOutcome, ResumeRequest};
 pub use snapshot::{ProductCommitment, ProductSnapshot};

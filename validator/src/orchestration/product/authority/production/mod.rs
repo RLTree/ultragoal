@@ -38,7 +38,7 @@ pub enum PermitReplayState {
 }
 
 pub struct ProductionRootAuthority {
-    pub(crate) authority: RootAuthority,
+    authority: RootAuthority,
     ledger: Ledger,
 }
 

@@ -80,26 +80,28 @@ impl ProductionRootAuthority {
     pub(crate) fn complete_action<T>(
         &self,
         reservation: ReservedExecution<'_>,
-        operation: impl FnOnce() -> Result<T, ProductError>,
+        operation: impl FnOnce(&RootAuthority) -> Result<T, ProductError>,
     ) -> Result<T, ProductError> {
         if !std::ptr::eq(self, reservation.authority)
             || reservation.operation == RootOperation::Reconcile
         {
             return Err(ProductError::AuthorityInvalid);
         }
-        self.ledger.complete(reservation, operation)
+        self.ledger
+            .complete(reservation, || operation(&self.authority))
     }
 
     pub(crate) fn complete_reconcile<T>(
         &self,
         reservation: ReservedExecution<'_>,
-        operation: impl FnOnce() -> Result<T, ProductError>,
+        operation: impl FnOnce(&RootAuthority) -> Result<T, ProductError>,
     ) -> Result<T, ProductError> {
         if !std::ptr::eq(self, reservation.authority)
             || reservation.operation != RootOperation::Reconcile
         {
             return Err(ProductError::AuthorityInvalid);
         }
-        self.ledger.complete(reservation, operation)
+        self.ledger
+            .complete(reservation, || operation(&self.authority))
     }
 }

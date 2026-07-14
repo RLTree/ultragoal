@@ -64,8 +64,7 @@ impl Debug for RootPermit {
     }
 }
 
-#[derive(Clone)]
-pub struct RootAuthority {
+pub(crate) struct RootAuthority {
     root_actor: Actor,
     key: [u8; 32],
 }

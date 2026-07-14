@@ -1,5 +1,5 @@
 use super::{
-    checkpoint::LedgerCheckpoint, store::Store, ProductError, ReservedExecution, ValidatedExecution,
+    ProductError, ReservedExecution, ValidatedExecution, checkpoint::LedgerCheckpoint, store::Store,
 };
 use hmac::{Hmac, Mac};
 use serde::{Deserialize, Serialize};

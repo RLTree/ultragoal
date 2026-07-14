@@ -1,4 +1,5 @@
 mod orchestration_production_authority_contract {
+    mod authority_boundary;
     mod causal_reconciliation;
     mod execution_binding;
     mod fixture;

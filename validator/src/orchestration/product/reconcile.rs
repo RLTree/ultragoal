@@ -28,7 +28,7 @@ pub struct ReconcileOutcome {
     pub snapshot_id: String,
 }
 
-pub fn reconcile(
+pub(crate) fn reconcile(
     context: &ProductContext,
     workspace: &ProductWorkspace,
     authority: &RootAuthority,

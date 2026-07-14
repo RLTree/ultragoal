@@ -1,7 +1,4 @@
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(1);
-static NEXT_NONCE: AtomicU64 = AtomicU64::new(1);
-pub const ROOT_SECRET: &[u8] = b"runtime-adapter-root-secret-0123456789abcdef";
-
 pub fn digest(byte: char) -> String {
     format!("sha256:{}", byte.to_string().repeat(64))
 }
@@ -166,31 +163,4 @@ pub fn durable_engine(label: &str, fail: bool) -> (TestRoot, Orchestrator<TestSi
     )
     .unwrap();
     (root, engine)
-}
-
-pub fn authority() -> RootAuthority {
-    root_authority_for_test(root_actor(), ROOT_SECRET).unwrap()
-}
-
-pub fn permit_for_action(
-    authority: &RootAuthority,
-    action: &RootActionRequest,
-    tick: u64,
-) -> RootPermit {
-    let serial = NEXT_NONCE.fetch_add(1, Ordering::Relaxed);
-    let nonce = format!("runtime-adapter-nonce-{serial:020}");
-    issue_action_permit_for_test(
-        authority,
-        RootActionPermitIssuance {
-            operation: action.operation,
-            binding: action.authority_binding.clone(),
-            workspace_identity: &action.workspace_identity,
-            journal_head_identity: &action.journal_head_identity,
-            issued_tick: tick.saturating_sub(1),
-            expires_tick: tick + 10,
-            nonce: nonce.as_bytes(),
-            target: action.target.clone(),
-        },
-    )
-    .unwrap()
 }
