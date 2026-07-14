@@ -1,76 +1,115 @@
 {
+  "schema": "WorkerResult-v1",
   "worker": "/root",
   "lease_id": "N04-DISTRIBUTION-RUNTIME",
+  "branch": "codex/n04-distribution-runtime",
   "context_id": "sha256:5d12e2029e4ad9801975fb8fe1425d93f2e1e0719bacbed8a5563732f3aedbad",
   "candidate_identity": {
     "repository": "repo://harness-ultragoal-plugin-proposal",
     "branch": "codex/n04-distribution-runtime",
     "base_commit": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
-    "implementation_commit": "443de84a49cbc1f474dee7a2a61eaf738f6e1675",
-    "implementation_tree": "277c854b0754c1d3a0c15fc7152f20389848a05f",
+    "implementation_commit": "be6bfdbc13a20ac1bd6d7222bc243cb124a25d42",
+    "implementation_tree": "ac1bba941e1402e010cafc4bd39b128b958a02c1",
     "context_id": "sha256:5d12e2029e4ad9801975fb8fe1425d93f2e1e0719bacbed8a5563732f3aedbad",
     "candidate_id": "sha256:5d12e2029e4ad9801975fb8fe1425d93f2e1e0719bacbed8a5563732f3aedbad",
-    "artifact_set_sha256": "sha256:7cb20ad106cc139c6889f5d18d9de120523aefbd4192ddf02d1c5580421a950d"
+    "artifact_set_sha256": "sha256:c83ed2ea8b497abbbaf8751db8fb2c63f497ae1d86a0d655634f7c1e76f53421"
   },
   "base_state": {
     "status": "parent-refreshed-accepted-base",
     "branch": "codex/n04-distribution-runtime",
-    "head": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
-    "accepted_dependency": "accepted-integration-checkpoint-5cc3be5f8"
+    "base_commit": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
+    "reviewed_frozen_head": "383057d5c1e9ca777fc7fee4224647402303744b",
+    "accepted_dependency": "accepted-integration-checkpoint-5cc3be5f8",
+    "self_rebased": false
   },
   "final_state": {
-    "status": "worker_blocked",
-    "implementation_commit": "443de84a49cbc1f474dee7a2a61eaf738f6e1675",
-    "refreshed_candidate_head": "69900991b8ca80f6e8161cf8ee44310457e807e0",
-    "refreshed_candidate_tree": "70d7372a5658d9873f4d7dae81cfd55d1b661825",
-    "source_correction": "confined-registry-authority-and-one-journey-identity-chain",
+    "status": "worker_blocked_by_root_compile_wall",
+    "implementation_commit": "be6bfdbc13a20ac1bd6d7222bc243cb124a25d42",
+    "implementation_tree": "ac1bba941e1402e010cafc4bd39b128b958a02c1",
+    "source_correction": "confined-package-app-registry-discovery-runtime-authority",
     "root_adoption": false,
-    "live_host_proof": false
+    "live_host_proof": false,
+    "focused_tests_executed": false
   },
+  "commits": [
+    {"sha": "b889f9662b99137749087ce3d891ae51668fca87", "subject": "bind package and registry identities into host ladder"},
+    {"sha": "ba19502c2e5c04ec0b1408a60625f93da284ad9b", "subject": "record blocked N04 distribution handoff"},
+    {"sha": "b95c7f46d2389377136473460d30531904fbdb48", "subject": "seal distribution identity issuance against caller forgery"},
+    {"sha": "7a6170d58d5f6acb7703e13481583e0c44dfecff", "subject": "record N04 identity authority rework handoff"},
+    {"sha": "443de84a49cbc1f474dee7a2a61eaf738f6e1675", "subject": "bind registry authority and chains to one host journey"},
+    {"sha": "69900991b8ca80f6e8161cf8ee44310457e807e0", "subject": "record confined registry authority rework handoff"},
+    {"sha": "383057d5c1e9ca777fc7fee4224647402303744b", "subject": "refresh N04 handoff on accepted integration base"},
+    {"sha": "be6bfdbc13a20ac1bd6d7222bc243cb124a25d42", "subject": "Bind N04 runtime identities to confined observations"}
+  ],
   "touched_paths": [
     "validator/src/distribution/filesystem/file.rs",
     "validator/src/distribution/filesystem/root/confined_root.rs",
+    "validator/src/distribution/filesystem/tree.rs",
+    "validator/src/distribution/host_capability/host_adapter_kind.rs",
     "validator/src/distribution/identity/identity_surface.rs",
     "validator/src/distribution/identity/mixed_journey_tests.rs",
     "validator/src/distribution/identity/mod.rs",
     "validator/src/distribution/identity/surface_identity_new.rs",
     "validator/src/distribution/identity/verify_bound_surface_chain.rs",
+    "validator/src/distribution/install/install_limit.rs",
     "validator/src/distribution/mod.rs",
     "validator/src/distribution/model.rs",
+    "validator/src/distribution/observations.rs",
     "validator/src/distribution/package/output/output_entry_limit.rs",
+    "validator/src/distribution/package/product/mod.rs",
+    "validator/src/distribution/package/product/plugin_id.rs",
+    "validator/src/distribution/package/product/tests/concurrent_output.rs",
+    "validator/src/distribution/package/product/tests/every_artifact_binding_dimension_is_checked_before_output_effects.rs",
     "validator/src/distribution/package/product/tests/mod.rs",
     "validator/src/distribution/package/product/tests/package_surface_identity.rs",
+    "validator/src/distribution/package/product/tests/repo.rs",
+    "validator/src/distribution/package/product/tests/source_mutate_restore_during_publication_rolls_back_output.rs",
     "validator/src/distribution/package/product/tests/undeclared_secret_local_and_benign_skill_members_fail_closed.rs",
-    "validator/src/distribution/registry_observation/registry_limit.rs",
+    "validator/src/distribution/registry_observation/mod.rs",
     "validator/src/distribution/registry_observation/observe_discovery.rs",
+    "validator/src/distribution/registry_observation/registry_limit.rs",
+    "validator/src/distribution/registry_observation/validate_app_registry.rs",
+    "validator/src/distribution/runtime_probe/mod.rs",
+    "validator/src/distribution/runtime_probe/output_limit.rs",
     "validator/src/distribution/spec/mod.rs",
     "validator/src/distribution/spec/validate_layer.rs",
     "validator/src/distribution/verify/mod.rs",
     "validator/src/distribution/verify/observations_disagree.rs",
     "validator/tests/distribution_contract/identity_ladder.rs",
     "validator/tests/distribution_contract/isolated_journey.rs",
+    "validator/tests/distribution_contract/journey_adversarial.rs",
+    "validator/tests/distribution_contract/journey_adversarial/wrong_scope_identity_duplicates_and_registered_hidden_fail_closed.rs",
     "validator/tests/distribution_contract/observation_races.rs",
     "validator/tests/distribution_contract/package_journey_fixture.rs",
+    "validator/tests/distribution_contract/package_output.rs",
+    "validator/tests/distribution_contract/package_output/corrupt_after_write.rs",
+    "validator/tests/distribution_contract/package_output/every_identity_dimension_is_checked_before_any_effect.rs",
+    "validator/tests/distribution_contract/runtime_session.rs",
     "validator/tests/distribution_contract/version_identity.rs",
     "validator/tests/supported_package_identity_contract.rs",
     "validator/tests/supported_package_identity_contract/confined_registry.rs",
     "validator/tests/supported_package_identity_contract/context.rs",
+    "validator/tests/supported_package_identity_contract/host_surface_substitution_controls.rs",
     "validator/tests/supported_package_identity_contract/typed_identity_surfaces_bind_only_verified_same_candidate_observations.rs",
     "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json"
   ],
+  "deleted_paths": [
+    "validator/src/distribution/package/product/tests/concurrent_output.rs"
+  ],
   "touched_semantics": [
-    "distribution-identity-chain",
     "repository-package-publication-identity",
-    "app-registry-journey-identity",
-    "opaque-surface-issuance",
+    "app-registry-confined-file-authority",
+    "separate-host-discovery-authority",
+    "binding-to-host-equality-guard",
+    "runtime-installed-route-binding",
     "caller-forgery-rejection",
-    "confined-registry-file-authority",
-    "single-journey-chain-binding"
+    "single-journey-chain-binding",
+    "zero-write-read-boundary"
   ],
   "generated_outputs": [],
   "fixtures": [],
   "effects": [
-    {"class": "workspace_write", "target": "n04-owned-source", "performed": true},
+    {"class": "workspace_write", "target": "n04-owned-source-tests-worker-result", "performed": true},
     {"class": "process", "target": "isolated-verification", "performed": true},
     {"class": "network", "target": "external-network", "performed": false},
     {"class": "external_write", "target": "host-distribution-surfaces", "performed": false}
@@ -79,7 +118,7 @@
     "n04-seven-surface-identity",
     "n04-false-pass-rejection",
     "n04-zero-write-read-boundary",
-    "n04-authority-issued-package-and-app-registry-rows",
+    "n04-authority-issued-package-app-registry-discovery-runtime-rows",
     "n04-one-journey-canonical-verification"
   ],
   "dependency_nodes": [
@@ -88,176 +127,186 @@
   ],
   "changes": [
     {
-      "area": "rebased-history",
-      "result": "Parent refreshed onto 5cc3be5f860de0071837f478bbe3a9de0d6c0e47 with commits b889f9662b99137749087ce3d891ae51668fca87, ba19502c2e5c04ec0b1408a60625f93da284ad9b, b95c7f46d2389377136473460d30531904fbdb48, 7a6170d58d5f6acb7703e13481583e0c44dfecff, 443de84a49cbc1f474dee7a2a61eaf738f6e1675, and 69900991b8ca80f6e8161cf8ee44310457e807e0. Every stable patch ID matches its pre-refresh commit, and the accepted-base delta has no path overlap with N04-owned changes."
+      "area": "discovery-authority",
+      "result": "Registry observation is AppRegistry-only. Discovery now uses host/discovery.json with schema harness-ultragoal.host-discovery.v1, exact confined root identity equal to the journey home, exact host binding equality, stable double-read, and visible=true. Supplying app/registry.json bytes to discovery is non-authoritative and fails ProvenanceMismatch."
     },
     {
-      "area": "identity-chain",
-      "result": "The canonical typed chain requires repository package, install, cache, marketplace, app registry, discovery, and runtime rows."
+      "area": "package-publication-authority",
+      "result": "PackageArtifactTransaction is issued only through the confined repository output adapter, records journey binding sha256, output root id, and output relative path, and from_published_package rejects same-package cross-root or cross-journey rebinding."
     },
     {
-      "area": "package-publication-binding",
-      "result": "Package rows can only be issued by from_published_package after exact PackageSnapshot, PackageArtifactTransaction, and JourneyBinding equality checks; generic issuance rejects Package."
+      "area": "runtime-authority",
+      "result": "Every host observation/probe calls the same HostCapabilityDeclaration-to-JourneyBinding equality guard. Runtime planning additionally requires the install snapshot to match the journey package, the supported install target plugins/harness-ultragoal.hugpkg, and the exact executable identity retained by the host capability. Probe output carries only a session nonce; runtime identity is derived independently from the bound plan."
     },
     {
-      "area": "app-registry-binding",
-      "result": "AppRegistry and Discovery rows require a stable double-read from the exact ScopedFile whose retained root identity equals the journey home and whose relative path is app/registry.json; arbitrary-byte and custom-reader observations remain non-authoritative."
-    },
-    {
-      "area": "caller-forgery-boundary",
-      "result": "SurfaceIdentity no longer implements Deserialize, its generic constructor and journey rebinder are crate-only, and the serialized ladder verifier rejects all caller-authored bytes as provenance mismatch."
-    },
-    {
-      "area": "negative-controls",
-      "result": "Controls reject arbitrary registry bytes, wrong confined roots, wrong registry paths, generic Package/AppRegistry issuance, serialized forged ladders, and same-package rows carrying mixed journey bindings against every canonical verifier."
+      "area": "app-registry-boundary",
+      "result": "AppRegistry identity remains tied to observe_registry_file/ScopedFile provenance. Arbitrary caller bytes can be validated structurally but cannot be promoted into the canonical AppRegistry surface."
     },
     {
       "area": "canonical-chain-binding",
-      "result": "The unbound verify_surface_chain API is crate-private and itself requires one non-empty binding digest across all rows; the public bound verifier additionally requires that digest to equal the supplied JourneyBinding."
+      "result": "The public canonical verifier path remains the bound verifier, and mixed same-package/different-journey rows are rejected by binding digest checks."
+    },
+    {
+      "area": "negative-controls",
+      "result": "Added/updated controls for registry-visible discovery substitution, discovery-absent host state, cross-root/cross-journey package transplant, direct runtime executable substitution, wrong host/runtime identity, and unsupported marketplace/cache/registry inputs."
     }
   ],
   "commands_and_tests": [
     {
-      "command": "verify base/head/tree; compare six old/rebased stable patch IDs; intersect accepted-base and N04 changed paths",
+      "command": ".codex/setup-worktree-env.sh; source .codex-worktree/env.sh",
       "status": "pass",
-      "result": "Base 5cc3be5f860de0071837f478bbe3a9de0d6c0e47, refreshed head 69900991b8ca80f6e8161cf8ee44310457e807e0, and tree 70d7372a5658d9873f4d7dae81cfd55d1b661825 matched the parent handoff. All six patch IDs are unchanged and accepted-base changes overlap zero N04-owned paths."
+      "result": "Worktree-local Cargo/state/home/tmp/scratch roots were initialized and used for verification commands."
+    },
+    {
+      "command": "git rev-parse HEAD; git merge-base HEAD 5cc3be5f860de0071837f478bbe3a9de0d6c0e47; git branch --show-current",
+      "status": "pass",
+      "result": "Before rework, branch codex/n04-distribution-runtime was at reviewed frozen head 383057d5c1e9ca777fc7fee4224647402303744b with merge-base 5cc3be5f860de0071837f478bbe3a9de0d6c0e47. No self-rebase was performed."
+    },
+    {
+      "command": "source .codex-worktree/env.sh; rustfmt --edition 2024 --config skip_children=true --check <all changed Rust paths>",
+      "status": "pass",
+      "result": "All edited Rust source/test paths were formatted under the repository's skip-children rustfmt policy."
+    },
+    {
+      "command": "authored Rust line audit over changed .rs files",
+      "status": "pass",
+      "result": "32 changed Rust files checked; all authored files remained at or below the 250-line limit."
     },
     {
       "command": "source .codex-worktree/env.sh; python3 scripts/check-python-source-laws .",
       "status": "pass",
-      "result": "27 typed Python sources passed."
+      "result": "python source laws pass: 27 typed sources."
     },
     {
-      "command": "source .codex-worktree/env.sh; rustfmt --edition 2024 --config skip_children=true --check <all changed Rust paths>; git diff --check; authored Rust line audit",
+      "command": "git diff --check 5cc3be5f860de0071837f478bbe3a9de0d6c0e47...HEAD",
       "status": "pass",
-      "result": "Exact changed paths are formatted and whitespace-clean; every authored distribution/package Rust file remains at most 250 lines."
-    },
-    {
-      "command": "source .codex-worktree/env.sh; Python identity and registry authority invariant check",
-      "status": "pass",
-      "result": "Confirmed opaque rows, exact confined registry root/path authority, non-authoritative arbitrary-byte observations, private unbound verification, one binding digest across every typed row, and fail-closed caller-byte verification."
+      "result": "Whitespace check passed."
     },
     {
       "command": "source .codex-worktree/env.sh; cargo check -p ultragoal --lib --offline --jobs 16",
       "status": "blocked",
-      "result": "The refreshed accepted base emits 657 denied root/shared errors; no lint allowance or warning suppression was used."
-    },
-    {
-      "command": "source .codex-worktree/env.sh; cargo check -p ultragoal --lib --offline --jobs 16 --message-format short 2>&1 | rg changed-distribution-paths",
-      "status": "blocked",
-      "result": "No type error or denied warning was reported on the changed filesystem, registry-observation, identity, or model paths. The unfiltered checkpoint still fails with 657 pre-existing denied errors; this is not a passing compile claim."
+      "result": "Compilation stops in root/shared library warnings promoted to errors, beginning with unused imports in validator/src/cli/successor/runtime/../diagnostics/mod.rs, validator/src/cli/successor/runtime/mod.rs, validator/src/cli/successor/mod.rs, visibility mismatch in validator/src/context/read_session/replacement_race_hook.rs, and many dead-code errors; cargo reports could not compile ultragoal (lib) due to 659 previous errors. No lint allowance or warning suppression was used."
     },
     {
       "command": "source .codex-worktree/env.sh; cargo test -p ultragoal --test distribution_contract --offline --jobs 16 -- --test-threads 16",
       "status": "blocked",
-      "result": "The complete focused distribution target, which contains positive, negative, race, mutation, security, false-pass, interruption/recovery, and repeat-use cases, stops in the library prerequisite on the same 657 denied root/shared errors before any case executes."
+      "result": "The focused distribution target did not execute. It stopped in the same library prerequisite root/shared -D warnings wall with 659 previous errors."
     },
     {
       "command": "source .codex-worktree/env.sh; cargo test -p ultragoal --test supported_package_identity_contract --offline --jobs 16 -- --test-threads 16",
       "status": "blocked",
-      "result": "The supported identity target stops in the library prerequisite on the same 657 denied root/shared errors before confined-registry and identity false-pass controls execute."
-    },
-    {
-      "command": "source .codex-worktree/env.sh; cargo test --manifest-path .codex-worktree/scratch/n04-package-contract/Cargo.toml --offline --jobs 16 -- --test-threads 16",
-      "status": "blocked",
-      "result": "Compilation stops on missing validator/src/distribution/host_effect/executor/target.rs and missing lifecycle/tests/target/race_substitution.rs before any positive, negative, race, mutation, security, interruption/recovery, repeat-use, or doctest case executes."
-    },
-    {
-      "command": "source .codex-worktree/env.sh; cargo fmt --all -- --check",
-      "status": "blocked",
-      "result": "Cargo fmt cannot resolve the missing host-effect executor target module; exact changed-path rustfmt succeeded separately."
+      "result": "The supported identity target did not execute. It stopped in the same library prerequisite root/shared -D warnings wall with 659 previous errors."
     }
   ],
   "artifacts": [
     {"path": "validator/src/distribution/filesystem/file.rs", "sha256": "sha256:29fd78624853775f37e4bbd32cd5fe7b1ab68b660b820c58786a3964c5b75244", "byte_length": 5883},
     {"path": "validator/src/distribution/filesystem/root/confined_root.rs", "sha256": "sha256:615be37c81cba72ca1bb7532f6a56156ec398ade661551221157925886ade0c3", "byte_length": 4800},
+    {"path": "validator/src/distribution/filesystem/tree.rs", "sha256": "sha256:c22b5c9c0752fb9458114bf48cffc23c2e974f2dce351bfe238b2166db72d5da", "byte_length": 8132},
+    {"path": "validator/src/distribution/host_capability/host_adapter_kind.rs", "sha256": "sha256:dc19795b7a80a7011e9dfbb73ce27fea34394c01720bc5df60f498007612f8b8", "byte_length": 8456},
     {"path": "validator/src/distribution/identity/identity_surface.rs", "sha256": "sha256:98b2075924dac523611a5d4a64a65dfbbd400ddb0f31fac5730aadbd94b18117", "byte_length": 4417},
     {"path": "validator/src/distribution/identity/mixed_journey_tests.rs", "sha256": "sha256:aed9d56f3cf8f33d5aeb18086532aeacfd630f39652d85876496657b9943db93", "byte_length": 2867},
     {"path": "validator/src/distribution/identity/mod.rs", "sha256": "sha256:c4dc5f1c780d24fb031440b9a7bbbf8defe1d45153037d0286a831a0a8994a37", "byte_length": 405},
-    {"path": "validator/src/distribution/identity/surface_identity_new.rs", "sha256": "sha256:f40a87ce9853902cd177265a42f70be290dfe67b0b6d1eef3435728124cf1095", "byte_length": 9069},
+    {"path": "validator/src/distribution/identity/surface_identity_new.rs", "sha256": "sha256:a0c56ea50de1ae9cf79774e1091805ffd275d6324dda80d9b9d0206e2e17ca5f", "byte_length": 9415},
     {"path": "validator/src/distribution/identity/verify_bound_surface_chain.rs", "sha256": "sha256:49ae1726475d955441fb70c8605c243c0e665b4cd14faa6fdf924b9156dd235f", "byte_length": 2206},
-    {"path": "validator/src/distribution/mod.rs", "sha256": "sha256:309ab8f14c248bf097348e318bbe4a8f384b8236615ecdc6db2030ef3067be3c", "byte_length": 3213},
+    {"path": "validator/src/distribution/install/install_limit.rs", "sha256": "sha256:1df4d271e28f84f00681e0d236efb2fe9dce07d8e82e6f35ab4b1fbe77485ca7", "byte_length": 5855},
+    {"path": "validator/src/distribution/mod.rs", "sha256": "sha256:331cd2f3db220dbaa64b2b1ad30aad9764b7eb0081bd8a611208df95af8b7c11", "byte_length": 3257},
     {"path": "validator/src/distribution/model.rs", "sha256": "sha256:0da774c5bf7516018153a42174240edb981e2aa412f2e4fe31338a43f3b80647", "byte_length": 6350},
-    {"path": "validator/src/distribution/package/output/output_entry_limit.rs", "sha256": "sha256:11ad9a65e11250a7a077d84ecc5fee82c95369cd33d8f62d07bf16ee51753bfc", "byte_length": 7379},
-    {"path": "validator/src/distribution/package/product/tests/mod.rs", "sha256": "sha256:38cfd5fda9c9b93dfedfa3a44c2dfb606430981be763a05fad3bcd777ac7fc58", "byte_length": 1105},
-    {"path": "validator/src/distribution/package/product/tests/package_surface_identity.rs", "sha256": "sha256:16e40fd4cca88668f7246876a929647205952d4d6709e80ae4a99af27831e119", "byte_length": 2233},
-    {"path": "validator/src/distribution/package/product/tests/undeclared_secret_local_and_benign_skill_members_fail_closed.rs", "sha256": "sha256:2ca7b805937e08dd32f9aa2186792b73dcc2078d3d5e4ebbd038d2fae429890e", "byte_length": 8374},
-    {"path": "validator/src/distribution/registry_observation/observe_discovery.rs", "sha256": "sha256:47066a52d7960cc5fda760dd57998863252b0ac7be8a8ecc4eb43931b5d6a4a5", "byte_length": 3521},
-    {"path": "validator/src/distribution/registry_observation/registry_limit.rs", "sha256": "sha256:8a4abb906781fb89630769c9fcb8278c90eec2450c1019fb605667ec66bb074a", "byte_length": 7815},
+    {"path": "validator/src/distribution/observations.rs", "sha256": "sha256:84b4a1e79796c9357ca380318d6fccdaa053c7b0ae373963186e571b201707f0", "byte_length": 3178},
+    {"path": "validator/src/distribution/package/output/output_entry_limit.rs", "sha256": "sha256:55a48e6fe7d4df205d7526d939bbc5ea849e6f5a960f877d412b58a30389723e", "byte_length": 8733},
+    {"path": "validator/src/distribution/package/product/mod.rs", "sha256": "sha256:d65594e4ee01504031e9f45b474b4e31ec72c809895c77670f97986bb6d6f81c", "byte_length": 880},
+    {"path": "validator/src/distribution/package/product/plugin_id.rs", "sha256": "sha256:c3b69b68db2a8dd5c3e479f28e461a224ee97d00af5b2526e88e37a7354a925c", "byte_length": 6231},
+    {"path": "validator/src/distribution/package/product/tests/every_artifact_binding_dimension_is_checked_before_output_effects.rs", "sha256": "sha256:45634c86280db61d5c1e4c83ba0aae6ca4e656889c8245313ab1e86dc0d731bb", "byte_length": 7515},
+    {"path": "validator/src/distribution/package/product/tests/mod.rs", "sha256": "sha256:c5c19df0173e6d1b02075df8071ae102a4548338bc550f63badae5a171ecfeb0", "byte_length": 1043},
+    {"path": "validator/src/distribution/package/product/tests/package_surface_identity.rs", "sha256": "sha256:5337cf18fb0d82de0845a01f0538924c072f8e93f2c0b6068633f4ea8467e3cd", "byte_length": 2322},
+    {"path": "validator/src/distribution/package/product/tests/repo.rs", "sha256": "sha256:925f04bd5f3d18efbb18da536c3c087adc57a31e3ab3cdda00d6bc4bf217704a", "byte_length": 5097},
+    {"path": "validator/src/distribution/package/product/tests/source_mutate_restore_during_publication_rolls_back_output.rs", "sha256": "sha256:4515ec43a09752bebde53eb61ee5fb45206ca88f74ca46ea18a69cb4b71e86e9", "byte_length": 5942},
+    {"path": "validator/src/distribution/package/product/tests/undeclared_secret_local_and_benign_skill_members_fail_closed.rs", "sha256": "sha256:058b2274f9341bfc697d4222475c6b2dc436e31beb1ea7f437727505107aef0a", "byte_length": 8287},
+    {"path": "validator/src/distribution/registry_observation/mod.rs", "sha256": "sha256:2d20e465f7ed8ca140c134ba71be20198a37262f43bbaf077f91d5d3f136df0a", "byte_length": 567},
+    {"path": "validator/src/distribution/registry_observation/observe_discovery.rs", "sha256": "sha256:e37960321ea43f129d79468e9042e0bdd81357eff44af3d1c6a69f4727e3bddd", "byte_length": 6210},
+    {"path": "validator/src/distribution/registry_observation/registry_limit.rs", "sha256": "sha256:4ca27ad5afd6c166710d3991688ae78fccce111efc79c79a1a33ea7bc1280da6", "byte_length": 7774},
+    {"path": "validator/src/distribution/registry_observation/validate_app_registry.rs", "sha256": "sha256:eddb2616de4a7bb310c70737412f2d710827cb62c109f6b710e69125d75c8e9b", "byte_length": 1904},
+    {"path": "validator/src/distribution/runtime_probe/mod.rs", "sha256": "sha256:9ffc143620f29d79626f35cb714fc15b74ae64e4f821ae6c363a12b7a54a1b67", "byte_length": 744},
+    {"path": "validator/src/distribution/runtime_probe/output_limit.rs", "sha256": "sha256:36337677626dd57acd2d79d3e58dfd0a71fae404bdfe641a7682879a72de95e9", "byte_length": 5006},
     {"path": "validator/src/distribution/spec/mod.rs", "sha256": "sha256:f1de2f5cb22b1e83102ca042187af40a37998f0524d6e0fdfc29206b64158d10", "byte_length": 321},
     {"path": "validator/src/distribution/spec/validate_layer.rs", "sha256": "sha256:0362c3853f91e4e4fef6ce1e885f9893f40cd55358c698ad31ae476bdc38d0bd", "byte_length": 3705},
     {"path": "validator/src/distribution/verify/mod.rs", "sha256": "sha256:95860fd1035fbb792a44f7aa4809afdea7a3882b6c97a08e944917b68d3a7ee1", "byte_length": 557},
     {"path": "validator/src/distribution/verify/observations_disagree.rs", "sha256": "sha256:526612a9909224b7079155b7fb4a24d9167ac01268596c874ba24d100bc18546", "byte_length": 1985},
     {"path": "validator/tests/distribution_contract/identity_ladder.rs", "sha256": "sha256:cc8b67347568ce34b8b2c97cb3703086c37cbf960c49afd7a51f05b8143e4744", "byte_length": 2398},
-    {"path": "validator/tests/distribution_contract/isolated_journey.rs", "sha256": "sha256:d106c79ae2f068e2bf846b9fee14aaf8ddc15a06bec6394f421f0bcfaf983287", "byte_length": 6923},
+    {"path": "validator/tests/distribution_contract/isolated_journey.rs", "sha256": "sha256:f8a1983b85f70041995214755d8dde2931eafbd0a12970dd0dff81de79409683", "byte_length": 7212},
+    {"path": "validator/tests/distribution_contract/journey_adversarial.rs", "sha256": "sha256:2582ab81417e13fc5341b67e94f27775e64246c61d9cb2f094b23cb6046d68db", "byte_length": 769},
+    {"path": "validator/tests/distribution_contract/journey_adversarial/wrong_scope_identity_duplicates_and_registered_hidden_fail_closed.rs", "sha256": "sha256:fc0e6c3a7be75bae030d92d3f4244797184b395d36354b7b18301d59705e71bb", "byte_length": 6407},
     {"path": "validator/tests/distribution_contract/observation_races.rs", "sha256": "sha256:8b4cff1641b9d1d9028ee24a9fbc881ef76b71480177db9cbb0a1ae2fd809bec", "byte_length": 3245},
     {"path": "validator/tests/distribution_contract/package_journey_fixture.rs", "sha256": "sha256:21a25b0b9f54374039c4e516d83cf4d6b0856c3896fd3051afbcbfb23327a824", "byte_length": 4483},
+    {"path": "validator/tests/distribution_contract/package_output.rs", "sha256": "sha256:ac06cb8b4e62cdafeb64ca954074e3a985f2e9e611ea7d2e39e1df47490844ce", "byte_length": 609},
+    {"path": "validator/tests/distribution_contract/package_output/corrupt_after_write.rs", "sha256": "sha256:b9641291fcde597bc546d2446c69fe85408723e09764846055256537d55c7e36", "byte_length": 4441},
+    {"path": "validator/tests/distribution_contract/package_output/every_identity_dimension_is_checked_before_any_effect.rs", "sha256": "sha256:fdd370b31c8553a04a66328e50242444283ac62e3acd938bb3dbd705404dadc3", "byte_length": 3803},
+    {"path": "validator/tests/distribution_contract/runtime_session.rs", "sha256": "sha256:5446abe6b80b7558303962b43c1666f97761f6c17c936031e3b786fe4606725e", "byte_length": 6434},
     {"path": "validator/tests/distribution_contract/version_identity.rs", "sha256": "sha256:29ac626bb91be1bada95908ee0fcbe11f4249dca43b43259719dba4d9bc97852", "byte_length": 6092},
-    {"path": "validator/tests/supported_package_identity_contract.rs", "sha256": "sha256:6e617d8f1a48525aac2a12f993f87ac9e3cbe10864328762bc91e5e7584b6c33", "byte_length": 1653},
-    {"path": "validator/tests/supported_package_identity_contract/confined_registry.rs", "sha256": "sha256:2ef0dd287ec108ed1821205be3ca8d22fb032027fb5a05b70d149e63cce0bb17", "byte_length": 2195},
-    {"path": "validator/tests/supported_package_identity_contract/context.rs", "sha256": "sha256:62a7adf4cde38a6020b20615a2ae2428603c3817307f2cc58fe7a02119c1b3cb", "byte_length": 6861},
-    {"path": "validator/tests/supported_package_identity_contract/typed_identity_surfaces_bind_only_verified_same_candidate_observations.rs", "sha256": "sha256:08e03e55bf284485ec783b718989b146ae3331ffe2231371f4e919e6b5b73b72", "byte_length": 8828}
+    {"path": "validator/tests/supported_package_identity_contract.rs", "sha256": "sha256:d394425e52163968d14e49cdcd9fcb0c9037f5741995850ca90ed258807aeb6f", "byte_length": 1807},
+    {"path": "validator/tests/supported_package_identity_contract/confined_registry.rs", "sha256": "sha256:79b6e0ff98eb45d96ac66d5f510afc0695334b2a1df24c266add842dcbe1f99b", "byte_length": 2886},
+    {"path": "validator/tests/supported_package_identity_contract/context.rs", "sha256": "sha256:1d61bc954094b810fd31e7658e1a40a97cd99e9c442e53651506a8fd521f4196", "byte_length": 6530},
+    {"path": "validator/tests/supported_package_identity_contract/host_surface_substitution_controls.rs", "sha256": "sha256:b033e16354ec992bee38bc37075c89056a038199412b7417ae3717cfecc4416f", "byte_length": 2978},
+    {"path": "validator/tests/supported_package_identity_contract/typed_identity_surfaces_bind_only_verified_same_candidate_observations.rs", "sha256": "sha256:ded07a5d0cea0a7adc6702cee0a7040ced1a14a5ef528a0544f8bf7fcdf55596", "byte_length": 5512}
   ],
   "findings": [
     {
       "severity": "blocker",
-      "finding": "The refreshed accepted base has a dangling host-effect executor target module declaration, blocking the isolated focused harness before tests execute."
-    },
-    {
-      "severity": "blocker",
-      "finding": "The refreshed accepted base retains a dangling lifecycle race-substitution include, blocking cfg(test) distribution/package contracts."
-    },
-    {
-      "severity": "blocker",
-      "finding": "The refreshed accepted base has 657 denied root/shared errors, so no warning-free library checkpoint or doctest execution is available."
+      "finding": "Focused Cargo checks remain unexecuted because accepted-base/root-shared library compilation stops on 659 denied warnings/errors before tests run."
     },
     {
       "severity": "root-wiring-required",
-      "finding": "The legacy plugin-product verifier still constructs five crate-internal rows and must be routed to the canonical seven-surface authority-issued chain or retired."
+      "finding": "The legacy plugin-product verifier still constructs a synthetic five-row caller and does not make the seven-row chain production reachable."
+    },
+    {
+      "severity": "root-wiring-required",
+      "finding": "Root-owned production observation framing still has to route separate app/registry.json and host/discovery.json observations instead of passing one registry byte stream to both surfaces."
+    },
+    {
+      "severity": "root-wiring-required",
+      "finding": "Root-owned lifecycle/runtime tests and public routes must pass an InstallSnapshot for the supported target and use the host-declared runtime program; this N04 branch did not edit those root-owned call sites."
     },
     {
       "severity": "live-proof-required",
-      "finding": "No root-authorized macOS route or exact package/install/cache/marketplace/app-registry/discovery/runtime operation was exercised."
+      "finding": "No live macOS package/install/cache/marketplace/app-registry/discovery/runtime journey was exercised."
     }
   ],
   "unresolved_dependencies": [
-    "exact-base-host-effect-target-module",
-    "exact-base-lifecycle-race-substitution-module",
     "exact-base-warning-free-root-checkpoint",
     "root-owned-seven-surface-public-route",
+    "root-owned-separated-app-registry-and-discovery-route",
+    "root-owned-runtime-plan-install-snapshot-route",
     "live-macos-same-surface-proof"
   ],
   "requested_root_changes": [
     {
-      "path": "validator/src/distribution/host_effect/executor/mod.rs",
-      "expected_sha256": "sha256:6bfdf6ea00f768dcd43527d31477fabcaa71ba68bcf8a7bb1f0134d57c668892",
-      "request": "Restore the deleted confined host target implementation as product-semantic files below 250 lines under executor/target/, preserving descriptor confinement behavior."
-    },
-    {
-      "path": "validator/src/distribution/host_effect/lifecycle/tests/mod.rs",
-      "expected_sha256": "sha256:348e2178e820c3250e447d5d856aa2c0470351081e49710dae284e2a348b4926",
-      "request": "Restore or reroute the missing target/race_substitution.rs control using product-semantic files below 250 lines."
-    },
-    {
       "path": "validator/src/plugin_product/host_lifecycle/verify.rs",
-      "expected_sha256": "sha256:17a357878a3f3a0746f971af8608695aded0b22f325b4850aaec5ec26ea7c095",
-      "request": "Replace the legacy five-row verifier with the canonical seven-row chain using authority-issued rows, or retire the legacy route."
+      "request": "Replace the synthetic five-row caller at lines 7-48 with the canonical seven-row chain using authority-issued package, install, cache, marketplace, app-registry, discovery, and runtime rows, or retire this legacy route."
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/observation/validate_frame.rs",
+      "request": "Replace the raw-registry-to-both-observers call pattern around lines 146-157 with separate confined observations: app/registry.json through observe_registry_file and host/discovery.json through observe_discovery_file."
+    },
+    {
+      "path": "validator/tests/plugin_host_lifecycle_contract/host_fixture/ui_document.rs",
+      "request": "Update root-owned RuntimeProbePlan::new call sites around lines 68-80 to pass the exact InstallSnapshot for plugins/harness-ultragoal.hugpkg and a host-declared runtime program; do not use arbitrary direct binaries."
+    },
+    {
+      "path": "validator/tests/plugin_host_lifecycle_contract/context.rs",
+      "request": "Update root-owned runtime fixture setup around lines 94-101 to produce the supported install snapshot and host runtime declaration required by the N04 runtime authority boundary."
     },
     {
       "path": "validator/src/cli/successor_public/mod.rs",
-      "expected_sha256": "sha256:c39a205a5677653b600745c4b94612d32463f521c5383836367cdff5cdcd1111",
       "request": "Wire the accepted package publication transaction and separately observed host identities through the root-authorized macOS distribution route without proof substitution."
     }
   ],
   "limitations": [
-    "No focused Rust test, doctest, race, mutation, security, false-pass, interruption/recovery, or repeat-use case executed because refreshed-candidate compilation stops at the named root/shared blockers; test source is not execution proof.",
+    "No focused Rust test, doctest, race, mutation, security, false-pass, interruption/recovery, repeat-use, or live runtime case executed because refreshed-candidate compilation stops at the named root/shared blocker; test source is not execution proof.",
     "No production external macOS host-effect route was compiled or exercised.",
     "No live repository package, install, cache, marketplace, app registry, discovery, or runtime surface was mutated or observed.",
-    "No N04 acceptance, live behavior, Product Fitness, readiness, release, completion, or parent acceptance claim is supported.",
-    "The parent refresh onto 5cc3be5f860de0071837f478bbe3a9de0d6c0e47 is incorporated and verified; this evidence record commit is the only post-refresh lane commit.",
+    "No N04 acceptance, provenance-chain acceptance, live behavior, Product Fitness, readiness, release, completion, or parent acceptance claim is supported.",
     "Documentation and generated authority were not edited; root-owned wiring and adoption documents remain pending the named root requests.",
-    "Security impact is narrowing: caller construction, deserialization, arbitrary-byte registry promotion, wrong-root/path registry promotion, mixed-journey chains, and public unbound verification are closed; no dependency, secret, network path, or external write was added.",
-    "Performance impact is two stable confined-file reads already required by observation plus fixed-size identity and digest comparisons; no new traversal, subprocess, network request, or persistent store was added."
+    "Security impact is narrowing only: caller-forged package/app-registry/discovery/runtime rows, registry-visible discovery substitution, same-package cross-root/cross-journey package transplant, direct runtime executable substitution, runtime echo self-attestation, arbitrary-byte registry promotion, and mixed-journey chains are guarded in N04 source/tests.",
+    "Performance impact is bounded to fixed identity/digest comparisons plus already-required stable confined reads; no dependency, network path, persistent state store, or external write was added."
   ],
-  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+  "no_claim_statement": "This task does not claim readiness, release, completion, parent acceptance, provenance-chain acceptance, live macOS behavior, or N04 acceptance."
 }
