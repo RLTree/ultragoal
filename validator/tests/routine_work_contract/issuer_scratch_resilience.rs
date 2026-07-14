@@ -1,10 +1,9 @@
 use std::fs;
+use std::io::{Seek, SeekFrom, Write};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use super::owned_compile_scratch::{
-    FAILURE_MARKER, OwnedCompileScratch, SUBSTITUTION_MARKER, SUBSTITUTION_MARKER_NAME,
-};
+use super::owned_compile_scratch::{FAILURE_MARKER, OwnedCompileScratch};
 
 #[test]
 fn failed_issuer_control_removes_build_tree_and_bounds_marker() {
@@ -49,9 +48,11 @@ fn renamed_compile_scratch_preserves_replacement_and_bounds_owned_tree() {
         fs::read(original.join("replacement-sentinel")).unwrap(),
         b"preserve\n"
     );
-    let retained = fs::read(renamed.join(SUBSTITUTION_MARKER_NAME)).unwrap();
-    assert_eq!(retained, SUBSTITUTION_MARKER);
-    assert!(retained.len() <= 128);
+    assert!(
+        renamed
+            .join("target/doc/public_surface/large-artifact.bin")
+            .exists()
+    );
     assert!(tree_bytes(&renamed) <= 128 * 1024);
     fs::remove_dir_all(original).unwrap();
     fs::remove_dir_all(renamed).unwrap();
@@ -60,38 +61,126 @@ fn renamed_compile_scratch_preserves_replacement_and_bounds_owned_tree() {
 #[test]
 fn interrupted_compile_scratch_is_bounded_and_reclaimable() {
     const CHILD: &str = "HUL_ROUTINE_INTERRUPTED_SCRATCH_CHILD";
-    const RENDEZVOUS: &str = "HUL_ROUTINE_INTERRUPTED_SCRATCH_PATH";
+    const OWNED_PATH: &str = "HUL_ROUTINE_INTERRUPTED_SCRATCH_PATH";
     if std::env::var_os(CHILD).is_some() {
-        let owned = OwnedCompileScratch::claim("routine-issuer-interrupted");
-        fs::write(
-            owned.path().join("bounded-source.rs"),
-            b"pub struct Probe;\n",
-        )
-        .unwrap();
-        fs::write(
-            std::env::var_os(RENDEZVOUS).unwrap(),
-            owned.path().as_os_str().as_encoded_bytes(),
-        )
-        .unwrap();
+        let owned = PathBuf::from(std::env::var_os(OWNED_PATH).unwrap());
+        fs::write(owned.join("bounded-source.rs"), b"pub struct Probe;\n").unwrap();
         unsafe { libc::_exit(77) };
     }
 
-    let parent = OwnedCompileScratch::claim("routine-issuer-interruption-control");
-    let rendezvous = parent.path().join("child-path");
+    let owned = OwnedCompileScratch::claim("routine-issuer-interrupted");
+    let interrupted = owned.path().to_path_buf();
     let status = Command::new(std::env::current_exe().unwrap())
         .args([
             "issuer_scratch_resilience::interrupted_compile_scratch_is_bounded_and_reclaimable",
             "--exact",
         ])
         .env(CHILD, "1")
-        .env(RENDEZVOUS, &rendezvous)
+        .env(OWNED_PATH, &interrupted)
         .status()
         .unwrap();
     assert_eq!(status.code(), Some(77));
-    let interrupted = PathBuf::from(String::from_utf8(fs::read(&rendezvous).unwrap()).unwrap());
     assert!(tree_bytes(&interrupted) <= 128 * 1024);
-    OwnedCompileScratch::reclaim_interrupted(&interrupted);
+    assert!(owned.recover_interrupted());
     assert!(!interrupted.exists());
+}
+
+#[test]
+fn child_reported_sibling_path_does_not_select_recovery_target() {
+    let owned = OwnedCompileScratch::claim("routine-issuer-interrupted-owner");
+    let sibling = OwnedCompileScratch::claim("routine-issuer-reported-sibling");
+    let owned_path = owned.path().to_path_buf();
+    let child_reported_path = sibling.path().to_path_buf();
+    fs::write(
+        child_reported_path.join("unrelated-sentinel"),
+        b"preserve\n",
+    )
+    .unwrap();
+
+    assert!(owned.recover_interrupted());
+    assert!(!owned_path.exists());
+    assert_eq!(
+        fs::read(child_reported_path.join("unrelated-sentinel")).unwrap(),
+        b"preserve\n"
+    );
+    assert!(sibling.recover_interrupted());
+}
+
+#[test]
+fn sibling_and_inode_substitution_cannot_authorize_recovery() {
+    let owned = OwnedCompileScratch::claim("routine-issuer-owned-claim");
+    let sibling = OwnedCompileScratch::claim("routine-issuer-attacker-sibling");
+    let original = owned.path().to_path_buf();
+    let attacker = sibling.path().to_path_buf();
+    let renamed = original.with_file_name(format!(
+        "{}-held",
+        original.file_name().unwrap().to_string_lossy()
+    ));
+    fs::write(original.join("owned-sentinel"), b"owned\n").unwrap();
+    fs::write(attacker.join("attacker-sentinel"), b"attacker\n").unwrap();
+    fs::rename(&original, &renamed).unwrap();
+    fs::rename(&attacker, &original).unwrap();
+
+    assert!(!owned.recover_interrupted());
+    assert!(!sibling.recover_interrupted());
+    assert_eq!(
+        fs::read(renamed.join("owned-sentinel")).unwrap(),
+        b"owned\n"
+    );
+    assert_eq!(
+        fs::read(original.join("attacker-sentinel")).unwrap(),
+        b"attacker\n"
+    );
+    fs::remove_dir_all(renamed).unwrap();
+    fs::remove_dir_all(original).unwrap();
+}
+
+#[test]
+fn copied_marker_and_token_cannot_authorize_another_claim() {
+    let owned = OwnedCompileScratch::claim("routine-issuer-marker-owner");
+    let sibling = OwnedCompileScratch::claim("routine-issuer-marker-source");
+    let original = owned.path().to_path_buf();
+    let sibling_path = sibling.path().to_path_buf();
+    let marker = original.join("OWNERSHIP.v1");
+    let foreign_marker = fs::read(sibling_path.join("OWNERSHIP.v1")).unwrap();
+    fs::remove_file(&marker).unwrap();
+    fs::write(&marker, foreign_marker).unwrap();
+
+    assert!(!owned.recover_interrupted());
+    assert!(original.exists());
+    assert!(sibling.recover_interrupted());
+    assert!(!sibling_path.exists());
+    fs::remove_dir_all(original).unwrap();
+}
+
+#[test]
+fn altered_marker_mac_cannot_use_the_parent_held_claim() {
+    let owned = OwnedCompileScratch::claim("routine-issuer-marker-mac");
+    let original = owned.path().to_path_buf();
+    let marker = original.join("OWNERSHIP.v1");
+    let altered = fs::read(&marker).unwrap()[0] ^ 0xff;
+    let mut file = fs::OpenOptions::new().write(true).open(&marker).unwrap();
+    file.seek(SeekFrom::Start(0)).unwrap();
+    file.write_all(&[altered]).unwrap();
+    drop(file);
+
+    assert!(!owned.recover_interrupted());
+    assert!(original.exists());
+    fs::remove_dir_all(original).unwrap();
+}
+
+#[test]
+fn replacement_marker_identity_refuses_even_with_copied_bytes() {
+    let owned = OwnedCompileScratch::claim("routine-issuer-marker-identity");
+    let original = owned.path().to_path_buf();
+    let marker = original.join("OWNERSHIP.v1");
+    let bytes = fs::read(&marker).unwrap();
+    fs::remove_file(&marker).unwrap();
+    fs::write(&marker, bytes).unwrap();
+
+    assert!(!owned.recover_interrupted());
+    assert!(original.exists());
+    fs::remove_dir_all(original).unwrap();
 }
 
 fn tree_bytes(root: &Path) -> u64 {

@@ -1,14 +1,13 @@
 use std::ffi::CString;
 use std::fs::{self, File};
 use std::io;
-use std::os::fd::{AsRawFd, FromRawFd};
+use std::os::fd::AsRawFd;
 use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicU64, Ordering};
 
-use super::owned_compile_quarantine::{cleanup, open_directory_at, write_new_file};
+use super::owned_compile_claim::{create_marker, random_claim_name};
+use super::owned_compile_quarantine::{cleanup, open_directory_at};
 
-static NEXT_SCRATCH: AtomicU64 = AtomicU64::new(0);
 pub(crate) const FAILURE_MARKER: &[u8] = b"compile scratch removed after induced failure\n";
 pub(crate) const SUBSTITUTION_MARKER: &[u8] =
     b"renamed compile scratch retained after path substitution\n";
@@ -22,16 +21,22 @@ pub(crate) struct OwnedCompileScratch {
     pub(crate) failure_marker: PathBuf,
     pub(crate) device: u64,
     pub(crate) inode: u64,
+    pub(crate) root_device: u64,
+    pub(crate) root_inode: u64,
+    pub(crate) marker_device: u64,
+    pub(crate) marker_inode: u64,
+    pub(crate) marker_mac: [u8; 32],
+    pub(crate) secret: [u8; 32],
+    settled: bool,
 }
 
 impl OwnedCompileScratch {
     pub(crate) fn claim(label: &str) -> Self {
         let root = configured_root("CODEX_WORKTREE_SCRATCH");
-        let _ = configured_root("CODEX_WORKTREE_TMP");
         let parent = File::open(&root).expect("configured scratch opens");
+        let root_metadata = parent.metadata().expect("configured scratch identity");
         for _ in 0..64 {
-            let nonce = NEXT_SCRATCH.fetch_add(1, Ordering::Relaxed);
-            let name = CString::new(format!("{label}-{}-{nonce}", std::process::id())).unwrap();
+            let name = random_claim_name(label);
             if unsafe { libc::mkdirat(parent.as_raw_fd(), name.as_ptr(), 0o700) } != 0 {
                 let error = io::Error::last_os_error();
                 if error.kind() == io::ErrorKind::AlreadyExists {
@@ -40,13 +45,19 @@ impl OwnedCompileScratch {
                 panic!("compile scratch claim failed: {error}");
             }
             let directory = open_directory_at(parent.as_raw_fd(), &name).unwrap();
-            write_new_file(
+            let metadata = directory.metadata().unwrap();
+            let mut secret = [0_u8; 32];
+            getrandom::fill(&mut secret).expect("scratch claim secret unavailable");
+            let marker = create_marker(
                 directory.as_raw_fd(),
-                "OWNERSHIP.txt",
-                b"descriptor-owned compile scratch\n",
+                root_metadata.dev(),
+                root_metadata.ino(),
+                &name,
+                metadata.dev(),
+                metadata.ino(),
+                &secret,
             )
             .unwrap();
-            let metadata = directory.metadata().unwrap();
             let path = root.join(name.to_str().unwrap());
             let failure_marker = root.join(format!("{}.failure.txt", name.to_str().unwrap()));
             return Self {
@@ -57,6 +68,13 @@ impl OwnedCompileScratch {
                 failure_marker,
                 device: metadata.dev(),
                 inode: metadata.ino(),
+                root_device: root_metadata.dev(),
+                root_inode: root_metadata.ino(),
+                marker_device: marker.device,
+                marker_inode: marker.inode,
+                marker_mac: marker.mac,
+                secret,
+                settled: false,
             };
         }
         panic!("compile scratch claim collisions exhausted")
@@ -70,32 +88,21 @@ impl OwnedCompileScratch {
         &self.failure_marker
     }
 
-    pub(crate) fn reclaim_interrupted(path: &Path) {
-        let root = configured_root("CODEX_WORKTREE_SCRATCH");
-        assert_eq!(path.parent(), Some(root.as_path()));
-        let name = CString::new(path.file_name().unwrap().as_encoded_bytes()).unwrap();
-        let parent = File::open(&root).unwrap();
-        let directory = open_directory_at(parent.as_raw_fd(), &name).unwrap();
-        let metadata = directory.metadata().unwrap();
-        drop(Self {
-            parent,
-            directory,
-            name,
-            path: path.to_path_buf(),
-            failure_marker: path.with_extension("failure.txt"),
-            device: metadata.dev(),
-            inode: metadata.ino(),
-        });
+    pub(crate) fn recover_interrupted(mut self) -> bool {
+        self.settled = true;
+        cleanup(&self)
     }
 }
 
 impl Drop for OwnedCompileScratch {
     fn drop(&mut self) {
-        cleanup(self);
+        if !self.settled {
+            let _ = cleanup(self);
+        }
     }
 }
 
-fn configured_root(name: &str) -> PathBuf {
+pub(crate) fn configured_root(name: &str) -> PathBuf {
     let value = std::env::var_os(name).unwrap_or_else(|| panic!("{name} is required"));
     let path = fs::canonicalize(PathBuf::from(value))
         .unwrap_or_else(|error| panic!("{name} is unavailable: {error}"));

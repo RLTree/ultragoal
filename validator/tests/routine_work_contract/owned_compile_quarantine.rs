@@ -5,15 +5,19 @@ use std::os::fd::{AsRawFd, FromRawFd, RawFd};
 use std::os::unix::ffi::OsStrExt;
 use std::path::Path;
 
+use super::owned_compile_claim::authenticates_claim;
 use super::owned_compile_scratch::{
     FAILURE_MARKER, OwnedCompileScratch, SUBSTITUTION_MARKER, SUBSTITUTION_MARKER_NAME,
 };
 
-pub(crate) fn cleanup(scratch: &OwnedCompileScratch) {
+pub(crate) fn cleanup(scratch: &OwnedCompileScratch) -> bool {
+    if !authenticates_claim(scratch) {
+        return false;
+    }
     let panicking = std::thread::panicking();
     let Some(quarantine) = quarantine_owned_entry(scratch) else {
         retain_substituted(scratch, panicking);
-        return;
+        return false;
     };
     let cleared = clear_directory(scratch.directory.as_raw_fd());
     if cleared.is_ok()
@@ -34,7 +38,7 @@ pub(crate) fn cleanup(scratch: &OwnedCompileScratch) {
                 FAILURE_MARKER,
             );
         }
-        return;
+        return true;
     }
     let _ = write_new_file(
         scratch.directory.as_raw_fd(),
@@ -44,6 +48,7 @@ pub(crate) fn cleanup(scratch: &OwnedCompileScratch) {
     if !panicking {
         assert!(cleared.is_ok(), "quarantined scratch cleanup failed");
     }
+    false
 }
 
 fn quarantine_owned_entry(scratch: &OwnedCompileScratch) -> Option<CString> {
@@ -122,7 +127,7 @@ pub(crate) fn open_directory_at(parent: RawFd, name: &CStr) -> io::Result<File> 
     }
 }
 
-fn entry_identity(parent: RawFd, name: &CStr) -> Option<(u64, u64)> {
+pub(crate) fn entry_identity(parent: RawFd, name: &CStr) -> Option<(u64, u64)> {
     let mut stat = std::mem::MaybeUninit::<libc::stat>::uninit();
     let result = unsafe {
         libc::fstatat(
