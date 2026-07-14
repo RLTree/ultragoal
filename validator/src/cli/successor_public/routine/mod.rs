@@ -7,6 +7,7 @@
 //! argument template, fallback, or child-authored outcome.
 
 mod behavior_child;
+mod effect_authorization;
 mod host;
 mod manifest;
 mod outcome;

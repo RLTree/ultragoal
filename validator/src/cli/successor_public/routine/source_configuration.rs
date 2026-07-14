@@ -29,7 +29,9 @@ pub(crate) fn execute(
     if let Some(outcome) = behavior_child::execute_if_requested(invocation) {
         return outcome;
     }
-    execute_inner(root, invocation, home).unwrap_or_else(outcome::failure)
+    effect_authorization::authorize()
+        .and_then(|_| execute_inner(root, invocation, home))
+        .unwrap_or_else(outcome::failure)
 }
 
 pub(crate) fn execute_inner(
@@ -75,8 +77,6 @@ pub(crate) fn execute_inner(
         ));
     }
 
-    #[cfg(target_os = "macos")]
-    crate::routine_work::require_root_broker_for_public_effect().map_err(PublicFailure::Routine)?;
     let home = home.ok_or(PublicFailure::Host(host::HostFailure::Unavailable))?;
     let state = HostState::open(home, &target).map_err(PublicFailure::Host)?;
     let selected_nodes = plan
