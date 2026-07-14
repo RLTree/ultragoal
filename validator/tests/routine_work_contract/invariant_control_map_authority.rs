@@ -1,9 +1,11 @@
 use super::invariant_control_map::{
-    CHILD_LIFECYCLE_BLOCKER, CHILD_SUCCESS_BLOCKER, Mapping, blocked, executable,
+    CHILD_LIFECYCLE_BLOCKER, CHILD_SUCCESS_BLOCKER, Mapping, blocked, routed,
 };
 
 const BROKER_GATE: &[&str] =
     &["current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"];
+const ISSUER_VISIBILITY: &[&str] =
+    &["issuer_visibility::sealed_issuer_and_grant_entrypoints_are_not_externally_callable"];
 const CAPACITY: &[&str] = &[
     "routine_work::runtime_adapter::production::ledger::tests::protocol_effect_and_consumed_grant_capacity_refuse_real_next_reservation_transactionally",
 ];
@@ -28,24 +30,24 @@ const REDACTION: &[&str] = &[
 ];
 
 pub(crate) const MAP: &[Mapping] = &[
-    executable(
+    routed(
         "routine_production_authority_cases/authority_redaction.rs::secrets_paths_and_raw_output_are_absent_from_authority_and_diagnostics",
         REDACTION,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/authority_redaction.rs::production_boundary_has_one_sealed_issuer_and_no_test_grant_entrypoint",
-        BROKER_GATE,
+        ISSUER_VISIBILITY,
     ),
     blocked(
         "routine_production_authority_cases/authority_redaction.rs::production_child_race_attempt",
         CHILD_LIFECYCLE_BLOCKER,
         BROKER_GATE,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/authority_redaction.rs::two_processes_racing_the_same_protocol_have_exactly_one_winner",
         CONFLICT,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/authority_scenario.rs::production_authority_fixture_catalog_is_exact_and_claimless",
         NOOP,
     ),
@@ -54,23 +56,23 @@ pub(crate) const MAP: &[Mapping] = &[
         CHILD_SUCCESS_BLOCKER,
         BROKER_GATE,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/authority_scenario.rs::malformed_reuse_refuses_before_any_authority_transition",
         SUBSTITUTION,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/concurrent_reuse_settlement.rs::forged_and_valid_reuse_concurrency_is_order_independent_and_single_transition",
         CONFLICT,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/concurrent_reuse_settlement.rs::concurrent_reuse_at_consumed_grant_capacity_publishes_one_valid_max_state",
         CAPACITY,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/effect_capacity_bounds.rs::protocol_effect_max_minus_one_max_and_max_plus_one_are_fail_closed",
         CAPACITY,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/effect_capacity_bounds.rs::no_op_bypasses_authority_initialization_and_all_writes",
         NOOP,
     ),
@@ -79,7 +81,7 @@ pub(crate) const MAP: &[Mapping] = &[
         CHILD_SUCCESS_BLOCKER,
         RECOVERY,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/effect_capacity_bounds.rs::expired_recovery_authority_is_rejected_from_authenticated_state",
         CONFLICT,
     ),
@@ -88,15 +90,15 @@ pub(crate) const MAP: &[Mapping] = &[
         CHILD_SUCCESS_BLOCKER,
         RECOVERY,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/invalid_reuse_recovery.rs::invalid_reuse_never_regresses_complete_or_blocks_later_exact_reuse",
         SUBSTITUTION,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/invalid_reuse_recovery.rs::reuse_preauthorization_generation_race_fails_before_reservation_mutation",
         CONFLICT,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/invalid_reuse_recovery.rs::consumed_grant_max_minus_one_max_and_max_plus_one_are_fail_closed",
         CAPACITY,
     ),
@@ -105,15 +107,15 @@ pub(crate) const MAP: &[Mapping] = &[
         CHILD_LIFECYCLE_BLOCKER,
         BROKER_GATE,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/terminal_failure_settlement.rs::stale_request_and_self_consistent_substitution_refuse_without_hidden_writes",
         SUBSTITUTION,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/terminal_failure_settlement.rs::owner_only_store_rejects_unknown_hardlink_symlink_special_and_root_replacement",
         STORE,
     ),
-    executable(
+    routed(
         "routine_production_authority_cases/terminal_failure_settlement.rs::authenticated_state_rejects_truncate_unknown_duplicate_reorder_rollback_and_mutate_restore",
         STORE,
     ),

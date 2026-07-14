@@ -30,6 +30,8 @@ mod invariant_control_map_authority;
 mod invariant_control_map_mediator_a;
 #[path = "routine_work_contract/invariant_control_map_mediator_b.rs"]
 mod invariant_control_map_mediator_b;
+#[path = "routine_work_contract/issuer_visibility.rs"]
+mod issuer_visibility;
 #[path = "routine_work_contract/local_capture.rs"]
 mod local_capture;
 #[path = "routine_work_contract/planning.rs"]

@@ -1,5 +1,5 @@
 use super::invariant_control_map::{
-    CHILD_LIFECYCLE_BLOCKER, CHILD_SUCCESS_BLOCKER, Mapping, blocked, executable,
+    CHILD_LIFECYCLE_BLOCKER, CHILD_SUCCESS_BLOCKER, Mapping, blocked, routed,
 };
 
 const BROKER: &[&str] =
@@ -32,19 +32,19 @@ const SYSTEM: &[&str] = &[
 ];
 
 pub(crate) const MAP: &[Mapping] = &[
-    executable(
+    routed(
         "runtime_mediator_cases/reuse_integrity.rs::fabricated_or_mutated_reuse_never_becomes_a_cache_hit",
         REUSE,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/reuse_integrity.rs::strict_expansion_and_capability_fallback_execute_the_selected_plan_exactly",
         PLAN,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/reuse_integrity.rs::current_user_owned_0555_runner_is_rejected_before_spawn_or_effect",
         IMMUTABLE,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/script_replacement_rejection.rs::external_dash_script_replacement_cannot_execute_or_seed_reuse",
         BINDING,
     ),
@@ -58,31 +58,31 @@ pub(crate) const MAP: &[Mapping] = &[
         CHILD_LIFECYCLE_BLOCKER,
         RECOVERY,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/setup_failure_recovery.rs::missing_forged_and_replayed_root_authority_fail_closed",
         BROKER,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/system_shell_eligibility.rs::root_owned_system_shell_remains_eligible_for_non_root_execution",
         SYSTEM,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/system_shell_eligibility.rs::concurrent_duplicate_grant_and_request_have_exactly_one_winner",
         CONFLICT,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/system_shell_eligibility.rs::active_protocol_attempt_blocks_a_distinct_grant_before_second_spawn",
         CONFLICT,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/system_shell_eligibility.rs::stale_dirty_bytes_and_output_scope_swap_are_refused_before_spawn",
         CONTEXT,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/unsafe_output_rejection.rs::unsafe_output_objects_are_rejected_before_authority_is_consumed",
         OUTPUTS,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/unsafe_output_rejection.rs::descriptor_walk_refuses_a_nested_directory_swap_during_capture",
         OUTPUTS,
     ),

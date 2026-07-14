@@ -3,30 +3,6 @@ use std::io::Write;
 use std::process::{Command, Stdio};
 
 #[test]
-fn production_boundary_has_one_sealed_issuer_and_no_test_grant_entrypoint() {
-    let runtime = include_str!("../src/routine_work/runtime_adapter/mod.rs");
-    let production = include_str!("../src/routine_work/runtime_adapter/production/mod.rs");
-    let issuance =
-        include_str!("../src/routine_work/runtime_adapter/production/production_issuance.rs");
-    let recovery =
-        include_str!("../src/routine_work/runtime_adapter/production/recovery_authority.rs");
-    let authority =
-        include_str!("../src/routine_work/runtime_adapter/production/ledger/authority_record.rs");
-    let cancellation = include_str!(
-        "../src/routine_work/runtime_adapter/mediator/outcome/routine_cancellation.rs"
-    );
-    assert_eq!(issuance.matches("issue_production_grant(").count(), 1);
-    assert!(recovery.contains("pub(crate) struct ProductionRoutineIssuer"));
-    assert!(production.contains("preflight_production_request"));
-    assert!(!production.contains("RoutineRootGrant::test_issue"));
-    assert!(cancellation.contains("#[cfg(test)]\nimpl RoutineRootGrant"));
-    assert!(runtime.contains("mod production;"));
-    assert!(!production.contains("ClaimDecision"));
-    assert!(!production.contains("public command"));
-    assert!(authority.contains("pub(crate) struct ReusePreauthorization"));
-}
-
-#[test]
 fn production_source_exposes_no_arbitrary_process_binding_surface() {
     let selection = include_str!("../src/routine_work/runtime_adapter/selection_limit.rs");
     let invocation = include_str!("../src/routine_work/runtime_adapter/invocation_binding.rs");

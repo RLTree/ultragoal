@@ -1,5 +1,5 @@
 use super::invariant_control_map::{
-    CHILD_LIFECYCLE_BLOCKER, CHILD_SUCCESS_BLOCKER, Mapping, blocked, executable,
+    CHILD_LIFECYCLE_BLOCKER, CHILD_SUCCESS_BLOCKER, Mapping, blocked, routed,
 };
 
 const BROKER: &[&str] =
@@ -74,15 +74,15 @@ pub(crate) const MAP: &[Mapping] = &[
         CHILD_LIFECYCLE_BLOCKER,
         BROKER,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/fork_bypass_reaping.rs::mediator_source_keeps_issuance_public_dispatch_and_claims_outside_the_boundary",
         BROKER,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/invocation_fixture.rs::mediator_fixture_catalog_is_exact_and_claimless",
         BINDING,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/invocation_fixture.rs::clean_noop_consumes_no_authority_spawns_nothing_and_writes_nothing",
         NOOP,
     ),
@@ -91,11 +91,11 @@ pub(crate) const MAP: &[Mapping] = &[
         CHILD_SUCCESS_BLOCKER,
         BROKER,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/read_source_refusals.rs::read_source_binding_refuses_symlinks_hardlinks_special_files_and_capture_races",
         READS,
     ),
-    executable(
+    routed(
         "runtime_mediator_cases/read_source_refusals.rs::read_source_aba_before_spawn_is_refused_without_effect",
         READS,
     ),
