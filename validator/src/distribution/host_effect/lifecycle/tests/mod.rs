@@ -30,7 +30,7 @@ include!("wrong/rejected_primitive_adapters.rs");
 
 include!("wrong/pre_reservation_identity.rs");
 
-include!("target/race_substitution.rs");
+include!("target_identity/race_substitution.rs");
 
 include!("wrong/package_plan.rs");
 
@@ -38,7 +38,7 @@ include!("every_complete_permit_binding_dimension_changes_the_canonical_binding.
 
 include!("expected/publication_identity.rs");
 
-include!("target/identity_substitution.rs");
+include!("target_identity/identity_substitution.rs");
 
 include!("acknowledgements_reject_effect_publication_head_and_wire_substitution.rs");
 

@@ -36,10 +36,8 @@ use self::process::BackendFailure;
 use self::target::{CommittedPublication, PublicationFailure};
 use super::lifecycle::{
     DescriptorExecutionCapability, DescriptorExecutionHandoff, DescriptorExecutionPlatform,
-    ExpectedPublicationObjectIdentity, ExpectedRegularPublicationObject, HostTargetLease,
-    PublicationAcknowledgementIdentity, PublicationClassificationId, PublicationExpectation,
-    PublicationInventoryObservation, PublicationInventoryObservationRequest, PublicationObjectKind,
-    PublicationObjectObservation, PublicationObjectObservationRequest, RootTrustedClock,
+    HostTargetLease, PublicationAcknowledgementIdentity, PublicationClassificationId,
+    PublicationInventoryObservation, RootTrustedClock,
 };
 use super::{
     AuthorizedHostEffect, DurableHostEffectLedger, HostEffectLedgerHead, HostEffectLedgerRecord,
