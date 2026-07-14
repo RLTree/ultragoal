@@ -3,7 +3,7 @@ use crate::distribution::host_capability::SUPPORTED_RUNTIME_PROGRAM;
 use crate::distribution::host_capability::{
     HostCapabilityDeclaration, HostCapabilityState, JourneyBinding,
 };
-use crate::distribution::install::InstallSnapshot;
+use crate::distribution::install::{CurrentInstallAuthority, InstallSnapshot};
 use crate::distribution::json;
 use crate::distribution::model::Capability;
 use crate::distribution::model::{IdentitySurface, SurfaceIdentity};

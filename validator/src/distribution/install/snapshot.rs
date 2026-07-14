@@ -46,6 +46,9 @@ impl InstallSnapshot {
     pub fn target_id(&self) -> &str {
         &self.target_id
     }
+    pub(crate) fn target(&self) -> &str {
+        &self.target
+    }
     pub const fn replaced_existing(&self) -> bool {
         self.replaced_existing
     }
@@ -57,6 +60,14 @@ impl InstallSnapshot {
     }
     pub(crate) fn bind_journey(
         &mut self,
+        binding: &crate::distribution::host_capability::JourneyBinding,
+    ) -> Result<(), DistributionError> {
+        self.bindable_to(binding)?;
+        self.journey_binding_sha256 = Some(binding.binding_sha256().into());
+        Ok(())
+    }
+    fn bindable_to(
+        &self,
         binding: &crate::distribution::host_capability::JourneyBinding,
     ) -> Result<(), DistributionError> {
         let source = binding.package().source();
@@ -71,7 +82,6 @@ impl InstallSnapshot {
         {
             return Err(error(DistributionErrorId::ProvenanceMismatch));
         }
-        self.journey_binding_sha256 = Some(binding.binding_sha256().into());
         Ok(())
     }
     pub(crate) fn revalidate_current(
@@ -88,6 +98,56 @@ impl InstallSnapshot {
         let current = effects
             .installed_postimage(&self.target, INSTALL_LIMIT)
             .map_err(|_| error(DistributionErrorId::ProvenanceMismatch))?
+            .ok_or_else(|| error(DistributionErrorId::ObjectUnavailable))?;
+        if &current != expected {
+            return Err(error(DistributionErrorId::ObjectChanged));
+        }
+        Ok(())
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct CurrentInstallAuthority {
+    snapshot: InstallSnapshot,
+    binding_sha256: String,
+    file: crate::distribution::filesystem::ScopedFile,
+}
+
+impl CurrentInstallAuthority {
+    pub(crate) fn issue(
+        snapshot: &InstallSnapshot,
+        binding: &crate::distribution::host_capability::JourneyBinding,
+        file: crate::distribution::filesystem::ScopedFile,
+    ) -> Result<Self, DistributionError> {
+        snapshot.bindable_to(binding)?;
+        let authority = Self {
+            snapshot: snapshot.clone(),
+            binding_sha256: binding.binding_sha256().into(),
+            file,
+        };
+        authority.revalidate(binding)?;
+        Ok(authority)
+    }
+
+    pub(crate) fn revalidate(
+        &self,
+        binding: &crate::distribution::host_capability::JourneyBinding,
+    ) -> Result<(), DistributionError> {
+        let expected = self
+            .snapshot
+            .postimage
+            .as_ref()
+            .ok_or_else(|| error(DistributionErrorId::ProvenanceMismatch))?;
+        if self.binding_sha256 != binding.binding_sha256()
+            || self.snapshot.journey_binding_sha256() != Some(binding.binding_sha256())
+            || self.file.root_id() != binding.home_id()
+            || self.file.relative_path() != self.snapshot.target()
+        {
+            return Err(error(DistributionErrorId::ProvenanceMismatch));
+        }
+        let current = self
+            .file
+            .installed_postimage(INSTALL_LIMIT)?
             .ok_or_else(|| error(DistributionErrorId::ObjectUnavailable))?;
         if &current != expected {
             return Err(error(DistributionErrorId::ObjectChanged));

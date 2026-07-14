@@ -3,7 +3,9 @@ use super::owned::OwnedFile;
 use super::root::ConfinedRoot;
 use crate::distribution::cache::MarketplaceEffects;
 use crate::distribution::error::{DistributionError, DistributionErrorId, error};
-use crate::distribution::install::{ExpectedPrior, InstallEffects, InstalledPostimage};
+use crate::distribution::install::{
+    CurrentInstallAuthority, ExpectedPrior, InstallEffects, InstallSnapshot, InstalledPostimage,
+};
 use crate::distribution::package::PackageEffects;
 use crate::distribution::reader::sha256;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -209,35 +211,4 @@ impl ScopedInstall {
     }
 }
 
-impl InstallEffects for ScopedInstall {
-    fn read_installed(&mut self, target: &str, maximum: usize) -> Result<Option<Vec<u8>>, ()> {
-        ScopedFile::new(self.root.clone(), target)
-            .and_then(|row| row.inspect(maximum))
-            .map_err(|_| ())
-    }
-
-    fn installed_postimage(
-        &mut self,
-        target: &str,
-        maximum: usize,
-    ) -> Result<Option<InstalledPostimage>, ()> {
-        ScopedFile::new(self.root.clone(), target)
-            .and_then(|row| row.installed_postimage(maximum))
-            .map_err(|_| ())
-    }
-
-    fn compare_exchange_installed(
-        &mut self,
-        target: &str,
-        expected: &ExpectedPrior,
-        replacement: Option<&[u8]>,
-    ) -> Result<bool, ()> {
-        let expected = match expected {
-            ExpectedPrior::Absent => None,
-            ExpectedPrior::ExactDigest(value) => Some(value.as_str()),
-        };
-        ScopedFile::new(self.root.clone(), target)
-            .and_then(|row| row.apply(expected, replacement))
-            .map_err(|_| ())
-    }
-}
+include!("file/scoped_install.rs");

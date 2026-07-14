@@ -7,6 +7,7 @@ static NONCE: AtomicU64 = AtomicU64::new(0);
 #[derive(Clone, Debug)]
 pub struct RuntimeProbePlan {
     binding: JourneyBinding,
+    install: CurrentInstallAuthority,
     executable: PinnedRuntimeExecutable,
     argv: Vec<String>,
     executable_sha256: String,
@@ -69,6 +70,9 @@ impl RuntimeProbePlan {
         {
             return Err(error(DistributionErrorId::CapabilityMismatch));
         }
+        let install = effects
+            .current_install_authority(install, &binding)
+            .map_err(|_| error(DistributionErrorId::ProvenanceMismatch))?;
         let session_nonce = sha256(
             format!(
                 "{}\0{}\0{}",
@@ -80,6 +84,7 @@ impl RuntimeProbePlan {
         );
         Ok(Self {
             binding,
+            install,
             executable,
             argv,
             executable_sha256,
@@ -114,6 +119,7 @@ struct ProbeEnvelope {
 pub fn execute_runtime_probe(
     plan: &RuntimeProbePlan,
 ) -> Result<RuntimeObservation, DistributionError> {
+    plan.install.revalidate(&plan.binding)?;
     plan.executable.revalidate()?;
     let executable_path = plan.executable.execution_path();
     let mut command = if plan.executable.shell_script() {
@@ -155,6 +161,7 @@ pub fn execute_runtime_probe(
     let envelope: ProbeEnvelope = json::parse(marker, 64 * 1024)?;
     validate_envelope(&envelope, plan)?;
     plan.executable.revalidate()?;
+    plan.install.revalidate(&plan.binding)?;
     let mut output = stdout;
     output.extend_from_slice(&stderr);
     Ok(RuntimeObservation::executed(

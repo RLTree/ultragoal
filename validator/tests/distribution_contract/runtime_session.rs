@@ -2,7 +2,7 @@ use crate::distribution::{
     DistributionErrorId as ErrorId, ExpectedPrior, HostCapabilityDeclaration, InstallEffects,
     InstallPlan, InstallScope, InstallTransaction, JourneyBinding, PackageSnapshot,
     RuntimeObservation, RuntimeProbePlan, RuntimeVerdict, ScopedInstall, SurfaceIdentity,
-    execute_runtime_probe, install,
+    execute_runtime_probe, install, uninstall,
 };
 use crate::distribution_fixture::Fixture;
 use crate::package_journey_fixture::{JourneyFixture, runtime_probe_bytes};
@@ -197,3 +197,5 @@ fn executable_substitution_during_probe_fails_final_revalidation() {
 include!("runtime_session/inode_swap.rs");
 
 include!("runtime_session/install_authority.rs");
+
+include!("runtime_session/install_staleness.rs");

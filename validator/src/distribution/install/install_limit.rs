@@ -77,6 +77,14 @@ pub trait InstallEffects {
         Err(())
     }
 
+    fn current_install_authority(
+        &mut self,
+        _snapshot: &InstallSnapshot,
+        _binding: &crate::distribution::host_capability::JourneyBinding,
+    ) -> Result<CurrentInstallAuthority, ()> {
+        Err(())
+    }
+
     /// Atomically compares the current destination with `expected` and, only
     /// when it matches, replaces it with `replacement` (`None` removes it).
     ///
