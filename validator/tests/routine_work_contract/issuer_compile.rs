@@ -1,13 +1,16 @@
-use std::fs;
-use std::os::unix::fs::PermissionsExt;
+use std::fs::{self, OpenOptions};
+use std::io::Write;
+use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static NEXT_SCRATCH: AtomicU64 = AtomicU64::new(0);
+pub(crate) const FAILURE_MARKER: &[u8] = b"issuer visibility build removed after induced failure\n";
 
 pub(crate) struct OwnedScratch {
     path: PathBuf,
+    failure_marker: PathBuf,
 }
 
 impl OwnedScratch {
@@ -25,7 +28,14 @@ impl OwnedScratch {
                         b"issuer visibility scratch; retained only if the owning test fails\n",
                     )
                     .expect("issuer scratch ownership marker");
-                    return Self { path };
+                    let failure_marker = root.join(format!(
+                        "{}.failure.txt",
+                        path.file_name().unwrap().to_string_lossy()
+                    ));
+                    return Self {
+                        path,
+                        failure_marker,
+                    };
                 }
                 Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
                 Err(error) => panic!("issuer scratch claim failed: {error}"),
@@ -37,12 +47,27 @@ impl OwnedScratch {
     pub(crate) fn path(&self) -> &Path {
         &self.path
     }
+
+    pub(crate) fn failure_marker(&self) -> &Path {
+        &self.failure_marker
+    }
 }
 
 impl Drop for OwnedScratch {
     fn drop(&mut self) {
-        if !std::thread::panicking() {
-            fs::remove_dir_all(&self.path).expect("owned issuer scratch cleanup");
+        let panicking = std::thread::panicking();
+        let removed = fs::remove_dir_all(&self.path);
+        if !panicking {
+            removed.expect("owned issuer scratch cleanup");
+            return;
+        }
+        if removed.is_ok() {
+            let _ = OpenOptions::new()
+                .write(true)
+                .create_new(true)
+                .mode(0o600)
+                .open(&self.failure_marker)
+                .and_then(|mut marker| marker.write_all(FAILURE_MARKER));
         }
     }
 }

@@ -55,6 +55,9 @@ fn sealed_issuer_and_grant_entrypoints_are_not_externally_callable() {
         "pub struct Api; impl Api { #[cfg_attr(all(), doc(hidden))] pub fn issue() {} }",
         "grant_api!();",
         "unsafe extern \"C\" { #[doc(hidden)] pub fn issue(); }",
+        "struct Api; #[doc(hidden)] impl Api { pub fn issue() {} }",
+        "#[doc(hidden)] unsafe extern \"C\" { pub fn issue(); }",
+        "thread_local! { #[doc(hidden)] pub static HIDDEN_GRANT: Cell<bool> = const { Cell::new(false) }; }",
     ] {
         assert!(file_has_hidden_public_api(mutant), "missed: {mutant}");
     }
@@ -67,12 +70,37 @@ fn sealed_issuer_and_grant_entrypoints_are_not_externally_callable() {
 }
 
 #[test]
+fn failed_issuer_control_removes_build_tree_and_bounds_marker() {
+    let mut owned_paths = None;
+    let failure = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let owned = issuer_compile::OwnedScratch::claim("routine-issuer-induced-failure");
+        owned_paths = Some((
+            owned.path().to_path_buf(),
+            owned.failure_marker().to_path_buf(),
+        ));
+        let build = owned.path().join("target/doc/public_surface");
+        fs::create_dir_all(&build).unwrap();
+        fs::write(build.join("large-artifact.bin"), vec![0x5a; 64 * 1024]).unwrap();
+        panic!("induced issuer proof failure");
+    }));
+    assert!(failure.is_err());
+    let (build_root, marker) = owned_paths.unwrap();
+    assert!(!build_root.exists());
+    let retained = fs::read(&marker).unwrap();
+    assert_eq!(retained, issuer_compile::FAILURE_MARKER);
+    assert!(retained.len() <= 128);
+    fs::remove_file(&marker).unwrap();
+}
+
+#[test]
 fn concurrent_issuer_controls_use_disjoint_authorized_scratch() {
     let owned = issuer_compile::OwnedScratch::claim("routine-issuer-concurrency");
     let scratch = owned.path().join("scratch");
     let tmp = owned.path().join("tmp");
     fs::create_dir(&scratch).unwrap();
     fs::create_dir(&tmp).unwrap();
+    let sentinel = scratch.join("parent-owned-sentinel");
+    fs::write(&sentinel, b"must survive child cleanup\n").unwrap();
     let executable = std::env::current_exe().unwrap();
     let mut children = (0..2)
         .map(|_| {
@@ -90,6 +118,11 @@ fn concurrent_issuer_controls_use_disjoint_authorized_scratch() {
     for child in &mut children {
         assert!(child.wait().unwrap().success());
     }
+    assert_eq!(
+        fs::read(&sentinel).unwrap(),
+        b"must survive child cleanup\n"
+    );
+    fs::remove_file(sentinel).unwrap();
     assert_eq!(fs::read_dir(&scratch).unwrap().count(), 0);
     assert_eq!(fs::read_dir(&tmp).unwrap().count(), 0);
 }

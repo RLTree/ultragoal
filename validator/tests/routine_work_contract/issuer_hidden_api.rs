@@ -65,12 +65,21 @@ fn item_has_hidden_public_api(item: &syn::Item) -> bool {
         return true;
     }
     match item {
-        Item::Impl(value) => value.items.iter().any(|item| match item {
-            syn::ImplItem::Const(value) => public(&value.vis) && hidden(&value.attrs),
-            syn::ImplItem::Fn(value) => public(&value.vis) && hidden(&value.attrs),
-            syn::ImplItem::Type(value) => public(&value.vis) && hidden(&value.attrs),
-            _ => false,
-        }),
+        Item::Impl(value) => {
+            let public_item = |item: &syn::ImplItem| match item {
+                syn::ImplItem::Const(value) => public(&value.vis),
+                syn::ImplItem::Fn(value) => public(&value.vis),
+                syn::ImplItem::Type(value) => public(&value.vis),
+                _ => false,
+            };
+            (hidden(&value.attrs) && value.items.iter().any(public_item))
+                || value.items.iter().any(|item| match item {
+                    syn::ImplItem::Const(value) => public(&value.vis) && hidden(&value.attrs),
+                    syn::ImplItem::Fn(value) => public(&value.vis) && hidden(&value.attrs),
+                    syn::ImplItem::Type(value) => public(&value.vis) && hidden(&value.attrs),
+                    _ => false,
+                })
+        }
         Item::Mod(value) => value
             .content
             .as_ref()
@@ -82,18 +91,35 @@ fn item_has_hidden_public_api(item: &syn::Item) -> bool {
             syn::TraitItem::Type(value) => hidden(&value.attrs),
             _ => false,
         }),
-        Item::ForeignMod(value) => value.items.iter().any(|item| match item {
-            syn::ForeignItem::Fn(value) => public(&value.vis) && hidden(&value.attrs),
-            syn::ForeignItem::Static(value) => public(&value.vis) && hidden(&value.attrs),
-            syn::ForeignItem::Type(value) => public(&value.vis) && hidden(&value.attrs),
-            _ => false,
-        }),
-        // `thread_local!` is the only production item macro; its expanded public
-        // surface is covered by the rustdoc inventory. Unknown item macros fail
-        // this source law because their expansion cannot be inspected here.
-        Item::Macro(value) => !value.mac.path.is_ident("thread_local"),
+        Item::ForeignMod(value) => {
+            let public_item = |item: &syn::ForeignItem| match item {
+                syn::ForeignItem::Fn(value) => public(&value.vis),
+                syn::ForeignItem::Static(value) => public(&value.vis),
+                syn::ForeignItem::Type(value) => public(&value.vis),
+                _ => false,
+            };
+            (hidden(&value.attrs) && value.items.iter().any(public_item))
+                || value.items.iter().any(|item| match item {
+                    syn::ForeignItem::Fn(value) => public(&value.vis) && hidden(&value.attrs),
+                    syn::ForeignItem::Static(value) => public(&value.vis) && hidden(&value.attrs),
+                    syn::ForeignItem::Type(value) => public(&value.vis) && hidden(&value.attrs),
+                    _ => false,
+                })
+        }
+        Item::Macro(value) if value.mac.path.is_ident("thread_local") => {
+            thread_local_has_hidden_public_api(&value.mac)
+        }
+        Item::Macro(_) => true,
         _ => false,
     }
+}
+
+fn thread_local_has_hidden_public_api(item: &syn::Macro) -> bool {
+    let tokens = &item.tokens;
+    let wrapped = format!("mod __thread_local_items {{ {tokens} }}");
+    syn::parse_file(&wrapped).map_or(true, |file| {
+        file.items.iter().any(item_has_hidden_public_api)
+    })
 }
 
 fn public(visibility: &syn::Visibility) -> bool {
