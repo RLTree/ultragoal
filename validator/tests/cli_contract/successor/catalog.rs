@@ -204,7 +204,7 @@ fn sensitive_effects_are_never_attached_to_read_routes() {
     for descriptor in catalog() {
         match (descriptor.command.group(), descriptor.subcommand) {
             (Group::Fit, Some("apply"))
-            | (Group::Check, _)
+            | (Group::Check, Some("routine"))
             | (Group::Prove, _)
             | (Group::Package, Some("inventory" | "build" | "install-test"))
             | (Group::Eval, Some("run" | "harvest" | "promote"))

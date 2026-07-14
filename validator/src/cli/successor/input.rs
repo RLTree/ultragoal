@@ -1,39 +1,58 @@
 use super::catalog::{catalog, descriptor_for};
-use super::clap_grammar::JSON_TOKEN;
+use super::clap_grammar::{JSON_TOKEN, ROOT_TOKEN};
 use super::command_contract::{Group, HelpTarget, OutputMode, ValueKind};
 use super::error::{ParseErrorId, ParseFailure};
-use std::ffi::OsString;
+use std::ffi::{OsStr, OsString};
 
 pub(crate) const MAX_ARGUMENTS: usize = 256;
 pub(crate) const MAX_ARGUMENT_BYTES: usize = 8192;
 
-pub(crate) fn prepare_args<I, S>(args: I) -> Result<(Vec<OsString>, OutputMode), ParseFailure>
+pub(crate) fn prepare_args<I, S>(
+    args: I,
+) -> Result<(Vec<OsString>, OutputMode, OutputMode), ParseFailure>
 where
     I: IntoIterator<Item = S>,
     S: Into<OsString>,
 {
     let mut collected = Vec::new();
+    for argument in args {
+        let argument = argument.into();
+        if collected.len() == MAX_ARGUMENTS {
+            let mode = machine_failure_mode(
+                collected
+                    .iter()
+                    .map(OsString::as_os_str)
+                    .chain(std::iter::once(argument.as_os_str())),
+            );
+            return fail(ParseErrorId::TooManyArguments, mode);
+        }
+        collected.push(argument);
+    }
+    let failure_mode = machine_failure_mode(collected.iter().map(OsString::as_os_str));
     let mut output_mode = OutputMode::Human;
     let mut help_seen = false;
-    for argument in args {
-        if collected.len() == MAX_ARGUMENTS {
-            return fail(ParseErrorId::TooManyArguments, output_mode);
-        }
-        let argument = argument.into();
+    for argument in &collected {
         let value = argument
             .to_str()
-            .ok_or_else(|| failure(ParseErrorId::NonUtf8Argument, output_mode))?;
+            .ok_or_else(|| failure(ParseErrorId::NonUtf8Argument, failure_mode))?;
         if value.len() > MAX_ARGUMENT_BYTES {
-            return fail(ParseErrorId::ArgumentTooLarge, output_mode);
+            return fail(ParseErrorId::ArgumentTooLarge, failure_mode);
         }
         if value == JSON_TOKEN && !help_seen {
             output_mode = OutputMode::Json;
         }
         help_seen |= is_help_token(value);
-        collected.push(argument);
     }
     validate_preparse_guards(semantic_prefix(&collected), output_mode)?;
-    Ok((collected, output_mode))
+    Ok((collected, output_mode, failure_mode))
+}
+
+fn machine_failure_mode<'a>(args: impl IntoIterator<Item = &'a OsStr>) -> OutputMode {
+    if args.into_iter().any(|argument| argument == JSON_TOKEN) {
+        OutputMode::Json
+    } else {
+        OutputMode::Human
+    }
 }
 
 pub(crate) fn requested_help_target(args: &[OsString]) -> HelpTarget {
@@ -75,7 +94,7 @@ fn validate_preparse_guards(
     if has_flag_value(&text) {
         return fail(ParseErrorId::UnexpectedOptionValue, output_mode);
     }
-    for singleton in ["--json", "--help", "-h", "--version"] {
+    for singleton in ["--json", "--root", "--help", "-h", "--version"] {
         if text.iter().filter(|token| **token == singleton).count() > 1 {
             return fail(ParseErrorId::DuplicateOption, output_mode);
         }
@@ -128,12 +147,13 @@ fn has_flag_value(text: &[&str]) -> bool {
 }
 
 fn is_value_option(token: &str) -> bool {
-    catalog().iter().any(|descriptor| {
-        descriptor
-            .options
-            .iter()
-            .any(|option| option.kind != ValueKind::Flag && option.name.as_str() == token)
-    })
+    token == ROOT_TOKEN
+        || catalog().iter().any(|descriptor| {
+            descriptor
+                .options
+                .iter()
+                .any(|option| option.kind != ValueKind::Flag && option.name.as_str() == token)
+        })
 }
 
 fn is_flag_option(token: &str) -> bool {

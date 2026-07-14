@@ -1,33 +1,22 @@
 use super::*;
-use std::ffi::{OsStr, OsString};
+use std::ffi::OsString;
 
-pub(crate) fn parse_public_os_args_from(raw: Vec<OsString>) -> Result<Args, String> {
-    let output_mode = if raw
-        .iter()
-        .any(|value| value.as_os_str() == OsStr::new("--json"))
-    {
-        cli::successor::OutputMode::Json
-    } else {
-        cli::successor::OutputMode::Human
-    };
-    let raw = raw
-        .into_iter()
-        .map(|value| {
-            value.into_string().map_err(|_| {
-                root_parse_failure(cli::successor::ParseErrorId::NonUtf8Argument, output_mode)
-            })
-        })
-        .collect::<Result<Vec<_>, _>>()?;
-    parse_public_args_from(raw)
-}
-
-pub(crate) fn parse_public_args_from(mut raw: Vec<String>) -> Result<Args, String> {
-    let root = extract_root(&mut raw)?;
-    let outcome = cli::successor_public::parse_public(&raw)?;
+pub(crate) fn parse_public_os_args_from(
+    raw: Vec<OsString>,
+) -> Result<Args, cli::successor::ParseFailure> {
+    let parsed: cli::successor::ParsedCommandLine = cli::successor::parse_command_line(raw)?;
+    let (root, outcome): (cli::successor::WorkspaceRoot, cli::successor::ParseOutcome) =
+        parsed.into_parts();
     Ok(Args {
         root: root.into_path_buf(),
         command: Command::Successor(outcome),
     })
+}
+
+#[cfg(test)]
+pub(crate) fn parse_public_args_from(raw: Vec<String>) -> Result<Args, String> {
+    parse_public_os_args_from(raw.into_iter().map(OsString::from).collect())
+        .map_err(cli::successor::ParseFailure::render)
 }
 
 #[cfg(test)]
@@ -43,6 +32,7 @@ pub(crate) fn parse_args_from(mut raw: Vec<String>) -> Result<Args, String> {
     })
 }
 
+#[cfg(test)]
 pub(super) fn extract_root(raw: &mut Vec<String>) -> Result<authority::CliRoot, String> {
     let mut root = authority::CliRoot::workspace_default();
     let output_mode = if raw.iter().any(|value| value == "--json") {
@@ -86,6 +76,7 @@ pub(super) fn extract_root(raw: &mut Vec<String>) -> Result<authority::CliRoot, 
     Ok(root)
 }
 
+#[cfg(test)]
 pub(crate) fn root_parse_failure(
     id: cli::successor::ParseErrorId,
     output_mode: cli::successor::OutputMode,

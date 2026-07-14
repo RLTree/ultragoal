@@ -2,8 +2,10 @@
 use crate::audit;
 use crate::cli;
 use crate::command::{Args, Command};
+#[cfg(test)]
 use std::path::PathBuf;
 
+#[cfg(test)]
 mod authority;
 #[cfg(test)]
 mod help_request;

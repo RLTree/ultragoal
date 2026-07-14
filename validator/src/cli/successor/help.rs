@@ -33,7 +33,7 @@ pub fn version_text(output_mode: OutputMode) -> String {
 fn human_help(descriptors: &[&CommandDescriptor]) -> String {
     let mut output = String::from(
         "Harness Ultragoal successor CLI\n\
-         Usage: ultragoal [--json] <group> [subcommand] [options]\n\
+         Usage: ultragoal [--json] [--root <path>] <group> [subcommand] [options]\n\
          Effects are structural; no effect override option is accepted.\n\nCommands:\n",
     );
     for descriptor in descriptors {

@@ -1,7 +1,9 @@
+#[cfg(test)]
+use crate::cli::successor::parse_args;
 use crate::cli::successor::runtime::{Diagnostic, DiagnosticId, RuntimeOutcome, RuntimeSession};
 use crate::cli::successor::{
     CheckProfile, EffectClass, ExitClass, FitAction, InspectTarget, OutputMode, ParseOutcome,
-    ParsedInvocation, SuccessorCommand, parse_args, render_help, version_text,
+    ParsedInvocation, SuccessorCommand, render_help, version_text,
 };
 use crate::context::{BuildRequest, LiveContext};
 use crate::inventory::{

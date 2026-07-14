@@ -2,9 +2,10 @@ use super::catalog::descriptor_for;
 use super::clap_error::map_clap_error;
 use super::clap_grammar::parser_command;
 use super::command_contract::{
-    CommandDescriptor, Group, OptionArgument, OutputMode, ParseOutcome, ParsedInvocation,
-    ParsedValue, ValueKind,
+    CommandDescriptor, Group, OptionArgument, OutputMode, ParseOutcome, ParsedCommandLine,
+    ParsedInvocation, ParsedValue, ValueKind,
 };
+use super::command_line_input::take_workspace_root;
 use super::compatibility::classify_legacy_command;
 use super::error::{ParseErrorId, ParseFailure};
 use super::input::{prepare_args, requested_help_target, version_is_standalone};
@@ -13,13 +14,30 @@ use clap::ArgMatches;
 use clap::error::ErrorKind;
 use std::ffi::OsString;
 
+#[cfg(test)]
 pub fn parse_args<I, S>(args: I) -> Result<ParseOutcome, ParseFailure>
 where
     I: IntoIterator<Item = S>,
     S: Into<OsString>,
 {
-    let (args, output_mode) = prepare_args(args)?;
-    if let Some(command) = classify_legacy_command(&args) {
+    parse_command_line(args).map(ParsedCommandLine::into_outcome)
+}
+
+pub fn parse_command_line<I, S>(args: I) -> Result<ParsedCommandLine, ParseFailure>
+where
+    I: IntoIterator<Item = S>,
+    S: Into<OsString>,
+{
+    let (mut args, output_mode, failure_mode) = prepare_args(args)?;
+    let root = take_workspace_root(&mut args, failure_mode)?;
+    parse_prepared(&args, output_mode).map(|outcome| ParsedCommandLine::new(root, outcome))
+}
+
+fn parse_prepared(
+    args: &[OsString],
+    output_mode: OutputMode,
+) -> Result<ParseOutcome, ParseFailure> {
+    if let Some(command) = classify_legacy_command(args) {
         return Ok(ParseOutcome::Compatibility {
             command,
             output_mode,
@@ -31,11 +49,11 @@ where
     match parser_command().try_get_matches_from(argv) {
         Ok(matches) => parse_matches(&matches, output_mode),
         Err(error) if error.kind() == ErrorKind::DisplayHelp => Ok(ParseOutcome::Help {
-            target: requested_help_target(&args),
+            target: requested_help_target(args),
             output_mode,
         }),
         Err(error) if error.kind() == ErrorKind::DisplayVersion => {
-            if version_is_standalone(&args) {
+            if version_is_standalone(args) {
                 Ok(ParseOutcome::Version(output_mode))
             } else {
                 fail(ParseErrorId::InvalidVersionPosition, output_mode)

@@ -6,6 +6,9 @@ use clap::{Arg, ArgAction, Command, value_parser};
 pub(crate) const JSON_ID: &str = "successor-json";
 pub(crate) const JSON_LONG: &str = "json";
 pub(crate) const JSON_TOKEN: &str = "--json";
+pub(crate) const ROOT_ID: &str = "successor-root";
+pub(crate) const ROOT_LONG: &str = "root";
+pub(crate) const ROOT_TOKEN: &str = "--root";
 pub(crate) const HELP_ID: &str = "successor-help";
 pub(crate) const VERSION_ID: &str = "successor-version";
 
@@ -21,6 +24,15 @@ pub fn parser_command() -> Command {
                 .default_missing_value("true")
                 .value_parser(value_parser!(bool))
                 .help("Select versioned machine output"),
+        )
+        .arg(
+            Arg::new(ROOT_ID)
+                .long(ROOT_LONG)
+                .global(true)
+                .action(ArgAction::Set)
+                .num_args(1)
+                .value_name("PATH")
+                .help("Select the workspace root"),
         )
         .arg(
             Arg::new(HELP_ID)

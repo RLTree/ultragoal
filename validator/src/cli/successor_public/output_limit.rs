@@ -2,6 +2,7 @@ use super::*;
 
 pub(crate) const MAX_PUBLIC_OUTPUT: usize = 16 * 1024 * 1024;
 
+#[cfg(test)]
 pub(crate) fn parse_public(raw: &[String]) -> Result<ParseOutcome, String> {
     parse_args(raw.iter().cloned()).map_err(|failure| failure.render())
 }

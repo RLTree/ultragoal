@@ -1,5 +1,5 @@
 Harness Ultragoal successor CLI
-Usage: ultragoal [--json] <group> [subcommand] [options]
+Usage: ultragoal [--json] [--root <path>] <group> [subcommand] [options]
 Effects are structural; no effect override option is accepted.
 
 Commands:
@@ -27,7 +27,7 @@ Commands:
       Verify fitted discovery and behavior without mutation.
   check routine  [workspace-write] [--target <value>]
       Run conservative affected validation with declared local build artifacts.
-  check strict  [workspace-write] [--target <value>] --claim <value>
+  check strict  [read] [--target <value>] --claim <value>
       Run dependency-closed validation for one named claim.
   diagnose  [read] [--finding <value>]
       Explain cause, smallest repair, exact rerun, effect, and ceiling.

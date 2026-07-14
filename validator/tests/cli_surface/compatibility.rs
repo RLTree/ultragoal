@@ -89,20 +89,29 @@ fn non_utf8_input_is_a_typed_zero_write_error_without_byte_echo() {
     let repository = Repository::new("non-utf8-typed-error");
     let before = observe(&repository.root);
     let private = std::ffi::OsString::from_vec(vec![0xff]);
-    let output = repository.run([
-        std::ffi::OsString::from("--json"),
-        private,
-        std::ffi::OsString::from("archive"),
-    ]);
-    assert_eq!(output.status.code(), Some(2), "{output:?}");
-    assert!(output.stdout.is_empty());
-    let value: serde_json::Value = serde_json::from_slice(&output.stderr).unwrap();
-    assert_eq!(value["schema_version"], "harness-ultragoal.cli-error.v1");
-    assert_eq!(value["error_id"], "CLI_NON_UTF8_ARGUMENT");
-    assert_eq!(value["exit_code"], 2);
-    assert_eq!(
-        output.stderr,
-        b"{\"schema_version\":\"harness-ultragoal.cli-error.v1\",\"error_id\":\"CLI_NON_UTF8_ARGUMENT\",\"exit_code\":2}\n"
-    );
+    for args in [
+        vec![
+            std::ffi::OsString::from("--json"),
+            private.clone(),
+            std::ffi::OsString::from("archive"),
+        ],
+        vec![
+            private.clone(),
+            std::ffi::OsString::from("archive"),
+            std::ffi::OsString::from("--json"),
+        ],
+    ] {
+        let output = repository.run(args);
+        assert_eq!(output.status.code(), Some(2), "{output:?}");
+        assert!(output.stdout.is_empty());
+        let value: serde_json::Value = serde_json::from_slice(&output.stderr).unwrap();
+        assert_eq!(value["schema_version"], "harness-ultragoal.cli-error.v1");
+        assert_eq!(value["error_id"], "CLI_NON_UTF8_ARGUMENT");
+        assert_eq!(value["exit_code"], 2);
+        assert_eq!(
+            output.stderr,
+            b"{\"schema_version\":\"harness-ultragoal.cli-error.v1\",\"error_id\":\"CLI_NON_UTF8_ARGUMENT\",\"exit_code\":2}\n"
+        );
+    }
     assert_eq!(observe(&repository.root), before);
 }
