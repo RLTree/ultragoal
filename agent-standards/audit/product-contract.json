@@ -3,58 +3,58 @@
   "rows": [
     {
       "standard_id": "goal-contract-amendment-authority-required-claim-id-mapping",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "product-success-binding-goal-lane-execplan-authority",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "product-success-contract-initiation-authority",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "product-success-contract-review-packet-team-skill-routing",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "product-success-inspiration-source-provenance-disposition",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "product-success-lifecycle-transitions-no-late-afterthought",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "product-success-lineage-amendments-closed-product-claim-ids",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     }
   ]

@@ -3,34 +3,34 @@
   "rows": [
     {
       "standard_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "review-disagreement-override-judgment-boundary-governance",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "review-feedback-disposition-same-round-satisfaction",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "reviewer-to-gate-conversion",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "scripts/check-agent-standards",
       "evidence_digest": "sha256:41c848ea277997f900430ebe72ef818b7ac3e2d1cc4b2d2ba0319d9781402810",
-      "audited_at": "2026-06-29T00:00:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "review, completion"
     }
   ]

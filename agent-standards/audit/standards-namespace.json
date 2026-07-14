@@ -3,106 +3,106 @@
   "rows": [
     {
       "standard_id": "architecture-dependency-topology",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "compact-agents-routed-standards",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "documentation-freshness",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "scripts/check-agent-standards",
       "evidence_digest": "sha256:41c848ea277997f900430ebe72ef818b7ac3e2d1cc4b2d2ba0319d9781402810",
-      "audited_at": "2026-06-29T00:00:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, documentation, orchestration"
     },
     {
       "standard_id": "feedback-to-rule-promotion",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "namespace-progressive-disclosure",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/namespace/law/mod.rs",
       "evidence_digest": "sha256:6359fa4fc34b1c9da869ec638712ac68c94f27aacbab0012e79a8ce39cc6404a",
-      "audited_at": "2026-07-07T11:23:51Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "semantic-domain-type-naming",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "skill-catalog-context-budget-omission-warning",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "skill-local-reference-closure",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "skill-progressive-disclosure-metadata",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "source-obligation-parity-anti-bundling",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "standards-gardener-promotion",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "std-automation-001",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "scripts/check-agent-standards",
       "evidence_digest": "sha256:41c848ea277997f900430ebe72ef818b7ac3e2d1cc4b2d2ba0319d9781402810",
-      "audited_at": "2026-06-29T00:00:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "orchestration, automation, lane monitoring, completion"
     },
     {
       "standard_id": "std-plans-001",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "scripts/check-agent-standards",
       "evidence_digest": "sha256:41c848ea277997f900430ebe72ef818b7ac3e2d1cc4b2d2ba0319d9781402810",
-      "audited_at": "2026-06-29T00:00:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "planning, orchestration, completion"
     },
     {
@@ -115,18 +115,18 @@
     },
     {
       "standard_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     },
     {
       "standard_id": "template-generation-governance-template-creator-boundary",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-02T00:45:00Z",
+      "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release"
     }
   ]
