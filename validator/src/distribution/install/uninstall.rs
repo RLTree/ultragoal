@@ -26,27 +26,89 @@ pub fn uninstall(
 pub fn rollback_install(
     transaction: InstallTransaction,
     effects: &mut ScopedInstall,
-) -> Result<(), DistributionError> {
-    transaction.revalidate_for_rollback(effects)?;
-    let expected = transaction
-        .snapshot
-        .postimage()
-        .ok_or_else(|| error(DistributionErrorId::ProvenanceMismatch))?;
+) -> Result<(), RollbackInstallError> {
+    if let Err(failure) = transaction.revalidate_for_rollback(effects) {
+        return Err(RollbackInstallError::refused(failure, transaction));
+    }
+    let expected = match transaction.snapshot.postimage().cloned() {
+        Some(expected) => expected,
+        None => {
+            return Err(RollbackInstallError::refused(
+                error(DistributionErrorId::ProvenanceMismatch),
+                transaction,
+            ));
+        }
+    };
     match effects.compare_exchange_installed_postimage(
         &transaction.target,
-        expected,
+        &expected,
         transaction.previous.as_deref(),
     ) {
         Ok(true) => {}
-        Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
-        Err(_) => return Err(error(DistributionErrorId::RollbackFailed)),
+        Ok(false) => {
+            return Err(RollbackInstallError::refused(
+                error(DistributionErrorId::InstallConflict),
+                transaction,
+            ));
+        }
+        Err(_) => {
+            return Err(RollbackInstallError::refused(
+                error(DistributionErrorId::RollbackFailed),
+                transaction,
+            ));
+        }
     }
     let restored = read(effects, &transaction.target)
-        .map_err(|_| error(DistributionErrorId::RollbackFailed))?;
+        .map_err(|_| RollbackInstallError::committed(error(DistributionErrorId::RollbackFailed)))?;
     if restored.as_deref() != transaction.previous.as_deref() {
-        return Err(error(DistributionErrorId::RollbackFailed));
+        return Err(RollbackInstallError::committed(error(
+            DistributionErrorId::RollbackFailed,
+        )));
     }
     Ok(())
+}
+
+#[derive(Debug)]
+pub enum RollbackInstallError {
+    Refused {
+        error: DistributionError,
+        transaction: InstallTransaction,
+    },
+    Committed {
+        error: DistributionError,
+    },
+}
+
+impl RollbackInstallError {
+    fn refused(error: DistributionError, transaction: InstallTransaction) -> Self {
+        Self::Refused { error, transaction }
+    }
+
+    fn committed(error: DistributionError) -> Self {
+        Self::Committed { error }
+    }
+
+    pub const fn id(&self) -> DistributionErrorId {
+        match self {
+            Self::Refused { error, .. } | Self::Committed { error } => error.id(),
+        }
+    }
+
+    pub fn into_transaction(self) -> Option<InstallTransaction> {
+        match self {
+            Self::Refused { transaction, .. } => Some(transaction),
+            Self::Committed { .. } => None,
+        }
+    }
+}
+
+impl From<RollbackInstallError> for DistributionError {
+    fn from(value: RollbackInstallError) -> Self {
+        match value {
+            RollbackInstallError::Refused { error, .. }
+            | RollbackInstallError::Committed { error } => error,
+        }
+    }
 }
 
 pub(super) fn restore_if_candidate(

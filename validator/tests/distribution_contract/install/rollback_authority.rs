@@ -16,8 +16,15 @@ fn confined_rollback_requires_exact_root_and_postimage_authority() {
         &mut ScopedInstall::for_scope(fixture_b.confined(), Scope::PersonalFixture),
     )
     .unwrap_err();
-    assert_eq!(failure.id(), DistributionErrorId::ProvenanceMismatch);
+    let tx_a = refused_transaction(failure, DistributionErrorId::ProvenanceMismatch);
     assert_eq!(inode_tree(&fixture_a.root), before_a);
+    assert_eq!(inode_tree(&fixture_b.root), before_b);
+    rollback_install(
+        tx_a,
+        &mut ScopedInstall::for_scope(fixture_a.confined(), Scope::PersonalFixture),
+    )
+    .unwrap();
+    assert!(!fixture_a.root.join(TARGET).exists());
     assert_eq!(inode_tree(&fixture_b.root), before_b);
 }
 
@@ -44,7 +51,7 @@ fn confined_rollback_rejects_same_byte_replacement_and_mutate_restore() {
             &mut ScopedInstall::for_scope(fixture.confined(), Scope::PersonalFixture),
         )
         .unwrap_err();
-        assert_eq!(failure.id(), DistributionErrorId::ObjectChanged);
+        let _tx = refused_transaction(failure, DistributionErrorId::ObjectChanged);
         assert_eq!(inode_tree(&fixture.root), attacked);
     }
 }
@@ -63,7 +70,7 @@ fn confined_rollback_rejects_wrong_target_substitution() {
         &mut ScopedInstall::for_scope(fixture.confined(), Scope::PersonalFixture),
     )
     .unwrap_err();
-    assert_eq!(failure.id(), DistributionErrorId::ObjectUnavailable);
+    let _tx = refused_transaction(failure, DistributionErrorId::ObjectUnavailable);
     assert_eq!(inode_tree(&fixture.root), moved);
 }
 
@@ -87,23 +94,21 @@ fn confined_rollback_rejects_journey_bound_transaction_without_journey_authority
         Some(&executable),
     )
     .unwrap();
-    let binding =
-        crate::distribution::JourneyBinding::new(
-            package.identity().clone(),
-            &host,
-            "local-harness-plugins",
-        )
-        .unwrap();
+    let binding = crate::distribution::JourneyBinding::new(
+        package.identity().clone(),
+        &host,
+        "local-harness-plugins",
+    )
+    .unwrap();
     tx.bind_journey(&binding).unwrap();
     let before = inode_tree(&fixture.root);
 
-    let failure =
-        rollback_install(
-            tx,
-            &mut ScopedInstall::for_scope(fixture.confined(), Scope::PersonalFixture),
-        )
-        .unwrap_err();
-    assert_eq!(failure.id(), DistributionErrorId::ProvenanceMismatch);
+    let failure = rollback_install(
+        tx,
+        &mut ScopedInstall::for_scope(fixture.confined(), Scope::PersonalFixture),
+    )
+    .unwrap_err();
+    let _tx = refused_transaction(failure, DistributionErrorId::ProvenanceMismatch);
     assert_eq!(inode_tree(&fixture.root), before);
 }
 
@@ -120,8 +125,14 @@ fn confined_rollback_rejects_wrong_scope_authority() {
         &mut ScopedInstall::for_scope(fixture.confined(), Scope::RepositoryFixture),
     )
     .unwrap_err();
-    assert_eq!(failure.id(), DistributionErrorId::ProvenanceMismatch);
+    let tx = refused_transaction(failure, DistributionErrorId::ProvenanceMismatch);
     assert_eq!(inode_tree(&fixture.root), before);
+    rollback_install(
+        tx,
+        &mut ScopedInstall::for_scope(fixture.confined(), Scope::PersonalFixture),
+    )
+    .unwrap();
+    assert!(!fixture.root.join(TARGET).exists());
 }
 
 #[cfg(unix)]
@@ -146,7 +157,7 @@ fn confined_rollback_preserves_concurrent_target_replacement() {
     )
     .unwrap_err();
     assert_test_effect_hook_consumed();
-    assert_eq!(failure.id(), DistributionErrorId::InstallConflict);
+    let _tx = refused_transaction(failure, DistributionErrorId::InstallConflict);
     assert_eq!(std::fs::read(target).unwrap(), concurrent);
 }
 
@@ -177,72 +188,5 @@ fn production_scopes_can_rollback_with_crate_confined_scope_authority() {
         let tx = install_confined_target(&fixture, &package, target, scope, Prior::Absent);
         rollback_install(tx, &mut ScopedInstall::for_scope(fixture.confined(), scope)).unwrap();
         assert!(!fixture.root.join(target).exists());
-    }
-}
-
-#[cfg(unix)]
-fn install_confined(
-    fixture: &crate::package_journey_fixture::JourneyFixture,
-    package: &crate::distribution::PackageSnapshot,
-    prior: Prior,
-) -> crate::distribution::InstallTransaction {
-    install_confined_target(fixture, package, TARGET, Scope::PersonalFixture, prior)
-}
-
-#[cfg(unix)]
-fn install_confined_target(
-    fixture: &crate::package_journey_fixture::JourneyFixture,
-    package: &crate::distribution::PackageSnapshot,
-    target: &str,
-    scope: Scope,
-    prior: Prior,
-) -> crate::distribution::InstallTransaction {
-    let plan = InstallPlan::new(
-        package.context_id().into(),
-        package.candidate_id().into(),
-        scope,
-        target.into(),
-        package.package_sha256().into(),
-        prior,
-    )
-    .unwrap();
-    install(
-        &plan,
-        package,
-        &mut ScopedInstall::for_scope(fixture.confined(), scope),
-    )
-    .unwrap()
-}
-
-#[cfg(unix)]
-fn inode_tree(root: &std::path::Path) -> Vec<String> {
-    use std::os::unix::fs::MetadataExt;
-    let mut rows = Vec::new();
-    collect_inode_tree(root, root, &mut rows);
-    rows
-}
-
-#[cfg(unix)]
-fn collect_inode_tree(root: &std::path::Path, path: &std::path::Path, rows: &mut Vec<String>) {
-    use std::os::unix::fs::MetadataExt;
-    let mut entries = std::fs::read_dir(path)
-        .unwrap()
-        .map(|entry| entry.unwrap())
-        .collect::<Vec<_>>();
-    entries.sort_by_key(|entry| entry.file_name());
-    for entry in entries {
-        let path = entry.path();
-        let meta = std::fs::symlink_metadata(&path).unwrap();
-        rows.push(format!(
-            "{}:{}:{}:{}:{}",
-            path.strip_prefix(root).unwrap().display(),
-            meta.dev(),
-            meta.ino(),
-            meta.len(),
-            meta.mode()
-        ));
-        if meta.is_dir() {
-            collect_inode_tree(root, &path, rows);
-        }
     }
 }

@@ -25,7 +25,7 @@ impl AdapterError {
         Self { id }
     }
 
-    pub(super) const fn distribution(_: DistributionError) -> Self {
+    pub(super) fn distribution(_: impl Into<DistributionError>) -> Self {
         Self::new(AdapterErrorId::DistributionEffect)
     }
 }

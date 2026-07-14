@@ -38,7 +38,7 @@ pub use host_capability::{
 };
 pub use install::{
     ExpectedPrior, InstallEffects, InstallPlan, InstallScope, InstallSnapshot, InstallTransaction,
-    install, rollback_install, uninstall,
+    RollbackInstallError, install, rollback_install, uninstall,
 };
 pub use marketplace::{
     CodexMarketplace, CodexPlugin, MarketplaceEffects, MarketplaceExpectation, MarketplacePlan,

@@ -6,7 +6,9 @@ impl ScopedFile {
         replacement: Option<&[u8]>,
     ) -> Result<(bool, Option<InstalledPostimage>), DistributionError> {
         let Some(replacement_bytes) = replacement else {
-            return self.apply(expected_sha256, None).map(|changed| (changed, None));
+            return self
+                .apply(expected_sha256, None)
+                .map(|changed| (changed, None));
         };
         self.apply_replacement(expected_sha256, replacement_bytes)
     }
