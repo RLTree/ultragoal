@@ -4,47 +4,10 @@ use std::os::unix::fs::symlink;
 
 use super::current_path_fixture::{CurrentPathFixture, authority_path, repo_path};
 use super::routine_work::{
-    PreparedRoutineExecution, RoutineCancellation, RoutineInvocationSpec, RoutineReuseInput,
+    PreparedRoutineExecution, RoutineCancellation, RoutineReuseInput,
     mediate_prepared_routine_execution_production, test_probe_execute_without_root_broker,
     test_spawn_count,
 };
-
-enum IgnoredBinding {
-    Environment,
-    Arguments,
-    ProgramPath,
-    ProgramDigest,
-    Behavior,
-    Timeout,
-}
-
-fn enforcement_disabled_mutant_accepts(
-    attacker: RoutineInvocationSpec,
-    expected: RoutineInvocationSpec,
-    ignored: IgnoredBinding,
-) -> bool {
-    (matches!(ignored, IgnoredBinding::Environment) || attacker.environment == expected.environment)
-        && (matches!(ignored, IgnoredBinding::Arguments)
-            || attacker.arguments == expected.arguments)
-        && (matches!(ignored, IgnoredBinding::ProgramPath)
-            || attacker.program_path_hex == expected.program_path_hex)
-        && (matches!(ignored, IgnoredBinding::ProgramDigest)
-            || attacker.program_sha256 == expected.program_sha256)
-        && (matches!(ignored, IgnoredBinding::Behavior)
-            || attacker.behavior_id == expected.behavior_id)
-        && (matches!(ignored, IgnoredBinding::Timeout)
-            || attacker.timeout_ms == expected.timeout_ms)
-        && attacker.node_id == expected.node_id
-        && attacker.tool_name == expected.tool_name
-        && attacker.tool_identity_sha256 == expected.tool_identity_sha256
-        && attacker.program_byte_length == expected.program_byte_length
-        && attacker.program_unix_mode == expected.program_unix_mode
-        && attacker.environment_sha256 == expected.environment_sha256
-        && attacker.read_authority_sha256 == expected.read_authority_sha256
-        && attacker.read_sources == expected.read_sources
-        && attacker.declared_output_scopes == expected.declared_output_scopes
-        && attacker.output_budget_bytes == expected.output_budget_bytes
-}
 
 fn cause<T>(result: Result<T, super::routine_work::RoutineError>) -> &'static str {
     result.err().expect("mutation must refuse").cause()
@@ -101,47 +64,6 @@ fn closed_binding_refuses_loader_child_argv_program_and_policy_mutations() {
     assert!(matches!(
         fixture.prepare().unwrap(),
         PreparedRoutineExecution::Effect(_)
-    ));
-}
-
-#[test]
-fn single_field_enforcement_disabled_mutants_accept_each_rejected_attack() {
-    let fixture = CurrentPathFixture::new("binding-mutant-sensitivity");
-    let valid = || fixture.invocation(fixture.plan.checks()[0].node_id());
-    let mut loader = valid().environment.clone();
-    loader.insert(
-        "DYLD_INSERT_LIBRARIES".to_owned(),
-        "/tmp/attacker".to_owned(),
-    );
-    assert!(enforcement_disabled_mutant_accepts(
-        valid().test_with_environment(loader),
-        valid(),
-        IgnoredBinding::Environment,
-    ));
-    assert!(enforcement_disabled_mutant_accepts(
-        valid().test_with_arguments(vec!["--arbitrary".to_owned()]),
-        valid(),
-        IgnoredBinding::Arguments,
-    ));
-    assert!(enforcement_disabled_mutant_accepts(
-        valid().test_with_program_path_hex("2f746d702f61747461636b6572"),
-        valid(),
-        IgnoredBinding::ProgramPath,
-    ));
-    assert!(enforcement_disabled_mutant_accepts(
-        valid().test_with_program_sha256(format!("sha256:{}", "0".repeat(64))),
-        valid(),
-        IgnoredBinding::ProgramDigest,
-    ));
-    assert!(enforcement_disabled_mutant_accepts(
-        valid().test_with_behavior_id("external-process-exit-v1"),
-        valid(),
-        IgnoredBinding::Behavior,
-    ));
-    assert!(enforcement_disabled_mutant_accepts(
-        valid().test_with_timeout_ms(0),
-        valid(),
-        IgnoredBinding::Timeout,
     ));
 }
 

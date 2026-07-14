@@ -90,7 +90,7 @@ fn dirty_development_binary_refuses_before_host_or_workspace_authority() {
 }
 
 #[test]
-#[ignore = "requires externally provisioned root-owned immutable current ultragoal binary"]
+#[ignore = "requires unavailable root broker authorization and externally provisioned immutable current ultragoal binary"]
 fn authorized_fresh_execution_then_exact_repeat_reuses_without_output_attribution() {
     Fixture::require_protected_binary();
     let fixture = Fixture::new(
@@ -122,7 +122,7 @@ fn authorized_fresh_execution_then_exact_repeat_reuses_without_output_attributio
 }
 
 #[test]
-#[ignore = "requires externally provisioned root-owned immutable current ultragoal binary"]
+#[ignore = "requires unavailable root broker authorization and externally provisioned immutable current ultragoal binary"]
 fn cache_binding_misses_across_targets_and_changes_then_reuses_exact_repeat() {
     Fixture::require_protected_binary();
     let first = Fixture::new(
