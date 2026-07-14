@@ -1,4 +1,4 @@
-use super::scenario::{Fixture, pass_node, prefix_route, tree};
+use super::scenario::{Fixture, git, pass_node, prefix_route, tree};
 use serde_json::Value;
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
@@ -116,7 +116,7 @@ fn concurrent_refusals_never_initialize_or_reserve_authority() {
 }
 
 #[test]
-fn public_refusal_does_not_spawn_discovery_or_tool_probe_processes() {
+fn public_refusal_does_not_enter_discovery_git_or_tool_probes() {
     let fixture = dirty_fixture("broker-before-process-spawn", true);
     let probe_dir = fixture.container.join("process-probes");
     let marker = fixture.container.join("process-spawned");
@@ -133,9 +133,22 @@ fn public_refusal_does_not_spawn_discovery_or_tool_probe_processes() {
         .unwrap();
         fs::set_permissions(&probe, fs::Permissions::from_mode(0o700)).unwrap();
     }
+    let git_probe = probe_dir.join("git-fsmonitor");
+    fs::write(
+        &git_probe,
+        format!("#!/bin/sh\n/usr/bin/touch '{}'\nexit 1\n", marker.display()),
+    )
+    .unwrap();
+    fs::set_permissions(&git_probe, fs::Permissions::from_mode(0o700)).unwrap();
+    git(
+        &fixture.root,
+        &["config", "core.fsmonitor", git_probe.to_str().unwrap()],
+    );
+    let before_status = fixture.status();
+    assert!(marker.exists(), "pinned Git status did not arm the probe");
+    fs::remove_file(&marker).unwrap();
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
-    let before_status = fixture.status();
 
     let mut command = fixture.base_command();
     let output = command
@@ -147,7 +160,7 @@ fn public_refusal_does_not_spawn_discovery_or_tool_probe_processes() {
     assert_root_broker_refusal(&output);
     assert!(
         !marker.exists(),
-        "public refusal spawned a discovery process"
+        "public refusal entered discovery Git or a tool probe"
     );
     assert_fixture_unchanged(&fixture, &before_root, &before_home, &before_status);
     assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
