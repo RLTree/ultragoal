@@ -15,7 +15,7 @@ mod target;
 pub(crate) use model::{
     HostEffectCancellation, HostEffectExecutionPolicy, HostEffectExecutionReceipt,
     HostEffectExecutorErrorId, HostEffectExecutorFailure,
-    HostEffectPostReservationLedgerClassification,
+    HostEffectPostPublicationRecoveryClassification, HostEffectPostReservationLedgerClassification,
     HostEffectPostReservationPublicationClassification, HostEffectRecoveryHandoff,
     HostEffectTerminalRecoveryClassification,
 };

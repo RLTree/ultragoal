@@ -59,6 +59,31 @@ impl HostEffectRecoveryHandoff {
                     }
                 }
             }
+            Self::PostPublicationTerminalTransition {
+                permit_id,
+                publication_identity_sha256,
+                prior_publication_observation,
+                exact_current_publication_observation,
+                originating_error_ids,
+                classification,
+                binding_sha256,
+                ..
+            } => {
+                binding_sha256 == &self.post_publication_binding_sha256()
+                    && is_digest(self.effect_identity_sha256())
+                    && is_digest(permit_id)
+                    && is_digest(publication_identity_sha256)
+                    && !*exact_current_publication_observation
+                    && valid_originating_error_chain(originating_error_ids)
+                    && *classification
+                        == HostEffectPostPublicationRecoveryClassification::CommittedBeforeTerminalTransitionObservationUnavailable
+                    && prior_publication_observation
+                        .classify()
+                        .is_ok_and(|prior| {
+                            prior.id()
+                                == PublicationClassificationId::CommittedBeforeAcknowledgement
+                        })
+            }
             Self::PostReservation {
                 permit_id,
                 reservation_ledger_head,

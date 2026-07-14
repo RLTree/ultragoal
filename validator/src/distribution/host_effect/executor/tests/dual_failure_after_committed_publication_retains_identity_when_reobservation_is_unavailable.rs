@@ -59,15 +59,15 @@ fn dual_failure_after_committed_publication_retains_identity_when_reobservation_
         ]
     );
     assert_eq!(
-        recovery.post_reservation_ledger_classification(),
-        Some(HostEffectPostReservationLedgerClassification::StillInFlight)
-    );
-    assert_eq!(
-        recovery.post_reservation_publication_classification(),
+        recovery.post_publication_classification(),
         Some(
-            HostEffectPostReservationPublicationClassification::PriorObservationCurrentObservationUnavailable
+            HostEffectPostPublicationRecoveryClassification::CommittedBeforeTerminalTransitionObservationUnavailable
         )
     );
+    assert!(recovery.post_reservation_ledger_classification().is_none());
+    assert!(recovery
+        .post_reservation_publication_classification()
+        .is_none());
     assert_eq!(
         recovery
             .prior_publication_observation()
@@ -80,15 +80,26 @@ fn dual_failure_after_committed_publication_retains_identity_when_reobservation_
     assert!(recovery.observation().is_none());
     assert!(recovery.classification().is_none());
     assert!(!recovery.has_exact_current_publication_observation());
-    assert!(recovery.has_exact_current_ledger_observation());
+    assert!(!recovery.has_exact_current_ledger_observation());
     assert!(recovery.terminal_classification().is_none());
-    assert_eq!(
-        recovery.ledger_record().unwrap().state(),
-        HostEffectState::InFlight
-    );
+    assert!(recovery.ledger_record().is_none());
     assert!(recovery.outcome().is_none());
     assert!(recovery.binding_sha256().unwrap().starts_with("sha256:"));
     assert!(recovery.verify_binding());
+    let mut substituted_permit = recovery.clone();
+    substituted_permit.substitute_permit_without_rebinding_for_test(digest('0'));
+    assert!(!substituted_permit.verify_binding());
+    let mut substituted_errors = recovery.clone();
+    substituted_errors.substitute_originating_error_ids_without_rebinding_for_test(vec![
+        HostEffectExecutorErrorId::PathSwap,
+        HostEffectExecutorErrorId::LedgerSubstitution,
+    ]);
+    assert!(!substituted_errors.verify_binding());
+    let mut substituted_head = recovery.clone();
+    substituted_head.substitute_ledger_head_without_rebinding_for_test(
+        HostEffectLedgerHead::new(99, digest('9')).unwrap(),
+    );
+    assert!(!substituted_head.verify_binding());
     assert_eq!(transition_calls.load(Ordering::SeqCst), 1);
     assert_eq!(
         durable.read(&permit_id).unwrap().unwrap().state(),

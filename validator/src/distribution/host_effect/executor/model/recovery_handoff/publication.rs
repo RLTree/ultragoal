@@ -86,6 +86,36 @@ impl HostEffectRecoveryHandoff {
         handoff
     }
 
+    pub(super) fn post_publication_terminal_transition_observation_unavailable(
+        effect_identity_sha256: String,
+        permit_id: String,
+        prior_ledger_head: HostEffectLedgerHead,
+        publication_identity_sha256: String,
+        prior_publication_observation: PublicationInventoryObservation,
+        originating_error_ids: Vec<HostEffectExecutorErrorId>,
+    ) -> Self {
+        let mut handoff = Self::PostPublicationTerminalTransition {
+            effect_identity_sha256,
+            permit_id,
+            prior_ledger_head,
+            publication_identity_sha256,
+            prior_publication_observation,
+            exact_current_publication_observation: false,
+            originating_error_ids,
+            classification: HostEffectPostPublicationRecoveryClassification::CommittedBeforeTerminalTransitionObservationUnavailable,
+            binding_sha256: String::new(),
+        };
+        let binding_sha256 = handoff.post_publication_binding_sha256();
+        if let Self::PostPublicationTerminalTransition {
+            binding_sha256: stored,
+            ..
+        } = &mut handoff
+        {
+            *stored = binding_sha256;
+        }
+        handoff
+    }
+
     pub(super) fn post_reservation(request: PostReservationRecoveryRequest) -> Self {
         let PostReservationRecoveryRequest {
             effect_identity_sha256,
@@ -138,6 +168,10 @@ impl HostEffectRecoveryHandoff {
                 effect_identity_sha256,
                 ..
             }
+            | Self::PostPublicationTerminalTransition {
+                effect_identity_sha256,
+                ..
+            }
             | Self::PostReservation {
                 effect_identity_sha256,
                 ..
@@ -149,6 +183,7 @@ impl HostEffectRecoveryHandoff {
         match self {
             Self::Publication { permit_id, .. }
             | Self::TerminalTransition { permit_id, .. }
+            | Self::PostPublicationTerminalTransition { permit_id, .. }
             | Self::PostReservation { permit_id, .. } => permit_id,
         }
     }
@@ -157,6 +192,9 @@ impl HostEffectRecoveryHandoff {
         match self {
             Self::Publication { ledger_head, .. }
             | Self::TerminalTransition { ledger_head, .. } => ledger_head,
+            Self::PostPublicationTerminalTransition {
+                prior_ledger_head, ..
+            } => prior_ledger_head,
             Self::PostReservation { ledger_head, .. } => ledger_head,
         }
     }
@@ -164,7 +202,9 @@ impl HostEffectRecoveryHandoff {
     pub(crate) fn observation(&self) -> Option<&PublicationInventoryObservation> {
         match self {
             Self::Publication { observation, .. } => Some(observation),
-            Self::TerminalTransition { .. } | Self::PostReservation { .. } => None,
+            Self::TerminalTransition { .. }
+            | Self::PostPublicationTerminalTransition { .. }
+            | Self::PostReservation { .. } => None,
         }
     }
 }

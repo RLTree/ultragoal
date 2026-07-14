@@ -14,3 +14,6 @@ include!("registry_limit.rs");
 include!("validate_app_registry.rs");
 
 include!("observe_discovery.rs");
+
+#[cfg(test)]
+mod registry_reader_race_tests;

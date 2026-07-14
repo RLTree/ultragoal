@@ -14,7 +14,10 @@ mod model;
 mod observations;
 mod package;
 mod reader;
+#[cfg(test)]
 pub(crate) mod registry_observation;
+#[cfg(not(test))]
+mod registry_observation;
 mod runtime_probe;
 mod spec;
 mod supply;

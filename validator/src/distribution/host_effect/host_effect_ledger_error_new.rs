@@ -73,6 +73,7 @@ impl PinnedHostExecutable {
         }
     }
 
+    #[cfg(any(target_os = "linux", target_os = "freebsd"))]
     pub(in crate::distribution::host_effect) fn file(&self) -> &File {
         &self.file
     }

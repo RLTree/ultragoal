@@ -1,5 +1,6 @@
 use super::super::lifecycle::{
-    PublicationAcknowledgementIdentity, PublicationClassification, PublicationInventoryObservation,
+    PublicationAcknowledgementIdentity, PublicationClassification, PublicationClassificationId,
+    PublicationInventoryObservation,
 };
 use super::super::{
     HostEffectLedgerHead, HostEffectLedgerRecord, HostEffectOutcome, HostEffectState, is_digest,

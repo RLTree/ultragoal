@@ -3,9 +3,12 @@ use crate::distribution::host_effect::executor::model::CommandCapture;
 use crate::distribution::host_effect::executor::process::BackendFailure;
 use crate::distribution::host_effect::executor::target::{FaultPoint, set_fault};
 use crate::distribution::host_effect::lifecycle::{
-    AcceptedHostScope, DescriptorExecutionPrimitive, HostTargetObserver,
-    PublicationAcknowledgementIdentity, PublicationClassificationId, SupportedHostLifecycleErrorId,
-    TrustedTimeSample, lifecycle_error,
+    AcceptedHostScope, AcceptedHostState, AcceptedLifecycleOperation, AcceptedLifecyclePlan,
+    AcceptedReconciliationPolicy, AcceptedRollbackPolicy, DescriptorExecutionAdapter,
+    DescriptorExecutionCapability, DescriptorExecutionPrimitive, HostEffectAcceptanceRequest,
+    HostEffectPreparationRequest, HostTargetObserver, PublicationAcknowledgementIdentity,
+    PublicationClassificationId, RootPlanCustody, SupportedHostLifecycleCoordinator,
+    SupportedHostLifecycleError, SupportedHostLifecycleErrorId, TrustedTimeSample, lifecycle_error,
 };
 use crate::distribution::host_effect::{
     DurableHostEffectLedger, FileHostEffectLedger, HostEffectAuthority, HostEffectDecision,
@@ -59,3 +62,5 @@ include!(
 include!("rename_race_and_output_overflow_never_settle.rs");
 
 include!("executable_mutation_and_unsafe_namespace_objects_fail_before_backend_effect.rs");
+
+include!("wrong_platform_handoff_never_executes_backend.rs");

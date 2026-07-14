@@ -1,6 +1,10 @@
 impl HostEffectRecoveryHandoff {
     pub(crate) fn prior_publication_observation(&self) -> Option<&PublicationInventoryObservation> {
         match self {
+            Self::PostPublicationTerminalTransition {
+                prior_publication_observation,
+                ..
+            } => Some(prior_publication_observation),
             Self::PostReservation {
                 prior_publication_observation,
                 ..
@@ -11,6 +15,10 @@ impl HostEffectRecoveryHandoff {
 
     pub(crate) fn publication_identity_sha256(&self) -> Option<&str> {
         match self {
+            Self::PostPublicationTerminalTransition {
+                publication_identity_sha256,
+                ..
+            } => Some(publication_identity_sha256),
             Self::PostReservation {
                 publication_identity_sha256,
                 ..
@@ -22,7 +30,20 @@ impl HostEffectRecoveryHandoff {
     pub(crate) fn classification(&self) -> Option<&PublicationClassification> {
         match self {
             Self::Publication { classification, .. } => Some(classification),
-            Self::TerminalTransition { .. } | Self::PostReservation { .. } => None,
+            Self::TerminalTransition { .. }
+            | Self::PostPublicationTerminalTransition { .. }
+            | Self::PostReservation { .. } => None,
+        }
+    }
+
+    pub(crate) fn post_publication_classification(
+        &self,
+    ) -> Option<HostEffectPostPublicationRecoveryClassification> {
+        match self {
+            Self::PostPublicationTerminalTransition { classification, .. } => Some(*classification),
+            Self::Publication { .. }
+            | Self::TerminalTransition { .. }
+            | Self::PostReservation { .. } => None,
         }
     }
 
@@ -30,14 +51,16 @@ impl HostEffectRecoveryHandoff {
         &self,
     ) -> Option<HostEffectTerminalRecoveryClassification> {
         match self {
-            Self::Publication { .. } | Self::PostReservation { .. } => None,
+            Self::Publication { .. }
+            | Self::PostPublicationTerminalTransition { .. }
+            | Self::PostReservation { .. } => None,
             Self::TerminalTransition { classification, .. } => Some(*classification),
         }
     }
 
     pub(crate) fn ledger_record(&self) -> Option<&HostEffectLedgerRecord> {
         match self {
-            Self::Publication { .. } => None,
+            Self::Publication { .. } | Self::PostPublicationTerminalTransition { .. } => None,
             Self::TerminalTransition { ledger_record, .. } => Some(ledger_record),
             Self::PostReservation { ledger_record, .. } => Some(ledger_record),
         }
@@ -45,7 +68,9 @@ impl HostEffectRecoveryHandoff {
 
     pub(crate) fn outcome(&self) -> Option<&HostEffectOutcome> {
         match self {
-            Self::Publication { .. } | Self::PostReservation { .. } => None,
+            Self::Publication { .. }
+            | Self::PostPublicationTerminalTransition { .. }
+            | Self::PostReservation { .. } => None,
             Self::TerminalTransition { outcome, .. } => Some(outcome),
         }
     }
@@ -57,6 +82,10 @@ impl HostEffectRecoveryHandoff {
                 ..
             }
             | Self::TerminalTransition {
+                originating_error_ids,
+                ..
+            }
+            | Self::PostPublicationTerminalTransition {
                 originating_error_ids,
                 ..
             }
@@ -74,6 +103,10 @@ impl HostEffectRecoveryHandoff {
                 ..
             }
             | Self::TerminalTransition {
+                originating_error_ids,
+                ..
+            }
+            | Self::PostPublicationTerminalTransition {
                 originating_error_ids,
                 ..
             }
@@ -125,7 +158,11 @@ impl HostEffectRecoveryHandoff {
         match self {
             Self::Publication { .. } => true,
             Self::TerminalTransition { .. } => false,
-            Self::PostReservation {
+            Self::PostPublicationTerminalTransition {
+                exact_current_publication_observation,
+                ..
+            }
+            | Self::PostReservation {
                 exact_current_publication_observation,
                 ..
             } => *exact_current_publication_observation,
@@ -136,6 +173,7 @@ impl HostEffectRecoveryHandoff {
         match self {
             Self::Publication { binding_sha256, .. }
             | Self::TerminalTransition { binding_sha256, .. }
+            | Self::PostPublicationTerminalTransition { binding_sha256, .. }
             | Self::PostReservation { binding_sha256, .. } => Some(binding_sha256),
         }
     }

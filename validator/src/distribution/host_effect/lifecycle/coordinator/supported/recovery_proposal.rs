@@ -40,7 +40,7 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
     }
 
     #[cfg(test)]
-    pub(super) fn prepare_as_platform(
+    pub(in crate::distribution::host_effect) fn prepare_as_platform(
         &self,
         platform: DescriptorExecutionPlatform,
         request: HostEffectPreparationRequest<'_>,

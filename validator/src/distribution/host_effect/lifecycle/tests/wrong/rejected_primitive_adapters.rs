@@ -8,6 +8,10 @@ fn assert_wrong_primitive_adapters_are_rejected() {
             DescriptorExecutionPlatform::FreeBsd,
             DescriptorExecutionPrimitive::ExecveAtEmptyPath,
         ),
+        (
+            DescriptorExecutionPlatform::Other,
+            DescriptorExecutionPrimitive::ExecveAtEmptyPath,
+        ),
     ] {
         assert_eq!(
             DescriptorExecutionCapability::new(

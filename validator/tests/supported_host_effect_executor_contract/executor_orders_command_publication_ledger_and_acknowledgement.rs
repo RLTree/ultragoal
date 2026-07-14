@@ -26,19 +26,32 @@ fn executor_orders_command_publication_ledger_and_acknowledgement() {
             "missing executor token {required}"
         );
     }
+    let execution = source("validator/src/distribution/host_effect/executor/reservation/execution.rs");
     assert_before(
-        &executor,
-        "self.backend.execute",
-        ".prepare(&effect_identity_sha256",
+        &execution,
+        "self.execute_reserved_commands",
+        "self.publish_reserved(",
     );
-    assert_before(&executor, ".publish(prepared", "let terminal = match");
+    let publication = source("validator/src/distribution/host_effect/executor/publication/write.rs");
     assert_before(
-        &executor,
-        "let terminal = match",
+        &publication,
+        "let prepared_publication = match self.target.prepare(",
+        ".publish(prepared",
+    );
+    assert_before(
+        &publication,
+        ".publish(prepared",
+        "self.acknowledge_reserved_publication",
+    );
+    let acknowledgement =
+        source("validator/src/distribution/host_effect/executor/publication/acknowledgement.rs");
+    assert_before(
+        &acknowledgement,
+        "let terminal = self",
         "PublicationAcknowledgementIdentity::new",
     );
     assert_before(
-        &executor,
+        &acknowledgement,
         "PublicationAcknowledgementIdentity::new",
         ".acknowledge(",
     );
@@ -122,10 +135,13 @@ fn executor_orders_command_publication_ledger_and_acknowledgement() {
         .map(|offset| dual_failure_start + offset)
         .unwrap();
     let dual_failure = &executor[dual_failure_start..dual_failure_end];
-    assert!(dual_failure.contains("post_reservation_recovery_failure"));
-    assert!(dual_failure.contains("observation: Some(&committed.observation)"));
-    assert!(dual_failure.contains("originating_error_id"));
+    assert!(
+        dual_failure.contains("post_publication_terminal_transition_observation_unavailable")
+    );
+    assert!(dual_failure.contains("committed.observation.clone()"));
+    assert!(dual_failure.contains("originating_error_ids"));
     assert!(dual_failure.contains("observation_failure.id()"));
+    assert!(!dual_failure.contains("post_reservation_recovery_failure"));
     assert!(!dual_failure.contains("HostEffectExecutorFailure::new"));
     assert!(!dual_failure.contains("HostEffectExecutorFailure::terminal"));
 }

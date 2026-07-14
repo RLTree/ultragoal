@@ -40,6 +40,30 @@ impl std::fmt::Debug for HostEffectRecoveryHandoff {
                 .field("classification", classification)
                 .field("binding_sha256", binding_sha256)
                 .finish_non_exhaustive(),
+            Self::PostPublicationTerminalTransition {
+                effect_identity_sha256,
+                permit_id,
+                prior_ledger_head,
+                publication_identity_sha256,
+                exact_current_publication_observation,
+                originating_error_ids,
+                classification,
+                binding_sha256,
+                ..
+            } => formatter
+                .debug_struct("HostEffectRecoveryHandoff::PostPublicationTerminalTransition")
+                .field("effect_identity_sha256", effect_identity_sha256)
+                .field("permit_id", permit_id)
+                .field("prior_ledger_head", prior_ledger_head)
+                .field("publication_identity_sha256", publication_identity_sha256)
+                .field(
+                    "exact_current_publication_observation",
+                    exact_current_publication_observation,
+                )
+                .field("originating_error_ids", originating_error_ids)
+                .field("classification", classification)
+                .field("binding_sha256", binding_sha256)
+                .finish_non_exhaustive(),
             Self::PostReservation {
                 effect_identity_sha256,
                 permit_id,

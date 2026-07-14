@@ -140,6 +140,9 @@ fn repo_root() -> PathBuf {
 fn source(path: &str) -> String {
     let requested = repo_root().join(path);
     if requested.is_file() {
+        if requested.extension().and_then(|extension| extension.to_str()) == Some("rs") {
+            return expand_module_source(&requested, &mut BTreeSet::new(), 0);
+        }
         return fs::read_to_string(requested).unwrap();
     }
     let module_root = requested.with_extension("").join("mod.rs");

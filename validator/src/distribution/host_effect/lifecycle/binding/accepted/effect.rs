@@ -110,6 +110,7 @@ impl AcceptedHostEffect {
         Ok(Self {
             package,
             lifecycle,
+            scope,
             expected_target,
             expected_head,
             coordinator_binding_sha256,
@@ -177,7 +178,14 @@ impl AcceptedHostEffect {
         &self,
         target: &ObservedTargetIdentity,
     ) -> Result<(), SupportedHostLifecycleError> {
-        if &self.expected_target != target {
+        let retained_scope_sha256 = digest_json(&ScopeBinding {
+            schema: "harness-ultragoal.accepted-host-scope.v1",
+            scope: &self.scope,
+        })?;
+        if retained_scope_sha256 != self.host_scope_sha256
+            || target.scope_sha256 != self.host_scope_sha256
+            || &self.expected_target != target
+        {
             return Err(lifecycle_error(
                 SupportedHostLifecycleErrorId::TargetSubstitution,
             ));

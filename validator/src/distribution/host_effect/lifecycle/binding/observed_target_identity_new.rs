@@ -50,6 +50,7 @@ struct ScopeBinding<'a> {
 pub(crate) struct AcceptedHostEffect {
     package: PackageIdentity,
     lifecycle: AcceptedLifecyclePlan,
+    scope: AcceptedHostScope,
     expected_target: ObservedTargetIdentity,
     expected_head: HostEffectLedgerHead,
     coordinator_binding_sha256: String,

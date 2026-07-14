@@ -165,17 +165,23 @@ impl<'a> SupportedHostEffectExecutor<'a> {
             }
             Err(observation_failure) => {
                 append_error_cause(&mut originating_error_ids, observation_failure.id());
-                self.post_reservation_recovery_failure(
-                    effect,
-                    effect_identity_sha256,
+                let recovery =
+                    HostEffectRecoveryHandoff::post_publication_terminal_transition_observation_unavailable(
+                        effect_identity_sha256.to_owned(),
+                        effect.permit().permit_id().to_owned(),
+                        ledger_head,
+                        committed
+                            .expectation
+                            .publication_identity_sha256()
+                            .to_owned(),
+                        committed.observation.clone(),
+                        originating_error_ids,
+                    );
+                debug_assert!(recovery.verify_binding());
+                HostEffectExecutorFailure::with_recovery(
                     HostEffectExecutorErrorId::RecoveryRequired,
-                    originating_error_ids,
-                    Some(PriorPublicationEvidence {
-                        publication_identity_sha256: Some(
-                            committed.expectation.publication_identity_sha256(),
-                        ),
-                        observation: Some(&committed.observation),
-                    }),
+                    None,
+                    recovery,
                 )
             }
         }

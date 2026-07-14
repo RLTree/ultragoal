@@ -32,3 +32,5 @@ include!("source_mutate_restore_during_publication_rolls_back_output.rs");
 include!("every_artifact_binding_dimension_is_checked_before_output_effects.rs");
 
 include!("package_surface_identity.rs");
+
+include!("artifact_identity_fields.rs");

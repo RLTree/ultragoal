@@ -112,6 +112,44 @@ fn darwin_is_repeatedly_unsupported_before_every_observable_boundary() {
 }
 
 #[test]
+fn current_platform_refuses_before_boundaries_on_unsupported_hosts() {
+    let fixture = Fixture::new('9');
+    let ledger_root = fixture.root.join("ledger-current");
+    let ledger =
+        FileHostEffectLedger::create(&ledger_root, "host-effect-ledger".to_owned()).unwrap();
+    let head = ledger.head().unwrap();
+    let (coordinator, request, mut custody) = accepted(&fixture, &ledger, head);
+    let ledger_before = recursive_snapshot(&ledger_root);
+    let fixture_before = recursive_snapshot(&fixture.root);
+    let mut target = ProbeTarget::stable(&fixture.target);
+    let mut clock = ProbeClock::good(30_000);
+    let mut adapter = ProbeAdapter::linux();
+
+    let error = coordinator
+        .prepare_current(preparation(
+            &request,
+            &mut custody,
+            fixture.pin(),
+            &mut target,
+            &mut clock,
+            &mut adapter,
+        ))
+        .unwrap_err();
+
+    assert_eq!(
+        error.id(),
+        SupportedHostLifecycleErrorId::UnsupportedPlatform
+    );
+    assert!(!custody.is_released());
+    assert_eq!(target.acquisitions.load(Ordering::Relaxed), 0);
+    assert_eq!(target.revalidations.load(Ordering::Relaxed), 0);
+    assert_eq!(clock.calls, 0);
+    assert_eq!(adapter.calls, 0);
+    assert_eq!(recursive_snapshot(&ledger_root), ledger_before);
+    assert_eq!(recursive_snapshot(&fixture.root), fixture_before);
+}
+
+#[test]
 fn supported_protocol_prepares_an_opaque_descriptor_handoff_without_execution() {
     let fixture = Fixture::new('2');
     let ledger = RecordingLedger::new(0, d('a'));
@@ -150,4 +188,38 @@ fn supported_protocol_prepares_an_opaque_descriptor_handoff_without_execution() 
         assert_eq!(effect.plan().plan_sha256(), fixture.plan.plan_sha256());
         assert_eq!(target.identity(), &fixture.target);
     });
+}
+
+#[test]
+fn non_descriptor_platform_is_rejected_before_authority_release() {
+    let fixture = Fixture::new('a');
+    let ledger = RecordingLedger::new(0, d('a'));
+    let (coordinator, request, mut custody) = accepted(&fixture, &ledger, ledger.observed_head());
+    let mut target = ProbeTarget::stable(&fixture.target);
+    let mut clock = ProbeClock::good(40_000);
+    let mut adapter = ProbeAdapter::linux();
+
+    let error = coordinator
+        .prepare_as_platform(
+            DescriptorExecutionPlatform::Other,
+            preparation(
+                &request,
+                &mut custody,
+                fixture.pin(),
+                &mut target,
+                &mut clock,
+                &mut adapter,
+            ),
+        )
+        .unwrap_err();
+
+    assert_eq!(
+        error.id(),
+        SupportedHostLifecycleErrorId::DescriptorExecutionUnavailable
+    );
+    assert!(!custody.is_released());
+    assert_eq!(ledger.writes(), 0);
+    assert_eq!(target.acquisitions.load(Ordering::Relaxed), 0);
+    assert_eq!(clock.calls, 0);
+    assert_eq!(adapter.calls, 0);
 }
