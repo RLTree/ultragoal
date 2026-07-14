@@ -92,14 +92,6 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
     let (_, runtime) = runtime_plan.execute_bound().unwrap();
 
     let surfaces = [
-        SurfaceIdentity::new(
-            package.identity().clone(),
-            ultragoal::distribution::IdentitySurface::Package,
-            package.inventory_sha256().into(),
-            None,
-        )
-        .and_then(|row| row.bind_journey(&binding))
-        .unwrap(),
         SurfaceIdentity::from_verified_install(installed.snapshot(), &binding).unwrap(),
         SurfaceIdentity::from_verified_cache(&cache, &binding).unwrap(),
         SurfaceIdentity::from_verified_marketplace(&marketplace, &binding).unwrap(),
@@ -107,7 +99,13 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
         SurfaceIdentity::from_verified_discovery(&discovery, &binding).unwrap(),
         runtime,
     ];
-    verify_bound_surface_chain(&surfaces, &binding).unwrap();
+    assert_eq!(
+        verify_bound_surface_chain(&surfaces, &binding)
+            .unwrap_err()
+            .id(),
+        DistributionErrorId::ProvenanceMismatch,
+        "verified host observations cannot substitute for package publication authority"
+    );
     assert_eq!(
         snapshot_tree(&fixture.0),
         before,

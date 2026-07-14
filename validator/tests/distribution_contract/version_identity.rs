@@ -1,7 +1,6 @@
 use crate::distribution::{
-    CacheExpectation, DistributionErrorId, HostCommandPlan, IdentitySurface, Layer,
-    MarketplaceExpectation, MarketplaceScope, PackageIdentity, SourceIdentity, SurfaceIdentity,
-    reject_stale_version_reuse, verify,
+    CacheExpectation, DistributionErrorId, HostCommandPlan, Layer, MarketplaceExpectation,
+    MarketplaceScope, PackageIdentity, SourceIdentity, reject_stale_version_reuse, verify,
 };
 use crate::distribution_fixture::{CANDIDATE_ID, CONTEXT_ID, Fixture};
 
@@ -192,12 +191,6 @@ fn deserialized_invalid_identity_cannot_enter_package_or_host_plans() {
     .unwrap();
     assert_eq!(
         HostCommandPlan::personal_install(&package, "local-harness-plugins")
-            .unwrap_err()
-            .id(),
-        DistributionErrorId::InvalidSpec
-    );
-    assert_eq!(
-        SurfaceIdentity::new(package, IdentitySurface::Runtime, C.into(), None)
             .unwrap_err()
             .id(),
         DistributionErrorId::InvalidSpec

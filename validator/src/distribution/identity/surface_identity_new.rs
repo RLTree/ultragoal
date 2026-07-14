@@ -1,5 +1,20 @@
 impl SurfaceIdentity {
-    pub fn new(
+    pub(crate) fn new(
+        package: PackageIdentity,
+        surface: IdentitySurface,
+        observation_sha256: String,
+        observed_tree_sha256: Option<String>,
+    ) -> Result<Self, DistributionError> {
+        if matches!(
+            surface,
+            IdentitySurface::Package | IdentitySurface::AppRegistry
+        ) {
+            return Err(error(DistributionErrorId::ProvenanceMismatch));
+        }
+        Self::issue(package, surface, observation_sha256, observed_tree_sha256)
+    }
+
+    fn issue(
         package: PackageIdentity,
         surface: IdentitySurface,
         observation_sha256: String,
@@ -41,7 +56,7 @@ impl SurfaceIdentity {
         self.observed_tree_sha256.as_deref()
     }
 
-    pub fn bind_journey(
+    pub(crate) fn bind_journey(
         mut self,
         binding: &crate::distribution::host_capability::JourneyBinding,
     ) -> Result<Self, DistributionError> {
@@ -93,7 +108,7 @@ impl SurfaceIdentity {
         {
             return Err(error(DistributionErrorId::ProvenanceMismatch));
         }
-        Self::new(
+        Self::issue(
             snapshot.identity().clone(),
             IdentitySurface::Package,
             publication.output_tree_sha256().into(),
@@ -193,7 +208,7 @@ impl SurfaceIdentity {
         let observation_sha256 = observation
             .observation_sha256()
             .ok_or_else(|| error(DistributionErrorId::ProvenanceMismatch))?;
-        Self::new(
+        Self::issue(
             binding.package().clone(),
             IdentitySurface::AppRegistry,
             observation_sha256.into(),
@@ -204,7 +219,7 @@ impl SurfaceIdentity {
 
     fn validate(&self) -> Result<(), DistributionError> {
         self.package.validate()?;
-        Self::new(
+        Self::issue(
             self.package.clone(),
             self.surface,
             self.observation_sha256.clone(),

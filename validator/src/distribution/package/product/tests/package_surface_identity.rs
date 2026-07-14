@@ -43,3 +43,24 @@ fn package_surface_identity_rejects_a_different_publication_transaction() {
         crate::distribution::DistributionErrorId::ProvenanceMismatch
     );
 }
+
+#[test]
+fn generic_internal_issuance_cannot_bypass_package_or_app_registry_authority() {
+    let repo = Repo::new("restricted-surface-issuance");
+    let context = repo.context();
+    let authority_catalog = catalog(&context);
+    let artifact = capture_product_package(&context, &authority_catalog).unwrap();
+    for surface in [IdentitySurface::Package, IdentitySurface::AppRegistry] {
+        assert_eq!(
+            SurfaceIdentity::new(
+                artifact.snapshot().identity().clone(),
+                surface,
+                artifact.snapshot().inventory_sha256().into(),
+                None,
+            )
+            .unwrap_err()
+            .id(),
+            crate::distribution::DistributionErrorId::ProvenanceMismatch
+        );
+    }
+}

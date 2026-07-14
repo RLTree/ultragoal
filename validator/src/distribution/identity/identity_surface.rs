@@ -138,8 +138,22 @@ impl PackageIdentity {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
-#[serde(deny_unknown_fields)]
+/// An identity row issued from a verified distribution observation.
+///
+/// Callers cannot mint or deserialize rows for the canonical verifier.
+///
+/// ```compile_fail,E0624
+/// use ultragoal::distribution::{IdentitySurface, PackageIdentity, SurfaceIdentity};
+/// fn forge(package: PackageIdentity) {
+///     let _ = SurfaceIdentity::new(package, IdentitySurface::Package, String::new(), None);
+/// }
+/// ```
+///
+/// ```compile_fail,E0277
+/// use ultragoal::distribution::SurfaceIdentity;
+/// let _: SurfaceIdentity = serde_json::from_str("{}").unwrap();
+/// ```
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct SurfaceIdentity {
     package: PackageIdentity,
     surface: IdentitySurface,

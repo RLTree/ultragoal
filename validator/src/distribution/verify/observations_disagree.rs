@@ -51,8 +51,9 @@ fn current_platform() -> &'static str {
     }
 }
 
-pub fn verify_identity_ladder(bytes: &[u8]) -> Result<Vec<SurfaceIdentity>, DistributionError> {
-    let rows = crate::distribution::spec::parse_identity_ladder(bytes)?;
-    verify_surface_chain(&rows)?;
-    Ok(rows)
+pub fn verify_identity_ladder(_bytes: &[u8]) -> Result<Vec<SurfaceIdentity>, DistributionError> {
+    // Provenance-bearing rows are opaque values issued by verified observations.
+    // Caller-provided bytes cannot reconstruct that authority, even when their
+    // serialized shape and digests are structurally valid.
+    Err(error(DistributionErrorId::ProvenanceMismatch))
 }

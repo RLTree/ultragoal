@@ -99,20 +99,3 @@ fn reason_id(value: &str) -> bool {
             .bytes()
             .all(|byte| byte.is_ascii_lowercase() || byte.is_ascii_digit() || byte == b'-')
 }
-
-#[derive(Deserialize)]
-#[serde(deny_unknown_fields)]
-struct RawIdentityLadder {
-    schema: String,
-    surfaces: Vec<SurfaceIdentity>,
-}
-
-pub(crate) fn parse_identity_ladder(
-    bytes: &[u8],
-) -> Result<Vec<SurfaceIdentity>, DistributionError> {
-    let value: RawIdentityLadder = json::parse(bytes, REQUEST_LIMIT)?;
-    if value.schema != "harness-ultragoal.distribution-identity-ladder.v1" {
-        return Err(error(DistributionErrorId::InvalidSpec));
-    }
-    Ok(value.surfaces)
-}

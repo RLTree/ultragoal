@@ -1,12 +1,12 @@
 use crate::distribution::{
-    CacheExpectation, Capability, CodexPlugin, DiscoveryVerdict, ExpectedPrior, ExpectedTree,
-    HostCapabilityDeclaration, HostCapabilityState, IdentitySurface, InstallPlan, InstallScope,
-    JourneyBinding, MarketplaceScope, RuntimeProbePlan, RuntimeVerdict, ScopedFile, ScopedInstall,
-    ScopedTree, SurfaceIdentity, apply_marketplace, execute_runtime_probe, install,
+    CacheExpectation, Capability, CodexPlugin, DiscoveryVerdict, DistributionErrorId,
+    ExpectedPrior, ExpectedTree, HostCapabilityDeclaration, HostCapabilityState, IdentitySurface,
+    InstallPlan, InstallScope, JourneyBinding, MarketplaceScope, RuntimeProbePlan, RuntimeVerdict,
+    ScopedFile, ScopedInstall, ScopedTree, SurfaceIdentity, apply_marketplace, install,
     materialize_package, observe_codex_marketplace, observe_registry_file, plan_codex_marketplace,
     reconcile_cache_file, registry_document, verify_bound_surface_chain,
 };
-use crate::distribution_fixture::{PLUGIN_ID, VERSION, digest};
+use crate::distribution_fixture::{PLUGIN_ID, VERSION};
 use crate::package_journey_fixture::{JourneyFixture, write_scoped};
 use crate::runtime_session::{program, valid_args};
 use serde_json::json;
@@ -144,7 +144,7 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
     )
     .unwrap();
     let before_runtime = fixture.tree();
-    let runtime = execute_runtime_probe(&runtime_plan).unwrap();
+    let (runtime, runtime_surface) = runtime_plan.execute_bound().unwrap();
     assert_eq!(runtime.runtime_verdict(), RuntimeVerdict::Executed);
     assert!(runtime.is_current_execution());
     assert_eq!(
@@ -153,60 +153,30 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
         "subprocess probe is zero-write in scope"
     );
 
-    let package = first.identity().clone();
-    let surfaces = vec![
-        SurfaceIdentity::new(
-            package.clone(),
-            IdentitySurface::Package,
-            first.inventory_sha256().into(),
-            None,
-        )
-        .unwrap(),
-        SurfaceIdentity::new(
-            package.clone(),
+    let observed_surfaces = [
+        SurfaceIdentity::from_verified_install(install.snapshot(), &binding).unwrap(),
+        SurfaceIdentity::from_verified_cache(&cache, &binding).unwrap(),
+        SurfaceIdentity::from_verified_marketplace(&marketplace, &binding).unwrap(),
+        SurfaceIdentity::from_verified_app_registry(&app, &binding).unwrap(),
+        SurfaceIdentity::from_verified_discovery(&discovery, &binding).unwrap(),
+        runtime_surface,
+    ];
+    assert_eq!(
+        observed_surfaces.each_ref().map(|row| row.surface()),
+        [
             IdentitySurface::Installed,
-            digest(&serde_json::to_vec(install.snapshot()).unwrap()),
-            Some(package.tree_sha256().into()),
-        )
-        .unwrap(),
-        SurfaceIdentity::new(
-            package.clone(),
             IdentitySurface::Cache,
-            cache.observation_sha256().into(),
-            Some(package.tree_sha256().into()),
-        )
-        .unwrap(),
-        SurfaceIdentity::new(
-            package.clone(),
             IdentitySurface::Marketplace,
-            marketplace.catalog_sha256().unwrap().into(),
-            None,
-        )
-        .unwrap(),
-        SurfaceIdentity::new(
-            package.clone(),
             IdentitySurface::AppRegistry,
-            app.observation_sha256().unwrap().into(),
-            None,
-        )
-        .unwrap(),
-        SurfaceIdentity::new(
-            package.clone(),
             IdentitySurface::Discovery,
-            discovery.observation_sha256().unwrap().into(),
-            None,
-        )
-        .unwrap(),
-        SurfaceIdentity::new(
-            package,
             IdentitySurface::Runtime,
-            runtime.output_sha256().unwrap().into(),
-            None,
-        )
-        .unwrap(),
-    ]
-    .into_iter()
-    .map(|row| row.bind_journey(&binding).unwrap())
-    .collect::<Vec<_>>();
-    verify_bound_surface_chain(&surfaces, &binding).unwrap();
+        ]
+    );
+    assert_eq!(
+        verify_bound_surface_chain(&observed_surfaces, &binding)
+            .unwrap_err()
+            .id(),
+        DistributionErrorId::ProvenanceMismatch,
+        "a journey without the separately published package row cannot pass"
+    );
 }

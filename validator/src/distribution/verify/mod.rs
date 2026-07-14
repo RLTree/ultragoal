@@ -1,7 +1,7 @@
 use crate::distribution::error::{DistributionError, DistributionErrorId, error};
 use crate::distribution::model::{
     DistributionReport, HostVerdict, JoinReport, JoinVerdict, Layer, LayerReport, LayerVerdict,
-    SurfaceIdentity, verify_surface_chain,
+    SurfaceIdentity,
 };
 use crate::distribution::reader::{ReadSession, sha256};
 use crate::distribution::spec::{

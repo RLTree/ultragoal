@@ -2,7 +2,8 @@ use super::*;
 use crate::context::{BuildRequest, LiveContext};
 use crate::distribution::package::{ExpectedTree, MaterializeEffects, TreeObject, tree_sha256};
 use crate::distribution::{
-    ConfinedRoot, HostCapabilityDeclaration, JourneyBinding, ScopedTree, SurfaceIdentity,
+    ConfinedRoot, HostCapabilityDeclaration, IdentitySurface, JourneyBinding, ScopedTree,
+    SurfaceIdentity,
 };
 use crate::inventory::{AuthorityCatalog, AuthorityCatalogDefinition, GeneratedSurfaceIndex};
 use serde_json::json;
