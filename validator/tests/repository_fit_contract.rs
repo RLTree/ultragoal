@@ -14,7 +14,7 @@ mod engine;
 mod enumeration;
 #[path = "repository_fit_contract/local_read.rs"]
 mod local_read;
+#[path = "repository_fit_contract/scenario.rs"]
+mod scenario;
 #[path = "repository_fit_contract/spec.rs"]
 mod spec;
-#[path = "repository_fit_contract/support.rs"]
-mod support;

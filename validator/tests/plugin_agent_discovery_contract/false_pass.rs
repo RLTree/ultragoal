@@ -2,7 +2,7 @@ use crate::agent_discovery::{
     AgentAuthorityLayer, AgentDiscoveryErrorId, AgentDiscoverySession,
     HostAgentAuthorityTransactionError,
 };
-use crate::support::{FixtureReader, TempRepo};
+use crate::authority_fixtures::{FixtureReader, TempRepo};
 
 #[test]
 fn source_catalog_without_host_transaction_cannot_produce_eligibility() {

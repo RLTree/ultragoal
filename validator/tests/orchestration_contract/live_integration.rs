@@ -1,6 +1,6 @@
-use crate::durable_support::*;
+use crate::durable_journal_fixture::*;
 use crate::orchestration::*;
-use crate::support::*;
+use crate::orchestration_fixture::*;
 use std::fs;
 
 fn accepted_engine(label: &str) -> (Orchestrator<CountingSink>, AcceptanceProposal, JournalRoot) {

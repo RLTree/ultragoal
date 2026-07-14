@@ -1,10 +1,10 @@
 #[path = "../../src/inventory/digest.rs"]
 mod digest;
 
-#[path = "../../src/inventory/types.rs"]
+#[path = "../../src/inventory/types/mod.rs"]
 mod types;
 
-pub use types::{
-    ActiveStatus, AuthorityCatalog, AuthorityState, FindingSeverity, GeneratedSurfaceIndex,
-    InventoryEntry, InventoryError, InventoryFinding,
+pub(crate) use types::{
+    ActiveStatus, AuthorityCatalog, AuthorityCatalogDefinition, AuthorityState, FindingSeverity,
+    GeneratedSurfaceIndex, InventoryEntry, InventoryError, InventoryFinding,
 };

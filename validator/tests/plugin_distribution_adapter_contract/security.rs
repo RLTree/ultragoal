@@ -1,4 +1,4 @@
-use crate::support::{Fixture, lifecycle, request};
+use crate::lifecycle_fixture::{Fixture, lifecycle, request};
 use std::fs;
 use ultragoal::plugin_product::lifecycle::{LifecycleIntent, LifecycleState};
 

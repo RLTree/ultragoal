@@ -1,5 +1,5 @@
 use super::claims::{DecisionLedger, DecisionStatus, EvidenceKind, Observation};
-use super::support::{
+use super::scenario::{
     candidate_id, context_id, definitions, now, observations_for, pass_before, pass_claim,
     reviewer, submit,
 };
@@ -20,7 +20,7 @@ fn stale_context_candidate_surface_ceiling_and_surrogate_evidence_reject() {
         "worker-summary",
     ] {
         let claim_id = "CL-PACKAGE";
-        let mut ledger = super::support::semantic_model_ledger();
+        let mut ledger = super::scenario::semantic_model_ledger();
         pass_before(
             &mut ledger,
             &definitions,
@@ -68,7 +68,7 @@ fn tampered_observation_and_malformed_digest_are_rejected() {
     let mut value = serde_json::to_value(observation).expect("encode observation");
     value["observed_digest"] = serde_json::Value::String("sha256:forged".to_owned());
     let tampered: Observation = serde_json::from_value(value).expect("decode tampered");
-    let mut ledger = super::support::semantic_model_ledger();
+    let mut ledger = super::scenario::semantic_model_ledger();
     let ids = submit(&mut ledger, vec![tampered]);
     let decision = ledger.decide(
         &definitions,
@@ -99,7 +99,7 @@ fn tampered_observation_and_malformed_digest_are_rejected() {
 #[test]
 fn prerequisite_bypass_unknown_claim_and_duplicate_evidence_id_reject() {
     let definitions = definitions();
-    let mut ledger = super::support::semantic_model_ledger();
+    let mut ledger = super::scenario::semantic_model_ledger();
     let ids = submit(
         &mut ledger,
         observations_for(&definitions, "CL-PACKAGE", "bypass"),
@@ -140,7 +140,7 @@ fn prerequisite_bypass_unknown_claim_and_duplicate_evidence_id_reject() {
 #[test]
 fn accepted_evidence_cannot_be_reused_across_candidates() {
     let definitions = definitions();
-    let mut ledger = super::support::semantic_model_ledger();
+    let mut ledger = super::scenario::semantic_model_ledger();
     let observations = observations_for(&definitions, "CL-SOURCE", "reuse");
     let ids = submit(&mut ledger, observations);
     let first = ledger.decide(
@@ -174,6 +174,6 @@ fn accepted_evidence_cannot_be_reused_across_candidates() {
 #[test]
 fn exact_sets_still_pass_after_negative_matrix_setup() {
     let definitions = definitions();
-    let mut ledger = super::support::semantic_model_ledger();
+    let mut ledger = super::scenario::semantic_model_ledger();
     pass_claim(&mut ledger, &definitions, "CL-SOURCE", "control");
 }

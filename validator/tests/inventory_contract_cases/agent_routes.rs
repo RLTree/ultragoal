@@ -6,10 +6,10 @@ use std::fs;
 
 #[path = "agent_routes/reader_false_pass.rs"]
 mod reader_false_pass;
-#[path = "agent_routes/support.rs"]
-mod support;
+#[path = "agent_routes/registry_fixture.rs"]
+mod registry_fixture;
 
-use support::{
+use registry_fixture::{
     CASES, Case, READER_PROOF, catalog, entry, prepare as prepare_without_agent_discovery_readers,
     registry, route_id, target_path, write_registry,
 };

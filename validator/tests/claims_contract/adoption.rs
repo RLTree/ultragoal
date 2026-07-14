@@ -1,5 +1,5 @@
 use super::claims::{ClaimDefinitions, DecisionLedger};
-use super::support::{REGISTRY, definitions, pass_claim, raw_digest};
+use super::scenario::{REGISTRY, definitions, pass_claim, raw_digest};
 
 #[test]
 fn adopts_exact_registry_dag_and_obligation_sets() {
@@ -40,7 +40,7 @@ fn rejects_tampered_duplicate_missing_and_cyclic_registry_definitions() {
 #[test]
 fn complete_exact_obligation_sets_pass_all_fourteen_claims_in_topological_order() {
     let definitions = definitions();
-    let mut ledger = super::support::semantic_model_ledger();
+    let mut ledger = super::scenario::semantic_model_ledger();
     for claim_id in definitions.order() {
         pass_claim(&mut ledger, &definitions, claim_id, "complete");
     }

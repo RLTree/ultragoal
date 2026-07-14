@@ -3,7 +3,7 @@ use std::process::Command;
 use super::routine_work::{
     ChangeKind, LocalDirtyTree, PlanMode, PlanRequest, RoutineErrorId, SelectionReason,
 };
-use super::support::{TempRepo, fallback_graph, graph, graph_with_order};
+use super::scenario::{TempRepo, fallback_graph, graph, graph_with_order};
 
 #[test]
 fn clean_repository_is_an_exact_no_op() {

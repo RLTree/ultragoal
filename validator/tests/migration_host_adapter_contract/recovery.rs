@@ -1,4 +1,4 @@
-use super::support::*;
+use super::host_fixture::*;
 use crate::migration::product::{
     ApplyOutcomeStatus, apply_product_plan, issue_apply_authorization, recover_product_operation,
 };

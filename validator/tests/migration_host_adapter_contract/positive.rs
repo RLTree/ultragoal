@@ -1,4 +1,4 @@
-use super::support::*;
+use super::host_fixture::*;
 use crate::migration::product::{
     ApplyOutcomeStatus, ConfinedMigrationEffect, MigrationInputSource, apply_product_plan,
     derive_product_plan, issue_apply_authorization, validate_adopted_registry_bytes,

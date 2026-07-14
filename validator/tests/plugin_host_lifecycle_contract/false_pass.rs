@@ -1,6 +1,6 @@
+use crate::host_fixture::{Fixture, Reader, handoff_external_effect, lifecycle, request};
 use crate::host_lifecycle::{HostLifecycleErrorId, HostLifecyclePhase};
 use crate::plugin_product::lifecycle::{LifecycleIntent, LifecycleState};
-use crate::support::{Fixture, Reader, handoff_external_effect, lifecycle, request};
 
 #[test]
 fn package_marketplace_and_receipt_shaped_values_cannot_substitute_for_host_observations() {
@@ -28,7 +28,7 @@ fn package_marketplace_and_receipt_shaped_values_cannot_substitute_for_host_obse
     ] {
         let mut reader = Reader {
             marketplace: Some(
-                crate::support::marketplace_plan(&bundle)
+                crate::host_fixture::marketplace_plan(&bundle)
                     .replacement()
                     .to_vec(),
             ),

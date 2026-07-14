@@ -6,8 +6,8 @@ use super::super::routine_work::{
     ReuseDecision, RoutineErrorId, assess_reuse, capture_executed_result, observe_result_artifact,
     set_test_live_authority_hook,
 };
-use super::super::support::{TempRepo, sha};
-use super::common::{
+use super::super::scenario::{TempRepo, sha};
+use super::execution_fixture::{
     authority_plan, capture_guard, capture_race_guard, capture_run, expectation, result_bytes,
     syntax_evidence,
 };

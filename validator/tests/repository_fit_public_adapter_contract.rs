@@ -77,9 +77,9 @@ fn fixture_catalog_covers_the_exact_representative_and_false_pass_matrix() {
 
 #[test]
 fn adapter_is_crate_private_and_opaque_without_effect_authority() {
-    let adapter = source("validator/src/repository_fit/product_adapter.rs");
-    let protocol = source("validator/src/repository_fit/product_adapter/protocol.rs");
-    let effects = source("validator/src/repository_fit/local/effects.rs");
+    let adapter = source("validator/src/repository_fit/product_adapter/mod.rs");
+    let protocol = source("validator/src/repository_fit/product_adapter/protocol/mod.rs");
+    let effects = source("validator/src/repository_fit/local/effects/mod.rs");
     assert!(adapter.contains("pub(crate) use protocol"));
     assert!(!adapter.contains("pub use protocol"));
     assert!(protocol.contains("pub(crate) struct OpaqueFitApplyRequest"));
@@ -152,8 +152,8 @@ fn root_owned_public_wiring_activates_read_routes_and_one_effectful_fit_route() 
 
 #[test]
 fn public_fit_apply_uses_the_sealed_kernel_and_durable_host_recovery() {
-    let fit = source("validator/src/cli/successor_public/fit.rs");
-    let authority = source("validator/src/cli/successor_public/fit/authority.rs");
+    let fit = source("validator/src/cli/successor_public/fit/mod.rs");
+    let authority = source("validator/src/cli/successor_public/fit/authority/mod.rs");
     assert!(fit.contains("pub(super) fn inspect"));
     assert!(fit.contains("pub(super) fn plan"));
     assert!(fit.contains("pub(super) fn verify"));

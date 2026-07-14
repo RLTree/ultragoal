@@ -2,7 +2,7 @@ use super::repository_fit::{
     CanonicalPath, DesiredFile, DesiredState, FitErrorId, FitMode, Ownership, PlanAuthorization,
     inspect, plan,
 };
-use super::support::{MemoryRepo, desired, file, sha};
+use super::scenario::{MemoryRepo, desired, file, sha};
 
 #[test]
 fn paths_reject_escape_alias_ambiguity_controls_and_unbounded_depth() {

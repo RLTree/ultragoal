@@ -2,7 +2,7 @@ use super::routine_work::{
     CheckClass, CheckNode, ImpactGraph, PathMatcher, PathRoute, PlanRequest, RepoPath,
     RoutineErrorId, RunnerSpec, set_test_live_authority_hook,
 };
-use super::support::{TempRepo, graph, node, path, route};
+use super::scenario::{TempRepo, graph, node, path, route};
 
 #[test]
 fn repository_paths_reject_escape_alias_and_excessive_depth_without_echo() {

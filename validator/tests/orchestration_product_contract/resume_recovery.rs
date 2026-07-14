@@ -1,6 +1,6 @@
 use crate::orchestration::*;
 use crate::orchestration_product::*;
-use crate::support::*;
+use crate::product_fixture::*;
 use std::collections::BTreeSet;
 
 fn submitted_interrupted(label: &str) -> (TestRoot, JournalHead, String) {
@@ -118,14 +118,16 @@ fn stale_result_expired_authority_and_expired_lease_fail_closed() {
     };
     let expired = issue_action_permit_for_test(
         &authority,
-        RootOperation::Resume,
-        binding(),
-        workspace.identity(),
-        &journal_head_identity(&head).unwrap(),
-        1,
-        2,
-        b"another-unique-nonce-0123456",
-        target.clone(),
+        RootActionPermitIssuance {
+            operation: RootOperation::Resume,
+            binding: binding(),
+            workspace_identity: workspace.identity(),
+            journal_head_identity: &journal_head_identity(&head).unwrap(),
+            issued_tick: 1,
+            expires_tick: 2,
+            nonce: b"another-unique-nonce-0123456",
+            target: target.clone(),
+        },
     )
     .unwrap();
     assert_eq!(

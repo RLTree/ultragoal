@@ -1,5 +1,5 @@
 use super::observability::{EventQuery, EventStore, SemanticEvent};
-use super::support::{TestDir, event, query, store};
+use super::scenario::{TestDir, event, query, store};
 
 #[test]
 fn attribute_row_event_store_scan_and_result_limits_fail_closed() {

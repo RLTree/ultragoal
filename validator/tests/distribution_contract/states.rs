@@ -2,7 +2,7 @@ use serde_json::json;
 use std::path::Path;
 
 use crate::distribution::{Capability, HostVerdict, JoinVerdict, Layer, LayerVerdict, verify};
-use crate::support::{Fixture, current_platform};
+use crate::distribution_fixture::{Fixture, current_platform};
 
 #[test]
 fn definition_missing_and_unavailable_states_are_not_promoted() {
@@ -60,7 +60,7 @@ fn definition_missing_and_unavailable_states_are_not_promoted() {
 
 #[test]
 fn unsupported_platform_is_an_explicit_report_not_simulated_proof() {
-    let mut request = crate::support::request();
+    let mut request = crate::distribution_fixture::request();
     request["host"]["platform"] = json!(if current_platform() == "windows" {
         "linux"
     } else {

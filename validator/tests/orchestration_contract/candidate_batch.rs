@@ -1,6 +1,6 @@
-use crate::durable_support::*;
+use crate::durable_journal_fixture::*;
 use crate::orchestration::*;
-use crate::support::*;
+use crate::orchestration_fixture::*;
 
 fn accepted_batch(
     second_root_path: &str,

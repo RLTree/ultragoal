@@ -1,5 +1,3 @@
-#![allow(dead_code, unused_imports)]
-
 #[path = "../src/orchestration/mod.rs"]
 mod orchestration;
 #[path = "../src/orchestration/product/runtime_adapter/mod.rs"]
@@ -13,6 +11,6 @@ mod orchestration_runtime_adapter_contract {
     mod negative;
     mod positive;
     mod race;
+    mod runtime_fixture;
     mod security;
-    mod support;
 }

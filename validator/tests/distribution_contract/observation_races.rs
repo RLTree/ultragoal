@@ -2,8 +2,8 @@ use crate::distribution::{
     CacheExpectation, CacheReader, DistributionErrorId as ErrorId, HostCapabilityDeclaration,
     JourneyBinding, RegistryReader, observe_registry_file, reconcile_cache_file, registry_document,
 };
-use crate::journey_support::JourneyFixture;
-use crate::support::{PLUGIN_ID, VERSION};
+use crate::distribution_fixture::{PLUGIN_ID, VERSION};
+use crate::package_journey_fixture::JourneyFixture;
 use serde_json::json;
 
 struct MutatingCache {

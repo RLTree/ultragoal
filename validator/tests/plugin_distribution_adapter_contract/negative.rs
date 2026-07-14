@@ -1,4 +1,6 @@
-use crate::support::{CANDIDATE, Fixture, OTHER_CANDIDATE, installed, lifecycle, request};
+use crate::lifecycle_fixture::{
+    CANDIDATE, Fixture, OTHER_CANDIDATE, installed, lifecycle, request,
+};
 use ultragoal::plugin_product::distribution_adapter::{
     AdapterErrorId, DistributionLifecycleOperation,
 };

@@ -1,6 +1,6 @@
 use crate::orchestration::*;
 use crate::orchestration_product::*;
-use crate::support::*;
+use crate::product_fixture::*;
 use std::collections::BTreeSet;
 
 fn running(label: &str) -> (TestRoot, JournalHead) {
@@ -86,14 +86,16 @@ fn authority_token_mutation_and_secret_echo_fail_closed() {
         root_authority_for_test(Actor::parse("not-the-root").unwrap(), SECRET_CANARY).unwrap();
     let wrong_root_permit = issue_action_permit_for_test(
         &wrong_root,
-        RootOperation::Resume,
-        binding(),
-        workspace.identity(),
-        &journal_head_identity(&head).unwrap(),
-        2,
-        10,
-        b"wrong-root-nonce-0123456789",
-        target.clone(),
+        RootActionPermitIssuance {
+            operation: RootOperation::Resume,
+            binding: binding(),
+            workspace_identity: workspace.identity(),
+            journal_head_identity: &journal_head_identity(&head).unwrap(),
+            issued_tick: 2,
+            expires_tick: 10,
+            nonce: b"wrong-root-nonce-0123456789",
+            target: target.clone(),
+        },
     )
     .unwrap();
     assert_eq!(

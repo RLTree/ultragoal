@@ -127,6 +127,27 @@ fn catalog(context: &LiveContext) -> AuthorityCatalog {
     .expect("canonical test catalog")
 }
 
+fn capture_failure_after_manifest_mutation(
+    label: &str,
+    mutate: impl FnOnce(&mut serde_json::Value),
+) -> ProductionPackageErrorId {
+    let product = ProductRoot::new(label);
+    let path = product.root.join("plugin-manifest-draft.json");
+    let mut manifest: serde_json::Value =
+        serde_json::from_slice(&fs::read(&path).expect("draft bytes")).expect("draft JSON");
+    mutate(&mut manifest);
+    fs::write(
+        path,
+        serde_json::to_vec(&manifest).expect("mutated draft JSON"),
+    )
+    .expect("mutated draft");
+    let context = product.context();
+    let authority_catalog = catalog(&context);
+    capture_product_package(&context, &authority_catalog)
+        .expect_err("invalid draft accepted")
+        .id()
+}
+
 #[test]
 fn named_target_exercises_real_product_capture_and_catalog_binding() {
     let product = ProductRoot::new("named-positive");
@@ -135,4 +156,62 @@ fn named_target_exercises_real_product_capture_and_catalog_binding() {
     let artifact = capture_product_package(&context, &authority_catalog).expect("capture");
     verify_product_package(&artifact, &context, &authority_catalog).expect("verify");
     assert_eq!(artifact.snapshot().entries().len(), 17);
+}
+
+#[test]
+fn draft_manifest_rejects_unknown_and_malformed_rows() {
+    assert_eq!(
+        capture_failure_after_manifest_mutation("unknown-top-level", |manifest| {
+            manifest["unadopted"] = json!(true);
+        }),
+        ProductionPackageErrorId::SourceUnavailable,
+    );
+    assert_eq!(
+        capture_failure_after_manifest_mutation("unknown-skill-field", |manifest| {
+            manifest["skills"][0]["unadopted"] = json!(true);
+        }),
+        ProductionPackageErrorId::SourceUnavailable,
+    );
+    assert_eq!(
+        capture_failure_after_manifest_mutation("malformed-skill", |manifest| {
+            manifest["skills"][0] = json!({"name":"harness-ultragoal"});
+        }),
+        ProductionPackageErrorId::SourceUnavailable,
+    );
+}
+
+#[test]
+fn draft_manifest_rejects_case_collisions_and_duplicate_semantic_ids() {
+    assert_eq!(
+        capture_failure_after_manifest_mutation("case-colliding-path", |manifest| {
+            let path = manifest["skills"][0]["path"].clone();
+            manifest["resources"] = json!([path.as_str().unwrap().to_ascii_uppercase()]);
+        }),
+        ProductionPackageErrorId::SourceUnavailable,
+    );
+    assert_eq!(
+        capture_failure_after_manifest_mutation("duplicate-skill-id", |manifest| {
+            let duplicate = manifest["skills"][0].clone();
+            manifest["skills"].as_array_mut().unwrap().push(duplicate);
+        }),
+        ProductionPackageErrorId::SourceUnavailable,
+    );
+}
+
+#[test]
+fn draft_manifest_rejects_duplicate_json_keys_before_typed_decode() {
+    let product = ProductRoot::new("duplicate-key");
+    let path = product.root.join("plugin-manifest-draft.json");
+    let draft = String::from_utf8(fs::read(&path).expect("draft bytes")).expect("utf8 draft");
+    let duplicate = draft.replacen(
+        &format!("\"name\":\"{PLUGIN_ID}\""),
+        &format!("\"name\":\"{PLUGIN_ID}\",\"name\":\"{PLUGIN_ID}\""),
+        1,
+    );
+    assert_ne!(duplicate, draft);
+    fs::write(path, duplicate).expect("duplicate-key draft");
+    let context = product.context();
+    let error = capture_product_package(&context, &catalog(&context))
+        .expect_err("duplicate-key draft accepted");
+    assert_eq!(error.id(), ProductionPackageErrorId::SourceUnavailable);
 }

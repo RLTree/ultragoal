@@ -1,5 +1,5 @@
 use super::observability::{EventQuery, EventStore};
-use super::support::{TestDir, event, query, store};
+use super::scenario::{TestDir, event, query, store};
 use std::fs::{self, OpenOptions};
 use std::io::Write;
 

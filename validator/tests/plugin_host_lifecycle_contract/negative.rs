@@ -1,12 +1,12 @@
 use crate::distribution::{HostCapabilityDeclaration, registry_document};
-use crate::host_lifecycle::{
-    HostLayer, HostLayerVerdict, HostLifecycleErrorId, HostLifecyclePhase, HostLifecycleSession,
-    HostScopeAuthority, observe_plugins_ui,
-};
-use crate::plugin_product::lifecycle::{LifecycleIntent, LifecycleState};
-use crate::support::{
+use crate::host_fixture::{
     Fixture, Reader, installed, lifecycle, marketplace_plan, request, ui_document,
 };
+use crate::host_lifecycle::{
+    HostLayer, HostLayerVerdict, HostLifecycleBindRequest, HostLifecycleErrorId,
+    HostLifecyclePhase, HostLifecycleSession, HostScopeAuthority, observe_plugins_ui,
+};
+use crate::plugin_product::lifecycle::{LifecycleIntent, LifecycleState};
 
 #[test]
 fn unsupported_host_is_explicit_and_supplied_bytes_cannot_promote_it() {
@@ -31,17 +31,17 @@ fn unsupported_host_is_explicit_and_supplied_bytes_cannot_promote_it() {
         "codex-app-unavailable",
     )
     .unwrap();
-    let mut session = HostLifecycleSession::bind(
-        fixture.confined(),
-        &bundle.plan,
-        &bundle.snapshot,
-        repeat.clone(),
+    let mut session = HostLifecycleSession::bind(HostLifecycleBindRequest {
+        root: fixture.confined(),
+        package_plan: &bundle.plan,
+        package: &bundle.snapshot,
+        lifecycle: repeat.clone(),
         host,
-        marketplace_plan(&bundle),
-        HostScopeAuthority::Personal {
+        marketplace_plan: marketplace_plan(&bundle),
+        host_scope: HostScopeAuthority::Personal {
             marketplace: "local-harness-plugins".into(),
         },
-    )
+    })
     .unwrap();
     session.apply_confined(&state).unwrap();
     let mut supplied = Reader {
@@ -167,34 +167,34 @@ fn conflicting_package_and_host_effect_arguments_refuse_before_mutation() {
     );
     let host = fixture.host();
     let before = fixture.tree();
-    let mismatch = HostLifecycleSession::bind(
-        fixture.confined(),
-        &expected.plan,
-        &expected.snapshot,
-        plan.clone(),
-        host.clone(),
-        marketplace_plan(&other),
-        HostScopeAuthority::Personal {
+    let mismatch = HostLifecycleSession::bind(HostLifecycleBindRequest {
+        root: fixture.confined(),
+        package_plan: &expected.plan,
+        package: &expected.snapshot,
+        lifecycle: plan.clone(),
+        host: host.clone(),
+        marketplace_plan: marketplace_plan(&other),
+        host_scope: HostScopeAuthority::Personal {
             marketplace: "local-harness-plugins".into(),
         },
-    );
+    });
     assert_eq!(
         mismatch.err().unwrap().id(),
         HostLifecycleErrorId::InvalidBinding
     );
     assert_eq!(fixture.tree(), before);
 
-    let invalid_effect = HostLifecycleSession::bind(
-        fixture.confined(),
-        &expected.plan,
-        &expected.snapshot,
-        plan,
-        host.clone(),
-        marketplace_plan(&expected),
-        HostScopeAuthority::Personal {
+    let invalid_effect = HostLifecycleSession::bind(HostLifecycleBindRequest {
+        root: fixture.confined(),
+        package_plan: &expected.plan,
+        package: &expected.snapshot,
+        lifecycle: plan,
+        host: host.clone(),
+        marketplace_plan: marketplace_plan(&expected),
+        host_scope: HostScopeAuthority::Personal {
             marketplace: "../../attacker".into(),
         },
-    );
+    });
     assert_eq!(
         invalid_effect.err().unwrap().id(),
         HostLifecycleErrorId::InvalidBinding

@@ -1,5 +1,3 @@
-#![allow(dead_code, unused_imports)]
-
 #[path = "../src/orchestration/mod.rs"]
 mod orchestration;
 #[path = "../src/orchestration/product/runtime_adapter/mod.rs"]

@@ -1,7 +1,7 @@
 use std::process::Command;
 
 use super::base_support::{TempRepo, fallback_graph, graph};
-use super::journey_support::{
+use super::journey_scenario::{
     authority_context, authority_plan, capture_guard, capture_receipt, expectation,
     issue_execution, observe_execution,
 };

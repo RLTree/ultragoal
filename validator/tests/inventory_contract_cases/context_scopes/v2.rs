@@ -6,6 +6,8 @@ use std::fs;
 
 #[path = "v2/evidence.rs"]
 mod evidence;
+#[path = "v2/proposal_context.rs"]
+mod proposal_context;
 
 const PREDECESSOR_ROOT: &str = "docs/ultragoal-contract-2026-07";
 const RESULTS_ROOT: &str = "docs/ultragoal-successor-live/worker-results";
@@ -79,6 +81,10 @@ fn exact_repo(label: &str) -> TestRepo {
     copy_candidate(&repo);
     copy_predecessor(&repo);
     copy_historical_evidence(&repo);
+    repo.write(
+        "REPORT.md",
+        &fs::read(live_root().join("REPORT.md")).unwrap(),
+    );
     repo.write(
         RESULT_PATH,
         &serde_json::to_vec(&worker_result("LEASE-N02-TEST-CONTEXT-001")).unwrap(),

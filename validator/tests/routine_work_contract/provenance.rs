@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 
 use super::routine_work::{LocalDirtyTree, PlanRequest, RoutineErrorId};
-use super::support::{TempRepo, graph};
+use super::scenario::{TempRepo, graph};
 
 const SCRATCH: &str = "/tmp/hul-routine-snapshot-provenance-001/consumer-probe";
 

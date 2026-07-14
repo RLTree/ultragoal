@@ -26,7 +26,7 @@ mod reuse;
 mod runtime_adapter;
 #[path = "routine_work_contract/runtime_mediator.rs"]
 mod runtime_mediator;
+#[path = "routine_work_contract/scenario.rs"]
+mod scenario;
 #[path = "routine_work_contract/security.rs"]
 mod security;
-#[path = "routine_work_contract/support.rs"]
-mod support;

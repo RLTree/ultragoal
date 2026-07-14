@@ -1,5 +1,5 @@
 use crate::orchestration::*;
-use crate::support::*;
+use crate::orchestration_fixture::*;
 
 fn blocker(id: &str, node: &str, class: BlockerClass) -> Blocker {
     Blocker {

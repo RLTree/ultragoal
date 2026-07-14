@@ -1,5 +1,5 @@
 use super::fresh_process_child::{CHILD_ENV, CHILD_TEST, ChildInput, ChildOutput};
-use super::support::*;
+use super::runtime_fixture::*;
 use crate::orchestration::*;
 use std::collections::BTreeSet;
 use std::fs;

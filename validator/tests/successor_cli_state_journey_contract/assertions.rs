@@ -27,6 +27,23 @@ pub(super) fn assert_diagnostic(output: &Output, exit: i32, schema: &str, privat
     machine_value(&output.stderr, schema, private)
 }
 
+pub(super) fn assert_payload_any_exit(
+    output: &Output,
+    exits: &[i32],
+    schema: &str,
+    private: &str,
+) -> Value {
+    assert!(
+        exits.contains(&output.status.code().unwrap_or(-1)),
+        "unexpected exit: {output:?}"
+    );
+    assert!(
+        output.stderr.is_empty(),
+        "payload contaminated stderr: {output:?}"
+    );
+    machine_value(&output.stdout, schema, private)
+}
+
 pub(super) fn machine_value(bytes: &[u8], schema: &str, private: &str) -> Value {
     assert!(!bytes.is_empty(), "machine stream is empty");
     assert!(!bytes.contains(&0x1b), "machine stream contains ANSI");

@@ -1,4 +1,4 @@
-use super::support::{AdapterMode, MockAdapter, TestDir, event, query, store};
+use super::scenario::{AdapterMode, MockAdapter, TestDir, event, query, store};
 use std::fs;
 use std::time::Duration;
 

@@ -2,7 +2,7 @@ use crate::distribution::{
     DistributionErrorId as ErrorId, IdentitySurface, PackageIdentity, SourceIdentity,
     SurfaceIdentity, verify_identity_ladder, verify_surface_chain,
 };
-use crate::support::{CANDIDATE_ID, CONTEXT_ID};
+use crate::distribution_fixture::{CANDIDATE_ID, CONTEXT_ID};
 use serde::Serialize;
 
 const INVENTORY: &str = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";

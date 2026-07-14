@@ -22,6 +22,8 @@ mod descriptor_races;
 mod descriptor_recovery;
 #[path = "distribution_contract/descriptor_unlink.rs"]
 mod descriptor_unlink;
+#[path = "distribution_contract/distribution_fixture.rs"]
+mod distribution_fixture;
 #[path = "distribution_contract/identity_ladder.rs"]
 mod identity_ladder;
 #[path = "distribution_contract/install.rs"]
@@ -30,8 +32,6 @@ mod install;
 mod isolated_journey;
 #[path = "distribution_contract/journey_adversarial.rs"]
 mod journey_adversarial;
-#[path = "distribution_contract/journey_support.rs"]
-mod journey_support;
 #[path = "distribution_contract/manifest_semantics.rs"]
 mod manifest_semantics;
 #[path = "distribution_contract/marketplace_install_kernel.rs"]
@@ -44,6 +44,8 @@ mod observation_races;
 mod package;
 #[path = "distribution_contract/package_identity.rs"]
 mod package_identity;
+#[path = "distribution_contract/package_journey_fixture.rs"]
+mod package_journey_fixture;
 #[path = "distribution_contract/package_manifest.rs"]
 mod package_manifest;
 #[path = "distribution_contract/package_output.rs"]
@@ -56,7 +58,5 @@ mod prefix_collisions;
 mod runtime_session;
 #[path = "distribution_contract/states.rs"]
 mod states;
-#[path = "distribution_contract/support.rs"]
-mod support;
 #[path = "distribution_contract/version_identity.rs"]
 mod version_identity;

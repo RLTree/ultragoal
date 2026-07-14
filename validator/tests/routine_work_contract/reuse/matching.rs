@@ -4,8 +4,8 @@ use super::super::context::{BuildRequest, LiveContext};
 use super::super::routine_work::{
     ReuseDecision, ReuseMiss, ReuseReceipt, RoutineErrorId, RunOutcome, assess_reuse,
 };
-use super::super::support::{TempRepo, sha};
-use super::common::{
+use super::super::scenario::{TempRepo, sha};
+use super::execution_fixture::{
     authority_context, authority_plan, capture_bytes, capture_guard, capture_receipt,
     observe_bytes, result_bytes_with, syntax_evidence,
 };

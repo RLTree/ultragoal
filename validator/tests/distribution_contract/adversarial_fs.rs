@@ -1,7 +1,7 @@
 use std::fs::{self, OpenOptions};
 
 use crate::distribution::{DistributionErrorId, Layer, verify};
-use crate::support::{Fixture, identity_path, payload_path};
+use crate::distribution_fixture::{Fixture, identity_path, payload_path};
 
 #[cfg(unix)]
 #[test]

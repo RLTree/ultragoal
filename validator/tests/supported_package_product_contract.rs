@@ -1,7 +1,8 @@
-#![allow(dead_code, unused_imports)]
-
 #[path = "../src/digest.rs"]
 mod digest;
+
+#[path = "../src/generated_authority/mod.rs"]
+mod generated_authority;
 
 #[path = "../src/context/mod.rs"]
 mod context;

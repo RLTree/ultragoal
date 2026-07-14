@@ -3,7 +3,7 @@ use crate::distribution::{
     ProvenanceExpectation, SignatureExpectation, SignatureVerifierEffects, unavailable_marketplace,
     verify_marketplace, verify_provenance, verify_signature,
 };
-use crate::support::{CANDIDATE_ID, CONTEXT_ID};
+use crate::distribution_fixture::{CANDIDATE_ID, CONTEXT_ID};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
 

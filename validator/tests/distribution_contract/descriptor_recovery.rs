@@ -4,8 +4,8 @@ use crate::distribution::{
     EffectPoint, ExpectedTree, ScopedTree, assert_test_effect_hook_consumed, materialize_package,
     set_test_effect_hook_matching,
 };
-use crate::journey_support::JourneyFixture;
-use crate::support::{digest, tree};
+use crate::distribution_fixture::{digest, tree};
+use crate::package_journey_fixture::JourneyFixture;
 use std::cell::RefCell;
 use std::fs;
 use std::os::unix::fs::symlink;

@@ -22,5 +22,5 @@ mod observability;
 mod privacy_export;
 #[path = "observability_contract/races_paths.rs"]
 mod races_paths;
-#[path = "observability_contract/support.rs"]
-mod support;
+#[path = "observability_contract/scenario.rs"]
+mod scenario;

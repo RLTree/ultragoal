@@ -15,5 +15,5 @@ mod false_pass_execution;
 mod lifecycle;
 #[path = "claims_contract/rejections.rs"]
 mod rejections;
-#[path = "claims_contract/support.rs"]
-mod support;
+#[path = "claims_contract/scenario.rs"]
+mod scenario;

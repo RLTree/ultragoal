@@ -1,4 +1,4 @@
-use crate::support::{Fixture, installed, lifecycle, request};
+use crate::lifecycle_fixture::{Fixture, installed, lifecycle, request};
 use ultragoal::plugin_product::lifecycle::{
     ApplyDisposition, LifecycleIntent, LifecycleState, verify,
 };

@@ -6,9 +6,9 @@ use crate::distribution::{
     materialize_package, observe_codex_marketplace, observe_registry_file, plan_codex_marketplace,
     reconcile_cache_file, registry_document, verify_bound_surface_chain,
 };
-use crate::journey_support::{JourneyFixture, write_scoped};
+use crate::distribution_fixture::{PLUGIN_ID, VERSION, digest};
+use crate::package_journey_fixture::{JourneyFixture, write_scoped};
 use crate::runtime_session::{program, valid_args};
-use crate::support::{PLUGIN_ID, VERSION, digest};
 use serde_json::json;
 use std::time::Duration;
 

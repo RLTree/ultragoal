@@ -1,7 +1,7 @@
 use super::observability::{
     CausalExplanation, EventQuery, EventStore, ExportAdapter, SemanticEvent,
 };
-use super::support::{TestDir, event, query, store, tree_snapshot};
+use super::scenario::{TestDir, event, query, store, tree_snapshot};
 
 #[test]
 fn public_contract_names_compile_from_the_owned_wrapper() {
@@ -13,7 +13,7 @@ fn public_contract_names_compile_from_the_owned_wrapper() {
         _: &mut T,
     ) {
     }
-    let _ = witness::<super::support::MockAdapter>;
+    let _ = witness::<super::scenario::MockAdapter>;
 }
 
 #[test]

@@ -2,7 +2,7 @@ use crate::distribution::{
     CodexPlugin, DistributionErrorId as ErrorId, MarketplaceEffects, PackageIdentity,
     SourceIdentity, apply_marketplace, plan_codex_marketplace, rollback_marketplace,
 };
-use crate::support::{CANDIDATE_ID, CONTEXT_ID, digest};
+use crate::distribution_fixture::{CANDIDATE_ID, CONTEXT_ID, digest};
 use serde_json::{Value, json};
 
 const A: &str = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";

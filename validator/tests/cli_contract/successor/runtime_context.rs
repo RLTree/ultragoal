@@ -10,8 +10,8 @@ use std::sync::atomic::{AtomicU64, Ordering};
 
 static NEXT_REPOSITORY: AtomicU64 = AtomicU64::new(0);
 
-#[path = "node_n03.rs"]
-mod node_n03;
+#[path = "state_views.rs"]
+mod state_views;
 
 struct Repository {
     root: PathBuf,

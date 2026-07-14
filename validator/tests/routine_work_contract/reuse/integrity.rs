@@ -2,8 +2,8 @@ use super::super::routine_work::{
     ReuseDecision, ReuseExpectation, ReuseMiss, ReuseReceipt, RoutineErrorId, assess_reuse,
     set_test_live_authority_hook,
 };
-use super::super::support::{TempRepo, sha};
-use super::common::{
+use super::super::scenario::{TempRepo, sha};
+use super::execution_fixture::{
     authority_context, authority_plan, capture_bytes, capture_guard, capture_receipt, expectation,
     issue_execution, syntax_evidence,
 };

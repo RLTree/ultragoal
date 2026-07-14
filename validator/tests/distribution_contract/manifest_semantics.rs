@@ -1,6 +1,6 @@
 use crate::distribution::{DistributionErrorId as ErrorId, plan_package};
+use crate::distribution_fixture::Fixture;
 use crate::package_manifest::{add, error, manifest, spec_value, write_manifest, write_sources};
-use crate::support::Fixture;
 use serde_json::{Value, json};
 
 #[test]

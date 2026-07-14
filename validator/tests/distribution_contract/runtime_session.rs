@@ -2,8 +2,8 @@ use crate::distribution::{
     DistributionErrorId as ErrorId, HostCapabilityDeclaration, JourneyBinding, RuntimeObservation,
     RuntimeProbePlan, RuntimeVerdict, execute_runtime_probe,
 };
-use crate::journey_support::JourneyFixture;
-use crate::support::Fixture;
+use crate::distribution_fixture::Fixture;
+use crate::package_journey_fixture::JourneyFixture;
 use serde_json::json;
 use std::path::PathBuf;
 use std::time::Duration;

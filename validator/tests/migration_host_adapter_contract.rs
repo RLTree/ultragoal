@@ -1,16 +1,14 @@
-#![allow(dead_code, unused_imports)]
-
 #[path = "../src/migration/mod.rs"]
 mod migration;
 
 #[path = "migration_host_adapter_contract/adversarial.rs"]
 mod adversarial;
+#[path = "migration_host_adapter_contract/host_fixture.rs"]
+mod host_fixture;
 #[path = "migration_host_adapter_contract/positive.rs"]
 mod positive;
 #[path = "migration_host_adapter_contract/recovery.rs"]
 mod recovery;
-#[path = "migration_host_adapter_contract/support.rs"]
-mod support;
 
 #[test]
 fn darwin_migration_host_adapter_is_wired_to_the_accepted_product_boundary() {

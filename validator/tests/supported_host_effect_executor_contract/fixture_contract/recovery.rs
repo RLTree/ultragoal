@@ -1,0 +1,85 @@
+fn assert_recovery_contract(cases: &Cases) {
+    let recovery = &cases.terminal_transition_recovery;
+    assert!(recovery.identity_bearing_handoff);
+    assert!(recovery.effect_identity_bound);
+    assert!(recovery.permit_id_bound);
+    assert!(recovery.current_ledger_record_and_head_bound_when_observable);
+    assert!(recovery.intended_outcome_bound);
+    assert!(recovery.originating_error_bound);
+    assert!(recovery.classification_bound);
+    assert!(recovery.post_publication_prior_evidence_bound);
+    assert!(recovery.post_publication_transition_cause_bound);
+    assert!(recovery.post_publication_current_observation_unavailable_explicit);
+    assert!(!recovery.post_publication_terminal_state_claim);
+    assert!(!recovery.post_publication_acknowledgement_claim);
+    assert!(!recovery.post_publication_success_claim);
+    assert!(!recovery.post_publication_automatic_retry);
+    assert!(!recovery.post_publication_automatic_cleanup);
+    assert_eq!(recovery.stable_observation_attempts, 3);
+    assert!(recovery.global_head_record_coherence_required);
+    assert!(recovery.record_permit_coherence_required);
+    assert!(!recovery.mismatched_head_record_exact_classification);
+    assert_eq!(
+        recovery.mismatched_head_record_fallback,
+        "ledger-observation-unavailable"
+    );
+    assert_eq!(
+        recovery
+            .classifications
+            .iter()
+            .map(String::as_str)
+            .collect::<Vec<_>>(),
+        [
+            "still-in-flight",
+            "terminal-committed-and-verified",
+            "terminal-committed-but-unverifiable",
+            "ledger-observation-rejected",
+            "ledger-observation-unavailable",
+        ]
+    );
+    assert_eq!(
+        recovery
+            .post_publication_classifications
+            .iter()
+            .map(String::as_str)
+            .collect::<Vec<_>>(),
+        ["committed-before-terminal-transition-observation-unavailable"]
+    );
+    assert_eq!(
+        recovery
+            .post_reservation_ledger_classifications
+            .iter()
+            .map(String::as_str)
+            .collect::<Vec<_>>(),
+        [
+            "still-in-flight",
+            "terminal-observed",
+            "observation-rejected",
+            "observation-unavailable",
+        ]
+    );
+    assert_eq!(
+        recovery
+            .post_reservation_publication_classifications
+            .iter()
+            .map(String::as_str)
+            .collect::<Vec<_>>(),
+        [
+            "no-publication-evidence",
+            "publication-evidence-unavailable",
+            "publication-identity-only-current-observation-unavailable",
+            "prior-observation-current-observation-unavailable",
+        ]
+    );
+    assert!(!recovery.bare_ledger_substitution_after_opaque_handoff);
+    assert!(!recovery.bare_post_publication_reobservation_failure_after_opaque_handoff);
+    assert!(recovery.guarded_post_reservation_error_boundary);
+    assert_eq!(recovery.identity_free_returns_after_guard, 0);
+    assert_eq!(recovery.terminal_only_returns_after_guard, 0);
+    assert!(recovery.complete_error_chain_bound);
+    assert!(recovery.ordered_error_chain_bound);
+    assert!(recovery.terminal_transition_error_bound);
+    assert!(recovery.duplicate_error_ids_rejected);
+    assert!(recovery.synthetic_recovery_error_id_rejected);
+    assert_eq!(recovery.maximum_originating_error_chain_length, 4);
+}

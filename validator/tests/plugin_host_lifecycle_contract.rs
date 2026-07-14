@@ -18,11 +18,11 @@ mod host_lifecycle;
 mod capability;
 #[path = "plugin_host_lifecycle_contract/false_pass.rs"]
 mod false_pass;
+#[path = "plugin_host_lifecycle_contract/host_fixture.rs"]
+mod host_fixture;
 #[path = "plugin_host_lifecycle_contract/journeys.rs"]
 mod journeys;
 #[path = "plugin_host_lifecycle_contract/negative.rs"]
 mod negative;
 #[path = "plugin_host_lifecycle_contract/security.rs"]
 mod security;
-#[path = "plugin_host_lifecycle_contract/support.rs"]
-mod support;

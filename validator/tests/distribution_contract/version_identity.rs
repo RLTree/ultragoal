@@ -3,7 +3,7 @@ use crate::distribution::{
     MarketplaceExpectation, MarketplaceScope, PackageIdentity, SourceIdentity, SurfaceIdentity,
     reject_stale_version_reuse, verify,
 };
-use crate::support::{CANDIDATE_ID, CONTEXT_ID, Fixture};
+use crate::distribution_fixture::{CANDIDATE_ID, CONTEXT_ID, Fixture};
 
 const A: &str = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const B: &str = "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";

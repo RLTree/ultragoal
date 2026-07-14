@@ -1,7 +1,7 @@
 use serde_json::json;
 
 use crate::distribution::{Capability, DistributionErrorId, Layer, LayerVerdict, verify};
-use crate::support::{Fixture, digest};
+use crate::distribution_fixture::{Fixture, digest};
 
 #[test]
 fn stale_mixed_hidden_and_payload_mismatch_never_promote() {

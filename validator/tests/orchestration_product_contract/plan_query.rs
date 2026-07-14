@@ -1,6 +1,6 @@
 use crate::orchestration::*;
 use crate::orchestration_product::*;
-use crate::support::*;
+use crate::product_fixture::*;
 use std::collections::BTreeSet;
 
 #[test]

@@ -4,8 +4,8 @@ use crate::distribution::{
     DistributionErrorId as ErrorId, EffectPoint, ExpectedTree, ScopedFile, ScopedTree,
     assert_test_effect_hook_consumed, materialize_package, set_test_effect_hook_matching,
 };
-use crate::journey_support::{JourneyFixture, write_scoped};
-use crate::support::digest;
+use crate::distribution_fixture::digest;
+use crate::package_journey_fixture::{JourneyFixture, write_scoped};
 use std::cell::RefCell;
 use std::fs;
 use std::path::PathBuf;

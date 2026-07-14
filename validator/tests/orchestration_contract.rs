@@ -1,5 +1,3 @@
-#![allow(dead_code, unused_imports)]
-
 #[path = "../src/orchestration/mod.rs"]
 mod orchestration;
 
@@ -15,8 +13,8 @@ mod blockers;
 mod candidate_batch;
 #[path = "orchestration_contract/candidate_rebind.rs"]
 mod candidate_rebind;
-#[path = "orchestration_contract/durable_support.rs"]
-mod durable_support;
+#[path = "orchestration_contract/durable_journal_fixture.rs"]
+mod durable_journal_fixture;
 #[path = "orchestration_contract/effect_recovery.rs"]
 mod effect_recovery;
 #[path = "orchestration_contract/effects.rs"]
@@ -39,6 +37,8 @@ mod journal_security;
 mod leases;
 #[path = "orchestration_contract/live_integration.rs"]
 mod live_integration;
+#[path = "orchestration_contract/orchestration_fixture.rs"]
+mod orchestration_fixture;
 #[path = "orchestration_contract/path_aliases.rs"]
 mod path_aliases;
 #[path = "orchestration_contract/read_write_authority.rs"]
@@ -55,8 +55,6 @@ mod root_acceptance;
 mod root_issued_envelope;
 #[path = "orchestration_contract/security.rs"]
 mod security;
-#[path = "orchestration_contract/support.rs"]
-mod support;
 #[path = "orchestration_contract/worker_results.rs"]
 mod worker_results;
 #[path = "orchestration_contract/workspace_observer.rs"]

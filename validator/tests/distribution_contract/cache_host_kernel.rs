@@ -3,7 +3,7 @@ use crate::distribution::{
     HostAuthorization, HostCommandPlan, HostExecutor, InstallPlan, InstallScope, PackageIdentity,
     SourceIdentity, execute_authorized, reconcile_cache_read_only, reject_stale_version_reuse,
 };
-use crate::support::{CANDIDATE_ID, CONTEXT_ID};
+use crate::distribution_fixture::{CANDIDATE_ID, CONTEXT_ID};
 use serde_json::json;
 
 const A: &str = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";

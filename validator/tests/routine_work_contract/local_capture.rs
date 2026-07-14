@@ -2,7 +2,7 @@ use std::fs::{self, OpenOptions};
 
 use super::context::{BuildRequest, LiveContext};
 use super::routine_work::{LocalDirtyTree, RoutineErrorId, set_test_live_authority_hook};
-use super::support::TempRepo;
+use super::scenario::TempRepo;
 
 #[test]
 fn clean_and_dirty_capture_are_recursively_zero_write() {

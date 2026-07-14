@@ -1,5 +1,5 @@
 use crate::distribution::{HostVerdict, JoinVerdict, Layer, LayerVerdict, verify};
-use crate::support::{CANDIDATE_ID, CONTEXT_ID, Fixture, tree};
+use crate::distribution_fixture::{CANDIDATE_ID, CONTEXT_ID, Fixture, tree};
 
 #[test]
 fn complete_ladder_is_candidate_bound_deterministic_and_zero_write() {

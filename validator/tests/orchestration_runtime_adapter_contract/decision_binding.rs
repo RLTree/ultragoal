@@ -1,4 +1,4 @@
-use super::support::*;
+use super::runtime_fixture::*;
 use crate::orchestration::product::*;
 use crate::orchestration::*;
 use crate::runtime_adapter::*;
@@ -165,14 +165,16 @@ fn action_and_reconciliation_permits_cannot_cross_interfaces() {
         permit_for_reconciliation(&authority, &action, inspection.tick, &request.resolution);
     let action_permit = issue_action_permit_for_test(
         &authority,
-        RootOperation::Resume,
-        action.authority_binding.clone(),
-        &action.workspace_identity,
-        &action.journal_head_identity,
-        3,
-        10,
-        b"runtime-cross-use-action-012345",
-        action.target.clone(),
+        RootActionPermitIssuance {
+            operation: RootOperation::Resume,
+            binding: action.authority_binding.clone(),
+            workspace_identity: &action.workspace_identity,
+            journal_head_identity: &action.journal_head_identity,
+            issued_tick: 3,
+            expires_tick: 10,
+            nonce: b"runtime-cross-use-action-012345",
+            target: action.target.clone(),
+        },
     )
     .unwrap();
     let before = recursive_fingerprint(root.path());
