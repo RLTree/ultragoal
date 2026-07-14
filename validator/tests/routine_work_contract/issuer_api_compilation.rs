@@ -49,7 +49,7 @@ const BINS: &[(&str, &str)] = &[
 pub(crate) fn prepare(scratch: &Path, probes: &Path) {
     let validator = Path::new(env!("CARGO_MANIFEST_DIR"));
     let mut manifest = format!(
-        "[workspace]\n\n[package]\nname = \"n06-issuer-visibility\"\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[lib]\nname = \"public_surface\"\npath = \"public_surface.rs\"\n\n[dependencies]\nserde_json = \"1\"\nultragoal = {{ path = {:?} }}\n",
+        "[workspace]\n\n[package]\nname = \"routine-issuer-visibility-contract\"\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[lib]\nname = \"public_surface\"\npath = \"public_surface.rs\"\n\n[dependencies]\nserde_json = \"1\"\nultragoal = {{ path = {:?} }}\n",
         validator
     );
     for (name, file) in BINS {
@@ -74,15 +74,16 @@ pub(crate) fn check(scratch: &Path, bin: &str) -> Output {
 }
 
 pub(crate) fn document(scratch: &Path) -> PathBuf {
-    let docs = scratch.join("target/doc/public_surface");
-    if docs.exists() {
-        fs::remove_dir_all(&docs).unwrap();
-    }
+    let docs = compiler_target().join("doc/public_surface");
     let output = cargo(scratch)
         .args(["rustdoc", "--offline", "--quiet", "--lib"])
         .output()
         .unwrap();
-    fs::write(scratch.join("rustdoc.stderr"), &output.stderr).unwrap();
+    fs::write(
+        scratch.join("rustdoc.stderr"),
+        &output.stderr[..output.stderr.len().min(64 * 1024)],
+    )
+    .unwrap();
     assert!(
         output.status.success(),
         "{}",
@@ -96,11 +97,15 @@ fn cargo(scratch: &Path) -> Command {
     let mut command = Command::new(cargo);
     command
         .current_dir(scratch)
-        .env("CARGO_TARGET_DIR", scratch.join("target"))
+        .env("CARGO_TARGET_DIR", compiler_target())
         .env("TMPDIR", configured_root("CODEX_WORKTREE_TMP"))
         .env("TMP", configured_root("CODEX_WORKTREE_TMP"))
         .env("TEMP", configured_root("CODEX_WORKTREE_TMP"));
     command
+}
+
+fn compiler_target() -> PathBuf {
+    configured_root("CARGO_TARGET_DIR").join("routine-issuer-api-cache")
 }
 
 fn configured_root(name: &str) -> PathBuf {

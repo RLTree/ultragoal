@@ -42,24 +42,6 @@ pub(crate) fn mediate_prepared_routine_execution_production(
     issuer.mediate_preflighted(context, plan, request, recovery, cancellation, reuse, None)
 }
 
-#[cfg(test)]
-thread_local! {
-    pub(super) static REUSE_PREAUTHORIZATION_TEST_HOOK: RefCell<Option<Box<dyn FnOnce() + Send>>> =
-        const { RefCell::new(None) };
-}
-
-#[cfg(test)]
-pub(crate) fn run_test_reuse_preauthorization_hook() {
-    REUSE_PREAUTHORIZATION_TEST_HOOK.with(|slot| {
-        if let Some(hook) = slot.borrow_mut().take() {
-            hook();
-        }
-    });
-}
-
-#[cfg(not(test))]
-pub(crate) fn run_test_reuse_preauthorization_hook() {}
-
 pub(crate) struct DurableAttempt {
     pub(crate) ledger: Arc<FileAuthorityLedger>,
     pub(crate) token: ReservationToken,

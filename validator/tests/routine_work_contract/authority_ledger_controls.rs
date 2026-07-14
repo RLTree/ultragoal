@@ -23,8 +23,7 @@ fn state(root: &std::path::Path) -> Vec<u8> {
 #[test]
 fn authority_root_and_state_aliases_or_special_objects_refuse_without_rewrite() {
     let (repo, root) = authority_root("ledger-object-security");
-    let issuer = ProductionRoutineIssuer::open(&root).unwrap();
-    issuer.seed_authority_capacity(1, 1).unwrap();
+    ProductionRoutineIssuer::open(&root).unwrap();
     let exact = state(&root);
     let state_path = root.join("routine-authority.state");
     let alias = repo.root().join("state-hardlink");
@@ -86,8 +85,7 @@ fn exact_noop_bypasses_authority_initialization_and_workspace_writes() {
 #[test]
 fn authenticated_state_truncate_unknown_duplicate_and_reorder_mutations_refuse() {
     let (_repo, root) = authority_root("ledger-state-mutations");
-    let issuer = ProductionRoutineIssuer::open(&root).unwrap();
-    issuer.seed_authority_capacity(2, 2).unwrap();
+    ProductionRoutineIssuer::open(&root).unwrap();
     let state_path = root.join("routine-authority.state");
     let exact = state(&root);
     let text = String::from_utf8(exact.clone()).unwrap();

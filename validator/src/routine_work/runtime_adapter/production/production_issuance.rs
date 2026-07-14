@@ -102,7 +102,6 @@ impl ProductionRoutineIssuer {
                 })
                 .collect();
             let authorization = self.ledger.preauthorize_reuse(&authority_binding, claims)?;
-            run_test_reuse_preauthorization_hook();
             Some(authorization)
         } else {
             None

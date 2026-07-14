@@ -4,7 +4,7 @@ use std::convert::Infallible;
 /// Opaque consumption boundary for a future root-owned broker adapter.
 ///
 /// The uninhabited private field makes this value impossible to construct from
-/// N06-owned safe code. Root integration must replace this refusal boundary,
+/// Routine-local safe code. Root integration must replace this refusal boundary,
 /// not add a local issuer or serialized representation.
 pub(crate) struct RootBrokerAuthorization {
     _root_owned: Infallible,
@@ -13,7 +13,7 @@ pub(crate) struct RootBrokerAuthorization {
 /// Refuses locally mediated execution before any child can be spawned.
 ///
 /// A future root-owned broker adapter must replace this boundary with an
-/// opaque authorization that N06 code cannot construct or deserialize.
+/// opaque authorization that routine-local code cannot construct or deserialize.
 pub(crate) fn require_root_broker_before_spawn() -> Result<RootBrokerAuthorization, RoutineError> {
     Err(RoutineError::new(
         RoutineErrorId::InvalidRequest,

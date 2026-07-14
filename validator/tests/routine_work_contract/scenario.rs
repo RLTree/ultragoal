@@ -1,16 +1,14 @@
 use sha2::{Digest, Sha256};
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use std::sync::atomic::{AtomicU64, Ordering};
 
 use super::context::{BuildRequest, LiveContext};
+use super::routine_fixture_workspace::claim_routine_fixture_root;
 use super::routine_work::{
     CheckClass, CheckNode, ClaimBoundary, ImpactGraph, PathMatcher, PathRoute, RepoPath, RunnerSpec,
 };
-
-static NEXT: AtomicU64 = AtomicU64::new(0);
 
 pub fn sha(bytes: &[u8]) -> String {
     format!("sha256:{:x}", Sha256::digest(bytes))
@@ -22,12 +20,8 @@ pub struct TempRepo {
 
 impl TempRepo {
     pub fn new(label: &str) -> Self {
-        let sequence = NEXT.fetch_add(1, Ordering::Relaxed);
-        let root = std::env::temp_dir().join(format!(
-            "hul-routine-{label}-{}-{sequence}",
-            std::process::id()
-        ));
-        fs::create_dir_all(root.join("src")).unwrap();
+        let root = claim_routine_fixture_root(label);
+        fs::create_dir(root.join("src")).unwrap();
         fs::create_dir_all(root.join("tests")).unwrap();
         fs::create_dir_all(root.join("docs")).unwrap();
         let repo = Self { root };

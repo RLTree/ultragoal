@@ -1,14 +1,12 @@
-#![allow(dead_code, unused_imports)]
-
-mod context {
+pub mod context {
     pub use ultragoal::context::*;
 }
 
 #[path = "../src/cli/capture/mod.rs"]
-mod capture;
+pub mod capture;
 
 #[path = "../src/routine_work/mod.rs"]
-mod routine_work;
+pub mod routine_work;
 
 #[path = "routine_work_contract/authority_ledger_controls.rs"]
 mod authority_ledger_controls;
@@ -26,8 +24,12 @@ mod issuer_api_compilation;
 mod issuer_api_visibility;
 #[path = "routine_work_contract/issuer_hidden_surface.rs"]
 mod issuer_hidden_surface;
+#[path = "routine_work_contract/issuer_scratch_resilience.rs"]
+mod issuer_scratch_resilience;
 #[path = "routine_work_contract/local_capture.rs"]
 mod local_capture;
+#[path = "routine_work_contract/owned_compile_quarantine.rs"]
+mod owned_compile_quarantine;
 #[path = "routine_work_contract/owned_compile_scratch.rs"]
 mod owned_compile_scratch;
 #[path = "routine_work_contract/planning.rs"]
@@ -48,6 +50,8 @@ mod retired_process_lifecycle_routes;
 mod retired_reuse_output_routes;
 #[path = "routine_work_contract/reuse/mod.rs"]
 mod reuse;
+#[path = "routine_work_contract/routine_fixture_workspace.rs"]
+mod routine_fixture_workspace;
 #[path = "routine_work_contract/routine_plan_fixture.rs"]
 mod routine_plan_fixture;
 #[path = "routine_work_contract/scenario.rs"]

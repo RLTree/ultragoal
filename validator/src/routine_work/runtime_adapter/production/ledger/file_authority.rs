@@ -170,30 +170,6 @@ impl FileAuthorityLedger {
         token.expires_tick = expired;
         Ok(())
     }
-
-    #[cfg(test)]
-    pub(crate) fn test_seed_capacity(
-        &self,
-        protocol_effect_count: usize,
-        consumed_grant_count: usize,
-    ) -> Result<(), RoutineError> {
-        #[cfg(target_vendor = "apple")]
-        {
-            return self
-                .inner
-                .test_seed_capacity(protocol_effect_count, consumed_grant_count);
-        }
-        #[cfg(not(target_vendor = "apple"))]
-        {
-            let _ = (protocol_effect_count, consumed_grant_count);
-            Err(error("routine-production-authority-host-unsupported"))
-        }
-    }
-
-    #[cfg(test)]
-    pub(crate) const fn test_capacity_limits() -> (usize, usize) {
-        (MAX_RECORDS, MAX_RECORDS * 4)
-    }
 }
 
 pub(crate) fn error(cause: &'static str) -> RoutineError {

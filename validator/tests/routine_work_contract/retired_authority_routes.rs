@@ -6,12 +6,13 @@ const BROKER_GATE: &[&str] =
     &["broker_binding_controls::root_broker_gate_refuses_before_spawn_and_writes"];
 const ISSUER_VISIBILITY: &[&str] =
     &["issuer_api_visibility::sealed_issuer_and_grant_entrypoints_are_not_externally_callable"];
-const CAPACITY: &[&str] = &[
-    "routine_work::runtime_adapter::production::ledger::tests::protocol_effect_and_consumed_grant_capacity_refuse_real_next_reservation_transactionally",
-];
+const CAPACITY: &[&str] =
+    &["unverified:real_supported_issuance_reaches_capacity_without_state_seeding"];
 const CONFLICT: &[&str] = &[
     "routine_work::runtime_adapter::production::ledger::tests::expired_and_concurrently_conflicting_preparations_fail_closed",
 ];
+const REUSE_PREAUTHORIZATION_RACE: &[&str] =
+    &["unverified:real_reuse_preauthorization_generation_conflict"];
 const RECOVERY: &[&str] = &[
     "routine_work::runtime_adapter::production::ledger::tests::staged_publication_recovers_without_reauthorizing_artifact_bytes",
 ];
@@ -97,7 +98,7 @@ pub(crate) const MAP: &[Mapping] = &[
     ),
     routed(
         "routine_production_authority_cases/invalid_reuse_recovery.rs::reuse_preauthorization_generation_race_fails_before_reservation_mutation",
-        CONFLICT,
+        REUSE_PREAUTHORIZATION_RACE,
     ),
     routed(
         "routine_production_authority_cases/invalid_reuse_recovery.rs::consumed_grant_max_minus_one_max_and_max_plus_one_are_fail_closed",

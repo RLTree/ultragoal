@@ -15,8 +15,8 @@ mod file_ledger_open_or_initialize;
 mod file_ledger_reserve;
 #[path = "file_ledger_settle.rs"]
 mod file_ledger_settle;
-#[path = "file_ledger_test_seed_capacity.rs"]
-mod file_ledger_test_seed_capacity;
+#[path = "file_ledger_transaction.rs"]
+mod file_ledger_transaction;
 #[path = "initial_state.rs"]
 mod initial_state;
 #[path = "ledger_effect_adapter.rs"]

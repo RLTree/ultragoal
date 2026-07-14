@@ -6,9 +6,7 @@ use std::process::{Command, Output};
 
 use super::issuer_api_compilation;
 use super::issuer_hidden_surface::{file_has_hidden_public_api, tree_has_hidden_public_api};
-use super::owned_compile_scratch::{
-    FAILURE_MARKER, OwnedCompileScratch, SUBSTITUTION_MARKER, SUBSTITUTION_MARKER_NAME,
-};
+use super::owned_compile_scratch::OwnedCompileScratch;
 
 #[test]
 fn sealed_issuer_and_grant_entrypoints_are_not_externally_callable() {
@@ -74,57 +72,6 @@ pub(crate) fn assert_sealed_issuer_and_grant_entrypoints_are_not_externally_call
     source.flush().unwrap();
     let mutated = public_inventory(&issuer_api_compilation::document(&scratch));
     assert_ne!(Sha256::digest(&mutated), Sha256::digest(&inventory));
-}
-
-#[test]
-fn failed_issuer_control_removes_build_tree_and_bounds_marker() {
-    let mut owned_paths = None;
-    let failure = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let owned = OwnedCompileScratch::claim("routine-issuer-induced-failure");
-        owned_paths = Some((
-            owned.path().to_path_buf(),
-            owned.failure_marker().to_path_buf(),
-        ));
-        let build = owned.path().join("target/doc/public_surface");
-        fs::create_dir_all(&build).unwrap();
-        fs::write(build.join("large-artifact.bin"), vec![0x5a; 64 * 1024]).unwrap();
-        panic!("induced issuer proof failure");
-    }));
-    assert!(failure.is_err());
-    let (build_root, marker) = owned_paths.unwrap();
-    assert!(!build_root.exists());
-    let retained = fs::read(&marker).unwrap();
-    assert_eq!(retained, FAILURE_MARKER);
-    assert!(retained.len() <= 128);
-    fs::remove_file(&marker).unwrap();
-}
-
-#[test]
-fn renamed_compile_scratch_preserves_replacement_and_bounds_owned_tree() {
-    let owned = OwnedCompileScratch::claim("routine-issuer-path-substitution");
-    let original = owned.path().to_path_buf();
-    let renamed = original.with_file_name(format!(
-        "{}-renamed",
-        original.file_name().unwrap().to_string_lossy()
-    ));
-    let build = original.join("target/doc/public_surface");
-    fs::create_dir_all(&build).unwrap();
-    fs::write(build.join("large-artifact.bin"), vec![0x5a; 64 * 1024]).unwrap();
-    fs::rename(&original, &renamed).unwrap();
-    fs::create_dir(&original).unwrap();
-    fs::write(original.join("replacement-sentinel"), b"preserve\n").unwrap();
-    drop(owned);
-
-    assert_eq!(
-        fs::read(original.join("replacement-sentinel")).unwrap(),
-        b"preserve\n"
-    );
-    let retained = fs::read(renamed.join(SUBSTITUTION_MARKER_NAME)).unwrap();
-    assert_eq!(retained, SUBSTITUTION_MARKER);
-    assert!(retained.len() <= 128);
-    assert_eq!(fs::read_dir(&renamed).unwrap().count(), 1);
-    fs::remove_dir_all(original).unwrap();
-    fs::remove_dir_all(renamed).unwrap();
 }
 
 #[test]

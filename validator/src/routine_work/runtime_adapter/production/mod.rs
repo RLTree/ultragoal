@@ -7,9 +7,6 @@ use std::path::Path;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-#[cfg(test)]
-use std::cell::RefCell;
-
 use serde::Serialize;
 
 use crate::context::LiveContext;
@@ -29,9 +26,6 @@ use ledger::{
     ReuseArtifactClaim,
 };
 
-#[cfg(test)]
-#[path = "authority_capacity_seed.rs"]
-mod authority_capacity_seed;
 #[path = "production_issuance.rs"]
 mod production_issuance;
 #[path = "production_mediation.rs"]
