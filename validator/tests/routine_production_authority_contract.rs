@@ -1,3 +1,7 @@
+use std::fs;
+use std::io::Write;
+use std::process::{Command, Stdio};
+
 #[test]
 fn production_boundary_has_one_sealed_issuer_and_no_test_grant_entrypoint() {
     let runtime = include_str!("../src/routine_work/runtime_adapter/mod.rs");
@@ -76,52 +80,33 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
 }
 
 #[test]
-fn child_behavior_requires_a_durable_process_bound_one_use_channel() {
-    let child = include_str!("../src/cli/successor_public/routine/behavior_child.rs");
-    let capability = include_str!("../src/routine_work/behavior/child_capability.rs");
-    let mediation =
-        include_str!("../src/routine_work/runtime_adapter/mediator/intent_mediation.rs");
-    let channel = include_str!(
-        "../src/routine_work/runtime_adapter/mediator/process/child_authority_channel.rs"
-    );
-    let process =
-        include_str!("../src/routine_work/runtime_adapter/mediator/process/process_execution.rs");
-    for obsolete in [
-        "HUL_ROUTINE_REQUEST_ID",
-        "HUL_ROUTINE_PROTOCOL_ID",
-        "HUL_ROUTINE_INTENT_ID",
-        "HUL_ROUTINE_NODE_ID",
-        "HUL_ROUTINE_BEHAVIOR_ID",
-    ] {
-        assert!(!child.contains(obsolete));
-        assert!(!mediation.contains(obsolete));
+fn built_public_child_request_refuses_before_input_and_without_writes() {
+    let scratch = std::env::var_os("CODEX_WORKTREE_SCRATCH")
+        .map(std::path::PathBuf::from)
+        .unwrap_or_else(std::env::temp_dir)
+        .join(format!("routine-child-refusal-{}", std::process::id()));
+    let root = scratch.join("root");
+    let home = scratch.join("home");
+    fs::create_dir_all(&root).unwrap();
+    fs::create_dir_all(&home).unwrap();
+
+    let mut child = Command::new(env!("CARGO_BIN_EXE_ultragoal"))
+        .args(["--json", "check", "routine"])
+        .current_dir(&root)
+        .env("HOME", &home)
+        .env("HUL_ROUTINE_CHILD_FD", "198")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    if let Some(mut stdin) = child.stdin.take() {
+        let _ = stdin.write_all(br#"{"schema_version":"RustSourceSyntaxFrame-v1"}"#);
     }
-    let validate = child.find("validate_capability(invocation").unwrap();
-    let framed_input = child.find("std::io::stdin()").unwrap();
-    assert!(validate < framed_input);
-    for binding in [
-        "request_id",
-        "protocol_id",
-        "intent_id",
-        "node_id",
-        "grant_session_id",
-        "grant_id",
-        "reservation_marker",
-        "parent_pid",
-        "child_pid",
-        "process_session_id",
-        "program_path_hex",
-        "program_sha256",
-    ] {
-        assert!(capability.contains(binding), "missing binding {binding}");
-    }
-    assert!(child.contains("LOCAL_PEERPID"));
-    assert!(child.contains("process_path(parent_pid)"));
-    assert!(channel.contains("capability.acknowledgement()"));
-    assert!(channel.contains("getrandom::fill"));
-    assert!(channel.contains("capability.seal(binding.secret)"));
-    assert!(mediation.contains("attempt.prepare_spawn()?"));
-    assert!(
-        process.find("child_authority.authorize").unwrap() < process.find("on_started()?").unwrap()
-    );
+    let output = child.wait_with_output().unwrap();
+    assert_ne!(output.status.code(), Some(0), "{output:?}");
+    assert!(String::from_utf8_lossy(&output.stdout).contains("RoutineBehaviorRefusal-v1"));
+    assert_eq!(fs::read_dir(&root).unwrap().count(), 0);
+    assert_eq!(fs::read_dir(&home).unwrap().count(), 0);
+    fs::remove_dir_all(&scratch).unwrap();
 }

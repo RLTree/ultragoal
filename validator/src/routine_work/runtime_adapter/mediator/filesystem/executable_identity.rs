@@ -83,10 +83,6 @@ impl PinnedExecutable {
         &self.path
     }
 
-    pub(crate) fn sha256(&self) -> &str {
-        &self.sha256
-    }
-
     #[cfg(unix)]
     pub(crate) fn identity_length(&self) -> u64 {
         self.identity.length
@@ -100,21 +96,6 @@ impl PinnedExecutable {
     #[cfg(unix)]
     pub(crate) fn identity_mode(&self) -> Option<u32> {
         Some(self.identity.mode)
-    }
-
-    #[cfg(unix)]
-    pub(crate) fn identity_device(&self) -> u64 {
-        self.identity.device
-    }
-
-    #[cfg(unix)]
-    pub(crate) fn identity_inode(&self) -> u64 {
-        self.identity.inode
-    }
-
-    #[cfg(unix)]
-    pub(crate) fn identity_changed(&self) -> (i64, i64) {
-        (self.identity.changed_seconds, self.identity.changed_nanos)
     }
 
     #[cfg(not(unix))]

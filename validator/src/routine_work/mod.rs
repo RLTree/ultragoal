@@ -18,10 +18,8 @@ mod reuse;
 mod runtime_adapter;
 mod snapshot;
 
+pub(crate) use behavior::BROKER_CHILD_REQUEST_ENV;
 pub(crate) use behavior::trusted_rust_source_execution_observed;
-pub(crate) use behavior::{
-    CHILD_CAPABILITY_ENV, CHILD_CAPABILITY_FD, MAX_CHILD_CAPABILITY_BYTES, RoutineChildCapability,
-};
 pub use behavior::{
     RustSourceFrameInput, RustSourceSyntaxError, RustSourceSyntaxErrorKind,
     RustSourceSyntaxObservation, RustSourceSyntaxOutcome, encode_rust_source_syntax_frame,
@@ -56,10 +54,12 @@ pub(crate) use runtime_adapter::{
     PreparedRoutineExecution, ProductionRoutineIssuer, RoutineAdapterSpec,
     RoutineArtifactPublisher, RoutineCancellation, RoutineInvocationSpec, RoutineMediationResult,
     RoutineMediatorStatus, RoutineNodeDisposition, RoutineReuseInput,
-    bind_rust_source_syntax_invocation, immutable_routine_program_matches,
-    mediate_prepared_routine_execution_production, prepare_routine_execution,
-    validate_immutable_routine_program,
+    bind_rust_source_syntax_invocation, mediate_prepared_routine_execution_production,
+    prepare_routine_execution, validate_immutable_routine_program,
 };
+
+#[cfg(test)]
+pub(crate) use runtime_adapter::test_require_root_broker_before_spawn;
 
 #[cfg(test)]
 pub(crate) use authority::set_test_live_authority_hook;
@@ -67,5 +67,6 @@ pub(crate) use authority::set_test_live_authority_hook;
 pub(crate) use runtime_adapter::{
     TestProcessSetupFailure, set_test_mediator_finish_failure, set_test_mediator_post_spawn_hook,
     set_test_mediator_pre_spawn_hook, set_test_output_capture_hook, set_test_process_setup_failure,
-    set_test_read_source_capture_hook, test_spawn_count,
+    set_test_read_source_capture_hook, test_probe_output_confinement, test_probe_read_confinement,
+    test_spawn_count,
 };

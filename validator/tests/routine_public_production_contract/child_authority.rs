@@ -5,7 +5,7 @@ use super::scenario::tree;
 use support::*;
 
 #[test]
-fn direct_public_binary_cannot_select_child_behavior_from_environment() {
+fn direct_public_binary_cannot_select_child_behavior_from_legacy_environment() {
     let fixture = dirty_fixture("direct-forged-environment");
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
@@ -24,8 +24,8 @@ fn direct_public_binary_cannot_select_child_behavior_from_environment() {
 }
 
 #[test]
-fn copied_or_replayed_child_environment_has_no_bearer_authority() {
-    let fixture = dirty_fixture("copied-replayed-environment");
+fn copied_or_replayed_descriptor_selector_is_refusal_only() {
+    let fixture = dirty_fixture("copied-replayed-descriptor");
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
     for _ in 0..2 {
@@ -33,32 +33,42 @@ fn copied_or_replayed_child_environment_has_no_bearer_authority() {
         command
             .args(["--json", "check", "routine"])
             .env("HUL_ROUTINE_CHILD_FD", CAPABILITY_FD.to_string());
-        assert_refused(&run_with_frame(command, frame(&fixture)));
+        assert_child_refused(&run_with_frame(command, frame(&fixture)));
     }
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
 }
 
 #[test]
-fn wrong_parent_or_process_session_cannot_authorize_framed_input() {
-    let fixture = dirty_fixture("wrong-parent-session");
+fn prebuffered_socket_and_arbitrary_canonical_frame_refuse_without_writes() {
+    let fixture = dirty_fixture("prebuffered-socket");
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
-    assert_refused(&run_with_forged_channel(&fixture, false, None).0);
-    assert_refused(&run_with_forged_channel(&fixture, true, None).0);
+    let output = run_with_prebuffered_channel(&fixture, &legacy_capability_wire());
+    assert_child_refused(&output);
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
 }
 
 #[test]
-fn attacker_sealed_material_still_cannot_cross_process_binding() {
-    let fixture = dirty_fixture("attacker-sealed-cross-process");
+fn valid_socket_and_held_open_stdin_are_not_read_before_refusal() {
+    let fixture = dirty_fixture("blocking-socket-stdin");
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
-    let (first, material) = run_with_forged_channel(&fixture, false, None);
-    assert_refused(&first);
-    let (later, _) = run_with_forged_channel(&fixture, false, Some(&material));
-    assert_refused(&later);
+    let output = run_with_blocking_socket_and_stdin(&fixture);
+    assert_child_refused(&output);
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+}
+
+#[test]
+fn replayed_prebuffered_socket_material_never_becomes_authority() {
+    let fixture = dirty_fixture("prebuffered-replay");
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+    let wire = legacy_capability_wire();
+    assert_child_refused(&run_with_prebuffered_channel(&fixture, &wire));
+    assert_child_refused(&run_with_prebuffered_channel(&fixture, &wire));
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
 }

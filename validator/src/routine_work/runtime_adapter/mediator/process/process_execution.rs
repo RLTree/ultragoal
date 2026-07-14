@@ -6,7 +6,6 @@ pub(crate) fn execute<F>(
     reads: &ReadConfinement,
     argv: &[String],
     environment: &BTreeMap<String, String>,
-    child_capability: ChildCapabilityBinding<'_>,
     framed_input: Vec<u8>,
     timeout: Duration,
     output_budget: u64,
@@ -25,7 +24,6 @@ where
             reads,
             argv,
             environment,
-            child_capability,
             framed_input,
             timeout,
             output_budget,
@@ -45,6 +43,7 @@ where
                 started: false,
             });
         }
+        require_root_broker_before_spawn()?;
         let sandbox = PinnedExecutable::open_unbound(Path::new("/usr/bin/sandbox-exec"))?;
         let profile = sandbox_profile(
             program.path(),
@@ -57,7 +56,6 @@ where
         root.validate()?;
         outputs.validate()?;
         let mut command = Command::new(sandbox.path());
-        let child_authority = ChildAuthorityChannel::new()?;
         command
             .arg("-p")
             .arg(profile)
@@ -69,7 +67,6 @@ where
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .stderr(Stdio::piped());
-        child_authority.install(&mut command);
         let cwd_fd = root.raw_fd();
         unsafe {
             command.pre_exec(move || {
@@ -93,7 +90,6 @@ where
             .spawn()
             .map_err(|_| mediator_error("mediator-process-launch-failed"))?;
         let mut setup = SpawnSetupGuard::new(child);
-        child_authority.authorize(setup.child_id(), child_capability, program)?;
         on_started()?;
         #[cfg(test)]
         TEST_SPAWN_COUNT.fetch_add(1, Ordering::SeqCst);

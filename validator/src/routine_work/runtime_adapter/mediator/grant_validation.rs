@@ -39,9 +39,6 @@ pub(crate) fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservati
     if let Some(durable) = &grant.durable {
         durable.validate_reserved()?;
     }
-    let mut child_capability_secret = [0_u8; 32];
-    getrandom::fill(&mut child_capability_secret)
-        .map_err(|_| mediator_error("mediator-child-capability-random-failed"))?;
     let mut state = registry()
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner);
@@ -70,8 +67,6 @@ pub(crate) fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservati
         .active_protocols
         .insert(grant.protocol_id.clone(), grant.grant_id.clone());
     Ok(AttemptReservation {
-        child_capability_secret,
-        session_id: grant.session_id.clone(),
         protocol_id: grant.protocol_id.clone(),
         grant_id: grant.grant_id.clone(),
         recovery_marker: recovery_identity(&grant.grant_id, &grant.protocol_id, &grant.request_id),

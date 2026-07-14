@@ -20,20 +20,6 @@ use crate::routine_work::{RoutineError, RoutineErrorId};
 use super::filesystem::{OutputConfinement, PinnedExecutable, ReadConfinement, RootAnchor};
 use super::outcome::RoutineCancellation;
 
-pub(crate) struct ChildCapabilityBinding<'a> {
-    pub(crate) behavior_id: &'a str,
-    pub(crate) request_id: &'a str,
-    pub(crate) protocol_id: &'a str,
-    pub(crate) intent_id: &'a str,
-    pub(crate) node_id: &'a str,
-    pub(crate) grant_session_id: &'a str,
-    pub(crate) grant_id: &'a str,
-    pub(crate) reservation_marker: &'a str,
-    pub(crate) program_path_hex: &'a str,
-    pub(crate) framed_input_sha256: &'a str,
-    pub(crate) secret: &'a [u8; 32],
-}
-
 #[cfg(target_os = "macos")]
 #[path = "child_authority_channel.rs"]
 mod child_authority_channel;
