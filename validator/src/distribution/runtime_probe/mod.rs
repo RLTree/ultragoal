@@ -17,6 +17,8 @@ use std::process::{Command, Stdio};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Duration, Instant};
 
+include!("pinned_executable.rs");
+
 include!("output_limit.rs");
 
 include!("unique_marker.rs");

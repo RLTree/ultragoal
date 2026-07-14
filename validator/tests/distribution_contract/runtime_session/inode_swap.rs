@@ -1,0 +1,137 @@
+#[cfg(unix)]
+fn runtime_fixture(
+    label: &str,
+) -> (
+    JourneyFixture,
+    PackageSnapshot,
+    InstallTransaction,
+    PathBuf,
+    HostCapabilityDeclaration,
+    JourneyBinding,
+) {
+    let fixture = JourneyFixture::new(label);
+    let package = fixture.build("packages/runtime.hugpkg");
+    let installed = install_for_runtime(&fixture, &package);
+    let executable = installed_program(&fixture.root);
+    let host = HostCapabilityDeclaration::isolated(
+        &fixture.root,
+        &fixture.project,
+        "isolated-host-v1",
+        Some(&executable),
+    )
+    .unwrap();
+    let binding =
+        JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
+    (fixture, package, installed, executable, host, binding)
+}
+
+#[cfg(unix)]
+fn replace_with_same_bytes(path: &std::path::Path, suffix: &str) {
+    use std::os::unix::fs::{MetadataExt, PermissionsExt};
+    let before = std::fs::symlink_metadata(path).unwrap();
+    let replacement = path.with_file_name(format!(
+        "{}-{suffix}",
+        path.file_name().unwrap().to_string_lossy()
+    ));
+    let bytes = std::fs::read(path).unwrap();
+    std::fs::write(&replacement, bytes).unwrap();
+    std::fs::set_permissions(&replacement, std::fs::Permissions::from_mode(0o755)).unwrap();
+    let replacement_meta = std::fs::symlink_metadata(&replacement).unwrap();
+    assert_ne!((before.dev(), before.ino()), (replacement_meta.dev(), replacement_meta.ino()));
+    std::fs::rename(replacement, path).unwrap();
+    let after = std::fs::symlink_metadata(path).unwrap();
+    assert_ne!((before.dev(), before.ino()), (after.dev(), after.ino()));
+    assert_eq!(before.len(), after.len());
+    assert_eq!(before.mode() & 0o777, after.mode() & 0o777);
+}
+
+#[cfg(unix)]
+#[test]
+fn same_byte_inode_swap_before_spawn_never_launches_or_accepts() {
+    let (_fixture, package, installed, executable, host, binding) =
+        runtime_fixture("runtime-same-byte-before-spawn");
+    let plan = RuntimeProbePlan::from_installed_package(
+        binding,
+        &host,
+        installed.snapshot(),
+        &package,
+        &executable,
+        valid_args(),
+        Duration::from_secs(10),
+    )
+    .unwrap();
+
+    replace_with_same_bytes(&executable, "same-bytes-before-spawn");
+
+    assert_eq!(
+        execute_runtime_probe(&plan).unwrap_err().id(),
+        ErrorId::ObjectChanged
+    );
+}
+
+#[cfg(unix)]
+#[test]
+fn same_byte_inode_swap_during_execution_is_not_accepted() {
+    let (_fixture, package, installed, executable, host, binding) =
+        runtime_fixture("runtime-same-byte-during-exec");
+    let plan = RuntimeProbePlan::from_installed_package(
+        binding,
+        &host,
+        installed.snapshot(),
+        &package,
+        &executable,
+        slow_args(),
+        Duration::from_secs(10),
+    )
+    .unwrap();
+    let executable_for_thread = executable.clone();
+    let race = std::thread::spawn(move || {
+        std::thread::sleep(Duration::from_millis(40));
+        replace_with_same_bytes(&executable_for_thread, "same-bytes-during-exec");
+    });
+
+    let result = execute_runtime_probe(&plan);
+    race.join().unwrap();
+
+    assert_eq!(result.unwrap_err().id(), ErrorId::ObjectChanged);
+}
+
+#[cfg(unix)]
+#[test]
+fn sibling_wrong_route_and_replaced_object_regressions_fail_closed() {
+    let (fixture, package, installed, executable, host, binding) =
+        runtime_fixture("runtime-wrong-route-regressions");
+    let sibling = fixture.root.join("runtime/sibling-runtime-probe-bin");
+    std::fs::copy(&executable, &sibling).unwrap();
+    assert_eq!(
+        RuntimeProbePlan::from_installed_package(
+            binding.clone(),
+            &host,
+            installed.snapshot(),
+            &package,
+            &sibling,
+            valid_args(),
+            Duration::from_secs(10),
+        )
+        .unwrap_err()
+        .id(),
+        ErrorId::CapabilityMismatch
+    );
+
+    replace_with_same_bytes(&executable, "same-bytes-before-plan");
+
+    assert_eq!(
+        RuntimeProbePlan::from_installed_package(
+            binding,
+            &host,
+            installed.snapshot(),
+            &package,
+            &executable,
+            valid_args(),
+            Duration::from_secs(10),
+        )
+        .unwrap_err()
+        .id(),
+        ErrorId::CapabilityMismatch
+    );
+}

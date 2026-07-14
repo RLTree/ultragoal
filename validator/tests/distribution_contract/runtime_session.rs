@@ -186,3 +186,5 @@ fn executable_substitution_during_probe_fails_final_revalidation() {
     race.join().unwrap();
     assert_eq!(result.unwrap_err().id(), ErrorId::ObjectChanged);
 }
+
+include!("runtime_session/inode_swap.rs");

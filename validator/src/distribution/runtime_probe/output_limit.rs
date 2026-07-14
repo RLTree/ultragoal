@@ -7,7 +7,7 @@ static NONCE: AtomicU64 = AtomicU64::new(0);
 #[derive(Clone, Debug)]
 pub struct RuntimeProbePlan {
     binding: JourneyBinding,
-    program: PathBuf,
+    executable: PinnedRuntimeExecutable,
     argv: Vec<String>,
     executable_sha256: String,
     session_nonce: String,
@@ -37,7 +37,8 @@ impl RuntimeProbePlan {
         timeout: Duration,
     ) -> Result<Self, DistributionError> {
         host.ensure_binding(&binding)?;
-        let executable_sha256 = executable_digest(program)?;
+        let executable = PinnedRuntimeExecutable::open(program)?;
+        let executable_sha256 = executable.sha256().to_owned();
         let runtime_entry = package
             .entries()
             .iter()
@@ -77,7 +78,7 @@ impl RuntimeProbePlan {
         );
         Ok(Self {
             binding,
-            program: program.into(),
+            executable,
             argv,
             executable_sha256,
             session_nonce,
@@ -111,10 +112,15 @@ struct ProbeEnvelope {
 pub fn execute_runtime_probe(
     plan: &RuntimeProbePlan,
 ) -> Result<RuntimeObservation, DistributionError> {
-    if executable_digest(&plan.program)? != plan.executable_sha256 {
-        return Err(error(DistributionErrorId::ObjectChanged));
-    }
-    let mut command = Command::new(&plan.program);
+    plan.executable.revalidate()?;
+    let executable_path = plan.executable.execution_path();
+    let mut command = if plan.executable.shell_script() {
+        let mut command = Command::new("/bin/sh");
+        command.arg(executable_path);
+        command
+    } else {
+        Command::new(executable_path)
+    };
     command
         .args(&plan.argv)
         .env_clear()
@@ -146,9 +152,7 @@ pub fn execute_runtime_probe(
     let marker = unique_marker(&stdout)?;
     let envelope: ProbeEnvelope = json::parse(marker, 64 * 1024)?;
     validate_envelope(&envelope, plan)?;
-    if executable_digest(&plan.program)? != plan.executable_sha256 {
-        return Err(error(DistributionErrorId::ObjectChanged));
-    }
+    plan.executable.revalidate()?;
     let mut output = stdout;
     output.extend_from_slice(&stderr);
     Ok(RuntimeObservation::executed(
