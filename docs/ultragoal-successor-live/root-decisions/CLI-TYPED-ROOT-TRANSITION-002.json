@@ -1,0 +1,65 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "CLI-TYPED-ROOT-TRANSITION-002",
+  "root_decision": "accept_bounded_artifact_set",
+  "review_mode": "independent_read_only_typed_root_and_actual_binary_falsification",
+  "reviewer": "/root/typed_root_transition_review",
+  "base_head": "391651772084e713dddefb8097217458f556211c",
+  "base_tree": "537625bbbad6e7305e10f69ff34f1eede7c3ded5",
+  "accepted_head": "8c847e9b0d4687bb5c53b6950981e8af7cafe688",
+  "accepted_tree": "3bfea2b2145578e8fb86267af69035dcf6992ef6",
+  "accepted_commits": [
+    "9e9d1b0ba route public argv through the typed successor root",
+    "8c847e9b0 rebind retained CLI routes to current source bytes"
+  ],
+  "artifact_set_formula": "Sort paths; for each append path, one TAB, lowercase SHA-256, and one LF; SHA-256 the concatenation.",
+  "artifact_set_sha256": "8342809230a6e53622ff8c0af2fea7206f857a196176eba595760aedbebc1fb5",
+  "artifact_count": 22,
+  "artifacts": [
+    {"path":"validator/src/argument_parser/mod.rs","sha256":"9af5bc7c96b9ff5e92d1f68095f6058e0018826a5e70324d907ae3c77e056ed7"},
+    {"path":"validator/src/argument_parser/public_arguments.rs","sha256":"2512529171d6da27dcb498b3d95fc4408ce73f3fb57080b4a37583bb2e119b07"},
+    {"path":"validator/src/cli/successor/clap_grammar.rs","sha256":"797ab4e6004a3243d5292697f374f33d00a03b23f2d177980a1607f2a512bf78"},
+    {"path":"validator/src/cli/successor/command_contract/command_line.rs","sha256":"7c127959363272f46e2e90e9b91db631acd30c3c60d9b8d78a5ec12f7cf317bb"},
+    {"path":"validator/src/cli/successor/command_contract/mod.rs","sha256":"e5dba4d06c6a1ca4cc6f1fcacdb9a387a448f476701448365f4f28e2405a5b34"},
+    {"path":"validator/src/cli/successor/command_line_input.rs","sha256":"68d261db23af95eaec7c855cd237216be5f7b98ab2684e8201ec6db101bcd531"},
+    {"path":"validator/src/cli/successor/help.rs","sha256":"3798f1d0e8a8bc49e07d615eac84443b4645799c45aff07a591bf66457a7249c"},
+    {"path":"validator/src/cli/successor/input.rs","sha256":"749602aa7cbc93aeadefb0828242c871b7be572192a77f7680625ac460f86e88"},
+    {"path":"validator/src/cli/successor/mod.rs","sha256":"c880a1557c70d275f9a725ec66ea348f9554ea3c0acc2099900203c763607a52"},
+    {"path":"validator/src/cli/successor/parser.rs","sha256":"8feffc8fe3a52148356e91a7aad82f6cf25559b2fa235d213b7b065c9ae3ec06"},
+    {"path":"validator/src/cli/successor_public/mod.rs","sha256":"c39a205a5677653b600745c4b94612d32463f521c5383836367cdff5cdcd1111"},
+    {"path":"validator/src/cli/successor_public/output_limit.rs","sha256":"9a2a9985b1faa33b7260ab11571edab524368121fd5c14d8df37d250f6c2dcd4"},
+    {"path":"validator/src/inventory/retained_routes/commands.rs","sha256":"b5c94c98d306ec153360d06b93729f363e1988405a782d44cd8baa59512abb9a"},
+    {"path":"validator/src/inventory/retained_routes/manifest.rs","sha256":"65857cd2367e18c2f654223f986ee396f69316167ea40552e8743ce8f5a8ac7d"},
+    {"path":"validator/src/lib.rs","sha256":"b7956d9d71c75a82844191b55f3379624083d0e195a2d4922201aa62e364106e"},
+    {"path":"validator/tests/cli_contract/successor/catalog.rs","sha256":"7238ee576200acdff3577655f694d80262c3b810fd4babd8be6460935fa3fae2"},
+    {"path":"validator/tests/cli_contract/successor/command_line.rs","sha256":"39ee5ad4372e507fa92e1beb2591a737f9a3af04d28aa03b13f629f3b5e00811"},
+    {"path":"validator/tests/cli_contract/successor/goldens/root-help.json","sha256":"407dda93b8937206a7892f9915c5cfee8d14dfb1fd8f74c6a3bda4c522315557"},
+    {"path":"validator/tests/cli_contract/successor/goldens/root-help.txt","sha256":"d8035c2c823ef4f4f7ddbfad3f1109327410377e909e170cca637e7c1a770b22"},
+    {"path":"validator/tests/cli_contract/successor/mod.rs","sha256":"b2727ae25fa2c6f43a992517a97428725134235430f502f1d9fdca41f15baeb0"},
+    {"path":"validator/tests/cli_surface/compatibility.rs","sha256":"1d0bb4f6f2481c52dadef7f8699e7518a7036223762a5752578d8708586c9b45"},
+    {"path":"validator/tests/cli_surface/root_and_context.rs","sha256":"70041d31015a95788a2879e53a5d0bfd498e2ec1faff03cff5fee9ac9bf6f214"}
+  ],
+  "verification": {
+    "successor_cli_contract": "43 passed; 0 failed",
+    "actual_cli_surface": "11 passed; 0 failed; recursive filesystem and Git comparisons include help/root and non-UTF-8 boundaries",
+    "retained_route_contract": "12 passed; 0 failed; all current source hashes matched",
+    "format_and_projection": "rustfmt, agent standards, generated authority, line caps, and diff checks passed",
+    "strict_library_check": "blocked by the exact 657-diagnostic integration baseline; zero accepted-set diagnostic and no suppression"
+  },
+  "review_history": [
+    "REWORK: typed root extraction crossed the help stop boundary and interpreted a trailing valueless root",
+    "ACCEPT: extraction stops at help and parser plus actual-binary zero-write controls cover the repaired boundary",
+    "ACCEPT: adjacent valueless inline duplicate short-help rooted-help and trailing non-UTF-8 cases were independently falsified"
+  ],
+  "accepted_scope": "The production public argv boundary performs one bounded typed successor parse including workspace-root extraction, preserves exact typed parse exit classes, emits compatibility guidance without selecting legacy effects, and rebinds retained source identities to current bytes.",
+  "withheld_scope": [
+    "direct successor dispatcher activation",
+    "legacy dispatcher writer schema or helper retirement",
+    "behavioral equivalence or compatibility completion",
+    "successor source adoption into the plugin package inventory",
+    "warning-free integration checkpoint",
+    "install cache marketplace app-registry discovery or runtime journeys",
+    "readiness release node closure or goal completion"
+  ],
+  "no_claim_statement": "This decision accepts only the typed public argv/root transition and retained-route reconciliation. It does not claim dispatcher retirement, equivalence, package adoption, readiness, release, or completion."
+}

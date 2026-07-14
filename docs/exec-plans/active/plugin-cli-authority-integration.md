@@ -42,8 +42,8 @@ increment through root-owned review, wiring, proof, and claim decisions.
   standards digests, and the routine false-pass defect.
 - [ ] Run fresh focused candidate checks, coverage authority, public self-law,
   independent review, and record root acceptance for the checkpoint.
-- [x] Accepted bounded legacy CLI guidance at `f533b5459`; exact live command
-  collisions remain successor-owned and all retirement claims stay withheld.
+- [x] Accepted bounded legacy CLI guidance at `f533b5459` and the typed public
+  argv/root transition at `8c847e9b0`; dispatcher retirement stays withheld.
 - [ ] Integrate accepted sessions one at a time and rerun dependency-closed
   root checks after each landing.
 - [ ] Close installed/runtime journeys, migration/retirement, claims, release,
@@ -245,6 +245,6 @@ evidence, worktree state, documentation freshness, and claim ceiling.
 ## Outcomes & Retrospective
 
 Open. Update after every accepted integration checkpoint and at final claim
-reconciliation. The highest honest new ceiling is accepted guidance-only CLI
-behavior; the integration checkpoint and every product/release claim remain
-under REWORK.
+reconciliation. The highest honest new ceiling is typed successor argv/root
+parsing plus guidance-only legacy intent; dispatcher retirement and every
+product/release claim remain under REWORK.
