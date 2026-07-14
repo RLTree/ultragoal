@@ -5,6 +5,7 @@ mod successor;
 
 mod boundaries;
 mod catalog;
+mod compatibility;
 mod help_boundaries;
 mod parsing;
 mod runtime_context;

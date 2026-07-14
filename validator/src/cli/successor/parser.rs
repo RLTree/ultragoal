@@ -5,6 +5,7 @@ use super::command_contract::{
     CommandDescriptor, Group, OptionArgument, OutputMode, ParseOutcome, ParsedInvocation,
     ParsedValue, ValueKind,
 };
+use super::compatibility::classify_legacy_command;
 use super::error::{ParseErrorId, ParseFailure};
 use super::input::{prepare_args, requested_help_target, version_is_standalone};
 use super::value::parse_value;
@@ -18,6 +19,12 @@ where
     S: Into<OsString>,
 {
     let (args, output_mode) = prepare_args(args)?;
+    if let Some(command) = classify_legacy_command(&args) {
+        return Ok(ParseOutcome::Compatibility {
+            command,
+            output_mode,
+        });
+    }
     let mut argv = Vec::with_capacity(args.len() + 1);
     argv.push(OsString::from("ultragoal"));
     argv.extend(args.iter().cloned());

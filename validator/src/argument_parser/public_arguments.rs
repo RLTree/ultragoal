@@ -1,4 +1,25 @@
 use super::*;
+use std::ffi::{OsStr, OsString};
+
+pub(crate) fn parse_public_os_args_from(raw: Vec<OsString>) -> Result<Args, String> {
+    let output_mode = if raw
+        .iter()
+        .any(|value| value.as_os_str() == OsStr::new("--json"))
+    {
+        cli::successor::OutputMode::Json
+    } else {
+        cli::successor::OutputMode::Human
+    };
+    let raw = raw
+        .into_iter()
+        .map(|value| {
+            value.into_string().map_err(|_| {
+                root_parse_failure(cli::successor::ParseErrorId::NonUtf8Argument, output_mode)
+            })
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+    parse_public_args_from(raw)
+}
 
 pub(crate) fn parse_public_args_from(mut raw: Vec<String>) -> Result<Args, String> {
     let root = extract_root(&mut raw)?;

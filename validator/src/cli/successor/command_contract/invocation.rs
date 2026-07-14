@@ -1,4 +1,4 @@
-use super::{OptionArgument, SuccessorCommand};
+use super::{LegacyCommand, OptionArgument, SuccessorCommand};
 use crate::context::EffectClass;
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
@@ -26,6 +26,10 @@ pub enum HelpTarget {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ParseOutcome {
     Invocation(ParsedInvocation),
+    Compatibility {
+        command: LegacyCommand,
+        output_mode: OutputMode,
+    },
     Help {
         target: HelpTarget,
         output_mode: OutputMode,

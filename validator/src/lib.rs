@@ -66,7 +66,7 @@ pub(crate) fn usage() -> String {
 }
 
 pub fn main_entry() -> i32 {
-    argument_parser::parse_public_args_from(std::env::args().skip(1).collect())
+    argument_parser::parse_public_os_args_from(std::env::args_os().skip(1).collect())
         .and_then(command_run::run)
         .unwrap_or_else(|err| {
             eprintln!("{err}");

@@ -28,8 +28,14 @@ pub(crate) fn public_router_adopts_only_live_successor_authority() {
             .collect::<Vec<_>>();
         assert!(parse_public(&raw).is_ok(), "{args:?}");
     }
+    let missing_output = vec!["--json", "package", "inventory"];
+    let raw = missing_output
+        .iter()
+        .map(|item| (*item).to_owned())
+        .collect::<Vec<_>>();
+    let failure = parse_public(&raw).expect_err("canonical inventory requires output");
+    assert!(failure.contains("harness-ultragoal.cli-error.v1"));
     for args in [
-        vec!["--json", "package", "inventory"],
         vec!["--json", "package", "digest"],
         vec!["--json", "observe", "logs", "query"],
         vec!["--json", "observe", "explain-failure"],
@@ -40,8 +46,10 @@ pub(crate) fn public_router_adopts_only_live_successor_authority() {
             .iter()
             .map(|item| (*item).to_owned())
             .collect::<Vec<_>>();
-        let failure = parse_public(&raw).expect_err("legacy route must fail closed");
-        assert!(failure.contains("harness-ultragoal.cli-error.v1"));
+        assert!(matches!(
+            parse_public(&raw).expect("legacy intent yields bounded guidance"),
+            ParseOutcome::Compatibility { .. }
+        ));
     }
 }
 

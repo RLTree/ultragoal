@@ -9,6 +9,7 @@ mod catalog;
 mod clap_error;
 mod clap_grammar;
 mod command_contract;
+pub(crate) mod compatibility;
 mod error;
 mod help;
 mod input;
@@ -19,6 +20,8 @@ mod value;
 pub use crate::context::EffectClass;
 pub use catalog::{catalog, descriptor_for};
 pub use clap_grammar::parser_command;
+#[cfg(test)]
+pub use command_contract::LegacyCommand;
 pub use command_contract::{
     CheckProfile, CommandDescriptor, EvalAction, ExitClass, FitAction, Group, HelpTarget,
     InspectTarget, MigrateAction, ObserveAction, OptionArgument, OptionName, OptionSpec,

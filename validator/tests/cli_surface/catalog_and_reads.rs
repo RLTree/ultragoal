@@ -3,13 +3,15 @@ use std::collections::BTreeSet;
 
 #[cfg(unix)]
 #[test]
-fn public_catalog_is_sole_and_legacy_routes_fail_closed_without_writes() {
+fn public_catalog_is_sole_and_legacy_routes_are_guidance_only_without_writes() {
     let repository = Repository::new("sole-catalog");
     let initial = observe(&repository.root);
     assert!(!initial.status.is_empty(), "fixture must be dirty");
 
+    let unknown = repository.run(&["--json", PRIVATE_CANARY]);
+    assert_machine_error(&unknown);
+
     for args in [
-        &["--json", PRIVATE_CANARY][..],
         &["--json", "help"][..],
         &["--json", "current-state", "--help"][..],
         &["--json", "observe", "logs", "query", "--help"][..],
@@ -18,7 +20,14 @@ fn public_catalog_is_sole_and_legacy_routes_fail_closed_without_writes() {
     ] {
         let before = observe(&repository.root);
         let output = repository.run(args);
-        assert_machine_error(&output);
+        assert_eq!(output.status.code(), Some(4), "{args:?}: {output:?}");
+        let value: serde_json::Value =
+            serde_json::from_slice(&output.stderr).expect("compatibility guidance JSON");
+        assert_eq!(
+            value["schema_version"],
+            "harness-ultragoal.compatibility-guidance.v1"
+        );
+        assert_eq!(value["legacy_effect_executed"], false);
         assert_eq!(observe(&repository.root), before, "hidden write: {args:?}");
     }
 

@@ -66,7 +66,11 @@ impl Repository {
         Self { root }
     }
 
-    pub(crate) fn run(&self, args: &[&str]) -> Output {
+    pub(crate) fn run<I, S>(&self, args: I) -> Output
+    where
+        I: IntoIterator<Item = S>,
+        S: AsRef<std::ffi::OsStr>,
+    {
         let mut command = Command::new(env!("CARGO_BIN_EXE_ultragoal"));
         command
             .env_clear()

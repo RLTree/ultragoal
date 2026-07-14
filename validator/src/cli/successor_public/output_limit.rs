@@ -8,6 +8,15 @@ pub(crate) fn parse_public(raw: &[String]) -> Result<ParseOutcome, String> {
 
 pub(crate) fn run_public(root: &Path, outcome: ParseOutcome) -> Result<i32, String> {
     match outcome {
+        ParseOutcome::Compatibility {
+            command,
+            output_mode,
+        } => emit_compatibility(
+            crate::cli::successor::compatibility::render_compatibility_guidance(
+                command,
+                output_mode,
+            ),
+        ),
         ParseOutcome::Help {
             target,
             output_mode,

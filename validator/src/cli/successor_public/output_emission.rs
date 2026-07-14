@@ -16,6 +16,15 @@ pub(crate) fn emit_text(text: String) -> Result<i32, String> {
     Ok(0)
 }
 
+pub(crate) fn emit_compatibility(text: String) -> Result<i32, String> {
+    let mut bytes = text.into_bytes();
+    if !bytes.ends_with(b"\n") {
+        bytes.push(b'\n');
+    }
+    write_all(io::stderr().lock(), &bytes)?;
+    Ok(crate::cli::successor::compatibility::COMPATIBILITY_EXIT_CODE)
+}
+
 pub(crate) fn write_all(mut output: impl Write, bytes: &[u8]) -> Result<(), String> {
     output
         .write_all(bytes)
