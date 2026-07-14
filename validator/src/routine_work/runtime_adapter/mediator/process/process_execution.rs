@@ -43,7 +43,7 @@ where
                 started: false,
             });
         }
-        require_root_broker_before_spawn()?;
+        let root_broker = require_root_broker_before_spawn()?;
         let sandbox = PinnedExecutable::open_unbound(Path::new("/usr/bin/sandbox-exec"))?;
         let profile = sandbox_profile(
             program.path(),
@@ -86,8 +86,7 @@ where
             });
         }
         let started_at = Instant::now();
-        let child = command
-            .spawn()
+        let child = spawn_with_root_broker(&root_broker, &mut command)
             .map_err(|_| mediator_error("mediator-process-launch-failed"))?;
         let mut setup = SpawnSetupGuard::new(child);
         on_started()?;
