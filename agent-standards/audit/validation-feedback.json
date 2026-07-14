@@ -1,0 +1,69 @@
+{
+  "schema": "harness-ultragoal.agent-standards-audit-shard.v1",
+  "rows": [
+    {
+      "standard_id": "agent-remediating-validator-failures",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "behavior-example-coverage-coverage-anti-gaming",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "coverage-proof-accountability",
+      "audit_status": "pass",
+      "evidence_path": "scripts/check",
+      "evidence_digest": "sha256:6b20e52ef57bed8b40344dd4bb208e4903ed907004e8078bfa2aef8c0e16dfa9",
+      "audited_at": "2026-06-29T00:00:00Z",
+      "claim_ceiling_impact": "completion, coverage, release, production-readiness"
+    },
+    {
+      "standard_id": "coverage-scope-authority",
+      "audit_status": "pass",
+      "evidence_path": "scripts/check-coverage-full",
+      "evidence_digest": "sha256:a936d8a7686038ea2be20197bcdd9ba9753a56d53d6023f7da89acf786dd6842",
+      "audited_at": "2026-07-02T23:00:32Z",
+      "claim_ceiling_impact": "completion, readiness, release, material-signoff, coverage"
+    },
+    {
+      "standard_id": "failure-remediation-quality-agent-actionable-output",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "green-path-adequacy-satisfiable-strictness",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "validator-source-namespace-topology",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/namespace/source/topology.rs",
+      "evidence_digest": "sha256:b579c4f8a541af8428efa5f5a401146f9c80b6a416e276855ba991ad1f1cee8e",
+      "audited_at": "2026-07-03T10:37:16Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release, cli-self-law, final-packet, update_goal"
+    },
+    {
+      "standard_id": "validator-theater-miswire-resistance",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    }
+  ]
+}

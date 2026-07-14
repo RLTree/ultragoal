@@ -1,0 +1,56 @@
+{
+  "schema_version": "ReviewResult-v1",
+  "review_id": "SUPPORTED-HOST-PLUGIN-TRANSACTION-REVIEW-100-R2",
+  "reviewer": "/root/migration_compatibility_contract_engineer",
+  "verdict": "REWORK",
+  "reviewed_identity": {
+    "freeze_head_commit": "860c803d736f7928e1ba5d45b5650513fcbf75eb",
+    "freeze_head_tree": "07b8bb10fefd16574db487e7abeadaad7a142560",
+    "frozen_review_root": "/private/tmp/hul-supported-host-transaction-review-100",
+    "artifact_count": 14,
+    "artifact_bytes": 181963,
+    "artifact_lines_diagnostic": 5122,
+    "artifact_set_sha256": "sha256:5bb7dbc086deb2c5b6f28fb4201cd8447a7c2c055f9a9ee92af0c54f01a56324",
+    "worker_result_sha256": "sha256:54753657074994a2642f9c55eee588d3dd64d80111ff6f46b24695c61620a7f4",
+    "worker_result_parser_id": "sha256:8622d1d21ded5489e7a97f50d18bdecca7736a1beb5156ea9876cfd94c589890",
+    "artifact_identity": "All fourteen artifacts are regular single-link files; every byte length and SHA-256 matches WorkerResult-v1."
+  },
+  "decisive_finding": {
+    "severity": "HIGH",
+    "stage": "correctness_and_false_pass_control",
+    "requirement": "terminal-lineage-to-surface-binding-before-successor-admission",
+    "issue": "Idle successor admission authenticates terminal lineage against its anchor but does not authenticate that lineage against the current seven terminal surfaces.",
+    "evidence": [
+      "darwin_adapter.rs validates idle authority before successor admission through lineage-anchor validation only; its terminal-surface binding check is not applied before preconditions or journal creation.",
+      "The frozen external regression installed candidate b, coherently replaced all seven surfaces with prior candidate c without changing lineage or anchor, and then submitted a valid c-to-d update.",
+      "The query diagnosed Conflict, but execute returned Applied and all seven final observations Verified, publishing a new terminal lineage that legitimized the substituted predecessor."
+    ],
+    "impact": "An unjournaled coherent rollback or substitution can be laundered through a successor transaction and become accepted durable predecessor authority.",
+    "required_fix": "Before idle execute admission or journal creation, require the seven-surface state to match authenticated terminal lineage with explicit cancelled and uninstall semantics. Revalidate that binding at the reservation and effect boundary. Add update, repair, uninstall, concurrency, and mutation controls proving exact zero-write refusal and subsequent valid recovery or use."
+  },
+  "verification": [
+    {
+      "surface": "identity and receipt parsing",
+      "result": "PASS: exact fourteen-artifact aggregate and WorkerResult parser identity matched."
+    },
+    {
+      "surface": "former terminal-lineage substitution blocker",
+      "result": "PASS: 1 passed."
+    },
+    {
+      "surface": "stale Pending Applying and Cancelling journal matrix",
+      "result": "PASS: 1 passed."
+    },
+    {
+      "surface": "focused supported-host contract",
+      "result": "PASS: 34 passed."
+    },
+    {
+      "surface": "coherent seven-surface rollback before successor admission",
+      "result": "FAIL as expected for the external regression: pre-execute query returned Conflict, but execute returned Applied and published Verified successor surfaces."
+    }
+  ],
+  "review_limits": "Review stopped at the first material blocker. Remaining acceptance, performance, and broader product stages were not independently cleared.",
+  "claim_ceiling": "REWORK; no source-local transaction acceptance or higher claim.",
+  "no_claim_statement": "No claim of source-local acceptance, integration, public behavior, installation, cache, marketplace, app registry, Plugins UI, discovery, runtime behavior, readiness, release, node closure, or completion."
+}

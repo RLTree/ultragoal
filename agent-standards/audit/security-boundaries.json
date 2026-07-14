@@ -1,0 +1,61 @@
+{
+  "schema": "harness-ultragoal.agent-standards-audit-shard.v1",
+  "rows": [
+    {
+      "standard_id": "adversarial-packet-tampering-forged-proof-rejection",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "openai-api-key-model-cost-external-ai-boundary",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/openai/mod.rs",
+      "evidence_digest": "sha256:766037e15823b4c33f8aaacb5a25dd9a3cd0a22d692ec01fd237c764aa102c01",
+      "audited_at": "2026-07-03T10:37:16Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release, update_goal, model_output_authority, live_model_claim"
+    },
+    {
+      "standard_id": "privacy-raw-artifact-boundary",
+      "audit_status": "pass",
+      "evidence_path": "scripts/check-agent-standards",
+      "evidence_digest": "sha256:41c848ea277997f900430ebe72ef818b7ac3e2d1cc4b2d2ba0319d9781402810",
+      "audited_at": "2026-06-29T00:00:00Z",
+      "claim_ceiling_impact": "security, review, fixtures"
+    },
+    {
+      "standard_id": "raw-private-artifact-handling-category-only-evidence",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "secret-token-boundaries",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "trust-boundary-abuse-path-failure-path-coverage",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "workspace-command-confinement-lifecycle-cleanup",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    }
+  ]
+}

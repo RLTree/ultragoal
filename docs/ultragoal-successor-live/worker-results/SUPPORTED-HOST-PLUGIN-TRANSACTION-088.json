@@ -1,0 +1,378 @@
+{
+  "worker": "/root/supported_host_effect_boundary_engineer",
+  "lease_id": "SUPPORTED-HOST-EFFECT-BOUNDARY-AUTHORITY-108",
+  "context_id": "sha256:cace35328273e6a5bc5ea56e606e809a998b25737383a362c475ab5556bb0e3c",
+  "candidate_identity": {
+    "candidate_id": "sha256:2693a634534e85b87a9f6b2add4572ad96f632505af241a6f9adf61c23a93c5b",
+    "context_id": "sha256:cace35328273e6a5bc5ea56e606e809a998b25737383a362c475ab5556bb0e3c",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "branch": "codex/successor-contract-v2-live-product",
+    "base_head_commit": "40982060ab4f89d6ced890e50edbe184c1c473ff",
+    "base_head_tree": "f407085c62dc074ab7485218e3231fc96f559238",
+    "artifact_set_sha256": "sha256:2693a634534e85b87a9f6b2add4572ad96f632505af241a6f9adf61c23a93c5b",
+    "artifact_set_formula": "Sort the fourteen artifact rows by UTF-8 path bytes; serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>; concatenate; SHA-256 the resulting bytes.",
+    "artifact_count": 14,
+    "artifact_total_bytes": 216616,
+    "artifact_total_lines": 6049,
+    "worker_result_self_excluded": true,
+    "immutable_freeze_claimed": false,
+    "scratch_root_used": true,
+    "scratch_root_removed_after_parser_validation": true,
+    "verification_target_directory": ".git/codex-target",
+    "predecessor_artifact_set_sha256": "sha256:6377d0a282f43460649261a5ef7ad60352225e147f424d93fe43ad14285ea79a",
+    "staged_or_committed_by_worker": false
+  },
+  "base_state": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "issued_head_commit": "40982060ab4f89d6ced890e50edbe184c1c473ff",
+    "issued_head_tree": "f407085c62dc074ab7485218e3231fc96f559238",
+    "current_live_root_observed_head_commit": "40982060ab4f89d6ced890e50edbe184c1c473ff",
+    "current_live_root_observed_head_tree": "f407085c62dc074ab7485218e3231fc96f559238",
+    "current_base_note": "Lease 108 continued the existing dirty supported-host candidate directly in the shared live root at HEAD 40982060ab4f89d6ced890e50edbe184c1c473ff. Existing bytes were preserved in place; no detached worktree, private temporary root, staging, commit, rebase, or shared-surface edit was used.",
+    "assignment_source": "Direct root continuation-and-freeze lease for the existing supported-host transaction set. The decisive correction requires exact active journal, terminal lineage, lineage anchor, and predecessor binding to be re-read after the final mutation hook and immediately before every surface compare-exchange in both execute and recovery; no persisted WorkPackage-v1 or AgentTaskEnvelope-v1 was supplied.",
+    "context_id_formula": "SHA-256 of lease_id, branch, issued_head_commit, and issued_head_tree, each UTF-8 encoded and LF terminated in that order.",
+    "status": "root-issued-corrective-implementation-lease",
+    "predecessor_review_id": "SUPPORTED-HOST-PLUGIN-TRANSACTION-REVIEW-100-R2",
+    "predecessor_review_sha256": "sha256:5bdc9096c2af4ce211a992e5db279ae4deeea12bcf5950e1a455fee2319eaccb",
+    "forbidden_surfaces_untouched": [
+      "shared-catalog",
+      "shared-manifest",
+      "cargo-manifests-and-lockfile",
+      "shared-board",
+      "public-dispatcher",
+      "installed-host",
+      "external-systems",
+      "git-index-and-history"
+    ],
+    "current_corrective_paths": [
+      "fixtures/supported-host-plugin-transaction/adversarial-cases.json",
+      "validator/src/plugin_product/host_lifecycle/darwin_adapter.rs",
+      "validator/tests/supported_host_plugin_transaction_contract/recovery.rs",
+      "docs/ultragoal-successor-live/worker-results/SUPPORTED-HOST-PLUGIN-TRANSACTION-088.json"
+    ],
+    "retained_candidate_artifacts_not_edited_by_this_correction": [
+      "validator/src/distribution/filesystem/descriptor/directory.rs",
+      "validator/src/distribution/filesystem/root.rs",
+      "validator/src/plugin_product/host_lifecycle/mod.rs",
+      "validator/src/plugin_product/host_lifecycle/darwin.rs",
+      "validator/src/plugin_product/host_lifecycle/darwin_format.rs",
+      "validator/src/plugin_product/host_lifecycle/darwin_model.rs",
+      "validator/src/plugin_product/host_lifecycle/darwin_plan.rs",
+      "validator/tests/supported_host_plugin_transaction_contract.rs",
+      "validator/tests/supported_host_plugin_transaction_contract/product.rs",
+      "validator/tests/supported_host_plugin_transaction_contract/security.rs",
+      "validator/tests/supported_host_plugin_transaction_contract/support.rs"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "worker_disposition": "ACCEPT-ready",
+    "candidate_phase": "live-root-overlay-pending-fresh-independent-review-and-root-reconciliation",
+    "exact_ceiling": "Source-local descriptor-confined Darwin transaction candidate over an explicitly supplied confined root. The anchored terminal lineage must match the current seven-surface predecessor before idle successor admission, is re-read immediately before journal reservation, is revalidated after reservation, and is re-authenticated with the exact active journal and predecessor binding after the final mutation hook immediately before each surface compare-exchange in execute and recovery. Completed install, update, repair, and recovery require seven exact target-bound surface records; completed uninstall requires seven absent surfaces; cancelled outcomes bind the observed predecessor without asserting the target is installed. Complete same-UID replacement of lineage, anchor, journal, and all surfaces remains outside this ceiling.",
+    "claim_effect": false,
+    "public_command_wired": false,
+    "real_host_effect_performed": false,
+    "immutable_freeze_claimed": false,
+    "independent_review_status": "Fresh independent review against sha256:2693a634534e85b87a9f6b2add4572ad96f632505af241a6f9adf61c23a93c5b remains required",
+    "current_live_focused_tests": "43 passed, 0 failed, 0 ignored against live HEAD 40982060ab4f89d6ced890e50edbe184c1c473ff plus the exact fourteen-artifact overlay; product was 7/7, security was 16/16, recovery and race coverage was 20/20, the two execute/recovery final-boundary controls each exercised lineage and anchor substitution, and retained-root authority was 5/5.",
+    "historical_predecessor_false_pass_proof": "Lease 105 previously recorded that adapter sha256:edc7c8b75d82418aea63ed15e128859a0d25c2973011802b27d4a393bcc52cd7 returned Applied for the backported coherent predecessor-substitution regression. Lease 108 treats that as historical context only; the current adapter sha256:1e2f052adf661a098635caa475c0ef40cb801dc1ee8c8a87bac90e11ad5b98af passed the retained predecessor controls and the new final-boundary controls.",
+    "current_dependency_closure": "Not re-run by lease 108. The predecessor receipt's 264-pass dependency-closure result is historical context only and is not claimed as current proof for this corrected artifact identity.",
+    "lease_exact_no_claim_statement": "Candidate source-local confined Darwin host transaction correction only. No claim of public command or dispatcher availability, install or installed-host state, cache state, marketplace state, app-registry state, Plugins-UI visibility, discovery state, runtime identity, representative live-user proof, root adoption, readiness, release, node closure, or completion."
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/SUPPORTED-HOST-PLUGIN-TRANSACTION-088.json",
+    "fixtures/supported-host-plugin-transaction/adversarial-cases.json",
+    "validator/src/distribution/filesystem/descriptor/directory.rs",
+    "validator/src/distribution/filesystem/root.rs",
+    "validator/src/plugin_product/host_lifecycle/mod.rs",
+    "validator/src/plugin_product/host_lifecycle/darwin.rs",
+    "validator/src/plugin_product/host_lifecycle/darwin_adapter.rs",
+    "validator/src/plugin_product/host_lifecycle/darwin_format.rs",
+    "validator/src/plugin_product/host_lifecycle/darwin_model.rs",
+    "validator/src/plugin_product/host_lifecycle/darwin_plan.rs",
+    "validator/tests/supported_host_plugin_transaction_contract.rs",
+    "validator/tests/supported_host_plugin_transaction_contract/product.rs",
+    "validator/tests/supported_host_plugin_transaction_contract/recovery.rs",
+    "validator/tests/supported_host_plugin_transaction_contract/security.rs",
+    "validator/tests/supported_host_plugin_transaction_contract/support.rs"
+  ],
+  "touched_semantics": [
+    "plugin-product::host-lifecycle::darwin-transaction",
+    "plugin-product::host-lifecycle::surface-bindings",
+    "plugin-product::host-lifecycle::transaction-journal",
+    "plugin-product::host-lifecycle::terminal-lineage",
+    "plugin-product::host-lifecycle::lineage-anchor",
+    "plugin-product::host-lifecycle::idle-terminal-predecessor-binding",
+    "plugin-product::host-lifecycle::reservation-and-effect-boundary-revalidation",
+    "plugin-product::host-lifecycle::semantic-plan-binding",
+    "plugin-product::host-lifecycle::recovery-and-cancellation",
+    "distribution-filesystem::retained-root-mutable-authority"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/SUPPORTED-HOST-PLUGIN-TRANSACTION-088.json"
+  ],
+  "fixtures": [
+    "fixtures/supported-host-plugin-transaction/adversarial-cases.json"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "leased-workspace",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "transaction-fixtures",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "cargo-validation",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "external-system",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "real-host-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "irreversible-action",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "authenticated-terminal-lineage-head",
+    "semantic-plan-digest-recomputation",
+    "seven-surface-terminal-package-equality",
+    "idle-terminal-predecessor-surface-binding",
+    "pre-reservation-authority-reread",
+    "post-reservation-authority-revalidation",
+    "effect-boundary-unaffected-surface-revalidation",
+    "pre-surface-cas-exact-journal-lineage-anchor-and-predecessor-reread",
+    "fresh-reopen-lineage-substitution-refusal",
+    "lineage-anchor-crash-recovery",
+    "stale-journal-replay-refusal",
+    "lineage-and-anchor-compare-and-exchange",
+    "honest-absent-and-cancelled-claim-ceiling",
+    "idempotent-zero-write-query-and-reinstall",
+    "versioned-update-and-stale-cache-repair",
+    "interruption-recovery-and-cancellation",
+    "toctou-concurrency-and-cas",
+    "adversarial-special-file-mode-and-substitution-rejection",
+    "retained-root-mode-owner-group-revalidation"
+  ],
+  "dependency_nodes": [
+    "supported-package-snapshot-authority",
+    "descriptor-confined-tree-effects",
+    "plugin-host-lifecycle-observation-contract"
+  ],
+  "changes": [
+    {
+      "area": "terminal-lineage-anchor",
+      "result": "Added a canonical root-bound generation and lineage-digest anchor stored in a separate descriptor-confined CAS tree. Idle open/query/subsequent execution require an exact lineage-anchor pair; terminal-journal recovery admits only the exact predecessor-to-current anchor transition."
+    },
+    {
+      "area": "semantic-plan-binding",
+      "result": "Terminal lineage now retains the prior package and ordered desired/prior step digests. Canonical parsing validates operation shape and recomputes the plan digest from root, operation, target, prior, marketplace, and steps instead of accepting a digest-shaped value."
+    },
+    {
+      "area": "seven-surface-terminal-binding",
+      "result": "Every completed, cancelled, uninstall, and cache-repair lineage records all seven terminal surface digests. Completed installed outcomes decode every actual surface and require exact root, marketplace, and target PackageBinding equality; completed uninstall requires actual absence."
+    },
+    {
+      "area": "idle-terminal-predecessor-binding",
+      "result": "Before a successor transaction can create a journal, authenticated terminal lineage is checked against the complete current seven-surface predecessor. Update and uninstall require the exact prior terminal state; cache repair permits only its explicit stale-cache exception while keeping the other six surfaces terminal-bound; cancelled lineage binds observed predecessor bytes without claiming its target is installed."
+    },
+    {
+      "area": "reservation-and-effect-boundary-revalidation",
+      "result": "Execution re-reads lineage, anchor, journal absence, preconditions, and all seven surfaces immediately before reservation; after exact journal creation it revalidates journal authority, predecessor authority, preconditions, and the reserved surface tuple. After every final mutation hook and immediately before each surface compare-exchange, the shared execute/recovery path re-reads and authenticates the exact active journal, terminal lineage, lineage anchor, and predecessor binding. An unclaimed exact reservation is CAS-removed on refusal, while a claimed journal remains intact for legal later recovery."
+    },
+    {
+      "area": "crash-recoverable-anchor-commit",
+      "result": "Terminalization compare-exchanges lineage, then its anchor, then removes the journal. A crash after lineage but before anchor is recognized only while the exact terminal journal remains, and recovery repairs the anchor without replaying any surface."
+    },
+    {
+      "area": "fresh-reopen-adversarial-coverage",
+      "result": "Retained the positive fresh reopen plus digest-shaped candidate, plan, package, operation, outcome, previous-lineage, generation, and terminal-digest substitutions. Retained coherent predecessor substitution controls for update, repair, uninstall, cancelled outcomes, idle-to-reservation, post-reservation mutation, and repair non-step mutation. Added execute and recovery controls that substitute lineage and anchor independently after the final mutation hook, prove zero writes to all seven surfaces, preserve the exact claimed journal, refuse recovery while authority is substituted, and complete recovery only after canonical authority is restored."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=.git/codex-target CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --test supported_host_plugin_transaction_contract --locked --offline -j 16 reauthenticates_lineage_and_anchor_at_the_final_surface_boundary -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "2 passed, 0 failed, 41 filtered out. Execute and recovery each exercised lineage and anchor substitution after the final mutation hook. Every subcase returned LineageConflict, wrote none of the seven surfaces, preserved the exact claimed journal, remained refused while authority was substituted, and recovered to Verified after canonical authority was restored."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=.git/codex-target CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 cargo test --manifest-path validator/Cargo.toml --test supported_host_plugin_transaction_contract --locked --offline -j 16 -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "43 passed, 0 failed, 0 ignored, 0 filtered out in 19.29 seconds. Product was 7 tests, security was 16 tests, and recovery was 20 tests; retained idle, reservation, update, repair, uninstall, cancellation, stale-journal, crash, concurrency, race, zero-write, and recovery controls all passed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=.git/codex-target CARGO_BUILD_JOBS=16 RUST_TEST_THREADS=16 cargo test --quiet --manifest-path validator/Cargo.toml --lib --locked --offline -j 16 distribution::filesystem::root::tests:: -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "5 passed, 0 failed, 1857 filtered out. Root owner, group, mode, retained-authority drift, and final filesystem effect-boundary revalidation controls passed."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <the exact thirteen Rust artifacts in the fourteen-artifact set>",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "All thirteen Rust artifacts match rustfmt."
+    },
+    {
+      "command": "jq -e . fixtures/supported-host-plugin-transaction/adversarial-cases.json",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "The current adversarial fixture is valid JSON; its declared-case uniqueness control and the four final-boundary case identifiers also passed in the 43-test suite."
+    },
+    {
+      "command": "git diff --check -- validator/src/distribution/filesystem/descriptor/directory.rs validator/src/distribution/filesystem/root.rs validator/src/plugin_product/host_lifecycle/mod.rs",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "No whitespace errors were reported for the three tracked supported-host artifacts; rustfmt separately checked all thirteen Rust artifacts, including untracked candidate files."
+    },
+    {
+      "command": ".git/codex-scratch/plugin/parse-worker-result docs/ultragoal-successor-live/worker-results/SUPPORTED-HOST-PLUGIN-TRANSACTION-088.json, followed by removal of .git/codex-scratch/plugin",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "The repository-authoritative WorkerResultV1::parse_json path accepted the final top-level key set, effect rows, requested_root_changes shape, and exact ArtifactRecord shape. The ephemeral parser directory was removed. No validate_for claim is made because root supplied no persisted LeaseSpec or WorkPackage."
+    },
+    {
+      "command": "Exact fourteen-row regular-file, single-link, SHA-256, byte, line, sorted path-bound aggregate, and total reconciliation in the live root",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Fourteen regular single-link files total 216616 bytes and 6049 lines with sorted path-bound aggregate sha256:2693a634534e85b87a9f6b2add4572ad96f632505af241a6f9adf61c23a93c5b. The WorkerResult is self-excluded and its final file SHA-256 is reported out-of-band."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/supported-host-plugin-transaction/adversarial-cases.json",
+      "sha256": "sha256:b0714414de9d23d3000d3cb5a51c19b4cd0f44179b2ec730ec5715c0c9f6b188",
+      "byte_length": 2424
+    },
+    {
+      "path": "validator/src/distribution/filesystem/descriptor/directory.rs",
+      "sha256": "sha256:8f47a5d1d9d837ffc1cc430702a510886bf3df5f6b608227a88789297242e0f3",
+      "byte_length": 12139
+    },
+    {
+      "path": "validator/src/distribution/filesystem/root.rs",
+      "sha256": "sha256:07657953d201ddad01e17c530d3d1c31688e25cad31faf616ef7af8c1c87b295",
+      "byte_length": 10396
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/mod.rs",
+      "sha256": "sha256:e05756d26741fddb56a5911020e816df9615db2fb8063f9aee803aeb4cfef9aa",
+      "byte_length": 1568
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/darwin.rs",
+      "sha256": "sha256:d273680e561bb5c0192b8e667d6afe0ecb56aee69e48ec5f584ec41b84c616e2",
+      "byte_length": 950
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/darwin_adapter.rs",
+      "sha256": "sha256:1e2f052adf661a098635caa475c0ef40cb801dc1ee8c8a87bac90e11ad5b98af",
+      "byte_length": 77634
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/darwin_format.rs",
+      "sha256": "sha256:b838ea3a043b8333f781e1728528306506dbda9bc93927fbb946ffc8f3fb1a5e",
+      "byte_length": 10050
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/darwin_model.rs",
+      "sha256": "sha256:d6c0b6e52c0f2bb4a5f4ece52c6af60f2ef11c656d8b7c672fb2df108e6e28bf",
+      "byte_length": 11440
+    },
+    {
+      "path": "validator/src/plugin_product/host_lifecycle/darwin_plan.rs",
+      "sha256": "sha256:217a724c8de2c80fb814838ed217d9108c30dd7342f7fc1b25b3d5bda8086ea3",
+      "byte_length": 7098
+    },
+    {
+      "path": "validator/tests/supported_host_plugin_transaction_contract.rs",
+      "sha256": "sha256:d87cfcf8f981f16c9cbdc4aafa69c1bb70e5e2efda33340cc9224c4e850ef3c4",
+      "byte_length": 473
+    },
+    {
+      "path": "validator/tests/supported_host_plugin_transaction_contract/product.rs",
+      "sha256": "sha256:11312314c7cfe5f475af10bbab1bf5e5a07bac368ca1b87802d4ff08e7715d32",
+      "byte_length": 8574
+    },
+    {
+      "path": "validator/tests/supported_host_plugin_transaction_contract/recovery.rs",
+      "sha256": "sha256:e36638b7d7d0102d00216fd04167677af17de312ba7f92161ebe375e5d0e958e",
+      "byte_length": 37482
+    },
+    {
+      "path": "validator/tests/supported_host_plugin_transaction_contract/security.rs",
+      "sha256": "sha256:373aa28e7f68148a81d9b23a323893f73a2dd41b1eec753058303fe97bad50fc",
+      "byte_length": 28925
+    },
+    {
+      "path": "validator/tests/supported_host_plugin_transaction_contract/support.rs",
+      "sha256": "sha256:becf92f61ebd2c29a03df1f8d9353d376b8525b4ce93a838c98bd2bfa5ed9ccd",
+      "byte_length": 7463
+    }
+  ],
+  "findings": [
+    {
+      "finding": "A lineage or lineage-anchor substitution can occur inside the final test-controlled mutation window after step claiming and before the surface compare-and-exchange. Earlier reservation, recovery-state, and unaffected-surface checks do not authenticate the authority tuple at that last effect boundary.",
+      "resolution": "The shared execute/recovery apply path now re-reads the exact active journal, terminal lineage, lineage anchor, and journal-to-predecessor binding after the final mutation hook and immediately before every surface compare-and-exchange. Execute and recovery controls independently substitute lineage and anchor, prove zero writes to all seven surfaces, preserve the exact claimed journal, and prove legal recovery only after canonical authority is restored."
+    },
+    {
+      "finding": "ReviewResult-v1 SUPPORTED-HOST-PLUGIN-TRANSACTION-REVIEW-100-R2 coherently replaced all seven idle predecessor surfaces while preserving anchored terminal lineage, then submitted a valid successor update. The predecessor candidate diagnosed Conflict at query but execute returned Applied and terminalized seven Verified successor surfaces.",
+      "resolution": "Idle successor admission binds anchored lineage to the complete observed predecessor before journal creation, repeats the full authority and surface read immediately before reservation, revalidates the exact reserved tuple after reservation, and checks recovery and non-step repair surfaces at each effect boundary. Historical lease 105 recorded the predecessor Applied false pass and its correction; lease 108 retained those controls in the 43-test suite."
+    },
+    {
+      "finding": "Independent review changed only the terminal lineage target candidate_id to another digest-shaped value, then opened a fresh adapter and queried the original plan. The old candidate returned Verified for all seven original surfaces.",
+      "resolution": "Fresh open and every later authority path now require the canonical lineage bytes to match a separately CAS-updated anchor. Lineage parsing also recomputes plan identity, and completed installed terminalization independently decodes all seven current surface records and requires exact PackageBinding equality."
+    },
+    {
+      "finding": "A prior independent probe restored an old Pending, Applying, or Cancelling journal after a newer terminal transaction.",
+      "resolution": "The existing generation and previous-lineage journal binding remains enforced, while the new anchor additionally binds the current head across fresh opens. The stale-journal matrix remains green."
+    },
+    {
+      "finding": "A crash can occur after the lineage compare-and-exchange but before its separate anchor compare-and-exchange.",
+      "resolution": "That state is accepted only with the exact still-present terminal journal and exact predecessor anchor. Recovery advances the anchor before journal removal and does not replay any surface."
+    },
+    {
+      "finding": "An arbitrary same-UID actor can replace the complete confined root, including lineage, anchor, journal, and all seven surfaces, after all trusted adapter state is gone.",
+      "resolution": "No unsupported protection claim was added. This remains outside the candidate ceiling pending an external monotonic or otherwise separately protected anchor."
+    }
+  ],
+  "unresolved_dependencies": [
+    "fresh-independent-review-of-current-artifact-identity",
+    "root-acceptance-and-reconciliation-of-the-live-dirty-artifact-set",
+    "root-public-host-command-wiring",
+    "real-host-installation-and-runtime-identity-proof",
+    "representative-live-user-journey",
+    "claim-adoption-and-release",
+    "external-monotonic-anchor-for-complete-root-rollback"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "This is an exact source-local artifact freeze in the live dirty root at HEAD 40982060ab4f89d6ced890e50edbe184c1c473ff, not an immutable accepted root freeze. Root must independently review and reconcile the shared worktree without treating this receipt as an automatic staging or commit instruction.",
+    "The current identity addresses the final surface effect-boundary race and is ACCEPT-ready for root review, but it has not received a fresh independent review against sha256:2693a634534e85b87a9f6b2add4572ad96f632505af241a6f9adf61c23a93c5b.",
+    "The lineage anchor is a separate descriptor-confined record in the same supplied root. It detects lineage-only substitution, rollback, deletion, malformed anchors, and unsafe anchor modes, but it is not a secret-backed authenticator or an external monotonic counter.",
+    "A same-UID actor able to replace lineage, anchor, journal, and all seven surfaces together after all trusted process state is gone remains outside the detectable rollback ceiling.",
+    "Completed uninstall and cancelled records retain bounded plan and terminal-state history but do not assert that the target package is installed or verified. Query reports actual surface observations for those outcomes.",
+    "The adapter mutates only explicitly supplied confined test roots. It did not write the real user home, real Codex cache, marketplace, app registry, Plugins UI, discovery registry, runtime state, or any external system.",
+    "No public CLI or plugin command dispatches this adapter in this candidate. Source, public-route, install, cache, marketplace, app-registry, Plugins UI, discovery, runtime, representative-user, readiness, release, and completion proof remain distinct and withheld.",
+    "The retained-root dependency binds POSIX mode, uid, and gid. macOS ACLs and file flags are not represented by this fourteen-artifact set, and the documented final same-UID syscall interval remains outside the arbitrary-adversary ceiling.",
+    "Each actual surface compare-and-exchange now incurs bounded descriptor-confined re-reads of the journal, lineage, anchor, and predecessor binding; transactions have at most seven surface steps and cache repair has one. No performance benchmark was run.",
+    "The WorkerResult is self-excluded from the fourteen-artifact aggregate and cannot make its own identity authoritative. Its file digest is an out-of-band handoff value; independent review and root reconciliation remain mandatory.",
+    "Lease 108 re-ran the focused 43-test transaction suite, the two final-boundary controls, retained-root unit tests, formatting, JSON, scoped tracked whitespace, authoritative parsing, and exact artifact identity. It did not re-run the predecessor receipt's broader 264-pass dependency closure, so that older result is not current proof.",
+    "The bounded cargo commands emitted existing repository warning volume. No warning-free source or repository claim is made."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

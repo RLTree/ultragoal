@@ -1,0 +1,132 @@
+{
+  "schema": "harness-ultragoal.agent-standards-policy-shard.v1",
+  "rows": [
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; observability_claims_withheld_without_typed_queryable_correlated_receipt.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "agent-queryable-observability",
+      "owner_lane": "root",
+      "required_behavior": "Agent Queryable Observability must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Agent Queryable Observability"
+    },
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; no_default_observability_install_claim.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "conditional-observability-proof",
+      "owner_lane": "root",
+      "required_behavior": "Conditional Observability Proof must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "source obligation: Conditional Observability Proof"
+    },
+    {
+      "blocker_or_repair_action": "Run observe stack up, health, smoke, prove, query logs/metrics/traces, then source audit; observability claims are withheld without live same-candidate receipt binding.",
+      "claim_ids_affected": "final packet, review, package, readiness, release, completion, update_goal",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/observability/mod.rs",
+      "id": "full-local-observability-stack-integration-non-opaque-failure",
+      "owner_lane": "root",
+      "required_behavior": "Every law-bearing CLI/check/proof path must emit typed logs, metrics, traces, diagnostics, query hints, redaction/bounds proof, and current observability receipt binding.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Full Local Observability Stack Integration And Non-Opaque Failure"
+    },
+    {
+      "blocker_or_repair_action": "Run improvement-loop prove and source audit; self_improvement_claims_withheld_without_same_candidate_loop_closure.",
+      "claim_ids_affected": "completion, review, package, readiness, release, self_improving, update_goal",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/cli/improvement_loop/mod.rs",
+      "id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+      "owner_lane": "root",
+      "required_behavior": "Harness improvement claims must close the trace-to-feedback-to-cluster-to-eval-to-promptfoo-to-HALO-to-Codex-handoff-to-validation-to-before-after-telemetry-to-promotion loop through CLI-bound same-candidate evidence.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Harness Improvement Loop, Trace Feedback, Eval, And Codex Handoff"
+    },
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; completion_claims_withheld_without_historical_regression_corpus.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "historical-regression-corpus-session-review-signals",
+      "owner_lane": "root",
+      "required_behavior": "Historical Regression Corpus Session Review Signals must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Historical Regression Corpus Session Review Signals"
+    },
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; implementation_proof_claims_withheld_when_memory_wiki_chronicle_or_session_summaries_are_not_joined_to_live_same_surface_evidence.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "memory-wiki-context-only",
+      "owner_lane": "root",
+      "required_behavior": "Memory Wiki Context Only must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "source obligation: Memory Wiki Context Only"
+    },
+    {
+      "blocker_or_repair_action": "Run source audit research-source-authority-article-to-law-integration; research_backed_claims_withheld_without_current_article_to_law_trace.",
+      "claim_ids_affected": "completion, review, package, readiness, release, update_goal",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/research/mod.rs",
+      "id": "research-source-authority-article-to-law-integration",
+      "owner_lane": "root",
+      "required_behavior": "Research source authority and article-to-law integration must be enforced through source cards, source digests, canonical law ids, standards rows, source obligations, foundational trace entries, schemas, validator checks, red and green fixtures, receipts, package inventory, setup/retrofit outputs, claim guards, final-packet fields, and update_goal blockers.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Research Source Authority And Article To Law Integration"
+    },
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; current_source_full_compliance_readiness_release_claims_withheld_by_unrefreshed_source_cards.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "source-card-freshness-ceiling",
+      "owner_lane": "root",
+      "required_behavior": "Source Card Freshness Ceiling must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "source obligation: Source Card Freshness Ceiling"
+    },
+    {
+      "blocker_or_repair_action": "Transcript reuse claims require final post-stop transcription, cleanup, and alignment evidence; disabled or missing finalization withholds reuse claims.",
+      "claim_ids_affected": "transcript, replay, product",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "id": "transcript-quality-reuse-gates",
+      "owner_lane": "root",
+      "required_behavior": "Missing or disabled post-stop batch transcription, cleanup, or final alignment blocks reuse when downstream claims trust final words.",
+      "required_execplan_refs": [
+        "mandatory-plugin-product-cohesion-and-fit-repo-authority.md",
+        "mandatory-product-fitness-quality-in-use-enforcement.md"
+      ],
+      "source_law": "security and reliability standards: transcript finalization"
+    }
+  ]
+}

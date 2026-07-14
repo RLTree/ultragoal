@@ -1,0 +1,54 @@
+# Plugin Activation And Distribution Surfaces
+
+## Activation Surface
+
+Plugin activation is a product workflow, not a file copy.
+
+- Fresh init installs AGENTS routing, this standards router, enforcement rows,
+  scripts, coverage authority, worktree environment support, validation
+  artifacts, Product Success/Fitness/Cohesion surfaces, observability routes,
+  setup receipts, and package inventory entries.
+- Retrofit classifies existing source, runtime, product, proof, docs, scripts,
+  package, install, cache, and app-registry surfaces before writing new law.
+- Stale or conflicting instructions are removed, routed to a blocker, or
+  superseded through a typed compatibility boundary. They are not left as
+  parallel authority.
+
+## Routine Product Commands
+
+Common flows need obvious command paths.
+
+- Setup, retrofit, fast validation, full source-local validation, observability
+  query/explain, repair-loop execution, eval execution, architecture checks,
+  security checks, product checks, and standards gardening route to canonical
+  CLI commands or helpers that delegate to the canonical CLI.
+- Helpers may improve ergonomics, but they preserve candidate digest,
+  telemetry, receipts, claim ceilings, and failure semantics from the CLI
+  authority kernel.
+- AGENTS routing should tell an agent: if doing X, run Y, inspect Z, and stop
+  on W. It should not duplicate the entire law system.
+
+## Distribution Surface Separation
+
+Distribution claims are same-surface claims.
+
+- Source proof, package proof, installed-plugin proof, cache proof, app registry
+  proof, launcher proof, marketplace proof, reviewer exposure proof, archive
+  proof, and live runtime proof are separate.
+- Package inventory must include every law-bearing resource, schema, template,
+  fixture, receipt expectation, setup output, retrofit output, and final packet
+  blocker required for plugin-activated repos.
+- Private local paths, personal-machine assumptions, hidden caches, untracked
+  generated artifacts, and author-memory-only commands cannot enter package or
+  distribution proof.
+
+## Clean-Room Proof
+
+Clean-room proof protects future users from hidden local state.
+
+- Rebuilds verify command availability, package closure, generated artifact
+  reproducibility, install/cache separation, and absence of private path
+  dependencies.
+- Claims depending on undocumented commands, stale caches, manual
+  post-processing, hidden generated state, or source/install/cache divergence
+  remain blocked.

@@ -1,0 +1,76 @@
+{
+  "schema_version": "ObservabilityPublicDiagnosisFixtures-v1",
+  "temporary_root": ".git/codex-scratch/observability/public-diagnosis-107",
+  "source_id": "successor-runtime",
+  "public_schema": "PublicCausalDiagnosis-v1",
+  "default_mode": "local-only",
+  "external_export_default": "disabled-safe-default-OD-004-OD-007",
+  "claim_effect": "none",
+  "cases": [
+    {
+      "id": "fresh-clean-zero-write",
+      "class": "fresh",
+      "expect": "help inspect query and unselected diagnosis preserve recursive bytes metadata and Git status without creating a local store"
+    },
+    {
+      "id": "dirty-causal-failure-provenance",
+      "class": "positive",
+      "expect": "a current dirty candidate selects the latest bounded non-receipt failure and reports stable operation outcome parent and repair provenance"
+    },
+    {
+      "id": "newer-success-and-receipt-refusal",
+      "class": "false-pass",
+      "expect": "a newer success or receipt reference cannot displace an eligible causal failure or raise a claim"
+    },
+    {
+      "id": "bounded-window-saturation",
+      "class": "limit",
+      "expect": "a full public result window is marked saturated and diagnosis withholds global causality instead of selecting an incomplete result"
+    },
+    {
+      "id": "configured-export-read-refusal",
+      "class": "network",
+      "expect": "export environment configuration cannot alter local read output connect to a listener or authorize the public export route"
+    },
+    {
+      "id": "truncated-tail-failure-recovery",
+      "class": "recovery",
+      "expect": "public reads preserve corrupt bytes and expose stable provenance until the explicit local recovery API removes only the incomplete tail"
+    },
+    {
+      "id": "unknown-row-corruption",
+      "class": "corruption",
+      "expect": "a complete unknown row fails query and is diagnosed as integrity failure without rewrite or raw parser output"
+    },
+    {
+      "id": "ancestor-symlink-refusal",
+      "class": "path",
+      "expect": "a substituted ancestor is rejected without following it path echo or outside effect"
+    },
+    {
+      "id": "fifo-and-hardlink-refusal",
+      "class": "special-file",
+      "expect": "special and multiply linked leaves fail closed promptly without interpreting or mutating their bytes"
+    },
+    {
+      "id": "bound-leaf-and-content-race",
+      "class": "race",
+      "expect": "leaf replacement and in-place content mutation after binding are detected before public diagnosis can retain the result"
+    },
+    {
+      "id": "lock-deadline-cancellation-negative-control",
+      "class": "concurrency",
+      "expect": "query and diagnosis time out deterministically under contention cancellation writes nothing and release restores successful reads"
+    },
+    {
+      "id": "repeat-query-determinism",
+      "class": "repeat",
+      "expect": "same-candidate repeated query and diagnosis return identical isolated machine bytes and stable exit classes"
+    },
+    {
+      "id": "privacy-preserving-output",
+      "class": "privacy",
+      "expect": "private token path email endpoint and raw store errors never appear in persisted or public output"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "RoutinePublicProductionCases-v1",
+  "supported_host": "target_vendor=apple",
+  "claim_effect": "none",
+  "cases": [
+    "clean-noop-zero-host-write",
+    "dirty-execution",
+    "conservative-partial-selection",
+    "dependency-closed-partial-failure",
+    "causal-failure-diagnosis",
+    "fixed-template-false-pass-refusal",
+    "fallback-runner",
+    "exact-durable-reuse",
+    "interruption-restart-recovery",
+    "concurrent-single-execution-and-reuse",
+    "selected-source-race-refusal",
+    "missing-host-authority-zero-workspace-write",
+    "stale-cache-binding-zero-ledger-transition",
+    "forged-reuse-zero-ledger-transition",
+    "host-lock-substitution-refusal",
+    "target-substitution-refusal",
+    "catalog-substitution-refusal",
+    "help-zero-write",
+    "parse-refusal-zero-write",
+    "read-route-zero-write"
+  ]
+}

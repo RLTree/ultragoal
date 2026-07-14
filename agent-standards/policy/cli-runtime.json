@@ -1,0 +1,174 @@
+{
+  "schema": "harness-ultragoal.agent-standards-policy-shard.v1",
+  "rows": [
+    {
+      "blocker_or_repair_action": "Run CLI authority validation, transactional finalization validation, and mandatory-law red fixtures; harness_claims_withheld_without_cli_control_plane_authority.",
+      "claim_ids_affected": "completion, review, package, readiness, release, app-registry, reviewer-exposure, update_goal",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/cli/control/plane/proof/transaction.rs",
+      "id": "cli-control-plane-authority",
+      "owner_lane": "root",
+      "required_behavior": "Harness Ultragoal claims must be computed, minted, or verified by the installed CLI control plane from typed current inputs; prose, checklist, reviewer agreement, source-only proof, install proof, cache proof, packet existence, or claim-ceiling text cannot satisfy completion, package, review, readiness, release, app, registry, reviewer, or update_goal claims.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "Gate 89 mandatory law: CLI Control Plane Authority"
+    },
+    {
+      "blocker_or_repair_action": "Run CLI performance validation and mandatory-law red fixtures; performance_claims_withheld_without_typed_budget_receipts_cache_honesty_and_regression_proof.",
+      "claim_ids_affected": "completion, routine usability, product readiness, package, readiness, release, update_goal",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/cli/performance.rs",
+      "id": "cli-performance-latency-speed-iteration-fitness",
+      "owner_lane": "root",
+      "required_behavior": "Every evidence-affecting Ultragoal CLI command must have typed budget classes, current performance receipts, cache/no-cache honesty, bounded concurrency/isolation proof, live-probe timeout and retry/backoff policy, regression baselines, and claim blocking for missing, stale, over-budget, hidden-cache, focused-substituted, or unbounded proof paths.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "Gate 89.22 mandatory law: CLI Performance, Latency, Speed, And Iteration Fitness"
+    },
+    {
+      "blocker_or_repair_action": "Run CLI authority validation, transactional finalization validation, and mandatory-law red fixtures; completion_claims_withheld_without_same_candidate_cli_self_law_receipt.",
+      "claim_ids_affected": "completion, review, package, readiness, release, app-registry, reviewer-exposure, update_goal",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/cli/control/plane/proof/transaction.rs",
+      "id": "cli-self-law-compliance",
+      "owner_lane": "root",
+      "required_behavior": "The CLI, validator source, schemas, receipts, fixtures, reports, package inventory, generated hooks, command wrappers, init or retrofit outputs, configuration, product surfaces, and documentation must obey every law the CLI enforces; bootstrap, transition-only, source-only, target-only, stale, copied, or non-current proof cannot support completion, package, review, release, registry, app, reviewer, product, or update_goal claims.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "Gate 89 mandatory law: CLI Self Law Compliance"
+    },
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; guardrail_claims_withheld_without_speed_isolation_cache_receipt.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "guardrail-speed-isolation-cache-honesty",
+      "owner_lane": "root",
+      "required_behavior": "Guardrail Speed Isolation Cache Honesty must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Guardrail Speed Isolation Cache Honesty"
+    },
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; bootstrap_claims_withheld_without_one_command_concurrent_safe_receipt.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+      "owner_lane": "root",
+      "required_behavior": "One Command Fresh Environment Bootstrap Concurrent Resource Allocation must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: One Command Fresh Environment Bootstrap Concurrent Resource Allocation"
+    },
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; strict_gate_claims_withheld_without_runtime_feasibility_receipt.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "runtime-feasibility-cost-strict-gate-usability",
+      "owner_lane": "root",
+      "required_behavior": "Runtime Feasibility Cost Strict Gate Usability must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Runtime Feasibility Cost Strict Gate Usability"
+    },
+    {
+      "blocker_or_repair_action": "Runtime/UI claims require exact tool identity evidence; unidentified runtime proof keeps live UI/runtime claims withheld.",
+      "claim_ids_affected": "runtime, UI, product",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "id": "runtime-tool-identity",
+      "owner_lane": "root",
+      "required_behavior": "Browser, UI, and runtime proof records exact tool identity, version, binary path when relevant, artifact digests, workspace, and claim ceiling.",
+      "required_execplan_refs": [
+        "mandatory-plugin-product-cohesion-and-fit-repo-authority.md",
+        "mandatory-product-fitness-quality-in-use-enforcement.md"
+      ],
+      "source_law": "agent standards: proof freshness and operation identity"
+    },
+    {
+      "blocker_or_repair_action": "Run Gate 91 Rust/GC CLI receipt validation and mandatory-law red fixtures; rust_no_cache_claims_withheld_without_cache_honesty_receipt.",
+      "claim_ids_affected": "routine usability, clean checkout, source, package, readiness, release, update_goal",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/rust/developer.rs",
+      "id": "rust-cache-no-cache-honesty",
+      "owner_lane": "root",
+      "required_behavior": "Rust acceleration, target dirs, Cargo homes, sccache, remote caches, global Cargo config, RUSTC_WRAPPER, warm cache timings, and clean-proof loops must be declared in receipts; warm or hidden cache proof cannot support no-cache claims.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "Gate 91 mandatory law: Rust Cache No-Cache Honesty"
+    },
+    {
+      "blocker_or_repair_action": "Run Gate 91 Rust/GC CLI receipt validation and mandatory-law red fixtures; rust_command_loop_claims_withheld_without_cli_loop_receipts.",
+      "claim_ids_affected": "completion, source, package, review, readiness, release, update_goal",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/rust/developer.rs",
+      "id": "rust-command-loop-authority",
+      "owner_lane": "root",
+      "required_behavior": "ultragoal rust fast, standard, release, coverage prove, clean-proof, watch, memory prove, dependency audit, and workspace topology loops must be CLI-routed; raw cargo test, watcher/editor state, smoke tests, or focused checks cannot substitute for claim-specific receipts.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "Gate 91 mandatory law: Rust Command Loop Authority"
+    },
+    {
+      "blocker_or_repair_action": "Run Gate 91 Rust/GC CLI receipt validation and mandatory-law red fixtures; rust_devx_claims_withheld_without_cli_bound_devx_receipts.",
+      "claim_ids_affected": "completion, review, package, readiness, release, product, update_goal",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/rust/developer.rs",
+      "id": "rust-developer-experience-authority",
+      "owner_lane": "root",
+      "required_behavior": "Rust developer experience is a governed product surface; raw Rust tools are observations only and cannot satisfy Harness claims until ultragoal converts them into typed, digest-bound receipts and claim ceilings.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "Gate 91 mandatory law: Rust Developer Experience Authority"
+    },
+    {
+      "blocker_or_repair_action": "Run Gate 91 Rust/GC CLI receipt validation and mandatory-law red fixtures; rust_runtime_claims_withheld_without_memory_resource_receipt.",
+      "claim_ids_affected": "source, package, runtime, readiness, release, update_goal",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/rust/developer.rs",
+      "id": "rust-memory-resource-discipline",
+      "owner_lane": "root",
+      "required_behavior": "Rust memory/resource proof must enforce ownership/RAII, bounded caches/queues, managed child processes, shutdown proof, leak/tempdir/fd cleanup, and forbid tracing GC as the correctness-critical core memory model.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "Gate 91 mandatory law: Rust Memory Resource Discipline"
+    },
+    {
+      "blocker_or_repair_action": "Run Gate 91 Rust/GC CLI receipt validation and mandatory-law red fixtures; rust_claims_withheld_without_current_toolchain_substrate_receipt.",
+      "claim_ids_affected": "completion, source, package, readiness, release, update_goal",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/rust/developer.rs",
+      "id": "rust-toolchain-substrate-authority",
+      "owner_lane": "root",
+      "required_behavior": "Rust substrate proof must bind rust-toolchain.toml, Cargo.lock, Cargo metadata, active toolchain, rustc/cargo versions, required components, and tool inventory; stale or missing substrate proof blocks claims.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "Gate 91 mandatory law: Rust Toolchain Substrate Authority"
+    }
+  ]
+}

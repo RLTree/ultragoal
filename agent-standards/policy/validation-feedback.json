@@ -1,0 +1,119 @@
+{
+  "schema": "harness-ultragoal.agent-standards-policy-shard.v1",
+  "rows": [
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; validator_claims_withheld_without_agent_remediating_failures.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "agent-remediating-validator-failures",
+      "owner_lane": "root",
+      "required_behavior": "Agent Remediating Validator Failures must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Agent Remediating Validator Failures"
+    },
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; coverage_claims_withheld_without_behavior_examples_and_anti_gaming_receipt.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "behavior-example-coverage-coverage-anti-gaming",
+      "owner_lane": "root",
+      "required_behavior": "Behavior Example Coverage Coverage Anti Gaming must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Behavior Example Coverage Coverage Anti Gaming"
+    },
+    {
+      "blocker_or_repair_action": "Run scripts/check and coverage-proof-policy before material completion claims; withhold claims when coverage is missing or below the declared policy.",
+      "claim_ids_affected": "completion, coverage, release, production-readiness",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check",
+      "id": "coverage-proof-accountability",
+      "owner_lane": "root",
+      "required_behavior": "Coverage claims require coverage receipts; test pass counts, smoke tests, fixtures, mocks, and reviewer signoff do not prove coverage. Lower-than-100 floors are ratchet debt with owner, reason, artifact, blocker, and claim ceiling.",
+      "required_execplan_refs": [
+        "mandatory-coverage-authority-and-enforcement.md",
+        "mandatory-coverage-scope-authority-and-anti-theater.md"
+      ],
+      "source_law": "agent standards: coverage and test law"
+    },
+    {
+      "blocker_or_repair_action": "Run coverage scope validators and full coverage gate before material claims; withhold claims when manifest, freshness, changed-file, or fast/full authority checks fail.",
+      "claim_ids_affected": "completion, readiness, release, material-signoff, coverage",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-coverage-full",
+      "id": "coverage-scope-authority",
+      "owner_lane": "root",
+      "required_behavior": "Coverage scope is owned by .harness/coverage-manifest.json, repo walk validation, changed-file coupling, receipt freshness, policy mutation checks, and fast/full coverage gate separation. Agents cannot narrow scope, copy proof, or use fast checks for completion claims.",
+      "required_execplan_refs": [
+        "mandatory-coverage-authority-and-enforcement.md",
+        "mandatory-coverage-scope-authority-and-anti-theater.md"
+      ],
+      "source_law": "coverage scope authority law"
+    },
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; repair_claims_withheld_without_agent_actionable_failure_output.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "failure-remediation-quality-agent-actionable-output",
+      "owner_lane": "root",
+      "required_behavior": "Failure Remediation Quality Agent Actionable Output must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Failure Remediation Quality Agent Actionable Output"
+    },
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; compliance_claims_withheld_when_any_law_lacks_green_path.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "green-path-adequacy-satisfiable-strictness",
+      "owner_lane": "root",
+      "required_behavior": "Green Path Adequacy Satisfiable Strictness must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Green Path Adequacy Satisfiable Strictness"
+    },
+    {
+      "blocker_or_repair_action": "Run namespace-progressive-disclosure validator and Gate 90 red/green/tamper fixtures; move validator source into semantic directories and delete broad source exceptions before material claims.",
+      "claim_ids_affected": "completion, review, package, readiness, release, cli-self-law, final-packet, update_goal",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/namespace/source/topology.rs",
+      "id": "validator-source-namespace-topology",
+      "owner_lane": "root",
+      "required_behavior": "Repo-owned validator source and test files are agent-facing law surfaces. Top-level internal_/internal_coverage/iinternal clusters, coverage-wave history names, broad validator/src source exceptions, generated/catalog exceptions for hand-authored source, and package-manifest blessing of bad source topology block completion, review, package, readiness, release, CLI self-law, final-packet, and update_goal claims.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Validator Source Namespace Topology And Semantic Repo-Law Enforcement"
+    },
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; validator_enforcement_claims_withheld_without_theater_and_miswire_resistance.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "validator-theater-miswire-resistance",
+      "owner_lane": "root",
+      "required_behavior": "Validator Theater Miswire Resistance must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Validator Theater Miswire Resistance"
+    }
+  ]
+}

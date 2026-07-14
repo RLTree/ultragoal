@@ -1,0 +1,60 @@
+# Research, Improvement, And Quality Gates
+
+## Research Source Authority
+
+Research-backed law must trace through the whole authority graph.
+
+- A source-backed requirement maps from source artifact and digest to canonical
+  law id, standards row, source obligation, foundational trace entry, schema,
+  validator, red fixture, green fixture, receipt, package inventory entry,
+  setup/retrofit output, claim guard, final-packet blocker, and update-goal
+  blocker.
+- Source cards are current authority only when their digest and freshness
+  policy match the claimed candidate. Historical cards are context.
+- Markdown alone cannot adopt, close, or retire a hard law.
+
+## Improvement Loop
+
+Failures become durable product improvement.
+
+- Harvest failed runs, opaque output, stale or wrong-digest escapes, bad tool
+  calls, bad repairs, slow workflows, reviewer findings, security near misses,
+  Product Fitness substitutions, docs drift, architecture violations, and lane
+  regressions.
+- Close the loop through trace, feedback, cluster, eval or fixture, law or
+  validator, repair, before/after telemetry, and promotion.
+- Promptfoo, HALO, OpenAI, model-call, or Codex handoff claims need redacted
+  config boundaries, rate-limit/retry/backoff when live, schema/output proof,
+  forbidden-substitution guards, and same-candidate receipts.
+
+## Quality Gates
+
+Quality gates are typed claim gates, not vibes.
+
+- Quality Score, taste, accessibility, cognitive-load, reliability,
+  performance, security, and product-fit gates are current, evidence-bound, and
+  unable to pass when the underlying law or same-surface proof fails.
+- Quality cannot hide an underlying legal, security, privacy, coverage,
+  observability, product-success, or package-boundary failure.
+
+## Measured Improvement
+
+The harness must reduce agent work, not add ceremony.
+
+- Measure time-to-diagnosis, time-to-repair, rerun count, stale-receipt
+  recurrence, wrong-digest recurrence, opaque-failure recurrence,
+  claim-theater escapes, source-audit recurrence, red-fixture drift, Product
+  Fitness substitution recurrence, eval trend, command latency, and manual
+  spelunking burden.
+- An improvement claim needs before/after evidence on the same surface or a
+  withheld claim ceiling.
+
+## Capability Gaps
+
+Repeated missing capability is a product signal.
+
+- Missing runtime, tool, documentation, permission, adapter, connector, model,
+  eval, or observability capability becomes an owned gap with repair action,
+  evidence path, affected claim ids, and review/update-goal blocker.
+- A capability gap cannot be closed by prose or hidden by an adjacent passing
+  gate.

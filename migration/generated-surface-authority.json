@@ -1,7 +1,100 @@
 {
-  "schema_version": "GeneratedSurfaceAuthority-v2",
+  "schema_version": "GeneratedSurfaceAuthority-v3",
   "contract_id": "harness-ultragoal-successor-contract-v2",
+  "registry_projection": {
+    "generator": "scripts/project-generated-authority",
+    "canonical_sources": [
+      "migration/generated-surface-authority/agent-standards-documents.json",
+      "migration/generated-surface-authority/agent-standards-indexes.json",
+      "migration/generated-surface-authority/agent-standards-tools.json",
+      "migration/generated-surface-authority/dependency-locks.json",
+      "migration/generated-surface-authority/retained-predecessor-context.json"
+    ],
+    "regeneration_command": "scripts/project-generated-authority write"
+  },
   "surfaces": [
+    {
+      "disposition": "tool_projection",
+      "output": "Cargo.lock",
+      "tool": "cargo",
+      "tool_version": "1.95.0",
+      "canonical_sources": [
+        "Cargo.toml",
+        "rust-toolchain.toml",
+        "validator/Cargo.toml"
+      ],
+      "regeneration_command": "cargo generate-lockfile --offline",
+      "output_sha256": "1d65320fcc310f4f992be232aa4e4f2a45157ce7897c5bca19e4867a43a041e8"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "agent-standards/enforcement-audit.tsv",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/audit/agent-orchestration.json",
+        "agent-standards/audit/authority-types.json",
+        "agent-standards/audit/capability-and-portability.json",
+        "agent-standards/audit/cli-runtime.json",
+        "agent-standards/audit/observability-research.json",
+        "agent-standards/audit/plugin-distribution.json",
+        "agent-standards/audit/product-contract.json",
+        "agent-standards/audit/product-quality.json",
+        "agent-standards/audit/proof-claims.json",
+        "agent-standards/audit/review-governance.json",
+        "agent-standards/audit/security-boundaries.json",
+        "agent-standards/audit/standards-namespace.json",
+        "agent-standards/audit/state-workflow.json",
+        "agent-standards/audit/validation-feedback.json"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "b4e877e51a28c0daf8924094cbb7ba760e348d5efc346f6a3a089e1dcd566707"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "agent-standards/enforcement.json",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/policy/agent-orchestration.json",
+        "agent-standards/policy/authority-types.json",
+        "agent-standards/policy/capability-and-portability.json",
+        "agent-standards/policy/cli-runtime.json",
+        "agent-standards/policy/observability-research.json",
+        "agent-standards/policy/plugin-distribution.json",
+        "agent-standards/policy/product-contract.json",
+        "agent-standards/policy/product-quality.json",
+        "agent-standards/policy/proof-claims.json",
+        "agent-standards/policy/review-governance.json",
+        "agent-standards/policy/security-boundaries.json",
+        "agent-standards/policy/standards-namespace.json",
+        "agent-standards/policy/state-workflow.json",
+        "agent-standards/policy/validation-feedback.json"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "8711360b639d74b41d940f792a002927d58b07fffd6ef939f1b13787b0da3d13"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "agent-standards/enforcement.tsv",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/policy/agent-orchestration.json",
+        "agent-standards/policy/authority-types.json",
+        "agent-standards/policy/capability-and-portability.json",
+        "agent-standards/policy/cli-runtime.json",
+        "agent-standards/policy/observability-research.json",
+        "agent-standards/policy/plugin-distribution.json",
+        "agent-standards/policy/product-contract.json",
+        "agent-standards/policy/product-quality.json",
+        "agent-standards/policy/proof-claims.json",
+        "agent-standards/policy/review-governance.json",
+        "agent-standards/policy/security-boundaries.json",
+        "agent-standards/policy/standards-namespace.json",
+        "agent-standards/policy/state-workflow.json",
+        "agent-standards/policy/validation-feedback.json"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "7c784031ce5b152516ee8062cce3a10127f2f2ccce6b6becaaaff42f666b9e3f"
+    },
     {
       "disposition": "retained_context",
       "output": "docs/generated/observability/command-inventory.json",
@@ -19,7 +112,9 @@
       "output": "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
       "sha256": "34eae3d4c4cab4de549d0d1f3f37423b6f55ef24cd2e2ac1b6b7ecbe58951814",
       "reason": "Retained predecessor product-success example; it is not claim authority and HCT-CLAIMS is its canonical replacement.",
-      "replacement_targets": ["HCT-CLAIMS"],
+      "replacement_targets": [
+        "HCT-CLAIMS"
+      ],
       "preserve": true,
       "physical_deletion_authorized": false
     },
@@ -28,7 +123,9 @@
       "output": "examples/generated/READY_FOR_MERGE-LANE-001.json",
       "sha256": "cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
       "reason": "Retained predecessor readiness example; it cannot authorize merge, readiness, release, or completion.",
-      "replacement_targets": ["HCT-CLAIMS"],
+      "replacement_targets": [
+        "HCT-CLAIMS"
+      ],
       "preserve": true,
       "physical_deletion_authorized": false
     },
@@ -37,7 +134,9 @@
       "output": "examples/generated/READY_FOR_MERGE-minimal-goal-run.json",
       "sha256": "62267add53035a3dcd9bbc4f4568bc22f0bf12fe0d6d122577b2bf72bbcd2c1d",
       "reason": "Retained predecessor readiness fixture; typed HCT-CLAIMS decisions replace its static authority.",
-      "replacement_targets": ["HCT-CLAIMS"],
+      "replacement_targets": [
+        "HCT-CLAIMS"
+      ],
       "preserve": true,
       "physical_deletion_authorized": false
     },
@@ -46,7 +145,9 @@
       "output": "examples/generated/READY_FOR_MERGE-non-product-engineering-language.json",
       "sha256": "44dd286634c864fedbb306b7e762480d1645e5a834f2547322c6dea1174024aa",
       "reason": "Retained negative readiness fixture; it is test context and never a product or release decision.",
-      "replacement_targets": ["HCT-CLAIMS"],
+      "replacement_targets": [
+        "HCT-CLAIMS"
+      ],
       "preserve": true,
       "physical_deletion_authorized": false
     },
@@ -55,7 +156,9 @@
       "output": "examples/generated/READY_FOR_MERGE-non-product-feature-completion.json",
       "sha256": "8c2a29c76397f43f1012d93b05264feef1e697707abb8611e2903c4e6ecb0b5e",
       "reason": "Retained negative readiness fixture; it is test context and never a product or release decision.",
-      "replacement_targets": ["HCT-CLAIMS"],
+      "replacement_targets": [
+        "HCT-CLAIMS"
+      ],
       "preserve": true,
       "physical_deletion_authorized": false
     },
@@ -64,7 +167,9 @@
       "output": "examples/generated/READY_FOR_MERGE-proof-surface-negative-probe.json",
       "sha256": "8e9aff3a6b22967e9505ba30af80c32714610e2918b9d84763dfa73362c077a4",
       "reason": "Retained negative proof-surface fixture; only HCT-CLAIMS may emit a claim decision.",
-      "replacement_targets": ["HCT-CLAIMS"],
+      "replacement_targets": [
+        "HCT-CLAIMS"
+      ],
       "preserve": true,
       "physical_deletion_authorized": false
     },
@@ -73,7 +178,9 @@
       "output": "examples/generated/READY_FOR_MERGE-two-lane-ready-dependency.json",
       "sha256": "6d455c46377d1c2fdbd87885a37d18b71f3435232cffb9b0268228923d2b3212",
       "reason": "Retained predecessor lane-readiness fixture; static dependency rows cannot raise a claim ceiling.",
-      "replacement_targets": ["HCT-CLAIMS"],
+      "replacement_targets": [
+        "HCT-CLAIMS"
+      ],
       "preserve": true,
       "physical_deletion_authorized": false
     },
@@ -82,9 +189,302 @@
       "output": "examples/generated/READY_FOR_MERGE.example.json",
       "sha256": "cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
       "reason": "Retained predecessor readiness example; it cannot authorize merge, readiness, release, or completion.",
-      "replacement_targets": ["HCT-CLAIMS"],
+      "replacement_targets": [
+        "HCT-CLAIMS"
+      ],
       "preserve": true,
       "physical_deletion_authorized": false
+    },
+    {
+      "disposition": "tool_projection",
+      "output": "pnpm-lock.yaml",
+      "tool": "pnpm",
+      "tool_version": "11.1.2",
+      "canonical_sources": [
+        "package.json",
+        "pnpm-workspace.yaml"
+      ],
+      "regeneration_command": "pnpm install --lockfile-only --ignore-scripts",
+      "output_sha256": "d33aded2f1e60e406fa20bbeac094e386ce363278f29c310e25bd4c48bfa358b"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/AGENTS.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "AGENTS.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "8ee0f93a66fea8bbb089571d7b3eafbb6cf71fc930530779def0bcf415bb95a8"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/AGENT_STANDARDS.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "AGENT_STANDARDS.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "abcfca728c10a568d1ac969679374c3508bd9890082697c0dd6f4a4533670c66"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/PLANS.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "PLANS.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "ab632b043a4827df6b7ec2958784d4bc745514b416f0dbf373690195179f145c"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/PRODUCT_SUCCESS_CONTRACT.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "PRODUCT_SUCCESS_CONTRACT.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "296715eaace5b12874f9a224c5c6b7d1d71a0adaeefd9e13a0c88b4d63678141"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/01-namespace-and-progressive-disclosure.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/01-namespace-and-progressive-disclosure.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "ec880b24c2bb992ff0844c5229dce011c494df4bb63c58b1032ff6815b8c232d"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/02-boundaries-validation-and-enforcement.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/02-boundaries-validation-and-enforcement.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "83e9d8e80cab6380537ccea955ad7751f47e9233e751540b7cf30b3f721a3c74"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/03-execplans-worktrees-and-orchestration.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/03-execplans-worktrees-and-orchestration.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "62e003d15efb7d5c43a7615002e7d5bffacedf272ba0554f3a7cd4983895a854"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/04-security-reliability-and-product-cohesion.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/04-security-reliability-and-product-cohesion.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "acbe96677aac16d52d3b0b35535f7b4facafac7bfa6bc35438cd9c96fdff9934"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/05-review-and-completion.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/05-review-and-completion.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "3c54182388bf5fd1195da68c3f138fb915fd662fcfd72d437770356ec105f3ef"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/06-standards-gardening.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/06-standards-gardening.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "c0507744c1dfb64f2b8cc66b1840a937270331e98334892f94a806acb50342b2"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/07-cli-authority-and-proof-surfaces.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/07-cli-authority-and-proof-surfaces.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "6879ca776c12466aa9528e3c0ca916847d62a43f2f008affba2cfb08914d43b8"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/08-observability-and-repair-loop.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/08-observability-and-repair-loop.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "526de65cc8206bb510281227b87489d57a0cac133257a927da12567754100006"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/09-product-success-and-quality-in-use.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/09-product-success-and-quality-in-use.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "e7f0caed482241c504f3c8c973d1de75ca54b8b928e8a409df71ec4d0e32c9b7"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/10-plugin-activation-and-distribution-surfaces.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/10-plugin-activation-and-distribution-surfaces.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "f597bd02099bb4afefe89debe877f8b78e9014a468e44bf4a67396bb4a292530"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/11-research-improvement-and-quality-gates.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/11-research-improvement-and-quality-gates.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "6ba353aa18c619c01143e3d239c1f7fac651bdd419706ac035f906376d5d7cd1"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/12-tool-risk-and-runtime-substrates.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/12-tool-risk-and-runtime-substrates.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "a4f6002588b317c51123b99b8d49cce2c912eba36fcadcd990f8c64f0958b59c"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/README.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/README.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "8413ae33594db1726b3711d196e74a5de1a4600c2a79bf71fae7e0fae2f5cadf"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/enforcement-audit.tsv",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/audit/agent-orchestration.json",
+        "agent-standards/audit/authority-types.json",
+        "agent-standards/audit/capability-and-portability.json",
+        "agent-standards/audit/cli-runtime.json",
+        "agent-standards/audit/observability-research.json",
+        "agent-standards/audit/plugin-distribution.json",
+        "agent-standards/audit/product-contract.json",
+        "agent-standards/audit/product-quality.json",
+        "agent-standards/audit/proof-claims.json",
+        "agent-standards/audit/review-governance.json",
+        "agent-standards/audit/security-boundaries.json",
+        "agent-standards/audit/standards-namespace.json",
+        "agent-standards/audit/state-workflow.json",
+        "agent-standards/audit/validation-feedback.json"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "b4e877e51a28c0daf8924094cbb7ba760e348d5efc346f6a3a089e1dcd566707"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/enforcement.json",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/policy/agent-orchestration.json",
+        "agent-standards/policy/authority-types.json",
+        "agent-standards/policy/capability-and-portability.json",
+        "agent-standards/policy/cli-runtime.json",
+        "agent-standards/policy/observability-research.json",
+        "agent-standards/policy/plugin-distribution.json",
+        "agent-standards/policy/product-contract.json",
+        "agent-standards/policy/product-quality.json",
+        "agent-standards/policy/proof-claims.json",
+        "agent-standards/policy/review-governance.json",
+        "agent-standards/policy/security-boundaries.json",
+        "agent-standards/policy/standards-namespace.json",
+        "agent-standards/policy/state-workflow.json",
+        "agent-standards/policy/validation-feedback.json"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "8711360b639d74b41d940f792a002927d58b07fffd6ef939f1b13787b0da3d13"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/enforcement.tsv",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/policy/agent-orchestration.json",
+        "agent-standards/policy/authority-types.json",
+        "agent-standards/policy/capability-and-portability.json",
+        "agent-standards/policy/cli-runtime.json",
+        "agent-standards/policy/observability-research.json",
+        "agent-standards/policy/plugin-distribution.json",
+        "agent-standards/policy/product-contract.json",
+        "agent-standards/policy/product-quality.json",
+        "agent-standards/policy/proof-claims.json",
+        "agent-standards/policy/review-governance.json",
+        "agent-standards/policy/security-boundaries.json",
+        "agent-standards/policy/standards-namespace.json",
+        "agent-standards/policy/state-workflow.json",
+        "agent-standards/policy/validation-feedback.json"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "7c784031ce5b152516ee8062cce3a10127f2f2ccce6b6becaaaff42f666b9e3f"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/scripts/agent_standards_validation/__init__.py",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "scripts/agent_standards_validation/__init__.py"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "40c9164c358e820cb6c02e70d7ded10276d34a5b1e2a0cf3c1823c7cc92443b5"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/scripts/agent_standards_validation/command.py",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "scripts/agent_standards_validation/command.py"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "f7f6cc8cece512c7f00130bd965e4b266cc4e6650bd8e1dc49e3cfccc4c065ee"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/scripts/agent_standards_validation/contracts.py",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "scripts/agent_standards_validation/contracts.py"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "51ec5ad27085c770a97d12b73edd43ecadc89ddbd95276e4331f3b5c6a5b55e7"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/scripts/check-agent-standards",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "scripts/check-agent-standards"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write",
+      "output_sha256": "822b8d7fe36ebc60e8c683c09cbe95016efcfdb1675bf3c3541603537d01c098"
     }
   ]
 }

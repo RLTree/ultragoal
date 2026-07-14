@@ -1,0 +1,29 @@
+{
+  "schema_version": "GeneratedSurfaceAuthorityShard-v1",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "surfaces": [
+    {
+      "disposition": "tool_projection",
+      "output": "Cargo.lock",
+      "tool": "cargo",
+      "tool_version": "1.95.0",
+      "canonical_sources": [
+        "Cargo.toml",
+        "rust-toolchain.toml",
+        "validator/Cargo.toml"
+      ],
+      "regeneration_command": "cargo generate-lockfile --offline"
+    },
+    {
+      "disposition": "tool_projection",
+      "output": "pnpm-lock.yaml",
+      "tool": "pnpm",
+      "tool_version": "11.1.2",
+      "canonical_sources": [
+        "package.json",
+        "pnpm-workspace.yaml"
+      ],
+      "regeneration_command": "pnpm install --lockfile-only --ignore-scripts"
+    }
+  ]
+}

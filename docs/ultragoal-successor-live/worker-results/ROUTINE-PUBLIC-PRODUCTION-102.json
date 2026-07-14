@@ -1,0 +1,342 @@
+{
+  "worker": "/root/routine_public_route_closure_engineer",
+  "lease_id": "ROUTINE-PUBLIC-PRODUCTION-102",
+  "context_id": "sha256:c33f189c69a52356e3c5f894163177680f91dadedee87b067aa4cf974b9626fa",
+  "candidate_identity": {
+    "candidate_id": "sha256:c91499453d4cd387b1cb033b3ab186b82f4628b9916a99b4621f45a3a8a745ad",
+    "context_id": "sha256:c33f189c69a52356e3c5f894163177680f91dadedee87b067aa4cf974b9626fa",
+    "context_formula": "SHA-256 of ROUTINE-PUBLIC-PRODUCTION-102|worker|freeze base HEAD|candidate_id.",
+    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "freeze_base_head_commit": "860c803d736f7928e1ba5d45b5650513fcbf75eb",
+    "freeze_base_head_tree": "07b8bb10fefd16574db487e7abeadaad7a142560",
+    "current_root_anchor_commit": "40982060ab4f89d6ced890e50edbe184c1c473ff",
+    "current_root_anchor_tree": "f407085c62dc074ab7485218e3231fc96f559238",
+    "candidate_overlay_worktree": "/private/tmp/hul-routine-public-production-102",
+    "isolated_target_directory": "/private/tmp/hul-routine-public-production-106-target",
+    "artifact_count": 12,
+    "artifact_total_bytes": 192813,
+    "artifact_total_lines_diagnostic": 5230,
+    "artifact_set_sha256": "sha256:c91499453d4cd387b1cb033b3ab186b82f4628b9916a99b4621f45a3a8a745ad",
+    "artifact_set_formula": "Sort the twelve artifact rows by UTF-8 path bytes; serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>; concatenate; SHA-256 the resulting bytes.",
+    "worker_result_self_excluded": true,
+    "staged_or_committed_by_worker": false,
+    "relevant_base_to_root_anchor_diff": "none"
+  },
+  "base_state": {
+    "status": "public-routine-production-route-absent",
+    "defect": "The accepted routine catalog, production authority ledger, and mediator had no public check routine WorkspaceWrite route, and one dependency-closed attempt could not prepare more than its first exact node intent.",
+    "required_boundary": "Bind the public candidate, source, graph, snapshot, plan, command, request, and owner-only host state before effect; recover or reuse only exact durable authority; refuse substitutions without a new transition."
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "status_scope": "Detached source-local Darwin public-route candidate pending root reconciliation and independent falsification.",
+    "public_route": "The typed WorkspaceWrite check routine branch enters the accepted production catalog, issuer, ledger, and mediator instead of the generic public mutation refusal.",
+    "supported_host": "target_vendor=apple",
+    "owner_only_authority": "Preprovisioned fixed host state is validated as owner-only, regular, single-link, non-aliased authority before a dirty effect.",
+    "durable_recovery_and_reuse": "Interrupted exact Started records are recovered through the production issuer; completed exact artifacts are authenticated before reuse and persisted under the full route binding.",
+    "multi_intent_authority": "Reserved transitions to Started once. Later dependency-closed intents may revalidate only the exact unexpired Started token without republishing the ledger; expiry, substitution, terminal reuse, and conflict remain fail-closed.",
+    "aggregate_test_result": "59 passed; 0 failed; 1 intentionally ignored production child helper.",
+    "library_check": "pass",
+    "claim_effect": "none",
+    "installation_or_live_runtime_proved": false,
+    "readiness_release_or_completion_proved": false
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/ROUTINE-PUBLIC-PRODUCTION-102.json",
+    "fixtures/routine-public-production/cases.json",
+    "validator/src/cli/successor_public/mod.rs",
+    "validator/src/cli/successor_public/routine.rs",
+    "validator/src/cli/successor_public/routine/host.rs",
+    "validator/src/cli/successor_public/routine/manifest.rs",
+    "validator/src/cli/successor_public/routine/outcome.rs",
+    "validator/src/routine_work/mod.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger.rs",
+    "validator/tests/routine_public_production_contract.rs",
+    "validator/tests/routine_public_production_contract/journeys.rs",
+    "validator/tests/routine_public_production_contract/security.rs",
+    "validator/tests/routine_public_production_contract/support.rs"
+  ],
+  "touched_semantics": [
+    "routine-public-dispatch",
+    "routine-public-source-binding",
+    "routine-public-host-authority",
+    "routine-public-durable-recovery",
+    "routine-public-reuse",
+    "routine-production-ledger-multi-intent",
+    "routine-public-adversarial-contract"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/ROUTINE-PUBLIC-PRODUCTION-102.json"
+  ],
+  "fixtures": [
+    "fixtures/routine-public-production/cases.json"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "routine-public-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "routine-public-fixture",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "isolated-validation",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "external-system",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "installed-runtime",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "irreversible-action",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "target": "root-integration",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "public-check-routine-workspace-write-dispatch",
+    "accepted-production-ledger-and-mediator-only",
+    "owner-only-darwin-host-authority",
+    "candidate-source-command-and-request-binding",
+    "dependency-closed-multi-intent-execution",
+    "durable-interruption-recovery",
+    "exact-authenticated-reuse",
+    "confinement-and-fixed-template-authority",
+    "clean-help-parse-and-read-zero-write",
+    "failure-and-adversarial-refusal",
+    "worker-result-v1"
+  ],
+  "dependency_nodes": [
+    "routine-production-catalog",
+    "routine-production-authority",
+    "routine-public-execution-mediator",
+    "routine-reuse-preauthorization"
+  ],
+  "changes": [
+    {
+      "area": "public-dispatch",
+      "result": "Added the exact Check(Routine) plus WorkspaceWrite branch before the generic mutation refusal, leaving read and help behavior on their existing routes."
+    },
+    {
+      "area": "candidate-and-source-binding",
+      "result": "The public manifest, production catalog, selected transitive sources, tool identity, affected graph, dirty snapshot, plan, protocol, request, and target are captured and cross-checked before mediation."
+    },
+    {
+      "area": "fixed-command-authority",
+      "result": "Repository input selects only bounded pass or fail templates and a directly pinned /bin/bash object; arbitrary catalog scripts, Darwin /bin/sh executable substitution, target aliases, and catalog substitution are refused."
+    },
+    {
+      "area": "host-state-and-reuse",
+      "result": "Added preprovisioned owner-only host validation, exact target identity, locked durable cache verification, authenticated reuse persistence, and explicit persistence-after-effect failure reporting."
+    },
+    {
+      "area": "production-ledger-multi-intent",
+      "result": "Made prepare_spawn atomically idempotent only for the exact unexpired Started reservation so a dependency-closed batch transitions once while substituted, expired, terminal, replayed, or racing tokens cannot prepare."
+    },
+    {
+      "area": "public-outcome",
+      "result": "Added stable JSON outcome and diagnostic surfaces for clean no-op, execution, reuse, incomplete failure, stale context, authority refusal, unsupported host, and persistence uncertainty, all with claim_effect none."
+    },
+    {
+      "area": "contract-proof",
+      "result": "Added a twenty-case fixture matrix plus positive, recovery, concurrency, failure, zero-write, confinement, substitution, false-pass, stale-cache, forged-reuse, and race controls."
+    },
+    {
+      "area": "worker-result-schema",
+      "result": "Regenerated the receipt with only authoritative WorkerResultV1 fields, including the exact candidate and context binding, touched paths and semantics, generated output, fixture, effects, artifacts, dependencies, and typed root-change requests."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-public-production-106-target CARGO_BUILD_JOBS=16 cargo test --quiet --manifest-path validator/Cargo.toml --test routine_public_production_contract --jobs 16 -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "14 passed, 0 failed; clean, dirty, partial, failure, fallback, reuse, interruption, concurrency, source race, authority refusal, substitution, and zero-write public journeys passed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-public-production-106-target CARGO_BUILD_JOBS=16 cargo test --quiet --manifest-path validator/Cargo.toml --lib routine_work::runtime_adapter::production::ledger::tests --jobs 16 -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "3 passed, 0 failed, 1853 filtered; exact Started revalidation, substitution, cross-attempt, expiry, terminal, conflict, and concurrency controls passed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-public-production-106-target CARGO_BUILD_JOBS=16 cargo test --quiet --manifest-path validator/Cargo.toml --test routine_production_authority_contract --jobs 16 -- --test-threads=16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Accepted production dependency closure: 42 passed, 0 failed, 1 intentional child-process helper ignored; spawned race controls passed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-routine-public-production-106-target CARGO_BUILD_JOBS=16 cargo check --quiet --manifest-path validator/Cargo.toml --locked --offline --lib --jobs 16",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "The source-local library candidate compiled against the locked offline graph; unchanged dead-code and private-interface warnings remain."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check --config skip_children=true on the nine candidate-owned Rust implementation and test paths; separate exact check on validator/src/routine_work/mod.rs",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "All candidate-owned Rust files and the routine-work wiring file passed exact-file formatting."
+    },
+    {
+      "command": "rustfmt --edition 2024 --check --config skip_children=true validator/src/cli/successor_public/mod.rs",
+      "status": "preexisting-unrelated-drift",
+      "exit_code": 1,
+      "result": "The unchanged fit::target_root match body at line 56 differs from current rustfmt; the routine dispatch hunks themselves are formatted, and this lane did not rewrite the unrelated fit route."
+    },
+    {
+      "command": "jq -e . fixtures/routine-public-production/cases.json; git diff --check; exact twelve-path digest, byte, line, aggregate, and base-to-root relevant-surface reconciliation",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "Fixture JSON and whitespace checks passed; 192813 bytes, 5230 diagnostic lines, aggregate sha256:c91499453d4cd387b1cb033b3ab186b82f4628b9916a99b4621f45a3a8a745ad; root anchor has no relevant dependency-surface drift from the freeze base."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-workerresult-schema-109-target CARGO_BUILD_JOBS=16 cargo run --manifest-path /private/tmp/hul-workerresult-schema-109/Cargo.toml --offline --quiet -- /private/tmp/hul-routine-public-production-102",
+      "status": "pass",
+      "exit_code": 0,
+      "result": "A fresh external harness using ultragoal::orchestration::WorkerResultV1 parsed the exact receipt, produced a canonical nonempty result ID, and verified all twelve artifacts as regular single-link files with exact hashes, byte lengths, total bytes, and aggregate identity."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/routine-public-production/cases.json",
+      "sha256": "sha256:70e608a2abdad8ec3253a8b56770a04ba308cbba9a450ffc557d008c9034866b",
+      "byte_length": 858
+    },
+    {
+      "path": "validator/src/cli/successor_public/mod.rs",
+      "sha256": "sha256:2201a17e7af83630ba6675dc7b85cfca7d728f26dbc8869e8778366a0f0c3707",
+      "byte_length": 9570
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine.rs",
+      "sha256": "sha256:9b639abdf5aaa2bca3fe8f0af7e63731fddc8342472ed138b0e9b88065ad40a3",
+      "byte_length": 18201
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host.rs",
+      "sha256": "sha256:ab4ed826bcde20c215e74ec71cb67ee26397e2be42c2f9e21887c8e2a4d24e7c",
+      "byte_length": 23911
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/manifest.rs",
+      "sha256": "sha256:5d246131b1a96dfda629acf58acb1cf10f389cc4b87b614f234c67eb2aab9568",
+      "byte_length": 11826
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/outcome.rs",
+      "sha256": "sha256:4f75354bacef8b1a4df15ae5b0ee97476bc6f052e59b580b00ee688ed0d3e9c9",
+      "byte_length": 11703
+    },
+    {
+      "path": "validator/src/routine_work/mod.rs",
+      "sha256": "sha256:5ddf0e6c18128c91bcf5b9cb2682b569caba0b449a64243113b1354b57e92f25",
+      "byte_length": 2965
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/ledger.rs",
+      "sha256": "sha256:d316d5d15d25e25ec60eb2f7961786fb47268dca45d835d052ab88daae1e799a",
+      "byte_length": 77499
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract.rs",
+      "sha256": "sha256:31fdd2bf73e15a447a32b14455eb0d6b1cc1a1c7f39bf65b9d9d81d1ab23a31f",
+      "byte_length": 130
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/journeys.rs",
+      "sha256": "sha256:e616ba4ed5f993cfca244f9e6698f446c5a864ea61d47a198abfae7c4cc29e94",
+      "byte_length": 8315
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/security.rs",
+      "sha256": "sha256:57d4b8c631620b54668b03d4dd681fb0db696ae3390119a0354cb0435a118d6d",
+      "byte_length": 8071
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/support.rs",
+      "sha256": "sha256:841f06aab441a7d1b39f293b45a17c5d919878ef5e128ec13d5e56e452244da9",
+      "byte_length": 19764
+    }
+  ],
+  "findings": [
+    {
+      "severity": "corrected",
+      "class": "darwin-shell-executable-substitution",
+      "finding": "Darwin /bin/sh reexecutes /bin/bash after Seatbelt activation, so allowing the /bin/sh pathname caused the accepted exact-executable sandbox to deny the real process.",
+      "resolution": "The public route now permits only the directly pinned /bin/bash object; the unavailable sentinel can select the same fixed Bash fallback template."
+    },
+    {
+      "severity": "corrected",
+      "class": "multi-intent-reservation-rejected",
+      "finding": "The first dependency-closed intent transitioned the shared reservation to Started, and every later exact intent was then refused as invalid.",
+      "resolution": "Exact unexpired Started revalidation is now a locked read-only no-op; all other state, token, expiry, and binding cases fail closed."
+    },
+    {
+      "severity": "test-harness-corrected",
+      "class": "spawned-output-not-captured",
+      "finding": "Spawned concurrency and source-race helpers inherited the test process output handles, so wait_with_output returned empty buffers despite a valid child outcome.",
+      "resolution": "The fixture now pipes stdout and stderr and nulls stdin for every spawned public-process control."
+    },
+    {
+      "severity": "ceiling-withheld",
+      "class": "source-local-only",
+      "finding": "The candidate is an uncommitted detached overlay and has not been reconciled into root, packaged, installed, discovered, or exercised as a representative live user.",
+      "resolution": "Root acceptance, independent falsification, install proof, runtime identity, and live-user proof remain explicit dependencies."
+    },
+    {
+      "severity": "receipt-corrected",
+      "class": "worker-result-schema-mismatch",
+      "finding": "The predecessor receipt used unsupported top-level schema_version, result_status, lease_boundary, and root_wiring fields and omitted required authoritative WorkerResultV1 collections and candidate context binding.",
+      "resolution": "The receipt now uses only authoritative fields, expresses wiring through typed requested_root_changes, and passes the live WorkerResultV1 parser in an external harness."
+    }
+  ],
+  "unresolved_dependencies": [
+    "root-current-anchor-reconciliation",
+    "independent-security-and-behavioral-falsification",
+    "package-and-install-proof",
+    "representative-live-user-proof",
+    "readiness-release-and-completion-authority"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/cli/successor_public/mod.rs",
+      "expected_sha256": "sha256:ff36490abbe03e5254fb872b0921239d10ce4123c1d5d5bbc3b53ce4f93a6400",
+      "request": "Reconcile candidate sha256:2201a17e7af83630ba6675dc7b85cfca7d728f26dbc8869e8778366a0f0c3707 by importing CheckProfile, dispatching only Check(Routine) plus WorkspaceWrite to routine::execute before generic mutation refusal, and declaring mod routine."
+    },
+    {
+      "path": "validator/src/routine_work/mod.rs",
+      "expected_sha256": "sha256:111dc887a68ddc778192e75cb50edc5b37296499102518e2dca9be2fa5f2be36",
+      "request": "Reconcile candidate sha256:5ddf0e6c18128c91bcf5b9cb2682b569caba0b449a64243113b1354b57e92f25 by declaring catalog and exposing only the crate-private adopted production catalog loading and binding surface used by the public route."
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/ledger.rs",
+      "expected_sha256": "sha256:a3aba3c5c87eca33efa9447fa29cc7d40e1fae4f3e290b12f3ccfeab41cdca6c",
+      "request": "Reconcile candidate sha256:d316d5d15d25e25ec60eb2f7961786fb47268dca45d835d052ab88daae1e799a with the exact conditional-write prepare_spawn transition and focused idempotence, substitution, expiry, terminal, and race tests."
+    }
+  ],
+  "limitations": [
+    "The exact twelve-artifact aggregate excludes this self-referential WorkerResult; its independent raw-file digest is reported after creation.",
+    "The candidate is an uncommitted detached overlay from 860c803d736f7928e1ba5d45b5650513fcbf75eb. The specified root anchor 40982060ab4f89d6ced890e50edbe184c1c473ff has no diff on the relevant dependency surfaces, but root must still reconcile every byte.",
+    "Runtime execution was exercised on target_vendor=apple only. The non-Apple host path remains source-level fail-closed and was not executed on another operating system.",
+    "The accepted production authority suite intentionally ignores one child-process entry helper in its parent run; the helper was exercised by the suite's spawned race controls.",
+    "Repository-wide formatting is not claimed because an unchanged fit-route match body in validator/src/cli/successor_public/mod.rs differs from current rustfmt. Exact candidate-owned files and the routine-work wiring file pass.",
+    "The owner-only signed ledger is not an external monotonic anchor against a malicious account owner replacing the complete key and state after all trusted process state is gone.",
+    "No package install, cache registration, marketplace, Plugins UI, installed binary identity, representative live-user execution, readiness, release, node closure, or completion surface was changed or proved."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

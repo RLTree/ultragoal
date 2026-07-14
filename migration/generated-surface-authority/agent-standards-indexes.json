@@ -1,0 +1,138 @@
+{
+  "schema_version": "GeneratedSurfaceAuthorityShard-v1",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "surfaces": [
+    {
+      "disposition": "source_projection",
+      "output": "agent-standards/enforcement-audit.tsv",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/audit/agent-orchestration.json",
+        "agent-standards/audit/authority-types.json",
+        "agent-standards/audit/capability-and-portability.json",
+        "agent-standards/audit/cli-runtime.json",
+        "agent-standards/audit/observability-research.json",
+        "agent-standards/audit/plugin-distribution.json",
+        "agent-standards/audit/product-contract.json",
+        "agent-standards/audit/product-quality.json",
+        "agent-standards/audit/proof-claims.json",
+        "agent-standards/audit/review-governance.json",
+        "agent-standards/audit/security-boundaries.json",
+        "agent-standards/audit/standards-namespace.json",
+        "agent-standards/audit/state-workflow.json",
+        "agent-standards/audit/validation-feedback.json"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "agent-standards/enforcement.json",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/policy/agent-orchestration.json",
+        "agent-standards/policy/authority-types.json",
+        "agent-standards/policy/capability-and-portability.json",
+        "agent-standards/policy/cli-runtime.json",
+        "agent-standards/policy/observability-research.json",
+        "agent-standards/policy/plugin-distribution.json",
+        "agent-standards/policy/product-contract.json",
+        "agent-standards/policy/product-quality.json",
+        "agent-standards/policy/proof-claims.json",
+        "agent-standards/policy/review-governance.json",
+        "agent-standards/policy/security-boundaries.json",
+        "agent-standards/policy/standards-namespace.json",
+        "agent-standards/policy/state-workflow.json",
+        "agent-standards/policy/validation-feedback.json"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "agent-standards/enforcement.tsv",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/policy/agent-orchestration.json",
+        "agent-standards/policy/authority-types.json",
+        "agent-standards/policy/capability-and-portability.json",
+        "agent-standards/policy/cli-runtime.json",
+        "agent-standards/policy/observability-research.json",
+        "agent-standards/policy/plugin-distribution.json",
+        "agent-standards/policy/product-contract.json",
+        "agent-standards/policy/product-quality.json",
+        "agent-standards/policy/proof-claims.json",
+        "agent-standards/policy/review-governance.json",
+        "agent-standards/policy/security-boundaries.json",
+        "agent-standards/policy/standards-namespace.json",
+        "agent-standards/policy/state-workflow.json",
+        "agent-standards/policy/validation-feedback.json"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/enforcement-audit.tsv",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/audit/agent-orchestration.json",
+        "agent-standards/audit/authority-types.json",
+        "agent-standards/audit/capability-and-portability.json",
+        "agent-standards/audit/cli-runtime.json",
+        "agent-standards/audit/observability-research.json",
+        "agent-standards/audit/plugin-distribution.json",
+        "agent-standards/audit/product-contract.json",
+        "agent-standards/audit/product-quality.json",
+        "agent-standards/audit/proof-claims.json",
+        "agent-standards/audit/review-governance.json",
+        "agent-standards/audit/security-boundaries.json",
+        "agent-standards/audit/standards-namespace.json",
+        "agent-standards/audit/state-workflow.json",
+        "agent-standards/audit/validation-feedback.json"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/enforcement.json",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/policy/agent-orchestration.json",
+        "agent-standards/policy/authority-types.json",
+        "agent-standards/policy/capability-and-portability.json",
+        "agent-standards/policy/cli-runtime.json",
+        "agent-standards/policy/observability-research.json",
+        "agent-standards/policy/plugin-distribution.json",
+        "agent-standards/policy/product-contract.json",
+        "agent-standards/policy/product-quality.json",
+        "agent-standards/policy/proof-claims.json",
+        "agent-standards/policy/review-governance.json",
+        "agent-standards/policy/security-boundaries.json",
+        "agent-standards/policy/standards-namespace.json",
+        "agent-standards/policy/state-workflow.json",
+        "agent-standards/policy/validation-feedback.json"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/enforcement.tsv",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/policy/agent-orchestration.json",
+        "agent-standards/policy/authority-types.json",
+        "agent-standards/policy/capability-and-portability.json",
+        "agent-standards/policy/cli-runtime.json",
+        "agent-standards/policy/observability-research.json",
+        "agent-standards/policy/plugin-distribution.json",
+        "agent-standards/policy/product-contract.json",
+        "agent-standards/policy/product-quality.json",
+        "agent-standards/policy/proof-claims.json",
+        "agent-standards/policy/review-governance.json",
+        "agent-standards/policy/security-boundaries.json",
+        "agent-standards/policy/standards-namespace.json",
+        "agent-standards/policy/state-workflow.json",
+        "agent-standards/policy/validation-feedback.json"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": "ObservabilityLocalDiagnosisFixtures-v1",
-  "temporary_root": "/tmp/hul-observability-local-diagnosis-069",
+  "temporary_root": ".git/codex-scratch/observability/local-diagnosis-069",
   "source_id": "successor-runtime",
   "claim_effect": "none",
   "external_export_default": "disabled-safe-default-OD-004-OD-007",

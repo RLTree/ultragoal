@@ -1,0 +1,159 @@
+{
+  "schema_version": "GeneratedSurfaceAuthorityShard-v1",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "surfaces": [
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/04-security-reliability-and-product-cohesion.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/04-security-reliability-and-product-cohesion.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/05-review-and-completion.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/05-review-and-completion.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/06-standards-gardening.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/06-standards-gardening.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/07-cli-authority-and-proof-surfaces.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/07-cli-authority-and-proof-surfaces.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/08-observability-and-repair-loop.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/08-observability-and-repair-loop.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/09-product-success-and-quality-in-use.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/09-product-success-and-quality-in-use.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/PLANS.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "PLANS.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/PRODUCT_SUCCESS_CONTRACT.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "PRODUCT_SUCCESS_CONTRACT.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/01-namespace-and-progressive-disclosure.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/01-namespace-and-progressive-disclosure.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/02-boundaries-validation-and-enforcement.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/02-boundaries-validation-and-enforcement.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/03-execplans-worktrees-and-orchestration.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/03-execplans-worktrees-and-orchestration.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/10-plugin-activation-and-distribution-surfaces.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/10-plugin-activation-and-distribution-surfaces.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/11-research-improvement-and-quality-gates.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/11-research-improvement-and-quality-gates.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/12-tool-risk-and-runtime-substrates.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/12-tool-risk-and-runtime-substrates.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/agent-standards/README.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "agent-standards/README.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/AGENTS.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "AGENTS.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/AGENT_STANDARDS.md",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "AGENT_STANDARDS.md"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    }
+  ]
+}

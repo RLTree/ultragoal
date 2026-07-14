@@ -6,7 +6,10 @@ cd "$root"
 
 echo "scripts/check narrow-helper ceiling: standards and exact coverage observations only; unsupported claims include routine_usability, product_readiness, readiness, release, final_packet, registry/reviewer exposure, completion, and update_goal." >&2
 
-bash scripts/check-agent-standards "$root"
+python3 scripts/project-agent-standards check "$root"
+python3 scripts/project-generated-authority check "$root"
+python3 scripts/check-python-source-laws "$root"
+python3 scripts/check-agent-standards "$root"
 
 coverage_cmd_file=".harness/coverage-command"
 if [[ ! -f "$coverage_cmd_file" ]]; then

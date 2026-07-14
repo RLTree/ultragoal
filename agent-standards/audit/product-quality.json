@@ -1,0 +1,93 @@
+{
+  "schema": "harness-ultragoal.agent-standards-audit-shard.v1",
+  "rows": [
+    {
+      "standard_id": "current-product-discovery-audit-quality-in-use-evidence",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "live-beneficial-e2e",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "non-e2e-claim-ceiling-confidence-bounds",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "product-cohesion-product-claims",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "product-live-surface-receipts",
+      "audit_status": "pass",
+      "evidence_path": "scripts/check-agent-standards",
+      "evidence_digest": "sha256:41c848ea277997f900430ebe72ef818b7ac3e2d1cc4b2d2ba0319d9781402810",
+      "audited_at": "2026-06-29T00:00:00Z",
+      "claim_ceiling_impact": "recording, replay, transcript, product"
+    },
+    {
+      "standard_id": "product-proof-joins-substitution-blocking",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "product-strategy-positioning-research-eval-before-lane-planning",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "purpose-backed-active-files",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "quality-score-taste-gates",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "repo-knowledge-index-core-beliefs",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "value-adoption-continuance-business-mission-evidence-hierarchy",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    }
+  ]
+}

@@ -1,0 +1,171 @@
+# Namespace And Progressive Disclosure
+
+## Namespace Law
+
+The filesystem is an agent-facing interface. Directory structure, filenames,
+CLI commands, and state roots must explain domain responsibility before a file
+is opened.
+
+- Paths answer "what does this do" by themselves. Avoid junk drawers such as
+  `utils`, `helpers`, `misc`, `support`, `shared`, `lib`, and vague `common`
+  or `services` directories for domain logic.
+- Name surfaces by the operator or reader's domain task, not implementation
+  accidents or historical shims.
+- Name source paths, modules, functions, helpers, tests, ids, receipts,
+  fixtures, and artifact path segments by product behavior or domain
+  responsibility, not by the goal work that caused the code to exist.
+  Non-compliant names include gate/slice/phase labels, progress/status labels,
+  evidence-purpose labels, session-history labels, and generic buckets when
+  they stand in for behavior.
+- Prefer small, well-scoped files. Large files degrade context quality and get
+  truncated in agent context.
+- Repeated prefixes across more than two files usually mean a missing
+  subdirectory with the prefix removed.
+- Compatibility exceptions must name the external contract that makes the
+  less-ideal name worth keeping.
+
+### Product-Semantic Names
+
+Agents navigate by names before they read code. A name is compliant only when a
+fresh agent can infer the product purpose from it without knowing the current
+goal, phase, receipt, proof chore, reviewer finding, or parent-session history.
+
+This law applies to every agent-facing name, not just directories:
+
+- source roots, directories, filenames, generated roots, receipt roots, and
+  artifact path segments;
+- Rust, TypeScript, Python, shell, or other modules and nested modules;
+- public and private functions, helper functions, test functions, types, enum
+  variants, constants, and local authority identifiers;
+- CLI command ids, check ids, validator ids, fixture ids, schema ids, receipt
+  ids, generated inventory ids, and package inventory paths.
+
+- Bad: `observe/fitting`, `observe/production_proof`, `audit/gate92`,
+  `phase4_rebind`, `progress/checkpoint`, `internal_coverage`,
+  `helpers`, `utils`, `lib`, `services`.
+- Better: `observe/command_roundtrip`,
+  `observe/telemetry_reconciliation`,
+  `audit/observability/command_inventory`,
+  `standards/reconciliation`,
+  `cache/invalidation`, `receipt/dereference`.
+- Function names follow the same law. Bad: `fit_command`, `fit_path`,
+  `production_proof`, `checkpoint_progress`. Better:
+  `run_command_roundtrip`, `roundtrip_path`, `reconcile_same_candidate`,
+  `write_command_inventory`, `query_trace_parentage`.
+- Product vocabulary is contextual. `fit-repo` is valid when it names the
+  user-facing fit-repo product command. The same root does not make `fitting`,
+  `fit_goal`, or `fit_slice` valid. `contract`, `closure`, and `proof` are
+  valid only when the code actually owns a product contract, dependency/package
+  closure, or proof-artifact/prove-command surface.
+- Compatibility aliases belong at parser or schema boundaries. The
+  implementation below an alias still needs product-semantic modules and
+  function names.
+
+### Violation Definition
+
+A name violates the law when it primarily describes why the work exists in the
+goal process instead of what the product surface does.
+
+Violations include:
+
+- goal, gate, phase, slice, lane, workstream, checkpoint, backlog, progress,
+  TODO, WIP, reviewer, parent-session, or receipt-churn vocabulary used as a
+  source namespace;
+- evidence-purpose names such as `production_proof`, `claim_closure`,
+  `readiness_packet`, or `finalization_work` when the file actually performs a
+  product behavior like command execution, receipt dereference, trace query,
+  cache invalidation, or package inventory;
+- generic buckets such as `helpers`, `utils`, `common`, `misc`, `shared`, or
+  `support` for domain logic unless the parent namespace and file names make
+  the behavior specific. `lib`, `services`, `core`, and `internal_*` are also
+  violations when they hide mixed responsibilities, historical coverage waves,
+  or product behavior that should be named directly;
+- excessive nesting, root-level clutter, mixed-domain folders, and generated
+  or mechanical exceptions without generator provenance;
+- compatibility or public command vocabulary leaking inward from parser/schema
+  boundaries into implementation modules, helper functions, fixtures, or
+  artifact paths;
+- allowlists that bless bad names because they appear in a current goal,
+  checklist, receipt, or compatibility field.
+
+The repair is to rename toward product behavior or domain responsibility. If a
+non-semantic name is forced by an external contract, keep it at the boundary,
+name that contract, and route immediately into product-semantic code.
+
+## Purpose Or Removal Law
+
+Every repo-managed file must have a current purpose that helps agents or
+humans operate, validate, understand, or ship the repo.
+
+- If an agent cannot explain why a file exists and what function it serves, the
+  file is debt until proven otherwise.
+- "Archived copy", "old version", "maybe useful", and "kept for history" are
+  not sufficient purposes inside the active repo. Preserve history in version
+  control, release artifacts, or an explicitly external archive when needed.
+- Remove purposeless files instead of moving them to an in-repo archive. In-repo
+  archives create conflicting stale context for future agents.
+- Keep historical context only when it has an active operational use, such as a
+  migration reference, fixture, compatibility contract, audit evidence, or
+  generated receipt. Name that use in the file, index, manifest, or adjacent
+  README.
+- Before adding a Markdown file, decide whether it is routing, specification,
+  proof index, runbook, source note, or generated artifact. If it is none of
+  those, do not add it.
+
+## Codemap
+
+`ARCHITECTURE.md` is the bird's-eye map of the repo. It answers where things
+live, what boundaries exist, and what must not depend on what. It is a map, not
+an encyclopedia.
+
+- Keep it short enough that every contributor reads it.
+- Name modules, types, commands, and state roots. Avoid link farms that rot.
+- Call out absences and invariants, such as forbidden dependencies or
+  restricted bind addresses.
+- Update it when architecture changes, not as a retrospective apology.
+
+## Documentation Freshness
+
+Documentation freshness is part of completion. When work changes architecture,
+commands, standards, runtime behavior, product behavior, proof surfaces, lane
+state, operational procedure, generated-doc freshness, validation receipts,
+backlog rows, or tech-debt records, update every affected repo-owned doc in the
+same lane before completion claims.
+
+- Check routed surfaces such as `ARCHITECTURE.md`, `PLANS.md`, specialized
+  root docs, active ExecPlans, `docs/**`, and `agent-standards/**`.
+- Do not edit every doc every time. The enforceable rule is that no affected
+  doc may be stale without an explicit blocker or claim ceiling.
+- Generated docs must be regenerated through their generator, not hand-edited,
+  unless the generator contract explicitly allows manual edits.
+- If freshness cannot be completed, record the owed update in
+  `VERIFICATION_BACKLOG.json`, the active ExecPlan,
+  `agent-standards/enforcement.*`, or the claim ceiling with owner, reason, and
+  required follow-up.
+
+## Progressive Disclosure
+
+Context is scarce. `AGENTS.md` stays short and routes to detailed standards,
+plans, specs, check entry points, and proof locations.
+
+- A giant instruction file crowds out the task, the code, and the relevant
+  docs. Use routed standards modules and specialized root docs instead of
+  bloating one always-loaded file.
+- When everything is important, nothing is. Put task-specific guidance in
+  routed docs and make the routing obvious.
+- The repo is the source of truth. Decisions, plans, debt, standards, and
+  proof live in version control or in named generated artifacts.
+- What an agent cannot discover and load in context effectively does not
+  exist.
+
+## Size And Shape
+
+File size is part of semantic legibility.
+
+- Prefer 100 to 200 lines for hand-authored source and standards modules.
+- Treat 250 lines as a hard review point for hand-authored files unless the
+  repo-specific contract defines a stricter limit.
+- Split by product behavior before adding comments that explain why a bloated
+  file is still navigable.
+- Generated files may exceed the cap only when the generator, source inputs,
+  and regeneration command are discoverable.

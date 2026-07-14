@@ -1,0 +1,42 @@
+{
+  "schema_version": "GeneratedSurfaceAuthorityShard-v1",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "surfaces": [
+    {
+      "disposition": "source_projection",
+      "output": "templates/scripts/check-agent-standards",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "scripts/check-agent-standards"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/scripts/agent_standards_validation/__init__.py",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "scripts/agent_standards_validation/__init__.py"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/scripts/agent_standards_validation/command.py",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "scripts/agent_standards_validation/command.py"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    },
+    {
+      "disposition": "source_projection",
+      "output": "templates/scripts/agent_standards_validation/contracts.py",
+      "generator": "scripts/project-agent-standards",
+      "canonical_sources": [
+        "scripts/agent_standards_validation/contracts.py"
+      ],
+      "regeneration_command": "scripts/project-agent-standards write"
+    }
+  ]
+}

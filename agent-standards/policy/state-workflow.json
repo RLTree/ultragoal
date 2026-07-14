@@ -1,0 +1,61 @@
+{
+  "schema": "harness-ultragoal.agent-standards-policy-shard.v1",
+  "rows": [
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; claim_green_states_withheld_without_forward_only_transition_history.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "forward-only-state-transition-integrity-silent-reopen-prevention",
+      "owner_lane": "root",
+      "required_behavior": "Forward Only State Transition Integrity Silent Reopen Prevention must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Forward Only State Transition Integrity Silent Reopen Prevention"
+    },
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; plan_orchestration_completion_claims_withheld_without_restartable_execplan_receipt.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "restartable-execplans",
+      "owner_lane": "root",
+      "required_behavior": "Restartable Execplans must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "source obligation: Restartable Execplans"
+    },
+    {
+      "blocker_or_repair_action": "Run mandatory-law surface validation; workflow_claims_withheld_without_strict_template_receipt.",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "id": "workflow-template-parsing-rendering-reload",
+      "owner_lane": "root",
+      "required_behavior": "Workflow Template Parsing Rendering Reload must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "mandatory law: Workflow Template Parsing Rendering Reload"
+    },
+    {
+      "blocker_or_repair_action": "Run Gate 91 Rust/GC CLI receipt validation and mandatory-law red fixtures; workspace_gc_claims_withheld_without_protected_plan_apply_verify_receipts.",
+      "claim_ids_affected": "completion, package, readiness, release, update_goal",
+      "current_status": "active",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/rust/developer.rs",
+      "id": "workspace-artifact-cache-garbage-collection",
+      "owner_lane": "root",
+      "required_behavior": "Workspace/artifact/cache cleanup must be plan, dry-run, apply, and verify with artifact classification, protected set, plan digest, deletion receipt, and post-delete verification; blind deletion or unclassified cleanup cannot support claims.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ],
+      "source_law": "Gate 91 mandatory law: Workspace Artifact Cache Garbage Collection"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+# Agent Standards
+
+This file is the compact operating-law router for agent-first repositories.
+`AGENTS.md` points here first; this file points to the detailed standards
+modules. Do not turn this router into the whole manual.
+
+Detailed standards live in `agent-standards/`.
+
+## Always Load
+
+For non-trivial work, load:
+
+1. The module or modules matching the task.
+
+If a module is missing, stale, or contradicted by repo-specific instructions,
+record the gap before acting.
+
+## Module Routing
+
+| Task shape | Load |
+| --- | --- |
+| File names, directories, modules, functions, symbols, ids, artifact paths, codemap, routing, context budget | `agent-standards/01-namespace-and-progressive-disclosure.md` |
+| Tests, parsing, validators, mechanical checks, feedback loops | `agent-standards/02-boundaries-validation-and-enforcement.md` |
+| ExecPlans, macro-lanes, worktrees, parent orchestration | `agent-standards/03-execplans-worktrees-and-orchestration.md` |
+| Security, reliability, product surfaces, human attention | `agent-standards/04-security-reliability-and-product-cohesion.md` |
+| Review teams, proof, claim ceilings, completion reports | `agent-standards/05-review-and-completion.md` |
+| Recurring friction, standards gardening, self-improvement | `agent-standards/06-standards-gardening.md` |
+| CLI authority, receipts, coverage authority, source/install/cache/app proof separation | `agent-standards/07-cli-authority-and-proof-surfaces.md` |
+| Observability, current state, next action, repair loops, telemetry, evals | `agent-standards/08-observability-and-repair-loop.md` |
+| Product Success Contract, Product Fitness, Product Cohesion, quality-in-use | `agent-standards/09-product-success-and-quality-in-use.md` |
+| Plugin activation, retrofit, package inventory, distribution surfaces, clean-room proof | `agent-standards/10-plugin-activation-and-distribution-surfaces.md` |
+| Research sources, improvement loop, quality gates, capability gaps, authority graph | `agent-standards/11-research-improvement-and-quality-gates.md` |
+| Tool contracts, risk tiers, Rust/toolchain substrate, dependency and privacy boundaries | `agent-standards/12-tool-risk-and-runtime-substrates.md` |
+
+## Non-Negotiable Entry Rules
+
+- The repo is the source of truth. Chat and memory are context only.
+- Preserve user changes and isolate concurrent work.
+- Parse external inputs at boundaries before acting on them.
+- Bind proof to fresh operation identity and artifact digests; metadata alone
+  is not proof.
+- Harness law claims are computed or verified by the canonical CLI authority
+  kernel. Prose, checklist rows, reviewer agreement, copied receipts, packet
+  existence, source-only checks, install proof, or cache proof cannot close
+  another surface.
+- State transitions for queues, approvals, dependency release, and closure must
+  be explicit and forward-safe.
+- Every active repo file needs a current operational purpose. If the purpose
+  cannot be justified, remove the file instead of archiving it in the repo.
+- Names are part of the product interface. Paths, modules, functions, helpers,
+  tests, ids, receipts, fixtures, generated artifacts, and artifact path
+  segments must describe product behavior or domain responsibility, not the
+  goal, phase, slice, proof chore, or session that caused them to exist.
+- Use self-contained ExecPlans for long-running or multi-lane work.
+- Codex app worktree threads are preferred owners only when the active contract
+  permits worktree lanes. Phase gates and forbidden-action lists override this
+  preference.
+- Documentation freshness is a completion obligation. Load
+  `agent-standards/01-namespace-and-progressive-disclosure.md` when work may
+  affect repo-owned docs or generated docs.
+- Coverage proof is a completion obligation for material source claims. Load
+  `agent-standards/02-boundaries-validation-and-enforcement.md` and
+  `agent-standards/07-cli-authority-and-proof-surfaces.md`.
+- Future Codex app worktree lane owners use the lowest supported reasoning level
+  that fits the named risk; material reviewers may require higher reasoning.
+  Record model and reasoning only when Codex exposes them, otherwise as unknown.
+- Branch first, worktree second. A missing branch ref is an orchestration
+  failure.
+- Product-surface claims require Product Success Contract lineage, Product
+  Fitness proof, Product Cohesion proof when journey coherence is claimed, and
+  same-surface proof at the declared evidence level. Engine proof, Product
+  Cohesion alone, Product Fitness alone, reviewer agreement, install success,
+  or smoke tests are forbidden substitutes.
+- Material review uses the four merged canonical personas with the required model,
+  reasoning, full-scope, fresh-context cadence.
+- Do not claim done, ready, fixed, passing, complete, or production-ready
+  without fresh named evidence and an honest claim ceiling.
+- Repeated friction becomes the smallest durable improvement: check, fixture,
+  scrubber, quality receipt, skill update, persona update, routed standard,
+  resource-map update, hook, or backlog row.
+
+## Review Team Reminder
+
+The canonical material review team is:
+
+1. Contract and Claim Falsifier.
+2. Orchestration and Recovery Falsifier.
+3. Security Trust-Boundary Falsifier.
+4. Product and Simplicity Falsifier.
+
+Every material review round is a sign-off attempt using all four canonical
+personas with full current scope, fresh reviewers, current anchors, and the
+current claim ceiling. Use only runtime-supported model and reasoning
+configuration, and record it only when exposed. All four must return `SIGN_OFF` in the
+same round. Any `REVISE_BEFORE_NEXT_PHASE` or `BLOCKED` invalidates the round;
+repair, regenerate anchors, close reviewers, and start a fresh full-scope
+round.
+
+Before launching reviewers, run the Material Review Scope Gate. Delta-only or
+advisory review is allowed only for non-signoff follow-up or deterministic
+validator deltas and cannot satisfy material `SIGN_OFF`. If deterministic
+preflight blocks, repair the validator/receipt/package problem before spending
+reviewer tokens.
+
+## Completion Report
+
+For non-trivial work, report:
+
+- verification command, artifact, receipt, runtime proof, or explicit gap;
+- security review or `N/A`;
+- performance review or `N/A`;
+- quality review and residual gaps;
+- claim ceiling: supported, unsupported, and blocked.

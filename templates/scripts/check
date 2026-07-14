@@ -4,7 +4,7 @@ set -euo pipefail
 root="${1:-${CODEX_WORKTREE_PATH:-$PWD}}"
 cd "$root"
 
-bash scripts/check-agent-standards "$root"
+python3 scripts/check-agent-standards "$root"
 
 coverage_cmd_file=".harness/coverage-command"
 if [[ ! -f "$coverage_cmd_file" ]]; then

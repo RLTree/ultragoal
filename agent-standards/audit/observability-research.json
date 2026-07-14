@@ -1,0 +1,77 @@
+{
+  "schema": "harness-ultragoal.agent-standards-audit-shard.v1",
+  "rows": [
+    {
+      "standard_id": "agent-queryable-observability",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "conditional-observability-proof",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/observability/mod.rs",
+      "evidence_digest": "sha256:d2982eb379ba3386a9e5a2327976c0aac311e7122ede10d897c19cd68fb7f4c3",
+      "audited_at": "2026-07-03T10:37:16Z",
+      "claim_ceiling_impact": "final packet, review, package, readiness, release, completion, update_goal operating-loop/signal observability enforced"
+    },
+    {
+      "standard_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/cli/improvement_loop/mod.rs",
+      "evidence_digest": "sha256:28971d4975d9a3b67d48b8c5eb14855a50f060008672dfe0bb2d2e5db912cb96",
+      "audited_at": "2026-07-03T10:37:16Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release, self_improving, update_goal"
+    },
+    {
+      "standard_id": "historical-regression-corpus-session-review-signals",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "memory-wiki-context-only",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "research-source-authority-article-to-law-integration",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/research/mod.rs",
+      "evidence_digest": "sha256:75ee8bc32f916da5d7f73944d098d49ab85cd2ed0146bbedaad0a80f1aab0b52",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release, update_goal"
+    },
+    {
+      "standard_id": "source-card-freshness-ceiling",
+      "audit_status": "pass",
+      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
+      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
+      "audited_at": "2026-07-02T00:45:00Z",
+      "claim_ceiling_impact": "completion, review, package, readiness, release"
+    },
+    {
+      "standard_id": "transcript-quality-reuse-gates",
+      "audit_status": "pass",
+      "evidence_path": "scripts/check-agent-standards",
+      "evidence_digest": "sha256:41c848ea277997f900430ebe72ef818b7ac3e2d1cc4b2d2ba0319d9781402810",
+      "audited_at": "2026-06-29T00:00:00Z",
+      "claim_ceiling_impact": "transcript, replay, product"
+    }
+  ]
+}
