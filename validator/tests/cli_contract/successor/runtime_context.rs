@@ -1,12 +1,10 @@
-use super::successor::runtime::{RuntimeErrorId, inspect_context};
-use super::successor::{
-    EffectClass, InspectTarget, OptionArgument, OptionName, OutputMode, ParseOutcome, ParsedValue,
-    SuccessorCommand, parse_args,
-};
+use super::super::context::{BuildRequest, LiveContext};
+use super::successor::{EffectClass, ParseOutcome, parse_args};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::atomic::{AtomicU64, Ordering};
+use ultragoal::inventory::{ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256};
 
 static NEXT_REPOSITORY: AtomicU64 = AtomicU64::new(0);
 
@@ -73,6 +71,18 @@ fn parsed(args: &[&str]) -> super::successor::ParsedInvocation {
     invocation
 }
 
+fn context(root: &Path) -> LiveContext {
+    LiveContext::build(
+        BuildRequest::new(root)
+            .with_effect(EffectClass::Read)
+            .bind_non_secret_configuration(
+                ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
+                ADOPTED_HANDOFF_MANIFEST_SHA256,
+            ),
+    )
+    .expect("build production-equivalent read context")
+}
+
 fn tree_snapshot(root: &Path) -> Vec<(String, Vec<u8>)> {
     fn collect(root: &Path, path: &Path, rows: &mut Vec<(String, Vec<u8>)>) {
         let mut entries = fs::read_dir(path)
@@ -112,85 +122,4 @@ fn tree_snapshot(root: &Path) -> Vec<(String, Vec<u8>)> {
     let mut rows = Vec::new();
     collect(root, root, &mut rows);
     rows
-}
-
-#[test]
-fn inspect_context_returns_a_current_dirty_read_context_without_writes() {
-    let repository = Repository::new("accepted-dirty");
-    fs::write(repository.root.join("dirty-canary.txt"), b"dirty\n").expect("write dirty fixture");
-    let invocation = parsed(&["--json", "inspect", "context"]);
-    let before_tree = tree_snapshot(&repository.root);
-    let before_status = repository.status();
-
-    let context = inspect_context(&repository.root, &invocation).expect("inspect live context");
-
-    assert!(context.candidate().dirty);
-    assert_eq!(context.effect().selected, EffectClass::Read);
-    assert_eq!(
-        context.worktree_root(),
-        repository
-            .root
-            .canonicalize()
-            .expect("canonical fixture repository")
-    );
-    context
-        .revalidate()
-        .expect("returned context remains current");
-    let json = String::from_utf8(context.to_canonical_json().expect("serialize context"))
-        .expect("context JSON is UTF-8");
-    assert!(json.contains("\"schema_version\":\"LiveContext-v1\""));
-    assert_eq!(tree_snapshot(&repository.root), before_tree);
-    assert_eq!(repository.status(), before_status);
-}
-
-#[test]
-fn runtime_rejects_every_non_context_command_before_repository_access() {
-    let canary = Path::new("/missing/runtime-command-canary-7183");
-    let error =
-        inspect_context(canary, &parsed(&["next"])).expect_err("wrong successor command must fail");
-    assert_eq!(error.id(), RuntimeErrorId::WrongCommand);
-    assert_eq!(error.stable_id(), "successor_runtime_wrong_command");
-    assert!(!error.to_string().contains("runtime-command-canary-7183"));
-}
-
-#[test]
-fn runtime_rejects_effect_drift_and_arguments_before_repository_access() {
-    let canary = Path::new("/missing/runtime-effect-canary-6421");
-    let mut effect = parsed(&["inspect", "context"]);
-    effect.effect = EffectClass::WorkspaceWrite;
-    assert_eq!(
-        inspect_context(canary, &effect)
-            .expect_err("effect drift must fail")
-            .id(),
-        RuntimeErrorId::EffectMismatch
-    );
-
-    let mut arguments = parsed(&["inspect", "context"]);
-    arguments.arguments.push(OptionArgument {
-        name: OptionName::ApproveExport,
-        value: ParsedValue::Flag,
-    });
-    assert_eq!(
-        inspect_context(canary, &arguments)
-            .expect_err("unexpected arguments must fail")
-            .id(),
-        RuntimeErrorId::UnexpectedArguments
-    );
-}
-
-#[test]
-fn context_failures_have_fixed_bounded_non_echo_errors() {
-    let canary = "runtime-context-path-canary-9937";
-    let invocation = super::successor::ParsedInvocation {
-        command: SuccessorCommand::Inspect(InspectTarget::Context),
-        effect: EffectClass::Read,
-        output_mode: OutputMode::Human,
-        arguments: Vec::new(),
-    };
-    let error = inspect_context(Path::new(canary), &invocation)
-        .expect_err("non-repository context must fail");
-    assert_eq!(error.id(), RuntimeErrorId::ContextUnavailable);
-    assert_eq!(error.to_string(), "successor runtime context unavailable");
-    assert!(error.to_string().len() <= 64);
-    assert!(!error.to_string().contains(canary));
 }

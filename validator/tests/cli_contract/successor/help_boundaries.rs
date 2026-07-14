@@ -1,6 +1,7 @@
+use super::successor::command_contract::HelpTarget;
 use super::successor::{
-    FitAction, Group, HelpTarget, OutputMode, ParseErrorId, ParseOutcome, SuccessorCommand,
-    parse_args, render_help,
+    FitAction, Group, OutputMode, ParseErrorId, ParseOutcome, SuccessorCommand, parse_args,
+    render_help,
 };
 
 fn expected_help(target: HelpTarget, output_mode: OutputMode) -> ParseOutcome {

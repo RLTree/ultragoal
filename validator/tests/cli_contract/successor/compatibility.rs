@@ -1,4 +1,5 @@
-use super::successor::{LegacyCommand, PackageAction, ParseOutcome, SuccessorCommand, parse_args};
+use super::successor::command_contract::PackageAction;
+use super::successor::{LegacyCommand, ParseOutcome, SuccessorCommand, parse_args};
 
 #[test]
 fn legacy_command_classes_return_bounded_guidance_without_selecting_effects() {

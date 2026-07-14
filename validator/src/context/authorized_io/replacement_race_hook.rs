@@ -8,6 +8,7 @@ pub(crate) fn set_test_pause_before_open(milliseconds: u64) {
     TEST_PAUSE_BEFORE_OPEN_MS.store(milliseconds, Ordering::SeqCst);
 }
 
+#[cfg(test)]
 impl AuthorizedPath {
     pub(crate) fn open_read(&self) -> Result<File, ContextError> {
         if self.effect != EffectClass::Read || !self.existed {

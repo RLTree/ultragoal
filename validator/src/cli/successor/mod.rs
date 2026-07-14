@@ -7,8 +7,8 @@
 
 mod catalog;
 mod clap_error;
-mod clap_grammar;
-mod command_contract;
+pub(crate) mod clap_grammar;
+pub(crate) mod command_contract;
 mod command_line_input;
 pub(crate) mod compatibility;
 mod error;
@@ -19,19 +19,21 @@ pub(crate) mod runtime;
 mod value;
 
 pub use crate::context::EffectClass;
-pub use catalog::{catalog, descriptor_for};
-pub use clap_grammar::parser_command;
+pub use catalog::catalog;
+#[cfg(not(test))]
+pub use command_contract::CommandDescriptor;
 #[cfg(test)]
 pub use command_contract::LegacyCommand;
-pub use command_contract::{
-    CheckProfile, CommandDescriptor, EvalAction, ExitClass, FitAction, Group, HelpTarget,
-    InspectTarget, MigrateAction, ObserveAction, OptionArgument, OptionName, OptionSpec,
-    OutputMode, PackageAction, ParseOutcome, ParsedCommandLine, ParsedInvocation, ParsedValue,
-    RelativePath, SuccessorCommand, ValueKind, WorkspaceRoot, effect_name,
-};
-pub use error::ParseFailure;
 #[cfg(test)]
-pub use error::{ParseError, ParseErrorId};
+pub use command_contract::OptionArgument;
+pub use command_contract::{
+    CheckProfile, ExitClass, FitAction, Group, InspectTarget, ObserveAction, OptionName,
+    OptionSpec, OutputMode, ParseOutcome, ParsedCommandLine, ParsedInvocation, ParsedValue,
+    SuccessorCommand, ValueKind, WorkspaceRoot, effect_name,
+};
+#[cfg(test)]
+pub use error::ParseErrorId;
+pub use error::ParseFailure;
 pub use help::{render_help, version_text};
 #[cfg(test)]
 pub(crate) use input::MAX_ARGUMENT_BYTES;

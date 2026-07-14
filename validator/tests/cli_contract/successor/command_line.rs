@@ -1,21 +1,25 @@
+use super::successor::command_contract::HelpTarget;
 use super::successor::{
-    HelpTarget, LegacyCommand, OutputMode, ParseErrorId, ParseOutcome, SuccessorCommand,
-    parse_command_line,
+    LegacyCommand, OutputMode, ParseErrorId, ParseOutcome, SuccessorCommand, parse_command_line,
 };
 use std::path::Path;
 
 #[test]
 fn typed_workspace_root_defaults_and_preserves_explicit_authority() {
-    let parsed = parse_command_line(["inspect"]).expect("default root parses");
-    assert_eq!(parsed.root().as_path(), Path::new("."));
+    let (root, _) = parse_command_line(["inspect"])
+        .expect("default root parses")
+        .into_parts();
+    assert_eq!(root.into_path_buf(), Path::new("."));
 
     for args in [
         vec!["--root", "/private/typed-root", "inspect", "context"],
         vec!["inspect", "context", "--root", "/private/typed-root"],
         vec!["--json", "inspect", "--root", "/private/typed-root"],
     ] {
-        let parsed = parse_command_line(args).expect("explicit root parses");
-        assert_eq!(parsed.root().as_path(), Path::new("/private/typed-root"));
+        let (root, _) = parse_command_line(args)
+            .expect("explicit root parses")
+            .into_parts();
+        assert_eq!(root.into_path_buf(), Path::new("/private/typed-root"));
     }
 }
 
@@ -48,11 +52,12 @@ fn root_is_removed_before_help_and_compatibility_classification() {
 
 #[test]
 fn malformed_root_after_help_is_outside_the_semantic_boundary() {
-    let parsed = parse_command_line(["--root", "/private/help-root", "--help", "--root"])
-        .expect("trailing root is ignored after help");
-    assert_eq!(parsed.root().as_path(), Path::new("/private/help-root"));
+    let (root, outcome) = parse_command_line(["--root", "/private/help-root", "--help", "--root"])
+        .expect("trailing root is ignored after help")
+        .into_parts();
+    assert_eq!(root.into_path_buf(), Path::new("/private/help-root"));
     assert!(matches!(
-        parsed.into_outcome(),
+        outcome,
         ParseOutcome::Help {
             target: HelpTarget::Root,
             output_mode: OutputMode::Human,

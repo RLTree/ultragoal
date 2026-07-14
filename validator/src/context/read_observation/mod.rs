@@ -12,4 +12,4 @@ mod observation_collection;
 #[path = "read_observation.rs"]
 mod read_observation;
 
-pub(crate) use read_observation::*;
+pub(in crate::context) use read_observation::ObservationSet;

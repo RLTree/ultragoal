@@ -1,3 +1,4 @@
+use super::read_observation::Observation;
 use super::*;
 
 impl ObservationSet {

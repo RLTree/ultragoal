@@ -1,7 +1,7 @@
+use super::successor::command_contract::{EvalAction, HelpTarget, MigrateAction, PackageAction};
 use super::successor::{
-    CheckProfile, EffectClass, EvalAction, ExitClass, HelpTarget, MigrateAction, ObserveAction,
-    OutputMode, PackageAction, ParseErrorId, ParseOutcome, SuccessorCommand, parse_args,
-    render_help, version_text,
+    CheckProfile, EffectClass, ExitClass, ObserveAction, OutputMode, ParseErrorId, ParseOutcome,
+    SuccessorCommand, parse_args, render_help, version_text,
 };
 
 fn invocation(args: &[&str]) -> super::successor::ParsedInvocation {

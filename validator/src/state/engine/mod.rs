@@ -21,4 +21,5 @@ mod state_derivation;
 
 pub(crate) use inventory_reduction::*;
 pub use state_derivation::StateEngine;
-pub(crate) use state_derivation::{all_reductions, derive_bound, initial_ceilings, policy_finding};
+#[cfg(test)]
+pub(crate) use state_derivation::derive_bound;

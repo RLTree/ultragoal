@@ -1,7 +1,11 @@
+#[cfg(test)]
 use super::bound_context::EffectClass;
 use super::error::{ContextError, io_error};
+#[cfg(test)]
 use super::path::AuthorizedPath;
-use std::fs::{self, File};
+#[cfg(test)]
+use std::fs;
+use std::fs::File;
 use std::path::{Component, Path};
 
 #[cfg(unix)]

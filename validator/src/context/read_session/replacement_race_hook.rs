@@ -21,7 +21,7 @@ pub(crate) struct ReadSession {
     pub(crate) root_identity: Option<(u64, u64)>,
     pub(crate) directories: RefCell<BTreeMap<PathBuf, File>>,
     pub(in crate::context) directory_identities: RefCell<BTreeMap<PathBuf, FileSnapshot>>,
-    pub(crate) observations: ObservationSet,
+    pub(in crate::context) observations: ObservationSet,
     pub(crate) bytes_read: Cell<u64>,
     pub(crate) entries_visited: Cell<u64>,
 }

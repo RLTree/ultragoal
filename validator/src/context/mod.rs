@@ -12,6 +12,7 @@ mod digest;
 mod effects;
 mod error;
 mod git;
+#[cfg(test)]
 mod path;
 mod process;
 mod read_budget;

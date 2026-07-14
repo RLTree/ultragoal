@@ -2,7 +2,7 @@ use super::super::successor::runtime::{
     RuntimeSession, StateDisposition, StateProjection, StateView,
 };
 use super::super::successor::{EffectClass, OptionArgument, OptionName, OutputMode, ParsedValue};
-use super::{Repository, parsed, tree_snapshot};
+use super::{Repository, context, parsed, tree_snapshot};
 use serde_json::json;
 use std::fs;
 
@@ -56,9 +56,7 @@ impl StateView for FakeState {
 fn one_context_drives_state_views_stable_streams_and_exact_exit_classes_without_writes() {
     let repository = Repository::new("state-view-runtime");
     fs::write(repository.root.join("dirty.txt"), b"dirty\n").unwrap();
-    let context =
-        super::inspect_context(&repository.root, &parsed(&["--json", "inspect", "context"]))
-            .unwrap();
+    let context = context(&repository.root);
     let state = FakeState {
         context_id: context.context_id().to_owned(),
         state_id: "sha256:fake-state",
@@ -127,9 +125,7 @@ fn one_context_drives_state_views_stable_streams_and_exact_exit_classes_without_
 #[test]
 fn missing_mismatched_and_unknown_state_fail_closed_without_input_echo() {
     let repository = Repository::new("state-view-failures");
-    let context =
-        super::inspect_context(&repository.root, &parsed(&["--json", "inspect", "context"]))
-            .unwrap();
+    let context = context(&repository.root);
     let no_state = RuntimeSession::new(&context, None)
         .dispatch(&parsed(&["--json", "next"]))
         .render(OutputMode::Json);

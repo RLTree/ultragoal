@@ -20,7 +20,7 @@ where
     I: IntoIterator<Item = S>,
     S: Into<OsString>,
 {
-    parse_command_line(args).map(ParsedCommandLine::into_outcome)
+    parse_command_line(args).map(|parsed| parsed.into_parts().1)
 }
 
 pub fn parse_command_line<I, S>(args: I) -> Result<ParsedCommandLine, ParseFailure>

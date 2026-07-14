@@ -19,6 +19,7 @@ pub(crate) fn unavailable_context_is_stable_and_does_not_echo_input() {
 #[test]
 pub(crate) fn public_context_uses_opaque_root_ids_and_is_recursively_zero_write() {
     let repo = Repository::new("public-context-roots");
+    fs::write(repo.root.join("dirty-canary.txt"), b"dirty\n").unwrap();
     let before_tree = tree(&repo.root);
     let before_status = repo.status();
     let ParseOutcome::Invocation(invocation) =
@@ -32,6 +33,7 @@ pub(crate) fn public_context_uses_opaque_root_ids_and_is_recursively_zero_write(
     assert!(streams.stderr.is_empty());
     let value: serde_json::Value = serde_json::from_slice(&streams.stdout).unwrap();
     assert_eq!(value["schema_version"], "HarnessPublicContext-v1");
+    assert_eq!(value["candidate"]["dirty"], true);
     for key in ["repository_root_id", "worktree_root_id"] {
         assert!(
             value["roots"][key]

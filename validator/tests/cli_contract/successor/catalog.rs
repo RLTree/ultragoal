@@ -1,7 +1,8 @@
+use super::successor::clap_grammar::parser_command;
+use super::successor::command_contract::{CommandDescriptor, HelpTarget};
 use super::successor::{
-    CommandDescriptor, EffectClass, Group, HelpTarget, OptionName, OutputMode, ParseErrorId,
-    ParseOutcome, ParsedValue, ValueKind, catalog, effect_name, parse_args, parser_command,
-    render_help,
+    EffectClass, Group, OptionName, OutputMode, ParseErrorId, ParseOutcome, ParsedValue, ValueKind,
+    catalog, effect_name, parse_args, render_help,
 };
 use clap::{ArgAction, builder::ValueRange};
 use std::collections::BTreeSet;

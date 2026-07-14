@@ -89,6 +89,7 @@ impl BuildRequest {
         self
     }
 
+    #[cfg(test)]
     pub(in crate::context) fn with_root_grant(mut self, grant: RootEffectGrant) -> Self {
         self.root_grant = Some(grant);
         self

@@ -1,5 +1,5 @@
 use super::ParseOutcome;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct WorkspaceRoot {
@@ -17,10 +17,6 @@ impl WorkspaceRoot {
         (!value.trim().is_empty()).then(|| Self {
             path: PathBuf::from(value),
         })
-    }
-
-    pub fn as_path(&self) -> &Path {
-        &self.path
     }
 
     pub(crate) fn into_path_buf(self) -> PathBuf {
@@ -41,13 +37,5 @@ impl ParsedCommandLine {
 
     pub fn into_parts(self) -> (WorkspaceRoot, ParseOutcome) {
         (self.root, self.outcome)
-    }
-
-    pub fn into_outcome(self) -> ParseOutcome {
-        self.outcome
-    }
-
-    pub fn root(&self) -> &WorkspaceRoot {
-        &self.root
     }
 }
