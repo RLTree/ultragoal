@@ -50,6 +50,8 @@ pub(crate) use catalog::{
     AdoptedRoutineNode, BoundCatalogInvocation, CatalogAdoption, CatalogSelectionRequest,
     RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation, load_production_catalog,
 };
+#[cfg(target_os = "macos")]
+pub(crate) use runtime_adapter::require_root_broker_for_public_effect;
 pub(crate) use runtime_adapter::{
     PreparedRoutineExecution, ProductionRoutineIssuer, RoutineAdapterSpec,
     RoutineArtifactPublisher, RoutineCancellation, RoutineInvocationSpec, RoutineMediationResult,

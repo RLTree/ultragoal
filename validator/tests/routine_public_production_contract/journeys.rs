@@ -65,7 +65,7 @@ fn clean_public_binary_is_noop_without_opening_host_authority() {
 }
 
 #[test]
-fn dirty_development_binary_refuses_before_host_or_workspace_authority() {
+fn dirty_public_effect_refuses_at_root_broker_before_host_or_workspace_authority() {
     let fixture = Fixture::new(
         "execute-reuse",
         &[pass_node("compile", &[])],
@@ -84,6 +84,8 @@ fn dirty_development_binary_refuses_before_host_or_workspace_authority() {
         diagnostic["diagnostic_id"],
         "successor_runtime_authority_required"
     );
+    assert_eq!(diagnostic["cause"], "mediator-child-root-broker-required");
+    assert_eq!(diagnostic["effect"], "none");
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fixture.status(), before_status);

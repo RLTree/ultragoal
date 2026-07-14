@@ -36,6 +36,8 @@ pub(crate) use outcome::{
     RoutineNodeMediation, RoutineReuseInput, RoutineRootGrant,
 };
 use process::ProcessTermination;
+#[cfg(target_os = "macos")]
+pub(crate) use process::require_root_broker_for_public_effect;
 
 #[path = "grant_scope.rs"]
 mod grant_scope;

@@ -1,7 +1,6 @@
 use super::*;
 
 pub(crate) const SOURCE_CONFIG_KEY: &str = "contract_id";
-pub(crate) const RESULT_SCOPE: &str = "routine-public-production";
 
 struct CachePublisher<'a> {
     state: &'a HostState,
@@ -76,6 +75,8 @@ pub(crate) fn execute_inner(
         ));
     }
 
+    #[cfg(target_os = "macos")]
+    crate::routine_work::require_root_broker_for_public_effect().map_err(PublicFailure::Routine)?;
     let home = home.ok_or(PublicFailure::Host(host::HostFailure::Unavailable))?;
     let state = HostState::open(home, &target).map_err(PublicFailure::Host)?;
     let selected_nodes = plan

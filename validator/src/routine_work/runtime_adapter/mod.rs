@@ -30,6 +30,8 @@ pub(crate) use execution_authority::{
     RoutineMediatedOutcome, RoutineMediatedWitness, RoutineMediationAuthority,
     RoutineMediationBatch, RoutineNoOpProjection,
 };
+#[cfg(target_os = "macos")]
+pub(crate) use mediator::require_root_broker_for_public_effect;
 pub(crate) use mediator::{
     RoutineArtifactPublisher, RoutineCancellation, RoutineMediationResult, RoutineMediatorStatus,
     RoutineNodeDisposition, RoutineReuseInput,

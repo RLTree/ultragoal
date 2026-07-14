@@ -15,7 +15,17 @@ pub(crate) struct RootBrokerAuthorization {
 /// A future root-owned broker adapter must replace this boundary with an
 /// opaque authorization that N06 code cannot construct or deserialize.
 pub(crate) fn require_root_broker_before_spawn() -> Result<RootBrokerAuthorization, RoutineError> {
-    Err(mediator_error("mediator-child-root-broker-required"))
+    Err(RoutineError::new(
+        RoutineErrorId::InvalidRequest,
+        "mediator-child-root-broker-required",
+        None,
+    ))
+}
+
+/// Refuses the public effect path before host state, output provisioning, or
+/// durable reservation until a root-owned broker supplies this authority.
+pub(crate) fn require_root_broker_for_public_effect() -> Result<(), RoutineError> {
+    require_root_broker_before_spawn().map(drop)
 }
 
 pub(crate) fn spawn_with_root_broker(

@@ -1,5 +1,7 @@
 use super::*;
 
+const RESULT_SCOPE: &str = "routine-public-production";
+
 pub(crate) fn validate_selected_sources(
     context: &LiveContext,
     manifest: &LoadedManifest,
