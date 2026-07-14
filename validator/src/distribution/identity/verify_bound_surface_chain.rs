@@ -12,7 +12,7 @@ pub fn verify_bound_surface_chain(
     Ok(())
 }
 
-pub fn verify_surface_chain(rows: &[SurfaceIdentity]) -> Result<(), DistributionError> {
+pub(crate) fn verify_surface_chain(rows: &[SurfaceIdentity]) -> Result<(), DistributionError> {
     if rows.len() != IdentitySurface::ALL.len() {
         return Err(error(DistributionErrorId::ProvenanceMismatch));
     }
@@ -20,9 +20,16 @@ pub fn verify_surface_chain(rows: &[SurfaceIdentity]) -> Result<(), Distribution
     let first = rows
         .first()
         .ok_or_else(|| error(DistributionErrorId::ProvenanceMismatch))?;
+    let binding = first
+        .journey_binding_sha256()
+        .ok_or_else(|| error(DistributionErrorId::ProvenanceMismatch))?;
     for (expected, row) in IdentitySurface::ALL.into_iter().zip(rows) {
         row.validate()?;
-        if row.surface != expected || !seen.insert(row.surface) || row.package != first.package {
+        if row.surface != expected
+            || !seen.insert(row.surface)
+            || row.package != first.package
+            || row.journey_binding_sha256() != Some(binding)
+        {
             return Err(error(DistributionErrorId::ProvenanceMismatch));
         }
     }

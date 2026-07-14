@@ -70,7 +70,7 @@ impl Fixture {
             .map(PathBuf::from)
             .unwrap_or_else(std::env::temp_dir);
         let root = base.join(format!(
-            "archive-{label}-{}-{}",
+            "hul-distribution-archive-{label}-{}-{}",
             std::process::id(),
             NEXT.fetch_add(1, Ordering::Relaxed)
         ));

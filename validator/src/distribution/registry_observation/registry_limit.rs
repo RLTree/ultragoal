@@ -1,6 +1,7 @@
 const REGISTRY_LIMIT: usize = 4 * 1024 * 1024;
+const APP_REGISTRY_PATH: &str = "app/registry.json";
 
-pub trait RegistryReader {
+pub(crate) trait RegistryReader {
     fn read_registry(&mut self, maximum: usize) -> Result<Option<Vec<u8>>, ()>;
 }
 
@@ -25,6 +26,8 @@ pub struct AppRegistryObservation {
     binding_sha256: String,
     observation_sha256: Option<String>,
     verdict: AppRegistryVerdict,
+    #[serde(skip)]
+    confined_file_observation: bool,
 }
 
 impl AppRegistryObservation {
@@ -42,6 +45,9 @@ impl AppRegistryObservation {
     }
     pub fn binding_sha256(&self) -> &str {
         &self.binding_sha256
+    }
+    pub(crate) const fn is_confined_file_observation(&self) -> bool {
+        self.confined_file_observation
     }
 }
 
@@ -63,6 +69,8 @@ pub struct DiscoveryObservation {
     discovery_verdict: DiscoveryVerdict,
     binding_sha256: Option<String>,
     observation_sha256: Option<String>,
+    #[serde(skip)]
+    confined_file_observation: bool,
 }
 
 impl DiscoveryObservation {
@@ -74,6 +82,7 @@ impl DiscoveryObservation {
             discovery_verdict: DiscoveryVerdict::DefinitionOnly,
             binding_sha256: None,
             observation_sha256: None,
+            confined_file_observation: false,
         }
     }
     pub const fn verdict(&self) -> LayerVerdict {
@@ -96,6 +105,9 @@ impl DiscoveryObservation {
     }
     pub fn binding_sha256(&self) -> Option<&str> {
         self.binding_sha256.as_deref()
+    }
+    pub(crate) const fn is_confined_file_observation(&self) -> bool {
+        self.confined_file_observation
     }
 }
 
@@ -159,21 +171,44 @@ pub fn registry_document(
 }
 
 pub fn observe_registry_file(
+    reader: &mut crate::distribution::filesystem::ScopedFile,
+    binding: &JourneyBinding,
+    host: &HostCapabilityDeclaration,
+) -> Result<RegistryObservations, DistributionError> {
+    if reader.root_id() != binding.home_id() || reader.relative_path() != APP_REGISTRY_PATH {
+        return Err(error(DistributionErrorId::ProvenanceMismatch));
+    }
+    observe_registry_reader_inner(reader, binding, host, true)
+}
+
+#[cfg(test)]
+pub(crate) fn observe_registry_reader(
     reader: &mut impl RegistryReader,
     binding: &JourneyBinding,
     host: &HostCapabilityDeclaration,
 ) -> Result<RegistryObservations, DistributionError> {
+    observe_registry_reader_inner(reader, binding, host, false)
+}
+
+fn observe_registry_reader_inner(
+    reader: &mut impl RegistryReader,
+    binding: &JourneyBinding,
+    host: &HostCapabilityDeclaration,
+    confined_file_observation: bool,
+) -> Result<RegistryObservations, DistributionError> {
     let before = reader
         .read_registry(REGISTRY_LIMIT)
         .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
-    let app_registry = observe_app_registry(before.as_deref(), binding, host)?;
-    let discovery = observe_discovery(before.as_deref(), binding, host)?;
+    let mut app_registry = observe_app_registry(before.as_deref(), binding, host)?;
+    let mut discovery = observe_discovery(before.as_deref(), binding, host)?;
     let after = reader
         .read_registry(REGISTRY_LIMIT)
         .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
     if before != after {
         return Err(error(DistributionErrorId::ObjectChanged));
     }
+    app_registry.confined_file_observation = confined_file_observation;
+    discovery.confined_file_observation = confined_file_observation;
     Ok(RegistryObservations {
         app_registry,
         discovery,
@@ -203,5 +238,6 @@ pub fn observe_app_registry(
         binding_sha256: binding.binding_sha256().into(),
         observation_sha256: bytes.map(sha256),
         verdict,
+        confined_file_observation: false,
     })
 }

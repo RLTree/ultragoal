@@ -50,7 +50,7 @@ pub use marketplace_observation::observe_codex_marketplace;
 pub use model::{
     Capability, DistributionReport, HostVerdict, IdentitySurface, JoinReport, JoinVerdict, Layer,
     LayerReport, LayerVerdict, PackageIdentity, SourceIdentity, SurfaceIdentity,
-    reject_stale_version_reuse, verify_bound_surface_chain, verify_surface_chain,
+    reject_stale_version_reuse, verify_bound_surface_chain,
 };
 pub use observations::{RuntimeObservation, RuntimeVerdict};
 pub use package::{
@@ -65,9 +65,11 @@ pub use package::{
 };
 pub use registry_observation::{
     AppRegistryObservation, AppRegistryVerdict, DiscoveryObservation, DiscoveryVerdict,
-    RegistryObservations, RegistryReader, observe_app_registry, observe_discovery,
-    observe_registry_file, registry_document,
+    RegistryObservations, observe_app_registry, observe_discovery, observe_registry_file,
+    registry_document,
 };
+#[cfg(test)]
+pub(crate) use registry_observation::{RegistryReader, observe_registry_reader};
 pub use runtime_probe::{RuntimeProbePlan, execute_runtime_probe};
 pub use supply::{
     ProvenanceExpectation, ProvenanceSnapshot, SignatureExpectation, SignatureSnapshot,

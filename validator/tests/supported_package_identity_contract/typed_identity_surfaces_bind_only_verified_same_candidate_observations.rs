@@ -5,7 +5,7 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
     let package = verify_package(&plan, &archive).unwrap();
     let runtime_program = fixture.0.join("runtime-probe.sh");
     let host = HostCapabilityDeclaration::isolated(
-        &fixture.0.join("home"),
+        &fixture.0,
         &fixture.0.join("project"),
         "isolated-contract-v1",
         Some(&runtime_program),
@@ -77,9 +77,9 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
         package.identity().tree_sha256()
     );
 
-    let registry = registry_document(&binding, true, true).unwrap();
-    let app_registry = observe_app_registry(Some(&registry), &binding, &host).unwrap();
-    let discovery = observe_discovery(Some(&registry), &binding, &host).unwrap();
+    let observed = confined_registry_observations(&fixture, &binding, &host);
+    let app_registry = observed.app_registry;
+    let discovery = observed.discovery;
     let before = snapshot_tree(&fixture.0);
     let runtime_plan = RuntimeProbePlan::new(
         binding.clone(),

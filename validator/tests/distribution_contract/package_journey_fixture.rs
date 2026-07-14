@@ -21,7 +21,7 @@ pub struct JourneyFixture {
 
 impl JourneyFixture {
     pub fn new(label: &str) -> Self {
-        let root = PathBuf::from("/tmp").join(format!(
+        let root = std::env::temp_dir().join(format!(
             "hul-distribution-{label}-{}-{}-{}",
             std::process::id(),
             NEXT.fetch_add(1, Ordering::Relaxed),

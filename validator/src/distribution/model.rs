@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 mod identity;
 pub use identity::{
     IdentitySurface, PackageIdentity, SourceIdentity, SurfaceIdentity, reject_stale_version_reuse,
-    verify_bound_surface_chain, verify_surface_chain,
+    verify_bound_surface_chain,
 };
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]

@@ -31,6 +31,14 @@ impl ScopedFile {
         })
     }
 
+    pub(crate) fn root_id(&self) -> &str {
+        self.root.root_id()
+    }
+
+    pub(crate) fn relative_path(&self) -> &str {
+        &self.relative
+    }
+
     #[cfg(unix)]
     pub fn inspect(&self, maximum: usize) -> Result<Option<Vec<u8>>, DistributionError> {
         let (parent, name) = match self.root.parent(&self.relative, false) {

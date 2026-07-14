@@ -6,12 +6,13 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Duration;
 use ultragoal::distribution::{
-    CacheExpectation, CodexPlugin, DistributionErrorId, ExpectedPrior, HostCapabilityDeclaration,
-    InstallEffects, InstallPlan, InstallScope, JourneyBinding, MarketplaceScope, PackageEffects,
-    PackageIdentity, PackagePlan, RuntimeProbePlan, SurfaceIdentity, build_package, install,
-    observe_app_registry, observe_codex_marketplace, observe_discovery, plan_codex_marketplace,
-    reconcile_cache_read_only, registry_document, unavailable_marketplace,
-    verify_bound_surface_chain, verify_marketplace, verify_package,
+    CacheExpectation, CodexPlugin, ConfinedRoot, DistributionErrorId, ExpectedPrior,
+    HostCapabilityDeclaration, InstallEffects, InstallPlan, InstallScope, JourneyBinding,
+    MarketplaceScope, PackageEffects, PackageIdentity, PackagePlan, RuntimeProbePlan, ScopedFile,
+    SurfaceIdentity, build_package, install, observe_app_registry, observe_codex_marketplace,
+    observe_discovery, observe_registry_file, plan_codex_marketplace, reconcile_cache_read_only,
+    registry_document, unavailable_marketplace, verify_bound_surface_chain, verify_marketplace,
+    verify_package,
 };
 use ultragoal::orchestration::{
     Actor, ArtifactWorkspace, Binding, CanonicalPath, EffectClass, EffectGrant, LeaseSpec,
@@ -22,6 +23,8 @@ use ultragoal::orchestration::{
 include!("supported_package_identity_contract/context.rs");
 
 include!("supported_package_identity_contract/layout.rs");
+
+include!("supported_package_identity_contract/confined_registry.rs");
 
 include!(
     "supported_package_identity_contract/typed_identity_surfaces_bind_only_verified_same_candidate_observations.rs"

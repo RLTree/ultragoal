@@ -35,6 +35,7 @@ pub fn observe_discovery(
         discovery_verdict,
         binding_sha256: Some(binding.binding_sha256().into()),
         observation_sha256: bytes.map(sha256),
+        confined_file_observation: false,
     })
 }
 

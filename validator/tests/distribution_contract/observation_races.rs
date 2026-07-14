@@ -1,6 +1,7 @@
 use crate::distribution::{
     CacheExpectation, CacheReader, DistributionErrorId as ErrorId, HostCapabilityDeclaration,
-    JourneyBinding, RegistryReader, observe_registry_file, reconcile_cache_file, registry_document,
+    JourneyBinding, RegistryReader, observe_registry_reader, reconcile_cache_file,
+    registry_document,
 };
 use crate::distribution_fixture::{PLUGIN_ID, VERSION};
 use crate::package_journey_fixture::JourneyFixture;
@@ -96,7 +97,7 @@ fn cache_and_registry_substitution_during_final_revalidation_fail_closed() {
         reads: 0,
     };
     assert_eq!(
-        observe_registry_file(&mut registry_reader, &binding, &host)
+        observe_registry_reader(&mut registry_reader, &binding, &host)
             .unwrap_err()
             .id(),
         ErrorId::ObjectChanged,

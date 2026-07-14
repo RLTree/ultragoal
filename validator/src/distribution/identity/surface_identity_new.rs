@@ -177,6 +177,7 @@ impl SurfaceIdentity {
             || observation.discovery_verdict()
                 != crate::distribution::registry_observation::DiscoveryVerdict::Visible
             || observation.binding_sha256() != Some(binding.binding_sha256())
+            || !observation.is_confined_file_observation()
         {
             return Err(error(DistributionErrorId::ProvenanceMismatch));
         }
@@ -200,6 +201,7 @@ impl SurfaceIdentity {
         if observation.context_id() != source.context_id()
             || observation.candidate_id() != source.candidate_id()
             || observation.binding_sha256() != binding.binding_sha256()
+            || !observation.is_confined_file_observation()
             || observation.verdict()
                 != crate::distribution::registry_observation::AppRegistryVerdict::Verified
         {

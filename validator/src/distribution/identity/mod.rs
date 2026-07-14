@@ -10,3 +10,6 @@ include!("identity_surface.rs");
 include!("surface_identity_new.rs");
 
 include!("verify_bound_surface_chain.rs");
+
+#[cfg(test)]
+mod mixed_journey_tests;
