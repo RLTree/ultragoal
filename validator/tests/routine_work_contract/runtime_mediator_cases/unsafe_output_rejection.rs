@@ -114,13 +114,13 @@ pub(crate) fn descriptor_walk_refuses_a_nested_directory_swap_during_capture() {
 
 #[test]
 #[cfg(target_os = "macos")]
-pub(crate) fn cleared_environment_and_correlated_child_report_are_required() {
+pub(crate) fn cleared_environment_and_process_exit_are_authoritative() {
     let _serial = mediator_lock();
     let environment_fixture = fixture("mediator-environment-report", true);
     let guarded = |node_id: &str| {
         format!(
             "test \"$LANG\" = C && test \"$LC_ALL\" = C && test \"$PATH\" = /bin && test -z \"${{SSH_AUTH_SOCK+x}}\" || exit 70; printf '%s' '{node_id}' > 'target/routine/{node_id}/result.txt'; {}",
-            report_script()
+            successful_exit_script()
         )
     };
     let prepared = prepared_with(&environment_fixture, guarded, 10_000, 1024 * 1024);
@@ -134,16 +134,16 @@ pub(crate) fn cleared_environment_and_correlated_child_report_are_required() {
     );
     assert_eq!(result.status(), RoutineMediatorStatus::CompleteExecution);
 
-    let missing_report_fixture = fixture("mediator-missing-report", true);
+    let authored_pass_fixture = fixture("mediator-authored-pass", true);
     let prepared = prepared_with(
-        &missing_report_fixture,
-        |_| "true".to_owned(),
+        &authored_pass_fixture,
+        |_| "printf '{\"outcome\":\"passed\"}'; exit 7".to_owned(),
         10_000,
         1024 * 1024,
     );
     let grant = issue_grant(&prepared, "missing-report-session", None);
     let result = mediate(
-        &missing_report_fixture,
+        &authored_pass_fixture,
         prepared,
         Some(grant),
         RoutineCancellation::new(),
@@ -153,7 +153,7 @@ pub(crate) fn cleared_environment_and_correlated_child_report_are_required() {
     assert_eq!(result.reuse_artifacts().len(), 0);
     assert_eq!(
         result.nodes()[0].failure_code(),
-        Some("MEDIATOR-COMMAND-REPORT-INVALID")
+        Some("MEDIATOR-CHECK-FAILED")
     );
     assert!(result.recovery_marker().is_some());
 }

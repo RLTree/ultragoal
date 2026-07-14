@@ -10,6 +10,7 @@ pub(crate) struct BoundCatalogInvocation {
     pub(crate) definition_id: String,
     pub(crate) definition_sha256: String,
     pub(crate) node_id: String,
+    pub(crate) behavior_id: String,
     pub(crate) depends_on: Vec<String>,
     pub(crate) selected_tool: String,
     pub(crate) selected_tool_identity_sha256: String,
@@ -36,6 +37,10 @@ impl BoundCatalogInvocation {
 
     pub(crate) fn node_id(&self) -> &str {
         &self.node_id
+    }
+
+    pub(crate) fn behavior_id(&self) -> &str {
+        &self.behavior_id
     }
 
     pub(crate) fn selected_tool(&self) -> &str {

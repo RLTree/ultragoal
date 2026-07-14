@@ -28,7 +28,7 @@ pub(crate) fn compiled_same_process_executable_substitutions_are_denied_without_
                 "exec /bin/bash -c {}",
                 shell_literal(&format!(
                     "printf unexpected > {relative_scope}/substitute.effect; {}",
-                    report_script()
+                    successful_exit_script()
                 ))
             ),
             "different-object-alias" => {
@@ -40,7 +40,7 @@ pub(crate) fn compiled_same_process_executable_substitutions_are_denied_without_
                     shell_literal(&alias.to_string_lossy()),
                     shell_literal(&format!(
                         "printf unexpected > {relative_scope}/substitute.effect; {}",
-                        report_script()
+                        successful_exit_script()
                     ))
                 );
                 alias_owner = Some(owner);
@@ -63,7 +63,7 @@ pub(crate) fn compiled_same_process_executable_substitutions_are_denied_without_
                     &script,
                     format!(
                         "#!/bin/dash\nprintf unexpected > \"$1/substitute.effect\"\n{}\n",
-                        report_script()
+                        successful_exit_script()
                     ),
                 )
                 .unwrap();

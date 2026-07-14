@@ -24,6 +24,8 @@ use super::outcome::OutputFileRecord;
 mod directory_read_failure;
 #[path = "executable_identity.rs"]
 mod executable_identity;
+#[path = "framed_read_input.rs"]
+mod framed_read_input;
 #[path = "mediation_failure.rs"]
 mod mediation_failure;
 #[path = "output_file_limit.rs"]
@@ -40,7 +42,8 @@ mod read_source_opening;
 mod source_revalidation;
 
 pub(crate) use directory_read_failure::*;
-pub(crate) use executable_identity::*;
+#[cfg(test)]
+pub(crate) use executable_identity::validate_execution_path_immutability;
 pub(crate) use mediation_failure::*;
 pub(crate) use output_file_limit::*;
 pub(crate) use output_tree_capture::*;

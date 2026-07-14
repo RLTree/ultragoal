@@ -160,7 +160,7 @@ pub(crate) fn read_source_aba_before_spawn_is_refused_without_effect() {
 
 #[test]
 #[cfg(target_os = "macos")]
-pub(crate) fn passing_report_cannot_hide_post_spawn_read_source_mutation() {
+pub(crate) fn successful_exit_cannot_hide_post_spawn_read_source_mutation() {
     let _serial = mediator_lock();
     let fixture = fixture("mediator-read-source-false-pass", true);
     let relative_source = "target/routine/source.sh";

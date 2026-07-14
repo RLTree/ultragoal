@@ -10,14 +10,6 @@ pub(crate) const PLAN_ID: &str =
     "sha256:4444444444444444444444444444444444444444444444444444444444444444";
 pub(crate) const TRUE_TOOL_ID: &str =
     "sha256:5555555555555555555555555555555555555555555555555555555555555555";
-pub(crate) const FALSE_TOOL_ID: &str =
-    "sha256:6666666666666666666666666666666666666666666666666666666666666666";
-pub(crate) const TRUE_PROGRAM_SHA256: &str =
-    "sha256:b9b54a7e5d45dda1aca284b454829f7f0bc76a827565f32418db2fb7869970eb";
-pub(crate) const FALSE_PROGRAM_SHA256: &str =
-    "sha256:0c5fb690df52f914a97ef76bc50baebba4e506511844d618e1ddf0611db1df22";
-pub(crate) const SYSTEM_PROGRAM_BYTE_LENGTH: u64 = 84_032;
-pub(crate) const SYSTEM_PROGRAM_UNIX_MODE: u32 = 0o100755;
 pub(crate) const R3_CONTEXT_ID: &str =
     "sha256:063fba8de7f4c543180c5842169a9c0915c25aa6d98199eeeae37ef4a62b0132";
 pub(crate) const R3_CANDIDATE_ID: &str =
@@ -29,7 +21,7 @@ pub(crate) const R3_WORK_PACKAGE_PATH: &str =
 pub(crate) const R3_WORK_PACKAGE_SHA256: &str =
     "sha256:5c60b9b3c4622eb5f7f0d2d3e5a8c0610896cb9a31a0db97f1d6b6a6e04d1ab1";
 pub(crate) const VALID_CATALOG: &[u8] =
-    include_bytes!("../../../fixtures/routine-production-catalog/valid-catalog.json");
+    include_bytes!("../../../fixtures/routine-production-catalog/valid-catalog-v2.json");
 
 pub(crate) static NEXT: AtomicU64 = AtomicU64::new(0);
 
@@ -85,14 +77,8 @@ pub(crate) fn full_adoption(bytes: &[u8], candidate: &str) -> CatalogAdoption {
         GRAPH_ID,
         candidate,
         vec![
-            AdoptedRoutineNode::new("syntax", Vec::<String>::new(), "true", None).unwrap(),
-            AdoptedRoutineNode::new(
-                "verify",
-                vec!["syntax".to_owned()],
-                "true",
-                Some("false".to_owned()),
-            )
-            .unwrap(),
+            AdoptedRoutineNode::new("syntax", Vec::<String>::new()).unwrap(),
+            AdoptedRoutineNode::new("verify", vec!["syntax".to_owned()]).unwrap(),
         ],
     )
     .unwrap()
@@ -104,7 +90,7 @@ pub(crate) fn one_node_adoption(bytes: &[u8]) -> CatalogAdoption {
         bytes.len() as u64,
         GRAPH_ID,
         CANDIDATE_ID,
-        vec![AdoptedRoutineNode::new("syntax", Vec::<String>::new(), "true", None).unwrap()],
+        vec![AdoptedRoutineNode::new("syntax", Vec::<String>::new()).unwrap()],
     )
     .unwrap()
 }
@@ -139,13 +125,11 @@ pub(crate) fn runner(tool: &str, tool_id: &str, path: &Path) -> RunnerObservatio
 }
 
 pub(crate) fn selected(root: &TestRoot, fallback: bool) -> Vec<SelectedRoutineNode> {
+    assert!(!fallback, "catalog v2 has no fallback selection");
     vec![
         SelectedRoutineNode::new(
             "syntax",
             Vec::<String>::new(),
-            "true",
-            TRUE_TOOL_ID,
-            false,
             sha(b"syntax input identity"),
             vec![input(root, "src/input.txt")],
         )
@@ -153,13 +137,6 @@ pub(crate) fn selected(root: &TestRoot, fallback: bool) -> Vec<SelectedRoutineNo
         SelectedRoutineNode::new(
             "verify",
             vec!["syntax".to_owned()],
-            if fallback { "false" } else { "true" },
-            if fallback {
-                FALSE_TOOL_ID
-            } else {
-                TRUE_TOOL_ID
-            },
-            fallback,
             sha(b"verify input identity"),
             vec![input(root, "src/input.txt"), input(root, "tests/input.txt")],
         )
@@ -174,10 +151,12 @@ pub(crate) fn request(
     candidate: &str,
     fallback: bool,
 ) -> CatalogSelectionRequest {
-    let mut runners = vec![runner("true", TRUE_TOOL_ID, Path::new("/usr/bin/true"))];
-    if fallback {
-        runners.push(runner("false", FALSE_TOOL_ID, Path::new("/usr/bin/false")));
-    }
+    assert!(!fallback, "catalog v2 has no fallback selection");
+    let runners = vec![runner(
+        "ultragoal",
+        TRUE_TOOL_ID,
+        Path::new("/usr/bin/true"),
+    )];
     CatalogSelectionRequest::new(
         catalog.catalog_id(),
         GRAPH_ID,

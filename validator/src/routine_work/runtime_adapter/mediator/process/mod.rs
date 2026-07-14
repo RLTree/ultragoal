@@ -1,8 +1,8 @@
 use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
-use std::io::Read;
+use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
-use std::process::{Child, ChildStderr, ChildStdout, Command, ExitStatus, Stdio};
+use std::process::{Child, ChildStderr, ChildStdin, ChildStdout, Command, ExitStatus, Stdio};
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 #[cfg(test)]
@@ -24,6 +24,8 @@ use super::outcome::RoutineCancellation;
 mod process_execution;
 #[path = "process_group_observation.rs"]
 mod process_group_observation;
+#[path = "process_input_write.rs"]
+mod process_input_write;
 #[path = "process_output_drain.rs"]
 mod process_output_drain;
 #[path = "spawn_test_observation.rs"]
@@ -31,5 +33,6 @@ mod spawn_test_observation;
 
 pub(crate) use process_execution::*;
 pub(crate) use process_group_observation::*;
+pub(crate) use process_input_write::*;
 pub(crate) use process_output_drain::*;
 pub(crate) use spawn_test_observation::*;

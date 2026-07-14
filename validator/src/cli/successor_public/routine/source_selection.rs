@@ -41,14 +41,7 @@ pub(crate) fn prepare(
     let adoption_nodes = manifest
         .nodes
         .iter()
-        .map(|node| {
-            AdoptedRoutineNode::new(
-                &node.node_id,
-                node.depends_on.clone(),
-                &node.primary_tool,
-                node.fallback_tool.clone(),
-            )
-        })
+        .map(|node| AdoptedRoutineNode::new(&node.node_id, node.depends_on.clone()))
         .collect::<Result<Vec<_>, _>>()
         .map_err(|error| PublicFailure::Catalog(error.code()))?;
     let adoption = CatalogAdoption::new(
@@ -89,9 +82,6 @@ pub(crate) fn prepare(
             SelectedRoutineNode::new(
                 check.node_id(),
                 check.depends_on().iter().cloned(),
-                check.selected_tool(),
-                check.selected_tool_identity(),
-                check.used_fallback(),
                 check.input_id(),
                 transitive,
             )
@@ -180,16 +170,14 @@ pub(crate) fn safe_executable(
     capability: &ToolCapability,
     tool_name: &str,
 ) -> Result<PathBuf, PublicFailure> {
-    let allowlisted = match tool_name {
-        "bash" => Path::new("/bin/bash"),
-        _ => {
-            return Err(PublicFailure::Catalog(
-                "routine-public-runner-not-allowlisted",
-            ));
-        }
-    };
-    let expected = fs::canonicalize(allowlisted)
-        .map_err(|_| PublicFailure::Catalog("routine-public-allowlisted-runner-unavailable"))?;
+    if tool_name != manifest::ROUTINE_RUNNER {
+        return Err(PublicFailure::Catalog(
+            "routine-public-runner-not-allowlisted",
+        ));
+    }
+    let expected = std::env::current_exe()
+        .and_then(fs::canonicalize)
+        .map_err(|_| PublicFailure::Catalog("routine-public-current-runner-unavailable"))?;
     if !capability.available
         || capability.executable.as_deref().map(Path::new) != Some(expected.as_path())
     {
@@ -197,5 +185,7 @@ pub(crate) fn safe_executable(
             "routine-public-runner-path-substituted",
         ));
     }
+    validate_immutable_routine_program(&expected)
+        .map_err(|_| PublicFailure::Catalog("routine-public-current-runner-not-immutable"))?;
     Ok(expected)
 }

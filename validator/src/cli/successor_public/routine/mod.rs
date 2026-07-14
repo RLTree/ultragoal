@@ -1,10 +1,12 @@
 //! Public `check routine` production adapter.
 //!
-//! The repository supplies a strict affected graph and immutable catalog. It
-//! never supplies arbitrary shell text: each selected recipe must equal one
-//! adapter-generated pass/fail template before it can enter the accepted
-//! production ledger and mediator.
+//! The repository supplies only a strict affected graph and exact source
+//! bindings. Dirty work is limited to the closed `rust-source-syntax-v1`
+//! behavior executed by the pinned current `ultragoal` program over
+//! mediator-held framed bytes; repository content cannot select a program,
+//! argument template, fallback, or child-authored outcome.
 
+mod behavior_child;
 mod host;
 mod manifest;
 mod outcome;
@@ -23,9 +25,9 @@ use crate::routine_work::{
     ImpactGraph, LocalDirtyTree, PlanRequest, PreparedRoutineExecution, ProductionRoutineIssuer,
     RepoPath, RoutineAdapterSpec, RoutineCancellation, RoutineInvocationSpec,
     RoutineMediatorStatus, RoutinePlan, RoutineReuseInput, RunnerObservation, SelectedRoutineNode,
-    TransitiveInputExpectation, bind_routine_invocation_with_environment_and_read_sources,
-    load_production_catalog, mediate_prepared_routine_execution_production, plan_routine,
-    prepare_routine_execution,
+    TransitiveInputExpectation, bind_rust_source_syntax_invocation, load_production_catalog,
+    mediate_prepared_routine_execution_production, plan_routine, prepare_routine_execution,
+    validate_immutable_routine_program,
 };
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;

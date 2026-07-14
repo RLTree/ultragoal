@@ -58,13 +58,13 @@ pub(crate) fn adversary_script(node_id: &str, mode: &str) -> String {
     let scope = format!("target/routine/{node_id}");
     let record = runner_record_script(node_id);
     match mode {
-        "complete" => format!("{record}; {}", report_script()),
+        "complete" => format!("{record}; {}", successful_exit_script()),
         "loop" => format!("{record}; trap '' TERM; while :; do :; done"),
         "overflow" => format!("{record}; trap '' TERM; while :; do printf '%04096d' 0; done"),
         "fork-new-pgid" | "fork-new-session" | "posix-spawn" | "vfork" | "raw-fork" => {
             format!(
                 "{record}; printf emitted > {scope}/report.emitted; {}; exec 1>&- 2>&-; (:); printf returned > {scope}/attempt.returned",
-                report_script()
+                successful_exit_script()
             )
         }
         _ => panic!("unsupported adversary mode {mode}"),
@@ -76,7 +76,7 @@ pub(crate) fn setup_failure_script(node_id: &str) -> String {
     let record = runner_record_script(node_id);
     format!(
         "{record}; i=0; while test \"$i\" -lt 500000; do i=$((i + 1)); done; {}",
-        report_script()
+        successful_exit_script()
     )
 }
 
@@ -98,7 +98,7 @@ pub(crate) fn ruby_mapping_adversary_arguments(
     let scope = root.join(format!("target/routine/{node_id}"));
     let effect = scope.join("mapping.effect");
     let script = format!(
-        "scope={scope:?}; File.write(File.join(scope, \"parent.pid\"), Process.pid.to_s); File.write(File.join(scope, \"parent.pgid\"), Process.getpgrp.to_s); File.write(File.join(scope, \"parent.sid\"), Process.pid.to_s); File.write(File.join(scope, \"activity\"), \"a\"); File.write(File.join(scope, \"ready\"), \"ready\"); require \"fiddle\"; handle=Fiddle.dlopen({library:?}); function=Fiddle::Function.new(handle[\"write_effect\"], [Fiddle::TYPE_VOIDP], Fiddle::TYPE_INT); raise \"effect failed\" unless function.call(Fiddle::Pointer[{effect:?}]) == 0; STDOUT.write(%Q({{\"schema_version\":\"RoutineCommandReport-v1\",\"request_id\":\"#{{ENV.fetch('HUL_ROUTINE_REQUEST_ID')}}\",\"protocol_id\":\"#{{ENV.fetch('HUL_ROUTINE_PROTOCOL_ID')}}\",\"intent_id\":\"#{{ENV.fetch('HUL_ROUTINE_INTENT_ID')}}\",\"node_id\":\"#{{ENV.fetch('HUL_ROUTINE_NODE_ID')}}\",\"outcome\":\"passed\",\"behavior_observed\":true}}))",
+        "scope={scope:?}; File.write(File.join(scope, \"parent.pid\"), Process.pid.to_s); File.write(File.join(scope, \"parent.pgid\"), Process.getpgrp.to_s); File.write(File.join(scope, \"parent.sid\"), Process.pid.to_s); File.write(File.join(scope, \"activity\"), \"a\"); File.write(File.join(scope, \"ready\"), \"ready\"); require \"fiddle\"; handle=Fiddle.dlopen({library:?}); function=Fiddle::Function.new(handle[\"write_effect\"], [Fiddle::TYPE_VOIDP], Fiddle::TYPE_INT); raise \"effect failed\" unless function.call(Fiddle::Pointer[{effect:?}]) == 0; STDOUT.write(\"child-authored-pass-ignored\")",
         scope = scope.to_string_lossy(),
         library = library.to_string_lossy(),
         effect = effect.to_string_lossy(),
@@ -121,7 +121,7 @@ pub(crate) fn ruby_process_creation_arguments(node_id: &str, mode: &str) -> Vec<
         _ => panic!("unsupported process creation mode {mode}"),
     };
     let script = format!(
-        "scope={scope:?}; File.write(File.join(scope, \"parent.pid\"), Process.pid.to_s); File.write(File.join(scope, \"parent.pgid\"), Process.getpgrp.to_s); File.write(File.join(scope, \"parent.sid\"), Process.pid.to_s); File.write(File.join(scope, \"activity\"), \"a\"); File.write(File.join(scope, \"ready\"), \"ready\"); File.write(File.join(scope, \"report.emitted\"), \"emitted\"); STDOUT.write(%Q({{\"schema_version\":\"RoutineCommandReport-v1\",\"request_id\":\"#{{ENV.fetch('HUL_ROUTINE_REQUEST_ID')}}\",\"protocol_id\":\"#{{ENV.fetch('HUL_ROUTINE_PROTOCOL_ID')}}\",\"intent_id\":\"#{{ENV.fetch('HUL_ROUTINE_INTENT_ID')}}\",\"node_id\":\"#{{ENV.fetch('HUL_ROUTINE_NODE_ID')}}\",\"outcome\":\"passed\",\"behavior_observed\":true}})); STDOUT.close; STDERR.close; Signal.trap(\"TERM\", \"IGNORE\"); {operation}; File.write(File.join(scope, \"attempt.returned\"), child.to_s); exit! 0",
+        "scope={scope:?}; File.write(File.join(scope, \"parent.pid\"), Process.pid.to_s); File.write(File.join(scope, \"parent.pgid\"), Process.getpgrp.to_s); File.write(File.join(scope, \"parent.sid\"), Process.pid.to_s); File.write(File.join(scope, \"activity\"), \"a\"); File.write(File.join(scope, \"ready\"), \"ready\"); File.write(File.join(scope, \"report.emitted\"), \"emitted\"); STDOUT.write(\"child-authored-pass-ignored\"); STDOUT.close; STDERR.close; Signal.trap(\"TERM\", \"IGNORE\"); {operation}; File.write(File.join(scope, \"attempt.returned\"), child.to_s); exit! 0",
     );
     vec!["--disable-gems".to_owned(), "-e".to_owned(), script]
 }
@@ -204,8 +204,8 @@ pub(crate) fn wait_for_joined_process(scope: &Path, target_pgid: i32) -> Reporte
     panic!("runner did not join existing PGID {target_pgid}: {scope:?}");
 }
 
-pub(crate) fn report_script() -> &'static str {
-    "printf '{\"schema_version\":\"RoutineCommandReport-v1\",\"request_id\":\"%s\",\"protocol_id\":\"%s\",\"intent_id\":\"%s\",\"node_id\":\"%s\",\"outcome\":\"passed\",\"behavior_observed\":true}' \"$HUL_ROUTINE_REQUEST_ID\" \"$HUL_ROUTINE_PROTOCOL_ID\" \"$HUL_ROUTINE_INTENT_ID\" \"$HUL_ROUTINE_NODE_ID\""
+pub(crate) fn successful_exit_script() -> &'static str {
+    ":"
 }
 
 pub(crate) fn invocations(

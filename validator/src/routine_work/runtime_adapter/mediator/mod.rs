@@ -26,12 +26,12 @@ use super::{begin_routine_mediation, environment_digest, read_authority_digest};
 use crate::routine_work::digest::{canonical, digest_of, framed, sha256, valid};
 use crate::routine_work::{
     LocalDirtyTree, RepoPath, RoutineBinding, RoutineError, RoutineErrorId, RoutinePlan,
+    RustSourceSyntaxOutcome, evaluate_rust_source_syntax_frame,
+    rust_source_syntax_observation_json,
 };
 
 use filesystem::{OutputConfinement, PinnedExecutable, ReadConfinement, RootAnchor};
-use outcome::{
-    CommandReport, ExecutedArtifact, ResultArtifactWire, ReuseArtifactWire, VerifiedReuseArtifact,
-};
+use outcome::{ExecutedArtifact, ResultArtifactWire, ReuseArtifactWire, VerifiedReuseArtifact};
 pub(crate) use outcome::{
     RoutineCancellation, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
     RoutineNodeMediation, RoutineReuseInput, RoutineRootGrant,
@@ -60,3 +60,7 @@ pub(crate) use intent_mediation::*;
 pub(crate) use no_op_mediation::*;
 pub(crate) use read_source_binding::*;
 pub(crate) use reuse_input_index::*;
+
+pub(super) fn validate_routine_program_path(path: &Path) -> Result<(), RoutineError> {
+    PinnedExecutable::open_unbound(path).map(|_| ())
+}

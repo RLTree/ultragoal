@@ -6,6 +6,7 @@ pub(crate) struct RoutineEffectIntent {
     pub(crate) intent_id: String,
     pub(crate) plan_order: usize,
     pub(crate) node_id: String,
+    pub(crate) behavior_id: String,
     pub(crate) selected_tool: String,
     pub(crate) tool_identity_sha256: String,
     pub(crate) program_path_hex: String,
@@ -39,6 +40,7 @@ impl RoutineEffectIntent {
         intent_id: String,
         plan_order: usize,
         node_id: String,
+        behavior_id: String,
         selected_tool: String,
         tool_identity_sha256: String,
         program_path_hex: String,
@@ -62,6 +64,7 @@ impl RoutineEffectIntent {
             intent_id,
             plan_order,
             node_id,
+            behavior_id,
             selected_tool,
             tool_identity_sha256,
             program_path_hex,
@@ -101,6 +104,9 @@ impl RoutineEffectIntent {
     }
     pub(crate) fn node_id(&self) -> &str {
         &self.node_id
+    }
+    pub(crate) fn behavior_id(&self) -> &str {
+        &self.behavior_id
     }
     pub(crate) fn selected_tool(&self) -> &str {
         &self.selected_tool

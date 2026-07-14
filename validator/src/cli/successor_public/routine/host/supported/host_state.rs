@@ -68,8 +68,15 @@ impl HostState {
         let bytes = read_bounded(&mut file, MAX_CACHE_BYTES)?;
         let envelope: CacheEnvelope =
             serde_json::from_slice(&bytes).map_err(|_| HostFailure::Invalid)?;
-        if serde_json::to_vec(&envelope).map_err(|_| HostFailure::Invalid)? != bytes
-            || envelope.schema_version != CACHE_SCHEMA
+        let canonical = serde_json::to_vec(&envelope).map_err(|_| HostFailure::Invalid)?;
+        if canonical != bytes {
+            return Err(HostFailure::Invalid);
+        }
+        if envelope.schema_version == RETIRED_CACHE_SCHEMA {
+            self.verify()?;
+            return Ok(None);
+        }
+        if envelope.schema_version != CACHE_SCHEMA
             || &envelope.binding != expected
             || decode_hex_exact(&envelope.nonce_hex, NONCE_BYTES).is_err()
             || envelope.artifact_sha256.is_empty()

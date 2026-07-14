@@ -5,9 +5,8 @@ use std::fs::{self, OpenOptions};
 use std::io::Write;
 use std::os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt, symlink};
 use std::path::{Path, PathBuf};
-use std::process::{Child, Command, Output, Stdio};
+use std::process::{Command, Output};
 use std::sync::atomic::{AtomicU64, Ordering};
-use ultragoal::context::ToolCapability;
 use ultragoal::routine_work::{
     CheckClass, CheckNode, ImpactGraph, PathMatcher, PathRoute, RepoPath, RunnerSpec,
 };

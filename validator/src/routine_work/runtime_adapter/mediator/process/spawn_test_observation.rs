@@ -32,6 +32,7 @@ pub(crate) enum SetupFailurePoint {
 }
 
 pub(crate) type ReaderHandle = JoinHandle<Result<Drained, RoutineError>>;
+pub(crate) type WriterHandle = JoinHandle<Result<(), RoutineError>>;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) struct ProcessGroupId(i32);
@@ -68,9 +69,11 @@ pub(crate) struct SpawnSetupGuard {
     pub(crate) process_group: Option<ProcessGroupId>,
     pub(crate) stdout: Option<ChildStdout>,
     pub(crate) stderr: Option<ChildStderr>,
+    pub(crate) stdin: Option<ChildStdin>,
     pub(crate) readers_done: Arc<AtomicBool>,
     pub(crate) stdout_reader: Option<ReaderHandle>,
     pub(crate) stderr_reader: Option<ReaderHandle>,
+    pub(crate) stdin_writer: Option<WriterHandle>,
     pub(crate) cleanup_required: bool,
 }
 
@@ -82,9 +85,11 @@ impl SpawnSetupGuard {
             process_group,
             stdout: None,
             stderr: None,
+            stdin: None,
             readers_done: Arc::new(AtomicBool::new(false)),
             stdout_reader: None,
             stderr_reader: None,
+            stdin_writer: None,
             cleanup_required: true,
         }
     }
@@ -111,6 +116,7 @@ impl SpawnSetupGuard {
                 .take()
                 .ok_or_else(|| mediator_error("mediator-stderr-unavailable"))?,
         );
+        self.stdin = child.stdin.take();
         Ok(())
     }
 
@@ -124,6 +130,7 @@ impl SpawnSetupGuard {
             readers_done: Arc::clone(&self.readers_done),
             stdout_reader: self.stdout_reader.take(),
             stderr_reader: self.stderr_reader.take(),
+            stdin_writer: self.stdin_writer.take(),
             cleanup_required: true,
         };
         self.cleanup_required = false;
@@ -142,8 +149,10 @@ impl Drop for SpawnSetupGuard {
         }
         self.stdout.take();
         self.stderr.take();
+        self.stdin.take();
         join_reader_best_effort(&mut self.stdout_reader);
         join_reader_best_effort(&mut self.stderr_reader);
+        join_writer_best_effort(&mut self.stdin_writer);
     }
 }
 
@@ -155,6 +164,7 @@ pub(crate) struct RunningProcess {
     pub(crate) readers_done: Arc<AtomicBool>,
     pub(crate) stdout_reader: Option<ReaderHandle>,
     pub(crate) stderr_reader: Option<ReaderHandle>,
+    pub(crate) stdin_writer: Option<WriterHandle>,
     pub(crate) cleanup_required: bool,
 }
 
@@ -170,7 +180,7 @@ impl RunningProcess {
         terminate_and_reap(self.child_mut(), process_group)
     }
 
-    pub(crate) fn join_readers(&mut self) -> Result<(Drained, Drained), RoutineError> {
+    pub(crate) fn join_io(&mut self) -> Result<(Drained, Drained), RoutineError> {
         self.readers_done.store(true, Ordering::Release);
         let stdout = self
             .stdout_reader
@@ -184,11 +194,20 @@ impl RunningProcess {
             .expect("stderr reader installed before setup handoff")
             .join()
             .map_err(|_| mediator_error("mediator-stderr-reader-failed"))??;
+        if let Some(writer) = self.stdin_writer.take() {
+            writer
+                .join()
+                .map_err(|_| mediator_error("mediator-stdin-writer-failed"))??;
+        }
         Ok((stdout, stderr))
     }
 
     pub(crate) fn disarm(&mut self) {
-        debug_assert!(self.stdout_reader.is_none() && self.stderr_reader.is_none());
+        debug_assert!(
+            self.stdout_reader.is_none()
+                && self.stderr_reader.is_none()
+                && self.stdin_writer.is_none()
+        );
         self.cleanup_required = false;
     }
 }
@@ -204,11 +223,18 @@ impl Drop for RunningProcess {
         }
         join_reader_best_effort(&mut self.stdout_reader);
         join_reader_best_effort(&mut self.stderr_reader);
+        join_writer_best_effort(&mut self.stdin_writer);
     }
 }
 
 pub(crate) fn join_reader_best_effort(reader: &mut Option<ReaderHandle>) {
     if let Some(reader) = reader.take() {
         let _ = reader.join();
+    }
+}
+
+pub(crate) fn join_writer_best_effort(writer: &mut Option<WriterHandle>) {
+    if let Some(writer) = writer.take() {
+        let _ = writer.join();
     }
 }

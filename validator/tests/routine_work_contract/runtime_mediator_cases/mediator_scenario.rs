@@ -149,15 +149,10 @@ pub(crate) fn fixture_for_tool(label: &str, dirty: bool, tool: &str) -> Mediator
 }
 
 pub(crate) fn command_script(node_id: &str) -> String {
-    format!(
-        "printf '%s' '{node_id}' > 'target/routine/{node_id}/result.txt'; printf '{{\"schema_version\":\"RoutineCommandReport-v1\",\"request_id\":\"%s\",\"protocol_id\":\"%s\",\"intent_id\":\"%s\",\"node_id\":\"%s\",\"outcome\":\"passed\",\"behavior_observed\":true}}' \"$HUL_ROUTINE_REQUEST_ID\" \"$HUL_ROUTINE_PROTOCOL_ID\" \"$HUL_ROUTINE_INTENT_ID\" \"$HUL_ROUTINE_NODE_ID\""
-    )
+    format!("printf '%s' '{node_id}' > 'target/routine/{node_id}/result.txt'")
 }
 
 pub(crate) fn command_file_script() -> Vec<u8> {
-    format!(
-        "node=$HUL_ROUTINE_NODE_ID; printf '%s' \"$node\" > \"target/routine/$node/result.txt\"; {}",
-        report_script()
-    )
-    .into_bytes()
+    b"node=$HUL_ROUTINE_NODE_ID; printf '%s' \"$node\" > \"target/routine/$node/result.txt\""
+        .to_vec()
 }

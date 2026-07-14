@@ -10,6 +10,7 @@ impl<'a> From<&'a BoundCatalogInvocation> for InvocationIdentity<'a> {
             definition_id: &value.definition_id,
             definition_sha256: &value.definition_sha256,
             node_id: &value.node_id,
+            behavior_id: &value.behavior_id,
             depends_on: &value.depends_on,
             selected_tool: &value.selected_tool,
             selected_tool_identity_sha256: &value.selected_tool_identity_sha256,

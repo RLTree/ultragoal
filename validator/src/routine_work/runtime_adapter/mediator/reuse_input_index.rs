@@ -43,7 +43,10 @@ pub(crate) fn verify_reuse_artifact(
     let Ok(wire) = serde_json::from_slice::<ReuseArtifactWire>(bytes) else {
         return Ok(None);
     };
-    if canonical(&wire)? != bytes || wire.state != "complete" {
+    if canonical(&wire)? != bytes
+        || wire.schema_version != "RoutineMediatedReuseArtifact-v2"
+        || wire.state != "complete"
+    {
         return Ok(None);
     }
     let artifact_sha256 = sha256(bytes);
@@ -65,6 +68,7 @@ pub(crate) fn verify_reuse_artifact(
         || wire.protocol_id != token.protocol_id()
         || wire.intent_id != token.intent().intent_id()
         || wire.node_id != token.intent().node_id()
+        || wire.behavior_id != token.intent().behavior_id()
         || wire.plan_order != token.intent().plan_order()
         || wire.context_id != context.context_id()
         || wire.candidate_id != plan.binding().candidate_id()
@@ -90,10 +94,11 @@ pub(crate) fn verify_reuse_artifact(
 
 pub(crate) fn result_matches_reuse(wire: &ReuseArtifactWire) -> bool {
     let result = &wire.result_artifact;
-    result.schema_version == "RoutineMediatedResultArtifact-v1"
+    result.schema_version == "RoutineMediatedResultArtifact-v2"
         && result.protocol_id == wire.protocol_id
         && result.intent_id == wire.intent_id
         && result.node_id == wire.node_id
+        && result.behavior_id == wire.behavior_id
         && result.plan_order == wire.plan_order
         && result.context_id == wire.context_id
         && result.candidate_id == wire.candidate_id
@@ -118,6 +123,7 @@ pub(crate) fn reuse_witness(wire: &ReuseArtifactWire) -> Result<String, RoutineE
         protocol_id: &'a str,
         intent_id: &'a str,
         node_id: &'a str,
+        behavior_id: &'a str,
         plan_order: usize,
         context_id: &'a str,
         candidate_id: &'a str,
@@ -133,12 +139,13 @@ pub(crate) fn reuse_witness(wire: &ReuseArtifactWire) -> Result<String, RoutineE
         result_artifact_sha256: &'a str,
     }
     digest_of(&Witness {
-        domain: "routine-mediated-reuse-witness-v1",
+        domain: "routine-mediated-reuse-witness-v2",
         schema_version: &wire.schema_version,
         state: &wire.state,
         protocol_id: &wire.protocol_id,
         intent_id: &wire.intent_id,
         node_id: &wire.node_id,
+        behavior_id: &wire.behavior_id,
         plan_order: wire.plan_order,
         context_id: &wire.context_id,
         candidate_id: &wire.candidate_id,

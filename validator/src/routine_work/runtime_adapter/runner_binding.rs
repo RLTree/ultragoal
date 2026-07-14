@@ -1,5 +1,9 @@
 use super::*;
 
+pub(crate) fn validate_immutable_routine_program(path: &Path) -> Result<(), RoutineError> {
+    mediator::validate_routine_program_path(path)
+}
+
 pub(crate) fn runner_identity(
     tool: &ToolCapability,
     tool_identity_sha256: String,
@@ -36,7 +40,9 @@ pub(crate) fn validate_bound_invocation(
     runner: &RunnerIdentity,
     check: &PlannedCheck,
 ) -> Result<(), RoutineError> {
-    if invocation.node_id != check.node_id()
+    if ![EXTERNAL_PROCESS_EXIT_BEHAVIOR, RUST_SOURCE_SYNTAX_BEHAVIOR]
+        .contains(&invocation.behavior_id.as_str())
+        || invocation.node_id != check.node_id()
         || invocation.tool_name != runner.tool_name
         || invocation.tool_identity_sha256 != runner.tool_identity_sha256
         || invocation.program_path_hex != runner.program_path_hex

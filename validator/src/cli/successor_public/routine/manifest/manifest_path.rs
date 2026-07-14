@@ -1,8 +1,10 @@
 use super::*;
 
 pub(crate) const MANIFEST_PATH: &str = "config/routine-public.json";
-pub(crate) const MANIFEST_SCHEMA: &str = "RoutinePublicProduction-v1";
+pub(crate) const MANIFEST_SCHEMA: &str = "RoutinePublicProduction-v2";
 pub(crate) const COMMAND_NAME: &str = "check-routine";
+pub(crate) const ROUTINE_BEHAVIOR: &str = "rust-source-syntax-v1";
+pub(crate) const ROUTINE_RUNNER: &str = "ultragoal";
 pub(crate) const MAX_MANIFEST_BYTES: u64 = 1024 * 1024;
 pub(crate) const MAX_NODES: usize = 4_096;
 pub(crate) const MAX_ROUTES: usize = 16_384;
@@ -32,22 +34,12 @@ pub(crate) struct CatalogBinding {
     pub(crate) byte_length: u64,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq)]
-#[serde(rename_all = "kebab-case")]
-pub(crate) enum RoutineAction {
-    Pass,
-    Fail,
-}
-
 #[derive(Clone, Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct ManifestNode {
     pub(crate) node_id: String,
     pub(crate) depends_on: Vec<String>,
-    pub(crate) primary_tool: String,
-    pub(crate) fallback_tool: Option<String>,
-    pub(crate) action: RoutineAction,
-    pub(crate) delay_seconds: u64,
+    pub(crate) behavior_id: String,
     pub(crate) read_sources: Vec<String>,
     pub(crate) timeout_ms: u64,
     pub(crate) output_budget_bytes: u64,
@@ -123,12 +115,7 @@ pub(crate) fn validate_raw(
     for node in &mut nodes {
         if !node_ids.insert(node.node_id.clone())
             || !node_case_ids.insert(node.node_id.to_ascii_lowercase())
-            || !allowed_tool(&node.primary_tool)
-            || node
-                .fallback_tool
-                .as_deref()
-                .is_some_and(|tool| !allowed_tool(tool) || tool == node.primary_tool)
-            || node.delay_seconds > 5
+            || node.behavior_id != ROUTINE_BEHAVIOR
             || !(1..=300_000).contains(&node.timeout_ms)
             || !(1..=16 * 1024 * 1024).contains(&node.output_budget_bytes)
             || node.read_sources.is_empty()

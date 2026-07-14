@@ -36,6 +36,7 @@ pub(crate) struct RoutineReadSource {
 #[derive(Debug, Eq, PartialEq, Serialize)]
 pub(crate) struct RoutineInvocationSpec {
     pub(crate) node_id: String,
+    pub(crate) behavior_id: String,
     pub(crate) tool_name: String,
     pub(crate) tool_identity_sha256: String,
     pub(crate) program_path_hex: String,
@@ -58,6 +59,7 @@ impl RoutineInvocationSpec {
     #[allow(clippy::too_many_arguments)]
     pub(crate) fn bound(
         node_id: String,
+        behavior_id: String,
         tool_name: String,
         tool_identity_sha256: String,
         program_path_hex: String,
@@ -75,6 +77,7 @@ impl RoutineInvocationSpec {
     ) -> Self {
         Self {
             node_id,
+            behavior_id,
             tool_name,
             tool_identity_sha256,
             program_path_hex,

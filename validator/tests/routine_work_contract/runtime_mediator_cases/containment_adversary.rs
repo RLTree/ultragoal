@@ -61,21 +61,8 @@ static void record_child(const char *scope) {
     write_number(scope, "child.sid", (long)getsid(0));
 }
 
-static const char *required_environment(const char *name) {
-    const char *value = getenv(name);
-    if (value == NULL || value[0] == '\0') _exit(85);
-    return value;
-}
-
-static void emit_report(void) {
-    int length = dprintf(
-        STDOUT_FILENO,
-        "{\"schema_version\":\"RoutineCommandReport-v1\",\"request_id\":\"%s\",\"protocol_id\":\"%s\",\"intent_id\":\"%s\",\"node_id\":\"%s\",\"outcome\":\"passed\",\"behavior_observed\":true}",
-        required_environment("HUL_ROUTINE_REQUEST_ID"),
-        required_environment("HUL_ROUTINE_PROTOCOL_ID"),
-        required_environment("HUL_ROUTINE_INTENT_ID"),
-        required_environment("HUL_ROUTINE_NODE_ID")
-    );
+static void emit_untrusted_stdout(void) {
+    int length = dprintf(STDOUT_FILENO, "child-authored-pass-ignored");
     if (length <= 0) _exit(86);
 }
 
@@ -122,7 +109,7 @@ int main(int argc, char **argv) {
 
     if (strcmp(mode, "complete") == 0) {
         write_text(scope, "substitute.effect", "unexpected");
-        emit_report();
+        emit_untrusted_stdout();
         return 0;
     }
     if (strcmp(mode, "loop") == 0) {
@@ -160,7 +147,7 @@ int main(int argc, char **argv) {
     }
 
     write_text(scope, "report.emitted", "emitted");
-    emit_report();
+    emit_untrusted_stdout();
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
     pid_t child = -1;

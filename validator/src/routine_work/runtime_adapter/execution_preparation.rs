@@ -75,6 +75,7 @@ pub(crate) fn prepare_routine_execution(
         bound.push(BoundIntent {
             plan_order,
             node_id: check.node_id().to_owned(),
+            behavior_id: invocation.behavior_id,
             selected_tool: invocation.tool_name,
             tool_identity_sha256: invocation.tool_identity_sha256,
             program_path_hex: invocation.program_path_hex,
@@ -127,6 +128,7 @@ pub(crate) fn prepare_routine_execution(
                 intent_id,
                 intent.plan_order,
                 intent.node_id,
+                intent.behavior_id,
                 intent.selected_tool,
                 intent.tool_identity_sha256,
                 intent.program_path_hex,

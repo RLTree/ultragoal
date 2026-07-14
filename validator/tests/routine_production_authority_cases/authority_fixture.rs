@@ -144,9 +144,7 @@ pub(crate) fn prepared_failure(fixture: &Fixture) -> PreparedRoutineExecution {
 }
 
 pub(crate) fn command_script(node_id: &str) -> String {
-    format!(
-        "printf '%s' '{node_id}' > 'target/routine/{node_id}/result.txt'; printf '{{\"schema_version\":\"RoutineCommandReport-v1\",\"request_id\":\"%s\",\"protocol_id\":\"%s\",\"intent_id\":\"%s\",\"node_id\":\"%s\",\"outcome\":\"passed\",\"behavior_observed\":true}}' \"$HUL_ROUTINE_REQUEST_ID\" \"$HUL_ROUTINE_PROTOCOL_ID\" \"$HUL_ROUTINE_INTENT_ID\" \"$HUL_ROUTINE_NODE_ID\""
-    )
+    format!("printf '%s' '{node_id}' > 'target/routine/{node_id}/result.txt'")
 }
 
 pub(crate) fn mediate(

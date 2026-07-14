@@ -48,7 +48,8 @@ pub(crate) fn bind_public_invocation(
         .map(|source| source.relative_path())
         .collect::<Vec<_>>();
     let expected_output = node.output_scope();
-    if invocation.selected_tool() != check.selected_tool()
+    if invocation.behavior_id() != manifest::ROUTINE_BEHAVIOR
+        || invocation.selected_tool() != check.selected_tool()
         || invocation.arguments() != node.canonical_arguments()
         || invocation.environment() != &expected_environment
         || observed_reads != expected_reads
@@ -68,7 +69,7 @@ pub(crate) fn bind_public_invocation(
         .collect::<Result<Vec<_>, _>>()
         .map_err(PublicFailure::Routine)?;
     let outputs = vec![RepoPath::parse(expected_output).map_err(PublicFailure::Routine)?];
-    bind_routine_invocation_with_environment_and_read_sources(
+    bind_rust_source_syntax_invocation(
         context,
         plan,
         invocation.node_id(),

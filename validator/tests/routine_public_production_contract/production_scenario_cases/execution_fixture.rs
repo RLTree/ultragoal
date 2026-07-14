@@ -6,10 +6,6 @@ pub(crate) static NEXT: AtomicU64 = AtomicU64::new(0);
 pub(crate) struct NodeSpec {
     pub id: &'static str,
     pub dependencies: &'static [&'static str],
-    pub primary: &'static str,
-    pub fallback: Option<&'static str>,
-    pub action: &'static str,
-    pub delay_seconds: u64,
     pub read_sources: &'static [&'static str],
 }
 
@@ -25,10 +21,6 @@ pub(crate) fn pass_node(id: &'static str, dependencies: &'static [&'static str])
     NodeSpec {
         id,
         dependencies,
-        primary: "bash",
-        fallback: None,
-        action: "pass",
-        delay_seconds: 0,
         read_sources: &["src/lib.rs"],
     }
 }
@@ -116,16 +108,6 @@ impl Fixture {
         command.args(args).output().unwrap()
     }
 
-    pub fn spawn(&self) -> Child {
-        let mut command = self.command();
-        command
-            .stdin(Stdio::null())
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .spawn()
-            .unwrap()
-    }
-
     pub fn value(output: &Output) -> Value {
         serde_json::from_slice(&output.stdout).unwrap_or_else(|error| {
             panic!(
@@ -143,10 +125,6 @@ impl Fixture {
 
     pub fn authority_root(&self) -> PathBuf {
         self.state_root().join("authority")
-    }
-
-    pub fn cache_path(&self) -> PathBuf {
-        self.state_root().join("adapter/reuse.json")
     }
 
     pub fn lock_path(&self) -> PathBuf {
@@ -169,8 +147,10 @@ impl Fixture {
     pub fn rewrite_catalog_with_arbitrary_script(&self) {
         let catalog_path = self.root.join("config/routines.json");
         let mut catalog: Value = serde_json::from_slice(&fs::read(&catalog_path).unwrap()).unwrap();
-        catalog["routines"][0]["primary"]["arguments"] =
-            json!(["-c", "touch target/routine/compile/false-pass"]);
+        catalog["routines"][0]["primary"] = json!({
+            "tool": "sh",
+            "arguments": ["-c", "touch target/routine/compile/false-pass"]
+        });
         let catalog = serde_json::to_vec(&catalog).unwrap();
         fs::write(&catalog_path, &catalog).unwrap();
         self.rebind_manifest_catalog(&catalog);
@@ -184,20 +164,11 @@ impl Fixture {
         fs::write(path, serde_json::to_vec(&manifest).unwrap()).unwrap();
     }
 
-    pub fn tamper_cache_field(&self, field: &str, value: Value) {
-        let path = self.cache_path();
-        let mut cache: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
-        cache["binding"][field] = value;
-        fs::write(path, serde_json::to_vec(&cache).unwrap()).unwrap();
-    }
-
-    pub fn forge_cache_artifact(&self) {
-        let path = self.cache_path();
-        let mut cache: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
-        let encoded = cache["artifacts_hex"][0].as_str().unwrap().to_owned();
-        let replacement = if encoded.starts_with('0') { '1' } else { '0' };
-        cache["artifacts_hex"][0] = Value::String(format!("{replacement}{}", &encoded[1..]));
-        fs::write(path, serde_json::to_vec(&cache).unwrap()).unwrap();
+    pub fn downgrade_manifest_schema(&self) {
+        let path = self.root.join("config/routine-public.json");
+        let mut manifest: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+        manifest["schema_version"] = Value::String("RoutinePublicProduction-v1".to_owned());
+        fs::write(path, serde_json::to_vec(&manifest).unwrap()).unwrap();
     }
 
     pub fn substitute_lock_with_symlink(&self) {
@@ -209,10 +180,6 @@ impl Fixture {
         symlink(&substitute, lock).unwrap();
     }
 
-    pub fn mutate_selected_source(&self, bytes: &[u8]) {
-        fs::write(self.root.join("src/lib.rs"), bytes).unwrap();
-    }
-
     pub(crate) fn command(&self) -> Command {
         let mut command = self.base_command();
         command.args(["--json", "check", "routine"]);
@@ -220,13 +187,14 @@ impl Fixture {
     }
 
     pub(crate) fn base_command(&self) -> Command {
-        let mut command = Command::new(env!("CARGO_BIN_EXE_ultragoal"));
+        let binary = Path::new(env!("CARGO_BIN_EXE_ultragoal"));
+        let mut command = Command::new(binary);
         command
             .env_clear()
             .env("HOME", &self.home)
             .env("LC_ALL", "C")
             .env("LANG", "C")
-            .env("PATH", "/usr/bin:/bin")
+            .env("PATH", binary.parent().unwrap())
             .env("GIT_CONFIG_GLOBAL", "/dev/null")
             .env("GIT_CONFIG_NOSYSTEM", "1")
             .env("GIT_OPTIONAL_LOCKS", "0")

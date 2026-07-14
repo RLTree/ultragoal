@@ -5,6 +5,7 @@ pub(crate) fn bind_routine_invocation_with_environment_inner(
     binding: RoutineBinding,
     check: &PlannedCheck,
     runner: RunnerIdentity,
+    behavior_id: String,
     arguments: Vec<String>,
     environment: BTreeMap<String, String>,
     read_source_paths: Vec<RepoPath>,
@@ -28,6 +29,7 @@ pub(crate) fn bind_routine_invocation_with_environment_inner(
     let read_authority_sha256 = read_authority_digest(&read_sources)?;
     Ok(RoutineInvocationSpec::bound(
         check.node_id().to_owned(),
+        behavior_id,
         runner.tool_name,
         runner.tool_identity_sha256,
         runner.program_path_hex,

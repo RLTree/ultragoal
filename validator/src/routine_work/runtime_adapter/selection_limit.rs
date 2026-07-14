@@ -11,6 +11,8 @@ pub(crate) const MAX_TIMEOUT_MS: u64 = 3_600_000;
 pub(crate) const MAX_OUTPUT_BUDGET_BYTES: u64 = 64 * 1024 * 1024;
 pub(crate) const REQUEST_DOMAIN: &[u8] = b"routine-effect-request-v1";
 pub(crate) const REQUEST_SEAL_DOMAIN: &[u8] = b"routine-effect-request-seal-v1";
+pub(crate) const EXTERNAL_PROCESS_EXIT_BEHAVIOR: &str = "external-process-exit-v1";
+pub(crate) const RUST_SOURCE_SYNTAX_BEHAVIOR: &str = "rust-source-syntax-v1";
 
 pub(crate) static NEXT_REQUEST_ISSUANCE: AtomicU64 = AtomicU64::new(1);
 
@@ -18,6 +20,7 @@ pub(crate) static NEXT_REQUEST_ISSUANCE: AtomicU64 = AtomicU64::new(1);
 pub(crate) struct BoundIntent {
     pub(crate) plan_order: usize,
     pub(crate) node_id: String,
+    pub(crate) behavior_id: String,
     pub(crate) selected_tool: String,
     pub(crate) tool_identity_sha256: String,
     pub(crate) program_path_hex: String,
@@ -101,6 +104,7 @@ pub(crate) fn bind_routine_invocation(
         binding,
         check,
         runner,
+        EXTERNAL_PROCESS_EXIT_BEHAVIOR.to_owned(),
         arguments,
         environment,
         Vec::new(),
@@ -129,6 +133,7 @@ pub(crate) fn bind_routine_invocation_with_environment(
         binding,
         check,
         runner,
+        EXTERNAL_PROCESS_EXIT_BEHAVIOR.to_owned(),
         arguments,
         environment,
         Vec::new(),
@@ -158,6 +163,7 @@ pub(crate) fn bind_routine_invocation_with_read_sources(
         binding,
         check,
         runner,
+        EXTERNAL_PROCESS_EXIT_BEHAVIOR.to_owned(),
         arguments,
         environment,
         read_sources,
@@ -188,6 +194,7 @@ pub(crate) fn bind_routine_invocation_with_environment_and_read_sources(
         binding,
         check,
         runner,
+        EXTERNAL_PROCESS_EXIT_BEHAVIOR.to_owned(),
         arguments,
         environment,
         read_sources,
@@ -195,4 +202,31 @@ pub(crate) fn bind_routine_invocation_with_environment_and_read_sources(
         output_budget_bytes,
         declared_output_scopes,
     )
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn bind_rust_source_syntax_invocation(
+    context: &LiveContext,
+    plan: &RoutinePlan,
+    node_id: &str,
+    arguments: Vec<String>,
+    environment: BTreeMap<String, String>,
+    read_sources: Vec<RepoPath>,
+    timeout_ms: u64,
+    output_budget_bytes: u64,
+    declared_output_scopes: Vec<RepoPath>,
+) -> Result<RoutineInvocationSpec, RoutineError> {
+    let mut invocation = bind_routine_invocation_with_environment_and_read_sources(
+        context,
+        plan,
+        node_id,
+        arguments,
+        environment,
+        read_sources,
+        timeout_ms,
+        output_budget_bytes,
+        declared_output_scopes,
+    )?;
+    invocation.behavior_id = RUST_SOURCE_SYNTAX_BEHAVIOR.to_owned();
+    Ok(invocation)
 }

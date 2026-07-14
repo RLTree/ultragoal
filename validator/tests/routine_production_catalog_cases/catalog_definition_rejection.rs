@@ -1,19 +1,7 @@
 use super::*;
 
 #[test]
-pub(crate) fn unknown_duplicate_ambiguous_and_missing_definitions_fail_closed() {
-    let case_aliased_fallback = AdoptedRoutineNode::new(
-        "verify",
-        vec!["syntax".to_owned()],
-        "true",
-        Some("TRUE".to_owned()),
-    )
-    .unwrap_err();
-    assert_eq!(
-        case_aliased_fallback.code(),
-        "catalog-adoption-runner-duplicated"
-    );
-
+pub(crate) fn unknown_duplicate_ambiguous_missing_and_behavior_substitutions_fail_closed() {
     let unknown = String::from_utf8(VALID_CATALOG.to_vec())
         .unwrap()
         .replacen("\"node_id\": \"verify\"", "\"node_id\": \"unknown\"", 1)
@@ -53,75 +41,13 @@ pub(crate) fn unknown_duplicate_ambiguous_and_missing_definitions_fail_closed() 
         "catalog-definition-set-inexact"
     );
 
-    let mut conflicting_runner_authority: serde_json::Value =
-        serde_json::from_slice(VALID_CATALOG).unwrap();
-    conflicting_runner_authority["routines"][1]["primary"]["program_sha256"] =
-        serde_json::json!(FALSE_PROGRAM_SHA256);
-    let conflicting_runner_authority =
-        serde_json::to_vec_pretty(&conflicting_runner_authority).unwrap();
-    let root = TestRoot::new(
-        "conflicting-runner-authority",
-        &conflicting_runner_authority,
-    );
+    let mut behavior: serde_json::Value = serde_json::from_slice(VALID_CATALOG).unwrap();
+    behavior["routines"][0]["behavior_id"] = serde_json::json!("shell-command-v1");
+    let behavior = serde_json::to_vec_pretty(&behavior).unwrap();
+    let root = TestRoot::new("behavior-substitution", &behavior);
     assert_eq!(
-        load_raw(
-            &root,
-            &conflicting_runner_authority,
-            full_adoption(&conflicting_runner_authority, CANDIDATE_ID),
-        ),
-        "catalog-runner-authority-ambiguous"
-    );
-
-    let mut case_alias_same_authority: serde_json::Value =
-        serde_json::from_slice(VALID_CATALOG).unwrap();
-    case_alias_same_authority["routines"][1]["primary"]["tool"] = serde_json::json!("TRUE");
-    let case_alias_same_authority = serde_json::to_vec_pretty(&case_alias_same_authority).unwrap();
-    let case_alias_adoption = |bytes: &[u8]| {
-        CatalogAdoption::new(
-            sha(bytes),
-            bytes.len() as u64,
-            GRAPH_ID,
-            CANDIDATE_ID,
-            vec![
-                AdoptedRoutineNode::new("syntax", Vec::<String>::new(), "true", None).unwrap(),
-                AdoptedRoutineNode::new(
-                    "verify",
-                    vec!["syntax".to_owned()],
-                    "TRUE",
-                    Some("false".to_owned()),
-                )
-                .unwrap(),
-            ],
-        )
-        .unwrap()
-    };
-    let root = TestRoot::new("case-alias-same-authority", &case_alias_same_authority);
-    assert_eq!(
-        load_raw(
-            &root,
-            &case_alias_same_authority,
-            case_alias_adoption(&case_alias_same_authority),
-        ),
-        "catalog-runner-spelling-ambiguous"
-    );
-
-    let mut case_alias_conflicting_authority: serde_json::Value =
-        serde_json::from_slice(&case_alias_same_authority).unwrap();
-    case_alias_conflicting_authority["routines"][1]["primary"]["program_sha256"] =
-        serde_json::json!(FALSE_PROGRAM_SHA256);
-    let case_alias_conflicting_authority =
-        serde_json::to_vec_pretty(&case_alias_conflicting_authority).unwrap();
-    let root = TestRoot::new(
-        "case-alias-conflicting-authority",
-        &case_alias_conflicting_authority,
-    );
-    assert_eq!(
-        load_raw(
-            &root,
-            &case_alias_conflicting_authority,
-            case_alias_adoption(&case_alias_conflicting_authority),
-        ),
-        "catalog-runner-spelling-ambiguous"
+        load_raw(&root, &behavior, full_adoption(&behavior, CANDIDATE_ID)),
+        "catalog-behavior-unsupported"
     );
 }
 
@@ -141,25 +67,15 @@ pub(crate) fn definition_candidate_input_and_dependency_drift_after_parse_are_re
         "catalog-sealed-file-changed"
     );
 
-    let root = TestRoot::new("runner-expectation-drift", VALID_CATALOG);
-    let catalog = load_full(&root, CANDIDATE_ID);
-    root.write_catalog(
-        &String::from_utf8(VALID_CATALOG.to_vec())
-            .unwrap()
-            .replacen(TRUE_PROGRAM_SHA256, FALSE_PROGRAM_SHA256, 1)
-            .into_bytes(),
-    );
-    assert_eq!(
-        catalog.verify_current().unwrap_err().code(),
-        "catalog-sealed-file-changed"
-    );
-
     let root = TestRoot::new("candidate-drift", VALID_CATALOG);
     let catalog = load_full(&root, CANDIDATE_ID);
-    let error = catalog
-        .bind_selected(request(&catalog, &root, OTHER_CANDIDATE_ID, false))
-        .unwrap_err();
-    assert_eq!(error.code(), "catalog-selection-binding-stale");
+    assert_eq!(
+        catalog
+            .bind_selected(request(&catalog, &root, OTHER_CANDIDATE_ID, false))
+            .unwrap_err()
+            .code(),
+        "catalog-selection-binding-stale"
+    );
 
     let root = TestRoot::new("input-drift", VALID_CATALOG);
     let catalog = load_full(&root, CANDIDATE_ID);
@@ -171,7 +87,11 @@ pub(crate) fn definition_candidate_input_and_dependency_drift_after_parse_are_re
         CANDIDATE_ID,
         PLAN_ID,
         stale_selected,
-        vec![runner("true", TRUE_TOOL_ID, Path::new("/usr/bin/true"))],
+        vec![runner(
+            "ultragoal",
+            TRUE_TOOL_ID,
+            Path::new("/usr/bin/true"),
+        )],
     )
     .unwrap();
     assert_eq!(
@@ -189,7 +109,11 @@ pub(crate) fn definition_candidate_input_and_dependency_drift_after_parse_are_re
             CANDIDATE_ID,
             PLAN_ID,
             vec![verify_only],
-            vec![runner("true", TRUE_TOOL_ID, Path::new("/usr/bin/true"))],
+            vec![runner(
+                "ultragoal",
+                TRUE_TOOL_ID,
+                Path::new("/usr/bin/true")
+            )],
         )
         .unwrap_err()
         .code(),

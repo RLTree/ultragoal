@@ -88,7 +88,11 @@ pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
         CANDIDATE_ID,
         PLAN_ID,
         stale,
-        vec![runner("true", TRUE_TOOL_ID, Path::new("/usr/bin/true"))],
+        vec![runner(
+            "ultragoal",
+            TRUE_TOOL_ID,
+            Path::new("/usr/bin/true"),
+        )],
     )
     .unwrap();
     assert_eq!(
@@ -110,7 +114,11 @@ pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
         CANDIDATE_ID,
         PLAN_ID,
         stale,
-        vec![runner("true", TRUE_TOOL_ID, Path::new("/usr/bin/true"))],
+        vec![runner(
+            "ultragoal",
+            TRUE_TOOL_ID,
+            Path::new("/usr/bin/true"),
+        )],
     )
     .unwrap();
     assert_eq!(
@@ -130,7 +138,11 @@ pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
         CANDIDATE_ID,
         PLAN_ID,
         stale,
-        vec![runner("true", TRUE_TOOL_ID, Path::new("/usr/bin/true"))],
+        vec![runner(
+            "ultragoal",
+            TRUE_TOOL_ID,
+            Path::new("/usr/bin/true"),
+        )],
     )
     .unwrap();
     assert_eq!(
@@ -155,49 +167,11 @@ pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
 }
 
 #[test]
-pub(crate) fn catalog_argv_environment_input_and_output_bounds_are_enforced() {
-    let arguments = (0..129)
-        .map(|index| format!("arg-{index}"))
-        .collect::<Vec<_>>();
-    let bytes = one_node_catalog(
-        &arguments,
-        &[],
-        &["src/input.txt".to_owned()],
-        &["target/routine-syntax".to_owned()],
-        ".",
-    );
-    let root = TestRoot::new("argv-bound", &bytes);
-    assert_eq!(
-        load_raw(&root, &bytes, one_node_adoption(&bytes)),
-        "catalog-arguments-invalid"
-    );
-
-    let environment = (0..62)
-        .map(|index| (format!("ROUTINE_{index}"), "v".to_owned()))
-        .collect::<Vec<_>>();
-    let bytes = one_node_catalog(
-        &["--version".to_owned()],
-        &environment,
-        &["src/input.txt".to_owned()],
-        &["target/routine-syntax".to_owned()],
-        ".",
-    );
-    let root = TestRoot::new("environment-bound", &bytes);
-    assert_eq!(
-        load_raw(&root, &bytes, one_node_adoption(&bytes)),
-        "catalog-environment-invalid"
-    );
-
+pub(crate) fn catalog_input_and_output_bounds_are_enforced() {
     let reads = (0..129)
         .map(|index| format!("src/input-{index}.txt"))
         .collect::<Vec<_>>();
-    let bytes = one_node_catalog(
-        &["--version".to_owned()],
-        &[],
-        &reads,
-        &["target/routine-syntax".to_owned()],
-        ".",
-    );
+    let bytes = one_node_catalog(&reads, &["target/routine-syntax".to_owned()]);
     let root = TestRoot::new("read-bound", &bytes);
     assert_eq!(
         load_raw(&root, &bytes, one_node_adoption(&bytes)),
@@ -207,13 +181,7 @@ pub(crate) fn catalog_argv_environment_input_and_output_bounds_are_enforced() {
     let outputs = (0..129)
         .map(|index| format!("target/routine-{index}"))
         .collect::<Vec<_>>();
-    let bytes = one_node_catalog(
-        &["--version".to_owned()],
-        &[],
-        &["src/input.txt".to_owned()],
-        &outputs,
-        ".",
-    );
+    let bytes = one_node_catalog(&["src/input.txt".to_owned()], &outputs);
     let root = TestRoot::new("output-bound", &bytes);
     assert_eq!(
         load_raw(&root, &bytes, one_node_adoption(&bytes)),
@@ -233,7 +201,7 @@ pub(crate) fn catalog_argv_environment_input_and_output_bounds_are_enforced() {
             oversized_catalog.len() as u64,
             GRAPH_ID,
             CANDIDATE_ID,
-            vec![AdoptedRoutineNode::new("syntax", Vec::<String>::new(), "true", None).unwrap()],
+            vec![AdoptedRoutineNode::new("syntax", Vec::<String>::new()).unwrap()],
         )
         .unwrap_err()
         .code(),

@@ -59,24 +59,13 @@ pub(crate) struct OutputFileRecord {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
-pub(crate) struct CommandReport {
-    pub(crate) schema_version: String,
-    pub(crate) request_id: String,
-    pub(crate) protocol_id: String,
-    pub(crate) intent_id: String,
-    pub(crate) node_id: String,
-    pub(crate) outcome: String,
-    pub(crate) behavior_observed: bool,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
 pub(crate) struct ResultArtifactWire {
     pub(crate) schema_version: String,
     pub(crate) request_id: String,
     pub(crate) protocol_id: String,
     pub(crate) intent_id: String,
     pub(crate) node_id: String,
+    pub(crate) behavior_id: String,
     pub(crate) plan_order: usize,
     pub(crate) context_id: String,
     pub(crate) candidate_id: String,
@@ -100,6 +89,7 @@ pub(crate) struct ReuseArtifactWire {
     pub(crate) protocol_id: String,
     pub(crate) intent_id: String,
     pub(crate) node_id: String,
+    pub(crate) behavior_id: String,
     pub(crate) plan_order: usize,
     pub(crate) context_id: String,
     pub(crate) candidate_id: String,

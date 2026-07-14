@@ -1,3 +1,4 @@
+use super::super::{EXTERNAL_PROCESS_EXIT_BEHAVIOR, RUST_SOURCE_SYNTAX_BEHAVIOR};
 use super::*;
 
 pub(crate) fn validate_grant(
@@ -143,7 +144,13 @@ pub(crate) fn validate_intent(
         .tool(check.selected_tool())
         .filter(|tool| tool.available)
         .ok_or_else(|| mediator_error("mediator-runner-unavailable"))?;
-    if intent.selected_tool() != check.selected_tool()
+    let behavior_valid = intent.behavior_id() == EXTERNAL_PROCESS_EXIT_BEHAVIOR
+        || (intent.behavior_id() == RUST_SOURCE_SYNTAX_BEHAVIOR
+            && intent.selected_tool() == "ultragoal"
+            && intent.argv() == ["ultragoal", "--json", "check", "routine"]
+            && !intent.read_sources().is_empty());
+    if !behavior_valid
+        || intent.selected_tool() != check.selected_tool()
         || intent.tool_identity_sha256() != check.selected_tool_identity()
         || digest_of(tool)? != intent.tool_identity_sha256()
         || intent.input_id() != check.input_id()
@@ -180,6 +187,7 @@ pub(crate) fn execution_environment(
         ("HUL_ROUTINE_PROTOCOL_ID", token.protocol_id()),
         ("HUL_ROUTINE_INTENT_ID", token.intent().intent_id()),
         ("HUL_ROUTINE_NODE_ID", token.intent().node_id()),
+        ("HUL_ROUTINE_BEHAVIOR_ID", token.intent().behavior_id()),
     ] {
         if environment
             .insert(key.to_owned(), value.to_owned())
@@ -189,22 +197,4 @@ pub(crate) fn execution_environment(
         }
     }
     Ok(environment)
-}
-
-pub(crate) fn parse_command_report(
-    bytes: &[u8],
-    token: &RoutineMediatedIntent,
-) -> Result<CommandReport, RoutineError> {
-    let report: CommandReport = serde_json::from_slice(bytes)
-        .map_err(|_| mediator_error("mediator-command-report-invalid"))?;
-    if canonical(&report)? != bytes
-        || report.schema_version != "RoutineCommandReport-v1"
-        || report.request_id != token.request_id()
-        || report.protocol_id != token.protocol_id()
-        || report.intent_id != token.intent().intent_id()
-        || report.node_id != token.intent().node_id()
-    {
-        return Err(mediator_error("mediator-command-report-binding-invalid"));
-    }
-    Ok(report)
 }

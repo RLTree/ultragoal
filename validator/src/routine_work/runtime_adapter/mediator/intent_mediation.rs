@@ -1,3 +1,4 @@
+use super::super::{EXTERNAL_PROCESS_EXIT_BEHAVIOR, RUST_SOURCE_SYNTAX_BEHAVIOR};
 use super::*;
 
 pub(crate) fn mediate_intent(
@@ -55,8 +56,20 @@ pub(crate) fn mediate_intent(
     {
         return Err(mediator_error("mediator-production-reuse-artifact-missing"));
     }
-    attempt.prepare_spawn()?;
     let environment = execution_environment(token)?;
+    let framed_input = if token.intent().behavior_id() == RUST_SOURCE_SYNTAX_BEHAVIOR {
+        Some(reads.rust_source_syntax_frame(&root)?)
+    } else if token.intent().behavior_id() == EXTERNAL_PROCESS_EXIT_BEHAVIOR {
+        None
+    } else {
+        return Err(mediator_error("mediator-behavior-unsupported"));
+    };
+    let expected_behavior_stdout = framed_input
+        .as_deref()
+        .map(expected_rust_source_syntax_stdout)
+        .transpose()?;
+    let framed_input_sha256 = framed_input.as_deref().map(sha256);
+    attempt.prepare_spawn()?;
     let observation = process::execute(
         &program,
         &root,
@@ -64,6 +77,7 @@ pub(crate) fn mediate_intent(
         &reads,
         token.intent().argv(),
         &environment,
+        framed_input,
         Duration::from_millis(token.intent().timeout_ms()),
         token.intent().output_budget_bytes(),
         cancellation,
@@ -106,7 +120,15 @@ pub(crate) fn mediate_intent(
             started: observation.started,
         });
     }
-    let report = parse_command_report(&observation.stdout, token)?;
+    if expected_behavior_stdout.as_ref().is_some_and(|expected| {
+        observation.stdout != *expected || observation.stderr_sha256 != sha256(&[])
+    }) {
+        return Ok(IntentResult::Incomplete {
+            disposition: RoutineNodeDisposition::Failed,
+            failure_code: "MEDIATOR-BEHAVIOR-OBSERVATION-INVALID",
+            started: true,
+        });
+    }
     let output_files = outputs.capture()?;
     let artifact_bytes = output_files
         .values()
@@ -131,23 +153,19 @@ pub(crate) fn mediate_intent(
     validate_snapshot(context, snapshot_id)?;
     let behavior_sha256 = framed(&[
         RESULT_DOMAIN,
+        token.intent().behavior_id().as_bytes(),
+        framed_input_sha256.as_deref().unwrap_or("none").as_bytes(),
         &observation.stdout,
         observation.stderr_sha256.as_bytes(),
         digest_of(&output_files)?.as_bytes(),
     ]);
-    if report.outcome != "passed" || !report.behavior_observed {
-        return Ok(IntentResult::Incomplete {
-            disposition: RoutineNodeDisposition::Failed,
-            failure_code: "MEDIATOR-REPORT-NOT-PASSED",
-            started: true,
-        });
-    }
     let result = ResultArtifactWire {
-        schema_version: "RoutineMediatedResultArtifact-v1".to_owned(),
+        schema_version: "RoutineMediatedResultArtifact-v2".to_owned(),
         request_id: token.request_id().to_owned(),
         protocol_id: token.protocol_id().to_owned(),
         intent_id: token.intent().intent_id().to_owned(),
         node_id: token.intent().node_id().to_owned(),
+        behavior_id: token.intent().behavior_id().to_owned(),
         plan_order: token.intent().plan_order(),
         context_id: context.context_id().to_owned(),
         candidate_id: plan.binding().candidate_id().to_owned(),
@@ -165,11 +183,12 @@ pub(crate) fn mediate_intent(
     let result_bytes = canonical(&result)?;
     let result_sha256 = sha256(&result_bytes);
     let mut reuse = ReuseArtifactWire {
-        schema_version: "RoutineMediatedReuseArtifact-v1".to_owned(),
+        schema_version: "RoutineMediatedReuseArtifact-v2".to_owned(),
         state: "complete".to_owned(),
         protocol_id: token.protocol_id().to_owned(),
         intent_id: token.intent().intent_id().to_owned(),
         node_id: token.intent().node_id().to_owned(),
+        behavior_id: token.intent().behavior_id().to_owned(),
         plan_order: token.intent().plan_order(),
         context_id: context.context_id().to_owned(),
         candidate_id: plan.binding().candidate_id().to_owned(),
@@ -191,4 +210,14 @@ pub(crate) fn mediate_intent(
         result_sha256,
         reuse_bytes: canonical(&reuse)?,
     }))
+}
+
+fn expected_rust_source_syntax_stdout(frame: &[u8]) -> Result<Vec<u8>, RoutineError> {
+    let RustSourceSyntaxOutcome::Passed(observation) = evaluate_rust_source_syntax_frame(frame)
+    else {
+        return Err(mediator_error("mediator-rust-source-behavior-refused"));
+    };
+    let mut bytes = rust_source_syntax_observation_json(&observation);
+    bytes.push(b'\n');
+    Ok(bytes)
 }

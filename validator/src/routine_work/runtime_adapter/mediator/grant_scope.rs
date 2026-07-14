@@ -156,7 +156,7 @@ pub(crate) fn preflight_production_reuse_input(
             .map_err(|_| mediator_error("mediator-production-reuse-input-malformed"))?;
         let intent = known.get(wire.intent_id.as_str());
         if canonical(&wire)?.as_slice() != bytes.as_slice()
-            || wire.schema_version != "RoutineMediatedReuseArtifact-v1"
+            || wire.schema_version != "RoutineMediatedReuseArtifact-v2"
             || wire.state != "complete"
             || wire.protocol_id != request.protocol_id
             || intent.is_none()
@@ -167,6 +167,7 @@ pub(crate) fn preflight_production_reuse_input(
         }
         let intent = intent.expect("checked exact request intent");
         if wire.node_id != intent.node_id()
+            || wire.behavior_id != intent.behavior_id()
             || wire.plan_order != intent.plan_order()
             || wire.context_id != request.context_id()
             || wire.candidate_id != request.candidate_id()

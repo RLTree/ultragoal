@@ -9,9 +9,6 @@ pub(crate) fn omitted_or_injected_transitive_inputs_and_definition_only_targets_
     rows[1] = SelectedRoutineNode::new(
         "verify",
         vec!["syntax".to_owned()],
-        "true",
-        TRUE_TOOL_ID,
-        false,
         sha(b"verify input identity"),
         vec![input(&root, "src/input.txt")],
     )
@@ -22,7 +19,11 @@ pub(crate) fn omitted_or_injected_transitive_inputs_and_definition_only_targets_
         CANDIDATE_ID,
         PLAN_ID,
         rows,
-        vec![runner("true", TRUE_TOOL_ID, Path::new("/usr/bin/true"))],
+        vec![runner(
+            "ultragoal",
+            TRUE_TOOL_ID,
+            Path::new("/usr/bin/true"),
+        )],
     )
     .unwrap();
     assert_eq!(
@@ -51,8 +52,8 @@ pub(crate) fn omitted_or_injected_transitive_inputs_and_definition_only_targets_
         PLAN_ID,
         selected(&root, false),
         vec![
-            runner("true", TRUE_TOOL_ID, Path::new("/usr/bin/true")),
-            runner("false", FALSE_TOOL_ID, Path::new("/usr/bin/false")),
+            runner("ultragoal", TRUE_TOOL_ID, Path::new("/usr/bin/true")),
+            runner("other", OTHER_CANDIDATE_ID, Path::new("/usr/bin/false")),
         ],
     )
     .unwrap_err();
@@ -77,7 +78,7 @@ pub(crate) fn parse_query_and_refusal_paths_are_recursively_zero_write() {
 
     let metadata = fs::metadata("/usr/bin/true").unwrap();
     let forged = RunnerObservation::new(
-        "true",
+        "ultragoal",
         TRUE_TOOL_ID,
         "/usr/bin/true",
         sha(b"forged"),

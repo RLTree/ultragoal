@@ -4,6 +4,7 @@
 //! receipt persistence, and claim decisions remain root-owned integration work.
 
 mod authority;
+mod behavior;
 mod binding;
 mod catalog;
 mod digest;
@@ -17,6 +18,11 @@ mod reuse;
 mod runtime_adapter;
 mod snapshot;
 
+pub use behavior::{
+    RustSourceFrameInput, RustSourceSyntaxError, RustSourceSyntaxErrorKind,
+    RustSourceSyntaxObservation, RustSourceSyntaxOutcome, encode_rust_source_syntax_frame,
+    evaluate_rust_source_syntax_frame, rust_source_syntax_observation_json,
+};
 pub use binding::{BoundTool, RoutineBinding};
 pub use error::{RoutineError, RoutineErrorId};
 pub use local::LocalDirtyTree;
@@ -45,8 +51,9 @@ pub(crate) use catalog::{
 pub(crate) use runtime_adapter::{
     PreparedRoutineExecution, ProductionRoutineIssuer, RoutineAdapterSpec, RoutineCancellation,
     RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutineReuseInput, bind_routine_invocation_with_environment_and_read_sources,
+    RoutineReuseInput, bind_rust_source_syntax_invocation,
     mediate_prepared_routine_execution_production, prepare_routine_execution,
+    validate_immutable_routine_program,
 };
 
 #[cfg(test)]

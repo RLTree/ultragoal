@@ -52,7 +52,11 @@ impl ProductionRoutineCatalog {
         let mut invocations = Vec::with_capacity(request.selected.len());
         let mut read_seals = Vec::new();
         let mut output_seals = Vec::new();
-        let mut runner_seals = BTreeMap::<String, SealedFile>::new();
+        let runner = request
+            .runners
+            .get(ROUTINE_RUNNER)
+            .ok_or_else(|| error("catalog-selection-runner-unobserved"))?;
+        let runner_seal = capture_program(runner)?;
 
         for selected in &request.selected {
             let definition = self
@@ -62,28 +66,6 @@ impl ProductionRoutineCatalog {
             if selected.depends_on != definition.depends_on {
                 return Err(error("catalog-selection-dependencies-stale"));
             }
-            let recipe = definition.recipe(selected.used_fallback)?;
-            if selected.selected_tool != recipe.tool {
-                return Err(error("catalog-selection-runner-mismatch"));
-            }
-            if selected.selected_tool_identity_sha256 != recipe.tool_identity_sha256 {
-                return Err(error("catalog-selection-runner-authority-stale"));
-            }
-            let runner = request
-                .runners
-                .get(&selected.selected_tool)
-                .ok_or_else(|| error("catalog-selection-runner-unobserved"))?;
-            if runner.tool_identity_sha256 != recipe.tool_identity_sha256
-                || runner.executable_path != recipe.executable_path
-                || runner.program_sha256 != recipe.program_sha256
-                || runner.program_byte_length != recipe.program_byte_length
-                || runner.program_unix_mode != recipe.program_unix_mode
-            {
-                return Err(error("catalog-runner-authority-stale"));
-            }
-            let runner_seal = capture_program(runner)?;
-            runner_seals.insert(selected.selected_tool.clone(), runner_seal.clone());
-
             if selected.transitive_inputs.len() != definition.read_sources.len()
                 || selected
                     .transitive_inputs
@@ -122,22 +104,16 @@ impl ProductionRoutineCatalog {
                 output_seals.push(seal);
             }
 
-            let program_parent = recipe
+            let program_parent = runner
                 .executable_path
                 .parent()
                 .and_then(Path::to_str)
                 .ok_or_else(|| error("catalog-runner-parent-invalid"))?;
-            let mut environment = BTreeMap::from([
+            let environment = BTreeMap::from([
                 ("LANG".to_owned(), "C".to_owned()),
                 ("LC_ALL".to_owned(), "C".to_owned()),
                 ("PATH".to_owned(), program_parent.to_owned()),
             ]);
-            for (key, value) in &definition.environment {
-                if environment.insert(key.clone(), value.clone()).is_some() {
-                    return Err(error("catalog-environment-default-override"));
-                }
-            }
-            validate_bound_environment(&environment)?;
 
             let mut invocation = BoundCatalogInvocation {
                 invocation_id: String::new(),
@@ -148,16 +124,20 @@ impl ProductionRoutineCatalog {
                 definition_id: definition.definition_id.clone(),
                 definition_sha256: definition.definition_sha256.clone(),
                 node_id: definition.node_id.clone(),
+                behavior_id: definition.behavior_id.clone(),
                 depends_on: definition.depends_on.iter().cloned().collect(),
-                selected_tool: recipe.tool.clone(),
-                selected_tool_identity_sha256: recipe.tool_identity_sha256.clone(),
-                used_fallback: selected.used_fallback,
+                selected_tool: ROUTINE_RUNNER.to_owned(),
+                selected_tool_identity_sha256: runner.tool_identity_sha256.clone(),
+                used_fallback: false,
                 input_id: selected.input_id.clone(),
-                program_path_hex: hex_path(&recipe.executable_path)?,
-                program_sha256: recipe.program_sha256.clone(),
-                program_byte_length: recipe.program_byte_length,
-                program_unix_mode: recipe.program_unix_mode,
-                arguments: recipe.arguments.clone(),
+                program_path_hex: hex_path(&runner.executable_path)?,
+                program_sha256: runner.program_sha256.clone(),
+                program_byte_length: runner.program_byte_length,
+                program_unix_mode: runner.program_unix_mode,
+                arguments: ROUTINE_ARGUMENTS
+                    .iter()
+                    .map(|value| (*value).to_owned())
+                    .collect(),
                 environment,
                 read_sources: bound_reads,
                 timeout_ms: definition.timeout_ms,
@@ -174,9 +154,7 @@ impl ProductionRoutineCatalog {
         for seal in &read_seals {
             seal.verify_current(MAX_READ_SOURCE_BYTES)?;
         }
-        for seal in runner_seals.values() {
-            seal.verify_current(MAX_READ_SOURCE_BYTES)?;
-        }
+        runner_seal.verify_current(MAX_READ_SOURCE_BYTES)?;
         for seal in &output_seals {
             seal.verify_current()?;
         }
