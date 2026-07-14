@@ -10,10 +10,10 @@ mod capture;
 #[path = "../src/routine_work/mod.rs"]
 mod routine_work;
 
-#[path = "routine_work_contract/contract.rs"]
-mod contract;
 #[path = "routine_work_contract/authority_ledger_controls.rs"]
 mod authority_ledger_controls;
+#[path = "routine_work_contract/contract.rs"]
+mod contract;
 #[path = "routine_work_contract/current_path_controls.rs"]
 mod current_path_controls;
 #[path = "routine_work_contract/current_path_fixture.rs"]

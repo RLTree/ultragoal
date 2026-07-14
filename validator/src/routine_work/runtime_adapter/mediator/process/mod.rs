@@ -20,12 +20,12 @@ use crate::routine_work::{RoutineError, RoutineErrorId};
 use super::filesystem::{OutputConfinement, PinnedExecutable, ReadConfinement, RootAnchor};
 use super::outcome::RoutineCancellation;
 
-#[cfg(target_os = "macos")]
-#[path = "child_authority_channel.rs"]
-mod child_authority_channel;
 #[cfg(test)]
 #[path = "broker_gate_probe.rs"]
 mod broker_gate_probe;
+#[cfg(target_os = "macos")]
+#[path = "child_authority_channel.rs"]
+mod child_authority_channel;
 #[path = "process_execution.rs"]
 mod process_execution;
 #[path = "process_group_observation.rs"]
@@ -37,10 +37,10 @@ mod process_output_drain;
 #[path = "spawn_test_observation.rs"]
 mod spawn_test_observation;
 
-#[cfg(target_os = "macos")]
-pub(crate) use child_authority_channel::*;
 #[cfg(test)]
 pub(crate) use broker_gate_probe::*;
+#[cfg(target_os = "macos")]
+pub(crate) use child_authority_channel::*;
 pub(crate) use process_execution::*;
 pub(crate) use process_group_observation::*;
 pub(crate) use process_input_write::*;
