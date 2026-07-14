@@ -118,8 +118,8 @@ fn capture_runtime_executable(
     file: &std::fs::File,
     path: &Path,
 ) -> Result<(RuntimeExecutableIdentity, String, bool), DistributionError> {
-    let path_before = std::fs::symlink_metadata(path)
-        .map_err(|_| error(DistributionErrorId::ObjectChanged))?;
+    let path_before =
+        std::fs::symlink_metadata(path).map_err(|_| error(DistributionErrorId::ObjectChanged))?;
     let descriptor_before = file
         .metadata()
         .map_err(|_| error(DistributionErrorId::UnsafeObject))?;
@@ -133,12 +133,15 @@ fn capture_runtime_executable(
     let descriptor_after = file
         .metadata()
         .map_err(|_| error(DistributionErrorId::UnsafeObject))?;
-    let path_after = std::fs::symlink_metadata(path)
-        .map_err(|_| error(DistributionErrorId::ObjectChanged))?;
+    let path_after =
+        std::fs::symlink_metadata(path).map_err(|_| error(DistributionErrorId::ObjectChanged))?;
     validate_runtime_executable(&path_after)?;
     if !same_runtime_object(&descriptor_before, &descriptor_after)
         || !same_runtime_object(&descriptor_after, &path_after)
-        || path.canonicalize().map_err(|_| error(DistributionErrorId::ObjectChanged))? != path
+        || path
+            .canonicalize()
+            .map_err(|_| error(DistributionErrorId::ObjectChanged))?
+            != path
     {
         return Err(error(DistributionErrorId::ObjectChanged));
     }
@@ -195,10 +198,7 @@ fn identity_from(metadata: &std::fs::Metadata) -> RuntimeExecutableIdentity {
 }
 
 #[cfg(unix)]
-fn digest_runtime_executable(
-    file: &std::fs::File,
-    len: u64,
-) -> Result<String, DistributionError> {
+fn digest_runtime_executable(file: &std::fs::File, len: u64) -> Result<String, DistributionError> {
     use std::os::unix::fs::FileExt;
     let mut offset = 0_u64;
     let mut bytes = Vec::with_capacity(len as usize);

@@ -37,7 +37,10 @@ fn replace_with_same_bytes(path: &std::path::Path, suffix: &str) {
     std::fs::write(&replacement, bytes).unwrap();
     std::fs::set_permissions(&replacement, std::fs::Permissions::from_mode(0o755)).unwrap();
     let replacement_meta = std::fs::symlink_metadata(&replacement).unwrap();
-    assert_ne!((before.dev(), before.ino()), (replacement_meta.dev(), replacement_meta.ino()));
+    assert_ne!(
+        (before.dev(), before.ino()),
+        (replacement_meta.dev(), replacement_meta.ino())
+    );
     std::fs::rename(replacement, path).unwrap();
     let after = std::fs::symlink_metadata(path).unwrap();
     assert_ne!((before.dev(), before.ino()), (after.dev(), after.ino()));
