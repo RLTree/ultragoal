@@ -12,6 +12,7 @@ use super::execution_fixture::{
     syntax_evidence,
 };
 use std::fs;
+use std::path::PathBuf;
 use std::time::{Duration, Instant};
 
 #[cfg(target_os = "macos")]
@@ -154,7 +155,16 @@ fn special_result_artifacts_fail_before_evidence_minting() {
     let fifo = repo.root().join("routine-cache/fifo");
     let name = CString::new(fifo.as_os_str().as_bytes()).unwrap();
     assert_eq!(unsafe { libc::mkfifo(name.as_ptr(), 0o600) }, 0);
-    let _socket = UnixListener::bind(repo.root().join("routine-cache/socket")).unwrap();
+    let alias = std::env::temp_dir().join(format!("result-alias-{}", std::process::id()));
+    std::os::unix::fs::symlink(repo.root().join("routine-cache"), &alias).unwrap();
+    let current = std::env::current_dir().unwrap();
+    let bind_path = if let Ok(relative) = alias.strip_prefix(&current) {
+        relative.to_path_buf()
+    } else {
+        PathBuf::from("..").join(alias.strip_prefix(current.parent().unwrap()).unwrap())
+    }
+    .join("socket");
+    let socket = UnixListener::bind(&bind_path).unwrap();
     for path in ["link", "hard", "real", "fifo", "socket"] {
         assert!(
             capture_public_for_test(
@@ -165,6 +175,8 @@ fn special_result_artifacts_fail_before_evidence_minting() {
             "{path}"
         );
     }
+    drop(socket);
+    fs::remove_file(alias).unwrap();
 }
 
 #[cfg(target_os = "macos")]

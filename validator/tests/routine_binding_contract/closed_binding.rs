@@ -1,24 +1,23 @@
 use std::collections::BTreeMap;
 
+use super::execution_fixture::{AdapterFixture, dirty_fixture, invocation_specs};
 use super::routine_work::{
     PreparedRoutineExecution, RoutineAdapterSpec, RoutineInvocationSpec, prepare_routine_execution,
 };
-use super::runtime_adapter::{dirty_fixture, invocation_specs, preparation_error};
 
-fn preparation_error_for(
-    fixture: &super::runtime_adapter::AdapterFixture,
-    first: RoutineInvocationSpec,
-) -> &'static str {
+fn preparation_error_for(fixture: &AdapterFixture, first: RoutineInvocationSpec) -> &'static str {
     let mut invocations = invocation_specs(&fixture.context, &fixture.plan);
     invocations[0] = first;
-    preparation_error(prepare_routine_execution(
+    match prepare_routine_execution(
         &fixture.context,
         &fixture.graph,
         &fixture.snapshot,
         &fixture.plan,
         RoutineAdapterSpec::new("routine", invocations),
-    ))
-    .cause()
+    ) {
+        Ok(_) => panic!("invalid adapter preparation succeeded"),
+        Err(error) => error.cause(),
+    }
 }
 
 #[test]

@@ -76,9 +76,14 @@ impl HostState {
             self.verify()?;
             return Ok(None);
         }
-        if envelope.schema_version != CACHE_SCHEMA
-            || &envelope.binding != expected
-            || decode_hex_exact(&envelope.nonce_hex, NONCE_BYTES).is_err()
+        if envelope.schema_version != CACHE_SCHEMA {
+            return Err(HostFailure::Invalid);
+        }
+        if &envelope.binding != expected {
+            self.verify()?;
+            return Ok(None);
+        }
+        if decode_hex_exact(&envelope.nonce_hex, NONCE_BYTES).is_err()
             || envelope.artifact_sha256.is_empty()
             || envelope.artifact_sha256.len() != envelope.artifacts_hex.len()
             || monotonic_tick()? < envelope.issued_monotonic_tick
@@ -162,3 +167,7 @@ impl HostState {
         self.verify()
     }
 }
+
+#[cfg(test)]
+#[path = "host_state_tests.rs"]
+mod tests;

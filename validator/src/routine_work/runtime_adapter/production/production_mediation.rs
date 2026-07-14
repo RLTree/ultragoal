@@ -22,6 +22,7 @@ pub(crate) fn mediate_prepared_routine_execution_production(
             None,
             cancellation,
             reuse,
+            None,
         );
     }
     let PreparedRoutineExecution::Effect(request) = prepared else {
@@ -38,7 +39,7 @@ pub(crate) fn mediate_prepared_routine_execution_production(
     } else {
         ProductionRoutineIssuer::open_existing(authority_root)?
     };
-    issuer.mediate_preflighted(context, plan, request, recovery, cancellation, reuse)
+    issuer.mediate_preflighted(context, plan, request, recovery, cancellation, reuse, None)
 }
 
 #[cfg(test)]
@@ -71,6 +72,10 @@ impl DurableAttemptAuthority for DurableAttempt {
 
     fn prepare_spawn(&self) -> Result<(), RoutineError> {
         self.ledger.prepare_spawn(&self.token)
+    }
+
+    fn stage_success(&self, artifacts: &BTreeMap<String, String>) -> Result<(), RoutineError> {
+        self.ledger.stage_success(&self.token, artifacts)
     }
 
     fn settle(

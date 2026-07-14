@@ -54,6 +54,12 @@ pub(crate) struct AttemptReservation {
 }
 
 impl AttemptReservation {
+    pub(crate) fn reuse_only(&self) -> bool {
+        self.durable
+            .as_ref()
+            .is_some_and(|durable| durable.reuse_only())
+    }
+
     pub(crate) fn prepare_spawn(&self) -> Result<(), RoutineError> {
         if let Some(durable) = &self.durable {
             durable.prepare_spawn()?;
@@ -69,6 +75,16 @@ impl AttemptReservation {
             .ambiguous_protocols
             .insert(self.protocol_id.clone(), self.recovery_marker.clone());
         self.started.set(true);
+    }
+
+    pub(crate) fn stage_success(
+        &self,
+        artifacts: &BTreeMap<String, String>,
+    ) -> Result<(), RoutineError> {
+        if let Some(durable) = &self.durable {
+            durable.stage_success(artifacts)?;
+        }
+        Ok(())
     }
 
     pub(crate) fn settle_success(
@@ -98,17 +114,15 @@ impl AttemptReservation {
 
     pub(crate) fn settle_incomplete(
         &self,
-        outcome: DurableSettlement,
+        _outcome: DurableSettlement,
     ) -> Result<Option<String>, RoutineError> {
-        if let Some(durable) = &self.durable {
-            durable.settle(outcome, &BTreeMap::new())?;
-        }
+        let durable_recovery = self.durable.is_some();
         let mut state = registry()
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         release_active(&mut state, &self.protocol_id, &self.grant_id);
         self.settled.set(true);
-        Ok(if self.started.get() {
+        Ok(if durable_recovery || self.started.get() {
             Some(self.recovery_marker.clone())
         } else {
             self.prior_recovery_marker.clone()
@@ -195,13 +209,20 @@ pub(crate) fn mediate_prepared_routine_execution(
     grant: Option<RoutineRootGrant>,
     cancellation: RoutineCancellation,
     reuse: RoutineReuseInput,
+    publisher: Option<&dyn RoutineArtifactPublisher>,
 ) -> Result<RoutineMediationResult, RoutineError> {
     match prepared {
         PreparedRoutineExecution::NoOp(projection) => {
             mediate_noop(context, plan, projection, grant, reuse)
         }
-        PreparedRoutineExecution::Effect(request) => {
-            mediate_effect(context, plan, request, grant, cancellation, reuse)
-        }
+        PreparedRoutineExecution::Effect(request) => mediate_effect(
+            context,
+            plan,
+            request,
+            grant,
+            cancellation,
+            reuse,
+            publisher,
+        ),
     }
 }

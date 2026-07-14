@@ -5,15 +5,21 @@
   "cases": [
     "clean-noop-zero-host-write",
     "dirty-development-runtime-refusal-zero-host-write",
-    "arbitrary-catalog-command-refusal",
-    "retired-v1-manifest-refusal",
     "missing-host-authority-zero-workspace-write",
-    "host-lock-substitution-refusal",
-    "target-substitution-refusal",
     "catalog-substitution-refusal",
     "help-zero-write",
     "parse-refusal-zero-write",
     "read-route-zero-write"
+  ],
+  "immutable_runtime_cases": [
+    "authorized-fresh-execution-empty-output-provenance",
+    "exact-repeat-durable-reuse",
+    "different-target-cache-miss",
+    "different-change-cache-miss",
+    "arbitrary-catalog-command-refusal",
+    "retired-v1-manifest-refusal",
+    "host-lock-substitution-refusal",
+    "target-substitution-refusal"
   ],
   "installed_runtime_ceiling": "dirty execution, durable reuse, interruption recovery, and concurrent serialization require a separately verified immutable installed ultragoal runtime"
 }

@@ -54,3 +54,23 @@ fn production_source_exposes_no_arbitrary_process_binding_surface() {
     assert!(runner.contains("invocation.environment != expected_environment"));
     assert!(grant.contains("intent.environment() != &expected_environment"));
 }
+
+#[test]
+fn publication_is_staged_before_cache_and_terminal_settlement() {
+    let mediation = include_str!("../src/routine_work/runtime_adapter/mediator/no_op_mediation.rs");
+    let output = include_str!(
+        "../src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection.rs"
+    );
+    let reservation =
+        include_str!("../src/routine_work/runtime_adapter/mediator/read_source_binding.rs");
+    let stage = mediation.find("attempt.stage_success").unwrap();
+    let publish = mediation.find("publisher.publish").unwrap();
+    let settle = mediation.find("attempt.settle_success").unwrap();
+    assert!(stage < publish && publish < settle);
+    assert!(output.contains("mediator-output-scope-not-empty"));
+    assert!(output.contains("capture_owned_delta"));
+    assert!(output.contains("held != scope.identity"));
+    let incomplete = reservation.find("pub(crate) fn settle_incomplete").unwrap();
+    let drop = reservation[incomplete..].find("impl Drop").unwrap();
+    assert!(!reservation[incomplete..incomplete + drop].contains("durable.settle"));
+}

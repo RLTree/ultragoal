@@ -18,14 +18,12 @@ mod local_capture;
 mod planning;
 #[path = "routine_work_contract/provenance.rs"]
 mod provenance;
+#[path = "routine_work_contract/provenance_compile.rs"]
+mod provenance_compile;
 #[path = "routine_work_contract/report.rs"]
 mod report;
 #[path = "routine_work_contract/reuse/mod.rs"]
 mod reuse;
-#[path = "routine_work_contract/runtime_adapter.rs"]
-mod runtime_adapter;
-#[path = "routine_work_contract/runtime_mediator.rs"]
-mod runtime_mediator;
 #[path = "routine_work_contract/scenario.rs"]
 mod scenario;
 #[path = "routine_work_contract/security.rs"]

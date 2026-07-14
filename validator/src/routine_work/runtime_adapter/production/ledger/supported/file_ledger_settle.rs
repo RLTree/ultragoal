@@ -1,6 +1,38 @@
 use super::*;
 
 impl FileLedger {
+    pub(crate) fn stage_success(
+        &self,
+        token: &ReservationToken,
+        artifacts: &BTreeMap<String, String>,
+    ) -> Result<(), RoutineError> {
+        if token.reuse_only
+            || artifacts.is_empty()
+            || artifacts
+                .iter()
+                .any(|(digest, witness)| !valid(digest) || !valid(witness))
+        {
+            return Err(error("routine-production-publication-stage-invalid"));
+        }
+        self.with_payload(true, |payload, _tick| {
+            let record = exact_record_mut(payload, token)?;
+            match record.state {
+                AttemptState::Started if record.artifacts.is_empty() => {
+                    record.artifacts.clone_from(artifacts);
+                }
+                AttemptState::Started if record.artifacts == *artifacts => {}
+                AttemptState::Reserved
+                    if token.recovery_for.is_some() && record.artifacts == *artifacts => {}
+                _ => {
+                    return Err(error(
+                        "routine-production-publication-stage-transition-invalid",
+                    ));
+                }
+            }
+            Ok(())
+        })
+    }
+
     pub(crate) fn settle(
         &self,
         token: &ReservationToken,
@@ -29,7 +61,12 @@ impl FileLedger {
                 AttemptState::Complete if record.reuse_only => {
                     record.state == AttemptState::Reserved && !record.artifacts.is_empty()
                 }
-                AttemptState::Complete => record.state == AttemptState::Started,
+                AttemptState::Complete => {
+                    record.state == AttemptState::Started
+                        || record.state == AttemptState::Reserved
+                            && token.recovery_for.is_some()
+                            && !record.artifacts.is_empty()
+                }
                 AttemptState::Failed | AttemptState::Cancelled | AttemptState::Incomplete => {
                     matches!(record.state, AttemptState::Reserved | AttemptState::Started)
                 }
@@ -42,7 +79,9 @@ impl FileLedger {
                 if artifacts.is_empty() {
                     return Err(error("routine-production-complete-artifacts-missing"));
                 }
-                record.artifacts.clone_from(artifacts);
+                if record.artifacts != *artifacts {
+                    return Err(error("routine-production-complete-artifacts-mismatch"));
+                }
             }
             record.state = state;
             Ok(())

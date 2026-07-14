@@ -70,7 +70,7 @@ pub(crate) fn retired_v1_catalog_has_no_behavioral_reader() {
     let root = TestRoot::new("retired-v1", &legacy);
     assert_eq!(
         load_raw(&root, &legacy, full_adoption(&legacy, CANDIDATE_ID)),
-        "catalog-source-invalid-json"
+        "catalog-schema-version-unsupported"
     );
 }
 
@@ -101,7 +101,7 @@ pub(crate) fn symbolic_tool_executable_content_mode_and_identity_substitutions_a
     .unwrap();
     assert_eq!(
         catalog.bind_selected(request).unwrap_err().code(),
-        "catalog-runner-authority-stale"
+        "catalog-runner-program-identity-stale"
     );
 
     let forged_mode = RunnerObservation::new(
@@ -124,6 +124,6 @@ pub(crate) fn symbolic_tool_executable_content_mode_and_identity_substitutions_a
     .unwrap();
     assert_eq!(
         catalog.bind_selected(request).unwrap_err().code(),
-        "catalog-runner-authority-stale"
+        "catalog-runner-program-identity-stale"
     );
 }

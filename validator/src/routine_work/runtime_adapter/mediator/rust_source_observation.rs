@@ -29,10 +29,14 @@ mod tests {
     };
 
     fn frame() -> Vec<u8> {
-        encode_rust_source_syntax_frame(&[RustSourceFrameInput {
-            relative_path: "src/lib.rs".to_owned(),
-            bytes: b"pub fn value() -> u8 { 1 }\n".to_vec(),
-        }])
+        let bytes = b"pub fn value() -> u8 { 1 }\n";
+        let digest = sha256(bytes);
+        encode_rust_source_syntax_frame(&[RustSourceFrameInput::new(
+            "src/lib.rs",
+            &digest,
+            bytes.len() as u64,
+            bytes,
+        )])
         .unwrap()
     }
 

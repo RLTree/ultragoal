@@ -31,8 +31,8 @@ pub(crate) use execution_authority::{
     RoutineMediationBatch, RoutineNoOpProjection,
 };
 pub(crate) use mediator::{
-    RoutineCancellation, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutineReuseInput,
+    RoutineArtifactPublisher, RoutineCancellation, RoutineMediationResult, RoutineMediatorStatus,
+    RoutineNodeDisposition, RoutineReuseInput,
 };
 #[cfg(test)]
 pub(crate) use mediator::{

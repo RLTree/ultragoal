@@ -120,7 +120,7 @@ pub(crate) fn mediate_intent(
             started: true,
         });
     }
-    let output_files = outputs.capture()?;
+    let output_files = outputs.capture_owned_delta()?;
     let artifact_bytes = output_files
         .values()
         .try_fold(0_u64, |total, file| total.checked_add(file.byte_length));

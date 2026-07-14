@@ -87,12 +87,10 @@ fn exact_started_token_is_read_only_idempotent_for_later_batch_intents() {
         "Started revalidation must not republish"
     );
 
+    let artifacts = BTreeMap::from([(id("artifact"), id("witness"))]);
+    ledger.stage_success(&token, &artifacts).unwrap();
     ledger
-        .settle(
-            &token,
-            AttemptState::Complete,
-            &BTreeMap::from([(id("artifact"), id("witness"))]),
-        )
+        .settle(&token, AttemptState::Complete, &artifacts)
         .unwrap();
     let terminal = root.state();
     let refused = ledger.prepare_spawn(&token).unwrap_err();
@@ -101,6 +99,39 @@ fn exact_started_token_is_read_only_idempotent_for_later_batch_intents() {
         "routine-production-spawn-authority-invalid"
     );
     assert_eq!(root.state(), terminal);
+}
+
+#[test]
+fn staged_publication_recovers_without_reauthorizing_artifact_bytes() {
+    let root = TestRoot::new("staged-recovery");
+    let ledger = FileAuthorityLedger::open_or_initialize(root.path()).unwrap();
+    let token = reserve(&ledger, "staged-recovery");
+    let artifacts = BTreeMap::from([(id("staged-artifact"), id("staged-witness"))]);
+    ledger.prepare_spawn(&token).unwrap();
+    ledger.stage_success(&token, &artifacts).unwrap();
+
+    let pending = ledger.pending_recovery(&token.binding).unwrap().unwrap();
+    let recovered = ledger
+        .reserve(ReservationSpec {
+            binding: token.binding.clone(),
+            request_id: token.request_id.clone(),
+            grant_id: id("staged-recovery-grant-two"),
+            recovery_marker: id("staged-recovery-marker-two"),
+            recovery_for: Some(pending.marker),
+            reuse_only: false,
+            reuse_preauthorization: None,
+        })
+        .unwrap();
+    assert!(
+        ledger
+            .authenticates(&recovered, &id("staged-artifact"), &id("staged-witness"))
+            .unwrap()
+    );
+    ledger.stage_success(&recovered, &artifacts).unwrap();
+    ledger
+        .settle(&recovered, AttemptState::Complete, &artifacts)
+        .unwrap();
+    assert!(ledger.pending_recovery(&token.binding).unwrap().is_none());
 }
 
 #[test]

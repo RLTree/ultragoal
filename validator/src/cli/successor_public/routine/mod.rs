@@ -23,9 +23,10 @@ use crate::inventory::{ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFE
 use crate::routine_work::{
     AdoptedRoutineNode, BoundCatalogInvocation, CatalogAdoption, CatalogSelectionRequest,
     ImpactGraph, LocalDirtyTree, PlanRequest, PreparedRoutineExecution, ProductionRoutineIssuer,
-    RepoPath, RoutineAdapterSpec, RoutineCancellation, RoutineInvocationSpec,
-    RoutineMediatorStatus, RoutinePlan, RoutineReuseInput, RunnerObservation, SelectedRoutineNode,
-    TransitiveInputExpectation, bind_rust_source_syntax_invocation, load_production_catalog,
+    RepoPath, RoutineAdapterSpec, RoutineArtifactPublisher, RoutineCancellation,
+    RoutineInvocationSpec, RoutineMediatorStatus, RoutinePlan, RoutineReuseInput,
+    RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation,
+    bind_rust_source_syntax_invocation, load_production_catalog,
     mediate_prepared_routine_execution_production, plan_routine, prepare_routine_execution,
     validate_immutable_routine_program,
 };

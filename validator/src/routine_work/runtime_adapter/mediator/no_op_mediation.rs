@@ -42,6 +42,7 @@ pub(crate) fn mediate_effect(
     grant: Option<RoutineRootGrant>,
     cancellation: RoutineCancellation,
     reuse: RoutineReuseInput,
+    publisher: Option<&dyn RoutineArtifactPublisher>,
 ) -> Result<RoutineMediationResult, RoutineError> {
     let grant = grant.ok_or_else(|| mediator_error("mediator-root-grant-missing"))?;
     let production = grant.durable.is_some();
@@ -114,6 +115,8 @@ pub(crate) fn mediate_effect(
                     RoutineNodeDisposition::Reused,
                     result_sha256,
                 ));
+                let artifact_sha256 = sha256(&verified.canonical_bytes);
+                generated.push((artifact_sha256, verified.canonical_bytes.clone()));
                 artifacts.push(verified.canonical_bytes);
                 token.advance()?;
             }
@@ -172,6 +175,12 @@ pub(crate) fn mediate_effect(
         })?
     } else {
         let authenticated = authenticate_generated(generated);
+        if !attempt.reuse_only() {
+            attempt.stage_success(&authenticated)?;
+            if let Some(publisher) = publisher {
+                publisher.publish(&artifacts)?;
+            }
+        }
         attempt.settle_success(&authenticated)?;
         None
     };

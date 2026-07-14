@@ -10,16 +10,6 @@ pub(crate) const PLAN_ID: &str =
     "sha256:4444444444444444444444444444444444444444444444444444444444444444";
 pub(crate) const TRUE_TOOL_ID: &str =
     "sha256:5555555555555555555555555555555555555555555555555555555555555555";
-pub(crate) const R3_CONTEXT_ID: &str =
-    "sha256:063fba8de7f4c543180c5842169a9c0915c25aa6d98199eeeae37ef4a62b0132";
-pub(crate) const R3_CANDIDATE_ID: &str =
-    "sha256:f4228656572628dd481187f62513dfd277526f8d910e782b3d673460521043e6";
-pub(crate) const R3_RESULT_PATH: &str =
-    "docs/ultragoal-successor-live/worker-results/ROUTINE-PRODUCTION-CATALOG-073.json";
-pub(crate) const R3_WORK_PACKAGE_PATH: &str =
-    "docs/ultragoal-successor-live/work-packages/ROUTINE-PRODUCTION-CATALOG-073-R3.json";
-pub(crate) const R3_WORK_PACKAGE_SHA256: &str =
-    "sha256:5c60b9b3c4622eb5f7f0d2d3e5a8c0610896cb9a31a0db97f1d6b6a6e04d1ab1";
 pub(crate) const VALID_CATALOG: &[u8] =
     include_bytes!("../../../fixtures/routine-production-catalog/valid-catalog-v2.json");
 

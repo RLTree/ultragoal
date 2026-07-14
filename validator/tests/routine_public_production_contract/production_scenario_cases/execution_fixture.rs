@@ -83,9 +83,6 @@ impl Fixture {
         git(&root, &["config", "maintenance.auto", "false"]);
         git(&root, &["add", "-A"]);
         git(&root, &["commit", "--quiet", "-m", "routine fixture"]);
-        for node in nodes {
-            fs::create_dir_all(root.join(format!("target/routine/{}", node.id))).unwrap();
-        }
         if dirty {
             fs::write(root.join("src/lib.rs"), b"pub fn value() -> u8 { 2 }\n").unwrap();
         }
@@ -187,7 +184,11 @@ impl Fixture {
     }
 
     pub(crate) fn base_command(&self) -> Command {
-        let binary = Path::new(env!("CARGO_BIN_EXE_ultragoal"));
+        let protected = std::env::var_os("HUL_ROUTINE_IMMUTABLE_BINARY");
+        let binary = protected
+            .as_deref()
+            .map(Path::new)
+            .unwrap_or_else(|| Path::new(env!("CARGO_BIN_EXE_ultragoal")));
         let mut command = Command::new(binary);
         command
             .env_clear()
@@ -203,5 +204,12 @@ impl Fixture {
             .arg("--root")
             .arg(&self.root);
         command
+    }
+
+    pub fn require_protected_binary() {
+        assert!(
+            std::env::var_os("HUL_ROUTINE_IMMUTABLE_BINARY").is_some(),
+            "authorized production journey requires HUL_ROUTINE_IMMUTABLE_BINARY pointing to an exact root-owned immutable copy of this build"
+        );
     }
 }

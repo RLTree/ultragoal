@@ -80,6 +80,22 @@ impl FileAuthorityLedger {
         }
     }
 
+    pub(crate) fn stage_success(
+        &self,
+        token: &ReservationToken,
+        artifacts: &BTreeMap<String, String>,
+    ) -> Result<(), RoutineError> {
+        #[cfg(target_vendor = "apple")]
+        {
+            return self.inner.stage_success(token, artifacts);
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (token, artifacts);
+            Err(error("routine-production-authority-host-unsupported"))
+        }
+    }
+
     pub(crate) fn settle(
         &self,
         token: &ReservationToken,

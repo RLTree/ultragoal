@@ -3,6 +3,25 @@ use super::*;
 pub(crate) const SOURCE_CONFIG_KEY: &str = "contract_id";
 pub(crate) const RESULT_SCOPE: &str = "routine-public-production";
 
+struct CachePublisher<'a> {
+    state: &'a HostState,
+    binding: CacheBinding,
+}
+
+impl RoutineArtifactPublisher for CachePublisher<'_> {
+    fn publish(&self, artifacts: &[Vec<u8>]) -> Result<(), crate::routine_work::RoutineError> {
+        self.state
+            .persist_reuse(self.binding.clone(), artifacts)
+            .map_err(|_| {
+                crate::routine_work::RoutineError::new(
+                    crate::routine_work::RoutineErrorId::ObservationFailed,
+                    "routine-public-cache-publication-failed",
+                    None,
+                )
+            })
+    }
+}
+
 pub(crate) fn execute(
     root: &Path,
     invocation: &ParsedInvocation,
@@ -30,10 +49,10 @@ pub(crate) fn execute_inner(
     let snapshot = LocalDirtyTree::capture(&context).map_err(PublicFailure::Routine)?;
     let plan = plan_routine(&context, &graph, &snapshot, PlanRequest::routine())
         .map_err(PublicFailure::Routine)?;
-    let prepared = prepare(&context, &manifest, &graph, &snapshot, &plan)?;
     let source_id = manifest.source_id();
 
-    if matches!(prepared, PreparedRoutineExecution::NoOp(_)) {
+    if plan.checks().is_empty() {
+        let prepared = prepare(&context, &manifest, &graph, &snapshot, &plan)?;
         let result = mediate_prepared_routine_execution_production(
             Path::new("/routine-noop-does-not-open-authority"),
             &context,
@@ -57,14 +76,31 @@ pub(crate) fn execute_inner(
         ));
     }
 
+    let home = home.ok_or(PublicFailure::Host(host::HostFailure::Unavailable))?;
+    let state = HostState::open(home, &target).map_err(PublicFailure::Host)?;
+    let selected_nodes = plan
+        .checks()
+        .iter()
+        .map(|check| check.node_id().to_owned())
+        .collect::<Vec<_>>();
+    let provision = state
+        .provision_outputs(&target, &selected_nodes)
+        .map_err(PublicFailure::Host)?;
+    let prepared = match prepare(&context, &manifest, &graph, &snapshot, &plan) {
+        Ok(prepared) => prepared,
+        Err(error) => {
+            provision
+                .rollback()
+                .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
+            return Err(error);
+        }
+    };
     let request = match &prepared {
         PreparedRoutineExecution::Effect(request) => request,
         PreparedRoutineExecution::NoOp(_) => unreachable!("no-op returned above"),
     };
     let request_id = request.request_id().to_owned();
     let protocol_id = request.protocol_id().to_owned();
-    let home = home.ok_or(PublicFailure::Host(host::HostFailure::Unavailable))?;
-    let state = HostState::open(home, &target).map_err(PublicFailure::Host)?;
     let cache_binding = CacheBinding::new(
         state.target_id().to_owned(),
         source_id.clone(),
@@ -80,47 +116,50 @@ pub(crate) fn execute_inner(
         .read_reuse(&cache_binding)
         .map_err(PublicFailure::Host)?;
 
-    let result = if let Some(artifacts) = reuse {
-        // Supplied bytes are parsed and exact-bound before this call. The
-        // production entry point then authenticates them through an
-        // existing-only ledger path before any durable transition.
-        mediate_prepared_routine_execution_production(
-            state.authority_root(),
-            &context,
-            &plan,
-            prepared,
-            None,
-            RoutineCancellation::new(),
-            RoutineReuseInput::new(artifacts),
-        )
-        .map_err(PublicFailure::Routine)?
-    } else {
-        // Absence can mean a first run or a process interrupted before cache
-        // settlement. The accepted issuer reconstructs recovery only from the
-        // exact current request and durable pending record.
-        let issuer = ProductionRoutineIssuer::open(state.authority_root())
-            .map_err(PublicFailure::Routine)?;
+    let mediated = (|| {
+        let issuer = if reuse.is_some() {
+            ProductionRoutineIssuer::open_existing(state.authority_root())
+        } else {
+            ProductionRoutineIssuer::open(state.authority_root())
+        }
+        .map_err(PublicFailure::Routine)?;
         let recovery = issuer
             .pending_recovery(&context, &plan, &prepared)
             .map_err(PublicFailure::Routine)?;
+        let publisher = CachePublisher {
+            state: &state,
+            binding: cache_binding,
+        };
         issuer
-            .mediate(
+            .mediate_with_publisher(
                 &context,
                 &plan,
                 prepared,
                 recovery,
                 RoutineCancellation::new(),
-                RoutineReuseInput::default(),
+                reuse.map_or_else(RoutineReuseInput::default, RoutineReuseInput::new),
+                &publisher,
             )
-            .map_err(PublicFailure::Routine)?
+            .map_err(PublicFailure::Routine)
+    })();
+    let result = match mediated {
+        Ok(result) => result,
+        Err(error) => {
+            provision
+                .rollback()
+                .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
+            return Err(error);
+        }
     };
 
     state
         .verify()
         .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
     if result.status() == RoutineMediatorStatus::CompleteExecution {
-        state
-            .persist_reuse(cache_binding, result.reuse_artifacts())
+        provision.commit();
+    } else {
+        provision
+            .rollback()
             .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
     }
     state

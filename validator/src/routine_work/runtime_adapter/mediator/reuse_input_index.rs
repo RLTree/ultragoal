@@ -82,7 +82,7 @@ pub(crate) fn verify_reuse_artifact(
         || wire.dependency_results != *dependencies
         || wire.result_artifact_sha256 != sha256(&canonical(&wire.result_artifact)?)
         || !result_matches_reuse(&wire)
-        || outputs.capture()? != wire.output_files
+        || outputs.capture_owned_delta()? != wire.output_files
     {
         return Ok(None);
     }

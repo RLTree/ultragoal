@@ -58,6 +58,11 @@ pub(crate) struct HostState {
     pub(crate) inner: supported::HostState,
 }
 
+pub(crate) struct OutputProvision {
+    #[cfg(target_vendor = "apple")]
+    pub(crate) inner: supported::OutputProvision,
+}
+
 impl HostState {
     pub(crate) fn open(home: &Path, target: &Path) -> Result<Self, HostFailure> {
         #[cfg(target_vendor = "apple")]
@@ -132,6 +137,42 @@ impl HostState {
         #[cfg(not(target_vendor = "apple"))]
         {
             unreachable!("unsupported host state cannot be constructed")
+        }
+    }
+
+    pub(crate) fn provision_outputs(
+        &self,
+        target: &Path,
+        node_ids: &[String],
+    ) -> Result<OutputProvision, HostFailure> {
+        #[cfg(target_vendor = "apple")]
+        {
+            self.verify()?;
+            return supported::OutputProvision::create(target, node_ids)
+                .map(|inner| OutputProvision { inner });
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (target, node_ids);
+            Err(HostFailure::Unsupported)
+        }
+    }
+}
+
+impl OutputProvision {
+    pub(crate) fn commit(self) {
+        #[cfg(target_vendor = "apple")]
+        self.inner.commit();
+    }
+
+    pub(crate) fn rollback(self) -> Result<(), HostFailure> {
+        #[cfg(target_vendor = "apple")]
+        {
+            return self.inner.rollback();
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            unreachable!("unsupported output provision cannot be constructed")
         }
     }
 }

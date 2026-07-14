@@ -4,7 +4,9 @@ use std::fs;
 use std::os::unix::fs::symlink;
 
 #[test]
+#[ignore = "requires externally provisioned root-owned immutable current ultragoal binary"]
 fn repository_cannot_turn_the_fixed_template_route_into_arbitrary_shell_authority() {
+    Fixture::require_protected_binary();
     let fixture = Fixture::new(
         "arbitrary-shell-refusal",
         &[pass_node("compile", &[])],
@@ -31,7 +33,9 @@ fn repository_cannot_turn_the_fixed_template_route_into_arbitrary_shell_authorit
 }
 
 #[test]
+#[ignore = "requires externally provisioned root-owned immutable current ultragoal binary"]
 fn legacy_manifest_is_rejected_without_opening_host_or_workspace_authority() {
+    Fixture::require_protected_binary();
     let fixture = Fixture::new(
         "legacy-manifest-refusal",
         &[pass_node("compile", &[])],
@@ -77,7 +81,9 @@ fn missing_host_authority_refuses_before_any_workspace_write() {
 }
 
 #[test]
+#[ignore = "requires externally provisioned root-owned immutable current ultragoal binary"]
 fn host_lock_symlink_and_target_symlink_substitution_fail_closed() {
+    Fixture::require_protected_binary();
     let fixture = Fixture::new(
         "lock-substitution",
         &[pass_node("compile", &[])],

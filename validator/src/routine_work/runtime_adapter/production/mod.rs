@@ -19,8 +19,9 @@ use crate::routine_work::{RoutineError, RoutineErrorId, RoutinePlan};
 use super::execution_authority::{PreparedRoutineExecution, RoutineEffectRequest};
 use super::mediator::{
     DurableAttemptAuthority, DurableSettlement, PreflightedProductionReuse, ProductionGrantBinding,
-    issue_production_grant, mediate_prepared_routine_execution, preflight_production_request,
-    preflight_production_reuse_input, production_grant_identity, production_recovery_identity,
+    RoutineArtifactPublisher, issue_production_grant, mediate_prepared_routine_execution,
+    preflight_production_request, preflight_production_reuse_input, production_grant_identity,
+    production_recovery_identity,
 };
 use super::{RoutineCancellation, RoutineMediationResult, RoutineReuseInput};
 use ledger::{
@@ -32,6 +33,9 @@ use ledger::{
 mod production_issuance;
 #[path = "production_mediation.rs"]
 mod production_mediation;
+#[cfg(test)]
+#[path = "production_test_support.rs"]
+mod production_test_support;
 #[path = "recovery_authority.rs"]
 mod recovery_authority;
 

@@ -20,6 +20,7 @@ pub(crate) enum DurableSettlement {
 pub(crate) trait DurableAttemptAuthority: Send + Sync {
     fn validate_reserved(&self) -> Result<(), RoutineError>;
     fn prepare_spawn(&self) -> Result<(), RoutineError>;
+    fn stage_success(&self, artifacts: &BTreeMap<String, String>) -> Result<(), RoutineError>;
     fn settle(
         &self,
         outcome: DurableSettlement,
@@ -28,6 +29,10 @@ pub(crate) trait DurableAttemptAuthority: Send + Sync {
     fn authenticates_artifact(&self, digest: &str, witness: &str) -> Result<bool, RoutineError>;
     fn recovery_is_durable(&self) -> bool;
     fn reuse_only(&self) -> bool;
+}
+
+pub(crate) trait RoutineArtifactPublisher {
+    fn publish(&self, artifacts: &[Vec<u8>]) -> Result<(), RoutineError>;
 }
 
 #[derive(Clone)]

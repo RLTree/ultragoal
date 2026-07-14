@@ -50,11 +50,11 @@ pub(crate) use catalog::{
     RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation, load_production_catalog,
 };
 pub(crate) use runtime_adapter::{
-    PreparedRoutineExecution, ProductionRoutineIssuer, RoutineAdapterSpec, RoutineCancellation,
-    RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutineReuseInput, bind_rust_source_syntax_invocation,
-    mediate_prepared_routine_execution_production, prepare_routine_execution,
-    validate_immutable_routine_program,
+    PreparedRoutineExecution, ProductionRoutineIssuer, RoutineAdapterSpec,
+    RoutineArtifactPublisher, RoutineCancellation, RoutineInvocationSpec, RoutineMediationResult,
+    RoutineMediatorStatus, RoutineNodeDisposition, RoutineReuseInput,
+    bind_rust_source_syntax_invocation, mediate_prepared_routine_execution_production,
+    prepare_routine_execution, validate_immutable_routine_program,
 };
 
 #[cfg(test)]

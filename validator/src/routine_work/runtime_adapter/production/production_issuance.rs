@@ -37,7 +37,7 @@ impl ProductionRoutineIssuer {
         })
     }
 
-    pub(crate) fn mediate(
+    pub(crate) fn mediate_with_publisher(
         &self,
         context: &LiveContext,
         plan: &RoutinePlan,
@@ -45,24 +45,23 @@ impl ProductionRoutineIssuer {
         recovery: Option<RoutineRecoveryAuthority>,
         cancellation: RoutineCancellation,
         reuse: RoutineReuseInput,
+        publisher: &dyn RoutineArtifactPublisher,
     ) -> Result<RoutineMediationResult, RoutineError> {
         let PreparedRoutineExecution::Effect(request) = prepared else {
-            if recovery.is_some() || !reuse.is_empty() {
-                return Err(error("routine-production-noop-authority-or-reuse-present"));
-            }
-            return mediate_prepared_routine_execution(
-                context,
-                plan,
-                prepared,
-                None,
-                cancellation,
-                reuse,
-            );
+            return Err(error("routine-production-publisher-effect-required"));
         };
         preflight_production_request(context, plan, &request)?;
-        let require_complete_reuse_set = recovery.is_none() && !reuse.is_empty();
-        let reuse = preflight_production_reuse_input(reuse, &request, require_complete_reuse_set)?;
-        self.mediate_preflighted(context, plan, request, recovery, cancellation, reuse)
+        let require_complete = recovery.is_none() && !reuse.is_empty();
+        let reuse = preflight_production_reuse_input(reuse, &request, require_complete)?;
+        self.mediate_preflighted(
+            context,
+            plan,
+            request,
+            recovery,
+            cancellation,
+            reuse,
+            Some(publisher),
+        )
     }
 
     pub(crate) fn mediate_preflighted(
@@ -73,6 +72,7 @@ impl ProductionRoutineIssuer {
         recovery: Option<RoutineRecoveryAuthority>,
         cancellation: RoutineCancellation,
         reuse: PreflightedProductionReuse,
+        publisher: Option<&dyn RoutineArtifactPublisher>,
     ) -> Result<RoutineMediationResult, RoutineError> {
         let (reuse, reuse_claims) = reuse.into_parts();
         let authority_binding = authority_binding(&request)?;
@@ -87,7 +87,7 @@ impl ProductionRoutineIssuer {
             None => None,
         };
         let reuse_only = recovery_for.is_none() && !reuse.is_empty();
-        if !reuse_claims.is_empty() && !reuse_only {
+        if !reuse_claims.is_empty() && !(reuse_only || recovery_for.is_some()) {
             return Err(error("mediator-production-reuse-not-authenticated"));
         }
         let reuse_preauthorization = if reuse_only {
@@ -144,85 +144,7 @@ impl ProductionRoutineIssuer {
             Some(grant),
             cancellation,
             reuse,
+            publisher,
         )
-    }
-
-    #[cfg(test)]
-    pub(crate) fn test_set_reuse_preauthorization_hook(hook: impl FnOnce() + Send + 'static) {
-        REUSE_PREAUTHORIZATION_TEST_HOOK.with(|slot| {
-            assert!(slot.borrow_mut().replace(Box::new(hook)).is_none());
-        });
-    }
-
-    #[cfg(test)]
-    pub(crate) fn test_reserve_and_abandon(
-        &self,
-        context: &LiveContext,
-        plan: &RoutinePlan,
-        prepared: &PreparedRoutineExecution,
-        started: bool,
-    ) -> Result<(), RoutineError> {
-        let PreparedRoutineExecution::Effect(request) = prepared else {
-            return Err(error("routine-production-test-effect-required"));
-        };
-        preflight_production_request(context, plan, request)?;
-        let authority_binding = authority_binding(request)?;
-        let grant_binding = ProductionGrantBinding {
-            session_id: random_session_id(&authority_binding)?,
-            request_id: request.request_id().to_owned(),
-            protocol_id: request.protocol_id().to_owned(),
-            context_id: request.context_id().to_owned(),
-            candidate_id: request.candidate_id().to_owned(),
-            plan_id: request.plan_id().to_owned(),
-            snapshot_id: authority_binding.snapshot_id.clone(),
-            allowed_output_scopes: allowed_output_scopes(request),
-            recovery_for: None,
-        };
-        let grant_id = production_grant_identity(&grant_binding)?;
-        let recovery_marker =
-            production_recovery_identity(&grant_id, request.protocol_id(), request.request_id());
-        let token = self.ledger.reserve(ReservationSpec {
-            binding: authority_binding,
-            request_id: request.request_id().to_owned(),
-            grant_id,
-            recovery_marker,
-            recovery_for: None,
-            reuse_only: false,
-            reuse_preauthorization: None,
-        })?;
-        if started {
-            self.ledger.prepare_spawn(&token)?;
-        }
-        Ok(())
-    }
-
-    #[cfg(test)]
-    pub(crate) fn test_expire_pending(
-        &self,
-        context: &LiveContext,
-        plan: &RoutinePlan,
-        prepared: &PreparedRoutineExecution,
-    ) -> Result<(), RoutineError> {
-        let PreparedRoutineExecution::Effect(request) = prepared else {
-            return Err(error("routine-production-test-effect-required"));
-        };
-        preflight_production_request(context, plan, request)?;
-        self.ledger
-            .test_expire_pending(&authority_binding(request)?)
-    }
-
-    #[cfg(test)]
-    pub(crate) fn test_seed_capacity(
-        &self,
-        protocol_effect_count: usize,
-        consumed_grant_count: usize,
-    ) -> Result<(), RoutineError> {
-        self.ledger
-            .test_seed_capacity(protocol_effect_count, consumed_grant_count)
-    }
-
-    #[cfg(test)]
-    pub(crate) const fn test_capacity_limits() -> (usize, usize) {
-        FileAuthorityLedger::test_capacity_limits()
     }
 }
