@@ -12,6 +12,24 @@ mod routine_work;
 
 #[path = "routine_work_contract/contract.rs"]
 mod contract;
+#[path = "routine_work_contract/authority_ledger_controls.rs"]
+mod authority_ledger_controls;
+#[path = "routine_work_contract/current_path_controls.rs"]
+mod current_path_controls;
+#[path = "routine_work_contract/current_path_fixture.rs"]
+mod current_path_fixture;
+#[path = "routine_work_contract/filesystem_controls.rs"]
+mod filesystem_controls;
+#[path = "routine_work_contract/invariant_control_map.rs"]
+mod invariant_control_map;
+#[path = "routine_work_contract/invariant_control_map_adapter.rs"]
+mod invariant_control_map_adapter;
+#[path = "routine_work_contract/invariant_control_map_authority.rs"]
+mod invariant_control_map_authority;
+#[path = "routine_work_contract/invariant_control_map_mediator_a.rs"]
+mod invariant_control_map_mediator_a;
+#[path = "routine_work_contract/invariant_control_map_mediator_b.rs"]
+mod invariant_control_map_mediator_b;
 #[path = "routine_work_contract/local_capture.rs"]
 mod local_capture;
 #[path = "routine_work_contract/planning.rs"]

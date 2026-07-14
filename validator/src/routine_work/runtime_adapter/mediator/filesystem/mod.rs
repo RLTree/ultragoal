@@ -40,6 +40,9 @@ mod read_confinement;
 mod read_source_opening;
 #[path = "source_revalidation.rs"]
 mod source_revalidation;
+#[cfg(test)]
+#[path = "test_probes.rs"]
+mod test_probes;
 
 pub(crate) use directory_read_failure::*;
 #[cfg(test)]
@@ -50,3 +53,5 @@ pub(crate) use output_tree_capture::*;
 pub(crate) use ownership_rejection::*;
 pub(crate) use read_source_opening::*;
 pub(crate) use source_revalidation::*;
+#[cfg(test)]
+pub(crate) use test_probes::*;

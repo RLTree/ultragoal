@@ -5,6 +5,9 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Barrier};
 
+#[path = "tests/capacity.rs"]
+mod capacity_tests;
+
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(1);
 
 struct TestRoot {
@@ -56,17 +59,19 @@ fn binding(label: &str) -> AuthorityBinding {
 }
 
 fn reserve(ledger: &FileAuthorityLedger, label: &str) -> ReservationToken {
-    ledger
-        .reserve(ReservationSpec {
-            binding: binding(label),
-            request_id: id(&format!("{label}-request")),
-            grant_id: id(&format!("{label}-grant")),
-            recovery_marker: id(&format!("{label}-recovery")),
-            recovery_for: None,
-            reuse_only: false,
-            reuse_preauthorization: None,
-        })
-        .unwrap()
+    ledger.reserve(reservation(label)).unwrap()
+}
+
+fn reservation(label: &str) -> ReservationSpec {
+    ReservationSpec {
+        binding: binding(label),
+        request_id: id(&format!("{label}-request")),
+        grant_id: id(&format!("{label}-grant")),
+        recovery_marker: id(&format!("{label}-recovery")),
+        recovery_for: None,
+        reuse_only: false,
+        reuse_preauthorization: None,
+    }
 }
 
 #[test]

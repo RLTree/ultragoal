@@ -23,6 +23,9 @@ use super::outcome::RoutineCancellation;
 #[cfg(target_os = "macos")]
 #[path = "child_authority_channel.rs"]
 mod child_authority_channel;
+#[cfg(test)]
+#[path = "broker_gate_probe.rs"]
+mod broker_gate_probe;
 #[path = "process_execution.rs"]
 mod process_execution;
 #[path = "process_group_observation.rs"]
@@ -36,6 +39,8 @@ mod spawn_test_observation;
 
 #[cfg(target_os = "macos")]
 pub(crate) use child_authority_channel::*;
+#[cfg(test)]
+pub(crate) use broker_gate_probe::*;
 pub(crate) use process_execution::*;
 pub(crate) use process_group_observation::*;
 pub(crate) use process_input_write::*;
