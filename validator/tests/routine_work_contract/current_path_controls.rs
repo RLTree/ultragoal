@@ -19,21 +19,31 @@ enum IgnoredBinding {
 }
 
 fn enforcement_disabled_mutant_accepts(
-    mut attacker: RoutineInvocationSpec,
+    attacker: RoutineInvocationSpec,
     expected: RoutineInvocationSpec,
     ignored: IgnoredBinding,
 ) -> bool {
-    match ignored {
-        IgnoredBinding::Environment => attacker.environment = expected.environment.clone(),
-        IgnoredBinding::Arguments => attacker.arguments = expected.arguments.clone(),
-        IgnoredBinding::ProgramPath => {
-            attacker.program_path_hex = expected.program_path_hex.clone()
-        }
-        IgnoredBinding::ProgramDigest => attacker.program_sha256 = expected.program_sha256.clone(),
-        IgnoredBinding::Behavior => attacker.behavior_id = expected.behavior_id.clone(),
-        IgnoredBinding::Timeout => attacker.timeout_ms = expected.timeout_ms,
-    }
-    attacker == expected
+    (matches!(ignored, IgnoredBinding::Environment) || attacker.environment == expected.environment)
+        && (matches!(ignored, IgnoredBinding::Arguments)
+            || attacker.arguments == expected.arguments)
+        && (matches!(ignored, IgnoredBinding::ProgramPath)
+            || attacker.program_path_hex == expected.program_path_hex)
+        && (matches!(ignored, IgnoredBinding::ProgramDigest)
+            || attacker.program_sha256 == expected.program_sha256)
+        && (matches!(ignored, IgnoredBinding::Behavior)
+            || attacker.behavior_id == expected.behavior_id)
+        && (matches!(ignored, IgnoredBinding::Timeout)
+            || attacker.timeout_ms == expected.timeout_ms)
+        && attacker.node_id == expected.node_id
+        && attacker.tool_name == expected.tool_name
+        && attacker.tool_identity_sha256 == expected.tool_identity_sha256
+        && attacker.program_byte_length == expected.program_byte_length
+        && attacker.program_unix_mode == expected.program_unix_mode
+        && attacker.environment_sha256 == expected.environment_sha256
+        && attacker.read_authority_sha256 == expected.read_authority_sha256
+        && attacker.read_sources == expected.read_sources
+        && attacker.declared_output_scopes == expected.declared_output_scopes
+        && attacker.output_budget_bytes == expected.output_budget_bytes
 }
 
 fn cause<T>(result: Result<T, super::routine_work::RoutineError>) -> &'static str {

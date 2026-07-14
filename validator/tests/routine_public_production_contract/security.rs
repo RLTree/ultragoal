@@ -33,9 +33,7 @@ fn repository_cannot_turn_the_fixed_template_route_into_arbitrary_shell_authorit
 }
 
 #[test]
-#[ignore = "requires externally provisioned root-owned immutable current ultragoal binary"]
 fn legacy_manifest_is_rejected_without_opening_host_or_workspace_authority() {
-    Fixture::require_protected_binary();
     let fixture = Fixture::new(
         "legacy-manifest-refusal",
         &[pass_node("compile", &[])],
@@ -49,6 +47,8 @@ fn legacy_manifest_is_rejected_without_opening_host_or_workspace_authority() {
     let before_status = fixture.status();
     let output = fixture.run();
     assert_diagnostic(&output, "successor_runtime_authority_required", &fixture);
+    let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
+    assert!(diagnostic["cause"].as_str().unwrap().contains("manifest"));
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fixture.status(), before_status);
@@ -82,7 +82,7 @@ fn missing_host_authority_refuses_before_any_workspace_write() {
 
 #[test]
 #[ignore = "requires externally provisioned root-owned immutable current ultragoal binary"]
-fn host_lock_symlink_and_target_symlink_substitution_fail_closed() {
+fn host_lock_symlink_substitution_fails_closed() {
     Fixture::require_protected_binary();
     let fixture = Fixture::new(
         "lock-substitution",
@@ -99,7 +99,10 @@ fn host_lock_symlink_and_target_symlink_substitution_fail_closed() {
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
+}
 
+#[test]
+fn target_symlink_substitution_refuses_before_runtime_authority() {
     let target_fixture = Fixture::new(
         "target-substitution",
         &[pass_node("compile", &[])],

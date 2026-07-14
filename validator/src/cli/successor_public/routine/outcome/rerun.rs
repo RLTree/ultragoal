@@ -1,7 +1,7 @@
 use super::*;
 
 pub(crate) const RERUN: &str = "ultragoal --json check routine [--target <relative-repository>]";
-pub(crate) const SUPPORT_LIMIT: &str = "source-local affected routine execution on a supported Darwin host only; no install, marketplace, live-user, readiness, release, or completion claim is raised";
+pub(crate) const SUPPORT_LIMIT: &str = "source-local routine planning, clean no-op, and fail-closed pre-broker behavior only; broker-backed effects, installed behavior, readiness, release, and completion remain unavailable";
 
 pub(crate) enum PublicFailure {
     InvalidInvocation,

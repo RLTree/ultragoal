@@ -1,3 +1,6 @@
+#[cfg(target_os = "macos")]
+#[path = "child_authority_same_executable_parent.rs"]
+mod same_executable_parent;
 #[path = "child_authority_support.rs"]
 mod support;
 
