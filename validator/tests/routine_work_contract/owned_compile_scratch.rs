@@ -6,12 +6,19 @@ use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
 
 use super::owned_compile_claim::{create_marker, random_claim_name};
-use super::owned_compile_quarantine::{cleanup, open_directory_at};
+use super::owned_compile_directory::open_directory_at;
+use super::owned_compile_quarantine::{
+    CleanupDirective, CleanupOutcome, CleanupStage, cleanup, cleanup_controlled,
+};
 
 pub(crate) const FAILURE_MARKER: &[u8] = b"compile scratch removed after induced failure\n";
-pub(crate) const SUBSTITUTION_MARKER: &[u8] =
-    b"renamed compile scratch retained after path substitution\n";
-pub(crate) const SUBSTITUTION_MARKER_NAME: &str = "RETAINED-SUBSTITUTION.txt";
+
+pub(crate) enum CleanupState {
+    Claimed,
+    Quarantined(CString),
+    Cleared(CString),
+    Settled,
+}
 
 pub(crate) struct OwnedCompileScratch {
     pub(crate) parent: File,
@@ -27,7 +34,7 @@ pub(crate) struct OwnedCompileScratch {
     pub(crate) marker_inode: u64,
     pub(crate) marker_mac: [u8; 32],
     pub(crate) secret: [u8; 32],
-    settled: bool,
+    pub(crate) cleanup_state: CleanupState,
 }
 
 impl OwnedCompileScratch {
@@ -74,7 +81,7 @@ impl OwnedCompileScratch {
                 marker_inode: marker.inode,
                 marker_mac: marker.mac,
                 secret,
-                settled: false,
+                cleanup_state: CleanupState::Claimed,
             };
         }
         panic!("compile scratch claim collisions exhausted")
@@ -88,15 +95,30 @@ impl OwnedCompileScratch {
         &self.failure_marker
     }
 
-    pub(crate) fn recover_interrupted(mut self) -> bool {
-        self.settled = true;
-        cleanup(&self)
+    pub(crate) fn recovery_path(&self) -> Option<PathBuf> {
+        match &self.cleanup_state {
+            CleanupState::Quarantined(name) | CleanupState::Cleared(name) => {
+                Some(self.path.parent().unwrap().join(name.to_str().unwrap()))
+            }
+            CleanupState::Claimed | CleanupState::Settled => None,
+        }
+    }
+
+    pub(crate) fn recover_interrupted(&mut self) -> CleanupOutcome {
+        cleanup(self)
+    }
+
+    pub(crate) fn recover_with(
+        &mut self,
+        pause: impl FnMut(CleanupStage) -> CleanupDirective,
+    ) -> CleanupOutcome {
+        cleanup_controlled(self, pause)
     }
 }
 
 impl Drop for OwnedCompileScratch {
     fn drop(&mut self) {
-        if !self.settled {
+        if !matches!(self.cleanup_state, CleanupState::Settled) {
             let _ = cleanup(self);
         }
     }

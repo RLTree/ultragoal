@@ -22,16 +22,20 @@ mod filesystem_controls;
 mod issuer_api_compilation;
 #[path = "routine_work_contract/issuer_api_visibility.rs"]
 mod issuer_api_visibility;
+#[path = "routine_work_contract/issuer_cleanup_races.rs"]
+mod issuer_cleanup_races;
 #[path = "routine_work_contract/issuer_hidden_surface.rs"]
 mod issuer_hidden_surface;
 #[path = "routine_work_contract/issuer_scratch_resilience.rs"]
 mod issuer_scratch_resilience;
 #[path = "routine_work_contract/local_capture.rs"]
 mod local_capture;
-#[path = "routine_work_contract/owned_compile_quarantine.rs"]
-mod owned_compile_quarantine;
 #[path = "routine_work_contract/owned_compile_claim.rs"]
 mod owned_compile_claim;
+#[path = "routine_work_contract/owned_compile_directory.rs"]
+mod owned_compile_directory;
+#[path = "routine_work_contract/owned_compile_quarantine.rs"]
+mod owned_compile_quarantine;
 #[path = "routine_work_contract/owned_compile_scratch.rs"]
 mod owned_compile_scratch;
 #[path = "routine_work_contract/planning.rs"]

@@ -7,7 +7,7 @@ use std::os::unix::fs::MetadataExt;
 use hmac::{Hmac, Mac};
 use sha2::Sha256;
 
-use super::owned_compile_quarantine::entry_identity;
+use super::owned_compile_directory::entry_identity;
 use super::owned_compile_scratch::{OwnedCompileScratch, configured_root};
 
 const MARKER_NAME: &[u8] = b"OWNERSHIP.v1";
