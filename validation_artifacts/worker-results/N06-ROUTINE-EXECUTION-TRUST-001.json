@@ -10,8 +10,9 @@
     "branch": "codex/n06-routine-execution-trust",
     "accepted_integration_base": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
     "historical_original_base": "20a11eb981c5db2d2136a555632be9c4e5ab7752",
-    "source_head": "8205213f0f44da95e12ae6f5a995a23fb7358813",
-    "source_tree": "1d394da1b3a0c446dc56c923d4ddf4ec138784d5",
+    "preserved_pre_rework_head": "ad2436dc19a3aa5c33a4468134cb4784deb284ad",
+    "source_head": "1d5583dfadc05c47939e128c412bf69a3caecf2d",
+    "source_tree": "b5b7fbc0c0b0515068cb5be709050bed37985bea",
     "source_commit_list": [
       "3ace481d127c4e53d8037397f9704b2b34e39fb3",
       "f57a9c87ad62cf7bfe13b3bd4b87ba0bd870b2bd",
@@ -20,15 +21,21 @@
       "c4e08a84e3f2a3400452515b542a6c6594b94e44",
       "89f030e3ff6bbed3ca3bb19d0d7b37f8a603485f",
       "18d249f9409d2c1ffa4596a4bbce7487b81d1557",
-      "8205213f0f44da95e12ae6f5a995a23fb7358813"
+      "8205213f0f44da95e12ae6f5a995a23fb7358813",
+      "ad2436dc19a3aa5c33a4468134cb4784deb284ad",
+      "954e0c00ad71476d3394d25e4efc6ba1d8bdfaa6",
+      "a4fbb79fa708412456f44e9bd13b1be5fa65030a",
+      "36c7ddc79c655cff09c988544436c975402e75f6",
+      "0a38e8056229c5b5ecab9a6b1c0e1dff49678034",
+      "0a2af31055cc0d86563a9ba5e60c5c63bb4ab617",
+      "a4a2323d4e4d9dc1ebc6bae17fea3234066fc584",
+      "1d5583dfadc05c47939e128c412bf69a3caecf2d"
     ],
-    "observed_pre_rewrite_evidence_head": "18d249f9409d2c1ffa4596a4bbce7487b81d1557",
-    "observed_pre_rewrite_evidence_tree": "494c5f77fcc29bdb18da45ba4035becb7efc35bd",
     "evidence_head_self_excluded": true,
-    "evidence_head_convention": "The receipt-only commit containing this record cannot hash or name itself. Source identity and every non-receipt artifact bind source_head; the final handoff names the later clean evidence commit and tree externally.",
-    "artifact_count": 97,
-    "artifact_total_bytes": 430666,
-    "artifact_path_sha256_aggregate": "sha256:d281a92926b177b2a0edc1c85a750c2fbe19c017486b9f72e29af4c441dd436b",
+    "evidence_head_convention": "This receipt binds the clean source head and excludes its own later receipt-only commit; the final handoff names that evidence head and tree externally.",
+    "artifact_count": 110,
+    "artifact_total_bytes": 462991,
+    "artifact_path_sha256_aggregate": "sha256:0e4a25e3c0c10e57067e0c11fd0b0f6d81ce70b8fa57589c960455110b3aa68d",
     "deleted_path_count": 30,
     "worker_result_self_excluded": true
   },
@@ -36,14 +43,14 @@
     "status": "parent_refreshed_base_verified",
     "base_commit": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
     "branch": "codex/n06-routine-execution-trust",
-    "environment": ".codex/setup-worktree-env.sh executed and .codex-worktree/env.sh sourced for checks",
+    "environment": ".codex/setup-worktree-env.sh executed and .codex-worktree/env.sh sourced for all Cargo/state/home/tmp/scratch checks",
     "parent_rebase_performed_by_worker": false
   },
   "final_state": {
     "status": "worker_blocked",
-    "source_head": "8205213f0f44da95e12ae6f5a995a23fb7358813",
-    "source_tree": "1d394da1b3a0c446dc56c923d4ddf4ec138784d5",
-    "reason": "Source-local child authority repair is committed, but immutable-runtime journeys, managed-temp recovery/reuse checks, strict root-wide compilation, shared adoption, and legitimate durable-child replay proof remain unresolved."
+    "source_head": "1d5583dfadc05c47939e128c412bf69a3caecf2d",
+    "source_tree": "b5b7fbc0c0b0515068cb5be709050bed37985bea",
+    "reason": "N06-owned child execution is refusal-only and executable non-external controls pass, but a root-owned broker/signing anchor, immutable installed runtime, managed-temp reconciliation, strict root integration, and shared adoption remain unavailable."
   },
   "touched_paths": [
     "fixtures/routine-production-catalog/cases.json",
@@ -62,6 +69,7 @@
     "validator/src/cli/successor_public/routine/manifest/loaded_manifest.rs",
     "validator/src/cli/successor_public/routine/manifest/manifest_path.rs",
     "validator/src/cli/successor_public/routine/mod.rs",
+    "validator/src/cli/successor_public/routine/outcome/rerun.rs",
     "validator/src/cli/successor_public/routine/source_configuration.rs",
     "validator/src/cli/successor_public/routine/source_selection.rs",
     "validator/src/routine_work/behavior/child_capability.rs",
@@ -89,12 +97,14 @@
     "validator/src/routine_work/runtime_adapter/mediator/filesystem/output_file_limit.rs",
     "validator/src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection.rs",
     "validator/src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection_tests.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/test_probes.rs",
     "validator/src/routine_work/runtime_adapter/mediator/grant_scope.rs",
     "validator/src/routine_work/runtime_adapter/mediator/grant_validation.rs",
     "validator/src/routine_work/runtime_adapter/mediator/intent_mediation.rs",
     "validator/src/routine_work/runtime_adapter/mediator/mod.rs",
     "validator/src/routine_work/runtime_adapter/mediator/no_op_mediation.rs",
     "validator/src/routine_work/runtime_adapter/mediator/outcome/routine_mediation_result.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/broker_gate_probe.rs",
     "validator/src/routine_work/runtime_adapter/mediator/process/child_authority_channel.rs",
     "validator/src/routine_work/runtime_adapter/mediator/process/mod.rs",
     "validator/src/routine_work/runtime_adapter/mediator/process/process_execution.rs",
@@ -107,12 +117,12 @@
     "validator/src/routine_work/runtime_adapter/production/ledger/file_authority.rs",
     "validator/src/routine_work/runtime_adapter/production/ledger/supported/file_ledger_settle.rs",
     "validator/src/routine_work/runtime_adapter/production/ledger/tests.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/tests/capacity.rs",
     "validator/src/routine_work/runtime_adapter/production/mod.rs",
     "validator/src/routine_work/runtime_adapter/production/production_issuance.rs",
     "validator/src/routine_work/runtime_adapter/production/production_mediation.rs",
     "validator/src/routine_work/runtime_adapter/production/production_test_support.rs",
     "validator/src/routine_work/runtime_adapter/runner_binding.rs",
-    "validator/src/routine_work/runtime_adapter/runner_object_binding.rs",
     "validator/src/routine_work/runtime_adapter/selection_limit.rs",
     "validator/tests/routine_behavior_protocol_cases/canonical_behavior.rs",
     "validator/tests/routine_behavior_protocol_cases/mod.rs",
@@ -140,6 +150,7 @@
     "validator/tests/routine_public_host_contract.rs",
     "validator/tests/routine_public_production_contract.rs",
     "validator/tests/routine_public_production_contract/child_authority.rs",
+    "validator/tests/routine_public_production_contract/child_authority_same_executable_parent.rs",
     "validator/tests/routine_public_production_contract/child_authority_support.rs",
     "validator/tests/routine_public_production_contract/journeys.rs",
     "validator/tests/routine_public_production_contract/production_scenario_cases/argument_fixture.rs",
@@ -148,6 +159,15 @@
     "validator/tests/routine_public_production_contract/scenario.rs",
     "validator/tests/routine_public_production_contract/security.rs",
     "validator/tests/routine_work_contract.rs",
+    "validator/tests/routine_work_contract/authority_ledger_controls.rs",
+    "validator/tests/routine_work_contract/current_path_controls.rs",
+    "validator/tests/routine_work_contract/current_path_fixture.rs",
+    "validator/tests/routine_work_contract/filesystem_controls.rs",
+    "validator/tests/routine_work_contract/invariant_control_map.rs",
+    "validator/tests/routine_work_contract/invariant_control_map_adapter.rs",
+    "validator/tests/routine_work_contract/invariant_control_map_authority.rs",
+    "validator/tests/routine_work_contract/invariant_control_map_mediator_a.rs",
+    "validator/tests/routine_work_contract/invariant_control_map_mediator_b.rs",
     "validator/tests/routine_work_contract/local_capture.rs",
     "validator/tests/routine_work_contract/provenance.rs",
     "validator/tests/routine_work_contract/provenance_compile.rs",
@@ -176,15 +196,14 @@
     "validator/tests/routine_work_contract/runtime_mediator_cases/unsafe_output_rejection.rs"
   ],
   "touched_semantics": [
-    "closed-routine-catalog-manifest-authority",
-    "mediator-held-framed-source-protocol",
-    "trusted-behavior-observation-result-derivation",
-    "arbitrary-process-branch-structural-retirement",
-    "canonical-runner-argv-environment-input-binding",
-    "unframed-exit-zero-v2-refusal",
-    "process-stdin-lifecycle-cleanup",
-    "v2-cache-result-reuse-v1-retirement",
-    "installed-runtime-refusal-ceiling"
+    "routine-behavior-protocol",
+    "routine-broker-consumption-boundary",
+    "routine-catalog-authority",
+    "routine-durable-ledger",
+    "routine-output-provenance",
+    "routine-public-production",
+    "routine-recovery-reuse",
+    "retired-invariant-executable-controls"
   ],
   "generated_outputs": [
     "validation_artifacts/worker-results/N06-ROUTINE-EXECUTION-TRUST-001.json"
@@ -192,23 +211,17 @@
   "fixtures": [
     "fixtures/routine-production-catalog/cases.json",
     "fixtures/routine-production-catalog/valid-catalog-v2.json",
-    "fixtures/routine-public-production/cases.json",
-    "validator/tests/routine_behavior_protocol_contract.rs"
+    "fixtures/routine-public-production/cases.json"
   ],
   "effects": [
     {
       "class": "workspace_write",
-      "target": "n06-source",
-      "performed": true
-    },
-    {
-      "class": "fixture_write",
-      "target": "n06-tests",
+      "target": "n06-owned-source-tests-receipt",
       "performed": true
     },
     {
       "class": "process",
-      "target": "isolated-verification",
+      "target": "isolated-local-checks",
       "performed": true
     },
     {
@@ -218,12 +231,7 @@
     },
     {
       "class": "external_write",
-      "target": "external",
-      "performed": false
-    },
-    {
-      "class": "destructive",
-      "target": "destructive",
+      "target": "external-systems",
       "performed": false
     },
     {
@@ -233,123 +241,120 @@
     }
   ],
   "requirements": [
-    "N06-ROUTINE-EXECUTION-TRUST",
-    "OD-008-PRESERVE",
-    "OD-009-PRESERVE"
+    "N06",
+    "OD-008",
+    "OD-009",
+    "WORKER-RESULT-v1",
+    "ROOT-BROKER-AUTHORIZATION"
   ],
   "dependency_nodes": [
     "N03-CLI-STATE",
+    "ROOT-ROUTINE-BROKER",
     "ROOT-INSTALLED-RUNTIME",
     "ROOT-SHARED-SCHEMA-MIGRATION"
   ],
   "changes": [
     {
-      "area": "execution-authority",
-      "result": "Retired arbitrary external-process success authority and retained one typed rust-source-syntax protocol."
-    },
-    {
       "area": "child-entry",
-      "result": "Replaced caller-selectable environment authority with a process-bound inherited socket capability, sealed exact bindings, and ACK-before-stdin mediation."
+      "result": "Public child selection is refusal-only and returns before descriptor or stdin reads."
     },
     {
-      "area": "runner-identity",
-      "result": "Bound and revalidated exact executable bytes and Unix object identity across parent and child."
+      "area": "broker-boundary",
+      "result": "All process spawn is structurally gated by a private uninhabited RootBrokerAuthorization with no local constructor, decoder, serializer, key, ledger, or public authority."
     },
     {
-      "area": "output-provenance",
-      "result": "Attests only authorized owned output deltas and rejects stale, foreign, alias, and restore substitution cases."
+      "area": "execution-authority",
+      "result": "Arbitrary process and child-authored result authority remain retired; exact framed Rust syntax observation is the only retained behavior shape."
     },
     {
-      "area": "durability",
-      "result": "Stages publication before terminal settlement and retains bounded recovery markers and interruption boundaries."
+      "area": "proof-restoration",
+      "result": "Restored 65 retired test-function mappings to executable controls or exact broker/immutable-runtime blockers; removed a non-causal predicate model rather than count it as mutation proof."
     },
     {
-      "area": "reuse",
-      "result": "Treats different full authority bindings as safe misses while exact repeats remain reusable."
-    },
-    {
-      "area": "fresh-output",
-      "result": "Adds confined authorized dynamic output provisioning with rollback and special-object rejection."
-    },
-    {
-      "area": "tests",
-      "result": "Adds built-public-binary exploit, copied environment, wrong parent/session, and replay-shaped refusal controls."
+      "area": "durability-output-reuse",
+      "result": "Executable controls cover ledger capacity/recovery/conflict, alias and special-object rejection, output/read mutation, context mutation, binding mutation, and repeat-use state behavior."
     }
   ],
   "commands_and_tests": [
     {
       "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo check --manifest-path validator/Cargo.toml --lib --locked --offline -j16",
-      "status": "passed",
-      "result": "exit 0; cap-lints behavior compilation passed"
+      "status": "passed_degraded",
+      "result": "exit 0; behavior compilation passed with warning wall capped"
     },
     {
-      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_behavior_protocol_contract --locked --offline -j16",
-      "status": "passed",
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_behavior_protocol_contract",
+      "status": "passed_degraded",
       "result": "4 passed; 0 failed"
     },
     {
-      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_production_authority_contract --locked --offline -j16",
-      "status": "passed",
-      "result": "4 passed; 0 failed"
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_binding_contract",
+      "status": "blocked_environment",
+      "exit_code": 101,
+      "result": "32 passed; 1 failed at the known managed-temp secret-path conflict; both closed-binding controls passed"
     },
     {
-      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_binding_contract closed_binding --locked --offline -j16",
-      "status": "passed",
-      "result": "2 passed; 0 failed; 30 filtered"
-    },
-    {
-      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_production_catalog_contract --locked --offline -j16",
-      "status": "passed",
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_production_catalog_contract",
+      "status": "passed_degraded",
       "result": "14 passed; 0 failed"
     },
     {
-      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_public_host_contract --locked --offline -j16",
-      "status": "passed",
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_public_host_contract",
+      "status": "passed_degraded",
       "result": "4 passed; 0 failed"
     },
     {
-      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_work_contract runtime_adapter --locked --offline -j16",
-      "status": "passed",
-      "result": "14 passed; 0 failed; 69 filtered"
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_production_authority_contract",
+      "status": "passed_degraded",
+      "result": "4 passed; 0 failed, including built-public refusal"
     },
     {
-      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_public_production_contract --locked --offline -j16",
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_public_production_contract",
       "status": "partial_runtime_gap",
-      "result": "10 passed; 0 failed; 5 ignored because no root-owned immutable current ultragoal binary was provisioned"
+      "result": "14 passed; 0 failed; 4 ignored because root broker and immutable installed runtime are unavailable; exact same-executable fork/exec attack passed its refusal control"
     },
     {
-      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_recovery_reuse_journey_contract --locked --offline -j16",
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_recovery_reuse_journey_contract",
       "status": "blocked_environment",
       "exit_code": 101,
-      "result": "35 passed; 2 failed because the required .codex-worktree root is rejected by legacy secret-path policy"
+      "result": "36 passed; 2 failed at the managed-temp secret-path conflict"
     },
     {
-      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_work_contract --locked --offline -j16",
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_work_contract",
       "status": "blocked_environment",
       "exit_code": 101,
-      "result": "57 passed; 26 failed; managed-temp secret-path conflict remains the dominant causal blocker, with one timed race assertion following the same unavailable fixture setup"
+      "result": "pre-final-delta broad run was 69 passed and 27 failed: 26 managed-temp secret-path conflicts and one StableCrateId provenance compiler collision; final delta removed one non-causal passing mutant model and was checked by focused controls instead of rerunning the broad audit"
+    },
+    {
+      "command": "routine_work_contract current_path_controls; filesystem_controls; authority_ledger_controls; capacity; invariant_control_map",
+      "status": "passed_degraded",
+      "result": "4/4, 3/3, 3/3, 1/1, and 1/1; exact retired audit is 65 unique old tests to 65 ledger rows"
     },
     {
       "command": "source .codex-worktree/env.sh; unset RUSTFLAGS; cargo check --manifest-path validator/Cargo.toml --lib --locked --offline -j16",
       "status": "blocked_root_wide",
       "exit_code": 101,
-      "result": "649 strict diagnostics; 31 mentions of routine-owned paths; no strict-green claim"
+      "result": "649 strict diagnostics; 31 mentions of routine-owned paths"
     },
     {
-      "command": "rustfmt --edition 2024 --check <20 changed N06 Rust paths>",
+      "command": "rustfmt --edition 2024 --check <all changed N06 Rust paths>",
       "status": "passed",
-      "result": "direct rustfmt check passed for every changed N06 Rust file"
+      "result": "direct formatting check passed after formatting commit; maximum changed Rust file is 245 lines"
     },
     {
-      "command": "source .codex-worktree/env.sh; cargo fmt --manifest-path validator/Cargo.toml -- --check",
+      "command": "python3 scripts/check-python-source-laws .",
+      "status": "passed",
+      "result": "27 typed sources"
+    },
+    {
+      "command": "python3 scripts/check-agent-standards .",
       "status": "blocked_root_owned",
       "exit_code": 1,
-      "result": "root-owned distribution target modules are absent, so Cargo-wide format discovery cannot resolve the crate module tree"
+      "result": "active-setup-to-idle-orchestration-thread-bound-heartbeat pass-evidence digest mismatch outside N06 scope"
     },
     {
       "command": "git diff --check",
       "status": "passed",
-      "result": "no whitespace errors before source commit"
+      "result": "no whitespace errors"
     }
   ],
   "artifacts": [
@@ -370,8 +375,8 @@
     },
     {
       "path": "validator/src/cli/successor_public/routine/behavior_child.rs",
-      "sha256": "sha256:5e872b0076726469c4561e54680a7f4d75ae918c410c451d2728a5dbda00931c",
-      "byte_length": 8212
+      "sha256": "sha256:8b44bc75585c19cc9203bb64dab2fc84bf9f4026a645d3676cd47c6e8bbad8f3",
+      "byte_length": 923
     },
     {
       "path": "validator/src/cli/successor_public/routine/host/host_failure.rs",
@@ -429,6 +434,11 @@
       "byte_length": 1954
     },
     {
+      "path": "validator/src/cli/successor_public/routine/outcome/rerun.rs",
+      "sha256": "sha256:2bfe56c5ad18ab11e059c19b157e5bb6ec22cb1cd27fe32fdf1f4323bad14afb",
+      "byte_length": 4425
+    },
+    {
       "path": "validator/src/cli/successor_public/routine/source_configuration.rs",
       "sha256": "sha256:8a3c93cb641978f8fd8acf2a0eef6cb742757b15330004f22db545fc261b300a",
       "byte_length": 8612
@@ -440,13 +450,13 @@
     },
     {
       "path": "validator/src/routine_work/behavior/child_capability.rs",
-      "sha256": "sha256:d498760eb57660405c283ae35188e8214098b99f3483477ebd68b7edee4160f9",
-      "byte_length": 5118
+      "sha256": "sha256:021234779b65697433b3098278af4483a58de967c2d51c29cbfc400e60e5462f",
+      "byte_length": 403
     },
     {
       "path": "validator/src/routine_work/behavior/mod.rs",
-      "sha256": "sha256:646ab27da688bf76f2af39d249f49920f3ca3b09e111cdf7e57303181d7a8c6b",
-      "byte_length": 668
+      "sha256": "sha256:e6c2abc186257376b20c3f674253bf693e8ca09c022b78bf974d4c4e61228f3f",
+      "byte_length": 590
     },
     {
       "path": "validator/src/routine_work/behavior/rust_source_frame.rs",
@@ -505,8 +515,8 @@
     },
     {
       "path": "validator/src/routine_work/mod.rs",
-      "sha256": "sha256:7de62c60480938e239b136ad8e1fab286fe7022cce890fd80047f20dcd29722b",
-      "byte_length": 2786
+      "sha256": "sha256:3a504a4462c800c8f0977cbc8922eeda46a4553d6b3ebe6da82f0df78bd34d7f",
+      "byte_length": 2816
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/execution_authority/effect_intent.rs",
@@ -535,8 +545,8 @@
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/executable_identity.rs",
-      "sha256": "sha256:6456d3ec48e7a45dfc3c40a24b14394dffc0cd715512098c1da8683f5a642852",
-      "byte_length": 6992
+      "sha256": "sha256:3622e0490af607fbc4b88e658677c0dd7ec7ddb3acaf110393178b2d5491959b",
+      "byte_length": 6567
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/framed_read_input.rs",
@@ -545,8 +555,8 @@
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/mod.rs",
-      "sha256": "sha256:b307fbaf8d33939e95ba4de999b0c631b90e9fe4d1d82379cc273df556ae5da9",
-      "byte_length": 1587
+      "sha256": "sha256:b0f5494c5474eb07658aeb653c5cd43660dd1005460bcb7390bd3f726ada6acf",
+      "byte_length": 1688
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/output_file_limit.rs",
@@ -564,24 +574,29 @@
       "byte_length": 1663
     },
     {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/test_probes.rs",
+      "sha256": "sha256:f8b70c58a300ea9825b0150318977e3913e1f0ac16c8a17e3ae8819716de731b",
+      "byte_length": 1058
+    },
+    {
       "path": "validator/src/routine_work/runtime_adapter/mediator/grant_scope.rs",
-      "sha256": "sha256:555a1d66b13a0276aca78e9f765ad3fb88eac75b9236d541bdda1cafbb8933f5",
-      "byte_length": 9559
+      "sha256": "sha256:749e5d0ed57eb53805ca857595fba77c5130eda2dde3d0bbdc12714b58cd5b65",
+      "byte_length": 9426
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/grant_validation.rs",
-      "sha256": "sha256:a178fa07beac3c3dc089d228217f4cc56dd08fb8e66ad9b48239423b23902593",
-      "byte_length": 7623
+      "sha256": "sha256:2c68d184fef0f9b7b22e47ac94a83374560681208e251520eafa76772eb6d974",
+      "byte_length": 7362
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/intent_mediation.rs",
-      "sha256": "sha256:ec96738c711aa12ba5ea27bdadef18b3e97ba0cc2fe283cfa8765b586ac59b34",
-      "byte_length": 8608
+      "sha256": "sha256:7409fcc178f2b0560b6c1337cf2e1c9cc3ee5e4ef3ed4e0730e995f2950691ca",
+      "byte_length": 7988
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/mod.rs",
-      "sha256": "sha256:527995c0e4fcbe37f98216f42501f69798f45de8871566186dc6e97621c9f37d",
-      "byte_length": 3050
+      "sha256": "sha256:d2fd5485c4734310fcf2558333390e3aaf64f7035d83e6f331472521459a27e6",
+      "byte_length": 2570
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/no_op_mediation.rs",
@@ -594,19 +609,24 @@
       "byte_length": 3432
     },
     {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/broker_gate_probe.rs",
+      "sha256": "sha256:5c308db8503d78e122e70de87276ca096ba678b89df6e04c6eba299bb84a3a32",
+      "byte_length": 1529
+    },
+    {
       "path": "validator/src/routine_work/runtime_adapter/mediator/process/child_authority_channel.rs",
-      "sha256": "sha256:d438ea98ba3b5e56e6590931776e51291fe493b3c9a962ca301a3ecfb8b9faf4",
-      "byte_length": 4535
+      "sha256": "sha256:deb4847371cbc14d473d8896de3d014dd06369254809ae913d8dc5fdc9204775",
+      "byte_length": 1114
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/process/mod.rs",
-      "sha256": "sha256:3f6f69552993cb5e037b5890776bde74dab2ab80c75179f2b1e45fa70231b618",
-      "byte_length": 1864
+      "sha256": "sha256:62701ec34d7272df26cfa123f19c2da27136116bff247344504cd8f52b7adf1c",
+      "byte_length": 1511
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_execution.rs",
-      "sha256": "sha256:c3c3409579e59f0c9432d694d6c54168632b1a3dbd4e91b53bd56bc659713961",
-      "byte_length": 9180
+      "sha256": "sha256:ba8a90fe90ccdb2bff751da223a81d23b6b28c4b44dd6d513d1a4d27179c9388",
+      "byte_length": 8996
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_input_write.rs",
@@ -615,13 +635,13 @@
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/process/spawn_test_observation.rs",
-      "sha256": "sha256:c251f1ae10003167e4881e06e0853eff35ea85939acb12db792f53947e25df40",
-      "byte_length": 7965
+      "sha256": "sha256:08380bce2204d882d94270a2f9f2b89da679ad5691a10dd31e0526495cd6bae5",
+      "byte_length": 7846
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/read_source_binding.rs",
-      "sha256": "sha256:1d5c84648a01b9562a1e947bd75b18886092660daa8a8c2c635c79acbc54684c",
-      "byte_length": 7560
+      "sha256": "sha256:5364578a4f10a42e07f7fa0d79f75c407d2d7c9c9a53109840799114381e8fb5",
+      "byte_length": 7475
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mediator/reuse_input_index.rs",
@@ -635,8 +655,8 @@
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/mod.rs",
-      "sha256": "sha256:0e6fc5eae0df53417ee8d88929251693784a5d13b173e19aa87de7fd55931956",
-      "byte_length": 2652
+      "sha256": "sha256:cf43d7f9dd133430d9490f2aef7626874602f2c433f78b147d5a55b202b053f2",
+      "byte_length": 2694
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/production/ledger/file_authority.rs",
@@ -650,8 +670,13 @@
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/production/ledger/tests.rs",
-      "sha256": "sha256:bc8a855781fc6fb761772741e099f5035e7138cd4f0998a022767fe3d5d57390",
-      "byte_length": 7999
+      "sha256": "sha256:c662c978abce9864601068e52b7c5d34e8c08b17d57b5f350f01acf1991b9f6d",
+      "byte_length": 8075
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/ledger/tests/capacity.rs",
+      "sha256": "sha256:86dc4d8bb38292b9efe394153246be06c799bb86b864e909af607319d7620809",
+      "byte_length": 1449
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/production/mod.rs",
@@ -677,11 +702,6 @@
       "path": "validator/src/routine_work/runtime_adapter/runner_binding.rs",
       "sha256": "sha256:dd1b7373d9f930dfb1ce2ed92070223136171b264f095152e47179b726d375db",
       "byte_length": 7850
-    },
-    {
-      "path": "validator/src/routine_work/runtime_adapter/runner_object_binding.rs",
-      "sha256": "sha256:822cbe0b9a09cd590d24eb0d595189f2b7962137c2c564dcb47098e46584eca8",
-      "byte_length": 1069
     },
     {
       "path": "validator/src/routine_work/runtime_adapter/selection_limit.rs",
@@ -725,8 +745,8 @@
     },
     {
       "path": "validator/tests/routine_production_authority_contract.rs",
-      "sha256": "sha256:b76eccbb72c24c42717fee67bd86e7a85c2083571fe33a2bfe9dd8bede8275fe",
-      "byte_length": 6224
+      "sha256": "sha256:b6f17699d3909e2088f468e701feeef7e5533c2ad24a0f8e07946dddce271f29",
+      "byte_length": 5649
     },
     {
       "path": "validator/tests/routine_production_catalog_cases/catalog_definition_rejection.rs",
@@ -775,18 +795,23 @@
     },
     {
       "path": "validator/tests/routine_public_production_contract/child_authority.rs",
-      "sha256": "sha256:4891b47c7eac7a6f319a92bf224c5fb620e25b4dbafe88fb45d96c481156f68e",
-      "byte_length": 2530
+      "sha256": "sha256:5140c9c1fd982afa430850320cb715325866fbe6a79677654c266924693cc343",
+      "byte_length": 3019
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/child_authority_same_executable_parent.rs",
+      "sha256": "sha256:33146f7b18435f2219565f79a53615b3bc1acea925807072345384e4312789eb",
+      "byte_length": 2405
     },
     {
       "path": "validator/tests/routine_public_production_contract/child_authority_support.rs",
-      "sha256": "sha256:d2cf213e743a5ee584edae504aa260ae4610db983b9b25358b75844ab3ee8d19",
-      "byte_length": 6769
+      "sha256": "sha256:c8763fc9d372efe5c17772c496fa5b8bf56bfd12e71ce2c35f5669c479366e35",
+      "byte_length": 5665
     },
     {
       "path": "validator/tests/routine_public_production_contract/journeys.rs",
-      "sha256": "sha256:34dea0bf15e0a3e099e54b0d3182df0c16a7e551cf750562e6964214de5d9884",
-      "byte_length": 5725
+      "sha256": "sha256:bee9e97a540826a28bd184567787bc8fc5dd5d4b9b473f446f031ddeedc6664a",
+      "byte_length": 5787
     },
     {
       "path": "validator/tests/routine_public_production_contract/production_scenario_cases/argument_fixture.rs",
@@ -810,13 +835,58 @@
     },
     {
       "path": "validator/tests/routine_public_production_contract/security.rs",
-      "sha256": "sha256:4842a0b037b7fbf73b83141f601259d058f55973b2a50a310e36ba94b36a6ae5",
-      "byte_length": 7148
+      "sha256": "sha256:df4c938683afd5d344cf4ede22ad6993334463109a09f3d3f45f5abb74ce6e16",
+      "byte_length": 7225
     },
     {
       "path": "validator/tests/routine_work_contract.rs",
-      "sha256": "sha256:ae1f41b1ee1228fe5a7c670232d13ea83d3d05b823f0911e032952a8cd42c970",
-      "byte_length": 768
+      "sha256": "sha256:ded86ba143afb602f7414346a0ce28d8d0cb29260755a6565c46e327def00722",
+      "byte_length": 1624
+    },
+    {
+      "path": "validator/tests/routine_work_contract/authority_ledger_controls.rs",
+      "sha256": "sha256:865009d3a53c2710c090a926332b0cb39886b3e915628528a54f258b153785c1",
+      "byte_length": 4292
+    },
+    {
+      "path": "validator/tests/routine_work_contract/current_path_controls.rs",
+      "sha256": "sha256:4d109f6e3d2062a67dc18457774ae65ff0ff21710ffebd5649bedaa98a483fab",
+      "byte_length": 5559
+    },
+    {
+      "path": "validator/tests/routine_work_contract/current_path_fixture.rs",
+      "sha256": "sha256:451ec87bf1b9778da54d1299ac9ff94bde7daac6004eaedf77109b25dcc8adbd",
+      "byte_length": 4450
+    },
+    {
+      "path": "validator/tests/routine_work_contract/filesystem_controls.rs",
+      "sha256": "sha256:81050a7eeebbebdc2dab645846d51ede16136d03d3c81a7697cd07ca32971072",
+      "byte_length": 6767
+    },
+    {
+      "path": "validator/tests/routine_work_contract/invariant_control_map.rs",
+      "sha256": "sha256:0c8fabbd86a8d8b4e964aa64193d84e79bd30854e3454148d96e7df79cc265a6",
+      "byte_length": 2711
+    },
+    {
+      "path": "validator/tests/routine_work_contract/invariant_control_map_adapter.rs",
+      "sha256": "sha256:d1a9e525c56c7d21ad71f03ae08c20754b6177c620fcad23ae65a6917be176f0",
+      "byte_length": 2737
+    },
+    {
+      "path": "validator/tests/routine_work_contract/invariant_control_map_authority.rs",
+      "sha256": "sha256:016cadd93f9331ef84ed44109fa2bda324587dc6f90f335474e95a1bda6b03f8",
+      "byte_length": 5422
+    },
+    {
+      "path": "validator/tests/routine_work_contract/invariant_control_map_mediator_a.rs",
+      "sha256": "sha256:7b5af2ff70551ee5c7a1613027e3f8191e424b9d9ebb1c52c3f397e5d5abdfa7",
+      "byte_length": 4330
+    },
+    {
+      "path": "validator/tests/routine_work_contract/invariant_control_map_mediator_b.rs",
+      "sha256": "sha256:4744742b8b87a536ee297752bc5873fa0dd09295123f2bc056f24c999155d478",
+      "byte_length": 4369
     },
     {
       "path": "validator/tests/routine_work_contract/local_capture.rs",
@@ -842,88 +912,669 @@
   "findings": [
     {
       "status": "closed_source_local",
-      "class": "false-pass",
-      "finding": "Exit-zero unframed, wrong stdout, nonempty stderr, arbitrary program, argv, and environment cannot issue a V2 routine success."
-    },
-    {
-      "status": "closed_source_local",
       "class": "child-authority",
-      "finding": "The former exact public-binary environment exploit now refuses with zero writes before framed input interpretation."
+      "finding": "Legacy environment, arbitrary frame, prebuffered socket, fork/descriptor transfer, replay, and held-open input cannot select child success and refuse with zero writes."
     },
     {
       "status": "closed_source_local",
-      "class": "binding",
-      "finding": "Capability sealing covers request, protocol, intent, node, grant session, durable reservation, parent/child/session, executable object, framed input digest, and nonce."
+      "class": "spawn-authority",
+      "finding": "Production spawn requires RootBrokerAuthorization; its private Infallible field has no source-local production constructor or serialization path, and the live gate always refuses."
+    },
+    {
+      "status": "closed_source_local",
+      "class": "false-pass",
+      "finding": "The process-path probe enters the real bounded executor with immutable /usr/bin/true and real root/read/output descriptors, observes broker-required before Started, and records zero spawn and unchanged state."
+    },
+    {
+      "status": "blocked",
+      "class": "root-broker",
+      "finding": "Same-UID N06 state cannot authenticate a same-executable parent. A different-principal root broker must own durable reservation and signing state, directly answer a post-exec child challenge, atomically bind request/protocol/intent/node/program object/PID/session/frame digest, and consume one use before stdin."
     },
     {
       "status": "blocked",
       "class": "runtime-proof",
-      "finding": "No exact root-owned immutable current ultragoal program was provisioned; five public production journeys remain ignored and a legitimate durable-mediated internal-child success/replay sequence is not runtime-proven."
-    },
-    {
-      "status": "blocked",
-      "class": "trust-assumption",
-      "finding": "The MAC secret and capability share the inherited peer-authenticated socket. Durable provenance therefore relies on peer PID, real-parent equality, exact immutable executable identity, and parent code honoring the reservation; same-executable non-reserved issuance is not independently runtime-proven."
+      "finding": "Four broker-backed immutable-runtime public journeys remain ignored; no installed/public success or legitimate internal-child positive claim is made."
     },
     {
       "status": "blocked",
       "class": "managed-environment",
-      "finding": "Recovery/reuse remains 35 passed and 2 failed; full routine_work remains 57 passed and 26 failed because the mandatory managed temp root conflicts with legacy secret-path capture policy."
+      "finding": "Recovery/reuse is 36/2; the last broad routine_work run before the final proof-only delta was 69/27 under the managed-temp secret-path conflict plus one provenance compiler collision."
     },
     {
       "status": "blocked",
       "class": "strict-compilation",
-      "finding": "Strict library compilation remains red at 649 diagnostics with 31 routine-path mentions."
+      "finding": "Strict library compilation is red at 649 diagnostics with 31 routine-path mentions."
     },
     {
       "status": "root_request",
-      "request_id": "ROOT-N06-ADOPT-V2-SHAPES",
-      "finding": "Adopt the V2 manifest, catalog, cache, result, and reuse shapes in shared schemas and generated authority."
-    },
-    {
-      "status": "root_request",
-      "request_id": "ROOT-N06-MIGRATION",
-      "finding": "Register V1 manifest, catalog, result, and reuse as non-authoritative and V1 cache as a typed miss while preserving OD-008 and OD-009 physical bytes."
+      "request_id": "ROOT-N06-BROKER",
+      "finding": "Replace require_root_broker_before_spawn with a root-owned different-principal broker adapter. It must own non-exportable signing/reservation state, validate the exact durable Reserved record, answer a fresh post-exec challenge directly, bind exact request/protocol/intent/node/program object/parent-child PID/session/frame digest, CAS Reserved to Started once, and only then permit stdin; no file-only same-UID authority is sufficient."
     },
     {
       "status": "root_request",
       "request_id": "ROOT-N06-INSTALLED-RUNTIME",
-      "finding": "Provision and verify an exact root-owned immutable current ultragoal binary, then execute all five ignored journeys and the legitimate internal-child replay controls."
+      "finding": "Provision an exact immutable installed Ultragoal runtime and execute the four broker-backed journeys plus positive internal child, cancellation, descendant reaping, setup-failure, sandbox, and replay controls."
     },
     {
       "status": "root_request",
       "request_id": "ROOT-N06-TEMP-POLICY",
-      "finding": "Reconcile the mandatory .codex-worktree isolated temp root with legacy capture secret-path prohibition without weakening either boundary."
+      "finding": "Reconcile required .codex-worktree isolated temp roots with the legacy secret-path prohibition without weakening either boundary."
     },
     {
       "status": "root_request",
-      "request_id": "ROOT-N06-INTEGRATION-GATES",
-      "finding": "Repair root-wide strict and generated blockers, rerun repository checks, and retain parent ownership of acceptance and claim surfaces."
+      "request_id": "ROOT-N06-INTEGRATION",
+      "finding": "Adopt shared schemas/migrations/exports, repair strict and generated blockers, preserve OD-008/OD-009 bytes, and retain parent ownership of acceptance and claims."
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_adapter_cases/adapter_scenario.rs::fixture_catalog_is_exact_and_has_no_claim_effect",
+      "current_executable_controls": [
+        "current_path_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_adapter_cases/clean_noop.rs::clean_noop_is_deterministic_exact_and_non_effectful",
+      "current_executable_controls": [
+        "authority_ledger_controls::exact_noop_bypasses_authority_initialization_and_workspace_writes"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_adapter_cases/clean_noop.rs::dirty_and_strict_preparation_bind_deterministic_complete_intents_without_effects",
+      "current_executable_controls": [
+        "current_path_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_adapter_cases/cross_request_rejection.rs::cross_request_witnesses_and_inconsistent_dependency_artifacts_fail_closed",
+      "current_executable_controls": [
+        "report::dependency_artifact_consistency::same_plan_reuse_and_execution_cannot_hide_missing_or_failed_dependencies"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_adapter_cases/cross_request_rejection.rs::candidate_mutation_during_delegated_reconciliation_never_returns_complete",
+      "current_executable_controls": [
+        "current_path_controls::context_mutation_refuses_before_authority_creation"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_adapter_cases/cross_request_rejection.rs::preparation_and_pre_report_refusal_source_has_no_effect_primitive",
+      "current_executable_controls": [
+        "current_path_controls::context_mutation_refuses_before_authority_creation"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_adapter_cases/invocation_binding_refusals.rs::malformed_invocation_sets_and_stale_bindings_refuse_without_writes",
+      "current_executable_controls": [
+        "current_path_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_adapter_cases/loader_environment_rejection.rs::startup_loader_environment_variables_are_rejected_at_binding",
+      "current_executable_controls": [
+        "current_path_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_adapter_cases/loader_environment_rejection.rs::missing_runner_identity_and_unbounded_execution_policy_refuse_without_writes",
+      "current_executable_controls": [
+        "current_path_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_adapter_cases/outcome_set_rejection.rs::partial_duplicate_unknown_reordered_unobserved_and_cross_session_outcomes_fail_closed",
+      "current_executable_controls": [
+        "report::mixed_witness_completion::unknown_duplicate_wrong_scope_and_invalid_failure_rows_are_rejected"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_adapter_cases/outcome_set_rejection.rs::genuine_ordered_outcomes_delegate_to_exact_report_reconciliation",
+      "current_executable_controls": [
+        "report::mixed_witness_completion::complete_execution_requires_mixed_opaque_executed_and_verified_reuse_witnesses"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/authority_redaction.rs::secrets_paths_and_raw_output_are_absent_from_authority_and_diagnostics",
+      "current_executable_controls": [
+        "capture::output::secret_safety_tests::secret_bearing_invocation_withholds_every_output_transformation"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/authority_redaction.rs::production_boundary_has_one_sealed_issuer_and_no_test_grant_entrypoint",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": null
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/authority_redaction.rs::production_child_race_attempt",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/authority_redaction.rs::two_processes_racing_the_same_protocol_have_exactly_one_winner",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::expired_and_concurrently_conflicting_preparations_fail_closed"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/authority_scenario.rs::production_authority_fixture_catalog_is_exact_and_claimless",
+      "current_executable_controls": [
+        "authority_ledger_controls::exact_noop_bypasses_authority_initialization_and_workspace_writes"
+      ],
+      "cause": null
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/authority_scenario.rs::production_fresh_execution_replay_refusal_and_exact_reuse_are_durable",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/authority_scenario.rs::malformed_reuse_refuses_before_any_authority_transition",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::candidate_source_command_and_cross_attempt_substitution_never_prepare"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/concurrent_reuse_settlement.rs::forged_and_valid_reuse_concurrency_is_order_independent_and_single_transition",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::expired_and_concurrently_conflicting_preparations_fail_closed"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/concurrent_reuse_settlement.rs::concurrent_reuse_at_consumed_grant_capacity_publishes_one_valid_max_state",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::protocol_effect_and_consumed_grant_capacity_refuse_real_next_reservation_transactionally"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/effect_capacity_bounds.rs::protocol_effect_max_minus_one_max_and_max_plus_one_are_fail_closed",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::protocol_effect_and_consumed_grant_capacity_refuse_real_next_reservation_transactionally"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/effect_capacity_bounds.rs::no_op_bypasses_authority_initialization_and_all_writes",
+      "current_executable_controls": [
+        "authority_ledger_controls::exact_noop_bypasses_authority_initialization_and_workspace_writes"
+      ],
+      "cause": null
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/effect_capacity_bounds.rs::reserved_and_started_crashes_require_exact_bounded_recovery",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::staged_publication_recovers_without_reauthorizing_artifact_bytes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/effect_capacity_bounds.rs::expired_recovery_authority_is_rejected_from_authenticated_state",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::expired_and_concurrently_conflicting_preparations_fail_closed"
+      ],
+      "cause": null
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/effect_capacity_bounds.rs::preterminal_reconciliation_failure_remains_pending_across_reopen",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::staged_publication_recovers_without_reauthorizing_artifact_bytes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/invalid_reuse_recovery.rs::invalid_reuse_never_regresses_complete_or_blocks_later_exact_reuse",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::candidate_source_command_and_cross_attempt_substitution_never_prepare"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/invalid_reuse_recovery.rs::reuse_preauthorization_generation_race_fails_before_reservation_mutation",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::expired_and_concurrently_conflicting_preparations_fail_closed"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/invalid_reuse_recovery.rs::consumed_grant_max_minus_one_max_and_max_plus_one_are_fail_closed",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::protocol_effect_and_consumed_grant_capacity_refuse_real_next_reservation_transactionally"
+      ],
+      "cause": null
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/terminal_failure_settlement.rs::failure_and_cancellation_settle_terminally_without_recovery",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/terminal_failure_settlement.rs::stale_request_and_self_consistent_substitution_refuse_without_hidden_writes",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::candidate_source_command_and_cross_attempt_substitution_never_prepare"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/terminal_failure_settlement.rs::owner_only_store_rejects_unknown_hardlink_symlink_special_and_root_replacement",
+      "current_executable_controls": [
+        "authority_ledger_controls::authority_root_and_state_aliases_or_special_objects_refuse_without_rewrite",
+        "authority_ledger_controls::authenticated_state_truncate_unknown_duplicate_and_reorder_mutations_refuse"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "routine_production_authority_cases/terminal_failure_settlement.rs::authenticated_state_rejects_truncate_unknown_duplicate_reorder_rollback_and_mutate_restore",
+      "current_executable_controls": [
+        "authority_ledger_controls::authority_root_and_state_aliases_or_special_objects_refuse_without_rewrite",
+        "authority_ledger_controls::authenticated_state_truncate_unknown_duplicate_and_reorder_mutations_refuse"
+      ],
+      "cause": null
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/cancellation_reaping.rs::cancellation_kills_the_process_group_and_emits_no_reuse",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/cancellation_reaping.rs::timeout_requires_exact_recovery_authority_and_leaves_no_child",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/context_mutation_recovery.rs::post_spawn_context_mutation_requires_exact_recovery_before_retry",
+      "current_executable_controls": [
+        "current_path_controls::context_mutation_refuses_before_authority_creation"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/context_mutation_recovery.rs::post_spawn_finish_failure_keeps_the_exact_recovery_barrier",
+      "current_executable_controls": [
+        "current_path_controls::context_mutation_refuses_before_authority_creation"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/executable_substitution_rejection.rs::compiled_same_process_executable_substitutions_are_denied_without_success_or_reuse",
+      "current_executable_controls": [
+        "current_path_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/executable_substitution_rejection.rs::exact_same_executable_reexec_remains_single_process_and_can_complete",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/executable_substitution_rejection.rs::compiled_user_owned_dlopen_mapping_is_denied_without_effect_success_or_reuse",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::mediator::filesystem::mediation_failure::tests::current_user_owned_0555_executable_is_mutable_despite_denied_write_access"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/executable_substitution_rejection.rs::pinned_single_process_route_completes_and_is_absent_after_natural_exit",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/fork_bypass_reaping.rs::fork_family_bypasses_are_killed_before_success_or_reuse",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/fork_bypass_reaping.rs::group_leader_joining_existing_pgid_is_reaped_by_direct_pid",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/fork_bypass_reaping.rs::term_resistant_output_overflow_is_reaped_without_reuse",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/fork_bypass_reaping.rs::mediator_source_keeps_issuance_public_dispatch_and_claims_outside_the_boundary",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/invocation_fixture.rs::mediator_fixture_catalog_is_exact_and_claimless",
+      "current_executable_controls": [
+        "current_path_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/invocation_fixture.rs::clean_noop_consumes_no_authority_spawns_nothing_and_writes_nothing",
+      "current_executable_controls": [
+        "authority_ledger_controls::exact_noop_bypasses_authority_initialization_and_workspace_writes"
+      ],
+      "cause": null
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/invocation_fixture.rs::ordered_execution_emits_correlated_results_and_exact_reuse_skips_all_spawns",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/read_source_refusals.rs::read_source_binding_refuses_symlinks_hardlinks_special_files_and_capture_races",
+      "current_executable_controls": [
+        "filesystem_controls::read_symlink_hardlink_fifo_socket_ancestor_swap_and_restore_refuse"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/read_source_refusals.rs::read_source_aba_before_spawn_is_refused_without_effect",
+      "current_executable_controls": [
+        "filesystem_controls::read_symlink_hardlink_fifo_socket_ancestor_swap_and_restore_refuse"
+      ],
+      "cause": null
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/read_source_refusals.rs::successful_exit_cannot_hide_post_spawn_read_source_mutation",
+      "current_executable_controls": [
+        "filesystem_controls::read_symlink_hardlink_fifo_socket_ancestor_swap_and_restore_refuse"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/reuse_integrity.rs::fabricated_or_mutated_reuse_never_becomes_a_cache_hit",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::candidate_source_command_and_cross_attempt_substitution_never_prepare",
+        "reuse::matching::content_and_same_size_output_substitution_never_hit"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/reuse_integrity.rs::strict_expansion_and_capability_fallback_execute_the_selected_plan_exactly",
+      "current_executable_controls": [
+        "planning::strict_named_boundary_and_optional_fallback_are_explicit"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/reuse_integrity.rs::current_user_owned_0555_runner_is_rejected_before_spawn_or_effect",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::mediator::filesystem::mediation_failure::tests::current_user_owned_0555_executable_is_mutable_despite_denied_write_access"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/script_replacement_rejection.rs::external_dash_script_replacement_cannot_execute_or_seed_reuse",
+      "current_executable_controls": [
+        "current_path_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations"
+      ],
+      "cause": null
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/script_replacement_rejection.rs::bound_dash_source_executes_reuses_exactly_and_mutation_invalidates_reuse",
+      "current_executable_controls": [
+        "current_path_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/setup_failure_recovery.rs::post_spawn_setup_failures_cleanup_every_resource_and_require_exact_recovery",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::staged_publication_recovers_without_reauthorizing_artifact_bytes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/setup_failure_recovery.rs::missing_forged_and_replayed_root_authority_fail_closed",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/system_shell_eligibility.rs::root_owned_system_shell_remains_eligible_for_non_root_execution",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::mediator::filesystem::mediation_failure::tests::root_owned_system_shell_path_remains_eligible_for_non_root_effective_user"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/system_shell_eligibility.rs::concurrent_duplicate_grant_and_request_have_exactly_one_winner",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::expired_and_concurrently_conflicting_preparations_fail_closed"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/system_shell_eligibility.rs::active_protocol_attempt_blocks_a_distinct_grant_before_second_spawn",
+      "current_executable_controls": [
+        "routine_work::runtime_adapter::production::ledger::tests::expired_and_concurrently_conflicting_preparations_fail_closed"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/system_shell_eligibility.rs::stale_dirty_bytes_and_output_scope_swap_are_refused_before_spawn",
+      "current_executable_controls": [
+        "current_path_controls::context_mutation_refuses_before_authority_creation"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/unsafe_output_rejection.rs::unsafe_output_objects_are_rejected_before_authority_is_consumed",
+      "current_executable_controls": [
+        "filesystem_controls::output_symlink_hardlink_fifo_socket_and_stale_files_refuse_exact_capture",
+        "filesystem_controls::output_nested_swap_and_create_delete_restore_refuse_final_validation"
+      ],
+      "cause": null
+    },
+    {
+      "status": "passed_executable",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/unsafe_output_rejection.rs::descriptor_walk_refuses_a_nested_directory_swap_during_capture",
+      "current_executable_controls": [
+        "filesystem_controls::output_symlink_hardlink_fifo_socket_and_stale_files_refuse_exact_capture",
+        "filesystem_controls::output_nested_swap_and_create_delete_restore_refuse_final_validation"
+      ],
+      "cause": null
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/unsafe_output_rejection.rs::cleared_environment_and_process_exit_are_authoritative",
+      "current_executable_controls": [
+        "current_path_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
+    },
+    {
+      "status": "blocked_external",
+      "class": "retired-invariant-ledger",
+      "old_test": "runtime_mediator_cases/unsafe_output_rejection.rs::sandbox_denies_undeclared_writes_and_network_connections",
+      "current_executable_controls": [
+        "current_path_controls::root_broker_gate_refuses_before_spawn_and_writes"
+      ],
+      "cause": "requires unavailable opaque root-broker authorization and, where success is asserted, the immutable installed Ultragoal runtime; listed pre-broker controls execute the reachable refusal boundary"
     }
   ],
   "unresolved_dependencies": [
-    "ROOT-N06-ADOPT-V2-SHAPES",
+    "ROOT-N06-BROKER",
     "ROOT-N06-INSTALLED-RUNTIME",
-    "ROOT-N06-INTEGRATION-GATES",
-    "ROOT-N06-MIGRATION",
     "ROOT-N06-TEMP-POLICY",
-    "N06-LEGITIMATE-CHILD-REPLAY-PROOF"
+    "ROOT-N06-INTEGRATION",
+    "N06-BROKER-BACKED-POSITIVE-JOURNEYS"
   ],
   "requested_root_changes": [
     {
       "path": "validator/src/lib.rs",
       "expected_sha256": "sha256:b7956d9d71c75a82844191b55f3379624083d0e195a2d4922201aa62e364106e",
-      "request": "After integration, reconcile N06-owned routine exports with the canonical witness without restoring arbitrary process authority or widening unrelated public APIs."
+      "request": "Wire a root-owned different-principal routine broker into the existing refusal-only consumption boundary and reconcile canonical exports only after broker/immutable-runtime proof; do not restore any N06-local or same-UID authority."
     }
   ],
   "limitations": [
-    "The source-local ceiling proves codec, static authority shape, and built-binary refusal controls; it does not prove an installed immutable runtime journey.",
-    "Five immutable-runtime public production journeys are ignored and unexecuted.",
-    "A legitimate durable-mediated child success followed by copied real-capability and consumed-reservation replay has not been executed.",
-    "Recovery/reuse is 35/2 and full routine_work is 57/26 under the required managed-temp environment conflict.",
-    "Strict library compilation is red at 649 diagnostics and Cargo-wide format discovery is blocked by root-owned absent distribution modules.",
-    "Shared schemas, generated authority, migrations, ExecPlans, claims, release surfaces, and parent integration were not edited.",
-    "Parent acceptance is not claimed."
+    "The source-local ceiling is refusal-only child safety plus executable non-external invariant controls, not broker-backed success.",
+    "Four broker-backed immutable-runtime public journeys are ignored and unexecuted.",
+    "Post-spawn cancellation, descendant reaping, setup-failure, sandbox, and legitimate child success remain causally broker-blocked.",
+    "Strict, managed-temp, shared schema/migration/export, installed runtime, root integration, readiness, release, completion, and parent acceptance remain withheld."
   ],
   "no_claim_statement": "This worker does not claim readiness, release, or completion."
 }
