@@ -83,6 +83,25 @@ impl SurfaceIdentity {
         .bind_journey(binding)
     }
 
+    pub fn from_published_package(
+        snapshot: &crate::distribution::package::PackageSnapshot,
+        publication: &crate::distribution::package::PackageArtifactTransaction,
+        binding: &crate::distribution::host_capability::JourneyBinding,
+    ) -> Result<Self, DistributionError> {
+        if snapshot.identity() != binding.package()
+            || publication.package_identity() != snapshot.identity()
+        {
+            return Err(error(DistributionErrorId::ProvenanceMismatch));
+        }
+        Self::new(
+            snapshot.identity().clone(),
+            IdentitySurface::Package,
+            publication.output_tree_sha256().into(),
+            None,
+        )?
+        .bind_journey(binding)
+    }
+
     pub fn from_verified_install(
         snapshot: &crate::distribution::install::InstallSnapshot,
         binding: &crate::distribution::host_capability::JourneyBinding,
@@ -152,6 +171,31 @@ impl SurfaceIdentity {
         Self::new(
             package.clone(),
             IdentitySurface::Discovery,
+            observation_sha256.into(),
+            None,
+        )?
+        .bind_journey(binding)
+    }
+
+    pub fn from_verified_app_registry(
+        observation: &crate::distribution::registry_observation::AppRegistryObservation,
+        binding: &crate::distribution::host_capability::JourneyBinding,
+    ) -> Result<Self, DistributionError> {
+        let source = binding.package().source();
+        if observation.context_id() != source.context_id()
+            || observation.candidate_id() != source.candidate_id()
+            || observation.binding_sha256() != binding.binding_sha256()
+            || observation.verdict()
+                != crate::distribution::registry_observation::AppRegistryVerdict::Verified
+        {
+            return Err(error(DistributionErrorId::ProvenanceMismatch));
+        }
+        let observation_sha256 = observation
+            .observation_sha256()
+            .ok_or_else(|| error(DistributionErrorId::ProvenanceMismatch))?;
+        Self::new(
+            binding.package().clone(),
+            IdentitySurface::AppRegistry,
             observation_sha256.into(),
             None,
         )?

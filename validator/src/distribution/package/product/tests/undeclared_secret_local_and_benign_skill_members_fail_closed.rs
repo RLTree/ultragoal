@@ -139,6 +139,26 @@ fn publication_is_current_bound_and_reconciles_one_complete_pair() {
         rows.iter()
             .any(|row| row.path().ends_with(".inventory.json"))
     );
+    let host = HostCapabilityDeclaration::isolated(
+        &output_root.root,
+        &output_root.root,
+        "macos-repository-output-v1",
+        None,
+    )
+    .expect("host identity");
+    let journey = JourneyBinding::new(
+        artifact.snapshot().identity().clone(),
+        &host,
+        "local-harness-plugins",
+    )
+    .expect("journey binding");
+    let identity =
+        SurfaceIdentity::from_published_package(artifact.snapshot(), &transaction, &journey)
+            .expect("published package identity");
+    assert_eq!(
+        identity.observation_sha256(),
+        transaction.output_tree_sha256()
+    );
     verify_product_package(&artifact, &context, &authority_catalog).expect("post-publish verify");
     assert_eq!(status(&repo.root), before);
     assert_eq!(source_tree(&repo.root), before_tree);

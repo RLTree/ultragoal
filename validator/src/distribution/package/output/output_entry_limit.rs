@@ -65,12 +65,17 @@ impl PackageArtifactBinding {
 #[derive(Debug)]
 pub struct PackageArtifactTransaction {
     output_tree_sha256: String,
+    package: crate::distribution::model::PackageIdentity,
     previous: Option<Vec<TreeObject>>,
 }
 
 impl PackageArtifactTransaction {
     pub fn output_tree_sha256(&self) -> &str {
         &self.output_tree_sha256
+    }
+
+    pub fn package_identity(&self) -> &crate::distribution::model::PackageIdentity {
+        &self.package
     }
 }
 
@@ -111,6 +116,7 @@ pub fn publish_package_artifact(
     }
     Ok(PackageArtifactTransaction {
         output_tree_sha256: tree_sha256(&replacement)?,
+        package: snapshot.identity().clone(),
         previous,
     })
 }

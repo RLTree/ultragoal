@@ -157,8 +157,8 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
     let surfaces = vec![
         SurfaceIdentity::new(
             package.clone(),
-            IdentitySurface::Marketplace,
-            marketplace.catalog_sha256().unwrap().into(),
+            IdentitySurface::Package,
+            first.inventory_sha256().into(),
             None,
         )
         .unwrap(),
@@ -174,6 +174,20 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
             IdentitySurface::Cache,
             cache.observation_sha256().into(),
             Some(package.tree_sha256().into()),
+        )
+        .unwrap(),
+        SurfaceIdentity::new(
+            package.clone(),
+            IdentitySurface::Marketplace,
+            marketplace.catalog_sha256().unwrap().into(),
+            None,
+        )
+        .unwrap(),
+        SurfaceIdentity::new(
+            package.clone(),
+            IdentitySurface::AppRegistry,
+            app.observation_sha256().unwrap().into(),
+            None,
         )
         .unwrap(),
         SurfaceIdentity::new(

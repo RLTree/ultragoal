@@ -9,7 +9,7 @@ use ultragoal::distribution::{
     CacheExpectation, CodexPlugin, DistributionErrorId, ExpectedPrior, HostCapabilityDeclaration,
     InstallEffects, InstallPlan, InstallScope, JourneyBinding, MarketplaceScope, PackageEffects,
     PackageIdentity, PackagePlan, RuntimeProbePlan, SurfaceIdentity, build_package, install,
-    observe_codex_marketplace, observe_discovery, plan_codex_marketplace, plan_package,
+    observe_app_registry, observe_codex_marketplace, observe_discovery, plan_codex_marketplace,
     reconcile_cache_read_only, registry_document, unavailable_marketplace,
     verify_bound_surface_chain, verify_marketplace, verify_package,
 };

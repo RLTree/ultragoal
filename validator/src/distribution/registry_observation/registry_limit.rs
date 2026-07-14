@@ -22,6 +22,7 @@ pub enum AppRegistryVerdict {
 pub struct AppRegistryObservation {
     context_id: String,
     candidate_id: String,
+    binding_sha256: String,
     observation_sha256: Option<String>,
     verdict: AppRegistryVerdict,
 }
@@ -32,6 +33,15 @@ impl AppRegistryObservation {
     }
     pub fn observation_sha256(&self) -> Option<&str> {
         self.observation_sha256.as_deref()
+    }
+    pub fn context_id(&self) -> &str {
+        &self.context_id
+    }
+    pub fn candidate_id(&self) -> &str {
+        &self.candidate_id
+    }
+    pub fn binding_sha256(&self) -> &str {
+        &self.binding_sha256
     }
 }
 
@@ -190,6 +200,7 @@ pub fn observe_app_registry(
     Ok(AppRegistryObservation {
         context_id: binding.package().source().context_id().into(),
         candidate_id: binding.package().source().candidate_id().into(),
+        binding_sha256: binding.binding_sha256().into(),
         observation_sha256: bytes.map(sha256),
         verdict,
     })

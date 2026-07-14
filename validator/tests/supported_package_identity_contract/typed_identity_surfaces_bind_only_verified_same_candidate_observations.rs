@@ -78,6 +78,7 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
     );
 
     let registry = registry_document(&binding, true, true).unwrap();
+    let app_registry = observe_app_registry(Some(&registry), &binding, &host).unwrap();
     let discovery = observe_discovery(Some(&registry), &binding, &host).unwrap();
     let before = snapshot_tree(&fixture.0);
     let runtime_plan = RuntimeProbePlan::new(
@@ -91,9 +92,18 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
     let (_, runtime) = runtime_plan.execute_bound().unwrap();
 
     let surfaces = [
-        SurfaceIdentity::from_verified_marketplace(&marketplace, &binding).unwrap(),
+        SurfaceIdentity::new(
+            package.identity().clone(),
+            ultragoal::distribution::IdentitySurface::Package,
+            package.inventory_sha256().into(),
+            None,
+        )
+        .and_then(|row| row.bind_journey(&binding))
+        .unwrap(),
         SurfaceIdentity::from_verified_install(installed.snapshot(), &binding).unwrap(),
         SurfaceIdentity::from_verified_cache(&cache, &binding).unwrap(),
+        SurfaceIdentity::from_verified_marketplace(&marketplace, &binding).unwrap(),
+        SurfaceIdentity::from_verified_app_registry(&app_registry, &binding).unwrap(),
         SurfaceIdentity::from_verified_discovery(&discovery, &binding).unwrap(),
         runtime,
     ];
@@ -114,6 +124,7 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
     for result in [
         SurfaceIdentity::from_verified_marketplace(&marketplace, &wrong_binding),
         SurfaceIdentity::from_verified_install(installed.snapshot(), &wrong_binding),
+        SurfaceIdentity::from_verified_app_registry(&app_registry, &wrong_binding),
         SurfaceIdentity::from_verified_discovery(&discovery, &wrong_binding),
     ] {
         assert_eq!(

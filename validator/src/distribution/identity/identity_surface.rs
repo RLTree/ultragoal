@@ -1,18 +1,22 @@
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum IdentitySurface {
-    Marketplace,
+    Package,
     Installed,
     Cache,
+    Marketplace,
+    AppRegistry,
     Discovery,
     Runtime,
 }
 
 impl IdentitySurface {
-    pub const ALL: [Self; 5] = [
-        Self::Marketplace,
+    pub const ALL: [Self; 7] = [
+        Self::Package,
         Self::Installed,
         Self::Cache,
+        Self::Marketplace,
+        Self::AppRegistry,
         Self::Discovery,
         Self::Runtime,
     ];
