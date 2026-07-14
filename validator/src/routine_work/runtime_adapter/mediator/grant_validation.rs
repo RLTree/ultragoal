@@ -39,6 +39,9 @@ pub(crate) fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservati
     if let Some(durable) = &grant.durable {
         durable.validate_reserved()?;
     }
+    let mut child_capability_secret = [0_u8; 32];
+    getrandom::fill(&mut child_capability_secret)
+        .map_err(|_| mediator_error("mediator-child-capability-random-failed"))?;
     let mut state = registry()
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner);
@@ -67,6 +70,8 @@ pub(crate) fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservati
         .active_protocols
         .insert(grant.protocol_id.clone(), grant.grant_id.clone());
     Ok(AttemptReservation {
+        child_capability_secret,
+        session_id: grant.session_id.clone(),
         protocol_id: grant.protocol_id.clone(),
         grant_id: grant.grant_id.clone(),
         recovery_marker: recovery_identity(&grant.grant_id, &grant.protocol_id, &grant.request_id),
@@ -184,22 +189,7 @@ pub(crate) fn validate_intent(
 }
 
 pub(crate) fn execution_environment(
-    token: &RoutineMediatedIntent,
+    _token: &RoutineMediatedIntent,
 ) -> Result<BTreeMap<String, String>, RoutineError> {
-    let mut environment = token.intent().environment().clone();
-    for (key, value) in [
-        ("HUL_ROUTINE_REQUEST_ID", token.request_id()),
-        ("HUL_ROUTINE_PROTOCOL_ID", token.protocol_id()),
-        ("HUL_ROUTINE_INTENT_ID", token.intent().intent_id()),
-        ("HUL_ROUTINE_NODE_ID", token.intent().node_id()),
-        ("HUL_ROUTINE_BEHAVIOR_ID", token.intent().behavior_id()),
-    ] {
-        if environment
-            .insert(key.to_owned(), value.to_owned())
-            .is_some()
-        {
-            return Err(mediator_error("mediator-environment-reserved-name"));
-        }
-    }
-    Ok(environment)
+    Ok(_token.intent().environment().clone())
 }

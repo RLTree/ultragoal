@@ -44,6 +44,8 @@ pub(crate) fn registry() -> &'static Mutex<MediatorRegistry> {
 /// only the active slot; it deliberately retains a marker once a child may have
 /// started.
 pub(crate) struct AttemptReservation {
+    pub(crate) child_capability_secret: [u8; 32],
+    pub(crate) session_id: String,
     pub(crate) protocol_id: String,
     pub(crate) grant_id: String,
     pub(crate) recovery_marker: String,

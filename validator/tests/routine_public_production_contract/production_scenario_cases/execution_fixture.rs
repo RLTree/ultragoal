@@ -184,12 +184,8 @@ impl Fixture {
     }
 
     pub(crate) fn base_command(&self) -> Command {
-        let protected = std::env::var_os("HUL_ROUTINE_IMMUTABLE_BINARY");
-        let binary = protected
-            .as_deref()
-            .map(Path::new)
-            .unwrap_or_else(|| Path::new(env!("CARGO_BIN_EXE_ultragoal")));
-        let mut command = Command::new(binary);
+        let binary = Self::binary();
+        let mut command = Command::new(&binary);
         command
             .env_clear()
             .env("HOME", &self.home)
@@ -204,6 +200,12 @@ impl Fixture {
             .arg("--root")
             .arg(&self.root);
         command
+    }
+
+    pub(crate) fn binary() -> PathBuf {
+        std::env::var_os("HUL_ROUTINE_IMMUTABLE_BINARY")
+            .map(PathBuf::from)
+            .unwrap_or_else(|| PathBuf::from(env!("CARGO_BIN_EXE_ultragoal")))
     }
 
     pub fn require_protected_binary() {

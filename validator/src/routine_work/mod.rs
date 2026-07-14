@@ -19,6 +19,9 @@ mod runtime_adapter;
 mod snapshot;
 
 pub(crate) use behavior::trusted_rust_source_execution_observed;
+pub(crate) use behavior::{
+    CHILD_CAPABILITY_ENV, CHILD_CAPABILITY_FD, MAX_CHILD_CAPABILITY_BYTES, RoutineChildCapability,
+};
 pub use behavior::{
     RustSourceFrameInput, RustSourceSyntaxError, RustSourceSyntaxErrorKind,
     RustSourceSyntaxObservation, RustSourceSyntaxOutcome, encode_rust_source_syntax_frame,
@@ -53,8 +56,9 @@ pub(crate) use runtime_adapter::{
     PreparedRoutineExecution, ProductionRoutineIssuer, RoutineAdapterSpec,
     RoutineArtifactPublisher, RoutineCancellation, RoutineInvocationSpec, RoutineMediationResult,
     RoutineMediatorStatus, RoutineNodeDisposition, RoutineReuseInput,
-    bind_rust_source_syntax_invocation, mediate_prepared_routine_execution_production,
-    prepare_routine_execution, validate_immutable_routine_program,
+    bind_rust_source_syntax_invocation, immutable_routine_program_matches,
+    mediate_prepared_routine_execution_production, prepare_routine_execution,
+    validate_immutable_routine_program,
 };
 
 #[cfg(test)]

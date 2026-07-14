@@ -62,7 +62,6 @@ pub(crate) fn mediate_intent(
     }
     let framed_input = reads.rust_source_syntax_frame(&root)?;
     let framed_input_sha256 = sha256(&framed_input);
-    attempt.prepare_spawn()?;
     let observation = process::execute(
         &program,
         &root,
@@ -70,11 +69,28 @@ pub(crate) fn mediate_intent(
         &reads,
         token.intent().argv(),
         &environment,
+        process::ChildCapabilityBinding {
+            behavior_id: token.intent().behavior_id(),
+            request_id: token.request_id(),
+            protocol_id: token.protocol_id(),
+            intent_id: token.intent().intent_id(),
+            node_id: token.intent().node_id(),
+            grant_session_id: &attempt.session_id,
+            grant_id: &attempt.grant_id,
+            reservation_marker: &attempt.recovery_marker,
+            program_path_hex: token.intent().program_path_hex(),
+            framed_input_sha256: &framed_input_sha256,
+            secret: &attempt.child_capability_secret,
+        },
         framed_input.clone(),
         Duration::from_millis(token.intent().timeout_ms()),
         token.intent().output_budget_bytes(),
         cancellation,
-        || attempt.mark_started(),
+        || {
+            attempt.prepare_spawn()?;
+            attempt.mark_started();
+            Ok(())
+        },
     );
     let observation = match observation {
         Ok(value) => value,

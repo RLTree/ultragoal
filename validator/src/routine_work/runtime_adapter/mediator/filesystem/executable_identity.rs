@@ -8,7 +8,16 @@ impl PinnedExecutable {
         expected_mode: Option<u32>,
     ) -> Result<Self, RoutineError> {
         let path = decode_path(path_hex)?;
-        let executable = Self::open_unbound(&path)?;
+        Self::open_bound_path(&path, expected_sha256, expected_length, expected_mode)
+    }
+
+    pub(crate) fn open_bound_path(
+        path: &Path,
+        expected_sha256: &str,
+        expected_length: u64,
+        expected_mode: Option<u32>,
+    ) -> Result<Self, RoutineError> {
+        let executable = Self::open_unbound(path)?;
         if executable.sha256 != expected_sha256
             || executable.identity_length() != expected_length
             || executable.identity_mode() != expected_mode
@@ -91,6 +100,21 @@ impl PinnedExecutable {
     #[cfg(unix)]
     pub(crate) fn identity_mode(&self) -> Option<u32> {
         Some(self.identity.mode)
+    }
+
+    #[cfg(unix)]
+    pub(crate) fn identity_device(&self) -> u64 {
+        self.identity.device
+    }
+
+    #[cfg(unix)]
+    pub(crate) fn identity_inode(&self) -> u64 {
+        self.identity.inode
+    }
+
+    #[cfg(unix)]
+    pub(crate) fn identity_changed(&self) -> (i64, i64) {
+        (self.identity.changed_seconds, self.identity.changed_nanos)
     }
 
     #[cfg(not(unix))]

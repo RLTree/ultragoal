@@ -56,6 +56,8 @@ mod mediation_issuance;
 mod output_scope_binding;
 #[path = "runner_binding.rs"]
 mod runner_binding;
+#[path = "runner_object_binding.rs"]
+mod runner_object_binding;
 #[path = "selection_limit.rs"]
 mod selection_limit;
 
@@ -65,4 +67,5 @@ pub(crate) use invocation_binding::*;
 pub(crate) use mediation_issuance::*;
 pub(crate) use output_scope_binding::*;
 pub(crate) use runner_binding::*;
+pub(crate) use runner_object_binding::*;
 pub(crate) use selection_limit::*;

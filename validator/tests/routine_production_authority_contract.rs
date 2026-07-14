@@ -74,3 +74,54 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
     let drop = reservation[incomplete..].find("impl Drop").unwrap();
     assert!(!reservation[incomplete..incomplete + drop].contains("durable.settle"));
 }
+
+#[test]
+fn child_behavior_requires_a_durable_process_bound_one_use_channel() {
+    let child = include_str!("../src/cli/successor_public/routine/behavior_child.rs");
+    let capability = include_str!("../src/routine_work/behavior/child_capability.rs");
+    let mediation =
+        include_str!("../src/routine_work/runtime_adapter/mediator/intent_mediation.rs");
+    let channel = include_str!(
+        "../src/routine_work/runtime_adapter/mediator/process/child_authority_channel.rs"
+    );
+    let process =
+        include_str!("../src/routine_work/runtime_adapter/mediator/process/process_execution.rs");
+    for obsolete in [
+        "HUL_ROUTINE_REQUEST_ID",
+        "HUL_ROUTINE_PROTOCOL_ID",
+        "HUL_ROUTINE_INTENT_ID",
+        "HUL_ROUTINE_NODE_ID",
+        "HUL_ROUTINE_BEHAVIOR_ID",
+    ] {
+        assert!(!child.contains(obsolete));
+        assert!(!mediation.contains(obsolete));
+    }
+    let validate = child.find("validate_capability(invocation").unwrap();
+    let framed_input = child.find("std::io::stdin()").unwrap();
+    assert!(validate < framed_input);
+    for binding in [
+        "request_id",
+        "protocol_id",
+        "intent_id",
+        "node_id",
+        "grant_session_id",
+        "grant_id",
+        "reservation_marker",
+        "parent_pid",
+        "child_pid",
+        "process_session_id",
+        "program_path_hex",
+        "program_sha256",
+    ] {
+        assert!(capability.contains(binding), "missing binding {binding}");
+    }
+    assert!(child.contains("LOCAL_PEERPID"));
+    assert!(child.contains("process_path(parent_pid)"));
+    assert!(channel.contains("capability.acknowledgement()"));
+    assert!(channel.contains("getrandom::fill"));
+    assert!(channel.contains("capability.seal(binding.secret)"));
+    assert!(mediation.contains("attempt.prepare_spawn()?"));
+    assert!(
+        process.find("child_authority.authorize").unwrap() < process.find("on_started()?").unwrap()
+    );
+}

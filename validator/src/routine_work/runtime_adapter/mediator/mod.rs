@@ -66,3 +66,27 @@ pub(crate) use rust_source_observation::*;
 pub(super) fn validate_routine_program_path(path: &Path) -> Result<(), RoutineError> {
     PinnedExecutable::open_unbound(path).map(|_| ())
 }
+
+pub(super) fn validate_bound_routine_program(
+    path: &Path,
+    sha256: &str,
+    byte_length: u64,
+    unix_mode: Option<u32>,
+    device: u64,
+    inode: u64,
+    changed_seconds: i64,
+    changed_nanos: i64,
+) -> Result<(), RoutineError> {
+    let executable = PinnedExecutable::open_bound_path(path, sha256, byte_length, unix_mode)?;
+    if executable.identity_device() != device
+        || executable.identity_inode() != inode
+        || executable.identity_changed() != (changed_seconds, changed_nanos)
+    {
+        return Err(RoutineError::new(
+            RoutineErrorId::ContextMismatch,
+            "mediator-executable-object-binding-stale",
+            None,
+        ));
+    }
+    Ok(())
+}

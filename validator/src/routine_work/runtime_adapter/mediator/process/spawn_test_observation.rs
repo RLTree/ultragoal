@@ -94,6 +94,10 @@ impl SpawnSetupGuard {
         }
     }
 
+    pub(crate) fn child_id(&self) -> u32 {
+        self.child.as_ref().expect("spawn setup retains child").id()
+    }
+
     pub(crate) fn process_group(&self) -> Result<ProcessGroupId, RoutineError> {
         self.process_group
             .ok_or_else(|| mediator_error("mediator-process-group-invalid"))

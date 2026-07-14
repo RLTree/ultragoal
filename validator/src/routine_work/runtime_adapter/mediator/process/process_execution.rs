@@ -1,5 +1,4 @@
 use super::*;
-
 pub(crate) fn execute<F>(
     program: &PinnedExecutable,
     root: &RootAnchor,
@@ -7,6 +6,7 @@ pub(crate) fn execute<F>(
     reads: &ReadConfinement,
     argv: &[String],
     environment: &BTreeMap<String, String>,
+    child_capability: ChildCapabilityBinding<'_>,
     framed_input: Vec<u8>,
     timeout: Duration,
     output_budget: u64,
@@ -14,7 +14,7 @@ pub(crate) fn execute<F>(
     on_started: F,
 ) -> Result<ProcessObservation, RoutineError>
 where
-    F: FnOnce(),
+    F: FnOnce() -> Result<(), RoutineError>,
 {
     #[cfg(not(target_os = "macos"))]
     {
@@ -25,6 +25,7 @@ where
             reads,
             argv,
             environment,
+            child_capability,
             framed_input,
             timeout,
             output_budget,
@@ -56,6 +57,7 @@ where
         root.validate()?;
         outputs.validate()?;
         let mut command = Command::new(sandbox.path());
+        let child_authority = ChildAuthorityChannel::new()?;
         command
             .arg("-p")
             .arg(profile)
@@ -67,6 +69,7 @@ where
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .stderr(Stdio::piped());
+        child_authority.install(&mut command);
         let cwd_fd = root.raw_fd();
         unsafe {
             command.pre_exec(move || {
@@ -90,7 +93,8 @@ where
             .spawn()
             .map_err(|_| mediator_error("mediator-process-launch-failed"))?;
         let mut setup = SpawnSetupGuard::new(child);
-        on_started();
+        child_authority.authorize(setup.child_id(), child_capability, program)?;
+        on_started()?;
         #[cfg(test)]
         TEST_SPAWN_COUNT.fetch_add(1, Ordering::SeqCst);
         let process_group = setup.process_group()?;
@@ -239,7 +243,6 @@ where
         })
     }
 }
-
 pub(crate) struct Drained {
     pub(crate) retained: Vec<u8>,
     pub(crate) sha256: String,
