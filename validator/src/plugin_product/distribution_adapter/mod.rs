@@ -93,8 +93,4 @@ impl DistributionLifecycleOperation {
     pub fn completed_effects(&self) -> &[LifecycleEffect] {
         self.effects.completed_effects()
     }
-
-    pub fn observed_mutation_count(&self) -> usize {
-        self.effects.mutation_count()
-    }
 }

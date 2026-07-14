@@ -29,9 +29,13 @@ pub struct Fixture {
 }
 
 impl Fixture {
-    pub fn new(label: &str) -> Self {
-        let root = PathBuf::from("/tmp").join(format!(
-            "hul-distribution-plugin-adapter-{label}-{}-{}",
+    pub fn new(_label: &str) -> Self {
+        let temporary = std::env::var_os("CODEX_WORKTREE_TMP")
+            .map(PathBuf::from)
+            .unwrap_or_else(|| PathBuf::from("/tmp"));
+        fs::create_dir_all(&temporary).unwrap();
+        let root = temporary.join(format!(
+            "hul-distribution-pa-{}-{}",
             std::process::id(),
             NEXT.fetch_add(1, Ordering::Relaxed)
         ));

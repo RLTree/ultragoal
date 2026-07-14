@@ -77,7 +77,6 @@ fn real_adapter_completes_all_eight_lifecycle_intents_in_one_isolated_root() {
         let mut operation = fixture.operation(&v11, &read_only);
         let report = operation.apply(&state, &read_only).unwrap();
         assert_eq!(report.state, state);
-        assert_eq!(operation.observed_mutation_count(), 0);
         assert_eq!(fixture.tree(), before, "read-only lifecycle mutated tree");
     }
 

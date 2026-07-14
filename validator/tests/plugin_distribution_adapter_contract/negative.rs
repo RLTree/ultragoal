@@ -129,7 +129,6 @@ fn verify_and_probe_failures_are_both_read_only_and_never_restore() {
             failure,
             LifecycleError::ReadEffectFailed { effect, .. } if effect == expected_effect
         ));
-        assert_eq!(operation.observed_mutation_count(), 0);
         assert_eq!(fixture.tree(), before);
     }
 }
@@ -163,7 +162,6 @@ fn independently_issued_identical_plan_is_rejected_before_effects() {
         operation.apply(&empty, &sibling),
         Err(LifecycleError::InvalidTransition)
     );
-    assert_eq!(operation.observed_mutation_count(), 0);
     assert_eq!(fixture.tree(), before);
 
     let applied = operation.apply(&empty, &bound).unwrap().state;

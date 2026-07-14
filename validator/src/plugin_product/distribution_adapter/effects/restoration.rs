@@ -10,8 +10,20 @@ impl Effects {
                     surface,
                     transaction,
                 } => {
-                    rollback_install(transaction, &mut ScopedInstall::new(self.root.clone()))
-                        .map_err(AdapterError::distribution)?;
+                    match rollback_install(transaction, &mut ScopedInstall::new(self.root.clone()))
+                    {
+                        Ok(()) => {}
+                        Err(RollbackInstallError::Refused { error, transaction }) => {
+                            self.mutations.push(Mutation::Installed {
+                                surface,
+                                transaction,
+                            });
+                            return Err(AdapterError::distribution(error));
+                        }
+                        Err(RollbackInstallError::Committed { error }) => {
+                            return Err(AdapterError::distribution(error));
+                        }
+                    }
                     surface
                 }
                 Mutation::Removed {

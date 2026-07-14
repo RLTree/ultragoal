@@ -93,9 +93,10 @@ fn oversized_and_special_installed_objects_refuse_before_adapter_effects() {
         } else {
             #[cfg(unix)]
             {
-                let listener = std::os::unix::net::UnixListener::bind(&target).unwrap();
+                use std::os::unix::ffi::OsStrExt;
+                let raw = std::ffi::CString::new(target.as_os_str().as_bytes()).unwrap();
+                assert_eq!(unsafe { libc::mkfifo(raw.as_ptr(), 0o600) }, 0);
                 assert!(operation.apply(&empty, &plan).is_err());
-                drop(listener);
                 continue;
             }
         }

@@ -12,7 +12,6 @@ pub mod source_closure;
 // The legacy source-closure contract compiles this module directly inside an
 // integration-test crate that has no distribution kernel. Production builds,
 // including every integration test through the library, expose the adapter.
-#[cfg(not(test))]
 pub mod distribution_adapter;
 
 // Agent-discovery and host-lifecycle candidate sources remain exercised by

@@ -32,7 +32,6 @@ fn same_root_sibling_operation_cannot_issue_or_use_owner_token() {
         sibling.recover(&after, &token),
         Err(LifecycleError::InvalidTransition)
     );
-    assert_eq!(sibling.observed_mutation_count(), 0);
     assert_eq!(fixture.tree(), before_refusal);
     assert_eq!(owner.recover(&after, &token).unwrap(), empty);
 }

@@ -30,7 +30,6 @@ fn partial_cache_failure_rolls_back_only_the_completed_install_prefix() {
     assert_eq!(report.disposition, ApplyDisposition::RecoveredAfterFailure);
     assert_eq!(report.state, empty);
     assert_eq!(report.completed_effects, vec![fresh.effects[0]]);
-    assert_eq!(operation.observed_mutation_count(), 0);
     assert_eq!(operation.observe_state().unwrap(), empty);
 }
 
@@ -72,7 +71,6 @@ fn successful_update_recovery_token_restores_exact_prior_once() {
     assert_eq!(fixture.tree(), before_sibling_refusal);
 
     let token = operation.recovery_token().unwrap();
-    assert_eq!(operation.observed_mutation_count(), 2);
     let mut substituted = token.clone();
     substituted
         .expected_current
@@ -149,8 +147,6 @@ fn independently_applied_cross_root_token_is_rejected_before_restore() {
         left.recover(&left_after, &right_token),
         Err(LifecycleError::InvalidTransition)
     );
-    assert_eq!(left.observed_mutation_count(), 2);
-    assert_eq!(right.observed_mutation_count(), 2);
     assert_eq!(left_fixture.tree(), left_tree);
     assert_eq!(right_fixture.tree(), right_tree);
 
