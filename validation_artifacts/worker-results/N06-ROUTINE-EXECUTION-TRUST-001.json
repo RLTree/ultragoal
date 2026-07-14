@@ -1,126 +1,50 @@
 {
-  "schema_version": "WorkerResult-v1",
   "worker": "/root",
   "lease_id": "N06-ROUTINE-EXECUTION-TRUST-001",
+  "context_id": "sha256:ac690404eb0feb9fa05a4b94438fe04484b8b60e92f2f72feca809ffdd295fdf",
   "candidate_identity": {
+    "candidate_id": "n06-routine-execution-trust",
+    "context_id": "sha256:ac690404eb0feb9fa05a4b94438fe04484b8b60e92f2f72feca809ffdd295fdf",
     "thread_id": "019f5f39-507b-78a2-a96a-0b566a5a2126",
     "worktree": "/Users/terrynoblin/.codex/worktrees/db3d/harness-ultragoal-plugin-proposal",
     "branch": "codex/n06-routine-execution-trust",
-    "base_commit": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
-    "implementation_head": "89f030e3ff6bbed3ca3bb19d0d7b37f8a603485f",
-    "implementation_tree": "116fddca110115ed803974cd1c63f5f4f582b126",
-    "commit_list": [
+    "accepted_integration_base": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
+    "historical_original_base": "20a11eb981c5db2d2136a555632be9c4e5ab7752",
+    "source_head": "8205213f0f44da95e12ae6f5a995a23fb7358813",
+    "source_tree": "1d394da1b3a0c446dc56c923d4ddf4ec138784d5",
+    "source_commit_list": [
       "3ace481d127c4e53d8037397f9704b2b34e39fb3",
       "f57a9c87ad62cf7bfe13b3bd4b87ba0bd870b2bd",
       "67eabfb0acf8f89545ed526465cb8e757adcfb8c",
       "2e3f0708215a0b9e50d628a4ff787c770b62aaf9",
       "c4e08a84e3f2a3400452515b542a6c6594b94e44",
-      "89f030e3ff6bbed3ca3bb19d0d7b37f8a603485f"
+      "89f030e3ff6bbed3ca3bb19d0d7b37f8a603485f",
+      "18d249f9409d2c1ffa4596a4bbce7487b81d1557",
+      "8205213f0f44da95e12ae6f5a995a23fb7358813"
     ],
-    "parent_refresh_checkpoint": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
-    "pre_refresh_commits": [
-      "1f69bfe8765cc926705ddeb8b4312faad56561a0",
-      "1a02cfe1e14d2c57925842dbb2e19ffa5fd778ec",
-      "25b62475105be127b38be0338fd86c34f65792a9",
-      "31a7df95a1a102b6a740c9104a5528b612775f9d"
-    ]
+    "observed_pre_rewrite_evidence_head": "18d249f9409d2c1ffa4596a4bbce7487b81d1557",
+    "observed_pre_rewrite_evidence_tree": "494c5f77fcc29bdb18da45ba4035becb7efc35bd",
+    "evidence_head_self_excluded": true,
+    "evidence_head_convention": "The receipt-only commit containing this record cannot hash or name itself. Source identity and every non-receipt artifact bind source_head; the final handoff names the later clean evidence commit and tree externally.",
+    "artifact_count": 97,
+    "artifact_total_bytes": 430666,
+    "artifact_path_sha256_aggregate": "sha256:d281a92926b177b2a0edc1c85a750c2fbe19c017486b9f72e29af4c441dd436b",
+    "deleted_path_count": 30,
+    "worker_result_self_excluded": true
+  },
+  "base_state": {
+    "status": "parent_refreshed_base_verified",
+    "base_commit": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
+    "branch": "codex/n06-routine-execution-trust",
+    "environment": ".codex/setup-worktree-env.sh executed and .codex-worktree/env.sh sourced for checks",
+    "parent_rebase_performed_by_worker": false
   },
   "final_state": {
-    "status": "rework_candidate_frozen_pending_parent_review",
-    "claim_ceiling": "source syntax codec, static closed-authority shape, cap-lints focused behavior evidence, and source-local host-state behavior only",
-    "behavior": "rust-source-syntax-v1 through the pinned current ultragoal program and exact framed mediator-held bytes",
-    "output_provenance": "successful closed syntax mediation requires an initially empty exact output scope and an unchanged empty post-state; no file is attributed to the run",
-    "publication_protocol": "stage exact artifact digests and mediator witnesses in the pending durable record, atomically publish exact cache bytes, then settle Complete; incomplete outcomes remain exact-bound pending recovery",
-    "fresh_output_protocol": "after owner-only host authority and lock acquisition, descriptor-relative no-follow mkdir/open creates only target/routine/<selected-node>; exact-identity reverse rollback handles ordinary failure and repeat use",
-    "cache_behavior": "valid V2 binding mismatch and canonical V1 are typed misses; malformed or unknown same-surface cache remains fail-closed",
-    "installed_runtime_ceiling": "no immutable installed ultragoal runtime was available; five authorized public production journeys are compiled but explicitly ignored and unexecuted"
+    "status": "worker_blocked",
+    "source_head": "8205213f0f44da95e12ae6f5a995a23fb7358813",
+    "source_tree": "1d394da1b3a0c446dc56c923d4ddf4ec138784d5",
+    "reason": "Source-local child authority repair is committed, but immutable-runtime journeys, managed-temp recovery/reuse checks, strict root-wide compilation, shared adoption, and legitimate durable-child replay proof remain unresolved."
   },
-  "changes": [
-    "retired stale external-process adapter tests and replaced them with the closed binding contract",
-    "fixed all reported cap-lints E-series compile failures and catalog diagnostics",
-    "keyed reuse behavior by full CacheBinding via safe mismatch misses",
-    "made cache publication precede terminal settlement with durable staged authentication and exact recovery",
-    "kept failure, cancellation, and incomplete attempts pending instead of terminally bricking replay",
-    "prevented stale or mutate-restore output trees from acquiring run provenance",
-    "added confined fresh output directory provisioning, rollback, alias/special-object rejection, and repeat-use tests",
-    "replaced false-green public dirty tests with explicit immutable-runtime-required journeys while retaining one development-runtime refusal"
-  ],
-  "verification": [
-    {
-      "surface": "cap-lints behavior compile",
-      "result": "PASS",
-      "evidence": "routine_work_contract --no-run; routine_public_production_contract --no-run"
-    },
-    {
-      "surface": "closed behavior protocol",
-      "result": "PASS",
-      "evidence": "4 passed"
-    },
-    {
-      "surface": "closed binding arbitrary program argv env and unframed refusal",
-      "result": "PASS",
-      "evidence": "2 passed, 30 filtered"
-    },
-    {
-      "surface": "production catalog authority",
-      "result": "PASS",
-      "evidence": "14 passed"
-    },
-    {
-      "surface": "production source law",
-      "result": "PASS",
-      "evidence": "3 passed"
-    },
-    {
-      "surface": "host cache and output provisioning",
-      "result": "PASS",
-      "evidence": "4 passed"
-    },
-    {
-      "surface": "mediator protocol output mutation and durable ledger",
-      "result": "PASS",
-      "evidence": "14 passed, 69 filtered"
-    },
-    {
-      "surface": "public source zero-write and refusal routes",
-      "result": "PASS_WITH_RUNTIME_GAP",
-      "evidence": "6 passed, 5 immutable-runtime journeys ignored"
-    },
-    {
-      "surface": "recovery/reuse journey contract",
-      "result": "PARTIAL_ENVIRONMENT_BLOCK",
-      "evidence": "35 passed, 2 failed because mandatory .codex-worktree temp root is rejected by legacy capture secret-path policy"
-    },
-    {
-      "surface": "full routine_work_contract",
-      "result": "PARTIAL_ENVIRONMENT_BLOCK",
-      "evidence": "57 passed, 26 remaining failures use the same prohibited managed-temp capture root after three unrelated compile/socket failures were repaired"
-    },
-    {
-      "surface": "cap-lints library compilation",
-      "result": "PASS",
-      "evidence": "RUSTFLAGS=--cap-lints allow cargo check --lib"
-    },
-    {
-      "surface": "strict library diagnostic probe",
-      "result": "BLOCKED_ROOT_WIDE",
-      "evidence": "649 -D warnings diagnostics after obsolete N06 mediate API removal; root-owned warning wall remains non-green"
-    }
-  ],
-  "runtime_journey_gaps": [
-    "authorized dirty execution against an exact root-owned immutable copy of the current build",
-    "public cross-target and cross-change sequential reuse journey",
-    "public interruption at cache temp-write, rename, staged-ledger, and terminal-settlement boundaries",
-    "public output mutation/race and fresh-provision rollback journey through the installed binary"
-  ],
-  "root_requests": [
-    "ROOT-N06-ADOPT-V2-SHAPES: adopt the V2 manifest, catalog, cache, result, and reuse shapes in shared schemas/generated authority",
-    "ROOT-N06-MIGRATION: register V1 manifest/catalog/result/reuse as non-authoritative and V1 cache as a typed miss while preserving OD-008/OD-009 bytes",
-    "ROOT-N06-INSTALLED-RUNTIME: provision and verify an exact root-owned immutable current ultragoal binary, then run the five ignored authorized journeys with HUL_ROUTINE_IMMUTABLE_BINARY",
-    "ROOT-N06-TEMP-POLICY: reconcile the mandatory .codex-worktree isolated temp root with the legacy capture secret-path prohibition without weakening either boundary",
-    "ROOT-N06-INTEGRATION-GATES: repair root-wide strict warnings/generated blockers and rerun repository checks",
-    "ROOT-N06-CLAIMS: parent alone owns refresh, acceptance, readiness, release, completion, and shared claim surfaces"
-  ],
   "touched_paths": [
     "fixtures/routine-production-catalog/cases.json",
     "fixtures/routine-production-catalog/valid-catalog-v2.json",
@@ -140,6 +64,7 @@
     "validator/src/cli/successor_public/routine/mod.rs",
     "validator/src/cli/successor_public/routine/source_configuration.rs",
     "validator/src/cli/successor_public/routine/source_selection.rs",
+    "validator/src/routine_work/behavior/child_capability.rs",
     "validator/src/routine_work/behavior/mod.rs",
     "validator/src/routine_work/behavior/rust_source_frame.rs",
     "validator/src/routine_work/behavior/rust_source_syntax.rs",
@@ -158,6 +83,7 @@
     "validator/src/routine_work/runtime_adapter/execution_preparation.rs",
     "validator/src/routine_work/runtime_adapter/execution_reconciliation.rs",
     "validator/src/routine_work/runtime_adapter/invocation_binding.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/executable_identity.rs",
     "validator/src/routine_work/runtime_adapter/mediator/filesystem/framed_read_input.rs",
     "validator/src/routine_work/runtime_adapter/mediator/filesystem/mod.rs",
     "validator/src/routine_work/runtime_adapter/mediator/filesystem/output_file_limit.rs",
@@ -169,6 +95,7 @@
     "validator/src/routine_work/runtime_adapter/mediator/mod.rs",
     "validator/src/routine_work/runtime_adapter/mediator/no_op_mediation.rs",
     "validator/src/routine_work/runtime_adapter/mediator/outcome/routine_mediation_result.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/child_authority_channel.rs",
     "validator/src/routine_work/runtime_adapter/mediator/process/mod.rs",
     "validator/src/routine_work/runtime_adapter/mediator/process/process_execution.rs",
     "validator/src/routine_work/runtime_adapter/mediator/process/process_input_write.rs",
@@ -185,6 +112,7 @@
     "validator/src/routine_work/runtime_adapter/production/production_mediation.rs",
     "validator/src/routine_work/runtime_adapter/production/production_test_support.rs",
     "validator/src/routine_work/runtime_adapter/runner_binding.rs",
+    "validator/src/routine_work/runtime_adapter/runner_object_binding.rs",
     "validator/src/routine_work/runtime_adapter/selection_limit.rs",
     "validator/tests/routine_behavior_protocol_cases/canonical_behavior.rs",
     "validator/tests/routine_behavior_protocol_cases/mod.rs",
@@ -210,6 +138,9 @@
     "validator/tests/routine_production_catalog_cases/unsafe_invocation_rejection.rs",
     "validator/tests/routine_production_catalog_contract.rs",
     "validator/tests/routine_public_host_contract.rs",
+    "validator/tests/routine_public_production_contract.rs",
+    "validator/tests/routine_public_production_contract/child_authority.rs",
+    "validator/tests/routine_public_production_contract/child_authority_support.rs",
     "validator/tests/routine_public_production_contract/journeys.rs",
     "validator/tests/routine_public_production_contract/production_scenario_cases/argument_fixture.rs",
     "validator/tests/routine_public_production_contract/production_scenario_cases/execution_fixture.rs",
@@ -244,509 +175,755 @@
     "validator/tests/routine_work_contract/runtime_mediator_cases/system_shell_eligibility.rs",
     "validator/tests/routine_work_contract/runtime_mediator_cases/unsafe_output_rejection.rs"
   ],
-  "deleted_paths": [
-    "validator/tests/routine_production_authority_cases/authority_fixture.rs",
-    "validator/tests/routine_production_authority_cases/authority_redaction.rs",
-    "validator/tests/routine_production_authority_cases/authority_scenario.rs",
-    "validator/tests/routine_production_authority_cases/concurrent_reuse_settlement.rs",
-    "validator/tests/routine_production_authority_cases/effect_capacity_bounds.rs",
-    "validator/tests/routine_production_authority_cases/invalid_reuse_recovery.rs",
-    "validator/tests/routine_production_authority_cases/terminal_failure_settlement.rs",
-    "validator/tests/routine_production_catalog_cases/artifact_set_contract.rs",
-    "validator/tests/routine_work_contract/runtime_adapter.rs",
-    "validator/tests/routine_work_contract/runtime_adapter_cases/adapter_scenario.rs",
-    "validator/tests/routine_work_contract/runtime_adapter_cases/clean_noop.rs",
-    "validator/tests/routine_work_contract/runtime_adapter_cases/cross_request_rejection.rs",
-    "validator/tests/routine_work_contract/runtime_adapter_cases/invocation_binding_refusals.rs",
-    "validator/tests/routine_work_contract/runtime_adapter_cases/loader_environment_rejection.rs",
-    "validator/tests/routine_work_contract/runtime_adapter_cases/outcome_set_rejection.rs",
-    "validator/tests/routine_work_contract/runtime_mediator.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/cancellation_reaping.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/containment_adversary.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/context_mutation_recovery.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/executable_substitution_rejection.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/fork_bypass_reaping.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/invocation_fixture.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/mapping_adversary.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/mediator_scenario.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/read_source_refusals.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/reuse_integrity.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/script_replacement_rejection.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/setup_failure_recovery.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/system_shell_eligibility.rs",
-    "validator/tests/routine_work_contract/runtime_mediator_cases/unsafe_output_rejection.rs"
+  "touched_semantics": [
+    "closed-routine-catalog-manifest-authority",
+    "mediator-held-framed-source-protocol",
+    "trusted-behavior-observation-result-derivation",
+    "arbitrary-process-branch-structural-retirement",
+    "canonical-runner-argv-environment-input-binding",
+    "unframed-exit-zero-v2-refusal",
+    "process-stdin-lifecycle-cleanup",
+    "v2-cache-result-reuse-v1-retirement",
+    "installed-runtime-refusal-ceiling"
   ],
-  "artifact_manifest": {
-    "formula": "sort by UTF-8 path bytes; path<TAB>lowercase raw SHA-256<LF>; SHA-256 concatenation",
-    "worker_result_self_excluded": true,
-    "artifact_count": 90,
-    "artifact_total_bytes": 392493,
-    "artifact_set_sha256": "sha256:b49b688c9973b30591bae69170129c3906a4b1f09c75c300ab67012bd99d6d58",
-    "artifacts": [
-      {
-        "path": "fixtures/routine-production-catalog/cases.json",
-        "sha256": "sha256:1556cd1083f72a8fddec5754d89caab5a1b46e013de731f03ff7ea6a588abfe8",
-        "byte_length": 1503
-      },
-      {
-        "path": "fixtures/routine-production-catalog/valid-catalog-v2.json",
-        "sha256": "sha256:20c8624b9e9385ecf00e5d947689e57a20a7f377aa799ff87330df5f700b664f",
-        "byte_length": 721
-      },
-      {
-        "path": "fixtures/routine-public-production/cases.json",
-        "sha256": "sha256:df115fb83d2180edf0ce1fcf486bef7cb6ee38bf14a497dea0dcf0e5e8eec5cc",
-        "byte_length": 938
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/behavior_child.rs",
-        "sha256": "sha256:777479a074b6b35cdcc9faeb1fceef51351260672176b63513117ba55b1a115c",
-        "byte_length": 1809
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/host/host_failure.rs",
-        "sha256": "sha256:b7d2a6809517363e19dd7d8b1ef3e31efbf5f9e05633ee3538b34039d54765d5",
-        "byte_length": 4874
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/host/supported/host_state.rs",
-        "sha256": "sha256:2dc2e1a582d70309b36d9d8b51820e526a6ecb0c40cd0cac8eb23c4dc7729093",
-        "byte_length": 6419
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/host/supported/host_state_tests.rs",
-        "sha256": "sha256:3783dc169cad06579b17bbbc96131594b2d52f025d17a94376deca20f9e0e87d",
-        "byte_length": 3682
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/host/supported/mod.rs",
-        "sha256": "sha256:067f4314d46b960f875290693a8059b43a2b8fb351a4b1636db556b2b7472aae",
-        "byte_length": 744
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/host/supported/output_provision.rs",
-        "sha256": "sha256:fe43c662dab49c42ff8274faa1c23267f30636309a8d201339eb49a3adfd55c3",
-        "byte_length": 5624
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/host/supported/output_provision_tests.rs",
-        "sha256": "sha256:8fb98f95cc1458675c6f83f7494ee0c8388a4c2e86dd3dd6cbfed9ded655deb3",
-        "byte_length": 2236
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/host/supported/state_components.rs",
-        "sha256": "sha256:fdd6d0cedbde23ed49cad2b6409a432cb1e81b5147a434ca44d66866454fd2c8",
-        "byte_length": 1760
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/invocation_binding.rs",
-        "sha256": "sha256:f3e9a6a137c3a6e63dab7ab8ee770c9c5a88d5f52c011e2d5b5148b645fb698a",
-        "byte_length": 2773
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/manifest/loaded_manifest.rs",
-        "sha256": "sha256:8a80d9f80762269ad6111e55671a4e94c390b2eb6024650fa77638e66782b3f9",
-        "byte_length": 3905
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/manifest/manifest_path.rs",
-        "sha256": "sha256:a9e8a9768c89571543b5eace5be24aec87ecf71653bd2f663b31f797f30c4991",
-        "byte_length": 5062
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/mod.rs",
-        "sha256": "sha256:266aa67e5aa83d7503659aeb879eac94c82fefaea0fbe65af3e16a79ce7fe994",
-        "byte_length": 1954
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/source_configuration.rs",
-        "sha256": "sha256:8a3c93cb641978f8fd8acf2a0eef6cb742757b15330004f22db545fc261b300a",
-        "byte_length": 8612
-      },
-      {
-        "path": "validator/src/cli/successor_public/routine/source_selection.rs",
-        "sha256": "sha256:f378b64e953a571b57b5ce17554c34628e8bfed77e6dcbac7b60308a7e95aa14",
-        "byte_length": 6335
-      },
-      {
-        "path": "validator/src/routine_work/behavior/mod.rs",
-        "sha256": "sha256:c36db555d764ee1f17c159e0b8405bb7488dc94f6a51611e850254eb6da44e5d",
-        "byte_length": 509
-      },
-      {
-        "path": "validator/src/routine_work/behavior/rust_source_frame.rs",
-        "sha256": "sha256:f6e91c1904181f36e6ee420cecf66fcd362d67736fb539704b1a8927eeada082",
-        "byte_length": 8073
-      },
-      {
-        "path": "validator/src/routine_work/behavior/rust_source_syntax.rs",
-        "sha256": "sha256:c49248ec50184f10ca470aff16ae6c21d46990f6879111c002e865e65c40cab5",
-        "byte_length": 6922
-      },
-      {
-        "path": "validator/src/routine_work/catalog/catalog_contract.rs",
-        "sha256": "sha256:66cc8e8c4e6bcdca80356c8ae420b17b9da4ff5df97320cad2117c57d8d4c386",
-        "byte_length": 6329
-      },
-      {
-        "path": "validator/src/routine_work/catalog/catalog_validation.rs",
-        "sha256": "sha256:462ecd2a88d84faaf45ef4041d3ad431170fed85aa939c8baac14547091ec6a0",
-        "byte_length": 4814
-      },
-      {
-        "path": "validator/src/routine_work/catalog/invocation_binding.rs",
-        "sha256": "sha256:16f8259a35b66143f5ee4b449e12f49e82a3ed856da10b77c679ec5a502f7a7b",
-        "byte_length": 2882
-      },
-      {
-        "path": "validator/src/routine_work/catalog/invocation_identity.rs",
-        "sha256": "sha256:204cf7d66d1216805c6fb83d5b756c15f97ac1c34f1a5b5b5be4c0ec4607c678",
-        "byte_length": 3566
-      },
-      {
-        "path": "validator/src/routine_work/catalog/node_selection.rs",
-        "sha256": "sha256:f5876968262453c7d87d5dee277367cfbc0436d6c503634a6ce9799bd7bda576",
-        "byte_length": 6102
-      },
-      {
-        "path": "validator/src/routine_work/catalog/production_catalog.rs",
-        "sha256": "sha256:0b6ef41f47e6a0b32ba66c272d050abc4841119904aab142ea7f8a32abc9da7a",
-        "byte_length": 7297
-      },
-      {
-        "path": "validator/src/routine_work/catalog/program_path_validation.rs",
-        "sha256": "sha256:52d07daca3d03a5b3f0273c929b49a4d991dcb7f5766af40710dc0c3559f7c33",
-        "byte_length": 905
-      },
-      {
-        "path": "validator/src/routine_work/catalog/selection_order.rs",
-        "sha256": "sha256:edf282c51927b9e4d673830f896a7754d8270276f964e64f84579ae4bb8daa3f",
-        "byte_length": 3562
-      },
-      {
-        "path": "validator/src/routine_work/catalog/source_ancestor_capture.rs",
-        "sha256": "sha256:0b3f0911e84e5e9cc5c63fa33637bc82fb4eef0e71568adf19f83b9625c75e32",
-        "byte_length": 6566
-      },
-      {
-        "path": "validator/src/routine_work/mod.rs",
-        "sha256": "sha256:76f4b0f9ca1d80cbda4fee1588e260954af68a4326f295e092576c3b7755aec6",
-        "byte_length": 2618
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/execution_authority/effect_intent.rs",
-        "sha256": "sha256:b055e5699034f3dee1fb988ccfabbb4981bd0b89477a0a3a36303c51a2a4998e",
-        "byte_length": 6281
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/execution_authority/read_authority.rs",
-        "sha256": "sha256:b1e644b01228be3ec794a3e674266f6eed91e4bf5ef533216022b5f7d8d05591",
-        "byte_length": 5652
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/execution_preparation.rs",
-        "sha256": "sha256:a2ba1fb6bda2c4c04d94eeef62c10661e8a5af5d8d82df06ebfd22fda221d4fc",
-        "byte_length": 7126
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/execution_reconciliation.rs",
-        "sha256": "sha256:d07851dce993ab3974ff617235923fdbd82bd0eb5cf2a2646425cb31188d40a7",
-        "byte_length": 7176
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/invocation_binding.rs",
-        "sha256": "sha256:54aa715661f28fa3160f24b51137f68fa3c073252cce8b9912c3a43aac4f647c",
-        "byte_length": 1784
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/framed_read_input.rs",
-        "sha256": "sha256:23620de60e76c0afce749e2caf8e222e9074265ba6230d393dfe7de0b1db0b38",
-        "byte_length": 2378
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/mod.rs",
-        "sha256": "sha256:b307fbaf8d33939e95ba4de999b0c631b90e9fe4d1d82379cc273df556ae5da9",
-        "byte_length": 1587
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/output_file_limit.rs",
-        "sha256": "sha256:2cf3dc3ffe15174dd32d61ade946cdf79f31ff23ec493f95cfef83f009ab684c",
-        "byte_length": 1639
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection.rs",
-        "sha256": "sha256:7899cd2850f0e79722ae688e7c7212a38e549678d9c73d2fbad0c8feb1118b60",
-        "byte_length": 6075
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection_tests.rs",
-        "sha256": "sha256:70b4dba09cc3d33981f77ec27e55d868c8dfd5a0113c7b402e5b668e90ba4584",
-        "byte_length": 1663
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/grant_scope.rs",
-        "sha256": "sha256:555a1d66b13a0276aca78e9f765ad3fb88eac75b9236d541bdda1cafbb8933f5",
-        "byte_length": 9559
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/grant_validation.rs",
-        "sha256": "sha256:aaf6bab6bf07aa113d0cea2ddbed413959cb1e6692014dbede78309059a0aa30",
-        "byte_length": 7940
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/intent_mediation.rs",
-        "sha256": "sha256:d3e999b32682b735bbd59392ff5acc39ab47b25379f055dc4bf50b64fcf94368",
-        "byte_length": 7936
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/mod.rs",
-        "sha256": "sha256:af91b245f658ee13ddc6fca75537051289083733aa7343cd4c37825765f40007",
-        "byte_length": 2343
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/no_op_mediation.rs",
-        "sha256": "sha256:2da46fe085ff22485014f8dedbed022edcdedf8f19b774bbad102b176ad4e457",
-        "byte_length": 7746
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/outcome/routine_mediation_result.rs",
-        "sha256": "sha256:6222cec6e867aa315c0093338500191ecc4f370e52ece15b32161ccd4aef0631",
-        "byte_length": 3432
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/process/mod.rs",
-        "sha256": "sha256:46a20499ee6051a1107dd40c10eb8da40932628f7953210ebd540e126a6b7e0c",
-        "byte_length": 1225
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_execution.rs",
-        "sha256": "sha256:dce6f32b975c53629d59b9779d2c36e73c6211a4d1b95c17ca3c47ddefbf8f1d",
-        "byte_length": 8884
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_input_write.rs",
-        "sha256": "sha256:cdb996e112e11b069fae14dd82e2a26ff3aec17a6e024b2288ccca56031703c1",
-        "byte_length": 508
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/process/spawn_test_observation.rs",
-        "sha256": "sha256:08380bce2204d882d94270a2f9f2b89da679ad5691a10dd31e0526495cd6bae5",
-        "byte_length": 7846
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/read_source_binding.rs",
-        "sha256": "sha256:5364578a4f10a42e07f7fa0d79f75c407d2d7c9c9a53109840799114381e8fb5",
-        "byte_length": 7475
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/reuse_input_index.rs",
-        "sha256": "sha256:951d032799efd75e253f99ebcc4aada62750afffbf3c32ce057feb7018da658c",
-        "byte_length": 8472
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mediator/rust_source_observation.rs",
-        "sha256": "sha256:7359278851df95de7b4fc09edfcd14f81cfa317b26f2efde57823639d2a85794",
-        "byte_length": 2745
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/mod.rs",
-        "sha256": "sha256:bf4b6e59d0c2752549d7f3fbb0419e86dc2c008a4844953fc4d9bc189ddb0c27",
-        "byte_length": 2547
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/production/ledger/file_authority.rs",
-        "sha256": "sha256:77eb848afd902ce8058acdf36c8529d1d75a7208eaf27fe06b22bdc22b3707f1",
-        "byte_length": 6169
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/production/ledger/supported/file_ledger_settle.rs",
-        "sha256": "sha256:889a036ce2dc19d18bc80ff59bf2270ee6e10b52ec03ddd7bdc93ce6172a9a6f",
-        "byte_length": 6714
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/production/ledger/tests.rs",
-        "sha256": "sha256:bc8a855781fc6fb761772741e099f5035e7138cd4f0998a022767fe3d5d57390",
-        "byte_length": 7999
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/production/mod.rs",
-        "sha256": "sha256:96abc982d15a66f9d507b7d2536f9de06ad0962d3729cd598e1b09c89654832f",
-        "byte_length": 1398
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/production/production_issuance.rs",
-        "sha256": "sha256:815d5b970e8ff26f30b9e4e3f078878b8e3d5932d988c61151a720f0be56e303",
-        "byte_length": 5991
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/production/production_mediation.rs",
-        "sha256": "sha256:5731a766868f38da8e8953dc72031e3ce05d330c334a86d448df4dc0f570b4f3",
-        "byte_length": 6025
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/production/production_test_support.rs",
-        "sha256": "sha256:dd9870d852eefaf196cdb21b4984d0edff7854afde1e6e41cf91e5c4139c9238",
-        "byte_length": 2887
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/runner_binding.rs",
-        "sha256": "sha256:dd1b7373d9f930dfb1ce2ed92070223136171b264f095152e47179b726d375db",
-        "byte_length": 7850
-      },
-      {
-        "path": "validator/src/routine_work/runtime_adapter/selection_limit.rs",
-        "sha256": "sha256:8360b2a76ba46f366eceb383573c120f9a6f18428c5c00026fc3ff6b08ed6bd1",
-        "byte_length": 3953
-      },
-      {
-        "path": "validator/tests/routine_behavior_protocol_cases/canonical_behavior.rs",
-        "sha256": "sha256:85a5f3850c807358a6f2de598c1008865b863ee6f9c923c7800a5a3a52cfffa7",
-        "byte_length": 3779
-      },
-      {
-        "path": "validator/tests/routine_behavior_protocol_cases/mod.rs",
-        "sha256": "sha256:66f4fae6dad5a9182c801e52c445ce5ec5c270704e8085ae2fcd20d01c812bd7",
-        "byte_length": 1219
-      },
-      {
-        "path": "validator/tests/routine_behavior_protocol_cases/refusal_matrix.rs",
-        "sha256": "sha256:20df0e3ce13e582112b36c61353d5bcc3539cff716d2de3dac54ab235f5452b7",
-        "byte_length": 2627
-      },
-      {
-        "path": "validator/tests/routine_behavior_protocol_contract.rs",
-        "sha256": "sha256:541ffd92de5a2fcf5b19928dea8362f547c223de00a15df20fccd85076a5dc8d",
-        "byte_length": 37
-      },
-      {
-        "path": "validator/tests/routine_binding_contract.rs",
-        "sha256": "sha256:090ce22c35ede3c7f506cae0f9ef827d0dfb0daae06cc9a2627eb4d2361ce48b",
-        "byte_length": 414
-      },
-      {
-        "path": "validator/tests/routine_binding_contract/closed_binding.rs",
-        "sha256": "sha256:2779acf3bb85830b7a6cb03da86a800cf04cd425c3fb5a49740a712003103c64",
-        "byte_length": 3144
-      },
-      {
-        "path": "validator/tests/routine_binding_contract/execution_fixture.rs",
-        "sha256": "sha256:e505725c261e49feb00414d10d888e5358d3d560bad0dae28c2036e90ea1e580",
-        "byte_length": 3153
-      },
-      {
-        "path": "validator/tests/routine_production_authority_contract.rs",
-        "sha256": "sha256:fa536737ec8e413b5a73f36e9512bfd6d44ee76a5ca531c39e0a6a6cf0c39bf3",
-        "byte_length": 4276
-      },
-      {
-        "path": "validator/tests/routine_production_catalog_cases/catalog_definition_rejection.rs",
-        "sha256": "sha256:38cd0384f6ad837b9b36f2ef760cf03775602a8660655c2b9c5ed2ec15f1220e",
-        "byte_length": 4354
-      },
-      {
-        "path": "validator/tests/routine_production_catalog_cases/catalog_fixture.rs",
-        "sha256": "sha256:c81a64fd1982cc629048d94abe655086c5ce7565431d27ce21f15e75ebcd3647",
-        "byte_length": 6914
-      },
-      {
-        "path": "validator/tests/routine_production_catalog_cases/repository_fixture.rs",
-        "sha256": "sha256:37a3c58285309315ce1df5615905a517edbb21dcaa9c6708f06532d3b47c6d8d",
-        "byte_length": 4718
-      },
-      {
-        "path": "validator/tests/routine_production_catalog_cases/source_path_rejection.rs",
-        "sha256": "sha256:93b09f5c2172787d3f5763f9c8daccffafb9038a0c127f78a1bde2750bdbb674",
-        "byte_length": 6766
-      },
-      {
-        "path": "validator/tests/routine_production_catalog_cases/transitive_input_rejection.rs",
-        "sha256": "sha256:6394d90748577d32aeafc0b3fe4b787a747f2af9f134d36ea19aa5f694e1bdc7",
-        "byte_length": 2844
-      },
-      {
-        "path": "validator/tests/routine_production_catalog_cases/unsafe_invocation_rejection.rs",
-        "sha256": "sha256:6cac363ceb1c29559ace15d7c19aeb9fb36bc09b905ded47fe5abe2de2874109",
-        "byte_length": 4295
-      },
-      {
-        "path": "validator/tests/routine_production_catalog_contract.rs",
-        "sha256": "sha256:395fd908be9a092db4e1c8d306f6999ecca1db26de2e78d3c9c559e59ca2f862",
-        "byte_length": 1455
-      },
-      {
-        "path": "validator/tests/routine_public_host_contract.rs",
-        "sha256": "sha256:74f399fcfd62a5b048a783e83c93266ec48b1c8fb108288ed484c18463133164",
-        "byte_length": 298
-      },
-      {
-        "path": "validator/tests/routine_public_production_contract/journeys.rs",
-        "sha256": "sha256:34dea0bf15e0a3e099e54b0d3182df0c16a7e551cf750562e6964214de5d9884",
-        "byte_length": 5725
-      },
-      {
-        "path": "validator/tests/routine_public_production_contract/production_scenario_cases/argument_fixture.rs",
-        "sha256": "sha256:fbe429834427e17bcb0bdf1d036f6f0c56490209465c2ecead8355c9d346817e",
-        "byte_length": 1853
-      },
-      {
-        "path": "validator/tests/routine_public_production_contract/production_scenario_cases/execution_fixture.rs",
-        "sha256": "sha256:4fa5d567562f1b22215ecae8457474ba70a4ebd0515d28e48123d54b7ece9985",
-        "byte_length": 7182
-      },
-      {
-        "path": "validator/tests/routine_public_production_contract/production_scenario_cases/scenario_fixture.rs",
-        "sha256": "sha256:8251cca16b83680c314d17e29bf0e0c63eab91ee0420ecb4172ab8a558e04cf4",
-        "byte_length": 5055
-      },
-      {
-        "path": "validator/tests/routine_public_production_contract/scenario.rs",
-        "sha256": "sha256:fcb0d47fd57bdf43c1b27f502f9dccd5b7097d7ab5fe3866c7d4fc2a4ae34cc7",
-        "byte_length": 812
-      },
-      {
-        "path": "validator/tests/routine_public_production_contract/security.rs",
-        "sha256": "sha256:4842a0b037b7fbf73b83141f601259d058f55973b2a50a310e36ba94b36a6ae5",
-        "byte_length": 7148
-      },
-      {
-        "path": "validator/tests/routine_work_contract.rs",
-        "sha256": "sha256:ae1f41b1ee1228fe5a7c670232d13ea83d3d05b823f0911e032952a8cd42c970",
-        "byte_length": 768
-      },
-      {
-        "path": "validator/tests/routine_work_contract/local_capture.rs",
-        "sha256": "sha256:895d16e760dd691a0ea3be5121b63efcffc5f279e03a27b7288fc4caca45c77f",
-        "byte_length": 6784
-      },
-      {
-        "path": "validator/tests/routine_work_contract/provenance.rs",
-        "sha256": "sha256:11952d17eb6fcadd2133122ee69473dd1129f0ff7114dc3b1ad28db4db2637c4",
-        "byte_length": 4700
-      },
-      {
-        "path": "validator/tests/routine_work_contract/provenance_compile.rs",
-        "sha256": "sha256:700544e77176da6837b04f58775fc28229fd28e9318414c488ffbf98434b36b3",
-        "byte_length": 4449
-      },
-      {
-        "path": "validator/tests/routine_work_contract/reuse/authority.rs",
-        "sha256": "sha256:763f5d92fa6d19910fe66b571f40381aac361c583ae137db0bfeb80b33cbb216",
-        "byte_length": 9623
-      }
-    ]
-  },
-  "docs_generated_impact": {
-    "edited": [
-
-    ],
-    "withheld": "shared schemas, generated authority, migration registry, ExecPlans, claims, release, and candidate identity are root-owned",
-    "stale_blocker": "root must adopt the V2 shapes and runtime/publication journey evidence before elevating any generated or claim surface"
-  },
+  "generated_outputs": [
+    "validation_artifacts/worker-results/N06-ROUTINE-EXECUTION-TRUST-001.json"
+  ],
+  "fixtures": [
+    "fixtures/routine-production-catalog/cases.json",
+    "fixtures/routine-production-catalog/valid-catalog-v2.json",
+    "fixtures/routine-public-production/cases.json",
+    "validator/tests/routine_behavior_protocol_contract.rs"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "n06-source",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "n06-tests",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "isolated-verification",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "external",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "destructive",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "target": "root-owned-surfaces",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "N06-ROUTINE-EXECUTION-TRUST",
+    "OD-008-PRESERVE",
+    "OD-009-PRESERVE"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE",
+    "ROOT-INSTALLED-RUNTIME",
+    "ROOT-SHARED-SCHEMA-MIGRATION"
+  ],
+  "changes": [
+    {
+      "area": "execution-authority",
+      "result": "Retired arbitrary external-process success authority and retained one typed rust-source-syntax protocol."
+    },
+    {
+      "area": "child-entry",
+      "result": "Replaced caller-selectable environment authority with a process-bound inherited socket capability, sealed exact bindings, and ACK-before-stdin mediation."
+    },
+    {
+      "area": "runner-identity",
+      "result": "Bound and revalidated exact executable bytes and Unix object identity across parent and child."
+    },
+    {
+      "area": "output-provenance",
+      "result": "Attests only authorized owned output deltas and rejects stale, foreign, alias, and restore substitution cases."
+    },
+    {
+      "area": "durability",
+      "result": "Stages publication before terminal settlement and retains bounded recovery markers and interruption boundaries."
+    },
+    {
+      "area": "reuse",
+      "result": "Treats different full authority bindings as safe misses while exact repeats remain reusable."
+    },
+    {
+      "area": "fresh-output",
+      "result": "Adds confined authorized dynamic output provisioning with rollback and special-object rejection."
+    },
+    {
+      "area": "tests",
+      "result": "Adds built-public-binary exploit, copied environment, wrong parent/session, and replay-shaped refusal controls."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo check --manifest-path validator/Cargo.toml --lib --locked --offline -j16",
+      "status": "passed",
+      "result": "exit 0; cap-lints behavior compilation passed"
+    },
+    {
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_behavior_protocol_contract --locked --offline -j16",
+      "status": "passed",
+      "result": "4 passed; 0 failed"
+    },
+    {
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_production_authority_contract --locked --offline -j16",
+      "status": "passed",
+      "result": "4 passed; 0 failed"
+    },
+    {
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_binding_contract closed_binding --locked --offline -j16",
+      "status": "passed",
+      "result": "2 passed; 0 failed; 30 filtered"
+    },
+    {
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_production_catalog_contract --locked --offline -j16",
+      "status": "passed",
+      "result": "14 passed; 0 failed"
+    },
+    {
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_public_host_contract --locked --offline -j16",
+      "status": "passed",
+      "result": "4 passed; 0 failed"
+    },
+    {
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_work_contract runtime_adapter --locked --offline -j16",
+      "status": "passed",
+      "result": "14 passed; 0 failed; 69 filtered"
+    },
+    {
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_public_production_contract --locked --offline -j16",
+      "status": "partial_runtime_gap",
+      "result": "10 passed; 0 failed; 5 ignored because no root-owned immutable current ultragoal binary was provisioned"
+    },
+    {
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_recovery_reuse_journey_contract --locked --offline -j16",
+      "status": "blocked_environment",
+      "exit_code": 101,
+      "result": "35 passed; 2 failed because the required .codex-worktree root is rejected by legacy secret-path policy"
+    },
+    {
+      "command": "source .codex-worktree/env.sh; RUSTFLAGS='--cap-lints allow' cargo test --manifest-path validator/Cargo.toml --test routine_work_contract --locked --offline -j16",
+      "status": "blocked_environment",
+      "exit_code": 101,
+      "result": "57 passed; 26 failed; managed-temp secret-path conflict remains the dominant causal blocker, with one timed race assertion following the same unavailable fixture setup"
+    },
+    {
+      "command": "source .codex-worktree/env.sh; unset RUSTFLAGS; cargo check --manifest-path validator/Cargo.toml --lib --locked --offline -j16",
+      "status": "blocked_root_wide",
+      "exit_code": 101,
+      "result": "649 strict diagnostics; 31 mentions of routine-owned paths; no strict-green claim"
+    },
+    {
+      "command": "rustfmt --edition 2024 --check <20 changed N06 Rust paths>",
+      "status": "passed",
+      "result": "direct rustfmt check passed for every changed N06 Rust file"
+    },
+    {
+      "command": "source .codex-worktree/env.sh; cargo fmt --manifest-path validator/Cargo.toml -- --check",
+      "status": "blocked_root_owned",
+      "exit_code": 1,
+      "result": "root-owned distribution target modules are absent, so Cargo-wide format discovery cannot resolve the crate module tree"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "result": "no whitespace errors before source commit"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/routine-production-catalog/cases.json",
+      "sha256": "sha256:1556cd1083f72a8fddec5754d89caab5a1b46e013de731f03ff7ea6a588abfe8",
+      "byte_length": 1503
+    },
+    {
+      "path": "fixtures/routine-production-catalog/valid-catalog-v2.json",
+      "sha256": "sha256:20c8624b9e9385ecf00e5d947689e57a20a7f377aa799ff87330df5f700b664f",
+      "byte_length": 721
+    },
+    {
+      "path": "fixtures/routine-public-production/cases.json",
+      "sha256": "sha256:df115fb83d2180edf0ce1fcf486bef7cb6ee38bf14a497dea0dcf0e5e8eec5cc",
+      "byte_length": 938
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/behavior_child.rs",
+      "sha256": "sha256:5e872b0076726469c4561e54680a7f4d75ae918c410c451d2728a5dbda00931c",
+      "byte_length": 8212
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/host_failure.rs",
+      "sha256": "sha256:b7d2a6809517363e19dd7d8b1ef3e31efbf5f9e05633ee3538b34039d54765d5",
+      "byte_length": 4874
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/supported/host_state.rs",
+      "sha256": "sha256:2dc2e1a582d70309b36d9d8b51820e526a6ecb0c40cd0cac8eb23c4dc7729093",
+      "byte_length": 6419
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/supported/host_state_tests.rs",
+      "sha256": "sha256:3783dc169cad06579b17bbbc96131594b2d52f025d17a94376deca20f9e0e87d",
+      "byte_length": 3682
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/supported/mod.rs",
+      "sha256": "sha256:067f4314d46b960f875290693a8059b43a2b8fb351a4b1636db556b2b7472aae",
+      "byte_length": 744
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/supported/output_provision.rs",
+      "sha256": "sha256:fe43c662dab49c42ff8274faa1c23267f30636309a8d201339eb49a3adfd55c3",
+      "byte_length": 5624
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/supported/output_provision_tests.rs",
+      "sha256": "sha256:8fb98f95cc1458675c6f83f7494ee0c8388a4c2e86dd3dd6cbfed9ded655deb3",
+      "byte_length": 2236
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/supported/state_components.rs",
+      "sha256": "sha256:fdd6d0cedbde23ed49cad2b6409a432cb1e81b5147a434ca44d66866454fd2c8",
+      "byte_length": 1760
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/invocation_binding.rs",
+      "sha256": "sha256:f3e9a6a137c3a6e63dab7ab8ee770c9c5a88d5f52c011e2d5b5148b645fb698a",
+      "byte_length": 2773
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/manifest/loaded_manifest.rs",
+      "sha256": "sha256:8a80d9f80762269ad6111e55671a4e94c390b2eb6024650fa77638e66782b3f9",
+      "byte_length": 3905
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/manifest/manifest_path.rs",
+      "sha256": "sha256:a9e8a9768c89571543b5eace5be24aec87ecf71653bd2f663b31f797f30c4991",
+      "byte_length": 5062
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/mod.rs",
+      "sha256": "sha256:266aa67e5aa83d7503659aeb879eac94c82fefaea0fbe65af3e16a79ce7fe994",
+      "byte_length": 1954
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/source_configuration.rs",
+      "sha256": "sha256:8a3c93cb641978f8fd8acf2a0eef6cb742757b15330004f22db545fc261b300a",
+      "byte_length": 8612
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/source_selection.rs",
+      "sha256": "sha256:f378b64e953a571b57b5ce17554c34628e8bfed77e6dcbac7b60308a7e95aa14",
+      "byte_length": 6335
+    },
+    {
+      "path": "validator/src/routine_work/behavior/child_capability.rs",
+      "sha256": "sha256:d498760eb57660405c283ae35188e8214098b99f3483477ebd68b7edee4160f9",
+      "byte_length": 5118
+    },
+    {
+      "path": "validator/src/routine_work/behavior/mod.rs",
+      "sha256": "sha256:646ab27da688bf76f2af39d249f49920f3ca3b09e111cdf7e57303181d7a8c6b",
+      "byte_length": 668
+    },
+    {
+      "path": "validator/src/routine_work/behavior/rust_source_frame.rs",
+      "sha256": "sha256:f6e91c1904181f36e6ee420cecf66fcd362d67736fb539704b1a8927eeada082",
+      "byte_length": 8073
+    },
+    {
+      "path": "validator/src/routine_work/behavior/rust_source_syntax.rs",
+      "sha256": "sha256:c49248ec50184f10ca470aff16ae6c21d46990f6879111c002e865e65c40cab5",
+      "byte_length": 6922
+    },
+    {
+      "path": "validator/src/routine_work/catalog/catalog_contract.rs",
+      "sha256": "sha256:66cc8e8c4e6bcdca80356c8ae420b17b9da4ff5df97320cad2117c57d8d4c386",
+      "byte_length": 6329
+    },
+    {
+      "path": "validator/src/routine_work/catalog/catalog_validation.rs",
+      "sha256": "sha256:462ecd2a88d84faaf45ef4041d3ad431170fed85aa939c8baac14547091ec6a0",
+      "byte_length": 4814
+    },
+    {
+      "path": "validator/src/routine_work/catalog/invocation_binding.rs",
+      "sha256": "sha256:16f8259a35b66143f5ee4b449e12f49e82a3ed856da10b77c679ec5a502f7a7b",
+      "byte_length": 2882
+    },
+    {
+      "path": "validator/src/routine_work/catalog/invocation_identity.rs",
+      "sha256": "sha256:204cf7d66d1216805c6fb83d5b756c15f97ac1c34f1a5b5b5be4c0ec4607c678",
+      "byte_length": 3566
+    },
+    {
+      "path": "validator/src/routine_work/catalog/node_selection.rs",
+      "sha256": "sha256:f5876968262453c7d87d5dee277367cfbc0436d6c503634a6ce9799bd7bda576",
+      "byte_length": 6102
+    },
+    {
+      "path": "validator/src/routine_work/catalog/production_catalog.rs",
+      "sha256": "sha256:0b6ef41f47e6a0b32ba66c272d050abc4841119904aab142ea7f8a32abc9da7a",
+      "byte_length": 7297
+    },
+    {
+      "path": "validator/src/routine_work/catalog/program_path_validation.rs",
+      "sha256": "sha256:52d07daca3d03a5b3f0273c929b49a4d991dcb7f5766af40710dc0c3559f7c33",
+      "byte_length": 905
+    },
+    {
+      "path": "validator/src/routine_work/catalog/selection_order.rs",
+      "sha256": "sha256:edf282c51927b9e4d673830f896a7754d8270276f964e64f84579ae4bb8daa3f",
+      "byte_length": 3562
+    },
+    {
+      "path": "validator/src/routine_work/catalog/source_ancestor_capture.rs",
+      "sha256": "sha256:0b3f0911e84e5e9cc5c63fa33637bc82fb4eef0e71568adf19f83b9625c75e32",
+      "byte_length": 6566
+    },
+    {
+      "path": "validator/src/routine_work/mod.rs",
+      "sha256": "sha256:7de62c60480938e239b136ad8e1fab286fe7022cce890fd80047f20dcd29722b",
+      "byte_length": 2786
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_authority/effect_intent.rs",
+      "sha256": "sha256:b055e5699034f3dee1fb988ccfabbb4981bd0b89477a0a3a36303c51a2a4998e",
+      "byte_length": 6281
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_authority/read_authority.rs",
+      "sha256": "sha256:b1e644b01228be3ec794a3e674266f6eed91e4bf5ef533216022b5f7d8d05591",
+      "byte_length": 5652
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_preparation.rs",
+      "sha256": "sha256:a2ba1fb6bda2c4c04d94eeef62c10661e8a5af5d8d82df06ebfd22fda221d4fc",
+      "byte_length": 7126
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_reconciliation.rs",
+      "sha256": "sha256:d07851dce993ab3974ff617235923fdbd82bd0eb5cf2a2646425cb31188d40a7",
+      "byte_length": 7176
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/invocation_binding.rs",
+      "sha256": "sha256:54aa715661f28fa3160f24b51137f68fa3c073252cce8b9912c3a43aac4f647c",
+      "byte_length": 1784
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/executable_identity.rs",
+      "sha256": "sha256:6456d3ec48e7a45dfc3c40a24b14394dffc0cd715512098c1da8683f5a642852",
+      "byte_length": 6992
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/framed_read_input.rs",
+      "sha256": "sha256:23620de60e76c0afce749e2caf8e222e9074265ba6230d393dfe7de0b1db0b38",
+      "byte_length": 2378
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/mod.rs",
+      "sha256": "sha256:b307fbaf8d33939e95ba4de999b0c631b90e9fe4d1d82379cc273df556ae5da9",
+      "byte_length": 1587
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/output_file_limit.rs",
+      "sha256": "sha256:2cf3dc3ffe15174dd32d61ade946cdf79f31ff23ec493f95cfef83f009ab684c",
+      "byte_length": 1639
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection.rs",
+      "sha256": "sha256:7899cd2850f0e79722ae688e7c7212a38e549678d9c73d2fbad0c8feb1118b60",
+      "byte_length": 6075
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection_tests.rs",
+      "sha256": "sha256:70b4dba09cc3d33981f77ec27e55d868c8dfd5a0113c7b402e5b668e90ba4584",
+      "byte_length": 1663
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/grant_scope.rs",
+      "sha256": "sha256:555a1d66b13a0276aca78e9f765ad3fb88eac75b9236d541bdda1cafbb8933f5",
+      "byte_length": 9559
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/grant_validation.rs",
+      "sha256": "sha256:a178fa07beac3c3dc089d228217f4cc56dd08fb8e66ad9b48239423b23902593",
+      "byte_length": 7623
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/intent_mediation.rs",
+      "sha256": "sha256:ec96738c711aa12ba5ea27bdadef18b3e97ba0cc2fe283cfa8765b586ac59b34",
+      "byte_length": 8608
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/mod.rs",
+      "sha256": "sha256:527995c0e4fcbe37f98216f42501f69798f45de8871566186dc6e97621c9f37d",
+      "byte_length": 3050
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/no_op_mediation.rs",
+      "sha256": "sha256:2da46fe085ff22485014f8dedbed022edcdedf8f19b774bbad102b176ad4e457",
+      "byte_length": 7746
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/outcome/routine_mediation_result.rs",
+      "sha256": "sha256:6222cec6e867aa315c0093338500191ecc4f370e52ece15b32161ccd4aef0631",
+      "byte_length": 3432
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/child_authority_channel.rs",
+      "sha256": "sha256:d438ea98ba3b5e56e6590931776e51291fe493b3c9a962ca301a3ecfb8b9faf4",
+      "byte_length": 4535
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/mod.rs",
+      "sha256": "sha256:3f6f69552993cb5e037b5890776bde74dab2ab80c75179f2b1e45fa70231b618",
+      "byte_length": 1864
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_execution.rs",
+      "sha256": "sha256:c3c3409579e59f0c9432d694d6c54168632b1a3dbd4e91b53bd56bc659713961",
+      "byte_length": 9180
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_input_write.rs",
+      "sha256": "sha256:cdb996e112e11b069fae14dd82e2a26ff3aec17a6e024b2288ccca56031703c1",
+      "byte_length": 508
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/spawn_test_observation.rs",
+      "sha256": "sha256:c251f1ae10003167e4881e06e0853eff35ea85939acb12db792f53947e25df40",
+      "byte_length": 7965
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/read_source_binding.rs",
+      "sha256": "sha256:1d5c84648a01b9562a1e947bd75b18886092660daa8a8c2c635c79acbc54684c",
+      "byte_length": 7560
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/reuse_input_index.rs",
+      "sha256": "sha256:951d032799efd75e253f99ebcc4aada62750afffbf3c32ce057feb7018da658c",
+      "byte_length": 8472
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/rust_source_observation.rs",
+      "sha256": "sha256:7359278851df95de7b4fc09edfcd14f81cfa317b26f2efde57823639d2a85794",
+      "byte_length": 2745
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mod.rs",
+      "sha256": "sha256:0e6fc5eae0df53417ee8d88929251693784a5d13b173e19aa87de7fd55931956",
+      "byte_length": 2652
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/ledger/file_authority.rs",
+      "sha256": "sha256:77eb848afd902ce8058acdf36c8529d1d75a7208eaf27fe06b22bdc22b3707f1",
+      "byte_length": 6169
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/ledger/supported/file_ledger_settle.rs",
+      "sha256": "sha256:889a036ce2dc19d18bc80ff59bf2270ee6e10b52ec03ddd7bdc93ce6172a9a6f",
+      "byte_length": 6714
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/ledger/tests.rs",
+      "sha256": "sha256:bc8a855781fc6fb761772741e099f5035e7138cd4f0998a022767fe3d5d57390",
+      "byte_length": 7999
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/mod.rs",
+      "sha256": "sha256:96abc982d15a66f9d507b7d2536f9de06ad0962d3729cd598e1b09c89654832f",
+      "byte_length": 1398
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/production_issuance.rs",
+      "sha256": "sha256:815d5b970e8ff26f30b9e4e3f078878b8e3d5932d988c61151a720f0be56e303",
+      "byte_length": 5991
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/production_mediation.rs",
+      "sha256": "sha256:5731a766868f38da8e8953dc72031e3ce05d330c334a86d448df4dc0f570b4f3",
+      "byte_length": 6025
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/production_test_support.rs",
+      "sha256": "sha256:dd9870d852eefaf196cdb21b4984d0edff7854afde1e6e41cf91e5c4139c9238",
+      "byte_length": 2887
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/runner_binding.rs",
+      "sha256": "sha256:dd1b7373d9f930dfb1ce2ed92070223136171b264f095152e47179b726d375db",
+      "byte_length": 7850
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/runner_object_binding.rs",
+      "sha256": "sha256:822cbe0b9a09cd590d24eb0d595189f2b7962137c2c564dcb47098e46584eca8",
+      "byte_length": 1069
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/selection_limit.rs",
+      "sha256": "sha256:8360b2a76ba46f366eceb383573c120f9a6f18428c5c00026fc3ff6b08ed6bd1",
+      "byte_length": 3953
+    },
+    {
+      "path": "validator/tests/routine_behavior_protocol_cases/canonical_behavior.rs",
+      "sha256": "sha256:85a5f3850c807358a6f2de598c1008865b863ee6f9c923c7800a5a3a52cfffa7",
+      "byte_length": 3779
+    },
+    {
+      "path": "validator/tests/routine_behavior_protocol_cases/mod.rs",
+      "sha256": "sha256:66f4fae6dad5a9182c801e52c445ce5ec5c270704e8085ae2fcd20d01c812bd7",
+      "byte_length": 1219
+    },
+    {
+      "path": "validator/tests/routine_behavior_protocol_cases/refusal_matrix.rs",
+      "sha256": "sha256:20df0e3ce13e582112b36c61353d5bcc3539cff716d2de3dac54ab235f5452b7",
+      "byte_length": 2627
+    },
+    {
+      "path": "validator/tests/routine_behavior_protocol_contract.rs",
+      "sha256": "sha256:541ffd92de5a2fcf5b19928dea8362f547c223de00a15df20fccd85076a5dc8d",
+      "byte_length": 37
+    },
+    {
+      "path": "validator/tests/routine_binding_contract.rs",
+      "sha256": "sha256:090ce22c35ede3c7f506cae0f9ef827d0dfb0daae06cc9a2627eb4d2361ce48b",
+      "byte_length": 414
+    },
+    {
+      "path": "validator/tests/routine_binding_contract/closed_binding.rs",
+      "sha256": "sha256:2779acf3bb85830b7a6cb03da86a800cf04cd425c3fb5a49740a712003103c64",
+      "byte_length": 3144
+    },
+    {
+      "path": "validator/tests/routine_binding_contract/execution_fixture.rs",
+      "sha256": "sha256:e505725c261e49feb00414d10d888e5358d3d560bad0dae28c2036e90ea1e580",
+      "byte_length": 3153
+    },
+    {
+      "path": "validator/tests/routine_production_authority_contract.rs",
+      "sha256": "sha256:b76eccbb72c24c42717fee67bd86e7a85c2083571fe33a2bfe9dd8bede8275fe",
+      "byte_length": 6224
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_definition_rejection.rs",
+      "sha256": "sha256:38cd0384f6ad837b9b36f2ef760cf03775602a8660655c2b9c5ed2ec15f1220e",
+      "byte_length": 4354
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture.rs",
+      "sha256": "sha256:c81a64fd1982cc629048d94abe655086c5ce7565431d27ce21f15e75ebcd3647",
+      "byte_length": 6914
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/repository_fixture.rs",
+      "sha256": "sha256:37a3c58285309315ce1df5615905a517edbb21dcaa9c6708f06532d3b47c6d8d",
+      "byte_length": 4718
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/source_path_rejection.rs",
+      "sha256": "sha256:93b09f5c2172787d3f5763f9c8daccffafb9038a0c127f78a1bde2750bdbb674",
+      "byte_length": 6766
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/transitive_input_rejection.rs",
+      "sha256": "sha256:6394d90748577d32aeafc0b3fe4b787a747f2af9f134d36ea19aa5f694e1bdc7",
+      "byte_length": 2844
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/unsafe_invocation_rejection.rs",
+      "sha256": "sha256:6cac363ceb1c29559ace15d7c19aeb9fb36bc09b905ded47fe5abe2de2874109",
+      "byte_length": 4295
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_contract.rs",
+      "sha256": "sha256:395fd908be9a092db4e1c8d306f6999ecca1db26de2e78d3c9c559e59ca2f862",
+      "byte_length": 1455
+    },
+    {
+      "path": "validator/tests/routine_public_host_contract.rs",
+      "sha256": "sha256:74f399fcfd62a5b048a783e83c93266ec48b1c8fb108288ed484c18463133164",
+      "byte_length": 298
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract.rs",
+      "sha256": "sha256:cb506810394009b2656652a45dabb72f6ff5276efd558676b9cb96b295f59c13",
+      "byte_length": 156
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/child_authority.rs",
+      "sha256": "sha256:4891b47c7eac7a6f319a92bf224c5fb620e25b4dbafe88fb45d96c481156f68e",
+      "byte_length": 2530
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/child_authority_support.rs",
+      "sha256": "sha256:d2cf213e743a5ee584edae504aa260ae4610db983b9b25358b75844ab3ee8d19",
+      "byte_length": 6769
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/journeys.rs",
+      "sha256": "sha256:34dea0bf15e0a3e099e54b0d3182df0c16a7e551cf750562e6964214de5d9884",
+      "byte_length": 5725
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/argument_fixture.rs",
+      "sha256": "sha256:fbe429834427e17bcb0bdf1d036f6f0c56490209465c2ecead8355c9d346817e",
+      "byte_length": 1853
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/execution_fixture.rs",
+      "sha256": "sha256:defcfbf1bfc675ea28d6f77bceea5f04a8e8454de321b83beba60bd86426809b",
+      "byte_length": 7202
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/scenario_fixture.rs",
+      "sha256": "sha256:8251cca16b83680c314d17e29bf0e0c63eab91ee0420ecb4172ab8a558e04cf4",
+      "byte_length": 5055
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/scenario.rs",
+      "sha256": "sha256:fcb0d47fd57bdf43c1b27f502f9dccd5b7097d7ab5fe3866c7d4fc2a4ae34cc7",
+      "byte_length": 812
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/security.rs",
+      "sha256": "sha256:4842a0b037b7fbf73b83141f601259d058f55973b2a50a310e36ba94b36a6ae5",
+      "byte_length": 7148
+    },
+    {
+      "path": "validator/tests/routine_work_contract.rs",
+      "sha256": "sha256:ae1f41b1ee1228fe5a7c670232d13ea83d3d05b823f0911e032952a8cd42c970",
+      "byte_length": 768
+    },
+    {
+      "path": "validator/tests/routine_work_contract/local_capture.rs",
+      "sha256": "sha256:895d16e760dd691a0ea3be5121b63efcffc5f279e03a27b7288fc4caca45c77f",
+      "byte_length": 6784
+    },
+    {
+      "path": "validator/tests/routine_work_contract/provenance.rs",
+      "sha256": "sha256:11952d17eb6fcadd2133122ee69473dd1129f0ff7114dc3b1ad28db4db2637c4",
+      "byte_length": 4700
+    },
+    {
+      "path": "validator/tests/routine_work_contract/provenance_compile.rs",
+      "sha256": "sha256:700544e77176da6837b04f58775fc28229fd28e9318414c488ffbf98434b36b3",
+      "byte_length": 4449
+    },
+    {
+      "path": "validator/tests/routine_work_contract/reuse/authority.rs",
+      "sha256": "sha256:763f5d92fa6d19910fe66b571f40381aac361c583ae137db0bfeb80b33cbb216",
+      "byte_length": 9623
+    }
+  ],
+  "findings": [
+    {
+      "status": "closed_source_local",
+      "class": "false-pass",
+      "finding": "Exit-zero unframed, wrong stdout, nonempty stderr, arbitrary program, argv, and environment cannot issue a V2 routine success."
+    },
+    {
+      "status": "closed_source_local",
+      "class": "child-authority",
+      "finding": "The former exact public-binary environment exploit now refuses with zero writes before framed input interpretation."
+    },
+    {
+      "status": "closed_source_local",
+      "class": "binding",
+      "finding": "Capability sealing covers request, protocol, intent, node, grant session, durable reservation, parent/child/session, executable object, framed input digest, and nonce."
+    },
+    {
+      "status": "blocked",
+      "class": "runtime-proof",
+      "finding": "No exact root-owned immutable current ultragoal program was provisioned; five public production journeys remain ignored and a legitimate durable-mediated internal-child success/replay sequence is not runtime-proven."
+    },
+    {
+      "status": "blocked",
+      "class": "trust-assumption",
+      "finding": "The MAC secret and capability share the inherited peer-authenticated socket. Durable provenance therefore relies on peer PID, real-parent equality, exact immutable executable identity, and parent code honoring the reservation; same-executable non-reserved issuance is not independently runtime-proven."
+    },
+    {
+      "status": "blocked",
+      "class": "managed-environment",
+      "finding": "Recovery/reuse remains 35 passed and 2 failed; full routine_work remains 57 passed and 26 failed because the mandatory managed temp root conflicts with legacy secret-path capture policy."
+    },
+    {
+      "status": "blocked",
+      "class": "strict-compilation",
+      "finding": "Strict library compilation remains red at 649 diagnostics with 31 routine-path mentions."
+    },
+    {
+      "status": "root_request",
+      "request_id": "ROOT-N06-ADOPT-V2-SHAPES",
+      "finding": "Adopt the V2 manifest, catalog, cache, result, and reuse shapes in shared schemas and generated authority."
+    },
+    {
+      "status": "root_request",
+      "request_id": "ROOT-N06-MIGRATION",
+      "finding": "Register V1 manifest, catalog, result, and reuse as non-authoritative and V1 cache as a typed miss while preserving OD-008 and OD-009 physical bytes."
+    },
+    {
+      "status": "root_request",
+      "request_id": "ROOT-N06-INSTALLED-RUNTIME",
+      "finding": "Provision and verify an exact root-owned immutable current ultragoal binary, then execute all five ignored journeys and the legitimate internal-child replay controls."
+    },
+    {
+      "status": "root_request",
+      "request_id": "ROOT-N06-TEMP-POLICY",
+      "finding": "Reconcile the mandatory .codex-worktree isolated temp root with legacy capture secret-path prohibition without weakening either boundary."
+    },
+    {
+      "status": "root_request",
+      "request_id": "ROOT-N06-INTEGRATION-GATES",
+      "finding": "Repair root-wide strict and generated blockers, rerun repository checks, and retain parent ownership of acceptance and claim surfaces."
+    }
+  ],
+  "unresolved_dependencies": [
+    "ROOT-N06-ADOPT-V2-SHAPES",
+    "ROOT-N06-INSTALLED-RUNTIME",
+    "ROOT-N06-INTEGRATION-GATES",
+    "ROOT-N06-MIGRATION",
+    "ROOT-N06-TEMP-POLICY",
+    "N06-LEGITIMATE-CHILD-REPLAY-PROOF"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/lib.rs",
+      "expected_sha256": "sha256:b7956d9d71c75a82844191b55f3379624083d0e195a2d4922201aa62e364106e",
+      "request": "After integration, reconcile N06-owned routine exports with the canonical witness without restoring arbitrary process authority or widening unrelated public APIs."
+    }
+  ],
   "limitations": [
-    "The managed isolated temp path conflicts with the legacy capture secret-path policy, so the full routine_work and recovery journey targets are not green under the required environment.",
-    "No immutable installed runtime was available, so authorized public dirty/race/interruption/reuse journeys were not executed.",
-    "Strict library compilation remains blocked by 649 repository-wide warning diagnostics.",
-    "This record makes no N06 readiness, release, completion, or parent-acceptance claim."
+    "The source-local ceiling proves codec, static authority shape, and built-binary refusal controls; it does not prove an installed immutable runtime journey.",
+    "Five immutable-runtime public production journeys are ignored and unexecuted.",
+    "A legitimate durable-mediated child success followed by copied real-capability and consumed-reservation replay has not been executed.",
+    "Recovery/reuse is 35/2 and full routine_work is 57/26 under the required managed-temp environment conflict.",
+    "Strict library compilation is red at 649 diagnostics and Cargo-wide format discovery is blocked by root-owned absent distribution modules.",
+    "Shared schemas, generated authority, migrations, ExecPlans, claims, release surfaces, and parent integration were not edited.",
+    "Parent acceptance is not claimed."
   ],
-  "no_claim_statement": "No N06 readiness, release, completion, or parent acceptance is claimed."
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
 }
