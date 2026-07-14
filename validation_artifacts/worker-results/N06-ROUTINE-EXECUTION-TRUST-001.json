@@ -1,21 +1,43 @@
 {
   "worker": "/root",
   "lease_id": "N06-ROUTINE-EXECUTION-TRUST-001",
-  "context_id": "sha256:20a11eb981c5db2d2136a555632be9c4e5ab775220a11eb981c5db2d2136a55",
+  "context_id": "sha256:ac690404eb0feb9fa05a4b94438fe04484b8b60e92f2f72feca809ffdd295fdf",
   "candidate_identity": {
     "candidate_id": "n06-routine-execution-trust",
-    "context_id": "sha256:20a11eb981c5db2d2136a555632be9c4e5ab775220a11eb981c5db2d2136a55",
+    "context_id": "sha256:ac690404eb0feb9fa05a4b94438fe04484b8b60e92f2f72feca809ffdd295fdf",
     "thread_id": "019f5f39-507b-78a2-a96a-0b566a5a2126",
     "worktree": "/Users/terrynoblin/.codex/worktrees/db3d/harness-ultragoal-plugin-proposal",
     "branch": "codex/n06-routine-execution-trust",
-    "base_commit": "20a11eb981c5db2d2136a555632be9c4e5ab7752",
-    "implementation_head": "25b62475105be127b38be0338fd86c34f65792a9",
-    "implementation_commit": "25b62475105be127b38be0338fd86c34f65792a9",
+    "base_commit": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
+    "implementation_head": "2e3f0708215a0b9e50d628a4ff787c770b62aaf9",
+    "implementation_tree": "536bc868d17bc7855f57b4bf7d61859cba4b6520",
+    "implementation_commit": "67eabfb0acf8f89545ed526465cb8e757adcfb8c",
+    "rebased_commits": [
+      "3ace481d127c4e53d8037397f9704b2b34e39fb3",
+      "f57a9c87ad62cf7bfe13b3bd4b87ba0bd870b2bd",
+      "67eabfb0acf8f89545ed526465cb8e757adcfb8c",
+      "2e3f0708215a0b9e50d628a4ff787c770b62aaf9"
+    ],
+    "pre_refresh_commits": [
+      "1f69bfe8765cc926705ddeb8b4312faad56561a0",
+      "1a02cfe1e14d2c57925842dbb2e19ffa5fd778ec",
+      "25b62475105be127b38be0338fd86c34f65792a9",
+      "31a7df95a1a102b6a740c9104a5528b612775f9d"
+    ],
+    "patch_equivalence": "all four old/new commit pairs have identical stable patch IDs and git range-diff reports four exact matches",
     "parent_refresh_checkpoint": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
-    "parent_refresh_status": "pending-parent-owned-refresh"
+    "parent_refresh_status": "parent-refresh-complete-worker-evidence-refreshed",
+    "artifact_set_formula": "Sort rows by UTF-8 path bytes, serialize each as path<TAB>lowercase SHA-256 without the sha256: prefix<LF>, concatenate, then SHA-256 the result.",
+    "artifact_count": 70,
+    "artifact_total_bytes": 305850,
+    "artifact_set_sha256": "sha256:0c19a4f3cee334b0a0a8693b3177ad63aaf75946db8eb78d98e8b764a0d1b7ed",
+    "deleted_path_count": 21,
+    "worker_result_self_excluded": true
   },
   "base_state": {
     "exact_base_verified": true,
+    "exact_refreshed_head_verified": true,
+    "exact_refreshed_tree_verified": true,
     "unique_branch_verified": true,
     "worktree_environment_setup": ".codex/setup-worktree-env.sh",
     "isolated_environment": ".codex-worktree/env.sh",
@@ -23,7 +45,7 @@
   },
   "final_state": {
     "status": "candidate_for_root_acceptance",
-    "status_scope": "Pre-refresh source-local correction candidate only; parent-owned refresh onto 5cc3be5f860de0071837f478bbe3a9de0d6c0e47, conflict reconciliation, evidence rerun, WorkerResult identity refresh, independent review, and parent acceptance all remain pending.",
+    "status_scope": "Refreshed source-local correction candidate only; parent-owned refresh was reconciled and bounded evidence was rerun. Independent parent review, root acceptance, integration, runtime journeys, readiness, release, and completion remain pending or withheld.",
     "behavior": "rust-source-syntax-v1",
     "catalog": "RoutineProductionCatalog-v2 has no repository-authored program, argv, environment, working-directory, primary, fallback, or outcome fields",
     "manifest": "RoutinePublicProduction-v2 selects only the closed behavior and fixed ultragoal route",
@@ -31,7 +53,7 @@
     "result_authority": "RoutineMediatedResultArtifact-v2 and RoutineMediatedReuseArtifact-v2 bind behavior, protocol, context, graph-derived plan, snapshot, input, runner/program, environment, read authority, dependency results, outputs, and mediator witness",
     "retirement": "The external-process-exit-v1 branch, generic argv/environment binders, and optional/unframed process input are absent. V1 manifest/catalog/result/reuse have no behavioral reader; canonical V1 public cache is a typed miss and malformed cache is refused.",
     "installed_runtime_ceiling": "The current Cargo-built binary is intentionally rejected as user-mutable. Immutable installed public execution, selected-source race, interruption recovery, concurrent serialization, and repeat-use remain unproven.",
-    "adversarial_review": "Independent security trust-boundary source-diff SIGN_OFF with no P0/P1/P2 findings for the named arbitrary-process false pass; no runtime or parent-acceptance sign-off.",
+    "adversarial_review": "Independent security trust-boundary source-diff SIGN_OFF with no P0/P1/P2 findings for the named arbitrary-process false pass; refreshed bounded conflict audit found no semantic conflict in consumed root dependencies; neither is runtime or parent-acceptance sign-off.",
     "root_requests": [
       "ROOT-N06-ADOPT-V2-SHAPES: adopt RoutinePublicProduction-v2, RoutineProductionCatalog-v2, RoutinePublicReuseCache-v2, RoutineMediatedResultArtifact-v2, and RoutineMediatedReuseArtifact-v2 in shared schemas/generated authority",
       "ROOT-N06-MIGRATION: register V1 manifest/catalog/result/reuse as non-authoritative, V1 cache as canonical typed miss, and preserve OD-008/OD-009 legacy fixture bytes until an adopted retirement decision",
@@ -184,17 +206,372 @@
     {"area": "obsolete test authority", "summary": "Deleted 21 shell/external-process execution fixtures instead of retaining a test-only executable fallback; their race, recovery, interruption, containment, and reuse proof is explicitly withheld."}
   ],
   "commands_and_tests": [
-    {"command": "fresh rustc --edition 2024 --test -D warnings isolated routine_behavior_protocol_check.rs", "result": "PASS: 6 passed, 0 failed; canonical frame plus exit-zero unframed, wrong stdout, nonempty stderr, and nonzero-exit refusals"},
-    {"command": "fresh rustc --edition 2024 --test -D warnings validator/tests/routine_production_authority_contract.rs", "result": "PASS: 2 passed, 0 failed; source confirms no arbitrary binder/behavior, mandatory framed stdin, and observation validation before V2 construction"},
-    {"command": "rustfmt --edition 2024 --check on all retained changed Rust files", "result": "PASS"},
+    {"command": "git patch-id --stable for each pre-refresh/rebased commit pair and git range-diff old-base..old-head new-base..new-head", "result": "PASS: four stable patch IDs matched pairwise and range-diff reported four exact matches"},
+    {"command": "git diff 31a7df95a1a102b6a740c9104a5528b612775f9d..2e3f0708215a0b9e50d628a4ff787c770b62aaf9 across all N06-owned paths", "result": "PASS: zero byte differences"},
+    {"command": "refreshed dependency semantic-conflict audit", "result": "PASS at static bounded ceiling: typed check-routine dispatch and exact JSON child observation remain compatible; no Cargo, shared-schema, or migration conflict found"},
+    {"command": "fresh rustc --edition 2024 --test -D warnings isolated routine_behavior_protocol_check.rs against refreshed sources", "result": "PASS: 6 passed, 0 failed; canonical frame plus exit-zero unframed, wrong stdout, nonempty stderr, and nonzero-exit refusals"},
+    {"command": "fresh rustc --edition 2024 --test -D warnings validator/tests/routine_production_authority_contract.rs against refreshed sources", "result": "PASS: 2 passed, 0 failed; source confirms no arbitrary binder/behavior, mandatory framed stdin, and observation validation before V2 construction"},
+    {"command": "rustfmt --edition 2024 --check on all 37 retained changed Rust files", "result": "PASS; largest retained changed Rust file is 247 lines"},
     {"command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-python-source-laws .", "result": "PASS: 27 typed sources"},
-    {"command": "git diff --check", "result": "PASS"},
-    {"command": "cargo check --manifest-path validator/Cargo.toml --lib --message-format short", "result": "BLOCKED: no E-series N06 errors observed; checkout stops on 649 root-wide -D warnings diagnostics"},
-    {"command": "cargo test --manifest-path validator/Cargo.toml --test routine_work_contract --no-run --message-format short", "result": "BLOCKED: no E-series N06 errors observed; checkout stops on the same root-wide -D warnings diagnostics"},
+    {"command": "git diff --check 5cc3be5f860de0071837f478bbe3a9de0d6c0e47..2e3f0708215a0b9e50d628a4ff787c770b62aaf9", "result": "PASS"},
+    {"command": "cargo check --manifest-path validator/Cargo.toml --lib --message-format short", "result": "BLOCKED: checkout stops on 649 -D warnings dead-code diagnostics; 32 diagnostics name N06 source and fresh strict compilation is not green"},
+    {"command": "cargo test --manifest-path validator/Cargo.toml --test routine_behavior_protocol_contract --test routine_production_authority_contract --test routine_production_catalog_contract --test routine_public_production_contract --test routine_work_contract -- --test-threads=16", "result": "BLOCKED: each requested focused target stops while compiling the library on the same 649 -D warnings diagnostics; no test executable was issued or run"},
     {"command": "scripts/check", "result": "BLOCKED: active-setup-to-idle-orchestration-thread-bound-heartbeat evidence digest mismatch"},
-    {"command": "independent N06 security trust-boundary source re-review", "result": "SIGN_OFF at narrow source-diff ceiling; no P0/P1/P2 findings for the named arbitrary-process false pass"}
+    {"command": "independent N06 security trust-boundary source re-review", "result": "SIGN_OFF at narrow source-diff ceiling; no P0/P1/P2 findings for the named arbitrary-process false pass"},
+    {"command": "SHA-256 and byte-length recomputation for every retained N06 artifact in the refreshed patch", "result": "PASS: 70 regular retained artifacts, 305850 bytes, artifact set sha256:0c19a4f3cee334b0a0a8693b3177ad63aaf75946db8eb78d98e8b764a0d1b7ed; 21 tracked deletions and this self-referential WorkerResult are excluded"}
   ],
-  "artifacts": [],
+  "artifacts": [
+    {
+      "path": "fixtures/routine-production-catalog/cases.json",
+      "sha256": "sha256:1556cd1083f72a8fddec5754d89caab5a1b46e013de731f03ff7ea6a588abfe8",
+      "byte_length": 1503
+    },
+    {
+      "path": "fixtures/routine-production-catalog/valid-catalog-v2.json",
+      "sha256": "sha256:20c8624b9e9385ecf00e5d947689e57a20a7f377aa799ff87330df5f700b664f",
+      "byte_length": 721
+    },
+    {
+      "path": "fixtures/routine-public-production/cases.json",
+      "sha256": "sha256:236ee89a6ffab0d3dcdc5ac6f1f7a825681ccb7963fe281b9116c0f9670dcf02",
+      "byte_length": 741
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/behavior_child.rs",
+      "sha256": "sha256:777479a074b6b35cdcc9faeb1fceef51351260672176b63513117ba55b1a115c",
+      "byte_length": 1809
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/supported/host_state.rs",
+      "sha256": "sha256:f0907e5d41a9d7fd9931a2ba60e13b80edef4fad0c0494c875f71eb6dba5432a",
+      "byte_length": 6243
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/supported/state_components.rs",
+      "sha256": "sha256:fdd6d0cedbde23ed49cad2b6409a432cb1e81b5147a434ca44d66866454fd2c8",
+      "byte_length": 1760
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/invocation_binding.rs",
+      "sha256": "sha256:f3e9a6a137c3a6e63dab7ab8ee770c9c5a88d5f52c011e2d5b5148b645fb698a",
+      "byte_length": 2773
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/manifest/loaded_manifest.rs",
+      "sha256": "sha256:8a80d9f80762269ad6111e55671a4e94c390b2eb6024650fa77638e66782b3f9",
+      "byte_length": 3905
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/manifest/manifest_path.rs",
+      "sha256": "sha256:a9e8a9768c89571543b5eace5be24aec87ecf71653bd2f663b31f797f30c4991",
+      "byte_length": 5062
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/mod.rs",
+      "sha256": "sha256:ca0ef40076d1ff48f75a08c0abd87111bd8c503cc5ca7fbb47644e9cc0efafd8",
+      "byte_length": 1924
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/source_configuration.rs",
+      "sha256": "sha256:11c332b4d0622d6cc7f251ef912dac5c83ca3add5a3b0b4b250351205a560498",
+      "byte_length": 7653
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/source_selection.rs",
+      "sha256": "sha256:f378b64e953a571b57b5ce17554c34628e8bfed77e6dcbac7b60308a7e95aa14",
+      "byte_length": 6335
+    },
+    {
+      "path": "validator/src/routine_work/behavior/mod.rs",
+      "sha256": "sha256:c36db555d764ee1f17c159e0b8405bb7488dc94f6a51611e850254eb6da44e5d",
+      "byte_length": 509
+    },
+    {
+      "path": "validator/src/routine_work/behavior/rust_source_frame.rs",
+      "sha256": "sha256:f6e91c1904181f36e6ee420cecf66fcd362d67736fb539704b1a8927eeada082",
+      "byte_length": 8073
+    },
+    {
+      "path": "validator/src/routine_work/behavior/rust_source_syntax.rs",
+      "sha256": "sha256:c49248ec50184f10ca470aff16ae6c21d46990f6879111c002e865e65c40cab5",
+      "byte_length": 6922
+    },
+    {
+      "path": "validator/src/routine_work/catalog/catalog_contract.rs",
+      "sha256": "sha256:66cc8e8c4e6bcdca80356c8ae420b17b9da4ff5df97320cad2117c57d8d4c386",
+      "byte_length": 6329
+    },
+    {
+      "path": "validator/src/routine_work/catalog/catalog_validation.rs",
+      "sha256": "sha256:462ecd2a88d84faaf45ef4041d3ad431170fed85aa939c8baac14547091ec6a0",
+      "byte_length": 4814
+    },
+    {
+      "path": "validator/src/routine_work/catalog/invocation_binding.rs",
+      "sha256": "sha256:16f8259a35b66143f5ee4b449e12f49e82a3ed856da10b77c679ec5a502f7a7b",
+      "byte_length": 2882
+    },
+    {
+      "path": "validator/src/routine_work/catalog/invocation_identity.rs",
+      "sha256": "sha256:204cf7d66d1216805c6fb83d5b756c15f97ac1c34f1a5b5b5be4c0ec4607c678",
+      "byte_length": 3566
+    },
+    {
+      "path": "validator/src/routine_work/catalog/node_selection.rs",
+      "sha256": "sha256:f5876968262453c7d87d5dee277367cfbc0436d6c503634a6ce9799bd7bda576",
+      "byte_length": 6102
+    },
+    {
+      "path": "validator/src/routine_work/catalog/production_catalog.rs",
+      "sha256": "sha256:0b6ef41f47e6a0b32ba66c272d050abc4841119904aab142ea7f8a32abc9da7a",
+      "byte_length": 7297
+    },
+    {
+      "path": "validator/src/routine_work/catalog/program_path_validation.rs",
+      "sha256": "sha256:52d07daca3d03a5b3f0273c929b49a4d991dcb7f5766af40710dc0c3559f7c33",
+      "byte_length": 905
+    },
+    {
+      "path": "validator/src/routine_work/catalog/selection_order.rs",
+      "sha256": "sha256:edf282c51927b9e4d673830f896a7754d8270276f964e64f84579ae4bb8daa3f",
+      "byte_length": 3562
+    },
+    {
+      "path": "validator/src/routine_work/catalog/source_ancestor_capture.rs",
+      "sha256": "sha256:0b3f0911e84e5e9cc5c63fa33637bc82fb4eef0e71568adf19f83b9625c75e32",
+      "byte_length": 6566
+    },
+    {
+      "path": "validator/src/routine_work/mod.rs",
+      "sha256": "sha256:1bc6fdb61fc242f6d532b34cc00cb60de19c2a853b4287d76fbca6489b1243ea",
+      "byte_length": 2592
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_authority/effect_intent.rs",
+      "sha256": "sha256:b055e5699034f3dee1fb988ccfabbb4981bd0b89477a0a3a36303c51a2a4998e",
+      "byte_length": 6281
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_authority/read_authority.rs",
+      "sha256": "sha256:b1e644b01228be3ec794a3e674266f6eed91e4bf5ef533216022b5f7d8d05591",
+      "byte_length": 5652
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_preparation.rs",
+      "sha256": "sha256:a2ba1fb6bda2c4c04d94eeef62c10661e8a5af5d8d82df06ebfd22fda221d4fc",
+      "byte_length": 7126
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_reconciliation.rs",
+      "sha256": "sha256:d07851dce993ab3974ff617235923fdbd82bd0eb5cf2a2646425cb31188d40a7",
+      "byte_length": 7176
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/invocation_binding.rs",
+      "sha256": "sha256:54aa715661f28fa3160f24b51137f68fa3c073252cce8b9912c3a43aac4f647c",
+      "byte_length": 1784
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/framed_read_input.rs",
+      "sha256": "sha256:23620de60e76c0afce749e2caf8e222e9074265ba6230d393dfe7de0b1db0b38",
+      "byte_length": 2378
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/mod.rs",
+      "sha256": "sha256:b307fbaf8d33939e95ba4de999b0c631b90e9fe4d1d82379cc273df556ae5da9",
+      "byte_length": 1587
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/grant_scope.rs",
+      "sha256": "sha256:8fb91056eb538f13e39bc710a3473b41d1572600da7f8729260a8aa4a86f5055",
+      "byte_length": 9343
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/grant_validation.rs",
+      "sha256": "sha256:aaf6bab6bf07aa113d0cea2ddbed413959cb1e6692014dbede78309059a0aa30",
+      "byte_length": 7940
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/intent_mediation.rs",
+      "sha256": "sha256:23d980e380cc6b548da1a5a5f2195b21817a64a1c1c5ff300660c1e0525f526b",
+      "byte_length": 7924
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/mod.rs",
+      "sha256": "sha256:af91b245f658ee13ddc6fca75537051289083733aa7343cd4c37825765f40007",
+      "byte_length": 2343
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/outcome/routine_mediation_result.rs",
+      "sha256": "sha256:6222cec6e867aa315c0093338500191ecc4f370e52ece15b32161ccd4aef0631",
+      "byte_length": 3432
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/mod.rs",
+      "sha256": "sha256:46a20499ee6051a1107dd40c10eb8da40932628f7953210ebd540e126a6b7e0c",
+      "byte_length": 1225
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_execution.rs",
+      "sha256": "sha256:dce6f32b975c53629d59b9779d2c36e73c6211a4d1b95c17ca3c47ddefbf8f1d",
+      "byte_length": 8884
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_input_write.rs",
+      "sha256": "sha256:cdb996e112e11b069fae14dd82e2a26ff3aec17a6e024b2288ccca56031703c1",
+      "byte_length": 508
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/spawn_test_observation.rs",
+      "sha256": "sha256:08380bce2204d882d94270a2f9f2b89da679ad5691a10dd31e0526495cd6bae5",
+      "byte_length": 7846
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/reuse_input_index.rs",
+      "sha256": "sha256:4cd887c257a2b58eba226d42adf18c60c75d43505b65e8ffe96ff886f6ec6c7f",
+      "byte_length": 8460
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/rust_source_observation.rs",
+      "sha256": "sha256:e0f3275c496e79b70f3b0fb9a75d3248ae833eba2753a04e47bd2ed778765188",
+      "byte_length": 2667
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mod.rs",
+      "sha256": "sha256:3cfc368b433c2f2aa4329ffb7f3a30ed165fe5827a11e9f969e08ffdafcd0b15",
+      "byte_length": 2521
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/runner_binding.rs",
+      "sha256": "sha256:dd1b7373d9f930dfb1ce2ed92070223136171b264f095152e47179b726d375db",
+      "byte_length": 7850
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/selection_limit.rs",
+      "sha256": "sha256:8360b2a76ba46f366eceb383573c120f9a6f18428c5c00026fc3ff6b08ed6bd1",
+      "byte_length": 3953
+    },
+    {
+      "path": "validator/tests/routine_behavior_protocol_cases/canonical_behavior.rs",
+      "sha256": "sha256:85a5f3850c807358a6f2de598c1008865b863ee6f9c923c7800a5a3a52cfffa7",
+      "byte_length": 3779
+    },
+    {
+      "path": "validator/tests/routine_behavior_protocol_cases/mod.rs",
+      "sha256": "sha256:66f4fae6dad5a9182c801e52c445ce5ec5c270704e8085ae2fcd20d01c812bd7",
+      "byte_length": 1219
+    },
+    {
+      "path": "validator/tests/routine_behavior_protocol_cases/refusal_matrix.rs",
+      "sha256": "sha256:20df0e3ce13e582112b36c61353d5bcc3539cff716d2de3dac54ab235f5452b7",
+      "byte_length": 2627
+    },
+    {
+      "path": "validator/tests/routine_behavior_protocol_contract.rs",
+      "sha256": "sha256:541ffd92de5a2fcf5b19928dea8362f547c223de00a15df20fccd85076a5dc8d",
+      "byte_length": 37
+    },
+    {
+      "path": "validator/tests/routine_production_authority_contract.rs",
+      "sha256": "sha256:e63db8d3ac04b09ccc66d40eb7506b15bba11d4d62235e281e337ca68a0a0fc7",
+      "byte_length": 3197
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_definition_rejection.rs",
+      "sha256": "sha256:38cd0384f6ad837b9b36f2ef760cf03775602a8660655c2b9c5ed2ec15f1220e",
+      "byte_length": 4354
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture.rs",
+      "sha256": "sha256:5e9d32fe50f9389ed5e5255c5970dcf61805657b22c1799fc374efdc4a81aa69",
+      "byte_length": 7543
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/repository_fixture.rs",
+      "sha256": "sha256:37a3c58285309315ce1df5615905a517edbb21dcaa9c6708f06532d3b47c6d8d",
+      "byte_length": 4718
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/source_path_rejection.rs",
+      "sha256": "sha256:93b09f5c2172787d3f5763f9c8daccffafb9038a0c127f78a1bde2750bdbb674",
+      "byte_length": 6766
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/transitive_input_rejection.rs",
+      "sha256": "sha256:535e43c212543989545af46a55dde99dabea09c06ef8d9fb7bb3d151dbaac46c",
+      "byte_length": 7149
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/unsafe_invocation_rejection.rs",
+      "sha256": "sha256:88266e7d8af5afee366d13818399365827bc6211ced42bba982633ec1ca8f00f",
+      "byte_length": 4274
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/journeys.rs",
+      "sha256": "sha256:8936f944b46a21b11c85a1215a128f4d7608d7177a01e56b7a1faa78bd0981a7",
+      "byte_length": 2776
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/argument_fixture.rs",
+      "sha256": "sha256:fbe429834427e17bcb0bdf1d036f6f0c56490209465c2ecead8355c9d346817e",
+      "byte_length": 1853
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/execution_fixture.rs",
+      "sha256": "sha256:5a0205e93da96eb8ca2f1bd6c225ac15e94c8332f4e976b2035e6c6204fefeb6",
+      "byte_length": 6853
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/scenario_fixture.rs",
+      "sha256": "sha256:8251cca16b83680c314d17e29bf0e0c63eab91ee0420ecb4172ab8a558e04cf4",
+      "byte_length": 5055
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/scenario.rs",
+      "sha256": "sha256:fcb0d47fd57bdf43c1b27f502f9dccd5b7097d7ab5fe3866c7d4fc2a4ae34cc7",
+      "byte_length": 812
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/security.rs",
+      "sha256": "sha256:1abc81d20b8a4463db4f8703b414a39343a7ec35762a42c7ce2f94c54419344d",
+      "byte_length": 6749
+    },
+    {
+      "path": "validator/tests/routine_work_contract/runtime_adapter.rs",
+      "sha256": "sha256:1adc4b94c2e3b7278024091e27eebb5957a61f80268c6ff210b688c275325844",
+      "byte_length": 1990
+    },
+    {
+      "path": "validator/tests/routine_work_contract/runtime_adapter_cases/adapter_scenario.rs",
+      "sha256": "sha256:a8017a30e86a2335b5cb1ef4eaf4ea87e40a64f547dbbff56792224e8c2a1212",
+      "byte_length": 7185
+    },
+    {
+      "path": "validator/tests/routine_work_contract/runtime_adapter_cases/clean_noop.rs",
+      "sha256": "sha256:a64d00e78288c2537e89e1d2dfa3be32bbf1c3ebebf576ff88a54b17bd61b2cc",
+      "byte_length": 4673
+    },
+    {
+      "path": "validator/tests/routine_work_contract/runtime_adapter_cases/invocation_binding_refusals.rs",
+      "sha256": "sha256:41713ea86a00cf5ea234cc3270bfa6112774eae0dd6213126526e695259b1d89",
+      "byte_length": 7050
+    },
+    {
+      "path": "validator/tests/routine_work_contract/runtime_adapter_cases/loader_environment_rejection.rs",
+      "sha256": "sha256:5a2a6eee1a9f8be1413b98fbc91c09d3987791e538d53379c1120c43712292fc",
+      "byte_length": 3825
+    },
+    {
+      "path": "validator/tests/routine_work_contract/runtime_adapter_cases/typed_runner_fixture.rs",
+      "sha256": "sha256:5d9f1733254548f2e1e9d4be7f2f21b8583c46e471ffaf9a5e601b2348c93b02",
+      "byte_length": 843
+    },
+    {
+      "path": "validator/tests/routine_work_contract/runtime_mediator.rs",
+      "sha256": "sha256:deb5a7b11bce9253c9d9d60845badc7c1ab4455fafa2d3a878475386eb262bb1",
+      "byte_length": 3095
+    }
+  ],
   "findings": [
     {"status": "closed", "finding": "Repository-authored catalog execution authority removed from V2."},
     {"status": "closed", "finding": "external-process-exit-v1 and all generic program, argv, environment, and unframed binders are absent from production."},
@@ -214,9 +591,10 @@
   "limitations": [
     "No immutable installed ultragoal runtime was available in this source-local worktree.",
     "Public dirty execution, interruption, containment, recovery, concurrency, and repeat-use are withheld rather than simulated; prior shell-based tests were removed because they encoded the retired authority.",
-    "Repository-wide Cargo and check entrypoints are not green because of named root-owned blockers outside this lane.",
-    "This receipt is pre-refresh evidence on base 20a11eb981c5db2d2136a555632be9c4e5ab7752. Parent-owned refresh onto accepted checkpoint 5cc3be5f860de0071837f478bbe3a9de0d6c0e47 must be followed by conflict reconciliation, all evidence reruns, and a new WorkerResult identity.",
-    "The artifacts array is intentionally empty because no root-issued typed LeaseSpec/WorkPackage was available for validate_for; root must independently bind the exact touched path set.",
+    "Repository-wide Cargo and check entrypoints are not green: strict compilation reports 649 dead-code diagnostics, including 32 in N06, and scripts/check reports the root-owned active-setup-to-idle-orchestration-thread-bound-heartbeat digest mismatch.",
+    "The parent-owned refresh onto accepted checkpoint 5cc3be5f860de0071837f478bbe3a9de0d6c0e47 is reconciled at the source-local ceiling. Four stable patch IDs and all owned bytes match the pre-refresh history, and the bounded dependency audit found no hidden semantic conflict.",
+    "All 70 retained N06 patch artifacts are byte-length and SHA-256 bound. The 21 tracked deletions are recorded in touched_paths but have no postimage artifact, and this WorkerResult is excluded to avoid recursive self-identity. No root-issued typed LeaseSpec/WorkPackage was available for validate_for, so root must independently bind the exact touched path set.",
+    "This worker makes no parent-acceptance claim; independent parent review and acceptance remain root-owned and pending.",
     "No shared schema, migration registry, generated authority, ExecPlan, claim, release, or candidate identity surface was edited."
   ],
   "no_claim_statement": "This worker does not claim readiness, release, or completion."
