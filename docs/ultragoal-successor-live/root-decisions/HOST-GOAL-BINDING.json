@@ -1,0 +1,38 @@
+{
+  "record_format": "host-goal-binding-context-v1",
+  "record_id": "harness-ultragoal-successor-live-parent",
+  "recorded_at": "2026-07-14T06:10:57Z",
+  "record_owner": "OWN-ULTRA-ROOT",
+  "runtime_tool": "create_goal",
+  "goal_id": "019f5f39-507b-78a2-a96a-0b566a5a2126",
+  "thread_id": "019f5f39-507b-78a2-a96a-0b566a5a2126",
+  "status_at_binding": "active",
+  "created_at_unix_s": 1784009156,
+  "objective": "Complete the live Harness Ultragoal successor-contract implementation in /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal, bound to docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/00-READ-ME-FIRST.md and its adopted manifest, dependency graph, requirement trace, claim registry, migration registry, and safe open-decision defaults. Preserve and independently reconcile the intentional candidate through e60fc9897368a946bcdb56c8f5e0c52ab379c39e; then coordinate dependency-closed Codex-managed worktree sections while retaining root-only ownership of shared authority, integration, candidate identity, claims, release, and completion. Continue until every adopted requirement and migration surface is implemented or explicitly externally blocked, same-surface source/package/install/cache/marketplace/app-registry/discovery/runtime/product journeys are current-candidate verified, strict self-law and zero-write read-path gates pass, independent falsification and release proof pass, two byte-identical final inventory summaries are produced, and the final requirement-to-evidence audit reconciles the honest claim ceiling. Do not mark the goal complete while any material requirement, migration, representative journey, release surface, or candidate reconciliation remains open.",
+  "objective_basis": "The current user explicitly requested a continuation parent-integrator goal and then directed the parent to bind its own researched objective with create_goal. This continuation binding records that user authority; it does not rewrite, amend, or replace the adopted product contract or the initial bootstrap goal text.",
+  "binding_candidate": {
+    "branch": "codex/successor-contract-v2-live-product",
+    "head_commit": "e60fc9897368a946bcdb56c8f5e0c52ab379c39e",
+    "head_tree": "1ec0ca72326068177da758fc61c078b63d100e94",
+    "worktree_state": "clean"
+  },
+  "tool_receipt": {
+    "provenance": "Exact fields returned by the built-in Codex goal tools and copied by the root. The runtime exposed no separate receipt id, tool version, schema, or independent validator, so this record is operational context only.",
+    "goal_present_before_create": false,
+    "returned_status": "active",
+    "tokens_used_at_binding": 0,
+    "time_used_seconds_at_binding": 0,
+    "get_goal_rebind": {
+      "observed_at": "2026-07-14T06:14:35Z",
+      "returned_status": "active",
+      "tokens_used": 155546,
+      "time_used_seconds": 519,
+      "created_at_unix_s": 1784009156,
+      "updated_at_unix_s": 1784009675
+    }
+  },
+  "authority_level": "supplied operational context; not typed product proof",
+  "validation": "jq empty plus independent content review; no HostGoalBinding schema or claim-bearing validator is asserted",
+  "separation_rule": "Host goal state records durable execution intent only. The adopted successor contract and current user request govern product scope and completion. This record does not prove source, package, install, discovery, runtime, journey, release, or completion behavior.",
+  "rebind_rule": "The root calls get_goal on resume, handoff, replacement, and completion review; chat text and repository files do not simulate host goal state."
+}

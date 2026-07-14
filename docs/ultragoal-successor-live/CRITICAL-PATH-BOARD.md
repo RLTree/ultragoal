@@ -1,5 +1,22 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+Current recovery note (2026-07-14): the intentional candidate is committed on
+`codex/successor-contract-v2-live-product` at `e60fc9897`, and durable host goal
+`019f5f39-507b-78a2-a96a-0b566a5a2126` was observed active by `get_goal` at
+`2026-07-14T06:14:35Z`. This candidate is under REWORK, not accepted: fresh
+compilation reports 640 dead-code, 16 unused-import, and one private-interface
+diagnostic; direct rustfmt fails in 14 files;
+standards audit has a stale digest; and public routine success still
+self-certifies a marker instead of executing declared repository behavior.
+
+The node rows below are the last pre-recovery board at `40982060a`. They remain
+historical routing context and are not current candidate proof. The root owns
+recomputation after a warning-free, behaviorally honest checkpoint; required
+follow-up is recorded in
+`docs/exec-plans/active/plugin-cli-authority-integration.md`. Until then source
+compilation, package, install, discovery, runtime, journey, release, node
+closure, and completion claims remain withheld.
+
 Live root: `/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal`
 
 Branch: `codex/successor-contract-v2-live-product`
