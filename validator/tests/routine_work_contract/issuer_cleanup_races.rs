@@ -57,6 +57,105 @@ fn authenticate_to_quarantine_swap_is_a_byte_stable_refusal() {
 }
 
 #[test]
+fn failed_restore_retains_exact_foreign_custody_until_safe_reconciliation() {
+    let mut owned = OwnedCompileScratch::claim("routine-issuer-restore-owner");
+    let mut attacker = OwnedCompileScratch::claim("routine-issuer-restore-attacker");
+    let original = owned.path().to_path_buf();
+    let attacker_original = attacker.path().to_path_buf();
+    let held = original.with_file_name(format!(
+        "{}-held",
+        original.file_name().unwrap().to_string_lossy()
+    ));
+    fs::write(original.join("genuine"), b"genuine bytes\n").unwrap();
+    fs::write(attacker_original.join("attacker"), b"attacker bytes\n").unwrap();
+    let genuine_before = tree_digest(&original);
+    let attacker_before = tree_digest(&attacker_original);
+    let authenticated = Arc::new(Barrier::new(2));
+    let foreign_quarantined = Arc::new(Barrier::new(2));
+    let swap_done = Arc::new(Barrier::new(2));
+    let refill_done = Arc::new(Barrier::new(2));
+    let worker_original = original.clone();
+    let worker_attacker = attacker_original.clone();
+    let worker_held = held.clone();
+    let worker_authenticated = Arc::clone(&authenticated);
+    let worker_foreign = Arc::clone(&foreign_quarantined);
+    let worker_swap_done = Arc::clone(&swap_done);
+    let worker_refill_done = Arc::clone(&refill_done);
+    let adversary = std::thread::spawn(move || {
+        worker_authenticated.wait();
+        fs::rename(&worker_original, worker_held).unwrap();
+        fs::rename(worker_attacker, &worker_original).unwrap();
+        worker_swap_done.wait();
+        worker_foreign.wait();
+        fs::write(&worker_original, b"refilled blocker\n").unwrap();
+        worker_refill_done.wait();
+    });
+
+    let outcome = owned.recover_with(|stage| {
+        if stage == CleanupStage::Authenticated {
+            authenticated.wait();
+            swap_done.wait();
+        } else if stage == CleanupStage::ForeignQuarantined {
+            foreign_quarantined.wait();
+            refill_done.wait();
+        }
+        CleanupDirective::Continue
+    });
+    adversary.join().unwrap();
+    assert_eq!(outcome, CleanupOutcome::AmbiguousPartialEffect);
+    let quarantine = owned.recovery_path().unwrap();
+    assert_eq!(tree_digest(&held), genuine_before);
+    assert_eq!(tree_digest(&quarantine), attacker_before);
+    assert_eq!(fs::read(&original).unwrap(), b"refilled blocker\n");
+
+    assert_eq!(
+        owned.recover_interrupted(),
+        CleanupOutcome::AmbiguousPartialEffect
+    );
+    assert_eq!(owned.recovery_path().as_deref(), Some(quarantine.as_path()));
+    let transplant = quarantine.with_extension("transplanted");
+    fs::rename(&quarantine, &transplant).unwrap();
+    fs::create_dir(&quarantine).unwrap();
+    fs::write(quarantine.join("replacement"), b"replacement bytes\n").unwrap();
+    assert_eq!(
+        owned.recover_interrupted(),
+        CleanupOutcome::AmbiguousPartialEffect
+    );
+    assert_eq!(tree_digest(&transplant), attacker_before);
+    assert_eq!(
+        fs::read(quarantine.join("replacement")).unwrap(),
+        b"replacement bytes\n"
+    );
+    assert_eq!(tree_digest(&held), genuine_before);
+    assert_eq!(fs::read(&original).unwrap(), b"refilled blocker\n");
+
+    fs::remove_dir_all(&quarantine).unwrap();
+    fs::rename(&transplant, &quarantine).unwrap();
+    assert!(!transplant.exists());
+    fs::remove_file(&original).unwrap();
+    assert_eq!(
+        owned.recover_interrupted(),
+        CleanupOutcome::ReconciledForeign
+    );
+    assert!(!quarantine.exists());
+    assert!(!transplant.exists());
+    assert_eq!(tree_digest(&original), attacker_before);
+    assert_eq!(tree_digest(&held), genuine_before);
+    assert_eq!(
+        owned.recover_interrupted(),
+        CleanupOutcome::RefusedZeroWrite
+    );
+    assert_eq!(
+        attacker.recover_interrupted(),
+        CleanupOutcome::RefusedZeroWrite
+    );
+    assert_eq!(tree_digest(&original), attacker_before);
+    assert_eq!(tree_digest(&held), genuine_before);
+    fs::remove_dir_all(original).unwrap();
+    fs::remove_dir_all(held).unwrap();
+}
+
+#[test]
 fn quarantine_interruption_is_ambiguous_then_replay_deletes_only_genuine() {
     let mut owned = OwnedCompileScratch::claim("routine-issuer-quarantine-interruption");
     let mut unrelated = OwnedCompileScratch::claim("routine-issuer-quarantine-unrelated");

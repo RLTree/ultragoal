@@ -9,12 +9,14 @@ use super::owned_compile_scratch::{CleanupState, FAILURE_MARKER, OwnedCompileScr
 pub(crate) enum CleanupOutcome {
     RefusedZeroWrite,
     Deleted,
+    ReconciledForeign,
     AmbiguousPartialEffect,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum CleanupStage {
     Authenticated,
+    ForeignQuarantined,
     Quarantined,
     Cleared,
 }
@@ -28,7 +30,11 @@ pub(crate) enum CleanupDirective {
 enum QuarantineOutcome {
     Owned(CString),
     Refused,
-    Ambiguous,
+    DisplacedForeign {
+        quarantine: CString,
+        device: u64,
+        inode: u64,
+    },
 }
 
 pub(crate) fn cleanup(scratch: &mut OwnedCompileScratch) -> CleanupOutcome {
@@ -39,6 +45,9 @@ pub(crate) fn cleanup_controlled(
     scratch: &mut OwnedCompileScratch,
     mut pause: impl FnMut(CleanupStage) -> CleanupDirective,
 ) -> CleanupOutcome {
+    if matches!(scratch.cleanup_state, CleanupState::DisplacedForeign { .. }) {
+        return reconcile_displaced_foreign(scratch);
+    }
     if matches!(scratch.cleanup_state, CleanupState::Claimed) {
         if !authenticates_claim(scratch) {
             scratch.cleanup_state = CleanupState::Settled;
@@ -48,7 +57,7 @@ pub(crate) fn cleanup_controlled(
             scratch.cleanup_state = CleanupState::Settled;
             return CleanupOutcome::RefusedZeroWrite;
         }
-        match quarantine_owned_entry(scratch) {
+        match quarantine_owned_entry(scratch, &mut pause) {
             QuarantineOutcome::Owned(name) => {
                 scratch.cleanup_state = CleanupState::Quarantined(name)
             }
@@ -56,7 +65,18 @@ pub(crate) fn cleanup_controlled(
                 scratch.cleanup_state = CleanupState::Settled;
                 return CleanupOutcome::RefusedZeroWrite;
             }
-            QuarantineOutcome::Ambiguous => return CleanupOutcome::AmbiguousPartialEffect,
+            QuarantineOutcome::DisplacedForeign {
+                quarantine,
+                device,
+                inode,
+            } => {
+                scratch.cleanup_state = CleanupState::DisplacedForeign {
+                    quarantine,
+                    device,
+                    inode,
+                };
+                return CleanupOutcome::AmbiguousPartialEffect;
+            }
         }
     }
 
@@ -74,6 +94,34 @@ pub(crate) fn cleanup_controlled(
     }
     scratch.cleanup_state = CleanupState::Cleared(quarantine.clone());
     finish_cleared(scratch, &mut pause)
+}
+
+fn reconcile_displaced_foreign(scratch: &mut OwnedCompileScratch) -> CleanupOutcome {
+    let CleanupState::DisplacedForeign {
+        quarantine,
+        device,
+        inode,
+    } = &scratch.cleanup_state
+    else {
+        return CleanupOutcome::AmbiguousPartialEffect;
+    };
+    if entry_identity(scratch.parent.as_raw_fd(), quarantine) != Some((*device, *inode)) {
+        return CleanupOutcome::AmbiguousPartialEffect;
+    }
+    if unsafe {
+        libc::renameatx_np(
+            scratch.parent.as_raw_fd(),
+            quarantine.as_ptr(),
+            scratch.parent.as_raw_fd(),
+            scratch.name.as_ptr(),
+            libc::RENAME_EXCL,
+        )
+    } != 0
+    {
+        return CleanupOutcome::AmbiguousPartialEffect;
+    }
+    scratch.cleanup_state = CleanupState::Settled;
+    CleanupOutcome::ReconciledForeign
 }
 
 fn finish_cleared(
@@ -109,7 +157,10 @@ fn finish_cleared(
     CleanupOutcome::Deleted
 }
 
-fn quarantine_owned_entry(scratch: &OwnedCompileScratch) -> QuarantineOutcome {
+fn quarantine_owned_entry(
+    scratch: &OwnedCompileScratch,
+    pause: &mut impl FnMut(CleanupStage) -> CleanupDirective,
+) -> QuarantineOutcome {
     let quarantine = random_quarantine_name();
     if unsafe {
         libc::renameatx_np(
@@ -123,10 +174,22 @@ fn quarantine_owned_entry(scratch: &OwnedCompileScratch) -> QuarantineOutcome {
     {
         return QuarantineOutcome::Refused;
     }
-    if entry_identity(scratch.parent.as_raw_fd(), &quarantine)
-        == Some((scratch.device, scratch.inode))
-    {
+    let Some((device, inode)) = entry_identity(scratch.parent.as_raw_fd(), &quarantine) else {
+        return QuarantineOutcome::DisplacedForeign {
+            quarantine,
+            device: 0,
+            inode: 0,
+        };
+    };
+    if (device, inode) == (scratch.device, scratch.inode) {
         return QuarantineOutcome::Owned(quarantine);
+    }
+    if pause(CleanupStage::ForeignQuarantined) == CleanupDirective::Interrupt {
+        return QuarantineOutcome::DisplacedForeign {
+            quarantine,
+            device,
+            inode,
+        };
     }
     if unsafe {
         libc::renameatx_np(
@@ -140,7 +203,11 @@ fn quarantine_owned_entry(scratch: &OwnedCompileScratch) -> QuarantineOutcome {
     {
         QuarantineOutcome::Refused
     } else {
-        QuarantineOutcome::Ambiguous
+        QuarantineOutcome::DisplacedForeign {
+            quarantine,
+            device,
+            inode,
+        }
     }
 }
 

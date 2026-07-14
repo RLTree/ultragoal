@@ -17,6 +17,11 @@ pub(crate) enum CleanupState {
     Claimed,
     Quarantined(CString),
     Cleared(CString),
+    DisplacedForeign {
+        quarantine: CString,
+        device: u64,
+        inode: u64,
+    },
     Settled,
 }
 
@@ -100,6 +105,12 @@ impl OwnedCompileScratch {
             CleanupState::Quarantined(name) | CleanupState::Cleared(name) => {
                 Some(self.path.parent().unwrap().join(name.to_str().unwrap()))
             }
+            CleanupState::DisplacedForeign { quarantine, .. } => Some(
+                self.path
+                    .parent()
+                    .unwrap()
+                    .join(quarantine.to_str().unwrap()),
+            ),
             CleanupState::Claimed | CleanupState::Settled => None,
         }
     }
