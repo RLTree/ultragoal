@@ -22,7 +22,6 @@ pub(crate) struct RootReconcilePermitIssuance<'a> {
     pub(crate) resolution: &'a EffectResolution,
 }
 
-#[cfg(test)]
 struct RootPermitIssuance<'a> {
     operation: RootOperation,
     binding: Binding,
@@ -112,7 +111,6 @@ impl RootAuthority {
         })
     }
 
-    #[cfg(test)]
     fn issue(&self, request: RootPermitIssuance<'_>) -> Result<RootPermit, ProductError> {
         let RootPermitIssuance {
             operation,

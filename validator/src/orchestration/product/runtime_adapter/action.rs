@@ -1,9 +1,10 @@
 use super::view::{CurrentRuntimeView, InterruptedRuntimeView, OrchestrationRuntimeAdapter};
 use crate::orchestration::product::command::{RootActionReason, RootActionRequest};
 use crate::orchestration::product::{
-    ProductError, ReconcileOutcome, ReconcileRequest, RecoverOutcome, RecoverRequest,
-    ResumeOutcome, ResumeRequest, RootAuthority, RootOperation, RootPermit, reconcile, recover,
-    resume,
+    journal_head_identity, reconcile, recover, resume, ProductError, ProductionRootAuthority,
+    ReconcileOutcome, ReconcileRequest, RecoverOutcome, RecoverRequest, ResumeOutcome,
+    ResumeRequest, RootActionPermitVerification, RootAuthority, RootOperation, RootPermit,
+    RootReconcilePermitVerification, ValidatedExecution,
 };
 use serde::{Deserialize, Serialize};
 
@@ -27,6 +28,79 @@ pub enum RuntimeActionOutcome {
 }
 
 impl OrchestrationRuntimeAdapter<'_> {
+    pub(crate) fn prevalidate_action<'a>(
+        &self,
+        source: RuntimeActionSource<'_>,
+        action: &RootActionRequest,
+        authority: &'a ProductionRootAuthority,
+        permit: &RootPermit,
+        request: &RuntimeActionRequest,
+    ) -> Result<ValidatedExecution<'a>, ProductError> {
+        match (source, request) {
+            (RuntimeActionSource::Current(view), RuntimeActionRequest::Resume(request)) => {
+                validate_resume(view, action, request)?;
+                view.revalidate_exact(self.context, self.workspace)?;
+                view.state().validate_action(self.workspace, action)?;
+                let head_identity = journal_head_identity(&request.expected_head)?;
+                authority.validate_action_execution(RootActionPermitVerification {
+                    permit,
+                    expected_root: self.context.root(),
+                    operation: RootOperation::Resume,
+                    binding: self.context.binding(),
+                    workspace_identity: self.workspace.identity(),
+                    journal_head_identity: &head_identity,
+                    tick: request.tick,
+                    target: &request.target,
+                })
+            }
+            (RuntimeActionSource::Interrupted(view), RuntimeActionRequest::Recover(request)) => {
+                validate_recover(view, action, request)?;
+                view.revalidate_exact(self.context, self.workspace)?;
+                view.preview().validate_action(self.workspace, action)?;
+                let head_identity = journal_head_identity(&request.expected_prior_head)?;
+                authority.validate_action_execution(RootActionPermitVerification {
+                    permit,
+                    expected_root: self.context.root(),
+                    operation: RootOperation::Recover,
+                    binding: self.context.binding(),
+                    workspace_identity: self.workspace.identity(),
+                    journal_head_identity: &head_identity,
+                    tick: request.tick,
+                    target: &request.target,
+                })
+            }
+            _ => Err(ProductError::AuthorityOperationMismatch),
+        }
+    }
+
+    pub(crate) fn prevalidate_reconcile<'a>(
+        &self,
+        view: &CurrentRuntimeView,
+        action: &RootActionRequest,
+        authority: &'a ProductionRootAuthority,
+        permit: &RootPermit,
+        request: &ReconcileRequest,
+    ) -> Result<ValidatedExecution<'a>, ProductError> {
+        validate_reconcile(view, action, request)?;
+        view.revalidate_exact(self.context, self.workspace)?;
+        view.state().validate_action(self.workspace, action)?;
+        request
+            .resolution
+            .validate_shape()
+            .map_err(ProductError::from)?;
+        let head_identity = journal_head_identity(&request.expected_head)?;
+        authority.validate_reconcile_execution(RootReconcilePermitVerification {
+            permit,
+            expected_root: self.context.root(),
+            binding: self.context.binding(),
+            workspace_identity: self.workspace.identity(),
+            journal_head_identity: &head_identity,
+            tick: request.tick,
+            target: &request.target,
+            resolution: &request.resolution,
+        })
+    }
+
     /// Routes an exact action-only root authorization. Reconciliation is kept
     /// on a separate interface because its permit binds the complete effect
     /// resolution rather than only the pre-decision action request.

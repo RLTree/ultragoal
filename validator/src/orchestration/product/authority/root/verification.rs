@@ -72,6 +72,26 @@ impl RootAuthority {
         Ok(())
     }
 
+    pub(crate) fn verify_observation(
+        &self,
+        permit: &RootPermit,
+        expected_root: &Actor,
+        binding: &Binding,
+        workspace_identity: &str,
+    ) -> Result<(), ProductError> {
+        self.verify(RootPermitVerification {
+            permit,
+            expected_root,
+            operation: permit.operation,
+            binding,
+            workspace_identity,
+            journal_head_identity: &permit.journal_head_identity,
+            tick: permit.issued_tick,
+            target: &permit.target,
+            decision_binding: &permit.decision_binding,
+        })
+    }
+
     fn authenticate(&self, permit: &RootPermit) -> Result<String, ProductError> {
         #[derive(Serialize)]
         struct Unsigned<'a> {
@@ -182,7 +202,6 @@ fn validate_digest(value: &str) -> Result<(), ProductError> {
     Ok(())
 }
 
-#[cfg(test)]
 fn digest(bytes: &[u8]) -> String {
     format!("sha256:{:x}", Sha256::digest(bytes))
 }

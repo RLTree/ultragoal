@@ -17,6 +17,10 @@ pub enum ProductError {
     LeaseExpired,
     WorkspaceChanged,
     InvalidWorkspacePath,
+    AuthorityReplay,
+    AuthorityReplayPending,
+    AuthorityStoreInvalid,
+    AuthorityCheckpointRequired,
     Kernel(OrchestrationError),
 }
 
@@ -36,6 +40,10 @@ impl ProductError {
             Self::LeaseExpired => "HUL-ORCH-PROD-011",
             Self::WorkspaceChanged => "HUL-ORCH-PROD-012",
             Self::InvalidWorkspacePath => "HUL-ORCH-PROD-013",
+            Self::AuthorityReplay => "HUL-ORCH-PROD-014",
+            Self::AuthorityReplayPending => "HUL-ORCH-PROD-015",
+            Self::AuthorityStoreInvalid => "HUL-ORCH-PROD-016",
+            Self::AuthorityCheckpointRequired => "HUL-ORCH-PROD-017",
             Self::Kernel(error) => error.code(),
         }
     }
@@ -55,7 +63,15 @@ impl ProductError {
             Self::LeaseExpired => "lease cannot resume after its deadline",
             Self::WorkspaceChanged => "the anchored orchestration workspace changed",
             Self::InvalidWorkspacePath => "orchestration workspace path is not confined",
-            Self::Kernel(error) => return error_message(error),
+            Self::AuthorityReplay => "root permit has already been consumed",
+            Self::AuthorityReplayPending => {
+                "root permit execution is pending durable reconciliation"
+            }
+            Self::AuthorityStoreInvalid => "root authority store is absent, unsafe, or corrupt",
+            Self::AuthorityCheckpointRequired => {
+                "root authority replay state requires an external monotonic checkpoint"
+            }
+            Self::Kernel(error) => error_message(error),
         }
     }
 }

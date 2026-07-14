@@ -8,7 +8,8 @@ mod test_hook;
 
 pub use frame::{JournalHead, JournalSnapshot};
 
-use self::frame::{decode_head, decode_log, encode_log, head_for, validate_snapshot};
+use self::frame::{decode_head, decode_log, validate_snapshot};
+pub(crate) use self::frame::{encode_log, head_for};
 use self::lock::JournalLock;
 use self::store::Store;
 use super::{Binding, EventLog, OrchestrationError};
@@ -54,6 +55,18 @@ impl FileJournal {
 
     pub fn path(&self) -> PathBuf {
         self.store.root().to_path_buf()
+    }
+
+    pub(crate) fn with_existing_exclusive_lock<T, E>(
+        root: &Path,
+        operation: impl FnOnce() -> Result<T, E>,
+    ) -> Result<T, E>
+    where
+        E: From<OrchestrationError>,
+    {
+        let store = Store::open(root).map_err(E::from)?;
+        let _guard = JournalLock::acquire(&store).map_err(E::from)?;
+        operation()
     }
 
     pub(crate) fn append(

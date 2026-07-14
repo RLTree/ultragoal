@@ -44,6 +44,9 @@ pub use error::OrchestrationError;
 pub use event::{EventKind, EventLog, OrchestrationEvent, ResultCommitment, ReviewDecision};
 pub use graph::{Plan, PlanBlock, WorkGraph, WorkProgress};
 pub use integration::{IntegrationDisposition, RootIntegrationIntent, RootIntegrationObservation};
+pub(crate) use journal::{
+    encode_log as encode_orchestration_log, head_for as orchestration_head_for,
+};
 pub use journal::{FileJournal, JournalHead, JournalSnapshot};
 pub use lease::{LeaseRegistry, LeaseSpec, PrerequisiteEvidence};
 pub use model::{
@@ -51,8 +54,8 @@ pub use model::{
     WorkPackage,
 };
 pub use reconcile::{
-    AcceptanceProposal, AcceptedLeaseIntegration, ReviewRecord, RootIntegrationReceipt,
-    propose_acceptance,
+    propose_acceptance, AcceptanceProposal, AcceptedLeaseIntegration, ReviewRecord,
+    RootIntegrationReceipt,
 };
 pub use recovery::{
     Blocker, BlockerClass, RecoveryAction, RecoveryDirective, RecoveryPlan, RecoveryReport,

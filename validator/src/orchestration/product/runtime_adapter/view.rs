@@ -8,8 +8,8 @@ use crate::orchestration::product::{ProductContext, ProductError, ProductWorkspa
 /// durable workspace.
 #[derive(Debug)]
 pub struct OrchestrationRuntimeAdapter<'a> {
-    pub(super) context: &'a ProductContext,
-    pub(super) workspace: &'a ProductWorkspace,
+    pub(crate) context: &'a ProductContext,
+    pub(crate) workspace: &'a ProductWorkspace,
 }
 
 /// A sealed current-state inspection together with the exact tick and live
@@ -90,7 +90,7 @@ impl CurrentRuntimeView {
         &self.request
     }
 
-    pub(super) fn revalidate_exact(
+    pub(crate) fn revalidate_exact(
         &self,
         context: &ProductContext,
         workspace: &ProductWorkspace,
@@ -113,7 +113,7 @@ impl InterruptedRuntimeView {
         &self.request
     }
 
-    pub(super) fn revalidate_exact(
+    pub(crate) fn revalidate_exact(
         &self,
         context: &ProductContext,
         workspace: &ProductWorkspace,

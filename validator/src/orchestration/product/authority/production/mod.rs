@@ -1,0 +1,116 @@
+//! Durable owner-only production issuance and one-use permit execution.
+//!
+//! The store is deliberately separate from the orchestration journal. It
+//! authenticates permit issuance and records execution reservation before the
+//! adapter may mutate the journal. A reserved record left by interruption is
+//! never retried until a fresh sealed view reconciles its observed outcome.
+
+mod checkpoint;
+mod ledger;
+mod store;
+
+use super::{
+    PermitDecisionBinding, ProductError, RootAuthority, RootOperation, RootPermit,
+    RootPermitIssuance,
+};
+use ledger::{Ledger, LedgerState};
+use sha2::{Digest, Sha256};
+use std::fmt::{Debug, Formatter};
+use std::path::Path;
+
+const NONCE_BYTES: usize = 32;
+const MAX_PERMIT_LIFETIME: u64 = 300;
+
+include!("permit_issuance.rs");
+include!("permit_execution.rs");
+include!("restart_reconciliation.rs");
+
+#[cfg(test)]
+mod interruption_tests;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum PermitReplayState {
+    Issued,
+    Reserved,
+    Committed,
+    Refused,
+    Ambiguous,
+}
+
+pub struct ProductionRootAuthority {
+    pub(crate) authority: RootAuthority,
+    ledger: Ledger,
+}
+
+impl Debug for ProductionRootAuthority {
+    fn fmt(&self, formatter: &mut Formatter<'_>) -> std::fmt::Result {
+        formatter
+            .debug_struct("ProductionRootAuthority")
+            .field("root_actor", &self.authority.root_actor.as_str())
+            .field("store", &"[owner-only]")
+            .finish()
+    }
+}
+
+impl ProductionRootAuthority {
+    /// Initializes missing authority files only inside an explicit,
+    /// pre-existing owner-only directory. Never call this from a read route.
+    pub fn open_or_initialize(
+        root: &Path,
+        root_actor: crate::orchestration::Actor,
+    ) -> Result<Self, ProductError> {
+        let (store, key) = store::Store::open_or_initialize(root, root_actor.as_str())?;
+        Ok(Self::new(root_actor, key, Ledger::open(store)?))
+    }
+
+    /// Reopens only empty existing state. Nonempty replay state remains blocked
+    /// until root-owned external monotonic custody is wired.
+    pub fn open_existing(
+        root: &Path,
+        root_actor: crate::orchestration::Actor,
+    ) -> Result<Self, ProductError> {
+        let (store, key) = store::Store::open_existing(root, root_actor.as_str())?;
+        Ok(Self::new(root_actor, key, Ledger::open(store)?))
+    }
+
+    fn new(root_actor: crate::orchestration::Actor, key: [u8; 32], ledger: Ledger) -> Self {
+        Self {
+            authority: RootAuthority { root_actor, key },
+            ledger,
+        }
+    }
+}
+
+fn permit_id(permit: &RootPermit) -> Result<String, ProductError> {
+    let bytes = serde_json::to_vec(permit).map_err(|_| ProductError::AuthorityInvalid)?;
+    Ok(format!("sha256:{:x}", Sha256::digest(bytes)))
+}
+
+fn causal_slot_id(permit: &RootPermit) -> Result<String, ProductError> {
+    #[derive(serde::Serialize)]
+    struct CausalSlot<'a> {
+        schema_version: &'a str,
+        root_actor: &'a str,
+        operation: RootOperation,
+        binding: &'a crate::orchestration::Binding,
+        workspace_identity: &'a str,
+        journal_head_identity: &'a str,
+        issued_tick: u64,
+        target: &'a super::PermitTarget,
+        decision_binding: &'a PermitDecisionBinding,
+    }
+
+    let bytes = serde_json::to_vec(&CausalSlot {
+        schema_version: &permit.schema_version,
+        root_actor: &permit.root_actor,
+        operation: permit.operation,
+        binding: &permit.binding,
+        workspace_identity: &permit.workspace_identity,
+        journal_head_identity: &permit.journal_head_identity,
+        issued_tick: permit.issued_tick,
+        target: &permit.target,
+        decision_binding: &permit.decision_binding,
+    })
+    .map_err(|_| ProductError::AuthorityInvalid)?;
+    Ok(format!("sha256:{:x}", Sha256::digest(bytes)))
+}

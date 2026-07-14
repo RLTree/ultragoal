@@ -10,4 +10,8 @@ include!("root/secret_binding.rs");
 
 include!("root/verification.rs");
 
+mod production;
+pub use production::{PermitReplayState, ProductionRootAuthority};
+pub(crate) use production::{ReservationObservation, ValidatedExecution};
+
 include!("issue_action_permit_for_test.rs");
