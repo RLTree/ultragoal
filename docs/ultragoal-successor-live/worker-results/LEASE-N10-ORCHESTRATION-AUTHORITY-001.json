@@ -1,0 +1,288 @@
+{
+  "worker": "codex/n10-orchestration-authority",
+  "lease_id": "LEASE-N10-ORCHESTRATION-AUTHORITY-001",
+  "context_id": "sha256:dd8b1df3a9adf7d503f8f34cfff81aeb721df510e5148ad0dfed59615316a07d",
+  "candidate_identity": {
+    "candidate_id": "sha256:ccd9a2e98a90d856e62e5b8126dc9df7fbd8fd859352964ddaf038627bc968f6",
+    "context_id": "sha256:dd8b1df3a9adf7d503f8f34cfff81aeb721df510e5148ad0dfed59615316a07d",
+    "repository_root": "/Users/terrynoblin/.codex/worktrees/cb63/harness-ultragoal-plugin-proposal",
+    "branch": "codex/n10-orchestration-authority",
+    "base_commit": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
+    "base_tree": "c3098e235fb5990b5862b478310867840cd2c4f6",
+    "source_commit": "35da75fb9142320cf62a02d14264fd0ebd034238",
+    "source_tree": "2485c558c5e242c3758ef2f29328105a006f1b9b",
+    "accepted_staged_aggregate_sha256": "76218fe92e9d31055d6954bea5de3c7bed417877b0e60871c8e213888246ea59",
+    "artifact_set_sha256": "sha256:ccd9a2e98a90d856e62e5b8126dc9df7fbd8fd859352964ddaf038627bc968f6",
+    "artifact_set_formula": "Sort source artifacts by path; concatenate path, one TAB byte, sha256 without prefix, and one LF byte; SHA-256 the concatenation. The WorkerResult is excluded.",
+    "artifact_count_excluding_result": 38,
+    "artifact_total_bytes": 152261
+  },
+  "base_state": {
+    "node": "N10-ORCHESTRATION",
+    "commit": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
+    "tree": "c3098e235fb5990b5862b478310867840cd2c4f6",
+    "source_authority": "typed successor root acceptance"
+  },
+  "final_state": {
+    "status": "worker_blocked",
+    "source_commit": "35da75fb9142320cf62a02d14264fd0ebd034238",
+    "source_tree": "2485c558c5e242c3758ef2f29328105a006f1b9b",
+    "artifact_count_excluding_result": 38,
+    "artifact_set_sha256": "sha256:ccd9a2e98a90d856e62e5b8126dc9df7fbd8fd859352964ddaf038627bc968f6",
+    "artifact_total_bytes": 152261,
+    "diagnostic_total_lines": 4276,
+    "maximum_changed_authored_rust_lines": 247,
+    "focused_production_contract": "19 passed; 0 failed",
+    "parent_source_review": "accepted exact bounded source ceiling",
+    "parent_integration_acceptance": "withheld",
+    "fresh_process_nonempty_reopen": "fails closed pending external protected monotonic custody",
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "destructive_effect_performed": false
+  },
+  "touched_paths": [
+    "validator/src/orchestration/journal/mod.rs",
+    "validator/src/orchestration/mod.rs",
+    "validator/src/orchestration/product/authority/mod.rs",
+    "validator/src/orchestration/product/authority/production/checkpoint.rs",
+    "validator/src/orchestration/product/authority/production/interruption_tests.rs",
+    "validator/src/orchestration/product/authority/production/ledger.rs",
+    "validator/src/orchestration/product/authority/production/ledger_checkpoint.rs",
+    "validator/src/orchestration/product/authority/production/ledger_record.rs",
+    "validator/src/orchestration/product/authority/production/mod.rs",
+    "validator/src/orchestration/product/authority/production/permit_execution.rs",
+    "validator/src/orchestration/product/authority/production/permit_issuance.rs",
+    "validator/src/orchestration/product/authority/production/restart_reconciliation.rs",
+    "validator/src/orchestration/product/authority/production/store.rs",
+    "validator/src/orchestration/product/authority/production/store_file.rs",
+    "validator/src/orchestration/product/authority/production/store_initialization.rs",
+    "validator/src/orchestration/product/authority/production/store_verification.rs",
+    "validator/src/orchestration/product/authority/root/secret_binding.rs",
+    "validator/src/orchestration/product/authority/root/verification.rs",
+    "validator/src/orchestration/product/error.rs",
+    "validator/src/orchestration/product/mod.rs",
+    "validator/src/orchestration/product/runtime_adapter/action.rs",
+    "validator/src/orchestration/product/runtime_adapter/mod.rs",
+    "validator/src/orchestration/product/runtime_adapter/production.rs",
+    "validator/src/orchestration/product/runtime_adapter/view.rs",
+    "validator/tests/orchestration_production_authority_contract.rs",
+    "validator/tests/orchestration_production_authority_contract/causal_reconciliation.rs",
+    "validator/tests/orchestration_production_authority_contract/execution_binding.rs",
+    "validator/tests/orchestration_production_authority_contract/fixture.rs",
+    "validator/tests/orchestration_production_authority_contract/fixture/execution_permit.rs",
+    "validator/tests/orchestration_production_authority_contract/fixture/process.rs",
+    "validator/tests/orchestration_production_authority_contract/fixture/scenario.rs",
+    "validator/tests/orchestration_production_authority_contract/race.rs",
+    "validator/tests/orchestration_production_authority_contract/reconciliation.rs",
+    "validator/tests/orchestration_production_authority_contract/recovery.rs",
+    "validator/tests/orchestration_production_authority_contract/rollback_security.rs",
+    "validator/tests/orchestration_production_authority_contract/security.rs",
+    "validator/tests/orchestration_production_authority_contract/settlement_binding.rs",
+    "validator/tests/orchestration_production_authority_contract/store_security.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-AUTHORITY-001.json"
+  ],
+  "touched_semantics": [
+    "orchestration::production_authority::sealed_permit_issuance",
+    "orchestration::production_authority::authenticated_mutation_once_replay",
+    "orchestration::production_authority::owner_only_descriptor_pinned_store",
+    "orchestration::production_authority::pre_reservation_execution_validation",
+    "orchestration::production_authority::single_use_validated_execution",
+    "orchestration::production_authority::reservation_reconciliation",
+    "orchestration::production_authority::process_local_checkpoint_fail_closed_reopen",
+    "orchestration::runtime_adapter::exact_workspace_action_request_binding"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "validator/tests/orchestration_production_authority_contract.rs",
+    "validator/tests/orchestration_production_authority_contract/causal_reconciliation.rs",
+    "validator/tests/orchestration_production_authority_contract/execution_binding.rs",
+    "validator/tests/orchestration_production_authority_contract/fixture.rs",
+    "validator/tests/orchestration_production_authority_contract/fixture/execution_permit.rs",
+    "validator/tests/orchestration_production_authority_contract/fixture/process.rs",
+    "validator/tests/orchestration_production_authority_contract/fixture/scenario.rs",
+    "validator/tests/orchestration_production_authority_contract/race.rs",
+    "validator/tests/orchestration_production_authority_contract/reconciliation.rs",
+    "validator/tests/orchestration_production_authority_contract/recovery.rs",
+    "validator/tests/orchestration_production_authority_contract/rollback_security.rs",
+    "validator/tests/orchestration_production_authority_contract/security.rs",
+    "validator/tests/orchestration_production_authority_contract/settlement_binding.rs",
+    "validator/tests/orchestration_production_authority_contract/store_security.rs"
+  ],
+  "effects": [
+    { "class": "workspace_write", "target": "n10-production-authority-source-and-result", "performed": true },
+    { "class": "fixture_write", "target": "n10-production-authority-contract", "performed": true },
+    { "class": "process", "target": "focused-cargo-and-source-law-checks", "performed": true },
+    { "class": "network", "target": "network", "performed": false },
+    { "class": "external_write", "target": "external-product", "performed": false },
+    { "class": "destructive", "target": "destructive", "performed": false },
+    { "class": "root_authority", "target": "root-integration", "performed": false }
+  ],
+  "requirements": [
+    "HUL-ORCH-PROD-001",
+    "HUL-ORCH-PROD-002",
+    "HUL-ORCH-PROD-003",
+    "HUL-ORCH-PROD-004",
+    "HUL-ORCH-PROD-005",
+    "HUL-ORCH-PROD-006",
+    "HUL-ORCH-PROD-007",
+    "HUL-ORCH-PROD-008",
+    "HUL-ORCH-PROD-009",
+    "HUL-ORCH-PROD-010",
+    "HUL-ORCH-PROD-011",
+    "HUL-ORCH-PROD-012",
+    "HUL-ORCH-PROD-013",
+    "HUL-ORCH-PROD-014",
+    "HUL-ORCH-PROD-015",
+    "HUL-ORCH-PROD-016",
+    "HUL-ORCH-PROD-017"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE",
+    "N04-DISTRIBUTION",
+    "N10-ORCHESTRATION"
+  ],
+  "changes": [
+    {
+      "area": "sealed issuance and binding",
+      "rationale": "RootPermit authenticity covers root actor, full binding, exact workspace and journal identities, causal observation, target, action, and request."
+    },
+    {
+      "area": "pre-reservation execution authorization",
+      "rationale": "Runtime validation now creates a private authority-bound single-use token before any durable reserve transition, preventing clone poisoning and substitution."
+    },
+    {
+      "area": "durable replay and recovery",
+      "rationale": "The owner-only authenticated ledger records Issued, Reserved, Committed, Refused, and Ambiguous states with descriptor and object identity checks."
+    },
+    {
+      "area": "rollback claim ceiling",
+      "rationale": "The local checkpoint is private and process-bound; all nonempty fresh-process reopen fails closed instead of claiming external monotonic authenticity."
+    },
+    {
+      "area": "adversarial controls",
+      "rationale": "Focused tests exercise replay, interruption, restart refusal, ambiguity, reconciliation, same-head clones, stale copies, same-inode rollback, races, mutation, security, and false-pass cases."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test -p ultragoal --test orchestration_production_authority_contract",
+      "result": "pass",
+      "summary": "19 passed; 0 failed on the final accepted source candidate."
+    },
+    {
+      "command": "cargo test -p ultragoal --test orchestration_runtime_adapter_contract -- --skip path_escape_links_hardlinks_fifo_and_socket_roots_fail_closed",
+      "result": "pass_with_explicit_environment_skip",
+      "summary": "23 passed; 0 failed; one Unix-domain-socket fixture was skipped because this worktree path exceeds SUN_LEN."
+    },
+    {
+      "command": "cargo test -p ultragoal --test orchestration_runtime_adapter_public_api -- --skip exact_root_export_compiles_from_an_external_consumer_crate",
+      "result": "pass_with_explicit_root_fixture_skip",
+      "summary": "2 passed; 0 failed; one external scratch consumer was skipped because its copied manifest lacks root-owned workspace lint configuration."
+    },
+    {
+      "command": "cargo clippy -p ultragoal --tests --message-format=short",
+      "result": "pass_owned_diagnostic_partition",
+      "summary": "Zero diagnostics in changed N10-owned paths."
+    },
+    {
+      "command": "changed authored Rust line-cap and suppression scans",
+      "result": "pass",
+      "summary": "Maximum 247 lines; no changed authored Rust file exceeds 250; no allow, expect, or cfg_attr suppression added."
+    },
+    {
+      "command": "scripts/check .",
+      "result": "blocked_outside_lane",
+      "summary": "Stopped at root-owned active-setup-to-idle-orchestration-thread-bound-heartbeat evidence digest mismatch."
+    },
+    {
+      "command": "python3 Draft202012Validator against docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
+      "result": "pass",
+      "summary": "The canonical repository WorkerResult-v1 JSON Schema accepted this receipt with no unknown top-level field."
+    },
+    {
+      "command": "independent artifact path, SHA-256, byte-length, count, and canonical-set reconciliation",
+      "result": "pass",
+      "summary": "38 self-excluding source artifacts, 152261 bytes, canonical set sha256:ccd9a2e98a90d856e62e5b8126dc9df7fbd8fd859352964ddaf038627bc968f6."
+    }
+  ],
+  "artifacts": [
+    { "path": "validator/src/orchestration/journal/mod.rs", "sha256": "sha256:2ffcaec221804615389bdbfa4394254b165728b8e3f84dd63b2524ad191807e4", "byte_length": 5082 },
+    { "path": "validator/src/orchestration/mod.rs", "sha256": "sha256:3fa74e252fcac97ce3bf86ef71894600593cd20e6826c26e2bdce646c1c4d97d", "byte_length": 5765 },
+    { "path": "validator/src/orchestration/product/authority/mod.rs", "sha256": "sha256:b014a4f0c4300810665799156519bd5275f0ecd5ac9e6162fe84eb93345041dc", "byte_length": 494 },
+    { "path": "validator/src/orchestration/product/authority/production/checkpoint.rs", "sha256": "sha256:141a9271b8c3f42991e954ae50d1086e57a44f112ecaddf2fef2f14623188511", "byte_length": 409 },
+    { "path": "validator/src/orchestration/product/authority/production/interruption_tests.rs", "sha256": "sha256:d641a24e5db7b5cc05f20f59328928c06212849a40ff895833b8826bb47fc6fe", "byte_length": 2143 },
+    { "path": "validator/src/orchestration/product/authority/production/ledger.rs", "sha256": "sha256:a95aa2772648f15cb5cf73d537e1c031da21593d14dac3fa5e3827d1856786d8", "byte_length": 7903 },
+    { "path": "validator/src/orchestration/product/authority/production/ledger_checkpoint.rs", "sha256": "sha256:ce44b4496b49159bf1587b5e4f5741ffbe5a6118378e7268ba68bd68811cbc45", "byte_length": 2009 },
+    { "path": "validator/src/orchestration/product/authority/production/ledger_record.rs", "sha256": "sha256:906aa02be6d2f857b2e5914e511583f5db513e22368b03637feb3b67c5b6c66d", "byte_length": 2771 },
+    { "path": "validator/src/orchestration/product/authority/production/mod.rs", "sha256": "sha256:3613d9330fb9a1c481d422bbe2dece881588fb64336932815a39ad14902a4089", "byte_length": 3829 },
+    { "path": "validator/src/orchestration/product/authority/production/permit_execution.rs", "sha256": "sha256:7ae91b223a69a69dc16a6cf489fe0cd7c1c7c2a982f685ff0c9e94e5be251ff7", "byte_length": 3237 },
+    { "path": "validator/src/orchestration/product/authority/production/permit_issuance.rs", "sha256": "sha256:d8609a2cb62039c14721e8531bcf8c55cda94f13a7411129e90b71b1747489d0", "byte_length": 2560 },
+    { "path": "validator/src/orchestration/product/authority/production/restart_reconciliation.rs", "sha256": "sha256:4ea610c32eb2771ac825f02c624789b7faf145957035fa086aeb7fcdc02b5807", "byte_length": 4947 },
+    { "path": "validator/src/orchestration/product/authority/production/store.rs", "sha256": "sha256:bacb5e0b4c7f3a23b8fb4291f1fa194d62d6bd0173eaa9f2c71140ddc2c43da2", "byte_length": 6759 },
+    { "path": "validator/src/orchestration/product/authority/production/store_file.rs", "sha256": "sha256:ed525f421daab89ad2c4478b667bdb84f251eec0457a19744d659d562b6e37c6", "byte_length": 6393 },
+    { "path": "validator/src/orchestration/product/authority/production/store_initialization.rs", "sha256": "sha256:db7a4042d38399aa7921dab285601ec277c281c3b583efa075e1f55d1ad8c828", "byte_length": 1242 },
+    { "path": "validator/src/orchestration/product/authority/production/store_verification.rs", "sha256": "sha256:87fa40d98f1184a63e04f7f11214095ff7236ac84c84e9d1043ca66e2fbabda6", "byte_length": 2190 },
+    { "path": "validator/src/orchestration/product/authority/root/secret_binding.rs", "sha256": "sha256:110db3252e1f939ba5c8d8fe83ef2f8d329e6b651d00a9bf2fded6ec66cc374f", "byte_length": 6781 },
+    { "path": "validator/src/orchestration/product/authority/root/verification.rs", "sha256": "sha256:4c52e8a7dcdbe5e146c41135f068cc102980edfe4ca949a1870844f45fa5d3e7", "byte_length": 7291 },
+    { "path": "validator/src/orchestration/product/error.rs", "sha256": "sha256:124d2ffe0ca943d7eacc3f3bda376f3180b129ddf367497047e03fdb02763eca", "byte_length": 6607 },
+    { "path": "validator/src/orchestration/product/mod.rs", "sha256": "sha256:4faac7923e13da510917618e91f4c9ea40895172168822ee8b8d68acf7298f0b", "byte_length": 1504 },
+    { "path": "validator/src/orchestration/product/runtime_adapter/action.rs", "sha256": "sha256:b3a9d6424e4e07d0364d7958591a4e1d529c41038cea95e487e56e517e473b7f", "byte_length": 9142 },
+    { "path": "validator/src/orchestration/product/runtime_adapter/mod.rs", "sha256": "sha256:859817f61842e44efd6779781552a8cbb4b0c61a61367fb1c295cc7d09bf5a4e", "byte_length": 501 },
+    { "path": "validator/src/orchestration/product/runtime_adapter/production.rs", "sha256": "sha256:1fbf5ce8b195f2ff7a99e49ec9de1489954e6da1921afe7c77dd1a58e6f4f3f3", "byte_length": 5789 },
+    { "path": "validator/src/orchestration/product/runtime_adapter/view.rs", "sha256": "sha256:11c15629910127bb5be8b7398f08047ad5846b791206ed0fa1645f307efc6a00", "byte_length": 4409 },
+    { "path": "validator/tests/orchestration_production_authority_contract.rs", "sha256": "sha256:65d07c8da252a1f2611d3d1a97b3c75e19223c251f56a1fe98a29737d499cc49", "byte_length": 280 },
+    { "path": "validator/tests/orchestration_production_authority_contract/causal_reconciliation.rs", "sha256": "sha256:422604f9d77262b46981a7f50831dba220c71c4cdee31b1f0c0004bf7c4539bf", "byte_length": 2377 },
+    { "path": "validator/tests/orchestration_production_authority_contract/execution_binding.rs", "sha256": "sha256:57343a4cca8f601549d351bdd74afb5e5b799b4ce5fa2c3fa06b175020b5c83b", "byte_length": 8959 },
+    { "path": "validator/tests/orchestration_production_authority_contract/fixture.rs", "sha256": "sha256:cc01fc1646f864180aeebca4603fa5948297a109e4e39176902d05309fb4293b", "byte_length": 4087 },
+    { "path": "validator/tests/orchestration_production_authority_contract/fixture/execution_permit.rs", "sha256": "sha256:02ea1118fa41b733318feffef0e6653b90cdaa3a1918aefda0401a7bb45af1ef", "byte_length": 854 },
+    { "path": "validator/tests/orchestration_production_authority_contract/fixture/process.rs", "sha256": "sha256:cb0c0bbe2e78469e34a503bc915e5186865c83b2339a32dc61dfbcc754b49554", "byte_length": 1126 },
+    { "path": "validator/tests/orchestration_production_authority_contract/fixture/scenario.rs", "sha256": "sha256:23c01eb73e84ab63c5c4f1fbb220a82e24489c0dbe2e45f98417f0c87964530f", "byte_length": 4937 },
+    { "path": "validator/tests/orchestration_production_authority_contract/race.rs", "sha256": "sha256:f39dce82047f111acab33cf6b1216c7de2fe3a308189e60ef9c06e6b0b50798c", "byte_length": 2376 },
+    { "path": "validator/tests/orchestration_production_authority_contract/reconciliation.rs", "sha256": "sha256:479eafbad48dfdcad0d505949c5dd8cf2ec6e0135159aec2ba6d54094543403b", "byte_length": 4375 },
+    { "path": "validator/tests/orchestration_production_authority_contract/recovery.rs", "sha256": "sha256:c0c65e569675b09045ad1860a8bac742b236887ab9c8f1271d363def39510244", "byte_length": 2314 },
+    { "path": "validator/tests/orchestration_production_authority_contract/rollback_security.rs", "sha256": "sha256:b362a855d67e70f3bb6e3517ce8932de8ba3cd7a09948b0b794a197842941eaa", "byte_length": 3583 },
+    { "path": "validator/tests/orchestration_production_authority_contract/security.rs", "sha256": "sha256:ecc18c3877b549f1bc638c12c43d7a55677b2047e3a990758acacd2131d787e1", "byte_length": 7073 },
+    { "path": "validator/tests/orchestration_production_authority_contract/settlement_binding.rs", "sha256": "sha256:98cf0ce86dbb31ed6b47babb816c489ee9d8e1bced0cc0b228cb9d207b2ad646", "byte_length": 6251 },
+    { "path": "validator/tests/orchestration_production_authority_contract/store_security.rs", "sha256": "sha256:9aeb742a1eb35400d9f3a4f8a9692742cddd5dd7339b3bf1cb0c913aa938d55d", "byte_length": 3912 }
+  ],
+  "findings": [
+    {
+      "severity": "accepted-bounded-source",
+      "finding": "Independent parent review accepted the exact 38-path source tree 2485c558c5e242c3758ef2f29328105a006f1b9b at aggregate 76218fe92e9d31055d6954bea5de3c7bed417877b0e60871c8e213888246ea59."
+    },
+    {
+      "severity": "corrected",
+      "finding": "Exact pre-reserve validation and a private single-use execution authority prevent same-head clone execution from poisoning the origin ledger."
+    },
+    {
+      "severity": "corrected",
+      "finding": "The public caller-forgeable checkpoint/reopen surface was removed; nonempty fresh-process reopen now fails closed."
+    },
+    {
+      "severity": "root-blocker",
+      "finding": "Fresh-process rollback-resistant replay cannot be claimed until an external protected monotonic custodian supplies unforgeable current-tail authority."
+    }
+  ],
+  "unresolved_dependencies": [
+    "ROOT-N10-EXTERNAL-PROTECTED-MONOTONIC-CUSTODY",
+    "ROOT-N10-PUBLIC-DISPATCH-AND-RUNTIME-LIFECYCLE-WIRING",
+    "ROOT-N10-STRICT-SHARED-ROUTING-RECONCILIATION",
+    "ROOT-AGENT-STANDARDS-EVIDENCE-DIGEST-RECONCILIATION",
+    "ROOT-N04-MISSING-DISTRIBUTION-MODULES",
+    "ROOT-RUNTIME-ADAPTER-UNIX-SOCKET-LONG-PATH-FIXTURE",
+    "ROOT-EXTERNAL-CONSUMER-SCRATCH-WORKSPACE-LINTS",
+    "PARENT-N10-INTEGRATION-ACCEPTANCE"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "Root must provide an external protected monotonic custodian bound to exact store, root actor, full binding, sequence, and tail before enabling any nonempty fresh-process reopen; a second co-writable local file is insufficient.",
+    "Root must integrate the private authority into public dispatch and runtime lifecycle wiring, then reconcile strict and shared diagnostic routes; this lane supplies no root-owned postimage and therefore makes no forgeable RootChangeRequest digest.",
+    "Public CLI, installed package, live runtime, external monotonic custody, and representative supported-host behavior were not exercised.",
+    "The canonical root check is blocked by a root-owned evidence digest mismatch; legacy namespace commands are deauthorized and current strict/shared routing is root-owned.",
+    "A scratch Cargo parser invocation was removed without source changes after cargo test --manifest-path validator/Cargo.toml --locked --test n10_worker_result_parse failed at compilation under repository -D warnings with 657 root/shared diagnostics before executing the parser; canonical JSON Schema validation passed instead.",
+    "Two adapter checks require explicit environment skips: Unix socket SUN_LEN under this long worktree path, and root workspace-lint inheritance in a copied external-consumer scratch manifest.",
+    "The latest broad 250-test dependency closure predates the final execute-order repair and is not claimed as final-candidate evidence.",
+    "Sudden-power-loss durability, readiness, release, node closure, completion, and parent integration acceptance are withheld."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}
