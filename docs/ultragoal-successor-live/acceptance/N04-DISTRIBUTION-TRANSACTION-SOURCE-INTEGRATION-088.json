@@ -1,0 +1,98 @@
+{
+  "schema_version": "RootAcceptance-v1",
+  "node_id": "N04-DISTRIBUTION",
+  "root_decision": "accepted_source_local_distribution_transaction_kernel",
+  "accepted_worker_result": {
+    "path": "validation_artifacts/worker-results/N04-DISTRIBUTION-RUNTIME.json",
+    "sha256": "47c6aa022f3ad0be86ab6d179400411b61ab2be3153adcdf91bafa19a400d549",
+    "bytes": 145741,
+    "source_head": "125f54bcd4820497d06ff36d1a90405a39bc1f5a",
+    "source_tree": "b53918ab8ec00c7e84672181693607eb5253841c",
+    "final_receipt_head": "75bced89f4fa29d26edbe1b5824cd52c80ddb58d",
+    "final_receipt_tree": "f57dc811752f4e54275e03764a509e0d37e667e9",
+    "changed_path_count": 129,
+    "retained_artifact_count": 128,
+    "deleted_path_count": 1,
+    "artifact_total_bytes": 627644,
+    "changed_path_set_sha256": "6d2c20a0146ab4db9220dbd0b62757821b735b84fe286d9543f8656db2df090b",
+    "artifact_aggregate_sha256": "8664392077b3a231cc5a627db4334ba873da56b8266c04af2b423d04b0649d67"
+  },
+  "independent_reviews": [
+    {
+      "reviewer": "/root/n04_125_parent_falsification",
+      "verdict": "accept_source_only",
+      "identity": "125f54bcd4820497d06ff36d1a90405a39bc1f5a / b53918ab8ec00c7e84672181693607eb5253841c",
+      "blocking_findings": 0
+    },
+    {
+      "reviewer": "/root/n04_75b_receipt_falsification",
+      "verdict": "accept_receipt_only",
+      "identity": "75bced89f4fa29d26edbe1b5824cd52c80ddb58d / f57dc811752f4e54275e03764a509e0d37e667e9",
+      "blocking_findings": 0
+    }
+  ],
+  "root_integration": {
+    "implementation_head": "665140d11c00b0706a60c94508efdbb1a2093667",
+    "implementation_tree": "8dd8a461a93652d8ed9e5ac01984e7323529e922",
+    "integrated_commits": [
+      "e805c2986 Track confined host target executor authority",
+      "d33ea9de5 Close host-effect diagnostic debt",
+      "8ce2b2bd2 Restore post-publication recovery authority",
+      "2164d830d Finalize N04 distribution WorkerResult receipt",
+      "665140d11 Correct N04 distribution WorkerResult receipt truth"
+    ],
+    "focused_behavior": {
+      "distribution_contract": "206 passed; 0 failed; 1 ignored",
+      "plugin_distribution_adapter_contract": "14 passed; 0 failed",
+      "supported_host_effect_executor_contract": "7 passed; 0 failed",
+      "supported_package_identity_contract": "4 passed; 0 failed",
+      "rollback_retry_regression": "1 passed; 0 failed",
+      "rustfmt": "passed"
+    },
+    "strict_checkpoint": {
+      "command": "cargo check -p ultragoal --lib --offline --jobs 16 --message-format=short",
+      "result": "withheld: compilation stopped with 608 root-candidate warning-as-error diagnostics"
+    }
+  },
+  "accepted_requirements": [],
+  "partial_requirements": [
+    {
+      "requirement_id": "REQ-SUPPLY-001",
+      "state": "typed source-local distribution transaction, confinement, identity, rollback, and post-publication recovery authority accepted",
+      "blocker": "Root production reachability and repository package, install, cache, marketplace, app-registry, discovery, and runtime behavior are not yet exercised."
+    },
+    {
+      "requirement_id": "REQ-PRODUCT-001",
+      "state": "source-local supported-host transaction behavior accepted",
+      "blocker": "No installed product, supported-host journey, readiness, or release proof exists for this candidate."
+    }
+  ],
+  "root_acceptance_limit": "Source-local typed distribution transaction, confinement, identity ladder, rollback, and recovery behavior on the integrated root candidate only.",
+  "explicitly_withheld": [
+    "root production reachability",
+    "public CLI distribution route",
+    "repository package artifact",
+    "real host installation",
+    "cache state",
+    "marketplace state",
+    "app-registry state",
+    "Plugins UI visibility",
+    "host discovery",
+    "runtime identity",
+    "representative live-user journey",
+    "strict warning-free integration",
+    "targeted or exact coverage",
+    "node closure",
+    "readiness",
+    "release",
+    "goal completion"
+  ],
+  "teardown": {
+    "thread_id": "019f5fa2-0bc3-7a50-9c2f-c377d88c60e4",
+    "thread_archived": true,
+    "worktree_removed": "/Users/terrynoblin/.codex/worktrees/45df/harness-ultragoal-plugin-proposal",
+    "unique_uncommitted_state_before_removal": false
+  },
+  "invalidation_rule": "Any change to the integrated distribution, package, plugin distribution adapter, supported host executor, receipt, or named focused-contract bytes reopens this acceptance at the affected boundary.",
+  "no_claim_statement": "This acceptance does not claim live package, install, cache, marketplace, app-registry, discovery, runtime, journey, readiness, release, node closure, or goal completion."
+}

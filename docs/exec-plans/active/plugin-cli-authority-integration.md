@@ -9,8 +9,9 @@ contract. Normative authority remains the adopted bundle rooted at
 
 Finish the plugin product and typed Rust CLI kernel from current repository
 truth. The intentionally committed self-law refactor now has bounded source
-acceptance; its 609/652 global strict blocker and 110 pending standards audits
-keep warning-free integration open. Drive the four dependency-closed Codex
+acceptance. N04 is root-integrated and retired at a source-only transaction
+ceiling; the current 608-diagnostic library strict wall and pending standards
+audits keep warning-free integration open. Drive the remaining three Codex
 worktree sessions through root-owned review, wiring, proof, and claim decisions.
 
 ## Durable Goal Binding
@@ -39,34 +40,40 @@ worktree sessions through root-owned review, wiring, proof, and claim decisions.
 - [x] Reconciled formatting, line caps, public self-law, repository-fit
   authority, and standards projection at clean root `da2994860`, tree
   `62a21a82`; recorded bounded acceptance in `CLI-SELF-LAW-CHECKPOINT-003`.
-- [x] Preserved the strict claim ceiling: 609 library and 652 library-test
-  diagnostics, zero in accepted paths; invalidated 110 stale audits to pending.
+- [x] Preserved the initial strict claim ceiling: 609 library and 652
+  library-test diagnostics, zero in the then-accepted paths; invalidated 110
+  stale audits to pending.
+- [x] Independently accepted and root-integrated N04 source transaction and
+  recovery authority through `665140d11`, tree `8dd8a461`; archived its Codex
+  task and removed its clean worktree/cache. Live host claims remain withheld.
 - [ ] Close the global strict diagnostics, exact coverage, and all pending
   standards audits without suppression or unsupported PASS restoration.
-- [ ] Accept or return REWORK on each frozen worktree artifact set.
+- [ ] Accept or return REWORK on each remaining frozen worktree artifact set.
 - [x] Accepted bounded legacy CLI guidance at `f533b5459` and the typed public
   argv/root transition at `8c847e9b0`; dispatcher retirement stays withheld.
-- [ ] Integrate accepted sessions one at a time and rerun dependency-closed
-  root checks after each landing.
+- [ ] Integrate the remaining accepted sessions one at a time and rerun
+  dependency-closed root checks after each landing.
 - [ ] Close installed/runtime journeys, migration/retirement, claims, release,
   two identical inventories, and the final requirement-to-evidence audit.
 
 ## Surprises & Discoveries
 
-- The old external `E0521` blocker is gone. Current strict compilation stops at
-  609 library and 652 library-test diagnostics; zero accepted self-law path is
-  implicated. Active product code must still be wired or retired, never hidden
-  by lint allowances, dummy reachability, or visibility widening.
+- The old external `E0521` blocker is gone. After N04 integration, exact root
+  library strict compilation stops at 608 warning-as-error diagnostics. Active
+  product code must still be wired or retired, never hidden by lint allowances,
+  dummy reachability, or visibility widening.
 - Formatting, diff hygiene, changed-file line caps, source laws, and public
   recursively zero-write CLI checks now pass for the bounded root artifact set.
 - All 110 stale standards PASS rows are pending; only 12 rows whose evidence
   digest matches current bytes retain PASS. This mechanically withholds every
   affected claim until behavior and evidence are re-audited.
-- N04 remains REWORK for caller-minted discovery/runtime authority, rollback
-  transplantability, and focused compile failures. N06 remains REWORK for
-  cross-request reuse, recovery ordering, output provenance, and false-pass
-  tests. N11 remains REWORK for causal evaluation input, initialization
-  recovery, and forgeable promotion review authority. N10 is active.
+- N04 source transaction authority and its corrected WorkerResult are accepted,
+  integrated, and retired. Root production reachability and every live host
+  identity remain open. N06 is under REWORK for interrupted scratch-custody
+  substitution. N11 source protocol is accepted but its receipt inventory is
+  under REWORK for omitted deletion rows and a stale diagnostic count. N10 has
+  a clean source freeze under fresh parent falsification; its WorkerResult stays
+  untouched until source review resolves.
 - An isolated legacy-command `cfg(test)` retirement is invalid. It would bypass
   N14 compatibility authority and disconnect a graph with about 3,000 dormant
   warnings. Compatibility routing and authority-registry reconciliation must
@@ -109,9 +116,11 @@ worktree sessions through root-owned review, wiring, proof, and claim decisions.
 
 ### A. Hold The Root Integration Checkpoint
 
-1. Keep `da2994860` clean while worktrees repair their owned sections.
-2. Preserve the exact 609/652 strict blocker; classify each remaining warning as
-   active wiring, safe deletion, or dormant candidate isolation.
+1. Keep the current root integration checkpoint clean while worktrees repair
+   their owned sections.
+2. Preserve the exact current 608-diagnostic library strict blocker; classify
+   each remaining warning as active wiring, safe deletion, or dormant candidate
+   isolation.
 3. Re-audit the 110 pending standards only after current behavior and exact
    evidence exist; never restore PASS from a source test alone.
 4. Keep formatting, line caps, source laws, generated authority, coverage
@@ -129,8 +138,10 @@ to exact base `5cc3be5f8`. Git/worktree probes and Codex app thread results bind
 each branch, worktree, and thread identity; unknown host fields stay unknown.
 
 - Distribution runtime: thread `019f5fa2-0bc3-7a50-9c2f-c377d88c60e4`, branch
-  `codex/n04-distribution-runtime`, worktree `.codex/worktrees/45df`; owns only
-  distribution/package behavior and matching tests/fixtures; decisive REWORK.
+  `codex/n04-distribution-runtime`; exact source `125f54bcd` / tree `b53918ab`
+  and corrected receipt `75bced89f` / tree `f57dc811` were independently
+  accepted and integrated through root `665140d11` / tree `8dd8a461`. The task
+  is archived and its clean worktree/cache is removed.
 - Routine execution trust: thread `019f5fa2-5206-7da1-ad4f-8bb5ca580012`,
   branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
   owns routine kernel/public adapter behavior and matching tests/fixtures;
@@ -138,11 +149,12 @@ each branch, worktree, and thread identity; unknown host fields stay unknown.
 - Orchestration authority: thread `019f5fa2-923f-7770-9a89-83ed713ac1f3`,
   branch `codex/n10-orchestration-authority`, worktree `.codex/worktrees/cb63`;
   owns orchestration issuer/replay/recovery behavior and matching tests/fixtures;
-  implementation active.
+  exact clean source `1f587d3b2` / tree `402e3fd5` is under fresh parent review.
 - Evaluation reliability: thread `019f5fa2-cace-7361-a3e7-6102a3dc1224`,
   branch `codex/n11-evaluation-reliability`, worktree `.codex/worktrees/bd86`;
   owns evaluation, fixture-scheduler, capture bridge, and matching tests/fixtures;
-  decisive REWORK with repair active.
+  source protocol is accepted, but its receipt inventory is under decisive
+  REWORK with repair active.
 
 Sibling active ExecPlans named `successor-worktree-{distribution,routine,
 orchestration,evaluation}.md` retain the exact lane contracts.
@@ -158,6 +170,24 @@ condition. Absence of that file blocks `create_thread`.
 Every session owns disjoint paths and semantics, uses isolated
 `.codex-worktree` state and Cargo targets, and returns a committed
 WorkerResult-v1 package without readiness, release, or completion claims.
+
+## Audit Cadence Matrix
+
+| Audit | Trigger | Owner | Required candidate identity | Evidence surface | Claims withheld until pass |
+| --- | --- | --- | --- | --- | --- |
+| Focused lane behavior and owned laws | Every implementation freeze | Worktree integrator | Exact clean lane HEAD/tree and owned artifact inventory | Focused positive, negative, race, interruption, recovery, repeat-use, security, false-pass, formatting, warning, line-cap, and mutation checks | Parent acceptance, root integration, product, readiness, release, completion |
+| Worktree freeze receipt and adversarial review | Clean committed source plus self-excluding WorkerResult | Worktree integrator and independent parent reviewer | Exact source HEAD/tree, receipt HEAD/tree, receipt digest, base, and path inventory | WorkerResult-v1, literal command outcomes, immutable artifact reconciliation, independent falsification | Parent acceptance, live behavior, readiness, release, completion |
+| Root dependency-closed integration | Accepted increment lands or a shared interface/authority changes | Root integrator | Exact root HEAD/tree after all root-owned wiring and documentation edits | Affected strict compile, cross-lane behavior, semantic namespaces, generated authority, documentation freshness, zero-write read probes, and targeted coverage when it can support the current claim | Affected integration ceiling, warning-free source, public route, and any dependent product claim |
+| Product freeze | Dependency graph reaches a stable product closure | Root integrator plus independent product/security/persona reviewers | Exact root, package, install, discovery, and runtime identities | Exact coverage; Product Success/Fitness/Cohesion; live observability; migrations; representative clean, dirty, partial, conflict, failure, interruption, recovery, repeat-use, adversarial, and fresh-agent journeys; full standards audit | Product success, quality-in-use, readiness, representative-journey closure |
+| Release and completion freeze | No authority-bearing edit remains after product acceptance | Root integrator plus independent final reviewers | Exact final commit/tree and separately bound package, install, cache, marketplace, app-registry, discovery, and runtime digests | Clean-room distribution proof, full coverage, release proof, four-persona material review, migration/retirement closure, two byte-identical inventories, final requirement-to-evidence audit | Release, node closure, completion |
+
+Current named deferrals are fail-closed: root strict warning closure triggers
+after the current worktrees are integrated and the root standards-debt pass is
+complete; semantic-namespace and full-standards audits trigger immediately after
+those worktrees are retired and before any new implementation worktree launches;
+targeted coverage triggers at the next dependency-closed integration claim that
+depends on it, and exact full coverage triggers at the product/release freeze.
+Root owns each deferred audit and the corresponding claims remain withheld.
 
 ### C. Integrate Continuously
 
@@ -189,11 +219,12 @@ two byte-identical inventory summaries, and every requirement-to-evidence row.
 - Built `ultragoal --root . check strict --claim cli-self-law-compliance`
   with recursive filesystem and Git comparisons before and after.
 
-At the bounded root freeze, successor CLI was 39/39, built CLI surface 11/11,
-repository-fit 223/223, private-mint/historical controls 2/2, managed-prior 1/1,
-and public adapter 5/5. Strict compilation stopped at 609 library and 652
-library-test diagnostics with zero accepted-path diagnostic. These results do
-not supply coverage or any installed/runtime/product claim.
+At the N04 root integration checkpoint, distribution behavior was 206 passed
+and 1 ignored, plugin distribution adapter 14/14, supported host-effect executor
+7/7, supported package identity 4/4, rollback retry 1/1, and root rustfmt clean.
+Exact root library strict compilation stopped at 608 warning-as-error
+diagnostics. These results do not supply coverage or any installed, runtime, or
+product claim.
 
 Use an isolated Cargo target for each concurrent workspace. Broad checks run
 only at dependency-closed freezes.
@@ -243,8 +274,9 @@ evidence, worktree state, documentation freshness, and claim ceiling.
 ## Outcomes & Retrospective
 
 Open. Update after every accepted integration checkpoint and final claim
-reconciliation. The highest honest ceiling is typed successor argv/root plus
-bounded self-law pruning and repository-fit authority. Warning-free integration,
-coverage, 110 pending audits, dispatcher retirement, package, install, cache,
-marketplace, app-registry, discovery, runtime, product, readiness, release, and
-completion remain withheld.
+reconciliation. The highest new ceiling is integrated source-local N04
+distribution transaction and recovery authority through `665140d11`; it does
+not raise a live host claim. Warning-free integration, coverage, pending audits,
+dispatcher retirement, repository package, install, cache, marketplace,
+app-registry, discovery, runtime, product, readiness, release, and completion
+remain withheld.
