@@ -5,12 +5,14 @@ fn package_surface_identity_rejects_a_different_publication_transaction() {
     let first_catalog = catalog(&first_context);
     let first_artifact = capture_product_package(&first_context, &first_catalog).unwrap();
     let first_output = OutputRoot::new("package-surface-first");
+    let mut first_tree = first_output.tree();
     let first_transaction = first_artifact
         .publish(
             &first_context,
             &first_catalog,
+            &first_output.journey(&first_artifact),
             &ExpectedTree::Absent,
-            &mut first_output.tree(),
+            &mut first_tree,
         )
         .unwrap();
 

@@ -65,8 +65,8 @@ pub use package::{
 };
 pub use registry_observation::{
     AppRegistryObservation, AppRegistryVerdict, DiscoveryObservation, DiscoveryVerdict,
-    RegistryObservations, observe_app_registry, observe_discovery, observe_registry_file,
-    registry_document,
+    RegistryObservations, discovery_document, observe_app_registry, observe_discovery,
+    observe_discovery_file, observe_registry_file, registry_document,
 };
 #[cfg(test)]
 pub(crate) use registry_observation::{RegistryReader, observe_registry_reader};

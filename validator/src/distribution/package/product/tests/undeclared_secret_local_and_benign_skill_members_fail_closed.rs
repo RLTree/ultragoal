@@ -121,6 +121,7 @@ fn publication_is_current_bound_and_reconciles_one_complete_pair() {
         .publish(
             &context,
             &authority_catalog,
+            &output_root.journey(&artifact),
             &ExpectedTree::Absent,
             &mut output,
         )
@@ -139,22 +140,12 @@ fn publication_is_current_bound_and_reconciles_one_complete_pair() {
         rows.iter()
             .any(|row| row.path().ends_with(".inventory.json"))
     );
-    let host = HostCapabilityDeclaration::isolated(
-        &output_root.root,
-        &output_root.root,
-        "macos-repository-output-v1",
-        None,
+    let identity = SurfaceIdentity::from_published_package(
+        artifact.snapshot(),
+        &transaction,
+        &output_root.journey(&artifact),
     )
-    .expect("host identity");
-    let journey = JourneyBinding::new(
-        artifact.snapshot().identity().clone(),
-        &host,
-        "local-harness-plugins",
-    )
-    .expect("journey binding");
-    let identity =
-        SurfaceIdentity::from_published_package(artifact.snapshot(), &transaction, &journey)
-            .expect("published package identity");
+    .expect("published package identity");
     assert_eq!(
         identity.observation_sha256(),
         transaction.output_tree_sha256()
@@ -173,17 +164,19 @@ fn stale_candidate_or_forged_catalog_is_rejected_before_output_effects() {
     fs::write(repo.root.join("skills/prove/SKILL.md"), "changed\n").expect("candidate drift");
     let changed_context = repo.context();
     let changed_catalog = catalog(&changed_context);
-    let mut output = MemoryOutput::default();
+    let output_root = OutputRoot::new("supported-package-product-stale-publication");
+    let mut output = output_root.tree();
     let error = artifact
         .publish(
             &changed_context,
             &changed_catalog,
+            &output_root.journey(&artifact),
             &ExpectedTree::Absent,
             &mut output,
         )
         .expect_err("stale artifact published");
     assert_eq!(error.id(), ProductionPackageErrorId::CatalogMismatch);
-    assert_eq!((output.reads, output.transitions), (0, 0));
+    assert!(output.inspect(2, 65 * 1024 * 1024).unwrap().is_none());
 
     let current_artifact =
         capture_product_package(&changed_context, &changed_catalog).expect("current package");
@@ -200,10 +193,11 @@ fn stale_candidate_or_forged_catalog_is_rejected_before_output_effects() {
         .publish(
             &changed_context,
             &forged_catalog,
+            &output_root.journey(&current_artifact),
             &ExpectedTree::Absent,
             &mut output,
         )
         .expect_err("forged catalog published");
     assert_eq!(error.id(), ProductionPackageErrorId::CatalogMismatch);
-    assert_eq!((output.reads, output.transitions), (0, 0));
+    assert!(output.inspect(2, 65 * 1024 * 1024).unwrap().is_none());
 }

@@ -54,6 +54,7 @@ impl RuntimeObservation {
         binding: &JourneyBinding,
         host: &HostCapabilityDeclaration,
     ) -> Result<Self, DistributionError> {
+        host.ensure_binding(binding)?;
         let runtime_verdict = match host.state(Capability::Runtime) {
             HostCapabilityState::Unsupported => RuntimeVerdict::Unsupported,
             HostCapabilityState::Absent => RuntimeVerdict::Absent,

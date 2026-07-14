@@ -1,6 +1,6 @@
 use super::*;
 use crate::context::{BuildRequest, LiveContext};
-use crate::distribution::package::{ExpectedTree, MaterializeEffects, TreeObject, tree_sha256};
+use crate::distribution::package::{ExpectedTree, TreeObject, tree_sha256};
 use crate::distribution::{
     ConfinedRoot, HostCapabilityDeclaration, IdentitySurface, JourneyBinding, ScopedTree,
     SurfaceIdentity,
@@ -11,7 +11,7 @@ use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use std::sync::{Arc, Barrier, Mutex};
+use std::sync::{Arc, Barrier};
 use walkdir::WalkDir;
 
 #[cfg(unix)]
@@ -20,8 +20,6 @@ use std::os::unix::fs::{PermissionsExt, symlink};
 use std::os::unix::net::UnixListener;
 
 include!("repo.rs");
-
-include!("concurrent_output.rs");
 
 include!("repository_snapshot.rs");
 

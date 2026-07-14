@@ -105,6 +105,13 @@ impl SurfaceIdentity {
     ) -> Result<Self, DistributionError> {
         if snapshot.identity() != binding.package()
             || publication.package_identity() != snapshot.identity()
+            || publication.journey_binding_sha256() != binding.binding_sha256()
+            || publication.output_root_id() != binding.home_id()
+            || publication.output_relative_path()
+                != format!(
+                    "repository/packages/{}",
+                    binding.package().source().plugin_id()
+                )
         {
             return Err(error(DistributionErrorId::ProvenanceMismatch));
         }

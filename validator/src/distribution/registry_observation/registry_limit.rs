@@ -1,5 +1,6 @@
 const REGISTRY_LIMIT: usize = 4 * 1024 * 1024;
 const APP_REGISTRY_PATH: &str = "app/registry.json";
+const DISCOVERY_PATH: &str = "host/discovery.json";
 
 pub(crate) trait RegistryReader {
     fn read_registry(&mut self, maximum: usize) -> Result<Option<Vec<u8>>, ()>;
@@ -174,10 +175,11 @@ pub fn observe_registry_file(
     reader: &mut crate::distribution::filesystem::ScopedFile,
     binding: &JourneyBinding,
     host: &HostCapabilityDeclaration,
-) -> Result<RegistryObservations, DistributionError> {
+) -> Result<AppRegistryObservation, DistributionError> {
     if reader.root_id() != binding.home_id() || reader.relative_path() != APP_REGISTRY_PATH {
         return Err(error(DistributionErrorId::ProvenanceMismatch));
     }
+    host.ensure_binding(binding)?;
     observe_registry_reader_inner(reader, binding, host, true)
 }
 
@@ -186,7 +188,7 @@ pub(crate) fn observe_registry_reader(
     reader: &mut impl RegistryReader,
     binding: &JourneyBinding,
     host: &HostCapabilityDeclaration,
-) -> Result<RegistryObservations, DistributionError> {
+) -> Result<AppRegistryObservation, DistributionError> {
     observe_registry_reader_inner(reader, binding, host, false)
 }
 
@@ -195,12 +197,12 @@ fn observe_registry_reader_inner(
     binding: &JourneyBinding,
     host: &HostCapabilityDeclaration,
     confined_file_observation: bool,
-) -> Result<RegistryObservations, DistributionError> {
+) -> Result<AppRegistryObservation, DistributionError> {
+    host.ensure_binding(binding)?;
     let before = reader
         .read_registry(REGISTRY_LIMIT)
         .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
     let mut app_registry = observe_app_registry(before.as_deref(), binding, host)?;
-    let mut discovery = observe_discovery(before.as_deref(), binding, host)?;
     let after = reader
         .read_registry(REGISTRY_LIMIT)
         .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
@@ -208,11 +210,7 @@ fn observe_registry_reader_inner(
         return Err(error(DistributionErrorId::ObjectChanged));
     }
     app_registry.confined_file_observation = confined_file_observation;
-    discovery.confined_file_observation = confined_file_observation;
-    Ok(RegistryObservations {
-        app_registry,
-        discovery,
-    })
+    Ok(app_registry)
 }
 
 pub fn observe_app_registry(
@@ -220,6 +218,7 @@ pub fn observe_app_registry(
     binding: &JourneyBinding,
     host: &HostCapabilityDeclaration,
 ) -> Result<AppRegistryObservation, DistributionError> {
+    host.ensure_binding(binding)?;
     let verdict = match host.state(Capability::AppRegistry) {
         HostCapabilityState::Supported => {
             validate_registry(

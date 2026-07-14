@@ -46,18 +46,20 @@ fn every_artifact_binding_dimension_is_checked_before_output_effects() {
     substitutions.push(binding);
 
     for altered in substitutions {
-        let mut output = MemoryOutput::default();
+        let output_root = OutputRoot::new("supported-package-product-binding-substitution");
+        let mut output = output_root.tree();
         assert!(
             altered
                 .publish(
                     &context,
                     &authority_catalog,
+                    &output_root.journey(&altered),
                     &ExpectedTree::Absent,
                     &mut output,
                 )
                 .is_err()
         );
-        assert_eq!((output.reads, output.transitions), (0, 0));
+        assert!(output.inspect(2, 65 * 1024 * 1024).unwrap().is_none());
     }
 }
 

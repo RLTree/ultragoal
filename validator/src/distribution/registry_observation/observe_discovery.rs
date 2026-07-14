@@ -1,23 +1,108 @@
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+struct DiscoveryDocument {
+    schema: String,
+    context_id: String,
+    candidate_id: String,
+    home_id: String,
+    project_id: String,
+    host_id: String,
+    capability_sha256: String,
+    binding_sha256: String,
+    entries: Vec<DiscoveryEntry>,
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+struct DiscoveryEntry {
+    plugin_id: String,
+    version: String,
+    package_sha256: String,
+    installed_tree_sha256: String,
+    visible: bool,
+}
+
+pub fn discovery_document(
+    binding: &JourneyBinding,
+    visible: bool,
+) -> Result<Vec<u8>, DistributionError> {
+    let source = binding.package().source();
+    serde_json::to_vec(&DiscoveryDocument {
+        schema: "harness-ultragoal.host-discovery.v1".into(),
+        context_id: source.context_id().into(),
+        candidate_id: source.candidate_id().into(),
+        home_id: binding.home_id().into(),
+        project_id: binding.project_id().into(),
+        host_id: binding.host_id().into(),
+        capability_sha256: binding.capability_sha256().into(),
+        binding_sha256: binding.binding_sha256().into(),
+        entries: vec![DiscoveryEntry {
+            plugin_id: source.plugin_id().into(),
+            version: source.version().into(),
+            package_sha256: binding.package().archive_sha256().into(),
+            installed_tree_sha256: binding.package().tree_sha256().into(),
+            visible,
+        }],
+    })
+    .map_err(|_| error(DistributionErrorId::InvalidSpec))
+}
+
+pub fn observe_discovery_file(
+    reader: &mut crate::distribution::filesystem::ScopedFile,
+    binding: &JourneyBinding,
+    host: &HostCapabilityDeclaration,
+) -> Result<DiscoveryObservation, DistributionError> {
+    if reader.root_id() != binding.home_id() || reader.relative_path() != DISCOVERY_PATH {
+        return Err(error(DistributionErrorId::ProvenanceMismatch));
+    }
+    host.ensure_binding(binding)?;
+    let before = reader
+        .inspect(REGISTRY_LIMIT)
+        .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
+    let mut discovery = observe_discovery_inner(before.as_deref(), binding, host)?;
+    let after = reader
+        .inspect(REGISTRY_LIMIT)
+        .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
+    if before != after {
+        return Err(error(DistributionErrorId::ObjectChanged));
+    }
+    discovery.confined_file_observation = true;
+    Ok(discovery)
+}
+
 pub fn observe_discovery(
     bytes: Option<&[u8]>,
     binding: &JourneyBinding,
     host: &HostCapabilityDeclaration,
 ) -> Result<DiscoveryObservation, DistributionError> {
+    host.ensure_binding(binding)?;
+    match host.state(Capability::Discovery) {
+        HostCapabilityState::Unsupported | HostCapabilityState::Absent if bytes.is_none() => {
+            observe_discovery_inner(None, binding, host)
+        }
+        _ => Err(error(DistributionErrorId::ProvenanceMismatch)),
+    }
+}
+
+fn observe_discovery_inner(
+    bytes: Option<&[u8]>,
+    binding: &JourneyBinding,
+    host: &HostCapabilityDeclaration,
+) -> Result<DiscoveryObservation, DistributionError> {
+    host.ensure_binding(binding)?;
     let (verdict, discovery_verdict) = match host.state(Capability::Discovery) {
         HostCapabilityState::Supported => {
-            let row = validate_registry(
+            let visible = validate_discovery(
                 bytes.ok_or_else(|| error(DistributionErrorId::ObjectUnavailable))?,
                 binding,
             )?;
-            if row.registered && row.visible {
+            if visible {
                 (LayerVerdict::Verified, DiscoveryVerdict::Visible)
-            } else if row.registered {
+            } else {
                 (
                     LayerVerdict::Contradicted,
                     DiscoveryVerdict::RegisteredHidden,
                 )
-            } else {
-                return Err(error(DistributionErrorId::InstallConflict));
             }
         }
         HostCapabilityState::Unsupported if bytes.is_none() => {
@@ -39,25 +124,17 @@ pub fn observe_discovery(
     })
 }
 
-#[derive(Clone, Copy)]
-struct RegistryState {
-    registered: bool,
-    visible: bool,
-}
-
-fn validate_registry(
-    bytes: &[u8],
-    binding: &JourneyBinding,
-) -> Result<RegistryState, DistributionError> {
-    let document: RegistryDocument = json::parse(bytes, REGISTRY_LIMIT)?;
+fn validate_discovery(bytes: &[u8], binding: &JourneyBinding) -> Result<bool, DistributionError> {
+    let document: DiscoveryDocument = json::parse(bytes, REGISTRY_LIMIT)?;
     let source = binding.package().source();
-    if document.schema != "harness-ultragoal.isolated-app-registry.v1"
+    if document.schema != "harness-ultragoal.host-discovery.v1"
         || document.context_id != source.context_id()
         || document.candidate_id != source.candidate_id()
         || document.home_id != binding.home_id()
         || document.project_id != binding.project_id()
         || document.host_id != binding.host_id()
         || document.capability_sha256 != binding.capability_sha256()
+        || document.binding_sha256 != binding.binding_sha256()
         || document.entries.is_empty()
         || document.entries.len() > 1024
     {
@@ -68,7 +145,6 @@ fn validate_registry(
         if row.plugin_id.is_empty()
             || Version::parse(&row.version).is_none()
             || !identities.insert((row.plugin_id.as_str(), row.version.as_str()))
-            || row.visible && !row.registered
         {
             return Err(error(DistributionErrorId::InstallConflict));
         }
@@ -87,8 +163,5 @@ fn validate_registry(
     {
         return Err(error(DistributionErrorId::InstallConflict));
     }
-    Ok(RegistryState {
-        registered: row.registered,
-        visible: row.visible,
-    })
+    Ok(row.visible)
 }

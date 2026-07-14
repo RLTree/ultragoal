@@ -148,21 +148,22 @@ impl ProductionPackageArtifact {
         &self,
         context: &LiveContext,
         catalog: &AuthorityCatalog,
+        journey: &JourneyBinding,
         expected: &ExpectedTree,
-        effects: &mut impl MaterializeEffects,
+        output: &mut ScopedTree,
     ) -> Result<PackageArtifactTransaction, ProductionPackageError> {
         verify_product_package(self, context, catalog)?;
         let guard = PackageCapture::begin(context)
             .map_err(|_| failure(ProductionPackageErrorId::SourceUnavailable))?;
         let transaction =
-            publish_package_artifact(&self.snapshot, &self.binding, expected, effects)
+            publish_package_artifact(&self.snapshot, &self.binding, journey, expected, output)
                 .map_err(|_| failure(ProductionPackageErrorId::OutputFailed))?;
         let post_effect = guard
             .finish()
             .map_err(|_| failure(ProductionPackageErrorId::SourceUnavailable))
             .and_then(|_| verify_product_package(self, context, catalog));
         if let Err(problem) = post_effect {
-            rollback_package_artifact(transaction, effects)
+            rollback_package_artifact(transaction, output)
                 .map_err(|_| failure(ProductionPackageErrorId::OutputFailed))?;
             return Err(problem);
         }

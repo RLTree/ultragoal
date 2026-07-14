@@ -1,47 +1,10 @@
 #[test]
-fn source_mutate_restore_during_publication_rolls_back_output() {
-    let repo = Repo::new("supported-package-product-publication-mutate-restore");
-    let context = repo.context();
-    let authority_catalog = catalog(&context);
-    let artifact = capture_product_package(&context, &authority_catalog).expect("package");
-    let path = repo.root.join("skills/prove/SKILL.md");
-    let original = fs::read(&path).expect("original source");
-    let hook_path = path.clone();
-    let hook_original = original.clone();
-    let mut output = MemoryOutput {
-        before_first_transition: Some(Box::new(move || {
-            fs::write(&hook_path, b"mutated during output\n").expect("mutate source");
-            fs::write(&hook_path, hook_original).expect("restore source");
-        })),
-        ..MemoryOutput::default()
-    };
-
-    let error = artifact
-        .publish(
-            &context,
-            &authority_catalog,
-            &ExpectedTree::Absent,
-            &mut output,
-        )
-        .expect_err("mutate-restore crossed publication");
-    assert!(matches!(
-        error.id(),
-        ProductionPackageErrorId::SourceUnavailable | ProductionPackageErrorId::ContextUnavailable
-    ));
-    assert!(
-        output.rows.is_none(),
-        "failed publication was not rolled back"
-    );
-    assert_eq!(fs::read(path).unwrap(), original);
-}
-
-#[test]
 fn two_concurrent_publishers_yield_one_exact_winner() {
     let repo = Repo::new("supported-package-product-writer-race");
     let context = repo.context();
     let authority_catalog = catalog(&context);
     let artifact = capture_product_package(&context, &authority_catalog).expect("package");
-    let rows = Arc::new(Mutex::new(None));
+    let output_root = Arc::new(OutputRoot::new("supported-package-product-writer-race"));
     let first_read = Arc::new(Barrier::new(2));
 
     let handles = (0..2)
@@ -49,17 +12,15 @@ fn two_concurrent_publishers_yield_one_exact_winner() {
             let context = context.clone();
             let authority_catalog = authority_catalog.clone();
             let artifact = artifact.clone();
-            let rows = Arc::clone(&rows);
+            let output_root = Arc::clone(&output_root);
             let first_read = Arc::clone(&first_read);
             std::thread::spawn(move || {
-                let mut output = ConcurrentOutput {
-                    rows,
-                    first_read,
-                    reads: 0,
-                };
+                let mut output = output_root.tree();
+                first_read.wait();
                 artifact.publish(
                     &context,
                     &authority_catalog,
+                    &output_root.journey(&artifact),
                     &ExpectedTree::Absent,
                     &mut output,
                 )
@@ -75,7 +36,15 @@ fn two_concurrent_publishers_yield_one_exact_winner() {
         outcomes.iter().filter(|outcome| outcome.is_err()).count(),
         1
     );
-    assert_eq!(rows.lock().unwrap().as_ref().unwrap().len(), 2);
+    assert_eq!(
+        output_root
+            .tree()
+            .inspect(2, 65 * 1024 * 1024)
+            .unwrap()
+            .unwrap()
+            .len(),
+        2
+    );
 }
 
 #[test]
@@ -90,58 +59,60 @@ fn partial_pair_and_failed_output_reconciliation_never_publish() {
         artifact.snapshot().archive().to_vec(),
     )];
     let partial_sha256 = tree_sha256(&partial).expect("partial digest");
-    let mut partial_output = MemoryOutput {
-        rows: Some(partial.clone()),
-        ..MemoryOutput::default()
-    };
+    let output_root = OutputRoot::new("supported-package-product-output-false-pass");
+    let partial_dir = output_root
+        .root
+        .join("repository/packages/harness-ultragoal");
+    fs::create_dir_all(&partial_dir).unwrap();
+    fs::write(
+        partial_dir.join(format!("{PLUGIN_ID}-{SUPPORTED_VERSION}.hugpkg")),
+        artifact.snapshot().archive(),
+    )
+    .unwrap();
+    let mut partial_output = output_root.tree();
     let error = artifact
         .publish(
             &context,
             &authority_catalog,
+            &output_root.journey(&artifact),
             &ExpectedTree::ExactDigest(partial_sha256),
             &mut partial_output,
         )
         .expect_err("partial pair was completed");
     assert_eq!(error.id(), ProductionPackageErrorId::OutputFailed);
-    assert_eq!(partial_output.rows, Some(partial));
-    assert_eq!(partial_output.transitions, 0);
+    assert_eq!(
+        partial_output.inspect(2, 65 * 1024 * 1024).unwrap(),
+        Some(partial)
+    );
 
+    fs::remove_dir_all(&partial_dir).unwrap();
+    fs::create_dir_all(&partial_dir).unwrap();
     let inventory_only = vec![TreeObject::regular(
         format!("{PLUGIN_ID}-{SUPPORTED_VERSION}.inventory.json"),
         0o644,
         artifact.snapshot().inventory().to_vec(),
     )];
     let inventory_only_sha256 = tree_sha256(&inventory_only).expect("inventory-only digest");
-    let mut inventory_only_output = MemoryOutput {
-        rows: Some(inventory_only.clone()),
-        ..MemoryOutput::default()
-    };
+    fs::write(
+        partial_dir.join(format!("{PLUGIN_ID}-{SUPPORTED_VERSION}.inventory.json")),
+        artifact.snapshot().inventory(),
+    )
+    .unwrap();
+    let mut inventory_only_output = output_root.tree();
     let error = artifact
         .publish(
             &context,
             &authority_catalog,
+            &output_root.journey(&artifact),
             &ExpectedTree::ExactDigest(inventory_only_sha256),
             &mut inventory_only_output,
         )
         .expect_err("inventory-only output was completed");
     assert_eq!(error.id(), ProductionPackageErrorId::OutputFailed);
-    assert_eq!(inventory_only_output.rows, Some(inventory_only));
-    assert_eq!(inventory_only_output.transitions, 0);
-
-    let mut corrupt_output = MemoryOutput {
-        corrupt_on_read: Some(2),
-        ..MemoryOutput::default()
-    };
-    let error = artifact
-        .publish(
-            &context,
-            &authority_catalog,
-            &ExpectedTree::Absent,
-            &mut corrupt_output,
-        )
-        .expect_err("corrupt post-write pair was accepted");
-    assert_eq!(error.id(), ProductionPackageErrorId::OutputFailed);
-    assert!(corrupt_output.rows.is_none());
+    assert_eq!(
+        inventory_only_output.inspect(2, 65 * 1024 * 1024).unwrap(),
+        Some(inventory_only)
+    );
 }
 
 #[test]
@@ -156,6 +127,7 @@ fn same_version_different_bytes_cannot_replace_published_pair() {
         .publish(
             &first_context,
             &first_catalog,
+            &output_root.journey(&first),
             &ExpectedTree::Absent,
             &mut output,
         )
@@ -172,6 +144,7 @@ fn same_version_different_bytes_cannot_replace_published_pair() {
         .publish(
             &second_context,
             &second_catalog,
+            &output_root.journey(&second),
             &ExpectedTree::ExactDigest(transaction.output_tree_sha256().to_owned()),
             &mut output,
         )

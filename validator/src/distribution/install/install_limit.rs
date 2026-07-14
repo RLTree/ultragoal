@@ -93,6 +93,10 @@ impl InstallSnapshot {
         &self.package_sha256
     }
 
+    pub fn target_id(&self) -> &str {
+        &self.target_id
+    }
+
     pub const fn replaced_existing(&self) -> bool {
         self.replaced_existing
     }

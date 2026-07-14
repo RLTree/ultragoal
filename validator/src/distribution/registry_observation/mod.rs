@@ -11,4 +11,6 @@ use std::collections::BTreeSet;
 
 include!("registry_limit.rs");
 
+include!("validate_app_registry.rs");
+
 include!("observe_discovery.rs");

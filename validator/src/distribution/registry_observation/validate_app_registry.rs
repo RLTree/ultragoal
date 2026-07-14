@@ -1,0 +1,53 @@
+#[derive(Clone, Copy)]
+struct RegistryState {
+    registered: bool,
+    visible: bool,
+}
+
+fn validate_registry(
+    bytes: &[u8],
+    binding: &JourneyBinding,
+) -> Result<RegistryState, DistributionError> {
+    let document: RegistryDocument = json::parse(bytes, REGISTRY_LIMIT)?;
+    let source = binding.package().source();
+    if document.schema != "harness-ultragoal.isolated-app-registry.v1"
+        || document.context_id != source.context_id()
+        || document.candidate_id != source.candidate_id()
+        || document.home_id != binding.home_id()
+        || document.project_id != binding.project_id()
+        || document.host_id != binding.host_id()
+        || document.capability_sha256 != binding.capability_sha256()
+        || document.entries.is_empty()
+        || document.entries.len() > 1024
+    {
+        return Err(error(DistributionErrorId::ProvenanceMismatch));
+    }
+    let mut identities = BTreeSet::new();
+    for row in &document.entries {
+        if row.plugin_id.is_empty()
+            || Version::parse(&row.version).is_none()
+            || !identities.insert((row.plugin_id.as_str(), row.version.as_str()))
+            || row.visible && !row.registered
+        {
+            return Err(error(DistributionErrorId::InstallConflict));
+        }
+    }
+    let mut matches = document
+        .entries
+        .iter()
+        .filter(|row| row.plugin_id == source.plugin_id());
+    let row = matches
+        .next()
+        .ok_or_else(|| error(DistributionErrorId::InstallConflict))?;
+    if matches.next().is_some()
+        || row.version != source.version()
+        || row.package_sha256 != binding.package().archive_sha256()
+        || row.installed_tree_sha256 != binding.package().tree_sha256()
+    {
+        return Err(error(DistributionErrorId::InstallConflict));
+    }
+    Ok(RegistryState {
+        registered: row.registered,
+        visible: row.visible,
+    })
+}

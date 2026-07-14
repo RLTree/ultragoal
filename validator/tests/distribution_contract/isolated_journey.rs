@@ -2,13 +2,14 @@ use crate::distribution::{
     CacheExpectation, Capability, CodexPlugin, DiscoveryVerdict, DistributionErrorId,
     ExpectedPrior, ExpectedTree, HostCapabilityDeclaration, HostCapabilityState, IdentitySurface,
     InstallPlan, InstallScope, JourneyBinding, MarketplaceScope, RuntimeProbePlan, RuntimeVerdict,
-    ScopedFile, ScopedInstall, ScopedTree, SurfaceIdentity, apply_marketplace, install,
-    materialize_package, observe_codex_marketplace, observe_registry_file, plan_codex_marketplace,
-    reconcile_cache_file, registry_document, verify_bound_surface_chain,
+    ScopedFile, ScopedInstall, ScopedTree, SurfaceIdentity, apply_marketplace, discovery_document,
+    install, materialize_package, observe_codex_marketplace, observe_discovery_file,
+    observe_registry_file, plan_codex_marketplace, reconcile_cache_file, registry_document,
+    verify_bound_surface_chain,
 };
 use crate::distribution_fixture::{PLUGIN_ID, VERSION};
 use crate::package_journey_fixture::{JourneyFixture, write_scoped};
-use crate::runtime_session::{program, valid_args};
+use crate::runtime_session::{installed_program, valid_args};
 use serde_json::json;
 use std::time::Duration;
 
@@ -71,7 +72,7 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
         .unwrap();
     assert_eq!(installed, first.archive());
 
-    let executable = program();
+    let executable = installed_program(&fixture.root);
     let host = HostCapabilityDeclaration::isolated(
         &fixture.root,
         &fixture.project,
@@ -122,10 +123,12 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
 
     let registry_bytes = registry_document(&binding, true, true).unwrap();
     let mut registry_file = write_scoped(fixture.confined(), "app/registry.json", &registry_bytes);
+    let discovery_bytes = discovery_document(&binding, true).unwrap();
+    let mut discovery_file =
+        write_scoped(fixture.confined(), "host/discovery.json", &discovery_bytes);
     let before_reads = fixture.tree();
-    let observations = observe_registry_file(&mut registry_file, &binding, &host).unwrap();
-    let app = observations.app_registry;
-    let discovery = observations.discovery;
+    let app = observe_registry_file(&mut registry_file, &binding, &host).unwrap();
+    let discovery = observe_discovery_file(&mut discovery_file, &binding, &host).unwrap();
     assert_eq!(discovery.discovery_verdict(), DiscoveryVerdict::Visible);
     assert!(discovery.is_current_visible());
     assert!(app.observation_sha256().is_some());
@@ -138,6 +141,7 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
     let runtime_plan = RuntimeProbePlan::new(
         binding.clone(),
         &host,
+        install.snapshot(),
         &executable,
         valid_args(),
         Duration::from_secs(10),

@@ -1,6 +1,7 @@
 use crate::distribution::{
-    DistributionErrorId as ErrorId, HostCapabilityDeclaration, JourneyBinding, RuntimeObservation,
-    RuntimeProbePlan, RuntimeVerdict, execute_runtime_probe,
+    DistributionErrorId as ErrorId, ExpectedPrior, HostCapabilityDeclaration, InstallPlan,
+    InstallScope, InstallTransaction, JourneyBinding, PackageSnapshot, RuntimeObservation,
+    RuntimeProbePlan, RuntimeVerdict, ScopedInstall, execute_runtime_probe, install,
 };
 use crate::distribution_fixture::Fixture;
 use crate::package_journey_fixture::JourneyFixture;
@@ -10,6 +11,18 @@ use std::time::Duration;
 
 pub fn program() -> PathBuf {
     std::env::current_exe().unwrap()
+}
+
+pub fn installed_program(root: &std::path::Path) -> PathBuf {
+    let target = root.join("runtime/runtime-probe-bin");
+    std::fs::create_dir_all(target.parent().unwrap()).unwrap();
+    std::fs::copy(program(), &target).unwrap();
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        std::fs::set_permissions(&target, std::fs::Permissions::from_mode(0o755)).unwrap();
+    }
+    target
 }
 
 pub fn valid_args() -> Vec<String> {
@@ -65,37 +78,11 @@ fn runtime_probe_child_slow() {
 }
 
 fn emit(stale: bool) {
-    let allowed = [
-        "HUL_CONTEXT_ID",
-        "HUL_CANDIDATE_ID",
-        "HUL_PLUGIN_ID",
-        "HUL_VERSION",
-        "HUL_PACKAGE_SHA256",
-        "HUL_TREE_SHA256",
-        "HUL_HOME_ID",
-        "HUL_PROJECT_ID",
-        "HUL_HOST_ID",
-        "HUL_CAPABILITY_SHA256",
-        "HUL_BINDING_SHA256",
-        "HUL_EXECUTABLE_SHA256",
-        "HUL_SESSION_NONCE",
-    ];
+    let allowed = ["HUL_SESSION_NONCE"];
     assert!(std::env::vars().all(|(key, _)| allowed.contains(&key.as_str())));
     let value = json!({
         "schema":"harness-ultragoal.runtime-probe.v1",
-        "context_id":env("HUL_CONTEXT_ID"),
-        "candidate_id":env("HUL_CANDIDATE_ID"),
-        "plugin_id":env("HUL_PLUGIN_ID"),
-        "version":if stale { "0.0.10".into() } else { env("HUL_VERSION") },
-        "package_sha256":env("HUL_PACKAGE_SHA256"),
-        "installed_tree_sha256":env("HUL_TREE_SHA256"),
-        "home_id":env("HUL_HOME_ID"),
-        "project_id":env("HUL_PROJECT_ID"),
-        "host_id":env("HUL_HOST_ID"),
-        "capability_sha256":env("HUL_CAPABILITY_SHA256"),
-        "binding_sha256":env("HUL_BINDING_SHA256"),
-        "executable_sha256":env("HUL_EXECUTABLE_SHA256"),
-        "session_nonce":env("HUL_SESSION_NONCE"),
+        "session_nonce":if stale { "stale".into() } else { env("HUL_SESSION_NONCE") },
     });
     println!("HUL_RUNTIME_OBSERVATION={value}");
 }
@@ -104,11 +91,25 @@ fn env(name: &str) -> String {
     std::env::var(name).unwrap()
 }
 
+fn install_for_runtime(fixture: &JourneyFixture, package: &PackageSnapshot) -> InstallTransaction {
+    let plan = InstallPlan::new(
+        package.context_id().into(),
+        package.candidate_id().into(),
+        InstallScope::PersonalFixture,
+        "plugins/harness-ultragoal.hugpkg".into(),
+        package.package_sha256().into(),
+        ExpectedPrior::Absent,
+    )
+    .unwrap();
+    install(&plan, package, &mut ScopedInstall::new(fixture.confined())).unwrap()
+}
+
 #[test]
 fn stale_subprocess_receipt_and_dormant_report_cannot_become_runtime_proof() {
     let fixture = JourneyFixture::new("runtime-stale");
     let package = fixture.build("package/runtime.hugpkg");
-    let executable = program();
+    let installed = install_for_runtime(&fixture, &package);
+    let executable = installed_program(&fixture.root);
     let host = HostCapabilityDeclaration::isolated(
         &fixture.root,
         &fixture.project,
@@ -121,6 +122,7 @@ fn stale_subprocess_receipt_and_dormant_report_cannot_become_runtime_proof() {
     let stale = RuntimeProbePlan::new(
         binding.clone(),
         &host,
+        installed.snapshot(),
         &executable,
         stale_args(),
         Duration::from_secs(10),
@@ -162,10 +164,8 @@ fn executable_substitution_during_probe_fails_final_revalidation() {
     use std::os::unix::fs::PermissionsExt;
     let fixture = JourneyFixture::new("runtime-executable-race");
     let package = fixture.build("packages/runtime.hugpkg");
-    let original = program();
-    let copied = fixture.root.join("runtime-probe-bin");
-    std::fs::copy(&original, &copied).unwrap();
-    std::fs::set_permissions(&copied, std::fs::Permissions::from_mode(0o755)).unwrap();
+    let installed = install_for_runtime(&fixture, &package);
+    let copied = installed_program(&fixture.root);
     let host = HostCapabilityDeclaration::isolated(
         &fixture.root,
         &fixture.project,
@@ -178,6 +178,7 @@ fn executable_substitution_during_probe_fails_final_revalidation() {
     let plan = RuntimeProbePlan::new(
         binding,
         &host,
+        installed.snapshot(),
         &copied,
         slow_args(),
         Duration::from_secs(10),

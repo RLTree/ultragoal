@@ -118,8 +118,11 @@ impl Fixture {
         fs::write(
             &runtime,
             br##"#!/bin/sh
-candidate="${1:-$HUL_CANDIDATE_ID}"
-printf '%s\n' "HUL_RUNTIME_OBSERVATION={\"schema\":\"harness-ultragoal.runtime-probe.v1\",\"context_id\":\"$HUL_CONTEXT_ID\",\"candidate_id\":\"$candidate\",\"plugin_id\":\"$HUL_PLUGIN_ID\",\"version\":\"$HUL_VERSION\",\"package_sha256\":\"$HUL_PACKAGE_SHA256\",\"installed_tree_sha256\":\"$HUL_TREE_SHA256\",\"home_id\":\"$HUL_HOME_ID\",\"project_id\":\"$HUL_PROJECT_ID\",\"host_id\":\"$HUL_HOST_ID\",\"capability_sha256\":\"$HUL_CAPABILITY_SHA256\",\"binding_sha256\":\"$HUL_BINDING_SHA256\",\"executable_sha256\":\"$HUL_EXECUTABLE_SHA256\",\"session_nonce\":\"$HUL_SESSION_NONCE\"}"
+if [ "$#" -ne 0 ]; then
+  printf '%s\n' "HUL_RUNTIME_OBSERVATION={\"schema\":\"harness-ultragoal.runtime-probe.v1\",\"session_nonce\":\"stale\"}"
+  exit 0
+fi
+printf '%s\n' "HUL_RUNTIME_OBSERVATION={\"schema\":\"harness-ultragoal.runtime-probe.v1\",\"session_nonce\":\"$HUL_SESSION_NONCE\"}"
 "##,
         )
         .unwrap();

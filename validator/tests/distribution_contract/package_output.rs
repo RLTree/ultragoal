@@ -1,8 +1,8 @@
 #![cfg(unix)]
 
 use crate::distribution::{
-    DistributionErrorId as ErrorId, ExpectedTree, MaterializeEffects, ScopedTree, TreeObject,
-    tree_sha256,
+    DistributionErrorId as ErrorId, ExpectedTree, HostCapabilityDeclaration, JourneyBinding,
+    ScopedTree, SurfaceIdentity, TreeObject, tree_sha256,
 };
 use crate::distribution::{
     PackageArtifactBinding, publish_package_artifact, reconcile_package_artifact,

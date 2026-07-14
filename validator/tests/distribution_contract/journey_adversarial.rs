@@ -1,8 +1,8 @@
 use crate::distribution::{
     AppRegistryVerdict, DiscoveryVerdict, DistributionErrorId as ErrorId, ExpectedPrior,
     ExpectedTree, HostCapabilityDeclaration, InstallPlan, InstallScope, JourneyBinding, ScopedFile,
-    ScopedInstall, ScopedTree, install, materialize_package, observe_app_registry,
-    observe_discovery, registry_document,
+    ScopedInstall, ScopedTree, discovery_document, install, materialize_package,
+    observe_app_registry, observe_discovery, observe_discovery_file, registry_document,
 };
 use crate::distribution_fixture::digest;
 use crate::package_journey_fixture::{JourneyFixture, renamed, write_scoped};

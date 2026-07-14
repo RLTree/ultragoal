@@ -23,6 +23,7 @@ pub struct HostCapabilityDeclaration {
     host_id: String,
     capabilities: BTreeMap<Capability, HostCapabilityState>,
     capability_sha256: String,
+    runtime_program_id: Option<String>,
 }
 
 impl HostCapabilityDeclaration {
@@ -32,12 +33,21 @@ impl HostCapabilityDeclaration {
         host_version: &str,
         runtime_program: Option<&Path>,
     ) -> Result<Self, DistributionError> {
-        let home_id = directory_id(home)?;
+        let home_canonical = home
+            .canonicalize()
+            .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
+        let home_id = directory_id(&home_canonical)?;
         let project_id = directory_id(project)?;
-        let runtime = match runtime_program {
-            Some(path) if executable(path)? => HostCapabilityState::Supported,
-            Some(_) => HostCapabilityState::Unsupported,
-            None => HostCapabilityState::Absent,
+        let runtime_program_id = match runtime_program {
+            Some(path) if executable(path)? && is_under(path, &home_canonical)? => {
+                Some(executable_identity(path)?)
+            }
+            Some(_) | None => None,
+        };
+        let runtime = match (&runtime_program, &runtime_program_id) {
+            (Some(_), Some(_)) => HostCapabilityState::Supported,
+            (Some(_), None) => HostCapabilityState::Unsupported,
+            (None, _) => HostCapabilityState::Absent,
         };
         let mut capabilities = Capability::ALL
             .into_iter()
@@ -52,6 +62,7 @@ impl HostCapabilityDeclaration {
             home_id,
             project_id,
             capabilities,
+            runtime_program_id,
         )
     }
 
@@ -76,6 +87,7 @@ impl HostCapabilityDeclaration {
             directory_id(home)?,
             directory_id(project)?,
             capabilities,
+            None,
         )
     }
 
@@ -86,6 +98,7 @@ impl HostCapabilityDeclaration {
         home_id: String,
         project_id: String,
         capabilities: BTreeMap<Capability, HostCapabilityState>,
+        runtime_program_id: Option<String>,
     ) -> Result<Self, DistributionError> {
         if host_version.is_empty()
             || host_version.len() > 128
@@ -94,6 +107,16 @@ impl HostCapabilityDeclaration {
             || Capability::ALL
                 .iter()
                 .any(|row| !capabilities.contains_key(row))
+            || runtime_program_id
+                .as_deref()
+                .is_some_and(|value| !digest(value))
+        {
+            return Err(error(DistributionErrorId::InvalidSpec));
+        }
+        if matches!(
+            capabilities.get(&Capability::Runtime),
+            Some(HostCapabilityState::Supported)
+        ) != runtime_program_id.is_some()
         {
             return Err(error(DistributionErrorId::InvalidSpec));
         }
@@ -110,6 +133,7 @@ impl HostCapabilityDeclaration {
             project_id: &'a str,
             host_id: &'a str,
             capabilities: &'a BTreeMap<Capability, HostCapabilityState>,
+            runtime_program_id: Option<&'a str>,
         }
         let capability_sha256 = serde_json::to_vec(&CapabilityBinding {
             schema: "harness-ultragoal.host-capabilities.v1",
@@ -120,6 +144,7 @@ impl HostCapabilityDeclaration {
             project_id: &project_id,
             host_id: &host_id,
             capabilities: &capabilities,
+            runtime_program_id: runtime_program_id.as_deref(),
         })
         .map(|bytes| sha256(&bytes))
         .map_err(|_| error(DistributionErrorId::InvalidSpec))?;
@@ -132,6 +157,7 @@ impl HostCapabilityDeclaration {
             host_id,
             capabilities,
             capability_sha256,
+            runtime_program_id,
         })
     }
 
@@ -153,6 +179,23 @@ impl HostCapabilityDeclaration {
     pub fn adapter(&self) -> HostAdapterKind {
         self.adapter
     }
+    pub(crate) fn ensure_binding(&self, binding: &JourneyBinding) -> Result<(), DistributionError> {
+        if self.home_id != binding.home_id
+            || self.project_id != binding.project_id
+            || self.host_id != binding.host_id
+            || self.capability_sha256 != binding.capability_sha256
+        {
+            return Err(error(DistributionErrorId::ProvenanceMismatch));
+        }
+        Ok(())
+    }
+    pub(crate) fn runtime_program_id(&self) -> Option<&str> {
+        self.runtime_program_id.as_deref()
+    }
+    pub(crate) fn matches_runtime_program(&self, path: &Path) -> Result<bool, DistributionError> {
+        let current = executable_identity(path)?;
+        Ok(self.runtime_program_id.as_deref() == Some(current.as_str()))
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
@@ -164,4 +207,43 @@ pub struct JourneyBinding {
     host_id: String,
     capability_sha256: String,
     binding_sha256: String,
+}
+
+fn is_under(path: &Path, root: &Path) -> Result<bool, DistributionError> {
+    let canonical = path
+        .canonicalize()
+        .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
+    Ok(canonical.starts_with(root))
+}
+
+fn executable_identity(path: &Path) -> Result<String, DistributionError> {
+    let canonical = path
+        .canonicalize()
+        .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
+    let metadata = std::fs::symlink_metadata(&canonical)
+        .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
+    if !metadata.is_file() || metadata.file_type().is_symlink() {
+        return Err(error(DistributionErrorId::UnsafeObject));
+    }
+    Ok(file_identity(&canonical, &metadata))
+}
+
+#[cfg(unix)]
+fn file_identity(path: &Path, metadata: &std::fs::Metadata) -> String {
+    use std::os::unix::fs::MetadataExt;
+    sha256(
+        format!(
+            "{}\0{}\0{}\0{}",
+            path.display(),
+            metadata.dev(),
+            metadata.ino(),
+            metadata.len()
+        )
+        .as_bytes(),
+    )
+}
+
+#[cfg(not(unix))]
+fn file_identity(path: &Path, metadata: &std::fs::Metadata) -> String {
+    sha256(format!("{}\0{}", path.display(), metadata.len()).as_bytes())
 }

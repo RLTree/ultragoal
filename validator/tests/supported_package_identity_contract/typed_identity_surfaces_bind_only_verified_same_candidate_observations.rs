@@ -35,7 +35,7 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
         CONTEXT.into(),
         CANDIDATE.into(),
         InstallScope::PersonalFixture,
-        "fixture/package.hugpkg".into(),
+        "plugins/harness-ultragoal.hugpkg".into(),
         package.package_sha256().into(),
         ExpectedPrior::Absent,
     )
@@ -84,6 +84,7 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
     let runtime_plan = RuntimeProbePlan::new(
         binding.clone(),
         &host,
+        installed.snapshot(),
         &runtime_program,
         Vec::new(),
         Duration::from_secs(5),
@@ -147,99 +148,5 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
 
     cache_identity_substitution_controls(&package, &binding, &host, &cache_bytes);
 
-    let unavailable = ultragoal::distribution::MarketplaceExpectation::new(
-        CONTEXT.into(),
-        CANDIDATE.into(),
-        MarketplaceScope::Personal,
-        "harness-ultragoal".into(),
-        "0.0.11".into(),
-        "plugins/harness-ultragoal".into(),
-        package.package_sha256().into(),
-    )
-    .and_then(|expectation| unavailable_marketplace(&expectation, "host-unavailable"))
-    .unwrap();
-    assert_eq!(
-        SurfaceIdentity::from_verified_marketplace(&unavailable, &binding)
-            .unwrap_err()
-            .id(),
-        DistributionErrorId::ProvenanceMismatch
-    );
-
-    let wrong_version_expectation = ultragoal::distribution::MarketplaceExpectation::new(
-        CONTEXT.into(),
-        CANDIDATE.into(),
-        MarketplaceScope::Personal,
-        "harness-ultragoal".into(),
-        "9.9.9".into(),
-        "plugins/harness-ultragoal".into(),
-        package.package_sha256().into(),
-    )
-    .unwrap();
-    let wrong_version_catalog = serde_json::to_vec(&json!({
-        "schema":"harness-ultragoal.marketplace-catalog.v1",
-        "context_id":CONTEXT,
-        "candidate_id":CANDIDATE,
-        "scope":"personal",
-        "plugins":[{
-            "plugin_id":"harness-ultragoal",
-            "version":"9.9.9",
-            "origin":"plugins/harness-ultragoal",
-            "package_sha256":package.package_sha256()
-        }]
-    }))
-    .unwrap();
-    let wrong_version = verify_marketplace(&wrong_version_catalog, &wrong_version_expectation)
-        .expect("wrong-version catalog is internally exact before package-source binding");
-    assert_eq!(wrong_version.version(), "9.9.9");
-    assert_eq!(wrong_version.package_sha256(), package.package_sha256());
-    assert_eq!(
-        SurfaceIdentity::from_verified_marketplace(&wrong_version, &binding)
-            .unwrap_err()
-            .id(),
-        DistributionErrorId::ProvenanceMismatch,
-        "same package digest cannot promote a different marketplace version"
-    );
-
-    let exact_version_catalog = serde_json::to_vec(&json!({
-        "schema":"harness-ultragoal.marketplace-catalog.v1",
-        "context_id":CONTEXT,
-        "candidate_id":CANDIDATE,
-        "scope":"personal",
-        "plugins":[{
-            "plugin_id":"harness-ultragoal",
-            "version":"0.0.11",
-            "origin":"plugins/harness-ultragoal",
-            "package_sha256":package.package_sha256()
-        }]
-    }))
-    .unwrap();
-    assert_eq!(
-        verify_marketplace(&exact_version_catalog, &wrong_version_expectation)
-            .unwrap_err()
-            .id(),
-        DistributionErrorId::InstallConflict,
-        "caller-authored expectation drift cannot relabel exact catalog bytes"
-    );
-
-    let hidden_registry = registry_document(&binding, true, false).unwrap();
-    let hidden = observe_discovery(Some(&hidden_registry), &binding, &host).unwrap();
-    assert_eq!(
-        SurfaceIdentity::from_verified_discovery(&hidden, &binding)
-            .unwrap_err()
-            .id(),
-        DistributionErrorId::ProvenanceMismatch
-    );
-
-    let substituted_runtime = RuntimeProbePlan::new(
-        binding,
-        &host,
-        &runtime_program,
-        vec!["sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd".into()],
-        Duration::from_secs(5),
-    )
-    .unwrap();
-    assert_eq!(
-        substituted_runtime.execute_bound().unwrap_err().id(),
-        DistributionErrorId::ProvenanceMismatch
-    );
+    host_surface_substitution_controls(&fixture, &package, &binding, &host, &installed);
 }

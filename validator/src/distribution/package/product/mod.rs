@@ -1,6 +1,6 @@
 use super::archive;
 use super::manifest;
-use super::materialize::{ExpectedTree, MaterializeEffects};
+use super::materialize::ExpectedTree;
 use super::output::{
     PackageArtifactBinding, PackageArtifactTransaction, publish_package_artifact,
     rollback_package_artifact,
@@ -9,6 +9,8 @@ use super::plan::{PackageEntry, PackagePlan, entry_tree_sha256};
 use super::snapshot::{PackageSnapshot, verify_package};
 use super::spec::PackageRole;
 use crate::context::LiveContext;
+use crate::distribution::filesystem::ScopedTree;
+use crate::distribution::host_capability::JourneyBinding;
 use crate::distribution::reader::sha256;
 use crate::inventory::AuthorityCatalog;
 use crate::package::inventory::snapshot::{

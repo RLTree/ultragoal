@@ -2,6 +2,7 @@ use crate::distribution::error::{DistributionError, DistributionErrorId, error};
 use crate::distribution::host_capability::{
     HostCapabilityDeclaration, HostCapabilityState, JourneyBinding,
 };
+use crate::distribution::install::InstallSnapshot;
 use crate::distribution::json;
 use crate::distribution::model::Capability;
 use crate::distribution::model::{IdentitySurface, SurfaceIdentity};

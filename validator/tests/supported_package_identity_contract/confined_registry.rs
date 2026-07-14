@@ -12,13 +12,19 @@ fn confined_registry_observations(
         DistributionErrorId::ProvenanceMismatch,
         "caller-owned bytes cannot mint app-registry identity authority"
     );
-    let caller_discovery = observe_discovery(Some(&registry), binding, host).unwrap();
+    fs::create_dir_all(fixture.0.join("host")).unwrap();
+    fs::write(fixture.0.join("host/discovery.json"), &registry).unwrap();
+    let mut registry_as_discovery = ScopedFile::new(
+        ConfinedRoot::open(&fixture.0).unwrap(),
+        "host/discovery.json",
+    )
+    .unwrap();
     assert_eq!(
-        SurfaceIdentity::from_verified_discovery(&caller_discovery, binding)
+        observe_discovery_file(&mut registry_as_discovery, binding, host)
             .unwrap_err()
             .id(),
         DistributionErrorId::ProvenanceMismatch,
-        "caller-owned bytes cannot mint discovery identity authority"
+        "registry bytes cannot substitute for host discovery authority"
     );
     fs::create_dir_all(fixture.0.join("app")).unwrap();
     fs::write(fixture.0.join("app/registry.json"), &registry).unwrap();
@@ -49,5 +55,17 @@ fn confined_registry_observations(
     );
     fs::remove_dir_all(substitute).unwrap();
     let mut registry_file = ScopedFile::new(confined, "app/registry.json").unwrap();
-    observe_registry_file(&mut registry_file, binding, host).unwrap()
+    let app_registry = observe_registry_file(&mut registry_file, binding, host).unwrap();
+    let discovery = discovery_document(binding, true).unwrap();
+    fs::write(fixture.0.join("host/discovery.json"), &discovery).unwrap();
+    let mut discovery_file = ScopedFile::new(
+        ConfinedRoot::open(&fixture.0).unwrap(),
+        "host/discovery.json",
+    )
+    .unwrap();
+    let discovery = observe_discovery_file(&mut discovery_file, binding, host).unwrap();
+    ultragoal::distribution::RegistryObservations {
+        app_registry,
+        discovery,
+    }
 }

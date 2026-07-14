@@ -1,5 +1,6 @@
 const OUTPUT_LIMIT: usize = 1024 * 1024;
 const EXECUTABLE_LIMIT: usize = 256 * 1024 * 1024;
+const SUPPORTED_INSTALL_TARGET: &str = "plugins/harness-ultragoal.hugpkg";
 const MARKER: &[u8] = b"HUL_RUNTIME_OBSERVATION=";
 static NONCE: AtomicU64 = AtomicU64::new(0);
 
@@ -17,12 +18,19 @@ impl RuntimeProbePlan {
     pub fn new(
         binding: JourneyBinding,
         host: &HostCapabilityDeclaration,
+        install: &InstallSnapshot,
         program: &Path,
         argv: Vec<String>,
         timeout: Duration,
     ) -> Result<Self, DistributionError> {
+        host.ensure_binding(&binding)?;
         if host.state(Capability::Runtime) != HostCapabilityState::Supported
+            || install.context_id() != binding.package().source().context_id()
+            || install.candidate_id() != binding.package().source().candidate_id()
+            || install.package_sha256() != binding.package().archive_sha256()
+            || install.target_id() != sha256(SUPPORTED_INSTALL_TARGET.as_bytes())
             || !program.is_absolute()
+            || !host.matches_runtime_program(program)?
             || argv.len() > 32
             || argv.iter().any(|row| {
                 row.len() > 4096 || row.bytes().any(|byte| byte == 0 || byte.is_ascii_control())
@@ -72,18 +80,6 @@ impl RuntimeProbePlan {
 #[serde(deny_unknown_fields)]
 struct ProbeEnvelope {
     schema: String,
-    context_id: String,
-    candidate_id: String,
-    plugin_id: String,
-    version: String,
-    package_sha256: String,
-    installed_tree_sha256: String,
-    home_id: String,
-    project_id: String,
-    host_id: String,
-    capability_sha256: String,
-    binding_sha256: String,
-    executable_sha256: String,
     session_nonce: String,
 }
 
@@ -93,26 +89,10 @@ pub fn execute_runtime_probe(
     if executable_digest(&plan.program)? != plan.executable_sha256 {
         return Err(error(DistributionErrorId::ObjectChanged));
     }
-    let source = plan.binding.package().source();
     let mut command = Command::new(&plan.program);
     command
         .args(&plan.argv)
         .env_clear()
-        .env("HUL_CONTEXT_ID", source.context_id())
-        .env("HUL_CANDIDATE_ID", source.candidate_id())
-        .env("HUL_PLUGIN_ID", source.plugin_id())
-        .env("HUL_VERSION", source.version())
-        .env(
-            "HUL_PACKAGE_SHA256",
-            plan.binding.package().archive_sha256(),
-        )
-        .env("HUL_TREE_SHA256", plan.binding.package().tree_sha256())
-        .env("HUL_HOME_ID", plan.binding.home_id())
-        .env("HUL_PROJECT_ID", plan.binding.project_id())
-        .env("HUL_HOST_ID", plan.binding.host_id())
-        .env("HUL_CAPABILITY_SHA256", plan.binding.capability_sha256())
-        .env("HUL_BINDING_SHA256", plan.binding.binding_sha256())
-        .env("HUL_EXECUTABLE_SHA256", &plan.executable_sha256)
         .env("HUL_SESSION_NONCE", &plan.session_nonce)
         .stdin(Stdio::null())
         .stdout(Stdio::piped())
@@ -157,21 +137,7 @@ fn validate_envelope(
     row: &ProbeEnvelope,
     plan: &RuntimeProbePlan,
 ) -> Result<(), DistributionError> {
-    let source = plan.binding.package().source();
-    if row.schema != "harness-ultragoal.runtime-probe.v1"
-        || row.context_id != source.context_id()
-        || row.candidate_id != source.candidate_id()
-        || row.plugin_id != source.plugin_id()
-        || row.version != source.version()
-        || row.package_sha256 != plan.binding.package().archive_sha256()
-        || row.installed_tree_sha256 != plan.binding.package().tree_sha256()
-        || row.home_id != plan.binding.home_id()
-        || row.project_id != plan.binding.project_id()
-        || row.host_id != plan.binding.host_id()
-        || row.capability_sha256 != plan.binding.capability_sha256()
-        || row.binding_sha256 != plan.binding.binding_sha256()
-        || row.executable_sha256 != plan.executable_sha256
-        || row.session_nonce != plan.session_nonce
+    if row.schema != "harness-ultragoal.runtime-probe.v1" || row.session_nonce != plan.session_nonce
     {
         return Err(error(DistributionErrorId::ProvenanceMismatch));
     }

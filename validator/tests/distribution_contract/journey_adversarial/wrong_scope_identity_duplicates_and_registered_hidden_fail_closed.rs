@@ -12,7 +12,7 @@ fn wrong_scope_identity_duplicates_and_registered_hidden_fail_closed() {
     .unwrap();
     let binding =
         JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
-    let valid = registry_document(&binding, true, true).unwrap();
+    let valid = discovery_document(&binding, true).unwrap();
     let value: Value = serde_json::from_slice(&valid).unwrap();
     for (pointer, replacement) in [
         (
@@ -52,8 +52,12 @@ fn wrong_scope_identity_duplicates_and_registered_hidden_fail_closed() {
         let mut changed = value.clone();
         *changed.pointer_mut(pointer).unwrap() = replacement;
         assert!(
-            observe_discovery(
-                Some(&serde_json::to_vec(&changed).unwrap()),
+            observe_discovery_file(
+                &mut write_scoped(
+                    fixture.confined(),
+                    "host/discovery.json",
+                    &serde_json::to_vec(&changed).unwrap(),
+                ),
                 &binding,
                 &host,
             )
@@ -62,14 +66,20 @@ fn wrong_scope_identity_duplicates_and_registered_hidden_fail_closed() {
         );
     }
 
-    let hidden = registry_document(&binding, true, false).unwrap();
+    let hidden_registry = registry_document(&binding, true, false).unwrap();
     assert_eq!(
-        observe_app_registry(Some(&hidden), &binding, &host)
+        observe_app_registry(Some(&hidden_registry), &binding, &host)
             .unwrap()
             .verdict(),
         AppRegistryVerdict::Verified,
     );
-    let discovery = observe_discovery(Some(&hidden), &binding, &host).unwrap();
+    let hidden_discovery = discovery_document(&binding, false).unwrap();
+    let discovery = observe_discovery_file(
+        &mut write_scoped(fixture.confined(), "host/discovery.json", &hidden_discovery),
+        &binding,
+        &host,
+    )
+    .unwrap();
     assert_eq!(
         discovery.discovery_verdict(),
         DiscoveryVerdict::RegisteredHidden
@@ -81,8 +91,12 @@ fn wrong_scope_identity_duplicates_and_registered_hidden_fail_closed() {
     row["version"] = json!("0.0.10");
     duplicate["entries"].as_array_mut().unwrap().push(row);
     assert_eq!(
-        observe_discovery(
-            Some(&serde_json::to_vec(&duplicate).unwrap()),
+        observe_discovery_file(
+            &mut write_scoped(
+                fixture.confined(),
+                "host/discovery.json",
+                &serde_json::to_vec(&duplicate).unwrap(),
+            ),
             &binding,
             &host,
         )
@@ -121,7 +135,7 @@ fn unsupported_app_surfaces_cannot_be_promoted_by_supplied_bytes() {
         observe_discovery(Some(&registry), &binding, &host)
             .unwrap_err()
             .id(),
-        ErrorId::CapabilityMismatch,
+        ErrorId::ProvenanceMismatch,
     );
 }
 

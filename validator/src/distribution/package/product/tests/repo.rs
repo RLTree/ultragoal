@@ -23,9 +23,25 @@ impl OutputRoot {
     fn tree(&self) -> ScopedTree {
         ScopedTree::new(
             ConfinedRoot::open(&self.root).expect("confined output authority"),
-            "candidate/package",
+            "repository/packages/harness-ultragoal",
         )
         .expect("confined package tree")
+    }
+
+    fn journey(&self, artifact: &ProductionPackageArtifact) -> JourneyBinding {
+        let host = HostCapabilityDeclaration::isolated(
+            &self.root,
+            &self.root,
+            "macos-repository-output-v1",
+            None,
+        )
+        .expect("host identity");
+        JourneyBinding::new(
+            artifact.snapshot().identity().clone(),
+            &host,
+            "local-harness-plugins",
+        )
+        .expect("journey binding")
     }
 }
 
@@ -146,48 +162,4 @@ fn catalog(context: &LiveContext) -> AuthorityCatalog {
         Vec::new(),
     )
     .expect("canonical test catalog")
-}
-
-#[derive(Default)]
-struct MemoryOutput {
-    rows: Option<Vec<TreeObject>>,
-    reads: usize,
-    transitions: usize,
-    before_first_transition: Option<Box<dyn FnOnce()>>,
-    corrupt_on_read: Option<usize>,
-}
-
-impl MaterializeEffects for MemoryOutput {
-    fn read_tree(&mut self, _: usize, _: usize) -> Result<Option<Vec<TreeObject>>, ()> {
-        self.reads += 1;
-        let mut rows = self.rows.clone();
-        if self.corrupt_on_read == Some(self.reads) {
-            if let Some(row) = rows.as_mut().and_then(|rows| rows.first_mut()) {
-                *row = TreeObject::regular(row.path().to_owned(), 0o644, b"substitute".to_vec());
-            }
-        }
-        Ok(rows)
-    }
-
-    fn compare_exchange_tree(
-        &mut self,
-        expected_sha256: Option<&str>,
-        replacement: Option<&[TreeObject]>,
-    ) -> Result<bool, ()> {
-        self.transitions += 1;
-        if let Some(hook) = self.before_first_transition.take() {
-            hook();
-        }
-        let current = self
-            .rows
-            .as_deref()
-            .map(tree_sha256)
-            .transpose()
-            .map_err(|_| ())?;
-        if current.as_deref() != expected_sha256 {
-            return Ok(false);
-        }
-        self.rows = replacement.map(<[TreeObject]>::to_vec);
-        Ok(true)
-    }
 }

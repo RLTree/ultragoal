@@ -1,5 +1,6 @@
 const OUTPUT_ENTRY_LIMIT: usize = 2;
 const OUTPUT_BYTE_LIMIT: usize = 65 * 1024 * 1024;
+const OUTPUT_PREFIX: &str = "repository/packages";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 /// Complete mutation authority for one verified package artifact pair.
@@ -66,6 +67,9 @@ impl PackageArtifactBinding {
 pub struct PackageArtifactTransaction {
     output_tree_sha256: String,
     package: crate::distribution::model::PackageIdentity,
+    journey_binding_sha256: String,
+    output_root_id: String,
+    output_relative_path: String,
     previous: Option<Vec<TreeObject>>,
 }
 
@@ -77,17 +81,31 @@ impl PackageArtifactTransaction {
     pub fn package_identity(&self) -> &crate::distribution::model::PackageIdentity {
         &self.package
     }
+
+    pub fn journey_binding_sha256(&self) -> &str {
+        &self.journey_binding_sha256
+    }
+
+    pub fn output_root_id(&self) -> &str {
+        &self.output_root_id
+    }
+
+    pub fn output_relative_path(&self) -> &str {
+        &self.output_relative_path
+    }
 }
 
 pub fn publish_package_artifact(
     snapshot: &PackageSnapshot,
     binding: &PackageArtifactBinding,
+    journey: &crate::distribution::host_capability::JourneyBinding,
     expected: &ExpectedTree,
-    effects: &mut impl MaterializeEffects,
+    output: &mut crate::distribution::filesystem::ScopedTree,
 ) -> Result<PackageArtifactTransaction, DistributionError> {
     verify_binding(snapshot, binding)?;
+    verify_output(snapshot, journey, output)?;
     let replacement = expected_pair(snapshot)?;
-    let previous = read(effects)?;
+    let previous = read(output)?;
     let previous_sha256 = previous.as_deref().map(tree_sha256).transpose()?;
     if previous
         .as_deref()
@@ -97,18 +115,18 @@ pub fn publish_package_artifact(
     {
         return Err(error(DistributionErrorId::InstallConflict));
     }
-    match effects.compare_exchange_tree(previous_sha256.as_deref(), Some(&replacement)) {
+    match output.compare_exchange_tree(previous_sha256.as_deref(), Some(&replacement)) {
         Ok(true) => {}
         Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
         Err(()) => return Err(error(DistributionErrorId::EffectFailed)),
     }
-    let result = read(effects).and_then(|observed| {
+    let result = read(output).and_then(|observed| {
         reconcile_package_artifact(snapshot, binding, observed.as_deref())?;
         Ok(())
     });
     if let Err(failure) = result {
         restore(
-            effects,
+            output,
             tree_sha256(&replacement)?.as_str(),
             previous.as_deref(),
         )?;
@@ -117,6 +135,9 @@ pub fn publish_package_artifact(
     Ok(PackageArtifactTransaction {
         output_tree_sha256: tree_sha256(&replacement)?,
         package: snapshot.identity().clone(),
+        journey_binding_sha256: journey.binding_sha256().into(),
+        output_root_id: output.root_id().into(),
+        output_relative_path: output.relative_path().into(),
         previous,
     })
 }
@@ -170,6 +191,27 @@ fn verify_binding(
         return Err(error(DistributionErrorId::ProvenanceMismatch));
     }
     Ok(())
+}
+
+fn verify_output(
+    snapshot: &PackageSnapshot,
+    journey: &crate::distribution::host_capability::JourneyBinding,
+    output: &crate::distribution::filesystem::ScopedTree,
+) -> Result<(), DistributionError> {
+    if snapshot.identity() != journey.package()
+        || output.root_id() != journey.home_id()
+        || output.relative_path() != package_output_path(snapshot)
+    {
+        return Err(error(DistributionErrorId::ProvenanceMismatch));
+    }
+    Ok(())
+}
+
+fn package_output_path(snapshot: &PackageSnapshot) -> String {
+    format!(
+        "{OUTPUT_PREFIX}/{}",
+        snapshot.identity().source().plugin_id()
+    )
 }
 
 fn verify_snapshot(snapshot: &PackageSnapshot) -> Result<(), DistributionError> {
