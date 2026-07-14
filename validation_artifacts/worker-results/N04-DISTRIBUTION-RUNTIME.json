@@ -1,26 +1,28 @@
 {
   "worker": "/root",
   "lease_id": "N04-DISTRIBUTION-RUNTIME",
-  "context_id": "sha256:69565e64015e81654fa0a268adcda09f8da99d2f5bcabfd29ddf99103a83903c",
+  "context_id": "sha256:5d12e2029e4ad9801975fb8fe1425d93f2e1e0719bacbed8a5563732f3aedbad",
   "candidate_identity": {
     "repository": "repo://harness-ultragoal-plugin-proposal",
     "branch": "codex/n04-distribution-runtime",
-    "base_commit": "20a11eb981c5db2d2136a555632be9c4e5ab7752",
-    "implementation_commit": "78c7fa9ec3430f08e75b275d0c6540676beb7237",
-    "implementation_tree": "fcf86683b54c7d4b59951b39b8b4630307f67cd4",
-    "context_id": "sha256:69565e64015e81654fa0a268adcda09f8da99d2f5bcabfd29ddf99103a83903c",
-    "candidate_id": "sha256:69565e64015e81654fa0a268adcda09f8da99d2f5bcabfd29ddf99103a83903c",
+    "base_commit": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
+    "implementation_commit": "443de84a49cbc1f474dee7a2a61eaf738f6e1675",
+    "implementation_tree": "277c854b0754c1d3a0c15fc7152f20389848a05f",
+    "context_id": "sha256:5d12e2029e4ad9801975fb8fe1425d93f2e1e0719bacbed8a5563732f3aedbad",
+    "candidate_id": "sha256:5d12e2029e4ad9801975fb8fe1425d93f2e1e0719bacbed8a5563732f3aedbad",
     "artifact_set_sha256": "sha256:7cb20ad106cc139c6889f5d18d9de120523aefbd4192ddf02d1c5580421a950d"
   },
   "base_state": {
-    "status": "exact-base-clean-before-worker",
+    "status": "parent-refreshed-accepted-base",
     "branch": "codex/n04-distribution-runtime",
-    "head": "20a11eb981c5db2d2136a555632be9c4e5ab7752",
-    "accepted_dependency": "deterministic-supported-source-package-0.0.12"
+    "head": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
+    "accepted_dependency": "accepted-integration-checkpoint-5cc3be5f8"
   },
   "final_state": {
     "status": "worker_blocked",
-    "implementation_commit": "78c7fa9ec3430f08e75b275d0c6540676beb7237",
+    "implementation_commit": "443de84a49cbc1f474dee7a2a61eaf738f6e1675",
+    "refreshed_candidate_head": "69900991b8ca80f6e8161cf8ee44310457e807e0",
+    "refreshed_candidate_tree": "70d7372a5658d9873f4d7dae81cfd55d1b661825",
     "source_correction": "confined-registry-authority-and-one-journey-identity-chain",
     "root_adoption": false,
     "live_host_proof": false
@@ -86,6 +88,10 @@
   ],
   "changes": [
     {
+      "area": "rebased-history",
+      "result": "Parent refreshed onto 5cc3be5f860de0071837f478bbe3a9de0d6c0e47 with commits b889f9662b99137749087ce3d891ae51668fca87, ba19502c2e5c04ec0b1408a60625f93da284ad9b, b95c7f46d2389377136473460d30531904fbdb48, 7a6170d58d5f6acb7703e13481583e0c44dfecff, 443de84a49cbc1f474dee7a2a61eaf738f6e1675, and 69900991b8ca80f6e8161cf8ee44310457e807e0. Every stable patch ID matches its pre-refresh commit, and the accepted-base delta has no path overlap with N04-owned changes."
+    },
+    {
       "area": "identity-chain",
       "result": "The canonical typed chain requires repository package, install, cache, marketplace, app registry, discovery, and runtime rows."
     },
@@ -112,6 +118,11 @@
   ],
   "commands_and_tests": [
     {
+      "command": "verify base/head/tree; compare six old/rebased stable patch IDs; intersect accepted-base and N04 changed paths",
+      "status": "pass",
+      "result": "Base 5cc3be5f860de0071837f478bbe3a9de0d6c0e47, refreshed head 69900991b8ca80f6e8161cf8ee44310457e807e0, and tree 70d7372a5658d9873f4d7dae81cfd55d1b661825 matched the parent handoff. All six patch IDs are unchanged and accepted-base changes overlap zero N04-owned paths."
+    },
+    {
       "command": "source .codex-worktree/env.sh; python3 scripts/check-python-source-laws .",
       "status": "pass",
       "result": "27 typed Python sources passed."
@@ -129,7 +140,7 @@
     {
       "command": "source .codex-worktree/env.sh; cargo check -p ultragoal --lib --offline --jobs 16",
       "status": "blocked",
-      "result": "The exact base emits 657 denied warnings across root-owned or shared modules; no lint allowance or warning suppression was used."
+      "result": "The refreshed accepted base emits 657 denied root/shared errors; no lint allowance or warning suppression was used."
     },
     {
       "command": "source .codex-worktree/env.sh; cargo check -p ultragoal --lib --offline --jobs 16 --message-format short 2>&1 | rg changed-distribution-paths",
@@ -137,9 +148,24 @@
       "result": "No type error or denied warning was reported on the changed filesystem, registry-observation, identity, or model paths. The unfiltered checkpoint still fails with 657 pre-existing denied errors; this is not a passing compile claim."
     },
     {
-      "command": "source .codex-worktree/env.sh; cargo test --manifest-path .codex-worktree/scratch/n04-package-contract/Cargo.toml --offline --jobs 16",
+      "command": "source .codex-worktree/env.sh; cargo test -p ultragoal --test distribution_contract --offline --jobs 16 -- --test-threads 16",
+      "status": "blocked",
+      "result": "The complete focused distribution target, which contains positive, negative, race, mutation, security, false-pass, interruption/recovery, and repeat-use cases, stops in the library prerequisite on the same 657 denied root/shared errors before any case executes."
+    },
+    {
+      "command": "source .codex-worktree/env.sh; cargo test -p ultragoal --test supported_package_identity_contract --offline --jobs 16 -- --test-threads 16",
+      "status": "blocked",
+      "result": "The supported identity target stops in the library prerequisite on the same 657 denied root/shared errors before confined-registry and identity false-pass controls execute."
+    },
+    {
+      "command": "source .codex-worktree/env.sh; cargo test --manifest-path .codex-worktree/scratch/n04-package-contract/Cargo.toml --offline --jobs 16 -- --test-threads 16",
       "status": "blocked",
       "result": "Compilation stops on missing validator/src/distribution/host_effect/executor/target.rs and missing lifecycle/tests/target/race_substitution.rs before any positive, negative, race, mutation, security, interruption/recovery, repeat-use, or doctest case executes."
+    },
+    {
+      "command": "source .codex-worktree/env.sh; cargo fmt --all -- --check",
+      "status": "blocked",
+      "result": "Cargo fmt cannot resolve the missing host-effect executor target module; exact changed-path rustfmt succeeded separately."
     }
   ],
   "artifacts": [
@@ -175,15 +201,15 @@
   "findings": [
     {
       "severity": "blocker",
-      "finding": "The exact base has a dangling host-effect executor target module declaration, blocking focused compilation before tests execute."
+      "finding": "The refreshed accepted base has a dangling host-effect executor target module declaration, blocking the isolated focused harness before tests execute."
     },
     {
       "severity": "blocker",
-      "finding": "The exact base retains a dangling lifecycle race-substitution include, blocking cfg(test) distribution/package contracts."
+      "finding": "The refreshed accepted base retains a dangling lifecycle race-substitution include, blocking cfg(test) distribution/package contracts."
     },
     {
       "severity": "blocker",
-      "finding": "The exact base has 657 denied warnings, so no warning-free library checkpoint or doctest execution is available."
+      "finding": "The refreshed accepted base has 657 denied root/shared errors, so no warning-free library checkpoint or doctest execution is available."
     },
     {
       "severity": "root-wiring-required",
@@ -192,10 +218,6 @@
     {
       "severity": "live-proof-required",
       "finding": "No root-authorized macOS route or exact package/install/cache/marketplace/app-registry/discovery/runtime operation was exercised."
-    },
-    {
-      "severity": "root-coordination-required",
-      "finding": "Shared root authority advanced to 5cc3be5f860de0071837f478bbe3a9de0d6c0e47 after this lane began; the parent owns refresh onto that checkpoint, conflict reconciliation return, evidence rerun, and WorkerResult identity refresh. This worker did not rebase."
     }
   ],
   "unresolved_dependencies": [
@@ -203,8 +225,7 @@
     "exact-base-lifecycle-race-substitution-module",
     "exact-base-warning-free-root-checkpoint",
     "root-owned-seven-surface-public-route",
-    "live-macos-same-surface-proof",
-    "parent-owned-refresh-to-5cc3be5f860de0071837f478bbe3a9de0d6c0e47"
+    "live-macos-same-surface-proof"
   ],
   "requested_root_changes": [
     {
@@ -224,16 +245,16 @@
     },
     {
       "path": "validator/src/cli/successor_public/mod.rs",
-      "expected_sha256": "sha256:448c95fb9d0361cdc172c9fc5d41bbea001f16ec975d1a3f51e6dbcf0d6084eb",
+      "expected_sha256": "sha256:c39a205a5677653b600745c4b94612d32463f521c5383836367cdff5cdcd1111",
       "request": "Wire the accepted package publication transaction and separately observed host identities through the root-authorized macOS distribution route without proof substitution."
     }
   ],
   "limitations": [
-    "No focused Rust test, doctest, race, mutation, security, interruption/recovery, or repeat-use case executed because compilation stops at exact-base missing modules; test source is not execution proof.",
+    "No focused Rust test, doctest, race, mutation, security, false-pass, interruption/recovery, or repeat-use case executed because refreshed-candidate compilation stops at the named root/shared blockers; test source is not execution proof.",
     "No production external macOS host-effect route was compiled or exercised.",
     "No live repository package, install, cache, marketplace, app registry, discovery, or runtime surface was mutated or observed.",
     "No N04 acceptance, live behavior, Product Fitness, readiness, release, completion, or parent acceptance claim is supported.",
-    "This identity is intentionally pre-refresh: the parent must rebase onto 5cc3be5f860de0071837f478bbe3a9de0d6c0e47, return conflicts for reconciliation, and require a complete evidence and identity rerun.",
+    "The parent refresh onto 5cc3be5f860de0071837f478bbe3a9de0d6c0e47 is incorporated and verified; this evidence record commit is the only post-refresh lane commit.",
     "Documentation and generated authority were not edited; root-owned wiring and adoption documents remain pending the named root requests.",
     "Security impact is narrowing: caller construction, deserialization, arbitrary-byte registry promotion, wrong-root/path registry promotion, mixed-journey chains, and public unbound verification are closed; no dependency, secret, network path, or external write was added.",
     "Performance impact is two stable confined-file reads already required by observation plus fixed-size identity and digest comparisons; no new traversal, subprocess, network request, or persistent store was added."
