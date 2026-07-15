@@ -1,8 +1,11 @@
 use super::*;
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 #[derive(Default)]
 pub(super) struct TerminalDurable {
     pub(super) settlements: Mutex<Vec<DurableSettlement>>,
+    pub(super) cleanup_failure: Mutex<Option<&'static str>>,
+    pub(super) cleanup_calls: AtomicUsize,
 }
 
 impl DurableAttemptAuthority for TerminalDurable {
@@ -15,7 +18,15 @@ impl DurableAttemptAuthority for TerminalDurable {
     }
 
     fn cleanup_staged(&self, _staged: &StagedProgram) -> Result<(), RoutineError> {
-        Ok(())
+        self.cleanup_calls.fetch_add(1, Ordering::SeqCst);
+        match *self
+            .cleanup_failure
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+        {
+            Some(cause) => Err(mediator_error(cause)),
+            None => Ok(()),
+        }
     }
 
     fn prepare_spawn(&self) -> Result<(), RoutineError> {

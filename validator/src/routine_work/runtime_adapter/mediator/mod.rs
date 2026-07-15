@@ -56,6 +56,9 @@ mod reservation_lifecycle;
 #[cfg(test)]
 #[path = "reservation_lifecycle_tests.rs"]
 mod reservation_lifecycle_tests;
+#[cfg(test)]
+#[path = "reservation_unwind_tests.rs"]
+mod reservation_unwind_tests;
 #[path = "reuse_input_index.rs"]
 mod reuse_input_index;
 #[path = "rust_source_observation.rs"]

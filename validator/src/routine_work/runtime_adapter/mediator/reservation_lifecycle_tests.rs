@@ -137,7 +137,11 @@ fn unwind_uses_the_same_explicit_post_start_transition() {
             panic!("reservation-lifecycle-unwind-injected");
         });
     }));
-    assert!(unwound.is_err());
+    let payload = unwound.unwrap_err();
+    assert_eq!(
+        payload.downcast_ref::<&'static str>().copied(),
+        Some("reservation-lifecycle-unwind-injected")
+    );
 
     let state = registry()
         .lock()

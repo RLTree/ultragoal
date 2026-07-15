@@ -40,12 +40,15 @@ pub(crate) fn run_reserved<T>(
             cleanup.and(Err(error))
         }
         Err(payload) => {
-            let cleanup = attempt.cleanup_staged();
-            attempt.transition_failure();
-            match cleanup {
-                Ok(()) => resume_unwind(payload),
-                Err(error) => resume_unwind(Box::new(error)),
+            match attempt.cleanup_staged() {
+                Ok(()) => {}
+                Err(_) => {
+                    // Failed launch cleanup leaves its staged entry and durable
+                    // reservation pending; it must not replace the initiating panic.
+                }
             }
+            attempt.transition_failure();
+            resume_unwind(payload)
         }
     }
 }
