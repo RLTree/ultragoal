@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | `9bf3dd88c` / tree `7d58c352` | Clean source freeze reports token-bound durable authentication across production reuse and recovery while process-local authentication is confined to non-durable mediation; independent source acceptance, receipt, and integration remain withheld | Falsify durable/process authority separation, then complete the cumulative runner, public-route, replay, hidden-write, and source-law review |
+| N06 routine execution | rework | `9bf3dd88c` / tree `7d58c352` | Exact-tree review found workspace output directories are created before the durable reservation, leaving an interruption window with unowned mutations; receipt and integration remain withheld | Place every exact output-provisioning effect under the canonical durable reservation and prove restart cleanup or safe adoption with foreign content failing closed |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,10 +46,10 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `20`. The next action is one
-required independent review of exact clean candidate `9bf3dd88c` / tree
-`7d58c352`; no receipt or dependent claim may be promoted before source
-acceptance on those bytes.
+current exact-candidate rejection count for N06 is `21`. The next action is the
+shared reservation-before-effect invariant: the canonical durable journal must
+own each exact output scope and identity before any workspace mutation, with
+explicit restart reconciliation and no destructive `Drop` cleanup.
 Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
