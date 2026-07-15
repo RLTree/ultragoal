@@ -202,19 +202,20 @@ each branch, worktree, and thread identity; unknown host fields stay unknown.
   `019f6487-8b8d-7d51-810b-1465f481eef7`,
   branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
   owns routine kernel/public adapter behavior and matching tests/fixtures;
-  exact clean source `d4ac1f406` / tree `2c7dc847` is in decisive cumulative
-  REWORK because the reservation boundary drops exact cleanup failures after
-  transition; its stale WorkerResult, load-sensitive public result, and v1→v2
+  exact clean source `3e7e62694` / tree `d904fc6d` is under one cumulative
+  exact-tree review after moving exact cleanup evidence ahead of reservation
+  release; its stale WorkerResult, load-sensitive public result, and v1→v2
   ledger migration remain withheld.
 - Orchestration authority: thread `019f5fa2-923f-7770-9a89-83ed713ac1f3`,
   branch `codex/n10-orchestration-authority`, worktree `.codex/worktrees/cb63`;
   owns orchestration issuer/replay/recovery behavior and matching tests/fixtures;
-  exact clean source `1f587d3b2` / tree `402e3fd5` is under fresh parent review.
+  exact clean source `7f92b7ed3` / tree `53bd7717` remains a speculative
+  source-local freeze pending integrated N06 and N09 interfaces.
 - Evaluation reliability: thread `019f5fa2-cace-7361-a3e7-6102a3dc1224`,
   branch `codex/n11-evaluation-reliability`, worktree `.codex/worktrees/bd86`;
   owns evaluation, fixture-scheduler, capture bridge, and matching tests/fixtures;
-  source protocol is accepted, but its receipt inventory is under decisive
-  REWORK with repair active.
+  exact clean source `9c2911d6d` / tree `6176c259` remains frozen at its
+  dependency-independent source ceiling pending current N06, N07, and N08.
 
 Sibling active ExecPlans named `successor-worktree-{distribution,routine,
 orchestration,evaluation}.md` retain the exact lane contracts.
