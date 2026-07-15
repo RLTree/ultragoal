@@ -62,7 +62,7 @@ pub(crate) fn fixture_catalog_declares_the_exact_adversarial_matrix_without_clai
 #[cfg(unix)]
 #[test]
 pub(crate) fn valid_catalog_binds_exact_primary_invocations_deterministically_and_without_writes() {
-    let root = TestRoot::new("valid-primary", VALID_CATALOG);
+    let mut root = TestRoot::new("valid-primary", VALID_CATALOG);
     let before = tree(root.path());
     let first_catalog = load_full(&root, CANDIDATE_ID);
     assert_eq!(first_catalog.definition_count(), 2);
@@ -103,6 +103,9 @@ pub(crate) fn valid_catalog_binds_exact_primary_invocations_deterministically_an
                 .all(|scope| scope.relative_path().starts_with("target/"))
     }));
     assert_eq!(tree(root.path()), before);
+    drop(second_catalog);
+    drop(first_catalog);
+    root.teardown_after_assertions();
 }
 
 #[cfg(unix)]
@@ -111,17 +114,18 @@ pub(crate) fn repository_catalog_cannot_choose_a_fallback() {
     let mut catalog: serde_json::Value = serde_json::from_slice(VALID_CATALOG).unwrap();
     catalog["routines"][0]["fallback"] = serde_json::json!({"tool": "false"});
     let bytes = serde_json::to_vec_pretty(&catalog).unwrap();
-    let root = TestRoot::new("fallback-field", &bytes);
+    let mut root = TestRoot::new("fallback-field", &bytes);
     assert_eq!(
         load_raw(&root, &bytes, full_adoption(&bytes, CANDIDATE_ID)),
         "catalog-source-invalid-json"
     );
+    root.teardown_after_assertions();
 }
 
 #[cfg(unix)]
 #[test]
 pub(crate) fn exact_same_spelling_same_authority_reuse_selects_and_binds_both_definitions() {
-    let root = TestRoot::new("exact-runner-reuse", VALID_CATALOG);
+    let mut root = TestRoot::new("exact-runner-reuse", VALID_CATALOG);
     let before = tree(root.path());
     let catalog = load_full(&root, CANDIDATE_ID);
     let bound = catalog
@@ -136,4 +140,6 @@ pub(crate) fn exact_same_spelling_same_authority_reuse_selects_and_binds_both_de
             .all(|invocation| invocation.selected_tool() == "ultragoal")
     );
     assert_eq!(tree(root.path()), before);
+    drop(catalog);
+    root.teardown_after_assertions();
 }

@@ -4,7 +4,7 @@ use super::*;
 #[test]
 pub(crate) fn source_path_escape_symlink_hardlink_special_and_non_utf8_are_refused_without_blocking()
  {
-    let root = TestRoot::new("source-path-security", VALID_CATALOG);
+    let mut root = TestRoot::new("source-path-security", VALID_CATALOG);
     assert_eq!(
         load_production_catalog(
             root.path(),
@@ -15,7 +15,6 @@ pub(crate) fn source_path_escape_symlink_hardlink_special_and_non_utf8_are_refus
         .code(),
         "catalog-repository-relative-path-required"
     );
-
     let original = root.path().join("config/original.json");
     fs::rename(root.path().join("config/routines.json"), &original).unwrap();
     std::os::unix::fs::symlink("original.json", root.path().join("config/routines.json")).unwrap();
@@ -68,12 +67,13 @@ pub(crate) fn source_path_escape_symlink_hardlink_special_and_non_utf8_are_refus
         .code(),
         "catalog-source-path-not-utf8"
     );
+    root.teardown_after_assertions();
 }
 
 #[cfg(unix)]
 #[test]
 pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
-    let root = TestRoot::new("input-symlink", VALID_CATALOG);
+    let mut root = TestRoot::new("input-symlink", VALID_CATALOG);
     let catalog = load_full(&root, CANDIDATE_ID);
     let stale = selected(&root, false);
     fs::rename(
@@ -99,8 +99,10 @@ pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
         catalog.bind_selected(request).unwrap_err().code(),
         "catalog-file-object-unsafe"
     );
+    drop(catalog);
+    root.teardown_after_assertions();
 
-    let root = TestRoot::new("input-hardlink", VALID_CATALOG);
+    let mut root = TestRoot::new("input-hardlink", VALID_CATALOG);
     let catalog = load_full(&root, CANDIDATE_ID);
     let stale = selected(&root, false);
     fs::hard_link(
@@ -125,8 +127,10 @@ pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
         catalog.bind_selected(request).unwrap_err().code(),
         "catalog-file-object-unsafe"
     );
+    drop(catalog);
+    root.teardown_after_assertions();
 
-    let root = TestRoot::new("input-special", VALID_CATALOG);
+    let mut root = TestRoot::new("input-special", VALID_CATALOG);
     let catalog = load_full(&root, CANDIDATE_ID);
     let stale = selected(&root, false);
     fs::remove_file(root.path().join("tests/input.txt")).unwrap();
@@ -149,8 +153,10 @@ pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
         catalog.bind_selected(request).unwrap_err().code(),
         "catalog-file-object-unsafe"
     );
+    drop(catalog);
+    root.teardown_after_assertions();
 
-    let root = TestRoot::new("output-symlink", VALID_CATALOG);
+    let mut root = TestRoot::new("output-symlink", VALID_CATALOG);
     fs::create_dir_all(root.path().join("target/alias-destination")).unwrap();
     fs::remove_dir(root.path().join("target/routine-verify")).unwrap();
     std::os::unix::fs::symlink(
@@ -164,6 +170,8 @@ pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
         catalog.bind_selected(request).unwrap_err().code(),
         "catalog-output-scope-unsafe"
     );
+    drop(catalog);
+    root.teardown_after_assertions();
 }
 
 #[test]
@@ -172,21 +180,23 @@ pub(crate) fn catalog_input_and_output_bounds_are_enforced() {
         .map(|index| format!("src/input-{index}.txt"))
         .collect::<Vec<_>>();
     let bytes = one_node_catalog(&reads, &["target/routine-syntax".to_owned()]);
-    let root = TestRoot::new("read-bound", &bytes);
+    let mut root = TestRoot::new("read-bound", &bytes);
     assert_eq!(
         load_raw(&root, &bytes, one_node_adoption(&bytes)),
         "catalog-read-source-limit-exceeded"
     );
+    root.teardown_after_assertions();
 
     let outputs = (0..129)
         .map(|index| format!("target/routine-{index}"))
         .collect::<Vec<_>>();
     let bytes = one_node_catalog(&["src/input.txt".to_owned()], &outputs);
-    let root = TestRoot::new("output-bound", &bytes);
+    let mut root = TestRoot::new("output-bound", &bytes);
     assert_eq!(
         load_raw(&root, &bytes, one_node_adoption(&bytes)),
         "catalog-output-scope-limit-exceeded"
     );
+    root.teardown_after_assertions();
 
     let too_large =
         TransitiveInputExpectation::new("src/input.txt", sha(b"x"), 64 * 1024 * 1024 + 1)
@@ -194,7 +204,7 @@ pub(crate) fn catalog_input_and_output_bounds_are_enforced() {
     assert_eq!(too_large.code(), "catalog-input-length-invalid");
 
     let oversized_catalog = vec![b'#'; 1024 * 1024 + 1];
-    let root = TestRoot::new("catalog-bound", &oversized_catalog);
+    let mut root = TestRoot::new("catalog-bound", &oversized_catalog);
     assert_eq!(
         CatalogAdoption::new(
             sha(&oversized_catalog),
@@ -207,5 +217,5 @@ pub(crate) fn catalog_input_and_output_bounds_are_enforced() {
         .code(),
         "catalog-source-length-invalid"
     );
-    drop(root);
+    root.teardown_after_assertions();
 }

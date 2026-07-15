@@ -3,7 +3,7 @@ use super::*;
 #[cfg(unix)]
 #[test]
 pub(crate) fn omitted_or_injected_transitive_inputs_and_definition_only_targets_cannot_pass() {
-    let root = TestRoot::new("input-set-inexact", VALID_CATALOG);
+    let mut root = TestRoot::new("input-set-inexact", VALID_CATALOG);
     let catalog = load_full(&root, CANDIDATE_ID);
     let mut rows = selected(&root, false);
     rows[1] = SelectedRoutineNode::new(
@@ -61,12 +61,14 @@ pub(crate) fn omitted_or_injected_transitive_inputs_and_definition_only_targets_
         extra_runner.code(),
         "catalog-runner-observation-set-inexact"
     );
+    drop(catalog);
+    root.teardown_after_assertions();
 }
 
 #[cfg(unix)]
 #[test]
 pub(crate) fn parse_query_and_refusal_paths_are_recursively_zero_write() {
-    let root = TestRoot::new("zero-write", VALID_CATALOG);
+    let mut root = TestRoot::new("zero-write", VALID_CATALOG);
     commit_fixture(root.path());
     let before = tree(root.path());
     let before_status = status(root.path());
@@ -98,4 +100,6 @@ pub(crate) fn parse_query_and_refusal_paths_are_recursively_zero_write() {
     assert!(catalog.bind_selected(request).is_err());
     assert_eq!(tree(root.path()), before);
     assert_eq!(status(root.path()), before_status);
+    drop(catalog);
+    root.teardown_after_assertions();
 }

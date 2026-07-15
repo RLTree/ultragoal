@@ -22,10 +22,14 @@ pub(crate) struct TestRoot {
 impl TestRoot {
     pub(crate) fn new(label: &str, catalog_bytes: &[u8]) -> Self {
         let sequence = NEXT.fetch_add(1, Ordering::Relaxed);
-        let path = PathBuf::from(format!(
-            "/private/tmp/hul-routine-production-catalog-073-r3-scratch/test-fixtures/{label}-{}-{sequence}",
-            std::process::id()
-        ));
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        let workspace = manifest
+            .parent()
+            .expect("catalog fixture manifest has no workspace parent");
+        let parent = workspace.join("target/routine-production-catalog-fixtures");
+        fs::create_dir_all(&parent).expect("catalog fixture parent creation failed");
+        let path = parent.join(format!("{label}-{}-{sequence}", std::process::id()));
+        fs::create_dir(&path).expect("catalog fixture child claim failed");
         fs::create_dir_all(path.join("config")).unwrap();
         fs::create_dir_all(path.join("src")).unwrap();
         fs::create_dir_all(path.join("tests")).unwrap();
@@ -44,11 +48,19 @@ impl TestRoot {
     pub(crate) fn write_catalog(&self, bytes: &[u8]) {
         fs::write(self.path.join("config/routines.json"), bytes).unwrap();
     }
-}
 
-impl Drop for TestRoot {
-    fn drop(&mut self) {
-        let _ = fs::remove_dir_all(&self.path);
+    pub(crate) fn teardown_after_assertions(&mut self) {
+        assert!(
+            self.path.is_dir(),
+            "catalog fixture scope disappeared before teardown: {}",
+            self.path.display()
+        );
+        fs::remove_dir_all(&self.path).expect("catalog fixture teardown failed");
+        assert!(
+            !self.path.exists(),
+            "catalog fixture teardown retained scope: {}",
+            self.path.display()
+        );
     }
 }
 
