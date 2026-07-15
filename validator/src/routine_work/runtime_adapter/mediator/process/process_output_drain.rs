@@ -1,5 +1,11 @@
 use super::*;
 
+pub(crate) struct Drained {
+    pub(crate) retained: Vec<u8>,
+    pub(crate) sha256: String,
+    pub(crate) closed: bool,
+}
+
 pub(crate) fn drain(
     mut reader: impl Read,
     limit: u64,

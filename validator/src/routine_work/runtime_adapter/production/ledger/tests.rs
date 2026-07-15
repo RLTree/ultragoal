@@ -5,6 +5,9 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Barrier};
 
+#[path = "reexecute_tests.rs"]
+mod reexecute_tests;
+
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(1);
 
 struct TestRoot {

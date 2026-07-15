@@ -2,8 +2,8 @@ use super::retired_behavior_routes::{
     CHILD_LIFECYCLE_BLOCKER, CHILD_SUCCESS_BLOCKER, Mapping, blocked, executed, routed,
 };
 
-const BROKER_GATE: &[&str] =
-    &["broker_binding_controls::root_broker_gate_refuses_before_spawn_and_writes"];
+const LOCAL_ISSUER_GATE: &[&str] =
+    &["authority_ledger_controls::missing_publisher_refuses_before_authority_initialization"];
 const ISSUER_VISIBILITY: &[&str] =
     &["issuer_api_visibility::sealed_issuer_and_grant_entrypoints_are_not_externally_callable"];
 const CAPACITY: &[&str] =
@@ -43,7 +43,7 @@ pub(crate) const MAP: &[Mapping] = &[
     blocked(
         "routine_production_authority_cases/authority_redaction.rs::production_child_race_attempt",
         CHILD_LIFECYCLE_BLOCKER,
-        BROKER_GATE,
+        LOCAL_ISSUER_GATE,
     ),
     routed(
         "routine_production_authority_cases/authority_redaction.rs::two_processes_racing_the_same_protocol_have_exactly_one_winner",
@@ -56,7 +56,7 @@ pub(crate) const MAP: &[Mapping] = &[
     blocked(
         "routine_production_authority_cases/authority_scenario.rs::production_fresh_execution_replay_refusal_and_exact_reuse_are_durable",
         CHILD_SUCCESS_BLOCKER,
-        BROKER_GATE,
+        LOCAL_ISSUER_GATE,
     ),
     routed(
         "routine_production_authority_cases/authority_scenario.rs::malformed_reuse_refuses_before_any_authority_transition",
@@ -107,7 +107,7 @@ pub(crate) const MAP: &[Mapping] = &[
     blocked(
         "routine_production_authority_cases/terminal_failure_settlement.rs::failure_and_cancellation_settle_terminally_without_recovery",
         CHILD_LIFECYCLE_BLOCKER,
-        BROKER_GATE,
+        LOCAL_ISSUER_GATE,
     ),
     routed(
         "routine_production_authority_cases/terminal_failure_settlement.rs::stale_request_and_self_consistent_substitution_refuse_without_hidden_writes",

@@ -1,7 +1,7 @@
 use super::*;
+use crate::routine_work::PRODUCTION_SUPPORT_LIMIT;
 
 pub(crate) const RERUN: &str = "ultragoal --json check routine [--target <relative-repository>]";
-pub(crate) const SUPPORT_LIMIT: &str = "source-local routine planning, clean no-op, and fail-closed pre-broker behavior only; broker-backed effects, installed behavior, readiness, release, and completion remain unavailable";
 
 pub(crate) enum PublicFailure {
     InvalidInvocation,
@@ -107,7 +107,7 @@ pub(crate) fn mediation(
         fallback_tool_count,
         recovery_required: result.recovery_marker().is_some(),
         claim_effect: "none",
-        support_limit: SUPPORT_LIMIT,
+        support_limit: PRODUCTION_SUPPORT_LIMIT,
     };
     match serde_json::to_vec(&payload) {
         Ok(machine) => RuntimeOutcome::payload(

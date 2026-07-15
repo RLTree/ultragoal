@@ -1,4 +1,5 @@
 use super::*;
+use crate::routine_work::PRODUCTION_SUPPORT_LIMIT;
 
 pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
     let (class, id, cause, surface, repair, effect, ceiling) = match failure {
@@ -9,7 +10,7 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "routine public invocation",
             "reparse the exact command through the successor grammar",
             "none",
-            "no workspace or host-state effect is authorized or performed",
+            PRODUCTION_SUPPORT_LIMIT,
         ),
         PublicFailure::Manifest(ManifestFailure::MissingOrUnreadable) => (
             ExitClass::BlockedAuthority,
@@ -18,16 +19,25 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "routine source authority",
             "restore the exact bounded config/routine-public.json source and retry",
             "none",
-            "no routine effect is authorized or performed",
+            PRODUCTION_SUPPORT_LIMIT,
         ),
-        PublicFailure::Manifest(ManifestFailure::Invalid) | PublicFailure::Catalog(_) => (
+        PublicFailure::Manifest(ManifestFailure::Invalid) => (
             ExitClass::BlockedAuthority,
             DiagnosticId::AuthorityRequired,
             "the routine manifest or production catalog is malformed, substituted, or outside the fixed public policy",
             "routine source and command authority",
             "repair the exact adopted manifest and immutable production catalog without broadening runner authority",
             "none",
-            "no routine effect is authorized or performed",
+            PRODUCTION_SUPPORT_LIMIT,
+        ),
+        PublicFailure::Catalog(code) => (
+            ExitClass::BlockedAuthority,
+            DiagnosticId::AuthorityRequired,
+            code,
+            "routine source and command authority",
+            "repair the exact adopted manifest and immutable production catalog without broadening runner authority",
+            "none",
+            PRODUCTION_SUPPORT_LIMIT,
         ),
         PublicFailure::Manifest(ManifestFailure::ConcurrentMutation) => (
             ExitClass::ActionableFinding,
@@ -36,7 +46,7 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "routine source authority",
             "stabilize the target candidate and rerun from a fresh context",
             "none",
-            "no routine effect is authorized or performed",
+            PRODUCTION_SUPPORT_LIMIT,
         ),
         PublicFailure::Context => (
             ExitClass::ActionableFinding,
@@ -45,7 +55,7 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "routine target binding",
             "stabilize the exact Git worktree and adopted inputs, then retry",
             "none",
-            "no routine effect is authorized or performed",
+            PRODUCTION_SUPPORT_LIMIT,
         ),
         PublicFailure::Routine(error) => routine_failure(error),
         PublicFailure::Host(HostFailure::Unsupported) => (
@@ -55,7 +65,7 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "routine production host",
             "run the command on the supported Darwin runtime",
             "none",
-            "routine execution remains unavailable on this host",
+            PRODUCTION_SUPPORT_LIMIT,
         ),
         PublicFailure::Host(HostFailure::Unavailable) => (
             ExitClass::BlockedAuthority,
@@ -64,7 +74,7 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "routine production host authority",
             "install or repair the owner-only routine-public authority, adapter directory, and lock file",
             "none",
-            "no routine effect is authorized or performed",
+            PRODUCTION_SUPPORT_LIMIT,
         ),
         PublicFailure::Host(HostFailure::Invalid) => (
             ExitClass::BlockedAuthority,
@@ -73,7 +83,7 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "routine production host authority",
             "preserve the ledger, repair the exact owner-only state, and retry only after diagnosis",
             "none",
-            "no new routine effect is authorized",
+            PRODUCTION_SUPPORT_LIMIT,
         ),
         PublicFailure::Host(HostFailure::RandomUnavailable) => (
             ExitClass::BlockedAuthority,
@@ -82,7 +92,7 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "routine production host authority",
             "restore the host random source and recompute the exact routine request",
             "none",
-            "no routine effect is authorized or performed",
+            PRODUCTION_SUPPORT_LIMIT,
         ),
         PublicFailure::Host(HostFailure::ClockUnavailable) => (
             ExitClass::BlockedAuthority,
@@ -91,7 +101,7 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "routine production host authority",
             "restore the Darwin monotonic clock substrate before retrying",
             "none",
-            "no routine effect is authorized or performed",
+            PRODUCTION_SUPPORT_LIMIT,
         ),
         PublicFailure::Host(HostFailure::Persistence) | PublicFailure::PersistenceAfterEffect => (
             ExitClass::InternalFailure,
@@ -100,7 +110,7 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "routine production result persistence",
             "preserve the workspace and owner-only ledger, then diagnose before retrying",
             "workspace_write_may_have_occurred",
-            "routine success and all dependent claims remain withheld",
+            PRODUCTION_SUPPORT_LIMIT,
         ),
     };
     RuntimeOutcome::failure(
@@ -156,8 +166,8 @@ pub(crate) fn routine_failure(
         id,
         error.cause(),
         "routine production mediation",
-        "stabilize the exact target, runner, source, output, and durable authority bindings before retrying",
+        "stabilize the exact target, runner, source, output, and durable local-issuer bindings before retrying",
         effect,
-        "routine success and all dependent claims remain withheld",
+        PRODUCTION_SUPPORT_LIMIT,
     )
 }

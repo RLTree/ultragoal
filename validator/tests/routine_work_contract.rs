@@ -10,8 +10,6 @@ pub mod routine_work;
 
 #[path = "routine_work_contract/authority_ledger_controls.rs"]
 mod authority_ledger_controls;
-#[path = "routine_work_contract/broker_binding_controls.rs"]
-mod broker_binding_controls;
 #[path = "routine_work_contract/configured_path_alias.rs"]
 mod configured_path_alias;
 #[path = "routine_work_contract/contract.rs"]
@@ -36,6 +34,8 @@ mod issuer_rollback_races;
 mod issuer_scratch_resilience;
 #[path = "routine_work_contract/local_capture.rs"]
 mod local_capture;
+#[path = "routine_work_contract/local_issuer_binding_controls.rs"]
+mod local_issuer_binding_controls;
 #[path = "routine_work_contract/owned_compile_claim.rs"]
 mod owned_compile_claim;
 #[path = "routine_work_contract/owned_compile_directory.rs"]

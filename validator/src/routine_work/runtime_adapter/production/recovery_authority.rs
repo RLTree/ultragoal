@@ -4,10 +4,11 @@ use super::*;
 /// pending record. It deliberately cannot be serialized, cloned, or forged
 /// from a caller-controlled marker.
 #[must_use = "recovery authority must be consumed by one exact recovery attempt"]
-pub(crate) struct RoutineRecoveryAuthority {
-    pub(crate) binding: AuthorityBinding,
-    pub(crate) marker: String,
-    pub(crate) deadline_tick: u64,
+pub(super) struct RoutineRecoveryAuthority {
+    pub(super) binding: AuthorityBinding,
+    pub(super) grant_id: String,
+    pub(super) marker: String,
+    pub(super) deadline_tick: u64,
 }
 
 impl std::fmt::Debug for RoutineRecoveryAuthority {
@@ -15,6 +16,7 @@ impl std::fmt::Debug for RoutineRecoveryAuthority {
         formatter
             .debug_struct("RoutineRecoveryAuthority")
             .field("binding", &"[bound]")
+            .field("grant", &"[bound]")
             .field("marker", &"[redacted]")
             .field("deadline", &"[bounded]")
             .finish()
@@ -22,6 +24,7 @@ impl std::fmt::Debug for RoutineRecoveryAuthority {
 }
 
 /// The only production constructor for routine root grants.
-pub(crate) struct ProductionRoutineIssuer {
-    pub(crate) ledger: Arc<FileAuthorityLedger>,
+pub(super) struct ProductionRoutineIssuer {
+    pub(super) ledger: Arc<FileAuthorityLedger>,
+    pub(super) launch_root: PathBuf,
 }

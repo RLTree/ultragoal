@@ -2,7 +2,7 @@
 //!
 //! Routed names are unverified candidates, not proof. The sole
 //! `ExecutedEquivalent` row invokes its bound control in this target;
-//! broker-blocked rows name an unavailable post-authorization surface.
+//! local issuer-blocked rows name an unavailable post-authorization surface.
 
 #[derive(Clone, Copy)]
 pub(crate) enum Status {
@@ -11,9 +11,9 @@ pub(crate) enum Status {
         execute: fn(),
     },
     Routed(&'static [&'static str]),
-    BrokerBlocked {
+    ExternalBlocked {
         cause: &'static str,
-        pre_broker_controls: &'static [&'static str],
+        pre_authority_controls: &'static [&'static str],
     },
 }
 
@@ -22,8 +22,8 @@ pub(crate) struct Mapping {
     pub(crate) status: Status,
 }
 
-pub(crate) const CHILD_LIFECYCLE_BLOCKER: &str = "requires an opaque root-broker authorization before spawn; the fail-closed child route cannot reach post-spawn cancellation, timeout, setup, descendant, mapping, sandbox, or natural-exit observation";
-pub(crate) const CHILD_SUCCESS_BLOCKER: &str = "requires an opaque root-broker authorization and immutable installed ultragoal runtime before a legitimate behavior result or reuse artifact can exist";
+pub(crate) const CHILD_LIFECYCLE_BLOCKER: &str = "requires an opaque local-issuer authorization before spawn; the fail-closed child route cannot reach post-spawn cancellation, timeout, setup, descendant, mapping, sandbox, or natural-exit observation";
+pub(crate) const CHILD_SUCCESS_BLOCKER: &str = "requires an opaque local-issuer authorization and immutable installed ultragoal runtime before a legitimate behavior result or reuse artifact can exist";
 
 pub(crate) const fn routed(retired: &'static str, controls: &'static [&'static str]) -> Mapping {
     Mapping {
@@ -53,9 +53,9 @@ pub(crate) const fn blocked(
 ) -> Mapping {
     Mapping {
         retired,
-        status: Status::BrokerBlocked {
+        status: Status::ExternalBlocked {
             cause,
-            pre_broker_controls: controls,
+            pre_authority_controls: controls,
         },
     }
 }
@@ -92,9 +92,9 @@ fn retired_behavior_routes_preserve_exact_claim_ceiling() {
                 routed_count += 1;
                 assert!(!controls.is_empty(), "{}", row.retired);
             }
-            Status::BrokerBlocked {
+            Status::ExternalBlocked {
                 cause,
-                pre_broker_controls,
+                pre_authority_controls,
             } => {
                 blocked_count += 1;
                 assert!(
@@ -102,7 +102,7 @@ fn retired_behavior_routes_preserve_exact_claim_ceiling() {
                     "unbounded blocker: {}",
                     row.retired
                 );
-                assert!(!pre_broker_controls.is_empty(), "{}", row.retired);
+                assert!(!pre_authority_controls.is_empty(), "{}", row.retired);
             }
         }
     }

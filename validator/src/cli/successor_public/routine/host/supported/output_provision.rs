@@ -8,7 +8,6 @@ struct CreatedDirectory {
 
 pub(crate) struct OutputProvision {
     created: Vec<CreatedDirectory>,
-    committed: bool,
 }
 
 impl OutputProvision {
@@ -17,7 +16,6 @@ impl OutputProvision {
         let root_device = identity(&root.metadata().map_err(|_| HostFailure::Invalid)?).device;
         let mut provision = Self {
             created: Vec::new(),
-            committed: false,
         };
         let mut nodes = node_ids.to_vec();
         nodes.sort();
@@ -34,17 +32,17 @@ impl OutputProvision {
             provision.rollback_inner()?;
             return Err(error);
         }
-        verify_target(target, &root)?;
+        if verify_target(target, &root).is_err() {
+            provision.rollback_inner()?;
+            return Err(HostFailure::Invalid);
+        }
         Ok(provision)
     }
 
-    pub(crate) fn commit(mut self) {
-        self.committed = true;
-    }
+    pub(crate) fn commit(self) {}
 
     pub(crate) fn rollback(mut self) -> Result<(), HostFailure> {
         self.rollback_inner()?;
-        self.committed = true;
         Ok(())
     }
 
@@ -90,14 +88,6 @@ impl OutputProvision {
         }
         self.created.clear();
         Ok(())
-    }
-}
-
-impl Drop for OutputProvision {
-    fn drop(&mut self) {
-        if !self.committed {
-            let _ = self.rollback_inner();
-        }
     }
 }
 

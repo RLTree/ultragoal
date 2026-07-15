@@ -104,16 +104,8 @@ impl ProductionRoutineCatalog {
                 output_seals.push(seal);
             }
 
-            let program_parent = runner
-                .executable_path
-                .parent()
-                .and_then(Path::to_str)
-                .ok_or_else(|| error("catalog-runner-parent-invalid"))?;
-            let environment = BTreeMap::from([
-                ("LANG".to_owned(), "C".to_owned()),
-                ("LC_ALL".to_owned(), "C".to_owned()),
-                ("PATH".to_owned(), program_parent.to_owned()),
-            ]);
+            let environment = crate::routine_work::fixed_environment(&runner.executable_path)
+                .map_err(|_| error("catalog-runner-parent-invalid"))?;
 
             let mut invocation = BoundCatalogInvocation {
                 invocation_id: String::new(),

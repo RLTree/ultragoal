@@ -1,13 +1,11 @@
 //! Public `check routine` production adapter.
 //!
 //! The repository supplies only a strict affected graph and exact source
-//! bindings. Dirty work is limited to the closed `rust-source-syntax-v1`
-//! behavior executed by the pinned current `ultragoal` program over
-//! mediator-held framed bytes; repository content cannot select a program,
-//! argument template, fallback, or child-authored outcome.
+//! bindings. The canonical adapter owns planning, exact local issuance, and
+//! parent-authenticated observations; repository content cannot select a
+//! program, argument template, fallback, or child-authored outcome.
 
 mod behavior_child;
-mod effect_authorization;
 mod host;
 mod manifest;
 mod outcome;
@@ -23,12 +21,11 @@ use crate::context::{BuildRequest, LiveContext, ToolCapability};
 use crate::inventory::{ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256};
 use crate::routine_work::{
     AdoptedRoutineNode, BoundCatalogInvocation, CatalogAdoption, CatalogSelectionRequest,
-    ImpactGraph, LocalDirtyTree, PlanRequest, PreparedRoutineExecution, ProductionRoutineIssuer,
-    RepoPath, RoutineAdapterSpec, RoutineArtifactPublisher, RoutineCancellation,
-    RoutineInvocationSpec, RoutineMediatorStatus, RoutinePlan, RoutineReuseInput,
-    RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation,
-    bind_rust_source_syntax_invocation, load_production_catalog,
-    mediate_prepared_routine_execution_production, plan_routine, prepare_routine_execution,
+    ImpactGraph, LocalDirtyTree, PlanRequest, PreparedRoutineExecution, RepoPath,
+    RoutineAdapterSpec, RoutineArtifactPublisher, RoutineCancellation, RoutineInvocationSpec,
+    RoutineMediatorStatus, RoutinePlan, RoutineReuseInput, RunnerObservation, SelectedRoutineNode,
+    TransitiveInputExpectation, bind_rust_source_syntax_invocation, load_production_catalog,
+    mediate_public_routine_execution, plan_routine, prepare_routine_execution,
     validate_immutable_routine_program,
 };
 use std::collections::{BTreeMap, BTreeSet};
@@ -39,6 +36,8 @@ use std::path::{Path, PathBuf};
 mod invocation_binding;
 #[path = "source_configuration.rs"]
 mod source_configuration;
+#[path = "source_context.rs"]
+mod source_context;
 #[path = "source_selection.rs"]
 mod source_selection;
 

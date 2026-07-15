@@ -1,43 +1,59 @@
+use super::launch_recovery::recover_staged;
+use super::launch_snapshot::launch_root;
+use super::production_mediation::{
+    DurableAttempt, allowed_output_scopes, authority_binding, error, now_tick, random_session_id,
+};
+use super::recovery_authority::RoutineRecoveryAuthority;
 use super::*;
 
 impl ProductionRoutineIssuer {
     /// Opens an explicit, pre-existing, owner-only authority root. This is an
     /// effectful constructor and must never be called by help/read/query paths.
-    pub(crate) fn open(authority_root: &Path) -> Result<Self, RoutineError> {
+    pub(super) fn open(authority_root: &Path) -> Result<Self, RoutineError> {
+        let launch_root = launch_root(authority_root)?;
         FileAuthorityLedger::open_or_initialize(authority_root).map(|ledger| Self {
             ledger: Arc::new(ledger),
+            launch_root,
         })
     }
 
-    pub(crate) fn open_existing(authority_root: &Path) -> Result<Self, RoutineError> {
+    pub(super) fn open_existing(authority_root: &Path) -> Result<Self, RoutineError> {
+        let launch_root = launch_root(authority_root)?;
         FileAuthorityLedger::open_existing(authority_root).map(|ledger| Self {
             ledger: Arc::new(ledger),
+            launch_root,
         })
     }
 
     /// Reconstructs bounded recovery authority only for the exact current
     /// request binding and a durable reserved-or-started record.
-    pub(crate) fn pending_recovery(
+    pub(super) fn pending_recovery(
         &self,
         context: &LiveContext,
         plan: &RoutinePlan,
-        prepared: &PreparedRoutineExecution,
+        request: &RoutineEffectRequest,
     ) -> Result<Option<RoutineRecoveryAuthority>, RoutineError> {
-        let PreparedRoutineExecution::Effect(request) = prepared else {
-            return Ok(None);
-        };
         preflight_production_request(context, plan, request)?;
         let binding = authority_binding(request)?;
-        self.ledger.pending_recovery(&binding).map(|pending| {
-            pending.map(|pending| RoutineRecoveryAuthority {
-                binding,
-                marker: pending.marker,
-                deadline_tick: pending.deadline_tick,
-            })
-        })
+        let pending = self.ledger.pending_recovery(&binding)?;
+        let Some(pending) = pending else {
+            return Ok(None);
+        };
+        recover_staged(
+            &self.launch_root,
+            &pending.grant_id,
+            &pending.marker,
+            request.intents(),
+        )?;
+        Ok(Some(RoutineRecoveryAuthority {
+            binding,
+            grant_id: pending.grant_id,
+            marker: pending.marker,
+            deadline_tick: pending.deadline_tick,
+        }))
     }
 
-    pub(crate) fn mediate_with_publisher(
+    pub(super) fn mediate_with_publisher(
         &self,
         context: &LiveContext,
         plan: &RoutinePlan,
@@ -64,7 +80,7 @@ impl ProductionRoutineIssuer {
         )
     }
 
-    pub(crate) fn mediate_preflighted(
+    pub(super) fn mediate_preflighted(
         &self,
         context: &LiveContext,
         plan: &RoutinePlan,
@@ -79,6 +95,7 @@ impl ProductionRoutineIssuer {
         let recovery_for = match recovery {
             Some(recovery)
                 if recovery.binding == authority_binding
+                    && !recovery.grant_id.is_empty()
                     && now_tick()? <= recovery.deadline_tick =>
             {
                 Some(recovery.marker)
@@ -134,6 +151,7 @@ impl ProductionRoutineIssuer {
         let durable = Arc::new(DurableAttempt {
             ledger: Arc::clone(&self.ledger),
             token,
+            launch_root: self.launch_root.clone(),
         });
         let grant = issue_production_grant(grant_binding, durable)?;
         mediate_prepared_routine_execution(

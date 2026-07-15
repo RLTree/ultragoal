@@ -1,17 +1,5 @@
 use super::*;
 
-#[cfg(unix)]
-pub(crate) fn reject_effective_user_control(
-    metadata: &fs::Metadata,
-    effective_user_id: libc::uid_t,
-) -> Result<(), RoutineError> {
-    if effective_user_id == 0 || metadata.uid() == effective_user_id {
-        Err(mediator_error("mediator-executable-path-mutable"))
-    } else {
-        Ok(())
-    }
-}
-
 pub(crate) struct ScopeAnchor {
     pub(crate) relative: RepoPath,
     pub(crate) path: PathBuf,

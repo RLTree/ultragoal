@@ -30,23 +30,18 @@ pub(crate) use execution_authority::{
     RoutineMediatedOutcome, RoutineMediatedWitness, RoutineMediationAuthority,
     RoutineMediationBatch, RoutineNoOpProjection,
 };
-#[cfg(target_os = "macos")]
-pub(crate) use mediator::require_root_broker_for_public_effect;
 pub(crate) use mediator::{
-    RoutineArtifactPublisher, RoutineCancellation, RoutineMediationResult, RoutineMediatorStatus,
-    RoutineNodeDisposition, RoutineReuseInput,
+    PRODUCTION_SUPPORT_LIMIT, RoutineArtifactPublisher, RoutineCancellation,
+    RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition, RoutineReuseInput,
 };
 #[cfg(test)]
 pub(crate) use mediator::{
     TestProcessSetupFailure, set_test_mediator_finish_failure, set_test_mediator_post_spawn_hook,
     set_test_mediator_pre_spawn_hook, set_test_output_capture_hook, set_test_process_setup_failure,
-    set_test_read_source_capture_hook, test_probe_execute_without_root_broker,
-    test_require_root_broker_before_spawn, test_spawn_count, validate_output_confinement_after,
+    set_test_read_source_capture_hook, test_spawn_count, validate_output_confinement_after,
     validate_read_confinement_after_bind,
 };
-pub(crate) use production::{
-    ProductionRoutineIssuer, mediate_prepared_routine_execution_production,
-};
+pub(crate) use production::mediate_public_routine_execution;
 
 #[path = "execution_preparation.rs"]
 mod execution_preparation;

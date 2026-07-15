@@ -42,6 +42,7 @@ pub(crate) struct Fixture {
     pub(crate) container: PathBuf,
     pub root: PathBuf,
     pub home: PathBuf,
+    binary: PathBuf,
 }
 
 impl Fixture {
@@ -52,16 +53,26 @@ impl Fixture {
         dirty: bool,
         provision_host: bool,
     ) -> Self {
-        let container = std::env::temp_dir().join(format!(
+        let fixture_root = PathBuf::from(
+            std::env::var_os("CODEX_WORKTREE_ROOT")
+                .expect("configured worktree root is required for public fixtures"),
+        )
+        .join("target/routine-public-contract-fixtures");
+        fs::create_dir_all(&fixture_root).unwrap();
+        let container = fixture_root.join(format!(
             "hul-routine-public-production-102-{label}-{}-{}",
             std::process::id(),
             NEXT.fetch_add(1, Ordering::Relaxed)
         ));
         let root = container.join("repo");
         let home = container.join("home");
+        let binary = container.join("bin/ultragoal");
         fs::create_dir_all(root.join("config")).unwrap();
         fs::create_dir_all(root.join("src")).unwrap();
         fs::create_dir_all(&home).unwrap();
+        fs::create_dir_all(binary.parent().unwrap()).unwrap();
+        fs::copy(Self::source_binary(), &binary).unwrap();
+        set_mode(&binary, 0o555);
         set_mode(&home, 0o700);
         fs::write(root.join("src/lib.rs"), b"pub fn value() -> u8 { 1 }\n").unwrap();
         fs::write(root.join(".gitignore"), b"target/\n").unwrap();
@@ -93,6 +104,7 @@ impl Fixture {
             container,
             root: fs::canonicalize(root).unwrap(),
             home: fs::canonicalize(home).unwrap(),
+            binary: fs::canonicalize(binary).unwrap(),
         }
     }
 
@@ -184,7 +196,7 @@ impl Fixture {
     }
 
     pub(crate) fn base_command(&self) -> Command {
-        let binary = Self::binary();
+        let binary = &self.binary;
         let mut command = Command::new(&binary);
         command
             .env_clear()
@@ -202,16 +214,9 @@ impl Fixture {
         command
     }
 
-    pub(crate) fn binary() -> PathBuf {
+    fn source_binary() -> PathBuf {
         std::env::var_os("HUL_ROUTINE_IMMUTABLE_BINARY")
             .map(PathBuf::from)
             .unwrap_or_else(|| PathBuf::from(env!("CARGO_BIN_EXE_ultragoal")))
-    }
-
-    pub fn require_protected_binary() {
-        assert!(
-            std::env::var_os("HUL_ROUTINE_IMMUTABLE_BINARY").is_some(),
-            "authorized production journey requires HUL_ROUTINE_IMMUTABLE_BINARY pointing to an exact root-owned immutable copy of this build"
-        );
     }
 }

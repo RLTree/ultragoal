@@ -21,5 +21,5 @@
     "host-lock-substitution-refusal",
     "target-substitution-refusal"
   ],
-  "installed_runtime_ceiling": "dirty execution, durable reuse, interruption recovery, and concurrent serialization require a separately verified immutable installed ultragoal runtime"
+  "installed_runtime_ceiling": "dirty execution, durable reuse, interruption recovery, and concurrent serialization are unavailable in this source checkout and require a separately verified immutable installed ultragoal runtime"
 }

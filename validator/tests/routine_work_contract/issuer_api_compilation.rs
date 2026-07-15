@@ -1,6 +1,7 @@
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
+use std::sync::OnceLock;
 
 const BINS: &[(&str, &str)] = &[
     (
@@ -105,7 +106,13 @@ fn cargo(scratch: &Path) -> Command {
 }
 
 fn compiler_target() -> PathBuf {
-    configured_root("CARGO_TARGET_DIR").join("routine-issuer-api-cache")
+    static TARGET: OnceLock<PathBuf> = OnceLock::new();
+    TARGET
+        .get_or_init(|| {
+            configured_root("CARGO_TARGET_DIR")
+                .join(format!("routine-issuer-api-cache-{}", std::process::id()))
+        })
+        .clone()
 }
 
 fn configured_root(name: &str) -> PathBuf {

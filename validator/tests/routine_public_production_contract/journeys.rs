@@ -40,9 +40,9 @@ fn fixture_matrix_names_the_public_production_contract_without_claim_effect() {
 }
 
 #[test]
-fn clean_public_routine_refuses_before_discovery_until_broker_wiring() {
+fn clean_public_routine_is_a_zero_effect_noop() {
     let fixture = Fixture::new(
-        "clean-noop",
+        "clean-no-op",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
         false,
@@ -52,18 +52,25 @@ fn clean_public_routine_refuses_before_discovery_until_broker_wiring() {
     let before_home = tree(&fixture.home);
     let before_status = fixture.status();
     let output = fixture.run();
-    assert_ne!(output.status.code(), Some(0), "{output:?}");
-    assert!(output.stdout.is_empty(), "{output:?}");
-    let value: Value = serde_json::from_slice(&output.stderr).unwrap();
-    assert_eq!(value["cause"], "mediator-child-root-broker-required");
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    assert!(output.stderr.is_empty(), "{output:?}");
+    let value = Fixture::value(&output);
+    assert_eq!(value["status"], "clean-no-op");
     assert_eq!(value["effect"], "none");
-    assert_eq!(tree(&fixture.root), before_root);
+    let after_root = tree(&fixture.root);
+    for (path, value) in before_root {
+        assert_eq!(
+            after_root.get(&path),
+            Some(&value),
+            "source changed: {path}"
+        );
+    }
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fixture.status(), before_status);
 }
 
 #[test]
-fn dirty_public_effect_refuses_at_root_broker_before_host_or_workspace_authority() {
+fn dirty_public_effect_executes_through_the_local_issuer_and_reuses() {
     let fixture = Fixture::new(
         "execute-reuse",
         &[pass_node("compile", &[])],
@@ -72,27 +79,31 @@ fn dirty_public_effect_refuses_at_root_broker_before_host_or_workspace_authority
         true,
     );
     let before_root = tree(&fixture.root);
-    let before_home = tree(&fixture.home);
-    let before_status = fixture.status();
-    let output = fixture.run();
-    assert_ne!(output.status.code(), Some(0), "{output:?}");
-    assert!(output.stdout.is_empty(), "{output:?}");
-    let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
-    assert_eq!(
-        diagnostic["diagnostic_id"],
-        "successor_runtime_authority_required"
-    );
-    assert_eq!(diagnostic["cause"], "mediator-child-root-broker-required");
-    assert_eq!(diagnostic["effect"], "none");
-    assert_eq!(tree(&fixture.root), before_root);
-    assert_eq!(tree(&fixture.home), before_home);
-    assert_eq!(fixture.status(), before_status);
+    let executed = fixture.run();
+    assert_eq!(executed.status.code(), Some(0), "{executed:?}");
+    assert!(executed.stderr.is_empty(), "{executed:?}");
+    let executed_value = Fixture::value(&executed);
+    assert_eq!(executed_value["status"], "executed");
+    assert_eq!(executed_value["nodes"][0]["disposition"], "executed");
+    let after_root = tree(&fixture.root);
+    for (path, value) in before_root {
+        assert_eq!(
+            after_root.get(&path),
+            Some(&value),
+            "source changed: {path}"
+        );
+    }
+
+    let reused = fixture.run();
+    assert_eq!(reused.status.code(), Some(0), "{reused:?}");
+    assert!(reused.stderr.is_empty(), "{reused:?}");
+    let reused_value = Fixture::value(&reused);
+    assert_eq!(reused_value["status"], "reused");
+    assert_eq!(reused_value["nodes"][0]["disposition"], "reused");
 }
 
 #[test]
-#[ignore = "requires unavailable root broker authorization and externally provisioned immutable current ultragoal binary"]
 fn authorized_fresh_execution_then_exact_repeat_reuses_without_output_attribution() {
-    Fixture::require_protected_binary();
     let fixture = Fixture::new(
         "authorized-fresh-repeat",
         &[pass_node("compile", &[])],
@@ -122,9 +133,7 @@ fn authorized_fresh_execution_then_exact_repeat_reuses_without_output_attributio
 }
 
 #[test]
-#[ignore = "requires unavailable root broker authorization and externally provisioned immutable current ultragoal binary"]
 fn cache_binding_misses_across_targets_and_changes_then_reuses_exact_repeat() {
-    Fixture::require_protected_binary();
     let first = Fixture::new(
         "binding-first",
         &[pass_node("compile", &[])],

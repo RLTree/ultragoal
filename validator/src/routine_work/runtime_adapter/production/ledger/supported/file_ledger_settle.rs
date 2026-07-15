@@ -127,6 +127,7 @@ impl FileLedger {
                 return Err(error("routine-production-recovery-expired"));
             }
             Ok(Some(PendingRecovery {
+                grant_id: record.grant_id.clone(),
                 marker: record.recovery_marker.clone(),
                 deadline_tick: record.recovery_deadline_tick,
             }))

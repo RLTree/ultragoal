@@ -124,3 +124,21 @@ pub(crate) struct PinnedExecutable {
     pub(crate) identity: ObjectIdentity,
     pub(crate) sha256: String,
 }
+
+/// An authority-owned execution snapshot. The child only receives the named
+/// snapshot path; the parent retains the descriptor and must explicitly clean
+/// the private directory after mediation has determined its outcome.
+pub(crate) struct StagedProgram {
+    pub(crate) executable: PinnedExecutable,
+    pub(crate) directory: PathBuf,
+    pub(crate) marker: PathBuf,
+    pub(crate) seal: PathBuf,
+    pub(crate) marker_bytes: Vec<u8>,
+    pub(crate) seal_bytes: Vec<u8>,
+    #[cfg(unix)]
+    pub(crate) directory_identity: ObjectIdentity,
+    #[cfg(unix)]
+    pub(crate) marker_identity: ObjectIdentity,
+    #[cfg(unix)]
+    pub(crate) seal_identity: ObjectIdentity,
+}

@@ -9,7 +9,7 @@ mod outcome;
 mod process;
 
 use serde::Serialize;
-use std::cell::Cell;
+use std::cell::{Cell, RefCell};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 use std::sync::Arc;
@@ -29,15 +29,15 @@ use crate::routine_work::{
     trusted_rust_source_execution_observed,
 };
 
-use filesystem::{OutputConfinement, PinnedExecutable, ReadConfinement, RootAnchor};
+pub(crate) use filesystem::{
+    ObjectIdentity, OutputConfinement, PinnedExecutable, ReadConfinement, RootAnchor, StagedProgram,
+};
 use outcome::{ExecutedArtifact, ResultArtifactWire, ReuseArtifactWire, VerifiedReuseArtifact};
 pub(crate) use outcome::{
     RoutineCancellation, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
     RoutineNodeMediation, RoutineReuseInput, RoutineRootGrant,
 };
 use process::ProcessTermination;
-#[cfg(target_os = "macos")]
-pub(crate) use process::require_root_broker_for_public_effect;
 
 #[path = "grant_scope.rs"]
 mod grant_scope;
@@ -55,6 +55,8 @@ mod read_source_binding;
 mod reuse_input_index;
 #[path = "rust_source_observation.rs"]
 mod rust_source_observation;
+#[path = "staged_launch.rs"]
+mod staged_launch;
 
 #[cfg(test)]
 pub(crate) use filesystem::{
@@ -64,12 +66,14 @@ pub(crate) use grant_scope::*;
 pub(crate) use grant_validation::*;
 pub(crate) use incomplete_outcome::*;
 pub(crate) use intent_mediation::*;
-pub(crate) use no_op_mediation::*;
+pub(super) use no_op_mediation::*;
 #[cfg(test)]
-pub(crate) use process::{
-    test_probe_execute_without_root_broker, test_require_root_broker_before_spawn,
+pub(crate) use process::test_spawn_count;
+pub(super) use read_source_binding::mediate_prepared_routine_execution;
+pub(crate) use read_source_binding::{
+    AttemptReservation, GrantPayload, MediatorRegistry, bind_read_sources, grant_identity,
+    grant_seal, registry, release_active, validate_read_sources,
 };
-pub(crate) use read_source_binding::*;
 pub(crate) use reuse_input_index::*;
 pub(crate) use rust_source_observation::*;
 

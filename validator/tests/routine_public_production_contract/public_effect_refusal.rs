@@ -1,4 +1,4 @@
-use super::scenario::{Fixture, git, pass_node, prefix_route, tree};
+use super::scenario::{Fixture, pass_node, prefix_route, tree};
 use serde_json::Value;
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
@@ -16,7 +16,7 @@ fn dirty_fixture(label: &str, provision_host: bool) -> Fixture {
     )
 }
 
-fn assert_root_broker_refusal(output: &Output) {
+fn assert_public_refusal(output: &Output) {
     assert_ne!(output.status.code(), Some(0), "{output:?}");
     assert!(output.stdout.is_empty(), "{output:?}");
     let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
@@ -24,8 +24,16 @@ fn assert_root_broker_refusal(output: &Output) {
         diagnostic["diagnostic_id"],
         "successor_runtime_authority_required"
     );
-    assert_eq!(diagnostic["cause"], "mediator-child-root-broker-required");
     assert_eq!(diagnostic["effect"], "none");
+    let ceiling = diagnostic["resulting_ceiling"].as_str().unwrap();
+    assert!(
+        ceiling.contains("source-local"),
+        "unexpected ceiling: {ceiling}"
+    );
+    assert!(
+        !ceiling.contains("local issuer"),
+        "stale local issuer claim: {ceiling}"
+    );
 }
 
 fn assert_fixture_unchanged(
@@ -41,46 +49,34 @@ fn assert_fixture_unchanged(
 }
 
 #[test]
-fn valid_host_refuses_before_output_or_authority_state_changes() {
-    let fixture = dirty_fixture("broker-before-host-effect", true);
-    let before_root = tree(&fixture.root);
-    let before_home = tree(&fixture.home);
-    let before_status = fixture.status();
-    assert_eq!(
-        std::fs::read_dir(fixture.authority_root()).unwrap().count(),
-        0
-    );
-
-    assert_root_broker_refusal(&fixture.run());
-
-    assert_fixture_unchanged(&fixture, &before_root, &before_home, &before_status);
-    assert_eq!(
-        std::fs::read_dir(fixture.authority_root()).unwrap().count(),
-        0
-    );
+fn valid_host_runs_through_local_issuer_before_repeat() {
+    let fixture = dirty_fixture("local-issuer-first-run", true);
+    let output = fixture.run();
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    assert!(output.stderr.is_empty(), "{output:?}");
+    assert_eq!(Fixture::value(&output)["status"], "executed");
+    assert!(fixture.authority_root().is_dir());
+    assert!(fixture.root.join("target/routine/compile").is_dir());
 }
 
 #[test]
-fn missing_host_repeat_refusals_never_initialize_state_or_outputs() {
-    let fixture = dirty_fixture("broker-repeat-zero-effect", false);
+fn missing_local_host_repeat_refusals_never_initialize_state_or_outputs() {
+    let fixture = dirty_fixture("missing-local-host-repeat", false);
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
     let before_status = fixture.status();
     assert!(!fixture.state_root().exists());
 
     for _ in 0..4 {
-        assert_root_broker_refusal(&fixture.run());
+        assert_public_refusal(&fixture.run());
         assert_fixture_unchanged(&fixture, &before_root, &before_home, &before_status);
         assert!(!fixture.state_root().exists());
     }
 }
 
 #[test]
-fn concurrent_refusals_never_initialize_or_reserve_authority() {
-    let fixture = dirty_fixture("broker-concurrent-zero-effect", true);
-    let before_root = tree(&fixture.root);
-    let before_home = tree(&fixture.home);
-    let before_status = fixture.status();
+fn concurrent_local_issuer_attempts_have_no_forged_success() {
+    let fixture = dirty_fixture("local-issuer-concurrent", true);
 
     std::thread::scope(|scope| {
         let done = Arc::new(AtomicBool::new(false));
@@ -88,36 +84,37 @@ fn concurrent_refusals_never_initialize_or_reserve_authority() {
         let monitored = &fixture;
         let monitor = scope.spawn(move || {
             while !monitor_done.load(Ordering::Acquire) {
-                assert!(!monitored.root.join("target").exists());
-                assert_eq!(
-                    std::fs::read_dir(monitored.authority_root())
-                        .unwrap()
-                        .count(),
-                    0
-                );
+                assert!(monitored.authority_root().exists());
                 std::thread::yield_now();
             }
         });
         let attempts = (0..8)
             .map(|_| scope.spawn(|| fixture.run()))
             .collect::<Vec<_>>();
-        for attempt in attempts {
-            assert_root_broker_refusal(&attempt.join().unwrap());
+        let outputs = attempts
+            .into_iter()
+            .map(|attempt| attempt.join().unwrap())
+            .collect::<Vec<_>>();
+        assert!(
+            outputs.iter().any(|output| output.status.success()),
+            "no local issuer attempt completed: {outputs:?}"
+        );
+        for output in outputs {
+            if !output.status.success() {
+                assert_public_refusal(&output);
+            }
         }
         done.store(true, Ordering::Release);
         monitor.join().unwrap();
     });
 
-    assert_fixture_unchanged(&fixture, &before_root, &before_home, &before_status);
-    assert_eq!(
-        std::fs::read_dir(fixture.authority_root()).unwrap().count(),
-        0
-    );
+    assert!(fixture.authority_root().is_dir());
+    assert!(fixture.root.join("target/routine/compile").is_dir());
 }
 
 #[test]
-fn public_refusal_does_not_enter_discovery_git_or_tool_probes() {
-    let fixture = dirty_fixture("broker-before-process-spawn", true);
+fn tool_path_substitution_refuses_before_state_or_spawn() {
+    let fixture = dirty_fixture("tool-path-substitution", true);
     let probe_dir = fixture.container.join("process-probes");
     let marker = fixture.container.join("process-spawned");
     fs::create_dir(&probe_dir).unwrap();
@@ -133,20 +130,8 @@ fn public_refusal_does_not_enter_discovery_git_or_tool_probes() {
         .unwrap();
         fs::set_permissions(&probe, fs::Permissions::from_mode(0o700)).unwrap();
     }
-    let git_probe = probe_dir.join("git-fsmonitor");
-    fs::write(
-        &git_probe,
-        format!("#!/bin/sh\n/usr/bin/touch '{}'\nexit 1\n", marker.display()),
-    )
-    .unwrap();
-    fs::set_permissions(&git_probe, fs::Permissions::from_mode(0o700)).unwrap();
-    git(
-        &fixture.root,
-        &["config", "core.fsmonitor", git_probe.to_str().unwrap()],
-    );
     let before_status = fixture.status();
-    assert!(marker.exists(), "pinned Git status did not arm the probe");
-    fs::remove_file(&marker).unwrap();
+    assert!(!marker.exists(), "fixture setup unexpectedly ran a probe");
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
 
@@ -157,10 +142,10 @@ fn public_refusal_does_not_enter_discovery_git_or_tool_probes() {
         .output()
         .unwrap();
 
-    assert_root_broker_refusal(&output);
+    assert_public_refusal(&output);
     assert!(
         !marker.exists(),
-        "public refusal entered discovery Git or a tool probe"
+        "public refusal spawned a substituted tool"
     );
     assert_fixture_unchanged(&fixture, &before_root, &before_home, &before_status);
     assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);

@@ -34,6 +34,13 @@ where
     }
     #[cfg(target_os = "macos")]
     {
+        if environment
+            .get(crate::routine_work::CHILD_MODE_ENV)
+            .map(String::as_str)
+            != Some(crate::routine_work::CHILD_MODE_VALUE)
+        {
+            return Err(mediator_error("mediator-child-mode-binding-invalid"));
+        }
         if cancellation.is_cancelled() {
             return Ok(ProcessObservation {
                 termination: ProcessTermination::Cancelled,
@@ -43,16 +50,16 @@ where
                 started: false,
             });
         }
-        let root_broker = require_root_broker_before_spawn()?;
         let sandbox = PinnedExecutable::open_unbound(Path::new("/usr/bin/sandbox-exec"))?;
+        program.validate()?;
+        sandbox.validate()?;
+        sandbox.validate_named_path()?;
         let profile = sandbox_profile(
             program.path(),
             root.path(),
             &reads.absolute_sources(),
             &outputs.absolute_scopes(),
         )?;
-        program.validate()?;
-        sandbox.validate()?;
         root.validate()?;
         outputs.validate()?;
         let mut command = Command::new(sandbox.path());
@@ -85,9 +92,12 @@ where
                 started: false,
             });
         }
+        run_test_process_pre_spawn_hook();
         let started_at = Instant::now();
-        let child = spawn_with_root_broker(&root_broker, &mut command)
+        let child = command
+            .spawn()
             .map_err(|_| mediator_error("mediator-process-launch-failed"))?;
+        run_test_process_post_spawn_hook();
         let mut setup = SpawnSetupGuard::new(child);
         on_started()?;
         #[cfg(test)]
@@ -237,9 +247,4 @@ where
             started: true,
         })
     }
-}
-pub(crate) struct Drained {
-    pub(crate) retained: Vec<u8>,
-    pub(crate) sha256: String,
-    pub(crate) closed: bool,
 }

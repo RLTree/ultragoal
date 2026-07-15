@@ -42,7 +42,7 @@ impl PinnedExecutable {
             if !path.is_absolute() {
                 return Err(mediator_error("mediator-executable-path-invalid"));
             }
-            validate_execution_path_immutability(path)?;
+            validate_program_execution_path(path)?;
             let metadata = fs::symlink_metadata(path)
                 .map_err(|_| mediator_error("mediator-executable-unavailable"))?;
             if metadata.file_type().is_symlink()
@@ -128,8 +128,12 @@ impl PinnedExecutable {
                 .open(&self.path)
                 .map_err(|_| mediator_error("mediator-executable-replaced"))?;
             let digest = digest_reader(&mut reopened, u64::MAX)?;
-            validate_execution_path_immutability(&self.path)?;
-            if held != self.identity || current != self.identity || digest != self.sha256 {
+            validate_program_execution_path(&self.path)?;
+            if held != self.identity
+                || current != self.identity
+                || digest != self.sha256
+                || current.links != self.identity.links
+            {
                 return Err(RoutineError::new(
                     RoutineErrorId::ConcurrentMutation,
                     "mediator-executable-replaced",
@@ -139,11 +143,25 @@ impl PinnedExecutable {
             Ok(())
         }
     }
+
+    #[cfg(unix)]
+    pub(crate) fn validate_named_path(&self) -> Result<(), RoutineError> {
+        validate_execution_path_immutability(&self.path)
+    }
 }
 
 #[cfg(unix)]
 pub(crate) fn validate_execution_path_immutability(path: &Path) -> Result<(), RoutineError> {
-    let effective_user_id = unsafe { libc::geteuid() };
+    validate_execution_path(path, true)
+}
+
+#[cfg(unix)]
+fn validate_program_execution_path(path: &Path) -> Result<(), RoutineError> {
+    validate_execution_path(path, false)
+}
+
+#[cfg(unix)]
+fn validate_execution_path(path: &Path, strict_ancestors: bool) -> Result<(), RoutineError> {
     let mut current = Some(path);
     while let Some(component) = current {
         let metadata = fs::symlink_metadata(component)
@@ -151,32 +169,33 @@ pub(crate) fn validate_execution_path_immutability(path: &Path) -> Result<(), Ro
         if metadata.file_type().is_symlink()
             || (component == path && !metadata.is_file())
             || (component != path && !metadata.is_dir())
-            || metadata.permissions().mode() & 0o022 != 0
+            || (component == path && metadata.permissions().mode() & 0o022 != 0)
         {
             return Err(mediator_error("mediator-executable-path-mutable"));
         }
-        reject_effective_user_control(&metadata, effective_user_id)?;
-        let encoded = std::ffi::CString::new(component.as_os_str().as_bytes())
-            .map_err(|_| mediator_error("mediator-executable-path-invalid"))?;
-        let access = unsafe {
-            libc::faccessat(
-                libc::AT_FDCWD,
-                encoded.as_ptr(),
-                libc::W_OK,
-                libc::AT_EACCESS,
-            )
-        };
-        if access == 0 {
-            return Err(mediator_error("mediator-executable-path-mutable"));
-        }
-        let error = std::io::Error::last_os_error();
-        if !matches!(
-            error.raw_os_error(),
-            Some(libc::EACCES) | Some(libc::EPERM) | Some(libc::EROFS)
-        ) {
-            return Err(mediator_error(
-                "mediator-executable-path-access-check-failed",
-            ));
+        if strict_ancestors {
+            let encoded = std::ffi::CString::new(component.as_os_str().as_bytes())
+                .map_err(|_| mediator_error("mediator-executable-path-invalid"))?;
+            let access = unsafe {
+                libc::faccessat(
+                    libc::AT_FDCWD,
+                    encoded.as_ptr(),
+                    libc::W_OK,
+                    libc::AT_EACCESS,
+                )
+            };
+            if access == 0 {
+                return Err(mediator_error("mediator-executable-path-mutable"));
+            }
+            let error = std::io::Error::last_os_error();
+            if !matches!(
+                error.raw_os_error(),
+                Some(libc::EACCES) | Some(libc::EPERM) | Some(libc::EROFS)
+            ) {
+                return Err(mediator_error(
+                    "mediator-executable-path-access-check-failed",
+                ));
+            }
         }
         current = component.parent();
     }

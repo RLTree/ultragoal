@@ -62,8 +62,9 @@ pub(crate) fn mediate_intent(
     }
     let framed_input = reads.rust_source_syntax_frame(&root)?;
     let framed_input_sha256 = sha256(&framed_input);
+    let staged = attempt.stage_program(&program)?;
     let observation = process::execute(
-        &program,
+        &staged.executable,
         &root,
         &outputs,
         &reads,
@@ -79,6 +80,7 @@ pub(crate) fn mediate_intent(
             Ok(())
         },
     );
+    attempt.retain_staged(staged);
     let observation = match observation {
         Ok(value) => value,
         Err(error) => {

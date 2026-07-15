@@ -29,9 +29,7 @@ pub(crate) fn execute(
     if let Some(outcome) = behavior_child::execute_if_requested(invocation) {
         return outcome;
     }
-    effect_authorization::authorize()
-        .and_then(|_| execute_inner(root, invocation, home))
-        .unwrap_or_else(outcome::failure)
+    execute_inner(root, invocation, home).unwrap_or_else(outcome::failure)
 }
 
 pub(crate) fn execute_inner(
@@ -39,13 +37,13 @@ pub(crate) fn execute_inner(
     invocation: &ParsedInvocation,
     home: Option<&Path>,
 ) -> Result<RuntimeOutcome, PublicFailure> {
-    let target = target_root(root, invocation)?;
-    let discovery = discovery_context(&target)?;
+    let target = source_context::target_root(root, invocation)?;
+    let discovery = source_context::discovery_context(&target)?;
     let manifest = manifest::load(&discovery, &target).map_err(PublicFailure::Manifest)?;
     let graph = manifest
         .graph()
         .map_err(|_| PublicFailure::Manifest(manifest::ManifestFailure::Invalid))?;
-    let context = execution_context(&target, &manifest)?;
+    let context = source_context::execution_context(&target, &manifest)?;
     validate_selected_sources(&context, &manifest)?;
     let snapshot = LocalDirtyTree::capture(&context).map_err(PublicFailure::Routine)?;
     let plan = plan_routine(&context, &graph, &snapshot, PlanRequest::routine())
@@ -54,14 +52,14 @@ pub(crate) fn execute_inner(
 
     if plan.checks().is_empty() {
         let prepared = prepare(&context, &manifest, &graph, &snapshot, &plan)?;
-        let result = mediate_prepared_routine_execution_production(
-            Path::new("/routine-noop-does-not-open-authority"),
+        let result = mediate_public_routine_execution(
+            None,
             &context,
             &plan,
             prepared,
-            None,
             RoutineCancellation::new(),
             RoutineReuseInput::default(),
+            None,
         )
         .map_err(PublicFailure::Routine)?;
         return Ok(outcome::mediation(
@@ -98,7 +96,15 @@ pub(crate) fn execute_inner(
     };
     let request = match &prepared {
         PreparedRoutineExecution::Effect(request) => request,
-        PreparedRoutineExecution::NoOp(_) => unreachable!("no-op returned above"),
+        PreparedRoutineExecution::NoOp(_) => {
+            return Err(PublicFailure::Routine(
+                crate::routine_work::RoutineError::new(
+                    crate::routine_work::RoutineErrorId::InvalidRequest,
+                    "routine-public-effect-required",
+                    None,
+                ),
+            ));
+        }
     };
     let request_id = request.request_id().to_owned();
     let protocol_id = request.protocol_id().to_owned();
@@ -113,35 +119,31 @@ pub(crate) fn execute_inner(
         &protocol_id,
         &request_id,
     );
-    let reuse = state
-        .read_reuse(&cache_binding)
-        .map_err(PublicFailure::Host)?;
+    let reuse = match state.read_reuse(&cache_binding) {
+        Ok(reuse) => reuse,
+        Err(error) => {
+            provision
+                .rollback()
+                .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
+            return Err(PublicFailure::Host(error));
+        }
+    };
 
     let mediated = (|| {
-        let issuer = if reuse.is_some() {
-            ProductionRoutineIssuer::open_existing(state.authority_root())
-        } else {
-            ProductionRoutineIssuer::open(state.authority_root())
-        }
-        .map_err(PublicFailure::Routine)?;
-        let recovery = issuer
-            .pending_recovery(&context, &plan, &prepared)
-            .map_err(PublicFailure::Routine)?;
         let publisher = CachePublisher {
             state: &state,
             binding: cache_binding,
         };
-        issuer
-            .mediate_with_publisher(
-                &context,
-                &plan,
-                prepared,
-                recovery,
-                RoutineCancellation::new(),
-                reuse.map_or_else(RoutineReuseInput::default, RoutineReuseInput::new),
-                &publisher,
-            )
-            .map_err(PublicFailure::Routine)
+        mediate_public_routine_execution(
+            Some(state.authority_root()),
+            &context,
+            &plan,
+            prepared,
+            RoutineCancellation::new(),
+            reuse.map_or_else(RoutineReuseInput::default, RoutineReuseInput::new),
+            Some(&publisher),
+        )
+        .map_err(PublicFailure::Routine)
     })();
     let result = match mediated {
         Ok(result) => result,
@@ -153,9 +155,12 @@ pub(crate) fn execute_inner(
         }
     };
 
-    state
-        .verify()
-        .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
+    if state.verify().is_err() {
+        provision
+            .rollback()
+            .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
+        return Err(PublicFailure::PersistenceAfterEffect);
+    }
     if result.status() == RoutineMediatorStatus::CompleteExecution {
         provision.commit();
     } else {
@@ -163,9 +168,9 @@ pub(crate) fn execute_inner(
             .rollback()
             .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
     }
-    state
-        .verify()
-        .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
+    if state.verify().is_err() {
+        return Err(PublicFailure::PersistenceAfterEffect);
+    }
     Ok(outcome::mediation(
         &result,
         context.context_id(),
@@ -177,73 +182,4 @@ pub(crate) fn execute_inner(
         Some(&protocol_id),
         plan.affected_set().coverage().fallback_tool_count(),
     ))
-}
-
-pub(crate) fn target_root(
-    root: &Path,
-    invocation: &ParsedInvocation,
-) -> Result<PathBuf, PublicFailure> {
-    if invocation.command != SuccessorCommand::Check(CheckProfile::Routine)
-        || invocation.effect != EffectClass::WorkspaceWrite
-    {
-        return Err(PublicFailure::InvalidInvocation);
-    }
-    let mut relative = None;
-    for argument in &invocation.arguments {
-        match (&argument.name, &argument.value) {
-            (OptionName::Target, ParsedValue::RelativePath(path)) if relative.is_none() => {
-                relative = Some(path.as_str())
-            }
-            _ => return Err(PublicFailure::InvalidInvocation),
-        }
-    }
-    let canonical_root = fs::canonicalize(root).map_err(|_| PublicFailure::Context)?;
-    if canonical_root != root {
-        return Err(PublicFailure::Context);
-    }
-    let requested = relative.map_or_else(|| root.to_path_buf(), |path| root.join(path));
-    let metadata = fs::symlink_metadata(&requested).map_err(|_| PublicFailure::Context)?;
-    if !metadata.is_dir() || metadata.file_type().is_symlink() {
-        return Err(PublicFailure::Context);
-    }
-    let target = fs::canonicalize(&requested).map_err(|_| PublicFailure::Context)?;
-    if !target.starts_with(root) || target.to_str().is_none() {
-        return Err(PublicFailure::Context);
-    }
-    Ok(target)
-}
-
-pub(crate) fn discovery_context(target: &Path) -> Result<LiveContext, PublicFailure> {
-    LiveContext::build(
-        BuildRequest::new(target)
-            .expect_worktree_root(target)
-            .with_effect(EffectClass::Read)
-            .bind_non_secret_configuration(
-                ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
-                ADOPTED_HANDOFF_MANIFEST_SHA256,
-            )
-            .select_input(target.join(MANIFEST_PATH)),
-    )
-    .map_err(|_| PublicFailure::Context)
-}
-
-pub(crate) fn execution_context(
-    target: &Path,
-    manifest: &LoadedManifest,
-) -> Result<LiveContext, PublicFailure> {
-    let mut request = BuildRequest::new(target)
-        .expect_worktree_root(target)
-        .with_effect(EffectClass::Read)
-        .bind_non_secret_configuration(
-            ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
-            ADOPTED_HANDOFF_MANIFEST_SHA256,
-        )
-        .bind_non_secret_configuration(SOURCE_CONFIG_KEY, manifest.source_id());
-    for path in manifest.selected_paths() {
-        request = request.select_input(target.join(path));
-    }
-    for tool in manifest.tool_names() {
-        request = request.probe_tool(tool);
-    }
-    LiveContext::build(request).map_err(|_| PublicFailure::Context)
 }

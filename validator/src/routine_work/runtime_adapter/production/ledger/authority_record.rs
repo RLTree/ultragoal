@@ -81,6 +81,7 @@ pub(crate) struct ReservationToken {
 }
 
 pub(crate) struct PendingRecovery {
+    pub(crate) grant_id: String,
     pub(crate) marker: String,
     pub(crate) deadline_tick: u64,
 }

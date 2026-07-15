@@ -150,7 +150,11 @@ impl SealedFile {
             self.relative.is_some(),
         )?;
         if identity != self.identity || bytes != self.bytes {
-            return Err(error("catalog-sealed-file-changed"));
+            return Err(error(if self.relative.is_some() {
+                "catalog-sealed-file-changed"
+            } else {
+                "catalog-runner-sealed-file-changed"
+            }));
         }
         Ok(())
     }

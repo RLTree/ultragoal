@@ -51,6 +51,7 @@ pub(crate) struct AttemptReservation {
     pub(crate) started: Cell<bool>,
     pub(crate) settled: Cell<bool>,
     pub(crate) durable: Option<Arc<dyn DurableAttemptAuthority>>,
+    pub(crate) staged: RefCell<Vec<StagedProgram>>,
 }
 
 impl AttemptReservation {
@@ -114,8 +115,11 @@ impl AttemptReservation {
 
     pub(crate) fn settle_incomplete(
         &self,
-        _outcome: DurableSettlement,
+        outcome: DurableSettlement,
     ) -> Result<Option<String>, RoutineError> {
+        if let Some(durable) = &self.durable {
+            durable.settle(outcome, &BTreeMap::new())?;
+        }
         let durable_recovery = self.durable.is_some();
         let mut state = registry()
             .lock()

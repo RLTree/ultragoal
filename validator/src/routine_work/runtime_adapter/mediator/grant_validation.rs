@@ -74,6 +74,7 @@ pub(crate) fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservati
         started: Cell::new(false),
         settled: Cell::new(false),
         durable: grant.durable.clone(),
+        staged: RefCell::new(Vec::new()),
     })
 }
 

@@ -1,55 +1,28 @@
+use super::launch_custody::cleanup_staged;
+use super::launch_snapshot::stage_program;
 use super::*;
+use crate::routine_work::runtime_adapter::mediator::{PinnedExecutable, StagedProgram};
 
-/// No-op mediation stays outside authority initialization. Effectful requests
-/// enter the sealed issuer and cannot supply a test grant.
-pub(crate) fn mediate_prepared_routine_execution_production(
-    authority_root: &Path,
-    context: &LiveContext,
-    plan: &RoutinePlan,
-    prepared: PreparedRoutineExecution,
-    recovery: Option<RoutineRecoveryAuthority>,
-    cancellation: RoutineCancellation,
-    reuse: RoutineReuseInput,
-) -> Result<RoutineMediationResult, RoutineError> {
-    if matches!(prepared, PreparedRoutineExecution::NoOp(_)) {
-        if recovery.is_some() || !reuse.is_empty() {
-            return Err(error("routine-production-noop-authority-or-reuse-present"));
-        }
-        return mediate_prepared_routine_execution(
-            context,
-            plan,
-            prepared,
-            None,
-            cancellation,
-            reuse,
-            None,
-        );
-    }
-    let PreparedRoutineExecution::Effect(request) = prepared else {
-        unreachable!("no-op returned before production issuer selection")
-    };
-    // Malformed, non-canonical, and request-binding-invalid bytes reject before
-    // the authority root is opened. Canonical supplied reuse then uses the
-    // existing-only ledger path, which cannot initialize any durable file.
-    preflight_production_request(context, plan, &request)?;
-    let require_complete_reuse_set = recovery.is_none() && !reuse.is_empty();
-    let reuse = preflight_production_reuse_input(reuse, &request, require_complete_reuse_set)?;
-    let issuer = if reuse.is_empty() && recovery.is_none() {
-        ProductionRoutineIssuer::open(authority_root)?
-    } else {
-        ProductionRoutineIssuer::open_existing(authority_root)?
-    };
-    issuer.mediate_preflighted(context, plan, request, recovery, cancellation, reuse, None)
-}
+/// Internal durable machinery. The production parent is the only module that
+/// may compose these helpers into the canonical public adapter.
 
-pub(crate) struct DurableAttempt {
+pub(super) struct DurableAttempt {
     pub(crate) ledger: Arc<FileAuthorityLedger>,
     pub(crate) token: ReservationToken,
+    pub(crate) launch_root: PathBuf,
 }
 
 impl DurableAttemptAuthority for DurableAttempt {
     fn validate_reserved(&self) -> Result<(), RoutineError> {
         self.ledger.validate_reserved(&self.token)
+    }
+
+    fn stage_program(&self, program: &PinnedExecutable) -> Result<StagedProgram, RoutineError> {
+        stage_program(&self.launch_root, &self.token, program)
+    }
+
+    fn cleanup_staged(&self, staged: &StagedProgram) -> Result<(), RoutineError> {
+        cleanup_staged(staged)
     }
 
     fn prepare_spawn(&self) -> Result<(), RoutineError> {
@@ -88,7 +61,7 @@ impl DurableAttemptAuthority for DurableAttempt {
 }
 
 #[derive(Serialize)]
-pub(crate) struct EffectBinding<'a> {
+pub(super) struct EffectBinding<'a> {
     pub(crate) domain: &'static str,
     pub(crate) protocol_id: &'a str,
     pub(crate) context_id: &'a str,
@@ -98,7 +71,7 @@ pub(crate) struct EffectBinding<'a> {
     pub(crate) intents: &'a [super::super::RoutineEffectIntent],
 }
 
-pub(crate) fn authority_binding(
+pub(super) fn authority_binding(
     request: &RoutineEffectRequest,
 ) -> Result<AuthorityBinding, RoutineError> {
     let effect_id = digest_of(&EffectBinding {
@@ -120,7 +93,7 @@ pub(crate) fn authority_binding(
     })
 }
 
-pub(crate) fn allowed_output_scopes(
+pub(super) fn allowed_output_scopes(
     request: &RoutineEffectRequest,
 ) -> Vec<crate::routine_work::RepoPath> {
     let mut scopes = request
@@ -133,7 +106,7 @@ pub(crate) fn allowed_output_scopes(
     scopes
 }
 
-pub(crate) fn random_session_id(binding: &AuthorityBinding) -> Result<String, RoutineError> {
+pub(super) fn random_session_id(binding: &AuthorityBinding) -> Result<String, RoutineError> {
     let mut nonce = [0u8; 32];
     getrandom::fill(&mut nonce)
         .map_err(|_| error("routine-production-authority-random-unavailable"))?;
@@ -145,13 +118,13 @@ pub(crate) fn random_session_id(binding: &AuthorityBinding) -> Result<String, Ro
     ]))
 }
 
-pub(crate) fn now_tick() -> Result<u64, RoutineError> {
+pub(super) fn now_tick() -> Result<u64, RoutineError> {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map(|duration| duration.as_secs())
         .map_err(|_| error("routine-production-trusted-time-unavailable"))
 }
 
-pub(crate) fn error(cause: &'static str) -> RoutineError {
+pub(super) fn error(cause: &'static str) -> RoutineError {
     RoutineError::new(RoutineErrorId::InvalidRequest, cause, None)
 }

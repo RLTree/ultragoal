@@ -23,7 +23,7 @@ pub(crate) fn assert_sealed_issuer_and_grant_entrypoints_are_not_externally_call
     assert!(control.status.success(), "{}", diagnostic(&control));
 
     for (probe, code) in [
-        ("production_issuer_consumer.rs", "E0603"),
+        ("production_issuer_consumer.rs", "E0432"),
         ("production_grant_consumer.rs", "E0432"),
         ("production_grant_entrypoint_consumer.rs", "E0432"),
         ("production_private_module_consumer.rs", "E0603"),

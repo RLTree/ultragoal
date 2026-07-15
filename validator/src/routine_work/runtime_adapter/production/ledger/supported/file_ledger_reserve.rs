@@ -22,6 +22,10 @@ impl FileLedger {
                         && record.state == AttemptState::Complete
                         && record.binding == spec.binding
                         && !record.artifacts.is_empty() => {}
+                (None, Some(record))
+                    if !spec.reuse_only
+                        && record.state == AttemptState::Complete
+                        && record.binding == spec.binding => {}
                 (None, Some(_)) => {
                     return Err(error("routine-production-semantic-effect-replayed"));
                 }
@@ -72,7 +76,10 @@ impl FileLedger {
                     expires_tick,
                 });
             }
-            let artifacts = existing.map(|record| record.artifacts).unwrap_or_default();
+            let artifacts = existing
+                .filter(|record| record.state != AttemptState::Complete)
+                .map(|record| record.artifacts)
+                .unwrap_or_default();
             let record = ProtocolRecord {
                 binding: spec.binding.clone(),
                 request_id: spec.request_id.clone(),

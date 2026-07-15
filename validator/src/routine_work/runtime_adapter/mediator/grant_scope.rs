@@ -4,8 +4,8 @@ pub(crate) const GRANT_DOMAIN: &[u8] = b"routine-root-grant-v1";
 pub(crate) const GRANT_SEAL_DOMAIN: &[u8] = b"routine-root-grant-seal-v1";
 pub(crate) const RESULT_DOMAIN: &[u8] = b"routine-mediated-result-v1";
 pub(crate) const RECOVERY_DOMAIN: &[u8] = b"routine-mediated-recovery-v1";
-pub(crate) const SUPPORT_LIMIT: &str = "internal macOS single-process routine mediation evidence only; grant replay, reuse authentication, ambiguity recovery, and artifacts are process-local; executable paths must be immutable to this user; after sandbox activation only the exact pinned executable identity may execute, unbound file reads are denied, explicitly bound worktree-relative regular-file reads are identity/content/ctime revalidated, immutable system runtime roots remain policy-authorized, post-activation file-backed executable mapping is limited to immutable system-library roots, and process-fork kills the runner; external interpreted sources, startup-loader environments, executable trampolines, different-object aliases, shebang scripts, descriptor aliases, user-owned executable mappings, and multi-process runners are unsupported; canonical root issuance, durable persistence, public dispatch, installed behavior, and claim decisions remain absent";
-pub(crate) const PRODUCTION_SUPPORT_LIMIT: &str = "source-local pre-discovery public refusal and fail-closed child selection only; a root-owned broker authorization cannot be minted here, so routine discovery, clean no-op, reservation, executable effects, cancellation, child results, installed behavior, representative effect journeys, readiness, release, and completion remain unavailable";
+pub(crate) const MEDIATOR_SUPPORT_LIMIT: &str = "internal macOS single-process routine mediation evidence only; grant replay, reuse authentication, ambiguity recovery, and artifacts are process-local; executable paths must be immutable to this user; after sandbox activation only the exact pinned executable identity may execute, unbound file reads are denied, explicitly bound worktree-relative regular-file reads are identity/content/ctime revalidated, immutable system runtime roots remain policy-authorized, post-activation file-backed executable mapping is limited to immutable system-library roots, and process-fork kills the runner; external interpreted sources, startup-loader environments, executable trampolines, different-object aliases, shebang scripts, descriptor aliases, user-owned executable mappings, and multi-process runners are unsupported; canonical root issuance, durable persistence, public dispatch, installed behavior, and claim decisions remain absent";
+pub(crate) const PRODUCTION_SUPPORT_LIMIT: &str = "source-local canonical routine planning, clean no-op, rust-source-syntax execution, exact durable reuse, conservative fallback, cancellation, bounded interruption recovery, and parent-authenticated observation; arbitrary programs, child-authored results, unbound fallback, installed behavior, representative product journeys, readiness, release, and completion remain unavailable";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum DurableSettlement {
@@ -19,6 +19,8 @@ pub(crate) enum DurableSettlement {
 /// authority. Implementations live only in the sibling production issuer.
 pub(crate) trait DurableAttemptAuthority: Send + Sync {
     fn validate_reserved(&self) -> Result<(), RoutineError>;
+    fn stage_program(&self, program: &PinnedExecutable) -> Result<StagedProgram, RoutineError>;
+    fn cleanup_staged(&self, staged: &StagedProgram) -> Result<(), RoutineError>;
     fn prepare_spawn(&self) -> Result<(), RoutineError>;
     fn stage_success(&self, artifacts: &BTreeMap<String, String>) -> Result<(), RoutineError>;
     fn settle(

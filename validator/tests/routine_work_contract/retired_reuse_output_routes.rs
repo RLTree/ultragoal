@@ -4,13 +4,13 @@ use super::retired_behavior_routes::{
     CHILD_LIFECYCLE_BLOCKER, CHILD_SUCCESS_BLOCKER, Mapping, blocked, routed,
 };
 
-const BROKER: &[&str] =
-    &["broker_binding_controls::root_broker_gate_refuses_before_spawn_and_writes"];
+const LOCAL_ISSUER: &[&str] =
+    &["authority_ledger_controls::missing_publisher_refuses_before_authority_initialization"];
 const BINDING: &[&str] = &[
-    "broker_binding_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations",
+    "local_issuer_binding_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations",
 ];
 const CONTEXT: &[&str] =
-    &["broker_binding_controls::context_mutation_refuses_before_authority_creation"];
+    &["local_issuer_binding_controls::context_mutation_refuses_before_authority_creation"];
 const OUTPUTS: &[&str] = &[
     "filesystem_controls::output_symlink_hardlink_fifo_socket_and_stale_files_refuse_exact_capture",
     "filesystem_controls::output_nested_swap_and_create_delete_restore_refuse_final_validation",
@@ -63,7 +63,7 @@ pub(crate) const MAP: &[Mapping] = &[
     blocked(
         "runtime_mediator_cases/setup_failure_recovery.rs::missing_forged_and_replayed_root_authority_fail_closed",
         CHILD_SUCCESS_BLOCKER,
-        BROKER,
+        LOCAL_ISSUER,
     ),
     routed(
         "runtime_mediator_cases/system_shell_eligibility.rs::root_owned_system_shell_remains_eligible_for_non_root_execution",
@@ -97,6 +97,6 @@ pub(crate) const MAP: &[Mapping] = &[
     blocked(
         "runtime_mediator_cases/unsafe_output_rejection.rs::sandbox_denies_undeclared_writes_and_network_connections",
         CHILD_LIFECYCLE_BLOCKER,
-        BROKER,
+        LOCAL_ISSUER,
     ),
 ];

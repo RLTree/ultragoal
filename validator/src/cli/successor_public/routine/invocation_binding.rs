@@ -23,20 +23,8 @@ pub(crate) fn bind_public_invocation(
             ))?,
         invocation.selected_tool(),
     )?;
-    let expected_environment = BTreeMap::from([
-        ("LANG".to_owned(), "C".to_owned()),
-        ("LC_ALL".to_owned(), "C".to_owned()),
-        (
-            "PATH".to_owned(),
-            executable
-                .parent()
-                .and_then(Path::to_str)
-                .ok_or(PublicFailure::Catalog(
-                    "routine-public-runner-parent-invalid",
-                ))?
-                .to_owned(),
-        ),
-    ]);
+    let expected_environment =
+        crate::routine_work::fixed_environment(&executable).map_err(PublicFailure::Routine)?;
     let expected_reads = node
         .read_sources
         .iter()

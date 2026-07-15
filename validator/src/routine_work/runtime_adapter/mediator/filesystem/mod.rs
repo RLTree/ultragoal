@@ -47,8 +47,6 @@ mod source_revalidation;
 #[cfg(test)]
 pub(crate) use confinement_transitions::*;
 pub(crate) use directory_read_failure::*;
-#[cfg(test)]
-pub(crate) use executable_identity::validate_execution_path_immutability;
 pub(crate) use mediation_failure::*;
 pub(crate) use output_file_limit::*;
 pub(crate) use output_tree_capture::*;

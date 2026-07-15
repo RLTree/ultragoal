@@ -18,8 +18,10 @@ mod reuse;
 mod runtime_adapter;
 mod snapshot;
 
-pub(crate) use behavior::BROKER_CHILD_REQUEST_ENV;
 pub(crate) use behavior::trusted_rust_source_execution_observed;
+pub(crate) use behavior::{
+    CHILD_MODE_ENV, CHILD_MODE_VALUE, LEGACY_BEHAVIOR_SELECTOR_ENV, LEGACY_CHILD_SELECTOR_ENV,
+};
 pub use behavior::{
     RustSourceFrameInput, RustSourceSyntaxError, RustSourceSyntaxErrorKind,
     RustSourceSyntaxObservation, RustSourceSyntaxOutcome, encode_rust_source_syntax_frame,
@@ -50,13 +52,11 @@ pub(crate) use catalog::{
     AdoptedRoutineNode, BoundCatalogInvocation, CatalogAdoption, CatalogSelectionRequest,
     RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation, load_production_catalog,
 };
-#[cfg(target_os = "macos")]
-pub(crate) use runtime_adapter::require_root_broker_for_public_effect;
 pub(crate) use runtime_adapter::{
-    PreparedRoutineExecution, ProductionRoutineIssuer, RoutineAdapterSpec,
+    PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, RoutineAdapterSpec,
     RoutineArtifactPublisher, RoutineCancellation, RoutineInvocationSpec, RoutineMediationResult,
     RoutineMediatorStatus, RoutineNodeDisposition, RoutineReuseInput,
-    bind_rust_source_syntax_invocation, mediate_prepared_routine_execution_production,
+    bind_rust_source_syntax_invocation, fixed_environment, mediate_public_routine_execution,
     prepare_routine_execution, validate_immutable_routine_program,
 };
 
@@ -66,7 +66,6 @@ pub(crate) use authority::set_test_live_authority_hook;
 pub(crate) use runtime_adapter::{
     TestProcessSetupFailure, set_test_mediator_finish_failure, set_test_mediator_post_spawn_hook,
     set_test_mediator_pre_spawn_hook, set_test_output_capture_hook, set_test_process_setup_failure,
-    set_test_read_source_capture_hook, test_probe_execute_without_root_broker,
-    test_require_root_broker_before_spawn, test_spawn_count, validate_output_confinement_after,
+    set_test_read_source_capture_hook, test_spawn_count, validate_output_confinement_after,
     validate_read_confinement_after_bind,
 };

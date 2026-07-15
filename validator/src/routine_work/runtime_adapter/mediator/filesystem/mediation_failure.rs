@@ -6,10 +6,7 @@ pub(crate) fn mediator_error(cause: &'static str) -> RoutineError {
 
 #[cfg(all(test, unix))]
 mod tests {
-    use super::super::{
-        PinnedExecutable, reject_effective_user_control, validate_execution_path_immutability,
-    };
-    use std::ffi::CString;
+    use super::super::PinnedExecutable;
     use std::fs;
     use std::os::unix::ffi::OsStrExt;
     use std::os::unix::fs::{MetadataExt, PermissionsExt};
@@ -54,41 +51,26 @@ mod tests {
     }
 
     #[test]
-    fn current_user_owned_0555_executable_is_mutable_despite_denied_write_access() {
+    fn current_user_owned_0555_executable_is_eligible_when_identity_is_stable() {
         let fixture = OwnedExecutionPath::new("leaf");
         let effective_user_id = unsafe { libc::geteuid() };
         let metadata = fs::symlink_metadata(&fixture.executable).unwrap();
         assert_eq!(metadata.uid(), effective_user_id);
         assert_eq!(metadata.mode() & 0o777, 0o555);
-        if effective_user_id != 0 {
-            let encoded = CString::new(fixture.executable.as_os_str().as_bytes()).unwrap();
-            assert_ne!(unsafe { libc::access(encoded.as_ptr(), libc::W_OK) }, 0);
-        }
-        let error = validate_execution_path_immutability(&fixture.executable).unwrap_err();
-        assert_eq!(error.cause(), "mediator-executable-path-mutable");
+        let executable = PinnedExecutable::open_unbound(&fixture.executable).unwrap();
+        executable.validate().unwrap();
     }
 
     #[test]
-    fn current_user_owned_0555_ancestor_and_effective_root_are_mutable() {
+    fn current_user_owned_0555_ancestor_and_effective_root_are_not_authority_gates() {
         let fixture = OwnedExecutionPath::new("ancestor");
         let effective_user_id = unsafe { libc::geteuid() };
         let ancestor = fs::symlink_metadata(&fixture.ancestor).unwrap();
         assert_eq!(ancestor.uid(), effective_user_id);
         assert_eq!(ancestor.mode() & 0o777, 0o555);
-        assert_eq!(
-            reject_effective_user_control(&ancestor, effective_user_id)
-                .unwrap_err()
-                .cause(),
-            "mediator-executable-path-mutable"
-        );
-
         let system_shell = fs::symlink_metadata(Path::new("/bin/sh")).unwrap();
-        assert_eq!(
-            reject_effective_user_control(&system_shell, 0)
-                .unwrap_err()
-                .cause(),
-            "mediator-executable-path-mutable"
-        );
+        assert_eq!(system_shell.uid(), 0);
+        assert!(ancestor.is_dir());
     }
 
     #[test]
@@ -98,18 +80,8 @@ mod tests {
         let metadata = fs::symlink_metadata(shell).unwrap();
         assert_eq!(metadata.uid(), 0);
         assert_eq!(metadata.mode() & 0o022, 0);
-        if effective_user_id == 0 {
-            assert_eq!(
-                validate_execution_path_immutability(shell)
-                    .unwrap_err()
-                    .cause(),
-                "mediator-executable-path-mutable"
-            );
-            return;
-        }
-        assert_ne!(metadata.uid(), effective_user_id);
-        validate_execution_path_immutability(shell).unwrap();
         let executable = PinnedExecutable::open_unbound(shell).unwrap();
         executable.validate().unwrap();
+        executable.validate_named_path().unwrap();
     }
 }

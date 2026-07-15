@@ -192,11 +192,7 @@ pub(crate) fn capture_program(observation: &RunnerObservation) -> CatalogResult<
     {
         return Err(error("catalog-runner-program-identity-stale"));
     }
-    let effective_user = unsafe { libc::geteuid() };
-    if identity.owner_user_id == effective_user
-        || identity.unix_mode & 0o111 == 0
-        || identity.unix_mode & 0o022 != 0
-    {
+    if identity.unix_mode & 0o111 == 0 || identity.unix_mode & 0o022 != 0 {
         return Err(error("catalog-runner-program-mutable"));
     }
     Ok(SealedFile {

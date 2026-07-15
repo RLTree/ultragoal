@@ -1,4 +1,5 @@
 use super::*;
+use crate::routine_work::{CHILD_MODE_ENV, CHILD_MODE_VALUE};
 
 pub(crate) fn validate_immutable_routine_program(path: &Path) -> Result<(), RoutineError> {
     mediator::validate_routine_program_path(path)
@@ -117,7 +118,11 @@ pub(crate) fn validate_execution_policy(
 pub(crate) fn default_environment(
     runner: &RunnerIdentity,
 ) -> Result<BTreeMap<String, String>, RoutineError> {
-    let parent = Path::new(&runner.program_path)
+    fixed_environment(Path::new(&runner.program_path))
+}
+
+pub(crate) fn fixed_environment(program: &Path) -> Result<BTreeMap<String, String>, RoutineError> {
+    let parent = program
         .parent()
         .and_then(Path::to_str)
         .ok_or_else(|| adapter_error("adapter-runner-program-parent-invalid"))?;
@@ -125,6 +130,7 @@ pub(crate) fn default_environment(
         ("LANG".to_owned(), "C".to_owned()),
         ("LC_ALL".to_owned(), "C".to_owned()),
         ("PATH".to_owned(), parent.to_owned()),
+        (CHILD_MODE_ENV.to_owned(), CHILD_MODE_VALUE.to_owned()),
     ]))
 }
 
@@ -140,7 +146,8 @@ pub(crate) fn validate_environment(
         || environment.iter().any(|(key, value)| {
             key.is_empty()
                 || key.len() > 128
-                || key.starts_with("HUL_ROUTINE_")
+                || (key.starts_with("HUL_ROUTINE_")
+                    && (key != CHILD_MODE_ENV || value != CHILD_MODE_VALUE))
                 || !key
                     .bytes()
                     .all(|byte| byte.is_ascii_uppercase() || byte.is_ascii_digit() || byte == b'_')
