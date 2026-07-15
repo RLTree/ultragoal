@@ -7,11 +7,24 @@ use std::path::{Path, PathBuf};
 #[cfg(test)]
 thread_local! {
     static RECONCILIATION_REFUSALS: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
+    static CAPTURE_REFUSALS: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
+    static CAPTURE_ATTEMPTS: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
 }
 
 #[cfg(test)]
 pub(crate) fn set_reconciliation_refusals(count: usize) {
     RECONCILIATION_REFUSALS.with(|value| value.set(count));
+}
+
+#[cfg(test)]
+pub(crate) fn set_capture_identity_refusals(count: usize) {
+    CAPTURE_REFUSALS.with(|value| value.set(count));
+    CAPTURE_ATTEMPTS.with(|value| value.set(0));
+}
+
+#[cfg(test)]
+pub(crate) fn capture_identity_attempts() -> usize {
+    CAPTURE_ATTEMPTS.with(std::cell::Cell::get)
 }
 
 use crate::catalog_fixture_scope::{ClaimedFixtureScope, FixtureScopeBinding, FixtureScopeError};
@@ -83,12 +96,22 @@ impl ClaimResidue {
 }
 
 impl UnopenedClaimResidue {
-    fn reconcile(self) -> Result<ClaimedFixtureScope, ClaimResidue> {
+    fn reconcile(mut self) -> Result<ClaimedFixtureScope, ClaimResidue> {
         if reconciliation_refused() {
             return Err(ClaimResidue::Unopened(self));
         }
-        let Some(identity) = self.identity else {
-            return Err(ClaimResidue::Unopened(self));
+        let identity = match self.identity {
+            Some(identity) => identity,
+            None => match capture_identity(&self.parent, &self.name) {
+                Ok(identity) => {
+                    self.identity = Some(identity);
+                    identity
+                }
+                Err(error) => {
+                    self.error = error;
+                    return Err(ClaimResidue::Unopened(self));
+                }
+            },
         };
         let descriptor = unsafe {
             libc::openat(
@@ -170,6 +193,11 @@ pub(crate) fn capture_identity(
     parent: &File,
     name: &CString,
 ) -> Result<ClaimIdentity, FixtureScopeError> {
+    if capture_refused() {
+        return Err(FixtureScopeError::Retained(
+            "injected claim identity capture refusal".to_owned(),
+        ));
+    }
     let mut stat = std::mem::MaybeUninit::<libc::stat>::uninit();
     if unsafe {
         libc::fstatat(
@@ -195,4 +223,20 @@ pub(crate) fn capture_identity(
         device: stat.st_dev as u64,
         inode: stat.st_ino as u64,
     })
+}
+
+fn capture_refused() -> bool {
+    #[cfg(test)]
+    {
+        CAPTURE_ATTEMPTS.with(|value| value.set(value.get().saturating_add(1)));
+        return CAPTURE_REFUSALS.with(|value| {
+            let count = value.get();
+            value.set(count.saturating_sub(1));
+            count > 0
+        });
+    }
+    #[cfg(not(test))]
+    {
+        false
+    }
 }

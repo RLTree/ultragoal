@@ -1,5 +1,8 @@
 use super::*;
-use crate::catalog_fixture_claim::{ClaimFailurePoint, set_reconciliation_refusals};
+use crate::catalog_fixture_claim::{
+    ClaimFailurePoint, capture_identity_attempts, set_capture_identity_refusals,
+    set_reconciliation_refusals,
+};
 use crate::catalog_fixture_cleanup_hook::{set_before_final_removal, set_final_refusals};
 use crate::catalog_fixture_scope::CatalogSetupFailurePoint;
 use std::panic::{AssertUnwindSafe, catch_unwind};
@@ -15,6 +18,18 @@ pub(crate) fn invocation_begin_failure_settles_before_the_test_harness_boundary(
         );
     }));
     assert!(result.is_err());
+    assert_eq!(fixture_inventory(), before);
+}
+
+#[test]
+pub(crate) fn invocation_retries_identity_none_residue_with_the_same_descriptor_owner() {
+    let before = fixture_inventory();
+    set_capture_identity_refusals(3);
+    let result = catch_unwind(AssertUnwindSafe(|| {
+        crate::catalog_fixture_invocation::run_catalog_case("identity-none", |_| Ok(()));
+    }));
+    assert!(result.is_err());
+    assert_eq!(capture_identity_attempts(), 4);
     assert_eq!(fixture_inventory(), before);
 }
 
