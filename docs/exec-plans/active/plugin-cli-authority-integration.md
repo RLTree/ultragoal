@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | `71d60b6f1` / tree `0e7ae2f0` | Clean source freeze removes build-specific authority members and causally binds the exact constructor, custody-field operations, and sensitive transition calls; migration, receipt, integration, and all higher claims remain withheld | Freshly falsify the cumulative exact tree; one material defect returns the same candidate to rework |
+| N06 routine execution | rework | `71d60b6f1` / tree `0e7ae2f0` | Independent review proved struct-pattern aliases can mutate opaque custody without entering the direct-field operation ledger; migration, receipt, integration, and all higher claims remain withheld | Reject custody-field pattern aliases and path-receiver mutation in the existing guard, add causal mutants, then refreeze once |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,11 +46,11 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `41`. The next action is one
-fresh cumulative exact-tree review of `71d60b6f1`, focused on the exact
-constructor and mutation allowlist, causal cfg/body mutants, all lifecycle
-siblings, and the honest strict/migration ceiling. No receipt regeneration or
-dependent claim may consume this unaccepted freeze.
+current exact-candidate rejection count for N06 is `42`. The next action is one
+narrow invariant repair that rejects custody-field destructuring aliases and
+subsequent path-receiver mutation, with independent constructor and existing-
+method mutants before the next exact freeze. No receipt regeneration or
+dependent claim may consume this rejected candidate.
 The public 42-test claim remains withheld at 41/42 until a representative-load
 root observation.
 Escalation is legitimate only for
@@ -203,9 +203,10 @@ each branch, worktree, and thread identity; unknown host fields stay unknown.
   `019f6487-8b8d-7d51-810b-1465f481eef7`,
   branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
   owns routine kernel/public adapter behavior and matching tests/fixtures;
-  exact clean source `71d60b6f1` / tree `0e7ae2f0` is under one fresh cumulative
-  exact-tree review after removing build-specific authority members and binding
-  the exact constructor, custody operations, and sensitive transition calls.
+  exact clean source `71d60b6f1` / tree `0e7ae2f0` is rejected because the
+  direct-field operation ledger does not observe struct-pattern aliases followed
+  by path-receiver mutation. The existing guard and causal mutants must close
+  that alias class without changing production behavior.
   Recovery continuation thread `019f67cd-d4f2-7243-ab4a-dbbe11cc564f` preserves
   the original worktree after the source task entered a host system error. Its
   stale WorkerResult, load-sensitive public result, root strict wall, and
