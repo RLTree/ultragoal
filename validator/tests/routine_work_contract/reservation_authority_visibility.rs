@@ -151,20 +151,21 @@ struct AttemptReservation { started: Cell<bool>, settled: Cell<bool> }
 struct StagedCustody(RefCell<Vec<()>>);
 impl AttemptReservation {
     fn existing_method(&self) { let AttemptReservation { started, .. } = self; started.set(true); }
+    fn aliases(&self) { (self).started.set(true); let first = self; let second = &first; second.started.set(true); let pair = (self,); pair.0.started.set(true); match self { alias => alias.started.set(true) }; let closure = || self.started.set(true); closure(); let const_alias = const { |target: &Self| target.started.set(true) }; const_alias(self); let future = async { self.started.set(true) }; drop(future); }
+    fn transition(&self) { let transition = Self::existing_method; transition(self); }
 }
 fn constructor_body() -> AttemptReservation {
     let attempt = AttemptReservation { started: Cell::new(false), settled: Cell::new(false) };
-    let AttemptReservation { settled, .. } = &attempt;
-    settled.set(true);
+    attempt.started.set(true); let AttemptReservation { settled, .. } = &attempt; settled.set(true);
     attempt
 }
-fn tuple_body(staged: &StagedCustody) { let StagedCustody(items) = staged; items.borrow_mut().clear(); }
+impl StagedCustody { fn clear(&self) { self.0.borrow_mut().clear(); } fn aliases(&self) { (self).0.borrow_mut().clear(); let first = self; first.0.borrow_mut().clear(); let pair = (self,); pair.0.0.borrow_mut().clear(); match self { alias => alias.0.borrow_mut().clear() }; let closure = || self.0.borrow_mut().clear(); closure(); let const_alias = const { |target: &Self| target.0.borrow_mut().clear() }; const_alias(self); let future = async { self.0.borrow_mut().clear() }; drop(future); let transition = Self::clear; transition(self); } }
 #[test]
 fn aliases_execute() {
     let attempt = constructor_body();
-    attempt.existing_method();
+    attempt.existing_method(); attempt.aliases(); attempt.transition();
     assert!(attempt.started.get() && attempt.settled.get());
-    tuple_body(&StagedCustody(RefCell::new(vec![()])));
+    let staged = StagedCustody(RefCell::new(vec![()])); staged.aliases(); assert!(staged.0.borrow().is_empty());
 }
 "#
 }

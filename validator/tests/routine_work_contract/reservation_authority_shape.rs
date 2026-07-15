@@ -2,6 +2,10 @@ use std::collections::BTreeMap;
 
 use syn::visit::Visit;
 
+#[path = "reservation_authority_shape/custody_receiver_identity.rs"]
+mod custody_receiver_identity;
+#[path = "reservation_authority_shape/custody_syntax.rs"]
+mod custody_syntax;
 #[path = "reservation_authority_shape/declarations.rs"]
 mod declarations;
 #[path = "reservation_authority_shape/operations.rs"]
@@ -58,6 +62,8 @@ fn validate_authority(source: &str) -> Result<(), &'static str> {
     shape.visit_file(&file);
     shape.require_plain(file.items.len())?;
     shape.require_no_custody_patterns()?;
+    shape.require_direct_transitions()?;
+    shape.require_identity_bound()?;
     shape.require_bound_operations(expected_authority_operations())?;
     shape.require_sensitive_calls([
         "settle_incomplete:self:finish_terminal",
@@ -99,6 +105,8 @@ fn validate_staged(source: &str) -> Result<(), &'static str> {
     shape.visit_file(&file);
     shape.require_plain(file.items.len())?;
     shape.require_no_custody_patterns()?;
+    shape.require_direct_transitions()?;
+    shape.require_identity_bound()?;
     shape.require_bound_operations([
         "cleanup_last:0:borrow",
         "cleanup_last:0:borrow_mut",

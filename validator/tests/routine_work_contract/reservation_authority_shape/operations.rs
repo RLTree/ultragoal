@@ -2,6 +2,10 @@
 
 use std::collections::BTreeSet;
 
+use super::custody_syntax::{
+    allowed_external_method, allowed_external_transition, contains_owner, direct_sensitive_method,
+    field, operation, path_name, sensitive_path,
+};
 use syn::visit::Visit;
 
 pub(super) struct BodyShape {
@@ -9,6 +13,13 @@ pub(super) struct BodyShape {
     forbidden_patterns: BTreeSet<String>,
     patterns: Vec<String>,
     current: String,
+    pub(super) self_paths: Vec<String>,
+    pub(super) direct_self_paths: Vec<String>,
+    pub(super) constructor_locals: usize,
+    pub(super) hidden_custody: usize,
+    pub(super) indirect_transitions: Vec<String>,
+    pub(super) import_renames: usize,
+    closure_depth: usize,
     references: Vec<String>,
     operations: Vec<String>,
     sensitive_calls: Vec<String>,
@@ -17,7 +28,6 @@ pub(super) struct BodyShape {
     unsafe_blocks: usize,
     items: usize,
 }
-
 impl BodyShape {
     pub(super) fn new<const N: usize, const M: usize>(
         tracked: [&str; N],
@@ -28,6 +38,13 @@ impl BodyShape {
             forbidden_patterns: forbidden_patterns.into_iter().map(str::to_owned).collect(),
             patterns: Vec::new(),
             current: String::new(),
+            self_paths: Vec::new(),
+            direct_self_paths: Vec::new(),
+            constructor_locals: 0,
+            hidden_custody: 0,
+            indirect_transitions: Vec::new(),
+            import_renames: 0,
+            closure_depth: 0,
             references: Vec::new(),
             operations: Vec::new(),
             sensitive_calls: Vec::new(),
@@ -37,7 +54,6 @@ impl BodyShape {
             items: 0,
         }
     }
-
     pub(super) fn require_plain(&self, top_level_items: usize) -> Result<(), &'static str> {
         (self.attributes == 0
             && self.macros == 0
@@ -46,7 +62,6 @@ impl BodyShape {
             .then_some(())
             .ok_or("authority-build-specific-or-hidden-code")
     }
-
     pub(super) fn require_bound_operations<const N: usize>(
         &self,
         expected: [&str; N],
@@ -74,14 +89,12 @@ impl BodyShape {
             .then_some(())
             .ok_or("authority-custody-operations")
     }
-
     pub(super) fn require_no_custody_patterns(&self) -> Result<(), &'static str> {
         self.patterns
             .is_empty()
             .then_some(())
             .ok_or("authority-custody-pattern-alias")
     }
-
     pub(super) fn require_sensitive_calls<const N: usize>(
         &self,
         expected: [&str; N],
@@ -120,6 +133,45 @@ impl<'ast> Visit<'ast> for BodyShape {
         self.unsafe_blocks += 1;
     }
 
+    fn visit_use_rename(&mut self, node: &'ast syn::UseRename) {
+        self.import_renames += 1;
+        syn::visit::visit_use_rename(self, node);
+    }
+
+    fn visit_expr_path(&mut self, node: &'ast syn::ExprPath) {
+        if node.path.is_ident("self") {
+            self.self_paths.push(self.current.clone());
+        }
+        if sensitive_path(&node.path) {
+            self.indirect_transitions
+                .push(format!("{}:{}", self.current, path_name(&node.path)));
+        }
+        syn::visit::visit_expr_path(self, node);
+    }
+
+    fn visit_expr_closure(&mut self, node: &'ast syn::ExprClosure) {
+        self.closure_depth += 1;
+        syn::visit::visit_expr_closure(self, node);
+        self.closure_depth -= 1;
+    }
+
+    fn visit_expr_async(&mut self, node: &'ast syn::ExprAsync) {
+        self.closure_depth += 1;
+        syn::visit::visit_expr_async(self, node);
+        self.closure_depth -= 1;
+    }
+
+    fn visit_local(&mut self, node: &'ast syn::Local) {
+        if node
+            .init
+            .as_ref()
+            .is_some_and(|init| contains_owner(&init.expr, &self.forbidden_patterns))
+        {
+            self.constructor_locals += 1;
+        }
+        syn::visit::visit_local(self, node);
+    }
+
     fn visit_pat_struct(&mut self, node: &'ast syn::PatStruct) {
         self.record_custody_pattern(&node.path);
         syn::visit::visit_pat_struct(self, node);
@@ -131,7 +183,13 @@ impl<'ast> Visit<'ast> for BodyShape {
     }
 
     fn visit_expr_field(&mut self, node: &'ast syn::ExprField) {
+        if matches!(node.base.as_ref(), syn::Expr::Path(path) if path.path.is_ident("self")) {
+            self.direct_self_paths.push(self.current.clone());
+        }
         if let Some(field) = field(node).filter(|field| self.tracked.contains(field)) {
+            if self.closure_depth > 0 {
+                self.hidden_custody += 1;
+            }
             self.references.push(format!("{}:{field}", self.current));
         }
         syn::visit::visit_expr_field(self, node);
@@ -144,12 +202,39 @@ impl<'ast> Visit<'ast> for BodyShape {
                     .push(format!("{}:{field}:{}", self.current, operation(node)));
             }
         } else if matches!(node.receiver.as_ref(), syn::Expr::Path(path) if path.path.is_ident("self"))
-            && sensitive_method(&node.method)
         {
-            self.sensitive_calls
-                .push(format!("{}:self:{}", self.current, node.method));
+            self.direct_self_paths.push(self.current.clone());
+            if direct_sensitive_method(&node.method) || node.method == "is_empty" {
+                if self.closure_depth > 0 {
+                    self.hidden_custody += 1;
+                }
+                self.sensitive_calls
+                    .push(format!("{}:self:{}", self.current, node.method));
+            }
+        } else if direct_sensitive_method(&node.method) && !allowed_external_method(node) {
+            self.indirect_transitions
+                .push(format!("{}:{}", self.current, node.method));
         }
         syn::visit::visit_expr_method_call(self, node);
+    }
+
+    fn visit_expr_call(&mut self, node: &'ast syn::ExprCall) {
+        if let syn::Expr::Path(path) = node.func.as_ref() {
+            if sensitive_path(&path.path) {
+                if !allowed_external_transition(&path.path) {
+                    self.indirect_transitions.push(format!(
+                        "{}:{}",
+                        self.current,
+                        path_name(&path.path)
+                    ));
+                }
+                for arg in &node.args {
+                    self.visit_expr(arg);
+                }
+                return;
+            }
+        }
+        syn::visit::visit_expr_call(self, node);
     }
 }
 
@@ -162,45 +247,4 @@ impl BodyShape {
             self.patterns.push(segment.ident.to_string());
         }
     }
-}
-
-fn operation(node: &syn::ExprMethodCall) -> String {
-    if node.method != "set" {
-        return node.method.to_string();
-    }
-    if matches!(node.args.first(), Some(syn::Expr::Lit(lit)) if matches!(&lit.lit, syn::Lit::Bool(value) if value.value))
-        && node.args.len() == 1
-    {
-        "set(true)".to_owned()
-    } else {
-        "set(other)".to_owned()
-    }
-}
-
-fn field(node: &syn::ExprField) -> Option<String> {
-    if !matches!(node.base.as_ref(), syn::Expr::Path(path) if path.path.is_ident("self")) {
-        return None;
-    }
-    match &node.member {
-        syn::Member::Named(name) => Some(name.to_string()),
-        syn::Member::Unnamed(index) if index.index == 0 => Some("0".to_owned()),
-        _ => None,
-    }
-}
-
-fn sensitive_method(name: &syn::Ident) -> bool {
-    [
-        "cleanup_staged",
-        "finish_terminal",
-        "mark_started",
-        "record_failure_and_transition",
-        "settle_incomplete",
-        "settle_success",
-        "stage_and_use",
-        "clear_recorded",
-        "is_empty",
-        "push_and_use",
-    ]
-    .iter()
-    .any(|expected| name == expected)
 }
