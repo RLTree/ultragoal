@@ -5,7 +5,7 @@ use super::*;
 pub(crate) fn source_path_escape_symlink_hardlink_special_and_non_utf8_are_refused_without_blocking()
  {
     crate::catalog_fixture_invocation::run_catalog_case("source-path-security", |invocation| {
-        let mut root = invocation.new_root("source-path-security", VALID_CATALOG);
+        let mut root = invocation.new_root("source-path-security", VALID_CATALOG)?;
         assert_eq!(
             load_production_catalog(
                 root.path(),
@@ -71,6 +71,7 @@ pub(crate) fn source_path_escape_symlink_hardlink_special_and_non_utf8_are_refus
             "catalog-source-path-not-utf8"
         );
         root.teardown_after_assertions();
+        Ok(())
     });
 }
 
@@ -78,7 +79,7 @@ pub(crate) fn source_path_escape_symlink_hardlink_special_and_non_utf8_are_refus
 #[test]
 pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
     crate::catalog_fixture_invocation::run_catalog_case("input-security", |invocation| {
-        let mut root = invocation.new_root("input-symlink", VALID_CATALOG);
+        let mut root = invocation.new_root("input-symlink", VALID_CATALOG)?;
         let catalog = load_full(&root, CANDIDATE_ID);
         let stale = selected(&root, false);
         fs::rename(
@@ -107,7 +108,7 @@ pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
         drop(catalog);
         root.teardown_after_assertions();
 
-        let mut root = invocation.new_root("input-hardlink", VALID_CATALOG);
+        let mut root = invocation.new_root("input-hardlink", VALID_CATALOG)?;
         let catalog = load_full(&root, CANDIDATE_ID);
         let stale = selected(&root, false);
         fs::hard_link(
@@ -135,7 +136,7 @@ pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
         drop(catalog);
         root.teardown_after_assertions();
 
-        let mut root = invocation.new_root("input-special", VALID_CATALOG);
+        let mut root = invocation.new_root("input-special", VALID_CATALOG)?;
         let catalog = load_full(&root, CANDIDATE_ID);
         let stale = selected(&root, false);
         fs::remove_file(root.path().join("tests/input.txt")).unwrap();
@@ -161,7 +162,7 @@ pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
         drop(catalog);
         root.teardown_after_assertions();
 
-        let mut root = invocation.new_root("output-symlink", VALID_CATALOG);
+        let mut root = invocation.new_root("output-symlink", VALID_CATALOG)?;
         fs::create_dir_all(root.path().join("target/alias-destination")).unwrap();
         fs::remove_dir(root.path().join("target/routine-verify")).unwrap();
         std::os::unix::fs::symlink(
@@ -177,6 +178,7 @@ pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
         );
         drop(catalog);
         root.teardown_after_assertions();
+        Ok(())
     });
 }
 
@@ -187,7 +189,7 @@ pub(crate) fn catalog_input_and_output_bounds_are_enforced() {
             .map(|index| format!("src/input-{index}.txt"))
             .collect::<Vec<_>>();
         let bytes = one_node_catalog(&reads, &["target/routine-syntax".to_owned()]);
-        let mut root = invocation.new_root("read-bound", &bytes);
+        let mut root = invocation.new_root("read-bound", &bytes)?;
         assert_eq!(
             load_raw(&root, &bytes, one_node_adoption(&bytes)),
             "catalog-read-source-limit-exceeded"
@@ -198,7 +200,7 @@ pub(crate) fn catalog_input_and_output_bounds_are_enforced() {
             .map(|index| format!("target/routine-{index}"))
             .collect::<Vec<_>>();
         let bytes = one_node_catalog(&["src/input.txt".to_owned()], &outputs);
-        let mut root = invocation.new_root("output-bound", &bytes);
+        let mut root = invocation.new_root("output-bound", &bytes)?;
         assert_eq!(
             load_raw(&root, &bytes, one_node_adoption(&bytes)),
             "catalog-output-scope-limit-exceeded"
@@ -211,7 +213,7 @@ pub(crate) fn catalog_input_and_output_bounds_are_enforced() {
         assert_eq!(too_large.code(), "catalog-input-length-invalid");
 
         let oversized_catalog = vec![b'#'; 1024 * 1024 + 1];
-        let mut root = invocation.new_root("catalog-bound", &oversized_catalog);
+        let mut root = invocation.new_root("catalog-bound", &oversized_catalog)?;
         assert_eq!(
             CatalogAdoption::new(
                 sha(&oversized_catalog),
@@ -225,5 +227,6 @@ pub(crate) fn catalog_input_and_output_bounds_are_enforced() {
             "catalog-source-length-invalid"
         );
         root.teardown_after_assertions();
+        Ok(())
     });
 }

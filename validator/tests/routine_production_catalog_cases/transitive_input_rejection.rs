@@ -4,7 +4,7 @@ use super::*;
 #[test]
 pub(crate) fn omitted_or_injected_transitive_inputs_and_definition_only_targets_cannot_pass() {
     crate::catalog_fixture_invocation::run_catalog_case("input-set-inexact", |invocation| {
-        let mut root = invocation.new_root("input-set-inexact", VALID_CATALOG);
+        let mut root = invocation.new_root("input-set-inexact", VALID_CATALOG)?;
         let catalog = load_full(&root, CANDIDATE_ID);
         let mut rows = selected(&root, false);
         rows[1] = SelectedRoutineNode::new(
@@ -64,6 +64,7 @@ pub(crate) fn omitted_or_injected_transitive_inputs_and_definition_only_targets_
         );
         drop(catalog);
         root.teardown_after_assertions();
+        Ok(())
     });
 }
 
@@ -71,7 +72,7 @@ pub(crate) fn omitted_or_injected_transitive_inputs_and_definition_only_targets_
 #[test]
 pub(crate) fn parse_query_and_refusal_paths_are_recursively_zero_write() {
     crate::catalog_fixture_invocation::run_catalog_case("zero-write", |invocation| {
-        let mut root = invocation.new_root("zero-write", VALID_CATALOG);
+        let mut root = invocation.new_root("zero-write", VALID_CATALOG)?;
         commit_fixture(root.path());
         let before = tree(root.path());
         let before_status = status(root.path());
@@ -105,5 +106,6 @@ pub(crate) fn parse_query_and_refusal_paths_are_recursively_zero_write() {
         assert_eq!(status(root.path()), before_status);
         drop(catalog);
         root.teardown_after_assertions();
+        Ok(())
     });
 }

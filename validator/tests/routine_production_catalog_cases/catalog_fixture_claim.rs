@@ -4,6 +4,16 @@ use std::os::fd::{AsRawFd, FromRawFd};
 use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
 
+#[cfg(test)]
+thread_local! {
+    static RECONCILIATION_REFUSALS: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
+}
+
+#[cfg(test)]
+pub(crate) fn set_reconciliation_refusals(count: usize) {
+    RECONCILIATION_REFUSALS.with(|value| value.set(count));
+}
+
 use crate::catalog_fixture_scope::{ClaimedFixtureScope, FixtureScopeBinding, FixtureScopeError};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -74,6 +84,9 @@ impl ClaimResidue {
 
 impl UnopenedClaimResidue {
     fn reconcile(self) -> Result<ClaimedFixtureScope, ClaimResidue> {
+        if reconciliation_refused() {
+            return Err(ClaimResidue::Unopened(self));
+        }
         let Some(identity) = self.identity else {
             return Err(ClaimResidue::Unopened(self));
         };
@@ -97,6 +110,21 @@ impl UnopenedClaimResidue {
         }
         .reconcile()
         .map_err(ClaimResidue::Opened)
+    }
+}
+
+fn reconciliation_refused() -> bool {
+    #[cfg(test)]
+    {
+        return RECONCILIATION_REFUSALS.with(|value| {
+            let count = value.get();
+            value.set(count.saturating_sub(1));
+            count > 0
+        });
+    }
+    #[cfg(not(test))]
+    {
+        false
     }
 }
 

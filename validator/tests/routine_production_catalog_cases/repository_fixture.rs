@@ -63,7 +63,7 @@ pub(crate) fn fixture_catalog_declares_the_exact_adversarial_matrix_without_clai
 #[test]
 pub(crate) fn valid_catalog_binds_exact_primary_invocations_deterministically_and_without_writes() {
     crate::catalog_fixture_invocation::run_catalog_case("valid-primary", |invocation| {
-        let mut root = invocation.new_root("valid-primary", VALID_CATALOG);
+        let mut root = invocation.new_root("valid-primary", VALID_CATALOG)?;
         let before = tree(root.path());
         let first_catalog = load_full(&root, CANDIDATE_ID);
         assert_eq!(first_catalog.definition_count(), 2);
@@ -107,6 +107,7 @@ pub(crate) fn valid_catalog_binds_exact_primary_invocations_deterministically_an
         drop(second_catalog);
         drop(first_catalog);
         root.teardown_after_assertions();
+        Ok(())
     });
 }
 
@@ -117,12 +118,13 @@ pub(crate) fn repository_catalog_cannot_choose_a_fallback() {
         let mut catalog: serde_json::Value = serde_json::from_slice(VALID_CATALOG).unwrap();
         catalog["routines"][0]["fallback"] = serde_json::json!({"tool": "false"});
         let bytes = serde_json::to_vec_pretty(&catalog).unwrap();
-        let mut root = invocation.new_root("fallback-field", &bytes);
+        let mut root = invocation.new_root("fallback-field", &bytes)?;
         assert_eq!(
             load_raw(&root, &bytes, full_adoption(&bytes, CANDIDATE_ID)),
             "catalog-source-invalid-json"
         );
         root.teardown_after_assertions();
+        Ok(())
     });
 }
 
@@ -130,7 +132,7 @@ pub(crate) fn repository_catalog_cannot_choose_a_fallback() {
 #[test]
 pub(crate) fn exact_same_spelling_same_authority_reuse_selects_and_binds_both_definitions() {
     crate::catalog_fixture_invocation::run_catalog_case("exact-runner-reuse", |invocation| {
-        let mut root = invocation.new_root("exact-runner-reuse", VALID_CATALOG);
+        let mut root = invocation.new_root("exact-runner-reuse", VALID_CATALOG)?;
         let before = tree(root.path());
         let catalog = load_full(&root, CANDIDATE_ID);
         let bound = catalog
@@ -147,5 +149,6 @@ pub(crate) fn exact_same_spelling_same_authority_reuse_selects_and_binds_both_de
         assert_eq!(tree(root.path()), before);
         drop(catalog);
         root.teardown_after_assertions();
+        Ok(())
     });
 }
