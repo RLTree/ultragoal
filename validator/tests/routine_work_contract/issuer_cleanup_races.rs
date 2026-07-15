@@ -8,7 +8,7 @@ use super::owned_compile_quarantine::{CleanupDirective, CleanupOutcome, CleanupS
 use super::owned_compile_scratch::OwnedCompileScratch;
 
 #[test]
-fn authenticate_to_quarantine_swap_is_a_byte_stable_refusal() {
+fn authenticate_to_quarantine_swap_restores_foreign_without_content_change() {
     let mut owned = OwnedCompileScratch::claim("routine-issuer-race-owner");
     let mut attacker = OwnedCompileScratch::claim("routine-issuer-race-attacker");
     let original = owned.path().to_path_buf();
@@ -43,7 +43,7 @@ fn authenticate_to_quarantine_swap_is_a_byte_stable_refusal() {
         CleanupDirective::Continue
     });
     adversary.join().unwrap();
-    assert_eq!(outcome, CleanupOutcome::RefusedZeroWrite);
+    assert_eq!(outcome, CleanupOutcome::ForeignRestoredNoContentChange);
     assert_eq!(tree_digest(&held), genuine_before);
     assert_eq!(tree_digest(&original), attacker_before);
     assert_eq!(

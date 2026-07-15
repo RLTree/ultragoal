@@ -22,6 +22,12 @@ pub(crate) enum CleanupState {
         device: u64,
         inode: u64,
     },
+    ReconciliationAmbiguous {
+        quarantine: CString,
+        device: u64,
+        inode: u64,
+        destination: Option<(u64, u64)>,
+    },
     Settled,
 }
 
@@ -105,13 +111,21 @@ impl OwnedCompileScratch {
             CleanupState::Quarantined(name) | CleanupState::Cleared(name) => {
                 Some(self.path.parent().unwrap().join(name.to_str().unwrap()))
             }
-            CleanupState::DisplacedForeign { quarantine, .. } => Some(
+            CleanupState::DisplacedForeign { quarantine, .. }
+            | CleanupState::ReconciliationAmbiguous { quarantine, .. } => Some(
                 self.path
                     .parent()
                     .unwrap()
                     .join(quarantine.to_str().unwrap()),
             ),
             CleanupState::Claimed | CleanupState::Settled => None,
+        }
+    }
+
+    pub(crate) fn ambiguous_destination(&self) -> Option<Option<(u64, u64)>> {
+        match self.cleanup_state {
+            CleanupState::ReconciliationAmbiguous { destination, .. } => Some(destination),
+            _ => None,
         }
     }
 

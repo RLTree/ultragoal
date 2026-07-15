@@ -26,6 +26,8 @@ mod issuer_api_visibility;
 mod issuer_cleanup_races;
 #[path = "routine_work_contract/issuer_hidden_surface.rs"]
 mod issuer_hidden_surface;
+#[path = "routine_work_contract/issuer_reconciliation_races.rs"]
+mod issuer_reconciliation_races;
 #[path = "routine_work_contract/issuer_scratch_resilience.rs"]
 mod issuer_scratch_resilience;
 #[path = "routine_work_contract/local_capture.rs"]
@@ -36,6 +38,8 @@ mod owned_compile_claim;
 mod owned_compile_directory;
 #[path = "routine_work_contract/owned_compile_quarantine.rs"]
 mod owned_compile_quarantine;
+#[path = "routine_work_contract/owned_compile_reconciliation.rs"]
+mod owned_compile_reconciliation;
 #[path = "routine_work_contract/owned_compile_scratch.rs"]
 mod owned_compile_scratch;
 #[path = "routine_work_contract/planning.rs"]
