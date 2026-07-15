@@ -6,8 +6,8 @@ use super::*;
 fn normal_exit_captures_bounded_streams() {
     let mut command = Command::new("/bin/sh");
     command.args(["-c", "printf stdout; printf stderr >&2"]);
-    match run_bounded_contender(&mut command, Duration::from_secs(1)) {
-        BoundedContender::Exited(output) => {
+    match resolve_control(run_bounded_contender(&mut command, Duration::from_secs(1))) {
+        ContainedContender::Exited(output) => {
             assert_eq!(output.stdout, b"stdout");
             assert_eq!(output.stderr, b"stderr");
         }
@@ -19,8 +19,11 @@ fn normal_exit_captures_bounded_streams() {
 fn pipe_pressure_is_drained_before_verified_termination() {
     let mut command = Command::new("/usr/bin/yes");
     let started = Instant::now();
-    match run_bounded_contender(&mut command, Duration::from_millis(100)) {
-        BoundedContender::TerminatedAndReaped(output) => {
+    match resolve_control(run_bounded_contender(
+        &mut command,
+        Duration::from_millis(100),
+    )) {
+        ContainedContender::TerminatedAndReaped(output) => {
             assert!(started.elapsed() < Duration::from_secs(1));
             assert_eq!(output.stderr, b"");
             assert_eq!(output.stdout.len(), MAX_CAPTURE_BYTES);
@@ -45,8 +48,8 @@ fn primary_kill_refusal_retains_child_until_group_escalation_reaps_it() {
     };
     assert_eq!(observed.primary_kill_refusals(), 1);
     let child = custody.child_id();
-    match custody.escalate(Duration::from_secs(1)) {
-        BoundedContender::TerminatedAndReaped(_) => {}
+    match resolve_control(BoundedContender::Unresolved(custody)) {
+        ContainedContender::TerminatedAndReaped(_) => {}
         other => panic!("group escalation did not reap child {child}: {other:?}"),
     }
 }
@@ -56,13 +59,13 @@ fn reap_status_refusals_are_observed_before_bounded_reap() {
     let (faults, observed) = TerminationFaults::injected(0, 0, 2, 0);
     let mut command = Command::new("/bin/sleep");
     command.arg("60");
-    match run_with_faults(
+    match resolve_control(run_with_faults(
         &mut command,
         Duration::from_millis(20),
         Duration::from_secs(1),
         faults,
-    ) {
-        BoundedContender::TerminatedAndReaped(_) => {}
+    )) {
+        ContainedContender::TerminatedAndReaped(_) => {}
         other => panic!("reap-status recovery did not finish: {other:?}"),
     }
     assert_eq!(observed.reap_status_refusals(), 2);
@@ -83,8 +86,8 @@ fn late_reap_retains_the_same_child_until_a_later_bounded_escalation() {
         other => panic!("late-reap fault did not retain custody: {other:?}"),
     };
     let child = custody.child_id();
-    match custody.escalate(Duration::from_secs(1)) {
-        BoundedContender::TerminatedAndReaped(_) => {}
+    match resolve_control(BoundedContender::Unresolved(custody)) {
+        ContainedContender::TerminatedAndReaped(_) => {}
         other => panic!("late child {child} was not reaped by escalation: {other:?}"),
     }
     assert_eq!(observed.reap_status_refusals(), 20);
@@ -104,8 +107,8 @@ fn group_signal_refusal_falls_through_to_forceful_group_reap() {
         BoundedContender::Unresolved(custody) => custody,
         other => panic!("primary refusal did not retain custody: {other:?}"),
     };
-    match custody.escalate(Duration::from_secs(1)) {
-        BoundedContender::TerminatedAndReaped(_) => {}
+    match resolve_control(BoundedContender::Unresolved(custody)) {
+        ContainedContender::TerminatedAndReaped(_) => {}
         other => panic!("forceful group fallback did not reap: {other:?}"),
     }
     assert_eq!(observed.group_signal_refusals(), 1);
@@ -120,8 +123,8 @@ fn descendant_holding_pipes_is_killed_with_the_owned_group() {
         BoundedContender::Unresolved(custody) => custody,
         other => panic!("descendant custody was not preserved: {other:?}"),
     };
-    match custody.escalate(Duration::from_secs(1)) {
-        BoundedContender::TerminatedAndReaped(_) => {}
+    match resolve_control(BoundedContender::Unresolved(custody)) {
+        ContainedContender::TerminatedAndReaped(_) => {}
         other => panic!("owned process group was not reaped: {other:?}"),
     }
 }
@@ -131,13 +134,13 @@ fn pipe_drain_failure_cannot_hide_an_unreaped_process() {
     let (faults, observed) = TerminationFaults::injected(0, 0, 0, 1);
     let mut command = Command::new("/bin/sleep");
     command.arg("60");
-    match run_with_faults(
+    match resolve_control(run_with_faults(
         &mut command,
         Duration::from_secs(1),
         Duration::from_secs(1),
         faults,
-    ) {
-        BoundedContender::ReapedWithFailure(cause) => {
+    )) {
+        ContainedContender::ReapedWithFailure(cause) => {
             assert_eq!(cause, "contender-pipe-drain-injected-refusal");
         }
         other => panic!("pipe failure returned before verified reap: {other:?}"),
@@ -148,23 +151,19 @@ fn pipe_drain_failure_cannot_hide_an_unreaped_process() {
 #[test]
 fn exit_at_deadline_race_returns_only_a_reaped_state() {
     let mut command = Command::new("/usr/bin/true");
-    let observed = run_bounded_contender(&mut command, Duration::ZERO);
+    let observed = resolve_control(run_bounded_contender(&mut command, Duration::ZERO));
     match observed {
-        BoundedContender::Exited(output)
-        | BoundedContender::ExitedAtDeadline(output)
-        | BoundedContender::TerminatedAndReaped(output) => {
+        ContainedContender::Exited(output)
+        | ContainedContender::ExitedAtDeadline(output)
+        | ContainedContender::TerminatedAndReaped(output) => {
             assert!(output.status.success() || output.status.code().is_none());
         }
-        BoundedContender::Unresolved(custody) => match custody.escalate(Duration::from_secs(1)) {
-            BoundedContender::Exited(output)
-            | BoundedContender::ExitedAtDeadline(output)
-            | BoundedContender::TerminatedAndReaped(output) => {
-                assert!(output.status.success() || output.status.code().is_none());
-            }
-            other => panic!("exit/deadline race was not reaped: {other:?}"),
-        },
-        BoundedContender::ReapedWithFailure(cause) => {
+        ContainedContender::ReapedWithFailure(cause) => {
             panic!("exit/deadline race lost output after reap: {cause}")
         }
     }
+}
+
+fn resolve_control(observed: BoundedContender) -> ContainedContender {
+    contain_contender(observed, Duration::from_secs(1))
 }

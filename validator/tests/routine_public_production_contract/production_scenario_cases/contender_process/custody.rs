@@ -145,10 +145,6 @@ impl ContenderCustody {
         }
     }
 
-    pub(crate) fn cause(&self) -> &'static str {
-        self.cause
-    }
-
     pub(crate) fn child_id(&self) -> u32 {
         self.child.id()
     }
@@ -206,7 +202,7 @@ impl fmt::Debug for ContenderCustody {
     }
 }
 
-fn group_exists(group: i32) -> Result<bool, &'static str> {
+pub(super) fn group_exists(group: i32) -> Result<bool, &'static str> {
     let target = group.checked_neg().ok_or("contender-group-invalid")?;
     if unsafe { libc::kill(target, 0) } == 0 {
         return Ok(true);

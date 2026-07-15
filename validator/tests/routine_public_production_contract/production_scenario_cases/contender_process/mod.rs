@@ -3,7 +3,7 @@ mod faults;
 mod output;
 
 pub(crate) use custody::ContenderCustody;
-use faults::TerminationFaults;
+pub(crate) use faults::{FaultObservations, TerminationFaults};
 use output::CapturedPipes;
 use std::os::unix::process::CommandExt;
 use std::process::{Command, Output, Stdio};
@@ -20,6 +20,14 @@ pub(crate) enum BoundedContender {
     ExitedAtDeadline(Output),
     ReapedWithFailure(&'static str),
     Unresolved(ContenderCustody),
+}
+
+#[derive(Debug)]
+pub(crate) enum ContainedContender {
+    Exited(Output),
+    TerminatedAndReaped(Output),
+    ExitedAtDeadline(Output),
+    ReapedWithFailure(&'static str),
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -41,6 +49,50 @@ pub(crate) fn run_bounded_contender(
     )
 }
 
+pub(crate) fn run_contender_with_termination_faults(
+    command: &mut Command,
+    execution_bound: Duration,
+    cleanup_bound: Duration,
+    faults: TerminationFaults,
+) -> BoundedContender {
+    run_with_faults(command, execution_bound, cleanup_bound, faults)
+}
+
+pub(crate) fn contain_contender(
+    observed: BoundedContender,
+    cleanup_bound: Duration,
+) -> ContainedContender {
+    let unresolved = match into_contained(observed) {
+        Ok(contained) => return contained,
+        Err(unresolved) => unresolved,
+    };
+    match into_contained(unresolved.escalate(cleanup_bound)) {
+        Ok(contained) => contained,
+        Err(unresolved) => {
+            eprintln!(
+                "supervisor containment could not verify group absence; outer runner must terminate this test process and its reported group: {unresolved:?}"
+            );
+            std::process::abort()
+        }
+    }
+}
+
+fn into_contained(observed: BoundedContender) -> Result<ContainedContender, ContenderCustody> {
+    match observed {
+        BoundedContender::Exited(output) => Ok(ContainedContender::Exited(output)),
+        BoundedContender::TerminatedAndReaped(output) => {
+            Ok(ContainedContender::TerminatedAndReaped(output))
+        }
+        BoundedContender::ExitedAtDeadline(output) => {
+            Ok(ContainedContender::ExitedAtDeadline(output))
+        }
+        BoundedContender::ReapedWithFailure(cause) => {
+            Ok(ContainedContender::ReapedWithFailure(cause))
+        }
+        BoundedContender::Unresolved(custody) => Err(custody),
+    }
+}
+
 fn run_with_faults(
     command: &mut Command,
     execution_bound: Duration,
@@ -54,6 +106,7 @@ fn run_with_faults(
         .process_group(0);
     let mut child = command.spawn().unwrap();
     let process_group = i32::try_from(child.id()).unwrap();
+    faults.observe_process_group(process_group);
     let (pipes, pipe_setup_failure) = CapturedPipes::take(&mut child);
     let custody = ContenderCustody::new(child, pipes, process_group, faults);
     if let Some(cause) = pipe_setup_failure {

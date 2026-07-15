@@ -52,6 +52,24 @@ pub(crate) fn git_output(root: &Path, args: &[&str]) -> Vec<u8> {
     output.stdout
 }
 
+pub(crate) fn routine_command(root: &Path, home: &Path, binary: &Path) -> Command {
+    let mut command = Command::new(binary);
+    command
+        .env_clear()
+        .env("HOME", home)
+        .env("LC_ALL", "C")
+        .env("LANG", "C")
+        .env("PATH", binary.parent().unwrap())
+        .env("GIT_CONFIG_GLOBAL", "/dev/null")
+        .env("GIT_CONFIG_NOSYSTEM", "1")
+        .env("GIT_OPTIONAL_LOCKS", "0")
+        .env("GIT_TERMINAL_PROMPT", "0")
+        .current_dir(root)
+        .arg("--root")
+        .arg(root);
+    command
+}
+
 pub(crate) fn sha(bytes: &[u8]) -> String {
     format!("sha256:{}", raw_sha(bytes))
 }

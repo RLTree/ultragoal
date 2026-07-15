@@ -150,6 +150,10 @@ impl Fixture {
         self.state_root().join("adapter/adapter.lock")
     }
 
+    pub(crate) fn binary_path(&self) -> &Path {
+        &self.binary
+    }
+
     pub fn status(&self) -> Vec<u8> {
         git_output(
             &self.root,
@@ -206,22 +210,7 @@ impl Fixture {
     }
 
     pub(crate) fn base_command(&self) -> Command {
-        let binary = &self.binary;
-        let mut command = Command::new(&binary);
-        command
-            .env_clear()
-            .env("HOME", &self.home)
-            .env("LC_ALL", "C")
-            .env("LANG", "C")
-            .env("PATH", binary.parent().unwrap())
-            .env("GIT_CONFIG_GLOBAL", "/dev/null")
-            .env("GIT_CONFIG_NOSYSTEM", "1")
-            .env("GIT_OPTIONAL_LOCKS", "0")
-            .env("GIT_TERMINAL_PROMPT", "0")
-            .current_dir(&self.root)
-            .arg("--root")
-            .arg(&self.root);
-        command
+        routine_command(&self.root, &self.home, &self.binary)
     }
 
     fn source_binary() -> PathBuf {
