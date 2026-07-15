@@ -1,5 +1,5 @@
 use super::*;
-use std::panic::{AssertUnwindSafe, catch_unwind, resume_unwind};
+use std::panic::{catch_unwind, resume_unwind, AssertUnwindSafe};
 
 type PanicPayload = Box<dyn std::any::Any + Send>;
 
@@ -8,10 +8,9 @@ struct CapturedCleanup {
     evidence: CleanupEvidence,
 }
 
-struct ReservationFailurePanic {
-    resume: PanicPayload,
-    evidence: ReservationFailureEvidence,
-}
+// Stack-local control only: cleanup was observed, but its durable record failed.
+// It carries no cleanup evidence and only run_reserved can decode it.
+struct TransitionRecordRefusal(RoutineError);
 
 pub(crate) fn run_reserved<T>(
     attempt: AttemptReservation,
@@ -20,9 +19,10 @@ pub(crate) fn run_reserved<T>(
     let outcome = catch_unwind(AssertUnwindSafe(|| lifecycle(&attempt)));
     match outcome {
         Ok(Ok(value)) if attempt.settled.get() => Ok(value),
+        Ok(Err(error)) if attempt.settled.get() => Err(error),
         Ok(Ok(_)) => finish_missing_transition(&attempt),
         Ok(Err(error)) => finish_error(&attempt, error),
-        Err(payload) => finish_panic(&attempt, payload),
+        Err(payload) => finish_unwind(&attempt, payload),
     }
 }
 
@@ -30,25 +30,34 @@ pub(super) fn observe_staged_transition(
     attempt: &AttemptReservation,
     operation: impl FnOnce() -> Result<(), RoutineError>,
 ) -> Result<(), RoutineError> {
-    let primary = match catch_unwind(AssertUnwindSafe(operation)) {
-        Ok(Err(error)) if error.reservation_failure_evidence().is_some() => return Err(error),
-        Err(payload) if payload.is::<ReservationFailurePanic>() => resume_unwind(payload),
-        outcome => outcome,
-    };
+    let primary = catch_unwind(AssertUnwindSafe(operation));
     let cleanup = capture_staged_cleanup(attempt);
     match primary {
         Ok(Ok(())) => finish_cleanup_observation(attempt, cleanup),
         Ok(Err(error)) => {
             let evidence = observed_error(attempt, &error, cleanup.evidence);
             drop(cleanup.outcome);
-            Err(error.with_reservation_failure_evidence(evidence))
+            record_or_refuse(attempt, &evidence);
+            Err(error)
         }
         Err(payload) => {
             let (resume, primary, process_cleanup) = panic_observation(payload);
             let evidence = attempt.failure_evidence(primary, process_cleanup, cleanup.evidence);
             drop(cleanup.outcome);
-            resume_unwind(Box::new(ReservationFailurePanic { resume, evidence }))
+            record_or_refuse(attempt, &evidence);
+            resume_unwind(resume)
         }
+    }
+}
+
+fn finish_unwind<T>(
+    attempt: &AttemptReservation,
+    payload: PanicPayload,
+) -> Result<T, RoutineError> {
+    match payload.downcast::<TransitionRecordRefusal>() {
+        Ok(refusal) => Err(refusal.0),
+        Err(payload) if attempt.settled.get() => resume_unwind(payload),
+        Err(payload) => finish_panic(attempt, payload),
     }
 }
 
@@ -71,10 +80,6 @@ fn finish_missing_transition<T>(attempt: &AttemptReservation) -> Result<T, Routi
 }
 
 fn finish_error<T>(attempt: &AttemptReservation, error: RoutineError) -> Result<T, RoutineError> {
-    if let Some(evidence) = error.reservation_failure_evidence() {
-        record_transition(attempt, evidence)?;
-        return Err(error);
-    }
     let (primary, process_cleanup) = error
         .process_custody()
         .map(|evidence| (evidence.primary.clone(), evidence.cleanup.clone()))
@@ -95,17 +100,6 @@ fn finish_error<T>(attempt: &AttemptReservation, error: RoutineError) -> Result<
 }
 
 fn finish_panic<T>(attempt: &AttemptReservation, payload: PanicPayload) -> Result<T, RoutineError> {
-    let payload = match payload.downcast::<ReservationFailurePanic>() {
-        Ok(failure) => {
-            let ReservationFailurePanic { resume, evidence } = *failure;
-            if let Err(error) = record_transition(attempt, &evidence) {
-                drop(resume);
-                return Err(error);
-            }
-            resume_unwind(resume)
-        }
-        Err(payload) => payload,
-    };
     let (original, process) = match process::take_process_custody_panic(payload) {
         Ok((original, process)) => (original, process),
         Err(original) => {
@@ -134,12 +128,14 @@ fn finish_cleanup_observation(
         Ok(Ok(())) => Ok(()),
         Ok(Err(error)) => {
             let evidence = observed_error(attempt, &error, cleanup.evidence);
-            Err(error.with_reservation_failure_evidence(evidence))
+            record_or_refuse(attempt, &evidence);
+            Err(error)
         }
         Err(payload) => {
             let (resume, primary, process_cleanup) = panic_observation(payload);
             let evidence = attempt.failure_evidence(primary, process_cleanup, cleanup.evidence);
-            resume_unwind(Box::new(ReservationFailurePanic { resume, evidence }))
+            record_or_refuse(attempt, &evidence);
+            resume_unwind(resume)
         }
     }
 }
@@ -179,6 +175,12 @@ fn capture_staged_cleanup(attempt: &AttemptReservation) -> CapturedCleanup {
         Err(payload) => CleanupEvidence::Panic(PanicEvidence::capture(payload.as_ref())),
     };
     CapturedCleanup { outcome, evidence }
+}
+
+fn record_or_refuse(attempt: &AttemptReservation, record: &ReservationFailureEvidence) {
+    if let Err(error) = record_transition(attempt, record) {
+        resume_unwind(Box::new(TransitionRecordRefusal(error)));
+    }
 }
 
 fn record_transition(

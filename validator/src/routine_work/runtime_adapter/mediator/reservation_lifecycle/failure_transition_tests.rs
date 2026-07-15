@@ -1,6 +1,6 @@
 use super::super::terminal_settlement_fixture::*;
 use super::super::*;
-use std::panic::{AssertUnwindSafe, catch_unwind};
+use std::panic::{catch_unwind, AssertUnwindSafe};
 
 #[test]
 fn failure_record_error_or_panic_retains_exact_active_authority() {
@@ -51,13 +51,11 @@ fn failure_record_error_or_panic_retains_exact_active_authority() {
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         assert_eq!(state.active_protocols.get(&protocol), Some(&grant));
-        assert!(
-            durable
-                .failure_records
-                .lock()
-                .unwrap_or_else(std::sync::PoisonError::into_inner)
-                .is_empty()
-        );
+        assert!(durable
+            .failure_records
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .is_empty());
         drop(state);
         let mut state = registry()
             .lock()

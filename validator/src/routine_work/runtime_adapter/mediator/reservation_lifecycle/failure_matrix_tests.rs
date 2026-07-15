@@ -2,7 +2,7 @@ use super::super::terminal_settlement_fixture::*;
 use super::super::*;
 use crate::routine_work::error::PanicPayloadKind;
 use std::fs;
-use std::panic::{AssertUnwindSafe, catch_unwind};
+use std::panic::{catch_unwind, AssertUnwindSafe};
 
 #[derive(Clone, Copy, Debug)]
 enum CleanupCase {

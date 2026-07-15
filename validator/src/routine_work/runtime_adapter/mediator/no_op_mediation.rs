@@ -227,6 +227,9 @@ pub(crate) enum IntentResult {
 }
 
 #[cfg(test)]
+#[path = "no_op_mediation/failure_authority.rs"]
+mod failure_authority_tests;
+#[cfg(test)]
 #[path = "no_op_mediation/producer_failure.rs"]
 mod producer_failure_tests;
 #[cfg(test)]

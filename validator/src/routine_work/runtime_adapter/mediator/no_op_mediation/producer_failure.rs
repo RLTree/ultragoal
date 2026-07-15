@@ -1,7 +1,7 @@
 use super::producer_state::*;
 use super::*;
 use std::fs;
-use std::panic::{AssertUnwindSafe, catch_unwind};
+use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::sync::atomic::Ordering;
 
 #[derive(Clone, Copy)]

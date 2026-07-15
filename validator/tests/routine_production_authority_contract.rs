@@ -68,6 +68,7 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
         include_str!("../src/routine_work/runtime_adapter/mediator/read_source_binding.rs");
     let lifecycle =
         include_str!("../src/routine_work/runtime_adapter/mediator/reservation_lifecycle.rs");
+    let error = include_str!("../src/routine_work/error.rs");
     let stage = mediation.find("attempt.stage_success").unwrap();
     let publish = mediation.find("publisher.publish").unwrap();
     let settle = mediation.find("attempt.settle_success").unwrap();
@@ -80,7 +81,11 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
     assert!(mediation.contains("observe_staged_transition(&attempt, || Ok(()))"));
     assert!(!mediation.contains("(Err(_), Err(error))"));
     assert!(lifecycle.contains("attempt.record_failure_and_transition(record)"));
-    assert!(lifecycle.contains("reservation_failure_evidence()"));
+    assert!(!lifecycle.contains("ReservationFailurePanic"));
+    assert!(!lifecycle.contains("error.transition_failure()"));
+    assert!(!error.contains("reservation_failure_evidence"));
+    assert!(!error.contains("with_reservation_failure_evidence"));
+    assert!(!error.contains("pub(crate) fn with_transition_failure"));
 }
 
 #[test]

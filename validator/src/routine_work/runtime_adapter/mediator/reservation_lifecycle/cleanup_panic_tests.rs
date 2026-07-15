@@ -1,7 +1,7 @@
 use super::super::terminal_settlement_fixture::*;
 use super::super::*;
 use std::fs;
-use std::panic::{AssertUnwindSafe, catch_unwind};
+use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::sync::atomic::Ordering;
 
 fn set_cleanup_panic(durable: &TerminalDurable, payload: &'static str) {

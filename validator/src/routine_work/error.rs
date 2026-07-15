@@ -53,7 +53,6 @@ pub struct RoutineError {
     cause: &'static str,
     subject_sha256: Option<String>,
     process_custody: Option<Box<ProcessCustodyEvidence>>,
-    reservation_failure_evidence: Option<Box<ReservationFailureEvidence>>,
     transition_failure: Option<Box<ReservationTransitionFailure>>,
 }
 
@@ -70,7 +69,6 @@ impl RoutineError {
             cause,
             subject_sha256,
             process_custody: None,
-            reservation_failure_evidence: None,
             transition_failure: None,
         }
     }
@@ -92,19 +90,7 @@ impl RoutineError {
         self.process_custody.as_deref()
     }
 
-    pub(crate) fn with_reservation_failure_evidence(
-        mut self,
-        evidence: ReservationFailureEvidence,
-    ) -> Self {
-        self.reservation_failure_evidence = Some(Box::new(evidence));
-        self
-    }
-
-    pub(crate) fn reservation_failure_evidence(&self) -> Option<&ReservationFailureEvidence> {
-        self.reservation_failure_evidence.as_deref()
-    }
-
-    pub(crate) fn with_transition_failure(mut self, failure: ReservationTransitionFailure) -> Self {
+    fn with_transition_failure(mut self, failure: ReservationTransitionFailure) -> Self {
         self.transition_failure = Some(Box::new(failure));
         self
     }
