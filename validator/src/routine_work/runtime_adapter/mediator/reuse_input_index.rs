@@ -1,5 +1,8 @@
 use super::*;
 
+#[path = "reuse_input_index/authentication_authority.rs"]
+mod authentication_authority;
+
 pub(crate) fn index_reuse_inputs(
     input: RoutineReuseInput,
     request: &RoutineEffectRequest,
@@ -62,20 +65,7 @@ pub(crate) fn verify_reuse_artifact(
         return Ok(None);
     }
     let artifact_sha256 = sha256(bytes);
-    let process_authenticated = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .authenticated_artifacts
-        .get(&artifact_sha256)
-        .is_some_and(|witness| witness == &wire.mediator_witness_sha256);
-    let durable_authenticated = if process_authenticated {
-        false
-    } else if let Some(durable) = &attempt.durable {
-        durable.authenticates_artifact(&artifact_sha256, &wire.mediator_witness_sha256)?
-    } else {
-        false
-    };
-    if !(process_authenticated || durable_authenticated)
+    if !attempt.authenticates_artifact(&artifact_sha256, &wire.mediator_witness_sha256)?
         || wire.mediator_witness_sha256 != reuse_witness(&wire)?
         || wire.protocol_id != token.protocol_id()
         || wire.intent_id != token.intent().intent_id()
@@ -103,6 +93,13 @@ pub(crate) fn verify_reuse_artifact(
         canonical_bytes: bytes.to_vec(),
     }))
 }
+
+#[cfg(test)]
+#[path = "reuse_input_index/durable_authentication_fixture.rs"]
+mod durable_authentication_fixture;
+#[cfg(test)]
+#[path = "reuse_input_index/durable_authority_tests.rs"]
+mod durable_authority_tests;
 
 pub(crate) fn result_matches_reuse(wire: &ReuseArtifactWire) -> bool {
     let result = &wire.result_artifact;

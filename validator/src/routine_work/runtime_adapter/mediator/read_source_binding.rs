@@ -25,7 +25,7 @@ pub(crate) fn validate_read_sources(
 #[derive(Default)]
 pub(crate) struct MediatorRegistry {
     pub(crate) consumed_grants: BTreeSet<String>,
-    pub(crate) authenticated_artifacts: BTreeMap<String, String>,
+    pub(crate) non_durable_authenticated_artifacts: BTreeMap<String, String>,
     pub(crate) ambiguous_protocols: BTreeMap<String, String>,
     pub(crate) active_protocols: BTreeMap<String, String>,
 }

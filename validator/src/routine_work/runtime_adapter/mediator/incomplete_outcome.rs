@@ -15,19 +15,17 @@ pub(crate) fn incomplete_node(
     }
 }
 
-pub(crate) fn authenticate_generated(values: Vec<(String, Vec<u8>)>) -> BTreeMap<String, String> {
-    let mut state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
+pub(crate) fn collect_generated_witnesses(
+    values: Vec<(String, Vec<u8>)>,
+    attempt: &AttemptReservation,
+) -> BTreeMap<String, String> {
     let mut authenticated = BTreeMap::new();
     for (digest, bytes) in values {
         if let Ok(wire) = serde_json::from_slice::<ReuseArtifactWire>(&bytes) {
-            state
-                .authenticated_artifacts
-                .insert(digest.clone(), wire.mediator_witness_sha256.clone());
             authenticated.insert(digest, wire.mediator_witness_sha256);
         }
     }
+    attempt.retain_non_durable_authentication(&authenticated);
     authenticated
 }
 

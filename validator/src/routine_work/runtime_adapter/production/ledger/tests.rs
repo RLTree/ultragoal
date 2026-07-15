@@ -1,6 +1,8 @@
 use super::*;
 use std::sync::{Arc, Barrier};
 
+#[path = "artifact_authentication_tests.rs"]
+mod artifact_authentication_tests;
 #[path = "fixture_ownership_tests.rs"]
 mod fixture_ownership_tests;
 #[path = "ledger_fixture_root.rs"]

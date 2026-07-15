@@ -178,7 +178,7 @@ pub(crate) fn mediate_effect(
                 DurableSettlement::Incomplete
             })?
         } else {
-            let authenticated = authenticate_generated(generated);
+            let authenticated = collect_generated_witnesses(generated, attempt);
             if !attempt.reuse_only() {
                 attempt.stage_success(&authenticated)?;
                 if let Some(publisher) = publisher {
