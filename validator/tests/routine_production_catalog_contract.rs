@@ -51,6 +51,8 @@ mod catalog_fixture_invocation_controls;
 mod catalog_fixture_lifecycle;
 #[path = "routine_production_catalog_cases/catalog_fixture_quarantine.rs"]
 mod catalog_fixture_quarantine;
+#[path = "routine_production_catalog_cases/catalog_fixture_rebind.rs"]
+mod catalog_fixture_rebind;
 #[path = "routine_production_catalog_cases/catalog_fixture_scope.rs"]
 mod catalog_fixture_scope;
 #[path = "routine_production_catalog_cases/repository_fixture.rs"]

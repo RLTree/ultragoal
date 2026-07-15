@@ -1,5 +1,6 @@
 use super::*;
 use crate::catalog_fixture_cleanup_hook::{set_before_entry_removal, set_before_final_removal};
+use crate::catalog_fixture_rebind::{rebind_attempts, set_rebind_refusals};
 use crate::catalog_fixture_scope::{ClaimedFixtureScope, FixtureScopeError};
 use std::sync::{Arc, Mutex};
 
@@ -69,6 +70,53 @@ pub(crate) fn final_quarantine_substitution_is_retained_without_deleting_the_rep
     fs::remove_dir_all(replacement).unwrap();
 }
 
+#[test]
+pub(crate) fn detached_scope_rebinds_only_the_held_directory_after_repeated_refusals() {
+    let parent = catalog_fixture_parent();
+    let before = inventory(&parent);
+    let name = format!("detached-rebind-{}", NEXT.fetch_add(1, Ordering::Relaxed));
+    let mut scope = ClaimedFixtureScope::claim(&parent, &name).unwrap();
+    let observed = Arc::new(Mutex::new(None::<PathBuf>));
+    let replacement = Arc::clone(&observed);
+    set_before_final_removal(Some(Box::new({
+        let parent = parent.clone();
+        move |quarantine| {
+            let quarantine = parent.join(quarantine.to_string_lossy().as_ref());
+            fs::rename(&quarantine, parent.join(format!("{name}-held"))).unwrap();
+            fs::create_dir(&quarantine).unwrap();
+            fs::write(
+                quarantine.join("foreign"),
+                b"preserve detached replacement\n",
+            )
+            .unwrap();
+            *replacement.lock().unwrap() = Some(quarantine);
+        }
+    })));
+    assert!(matches!(
+        scope.rollback(),
+        Err(FixtureScopeError::Retained(_))
+    ));
+    assert!(!scope.has_name_binding());
+    set_rebind_refusals(2);
+    assert!(matches!(
+        scope.rollback(),
+        Err(FixtureScopeError::Retained(_))
+    ));
+    assert!(matches!(
+        scope.rollback(),
+        Err(FixtureScopeError::Retained(_))
+    ));
+    assert_eq!(rebind_attempts(), 2);
+    scope.rollback().unwrap();
+    let replacement = observed.lock().unwrap().take().unwrap();
+    assert_eq!(
+        fs::read(replacement.join("foreign")).unwrap(),
+        b"preserve detached replacement\n"
+    );
+    fs::remove_dir_all(replacement).unwrap();
+    assert_eq!(inventory(&parent), before);
+}
+
 fn replace_quarantined_entry(
     directory: libc::c_int,
     quarantine: &std::ffi::CStr,
@@ -109,4 +157,16 @@ fn catalog_fixture_parent() -> PathBuf {
         .parent()
         .unwrap()
         .join("target/routine-production-catalog-fixtures")
+}
+
+fn inventory(parent: &Path) -> Vec<PathBuf> {
+    let mut entries = fs::read_dir(parent)
+        .map(|rows| {
+            rows.filter_map(Result::ok)
+                .map(|entry| entry.path())
+                .collect::<Vec<_>>()
+        })
+        .unwrap_or_default();
+    entries.sort();
+    entries
 }

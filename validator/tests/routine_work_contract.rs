@@ -20,6 +20,8 @@ mod catalog_fixture_custody;
 mod catalog_fixture_custody_types;
 #[path = "routine_production_catalog_cases/catalog_fixture_directory_entries.rs"]
 mod catalog_fixture_directory_entries;
+#[path = "routine_production_catalog_cases/catalog_fixture_rebind.rs"]
+mod catalog_fixture_rebind;
 #[path = "routine_production_catalog_cases/catalog_fixture_scope.rs"]
 mod catalog_fixture_scope;
 #[path = "routine_work_contract/catalog_fixture_setup.rs"]

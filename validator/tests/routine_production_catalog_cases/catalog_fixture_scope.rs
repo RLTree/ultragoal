@@ -167,9 +167,7 @@ impl ClaimedFixtureScope {
 
     pub(crate) fn rollback(&mut self) -> Result<(), FixtureScopeError> {
         if self.binding == FixtureScopeBinding::Detached {
-            return Err(FixtureScopeError::Retained(
-                "scope is retained by descriptor identity without a pathname binding".to_owned(),
-            ));
+            crate::catalog_fixture_rebind::restore(self)?;
         }
         match crate::catalog_fixture_custody::quarantine_and_remove(
             &self.parent,
