@@ -71,8 +71,8 @@ pub(super) use no_op_mediation::*;
 pub(crate) use process::test_spawn_count;
 pub(super) use read_source_binding::mediate_prepared_routine_execution;
 pub(crate) use read_source_binding::{
-    AttemptReservation, GrantPayload, MediatorRegistry, bind_read_sources, grant_identity,
-    grant_seal, registry, release_active, validate_read_sources,
+    AttemptReservation, bind_read_sources, grant_identity, grant_seal, registry,
+    validate_read_sources,
 };
 pub(crate) use reuse_input_index::*;
 pub(crate) use rust_source_observation::*;

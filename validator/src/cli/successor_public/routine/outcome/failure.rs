@@ -58,6 +58,7 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             PRODUCTION_SUPPORT_LIMIT,
         ),
         PublicFailure::Routine(error) => routine_failure(error),
+        #[cfg(not(target_vendor = "apple"))]
         PublicFailure::Host(HostFailure::Unsupported) => (
             ExitClass::UnsupportedCapability,
             DiagnosticId::DownstreamToolUnavailable,

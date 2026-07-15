@@ -56,45 +56,6 @@ pub(crate) struct RoutineInvocationSpec {
 }
 
 impl RoutineInvocationSpec {
-    #[allow(clippy::too_many_arguments)]
-    pub(crate) fn bound(
-        node_id: String,
-        behavior_id: String,
-        tool_name: String,
-        tool_identity_sha256: String,
-        program_path_hex: String,
-        program_sha256: String,
-        program_byte_length: u64,
-        program_unix_mode: Option<u32>,
-        arguments: Vec<String>,
-        environment_sha256: String,
-        environment: BTreeMap<String, String>,
-        read_authority_sha256: String,
-        read_sources: Vec<RoutineReadSource>,
-        timeout_ms: u64,
-        output_budget_bytes: u64,
-        declared_output_scopes: Vec<RepoPath>,
-    ) -> Self {
-        Self {
-            node_id,
-            behavior_id,
-            tool_name,
-            tool_identity_sha256,
-            program_path_hex,
-            program_sha256,
-            program_byte_length,
-            program_unix_mode,
-            arguments,
-            environment_sha256,
-            environment,
-            read_authority_sha256,
-            read_sources,
-            timeout_ms,
-            output_budget_bytes,
-            declared_output_scopes,
-        }
-    }
-
     pub(crate) fn node_id(&self) -> &str {
         &self.node_id
     }

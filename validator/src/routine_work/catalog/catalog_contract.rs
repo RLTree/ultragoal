@@ -61,10 +61,6 @@ impl AdoptedRoutineNode {
             depends_on,
         })
     }
-
-    pub(crate) fn node_id(&self) -> &str {
-        &self.node_id
-    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -173,10 +169,6 @@ impl TransitiveInputExpectation {
             sha256: required_sha256(sha256.into(), "catalog-input-digest-invalid")?,
             byte_length,
         })
-    }
-
-    pub(crate) fn relative_path(&self) -> &str {
-        self.relative_path.as_str()
     }
 }
 

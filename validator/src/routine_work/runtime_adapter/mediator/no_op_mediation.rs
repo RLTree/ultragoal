@@ -29,7 +29,6 @@ pub(crate) fn mediate_noop(
         protocol_id: None,
         status: RoutineMediatorStatus::CompleteNoOp,
         nodes: Vec::new(),
-        reuse_artifacts: Vec::new(),
         recovery_marker: None,
         support_limit: MEDIATOR_SUPPORT_LIMIT,
     })
@@ -205,7 +204,6 @@ pub(crate) fn mediate_effect(
                 RoutineMediatorStatus::CompleteExecution
             },
             nodes,
-            reuse_artifacts: artifacts,
             recovery_marker,
             support_limit: if production {
                 PRODUCTION_SUPPORT_LIMIT

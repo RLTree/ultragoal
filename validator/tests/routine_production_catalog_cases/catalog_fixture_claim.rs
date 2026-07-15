@@ -73,13 +73,6 @@ pub(crate) struct OpenedClaimResidue {
 }
 
 impl ClaimResidue {
-    pub(crate) fn path(&self) -> &Path {
-        match self {
-            Self::Unopened(value) => &value.path,
-            Self::Opened(value) => &value.path,
-        }
-    }
-
     pub(crate) fn error(&self) -> &FixtureScopeError {
         match self {
             Self::Unopened(value) => &value.error,

@@ -29,17 +29,29 @@ pub(crate) fn index_reuse_inputs(
     Ok(indexed)
 }
 
-#[allow(clippy::too_many_arguments)]
+pub(crate) struct ReuseArtifactValidation<'a> {
+    pub(crate) context: &'a LiveContext,
+    pub(crate) plan: &'a RoutinePlan,
+    pub(crate) token: &'a RoutineMediatedIntent,
+    pub(crate) snapshot_id: &'a str,
+    pub(crate) dependencies: &'a BTreeMap<String, String>,
+    pub(crate) outputs: &'a OutputConfinement,
+    pub(crate) attempt: &'a AttemptReservation,
+}
+
 pub(crate) fn verify_reuse_artifact(
     bytes: &[u8],
-    context: &LiveContext,
-    plan: &RoutinePlan,
-    token: &RoutineMediatedIntent,
-    snapshot_id: &str,
-    dependencies: &BTreeMap<String, String>,
-    outputs: &OutputConfinement,
-    attempt: &AttemptReservation,
+    validation: ReuseArtifactValidation<'_>,
 ) -> Result<Option<VerifiedReuseArtifact>, RoutineError> {
+    let ReuseArtifactValidation {
+        context,
+        plan,
+        token,
+        snapshot_id,
+        dependencies,
+        outputs,
+        attempt,
+    } = validation;
     let Ok(wire) = serde_json::from_slice::<ReuseArtifactWire>(bytes) else {
         return Ok(None);
     };

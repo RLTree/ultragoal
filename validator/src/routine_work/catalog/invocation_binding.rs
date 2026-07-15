@@ -31,10 +31,6 @@ pub(crate) struct BoundCatalogInvocation {
 }
 
 impl BoundCatalogInvocation {
-    pub(crate) fn invocation_id(&self) -> &str {
-        &self.invocation_id
-    }
-
     pub(crate) fn node_id(&self) -> &str {
         &self.node_id
     }
@@ -83,6 +79,7 @@ pub(crate) struct BoundRoutineInvocationSet {
 }
 
 impl BoundRoutineInvocationSet {
+    #[cfg(test)]
     pub(crate) fn invocation_set_id(&self) -> &str {
         &self.invocation_set_id
     }

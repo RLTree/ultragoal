@@ -12,6 +12,7 @@ impl RoutineCancellation {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn cancel(&self) {
         self.cancelled.store(true, Ordering::SeqCst);
     }
@@ -181,7 +182,6 @@ pub(crate) struct RoutineMediationResult {
     pub(crate) protocol_id: Option<String>,
     pub(crate) status: RoutineMediatorStatus,
     pub(crate) nodes: Vec<RoutineNodeMediation>,
-    pub(crate) reuse_artifacts: Vec<Vec<u8>>,
     pub(crate) recovery_marker: Option<String>,
     pub(crate) support_limit: &'static str,
 }

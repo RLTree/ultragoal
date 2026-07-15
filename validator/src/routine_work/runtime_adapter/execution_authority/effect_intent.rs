@@ -34,68 +34,42 @@ pub(crate) struct RoutineEffectIntent {
 }
 
 impl RoutineEffectIntent {
-    #[allow(clippy::too_many_arguments)]
-    pub(crate) fn new(
+    pub(crate) fn from_bound(
         protocol_id: String,
         intent_id: String,
-        plan_order: usize,
-        node_id: String,
-        behavior_id: String,
-        selected_tool: String,
-        tool_identity_sha256: String,
-        program_path_hex: String,
-        program_sha256: String,
-        program_byte_length: u64,
-        program_unix_mode: Option<u32>,
-        argv: Vec<String>,
-        working_directory: String,
-        environment_sha256: String,
-        environment: BTreeMap<String, String>,
-        read_authority_sha256: String,
-        read_sources: Vec<RoutineReadSource>,
-        timeout_ms: u64,
-        output_budget_bytes: u64,
-        declared_output_scopes: Vec<RepoPath>,
-        expected_dependency_nodes: Vec<String>,
-        input_id: String,
+        intent: super::super::BoundIntent,
     ) -> Self {
         Self {
             protocol_id,
             intent_id,
-            plan_order,
-            node_id,
-            behavior_id,
-            selected_tool,
-            tool_identity_sha256,
-            program_path_hex,
-            program_sha256,
-            program_byte_length,
-            program_unix_mode,
-            argv,
-            working_directory,
+            plan_order: intent.plan_order,
+            node_id: intent.node_id,
+            behavior_id: intent.behavior_id,
+            selected_tool: intent.selected_tool,
+            tool_identity_sha256: intent.tool_identity_sha256,
+            program_path_hex: intent.program_path_hex,
+            program_sha256: intent.program_sha256,
+            program_byte_length: intent.program_byte_length,
+            program_unix_mode: intent.program_unix_mode,
+            argv: intent.argv,
+            working_directory: intent.working_directory,
             environment_policy: "clear-all-allowlisted-v1",
-            environment_keys: environment.keys().cloned().collect(),
-            environment_sha256,
-            environment,
+            environment_keys: intent.environment_keys,
+            environment_sha256: intent.environment_sha256,
+            environment: intent.environment,
             read_authority_policy: "default-deny-exact-bound-read-v1",
-            read_source_paths: read_sources
-                .iter()
-                .map(|source| source.relative_path.clone())
-                .collect(),
-            read_authority_sha256,
-            read_sources,
+            read_source_paths: intent.read_source_paths,
+            read_authority_sha256: intent.read_authority_sha256,
+            read_sources: intent.read_sources,
             mediation_preflight: "revalidate-context-candidate-tool-executable-read-sources-output-scopes-before-and-after-effect-v1",
-            timeout_ms,
-            output_budget_bytes,
-            declared_output_scopes,
-            expected_dependency_nodes,
-            input_id,
+            timeout_ms: intent.timeout_ms,
+            output_budget_bytes: intent.output_budget_bytes,
+            declared_output_scopes: intent.declared_output_scopes,
+            expected_dependency_nodes: intent.expected_dependency_nodes,
+            input_id: intent.input_id,
         }
     }
 
-    pub(crate) fn protocol_id(&self) -> &str {
-        &self.protocol_id
-    }
     pub(crate) fn intent_id(&self) -> &str {
         &self.intent_id
     }
@@ -135,9 +109,6 @@ impl RoutineEffectIntent {
     pub(crate) fn environment_policy(&self) -> &'static str {
         self.environment_policy
     }
-    pub(crate) fn environment_keys(&self) -> &[String] {
-        &self.environment_keys
-    }
     pub(crate) fn environment_sha256(&self) -> &str {
         &self.environment_sha256
     }
@@ -155,9 +126,6 @@ impl RoutineEffectIntent {
     }
     pub(crate) fn read_sources(&self) -> &[RoutineReadSource] {
         &self.read_sources
-    }
-    pub(crate) fn mediation_preflight(&self) -> &'static str {
-        self.mediation_preflight
     }
     pub(crate) fn timeout_ms(&self) -> u64 {
         self.timeout_ms

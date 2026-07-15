@@ -1,11 +1,11 @@
 use super::*;
 use crate::catalog_fixture_claim::{
-    capture_identity_attempts, set_capture_identity_refusals, set_reconciliation_refusals,
-    ClaimFailurePoint,
+    ClaimFailurePoint, capture_identity_attempts, set_capture_identity_refusals,
+    set_reconciliation_refusals,
 };
 use crate::catalog_fixture_cleanup_hook::{set_before_final_removal, set_final_refusals};
 use crate::catalog_fixture_scope::CatalogSetupFailurePoint;
-use std::panic::{catch_unwind, AssertUnwindSafe};
+use std::panic::{AssertUnwindSafe, catch_unwind};
 
 #[test]
 pub(crate) fn invocation_begin_failure_settles_before_the_test_harness_boundary() {

@@ -1,19 +1,32 @@
 use super::*;
 
+pub(crate) struct EffectRequestData {
+    pub(crate) request_id: String,
+    pub(crate) protocol_id: String,
+    pub(crate) binding: RoutineBinding,
+    pub(crate) graph_id: String,
+    pub(crate) snapshot_id: String,
+    pub(crate) plan_id: String,
+    pub(crate) result_scope: String,
+    pub(crate) intents: Vec<RoutineEffectIntent>,
+    pub(crate) issuance: u64,
+    pub(crate) seal_id: String,
+}
+
 impl RoutineEffectRequest {
-    #[allow(clippy::too_many_arguments)]
-    pub(crate) fn new(
-        request_id: String,
-        protocol_id: String,
-        binding: RoutineBinding,
-        graph_id: String,
-        snapshot_id: String,
-        plan_id: String,
-        result_scope: String,
-        intents: Vec<RoutineEffectIntent>,
-        issuance: u64,
-        seal_id: String,
-    ) -> Self {
+    pub(crate) fn from_data(data: EffectRequestData) -> Self {
+        let EffectRequestData {
+            request_id,
+            protocol_id,
+            binding,
+            graph_id,
+            snapshot_id,
+            plan_id,
+            result_scope,
+            intents,
+            issuance,
+            seal_id,
+        } = data;
         Self {
             request_id,
             protocol_id,
@@ -110,64 +123,28 @@ pub(crate) struct MediatedExpectedRow {
 /// Opaque one-use authority for exactly one request issuance.
 #[must_use = "mediation authority must be reconciled once or explicitly discarded"]
 pub(crate) struct RoutineMediationAuthority {
-    pub(crate) request_id: String,
-    pub(crate) protocol_id: String,
     pub(crate) binding: RoutineBinding,
-    pub(crate) graph_id: String,
     pub(crate) snapshot_id: String,
     pub(crate) plan_id: String,
-    pub(crate) requested_result_scope: String,
-    pub(crate) execution_result_scope: String,
     pub(crate) expected: Vec<MediatedExpectedRow>,
     pub(crate) seal: Arc<RequestSeal>,
 }
 
 impl RoutineMediationAuthority {
-    #[allow(clippy::too_many_arguments)]
     pub(crate) fn new(
-        request_id: String,
-        protocol_id: String,
         binding: RoutineBinding,
-        graph_id: String,
         snapshot_id: String,
         plan_id: String,
-        requested_result_scope: String,
-        execution_result_scope: String,
         expected: Vec<MediatedExpectedRow>,
         seal: Arc<RequestSeal>,
     ) -> Self {
         Self {
-            request_id,
-            protocol_id,
             binding,
-            graph_id,
             snapshot_id,
             plan_id,
-            requested_result_scope,
-            execution_result_scope,
             expected,
             seal,
         }
-    }
-
-    pub(crate) fn request_id(&self) -> &str {
-        &self.request_id
-    }
-
-    pub(crate) fn protocol_id(&self) -> &str {
-        &self.protocol_id
-    }
-
-    pub(crate) fn requested_result_scope(&self) -> &str {
-        &self.requested_result_scope
-    }
-
-    pub(crate) fn execution_result_scope(&self) -> &str {
-        &self.execution_result_scope
-    }
-
-    pub(crate) fn same_issuance(&self, outcome: &RoutineMediatedOutcome) -> bool {
-        Arc::ptr_eq(&self.seal, &outcome.seal)
     }
 
     pub(crate) fn require_complete(&self) -> Result<(), RoutineError> {
@@ -184,7 +161,6 @@ impl RoutineMediationAuthority {
 pub(crate) struct RoutineMediatedIntent {
     pub(crate) request_id: String,
     pub(crate) protocol_id: String,
-    pub(crate) execution_result_scope: String,
     pub(crate) intent: RoutineEffectIntent,
     pub(crate) seal: Arc<RequestSeal>,
 }

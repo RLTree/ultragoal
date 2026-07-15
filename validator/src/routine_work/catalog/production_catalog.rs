@@ -5,14 +5,17 @@ impl ProductionRoutineCatalog {
         &self.catalog_id
     }
 
+    #[cfg(test)]
     pub(crate) fn graph_id(&self) -> &str {
         &self.graph_id
     }
 
+    #[cfg(test)]
     pub(crate) fn definition_count(&self) -> usize {
         self.definitions.len()
     }
 
+    #[cfg(test)]
     pub(crate) fn definition_ids(&self) -> impl Iterator<Item = &str> {
         self.definitions
             .values()

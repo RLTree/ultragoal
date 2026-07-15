@@ -39,14 +39,20 @@ pub(crate) fn prepare_routine_execution(
             effect_intent_count: 0,
             support_limit,
         })?;
-        return Ok(PreparedRoutineExecution::NoOp(RoutineNoOpProjection::new(
+        return Ok(PreparedRoutineExecution::NoOp(RoutineNoOpProjection {
             projection_id,
-            &binding,
-            graph.graph_id().to_owned(),
-            snapshot.snapshot_id().to_owned(),
-            plan.plan_id().to_owned(),
-            spec.result_scope,
-        )));
+            binding_id: binding.binding_id().to_owned(),
+            context_id: binding.context_id().to_owned(),
+            candidate_id: binding.candidate_id().to_owned(),
+            graph_id: graph.graph_id().to_owned(),
+            snapshot_id: snapshot.snapshot_id().to_owned(),
+            plan_id: plan.plan_id().to_owned(),
+            result_scope: spec.result_scope,
+            selected,
+            status: ReportStatus::CompleteExecution,
+            effect_intent_count: 0,
+            support_limit,
+        }));
     }
     if plan.affected_set().mode() == PlanMode::NoOp {
         return Err(adapter_error("adapter-nonempty-noop-plan-invalid"));
@@ -123,30 +129,7 @@ pub(crate) fn prepare_routine_execution(
         .into_iter()
         .zip(intent_ids)
         .map(|(intent, intent_id)| {
-            RoutineEffectIntent::new(
-                protocol_id.clone(),
-                intent_id,
-                intent.plan_order,
-                intent.node_id,
-                intent.behavior_id,
-                intent.selected_tool,
-                intent.tool_identity_sha256,
-                intent.program_path_hex,
-                intent.program_sha256,
-                intent.program_byte_length,
-                intent.program_unix_mode,
-                intent.argv,
-                intent.working_directory,
-                intent.environment_sha256,
-                intent.environment,
-                intent.read_authority_sha256,
-                intent.read_sources,
-                intent.timeout_ms,
-                intent.output_budget_bytes,
-                intent.declared_output_scopes,
-                intent.expected_dependency_nodes,
-                intent.input_id,
-            )
+            RoutineEffectIntent::from_bound(protocol_id.clone(), intent_id, intent)
         })
         .collect::<Vec<_>>();
     let issuance = NEXT_REQUEST_ISSUANCE
@@ -162,16 +145,18 @@ pub(crate) fn prepare_routine_execution(
         &issuance_bytes,
     ]);
     let seal_id = request_seal(&request_id, &protocol_id, issuance);
-    Ok(PreparedRoutineExecution::Effect(RoutineEffectRequest::new(
-        request_id,
-        protocol_id,
-        binding,
-        graph.graph_id().to_owned(),
-        snapshot.snapshot_id().to_owned(),
-        plan.plan_id().to_owned(),
-        spec.result_scope,
-        intents,
-        issuance,
-        seal_id,
-    )))
+    Ok(PreparedRoutineExecution::Effect(
+        RoutineEffectRequest::from_data(EffectRequestData {
+            request_id,
+            protocol_id,
+            binding,
+            graph_id: graph.graph_id().to_owned(),
+            snapshot_id: snapshot.snapshot_id().to_owned(),
+            plan_id: plan.plan_id().to_owned(),
+            result_scope: spec.result_scope,
+            intents,
+            issuance,
+            seal_id,
+        }),
+    ))
 }

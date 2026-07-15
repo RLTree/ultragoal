@@ -1,34 +1,6 @@
 use super::*;
 
 impl RoutineNoOpProjection {
-    #[allow(clippy::too_many_arguments)]
-    pub(crate) fn new(
-        projection_id: String,
-        binding: &RoutineBinding,
-        graph_id: String,
-        snapshot_id: String,
-        plan_id: String,
-        result_scope: String,
-    ) -> Self {
-        Self {
-            projection_id,
-            binding_id: binding.binding_id().to_owned(),
-            context_id: binding.context_id().to_owned(),
-            candidate_id: binding.candidate_id().to_owned(),
-            graph_id,
-            snapshot_id,
-            plan_id,
-            result_scope,
-            selected: Vec::new(),
-            status: ReportStatus::CompleteExecution,
-            effect_intent_count: 0,
-            support_limit: "non-effectful protocol projection only; no public command or claim",
-        }
-    }
-
-    pub(crate) fn projection_id(&self) -> &str {
-        &self.projection_id
-    }
     pub(crate) fn context_id(&self) -> &str {
         &self.context_id
     }
@@ -38,20 +10,11 @@ impl RoutineNoOpProjection {
     pub(crate) fn plan_id(&self) -> &str {
         &self.plan_id
     }
-    pub(crate) fn result_scope(&self) -> &str {
-        &self.result_scope
-    }
     pub(crate) fn selected(&self) -> &[String] {
         &self.selected
     }
-    pub(crate) fn status(&self) -> ReportStatus {
-        self.status
-    }
     pub(crate) fn effect_intent_count(&self) -> usize {
         self.effect_intent_count
-    }
-    pub(crate) fn support_limit(&self) -> &'static str {
-        self.support_limit
     }
 }
 

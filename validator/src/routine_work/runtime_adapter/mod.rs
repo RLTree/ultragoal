@@ -18,17 +18,15 @@ use crate::context::{EffectClass, LiveContext, ToolCapability};
 
 use super::digest::{digest_of, framed, valid};
 use super::{
-    DependencyResult, DirtySnapshot, ImpactGraph, PlanMode, PlannedCheck, RepoPath,
-    ReportDisposition, ReportRecord, ReportStatus, ReuseExpectation, RoutineBinding, RoutineError,
-    RoutineErrorId, RoutinePlan, RoutineReport, RunOutcome, reconcile_report,
+    DirtySnapshot, ImpactGraph, PlanMode, PlannedCheck, RepoPath, ReportStatus, RoutineBinding,
+    RoutineError, RoutineErrorId, RoutinePlan,
 };
 
 use execution_authority::RoutineReadSource;
 pub(crate) use execution_authority::{
-    PreparedRoutineExecution, RoutineAdapterSpec, RoutineEffectIntent, RoutineEffectRequest,
-    RoutineInvocationSpec, RoutineMediatedExpectation, RoutineMediatedIntent,
-    RoutineMediatedOutcome, RoutineMediatedWitness, RoutineMediationAuthority,
-    RoutineMediationBatch, RoutineNoOpProjection,
+    EffectRequestData, PreparedRoutineExecution, RoutineAdapterSpec, RoutineEffectIntent,
+    RoutineEffectRequest, RoutineInvocationSpec, RoutineMediationAuthority, RoutineMediationBatch,
+    RoutineNoOpProjection,
 };
 pub(crate) use mediator::{
     PRODUCTION_SUPPORT_LIMIT, RoutineArtifactPublisher, RoutineCancellation,

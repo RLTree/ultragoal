@@ -53,33 +53,6 @@ impl ProductionRoutineIssuer {
         }))
     }
 
-    pub(super) fn mediate_with_publisher(
-        &self,
-        context: &LiveContext,
-        plan: &RoutinePlan,
-        prepared: PreparedRoutineExecution,
-        recovery: Option<RoutineRecoveryAuthority>,
-        cancellation: RoutineCancellation,
-        reuse: RoutineReuseInput,
-        publisher: &dyn RoutineArtifactPublisher,
-    ) -> Result<RoutineMediationResult, RoutineError> {
-        let PreparedRoutineExecution::Effect(request) = prepared else {
-            return Err(error("routine-production-publisher-effect-required"));
-        };
-        preflight_production_request(context, plan, &request)?;
-        let require_complete = recovery.is_none() && !reuse.is_empty();
-        let reuse = preflight_production_reuse_input(reuse, &request, require_complete)?;
-        self.mediate_preflighted(
-            context,
-            plan,
-            request,
-            recovery,
-            cancellation,
-            reuse,
-            Some(publisher),
-        )
-    }
-
     pub(super) fn mediate_preflighted(
         &self,
         context: &LiveContext,

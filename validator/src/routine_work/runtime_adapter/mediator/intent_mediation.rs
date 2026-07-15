@@ -29,13 +29,15 @@ pub(crate) fn mediate_intent(
     if let Some(bytes) = reuse {
         if let Some(verified) = verify_reuse_artifact(
             bytes,
-            context,
-            plan,
-            token,
-            snapshot_id,
-            dependencies,
-            &outputs,
-            attempt,
+            ReuseArtifactValidation {
+                context,
+                plan,
+                token,
+                snapshot_id,
+                dependencies,
+                outputs: &outputs,
+                attempt,
+            },
         )? {
             reads.validate(&root)?;
             return Ok(IntentResult::Reused(verified));

@@ -1,6 +1,5 @@
 use super::*;
 
-pub(crate) const GRANT_DOMAIN: &[u8] = b"routine-root-grant-v1";
 pub(crate) const GRANT_SEAL_DOMAIN: &[u8] = b"routine-root-grant-seal-v1";
 pub(crate) const RESULT_DOMAIN: &[u8] = b"routine-mediated-result-v1";
 pub(crate) const RECOVERY_DOMAIN: &[u8] = b"routine-mediated-recovery-v1";

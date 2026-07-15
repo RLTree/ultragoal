@@ -47,17 +47,18 @@ fn fixture() -> (PathBuf, PathBuf) {
 }
 
 fn binding(target_id: &str, label: &str) -> CacheBinding {
-    CacheBinding::new(
-        target_id.to_owned(),
-        digest(format!("source-{label}").as_bytes()),
-        digest(format!("context-{label}").as_bytes()),
-        digest(format!("candidate-{label}").as_bytes()),
-        digest(format!("graph-{label}").as_bytes()),
-        digest(format!("snapshot-{label}").as_bytes()),
-        digest(format!("plan-{label}").as_bytes()),
-        digest(format!("protocol-{label}").as_bytes()),
-        digest(format!("request-{label}").as_bytes()),
-    )
+    CacheBinding {
+        command: "check-routine".to_owned(),
+        target_id: target_id.to_owned(),
+        source_id: digest(format!("source-{label}").as_bytes()),
+        context_id: digest(format!("context-{label}").as_bytes()),
+        candidate_id: digest(format!("candidate-{label}").as_bytes()),
+        graph_id: digest(format!("graph-{label}").as_bytes()),
+        snapshot_id: digest(format!("snapshot-{label}").as_bytes()),
+        plan_id: digest(format!("plan-{label}").as_bytes()),
+        protocol_id: digest(format!("protocol-{label}").as_bytes()),
+        request_id: digest(format!("request-{label}").as_bytes()),
+    }
 }
 
 #[test]

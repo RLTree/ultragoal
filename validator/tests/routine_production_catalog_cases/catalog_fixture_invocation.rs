@@ -3,7 +3,7 @@ use crate::catalog_fixture::FixtureRootGuard;
 use crate::catalog_fixture_claim::FixtureClaimFailure;
 use crate::catalog_fixture_construction::FixtureConstructionFailure;
 use crate::catalog_fixture_scope::ClaimedFixtureScope;
-use std::panic::{catch_unwind, resume_unwind, AssertUnwindSafe};
+use std::panic::{AssertUnwindSafe, catch_unwind, resume_unwind};
 
 pub(crate) struct CatalogFixtureInvocation {
     scope: ClaimedFixtureScope,

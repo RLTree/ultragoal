@@ -8,7 +8,6 @@ pub(crate) fn mediator_error(cause: &'static str) -> RoutineError {
 mod tests {
     use super::super::PinnedExecutable;
     use std::fs;
-    use std::os::unix::ffi::OsStrExt;
     use std::os::unix::fs::{MetadataExt, PermissionsExt};
     use std::path::{Path, PathBuf};
     use std::sync::atomic::{AtomicU64, Ordering};
@@ -95,7 +94,6 @@ mod tests {
     #[test]
     fn root_owned_system_shell_path_remains_eligible_for_non_root_effective_user() {
         let shell = Path::new("/bin/sh");
-        let effective_user_id = unsafe { libc::geteuid() };
         let metadata = fs::symlink_metadata(shell).unwrap();
         assert_eq!(metadata.uid(), 0);
         assert_eq!(metadata.mode() & 0o022, 0);

@@ -5,34 +5,6 @@ use sha2::Sha256;
 
 type HmacSha256 = Hmac<Sha256>;
 
-pub(crate) enum LedgerEffectRequest<'a> {
-    Authenticate {
-        key: &'a [u8],
-        bytes: &'a [u8],
-    },
-    TemporaryName,
-    Rename {
-        directory: &'a File,
-        from: &'a str,
-        to: &'a str,
-    },
-    Unlink {
-        directory: &'a File,
-        name: &'a str,
-    },
-}
-
-pub(crate) enum LedgerEffectResponse {
-    Digest(String),
-    Name(String),
-    Applied,
-}
-
-#[derive(Debug)]
-pub(crate) struct LedgerEffectError {
-    pub(crate) cause: RoutineError,
-}
-
 pub(crate) fn hmac(key: &[u8], bytes: &[u8]) -> Result<String, RoutineError> {
     let mut mac = HmacSha256::new_from_slice(key)
         .map_err(|_| error("routine-production-authority-hmac-invalid"))?;

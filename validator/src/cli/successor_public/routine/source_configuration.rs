@@ -64,14 +64,15 @@ pub(crate) fn execute_inner(
         .map_err(PublicFailure::Routine)?;
         return Ok(outcome::mediation(
             &result,
-            context.context_id(),
-            plan.binding().candidate_id(),
-            graph.graph_id(),
-            snapshot.snapshot_id(),
-            plan.plan_id(),
-            &source_id,
-            None,
-            plan.affected_set().coverage().fallback_tool_count(),
+            outcome::MediationContext {
+                context_id: context.context_id(),
+                candidate_id: plan.binding().candidate_id(),
+                graph_id: graph.graph_id(),
+                snapshot_id: snapshot.snapshot_id(),
+                plan_id: plan.plan_id(),
+                source_id: &source_id,
+                fallback_tool_count: plan.affected_set().coverage().fallback_tool_count(),
+            },
         ));
     }
 
@@ -108,17 +109,18 @@ pub(crate) fn execute_inner(
     };
     let request_id = request.request_id().to_owned();
     let protocol_id = request.protocol_id().to_owned();
-    let cache_binding = CacheBinding::new(
-        state.target_id().to_owned(),
-        source_id.clone(),
-        context.context_id(),
-        plan.binding().candidate_id(),
-        graph.graph_id(),
-        snapshot.snapshot_id(),
-        plan.plan_id(),
-        &protocol_id,
-        &request_id,
-    );
+    let cache_binding = CacheBinding {
+        command: "check-routine".to_owned(),
+        target_id: state.target_id().to_owned(),
+        source_id: source_id.clone(),
+        context_id: context.context_id().to_owned(),
+        candidate_id: plan.binding().candidate_id().to_owned(),
+        graph_id: graph.graph_id().to_owned(),
+        snapshot_id: snapshot.snapshot_id().to_owned(),
+        plan_id: plan.plan_id().to_owned(),
+        protocol_id,
+        request_id,
+    };
     let reuse = match state.read_reuse(&cache_binding) {
         Ok(reuse) => reuse,
         Err(error) => {
@@ -173,13 +175,14 @@ pub(crate) fn execute_inner(
     }
     Ok(outcome::mediation(
         &result,
-        context.context_id(),
-        plan.binding().candidate_id(),
-        graph.graph_id(),
-        snapshot.snapshot_id(),
-        plan.plan_id(),
-        &source_id,
-        Some(&protocol_id),
-        plan.affected_set().coverage().fallback_tool_count(),
+        outcome::MediationContext {
+            context_id: context.context_id(),
+            candidate_id: plan.binding().candidate_id(),
+            graph_id: graph.graph_id(),
+            snapshot_id: snapshot.snapshot_id(),
+            plan_id: plan.plan_id(),
+            source_id: &source_id,
+            fallback_tool_count: plan.affected_set().coverage().fallback_tool_count(),
+        },
     ))
 }

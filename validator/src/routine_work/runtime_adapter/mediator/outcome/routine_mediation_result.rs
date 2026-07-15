@@ -9,12 +9,12 @@ impl RoutineMediationResult {
         self.request_id.as_deref()
     }
 
-    pub(crate) fn nodes(&self) -> &[RoutineNodeMediation] {
-        &self.nodes
+    pub(crate) fn protocol_id(&self) -> Option<&str> {
+        self.protocol_id.as_deref()
     }
 
-    pub(crate) fn reuse_artifacts(&self) -> &[Vec<u8>] {
-        &self.reuse_artifacts
+    pub(crate) fn nodes(&self) -> &[RoutineNodeMediation] {
+        &self.nodes
     }
 
     pub(crate) fn recovery_marker(&self) -> Option<&str> {

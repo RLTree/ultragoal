@@ -2,6 +2,7 @@ use super::*;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum HostFailure {
+    #[cfg(not(target_vendor = "apple"))]
     Unsupported,
     Unavailable,
     Invalid,
@@ -23,34 +24,6 @@ pub(crate) struct CacheBinding {
     pub(crate) plan_id: String,
     pub(crate) protocol_id: String,
     pub(crate) request_id: String,
-}
-
-impl CacheBinding {
-    #[allow(clippy::too_many_arguments)]
-    pub(crate) fn new(
-        target_id: String,
-        source_id: String,
-        context_id: impl Into<String>,
-        candidate_id: impl Into<String>,
-        graph_id: impl Into<String>,
-        snapshot_id: impl Into<String>,
-        plan_id: impl Into<String>,
-        protocol_id: impl Into<String>,
-        request_id: impl Into<String>,
-    ) -> Self {
-        Self {
-            command: "check-routine".to_owned(),
-            target_id,
-            source_id,
-            context_id: context_id.into(),
-            candidate_id: candidate_id.into(),
-            graph_id: graph_id.into(),
-            snapshot_id: snapshot_id.into(),
-            plan_id: plan_id.into(),
-            protocol_id: protocol_id.into(),
-            request_id: request_id.into(),
-        }
-    }
 }
 
 pub(crate) struct HostState {

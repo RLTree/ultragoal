@@ -103,9 +103,11 @@ pub(crate) fn bind_rust_source_syntax_invocation(
         binding,
         check,
         runner,
-        read_sources,
-        timeout_ms,
-        output_budget_bytes,
-        declared_output_scopes,
+        ClosedInvocationLimits {
+            read_source_paths: read_sources,
+            timeout_ms,
+            output_budget_bytes,
+            declared_output_scopes,
+        },
     )
 }
