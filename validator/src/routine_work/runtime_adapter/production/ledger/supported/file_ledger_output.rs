@@ -19,6 +19,50 @@ impl FileLedger {
         self.record_output_transition(token, relative_path, identity, true)
     }
 
+    pub(crate) fn reconcile_output_ambiguity(
+        &self,
+        token: &ReservationToken,
+        ambiguity: &OutputStageAmbiguity,
+    ) -> Result<(), RoutineError> {
+        if token.reuse_only || token.recovery_for.is_none() {
+            return Err(error(
+                "routine-production-output-ambiguity-recovery-required",
+            ));
+        }
+        self.with_payload_conditional(|payload, _tick| {
+            let record = exact_record_mut(payload, token)?;
+            if record.output_journal != token.output_journal {
+                return Err(error("routine-production-output-ambiguity-binding-invalid"));
+            }
+            let component = record
+                .output_journal
+                .components
+                .iter()
+                .find(|component| component.relative_path == ambiguity.relative_path)
+                .ok_or_else(|| error("routine-production-output-ambiguity-binding-invalid"))?;
+            if component.preexisting.is_some()
+                || component.creation_nonce.as_deref() != Some(&ambiguity.creation_nonce)
+                || component.staged.is_some()
+                || component.provisioned.is_some()
+            {
+                return Err(error("routine-production-output-ambiguity-binding-invalid"));
+            }
+            match record.state {
+                AttemptState::Reserved => {
+                    record.state = AttemptState::Incomplete;
+                    Ok(((), true))
+                }
+                AttemptState::Incomplete => Ok(((), false)),
+                AttemptState::Started
+                | AttemptState::Complete
+                | AttemptState::Failed
+                | AttemptState::Cancelled => Err(error(
+                    "routine-production-output-ambiguity-transition-invalid",
+                )),
+            }
+        })
+    }
+
     fn record_output_transition(
         &self,
         token: &ReservationToken,

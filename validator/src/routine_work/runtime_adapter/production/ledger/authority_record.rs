@@ -77,6 +77,12 @@ pub(crate) struct OutputProvisionJournal {
     pub(crate) components: Vec<OutputComponentJournal>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct OutputStageAmbiguity {
+    pub(crate) relative_path: String,
+    pub(crate) creation_nonce: String,
+}
+
 impl OutputProvisionJournal {
     #[cfg(test)]
     pub(crate) fn empty() -> Self {

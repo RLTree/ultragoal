@@ -10,6 +10,11 @@ pub(super) enum ProvisionEvent {
     FinalRecorded,
 }
 
+pub(super) enum ProvisionOutcome {
+    Ready(OutputDirectoryIdentity),
+    UnrecordedStage(OutputStageAmbiguity),
+}
+
 pub(super) fn provision(
     ledger: &FileAuthorityLedger,
     token: &ReservationToken,
@@ -18,7 +23,7 @@ pub(super) fn provision(
     final_name: &str,
     root_device: u64,
     observer: &mut dyn FnMut(&str, ProvisionEvent) -> Result<(), RoutineError>,
-) -> Result<OutputDirectoryIdentity, RoutineError> {
+) -> Result<ProvisionOutcome, RoutineError> {
     let nonce = component
         .creation_nonce
         .as_deref()
@@ -31,7 +36,7 @@ pub(super) fn provision(
             return Err(error("routine-production-output-owned-state-changed"));
         }
         validate_exact(parent, final_name, expected, root_device, false)?;
-        return Ok(expected);
+        return Ok(ProvisionOutcome::Ready(expected));
     }
     if token.reuse_only {
         return Err(error("routine-production-reuse-output-missing"));
@@ -43,7 +48,10 @@ pub(super) fn provision(
                 return Err(error("routine-production-output-final-without-custody"));
             }
             if stage_observed.is_some() {
-                return Err(error("routine-production-output-stage-custody-changed"));
+                return Ok(ProvisionOutcome::UnrecordedStage(OutputStageAmbiguity {
+                    relative_path: component.relative_path.clone(),
+                    creation_nonce: nonce.to_owned(),
+                }));
             }
             let identity = establish_stage(parent, &stage_name, root_device)?;
             observer(&component.relative_path, ProvisionEvent::StageCreated)?;
@@ -62,7 +70,7 @@ pub(super) fn provision(
     };
     ledger.record_output_component(token, &component.relative_path, expected)?;
     observer(&component.relative_path, ProvisionEvent::FinalRecorded)?;
-    Ok(expected)
+    Ok(ProvisionOutcome::Ready(expected))
 }
 
 enum StageState {

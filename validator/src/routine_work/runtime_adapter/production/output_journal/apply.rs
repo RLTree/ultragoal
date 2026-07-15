@@ -1,4 +1,4 @@
-use super::creation::{ProvisionEvent, provision};
+use super::creation::{ProvisionEvent, ProvisionOutcome, provision};
 use super::directory_entries::names;
 use super::observation::{open_at, open_root, stat_at, validate_directory};
 use super::*;
@@ -7,7 +7,7 @@ pub(super) fn apply(
     ledger: &FileAuthorityLedger,
     token: &ReservationToken,
     root: &Path,
-) -> Result<(), RoutineError> {
+) -> Result<ApplyOutcome, RoutineError> {
     apply_inner(ledger, token, root, &mut |_, _| Ok(()))
 }
 
@@ -25,7 +25,7 @@ pub(super) fn apply_observed(
     token: &ReservationToken,
     root: &Path,
     observer: &mut dyn FnMut(ApplyEvent<'_>) -> Result<(), RoutineError>,
-) -> Result<(), RoutineError> {
+) -> Result<ApplyOutcome, RoutineError> {
     apply_inner(ledger, token, root, &mut |path, event| {
         observer(match event {
             ProvisionEvent::StageCreated => ApplyEvent::StageCreated(path),
@@ -41,7 +41,7 @@ fn apply_inner(
     token: &ReservationToken,
     root: &Path,
     observer: &mut dyn FnMut(&str, ProvisionEvent) -> Result<(), RoutineError>,
-) -> Result<(), RoutineError> {
+) -> Result<ApplyOutcome, RoutineError> {
     let journal = &token.output_journal;
     let root = open_root(root)?;
     if identity(
@@ -69,7 +69,7 @@ fn apply_inner(
         let expected = match (component.preexisting, observed) {
             (Some(expected), Some(current)) if expected == current => current,
             (Some(_), _) => return Err(error("routine-production-output-prestate-changed")),
-            (None, _) => provision(
+            (None, _) => match provision(
                 ledger,
                 token,
                 component,
@@ -77,7 +77,12 @@ fn apply_inner(
                 child_name,
                 journal.root.device,
                 observer,
-            )?,
+            )? {
+                ProvisionOutcome::Ready(identity) => identity,
+                ProvisionOutcome::UnrecordedStage(ambiguity) => {
+                    return Ok(ApplyOutcome::UnrecordedStage(ambiguity));
+                }
+            },
         };
         validate_directory(expected, journal.root.device)?;
         let child = open_at(parent, child_name)?;
@@ -101,7 +106,7 @@ fn apply_inner(
         }
         opened.insert(component.relative_path.clone(), child);
     }
-    Ok(())
+    Ok(ApplyOutcome::Applied)
 }
 
 fn allowed_children(journal: &OutputProvisionJournal) -> BTreeMap<String, BTreeSet<String>> {

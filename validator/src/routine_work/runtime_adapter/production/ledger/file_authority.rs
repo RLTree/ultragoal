@@ -118,6 +118,22 @@ impl FileAuthorityLedger {
         }
     }
 
+    pub(crate) fn reconcile_output_ambiguity(
+        &self,
+        token: &ReservationToken,
+        ambiguity: &OutputStageAmbiguity,
+    ) -> Result<(), RoutineError> {
+        #[cfg(target_vendor = "apple")]
+        {
+            return self.inner.reconcile_output_ambiguity(token, ambiguity);
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (token, ambiguity);
+            Err(error("routine-production-authority-host-unsupported"))
+        }
+    }
+
     pub(crate) fn stage_success(
         &self,
         token: &ReservationToken,

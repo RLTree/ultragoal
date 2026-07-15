@@ -139,7 +139,8 @@ impl ProductionRoutineIssuer {
             token,
             launch_root: self.launch_root.clone(),
         });
-        output_journal::apply(&self.ledger, &durable.token, context.worktree_root())?;
+        let output = output_journal::apply(&self.ledger, &durable.token, context.worktree_root())?;
+        resolve_output_application(&self.ledger, &durable.token, output)?;
         let grant = issue_production_grant(grant_binding, durable)?;
         mediate_prepared_routine_execution(
             context,
@@ -150,5 +151,26 @@ impl ProductionRoutineIssuer {
             reuse,
             publisher,
         )
+    }
+}
+
+pub(super) fn resolve_output_application(
+    ledger: &FileAuthorityLedger,
+    token: &ReservationToken,
+    outcome: output_journal::ApplyOutcome,
+) -> Result<(), RoutineError> {
+    match outcome {
+        output_journal::ApplyOutcome::Applied => Ok(()),
+        output_journal::ApplyOutcome::UnrecordedStage(ambiguity)
+            if token.recovery_for.is_some() =>
+        {
+            ledger.reconcile_output_ambiguity(token, &ambiguity)?;
+            Err(error(
+                "routine-production-output-ambiguity-reconciled-incomplete",
+            ))
+        }
+        output_journal::ApplyOutcome::UnrecordedStage(_) => Err(error(
+            "routine-production-output-ambiguity-recovery-required",
+        )),
     }
 }

@@ -65,18 +65,37 @@ pub(super) fn reserve(
     journal: OutputProvisionJournal,
     recovery_for: Option<String>,
 ) -> ReservationToken {
+    reserve_attempt(ledger, label, journal, recovery_for, "default")
+}
+
+pub(super) fn reserve_attempt(
+    ledger: &FileAuthorityLedger,
+    label: &str,
+    journal: OutputProvisionJournal,
+    recovery_for: Option<String>,
+    attempt: &str,
+) -> ReservationToken {
     ledger
-        .reserve(ReservationSpec {
-            binding: binding(label),
-            request_id: digest(&format!("{label}-request")),
-            grant_id: digest(&format!("{label}-grant-{recovery_for:?}")),
-            recovery_marker: digest(&format!("{label}-recovery-{recovery_for:?}")),
-            recovery_for,
-            reuse_only: false,
-            reuse_preauthorization: None,
-            output_journal: journal,
-        })
+        .reserve(reservation_attempt(label, journal, recovery_for, attempt))
         .unwrap()
+}
+
+pub(super) fn reservation_attempt(
+    label: &str,
+    output_journal: OutputProvisionJournal,
+    recovery_for: Option<String>,
+    attempt: &str,
+) -> ReservationSpec {
+    ReservationSpec {
+        binding: binding(label),
+        request_id: digest(&format!("{label}-request")),
+        grant_id: digest(&format!("{label}-grant-{attempt}-{recovery_for:?}")),
+        recovery_marker: digest(&format!("{label}-recovery-{attempt}-{recovery_for:?}")),
+        recovery_for,
+        reuse_only: false,
+        reuse_preauthorization: None,
+        output_journal,
+    }
 }
 
 pub(super) fn scope() -> RepoPath {
@@ -84,7 +103,7 @@ pub(super) fn scope() -> RepoPath {
 }
 
 #[test]
-fn recovery_preserves_foreign_content_and_keeps_the_attempt_pending() {
+fn recovery_preserves_foreign_content_while_terminalizing_ambiguity() {
     let fixture = Fixture::new("foreign-content");
     let ledger = FileAuthorityLedger::open_or_initialize(&fixture.authority).unwrap();
     let first = reserve(
@@ -119,17 +138,20 @@ fn recovery_preserves_foreign_content_and_keeps_the_attempt_pending() {
         pending.output_journal,
         Some(pending.marker),
     );
-    let failure = apply(&ledger, &recovered, &fixture.workspace).unwrap_err();
-    assert_eq!(
-        failure.cause(),
-        "routine-production-output-stage-custody-changed"
-    );
+    let ApplyOutcome::UnrecordedStage(ambiguity) =
+        apply(&ledger, &recovered, &fixture.workspace).unwrap()
+    else {
+        panic!("unrecorded stage was not classified as ambiguous");
+    };
+    ledger
+        .reconcile_output_ambiguity(&recovered, &ambiguity)
+        .unwrap();
     assert_eq!(fs::read(&foreign).unwrap(), b"foreign");
     assert!(
         ledger
             .pending_recovery(&recovered.binding)
             .unwrap()
-            .is_some()
+            .is_none()
     );
     drop(ledger);
     fixture.teardown();

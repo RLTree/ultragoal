@@ -9,11 +9,14 @@ use std::path::Path;
 
 use super::ledger::{
     FileAuthorityLedger, OutputComponentJournal, OutputDirectoryIdentity, OutputProvisionJournal,
-    ReservationToken,
+    OutputStageAmbiguity, ReservationToken,
 };
 use super::production_mediation::error;
 use crate::routine_work::{RepoPath, RoutineError};
 
+#[cfg(test)]
+#[path = "ambiguity_lifecycle_tests.rs"]
+mod ambiguity_lifecycle_tests;
 #[path = "apply.rs"]
 mod apply;
 #[path = "creation.rs"]
@@ -26,11 +29,20 @@ mod directory_entries;
 #[path = "observation.rs"]
 mod observation;
 #[cfg(test)]
+#[path = "reconciliation_authority_tests.rs"]
+mod reconciliation_authority_tests;
+#[cfg(test)]
 #[path = "recovery_tests.rs"]
 mod recovery_tests;
 #[cfg(test)]
 #[path = "tests.rs"]
 mod tests;
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(super) enum ApplyOutcome {
+    Applied,
+    UnrecordedStage(OutputStageAmbiguity),
+}
 
 pub(super) fn observe(
     root: &Path,
@@ -43,7 +55,7 @@ pub(super) fn apply(
     ledger: &FileAuthorityLedger,
     token: &ReservationToken,
     root: &Path,
-) -> Result<(), RoutineError> {
+) -> Result<ApplyOutcome, RoutineError> {
     apply::apply(ledger, token, root)
 }
 
