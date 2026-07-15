@@ -31,6 +31,8 @@ use std::sync::atomic::{AtomicU64, Ordering};
 mod catalog_definition_rejection;
 #[path = "routine_production_catalog_cases/catalog_fixture.rs"]
 mod catalog_fixture;
+#[path = "routine_production_catalog_cases/catalog_fixture_claim.rs"]
+mod catalog_fixture_claim;
 #[path = "routine_production_catalog_cases/catalog_fixture_cleanup_hook.rs"]
 mod catalog_fixture_cleanup_hook;
 #[path = "routine_production_catalog_cases/catalog_fixture_construction.rs"]
@@ -39,8 +41,12 @@ mod catalog_fixture_construction;
 mod catalog_fixture_custody;
 #[path = "routine_production_catalog_cases/catalog_fixture_custody_types.rs"]
 mod catalog_fixture_custody_types;
+#[path = "routine_production_catalog_cases/catalog_fixture_directory_entries.rs"]
+mod catalog_fixture_directory_entries;
 #[path = "routine_production_catalog_cases/catalog_fixture_lifecycle.rs"]
 mod catalog_fixture_lifecycle;
+#[path = "routine_production_catalog_cases/catalog_fixture_quarantine.rs"]
+mod catalog_fixture_quarantine;
 #[path = "routine_production_catalog_cases/catalog_fixture_scope.rs"]
 mod catalog_fixture_scope;
 #[path = "routine_production_catalog_cases/repository_fixture.rs"]

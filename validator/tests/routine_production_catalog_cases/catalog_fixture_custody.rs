@@ -1,19 +1,27 @@
-use std::ffi::{CStr, CString, OsString};
+use std::ffi::{CStr, CString};
 use std::fs::File;
 use std::io;
-use std::os::fd::{AsRawFd, FromRawFd, RawFd};
+use std::os::fd::{AsRawFd, RawFd};
 use std::os::unix::ffi::OsStringExt;
 use std::os::unix::fs::MetadataExt;
 use std::sync::atomic::{AtomicU64, Ordering};
 
-use super::catalog_fixture_scope::FixtureScopeError;
 use crate::catalog_fixture_custody_types::{EntryIdentity, EntryKind};
+use crate::catalog_fixture_directory_entries::{entry_identity, names, open_directory};
 
 static NEXT_QUARANTINE: AtomicU64 = AtomicU64::new(0);
 
+pub(crate) enum RetainedBinding {
+    Named(CString),
+    DescriptorOnly,
+}
+
 pub(crate) enum CleanupDisposition {
     Deleted,
-    Retained { name: CString, reason: String },
+    Retained {
+        binding: RetainedBinding,
+        reason: String,
+    },
 }
 
 pub(crate) fn quarantine_and_remove(
@@ -24,117 +32,162 @@ pub(crate) fn quarantine_and_remove(
     inode: u64,
 ) -> CleanupDisposition {
     let quarantine = match fresh_quarantine(parent.as_raw_fd()) {
-        Ok(name) => name,
-        Err(error) => return retained(name, error),
+        Ok(value) => value,
+        Err(error) => return retained(RetainedBinding::Named(copy_name(name)), error),
     };
     if let Err(error) = rename_exclusive(parent.as_raw_fd(), name, &quarantine) {
-        return retained(name, error);
+        return retained(RetainedBinding::Named(copy_name(name)), error);
     }
-    if let Err(error) = validate(parent.as_raw_fd(), &quarantine, child, device, inode) {
-        return restore_or_retain(parent.as_raw_fd(), name, &quarantine, error);
+    if let Err(error) = validate_scope(parent.as_raw_fd(), &quarantine, child, device, inode) {
+        return retain_scope(parent, child, name, &quarantine, device, inode, error);
     }
     if let Err(error) = clear(child.as_raw_fd()) {
-        return restore_or_retain(parent.as_raw_fd(), name, &quarantine, error);
+        return retain_scope(parent, child, name, &quarantine, device, inode, error);
     }
-    if let Err(error) = validate(parent.as_raw_fd(), &quarantine, child, device, inode) {
-        return restore_or_retain(parent.as_raw_fd(), name, &quarantine, error);
+    if let Err(error) = validate_scope(parent.as_raw_fd(), &quarantine, child, device, inode) {
+        return retain_scope(parent, child, name, &quarantine, device, inode, error);
     }
-    crate::catalog_fixture_cleanup_hook::run_before_final_removal(&quarantine);
-    if let Err(error) = validate(parent.as_raw_fd(), &quarantine, child, device, inode) {
-        return restore_or_retain(parent.as_raw_fd(), name, &quarantine, error);
-    }
-    if unsafe { libc::unlinkat(parent.as_raw_fd(), quarantine.as_ptr(), libc::AT_REMOVEDIR) } != 0 {
-        return restore_or_retain(
-            parent.as_raw_fd(),
+    if crate::catalog_fixture_cleanup_hook::run_before_final_removal(&quarantine) {
+        return retain_scope(
+            parent,
+            child,
             name,
             &quarantine,
+            device,
+            inode,
+            "final removal was retained after the test hook",
+        );
+    }
+    if unsafe { libc::unlinkat(parent.as_raw_fd(), quarantine.as_ptr(), libc::AT_REMOVEDIR) } != 0 {
+        return retain_scope(
+            parent,
+            child,
+            name,
+            &quarantine,
+            device,
+            inode,
             io::Error::last_os_error().to_string(),
         );
     }
     CleanupDisposition::Deleted
 }
 
-fn restore_or_retain(
-    parent: RawFd,
+fn retain_scope(
+    parent: &File,
+    child: &File,
     original: &CStr,
     quarantine: &CStr,
+    device: u64,
+    inode: u64,
     reason: impl ToString,
 ) -> CleanupDisposition {
-    if rename_exclusive(parent, quarantine, original).is_ok() {
-        retained(original, reason)
+    let binding = if validate_scope(parent.as_raw_fd(), quarantine, child, device, inode).is_ok()
+        && rename_exclusive(parent.as_raw_fd(), quarantine, original).is_ok()
+        && validate_scope(parent.as_raw_fd(), original, child, device, inode).is_ok()
+    {
+        RetainedBinding::Named(copy_name(original))
+    } else if validate_scope(parent.as_raw_fd(), quarantine, child, device, inode).is_ok() {
+        RetainedBinding::Named(copy_name(quarantine))
     } else {
-        retained(quarantine, reason)
-    }
+        RetainedBinding::DescriptorOnly
+    };
+    retained(binding, reason)
 }
 
 fn clear(directory: RawFd) -> Result<(), String> {
-    for name in names(directory)? {
-        let name = CString::new(name.into_vec()).map_err(|_| "entry contains NUL".to_owned())?;
-        let observed = entry_identity(directory, &name)?;
-        if observed.kind == EntryKind::Directory {
-            let child = open_directory(directory, &name)?;
-            let held = child.metadata().map_err(|error| error.to_string())?;
-            if held.dev() != observed.device || held.ino() != observed.inode {
-                return Err("child identity changed before cleanup".to_owned());
-            }
+    for entry in names(directory)? {
+        let name = CString::new(entry.into_vec()).map_err(|_| "entry contains NUL".to_owned())?;
+        let expected = entry_identity(directory, &name)?;
+        let quarantine = fresh_quarantine(directory)?;
+        rename_exclusive(directory, &name, &quarantine)?;
+        validate_entry(directory, &quarantine, expected)?;
+        if expected.kind == EntryKind::Directory {
+            let child = open_directory(directory, &quarantine)?;
+            validate_held(&child, expected)?;
             clear(child.as_raw_fd())?;
-            if entry_identity(directory, &name)? != observed {
-                return Err("child identity changed before removal".to_owned());
-            }
-            remove(directory, &name, libc::AT_REMOVEDIR)?;
-        } else if matches!(observed.kind, EntryKind::File | EntryKind::Symlink) {
-            if entry_identity(directory, &name)? != observed {
-                return Err("entry identity changed before removal".to_owned());
-            }
-            remove(directory, &name, 0)?;
+            remove_entry(directory, &quarantine, expected, Some(&child))?;
         } else {
-            if entry_identity(directory, &name)? != observed {
-                return Err("special entry changed before removal".to_owned());
-            }
-            remove(directory, &name, 0)?;
+            remove_entry(directory, &quarantine, expected, None)?;
         }
     }
     Ok(())
 }
 
-fn validate(
+fn remove_entry(
+    parent: RawFd,
+    name: &CStr,
+    expected: EntryIdentity,
+    held: Option<&File>,
+) -> Result<(), String> {
+    validate_entry(parent, name, expected)?;
+    if let Some(file) = held {
+        validate_held(file, expected)?;
+    }
+    if crate::catalog_fixture_cleanup_hook::run_before_entry_removal(parent, name) {
+        return Err("entry removal was retained after the test hook".to_owned());
+    }
+    let flags = if expected.kind == EntryKind::Directory {
+        libc::AT_REMOVEDIR
+    } else {
+        0
+    };
+    if unsafe { libc::unlinkat(parent, name.as_ptr(), flags) } == 0 {
+        Ok(())
+    } else {
+        Err(io::Error::last_os_error().to_string())
+    }
+}
+
+fn validate_scope(
     parent: RawFd,
     name: &CStr,
     child: &File,
     device: u64,
     inode: u64,
 ) -> Result<(), String> {
-    let metadata = entry_identity(parent, name)?;
-    let held = child.metadata().map_err(|error| error.to_string())?;
-    #[cfg(unix)]
-    if metadata.device != device
-        || metadata.inode != inode
-        || held.dev() != device
-        || held.ino() != inode
-    {
+    let named = entry_identity(parent, name)?;
+    if named.kind != EntryKind::Directory || named.device != device || named.inode != inode {
         return Err("quarantined scope identity changed".to_owned());
     }
-    if metadata.kind != EntryKind::Directory || !held.file_type().is_dir() {
-        return Err("quarantined scope is not a directory".to_owned());
-    }
-    Ok(())
+    validate_held(child, named)
 }
 
-fn retained(name: &CStr, reason: impl ToString) -> CleanupDisposition {
+fn validate_entry(parent: RawFd, name: &CStr, expected: EntryIdentity) -> Result<(), String> {
+    if entry_identity(parent, name)? == expected {
+        Ok(())
+    } else {
+        Err("quarantined entry identity changed".to_owned())
+    }
+}
+
+fn validate_held(file: &File, expected: EntryIdentity) -> Result<(), String> {
+    let held = file.metadata().map_err(|error| error.to_string())?;
+    if held.dev() == expected.device && held.ino() == expected.inode && held.file_type().is_dir() {
+        Ok(())
+    } else {
+        Err("held directory identity changed".to_owned())
+    }
+}
+
+fn retained(binding: RetainedBinding, reason: impl ToString) -> CleanupDisposition {
     CleanupDisposition::Retained {
-        name: CString::new(name.to_bytes()).expect("validated C name contains no NUL"),
+        binding,
         reason: reason.to_string(),
     }
+}
+
+fn copy_name(name: &CStr) -> CString {
+    CString::new(name.to_bytes()).unwrap_or_default()
 }
 
 fn fresh_quarantine(parent: RawFd) -> Result<CString, String> {
     for _ in 0..32 {
         let ordinal = NEXT_QUARANTINE.fetch_add(1, Ordering::Relaxed);
-        let name = CString::new(format!(
+        let candidate = format!(
             ".catalog-fixture-quarantine-{}-{ordinal}",
             std::process::id()
-        ))
-        .expect("fixed quarantine name contains no NUL");
+        );
+        let name = CString::new(candidate).map_err(|_| "invalid quarantine name".to_owned())?;
         if matches!(entry_identity(parent, &name), Err(error) if error.contains("No such file")) {
             return Ok(name);
         }
@@ -163,82 +216,4 @@ fn rename_exclusive(parent: RawFd, from: &CStr, to: &CStr) -> Result<(), String>
 #[cfg(not(target_os = "macos"))]
 fn rename_exclusive(_parent: RawFd, _from: &CStr, _to: &CStr) -> Result<(), String> {
     Err("exclusive rename unavailable on this platform".to_owned())
-}
-
-fn remove(parent: RawFd, name: &CStr, flags: libc::c_int) -> Result<(), String> {
-    if unsafe { libc::unlinkat(parent, name.as_ptr(), flags) } == 0 {
-        Ok(())
-    } else {
-        Err(io::Error::last_os_error().to_string())
-    }
-}
-
-fn open_directory(parent: RawFd, name: &CStr) -> Result<File, String> {
-    let fd = unsafe {
-        libc::openat(
-            parent,
-            name.as_ptr(),
-            libc::O_RDONLY | libc::O_DIRECTORY | libc::O_NOFOLLOW | libc::O_CLOEXEC,
-        )
-    };
-    if fd < 0 {
-        Err(io::Error::last_os_error().to_string())
-    } else {
-        Ok(unsafe { File::from_raw_fd(fd) })
-    }
-}
-
-fn entry_identity(parent: RawFd, name: &CStr) -> Result<EntryIdentity, String> {
-    let mut stat = std::mem::MaybeUninit::<libc::stat>::uninit();
-    if unsafe {
-        libc::fstatat(
-            parent,
-            name.as_ptr(),
-            stat.as_mut_ptr(),
-            libc::AT_SYMLINK_NOFOLLOW,
-        )
-    } != 0
-    {
-        return Err(io::Error::last_os_error().to_string());
-    }
-    let stat = unsafe { stat.assume_init() };
-    let kind = match stat.st_mode & libc::S_IFMT {
-        libc::S_IFDIR => EntryKind::Directory,
-        libc::S_IFREG => EntryKind::File,
-        libc::S_IFLNK => EntryKind::Symlink,
-        _ => EntryKind::Special,
-    };
-    Ok(EntryIdentity {
-        device: stat.st_dev as u64,
-        inode: stat.st_ino as u64,
-        kind,
-    })
-}
-
-fn names(directory: RawFd) -> Result<Vec<OsString>, String> {
-    let duplicate = unsafe { libc::dup(directory) };
-    if duplicate < 0 {
-        return Err(io::Error::last_os_error().to_string());
-    }
-    let stream = unsafe { libc::fdopendir(duplicate) };
-    if stream.is_null() {
-        unsafe { libc::close(duplicate) };
-        return Err(io::Error::last_os_error().to_string());
-    }
-    let mut result = Vec::new();
-    loop {
-        let entry = unsafe { libc::readdir(stream) };
-        if entry.is_null() {
-            break;
-        }
-        let bytes = unsafe { CStr::from_ptr((*entry).d_name.as_ptr()) }.to_bytes();
-        if bytes != b"." && bytes != b".." {
-            result.push(OsString::from_vec(bytes.to_vec()));
-        }
-    }
-    if unsafe { libc::closedir(stream) } != 0 {
-        return Err(io::Error::last_os_error().to_string());
-    }
-    result.sort();
-    Ok(result)
 }

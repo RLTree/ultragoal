@@ -10,12 +10,16 @@ pub mod routine_work;
 
 #[path = "routine_work_contract/authority_ledger_controls.rs"]
 mod authority_ledger_controls;
+#[path = "routine_production_catalog_cases/catalog_fixture_claim.rs"]
+mod catalog_fixture_claim;
 #[path = "routine_production_catalog_cases/catalog_fixture_cleanup_hook.rs"]
 mod catalog_fixture_cleanup_hook;
 #[path = "routine_production_catalog_cases/catalog_fixture_custody.rs"]
 mod catalog_fixture_custody;
 #[path = "routine_production_catalog_cases/catalog_fixture_custody_types.rs"]
 mod catalog_fixture_custody_types;
+#[path = "routine_production_catalog_cases/catalog_fixture_directory_entries.rs"]
+mod catalog_fixture_directory_entries;
 #[path = "routine_production_catalog_cases/catalog_fixture_scope.rs"]
 mod catalog_fixture_scope;
 #[path = "routine_work_contract/catalog_fixture_setup.rs"]

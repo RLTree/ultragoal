@@ -1,5 +1,5 @@
 use super::*;
-use crate::catalog_fixture_cleanup_hook::set_before_final_removal;
+use crate::catalog_fixture_claim::{ClaimFailurePoint, ClaimResidue, FixtureClaimFailure};
 use crate::catalog_fixture_construction::FixtureConstructionFailure;
 use crate::catalog_fixture_scope::{
     CatalogSetupFailurePoint, ClaimedFixtureScope, FixtureScopeError,
@@ -58,6 +58,11 @@ pub(crate) fn catalog_fixture_setup_failures_roll_back_only_the_claimed_child() 
                 "setup failure {stage} retained {}: {error:?}",
                 scope.path().display()
             ),
+            Err(FixtureConstructionFailure::ClaimRetained(residue)) => panic!(
+                "setup failure {stage} retained {}: {:?}",
+                residue.path().display(),
+                residue.error()
+            ),
         };
         assert_eq!(error, FixtureScopeError::Setup(stage));
         let path =
@@ -72,7 +77,11 @@ pub(crate) fn catalog_fixture_setup_failures_roll_back_only_the_claimed_child() 
 
 #[test]
 pub(crate) fn catalog_fixture_setup_rollback_refuses_a_substituted_scope() {
-    let parent = fixture_parent();
+    let parent = fixture_parent().join(format!(
+        "pre-rollback-parent-{}",
+        NEXT.load(Ordering::Relaxed)
+    ));
+    fs::create_dir_all(&parent).unwrap();
     let name = format!(
         "setup-substitution-{}",
         NEXT.fetch_add(1, Ordering::Relaxed)
@@ -86,52 +95,87 @@ pub(crate) fn catalog_fixture_setup_rollback_refuses_a_substituted_scope() {
         scope.rollback(),
         Err(FixtureScopeError::Retained(_))
     ));
-    assert_eq!(
-        fs::read(scope.path().join("foreign")).unwrap(),
-        b"preserve foreign scope\n"
+    assert!(
+        !scope.has_name_binding(),
+        "the descriptor-held scope must not claim the replacement pathname"
     );
-    fs::remove_dir_all(scope.path()).unwrap();
-    fs::remove_dir_all(&held).unwrap();
+    assert_foreign_present(&parent);
+    fs::remove_dir_all(&parent).unwrap();
 }
 
 #[test]
-pub(crate) fn final_quarantine_substitution_is_retained_without_deleting_the_replacement() {
-    let parent = fixture_parent();
-    let name = format!(
-        "final-substitution-{}-{}",
-        std::process::id(),
-        NEXT.fetch_add(1, Ordering::Relaxed)
-    );
-    let mut scope = ClaimedFixtureScope::claim(&parent, &name).unwrap();
-    fs::write(scope.path().join("owned"), b"owned bytes\n").unwrap();
-    let retained = parent.join(format!("{name}-quarantine-held"));
-    let replacement = parent.join(format!("{name}-replacement"));
-    set_before_final_removal(Some(Box::new({
-        let parent = parent.clone();
-        let retained = retained.clone();
-        let replacement = replacement.clone();
-        move |quarantine| {
-            let quarantine = parent.join(quarantine.to_string_lossy().as_ref());
-            fs::rename(&quarantine, &retained).unwrap();
-            fs::create_dir(&quarantine).unwrap();
-            fs::write(quarantine.join("foreign"), b"preserve replacement\n").unwrap();
-            fs::rename(&quarantine, &replacement).unwrap();
-            fs::create_dir(&quarantine).unwrap();
-        }
-    })));
-    assert!(matches!(
-        scope.rollback(),
-        Err(FixtureScopeError::Retained(_))
+pub(crate) fn catalog_claim_failures_retain_typed_custody_without_uncertain_cleanup() {
+    let parent = fixture_parent().join(format!(
+        "claim-failure-parent-{}",
+        NEXT.load(Ordering::Relaxed)
     ));
-    set_before_final_removal(None);
-    assert!(fs::read_dir(&retained).unwrap().next().is_none());
-    assert_eq!(
-        fs::read(replacement.join("foreign")).unwrap(),
-        b"preserve replacement\n"
+    fs::create_dir_all(&parent).unwrap();
+    let unopened = ClaimedFixtureScope::claim_with_failure(
+        &parent,
+        "before-open",
+        Some(ClaimFailurePoint::AfterMkdirBeforeOpen),
     );
-    fs::remove_dir_all(scope.path()).unwrap();
-    fs::remove_dir_all(retained).unwrap();
-    fs::remove_dir_all(replacement).unwrap();
+    let residue = match unopened {
+        Err(FixtureClaimFailure::Retained(ClaimResidue::Unopened(value))) => {
+            ClaimResidue::Unopened(value)
+        }
+        _ => panic!("expected typed pre-open residue"),
+    };
+    assert!(matches!(
+        residue.reconcile(),
+        Err(ClaimResidue::Unopened(_))
+    ));
+
+    let opened = ClaimedFixtureScope::claim_with_failure(
+        &parent,
+        "after-open",
+        Some(ClaimFailurePoint::AfterOpenBeforeIdentity),
+    );
+    let scope = match opened {
+        Err(FixtureClaimFailure::Retained(residue)) => residue.reconcile().unwrap(),
+        _ => panic!("expected typed post-open residue"),
+    };
+    let mut scope = scope;
+    scope.rollback().unwrap();
+    assert!(parent.join("before-open").exists());
+    assert!(!parent.join("after-open").exists());
+    fs::remove_dir_all(&parent).unwrap();
+}
+
+#[test]
+pub(crate) fn opened_claim_reconciliation_refuses_a_replaced_name() {
+    let parent = fixture_parent().join(format!(
+        "claim-replacement-parent-{}",
+        NEXT.load(Ordering::Relaxed)
+    ));
+    fs::create_dir_all(&parent).unwrap();
+    let name = "replacement";
+    let residue = match ClaimedFixtureScope::claim_with_failure(
+        &parent,
+        name,
+        Some(ClaimFailurePoint::AfterOpenBeforeIdentity),
+    ) {
+        Err(FixtureClaimFailure::Retained(residue)) => residue,
+        _ => panic!("expected opened residue"),
+    };
+    let held = parent.join("held");
+    fs::rename(parent.join(name), &held).unwrap();
+    fs::create_dir(parent.join(name)).unwrap();
+    fs::write(parent.join(name).join("foreign"), b"preserve foreign\n").unwrap();
+    assert!(matches!(residue.reconcile(), Err(ClaimResidue::Opened(_))));
+    assert_eq!(
+        fs::read(parent.join(name).join("foreign")).unwrap(),
+        b"preserve foreign\n"
+    );
+    fs::remove_dir_all(&parent).unwrap();
+}
+
+fn assert_foreign_present(parent: &Path) {
+    let found = fs::read_dir(parent)
+        .unwrap()
+        .filter_map(Result::ok)
+        .any(|entry| entry.path().join("foreign").is_file());
+    assert!(found, "substituted foreign scope was removed");
 }
 
 fn fixture_parent() -> PathBuf {
