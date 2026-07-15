@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | `e7976876e` / tree `6b84b0e0` | Source repair removes destructive fixture `Drop`, adds explicit checked teardown and drop/unwind controls, and preserves the stale receipt; exact-freeze independent review is active, so source acceptance and receipt regeneration remain withheld | Accept or return one exact material finding from the current review |
+| N06 routine execution | rework | `e7976876e` / tree `6b84b0e0` | Exact-freeze review found the same hidden-cleanup class in N06-owned `routine_production_catalog_cases/catalog_fixture.rs`: hard-coded `/private/tmp` plus silent recursive deletion in `Drop`; source acceptance and receipt regeneration remain withheld | Close the invariant across the exhaustive N06 fixture inventory, then refreeze once |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,8 +46,8 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for the hidden-cleanup class is `1`.
-The next action is the exact N06 source review. Escalation is legitimate only for
+current exact-candidate rejection count for the hidden-cleanup class is `2`.
+The next action is the exhaustive N06 fixture-lifecycle repair. Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
 
@@ -96,9 +96,9 @@ external action, secret handling, or unavailable required access.
   affected claim until behavior and evidence are re-audited.
 - N04 source transaction authority and its corrected WorkerResult are accepted,
   integrated, and retired. Root production reachability and every live host
-  identity remain open. Root `e4cd10b08` is clean. N06 `e7976876e` / tree
-  `6b84b0e0` remains the sole gate and is under exact-freeze review after the
-  shared fixture-lifecycle repair removed destructive cleanup from `Drop`.
+  identity remain open. Root `2bf62452a` is clean. N06 `e7976876e` / tree
+  `6b84b0e0` remains the sole gate and is back under REWORK because the shared
+  fixture-lifecycle repair missed an N06-owned destructive `Drop` sibling.
   N10 `7f92b7ed3` / tree `53bd7717` and N11 `9c2911d6d` /
   tree `6176c259` are frozen speculative source candidates; their dependency
   claims, receipt promotion, and integration remain withheld.
