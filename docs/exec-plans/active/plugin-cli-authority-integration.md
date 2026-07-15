@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | `4af102c4a` / tree `f54deb80` | Constructor transaction now exercises typed post-claim rollback and foreign-substitution refusal through the compiling routine-work target; the stale receipt and catalog test-crate root gate remain withheld during fresh review | Accept or return one exact material finding from the current review |
+| N06 routine execution | rework | `4af102c4a` / tree `f54deb80` | Claim, rollback, release, and teardown still cross pathname identity-check/delete windows and can lose custody or delete a replacement; source acceptance and receipt regeneration remain withheld | Retain descriptor-held custody through every lifecycle transition and prove identity-conditioned removal or typed residue retention |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,8 +46,8 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for the hidden-cleanup class is `3`.
-The next action is the exact N06 source review. Escalation is legitimate only for
+current exact-candidate rejection count for the hidden-cleanup class is `4`.
+The next action is the N06 descriptor-held lifecycle repair. Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
 
@@ -96,9 +96,9 @@ external action, secret handling, or unavailable required access.
   affected claim until behavior and evidence are re-audited.
 - N04 source transaction authority and its corrected WorkerResult are accepted,
   integrated, and retired. Root production reachability and every live host
-  identity remain open. Root `00d5b72f2` is clean. N06 `4af102c4a` / tree
-  `f54deb80` remains the sole gate and is under fresh exact-tree review after
-  the typed constructor-rollback repair.
+  identity remain open. Root `87b0c1a80` is clean. N06 `4af102c4a` / tree
+  `f54deb80` remains the sole gate and is under REWORK because pathname-based
+  claim, rollback, release, and teardown still lose exact fixture custody.
   N10 `7f92b7ed3` / tree `53bd7717` and N11 `9c2911d6d` /
   tree `6176c259` are frozen speculative source candidates; their dependency
   claims, receipt promotion, and integration remain withheld.
