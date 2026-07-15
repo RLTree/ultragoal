@@ -94,6 +94,81 @@ fn build_specific_custody_side_effect_is_rejected() {
     );
 }
 
+#[test]
+fn custody_pattern_aliases_compile_but_are_rejected() {
+    let source = include_str!(
+        "../../src/routine_work/runtime_adapter/mediator/reservation_state/authority.rs"
+    );
+    let staged = include_str!(
+        "../../src/routine_work/runtime_adapter/mediator/reservation_state/staged_custody.rs"
+    );
+    let method = "    pub(in super::super) fn protocol_id(&self) -> &String {\n        self.binding.protocol_id()\n    }";
+    let aliased_method = source.replacen(
+        method,
+        "    pub(in super::super) fn protocol_id(&self) -> &String {\n        let AttemptReservation { started, .. } = self;\n        started.set(true);\n        self.binding.protocol_id()\n    }",
+        1,
+    );
+    assert_eq!(
+        reservation_authority_shape::validate(&aliased_method, staged),
+        Err("authority-custody-pattern-alias")
+    );
+    let constructor = "    Ok(AttemptReservation {";
+    let alias = source.replacen(constructor, "    let attempt = AttemptReservation {", 1);
+    let aliased_constructor = alias.replacen(
+        "        staged: StagedCustody::new(),\n    })\n}\n\nimpl AttemptReservation",
+        "        staged: StagedCustody::new(),\n    };\n    let AttemptReservation { settled, .. } = &attempt;\n    settled.set(true);\n    Ok(attempt)\n}\n\nimpl AttemptReservation",
+        1,
+    );
+    assert_eq!(
+        reservation_authority_shape::validate(&aliased_constructor, staged),
+        Err("authority-custody-pattern-alias")
+    );
+    let tuple_alias = staged.replacen(
+        "    pub(super) fn is_empty(&self) -> bool {\n        self.0.borrow().is_empty()\n    }",
+        "    pub(super) fn is_empty(&self) -> bool {\n        let StagedCustody(staged) = self;\n        staged.borrow_mut().clear();\n        staged.borrow().is_empty()\n    }",
+        1,
+    );
+    assert_eq!(
+        reservation_authority_shape::validate(source, &tuple_alias),
+        Err("authority-custody-pattern-alias")
+    );
+    assert_pattern_aliases_compile();
+}
+
+fn assert_pattern_aliases_compile() {
+    let mut owned = OwnedCompileScratch::claim("routine-reservation-pattern-alias");
+    prepare(owned.path());
+    fs::write(owned.path().join("lib.rs"), pattern_alias_model()).unwrap();
+    let output = run(owned.path());
+    assert!(output.status.success(), "{}", diagnostic(&output));
+    owned.teardown_after_assertions();
+}
+
+fn pattern_alias_model() -> &'static str {
+    r#"
+use std::cell::{Cell, RefCell};
+struct AttemptReservation { started: Cell<bool>, settled: Cell<bool> }
+struct StagedCustody(RefCell<Vec<()>>);
+impl AttemptReservation {
+    fn existing_method(&self) { let AttemptReservation { started, .. } = self; started.set(true); }
+}
+fn constructor_body() -> AttemptReservation {
+    let attempt = AttemptReservation { started: Cell::new(false), settled: Cell::new(false) };
+    let AttemptReservation { settled, .. } = &attempt;
+    settled.set(true);
+    attempt
+}
+fn tuple_body(staged: &StagedCustody) { let StagedCustody(items) = staged; items.borrow_mut().clear(); }
+#[test]
+fn aliases_execute() {
+    let attempt = constructor_body();
+    attempt.existing_method();
+    assert!(attempt.started.get() && attempt.settled.get());
+    tuple_body(&StagedCustody(RefCell::new(vec![()])));
+}
+"#
+}
+
 fn opened() -> String {
     let graph = CLOSED
         .replace(

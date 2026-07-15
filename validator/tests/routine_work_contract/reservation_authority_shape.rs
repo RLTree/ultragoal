@@ -6,6 +6,8 @@ use syn::visit::Visit;
 mod declarations;
 #[path = "reservation_authority_shape/operations.rs"]
 mod operations;
+#[path = "reservation_authority_shape/pattern_aliases.rs"]
+mod pattern_aliases;
 
 use operations::BodyShape;
 
@@ -49,9 +51,13 @@ fn validate_authority(source: &str) -> Result<(), &'static str> {
         return Err("authority-methods");
     }
 
-    let mut shape = BodyShape::new(["started", "settled", "staged"]);
+    let mut shape = BodyShape::new(
+        ["started", "settled", "staged"],
+        ["AttemptReservation", "Self"],
+    );
     shape.visit_file(&file);
     shape.require_plain(file.items.len())?;
+    shape.require_no_custody_patterns()?;
     shape.require_bound_operations(expected_authority_operations())?;
     shape.require_sensitive_calls([
         "settle_incomplete:self:finish_terminal",
@@ -89,9 +95,10 @@ fn validate_staged(source: &str) -> Result<(), &'static str> {
     {
         return Err("staged-methods");
     }
-    let mut shape = BodyShape::new(["0"]);
+    let mut shape = BodyShape::new(["0"], ["StagedCustody", "Self"]);
     shape.visit_file(&file);
     shape.require_plain(file.items.len())?;
+    shape.require_no_custody_patterns()?;
     shape.require_bound_operations([
         "cleanup_last:0:borrow",
         "cleanup_last:0:borrow_mut",

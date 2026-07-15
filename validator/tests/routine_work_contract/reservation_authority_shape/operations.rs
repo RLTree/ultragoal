@@ -6,6 +6,8 @@ use syn::visit::Visit;
 
 pub(super) struct BodyShape {
     tracked: BTreeSet<String>,
+    forbidden_patterns: BTreeSet<String>,
+    patterns: Vec<String>,
     current: String,
     references: Vec<String>,
     operations: Vec<String>,
@@ -17,9 +19,14 @@ pub(super) struct BodyShape {
 }
 
 impl BodyShape {
-    pub(super) fn new<const N: usize>(tracked: [&str; N]) -> Self {
+    pub(super) fn new<const N: usize, const M: usize>(
+        tracked: [&str; N],
+        forbidden_patterns: [&str; M],
+    ) -> Self {
         Self {
             tracked: tracked.into_iter().map(str::to_owned).collect(),
+            forbidden_patterns: forbidden_patterns.into_iter().map(str::to_owned).collect(),
+            patterns: Vec::new(),
             current: String::new(),
             references: Vec::new(),
             operations: Vec::new(),
@@ -68,6 +75,13 @@ impl BodyShape {
             .ok_or("authority-custody-operations")
     }
 
+    pub(super) fn require_no_custody_patterns(&self) -> Result<(), &'static str> {
+        self.patterns
+            .is_empty()
+            .then_some(())
+            .ok_or("authority-custody-pattern-alias")
+    }
+
     pub(super) fn require_sensitive_calls<const N: usize>(
         &self,
         expected: [&str; N],
@@ -106,6 +120,16 @@ impl<'ast> Visit<'ast> for BodyShape {
         self.unsafe_blocks += 1;
     }
 
+    fn visit_pat_struct(&mut self, node: &'ast syn::PatStruct) {
+        self.record_custody_pattern(&node.path);
+        syn::visit::visit_pat_struct(self, node);
+    }
+
+    fn visit_pat_tuple_struct(&mut self, node: &'ast syn::PatTupleStruct) {
+        self.record_custody_pattern(&node.path);
+        syn::visit::visit_pat_tuple_struct(self, node);
+    }
+
     fn visit_expr_field(&mut self, node: &'ast syn::ExprField) {
         if let Some(field) = field(node).filter(|field| self.tracked.contains(field)) {
             self.references.push(format!("{}:{field}", self.current));
@@ -126,6 +150,17 @@ impl<'ast> Visit<'ast> for BodyShape {
                 .push(format!("{}:self:{}", self.current, node.method));
         }
         syn::visit::visit_expr_method_call(self, node);
+    }
+}
+
+impl BodyShape {
+    fn record_custody_pattern(&mut self, path: &syn::Path) {
+        let Some(segment) = path.segments.last() else {
+            return;
+        };
+        if self.forbidden_patterns.contains(&segment.ident.to_string()) {
+            self.patterns.push(segment.ident.to_string());
+        }
     }
 }
 
