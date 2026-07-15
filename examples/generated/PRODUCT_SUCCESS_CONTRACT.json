@@ -1,38 +1,57 @@
 {
   "schema": "harness-ultragoal.product-success-contract.v1",
   "source_spec": {
-    "generated_from": "templates/PRODUCT_SUCCESS_CONTRACT.md",
-    "generator_command": "ultragoal product success contract static example generation",
+    "generated_from": "GOAL_CONTRACT.md",
+    "generator_command": "root-authored live successor contract amendment AMEND-001",
     "input_artifacts": [
-      "templates/PRODUCT_SUCCESS_CONTRACT.md",
+      "GOAL_CONTRACT.md",
+      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json",
       "schemas/product-success-contract.schema.json"
     ],
-    "claim_ceiling": "package_static_fixture_only_until_live_e2e"
+    "claim_ceiling": "contract_authority_only_until_current_source_installed_journeys_and_product_fitness_pass"
   },
-  "product_success_contract_id": "PSC-HARNESS-ULTRAGOAL-STATIC-001",
-  "contract_version": "1.0.0",
-  "goal_id": "harness-ultragoal-june-25-candidate",
+  "product_success_contract_id": "PSC-HARNESS-ULTRAGOAL-SUCCESSOR-LIVE-001",
+  "contract_version": "2.1.0",
+  "goal_id": "harness-ultragoal-successor-contract-v2-live",
   "target_revision": {
-    "path": "plugin-manifest-draft.json",
-    "digest": "sha256:79c662ddb8c3091aa7fc13b1abf2d71e5e012fa705151b269def7a2a5879fc29"
+    "path": "GOAL_CONTRACT.md",
+    "digest": "sha256:bc0080163641a33a781d5bd14dd4b40bdba507909a88bbba52303ec3a8295071"
   },
   "claim_ids": [
-    "CLAIM-001"
+    "CL-SOURCE",
+    "CL-PACKAGE",
+    "CL-INSTALL",
+    "CL-DISCOVERY",
+    "CL-RUNTIME",
+    "CL-FIT",
+    "CL-ROUTINE",
+    "CL-OBSERVABILITY",
+    "CL-STRICT",
+    "CL-ORCHESTRATION",
+    "CL-EVAL-IMPROVEMENT",
+    "CL-REAL-JOURNEY",
+    "CL-RELEASE",
+    "CL-COMPLETION"
   ],
-  "product_surface_classification": "developer_tool_plugin_package_static",
-  "target_user_or_operator": "Harness Ultragoal plugin-activated repository operator",
-  "job_to_be_done": "Fit a repository without letting unsupported proof become completion claims",
-  "context_of_use": "Codex local repo setup or retrofit session",
-  "desired_user_outcome": "The agent receives clear gates and cannot claim unsupported product success",
-  "business_or_mission_outcome": "Reduce false completion and product-proof theater in high-stakes repo work",
-  "critical_journey_id": "harness-ultragoal-fit-repo-static-journey",
+  "product_surface_classification": "developer_tool_plugin_and_typed_cli_installed_product",
+  "target_user_or_operator": "Repository operator using Harness Ultragoal to deliver ambitious work with bounded supervision",
+  "job_to_be_done": "Turn a falsifiable repository outcome into a reversible, inspectable, recoverable delivery using the smallest sufficient harness",
+  "context_of_use": "Current-source Codex plugin and Rust CLI use in established dirty and materially different real repositories",
+  "desired_user_outcome": "Reach a useful verified repository outcome while preserving unrelated work and understanding failures, recovery, evidence, and remaining claim limits",
+  "business_or_mission_outcome": "Improve trustworthy delivery while reducing human attention, repeated review loops, and non-product proof or artifact cost",
+  "critical_journey_id": "harness-ultragoal-current-source-installed-daily-driver-v1",
   "critical_journey_steps": [
-    "classify repo mode",
-    "install or verify law surfaces",
-    "run validator",
-    "emit claim ceiling"
+    "build an exact current-source package",
+    "install and identify exact installed bytes",
+    "observe host discovery in a new supported session",
+    "fit a real repository while preserving unrelated state",
+    "perform dirty-tree routine work",
+    "encounter and diagnose a representative failure",
+    "recover through parent-observed settlement and explicit cleanup",
+    "repeat useful work without stale custody or hidden writes",
+    "reconcile operator value, attention cost, retained artifacts, and claim ceiling"
   ],
-  "first_value_event": "validator rejects a product success substitution red fixture",
+  "first_value_event": "The installed current-source product safely completes one useful dirty-tree repository task and reports an honest same-surface outcome",
   "quality_in_use_dimensions": [
     "effectiveness",
     "efficiency",
@@ -40,32 +59,32 @@
     "freedom_from_risk",
     "context_coverage"
   ],
-  "accessibility_gate": "product proof language and receipts are text-first and screen-reader inspectable",
-  "cognitive_load_gate": "entry routing starts from fit-repo and names exact missing evidence",
-  "recovery_burden_gate": "unsupported claims are withheld with repair class and evidence requirements",
-  "trust_burden_gate": "same-surface receipts and non-E2E ceiling prevent proof substitution",
-  "human_attention_policy": "ask for human judgment only after deterministic proof path is exhausted or judgment-only review is explicitly required",
-  "continuance_required": false,
-  "evidence_ladder_required_level": "Inferred",
+  "accessibility_gate": "Commands, decisions, failures, recovery actions, and claim limits remain text-first and inspectable without hidden visual-only state",
+  "cognitive_load_gate": "One lean outcome contract, one canonical current state, batched reviews, and exact next actions minimize operator interpretation burden",
+  "recovery_burden_gate": "Interruption and failure preserve unrelated state and expose diagnosis, parent-observed settlement, explicit cleanup, and repeat-use recovery",
+  "trust_burden_gate": "Package, install, discovery, runtime, repository behavior, Product Fitness, release, and completion remain separate claims bound to exact identities",
+  "human_attention_policy": "Use the lowest sufficient model and focused deterministic checks; request human judgment only for material product or authority decisions without a safe default",
+  "continuance_required": true,
+  "evidence_ladder_required_level": "Known",
   "forbidden_substitutions": [
-    "install success",
-    "package publication",
-    "smoke test",
-    "fixture pass",
-    "reviewer agreement",
-    "Product Cohesion alone",
-    "Product Fitness alone",
-    "happy path only"
+    "source code for package behavior",
+    "package bytes for installation",
+    "installation for discovery",
+    "discovery for runtime behavior",
+    "unit or fixture tests for real repository use",
+    "receipts, manifests, logs, signatures, or generated output for behavior",
+    "one repository journey for broad reuse or mastery",
+    "artifact existence for readiness, release, or completion"
   ],
   "non_goal_product_claims": [
-    "daily-driver readiness",
-    "marketplace readiness",
-    "live reviewer exposure",
-    "external user success"
+    "public marketplace availability before explicit release authority",
+    "universal operating-system or host support beyond exercised environments",
+    "broadly reusable or mastery-level performance before two materially different real-repository journeys",
+    "autonomous external publication or destructive cleanup"
   ],
-  "claim_ceiling": "package_static_fixture_only_until_live_e2e",
-  "producer_actor_id": "harness-ultragoal-cli",
-  "review_owner": "harness-product-simplicity-falsifier",
-  "generated_at": "2026-06-25T00:00:00Z",
+  "claim_ceiling": "Contract authority only. N06, current-source installed behavior, Product Fitness, real-repository journeys, readiness, release, completion, and mastery remain withheld pending exact same-surface evidence.",
+  "producer_actor_id": "OWN-ULTRA-ROOT",
+  "review_owner": "OWN-INDEPENDENT-REVIEW",
+  "generated_at": "2026-07-15T23:30:48Z",
   "receipt_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
 }

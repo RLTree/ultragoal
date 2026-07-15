@@ -30,6 +30,26 @@ current on the exact root candidate.
 - This is a continuation binding explicitly requested by the current user. It
   neither replaces the adopted contract nor reopens the initial bootstrap goal.
 
+## Contract Amendment Checkpoint
+
+- `AMEND-001` is the first live append-only successor amendment. It strengthens
+  all 14 adopted `CL-*` claims without removing, merging, or promoting one.
+- Previous contract hash: `sha256:d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51`.
+  Current contract hash: `sha256:bc0080163641a33a781d5bd14dd4b40bdba507909a88bbba52303ec3a8295071`.
+  Amendment hash: `sha256:468948438a0756f0461ae92e94ea6bc36cb0fbbdc4756475bc5de5544ba6f42a`.
+  Exact log digest: `sha256:8d3333f118a55b981d8e1b88a23a8e4b0f65001317172fc3478d2b24d248e3ce`.
+- `examples/generated/PRODUCT_SUCCESS_CONTRACT.json` now binds the live v2
+  goal, all 14 exact claim IDs, the current contract digest, the installed
+  daily-driver journey, two-real-repository ceiling, minimal manual Product
+  Fitness observations, and proof-artifact cost. Its zero receipt digest is a
+  deliberate contract-only sentinel until the product proof boundary.
+- The amendment schema now accepts the adopted successor's `CL-*` claim IDs.
+  Exact schema, hash, lineage, and monotonicity checks pass locally. The
+  existing semantic validator still does not recompute the append-only hash
+  chain across documents; `CL-SOURCE`, `CL-STRICT`, `CL-RELEASE`, and
+  `CL-COMPLETION` remain withheld until that existing authority gap is repaired
+  and exercised. Do not create a parallel amendment or receipt subsystem.
+
 ## Controller Checkpoint
 
 This table is the canonical operational queue. It records integration state,
@@ -37,7 +57,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | frozen `d0e69eb12` / tree `020754e5` | Candidate replaces the retired alias analyzer with opaque childless custody leaves, a compact placement/export guard, and fresh-owner open/closed compile controls; stale WorkerResult remains byte-untouched and migration, receipt, integration, and all higher claims remain withheld | Exhaustively falsify the exact structural custody boundary and batch every demonstrated defect before ACCEPT or REWORK |
+| N06 routine execution | rework | rejected `d0e69eb12` / tree `020754e5` | Exhaustive review proved authority descendants can reach private custody, mediator siblings can invoke settlement, an unrelated crate sibling can clear the raw registry, and the compile control probes the wrong hierarchy/location; stale WorkerResult remains byte-untouched and every dependent claim remains withheld | Same owner must move all custody/registry construction and mutation behind one leaf owner boundary and cover the actual closest descendants, siblings, and transition family before one new freeze |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,15 +66,15 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `44`. Exact candidate
-`71acbbef4` / tree `60e600b6` is rejected after the bounded review completed the
-named custody surface and returned six defect classes together. Repeated
-same-class rejection retires the partial AST alias-analysis strategy. The next
-action is one structural repair that confines each custody mutation and registry
-transition to its exact typed method and control-flow location, forbids extra
-receiver parameters and unreachable decoys, includes cleanup mutation, and
-uses isolated executing controls with fresh pre/post state. No receipt
-regeneration or dependent claim may consume this rejected freeze.
+current exact-candidate rejection count for N06 is `45`. Exact candidate
+`d0e69eb12` / tree `020754e5` is rejected after one exhaustive review proved the
+opaque leaves remain reachable from real Rust descendants, mediator siblings
+retain settlement authority, and a crate sibling can clear the raw registry.
+The settled invariant is now one owner boundary: no descendant or sibling may
+construct, mutate, start, stage, settle, reconcile, clean, release, or clear
+custody/registry state outside its typed transition. The same owner is repairing
+that boundary and its exact closest-hierarchy controls. No receipt regeneration
+or dependent claim may consume this rejected freeze.
 The public 42-test claim remains withheld at 41/42 until a representative-load
 root observation.
 Escalation is legitimate only for

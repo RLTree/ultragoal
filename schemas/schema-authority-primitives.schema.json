@@ -229,7 +229,7 @@
       "type": "object"
     },
     "claimId": {
-      "pattern": "^CLAIM-[0-9]{3,}$",
+      "pattern": "^(?:CLAIM-[0-9]{3,}|CL-[A-Z][A-Z0-9-]*)$",
       "type": "string"
     },
     "claimKind": {
