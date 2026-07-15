@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | `d4ac1f406` / tree `2c7dc847` | Destructive `Drop` paths are removed, but cumulative review found `run_reserved` transitions reservation authority before observing cleanup results, then drops process-custody and staged-cleanup failures and resumes only the initiating panic; all higher claims remain withheld | Make the existing reservation/ambiguity authority record the exact primary, process-cleanup, staged-cleanup, and transition outcomes before release or panic resume |
+| N06 routine execution | under_review | `3e7e62694` / tree `d904fc6d` | Clean source freeze records typed primary, process-cleanup, staged-cleanup, and transition evidence on the existing signed reservation ledger before release; exact-tree review, schema migration, receipt regeneration, root integration, and all higher claims remain withheld | Independently falsify the cumulative exact tree; one material defect returns this same candidate to rework |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,10 +46,10 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `34`. The next action is the
-shared reservation-settlement repair: collect and record the exact primary,
-process-custody cleanup, staged cleanup, and authority-transition outcomes on
-the existing canonical authority before release, ambiguity, or panic resume.
+current exact-candidate rejection count for N06 is `34`. The next action is one
+cumulative exact-tree review of `3e7e62694` / tree `d904fc6d`, including durable
+authentication, crash/replay/recovery, panic preservation, and schema-version
+impact. No receipt regeneration or dependent claim may consume this freeze.
 The public 42-test claim remains withheld at 41/42 until a representative-load
 root observation.
 Escalation is legitimate only for
