@@ -24,10 +24,10 @@ use super::execution_authority::{
 use super::{begin_routine_mediation, environment_digest, read_authority_digest};
 use crate::routine_work::digest::{canonical, digest_of, framed, sha256, valid};
 use crate::routine_work::{
-    transition_failure_error, trusted_rust_source_execution_observed, CleanupEvidence,
-    FailureEvidence, LocalDirtyTree, PanicEvidence, ProcessCustodyEvidence, RepoPath,
-    ReservationFailureDisposition, ReservationFailureEvidence, RoutineBinding, RoutineError,
-    RoutineErrorId, RoutinePlan, RESERVATION_FAILURE_SCHEMA,
+    CleanupEvidence, FailureEvidence, LocalDirtyTree, PanicEvidence, ProcessCustodyEvidence,
+    RESERVATION_FAILURE_SCHEMA, RepoPath, ReservationFailureDisposition,
+    ReservationFailureEvidence, RoutineBinding, RoutineError, RoutineErrorId, RoutinePlan,
+    transition_failure_error, trusted_rust_source_execution_observed,
 };
 
 pub(crate) use filesystem::{
@@ -78,7 +78,7 @@ pub(crate) use filesystem::{
 pub(crate) use grant_scope::*;
 pub(crate) use grant_validation::*;
 pub(crate) use incomplete_outcome::*;
-pub(crate) use intent_mediation::*;
+use intent_mediation::mediate_intent;
 pub(super) use no_op_mediation::*;
 pub(super) use read_source_binding::mediate_prepared_routine_execution;
 pub(crate) use read_source_binding::{
