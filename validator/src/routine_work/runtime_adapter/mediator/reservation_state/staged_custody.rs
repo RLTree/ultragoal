@@ -1,12 +1,19 @@
 use super::*;
+use std::cell::RefCell;
 
-impl AttemptReservation {
-    pub(super) fn has_staged_custody(&self) -> bool {
-        !self.staged.borrow().is_empty()
+pub(super) struct StagedCustody(RefCell<Vec<StagedProgram>>);
+
+impl StagedCustody {
+    pub(super) fn new() -> Self {
+        Self(RefCell::new(Vec::new()))
     }
 
-    pub(super) fn require_staged_empty(&self) -> Result<(), RoutineError> {
-        if self.has_staged_custody() {
+    pub(super) fn is_empty(&self) -> bool {
+        self.0.borrow().is_empty()
+    }
+
+    pub(super) fn require_empty(&self) -> Result<(), RoutineError> {
+        if !self.is_empty() {
             return Err(mediator_error(
                 "mediator-staged-custody-terminal-transition-refused",
             ));
@@ -14,22 +21,13 @@ impl AttemptReservation {
         Ok(())
     }
 
-    pub(in super::super) fn stage_and_use<T>(
+    pub(super) fn push_and_use<T>(
         &self,
-        program: &PinnedExecutable,
+        staged: StagedProgram,
         use_program: impl FnOnce(&PinnedExecutable) -> Result<T, RoutineError>,
     ) -> Result<T, RoutineError> {
-        self.require_open()?;
-        self.require_staged_empty()?;
-        let staged = self
-            .durable
-            .as_ref()
-            .ok_or_else(|| mediator_error("mediator-staging-authority-missing"))?
-            .stage_program(program)?;
-        self.require_open()?;
-        self.require_staged_empty()?;
-        self.staged.borrow_mut().push(staged);
-        let staged = self.staged.borrow();
+        self.0.borrow_mut().push(staged);
+        let staged = self.0.borrow();
         let program = staged
             .last()
             .map(|item| &item.executable)
@@ -37,40 +35,35 @@ impl AttemptReservation {
         use_program(program)
     }
 
-    pub(super) fn cleanup_staged(&self) -> Result<(), RoutineError> {
-        let Some(durable) = &self.durable else {
-            return if self.staged.borrow().is_empty() {
-                Ok(())
-            } else {
-                Err(mediator_error("mediator-staging-authority-missing"))
-            };
+    pub(super) fn cleanup_last(
+        &self,
+        cleanup: impl FnOnce(&StagedProgram) -> Result<(), RoutineError>,
+    ) -> Result<bool, RoutineError> {
+        let staged = self.0.borrow();
+        let Some(item) = staged.last() else {
+            return Ok(false);
         };
-        let mut staged = self.staged.borrow_mut();
-        while let Some(item) = staged.last() {
-            durable.cleanup_staged(item)?;
-            staged.pop();
-        }
-        Ok(())
+        cleanup(item)?;
+        drop(staged);
+        self.0.borrow_mut().pop();
+        Ok(true)
     }
 
-    pub(super) fn failure_custody_transfer_required(
+    pub(super) fn clear_recorded(&self) {
+        self.0.borrow_mut().clear();
+    }
+
+    pub(super) fn failure_transfer_required(
         &self,
         evidence: &CleanupEvidence,
+        durable: bool,
     ) -> Result<bool, RoutineError> {
-        match (self.has_staged_custody(), evidence) {
-            (false, CleanupEvidence::Succeeded | CleanupEvidence::NotRequired) => Ok(false),
-            (true, CleanupEvidence::Error(_) | CleanupEvidence::Panic(_))
-                if self.durable.is_some() =>
-            {
-                Ok(true)
-            }
+        match (self.is_empty(), evidence) {
+            (true, CleanupEvidence::Succeeded | CleanupEvidence::NotRequired) => Ok(false),
+            (false, CleanupEvidence::Error(_) | CleanupEvidence::Panic(_)) if durable => Ok(true),
             _ => Err(mediator_error(
                 "mediator-reservation-failure-custody-binding-invalid",
             )),
         }
-    }
-
-    pub(super) fn transfer_staged_to_recorded_recovery(&self) {
-        self.staged.borrow_mut().clear();
     }
 }

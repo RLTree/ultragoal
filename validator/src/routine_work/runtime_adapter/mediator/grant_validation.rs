@@ -1,5 +1,5 @@
 use super::super::{
-    default_environment, exact_runner, RUST_SOURCE_SYNTAX_ARGUMENTS, RUST_SOURCE_SYNTAX_BEHAVIOR,
+    RUST_SOURCE_SYNTAX_ARGUMENTS, RUST_SOURCE_SYNTAX_BEHAVIOR, default_environment, exact_runner,
 };
 use super::*;
 
@@ -35,7 +35,7 @@ pub(crate) fn validate_grant(
     Ok(())
 }
 
-pub(crate) fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservation, RoutineError> {
+pub(super) fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservation, RoutineError> {
     if let Some(durable) = &grant.durable {
         durable.validate_reserved()?;
     }

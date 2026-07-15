@@ -1,7 +1,7 @@
 use super::super::RUST_SOURCE_SYNTAX_BEHAVIOR;
 use super::*;
 
-pub(crate) fn mediate_intent(
+pub(super) fn mediate_intent(
     context: &LiveContext,
     plan: &RoutinePlan,
     token: &RoutineMediatedIntent,

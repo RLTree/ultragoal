@@ -17,7 +17,7 @@ pub(crate) fn incomplete_node(
     }
 }
 
-pub(crate) fn collect_generated_witnesses(
+pub(super) fn collect_generated_witnesses(
     values: Vec<(String, Vec<u8>)>,
     attempt: &AttemptReservation,
 ) -> BTreeMap<String, String> {

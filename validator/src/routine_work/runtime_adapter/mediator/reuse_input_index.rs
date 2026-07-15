@@ -29,17 +29,17 @@ pub(crate) fn index_reuse_inputs(
     Ok(indexed)
 }
 
-pub(crate) struct ReuseArtifactValidation<'a> {
-    pub(crate) context: &'a LiveContext,
-    pub(crate) plan: &'a RoutinePlan,
-    pub(crate) token: &'a RoutineMediatedIntent,
-    pub(crate) snapshot_id: &'a str,
-    pub(crate) dependencies: &'a BTreeMap<String, String>,
-    pub(crate) outputs: &'a OutputConfinement,
-    pub(crate) attempt: &'a AttemptReservation,
+pub(super) struct ReuseArtifactValidation<'a> {
+    pub(super) context: &'a LiveContext,
+    pub(super) plan: &'a RoutinePlan,
+    pub(super) token: &'a RoutineMediatedIntent,
+    pub(super) snapshot_id: &'a str,
+    pub(super) dependencies: &'a BTreeMap<String, String>,
+    pub(super) outputs: &'a OutputConfinement,
+    pub(super) attempt: &'a AttemptReservation,
 }
 
-pub(crate) fn verify_reuse_artifact(
+pub(super) fn verify_reuse_artifact(
     bytes: &[u8],
     validation: ReuseArtifactValidation<'_>,
 ) -> Result<Option<VerifiedReuseArtifact>, RoutineError> {

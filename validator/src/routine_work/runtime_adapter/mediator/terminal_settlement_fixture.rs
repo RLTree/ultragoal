@@ -111,14 +111,25 @@ pub(super) fn attempt(
     started: bool,
     prior_recovery_marker: Option<String>,
 ) -> AttemptReservation {
-    AttemptReservation::reserved_test_attempt(
+    let reservation = AttemptReservation::reserved(
         format!("terminal-protocol-{label}"),
         format!("terminal-grant-{label}"),
         format!("terminal-marker-{label}"),
         prior_recovery_marker,
         durable,
-        started,
-    )
+    );
+    if started {
+        registry()
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .active_protocols
+            .insert(
+                reservation.protocol_id().clone(),
+                reservation.grant_id().clone(),
+            );
+        reservation.mark_started().unwrap();
+    }
+    reservation
 }
 
 pub(super) fn seed(attempt: &AttemptReservation, active_grant: &str, ambiguity: &str) {

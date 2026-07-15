@@ -32,12 +32,16 @@ fn durable_terminal_siblings_clear_exact_ambiguity_and_public_recovery() {
         let state = registry()
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
-        assert!(!state
-            .active_protocols
-            .contains_key(reservation.protocol_id()));
-        assert!(!state
-            .ambiguous_protocols
-            .contains_key(reservation.protocol_id()));
+        assert!(
+            !state
+                .active_protocols
+                .contains_key(reservation.protocol_id())
+        );
+        assert!(
+            !state
+                .ambiguous_protocols
+                .contains_key(reservation.protocol_id())
+        );
         drop(state);
         assert_eq!(
             *durable
@@ -74,6 +78,7 @@ fn non_durable_missing_or_foreign_ambiguity_emits_no_marker() {
             reservation.protocol_id().clone(),
             reservation.grant_id().clone(),
         );
+        state.ambiguous_protocols.remove(reservation.protocol_id());
         if let Some(ambiguity) = ambiguity {
             state
                 .ambiguous_protocols
