@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | `0a1ee0e99` / tree `9bfba50d` | Exact-tree review found authority cleanup still occurs implicitly in `AttemptReservation::drop`; fallible construction, reconciliation, finish, staged-cleanup, publication, settlement, and unwind paths can mutate active/recovery state without a parent-observed transition; receipt and integration remain withheld | Remove authority mutation from `Drop` and make every post-reservation sibling failure explicitly settle or preserve custody at the orchestration boundary |
+| N06 routine execution | rework | `7bc4f9edb` / tree `692118b0` | Exact-tree review found combined panic and staged-cleanup failure replaces the initiating panic with a cleanup error; receipt and integration remain withheld | Preserve the original panic payload while explicitly retaining exact recovery and staged custody, then refreeze for one fresh review |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,9 +46,10 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for the custody/cleanup class is `15`.
-The next action is invariant-level explicit settlement/preservation for every
-post-reservation N06 failure transition; `Drop` must not mutate authority state.
+current exact-candidate rejection count for the custody/cleanup class is `16`.
+The next action is invariant-level failure-identity preservation: lifecycle
+cleanup may retain recovery evidence but must never replace the initiating
+panic, and `Drop` must remain authority-inert.
 Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
