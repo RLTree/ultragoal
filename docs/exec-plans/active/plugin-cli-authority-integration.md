@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | `cf84b182d` / tree `3dcc9f97` | Clean source freeze rejects typed owner/subobject pattern aliases across expression and parameter forms, with causal compiling mutants; migration, receipt, integration, and all higher claims remain withheld | Freshly falsify the exact alias guard and cumulative custody boundary; one material defect returns it to rework |
+| N06 routine execution | under_review | `cf84b182d` / tree `3dcc9f97` | Clean source freeze rejects typed owner/subobject pattern aliases across expression and parameter forms, with causal compiling mutants; migration, receipt, integration, and all higher claims remain withheld | Complete one bounded exhaustive falsification of the alias guard and cumulative custody boundary; batch every demonstrated sibling bypass before returning the candidate to rework |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -49,8 +49,10 @@ or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
 current exact-candidate rejection count for N06 is `42`. The next action is one
 fresh exact-tree review of `cf84b182d`, focused on typed pattern coverage,
 subsequent path-receiver mutation, compiling causal mutants, and the cumulative
-custody boundary. No receipt regeneration or dependent claim may consume this
-unaccepted freeze.
+custody boundary. The review must finish that bounded invariant surface and
+return all demonstrated sibling defects together; one material defect remains
+sufficient for REWORK, but is not an early-stop condition. No receipt
+regeneration or dependent claim may consume this unaccepted freeze.
 The public 42-test claim remains withheld at 41/42 until a representative-load
 root observation.
 Escalation is legitimate only for
@@ -257,11 +259,14 @@ Root owns each deferred audit and the corresponding claims remain withheld.
 
 ### C. Integrate Continuously
 
-For each frozen session: inspect the commit and WorkerResult, run independent
-falsification, return one material defect for REWORK, integrate one accepted
-increment, apply root-owned wiring, rerun the dependency closure, refresh any
-remaining worktrees after shared-interface changes, then archive and remove
-the accepted session when no unique state remains.
+For each frozen session: inspect the commit and WorkerResult, run a bounded
+independent falsification through the complete named invariant surface, and
+batch all demonstrated sibling defects into one REWORK packet. One material
+defect is sufficient to reject the candidate, but review does not stop at the
+first defect. Integrate one accepted increment, apply root-owned wiring, rerun
+the dependency closure, refresh any remaining worktrees after shared-interface
+changes, then archive and remove the accepted session when no unique state
+remains.
 
 ### D. Close Product And Proof Surfaces
 
