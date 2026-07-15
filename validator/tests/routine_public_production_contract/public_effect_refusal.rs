@@ -1,19 +1,12 @@
-use super::scenario::{
-    BoundedContender, Fixture, pass_node, prefix_route, run_bounded_contender, tree,
-};
+use super::scenario::{Fixture, pass_node, prefix_route, tree};
 use serde_json::Value;
 use std::fs;
-use std::fs::OpenOptions;
-use std::os::fd::AsRawFd;
 use std::os::unix::fs::PermissionsExt;
-use std::process::{Command, Output};
+use std::process::Output;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::time::{Duration, Instant};
 
-const LOCK_CONTENTION_BOUND: Duration = Duration::from_secs(10);
-
-fn dirty_fixture(label: &str, provision_host: bool) -> Fixture {
+pub(super) fn dirty_fixture(label: &str, provision_host: bool) -> Fixture {
     Fixture::new(
         label,
         &[pass_node("compile", &[])],
@@ -23,7 +16,7 @@ fn dirty_fixture(label: &str, provision_host: bool) -> Fixture {
     )
 }
 
-fn assert_public_refusal(output: &Output) {
+pub(super) fn assert_public_refusal(output: &Output) {
     assert_ne!(output.status.code(), Some(0), "{output:?}");
     assert!(output.stdout.is_empty(), "{output:?}");
     let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
@@ -43,16 +36,7 @@ fn assert_public_refusal(output: &Output) {
     );
 }
 
-fn assert_public_busy(output: &Output) {
-    assert_public_refusal(output);
-    let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
-    assert_eq!(
-        diagnostic["cause"],
-        "the exact routine host authority is busy with another active public invocation"
-    );
-}
-
-fn assert_fixture_unchanged(
+pub(super) fn assert_fixture_unchanged(
     fixture: &Fixture,
     root: &std::collections::BTreeMap<String, String>,
     home: &std::collections::BTreeMap<String, String>,
@@ -129,59 +113,6 @@ fn concurrent_local_issuer_attempts_have_no_forged_success() {
     assert!(fixture.authority_root().is_dir());
     assert!(fixture.root.join("target/routine/compile").is_dir());
     fixture.teardown_after_assertions();
-}
-
-#[test]
-fn held_public_lock_refuses_a_real_contender_without_effect_then_allows_retry() {
-    let mut fixture = dirty_fixture("held-lock-contender", true);
-    let before_root = tree(&fixture.root);
-    let before_home = tree(&fixture.home);
-    let before_status = fixture.status();
-    let holder = OpenOptions::new()
-        .read(true)
-        .write(true)
-        .open(fixture.lock_path())
-        .unwrap();
-    assert_eq!(
-        unsafe { libc::flock(holder.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) },
-        0
-    );
-
-    let mut command = fixture.command();
-    let contender = match run_bounded_contender(&mut command, LOCK_CONTENTION_BOUND) {
-        BoundedContender::Exited(output) => output,
-        other => {
-            assert_eq!(unsafe { libc::flock(holder.as_raw_fd(), libc::LOCK_UN) }, 0);
-            drop(holder);
-            fixture.teardown_after_assertions();
-            panic!("public contender did not finish before {LOCK_CONTENTION_BOUND:?}: {other:?}");
-        }
-    };
-    assert_public_busy(&contender);
-    assert_fixture_unchanged(&fixture, &before_root, &before_home, &before_status);
-    assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
-
-    assert_eq!(unsafe { libc::flock(holder.as_raw_fd(), libc::LOCK_UN) }, 0);
-    drop(holder);
-    let retry = fixture.run();
-    assert_eq!(retry.status.code(), Some(0), "{retry:?}");
-    assert!(fixture.root.join("target/routine/compile").is_dir());
-    fixture.teardown_after_assertions();
-}
-
-#[test]
-#[should_panic(expected = "bounded contender timed out")]
-fn blocking_contender_is_reaped_and_never_accepted_as_a_public_result() {
-    let mut blocking = Command::new("/bin/sleep");
-    blocking.arg("60");
-    let started = Instant::now();
-    match run_bounded_contender(&mut blocking, Duration::from_millis(100)) {
-        BoundedContender::TerminatedAndReaped(output) => {
-            assert!(started.elapsed() < Duration::from_secs(1), "{output:?}");
-            panic!("bounded contender timed out after verified reap: {output:?}")
-        }
-        other => panic!("blocking contender was not verified reaped: {other:?}"),
-    }
 }
 
 #[test]
