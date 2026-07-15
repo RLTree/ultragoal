@@ -1,5 +1,6 @@
 use super::*;
 use crate::catalog_fixture_scope::ClaimedFixtureScope;
+use std::sync::{Mutex, MutexGuard};
 
 pub(crate) const GRAPH_ID: &str =
     "sha256:1111111111111111111111111111111111111111111111111111111111111111";
@@ -15,6 +16,17 @@ pub(crate) const VALID_CATALOG: &[u8] =
     include_bytes!("../../../fixtures/routine-production-catalog/valid-catalog-v2.json");
 
 pub(crate) static NEXT: AtomicU64 = AtomicU64::new(0);
+static FIXTURE_ROOT_LOCK: Mutex<()> = Mutex::new(());
+
+pub(crate) struct FixtureRootGuard(MutexGuard<'static, ()>);
+
+pub(crate) fn lock_fixture_root() -> FixtureRootGuard {
+    FixtureRootGuard(
+        FIXTURE_ROOT_LOCK
+            .lock()
+            .unwrap_or_else(|error| error.into_inner()),
+    )
+}
 
 pub(crate) struct TestRoot {
     pub(crate) path: PathBuf,

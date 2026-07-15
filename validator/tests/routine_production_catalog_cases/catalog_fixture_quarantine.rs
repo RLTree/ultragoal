@@ -1,11 +1,12 @@
 use super::*;
 use crate::catalog_fixture_cleanup_hook::{set_before_entry_removal, set_before_final_removal};
-use crate::catalog_fixture_rebind::{rebind_attempts, set_rebind_refusals};
+use crate::catalog_fixture_rebind::{owner_bound_scans, set_rebind_refusals};
 use crate::catalog_fixture_scope::{ClaimedFixtureScope, FixtureScopeError};
 use std::sync::{Arc, Mutex};
 
 #[test]
 pub(crate) fn nested_quarantine_revalidation_preserves_a_replacement() {
+    let _guard = crate::catalog_fixture::lock_fixture_root();
     let parent = catalog_fixture_parent();
     let name = format!(
         "nested-substitution-{}",
@@ -33,6 +34,7 @@ pub(crate) fn nested_quarantine_revalidation_preserves_a_replacement() {
 
 #[test]
 pub(crate) fn final_quarantine_substitution_is_retained_without_deleting_the_replacement() {
+    let _guard = crate::catalog_fixture::lock_fixture_root();
     let parent = catalog_fixture_parent();
     let name = format!(
         "final-substitution-{}-{}",
@@ -72,17 +74,23 @@ pub(crate) fn final_quarantine_substitution_is_retained_without_deleting_the_rep
 
 #[test]
 pub(crate) fn detached_scope_rebinds_only_the_held_directory_after_repeated_refusals() {
+    let _guard = crate::catalog_fixture::lock_fixture_root();
     let parent = catalog_fixture_parent();
     let before = inventory(&parent);
-    let name = format!("detached-rebind-{}", NEXT.fetch_add(1, Ordering::Relaxed));
+    let name = format!(
+        "detached-rebind-{}-{}",
+        std::process::id(),
+        NEXT.fetch_add(1, Ordering::Relaxed)
+    );
     let mut scope = ClaimedFixtureScope::claim(&parent, &name).unwrap();
     let observed = Arc::new(Mutex::new(None::<PathBuf>));
     let replacement = Arc::clone(&observed);
+    let held_name = name.clone();
     set_before_final_removal(Some(Box::new({
         let parent = parent.clone();
         move |quarantine| {
             let quarantine = parent.join(quarantine.to_string_lossy().as_ref());
-            fs::rename(&quarantine, parent.join(format!("{name}-held"))).unwrap();
+            fs::rename(&quarantine, parent.join(format!("{held_name}-held"))).unwrap();
             fs::create_dir(&quarantine).unwrap();
             fs::write(
                 quarantine.join("foreign"),
@@ -98,15 +106,22 @@ pub(crate) fn detached_scope_rebinds_only_the_held_directory_after_repeated_refu
     ));
     assert!(!scope.has_name_binding());
     set_rebind_refusals(2);
+    let first_refusal = scope.rollback().unwrap_err();
     assert!(matches!(
-        scope.rollback(),
-        Err(FixtureScopeError::Retained(_))
+        first_refusal,
+        FixtureScopeError::Retained(ref reason) if reason.contains("after owner-bound scan")
     ));
-    assert!(matches!(
-        scope.rollback(),
-        Err(FixtureScopeError::Retained(_))
-    ));
-    assert_eq!(rebind_attempts(), 2);
+    assert!(parent.join(format!("{name}-held")).is_dir());
+    let second_refusal = scope.rollback().unwrap_err();
+    assert!(
+        matches!(
+            second_refusal,
+            FixtureScopeError::Retained(ref reason) if reason.contains("after owner-bound scan")
+        ),
+        "{second_refusal:?}"
+    );
+    assert!(parent.join(format!("{name}-held")).is_dir());
+    assert_eq!(owner_bound_scans(), 2);
     scope.rollback().unwrap();
     let replacement = observed.lock().unwrap().take().unwrap();
     assert_eq!(

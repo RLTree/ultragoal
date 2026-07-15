@@ -1,14 +1,24 @@
 use super::*;
+use crate::catalog_fixture::FixtureRootGuard;
 use crate::catalog_fixture_claim::FixtureClaimFailure;
 use crate::catalog_fixture_construction::FixtureConstructionFailure;
 use crate::catalog_fixture_scope::{ClaimedFixtureScope, FixtureScopeError};
-use std::panic::{AssertUnwindSafe, catch_unwind, resume_unwind};
+use std::panic::{catch_unwind, resume_unwind, AssertUnwindSafe};
 
 pub(crate) struct CatalogFixtureInvocation {
     scope: ClaimedFixtureScope,
 }
 
 pub(crate) fn run_catalog_case(
+    label: &str,
+    body: impl FnOnce(&mut CatalogFixtureInvocation) -> Result<(), FixtureConstructionFailure>,
+) {
+    let guard = crate::catalog_fixture::lock_fixture_root();
+    run_catalog_case_with_guard(&guard, label, body);
+}
+
+pub(crate) fn run_catalog_case_with_guard(
+    _guard: &FixtureRootGuard,
     label: &str,
     body: impl FnOnce(&mut CatalogFixtureInvocation) -> Result<(), FixtureConstructionFailure>,
 ) {
@@ -28,6 +38,15 @@ pub(crate) fn run_catalog_case(
 }
 
 pub(crate) fn run_catalog_case_with_begin_failure(
+    label: &str,
+    failure: crate::catalog_fixture_claim::ClaimFailurePoint,
+) {
+    let guard = crate::catalog_fixture::lock_fixture_root();
+    run_catalog_case_with_begin_failure_guard(&guard, label, failure);
+}
+
+pub(crate) fn run_catalog_case_with_begin_failure_guard(
+    _guard: &FixtureRootGuard,
     label: &str,
     failure: crate::catalog_fixture_claim::ClaimFailurePoint,
 ) {

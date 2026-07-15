@@ -38,6 +38,10 @@ pub(crate) fn names(directory: RawFd) -> Result<Vec<OsString>, String> {
     if duplicate < 0 {
         return Err(io::Error::last_os_error().to_string());
     }
+    if unsafe { libc::lseek(duplicate, 0, libc::SEEK_SET) } < 0 {
+        unsafe { libc::close(duplicate) };
+        return Err(io::Error::last_os_error().to_string());
+    }
     let stream = unsafe { libc::fdopendir(duplicate) };
     if stream.is_null() {
         unsafe { libc::close(duplicate) };

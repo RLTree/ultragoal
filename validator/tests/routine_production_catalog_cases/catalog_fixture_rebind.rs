@@ -11,18 +11,18 @@ use crate::catalog_fixture_scope::{ClaimedFixtureScope, FixtureScopeBinding, Fix
 #[cfg(test)]
 thread_local! {
     static REFUSALS: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
-    static ATTEMPTS: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
+    static OWNER_BOUND_SCANS: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
 }
 
 #[cfg(test)]
 pub(crate) fn set_rebind_refusals(count: usize) {
     REFUSALS.with(|value| value.set(count));
-    ATTEMPTS.with(|value| value.set(0));
+    OWNER_BOUND_SCANS.with(|value| value.set(0));
 }
 
 #[cfg(test)]
-pub(crate) fn rebind_attempts() -> usize {
-    ATTEMPTS.with(std::cell::Cell::get)
+pub(crate) fn owner_bound_scans() -> usize {
+    OWNER_BOUND_SCANS.with(std::cell::Cell::get)
 }
 
 pub(crate) fn exact_name(
@@ -31,9 +31,6 @@ pub(crate) fn exact_name(
     device: u64,
     inode: u64,
 ) -> Result<CString, String> {
-    if refused() {
-        return Err("injected descriptor rebind refusal".to_owned());
-    }
     let held = child.metadata().map_err(|error| error.to_string())?;
     if !held.file_type().is_dir() || held.dev() != device || held.ino() != inode {
         return Err("held fixture directory identity changed".to_owned());
@@ -50,6 +47,10 @@ pub(crate) fn exact_name(
         let reopened = open_directory(parent.as_raw_fd(), &name)?;
         let reopened = reopened.metadata().map_err(|error| error.to_string())?;
         if reopened.file_type().is_dir() && reopened.dev() == device && reopened.ino() == inode {
+            record_owner_bound_scan();
+            if refused() {
+                return Err("injected descriptor rebind refusal after owner-bound scan".to_owned());
+            }
             return Ok(name);
         }
     }
@@ -73,7 +74,6 @@ pub(crate) fn restore(scope: &mut ClaimedFixtureScope) -> Result<(), FixtureScop
 fn refused() -> bool {
     #[cfg(test)]
     {
-        ATTEMPTS.with(|value| value.set(value.get().saturating_add(1)));
         return REFUSALS.with(|value| {
             let count = value.get();
             value.set(count.saturating_sub(1));
@@ -84,4 +84,9 @@ fn refused() -> bool {
     {
         false
     }
+}
+
+fn record_owner_bound_scan() {
+    #[cfg(test)]
+    OWNER_BOUND_SCANS.with(|value| value.set(value.get().saturating_add(1)));
 }
