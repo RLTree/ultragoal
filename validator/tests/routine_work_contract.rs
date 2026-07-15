@@ -62,6 +62,8 @@ mod retired_process_lifecycle_routes;
 mod retired_reuse_output_routes;
 #[path = "routine_work_contract/reuse/mod.rs"]
 mod reuse;
+#[path = "routine_work_contract/routine_fixture_repository.rs"]
+mod routine_fixture_repository;
 #[path = "routine_work_contract/routine_fixture_workspace.rs"]
 mod routine_fixture_workspace;
 #[path = "routine_work_contract/routine_plan_fixture.rs"]
