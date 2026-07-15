@@ -105,11 +105,14 @@ pub(crate) fn catalog_fixture_setup_rollback_refuses_a_substituted_scope() {
 
 #[test]
 pub(crate) fn catalog_claim_failures_retain_typed_custody_without_uncertain_cleanup() {
-    let parent = fixture_parent().join(format!(
-        "claim-failure-parent-{}",
-        NEXT.load(Ordering::Relaxed)
-    ));
-    fs::create_dir_all(&parent).unwrap();
+    let base = fixture_parent();
+    let name = format!(
+        "claim-failure-parent-{}-{}",
+        std::process::id(),
+        NEXT.fetch_add(1, Ordering::Relaxed)
+    );
+    let mut parent_scope = ClaimedFixtureScope::claim(&base, &name).unwrap();
+    let parent = parent_scope.path().to_path_buf();
     let unopened = ClaimedFixtureScope::claim_with_failure(
         &parent,
         "before-open",
@@ -121,25 +124,34 @@ pub(crate) fn catalog_claim_failures_retain_typed_custody_without_uncertain_clea
         }
         _ => panic!("expected typed pre-open residue"),
     };
+    let mut scope = residue.reconcile().unwrap();
+    scope.rollback().unwrap();
+    assert!(!parent.join("before-open").exists());
     assert!(matches!(
-        residue.reconcile(),
-        Err(ClaimResidue::Unopened(_))
+        scope.rollback(),
+        Err(FixtureScopeError::Retained(_))
     ));
 
-    let opened = ClaimedFixtureScope::claim_with_failure(
+    let foreign = ClaimedFixtureScope::claim_with_failure(
         &parent,
-        "after-open",
-        Some(ClaimFailurePoint::AfterOpenBeforeIdentity),
+        "foreign-retry",
+        Some(ClaimFailurePoint::AfterMkdirBeforeOpen),
     );
-    let scope = match opened {
-        Err(FixtureClaimFailure::Retained(residue)) => residue.reconcile().unwrap(),
-        _ => panic!("expected typed post-open residue"),
+    let residue = match foreign {
+        Err(FixtureClaimFailure::Retained(ClaimResidue::Unopened(value))) => {
+            ClaimResidue::Unopened(value)
+        }
+        _ => panic!("expected foreign-retry residue"),
     };
-    let mut scope = scope;
-    scope.rollback().unwrap();
-    assert!(parent.join("before-open").exists());
-    assert!(!parent.join("after-open").exists());
-    fs::remove_dir_all(&parent).unwrap();
+    fs::rename(parent.join("foreign-retry"), parent.join("foreign-held")).unwrap();
+    fs::create_dir(parent.join("foreign-retry")).unwrap();
+    fs::write(parent.join("foreign-retry/foreign"), b"preserve foreign\n").unwrap();
+    assert!(matches!(residue.reconcile(), Err(ClaimResidue::Opened(_))));
+    assert_eq!(
+        fs::read(parent.join("foreign-retry/foreign")).unwrap(),
+        b"preserve foreign\n"
+    );
+    parent_scope.teardown_after_assertions().unwrap();
 }
 
 #[test]

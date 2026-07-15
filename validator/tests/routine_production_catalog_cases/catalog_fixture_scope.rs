@@ -6,6 +6,7 @@ use std::path::{Path, PathBuf};
 
 use crate::catalog_fixture_claim::{
     ClaimFailurePoint, ClaimResidue, FixtureClaimFailure, OpenedClaimResidue, UnopenedClaimResidue,
+    capture_identity,
 };
 
 #[derive(Debug, Eq, PartialEq)]
@@ -65,12 +66,27 @@ impl ClaimedFixtureScope {
                 io::Error::last_os_error().to_string(),
             )));
         }
+        let identity = match capture_identity(&parent_directory, &name) {
+            Ok(value) => value,
+            Err(error) => {
+                return Err(FixtureClaimFailure::Retained(ClaimResidue::Unopened(
+                    UnopenedClaimResidue {
+                        parent: parent_directory,
+                        name,
+                        path,
+                        identity: None,
+                        error,
+                    },
+                )));
+            }
+        };
         if failure == Some(ClaimFailurePoint::AfterMkdirBeforeOpen) {
             return Err(FixtureClaimFailure::Retained(ClaimResidue::Unopened(
                 UnopenedClaimResidue {
                     parent: parent_directory,
                     name,
                     path,
+                    identity: Some(identity),
                     error: FixtureScopeError::Retained(
                         "injected post-mkdir pre-open failure".to_owned(),
                     ),
@@ -90,6 +106,7 @@ impl ClaimedFixtureScope {
                     parent: parent_directory,
                     name,
                     path,
+                    identity: Some(identity),
                     error: FixtureScopeError::Retained(format!(
                         "open failed: {}",
                         io::Error::last_os_error()
@@ -103,6 +120,7 @@ impl ClaimedFixtureScope {
             directory,
             name,
             path,
+            identity,
             error: FixtureScopeError::Retained("opened claim awaits identity".to_owned()),
         };
         if failure == Some(ClaimFailurePoint::AfterOpenBeforeIdentity) {
