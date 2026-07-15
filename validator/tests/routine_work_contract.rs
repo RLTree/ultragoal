@@ -38,14 +38,10 @@ mod issuer_scratch_resilience;
 mod local_capture;
 #[path = "routine_work_contract/owned_compile_claim.rs"]
 mod owned_compile_claim;
-#[path = "routine_work_contract/owned_compile_custody.rs"]
-mod owned_compile_custody;
 #[path = "routine_work_contract/owned_compile_directory.rs"]
 mod owned_compile_directory;
-#[path = "routine_work_contract/owned_compile_quarantine.rs"]
-mod owned_compile_quarantine;
-#[path = "routine_work_contract/owned_compile_reconciliation.rs"]
-mod owned_compile_reconciliation;
+#[path = "routine_work_contract/owned_compile_retention.rs"]
+mod owned_compile_retention;
 #[path = "routine_work_contract/owned_compile_scratch.rs"]
 mod owned_compile_scratch;
 #[path = "routine_work_contract/planning.rs"]

@@ -7,7 +7,7 @@ use super::scenario::{TempRepo, fallback_graph, graph, graph_with_order};
 
 #[test]
 fn clean_repository_is_an_exact_no_op() {
-    let repo = TempRepo::new("clean-noop");
+    let mut repo = TempRepo::new("clean-noop");
     let context = repo.context("routine");
     let snapshot = LocalDirtyTree::capture(&context).unwrap();
     let plan =
@@ -16,11 +16,12 @@ fn clean_repository_is_an_exact_no_op() {
     assert!(snapshot.is_clean());
     assert_eq!(plan.affected_set().mode(), PlanMode::NoOp);
     assert!(plan.checks().is_empty());
+    repo.teardown_after_assertions();
 }
 
 #[test]
 fn ordinary_dirty_subset_is_dependency_closed_without_release_ceremony() {
-    let repo = TempRepo::new("dirty-subset");
+    let mut repo = TempRepo::new("dirty-subset");
     repo.write("src/lib.rs", b"pub fn value() -> u8 { 2 }\n");
     let context = repo.context("routine");
     let snapshot = LocalDirtyTree::capture(&context).unwrap();
@@ -39,11 +40,12 @@ fn ordinary_dirty_subset_is_dependency_closed_without_release_ceremony() {
             .contains(&SelectionReason::DirectImpact)
     );
     assert!(plan.check("release").is_none());
+    repo.teardown_after_assertions();
 }
 
 #[test]
 fn dependency_fanout_runs_downstream_checks_and_prerequisites() {
-    let repo = TempRepo::new("fanout");
+    let mut repo = TempRepo::new("fanout");
     repo.write("docs/guide.md", b"changed guide\n");
     let context = repo.context("routine");
     let snapshot = LocalDirtyTree::capture(&context).unwrap();
@@ -60,11 +62,12 @@ fn dependency_fanout_runs_downstream_checks_and_prerequisites() {
             .unwrap()
             .contains(&SelectionReason::DownstreamImpact)
     );
+    repo.teardown_after_assertions();
 }
 
 #[test]
 fn untracked_renamed_and_deleted_paths_remain_covered() {
-    let untracked = TempRepo::new("untracked");
+    let mut untracked = TempRepo::new("untracked");
     untracked.write("tests/new.rs", b"#[test] fn new() {}\n");
     let untracked_context = untracked.context("routine");
     let untracked_snapshot = LocalDirtyTree::capture(&untracked_context).unwrap();
@@ -83,7 +86,7 @@ fn untracked_renamed_and_deleted_paths_remain_covered() {
     .unwrap();
     assert!(untracked_plan.check("unit").is_some());
 
-    let renamed = TempRepo::new("renamed");
+    let mut renamed = TempRepo::new("renamed");
     renamed.git(&["mv", "docs/guide.md", "src/guide.md"]);
     let renamed_context = renamed.context("routine");
     let renamed_snapshot = LocalDirtyTree::capture(&renamed_context).unwrap();
@@ -102,7 +105,7 @@ fn untracked_renamed_and_deleted_paths_remain_covered() {
     .unwrap();
     assert!(renamed_plan.check("compile").is_some());
 
-    let deleted = TempRepo::new("deleted");
+    let mut deleted = TempRepo::new("deleted");
     deleted.remove("src/lib.rs");
     let deleted_context = deleted.context("routine");
     let deleted_snapshot = LocalDirtyTree::capture(&deleted_context).unwrap();
@@ -120,11 +123,14 @@ fn untracked_renamed_and_deleted_paths_remain_covered() {
     )
     .unwrap();
     assert!(deleted_plan.check("compile").is_some());
+    untracked.teardown_after_assertions();
+    renamed.teardown_after_assertions();
+    deleted.teardown_after_assertions();
 }
 
 #[test]
 fn unknown_paths_and_conflicts_expand_to_strict_all_node_boundary() {
-    let repo = TempRepo::new("unknown");
+    let mut repo = TempRepo::new("unknown");
     repo.write("mystery.bin", b"unknown\n");
     let context = repo.context("routine");
     let snapshot = LocalDirtyTree::capture(&context).unwrap();
@@ -135,7 +141,7 @@ fn unknown_paths_and_conflicts_expand_to_strict_all_node_boundary() {
     assert_eq!(plan.checks().len(), 4);
     assert_eq!(plan.affected_set().coverage().unknown_path_count(), 1);
 
-    let conflict_repo = TempRepo::new("conflict-expansion");
+    let mut conflict_repo = TempRepo::new("conflict-expansion");
     conflict_repo.git(&["checkout", "-q", "-b", "conflict-side"]);
     conflict_repo.write("src/lib.rs", b"side change\n");
     conflict_repo.git(&["add", "src/lib.rs"]);
@@ -168,11 +174,13 @@ fn unknown_paths_and_conflicts_expand_to_strict_all_node_boundary() {
     .unwrap();
     assert_eq!(conflict_plan.affected_set().mode(), PlanMode::Strict);
     assert_eq!(conflict_plan.checks().len(), 4);
+    repo.teardown_after_assertions();
+    conflict_repo.teardown_after_assertions();
 }
 
 #[test]
 fn strict_named_boundary_and_optional_fallback_are_explicit() {
-    let repo = TempRepo::new("strict");
+    let mut repo = TempRepo::new("strict");
     let context = repo.context("routine");
     let clean = LocalDirtyTree::capture(&context).unwrap();
     let strict = super::routine_work::plan_routine(
@@ -198,6 +206,7 @@ fn strict_named_boundary_and_optional_fallback_are_explicit() {
     assert!(fallback.check("compile").unwrap().used_fallback());
     assert_eq!(fallback.check("compile").unwrap().selected_tool(), "git");
     assert_eq!(fallback.affected_set().coverage().fallback_tool_count(), 1);
+    repo.teardown_after_assertions();
 }
 
 #[test]
@@ -205,7 +214,7 @@ fn registry_and_plan_order_are_deterministic_and_unknown_requests_fail() {
     let forward = graph_with_order(false);
     let reverse = graph_with_order(true);
     assert_eq!(forward.graph_id(), reverse.graph_id());
-    let repo = TempRepo::new("deterministic");
+    let mut repo = TempRepo::new("deterministic");
     repo.write("src/lib.rs", b"pub fn value() -> u8 { 4 }\n");
     let context = repo.context("routine");
     let snapshot = LocalDirtyTree::capture(&context).unwrap();
@@ -224,4 +233,5 @@ fn registry_and_plan_order_are_deterministic_and_unknown_requests_fail() {
     )
     .unwrap_err();
     assert_eq!(error.id(), RoutineErrorId::UnknownRegistryRow);
+    repo.teardown_after_assertions();
 }

@@ -14,7 +14,7 @@ fn sealed_issuer_and_grant_entrypoints_are_not_externally_callable() {
 }
 
 pub(crate) fn assert_sealed_issuer_and_grant_entrypoints_are_not_externally_callable() {
-    let owned = OwnedCompileScratch::claim("routine-issuer-visibility");
+    let mut owned = OwnedCompileScratch::claim("routine-issuer-visibility");
     let scratch = owned.path();
     let probes = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/routine_work_contract/probes");
     issuer_api_compilation::prepare(&scratch, &probes);
@@ -72,11 +72,12 @@ pub(crate) fn assert_sealed_issuer_and_grant_entrypoints_are_not_externally_call
     source.flush().unwrap();
     let mutated = public_inventory(&issuer_api_compilation::document(&scratch));
     assert_ne!(Sha256::digest(&mutated), Sha256::digest(&inventory));
+    owned.teardown_after_assertions();
 }
 
 #[test]
 fn concurrent_issuer_controls_use_disjoint_authorized_scratch() {
-    let owned = OwnedCompileScratch::claim("routine-issuer-concurrency");
+    let mut owned = OwnedCompileScratch::claim("routine-issuer-concurrency");
     let scratch = owned.path().join("scratch");
     let tmp = owned.path().join("tmp");
     fs::create_dir(&scratch).unwrap();
@@ -107,6 +108,7 @@ fn concurrent_issuer_controls_use_disjoint_authorized_scratch() {
     fs::remove_file(sentinel).unwrap();
     assert_eq!(fs::read_dir(&scratch).unwrap().count(), 0);
     assert_eq!(fs::read_dir(&tmp).unwrap().count(), 0);
+    owned.teardown_after_assertions();
 }
 
 fn public_inventory(docs: &Path) -> Vec<u8> {

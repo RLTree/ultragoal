@@ -22,7 +22,7 @@ fn state(root: &std::path::Path) -> Vec<u8> {
 
 #[test]
 fn authority_root_and_state_aliases_or_special_objects_refuse_without_rewrite() {
-    let (repo, root) = authority_root("ledger-object-security");
+    let (mut repo, root) = authority_root("ledger-object-security");
     ProductionRoutineIssuer::open(&root).unwrap();
     let exact = state(&root);
     let state_path = root.join("routine-authority.state");
@@ -48,11 +48,12 @@ fn authority_root_and_state_aliases_or_special_objects_refuse_without_rewrite() 
         fs::symlink_metadata(&fifo).unwrap().file_type().is_fifo(),
         true
     );
+    repo.teardown_after_assertions();
 }
 
 #[test]
 fn exact_noop_bypasses_authority_initialization_and_workspace_writes() {
-    let repo = TempRepo::new("production-noop-zero-write");
+    let mut repo = TempRepo::new("production-noop-zero-write");
     let context = repo.context("routine-noop");
     let snapshot = LocalDirtyTree::capture(&context).unwrap();
     let graph = graph();
@@ -80,11 +81,12 @@ fn exact_noop_bypasses_authority_initialization_and_workspace_writes() {
     assert_eq!(result.status(), RoutineMediatorStatus::CompleteNoOp);
     assert!(!authority.exists());
     assert_eq!(repo.tree(), before);
+    repo.teardown_after_assertions();
 }
 
 #[test]
 fn authenticated_state_truncate_unknown_duplicate_and_reorder_mutations_refuse() {
-    let (_repo, root) = authority_root("ledger-state-mutations");
+    let (mut repo, root) = authority_root("ledger-state-mutations");
     ProductionRoutineIssuer::open(&root).unwrap();
     let state_path = root.join("routine-authority.state");
     let exact = state(&root);
@@ -111,4 +113,5 @@ fn authenticated_state_truncate_unknown_duplicate_and_reorder_mutations_refuse()
         ProductionRoutineIssuer::open(&root).unwrap();
     }
     assert_eq!(state(&root), exact);
+    repo.teardown_after_assertions();
 }

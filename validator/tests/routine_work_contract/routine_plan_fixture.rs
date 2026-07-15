@@ -18,7 +18,7 @@ pub(crate) struct RoutinePlanFixture {
     pub(crate) graph: ImpactGraph,
     pub(crate) snapshot: DirtySnapshot,
     pub(crate) plan: RoutinePlan,
-    _program: OwnedCompileScratch,
+    program: OwnedCompileScratch,
     _path_lock: MutexGuard<'static, ()>,
 }
 
@@ -65,7 +65,7 @@ impl RoutinePlanFixture {
             graph,
             snapshot,
             plan,
-            _program: program,
+            program,
             _path_lock: path_lock,
         }
     }
@@ -108,6 +108,11 @@ impl RoutinePlanFixture {
             &self.plan,
             RoutineAdapterSpec::new("routine", invocations),
         )
+    }
+
+    pub(crate) fn finish(&mut self) {
+        self.program.teardown_after_assertions();
+        self.repo.teardown_after_assertions();
     }
 }
 

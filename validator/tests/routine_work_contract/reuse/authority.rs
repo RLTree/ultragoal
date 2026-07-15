@@ -19,7 +19,7 @@ use std::time::{Duration, Instant};
 #[test]
 fn real_capture_run_and_anchored_result_issue_opaque_executed_work() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("executed-authority");
+    let mut repo = TempRepo::new("executed-authority");
     let (context, plan) = authority_plan(&repo);
     let expectation = expectation(&context, &plan, "syntax", Vec::new());
     let bytes = result_bytes(&context, &expectation, b"syntax");
@@ -29,13 +29,14 @@ fn real_capture_run_and_anchored_result_issue_opaque_executed_work() {
     assert!(execution.work().behavior_observed());
     assert!(execution.work().dependency_result(&context).is_ok());
     assert!(execution.receipt_json().starts_with(b"{"));
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn executed_capture_revalidates_after_initial_live_authority() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("executed-live-mutation");
+    let mut repo = TempRepo::new("executed-live-mutation");
     let (context, plan) = authority_plan(&repo);
     let expectation = expectation(&context, &plan, "syntax", Vec::new());
     let bytes = result_bytes(&context, &expectation, b"syntax");
@@ -54,13 +55,14 @@ fn executed_capture_revalidates_after_initial_live_authority() {
             .id(),
         RoutineErrorId::ConcurrentMutation
     );
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn result_observation_revalidates_after_initial_live_authority() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("observation-live-mutation");
+    let mut repo = TempRepo::new("observation-live-mutation");
     let (context, plan) = authority_plan(&repo);
     let expectation = expectation(&context, &plan, "syntax", Vec::new());
     let bytes = result_bytes(&context, &expectation, b"syntax");
@@ -75,13 +77,14 @@ fn result_observation_revalidates_after_initial_live_authority() {
             .id(),
         RoutineErrorId::ConcurrentMutation
     );
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn missing_artifact_wrong_command_and_wrong_tool_program_fail_closed() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("executed-missing");
+    let mut repo = TempRepo::new("executed-missing");
     let (context, plan) = authority_plan(&repo);
     let expectation = expectation(&context, &plan, "syntax", Vec::new());
     let missing = CommandSpec::catalog_read("syntax", "true")
@@ -103,13 +106,14 @@ fn missing_artifact_wrong_command_and_wrong_tool_program_fail_closed() {
     let wrong_program = mutate_string(&bytes, "capture_program_sha256", &sha(b"other-program"));
     let run = capture_run(&repo, &context, &expectation, &wrong_program);
     assert!(capture_executed_result(&context, &expectation, &run).is_err());
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn captured_result_rejects_wrong_plan_check_scope_context_root_config_tool_and_input() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("executed-binding");
+    let mut repo = TempRepo::new("executed-binding");
     let (context, plan) = authority_plan(&repo);
     let expectation = expectation(&context, &plan, "syntax", Vec::new());
     let original = result_bytes(&context, &expectation, b"syntax");
@@ -133,6 +137,7 @@ fn captured_result_rejects_wrong_plan_check_scope_context_root_config_tool_and_i
             "{field}"
         );
     }
+    repo.teardown_after_assertions();
 }
 
 #[cfg(all(target_os = "macos", unix))]
@@ -143,7 +148,7 @@ fn special_result_artifacts_fail_before_evidence_minting() {
     use std::os::unix::ffi::OsStrExt;
     use std::os::unix::net::UnixListener;
 
-    let repo = TempRepo::new("s");
+    let mut repo = TempRepo::new("s");
     let (context, _) = authority_plan(&repo);
     repo.write("routine-cache/real", b"bytes");
     std::os::unix::fs::symlink("real", repo.root().join("routine-cache/link")).unwrap();
@@ -155,7 +160,7 @@ fn special_result_artifacts_fail_before_evidence_minting() {
     let fifo = repo.root().join("routine-cache/fifo");
     let name = CString::new(fifo.as_os_str().as_bytes()).unwrap();
     assert_eq!(unsafe { libc::mkfifo(name.as_ptr(), 0o600) }, 0);
-    let alias =
+    let mut alias =
         ConfiguredPathAlias::claim("routine-result-socket", &repo.root().join("routine-cache"));
     let bind_path = alias.child_from_current_dir("socket");
     let socket = UnixListener::bind(&bind_path).unwrap();
@@ -170,14 +175,15 @@ fn special_result_artifacts_fail_before_evidence_minting() {
         );
     }
     drop(socket);
-    drop(alias);
+    alias.teardown_after_assertions();
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn result_artifact_swap_has_initial_and_final_validation_without_retry() {
     let _capture = capture_race_guard();
-    let repo = TempRepo::new("result-race");
+    let mut repo = TempRepo::new("result-race");
     let (context, plan) = authority_plan(&repo);
     let expectation = expectation(&context, &plan, "syntax", Vec::new());
     let bytes = result_bytes(&context, &expectation, b"syntax");
@@ -202,13 +208,14 @@ fn result_artifact_swap_has_initial_and_final_validation_without_retry() {
     swapper.join().unwrap();
     assert!(error.contains("identity changed") || error.contains("content changed"));
     assert_eq!(test_file_open_attempts(), 2);
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn reuse_assessment_is_recursively_zero_write() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("reuse-zero-write");
+    let mut repo = TempRepo::new("reuse-zero-write");
     let (context, plan) = authority_plan(&repo);
     let (expectation, _, receipt, observed) = syntax_evidence(&repo, &context, &plan);
     let tree = repo.tree();
@@ -219,6 +226,7 @@ fn reuse_assessment_is_recursively_zero_write() {
     ));
     assert_eq!(repo.tree(), tree);
     assert_eq!(repo.status(), status);
+    repo.teardown_after_assertions();
 }
 
 fn mutate_string(bytes: &[u8], field: &str, replacement: &str) -> Vec<u8> {

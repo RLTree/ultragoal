@@ -6,25 +6,16 @@ use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
 
 use super::owned_compile_claim::{create_marker, random_claim_name};
-use super::owned_compile_custody::ForeignCustody;
 use super::owned_compile_directory::open_directory_at;
-use super::owned_compile_quarantine::{
-    CleanupDirective, CleanupOutcome, CleanupStage, cleanup, cleanup_controlled,
+use super::owned_compile_retention::{
+    CleanupDirective, CleanupOutcome, CleanupStage, retain, retain_controlled,
 };
-
-pub(crate) const FAILURE_MARKER: &[u8] = b"compile scratch removed after induced failure\n";
 
 pub(crate) enum CleanupState {
     Claimed,
-    Quarantined(CString),
-    Cleared(CString),
-    DisplacedForeign {
-        quarantine: CString,
-        custody: ForeignCustody,
-        destination: Option<(u64, u64)>,
-    },
-    UnrecoverableForeign,
-    Settled,
+    Retained,
+    Refused,
+    TeardownComplete,
 }
 
 pub(crate) struct OwnedCompileScratch {
@@ -32,7 +23,6 @@ pub(crate) struct OwnedCompileScratch {
     pub(crate) directory: File,
     pub(crate) name: CString,
     pub(crate) path: PathBuf,
-    pub(crate) failure_marker: PathBuf,
     pub(crate) device: u64,
     pub(crate) inode: u64,
     pub(crate) root_device: u64,
@@ -73,13 +63,11 @@ impl OwnedCompileScratch {
             )
             .unwrap();
             let path = root.join(name.to_str().unwrap());
-            let failure_marker = root.join(format!("{}.failure.txt", name.to_str().unwrap()));
             return Self {
                 parent,
                 directory,
                 name,
                 path,
-                failure_marker,
                 device: metadata.dev(),
                 inode: metadata.ino(),
                 root_device: root_metadata.dev(),
@@ -98,48 +86,26 @@ impl OwnedCompileScratch {
         &self.path
     }
 
-    pub(crate) fn failure_marker(&self) -> &Path {
-        &self.failure_marker
-    }
-
-    pub(crate) fn recovery_path(&self) -> Option<PathBuf> {
-        match &self.cleanup_state {
-            CleanupState::Quarantined(name) | CleanupState::Cleared(name) => {
-                Some(self.path.parent().unwrap().join(name.to_str().unwrap()))
-            }
-            CleanupState::DisplacedForeign { custody, .. } => custody
-                .current_name(self.path.parent().unwrap())
-                .map(|name| self.path.parent().unwrap().join(name.to_str().unwrap())),
-            CleanupState::Claimed | CleanupState::UnrecoverableForeign | CleanupState::Settled => {
-                None
-            }
-        }
-    }
-
-    pub(crate) fn ambiguous_destination(&self) -> Option<Option<(u64, u64)>> {
-        match self.cleanup_state {
-            CleanupState::DisplacedForeign { destination, .. } => Some(destination),
-            _ => None,
-        }
-    }
-
     pub(crate) fn recover_interrupted(&mut self) -> CleanupOutcome {
-        cleanup(self)
+        retain(self)
     }
 
     pub(crate) fn recover_with(
         &mut self,
         pause: impl FnMut(CleanupStage) -> CleanupDirective,
     ) -> CleanupOutcome {
-        cleanup_controlled(self, pause)
+        retain_controlled(self, pause)
     }
-}
 
-impl Drop for OwnedCompileScratch {
-    fn drop(&mut self) {
-        if !matches!(self.cleanup_state, CleanupState::Settled) {
-            let _ = cleanup(self);
-        }
+    // Explicit fixture teardown after all actors and assertions finish. This has no
+    // same-UID mutation-safety claim and is never called by recovery or Drop.
+    pub(crate) fn teardown_after_assertions(&mut self) {
+        assert!(
+            super::owned_compile_claim::authenticates_claim(self),
+            "explicit teardown requires an uncontested exact claim"
+        );
+        fs::remove_dir_all(&self.path).expect("explicit post-assertion teardown failed");
+        self.cleanup_state = CleanupState::TeardownComplete;
     }
 }
 

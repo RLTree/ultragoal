@@ -8,7 +8,6 @@ static NEXT_ALIAS: AtomicU64 = AtomicU64::new(0);
 
 pub(crate) struct ConfiguredPathAlias {
     path: PathBuf,
-    target: PathBuf,
 }
 
 impl ConfiguredPathAlias {
@@ -22,10 +21,7 @@ impl ConfiguredPathAlias {
             let path = root.join(format!("{label}-{}-{nonce}", std::process::id()));
             match symlink(target, &path) {
                 Ok(()) => {
-                    return Self {
-                        path,
-                        target: target.to_path_buf(),
-                    };
+                    return Self { path };
                 }
                 Err(error) if error.kind() == io::ErrorKind::AlreadyExists => continue,
                 Err(error) => panic!("configured alias claim failed: {error}"),
@@ -40,6 +36,12 @@ impl ConfiguredPathAlias {
 
     pub(crate) fn child_from_current_dir(&self, child: &str) -> PathBuf {
         relative_path(&std::env::current_dir().unwrap(), &self.path).join(child)
+    }
+
+    // Explicit fixture teardown after all actors and assertions finish. This has no
+    // same-UID mutation-safety claim and is never called from Drop.
+    pub(crate) fn teardown_after_assertions(&mut self) {
+        fs::remove_file(&self.path).expect("explicit configured alias teardown");
     }
 }
 
@@ -60,12 +62,4 @@ fn relative_path(from: &Path, to: &Path) -> PathBuf {
         relative.push(component.as_os_str());
     }
     relative
-}
-
-impl Drop for ConfiguredPathAlias {
-    fn drop(&mut self) {
-        if fs::read_link(&self.path).ok().as_deref() == Some(self.target.as_path()) {
-            fs::remove_file(&self.path).expect("owned configured alias cleanup");
-        }
-    }
 }

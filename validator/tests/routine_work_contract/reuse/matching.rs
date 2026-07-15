@@ -14,7 +14,7 @@ use super::execution_fixture::{
 #[test]
 fn exact_anchored_evidence_reuses_without_reexecuting_work() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("reuse-hit");
+    let mut repo = TempRepo::new("reuse-hit");
     let (context, plan) = authority_plan(&repo);
     let (expectation, _, receipt, observed) = syntax_evidence(&repo, &context, &plan);
     for _ in 0..2 {
@@ -23,13 +23,14 @@ fn exact_anchored_evidence_reuses_without_reexecuting_work() {
             ReuseDecision::Hit(_)
         ));
     }
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn fresh_live_configuration_input_and_tool_substitutions_miss() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("reuse-live-dimensions");
+    let mut repo = TempRepo::new("reuse-live-dimensions");
     let (context, plan) = authority_plan(&repo);
     let (expectation, _, receipt, observed) = syntax_evidence(&repo, &context, &plan);
     let build = || {
@@ -57,13 +58,14 @@ fn fresh_live_configuration_input_and_tool_substitutions_miss() {
             ReuseDecision::Miss(expected)
         );
     }
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn every_context_plan_check_scope_tool_and_input_dimension_is_exact() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("reuse-dimensions");
+    let mut repo = TempRepo::new("reuse-dimensions");
     let (context, plan) = authority_plan(&repo);
     let (expectation, execution, _, observed) = syntax_evidence(&repo, &context, &plan);
     let receipt = execution.receipt_json();
@@ -115,13 +117,14 @@ fn every_context_plan_check_scope_tool_and_input_dimension_is_exact() {
             "{field}"
         );
     }
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn stale_candidate_and_incomplete_failed_or_unobserved_receipts_miss() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("reuse-stale-state");
+    let mut repo = TempRepo::new("reuse-stale-state");
     let (context, plan) = authority_plan(&repo);
     let (expectation, execution, receipt, observed) = syntax_evidence(&repo, &context, &plan);
     let started = ReuseReceipt::started_bytes(&expectation).unwrap();
@@ -163,13 +166,14 @@ fn stale_candidate_and_incomplete_failed_or_unobserved_receipts_miss() {
         assess_reuse(&current, &expectation, &receipt, &observed).unwrap(),
         ReuseDecision::Miss(ReuseMiss::Candidate)
     );
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn content_and_same_size_output_substitution_never_hit() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("reuse-substitution");
+    let mut repo = TempRepo::new("reuse-substitution");
     let (context, plan) = authority_plan(&repo);
     let (expectation, _, receipt, _) = syntax_evidence(&repo, &context, &plan);
     let behavior = result_bytes_with(
@@ -199,6 +203,7 @@ fn content_and_same_size_output_substitution_never_hit() {
         assess_reuse(&context, &expectation, &receipt, &observed).unwrap(),
         ReuseDecision::Miss(ReuseMiss::OutputSubstitution)
     );
+    repo.teardown_after_assertions();
 }
 
 fn mutate_string(bytes: &[u8], field: &str, replacement: &str) -> Vec<u8> {

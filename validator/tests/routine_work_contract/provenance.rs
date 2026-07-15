@@ -9,7 +9,7 @@ use super::scenario::{TempRepo, graph};
 
 #[test]
 fn structurally_valid_subset_without_capture_provenance_is_rejected() {
-    let repo = TempRepo::new("subset-provenance");
+    let mut repo = TempRepo::new("subset-provenance");
     repo.write("docs/guide.md", b"changed guide\n");
     repo.write("release.json", b"{\"changed\":true}\n");
     let context = repo.context("routine");
@@ -31,11 +31,12 @@ fn structurally_valid_subset_without_capture_provenance_is_rejected() {
             .unwrap_err();
     assert_eq!(error.id(), RoutineErrorId::InvalidSnapshot);
     assert_eq!(error.cause(), "snapshot-capture-provenance-invalid");
+    repo.teardown_after_assertions();
 }
 
 #[test]
 fn external_consumer_can_inspect_but_cannot_construct_or_deserialize_snapshot() {
-    let owned = OwnedCompileScratch::claim("routine-snapshot-provenance");
+    let mut owned = OwnedCompileScratch::claim("routine-snapshot-provenance");
     let scratch = owned.path();
     let probes = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/routine_work_contract/probes");
     prepare(scratch, &probes);
@@ -76,11 +77,12 @@ fn external_consumer_can_inspect_but_cannot_construct_or_deserialize_snapshot() 
         "opaque evidence reconstruction compiled"
     );
     assert_specific_failure(&evidence, "E0451", "private");
+    owned.teardown_after_assertions();
 }
 
 #[test]
 fn concurrent_external_consumers_use_disjoint_owned_scratch() {
-    let owned = OwnedCompileScratch::claim("routine-snapshot-provenance-concurrency");
+    let mut owned = OwnedCompileScratch::claim("routine-snapshot-provenance-concurrency");
     let scratch = owned.path().join("scratch");
     let tmp = owned.path().join("tmp");
     fs::create_dir(&scratch).unwrap();
@@ -111,6 +113,7 @@ fn concurrent_external_consumers_use_disjoint_owned_scratch() {
     fs::remove_file(sentinel).unwrap();
     assert_eq!(fs::read_dir(scratch).unwrap().count(), 0);
     assert_eq!(fs::read_dir(tmp).unwrap().count(), 0);
+    owned.teardown_after_assertions();
 }
 
 fn assert_specific_failure(output: &Output, code: &str, reason: &str) {

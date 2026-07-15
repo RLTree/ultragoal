@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 use std::fs;
 use std::os::unix::fs::symlink;
+use std::process::Command;
 
 use super::routine_plan_fixture::{RoutinePlanFixture, authority_path, repo_path};
 use super::routine_work::{
@@ -15,7 +16,12 @@ fn cause<T>(result: Result<T, super::routine_work::RoutineError>) -> &'static st
 
 #[test]
 fn closed_binding_refuses_loader_child_argv_program_and_policy_mutations() {
-    let fixture = RoutinePlanFixture::new("typed-binding-mutations");
+    if isolate(
+        "broker_binding_controls::closed_binding_refuses_loader_child_argv_program_and_policy_mutations",
+    ) {
+        return;
+    }
+    let mut fixture = RoutinePlanFixture::new("typed-binding-mutations");
     let replace_first = |first| {
         let mut invocations = fixture.invocations();
         invocations[0] = first;
@@ -65,11 +71,17 @@ fn closed_binding_refuses_loader_child_argv_program_and_policy_mutations() {
         fixture.prepare().unwrap(),
         PreparedRoutineExecution::Effect(_)
     ));
+    fixture.finish();
 }
 
 #[test]
 fn read_source_alias_special_and_mutate_restore_refuse_before_effect() {
-    let fixture = RoutinePlanFixture::new("bound-read-refusals");
+    if isolate(
+        "broker_binding_controls::read_source_alias_special_and_mutate_restore_refuse_before_effect",
+    ) {
+        return;
+    }
+    let mut fixture = RoutinePlanFixture::new("bound-read-refusals");
     let source = fixture.repo.root().join("src/lib.rs");
 
     symlink("lib.rs", fixture.repo.root().join("src/link.rs")).unwrap();
@@ -110,11 +122,15 @@ fn read_source_alias_special_and_mutate_restore_refuse_before_effect() {
         cause(fixture.prepare_with(invocations)),
         "mediator-read-source-binding-stale"
     );
+    fixture.finish();
 }
 
 #[test]
 fn context_mutation_refuses_before_authority_creation() {
-    let fixture = RoutinePlanFixture::new("context-mutation");
+    if isolate("broker_binding_controls::context_mutation_refuses_before_authority_creation") {
+        return;
+    }
+    let mut fixture = RoutinePlanFixture::new("context-mutation");
     let prepared = fixture.prepare().unwrap();
     let authority = authority_path(&fixture);
     fixture.repo.write("src/lib.rs", b"context mutation\n");
@@ -133,11 +149,15 @@ fn context_mutation_refuses_before_authority_creation() {
         "mediator-context-preflight-stale" | "mediator-dirty-snapshot-stale"
     ));
     assert!(!authority.exists());
+    fixture.finish();
 }
 
 #[test]
 fn root_broker_gate_refuses_before_spawn_and_writes() {
-    let fixture = RoutinePlanFixture::new("root-broker-pre-spawn-refusal");
+    if isolate("broker_binding_controls::root_broker_gate_refuses_before_spawn_and_writes") {
+        return;
+    }
+    let mut fixture = RoutinePlanFixture::new("root-broker-pre-spawn-refusal");
     let authority = authority_path(&fixture);
     let before = fixture.repo.tree();
     assert_eq!(test_spawn_count(), 0);
@@ -156,4 +176,19 @@ fn root_broker_gate_refuses_before_spawn_and_writes() {
     assert_eq!(test_spawn_count(), 0);
     assert_eq!(fixture.repo.tree(), before);
     assert!(!authority.exists());
+    fixture.finish();
+}
+
+fn isolate(test: &str) -> bool {
+    const CHILD: &str = "HUL_ROUTINE_BROKER_CONTROL_CHILD";
+    if std::env::var_os(CHILD).is_some() {
+        return false;
+    }
+    let status = Command::new(std::env::current_exe().unwrap())
+        .args([test, "--exact", "--test-threads=1"])
+        .env(CHILD, "1")
+        .status()
+        .unwrap();
+    assert!(status.success(), "isolated broker control failed: {test}");
+    true
 }

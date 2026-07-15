@@ -1,7 +1,5 @@
-use super::super::routine_work::{
-    ReuseDecision, ReuseExpectation, ReuseMiss, ReuseReceipt, RoutineErrorId, assess_reuse,
-    set_test_live_authority_hook,
-};
+use super::super::routine_work::{ReuseDecision, ReuseExpectation, ReuseMiss, ReuseReceipt};
+use super::super::routine_work::{RoutineErrorId, assess_reuse, set_test_live_authority_hook};
 use super::super::scenario::{TempRepo, sha};
 use super::execution_fixture::{
     authority_context, authority_plan, capture_bytes, capture_guard, capture_receipt, expectation,
@@ -12,7 +10,7 @@ use super::execution_fixture::{
 #[test]
 fn dependency_results_can_only_come_from_opaque_executed_or_reused_work() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("reuse-dependencies");
+    let mut repo = TempRepo::new("reuse-dependencies");
     let (context, plan) = authority_plan(&repo);
     let syntax = expectation(&context, &plan, "syntax", Vec::new());
     let syntax = issue_execution(&repo, &context, &syntax, b"syntax");
@@ -51,13 +49,14 @@ fn dependency_results_can_only_come_from_opaque_executed_or_reused_work() {
         .id(),
         RoutineErrorId::InvalidReceipt
     );
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn expectation_and_dependency_result_revalidate_live_authority() {
     let _capture = capture_guard();
-    let expectation_repo = TempRepo::new("expectation-live-mutation");
+    let mut expectation_repo = TempRepo::new("expectation-live-mutation");
     let (expectation_context, expectation_plan) = authority_plan(&expectation_repo);
     let root = expectation_repo.root().to_path_buf();
     set_test_live_authority_hook(move || {
@@ -76,7 +75,7 @@ fn expectation_and_dependency_result_revalidate_live_authority() {
         RoutineErrorId::ConcurrentMutation
     );
 
-    let dependency_repo = TempRepo::new("dependency-live-mutation");
+    let mut dependency_repo = TempRepo::new("dependency-live-mutation");
     let (dependency_context, dependency_plan) = authority_plan(&dependency_repo);
     let expectation = expectation(&dependency_context, &dependency_plan, "syntax", Vec::new());
     let execution = issue_execution(
@@ -101,13 +100,15 @@ fn expectation_and_dependency_result_revalidate_live_authority() {
             .id(),
         RoutineErrorId::ConcurrentMutation
     );
+    expectation_repo.teardown_after_assertions();
+    dependency_repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn a_check_from_another_plan_cannot_be_substituted() {
-    let first_repo = TempRepo::new("reuse-first-plan");
-    let second_repo = TempRepo::new("reuse-second-plan");
+    let mut first_repo = TempRepo::new("reuse-first-plan");
+    let mut second_repo = TempRepo::new("reuse-second-plan");
     let (first_context, first) = authority_plan(&first_repo);
     let (second_context, second) = authority_plan(&second_repo);
     assert_eq!(
@@ -141,13 +142,15 @@ fn a_check_from_another_plan_cannot_be_substituted() {
         .id(),
         RoutineErrorId::InvalidReceipt
     );
+    first_repo.teardown_after_assertions();
+    second_repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn captured_receipt_parser_rejects_unknown_duplicate_noncanonical_and_oversized_rows() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("reuse-canonical");
+    let mut repo = TempRepo::new("reuse-canonical");
     let (context, plan) = authority_plan(&repo);
     let (_, execution, _, _) = syntax_evidence(&repo, &context, &plan);
     let canonical = String::from_utf8(execution.receipt_json().to_vec()).unwrap();
@@ -173,13 +176,14 @@ fn captured_receipt_parser_rejects_unknown_duplicate_noncanonical_and_oversized_
     }
     let oversized = vec![b' '; 4 * 1024 * 1024 + 1];
     assert!(capture_bytes(&repo, &context, &oversized, "oversized").is_err());
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn unknown_dependency_row_misses_and_duplicate_json_row_is_rejected() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("reuse-row-integrity");
+    let mut repo = TempRepo::new("reuse-row-integrity");
     let (context, plan) = authority_plan(&repo);
     let (expectation, execution, _, observed) = syntax_evidence(&repo, &context, &plan);
     let canonical = String::from_utf8(execution.receipt_json().to_vec()).unwrap();
@@ -204,13 +208,14 @@ fn unknown_dependency_row_misses_and_duplicate_json_row_is_rejected() {
         ReuseReceipt::from_captured(&artifact).unwrap_err().id(),
         RoutineErrorId::InvalidReceipt
     );
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn mutation_after_initial_reuse_validation_cannot_return_hit() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("reuse-live-checkpoint");
+    let mut repo = TempRepo::new("reuse-live-checkpoint");
     let (context, plan) = authority_plan(&repo);
     let (expectation, _, receipt, observed) = syntax_evidence(&repo, &context, &plan);
     let root = repo.root().to_path_buf();
@@ -223,13 +228,14 @@ fn mutation_after_initial_reuse_validation_cannot_return_hit() {
             .id(),
         RoutineErrorId::ConcurrentMutation
     );
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 fn mutation_after_observation_is_revalidated_before_reuse_decision() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("reuse-race");
+    let mut repo = TempRepo::new("reuse-race");
     let (context, plan) = authority_plan(&repo);
     let (expectation, _, receipt, observed) = syntax_evidence(&repo, &context, &plan);
     repo.write("src/lib.rs", b"pub fn value() -> u8 { 91 }\n");
@@ -240,4 +246,5 @@ fn mutation_after_observation_is_revalidated_before_reuse_decision() {
         assess_reuse(&current, &expectation, &receipt, &observed).unwrap(),
         ReuseDecision::Miss(ReuseMiss::Candidate)
     );
+    repo.teardown_after_assertions();
 }

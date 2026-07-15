@@ -27,7 +27,7 @@ fn short_alias(repo: &TempRepo) -> ConfiguredPathAlias {
 
 #[test]
 fn output_symlink_hardlink_fifo_socket_and_stale_files_refuse_exact_capture() {
-    let (repo, root) = root("output-object-refusals");
+    let (mut repo, root) = root("output-object-refusals");
     let scope = repo_path("target/routine");
     let outside = repo.root().join("outside");
     fs::write(&outside, b"outside").unwrap();
@@ -76,7 +76,7 @@ fn output_symlink_hardlink_fifo_socket_and_stale_files_refuse_exact_capture() {
     );
     fs::remove_file(&fifo).unwrap();
 
-    let alias = short_alias(&repo);
+    let mut alias = short_alias(&repo);
     let socket = repo.root().join("target/routine/socket");
     let listener =
         UnixListener::bind(alias.child_from_current_dir("target/routine/socket")).unwrap();
@@ -91,7 +91,7 @@ fn output_symlink_hardlink_fifo_socket_and_stale_files_refuse_exact_capture() {
     );
     drop(listener);
     fs::remove_file(&socket).unwrap();
-    drop(alias);
+    alias.teardown_after_assertions();
 
     fs::write(repo.root().join("target/routine/stale"), b"stale").unwrap();
     assert_eq!(
@@ -103,11 +103,12 @@ fn output_symlink_hardlink_fifo_socket_and_stale_files_refuse_exact_capture() {
         )),
         "mediator-output-scope-not-empty"
     );
+    repo.teardown_after_assertions();
 }
 
 #[test]
 fn output_nested_swap_and_create_delete_restore_refuse_final_validation() {
-    let (repo, root) = root("output-races");
+    let (mut repo, root) = root("output-races");
     let scope = repo_path("target/routine");
     fs::create_dir(repo.root().join("target/routine/nested")).unwrap();
     let current = repo.root().join("target/routine/nested");
@@ -139,11 +140,12 @@ fn output_nested_swap_and_create_delete_restore_refuse_final_validation() {
         .id(),
         RoutineErrorId::ConcurrentMutation
     );
+    repo.teardown_after_assertions();
 }
 
 #[test]
 fn read_symlink_hardlink_fifo_socket_ancestor_swap_and_restore_refuse() {
-    let (repo, root) = root("read-object-refusals");
+    let (mut repo, root) = root("read-object-refusals");
     let source = repo.root().join("src/lib.rs");
     symlink("lib.rs", repo.root().join("src/link.rs")).unwrap();
     assert!(
@@ -163,7 +165,7 @@ fn read_symlink_hardlink_fifo_socket_ancestor_swap_and_restore_refuse() {
     assert!(validate_read_confinement_after_bind(&root, &[repo_path("src/fifo")], || {}).is_err());
     fs::remove_file(&fifo).unwrap();
 
-    let alias = short_alias(&repo);
+    let mut alias = short_alias(&repo);
     let socket = repo.root().join("src/socket");
     let listener = UnixListener::bind(alias.child_from_current_dir("src/socket")).unwrap();
     assert!(
@@ -171,7 +173,7 @@ fn read_symlink_hardlink_fifo_socket_ancestor_swap_and_restore_refuse() {
     );
     drop(listener);
     fs::remove_file(&socket).unwrap();
-    drop(alias);
+    alias.teardown_after_assertions();
 
     let original = fs::read(&source).unwrap();
     assert_eq!(
@@ -195,4 +197,5 @@ fn read_symlink_hardlink_fifo_socket_ancestor_swap_and_restore_refuse() {
         .id(),
         RoutineErrorId::ConcurrentMutation
     );
+    repo.teardown_after_assertions();
 }

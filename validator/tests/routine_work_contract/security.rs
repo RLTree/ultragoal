@@ -118,7 +118,7 @@ fn duplicated_dependency_route_and_explicit_request_rows_are_rejected() {
     .unwrap_err();
     assert_eq!(duplicate_route_target.id(), RoutineErrorId::InvalidRegistry);
 
-    let repo = TempRepo::new("duplicated-explicit-request");
+    let mut repo = TempRepo::new("duplicated-explicit-request");
     repo.write("src/lib.rs", b"changed\n");
     let context = repo.context("routine");
     let snapshot = super::routine_work::LocalDirtyTree::capture(&context).unwrap();
@@ -130,11 +130,12 @@ fn duplicated_dependency_route_and_explicit_request_rows_are_rejected() {
     )
     .unwrap_err();
     assert_eq!(error.id(), RoutineErrorId::InvalidRequest);
+    repo.teardown_after_assertions();
 }
 
 #[test]
 fn candidate_change_during_planning_invalidates_the_plan() {
-    let repo = TempRepo::new("planning-live-mutation");
+    let mut repo = TempRepo::new("planning-live-mutation");
     repo.write("src/lib.rs", b"first candidate\n");
     let context = repo.context("routine");
     let snapshot = super::routine_work::LocalDirtyTree::capture(&context).unwrap();
@@ -146,6 +147,7 @@ fn candidate_change_during_planning_invalidates_the_plan() {
         super::routine_work::plan_routine(&context, &graph(), &snapshot, PlanRequest::routine())
             .unwrap_err();
     assert_eq!(error.id(), RoutineErrorId::ConcurrentMutation);
+    repo.teardown_after_assertions();
 }
 
 #[test]

@@ -89,11 +89,11 @@ impl TempRepo {
         visit_tree(&self.root, &self.root, &mut rows);
         rows
     }
-}
 
-impl Drop for TempRepo {
-    fn drop(&mut self) {
-        let _ = fs::remove_dir_all(&self.root);
+    // Explicit fixture teardown after all actors and assertions finish. This has no
+    // same-UID mutation-safety claim and is never called from Drop.
+    pub fn teardown_after_assertions(&mut self) {
+        fs::remove_dir_all(&self.root).unwrap();
     }
 }
 
