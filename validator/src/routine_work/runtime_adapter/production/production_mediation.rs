@@ -33,6 +33,10 @@ impl DurableAttemptAuthority for DurableAttempt {
         self.ledger.stage_success(&self.token, artifacts)
     }
 
+    fn record_failure(&self, evidence: &ReservationFailureEvidence) -> Result<(), RoutineError> {
+        self.ledger.record_failure(&self.token, evidence)
+    }
+
     fn settle(
         &self,
         outcome: DurableSettlement,

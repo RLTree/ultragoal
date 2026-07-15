@@ -25,8 +25,10 @@ use super::execution_authority::{
 use super::{begin_routine_mediation, environment_digest, read_authority_digest};
 use crate::routine_work::digest::{canonical, digest_of, framed, sha256, valid};
 use crate::routine_work::{
-    LocalDirtyTree, RepoPath, RoutineBinding, RoutineError, RoutineErrorId, RoutinePlan,
-    trusted_rust_source_execution_observed,
+    CleanupEvidence, FailureEvidence, LocalDirtyTree, PanicEvidence, ProcessCustodyEvidence,
+    RESERVATION_FAILURE_SCHEMA, RepoPath, ReservationFailureDisposition,
+    ReservationFailureEvidence, RoutineBinding, RoutineError, RoutineErrorId, RoutinePlan,
+    transition_failure_error, trusted_rust_source_execution_observed,
 };
 
 pub(crate) use filesystem::{
@@ -51,6 +53,8 @@ mod intent_mediation;
 mod no_op_mediation;
 #[path = "read_source_binding.rs"]
 mod read_source_binding;
+#[path = "reservation_failure_transition.rs"]
+mod reservation_failure_transition;
 #[path = "reservation_lifecycle.rs"]
 mod reservation_lifecycle;
 #[cfg(test)]

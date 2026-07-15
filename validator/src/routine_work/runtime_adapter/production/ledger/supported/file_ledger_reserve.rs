@@ -92,9 +92,14 @@ impl FileLedger {
                 .map(|record| record.artifacts.clone())
                 .unwrap_or_default();
             let output_journal = existing
+                .as_ref()
                 .filter(|record| record.state.pending())
-                .map(|record| record.output_journal)
+                .map(|record| record.output_journal.clone())
                 .unwrap_or(spec.output_journal);
+            let failure_evidence = existing
+                .as_ref()
+                .map(|record| record.failure_evidence.clone())
+                .unwrap_or_default();
             let record = ProtocolRecord {
                 binding: spec.binding.clone(),
                 request_id: spec.request_id.clone(),
@@ -108,6 +113,7 @@ impl FileLedger {
                 recovery_deadline_tick,
                 artifacts,
                 output_journal: output_journal.clone(),
+                failure_evidence,
             };
             payload.effects.insert(
                 spec.binding.effect_id.clone(),

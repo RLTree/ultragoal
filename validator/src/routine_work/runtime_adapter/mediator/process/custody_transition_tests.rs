@@ -3,7 +3,6 @@ use super::super::outcome::RoutineCancellation;
 use super::process_termination_tests::ProcessFixture;
 use super::*;
 use std::collections::BTreeMap;
-use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::sync::Arc;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Duration;
@@ -55,111 +54,6 @@ fn every_setup_running_and_join_refusal_explicitly_reaps_custody() {
 }
 
 #[test]
-fn started_refusal_and_cleanup_failure_are_both_explicit() {
-    let fixture = ProcessFixture::new("started-refusal");
-    let result = fixture.run_result(
-        "while :; do :; done",
-        Duration::from_secs(2),
-        1024,
-        &RoutineCancellation::new(),
-        || Err(mediator_error("mediator-started-transition-injected")),
-    );
-    assert_eq!(error_cause(result), "mediator-started-transition-injected");
-    assert_last_group_absent();
-    fixture.teardown();
-
-    let fixture = ProcessFixture::new("cleanup-refusal");
-    set_test_process_failure(ProcessFailurePoint::Cleanup, || {});
-    let result = fixture.run_result(
-        "while :; do :; done",
-        Duration::from_secs(2),
-        1024,
-        &RoutineCancellation::new(),
-        || Err(mediator_error("mediator-started-transition-injected")),
-    );
-    assert_eq!(error_cause(result), "mediator-process-cleanup-injected");
-    assert_last_group_absent();
-    fixture.teardown();
-}
-
-#[test]
-fn running_panic_preserves_payload_after_explicit_reap() {
-    let fixture = ProcessFixture::new("panic");
-    set_test_process_failure(ProcessFailurePoint::Wait, || {
-        std::panic::panic_any("process-custody-panic")
-    });
-    let panic = match catch_unwind(AssertUnwindSafe(|| {
-        fixture.run_result(
-            "while :; do :; done",
-            Duration::from_secs(2),
-            1024,
-            &RoutineCancellation::new(),
-            || Ok(()),
-        )
-    })) {
-        Err(payload) => payload,
-        Ok(_) => panic!("injected running panic was swallowed"),
-    };
-    assert_eq!(panic.downcast_ref::<&str>(), Some(&"process-custody-panic"));
-    assert_last_group_absent();
-    fixture.teardown();
-}
-
-#[test]
-fn panic_cleanup_failure_is_typed_before_authority_transition() {
-    for cleanup_panics in [false, true] {
-        let fixture = ProcessFixture::new(if cleanup_panics {
-            "panic-cleanup-panic"
-        } else {
-            "panic-cleanup-error"
-        });
-        set_test_process_failure(ProcessFailurePoint::Wait, || {
-            std::panic::panic_any("process-custody-original-panic")
-        });
-        append_test_process_failure(ProcessFailurePoint::Cleanup, move || {
-            if cleanup_panics {
-                std::panic::panic_any("process-custody-cleanup-panic");
-            }
-        });
-        let payload = catch_process_panic(&fixture);
-        let (original, cleanup_failure) = take_process_custody_panic(payload)
-            .unwrap_or_else(|_| panic!("cleanup failure lacked typed custody"));
-        assert_eq!(
-            original.downcast_ref::<&str>(),
-            Some(&"process-custody-original-panic")
-        );
-        if cleanup_panics {
-            assert_eq!(
-                cleanup_failure.downcast_ref::<&str>(),
-                Some(&"process-custody-cleanup-panic")
-            );
-        } else {
-            let error = cleanup_failure
-                .downcast_ref::<crate::routine_work::RoutineError>()
-                .unwrap_or_else(|| panic!("cleanup error changed type"));
-            assert_eq!(error.cause(), "mediator-process-cleanup-injected");
-        }
-        assert_last_group_absent();
-        fixture.teardown();
-    }
-}
-
-fn catch_process_panic(fixture: &ProcessFixture) -> Box<dyn std::any::Any + Send> {
-    match catch_unwind(AssertUnwindSafe(|| {
-        fixture.run_result(
-            "while :; do :; done",
-            Duration::from_secs(2),
-            1024,
-            &RoutineCancellation::new(),
-            || Ok(()),
-        )
-    })) {
-        Err(payload) => payload,
-        Ok(_) => panic!("cleanup failure did not preserve the initiating panic"),
-    }
-}
-
-#[test]
 fn dropping_setup_or_running_custody_does_not_signal_or_reap() {
     let fixture = ProcessFixture::new("drop-inert");
     let setup = suspended_setup(&fixture);
@@ -203,15 +97,6 @@ fn assert_last_group_absent() {
         !process_group_exists(group).unwrap(),
         "process group survived explicit cleanup"
     );
-}
-
-fn error_cause(
-    result: Result<ProcessObservation, crate::routine_work::RoutineError>,
-) -> &'static str {
-    match result {
-        Err(error) => error.cause(),
-        Ok(_) => panic!("injected process failure unexpectedly succeeded"),
-    }
 }
 
 fn reap_raw_test_child(group: ProcessGroupId) {

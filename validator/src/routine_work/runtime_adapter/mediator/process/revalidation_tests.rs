@@ -104,7 +104,16 @@ fn setup_panic_preserves_payload_after_explicit_reap() {
         Err(payload) => payload,
         Ok(_) => panic!("setup panic was swallowed"),
     };
+    let (payload, evidence) = take_process_custody_panic(payload)
+        .unwrap_or_else(|_| panic!("setup panic lacked process-custody evidence"));
     assert_eq!(payload.downcast_ref::<&str>(), Some(&"process-setup-panic"));
+    assert!(matches!(
+        evidence,
+        ProcessCustodyEvidence {
+            primary: FailureEvidence::Panic(_),
+            cleanup: CleanupEvidence::Succeeded,
+        }
+    ));
     assert_last_group_absent();
     fixture.teardown();
 }

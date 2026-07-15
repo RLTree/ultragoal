@@ -29,6 +29,11 @@ pub use behavior::{
     evaluate_rust_source_syntax_frame, rust_source_syntax_observation_json,
 };
 pub use binding::{BoundTool, RoutineBinding};
+pub(crate) use error::{
+    CleanupEvidence, FailureEvidence, PanicEvidence, ProcessCustodyEvidence,
+    RESERVATION_FAILURE_SCHEMA, ReservationFailureDisposition, ReservationFailureEvidence,
+    transition_failure_error,
+};
 pub use error::{RoutineError, RoutineErrorId};
 pub use local::LocalDirtyTree;
 pub use path::RepoPath;

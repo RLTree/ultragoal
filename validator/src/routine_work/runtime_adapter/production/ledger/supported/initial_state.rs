@@ -87,6 +87,10 @@ pub(crate) fn validate_payload(payload: &Payload) -> Result<(), RoutineError> {
                     .artifacts
                     .iter()
                     .any(|(digest, witness)| !valid(digest) || !valid(witness))
+                || record.failure_evidence.len() > 32
+                || record.failure_evidence.iter().any(|evidence| {
+                    !evidence.shape_is_valid() || evidence.protocol_id != record.binding.protocol_id
+                })
                 || validate_output_journal(&record.output_journal).is_err()
         })
         || payload.effects.iter().any(|(effect, protocol)| {

@@ -28,6 +28,7 @@ pub(crate) struct MediatorRegistry {
     pub(crate) non_durable_authenticated_artifacts: BTreeMap<String, String>,
     pub(crate) ambiguous_protocols: BTreeMap<String, String>,
     pub(crate) active_protocols: BTreeMap<String, String>,
+    pub(crate) failure_records: BTreeMap<String, ReservationFailureEvidence>,
 }
 
 pub(crate) fn registry() -> &'static Mutex<MediatorRegistry> {
@@ -122,6 +123,7 @@ impl AttemptReservation {
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         release_active(&mut state, &self.protocol_id, &self.grant_id);
         self.clear_exact_ambiguity(&mut state);
+        self.clear_exact_failure(&mut state);
         self.settled.set(true);
         Ok(())
     }
@@ -142,6 +144,7 @@ impl AttemptReservation {
         release_active(&mut state, &self.protocol_id, &self.grant_id);
         if durably_terminal {
             self.clear_exact_ambiguity(&mut state);
+            self.clear_exact_failure(&mut state);
         }
         let pending_marker = (!durably_terminal)
             .then(|| {

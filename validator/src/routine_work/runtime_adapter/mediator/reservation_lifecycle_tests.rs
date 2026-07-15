@@ -8,6 +8,9 @@ fn clear(protocol: &str) {
         .unwrap_or_else(std::sync::PoisonError::into_inner);
     state.active_protocols.remove(protocol);
     state.ambiguous_protocols.remove(protocol);
+    state
+        .failure_records
+        .retain(|_, record| record.protocol_id != protocol);
 }
 
 #[test]

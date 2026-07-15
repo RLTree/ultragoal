@@ -9,6 +9,9 @@ static NEXT_STAGE: AtomicU64 = AtomicU64::new(0);
 #[derive(Default)]
 pub(super) struct TerminalDurable {
     pub(super) settlements: Mutex<Vec<DurableSettlement>>,
+    pub(super) failure_records: Mutex<Vec<ReservationFailureEvidence>>,
+    pub(super) failure_record_error: Mutex<Option<&'static str>>,
+    pub(super) failure_record_panic: Mutex<Option<&'static str>>,
     pub(super) cleanup_failure: Mutex<Option<&'static str>>,
     pub(super) cleanup_panic: Mutex<Option<&'static str>>,
     pub(super) cleanup_calls: AtomicUsize,
@@ -47,6 +50,28 @@ impl DurableAttemptAuthority for TerminalDurable {
     }
 
     fn stage_success(&self, _artifacts: &BTreeMap<String, String>) -> Result<(), RoutineError> {
+        Ok(())
+    }
+
+    fn record_failure(&self, evidence: &ReservationFailureEvidence) -> Result<(), RoutineError> {
+        if let Some(payload) = *self
+            .failure_record_panic
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+        {
+            panic!("{payload}");
+        }
+        if let Some(cause) = *self
+            .failure_record_error
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+        {
+            return Err(mediator_error(cause));
+        }
+        self.failure_records
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .push(evidence.clone());
         Ok(())
     }
 

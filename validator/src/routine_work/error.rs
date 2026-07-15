@@ -1,6 +1,11 @@
 use sha2::{Digest, Sha256};
 use std::fmt;
 
+#[path = "error/failure_evidence.rs"]
+mod failure_evidence;
+
+pub(crate) use failure_evidence::*;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum RoutineErrorId {
     InvalidRegistry,
@@ -47,6 +52,8 @@ pub struct RoutineError {
     id: RoutineErrorId,
     cause: &'static str,
     subject_sha256: Option<String>,
+    process_custody: Option<Box<ProcessCustodyEvidence>>,
+    transition_failure: Option<Box<ReservationTransitionFailure>>,
 }
 
 impl RoutineError {
@@ -61,7 +68,36 @@ impl RoutineError {
             id,
             cause,
             subject_sha256,
+            process_custody: None,
+            transition_failure: None,
         }
+    }
+
+    pub(crate) fn evidence(&self) -> ErrorEvidence {
+        ErrorEvidence {
+            code: self.code().to_owned(),
+            cause: self.cause.to_owned(),
+            subject_sha256: self.subject_sha256.clone(),
+        }
+    }
+
+    pub(crate) fn with_process_custody(mut self, evidence: ProcessCustodyEvidence) -> Self {
+        self.process_custody = Some(Box::new(evidence));
+        self
+    }
+
+    pub(crate) fn process_custody(&self) -> Option<&ProcessCustodyEvidence> {
+        self.process_custody.as_deref()
+    }
+
+    pub(crate) fn with_transition_failure(mut self, failure: ReservationTransitionFailure) -> Self {
+        self.transition_failure = Some(Box::new(failure));
+        self
+    }
+
+    #[cfg(test)]
+    pub(crate) fn transition_failure(&self) -> Option<&ReservationTransitionFailure> {
+        self.transition_failure.as_deref()
     }
 
     pub fn id(&self) -> RoutineErrorId {

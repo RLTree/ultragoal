@@ -2,18 +2,25 @@ use super::*;
 use std::panic::{AssertUnwindSafe, catch_unwind, resume_unwind};
 
 pub(crate) struct ProcessCustodyPanic {
-    original: Box<dyn std::any::Any + Send>,
-    cleanup_failure: ProcessCleanupFailure,
+    resume: Box<dyn std::any::Any + Send>,
+    evidence: ProcessCustodyEvidence,
 }
-
-pub(crate) type ProcessCleanupFailure = Box<dyn std::any::Any + Send>;
 
 pub(crate) fn take_process_custody_panic(
     payload: Box<dyn std::any::Any + Send>,
-) -> Result<(Box<dyn std::any::Any + Send>, ProcessCleanupFailure), Box<dyn std::any::Any + Send>> {
+) -> Result<(Box<dyn std::any::Any + Send>, ProcessCustodyEvidence), Box<dyn std::any::Any + Send>>
+{
     payload
         .downcast::<ProcessCustodyPanic>()
-        .map(|custody| (custody.original, custody.cleanup_failure))
+        .map(|custody| (custody.resume, custody.evidence))
+}
+
+#[cfg(test)]
+pub(crate) fn resume_test_process_custody_panic(
+    resume: Box<dyn std::any::Any + Send>,
+    evidence: ProcessCustodyEvidence,
+) -> ! {
+    resume_unwind(Box::new(ProcessCustodyPanic { resume, evidence }))
 }
 
 impl SpawnSetupGuard {
@@ -93,10 +100,29 @@ fn cleanup_after_error<T>(
     cleanup: impl FnOnce() -> Result<(), RoutineError>,
     primary: RoutineError,
 ) -> Result<T, RoutineError> {
+    let primary_evidence = FailureEvidence::Error(primary.evidence());
     match catch_unwind(AssertUnwindSafe(cleanup)) {
-        Ok(Ok(())) => Err(primary),
-        Ok(Err(cleanup_error)) => Err(cleanup_error),
-        Err(cleanup_panic) => resume_unwind(cleanup_panic),
+        Ok(Ok(())) => Err(primary.with_process_custody(ProcessCustodyEvidence {
+            primary: primary_evidence,
+            cleanup: CleanupEvidence::Succeeded,
+        })),
+        Ok(Err(cleanup_error)) => {
+            let cleanup = CleanupEvidence::Error(cleanup_error.evidence());
+            Err(cleanup_error.with_process_custody(ProcessCustodyEvidence {
+                primary: primary_evidence,
+                cleanup,
+            }))
+        }
+        Err(cleanup_panic) => {
+            let evidence = ProcessCustodyEvidence {
+                primary: primary_evidence,
+                cleanup: CleanupEvidence::Panic(PanicEvidence::capture(cleanup_panic.as_ref())),
+            };
+            resume_unwind(Box::new(ProcessCustodyPanic {
+                resume: cleanup_panic,
+                evidence,
+            }))
+        }
     }
 }
 
@@ -104,14 +130,15 @@ fn cleanup_after_panic<T>(
     cleanup: impl FnOnce() -> Result<(), RoutineError>,
     original: Box<dyn std::any::Any + Send>,
 ) -> T {
-    let cleanup_failure = match catch_unwind(AssertUnwindSafe(cleanup)) {
-        Ok(Ok(())) => resume_unwind(original),
-        Ok(Err(error)) => Box::new(error) as ProcessCleanupFailure,
-        Err(payload) => payload,
+    let primary = FailureEvidence::Panic(PanicEvidence::capture(original.as_ref()));
+    let cleanup = match catch_unwind(AssertUnwindSafe(cleanup)) {
+        Ok(Ok(())) => CleanupEvidence::Succeeded,
+        Ok(Err(error)) => CleanupEvidence::Error(error.evidence()),
+        Err(payload) => CleanupEvidence::Panic(PanicEvidence::capture(payload.as_ref())),
     };
     resume_unwind(Box::new(ProcessCustodyPanic {
-        original,
-        cleanup_failure,
+        resume: original,
+        evidence: ProcessCustodyEvidence { primary, cleanup },
     }))
 }
 

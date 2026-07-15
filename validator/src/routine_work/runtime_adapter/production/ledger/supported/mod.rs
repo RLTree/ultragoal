@@ -9,6 +9,8 @@ use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+#[path = "file_ledger_failure.rs"]
+mod file_ledger_failure;
 #[path = "file_ledger_open_or_initialize.rs"]
 mod file_ledger_open_or_initialize;
 #[path = "file_ledger_output.rs"]

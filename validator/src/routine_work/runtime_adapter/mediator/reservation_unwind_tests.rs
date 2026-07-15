@@ -45,6 +45,17 @@ fn cleanup_failures_never_replace_the_initiating_panic_or_erase_recovery() {
             Some("reservation-unwind-original-payload")
         );
         assert_eq!(durable.cleanup_calls.load(Ordering::SeqCst), 1);
+        let records = durable
+            .failure_records
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        assert_eq!(records.len(), 1);
+        assert!(matches!(records[0].primary, FailureEvidence::Panic(_)));
+        assert!(matches!(
+            records[0].staged_cleanup,
+            CleanupEvidence::Error(_)
+        ));
+        drop(records);
         assert!(stage_root.is_dir());
         {
             let state = registry()

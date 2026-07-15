@@ -7,6 +7,7 @@ pub(super) struct DurableRecord {
     pub(super) fail_stage: AtomicBool,
     artifacts: Mutex<BTreeMap<String, String>>,
     pub(super) settlements: Mutex<Vec<DurableSettlement>>,
+    pub(super) failure_records: Mutex<Vec<ReservationFailureEvidence>>,
 }
 
 impl DurableAttemptAuthority for DurableRecord {
@@ -34,6 +35,14 @@ impl DurableAttemptAuthority for DurableRecord {
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner)
             .clone_from(artifacts);
+        Ok(())
+    }
+
+    fn record_failure(&self, evidence: &ReservationFailureEvidence) -> Result<(), RoutineError> {
+        self.failure_records
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .push(evidence.clone());
         Ok(())
     }
 

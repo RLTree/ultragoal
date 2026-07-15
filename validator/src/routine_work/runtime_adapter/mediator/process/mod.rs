@@ -16,7 +16,10 @@ use std::os::fd::AsRawFd;
 #[cfg(unix)]
 use std::os::unix::process::ExitStatusExt;
 
-use crate::routine_work::{RoutineError, RoutineErrorId};
+use crate::routine_work::{
+    CleanupEvidence, FailureEvidence, PanicEvidence, ProcessCustodyEvidence, RoutineError,
+    RoutineErrorId,
+};
 
 use super::filesystem::{OutputConfinement, PinnedExecutable, ReadConfinement, RootAnchor};
 use super::outcome::RoutineCancellation;
@@ -106,7 +109,9 @@ fn run_test_process_post_spawn_hook() {}
 fn run_test_loaded_object_hook() {}
 
 pub(crate) use configuration::*;
-pub(crate) use custody_settlement::{ProcessCleanupFailure, take_process_custody_panic};
+#[cfg(test)]
+pub(crate) use custody_settlement::resume_test_process_custody_panic;
+pub(crate) use custody_settlement::take_process_custody_panic;
 #[cfg(target_os = "macos")]
 pub(crate) use darwin_child_custody::*;
 #[cfg(target_os = "macos")]
@@ -125,6 +130,9 @@ pub(crate) use spawn_test_observation::*;
 #[cfg(all(test, target_os = "macos"))]
 #[path = "custody_transition_tests.rs"]
 mod custody_transition_tests;
+#[cfg(all(test, target_os = "macos"))]
+#[path = "failure_record_tests.rs"]
+mod failure_record_tests;
 #[cfg(test)]
 #[path = "process_object_binding_tests.rs"]
 mod process_object_binding_tests;

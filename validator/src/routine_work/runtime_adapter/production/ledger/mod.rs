@@ -7,7 +7,9 @@ use std::sync::Arc;
 use serde::{Deserialize, Serialize};
 
 use crate::routine_work::digest::{canonical, sha256, valid};
-use crate::routine_work::{RoutineError, RoutineErrorId};
+use crate::routine_work::{
+    ReservationFailureDisposition, ReservationFailureEvidence, RoutineError, RoutineErrorId,
+};
 
 #[cfg(target_vendor = "apple")]
 #[path = "supported/mod.rs"]
@@ -20,6 +22,8 @@ mod tests;
 mod authority_record;
 #[path = "file_authority.rs"]
 mod file_authority;
+#[path = "file_authority_failure.rs"]
+mod file_authority_failure;
 
 pub(crate) use authority_record::*;
 pub(crate) use file_authority::*;

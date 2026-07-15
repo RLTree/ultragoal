@@ -22,6 +22,7 @@ pub(crate) trait DurableAttemptAuthority: Send + Sync {
     fn cleanup_staged(&self, staged: &StagedProgram) -> Result<(), RoutineError>;
     fn prepare_spawn(&self) -> Result<(), RoutineError>;
     fn stage_success(&self, artifacts: &BTreeMap<String, String>) -> Result<(), RoutineError>;
+    fn record_failure(&self, evidence: &ReservationFailureEvidence) -> Result<(), RoutineError>;
     fn settle(
         &self,
         outcome: DurableSettlement,

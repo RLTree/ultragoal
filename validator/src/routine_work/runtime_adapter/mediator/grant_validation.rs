@@ -60,7 +60,9 @@ pub(crate) fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservati
                 .as_ref()
                 .is_some_and(|durable| durable.recovery_is_durable()) => {}
         (None, Some(_)) => return Err(mediator_error("mediator-recovery-marker-stale")),
-        (None, None) => {}
+        (None, None) => state
+            .failure_records
+            .retain(|_, record| record.protocol_id != grant.protocol_id),
     }
     state.consumed_grants.insert(grant.grant_id.clone());
     state

@@ -37,6 +37,8 @@ pub(crate) struct ProtocolRecord {
     pub(crate) recovery_deadline_tick: u64,
     pub(crate) artifacts: BTreeMap<String, String>,
     pub(crate) output_journal: OutputProvisionJournal,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub(crate) failure_evidence: Vec<ReservationFailureEvidence>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]

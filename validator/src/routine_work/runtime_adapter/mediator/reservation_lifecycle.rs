@@ -1,33 +1,11 @@
-use super::read_source_binding::release_active;
 use super::*;
 use std::panic::{AssertUnwindSafe, catch_unwind, resume_unwind};
 
-impl AttemptReservation {
-    fn transition_failure(&self) {
-        if self.settled.get() {
-            return;
-        }
-        let mut state = registry()
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner);
-        release_active(&mut state, &self.protocol_id, &self.grant_id);
-        if self.started.get() && !state.ambiguous_protocols.contains_key(&self.protocol_id) {
-            state
-                .ambiguous_protocols
-                .insert(self.protocol_id.clone(), self.recovery_marker.clone());
-        }
-        self.settled.set(true);
-    }
-}
+type PanicPayload = Box<dyn std::any::Any + Send>;
 
-fn cleanup_and_transition(
-    attempt: &AttemptReservation,
-    process_cleanup_failure: Option<process::ProcessCleanupFailure>,
-) -> std::thread::Result<Result<(), RoutineError>> {
-    let cleanup = catch_unwind(AssertUnwindSafe(|| attempt.cleanup_staged()));
-    attempt.transition_failure();
-    drop(process_cleanup_failure);
-    cleanup
+struct CapturedCleanup {
+    outcome: std::thread::Result<Result<(), RoutineError>>,
+    evidence: CleanupEvidence,
 }
 
 pub(crate) fn run_reserved<T>(
@@ -37,24 +15,101 @@ pub(crate) fn run_reserved<T>(
     let outcome = catch_unwind(AssertUnwindSafe(|| lifecycle(&attempt)));
     match outcome {
         Ok(Ok(value)) if attempt.settled.get() => Ok(value),
-        Ok(Ok(_)) => match cleanup_and_transition(&attempt, None) {
-            Ok(cleanup) => cleanup.and(Err(mediator_error(
-                "mediator-reservation-terminal-transition-missing",
-            ))),
-            Err(payload) => resume_unwind(payload),
-        },
-        Ok(Err(error)) => match cleanup_and_transition(&attempt, None) {
-            Ok(_) => Err(error),
-            Err(payload) => resume_unwind(payload),
-        },
+        Ok(Ok(_)) => finish_missing_transition(&attempt),
+        Ok(Err(error)) => finish_error(&attempt, error),
+        Err(payload) => finish_panic(&attempt, payload),
+    }
+}
+
+fn finish_missing_transition<T>(attempt: &AttemptReservation) -> Result<T, RoutineError> {
+    let cleanup = capture_staged_cleanup(attempt);
+    let evidence = cleanup.evidence.clone();
+    let record = attempt.failure_evidence(
+        FailureEvidence::MissingSettlement,
+        CleanupEvidence::NotRequired,
+        evidence,
+    );
+    record_transition(attempt, &record)?;
+    match cleanup.outcome {
+        Ok(Ok(())) => Err(mediator_error(
+            "mediator-reservation-terminal-transition-missing",
+        )),
+        Ok(Err(error)) => Err(error),
+        Err(payload) => resume_unwind(payload),
+    }
+}
+
+fn finish_error<T>(attempt: &AttemptReservation, error: RoutineError) -> Result<T, RoutineError> {
+    let (primary, process_cleanup) = error
+        .process_custody()
+        .map(|evidence| (evidence.primary.clone(), evidence.cleanup.clone()))
+        .unwrap_or_else(|| {
+            (
+                FailureEvidence::Error(error.evidence()),
+                CleanupEvidence::NotRequired,
+            )
+        });
+    let cleanup = capture_staged_cleanup(attempt);
+    let staged_cleanup = cleanup.evidence.clone();
+    let record = attempt.failure_evidence(primary, process_cleanup, staged_cleanup);
+    record_transition(attempt, &record)?;
+    match cleanup.outcome {
+        Err(payload) => resume_unwind(payload),
+        Ok(_) => Err(error),
+    }
+}
+
+fn finish_panic<T>(attempt: &AttemptReservation, payload: PanicPayload) -> Result<T, RoutineError> {
+    let (original, process) = match process::take_process_custody_panic(payload) {
+        Ok((original, process)) => (original, process),
+        Err(original) => {
+            let process = ProcessCustodyEvidence {
+                primary: FailureEvidence::Panic(PanicEvidence::capture(original.as_ref())),
+                cleanup: CleanupEvidence::NotRequired,
+            };
+            (original, process)
+        }
+    };
+    let cleanup = capture_staged_cleanup(attempt);
+    let staged_cleanup = cleanup.evidence.clone();
+    let record = attempt.failure_evidence(process.primary, process.cleanup, staged_cleanup);
+    if let Err(error) = record_transition(attempt, &record) {
+        drop(original);
+        return Err(error);
+    }
+    resume_unwind(original)
+}
+
+fn capture_staged_cleanup(attempt: &AttemptReservation) -> CapturedCleanup {
+    let outcome = catch_unwind(AssertUnwindSafe(|| attempt.cleanup_staged()));
+    let evidence = match &outcome {
+        Ok(Ok(())) => CleanupEvidence::Succeeded,
+        Ok(Err(error)) => CleanupEvidence::Error(error.evidence()),
+        Err(payload) => CleanupEvidence::Panic(PanicEvidence::capture(payload.as_ref())),
+    };
+    CapturedCleanup { outcome, evidence }
+}
+
+fn record_transition(
+    attempt: &AttemptReservation,
+    record: &ReservationFailureEvidence,
+) -> Result<(), RoutineError> {
+    match catch_unwind(AssertUnwindSafe(|| {
+        attempt.record_failure_and_transition(record)
+    })) {
+        Ok(Ok(())) => Ok(()),
+        Ok(Err(error)) => Err(transition_failure_error(
+            "mediator-reservation-failure-transition-failed",
+            record.clone(),
+            FailureEvidence::Error(error.evidence()),
+        )),
         Err(payload) => {
-            let (payload, process_cleanup_failure) =
-                match process::take_process_custody_panic(payload) {
-                    Ok((original, cleanup_failure)) => (original, Some(cleanup_failure)),
-                    Err(original) => (original, None),
-                };
-            drop(cleanup_and_transition(&attempt, process_cleanup_failure));
-            resume_unwind(payload)
+            let failure = FailureEvidence::Panic(PanicEvidence::capture(payload.as_ref()));
+            Err(transition_failure_error(
+                "mediator-reservation-failure-transition-panicked",
+                record.clone(),
+                failure,
+            ))
         }
     }
 }
@@ -62,3 +117,9 @@ pub(crate) fn run_reserved<T>(
 #[cfg(test)]
 #[path = "reservation_lifecycle/cleanup_panic_tests.rs"]
 mod cleanup_panic_tests;
+#[cfg(test)]
+#[path = "reservation_lifecycle/failure_matrix_tests.rs"]
+mod failure_matrix_tests;
+#[cfg(test)]
+#[path = "reservation_lifecycle/failure_transition_tests.rs"]
+mod failure_transition_tests;

@@ -11,7 +11,7 @@ use serde::Serialize;
 
 use crate::context::LiveContext;
 use crate::routine_work::digest::{digest_of, framed};
-use crate::routine_work::{RoutineError, RoutineErrorId, RoutinePlan};
+use crate::routine_work::{ReservationFailureEvidence, RoutineError, RoutineErrorId, RoutinePlan};
 
 use super::execution_authority::{PreparedRoutineExecution, RoutineEffectRequest};
 use super::mediator::{
