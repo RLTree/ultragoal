@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | `d252a9409` / tree `0d625585` | Ambiguity reconciliation passed review; cumulative review found the validated executable descriptor is discarded and a mutable staged pathname is re-resolved at spawn, allowing wrong-binary execution before post-spawn checks; all higher claims remain withheld | Execute the exact validated descriptor identity through the single process boundary and prove a canonical-output replacement never executes or authenticates |
+| N06 routine execution | under_review | `e0f4c1ac5` / tree `460e9b3f` | Exact loaded-object repair is frozen clean: the child starts kernel-suspended, the parent compares the loaded vnode to the pinned descriptor, mismatch is killed and reaped before user code, and the accepted child activates Seatbelt before reading its frame; source, integration, migration, install, and higher claims remain withheld | Independently falsify the exact cumulative N06 source candidate before receipt regeneration or integration |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,9 +46,10 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `32`. The next action is the
-shared descriptor-bound execution repair across spawn, sandboxing, cancellation,
-timeout, output limit, process-group cleanup, recovery, replay, and substitution.
+current exact-candidate rejection count for N06 is `32`. The next action is one
+fresh exact-tree cumulative review of the descriptor-bound execution repair
+across spawn, sandboxing, cancellation, timeout, output limit, process-group
+cleanup, recovery, replay, and substitution.
 Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
@@ -195,12 +196,13 @@ each branch, worktree, and thread identity; unknown host fields stay unknown.
   and corrected receipt `75bced89f` / tree `f57dc811` were independently
   accepted and integrated through root `665140d11` / tree `8dd8a461`. The task
   is archived and its clean worktree/cache is removed.
-- Routine execution trust: thread `019f5fa2-5206-7da1-ad4f-8bb5ca580012`,
+- Routine execution trust: active continuation thread
+  `019f6487-8b8d-7d51-810b-1465f481eef7`,
   branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
   owns routine kernel/public adapter behavior and matching tests/fixtures;
-  exact clean source `d252a9409` / tree `0d625585` is in decisive REWORK for
-  runner object identity; its stale WorkerResult and v1→v2 ledger migration
-  remain withheld.
+  exact clean source `e0f4c1ac5` / tree `460e9b3f` is under fresh cumulative
+  exact-tree review for runner object identity; its stale WorkerResult and
+  v1→v2 ledger migration remain withheld.
 - Orchestration authority: thread `019f5fa2-923f-7770-9a89-83ed713ac1f3`,
   branch `codex/n10-orchestration-authority`, worktree `.codex/worktrees/cb63`;
   owns orchestration issuer/replay/recovery behavior and matching tests/fixtures;
