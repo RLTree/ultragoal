@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | `43eb916a7` / tree `79f6d591` | Repeated namespace review found both test crates still mount the moved fixture children as generic root Rust modules; receipt and integration remain withheld | Make `catalog_fixture` the sole child-module authority in both harnesses and expose only a narrow outer facade |
+| N06 routine execution | rework | `9eb2b2cfa` / tree `1936d676` | Exact-tree review found `cleanup_staged()` can unwind before the explicit reservation failure transition, replacing an initiating panic and leaving active custody without ambiguity; receipt and integration remain withheld | Catch cleanup unwind independently, always perform the exact transition once, and enforce deterministic lifecycle-panic precedence across sibling failure paths |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,10 +46,10 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `18`. The next action is the
-shared Rust module-hierarchy invariant: filesystem nesting and module ownership
-must agree, with no generic fixture children remounted at either test-crate
-root and no duplicate fixture state or cleanup authority.
+current exact-candidate rejection count for N06 is `19`. The next action is the
+shared cleanup-panic invariant: no fallible or panicking cleanup may prevent
+the one explicit reservation transition, and an initiating lifecycle panic
+must retain precedence without double settlement or authority-bearing `Drop`.
 Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
