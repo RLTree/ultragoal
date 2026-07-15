@@ -6,7 +6,8 @@ use super::super::outcome::RoutineCancellation;
 use super::{execute, set_test_process_post_spawn_hook, set_test_process_pre_spawn_hook};
 #[cfg(target_os = "macos")]
 use crate::routine_work::{
-    RustSourceFrameInput, encode_rust_source_syntax_frame, trusted_rust_source_execution_observed,
+    RustSourceFrameInput, RustSourceSyntaxOutcome, encode_rust_source_syntax_frame,
+    evaluate_rust_source_syntax_frame, rust_source_syntax_observation_json,
 };
 #[cfg(target_os = "macos")]
 use sha2::{Digest, Sha256};
@@ -44,6 +45,8 @@ fn named_path_swap_during_spawn_cannot_authenticate_observation() {
         sources: Vec::new(),
     };
     let program = PinnedExecutable::open_unbound(&named).unwrap();
+    let (frame, canonical) = canonical_observation();
+    let sentinel = root.join("replacement-executed");
     let environment = BTreeMap::from([(
         crate::routine_work::CHILD_MODE_ENV.to_owned(),
         crate::routine_work::CHILD_MODE_VALUE.to_owned(),
@@ -52,10 +55,16 @@ fn named_path_swap_during_spawn_cannot_authenticate_observation() {
     let before_held_directory = held_directory.clone();
     let before_directory = directory.clone();
     let before_name = named.clone();
+    let replacement_sentinel = sentinel.clone();
     set_test_process_pre_spawn_hook(move || {
         fs::rename(&before_directory, &before_held_directory).unwrap();
         fs::create_dir(&before_directory).unwrap();
-        fs::copy("/usr/bin/true", &before_name).unwrap();
+        let script = format!(
+            "#!/bin/sh\nprintf '%s' '{}'\nprintf executed > '{}'\n",
+            String::from_utf8(canonical).unwrap(),
+            replacement_sentinel.display()
+        );
+        fs::write(&before_name, script).unwrap();
         fs::set_permissions(&before_name, fs::Permissions::from_mode(0o555)).unwrap();
     });
     let after_directory = directory.clone();
@@ -65,7 +74,7 @@ fn named_path_swap_during_spawn_cannot_authenticate_observation() {
         fs::rename(&after_held_directory, &after_directory).unwrap();
     });
 
-    let observation = execute(
+    let result = execute(
         &program,
         &root_anchor,
         &outputs,
@@ -76,13 +85,25 @@ fn named_path_swap_during_spawn_cannot_authenticate_observation() {
             "printf retained-object".to_owned(),
         ],
         &environment,
-        Vec::new(),
+        frame,
         Duration::from_secs(2),
         1024,
         &RoutineCancellation::new(),
         || Ok(()),
-    )
-    .unwrap();
+    );
+    let error = match result {
+        Err(error) => error,
+        Ok(_) => panic!("substituted executable was accepted"),
+    };
+    assert!(format!("{error}").contains("mediator-loaded-executable"));
+    assert!(!sentinel.exists(), "replacement user code ran");
+    assert!(named.exists());
+    assert!(!held_directory.exists());
+    fs::remove_dir_all(root).unwrap();
+}
+
+#[cfg(target_os = "macos")]
+fn canonical_observation() -> (Vec<u8>, Vec<u8>) {
     let source = b"pub fn value() -> u8 { 1 }\n";
     let source_digest = format!("sha256:{:x}", Sha256::digest(source));
     let frame = encode_rust_source_syntax_frame(&[RustSourceFrameInput::new(
@@ -92,27 +113,11 @@ fn named_path_swap_during_spawn_cannot_authenticate_observation() {
         source,
     )])
     .unwrap();
-    assert_ne!(
-        observation.stdout, b"retained-object",
-        "termination={:?}",
-        observation.termination
-    );
-    let exit_code = match observation.termination {
-        super::ProcessTermination::Exited(code) => code,
-        _ => -1,
+    let observation = match evaluate_rust_source_syntax_frame(&frame) {
+        RustSourceSyntaxOutcome::Passed(observation) => observation,
+        RustSourceSyntaxOutcome::Refused(error) => panic!("canonical frame refused: {error:?}"),
     };
-    assert!(
-        !trusted_rust_source_execution_observed(
-            Some(&frame),
-            exit_code,
-            &observation.stdout,
-            observation.stderr_sha256 == format!("sha256:{:x}", Sha256::digest([])),
-        ),
-        "the substituted process observation must not authenticate a canonical routine success"
-    );
-    assert!(named.exists());
-    assert!(!held_directory.exists());
-    fs::remove_dir_all(root).unwrap();
+    (frame, rust_source_syntax_observation_json(&observation))
 }
 
 #[cfg(target_os = "macos")]

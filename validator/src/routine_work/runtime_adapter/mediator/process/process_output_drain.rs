@@ -125,7 +125,6 @@ pub(crate) fn maybe_inject_setup_failure(
 
 #[cfg(target_os = "macos")]
 pub(crate) fn sandbox_profile(
-    program: &Path,
     working_directory: &Path,
     read_sources: &[&Path],
     scopes: &[&Path],
@@ -133,12 +132,6 @@ pub(crate) fn sandbox_profile(
     let mut profile = String::from(
         "(version 1)\n(allow default)\n(deny network*)\n(deny process-fork (with send-signal SIGKILL))\n(deny process-exec)\n(deny file-map-executable)\n(allow file-map-executable (subpath \"/System\"))\n(allow file-map-executable (subpath \"/usr/lib\"))\n(deny file-read*)\n(allow file-read* (literal \"/\"))\n(allow file-read* (subpath \"/System\"))\n(allow file-read* (subpath \"/usr/lib\"))\n(allow file-read* (subpath \"/private/var/db/dyld\"))\n(deny file-write*)\n(deny file-clone file-link)\n",
     );
-    let program = program
-        .to_str()
-        .ok_or_else(|| mediator_error("mediator-executable-path-not-utf8"))?;
-    profile.push_str("(allow process-exec (literal \"");
-    profile.push_str(&sandbox_escape(program)?);
-    profile.push_str("\"))\n");
     for ancestor in working_directory
         .ancestors()
         .collect::<Vec<_>>()
@@ -155,9 +148,6 @@ pub(crate) fn sandbox_profile(
         profile.push_str(&sandbox_escape(text)?);
         profile.push_str("\"))\n");
     }
-    profile.push_str("(allow file-read* (literal \"");
-    profile.push_str(&sandbox_escape(program)?);
-    profile.push_str("\"))\n");
     for source in read_sources {
         let text = source
             .to_str()

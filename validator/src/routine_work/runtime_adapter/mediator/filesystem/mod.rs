@@ -11,8 +11,6 @@ use std::sync::{Mutex, OnceLock};
 #[cfg(unix)]
 use std::os::fd::{AsRawFd, FromRawFd, RawFd};
 #[cfg(unix)]
-use std::os::unix::ffi::OsStrExt;
-#[cfg(unix)]
 use std::os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt};
 
 use crate::routine_work::{RepoPath, RoutineError, RoutineErrorId};

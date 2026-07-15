@@ -13,6 +13,11 @@ fn production_source_exposes_no_arbitrary_process_binding_surface() {
         include_str!("../src/routine_work/runtime_adapter/mediator/intent_mediation.rs");
     let process =
         include_str!("../src/routine_work/runtime_adapter/mediator/process/process_execution.rs");
+    let launch = include_str!(
+        "../src/routine_work/runtime_adapter/mediator/process/darwin_suspended_launch.rs"
+    );
+    let binding =
+        include_str!("../src/routine_work/runtime_adapter/mediator/process/object_bound_launch.rs");
     let runner = include_str!("../src/routine_work/runtime_adapter/runner_binding.rs");
     let reconciliation =
         include_str!("../src/routine_work/runtime_adapter/execution_reconciliation.rs");
@@ -32,7 +37,14 @@ fn production_source_exposes_no_arbitrary_process_binding_surface() {
     );
     assert!(process.contains("framed_input: Vec<u8>"));
     assert!(!process.contains("framed_input: Option"));
-    assert!(process.contains("stdin(Stdio::piped())"));
+    assert!(process.contains("spawn_exact_program"));
+    assert!(process.contains("frame_sandboxed_input"));
+    assert!(!process.contains("Command::new"));
+    assert!(launch.contains("POSIX_SPAWN_START_SUSPENDED"));
+    assert!(launch.contains("posix_spawn_file_actions_adddup2"));
+    assert!(!launch.contains("/dev/fd"));
+    assert!(binding.contains("validate_loaded_executable"));
+    assert!(binding.contains("terminate_suspended"));
     assert!(reconciliation.contains("adapter-current-runner-substituted"));
     assert!(runner.contains("invocation.environment != expected_environment"));
     assert!(grant.contains("intent.environment() != &expected_environment"));

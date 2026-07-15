@@ -50,39 +50,16 @@ where
                 started: false,
             });
         }
-        let sandbox = PinnedExecutable::open_unbound(Path::new("/usr/bin/sandbox-exec"))?;
         program.validate()?;
-        sandbox.validate()?;
-        sandbox.validate_named_path()?;
         let profile = sandbox_profile(
-            program.path(),
             root.path(),
             &reads.absolute_sources(),
             &outputs.absolute_scopes(),
         )?;
+        let framed_input = crate::routine_work::frame_sandboxed_input(&profile, framed_input)
+            .map_err(mediator_error)?;
         root.validate()?;
         outputs.validate()?;
-        let mut command = Command::new(sandbox.path());
-        command
-            .arg("-p")
-            .arg(profile)
-            .arg(program.path())
-            .args(argv.iter().skip(1))
-            .current_dir(root.path())
-            .env_clear()
-            .envs(environment)
-            .stdin(Stdio::piped())
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped());
-        let cwd_fd = root.raw_fd();
-        unsafe {
-            command.pre_exec(move || {
-                if libc::setpgid(0, 0) != 0 || libc::fchdir(cwd_fd) != 0 {
-                    return Err(std::io::Error::last_os_error());
-                }
-                Ok(())
-            });
-        }
         if cancellation.is_cancelled() {
             return Ok(ProcessObservation {
                 termination: ProcessTermination::Cancelled,
@@ -92,22 +69,15 @@ where
                 started: false,
             });
         }
-        run_test_process_pre_spawn_hook();
-        let started_at = Instant::now();
-        let child = command
-            .spawn()
-            .map_err(|_| mediator_error("mediator-process-launch-failed"))?;
-        run_test_process_post_spawn_hook();
-        let mut setup = SpawnSetupGuard::new(child);
+        let mut setup = spawn_exact_program(program, root, argv, environment)?;
+        root.validate()?;
+        outputs.validate()?;
         on_started()?;
-        #[cfg(test)]
-        TEST_SPAWN_COUNT.fetch_add(1, Ordering::SeqCst);
         let process_group = setup.process_group()?;
         maybe_inject_setup_failure(
             SetupFailurePoint::ProcessGroup,
             "mediator-process-group-setup-injected",
         )?;
-        setup.take_pipes()?;
         maybe_inject_setup_failure(
             SetupFailurePoint::StdoutNonblocking,
             "mediator-stdout-nonblocking-injected",
@@ -182,6 +152,10 @@ where
             .ok_or_else(|| mediator_error("mediator-stdin-unavailable"))?;
         setup.stdin_writer = Some(start_input_writer(stdin, framed_input)?);
         let mut running = setup.into_running();
+        running.resume()?;
+        #[cfg(test)]
+        TEST_SPAWN_COUNT.fetch_add(1, Ordering::SeqCst);
+        let started_at = Instant::now();
         let deadline = started_at + timeout;
         let observed_termination = loop {
             if cancellation.is_cancelled() {
@@ -225,7 +199,6 @@ where
         };
         let (stdout, stderr) = running.join_io()?;
         program.validate()?;
-        sandbox.validate()?;
         root.validate()?;
         outputs.validate()?;
         let termination = match observed_termination {

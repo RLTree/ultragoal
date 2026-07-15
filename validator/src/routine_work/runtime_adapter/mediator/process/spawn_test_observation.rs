@@ -65,11 +65,11 @@ impl ProcessGroupId {
 /// `into_running` terminates and reaps the process group, closes unhanded pipe
 /// descriptors, signals started readers to stop, and joins them.
 pub(crate) struct SpawnSetupGuard {
-    pub(crate) child: Option<Child>,
+    pub(crate) child: Option<BoundChild>,
     pub(crate) process_group: Option<ProcessGroupId>,
-    pub(crate) stdout: Option<ChildStdout>,
-    pub(crate) stderr: Option<ChildStderr>,
-    pub(crate) stdin: Option<ChildStdin>,
+    pub(crate) stdout: Option<File>,
+    pub(crate) stderr: Option<File>,
+    pub(crate) stdin: Option<File>,
     pub(crate) readers_done: Arc<AtomicBool>,
     pub(crate) stdout_reader: Option<ReaderHandle>,
     pub(crate) stderr_reader: Option<ReaderHandle>,
@@ -78,14 +78,14 @@ pub(crate) struct SpawnSetupGuard {
 }
 
 impl SpawnSetupGuard {
-    pub(crate) fn new(child: Child) -> Self {
-        let process_group = ProcessGroupId::from_child_id(child.id()).ok();
+    pub(crate) fn new(spawned: SpawnedProcess) -> Self {
+        let process_group = ProcessGroupId::from_child_id(spawned.child.id()).ok();
         Self {
-            child: Some(child),
+            child: Some(spawned.child),
             process_group,
-            stdout: None,
-            stderr: None,
-            stdin: None,
+            stdout: Some(spawned.stdout),
+            stderr: Some(spawned.stderr),
+            stdin: Some(spawned.stdin),
             readers_done: Arc::new(AtomicBool::new(false)),
             stdout_reader: None,
             stderr_reader: None,
@@ -99,24 +99,20 @@ impl SpawnSetupGuard {
             .ok_or_else(|| mediator_error("mediator-process-group-invalid"))
     }
 
-    pub(crate) fn take_pipes(&mut self) -> Result<(), RoutineError> {
+    pub(crate) fn child(&self) -> Result<&BoundChild, RoutineError> {
+        self.child
+            .as_ref()
+            .ok_or_else(|| mediator_error("mediator-child-custody-missing"))
+    }
+
+    pub(crate) fn terminate_suspended(&mut self) -> Result<(), RoutineError> {
+        let process_group = self.process_group()?;
         let child = self
             .child
             .as_mut()
-            .expect("spawn guard always owns its child before handoff");
-        self.stdout = Some(
-            child
-                .stdout
-                .take()
-                .ok_or_else(|| mediator_error("mediator-stdout-unavailable"))?,
-        );
-        self.stderr = Some(
-            child
-                .stderr
-                .take()
-                .ok_or_else(|| mediator_error("mediator-stderr-unavailable"))?,
-        );
-        self.stdin = child.stdin.take();
+            .ok_or_else(|| mediator_error("mediator-child-custody-missing"))?;
+        cleanup_spawned_child(child, Some(process_group))?;
+        self.cleanup_required = false;
         Ok(())
     }
 
@@ -159,7 +155,7 @@ impl Drop for SpawnSetupGuard {
 /// Owns child, group, and reader threads for all post-setup fallible work.
 /// Dropping it before `disarm` repeats fail-closed cleanup and joins readers.
 pub(crate) struct RunningProcess {
-    pub(crate) child: Option<Child>,
+    pub(crate) child: Option<BoundChild>,
     pub(crate) process_group: ProcessGroupId,
     pub(crate) readers_done: Arc<AtomicBool>,
     pub(crate) stdout_reader: Option<ReaderHandle>,
@@ -169,10 +165,14 @@ pub(crate) struct RunningProcess {
 }
 
 impl RunningProcess {
-    pub(crate) fn child_mut(&mut self) -> &mut Child {
+    pub(crate) fn child_mut(&mut self) -> &mut BoundChild {
         self.child
             .as_mut()
             .expect("running process retains child ownership")
+    }
+
+    pub(crate) fn resume(&self) -> Result<(), RoutineError> {
+        signal_group(self.process_group, libc::SIGCONT)
     }
 
     pub(crate) fn terminate_and_reap(&mut self) -> Result<(), RoutineError> {

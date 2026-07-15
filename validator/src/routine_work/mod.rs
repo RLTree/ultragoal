@@ -21,6 +21,7 @@ mod snapshot;
 pub(crate) use behavior::trusted_rust_source_execution_observed;
 pub(crate) use behavior::{
     CHILD_MODE_ENV, CHILD_MODE_VALUE, LEGACY_BEHAVIOR_SELECTOR_ENV, LEGACY_CHILD_SELECTOR_ENV,
+    activate_and_read_frame, frame_sandboxed_input,
 };
 pub use behavior::{
     RustSourceFrameInput, RustSourceSyntaxError, RustSourceSyntaxErrorKind,

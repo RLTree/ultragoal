@@ -1,7 +1,7 @@
 use super::*;
 
 pub(crate) fn start_input_writer(
-    mut stdin: ChildStdin,
+    mut stdin: File,
     bytes: Vec<u8>,
 ) -> Result<WriterHandle, RoutineError> {
     std::thread::Builder::new()

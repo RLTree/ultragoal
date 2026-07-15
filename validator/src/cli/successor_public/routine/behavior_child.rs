@@ -2,10 +2,9 @@ use super::*;
 use crate::cli::successor::ExitClass;
 use crate::routine_work::{
     CHILD_MODE_ENV, CHILD_MODE_VALUE, LEGACY_BEHAVIOR_SELECTOR_ENV, LEGACY_CHILD_SELECTOR_ENV,
-    RustSourceSyntaxOutcome, evaluate_rust_source_syntax_frame,
+    RustSourceSyntaxOutcome, activate_and_read_frame, evaluate_rust_source_syntax_frame,
     rust_source_syntax_observation_json,
 };
-use std::io::Read;
 
 const MAX_FRAME_BYTES: u64 = 16 * 1024 * 1024;
 
@@ -23,15 +22,10 @@ pub(crate) fn execute_if_requested(invocation: &ParsedInvocation) -> Option<Runt
     {
         return Some(refusal());
     }
-    let mut frame = Vec::new();
-    if std::io::stdin()
-        .take(MAX_FRAME_BYTES + 1)
-        .read_to_end(&mut frame)
-        .is_err()
-        || frame.len() as u64 > MAX_FRAME_BYTES
-    {
-        return Some(refusal());
-    }
+    let frame = match activate_and_read_frame(std::io::stdin(), MAX_FRAME_BYTES) {
+        Ok(frame) => frame,
+        Err(()) => return Some(refusal()),
+    };
     Some(match evaluate_rust_source_syntax_frame(&frame) {
         RustSourceSyntaxOutcome::Passed(observation) => RuntimeOutcome::payload(
             ExitClass::Success,

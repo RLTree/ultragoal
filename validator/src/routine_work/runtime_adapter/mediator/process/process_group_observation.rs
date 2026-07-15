@@ -28,7 +28,7 @@ pub(crate) fn signal_group(group: ProcessGroupId, signal: i32) -> Result<(), Rou
 
 #[cfg(unix)]
 pub(crate) fn cleanup_spawned_child(
-    child: &mut Child,
+    child: &mut BoundChild,
     process_group: Option<ProcessGroupId>,
 ) -> Result<(), RoutineError> {
     if let Some(process_group) = process_group {
@@ -44,7 +44,7 @@ pub(crate) fn cleanup_spawned_child(
 
 #[cfg(unix)]
 pub(crate) fn terminate_and_reap(
-    child: &mut std::process::Child,
+    child: &mut BoundChild,
     group: ProcessGroupId,
 ) -> Result<(), RoutineError> {
     let mut first_error = None;

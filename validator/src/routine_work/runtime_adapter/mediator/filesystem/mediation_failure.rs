@@ -99,7 +99,6 @@ mod tests {
         assert_eq!(metadata.mode() & 0o022, 0);
         let executable = PinnedExecutable::open_unbound(shell).unwrap();
         executable.validate().unwrap();
-        executable.validate_named_path().unwrap();
     }
 
     #[test]
