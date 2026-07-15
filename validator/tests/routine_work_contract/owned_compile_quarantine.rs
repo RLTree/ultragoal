@@ -18,6 +18,8 @@ pub(crate) enum CleanupOutcome {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum CleanupStage {
     Authenticated,
+    ForeignCaptured,
+    ForeignMoveMismatch,
     ForeignQuarantined,
     ForeignIdentityValidated,
     ForeignMoved,
@@ -34,6 +36,7 @@ pub(crate) enum CleanupDirective {
 enum QuarantineOutcome {
     Owned(CString),
     Refused,
+    Unrecoverable,
     DisplacedForeign {
         quarantine: CString,
         custody: ForeignCustody,
@@ -51,6 +54,9 @@ pub(crate) fn cleanup_controlled(
     if matches!(scratch.cleanup_state, CleanupState::DisplacedForeign { .. }) {
         return reconcile_displaced_foreign(scratch, &mut pause);
     }
+    if matches!(scratch.cleanup_state, CleanupState::UnrecoverableForeign) {
+        return CleanupOutcome::AmbiguousPartialEffect;
+    }
     if matches!(scratch.cleanup_state, CleanupState::Claimed) {
         if !authenticates_claim(scratch) {
             scratch.cleanup_state = CleanupState::Settled;
@@ -67,6 +73,10 @@ pub(crate) fn cleanup_controlled(
             QuarantineOutcome::Refused => {
                 scratch.cleanup_state = CleanupState::Settled;
                 return CleanupOutcome::RefusedZeroWrite;
+            }
+            QuarantineOutcome::Unrecoverable => {
+                scratch.cleanup_state = CleanupState::UnrecoverableForeign;
+                return CleanupOutcome::AmbiguousPartialEffect;
             }
             QuarantineOutcome::DisplacedForeign {
                 quarantine,
@@ -138,6 +148,7 @@ fn quarantine_owned_entry(
     let Some(custody) = ForeignCustody::capture(&scratch.parent, &scratch.name) else {
         return QuarantineOutcome::Refused;
     };
+    let _ = pause(CleanupStage::ForeignCaptured);
     let quarantine = random_quarantine_name();
     if unsafe {
         libc::renameatx_np(
@@ -152,9 +163,16 @@ fn quarantine_owned_entry(
         return QuarantineOutcome::Refused;
     }
     if !custody.matches(&scratch.parent, &quarantine) {
+        let _ = pause(CleanupStage::ForeignMoveMismatch);
+        let Some(moved_custody) = ForeignCustody::capture(&scratch.parent, &quarantine) else {
+            return QuarantineOutcome::Unrecoverable;
+        };
+        if !moved_custody.matches(&scratch.parent, &quarantine) {
+            return QuarantineOutcome::Unrecoverable;
+        }
         return QuarantineOutcome::DisplacedForeign {
             quarantine,
-            custody,
+            custody: moved_custody,
         };
     }
     if (custody.device, custody.inode) == (scratch.device, scratch.inode) {

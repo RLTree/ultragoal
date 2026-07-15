@@ -23,6 +23,7 @@ pub(crate) enum CleanupState {
         custody: ForeignCustody,
         destination: Option<(u64, u64)>,
     },
+    UnrecoverableForeign,
     Settled,
 }
 
@@ -109,7 +110,9 @@ impl OwnedCompileScratch {
             CleanupState::DisplacedForeign { custody, .. } => custody
                 .current_name(self.path.parent().unwrap())
                 .map(|name| self.path.parent().unwrap().join(name.to_str().unwrap())),
-            CleanupState::Claimed | CleanupState::Settled => None,
+            CleanupState::Claimed | CleanupState::UnrecoverableForeign | CleanupState::Settled => {
+                None
+            }
         }
     }
 

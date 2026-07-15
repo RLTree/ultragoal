@@ -22,6 +22,8 @@ mod filesystem_controls;
 mod issuer_api_compilation;
 #[path = "routine_work_contract/issuer_api_visibility.rs"]
 mod issuer_api_visibility;
+#[path = "routine_work_contract/issuer_capture_races.rs"]
+mod issuer_capture_races;
 #[path = "routine_work_contract/issuer_cleanup_races.rs"]
 mod issuer_cleanup_races;
 #[path = "routine_work_contract/issuer_hidden_surface.rs"]
