@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | `d4ac1f406` / tree `2c7dc847` | Explicit process-custody repair is frozen clean: destructive `Drop` paths are removed and setup/running/panic transitions consume custody before reservation transition; focused owned gates pass, while the public target remains withheld at 41/42 under non-representative host load | Independently falsify cleanup-result propagation and the full cumulative exact tree; rerun the public target only at a representative root boundary |
+| N06 routine execution | rework | `d4ac1f406` / tree `2c7dc847` | Destructive `Drop` paths are removed, but cumulative review found `run_reserved` transitions reservation authority before observing cleanup results, then drops process-custody and staged-cleanup failures and resumes only the initiating panic; all higher claims remain withheld | Make the existing reservation/ambiguity authority record the exact primary, process-cleanup, staged-cleanup, and transition outcomes before release or panic resume |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,11 +46,12 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `33`. The next action is one
-fresh exact-tree cumulative review of explicit custody consumption, cleanup
-failure propagation, reservation settlement, and the preserved object-bound
-launch controls. The public 42-test claim remains withheld at 41/42 until a
-representative-load root observation.
+current exact-candidate rejection count for N06 is `34`. The next action is the
+shared reservation-settlement repair: collect and record the exact primary,
+process-custody cleanup, staged cleanup, and authority-transition outcomes on
+the existing canonical authority before release, ambiguity, or panic resume.
+The public 42-test claim remains withheld at 41/42 until a representative-load
+root observation.
 Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
@@ -201,10 +202,10 @@ each branch, worktree, and thread identity; unknown host fields stay unknown.
   `019f6487-8b8d-7d51-810b-1465f481eef7`,
   branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
   owns routine kernel/public adapter behavior and matching tests/fixtures;
-  exact clean source `d4ac1f406` / tree `2c7dc847` is under fresh cumulative
-  exact-tree review for explicit process-custody settlement; its stale
-  WorkerResult, load-sensitive public result, and v1→v2 ledger migration remain
-  withheld.
+  exact clean source `d4ac1f406` / tree `2c7dc847` is in decisive cumulative
+  REWORK because the reservation boundary drops exact cleanup failures after
+  transition; its stale WorkerResult, load-sensitive public result, and v1→v2
+  ledger migration remain withheld.
 - Orchestration authority: thread `019f5fa2-923f-7770-9a89-83ed713ac1f3`,
   branch `codex/n10-orchestration-authority`, worktree `.codex/worktrees/cb63`;
   owns orchestration issuer/replay/recovery behavior and matching tests/fixtures;
