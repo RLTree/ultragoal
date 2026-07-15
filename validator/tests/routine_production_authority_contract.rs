@@ -76,7 +76,11 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
     assert!(output.contains("capture_owned_delta"));
     assert!(output.contains("held != scope.identity"));
     assert!(!reservation.contains("impl Drop for AttemptReservation"));
-    assert!(lifecycle.contains("attempt.transition_failure()"));
+    assert!(mediation.contains("complete_intent_transition"));
+    assert!(mediation.contains("observe_staged_transition(&attempt, || Ok(()))"));
+    assert!(!mediation.contains("(Err(_), Err(error))"));
+    assert!(lifecycle.contains("attempt.record_failure_and_transition(record)"));
+    assert!(lifecycle.contains("reservation_failure_evidence()"));
 }
 
 #[test]

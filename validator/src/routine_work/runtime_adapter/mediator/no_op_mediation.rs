@@ -75,87 +75,80 @@ pub(crate) fn mediate_effect(
                         .map(|digest| (node.clone(), digest.clone()))
                 })
                 .collect::<Option<BTreeMap<_, _>>>();
-            if cancelled || cancellation.is_cancelled() {
+            let node = if cancelled || cancellation.is_cancelled() {
                 cancelled = true;
                 incomplete = true;
-                advance_and_cleanup(&token, &attempt)?;
-                nodes.push(incomplete_node(
+                incomplete_node(
                     &token,
                     RoutineNodeDisposition::Cancelled,
                     "MEDIATOR-CANCELLED",
-                ));
-                continue;
-            }
-            let Some(expected_dependencies) = expected_dependencies else {
+                )
+            } else if let Some(expected_dependencies) = expected_dependencies {
+                let result = mediate_intent(
+                    context,
+                    plan,
+                    &token,
+                    &snapshot_id,
+                    &expected_dependencies,
+                    supplied_reuse.get(token.intent().intent_id()),
+                    &cancellation,
+                    &attempt,
+                );
+                match result {
+                    Ok(IntentResult::Reused(verified)) => {
+                        let result_sha256 = verified.wire.result_artifact_sha256.clone();
+                        dependencies
+                            .insert(token.intent().node_id().to_owned(), result_sha256.clone());
+                        let node =
+                            success_node(&token, RoutineNodeDisposition::Reused, result_sha256);
+                        let artifact_sha256 = sha256(&verified.canonical_bytes);
+                        generated.push((artifact_sha256, verified.canonical_bytes.clone()));
+                        artifacts.push(verified.canonical_bytes);
+                        node
+                    }
+                    Ok(IntentResult::Executed(executed)) => {
+                        dependencies.insert(
+                            token.intent().node_id().to_owned(),
+                            executed.result_sha256.clone(),
+                        );
+                        let node = success_node(
+                            &token,
+                            RoutineNodeDisposition::Executed,
+                            executed.result_sha256,
+                        );
+                        let artifact_sha256 = sha256(&executed.reuse_bytes);
+                        generated.push((artifact_sha256, executed.reuse_bytes.clone()));
+                        artifacts.push(executed.reuse_bytes);
+                        node
+                    }
+                    Ok(IntentResult::Incomplete {
+                        disposition,
+                        failure_code,
+                        started,
+                    }) => {
+                        incomplete = true;
+                        cancelled |= disposition == RoutineNodeDisposition::Cancelled;
+                        debug_assert!(!started || attempt.started.get());
+                        incomplete_node(&token, disposition, failure_code)
+                    }
+                    Err(error) => {
+                        incomplete = true;
+                        incomplete_node(
+                            &token,
+                            RoutineNodeDisposition::Failed,
+                            error.cause().to_ascii_uppercase().replace('_', "-"),
+                        )
+                    }
+                }
+            } else {
                 incomplete = true;
-                advance_and_cleanup(&token, &attempt)?;
-                nodes.push(incomplete_node(
+                incomplete_node(
                     &token,
                     RoutineNodeDisposition::DependencyFailed,
                     "MEDIATOR-DEPENDENCY-FAILED",
-                ));
-                continue;
+                )
             };
-            let result = mediate_intent(
-                context,
-                plan,
-                &token,
-                &snapshot_id,
-                &expected_dependencies,
-                supplied_reuse.get(token.intent().intent_id()),
-                &cancellation,
-                &attempt,
-            );
-            match result {
-                Ok(IntentResult::Reused(verified)) => {
-                    let result_sha256 = verified.wire.result_artifact_sha256.clone();
-                    dependencies.insert(token.intent().node_id().to_owned(), result_sha256.clone());
-                    nodes.push(success_node(
-                        &token,
-                        RoutineNodeDisposition::Reused,
-                        result_sha256,
-                    ));
-                    let artifact_sha256 = sha256(&verified.canonical_bytes);
-                    generated.push((artifact_sha256, verified.canonical_bytes.clone()));
-                    artifacts.push(verified.canonical_bytes);
-                    advance_and_cleanup(&token, &attempt)?;
-                }
-                Ok(IntentResult::Executed(executed)) => {
-                    dependencies.insert(
-                        token.intent().node_id().to_owned(),
-                        executed.result_sha256.clone(),
-                    );
-                    nodes.push(success_node(
-                        &token,
-                        RoutineNodeDisposition::Executed,
-                        executed.result_sha256,
-                    ));
-                    let artifact_sha256 = sha256(&executed.reuse_bytes);
-                    generated.push((artifact_sha256, executed.reuse_bytes.clone()));
-                    artifacts.push(executed.reuse_bytes);
-                    advance_and_cleanup(&token, &attempt)?;
-                }
-                Ok(IntentResult::Incomplete {
-                    disposition,
-                    failure_code,
-                    started,
-                }) => {
-                    incomplete = true;
-                    cancelled |= disposition == RoutineNodeDisposition::Cancelled;
-                    debug_assert!(!started || attempt.started.get());
-                    advance_and_cleanup(&token, &attempt)?;
-                    nodes.push(incomplete_node(&token, disposition, failure_code));
-                }
-                Err(error) => {
-                    incomplete = true;
-                    advance_and_cleanup(&token, &attempt)?;
-                    nodes.push(incomplete_node(
-                        &token,
-                        RoutineNodeDisposition::Failed,
-                        error.cause().to_ascii_uppercase().replace('_', "-"),
-                    ));
-                }
-            }
+            nodes.push(complete_intent_transition(&token, &attempt, node)?);
         }
         reconcile_internal(context, plan, &authority, &nodes)?;
         run_test_finish_failure_hook(&authority);
@@ -163,7 +156,7 @@ pub(crate) fn mediate_effect(
         // The process has been reaped and the batch outcome is reconciled. Consume
         // every launch snapshot before any terminal ledger transition; a custody
         // failure therefore leaves the exact Started reservation recoverable.
-        attempt.cleanup_staged()?;
+        observe_staged_transition(&attempt, || Ok(()))?;
         let recovery_marker = if incomplete {
             artifacts.clear();
             generated.clear();
@@ -214,18 +207,13 @@ pub(crate) fn mediate_effect(
     })
 }
 
-fn advance_and_cleanup(
+fn complete_intent_transition(
     token: &RoutineMediatedIntent,
     attempt: &AttemptReservation,
-) -> Result<(), RoutineError> {
-    let advanced = token.advance();
-    let cleanup = attempt.cleanup_staged();
-    match (advanced, cleanup) {
-        (Ok(()), Ok(())) => Ok(()),
-        (Err(error), Ok(())) => Err(error),
-        (Ok(()), Err(error)) => Err(error),
-        (Err(_), Err(error)) => Err(error),
-    }
+    node: RoutineNodeMediation,
+) -> Result<RoutineNodeMediation, RoutineError> {
+    observe_staged_transition(attempt, || token.advance())?;
+    Ok(node)
 }
 
 pub(crate) enum IntentResult {
@@ -237,3 +225,10 @@ pub(crate) enum IntentResult {
         started: bool,
     },
 }
+
+#[cfg(test)]
+#[path = "no_op_mediation/producer_failure.rs"]
+mod producer_failure_tests;
+#[cfg(test)]
+#[path = "no_op_mediation/producer_state.rs"]
+mod producer_state;
