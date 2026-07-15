@@ -1,15 +1,5 @@
 use super::*;
 
-impl Drop for Fixture {
-    fn drop(&mut self) {
-        if std::env::var_os("HUL_KEEP_FIXTURES").is_some_and(|value| !value.is_empty()) {
-            eprintln!("kept routine fixture at {}", self.container.display());
-            return;
-        }
-        let _ = fs::remove_dir_all(&self.container);
-    }
-}
-
 pub(crate) fn tree(root: &Path) -> BTreeMap<String, String> {
     fn visit(root: &Path, current: &Path, rows: &mut BTreeMap<String, String>) {
         if !current.exists() {

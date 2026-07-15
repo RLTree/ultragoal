@@ -1,47 +1,14 @@
 use super::*;
-use std::fs;
-use std::os::unix::fs::PermissionsExt;
-use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Barrier};
 
+#[path = "fixture_ownership_tests.rs"]
+mod fixture_ownership_tests;
+#[path = "ledger_fixture_root.rs"]
+mod ledger_fixture_root;
 #[path = "reexecute_tests.rs"]
 mod reexecute_tests;
 
-static NEXT_ROOT: AtomicU64 = AtomicU64::new(1);
-
-struct TestRoot {
-    parent: PathBuf,
-    authority: PathBuf,
-}
-
-impl TestRoot {
-    fn new(label: &str) -> Self {
-        let parent = std::env::temp_dir().join(format!(
-            "hul-routine-ledger-{label}-{}-{}",
-            std::process::id(),
-            NEXT_ROOT.fetch_add(1, Ordering::Relaxed)
-        ));
-        let authority = parent.join("authority");
-        fs::create_dir_all(&authority).unwrap();
-        fs::set_permissions(&authority, fs::Permissions::from_mode(0o700)).unwrap();
-        Self { parent, authority }
-    }
-
-    fn path(&self) -> &Path {
-        &self.authority
-    }
-
-    fn state(&self) -> Vec<u8> {
-        fs::read(self.authority.join(STATE_NAME)).unwrap()
-    }
-}
-
-impl Drop for TestRoot {
-    fn drop(&mut self) {
-        let _ = fs::remove_dir_all(&self.parent);
-    }
-}
+use ledger_fixture_root::TestRoot;
 
 fn id(label: &str) -> String {
     sha256(format!("routine-ledger-test-{label}").as_bytes())
@@ -76,7 +43,7 @@ fn reservation(label: &str) -> ReservationSpec {
 
 #[test]
 fn exact_started_token_is_read_only_idempotent_for_later_batch_intents() {
-    let root = TestRoot::new("idempotent-started");
+    let mut root = TestRoot::new("idempotent-started");
     let ledger = FileAuthorityLedger::open_or_initialize(root.path()).unwrap();
     let token = reserve(&ledger, "batch");
     let reserved = root.state();
@@ -104,11 +71,13 @@ fn exact_started_token_is_read_only_idempotent_for_later_batch_intents() {
         "routine-production-spawn-authority-invalid"
     );
     assert_eq!(root.state(), terminal);
+    drop(ledger);
+    root.teardown_after_assertions();
 }
 
 #[test]
 fn staged_publication_recovers_without_reauthorizing_artifact_bytes() {
-    let root = TestRoot::new("staged-recovery");
+    let mut root = TestRoot::new("staged-recovery");
     let ledger = FileAuthorityLedger::open_or_initialize(root.path()).unwrap();
     let token = reserve(&ledger, "staged-recovery");
     let artifacts = BTreeMap::from([(id("staged-artifact"), id("staged-witness"))]);
@@ -137,11 +106,13 @@ fn staged_publication_recovers_without_reauthorizing_artifact_bytes() {
         .settle(&recovered, AttemptState::Complete, &artifacts)
         .unwrap();
     assert!(ledger.pending_recovery(&token.binding).unwrap().is_none());
+    drop(ledger);
+    root.teardown_after_assertions();
 }
 
 #[test]
 fn candidate_source_command_and_cross_attempt_substitution_never_prepare() {
-    let root = TestRoot::new("substitution");
+    let mut root = TestRoot::new("substitution");
     let ledger = FileAuthorityLedger::open_or_initialize(root.path()).unwrap();
     let token = reserve(&ledger, "original");
     let reserved = root.state();
@@ -183,11 +154,13 @@ fn candidate_source_command_and_cross_attempt_substitution_never_prepare() {
     assert_eq!(root.state(), after_other_reservation);
 
     ledger.prepare_spawn(&token).unwrap();
+    drop(ledger);
+    root.teardown_after_assertions();
 }
 
 #[test]
 fn expired_and_concurrently_conflicting_preparations_fail_closed() {
-    let expired_root = TestRoot::new("expired");
+    let mut expired_root = TestRoot::new("expired");
     let expired_ledger = FileAuthorityLedger::open_or_initialize(expired_root.path()).unwrap();
     let mut expired = reserve(&expired_ledger, "expired");
     expired_ledger.prepare_spawn(&expired).unwrap();
@@ -202,7 +175,7 @@ fn expired_and_concurrently_conflicting_preparations_fail_closed() {
     );
     assert_eq!(expired_root.state(), expired_state);
 
-    let race_root = TestRoot::new("conflicting-race");
+    let mut race_root = TestRoot::new("conflicting-race");
     let ledger = Arc::new(FileAuthorityLedger::open_or_initialize(race_root.path()).unwrap());
     let valid = reserve(&ledger, "race");
     let exact = valid.clone();
@@ -233,4 +206,8 @@ fn expired_and_concurrently_conflicting_preparations_fail_closed() {
     let started = race_root.state();
     ledger.prepare_spawn(&exact).unwrap();
     assert_eq!(race_root.state(), started);
+    drop(ledger);
+    drop(expired_ledger);
+    race_root.teardown_after_assertions();
+    expired_root.teardown_after_assertions();
 }

@@ -53,11 +53,7 @@ impl Fixture {
         dirty: bool,
         provision_host: bool,
     ) -> Self {
-        let fixture_root = PathBuf::from(
-            std::env::var_os("CODEX_WORKTREE_ROOT")
-                .expect("configured worktree root is required for public fixtures"),
-        )
-        .join("target/routine-public-contract-fixtures");
+        let fixture_root = Self::fixture_parent().join("routine-public-contract-fixtures");
         fs::create_dir_all(&fixture_root).unwrap();
         let container = fixture_root.join(format!(
             "hul-routine-public-production-102-{label}-{}-{}",
@@ -115,6 +111,20 @@ impl Fixture {
     pub fn run_args(&self, args: &[&str]) -> Output {
         let mut command = self.base_command();
         command.args(args).output().unwrap()
+    }
+
+    pub(crate) fn teardown_after_assertions(&mut self) {
+        assert!(
+            self.container.is_dir(),
+            "public fixture scope disappeared before explicit teardown: {}",
+            self.container.display()
+        );
+        fs::remove_dir_all(&self.container).expect("public fixture teardown failed");
+        assert!(
+            !self.container.exists(),
+            "public fixture teardown retained scope: {}",
+            self.container.display()
+        );
     }
 
     pub fn value(output: &Output) -> Value {
@@ -218,5 +228,13 @@ impl Fixture {
         std::env::var_os("HUL_ROUTINE_IMMUTABLE_BINARY")
             .map(PathBuf::from)
             .unwrap_or_else(|| PathBuf::from(env!("CARGO_BIN_EXE_ultragoal")))
+    }
+
+    fn fixture_parent() -> PathBuf {
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        let workspace = manifest
+            .parent()
+            .expect("public fixture manifest has no workspace parent");
+        workspace.join("target")
     }
 }

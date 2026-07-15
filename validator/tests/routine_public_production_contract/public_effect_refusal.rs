@@ -50,18 +50,19 @@ fn assert_fixture_unchanged(
 
 #[test]
 fn valid_host_runs_through_local_issuer_before_repeat() {
-    let fixture = dirty_fixture("local-issuer-first-run", true);
+    let mut fixture = dirty_fixture("local-issuer-first-run", true);
     let output = fixture.run();
     assert_eq!(output.status.code(), Some(0), "{output:?}");
     assert!(output.stderr.is_empty(), "{output:?}");
     assert_eq!(Fixture::value(&output)["status"], "executed");
     assert!(fixture.authority_root().is_dir());
     assert!(fixture.root.join("target/routine/compile").is_dir());
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn missing_local_host_repeat_refusals_never_initialize_state_or_outputs() {
-    let fixture = dirty_fixture("missing-local-host-repeat", false);
+    let mut fixture = dirty_fixture("missing-local-host-repeat", false);
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
     let before_status = fixture.status();
@@ -72,11 +73,12 @@ fn missing_local_host_repeat_refusals_never_initialize_state_or_outputs() {
         assert_fixture_unchanged(&fixture, &before_root, &before_home, &before_status);
         assert!(!fixture.state_root().exists());
     }
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn concurrent_local_issuer_attempts_have_no_forged_success() {
-    let fixture = dirty_fixture("local-issuer-concurrent", true);
+    let mut fixture = dirty_fixture("local-issuer-concurrent", true);
 
     std::thread::scope(|scope| {
         let done = Arc::new(AtomicBool::new(false));
@@ -110,11 +112,12 @@ fn concurrent_local_issuer_attempts_have_no_forged_success() {
 
     assert!(fixture.authority_root().is_dir());
     assert!(fixture.root.join("target/routine/compile").is_dir());
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn tool_path_substitution_refuses_before_state_or_spawn() {
-    let fixture = dirty_fixture("tool-path-substitution", true);
+    let mut fixture = dirty_fixture("tool-path-substitution", true);
     let probe_dir = fixture.container.join("process-probes");
     let marker = fixture.container.join("process-spawned");
     fs::create_dir(&probe_dir).unwrap();
@@ -149,4 +152,5 @@ fn tool_path_substitution_refuses_before_state_or_spawn() {
     );
     assert_fixture_unchanged(&fixture, &before_root, &before_home, &before_status);
     assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
+    fixture.teardown_after_assertions();
 }

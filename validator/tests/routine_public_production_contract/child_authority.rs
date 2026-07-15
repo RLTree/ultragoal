@@ -9,7 +9,7 @@ use refusal_process::*;
 
 #[test]
 fn direct_public_binary_cannot_select_child_behavior_from_legacy_environment() {
-    let fixture = dirty_fixture("direct-forged-environment");
+    let mut fixture = dirty_fixture("direct-forged-environment");
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
     let mut command = fixture.base_command();
@@ -24,11 +24,12 @@ fn direct_public_binary_cannot_select_child_behavior_from_legacy_environment() {
     assert_refused(&output);
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn copied_or_replayed_descriptor_selector_is_refusal_only() {
-    let fixture = dirty_fixture("copied-replayed-descriptor");
+    let mut fixture = dirty_fixture("copied-replayed-descriptor");
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
     for _ in 0..2 {
@@ -40,33 +41,36 @@ fn copied_or_replayed_descriptor_selector_is_refusal_only() {
     }
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn prebuffered_socket_and_arbitrary_canonical_frame_refuse_without_writes() {
-    let fixture = dirty_fixture("prebuffered-socket");
+    let mut fixture = dirty_fixture("prebuffered-socket");
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
     let output = run_with_prebuffered_channel(&fixture, &legacy_capability_wire());
     assert_child_refused(&output);
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn valid_socket_and_held_open_stdin_are_not_read_before_refusal() {
-    let fixture = dirty_fixture("blocking-socket-stdin");
+    let mut fixture = dirty_fixture("blocking-socket-stdin");
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
     let output = run_with_blocking_socket_and_stdin(&fixture);
     assert_child_refused(&output);
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn replayed_prebuffered_socket_material_never_becomes_authority() {
-    let fixture = dirty_fixture("prebuffered-replay");
+    let mut fixture = dirty_fixture("prebuffered-replay");
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
     let wire = legacy_capability_wire();
@@ -74,4 +78,5 @@ fn replayed_prebuffered_socket_material_never_becomes_authority() {
     assert_child_refused(&run_with_prebuffered_channel(&fixture, &wire));
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
+    fixture.teardown_after_assertions();
 }

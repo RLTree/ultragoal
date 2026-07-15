@@ -2,7 +2,7 @@ use super::*;
 
 #[test]
 fn complete_effect_can_reexecute_after_a_cache_miss() {
-    let root = TestRoot::new("complete-reexecute");
+    let mut root = TestRoot::new("complete-reexecute");
     let ledger = FileAuthorityLedger::open_or_initialize(root.path()).unwrap();
     let first = reserve(&ledger, "complete-reexecute");
     let artifacts = BTreeMap::from([(id("first-artifact"), id("first-witness"))]);
@@ -30,4 +30,6 @@ fn complete_effect_can_reexecute_after_a_cache_miss() {
         .settle(&second, AttemptState::Complete, &replacement)
         .unwrap();
     assert!(ledger.pending_recovery(&second.binding).unwrap().is_none());
+    drop(ledger);
+    root.teardown_after_assertions();
 }

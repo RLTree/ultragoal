@@ -5,7 +5,7 @@ use std::os::unix::fs::symlink;
 
 #[test]
 fn repository_cannot_turn_the_fixed_template_route_into_arbitrary_shell_authority() {
-    let fixture = Fixture::new(
+    let mut fixture = Fixture::new(
         "arbitrary-shell-refusal",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -28,11 +28,12 @@ fn repository_cannot_turn_the_fixed_template_route_into_arbitrary_shell_authorit
             .exists()
     );
     assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn legacy_manifest_schema_is_rejected_before_effect() {
-    let fixture = Fixture::new(
+    let mut fixture = Fixture::new(
         "legacy-manifest-refusal",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -50,11 +51,12 @@ fn legacy_manifest_schema_is_rejected_before_effect() {
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fixture.status(), before_status);
     assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn missing_host_refuses_before_any_workspace_write() {
-    let fixture = Fixture::new(
+    let mut fixture = Fixture::new(
         "missing-host",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -75,11 +77,12 @@ fn missing_host_refuses_before_any_workspace_write() {
             .join("target/routine/compile/result.txt")
             .exists()
     );
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn host_lock_symlink_substitution_fails_closed() {
-    let fixture = Fixture::new(
+    let mut fixture = Fixture::new(
         "lock-substitution",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -94,11 +97,12 @@ fn host_lock_symlink_substitution_fails_closed() {
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn target_symlink_substitution_refuses_before_discovery() {
-    let target_fixture = Fixture::new(
+    let mut target_fixture = Fixture::new(
         "target-substitution",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -122,11 +126,12 @@ fn target_symlink_substitution_refuses_before_discovery() {
     let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
     assert_eq!(tree(&target_fixture.root), before_root);
     assert_eq!(tree(&target_fixture.home), before_home);
+    target_fixture.teardown_after_assertions();
 }
 
 #[test]
 fn catalog_digest_substitution_refuses_before_effect() {
-    let fixture = Fixture::new(
+    let mut fixture = Fixture::new(
         "catalog-substitution",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -146,11 +151,12 @@ fn catalog_digest_substitution_refuses_before_effect() {
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn help_parse_and_read_paths_never_open_routine_host_state() {
-    let fixture = Fixture::new(
+    let mut fixture = Fixture::new(
         "read-zero-write",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -176,6 +182,7 @@ fn help_parse_and_read_paths_never_open_routine_host_state() {
         assert_eq!(fixture.status(), before_status, "args={args:?}");
         assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
     }
+    fixture.teardown_after_assertions();
 }
 
 fn assert_diagnostic(output: &std::process::Output, id: &str, fixture: &Fixture) {

@@ -39,7 +39,7 @@ __attribute__((constructor)) static void same_executable_parent_attack(void) {
 
 #[test]
 fn live_same_executable_parent_fork_exec_and_prebuffer_refuse_without_writes() {
-    let fixture = dirty_fixture("same-executable-parent");
+    let mut fixture = dirty_fixture("same-executable-parent");
     let substrate = fixture.home.join("same-executable-parent-substrate");
     fs::create_dir_all(&substrate).unwrap();
     let source = substrate.join("attack.c");
@@ -69,4 +69,5 @@ fn live_same_executable_parent_fork_exec_and_prebuffer_refuse_without_writes() {
     assert_child_refused(&output);
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
+    fixture.teardown_after_assertions();
 }

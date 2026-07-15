@@ -41,7 +41,7 @@ fn fixture_matrix_names_the_public_production_contract_without_claim_effect() {
 
 #[test]
 fn clean_public_routine_is_a_zero_effect_noop() {
-    let fixture = Fixture::new(
+    let mut fixture = Fixture::new(
         "clean-no-op",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -67,11 +67,12 @@ fn clean_public_routine_is_a_zero_effect_noop() {
     }
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fixture.status(), before_status);
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn dirty_public_effect_executes_through_the_local_issuer_and_reuses() {
-    let fixture = Fixture::new(
+    let mut fixture = Fixture::new(
         "execute-reuse",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -100,11 +101,12 @@ fn dirty_public_effect_executes_through_the_local_issuer_and_reuses() {
     let reused_value = Fixture::value(&reused);
     assert_eq!(reused_value["status"], "reused");
     assert_eq!(reused_value["nodes"][0]["disposition"], "reused");
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn authorized_fresh_execution_then_exact_repeat_reuses_without_output_attribution() {
-    let fixture = Fixture::new(
+    let mut fixture = Fixture::new(
         "authorized-fresh-repeat",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -130,11 +132,12 @@ fn authorized_fresh_execution_then_exact_repeat_reuses_without_output_attributio
     assert_eq!(reused["status"], "reused");
     assert_eq!(reused["nodes"][0]["disposition"], "reused");
     assert_eq!(fs::read_dir(scope).unwrap().count(), 0);
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn cache_binding_misses_across_targets_and_changes_then_reuses_exact_repeat() {
-    let first = Fixture::new(
+    let mut first = Fixture::new(
         "binding-first",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -164,6 +167,8 @@ fn cache_binding_misses_across_targets_and_changes_then_reuses_exact_repeat() {
     .unwrap();
     assert_status(&first, "executed");
     assert_status(&first, "reused");
+    second.teardown_after_assertions();
+    first.teardown_after_assertions();
 }
 
 fn assert_status(fixture: &Fixture, expected: &str) {
