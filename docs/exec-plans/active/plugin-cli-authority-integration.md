@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | `0a1ee0e99` / tree `9bfba50d` | Clean source freeze aligns terminal durable state, exact ambiguity cleanup, public `recovery_required`, and retry eligibility; focused real public double-attempt evidence passed, but the stale WorkerResult and every acceptance/integration claim remain withheld pending one exact-tree independent review | Independently falsify the full cumulative N06 source on this identity; accept or return one exact material defect to the same owner |
+| N06 routine execution | rework | `0a1ee0e99` / tree `9bfba50d` | Exact-tree review found authority cleanup still occurs implicitly in `AttemptReservation::drop`; fallible construction, reconciliation, finish, staged-cleanup, publication, settlement, and unwind paths can mutate active/recovery state without a parent-observed transition; receipt and integration remain withheld | Remove authority mutation from `Drop` and make every post-reservation sibling failure explicitly settle or preserve custody at the orchestration boundary |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,9 +46,9 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for the custody/cleanup class is `14`.
-The next action is the single exact-tree independent review of N06 source
-`0a1ee0e99` / tree `9bfba50d`.
+current exact-candidate rejection count for the custody/cleanup class is `15`.
+The next action is invariant-level explicit settlement/preservation for every
+post-reservation N06 failure transition; `Drop` must not mutate authority state.
 Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
@@ -98,11 +98,11 @@ external action, secret handling, or unavailable required access.
   affected claim until behavior and evidence are re-audited.
 - N04 source transaction authority and its corrected WorkerResult are accepted,
   integrated, and retired. Root production reachability and every live host
-  identity remain open. Root `10c70a5b0` is clean. N06 `0a1ee0e99` / tree
-  `9bfba50d` remains the sole gate and is under exact-tree source review after
-  aligning terminal settlement, public recovery truth, and fresh retry.
-  Receipt regeneration, dependency-closed acceptance, and integration remain
-  withheld.
+  identity remain open. Root `e85862768` is clean. N06 `0a1ee0e99` / tree
+  `9bfba50d` remains the sole gate and is in source REWORK because authority
+  cleanup still occurs implicitly in `AttemptReservation::drop` rather than an
+  explicit parent-observed transition. Receipt regeneration, dependency-closed
+  acceptance, and integration remain withheld.
   N10 `7f92b7ed3` / tree `53bd7717` and N11 `9c2911d6d` /
   tree `6176c259` are frozen speculative source candidates; their dependency
   claims, receipt promotion, and integration remain withheld.
