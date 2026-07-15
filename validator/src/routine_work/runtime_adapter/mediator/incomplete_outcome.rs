@@ -1,4 +1,6 @@
 use super::*;
+#[cfg(test)]
+use std::cell::Cell;
 
 pub(crate) fn incomplete_node(
     token: &RoutineMediatedIntent,

@@ -1,7 +1,10 @@
-use super::super::*;
+use super::*;
 
 impl AttemptReservation {
-    pub(crate) fn retain_non_durable_authentication(&self, artifacts: &BTreeMap<String, String>) {
+    pub(in super::super) fn retain_non_durable_authentication(
+        &self,
+        artifacts: &BTreeMap<String, String>,
+    ) {
         if self.durable.is_none() {
             registry()
                 .lock()
@@ -11,7 +14,7 @@ impl AttemptReservation {
         }
     }
 
-    pub(crate) fn authenticates_artifact(
+    pub(in super::super) fn authenticates_artifact(
         &self,
         digest: &str,
         witness: &str,

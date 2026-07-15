@@ -1,8 +1,8 @@
-use super::super::terminal_settlement_fixture::{TerminalDurable, attempt, seed};
+use super::super::terminal_settlement_fixture::{attempt, seed, TerminalDurable};
 use super::super::{registry, run_reserved};
 use super::process_termination_tests::ProcessFixture;
 use super::*;
-use std::panic::{AssertUnwindSafe, catch_unwind};
+use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::sync::Arc;
 
 #[test]
@@ -104,9 +104,9 @@ fn real_process_cleanup_evidence_reaches_reservation_authority_before_release() 
     let fixture = ProcessFixture::new("reservation-record");
     let durable = Arc::new(TerminalDurable::default());
     let reservation = attempt("real-process-record", Some(durable.clone()), false, None);
-    let protocol = reservation.protocol_id.clone();
-    let marker = reservation.recovery_marker.clone();
-    seed(&reservation, &reservation.grant_id, &marker);
+    let protocol = reservation.protocol_id().clone();
+    let marker = reservation.recovery_marker().clone();
+    seed(&reservation, reservation.grant_id(), &marker);
     set_test_process_failure(ProcessFailurePoint::Cleanup, || {});
     let result = run_reserved(reservation, |attempt| {
         fixture.run_result(

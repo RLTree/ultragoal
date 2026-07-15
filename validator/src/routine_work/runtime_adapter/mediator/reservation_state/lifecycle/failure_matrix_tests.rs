@@ -35,8 +35,8 @@ fn missing_settlement_records_no_process_cleanup_and_every_staged_outcome() {
     for (ordinal, staged) in CASES.into_iter().enumerate() {
         let label = format!("matrix-missing-{ordinal}");
         let (reservation, durable, stage_root) = matrix_attempt(&label, true, staged);
-        let protocol = reservation.protocol_id.clone();
-        let marker = reservation.recovery_marker.clone();
+        let protocol = reservation.protocol_id().clone();
+        let marker = reservation.recovery_marker().clone();
         let result = catch_unwind(AssertUnwindSafe(|| {
             run_reserved(reservation, |_| Ok::<(), RoutineError>(()))
         }));
@@ -54,9 +54,9 @@ fn missing_settlement_records_no_process_cleanup_and_every_staged_outcome() {
 fn opaque_panic_identity_is_recorded_before_the_exact_payload_resumes() {
     let durable = Arc::new(TerminalDurable::default());
     let reservation = attempt("matrix-opaque-panic", Some(durable.clone()), true, None);
-    let protocol = reservation.protocol_id.clone();
-    let marker = reservation.recovery_marker.clone();
-    seed(&reservation, &reservation.grant_id, &marker);
+    let protocol = reservation.protocol_id().clone();
+    let marker = reservation.recovery_marker().clone();
+    seed(&reservation, reservation.grant_id(), &marker);
     let payload = catch_unwind(AssertUnwindSafe(|| {
         let _: Result<(), RoutineError> =
             run_reserved(reservation, |_| std::panic::panic_any(OpaquePanic(7)));
@@ -87,8 +87,8 @@ fn exercise_failure(
 ) {
     let label = format!("matrix-{ordinal}");
     let (reservation, durable, stage_root) = matrix_attempt(&label, started, staged);
-    let protocol = reservation.protocol_id.clone();
-    let marker = reservation.recovery_marker.clone();
+    let protocol = reservation.protocol_id().clone();
+    let marker = reservation.recovery_marker().clone();
     let process_evidence = ProcessCustodyEvidence {
         primary: if primary_panics {
             FailureEvidence::Panic(panic_evidence("matrix-primary-panic"))
@@ -154,13 +154,13 @@ fn matrix_attempt(
     }
     let reservation = attempt(label, Some(durable.clone()), started, None);
     let (stage_root, staged_program) = staged_fixture(label);
-    reservation.staged.borrow_mut().push(staged_program);
+    retain_stage(&reservation, durable.as_ref(), staged_program);
     let ambiguity = if started {
-        reservation.recovery_marker.as_str()
+        reservation.recovery_marker().as_str()
     } else {
         "matrix-foreign-marker"
     };
-    seed(&reservation, &reservation.grant_id, ambiguity);
+    seed(&reservation, reservation.grant_id(), ambiguity);
     (reservation, durable, stage_root)
 }
 

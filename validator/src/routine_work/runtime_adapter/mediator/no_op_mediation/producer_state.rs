@@ -34,8 +34,8 @@ pub(super) fn producer_attempt(
     }
     let attempt = attempt(label, Some(durable.clone()), true, None);
     let (stage_root, staged) = staged_fixture(label);
-    attempt.staged.borrow_mut().push(staged);
-    seed(&attempt, &attempt.grant_id, &attempt.recovery_marker);
+    retain_stage(&attempt, durable.as_ref(), staged);
+    seed(&attempt, attempt.grant_id(), attempt.recovery_marker());
     (attempt, durable, stage_root)
 }
 

@@ -41,12 +41,12 @@ fn lifecycle_panic_precedes_cleanup_panic_after_exact_transition() {
         let durable = Arc::new(TerminalDurable::default());
         set_cleanup_panic(&durable, "reservation-cleanup-panic");
         let reservation = attempt(label, Some(durable.clone()), false, None);
-        let protocol = reservation.protocol_id.clone();
-        let grant = reservation.grant_id.clone();
-        let marker = reservation.recovery_marker.clone();
+        let protocol = reservation.protocol_id().clone();
+        let grant = reservation.grant_id().clone();
+        let marker = reservation.recovery_marker().clone();
         let foreign_protocol = format!("{protocol}-foreign");
         let (stage_root, staged) = staged_fixture(label);
-        reservation.staged.borrow_mut().push(staged);
+        retain_stage(&reservation, durable.as_ref(), staged);
         {
             let mut state = registry()
                 .lock()
@@ -126,11 +126,11 @@ fn cleanup_panic_precedes_result_outcomes_after_exact_transition() {
         let durable = Arc::new(TerminalDurable::default());
         set_cleanup_panic(&durable, "reservation-cleanup-result-panic");
         let reservation = attempt(label, Some(durable.clone()), false, None);
-        let protocol = reservation.protocol_id.clone();
-        let grant = reservation.grant_id.clone();
-        let marker = reservation.recovery_marker.clone();
+        let protocol = reservation.protocol_id().clone();
+        let grant = reservation.grant_id().clone();
+        let marker = reservation.recovery_marker().clone();
         let (stage_root, staged) = staged_fixture(label);
-        reservation.staged.borrow_mut().push(staged);
+        retain_stage(&reservation, durable.as_ref(), staged);
         seed(
             &reservation,
             &grant,
@@ -197,10 +197,10 @@ fn ordinary_error_precedes_cleanup_error_but_missing_transition_does_not() {
             .unwrap_or_else(std::sync::PoisonError::into_inner) =
             Some("reservation-cleanup-result-error");
         let reservation = attempt(label, Some(durable.clone()), false, None);
-        let protocol = reservation.protocol_id.clone();
-        let grant = reservation.grant_id.clone();
+        let protocol = reservation.protocol_id().clone();
+        let grant = reservation.grant_id().clone();
         let (stage_root, staged) = staged_fixture(label);
-        reservation.staged.borrow_mut().push(staged);
+        retain_stage(&reservation, durable.as_ref(), staged);
         seed(&reservation, &grant, "foreign-marker");
 
         let error = run_reserved(reservation, |_| {

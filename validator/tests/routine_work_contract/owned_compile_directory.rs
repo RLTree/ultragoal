@@ -1,7 +1,7 @@
 use std::ffi::CStr;
 use std::fs::File;
 use std::io;
-use std::os::fd::{AsRawFd, FromRawFd, RawFd};
+use std::os::fd::{FromRawFd, RawFd};
 
 pub(crate) fn open_directory_at(parent: RawFd, name: &CStr) -> io::Result<File> {
     let fd = unsafe {

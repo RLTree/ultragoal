@@ -1,6 +1,6 @@
 use super::claim::{ClaimFailurePoint, ClaimResidue, FixtureClaimFailure};
 use super::scope::{
-    CatalogSetupFailurePoint, ClaimedFixtureScope, FixtureScopeError, populate_catalog_scope,
+    populate_catalog_scope, CatalogSetupFailurePoint, ClaimedFixtureScope, FixtureScopeError,
 };
 use super::*;
 use std::fs;
@@ -53,6 +53,12 @@ impl TestRoot {
 }
 
 pub(super) fn verify_catalog_scope_construction() {
+    super::run_catalog_case("scope-construction-ready", |invocation| {
+        let mut root = invocation.new_root("scope-construction-ready", VALID_CATALOG)?;
+        root.write_catalog(VALID_CATALOG);
+        root.teardown_after_assertions();
+        Ok(())
+    });
     let parent = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .unwrap()

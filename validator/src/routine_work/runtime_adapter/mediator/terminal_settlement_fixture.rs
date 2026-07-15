@@ -15,6 +15,7 @@ pub(super) struct TerminalDurable {
     pub(super) cleanup_failure: Mutex<Option<&'static str>>,
     pub(super) cleanup_panic: Mutex<Option<&'static str>>,
     pub(super) cleanup_calls: AtomicUsize,
+    staged_program: Mutex<Option<StagedProgram>>,
 }
 
 impl DurableAttemptAuthority for TerminalDurable {
@@ -23,7 +24,11 @@ impl DurableAttemptAuthority for TerminalDurable {
     }
 
     fn stage_program(&self, _program: &PinnedExecutable) -> Result<StagedProgram, RoutineError> {
-        Err(mediator_error("terminal-settlement-test-stage-unavailable"))
+        self.staged_program
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .take()
+            .ok_or_else(|| mediator_error("terminal-settlement-test-stage-unavailable"))
     }
 
     fn cleanup_staged(&self, _staged: &StagedProgram) -> Result<(), RoutineError> {
@@ -106,16 +111,14 @@ pub(super) fn attempt(
     started: bool,
     prior_recovery_marker: Option<String>,
 ) -> AttemptReservation {
-    AttemptReservation {
-        protocol_id: format!("terminal-protocol-{label}"),
-        grant_id: format!("terminal-grant-{label}"),
-        recovery_marker: format!("terminal-marker-{label}"),
+    AttemptReservation::reserved_test_attempt(
+        format!("terminal-protocol-{label}"),
+        format!("terminal-grant-{label}"),
+        format!("terminal-marker-{label}"),
         prior_recovery_marker,
-        started: Cell::new(started),
-        settled: Cell::new(false),
         durable,
-        staged: RefCell::new(Vec::new()),
-    }
+        started,
+    )
 }
 
 pub(super) fn seed(attempt: &AttemptReservation, active_grant: &str, ambiguity: &str) {
@@ -124,10 +127,10 @@ pub(super) fn seed(attempt: &AttemptReservation, active_grant: &str, ambiguity: 
         .unwrap_or_else(std::sync::PoisonError::into_inner);
     state
         .active_protocols
-        .insert(attempt.protocol_id.clone(), active_grant.to_owned());
+        .insert(attempt.protocol_id().to_owned(), active_grant.to_owned());
     state
         .ambiguous_protocols
-        .insert(attempt.protocol_id.clone(), ambiguity.to_owned());
+        .insert(attempt.protocol_id().to_owned(), ambiguity.to_owned());
 }
 
 pub(super) fn retry_grant(
@@ -135,10 +138,10 @@ pub(super) fn retry_grant(
     durable: Arc<dyn DurableAttemptAuthority>,
 ) -> RoutineRootGrant {
     RoutineRootGrant {
-        grant_id: format!("{}-retry", reservation.grant_id),
+        grant_id: format!("{}-retry", reservation.grant_id()),
         session_id: "terminal-session-retry".to_owned(),
         request_id: "terminal-request-retry".to_owned(),
-        protocol_id: reservation.protocol_id.clone(),
+        protocol_id: reservation.protocol_id().to_owned(),
         context_id: "terminal-context-retry".to_owned(),
         candidate_id: "terminal-candidate-retry".to_owned(),
         plan_id: "terminal-plan-retry".to_owned(),
@@ -185,4 +188,17 @@ pub(super) fn staged_fixture(label: &str) -> (PathBuf, StagedProgram) {
         seal_identity: ObjectIdentity::from(&fs::metadata(seal).unwrap()),
     };
     (directory, staged)
+}
+
+pub(super) fn retain_stage(
+    attempt: &AttemptReservation,
+    durable: &TerminalDurable,
+    staged: StagedProgram,
+) {
+    *durable
+        .staged_program
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(staged);
+    let source = PinnedExecutable::open_unbound(std::path::Path::new("/usr/bin/true")).unwrap();
+    attempt.stage_and_use(&source, |_| Ok(())).unwrap();
 }

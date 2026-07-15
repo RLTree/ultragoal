@@ -8,14 +8,10 @@ use std::sync::atomic::Ordering;
 fn caller_held_evidence_cannot_skip_cleanup_or_release_authority() {
     let (attempt, durable, stage_root) =
         producer_attempt("caller-held-evidence", CleanupCase::Success);
-    let protocol = attempt.protocol_id.clone();
-    let grant = attempt.grant_id.clone();
-    let marker = attempt.recovery_marker.clone();
-    let forged = attempt.failure_evidence(
-        FailureEvidence::Error(mediator_error("forged-primary").evidence()),
-        CleanupEvidence::NotRequired,
-        CleanupEvidence::Succeeded,
-    );
+    let protocol = attempt.protocol_id().clone();
+    let grant = attempt.grant_id().clone();
+    let marker = attempt.recovery_marker().clone();
+    let forged = forged_evidence(&attempt);
     assert_eq!(forged.protocol_id, protocol);
     assert_eq!(forged.grant_id, grant);
     assert_eq!(forged.recovery_marker, marker);
@@ -44,12 +40,8 @@ fn caller_held_evidence_cannot_skip_cleanup_or_release_authority() {
 fn caller_constructed_transition_error_cannot_skip_cleanup_observation() {
     let (attempt, durable, stage_root) =
         producer_attempt("caller-transition-error", CleanupCase::Success);
-    let protocol = attempt.protocol_id.clone();
-    let forged = attempt.failure_evidence(
-        FailureEvidence::Error(mediator_error("forged-primary").evidence()),
-        CleanupEvidence::NotRequired,
-        CleanupEvidence::Succeeded,
-    );
+    let protocol = attempt.protocol_id().clone();
+    let forged = forged_evidence(&attempt);
     let crafted = transition_failure_error(
         "crafted-transition-error",
         forged,
@@ -81,8 +73,8 @@ fn producer_panic_record_failure_returns_transition_and_retains_authority() {
             .failure_record_error
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner) = Some("producer-record-error");
-        let protocol = attempt.protocol_id.clone();
-        let grant = attempt.grant_id.clone();
+        let protocol = attempt.protocol_id().clone();
+        let grant = attempt.grant_id().clone();
         let token = mediated_token(usize::MAX, usize::MAX);
 
         let outcome = catch_unwind(AssertUnwindSafe(|| {
@@ -121,5 +113,18 @@ fn producer_panic_record_failure_returns_transition_and_retains_authority() {
         );
         clear(&protocol);
         fs::remove_dir_all(stage_root).unwrap();
+    }
+}
+
+fn forged_evidence(attempt: &AttemptReservation) -> ReservationFailureEvidence {
+    ReservationFailureEvidence {
+        schema_version: RESERVATION_FAILURE_SCHEMA.to_owned(),
+        protocol_id: attempt.protocol_id().clone(),
+        grant_id: attempt.grant_id().clone(),
+        recovery_marker: attempt.recovery_marker().clone(),
+        primary: FailureEvidence::Error(mediator_error("forged-primary").evidence()),
+        process_cleanup: CleanupEvidence::NotRequired,
+        staged_cleanup: CleanupEvidence::Succeeded,
+        disposition: ReservationFailureDisposition::StartedPending,
     }
 }

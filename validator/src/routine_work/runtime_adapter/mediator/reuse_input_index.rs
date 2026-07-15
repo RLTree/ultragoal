@@ -1,8 +1,5 @@
 use super::*;
 
-#[path = "reuse_input_index/authentication_authority.rs"]
-mod authentication_authority;
-
 pub(crate) fn index_reuse_inputs(
     input: RoutineReuseInput,
     request: &RoutineEffectRequest,

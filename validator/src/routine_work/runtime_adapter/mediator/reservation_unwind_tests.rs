@@ -1,7 +1,7 @@
 use super::terminal_settlement_fixture::*;
 use super::*;
 use std::fs;
-use std::panic::{AssertUnwindSafe, catch_unwind};
+use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::sync::atomic::Ordering;
 
 #[test]
@@ -17,12 +17,12 @@ fn cleanup_failures_never_replace_the_initiating_panic_or_erase_recovery() {
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(cleanup_cause);
         let reservation = attempt(label, Some(durable.clone()), false, None);
-        let protocol = reservation.protocol_id.clone();
-        let grant = reservation.grant_id.clone();
-        let marker = reservation.recovery_marker.clone();
+        let protocol = reservation.protocol_id().clone();
+        let grant = reservation.grant_id().clone();
+        let marker = reservation.recovery_marker().clone();
         let foreign_protocol = format!("{protocol}-foreign");
         let (stage_root, staged) = staged_fixture(label);
-        reservation.staged.borrow_mut().push(staged);
+        retain_stage(&reservation, durable.as_ref(), staged);
         {
             let mut state = registry()
                 .lock()

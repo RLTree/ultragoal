@@ -128,7 +128,7 @@ pub(crate) fn mediate_effect(
                     }) => {
                         incomplete = true;
                         cancelled |= disposition == RoutineNodeDisposition::Cancelled;
-                        debug_assert!(!started || attempt.started.get());
+                        debug_assert!(!started || attempt.is_started());
                         incomplete_node(&token, disposition, failure_code)
                     }
                     Err(error) => {

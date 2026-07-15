@@ -66,8 +66,13 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
     );
     let reservation =
         include_str!("../src/routine_work/runtime_adapter/mediator/read_source_binding.rs");
+    let reservation_state =
+        include_str!("../src/routine_work/runtime_adapter/mediator/reservation_state/mod.rs");
+    let staged_custody = include_str!(
+        "../src/routine_work/runtime_adapter/mediator/reservation_state/staged_custody.rs"
+    );
     let lifecycle =
-        include_str!("../src/routine_work/runtime_adapter/mediator/reservation_lifecycle.rs");
+        include_str!("../src/routine_work/runtime_adapter/mediator/reservation_state/lifecycle.rs");
     let error = include_str!("../src/routine_work/error.rs");
     let stage = mediation.find("attempt.stage_success").unwrap();
     let publish = mediation.find("publisher.publish").unwrap();
@@ -77,6 +82,10 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
     assert!(output.contains("capture_owned_delta"));
     assert!(output.contains("held != scope.identity"));
     assert!(!reservation.contains("impl Drop for AttemptReservation"));
+    assert_attempt_fields_are_private(reservation_state);
+    assert!(reservation_state.contains("fn terminal_is_authoritative"));
+    assert!(!staged_custody.contains("fn retain_staged"));
+    assert!(staged_custody.contains("fn stage_and_use"));
     assert!(mediation.contains("complete_intent_transition"));
     assert!(mediation.contains("observe_staged_transition(&attempt, || Ok(()))"));
     assert!(!mediation.contains("(Err(_), Err(error))"));
@@ -86,6 +95,42 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
     assert!(!error.contains("reservation_failure_evidence"));
     assert!(!error.contains("with_reservation_failure_evidence"));
     assert!(!error.contains("pub(crate) fn with_transition_failure"));
+}
+
+fn assert_attempt_fields_are_private(source: &str) {
+    let file = syn::parse_file(source).expect("reservation state source parses");
+    let attempt = file
+        .items
+        .iter()
+        .find_map(|item| match item {
+            syn::Item::Struct(item) if item.ident == "AttemptReservation" => Some(item),
+            _ => None,
+        })
+        .expect("AttemptReservation is declared exactly once");
+    let fields = attempt
+        .fields
+        .iter()
+        .map(|field| {
+            assert!(matches!(field.vis, syn::Visibility::Inherited));
+            field.ident.as_ref().unwrap().to_string()
+        })
+        .collect::<std::collections::BTreeSet<_>>();
+    assert_eq!(
+        fields,
+        [
+            "durable",
+            "grant_id",
+            "prior_recovery_marker",
+            "protocol_id",
+            "recovery_marker",
+            "settled",
+            "staged",
+            "started",
+        ]
+        .into_iter()
+        .map(str::to_owned)
+        .collect()
+    );
 }
 
 #[test]

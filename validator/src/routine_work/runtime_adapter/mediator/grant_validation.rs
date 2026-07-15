@@ -1,5 +1,5 @@
 use super::super::{
-    RUST_SOURCE_SYNTAX_ARGUMENTS, RUST_SOURCE_SYNTAX_BEHAVIOR, default_environment, exact_runner,
+    default_environment, exact_runner, RUST_SOURCE_SYNTAX_ARGUMENTS, RUST_SOURCE_SYNTAX_BEHAVIOR,
 };
 use super::*;
 
@@ -68,16 +68,13 @@ pub(crate) fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservati
     state
         .active_protocols
         .insert(grant.protocol_id.clone(), grant.grant_id.clone());
-    Ok(AttemptReservation {
-        protocol_id: grant.protocol_id.clone(),
-        grant_id: grant.grant_id.clone(),
-        recovery_marker: recovery_identity(&grant.grant_id, &grant.protocol_id, &grant.request_id),
-        prior_recovery_marker: grant.recovery_for.clone(),
-        started: Cell::new(false),
-        settled: Cell::new(false),
-        durable: grant.durable.clone(),
-        staged: RefCell::new(Vec::new()),
-    })
+    Ok(AttemptReservation::reserved(
+        grant.protocol_id.clone(),
+        grant.grant_id.clone(),
+        recovery_identity(&grant.grant_id, &grant.protocol_id, &grant.request_id),
+        grant.recovery_for.clone(),
+        grant.durable.clone(),
+    ))
 }
 
 pub(crate) fn preflight_request(

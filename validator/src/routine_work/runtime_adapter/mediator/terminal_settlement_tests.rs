@@ -24,24 +24,20 @@ fn durable_terminal_siblings_clear_exact_ambiguity_and_public_recovery() {
         let reservation = attempt(label, Some(durable.clone()), true, None);
         seed(
             &reservation,
-            &reservation.grant_id,
-            &reservation.recovery_marker,
+            reservation.grant_id(),
+            reservation.recovery_marker(),
         );
         let marker = reservation.settle_incomplete(outcome).unwrap();
         assert_eq!(marker, None);
         let state = registry()
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
-        assert!(
-            !state
-                .active_protocols
-                .contains_key(&reservation.protocol_id)
-        );
-        assert!(
-            !state
-                .ambiguous_protocols
-                .contains_key(&reservation.protocol_id)
-        );
+        assert!(!state
+            .active_protocols
+            .contains_key(reservation.protocol_id()));
+        assert!(!state
+            .ambiguous_protocols
+            .contains_key(reservation.protocol_id()));
         drop(state);
         assert_eq!(
             *durable
@@ -75,13 +71,13 @@ fn non_durable_missing_or_foreign_ambiguity_emits_no_marker() {
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         state.active_protocols.insert(
-            reservation.protocol_id.clone(),
-            reservation.grant_id.clone(),
+            reservation.protocol_id().clone(),
+            reservation.grant_id().clone(),
         );
         if let Some(ambiguity) = ambiguity {
             state
                 .ambiguous_protocols
-                .insert(reservation.protocol_id.clone(), ambiguity.to_owned());
+                .insert(reservation.protocol_id().clone(), ambiguity.to_owned());
         }
         drop(state);
         assert_eq!(
@@ -96,11 +92,11 @@ fn non_durable_missing_or_foreign_ambiguity_emits_no_marker() {
         assert_eq!(
             state
                 .ambiguous_protocols
-                .get(&reservation.protocol_id)
+                .get(reservation.protocol_id())
                 .map(String::as_str),
             ambiguity
         );
-        state.ambiguous_protocols.remove(&reservation.protocol_id);
+        state.ambiguous_protocols.remove(reservation.protocol_id());
     }
 }
 
@@ -109,23 +105,23 @@ fn non_durable_ambiguity_retains_the_exact_pending_marker() {
     let reservation = attempt("non-durable", None, true, None);
     seed(
         &reservation,
-        &reservation.grant_id,
-        &reservation.recovery_marker,
+        reservation.grant_id(),
+        reservation.recovery_marker(),
     );
     assert_eq!(
         reservation
             .settle_incomplete(DurableSettlement::Incomplete)
             .unwrap(),
-        Some(reservation.recovery_marker.clone())
+        Some(reservation.recovery_marker().clone())
     );
     let mut state = registry()
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner);
     assert_eq!(
-        state.ambiguous_protocols.get(&reservation.protocol_id),
-        Some(&reservation.recovery_marker)
+        state.ambiguous_protocols.get(reservation.protocol_id()),
+        Some(reservation.recovery_marker())
     );
-    state.ambiguous_protocols.remove(&reservation.protocol_id);
+    state.ambiguous_protocols.remove(reservation.protocol_id());
 }
 
 #[test]
@@ -140,7 +136,7 @@ fn terminal_cleanup_preserves_foreign_protocol_marker_and_grant() {
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         state.ambiguous_protocols.insert(
             foreign_protocol.clone(),
-            reservation.recovery_marker.clone(),
+            reservation.recovery_marker().clone(),
         );
     }
     assert_eq!(
@@ -153,18 +149,18 @@ fn terminal_cleanup_preserves_foreign_protocol_marker_and_grant() {
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner);
     assert_eq!(
-        state.active_protocols.get(&reservation.protocol_id),
+        state.active_protocols.get(reservation.protocol_id()),
         Some(&"foreign-grant".to_owned())
     );
     assert_eq!(
-        state.ambiguous_protocols.get(&reservation.protocol_id),
+        state.ambiguous_protocols.get(reservation.protocol_id()),
         Some(&"foreign-marker".to_owned())
     );
     assert_eq!(
         state.ambiguous_protocols.get(&foreign_protocol),
-        Some(&reservation.recovery_marker)
+        Some(reservation.recovery_marker())
     );
-    state.active_protocols.remove(&reservation.protocol_id);
-    state.ambiguous_protocols.remove(&reservation.protocol_id);
+    state.active_protocols.remove(reservation.protocol_id());
+    state.ambiguous_protocols.remove(reservation.protocol_id());
     state.ambiguous_protocols.remove(&foreign_protocol);
 }

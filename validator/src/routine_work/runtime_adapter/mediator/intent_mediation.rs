@@ -42,20 +42,12 @@ pub(crate) fn mediate_intent(
             reads.validate(&root)?;
             return Ok(IntentResult::Reused(verified));
         }
-        if attempt
-            .durable
-            .as_ref()
-            .is_some_and(|durable| durable.reuse_only())
-        {
+        if attempt.reuse_only() {
             return Err(mediator_error(
                 "mediator-production-reuse-not-authenticated",
             ));
         }
-    } else if attempt
-        .durable
-        .as_ref()
-        .is_some_and(|durable| durable.reuse_only())
-    {
+    } else if attempt.reuse_only() {
         return Err(mediator_error("mediator-production-reuse-artifact-missing"));
     }
     let environment = execution_environment(token)?;
@@ -64,8 +56,7 @@ pub(crate) fn mediate_intent(
     }
     let framed_input = reads.rust_source_syntax_frame(&root)?;
     let framed_input_sha256 = sha256(&framed_input);
-    let staged = attempt.stage_program(&program)?;
-    let observation = attempt.retain_and_use_staged(staged, |staged_program| {
+    let observation = attempt.stage_and_use(&program, |staged_program| {
         process::execute(
             staged_program,
             &root,

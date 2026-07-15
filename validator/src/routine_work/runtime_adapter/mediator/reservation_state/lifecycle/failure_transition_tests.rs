@@ -12,9 +12,9 @@ fn failure_record_error_or_panic_retains_exact_active_authority() {
         };
         let durable = Arc::new(TerminalDurable::default());
         let reservation = attempt(label, Some(durable.clone()), true, None);
-        let protocol = reservation.protocol_id.clone();
-        let grant = reservation.grant_id.clone();
-        seed(&reservation, &grant, &reservation.recovery_marker);
+        let protocol = reservation.protocol_id().clone();
+        let grant = reservation.grant_id().clone();
+        seed(&reservation, &grant, reservation.recovery_marker());
         if record_panics {
             *durable
                 .failure_record_panic
@@ -73,9 +73,9 @@ fn initiating_panic_is_retained_inside_typed_transition_failure() {
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner) = Some("record-error");
     let reservation = attempt("panic-record-error", Some(durable), true, None);
-    let protocol = reservation.protocol_id.clone();
-    let grant = reservation.grant_id.clone();
-    seed(&reservation, &grant, &reservation.recovery_marker);
+    let protocol = reservation.protocol_id().clone();
+    let grant = reservation.grant_id().clone();
+    seed(&reservation, &grant, reservation.recovery_marker());
     let failure: RoutineError = run_reserved(reservation, |_| -> Result<(), RoutineError> {
         panic!("initiating-reservation-panic")
     })

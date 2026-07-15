@@ -12,21 +12,21 @@ struct CapturedCleanup {
 // It carries no cleanup evidence and only run_reserved can decode it.
 struct TransitionRecordRefusal(RoutineError);
 
-pub(crate) fn run_reserved<T>(
+pub(in super::super) fn run_reserved<T>(
     attempt: AttemptReservation,
     lifecycle: impl FnOnce(&AttemptReservation) -> Result<T, RoutineError>,
 ) -> Result<T, RoutineError> {
     let outcome = catch_unwind(AssertUnwindSafe(|| lifecycle(&attempt)));
     match outcome {
-        Ok(Ok(value)) if attempt.settled.get() => Ok(value),
-        Ok(Err(error)) if attempt.settled.get() => Err(error),
+        Ok(Ok(value)) if attempt.terminal_is_authoritative() => Ok(value),
+        Ok(Err(error)) if attempt.terminal_is_authoritative() => Err(error),
         Ok(Ok(_)) => finish_missing_transition(&attempt),
         Ok(Err(error)) => finish_error(&attempt, error),
         Err(payload) => finish_unwind(&attempt, payload),
     }
 }
 
-pub(super) fn observe_staged_transition(
+pub(in super::super) fn observe_staged_transition(
     attempt: &AttemptReservation,
     operation: impl FnOnce() -> Result<(), RoutineError>,
 ) -> Result<(), RoutineError> {
@@ -56,7 +56,7 @@ fn finish_unwind<T>(
 ) -> Result<T, RoutineError> {
     match payload.downcast::<TransitionRecordRefusal>() {
         Ok(refusal) => Err(refusal.0),
-        Err(payload) if attempt.settled.get() => resume_unwind(payload),
+        Err(payload) if attempt.terminal_is_authoritative() => resume_unwind(payload),
         Err(payload) => finish_panic(attempt, payload),
     }
 }
@@ -208,11 +208,11 @@ fn record_transition(
 }
 
 #[cfg(test)]
-#[path = "reservation_lifecycle/cleanup_panic_tests.rs"]
+#[path = "lifecycle/cleanup_panic_tests.rs"]
 mod cleanup_panic_tests;
 #[cfg(test)]
-#[path = "reservation_lifecycle/failure_matrix_tests.rs"]
+#[path = "lifecycle/failure_matrix_tests.rs"]
 mod failure_matrix_tests;
 #[cfg(test)]
-#[path = "reservation_lifecycle/failure_transition_tests.rs"]
+#[path = "lifecycle/failure_transition_tests.rs"]
 mod failure_transition_tests;

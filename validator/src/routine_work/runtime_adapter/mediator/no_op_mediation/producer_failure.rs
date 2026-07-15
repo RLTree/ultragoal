@@ -67,7 +67,7 @@ fn advance_error_remains_primary_across_cleanup_error_and_panic() {
         for cleanup in [CleanupCase::Error, CleanupCase::Panic] {
             let label = format!("producer-{}-advance-error", route.label());
             let (attempt, durable, stage_root) = producer_attempt(&label, cleanup);
-            let protocol = attempt.protocol_id.clone();
+            let protocol = attempt.protocol_id().clone();
             let token = mediated_token(1, 0);
             let error = run_reserved(attempt, |attempt| {
                 complete_intent_transition(&token, attempt, route.node(&token)).map(drop)
@@ -93,7 +93,7 @@ fn advance_panic_remains_primary_across_cleanup_error_and_panic() {
     {
         let label = format!("producer-advance-panic-{ordinal}");
         let (attempt, durable, stage_root) = producer_attempt(&label, cleanup);
-        let protocol = attempt.protocol_id.clone();
+        let protocol = attempt.protocol_id().clone();
         let token = mediated_token(usize::MAX, usize::MAX);
         let payload = catch_unwind(AssertUnwindSafe(|| {
             let _: Result<(), RoutineError> = run_reserved(attempt, |attempt| {
@@ -119,7 +119,7 @@ fn advance_panic_remains_primary_across_cleanup_error_and_panic() {
 fn single_and_terminal_cleanup_failures_keep_the_first_observation() {
     let (attempt, durable, stage_root) =
         producer_attempt("producer-single-advance", CleanupCase::Success);
-    let protocol = attempt.protocol_id.clone();
+    let protocol = attempt.protocol_id().clone();
     let token = mediated_token(1, 0);
     let error = run_reserved(attempt, |attempt| {
         complete_intent_transition(&token, attempt, ProducerRoute::Executed.node(&token)).map(drop)
@@ -135,7 +135,7 @@ fn single_and_terminal_cleanup_failures_keep_the_first_observation() {
     fs::remove_dir_all(stage_root).unwrap();
 
     let (attempt, durable, stage_root) = producer_attempt("producer-terminal", CleanupCase::Error);
-    let protocol = attempt.protocol_id.clone();
+    let protocol = attempt.protocol_id().clone();
     let error = run_reserved(attempt, |attempt| {
         observe_staged_transition(attempt, || Ok(()))
     })
@@ -150,7 +150,7 @@ fn single_and_terminal_cleanup_failures_keep_the_first_observation() {
 
     let (attempt, durable, stage_root) =
         producer_attempt("producer-terminal-panic", CleanupCase::Panic);
-    let protocol = attempt.protocol_id.clone();
+    let protocol = attempt.protocol_id().clone();
     let payload = catch_unwind(AssertUnwindSafe(|| {
         let _: Result<(), RoutineError> = run_reserved(attempt, |attempt| {
             observe_staged_transition(attempt, || Ok(()))
@@ -174,8 +174,8 @@ fn producer_transition_failure_retains_exact_active_authority() {
         .failure_record_error
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner) = Some("producer-record-error");
-    let protocol = attempt.protocol_id.clone();
-    let grant = attempt.grant_id.clone();
+    let protocol = attempt.protocol_id().clone();
+    let grant = attempt.grant_id().clone();
     let token = mediated_token(1, 0);
     let error = run_reserved(attempt, |attempt| {
         complete_intent_transition(&token, attempt, ProducerRoute::Executed.node(&token)).map(drop)

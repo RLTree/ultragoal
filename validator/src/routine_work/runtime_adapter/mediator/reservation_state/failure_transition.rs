@@ -1,4 +1,3 @@
-use super::read_source_binding::{MediatorRegistry, release_active};
 use super::*;
 
 impl AttemptReservation {
@@ -44,8 +43,8 @@ impl AttemptReservation {
         &self,
         evidence: &ReservationFailureEvidence,
     ) -> Result<(), RoutineError> {
-        if self.settled.get()
-            || evidence.protocol_id != self.protocol_id
+        self.require_open()?;
+        if evidence.protocol_id != self.protocol_id
             || evidence.grant_id != self.grant_id
             || evidence.recovery_marker != self.recovery_marker
             || evidence.disposition
@@ -59,6 +58,7 @@ impl AttemptReservation {
                 "mediator-reservation-failure-evidence-binding-invalid",
             ));
         }
+        let transfer_custody = self.failure_custody_transfer_required(&evidence.staged_cleanup)?;
         let mut state = registry()
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
@@ -88,6 +88,9 @@ impl AttemptReservation {
                         .insert(self.recovery_marker.clone(), evidence.clone());
                 }
             }
+        }
+        if transfer_custody {
+            self.transfer_staged_to_recorded_recovery();
         }
         release_active(&mut state, &self.protocol_id, &self.grant_id);
         if self.started.get() && !state.ambiguous_protocols.contains_key(&self.protocol_id) {

@@ -1,6 +1,6 @@
 use super::terminal_settlement_fixture::*;
 use super::*;
-use std::panic::{AssertUnwindSafe, catch_unwind};
+use std::panic::{catch_unwind, AssertUnwindSafe};
 
 fn clear(protocol: &str) {
     let mut state = registry()
@@ -16,9 +16,9 @@ fn clear(protocol: &str) {
 #[test]
 fn leaving_scope_alone_never_changes_authority_state() {
     let reservation = attempt("drop-inert", None, true, None);
-    let protocol = reservation.protocol_id.clone();
-    let grant = reservation.grant_id.clone();
-    let marker = reservation.recovery_marker.clone();
+    let protocol = reservation.protocol_id().clone();
+    let grant = reservation.grant_id().clone();
+    let marker = reservation.recovery_marker().clone();
     seed(&reservation, &grant, &marker);
     drop(reservation);
 
@@ -34,8 +34,8 @@ fn leaving_scope_alone_never_changes_authority_state() {
 #[test]
 fn explicit_pre_start_failure_releases_only_exact_active_grant() {
     let reservation = attempt("pre-start", None, false, None);
-    let protocol = reservation.protocol_id.clone();
-    let grant = reservation.grant_id.clone();
+    let protocol = reservation.protocol_id().clone();
+    let grant = reservation.grant_id().clone();
     seed(&reservation, &grant, "foreign-marker");
     let error = run_reserved(reservation, |_| {
         Err::<(), _>(mediator_error("pre-start-injected"))
@@ -58,9 +58,9 @@ fn explicit_pre_start_failure_releases_only_exact_active_grant() {
 #[test]
 fn explicit_post_start_failure_preserves_exact_ambiguity() {
     let reservation = attempt("post-start", None, false, None);
-    let protocol = reservation.protocol_id.clone();
-    let grant = reservation.grant_id.clone();
-    let marker = reservation.recovery_marker.clone();
+    let protocol = reservation.protocol_id().clone();
+    let grant = reservation.grant_id().clone();
+    let marker = reservation.recovery_marker().clone();
     seed(&reservation, &grant, &marker);
     run_reserved(reservation, |attempt| {
         attempt.mark_started()?;
@@ -80,7 +80,7 @@ fn explicit_post_start_failure_preserves_exact_ambiguity() {
 #[test]
 fn foreign_grant_and_marker_are_never_erased_by_failure() {
     let reservation = attempt("foreign-transition", None, true, None);
-    let protocol = reservation.protocol_id.clone();
+    let protocol = reservation.protocol_id().clone();
     seed(&reservation, "foreign-grant", "foreign-marker");
     run_reserved(reservation, |_| {
         Err::<(), _>(mediator_error("foreign-transition-injected"))
@@ -105,8 +105,8 @@ fn foreign_grant_and_marker_are_never_erased_by_failure() {
 #[test]
 fn child_start_refuses_a_foreign_marker_without_overwriting_it() {
     let reservation = attempt("foreign-start", None, false, None);
-    let protocol = reservation.protocol_id.clone();
-    let grant = reservation.grant_id.clone();
+    let protocol = reservation.protocol_id().clone();
+    let grant = reservation.grant_id().clone();
     seed(&reservation, &grant, "foreign-marker");
     let error = run_reserved(reservation, |attempt| {
         attempt.mark_started()?;
@@ -130,9 +130,9 @@ fn child_start_refuses_a_foreign_marker_without_overwriting_it() {
 #[test]
 fn unwind_uses_the_same_explicit_post_start_transition() {
     let reservation = attempt("unwind", None, false, None);
-    let protocol = reservation.protocol_id.clone();
-    let grant = reservation.grant_id.clone();
-    let marker = reservation.recovery_marker.clone();
+    let protocol = reservation.protocol_id().clone();
+    let grant = reservation.grant_id().clone();
+    let marker = reservation.recovery_marker().clone();
     seed(&reservation, &grant, &marker);
     let unwound = catch_unwind(AssertUnwindSafe(|| {
         let _: Result<(), RoutineError> = run_reserved(reservation, |attempt| {
@@ -158,8 +158,8 @@ fn unwind_uses_the_same_explicit_post_start_transition() {
 #[test]
 fn success_without_terminal_transition_fails_and_releases_reservation() {
     let reservation = attempt("missing-terminal", None, false, None);
-    let protocol = reservation.protocol_id.clone();
-    let grant = reservation.grant_id.clone();
+    let protocol = reservation.protocol_id().clone();
+    let grant = reservation.grant_id().clone();
     seed(&reservation, &grant, "prior-marker");
     let error = run_reserved(reservation, |_| Ok(())).unwrap_err();
     assert_eq!(

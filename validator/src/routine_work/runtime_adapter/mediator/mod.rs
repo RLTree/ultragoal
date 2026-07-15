@@ -9,7 +9,6 @@ mod outcome;
 mod process;
 
 use serde::Serialize;
-use std::cell::{Cell, RefCell};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 use std::sync::Arc;
@@ -25,10 +24,10 @@ use super::execution_authority::{
 use super::{begin_routine_mediation, environment_digest, read_authority_digest};
 use crate::routine_work::digest::{canonical, digest_of, framed, sha256, valid};
 use crate::routine_work::{
-    CleanupEvidence, FailureEvidence, LocalDirtyTree, PanicEvidence, ProcessCustodyEvidence,
-    RESERVATION_FAILURE_SCHEMA, RepoPath, ReservationFailureDisposition,
-    ReservationFailureEvidence, RoutineBinding, RoutineError, RoutineErrorId, RoutinePlan,
-    transition_failure_error, trusted_rust_source_execution_observed,
+    transition_failure_error, trusted_rust_source_execution_observed, CleanupEvidence,
+    FailureEvidence, LocalDirtyTree, PanicEvidence, ProcessCustodyEvidence, RepoPath,
+    ReservationFailureDisposition, ReservationFailureEvidence, RoutineBinding, RoutineError,
+    RoutineErrorId, RoutinePlan, RESERVATION_FAILURE_SCHEMA,
 };
 
 pub(crate) use filesystem::{
@@ -53,13 +52,11 @@ mod intent_mediation;
 mod no_op_mediation;
 #[path = "read_source_binding.rs"]
 mod read_source_binding;
-#[path = "reservation_failure_transition.rs"]
-mod reservation_failure_transition;
-#[path = "reservation_lifecycle.rs"]
-mod reservation_lifecycle;
 #[cfg(test)]
 #[path = "reservation_lifecycle_tests.rs"]
 mod reservation_lifecycle_tests;
+#[path = "reservation_state/mod.rs"]
+mod reservation_state;
 #[cfg(test)]
 #[path = "reservation_unwind_tests.rs"]
 mod reservation_unwind_tests;
@@ -67,8 +64,6 @@ mod reservation_unwind_tests;
 mod reuse_input_index;
 #[path = "rust_source_observation.rs"]
 mod rust_source_observation;
-#[path = "staged_launch.rs"]
-mod staged_launch;
 #[cfg(test)]
 #[path = "terminal_settlement_fixture.rs"]
 mod terminal_settlement_fixture;
@@ -87,10 +82,10 @@ pub(crate) use intent_mediation::*;
 pub(super) use no_op_mediation::*;
 pub(super) use read_source_binding::mediate_prepared_routine_execution;
 pub(crate) use read_source_binding::{
-    AttemptReservation, bind_read_sources, grant_identity, grant_seal, registry,
-    validate_read_sources,
+    bind_read_sources, grant_identity, grant_seal, registry, validate_read_sources,
 };
-pub(crate) use reservation_lifecycle::*;
+use reservation_state::AttemptReservation;
+use reservation_state::{observe_staged_transition, run_reserved};
 pub(crate) use reuse_input_index::*;
 pub(crate) use rust_source_observation::*;
 
