@@ -43,6 +43,10 @@ mod catalog_fixture_custody;
 mod catalog_fixture_custody_types;
 #[path = "routine_production_catalog_cases/catalog_fixture_directory_entries.rs"]
 mod catalog_fixture_directory_entries;
+#[path = "routine_production_catalog_cases/catalog_fixture_invocation.rs"]
+mod catalog_fixture_invocation;
+#[path = "routine_production_catalog_cases/catalog_fixture_invocation_controls.rs"]
+mod catalog_fixture_invocation_controls;
 #[path = "routine_production_catalog_cases/catalog_fixture_lifecycle.rs"]
 mod catalog_fixture_lifecycle;
 #[path = "routine_production_catalog_cases/catalog_fixture_quarantine.rs"]

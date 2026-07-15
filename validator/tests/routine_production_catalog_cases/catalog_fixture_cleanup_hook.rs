@@ -16,7 +16,8 @@ pub(crate) fn set_before_final_removal(hook: Option<Box<dyn FnMut(&CStr)>>) {
 #[cfg(test)]
 pub(crate) fn run_before_final_removal(name: &CStr) -> bool {
     BEFORE_FINAL_REMOVAL.with(|slot| {
-        if let Some(hook) = slot.borrow_mut().as_mut() {
+        let mut hook = slot.borrow_mut().take();
+        if let Some(hook) = hook.as_mut() {
             hook(name);
             true
         } else {
@@ -33,7 +34,8 @@ pub(crate) fn set_before_entry_removal(hook: Option<Box<dyn FnMut(RawFd, &CStr)>
 #[cfg(test)]
 pub(crate) fn run_before_entry_removal(directory: RawFd, name: &CStr) -> bool {
     BEFORE_ENTRY_REMOVAL.with(|slot| {
-        if let Some(hook) = slot.borrow_mut().as_mut() {
+        let mut hook = slot.borrow_mut().take();
+        if let Some(hook) = hook.as_mut() {
             hook(directory, name);
             true
         } else {

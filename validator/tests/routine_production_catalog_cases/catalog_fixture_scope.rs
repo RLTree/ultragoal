@@ -56,6 +56,28 @@ impl ClaimedFixtureScope {
             FixtureClaimFailure::Failed(FixtureScopeError::Claim(format!("parent open: {error}")))
         })?;
         let path = parent.join(child);
+        Self::claim_from_parent(parent_directory, path, child, failure)
+    }
+
+    pub(crate) fn claim_child(
+        parent: &Self,
+        child: &str,
+        failure: Option<ClaimFailurePoint>,
+    ) -> Result<Self, FixtureClaimFailure> {
+        let directory = parent.directory.try_clone().map_err(|error| {
+            FixtureClaimFailure::Failed(FixtureScopeError::Claim(format!(
+                "parent descriptor clone: {error}"
+            )))
+        })?;
+        Self::claim_from_parent(directory, parent.path.join(child), child, failure)
+    }
+
+    fn claim_from_parent(
+        parent_directory: File,
+        path: PathBuf,
+        child: &str,
+        failure: Option<ClaimFailurePoint>,
+    ) -> Result<Self, FixtureClaimFailure> {
         let name = CString::new(child).map_err(|_| {
             FixtureClaimFailure::Failed(FixtureScopeError::Claim(
                 "fixture child name contains NUL".to_owned(),

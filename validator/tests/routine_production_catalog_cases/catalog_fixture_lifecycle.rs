@@ -1,6 +1,5 @@
 use super::*;
 use crate::catalog_fixture_claim::{ClaimFailurePoint, ClaimResidue, FixtureClaimFailure};
-use crate::catalog_fixture_construction::FixtureConstructionFailure;
 use crate::catalog_fixture_scope::{
     CatalogSetupFailurePoint, ClaimedFixtureScope, FixtureScopeError,
 };
@@ -9,70 +8,70 @@ use std::sync::{Arc, Mutex};
 
 #[test]
 pub(crate) fn catalog_fixture_drop_and_unwind_preserve_scope_until_explicit_teardown() {
-    let root = TestRoot::new("drop-inert", VALID_CATALOG);
-    let path = root.path.clone();
-    let sentinel = path.join("drop-sentinel");
-    fs::write(&sentinel, b"catalog fixture drop must not delete this\n").unwrap();
-    drop(root);
-    assert_eq!(
-        fs::read(&sentinel).unwrap(),
-        b"catalog fixture drop must not delete this\n"
-    );
-    fs::remove_dir_all(&path).expect("explicit catalog fixture teardown failed");
-    assert!(!path.exists());
+    crate::catalog_fixture_invocation::run_catalog_case("drop-unwind", |invocation| {
+        let root = invocation.new_root("drop-inert", VALID_CATALOG);
+        let path = root.path.clone();
+        let sentinel = path.join("drop-sentinel");
+        fs::write(&sentinel, b"catalog fixture drop must not delete this\n").unwrap();
+        drop(root);
+        assert_eq!(
+            fs::read(&sentinel).unwrap(),
+            b"catalog fixture drop must not delete this\n"
+        );
+        assert!(
+            path.exists(),
+            "dropping a root must not clean its proof scope"
+        );
 
-    let retained = Arc::new(Mutex::new(None::<PathBuf>));
-    let captured = Arc::clone(&retained);
-    let result = catch_unwind(AssertUnwindSafe(|| {
-        let root = TestRoot::new("unwind-inert", VALID_CATALOG);
-        fs::write(
-            root.path.join("unwind-sentinel"),
-            b"unwind keeps catalog fixture\n",
-        )
-        .unwrap();
-        *captured.lock().unwrap() = Some(root.path.clone());
-        panic!("induced catalog fixture unwind");
-    }));
-    assert!(result.is_err());
-    let path = retained.lock().unwrap().take().unwrap();
-    assert_eq!(
-        fs::read(path.join("unwind-sentinel")).unwrap(),
-        b"unwind keeps catalog fixture\n"
-    );
-    fs::remove_dir_all(&path).expect("explicit catalog unwind teardown failed");
-    assert!(!path.exists());
+        let retained = Arc::new(Mutex::new(None::<PathBuf>));
+        let captured = Arc::clone(&retained);
+        let root = invocation.new_root("unwind-inert", VALID_CATALOG);
+        let result = catch_unwind(AssertUnwindSafe(|| {
+            fs::write(
+                root.path.join("unwind-sentinel"),
+                b"unwind keeps catalog fixture\n",
+            )
+            .unwrap();
+            *captured.lock().unwrap() = Some(root.path.clone());
+            panic!("induced catalog fixture unwind");
+        }));
+        assert!(result.is_err());
+        let path = retained.lock().unwrap().take().unwrap();
+        assert_eq!(
+            fs::read(path.join("unwind-sentinel")).unwrap(),
+            b"unwind keeps catalog fixture\n"
+        );
+        assert!(
+            path.exists(),
+            "unwinding a root must not clean its proof scope"
+        );
+    });
 }
 
 #[test]
 pub(crate) fn catalog_fixture_setup_failures_roll_back_only_the_claimed_child() {
-    for (point, stage) in [
-        (CatalogSetupFailurePoint::AfterClaim, "claim"),
-        (CatalogSetupFailurePoint::AfterDirectories, "directories"),
-        (CatalogSetupFailurePoint::AfterCatalogWrite, "catalog"),
-    ] {
-        let sequence = NEXT.load(Ordering::Relaxed);
-        let error = match TestRoot::try_new("setup-rollback", VALID_CATALOG, Some(point)) {
-            Ok(_) => panic!("setup failure {stage} unexpectedly constructed a fixture"),
-            Err(FixtureConstructionFailure::Setup(error)) => error,
-            Err(FixtureConstructionFailure::Retained { scope, error }) => panic!(
-                "setup failure {stage} retained {}: {error:?}",
-                scope.path().display()
-            ),
-            Err(FixtureConstructionFailure::ClaimRetained(residue)) => panic!(
-                "setup failure {stage} retained {}: {:?}",
-                residue.path().display(),
-                residue.error()
-            ),
-        };
-        assert_eq!(error, FixtureScopeError::Setup(stage));
-        let path =
-            fixture_parent().join(format!("setup-rollback-{}-{sequence}", std::process::id()));
-        assert!(
-            !path.exists(),
-            "setup failure retained {stage}: {}",
-            path.display()
-        );
-    }
+    crate::catalog_fixture_invocation::run_catalog_case("setup-rollback", |invocation| {
+        for (point, stage) in [
+            (CatalogSetupFailurePoint::AfterClaim, "claim"),
+            (CatalogSetupFailurePoint::AfterDirectories, "directories"),
+            (CatalogSetupFailurePoint::AfterCatalogWrite, "catalog"),
+        ] {
+            let sequence = NEXT.load(Ordering::Relaxed);
+            let error =
+                match invocation.try_root("setup-rollback", VALID_CATALOG, Some(point), None) {
+                    Ok(_) => panic!("setup failure {stage} unexpectedly constructed a fixture"),
+                    Err(error) => error,
+                };
+            assert_eq!(error, FixtureScopeError::Setup(stage));
+            let path =
+                fixture_parent().join(format!("setup-rollback-{}-{sequence}", std::process::id()));
+            assert!(
+                !path.exists(),
+                "setup failure retained {stage}: {}",
+                path.display()
+            );
+        }
+    });
 }
 
 #[test]
@@ -124,7 +123,10 @@ pub(crate) fn catalog_claim_failures_retain_typed_custody_without_uncertain_clea
         }
         _ => panic!("expected typed pre-open residue"),
     };
-    let mut scope = residue.reconcile().unwrap();
+    let mut scope = match residue.reconcile() {
+        Ok(scope) => scope,
+        Err(residue) => panic!("claim retry retained custody: {:?}", residue.error()),
+    };
     scope.rollback().unwrap();
     assert!(!parent.join("before-open").exists());
     assert!(matches!(
@@ -152,6 +154,22 @@ pub(crate) fn catalog_claim_failures_retain_typed_custody_without_uncertain_clea
         b"preserve foreign\n"
     );
     parent_scope.teardown_after_assertions().unwrap();
+}
+
+#[test]
+pub(crate) fn constructor_claim_failure_returns_a_settleable_owner() {
+    crate::catalog_fixture_invocation::run_catalog_case("constructor-claim", |invocation| {
+        let error = match invocation.try_root(
+            "constructor-claim-retry",
+            VALID_CATALOG,
+            None,
+            Some(ClaimFailurePoint::AfterMkdirBeforeOpen),
+        ) {
+            Ok(_) => panic!("injected constructor claim failure unexpectedly constructed a root"),
+            Err(error) => error,
+        };
+        assert!(matches!(error, FixtureScopeError::Retained(_)));
+    });
 }
 
 #[test]
