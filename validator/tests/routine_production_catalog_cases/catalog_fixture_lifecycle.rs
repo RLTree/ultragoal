@@ -80,7 +80,7 @@ pub(crate) fn catalog_fixture_setup_failures_roll_back_only_the_claimed_child() 
 
 #[test]
 pub(crate) fn catalog_fixture_setup_rollback_refuses_a_substituted_scope() {
-    let _guard = crate::catalog_fixture::lock_fixture_root();
+    let guard = crate::catalog_fixture::lock_fixture_root();
     let parent = fixture_parent().join(format!(
         "pre-rollback-parent-{}",
         NEXT.load(Ordering::Relaxed)
@@ -105,11 +105,12 @@ pub(crate) fn catalog_fixture_setup_rollback_refuses_a_substituted_scope() {
     );
     assert_foreign_present(&parent);
     fs::remove_dir_all(&parent).unwrap();
+    drop(guard);
 }
 
 #[test]
 pub(crate) fn catalog_claim_failures_retain_typed_custody_without_uncertain_cleanup() {
-    let _guard = crate::catalog_fixture::lock_fixture_root();
+    let guard = crate::catalog_fixture::lock_fixture_root();
     let base = fixture_parent();
     let name = format!(
         "claim-failure-parent-{}-{}",
@@ -160,6 +161,7 @@ pub(crate) fn catalog_claim_failures_retain_typed_custody_without_uncertain_clea
         b"preserve foreign\n"
     );
     parent_scope.teardown_after_assertions().unwrap();
+    drop(guard);
 }
 
 #[test]
@@ -175,9 +177,8 @@ pub(crate) fn constructor_claim_failure_returns_a_settleable_owner() {
                 Ok(_) => {
                     panic!("injected constructor claim failure unexpectedly constructed a root")
                 }
-                Err(failure) => return Err(failure),
+                Err(failure) => Err(failure),
             }
-            Ok(())
         });
     }));
     assert!(result.is_err());
@@ -185,7 +186,7 @@ pub(crate) fn constructor_claim_failure_returns_a_settleable_owner() {
 
 #[test]
 pub(crate) fn opened_claim_reconciliation_refuses_a_replaced_name() {
-    let _guard = crate::catalog_fixture::lock_fixture_root();
+    let guard = crate::catalog_fixture::lock_fixture_root();
     let parent = fixture_parent().join(format!(
         "claim-replacement-parent-{}",
         NEXT.load(Ordering::Relaxed)
@@ -210,6 +211,7 @@ pub(crate) fn opened_claim_reconciliation_refuses_a_replaced_name() {
         b"preserve foreign\n"
     );
     fs::remove_dir_all(&parent).unwrap();
+    drop(guard);
 }
 
 fn assert_foreign_present(parent: &Path) {

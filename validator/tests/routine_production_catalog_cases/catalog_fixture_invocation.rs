@@ -2,7 +2,7 @@ use super::*;
 use crate::catalog_fixture::FixtureRootGuard;
 use crate::catalog_fixture_claim::FixtureClaimFailure;
 use crate::catalog_fixture_construction::FixtureConstructionFailure;
-use crate::catalog_fixture_scope::{ClaimedFixtureScope, FixtureScopeError};
+use crate::catalog_fixture_scope::ClaimedFixtureScope;
 use std::panic::{catch_unwind, resume_unwind, AssertUnwindSafe};
 
 pub(crate) struct CatalogFixtureInvocation {
@@ -14,11 +14,11 @@ pub(crate) fn run_catalog_case(
     body: impl FnOnce(&mut CatalogFixtureInvocation) -> Result<(), FixtureConstructionFailure>,
 ) {
     let guard = crate::catalog_fixture::lock_fixture_root();
-    run_catalog_case_with_guard(&guard, label, body);
+    run_catalog_case_with_guard(guard, label, body);
 }
 
 pub(crate) fn run_catalog_case_with_guard(
-    _guard: &FixtureRootGuard,
+    guard: FixtureRootGuard,
     label: &str,
     body: impl FnOnce(&mut CatalogFixtureInvocation) -> Result<(), FixtureConstructionFailure>,
 ) {
@@ -26,6 +26,7 @@ pub(crate) fn run_catalog_case_with_guard(
     let result = catch_unwind(AssertUnwindSafe(|| body(&mut invocation)));
     let body_failure = result.as_ref().ok().and_then(|value| value.as_ref().err());
     finish_until_settled(invocation);
+    drop(guard);
     if let Some(failure) = body_failure {
         panic!(
             "catalog fixture body failed after outer settlement: {:?}",
@@ -37,20 +38,15 @@ pub(crate) fn run_catalog_case_with_guard(
     }
 }
 
-pub(crate) fn run_catalog_case_with_begin_failure(
-    label: &str,
-    failure: crate::catalog_fixture_claim::ClaimFailurePoint,
-) {
-    let guard = crate::catalog_fixture::lock_fixture_root();
-    run_catalog_case_with_begin_failure_guard(&guard, label, failure);
-}
-
 pub(crate) fn run_catalog_case_with_begin_failure_guard(
-    _guard: &FixtureRootGuard,
+    guard: FixtureRootGuard,
     label: &str,
     failure: crate::catalog_fixture_claim::ClaimFailurePoint,
 ) {
-    let _ = begin_until_settled(label, Some(failure));
+    let invocation = begin_until_settled(label, Some(failure));
+    finish_until_settled(invocation);
+    drop(guard);
+    panic!("catalog invocation claim unexpectedly succeeded");
 }
 
 impl CatalogFixtureInvocation {

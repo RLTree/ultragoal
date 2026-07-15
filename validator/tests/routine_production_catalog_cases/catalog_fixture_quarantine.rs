@@ -6,7 +6,7 @@ use std::sync::{Arc, Mutex};
 
 #[test]
 pub(crate) fn nested_quarantine_revalidation_preserves_a_replacement() {
-    let _guard = crate::catalog_fixture::lock_fixture_root();
+    let guard = crate::catalog_fixture::lock_fixture_root();
     let parent = catalog_fixture_parent();
     let name = format!(
         "nested-substitution-{}",
@@ -30,11 +30,12 @@ pub(crate) fn nested_quarantine_revalidation_preserves_a_replacement() {
         b"foreign replacement\n"
     );
     fs::remove_dir_all(scope.path()).unwrap();
+    drop(guard);
 }
 
 #[test]
 pub(crate) fn final_quarantine_substitution_is_retained_without_deleting_the_replacement() {
-    let _guard = crate::catalog_fixture::lock_fixture_root();
+    let guard = crate::catalog_fixture::lock_fixture_root();
     let parent = catalog_fixture_parent();
     let name = format!(
         "final-substitution-{}-{}",
@@ -70,11 +71,12 @@ pub(crate) fn final_quarantine_substitution_is_retained_without_deleting_the_rep
     );
     fs::remove_dir_all(retained).unwrap();
     fs::remove_dir_all(replacement).unwrap();
+    drop(guard);
 }
 
 #[test]
 pub(crate) fn detached_scope_rebinds_only_the_held_directory_after_repeated_refusals() {
-    let _guard = crate::catalog_fixture::lock_fixture_root();
+    let guard = crate::catalog_fixture::lock_fixture_root();
     let parent = catalog_fixture_parent();
     let before = inventory(&parent);
     let name = format!(
@@ -130,6 +132,7 @@ pub(crate) fn detached_scope_rebinds_only_the_held_directory_after_repeated_refu
     );
     fs::remove_dir_all(replacement).unwrap();
     assert_eq!(inventory(&parent), before);
+    drop(guard);
 }
 
 fn replace_quarantined_entry(

@@ -12,9 +12,9 @@ pub(crate) fn invocation_begin_failure_settles_before_the_test_harness_boundary(
     let guard = crate::catalog_fixture::lock_fixture_root();
     let before = fixture_inventory();
     set_reconciliation_refusals(2);
-    let result = catch_unwind(AssertUnwindSafe(|| {
+    let result = catch_unwind(AssertUnwindSafe(move || {
         crate::catalog_fixture_invocation::run_catalog_case_with_begin_failure_guard(
-            &guard,
+            guard,
             "begin-failure",
             ClaimFailurePoint::AfterMkdirBeforeOpen,
         );
@@ -28,9 +28,9 @@ pub(crate) fn invocation_retries_identity_none_residue_with_the_same_descriptor_
     let guard = crate::catalog_fixture::lock_fixture_root();
     let before = fixture_inventory();
     set_capture_identity_refusals(3);
-    let result = catch_unwind(AssertUnwindSafe(|| {
+    let result = catch_unwind(AssertUnwindSafe(move || {
         crate::catalog_fixture_invocation::run_catalog_case_with_guard(
-            &guard,
+            guard,
             "identity-none",
             |_| Ok(()),
         );
@@ -47,7 +47,7 @@ pub(crate) fn invocation_finish_retries_a_temporary_refusal_while_custody_is_liv
     set_before_final_removal(None);
     set_final_refusals(2);
     crate::catalog_fixture_invocation::run_catalog_case_with_guard(
-        &guard,
+        guard,
         "finish-refusal",
         |invocation| {
             let root = invocation.new_root("finish-refusal-root", VALID_CATALOG)?;
@@ -67,18 +67,21 @@ pub(crate) fn invocation_finish_retries_a_temporary_refusal_while_custody_is_liv
 pub(crate) fn invocation_settles_a_body_construction_failure_before_returning_it_as_non_custody() {
     let guard = crate::catalog_fixture::lock_fixture_root();
     let before = fixture_inventory();
-    let result = catch_unwind(AssertUnwindSafe(|| {
+    let result = catch_unwind(AssertUnwindSafe(move || {
         crate::catalog_fixture_invocation::run_catalog_case_with_guard(
-            &guard,
+            guard,
             "body-failure",
-            |invocation| {
-                let _ = invocation.try_root(
-                    "body-failure-root",
-                    VALID_CATALOG,
-                    Some(CatalogSetupFailurePoint::AfterDirectories),
-                    None,
-                )?;
-                Ok(())
+            |invocation| match invocation.try_root(
+                "body-failure-root",
+                VALID_CATALOG,
+                Some(CatalogSetupFailurePoint::AfterDirectories),
+                None,
+            ) {
+                Ok(root) => panic!(
+                    "body failure unexpectedly constructed {}",
+                    root.path().display()
+                ),
+                Err(failure) => Err(failure),
             },
         );
     }));
@@ -90,12 +93,13 @@ pub(crate) fn invocation_settles_a_body_construction_failure_before_returning_it
 pub(crate) fn invocation_settles_after_an_uncaught_body_unwind() {
     let guard = crate::catalog_fixture::lock_fixture_root();
     let before = fixture_inventory();
-    let result = catch_unwind(AssertUnwindSafe(|| {
+    let result = catch_unwind(AssertUnwindSafe(move || {
         crate::catalog_fixture_invocation::run_catalog_case_with_guard(
-            &guard,
+            guard,
             "body-unwind",
             |invocation| {
-                let _root = invocation.new_root("body-unwind-root", VALID_CATALOG)?;
+                let root = invocation.new_root("body-unwind-root", VALID_CATALOG)?;
+                assert!(root.path().exists());
                 panic!("induced outer invocation unwind");
             },
         );
