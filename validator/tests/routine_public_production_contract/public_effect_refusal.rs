@@ -1,10 +1,15 @@
 use super::scenario::{Fixture, pass_node, prefix_route, tree};
 use serde_json::Value;
 use std::fs;
+use std::fs::OpenOptions;
+use std::os::fd::AsRawFd;
 use std::os::unix::fs::PermissionsExt;
 use std::process::Output;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::time::{Duration, Instant};
+
+const LOCK_CONTENTION_BOUND: Duration = Duration::from_secs(10);
 
 fn dirty_fixture(label: &str, provision_host: bool) -> Fixture {
     Fixture::new(
@@ -33,6 +38,15 @@ fn assert_public_refusal(output: &Output) {
     assert!(
         !ceiling.contains("local issuer"),
         "stale local issuer claim: {ceiling}"
+    );
+}
+
+fn assert_public_busy(output: &Output) {
+    assert_public_refusal(output);
+    let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
+    assert_eq!(
+        diagnostic["cause"],
+        "the exact routine host authority is busy with another active public invocation"
     );
 }
 
@@ -111,6 +125,37 @@ fn concurrent_local_issuer_attempts_have_no_forged_success() {
     });
 
     assert!(fixture.authority_root().is_dir());
+    assert!(fixture.root.join("target/routine/compile").is_dir());
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn held_public_lock_refuses_a_real_contender_without_effect_then_allows_retry() {
+    let mut fixture = dirty_fixture("held-lock-contender", true);
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+    let before_status = fixture.status();
+    let holder = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open(fixture.lock_path())
+        .unwrap();
+    assert_eq!(
+        unsafe { libc::flock(holder.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) },
+        0
+    );
+
+    let started = Instant::now();
+    let contender = fixture.run();
+    assert!(started.elapsed() < LOCK_CONTENTION_BOUND, "{contender:?}");
+    assert_public_busy(&contender);
+    assert_fixture_unchanged(&fixture, &before_root, &before_home, &before_status);
+    assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
+
+    assert_eq!(unsafe { libc::flock(holder.as_raw_fd(), libc::LOCK_UN) }, 0);
+    drop(holder);
+    let retry = fixture.run();
+    assert_eq!(retry.status.code(), Some(0), "{retry:?}");
     assert!(fixture.root.join("target/routine/compile").is_dir());
     fixture.teardown_after_assertions();
 }

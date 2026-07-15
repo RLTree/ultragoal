@@ -5,6 +5,7 @@ pub(crate) enum HostFailure {
     #[cfg(not(target_vendor = "apple"))]
     Unsupported,
     Unavailable,
+    Busy,
     Invalid,
     RandomUnavailable,
     ClockUnavailable,

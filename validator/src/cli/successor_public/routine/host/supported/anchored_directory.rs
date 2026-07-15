@@ -155,8 +155,13 @@ impl AnchoredDirectory {
 
 impl ProcessLock {
     pub(crate) fn acquire(file: File) -> Result<Self, HostFailure> {
-        if unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX) } != 0 {
-            return Err(HostFailure::Invalid);
+        if unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) } != 0 {
+            return Err(match std::io::Error::last_os_error().raw_os_error() {
+                Some(value) if value == libc::EWOULDBLOCK || value == libc::EAGAIN => {
+                    HostFailure::Busy
+                }
+                _ => HostFailure::Invalid,
+            });
         }
         Ok(Self(file))
     }

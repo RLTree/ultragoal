@@ -77,6 +77,15 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "none",
             PRODUCTION_SUPPORT_LIMIT,
         ),
+        PublicFailure::Host(HostFailure::Busy) => (
+            ExitClass::BlockedAuthority,
+            DiagnosticId::AuthorityRequired,
+            "the exact routine host authority is busy with another active public invocation",
+            "routine production host authority",
+            "wait for the active invocation to settle, then retry the exact request",
+            "none",
+            PRODUCTION_SUPPORT_LIMIT,
+        ),
         PublicFailure::Host(HostFailure::Invalid) => (
             ExitClass::BlockedAuthority,
             DiagnosticId::AuthorityRequired,
