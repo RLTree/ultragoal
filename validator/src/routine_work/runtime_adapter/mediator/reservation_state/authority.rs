@@ -3,16 +3,21 @@ use super::binding::ReservationBinding;
 use super::durable_binding::DurableBinding;
 use super::read_source_binding::release_active;
 use super::registry_transition;
-use super::staged_custody::StagedCustody;
 use super::*;
-use std::cell::Cell;
+
+#[path = "authority/custody.rs"]
+mod custody;
+#[path = "authority/staged_custody.rs"]
+mod staged_custody;
+#[path = "authority/transition_flag.rs"]
+mod transition_flag;
+
+use custody::AttemptCustody;
 
 pub(in super::super) struct AttemptReservation {
     binding: ReservationBinding,
-    started: Cell<bool>,
-    settled: Cell<bool>,
     durable: DurableBinding,
-    staged: StagedCustody,
+    custody: AttemptCustody,
 }
 
 pub(in super::super) fn reserve_grant(
@@ -46,10 +51,8 @@ pub(in super::super) fn reserve_grant(
             recovery_identity(&grant.grant_id, &grant.protocol_id, &grant.request_id),
             grant.recovery_for.clone(),
         ),
-        started: Cell::new(false),
-        settled: Cell::new(false),
         durable: DurableBinding::new(grant.durable.clone()),
-        staged: StagedCustody::new(),
+        custody: AttemptCustody::new(),
     })
 }
 
@@ -67,20 +70,11 @@ impl AttemptReservation {
     }
 
     pub(in super::super) fn is_started(&self) -> bool {
-        self.started.get()
+        self.custody.is_started()
     }
 
     pub(super) fn terminal_is_authoritative(&self) -> bool {
-        self.settled.get() && self.staged.is_empty()
-    }
-
-    fn require_open(&self) -> Result<(), RoutineError> {
-        if self.settled.get() {
-            return Err(mediator_error(
-                "mediator-reservation-terminal-already-settled",
-            ));
-        }
-        Ok(())
+        self.custody.terminal_is_authoritative()
     }
 
     pub(in super::super) fn reuse_only(&self) -> bool {
@@ -88,23 +82,20 @@ impl AttemptReservation {
     }
 
     pub(in super::super) fn prepare_spawn(&self) -> Result<(), RoutineError> {
-        self.require_open()?;
+        self.custody.require_open()?;
         self.durable.prepare_spawn()
     }
 
     pub(in super::super) fn mark_started(&self) -> Result<(), RoutineError> {
-        self.require_open()?;
-        registry_transition::mark_started(&self.binding)?;
-        self.started.set(true);
-        Ok(())
+        self.custody.mark_started(&self.binding)
     }
 
     pub(in super::super) fn stage_success(
         &self,
         artifacts: &BTreeMap<String, String>,
     ) -> Result<(), RoutineError> {
-        self.require_open()?;
-        self.staged.require_empty()?;
+        self.custody.require_open()?;
+        self.custody.require_staged_empty()?;
         self.durable.stage_success(artifacts)
     }
 
@@ -112,11 +103,11 @@ impl AttemptReservation {
         &self,
         artifacts: &BTreeMap<String, String>,
     ) -> Result<(), RoutineError> {
-        self.require_open()?;
-        self.staged.require_empty()?;
+        self.custody.require_open()?;
+        self.custody.require_staged_empty()?;
         self.durable
             .settle(DurableSettlement::Complete, artifacts)?;
-        self.finish_terminal(true);
+        self.custody.finish_terminal(&self.binding, true);
         Ok(())
     }
 
@@ -124,18 +115,11 @@ impl AttemptReservation {
         &self,
         outcome: DurableSettlement,
     ) -> Result<Option<String>, RoutineError> {
-        self.require_open()?;
-        self.staged.require_empty()?;
+        self.custody.require_open()?;
+        self.custody.require_staged_empty()?;
         let durable = self.durable.settle(outcome, &BTreeMap::new())?;
-        let pending = self.finish_terminal(durable);
+        let pending = self.custody.finish_terminal(&self.binding, durable);
         Ok((!durable).then_some(pending).flatten())
-    }
-
-    fn finish_terminal(&self, durable: bool) -> Option<String> {
-        let pending =
-            registry_transition::finish_terminal(&self.binding, self.started.get(), durable);
-        self.settled.set(true);
-        pending
     }
 
     pub(in super::super) fn retain_non_durable_authentication(
@@ -165,27 +149,19 @@ impl AttemptReservation {
         program: &PinnedExecutable,
         use_program: impl FnOnce(&PinnedExecutable) -> Result<T, RoutineError>,
     ) -> Result<T, RoutineError> {
-        self.require_open()?;
-        self.staged.require_empty()?;
+        self.custody.require_open()?;
+        self.custody.require_staged_empty()?;
         let staged = self.durable.stage_program(program)?;
-        self.require_open()?;
-        self.staged.require_empty()?;
-        self.staged.push_and_use(staged, use_program)
+        self.custody.require_open()?;
+        self.custody.require_staged_empty()?;
+        self.custody.stage_and_use(staged, use_program)
     }
 
     pub(super) fn cleanup_staged(&self) -> Result<(), RoutineError> {
-        if !self.durable.is_present() {
-            return if self.staged.is_empty() {
-                Ok(())
-            } else {
-                Err(mediator_error("mediator-staging-authority-missing"))
-            };
-        }
-        while self
-            .staged
-            .cleanup_last(|staged| self.durable.cleanup_staged(staged))?
-        {}
-        Ok(())
+        self.custody
+            .cleanup_staged(self.durable.is_present(), |staged| {
+                self.durable.cleanup_staged(staged)
+            })
     }
 
     pub(super) fn failure_evidence(
@@ -194,22 +170,29 @@ impl AttemptReservation {
         process_cleanup: CleanupEvidence,
         staged_cleanup: CleanupEvidence,
     ) -> ReservationFailureEvidence {
-        self.binding
-            .failure_evidence(primary, process_cleanup, staged_cleanup, self.started.get())
+        self.binding.failure_evidence(
+            primary,
+            process_cleanup,
+            staged_cleanup,
+            self.custody.is_started(),
+        )
     }
 
     pub(super) fn record_failure_and_transition(
         &self,
         evidence: &ReservationFailureEvidence,
     ) -> Result<(), RoutineError> {
-        self.require_open()?;
-        if !self.binding.validates_failure(evidence, self.started.get()) {
+        self.custody.require_open()?;
+        if !self
+            .binding
+            .validates_failure(evidence, self.custody.is_started())
+        {
             return Err(mediator_error(
                 "mediator-reservation-failure-evidence-binding-invalid",
             ));
         }
         let transfer = self
-            .staged
+            .custody
             .failure_transfer_required(&evidence.staged_cleanup, self.durable.is_present())?;
         let mut state = registry()
             .lock()
@@ -222,16 +205,14 @@ impl AttemptReservation {
         if !self.durable.record_failure(evidence)? {
             registry_transition::record_non_durable_failure(&mut state, &self.binding, evidence)?;
         }
-        if transfer {
-            self.staged.clear_recorded();
-        }
-        release_active(&mut state, self.protocol_id(), self.grant_id());
-        if self.started.get() && !state.ambiguous_protocols.contains_key(self.protocol_id()) {
-            state
-                .ambiguous_protocols
-                .insert(self.protocol_id().clone(), self.recovery_marker().clone());
-        }
-        self.settled.set(true);
+        self.custody.finish_failure(transfer, |started| {
+            release_active(&mut state, self.protocol_id(), self.grant_id());
+            if started && !state.ambiguous_protocols.contains_key(self.protocol_id()) {
+                state
+                    .ambiguous_protocols
+                    .insert(self.protocol_id().clone(), self.recovery_marker().clone());
+            }
+        });
         Ok(())
     }
 }

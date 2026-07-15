@@ -1,10 +1,43 @@
-use std::collections::{BTreeMap, BTreeSet};
-
 use syn::visit::Visit;
 
-pub(super) fn validate_authority(file: &syn::File) -> Result<(), &'static str> {
+pub(super) fn validate(
+    authority: &syn::File,
+    custody: &syn::File,
+    staged: &syn::File,
+    flag: &syn::File,
+) -> Result<(), &'static str> {
+    validate_authority(authority)?;
+    validate_custody(custody)?;
+    validate_tuple_leaf(staged, "StagedCustody", "RefCell")?;
+    validate_tuple_leaf(flag, "TransitionFlag", "Cell")
+}
+
+fn validate_authority(file: &syn::File) -> Result<(), &'static str> {
+    let modules = file
+        .items
+        .iter()
+        .filter_map(|item| match item {
+            syn::Item::Mod(module) => Some(module),
+            _ => None,
+        })
+        .collect::<Vec<_>>();
+    let mut names = modules
+        .iter()
+        .map(|module| module.ident.to_string())
+        .collect::<Vec<_>>();
+    names.sort();
+    if !file.attrs.is_empty()
+        || names != ["custody", "staged_custody", "transition_flag"]
+        || modules.iter().any(|module| {
+            module.content.is_some()
+                || module.attrs.len() != 1
+                || !module.attrs[0].path().is_ident("path")
+        })
+    {
+        return Err("authority-module-boundary");
+    }
     if file.items.iter().any(|item| match item {
-        syn::Item::Use(_) => false,
+        syn::Item::Use(_) | syn::Item::Mod(_) => false,
         syn::Item::Struct(item) => item.ident != "AttemptReservation",
         syn::Item::Fn(item) => item.sig.ident != "reserve_grant",
         syn::Item::Impl(item) => !type_is(&item.self_ty, "AttemptReservation"),
@@ -12,150 +45,187 @@ pub(super) fn validate_authority(file: &syn::File) -> Result<(), &'static str> {
     }) {
         return Err("authority-top-level-items");
     }
-    let attempt = file.items.iter().find_map(|item| match item {
-        syn::Item::Struct(item) if item.ident == "AttemptReservation" => Some(item),
-        _ => None,
-    });
-    let Some(attempt) = attempt else {
-        return Err("authority-owner-missing");
-    };
-    if !attempt.attrs.is_empty() || visibility(&attempt.vis) != "super::super" {
-        return Err("authority-owner-shape");
-    }
-    let fields = attempt
-        .fields
-        .iter()
-        .map(|field| {
-            if !matches!(field.vis, syn::Visibility::Inherited) {
-                return Err("authority-field-visible");
-            }
-            Ok(field.ident.as_ref().expect("named owner field").to_string())
-        })
-        .collect::<Result<BTreeSet<_>, _>>()?;
-    if fields != strings(["binding", "durable", "settled", "staged", "started"]) {
-        return Err("authority-fields");
-    }
-    let functions = file
-        .items
-        .iter()
-        .filter_map(|item| match item {
-            syn::Item::Fn(item) => Some(item),
-            _ => None,
-        })
-        .collect::<Vec<_>>();
-    if functions.len() != 1
-        || !functions[0].attrs.is_empty()
-        || visibility(&functions[0].vis) != "super::super"
-    {
-        return Err("authority-constructor-entry");
-    }
-    validate_constructor(functions[0])
+    validate_named_owner(
+        file,
+        "AttemptReservation",
+        "super::super",
+        &[
+            ("binding", "ReservationBinding"),
+            ("custody", "AttemptCustody"),
+            ("durable", "DurableBinding"),
+        ],
+    )?;
+    validate_constructor(file)
 }
 
-pub(super) fn validate_staged(file: &syn::File) -> Result<(), &'static str> {
-    if file.items.iter().any(|item| match item {
-        syn::Item::Use(_) => false,
-        syn::Item::Struct(item) => item.ident != "StagedCustody",
-        syn::Item::Impl(item) => !type_is(&item.self_ty, "StagedCustody"),
-        _ => true,
-    }) {
-        return Err("staged-top-level-items");
+fn validate_custody(file: &syn::File) -> Result<(), &'static str> {
+    if !file.attrs.is_empty()
+        || file.items.iter().any(|item| match item {
+            syn::Item::Use(_) => false,
+            syn::Item::Struct(item) => item.ident != "AttemptCustody",
+            syn::Item::Impl(item) => !type_is(&item.self_ty, "AttemptCustody"),
+            syn::Item::Fn(item) => !["clear_exact_ambiguity", "clear_exact_failure"]
+                .iter()
+                .any(|name| item.sig.ident == name),
+            _ => true,
+        })
+    {
+        return Err("authority-leaf-items");
     }
-    let staged = file.items.iter().find_map(|item| match item {
-        syn::Item::Struct(item) if item.ident == "StagedCustody" => Some(item),
-        _ => None,
-    });
-    let Some(staged) = staged else {
-        return Err("staged-owner-missing");
-    };
-    if !staged.attrs.is_empty() || visibility(&staged.vis) != "super" {
-        return Err("staged-owner-shape");
+    validate_named_owner(
+        file,
+        "AttemptCustody",
+        "super",
+        &[
+            ("settled", "TransitionFlag"),
+            ("staged", "StagedCustody"),
+            ("started", "TransitionFlag"),
+        ],
+    )
+}
+
+fn validate_tuple_leaf(
+    file: &syn::File,
+    owner: &str,
+    expected_type: &str,
+) -> Result<(), &'static str> {
+    if !file.attrs.is_empty()
+        || file.items.iter().any(|item| match item {
+            syn::Item::Use(_) => false,
+            syn::Item::Struct(item) => item.ident != owner,
+            syn::Item::Impl(item) => !type_is(&item.self_ty, owner),
+            _ => true,
+        })
+    {
+        return Err("authority-leaf-items");
     }
-    let syn::Fields::Unnamed(fields) = &staged.fields else {
-        return Err("staged-storage-shape");
+    let item = owner_item(file, owner)?;
+    let syn::Fields::Unnamed(fields) = &item.fields else {
+        return Err("authority-leaf-storage");
     };
-    if fields.unnamed.len() != 1 || !matches!(fields.unnamed[0].vis, syn::Visibility::Inherited) {
-        return Err("staged-storage-shape");
+    if fields.unnamed.len() != 1 {
+        return Err("authority-leaf-storage");
+    }
+    let field = fields.unnamed.first().ok_or("authority-leaf-storage")?;
+    if !item.attrs.is_empty()
+        || visibility(&item.vis) != "super"
+        || !matches!(field.vis, syn::Visibility::Inherited)
+        || type_name(&field.ty).as_deref() != Some(expected_type)
+    {
+        return Err("authority-leaf-storage");
     }
     Ok(())
 }
 
-fn validate_constructor(function: &syn::ItemFn) -> Result<(), &'static str> {
+fn validate_named_owner(
+    file: &syn::File,
+    owner: &str,
+    expected_visibility: &str,
+    expected: &[(&str, &str)],
+) -> Result<(), &'static str> {
+    let item = owner_item(file, owner)?;
+    if !item.attrs.is_empty()
+        || visibility(&item.vis) != expected_visibility
+        || item.fields.len() != expected.len()
+    {
+        return Err("authority-owner-shape");
+    }
+    for field in &item.fields {
+        if !matches!(field.vis, syn::Visibility::Inherited) {
+            return Err("authority-field-visible");
+        }
+        let name = field.ident.as_ref().ok_or("authority-field-shape")?;
+        let ty = type_name(&field.ty).ok_or("authority-field-type")?;
+        if !expected
+            .iter()
+            .any(|(expected_name, expected_type)| name == expected_name && ty == *expected_type)
+        {
+            return Err("authority-fields");
+        }
+    }
+    Ok(())
+}
+
+fn validate_constructor(file: &syn::File) -> Result<(), &'static str> {
     let mut constructors = Vec::new();
-    Find(&mut constructors).visit_block(&function.block);
+    ConstructorFind(&mut constructors).visit_file(file);
     let [constructor] = constructors.as_slice() else {
         return Err("authority-constructor-count");
     };
-    if constructor.rest.is_some() {
-        return Err("authority-constructor-rest");
-    }
     let fields = constructor
         .fields
         .iter()
-        .map(|field| (member_name(&field.member), initializer(&field.expr)))
-        .collect::<BTreeMap<_, _>>();
-    let expected = BTreeMap::from([
-        ("binding".to_owned(), "other"),
-        ("durable".to_owned(), "other"),
-        ("settled".to_owned(), "false-cell"),
-        ("staged".to_owned(), "empty-staged"),
-        ("started".to_owned(), "false-cell"),
-    ]);
-    (fields == expected)
-        .then_some(())
-        .ok_or("authority-constructor-fields")
+        .map(|field| member_name(&field.member))
+        .collect::<Vec<_>>();
+    if constructor.rest.is_some()
+        || !["binding", "custody", "durable"]
+            .iter()
+            .all(|name| fields.iter().any(|field| field == name))
+        || constructor.fields.iter().any(|field| {
+            member_name(&field.member) == "custody"
+                && !call_is(&field.expr, &["AttemptCustody", "new"])
+        })
+    {
+        return Err("authority-constructor-shape");
+    }
+    Ok(())
 }
 
-struct Find<'a>(&'a mut Vec<syn::ExprStruct>);
+struct ConstructorFind<'a>(&'a mut Vec<syn::ExprStruct>);
 
-impl Visit<'_> for Find<'_> {
-    fn visit_expr_struct(&mut self, node: &syn::ExprStruct) {
-        if node
+impl Visit<'_> for ConstructorFind<'_> {
+    fn visit_expr_struct(&mut self, expression: &syn::ExprStruct) {
+        if expression
             .path
             .segments
             .last()
             .is_some_and(|part| part.ident == "AttemptReservation")
         {
-            self.0.push(node.clone());
+            self.0.push(expression.clone());
         }
-        syn::visit::visit_expr_struct(self, node);
+        syn::visit::visit_expr_struct(self, expression);
     }
 }
 
+fn owner_item<'a>(file: &'a syn::File, owner: &str) -> Result<&'a syn::ItemStruct, &'static str> {
+    file.items
+        .iter()
+        .find_map(|item| match item {
+            syn::Item::Struct(item) if item.ident == owner => Some(item),
+            _ => None,
+        })
+        .ok_or("authority-owner-missing")
+}
+
+fn call_is(expression: &syn::Expr, expected: &[&str]) -> bool {
+    let syn::Expr::Call(call) = expression else {
+        return false;
+    };
+    let syn::Expr::Path(path) = call.func.as_ref() else {
+        return false;
+    };
+    path.path
+        .segments
+        .iter()
+        .map(|part| part.ident.to_string())
+        .eq(expected.iter().copied())
+}
+
 fn type_is(value: &syn::Type, expected: &str) -> bool {
-    matches!(value, syn::Type::Path(path) if path.path.is_ident(expected))
+    type_name(value).as_deref() == Some(expected)
+}
+
+fn type_name(value: &syn::Type) -> Option<String> {
+    let syn::Type::Path(path) = value else {
+        return None;
+    };
+    path.path.segments.last().map(|part| part.ident.to_string())
 }
 
 fn member_name(member: &syn::Member) -> String {
     match member {
         syn::Member::Named(name) => name.to_string(),
         syn::Member::Unnamed(index) => index.index.to_string(),
-    }
-}
-
-fn initializer(expr: &syn::Expr) -> &'static str {
-    let syn::Expr::Call(call) = expr else {
-        return "other";
-    };
-    let syn::Expr::Path(path) = call.func.as_ref() else {
-        return "other";
-    };
-    let names = path
-        .path
-        .segments
-        .iter()
-        .map(|part| part.ident.to_string())
-        .collect::<Vec<_>>();
-    if names.ends_with(&["Cell".to_owned(), "new".to_owned()])
-        && matches!(call.args.first(), Some(syn::Expr::Lit(lit)) if matches!(&lit.lit, syn::Lit::Bool(value) if !value.value))
-    {
-        "false-cell"
-    } else if names.ends_with(&["StagedCustody".to_owned(), "new".to_owned()])
-        && call.args.is_empty()
-    {
-        "empty-staged"
-    } else {
-        "other"
     }
 }
 
@@ -171,8 +241,4 @@ fn visibility(value: &syn::Visibility) -> String {
             .join("::"),
         syn::Visibility::Public(_) => "public".to_owned(),
     }
-}
-
-fn strings<const N: usize>(values: [&str; N]) -> BTreeSet<String> {
-    values.into_iter().map(str::to_owned).collect()
 }

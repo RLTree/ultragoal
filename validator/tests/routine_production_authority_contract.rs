@@ -66,13 +66,6 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
     );
     let reservation =
         include_str!("../src/routine_work/runtime_adapter/mediator/read_source_binding.rs");
-    let reservation_state =
-        include_str!("../src/routine_work/runtime_adapter/mediator/reservation_state/mod.rs");
-    let reservation_authority =
-        include_str!("../src/routine_work/runtime_adapter/mediator/reservation_state/authority.rs");
-    let staged_custody = include_str!(
-        "../src/routine_work/runtime_adapter/mediator/reservation_state/staged_custody.rs"
-    );
     let lifecycle =
         include_str!("../src/routine_work/runtime_adapter/mediator/reservation_state/lifecycle.rs");
     let error = include_str!("../src/routine_work/error.rs");
@@ -84,12 +77,6 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
     assert!(output.contains("capture_owned_delta"));
     assert!(output.contains("held != scope.identity"));
     assert!(!reservation.contains("impl Drop for AttemptReservation"));
-    assert!(reservation_state.contains("mod authority"));
-    assert!(!reservation_state.contains("struct AttemptReservation"));
-    assert_attempt_storage_is_a_childless_leaf(reservation_authority);
-    assert!(reservation_authority.contains("fn terminal_is_authoritative"));
-    assert!(!staged_custody.contains("fn retain_staged"));
-    assert!(reservation_authority.contains("fn stage_and_use"));
     assert!(mediation.contains("complete_intent_transition"));
     assert!(mediation.contains("observe_staged_transition(&attempt, || Ok(()))"));
     assert!(!mediation.contains("(Err(_), Err(error))"));
@@ -99,51 +86,6 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
     assert!(!error.contains("reservation_failure_evidence"));
     assert!(!error.contains("with_reservation_failure_evidence"));
     assert!(!error.contains("pub(crate) fn with_transition_failure"));
-}
-
-fn assert_attempt_storage_is_a_childless_leaf(source: &str) {
-    let file = syn::parse_file(source).expect("reservation state source parses");
-    assert!(
-        !file
-            .items
-            .iter()
-            .any(|item| matches!(item, syn::Item::Mod(_) | syn::Item::Macro(_)))
-    );
-    let attempt = file
-        .items
-        .iter()
-        .find_map(|item| match item {
-            syn::Item::Struct(item) if item.ident == "AttemptReservation" => Some(item),
-            _ => None,
-        })
-        .expect("AttemptReservation is declared exactly once");
-    let syn::Visibility::Restricted(visibility) = &attempt.vis else {
-        panic!("reservation owner visibility widened");
-    };
-    assert_eq!(
-        visibility
-            .path
-            .segments
-            .iter()
-            .map(|segment| segment.ident.to_string())
-            .collect::<Vec<_>>(),
-        ["super", "super"]
-    );
-    let fields = attempt
-        .fields
-        .iter()
-        .map(|field| {
-            assert!(matches!(field.vis, syn::Visibility::Inherited));
-            field.ident.as_ref().unwrap().to_string()
-        })
-        .collect::<std::collections::BTreeSet<_>>();
-    assert_eq!(
-        fields,
-        ["binding", "durable", "settled", "staged", "started",]
-            .into_iter()
-            .map(str::to_owned)
-            .collect()
-    );
 }
 
 #[test]

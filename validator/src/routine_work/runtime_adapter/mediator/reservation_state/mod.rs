@@ -10,8 +10,6 @@ mod durable_binding;
 mod lifecycle;
 #[path = "registry_transition.rs"]
 mod registry_transition;
-#[path = "staged_custody.rs"]
-mod staged_custody;
 #[cfg(test)]
 #[path = "terminal_custody_tests.rs"]
 mod terminal_custody_tests;
