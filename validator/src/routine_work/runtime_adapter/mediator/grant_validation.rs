@@ -1,7 +1,31 @@
 use super::super::{
     RUST_SOURCE_SYNTAX_ARGUMENTS, RUST_SOURCE_SYNTAX_BEHAVIOR, default_environment, exact_runner,
 };
+use super::read_source_binding::MediatorRegistry;
 use super::*;
+
+pub(super) fn reservation_starts_fresh(
+    state: &MediatorRegistry,
+    grant: &RoutineRootGrant,
+) -> Result<bool, RoutineError> {
+    match (
+        state.ambiguous_protocols.get(&grant.protocol_id),
+        grant.recovery_for.as_ref(),
+    ) {
+        (Some(expected), Some(actual)) if expected == actual => Ok(false),
+        (Some(_), _) => Err(mediator_error("mediator-recovery-authority-required")),
+        (None, Some(_))
+            if grant
+                .durable
+                .as_ref()
+                .is_some_and(|durable| durable.recovery_is_durable()) =>
+        {
+            Ok(false)
+        }
+        (None, Some(_)) => Err(mediator_error("mediator-recovery-marker-stale")),
+        (None, None) => Ok(true),
+    }
+}
 
 pub(crate) fn validate_grant(
     context: &LiveContext,
@@ -33,48 +57,6 @@ pub(crate) fn validate_grant(
         return Err(mediator_error("mediator-root-grant-binding-invalid"));
     }
     Ok(())
-}
-
-pub(super) fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservation, RoutineError> {
-    if let Some(durable) = &grant.durable {
-        durable.validate_reserved()?;
-    }
-    let mut state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    if state.consumed_grants.contains(&grant.grant_id) {
-        return Err(mediator_error("mediator-root-grant-replayed"));
-    }
-    if state.active_protocols.contains_key(&grant.protocol_id) {
-        return Err(mediator_error("mediator-protocol-attempt-active"));
-    }
-    match (
-        state.ambiguous_protocols.get(&grant.protocol_id),
-        grant.recovery_for.as_ref(),
-    ) {
-        (Some(expected), Some(actual)) if expected == actual => {}
-        (Some(_), _) => return Err(mediator_error("mediator-recovery-authority-required")),
-        (None, Some(_))
-            if grant
-                .durable
-                .as_ref()
-                .is_some_and(|durable| durable.recovery_is_durable()) => {}
-        (None, Some(_)) => return Err(mediator_error("mediator-recovery-marker-stale")),
-        (None, None) => state
-            .failure_records
-            .retain(|_, record| record.protocol_id != grant.protocol_id),
-    }
-    state.consumed_grants.insert(grant.grant_id.clone());
-    state
-        .active_protocols
-        .insert(grant.protocol_id.clone(), grant.grant_id.clone());
-    Ok(AttemptReservation::reserved(
-        grant.protocol_id.clone(),
-        grant.grant_id.clone(),
-        recovery_identity(&grant.grant_id, &grant.protocol_id, &grant.request_id),
-        grant.recovery_for.clone(),
-        grant.durable.clone(),
-    ))
 }
 
 pub(crate) fn preflight_request(

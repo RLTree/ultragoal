@@ -9,14 +9,8 @@ fn durable_stage_failure_cannot_become_same_process_reuse_authority() {
     durable.fail_stage.store(true, Ordering::SeqCst);
     let first = attempt("durable-stage-failure", Some(durable.clone()), false, None);
     let protocol = first.protocol_id().clone();
-    let grant = first.grant_id().clone();
     let marker = first.recovery_marker().clone();
     let (digest, witness, bytes) = generated_artifact("stage-failure");
-    registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .active_protocols
-        .insert(protocol.clone(), grant);
     let stage_error = run_reserved(first, |attempt| {
         attempt.mark_started()?;
         let generated = collect_generated_witnesses(vec![(digest.clone(), bytes.clone())], attempt);
@@ -26,16 +20,20 @@ fn durable_stage_failure_cannot_become_same_process_reuse_authority() {
     })
     .unwrap_err();
     assert_eq!(stage_error.cause(), "durable-authority-test-stage-failed");
-    assert!(!registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .non_durable_authenticated_artifacts
-        .contains_key(&digest));
-    assert!(durable
-        .settlements
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .is_empty());
+    assert!(
+        !registry()
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .non_durable_authenticated_artifacts
+            .contains_key(&digest)
+    );
+    assert!(
+        durable
+            .settlements
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .is_empty()
+    );
     {
         let state = registry()
             .lock()
@@ -55,12 +53,6 @@ fn durable_stage_failure_cannot_become_same_process_reuse_authority() {
         false,
         Some(marker.clone()),
     );
-    let refused_grant = refused.grant_id().clone();
-    registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .active_protocols
-        .insert(protocol.clone(), refused_grant);
     let error = run_reserved(refused, |attempt| {
         if attempt.authenticates_artifact(&digest, &witness)? {
             attempt.settle_success(&BTreeMap::from([(digest.clone(), witness.clone())]))?;
@@ -71,11 +63,13 @@ fn durable_stage_failure_cannot_become_same_process_reuse_authority() {
     })
     .unwrap_err();
     assert_eq!(error.cause(), "durable-artifact-witness-required");
-    assert!(durable
-        .settlements
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .is_empty());
+    assert!(
+        durable
+            .settlements
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .is_empty()
+    );
 
     durable.fail_stage.store(false, Ordering::SeqCst);
     registry()
@@ -89,12 +83,6 @@ fn durable_stage_failure_cannot_become_same_process_reuse_authority() {
         false,
         Some(marker),
     );
-    let recovery_grant = recovery.grant_id().clone();
-    registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .active_protocols
-        .insert(protocol.clone(), recovery_grant);
     let recovered = run_reserved(recovery, |attempt| {
         attempt.mark_started()?;
         let generated = collect_generated_witnesses(vec![(digest.clone(), bytes)], attempt);
@@ -104,7 +92,7 @@ fn durable_stage_failure_cannot_become_same_process_reuse_authority() {
         attempt.settle_success(&generated)?;
         Ok(())
     });
-    assert!(recovered.is_ok());
+    assert!(recovered.is_ok(), "{recovered:?}");
     assert_eq!(
         durable
             .settlements
@@ -113,11 +101,13 @@ fn durable_stage_failure_cannot_become_same_process_reuse_authority() {
             .as_slice(),
         &[DurableSettlement::Complete]
     );
-    assert!(!registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .ambiguous_protocols
-        .contains_key(&protocol));
+    assert!(
+        !registry()
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .ambiguous_protocols
+            .contains_key(&protocol)
+    );
     registry()
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner)

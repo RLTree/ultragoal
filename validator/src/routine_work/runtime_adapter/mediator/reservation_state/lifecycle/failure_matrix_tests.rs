@@ -2,7 +2,7 @@ use super::super::terminal_settlement_fixture::*;
 use super::super::*;
 use crate::routine_work::error::PanicPayloadKind;
 use std::fs;
-use std::panic::{catch_unwind, AssertUnwindSafe};
+use std::panic::{AssertUnwindSafe, catch_unwind};
 
 #[derive(Clone, Copy, Debug)]
 enum CleanupCase {
@@ -56,7 +56,6 @@ fn opaque_panic_identity_is_recorded_before_the_exact_payload_resumes() {
     let reservation = attempt("matrix-opaque-panic", Some(durable.clone()), true, None);
     let protocol = reservation.protocol_id().clone();
     let marker = reservation.recovery_marker().clone();
-    seed(&reservation, reservation.grant_id(), &marker);
     let payload = catch_unwind(AssertUnwindSafe(|| {
         let _: Result<(), RoutineError> =
             run_reserved(reservation, |_| std::panic::panic_any(OpaquePanic(7)));
@@ -124,10 +123,7 @@ fn exercise_failure(
             ReservationFailureDisposition::ReservedPending
         }
     );
-    let expected_marker = started
-        .then_some(marker.as_str())
-        .unwrap_or("matrix-foreign-marker");
-    assert_released(&protocol, Some(expected_marker));
+    assert_released(&protocol, started.then_some(marker.as_str()));
     fs::remove_dir_all(stage_root).unwrap();
 }
 
@@ -155,12 +151,6 @@ fn matrix_attempt(
     let reservation = attempt(label, Some(durable.clone()), started, None);
     let (stage_root, staged_program) = staged_fixture(label);
     retain_stage(&reservation, durable.as_ref(), staged_program);
-    let ambiguity = if started {
-        reservation.recovery_marker().as_str()
-    } else {
-        "matrix-foreign-marker"
-    };
-    seed(&reservation, reservation.grant_id(), ambiguity);
     (reservation, durable, stage_root)
 }
 

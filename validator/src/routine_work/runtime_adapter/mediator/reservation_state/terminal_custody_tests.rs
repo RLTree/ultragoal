@@ -1,7 +1,7 @@
 use super::super::terminal_settlement_fixture::*;
 use super::super::*;
 use std::fs;
-use std::panic::{catch_unwind, AssertUnwindSafe};
+use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::sync::atomic::Ordering;
 
 #[test]
@@ -103,7 +103,6 @@ fn settled_then_error_and_panic_cannot_bypass_cleanup() {
 fn terminal_attempt_rejects_new_staged_custody() {
     let durable = Arc::new(TerminalDurable::default());
     let attempt = attempt("stage-after-terminal", Some(durable.clone()), true, None);
-    seed(&attempt, attempt.grant_id(), attempt.recovery_marker());
     attempt
         .settle_incomplete(DurableSettlement::Failed)
         .unwrap();
@@ -131,7 +130,6 @@ fn staged_attempt(label: &str) -> (AttemptReservation, Arc<TerminalDurable>, std
     let attempt = attempt(label, Some(durable.clone()), true, None);
     let (stage_root, staged) = staged_fixture(label);
     retain_stage(&attempt, durable.as_ref(), staged);
-    seed(&attempt, attempt.grant_id(), attempt.recovery_marker());
     (attempt, durable, stage_root)
 }
 

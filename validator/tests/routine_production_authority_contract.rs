@@ -107,7 +107,7 @@ fn assert_attempt_storage_is_a_childless_leaf(source: &str) {
         !file
             .items
             .iter()
-            .any(|item| matches!(item, syn::Item::Mod(_)))
+            .any(|item| matches!(item, syn::Item::Mod(_) | syn::Item::Macro(_)))
     );
     let attempt = file
         .items

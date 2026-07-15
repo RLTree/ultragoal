@@ -84,8 +84,9 @@ pub(super) use read_source_binding::mediate_prepared_routine_execution;
 pub(crate) use read_source_binding::{
     bind_read_sources, grant_identity, grant_seal, registry, validate_read_sources,
 };
-use reservation_state::AttemptReservation;
-use reservation_state::{observe_staged_transition, run_reserved};
+use reservation_state::{
+    AttemptReservation, observe_staged_transition, reserve_grant, run_reserved,
+};
 pub(crate) use reuse_input_index::*;
 pub(crate) use rust_source_observation::*;
 

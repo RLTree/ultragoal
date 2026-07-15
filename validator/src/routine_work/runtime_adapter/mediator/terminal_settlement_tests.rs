@@ -22,11 +22,6 @@ fn durable_terminal_siblings_clear_exact_ambiguity_and_public_recovery() {
     ] {
         let durable = Arc::new(TerminalDurable::default());
         let reservation = attempt(label, Some(durable.clone()), true, None);
-        seed(
-            &reservation,
-            reservation.grant_id(),
-            reservation.recovery_marker(),
-        );
         let marker = reservation.settle_incomplete(outcome).unwrap();
         assert_eq!(marker, None);
         let state = registry()
@@ -65,54 +60,54 @@ fn durable_terminal_siblings_clear_exact_ambiguity_and_public_recovery() {
 }
 
 #[test]
-fn non_durable_missing_or_foreign_ambiguity_emits_no_marker() {
-    for (label, ambiguity) in [
-        ("missing-ambiguity", None),
-        ("foreign-ambiguity", Some("foreign-marker")),
-    ] {
-        let reservation = attempt(label, None, true, None);
-        let mut state = registry()
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner);
-        state.active_protocols.insert(
-            reservation.protocol_id().clone(),
-            reservation.grant_id().clone(),
-        );
-        state.ambiguous_protocols.remove(reservation.protocol_id());
-        if let Some(ambiguity) = ambiguity {
-            state
-                .ambiguous_protocols
-                .insert(reservation.protocol_id().clone(), ambiguity.to_owned());
-        }
-        drop(state);
-        assert_eq!(
-            reservation
-                .settle_incomplete(DurableSettlement::Incomplete)
-                .unwrap(),
-            None
-        );
-        let mut state = registry()
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner);
-        assert_eq!(
-            state
-                .ambiguous_protocols
-                .get(reservation.protocol_id())
-                .map(String::as_str),
-            ambiguity
-        );
-        state.ambiguous_protocols.remove(reservation.protocol_id());
-    }
+fn non_durable_pre_start_terminal_emits_no_marker() {
+    let reservation = attempt("pre-start-terminal", None, false, None);
+    assert_eq!(
+        reservation
+            .settle_incomplete(DurableSettlement::Incomplete)
+            .unwrap(),
+        None
+    );
+    let state = registry()
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    assert!(
+        !state
+            .ambiguous_protocols
+            .contains_key(reservation.protocol_id())
+    );
+}
+
+#[test]
+fn non_durable_recovery_pre_start_retains_prior_marker() {
+    let (protocol, prior_marker) = pending_recovery("pre-start-recovery-prior");
+    let reservation = recovering_attempt(
+        "pre-start-recovery",
+        &protocol,
+        prior_marker.clone(),
+        None,
+        false,
+    );
+    assert_eq!(
+        reservation
+            .settle_incomplete(DurableSettlement::Incomplete)
+            .unwrap(),
+        Some(prior_marker.clone())
+    );
+    let state = registry()
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    assert_eq!(
+        state.ambiguous_protocols.get(&protocol),
+        Some(&prior_marker)
+    );
+    drop(state);
+    clear_protocol(&protocol);
 }
 
 #[test]
 fn non_durable_ambiguity_retains_the_exact_pending_marker() {
     let reservation = attempt("non-durable", None, true, None);
-    seed(
-        &reservation,
-        reservation.grant_id(),
-        reservation.recovery_marker(),
-    );
     assert_eq!(
         reservation
             .settle_incomplete(DurableSettlement::Incomplete)
@@ -133,39 +128,40 @@ fn non_durable_ambiguity_retains_the_exact_pending_marker() {
 fn terminal_cleanup_preserves_foreign_protocol_marker_and_grant() {
     let durable = Arc::new(TerminalDurable::default());
     let reservation = attempt("foreign-cleanup", Some(durable), true, None);
-    let foreign_protocol = "terminal-protocol-foreign-other".to_owned();
-    seed(&reservation, "foreign-grant", "foreign-marker");
-    {
-        let mut state = registry()
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner);
-        state.ambiguous_protocols.insert(
-            foreign_protocol.clone(),
-            reservation.recovery_marker().clone(),
-        );
-    }
+    let foreign = attempt("foreign-cleanup-other", None, true, None);
+    let foreign_protocol = foreign.protocol_id().clone();
+    let foreign_grant = foreign.grant_id().clone();
+    let foreign_marker = foreign.recovery_marker().clone();
     assert_eq!(
         reservation
             .settle_incomplete(DurableSettlement::Failed)
             .unwrap(),
         None
     );
-    let mut state = registry()
+    let state = registry()
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner);
     assert_eq!(
-        state.active_protocols.get(reservation.protocol_id()),
-        Some(&"foreign-grant".to_owned())
-    );
-    assert_eq!(
-        state.ambiguous_protocols.get(reservation.protocol_id()),
-        Some(&"foreign-marker".to_owned())
+        state.active_protocols.get(&foreign_protocol),
+        Some(&foreign_grant)
     );
     assert_eq!(
         state.ambiguous_protocols.get(&foreign_protocol),
-        Some(reservation.recovery_marker())
+        Some(&foreign_marker)
     );
-    state.active_protocols.remove(reservation.protocol_id());
-    state.ambiguous_protocols.remove(reservation.protocol_id());
-    state.ambiguous_protocols.remove(&foreign_protocol);
+    drop(state);
+    foreign
+        .settle_incomplete(DurableSettlement::Incomplete)
+        .unwrap();
+    clear_protocol(&foreign_protocol);
+}
+
+fn clear_protocol(protocol: &str) {
+    let mut state = registry()
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    state.ambiguous_protocols.remove(protocol);
+    state
+        .failure_records
+        .retain(|_, record| record.protocol_id != protocol);
 }

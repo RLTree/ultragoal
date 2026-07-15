@@ -5,6 +5,7 @@ use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, AtomicUsize, Ordering};
 
 static NEXT_STAGE: AtomicU64 = AtomicU64::new(0);
+static NEXT_RESERVATION: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Default)]
 pub(super) struct TerminalDurable {
@@ -111,56 +112,80 @@ pub(super) fn attempt(
     started: bool,
     prior_recovery_marker: Option<String>,
 ) -> AttemptReservation {
-    let reservation = AttemptReservation::reserved(
-        format!("terminal-protocol-{label}"),
-        format!("terminal-grant-{label}"),
-        format!("terminal-marker-{label}"),
+    let grant = reservation_grant(
+        label,
+        &format!("terminal-protocol-{label}"),
         prior_recovery_marker,
         durable,
     );
+    let reservation = reserve_grant(&grant).unwrap();
     if started {
-        registry()
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner)
-            .active_protocols
-            .insert(
-                reservation.protocol_id().clone(),
-                reservation.grant_id().clone(),
-            );
         reservation.mark_started().unwrap();
     }
     reservation
 }
 
-pub(super) fn seed(attempt: &AttemptReservation, active_grant: &str, ambiguity: &str) {
-    let mut state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    state
-        .active_protocols
-        .insert(attempt.protocol_id().to_owned(), active_grant.to_owned());
-    state
-        .ambiguous_protocols
-        .insert(attempt.protocol_id().to_owned(), ambiguity.to_owned());
+pub(super) fn recovering_attempt(
+    label: &str,
+    protocol_id: &str,
+    recovery_for: String,
+    durable: Option<Arc<dyn DurableAttemptAuthority>>,
+    started: bool,
+) -> AttemptReservation {
+    let grant = reservation_grant(label, protocol_id, Some(recovery_for), durable);
+    let reservation = reserve_grant(&grant).unwrap();
+    if started {
+        reservation.mark_started().unwrap();
+    }
+    reservation
+}
+
+pub(super) fn pending_recovery(label: &str) -> (String, String) {
+    let reservation = attempt(label, None, true, None);
+    let protocol = reservation.protocol_id().clone();
+    let marker = reservation.recovery_marker().clone();
+    run_reserved(reservation, |_| {
+        Err::<(), _>(mediator_error("terminal-fixture-pending-recovery"))
+    })
+    .unwrap_err();
+    (protocol, marker)
+}
+
+pub(super) fn recovery_grant(
+    protocol_id: &str,
+    recovery_for: Option<String>,
+    durable: Arc<dyn DurableAttemptAuthority>,
+) -> RoutineRootGrant {
+    reservation_grant("recovery", protocol_id, recovery_for, Some(durable))
 }
 
 pub(super) fn retry_grant(
     reservation: &AttemptReservation,
     durable: Arc<dyn DurableAttemptAuthority>,
 ) -> RoutineRootGrant {
+    reservation_grant("retry", reservation.protocol_id(), None, Some(durable))
+}
+
+fn reservation_grant(
+    label: &str,
+    protocol_id: &str,
+    recovery_for: Option<String>,
+    durable: Option<Arc<dyn DurableAttemptAuthority>>,
+) -> RoutineRootGrant {
+    let ordinal = NEXT_RESERVATION.fetch_add(1, Ordering::Relaxed);
     RoutineRootGrant {
-        grant_id: format!("{}-retry", reservation.grant_id()),
-        session_id: "terminal-session-retry".to_owned(),
-        request_id: "terminal-request-retry".to_owned(),
-        protocol_id: reservation.protocol_id().to_owned(),
-        context_id: "terminal-context-retry".to_owned(),
-        candidate_id: "terminal-candidate-retry".to_owned(),
-        plan_id: "terminal-plan-retry".to_owned(),
-        snapshot_id: "terminal-snapshot-retry".to_owned(),
+        grant_id: format!("terminal-grant-{label}-{ordinal}"),
+        session_id: format!("terminal-session-{ordinal}"),
+        request_id: format!("terminal-request-{ordinal}"),
+        protocol_id: protocol_id.to_owned(),
+        context_id: "terminal-context".to_owned(),
+        candidate_id: "terminal-candidate".to_owned(),
+        plan_id: "terminal-plan".to_owned(),
+        snapshot_id: "terminal-snapshot".to_owned(),
         allowed_output_scopes: Vec::new(),
-        recovery_for: None,
-        seal: "terminal-seal-retry".to_owned(),
-        durable: Some(durable),
+        recovery_for,
+        seal: format!("terminal-seal-{ordinal}"),
+        durable,
     }
 }
 

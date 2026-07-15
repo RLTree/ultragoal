@@ -9,7 +9,9 @@ pub(super) fn mark_started(binding: &ReservationBinding) -> Result<(), RoutineEr
     if state
         .ambiguous_protocols
         .get(binding.protocol_id())
-        .is_some_and(|actual| actual != binding.recovery_marker())
+        .is_some_and(|actual| {
+            actual != binding.recovery_marker() && binding.prior_recovery_marker() != Some(actual)
+        })
     {
         return Err(mediator_error("mediator-recovery-marker-conflict"));
     }

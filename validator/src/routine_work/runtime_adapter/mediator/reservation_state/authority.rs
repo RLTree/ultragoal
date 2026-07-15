@@ -1,3 +1,4 @@
+use super::super::grant_validation::reservation_starts_fresh;
 use super::binding::ReservationBinding;
 use super::durable_binding::DurableBinding;
 use super::read_source_binding::release_active;
@@ -14,28 +15,45 @@ pub(in super::super) struct AttemptReservation {
     staged: StagedCustody,
 }
 
-impl AttemptReservation {
-    pub(in super::super) fn reserved(
-        protocol_id: String,
-        grant_id: String,
-        recovery_marker: String,
-        prior_recovery_marker: Option<String>,
-        durable: Option<Arc<dyn DurableAttemptAuthority>>,
-    ) -> Self {
-        Self {
-            binding: ReservationBinding::new(
-                protocol_id,
-                grant_id,
-                recovery_marker,
-                prior_recovery_marker,
-            ),
-            started: Cell::new(false),
-            settled: Cell::new(false),
-            durable: DurableBinding::new(durable),
-            staged: StagedCustody::new(),
-        }
+pub(in super::super) fn reserve_grant(
+    grant: &RoutineRootGrant,
+) -> Result<AttemptReservation, RoutineError> {
+    if let Some(durable) = &grant.durable {
+        durable.validate_reserved()?;
     }
+    let mut state = registry()
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    if state.consumed_grants.contains(&grant.grant_id) {
+        return Err(mediator_error("mediator-root-grant-replayed"));
+    }
+    if state.active_protocols.contains_key(&grant.protocol_id) {
+        return Err(mediator_error("mediator-protocol-attempt-active"));
+    }
+    if reservation_starts_fresh(&state, grant)? {
+        state
+            .failure_records
+            .retain(|_, record| record.protocol_id != grant.protocol_id);
+    }
+    state.consumed_grants.insert(grant.grant_id.clone());
+    state
+        .active_protocols
+        .insert(grant.protocol_id.clone(), grant.grant_id.clone());
+    Ok(AttemptReservation {
+        binding: ReservationBinding::new(
+            grant.protocol_id.clone(),
+            grant.grant_id.clone(),
+            recovery_identity(&grant.grant_id, &grant.protocol_id, &grant.request_id),
+            grant.recovery_for.clone(),
+        ),
+        started: Cell::new(false),
+        settled: Cell::new(false),
+        durable: DurableBinding::new(grant.durable.clone()),
+        staged: StagedCustody::new(),
+    })
+}
 
+impl AttemptReservation {
     #[cfg(test)]
     pub(in super::super) fn protocol_id(&self) -> &String {
         self.binding.protocol_id()

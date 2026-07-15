@@ -10,6 +10,7 @@ mod mediator {
         pub(crate) mod authority {
             use std::cell::{Cell, RefCell};
             pub(in crate::mediator) struct AttemptReservation {
+                started: Cell<bool>,
                 settled: Cell<bool>,
                 staged: RefCell<Vec<()>>,
             }
@@ -18,6 +19,7 @@ mod mediator {
         pub mod descendant_attack {
             use super::AttemptReservation;
             pub fn forge(a: &AttemptReservation) {
+                a.started.set(true);
                 a.settled.set(true);
                 a.staged.borrow_mut().clear();
             }
@@ -26,10 +28,12 @@ mod mediator {
     pub mod sibling_attack {
         use super::reservation_state::AttemptReservation;
         pub fn forge(a: &AttemptReservation) {
+            a.started.set(true);
             a.settled.set(true);
             a.staged.borrow_mut().clear();
         }
     }
+    // OPENED_EXTENSION
 }
 "#;
 
@@ -40,15 +44,15 @@ fn sibling_and_descendant_cannot_mutate_reservation_storage() {
     prepare(owned.path());
 
     fs::write(owned.path().join("lib.rs"), opened()).unwrap();
-    let control = check(owned.path());
+    let control = run(owned.path());
     assert!(control.status.success(), "{}", diagnostic(&control));
 
     fs::write(owned.path().join("lib.rs"), CLOSED).unwrap();
     let closed = check(owned.path());
     assert!(!closed.status.success(), "closed mutation probe compiled");
     let stderr = String::from_utf8_lossy(&closed.stderr);
-    assert_eq!(stderr.matches("error[E0616]").count(), 4, "{stderr}");
-    for field in ["settled", "staged"] {
+    assert_eq!(stderr.matches("error[E0616]").count(), 6, "{stderr}");
+    for field in ["started", "settled", "staged"] {
         assert!(
             stderr.matches(&format!("field `{field}`")).count() >= 2,
             "{stderr}"
@@ -61,7 +65,7 @@ fn assert_production_shape() {
     let graph =
         include_str!("../../src/routine_work/runtime_adapter/mediator/reservation_state/mod.rs");
     assert!(graph.contains("mod authority;"));
-    assert!(graph.contains("pub(super) use authority::AttemptReservation;"));
+    assert!(graph.contains("pub(super) use authority::{AttemptReservation, reserve_grant};"));
     assert!(!graph.contains("reserved_test_attempt"));
     let source = include_str!(
         "../../src/routine_work/runtime_adapter/mediator/reservation_state/authority.rs"
@@ -71,7 +75,7 @@ fn assert_production_shape() {
         !file
             .items
             .iter()
-            .any(|item| matches!(item, syn::Item::Mod(_)))
+            .any(|item| matches!(item, syn::Item::Mod(_) | syn::Item::Macro(_)))
     );
     let attempt = file
         .items
@@ -81,6 +85,7 @@ fn assert_production_shape() {
             _ => None,
         })
         .expect("opaque reservation owner is declared");
+    assert!(attempt.attrs.is_empty());
     let syn::Visibility::Restricted(visibility) = &attempt.vis else {
         panic!("reservation owner visibility widened");
     };
@@ -108,10 +113,48 @@ fn assert_production_shape() {
             .map(str::to_owned)
             .collect()
     );
+    let free_functions = file
+        .items
+        .iter()
+        .filter_map(|item| match item {
+            syn::Item::Fn(item) => Some(item.sig.ident.to_string()),
+            _ => None,
+        })
+        .collect::<std::collections::BTreeSet<_>>();
+    assert_eq!(
+        free_functions,
+        ["reserve_grant".to_owned()].into_iter().collect()
+    );
+    let methods = file
+        .items
+        .iter()
+        .filter_map(|item| match item {
+            syn::Item::Impl(item) => Some(item),
+            _ => None,
+        })
+        .flat_map(|item| {
+            assert!(item.attrs.is_empty());
+            assert!(
+                item.items
+                    .iter()
+                    .all(|member| matches!(member, syn::ImplItem::Fn(_)))
+            );
+            &item.items
+        })
+        .filter_map(|item| match item {
+            syn::ImplItem::Fn(item) => Some(item.sig.ident.to_string()),
+            _ => None,
+        })
+        .collect::<std::collections::BTreeSet<_>>();
+    assert_eq!(methods, expected_methods());
 }
 
 fn opened() -> String {
-    CLOSED
+    let graph = CLOSED
+        .replace(
+            "started: Cell<bool>",
+            "pub(in crate::mediator) started: Cell<bool>",
+        )
         .replace(
             "settled: Cell<bool>",
             "pub(in crate::mediator) settled: Cell<bool>",
@@ -119,7 +162,38 @@ fn opened() -> String {
         .replace(
             "staged: RefCell<Vec<()>>",
             "pub(in crate::mediator) staged: RefCell<Vec<()>>",
-        )
+        );
+    graph.replace(
+        "// OPENED_EXTENSION",
+        "pub fn exercise() {\n        let attempt = reservation_state::authority::AttemptReservation {\n            started: std::cell::Cell::new(false),\n            settled: std::cell::Cell::new(false),\n            staged: std::cell::RefCell::new(vec![()]),\n        };\n        reservation_state::descendant_attack::forge(&attempt);\n        sibling_attack::forge(&attempt);\n        assert!(attempt.started.get());\n        assert!(attempt.settled.get());\n        assert!(attempt.staged.borrow().is_empty());\n    }",
+    ) + "\n#[cfg(test)] mod opened_control {\n    #[test] fn both_attacks_execute() { crate::mediator::exercise(); }\n}\n"
+}
+
+fn expected_methods() -> std::collections::BTreeSet<String> {
+    [
+        "authenticates_artifact",
+        "cleanup_staged",
+        "failure_evidence",
+        "finish_terminal",
+        "grant_id",
+        "is_started",
+        "mark_started",
+        "prepare_spawn",
+        "protocol_id",
+        "record_failure_and_transition",
+        "recovery_marker",
+        "require_open",
+        "retain_non_durable_authentication",
+        "reuse_only",
+        "settle_incomplete",
+        "settle_success",
+        "stage_and_use",
+        "stage_success",
+        "terminal_is_authoritative",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
 }
 
 fn prepare(scratch: &Path) {
@@ -133,6 +207,15 @@ fn prepare(scratch: &Path) {
 fn check(scratch: &Path) -> Output {
     Command::new(std::env::var_os("CARGO").unwrap_or_else(|| "cargo".into()))
         .args(["check", "--offline", "--quiet"])
+        .current_dir(scratch)
+        .env("CARGO_TARGET_DIR", scratch.join("target"))
+        .output()
+        .unwrap()
+}
+
+fn run(scratch: &Path) -> Output {
+    Command::new(std::env::var_os("CARGO").unwrap_or_else(|| "cargo".into()))
+        .args(["test", "--offline", "--quiet"])
         .current_dir(scratch)
         .env("CARGO_TARGET_DIR", scratch.join("target"))
         .output()

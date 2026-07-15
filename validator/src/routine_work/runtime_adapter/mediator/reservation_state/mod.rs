@@ -16,5 +16,5 @@ mod staged_custody;
 #[path = "terminal_custody_tests.rs"]
 mod terminal_custody_tests;
 
-pub(super) use authority::AttemptReservation;
+pub(super) use authority::{AttemptReservation, reserve_grant};
 pub(super) use lifecycle::{observe_staged_transition, run_reserved};

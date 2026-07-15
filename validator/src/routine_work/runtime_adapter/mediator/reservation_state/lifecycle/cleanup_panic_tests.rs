@@ -1,7 +1,7 @@
 use super::super::terminal_settlement_fixture::*;
 use super::super::*;
 use std::fs;
-use std::panic::{catch_unwind, AssertUnwindSafe};
+use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::sync::atomic::Ordering;
 
 fn set_cleanup_panic(durable: &TerminalDurable, payload: &'static str) {
@@ -42,20 +42,12 @@ fn lifecycle_panic_precedes_cleanup_panic_after_exact_transition() {
         set_cleanup_panic(&durable, "reservation-cleanup-panic");
         let reservation = attempt(label, Some(durable.clone()), false, None);
         let protocol = reservation.protocol_id().clone();
-        let grant = reservation.grant_id().clone();
         let marker = reservation.recovery_marker().clone();
-        let foreign_protocol = format!("{protocol}-foreign");
+        let foreign = attempt(&format!("{label}-foreign"), None, true, None);
+        let foreign_protocol = foreign.protocol_id().clone();
+        let foreign_marker = foreign.recovery_marker().clone();
         let (stage_root, staged) = staged_fixture(label);
         retain_stage(&reservation, durable.as_ref(), staged);
-        {
-            let mut state = registry()
-                .lock()
-                .unwrap_or_else(std::sync::PoisonError::into_inner);
-            state.active_protocols.insert(protocol.clone(), grant);
-            state
-                .ambiguous_protocols
-                .insert(foreign_protocol.clone(), "foreign-marker".to_owned());
-        }
 
         let unwound = catch_unwind(AssertUnwindSafe(|| {
             let _: Result<(), RoutineError> = run_reserved(reservation, |attempt| {
@@ -89,17 +81,15 @@ fn lifecycle_panic_precedes_cleanup_panic_after_exact_transition() {
                     .ambiguous_protocols
                     .get(&foreign_protocol)
                     .map(String::as_str),
-                Some("foreign-marker")
+                Some(foreign_marker.as_str())
             );
         }
 
         let recovery_durable = Arc::new(TerminalDurable::default());
-        let mut recovery = retry_grant(&attempt(label, None, false, None), recovery_durable);
-        recovery.protocol_id.clone_from(&protocol);
-        recovery.recovery_for = started.then_some(marker);
+        let recovery = recovery_grant(&protocol, started.then_some(marker), recovery_durable);
         let retry = reserve_grant(&recovery).unwrap();
         retry.settle_incomplete(DurableSettlement::Failed).unwrap();
-        let mut state = registry()
+        let state = registry()
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         assert!(!state.active_protocols.contains_key(&protocol));
@@ -109,10 +99,13 @@ fn lifecycle_panic_precedes_cleanup_panic_after_exact_transition() {
                 .ambiguous_protocols
                 .get(&foreign_protocol)
                 .map(String::as_str),
-            Some("foreign-marker")
+            Some(foreign_marker.as_str())
         );
-        state.ambiguous_protocols.remove(&foreign_protocol);
         drop(state);
+        foreign
+            .settle_incomplete(DurableSettlement::Incomplete)
+            .unwrap();
+        clear(&foreign_protocol);
         fs::remove_dir_all(stage_root).unwrap();
     }
 }
@@ -127,15 +120,9 @@ fn cleanup_panic_precedes_result_outcomes_after_exact_transition() {
         set_cleanup_panic(&durable, "reservation-cleanup-result-panic");
         let reservation = attempt(label, Some(durable.clone()), false, None);
         let protocol = reservation.protocol_id().clone();
-        let grant = reservation.grant_id().clone();
         let marker = reservation.recovery_marker().clone();
         let (stage_root, staged) = staged_fixture(label);
         retain_stage(&reservation, durable.as_ref(), staged);
-        seed(
-            &reservation,
-            &grant,
-            if started { &marker } else { "foreign-marker" },
-        );
 
         let unwound = catch_unwind(AssertUnwindSafe(|| {
             run_reserved(reservation, |attempt| {
@@ -168,11 +155,7 @@ fn cleanup_panic_precedes_result_outcomes_after_exact_transition() {
         assert!(!state.active_protocols.contains_key(&protocol));
         assert_eq!(
             state.ambiguous_protocols.get(&protocol).map(String::as_str),
-            Some(if started {
-                marker.as_str()
-            } else {
-                "foreign-marker"
-            })
+            started.then_some(marker.as_str())
         );
         drop(state);
         clear(&protocol);
@@ -198,10 +181,8 @@ fn ordinary_error_precedes_cleanup_error_but_missing_transition_does_not() {
             Some("reservation-cleanup-result-error");
         let reservation = attempt(label, Some(durable.clone()), false, None);
         let protocol = reservation.protocol_id().clone();
-        let grant = reservation.grant_id().clone();
         let (stage_root, staged) = staged_fixture(label);
         retain_stage(&reservation, durable.as_ref(), staged);
-        seed(&reservation, &grant, "foreign-marker");
 
         let error = run_reserved(reservation, |_| {
             if ordinary_error {
@@ -224,10 +205,7 @@ fn ordinary_error_precedes_cleanup_error_but_missing_transition_does_not() {
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         assert!(!state.active_protocols.contains_key(&protocol));
-        assert_eq!(
-            state.ambiguous_protocols.get(&protocol).map(String::as_str),
-            Some("foreign-marker")
-        );
+        assert!(!state.ambiguous_protocols.contains_key(&protocol));
         drop(state);
         clear(&protocol);
         fs::remove_dir_all(stage_root).unwrap();
