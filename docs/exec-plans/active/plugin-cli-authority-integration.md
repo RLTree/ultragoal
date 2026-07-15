@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | `36c902b35` / tree `1e7e404f` | Clean source-only freeze makes Detached rollback scan the held parent and rebind only the exact descriptor identity; causal control covers two refused scans then settlement; custody matrix `14/14` and same-helper pass; acceptance, receipt regeneration, and integration remain withheld | Independently falsify the exact descriptor-rebind tree before receipt regeneration |
+| N06 routine execution | rework | `36c902b35` / tree `1e7e404f` | Exact-tree review found the refusal hook runs before parent enumeration or held-child identity observation, so the causal control can count two effectless entries as recovery scans; acceptance, receipt regeneration, and integration remain withheld | Move the fault boundary behind descriptor-bound parent enumeration and held-owner observation, then prove two real scans precede successful rebind and settlement |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,8 +46,10 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for the custody/cleanup class is `9`.
-The next action is exact-tree N06 descriptor-rebind review. Escalation is legitimate only for
+current exact-candidate rejection count for the custody/cleanup class is `10`.
+The next action is N06 repair at the shared observed-recovery invariant: every
+counted refusal follows a real scan of the same held parent and observation of
+the held owner. Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
 
@@ -96,8 +98,9 @@ external action, secret handling, or unavailable required access.
   affected claim until behavior and evidence are re-audited.
 - N04 source transaction authority and its corrected WorkerResult are accepted,
   integrated, and retired. Root production reachability and every live host
-  identity remain open. Root `350504634` is clean. N06 `36c902b35` / tree
-  `1e7e404f` remains the sole gate and is under exact-tree source review; receipt
+  identity remain open. Root `49502ddab` is clean. N06 `36c902b35` / tree
+  `1e7e404f` remains the sole gate and is in source REWORK because its refusal
+  control can count function entry before any descriptor-bound scan; receipt
   regeneration, dependency-closed acceptance, and integration remain withheld.
   N10 `7f92b7ed3` / tree `53bd7717` and N11 `9c2911d6d` /
   tree `6176c259` are frozen speculative source candidates; their dependency
