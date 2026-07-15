@@ -37,8 +37,10 @@ Proof must bind to a fresh operation, not just to plausible metadata.
   operation happened correctly.
 - Regenerate manifests after live proof. Stale claim rows are blockers, not
   harmless leftovers.
-- Split large gates into independently runnable receipts when a monolithic
-  check is slow, hangs, or hides which proof surface failed.
+- Split large gates into independently runnable checks when a monolithic check
+  is slow, hangs, or hides which proof surface failed. Do not multiply durable
+  receipts merely to mirror that command split; emit one minimal canonical
+  claim anchor only at the boundary that requires persistence.
 - If a command needs isolated cache or target state, declare that environment
   in the receipt or setup contract; do not rely on the operator's memory.
 - If the user or contract names a full plugin, process, installed package, app
@@ -47,9 +49,12 @@ Proof must bind to a fresh operation, not just to plausible metadata.
   packages, or alternate tools claim-limits the result unless the fallback
   boundary is explicit and accepted.
 - Plugin availability claims need separate source, installed-plugin,
-  cache-package, package-sync, package-hygiene, and per-surface receipts. A
-  source-tree check does not prove installed plugin, app registry, sidebar,
-  multi-agent launcher, marketplace, or runtime visibility.
+  cache-package, package-sync, package-hygiene, app-registry, and runtime
+  observations. A source-tree check does not prove installed plugin, app
+  registry, sidebar, multi-agent launcher, marketplace, or runtime visibility.
+  Persist separate receipts only when a named claim requires durable
+  same-surface custody and one canonical aggregate cannot preserve the
+  distinctions without ambiguity.
 - Browser, UI, and runtime proof records exact tool identity, version, binary
   path when relevant, artifact digests, workspace, and claim ceiling. A
   screenshot or trace without runtime identity is weak context, not strong

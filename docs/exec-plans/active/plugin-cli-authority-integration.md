@@ -233,19 +233,53 @@ public catalog/dispatcher, global generated authority, migration/claim registry,
 candidate identity, integration, claims, and release. Before launch, each gets
 a dedicated ExecPlan with exact base/head, launch prompt, owned/forbidden paths,
 `.codex-worktree/env.sh`, state/scratch/home/temp/cache/target roots, dependency
-digests, verification commands, review cadence, ready receipt, and teardown
-condition. Absence of that file blocks `create_thread`.
+digests, verification commands, review cadence, the single post-acceptance
+WorkerResult handoff, and teardown condition. Absence of that file blocks
+`create_thread`.
 
 Every session owns disjoint paths and semantics, uses isolated
 `.codex-worktree` state and Cargo targets, and returns a committed
 WorkerResult-v1 package without readiness, release, or completion claims.
+
+## Standing Review And Proof-Artifact Economy
+
+These are interpretations of the adopted review, simplicity, and proof laws;
+they do not add a graph node or raise any claim.
+
+- Every bounded independent review completes the named invariant surface and
+  batches all demonstrated sibling and descendant defects into one REWORK
+  packet. One material defect still rejects the candidate, but is not an
+  early-stop condition.
+- Implementation and repair loops keep command output, compiler output, test
+  logs, targets, caches, scratch state, and reproducible diagnostics ephemeral.
+  They do not emit receipts merely because bytes or commands changed.
+- `WorkerResult-v1` is the single lane handoff receipt required by the adopted
+  contract. Generate it once only after source acceptance, never for rejected
+  repair candidates, and do not wrap it in duplicate summaries or receipts.
+- Root persists additional evidence only when a named current claim needs
+  cross-process custody or the observation cannot be reproduced. Each retained
+  artifact must have one canonical authority, purpose, owner, claim ceiling,
+  candidate identity, invalidation trigger, retention boundary, and deletion
+  path.
+- Superseded, detached, reproducible, non-claimed, and package-excluded proof
+  artifacts are deleted at the next safe integration or worktree teardown.
+  Product source, required migrations, and irreproducible active claim anchors
+  are not classified as disposable build artifacts.
+- At the already-required post-N06/N10/N11 standards-debt checkpoint, the root
+  must make the canonical CLI reject duplicate receipt readers/writers,
+  receipt-of-receipt chains, package-visible build artifacts, private-path
+  proof, and artifact-existence claim promotion. Reuse the existing inventory,
+  claim manifest, and package checks; do not create a new proof subsystem or
+  audit-only worktree. The standards, package-hygiene, affected integration,
+  release, and completion claims remain withheld until that enforcement passes
+  on their exact candidate boundaries.
 
 ## Audit Cadence Matrix
 
 | Audit | Trigger | Owner | Required candidate identity | Evidence surface | Claims withheld until pass |
 | --- | --- | --- | --- | --- | --- |
 | Focused lane behavior and owned laws | Every implementation freeze | Worktree integrator | Exact clean lane HEAD/tree and owned artifact inventory | Focused positive, negative, race, interruption, recovery, repeat-use, security, false-pass, formatting, warning, line-cap, and mutation checks | Parent acceptance, root integration, product, readiness, release, completion |
-| Worktree freeze receipt and adversarial review | Clean committed source plus self-excluding WorkerResult | Worktree integrator and independent parent reviewer | Exact source HEAD/tree, receipt HEAD/tree, receipt digest, base, and path inventory | WorkerResult-v1, literal command outcomes, immutable artifact reconciliation, independent falsification | Parent acceptance, live behavior, readiness, release, completion |
+| Worktree freeze handoff and adversarial review | Source acceptance, then one self-excluding WorkerResult | Worktree integrator and independent parent reviewer | Exact accepted source HEAD/tree, receipt HEAD/tree, receipt digest, base, and path inventory | Single WorkerResult-v1, literal command outcomes kept in the handoff, immutable artifact reconciliation, bounded exhaustive falsification | Parent acceptance, live behavior, readiness, release, completion |
 | Root dependency-closed integration | Accepted increment lands or a shared interface/authority changes | Root integrator | Exact root HEAD/tree after all root-owned wiring and documentation edits | Affected strict compile, cross-lane behavior, semantic namespaces, generated authority, documentation freshness, zero-write read probes, and targeted coverage when it can support the current claim | Affected integration ceiling, warning-free source, public route, and any dependent product claim |
 | Product freeze | Dependency graph reaches a stable product closure | Root integrator plus independent product/security/persona reviewers | Exact root, package, install, discovery, and runtime identities | Exact coverage; Product Success/Fitness/Cohesion; live observability; migrations; representative clean, dirty, partial, conflict, failure, interruption, recovery, repeat-use, adversarial, and fresh-agent journeys; full standards audit | Product success, quality-in-use, readiness, representative-journey closure |
 | Release and completion freeze | No authority-bearing edit remains after product acceptance | Root integrator plus independent final reviewers | Exact final commit/tree and separately bound package, install, cache, marketplace, app-registry, discovery, and runtime digests | Clean-room distribution proof, full coverage, release proof, four-persona material review, migration/retirement closure, two byte-identical inventories, final requirement-to-evidence audit | Release, node closure, completion |

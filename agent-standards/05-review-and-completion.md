@@ -27,6 +27,10 @@ evidence.
   the verdict must label the evidence as supplied-only and explain the
   exception.
 - Negative fixtures must pin the bug class.
+- A reviewer completes the bounded named invariant surface and returns all
+  demonstrated sibling and descendant defects in one consolidated result. One
+  material defect is sufficient for rejection, but review does not stop at the
+  first defect unless continuing would be unsafe, destructive, or out of scope.
 - Approval must name the proof anchors checked and the claim ceiling that
   remains unsupported.
 
@@ -57,8 +61,10 @@ cannot satisfy material sign-off.
 
 Cadence:
 
-- Every material review round is a sign-off attempt: regenerate validator,
-  review-target, archive, and registry receipts first when relevant.
+- Every material review round is a sign-off attempt. Recompute only the
+  canonical claim anchors whose candidate, authority surface, or freshness rule
+  makes them necessary for that round; do not regenerate detached, historical,
+  superseded, or unrelated receipts.
 - Use all four installed personas with runtime-supported model and reasoning
   configuration, recording those values only when Codex exposes them.
 - Give every reviewer the full current scope, current anchors, and current

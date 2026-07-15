@@ -23,7 +23,9 @@ credentials, and mutable runtime state.
 - Agents preserve user changes and never sweep unrelated files into their work.
 - Dirty worktrees, foreign edits, and stale state roots are blockers or
   coordination points, not reasons to widen scope.
-- Teardown preserves evidence before deleting scratch state.
+- Teardown preserves only irreproducible evidence that still anchors an active
+  claim or recovery need. Reproducible build, test, debug, target, cache, and
+  scratch output is deleted with the workspace.
 - Codex app-managed worktree threads are the preferred owners for ExecPlan
   macro-lanes that should be visible, resumable, and independently operable in
   the Codex app.
@@ -40,9 +42,10 @@ credentials, and mutable runtime state.
   state, scratch, home, temp, port, cache, and target directories.
 - Runtime output belongs in ignored per-worktree state, not in repo-managed
   `.codex/` configuration.
-- Durable identity belongs in repo-managed contracts and receipts. Ephemeral
-  worktree, cache, debug, replay, and local environment state belongs in
-  ignored per-worktree paths.
+- Durable identity belongs in repo-managed contracts and, only when a named
+  claim or cross-process handoff requires it, one canonical receipt. Ephemeral
+  worktree, cache, debug, replay, build, test, and local environment state
+  belongs in ignored per-worktree paths.
 - One worktree per macro-lane is reused across that lane's repair and review
   loops.
 - Worktrees are storage debt. Clean merged worktrees must be closed after
@@ -93,7 +96,8 @@ Required fields:
 - lane id, branch, worktree, and current commit;
 - changed owned paths and confirmation that forbidden/shared paths were not
   modified;
-- commands run, exit codes, and artifact paths;
-- ready receipt path and claim ceiling;
+- commands run, exit codes, and only the artifact paths that remain necessary;
+- the minimal current proof anchor and claim ceiling; name `none` when no
+  durable receipt is required;
 - dirty worktree status or explicit preserved uncommitted paths;
 - blockers, withheld claims, and next recommended parent action.

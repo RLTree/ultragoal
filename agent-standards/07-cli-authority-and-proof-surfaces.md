@@ -31,6 +31,31 @@ Proof surfaces are not interchangeable.
   ceiling. Stale, wrong-digest, wrong-surface, copied, missing, or private-path
   receipts block affected claims.
 
+## Proof Artifact Economy
+
+Evidence is observed whenever needed; durable proof artifacts are created only
+when persistence is necessary.
+
+- Focused implementation checks, repair-loop diagnostics, and reproducible
+  local test output stay ephemeral by default.
+- Persist a receipt only for a named current claim, cross-process custody,
+  irreproducible external observation, required independent handoff, or
+  recovery need. A schema or writer existing is not a reason to emit one.
+- Use one canonical receipt per claim, proof surface, candidate, and operation.
+  Do not create per-command mirrors, copied summaries, receipt-of-receipt
+  chains, or parallel readers and writers for the same authority.
+- Every retained proof artifact names its purpose, owner, claim ceiling,
+  invalidation trigger, retention boundary, and deletion or garbage-collection
+  path. If those cannot be named, keep the observation ephemeral or remove the
+  artifact.
+- Superseded, detached, reproducible, and non-claimed artifacts are cleanup,
+  not historical authority. They must not enter the product package and are
+  removed at the next safe integration or workspace teardown boundary.
+- The CLI enforcement kernel must reject duplicate receipt authority,
+  package-visible build artifacts, private-path proof, and promotion based only
+  on artifact existence. Enforcement should use existing inventories and claim
+  manifests rather than producing another receipt layer.
+
 ## Coverage Authority
 
 Coverage is source-law proof, not a confidence note.

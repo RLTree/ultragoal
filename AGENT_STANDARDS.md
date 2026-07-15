@@ -73,6 +73,14 @@ record the gap before acting.
   or smoke tests are forbidden substitutes.
 - Material review uses the four merged canonical personas with the required model,
   reasoning, full-scope, fresh-context cadence.
+- A bounded review completes its named invariant surface and batches every
+  demonstrated sibling defect into one response. One material defect rejects
+  the candidate, but is not an early-stop condition unless continuing would be
+  unsafe, destructive, or outside the authorized surface.
+- Proof artifacts are an exception, not a default output. Persist only the
+  smallest canonical artifact required by a current claim, cross-process
+  handoff, irreproducible observation, or recovery need; keep ordinary build,
+  test, and diagnostic output ephemeral and disposable.
 - Do not claim done, ready, fixed, passing, complete, or production-ready
   without fresh named evidence and an honest claim ceiling.
 - Repeated friction becomes the smallest durable improvement: check, fixture,
