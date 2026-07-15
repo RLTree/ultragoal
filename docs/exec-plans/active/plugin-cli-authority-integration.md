@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | rejected `cf84b182d` / tree `3dcc9f97` | Consolidated exact-tree review demonstrated three shared false-pass classes: wrapped or locally aliased owner receivers, grammar-aliased transition calls, and import-renamed owner patterns; migration, receipt, integration, and all higher claims remain withheld | Repair the single semantic custody invariant across both owners and constructors: every custody mutation and transition must be recognized independently of receiver or type spelling, with compiling causal controls for every demonstrated sibling class |
+| N06 routine execution | under_review | `71acbbef4` / tree `60e600b6` | Clean source freeze repairs wrapped/local receiver identity, grammar-aliased transition calls, constructor locals, and import-renamed owner patterns across both custody owners; migration, receipt, integration, and all higher claims remain withheld | Complete one fresh bounded exhaustive review of the whole semantic custody invariant and batch every demonstrated defect before verdict |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,14 +46,12 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `43`. Exact candidate
-`cf84b182d` / tree `3dcc9f97` is rejected after one bounded review completed the
-named custody surface. The next action is one invariant-level repair of the
-existing AST guard and its causal mutants: recognize wrapped and locally aliased
-owner receivers, method/UFCS/function-pointer transition aliases, constructor
-locals, and import-renamed owner patterns across both `AttemptReservation` and
-`StagedCustody`. No receipt regeneration or dependent claim may consume this
-rejected freeze.
+current exact-candidate rejection count for N06 is `43`. Exact clean candidate
+`71acbbef4` / tree `60e600b6` is under one fresh bounded exhaustive review of the
+complete semantic custody invariant across `AttemptReservation`,
+`StagedCustody`, existing methods, constructors, receiver propagation,
+transition invocation grammar, and owner spelling. No receipt regeneration or
+dependent claim may consume this unaccepted freeze.
 The public 42-test claim remains withheld at 41/42 until a representative-load
 root observation.
 Escalation is legitimate only for
