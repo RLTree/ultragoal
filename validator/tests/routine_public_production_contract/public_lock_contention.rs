@@ -1,7 +1,10 @@
 mod controls;
+mod invocation_capability;
 mod live_child;
+mod selection_controls;
 mod supervisor;
 
+use self::invocation_capability::CapabilityMode;
 use self::supervisor::{
     SupervisorOutcome, SupervisorPlan, assert_fixture_lock_released, finish_fixture,
     run_child_if_requested, run_supervisor,
@@ -28,7 +31,7 @@ fn assert_public_busy(output: &std::process::Output) {
 
 #[test]
 fn held_public_lock_refuses_a_real_contender_without_effect_then_allows_retry() {
-    if run_child_if_requested() {
+    if run_child_if_requested(TEST_NAME) {
         return;
     }
     let mut fixture = dirty_fixture("held-lock-contender", true);
@@ -45,6 +48,7 @@ fn held_public_lock_refuses_a_real_contender_without_effect_then_allows_retry() 
             group_signal_refusals: 0,
             reap_status_refusals: 0,
             pipe_drain_refusals: 0,
+            capability: CapabilityMode::Valid,
         },
     );
 

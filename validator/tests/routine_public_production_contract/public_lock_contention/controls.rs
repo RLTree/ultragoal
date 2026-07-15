@@ -1,5 +1,6 @@
 use super::super::public_effect_refusal::{assert_fixture_unchanged, dirty_fixture};
 use super::super::scenario::tree;
+use super::invocation_capability::CapabilityMode;
 use super::live_child::verify_live_child_panic;
 use super::supervisor::{
     SupervisorObservation, SupervisorOutcome, SupervisorPlan, assert_fixture_lock_released,
@@ -9,10 +10,12 @@ use std::time::Duration;
 
 const TEST_NAME: &str = "routine_public_production_contract::public_lock_contention::controls::\
     supervisor_faults_leave_no_live_group_or_fixture_residue";
+const LIVE_CHILD_TEST_NAME: &str = "routine_public_production_contract::public_lock_contention::controls::\
+    live_child_handshake_rejects_noncausal_panic_variants";
 
 #[test]
 fn supervisor_faults_leave_no_live_group_or_fixture_residue() {
-    if run_child_if_requested() {
+    if run_child_if_requested(TEST_NAME) {
         return;
     }
     run_case("hang", plan("hang"), |_, observed| {
@@ -56,10 +59,17 @@ fn supervisor_faults_leave_no_live_group_or_fixture_residue() {
             assert_eq!(observed.faults.reap_status_refusals(), 40);
         },
     );
-    run_case("pipe-pressure", plan("pipe-pressure"), |_, observed| {
-        let output = terminated_output(observed);
-        assert_eq!(output.stdout.len(), 64 * 1024);
-    });
+    run_case(
+        "pipe-pressure",
+        SupervisorPlan {
+            execution_bound: Duration::from_secs(1),
+            ..plan("pipe-pressure")
+        },
+        |_, observed| {
+            let output = terminated_output(observed);
+            assert_eq!(output.stdout.len(), 64 * 1024);
+        },
+    );
     run_case(
         "pipe-refusal",
         SupervisorPlan {
@@ -104,7 +114,7 @@ fn supervisor_faults_leave_no_live_group_or_fixture_residue() {
 
 #[test]
 fn live_child_handshake_rejects_noncausal_panic_variants() {
-    if run_child_if_requested() {
+    if run_child_if_requested(LIVE_CHILD_TEST_NAME) {
         return;
     }
     for (case, diagnostic) in [
@@ -168,6 +178,7 @@ fn plan(case: &'static str) -> SupervisorPlan {
         group_signal_refusals: 0,
         reap_status_refusals: 0,
         pipe_drain_refusals: 0,
+        capability: CapabilityMode::Valid,
     }
 }
 

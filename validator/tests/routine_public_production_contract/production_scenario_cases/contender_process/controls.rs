@@ -42,6 +42,7 @@ fn primary_kill_refusal_retains_child_until_group_escalation_reaps_it() {
         Duration::from_millis(20),
         Duration::from_millis(100),
         faults,
+        || {},
     ) {
         BoundedContender::Unresolved(custody) => custody,
         other => panic!("primary kill refusal lost custody: {other:?}"),
@@ -64,6 +65,7 @@ fn reap_status_refusals_are_observed_before_bounded_reap() {
         Duration::from_millis(20),
         Duration::from_secs(1),
         faults,
+        || {},
     )) {
         ContainedContender::TerminatedAndReaped(_) => {}
         other => panic!("reap-status recovery did not finish: {other:?}"),
@@ -81,6 +83,7 @@ fn late_reap_retains_the_same_child_until_a_later_bounded_escalation() {
         Duration::from_millis(20),
         Duration::from_millis(40),
         faults,
+        || {},
     ) {
         BoundedContender::Unresolved(custody) => custody,
         other => panic!("late-reap fault did not retain custody: {other:?}"),
@@ -103,6 +106,7 @@ fn group_signal_refusal_falls_through_to_forceful_group_reap() {
         Duration::from_millis(20),
         Duration::from_millis(100),
         faults,
+        || {},
     ) {
         BoundedContender::Unresolved(custody) => custody,
         other => panic!("primary refusal did not retain custody: {other:?}"),
@@ -139,6 +143,7 @@ fn pipe_drain_failure_cannot_hide_an_unreaped_process() {
         Duration::from_secs(1),
         Duration::from_secs(1),
         faults,
+        || {},
     )) {
         ContainedContender::ReapedWithFailure(cause) => {
             assert_eq!(cause, "contender-pipe-drain-injected-refusal");

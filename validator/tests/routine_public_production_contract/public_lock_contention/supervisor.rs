@@ -1,8 +1,9 @@
 use super::super::scenario::{
     ContainedContender, FaultObservations, Fixture, TerminationFaults, contain_contender,
-    git_output, routine_command, run_contender_with_termination_faults, tree,
+    git_output, routine_command, run_contender_with_termination_faults_after_spawn, tree,
 };
 use super::assert_public_busy;
+use super::invocation_capability::{self, CapabilityMode, Invocation};
 use super::live_child;
 use std::fs::{self, OpenOptions};
 use std::io::Write;
@@ -12,11 +13,6 @@ use std::process::{Command, Output};
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
-const MODE: &str = "HUL_ROUTINE_PUBLIC_CONTENTION_SUPERVISOR";
-const CASE: &str = "HUL_ROUTINE_PUBLIC_CONTENTION_CASE";
-const ROOT: &str = "HUL_ROUTINE_PUBLIC_CONTENTION_ROOT";
-const HOME: &str = "HUL_ROUTINE_PUBLIC_CONTENTION_HOME";
-const BINARY: &str = "HUL_ROUTINE_PUBLIC_CONTENTION_BINARY";
 const ESCALATION_BOUND: Duration = Duration::from_secs(2);
 
 #[derive(Clone, Copy)]
@@ -28,6 +24,7 @@ pub(super) struct SupervisorPlan {
     pub group_signal_refusals: usize,
     pub reap_status_refusals: usize,
     pub pipe_drain_refusals: usize,
+    pub capability: CapabilityMode,
 }
 
 #[derive(Debug)]
@@ -44,15 +41,23 @@ pub(super) struct SupervisorObservation {
     pub elapsed: Duration,
 }
 
-pub(super) fn run_child_if_requested() -> bool {
-    let Some(case) = std::env::var_os(CASE) else {
-        return false;
+pub(super) fn run_child_if_requested(expected_test: &str) -> bool {
+    let invocation = match invocation_capability::consume(expected_test) {
+        Ok(None) => return false,
+        Ok(Some(invocation)) => invocation,
+        Err(error) => panic!("routine public helper capability refused: {error}"),
     };
-    let case = case.to_string_lossy();
-    assert_eq!(std::env::var(MODE).as_deref(), Ok("routine-public-v1"));
-    match case.as_ref() {
-        "real-public-lock" => real_public_lock_sequence(),
-        "hang" => hold_lock_and_wait(false),
+    match invocation.case.as_str() {
+        "capability-probe" => println!("routine-public-capability-v1: helper-selected"),
+        "capability-replay" => {
+            assert!(
+                invocation_capability::consume(expected_test).is_err(),
+                "a consumed helper capability remained usable"
+            );
+            println!("routine-public-capability-v1: replay-refused");
+        }
+        "real-public-lock" => real_public_lock_sequence(&invocation),
+        "hang" => hold_lock_and_wait(&invocation, false),
         "panic-live-child"
         | "panic-live-child-spawn-refusal"
         | "panic-live-child-early-exit"
@@ -62,9 +67,9 @@ pub(super) fn run_child_if_requested() -> bool {
         | "panic-live-child-duplicate-handshake"
         | "panic-live-child-malformed-handshake"
         | "panic-live-child-wrong-binary"
-        | "panic-live-child-wrong-sentinel" => live_child::panic_with_live_child(case.as_ref()),
-        "ignore-term-descendant" => hold_lock_and_wait(true),
-        "pipe-pressure" => pipe_pressure(),
+        | "panic-live-child-wrong-sentinel" => live_child::panic_with_live_child(&invocation),
+        "ignore-term-descendant" => hold_lock_and_wait(&invocation, true),
+        "pipe-pressure" => pipe_pressure(&invocation),
         "exit" => {}
         other => panic!("unknown public contention supervisor case: {other}"),
     }
@@ -88,18 +93,16 @@ pub(super) fn run_supervisor(
         .env_clear()
         .env("LC_ALL", "C")
         .env("LANG", "C")
-        .env("PATH", "/usr/bin:/bin")
-        .env(MODE, "routine-public-v1")
-        .env(CASE, plan.case)
-        .env(ROOT, &fixture.root)
-        .env(HOME, &fixture.home)
-        .env(BINARY, fixture.binary_path());
+        .env("PATH", "/usr/bin:/bin");
+    let capability =
+        invocation_capability::issue(&mut command, fixture, test_name, plan.case, plan.capability);
     let started = Instant::now();
-    let observed = run_contender_with_termination_faults(
+    let observed = run_contender_with_termination_faults_after_spawn(
         &mut command,
         plan.execution_bound,
         plan.cleanup_bound,
         faults,
+        || capability.close_after_spawn(),
     );
     let outcome = match contain_contender(observed, ESCALATION_BOUND) {
         ContainedContender::Exited(output) => SupervisorOutcome::Exited(output),
@@ -145,30 +148,37 @@ pub(super) fn assert_fixture_lock_released(fixture: &Fixture) {
     unlock(lock);
 }
 
-fn real_public_lock_sequence() {
-    let (root, home, binary) = bound_paths();
-    let before_root = tree(&root);
-    let before_home = tree(&home);
-    let before_status = status(&root);
-    let holder = lock(&home);
-    let output = public_command(&root, &home, &binary).output().unwrap();
+fn real_public_lock_sequence(invocation: &Invocation) {
+    let before_root = tree(&invocation.root);
+    let before_home = tree(&invocation.home);
+    let before_status = status(&invocation.root);
+    let holder = lock(&invocation.home);
+    let output = public_command(&invocation.root, &invocation.home, &invocation.binary)
+        .output()
+        .unwrap();
     assert_public_busy(&output);
-    assert_eq!(tree(&root), before_root);
-    assert_eq!(tree(&home), before_home);
-    assert_eq!(status(&root), before_status);
-    assert!(!root.join("target").exists());
-    assert_eq!(fs::read_dir(authority_root(&home)).unwrap().count(), 0);
+    assert_eq!(tree(&invocation.root), before_root);
+    assert_eq!(tree(&invocation.home), before_home);
+    assert_eq!(status(&invocation.root), before_status);
+    assert!(!invocation.root.join("target").exists());
+    assert_eq!(
+        fs::read_dir(authority_root(&invocation.home))
+            .unwrap()
+            .count(),
+        0
+    );
     unlock(holder);
 
-    let retry = public_command(&root, &home, &binary).output().unwrap();
+    let retry = public_command(&invocation.root, &invocation.home, &invocation.binary)
+        .output()
+        .unwrap();
     assert_eq!(retry.status.code(), Some(0), "{retry:?}");
     assert!(retry.stderr.is_empty(), "{retry:?}");
-    assert!(root.join("target/routine/compile").is_dir());
+    assert!(invocation.root.join("target/routine/compile").is_dir());
 }
 
-fn hold_lock_and_wait(ignore_term: bool) {
-    let (_, home, _) = bound_paths();
-    let _holder = lock(&home);
+fn hold_lock_and_wait(invocation: &Invocation, ignore_term: bool) {
+    let _holder = lock(&invocation.home);
     if ignore_term {
         unsafe { libc::signal(libc::SIGTERM, libc::SIG_IGN) };
         let _descendant = Command::new("/bin/sh")
@@ -179,9 +189,8 @@ fn hold_lock_and_wait(ignore_term: bool) {
     std::thread::sleep(Duration::from_secs(60));
 }
 
-fn pipe_pressure() {
-    let (_, home, _) = bound_paths();
-    let _holder = lock(&home);
+fn pipe_pressure(invocation: &Invocation) {
+    let _holder = lock(&invocation.home);
     let bytes = vec![b'x'; 256 * 1024];
     std::io::stdout().write_all(&bytes).unwrap();
     std::io::stdout().flush().unwrap();
@@ -192,14 +201,6 @@ pub(super) fn public_command(root: &PathBuf, home: &PathBuf, binary: &PathBuf) -
     let mut command = routine_command(root, home, binary);
     command.args(["--json", "check", "routine"]);
     command
-}
-
-pub(super) fn bound_paths() -> (PathBuf, PathBuf, PathBuf) {
-    (path(ROOT), path(HOME), path(BINARY))
-}
-
-fn path(name: &str) -> PathBuf {
-    PathBuf::from(std::env::var_os(name).unwrap())
 }
 
 fn status(root: &PathBuf) -> Vec<u8> {

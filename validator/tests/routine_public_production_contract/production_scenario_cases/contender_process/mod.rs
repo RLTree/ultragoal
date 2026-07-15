@@ -46,6 +46,7 @@ pub(crate) fn run_bounded_contender(
         execution_bound,
         CONTENDER_CLEANUP_BOUND,
         TerminationFaults::default(),
+        || {},
     )
 }
 
@@ -55,7 +56,17 @@ pub(crate) fn run_contender_with_termination_faults(
     cleanup_bound: Duration,
     faults: TerminationFaults,
 ) -> BoundedContender {
-    run_with_faults(command, execution_bound, cleanup_bound, faults)
+    run_with_faults(command, execution_bound, cleanup_bound, faults, || {})
+}
+
+pub(crate) fn run_contender_with_termination_faults_after_spawn(
+    command: &mut Command,
+    execution_bound: Duration,
+    cleanup_bound: Duration,
+    faults: TerminationFaults,
+    after_spawn: impl FnOnce(),
+) -> BoundedContender {
+    run_with_faults(command, execution_bound, cleanup_bound, faults, after_spawn)
 }
 
 pub(crate) fn contain_contender(
@@ -98,6 +109,7 @@ fn run_with_faults(
     execution_bound: Duration,
     cleanup_bound: Duration,
     faults: TerminationFaults,
+    after_spawn: impl FnOnce(),
 ) -> BoundedContender {
     command
         .stdin(Stdio::null())
@@ -105,6 +117,7 @@ fn run_with_faults(
         .stderr(Stdio::piped())
         .process_group(0);
     let mut child = command.spawn().unwrap();
+    after_spawn();
     let process_group = i32::try_from(child.id()).unwrap();
     faults.observe_process_group(process_group);
     let (pipes, pipe_setup_failure) = CapturedPipes::take(&mut child);

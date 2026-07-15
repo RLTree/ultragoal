@@ -1,5 +1,6 @@
 use super::super::scenario::{Fixture, sha};
-use super::supervisor::{bound_paths, lock, public_command};
+use super::invocation_capability::Invocation;
+use super::supervisor::{lock, public_command};
 use serde_json::{Value, json};
 use std::fs;
 use std::io::Write;
@@ -10,21 +11,20 @@ const FRAME_VERSION: &str = "routine-public-live-child-v1";
 pub(super) const PANIC_SENTINEL: &str =
     "routine-public-live-child-v1: verified configured product child is stopped";
 
-pub(super) fn panic_with_live_child(case: &str) -> ! {
-    let (root, home, binary) = bound_paths();
-    if case == "panic-live-child-spawn-refusal" {
-        spawn_refusal(&root, &home, &binary);
+pub(super) fn panic_with_live_child(invocation: &Invocation) -> ! {
+    if invocation.case == "panic-live-child-spawn-refusal" {
+        spawn_refusal(&invocation.root, &invocation.home, &invocation.binary);
     }
-    let _holder = lock(&home);
-    let mut command = public_command(&root, &home, &binary);
+    let _holder = lock(&invocation.home);
+    let mut command = public_command(&invocation.root, &invocation.home, &invocation.binary);
     let mut child = command
         .spawn()
         .unwrap_or_else(|error| panic!("live-child-handshake-v1 spawn-failure: {error}"));
-    if case == "panic-live-child-early-exit" {
+    if invocation.case == "panic-live-child-early-exit" {
         stop_and_reap(&mut child, "early-exit");
         panic!("live-child-handshake-v1 early-exit");
     }
-    if case == "panic-live-child-signal-failure" {
+    if invocation.case == "panic-live-child-signal-failure" {
         let child_id = child.id();
         stop_and_reap(&mut child, "signal-failure");
         assert_ne!(
@@ -36,7 +36,7 @@ pub(super) fn panic_with_live_child(case: &str) -> ! {
     }
     let expected_group = current_group();
     let first_group = live_group(&mut child);
-    if case == "panic-live-child-wrong-group" {
+    if invocation.case == "panic-live-child-wrong-group" {
         require_group(first_group, expected_group.checked_add(1).unwrap());
     }
     require_group(first_group, expected_group);
@@ -46,8 +46,8 @@ pub(super) fn panic_with_live_child(case: &str) -> ! {
         "live-child-handshake-v1 stop-failure"
     );
     require_group(live_group(&mut child), expected_group);
-    emit_frame(case, &binary, expected_group);
-    if case == "panic-live-child-wrong-sentinel" {
+    emit_frame(&invocation.case, &invocation.binary, expected_group);
+    if invocation.case == "panic-live-child-wrong-sentinel" {
         panic!("live-child-handshake-v1 wrong panic sentinel");
     }
     panic!("{PANIC_SENTINEL}");
