@@ -1,4 +1,5 @@
 mod controls;
+mod live_child;
 mod supervisor;
 
 use self::supervisor::{

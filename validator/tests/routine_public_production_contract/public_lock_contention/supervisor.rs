@@ -3,6 +3,7 @@ use super::super::scenario::{
     git_output, routine_command, run_contender_with_termination_faults, tree,
 };
 use super::assert_public_busy;
+use super::live_child;
 use std::fs::{self, OpenOptions};
 use std::io::Write;
 use std::os::fd::AsRawFd;
@@ -47,11 +48,21 @@ pub(super) fn run_child_if_requested() -> bool {
     let Some(case) = std::env::var_os(CASE) else {
         return false;
     };
+    let case = case.to_string_lossy();
     assert_eq!(std::env::var(MODE).as_deref(), Ok("routine-public-v1"));
-    match case.to_string_lossy().as_ref() {
+    match case.as_ref() {
         "real-public-lock" => real_public_lock_sequence(),
         "hang" => hold_lock_and_wait(false),
-        "panic-live-child" => panic_with_live_child(),
+        "panic-live-child"
+        | "panic-live-child-spawn-refusal"
+        | "panic-live-child-early-exit"
+        | "panic-live-child-signal-failure"
+        | "panic-live-child-wrong-group"
+        | "panic-live-child-missing-handshake"
+        | "panic-live-child-duplicate-handshake"
+        | "panic-live-child-malformed-handshake"
+        | "panic-live-child-wrong-binary"
+        | "panic-live-child-wrong-sentinel" => live_child::panic_with_live_child(case.as_ref()),
         "ignore-term-descendant" => hold_lock_and_wait(true),
         "pipe-pressure" => pipe_pressure(),
         "exit" => {}
@@ -168,14 +179,6 @@ fn hold_lock_and_wait(ignore_term: bool) {
     std::thread::sleep(Duration::from_secs(60));
 }
 
-fn panic_with_live_child() {
-    let (root, home, binary) = bound_paths();
-    let _holder = lock(&home);
-    let child = public_command(&root, &home, &binary).spawn().unwrap();
-    assert_eq!(unsafe { libc::kill(child.id() as i32, libc::SIGSTOP) }, 0);
-    panic!("supervisor panic with live public contender {}", child.id());
-}
-
 fn pipe_pressure() {
     let (_, home, _) = bound_paths();
     let _holder = lock(&home);
@@ -185,13 +188,13 @@ fn pipe_pressure() {
     std::thread::sleep(Duration::from_secs(60));
 }
 
-fn public_command(root: &PathBuf, home: &PathBuf, binary: &PathBuf) -> Command {
+pub(super) fn public_command(root: &PathBuf, home: &PathBuf, binary: &PathBuf) -> Command {
     let mut command = routine_command(root, home, binary);
     command.args(["--json", "check", "routine"]);
     command
 }
 
-fn bound_paths() -> (PathBuf, PathBuf, PathBuf) {
+pub(super) fn bound_paths() -> (PathBuf, PathBuf, PathBuf) {
     (path(ROOT), path(HOME), path(BINARY))
 }
 
@@ -216,7 +219,7 @@ fn authority_root(home: &PathBuf) -> PathBuf {
     home.join(".codex/state/harness-ultragoal/routine-public/authority")
 }
 
-fn lock(home: &PathBuf) -> std::fs::File {
+pub(super) fn lock(home: &PathBuf) -> std::fs::File {
     let holder = OpenOptions::new()
         .read(true)
         .write(true)
