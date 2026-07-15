@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | `9e8e8f40f` / tree `7e375c7c` | Clean proof freeze encodes normal exit, verified bounded termination/reap, deadline races, and cleanup failure as distinct outcomes; WorkerResult and higher claims remain withheld | Independently falsify the shared helper and resume cumulative source review |
+| N06 routine execution | rework | `9e8e8f40f` / tree `7e375c7c` | Exact-tree review found cleanup failure discards an unreaped child before the caller releases the lock and tears down the fixture; receipt and integration remain withheld | Retain exact child/process-group custody through bounded escalation and make confirmed reap a prerequisite for caller progress |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,9 +46,9 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `24`. The next action is the
-required exact-tree review of `9e8e8f40f` / tree `7e375c7c`; receipt regeneration
-and integration remain withheld until source acceptance.
+current exact-candidate rejection count for N06 is `25`. The next action is the
+shared child-custody invariant across kill failure, reap failure, late cleanup,
+descendants, pipe pressure, caller teardown, holder release, and retry.
 Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
