@@ -37,17 +37,17 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | `b22fac24c` / tree `97d54a45` | Exact review found `DescriptorOnly` retention makes later rollback exit before any filesystem observation, so settlement hot-spins despite holding the owner; acceptance, receipt regeneration, and integration remain withheld | Rebind by scanning for the held descriptor identity, then retry checked cleanup |
+| N06 routine execution | under_review | `36c902b35` / tree `1e7e404f` | Clean source-only freeze makes Detached rollback scan the held parent and rebind only the exact descriptor identity; causal control covers two refused scans then settlement; custody matrix `14/14` and same-helper pass; acceptance, receipt regeneration, and integration remain withheld | Independently falsify the exact descriptor-rebind tree before receipt regeneration |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
 | N08 plugin product | planned | no admissible candidate on root `946c7bab1` | N04/N05/N07 source ceilings exist; N06 dependency and live host behavior remain open | Prepare closure only after N06 integrates |
 
-Controller measures at this checkpoint: integration queue length `0`; installed
+Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
 current exact-candidate rejection count for the custody/cleanup class is `9`.
-The next action is N06 detached-descriptor rebind repair. Escalation is legitimate only for
+The next action is exact-tree N06 descriptor-rebind review. Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
 
@@ -96,9 +96,9 @@ external action, secret handling, or unavailable required access.
   affected claim until behavior and evidence are re-audited.
 - N04 source transaction authority and its corrected WorkerResult are accepted,
   integrated, and retired. Root production reachability and every live host
-  identity remain open. Root `2679958d9` is clean. N06 `b22fac24c` / tree
-  `97d54a45` remains the sole gate and is under REWORK because detached custody
-  has no effectful descriptor-identity recovery transition.
+  identity remain open. Root `350504634` is clean. N06 `36c902b35` / tree
+  `1e7e404f` remains the sole gate and is under exact-tree source review; receipt
+  regeneration, dependency-closed acceptance, and integration remain withheld.
   N10 `7f92b7ed3` / tree `53bd7717` and N11 `9c2911d6d` /
   tree `6176c259` are frozen speculative source candidates; their dependency
   claims, receipt promotion, and integration remain withheld.
