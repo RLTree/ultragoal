@@ -13,6 +13,38 @@ use ultragoal::orchestration::{
 };
 
 #[test]
+fn issuance_refuses_unbounded_lifetime_without_ledger_mutation() {
+    let (journal, head) = interrupted_root("unbounded-lifetime-journal");
+    let authority_root = TestRoot::new("unbounded-lifetime-authority", 0o700);
+    let context = context();
+    let workspace = ProductWorkspace::open(journal.path()).unwrap();
+    let adapter = OrchestrationRuntimeAdapter::new(&context, &workspace).unwrap();
+    let view = adapter
+        .inspect_current(&OrchestrationStateRequest {
+            expected_head: head,
+            tick: 2,
+            live_workers: BTreeSet::new(),
+        })
+        .unwrap();
+    let action = view.state().root_action_requests[0].clone();
+    let authority =
+        ProductionRootAuthority::open_or_initialize(authority_root.path(), root_actor()).unwrap();
+    let before = recursive_fingerprint(authority_root.path());
+    assert_eq!(
+        adapter
+            .issue_production_action(
+                &authority,
+                RuntimeActionSource::Current(&view),
+                &action,
+                u64::MAX,
+            )
+            .unwrap_err(),
+        ProductError::AuthorityInvalid
+    );
+    assert_eq!(recursive_fingerprint(authority_root.path()), before);
+}
+
+#[test]
 fn exact_reconcile_permit_rejects_every_resolution_field_substitution() {
     let (journal, head) = ambiguous_effect("decision-binding-fields");
     let authority_root = TestRoot::new("decision-binding-authority", 0o700);

@@ -3,7 +3,7 @@ pub(crate) struct ReservationObservation<'a> {
     pub(crate) binding: &'a crate::orchestration::Binding,
     pub(crate) workspace_identity: &'a str,
     pub(crate) current_identity: &'a str,
-    pub(crate) snapshot: &'a super::super::ProductSnapshot,
+    pub(crate) snapshot: &'a super::super::super::ProductSnapshot,
     pub(crate) prior_identity: Option<&'a str>,
     pub(crate) last_event: Option<&'a crate::orchestration::OrchestrationEvent>,
 }
@@ -48,7 +48,7 @@ impl ProductionRootAuthority {
 
 fn classify_observation(
     current_identity: &str,
-    snapshot: &super::super::ProductSnapshot,
+    snapshot: &super::super::super::ProductSnapshot,
     prior_identity: Option<&str>,
     last_event: Option<&crate::orchestration::OrchestrationEvent>,
     permit: &RootPermit,

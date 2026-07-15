@@ -54,6 +54,8 @@ impl RootAuthority {
             || permit.target != *target
             || permit.decision_binding != *decision_binding
             || permit.issued_tick > tick
+            || permit.expires_tick < permit.issued_tick
+            || permit.expires_tick - permit.issued_tick > super::MAX_PERMIT_LIFETIME
         {
             return Err(ProductError::AuthorityInvalid);
         }

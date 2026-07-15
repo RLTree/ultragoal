@@ -126,7 +126,10 @@ impl RootAuthority {
             target,
             decision_binding,
         } = request;
-        if expires_tick < issued_tick || nonce.len() < 16 {
+        if expires_tick < issued_tick
+            || expires_tick - issued_tick > super::MAX_PERMIT_LIFETIME
+            || nonce.len() < 16
+        {
             return Err(ProductError::AuthorityInvalid);
         }
         validate_digest(workspace_identity)?;

@@ -1,25 +1,78 @@
-use super::super::{permit_id, ProductError, ProductionRootAuthority, RootPermit};
-use super::{ExecutionRequest, ProductionExecutionOutcome};
+use super::super::root_authority::{
+    RootActionPermitVerification, RootAuthority, RootReconcilePermitVerification,
+};
+use super::super::{permit_id, ProductError, ProductionRootAuthority, RootOperation, RootPermit};
 use crate::orchestration::product::command::RootActionRequest;
-use crate::orchestration::product::runtime_adapter::{RuntimeActionRequest, RuntimeActionSource};
-use crate::orchestration::product::{ProductContext, ProductWorkspace, ReconcileRequest};
+use crate::orchestration::product::runtime_adapter::{
+    CurrentRuntimeView, OrchestrationRuntimeAdapter, RuntimeActionRequest, RuntimeActionSource,
+};
+use crate::orchestration::product::{
+    journal_head_identity, ProductContext, ProductWorkspace, ReconcileOutcome, ReconcileRequest,
+    RecoverOutcome, RecoverRequest, ResumeOutcome, ResumeRequest,
+};
 
-pub(in crate::orchestration::product::authority::production) struct ValidatedExecution<'a> {
+#[path = "reconcile.rs"]
+mod reconcile;
+#[path = "recover.rs"]
+mod recover;
+#[path = "resume.rs"]
+mod resume;
+
+enum ExecutionRequest<'a> {
+    Resume {
+        context: &'a ProductContext,
+        workspace: &'a ProductWorkspace,
+        permit: &'a RootPermit,
+        source: RuntimeActionSource<'a>,
+        action: &'a RootActionRequest,
+        request: &'a ResumeRequest,
+    },
+    Recover {
+        context: &'a ProductContext,
+        workspace: &'a ProductWorkspace,
+        permit: &'a RootPermit,
+        source: RuntimeActionSource<'a>,
+        action: &'a RootActionRequest,
+        request: &'a RecoverRequest,
+    },
+    Reconcile {
+        context: &'a ProductContext,
+        workspace: &'a ProductWorkspace,
+        permit: &'a RootPermit,
+        view: &'a CurrentRuntimeView,
+        action: &'a RootActionRequest,
+        request: &'a ReconcileRequest,
+    },
+}
+
+pub(crate) enum ProductionExecutionOutcome {
+    Resume(ResumeOutcome),
+    Recover(RecoverOutcome),
+    Reconcile(ReconcileOutcome),
+}
+
+pub(in crate::orchestration::product::authority::production::sealed_authority) struct ValidatedExecution<
+    'a,
+> {
     permit_id: String,
     request: ExecutionRequest<'a>,
 }
 
-pub(in crate::orchestration::product::authority::production) struct ReservedExecution<'a> {
+pub(in crate::orchestration::product::authority::production::sealed_authority) struct ReservedExecution<
+    'a,
+> {
     permit_id: String,
     request: ExecutionRequest<'a>,
 }
 
 impl<'a> ValidatedExecution<'a> {
-    pub(in crate::orchestration::product::authority::production) fn permit_id(&self) -> &str {
+    pub(in crate::orchestration::product::authority::production::sealed_authority) fn permit_id(
+        &self,
+    ) -> &str {
         &self.permit_id
     }
 
-    pub(in crate::orchestration::product::authority::production) fn reserve(
+    pub(in crate::orchestration::product::authority::production::sealed_authority) fn reserve(
         self,
     ) -> ReservedExecution<'a> {
         ReservedExecution {
@@ -30,86 +83,74 @@ impl<'a> ValidatedExecution<'a> {
 }
 
 impl<'a> ReservedExecution<'a> {
-    pub(in crate::orchestration::product::authority::production) fn permit_id(&self) -> &str {
+    pub(in crate::orchestration::product::authority::production::sealed_authority) fn permit_id(
+        &self,
+    ) -> &str {
         &self.permit_id
     }
 
-    pub(in crate::orchestration::product::authority::production) fn execute(
+    pub(in crate::orchestration::product::authority::production::sealed_authority) fn execute(
         self,
     ) -> Result<ProductionExecutionOutcome, ProductError> {
         self.request.execute()
     }
 }
 
-impl ProductionRootAuthority {
-    pub(crate) fn execute_action<'a>(
-        &'a self,
-        context: &'a ProductContext,
-        workspace: &'a ProductWorkspace,
-        source: RuntimeActionSource<'a>,
-        action: &'a RootActionRequest,
-        permit: &'a RootPermit,
-        request: &'a RuntimeActionRequest,
-    ) -> Result<ProductionExecutionOutcome, ProductError> {
-        let execution = match request {
-            RuntimeActionRequest::Resume(request) => ExecutionRequest::Resume {
+impl<'a> ExecutionRequest<'a> {
+    fn workspace(&self) -> &'a ProductWorkspace {
+        match self {
+            Self::Resume { workspace, .. }
+            | Self::Recover { workspace, .. }
+            | Self::Reconcile { workspace, .. } => workspace,
+        }
+    }
+
+    fn permit(&self) -> &'a RootPermit {
+        match self {
+            Self::Resume { permit, .. }
+            | Self::Recover { permit, .. }
+            | Self::Reconcile { permit, .. } => permit,
+        }
+    }
+
+    fn prevalidate(&self) -> Result<(), ProductError> {
+        match self {
+            Self::Resume {
                 context,
                 workspace,
-                permit,
                 source,
                 action,
                 request,
-            },
-            RuntimeActionRequest::Recover(request) => ExecutionRequest::Recover {
+                ..
+            } => OrchestrationRuntimeAdapter::new(context, workspace)?.prevalidate_action(
+                *source,
+                action,
+                &RuntimeActionRequest::Resume((*request).clone()),
+            ),
+            Self::Recover {
                 context,
                 workspace,
-                permit,
                 source,
                 action,
                 request,
-            },
-        };
-        self.execute(execution)
-    }
-
-    pub(crate) fn execute_reconcile<'a>(
-        &'a self,
-        context: &'a ProductContext,
-        workspace: &'a ProductWorkspace,
-        view: &'a crate::orchestration::product::runtime_adapter::CurrentRuntimeView,
-        action: &'a RootActionRequest,
-        permit: &'a RootPermit,
-        request: &'a ReconcileRequest,
-    ) -> Result<ProductionExecutionOutcome, ProductError> {
-        self.execute(ExecutionRequest::Reconcile {
-            context,
-            workspace,
-            permit,
-            view,
-            action,
-            request,
-        })
-    }
-
-    fn execute<'a>(
-        &'a self,
-        request: ExecutionRequest<'a>,
-    ) -> Result<ProductionExecutionOutcome, ProductError> {
-        let permit_id = permit_id(request.permit())?;
-        self.ledger.require_issued(&permit_id)?;
-        let workspace = request.workspace();
-        workspace.verify()?;
-        let reservation = crate::orchestration::FileJournal::with_existing_exclusive_lock(
-            workspace.root(),
-            || {
-                workspace.verify()?;
-                request.prevalidate()?;
-                request.verify(&self.authority)?;
-                let execution = ValidatedExecution { permit_id, request };
-                self.ledger.require_issued(&execution.permit_id)?;
-                self.ledger.reserve(execution)
-            },
-        )?;
-        self.ledger.complete(reservation)
+                ..
+            } => OrchestrationRuntimeAdapter::new(context, workspace)?.prevalidate_action(
+                *source,
+                action,
+                &RuntimeActionRequest::Recover((*request).clone()),
+            ),
+            Self::Reconcile {
+                context,
+                workspace,
+                view,
+                action,
+                request,
+                ..
+            } => OrchestrationRuntimeAdapter::new(context, workspace)?
+                .prevalidate_reconcile(view, action, request),
+        }
     }
 }
+
+include!("route_verification.rs");
+include!("route_execution.rs");
