@@ -1,3 +1,13 @@
+pub mod context {
+    pub use ultragoal::context::*;
+}
+
+#[path = "../src/cli/capture/mod.rs"]
+pub mod capture;
+
+#[path = "../src/routine_work/mod.rs"]
+pub mod routine_work;
+
 #[path = "../src/routine_work/catalog/mod.rs"]
 mod catalog;
 
@@ -21,8 +31,14 @@ use std::sync::atomic::{AtomicU64, Ordering};
 mod catalog_definition_rejection;
 #[path = "routine_production_catalog_cases/catalog_fixture.rs"]
 mod catalog_fixture;
+#[path = "routine_production_catalog_cases/catalog_fixture_cleanup_hook.rs"]
+mod catalog_fixture_cleanup_hook;
 #[path = "routine_production_catalog_cases/catalog_fixture_construction.rs"]
 mod catalog_fixture_construction;
+#[path = "routine_production_catalog_cases/catalog_fixture_custody.rs"]
+mod catalog_fixture_custody;
+#[path = "routine_production_catalog_cases/catalog_fixture_custody_types.rs"]
+mod catalog_fixture_custody_types;
 #[path = "routine_production_catalog_cases/catalog_fixture_lifecycle.rs"]
 mod catalog_fixture_lifecycle;
 #[path = "routine_production_catalog_cases/catalog_fixture_scope.rs"]

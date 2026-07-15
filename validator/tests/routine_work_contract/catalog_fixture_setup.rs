@@ -42,7 +42,10 @@ fn claimed_catalog_scope_rolls_back_setup_failures_and_refuses_substitution() {
     fs::rename(scope.path(), &held).unwrap();
     fs::create_dir(scope.path()).unwrap();
     fs::write(scope.path().join("foreign"), b"do not delete\n").unwrap();
-    assert_eq!(scope.rollback(), Err(FixtureScopeError::Substituted));
+    assert!(matches!(
+        scope.rollback(),
+        Err(FixtureScopeError::Retained(_))
+    ));
     assert_eq!(
         fs::read(scope.path().join("foreign")).unwrap(),
         b"do not delete\n"

@@ -1,4 +1,5 @@
 use super::*;
+use crate::catalog_fixture_scope::ClaimedFixtureScope;
 
 pub(crate) const GRAPH_ID: &str =
     "sha256:1111111111111111111111111111111111111111111111111111111111111111";
@@ -17,6 +18,7 @@ pub(crate) static NEXT: AtomicU64 = AtomicU64::new(0);
 
 pub(crate) struct TestRoot {
     pub(crate) path: PathBuf,
+    pub(super) scope: ClaimedFixtureScope,
 }
 
 impl TestRoot {
@@ -29,12 +31,9 @@ impl TestRoot {
     }
 
     pub(crate) fn teardown_after_assertions(&mut self) {
-        assert!(
-            self.path.is_dir(),
-            "catalog fixture scope disappeared before teardown: {}",
-            self.path.display()
-        );
-        fs::remove_dir_all(&self.path).expect("catalog fixture teardown failed");
+        self.scope
+            .teardown_after_assertions()
+            .expect("catalog fixture descriptor-held teardown failed");
         assert!(
             !self.path.exists(),
             "catalog fixture teardown retained scope: {}",

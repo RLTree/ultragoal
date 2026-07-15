@@ -1,4 +1,6 @@
 use super::*;
+use crate::catalog_fixture_cleanup_hook::set_before_final_removal;
+use crate::catalog_fixture_construction::FixtureConstructionFailure;
 use crate::catalog_fixture_scope::{
     CatalogSetupFailurePoint, ClaimedFixtureScope, FixtureScopeError,
 };
@@ -51,7 +53,11 @@ pub(crate) fn catalog_fixture_setup_failures_roll_back_only_the_claimed_child() 
         let sequence = NEXT.load(Ordering::Relaxed);
         let error = match TestRoot::try_new("setup-rollback", VALID_CATALOG, Some(point)) {
             Ok(_) => panic!("setup failure {stage} unexpectedly constructed a fixture"),
-            Err(error) => error,
+            Err(FixtureConstructionFailure::Setup(error)) => error,
+            Err(FixtureConstructionFailure::Retained { scope, error }) => panic!(
+                "setup failure {stage} retained {}: {error:?}",
+                scope.path().display()
+            ),
         };
         assert_eq!(error, FixtureScopeError::Setup(stage));
         let path =
@@ -76,13 +82,56 @@ pub(crate) fn catalog_fixture_setup_rollback_refuses_a_substituted_scope() {
     fs::rename(scope.path(), &held).unwrap();
     fs::create_dir(scope.path()).unwrap();
     fs::write(scope.path().join("foreign"), b"preserve foreign scope\n").unwrap();
-    assert_eq!(scope.rollback(), Err(FixtureScopeError::Substituted));
+    assert!(matches!(
+        scope.rollback(),
+        Err(FixtureScopeError::Retained(_))
+    ));
     assert_eq!(
         fs::read(scope.path().join("foreign")).unwrap(),
         b"preserve foreign scope\n"
     );
     fs::remove_dir_all(scope.path()).unwrap();
     fs::remove_dir_all(&held).unwrap();
+}
+
+#[test]
+pub(crate) fn final_quarantine_substitution_is_retained_without_deleting_the_replacement() {
+    let parent = fixture_parent();
+    let name = format!(
+        "final-substitution-{}-{}",
+        std::process::id(),
+        NEXT.fetch_add(1, Ordering::Relaxed)
+    );
+    let mut scope = ClaimedFixtureScope::claim(&parent, &name).unwrap();
+    fs::write(scope.path().join("owned"), b"owned bytes\n").unwrap();
+    let retained = parent.join(format!("{name}-quarantine-held"));
+    let replacement = parent.join(format!("{name}-replacement"));
+    set_before_final_removal(Some(Box::new({
+        let parent = parent.clone();
+        let retained = retained.clone();
+        let replacement = replacement.clone();
+        move |quarantine| {
+            let quarantine = parent.join(quarantine.to_string_lossy().as_ref());
+            fs::rename(&quarantine, &retained).unwrap();
+            fs::create_dir(&quarantine).unwrap();
+            fs::write(quarantine.join("foreign"), b"preserve replacement\n").unwrap();
+            fs::rename(&quarantine, &replacement).unwrap();
+            fs::create_dir(&quarantine).unwrap();
+        }
+    })));
+    assert!(matches!(
+        scope.rollback(),
+        Err(FixtureScopeError::Retained(_))
+    ));
+    set_before_final_removal(None);
+    assert!(fs::read_dir(&retained).unwrap().next().is_none());
+    assert_eq!(
+        fs::read(replacement.join("foreign")).unwrap(),
+        b"preserve replacement\n"
+    );
+    fs::remove_dir_all(scope.path()).unwrap();
+    fs::remove_dir_all(retained).unwrap();
+    fs::remove_dir_all(replacement).unwrap();
 }
 
 fn fixture_parent() -> PathBuf {
