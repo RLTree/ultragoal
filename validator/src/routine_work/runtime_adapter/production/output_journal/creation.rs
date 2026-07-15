@@ -42,11 +42,11 @@ pub(super) fn provision(
             if final_observed.is_some() {
                 return Err(error("routine-production-output-final-without-custody"));
             }
-            let (identity, created) =
-                establish_stage(parent, &stage_name, root_device, stage_observed)?;
-            if created {
-                observer(&component.relative_path, ProvisionEvent::StageCreated)?;
+            if stage_observed.is_some() {
+                return Err(error("routine-production-output-stage-custody-changed"));
             }
+            let identity = establish_stage(parent, &stage_name, root_device)?;
+            observer(&component.relative_path, ProvisionEvent::StageCreated)?;
             ledger.record_output_staged(token, &component.relative_path, identity)?;
             observer(&component.relative_path, ProvisionEvent::StageRecorded)?;
             StageState::Present(identity)
@@ -74,16 +74,12 @@ fn establish_stage(
     parent: &File,
     stage_name: &str,
     root_device: u64,
-    observed: Option<OutputDirectoryIdentity>,
-) -> Result<(OutputDirectoryIdentity, bool), RoutineError> {
-    let created = observed.is_none();
-    if created {
-        mkdir_at(parent, stage_name)?;
-    }
+) -> Result<OutputDirectoryIdentity, RoutineError> {
+    mkdir_at(parent, stage_name)?;
     let identity = stat_at(parent, stage_name)?
         .ok_or_else(|| error("routine-production-output-stage-unobserved"))?;
     validate_exact(parent, stage_name, identity, root_device, true)?;
-    Ok((identity, created))
+    Ok(identity)
 }
 
 fn recover_staged(

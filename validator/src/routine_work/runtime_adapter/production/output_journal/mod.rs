@@ -26,6 +26,9 @@ mod directory_entries;
 #[path = "observation.rs"]
 mod observation;
 #[cfg(test)]
+#[path = "recovery_tests.rs"]
+mod recovery_tests;
+#[cfg(test)]
 #[path = "tests.rs"]
 mod tests;
 
