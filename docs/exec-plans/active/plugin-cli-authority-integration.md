@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | `7bc4f9edb` / tree `692118b0` | Exact-tree review found combined panic and staged-cleanup failure replaces the initiating panic with a cleanup error; receipt and integration remain withheld | Preserve the original panic payload while explicitly retaining exact recovery and staged custody, then refreeze for one fresh review |
+| N06 routine execution | rework | `33a091536` / tree `2bf3d156` | Cumulative exact-tree review found N06-added semantic-namespace debt in thirteen flat `catalog_fixture_*` modules and generic `launch_stage_support.rs`; receipt and integration remain withheld | Move the fixture family under a semantic subdirectory, split launch behavior into precise owned modules, and refreeze without behavior changes |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,10 +46,10 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for the custody/cleanup class is `16`.
-The next action is invariant-level failure-identity preservation: lifecycle
-cleanup may retain recovery evidence but must never replace the initiating
-panic, and `Drop` must remain authority-inert.
+current exact-candidate rejection count for N06 is `17`. The next action is a
+cumulative N06 namespace repair: repeated file prefixes must become semantic
+subdirectories and generic support buckets must be split by owned behavior,
+without changing the accepted lifecycle or authority boundaries.
 Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
