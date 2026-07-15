@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | `f76a58ac4` / tree `6bbf78d7` | Exact-tree review proved descendant modules can mutate inherited-private settlement/custody fields and forge terminal authority; the branch is also stale against integrated N04 and cannot reproduce focused tests on its exact tree; all higher claims remain withheld | Move authority storage behind a descendant-inaccessible leaf, replace the false-pass visibility assertion with compile-fail controls, refresh on the exact integrated root, and refreeze |
+| N06 routine execution | under_review | `2ef86331a` / tree `d0e38b61` | Clean source freeze is refreshed on exact root `437bcefe3`; authority storage is childless-leaf confined and executable sibling/descendant controls replace the false-pass visibility assertion; exact-tree review, migration, receipt, integration, and all higher claims remain withheld | Independently falsify the cumulative exact tree; one material defect returns the same candidate to rework |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,12 +46,11 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `38`. The next action is the
-shared descendant-confinement repair: no sibling, descendant, or test module may
-forge settlement state or erase staged custody, and executable compile controls
-must prove that boundary. The same worktree must then refresh onto the exact
-integrated root before refreezing so focused evidence is reproducible. No receipt
-regeneration or dependent claim may consume this rejected freeze.
+current exact-candidate rejection count for N06 is `38`. The next action is one
+fresh cumulative exact-tree review of `2ef86331a`, focused on leaf confinement,
+opened/closed compile-control causality, terminal and failure transitions,
+recovery/replay, and schema impact. No receipt regeneration or dependent claim
+may consume this unaccepted freeze.
 The public 42-test claim remains withheld at 41/42 until a representative-load
 root observation.
 Escalation is legitimate only for
@@ -204,12 +203,11 @@ each branch, worktree, and thread identity; unknown host fields stay unknown.
   `019f6487-8b8d-7d51-810b-1465f481eef7`,
   branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
   owns routine kernel/public adapter behavior and matching tests/fixtures;
-  exact clean source `f76a58ac4` / tree `6bbf78d7` is in cumulative REWORK
-  because descendant modules can still forge inherited-private settlement and
-  custody state, its structural visibility assertion false-passes that route,
-  and the stale N04 base prevents exact-tree focused compilation. Its stale
-  WorkerResult, load-sensitive public result, and v1→v2 ledger migration remain
-  withheld.
+  exact clean source `2ef86331a` / tree `d0e38b61` is under one fresh cumulative
+  exact-tree review after rebasing the 75-commit N06 patch equivalently onto
+  exact root `437bcefe3` and moving reservation storage into a childless owner
+  leaf. Its stale WorkerResult, load-sensitive public result, and v1→v2 ledger
+  migration remain withheld.
 - Orchestration authority: thread `019f5fa2-923f-7770-9a89-83ed713ac1f3`,
   branch `codex/n10-orchestration-authority`, worktree `.codex/worktrees/cb63`;
   owns orchestration issuer/replay/recovery behavior and matching tests/fixtures;
