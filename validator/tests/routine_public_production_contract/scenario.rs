@@ -13,11 +13,14 @@ use ultragoal::routine_work::{
 
 #[path = "production_scenario_cases/argument_fixture.rs"]
 mod argument_fixture;
+#[path = "production_scenario_cases/contender_process.rs"]
+mod contender_process;
 #[path = "production_scenario_cases/execution_fixture.rs"]
 mod execution_fixture;
 #[path = "production_scenario_cases/scenario_fixture.rs"]
 mod scenario_fixture;
 
 pub(crate) use argument_fixture::*;
+pub(crate) use contender_process::*;
 pub(crate) use execution_fixture::*;
 pub(crate) use scenario_fixture::*;
