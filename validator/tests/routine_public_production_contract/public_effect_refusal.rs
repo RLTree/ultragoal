@@ -9,7 +9,7 @@ use std::os::unix::fs::PermissionsExt;
 use std::process::{Command, Output};
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 const LOCK_CONTENTION_BOUND: Duration = Duration::from_secs(10);
 
@@ -150,13 +150,11 @@ fn held_public_lock_refuses_a_real_contender_without_effect_then_allows_retry() 
     let mut command = fixture.command();
     let contender = match run_bounded_contender(&mut command, LOCK_CONTENTION_BOUND) {
         BoundedContender::Exited(output) => output,
-        BoundedContender::TimedOut { output, kill_error } => {
+        other => {
             assert_eq!(unsafe { libc::flock(holder.as_raw_fd(), libc::LOCK_UN) }, 0);
             drop(holder);
             fixture.teardown_after_assertions();
-            panic!(
-                "public contender exceeded {LOCK_CONTENTION_BOUND:?}: {kill_error:?}; {output:?}"
-            );
+            panic!("public contender did not finish before {LOCK_CONTENTION_BOUND:?}: {other:?}");
         }
     };
     assert_public_busy(&contender);
@@ -176,11 +174,13 @@ fn held_public_lock_refuses_a_real_contender_without_effect_then_allows_retry() 
 fn blocking_contender_is_reaped_and_never_accepted_as_a_public_result() {
     let mut blocking = Command::new("/bin/sleep");
     blocking.arg("60");
+    let started = Instant::now();
     match run_bounded_contender(&mut blocking, Duration::from_millis(100)) {
-        BoundedContender::Exited(output) => panic!("blocking contender exited: {output:?}"),
-        BoundedContender::TimedOut { output, kill_error } => {
-            panic!("bounded contender timed out after reaping: {kill_error:?}; {output:?}")
+        BoundedContender::TerminatedAndReaped(output) => {
+            assert!(started.elapsed() < Duration::from_secs(1), "{output:?}");
+            panic!("bounded contender timed out after verified reap: {output:?}")
         }
+        other => panic!("blocking contender was not verified reaped: {other:?}"),
     }
 }
 
