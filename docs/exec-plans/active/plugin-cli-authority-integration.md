@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | `bd204e11e` / tree `198871c4` | Clean source freeze reports the cleanup-panic transition and precedence matrix green; independent exact-tree source acceptance, receipt, and integration remain withheld | Falsify the cumulative candidate, beginning with cleanup-panic custody and then the previously deferred runner, public-route, replay, recovery, and source-law surfaces |
+| N06 routine execution | rework | `bd204e11e` / tree `198871c4` | Exact-tree review found production recovery can accept process-local artifact authentication after durable staging failed, bypassing the ledger; receipt and integration remain withheld | Make the exact durable record the sole production reuse authority across reuse, recovery, reconciliation, retry, replay, and rollback siblings |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,10 +46,10 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `19`. The next action is one
-required independent review of exact clean candidate `bd204e11e` / tree
-`198871c4`; no receipt or dependent claim may be promoted before source
-acceptance on those bytes.
+current exact-candidate rejection count for N06 is `20`. The next action is the
+shared production-reuse authority invariant: process-local artifact state may
+never bypass, veto, shadow, or satisfy the exact durable witness required by
+production recovery and reuse.
 Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
