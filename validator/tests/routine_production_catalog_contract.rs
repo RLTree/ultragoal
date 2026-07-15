@@ -29,34 +29,34 @@ use std::sync::atomic::{AtomicU64, Ordering};
 
 #[path = "routine_production_catalog_cases/catalog_definition_rejection.rs"]
 mod catalog_definition_rejection;
-#[path = "routine_production_catalog_cases/catalog_fixture.rs"]
+#[path = "routine_production_catalog_cases/catalog_fixture/mod.rs"]
 mod catalog_fixture;
-#[path = "routine_production_catalog_cases/catalog_fixture_claim.rs"]
-mod catalog_fixture_claim;
-#[path = "routine_production_catalog_cases/catalog_fixture_cleanup_hook.rs"]
-mod catalog_fixture_cleanup_hook;
-#[path = "routine_production_catalog_cases/catalog_fixture_construction.rs"]
-mod catalog_fixture_construction;
-#[path = "routine_production_catalog_cases/catalog_fixture_custody.rs"]
-mod catalog_fixture_custody;
-#[path = "routine_production_catalog_cases/catalog_fixture_custody_types.rs"]
-mod catalog_fixture_custody_types;
-#[path = "routine_production_catalog_cases/catalog_fixture_directory_entries.rs"]
-mod catalog_fixture_directory_entries;
-#[path = "routine_production_catalog_cases/catalog_fixture_invocation.rs"]
-mod catalog_fixture_invocation;
-#[path = "routine_production_catalog_cases/catalog_fixture_invocation_controls.rs"]
-mod catalog_fixture_invocation_controls;
-#[path = "routine_production_catalog_cases/catalog_fixture_lifecycle.rs"]
-mod catalog_fixture_lifecycle;
-#[path = "routine_production_catalog_cases/catalog_fixture_quarantine.rs"]
-mod catalog_fixture_quarantine;
-#[path = "routine_production_catalog_cases/catalog_fixture_rebind.rs"]
-mod catalog_fixture_rebind;
-#[path = "routine_production_catalog_cases/catalog_fixture_scope.rs"]
-mod catalog_fixture_scope;
+#[path = "routine_production_catalog_cases/catalog_fixture/claim.rs"]
+mod claim;
+#[path = "routine_production_catalog_cases/catalog_fixture/cleanup_hook.rs"]
+mod cleanup_hook;
+#[path = "routine_production_catalog_cases/catalog_fixture/construction.rs"]
+mod construction;
+#[path = "routine_production_catalog_cases/catalog_fixture/custody.rs"]
+mod custody;
+#[path = "routine_production_catalog_cases/catalog_fixture/custody_types.rs"]
+mod custody_types;
+#[path = "routine_production_catalog_cases/catalog_fixture/directory_entries.rs"]
+mod directory_entries;
+#[path = "routine_production_catalog_cases/catalog_fixture/invocation.rs"]
+mod invocation;
+#[path = "routine_production_catalog_cases/catalog_fixture/invocation_controls.rs"]
+mod invocation_controls;
+#[path = "routine_production_catalog_cases/catalog_fixture/lifecycle.rs"]
+mod lifecycle;
+#[path = "routine_production_catalog_cases/catalog_fixture/quarantine.rs"]
+mod quarantine;
+#[path = "routine_production_catalog_cases/catalog_fixture/rebind.rs"]
+mod rebind;
 #[path = "routine_production_catalog_cases/repository_fixture.rs"]
 mod repository_fixture;
+#[path = "routine_production_catalog_cases/catalog_fixture/scope.rs"]
+mod scope;
 #[path = "routine_production_catalog_cases/source_path_rejection.rs"]
 mod source_path_rejection;
 #[path = "routine_production_catalog_cases/transitive_input_rejection.rs"]

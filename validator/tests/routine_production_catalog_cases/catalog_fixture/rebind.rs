@@ -4,9 +4,9 @@ use std::os::fd::AsRawFd;
 use std::os::unix::ffi::OsStringExt;
 use std::os::unix::fs::MetadataExt;
 
-use crate::catalog_fixture_custody_types::EntryKind;
-use crate::catalog_fixture_directory_entries::{entry_identity, names, open_directory};
-use crate::catalog_fixture_scope::{ClaimedFixtureScope, FixtureScopeBinding, FixtureScopeError};
+use crate::custody_types::EntryKind;
+use crate::directory_entries::{entry_identity, names, open_directory};
+use crate::scope::{ClaimedFixtureScope, FixtureScopeBinding, FixtureScopeError};
 
 #[cfg(test)]
 thread_local! {

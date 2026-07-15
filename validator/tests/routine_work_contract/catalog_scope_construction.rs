@@ -1,4 +1,4 @@
-use super::catalog_fixture_scope::{
+use super::scope::{
     CatalogSetupFailurePoint, ClaimedFixtureScope, FixtureScopeError, populate_catalog_scope,
 };
 use std::fs;

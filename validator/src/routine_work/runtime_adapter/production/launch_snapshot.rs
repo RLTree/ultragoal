@@ -9,8 +9,8 @@ use crate::routine_work::runtime_adapter::mediator::{
 #[cfg(unix)]
 use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
 
-use super::launch_custody::{EntryClaim, cleanup_partial_stage};
-use super::launch_stage_support::{cleanup_created_child, ensure_launch_root, safe_token_name};
+use super::launch_custody::{EntryClaim, cleanup_created_child, cleanup_partial_stage};
+use super::launch_root::{ensure_launch_root, safe_token_name};
 
 pub(super) const LAUNCH_ROOT_NAME: &str = ".routine-authority-launch";
 pub(super) const LAUNCH_FILE_NAME: &str = "program";

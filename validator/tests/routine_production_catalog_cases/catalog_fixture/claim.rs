@@ -27,7 +27,7 @@ pub(crate) fn capture_identity_attempts() -> usize {
     CAPTURE_ATTEMPTS.with(std::cell::Cell::get)
 }
 
-use crate::catalog_fixture_scope::{ClaimedFixtureScope, FixtureScopeBinding, FixtureScopeError};
+use crate::scope::{ClaimedFixtureScope, FixtureScopeBinding, FixtureScopeError};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum ClaimFailurePoint {

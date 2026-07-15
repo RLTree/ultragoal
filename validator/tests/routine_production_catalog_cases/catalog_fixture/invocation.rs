@@ -1,8 +1,8 @@
 use super::*;
 use crate::catalog_fixture::FixtureRootGuard;
-use crate::catalog_fixture_claim::FixtureClaimFailure;
-use crate::catalog_fixture_construction::FixtureConstructionFailure;
-use crate::catalog_fixture_scope::ClaimedFixtureScope;
+use crate::claim::FixtureClaimFailure;
+use crate::construction::FixtureConstructionFailure;
+use crate::scope::ClaimedFixtureScope;
 use std::panic::{AssertUnwindSafe, catch_unwind, resume_unwind};
 
 pub(crate) struct CatalogFixtureInvocation {
@@ -41,7 +41,7 @@ pub(crate) fn run_catalog_case_with_guard(
 pub(crate) fn run_catalog_case_with_begin_failure_guard(
     guard: FixtureRootGuard,
     label: &str,
-    failure: crate::catalog_fixture_claim::ClaimFailurePoint,
+    failure: crate::claim::ClaimFailurePoint,
 ) {
     let invocation = begin_until_settled(label, Some(failure));
     finish_until_settled(invocation);
@@ -62,8 +62,8 @@ impl CatalogFixtureInvocation {
         &mut self,
         label: &str,
         catalog_bytes: &[u8],
-        fail_after: Option<crate::catalog_fixture_scope::CatalogSetupFailurePoint>,
-        claim_failure: Option<crate::catalog_fixture_claim::ClaimFailurePoint>,
+        fail_after: Option<crate::scope::CatalogSetupFailurePoint>,
+        claim_failure: Option<crate::claim::ClaimFailurePoint>,
     ) -> Result<TestRoot, FixtureConstructionFailure> {
         TestRoot::new_in(&self.scope, label, catalog_bytes, fail_after, claim_failure)
     }
@@ -78,7 +78,7 @@ impl CatalogFixtureInvocation {
 
 fn begin_until_settled(
     label: &str,
-    failure: Option<crate::catalog_fixture_claim::ClaimFailurePoint>,
+    failure: Option<crate::claim::ClaimFailurePoint>,
 ) -> CatalogFixtureInvocation {
     let name = format!(
         "invocation-{label}-{}-{}",

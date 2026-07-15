@@ -11,8 +11,8 @@ use crate::routine_work::runtime_adapter::mediator::{
 };
 
 use super::launch_custody::{EntryClaim, cleanup_partial_stage, cleanup_staged};
+use super::launch_root::{ensure_launch_root, safe_token_name};
 use super::launch_snapshot::{LAUNCH_FILE_NAME, LAUNCH_MARKER_NAME, LAUNCH_SEAL_NAME};
-use super::launch_stage_support::{ensure_launch_root, safe_token_name};
 
 pub(super) fn recover_staged(
     root: &Path,

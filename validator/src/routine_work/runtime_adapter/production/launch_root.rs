@@ -6,9 +6,6 @@ use std::fs;
 use std::os::unix::fs::{MetadataExt, PermissionsExt};
 
 use crate::routine_work::digest::sha256;
-use crate::routine_work::runtime_adapter::mediator::ObjectIdentity;
-
-use super::launch_custody::cleanup_partial_stage;
 
 #[cfg(unix)]
 pub(super) fn ensure_launch_root(root: &Path) -> Result<(), RoutineError> {
@@ -37,17 +34,4 @@ pub(super) fn safe_token_name(value: &str) -> String {
     sha256(value.as_bytes())
         .trim_start_matches("sha256:")
         .to_owned()
-}
-
-#[cfg(unix)]
-pub(super) fn cleanup_created_child(
-    child: &Path,
-    identity: ObjectIdentity,
-    _cause: std::io::Error,
-    cause: &'static str,
-) -> RoutineError {
-    match cleanup_partial_stage(child, identity, &[]) {
-        Ok(()) => error(cause),
-        Err(cleanup_error) => cleanup_error,
-    }
 }

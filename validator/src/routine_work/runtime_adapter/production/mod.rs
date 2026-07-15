@@ -30,10 +30,10 @@ use ledger::{
 mod launch_custody;
 #[path = "launch_recovery.rs"]
 mod launch_recovery;
+#[path = "launch_root.rs"]
+mod launch_root;
 #[path = "launch_snapshot.rs"]
 mod launch_snapshot;
-#[path = "launch_stage_support.rs"]
-mod launch_stage_support;
 #[path = "production_issuance.rs"]
 mod production_issuance;
 #[path = "production_mediation.rs"]

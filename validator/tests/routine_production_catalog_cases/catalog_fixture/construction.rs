@@ -1,6 +1,6 @@
 use super::*;
-use crate::catalog_fixture_claim::{ClaimFailurePoint, ClaimResidue, FixtureClaimFailure};
-use crate::catalog_fixture_scope::{
+use crate::claim::{ClaimFailurePoint, ClaimResidue, FixtureClaimFailure};
+use crate::scope::{
     CatalogSetupFailurePoint, ClaimedFixtureScope, FixtureScopeError, populate_catalog_scope,
 };
 

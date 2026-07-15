@@ -1,15 +1,13 @@
 use super::*;
-use crate::catalog_fixture_claim::{ClaimFailurePoint, ClaimResidue, FixtureClaimFailure};
-use crate::catalog_fixture_construction::FixtureConstructionFailure;
-use crate::catalog_fixture_scope::{
-    CatalogSetupFailurePoint, ClaimedFixtureScope, FixtureScopeError,
-};
+use crate::claim::{ClaimFailurePoint, ClaimResidue, FixtureClaimFailure};
+use crate::construction::FixtureConstructionFailure;
+use crate::scope::{CatalogSetupFailurePoint, ClaimedFixtureScope, FixtureScopeError};
 use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::sync::{Arc, Mutex};
 
 #[test]
-pub(crate) fn catalog_fixture_drop_and_unwind_preserve_scope_until_explicit_teardown() {
-    crate::catalog_fixture_invocation::run_catalog_case("drop-unwind", |invocation| {
+pub(crate) fn drop_and_unwind_preserve_scope_until_explicit_teardown() {
+    crate::invocation::run_catalog_case("drop-unwind", |invocation| {
         let root = invocation.new_root("drop-inert", VALID_CATALOG)?;
         let path = root.path.clone();
         let sentinel = path.join("drop-sentinel");
@@ -51,8 +49,8 @@ pub(crate) fn catalog_fixture_drop_and_unwind_preserve_scope_until_explicit_tear
 }
 
 #[test]
-pub(crate) fn catalog_fixture_setup_failures_roll_back_only_the_claimed_child() {
-    crate::catalog_fixture_invocation::run_catalog_case("setup-rollback", |invocation| {
+pub(crate) fn setup_failures_roll_back_only_the_claimed_child() {
+    crate::invocation::run_catalog_case("setup-rollback", |invocation| {
         for (point, stage) in [
             (CatalogSetupFailurePoint::AfterClaim, "claim"),
             (CatalogSetupFailurePoint::AfterDirectories, "directories"),
@@ -79,7 +77,7 @@ pub(crate) fn catalog_fixture_setup_failures_roll_back_only_the_claimed_child() 
 }
 
 #[test]
-pub(crate) fn catalog_fixture_setup_rollback_refuses_a_substituted_scope() {
+pub(crate) fn setup_rollback_refuses_a_substituted_scope() {
     let guard = crate::catalog_fixture::lock_fixture_root();
     let parent = fixture_parent().join(format!(
         "pre-rollback-parent-{}",
@@ -167,7 +165,7 @@ pub(crate) fn catalog_claim_failures_retain_typed_custody_without_uncertain_clea
 #[test]
 pub(crate) fn constructor_claim_failure_returns_a_settleable_owner() {
     let result = catch_unwind(AssertUnwindSafe(|| {
-        crate::catalog_fixture_invocation::run_catalog_case("constructor-claim", |invocation| {
+        crate::invocation::run_catalog_case("constructor-claim", |invocation| {
             match invocation.try_root(
                 "constructor-claim-retry",
                 VALID_CATALOG,

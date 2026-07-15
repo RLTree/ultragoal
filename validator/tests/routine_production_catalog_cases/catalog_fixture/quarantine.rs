@@ -1,13 +1,13 @@
 use super::*;
-use crate::catalog_fixture_cleanup_hook::{set_before_entry_removal, set_before_final_removal};
-use crate::catalog_fixture_rebind::{owner_bound_scans, set_rebind_refusals};
-use crate::catalog_fixture_scope::{ClaimedFixtureScope, FixtureScopeError};
+use crate::cleanup_hook::{set_before_entry_removal, set_before_final_removal};
+use crate::rebind::{owner_bound_scans, set_rebind_refusals};
+use crate::scope::{ClaimedFixtureScope, FixtureScopeError};
 use std::sync::{Arc, Mutex};
 
 #[test]
 pub(crate) fn nested_quarantine_revalidation_preserves_a_replacement() {
     let guard = crate::catalog_fixture::lock_fixture_root();
-    let parent = catalog_fixture_parent();
+    let parent = fixture_parent();
     let name = format!(
         "nested-substitution-{}",
         NEXT.fetch_add(1, Ordering::Relaxed)
@@ -36,7 +36,7 @@ pub(crate) fn nested_quarantine_revalidation_preserves_a_replacement() {
 #[test]
 pub(crate) fn final_quarantine_substitution_is_retained_without_deleting_the_replacement() {
     let guard = crate::catalog_fixture::lock_fixture_root();
-    let parent = catalog_fixture_parent();
+    let parent = fixture_parent();
     let name = format!(
         "final-substitution-{}-{}",
         std::process::id(),
@@ -77,7 +77,7 @@ pub(crate) fn final_quarantine_substitution_is_retained_without_deleting_the_rep
 #[test]
 pub(crate) fn detached_scope_rebinds_only_the_held_directory_after_repeated_refusals() {
     let guard = crate::catalog_fixture::lock_fixture_root();
-    let parent = catalog_fixture_parent();
+    let parent = fixture_parent();
     let before = inventory(&parent);
     let name = format!(
         "detached-rebind-{}-{}",
@@ -170,7 +170,7 @@ fn replace_quarantined_entry(
     *observed.lock().unwrap() = Some(CString::new(quarantine.to_bytes()).unwrap());
 }
 
-fn catalog_fixture_parent() -> PathBuf {
+fn fixture_parent() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .unwrap()

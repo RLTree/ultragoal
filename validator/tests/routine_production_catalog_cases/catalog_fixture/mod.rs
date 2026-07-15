@@ -1,5 +1,5 @@
 use super::*;
-use crate::catalog_fixture_scope::ClaimedFixtureScope;
+use crate::scope::ClaimedFixtureScope;
 use std::sync::{Mutex, MutexGuard};
 
 pub(crate) const GRAPH_ID: &str =
@@ -13,7 +13,7 @@ pub(crate) const PLAN_ID: &str =
 pub(crate) const TRUE_TOOL_ID: &str =
     "sha256:5555555555555555555555555555555555555555555555555555555555555555";
 pub(crate) const VALID_CATALOG: &[u8] =
-    include_bytes!("../../../fixtures/routine-production-catalog/valid-catalog-v2.json");
+    include_bytes!("../../../../fixtures/routine-production-catalog/valid-catalog-v2.json");
 
 pub(crate) static NEXT: AtomicU64 = AtomicU64::new(0);
 static FIXTURE_ROOT_LOCK: Mutex<()> = Mutex::new(());

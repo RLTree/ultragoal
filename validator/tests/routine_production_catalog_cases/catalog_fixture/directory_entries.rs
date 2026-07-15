@@ -4,7 +4,7 @@ use std::io;
 use std::os::fd::{FromRawFd, RawFd};
 use std::os::unix::ffi::OsStringExt;
 
-use crate::catalog_fixture_custody_types::{EntryIdentity, EntryKind};
+use crate::custody_types::{EntryIdentity, EntryKind};
 
 pub(crate) fn entry_identity(parent: RawFd, name: &CStr) -> Result<EntryIdentity, String> {
     let mut stat = std::mem::MaybeUninit::<libc::stat>::uninit();

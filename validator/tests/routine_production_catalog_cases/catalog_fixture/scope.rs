@@ -4,7 +4,7 @@ use std::io;
 use std::os::fd::{AsRawFd, FromRawFd};
 use std::path::{Path, PathBuf};
 
-use crate::catalog_fixture_claim::{
+use crate::claim::{
     ClaimFailurePoint, ClaimResidue, FixtureClaimFailure, OpenedClaimResidue, UnopenedClaimResidue,
     capture_identity,
 };
@@ -167,17 +167,17 @@ impl ClaimedFixtureScope {
 
     pub(crate) fn rollback(&mut self) -> Result<(), FixtureScopeError> {
         if self.binding == FixtureScopeBinding::Detached {
-            crate::catalog_fixture_rebind::restore(self)?;
+            crate::rebind::restore(self)?;
         }
-        match crate::catalog_fixture_custody::quarantine_and_remove(
+        match crate::custody::quarantine_and_remove(
             &self.parent,
             &self.directory,
             &self.name,
             self.device,
             self.inode,
         ) {
-            crate::catalog_fixture_custody::CleanupDisposition::Deleted => Ok(()),
-            crate::catalog_fixture_custody::CleanupDisposition::Retained { binding, reason } => {
+            crate::custody::CleanupDisposition::Deleted => Ok(()),
+            crate::custody::CleanupDisposition::Retained { binding, reason } => {
                 self.apply_retained_binding(binding);
                 Err(FixtureScopeError::Retained(reason))
             }
@@ -188,9 +188,9 @@ impl ClaimedFixtureScope {
         self.rollback()
     }
 
-    fn apply_retained_binding(&mut self, binding: crate::catalog_fixture_custody::RetainedBinding) {
+    fn apply_retained_binding(&mut self, binding: crate::custody::RetainedBinding) {
         match binding {
-            crate::catalog_fixture_custody::RetainedBinding::Named(name) => {
+            crate::custody::RetainedBinding::Named(name) => {
                 if let Some(parent) = self.path.parent() {
                     self.path = parent.join(name.to_string_lossy().as_ref());
                     self.name = name;
@@ -198,7 +198,7 @@ impl ClaimedFixtureScope {
                     self.binding = FixtureScopeBinding::Detached;
                 }
             }
-            crate::catalog_fixture_custody::RetainedBinding::DescriptorOnly => {
+            crate::custody::RetainedBinding::DescriptorOnly => {
                 self.binding = FixtureScopeBinding::Detached;
             }
         }

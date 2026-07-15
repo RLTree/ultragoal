@@ -6,8 +6,8 @@ use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 
+use super::super::launch_root::{ensure_launch_root, safe_token_name};
 use super::super::launch_snapshot::launch_root;
-use super::super::launch_stage_support::{ensure_launch_root, safe_token_name};
 
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
 

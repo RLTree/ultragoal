@@ -10,6 +10,19 @@ pub(super) struct EntryClaim {
     pub(super) bytes: Option<Vec<u8>>,
 }
 
+#[cfg(unix)]
+pub(super) fn cleanup_created_child(
+    child: &Path,
+    identity: ObjectIdentity,
+    _cause: std::io::Error,
+    cause: &'static str,
+) -> RoutineError {
+    match cleanup_partial_stage(child, identity, &[]) {
+        Ok(()) => error(cause),
+        Err(cleanup_error) => cleanup_error,
+    }
+}
+
 pub(super) fn cleanup_partial_stage(
     child: &Path,
     directory_identity: ObjectIdentity,

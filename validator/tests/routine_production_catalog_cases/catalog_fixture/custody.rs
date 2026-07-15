@@ -6,8 +6,8 @@ use std::os::unix::ffi::OsStringExt;
 use std::os::unix::fs::MetadataExt;
 use std::sync::atomic::{AtomicU64, Ordering};
 
-use crate::catalog_fixture_custody_types::{EntryIdentity, EntryKind};
-use crate::catalog_fixture_directory_entries::{entry_identity, names, open_directory};
+use crate::custody_types::{EntryIdentity, EntryKind};
+use crate::directory_entries::{entry_identity, names, open_directory};
 
 static NEXT_QUARANTINE: AtomicU64 = AtomicU64::new(0);
 
@@ -47,7 +47,7 @@ pub(crate) fn quarantine_and_remove(
     if let Err(error) = validate_scope(parent.as_raw_fd(), &quarantine, child, device, inode) {
         return retain_scope(parent, child, name, &quarantine, device, inode, error);
     }
-    if crate::catalog_fixture_cleanup_hook::run_before_final_removal(&quarantine) {
+    if crate::cleanup_hook::run_before_final_removal(&quarantine) {
         return retain_scope(
             parent,
             child,
@@ -123,7 +123,7 @@ fn remove_entry(
     if let Some(file) = held {
         validate_held(file, expected)?;
     }
-    if crate::catalog_fixture_cleanup_hook::run_before_entry_removal(parent, name) {
+    if crate::cleanup_hook::run_before_entry_removal(parent, name) {
         return Err("entry removal was retained after the test hook".to_owned());
     }
     let flags = if expected.kind == EntryKind::Directory {
