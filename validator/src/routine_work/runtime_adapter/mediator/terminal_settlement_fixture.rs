@@ -1,10 +1,16 @@
 use super::*;
-use std::sync::atomic::{AtomicUsize, Ordering};
+use std::fs;
+use std::os::unix::fs::PermissionsExt;
+use std::path::PathBuf;
+use std::sync::atomic::{AtomicU64, AtomicUsize, Ordering};
+
+static NEXT_STAGE: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Default)]
 pub(super) struct TerminalDurable {
     pub(super) settlements: Mutex<Vec<DurableSettlement>>,
     pub(super) cleanup_failure: Mutex<Option<&'static str>>,
+    pub(super) cleanup_panic: Mutex<Option<&'static str>>,
     pub(super) cleanup_calls: AtomicUsize,
 }
 
@@ -19,6 +25,13 @@ impl DurableAttemptAuthority for TerminalDurable {
 
     fn cleanup_staged(&self, _staged: &StagedProgram) -> Result<(), RoutineError> {
         self.cleanup_calls.fetch_add(1, Ordering::SeqCst);
+        let cleanup_panic = *self
+            .cleanup_panic
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        if let Some(payload) = cleanup_panic {
+            panic!("{payload}");
+        }
         match *self
             .cleanup_failure
             .lock()
@@ -110,4 +123,41 @@ pub(super) fn retry_grant(
         seal: "terminal-seal-retry".to_owned(),
         durable: Some(durable),
     }
+}
+
+pub(super) fn staged_fixture(label: &str) -> (PathBuf, StagedProgram) {
+    let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let parent = manifest
+        .parent()
+        .expect("reservation fixture manifest has no workspace parent")
+        .join("target/routine-reservation-lifecycle-fixtures");
+    fs::create_dir_all(&parent).expect("reservation fixture parent is unavailable");
+    let directory = parent.join(format!(
+        "{label}-{}-{}",
+        std::process::id(),
+        NEXT_STAGE.fetch_add(1, Ordering::Relaxed)
+    ));
+    fs::create_dir(&directory).unwrap();
+    let program = directory.join("program");
+    let marker = directory.join("authority");
+    let seal = directory.join("seal");
+    fs::copy("/usr/bin/true", &program).unwrap();
+    fs::set_permissions(&program, fs::Permissions::from_mode(0o555)).unwrap();
+    let marker_bytes = b"reservation-unwind-marker\n".to_vec();
+    let seal_bytes = b"reservation-unwind-seal\n".to_vec();
+    fs::write(&marker, &marker_bytes).unwrap();
+    fs::write(&seal, &seal_bytes).unwrap();
+    let executable = PinnedExecutable::open_unbound(&program).unwrap();
+    let staged = StagedProgram {
+        executable,
+        directory: directory.clone(),
+        marker: marker.clone(),
+        seal: seal.clone(),
+        marker_bytes,
+        seal_bytes,
+        directory_identity: ObjectIdentity::from(&fs::metadata(&directory).unwrap()),
+        marker_identity: ObjectIdentity::from(&fs::metadata(marker).unwrap()),
+        seal_identity: ObjectIdentity::from(&fs::metadata(seal).unwrap()),
+    };
+    (directory, staged)
 }

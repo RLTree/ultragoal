@@ -20,6 +20,14 @@ impl AttemptReservation {
     }
 }
 
+fn cleanup_and_transition(
+    attempt: &AttemptReservation,
+) -> std::thread::Result<Result<(), RoutineError>> {
+    let cleanup = catch_unwind(AssertUnwindSafe(|| attempt.cleanup_staged()));
+    attempt.transition_failure();
+    cleanup
+}
+
 pub(crate) fn run_reserved<T>(
     attempt: AttemptReservation,
     lifecycle: impl FnOnce(&AttemptReservation) -> Result<T, RoutineError>,
@@ -27,28 +35,23 @@ pub(crate) fn run_reserved<T>(
     let outcome = catch_unwind(AssertUnwindSafe(|| lifecycle(&attempt)));
     match outcome {
         Ok(Ok(value)) if attempt.settled.get() => Ok(value),
-        Ok(Ok(_)) => {
-            let cleanup = attempt.cleanup_staged();
-            attempt.transition_failure();
-            cleanup.and(Err(mediator_error(
+        Ok(Ok(_)) => match cleanup_and_transition(&attempt) {
+            Ok(cleanup) => cleanup.and(Err(mediator_error(
                 "mediator-reservation-terminal-transition-missing",
-            )))
-        }
-        Ok(Err(error)) => {
-            let cleanup = attempt.cleanup_staged();
-            attempt.transition_failure();
-            cleanup.and(Err(error))
-        }
+            ))),
+            Err(payload) => resume_unwind(payload),
+        },
+        Ok(Err(error)) => match cleanup_and_transition(&attempt) {
+            Ok(_) => Err(error),
+            Err(payload) => resume_unwind(payload),
+        },
         Err(payload) => {
-            match attempt.cleanup_staged() {
-                Ok(()) => {}
-                Err(_) => {
-                    // Failed launch cleanup leaves its staged entry and durable
-                    // reservation pending; it must not replace the initiating panic.
-                }
-            }
-            attempt.transition_failure();
+            drop(cleanup_and_transition(&attempt));
             resume_unwind(payload)
         }
     }
 }
+
+#[cfg(test)]
+#[path = "reservation_lifecycle/cleanup_panic_tests.rs"]
+mod cleanup_panic_tests;

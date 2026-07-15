@@ -1,49 +1,8 @@
 use super::terminal_settlement_fixture::*;
 use super::*;
 use std::fs;
-use std::os::unix::fs::PermissionsExt;
 use std::panic::{AssertUnwindSafe, catch_unwind};
-use std::path::PathBuf;
-use std::sync::atomic::{AtomicU64, Ordering};
-
-static NEXT_STAGE: AtomicU64 = AtomicU64::new(0);
-
-fn staged_fixture(label: &str) -> (PathBuf, StagedProgram) {
-    let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let parent = manifest
-        .parent()
-        .expect("reservation fixture manifest has no workspace parent")
-        .join("target/routine-reservation-lifecycle-fixtures");
-    fs::create_dir_all(&parent).expect("reservation fixture parent is unavailable");
-    let directory = parent.join(format!(
-        "{label}-{}-{}",
-        std::process::id(),
-        NEXT_STAGE.fetch_add(1, Ordering::Relaxed)
-    ));
-    fs::create_dir(&directory).unwrap();
-    let program = directory.join("program");
-    let marker = directory.join("authority");
-    let seal = directory.join("seal");
-    fs::copy("/usr/bin/true", &program).unwrap();
-    fs::set_permissions(&program, fs::Permissions::from_mode(0o555)).unwrap();
-    let marker_bytes = b"reservation-unwind-marker\n".to_vec();
-    let seal_bytes = b"reservation-unwind-seal\n".to_vec();
-    fs::write(&marker, &marker_bytes).unwrap();
-    fs::write(&seal, &seal_bytes).unwrap();
-    let executable = PinnedExecutable::open_unbound(&program).unwrap();
-    let staged = StagedProgram {
-        executable,
-        directory: directory.clone(),
-        marker: marker.clone(),
-        seal: seal.clone(),
-        marker_bytes,
-        seal_bytes,
-        directory_identity: ObjectIdentity::from(&fs::metadata(&directory).unwrap()),
-        marker_identity: ObjectIdentity::from(&fs::metadata(marker).unwrap()),
-        seal_identity: ObjectIdentity::from(&fs::metadata(seal).unwrap()),
-    };
-    (directory, staged)
-}
+use std::sync::atomic::Ordering;
 
 #[test]
 fn cleanup_failures_never_replace_the_initiating_panic_or_erase_recovery() {
