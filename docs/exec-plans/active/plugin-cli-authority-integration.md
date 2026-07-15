@@ -13,6 +13,9 @@ acceptance. N04 is root-integrated and retired at a source-only transaction
 ceiling; the current 608-diagnostic library strict wall and pending standards
 audits keep warning-free integration open. Drive the remaining three Codex
 worktree sessions through root-owned review, wiring, proof, and claim decisions.
+N06 is the sole next integration gate. N10 and N11 may continue in parallel only
+at explicitly withheld source-local ceilings until their graph dependencies are
+current on the exact root candidate.
 
 ## Durable Goal Binding
 
@@ -49,6 +52,9 @@ worktree sessions through root-owned review, wiring, proof, and claim decisions.
 - [ ] Close the global strict diagnostics, exact coverage, and all pending
   standards audits without suppression or unsupported PASS restoration.
 - [ ] Accept or return REWORK on each remaining frozen worktree artifact set.
+- [x] Rebound acceptance and integration to graph order: N06 next; N10 only
+  after current N06 and N09 ceilings; N11 only after current N06, N07, and N08
+  ceilings. Parallel downstream source work does not satisfy those dependencies.
 - [x] Accepted bounded legacy CLI guidance at `f533b5459` and the typed public
   argv/root transition at `8c847e9b0`; dispatcher retirement stays withheld.
 - [ ] Integrate the remaining accepted sessions one at a time and rerun
@@ -69,11 +75,14 @@ worktree sessions through root-owned review, wiring, proof, and claim decisions.
   affected claim until behavior and evidence are re-audited.
 - N04 source transaction authority and its corrected WorkerResult are accepted,
   integrated, and retired. Root production reachability and every live host
-  identity remain open. N06 is under REWORK for interrupted scratch-custody
-  substitution. N11 source protocol is accepted but its receipt inventory is
-  under REWORK for omitted deletion rows and a stale diagnostic count. N10 has
-  a clean source freeze under fresh parent falsification; its WorkerResult stays
-  untouched until source review resolves.
+  identity remain open. At root `a0f52fc11` / tree `4e1b5f00`, N06
+  `4edc87982` / tree `c620e612` is under REWORK for a repeated destructive
+  pathname-custody race and is the next integration gate. N10 remains at
+  committed source `8ae945a2f` / tree `d6e45197` with an active false-pass
+  control repair; its receipt is frozen. N11 remains at committed source
+  `b0ba74926` / tree `78b394e4` with an active fail-closed cleanup repair; its
+  receipt is frozen. N10 and N11 are speculative source work, not
+  dependency-closed acceptance candidates.
 - An isolated legacy-command `cfg(test)` retirement is invalid. It would bypass
   N14 compatibility authority and disconnect a graph with about 3,000 dormant
   warnings. Compatibility routing and authority-registry reconciliation must
@@ -97,6 +106,16 @@ worktree sessions through root-owned review, wiring, proof, and claim decisions.
 - Keep OD-001 through OD-010 safe defaults: local, unpublished, unsigned,
   non-destructive, no optional export or executable extension, and claims only
   for independently exercised environments.
+- Dependency order is acceptance authority, not a scheduling suggestion. Keep
+  N06, N10, and N11 active in parallel, but integrate N06 alone first. Then
+  prepare N08 closure and N10 acceptance concurrently, serialize their root
+  landings, and admit N11 only after N06, N07, and N08 are current on the exact
+  root candidate. Refresh and re-review downstream source whenever an upstream
+  integration changes a consumed interface, schema, behavior, or authority.
+- A repeated custody, authority, or false-pass defect class requires one shared
+  invariant-level repair. Enumerate every sibling, descendant, rollback,
+  recovery, reconciliation, cleanup, and replay transition before the next
+  patch; do not repair only the reported test route.
 
 ## Context And Orientation
 
@@ -118,12 +137,23 @@ worktree sessions through root-owned review, wiring, proof, and claim decisions.
 
 1. Keep the current root integration checkpoint clean while worktrees repair
    their owned sections.
-2. Preserve the exact current 608-diagnostic library strict blocker; classify
+2. Treat N06 as the only next admissible worktree integration. Review its clean
+   source, regenerate and review its WorkerResult only after source acceptance,
+   land it alone, apply root wiring, run affected dependency-closed checks, and
+   recompute root identity and the N02 duplicate-authority inventory ceiling.
+3. Keep N10 and N11 implementation active without consuming an unaccepted N06
+   claim. After N06 lands, compare their consumed interfaces and refresh them
+   when relevant. Prepare N08 closure and N10 acceptance concurrently; do not
+   integrate N11 until current N06, N07, and N08 ceilings are present together.
+4. After N06, N10, and N11 are integrated and their tasks/worktrees/caches are
+   retired, close semantic-namespace and accumulated agent-standards debt before
+   launching the next implementation worktree.
+5. Preserve the exact current 608-diagnostic library strict blocker; classify
    each remaining warning as active wiring, safe deletion, or dormant candidate
    isolation.
-3. Re-audit the 110 pending standards only after current behavior and exact
+6. Re-audit the 110 pending standards only after current behavior and exact
    evidence exist; never restore PASS from a source test alone.
-4. Keep formatting, line caps, source laws, generated authority, coverage
+7. Keep formatting, line caps, source laws, generated authority, coverage
    ceiling, and recursively zero-write public reads current after every root edit.
 
 ### B. Launch Dependency-Closed Product Sessions
