@@ -54,17 +54,14 @@ pub(in super::super) fn reserve_grant(
 }
 
 impl AttemptReservation {
-    #[cfg(test)]
     pub(in super::super) fn protocol_id(&self) -> &String {
         self.binding.protocol_id()
     }
 
-    #[cfg(test)]
     pub(in super::super) fn grant_id(&self) -> &String {
         self.binding.grant_id()
     }
 
-    #[cfg(test)]
     pub(in super::super) fn recovery_marker(&self) -> &String {
         self.binding.recovery_marker()
     }
@@ -217,7 +214,7 @@ impl AttemptReservation {
         let mut state = registry()
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
-        if state.active_protocols.get(self.binding.protocol_id()) != Some(self.binding.grant_id()) {
+        if state.active_protocols.get(self.protocol_id()) != Some(self.grant_id()) {
             return Err(mediator_error(
                 "mediator-reservation-failure-active-binding-invalid",
             ));
@@ -228,20 +225,11 @@ impl AttemptReservation {
         if transfer {
             self.staged.clear_recorded();
         }
-        release_active(
-            &mut state,
-            self.binding.protocol_id(),
-            self.binding.grant_id(),
-        );
-        if self.started.get()
-            && !state
+        release_active(&mut state, self.protocol_id(), self.grant_id());
+        if self.started.get() && !state.ambiguous_protocols.contains_key(self.protocol_id()) {
+            state
                 .ambiguous_protocols
-                .contains_key(self.binding.protocol_id())
-        {
-            state.ambiguous_protocols.insert(
-                self.binding.protocol_id().clone(),
-                self.binding.recovery_marker().clone(),
-            );
+                .insert(self.protocol_id().clone(), self.recovery_marker().clone());
         }
         self.settled.set(true);
         Ok(())
