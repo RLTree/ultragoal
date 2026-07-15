@@ -18,14 +18,12 @@ pub(crate) const VALID_CATALOG: &[u8] =
 pub(crate) static NEXT: AtomicU64 = AtomicU64::new(0);
 static FIXTURE_ROOT_LOCK: Mutex<()> = Mutex::new(());
 
-pub(crate) struct FixtureRootGuard(MutexGuard<'static, ()>);
+pub(crate) type FixtureRootGuard = MutexGuard<'static, ()>;
 
 pub(crate) fn lock_fixture_root() -> FixtureRootGuard {
-    FixtureRootGuard(
-        FIXTURE_ROOT_LOCK
-            .lock()
-            .unwrap_or_else(|error| error.into_inner()),
-    )
+    FIXTURE_ROOT_LOCK
+        .lock()
+        .unwrap_or_else(|error| error.into_inner())
 }
 
 pub(crate) struct TestRoot {
