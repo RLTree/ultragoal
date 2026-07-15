@@ -30,6 +30,8 @@ pub(super) fn observe(
         components.push(OutputComponentJournal {
             relative_path,
             preexisting,
+            creation_nonce: preexisting.is_none().then(creation_nonce).transpose()?,
+            staged: None,
             provisioned: None,
         });
     }
@@ -38,6 +40,13 @@ pub(super) fn observe(
         scopes: scope_names,
         components,
     })
+}
+
+fn creation_nonce() -> Result<String, RoutineError> {
+    let mut bytes = [0_u8; 32];
+    getrandom::fill(&mut bytes)
+        .map_err(|_| error("routine-production-output-random-unavailable"))?;
+    Ok(bytes.iter().map(|byte| format!("{byte:02x}")).collect())
 }
 
 pub(super) fn open_root(root: &Path) -> Result<File, RoutineError> {

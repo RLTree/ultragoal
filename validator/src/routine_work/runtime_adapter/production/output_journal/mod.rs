@@ -16,6 +16,11 @@ use crate::routine_work::{RepoPath, RoutineError};
 
 #[path = "apply.rs"]
 mod apply;
+#[path = "creation.rs"]
+mod creation;
+#[cfg(test)]
+#[path = "custody_tests.rs"]
+mod custody_tests;
 #[path = "directory_entries.rs"]
 mod directory_entries;
 #[path = "observation.rs"]

@@ -1,11 +1,30 @@
 use super::*;
 
 impl FileLedger {
+    pub(crate) fn record_output_staged(
+        &self,
+        token: &ReservationToken,
+        relative_path: &str,
+        identity: OutputDirectoryIdentity,
+    ) -> Result<(), RoutineError> {
+        self.record_output_transition(token, relative_path, identity, false)
+    }
+
     pub(crate) fn record_output_component(
         &self,
         token: &ReservationToken,
         relative_path: &str,
         identity: OutputDirectoryIdentity,
+    ) -> Result<(), RoutineError> {
+        self.record_output_transition(token, relative_path, identity, true)
+    }
+
+    fn record_output_transition(
+        &self,
+        token: &ReservationToken,
+        relative_path: &str,
+        identity: OutputDirectoryIdentity,
+        final_record: bool,
     ) -> Result<(), RoutineError> {
         if token.reuse_only || validate_output_journal(&token.output_journal).is_err() {
             return Err(error(
@@ -26,6 +45,7 @@ impl FileLedger {
                     .any(|(recorded, issued)| {
                         recorded.relative_path != issued.relative_path
                             || recorded.preexisting != issued.preexisting
+                            || recorded.creation_nonce != issued.creation_nonce
                     })
             {
                 return Err(error(
@@ -41,12 +61,20 @@ impl FileLedger {
             if component.preexisting.is_some() {
                 return Err(error("routine-production-output-component-preexisting"));
             }
-            match component.provisioned {
+            let destination = if final_record {
+                if component.staged != Some(identity) {
+                    return Err(error("routine-production-output-stage-identity-changed"));
+                }
+                &mut component.provisioned
+            } else {
+                &mut component.staged
+            };
+            match *destination {
                 Some(observed) if observed != identity => {
                     return Err(error("routine-production-output-identity-changed"));
                 }
                 Some(_) => return Ok(()),
-                None => component.provisioned = Some(identity),
+                None => *destination = Some(identity),
             }
             Ok(())
         })

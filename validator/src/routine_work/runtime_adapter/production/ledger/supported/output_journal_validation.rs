@@ -18,22 +18,60 @@ pub(crate) fn validate_output_journal(
         || scopes != journal.scopes
         || journal.scopes.iter().any(|scope| !valid_repo_path(scope))
         || actual_components != expected_components
+        || duplicate_creation_nonce(journal)
         || journal.components.iter().any(|component| {
             component
                 .preexisting
                 .as_ref()
                 .is_some_and(|value| !valid_identity(value))
                 || component
+                    .staged
+                    .as_ref()
+                    .is_some_and(|value| !valid_identity(value))
+                || component
                     .provisioned
                     .as_ref()
                     .is_some_and(|value| !valid_identity(value))
-                || component.preexisting.is_some() && component.provisioned.is_some()
+                || invalid_creation_state(component)
         })
         || impossible_descendant_state(journal)
     {
         return Err(error("routine-production-output-journal-invalid"));
     }
     Ok(())
+}
+
+fn duplicate_creation_nonce(journal: &OutputProvisionJournal) -> bool {
+    let mut nonces = BTreeSet::new();
+    journal.components.iter().any(|component| {
+        component
+            .creation_nonce
+            .as_deref()
+            .is_some_and(|nonce| !nonces.insert(nonce))
+    })
+}
+
+fn invalid_creation_state(component: &OutputComponentJournal) -> bool {
+    match component.preexisting {
+        Some(_) => {
+            component.creation_nonce.is_some()
+                || component.staged.is_some()
+                || component.provisioned.is_some()
+        }
+        None => {
+            component
+                .creation_nonce
+                .as_deref()
+                .is_none_or(|nonce| !valid_creation_nonce(nonce))
+                || component
+                    .provisioned
+                    .is_some_and(|final_identity| component.staged != Some(final_identity))
+        }
+    }
+}
+
+fn valid_creation_nonce(value: &str) -> bool {
+    value.len() == 64 && value.bytes().all(|byte| byte.is_ascii_hexdigit())
 }
 
 fn component_paths(scopes: &[String]) -> Vec<String> {
@@ -71,7 +109,9 @@ fn impossible_descendant_state(journal: &OutputProvisionJournal) -> bool {
         states.get(parent).is_some_and(|parent| {
             parent.preexisting.is_none()
                 && parent.provisioned.is_none()
-                && (component.preexisting.is_some() || component.provisioned.is_some())
+                && (component.preexisting.is_some()
+                    || component.staged.is_some()
+                    || component.provisioned.is_some())
         })
     })
 }

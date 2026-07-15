@@ -8,14 +8,14 @@ use std::sync::atomic::{AtomicU64, Ordering};
 
 static NEXT_FIXTURE: AtomicU64 = AtomicU64::new(0);
 
-struct Fixture {
-    root: PathBuf,
-    workspace: PathBuf,
-    authority: PathBuf,
+pub(super) struct Fixture {
+    pub(super) root: PathBuf,
+    pub(super) workspace: PathBuf,
+    pub(super) authority: PathBuf,
 }
 
 impl Fixture {
-    fn new(label: &str) -> Self {
+    pub(super) fn new(label: &str) -> Self {
         let parent =
             PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("target/routine-output-journal-tests");
         fs::create_dir_all(&parent).unwrap();
@@ -38,7 +38,7 @@ impl Fixture {
         }
     }
 
-    fn teardown(self) {
+    pub(super) fn teardown(self) {
         fs::remove_dir_all(&self.root).unwrap();
         assert!(!self.root.exists());
     }
@@ -59,7 +59,7 @@ fn binding(label: &str) -> AuthorityBinding {
     }
 }
 
-fn reserve(
+pub(super) fn reserve(
     ledger: &FileAuthorityLedger,
     label: &str,
     journal: OutputProvisionJournal,
@@ -79,20 +79,17 @@ fn reserve(
         .unwrap()
 }
 
-fn scope() -> RepoPath {
+pub(super) fn scope() -> RepoPath {
     RepoPath::parse("target/routine/compile").unwrap()
 }
 
 #[test]
-fn every_created_and_recorded_boundary_recovers_from_the_exact_durable_journal() {
-    for (ordinal, boundary) in [
-        (0, ("target", false)),
-        (1, ("target", true)),
-        (2, ("target/routine", false)),
-        (3, ("target/routine", true)),
-        (4, ("target/routine/compile", false)),
-        (5, ("target/routine/compile", true)),
-    ] {
+fn every_stage_and_publish_boundary_recovers_from_the_exact_durable_journal() {
+    for (ordinal, (path, boundary)) in ["target", "target/routine", "target/routine/compile"]
+        .into_iter()
+        .flat_map(|path| [0, 1, 2, 3].map(move |boundary| (path, boundary)))
+        .enumerate()
+    {
         let label = format!("boundary-{ordinal}");
         let fixture = Fixture::new(&label);
         let ledger = FileAuthorityLedger::open_or_initialize(&fixture.authority).unwrap();
@@ -103,11 +100,7 @@ fn every_created_and_recorded_boundary_recovers_from_the_exact_durable_journal()
             None,
         );
         let interrupted = apply_observed(&ledger, &first, &fixture.workspace, &mut |event| {
-            let matches = match event {
-                ApplyEvent::Created(path) => path == boundary.0 && !boundary.1,
-                ApplyEvent::Recorded(path) => path == boundary.0 && boundary.1,
-            };
-            if matches {
+            if boundary_matches(event, path, boundary) {
                 Err(error("routine-output-journal-test-interruption"))
             } else {
                 Ok(())
@@ -126,6 +119,7 @@ fn every_created_and_recorded_boundary_recovers_from_the_exact_durable_journal()
         );
         apply(&ledger, &recovered, &fixture.workspace).unwrap();
         assert!(fixture.workspace.join("target/routine/compile").is_dir());
+        super::custody_tests::assert_no_staged_outputs(&fixture.workspace);
         ledger
             .settle(&recovered, AttemptState::Failed, &BTreeMap::new())
             .unwrap();
@@ -151,16 +145,25 @@ fn recovery_preserves_foreign_content_and_keeps_the_attempt_pending() {
         None,
     );
     let interrupted = apply_observed(&ledger, &first, &fixture.workspace, &mut |event| {
-        if matches!(event, ApplyEvent::Created("target/routine/compile")) {
+        if matches!(event, ApplyEvent::StageCreated("target/routine/compile")) {
             Err(error("routine-output-journal-test-interruption"))
         } else {
             Ok(())
         }
     });
     assert!(interrupted.is_err());
-    let foreign = fixture.workspace.join("target/routine/compile/foreign");
-    fs::write(&foreign, b"foreign").unwrap();
     let pending = ledger.pending_recovery(&first.binding).unwrap().unwrap();
+    let nonce = pending
+        .output_journal
+        .components
+        .iter()
+        .find(|component| component.relative_path == "target/routine/compile")
+        .and_then(|component| component.creation_nonce.as_deref())
+        .unwrap();
+    let foreign = fixture
+        .workspace
+        .join(format!("target/routine/.routine-output-{nonce}/foreign"));
+    fs::write(&foreign, b"foreign").unwrap();
     let recovered = reserve(
         &ledger,
         "foreign-content",
@@ -170,7 +173,7 @@ fn recovery_preserves_foreign_content_and_keeps_the_attempt_pending() {
     let failure = apply(&ledger, &recovered, &fixture.workspace).unwrap_err();
     assert_eq!(
         failure.cause(),
-        "routine-production-output-owned-content-ambiguous"
+        "routine-production-output-stage-custody-changed"
     );
     assert_eq!(fs::read(&foreign).unwrap(), b"foreign");
     assert!(
@@ -181,6 +184,17 @@ fn recovery_preserves_foreign_content_and_keeps_the_attempt_pending() {
     );
     drop(ledger);
     fixture.teardown();
+}
+
+fn boundary_matches(event: ApplyEvent<'_>, path: &str, boundary: u8) -> bool {
+    matches!(
+        (event, boundary),
+        (ApplyEvent::StageCreated(observed), 0)
+            | (ApplyEvent::StageRecorded(observed), 1)
+            | (ApplyEvent::Published(observed), 2)
+            | (ApplyEvent::FinalRecorded(observed), 3)
+            if observed == path
+    )
 }
 
 #[test]

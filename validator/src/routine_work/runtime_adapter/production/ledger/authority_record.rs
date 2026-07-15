@@ -1,6 +1,6 @@
 use super::*;
 
-pub(crate) const SCHEMA: &str = "RoutineProductionAuthorityLedger-v1";
+pub(crate) const SCHEMA: &str = "RoutineProductionAuthorityLedger-v2";
 pub(crate) const KEY_NAME: &str = "routine-authority.key";
 pub(crate) const LOCK_NAME: &str = "routine-authority.lock";
 pub(crate) const STATE_NAME: &str = "routine-authority.state";
@@ -64,6 +64,8 @@ pub(crate) struct OutputDirectoryIdentity {
 pub(crate) struct OutputComponentJournal {
     pub(crate) relative_path: String,
     pub(crate) preexisting: Option<OutputDirectoryIdentity>,
+    pub(crate) creation_nonce: Option<String>,
+    pub(crate) staged: Option<OutputDirectoryIdentity>,
     pub(crate) provisioned: Option<OutputDirectoryIdentity>,
 }
 
