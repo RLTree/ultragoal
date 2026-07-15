@@ -20,27 +20,6 @@ pub(crate) struct TestRoot {
 }
 
 impl TestRoot {
-    pub(crate) fn new(label: &str, catalog_bytes: &[u8]) -> Self {
-        let sequence = NEXT.fetch_add(1, Ordering::Relaxed);
-        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        let workspace = manifest
-            .parent()
-            .expect("catalog fixture manifest has no workspace parent");
-        let parent = workspace.join("target/routine-production-catalog-fixtures");
-        fs::create_dir_all(&parent).expect("catalog fixture parent creation failed");
-        let path = parent.join(format!("{label}-{}-{sequence}", std::process::id()));
-        fs::create_dir(&path).expect("catalog fixture child claim failed");
-        fs::create_dir_all(path.join("config")).unwrap();
-        fs::create_dir_all(path.join("src")).unwrap();
-        fs::create_dir_all(path.join("tests")).unwrap();
-        fs::create_dir_all(path.join("target/routine-syntax")).unwrap();
-        fs::create_dir_all(path.join("target/routine-verify")).unwrap();
-        fs::write(path.join("config/routines.json"), catalog_bytes).unwrap();
-        fs::write(path.join("src/input.txt"), b"source input\n").unwrap();
-        fs::write(path.join("tests/input.txt"), b"test input\n").unwrap();
-        Self { path }
-    }
-
     pub(crate) fn path(&self) -> &Path {
         &self.path
     }

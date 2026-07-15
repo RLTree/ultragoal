@@ -10,6 +10,10 @@ pub mod routine_work;
 
 #[path = "routine_work_contract/authority_ledger_controls.rs"]
 mod authority_ledger_controls;
+#[path = "routine_production_catalog_cases/catalog_fixture_scope.rs"]
+mod catalog_fixture_scope;
+#[path = "routine_work_contract/catalog_fixture_setup.rs"]
+mod catalog_fixture_setup;
 #[path = "routine_work_contract/configured_path_alias.rs"]
 mod configured_path_alias;
 #[path = "routine_work_contract/contract.rs"]

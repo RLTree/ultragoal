@@ -21,8 +21,12 @@ use std::sync::atomic::{AtomicU64, Ordering};
 mod catalog_definition_rejection;
 #[path = "routine_production_catalog_cases/catalog_fixture.rs"]
 mod catalog_fixture;
+#[path = "routine_production_catalog_cases/catalog_fixture_construction.rs"]
+mod catalog_fixture_construction;
 #[path = "routine_production_catalog_cases/catalog_fixture_lifecycle.rs"]
 mod catalog_fixture_lifecycle;
+#[path = "routine_production_catalog_cases/catalog_fixture_scope.rs"]
+mod catalog_fixture_scope;
 #[path = "routine_production_catalog_cases/repository_fixture.rs"]
 mod repository_fixture;
 #[path = "routine_production_catalog_cases/source_path_rejection.rs"]
