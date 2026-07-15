@@ -58,15 +58,26 @@ impl ProductionRootAuthority {
         workspace.verify()?;
         let reservation = crate::orchestration::FileJournal::with_existing_exclusive_lock(
             workspace.root(),
-            || {
+            || -> Result<ReservedExecution<'a>, ProductError> {
                 workspace.verify()?;
                 request.prevalidate()?;
                 request.verify(&self.authority)?;
                 let execution = ValidatedExecution { permit_id, request };
                 self.ledger.require_issued(execution.permit_id())?;
-                self.ledger.reserve(execution)
+                self.ledger.reserve(execution.permit_id())?;
+                Ok(execution.reserve())
             },
         )?;
-        self.ledger.complete(reservation)
+        let permit_id = reservation.permit_id().to_owned();
+        match reservation.execute() {
+            Ok(outcome) => {
+                self.ledger.commit(&permit_id)?;
+                Ok(outcome)
+            }
+            Err(error) => {
+                self.ledger.mark_ambiguous(&permit_id)?;
+                Err(error)
+            }
+        }
     }
 }

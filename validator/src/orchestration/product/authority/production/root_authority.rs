@@ -40,3 +40,6 @@ impl ProductionRootAuthority {
 
 include!("../root/secret_binding.rs");
 include!("../root/verification.rs");
+
+#[cfg(test)]
+include!("root_authority_lifetime_tests.rs");

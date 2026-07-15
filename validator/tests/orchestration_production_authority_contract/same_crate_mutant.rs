@@ -1,144 +1,123 @@
+mod authority_descendants;
+mod direct_routes;
+mod reservation_tokens;
+
 use super::fixture::TestRoot;
 use std::fs;
-use std::path::Path;
-use std::process::Command;
+use std::path::{Path, PathBuf};
+use std::process::{Child, Command, Stdio};
 
 #[test]
-fn descendants_cannot_mint_authority_or_call_direct_effects() {
-    let scratch = TestRoot::new("same-crate-transaction-mutant", 0o700);
-    let crate_root = scratch.path().join("validator");
-    let repository_root = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
-    fs::create_dir(&crate_root).unwrap();
-    copy_tree(
-        &repository_root.join("validator/src"),
-        &crate_root.join("src"),
+fn same_crate_boundaries_have_independent_exact_path_controls() {
+    let rejected_fixture = MutantCrate::new("rejected");
+    let exposed_fixture = MutantCrate::new("exposed");
+    let production_path = "orchestration/product/authority/production/mod.rs";
+    let transaction_path = "orchestration/product/authority/production/execution_transaction.rs";
+    let production = rejected_fixture.original(production_path);
+    let transaction = rejected_fixture.original(transaction_path);
+    rejected_fixture.write_with(
+        production_path,
+        &production,
+        &format!(
+            "{}\n{}",
+            authority_descendants::PRODUCTION_MUTANT,
+            direct_routes::MUTANTS
+        ),
     );
-    copy_tree(
-        &repository_root.join("validator/build_support"),
-        &crate_root.join("build_support"),
+    rejected_fixture.write_with(
+        transaction_path,
+        &transaction,
+        &format!(
+            "{}\n{}",
+            authority_descendants::EFFECT_MUTANT,
+            reservation_tokens::MUTANTS
+        ),
     );
-    for path in [
-        "templates",
-        ".codex/agents",
-        "docs/ultragoal-contract-2026-07-successor-v2",
-    ] {
-        copy_tree(&repository_root.join(path), &scratch.path().join(path));
-    }
-    copy_required_manifest_files(repository_root, &crate_root, scratch.path());
+    reservation_tokens::install_setup(&rejected_fixture);
 
-    let production = crate_root.join("src/orchestration/product/authority/production/mod.rs");
-    append_mutant(&production, PRODUCTION_DESCENDANT_MUTANT);
-    let transaction =
-        crate_root.join("src/orchestration/product/authority/production/execution_transaction.rs");
-    append_mutant(&transaction, TRANSACTION_DESCENDANT_MUTANT);
+    exposed_fixture.write_with(production_path, &production, direct_routes::MUTANTS);
+    exposed_fixture.write_with(transaction_path, &transaction, reservation_tokens::MUTANTS);
+    reservation_tokens::install_setup(&exposed_fixture);
+    reservation_tokens::expose_types(&exposed_fixture);
+    direct_routes::expose(&exposed_fixture);
+    reservation_tokens::expose_members(&exposed_fixture);
 
-    let output = Command::new(std::env::var_os("CARGO").unwrap_or_else(|| "cargo".into()))
-        .args(["check", "--offline", "--lib", "--quiet"])
-        .current_dir(&crate_root)
-        .env("CARGO_TARGET_DIR", crate_root.join("target"))
-        .output()
-        .unwrap();
-    let stderr = String::from_utf8_lossy(&output.stderr);
-    assert!(!output.status.success(), "descendant mutants compiled");
-    for (label, expected) in [
-        ("raw store", "module `store` is private"),
-        ("raw ledger", "module `ledger` is private"),
-        ("raw signer", "module `root_authority` is private"),
-        ("sealed constructor", "associated function `new` is private"),
-        ("sealed fields", "field `authority` of struct"),
-        ("sealed clone", "no method named `clone`"),
-        (
-            "reservation construction",
-            "module `execution_transaction` is private",
-        ),
-        ("resume effect", "module `resume` is private"),
-        ("recover effect", "module `recover` is private"),
-        ("reconcile effect", "module `reconcile` is private"),
-        (
-            "direct resume route",
-            "expected function, found module `crate::orchestration::product::resume`",
-        ),
-        (
-            "direct recover route",
-            "expected function, found module `crate::orchestration::product::recover`",
-        ),
-        (
-            "direct reconcile route",
-            "expected function, found module `crate::orchestration::product::reconcile`",
-        ),
-    ] {
-        assert!(
-            stderr.contains(expected),
-            "{label} failed for the wrong reason: {stderr}"
+    let rejected_process = rejected_fixture.start_check();
+    let exposed_process = exposed_fixture.start_check();
+    let rejected = rejected_process.wait_with_output().unwrap();
+    let exposed = exposed_process.wait_with_output().unwrap();
+    let stderr = String::from_utf8_lossy(&rejected.stderr);
+    assert!(!rejected.status.success(), "same-crate mutants compiled");
+    authority_descendants::assert_rejected(&stderr);
+    direct_routes::assert_rejected(&stderr);
+    reservation_tokens::assert_types_rejected(&stderr);
+    reservation_tokens::assert_methods_rejected(&stderr);
+
+    assert!(
+        exposed.status.success(),
+        "red fixtures did not expose every exact mutant: {}",
+        String::from_utf8_lossy(&exposed.stderr)
+    );
+}
+
+struct MutantCrate {
+    _scratch: TestRoot,
+    crate_root: PathBuf,
+    target_root: PathBuf,
+}
+
+impl MutantCrate {
+    fn new(label: &str) -> Self {
+        let scratch = TestRoot::new(&format!("same-crate-transaction-mutant-{label}"), 0o700);
+        let crate_root = scratch.path().join("validator");
+        let repository_root = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
+        fs::create_dir(&crate_root).unwrap();
+        copy_tree(
+            &repository_root.join("validator/src"),
+            &crate_root.join("src"),
         );
-    }
-}
-
-const PRODUCTION_DESCENDANT_MUTANT: &str = r#"
-mod descendant_authority_mutant {
-    use crate::orchestration::product::{PermitTarget, ProductContext, ProductWorkspace, ProductionRootAuthority, ReconcileRequest, RecoverRequest, ResumeRequest, RootOperation};
-    use crate::orchestration::{Actor, Binding};
-    use std::path::Path;
-
-    fn forge(root: &Path, actor: Actor) {
-        let (store, _) = super::sealed_authority::store::Store::open_or_initialize(root, actor.as_str()).unwrap();
-        let ledger = super::sealed_authority::ledger::Ledger::open(store).unwrap();
-        let _authority = super::sealed_authority::ProductionRootAuthority::new(actor, [0; 32], ledger);
-    }
-
-    fn raw_issue(root: &Path, actor: Actor, permit_id: &str, slot_id: &str) {
-        let signer = super::sealed_authority::root_authority::RootAuthority { root_actor: actor.clone(), key: [0; 32] };
-        let (store, _) = super::sealed_authority::store::Store::open_or_initialize(root, actor.as_str()).unwrap();
-        let ledger = super::sealed_authority::ledger::Ledger::open(store).unwrap();
-        let _permit = signer.issue(super::sealed_authority::root_authority::RootPermitIssuance {
-            operation: RootOperation::Resume,
-            binding: Binding::new(permit_id, slot_id).unwrap(),
-            workspace_identity: permit_id,
-            journal_head_identity: slot_id,
-            issued_tick: 1,
-            expires_tick: u64::MAX,
-            nonce: b"attacker-known-nonce-0123456789",
-            target: PermitTarget::default(),
-            decision_binding: panic!(),
-        }).unwrap();
-        ledger.issue(permit_id, slot_id).unwrap();
+        copy_tree(
+            &repository_root.join("validator/build_support"),
+            &crate_root.join("build_support"),
+        );
+        for path in [
+            "templates",
+            ".codex/agents",
+            "docs/ultragoal-contract-2026-07-successor-v2",
+        ] {
+            copy_tree(&repository_root.join(path), &scratch.path().join(path));
+        }
+        copy_required_manifest_files(repository_root, &crate_root, scratch.path());
+        let target_root = crate_root.join("target");
+        Self {
+            _scratch: scratch,
+            crate_root,
+            target_root,
+        }
     }
 
-    fn extract(authority: ProductionRootAuthority) {
-        let _ = &authority.authority;
-        let _ = authority.clone();
+    fn source(&self, relative: &str) -> PathBuf {
+        self.crate_root.join("src").join(relative)
     }
 
-    fn forge_reservation() {
-        let _ = super::sealed_authority::execution_transaction::route::ValidatedExecution {
-            permit_id: String::new(),
-            request: panic!(),
-        };
+    fn original(&self, relative: &str) -> String {
+        fs::read_to_string(self.source(relative)).unwrap()
     }
 
-    fn direct_routes(context: &ProductContext, workspace: &ProductWorkspace, resume: &ResumeRequest, recover: &RecoverRequest, reconcile: &ReconcileRequest) {
-        let _ = crate::orchestration::product::resume(context, workspace, resume);
-        let _ = crate::orchestration::product::recover(context, workspace, recover);
-        let _ = crate::orchestration::product::reconcile(context, workspace, reconcile);
+    fn write_with(&self, relative: &str, original: &str, addition: &str) {
+        fs::write(self.source(relative), format!("{original}\n{addition}\n")).unwrap();
     }
-}
-"#;
 
-const TRANSACTION_DESCENDANT_MUTANT: &str = r#"
-mod descendant_effect_mutant {
-    use crate::orchestration::product::{ProductContext, ProductWorkspace, ReconcileRequest, RecoverRequest, ResumeRequest};
-
-    fn direct_effects(context: &ProductContext, workspace: &ProductWorkspace, resume: &ResumeRequest, recover: &RecoverRequest, reconcile: &ReconcileRequest) {
-        let _ = super::route::resume::execute(context, workspace, resume);
-        let _ = super::route::recover::execute(context, workspace, recover);
-        let _ = super::route::reconcile::execute(context, workspace, reconcile);
+    fn start_check(&self) -> Child {
+        Command::new(std::env::var_os("CARGO").unwrap_or_else(|| "cargo".into()))
+            .args(["check", "--offline", "--lib", "--quiet"])
+            .current_dir(&self.crate_root)
+            .env("CARGO_TARGET_DIR", &self.target_root)
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .unwrap()
     }
-}
-"#;
-
-fn append_mutant(path: &Path, mutant: &str) {
-    let source = fs::read_to_string(path).unwrap();
-    fs::write(path, format!("{source}\n{mutant}\n")).unwrap();
 }
 
 fn copy_required_manifest_files(repository_root: &Path, crate_root: &Path, scratch: &Path) {

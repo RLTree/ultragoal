@@ -29,7 +29,6 @@ include!("permit_issuance.rs");
 include!("restart_reconciliation.rs");
 
 pub(crate) use execution_transaction::ProductionExecutionOutcome;
-use execution_transaction::{ReservedExecution, ValidatedExecution};
 #[cfg(not(test))]
 use root_authority::RootAuthority;
 use root_authority::RootPermitIssuance;

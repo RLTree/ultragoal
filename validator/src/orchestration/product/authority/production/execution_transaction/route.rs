@@ -51,30 +51,22 @@ pub(crate) enum ProductionExecutionOutcome {
     Reconcile(ReconcileOutcome),
 }
 
-pub(in crate::orchestration::product::authority::production::sealed_authority) struct ValidatedExecution<
-    'a,
-> {
+struct ValidatedExecution<'a> {
     permit_id: String,
     request: ExecutionRequest<'a>,
 }
 
-pub(in crate::orchestration::product::authority::production::sealed_authority) struct ReservedExecution<
-    'a,
-> {
+struct ReservedExecution<'a> {
     permit_id: String,
     request: ExecutionRequest<'a>,
 }
 
 impl<'a> ValidatedExecution<'a> {
-    pub(in crate::orchestration::product::authority::production::sealed_authority) fn permit_id(
-        &self,
-    ) -> &str {
+    fn permit_id(&self) -> &str {
         &self.permit_id
     }
 
-    pub(in crate::orchestration::product::authority::production::sealed_authority) fn reserve(
-        self,
-    ) -> ReservedExecution<'a> {
+    fn reserve(self) -> ReservedExecution<'a> {
         ReservedExecution {
             permit_id: self.permit_id,
             request: self.request,
@@ -83,15 +75,11 @@ impl<'a> ValidatedExecution<'a> {
 }
 
 impl<'a> ReservedExecution<'a> {
-    pub(in crate::orchestration::product::authority::production::sealed_authority) fn permit_id(
-        &self,
-    ) -> &str {
+    fn permit_id(&self) -> &str {
         &self.permit_id
     }
 
-    pub(in crate::orchestration::product::authority::production::sealed_authority) fn execute(
-        self,
-    ) -> Result<ProductionExecutionOutcome, ProductError> {
+    fn execute(self) -> Result<ProductionExecutionOutcome, ProductError> {
         self.request.execute()
     }
 }

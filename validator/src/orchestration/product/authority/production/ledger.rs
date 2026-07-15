@@ -1,7 +1,4 @@
-use super::{
-    checkpoint::LedgerCheckpoint, store::Store, ProductError, ProductionExecutionOutcome,
-    ReservedExecution, ValidatedExecution,
-};
+use super::{checkpoint::LedgerCheckpoint, store::Store, ProductError};
 use hmac::{Hmac, Mac};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -45,45 +42,31 @@ impl Ledger {
         self.transition(permit_id, Some(causal_slot_id), None, LedgerState::Issued)
     }
 
-    pub(super) fn reserve<'a>(
-        &self,
-        execution: ValidatedExecution<'a>,
-    ) -> Result<ReservedExecution<'a>, ProductError> {
-        let permit_id = execution.permit_id().to_owned();
+    pub(super) fn reserve(&self, permit_id: &str) -> Result<(), ProductError> {
         self.transition(
-            &permit_id,
+            permit_id,
             None,
             Some(LedgerState::Issued),
             LedgerState::Reserved,
-        )?;
-        Ok(execution.reserve())
+        )
     }
 
-    pub(super) fn complete(
-        &self,
-        reservation: ReservedExecution<'_>,
-    ) -> Result<ProductionExecutionOutcome, ProductError> {
-        let permit_id = reservation.permit_id().to_owned();
-        match reservation.execute() {
-            Ok(outcome) => {
-                self.transition(
-                    &permit_id,
-                    None,
-                    Some(LedgerState::Reserved),
-                    LedgerState::Committed,
-                )?;
-                Ok(outcome)
-            }
-            Err(error) => {
-                self.transition(
-                    &permit_id,
-                    None,
-                    Some(LedgerState::Reserved),
-                    LedgerState::Ambiguous,
-                )?;
-                Err(error)
-            }
-        }
+    pub(super) fn commit(&self, permit_id: &str) -> Result<(), ProductError> {
+        self.transition(
+            permit_id,
+            None,
+            Some(LedgerState::Reserved),
+            LedgerState::Committed,
+        )
+    }
+
+    pub(super) fn mark_ambiguous(&self, permit_id: &str) -> Result<(), ProductError> {
+        self.transition(
+            permit_id,
+            None,
+            Some(LedgerState::Reserved),
+            LedgerState::Ambiguous,
+        )
     }
 
     pub(super) fn reconcile(
