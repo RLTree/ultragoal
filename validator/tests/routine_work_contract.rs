@@ -10,22 +10,14 @@ pub mod routine_work;
 
 #[path = "routine_work_contract/authority_ledger_controls.rs"]
 mod authority_ledger_controls;
+#[path = "routine_production_catalog_cases/catalog_fixture/mod.rs"]
+mod catalog_fixture;
 #[path = "routine_work_contract/catalog_scope_construction.rs"]
 mod catalog_scope_construction;
-#[path = "routine_production_catalog_cases/catalog_fixture/claim.rs"]
-mod claim;
-#[path = "routine_production_catalog_cases/catalog_fixture/cleanup_hook.rs"]
-mod cleanup_hook;
 #[path = "routine_work_contract/configured_path_alias.rs"]
 mod configured_path_alias;
 #[path = "routine_work_contract/contract.rs"]
 mod contract;
-#[path = "routine_production_catalog_cases/catalog_fixture/custody.rs"]
-mod custody;
-#[path = "routine_production_catalog_cases/catalog_fixture/custody_types.rs"]
-mod custody_types;
-#[path = "routine_production_catalog_cases/catalog_fixture/directory_entries.rs"]
-mod directory_entries;
 #[path = "routine_work_contract/filesystem_controls.rs"]
 mod filesystem_controls;
 #[path = "routine_work_contract/issuer_api_compilation.rs"]
@@ -60,8 +52,6 @@ mod owned_compile_scratch;
 mod planning;
 #[path = "routine_work_contract/provenance.rs"]
 mod provenance;
-#[path = "routine_production_catalog_cases/catalog_fixture/rebind.rs"]
-mod rebind;
 #[path = "routine_work_contract/report.rs"]
 mod report;
 #[path = "routine_work_contract/retired_adapter_routes.rs"]
@@ -84,7 +74,5 @@ mod routine_fixture_workspace;
 mod routine_plan_fixture;
 #[path = "routine_work_contract/scenario.rs"]
 mod scenario;
-#[path = "routine_production_catalog_cases/catalog_fixture/scope.rs"]
-mod scope;
 #[path = "routine_work_contract/security.rs"]
 mod security;

@@ -41,6 +41,55 @@ pub(crate) fn one_node_catalog(read_sources: &[String], output_scopes: &[String]
     .unwrap()
 }
 
+pub(crate) fn tree(root: &Path) -> BTreeMap<String, String> {
+    fn visit(root: &Path, current: &Path, rows: &mut BTreeMap<String, String>) {
+        let mut entries = fs::read_dir(current)
+            .unwrap()
+            .map(|entry| entry.unwrap())
+            .collect::<Vec<_>>();
+        entries.sort_by_key(|entry| entry.file_name());
+        for entry in entries {
+            let path = entry.path();
+            let relative = path
+                .strip_prefix(root)
+                .unwrap()
+                .to_string_lossy()
+                .into_owned();
+            let metadata = fs::symlink_metadata(&path).unwrap();
+            if metadata.file_type().is_dir() {
+                rows.insert(relative, "directory".to_owned());
+                visit(root, &path, rows);
+            } else if metadata.file_type().is_symlink() {
+                rows.insert(
+                    relative,
+                    format!(
+                        "symlink:{}",
+                        sha(fs::read_link(&path).unwrap().to_string_lossy().as_bytes())
+                    ),
+                );
+            } else if metadata.file_type().is_file() {
+                rows.insert(relative, format!("file:{}", file_sha(&path)));
+            } else {
+                rows.insert(relative, "special".to_owned());
+            }
+        }
+    }
+    let mut rows = BTreeMap::new();
+    visit(root, root, &mut rows);
+    rows
+}
+
+pub(crate) fn git(root: &Path, arguments: &[&str]) -> Vec<u8> {
+    let output = Command::new("git")
+        .args(arguments)
+        .current_dir(root)
+        .env("GIT_OPTIONAL_LOCKS", "0")
+        .output()
+        .unwrap();
+    assert!(output.status.success(), "git {arguments:?}");
+    output.stdout
+}
+
 #[test]
 pub(crate) fn fixture_catalog_declares_the_exact_adversarial_matrix_without_claim_effect() {
     let cases: serde_json::Value = serde_json::from_slice(include_bytes!(
@@ -62,7 +111,7 @@ pub(crate) fn fixture_catalog_declares_the_exact_adversarial_matrix_without_clai
 #[cfg(unix)]
 #[test]
 pub(crate) fn valid_catalog_binds_exact_primary_invocations_deterministically_and_without_writes() {
-    crate::invocation::run_catalog_case("valid-primary", |invocation| {
+    crate::catalog_fixture::run_catalog_case("valid-primary", |invocation| {
         let mut root = invocation.new_root("valid-primary", VALID_CATALOG)?;
         let before = tree(root.path());
         let first_catalog = load_full(&root, CANDIDATE_ID);
@@ -114,7 +163,7 @@ pub(crate) fn valid_catalog_binds_exact_primary_invocations_deterministically_an
 #[cfg(unix)]
 #[test]
 pub(crate) fn repository_catalog_cannot_choose_a_fallback() {
-    crate::invocation::run_catalog_case("fallback-field", |invocation| {
+    crate::catalog_fixture::run_catalog_case("fallback-field", |invocation| {
         let mut catalog: serde_json::Value = serde_json::from_slice(VALID_CATALOG).unwrap();
         catalog["routines"][0]["fallback"] = serde_json::json!({"tool": "false"});
         let bytes = serde_json::to_vec_pretty(&catalog).unwrap();
@@ -131,7 +180,7 @@ pub(crate) fn repository_catalog_cannot_choose_a_fallback() {
 #[cfg(unix)]
 #[test]
 pub(crate) fn exact_same_spelling_same_authority_reuse_selects_and_binds_both_definitions() {
-    crate::invocation::run_catalog_case("exact-runner-reuse", |invocation| {
+    crate::catalog_fixture::run_catalog_case("exact-runner-reuse", |invocation| {
         let mut root = invocation.new_root("exact-runner-reuse", VALID_CATALOG)?;
         let before = tree(root.path());
         let catalog = load_full(&root, CANDIDATE_ID);

@@ -4,7 +4,7 @@ use std::io;
 use std::os::fd::{AsRawFd, FromRawFd};
 use std::path::{Path, PathBuf};
 
-use crate::claim::{
+use super::claim::{
     ClaimFailurePoint, ClaimResidue, FixtureClaimFailure, OpenedClaimResidue, UnopenedClaimResidue,
     capture_identity,
 };
@@ -167,17 +167,17 @@ impl ClaimedFixtureScope {
 
     pub(crate) fn rollback(&mut self) -> Result<(), FixtureScopeError> {
         if self.binding == FixtureScopeBinding::Detached {
-            crate::rebind::restore(self)?;
+            super::rebind::restore(self)?;
         }
-        match crate::custody::quarantine_and_remove(
+        match super::custody::quarantine_and_remove(
             &self.parent,
             &self.directory,
             &self.name,
             self.device,
             self.inode,
         ) {
-            crate::custody::CleanupDisposition::Deleted => Ok(()),
-            crate::custody::CleanupDisposition::Retained { binding, reason } => {
+            super::custody::CleanupDisposition::Deleted => Ok(()),
+            super::custody::CleanupDisposition::Retained { binding, reason } => {
                 self.apply_retained_binding(binding);
                 Err(FixtureScopeError::Retained(reason))
             }
@@ -188,9 +188,9 @@ impl ClaimedFixtureScope {
         self.rollback()
     }
 
-    fn apply_retained_binding(&mut self, binding: crate::custody::RetainedBinding) {
+    fn apply_retained_binding(&mut self, binding: super::custody::RetainedBinding) {
         match binding {
-            crate::custody::RetainedBinding::Named(name) => {
+            super::custody::RetainedBinding::Named(name) => {
                 if let Some(parent) = self.path.parent() {
                     self.path = parent.join(name.to_string_lossy().as_ref());
                     self.name = name;
@@ -198,7 +198,7 @@ impl ClaimedFixtureScope {
                     self.binding = FixtureScopeBinding::Detached;
                 }
             }
-            crate::custody::RetainedBinding::DescriptorOnly => {
+            super::custody::RetainedBinding::DescriptorOnly => {
                 self.binding = FixtureScopeBinding::Detached;
             }
         }

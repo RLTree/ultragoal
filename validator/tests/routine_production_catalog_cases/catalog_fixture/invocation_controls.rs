@@ -1,19 +1,19 @@
-use super::*;
-use crate::claim::{
+use super::claim::{
     ClaimFailurePoint, capture_identity_attempts, set_capture_identity_refusals,
     set_reconciliation_refusals,
 };
-use crate::cleanup_hook::{set_before_final_removal, set_final_refusals};
-use crate::scope::CatalogSetupFailurePoint;
+use super::cleanup_hook::{set_before_final_removal, set_final_refusals};
+use super::scope::CatalogSetupFailurePoint;
+use super::*;
 use std::panic::{AssertUnwindSafe, catch_unwind};
 
 #[test]
 pub(crate) fn invocation_begin_failure_settles_before_the_test_harness_boundary() {
-    let guard = crate::catalog_fixture::lock_fixture_root();
+    let guard = super::lock_fixture_root();
     let before = fixture_inventory();
     set_reconciliation_refusals(2);
     let result = catch_unwind(AssertUnwindSafe(move || {
-        crate::invocation::run_catalog_case_with_begin_failure_guard(
+        super::invocation::run_catalog_case_with_begin_failure_guard(
             guard,
             "begin-failure",
             ClaimFailurePoint::AfterMkdirBeforeOpen,
@@ -25,11 +25,11 @@ pub(crate) fn invocation_begin_failure_settles_before_the_test_harness_boundary(
 
 #[test]
 pub(crate) fn invocation_retries_identity_none_residue_with_the_same_descriptor_owner() {
-    let guard = crate::catalog_fixture::lock_fixture_root();
+    let guard = super::lock_fixture_root();
     let before = fixture_inventory();
     set_capture_identity_refusals(3);
     let result = catch_unwind(AssertUnwindSafe(move || {
-        crate::invocation::run_catalog_case_with_guard(guard, "identity-none", |_| Ok(()));
+        super::invocation::run_catalog_case_with_guard(guard, "identity-none", |_| Ok(()));
     }));
     assert!(result.is_err());
     assert_eq!(capture_identity_attempts(), 4);
@@ -38,11 +38,11 @@ pub(crate) fn invocation_retries_identity_none_residue_with_the_same_descriptor_
 
 #[test]
 pub(crate) fn invocation_finish_retries_a_temporary_refusal_while_custody_is_live() {
-    let guard = crate::catalog_fixture::lock_fixture_root();
+    let guard = super::lock_fixture_root();
     let before = fixture_inventory();
     set_before_final_removal(None);
     set_final_refusals(2);
-    crate::invocation::run_catalog_case_with_guard(guard, "finish-refusal", |invocation| {
+    super::invocation::run_catalog_case_with_guard(guard, "finish-refusal", |invocation| {
         let root = invocation.new_root("finish-refusal-root", VALID_CATALOG)?;
         let path = root.path().to_path_buf();
         drop(root);
@@ -57,10 +57,10 @@ pub(crate) fn invocation_finish_retries_a_temporary_refusal_while_custody_is_liv
 
 #[test]
 pub(crate) fn invocation_settles_a_body_construction_failure_before_returning_it_as_non_custody() {
-    let guard = crate::catalog_fixture::lock_fixture_root();
+    let guard = super::lock_fixture_root();
     let before = fixture_inventory();
     let result = catch_unwind(AssertUnwindSafe(move || {
-        crate::invocation::run_catalog_case_with_guard(guard, "body-failure", |invocation| {
+        super::invocation::run_catalog_case_with_guard(guard, "body-failure", |invocation| {
             match invocation.try_root(
                 "body-failure-root",
                 VALID_CATALOG,
@@ -81,10 +81,10 @@ pub(crate) fn invocation_settles_a_body_construction_failure_before_returning_it
 
 #[test]
 pub(crate) fn invocation_settles_after_an_uncaught_body_unwind() {
-    let guard = crate::catalog_fixture::lock_fixture_root();
+    let guard = super::lock_fixture_root();
     let before = fixture_inventory();
     let result = catch_unwind(AssertUnwindSafe(move || {
-        crate::invocation::run_catalog_case_with_guard(guard, "body-unwind", |invocation| {
+        super::invocation::run_catalog_case_with_guard(guard, "body-unwind", |invocation| {
             let root = invocation.new_root("body-unwind-root", VALID_CATALOG)?;
             assert!(root.path().exists());
             panic!("induced outer invocation unwind");
@@ -95,7 +95,7 @@ pub(crate) fn invocation_settles_after_an_uncaught_body_unwind() {
 }
 
 fn assert_inventory_unchanged(before: Vec<PathBuf>) {
-    let guard = crate::catalog_fixture::lock_fixture_root();
+    let guard = super::lock_fixture_root();
     assert_eq!(fixture_inventory(), before);
     drop(guard);
 }
