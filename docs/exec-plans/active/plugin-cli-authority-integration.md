@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | `3a48eeabb` / tree `2954dfa7` | Fresh review proved cfg(test) lifecycle fixtures still bypass production reservation through direct construction/registry seeding, and the compile control omits the `started` attack while modeling rather than binding the full production route; migration and all higher claims remain withheld | Route terminal/failure fixtures through the production reservation transition and make the privacy control cover all three authority fields without a modeled false pass |
+| N06 routine execution | under_review | `c6a7acdce` / tree `86da7470` | Clean source freeze moves construction into the opaque owner, routes fixtures through production reservation, removes test-side authority seeding, and repairs bound recovery-marker rotation; migration, receipt, integration, and all higher claims remain withheld | Freshly falsify the cumulative exact tree; one material defect returns the same candidate to rework |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,12 +46,11 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `40`. The next action is the
-shared fixture-authority repair: terminal, producer, and failure-matrix helpers
-must obtain active/ambiguity/lifecycle state through the production reservation
-transition, and executable privacy controls must cover started, settled, and
-staged storage without an unbound modeled route. No receipt regeneration or
-dependent claim may consume this rejected freeze.
+current exact-candidate rejection count for N06 is `40`. The next action is one
+fresh cumulative exact-tree review of `c6a7acdce`, focused on production reserve
+custody, recovery-marker rotation, fixture parity, all-three-field privacy, and
+the honest strict/migration ceiling. No receipt regeneration or dependent claim
+may consume this unaccepted freeze.
 The public 42-test claim remains withheld at 41/42 until a representative-load
 root observation.
 Escalation is legitimate only for
@@ -204,11 +203,12 @@ each branch, worktree, and thread identity; unknown host fields stay unknown.
   `019f6487-8b8d-7d51-810b-1465f481eef7`,
   branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
   owns routine kernel/public adapter behavior and matching tests/fixtures;
-  exact clean source `3a48eeabb` / tree `2954dfa7` is in cumulative REWORK:
-  cfg(test) terminal/failure fixtures directly construct reservations and seed
-  registry lifecycle state, while the modeled compile control omits the started
-  mutation route. Its stale WorkerResult, load-sensitive public result, root
-  strict wall, and root-owned v1→v2 migration remain withheld.
+  exact clean source `c6a7acdce` / tree `86da7470` is under one fresh cumulative
+  exact-tree review after routing terminal/failure/recovery fixtures through the
+  production reservation transition, removing test-side authority insertion,
+  and repairing exact recovery-marker rotation. Its stale WorkerResult,
+  load-sensitive public result, root strict wall, and root-owned v1→v2 migration
+  remain withheld.
 - Orchestration authority: thread `019f5fa2-923f-7770-9a89-83ed713ac1f3`,
   branch `codex/n10-orchestration-authority`, worktree `.codex/worktrees/cb63`;
   owns orchestration issuer/replay/recovery behavior and matching tests/fixtures;
