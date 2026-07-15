@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | `99a778ebe` / tree `c9ad1970` | Descriptor-held owner-only Darwin quarantine now protects setup, rollback, release, and teardown and runs the catalog target; claim/open-failure custody, strict ownership, source acceptance, and receipt regeneration remain under fresh review | Accept or return one exact material finding from the current review |
+| N06 routine execution | rework | `99a778ebe` / tree `c9ad1970` | Post-mkdir open/metadata failure still drops parent/name custody; retained substitution can misidentify the descriptor-held owned scope; source acceptance and receipt regeneration remain withheld | Return typed custody from every claim stage and bind retained residue to the held owned directory |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,8 +46,8 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for the hidden-cleanup class is `4`.
-The next action is the exact N06 source review. Escalation is legitimate only for
+current exact-candidate rejection count for the hidden-cleanup class is `5`.
+The next action is the final N06 claim-custody repair. Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
 
@@ -96,9 +96,9 @@ external action, secret handling, or unavailable required access.
   affected claim until behavior and evidence are re-audited.
 - N04 source transaction authority and its corrected WorkerResult are accepted,
   integrated, and retired. Root production reachability and every live host
-  identity remain open. Root `f5af3a1ea` is clean. N06 `99a778ebe` / tree
-  `c9ad1970` remains the sole gate and is under fresh exact-tree review after
-  the descriptor-held owner-only Darwin quarantine repair.
+  identity remain open. Root `b809666ca` is clean. N06 `99a778ebe` / tree
+  `c9ad1970` remains the sole gate and is under REWORK because claim/open failure
+  can still discard custody before the descriptor-held lifecycle begins.
   N10 `7f92b7ed3` / tree `53bd7717` and N11 `9c2911d6d` /
   tree `6176c259` are frozen speculative source candidates; their dependency
   claims, receipt promotion, and integration remain withheld.
