@@ -37,17 +37,17 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | `b217fc822` / tree `3be27abe` | Exact review found unopened residue cannot retry or settle, while `TestRoot::new` can format-and-drop retained custody during panic; focused green controls encode that gap; source acceptance, receipt regeneration, and integration remain withheld | Add one custody-preserving retry/settlement transition and remove the retained-owner panic route |
+| N06 routine execution | under_review | `5a162ef4f` / tree `8efd6a50` | Clean source-only freeze adds exact unopened retry plus descriptor-held outer invocation ownership across constructor failure, unwind, and finish retry; lifecycle/custody `10/10` and same-helper `1/1` pass; receipt regeneration, acceptance, and integration remain withheld | Independently falsify the exact invocation-owner tree before receipt regeneration |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
 | N08 plugin product | planned | no admissible candidate on root `946c7bab1` | N04/N05/N07 source ceilings exist; N06 dependency and live host behavior remain open | Prepare closure only after N06 integrates |
 
-Controller measures at this checkpoint: integration queue length `0`; installed
+Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
 current exact-candidate rejection count for the custody/cleanup class is `6`.
-The next action is N06 unopened-residue settlement repair. Escalation is legitimate only for
+The next action is exact-tree N06 invocation-owner review. Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
 
@@ -96,9 +96,9 @@ external action, secret handling, or unavailable required access.
   affected claim until behavior and evidence are re-audited.
 - N04 source transaction authority and its corrected WorkerResult are accepted,
   integrated, and retired. Root production reachability and every live host
-  identity remain open. Root `b8eff3dee` is clean. N06 `b217fc822` / tree
-  `3be27abe` remains the sole gate and is under REWORK because unopened residue
-  has no checked settlement transition and a panic path can discard its owner.
+  identity remain open. Root `0aeda435a` is clean. N06 `5a162ef4f` / tree
+  `8efd6a50` remains the sole gate and is under exact-tree source review; receipt
+  regeneration, dependency-closed acceptance, and integration remain withheld.
   N10 `7f92b7ed3` / tree `53bd7717` and N11 `9c2911d6d` /
   tree `6176c259` are frozen speculative source candidates; their dependency
   claims, receipt promotion, and integration remain withheld.
