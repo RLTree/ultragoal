@@ -136,6 +136,29 @@ fn authorized_fresh_execution_then_exact_repeat_reuses_without_output_attributio
 }
 
 #[test]
+fn terminal_failure_serializes_no_recovery_and_allows_a_fresh_retry() {
+    let mut fixture = Fixture::new(
+        "terminal-failure-retry",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    fs::write(fixture.root.join("src/lib.rs"), b"pub fn broken(\n").unwrap();
+
+    for _ in 0..2 {
+        let output = fixture.run();
+        assert_eq!(output.status.code(), Some(1), "{output:?}");
+        assert!(output.stderr.is_empty(), "{output:?}");
+        let value = Fixture::value(&output);
+        assert_eq!(value["status"], "incomplete");
+        assert_eq!(value["recovery_required"], false);
+        assert_eq!(value["nodes"][0]["disposition"], "failed");
+    }
+    fixture.teardown_after_assertions();
+}
+
+#[test]
 fn cache_binding_misses_across_targets_and_changes_then_reuses_exact_repeat() {
     let mut first = Fixture::new(
         "binding-first",

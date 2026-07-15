@@ -57,6 +57,12 @@ mod reuse_input_index;
 mod rust_source_observation;
 #[path = "staged_launch.rs"]
 mod staged_launch;
+#[cfg(test)]
+#[path = "terminal_settlement_fixture.rs"]
+mod terminal_settlement_fixture;
+#[cfg(test)]
+#[path = "terminal_settlement_tests.rs"]
+mod terminal_settlement_tests;
 
 #[cfg(test)]
 pub(crate) use filesystem::{

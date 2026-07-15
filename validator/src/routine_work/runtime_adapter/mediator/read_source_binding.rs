@@ -55,6 +55,22 @@ pub(crate) struct AttemptReservation {
 }
 
 impl AttemptReservation {
+    fn expected_ambiguity(&self) -> Option<&String> {
+        if self.started.get() {
+            Some(&self.recovery_marker)
+        } else {
+            self.prior_recovery_marker.as_ref()
+        }
+    }
+
+    fn clear_exact_ambiguity(&self, state: &mut MediatorRegistry) {
+        if self.expected_ambiguity().is_some_and(|expected| {
+            state.ambiguous_protocols.get(&self.protocol_id) == Some(expected)
+        }) {
+            state.ambiguous_protocols.remove(&self.protocol_id);
+        }
+    }
+
     pub(crate) fn reuse_only(&self) -> bool {
         self.durable
             .as_ref()
@@ -99,16 +115,7 @@ impl AttemptReservation {
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         release_active(&mut state, &self.protocol_id, &self.grant_id);
-        let expected = if self.started.get() {
-            Some(&self.recovery_marker)
-        } else {
-            self.prior_recovery_marker.as_ref()
-        };
-        if expected.is_some_and(|expected| {
-            state.ambiguous_protocols.get(&self.protocol_id) == Some(expected)
-        }) {
-            state.ambiguous_protocols.remove(&self.protocol_id);
-        }
+        self.clear_exact_ambiguity(&mut state);
         self.settled.set(true);
         Ok(())
     }
@@ -117,20 +124,30 @@ impl AttemptReservation {
         &self,
         outcome: DurableSettlement,
     ) -> Result<Option<String>, RoutineError> {
-        if let Some(durable) = &self.durable {
+        let durably_terminal = if let Some(durable) = &self.durable {
             durable.settle(outcome, &BTreeMap::new())?;
-        }
-        let durable_recovery = self.durable.is_some();
+            true
+        } else {
+            false
+        };
         let mut state = registry()
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         release_active(&mut state, &self.protocol_id, &self.grant_id);
+        if durably_terminal {
+            self.clear_exact_ambiguity(&mut state);
+        }
+        let pending_marker = (!durably_terminal)
+            .then(|| {
+                self.expected_ambiguity()
+                    .filter(|expected| {
+                        state.ambiguous_protocols.get(&self.protocol_id) == Some(*expected)
+                    })
+                    .cloned()
+            })
+            .flatten();
         self.settled.set(true);
-        Ok(if durable_recovery || self.started.get() {
-            Some(self.recovery_marker.clone())
-        } else {
-            self.prior_recovery_marker.clone()
-        })
+        Ok(pending_marker)
     }
 }
 

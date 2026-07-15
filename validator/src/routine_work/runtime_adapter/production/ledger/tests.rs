@@ -7,6 +7,8 @@ mod fixture_ownership_tests;
 mod ledger_fixture_root;
 #[path = "reexecute_tests.rs"]
 mod reexecute_tests;
+#[path = "terminal_retry_tests.rs"]
+mod terminal_retry_tests;
 
 use ledger_fixture_root::TestRoot;
 

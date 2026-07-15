@@ -46,7 +46,6 @@ fn legacy_manifest_schema_is_rejected_before_effect() {
     let before_status = fixture.status();
     let output = fixture.run();
     assert_diagnostic(&output, "successor_runtime_authority_required", &fixture);
-    let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fixture.status(), before_status);
@@ -123,7 +122,6 @@ fn target_symlink_substitution_refuses_before_discovery() {
         "successor_runtime_context_unavailable",
         &target_fixture,
     );
-    let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
     assert_eq!(tree(&target_fixture.root), before_root);
     assert_eq!(tree(&target_fixture.home), before_home);
     target_fixture.teardown_after_assertions();
@@ -147,7 +145,6 @@ fn catalog_digest_substitution_refuses_before_effect() {
     let before_home = tree(&fixture.home);
     let output = fixture.run();
     assert_diagnostic(&output, "successor_runtime_stale_context", &fixture);
-    let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);

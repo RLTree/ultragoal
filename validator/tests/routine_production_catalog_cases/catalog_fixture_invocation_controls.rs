@@ -20,7 +20,7 @@ pub(crate) fn invocation_begin_failure_settles_before_the_test_harness_boundary(
         );
     }));
     assert!(result.is_err());
-    assert_eq!(fixture_inventory(), before);
+    assert_inventory_unchanged(before);
 }
 
 #[test]
@@ -37,7 +37,7 @@ pub(crate) fn invocation_retries_identity_none_residue_with_the_same_descriptor_
     }));
     assert!(result.is_err());
     assert_eq!(capture_identity_attempts(), 4);
-    assert_eq!(fixture_inventory(), before);
+    assert_inventory_unchanged(before);
 }
 
 #[test]
@@ -60,7 +60,7 @@ pub(crate) fn invocation_finish_retries_a_temporary_refusal_while_custody_is_liv
             Ok(())
         },
     );
-    assert_eq!(fixture_inventory(), before);
+    assert_inventory_unchanged(before);
 }
 
 #[test]
@@ -86,7 +86,7 @@ pub(crate) fn invocation_settles_a_body_construction_failure_before_returning_it
         );
     }));
     assert!(result.is_err());
-    assert_eq!(fixture_inventory(), before);
+    assert_inventory_unchanged(before);
 }
 
 #[test]
@@ -105,7 +105,13 @@ pub(crate) fn invocation_settles_after_an_uncaught_body_unwind() {
         );
     }));
     assert!(result.is_err());
+    assert_inventory_unchanged(before);
+}
+
+fn assert_inventory_unchanged(before: Vec<PathBuf>) {
+    let guard = crate::catalog_fixture::lock_fixture_root();
     assert_eq!(fixture_inventory(), before);
+    drop(guard);
 }
 
 fn fixture_inventory() -> Vec<PathBuf> {

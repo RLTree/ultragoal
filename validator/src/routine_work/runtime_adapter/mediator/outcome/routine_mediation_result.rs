@@ -17,8 +17,8 @@ impl RoutineMediationResult {
         &self.nodes
     }
 
-    pub(crate) fn recovery_marker(&self) -> Option<&str> {
-        self.recovery_marker.as_deref()
+    pub(crate) fn recovery_required(&self) -> bool {
+        self.recovery_marker.is_some()
     }
 
     pub(crate) fn support_limit(&self) -> &'static str {

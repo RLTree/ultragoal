@@ -106,7 +106,7 @@ pub(crate) fn mediation(
         request_id: result.request_id(),
         nodes,
         fallback_tool_count: context.fallback_tool_count,
-        recovery_required: result.recovery_marker().is_some(),
+        recovery_required: result.recovery_required(),
         claim_effect: "none",
         support_limit: result.support_limit(),
     };
