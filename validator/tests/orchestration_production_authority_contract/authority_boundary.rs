@@ -18,22 +18,37 @@ fn inner_authority_and_direct_executors_are_compile_private() {
         &root,
         "inner-type",
         "use ultragoal::orchestration::product::RootAuthority; fn main() {}",
-        "private",
+        "E0432",
+        "no `RootAuthority` in `orchestration::product`",
     );
     assert_consumer_rejected(
         &root,
         "extract",
         "use ultragoal::orchestration::product::ProductionRootAuthority; fn probe(a: &ProductionRootAuthority) { let _ = &a.authority; } fn main() {}",
-        "private",
+        "E0616",
+        "field `authority`",
     );
     assert_consumer_rejected(
         &root,
         "clone",
         "use ultragoal::orchestration::product::ProductionRootAuthority; fn probe(a: &ProductionRootAuthority) { let _ = a.authority.clone(); } fn main() {}",
-        "private",
+        "E0616",
+        "field `authority`",
     );
-    assert_consumer_rejected(&root, "direct-action", DIRECT_ACTION, "private");
-    assert_consumer_rejected(&root, "direct-reconcile", DIRECT_RECONCILE, "private");
+    assert_consumer_rejected(
+        &root,
+        "direct-action",
+        DIRECT_ACTION,
+        "E0624",
+        "method `execute_action` is private",
+    );
+    assert_consumer_rejected(
+        &root,
+        "direct-reconcile",
+        DIRECT_RECONCILE,
+        "E0624",
+        "method `execute_reconcile` is private",
+    );
     fs::remove_dir_all(root).unwrap();
 }
 
@@ -125,7 +140,13 @@ fn privacy_consumer() -> PathBuf {
     root
 }
 
-fn assert_consumer_rejected(root: &PathBuf, label: &str, source: &str, expected: &str) {
+fn assert_consumer_rejected(
+    root: &PathBuf,
+    label: &str,
+    source: &str,
+    expected_code: &str,
+    expected_message: &str,
+) {
     fs::write(root.join("src/main.rs"), source).unwrap();
     let output = Command::new(std::env::var_os("CARGO").unwrap_or_else(|| "cargo".into()))
         .args(["check", "--offline", "--quiet"])
@@ -135,25 +156,28 @@ fn assert_consumer_rejected(root: &PathBuf, label: &str, source: &str, expected:
         .unwrap();
     let stderr = String::from_utf8_lossy(&output.stderr);
     assert!(!output.status.success(), "{label} unexpectedly compiled");
-    assert!(stderr.contains(expected), "{label}: {stderr}");
+    assert!(
+        stderr.contains(&format!("error[{expected_code}]")) && stderr.contains(expected_message),
+        "{label}: {stderr}"
+    );
 }
 
 const DIRECT_ACTION: &str = r#"
 use ultragoal::orchestration::product::command::RootActionRequest;
-use ultragoal::orchestration::product::runtime_adapter::{OrchestrationRuntimeAdapter, RuntimeActionRequest, RuntimeActionSource};
-use ultragoal::orchestration::product::RootPermit;
-fn probe<'a>(adapter: &OrchestrationRuntimeAdapter<'a>, source: RuntimeActionSource<'_>, action: &RootActionRequest, permit: &RootPermit, request: &RuntimeActionRequest) {
-    let _ = adapter.execute_action(source, action, panic!(), permit, request);
+use ultragoal::orchestration::product::runtime_adapter::{RuntimeActionRequest, RuntimeActionSource};
+use ultragoal::orchestration::product::{ProductContext, ProductWorkspace, ProductionRootAuthority, RootPermit};
+fn probe(authority: &ProductionRootAuthority, context: &ProductContext, workspace: &ProductWorkspace, source: RuntimeActionSource<'_>, action: &RootActionRequest, permit: &RootPermit, request: &RuntimeActionRequest) {
+    let _ = authority.execute_action(context, workspace, source, action, permit, request);
 }
 fn main() {}
 "#;
 
 const DIRECT_RECONCILE: &str = r#"
 use ultragoal::orchestration::product::command::RootActionRequest;
-use ultragoal::orchestration::product::runtime_adapter::{CurrentRuntimeView, OrchestrationRuntimeAdapter};
-use ultragoal::orchestration::product::{ReconcileRequest, RootPermit};
-fn probe<'a>(adapter: &OrchestrationRuntimeAdapter<'a>, view: &CurrentRuntimeView, action: &RootActionRequest, permit: &RootPermit, request: &ReconcileRequest) {
-    let _ = adapter.execute_reconcile(view, action, panic!(), permit, request);
+use ultragoal::orchestration::product::runtime_adapter::CurrentRuntimeView;
+use ultragoal::orchestration::product::{ProductContext, ProductWorkspace, ProductionRootAuthority, ReconcileRequest, RootPermit};
+fn probe(authority: &ProductionRootAuthority, context: &ProductContext, workspace: &ProductWorkspace, view: &CurrentRuntimeView, action: &RootActionRequest, permit: &RootPermit, request: &ReconcileRequest) {
+    let _ = authority.execute_reconcile(context, workspace, view, action, permit, request);
 }
 fn main() {}
 "#;

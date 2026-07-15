@@ -1,60 +1,68 @@
 use super::MutantCrate;
+use super::compile_cases::CaseSpec;
 
-pub(super) fn assert_rejected(stderr: &str) {
-    for (label, expression) in [
-        ("resume", RESUME_EXPRESSION),
-        ("recover", RECOVER_EXPRESSION),
-        ("reconcile", RECONCILE_EXPRESSION),
-    ] {
-        assert!(
-            stderr.contains("cannot find function `execute`") && stderr.contains(expression),
-            "{label} failed for the wrong reason: {stderr}"
-        );
-    }
-}
+const PRODUCTION: &str = "orchestration/product/authority/production/mod.rs";
+
+pub(super) const CASES: &[CaseSpec] = &[
+    CaseSpec {
+        marker: "N10_PRODUCT_RESUME_EXECUTE",
+        file: PRODUCTION,
+        code: "E0425",
+        message: "cannot find function `execute`",
+        additional_message: None,
+    },
+    CaseSpec {
+        marker: "N10_PRODUCT_RECOVER_EXECUTE",
+        file: PRODUCTION,
+        code: "E0425",
+        message: "cannot find function `execute`",
+        additional_message: None,
+    },
+    CaseSpec {
+        marker: "N10_PRODUCT_RECONCILE_EXECUTE",
+        file: PRODUCTION,
+        code: "E0425",
+        message: "cannot find function `execute`",
+        additional_message: None,
+    },
+];
 
 pub(super) fn expose(fixture: &MutantCrate) {
     for (path, addition) in [
-        ("orchestration/product/resume.rs", RESUME_FIXTURE),
-        ("orchestration/product/recover.rs", RECOVER_FIXTURE),
-        ("orchestration/product/reconcile.rs", RECONCILE_FIXTURE),
+        ("orchestration/product/resume.rs", RESUME_EXPOSURE),
+        ("orchestration/product/recover.rs", RECOVER_EXPOSURE),
+        ("orchestration/product/reconcile.rs", RECONCILE_EXPOSURE),
     ] {
-        let original = fixture.original(path);
-        fixture.write_with(path, &original, addition);
+        fixture.append(path, addition);
     }
 }
-
-const RESUME_EXPRESSION: &str =
-    "crate::orchestration::product::resume::execute(context, workspace, request)";
-const RECOVER_EXPRESSION: &str =
-    "crate::orchestration::product::recover::execute(context, workspace, request)";
-const RECONCILE_EXPRESSION: &str =
-    "crate::orchestration::product::reconcile::execute(context, workspace, request)";
 
 pub(super) const MUTANTS: &str = r#"
-mod exact_resume_route_mutant {
-    fn probe(context: &crate::orchestration::product::ProductContext, workspace: &crate::orchestration::product::ProductWorkspace, request: &crate::orchestration::product::ResumeRequest) -> Result<crate::orchestration::product::ResumeOutcome, crate::orchestration::product::ProductError> {
-        crate::orchestration::product::resume::execute(context, workspace, request)
+mod n10_product_direct_route_probes {
+    fn resume(context: &crate::orchestration::product::ProductContext, workspace: &crate::orchestration::product::ProductWorkspace, request: &crate::orchestration::product::ResumeRequest) {
+        let _ = crate::orchestration::product::resume::execute(context, workspace, request); // N10_PRODUCT_RESUME_EXECUTE
     }
-}
-mod exact_recover_route_mutant {
-    fn probe(context: &crate::orchestration::product::ProductContext, workspace: &crate::orchestration::product::ProductWorkspace, request: &crate::orchestration::product::RecoverRequest) -> Result<crate::orchestration::product::RecoverOutcome, crate::orchestration::product::ProductError> {
-        crate::orchestration::product::recover::execute(context, workspace, request)
+    fn recover(context: &crate::orchestration::product::ProductContext, workspace: &crate::orchestration::product::ProductWorkspace, request: &crate::orchestration::product::RecoverRequest) {
+        let _ = crate::orchestration::product::recover::execute(context, workspace, request); // N10_PRODUCT_RECOVER_EXECUTE
     }
-}
-mod exact_reconcile_route_mutant {
-    fn probe(context: &crate::orchestration::product::ProductContext, workspace: &crate::orchestration::product::ProductWorkspace, request: &crate::orchestration::product::ReconcileRequest) -> Result<crate::orchestration::product::ReconcileOutcome, crate::orchestration::product::ProductError> {
-        crate::orchestration::product::reconcile::execute(context, workspace, request)
+    fn reconcile(context: &crate::orchestration::product::ProductContext, workspace: &crate::orchestration::product::ProductWorkspace, request: &crate::orchestration::product::ReconcileRequest) {
+        let _ = crate::orchestration::product::reconcile::execute(context, workspace, request); // N10_PRODUCT_RECONCILE_EXECUTE
     }
 }
 "#;
 
-const RESUME_FIXTURE: &str = r#"
-pub(crate) fn execute(_: &super::ProductContext, _: &super::ProductWorkspace, _: &ResumeRequest) -> Result<ResumeOutcome, super::ProductError> { Err(super::ProductError::AuthorityInvalid) }
+const RESUME_EXPOSURE: &str = r#"
+pub(crate) fn execute(_: &super::ProductContext, _: &super::ProductWorkspace, _: &ResumeRequest) -> Result<ResumeOutcome, super::ProductError> {
+    Err(super::ProductError::AuthorityInvalid)
+}
 "#;
-const RECOVER_FIXTURE: &str = r#"
-pub(crate) fn execute(_: &super::ProductContext, _: &super::ProductWorkspace, _: &RecoverRequest) -> Result<RecoverOutcome, super::ProductError> { Err(super::ProductError::AuthorityInvalid) }
+const RECOVER_EXPOSURE: &str = r#"
+pub(crate) fn execute(_: &super::ProductContext, _: &super::ProductWorkspace, _: &RecoverRequest) -> Result<RecoverOutcome, super::ProductError> {
+    Err(super::ProductError::AuthorityInvalid)
+}
 "#;
-const RECONCILE_FIXTURE: &str = r#"
-pub(crate) fn execute(_: &super::ProductContext, _: &super::ProductWorkspace, _: &ReconcileRequest) -> Result<ReconcileOutcome, super::ProductError> { Err(super::ProductError::AuthorityInvalid) }
+const RECONCILE_EXPOSURE: &str = r#"
+pub(crate) fn execute(_: &super::ProductContext, _: &super::ProductWorkspace, _: &ReconcileRequest) -> Result<ReconcileOutcome, super::ProductError> {
+    Err(super::ProductError::AuthorityInvalid)
+}
 "#;

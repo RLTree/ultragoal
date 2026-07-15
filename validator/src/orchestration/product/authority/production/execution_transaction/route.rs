@@ -1,14 +1,14 @@
 use super::super::root_authority::{
     RootActionPermitVerification, RootAuthority, RootReconcilePermitVerification,
 };
-use super::super::{permit_id, ProductError, ProductionRootAuthority, RootOperation, RootPermit};
+use super::super::{ProductError, ProductionRootAuthority, RootOperation, RootPermit, permit_id};
 use crate::orchestration::product::command::RootActionRequest;
 use crate::orchestration::product::runtime_adapter::{
     CurrentRuntimeView, OrchestrationRuntimeAdapter, RuntimeActionRequest, RuntimeActionSource,
 };
 use crate::orchestration::product::{
-    journal_head_identity, ProductContext, ProductWorkspace, ReconcileOutcome, ReconcileRequest,
-    RecoverOutcome, RecoverRequest, ResumeOutcome, ResumeRequest,
+    ProductContext, ProductWorkspace, ReconcileOutcome, ReconcileRequest, RecoverOutcome,
+    RecoverRequest, ResumeOutcome, ResumeRequest, journal_head_identity,
 };
 
 #[path = "reconcile.rs"]

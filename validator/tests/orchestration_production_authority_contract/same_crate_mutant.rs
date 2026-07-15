@@ -1,5 +1,10 @@
+mod authority_cases;
 mod authority_descendants;
+mod authority_mutants;
+mod compile_cases;
 mod direct_routes;
+mod reservation_cases;
+mod reservation_mutants;
 mod reservation_tokens;
 
 use super::fixture::TestRoot;
@@ -7,60 +12,72 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command, Stdio};
 
+const PRODUCTION: &str = "orchestration/product/authority/production/mod.rs";
+const TRANSACTION: &str = "orchestration/product/authority/production/execution_transaction.rs";
+
 #[test]
-fn same_crate_boundaries_have_independent_exact_path_controls() {
-    let rejected_fixture = MutantCrate::new("rejected");
-    let exposed_fixture = MutantCrate::new("exposed");
-    let production_path = "orchestration/product/authority/production/mod.rs";
-    let transaction_path = "orchestration/product/authority/production/execution_transaction.rs";
-    let production = rejected_fixture.original(production_path);
-    let transaction = rejected_fixture.original(transaction_path);
-    rejected_fixture.write_with(
-        production_path,
-        &production,
-        &format!(
-            "{}\n{}",
-            authority_descendants::PRODUCTION_MUTANT,
-            direct_routes::MUTANTS
-        ),
+fn same_crate_boundaries_bind_each_exact_expression_to_a_green_exposure() {
+    let hidden = MutantCrate::new("hidden");
+    let members = MutantCrate::new("members");
+    let opened = MutantCrate::new("opened");
+
+    install_hidden_probes(&hidden);
+    expose_types(&members);
+    install_member_probes(&members);
+    expose_types(&opened);
+    expose_members(&opened);
+    install_hidden_probes(&opened);
+    install_member_probes(&opened);
+    direct_routes::expose(&opened);
+
+    let hidden_process = hidden.start_check();
+    let member_process = members.start_check();
+    let opened_process = opened.start_check();
+    let hidden_output = hidden_process.wait_with_output().unwrap();
+    let member_output = member_process.wait_with_output().unwrap();
+    let opened_output = opened_process.wait_with_output().unwrap();
+
+    compile_cases::assert_rejected(&hidden, &opened, &hidden_output, authority_cases::HIDDEN);
+    compile_cases::assert_rejected(&hidden, &opened, &hidden_output, reservation_cases::HIDDEN);
+    compile_cases::assert_rejected(&hidden, &opened, &hidden_output, direct_routes::CASES);
+    compile_cases::assert_rejected(&members, &opened, &member_output, authority_cases::MEMBERS);
+    compile_cases::assert_rejected(
+        &members,
+        &opened,
+        &member_output,
+        reservation_cases::MEMBERS,
     );
-    rejected_fixture.write_with(
-        transaction_path,
-        &transaction,
-        &format!(
-            "{}\n{}",
-            authority_descendants::EFFECT_MUTANT,
-            reservation_tokens::MUTANTS
-        ),
-    );
-    reservation_tokens::install_setup(&rejected_fixture);
-
-    exposed_fixture.write_with(production_path, &production, direct_routes::MUTANTS);
-    exposed_fixture.write_with(transaction_path, &transaction, reservation_tokens::MUTANTS);
-    reservation_tokens::install_setup(&exposed_fixture);
-    reservation_tokens::expose_types(&exposed_fixture);
-    direct_routes::expose(&exposed_fixture);
-    reservation_tokens::expose_members(&exposed_fixture);
-
-    let rejected_process = rejected_fixture.start_check();
-    let exposed_process = exposed_fixture.start_check();
-    let rejected = rejected_process.wait_with_output().unwrap();
-    let exposed = exposed_process.wait_with_output().unwrap();
-    let stderr = String::from_utf8_lossy(&rejected.stderr);
-    assert!(!rejected.status.success(), "same-crate mutants compiled");
-    authority_descendants::assert_rejected(&stderr);
-    direct_routes::assert_rejected(&stderr);
-    reservation_tokens::assert_types_rejected(&stderr);
-    reservation_tokens::assert_methods_rejected(&stderr);
-
     assert!(
-        exposed.status.success(),
-        "red fixtures did not expose every exact mutant: {}",
-        String::from_utf8_lossy(&exposed.stderr)
+        opened_output.status.success(),
+        "paired green exposure failed: {}",
+        String::from_utf8_lossy(&opened_output.stderr)
     );
 }
 
-struct MutantCrate {
+fn install_hidden_probes(fixture: &MutantCrate) {
+    fixture.append(PRODUCTION, authority_mutants::HIDDEN);
+    fixture.append(PRODUCTION, direct_routes::MUTANTS);
+    fixture.append(TRANSACTION, authority_mutants::HIDDEN_EFFECTS);
+    fixture.append(TRANSACTION, reservation_mutants::HIDDEN);
+}
+
+fn install_member_probes(fixture: &MutantCrate) {
+    fixture.append(PRODUCTION, authority_mutants::MEMBERS);
+    fixture.append(TRANSACTION, authority_mutants::MEMBER_EFFECTS);
+    fixture.append(TRANSACTION, reservation_mutants::MEMBERS);
+}
+
+fn expose_types(fixture: &MutantCrate) {
+    authority_descendants::expose_types(fixture);
+    reservation_tokens::expose_types(fixture);
+}
+
+fn expose_members(fixture: &MutantCrate) {
+    authority_descendants::expose_members(fixture);
+    reservation_tokens::expose_members(fixture);
+}
+
+pub(super) struct MutantCrate {
     _scratch: TestRoot,
     crate_root: PathBuf,
     target_root: PathBuf,
@@ -68,7 +85,7 @@ struct MutantCrate {
 
 impl MutantCrate {
     fn new(label: &str) -> Self {
-        let scratch = TestRoot::new(&format!("same-crate-transaction-mutant-{label}"), 0o700);
+        let scratch = TestRoot::new(&format!("same-crate-boundary-{label}"), 0o700);
         let crate_root = scratch.path().join("validator");
         let repository_root = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
         fs::create_dir(&crate_root).unwrap();
@@ -87,7 +104,7 @@ impl MutantCrate {
         ] {
             copy_tree(&repository_root.join(path), &scratch.path().join(path));
         }
-        copy_required_manifest_files(repository_root, &crate_root, scratch.path());
+        copy_manifest_inputs(repository_root, &crate_root, scratch.path());
         let target_root = crate_root.join("target");
         Self {
             _scratch: scratch,
@@ -96,21 +113,45 @@ impl MutantCrate {
         }
     }
 
+    pub(super) fn append(&self, relative: &str, addition: &str) {
+        let path = self.source(relative);
+        let source = fs::read_to_string(&path).unwrap();
+        fs::write(path, format!("{source}\n{addition}\n")).unwrap();
+    }
+
+    pub(super) fn replace(&self, relative: &str, before: &str, after: &str) {
+        let path = self.source(relative);
+        let source = fs::read_to_string(&path).unwrap();
+        let count = source.matches(before).count();
+        assert!(
+            count > 0,
+            "missing exposure anchor {before:?} in {relative}"
+        );
+        fs::write(path, source.replace(before, after)).unwrap();
+    }
+
+    pub(super) fn unique_marker(&self, relative: &str, marker: &str) -> (usize, String) {
+        let source = fs::read_to_string(self.source(relative)).unwrap();
+        let matches: Vec<_> = source
+            .lines()
+            .enumerate()
+            .filter(|(_, line)| line.contains(marker))
+            .collect();
+        assert_eq!(
+            matches.len(),
+            1,
+            "marker {marker} must identify one expression"
+        );
+        (matches[0].0 + 1, matches[0].1.trim().to_owned())
+    }
+
     fn source(&self, relative: &str) -> PathBuf {
         self.crate_root.join("src").join(relative)
     }
 
-    fn original(&self, relative: &str) -> String {
-        fs::read_to_string(self.source(relative)).unwrap()
-    }
-
-    fn write_with(&self, relative: &str, original: &str, addition: &str) {
-        fs::write(self.source(relative), format!("{original}\n{addition}\n")).unwrap();
-    }
-
     fn start_check(&self) -> Child {
         Command::new(std::env::var_os("CARGO").unwrap_or_else(|| "cargo".into()))
-            .args(["check", "--offline", "--lib", "--quiet"])
+            .args(["check", "--offline", "--lib", "--message-format=json"])
             .current_dir(&self.crate_root)
             .env("CARGO_TARGET_DIR", &self.target_root)
             .stdout(Stdio::piped())
@@ -120,7 +161,7 @@ impl MutantCrate {
     }
 }
 
-fn copy_required_manifest_files(repository_root: &Path, crate_root: &Path, scratch: &Path) {
+fn copy_manifest_inputs(repository_root: &Path, crate_root: &Path, scratch: &Path) {
     fs::create_dir_all(crate_root.join("tests")).unwrap();
     fs::copy(
         repository_root.join("validator/tests/public_api_witness.rs"),

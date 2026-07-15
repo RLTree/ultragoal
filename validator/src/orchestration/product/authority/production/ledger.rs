@@ -1,4 +1,4 @@
-use super::{checkpoint::LedgerCheckpoint, store::Store, ProductError};
+use super::{ProductError, checkpoint::LedgerCheckpoint, store::Store};
 use hmac::{Hmac, Mac};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};

@@ -1,64 +1,120 @@
-pub(super) fn assert_rejected(stderr: &str) {
-    for expected in [
-        "module `store` is private",
-        "module `ledger` is private",
-        "module `root_authority` is private",
-        "associated function `new` is private",
-        "field `authority` of struct",
-        "no method named `clone`",
-        "module `resume` is private",
-        "module `recover` is private",
-        "module `reconcile` is private",
+use super::MutantCrate;
+
+const PRODUCTION: &str = "orchestration/product/authority/production/mod.rs";
+
+pub(super) fn expose_types(fixture: &MutantCrate) {
+    fixture.replace(
+        PRODUCTION,
+        "mod sealed_authority;",
+        "pub(crate) mod sealed_authority;",
+    );
+    let sealed = "orchestration/product/authority/production/sealed_authority.rs";
+    for module in ["execution_transaction", "ledger", "root_authority", "store"] {
+        fixture.replace(
+            sealed,
+            &format!("mod {module};"),
+            &format!("pub(crate) mod {module};"),
+        );
+    }
+    fixture.replace(
+        "orchestration/product/authority/root/secret_binding.rs",
+        "pub(super) struct RootPermitIssuance<'a>",
+        "pub(crate) struct RootPermitIssuance<'a>",
+    );
+    for name in [
+        "RootActionPermitVerification",
+        "RootReconcilePermitVerification",
     ] {
-        assert!(stderr.contains(expected), "missing {expected}: {stderr}");
+        fixture.replace(
+            "orchestration/product/authority/root/verification.rs",
+            &format!("pub(super) struct {name}<'a>"),
+            &format!("pub(crate) struct {name}<'a>"),
+        );
+    }
+    fixture.replace(
+        "orchestration/product/authority/production/store.rs",
+        "pub(super) struct Store {",
+        "pub(crate) struct Store {",
+    );
+    fixture.replace(
+        "orchestration/product/authority/production/ledger.rs",
+        "pub(super) struct Ledger {",
+        "pub(crate) struct Ledger {",
+    );
+    let route = "orchestration/product/authority/production/execution_transaction/route.rs";
+    for module in ["resume", "recover", "reconcile"] {
+        fixture.replace(
+            route,
+            &format!("mod {module};"),
+            &format!("pub(super) mod {module};"),
+        );
     }
 }
 
-pub(super) const PRODUCTION_MUTANT: &str = r#"
-mod descendant_authority_mutant {
-    use crate::orchestration::product::{PermitTarget, ProductionRootAuthority, RootOperation};
-    use crate::orchestration::{Actor, Binding};
-    use std::path::Path;
-
-    fn forge(root: &Path, actor: Actor) {
-        let (store, _) = super::sealed_authority::store::Store::open_or_initialize(root, actor.as_str()).unwrap();
-        let ledger = super::sealed_authority::ledger::Ledger::open(store).unwrap();
-        let _authority = super::sealed_authority::ProductionRootAuthority::new(actor, [0; 32], ledger);
-    }
-
-    fn raw_issue(root: &Path, actor: Actor, permit_id: &str, slot_id: &str) {
-        let signer = super::sealed_authority::root_authority::RootAuthority { root_actor: actor.clone(), key: [0; 32] };
-        let (store, _) = super::sealed_authority::store::Store::open_or_initialize(root, actor.as_str()).unwrap();
-        let ledger = super::sealed_authority::ledger::Ledger::open(store).unwrap();
-        let _permit = signer.issue(super::sealed_authority::root_authority::RootPermitIssuance {
-            operation: RootOperation::Resume,
-            binding: Binding::new(permit_id, slot_id).unwrap(),
-            workspace_identity: permit_id,
-            journal_head_identity: slot_id,
-            issued_tick: 1,
-            expires_tick: u64::MAX,
-            nonce: b"attacker-known-nonce-0123456789",
-            target: PermitTarget::default(),
-            decision_binding: panic!(),
-        }).unwrap();
-        ledger.issue(permit_id, slot_id).unwrap();
-    }
-
-    fn extract(authority: ProductionRootAuthority) {
-        let _ = &authority.authority;
-        let _ = authority.clone();
+pub(super) fn expose_members(fixture: &MutantCrate) {
+    let root = "orchestration/product/authority/production/root_authority.rs";
+    fixture.replace(
+        root,
+        "    root_actor: Actor,",
+        "    pub(crate) root_actor: Actor,",
+    );
+    fixture.replace(root, "    key: [u8; 32],", "    pub(crate) key: [u8; 32],");
+    fixture.replace(root, "    pub(super) fn new(", "    pub(crate) fn new(");
+    fixture.append(root, "impl RootAuthority { pub(crate) fn clone(&self) {} }");
+    let binding = "orchestration/product/authority/root/secret_binding.rs";
+    fixture.replace(
+        binding,
+        "    pub(super) fn issue(",
+        "    pub(crate) fn issue(",
+    );
+    fixture.replace(
+        binding,
+        "    pub(super) fn verify_action(",
+        "    pub(crate) fn verify_action(",
+    );
+    let sealed = "orchestration/product/authority/production/sealed_authority.rs";
+    fixture.replace(
+        sealed,
+        "    authority: RootAuthority,",
+        "    pub(crate) authority: RootAuthority,",
+    );
+    fixture.replace(
+        sealed,
+        "    ledger: Ledger,",
+        "    pub(crate) ledger: Ledger,",
+    );
+    fixture.append(
+        sealed,
+        "impl ProductionRootAuthority { pub(crate) fn clone(&self) {} }",
+    );
+    fixture.replace(
+        "orchestration/product/authority/production/store.rs",
+        "    pub(super) fn open_or_initialize(",
+        "    pub(crate) fn open_or_initialize(",
+    );
+    let ledger = "orchestration/product/authority/production/ledger.rs";
+    fixture.replace(
+        ledger,
+        "    pub(super) fn issue(",
+        "    pub(crate) fn issue(",
+    );
+    fixture.replace(
+        ledger,
+        "    pub(super) fn reserve(",
+        "    pub(crate) fn reserve(",
+    );
+    fixture.replace(
+        "orchestration/product/authority/production/ledger_checkpoint.rs",
+        "    pub(super) fn open(",
+        "    pub(crate) fn open(",
+    );
+    for module in ["resume", "recover", "reconcile"] {
+        fixture.replace(
+            &format!(
+                "orchestration/product/authority/production/execution_transaction/{module}.rs"
+            ),
+            "pub(super) fn execute(",
+            "pub(in super::super) fn execute(",
+        );
     }
 }
-"#;
-
-pub(super) const EFFECT_MUTANT: &str = r#"
-mod descendant_effect_mutant {
-    use crate::orchestration::product::{ProductContext, ProductWorkspace, ReconcileRequest, RecoverRequest, ResumeRequest};
-
-    fn direct_effects(context: &ProductContext, workspace: &ProductWorkspace, resume: &ResumeRequest, recover: &RecoverRequest, reconcile: &ReconcileRequest) {
-        let _ = super::route::resume::execute(context, workspace, resume);
-        let _ = super::route::recover::execute(context, workspace, recover);
-        let _ = super::route::reconcile::execute(context, workspace, reconcile);
-    }
-}
-"#;

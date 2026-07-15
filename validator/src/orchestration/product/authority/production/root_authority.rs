@@ -1,6 +1,6 @@
 use super::super::super::{
-    PermitDecisionBinding, PermitTarget, RootOperation, RootPermit, AUTHORITY_DOMAIN,
-    AUTHORITY_SCHEMA,
+    AUTHORITY_DOMAIN, AUTHORITY_SCHEMA, PermitDecisionBinding, PermitTarget, RootOperation,
+    RootPermit,
 };
 use super::{Ledger, ProductError, ProductionRootAuthority};
 use crate::orchestration::{Actor, Binding, EffectResolution};

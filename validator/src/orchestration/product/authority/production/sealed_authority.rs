@@ -34,7 +34,7 @@ use root_authority::RootAuthority;
 use root_authority::RootPermitIssuance;
 #[cfg(test)]
 pub(crate) use root_authority::{
-    root_authority_for_test, RootActionPermitIssuance, RootAuthority, RootReconcilePermitIssuance,
+    RootActionPermitIssuance, RootAuthority, RootReconcilePermitIssuance, root_authority_for_test,
 };
 
 #[cfg(test)]
