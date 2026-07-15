@@ -45,3 +45,26 @@ fn failed_cancelled_and_incomplete_are_terminal_and_freshly_retryable() {
         root.teardown_after_assertions();
     }
 }
+
+#[test]
+fn failed_terminal_settlement_leaves_the_exact_started_attempt_recoverable() {
+    let mut root = TestRoot::new("failed-terminal-settlement");
+    let ledger = FileAuthorityLedger::open_or_initialize(root.path()).unwrap();
+    let token = reserve(&ledger, "failed-terminal-settlement");
+    ledger.prepare_spawn(&token).unwrap();
+    let error = ledger
+        .settle(&token, AttemptState::Complete, &BTreeMap::new())
+        .unwrap_err();
+    assert_eq!(
+        error.cause(),
+        "routine-production-complete-artifacts-missing"
+    );
+    let pending = ledger.pending_recovery(&token.binding).unwrap().unwrap();
+    assert_eq!(pending.grant_id, token.grant_id);
+    assert_eq!(pending.marker, token.recovery_marker);
+    ledger
+        .settle(&token, AttemptState::Failed, &BTreeMap::new())
+        .unwrap();
+    drop(ledger);
+    root.teardown_after_assertions();
+}

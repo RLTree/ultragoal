@@ -51,6 +51,11 @@ mod intent_mediation;
 mod no_op_mediation;
 #[path = "read_source_binding.rs"]
 mod read_source_binding;
+#[path = "reservation_lifecycle.rs"]
+mod reservation_lifecycle;
+#[cfg(test)]
+#[path = "reservation_lifecycle_tests.rs"]
+mod reservation_lifecycle_tests;
 #[path = "reuse_input_index.rs"]
 mod reuse_input_index;
 #[path = "rust_source_observation.rs"]
@@ -80,6 +85,7 @@ pub(crate) use read_source_binding::{
     AttemptReservation, bind_read_sources, grant_identity, grant_seal, registry,
     validate_read_sources,
 };
+pub(crate) use reservation_lifecycle::*;
 pub(crate) use reuse_input_index::*;
 pub(crate) use rust_source_observation::*;
 

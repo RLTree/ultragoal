@@ -119,7 +119,12 @@ pub(crate) fn capture_regular_file(
     } else {
         capture_absolute_ancestors(absolute)?
     };
-    if &current_root != root_identity || current_ancestors != ancestors {
+    let ancestors_match = if relative.is_some() {
+        current_ancestors == ancestors
+    } else {
+        same_runner_ancestors(&current_ancestors, &ancestors)
+    };
+    if &current_root != root_identity || !ancestors_match {
         return Err(error("catalog-file-ancestor-race"));
     }
     Ok((

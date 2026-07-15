@@ -53,7 +53,7 @@ pub(crate) fn mediate_effect(
     let request_id = request.request_id().to_owned();
     let protocol_id = request.protocol_id().to_owned();
     let attempt = reserve_grant(&grant)?;
-    let outcome = (|| {
+    run_reserved(attempt, |attempt| {
         let snapshot_id = request.snapshot_id.clone();
         let batch = begin_routine_mediation(context, plan, request)?;
         let (authority, intents) = batch.into_parts();
@@ -211,14 +211,7 @@ pub(crate) fn mediate_effect(
                 MEDIATOR_SUPPORT_LIMIT
             },
         })
-    })();
-    let cleanup = attempt.cleanup_staged();
-    match (outcome, cleanup) {
-        (Ok(result), Ok(())) => Ok(result),
-        (Err(error), Ok(())) => Err(error),
-        (Ok(_), Err(error)) => Err(error),
-        (Err(error), Err(_cleanup_error)) => Err(error),
-    }
+    })
 }
 
 fn advance_and_cleanup(

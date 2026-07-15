@@ -65,30 +65,24 @@ pub(crate) fn mediate_intent(
     let framed_input = reads.rust_source_syntax_frame(&root)?;
     let framed_input_sha256 = sha256(&framed_input);
     let staged = attempt.stage_program(&program)?;
-    let observation = process::execute(
-        &staged.executable,
-        &root,
-        &outputs,
-        &reads,
-        token.intent().argv(),
-        &environment,
-        framed_input.clone(),
-        Duration::from_millis(token.intent().timeout_ms()),
-        token.intent().output_budget_bytes(),
-        cancellation,
-        || {
-            attempt.prepare_spawn()?;
-            attempt.mark_started();
-            Ok(())
-        },
-    );
-    attempt.retain_staged(staged);
-    let observation = match observation {
-        Ok(value) => value,
-        Err(error) => {
-            return Err(error);
-        }
-    };
+    let observation = attempt.retain_and_use_staged(staged, |staged_program| {
+        process::execute(
+            staged_program,
+            &root,
+            &outputs,
+            &reads,
+            token.intent().argv(),
+            &environment,
+            framed_input.clone(),
+            Duration::from_millis(token.intent().timeout_ms()),
+            token.intent().output_budget_bytes(),
+            cancellation,
+            || {
+                attempt.mark_started()?;
+                attempt.prepare_spawn()
+            },
+        )
+    })?;
     if observation.started {
         run_test_post_spawn_hook();
     }

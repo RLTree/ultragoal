@@ -66,7 +66,10 @@ fn durable_terminal_siblings_clear_exact_ambiguity_and_public_recovery() {
 
 #[test]
 fn non_durable_missing_or_foreign_ambiguity_emits_no_marker() {
-    for (label, ambiguity) in [("missing", None), ("foreign", Some("foreign-marker"))] {
+    for (label, ambiguity) in [
+        ("missing-ambiguity", None),
+        ("foreign-ambiguity", Some("foreign-marker")),
+    ] {
         let reservation = attempt(label, None, true, None);
         let mut state = registry()
             .lock()
@@ -128,7 +131,7 @@ fn non_durable_ambiguity_retains_the_exact_pending_marker() {
 #[test]
 fn terminal_cleanup_preserves_foreign_protocol_marker_and_grant() {
     let durable = Arc::new(TerminalDurable::default());
-    let reservation = attempt("foreign", Some(durable), true, None);
+    let reservation = attempt("foreign-cleanup", Some(durable), true, None);
     let foreign_protocol = "terminal-protocol-foreign-other".to_owned();
     seed(&reservation, "foreign-grant", "foreign-marker");
     {

@@ -38,11 +38,9 @@ pub(crate) fn registry() -> &'static Mutex<MediatorRegistry> {
 /// Process-local attempt reservation guarding the gap between grant
 /// consumption and final reconciliation.
 ///
-/// A protocol is reserved before mediation begins. The first successful child
-/// spawn records the recovery marker before any later process, filesystem, or
-/// reconciliation error can return. Dropping an unsettled reservation releases
-/// only the active slot; it deliberately retains a marker once a child may have
-/// started.
+/// A protocol is reserved before mediation begins. The explicit reservation
+/// lifecycle records every later transition; leaving scope never changes
+/// authority state.
 pub(crate) struct AttemptReservation {
     pub(crate) protocol_id: String,
     pub(crate) grant_id: String,
@@ -84,14 +82,22 @@ impl AttemptReservation {
         Ok(())
     }
 
-    pub(crate) fn mark_started(&self) {
+    pub(crate) fn mark_started(&self) -> Result<(), RoutineError> {
         let mut state = registry()
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
+        if state
+            .ambiguous_protocols
+            .get(&self.protocol_id)
+            .is_some_and(|marker| marker != &self.recovery_marker)
+        {
+            return Err(mediator_error("mediator-recovery-marker-conflict"));
+        }
         state
             .ambiguous_protocols
             .insert(self.protocol_id.clone(), self.recovery_marker.clone());
         self.started.set(true);
+        Ok(())
     }
 
     pub(crate) fn stage_success(
@@ -148,23 +154,6 @@ impl AttemptReservation {
             .flatten();
         self.settled.set(true);
         Ok(pending_marker)
-    }
-}
-
-impl Drop for AttemptReservation {
-    fn drop(&mut self) {
-        if self.settled.get() {
-            return;
-        }
-        let mut state = registry()
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner);
-        release_active(&mut state, &self.protocol_id, &self.grant_id);
-        if self.started.get() {
-            state
-                .ambiguous_protocols
-                .insert(self.protocol_id.clone(), self.recovery_marker.clone());
-        }
     }
 }
 

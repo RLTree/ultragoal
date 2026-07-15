@@ -35,6 +35,8 @@ mod node_selection;
 mod production_catalog;
 #[path = "program_path_validation.rs"]
 mod program_path_validation;
+#[path = "runner_identity.rs"]
+mod runner_identity;
 #[path = "selection_order.rs"]
 mod selection_order;
 #[path = "source_ancestor_capture.rs"]
@@ -48,5 +50,6 @@ pub(crate) use invocation_binding::*;
 pub(crate) use invocation_identity::*;
 pub(crate) use node_selection::*;
 pub(crate) use program_path_validation::*;
+pub(crate) use runner_identity::*;
 pub(crate) use selection_order::*;
 pub(crate) use source_ancestor_capture::*;

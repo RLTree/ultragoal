@@ -46,6 +46,8 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
     );
     let reservation =
         include_str!("../src/routine_work/runtime_adapter/mediator/read_source_binding.rs");
+    let lifecycle =
+        include_str!("../src/routine_work/runtime_adapter/mediator/reservation_lifecycle.rs");
     let stage = mediation.find("attempt.stage_success").unwrap();
     let publish = mediation.find("publisher.publish").unwrap();
     let settle = mediation.find("attempt.settle_success").unwrap();
@@ -53,9 +55,8 @@ fn publication_is_staged_before_cache_and_terminal_settlement() {
     assert!(output.contains("mediator-output-scope-not-empty"));
     assert!(output.contains("capture_owned_delta"));
     assert!(output.contains("held != scope.identity"));
-    let incomplete = reservation.find("pub(crate) fn settle_incomplete").unwrap();
-    let drop = reservation[incomplete..].find("impl Drop").unwrap();
-    assert!(!reservation[incomplete..incomplete + drop].contains("durable.settle"));
+    assert!(!reservation.contains("impl Drop for AttemptReservation"));
+    assert!(lifecycle.contains("attempt.transition_failure()"));
 }
 
 #[test]
