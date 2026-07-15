@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | `a09de88ed` / tree `4156b565` | Helper capability passed review; cumulative review found absent-to-present output state can adopt a concurrently created empty same-user directory, so source acceptance, receipt, and integration remain withheld | Require exclusive durable product creation custody across every component and crash/recovery boundary; never infer ownership from uid, mode, or emptiness |
+| N06 routine execution | under_review | `393424423` / tree `2f3dfcd3` | Clean source freeze precommits per-component creation nonces, records staged identity, exclusively publishes, and records final identity; source acceptance, receipt, integration, and v1→v2 recovery remain withheld | Complete cumulative exact-tree review; root must separately decide the persisted v1 ledger migration or retirement before integration claims |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -47,8 +47,9 @@ Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
 current exact-candidate rejection count for N06 is `29`. The next action is one
-shared output-creation custody repair across initial creation, descendants,
-rollback, interruption, recovery, reconciliation, cleanup, replay, and reuse.
+cumulative exact-tree review of the shared output-creation custody repair across
+initial creation, descendants, rollback, interruption, recovery,
+reconciliation, cleanup, replay, and reuse.
 Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
@@ -198,8 +199,9 @@ each branch, worktree, and thread identity; unknown host fields stay unknown.
 - Routine execution trust: thread `019f5fa2-5206-7da1-ad4f-8bb5ca580012`,
   branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
   owns routine kernel/public adapter behavior and matching tests/fixtures;
-  exact clean source `a09de88ed` / tree `4156b565` is in decisive REWORK for
-  output-creation custody; its stale WorkerResult remains withheld.
+  exact clean source `393424423` / tree `2f3dfcd3` is under cumulative
+  independent review; its stale WorkerResult and v1→v2 ledger migration remain
+  withheld.
 - Orchestration authority: thread `019f5fa2-923f-7770-9a89-83ed713ac1f3`,
   branch `codex/n10-orchestration-authority`, worktree `.codex/worktrees/cb63`;
   owns orchestration issuer/replay/recovery behavior and matching tests/fixtures;
