@@ -24,6 +24,7 @@ fn unstaged_recovery_requires_reexecution_before_artifact_authentication() {
             recovery_for: Some(pending.marker),
             reuse_only: false,
             reuse_preauthorization: None,
+            output_journal: pending.output_journal,
         })
         .unwrap();
     let (digest, witness) = artifacts.first_key_value().unwrap();

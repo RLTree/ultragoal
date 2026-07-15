@@ -56,31 +56,35 @@ pub(crate) fn capture_absolute_ancestors(path: &Path) -> CatalogResult<Vec<Direc
 }
 
 #[cfg(unix)]
-pub(crate) fn capture_directory(
+pub(crate) fn validate_output_scope_prefix(
     root: &Path,
-    root_identity: &DirectoryIdentity,
     relative: &CatalogPath,
-) -> CatalogResult<(DirectoryIdentity, Vec<DirectoryIdentity>)> {
+) -> CatalogResult<()> {
+    let root_identity = capture_root(root)?;
     let mut current = root.to_path_buf();
-    let mut ancestors = vec![root_identity.clone()];
-    let components = relative.as_str().split('/').collect::<Vec<_>>();
-    for (index, component) in components.iter().enumerate() {
+    for component in relative.as_str().split('/') {
         current.push(component);
-        let metadata =
-            fs::symlink_metadata(&current).map_err(|_| error("catalog-output-scope-missing"))?;
+        let metadata = match fs::symlink_metadata(&current) {
+            Ok(metadata) => metadata,
+            Err(io_error) if io_error.kind() == std::io::ErrorKind::NotFound => return Ok(()),
+            Err(_) => return Err(error("catalog-output-scope-unobservable")),
+        };
         if !metadata.file_type().is_dir()
             || metadata.file_type().is_symlink()
             || metadata.dev() != root_identity.device
         {
             return Err(error("catalog-output-scope-unsafe"));
         }
-        let identity = directory_identity(&components[..=index].join("/"), &metadata);
-        if index + 1 == components.len() {
-            return Ok((identity, ancestors));
-        }
-        ancestors.push(identity);
     }
-    Err(error("catalog-output-scope-missing"))
+    Ok(())
+}
+
+#[cfg(not(unix))]
+pub(crate) fn validate_output_scope_prefix(
+    _root: &Path,
+    _relative: &CatalogPath,
+) -> CatalogResult<()> {
+    Err(error("catalog-platform-unsupported"))
 }
 
 #[cfg(unix)]

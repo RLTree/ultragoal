@@ -23,7 +23,7 @@ use crate::routine_work::{
     AdoptedRoutineNode, BoundCatalogInvocation, CatalogAdoption, CatalogSelectionRequest,
     ImpactGraph, LocalDirtyTree, PlanRequest, PreparedRoutineExecution, RepoPath,
     RoutineAdapterSpec, RoutineArtifactPublisher, RoutineCancellation, RoutineInvocationSpec,
-    RoutineMediatorStatus, RoutinePlan, RoutineReuseInput, RunnerObservation, SelectedRoutineNode,
+    RoutinePlan, RoutineReuseInput, RunnerObservation, SelectedRoutineNode,
     TransitiveInputExpectation, bind_rust_source_syntax_invocation, load_production_catalog,
     mediate_public_routine_execution, plan_routine, prepare_routine_execution,
     validate_immutable_routine_program,

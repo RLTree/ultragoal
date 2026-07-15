@@ -1,6 +1,8 @@
 use super::scenario::{Fixture, pass_node, prefix_route, tree};
 use serde_json::Value;
 use std::fs;
+use std::process::Stdio;
+use std::time::{Duration, Instant};
 
 #[test]
 fn fixture_matrix_names_the_public_production_contract_without_claim_effect() {
@@ -132,6 +134,46 @@ fn authorized_fresh_execution_then_exact_repeat_reuses_without_output_attributio
     assert_eq!(reused["status"], "reused");
     assert_eq!(reused["nodes"][0]["disposition"], "reused");
     assert_eq!(fs::read_dir(scope).unwrap().count(), 0);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn public_output_creation_is_observed_only_after_the_durable_journal() {
+    let mut fixture = Fixture::new(
+        "durable-output-order",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let scope = fixture.root.join("target/routine/compile");
+    let state = fixture.authority_root().join("routine-authority.state");
+    let mut command = fixture.base_command();
+    let mut child = command
+        .args(["--json", "check", "routine"])
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    let deadline = Instant::now() + Duration::from_secs(30);
+    loop {
+        if scope.is_dir() {
+            let durable = fs::read(&state).expect("output appeared before durable state");
+            let text = String::from_utf8(durable).unwrap();
+            assert!(text.contains("\"output_journal\""), "{text}");
+            assert!(text.contains("target/routine/compile"), "{text}");
+            break;
+        }
+        assert!(
+            child.try_wait().unwrap().is_none(),
+            "child exited before output"
+        );
+        assert!(Instant::now() < deadline, "child did not provision output");
+        std::thread::yield_now();
+    }
+    let output = child.wait_with_output().unwrap();
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    assert!(output.stderr.is_empty(), "{output:?}");
     fixture.teardown_after_assertions();
 }
 

@@ -87,6 +87,7 @@ pub(crate) fn validate_payload(payload: &Payload) -> Result<(), RoutineError> {
                     .artifacts
                     .iter()
                     .any(|(digest, witness)| !valid(digest) || !valid(witness))
+                || validate_output_journal(&record.output_journal).is_err()
         })
         || payload.effects.iter().any(|(effect, protocol)| {
             !valid(effect)
@@ -114,6 +115,7 @@ pub(crate) fn validate_spec(spec: &ReservationSpec) -> Result<(), RoutineError> 
             .is_some_and(|value| !valid(value))
         || spec.reuse_only && spec.recovery_for.is_some()
         || spec.reuse_only != spec.reuse_preauthorization.is_some()
+        || validate_output_journal(&spec.output_journal).is_err()
     {
         return Err(error("routine-production-reservation-spec-invalid"));
     }

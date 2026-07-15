@@ -166,11 +166,6 @@ pub(crate) fn read_ancestor_record(
         unix_mode: identity.mode,
         owner_user_id: identity.owner_user_id,
         owner_group_id: identity.owner_group_id,
-        link_count: identity.links,
-        modified_seconds: identity.modified_seconds,
-        modified_nanos: identity.modified_nanos,
-        changed_seconds: identity.changed_seconds,
-        changed_nanos: identity.changed_nanos,
     }
 }
 
@@ -181,9 +176,26 @@ pub(crate) fn ancestor_matches(record: &RoutineReadAncestor, identity: ObjectIde
         && record.unix_mode == identity.mode
         && record.owner_user_id == identity.owner_user_id
         && record.owner_group_id == identity.owner_group_id
-        && record.link_count == identity.links
-        && record.modified_seconds == identity.modified_seconds
-        && record.modified_nanos == identity.modified_nanos
-        && record.changed_seconds == identity.changed_seconds
-        && record.changed_nanos == identity.changed_nanos
+}
+
+#[cfg(unix)]
+pub(crate) fn read_source_record_matches(
+    expected: &RoutineReadSource,
+    current: &ReadSourceAnchor,
+) -> bool {
+    expected.relative_path == current.record.relative_path
+        && source_matches(expected, current.identity, &current.record.sha256)
+        && expected.ancestors.len() == current.record.ancestors.len()
+        && expected
+            .ancestors
+            .iter()
+            .zip(&current.record.ancestors)
+            .all(|(expected, observed)| {
+                expected.relative_directory == observed.relative_directory
+                    && expected.device == observed.device
+                    && expected.inode == observed.inode
+                    && expected.unix_mode == observed.unix_mode
+                    && expected.owner_user_id == observed.owner_user_id
+                    && expected.owner_group_id == observed.owner_group_id
+            })
 }

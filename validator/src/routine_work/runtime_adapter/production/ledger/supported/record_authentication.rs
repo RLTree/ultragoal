@@ -36,6 +36,7 @@ pub(crate) struct ProtocolRecord {
     pub(crate) expires_tick: u64,
     pub(crate) recovery_deadline_tick: u64,
     pub(crate) artifacts: BTreeMap<String, String>,
+    pub(crate) output_journal: OutputProvisionJournal,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]

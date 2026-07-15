@@ -54,7 +54,6 @@ impl ProductionRoutineCatalog {
 
         let mut invocations = Vec::with_capacity(request.selected.len());
         let mut read_seals = Vec::new();
-        let mut output_seals = Vec::new();
         let runner = request
             .runners
             .get(ROUTINE_RUNNER)
@@ -102,9 +101,10 @@ impl ProductionRoutineCatalog {
 
             let mut bound_outputs = Vec::with_capacity(definition.output_scopes.len());
             for relative in &definition.output_scopes {
-                let seal = SealedDirectory::capture(&self.source.root, relative)?;
-                bound_outputs.push(seal.bound_output_scope(relative.as_str()));
-                output_seals.push(seal);
+                validate_output_scope_prefix(&self.source.root, relative)?;
+                bound_outputs.push(BoundOutputScope {
+                    relative_path: relative.as_str().to_owned(),
+                });
             }
 
             let environment = crate::routine_work::fixed_environment(&runner.executable_path)
@@ -150,9 +150,6 @@ impl ProductionRoutineCatalog {
             seal.verify_current(MAX_READ_SOURCE_BYTES)?;
         }
         runner_seal.verify_current(MAX_READ_SOURCE_BYTES)?;
-        for seal in &output_seals {
-            seal.verify_current()?;
-        }
 
         let invocation_set_id = digest_json(&InvocationSetIdentity {
             catalog_id: &self.catalog_id,

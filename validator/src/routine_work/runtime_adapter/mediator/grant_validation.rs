@@ -83,6 +83,23 @@ pub(crate) fn preflight_request(
     plan: &RoutinePlan,
     request: &RoutineEffectRequest,
 ) -> Result<(), RoutineError> {
+    preflight_request_inner(context, plan, request, true)
+}
+
+pub(crate) fn preflight_request_without_outputs(
+    context: &LiveContext,
+    plan: &RoutinePlan,
+    request: &RoutineEffectRequest,
+) -> Result<(), RoutineError> {
+    preflight_request_inner(context, plan, request, false)
+}
+
+fn preflight_request_inner(
+    context: &LiveContext,
+    plan: &RoutinePlan,
+    request: &RoutineEffectRequest,
+    require_outputs: bool,
+) -> Result<(), RoutineError> {
     context
         .revalidate()
         .map_err(|_| concurrent("mediator-context-preflight-stale"))?;
@@ -108,15 +125,21 @@ pub(crate) fn preflight_request(
             intent.program_byte_length(),
             intent.program_unix_mode(),
         )?;
-        let outputs = OutputConfinement::prepare(
-            &root,
-            intent.declared_output_scopes(),
-            intent.output_budget_bytes(),
-        )?;
+        let outputs = require_outputs
+            .then(|| {
+                OutputConfinement::prepare(
+                    &root,
+                    intent.declared_output_scopes(),
+                    intent.output_budget_bytes(),
+                )
+            })
+            .transpose()?;
         let reads = ReadConfinement::open_bound(&root, intent.read_sources())?;
         program.validate()?;
         reads.validate(&root)?;
-        outputs.validate()?;
+        if let Some(outputs) = outputs {
+            outputs.validate()?;
+        }
         root.validate()?;
     }
     validate_snapshot(context, &request.snapshot_id)?;

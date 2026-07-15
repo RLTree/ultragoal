@@ -199,3 +199,16 @@ fn read_symlink_hardlink_fifo_socket_ancestor_swap_and_restore_refuse() {
     );
     repo.teardown_after_assertions();
 }
+
+#[test]
+fn read_binding_accepts_unrelated_journaled_output_ancestor_metadata_change() {
+    let (mut repo, root) = root("read-output-ancestor-change");
+    fs::remove_dir_all(repo.root().join("target")).unwrap();
+    validate_read_confinement_after_bind(&root, &[repo_path("src/lib.rs")], || {
+        fs::create_dir(repo.root().join("target")).unwrap();
+        fs::create_dir(repo.root().join("target/routine")).unwrap();
+        fs::create_dir(repo.root().join("target/routine/compile")).unwrap();
+    })
+    .unwrap();
+    repo.teardown_after_assertions();
+}

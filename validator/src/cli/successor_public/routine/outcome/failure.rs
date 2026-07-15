@@ -151,7 +151,7 @@ pub(crate) fn routine_failure(
         | RoutineErrorId::InvalidReceipt => (
             ExitClass::BlockedAuthority,
             DiagnosticId::AuthorityRequired,
-            "none",
+            "none_or_unacknowledged_workspace_request",
         ),
         RoutineErrorId::CaptureFailed
         | RoutineErrorId::CaptureLimit

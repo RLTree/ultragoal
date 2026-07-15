@@ -11,6 +11,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 #[path = "file_ledger_open_or_initialize.rs"]
 mod file_ledger_open_or_initialize;
+#[path = "file_ledger_output.rs"]
+mod file_ledger_output;
 #[path = "file_ledger_reserve.rs"]
 mod file_ledger_reserve;
 #[path = "file_ledger_settle.rs"]
@@ -21,6 +23,8 @@ mod file_ledger_transaction;
 mod initial_state;
 #[path = "ledger_effect_adapter.rs"]
 mod ledger_effect_adapter;
+#[path = "output_journal_validation.rs"]
+mod output_journal_validation;
 #[path = "record_authentication.rs"]
 mod record_authentication;
 #[path = "record_identity.rs"]
@@ -32,6 +36,7 @@ mod store_stat_name;
 
 pub(crate) use initial_state::*;
 pub(crate) use ledger_effect_adapter::*;
+pub(crate) use output_journal_validation::*;
 pub(crate) use record_authentication::*;
 pub(crate) use record_identity::*;
 pub(crate) use store_stat_name::*;

@@ -42,6 +42,7 @@ fn reservation(label: &str) -> ReservationSpec {
         recovery_for: None,
         reuse_only: false,
         reuse_preauthorization: None,
+        output_journal: OutputProvisionJournal::empty(),
     }
 }
 
@@ -98,6 +99,7 @@ fn staged_publication_recovers_without_reauthorizing_artifact_bytes() {
             recovery_for: Some(pending.marker),
             reuse_only: false,
             reuse_preauthorization: None,
+            output_journal: pending.output_journal,
         })
         .unwrap();
     assert!(

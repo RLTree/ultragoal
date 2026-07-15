@@ -183,12 +183,3 @@ impl SealedFile {
         }
     }
 }
-
-#[derive(Clone, Debug)]
-pub(crate) struct SealedDirectory {
-    pub(crate) root: PathBuf,
-    pub(crate) relative: CatalogPath,
-    pub(crate) root_identity: DirectoryIdentity,
-    pub(crate) identity: DirectoryIdentity,
-    pub(crate) ancestors: Vec<DirectoryIdentity>,
-}

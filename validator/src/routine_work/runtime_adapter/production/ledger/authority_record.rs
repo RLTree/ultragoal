@@ -47,6 +47,48 @@ pub(crate) struct ReservationSpec {
     pub(crate) recovery_for: Option<String>,
     pub(crate) reuse_only: bool,
     pub(crate) reuse_preauthorization: Option<ReusePreauthorization>,
+    pub(crate) output_journal: OutputProvisionJournal,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(crate) struct OutputDirectoryIdentity {
+    pub(crate) device: u64,
+    pub(crate) inode: u64,
+    pub(crate) owner: u32,
+    pub(crate) mode: u32,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(crate) struct OutputComponentJournal {
+    pub(crate) relative_path: String,
+    pub(crate) preexisting: Option<OutputDirectoryIdentity>,
+    pub(crate) provisioned: Option<OutputDirectoryIdentity>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(crate) struct OutputProvisionJournal {
+    pub(crate) root: OutputDirectoryIdentity,
+    pub(crate) scopes: Vec<String>,
+    pub(crate) components: Vec<OutputComponentJournal>,
+}
+
+impl OutputProvisionJournal {
+    #[cfg(test)]
+    pub(crate) fn empty() -> Self {
+        Self {
+            root: OutputDirectoryIdentity {
+                device: 1,
+                inode: 1,
+                owner: 1,
+                mode: u32::from(libc::S_IFDIR) | 0o700,
+            },
+            scopes: Vec::new(),
+            components: Vec::new(),
+        }
+    }
 }
 
 pub(crate) struct ReuseArtifactClaim {
@@ -78,12 +120,14 @@ pub(crate) struct ReservationToken {
     pub(crate) recovery_for: Option<String>,
     pub(crate) reuse_only: bool,
     pub(crate) expires_tick: u64,
+    pub(crate) output_journal: OutputProvisionJournal,
 }
 
 pub(crate) struct PendingRecovery {
     pub(crate) grant_id: String,
     pub(crate) marker: String,
     pub(crate) deadline_tick: u64,
+    pub(crate) output_journal: OutputProvisionJournal,
 }
 
 pub(crate) struct FileAuthorityLedger {

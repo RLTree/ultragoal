@@ -22,8 +22,8 @@ use super::mediator::{
 };
 use super::{RoutineCancellation, RoutineMediationResult, RoutineReuseInput};
 use ledger::{
-    AttemptState, AuthorityBinding, FileAuthorityLedger, ReservationSpec, ReservationToken,
-    ReuseArtifactClaim,
+    AttemptState, AuthorityBinding, FileAuthorityLedger, OutputProvisionJournal, ReservationSpec,
+    ReservationToken, ReuseArtifactClaim,
 };
 
 #[path = "launch_custody.rs"]
@@ -34,6 +34,8 @@ mod launch_recovery;
 mod launch_root;
 #[path = "launch_snapshot.rs"]
 mod launch_snapshot;
+#[path = "output_journal/mod.rs"]
+mod output_journal;
 #[path = "production_issuance.rs"]
 mod production_issuance;
 #[path = "production_mediation.rs"]

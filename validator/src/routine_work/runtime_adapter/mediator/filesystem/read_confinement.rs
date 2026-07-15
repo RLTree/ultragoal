@@ -57,7 +57,7 @@ impl ReadConfinement {
                     .checked_add(anchor.record.byte_length)
                     .filter(|total| *total <= MAX_READ_SOURCE_BYTES)
                     .ok_or_else(|| mediator_error("mediator-read-source-budget-exceeded"))?;
-                if &anchor.record != expected {
+                if !read_source_record_matches(expected, &anchor) {
                     return Err(RoutineError::new(
                         RoutineErrorId::ConcurrentMutation,
                         "mediator-read-source-binding-stale",
@@ -101,7 +101,9 @@ impl ReadConfinement {
                     let current = ObjectIdentity::from(&held.file.metadata().map_err(|_| {
                         mediator_error("mediator-read-source-ancestor-metadata-failed")
                     })?);
-                    if current != held.identity || !ancestor_matches(expected, current) {
+                    if !directory_object_matches(held.identity, current)
+                        || !ancestor_matches(expected, current)
+                    {
                         return Err(RoutineError::new(
                             RoutineErrorId::ConcurrentMutation,
                             "mediator-read-source-ancestor-changed",
@@ -131,7 +133,7 @@ impl ReadConfinement {
                     ));
                 }
                 let current = open_read_source(root, &source.record.relative_path)?;
-                if current.record != source.record {
+                if !read_source_record_matches(&source.record, &current) {
                     return Err(RoutineError::new(
                         RoutineErrorId::ConcurrentMutation,
                         "mediator-read-source-replaced",

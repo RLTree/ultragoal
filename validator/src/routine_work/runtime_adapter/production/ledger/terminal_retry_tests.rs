@@ -10,6 +10,7 @@ fn retry_spec(token: &ReservationToken, label: &str) -> ReservationSpec {
         recovery_for: None,
         reuse_only: false,
         reuse_preauthorization: None,
+        output_journal: OutputProvisionJournal::empty(),
     }
 }
 

@@ -76,25 +76,7 @@ pub(crate) fn execute_inner(
         ));
     }
 
-    let home = home.ok_or(PublicFailure::Host(host::HostFailure::Unavailable))?;
-    let state = HostState::open(home, &target).map_err(PublicFailure::Host)?;
-    let selected_nodes = plan
-        .checks()
-        .iter()
-        .map(|check| check.node_id().to_owned())
-        .collect::<Vec<_>>();
-    let provision = state
-        .provision_outputs(&target, &selected_nodes)
-        .map_err(PublicFailure::Host)?;
-    let prepared = match prepare(&context, &manifest, &graph, &snapshot, &plan) {
-        Ok(prepared) => prepared,
-        Err(error) => {
-            provision
-                .rollback()
-                .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
-            return Err(error);
-        }
-    };
+    let prepared = prepare(&context, &manifest, &graph, &snapshot, &plan)?;
     let request = match &prepared {
         PreparedRoutineExecution::Effect(request) => request,
         PreparedRoutineExecution::NoOp(_) => {
@@ -107,6 +89,8 @@ pub(crate) fn execute_inner(
             ));
         }
     };
+    let home = home.ok_or(PublicFailure::Host(host::HostFailure::Unavailable))?;
+    let state = HostState::open(home, &target).map_err(PublicFailure::Host)?;
     let request_id = request.request_id().to_owned();
     let protocol_id = request.protocol_id().to_owned();
     let cache_binding = CacheBinding {
@@ -121,15 +105,9 @@ pub(crate) fn execute_inner(
         protocol_id,
         request_id,
     };
-    let reuse = match state.read_reuse(&cache_binding) {
-        Ok(reuse) => reuse,
-        Err(error) => {
-            provision
-                .rollback()
-                .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
-            return Err(PublicFailure::Host(error));
-        }
-    };
+    let reuse = state
+        .read_reuse(&cache_binding)
+        .map_err(PublicFailure::Host)?;
 
     let mediated = (|| {
         let publisher = CachePublisher {
@@ -147,29 +125,8 @@ pub(crate) fn execute_inner(
         )
         .map_err(PublicFailure::Routine)
     })();
-    let result = match mediated {
-        Ok(result) => result,
-        Err(error) => {
-            provision
-                .rollback()
-                .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
-            return Err(error);
-        }
-    };
+    let result = mediated?;
 
-    if state.verify().is_err() {
-        provision
-            .rollback()
-            .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
-        return Err(PublicFailure::PersistenceAfterEffect);
-    }
-    if result.status() == RoutineMediatorStatus::CompleteExecution {
-        provision.commit();
-    } else {
-        provision
-            .rollback()
-            .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
-    }
     if state.verify().is_err() {
         return Err(PublicFailure::PersistenceAfterEffect);
     }

@@ -35,6 +35,7 @@ fn staged_program_is_bound_to_source_digest_and_explicitly_consumed() {
         recovery_for: None,
         reuse_only: false,
         expires_tick: u64::MAX,
+        output_journal: OutputProvisionJournal::empty(),
     };
     let staged = stage_program(&launch, &token, &source).unwrap();
     assert_eq!(staged.executable.sha256, source.sha256);

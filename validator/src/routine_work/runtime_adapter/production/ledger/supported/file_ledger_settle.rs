@@ -130,6 +130,7 @@ impl FileLedger {
                 grant_id: record.grant_id.clone(),
                 marker: record.recovery_marker.clone(),
                 deadline_tick: record.recovery_deadline_tick,
+                output_journal: record.output_journal.clone(),
             }))
         })
     }

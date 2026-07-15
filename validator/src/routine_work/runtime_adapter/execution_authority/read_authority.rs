@@ -8,11 +8,6 @@ pub(crate) struct RoutineReadAncestor {
     pub(crate) unix_mode: u32,
     pub(crate) owner_user_id: u32,
     pub(crate) owner_group_id: u32,
-    pub(crate) link_count: u64,
-    pub(crate) modified_seconds: i64,
-    pub(crate) modified_nanos: i64,
-    pub(crate) changed_seconds: i64,
-    pub(crate) changed_nanos: i64,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]

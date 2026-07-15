@@ -21,6 +21,7 @@ fn complete_effect_can_reexecute_after_a_cache_miss() {
             recovery_for: None,
             reuse_only: false,
             reuse_preauthorization: None,
+            output_journal: OutputProvisionJournal::empty(),
         })
         .unwrap();
     ledger.prepare_spawn(&second).unwrap();

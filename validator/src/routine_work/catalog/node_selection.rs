@@ -154,16 +154,6 @@ impl BoundReadSource {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub(crate) struct BoundOutputScope {
     pub(crate) relative_path: String,
-    pub(crate) device: u64,
-    pub(crate) inode: u64,
-    pub(crate) unix_mode: u32,
-    pub(crate) owner_user_id: u32,
-    pub(crate) owner_group_id: u32,
-    pub(crate) modified_seconds: i64,
-    pub(crate) modified_nanos: i64,
-    pub(crate) changed_seconds: i64,
-    pub(crate) changed_nanos: i64,
-    pub(crate) ancestors: Vec<DirectoryIdentity>,
 }
 
 impl BoundOutputScope {

@@ -5,6 +5,7 @@ mod routine_public_production_contract {
     #[path = "fixture_ownership_controls.rs"]
     mod fixture_ownership_controls;
     mod journeys;
+    mod output_provisioning;
     mod public_effect_refusal;
     mod scenario;
     mod security;

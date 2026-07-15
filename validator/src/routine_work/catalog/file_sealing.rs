@@ -1,56 +1,5 @@
 use super::*;
 
-impl SealedDirectory {
-    pub(crate) fn capture(root: &Path, relative: &CatalogPath) -> CatalogResult<Self> {
-        let root_identity = capture_root(root)?;
-        let (identity, ancestors) = capture_directory(root, &root_identity, relative)?;
-        let current_root = capture_root(root)?;
-        let (current_identity, current_ancestors) =
-            capture_directory(root, &current_root, relative)?;
-        if current_root != root_identity
-            || current_identity != identity
-            || current_ancestors != ancestors
-        {
-            return Err(error("catalog-output-scope-capture-race"));
-        }
-        Ok(Self {
-            root: root.to_path_buf(),
-            relative: relative.clone(),
-            root_identity,
-            identity,
-            ancestors,
-        })
-    }
-
-    pub(crate) fn verify_current(&self) -> CatalogResult<()> {
-        let current_root = capture_root(&self.root)?;
-        if current_root != self.root_identity {
-            return Err(error("catalog-root-identity-changed"));
-        }
-        let (identity, ancestors) = capture_directory(&self.root, &current_root, &self.relative)?;
-        if identity != self.identity || ancestors != self.ancestors {
-            return Err(error("catalog-output-scope-changed"));
-        }
-        Ok(())
-    }
-
-    pub(crate) fn bound_output_scope(&self, relative_path: &str) -> BoundOutputScope {
-        BoundOutputScope {
-            relative_path: relative_path.to_owned(),
-            device: self.identity.device,
-            inode: self.identity.inode,
-            unix_mode: self.identity.unix_mode,
-            owner_user_id: self.identity.owner_user_id,
-            owner_group_id: self.identity.owner_group_id,
-            modified_seconds: self.identity.modified_seconds,
-            modified_nanos: self.identity.modified_nanos,
-            changed_seconds: self.identity.changed_seconds,
-            changed_nanos: self.identity.changed_nanos,
-            ancestors: self.ancestors.clone(),
-        }
-    }
-}
-
 #[cfg(unix)]
 pub(crate) fn capture_root(root: &Path) -> CatalogResult<DirectoryIdentity> {
     if !root.is_absolute() || root.to_str().is_none() {

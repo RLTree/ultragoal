@@ -50,6 +50,7 @@ impl ProductionRoutineIssuer {
             grant_id: pending.grant_id,
             marker: pending.marker,
             deadline_tick: pending.deadline_tick,
+            output_journal: pending.output_journal,
         }))
     }
 
@@ -65,13 +66,13 @@ impl ProductionRoutineIssuer {
     ) -> Result<RoutineMediationResult, RoutineError> {
         let (reuse, reuse_claims) = reuse.into_parts();
         let authority_binding = authority_binding(&request)?;
-        let recovery_for = match recovery {
+        let recovery_for = match recovery.as_ref() {
             Some(recovery)
                 if recovery.binding == authority_binding
                     && !recovery.grant_id.is_empty()
                     && now_tick()? <= recovery.deadline_tick =>
             {
-                Some(recovery.marker)
+                Some(recovery.marker.clone())
             }
             Some(_) => return Err(error("routine-production-recovery-authority-stale")),
             None => None,
@@ -98,6 +99,17 @@ impl ProductionRoutineIssuer {
         };
         let session_id = random_session_id(&authority_binding)?;
         let allowed_output_scopes = allowed_output_scopes(&request);
+        let output_journal = match recovery {
+            Some(recovery) => recovery.output_journal,
+            None => output_journal::observe(context.worktree_root(), &allowed_output_scopes)?,
+        };
+        let expected_scope_names = allowed_output_scopes
+            .iter()
+            .map(|scope| scope.as_str().to_owned())
+            .collect::<Vec<_>>();
+        if output_journal.scopes != expected_scope_names {
+            return Err(error("routine-production-output-journal-binding-stale"));
+        }
         let grant_binding = ProductionGrantBinding {
             session_id,
             request_id: request.request_id().to_owned(),
@@ -120,12 +132,14 @@ impl ProductionRoutineIssuer {
             recovery_for,
             reuse_only,
             reuse_preauthorization,
+            output_journal,
         })?;
         let durable = Arc::new(DurableAttempt {
             ledger: Arc::clone(&self.ledger),
             token,
             launch_root: self.launch_root.clone(),
         });
+        output_journal::apply(&self.ledger, &durable.token, context.worktree_root())?;
         let grant = issue_production_grant(grant_binding, durable)?;
         mediate_prepared_routine_execution(
             context,

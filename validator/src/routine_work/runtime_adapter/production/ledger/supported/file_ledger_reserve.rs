@@ -83,12 +83,18 @@ impl FileLedger {
                     recovery_for: spec.recovery_for,
                     reuse_only: true,
                     expires_tick,
+                    output_journal: spec.output_journal,
                 });
             }
             let artifacts = existing
+                .as_ref()
                 .filter(|record| record.state.pending())
-                .map(|record| record.artifacts)
+                .map(|record| record.artifacts.clone())
                 .unwrap_or_default();
+            let output_journal = existing
+                .filter(|record| record.state.pending())
+                .map(|record| record.output_journal)
+                .unwrap_or(spec.output_journal);
             let record = ProtocolRecord {
                 binding: spec.binding.clone(),
                 request_id: spec.request_id.clone(),
@@ -101,6 +107,7 @@ impl FileLedger {
                 expires_tick,
                 recovery_deadline_tick,
                 artifacts,
+                output_journal: output_journal.clone(),
             };
             payload.effects.insert(
                 spec.binding.effect_id.clone(),
@@ -117,6 +124,7 @@ impl FileLedger {
                 recovery_for: spec.recovery_for,
                 reuse_only: false,
                 expires_tick,
+                output_journal,
             })
         })
     }

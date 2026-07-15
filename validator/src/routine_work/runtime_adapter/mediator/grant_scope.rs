@@ -105,7 +105,7 @@ pub(crate) fn preflight_production_request(
     plan: &RoutinePlan,
     request: &RoutineEffectRequest,
 ) -> Result<(), RoutineError> {
-    preflight_request(context, plan, request)
+    preflight_request_without_outputs(context, plan, request)
 }
 
 /// Exact, parsed commitments carried from zero-write input validation into the

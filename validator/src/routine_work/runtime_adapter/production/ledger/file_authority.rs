@@ -80,6 +80,25 @@ impl FileAuthorityLedger {
         }
     }
 
+    pub(crate) fn record_output_component(
+        &self,
+        token: &ReservationToken,
+        relative_path: &str,
+        identity: OutputDirectoryIdentity,
+    ) -> Result<(), RoutineError> {
+        #[cfg(target_vendor = "apple")]
+        {
+            return self
+                .inner
+                .record_output_component(token, relative_path, identity);
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (token, relative_path, identity);
+            Err(error("routine-production-authority-host-unsupported"))
+        }
+    }
+
     pub(crate) fn stage_success(
         &self,
         token: &ReservationToken,

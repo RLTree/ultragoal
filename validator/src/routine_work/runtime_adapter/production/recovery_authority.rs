@@ -9,6 +9,7 @@ pub(super) struct RoutineRecoveryAuthority {
     pub(super) grant_id: String,
     pub(super) marker: String,
     pub(super) deadline_tick: u64,
+    pub(super) output_journal: OutputProvisionJournal,
 }
 
 impl std::fmt::Debug for RoutineRecoveryAuthority {

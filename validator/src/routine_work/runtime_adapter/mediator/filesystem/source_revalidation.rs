@@ -20,6 +20,15 @@ pub(crate) fn source_matches(
         && record.sha256 == digest
 }
 
+#[cfg(unix)]
+pub(crate) fn directory_object_matches(expected: ObjectIdentity, current: ObjectIdentity) -> bool {
+    expected.device == current.device
+        && expected.inode == current.inode
+        && expected.mode == current.mode
+        && expected.owner_user_id == current.owner_user_id
+        && expected.owner_group_id == current.owner_group_id
+}
+
 pub(crate) struct RootAnchor {
     pub(crate) path: PathBuf,
     pub(crate) file: File,
@@ -105,7 +114,10 @@ impl RootAnchor {
                 .path
                 .canonicalize()
                 .map_err(|_| mediator_error("mediator-working-directory-replaced"))?;
-            if held != self.identity || current != self.identity || canonical != self.path {
+            if !directory_object_matches(self.identity, held)
+                || !directory_object_matches(self.identity, current)
+                || canonical != self.path
+            {
                 return Err(RoutineError::new(
                     RoutineErrorId::ConcurrentMutation,
                     "mediator-working-directory-replaced",
