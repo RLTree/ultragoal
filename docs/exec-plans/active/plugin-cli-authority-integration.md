@@ -37,7 +37,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | `8c767dee6` / tree `09998798` | Clean one-file correction replaces the unread guard wrapper with a direct `MutexGuard` alias while preserving custody `14/14`, same-helper `1/1`, and default-parallel catalog `65/66` with only the root-owned path-policy refusal; acceptance, receipt regeneration, and integration remain withheld | Independently review the exact warning-free shared-root tree before receipt regeneration |
+| N06 routine execution | rework | `8c767dee6` / tree `09998798` | Exact-tree review found a second candidate-owned warning: `run_catalog_case_with_begin_failure` is uncalled because the only control invokes its guard-taking sibling; repeated owned-warning class now requires cumulative helper-graph repair; acceptance, receipt regeneration, and integration remain withheld | Enumerate every new fixture entry point across the N06 diff, remove uncalled wrappers, and prove the whole owned helper graph warning-free without suppression or dummy reachability |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -46,8 +46,9 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for the custody/cleanup class is `11`.
-The next action is exact-tree N06 source review. Escalation is legitimate only for
+current exact-candidate rejection count for the custody/cleanup class is `12`.
+The next action is invariant-level N06 owned-helper reachability repair.
+Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
 
@@ -96,10 +97,10 @@ external action, secret handling, or unavailable required access.
   affected claim until behavior and evidence are re-audited.
 - N04 source transaction authority and its corrected WorkerResult are accepted,
   integrated, and retired. Root production reachability and every live host
-  identity remain open. Root `1b140123d` is clean. N06 `8c767dee6` / tree
-  `09998798` remains the sole gate and is under exact-tree source review after
-  replacing its warning-bearing fixture-root wrapper with the direct guard type;
-  receipt regeneration,
+  identity remain open. Root `ce102a3b8` is clean. N06 `8c767dee6` / tree
+  `09998798` remains the sole gate and is in source REWORK after a second
+  candidate-owned warning exposed an uncalled fixture wrapper; the cumulative
+  owned helper graph must now be reconciled before refreeze. Receipt regeneration,
   dependency-closed acceptance, and integration remain withheld.
   N10 `7f92b7ed3` / tree `53bd7717` and N11 `9c2911d6d` /
   tree `6176c259` are frozen speculative source candidates; their dependency
