@@ -30,6 +30,27 @@ current on the exact root candidate.
 - This is a continuation binding explicitly requested by the current user. It
   neither replaces the adopted contract nor reopens the initial bootstrap goal.
 
+## Controller Checkpoint
+
+This table is the canonical operational queue. It records integration state,
+not acceptance proof, and it cannot raise a claim beyond the cited evidence.
+
+| Package | State | Exact candidate | Transition evidence and ceiling | Next action |
+| --- | --- | --- | --- | --- |
+| N06 routine execution | rework | `b76187a11` / tree `6987ec45` | Exact-freeze review found destructive best-effort fixture cleanup in `Drop` at `routine_public_production_contract/production_scenario_cases/scenario_fixture.rs` and `output_provision_tests.rs`; source acceptance and receipt regeneration withheld | Remove hidden cleanup at the shared fixture-lifecycle boundary, prove drop and unwind are zero-write, then refreeze once |
+| N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
+| N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
+| N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
+| N08 plugin product | planned | no admissible candidate on root `4f4a4765b` | N04/N05/N07 source ceilings exist; N06 dependency and live host behavior remain open | Prepare closure only after N06 integrates |
+
+Controller measures at this checkpoint: integration queue length `0`; installed
+journeys closed `0`; Tree interventions after controller activation `0`; stale
+or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
+current exact-candidate rejection count for the hidden-cleanup class is `1`.
+The next action is the N06 invariant repair. Escalation is legitimate only for
+an authority conflict, product decision without a safe default, destructive or
+external action, secret handling, or unavailable required access.
+
 ## Progress
 
 - [x] Recovered repository root, branch, worktree list, status, history, and
@@ -75,14 +96,12 @@ current on the exact root candidate.
   affected claim until behavior and evidence are re-audited.
 - N04 source transaction authority and its corrected WorkerResult are accepted,
   integrated, and retired. Root production reachability and every live host
-  identity remain open. At root `a0f52fc11` / tree `4e1b5f00`, N06
-  `4edc87982` / tree `c620e612` is under REWORK for a repeated destructive
-  pathname-custody race and is the next integration gate. N10 remains at
-  committed source `8ae945a2f` / tree `d6e45197` with an active false-pass
-  control repair; its receipt is frozen. N11 remains at committed source
-  `b0ba74926` / tree `78b394e4` with an active fail-closed cleanup repair; its
-  receipt is frozen. N10 and N11 are speculative source work, not
-  dependency-closed acceptance candidates.
+  identity remain open. Root `4f4a4765b` / tree `7d550bd8` is clean. N06
+  `b76187a11` / tree `6987ec45` remains the sole gate and is under exact-candidate
+  REWORK because two fixture owners still perform destructive best-effort
+  cleanup in `Drop`. N10 `7f92b7ed3` / tree `53bd7717` and N11 `9c2911d6d` /
+  tree `6176c259` are frozen speculative source candidates; their dependency
+  claims, receipt promotion, and integration remain withheld.
 - An isolated legacy-command `cfg(test)` retirement is invalid. It would bypass
   N14 compatibility authority and disconnect a graph with about 3,000 dormant
   warnings. Compatibility routing and authority-registry reconciliation must
