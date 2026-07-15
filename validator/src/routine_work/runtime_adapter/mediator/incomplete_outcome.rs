@@ -131,7 +131,3 @@ pub(crate) fn run_test_finish_failure_hook(_authority: &RoutineMediationAuthorit
 
 #[cfg(test)]
 pub(crate) use filesystem::{set_test_output_capture_hook, set_test_read_source_capture_hook};
-#[cfg(test)]
-pub(crate) use process::{
-    SetupFailurePoint as TestProcessSetupFailure, set_test_process_setup_failure, test_spawn_count,
-};

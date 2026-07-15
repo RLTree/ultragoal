@@ -3,7 +3,10 @@ use super::super::filesystem::{OutputConfinement, PinnedExecutable, ReadConfinem
 #[cfg(target_os = "macos")]
 use super::super::outcome::RoutineCancellation;
 #[cfg(target_os = "macos")]
-use super::{execute, set_test_process_post_spawn_hook, set_test_process_pre_spawn_hook};
+use super::{
+    execute, set_test_loaded_object_hook, set_test_process_post_spawn_hook,
+    set_test_process_pre_spawn_hook,
+};
 #[cfg(target_os = "macos")]
 use crate::routine_work::{
     RustSourceFrameInput, RustSourceSyntaxOutcome, encode_rust_source_syntax_frame,
@@ -99,6 +102,61 @@ fn named_path_swap_during_spawn_cannot_authenticate_observation() {
     assert!(!sentinel.exists(), "replacement user code ran");
     assert!(named.exists());
     assert!(!held_directory.exists());
+    fs::remove_dir_all(root).unwrap();
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn named_path_revalidation_failure_explicitly_reaps_suspended_child() {
+    let root = unique_root("named-path-revalidation");
+    let workspace = root.join("workspace");
+    let directory = root.join("bin");
+    fs::create_dir_all(&workspace).unwrap();
+    fs::create_dir_all(&directory).unwrap();
+    let named = directory.join("runner");
+    let held = directory.join("runner-held");
+    fs::copy("/bin/sh", &named).unwrap();
+    fs::set_permissions(&named, fs::Permissions::from_mode(0o555)).unwrap();
+    let root_anchor = RootAnchor::open(&workspace).unwrap();
+    let outputs = OutputConfinement::prepare(&root_anchor, &[], 1024).unwrap();
+    let reads = ReadConfinement {
+        sources: Vec::new(),
+    };
+    let program = PinnedExecutable::open_unbound(&named).unwrap();
+    let environment = BTreeMap::from([(
+        crate::routine_work::CHILD_MODE_ENV.to_owned(),
+        crate::routine_work::CHILD_MODE_VALUE.to_owned(),
+    )]);
+    let hook_named = named.clone();
+    let hook_held = held.clone();
+    set_test_loaded_object_hook(move || {
+        fs::rename(&hook_named, &hook_held).unwrap();
+        fs::write(&hook_named, b"#!/bin/sh\nexit 0\n").unwrap();
+        fs::set_permissions(&hook_named, fs::Permissions::from_mode(0o555)).unwrap();
+    });
+
+    let result = execute(
+        &program,
+        &root_anchor,
+        &outputs,
+        &reads,
+        &["sh".to_owned(), "-c".to_owned(), "exit 0".to_owned()],
+        &environment,
+        Vec::new(),
+        Duration::from_secs(2),
+        1024,
+        &RoutineCancellation::new(),
+        || Ok(()),
+    );
+    let error = match result {
+        Err(error) => error,
+        Ok(_) => panic!("named replacement was accepted"),
+    };
+    assert_eq!(error.cause(), "mediator-executable-replaced");
+    let group = super::test_last_spawn_group().unwrap();
+    assert!(!super::process_group_exists(group).unwrap());
+    fs::remove_file(&named).unwrap();
+    fs::rename(&held, &named).unwrap();
     fs::remove_dir_all(root).unwrap();
 }
 

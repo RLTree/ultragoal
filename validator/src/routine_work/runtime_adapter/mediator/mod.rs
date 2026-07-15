@@ -81,8 +81,6 @@ pub(crate) use grant_validation::*;
 pub(crate) use incomplete_outcome::*;
 pub(crate) use intent_mediation::*;
 pub(super) use no_op_mediation::*;
-#[cfg(test)]
-pub(crate) use process::test_spawn_count;
 pub(super) use read_source_binding::mediate_prepared_routine_execution;
 pub(crate) use read_source_binding::{
     AttemptReservation, bind_read_sources, grant_identity, grant_seal, registry,

@@ -7,12 +7,12 @@ pub(crate) fn spawn_exact_program(
     environment: &BTreeMap<String, String>,
 ) -> Result<SpawnSetupGuard, RoutineError> {
     run_test_process_pre_spawn_hook();
-    let mut setup = SpawnSetupGuard::new(spawn_suspended(program, root, argv, environment)?);
-    run_test_process_post_spawn_hook();
-    if let Err(error) = validate_loaded_executable(setup.child()?, program) {
-        setup.terminate_suspended()?;
-        return Err(error);
-    }
-    program.validate()?;
+    let setup = SpawnSetupGuard::new(spawn_suspended(program, root, argv, environment)?);
+    let (setup, ()) = setup.configure(|setup| {
+        run_test_process_post_spawn_hook();
+        validate_loaded_executable(setup.child()?, program)?;
+        run_test_loaded_object_hook();
+        program.validate()
+    })?;
     Ok(setup)
 }

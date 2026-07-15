@@ -22,9 +22,11 @@ impl AttemptReservation {
 
 fn cleanup_and_transition(
     attempt: &AttemptReservation,
+    process_cleanup_failure: Option<process::ProcessCleanupFailure>,
 ) -> std::thread::Result<Result<(), RoutineError>> {
     let cleanup = catch_unwind(AssertUnwindSafe(|| attempt.cleanup_staged()));
     attempt.transition_failure();
+    drop(process_cleanup_failure);
     cleanup
 }
 
@@ -35,18 +37,23 @@ pub(crate) fn run_reserved<T>(
     let outcome = catch_unwind(AssertUnwindSafe(|| lifecycle(&attempt)));
     match outcome {
         Ok(Ok(value)) if attempt.settled.get() => Ok(value),
-        Ok(Ok(_)) => match cleanup_and_transition(&attempt) {
+        Ok(Ok(_)) => match cleanup_and_transition(&attempt, None) {
             Ok(cleanup) => cleanup.and(Err(mediator_error(
                 "mediator-reservation-terminal-transition-missing",
             ))),
             Err(payload) => resume_unwind(payload),
         },
-        Ok(Err(error)) => match cleanup_and_transition(&attempt) {
+        Ok(Err(error)) => match cleanup_and_transition(&attempt, None) {
             Ok(_) => Err(error),
             Err(payload) => resume_unwind(payload),
         },
         Err(payload) => {
-            drop(cleanup_and_transition(&attempt));
+            let (payload, process_cleanup_failure) =
+                match process::take_process_custody_panic(payload) {
+                    Ok((original, cleanup_failure)) => (original, Some(cleanup_failure)),
+                    Err(original) => (original, None),
+                };
+            drop(cleanup_and_transition(&attempt, process_cleanup_failure));
             resume_unwind(payload)
         }
     }

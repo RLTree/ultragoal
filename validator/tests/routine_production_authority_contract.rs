@@ -18,6 +18,11 @@ fn production_source_exposes_no_arbitrary_process_binding_surface() {
     );
     let binding =
         include_str!("../src/routine_work/runtime_adapter/mediator/process/object_bound_launch.rs");
+    let custody = include_str!(
+        "../src/routine_work/runtime_adapter/mediator/process/spawn_test_observation.rs"
+    );
+    let settlement =
+        include_str!("../src/routine_work/runtime_adapter/mediator/process/custody_settlement.rs");
     let runner = include_str!("../src/routine_work/runtime_adapter/runner_binding.rs");
     let reconciliation =
         include_str!("../src/routine_work/runtime_adapter/execution_reconciliation.rs");
@@ -44,7 +49,10 @@ fn production_source_exposes_no_arbitrary_process_binding_surface() {
     assert!(launch.contains("posix_spawn_file_actions_adddup2"));
     assert!(!launch.contains("/dev/fd"));
     assert!(binding.contains("validate_loaded_executable"));
-    assert!(binding.contains("terminate_suspended"));
+    assert!(binding.contains("setup.configure"));
+    assert!(!custody.contains("impl Drop for SpawnSetupGuard"));
+    assert!(!custody.contains("impl Drop for RunningProcess"));
+    assert!(settlement.contains("cleanup_owned_process"));
     assert!(reconciliation.contains("adapter-current-runner-substituted"));
     assert!(runner.contains("invocation.environment != expected_environment"));
     assert!(grant.contains("intent.environment() != &expected_environment"));

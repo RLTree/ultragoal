@@ -1,7 +1,9 @@
 use super::*;
 
 #[cfg(test)]
-pub(crate) static TEST_SPAWN_COUNT: AtomicU64 = AtomicU64::new(0);
+thread_local! {
+    static TEST_LAST_SPAWN_GROUP: Cell<Option<ProcessGroupId>> = const { Cell::new(None) };
+}
 
 pub(crate) struct ProcessObservation {
     pub(crate) termination: ProcessTermination,
@@ -23,12 +25,19 @@ pub(crate) enum ProcessTermination {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub(crate) enum SetupFailurePoint {
+pub(crate) enum ProcessFailurePoint {
     ProcessGroup,
     StdoutNonblocking,
     StderrNonblocking,
     StdoutReaderStart,
     StderrReaderStart,
+    StdinWriterStart,
+    Resume,
+    Wait,
+    StdoutJoin,
+    StderrJoin,
+    StdinJoin,
+    Cleanup,
 }
 
 pub(crate) type ReaderHandle = JoinHandle<Result<Drained, RoutineError>>;
@@ -59,11 +68,7 @@ impl ProcessGroupId {
     }
 }
 
-/// Owns every spawned-process resource until all fallible setup completes.
-///
-/// It is installed immediately after `spawn()`. Any return or unwind before
-/// `into_running` terminates and reaps the process group, closes unhanded pipe
-/// descriptors, signals started readers to stop, and joins them.
+/// Owns every spawned-process resource until explicit setup settlement.
 pub(crate) struct SpawnSetupGuard {
     pub(crate) child: Option<BoundChild>,
     pub(crate) process_group: Option<ProcessGroupId>,
@@ -74,12 +79,13 @@ pub(crate) struct SpawnSetupGuard {
     pub(crate) stdout_reader: Option<ReaderHandle>,
     pub(crate) stderr_reader: Option<ReaderHandle>,
     pub(crate) stdin_writer: Option<WriterHandle>,
-    pub(crate) cleanup_required: bool,
 }
 
 impl SpawnSetupGuard {
     pub(crate) fn new(spawned: SpawnedProcess) -> Self {
         let process_group = ProcessGroupId::from_child_id(spawned.child.id()).ok();
+        #[cfg(test)]
+        TEST_LAST_SPAWN_GROUP.with(|slot| slot.set(process_group));
         Self {
             child: Some(spawned.child),
             process_group,
@@ -90,7 +96,6 @@ impl SpawnSetupGuard {
             stdout_reader: None,
             stderr_reader: None,
             stdin_writer: None,
-            cleanup_required: true,
         }
     }
 
@@ -105,55 +110,24 @@ impl SpawnSetupGuard {
             .ok_or_else(|| mediator_error("mediator-child-custody-missing"))
     }
 
-    pub(crate) fn terminate_suspended(&mut self) -> Result<(), RoutineError> {
-        let process_group = self.process_group()?;
-        let child = self
-            .child
-            .as_mut()
-            .ok_or_else(|| mediator_error("mediator-child-custody-missing"))?;
-        cleanup_spawned_child(child, Some(process_group))?;
-        self.cleanup_required = false;
-        Ok(())
-    }
-
-    pub(crate) fn into_running(mut self) -> RunningProcess {
-        let running = RunningProcess {
+    pub(crate) fn into_running(mut self, process_group: ProcessGroupId) -> RunningProcess {
+        RunningProcess {
             child: self.child.take(),
-            process_group: self
-                .process_group
-                .take()
-                .expect("validated process group before setup handoff"),
+            process_group,
             readers_done: Arc::clone(&self.readers_done),
             stdout_reader: self.stdout_reader.take(),
             stderr_reader: self.stderr_reader.take(),
             stdin_writer: self.stdin_writer.take(),
-            cleanup_required: true,
-        };
-        self.cleanup_required = false;
-        running
+        }
     }
 }
 
-impl Drop for SpawnSetupGuard {
-    fn drop(&mut self) {
-        if !self.cleanup_required {
-            return;
-        }
-        self.readers_done.store(true, Ordering::Release);
-        if let Some(child) = self.child.as_mut() {
-            let _ = cleanup_spawned_child(child, self.process_group);
-        }
-        self.stdout.take();
-        self.stderr.take();
-        self.stdin.take();
-        join_reader_best_effort(&mut self.stdout_reader);
-        join_reader_best_effort(&mut self.stderr_reader);
-        join_writer_best_effort(&mut self.stdin_writer);
-    }
+#[cfg(test)]
+pub(crate) fn test_last_spawn_group() -> Option<ProcessGroupId> {
+    TEST_LAST_SPAWN_GROUP.with(Cell::get)
 }
 
-/// Owns child, group, and reader threads for all post-setup fallible work.
-/// Dropping it before `disarm` repeats fail-closed cleanup and joins readers.
+/// Owns child, group, and I/O threads until explicit process settlement.
 pub(crate) struct RunningProcess {
     pub(crate) child: Option<BoundChild>,
     pub(crate) process_group: ProcessGroupId,
@@ -161,80 +135,59 @@ pub(crate) struct RunningProcess {
     pub(crate) stdout_reader: Option<ReaderHandle>,
     pub(crate) stderr_reader: Option<ReaderHandle>,
     pub(crate) stdin_writer: Option<WriterHandle>,
-    pub(crate) cleanup_required: bool,
 }
 
 impl RunningProcess {
-    pub(crate) fn child_mut(&mut self) -> &mut BoundChild {
+    pub(crate) fn child_mut(&mut self) -> Result<&mut BoundChild, RoutineError> {
         self.child
             .as_mut()
-            .expect("running process retains child ownership")
+            .ok_or_else(|| mediator_error("mediator-child-custody-missing"))
     }
 
     pub(crate) fn resume(&self) -> Result<(), RoutineError> {
+        maybe_inject_process_failure(
+            ProcessFailurePoint::Resume,
+            "mediator-process-resume-injected",
+        )?;
         signal_group(self.process_group, libc::SIGCONT)
     }
 
     pub(crate) fn terminate_and_reap(&mut self) -> Result<(), RoutineError> {
         let process_group = self.process_group;
-        terminate_and_reap(self.child_mut(), process_group)
+        terminate_and_reap(self.child_mut()?, process_group)
     }
 
     pub(crate) fn join_io(&mut self) -> Result<(Drained, Drained), RoutineError> {
         self.readers_done.store(true, Ordering::Release);
+        maybe_inject_process_failure(
+            ProcessFailurePoint::StdoutJoin,
+            "mediator-stdout-reader-join-injected",
+        )?;
         let stdout = self
             .stdout_reader
             .take()
-            .expect("stdout reader installed before setup handoff")
+            .ok_or_else(|| mediator_error("mediator-stdout-reader-missing"))?
             .join()
             .map_err(|_| mediator_error("mediator-stdout-reader-failed"))??;
+        maybe_inject_process_failure(
+            ProcessFailurePoint::StderrJoin,
+            "mediator-stderr-reader-join-injected",
+        )?;
         let stderr = self
             .stderr_reader
             .take()
-            .expect("stderr reader installed before setup handoff")
+            .ok_or_else(|| mediator_error("mediator-stderr-reader-missing"))?
             .join()
             .map_err(|_| mediator_error("mediator-stderr-reader-failed"))??;
-        if let Some(writer) = self.stdin_writer.take() {
-            writer
-                .join()
-                .map_err(|_| mediator_error("mediator-stdin-writer-failed"))??;
-        }
+        maybe_inject_process_failure(
+            ProcessFailurePoint::StdinJoin,
+            "mediator-stdin-writer-join-injected",
+        )?;
+        self.stdin_writer
+            .take()
+            .ok_or_else(|| mediator_error("mediator-stdin-writer-missing"))?
+            .join()
+            .map_err(|_| mediator_error("mediator-stdin-writer-failed"))??;
         Ok((stdout, stderr))
-    }
-
-    pub(crate) fn disarm(&mut self) {
-        debug_assert!(
-            self.stdout_reader.is_none()
-                && self.stderr_reader.is_none()
-                && self.stdin_writer.is_none()
-        );
-        self.cleanup_required = false;
-    }
-}
-
-impl Drop for RunningProcess {
-    fn drop(&mut self) {
-        if !self.cleanup_required {
-            return;
-        }
-        self.readers_done.store(true, Ordering::Release);
-        if let Some(child) = self.child.as_mut() {
-            let _ = cleanup_spawned_child(child, Some(self.process_group));
-        }
-        join_reader_best_effort(&mut self.stdout_reader);
-        join_reader_best_effort(&mut self.stderr_reader);
-        join_writer_best_effort(&mut self.stdin_writer);
-    }
-}
-
-pub(crate) fn join_reader_best_effort(reader: &mut Option<ReaderHandle>) {
-    if let Some(reader) = reader.take() {
-        let _ = reader.join();
-    }
-}
-
-pub(crate) fn join_writer_best_effort(writer: &mut Option<WriterHandle>) {
-    if let Some(writer) = writer.take() {
-        let _ = writer.join();
     }
 }

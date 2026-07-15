@@ -19,14 +19,14 @@ use std::time::Duration;
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
 
 #[cfg(target_os = "macos")]
-struct ProcessFixture {
-    root: PathBuf,
-    workspace: PathBuf,
+pub(super) struct ProcessFixture {
+    pub(super) root: PathBuf,
+    pub(super) workspace: PathBuf,
 }
 
 #[cfg(target_os = "macos")]
 impl ProcessFixture {
-    fn new(label: &str) -> Self {
+    pub(super) fn new(label: &str) -> Self {
         let parent = std::env::var_os("CODEX_WORKTREE_TMP")
             .map(PathBuf::from)
             .expect("managed worktree tmp is required");
@@ -47,6 +47,21 @@ impl ProcessFixture {
         budget: u64,
         cancellation: &RoutineCancellation,
     ) -> ProcessObservation {
+        self.run_result(script, timeout, budget, cancellation, || Ok(()))
+            .unwrap()
+    }
+
+    pub(super) fn run_result<F>(
+        &self,
+        script: &str,
+        timeout: Duration,
+        budget: u64,
+        cancellation: &RoutineCancellation,
+        on_started: F,
+    ) -> Result<ProcessObservation, crate::routine_work::RoutineError>
+    where
+        F: FnOnce() -> Result<(), crate::routine_work::RoutineError>,
+    {
         let root = RootAnchor::open(&self.workspace).unwrap();
         let outputs = OutputConfinement::prepare(&root, &[], budget).unwrap();
         let reads = ReadConfinement {
@@ -68,12 +83,11 @@ impl ProcessFixture {
             timeout,
             budget,
             cancellation,
-            || Ok(()),
+            on_started,
         )
-        .unwrap()
     }
 
-    fn teardown(self) {
+    pub(super) fn teardown(self) {
         fs::remove_dir_all(self.root).unwrap();
     }
 }
