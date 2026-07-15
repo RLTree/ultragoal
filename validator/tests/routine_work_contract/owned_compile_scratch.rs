@@ -6,6 +6,7 @@ use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
 
 use super::owned_compile_claim::{create_marker, random_claim_name};
+use super::owned_compile_custody::ForeignCustody;
 use super::owned_compile_directory::open_directory_at;
 use super::owned_compile_quarantine::{
     CleanupDirective, CleanupOutcome, CleanupStage, cleanup, cleanup_controlled,
@@ -19,13 +20,7 @@ pub(crate) enum CleanupState {
     Cleared(CString),
     DisplacedForeign {
         quarantine: CString,
-        device: u64,
-        inode: u64,
-    },
-    ReconciliationAmbiguous {
-        quarantine: CString,
-        device: u64,
-        inode: u64,
+        custody: ForeignCustody,
         destination: Option<(u64, u64)>,
     },
     Settled,
@@ -111,20 +106,16 @@ impl OwnedCompileScratch {
             CleanupState::Quarantined(name) | CleanupState::Cleared(name) => {
                 Some(self.path.parent().unwrap().join(name.to_str().unwrap()))
             }
-            CleanupState::DisplacedForeign { quarantine, .. }
-            | CleanupState::ReconciliationAmbiguous { quarantine, .. } => Some(
-                self.path
-                    .parent()
-                    .unwrap()
-                    .join(quarantine.to_str().unwrap()),
-            ),
+            CleanupState::DisplacedForeign { custody, .. } => custody
+                .current_name(self.path.parent().unwrap())
+                .map(|name| self.path.parent().unwrap().join(name.to_str().unwrap())),
             CleanupState::Claimed | CleanupState::Settled => None,
         }
     }
 
     pub(crate) fn ambiguous_destination(&self) -> Option<Option<(u64, u64)>> {
         match self.cleanup_state {
-            CleanupState::ReconciliationAmbiguous { destination, .. } => Some(destination),
+            CleanupState::DisplacedForeign { destination, .. } => Some(destination),
             _ => None,
         }
     }

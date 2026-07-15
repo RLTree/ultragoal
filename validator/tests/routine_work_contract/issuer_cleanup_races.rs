@@ -43,7 +43,11 @@ fn authenticate_to_quarantine_swap_restores_foreign_without_content_change() {
         CleanupDirective::Continue
     });
     adversary.join().unwrap();
-    assert_eq!(outcome, CleanupOutcome::ForeignRestoredNoContentChange);
+    assert_eq!(outcome, CleanupOutcome::AmbiguousPartialEffect);
+    assert_eq!(
+        owned.recover_interrupted(),
+        CleanupOutcome::ReconciledForeign
+    );
     assert_eq!(tree_digest(&held), genuine_before);
     assert_eq!(tree_digest(&original), attacker_before);
     assert_eq!(
@@ -122,6 +126,7 @@ fn failed_restore_retains_exact_foreign_custody_until_safe_reconciliation() {
         CleanupOutcome::AmbiguousPartialEffect
     );
     assert_eq!(tree_digest(&transplant), attacker_before);
+    assert_eq!(owned.recovery_path().as_deref(), Some(transplant.as_path()));
     assert_eq!(
         fs::read(quarantine.join("replacement")).unwrap(),
         b"replacement bytes\n"
@@ -130,14 +135,11 @@ fn failed_restore_retains_exact_foreign_custody_until_safe_reconciliation() {
     assert_eq!(fs::read(&original).unwrap(), b"refilled blocker\n");
 
     fs::remove_dir_all(&quarantine).unwrap();
-    fs::rename(&transplant, &quarantine).unwrap();
-    assert!(!transplant.exists());
     fs::remove_file(&original).unwrap();
     assert_eq!(
         owned.recover_interrupted(),
         CleanupOutcome::ReconciledForeign
     );
-    assert!(!quarantine.exists());
     assert!(!transplant.exists());
     assert_eq!(tree_digest(&original), attacker_before);
     assert_eq!(tree_digest(&held), genuine_before);

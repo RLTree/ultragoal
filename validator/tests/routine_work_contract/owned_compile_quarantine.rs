@@ -2,6 +2,7 @@ use std::ffi::CString;
 use std::os::fd::AsRawFd;
 
 use super::owned_compile_claim::authenticates_claim;
+use super::owned_compile_custody::ForeignCustody;
 use super::owned_compile_directory::{clear_directory, entry_identity, write_new_file_at_path};
 use super::owned_compile_reconciliation::reconcile_displaced_foreign;
 use super::owned_compile_scratch::{CleanupState, FAILURE_MARKER, OwnedCompileScratch};
@@ -9,7 +10,6 @@ use super::owned_compile_scratch::{CleanupState, FAILURE_MARKER, OwnedCompileScr
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum CleanupOutcome {
     RefusedZeroWrite,
-    ForeignRestoredNoContentChange,
     Deleted,
     ReconciledForeign,
     AmbiguousPartialEffect,
@@ -34,11 +34,9 @@ pub(crate) enum CleanupDirective {
 enum QuarantineOutcome {
     Owned(CString),
     Refused,
-    ForeignRestored,
     DisplacedForeign {
         quarantine: CString,
-        device: u64,
-        inode: u64,
+        custody: ForeignCustody,
     },
 }
 
@@ -50,10 +48,7 @@ pub(crate) fn cleanup_controlled(
     scratch: &mut OwnedCompileScratch,
     mut pause: impl FnMut(CleanupStage) -> CleanupDirective,
 ) -> CleanupOutcome {
-    if matches!(
-        scratch.cleanup_state,
-        CleanupState::DisplacedForeign { .. } | CleanupState::ReconciliationAmbiguous { .. }
-    ) {
+    if matches!(scratch.cleanup_state, CleanupState::DisplacedForeign { .. }) {
         return reconcile_displaced_foreign(scratch, &mut pause);
     }
     if matches!(scratch.cleanup_state, CleanupState::Claimed) {
@@ -73,19 +68,14 @@ pub(crate) fn cleanup_controlled(
                 scratch.cleanup_state = CleanupState::Settled;
                 return CleanupOutcome::RefusedZeroWrite;
             }
-            QuarantineOutcome::ForeignRestored => {
-                scratch.cleanup_state = CleanupState::Settled;
-                return CleanupOutcome::ForeignRestoredNoContentChange;
-            }
             QuarantineOutcome::DisplacedForeign {
                 quarantine,
-                device,
-                inode,
+                custody,
             } => {
                 scratch.cleanup_state = CleanupState::DisplacedForeign {
                     quarantine,
-                    device,
-                    inode,
+                    custody,
+                    destination: None,
                 };
                 return CleanupOutcome::AmbiguousPartialEffect;
             }
@@ -145,6 +135,9 @@ fn quarantine_owned_entry(
     scratch: &OwnedCompileScratch,
     pause: &mut impl FnMut(CleanupStage) -> CleanupDirective,
 ) -> QuarantineOutcome {
+    let Some(custody) = ForeignCustody::capture(&scratch.parent, &scratch.name) else {
+        return QuarantineOutcome::Refused;
+    };
     let quarantine = random_quarantine_name();
     if unsafe {
         libc::renameatx_np(
@@ -158,40 +151,19 @@ fn quarantine_owned_entry(
     {
         return QuarantineOutcome::Refused;
     }
-    let Some((device, inode)) = entry_identity(scratch.parent.as_raw_fd(), &quarantine) else {
+    if !custody.matches(&scratch.parent, &quarantine) {
         return QuarantineOutcome::DisplacedForeign {
             quarantine,
-            device: 0,
-            inode: 0,
+            custody,
         };
-    };
-    if (device, inode) == (scratch.device, scratch.inode) {
+    }
+    if (custody.device, custody.inode) == (scratch.device, scratch.inode) {
         return QuarantineOutcome::Owned(quarantine);
     }
-    if pause(CleanupStage::ForeignQuarantined) == CleanupDirective::Interrupt {
-        return QuarantineOutcome::DisplacedForeign {
-            quarantine,
-            device,
-            inode,
-        };
-    }
-    if unsafe {
-        libc::renameatx_np(
-            scratch.parent.as_raw_fd(),
-            quarantine.as_ptr(),
-            scratch.parent.as_raw_fd(),
-            scratch.name.as_ptr(),
-            libc::RENAME_EXCL,
-        )
-    } == 0
-    {
-        QuarantineOutcome::ForeignRestored
-    } else {
-        QuarantineOutcome::DisplacedForeign {
-            quarantine,
-            device,
-            inode,
-        }
+    let _ = pause(CleanupStage::ForeignQuarantined);
+    QuarantineOutcome::DisplacedForeign {
+        quarantine,
+        custody,
     }
 }
 

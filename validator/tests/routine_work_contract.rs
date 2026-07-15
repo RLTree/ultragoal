@@ -28,12 +28,16 @@ mod issuer_cleanup_races;
 mod issuer_hidden_surface;
 #[path = "routine_work_contract/issuer_reconciliation_races.rs"]
 mod issuer_reconciliation_races;
+#[path = "routine_work_contract/issuer_rollback_races.rs"]
+mod issuer_rollback_races;
 #[path = "routine_work_contract/issuer_scratch_resilience.rs"]
 mod issuer_scratch_resilience;
 #[path = "routine_work_contract/local_capture.rs"]
 mod local_capture;
 #[path = "routine_work_contract/owned_compile_claim.rs"]
 mod owned_compile_claim;
+#[path = "routine_work_contract/owned_compile_custody.rs"]
+mod owned_compile_custody;
 #[path = "routine_work_contract/owned_compile_directory.rs"]
 mod owned_compile_directory;
 #[path = "routine_work_contract/owned_compile_quarantine.rs"]

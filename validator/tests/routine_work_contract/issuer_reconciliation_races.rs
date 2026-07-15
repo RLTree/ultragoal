@@ -137,9 +137,8 @@ fn quarantine_disappearance_between_check_and_rename_retains_custody() {
     assert_eq!(tree_digest(&transplant), fixture.foreign_digest);
     assert_eq!(
         fixture.owned.recovery_path().as_deref(),
-        Some(quarantine.as_path())
+        Some(transplant.as_path())
     );
-    fs::rename(&transplant, &quarantine).unwrap();
     assert_eq!(
         fixture.owned.recover_interrupted(),
         CleanupOutcome::ReconciledForeign

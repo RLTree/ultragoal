@@ -8,30 +8,27 @@ pub(crate) fn reconcile_displaced_foreign(
     scratch: &mut OwnedCompileScratch,
     pause: &mut impl FnMut(CleanupStage) -> CleanupDirective,
 ) -> CleanupOutcome {
-    let (quarantine, device, inode) = match &scratch.cleanup_state {
-        CleanupState::DisplacedForeign {
-            quarantine,
-            device,
-            inode,
-        }
-        | CleanupState::ReconciliationAmbiguous {
-            quarantine,
-            device,
-            inode,
-            ..
-        } => (quarantine.clone(), *device, *inode),
-        _ => return CleanupOutcome::AmbiguousPartialEffect,
+    let CleanupState::DisplacedForeign {
+        quarantine,
+        custody,
+        destination,
+    } = &mut scratch.cleanup_state
+    else {
+        return CleanupOutcome::AmbiguousPartialEffect;
     };
-    if entry_identity(scratch.parent.as_raw_fd(), &scratch.name) == Some((device, inode)) {
-        if entry_identity(scratch.parent.as_raw_fd(), &quarantine).is_none() {
+    let parent_path = scratch.path.parent().unwrap();
+    let Some(source_name) = custody.current_name(parent_path) else {
+        return CleanupOutcome::AmbiguousPartialEffect;
+    };
+    if custody.matches(&scratch.parent, &scratch.name) {
+        if entry_identity(scratch.parent.as_raw_fd(), quarantine).is_none() {
             scratch.cleanup_state = CleanupState::Settled;
             return CleanupOutcome::ReconciledForeign;
         }
         return CleanupOutcome::AmbiguousPartialEffect;
     }
-    if entry_identity(scratch.parent.as_raw_fd(), &quarantine) != Some((device, inode))
-        || entry_identity(scratch.parent.as_raw_fd(), &scratch.name).is_some()
-    {
+    *destination = entry_identity(scratch.parent.as_raw_fd(), &scratch.name);
+    if !custody.matches(&scratch.parent, &source_name) || destination.is_some() {
         return CleanupOutcome::AmbiguousPartialEffect;
     }
     if pause(CleanupStage::ForeignIdentityValidated) == CleanupDirective::Interrupt {
@@ -40,7 +37,7 @@ pub(crate) fn reconcile_displaced_foreign(
     if unsafe {
         libc::renameatx_np(
             scratch.parent.as_raw_fd(),
-            quarantine.as_ptr(),
+            source_name.as_ptr(),
             scratch.parent.as_raw_fd(),
             scratch.name.as_ptr(),
             libc::RENAME_EXCL,
@@ -49,37 +46,15 @@ pub(crate) fn reconcile_displaced_foreign(
     {
         return CleanupOutcome::AmbiguousPartialEffect;
     }
-    if pause(CleanupStage::ForeignMoved) == CleanupDirective::Interrupt {
-        retain_ambiguous_destination(scratch, quarantine, device, inode);
-        return CleanupOutcome::AmbiguousPartialEffect;
-    }
-    let destination = entry_identity(scratch.parent.as_raw_fd(), &scratch.name);
-    if destination == Some((device, inode))
-        && entry_identity(scratch.parent.as_raw_fd(), &quarantine).is_none()
-    {
+    let interrupted = pause(CleanupStage::ForeignMoved) == CleanupDirective::Interrupt;
+    *destination = entry_identity(scratch.parent.as_raw_fd(), &scratch.name);
+    let moved_exact = custody.matches(&scratch.parent, &scratch.name);
+    let source_absent = entry_identity(scratch.parent.as_raw_fd(), &source_name).is_none();
+    let quarantine_absent = entry_identity(scratch.parent.as_raw_fd(), quarantine).is_none();
+    if !interrupted && moved_exact && source_absent && quarantine_absent {
         scratch.cleanup_state = CleanupState::Settled;
         CleanupOutcome::ReconciledForeign
     } else {
-        scratch.cleanup_state = CleanupState::ReconciliationAmbiguous {
-            quarantine,
-            device,
-            inode,
-            destination,
-        };
         CleanupOutcome::AmbiguousPartialEffect
     }
-}
-
-fn retain_ambiguous_destination(
-    scratch: &mut OwnedCompileScratch,
-    quarantine: std::ffi::CString,
-    device: u64,
-    inode: u64,
-) {
-    scratch.cleanup_state = CleanupState::ReconciliationAmbiguous {
-        quarantine,
-        device,
-        inode,
-        destination: entry_identity(scratch.parent.as_raw_fd(), &scratch.name),
-    };
 }
