@@ -57,7 +57,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | frozen `fcc2f45b9` / tree `f24c0379` | Sealed durable transaction repair is clean and committed; prior parallel grant/settler and process-local authority surfaces are retired. Stale WorkerResult remains byte-untouched; strict, integration, installed, and dependent claims remain withheld | One exhaustive independent exact-tree review is active against the immutable freeze; ACCEPT is required before receipt regeneration or root integration |
+| N06 routine execution | rework | rejected `fcc2f45b9` / tree `f24c0379` | Exhaustive review found descendant terminal/token authority, live-owner takeover without process custody, swallowed cleanup ambiguity, non-durable reuse completion, post-commit ambiguity, expired-recovery deadlock, reopen rollback, forgeable cleanup evidence, irrecoverable staged cleanup, evidence-capacity exhaustion, and semantic-namespace debt. Stale WorkerResult remains byte-untouched; every dependent claim remains withheld | Same owner must confine the full durable transition family to one childless private transaction, repair lease/process custody and typed commit outcomes, and return one new clean freeze before receipt regeneration |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -66,8 +66,8 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `46`. Exact candidate
-`fcc2f45b9` / tree `f24c0379` is frozen under one exhaustive independent
+current exact-candidate rejection count for N06 is `47`. Exact candidate
+`fcc2f45b9` / tree `f24c0379` is rejected after one exhaustive independent
 review. Its parent `e784f0366` / tree `476d42ea` remains rejected after review proved a
 non-durable `Complete` is treated as durably settled, mediator siblings can
 construct and settle attempts outside the intended production route, settlement
@@ -75,8 +75,11 @@ panic escapes the typed recovery transition, and the shape/compile controls omit
 those paths. The convergence decision is to replace authority-by-shape with one
 sealed typed transaction enforced by Rust privacy. Existing shape and compile
 controls may remain only as secondary topology regression checks and cannot
-support the custody claim. No receipt regeneration or dependent claim may
-consume the new freeze before exact-tree ACCEPT.
+support the custody claim. The replacement must also bind live-owner death and
+process-group custody, typed precommit/committed/ambiguous outcomes, durable
+reuse attempts, rollback-safe reopen, unforgeable cleanup evidence, recoverable
+expiry/staged cleanup, and semantic module ownership. No receipt regeneration
+or dependent claim may consume the rejected freeze.
 The public 42-test claim remains withheld at 41/42 until a representative-load
 root observation.
 Escalation is legitimate only for
