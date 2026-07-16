@@ -57,23 +57,23 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | rejected `fcc2f45b9` / tree `f24c0379` | Exhaustive review found descendant terminal/token authority, live-owner takeover without process custody, swallowed cleanup ambiguity, non-durable reuse completion, post-commit ambiguity, expired-recovery deadlock, reopen rollback, forgeable cleanup evidence, irrecoverable staged cleanup, evidence-capacity exhaustion, and semantic-namespace debt. Root decision: replace the topology with one private typed custody owner and one atomic transition boundary; fresh-process rollback/takeover remains fail-closed without external monotonic custody. The stale WorkerResult remains byte-untouched and every dependent claim remains withheld | Same owner preserves its namespace-only split, replaces the full caller family as one batch against the matrix below, and returns one clean freeze before receipt regeneration |
+| N06 routine execution | rework | rejected `9cda2f1fc` / tree `359d746a` | The first typed-custody replacement freeze passed owned source laws and focused controls, but one exhaustive independent review found three shared-boundary defects: output, launch, and suspended-child custody can exist before durable ownership and later be terminalized with synthetic cleanup success; descendant modules and `pub(crate)` cloneable records can still construct or mutate authority; and ambiguous publication is neither reconciled under lock nor durably bound to its initiating cause and cleanup evidence. The supplied release fixture was absent from the immutable review checkout, and a fresh local public run was 37/42, so its 42/42 claim was not promoted. The stale WorkerResult remains byte-untouched and every dependent claim remains withheld | Same owner repairs physical-acquisition/publication atomicity, descendant-free privacy, and durable ambiguity reconciliation as one invariant batch, then returns one new clean freeze before a fresh review or receipt regeneration |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | branch tip `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld. Its prior worktree is removed; branch bytes are the only retained source authority | Preserve the branch unchanged until its dependency ceiling is current; create no replacement worktree while the integration queue is occupied |
 | N08 plugin product | planned | no admissible candidate on root `946c7bab1` | N04/N05/N07 source ceilings exist; N06 dependency and live host behavior remain open | Prepare closure only after N06 integrates |
 
 Controller measures at this checkpoint: integration queue length `1`; installed
-journeys closed `0`; Tree interventions after controller activation `0`; stale
+journeys closed `0`; Tree interventions after controller activation `1`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `47`. Exact candidate
-`fcc2f45b9` / tree `f24c0379` is rejected after one exhaustive independent
-review. Its parent `e784f0366` / tree `476d42ea` remains rejected after review proved a
-non-durable `Complete` is treated as durably settled, mediator siblings can
-construct and settle attempts outside the intended production route, settlement
-panic escapes the typed recovery transition, and the shape/compile controls omit
-those paths. The convergence decision is to replace authority-by-shape with one
-sealed typed transaction enforced by Rust privacy. Existing shape and compile
+current exact-candidate rejection count for N06 is `48`. Exact candidate
+`9cda2f1fc` / tree `359d746a` is rejected after one exhaustive independent
+review. It proved that physical effects still precede durable custody, privacy is
+not enforced against descendants or cloneable raw records, and ambiguous writes
+escape the lock without a durable reconciliation record. The convergence
+decision remains one sealed typed transaction enforced by Rust privacy; the
+repair must now make physical acquisition and publication one owner transition.
+Existing shape and compile
 controls may remain only as secondary topology regression checks and cannot
 support the custody claim. The root replacement decision and transition matrix
 below supersede further patching of this topology. No receipt regeneration or
@@ -278,12 +278,12 @@ each branch, worktree, and thread identity; unknown host fields stay unknown.
   `019f67cd-d4f2-7243-ab4a-dbbe11cc564f`,
   branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
   owns routine kernel/public adapter behavior and matching tests/fixtures;
-  exact source `fcc2f45b9` / tree `f24c0379` is rejected after one exhaustive
-  review found twelve material defects in the repeated custody topology. The
-  same owner preserves an uncommitted namespace-only split and is paused until
-  it receives the root typed-owner replacement matrix. Its stale WorkerResult,
-  load-sensitive public result, root strict wall, and root-owned v1→v2
-  migration remain withheld.
+  exact source `9cda2f1fc` / tree `359d746a` is rejected after one exhaustive
+  review found three material shared-boundary defects in physical custody,
+  descendant privacy, and ambiguous publication. The same owner is repairing
+  that invariant from the clean rejected freeze. Its stale WorkerResult,
+  non-reproducible release-fixture result, root strict wall, and root-owned
+  store migration remain withheld.
 - Orchestration authority: thread `019f5fa2-923f-7770-9a89-83ed713ac1f3`,
   branch `codex/n10-orchestration-authority`, worktree `.codex/worktrees/cb63`;
   owns orchestration issuer/replay/recovery behavior and matching tests/fixtures;
