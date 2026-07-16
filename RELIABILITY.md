@@ -30,6 +30,14 @@ and can be rebuilt or rejected; they cannot overwrite the underlying record.
 Cleanup is legal only after terminal reconciliation proves that no unique
 state, pending effect, or recovery authority remains.
 
+Routine execution keeps reservation, child/process-group custody, staged
+outputs, cleanup observation, terminal precommit, and terminal publication in
+one private typed owner. Expiry permits recovery investigation but never proves
+owner death or authorizes takeover. Failure, cancellation, timeout, panic, or
+output ambiguity stays nonterminal until the owner proves that no child or
+staged custody remains. Reuse is a new durable attempt bound to the prior
+committed record; it is not a read-only shortcut to completion.
+
 An interrupted operation follows this sequence:
 
 1. reopen the exact state root without initializing missing authority;
@@ -37,6 +45,12 @@ An interrupted operation follows this sequence:
 3. classify the last durable transition and observed host state;
 4. reconcile to committed, rolled back, refused, or ambiguous;
 5. issue a new action only from the reconciled state.
+
+A mutable local store cannot independently prove that its own complete history
+was not rolled back. Until an external monotonic head is available, a nonempty
+routine-authority store refuses fresh-process open, takeover, reuse, and
+mutation. Same-process evidence cannot promote cross-process recovery or
+installed interruption/recovery claims.
 
 ## Concurrency
 

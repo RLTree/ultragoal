@@ -10,12 +10,12 @@ contract. Normative authority remains the adopted bundle rooted at
 Finish the plugin product and typed Rust CLI kernel from current repository
 truth. The intentionally committed self-law refactor now has bounded source
 acceptance. N04 is root-integrated and retired at a source-only transaction
-ceiling; the current 608-diagnostic library strict wall and pending standards
-audits keep warning-free integration open. Drive the remaining three Codex
-worktree sessions through root-owned review, wiring, proof, and claim decisions.
-N06 is the sole next integration gate. N10 and N11 may continue in parallel only
-at explicitly withheld source-local ceilings until their graph dependencies are
-current on the exact root candidate.
+ceiling; the current warning wall and pending standards audits keep warning-free
+integration open. Drive the retained N06 and N10 Codex worktrees through
+root-owned review, wiring, proof, and claim decisions. N11 remains a preserved
+branch-only speculative freeze after its worktree teardown. N06 is the sole next
+integration gate. N10 and N11 remain at explicitly withheld source-local
+ceilings until their graph dependencies are current on the exact root candidate.
 
 ## Durable Goal Binding
 
@@ -57,10 +57,10 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | rejected `fcc2f45b9` / tree `f24c0379` | Exhaustive review found descendant terminal/token authority, live-owner takeover without process custody, swallowed cleanup ambiguity, non-durable reuse completion, post-commit ambiguity, expired-recovery deadlock, reopen rollback, forgeable cleanup evidence, irrecoverable staged cleanup, evidence-capacity exhaustion, and semantic-namespace debt. Stale WorkerResult remains byte-untouched; every dependent claim remains withheld | Same owner must confine the full durable transition family to one childless private transaction, repair lease/process custody and typed commit outcomes, and return one new clean freeze before receipt regeneration |
+| N06 routine execution | rework | rejected `fcc2f45b9` / tree `f24c0379` | Exhaustive review found descendant terminal/token authority, live-owner takeover without process custody, swallowed cleanup ambiguity, non-durable reuse completion, post-commit ambiguity, expired-recovery deadlock, reopen rollback, forgeable cleanup evidence, irrecoverable staged cleanup, evidence-capacity exhaustion, and semantic-namespace debt. Root decision: replace the topology with one private typed custody owner and one atomic transition boundary; fresh-process rollback/takeover remains fail-closed without external monotonic custody. The stale WorkerResult remains byte-untouched and every dependent claim remains withheld | Same owner preserves its namespace-only split, replaces the full caller family as one batch against the matrix below, and returns one clean freeze before receipt regeneration |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
-| N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
+| N11 evaluation | candidate | branch tip `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld. Its prior worktree is removed; branch bytes are the only retained source authority | Preserve the branch unchanged until its dependency ceiling is current; create no replacement worktree while the integration queue is occupied |
 | N08 plugin product | planned | no admissible candidate on root `946c7bab1` | N04/N05/N07 source ceilings exist; N06 dependency and live host behavior remain open | Prepare closure only after N06 integrates |
 
 Controller measures at this checkpoint: integration queue length `1`; installed
@@ -75,11 +75,9 @@ panic escapes the typed recovery transition, and the shape/compile controls omit
 those paths. The convergence decision is to replace authority-by-shape with one
 sealed typed transaction enforced by Rust privacy. Existing shape and compile
 controls may remain only as secondary topology regression checks and cannot
-support the custody claim. The replacement must also bind live-owner death and
-process-group custody, typed precommit/committed/ambiguous outcomes, durable
-reuse attempts, rollback-safe reopen, unforgeable cleanup evidence, recoverable
-expiry/staged cleanup, and semantic module ownership. No receipt regeneration
-or dependent claim may consume the rejected freeze.
+support the custody claim. The root replacement decision and transition matrix
+below supersede further patching of this topology. No receipt regeneration or
+dependent claim may consume the rejected freeze.
 The public 42-test claim remains withheld at 41/42 until a representative-load
 root observation.
 Escalation is legitimate only for
@@ -131,11 +129,13 @@ external action, secret handling, or unavailable required access.
   affected claim until behavior and evidence are re-audited.
 - N04 source transaction authority and its corrected WorkerResult are accepted,
   integrated, and retired. Root production reachability and every live host
-  identity remain open. Root `e85862768` is clean. N06 `0a1ee0e99` / tree
-  `9bfba50d` remains the sole gate and is in source REWORK because authority
-  cleanup still occurs implicitly in `AttemptReservation::drop` rather than an
-  explicit parent-observed transition. Receipt regeneration, dependency-closed
-  acceptance, and integration remain withheld.
+  identity remain open. N06 `fcc2f45b9` / tree `f24c0379` remains the sole gate
+  and is rejected after exhaustive review demonstrated twelve custody,
+  terminal, recovery, rollback, reuse, evidence, and namespace defects in the
+  repeated topology. Root has selected the typed-owner replacement above; the
+  owner preserves only an uncommitted namespace split while awaiting this
+  decision. Receipt regeneration, dependency-closed acceptance, and integration
+  remain withheld.
   N10 `7f92b7ed3` / tree `53bd7717` and N11 `9c2911d6d` /
   tree `6176c259` are frozen speculative source candidates; their dependency
   claims, receipt promotion, and integration remain withheld.
@@ -177,6 +177,47 @@ external action, secret handling, or unavailable required access.
   custody, settlement, and recovery transitions are confined by Rust privacy.
   Retain source-shape and compile-negative controls only as secondary topology
   regression checks; they do not raise the custody claim.
+- N06 replacement decision after `fcc2f45b9`: replace the ledger/token/output
+  sibling topology rather than retain it. One private routine-custody leaf owns
+  the durable store, non-clone attempt state, process lease and process-group
+  identity, staged output custody, opaque cleanup observation, terminal
+  precommit, and atomic append/reconciliation. Siblings receive only typed
+  requests and observations; they cannot construct, clone, settle, release,
+  recover, roll back, register, or reopen authority. Migrate every production
+  caller in one coherent batch. Whole-store rollback and fresh-process takeover
+  cannot be proven from the mutable store alone, so nonempty fresh-process open
+  remains refused until root provides external monotonic custody. This narrows
+  only that source capability; `CL-ROUTINE`, dependency acceptance, installed
+  interruption/recovery, runtime, readiness, release, and completion remain
+  withheld. This is the required replace-or-narrow decision and adds no new
+  tracker, receipt, analyzer, counter, or implementation lane.
+
+## N06 Typed Custody Transition Matrix
+
+This matrix is the implementation boundary for the existing N06 owner. State
+names may change to fit semantic Rust namespaces, but no transition or authority
+may move outside the one private owner. Terminal publication is one atomic
+store transition after all required observations exist.
+
+| From | Observation or request | Only legal result | Required rejection / withholding |
+| --- | --- | --- | --- |
+| empty store | exact validated context, plan, request, candidate, output scope, and capacity | durable `reserved` attempt owned by a new non-clone owner | reject missing/mismatched binding, insufficient failure capacity, or caller-supplied authority |
+| reserved | output staging starts | durable staged identity remains owned; attempt stays nonterminal | no sibling may register, release, clean, settle, or overwrite the reservation |
+| reserved or staged | child launch | durable child process, process-group, executable, and lease identity is recorded before resume | launch ambiguity stays recovery-required; never report failure or release custody while a child may live |
+| live child | exit, cancellation, timeout, output flood, or panic | parent drains output, terminates and reaps the full process group when required, then creates an opaque owner-issued observation | caller evidence, child-reported success, `Drop`, expiry, or panic cannot advance or clean custody |
+| no live child, staged output present | owner-observed cleanup | owner verifies every staged identity and records cleanup or a typed ambiguity | partial/failed cleanup remains recovery-required and preserves initiating cause plus cleanup cause |
+| observed effect, no live or staged custody | success, failure, cancellation, or incomplete result | durable terminal precommit binds actual result, output witnesses, cleanup observation, and prior head | no `Complete` before publication/witness durability; no terminal state while custody is live |
+| terminal precommit | atomic store commit | exactly one committed, failed, cancelled, incomplete, rolled-back, or ambiguous terminal record and new durable head | rename/sync uncertainty becomes durable ambiguity; retry cannot overwrite or fabricate terminal state |
+| committed prior attempt | verified reuse request | a distinct reserved attempt binds prior record/head, all reuse dimensions, artifacts, and witnesses, then follows the same terminal path | reuse never mutates the prior attempt, bypasses reservation, or treats read-only validation as settlement |
+| pending attempt after interruption | recovery open with same trusted monotonic head and exclusive lock | a recovery owner adopts the exact attempt, re-observes child/output state, and follows cleanup, rollback, ambiguity, or commit transitions | active owner/child, lost lock, mismatched binding, or unverifiable head refuses takeover without mutation |
+| expired lease | exclusive recovery observation | expiry permits investigation only; takeover requires proven owner death and no live process-group custody | tick expiry alone never authorizes cleanup, release, settlement, or a new attempt |
+| effect proven absent or reversibly undone | rollback request | owner records verified cleanup and atomically terminalizes `rolled_back` | any possible effect, live child, unknown output, or cleanup ambiguity forbids rollback and remains recovery-required/ambiguous |
+| nonempty store after fresh-process reopen | no external monotonic head | fail closed without initialization, takeover, reuse, or mutation | cross-process rollback/takeover/recovery and installed recovery claims remain withheld |
+
+Acceptance requires executing controls for every row, compile/privacy controls
+showing unauthorized code cannot construct or advance the owner, one exact clean
+candidate, and one exhaustive source review. Only after source acceptance may
+the existing single WorkerResult be regenerated.
 
 ## Context And Orientation
 
@@ -234,25 +275,23 @@ each branch, worktree, and thread identity; unknown host fields stay unknown.
   accepted and integrated through root `665140d11` / tree `8dd8a461`. The task
   is archived and its clean worktree/cache is removed.
 - Routine execution trust: active continuation thread
-  `019f6487-8b8d-7d51-810b-1465f481eef7`,
+  `019f67cd-d4f2-7243-ab4a-dbbe11cc564f`,
   branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
   owns routine kernel/public adapter behavior and matching tests/fixtures;
-  exact source `e784f0366` / tree `476d42ea` is rejected and remains the repair
-  base after one exhaustive review found four material authority and false-pass
-  classes. The same owner is repairing the sealed typed transaction invariant.
-  Recovery continuation thread `019f67cd-d4f2-7243-ab4a-dbbe11cc564f` preserves
-  the original worktree after the source task entered a host system error. Its
-  stale WorkerResult, load-sensitive public result, root strict wall, and
-  root-owned v1→v2 migration remain withheld.
+  exact source `fcc2f45b9` / tree `f24c0379` is rejected after one exhaustive
+  review found twelve material defects in the repeated custody topology. The
+  same owner preserves an uncommitted namespace-only split and is paused until
+  it receives the root typed-owner replacement matrix. Its stale WorkerResult,
+  load-sensitive public result, root strict wall, and root-owned v1→v2
+  migration remain withheld.
 - Orchestration authority: thread `019f5fa2-923f-7770-9a89-83ed713ac1f3`,
   branch `codex/n10-orchestration-authority`, worktree `.codex/worktrees/cb63`;
   owns orchestration issuer/replay/recovery behavior and matching tests/fixtures;
   exact clean source `7f92b7ed3` / tree `53bd7717` remains a speculative
   source-local freeze pending integrated N06 and N09 interfaces.
 - Evaluation reliability: thread `019f5fa2-cace-7361-a3e7-6102a3dc1224`,
-  branch `codex/n11-evaluation-reliability`, worktree `.codex/worktrees/bd86`;
-  owns evaluation, fixture-scheduler, capture bridge, and matching tests/fixtures;
-  exact clean source `9c2911d6d` / tree `6176c259` remains frozen at its
+  branch `codex/n11-evaluation-reliability`; its prior worktree is removed and
+  branch tip `9c2911d6d` / tree `6176c259` remains frozen at its
   dependency-independent source ceiling pending current N06, N07, and N08.
 
 Sibling active ExecPlans named `successor-worktree-{distribution,routine,

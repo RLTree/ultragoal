@@ -33,6 +33,15 @@ parse raw command arguments, mint root authority, or write public artifacts
 through an untyped convenience path. Tests exercise production entry points;
 test-only constructors cannot become a live authority route.
 
+Routine effect custody is one private production leaf. That leaf alone owns
+the durable store, non-clone attempt state, process lease and process-group
+identity, staged outputs, cleanup observation, terminal precommit, recovery,
+rollback, and atomic terminal publication. Mediators and output/process
+adapters supply typed requests or observations only; no sibling or descendant
+may construct, clone, settle, release, recover, roll back, register, or reopen
+routine authority. Source-shape checks are secondary regression controls, not
+semantic authority proof.
+
 ## Public Surfaces
 
 The only successor command groups are `inspect`, `next`, `fit`, `check`,

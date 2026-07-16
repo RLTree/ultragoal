@@ -38,6 +38,14 @@ External effects execute only through the supported host adapters after typed
 preflight. Cancellation or failure after a possible effect is ambiguous until
 reconciled; it must never be reported as success or silently retried.
 
+Routine custody authority is structurally confined to one private owner and
+one atomic transition boundary. Raw ledger handles, reservation tokens,
+terminal writers, cleanup evidence constructors, recovery/takeover functions,
+and rollback functions are not sibling or descendant APIs. Unauthorized code
+may neither construct nor advance custody, even with a known local signing key;
+privacy and executing transition controls carry this claim, while source-text
+shape checks remain secondary.
+
 ## Data And Process Rules
 
 - Do not persist secrets, prompt bodies, transcripts, credentials, personal
