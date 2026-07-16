@@ -35,7 +35,12 @@ use custody::AuthorityBinding;
 pub(crate) use custody::{
     set_test_publication_ambiguity_after, set_test_publication_refusal_after,
 };
-pub(in crate::routine_work) use launch_custody::ObservedStagedCleanup;
+pub(in crate::routine_work) use launch_custody::{LaunchCleanupEvidence, ObservedLaunchCleanup};
+#[cfg(all(test, target_vendor = "apple"))]
+pub(crate) use launch_custody::{
+    set_test_launch_cleanup_refusal, set_test_launch_panic_after_stat,
+    set_test_launch_stat_failure_after,
+};
 use production_mediation::error;
 
 /// Canonical public production entry. Issuer construction, reservation,

@@ -36,6 +36,8 @@ mod issuer_reconciliation_races;
 mod issuer_rollback_races;
 #[path = "routine_work_contract/issuer_scratch_resilience.rs"]
 mod issuer_scratch_resilience;
+#[path = "routine_work_contract/launch_acquisition_controls.rs"]
+mod launch_acquisition_controls;
 #[path = "routine_work_contract/local_capture.rs"]
 mod local_capture;
 #[path = "routine_work_contract/local_issuer_binding_controls.rs"]

@@ -1,5 +1,9 @@
 use super::*;
 
+#[path = "reservation_failure/completion.rs"]
+mod completion;
+pub(super) use completion::{finish_error, finish_execution, finish_panic};
+
 pub(super) type PanicPayload = Box<dyn std::any::Any + Send>;
 pub(super) type CleanupOutcome = std::thread::Result<Result<(), RoutineError>>;
 
@@ -26,9 +30,10 @@ impl CapturedCleanup {
 }
 
 pub(super) struct FailureParts {
-    pub(super) primary: FailureEvidence,
-    pub(super) process_cleanup: CleanupEvidence,
-    pub(super) staged_cleanup: CleanupEvidence,
+    primary: FailureEvidence,
+    process_cleanup: CleanupEvidence,
+    launch_cleanup: Option<CleanupEvidence>,
+    output_cleanup: CleanupEvidence,
 }
 
 pub(super) enum LifecycleFailure {
@@ -46,69 +51,6 @@ pub(super) enum TransactionFailure {
     Panic(PanicPayload, FailureParts),
 }
 
-pub(super) fn combine(
-    primary: std::thread::Result<Result<(), RoutineError>>,
-    cleanup: CapturedCleanup,
-) -> Result<(), LifecycleFailure> {
-    match primary {
-        Ok(Ok(())) => match cleanup.outcome {
-            Ok(Ok(())) => Ok(()),
-            Ok(Err(error)) => observed_error(error, cleanup.evidence),
-            Err(payload) => observed_panic(payload, cleanup.evidence),
-        },
-        Ok(Err(error)) => observed_error(error, cleanup.evidence),
-        Err(payload) => observed_panic(payload, cleanup.evidence),
-    }
-}
-
-pub(super) fn finish_execution<T>(
-    primary: std::thread::Result<Result<T, RoutineError>>,
-    cleanup: CapturedCleanup,
-) -> Result<T, RoutineError> {
-    match primary {
-        Ok(Ok(value)) => match combine(Ok(Ok(())), cleanup) {
-            Ok(()) => Ok(value),
-            Err(failure) => std::panic::resume_unwind(Box::new(failure)),
-        },
-        Ok(Err(error)) => match combine(Ok(Err(error)), cleanup) {
-            Ok(()) => Err(super::production_mediation::error(
-                "routine-process-error-transition-missing",
-            )),
-            Err(failure) => std::panic::resume_unwind(Box::new(failure)),
-        },
-        Err(payload) => match combine(Err(payload), cleanup) {
-            Ok(()) => Err(super::production_mediation::error(
-                "routine-process-panic-transition-missing",
-            )),
-            Err(failure) => std::panic::resume_unwind(Box::new(failure)),
-        },
-    }
-}
-
-fn observed_error(error: RoutineError, staged: CleanupEvidence) -> Result<(), LifecycleFailure> {
-    let (primary, process_cleanup, observed_staged) = error_parts(&error);
-    Err(LifecycleFailure::Error(
-        error,
-        FailureParts {
-            primary,
-            process_cleanup,
-            staged_cleanup: observed_staged.unwrap_or(staged),
-        },
-    ))
-}
-
-fn observed_panic(payload: PanicPayload, staged: CleanupEvidence) -> Result<(), LifecycleFailure> {
-    let (payload, primary, process_cleanup) = panic_parts(payload);
-    Err(LifecycleFailure::Panic(
-        payload,
-        FailureParts {
-            primary,
-            process_cleanup,
-            staged_cleanup: staged,
-        },
-    ))
-}
-
 pub(super) fn error_parts(
     error: &RoutineError,
 ) -> (FailureEvidence, CleanupEvidence, Option<CleanupEvidence>) {
@@ -121,7 +63,30 @@ pub(super) fn error_parts(
                 CleanupEvidence::NotRequired,
             )
         });
-    (primary, process, error.staged_cleanup().cloned())
+    (
+        primary,
+        process,
+        error
+            .launch_cleanup()
+            .map(|observation| observation.as_cleanup().clone()),
+    )
+}
+
+pub(super) fn resume_launch_acquisition_panic(
+    payload: PanicPayload,
+    cleanup: ObservedLaunchCleanup,
+) -> ! {
+    let primary = FailureEvidence::Panic(PanicEvidence::capture(payload.as_ref()));
+    let (_, cleanup) = cleanup.into_parts();
+    std::panic::resume_unwind(Box::new(LifecycleFailure::Panic(
+        payload,
+        FailureParts {
+            primary,
+            process_cleanup: CleanupEvidence::NotRequired,
+            launch_cleanup: Some(cleanup.into_cleanup()),
+            output_cleanup: CleanupEvidence::NotRequired,
+        },
+    )))
 }
 
 pub(super) fn panic_parts(
@@ -155,34 +120,12 @@ pub(super) fn observed_transition(
     }
 }
 
-pub(super) fn finish_error<T>(
-    error: RoutineError,
-    cleanup: Option<std::thread::Result<Result<(), RoutineError>>>,
-    transition: Result<(), RoutineError>,
-) -> Result<T, RoutineError> {
-    transition?;
-    match cleanup {
-        Some(Err(payload)) => std::panic::resume_unwind(payload),
-        _ => Err(error),
-    }
-}
-
-pub(super) fn finish_panic<T>(
-    payload: PanicPayload,
-    transition: Result<(), RoutineError>,
-) -> Result<T, RoutineError> {
-    if let Err(error) = transition {
-        drop(payload);
-        return Err(error);
-    }
-    std::panic::resume_unwind(payload)
-}
-
 pub(super) fn failure_record(
     binding: FailureBinding<'_>,
     started: bool,
     parts: FailureParts,
 ) -> ReservationFailureEvidence {
+    let staged_cleanup = combined_cleanup(parts.launch_cleanup.as_ref(), &parts.output_cleanup);
     ReservationFailureEvidence {
         schema_version: RESERVATION_FAILURE_SCHEMA.to_owned(),
         protocol_id: binding.protocol_id.to_owned(),
@@ -190,7 +133,7 @@ pub(super) fn failure_record(
         recovery_marker: binding.recovery_marker.to_owned(),
         primary: parts.primary,
         process_cleanup: parts.process_cleanup,
-        staged_cleanup: parts.staged_cleanup,
+        staged_cleanup,
         disposition: if started {
             ReservationFailureDisposition::StartedPending
         } else {
@@ -200,11 +143,12 @@ pub(super) fn failure_record(
 }
 
 pub(super) fn parts_from_error(error: &RoutineError, cleanup: &CapturedCleanup) -> FailureParts {
-    let (primary, process_cleanup, observed_staged) = error_parts(error);
+    let (primary, process_cleanup, launch_cleanup) = error_parts(error);
     FailureParts {
         primary,
         process_cleanup,
-        staged_cleanup: observed_staged.unwrap_or_else(|| cleanup.evidence.clone()),
+        launch_cleanup,
+        output_cleanup: cleanup.evidence.clone(),
     }
 }
 
@@ -230,7 +174,8 @@ pub(super) fn observe(primary: PrimaryFailure, cleanup: CapturedCleanup) -> Tran
                     FailureParts {
                         primary,
                         process_cleanup,
-                        staged_cleanup: cleanup.evidence,
+                        launch_cleanup: None,
+                        output_cleanup: cleanup.evidence,
                     },
                 )
             }
@@ -239,11 +184,19 @@ pub(super) fn observe(primary: PrimaryFailure, cleanup: CapturedCleanup) -> Tran
 }
 
 fn merge_cleanup(mut parts: FailureParts, cleanup: CapturedCleanup) -> FailureParts {
-    if matches!(
-        parts.staged_cleanup,
-        CleanupEvidence::NotRequired | CleanupEvidence::Succeeded
-    ) {
-        parts.staged_cleanup = cleanup.evidence;
-    }
+    parts.output_cleanup = cleanup.evidence;
     parts
+}
+
+fn combined_cleanup(launch: Option<&CleanupEvidence>, output: &CleanupEvidence) -> CleanupEvidence {
+    if let Some(value @ (CleanupEvidence::Error(_) | CleanupEvidence::Panic(_))) = launch {
+        return value.clone();
+    }
+    if matches!(
+        output,
+        CleanupEvidence::Error(_) | CleanupEvidence::Panic(_)
+    ) {
+        return output.clone();
+    }
+    launch.cloned().unwrap_or_else(|| output.clone())
 }

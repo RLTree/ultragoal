@@ -2,6 +2,7 @@ use super::*;
 
 use std::fs::{self, File, OpenOptions};
 use std::io::{Seek, SeekFrom, Write};
+use std::panic::{AssertUnwindSafe, catch_unwind};
 
 use crate::routine_work::runtime_adapter::mediator::{
     ObjectIdentity, PinnedExecutable, StagedProgram,
@@ -9,7 +10,8 @@ use crate::routine_work::runtime_adapter::mediator::{
 #[cfg(unix)]
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt, PermissionsExt};
 
-use super::cleanup::{EntryClaim, attach_partial_cleanup, cleanup_created_child};
+use super::acquisition::{LaunchAcquisitionCustody, observe_directory_stat};
+use super::cleanup::EntryClaim;
 use super::root::{ensure_launch_root, safe_token_name};
 
 pub(super) const LAUNCH_ROOT_NAME: &str = ".routine-authority-launch";
@@ -40,7 +42,7 @@ pub(in crate::routine_work::runtime_adapter::production) fn stage_program(
 ) -> Result<StagedProgram, RoutineError> {
     #[cfg(not(unix))]
     {
-        let _ = (root, token, source);
+        let _ = (root, binding, source);
         return Err(error("routine-production-launch-unix-required"));
     }
     #[cfg(unix)]
@@ -53,61 +55,48 @@ pub(in crate::routine_work::runtime_adapter::production) fn stage_program(
         builder
             .create(&child)
             .map_err(|_| error("routine-production-launch-directory-create-failed"))?;
-        let created_directory_identity = ObjectIdentity::from(
-            &fs::symlink_metadata(&child)
-                .map_err(|_| error("routine-production-launch-directory-stat-failed"))?,
-        );
-        let directory = match File::open(&child) {
-            Ok(directory) => directory,
-            Err(value) => {
-                return Err(cleanup_created_child(
-                    &child,
-                    created_directory_identity,
-                    value,
-                    "routine-production-launch-directory-open-failed",
-                ));
+        let mut custody = LaunchAcquisitionCustody::created(child);
+        let result = catch_unwind(AssertUnwindSafe(|| {
+            let child = custody.child().to_path_buf();
+            let held_directory = File::open(&child)
+                .map_err(|_| error("routine-production-launch-directory-open-failed"))?;
+            custody.hold_directory(held_directory);
+            let directory = custody.duplicate_directory()?;
+            observe_directory_stat()?;
+            let created_directory_identity = ObjectIdentity::from(
+                &fs::symlink_metadata(&child)
+                    .map_err(|_| error("routine-production-launch-directory-stat-failed"))?,
+            );
+            observe_directory_stat()?;
+            let directory_identity = ObjectIdentity::from(
+                &directory
+                    .metadata()
+                    .map_err(|_| error("routine-production-launch-directory-stat-failed"))?,
+            );
+            if created_directory_identity != directory_identity {
+                return Err(error("routine-production-launch-directory-mismatch"));
             }
-        };
-        let directory_identity = ObjectIdentity::from(
-            &directory
-                .metadata()
-                .map_err(|_| error("routine-production-launch-directory-stat-failed"))?,
-        );
-        let marker = child.join(LAUNCH_MARKER_NAME);
-        let marker_bytes =
-            format!("{}\n{}\n", binding.grant_id, binding.recovery_marker).into_bytes();
-        let mut marker_file = match OpenOptions::new()
-            .write(true)
-            .create_new(true)
-            .custom_flags(libc::O_NOFOLLOW | libc::O_CLOEXEC)
-            .mode(0o400)
-            .open(&marker)
-        {
-            Ok(file) => file,
-            Err(_) => {
-                return Err(attach_partial_cleanup(
-                    error("routine-production-launch-marker-create-failed"),
-                    || super::cleanup::cleanup_partial_stage(&child, directory_identity, &[]),
-                ));
-            }
-        };
-        let marker_created_identity = match marker_file.metadata() {
-            Ok(metadata) => ObjectIdentity::from(&metadata),
-            Err(_) => {
-                return Err(attach_partial_cleanup(
-                    error("routine-production-launch-marker-stat-failed"),
-                    || super::cleanup::cleanup_partial_stage(&child, directory_identity, &[]),
-                ));
-            }
-        };
-        let marker_claim = EntryClaim {
-            path: marker.clone(),
-            identity: marker_created_identity,
-            bytes: Some(marker_bytes.clone()),
-        };
-        let mut program_claim = None;
-        let mut seal_claim = None;
-        let result = (|| {
+            custody.bind_directory(directory_identity);
+            let marker = child.join(LAUNCH_MARKER_NAME);
+            let marker_bytes =
+                format!("{}\n{}\n", binding.grant_id, binding.recovery_marker).into_bytes();
+            let mut marker_file = OpenOptions::new()
+                .write(true)
+                .create_new(true)
+                .custom_flags(libc::O_NOFOLLOW | libc::O_CLOEXEC)
+                .mode(0o400)
+                .open(&marker)
+                .map_err(|_| error("routine-production-launch-marker-create-failed"))?;
+            let marker_created_identity = ObjectIdentity::from(
+                &marker_file
+                    .metadata()
+                    .map_err(|_| error("routine-production-launch-marker-stat-failed"))?,
+            );
+            custody.claim(EntryClaim {
+                path: marker.clone(),
+                identity: marker_created_identity,
+                bytes: Some(marker_bytes.clone()),
+            });
             marker_file
                 .write_all(&marker_bytes)
                 .map_err(|_| error("routine-production-launch-marker-write-failed"))?;
@@ -128,7 +117,7 @@ pub(in crate::routine_work::runtime_adapter::production) fn stage_program(
                     .metadata()
                     .map_err(|_| error("routine-production-launch-file-stat-failed"))?,
             );
-            program_claim = Some(EntryClaim {
+            custody.claim(EntryClaim {
                 path: path.clone(),
                 identity: program_identity,
                 bytes: None,
@@ -170,7 +159,7 @@ pub(in crate::routine_work::runtime_adapter::production) fn stage_program(
                     .metadata()
                     .map_err(|_| error("routine-production-launch-seal-stat-failed"))?,
             );
-            seal_claim = Some(EntryClaim {
+            custody.claim(EntryClaim {
                 path: seal.clone(),
                 identity: seal_created_identity,
                 bytes: Some(seal_bytes.clone()),
@@ -210,25 +199,14 @@ pub(in crate::routine_work::runtime_adapter::production) fn stage_program(
                 marker_identity,
                 seal_identity,
             })
-        })();
+        }));
         match result {
-            Ok(staged) => Ok(staged),
-            Err(error) => {
-                let mut claims = vec![EntryClaim {
-                    path: marker_claim.path.clone(),
-                    identity: marker_claim.identity,
-                    bytes: marker_claim.bytes.clone(),
-                }];
-                if let Some(claim) = program_claim {
-                    claims.push(claim);
-                }
-                if let Some(claim) = seal_claim {
-                    claims.push(claim);
-                }
-                Err(attach_partial_cleanup(error, || {
-                    super::cleanup::cleanup_partial_stage(&child, directory_identity, &claims)
-                }))
-            }
+            Ok(Ok(staged)) => Ok(staged),
+            Ok(Err(primary)) => Err(primary.with_launch_cleanup(custody.observe_cleanup())),
+            Err(payload) => super::super::reservation_failure::resume_launch_acquisition_panic(
+                payload,
+                custody.observe_cleanup(),
+            ),
         }
     }
 }

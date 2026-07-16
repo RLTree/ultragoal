@@ -7,48 +7,10 @@ use std::os::unix::ffi::OsStrExt;
 
 use crate::routine_work::runtime_adapter::mediator::{ObjectIdentity, StagedProgram};
 
-pub(in crate::routine_work) struct ObservedStagedCleanup {
-    evidence: CleanupEvidence,
-}
-
-impl ObservedStagedCleanup {
-    pub(super) fn capture(cleanup: impl FnOnce() -> Result<(), RoutineError>) -> Self {
-        let evidence = match std::panic::catch_unwind(std::panic::AssertUnwindSafe(cleanup)) {
-            Ok(Ok(())) => CleanupEvidence::Succeeded,
-            Ok(Err(error)) => CleanupEvidence::Error(error.evidence()),
-            Err(payload) => CleanupEvidence::Panic(PanicEvidence::capture(payload.as_ref())),
-        };
-        Self { evidence }
-    }
-
-    pub(in crate::routine_work) fn into_evidence(self) -> CleanupEvidence {
-        self.evidence
-    }
-}
-
 pub(super) struct EntryClaim {
     pub(super) path: PathBuf,
     pub(super) identity: ObjectIdentity,
     pub(super) bytes: Option<Vec<u8>>,
-}
-
-#[cfg(unix)]
-pub(super) fn cleanup_created_child(
-    child: &Path,
-    identity: ObjectIdentity,
-    _cause: std::io::Error,
-    cause: &'static str,
-) -> RoutineError {
-    error(cause).with_staged_cleanup(ObservedStagedCleanup::capture(|| {
-        cleanup_partial_stage(child, identity, &[])
-    }))
-}
-
-pub(super) fn attach_partial_cleanup(
-    primary: RoutineError,
-    cleanup: impl FnOnce() -> Result<(), RoutineError>,
-) -> RoutineError {
-    primary.with_staged_cleanup(ObservedStagedCleanup::capture(cleanup))
 }
 
 pub(super) fn cleanup_partial_stage(
@@ -206,11 +168,4 @@ pub(in crate::routine_work::runtime_adapter::production) fn cleanup_staged(
             },
         ],
     )
-}
-
-pub(in crate::routine_work::runtime_adapter::production) fn fail_staged(
-    staged: &StagedProgram,
-    primary: RoutineError,
-) -> RoutineError {
-    attach_partial_cleanup(primary, || cleanup_staged(staged))
 }

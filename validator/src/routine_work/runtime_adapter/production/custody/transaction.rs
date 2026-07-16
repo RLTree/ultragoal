@@ -1,5 +1,5 @@
 use super::super::launch_custody::{
-    LaunchBinding, cleanup_staged, fail_staged, launch_root, stage_program,
+    LaunchBinding, fail_staged, launch_root, observe_staged_cleanup, stage_program,
 };
 use super::super::production_mediation::{
     allowed_output_scopes, authority_binding, error, owner_process_identity, random_session_id,
@@ -175,9 +175,8 @@ fn execute_intent(
         }
     }));
     let primary = observe_reaped(owner, observation, &child);
-    let mut cleanup =
-        CapturedCleanup::from(catch_unwind(AssertUnwindSafe(|| cleanup_staged(&staged))));
-    if cleanup.evidence == CleanupEvidence::Succeeded {
+    let mut cleanup = observe_staged_cleanup(&staged);
+    if cleanup.evidence() == &CleanupEvidence::Succeeded {
         let recorded = CapturedCleanup::from(catch_unwind(AssertUnwindSafe(|| {
             let handle = stage
                 .borrow_mut()
@@ -185,9 +184,7 @@ fn execute_intent(
                 .ok_or_else(|| error("routine-production-launch-custody-missing"))?;
             owner.record_stage_cleaned(handle)
         })));
-        if recorded.evidence != CleanupEvidence::Succeeded {
-            cleanup = recorded;
-        }
+        cleanup = cleanup.with_transition(recorded.outcome);
     }
     finish_execution(primary, cleanup)
 }

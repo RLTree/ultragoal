@@ -68,7 +68,9 @@ pub(crate) use runtime_adapter::{
 
 #[cfg(all(test, target_vendor = "apple"))]
 pub(crate) use runtime_adapter::{
-    set_test_publication_ambiguity_after, set_test_publication_refusal_after,
+    set_test_launch_cleanup_refusal, set_test_launch_panic_after_stat,
+    set_test_launch_stat_failure_after, set_test_publication_ambiguity_after,
+    set_test_publication_refusal_after,
 };
 
 #[cfg(test)]

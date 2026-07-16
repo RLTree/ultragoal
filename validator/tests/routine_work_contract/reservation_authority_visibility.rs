@@ -19,7 +19,6 @@ const PRODUCTION: &str = include_str!("../../src/routine_work/runtime_adapter/pr
 const MEDIATOR: &str = include_str!("../../src/routine_work/runtime_adapter/mediator/mod.rs");
 const OUTPUT: &str =
     include_str!("../../src/routine_work/runtime_adapter/production/output_journal/mod.rs");
-
 #[test]
 fn one_childless_owner_holds_reservation_and_terminal_authority() {
     assert_eq!(validate(TRANSACTION, OWNER, RECORDS, CUSTODY), Ok(()));
@@ -87,6 +86,11 @@ fn exact_custody_sibling_cannot_construct_clone_or_forge_raw_authority() {
                 "ChildLease",
                 "LaunchStageRecord",
                 "TerminalRecord",
+                "LaunchCleanupEvidence",
+                "RoutineError",
+                "clone_launch_cleanup",
+                "clone_routine_error",
+                "no method named `clone`",
             ]
             .into_iter()
             .all(|name| diagnostic.contains(name))
@@ -106,19 +110,17 @@ fn exact_custody_sibling_cannot_construct_clone_or_forge_raw_authority() {
     assert_eq!(result, Ok(()));
 }
 const ATTACK: &str = r#"
+use crate::routine_work::{runtime_adapter::LaunchCleanupEvidence, RoutineError};
 use super::store::{ChildLease, LaunchStageRecord, ReservationToken, TerminalRecord};
 use super::store::DurableCustody;
 use super::store::supported::record_authentication::FileLedger;
 use super::transaction::ReservationSpec;
-
 fn raw_types() {
-    let _: Option<ReservationToken> = None;
-    let _: Option<ChildLease> = None;
-    let _: Option<LaunchStageRecord> = None;
-    let _: Option<TerminalRecord> = None;
+    let _: (Option<ReservationToken>, Option<ChildLease>, Option<LaunchStageRecord>, Option<TerminalRecord>) = (None, None, None, None);
 }
-
 fn clone_custody(value: DurableCustody) { let _ = value.clone(); }
+fn clone_launch_cleanup(value: LaunchCleanupEvidence) { let _ = value.clone(); }
+fn clone_routine_error(value: RoutineError) { let _ = value.clone(); }
 fn raw_ledger(value: FileLedger) { let _ = value; }
 fn construct_custody() { let _ = DurableCustody {}; }
 fn reconstruct_spec(seed: ReservationSpec) {
@@ -169,10 +171,8 @@ fn copy_validator(destination: &Path) -> Result<(), String> {
 fn copy_tree(source: &Path, destination: &Path) -> Result<(), String> {
     for entry in WalkDir::new(source) {
         let entry = entry.map_err(|e| e.to_string())?;
-        let relative = entry
-            .path()
-            .strip_prefix(source)
-            .map_err(|e| e.to_string())?;
+        let path = entry.path();
+        let relative = path.strip_prefix(source).map_err(|e| e.to_string())?;
         let target = destination.join(relative);
         if entry.file_type().is_dir() {
             fs::create_dir_all(target).map_err(|e| e.to_string())?;

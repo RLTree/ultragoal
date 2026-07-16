@@ -1,7 +1,7 @@
 use sha2::{Digest, Sha256};
 use std::fmt;
 
-use super::runtime_adapter::{ObservedProcessCustody, ObservedStagedCleanup};
+use super::runtime_adapter::{LaunchCleanupEvidence, ObservedProcessCustody};
 
 #[path = "error/failure_evidence.rs"]
 mod failure_evidence;
@@ -49,13 +49,13 @@ impl RoutineErrorId {
     }
 }
 
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Eq, PartialEq)]
 pub struct RoutineError {
     id: RoutineErrorId,
     cause: &'static str,
     subject_sha256: Option<String>,
     process_custody: Option<Box<ProcessCustodyEvidence>>,
-    staged_cleanup: Option<Box<CleanupEvidence>>,
+    launch_cleanup: Option<Box<LaunchCleanupEvidence>>,
     transition_failure: Option<Box<ReservationTransitionFailure>>,
 }
 
@@ -72,7 +72,7 @@ impl RoutineError {
             cause,
             subject_sha256,
             process_custody: None,
-            staged_cleanup: None,
+            launch_cleanup: None,
             transition_failure: None,
         }
     }
@@ -97,26 +97,21 @@ impl RoutineError {
         self.process_custody.as_deref()
     }
 
-    pub(in crate::routine_work) fn with_staged_cleanup(
+    pub(in crate::routine_work) fn with_launch_cleanup(
         mut self,
-        observation: ObservedStagedCleanup,
+        observation: super::runtime_adapter::ObservedLaunchCleanup,
     ) -> Self {
-        self.staged_cleanup = Some(Box::new(observation.into_evidence()));
+        self.launch_cleanup = Some(Box::new(observation.into_evidence()));
         self
     }
 
-    pub(crate) fn staged_cleanup(&self) -> Option<&CleanupEvidence> {
-        self.staged_cleanup.as_deref()
+    pub(in crate::routine_work) fn launch_cleanup(&self) -> Option<&LaunchCleanupEvidence> {
+        self.launch_cleanup.as_deref()
     }
 
     fn with_transition_failure(mut self, failure: ReservationTransitionFailure) -> Self {
         self.transition_failure = Some(Box::new(failure));
         self
-    }
-
-    #[cfg(test)]
-    pub(crate) fn transition_failure(&self) -> Option<&ReservationTransitionFailure> {
-        self.transition_failure.as_deref()
     }
 
     pub fn id(&self) -> RoutineErrorId {
