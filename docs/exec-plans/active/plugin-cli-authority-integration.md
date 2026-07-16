@@ -57,7 +57,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | rejected `d0e69eb12` / tree `020754e5` | Exhaustive review proved authority descendants can reach private custody, mediator siblings can invoke settlement, an unrelated crate sibling can clear the raw registry, and the compile control probes the wrong hierarchy/location; stale WorkerResult remains byte-untouched and every dependent claim remains withheld | Same owner must move all custody/registry construction and mutation behind one leaf owner boundary and cover the actual closest descendants, siblings, and transition family before one new freeze |
+| N06 routine execution | under_review | `e784f0366` / tree `476d42ea` | Clean source-only owner-transition freeze; stale WorkerResult remains byte-untouched at `sha256:6be846b4537f3866f852218609c1c0b7b9817246a215e57a3780ca4dbf53221a`; one exhaustive exact-candidate review is active and every dependent claim remains withheld | Accept the complete custody invariant or return one batched REWORK to the same owner; regenerate the single WorkerResult only after source acceptance |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -66,15 +66,14 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `45`. Exact candidate
-`d0e69eb12` / tree `020754e5` is rejected after one exhaustive review proved the
-opaque leaves remain reachable from real Rust descendants, mediator siblings
-retain settlement authority, and a crate sibling can clear the raw registry.
-The settled invariant is now one owner boundary: no descendant or sibling may
-construct, mutate, start, stage, settle, reconcile, clean, release, or clear
-custody/registry state outside its typed transition. The same owner is repairing
-that boundary and its exact closest-hierarchy controls. No receipt regeneration
-or dependent claim may consume this rejected freeze.
+current exact-candidate rejection count for N06 is `45`. Exact clean candidate
+`e784f0366` / tree `476d42ea` is under one exhaustive source review after the
+same owner nested raw reservation and registry state behind the private owner
+wrapper and replaced caller settlement with a nonterminal capability plus typed
+terminal intent. The settled invariant remains one owner boundary: no descendant
+or sibling may construct, mutate, start, stage, settle, reconcile, clean,
+release, or clear custody/registry state outside its typed transition. No receipt
+regeneration or dependent claim may consume this freeze before source acceptance.
 The public 42-test claim remains withheld at 41/42 until a representative-load
 root observation.
 Escalation is legitimate only for
@@ -227,10 +226,9 @@ each branch, worktree, and thread identity; unknown host fields stay unknown.
   `019f6487-8b8d-7d51-810b-1465f481eef7`,
   branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
   owns routine kernel/public adapter behavior and matching tests/fixtures;
-  exact clean source `cf84b182d` / tree `3dcc9f97` is under one fresh review
-  after the existing guard learned to reject typed owner and staged-subobject
-  pattern aliases across expression and parameter forms, with compiling causal
-  mutants and no production behavior change.
+  exact clean source `e784f0366` / tree `476d42ea` is under one exhaustive
+  review after raw reservation and registry transitions moved behind the
+  private owner wrapper and closest descendant/sibling controls were refreshed.
   Recovery continuation thread `019f67cd-d4f2-7243-ab4a-dbbe11cc564f` preserves
   the original worktree after the source task entered a host system error. Its
   stale WorkerResult, load-sensitive public result, root strict wall, and
