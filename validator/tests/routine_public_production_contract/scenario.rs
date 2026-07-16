@@ -5,20 +5,54 @@ use std::fs::{self, OpenOptions};
 use std::io::Write;
 use std::os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt, symlink};
 use std::path::{Path, PathBuf};
-use std::process::{Child, Command, Output, Stdio};
+use std::process::{Command, Output};
 use std::sync::atomic::{AtomicU64, Ordering};
-use ultragoal::context::ToolCapability;
+use std::sync::{Condvar, Mutex};
 use ultragoal::routine_work::{
     CheckClass, CheckNode, ImpactGraph, PathMatcher, PathRoute, RepoPath, RunnerSpec,
 };
 
 #[path = "production_scenario_cases/argument_fixture.rs"]
 mod argument_fixture;
+#[path = "production_scenario_cases/contender_process/mod.rs"]
+mod contender_process;
 #[path = "production_scenario_cases/execution_fixture.rs"]
 mod execution_fixture;
 #[path = "production_scenario_cases/scenario_fixture.rs"]
 mod scenario_fixture;
 
 pub(crate) use argument_fixture::*;
+pub(crate) use contender_process::*;
 pub(crate) use execution_fixture::*;
 pub(crate) use scenario_fixture::*;
+
+const MAX_ACTIVE_FIXTURES: usize = 2;
+static ACTIVE_FIXTURES: Mutex<usize> = Mutex::new(0);
+static FIXTURE_SLOT: Condvar = Condvar::new();
+
+pub(crate) struct FixturePermit;
+
+impl FixturePermit {
+    pub(crate) fn claim() -> Self {
+        let mut active = ACTIVE_FIXTURES
+            .lock()
+            .unwrap_or_else(|error| error.into_inner());
+        while *active >= MAX_ACTIVE_FIXTURES {
+            active = FIXTURE_SLOT
+                .wait(active)
+                .unwrap_or_else(|error| error.into_inner());
+        }
+        *active += 1;
+        Self
+    }
+}
+
+impl Drop for FixturePermit {
+    fn drop(&mut self) {
+        let mut active = ACTIVE_FIXTURES
+            .lock()
+            .unwrap_or_else(|error| error.into_inner());
+        *active = active.checked_sub(1).expect("fixture permit underflow");
+        FIXTURE_SLOT.notify_one();
+    }
+}

@@ -1,11 +1,11 @@
-use super::scenario::{Fixture, NodeSpec, pass_node, prefix_route, tree, wait_for_started};
+use super::scenario::{Fixture, pass_node, prefix_route, tree};
 use serde_json::Value;
 use std::fs;
 use std::os::unix::fs::symlink;
 
 #[test]
 fn repository_cannot_turn_the_fixed_template_route_into_arbitrary_shell_authority() {
-    let fixture = Fixture::new(
+    let mut fixture = Fixture::new(
         "arbitrary-shell-refusal",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -28,11 +28,34 @@ fn repository_cannot_turn_the_fixed_template_route_into_arbitrary_shell_authorit
             .exists()
     );
     assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
+    fixture.teardown_after_assertions();
 }
 
 #[test]
-fn missing_host_authority_refuses_before_any_workspace_write() {
-    let fixture = Fixture::new(
+fn legacy_manifest_schema_is_rejected_before_effect() {
+    let mut fixture = Fixture::new(
+        "legacy-manifest-refusal",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    fixture.downgrade_manifest_schema();
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+    let before_status = fixture.status();
+    let output = fixture.run();
+    assert_diagnostic(&output, "successor_runtime_authority_required", &fixture);
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+    assert_eq!(fixture.status(), before_status);
+    assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn missing_host_refuses_before_any_workspace_write() {
+    let mut fixture = Fixture::new(
         "missing-host",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -53,49 +76,12 @@ fn missing_host_authority_refuses_before_any_workspace_write() {
             .join("target/routine/compile/result.txt")
             .exists()
     );
+    fixture.teardown_after_assertions();
 }
 
 #[test]
-fn stale_and_forged_reuse_are_rejected_before_ledger_transition() {
-    for forged in [false, true] {
-        let fixture = Fixture::new(
-            if forged {
-                "forged-reuse"
-            } else {
-                "stale-reuse"
-            },
-            &[pass_node("compile", &[])],
-            &[prefix_route("route-src", "src", &["compile"])],
-            true,
-            true,
-        );
-        let first = fixture.run();
-        assert_eq!(first.status.code(), Some(0), "{first:?}");
-        if forged {
-            fixture.forge_cache_artifact();
-        } else {
-            fixture.tamper_cache_field(
-                "candidate_id",
-                Value::String(format!("sha256:{}", "0".repeat(64))),
-            );
-        }
-        let state_path = fixture.authority_root().join("routine-authority.state");
-        let before_ledger = fs::read(&state_path).unwrap();
-        let before_output =
-            fs::read(fixture.root.join("target/routine/compile/result.txt")).unwrap();
-        let output = fixture.run();
-        assert_diagnostic(&output, "successor_runtime_authority_required", &fixture);
-        assert_eq!(fs::read(state_path).unwrap(), before_ledger);
-        assert_eq!(
-            fs::read(fixture.root.join("target/routine/compile/result.txt")).unwrap(),
-            before_output
-        );
-    }
-}
-
-#[test]
-fn host_lock_symlink_and_target_symlink_substitution_fail_closed() {
-    let fixture = Fixture::new(
+fn host_lock_symlink_substitution_fails_closed() {
+    let mut fixture = Fixture::new(
         "lock-substitution",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -110,8 +96,12 @@ fn host_lock_symlink_and_target_symlink_substitution_fail_closed() {
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
+    fixture.teardown_after_assertions();
+}
 
-    let target_fixture = Fixture::new(
+#[test]
+fn target_symlink_substitution_refuses_before_discovery() {
+    let mut target_fixture = Fixture::new(
         "target-substitution",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -134,11 +124,12 @@ fn host_lock_symlink_and_target_symlink_substitution_fail_closed() {
     );
     assert_eq!(tree(&target_fixture.root), before_root);
     assert_eq!(tree(&target_fixture.home), before_home);
+    target_fixture.teardown_after_assertions();
 }
 
 #[test]
-fn catalog_digest_substitution_and_selected_source_race_withhold_success() {
-    let fixture = Fixture::new(
+fn catalog_digest_substitution_refuses_before_effect() {
+    let mut fixture = Fixture::new(
         "catalog-substitution",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -157,34 +148,12 @@ fn catalog_digest_substitution_and_selected_source_race_withhold_success() {
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
-
-    let node = NodeSpec {
-        id: "compile",
-        dependencies: &[],
-        primary: "bash",
-        fallback: None,
-        action: "pass",
-        delay_seconds: 2,
-        read_sources: &["src/lib.rs"],
-    };
-    let race = Fixture::new(
-        "selected-source-race",
-        &[node],
-        &[prefix_route("route-src", "src", &["compile"])],
-        true,
-        true,
-    );
-    let child = race.spawn();
-    wait_for_started(&race.authority_root());
-    race.mutate_selected_source(b"pub fn value() -> u8 { 99 }\n");
-    let output = child.wait_with_output().unwrap();
-    assert_diagnostic(&output, "successor_runtime_stale_context", &race);
-    assert!(!race.cache_path().exists());
+    fixture.teardown_after_assertions();
 }
 
 #[test]
 fn help_parse_and_read_paths_never_open_routine_host_state() {
-    let fixture = Fixture::new(
+    let mut fixture = Fixture::new(
         "read-zero-write",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
@@ -210,6 +179,7 @@ fn help_parse_and_read_paths_never_open_routine_host_state() {
         assert_eq!(fixture.status(), before_status, "args={args:?}");
         assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
     }
+    fixture.teardown_after_assertions();
 }
 
 fn assert_diagnostic(output: &std::process::Output, id: &str, fixture: &Fixture) {

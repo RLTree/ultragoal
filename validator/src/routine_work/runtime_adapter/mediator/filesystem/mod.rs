@@ -11,8 +11,6 @@ use std::sync::{Mutex, OnceLock};
 #[cfg(unix)]
 use std::os::fd::{AsRawFd, FromRawFd, RawFd};
 #[cfg(unix)]
-use std::os::unix::ffi::OsStrExt;
-#[cfg(unix)]
 use std::os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt};
 
 use crate::routine_work::{RepoPath, RoutineError, RoutineErrorId};
@@ -20,10 +18,15 @@ use crate::routine_work::{RepoPath, RoutineError, RoutineErrorId};
 use super::super::execution_authority::{RoutineReadAncestor, RoutineReadSource};
 use super::outcome::OutputFileRecord;
 
+#[cfg(test)]
+#[path = "confinement_transitions.rs"]
+mod confinement_transitions;
 #[path = "directory_read_failure.rs"]
 mod directory_read_failure;
 #[path = "executable_identity.rs"]
 mod executable_identity;
+#[path = "framed_read_input.rs"]
+mod framed_read_input;
 #[path = "mediation_failure.rs"]
 mod mediation_failure;
 #[path = "output_file_limit.rs"]
@@ -39,8 +42,9 @@ mod read_source_opening;
 #[path = "source_revalidation.rs"]
 mod source_revalidation;
 
+#[cfg(test)]
+pub(crate) use confinement_transitions::*;
 pub(crate) use directory_read_failure::*;
-pub(crate) use executable_identity::*;
 pub(crate) use mediation_failure::*;
 pub(crate) use output_file_limit::*;
 pub(crate) use output_tree_capture::*;

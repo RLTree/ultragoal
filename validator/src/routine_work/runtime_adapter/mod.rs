@@ -18,31 +18,33 @@ use crate::context::{EffectClass, LiveContext, ToolCapability};
 
 use super::digest::{digest_of, framed, valid};
 use super::{
-    DependencyResult, DirtySnapshot, ImpactGraph, PlanMode, PlannedCheck, RepoPath,
-    ReportDisposition, ReportRecord, ReportStatus, ReuseExpectation, RoutineBinding, RoutineError,
-    RoutineErrorId, RoutinePlan, RoutineReport, RunOutcome, reconcile_report,
+    DirtySnapshot, ImpactGraph, PlanMode, PlannedCheck, RepoPath, ReportStatus, RoutineBinding,
+    RoutineError, RoutineErrorId, RoutinePlan,
 };
 
 use execution_authority::RoutineReadSource;
 pub(crate) use execution_authority::{
-    PreparedRoutineExecution, RoutineAdapterSpec, RoutineEffectIntent, RoutineEffectRequest,
-    RoutineInvocationSpec, RoutineMediatedExpectation, RoutineMediatedIntent,
-    RoutineMediatedOutcome, RoutineMediatedWitness, RoutineMediationAuthority,
-    RoutineMediationBatch, RoutineNoOpProjection,
+    EffectRequestData, PreparedRoutineExecution, RoutineAdapterSpec, RoutineEffectIntent,
+    RoutineEffectRequest, RoutineInvocationSpec, RoutineMediationAuthority, RoutineMediationBatch,
+    RoutineNoOpProjection,
 };
+pub(in crate::routine_work) use mediator::ObservedProcessCustody;
 pub(crate) use mediator::{
-    RoutineCancellation, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutineNodeMediation, RoutineReuseInput, RoutineRootGrant, mediate_prepared_routine_execution,
+    PRODUCTION_SUPPORT_LIMIT, RoutineCancellation, RoutineMediationResult, RoutineMediatorStatus,
+    RoutineNodeDisposition, RoutineReuseInput,
 };
 #[cfg(test)]
 pub(crate) use mediator::{
-    TestProcessSetupFailure, set_test_mediator_finish_failure, set_test_mediator_post_spawn_hook,
-    set_test_mediator_pre_spawn_hook, set_test_output_capture_hook, set_test_process_setup_failure,
-    set_test_read_source_capture_hook, test_spawn_count,
+    set_test_output_capture_hook, set_test_read_source_capture_hook, test_last_spawn_group_absent,
+    validate_output_confinement_after, validate_read_confinement_after_bind,
 };
+pub(crate) use production::mediate_public_routine_execution;
+pub(in crate::routine_work) use production::{LaunchCleanupEvidence, ObservedLaunchCleanup};
+#[cfg(all(test, target_vendor = "apple"))]
 pub(crate) use production::{
-    ProductionRoutineIssuer, RoutineRecoveryAuthority,
-    mediate_prepared_routine_execution_production,
+    set_test_launch_cleanup_refusal, set_test_launch_panic_after_stat,
+    set_test_launch_stat_failure_after, set_test_publication_ambiguity_after,
+    set_test_publication_refusal_after,
 };
 
 #[path = "execution_preparation.rs"]

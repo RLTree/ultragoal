@@ -1,4 +1,3 @@
-use serde::{Deserialize, Serialize};
 use std::path::Path;
 
 #[cfg(target_vendor = "apple")]

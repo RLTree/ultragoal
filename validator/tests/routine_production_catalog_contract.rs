@@ -1,3 +1,13 @@
+pub mod context {
+    pub use ultragoal::context::*;
+}
+
+#[path = "../src/cli/capture/mod.rs"]
+pub mod capture;
+
+#[path = "../src/routine_work/mod.rs"]
+pub mod routine_work;
+
 #[path = "../src/routine_work/catalog/mod.rs"]
 mod catalog;
 
@@ -6,28 +16,22 @@ use catalog::{
     RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation, load_production_catalog,
 };
 use sha2::{Digest, Sha256};
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 use std::ffi::CString;
 use std::fs;
-use std::path::{Path, PathBuf};
-use std::process::Command;
-use std::sync::atomic::{AtomicU64, Ordering};
-use ultragoal::orchestration::{
-    Actor, ArtifactWorkspace, Binding, CanonicalPath, EffectClass, EffectGrant, LeaseSpec,
-    OwnedScope, PrerequisiteEvidence, Principal, SafetyClass, ScopePolicy, WorkPackage,
-    WorkerResultV1,
-};
-
 #[cfg(unix)]
 use std::os::unix::ffi::OsStringExt;
 #[cfg(unix)]
-use std::os::unix::fs::{MetadataExt, PermissionsExt};
+use std::os::unix::fs::MetadataExt;
+use std::path::{Path, PathBuf};
+use std::process::Command;
+use std::sync::atomic::{AtomicU64, Ordering};
 
-#[path = "routine_production_catalog_cases/artifact_set_contract.rs"]
-mod artifact_set_contract;
+#[path = "routine_production_catalog_cases/catalog_binding.rs"]
+mod catalog_binding;
 #[path = "routine_production_catalog_cases/catalog_definition_rejection.rs"]
 mod catalog_definition_rejection;
-#[path = "routine_production_catalog_cases/catalog_fixture.rs"]
+#[path = "routine_production_catalog_cases/catalog_fixture/mod.rs"]
 mod catalog_fixture;
 #[path = "routine_production_catalog_cases/repository_fixture.rs"]
 mod repository_fixture;
@@ -38,10 +42,6 @@ mod transitive_input_rejection;
 #[path = "routine_production_catalog_cases/unsafe_invocation_rejection.rs"]
 mod unsafe_invocation_rejection;
 
-pub(crate) use artifact_set_contract::*;
-pub(crate) use catalog_definition_rejection::*;
-pub(crate) use catalog_fixture::*;
+pub(crate) use catalog_binding::*;
+pub(crate) use catalog_fixture::VALID_CATALOG;
 pub(crate) use repository_fixture::*;
-pub(crate) use source_path_rejection::*;
-pub(crate) use transitive_input_rejection::*;
-pub(crate) use unsafe_invocation_rejection::*;

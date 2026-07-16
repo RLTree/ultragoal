@@ -1,9 +1,7 @@
-use super::{CacheBinding, HostFailure};
-use serde::{Deserialize, Serialize};
-use sha2::{Digest, Sha256};
+use super::HostFailure;
 use std::ffi::CString;
 use std::fs::{self, File};
-use std::io::{Read, Seek, SeekFrom, Write};
+use std::io::{Read, Seek, SeekFrom};
 use std::mem::MaybeUninit;
 use std::os::fd::{AsRawFd, FromRawFd};
 use std::os::unix::ffi::OsStrExt;

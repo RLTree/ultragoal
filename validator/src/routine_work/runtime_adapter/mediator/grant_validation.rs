@@ -1,83 +1,29 @@
+use super::super::{
+    RUST_SOURCE_SYNTAX_ARGUMENTS, RUST_SOURCE_SYNTAX_BEHAVIOR, default_environment, exact_runner,
+};
 use super::*;
-
-pub(crate) fn validate_grant(
-    context: &LiveContext,
-    plan: &RoutinePlan,
-    request: &RoutineEffectRequest,
-    grant: &RoutineRootGrant,
-) -> Result<(), RoutineError> {
-    let mut expected_scopes = request
-        .intents
-        .iter()
-        .flat_map(|intent| intent.declared_output_scopes().iter().cloned())
-        .collect::<Vec<_>>();
-    expected_scopes.sort_by(|left, right| left.as_str().cmp(right.as_str()));
-    expected_scopes.dedup();
-    if grant.grant_id != grant_identity(grant)?
-        || grant.seal != grant_seal(grant)?
-        || grant.session_id.is_empty()
-        || grant.session_id.len() > 128
-        || grant.request_id != request.request_id
-        || grant.protocol_id != request.protocol_id
-        || grant.context_id != context.context_id()
-        || grant.context_id != request.binding.context_id()
-        || grant.candidate_id != request.binding.candidate_id()
-        || grant.plan_id != plan.plan_id()
-        || grant.plan_id != request.plan_id
-        || grant.snapshot_id != request.snapshot_id
-        || grant.allowed_output_scopes != expected_scopes
-    {
-        return Err(mediator_error("mediator-root-grant-binding-invalid"));
-    }
-    Ok(())
-}
-
-pub(crate) fn reserve_grant(grant: &RoutineRootGrant) -> Result<AttemptReservation, RoutineError> {
-    if let Some(durable) = &grant.durable {
-        durable.validate_reserved()?;
-    }
-    let mut state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    if state.consumed_grants.contains(&grant.grant_id) {
-        return Err(mediator_error("mediator-root-grant-replayed"));
-    }
-    if state.active_protocols.contains_key(&grant.protocol_id) {
-        return Err(mediator_error("mediator-protocol-attempt-active"));
-    }
-    match (
-        state.ambiguous_protocols.get(&grant.protocol_id),
-        grant.recovery_for.as_ref(),
-    ) {
-        (Some(expected), Some(actual)) if expected == actual => {}
-        (Some(_), _) => return Err(mediator_error("mediator-recovery-authority-required")),
-        (None, Some(_))
-            if grant
-                .durable
-                .as_ref()
-                .is_some_and(|durable| durable.recovery_is_durable()) => {}
-        (None, Some(_)) => return Err(mediator_error("mediator-recovery-marker-stale")),
-        (None, None) => {}
-    }
-    state.consumed_grants.insert(grant.grant_id.clone());
-    state
-        .active_protocols
-        .insert(grant.protocol_id.clone(), grant.grant_id.clone());
-    Ok(AttemptReservation {
-        protocol_id: grant.protocol_id.clone(),
-        grant_id: grant.grant_id.clone(),
-        recovery_marker: recovery_identity(&grant.grant_id, &grant.protocol_id, &grant.request_id),
-        prior_recovery_marker: grant.recovery_for.clone(),
-        started: Cell::new(false),
-        settled: Cell::new(false),
-        durable: grant.durable.clone(),
-    })
-}
 
 pub(crate) fn preflight_request(
     context: &LiveContext,
     plan: &RoutinePlan,
     request: &RoutineEffectRequest,
+) -> Result<(), RoutineError> {
+    preflight_request_inner(context, plan, request, true)
+}
+
+pub(crate) fn preflight_request_without_outputs(
+    context: &LiveContext,
+    plan: &RoutinePlan,
+    request: &RoutineEffectRequest,
+) -> Result<(), RoutineError> {
+    preflight_request_inner(context, plan, request, false)
+}
+
+fn preflight_request_inner(
+    context: &LiveContext,
+    plan: &RoutinePlan,
+    request: &RoutineEffectRequest,
+    require_outputs: bool,
 ) -> Result<(), RoutineError> {
     context
         .revalidate()
@@ -104,15 +50,21 @@ pub(crate) fn preflight_request(
             intent.program_byte_length(),
             intent.program_unix_mode(),
         )?;
-        let outputs = OutputConfinement::prepare(
-            &root,
-            intent.declared_output_scopes(),
-            intent.output_budget_bytes(),
-        )?;
+        let outputs = require_outputs
+            .then(|| {
+                OutputConfinement::prepare(
+                    &root,
+                    intent.declared_output_scopes(),
+                    intent.output_budget_bytes(),
+                )
+            })
+            .transpose()?;
         let reads = ReadConfinement::open_bound(&root, intent.read_sources())?;
         program.validate()?;
         reads.validate(&root)?;
-        outputs.validate()?;
+        if let Some(outputs) = outputs {
+            outputs.validate()?;
+        }
         root.validate()?;
     }
     validate_snapshot(context, &request.snapshot_id)?;
@@ -143,7 +95,16 @@ pub(crate) fn validate_intent(
         .tool(check.selected_tool())
         .filter(|tool| tool.available)
         .ok_or_else(|| mediator_error("mediator-runner-unavailable"))?;
-    if intent.selected_tool() != check.selected_tool()
+    let expected_environment = default_environment(&exact_runner(context, check)?)?;
+    let expected_argv = std::iter::once("ultragoal")
+        .chain(RUST_SOURCE_SYNTAX_ARGUMENTS)
+        .collect::<Vec<_>>();
+    if intent.behavior_id() != RUST_SOURCE_SYNTAX_BEHAVIOR
+        || intent.selected_tool() != "ultragoal"
+        || intent.argv() != expected_argv
+        || intent.environment() != &expected_environment
+        || intent.read_sources().is_empty()
+        || intent.selected_tool() != check.selected_tool()
         || intent.tool_identity_sha256() != check.selected_tool_identity()
         || digest_of(tool)? != intent.tool_identity_sha256()
         || intent.input_id() != check.input_id()
@@ -172,39 +133,7 @@ pub(crate) fn validate_intent(
 }
 
 pub(crate) fn execution_environment(
-    token: &RoutineMediatedIntent,
+    _token: &RoutineMediatedIntent,
 ) -> Result<BTreeMap<String, String>, RoutineError> {
-    let mut environment = token.intent().environment().clone();
-    for (key, value) in [
-        ("HUL_ROUTINE_REQUEST_ID", token.request_id()),
-        ("HUL_ROUTINE_PROTOCOL_ID", token.protocol_id()),
-        ("HUL_ROUTINE_INTENT_ID", token.intent().intent_id()),
-        ("HUL_ROUTINE_NODE_ID", token.intent().node_id()),
-    ] {
-        if environment
-            .insert(key.to_owned(), value.to_owned())
-            .is_some()
-        {
-            return Err(mediator_error("mediator-environment-reserved-name"));
-        }
-    }
-    Ok(environment)
-}
-
-pub(crate) fn parse_command_report(
-    bytes: &[u8],
-    token: &RoutineMediatedIntent,
-) -> Result<CommandReport, RoutineError> {
-    let report: CommandReport = serde_json::from_slice(bytes)
-        .map_err(|_| mediator_error("mediator-command-report-invalid"))?;
-    if canonical(&report)? != bytes
-        || report.schema_version != "RoutineCommandReport-v1"
-        || report.request_id != token.request_id()
-        || report.protocol_id != token.protocol_id()
-        || report.intent_id != token.intent().intent_id()
-        || report.node_id != token.intent().node_id()
-    {
-        return Err(mediator_error("mediator-command-report-binding-invalid"));
-    }
-    Ok(report)
+    Ok(_token.intent().environment().clone())
 }

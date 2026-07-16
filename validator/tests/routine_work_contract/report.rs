@@ -15,6 +15,3 @@ use std::collections::BTreeMap;
 mod dependency_artifact_consistency;
 #[path = "report_cases/mixed_witness_completion.rs"]
 mod mixed_witness_completion;
-
-pub(crate) use dependency_artifact_consistency::*;
-pub(crate) use mixed_witness_completion::*;

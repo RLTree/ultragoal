@@ -1,4 +1,9 @@
 use super::*;
+use crate::routine_work::{CHILD_MODE_ENV, CHILD_MODE_VALUE};
+
+pub(crate) fn validate_immutable_routine_program(path: &Path) -> Result<(), RoutineError> {
+    mediator::validate_routine_program_path(path)
+}
 
 pub(crate) fn runner_identity(
     tool: &ToolCapability,
@@ -36,7 +41,13 @@ pub(crate) fn validate_bound_invocation(
     runner: &RunnerIdentity,
     check: &PlannedCheck,
 ) -> Result<(), RoutineError> {
-    if invocation.node_id != check.node_id()
+    let expected_environment = default_environment(runner)?;
+    if invocation.behavior_id != RUST_SOURCE_SYNTAX_BEHAVIOR
+        || invocation.tool_name != "ultragoal"
+        || invocation.arguments != RUST_SOURCE_SYNTAX_ARGUMENTS
+        || invocation.environment != expected_environment
+        || invocation.read_sources.is_empty()
+        || invocation.node_id != check.node_id()
         || invocation.tool_name != runner.tool_name
         || invocation.tool_identity_sha256 != runner.tool_identity_sha256
         || invocation.program_path_hex != runner.program_path_hex
@@ -63,6 +74,13 @@ pub(crate) fn validate_and_normalize_bound_invocation(
         invocation.output_budget_bytes,
         &invocation.declared_output_scopes,
     )?;
+    if invocation.behavior_id != RUST_SOURCE_SYNTAX_BEHAVIOR
+        || invocation.tool_name != "ultragoal"
+        || invocation.arguments != RUST_SOURCE_SYNTAX_ARGUMENTS
+        || invocation.read_sources.is_empty()
+    {
+        return Err(adapter_error("adapter-closed-behavior-binding-invalid"));
+    }
     Ok(invocation)
 }
 
@@ -100,7 +118,11 @@ pub(crate) fn validate_execution_policy(
 pub(crate) fn default_environment(
     runner: &RunnerIdentity,
 ) -> Result<BTreeMap<String, String>, RoutineError> {
-    let parent = Path::new(&runner.program_path)
+    fixed_environment(Path::new(&runner.program_path))
+}
+
+pub(crate) fn fixed_environment(program: &Path) -> Result<BTreeMap<String, String>, RoutineError> {
+    let parent = program
         .parent()
         .and_then(Path::to_str)
         .ok_or_else(|| adapter_error("adapter-runner-program-parent-invalid"))?;
@@ -108,6 +130,7 @@ pub(crate) fn default_environment(
         ("LANG".to_owned(), "C".to_owned()),
         ("LC_ALL".to_owned(), "C".to_owned()),
         ("PATH".to_owned(), parent.to_owned()),
+        (CHILD_MODE_ENV.to_owned(), CHILD_MODE_VALUE.to_owned()),
     ]))
 }
 
@@ -123,7 +146,8 @@ pub(crate) fn validate_environment(
         || environment.iter().any(|(key, value)| {
             key.is_empty()
                 || key.len() > 128
-                || key.starts_with("HUL_ROUTINE_")
+                || (key.starts_with("HUL_ROUTINE_")
+                    && (key != CHILD_MODE_ENV || value != CHILD_MODE_VALUE))
                 || !key
                     .bytes()
                     .all(|byte| byte.is_ascii_uppercase() || byte.is_ascii_digit() || byte == b'_')

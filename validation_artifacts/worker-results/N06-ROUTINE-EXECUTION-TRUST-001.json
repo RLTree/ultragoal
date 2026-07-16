@@ -1,0 +1,1890 @@
+{
+  "worker": "/root",
+  "lease_id": "N06-ROUTINE-EXECUTION-TRUST-001",
+  "context_id": "sha256:ac690404eb0feb9fa05a4b94438fe04484b8b60e92f2f72feca809ffdd295fdf",
+  "candidate_identity": {
+    "candidate_id": "n06-routine-execution-trust",
+    "context_id": "sha256:ac690404eb0feb9fa05a4b94438fe04484b8b60e92f2f72feca809ffdd295fdf",
+    "thread_id": "019f5f39-507b-78a2-a96a-0b566a5a2126",
+    "worktree": "/Users/terrynoblin/.codex/worktrees/db3d/harness-ultragoal-plugin-proposal",
+    "branch": "codex/n06-routine-execution-trust",
+    "accepted_source_base": "437bcefe3e5c050e2ea41c09b843d9756b2241b1",
+    "accepted_source_base_tree": "d94e56035a43ddfda0bd67490f78090c8918260a",
+    "historical_original_base": "20a11eb981c5db2d2136a555632be9c4e5ab7752",
+    "source_parent": "074eff12c116ebb1b2360df19ce02c8eab7d0703",
+    "source_head": "a646eace68431b9bae5dc6473762124593450d5f",
+    "source_tree": "97d7d658fcfe4609cd952ec9fe7a171745252d34",
+    "source_commit_list": [
+      "2069c320106296d5afaf69ae610685feddde6206",
+      "9c55e4935d87d988cb8331c28af6fcbe5c34e917",
+      "4ad36702db2ec23fe7cc8b788137d7a053562d33",
+      "6747143698e172990e9469045e702ca05fc5697c",
+      "09554b100a737e41393c000fbef17b7e11a54383",
+      "f8167e5b743ca90d5d88c3a07cd835d99b70eb0f",
+      "162a027f1b9ccd1a78672af8a50f8b4555581ea4",
+      "f2cd0416d05f5d81edd6c06a74f140515baf2b70",
+      "c661248d082039d170dd577d26168da43597f7b9",
+      "74baf8ee3924640a9826e54940e0522aa2b6a577",
+      "deaee9db9348436b42887b177399a26f29d08e4e",
+      "0d759ff94cab542f335dcd0afc316b39e184b09f",
+      "d812adda1a6dd7b032e179eb59b027d563871375",
+      "be0c2c5448cea1d328c67e24a79a305ed72b7859",
+      "2165a0be3d79b8d59a1cc57d8434b14e93817361",
+      "28d0708507fe58b58383d263fb78cf6c1d36d45d",
+      "48db77d5b18b61d12e389b94ea5f2e669ef50d29",
+      "bb76b669bde834e088b2c7d3a4b8122743b783f4",
+      "a65b0cc2719ef8924bfe3a2a199ca584488d037d",
+      "77738914608a76f29eb3c3e8e0f189811a2c71f5",
+      "ec5b570f9dffd1aee19a943eca46967f32ee4570",
+      "f275ea9ab8a0c0dc6075eac3fa695f638a321306",
+      "683f251f6b7ebdda32d0de2aca332aee87caecd6",
+      "4556dfa3bd71b1a426e2f87adcee68936be73588",
+      "b50681bcebd3f6ac9ed6eeb146f6f0d50664fbd0",
+      "18085f9bd38f7fd2149922ebe1661c7a5929f975",
+      "5dcae83c54ebb1cc6b1bf03701fa1f65fb103c78",
+      "d90442bc7b41fede8fb61f07bb001b7f80d40782",
+      "bbd80ce17228359aa99359346ed148bfa3dcaf04",
+      "3202f796ed04a13d46de3ca96b060084bf36008b",
+      "e39b752bd5551b74e4996fae3a137fba30ecbaf0",
+      "5377821a6b1b1170807499dbb50cfaadbe70d94b",
+      "e19064be0b2c81024e0ee347f56e7cda0022f1b7",
+      "6d933a3d00a037f6fca19442e51a5ca6cfa8b909",
+      "c374049af6ca967ae36881fad39dd39c811e881b",
+      "3ed729692c926ffc3c8d5bed1172634df223d047",
+      "d186c8808e40026fbd32ee7deffcf1a51284b137",
+      "c559ab7d474f6611dcdc7950adc2417ea2f4805d",
+      "ffde08c34a1e6b711f6ac6fa60c083651361aa89",
+      "fd5d71ed6e1ace1b7ba4a9c8d79bc3aa13eb7bfd",
+      "aaf4e13dfdd16fe0955ed52b65f397c4c2fb1d50",
+      "1b1f6969858d7659bdf9c2ce0575b960bd11cf1d",
+      "898d61c1dda5f80940fa0798d6e89c3d80e0e0e7",
+      "a53e44af8fcb0329648a5f2b2edbff9c8c90051c",
+      "3dad11eb68e76c6e3391e98cf21113f62c0559a5",
+      "2b7addee21e207b0c3dd9bc6f377fb7adf4225e6",
+      "713fa3e053e36e4d25a1ef883c8d8d83f237db08",
+      "42da07727fe48ac01056b098fb547ab24eb303a3",
+      "3e1f0e4f80110acade401295f55d5efbf5c9e0fc",
+      "68cadc6ff1cc4300076aa6dc7bff103cf6cc06dc",
+      "604f716ffdc5f66bf42403a1110bc8c5fc466f8b",
+      "5681488c83b61db6c681435f8f53806e5f4a39e5",
+      "b797d3559eaacec80486cfa9b5b2d7b3f318a6fc",
+      "9f5398505f28edabe249e8eb5b6889a544bc1750",
+      "fb4644ff8d425b42842336e99956dc1fbc05bd57",
+      "1c5eb3dd88c107bcbaae91b9ef12cf05ac04192f",
+      "19d224e109264bfb17782d8b001d584b76a31aff",
+      "3219b09b9d63e79a627f51cd6fc0df4dafb7de6c",
+      "81afccbb639d90684d08428fb1d2bf1aa075d037",
+      "fa43a310676a6b8490c776f71de44e978cc8df2c",
+      "6cf70217a878771bd5bc3e7fd2319df71789a218",
+      "c31237c764947f17facc3e79ca118621f59c39e2",
+      "31b2a7ef9a6fe723076dd35e8f5d5305b29fbe96",
+      "abb76e7d9e553ca8832ca075ac1d6f681c8a15b7",
+      "5609d4de89be2337057b6c8089686261015f04db",
+      "5bdd8d0c4135f60b447879d2f1089465280f8071",
+      "322c8ab5388331513f06d57db95cf7b3b310280e",
+      "9d312dabe500c43f13fde23494adf8f05c54c690",
+      "8671e7ad7acd442e219a278a7ecdd6d195aaf57f",
+      "d813fc73e2182ce97e0122b245436078c8a68717",
+      "f6da324d4263488aa6778100fa5650ffd0263d75",
+      "edc0cbc0e2db68cc1957655ebbffb28a5ae552b7",
+      "49f256d41bc9288b1bb24dda1c8fda32a10eb8ad",
+      "8f36af3c3da8915e68de41ac2e107b506cb237fd",
+      "e46812767d6995dea993b3258051e80bf9bfef62",
+      "2ef86331a42deb91a6f4ac41462295954c6c94d2",
+      "3a48eeabb0112c696b589cc35dff87ff86c9d680",
+      "c6a7acdcecac3d108eda7f24081b82d7fcabaeeb",
+      "71d60b6f1452af5f3b15d629414fc893f0c2e07e",
+      "cf84b182d70d0ab2e46e74a81251ce390e902937",
+      "71acbbef440093b46c707fa3cf0dbcf158ab792d",
+      "d0e69eb128083a4ef5bfdd8bbdd18f89a8d1f128",
+      "e784f0366d2cd0bf5bb3fd120a1cbf66584e5c40",
+      "fcc2f45b981d78faa9b48bd9357036bdbb6c71ff",
+      "9cda2f1fc627fe808fd310269b886281273810fc",
+      "3b3ba891e97be14448fd73119ebbb8a9a250a7b0",
+      "074eff12c116ebb1b2360df19ce02c8eab7d0703",
+      "a646eace68431b9bae5dc6473762124593450d5f"
+    ],
+    "source_review": "independently_accepted",
+    "evidence_head_self_excluded": true,
+    "worker_result_self_excluded": true,
+    "artifact_count": 244,
+    "artifact_total_bytes": 1012710,
+    "artifact_inventory_sha256": "sha256:30b3a0a7f239121b873a32837d55b9fa3d8d7e0e0fd490749e03daf3a2230375",
+    "artifact_inventory_convention": "sorted path NUL sha256 NUL byte_length newline; WorkerResult excluded",
+    "touched_path_count": 295,
+    "touched_path_inventory_sha256": "sha256:5eda8b4acce86239cd2a88cc58663a48dfb77423a9c3a1a6c1783f1578f79be9",
+    "deleted_path_count": 50,
+    "deleted_paths": [
+      "validator/src/routine_work/catalog/directory_sealing.rs",
+      "validator/src/routine_work/runtime_adapter/mediator/reuse_input_index.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/authority_record.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/file_authority.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/mod.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/supported/file_ledger_open_or_initialize.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/supported/file_ledger_reserve.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/supported/file_ledger_settle.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/supported/file_ledger_test_seed_capacity.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/supported/initial_state.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/supported/ledger_effect_adapter.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/supported/mod.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/supported/record_authentication.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/supported/record_identity.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/supported/store_open.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/supported/store_stat_name.rs",
+      "validator/src/routine_work/runtime_adapter/production/ledger/tests.rs",
+      "validator/src/routine_work/runtime_adapter/production/production_issuance.rs",
+      "validator/src/routine_work/runtime_adapter/production/recovery_authority.rs",
+      "validator/tests/routine_production_authority_cases/authority_fixture.rs",
+      "validator/tests/routine_production_authority_cases/authority_redaction.rs",
+      "validator/tests/routine_production_authority_cases/authority_scenario.rs",
+      "validator/tests/routine_production_authority_cases/concurrent_reuse_settlement.rs",
+      "validator/tests/routine_production_authority_cases/effect_capacity_bounds.rs",
+      "validator/tests/routine_production_authority_cases/invalid_reuse_recovery.rs",
+      "validator/tests/routine_production_authority_cases/terminal_failure_settlement.rs",
+      "validator/tests/routine_production_catalog_cases/artifact_set_contract.rs",
+      "validator/tests/routine_production_catalog_cases/catalog_fixture.rs",
+      "validator/tests/routine_work_contract/runtime_adapter.rs",
+      "validator/tests/routine_work_contract/runtime_adapter_cases/adapter_scenario.rs",
+      "validator/tests/routine_work_contract/runtime_adapter_cases/clean_noop.rs",
+      "validator/tests/routine_work_contract/runtime_adapter_cases/cross_request_rejection.rs",
+      "validator/tests/routine_work_contract/runtime_adapter_cases/invocation_binding_refusals.rs",
+      "validator/tests/routine_work_contract/runtime_adapter_cases/loader_environment_rejection.rs",
+      "validator/tests/routine_work_contract/runtime_adapter_cases/outcome_set_rejection.rs",
+      "validator/tests/routine_work_contract/runtime_mediator.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/cancellation_reaping.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/containment_adversary.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/context_mutation_recovery.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/executable_substitution_rejection.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/fork_bypass_reaping.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/invocation_fixture.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/mapping_adversary.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/mediator_scenario.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/read_source_refusals.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/reuse_integrity.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/script_replacement_rejection.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/setup_failure_recovery.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/system_shell_eligibility.rs",
+      "validator/tests/routine_work_contract/runtime_mediator_cases/unsafe_output_rejection.rs"
+    ]
+  },
+  "base_state": {
+    "status": "accepted_source_base_verified",
+    "base_commit": "437bcefe3e5c050e2ea41c09b843d9756b2241b1",
+    "base_tree": "d94e56035a43ddfda0bd67490f78090c8918260a",
+    "branch": "codex/n06-routine-execution-trust",
+    "parent_rebase_performed_for_receipt": false
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "source_head": "a646eace68431b9bae5dc6473762124593450d5f",
+    "source_tree": "97d7d658fcfe4609cd952ec9fe7a171745252d34",
+    "reason": "Independent review accepted the exact source candidate. This receipt records source-local evidence only; integration and every installed/runtime/product/release claim remain withheld."
+  },
+  "touched_paths": [
+    "fixtures/routine-production-catalog/cases.json",
+    "fixtures/routine-production-catalog/valid-catalog-v2.json",
+    "fixtures/routine-public-production/cases.json",
+    "validation_artifacts/worker-results/N06-ROUTINE-EXECUTION-TRUST-001.json",
+    "validator/src/cli/successor_public/routine/behavior_child.rs",
+    "validator/src/cli/successor_public/routine/host/host_failure.rs",
+    "validator/src/cli/successor_public/routine/host/mod.rs",
+    "validator/src/cli/successor_public/routine/host/supported/anchored_directory.rs",
+    "validator/src/cli/successor_public/routine/host/supported/host_state.rs",
+    "validator/src/cli/successor_public/routine/host/supported/mod.rs",
+    "validator/src/cli/successor_public/routine/host/supported/state_components.rs",
+    "validator/src/cli/successor_public/routine/host/supported/validate_name.rs",
+    "validator/src/cli/successor_public/routine/invocation_binding.rs",
+    "validator/src/cli/successor_public/routine/manifest/loaded_manifest.rs",
+    "validator/src/cli/successor_public/routine/manifest/manifest_path.rs",
+    "validator/src/cli/successor_public/routine/mod.rs",
+    "validator/src/cli/successor_public/routine/outcome/failure.rs",
+    "validator/src/cli/successor_public/routine/outcome/rerun.rs",
+    "validator/src/cli/successor_public/routine/source_configuration.rs",
+    "validator/src/cli/successor_public/routine/source_context.rs",
+    "validator/src/cli/successor_public/routine/source_selection.rs",
+    "validator/src/routine_work/behavior/child_capability.rs",
+    "validator/src/routine_work/behavior/mod.rs",
+    "validator/src/routine_work/behavior/rust_source_frame.rs",
+    "validator/src/routine_work/behavior/rust_source_syntax.rs",
+    "validator/src/routine_work/behavior/sandbox_activation.rs",
+    "validator/src/routine_work/catalog/catalog_contract.rs",
+    "validator/src/routine_work/catalog/catalog_path_normalization.rs",
+    "validator/src/routine_work/catalog/catalog_validation.rs",
+    "validator/src/routine_work/catalog/directory_sealing.rs",
+    "validator/src/routine_work/catalog/file_sealing.rs",
+    "validator/src/routine_work/catalog/invocation_binding.rs",
+    "validator/src/routine_work/catalog/invocation_identity.rs",
+    "validator/src/routine_work/catalog/mod.rs",
+    "validator/src/routine_work/catalog/node_selection.rs",
+    "validator/src/routine_work/catalog/production_catalog.rs",
+    "validator/src/routine_work/catalog/program_path_validation.rs",
+    "validator/src/routine_work/catalog/runner_identity.rs",
+    "validator/src/routine_work/catalog/selection_order.rs",
+    "validator/src/routine_work/catalog/source_ancestor_capture.rs",
+    "validator/src/routine_work/error.rs",
+    "validator/src/routine_work/error/failure_evidence.rs",
+    "validator/src/routine_work/mod.rs",
+    "validator/src/routine_work/runtime_adapter/execution_authority/effect_intent.rs",
+    "validator/src/routine_work/runtime_adapter/execution_authority/effect_request.rs",
+    "validator/src/routine_work/runtime_adapter/execution_authority/mediated_intent.rs",
+    "validator/src/routine_work/runtime_adapter/execution_authority/mediation_identity.rs",
+    "validator/src/routine_work/runtime_adapter/execution_authority/mod.rs",
+    "validator/src/routine_work/runtime_adapter/execution_authority/no_op_projection.rs",
+    "validator/src/routine_work/runtime_adapter/execution_authority/read_authority.rs",
+    "validator/src/routine_work/runtime_adapter/execution_preparation.rs",
+    "validator/src/routine_work/runtime_adapter/execution_reconciliation.rs",
+    "validator/src/routine_work/runtime_adapter/invocation_binding.rs",
+    "validator/src/routine_work/runtime_adapter/mediation_issuance.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/effect_mediation.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/confinement_transitions.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/directory_read_failure.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/executable_identity.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/framed_read_input.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/mediation_failure.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/mod.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/output_file_limit.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection_tests.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/read_confinement.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/read_source_opening.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/filesystem/source_revalidation.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/grant_scope.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/grant_validation.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/incomplete_outcome.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/intent_mediation.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/mod.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/no_op_mediation.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/outcome/executed_intent.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/outcome/mod.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/outcome/routine_cancellation.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/outcome/routine_mediation_result.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/configuration.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/custody_settlement.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/custody_transition_tests.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/darwin_child_custody.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/darwin_suspended_launch.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/loaded_executable_identity.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/mod.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/object_bound_launch.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/observation_lifecycle.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/process_execution.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/process_group_observation.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/process_input_write.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/process_object_binding_tests.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/process_output_drain.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/process_termination_tests.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/revalidation_tests.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/process/spawn_test_observation.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/read_source_binding.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/reuse_artifact.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/reuse_input_index.rs",
+    "validator/src/routine_work/runtime_adapter/mediator/rust_source_observation.rs",
+    "validator/src/routine_work/runtime_adapter/mod.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/mod.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/observations.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/authority_record.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/file_authority.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/mod.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_failure.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_open_or_initialize.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_output.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_reserve.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_settle.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_transaction.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/initial_state.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/ledger_effect_adapter.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/mod.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/output_journal_validation.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/record_authentication.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/record_identity.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/state_publication.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/store_open.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/store/supported/store_stat_name.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/transaction.rs",
+    "validator/src/routine_work/runtime_adapter/production/custody/transaction/owner.rs",
+    "validator/src/routine_work/runtime_adapter/production/launch_custody/acquisition.rs",
+    "validator/src/routine_work/runtime_adapter/production/launch_custody/cleanup.rs",
+    "validator/src/routine_work/runtime_adapter/production/launch_custody/mod.rs",
+    "validator/src/routine_work/runtime_adapter/production/launch_custody/root.rs",
+    "validator/src/routine_work/runtime_adapter/production/launch_custody/snapshot.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/authority_record.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/file_authority.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/mod.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/supported/file_ledger_open_or_initialize.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/supported/file_ledger_reserve.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/supported/file_ledger_settle.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/supported/file_ledger_test_seed_capacity.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/supported/initial_state.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/supported/ledger_effect_adapter.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/supported/mod.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/supported/record_authentication.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/supported/record_identity.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/supported/store_open.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/supported/store_stat_name.rs",
+    "validator/src/routine_work/runtime_adapter/production/ledger/tests.rs",
+    "validator/src/routine_work/runtime_adapter/production/mod.rs",
+    "validator/src/routine_work/runtime_adapter/production/output_journal/apply.rs",
+    "validator/src/routine_work/runtime_adapter/production/output_journal/component_paths.rs",
+    "validator/src/routine_work/runtime_adapter/production/output_journal/creation.rs",
+    "validator/src/routine_work/runtime_adapter/production/output_journal/directory_entries.rs",
+    "validator/src/routine_work/runtime_adapter/production/output_journal/mod.rs",
+    "validator/src/routine_work/runtime_adapter/production/output_journal/observation.rs",
+    "validator/src/routine_work/runtime_adapter/production/output_journal/rollback.rs",
+    "validator/src/routine_work/runtime_adapter/production/production_issuance.rs",
+    "validator/src/routine_work/runtime_adapter/production/production_mediation.rs",
+    "validator/src/routine_work/runtime_adapter/production/recovery_authority.rs",
+    "validator/src/routine_work/runtime_adapter/production/reservation_failure.rs",
+    "validator/src/routine_work/runtime_adapter/production/reservation_failure/completion.rs",
+    "validator/src/routine_work/runtime_adapter/runner_binding.rs",
+    "validator/src/routine_work/runtime_adapter/selection_limit.rs",
+    "validator/tests/routine_behavior_protocol_cases/canonical_behavior.rs",
+    "validator/tests/routine_behavior_protocol_cases/mod.rs",
+    "validator/tests/routine_behavior_protocol_cases/refusal_matrix.rs",
+    "validator/tests/routine_behavior_protocol_contract.rs",
+    "validator/tests/routine_binding_contract.rs",
+    "validator/tests/routine_production_authority_cases/authority_fixture.rs",
+    "validator/tests/routine_production_authority_cases/authority_redaction.rs",
+    "validator/tests/routine_production_authority_cases/authority_scenario.rs",
+    "validator/tests/routine_production_authority_cases/concurrent_reuse_settlement.rs",
+    "validator/tests/routine_production_authority_cases/effect_capacity_bounds.rs",
+    "validator/tests/routine_production_authority_cases/invalid_reuse_recovery.rs",
+    "validator/tests/routine_production_authority_cases/terminal_failure_settlement.rs",
+    "validator/tests/routine_production_authority_contract.rs",
+    "validator/tests/routine_production_catalog_cases/artifact_set_contract.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_binding.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_definition_rejection.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture/claim.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture/cleanup_hook.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture/construction.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture/custody.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture/custody_types.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture/directory_entries.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture/invocation.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture/invocation_controls.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture/lifecycle.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture/mod.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture/quarantine.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture/rebind.rs",
+    "validator/tests/routine_production_catalog_cases/catalog_fixture/scope.rs",
+    "validator/tests/routine_production_catalog_cases/repository_fixture.rs",
+    "validator/tests/routine_production_catalog_cases/source_path_rejection.rs",
+    "validator/tests/routine_production_catalog_cases/transitive_input_rejection.rs",
+    "validator/tests/routine_production_catalog_cases/unsafe_invocation_rejection.rs",
+    "validator/tests/routine_production_catalog_contract.rs",
+    "validator/tests/routine_public_host_contract.rs",
+    "validator/tests/routine_public_production_contract.rs",
+    "validator/tests/routine_public_production_contract/child_authority.rs",
+    "validator/tests/routine_public_production_contract/child_authority_same_executable_parent.rs",
+    "validator/tests/routine_public_production_contract/child_refusal_process.rs",
+    "validator/tests/routine_public_production_contract/fixture_ownership_controls.rs",
+    "validator/tests/routine_public_production_contract/journeys.rs",
+    "validator/tests/routine_public_production_contract/output_provisioning.rs",
+    "validator/tests/routine_public_production_contract/production_scenario_cases/argument_fixture.rs",
+    "validator/tests/routine_public_production_contract/production_scenario_cases/contender_process/controls.rs",
+    "validator/tests/routine_public_production_contract/production_scenario_cases/contender_process/custody.rs",
+    "validator/tests/routine_public_production_contract/production_scenario_cases/contender_process/faults.rs",
+    "validator/tests/routine_public_production_contract/production_scenario_cases/contender_process/mod.rs",
+    "validator/tests/routine_public_production_contract/production_scenario_cases/contender_process/output.rs",
+    "validator/tests/routine_public_production_contract/production_scenario_cases/execution_fixture.rs",
+    "validator/tests/routine_public_production_contract/production_scenario_cases/scenario_fixture.rs",
+    "validator/tests/routine_public_production_contract/public_effect_refusal.rs",
+    "validator/tests/routine_public_production_contract/public_lock_contention.rs",
+    "validator/tests/routine_public_production_contract/public_lock_contention/controls.rs",
+    "validator/tests/routine_public_production_contract/public_lock_contention/invocation_capability.rs",
+    "validator/tests/routine_public_production_contract/public_lock_contention/invocation_capability/capability_pipe.rs",
+    "validator/tests/routine_public_production_contract/public_lock_contention/live_child.rs",
+    "validator/tests/routine_public_production_contract/public_lock_contention/selection_controls.rs",
+    "validator/tests/routine_public_production_contract/public_lock_contention/supervisor.rs",
+    "validator/tests/routine_public_production_contract/scenario.rs",
+    "validator/tests/routine_public_production_contract/security.rs",
+    "validator/tests/routine_recovery_reuse_journey_contract.rs",
+    "validator/tests/routine_recovery_reuse_journey_contract/journeys.rs",
+    "validator/tests/routine_recovery_reuse_journey_contract/routine_fixture_inventory.rs",
+    "validator/tests/routine_recovery_reuse_journey_contract/routine_fixture_invocation.rs",
+    "validator/tests/routine_recovery_reuse_journey_contract/routine_fixture_lifecycle.rs",
+    "validator/tests/routine_work_contract.rs",
+    "validator/tests/routine_work_contract/authority_ledger_controls.rs",
+    "validator/tests/routine_work_contract/catalog_scope_construction.rs",
+    "validator/tests/routine_work_contract/configured_path_alias.rs",
+    "validator/tests/routine_work_contract/filesystem_controls.rs",
+    "validator/tests/routine_work_contract/issuer_api_compilation.rs",
+    "validator/tests/routine_work_contract/issuer_api_visibility.rs",
+    "validator/tests/routine_work_contract/issuer_capture_races.rs",
+    "validator/tests/routine_work_contract/issuer_cleanup_races.rs",
+    "validator/tests/routine_work_contract/issuer_hidden_surface.rs",
+    "validator/tests/routine_work_contract/issuer_reconciliation_races.rs",
+    "validator/tests/routine_work_contract/issuer_rollback_races.rs",
+    "validator/tests/routine_work_contract/issuer_scratch_resilience.rs",
+    "validator/tests/routine_work_contract/launch_acquisition_controls.rs",
+    "validator/tests/routine_work_contract/local_capture.rs",
+    "validator/tests/routine_work_contract/local_issuer_binding_controls.rs",
+    "validator/tests/routine_work_contract/owned_compile_claim.rs",
+    "validator/tests/routine_work_contract/owned_compile_directory.rs",
+    "validator/tests/routine_work_contract/owned_compile_retention.rs",
+    "validator/tests/routine_work_contract/owned_compile_scratch.rs",
+    "validator/tests/routine_work_contract/planning.rs",
+    "validator/tests/routine_work_contract/probes/evidence_reconstruction_consumer.rs",
+    "validator/tests/routine_work_contract/probes/partial_snapshot_consumer.rs",
+    "validator/tests/routine_work_contract/probes/production_grant_consumer.rs",
+    "validator/tests/routine_work_contract/probes/production_grant_entrypoint_consumer.rs",
+    "validator/tests/routine_work_contract/probes/production_issuer_consumer.rs",
+    "validator/tests/routine_work_contract/probes/production_private_grant_consumer.rs",
+    "validator/tests/routine_work_contract/probes/production_private_module_consumer.rs",
+    "validator/tests/routine_work_contract/probes/read_only_snapshot_consumer.rs",
+    "validator/tests/routine_work_contract/probes/routine_public_api_control.rs",
+    "validator/tests/routine_work_contract/probes/snapshot_constructor_consumer.rs",
+    "validator/tests/routine_work_contract/probes/snapshot_deserialize_consumer.rs",
+    "validator/tests/routine_work_contract/provenance.rs",
+    "validator/tests/routine_work_contract/report.rs",
+    "validator/tests/routine_work_contract/report_cases/dependency_artifact_consistency.rs",
+    "validator/tests/routine_work_contract/report_cases/mixed_witness_completion.rs",
+    "validator/tests/routine_work_contract/reservation_authority_visibility.rs",
+    "validator/tests/routine_work_contract/reservation_publication_controls.rs",
+    "validator/tests/routine_work_contract/retired_adapter_routes.rs",
+    "validator/tests/routine_work_contract/retired_authority_routes.rs",
+    "validator/tests/routine_work_contract/retired_behavior_routes.rs",
+    "validator/tests/routine_work_contract/retired_process_lifecycle_routes.rs",
+    "validator/tests/routine_work_contract/retired_reuse_output_routes.rs",
+    "validator/tests/routine_work_contract/reuse/authority.rs",
+    "validator/tests/routine_work_contract/reuse/integrity.rs",
+    "validator/tests/routine_work_contract/reuse/matching.rs",
+    "validator/tests/routine_work_contract/routine_fixture_repository.rs",
+    "validator/tests/routine_work_contract/routine_fixture_workspace.rs",
+    "validator/tests/routine_work_contract/routine_plan_fixture.rs",
+    "validator/tests/routine_work_contract/runtime_adapter.rs",
+    "validator/tests/routine_work_contract/runtime_adapter_cases/adapter_scenario.rs",
+    "validator/tests/routine_work_contract/runtime_adapter_cases/clean_noop.rs",
+    "validator/tests/routine_work_contract/runtime_adapter_cases/cross_request_rejection.rs",
+    "validator/tests/routine_work_contract/runtime_adapter_cases/invocation_binding_refusals.rs",
+    "validator/tests/routine_work_contract/runtime_adapter_cases/loader_environment_rejection.rs",
+    "validator/tests/routine_work_contract/runtime_adapter_cases/outcome_set_rejection.rs",
+    "validator/tests/routine_work_contract/runtime_mediator.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/cancellation_reaping.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/containment_adversary.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/context_mutation_recovery.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/executable_substitution_rejection.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/fork_bypass_reaping.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/invocation_fixture.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/mapping_adversary.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/mediator_scenario.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/read_source_refusals.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/reuse_integrity.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/script_replacement_rejection.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/setup_failure_recovery.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/system_shell_eligibility.rs",
+    "validator/tests/routine_work_contract/runtime_mediator_cases/unsafe_output_rejection.rs",
+    "validator/tests/routine_work_contract/scenario.rs",
+    "validator/tests/routine_work_contract/security.rs"
+  ],
+  "touched_semantics": [
+    "routine-behavior-protocol",
+    "routine-catalog-authority",
+    "routine-durable-custody",
+    "routine-launch-custody",
+    "routine-output-journal",
+    "routine-process-observation",
+    "routine-public-production",
+    "routine-recovery-reuse"
+  ],
+  "generated_outputs": [
+    "validation_artifacts/worker-results/N06-ROUTINE-EXECUTION-TRUST-001.json"
+  ],
+  "fixtures": [
+    "fixtures/routine-production-catalog/cases.json",
+    "fixtures/routine-production-catalog/valid-catalog-v2.json",
+    "fixtures/routine-public-production/cases.json"
+  ],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "n06-worker-result",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "focused-local-validation",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "external-systems",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "target": "root-owned-surfaces",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "N06",
+    "OD-008",
+    "OD-009",
+    "TYPED-CUSTODY",
+    "WORKER-RESULT-v1"
+  ],
+  "dependency_nodes": [
+    "N03-CLI-STATE",
+    "ROOT-EXTERNAL-MONOTONIC-CUSTODY",
+    "ROOT-INTEGRATION",
+    "ROOT-SHARED-BUDGET-FIXTURE"
+  ],
+  "changes": [
+    {
+      "area": "authority",
+      "result": "One private typed owner binds durable reservation, physical launch/output/process custody, cleanup evidence, and terminal publication."
+    },
+    {
+      "area": "execution",
+      "result": "Parent validates exact framed process observations; child observations cannot authorize settlement."
+    },
+    {
+      "area": "recovery",
+      "result": "Ambiguous local custody fails closed; external monotonic takeover and cross-process recovery remain unsupported."
+    },
+    {
+      "area": "receipt",
+      "result": "This self-excluding WorkerResult binds the independently accepted source HEAD/tree and exact base-to-source artifact inventory."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "focused launch acquisition custody controls",
+      "status": "passed",
+      "result": "3/3 in 101.59s: post-mkdir stat failures, panic cleanup before resume, and output-cleanup substitution refusal."
+    },
+    {
+      "command": "exact launch cleanup privacy/clone attack control",
+      "status": "passed",
+      "result": "1/1 in 23.15s; cleanup evidence and RoutineError are non-Clone and unauthorized raw authority attacks fail."
+    },
+    {
+      "command": "focused durable publication controls",
+      "status": "passed",
+      "result": "5/5 in 135.13s."
+    },
+    {
+      "command": "focused object-swap cancellation timeout and setup-panic controls",
+      "status": "passed",
+      "result": "4/4."
+    },
+    {
+      "command": "rebuilt release routine_public_production_contract",
+      "status": "passed",
+      "result": "43/43 in 133.81s; release fixture build completed in 37.77s."
+    },
+    {
+      "command": "routine recovery/reuse target",
+      "status": "blocked",
+      "result": "52/53 in 29.59s; sole failure is unchanged root-owned shared_budget fixture rejected by the production secret-bearing worktree path policy."
+    },
+    {
+      "command": "uncapped production cargo check",
+      "exit_code": 101,
+      "result": "Known root-wide 568-warning wall; zero diagnostics referenced N06 changed paths. This is not a strict warning pass."
+    },
+    {
+      "command": "changed-path rustfmt diff-check line-cap namespace suppression residue gates",
+      "status": "passed",
+      "result": "Diff/source laws passed; maximum authored changed Rust file was 249 lines; no new scratch scope was created by final runs."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "fixtures/routine-production-catalog/cases.json",
+      "sha256": "sha256:1556cd1083f72a8fddec5754d89caab5a1b46e013de731f03ff7ea6a588abfe8",
+      "byte_length": 1503
+    },
+    {
+      "path": "fixtures/routine-production-catalog/valid-catalog-v2.json",
+      "sha256": "sha256:20c8624b9e9385ecf00e5d947689e57a20a7f377aa799ff87330df5f700b664f",
+      "byte_length": 721
+    },
+    {
+      "path": "fixtures/routine-public-production/cases.json",
+      "sha256": "sha256:a1594c30cfad2bbf111153bbadee56ccd47a3040ae0611834c614c3934854e06",
+      "byte_length": 982
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/behavior_child.rs",
+      "sha256": "sha256:8a65903020a0fc72036cfbdd3ce783c7cb86e1eb87cfa616b86c841390c7c9ea",
+      "byte_length": 1975
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/host_failure.rs",
+      "sha256": "sha256:c0c7cb65bb0a73e072d809ac16a55310e97b0f1495f9fdab7867e19974f03994",
+      "byte_length": 1263
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/mod.rs",
+      "sha256": "sha256:257a8b18f95b6ebd6888996f2d99b9b84ed75907f4bd10f172a5f185b99e142a",
+      "byte_length": 178
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/supported/anchored_directory.rs",
+      "sha256": "sha256:28f3f45a66d9f5bf12064fa8d2a9bf5b6ced00675362a99f9d9ef1c354396356",
+      "byte_length": 4649
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/supported/host_state.rs",
+      "sha256": "sha256:7a15c5ab2f943e805bda500166ae959536c7ef9d323c6114535757f846746c74",
+      "byte_length": 2078
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/supported/mod.rs",
+      "sha256": "sha256:f1ac478376672270f5df7ec5d8fe4750976033d373f2a7110b61008e72926b8f",
+      "byte_length": 552
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/supported/state_components.rs",
+      "sha256": "sha256:50e4a77327a5af6d0b4f7889f51e24a4e5431813017eb69c9aed99e695e8b0aa",
+      "byte_length": 1018
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/host/supported/validate_name.rs",
+      "sha256": "sha256:9e912b0090ab408a34eaf7f905d5141de0e04309f358c4d1d1e78be2fa2b1f5b",
+      "byte_length": 1053
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/invocation_binding.rs",
+      "sha256": "sha256:e32e592966cd422ef27fce4c0ad89aeeae1a49c1b336cf73d108e2789e9f4500",
+      "byte_length": 2453
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/manifest/loaded_manifest.rs",
+      "sha256": "sha256:8a80d9f80762269ad6111e55671a4e94c390b2eb6024650fa77638e66782b3f9",
+      "byte_length": 3905
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/manifest/manifest_path.rs",
+      "sha256": "sha256:a9e8a9768c89571543b5eace5be24aec87ecf71653bd2f663b31f797f30c4991",
+      "byte_length": 5062
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/mod.rs",
+      "sha256": "sha256:687380e9b08189304be6e9135527e7de097dd2f30271208560af7764f93ae091",
+      "byte_length": 1822
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/outcome/failure.rs",
+      "sha256": "sha256:633fa304079218038c710193d3318a5af9e06b28852e512551b158230c464605",
+      "byte_length": 6988
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/outcome/rerun.rs",
+      "sha256": "sha256:a45bc85021c20e7998bd4099a9cab8e771545e0ddfe00761a1640d119f4ae629",
+      "byte_length": 4475
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/source_configuration.rs",
+      "sha256": "sha256:eb91cd25ea7e97ef4f820b179faaf2733e2b198da72d748338760eceade7016b",
+      "byte_length": 3221
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/source_context.rs",
+      "sha256": "sha256:c6c8da464e772b361fa938dca27eb5b63261ca834ef967f6a230570bb2e29aa1",
+      "byte_length": 2605
+    },
+    {
+      "path": "validator/src/cli/successor_public/routine/source_selection.rs",
+      "sha256": "sha256:2300da0cde8d5089f5d7e1a7216e052650e9df1874100410ca450aa1ea481913",
+      "byte_length": 6392
+    },
+    {
+      "path": "validator/src/routine_work/behavior/child_capability.rs",
+      "sha256": "sha256:9a968c7e03e66424eede199c160f2b80cbeafffd96ba72cf41bf83dc07726658",
+      "byte_length": 354
+    },
+    {
+      "path": "validator/src/routine_work/behavior/mod.rs",
+      "sha256": "sha256:86ce3c8fae5333950b1e6b22db895231388be7bb36a964948198aab3929b53b7",
+      "byte_length": 773
+    },
+    {
+      "path": "validator/src/routine_work/behavior/rust_source_frame.rs",
+      "sha256": "sha256:f6e91c1904181f36e6ee420cecf66fcd362d67736fb539704b1a8927eeada082",
+      "byte_length": 8073
+    },
+    {
+      "path": "validator/src/routine_work/behavior/rust_source_syntax.rs",
+      "sha256": "sha256:c49248ec50184f10ca470aff16ae6c21d46990f6879111c002e865e65c40cab5",
+      "byte_length": 6922
+    },
+    {
+      "path": "validator/src/routine_work/behavior/sandbox_activation.rs",
+      "sha256": "sha256:9c45ddcce45a31660e4667c669452a50983aca51d76115a46871eb9e54cf3293",
+      "byte_length": 2401
+    },
+    {
+      "path": "validator/src/routine_work/catalog/catalog_contract.rs",
+      "sha256": "sha256:8e3e235f9548c463e8b6df0274cc7b9d7acf4e9fcbe2e8d2580776e6e59eff54",
+      "byte_length": 6165
+    },
+    {
+      "path": "validator/src/routine_work/catalog/catalog_path_normalization.rs",
+      "sha256": "sha256:0766726fe5a94b17093333d59c6e3c1676e58de9983581a245f70878a0c1f335",
+      "byte_length": 5976
+    },
+    {
+      "path": "validator/src/routine_work/catalog/catalog_validation.rs",
+      "sha256": "sha256:462ecd2a88d84faaf45ef4041d3ad431170fed85aa939c8baac14547091ec6a0",
+      "byte_length": 4814
+    },
+    {
+      "path": "validator/src/routine_work/catalog/file_sealing.rs",
+      "sha256": "sha256:e68c585d49126b0ef950efe384a4670636e5db5bfcaf01ded2667f2a44c76951",
+      "byte_length": 5623
+    },
+    {
+      "path": "validator/src/routine_work/catalog/invocation_binding.rs",
+      "sha256": "sha256:f0808d7007c78aaf8f22785b018d7fea275860c109e379b0e1d5825c366712fe",
+      "byte_length": 2815
+    },
+    {
+      "path": "validator/src/routine_work/catalog/invocation_identity.rs",
+      "sha256": "sha256:204cf7d66d1216805c6fb83d5b756c15f97ac1c34f1a5b5b5be4c0ec4607c678",
+      "byte_length": 3566
+    },
+    {
+      "path": "validator/src/routine_work/catalog/mod.rs",
+      "sha256": "sha256:54e0a7babe0baf000dc6a52c68d49a6d68b0a41978a0eb62ca8045ae3411045e",
+      "byte_length": 1899
+    },
+    {
+      "path": "validator/src/routine_work/catalog/node_selection.rs",
+      "sha256": "sha256:0692adc33d9361f57db7af34df930daba25374880aeaa02bbe2395fbec47eed9",
+      "byte_length": 5749
+    },
+    {
+      "path": "validator/src/routine_work/catalog/production_catalog.rs",
+      "sha256": "sha256:360eb22df663f0901113979ba3c6c68292260fbdf2db1554434f62d56c348437",
+      "byte_length": 6952
+    },
+    {
+      "path": "validator/src/routine_work/catalog/program_path_validation.rs",
+      "sha256": "sha256:52d07daca3d03a5b3f0273c929b49a4d991dcb7f5766af40710dc0c3559f7c33",
+      "byte_length": 905
+    },
+    {
+      "path": "validator/src/routine_work/catalog/runner_identity.rs",
+      "sha256": "sha256:89b2d1935e59305d0509457bab27e14826e3c01b70c137f676a1ebb5c4b2adfb",
+      "byte_length": 2223
+    },
+    {
+      "path": "validator/src/routine_work/catalog/selection_order.rs",
+      "sha256": "sha256:edf282c51927b9e4d673830f896a7754d8270276f964e64f84579ae4bb8daa3f",
+      "byte_length": 3562
+    },
+    {
+      "path": "validator/src/routine_work/catalog/source_ancestor_capture.rs",
+      "sha256": "sha256:f1524d0b5b4b685b8b0ca13e15d04fff81845a2d24207cc995f3176c6553027b",
+      "byte_length": 6501
+    },
+    {
+      "path": "validator/src/routine_work/error.rs",
+      "sha256": "sha256:4bdb58868f1a476e28f8d7096f56e4a60c34039b6c21e2e1d1495332ab74326e",
+      "byte_length": 4409
+    },
+    {
+      "path": "validator/src/routine_work/error/failure_evidence.rs",
+      "sha256": "sha256:25d56ee674b4dc6e5d07f294ba5ed39f89e931e815a4e8a568edf0cc2966bd4e",
+      "byte_length": 5879
+    },
+    {
+      "path": "validator/src/routine_work/mod.rs",
+      "sha256": "sha256:cb5139deb362a0dfc699bb3b821d2a2354b5be1fe2f86b18df7e12fc7c030e65",
+      "byte_length": 3192
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_authority/effect_intent.rs",
+      "sha256": "sha256:c3754feb2ad4906832259d7073fd888f9bc7d0c1e3e27bb665d753dd7cf12497",
+      "byte_length": 5676
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_authority/effect_request.rs",
+      "sha256": "sha256:bd0aedd99b79f1467d17e480d7fcda791c3683d1b457abd19b70068cdb3f66dd",
+      "byte_length": 4683
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_authority/mediated_intent.rs",
+      "sha256": "sha256:4fe1c8789b276a68192636465fb8078e78f9b56bd858c5b7f3c822d369eaa700",
+      "byte_length": 1165
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_authority/mediation_identity.rs",
+      "sha256": "sha256:b40123ca9e67709129ee508ec88cfac1398f98b39af89521673e7d318eff280e",
+      "byte_length": 974
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_authority/mod.rs",
+      "sha256": "sha256:f1b6ea8071733551caf8d4410e9d29298dc86ed633b65fcfe478262bad443663",
+      "byte_length": 766
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_authority/no_op_projection.rs",
+      "sha256": "sha256:87823da22ab09137a29d79e2d7e3707ebbda61894d01291c8f3f67533ba8265d",
+      "byte_length": 3879
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_authority/read_authority.rs",
+      "sha256": "sha256:bd885c4935ef60fa0a25d44d4c230b32b50b0cc1244dd0f96a84f285d5b8f6d8",
+      "byte_length": 4336
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_preparation.rs",
+      "sha256": "sha256:aeaa0c23a4dbbfb0baf34cb600d2aa38a375c0fa6d2b4b9fd5975ba988dd19be",
+      "byte_length": 6764
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/execution_reconciliation.rs",
+      "sha256": "sha256:50816622e441cee5cb4db8a712e4df8ff31c99dbf0536abddbf4d4a8b657f82a",
+      "byte_length": 3197
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/invocation_binding.rs",
+      "sha256": "sha256:c0b016b44d1e870b3d110edd9faaf670d7136eecba95845cee78ac4f1705d49b",
+      "byte_length": 2173
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediation_issuance.rs",
+      "sha256": "sha256:df843e4b2be7bbb8f2ed04a091840e7415886bbcac1735fd0ec8024ac46243aa",
+      "byte_length": 1493
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/effect_mediation.rs",
+      "sha256": "sha256:52fd0d1009081051fabb94a6e68bf42d3b3e164d5a79194227d3ef337b52b56f",
+      "byte_length": 8170
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/confinement_transitions.rs",
+      "sha256": "sha256:faffcb678e05ed4aa6cd62e569ff47375f39ae0ab83cdb0355c42521859dff63",
+      "byte_length": 1071
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/directory_read_failure.rs",
+      "sha256": "sha256:29bdacd3bf20ebb90058e6bf8c9c911e1a9e18c8d04aa848394d2894b48ce604",
+      "byte_length": 4069
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/executable_identity.rs",
+      "sha256": "sha256:324c9b39650066d4d1ba395a18aec443b242ce10f62df205e75cae520e5951b7",
+      "byte_length": 6196
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/framed_read_input.rs",
+      "sha256": "sha256:23620de60e76c0afce749e2caf8e222e9074265ba6230d393dfe7de0b1db0b38",
+      "byte_length": 2378
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/mediation_failure.rs",
+      "sha256": "sha256:38e848949b24b24c9e862ac041ad80de818a64445db6dd58757d4bad8f9c3929",
+      "byte_length": 5238
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/mod.rs",
+      "sha256": "sha256:4a25a30b8824280df96c8ed2f56501efe97aeb3be5b14f527cf5eff14d5a593a",
+      "byte_length": 1590
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/output_file_limit.rs",
+      "sha256": "sha256:2cf3dc3ffe15174dd32d61ade946cdf79f31ff23ec493f95cfef83f009ab684c",
+      "byte_length": 1639
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection.rs",
+      "sha256": "sha256:0f5d254e120c5d4e1acd8bac50281086efb78496deaca8366a83e3bc83286461",
+      "byte_length": 5748
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection_tests.rs",
+      "sha256": "sha256:7a1fe4b8efd8e5764f2d4091f95eae4dfd2b56c03a87e189221a8decb453612c",
+      "byte_length": 2256
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/read_confinement.rs",
+      "sha256": "sha256:0887f3a9455f63edf25b433a05cc478c52ba6c14c4c82996c092ef7b45789bdd",
+      "byte_length": 5446
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/read_source_opening.rs",
+      "sha256": "sha256:04c4413e61965745598e50f362040de3f200a586feb611d63a303357b8ebdb63",
+      "byte_length": 7267
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/filesystem/source_revalidation.rs",
+      "sha256": "sha256:8254e5420ea80ae8d389888a2138530266347175da2b11c10cb0fcdac7c157c5",
+      "byte_length": 5464
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/grant_scope.rs",
+      "sha256": "sha256:070b3175039bd79c6691ba9f3c2a82a9a8effedb8513d727aff275801f0aeebe",
+      "byte_length": 5702
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/grant_validation.rs",
+      "sha256": "sha256:994b18fa9d6978d1e6c2f9a1f96991e67a61eae3bad70c84d15d791cec8e59ae",
+      "byte_length": 5101
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/incomplete_outcome.rs",
+      "sha256": "sha256:deaf9f00f156045127d70a6cd37cf33423c098b57a3d02ecbc6e544dff3caff1",
+      "byte_length": 1494
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/intent_mediation.rs",
+      "sha256": "sha256:e1272b660e16cb64cf89ec7d710eefb86c4327a7232f27546af62401101ebbff",
+      "byte_length": 7318
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/mod.rs",
+      "sha256": "sha256:a7a393f3f1bcc8f0edd7d6b0975970323d9c25d68970876cd5a8726936ec1553",
+      "byte_length": 3494
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/no_op_mediation.rs",
+      "sha256": "sha256:096763979b65670c857edf2048611c0409573455df777773985c51481be7a351",
+      "byte_length": 1300
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/outcome/executed_intent.rs",
+      "sha256": "sha256:df98be1c98a12d05d570f688fcb85c751404081a39871e84e4ac9cacc3cc3db0",
+      "byte_length": 3486
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/outcome/mod.rs",
+      "sha256": "sha256:ae05f993ea12736c3f7fc80988c1a2c042677ff3d7fc10775e3657ba97b1784e",
+      "byte_length": 441
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/outcome/routine_cancellation.rs",
+      "sha256": "sha256:8c53efc9f983e69f9b2cf96bb9e4f616c27f33af2410ac6250df7c7f382af6bc",
+      "byte_length": 2089
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/outcome/routine_mediation_result.rs",
+      "sha256": "sha256:a5b097c12dcb0920fa32daa38166ae4b05ba0e889b7d38e998483b023648b69f",
+      "byte_length": 3255
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/configuration.rs",
+      "sha256": "sha256:34fc4e065d64c7a376a595ea4535aae0b025c61cefe5d24d7670e742268eaf7f",
+      "byte_length": 4517
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/custody_settlement.rs",
+      "sha256": "sha256:c4860c51426abd958445ad1961f0d1f196fbe023a0aae7d6ccf74e874aaafc39",
+      "byte_length": 8071
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/custody_transition_tests.rs",
+      "sha256": "sha256:b69416726d0e6ea6312a893d8a6a6070b64e034b734edec4a513fea927528863",
+      "byte_length": 3789
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/darwin_child_custody.rs",
+      "sha256": "sha256:2d1910be66c7168ab2b1a4db461eecd945d49fdd1dbb7a5b6f6f73866b23cbc3",
+      "byte_length": 1673
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/darwin_suspended_launch.rs",
+      "sha256": "sha256:d7933484c6c785b5206253c0edaacc8b098dd58e0377ba5146028032963f2eaa",
+      "byte_length": 6198
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/loaded_executable_identity.rs",
+      "sha256": "sha256:ed9607d6c83b0221061360fe1d99e600269e1ef67ab6506c9a2e09bf857620bf",
+      "byte_length": 3021
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/mod.rs",
+      "sha256": "sha256:09b42b73beebd7f06f199f2cbcff4eb5d70e46819d89a63851cf6d4ba2c236f4",
+      "byte_length": 4398
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/object_bound_launch.rs",
+      "sha256": "sha256:c8c3851a0ff5b59de3f55d72e4da4222cdf5fc80651a23b2402738d3a17579d8",
+      "byte_length": 589
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/observation_lifecycle.rs",
+      "sha256": "sha256:d2b805513d4f3f369ae28c0f55664c19456160ba38fe6fb0249cfdfe9507f9b1",
+      "byte_length": 3406
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_execution.rs",
+      "sha256": "sha256:effdae6f4e860c83d4750b339a8e42237a7086941651f2324a8927af13558ef7",
+      "byte_length": 3938
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_group_observation.rs",
+      "sha256": "sha256:81ade6f191d82e18ff15738fc2e7d230429822af06ceea81635f62929ff98d4e",
+      "byte_length": 5193
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_input_write.rs",
+      "sha256": "sha256:940bd34700af2217bec1e6a2dfd53abb846c0991d748ffdfb7e3698659b3ae7f",
+      "byte_length": 502
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_object_binding_tests.rs",
+      "sha256": "sha256:39c43ecdb01035d1376319262cb818b42771c0e6bde31d59f9d119ff15ea82de",
+      "byte_length": 7050
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_output_drain.rs",
+      "sha256": "sha256:4383b7ba5bbcd3517ad061c463ade8a4bfdebd5380f7fbfa97dabf0af4684652",
+      "byte_length": 8448
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/process_termination_tests.rs",
+      "sha256": "sha256:bde158eca8b357bb8901da8271876030fb093ff7cf8dbd7001d5defc18375548",
+      "byte_length": 5887
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/revalidation_tests.rs",
+      "sha256": "sha256:4b95625339dcccc1d98694f324265e2b2e1bb36473db659992fd0131fcb84ced",
+      "byte_length": 4241
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/process/spawn_test_observation.rs",
+      "sha256": "sha256:83de52c5ef62389eb9a889bf8f95d3f426d859cfcb5bf7ffa4884d04f942b36e",
+      "byte_length": 6785
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/read_source_binding.rs",
+      "sha256": "sha256:a8c0f3ff241d41577224891fd05d43d5fa009bee7c89c6d657df5d39099a7d93",
+      "byte_length": 586
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/reuse_artifact.rs",
+      "sha256": "sha256:ba5e72d1d2c68ff79c1793f7b4b68f751737304f20c343626e5b37daa9dd9b7e",
+      "byte_length": 4934
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mediator/rust_source_observation.rs",
+      "sha256": "sha256:8fc10898a8b9514e912ee00d3bcc8deeaf3e3532780a25a11f05e14a5480473b",
+      "byte_length": 2718
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/mod.rs",
+      "sha256": "sha256:ed86ca14cecaf86d82f2ddf2f8168e6a3be54e2768c11153b743d9c3ba6ba79e",
+      "byte_length": 2641
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/mod.rs",
+      "sha256": "sha256:01cc254c953de73a6d7ae0fda1fd87756e86109523281cb89f7af267de4dde37",
+      "byte_length": 559
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/observations.rs",
+      "sha256": "sha256:08a1b9dd2707d250ff7d3d71d60b6c9d637d50c167141832b05884161cff5a7d",
+      "byte_length": 4138
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/authority_record.rs",
+      "sha256": "sha256:28b70087def6b1213b9ffd9cb3694c9275d54f5272fafdb9a5e31dd3f3c903eb",
+      "byte_length": 6482
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/file_authority.rs",
+      "sha256": "sha256:99f5d29efa3e5f09c34a872b53c73d8184e5121f3560cb05320d27bfa28228ea",
+      "byte_length": 9651
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/mod.rs",
+      "sha256": "sha256:e7d3ac76bcbe2d5ccf36a03e7fbe6330c36b7bddcbdf24207037e1ac1b01253f",
+      "byte_length": 2001
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_failure.rs",
+      "sha256": "sha256:a9bdaaccfb96f769ac7e2322b24c5e94e7c4d96be00d91e07bf208ed20ee151e",
+      "byte_length": 3014
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_open_or_initialize.rs",
+      "sha256": "sha256:805f8131266dae3f9a6c9d16edaa48999f49a1f9011996cc8766861a695612e8",
+      "byte_length": 2573
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_output.rs",
+      "sha256": "sha256:43d17e2d2b2807278e51a438519b713089c1df3f65766b18d16a6763e6827108",
+      "byte_length": 3787
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_reserve.rs",
+      "sha256": "sha256:a59be9d8ae95f39d5a6fdf8101a08d23466d4c09292842c91202c4fb7ee7f34a",
+      "byte_length": 8277
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_settle.rs",
+      "sha256": "sha256:6fa25fa7c15faf8616705da66390877680b4da60aaa1e5e31377331c32365aa8",
+      "byte_length": 3709
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_transaction.rs",
+      "sha256": "sha256:2a35c421cf25cf8cae86308fa7dc2055eb7e13a3d8d55aadc20351148f80dd93",
+      "byte_length": 8926
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/initial_state.rs",
+      "sha256": "sha256:4cf5664ca0c0115e0a65a6a5f34ca0d98d8b4acd7f360e0ec20a153766651032",
+      "byte_length": 9245
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/ledger_effect_adapter.rs",
+      "sha256": "sha256:f98160ca846308b8c9d2db43cefa3ac2fc8afb6f8b80d2121fea8a07438fc2a7",
+      "byte_length": 4821
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/mod.rs",
+      "sha256": "sha256:2cd6bbcda0a45c844f723c3f1f1e540b6666ed06ce708d10612025aa7c2053ac",
+      "byte_length": 1504
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/output_journal_validation.rs",
+      "sha256": "sha256:23e224fc5f08ba9710d46b38892a894363b74e181823b33a9fdf164790b12d8d",
+      "byte_length": 4485
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/record_authentication.rs",
+      "sha256": "sha256:6d21884f0350dcf77b7b7aad1d01333c487e86a60470654bf9ded8ee5002e2c7",
+      "byte_length": 8714
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/record_identity.rs",
+      "sha256": "sha256:eb35f9e05ee764f6c7cdbb2ca4d42936c98bcedf514de33b140bef9f3cfd8c2c",
+      "byte_length": 2333
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/state_publication.rs",
+      "sha256": "sha256:9b4f8e2cd403a1c65f07c4d231cc5945090f819965b03e87df5095e57ecf1c1e",
+      "byte_length": 5023
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/store_open.rs",
+      "sha256": "sha256:8ec9090d1e6294f156935da7e27d96ac5ad1ed3fdc369b7cf050dfee49caa8ca",
+      "byte_length": 6973
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/store/supported/store_stat_name.rs",
+      "sha256": "sha256:a5e494598f4e53f002c25af628d57b074f8a059b7e4c4762b260b6fea5cd475d",
+      "byte_length": 4791
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/transaction.rs",
+      "sha256": "sha256:5067b7c1aa1258aa808a970ac162d2cbfc562162607ab7bd8ec9db7617d23df6",
+      "byte_length": 9311
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/custody/transaction/owner.rs",
+      "sha256": "sha256:6ce90c47bad04c059e7348d196392b6a377765c51bfae1922234fafc3af74e6b",
+      "byte_length": 7815
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/launch_custody/acquisition.rs",
+      "sha256": "sha256:6d1558270221b8379a38137ee50f521624339d6e5a6f976573a565ddf2822a6d",
+      "byte_length": 6628
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/launch_custody/cleanup.rs",
+      "sha256": "sha256:25be46c0dcd209857c4de156c77a2c958a00e6c21c7d718a49ab7b151590a40e",
+      "byte_length": 6334
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/launch_custody/mod.rs",
+      "sha256": "sha256:c83382a1cbc8969dc20347fe748b680fe9b5ebe1f8180ef85918d54ebd6bfe62",
+      "byte_length": 551
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/launch_custody/root.rs",
+      "sha256": "sha256:c5fd0b3fd1186e276377869704ddf790a2950633033d03f5adfd382d3292b84c",
+      "byte_length": 1119
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/launch_custody/snapshot.rs",
+      "sha256": "sha256:21802f1d654d48d1bee85d1ba24285eee9d8a34031492c3ec215c690a4b6e726",
+      "byte_length": 9071
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/mod.rs",
+      "sha256": "sha256:dfc02a5edd05020c2505c58028ae487645d4808a36f50429d43f362d6f627339",
+      "byte_length": 2976
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/output_journal/apply.rs",
+      "sha256": "sha256:cfb8495700e4837ed3e0187f398d20dda706970b290e4ab97edf8405b1e76595",
+      "byte_length": 9781
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/output_journal/component_paths.rs",
+      "sha256": "sha256:aa66e5e3766e4240ccdad62355e46b99bfcaff13d00012727ab40d36cb111b56",
+      "byte_length": 854
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/output_journal/creation.rs",
+      "sha256": "sha256:07816fb32f7abaf9afecd213bf5c0d37218dad5fd87528ef5186c4fcfd4c5ed5",
+      "byte_length": 6687
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/output_journal/directory_entries.rs",
+      "sha256": "sha256:f280370f93a95b05081848b27984bca9225a90b6ebc7f123dc3834f149a5b68d",
+      "byte_length": 1276
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/output_journal/mod.rs",
+      "sha256": "sha256:c67699b85db590345a402cfae710ade94754419fb53d18006a86f2b6d9e1bb97",
+      "byte_length": 2328
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/output_journal/observation.rs",
+      "sha256": "sha256:80b27690e7b2e5e3a9cb32d823741c36c6c7de1a677d2b42c4b659306466440c",
+      "byte_length": 6071
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/output_journal/rollback.rs",
+      "sha256": "sha256:d60257cfb603184dcc435c4ef832225ee9d05464d57475009ced5adc1bba3491",
+      "byte_length": 2531
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/production_mediation.rs",
+      "sha256": "sha256:74672766a1f3760854968eb344644c902dc2f923f86f619d73cd9d45c3b55e70",
+      "byte_length": 7395
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/reservation_failure.rs",
+      "sha256": "sha256:2c97bee6e9eb462bd7b9d108ffb15afa952ae98ea74a5fbbd85a4d8248f80ba4",
+      "byte_length": 6716
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/production/reservation_failure/completion.rs",
+      "sha256": "sha256:e34129acacc875c90459c0f9ad22da79d35f4f5583d01e7154d9c8bcc1fe3b7b",
+      "byte_length": 3022
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/runner_binding.rs",
+      "sha256": "sha256:c6a9795dea54757d633989718479ef0ee66de92c3ea872becf775e9ae86dd50c",
+      "byte_length": 8189
+    },
+    {
+      "path": "validator/src/routine_work/runtime_adapter/selection_limit.rs",
+      "sha256": "sha256:5704480c736c50fb5dec4f3086132b11e9cf85680d810813d65d27135c4db2ae",
+      "byte_length": 4032
+    },
+    {
+      "path": "validator/tests/routine_behavior_protocol_cases/canonical_behavior.rs",
+      "sha256": "sha256:85a5f3850c807358a6f2de598c1008865b863ee6f9c923c7800a5a3a52cfffa7",
+      "byte_length": 3779
+    },
+    {
+      "path": "validator/tests/routine_behavior_protocol_cases/mod.rs",
+      "sha256": "sha256:66f4fae6dad5a9182c801e52c445ce5ec5c270704e8085ae2fcd20d01c812bd7",
+      "byte_length": 1219
+    },
+    {
+      "path": "validator/tests/routine_behavior_protocol_cases/refusal_matrix.rs",
+      "sha256": "sha256:20df0e3ce13e582112b36c61353d5bcc3539cff716d2de3dac54ab235f5452b7",
+      "byte_length": 2627
+    },
+    {
+      "path": "validator/tests/routine_behavior_protocol_contract.rs",
+      "sha256": "sha256:541ffd92de5a2fcf5b19928dea8362f547c223de00a15df20fccd85076a5dc8d",
+      "byte_length": 37
+    },
+    {
+      "path": "validator/tests/routine_binding_contract.rs",
+      "sha256": "sha256:65ec530a54c0e98cb1296c6d9907b8f5d86c881d1ed7249ed4363ad083ae6b09",
+      "byte_length": 1561
+    },
+    {
+      "path": "validator/tests/routine_production_authority_contract.rs",
+      "sha256": "sha256:9de5a05280234dfb96c71d1fa273c883d0a1469cc38927ac0c3dbce0cf71e123",
+      "byte_length": 6832
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_binding.rs",
+      "sha256": "sha256:411d1c328c7934df90adcf04356a1a337a8a927cc7d0a9a27a1726c2b6bc7c85",
+      "byte_length": 3745
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_definition_rejection.rs",
+      "sha256": "sha256:b41231e9b8ab5eab8dbac436001f9f80946a6f11a0c3bc1ee1152e97c334ba0a",
+      "byte_length": 5553
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture/claim.rs",
+      "sha256": "sha256:5b1d47c9c480e138283982b27df4cff37ef2cba08a260a8bac04996c6ae05880",
+      "byte_length": 6686
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture/cleanup_hook.rs",
+      "sha256": "sha256:e06f37931327d58e83e41cc78c6374efdd34e1883cc5690510962115e6056a2e",
+      "byte_length": 1819
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture/construction.rs",
+      "sha256": "sha256:f6effee8f25b3495fe72201dffb29992cf6e1a117e74d707b9a0f848b258eb95",
+      "byte_length": 4093
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture/custody.rs",
+      "sha256": "sha256:331cd7953724e4dc6ff45c880371a3e7bc7b598ee79c0348517dd61c968a4c8e",
+      "byte_length": 6935
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture/custody_types.rs",
+      "sha256": "sha256:0fe56c5bccf793c3d639945e2d39944ed055b16c97e5a9e9013332105bac1c39",
+      "byte_length": 281
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture/directory_entries.rs",
+      "sha256": "sha256:add9046ea8114d7e1837d282b1fcfb8b3d18b9036d09727bd58912d3e405159a",
+      "byte_length": 2494
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture/invocation.rs",
+      "sha256": "sha256:6ca2a368c60fdbe2f27e5fa5a218272867843210a7c42cbae37330e0fec78a44",
+      "byte_length": 4915
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture/invocation_controls.rs",
+      "sha256": "sha256:832417f35e02adb3d3f9519f5dc859978bb3cd10d46a179ab578e3790bb1d702",
+      "byte_length": 4057
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture/lifecycle.rs",
+      "sha256": "sha256:6f67fa52aed99ccf5099ce53b4f6efa5b5d95379f6c96ff11c0a92ea44f5159e",
+      "byte_length": 8357
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture/mod.rs",
+      "sha256": "sha256:aa533b12a7e220c3c94060e0740df5bf201478b86853b882519296f39b9a4f43",
+      "byte_length": 2539
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture/quarantine.rs",
+      "sha256": "sha256:03e157b273914a28c1a32a944971b09020f761703a095a4a4c6bc50f3a47193e",
+      "byte_length": 6674
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture/rebind.rs",
+      "sha256": "sha256:2abab43be5e1e1a47d0f68d5a78f274f694f48443d572ebe08bcf62dbda8cb8d",
+      "byte_length": 3042
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/catalog_fixture/scope.rs",
+      "sha256": "sha256:464a9eaf1e7a26f68e51977cb6e98c2bab8d6e69f536b4719efb1e7270043a8d",
+      "byte_length": 8619
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/repository_fixture.rs",
+      "sha256": "sha256:968cc3fbe665f6922b6daafd95536ea975a634b6b0b08e2ad16eed31a1878fe7",
+      "byte_length": 7255
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/source_path_rejection.rs",
+      "sha256": "sha256:db032b1e3a9468ecb9d8aa53885adc95828559684263054140f18e46702b6d15",
+      "byte_length": 8335
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/transitive_input_rejection.rs",
+      "sha256": "sha256:1dea639b1d72c1657d8bb916605f1dab00fefaec9af931a4552647fbee8c91dd",
+      "byte_length": 3545
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_cases/unsafe_invocation_rejection.rs",
+      "sha256": "sha256:7856ffd80580d539d7fed63cabb477e46fb645f291e94539f5581fbf185ffe9d",
+      "byte_length": 5436
+    },
+    {
+      "path": "validator/tests/routine_production_catalog_contract.rs",
+      "sha256": "sha256:727c4826422058ab99ad786cd9973e5f8a056a1f3570b2628734844be240d473",
+      "byte_length": 1553
+    },
+    {
+      "path": "validator/tests/routine_public_host_contract.rs",
+      "sha256": "sha256:74f399fcfd62a5b048a783e83c93266ec48b1c8fb108288ed484c18463133164",
+      "byte_length": 298
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract.rs",
+      "sha256": "sha256:1f4a81b556f981f7dfa0b09cddd3de0059bc9646e65b91fad02860a3557bb59a",
+      "byte_length": 330
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/child_authority.rs",
+      "sha256": "sha256:01a0401198e1b2868a97c1adad473ddc89741e0c06815bd3db2726eb2a5c7224",
+      "byte_length": 3261
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/child_authority_same_executable_parent.rs",
+      "sha256": "sha256:c9614c035d56439707d62c9f1462a731bac1a38f3f8198407ea512b4d18e4fad",
+      "byte_length": 2450
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/child_refusal_process.rs",
+      "sha256": "sha256:d58133d12ba0477a016d2896abfdb652ffc5138dedfa9f85a2b592c152854ef5",
+      "byte_length": 5724
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/fixture_ownership_controls.rs",
+      "sha256": "sha256:055a7bbadadf2b5392dd47e3f961ed9f12f9845d2cd18ab4b4714ad5346ef342",
+      "byte_length": 1867
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/journeys.rs",
+      "sha256": "sha256:9b752076c0f2041df0bf41da91b11d89798302579fbe91713ab281e50a821d81",
+      "byte_length": 9128
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/output_provisioning.rs",
+      "sha256": "sha256:698262694c0849b2c1dac64d888294b46c5a731c4c5e1f1bb0c5f84c24d3af2f",
+      "byte_length": 2863
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/argument_fixture.rs",
+      "sha256": "sha256:8c2bb56c9cb14d87be28be0b82eda842ae9d33e01524c393a9d202ddb095f922",
+      "byte_length": 2396
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/contender_process/controls.rs",
+      "sha256": "sha256:1a3e5f74d8ae47a4933b0b03522934c694b735d4941567bb3bb845c4853fb10b",
+      "byte_length": 6655
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/contender_process/custody.rs",
+      "sha256": "sha256:1aa0141165b45987f195ff13e8cba346b5a8f34034d86155b5edcc18e5ca803f",
+      "byte_length": 7588
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/contender_process/faults.rs",
+      "sha256": "sha256:06cb0b962b097bc8e051e50df4c2c437bf9ebef4fc66da97a2d5ba6a3f742179",
+      "byte_length": 3145
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/contender_process/mod.rs",
+      "sha256": "sha256:3c98cefc6f7fb5e02d16c69b731100d7a01e43fc7e13eb5fbc1b3f963f0c820c",
+      "byte_length": 5184
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/contender_process/output.rs",
+      "sha256": "sha256:c7de75b1d8412bba78b0b254f69333f819e613fe8d4157f4461cb1753e6d74ff",
+      "byte_length": 2960
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/execution_fixture.rs",
+      "sha256": "sha256:3fe26a69c09ebb0090185d65e9115f9b7f03ba7105904fa54bb8db6b530a8f51",
+      "byte_length": 7862
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/production_scenario_cases/scenario_fixture.rs",
+      "sha256": "sha256:9d6cb2e44f6594e824d609595de4908d51dfecf55e3a900ba61b019c3343c231",
+      "byte_length": 4774
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/public_effect_refusal.rs",
+      "sha256": "sha256:b41d6f9d38271a7df2f84ea3743db86d526228b43f0b5123f892944433ad2279",
+      "byte_length": 5392
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/public_lock_contention.rs",
+      "sha256": "sha256:c6686295bdd46e36d1932e73363ee21043133b3adbacb68329be31e130022b1e",
+      "byte_length": 3248
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/public_lock_contention/controls.rs",
+      "sha256": "sha256:5870d82dabc7fd2d1b554a7643987c0cf4608a7eaff3cbf7c031d7f6130984e8",
+      "byte_length": 8075
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/public_lock_contention/invocation_capability.rs",
+      "sha256": "sha256:a0c9219a7ed2c970ccbc8e6a13f7756867d2fa62251e9719ccead3880d9508c1",
+      "byte_length": 7576
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/public_lock_contention/invocation_capability/capability_pipe.rs",
+      "sha256": "sha256:3163023351756fd08332e27ab1756c5467dfd0ebb62ca4d0818f27dc505588b7",
+      "byte_length": 1947
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/public_lock_contention/live_child.rs",
+      "sha256": "sha256:b20fa028079e70376a47a70face01beb0b0f2551214ede741226b0ca1f462212",
+      "byte_length": 6569
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/public_lock_contention/selection_controls.rs",
+      "sha256": "sha256:049885ef858d9af60d747c2b922aebdddf50356a98bcf8bcc3e915ccafb972bb",
+      "byte_length": 3450
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/public_lock_contention/supervisor.rs",
+      "sha256": "sha256:bc3851f80a438b2a4b303dea704b086de507b47c361e52da09c60e4464f3616d",
+      "byte_length": 8102
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/scenario.rs",
+      "sha256": "sha256:97dea944991956cb28ebbdf8185eb3f89feb3a7ea1b7b92cd48c0c18e526c720",
+      "byte_length": 1836
+    },
+    {
+      "path": "validator/tests/routine_public_production_contract/security.rs",
+      "sha256": "sha256:52da5fb9883c5ec337897438cff625e81aa37b201023a43d4384fbec5e204f20",
+      "byte_length": 7094
+    },
+    {
+      "path": "validator/tests/routine_recovery_reuse_journey_contract.rs",
+      "sha256": "sha256:aa2b002e0ac6a72a3c7e0adbb16f1d6fd80651b7cdcee08a7cf6cde09baf7e6f",
+      "byte_length": 1167
+    },
+    {
+      "path": "validator/tests/routine_recovery_reuse_journey_contract/journeys.rs",
+      "sha256": "sha256:0080eb8241c0de4ae1b3cdeb5af63529fbb617bec0189184d65ee020a4e94371",
+      "byte_length": 10038
+    },
+    {
+      "path": "validator/tests/routine_recovery_reuse_journey_contract/routine_fixture_inventory.rs",
+      "sha256": "sha256:abee5e8926b6602a6f07183c72d187eede897233faca36af46779848e28b603f",
+      "byte_length": 2468
+    },
+    {
+      "path": "validator/tests/routine_recovery_reuse_journey_contract/routine_fixture_invocation.rs",
+      "sha256": "sha256:ad3a40da511794872564535fee5f54bf66e3c3533206555468a517a5eb1b7c36",
+      "byte_length": 1038
+    },
+    {
+      "path": "validator/tests/routine_recovery_reuse_journey_contract/routine_fixture_lifecycle.rs",
+      "sha256": "sha256:cb9cee14bb489a5f9488b7f9049a6c7bec6e574ce6411c57257980ac79ee8834",
+      "byte_length": 4378
+    },
+    {
+      "path": "validator/tests/routine_work_contract.rs",
+      "sha256": "sha256:0a183f7be415576963d5e0dea0f04f2d78fe91755798f53e4cf32c304c73e840",
+      "byte_length": 3329
+    },
+    {
+      "path": "validator/tests/routine_work_contract/authority_ledger_controls.rs",
+      "sha256": "sha256:32b333d7fff4e33a1ba7243166383af261f802a2b790a4850e18e94f30fdb896",
+      "byte_length": 2209
+    },
+    {
+      "path": "validator/tests/routine_work_contract/catalog_scope_construction.rs",
+      "sha256": "sha256:b2f2a7e68054203fa83586bbe06a41f38eaf255b9a44208eed3b2d9004352264",
+      "byte_length": 155
+    },
+    {
+      "path": "validator/tests/routine_work_contract/configured_path_alias.rs",
+      "sha256": "sha256:7f7d2d18685ab4824b7f22a7101517cfcfccb8fc9abe87bbee4fceb90195ffd7",
+      "byte_length": 2249
+    },
+    {
+      "path": "validator/tests/routine_work_contract/filesystem_controls.rs",
+      "sha256": "sha256:987ec6de4d52d21f006684b566b78f602d5b18bacadcc83d608545120b795422",
+      "byte_length": 7485
+    },
+    {
+      "path": "validator/tests/routine_work_contract/issuer_api_compilation.rs",
+      "sha256": "sha256:753c11062bc7a6b185f1801b2dfce9b9587c844f93b6f49932df6cfb40121cc3",
+      "byte_length": 3836
+    },
+    {
+      "path": "validator/tests/routine_work_contract/issuer_api_visibility.rs",
+      "sha256": "sha256:85ac989d3d1a907e6d8bb3c138ebf000932fe0d1cfbf4261635b19b38a0b0331",
+      "byte_length": 6029
+    },
+    {
+      "path": "validator/tests/routine_work_contract/issuer_capture_races.rs",
+      "sha256": "sha256:ea156bfbb81717284dffd107cabaabdf07dfbd5bb5c1b7654d20c32523f20662",
+      "byte_length": 2061
+    },
+    {
+      "path": "validator/tests/routine_work_contract/issuer_cleanup_races.rs",
+      "sha256": "sha256:9a5fa60f7f45f17a523992d8ea8bb16894a0ddf1e42f7a2bec07f5324664c3ff",
+      "byte_length": 3722
+    },
+    {
+      "path": "validator/tests/routine_work_contract/issuer_hidden_surface.rs",
+      "sha256": "sha256:74f88ab39bd3b66a218adcec249360019547338fe5f46d4597209de7eeffec59",
+      "byte_length": 6029
+    },
+    {
+      "path": "validator/tests/routine_work_contract/issuer_reconciliation_races.rs",
+      "sha256": "sha256:3774fc4351096eb355914ea6e58b23ad4c6157402d93211dead1d50c6a4950dd",
+      "byte_length": 3991
+    },
+    {
+      "path": "validator/tests/routine_work_contract/issuer_rollback_races.rs",
+      "sha256": "sha256:efb287c8050dd2b2714a5e30341d40dde81f1d954ec27dfbea2cee59b783d530",
+      "byte_length": 2024
+    },
+    {
+      "path": "validator/tests/routine_work_contract/issuer_scratch_resilience.rs",
+      "sha256": "sha256:2d99d5a5163704539b4970019327ca5efc75a5d45b53f43e55c86b7f29163ce0",
+      "byte_length": 5956
+    },
+    {
+      "path": "validator/tests/routine_work_contract/launch_acquisition_controls.rs",
+      "sha256": "sha256:b4ccc727d58715d8257fea8df22b95070a3781d77b2e7854e2bda57a04fb6002",
+      "byte_length": 4781
+    },
+    {
+      "path": "validator/tests/routine_work_contract/local_capture.rs",
+      "sha256": "sha256:1512ce539ae2adfc5eaf1ee5b8cc60dc5e7eba774f3722fd8d18e46d8d40e091",
+      "byte_length": 6953
+    },
+    {
+      "path": "validator/tests/routine_work_contract/local_issuer_binding_controls.rs",
+      "sha256": "sha256:15cb2c148080178a5889d15d63c090781729e4e608c711c5bd81841eb6c7e4c7",
+      "byte_length": 5693
+    },
+    {
+      "path": "validator/tests/routine_work_contract/owned_compile_claim.rs",
+      "sha256": "sha256:f81689772ace07730c8d080cd0103547e26fcbe470753a92db02bd09911fdc86",
+      "byte_length": 4325
+    },
+    {
+      "path": "validator/tests/routine_work_contract/owned_compile_directory.rs",
+      "sha256": "sha256:d170cb4f4904aba0f0c06f70b7de02c19d52b1e1014098752c3ca531d04ea219",
+      "byte_length": 954
+    },
+    {
+      "path": "validator/tests/routine_work_contract/owned_compile_retention.rs",
+      "sha256": "sha256:7da267f5bc32f55f2cd653fd049c78c97d6e4f6596cf0b62bbc8ff7564d9268b",
+      "byte_length": 1738
+    },
+    {
+      "path": "validator/tests/routine_work_contract/owned_compile_scratch.rs",
+      "sha256": "sha256:b013eab5bae2a8ee2a01eba71565b3cd941cc9caf3436750d954b28da692829b",
+      "byte_length": 4143
+    },
+    {
+      "path": "validator/tests/routine_work_contract/planning.rs",
+      "sha256": "sha256:545eb4631250db2f0e9e18225b6bb361df24c31dd8e9e2a2bc4cd6ddff97eaac",
+      "byte_length": 8739
+    },
+    {
+      "path": "validator/tests/routine_work_contract/probes/evidence_reconstruction_consumer.rs",
+      "sha256": "sha256:3a478bdde5f839c211039064da3c0920a29374cae112d701ff9fc9780cdf1626",
+      "byte_length": 924
+    },
+    {
+      "path": "validator/tests/routine_work_contract/probes/partial_snapshot_consumer.rs",
+      "sha256": "sha256:16fbab1e5cb9aba26622c10031f905bee6076e177b54da6b164d997e7e138db3",
+      "byte_length": 287
+    },
+    {
+      "path": "validator/tests/routine_work_contract/probes/production_grant_consumer.rs",
+      "sha256": "sha256:56490010a2edc872950ca639f2b4089b9792fee7da318b5a3c35fcf3e5d9339a",
+      "byte_length": 104
+    },
+    {
+      "path": "validator/tests/routine_work_contract/probes/production_grant_entrypoint_consumer.rs",
+      "sha256": "sha256:86c85d33e0748ac981be8d8a5c428fb1fb9b0cf94ee0efcb8308034a2cc184da",
+      "byte_length": 104
+    },
+    {
+      "path": "validator/tests/routine_work_contract/probes/production_issuer_consumer.rs",
+      "sha256": "sha256:4a2c23d677d58e3e452355689a24a06f1008f5b2dc843edee3c3c9cbafd003db",
+      "byte_length": 129
+    },
+    {
+      "path": "validator/tests/routine_work_contract/probes/production_private_grant_consumer.rs",
+      "sha256": "sha256:2423f4e5c4511c981b22cc81d0ad57526acb51ab4e917c1ee4dc4aa30c68d67e",
+      "byte_length": 131
+    },
+    {
+      "path": "validator/tests/routine_work_contract/probes/production_private_module_consumer.rs",
+      "sha256": "sha256:4adb0e061b38584ce4e9c69e4fc78ce10224b5046647108ff63cf65d845501df",
+      "byte_length": 158
+    },
+    {
+      "path": "validator/tests/routine_work_contract/probes/read_only_snapshot_consumer.rs",
+      "sha256": "sha256:ee497503e709bc8ca1d370fe5c4b5a31b6508c2f43b44717bde884130f539d3d",
+      "byte_length": 467
+    },
+    {
+      "path": "validator/tests/routine_work_contract/probes/routine_public_api_control.rs",
+      "sha256": "sha256:5e4efa54bb6a07c876ddd4ff70bf9d0270464207789f3bf80a97517d94fd0b9b",
+      "byte_length": 123
+    },
+    {
+      "path": "validator/tests/routine_work_contract/probes/snapshot_constructor_consumer.rs",
+      "sha256": "sha256:6cc3ba6f4529b71a114de639130898ee609b88476161695073cf6acdd3fd2a0e",
+      "byte_length": 355
+    },
+    {
+      "path": "validator/tests/routine_work_contract/probes/snapshot_deserialize_consumer.rs",
+      "sha256": "sha256:51fd53203784268d17abeb4ad78206e100032bd7add9dcecdd6820ed0f4039dc",
+      "byte_length": 203
+    },
+    {
+      "path": "validator/tests/routine_work_contract/provenance.rs",
+      "sha256": "sha256:2d80e12e0824166af432f59c813123662fba337b1ae3070c3b679a25b4443be9",
+      "byte_length": 5339
+    },
+    {
+      "path": "validator/tests/routine_work_contract/report.rs",
+      "sha256": "sha256:f38e2aa39b35c6e00b9799f0bcafc7e025ef8f5450b3f082138fe6a294eef671",
+      "byte_length": 717
+    },
+    {
+      "path": "validator/tests/routine_work_contract/report_cases/dependency_artifact_consistency.rs",
+      "sha256": "sha256:262a7b2ab7f8fdb4c3fc068a0e383ba03f819871350a4eb2054da824edc426fe",
+      "byte_length": 7466
+    },
+    {
+      "path": "validator/tests/routine_work_contract/report_cases/mixed_witness_completion.rs",
+      "sha256": "sha256:4ed161cf84a4178011b11718248d1f5a96e0836da73825053956896493a6452b",
+      "byte_length": 7942
+    },
+    {
+      "path": "validator/tests/routine_work_contract/reservation_authority_visibility.rs",
+      "sha256": "sha256:6638314fbcb32f720202d86afb3b613e76cae2c71f0e4738ff8c00c999b6cdfe",
+      "byte_length": 9408
+    },
+    {
+      "path": "validator/tests/routine_work_contract/reservation_publication_controls.rs",
+      "sha256": "sha256:4a6154620d4ac74536f0d83121a162f38568693dc0d3b744f782503772422434",
+      "byte_length": 7445
+    },
+    {
+      "path": "validator/tests/routine_work_contract/retired_adapter_routes.rs",
+      "sha256": "sha256:7eca58bc6c9b43f83e50a74d7c78a4af010b34768df173d8de26bebcbed35f47",
+      "byte_length": 2707
+    },
+    {
+      "path": "validator/tests/routine_work_contract/retired_authority_routes.rs",
+      "sha256": "sha256:6fb8842ae4588a7aa19b7d447b6f72ce4e53cf8db84d0c6e70864150acd83120",
+      "byte_length": 5713
+    },
+    {
+      "path": "validator/tests/routine_work_contract/retired_behavior_routes.rs",
+      "sha256": "sha256:b1cef818e1f00ddf388e64b7317c1c3af52a4351d299f91363972d57e805fa2d",
+      "byte_length": 3646
+    },
+    {
+      "path": "validator/tests/routine_work_contract/retired_process_lifecycle_routes.rs",
+      "sha256": "sha256:c29ff0e80e176972d0445a206aba31c517d1732843d375614e6da865e006d59f",
+      "byte_length": 4473
+    },
+    {
+      "path": "validator/tests/routine_work_contract/retired_reuse_output_routes.rs",
+      "sha256": "sha256:9ce4bd8b88814daf9d92d6a7918157c9ca3aa84593a8fc8d670857f0f10a0a7c",
+      "byte_length": 4473
+    },
+    {
+      "path": "validator/tests/routine_work_contract/reuse/authority.rs",
+      "sha256": "sha256:91057d4223f1a27657ed9125b16037f81d615b7c6a0cccf629c81384c0355d6f",
+      "byte_length": 9716
+    },
+    {
+      "path": "validator/tests/routine_work_contract/reuse/integrity.rs",
+      "sha256": "sha256:e66fe16dc8558863b081e359b69b2e6f8c63663c84954246c759dbe41de40bbc",
+      "byte_length": 8861
+    },
+    {
+      "path": "validator/tests/routine_work_contract/reuse/matching.rs",
+      "sha256": "sha256:07713c3b1052b9bf3a88be2b60ab0ed4278e374998a9df1fcd6c3d0bfc928daa",
+      "byte_length": 8492
+    },
+    {
+      "path": "validator/tests/routine_work_contract/routine_fixture_repository.rs",
+      "sha256": "sha256:ecf8e7c21aa4a2219c6e60c8502cff89becbfc84ae183dc418c4b3b8e8d407d4",
+      "byte_length": 6382
+    },
+    {
+      "path": "validator/tests/routine_work_contract/routine_fixture_workspace.rs",
+      "sha256": "sha256:56069dc43a2f79e1236c7a6f68c1729fa7a59fa18ccac0e4c569e6ae4af5eb6d",
+      "byte_length": 6856
+    },
+    {
+      "path": "validator/tests/routine_work_contract/routine_plan_fixture.rs",
+      "sha256": "sha256:233fd637ece88992c805e7b134f58813354708019cbdeebb43efcc18d2cde38d",
+      "byte_length": 5347
+    },
+    {
+      "path": "validator/tests/routine_work_contract/scenario.rs",
+      "sha256": "sha256:5dfa4ca7f10233573e908d2a178112b5e6b5ce375321a98f48e9096913c83c52",
+      "byte_length": 2750
+    },
+    {
+      "path": "validator/tests/routine_work_contract/security.rs",
+      "sha256": "sha256:52e4693b425bfd184b6a71709c8ad327d57d96d8e21314141094e1c38355539c",
+      "byte_length": 5496
+    }
+  ],
+  "findings": [
+    {
+      "severity": "accepted",
+      "surface": "source",
+      "finding": "Independent exact-tree review accepted source HEAD a646eace68431b9bae5dc6473762124593450d5f and tree 97d7d658fcfe4609cd952ec9fe7a171745252d34."
+    },
+    {
+      "severity": "withheld",
+      "surface": "external-monotonic-custody",
+      "finding": "Fresh-process takeover, rollback resistance, and cross-process recovery/reuse require external monotonic custody not implemented in N06."
+    },
+    {
+      "severity": "blocked",
+      "surface": "shared-budget-fixture",
+      "finding": "The unchanged root-owned shared_budget fixture enters a prohibited secret-bearing worktree path; production refusal is retained."
+    },
+    {
+      "severity": "retained",
+      "surface": "scratch-custody",
+      "finding": "Four exact historical scratch scopes remain preserved for root reconciliation because pathname-only deletion is unauthorized."
+    },
+    {
+      "severity": "withheld",
+      "surface": "product",
+      "finding": "No install, cache/discovery, immutable runtime, cross-process journey, readiness, release, completion, or parent-integration behavior is claimed."
+    }
+  ],
+  "unresolved_dependencies": [
+    "ROOT-EXTERNAL-MONOTONIC-CUSTODY",
+    "ROOT-INTEGRATION",
+    "ROOT-SCRATCH-RECONCILIATION",
+    "ROOT-SHARED-BUDGET-FIXTURE",
+    "ROOT-STRICT-WARNING-WALL"
+  ],
+  "requested_root_changes": [
+    {
+      "path": ".codex-worktree/scratch/routine-plan-program-6ec40800a3f8e728ea8eb1fe08114876",
+      "expected_sha256": "sha256:e6be9f3f039962fc1141f698a989af4c2d14a6ed63408d5c604c467f4b43b138",
+      "request": "Root must reconcile this preserved invocation-owned scratch scope using exact ownership evidence; do not authorize pathname-only deletion. expected_sha256 is the sorted recursive type/path/length/content inventory digest recorded by this receipt."
+    },
+    {
+      "path": ".codex-worktree/scratch/routine-plan-program-741afad49ebb79edf15318d9ec733ccd",
+      "expected_sha256": "sha256:0931a6ea5e7407ddd2b181f5e01c5fb2b6cb978e7aa476b5f79ae5a8d7930218",
+      "request": "Root must reconcile this preserved invocation-owned scratch scope using exact ownership evidence; do not authorize pathname-only deletion. expected_sha256 is the sorted recursive type/path/length/content inventory digest recorded by this receipt."
+    },
+    {
+      "path": ".codex-worktree/scratch/routine-plan-program-d4d2a6c80014ccff668b05e71fff5e92",
+      "expected_sha256": "sha256:90020b31f163dc7576562190254b048c5d26fb81c4deae013e7205a6b4446fc6",
+      "request": "Root must reconcile this preserved invocation-owned scratch scope using exact ownership evidence; do not authorize pathname-only deletion. expected_sha256 is the sorted recursive type/path/length/content inventory digest recorded by this receipt."
+    },
+    {
+      "path": ".codex-worktree/scratch/routine-plan-program-dda43e1fb9e53e75426903e6495b5957",
+      "expected_sha256": "sha256:3eb1d4bb5f8bcf3d5e0a06a08e67ab99005ab4a6f0b5a9ef4ff10bda61f4e42c",
+      "request": "Root must reconcile this preserved invocation-owned scratch scope using exact ownership evidence; do not authorize pathname-only deletion. expected_sha256 is the sorted recursive type/path/length/content inventory digest recorded by this receipt."
+    },
+    {
+      "path": "validator/tests/cli_contract/capture/shared_budget.rs",
+      "expected_sha256": "sha256:f05f6e32ae6aeacbc50b989f774e44414a960a8695c216fc973843b6e80eb245",
+      "request": "Provide a supported non-secret repository fixture root for the shared_budget control under the managed worktree environment without weakening production rejection of secret-bearing worktree paths."
+    }
+  ],
+  "limitations": [
+    "Source-local evidence only; no root integration or parent-acceptance claim is made by this receipt.",
+    "External monotonic custody, fresh-process takeover, rollback resistance, and cross-process recovery/reuse are unsupported.",
+    "The strict repository warning wall remains root-blocked; changed N06 paths produced no observed diagnostics but no strict-root pass is claimed.",
+    "Four preserved scratch scopes require exact root reconciliation; this receipt authorizes no pathname-only cleanup.",
+    "The shared_budget environment fixture remains root-owned and blocked by the intentionally strict secret-bearing worktree path refusal.",
+    "Install, cache/discovery, immutable installed runtime, product journey, readiness, release, completion, and mastery are unverified and withheld."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

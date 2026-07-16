@@ -9,16 +9,16 @@ impl RoutineMediationResult {
         self.request_id.as_deref()
     }
 
+    pub(crate) fn protocol_id(&self) -> Option<&str> {
+        self.protocol_id.as_deref()
+    }
+
     pub(crate) fn nodes(&self) -> &[RoutineNodeMediation] {
         &self.nodes
     }
 
-    pub(crate) fn reuse_artifacts(&self) -> &[Vec<u8>] {
-        &self.reuse_artifacts
-    }
-
-    pub(crate) fn recovery_marker(&self) -> Option<&str> {
-        self.recovery_marker.as_deref()
+    pub(crate) fn recovery_required(&self) -> bool {
+        self.recovery_marker.is_some()
     }
 
     pub(crate) fn support_limit(&self) -> &'static str {
@@ -32,10 +32,6 @@ pub(crate) struct RoutineReuseInput {
 }
 
 impl RoutineReuseInput {
-    pub(crate) fn new(artifacts: Vec<Vec<u8>>) -> Self {
-        Self { artifacts }
-    }
-
     pub(crate) fn into_artifacts(self) -> Vec<Vec<u8>> {
         self.artifacts
     }
@@ -59,24 +55,13 @@ pub(crate) struct OutputFileRecord {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
-pub(crate) struct CommandReport {
-    pub(crate) schema_version: String,
-    pub(crate) request_id: String,
-    pub(crate) protocol_id: String,
-    pub(crate) intent_id: String,
-    pub(crate) node_id: String,
-    pub(crate) outcome: String,
-    pub(crate) behavior_observed: bool,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
 pub(crate) struct ResultArtifactWire {
     pub(crate) schema_version: String,
     pub(crate) request_id: String,
     pub(crate) protocol_id: String,
     pub(crate) intent_id: String,
     pub(crate) node_id: String,
+    pub(crate) behavior_id: String,
     pub(crate) plan_order: usize,
     pub(crate) context_id: String,
     pub(crate) candidate_id: String,
@@ -100,6 +85,7 @@ pub(crate) struct ReuseArtifactWire {
     pub(crate) protocol_id: String,
     pub(crate) intent_id: String,
     pub(crate) node_id: String,
+    pub(crate) behavior_id: String,
     pub(crate) plan_order: usize,
     pub(crate) context_id: String,
     pub(crate) candidate_id: String,
@@ -117,12 +103,8 @@ pub(crate) struct ReuseArtifactWire {
     pub(crate) mediator_witness_sha256: String,
 }
 
-pub(crate) struct VerifiedReuseArtifact {
-    pub(crate) wire: ReuseArtifactWire,
-    pub(crate) canonical_bytes: Vec<u8>,
-}
-
 pub(crate) struct ExecutedArtifact {
+    pub(crate) node: RoutineNodeMediation,
     pub(crate) result_sha256: String,
     pub(crate) reuse_bytes: Vec<u8>,
 }

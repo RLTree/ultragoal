@@ -8,11 +8,6 @@ pub(crate) struct RoutineReadAncestor {
     pub(crate) unix_mode: u32,
     pub(crate) owner_user_id: u32,
     pub(crate) owner_group_id: u32,
-    pub(crate) link_count: u64,
-    pub(crate) modified_seconds: i64,
-    pub(crate) modified_nanos: i64,
-    pub(crate) changed_seconds: i64,
-    pub(crate) changed_nanos: i64,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
@@ -36,6 +31,7 @@ pub(crate) struct RoutineReadSource {
 #[derive(Debug, Eq, PartialEq, Serialize)]
 pub(crate) struct RoutineInvocationSpec {
     pub(crate) node_id: String,
+    pub(crate) behavior_id: String,
     pub(crate) tool_name: String,
     pub(crate) tool_identity_sha256: String,
     pub(crate) program_path_hex: String,
@@ -55,43 +51,6 @@ pub(crate) struct RoutineInvocationSpec {
 }
 
 impl RoutineInvocationSpec {
-    #[allow(clippy::too_many_arguments)]
-    pub(crate) fn bound(
-        node_id: String,
-        tool_name: String,
-        tool_identity_sha256: String,
-        program_path_hex: String,
-        program_sha256: String,
-        program_byte_length: u64,
-        program_unix_mode: Option<u32>,
-        arguments: Vec<String>,
-        environment_sha256: String,
-        environment: BTreeMap<String, String>,
-        read_authority_sha256: String,
-        read_sources: Vec<RoutineReadSource>,
-        timeout_ms: u64,
-        output_budget_bytes: u64,
-        declared_output_scopes: Vec<RepoPath>,
-    ) -> Self {
-        Self {
-            node_id,
-            tool_name,
-            tool_identity_sha256,
-            program_path_hex,
-            program_sha256,
-            program_byte_length,
-            program_unix_mode,
-            arguments,
-            environment_sha256,
-            environment,
-            read_authority_sha256,
-            read_sources,
-            timeout_ms,
-            output_budget_bytes,
-            declared_output_scopes,
-        }
-    }
-
     pub(crate) fn node_id(&self) -> &str {
         &self.node_id
     }
@@ -111,6 +70,18 @@ impl RoutineInvocationSpec {
     #[cfg(test)]
     pub(crate) fn test_with_program_sha256(mut self, identity: impl Into<String>) -> Self {
         self.program_sha256 = identity.into();
+        self
+    }
+
+    #[cfg(test)]
+    pub(crate) fn test_with_program_path_hex(mut self, path: impl Into<String>) -> Self {
+        self.program_path_hex = path.into();
+        self
+    }
+
+    #[cfg(test)]
+    pub(crate) fn test_with_behavior_id(mut self, behavior: impl Into<String>) -> Self {
+        self.behavior_id = behavior.into();
         self
     }
 

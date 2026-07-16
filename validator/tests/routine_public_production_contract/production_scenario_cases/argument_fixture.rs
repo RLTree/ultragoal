@@ -1,34 +1,5 @@
 use super::*;
 
-pub(crate) fn canonical_arguments(node: &NodeSpec) -> Vec<String> {
-    let delay = if node.delay_seconds == 0 {
-        String::new()
-    } else {
-        format!(
-            "HUL_ROUTINE_END=$((SECONDS + {})); while [ \"$SECONDS\" -lt \"$HUL_ROUTINE_END\" ]; do :; done; ",
-            node.delay_seconds
-        )
-    };
-    let settle = "exec 1>&- 2>&-; HUL_ROUTINE_SETTLE=0; while [ \"$HUL_ROUTINE_SETTLE\" -lt 4096 ]; do HUL_ROUTINE_SETTLE=$((HUL_ROUTINE_SETTLE + 1)); done";
-    let report = match node.action {
-        "pass" => format!(
-            "printf '%s' \"$HUL_ROUTINE_NODE_ID\" > 'target/routine/{}/result.txt'; printf '{{\"schema_version\":\"RoutineCommandReport-v1\",\"request_id\":\"%s\",\"protocol_id\":\"%s\",\"intent_id\":\"%s\",\"node_id\":\"%s\",\"outcome\":\"passed\",\"behavior_observed\":true}}' \"$HUL_ROUTINE_REQUEST_ID\" \"$HUL_ROUTINE_PROTOCOL_ID\" \"$HUL_ROUTINE_INTENT_ID\" \"$HUL_ROUTINE_NODE_ID\"; {settle}",
-            node.id,
-        ),
-        "fail" => format!(
-            "printf '{{\"schema_version\":\"RoutineCommandReport-v1\",\"request_id\":\"%s\",\"protocol_id\":\"%s\",\"intent_id\":\"%s\",\"node_id\":\"%s\",\"outcome\":\"failed\",\"behavior_observed\":true}}' \"$HUL_ROUTINE_REQUEST_ID\" \"$HUL_ROUTINE_PROTOCOL_ID\" \"$HUL_ROUTINE_INTENT_ID\" \"$HUL_ROUTINE_NODE_ID\"; {settle}; exit 7"
-        ),
-        _ => panic!("unknown action"),
-    };
-    vec![
-        "-c".to_owned(),
-        format!(
-            "exec 2> 'target/routine/{}/debug.txt'; {delay}{report}",
-            node.id
-        ),
-    ]
-}
-
 pub(crate) fn provision_host_state(home: &Path) {
     let components = [
         ".codex",
@@ -79,6 +50,24 @@ pub(crate) fn git_output(root: &Path, args: &[&str]) -> Vec<u8> {
         .unwrap();
     assert!(output.status.success(), "git {args:?}: {output:?}");
     output.stdout
+}
+
+pub(crate) fn routine_command(root: &Path, home: &Path, binary: &Path) -> Command {
+    let mut command = Command::new(binary);
+    command
+        .env_clear()
+        .env("HOME", home)
+        .env("LC_ALL", "C")
+        .env("LANG", "C")
+        .env("PATH", binary.parent().unwrap())
+        .env("GIT_CONFIG_GLOBAL", "/dev/null")
+        .env("GIT_CONFIG_NOSYSTEM", "1")
+        .env("GIT_OPTIONAL_LOCKS", "0")
+        .env("GIT_TERMINAL_PROMPT", "0")
+        .current_dir(root)
+        .arg("--root")
+        .arg(root);
+    command
 }
 
 pub(crate) fn sha(bytes: &[u8]) -> String {

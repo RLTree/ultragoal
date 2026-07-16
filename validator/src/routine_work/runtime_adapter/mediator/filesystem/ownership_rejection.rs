@@ -1,17 +1,5 @@
 use super::*;
 
-#[cfg(unix)]
-pub(crate) fn reject_effective_user_control(
-    metadata: &fs::Metadata,
-    effective_user_id: libc::uid_t,
-) -> Result<(), RoutineError> {
-    if effective_user_id == 0 || metadata.uid() == effective_user_id {
-        Err(mediator_error("mediator-executable-path-mutable"))
-    } else {
-        Ok(())
-    }
-}
-
 pub(crate) struct ScopeAnchor {
     pub(crate) relative: RepoPath,
     pub(crate) path: PathBuf,
@@ -85,7 +73,9 @@ impl OutputConfinement {
                 scopes: anchors,
                 budget_bytes,
             };
-            confinement.capture()?;
+            if !confinement.capture()?.is_empty() {
+                return Err(mediator_error("mediator-output-scope-not-empty"));
+            }
             Ok(confinement)
         }
     }
@@ -113,6 +103,21 @@ impl OutputConfinement {
         Ok(files)
     }
 
+    pub(crate) fn capture_owned_delta(
+        &self,
+    ) -> Result<BTreeMap<String, OutputFileRecord>, RoutineError> {
+        self.validate()?;
+        let files = self.capture()?;
+        if !files.is_empty() {
+            return Err(RoutineError::new(
+                RoutineErrorId::ConcurrentMutation,
+                "mediator-output-scope-mutated",
+                None,
+            ));
+        }
+        Ok(BTreeMap::new())
+    }
+
     pub(crate) fn validate(&self) -> Result<(), RoutineError> {
         #[cfg(not(unix))]
         {
@@ -137,10 +142,7 @@ impl OutputConfinement {
                     .path
                     .canonicalize()
                     .map_err(|_| mediator_error("mediator-output-scope-replaced"))?;
-                if !held.same_anchor_object(scope.identity)
-                    || !current.same_anchor_object(scope.identity)
-                    || canonical != scope.path
-                {
+                if held != scope.identity || current != scope.identity || canonical != scope.path {
                     return Err(RoutineError::new(
                         RoutineErrorId::ConcurrentMutation,
                         "mediator-output-scope-replaced",
@@ -152,3 +154,7 @@ impl OutputConfinement {
         }
     }
 }
+
+#[cfg(test)]
+#[path = "ownership_rejection_tests.rs"]
+mod tests;

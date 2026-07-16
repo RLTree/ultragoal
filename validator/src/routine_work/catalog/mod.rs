@@ -23,8 +23,8 @@ mod catalog_contract;
 mod catalog_path_normalization;
 #[path = "catalog_validation.rs"]
 mod catalog_validation;
-#[path = "directory_sealing.rs"]
-mod directory_sealing;
+#[path = "file_sealing.rs"]
+mod file_sealing;
 #[path = "invocation_binding.rs"]
 mod invocation_binding;
 #[path = "invocation_identity.rs"]
@@ -35,6 +35,8 @@ mod node_selection;
 mod production_catalog;
 #[path = "program_path_validation.rs"]
 mod program_path_validation;
+#[path = "runner_identity.rs"]
+mod runner_identity;
 #[path = "selection_order.rs"]
 mod selection_order;
 #[path = "source_ancestor_capture.rs"]
@@ -43,10 +45,11 @@ mod source_ancestor_capture;
 pub(crate) use catalog_contract::*;
 pub(crate) use catalog_path_normalization::*;
 pub(crate) use catalog_validation::*;
-pub(crate) use directory_sealing::*;
+pub(crate) use file_sealing::*;
 pub(crate) use invocation_binding::*;
 pub(crate) use invocation_identity::*;
 pub(crate) use node_selection::*;
 pub(crate) use program_path_validation::*;
+pub(crate) use runner_identity::*;
 pub(crate) use selection_order::*;
 pub(crate) use source_ancestor_capture::*;

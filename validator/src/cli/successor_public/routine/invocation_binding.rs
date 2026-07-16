@@ -23,20 +23,8 @@ pub(crate) fn bind_public_invocation(
             ))?,
         invocation.selected_tool(),
     )?;
-    let expected_environment = BTreeMap::from([
-        ("LANG".to_owned(), "C".to_owned()),
-        ("LC_ALL".to_owned(), "C".to_owned()),
-        (
-            "PATH".to_owned(),
-            executable
-                .parent()
-                .and_then(Path::to_str)
-                .ok_or(PublicFailure::Catalog(
-                    "routine-public-runner-parent-invalid",
-                ))?
-                .to_owned(),
-        ),
-    ]);
+    let expected_environment =
+        crate::routine_work::fixed_environment(&executable).map_err(PublicFailure::Routine)?;
     let expected_reads = node
         .read_sources
         .iter()
@@ -48,7 +36,8 @@ pub(crate) fn bind_public_invocation(
         .map(|source| source.relative_path())
         .collect::<Vec<_>>();
     let expected_output = node.output_scope();
-    if invocation.selected_tool() != check.selected_tool()
+    if invocation.behavior_id() != manifest::ROUTINE_BEHAVIOR
+        || invocation.selected_tool() != check.selected_tool()
         || invocation.arguments() != node.canonical_arguments()
         || invocation.environment() != &expected_environment
         || observed_reads != expected_reads
@@ -68,12 +57,10 @@ pub(crate) fn bind_public_invocation(
         .collect::<Result<Vec<_>, _>>()
         .map_err(PublicFailure::Routine)?;
     let outputs = vec![RepoPath::parse(expected_output).map_err(PublicFailure::Routine)?];
-    bind_routine_invocation_with_environment_and_read_sources(
+    bind_rust_source_syntax_invocation(
         context,
         plan,
         invocation.node_id(),
-        invocation.arguments().to_vec(),
-        invocation.environment().clone(),
         reads,
         invocation.timeout_ms(),
         invocation.output_budget_bytes(),

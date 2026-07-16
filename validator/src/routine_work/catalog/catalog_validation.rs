@@ -18,18 +18,9 @@ pub(crate) fn validate_raw_catalog(
     }
 
     let mut definitions = BTreeMap::new();
-    let mut definition_ids = BTreeSet::new();
-    let mut definition_case_ids = BTreeSet::new();
     let mut node_case_ids = BTreeSet::new();
     for raw_definition in raw.routines {
-        let definition_id = identifier(raw_definition.definition_id)?;
         let node_id = identifier(raw_definition.node_id)?;
-        if !definition_ids.insert(definition_id.clone()) {
-            return Err(error("catalog-definition-id-duplicated"));
-        }
-        if !definition_case_ids.insert(definition_id.to_ascii_lowercase()) {
-            return Err(error("catalog-definition-id-ambiguous"));
-        }
         if !node_case_ids.insert(node_id.to_ascii_lowercase()) {
             return Err(error("catalog-definition-node-ambiguous"));
         }
@@ -47,42 +38,8 @@ pub(crate) fn validate_raw_catalog(
         if depends_on != adopted.depends_on {
             return Err(error("catalog-definition-dependencies-mismatch"));
         }
-        if raw_definition.working_directory != "." {
-            return Err(error("catalog-working-directory-unsafe"));
-        }
-        if raw_definition.runner_policy != RUNNER_POLICY {
-            return Err(error("catalog-runner-policy-unsupported"));
-        }
-        if raw_definition.read_policy != READ_POLICY {
-            return Err(error("catalog-read-policy-unsupported"));
-        }
-        let primary = validate_recipe(raw_definition.primary, &adopted.primary_tool)?;
-        let fallback = match (raw_definition.fallback, &adopted.fallback_tool) {
-            (None, None) => None,
-            (Some(raw_fallback), Some(expected)) => {
-                if raw_fallback.equivalence != FALLBACK_EQUIVALENCE {
-                    return Err(error("catalog-fallback-equivalence-unproven"));
-                }
-                Some(validate_recipe(
-                    RawRunnerRecipe {
-                        tool: raw_fallback.tool,
-                        tool_identity_sha256: raw_fallback.tool_identity_sha256,
-                        executable_path: raw_fallback.executable_path,
-                        program_sha256: raw_fallback.program_sha256,
-                        program_byte_length: raw_fallback.program_byte_length,
-                        program_unix_mode: raw_fallback.program_unix_mode,
-                        arguments: raw_fallback.arguments,
-                    },
-                    expected,
-                )?)
-            }
-            _ => return Err(error("catalog-fallback-definition-mismatch")),
-        };
-        if fallback
-            .as_ref()
-            .is_some_and(|row| row.tool.eq_ignore_ascii_case(&primary.tool))
-        {
-            return Err(error("catalog-fallback-runner-duplicated"));
+        if raw_definition.behavior_id != ROUTINE_BEHAVIOR {
+            return Err(error("catalog-behavior-unsupported"));
         }
 
         let read_sources = normalize_catalog_paths(
@@ -107,7 +64,6 @@ pub(crate) fn validate_raw_catalog(
         }) {
             return Err(error("catalog-output-scope-overlaps-input"));
         }
-        validate_environment(&raw_definition.environment)?;
         if raw_definition.timeout_ms == 0 || raw_definition.timeout_ms > MAX_TIMEOUT_MS {
             return Err(error("catalog-timeout-invalid"));
         }
@@ -117,17 +73,15 @@ pub(crate) fn validate_raw_catalog(
             return Err(error("catalog-output-budget-invalid"));
         }
         let mut definition = RoutineDefinition {
-            definition_id,
+            definition_id: format!("routine.{node_id}.v2"),
             definition_sha256: String::new(),
             node_id: node_id.clone(),
+            behavior_id: raw_definition.behavior_id,
             depends_on,
             read_sources,
-            environment: raw_definition.environment,
             timeout_ms: raw_definition.timeout_ms,
             output_budget_bytes: raw_definition.output_budget_bytes,
             output_scopes,
-            primary,
-            fallback,
         };
         definition.definition_sha256 = digest_json(&DefinitionIdentity::from(&definition))?;
         definitions.insert(node_id, definition);
@@ -136,7 +90,6 @@ pub(crate) fn validate_raw_catalog(
         return Err(error("catalog-definition-set-inexact"));
     }
     validate_global_path_compatibility(&definitions)?;
-    validate_global_runner_compatibility(&definitions)?;
     Ok(definitions)
 }
 
@@ -175,40 +128,4 @@ pub(crate) fn validate_global_path_compatibility(
         }
     }
     Ok(())
-}
-
-pub(crate) fn validate_recipe(
-    raw: RawRunnerRecipe,
-    expected_tool: &str,
-) -> CatalogResult<RunnerRecipe> {
-    let tool = identifier(raw.tool)?;
-    if tool != expected_tool {
-        return Err(error("catalog-runner-registry-mismatch"));
-    }
-    let executable_path = absolute_program_path(raw.executable_path)?;
-    let tool_identity_sha256 = required_sha256(
-        raw.tool_identity_sha256,
-        "catalog-runner-tool-identity-invalid",
-    )?;
-    let program_sha256 =
-        required_sha256(raw.program_sha256, "catalog-runner-program-digest-invalid")?;
-    if raw.program_byte_length == 0 || raw.program_byte_length > MAX_READ_SOURCE_BYTES {
-        return Err(error("catalog-runner-program-length-invalid"));
-    }
-    if raw.program_unix_mode & 0o170000 != 0o100000
-        || raw.program_unix_mode & 0o111 == 0
-        || raw.program_unix_mode & 0o022 != 0
-    {
-        return Err(error("catalog-runner-program-mode-invalid"));
-    }
-    validate_arguments(&raw.arguments)?;
-    Ok(RunnerRecipe {
-        tool,
-        tool_identity_sha256,
-        executable_path,
-        program_sha256,
-        program_byte_length: raw.program_byte_length,
-        program_unix_mode: raw.program_unix_mode,
-        arguments: raw.arguments,
-    })
 }

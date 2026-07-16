@@ -56,31 +56,35 @@ pub(crate) fn capture_absolute_ancestors(path: &Path) -> CatalogResult<Vec<Direc
 }
 
 #[cfg(unix)]
-pub(crate) fn capture_directory(
+pub(crate) fn validate_output_scope_prefix(
     root: &Path,
-    root_identity: &DirectoryIdentity,
     relative: &CatalogPath,
-) -> CatalogResult<(DirectoryIdentity, Vec<DirectoryIdentity>)> {
+) -> CatalogResult<()> {
+    let root_identity = capture_root(root)?;
     let mut current = root.to_path_buf();
-    let mut ancestors = vec![root_identity.clone()];
-    let components = relative.as_str().split('/').collect::<Vec<_>>();
-    for (index, component) in components.iter().enumerate() {
+    for component in relative.as_str().split('/') {
         current.push(component);
-        let metadata =
-            fs::symlink_metadata(&current).map_err(|_| error("catalog-output-scope-missing"))?;
+        let metadata = match fs::symlink_metadata(&current) {
+            Ok(metadata) => metadata,
+            Err(io_error) if io_error.kind() == std::io::ErrorKind::NotFound => return Ok(()),
+            Err(_) => return Err(error("catalog-output-scope-unobservable")),
+        };
         if !metadata.file_type().is_dir()
             || metadata.file_type().is_symlink()
             || metadata.dev() != root_identity.device
         {
             return Err(error("catalog-output-scope-unsafe"));
         }
-        let identity = directory_identity(&components[..=index].join("/"), &metadata);
-        if index + 1 == components.len() {
-            return Ok((identity, ancestors));
-        }
-        ancestors.push(identity);
     }
-    Err(error("catalog-output-scope-missing"))
+    Ok(())
+}
+
+#[cfg(not(unix))]
+pub(crate) fn validate_output_scope_prefix(
+    _root: &Path,
+    _relative: &CatalogPath,
+) -> CatalogResult<()> {
+    Err(error("catalog-platform-unsupported"))
 }
 
 #[cfg(unix)]
@@ -131,14 +135,12 @@ pub(crate) struct CatalogIdentity<'a> {
 pub(crate) struct DefinitionIdentity<'a> {
     pub(crate) definition_id: &'a str,
     pub(crate) node_id: &'a str,
+    pub(crate) behavior_id: &'a str,
     pub(crate) depends_on: &'a BTreeSet<String>,
     pub(crate) read_sources: &'a [CatalogPath],
-    pub(crate) environment: &'a BTreeMap<String, String>,
     pub(crate) timeout_ms: u64,
     pub(crate) output_budget_bytes: u64,
     pub(crate) output_scopes: &'a [CatalogPath],
-    pub(crate) primary: &'a RunnerRecipe,
-    pub(crate) fallback: &'a Option<RunnerRecipe>,
     pub(crate) runner_policy: &'static str,
     pub(crate) read_policy: &'static str,
 }
@@ -148,14 +150,12 @@ impl<'a> From<&'a RoutineDefinition> for DefinitionIdentity<'a> {
         Self {
             definition_id: &value.definition_id,
             node_id: &value.node_id,
+            behavior_id: &value.behavior_id,
             depends_on: &value.depends_on,
             read_sources: &value.read_sources,
-            environment: &value.environment,
             timeout_ms: value.timeout_ms,
             output_budget_bytes: value.output_budget_bytes,
             output_scopes: &value.output_scopes,
-            primary: &value.primary,
-            fallback: &value.fallback,
             runner_policy: RUNNER_POLICY,
             read_policy: READ_POLICY,
         }
@@ -171,6 +171,7 @@ pub(crate) struct InvocationIdentity<'a> {
     pub(crate) definition_id: &'a str,
     pub(crate) definition_sha256: &'a str,
     pub(crate) node_id: &'a str,
+    pub(crate) behavior_id: &'a str,
     pub(crate) depends_on: &'a [String],
     pub(crate) selected_tool: &'a str,
     pub(crate) selected_tool_identity_sha256: &'a str,

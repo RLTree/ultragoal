@@ -1,31 +1,19 @@
 use super::*;
 
 impl SelectedRoutineNode {
-    #[allow(clippy::too_many_arguments)]
     pub(crate) fn new(
         node_id: impl Into<String>,
         depends_on: impl IntoIterator<Item = String>,
-        selected_tool: impl Into<String>,
-        selected_tool_identity_sha256: impl Into<String>,
-        used_fallback: bool,
         input_id: impl Into<String>,
         mut transitive_inputs: Vec<TransitiveInputExpectation>,
     ) -> CatalogResult<Self> {
         let node_id = identifier(node_id.into())?;
         let depends_on = identifier_set(depends_on, "catalog-selection-dependency-duplicated")?;
-        let selected_tool = identifier(selected_tool.into())?;
-        let selected_tool_identity_sha256 = required_sha256(
-            selected_tool_identity_sha256.into(),
-            "catalog-selection-tool-identity-invalid",
-        )?;
         let input_id = required_sha256(input_id.into(), "catalog-selection-input-id-invalid")?;
         normalize_input_expectations(&mut transitive_inputs)?;
         Ok(Self {
             node_id,
             depends_on,
-            selected_tool,
-            selected_tool_identity_sha256,
-            used_fallback,
             input_id,
             transitive_inputs,
         })
@@ -122,16 +110,7 @@ impl CatalogSelectionRequest {
                 return Err(error("catalog-runner-observation-duplicated"));
             }
         }
-        let selected_tools = selected
-            .iter()
-            .map(|row| row.selected_tool.as_str())
-            .collect::<BTreeSet<_>>();
-        if runner_map
-            .keys()
-            .map(String::as_str)
-            .collect::<BTreeSet<_>>()
-            != selected_tools
-        {
+        if runner_map.len() != 1 || !runner_map.contains_key(ROUTINE_RUNNER) {
             return Err(error("catalog-runner-observation-set-inexact"));
         }
         Ok(Self {
@@ -175,16 +154,6 @@ impl BoundReadSource {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub(crate) struct BoundOutputScope {
     pub(crate) relative_path: String,
-    pub(crate) device: u64,
-    pub(crate) inode: u64,
-    pub(crate) unix_mode: u32,
-    pub(crate) owner_user_id: u32,
-    pub(crate) owner_group_id: u32,
-    pub(crate) modified_seconds: i64,
-    pub(crate) modified_nanos: i64,
-    pub(crate) changed_seconds: i64,
-    pub(crate) changed_nanos: i64,
-    pub(crate) ancestors: Vec<DirectoryIdentity>,
 }
 
 impl BoundOutputScope {

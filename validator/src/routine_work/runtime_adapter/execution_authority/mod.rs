@@ -3,10 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
 use std::sync::atomic::{AtomicU8, AtomicUsize, Ordering};
 
-use crate::routine_work::{
-    RepoPath, ReportDisposition, ReportStatus, ReuseExpectation, RoutineBinding, RoutineError,
-    RoutineErrorId,
-};
+use crate::routine_work::{RepoPath, ReportStatus, RoutineBinding, RoutineError, RoutineErrorId};
 
 #[path = "effect_intent.rs"]
 mod effect_intent;

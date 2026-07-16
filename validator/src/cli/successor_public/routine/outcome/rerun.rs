@@ -1,7 +1,6 @@
 use super::*;
 
 pub(crate) const RERUN: &str = "ultragoal --json check routine [--target <relative-repository>]";
-pub(crate) const SUPPORT_LIMIT: &str = "source-local affected routine execution on a supported Darwin host only; no install, marketplace, live-user, readiness, release, or completion claim is raised";
 
 pub(crate) enum PublicFailure {
     InvalidInvocation,
@@ -42,17 +41,19 @@ pub(crate) struct PublicNode<'a> {
     pub(crate) failure_code: Option<&'a str>,
 }
 
-#[allow(clippy::too_many_arguments)]
+pub(crate) struct MediationContext<'a> {
+    pub(crate) context_id: &'a str,
+    pub(crate) candidate_id: &'a str,
+    pub(crate) graph_id: &'a str,
+    pub(crate) snapshot_id: &'a str,
+    pub(crate) plan_id: &'a str,
+    pub(crate) source_id: &'a str,
+    pub(crate) fallback_tool_count: usize,
+}
+
 pub(crate) fn mediation(
     result: &RoutineMediationResult,
-    context_id: &str,
-    candidate_id: &str,
-    graph_id: &str,
-    snapshot_id: &str,
-    plan_id: &str,
-    source_id: &str,
-    protocol_id: Option<&str>,
-    fallback_tool_count: usize,
+    context: MediationContext<'_>,
 ) -> RuntimeOutcome {
     let status = match result.status() {
         RoutineMediatorStatus::CompleteNoOp => "clean-no-op",
@@ -95,19 +96,19 @@ pub(crate) fn mediation(
         } else {
             "workspace_write"
         },
-        context_id,
-        candidate_id,
-        graph_id,
-        snapshot_id,
-        plan_id,
-        source_id,
-        protocol_id,
+        context_id: context.context_id,
+        candidate_id: context.candidate_id,
+        graph_id: context.graph_id,
+        snapshot_id: context.snapshot_id,
+        plan_id: context.plan_id,
+        source_id: context.source_id,
+        protocol_id: result.protocol_id(),
         request_id: result.request_id(),
         nodes,
-        fallback_tool_count,
-        recovery_required: result.recovery_marker().is_some(),
+        fallback_tool_count: context.fallback_tool_count,
+        recovery_required: result.recovery_required(),
         claim_effect: "none",
-        support_limit: SUPPORT_LIMIT,
+        support_limit: result.support_limit(),
     };
     match serde_json::to_vec(&payload) {
         Ok(machine) => RuntimeOutcome::payload(

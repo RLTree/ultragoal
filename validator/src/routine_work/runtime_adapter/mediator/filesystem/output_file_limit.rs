@@ -36,10 +36,6 @@ impl ObjectIdentity {
             changed_nanos: metadata.ctime_nsec(),
         }
     }
-
-    pub(crate) fn same_anchor_object(self, other: Self) -> bool {
-        self.device == other.device && self.inode == other.inode && self.mode == other.mode
-    }
 }
 
 #[cfg(unix)]

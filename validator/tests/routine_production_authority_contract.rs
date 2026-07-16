@@ -1,54 +1,139 @@
-#![allow(dead_code, unused_imports)]
+use std::fs;
+use std::io::Write;
+use std::process::{Command, Stdio};
+use std::sync::atomic::{AtomicU64, Ordering};
 
-mod context {
-    pub use ultragoal::context::*;
+static NEXT_CHILD_REFUSAL: AtomicU64 = AtomicU64::new(0);
+
+#[test]
+fn production_source_exposes_no_arbitrary_process_binding_surface() {
+    let selection = include_str!("../src/routine_work/runtime_adapter/selection_limit.rs");
+    let invocation = include_str!("../src/routine_work/runtime_adapter/invocation_binding.rs");
+    let mediation =
+        include_str!("../src/routine_work/runtime_adapter/mediator/intent_mediation.rs");
+    let executed =
+        include_str!("../src/routine_work/runtime_adapter/mediator/outcome/executed_intent.rs");
+    let process =
+        include_str!("../src/routine_work/runtime_adapter/mediator/process/process_execution.rs");
+    let launch = include_str!(
+        "../src/routine_work/runtime_adapter/mediator/process/darwin_suspended_launch.rs"
+    );
+    let binding =
+        include_str!("../src/routine_work/runtime_adapter/mediator/process/object_bound_launch.rs");
+    let custody = include_str!(
+        "../src/routine_work/runtime_adapter/mediator/process/spawn_test_observation.rs"
+    );
+    let settlement =
+        include_str!("../src/routine_work/runtime_adapter/mediator/process/custody_settlement.rs");
+    let runner = include_str!("../src/routine_work/runtime_adapter/runner_binding.rs");
+    let reconciliation =
+        include_str!("../src/routine_work/runtime_adapter/execution_reconciliation.rs");
+    let grant = include_str!("../src/routine_work/runtime_adapter/mediator/grant_validation.rs");
+
+    assert!(!selection.contains("external-process-exit-v1"));
+    assert!(!selection.contains("bind_routine_invocation("));
+    assert!(!selection.contains("bind_routine_invocation_with_environment"));
+    assert!(selection.contains("bind_rust_source_syntax_invocation("));
+    assert!(invocation.contains("RUST_SOURCE_SYNTAX_ARGUMENTS"));
+    assert!(invocation.contains("adapter-rust-source-input-missing"));
+    assert!(!mediation.contains("framed_input.as_ref()"));
+    assert!(!mediation.contains("unwrap_or(\"none\")"));
+    assert!(
+        mediation.find("validate_rust_source_observation").unwrap()
+            < mediation.find("project_executed_intent").unwrap()
+    );
+    assert!(executed.contains("ResultArtifactWire"));
+    assert!(process.contains("framed_input: Vec<u8>"));
+    assert!(!process.contains("framed_input: Option"));
+    assert!(process.contains("spawn_exact_program"));
+    assert!(process.contains("frame_sandboxed_input"));
+    assert!(!process.contains("Command::new"));
+    assert!(launch.contains("POSIX_SPAWN_START_SUSPENDED"));
+    assert!(launch.contains("posix_spawn_file_actions_adddup2"));
+    assert!(!launch.contains("/dev/fd"));
+    assert!(binding.contains("validate_loaded_executable"));
+    assert!(binding.contains("setup.configure"));
+    assert!(!custody.contains("impl Drop for SpawnSetupGuard"));
+    assert!(!custody.contains("impl Drop for RunningProcess"));
+    assert!(settlement.contains("cleanup_owned_process"));
+    assert!(reconciliation.contains("adapter-current-runner-substituted"));
+    assert!(runner.contains("invocation.environment != expected_environment"));
+    assert!(grant.contains("intent.environment() != &expected_environment"));
 }
 
-#[path = "../src/cli/capture/mod.rs"]
-mod capture;
-#[path = "../src/routine_work/mod.rs"]
-mod routine_work;
-#[path = "routine_work_contract/scenario.rs"]
-mod scenario;
+#[test]
+fn terminal_publication_follows_observation_without_parallel_cache_authority() {
+    let transaction =
+        include_str!("../src/routine_work/runtime_adapter/production/custody/transaction.rs");
+    let durable =
+        include_str!("../src/routine_work/runtime_adapter/production/custody/transaction/owner.rs");
+    let settlement = include_str!(
+        "../src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_settle.rs"
+    );
+    let source = include_str!("../src/cli/successor_public/routine/source_configuration.rs");
+    let output = include_str!(
+        "../src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection.rs"
+    );
+    let error = include_str!("../src/routine_work/error.rs");
+    let catch = transaction.find("catch_unwind").unwrap();
+    let settle = transaction.find("owner.settle(settlement").unwrap();
+    assert!(catch < settle);
+    assert!(output.contains("mediator-output-scope-not-empty"));
+    assert!(output.contains("capture_owned_delta"));
+    assert!(output.contains("held != scope.identity"));
+    assert!(!transaction.contains("publisher.publish"));
+    assert!(!source.contains("persist_reuse"));
+    assert!(!source.contains("read_reuse"));
+    assert!(!durable.contains("stage_success"));
+    assert_eq!(settlement.matches("transition_payload(").count(), 1);
+    assert!(!durable.contains("impl Drop for ReservationOwner"));
+    assert!(durable.contains("record_failure("));
+    assert!(!error.contains("reservation_failure_evidence"));
+    assert!(!error.contains("with_reservation_failure_evidence"));
+    assert!(!error.contains("pub(crate) fn with_transition_failure"));
+}
 
-use std::collections::BTreeMap;
-use std::fs;
-use std::os::unix::fs::{PermissionsExt, symlink};
-use std::path::{Path, PathBuf};
-use std::process::Command;
-use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, Mutex};
+#[test]
+fn built_public_child_request_refuses_before_input_and_without_writes() {
+    let scratch_root = std::env::var_os("CODEX_WORKTREE_SCRATCH")
+        .map(std::path::PathBuf::from)
+        .unwrap_or_else(|| panic!("CODEX_WORKTREE_SCRATCH is required"));
+    let scratch_root =
+        fs::canonicalize(scratch_root).expect("configured worktree scratch is unavailable");
+    let scratch = loop {
+        let candidate = scratch_root.join(format!(
+            "routine-child-refusal-{}-{}",
+            std::process::id(),
+            NEXT_CHILD_REFUSAL.fetch_add(1, Ordering::Relaxed)
+        ));
+        match fs::create_dir(&candidate) {
+            Ok(()) => break candidate,
+            Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
+            Err(error) => panic!("child refusal fixture claim failed: {error}"),
+        }
+    };
+    let root = scratch.join("root");
+    let home = scratch.join("home");
+    fs::create_dir(&root).unwrap();
+    fs::create_dir(&home).unwrap();
 
-use context::{BuildRequest, LiveContext};
-use routine_work::{
-    CheckClass, DirtySnapshot, ImpactGraph, LocalDirtyTree, PathMatcher, PlanMode, PlanRequest,
-    PreparedRoutineExecution, ProductionRoutineIssuer, RoutineAdapterSpec, RoutineCancellation,
-    RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutinePlan, RoutineReuseInput, bind_routine_invocation,
-    mediate_prepared_routine_execution_production, plan_routine, prepare_routine_execution,
-    set_test_mediator_finish_failure,
-};
-use scenario::{TempRepo, node, path, route, sha};
-
-#[path = "routine_production_authority_cases/authority_fixture.rs"]
-mod authority_fixture;
-#[path = "routine_production_authority_cases/authority_redaction.rs"]
-mod authority_redaction;
-#[path = "routine_production_authority_cases/authority_scenario.rs"]
-mod authority_scenario;
-#[path = "routine_production_authority_cases/concurrent_reuse_settlement.rs"]
-mod concurrent_reuse_settlement;
-#[path = "routine_production_authority_cases/effect_capacity_bounds.rs"]
-mod effect_capacity_bounds;
-#[path = "routine_production_authority_cases/invalid_reuse_recovery.rs"]
-mod invalid_reuse_recovery;
-#[path = "routine_production_authority_cases/terminal_failure_settlement.rs"]
-mod terminal_failure_settlement;
-
-pub(crate) use authority_fixture::*;
-pub(crate) use authority_redaction::*;
-pub(crate) use authority_scenario::*;
-pub(crate) use concurrent_reuse_settlement::*;
-pub(crate) use effect_capacity_bounds::*;
-pub(crate) use invalid_reuse_recovery::*;
-pub(crate) use terminal_failure_settlement::*;
+    let mut child = Command::new(env!("CARGO_BIN_EXE_ultragoal"))
+        .args(["--json", "check", "routine"])
+        .current_dir(&root)
+        .env("HOME", &home)
+        .env("HUL_ROUTINE_CHILD_FD", "198")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    if let Some(mut stdin) = child.stdin.take() {
+        let _ = stdin.write_all(br#"{"schema_version":"RustSourceSyntaxFrame-v1"}"#);
+    }
+    let output = child.wait_with_output().unwrap();
+    assert_ne!(output.status.code(), Some(0), "{output:?}");
+    assert!(String::from_utf8_lossy(&output.stdout).contains("RoutineBehaviorRefusal-v1"));
+    assert_eq!(fs::read_dir(&root).unwrap().count(), 0);
+    assert_eq!(fs::read_dir(&home).unwrap().count(), 0);
+    fs::remove_dir_all(&scratch).unwrap();
+}

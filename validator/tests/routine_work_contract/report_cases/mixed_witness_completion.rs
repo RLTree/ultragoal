@@ -4,7 +4,7 @@ use super::*;
 #[test]
 pub(crate) fn complete_execution_requires_mixed_opaque_executed_and_verified_reuse_witnesses() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("complete-report");
+    let mut repo = TempRepo::new("complete-report");
     let (context, plan) = authority_plan(&repo);
 
     let syntax_expectation = expectation(&context, &plan, "syntax", Vec::new());
@@ -56,13 +56,14 @@ pub(crate) fn complete_execution_requires_mixed_opaque_executed_and_verified_reu
     assert_eq!(report.context_id(), context.context_id());
     assert_eq!(report.candidate_id(), plan.binding().candidate_id());
     assert!(report.support_limit().contains("no claim decision"));
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 pub(crate) fn missing_witness_rows_and_partial_failure_remain_incomplete() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("partial-report");
+    let mut repo = TempRepo::new("partial-report");
     let (context, plan) = authority_plan(&repo);
     let syntax_expectation = expectation(&context, &plan, "syntax", Vec::new());
     let syntax = issue_execution(&repo, &context, &syntax_expectation, b"syntax");
@@ -86,13 +87,14 @@ pub(crate) fn missing_witness_rows_and_partial_failure_remain_incomplete() {
         Some(&SkipReason::DependencyFailed)
     );
     assert_eq!(report.skipped().get("unit"), Some(&SkipReason::Cancelled));
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 pub(crate) fn tracked_mutation_during_report_never_mints_complete_execution() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("report-live-mutation");
+    let mut repo = TempRepo::new("report-live-mutation");
     let (context, plan) = authority_plan(&repo);
     let syntax_expectation = expectation(&context, &plan, "syntax", Vec::new());
     let execution = issue_execution(&repo, &context, &syntax_expectation, b"syntax");
@@ -137,13 +139,14 @@ pub(crate) fn tracked_mutation_during_report_never_mints_complete_execution() {
             .id(),
         RoutineErrorId::ContextMismatch
     );
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 pub(crate) fn unknown_duplicate_wrong_scope_and_invalid_failure_rows_are_rejected() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("invalid-report");
+    let mut repo = TempRepo::new("invalid-report");
     let (context, plan) = authority_plan(&repo);
     let syntax_expectation = expectation(&context, &plan, "syntax", Vec::new());
     let first = issue_execution(&repo, &context, &syntax_expectation, b"syntax-one");
@@ -207,4 +210,5 @@ pub(crate) fn unknown_duplicate_wrong_scope_and_invalid_failure_rows_are_rejecte
         .id(),
         RoutineErrorId::InvalidRequest
     );
+    repo.teardown_after_assertions();
 }

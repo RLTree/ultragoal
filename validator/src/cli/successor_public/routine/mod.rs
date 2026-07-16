@@ -1,15 +1,16 @@
 //! Public `check routine` production adapter.
 //!
-//! The repository supplies a strict affected graph and immutable catalog. It
-//! never supplies arbitrary shell text: each selected recipe must equal one
-//! adapter-generated pass/fail template before it can enter the accepted
-//! production ledger and mediator.
+//! The repository supplies only a strict affected graph and exact source
+//! bindings. The canonical adapter owns planning, exact local issuance, and
+//! parent-authenticated observations; repository content cannot select a
+//! program, argument template, fallback, or child-authored outcome.
 
+mod behavior_child;
 mod host;
 mod manifest;
 mod outcome;
 
-use self::host::{CacheBinding, HostState};
+use self::host::HostState;
 use self::manifest::{LoadedManifest, MANIFEST_PATH};
 use self::outcome::PublicFailure;
 use crate::cli::successor::runtime::RuntimeOutcome;
@@ -20,14 +21,13 @@ use crate::context::{BuildRequest, LiveContext, ToolCapability};
 use crate::inventory::{ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256};
 use crate::routine_work::{
     AdoptedRoutineNode, BoundCatalogInvocation, CatalogAdoption, CatalogSelectionRequest,
-    ImpactGraph, LocalDirtyTree, PlanRequest, PreparedRoutineExecution, ProductionRoutineIssuer,
-    RepoPath, RoutineAdapterSpec, RoutineCancellation, RoutineInvocationSpec,
-    RoutineMediatorStatus, RoutinePlan, RoutineReuseInput, RunnerObservation, SelectedRoutineNode,
-    TransitiveInputExpectation, bind_routine_invocation_with_environment_and_read_sources,
-    load_production_catalog, mediate_prepared_routine_execution_production, plan_routine,
-    prepare_routine_execution,
+    ImpactGraph, LocalDirtyTree, PlanRequest, PreparedRoutineExecution, RepoPath,
+    RoutineAdapterSpec, RoutineCancellation, RoutineInvocationSpec, RoutinePlan, RoutineReuseInput,
+    RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation,
+    bind_rust_source_syntax_invocation, load_production_catalog, mediate_public_routine_execution,
+    plan_routine, prepare_routine_execution, validate_immutable_routine_program,
 };
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -35,6 +35,8 @@ use std::path::{Path, PathBuf};
 mod invocation_binding;
 #[path = "source_configuration.rs"]
 mod source_configuration;
+#[path = "source_context.rs"]
+mod source_context;
 #[path = "source_selection.rs"]
 mod source_selection;
 

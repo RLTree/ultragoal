@@ -149,8 +149,17 @@ impl SealedFile {
             maximum,
             self.relative.is_some(),
         )?;
-        if identity != self.identity || bytes != self.bytes {
-            return Err(error("catalog-sealed-file-changed"));
+        let identity_matches = if self.relative.is_some() {
+            identity == self.identity
+        } else {
+            same_runner_file(&identity, &self.identity)
+        };
+        if !identity_matches || bytes != self.bytes {
+            return Err(error(if self.relative.is_some() {
+                "catalog-sealed-file-changed"
+            } else {
+                "catalog-runner-sealed-file-changed"
+            }));
         }
         Ok(())
     }
@@ -173,13 +182,4 @@ impl SealedFile {
             ancestors: self.identity.ancestors.clone(),
         }
     }
-}
-
-#[derive(Clone, Debug)]
-pub(crate) struct SealedDirectory {
-    pub(crate) root: PathBuf,
-    pub(crate) relative: CatalogPath,
-    pub(crate) root_identity: DirectoryIdentity,
-    pub(crate) identity: DirectoryIdentity,
-    pub(crate) ancestors: Vec<DirectoryIdentity>,
 }

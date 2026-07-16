@@ -4,6 +4,7 @@
 //! receipt persistence, and claim decisions remain root-owned integration work.
 
 mod authority;
+mod behavior;
 mod binding;
 mod catalog;
 mod digest;
@@ -17,7 +18,22 @@ mod reuse;
 mod runtime_adapter;
 mod snapshot;
 
+pub(crate) use behavior::trusted_rust_source_execution_observed;
+pub(crate) use behavior::{
+    CHILD_MODE_ENV, CHILD_MODE_VALUE, LEGACY_BEHAVIOR_SELECTOR_ENV, LEGACY_CHILD_SELECTOR_ENV,
+    activate_and_read_frame, frame_sandboxed_input,
+};
+pub use behavior::{
+    RustSourceFrameInput, RustSourceSyntaxError, RustSourceSyntaxErrorKind,
+    RustSourceSyntaxObservation, RustSourceSyntaxOutcome, encode_rust_source_syntax_frame,
+    evaluate_rust_source_syntax_frame, rust_source_syntax_observation_json,
+};
 pub use binding::{BoundTool, RoutineBinding};
+pub(crate) use error::{
+    CleanupEvidence, FailureEvidence, PanicEvidence, ProcessCustodyEvidence,
+    RESERVATION_FAILURE_SCHEMA, ReservationFailureDisposition, ReservationFailureEvidence,
+    transition_failure_error,
+};
 pub use error::{RoutineError, RoutineErrorId};
 pub use local::LocalDirtyTree;
 pub use path::RepoPath;
@@ -43,17 +59,24 @@ pub(crate) use catalog::{
     RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation, load_production_catalog,
 };
 pub(crate) use runtime_adapter::{
-    PreparedRoutineExecution, ProductionRoutineIssuer, RoutineAdapterSpec, RoutineCancellation,
+    PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, RoutineAdapterSpec, RoutineCancellation,
     RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutineReuseInput, bind_routine_invocation_with_environment_and_read_sources,
-    mediate_prepared_routine_execution_production, prepare_routine_execution,
+    RoutineReuseInput, bind_rust_source_syntax_invocation, fixed_environment,
+    mediate_public_routine_execution, prepare_routine_execution,
+    validate_immutable_routine_program,
+};
+
+#[cfg(all(test, target_vendor = "apple"))]
+pub(crate) use runtime_adapter::{
+    set_test_launch_cleanup_refusal, set_test_launch_panic_after_stat,
+    set_test_launch_stat_failure_after, set_test_publication_ambiguity_after,
+    set_test_publication_refusal_after,
 };
 
 #[cfg(test)]
 pub(crate) use authority::set_test_live_authority_hook;
 #[cfg(test)]
 pub(crate) use runtime_adapter::{
-    TestProcessSetupFailure, set_test_mediator_finish_failure, set_test_mediator_post_spawn_hook,
-    set_test_mediator_pre_spawn_hook, set_test_output_capture_hook, set_test_process_setup_failure,
-    set_test_read_source_capture_hook, test_spawn_count,
+    set_test_output_capture_hook, set_test_read_source_capture_hook, test_last_spawn_group_absent,
+    validate_output_confinement_after, validate_read_confinement_after_bind,
 };

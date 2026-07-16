@@ -1,16 +1,14 @@
 use super::*;
 
-pub(crate) const CATALOG_SCHEMA: &str = "RoutineProductionCatalog-v1";
+pub(crate) const CATALOG_SCHEMA: &str = "RoutineProductionCatalog-v2";
+pub(crate) const ROUTINE_BEHAVIOR: &str = "rust-source-syntax-v1";
+pub(crate) const ROUTINE_RUNNER: &str = "ultragoal";
+pub(crate) const ROUTINE_ARGUMENTS: [&str; 3] = ["--json", "check", "routine"];
 pub(crate) const RUNNER_POLICY: &str = "immutable-single-process-exact-executable-v1";
 pub(crate) const READ_POLICY: &str = "selected-transitive-exact-regular-files-v1";
-pub(crate) const FALLBACK_EQUIVALENCE: &str = "same-node-semantics-v1";
 pub(crate) const MAX_CATALOG_BYTES: u64 = 1024 * 1024;
 pub(crate) const MAX_DEFINITIONS: usize = 4_096;
 pub(crate) const MAX_DEPENDENCIES: usize = 1_024;
-pub(crate) const MAX_ARGUMENTS: usize = 128;
-pub(crate) const MAX_ARGUMENT_BYTES: usize = 64 * 1024;
-pub(crate) const MAX_ENVIRONMENT_ENTRIES: usize = 61;
-pub(crate) const MAX_ENVIRONMENT_BYTES: usize = 60 * 1024;
 pub(crate) const MAX_READ_SOURCES: usize = 128;
 pub(crate) const MAX_READ_SOURCE_BYTES: u64 = 64 * 1024 * 1024;
 pub(crate) const MAX_OUTPUT_SCOPES: usize = 128;
@@ -46,40 +44,22 @@ pub(crate) type CatalogResult<T> = Result<T, RoutineCatalogError>;
 pub(crate) struct AdoptedRoutineNode {
     pub(crate) node_id: String,
     pub(crate) depends_on: BTreeSet<String>,
-    pub(crate) primary_tool: String,
-    pub(crate) fallback_tool: Option<String>,
 }
 
 impl AdoptedRoutineNode {
     pub(crate) fn new(
         node_id: impl Into<String>,
         depends_on: impl IntoIterator<Item = String>,
-        primary_tool: impl Into<String>,
-        fallback_tool: Option<String>,
     ) -> CatalogResult<Self> {
         let node_id = identifier(node_id.into())?;
         let depends_on = identifier_set(depends_on, "catalog-adoption-dependency-duplicated")?;
         if depends_on.len() > MAX_DEPENDENCIES || depends_on.contains(&node_id) {
             return Err(error("catalog-adoption-dependencies-invalid"));
         }
-        let primary_tool = identifier(primary_tool.into())?;
-        let fallback_tool = fallback_tool.map(identifier).transpose()?;
-        if fallback_tool
-            .as_ref()
-            .is_some_and(|fallback| fallback.eq_ignore_ascii_case(&primary_tool))
-        {
-            return Err(error("catalog-adoption-runner-duplicated"));
-        }
         Ok(Self {
             node_id,
             depends_on,
-            primary_tool,
-            fallback_tool,
         })
-    }
-
-    pub(crate) fn node_id(&self) -> &str {
-        &self.node_id
     }
 }
 
@@ -190,19 +170,12 @@ impl TransitiveInputExpectation {
             byte_length,
         })
     }
-
-    pub(crate) fn relative_path(&self) -> &str {
-        self.relative_path.as_str()
-    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(crate) struct SelectedRoutineNode {
     pub(crate) node_id: String,
     pub(crate) depends_on: BTreeSet<String>,
-    pub(crate) selected_tool: String,
-    pub(crate) selected_tool_identity_sha256: String,
-    pub(crate) used_fallback: bool,
     pub(crate) input_id: String,
     pub(crate) transitive_inputs: Vec<TransitiveInputExpectation>,
 }

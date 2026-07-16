@@ -1,0 +1,75 @@
+use super::scenario::{Fixture, pass_node, prefix_route};
+use serde_json::Value;
+use std::fs;
+
+#[test]
+fn dependency_closed_outputs_are_journaled_before_real_children_then_repeat_refuses() {
+    let mut fixture = Fixture::new(
+        "multi-node-output-journal",
+        &[pass_node("syntax", &[]), pass_node("compile", &["syntax"])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let first = fixture.run();
+    assert_eq!(first.status.code(), Some(0), "{first:?}");
+    assert!(first.stderr.is_empty(), "{first:?}");
+    let first = Fixture::value(&first);
+    assert_eq!(first["status"], "executed");
+    assert_eq!(first["nodes"].as_array().unwrap().len(), 2);
+    assert!(fixture.root.join("target/routine/syntax").is_dir());
+    assert!(fixture.root.join("target/routine/compile").is_dir());
+
+    let before = super::scenario::tree(&fixture.root);
+    let repeat = fixture.run();
+    assert_eq!(repeat.status.code(), Some(3), "{repeat:?}");
+    let diagnostic: Value = serde_json::from_slice(&repeat.stderr).unwrap();
+    assert_eq!(
+        diagnostic["cause"],
+        "routine-production-session-continuity-required"
+    );
+    assert_eq!(super::scenario::tree(&fixture.root), before);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn foreign_output_is_preserved_and_fresh_process_recovery_refuses() {
+    let mut fixture = Fixture::new(
+        "foreign-output-recovery",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let scope = fixture.root.join("target/routine/compile");
+    let foreign = scope.join("foreign");
+    fs::create_dir_all(&scope).unwrap();
+    fs::write(&foreign, b"foreign-user-work").unwrap();
+
+    let refusal = fixture.run();
+    assert_eq!(refusal.status.code(), Some(3), "{refusal:?}");
+    assert!(refusal.stdout.is_empty(), "{refusal:?}");
+    let diagnostic: Value = serde_json::from_slice(&refusal.stderr).unwrap();
+    assert_eq!(diagnostic["cause"], "mediator-output-scope-not-empty");
+    assert_eq!(
+        diagnostic["effect"],
+        "none_or_unacknowledged_workspace_request"
+    );
+    assert_eq!(fs::read(&foreign).unwrap(), b"foreign-user-work");
+    let durable = fs::read(fixture.authority_root().join("routine-authority.state")).unwrap();
+    assert!(
+        String::from_utf8(durable)
+            .unwrap()
+            .contains("\"state\":\"failed\"")
+    );
+
+    let recovered = fixture.run();
+    assert_eq!(recovered.status.code(), Some(3), "{recovered:?}");
+    let diagnostic: Value = serde_json::from_slice(&recovered.stderr).unwrap();
+    assert_eq!(
+        diagnostic["cause"],
+        "routine-production-session-continuity-required"
+    );
+    assert_eq!(fs::read(&foreign).unwrap(), b"foreign-user-work");
+    fixture.teardown_after_assertions();
+}

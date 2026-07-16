@@ -15,16 +15,12 @@ pub(crate) fn incomplete_node(
     }
 }
 
-pub(crate) fn authenticate_generated(values: Vec<(String, Vec<u8>)>) -> BTreeMap<String, String> {
-    let mut state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
+pub(super) fn collect_generated_witnesses(
+    values: Vec<(String, Vec<u8>)>,
+) -> BTreeMap<String, String> {
     let mut authenticated = BTreeMap::new();
     for (digest, bytes) in values {
         if let Ok(wire) = serde_json::from_slice::<ReuseArtifactWire>(&bytes) {
-            state
-                .authenticated_artifacts
-                .insert(digest.clone(), wire.mediator_witness_sha256.clone());
             authenticated.insert(digest, wire.mediator_witness_sha256);
         }
     }
@@ -49,91 +45,4 @@ pub(crate) fn concurrent(cause: &'static str) -> RoutineError {
 }
 
 #[cfg(test)]
-pub(crate) type TestHook = Box<dyn FnOnce() + Send + 'static>;
-
-#[cfg(test)]
-pub(crate) fn test_hook() -> &'static Mutex<Option<TestHook>> {
-    static HOOK: OnceLock<Mutex<Option<TestHook>>> = OnceLock::new();
-    HOOK.get_or_init(|| Mutex::new(None))
-}
-
-#[cfg(test)]
-pub(crate) fn post_spawn_test_hook() -> &'static Mutex<Option<TestHook>> {
-    static HOOK: OnceLock<Mutex<Option<TestHook>>> = OnceLock::new();
-    HOOK.get_or_init(|| Mutex::new(None))
-}
-
-#[cfg(test)]
-thread_local! {
-    // This injection is scoped to the calling test thread. A process-global
-    // flag can be consumed by an unrelated concurrent mediation and turn a
-    // deterministic reconciliation test into a race.
-    static FINISH_FAILURE_TEST_HOOK: Cell<bool> = const { Cell::new(false) };
-}
-
-#[cfg(test)]
-pub(crate) fn set_test_mediator_pre_spawn_hook(hook: impl FnOnce() + Send + 'static) {
-    *test_hook()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(Box::new(hook));
-}
-
-#[cfg(test)]
-pub(crate) fn set_test_mediator_post_spawn_hook(hook: impl FnOnce() + Send + 'static) {
-    *post_spawn_test_hook()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(Box::new(hook));
-}
-
-#[cfg(test)]
-pub(crate) fn set_test_mediator_finish_failure() {
-    FINISH_FAILURE_TEST_HOOK.with(|hook| hook.set(true));
-}
-
-#[cfg(test)]
-pub(crate) fn run_test_pre_spawn_hook() {
-    if let Some(hook) = test_hook()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .take()
-    {
-        hook();
-    }
-}
-
-#[cfg(test)]
-pub(crate) fn run_test_post_spawn_hook() {
-    if let Some(hook) = post_spawn_test_hook()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .take()
-    {
-        hook();
-    }
-}
-
-#[cfg(test)]
-pub(crate) fn run_test_finish_failure_hook(authority: &RoutineMediationAuthority) {
-    let force = FINISH_FAILURE_TEST_HOOK.with(|hook| hook.replace(false));
-    if force {
-        authority
-            .finish()
-            .expect("test finish-failure hook requires complete authority");
-    }
-}
-
-#[cfg(not(test))]
-pub(crate) fn run_test_pre_spawn_hook() {}
-
-#[cfg(not(test))]
-pub(crate) fn run_test_post_spawn_hook() {}
-
-#[cfg(not(test))]
-pub(crate) fn run_test_finish_failure_hook(_authority: &RoutineMediationAuthority) {}
-
-#[cfg(test)]
 pub(crate) use filesystem::{set_test_output_capture_hook, set_test_read_source_capture_hook};
-#[cfg(test)]
-pub(crate) use process::{
-    SetupFailurePoint as TestProcessSetupFailure, set_test_process_setup_failure, test_spawn_count,
-};

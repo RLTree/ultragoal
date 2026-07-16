@@ -1,27 +1,25 @@
 {
-  "schema_version": "RoutinePublicProductionCases-v1",
+  "schema_version": "RoutinePublicProductionCases-v2",
   "supported_host": "target_vendor=apple",
   "claim_effect": "none",
   "cases": [
     "clean-noop-zero-host-write",
-    "dirty-execution",
-    "conservative-partial-selection",
-    "dependency-closed-partial-failure",
-    "causal-failure-diagnosis",
-    "fixed-template-false-pass-refusal",
-    "fallback-runner",
-    "exact-durable-reuse",
-    "interruption-restart-recovery",
-    "concurrent-single-execution-and-reuse",
-    "selected-source-race-refusal",
+    "dirty-development-runtime-refusal-zero-host-write",
     "missing-host-authority-zero-workspace-write",
-    "stale-cache-binding-zero-ledger-transition",
-    "forged-reuse-zero-ledger-transition",
-    "host-lock-substitution-refusal",
-    "target-substitution-refusal",
     "catalog-substitution-refusal",
     "help-zero-write",
     "parse-refusal-zero-write",
     "read-route-zero-write"
-  ]
+  ],
+  "immutable_runtime_cases": [
+    "authorized-fresh-execution-empty-output-provenance",
+    "exact-repeat-durable-reuse",
+    "different-target-cache-miss",
+    "different-change-cache-miss",
+    "arbitrary-catalog-command-refusal",
+    "retired-v1-manifest-refusal",
+    "host-lock-substitution-refusal",
+    "target-substitution-refusal"
+  ],
+  "installed_runtime_ceiling": "dirty execution, durable reuse, interruption recovery, and concurrent serialization are unavailable in this source checkout and require a separately verified immutable installed ultragoal runtime"
 }

@@ -4,7 +4,7 @@ use super::*;
 #[test]
 pub(crate) fn same_plan_executed_witnesses_cannot_select_different_dependency_artifacts() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("report-executed-dependency-substitution");
+    let mut repo = TempRepo::new("report-executed-dependency-substitution");
     let (context, plan) = authority_plan(&repo);
 
     let syntax_expectation = expectation(&context, &plan, "syntax", Vec::new());
@@ -71,13 +71,14 @@ pub(crate) fn same_plan_executed_witnesses_cannot_select_different_dependency_ar
     );
     assert_eq!(repo.tree(), tree_before_refusal);
     assert_eq!(repo.status(), status_before_refusal);
+    repo.teardown_after_assertions();
 }
 
 #[cfg(target_os = "macos")]
 #[test]
 pub(crate) fn same_plan_reuse_and_execution_cannot_hide_missing_or_failed_dependencies() {
     let _capture = capture_guard();
-    let repo = TempRepo::new("report-reuse-dependency-substitution");
+    let mut repo = TempRepo::new("report-reuse-dependency-substitution");
     let (context, plan) = authority_plan(&repo);
 
     let syntax_expectation = expectation(&context, &plan, "syntax", Vec::new());
@@ -190,4 +191,5 @@ pub(crate) fn same_plan_reuse_and_execution_cannot_hide_missing_or_failed_depend
         .id(),
         RoutineErrorId::InvalidRequest
     );
+    repo.teardown_after_assertions();
 }

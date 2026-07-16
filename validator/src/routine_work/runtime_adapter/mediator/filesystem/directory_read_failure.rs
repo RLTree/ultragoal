@@ -3,15 +3,17 @@ use super::*;
 #[cfg(unix)]
 pub(crate) fn readdir_failed() -> bool {
     #[cfg(target_os = "macos")]
-    unsafe {
-        return *libc::__error() != 0;
+    {
+        unsafe { *libc::__error() != 0 }
     }
     #[cfg(any(target_os = "linux", target_os = "android"))]
-    unsafe {
-        return *libc::__errno_location() != 0;
+    {
+        unsafe { *libc::__errno_location() != 0 }
     }
-    #[allow(unreachable_code)]
-    false
+    #[cfg(not(any(target_os = "macos", target_os = "linux", target_os = "android")))]
+    {
+        false
+    }
 }
 
 #[cfg(unix)]

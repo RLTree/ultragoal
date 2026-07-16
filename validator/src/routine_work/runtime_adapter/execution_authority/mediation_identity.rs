@@ -3,7 +3,6 @@ use super::*;
 pub(crate) fn mediation_tokens(
     request_id: &str,
     protocol_id: &str,
-    execution_result_scope: &str,
     intents: Vec<RoutineEffectIntent>,
     seal: &Arc<RequestSeal>,
 ) -> Vec<RoutineMediatedIntent> {
@@ -13,7 +12,6 @@ pub(crate) fn mediation_tokens(
             RoutineMediatedIntent::new(
                 request_id.to_owned(),
                 protocol_id.to_owned(),
-                execution_result_scope.to_owned(),
                 intent,
                 Arc::clone(seal),
             )

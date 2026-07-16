@@ -1,6 +1,13 @@
 use sha2::{Digest, Sha256};
 use std::fmt;
 
+use super::runtime_adapter::{LaunchCleanupEvidence, ObservedProcessCustody};
+
+#[path = "error/failure_evidence.rs"]
+mod failure_evidence;
+
+pub(crate) use failure_evidence::*;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum RoutineErrorId {
     InvalidRegistry,
@@ -42,11 +49,14 @@ impl RoutineErrorId {
     }
 }
 
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Eq, PartialEq)]
 pub struct RoutineError {
     id: RoutineErrorId,
     cause: &'static str,
     subject_sha256: Option<String>,
+    process_custody: Option<Box<ProcessCustodyEvidence>>,
+    launch_cleanup: Option<Box<LaunchCleanupEvidence>>,
+    transition_failure: Option<Box<ReservationTransitionFailure>>,
 }
 
 impl RoutineError {
@@ -61,7 +71,47 @@ impl RoutineError {
             id,
             cause,
             subject_sha256,
+            process_custody: None,
+            launch_cleanup: None,
+            transition_failure: None,
         }
+    }
+
+    pub(crate) fn evidence(&self) -> ErrorEvidence {
+        ErrorEvidence {
+            code: self.code().to_owned(),
+            cause: self.cause.to_owned(),
+            subject_sha256: self.subject_sha256.clone(),
+        }
+    }
+
+    pub(in crate::routine_work) fn with_process_custody(
+        mut self,
+        observation: ObservedProcessCustody,
+    ) -> Self {
+        self.process_custody = Some(Box::new(observation.into_evidence()));
+        self
+    }
+
+    pub(crate) fn process_custody(&self) -> Option<&ProcessCustodyEvidence> {
+        self.process_custody.as_deref()
+    }
+
+    pub(in crate::routine_work) fn with_launch_cleanup(
+        mut self,
+        observation: super::runtime_adapter::ObservedLaunchCleanup,
+    ) -> Self {
+        self.launch_cleanup = Some(Box::new(observation.into_evidence()));
+        self
+    }
+
+    pub(in crate::routine_work) fn launch_cleanup(&self) -> Option<&LaunchCleanupEvidence> {
+        self.launch_cleanup.as_deref()
+    }
+
+    fn with_transition_failure(mut self, failure: ReservationTransitionFailure) -> Self {
+        self.transition_failure = Some(Box::new(failure));
+        self
     }
 
     pub fn id(&self) -> RoutineErrorId {

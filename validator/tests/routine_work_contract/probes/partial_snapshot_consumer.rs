@@ -1,6 +1,6 @@
-extern crate routine_surface;
+extern crate ultragoal;
 
-use routine_surface::routine_work::{DirtyChange, DirtySnapshot};
+use ultragoal::routine_work::{DirtyChange, DirtySnapshot};
 
 fn clone_then_subset(snapshot: DirtySnapshot, changes: Vec<DirtyChange>) -> DirtySnapshot {
     DirtySnapshot {

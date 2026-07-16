@@ -1,107 +1,7 @@
 use super::*;
 
-/// No-op mediation stays outside authority initialization. Effectful requests
-/// enter the sealed issuer and cannot supply a test grant.
-pub(crate) fn mediate_prepared_routine_execution_production(
-    authority_root: &Path,
-    context: &LiveContext,
-    plan: &RoutinePlan,
-    prepared: PreparedRoutineExecution,
-    recovery: Option<RoutineRecoveryAuthority>,
-    cancellation: RoutineCancellation,
-    reuse: RoutineReuseInput,
-) -> Result<RoutineMediationResult, RoutineError> {
-    if matches!(prepared, PreparedRoutineExecution::NoOp(_)) {
-        if recovery.is_some() || !reuse.is_empty() {
-            return Err(error("routine-production-noop-authority-or-reuse-present"));
-        }
-        return mediate_prepared_routine_execution(
-            context,
-            plan,
-            prepared,
-            None,
-            cancellation,
-            reuse,
-        );
-    }
-    let PreparedRoutineExecution::Effect(request) = prepared else {
-        unreachable!("no-op returned before production issuer selection")
-    };
-    // Malformed, non-canonical, and request-binding-invalid bytes reject before
-    // the authority root is opened. Canonical supplied reuse then uses the
-    // existing-only ledger path, which cannot initialize any durable file.
-    preflight_production_request(context, plan, &request)?;
-    let require_complete_reuse_set = recovery.is_none() && !reuse.is_empty();
-    let reuse = preflight_production_reuse_input(reuse, &request, require_complete_reuse_set)?;
-    let issuer = if reuse.is_empty() && recovery.is_none() {
-        ProductionRoutineIssuer::open(authority_root)?
-    } else {
-        ProductionRoutineIssuer::open_existing(authority_root)?
-    };
-    issuer.mediate_preflighted(context, plan, request, recovery, cancellation, reuse)
-}
-
-#[cfg(test)]
-thread_local! {
-    pub(super) static REUSE_PREAUTHORIZATION_TEST_HOOK: RefCell<Option<Box<dyn FnOnce() + Send>>> =
-        const { RefCell::new(None) };
-}
-
-#[cfg(test)]
-pub(crate) fn run_test_reuse_preauthorization_hook() {
-    REUSE_PREAUTHORIZATION_TEST_HOOK.with(|slot| {
-        if let Some(hook) = slot.borrow_mut().take() {
-            hook();
-        }
-    });
-}
-
-#[cfg(not(test))]
-pub(crate) fn run_test_reuse_preauthorization_hook() {}
-
-pub(crate) struct DurableAttempt {
-    pub(crate) ledger: Arc<FileAuthorityLedger>,
-    pub(crate) token: ReservationToken,
-}
-
-impl DurableAttemptAuthority for DurableAttempt {
-    fn validate_reserved(&self) -> Result<(), RoutineError> {
-        self.ledger.validate_reserved(&self.token)
-    }
-
-    fn prepare_spawn(&self) -> Result<(), RoutineError> {
-        self.ledger.prepare_spawn(&self.token)
-    }
-
-    fn settle(
-        &self,
-        outcome: DurableSettlement,
-        artifacts: &BTreeMap<String, String>,
-    ) -> Result<(), RoutineError> {
-        let state = match outcome {
-            DurableSettlement::Complete => AttemptState::Complete,
-            DurableSettlement::Failed => AttemptState::Failed,
-            DurableSettlement::Cancelled => AttemptState::Cancelled,
-            DurableSettlement::Incomplete => AttemptState::Incomplete,
-        };
-        self.ledger.settle(&self.token, state, artifacts)
-    }
-
-    fn authenticates_artifact(&self, digest: &str, witness: &str) -> Result<bool, RoutineError> {
-        self.ledger.authenticates(&self.token, digest, witness)
-    }
-
-    fn recovery_is_durable(&self) -> bool {
-        self.token.recovery_for.is_some()
-    }
-
-    fn reuse_only(&self) -> bool {
-        self.token.reuse_only
-    }
-}
-
 #[derive(Serialize)]
-pub(crate) struct EffectBinding<'a> {
+pub(super) struct EffectBinding<'a> {
     pub(crate) domain: &'static str,
     pub(crate) protocol_id: &'a str,
     pub(crate) context_id: &'a str,
@@ -111,7 +11,7 @@ pub(crate) struct EffectBinding<'a> {
     pub(crate) intents: &'a [super::super::RoutineEffectIntent],
 }
 
-pub(crate) fn authority_binding(
+pub(super) fn authority_binding(
     request: &RoutineEffectRequest,
 ) -> Result<AuthorityBinding, RoutineError> {
     let effect_id = digest_of(&EffectBinding {
@@ -133,7 +33,7 @@ pub(crate) fn authority_binding(
     })
 }
 
-pub(crate) fn allowed_output_scopes(
+pub(super) fn allowed_output_scopes(
     request: &RoutineEffectRequest,
 ) -> Vec<crate::routine_work::RepoPath> {
     let mut scopes = request
@@ -146,7 +46,26 @@ pub(crate) fn allowed_output_scopes(
     scopes
 }
 
-pub(crate) fn random_session_id(binding: &AuthorityBinding) -> Result<String, RoutineError> {
+pub(super) fn reservation_grant_id(
+    session_id: &str,
+    request: &RoutineEffectRequest,
+    binding: &AuthorityBinding,
+    scopes: &[crate::routine_work::RepoPath],
+) -> Result<String, RoutineError> {
+    digest_of(&(
+        "routine-production-reservation-v1",
+        session_id,
+        request.request_id(),
+        request.protocol_id(),
+        request.context_id(),
+        request.candidate_id(),
+        request.plan_id(),
+        &binding.snapshot_id,
+        scopes,
+    ))
+}
+
+pub(super) fn random_session_id(binding: &AuthorityBinding) -> Result<String, RoutineError> {
     let mut nonce = [0u8; 32];
     getrandom::fill(&mut nonce)
         .map_err(|_| error("routine-production-authority-random-unavailable"))?;
@@ -158,13 +77,127 @@ pub(crate) fn random_session_id(binding: &AuthorityBinding) -> Result<String, Ro
     ]))
 }
 
-pub(crate) fn now_tick() -> Result<u64, RoutineError> {
-    SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .map(|duration| duration.as_secs())
-        .map_err(|_| error("routine-production-trusted-time-unavailable"))
+pub(super) fn owner_process_identity() -> Result<(i32, u64, u64, String), RoutineError> {
+    #[cfg(target_vendor = "apple")]
+    {
+        let process_id = std::process::id() as i32;
+        let mut info = std::mem::MaybeUninit::<libc::proc_bsdinfo>::zeroed();
+        let size = std::mem::size_of::<libc::proc_bsdinfo>() as i32;
+        let observed = unsafe {
+            libc::proc_pidinfo(
+                process_id,
+                libc::PROC_PIDTBSDINFO,
+                0,
+                info.as_mut_ptr().cast(),
+                size,
+            )
+        };
+        if observed != size {
+            return Err(error("routine-production-owner-identity-unavailable"));
+        }
+        let info = unsafe { info.assume_init() };
+        let mut nonce = [0_u8; 32];
+        getrandom::fill(&mut nonce)
+            .map_err(|_| error("routine-production-authority-random-unavailable"))?;
+        Ok((
+            process_id,
+            info.pbi_start_tvsec,
+            info.pbi_start_tvusec,
+            crate::routine_work::digest::sha256(&nonce),
+        ))
+    }
+    #[cfg(not(target_vendor = "apple"))]
+    {
+        Err(error("routine-production-authority-host-unsupported"))
+    }
 }
 
-pub(crate) fn error(cause: &'static str) -> RoutineError {
+pub(super) fn validate_observed_mediation(
+    result: &RoutineMediationResult,
+    settlement: DurableSettlement,
+    artifacts: &[Vec<u8>],
+    claimed: &BTreeMap<String, String>,
+) -> Result<BTreeMap<String, String>, RoutineError> {
+    use super::super::mediator::{
+        ReuseArtifactWire, RoutineMediatorStatus, RoutineNodeDisposition,
+    };
+    let valid_status = match settlement {
+        DurableSettlement::Complete => {
+            result.status() == RoutineMediatorStatus::CompleteExecution
+                && result
+                    .nodes()
+                    .iter()
+                    .all(|node| node.disposition() == RoutineNodeDisposition::Executed)
+        }
+        DurableSettlement::Failed => {
+            result.status() == RoutineMediatorStatus::IncompleteExecution
+                && result
+                    .nodes()
+                    .iter()
+                    .any(|node| node.disposition() == RoutineNodeDisposition::Failed)
+        }
+        DurableSettlement::Cancelled => {
+            result.status() == RoutineMediatorStatus::Cancelled
+                && result
+                    .nodes()
+                    .iter()
+                    .any(|node| node.disposition() == RoutineNodeDisposition::Cancelled)
+        }
+        DurableSettlement::Incomplete => {
+            result.status() == RoutineMediatorStatus::IncompleteExecution
+                && result.nodes().iter().all(|node| {
+                    !matches!(
+                        node.disposition(),
+                        RoutineNodeDisposition::Failed | RoutineNodeDisposition::Cancelled
+                    )
+                })
+        }
+    };
+    if !valid_status || result.recovery_required() {
+        return Err(error("routine-production-mediation-outcome-invalid"));
+    }
+    if settlement != DurableSettlement::Complete {
+        return if artifacts.is_empty() && claimed.is_empty() {
+            Ok(BTreeMap::new())
+        } else {
+            Err(error("routine-production-terminal-artifacts-unexpected"))
+        };
+    }
+    let expected_results = result
+        .nodes()
+        .iter()
+        .filter_map(|node| {
+            node.result_artifact_sha256()
+                .map(|digest| (node.node_id(), digest))
+        })
+        .collect::<BTreeMap<_, _>>();
+    let mut authenticated = BTreeMap::new();
+    for bytes in artifacts {
+        let wire: ReuseArtifactWire = serde_json::from_slice(bytes)
+            .map_err(|_| error("routine-production-artifact-observation-invalid"))?;
+        let digest = crate::routine_work::digest::sha256(bytes);
+        let witness = super::super::mediator::reuse_witness(&wire)?;
+        if crate::routine_work::digest::canonical(&wire)? != *bytes
+            || wire.schema_version != "RoutineMediatedReuseArtifact-v2"
+            || wire.state != "complete"
+            || wire.mediator_witness_sha256 != witness
+            || !super::super::mediator::result_matches_reuse(&wire)
+            || crate::routine_work::digest::digest_of(&wire.result_artifact)?
+                != wire.result_artifact_sha256
+            || expected_results.get(wire.node_id.as_str())
+                != Some(&wire.result_artifact_sha256.as_str())
+            || claimed.get(&digest) != Some(&witness)
+            || authenticated.insert(digest, witness).is_some()
+        {
+            return Err(error("routine-production-artifact-observation-invalid"));
+        }
+    }
+    if authenticated.len() != expected_results.len() || authenticated != *claimed {
+        return Err(error("routine-production-artifact-cardinality-invalid"));
+    }
+    Ok(authenticated)
+}
+
+pub(super) fn error(cause: &'static str) -> RoutineError {
     RoutineError::new(RoutineErrorId::InvalidRequest, cause, None)
 }

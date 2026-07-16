@@ -1,15 +1,40 @@
+use super::super::RUST_SOURCE_SYNTAX_BEHAVIOR;
 use super::*;
 
-pub(crate) fn mediate_intent(
+#[must_use = "the exact prepared intent must receive one process observation"]
+pub(crate) struct IntentExecutionRequest {
+    token: RoutineMediatedIntent,
+    snapshot_id: String,
+    dependencies: BTreeMap<String, String>,
+    root: RootAnchor,
+    program: PinnedExecutable,
+    outputs: OutputConfinement,
+    reads: ReadConfinement,
+    environment: BTreeMap<String, String>,
+    framed_input: Vec<u8>,
+    framed_input_sha256: String,
+    cancellation: RoutineCancellation,
+}
+
+pub(super) struct PreparedIntentExecution {
+    snapshot_id: String,
+    dependencies: BTreeMap<String, String>,
+    root: RootAnchor,
+    program: PinnedExecutable,
+    outputs: OutputConfinement,
+    reads: ReadConfinement,
+    environment: BTreeMap<String, String>,
+    framed_input: Vec<u8>,
+    framed_input_sha256: String,
+}
+
+pub(super) fn prepare_intent(
     context: &LiveContext,
     plan: &RoutinePlan,
     token: &RoutineMediatedIntent,
     snapshot_id: &str,
-    dependencies: &BTreeMap<String, String>,
-    reuse: Option<&Vec<u8>>,
-    cancellation: &RoutineCancellation,
-    attempt: &AttemptReservation,
-) -> Result<IntentResult, RoutineError> {
+    dependencies: BTreeMap<String, String>,
+) -> Result<PreparedIntentExecution, RoutineError> {
     token.require_current()?;
     validate_intent(context, plan, token.intent())?;
     let root = RootAnchor::open(context.worktree_root())?;
@@ -25,170 +50,176 @@ pub(crate) fn mediate_intent(
         token.intent().output_budget_bytes(),
     )?;
     let reads = ReadConfinement::open_bound(&root, token.intent().read_sources())?;
-    if let Some(bytes) = reuse {
-        if let Some(verified) = verify_reuse_artifact(
-            bytes,
+    let environment = execution_environment(token)?;
+    if token.intent().behavior_id() != RUST_SOURCE_SYNTAX_BEHAVIOR {
+        return Err(mediator_error("mediator-behavior-unsupported"));
+    }
+    let framed_input = reads.rust_source_syntax_frame(&root)?;
+    Ok(PreparedIntentExecution {
+        snapshot_id: snapshot_id.to_owned(),
+        dependencies,
+        root,
+        program,
+        outputs,
+        reads,
+        environment,
+        framed_input_sha256: sha256(&framed_input),
+        framed_input,
+    })
+}
+
+pub(super) fn bind_intent_request(
+    token: RoutineMediatedIntent,
+    prepared: PreparedIntentExecution,
+    cancellation: RoutineCancellation,
+) -> IntentExecutionRequest {
+    IntentExecutionRequest {
+        token,
+        snapshot_id: prepared.snapshot_id,
+        dependencies: prepared.dependencies,
+        root: prepared.root,
+        program: prepared.program,
+        outputs: prepared.outputs,
+        reads: prepared.reads,
+        environment: prepared.environment,
+        framed_input: prepared.framed_input,
+        framed_input_sha256: prepared.framed_input_sha256,
+        cancellation,
+    }
+}
+
+impl IntentExecutionRequest {
+    pub(crate) fn program(&self) -> &PinnedExecutable {
+        &self.program
+    }
+
+    pub(crate) fn root(&self) -> &RootAnchor {
+        &self.root
+    }
+
+    pub(crate) fn outputs(&self) -> &OutputConfinement {
+        &self.outputs
+    }
+
+    pub(crate) fn reads(&self) -> &ReadConfinement {
+        &self.reads
+    }
+
+    pub(crate) fn argv(&self) -> &[String] {
+        self.token.intent().argv()
+    }
+
+    pub(crate) fn environment(&self) -> &BTreeMap<String, String> {
+        &self.environment
+    }
+
+    pub(crate) fn framed_input(&self) -> &[u8] {
+        &self.framed_input
+    }
+
+    pub(crate) fn timeout(&self) -> Duration {
+        Duration::from_millis(self.token.intent().timeout_ms())
+    }
+
+    pub(crate) fn output_budget(&self) -> u64 {
+        self.token.intent().output_budget_bytes()
+    }
+
+    pub(crate) fn cancellation(&self) -> &RoutineCancellation {
+        &self.cancellation
+    }
+
+    pub(crate) fn node_id(&self) -> &str {
+        self.token.intent().node_id()
+    }
+
+    pub(crate) fn intent_id(&self) -> &str {
+        self.token.intent().intent_id()
+    }
+
+    pub(crate) fn plan_order(&self) -> usize {
+        self.token.intent().plan_order()
+    }
+
+    pub(super) fn observe(
+        self,
+        context: &LiveContext,
+        plan: &RoutinePlan,
+        observation: ProcessObservation,
+    ) -> Result<IntentResult, RoutineError> {
+        self.reads.validate(&self.root)?;
+        let disposition = match observation.termination {
+            ProcessTermination::Exited(0) => None,
+            ProcessTermination::Cancelled => {
+                Some((RoutineNodeDisposition::Cancelled, "MEDIATOR-CANCELLED"))
+            }
+            ProcessTermination::TimedOut => {
+                Some((RoutineNodeDisposition::Failed, "MEDIATOR-TIMEOUT"))
+            }
+            ProcessTermination::OutputLimit => {
+                Some((RoutineNodeDisposition::Failed, "MEDIATOR-OUTPUT-LIMIT"))
+            }
+            ProcessTermination::DescendantSurvived => Some((
+                RoutineNodeDisposition::Failed,
+                "MEDIATOR-DESCENDANT-SURVIVED",
+            )),
+            ProcessTermination::CleanupFailed => {
+                return Err(mediator_error("mediator-process-cleanup-failed"));
+            }
+            ProcessTermination::Exited(_) | ProcessTermination::Signaled(_) => {
+                Some((RoutineNodeDisposition::Failed, "MEDIATOR-CHECK-FAILED"))
+            }
+        };
+        if let Some((disposition, failure_code)) = disposition {
+            let result = IntentResult::Incomplete {
+                disposition,
+                failure_code,
+            };
+            self.token.advance()?;
+            return Ok(result);
+        }
+        if validate_rust_source_observation(Some(&self.framed_input), &observation).is_err() {
+            let result = IntentResult::Incomplete {
+                disposition: RoutineNodeDisposition::Failed,
+                failure_code: "MEDIATOR-BEHAVIOR-OBSERVATION-INVALID",
+            };
+            self.token.advance()?;
+            return Ok(result);
+        }
+        let output_files = self.outputs.capture_owned_delta()?;
+        let artifact_bytes = output_files
+            .values()
+            .try_fold(0_u64, |total, file| total.checked_add(file.byte_length));
+        if artifact_bytes
+            .and_then(|total| total.checked_add(observation.output_byte_length))
+            .is_none_or(|total| total > self.output_budget())
+        {
+            let result = IntentResult::Incomplete {
+                disposition: RoutineNodeDisposition::Failed,
+                failure_code: "MEDIATOR-OUTPUT-LIMIT",
+            };
+            self.token.advance()?;
+            return Ok(result);
+        }
+        self.outputs.validate()?;
+        self.reads.validate(&self.root)?;
+        self.root.validate()?;
+        self.program.validate()?;
+        context
+            .revalidate()
+            .map_err(|_| concurrent("mediator-context-mutated-by-process"))?;
+        validate_snapshot(context, &self.snapshot_id)?;
+        let result = project_executed_intent(
             context,
             plan,
-            token,
-            snapshot_id,
-            dependencies,
-            &outputs,
-            attempt,
-        )? {
-            reads.validate(&root)?;
-            return Ok(IntentResult::Reused(verified));
-        }
-        if attempt
-            .durable
-            .as_ref()
-            .is_some_and(|durable| durable.reuse_only())
-        {
-            return Err(mediator_error(
-                "mediator-production-reuse-not-authenticated",
-            ));
-        }
-    } else if attempt
-        .durable
-        .as_ref()
-        .is_some_and(|durable| durable.reuse_only())
-    {
-        return Err(mediator_error("mediator-production-reuse-artifact-missing"));
+            &self.token,
+            &self.snapshot_id,
+            &self.dependencies,
+            &self.framed_input_sha256,
+            &observation,
+            output_files,
+        )?;
+        self.token.advance()?;
+        Ok(IntentResult::Executed(result))
     }
-    attempt.prepare_spawn()?;
-    let environment = execution_environment(token)?;
-    let observation = process::execute(
-        &program,
-        &root,
-        &outputs,
-        &reads,
-        token.intent().argv(),
-        &environment,
-        Duration::from_millis(token.intent().timeout_ms()),
-        token.intent().output_budget_bytes(),
-        cancellation,
-        || attempt.mark_started(),
-    );
-    let observation = match observation {
-        Ok(value) => value,
-        Err(error) => {
-            return Err(error);
-        }
-    };
-    if observation.started {
-        run_test_post_spawn_hook();
-    }
-    reads.validate(&root)?;
-    let disposition = match observation.termination {
-        ProcessTermination::Exited(0) => None,
-        ProcessTermination::Cancelled => {
-            Some((RoutineNodeDisposition::Cancelled, "MEDIATOR-CANCELLED"))
-        }
-        ProcessTermination::TimedOut => Some((RoutineNodeDisposition::Failed, "MEDIATOR-TIMEOUT")),
-        ProcessTermination::OutputLimit => {
-            Some((RoutineNodeDisposition::Failed, "MEDIATOR-OUTPUT-LIMIT"))
-        }
-        ProcessTermination::DescendantSurvived => Some((
-            RoutineNodeDisposition::Failed,
-            "MEDIATOR-DESCENDANT-SURVIVED",
-        )),
-        ProcessTermination::CleanupFailed => {
-            Some((RoutineNodeDisposition::Failed, "MEDIATOR-CLEANUP-FAILED"))
-        }
-        ProcessTermination::Exited(_) | ProcessTermination::Signaled(_) => {
-            Some((RoutineNodeDisposition::Failed, "MEDIATOR-CHECK-FAILED"))
-        }
-    };
-    if let Some((disposition, failure_code)) = disposition {
-        return Ok(IntentResult::Incomplete {
-            disposition,
-            failure_code,
-            started: observation.started,
-        });
-    }
-    let report = parse_command_report(&observation.stdout, token)?;
-    let output_files = outputs.capture()?;
-    let artifact_bytes = output_files
-        .values()
-        .try_fold(0_u64, |total, file| total.checked_add(file.byte_length));
-    if artifact_bytes
-        .and_then(|total| total.checked_add(observation.output_byte_length))
-        .is_none_or(|total| total > token.intent().output_budget_bytes())
-    {
-        return Ok(IntentResult::Incomplete {
-            disposition: RoutineNodeDisposition::Failed,
-            failure_code: "MEDIATOR-OUTPUT-LIMIT",
-            started: true,
-        });
-    }
-    outputs.validate()?;
-    reads.validate(&root)?;
-    root.validate()?;
-    program.validate()?;
-    context
-        .revalidate()
-        .map_err(|_| concurrent("mediator-context-mutated-by-process"))?;
-    validate_snapshot(context, snapshot_id)?;
-    let behavior_sha256 = framed(&[
-        RESULT_DOMAIN,
-        &observation.stdout,
-        observation.stderr_sha256.as_bytes(),
-        digest_of(&output_files)?.as_bytes(),
-    ]);
-    if report.outcome != "passed" || !report.behavior_observed {
-        return Ok(IntentResult::Incomplete {
-            disposition: RoutineNodeDisposition::Failed,
-            failure_code: "MEDIATOR-REPORT-NOT-PASSED",
-            started: true,
-        });
-    }
-    let result = ResultArtifactWire {
-        schema_version: "RoutineMediatedResultArtifact-v1".to_owned(),
-        request_id: token.request_id().to_owned(),
-        protocol_id: token.protocol_id().to_owned(),
-        intent_id: token.intent().intent_id().to_owned(),
-        node_id: token.intent().node_id().to_owned(),
-        plan_order: token.intent().plan_order(),
-        context_id: context.context_id().to_owned(),
-        candidate_id: plan.binding().candidate_id().to_owned(),
-        plan_id: plan.plan_id().to_owned(),
-        snapshot_id: snapshot_id.to_owned(),
-        input_id: token.intent().input_id().to_owned(),
-        tool_identity_sha256: token.intent().tool_identity_sha256().to_owned(),
-        program_sha256: token.intent().program_sha256().to_owned(),
-        environment_sha256: token.intent().environment_sha256().to_owned(),
-        read_authority_sha256: token.intent().read_authority_sha256().to_owned(),
-        dependency_results: dependencies.clone(),
-        behavior_sha256,
-        output_files: output_files.clone(),
-    };
-    let result_bytes = canonical(&result)?;
-    let result_sha256 = sha256(&result_bytes);
-    let mut reuse = ReuseArtifactWire {
-        schema_version: "RoutineMediatedReuseArtifact-v1".to_owned(),
-        state: "complete".to_owned(),
-        protocol_id: token.protocol_id().to_owned(),
-        intent_id: token.intent().intent_id().to_owned(),
-        node_id: token.intent().node_id().to_owned(),
-        plan_order: token.intent().plan_order(),
-        context_id: context.context_id().to_owned(),
-        candidate_id: plan.binding().candidate_id().to_owned(),
-        plan_id: plan.plan_id().to_owned(),
-        snapshot_id: snapshot_id.to_owned(),
-        input_id: token.intent().input_id().to_owned(),
-        tool_identity_sha256: token.intent().tool_identity_sha256().to_owned(),
-        program_sha256: token.intent().program_sha256().to_owned(),
-        environment_sha256: token.intent().environment_sha256().to_owned(),
-        read_authority_sha256: token.intent().read_authority_sha256().to_owned(),
-        dependency_results: dependencies.clone(),
-        output_files,
-        result_artifact: result,
-        result_artifact_sha256: result_sha256.clone(),
-        mediator_witness_sha256: String::new(),
-    };
-    reuse.mediator_witness_sha256 = reuse_witness(&reuse)?;
-    Ok(IntentResult::Executed(ExecutedArtifact {
-        result_sha256,
-        reuse_bytes: canonical(&reuse)?,
-    }))
 }

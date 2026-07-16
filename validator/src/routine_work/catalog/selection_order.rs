@@ -79,55 +79,13 @@ pub(crate) struct RawCatalog {
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct RawRoutineDefinition {
-    pub(crate) definition_id: String,
     pub(crate) node_id: String,
+    pub(crate) behavior_id: String,
     pub(crate) depends_on: Vec<String>,
-    pub(crate) working_directory: String,
-    pub(crate) runner_policy: String,
-    pub(crate) read_policy: String,
     pub(crate) read_sources: Vec<String>,
-    pub(crate) environment: BTreeMap<String, String>,
     pub(crate) timeout_ms: u64,
     pub(crate) output_budget_bytes: u64,
     pub(crate) output_scopes: Vec<String>,
-    pub(crate) primary: RawRunnerRecipe,
-    pub(crate) fallback: Option<RawFallbackRecipe>,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub(crate) struct RawRunnerRecipe {
-    pub(crate) tool: String,
-    pub(crate) tool_identity_sha256: String,
-    pub(crate) executable_path: String,
-    pub(crate) program_sha256: String,
-    pub(crate) program_byte_length: u64,
-    pub(crate) program_unix_mode: u32,
-    pub(crate) arguments: Vec<String>,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub(crate) struct RawFallbackRecipe {
-    pub(crate) tool: String,
-    pub(crate) tool_identity_sha256: String,
-    pub(crate) executable_path: String,
-    pub(crate) program_sha256: String,
-    pub(crate) program_byte_length: u64,
-    pub(crate) program_unix_mode: u32,
-    pub(crate) arguments: Vec<String>,
-    pub(crate) equivalence: String,
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
-pub(crate) struct RunnerRecipe {
-    pub(crate) tool: String,
-    pub(crate) tool_identity_sha256: String,
-    pub(crate) executable_path: PathBuf,
-    pub(crate) program_sha256: String,
-    pub(crate) program_byte_length: u64,
-    pub(crate) program_unix_mode: u32,
-    pub(crate) arguments: Vec<String>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
@@ -135,24 +93,10 @@ pub(crate) struct RoutineDefinition {
     pub(crate) definition_id: String,
     pub(crate) definition_sha256: String,
     pub(crate) node_id: String,
+    pub(crate) behavior_id: String,
     pub(crate) depends_on: BTreeSet<String>,
     pub(crate) read_sources: Vec<CatalogPath>,
-    pub(crate) environment: BTreeMap<String, String>,
     pub(crate) timeout_ms: u64,
     pub(crate) output_budget_bytes: u64,
     pub(crate) output_scopes: Vec<CatalogPath>,
-    pub(crate) primary: RunnerRecipe,
-    pub(crate) fallback: Option<RunnerRecipe>,
-}
-
-impl RoutineDefinition {
-    pub(crate) fn recipe(&self, fallback: bool) -> CatalogResult<&RunnerRecipe> {
-        if fallback {
-            self.fallback
-                .as_ref()
-                .ok_or_else(|| error("catalog-selection-fallback-unavailable"))
-        } else {
-            Ok(&self.primary)
-        }
-    }
 }

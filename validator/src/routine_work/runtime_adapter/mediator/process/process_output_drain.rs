@@ -1,5 +1,11 @@
 use super::*;
 
+pub(crate) struct Drained {
+    pub(crate) retained: Vec<u8>,
+    pub(crate) sha256: String,
+    pub(crate) closed: bool,
+}
+
 pub(crate) fn drain(
     mut reader: impl Read,
     limit: u64,
@@ -68,40 +74,45 @@ pub(crate) fn set_nonblocking(file: &impl AsRawFd) -> Result<(), RoutineError> {
 }
 
 #[cfg(test)]
-pub(crate) type SetupFailureHook = Box<dyn FnOnce() + Send + 'static>;
+pub(crate) type ProcessFailureHook = Box<dyn FnOnce() + Send + 'static>;
 
 #[cfg(test)]
-pub(crate) fn setup_failure_hook() -> &'static Mutex<Option<(SetupFailurePoint, SetupFailureHook)>>
-{
-    static HOOK: OnceLock<Mutex<Option<(SetupFailurePoint, SetupFailureHook)>>> = OnceLock::new();
-    HOOK.get_or_init(|| Mutex::new(None))
+thread_local! {
+    static PROCESS_FAILURE_HOOKS: RefCell<Vec<(ProcessFailurePoint, ProcessFailureHook)>> =
+        RefCell::new(Vec::new());
 }
 
 #[cfg(test)]
-pub(crate) fn set_test_process_setup_failure(
-    point: SetupFailurePoint,
+pub(crate) fn set_test_process_failure(
+    point: ProcessFailurePoint,
     hook: impl FnOnce() + Send + 'static,
 ) {
-    *setup_failure_hook()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner) = Some((point, Box::new(hook)));
+    PROCESS_FAILURE_HOOKS.with(|slot| {
+        let mut slot = slot.borrow_mut();
+        slot.clear();
+        slot.push((point, Box::new(hook)));
+    });
 }
 
 #[cfg(test)]
-pub(crate) fn maybe_inject_setup_failure(
-    point: SetupFailurePoint,
+pub(crate) fn append_test_process_failure(
+    point: ProcessFailurePoint,
+    hook: impl FnOnce() + Send + 'static,
+) {
+    PROCESS_FAILURE_HOOKS.with(|slot| slot.borrow_mut().push((point, Box::new(hook))));
+}
+
+#[cfg(test)]
+pub(crate) fn maybe_inject_process_failure(
+    point: ProcessFailurePoint,
     cause: &'static str,
 ) -> Result<(), RoutineError> {
-    let hook = {
-        let mut slot = setup_failure_hook()
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner);
-        if slot.as_ref().map(|(expected, _)| *expected) == Some(point) {
-            slot.take().map(|(_, hook)| hook)
-        } else {
-            None
-        }
-    };
+    let hook = PROCESS_FAILURE_HOOKS.with(|slot| {
+        let mut slot = slot.borrow_mut();
+        slot.iter()
+            .position(|(expected, _)| *expected == point)
+            .map(|index| slot.remove(index).1)
+    });
     if let Some(hook) = hook {
         hook();
         return Err(mediator_error(cause));
@@ -110,8 +121,8 @@ pub(crate) fn maybe_inject_setup_failure(
 }
 
 #[cfg(not(test))]
-pub(crate) fn maybe_inject_setup_failure(
-    _point: SetupFailurePoint,
+pub(crate) fn maybe_inject_process_failure(
+    _point: ProcessFailurePoint,
     _cause: &'static str,
 ) -> Result<(), RoutineError> {
     Ok(())
@@ -119,7 +130,6 @@ pub(crate) fn maybe_inject_setup_failure(
 
 #[cfg(target_os = "macos")]
 pub(crate) fn sandbox_profile(
-    program: &Path,
     working_directory: &Path,
     read_sources: &[&Path],
     scopes: &[&Path],
@@ -127,12 +137,6 @@ pub(crate) fn sandbox_profile(
     let mut profile = String::from(
         "(version 1)\n(allow default)\n(deny network*)\n(deny process-fork (with send-signal SIGKILL))\n(deny process-exec)\n(deny file-map-executable)\n(allow file-map-executable (subpath \"/System\"))\n(allow file-map-executable (subpath \"/usr/lib\"))\n(deny file-read*)\n(allow file-read* (literal \"/\"))\n(allow file-read* (subpath \"/System\"))\n(allow file-read* (subpath \"/usr/lib\"))\n(allow file-read* (subpath \"/private/var/db/dyld\"))\n(deny file-write*)\n(deny file-clone file-link)\n",
     );
-    let program = program
-        .to_str()
-        .ok_or_else(|| mediator_error("mediator-executable-path-not-utf8"))?;
-    profile.push_str("(allow process-exec (literal \"");
-    profile.push_str(&sandbox_escape(program)?);
-    profile.push_str("\"))\n");
     for ancestor in working_directory
         .ancestors()
         .collect::<Vec<_>>()
@@ -149,9 +153,6 @@ pub(crate) fn sandbox_profile(
         profile.push_str(&sandbox_escape(text)?);
         profile.push_str("\"))\n");
     }
-    profile.push_str("(allow file-read* (literal \"");
-    profile.push_str(&sandbox_escape(program)?);
-    profile.push_str("\"))\n");
     for source in read_sources {
         let text = source
             .to_str()

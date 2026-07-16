@@ -1,6 +1,11 @@
-use super::scenario::{Fixture, NodeSpec, pass_node, prefix_route, tree, wait_for_started};
+use super::scenario::{
+    ContainedContender, Fixture, contain_contender, pass_node, prefix_route, run_bounded_contender,
+    tree,
+};
 use serde_json::Value;
 use std::fs;
+use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 
 #[test]
@@ -9,25 +14,40 @@ fn fixture_matrix_names_the_public_production_contract_without_claim_effect() {
         "../../../fixtures/routine-public-production/cases.json"
     ))
     .unwrap();
-    assert_eq!(value["schema_version"], "RoutinePublicProductionCases-v1");
+    assert_eq!(value["schema_version"], "RoutinePublicProductionCases-v2");
     assert_eq!(value["supported_host"], "target_vendor=apple");
     assert_eq!(value["claim_effect"], "none");
     let cases = value["cases"].as_array().unwrap();
-    assert_eq!(cases.len(), 20);
+    assert_eq!(cases.len(), 7);
     assert_eq!(
         cases
             .iter()
             .filter_map(Value::as_str)
             .collect::<std::collections::BTreeSet<_>>()
             .len(),
-        20
+        7
+    );
+    let runtime_cases = value["immutable_runtime_cases"].as_array().unwrap();
+    assert_eq!(runtime_cases.len(), 8);
+    assert_eq!(
+        runtime_cases
+            .iter()
+            .filter_map(Value::as_str)
+            .collect::<std::collections::BTreeSet<_>>()
+            .len(),
+        8
+    );
+    assert!(
+        value["installed_runtime_ceiling"]
+            .as_str()
+            .unwrap()
+            .contains("immutable installed ultragoal runtime")
     );
 }
-
 #[test]
-fn clean_public_binary_is_noop_without_opening_host_authority() {
-    let fixture = Fixture::new(
-        "clean-noop",
+fn clean_public_routine_is_a_zero_effect_noop() {
+    let mut fixture = Fixture::new(
+        "clean-no-op",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
         false,
@@ -40,199 +60,190 @@ fn clean_public_binary_is_noop_without_opening_host_authority() {
     assert_eq!(output.status.code(), Some(0), "{output:?}");
     assert!(output.stderr.is_empty(), "{output:?}");
     let value = Fixture::value(&output);
-    assert_eq!(value["schema_version"], "RoutinePublicProductionOutcome-v1");
     assert_eq!(value["status"], "clean-no-op");
     assert_eq!(value["effect"], "none");
-    assert_eq!(value["claim_effect"], "none");
-    assert_eq!(tree(&fixture.root), before_root);
+    let after_root = tree(&fixture.root);
+    for (path, value) in before_root {
+        assert_eq!(
+            after_root.get(&path),
+            Some(&value),
+            "source changed: {path}"
+        );
+    }
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fixture.status(), before_status);
+    fixture.teardown_after_assertions();
 }
-
 #[test]
-fn dirty_public_binary_executes_then_authenticates_exact_durable_reuse() {
-    let fixture = Fixture::new(
+fn dirty_public_effect_executes_once_then_repeat_refuses_without_mutation() {
+    let mut fixture = Fixture::new(
         "execute-reuse",
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
         true,
         true,
     );
-    let first = fixture.run();
-    assert_eq!(first.status.code(), Some(0), "{first:?}");
-    assert!(first.stderr.is_empty(), "{first:?}");
-    let first_value = Fixture::value(&first);
-    assert_eq!(first_value["status"], "executed");
-    assert_eq!(first_value["effect"], "workspace_write");
-    assert_eq!(first_value["nodes"][0]["node_id"], "compile");
-    assert_eq!(first_value["nodes"][0]["disposition"], "executed");
-    assert_eq!(
-        fs::read(fixture.root.join("target/routine/compile/result.txt")).unwrap(),
-        b"compile"
-    );
-    assert!(fixture.cache_path().is_file());
-    assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 3);
+    let before_root = tree(&fixture.root);
+    let executed = fixture.run();
+    assert_eq!(executed.status.code(), Some(0), "{executed:?}");
+    assert!(executed.stderr.is_empty(), "{executed:?}");
+    let executed_value = Fixture::value(&executed);
+    assert_eq!(executed_value["status"], "executed");
+    assert_eq!(executed_value["nodes"][0]["disposition"], "executed");
+    let after_root = tree(&fixture.root);
+    for (path, value) in before_root {
+        assert_eq!(
+            after_root.get(&path),
+            Some(&value),
+            "source changed: {path}"
+        );
+    }
 
-    let output_before = fs::read(fixture.root.join("target/routine/compile/result.txt")).unwrap();
-    let second = fixture.run();
-    assert_eq!(second.status.code(), Some(0), "{second:?}");
-    assert!(second.stderr.is_empty(), "{second:?}");
-    let second_value = Fixture::value(&second);
-    assert_eq!(second_value["status"], "reused");
-    assert_eq!(second_value["nodes"][0]["disposition"], "reused");
-    assert_eq!(
-        fs::read(fixture.root.join("target/routine/compile/result.txt")).unwrap(),
-        output_before
+    let before_repeat = tree(&fixture.root);
+    assert_session_continuity_refusal(&fixture.run());
+    assert_eq!(tree(&fixture.root), before_repeat);
+    fixture.teardown_after_assertions();
+}
+#[test]
+fn authorized_fresh_execution_then_exact_repeat_requires_session_continuity() {
+    let mut fixture = Fixture::new(
+        "authorized-fresh-repeat",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
     );
+    assert!(!fixture.root.join("target").exists());
+
+    let executed = fixture.run();
+    assert_eq!(executed.status.code(), Some(0), "{executed:?}");
+    assert!(executed.stderr.is_empty(), "{executed:?}");
+    let executed = Fixture::value(&executed);
+    assert_eq!(executed["status"], "executed");
+    assert_eq!(executed["nodes"][0]["disposition"], "executed");
+    let scope = fixture.root.join("target/routine/compile");
+    assert!(scope.is_dir());
+    assert_eq!(fs::read_dir(&scope).unwrap().count(), 0);
+
+    assert_session_continuity_refusal(&fixture.run());
+    assert_eq!(fs::read_dir(scope).unwrap().count(), 0);
+    fixture.teardown_after_assertions();
 }
 
 #[test]
-fn affected_selection_is_conservative_but_does_not_run_unrelated_nodes() {
-    let nodes = [pass_node("compile", &[]), pass_node("docs", &[])];
-    let routes = [
-        prefix_route("route-src", "src", &["compile"]),
-        prefix_route("route-docs", "docs", &["docs"]),
-    ];
-    let fixture = Fixture::new("partial-selection", &nodes, &routes, true, true);
-    let output = fixture.run();
+fn public_output_creation_is_observed_only_after_the_durable_journal() {
+    let mut fixture = Fixture::new(
+        "durable-output-order",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let scope = fixture.root.join("target/routine/compile");
+    let state = fixture.authority_root().join("routine-authority.state");
+    let stopped = Arc::new(AtomicBool::new(false));
+    let watcher_stopped = Arc::clone(&stopped);
+    let watcher = std::thread::spawn(move || {
+        loop {
+            if scope.is_dir() {
+                let durable =
+                    fs::read(&state).map_err(|_| "output appeared before durable state")?;
+                let text = String::from_utf8(durable).map_err(|_| "durable state is not UTF-8")?;
+                if !text.contains("\"output_journal\"") || !text.contains("target/routine/compile")
+                {
+                    return Err("output appeared before its durable journal binding");
+                }
+                return Ok(());
+            }
+            if watcher_stopped.load(Ordering::Acquire) {
+                return Err("child exited without provisioning output");
+            }
+            std::thread::sleep(Duration::from_millis(2));
+        }
+    });
+    let mut command = fixture.base_command();
+    command.args(["--json", "check", "routine"]);
+    let observed = contain_contender(
+        run_bounded_contender(&mut command, Duration::from_secs(60)),
+        Duration::from_secs(2),
+    );
+    stopped.store(true, Ordering::Release);
+    let journal = watcher.join().expect("journal watcher panicked");
+    let outcome = match observed {
+        ContainedContender::Exited(output) => Ok(output),
+        ContainedContender::TerminatedAndReaped(_) => Err("public command timed out"),
+        ContainedContender::ExitedAtDeadline(_) => Err("public command exited after deadline"),
+        ContainedContender::ReapedWithFailure(_) => Err("public command cleanup failed"),
+    };
+    fixture.teardown_after_assertions();
+    assert_eq!(journal, Ok(()));
+    let output = outcome.unwrap();
     assert_eq!(output.status.code(), Some(0), "{output:?}");
-    let value = Fixture::value(&output);
-    assert_eq!(value["status"], "executed");
-    assert_eq!(value["nodes"].as_array().unwrap().len(), 1);
-    assert_eq!(value["nodes"][0]["node_id"], "compile");
-    assert!(
-        fixture
-            .root
-            .join("target/routine/compile/result.txt")
-            .exists()
-    );
-    assert!(!fixture.root.join("target/routine/docs/result.txt").exists());
+    assert!(output.stderr.is_empty(), "{output:?}");
 }
 
 #[test]
-fn dependency_closed_partial_failure_reports_stable_cause_and_withholds_cache() {
-    let nodes = [
-        pass_node("compile", &[]),
-        NodeSpec {
-            id: "verify",
-            dependencies: &["compile"],
-            primary: "bash",
-            fallback: None,
-            action: "fail",
-            delay_seconds: 0,
-            read_sources: &["src/lib.rs"],
-        },
-    ];
-    let fixture = Fixture::new(
-        "partial-failure",
-        &nodes,
-        &[prefix_route("route-src", "src", &["verify"])],
+fn terminal_failure_serializes_no_recovery_and_fresh_process_refuses_takeover() {
+    let mut fixture = Fixture::new(
+        "terminal-failure-retry",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
         true,
         true,
     );
+    fs::write(fixture.root.join("src/lib.rs"), b"pub fn broken(\n").unwrap();
+
     let output = fixture.run();
-    assert_ne!(output.status.code(), Some(0), "{output:?}");
+    assert_eq!(output.status.code(), Some(1), "{output:?}");
     assert!(output.stderr.is_empty(), "{output:?}");
     let value = Fixture::value(&output);
     assert_eq!(value["status"], "incomplete");
-    assert_eq!(value["nodes"].as_array().unwrap().len(), 2);
-    assert_eq!(value["nodes"][0]["node_id"], "compile");
-    assert_eq!(value["nodes"][0]["disposition"], "executed");
-    assert_eq!(value["nodes"][1]["node_id"], "verify");
-    assert_eq!(value["nodes"][1]["disposition"], "failed");
-    let failure = value["nodes"][1]["failure_code"].as_str().unwrap();
-    assert!(failure.starts_with("MEDIATOR-"), "{failure}");
-    assert!(!failure.contains(fixture.root.to_str().unwrap()));
-    assert!(!fixture.cache_path().exists());
+    assert_eq!(value["recovery_required"], false);
+    assert_eq!(value["nodes"][0]["disposition"], "failed");
+    assert_session_continuity_refusal(&fixture.run());
+    fixture.teardown_after_assertions();
 }
 
 #[test]
-fn unavailable_primary_uses_only_the_adopted_fixed_template_fallback() {
-    let node = NodeSpec {
-        id: "compile",
-        dependencies: &[],
-        primary: "routine-unavailable",
-        fallback: Some("bash"),
-        action: "pass",
-        delay_seconds: 0,
-        read_sources: &["src/lib.rs"],
-    };
-    let fixture = Fixture::new(
-        "fallback",
-        &[node],
+fn independent_fresh_authority_roots_execute_once_and_refuse_repeat() {
+    let mut first = Fixture::new(
+        "binding-first",
+        &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
         true,
         true,
     );
+    let mut second = Fixture::new(
+        "binding-second",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    assert_status(&first, "executed");
+    assert_status(&second, "executed");
+    assert_session_continuity_refusal(&first.run());
+    assert_session_continuity_refusal(&second.run());
+    second.teardown_after_assertions();
+    first.teardown_after_assertions();
+}
+
+fn assert_session_continuity_refusal(output: &std::process::Output) {
+    assert_eq!(output.status.code(), Some(3), "{output:?}");
+    assert!(output.stdout.is_empty(), "{output:?}");
+    let value: Value = serde_json::from_slice(&output.stderr).unwrap();
+    assert_eq!(
+        value["cause"],
+        "routine-production-session-continuity-required"
+    );
+    let ceiling = value["resulting_ceiling"].as_str().unwrap();
+    assert!(ceiling.contains("reuse, repeat execution"), "{ceiling}");
+    assert!(ceiling.contains("external monotonic head"), "{ceiling}");
+}
+
+fn assert_status(fixture: &Fixture, expected: &str) {
     let output = fixture.run();
     assert_eq!(output.status.code(), Some(0), "{output:?}");
-    let value = Fixture::value(&output);
-    assert_eq!(value["status"], "executed");
-    assert_eq!(value["fallback_tool_count"], 1);
-}
-
-#[test]
-fn interrupted_process_restarts_through_exact_durable_recovery() {
-    let node = NodeSpec {
-        id: "compile",
-        dependencies: &[],
-        primary: "bash",
-        fallback: None,
-        action: "pass",
-        delay_seconds: 2,
-        read_sources: &["src/lib.rs"],
-    };
-    let fixture = Fixture::new(
-        "restart-recovery",
-        &[node],
-        &[prefix_route("route-src", "src", &["compile"])],
-        true,
-        true,
-    );
-    let mut child = fixture.spawn();
-    wait_for_started(&fixture.authority_root());
-    child.kill().unwrap();
-    let _ = child.wait();
-    std::thread::sleep(Duration::from_secs(3));
-    let recovered = fixture.run();
-    assert_eq!(recovered.status.code(), Some(0), "{recovered:?}");
-    let value = Fixture::value(&recovered);
-    assert_eq!(value["status"], "executed");
-    assert_eq!(value["recovery_required"], false);
-    assert!(fixture.cache_path().is_file());
-}
-
-#[test]
-fn concurrent_public_processes_serialize_to_one_execution_and_one_reuse() {
-    let node = NodeSpec {
-        id: "compile",
-        dependencies: &[],
-        primary: "bash",
-        fallback: None,
-        action: "pass",
-        delay_seconds: 1,
-        read_sources: &["src/lib.rs"],
-    };
-    let fixture = Fixture::new(
-        "concurrent",
-        &[node],
-        &[prefix_route("route-src", "src", &["compile"])],
-        true,
-        true,
-    );
-    let first = fixture.spawn();
-    std::thread::sleep(Duration::from_millis(50));
-    let second = fixture.spawn();
-    let first = first.wait_with_output().unwrap();
-    let second = second.wait_with_output().unwrap();
-    assert_eq!(first.status.code(), Some(0), "{first:?}");
-    assert_eq!(second.status.code(), Some(0), "{second:?}");
-    let statuses = [Fixture::value(&first), Fixture::value(&second)]
-        .into_iter()
-        .map(|value| value["status"].as_str().unwrap().to_owned())
-        .collect::<std::collections::BTreeSet<_>>();
-    assert_eq!(
-        statuses,
-        std::collections::BTreeSet::from(["executed".to_owned(), "reused".to_owned()])
-    );
+    assert!(output.stderr.is_empty(), "{output:?}");
+    assert_eq!(Fixture::value(&output)["status"], expected);
 }
