@@ -57,7 +57,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | under_review | `e784f0366` / tree `476d42ea` | Clean source-only owner-transition freeze; stale WorkerResult remains byte-untouched at `sha256:6be846b4537f3866f852218609c1c0b7b9817246a215e57a3780ca4dbf53221a`; one exhaustive exact-candidate review is active and every dependent claim remains withheld | Accept the complete custody invariant or return one batched REWORK to the same owner; regenerate the single WorkerResult only after source acceptance |
+| N06 routine execution | rework | rejected `e784f0366` / tree `476d42ea` | Exhaustive review found false durable settlement for non-durable `Complete`, mediator-wide issuer/terminal bypass, uncaught settlement panic that strands custody, and controls that omit those routes; stale WorkerResult remains byte-untouched and every dependent claim remains withheld | Same owner must replace authority-by-shape with one sealed typed transaction, cover the complete sibling transition family, and return one new clean freeze before receipt regeneration |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld | Preserve unchanged until its dependency ceiling is current |
@@ -66,14 +66,16 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `0`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `45`. Exact clean candidate
-`e784f0366` / tree `476d42ea` is under one exhaustive source review after the
-same owner nested raw reservation and registry state behind the private owner
-wrapper and replaced caller settlement with a nonterminal capability plus typed
-terminal intent. The settled invariant remains one owner boundary: no descendant
-or sibling may construct, mutate, start, stage, settle, reconcile, clean,
-release, or clear custody/registry state outside its typed transition. No receipt
-regeneration or dependent claim may consume this freeze before source acceptance.
+current exact-candidate rejection count for N06 is `46`. Exact candidate
+`e784f0366` / tree `476d42ea` is rejected after one exhaustive review proved a
+non-durable `Complete` is treated as durably settled, mediator siblings can
+construct and settle attempts outside the intended production route, settlement
+panic escapes the typed recovery transition, and the shape/compile controls omit
+those paths. The convergence decision is to replace authority-by-shape with one
+sealed typed transaction enforced by Rust privacy. Existing shape and compile
+controls may remain only as secondary topology regression checks and cannot
+support the custody claim. No receipt regeneration or dependent claim may
+consume this rejected freeze.
 The public 42-test claim remains withheld at 41/42 until a representative-load
 root observation.
 Escalation is legitimate only for
@@ -166,6 +168,11 @@ external action, secret handling, or unavailable required access.
   invariant-level repair. Enumerate every sibling, descendant, rollback,
   recovery, reconciliation, cleanup, and replay transition before the next
   patch; do not repair only the reported test route.
+- N06 convergence decision after repeated shape-control bypasses: replace
+  authority-by-shape with a sealed typed transaction whose issuer, validation,
+  custody, settlement, and recovery transitions are confined by Rust privacy.
+  Retain source-shape and compile-negative controls only as secondary topology
+  regression checks; they do not raise the custody claim.
 
 ## Context And Orientation
 
@@ -226,9 +233,9 @@ each branch, worktree, and thread identity; unknown host fields stay unknown.
   `019f6487-8b8d-7d51-810b-1465f481eef7`,
   branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
   owns routine kernel/public adapter behavior and matching tests/fixtures;
-  exact clean source `e784f0366` / tree `476d42ea` is under one exhaustive
-  review after raw reservation and registry transitions moved behind the
-  private owner wrapper and closest descendant/sibling controls were refreshed.
+  exact source `e784f0366` / tree `476d42ea` is rejected and remains the repair
+  base after one exhaustive review found four material authority and false-pass
+  classes. The same owner is repairing the sealed typed transaction invariant.
   Recovery continuation thread `019f67cd-d4f2-7243-ab4a-dbbe11cc564f` preserves
   the original worktree after the source task entered a host system error. Its
   stale WorkerResult, load-sensitive public result, root strict wall, and
