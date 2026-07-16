@@ -3,58 +3,6 @@ use super::super::{
 };
 use super::*;
 
-pub(super) fn reservation_starts_fresh(
-    ambiguous_marker: Option<&String>,
-    grant: &RoutineRootGrant,
-) -> Result<bool, RoutineError> {
-    match (ambiguous_marker, grant.recovery_for.as_ref()) {
-        (Some(expected), Some(actual)) if expected == actual => Ok(false),
-        (Some(_), _) => Err(mediator_error("mediator-recovery-authority-required")),
-        (None, Some(_))
-            if grant
-                .durable
-                .as_ref()
-                .is_some_and(|durable| durable.recovery_is_durable()) =>
-        {
-            Ok(false)
-        }
-        (None, Some(_)) => Err(mediator_error("mediator-recovery-marker-stale")),
-        (None, None) => Ok(true),
-    }
-}
-
-pub(crate) fn validate_grant(
-    context: &LiveContext,
-    plan: &RoutinePlan,
-    request: &RoutineEffectRequest,
-    grant: &RoutineRootGrant,
-) -> Result<(), RoutineError> {
-    let mut expected_scopes = request
-        .intents
-        .iter()
-        .flat_map(|intent| intent.declared_output_scopes().iter().cloned())
-        .collect::<Vec<_>>();
-    expected_scopes.sort_by(|left, right| left.as_str().cmp(right.as_str()));
-    expected_scopes.dedup();
-    if grant.grant_id != grant_identity(grant)?
-        || grant.seal != grant_seal(grant)?
-        || grant.session_id.is_empty()
-        || grant.session_id.len() > 128
-        || grant.request_id != request.request_id
-        || grant.protocol_id != request.protocol_id
-        || grant.context_id != context.context_id()
-        || grant.context_id != request.binding.context_id()
-        || grant.candidate_id != request.binding.candidate_id()
-        || grant.plan_id != plan.plan_id()
-        || grant.plan_id != request.plan_id
-        || grant.snapshot_id != request.snapshot_id
-        || grant.allowed_output_scopes != expected_scopes
-    {
-        return Err(mediator_error("mediator-root-grant-binding-invalid"));
-    }
-    Ok(())
-}
-
 pub(crate) fn preflight_request(
     context: &LiveContext,
     plan: &RoutinePlan,

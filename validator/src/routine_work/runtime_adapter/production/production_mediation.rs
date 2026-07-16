@@ -1,68 +1,4 @@
-use super::launch_custody::cleanup_staged;
-use super::launch_snapshot::stage_program;
 use super::*;
-use crate::routine_work::runtime_adapter::mediator::{PinnedExecutable, StagedProgram};
-
-/// Internal durable machinery. The production parent is the only module that
-/// may compose these helpers into the canonical public adapter.
-
-pub(super) struct DurableAttempt {
-    pub(crate) ledger: Arc<FileAuthorityLedger>,
-    pub(crate) token: ReservationToken,
-    pub(crate) launch_root: PathBuf,
-}
-
-impl DurableAttemptAuthority for DurableAttempt {
-    fn validate_reserved(&self) -> Result<(), RoutineError> {
-        self.ledger.validate_reserved(&self.token)
-    }
-
-    fn stage_program(&self, program: &PinnedExecutable) -> Result<StagedProgram, RoutineError> {
-        stage_program(&self.launch_root, &self.token, program)
-    }
-
-    fn cleanup_staged(&self, staged: &StagedProgram) -> Result<(), RoutineError> {
-        cleanup_staged(staged)
-    }
-
-    fn prepare_spawn(&self) -> Result<(), RoutineError> {
-        self.ledger.prepare_spawn(&self.token)
-    }
-
-    fn stage_success(&self, artifacts: &BTreeMap<String, String>) -> Result<(), RoutineError> {
-        self.ledger.stage_success(&self.token, artifacts)
-    }
-
-    fn record_failure(&self, evidence: &ReservationFailureEvidence) -> Result<(), RoutineError> {
-        self.ledger.record_failure(&self.token, evidence)
-    }
-
-    fn settle(
-        &self,
-        outcome: DurableSettlement,
-        artifacts: &BTreeMap<String, String>,
-    ) -> Result<(), RoutineError> {
-        let state = match outcome {
-            DurableSettlement::Complete => AttemptState::Complete,
-            DurableSettlement::Failed => AttemptState::Failed,
-            DurableSettlement::Cancelled => AttemptState::Cancelled,
-            DurableSettlement::Incomplete => AttemptState::Incomplete,
-        };
-        self.ledger.settle(&self.token, state, artifacts)
-    }
-
-    fn authenticates_artifact(&self, digest: &str, witness: &str) -> Result<bool, RoutineError> {
-        self.ledger.authenticates(&self.token, digest, witness)
-    }
-
-    fn recovery_is_durable(&self) -> bool {
-        self.token.recovery_for.is_some()
-    }
-
-    fn reuse_only(&self) -> bool {
-        self.token.reuse_only
-    }
-}
 
 #[derive(Serialize)]
 pub(super) struct EffectBinding<'a> {
@@ -108,6 +44,27 @@ pub(super) fn allowed_output_scopes(
     scopes.sort_by(|left, right| left.as_str().cmp(right.as_str()));
     scopes.dedup();
     scopes
+}
+
+pub(super) fn reservation_grant_id(
+    session_id: &str,
+    request: &RoutineEffectRequest,
+    binding: &AuthorityBinding,
+    scopes: &[crate::routine_work::RepoPath],
+    recovery_for: Option<&str>,
+) -> Result<String, RoutineError> {
+    digest_of(&(
+        "routine-production-reservation-v1",
+        session_id,
+        request.request_id(),
+        request.protocol_id(),
+        request.context_id(),
+        request.candidate_id(),
+        request.plan_id(),
+        &binding.snapshot_id,
+        scopes,
+        recovery_for,
+    ))
 }
 
 pub(super) fn random_session_id(binding: &AuthorityBinding) -> Result<String, RoutineError> {

@@ -59,6 +59,25 @@ pub(super) fn apply(
     apply::apply(ledger, token, root)
 }
 
+pub(super) fn resolve_application(
+    ledger: &FileAuthorityLedger,
+    token: &ReservationToken,
+    outcome: ApplyOutcome,
+) -> Result<(), RoutineError> {
+    match outcome {
+        ApplyOutcome::Applied => Ok(()),
+        ApplyOutcome::UnrecordedStage(ambiguity) if token.recovery_for.is_some() => {
+            ledger.reconcile_output_ambiguity(token, &ambiguity)?;
+            Err(error(
+                "routine-production-output-ambiguity-reconciled-incomplete",
+            ))
+        }
+        ApplyOutcome::UnrecordedStage(_) => Err(error(
+            "routine-production-output-ambiguity-recovery-required",
+        )),
+    }
+}
+
 fn identity(metadata: &fs::Metadata) -> OutputDirectoryIdentity {
     OutputDirectoryIdentity {
         device: metadata.dev(),

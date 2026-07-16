@@ -4,10 +4,9 @@ pub(crate) fn mediate_noop(
     context: &LiveContext,
     plan: &RoutinePlan,
     projection: RoutineNoOpProjection,
-    grant: Option<RoutineRootGrant>,
     reuse: RoutineReuseInput,
 ) -> Result<RoutineMediationResult, RoutineError> {
-    if grant.is_some() || !reuse.into_artifacts().is_empty() {
+    if !reuse.into_artifacts().is_empty() {
         return Err(mediator_error("mediator-noop-authority-or-reuse-present"));
     }
     let current = RoutineBinding::from_live(context)?;
@@ -34,183 +33,183 @@ pub(crate) fn mediate_noop(
     })
 }
 
-pub(crate) fn mediate_effect(
+pub(crate) struct ObservedRoutineMediation {
+    result: RoutineMediationResult,
+    settlement: DurableSettlement,
+    artifacts: Vec<Vec<u8>>,
+    authenticated: BTreeMap<String, String>,
+}
+
+impl ObservedRoutineMediation {
+    pub(crate) fn into_parts(
+        self,
+    ) -> (
+        RoutineMediationResult,
+        DurableSettlement,
+        Vec<Vec<u8>>,
+        BTreeMap<String, String>,
+    ) {
+        (
+            self.result,
+            self.settlement,
+            self.artifacts,
+            self.authenticated,
+        )
+    }
+}
+
+pub(crate) fn mediate_effect_observed(
     context: &LiveContext,
     plan: &RoutinePlan,
     request: RoutineEffectRequest,
-    grant: Option<RoutineRootGrant>,
     cancellation: RoutineCancellation,
     reuse: RoutineReuseInput,
-    publisher: Option<&dyn RoutineArtifactPublisher>,
-) -> Result<RoutineMediationResult, RoutineError> {
-    let grant = grant.ok_or_else(|| mediator_error("mediator-root-grant-missing"))?;
-    let production = grant.durable.is_some();
-    validate_grant(context, plan, &request, &grant)?;
+    attempt: &RoutineExecutionCapability<'_>,
+) -> Result<ObservedRoutineMediation, RoutineError> {
     let supplied_reuse = index_reuse_inputs(reuse, &request)?;
     preflight_request(context, plan, &request)?;
     let request_id = request.request_id().to_owned();
     let protocol_id = request.protocol_id().to_owned();
-    let (mut result, recovery_marker) = run_reserved(&grant, |attempt| {
-        let snapshot_id = request.snapshot_id.clone();
-        let batch = begin_routine_mediation(context, plan, request)?;
-        let (authority, intents) = batch.into_parts();
-        let mut dependencies = BTreeMap::<String, String>::new();
-        let mut nodes = Vec::with_capacity(intents.len());
-        let mut artifacts = Vec::<Vec<u8>>::with_capacity(intents.len());
-        let mut generated = Vec::<(String, Vec<u8>)>::new();
-        let mut incomplete = false;
-        let mut cancelled = false;
+    let snapshot_id = request.snapshot_id.clone();
+    let batch = begin_routine_mediation(context, plan, request)?;
+    let (authority, intents) = batch.into_parts();
+    let mut dependencies = BTreeMap::<String, String>::new();
+    let mut nodes = Vec::with_capacity(intents.len());
+    let mut artifacts = Vec::<Vec<u8>>::with_capacity(intents.len());
+    let mut generated = Vec::<(String, Vec<u8>)>::new();
+    let mut incomplete = false;
+    let mut cancelled = false;
 
-        for token in intents {
-            let expected_dependencies = token
-                .intent()
-                .expected_dependency_nodes()
-                .iter()
-                .map(|node| {
-                    dependencies
-                        .get(node)
-                        .map(|digest| (node.clone(), digest.clone()))
-                })
-                .collect::<Option<BTreeMap<_, _>>>();
-            let node = if cancelled || cancellation.is_cancelled() {
-                cancelled = true;
-                incomplete = true;
-                incomplete_node(
-                    &token,
-                    RoutineNodeDisposition::Cancelled,
-                    "MEDIATOR-CANCELLED",
-                )
-            } else if let Some(expected_dependencies) = expected_dependencies {
-                let result = mediate_intent(
-                    context,
-                    plan,
-                    &token,
-                    &snapshot_id,
-                    &expected_dependencies,
-                    supplied_reuse.get(token.intent().intent_id()),
-                    &cancellation,
-                    &attempt,
-                );
-                match result {
-                    Ok(IntentResult::Reused(verified)) => {
-                        let result_sha256 = verified.wire.result_artifact_sha256.clone();
-                        dependencies
-                            .insert(token.intent().node_id().to_owned(), result_sha256.clone());
-                        let node =
-                            success_node(&token, RoutineNodeDisposition::Reused, result_sha256);
-                        let artifact_sha256 = sha256(&verified.canonical_bytes);
-                        generated.push((artifact_sha256, verified.canonical_bytes.clone()));
-                        artifacts.push(verified.canonical_bytes);
-                        node
-                    }
-                    Ok(IntentResult::Executed(executed)) => {
-                        dependencies.insert(
-                            token.intent().node_id().to_owned(),
-                            executed.result_sha256.clone(),
-                        );
-                        let node = success_node(
-                            &token,
-                            RoutineNodeDisposition::Executed,
-                            executed.result_sha256,
-                        );
-                        let artifact_sha256 = sha256(&executed.reuse_bytes);
-                        generated.push((artifact_sha256, executed.reuse_bytes.clone()));
-                        artifacts.push(executed.reuse_bytes);
-                        node
-                    }
-                    Ok(IntentResult::Incomplete {
-                        disposition,
-                        failure_code,
-                    }) => {
-                        incomplete = true;
-                        cancelled |= disposition == RoutineNodeDisposition::Cancelled;
-                        incomplete_node(&token, disposition, failure_code)
-                    }
-                    Err(error) => {
-                        incomplete = true;
-                        incomplete_node(
-                            &token,
-                            RoutineNodeDisposition::Failed,
-                            error.cause().to_ascii_uppercase().replace('_', "-"),
-                        )
-                    }
-                }
-            } else {
-                incomplete = true;
-                incomplete_node(
-                    &token,
-                    RoutineNodeDisposition::DependencyFailed,
-                    "MEDIATOR-DEPENDENCY-FAILED",
-                )
-            };
-            nodes.push(complete_intent_transition(&token, &attempt, node)?);
-        }
-        reconcile_internal(context, plan, &authority, &nodes)?;
-        authority.finish()?;
-        // The process has been reaped and the batch outcome is reconciled. Consume
-        // every launch snapshot before any terminal ledger transition; a custody
-        // failure therefore leaves the exact Started reservation recoverable.
-        observe_staged_transition(&attempt, || Ok(()))?;
-        let terminal = if incomplete {
-            artifacts.clear();
-            generated.clear();
-            ReservationTerminal::Incomplete(if cancelled {
-                DurableSettlement::Cancelled
-            } else if nodes
-                .iter()
-                .any(|node| node.disposition == RoutineNodeDisposition::Failed)
-            {
-                DurableSettlement::Failed
-            } else {
-                DurableSettlement::Incomplete
+    for token in intents {
+        let expected_dependencies = token
+            .intent()
+            .expected_dependency_nodes()
+            .iter()
+            .map(|node| {
+                dependencies
+                    .get(node)
+                    .map(|digest| (node.clone(), digest.clone()))
             })
-        } else {
-            let authenticated = collect_generated_witnesses(generated, &attempt);
-            if !attempt.reuse_only() {
-                attempt.stage_success(&authenticated)?;
-                if let Some(publisher) = publisher {
-                    publisher.publish(&artifacts)?;
+            .collect::<Option<BTreeMap<_, _>>>();
+        let node = if cancelled || cancellation.is_cancelled() {
+            cancelled = true;
+            incomplete = true;
+            incomplete_node(
+                &token,
+                RoutineNodeDisposition::Cancelled,
+                "MEDIATOR-CANCELLED",
+            )
+        } else if let Some(expected_dependencies) = expected_dependencies {
+            let result = mediate_intent(
+                context,
+                plan,
+                &token,
+                &snapshot_id,
+                &expected_dependencies,
+                supplied_reuse.get(token.intent().intent_id()),
+                &cancellation,
+                attempt,
+            );
+            match result {
+                Ok(IntentResult::Reused(verified)) => {
+                    let result_sha256 = verified.wire.result_artifact_sha256.clone();
+                    dependencies.insert(token.intent().node_id().to_owned(), result_sha256.clone());
+                    let node = success_node(&token, RoutineNodeDisposition::Reused, result_sha256);
+                    let artifact_sha256 = sha256(&verified.canonical_bytes);
+                    generated.push((artifact_sha256, verified.canonical_bytes.clone()));
+                    artifacts.push(verified.canonical_bytes);
+                    node
+                }
+                Ok(IntentResult::Executed(executed)) => {
+                    dependencies.insert(
+                        token.intent().node_id().to_owned(),
+                        executed.result_sha256.clone(),
+                    );
+                    let node = success_node(
+                        &token,
+                        RoutineNodeDisposition::Executed,
+                        executed.result_sha256,
+                    );
+                    let artifact_sha256 = sha256(&executed.reuse_bytes);
+                    generated.push((artifact_sha256, executed.reuse_bytes.clone()));
+                    artifacts.push(executed.reuse_bytes);
+                    node
+                }
+                Ok(IntentResult::Incomplete {
+                    disposition,
+                    failure_code,
+                }) => {
+                    incomplete = true;
+                    cancelled |= disposition == RoutineNodeDisposition::Cancelled;
+                    incomplete_node(&token, disposition, failure_code)
+                }
+                Err(error) => {
+                    incomplete = true;
+                    incomplete_node(
+                        &token,
+                        RoutineNodeDisposition::Failed,
+                        error.cause().to_ascii_uppercase().replace('_', "-"),
+                    )
                 }
             }
-            let settlement_artifacts = if attempt.reuse_only() {
-                BTreeMap::new()
-            } else {
-                authenticated
-            };
-            ReservationTerminal::Complete(settlement_artifacts)
+        } else {
+            incomplete = true;
+            incomplete_node(
+                &token,
+                RoutineNodeDisposition::DependencyFailed,
+                "MEDIATOR-DEPENDENCY-FAILED",
+            )
         };
-        Ok((
-            RoutineMediationResult {
-                request_id: Some(request_id),
-                protocol_id: Some(protocol_id),
-                status: if cancelled {
-                    RoutineMediatorStatus::Cancelled
-                } else if incomplete {
-                    RoutineMediatorStatus::IncompleteExecution
-                } else {
-                    RoutineMediatorStatus::CompleteExecution
-                },
-                nodes,
-                recovery_marker: None,
-                support_limit: if production {
-                    PRODUCTION_SUPPORT_LIMIT
-                } else {
-                    MEDIATOR_SUPPORT_LIMIT
-                },
+        nodes.push(complete_intent_transition(&token, attempt, node)?);
+    }
+    reconcile_internal(context, plan, &authority, &nodes)?;
+    authority.finish()?;
+    attempt.observe_staged_transition(|| Ok(()))?;
+    let settlement = if cancelled {
+        DurableSettlement::Cancelled
+    } else if nodes
+        .iter()
+        .any(|node| node.disposition == RoutineNodeDisposition::Failed)
+    {
+        DurableSettlement::Failed
+    } else if incomplete {
+        DurableSettlement::Incomplete
+    } else {
+        DurableSettlement::Complete
+    };
+    let authenticated = if settlement == DurableSettlement::Complete {
+        collect_generated_witnesses(generated)
+    } else {
+        artifacts.clear();
+        BTreeMap::new()
+    };
+    Ok(ObservedRoutineMediation {
+        result: RoutineMediationResult {
+            request_id: Some(request_id),
+            protocol_id: Some(protocol_id),
+            status: if cancelled {
+                RoutineMediatorStatus::Cancelled
+            } else if incomplete {
+                RoutineMediatorStatus::IncompleteExecution
+            } else {
+                RoutineMediatorStatus::CompleteExecution
             },
-            terminal,
-        ))
-    })?;
-    result.recovery_marker = recovery_marker;
-    Ok(result)
+            nodes,
+            recovery_marker: None,
+            support_limit: PRODUCTION_SUPPORT_LIMIT,
+        },
+        settlement,
+        artifacts,
+        authenticated,
+    })
 }
 
 fn complete_intent_transition(
     token: &RoutineMediatedIntent,
-    attempt: &ReservationAttempt<'_>,
+    attempt: &RoutineExecutionCapability<'_>,
     node: RoutineNodeMediation,
 ) -> Result<RoutineNodeMediation, RoutineError> {
-    observe_staged_transition(attempt, || token.advance())?;
+    attempt.observe_staged_transition(|| token.advance())?;
     Ok(node)
 }
 
@@ -222,13 +221,3 @@ pub(crate) enum IntentResult {
         failure_code: &'static str,
     },
 }
-
-#[cfg(test)]
-#[path = "no_op_mediation/failure_authority.rs"]
-mod failure_authority_tests;
-#[cfg(test)]
-#[path = "no_op_mediation/producer_failure.rs"]
-mod producer_failure_tests;
-#[cfg(test)]
-#[path = "no_op_mediation/producer_state.rs"]
-mod producer_state;

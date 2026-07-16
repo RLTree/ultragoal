@@ -9,7 +9,7 @@ pub(super) fn mediate_intent(
     dependencies: &BTreeMap<String, String>,
     reuse: Option<&Vec<u8>>,
     cancellation: &RoutineCancellation,
-    attempt: &ReservationAttempt<'_>,
+    attempt: &RoutineExecutionCapability<'_>,
 ) -> Result<IntentResult, RoutineError> {
     token.require_current()?;
     validate_intent(context, plan, token.intent())?;
@@ -68,10 +68,7 @@ pub(super) fn mediate_intent(
             Duration::from_millis(token.intent().timeout_ms()),
             token.intent().output_budget_bytes(),
             cancellation,
-            || {
-                attempt.mark_started()?;
-                attempt.prepare_spawn()
-            },
+            || attempt.prepare_spawn(),
         )
     })?;
     reads.validate(&root)?;

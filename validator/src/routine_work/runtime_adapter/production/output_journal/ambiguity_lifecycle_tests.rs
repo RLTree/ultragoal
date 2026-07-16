@@ -81,9 +81,7 @@ fn exercise_lifecycle(path: &str, ordinal: usize, substitute: bool) {
         ambiguity.creation_nonce,
         component.creation_nonce.as_deref().unwrap()
     );
-    let resolution =
-        super::super::production_issuance::resolve_output_application(&ledger, &recovered, outcome)
-            .unwrap_err();
+    let resolution = super::resolve_application(&ledger, &recovered, outcome).unwrap_err();
     assert_eq!(
         resolution.cause(),
         "routine-production-output-ambiguity-reconciled-incomplete"

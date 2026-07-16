@@ -24,9 +24,7 @@ fn initial_ambiguity_cannot_terminalize_without_recovery_authority() {
     let before = state(&fixture);
     let pending = ledger.pending_recovery(&first.binding).unwrap().unwrap();
     let outcome = apply(&ledger, &first, &fixture.workspace).unwrap();
-    let refusal =
-        super::super::production_issuance::resolve_output_application(&ledger, &first, outcome)
-            .unwrap_err();
+    let refusal = super::resolve_application(&ledger, &first, outcome).unwrap_err();
     assert_eq!(
         refusal.cause(),
         "routine-production-output-ambiguity-recovery-required"

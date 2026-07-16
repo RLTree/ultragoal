@@ -1,6 +1,5 @@
 use super::*;
 
-pub(crate) const GRANT_SEAL_DOMAIN: &[u8] = b"routine-root-grant-seal-v1";
 pub(crate) const RESULT_DOMAIN: &[u8] = b"routine-mediated-result-v1";
 pub(crate) const RECOVERY_DOMAIN: &[u8] = b"routine-mediated-recovery-v1";
 pub(crate) const MEDIATOR_SUPPORT_LIMIT: &str = "internal macOS single-process routine mediation evidence only; grant replay, reuse authentication, ambiguity recovery, and artifacts are process-local; the parent kernel-suspends each launch and matches its loaded vnode to the exact pinned executable descriptor before resume, so a user-writable ancestor name cannot select executed bytes; the exact child activates the fixed sandbox before frame evaluation, unbound file reads are denied, explicitly bound worktree-relative regular-file reads are identity/content/ctime revalidated, immutable system runtime roots remain policy-authorized, post-activation file-backed executable mapping is limited to immutable system-library roots, and process-fork kills the runner; external interpreted sources, startup-loader environments, executable trampolines, different-object aliases, shebang scripts, descriptor aliases, user-owned executable mappings, and multi-process runners are unsupported; canonical root issuance, durable persistence, public dispatch, installed behavior, and claim decisions remain absent";
@@ -14,91 +13,8 @@ pub(crate) enum DurableSettlement {
     Incomplete,
 }
 
-/// Sealed bridge between the process mediator and the durable production
-/// authority. Implementations live only in the sibling production issuer.
-pub(crate) trait DurableAttemptAuthority: Send + Sync {
-    fn validate_reserved(&self) -> Result<(), RoutineError>;
-    fn stage_program(&self, program: &PinnedExecutable) -> Result<StagedProgram, RoutineError>;
-    fn cleanup_staged(&self, staged: &StagedProgram) -> Result<(), RoutineError>;
-    fn prepare_spawn(&self) -> Result<(), RoutineError>;
-    fn stage_success(&self, artifacts: &BTreeMap<String, String>) -> Result<(), RoutineError>;
-    fn record_failure(&self, evidence: &ReservationFailureEvidence) -> Result<(), RoutineError>;
-    fn settle(
-        &self,
-        outcome: DurableSettlement,
-        artifacts: &BTreeMap<String, String>,
-    ) -> Result<(), RoutineError>;
-    fn authenticates_artifact(&self, digest: &str, witness: &str) -> Result<bool, RoutineError>;
-    fn recovery_is_durable(&self) -> bool;
-    fn reuse_only(&self) -> bool;
-}
-
 pub(crate) trait RoutineArtifactPublisher {
     fn publish(&self, artifacts: &[Vec<u8>]) -> Result<(), RoutineError>;
-}
-
-#[derive(Clone)]
-pub(crate) struct ProductionGrantBinding {
-    pub(crate) session_id: String,
-    pub(crate) request_id: String,
-    pub(crate) protocol_id: String,
-    pub(crate) context_id: String,
-    pub(crate) candidate_id: String,
-    pub(crate) plan_id: String,
-    pub(crate) snapshot_id: String,
-    pub(crate) allowed_output_scopes: Vec<RepoPath>,
-    pub(crate) recovery_for: Option<String>,
-}
-
-pub(crate) fn production_grant_identity(
-    spec: &ProductionGrantBinding,
-) -> Result<String, RoutineError> {
-    let grant = RoutineRootGrant {
-        grant_id: String::new(),
-        session_id: spec.session_id.clone(),
-        request_id: spec.request_id.clone(),
-        protocol_id: spec.protocol_id.clone(),
-        context_id: spec.context_id.clone(),
-        candidate_id: spec.candidate_id.clone(),
-        plan_id: spec.plan_id.clone(),
-        snapshot_id: spec.snapshot_id.clone(),
-        allowed_output_scopes: spec.allowed_output_scopes.clone(),
-        recovery_for: spec.recovery_for.clone(),
-        seal: String::new(),
-        durable: None,
-    };
-    grant_identity(&grant)
-}
-
-pub(crate) fn production_recovery_identity(
-    grant_id: &str,
-    protocol_id: &str,
-    request_id: &str,
-) -> String {
-    recovery_identity(grant_id, protocol_id, request_id)
-}
-
-pub(crate) fn issue_production_grant(
-    spec: ProductionGrantBinding,
-    durable: Arc<dyn DurableAttemptAuthority>,
-) -> Result<RoutineRootGrant, RoutineError> {
-    let mut grant = RoutineRootGrant {
-        grant_id: String::new(),
-        session_id: spec.session_id,
-        request_id: spec.request_id,
-        protocol_id: spec.protocol_id,
-        context_id: spec.context_id,
-        candidate_id: spec.candidate_id,
-        plan_id: spec.plan_id,
-        snapshot_id: spec.snapshot_id,
-        allowed_output_scopes: spec.allowed_output_scopes,
-        recovery_for: spec.recovery_for,
-        seal: String::new(),
-        durable: Some(durable),
-    };
-    grant.grant_id = grant_identity(&grant)?;
-    grant.seal = grant_seal(&grant)?;
-    Ok(grant)
 }
 
 pub(crate) fn preflight_production_request(

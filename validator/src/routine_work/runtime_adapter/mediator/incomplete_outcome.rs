@@ -17,7 +17,6 @@ pub(crate) fn incomplete_node(
 
 pub(super) fn collect_generated_witnesses(
     values: Vec<(String, Vec<u8>)>,
-    attempt: &ReservationAttempt<'_>,
 ) -> BTreeMap<String, String> {
     let mut authenticated = BTreeMap::new();
     for (digest, bytes) in values {
@@ -25,7 +24,6 @@ pub(super) fn collect_generated_witnesses(
             authenticated.insert(digest, wire.mediator_witness_sha256);
         }
     }
-    attempt.retain_non_durable_authentication(&authenticated);
     authenticated
 }
 

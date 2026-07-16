@@ -3,13 +3,6 @@ use std::collections::BTreeMap;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
-use crate::routine_work::RepoPath;
-
-use super::DurableAttemptAuthority;
-
-#[cfg(test)]
-use super::super::execution_authority::RoutineEffectRequest;
-
 #[path = "routine_cancellation.rs"]
 mod routine_cancellation;
 #[path = "routine_mediation_result.rs"]

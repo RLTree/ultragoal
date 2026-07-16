@@ -130,9 +130,6 @@ pub(crate) use spawn_test_observation::*;
 #[cfg(all(test, target_os = "macos"))]
 #[path = "custody_transition_tests.rs"]
 mod custody_transition_tests;
-#[cfg(all(test, target_os = "macos"))]
-#[path = "failure_record_tests.rs"]
-mod failure_record_tests;
 #[cfg(test)]
 #[path = "process_object_binding_tests.rs"]
 mod process_object_binding_tests;

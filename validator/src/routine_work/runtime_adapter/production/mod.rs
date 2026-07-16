@@ -11,14 +11,16 @@ use serde::Serialize;
 
 use crate::context::LiveContext;
 use crate::routine_work::digest::{digest_of, framed};
-use crate::routine_work::{ReservationFailureEvidence, RoutineError, RoutineErrorId, RoutinePlan};
+use crate::routine_work::{
+    CleanupEvidence, FailureEvidence, PanicEvidence, RESERVATION_FAILURE_SCHEMA,
+    ReservationFailureDisposition, ReservationFailureEvidence, RoutineError, RoutineErrorId,
+    RoutinePlan, transition_failure_error,
+};
 
 use super::execution_authority::{PreparedRoutineExecution, RoutineEffectRequest};
 use super::mediator::{
-    DurableAttemptAuthority, DurableSettlement, PreflightedProductionReuse, ProductionGrantBinding,
-    RoutineArtifactPublisher, issue_production_grant, mediate_prepared_routine_execution,
-    preflight_production_request, preflight_production_reuse_input, production_grant_identity,
-    production_recovery_identity,
+    DurableSettlement, PreflightedProductionReuse, RoutineArtifactPublisher, mediate_noop,
+    preflight_production_request, preflight_production_reuse_input, recovery_identity,
 };
 use super::{RoutineCancellation, RoutineMediationResult, RoutineReuseInput};
 use ledger::{
@@ -40,11 +42,13 @@ mod output_journal;
 mod production_issuance;
 #[path = "production_mediation.rs"]
 mod production_mediation;
-#[path = "recovery_authority.rs"]
-mod recovery_authority;
+#[path = "reservation_failure.rs"]
+mod reservation_failure;
+#[path = "reservation_transaction.rs"]
+mod reservation_transaction;
 
 use production_mediation::error;
-use recovery_authority::ProductionRoutineIssuer;
+pub(crate) use reservation_transaction::RoutineExecutionCapability;
 
 /// Canonical public production entry. Issuer construction, reservation,
 /// recovery lookup, and raw settlement stay inside this leaf.
@@ -61,15 +65,10 @@ pub(crate) fn mediate_public_routine_execution(
         if !reuse.is_empty() || publisher.is_some() {
             return Err(error("routine-production-noop-authority-or-reuse-present"));
         }
-        return mediate_prepared_routine_execution(
-            context,
-            plan,
-            prepared,
-            None,
-            cancellation,
-            reuse,
-            None,
-        );
+        let PreparedRoutineExecution::NoOp(projection) = prepared else {
+            return Err(error("routine-production-noop-required"));
+        };
+        return mediate_noop(context, plan, projection, reuse);
     }
     let PreparedRoutineExecution::Effect(request) = prepared else {
         return Err(error("routine-production-effect-required"));
@@ -80,19 +79,13 @@ pub(crate) fn mediate_public_routine_execution(
     let reuse = preflight_production_reuse_input(reuse, &request, reuse_supplied)?;
     let authority_root =
         authority_root.ok_or_else(|| error("routine-production-authority-root-missing"))?;
-    let issuer = if reuse.is_empty() {
-        ProductionRoutineIssuer::open(authority_root)?
-    } else {
-        ProductionRoutineIssuer::open_existing(authority_root)?
-    };
-    let recovery = issuer.pending_recovery(context, plan, &request)?;
-    issuer.mediate_preflighted(
+    reservation_transaction::mediate_reserved_effect(
+        authority_root,
         context,
         plan,
         request,
-        recovery,
         cancellation,
         reuse,
-        Some(publisher),
+        publisher,
     )
 }

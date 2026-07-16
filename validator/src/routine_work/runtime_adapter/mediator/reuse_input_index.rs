@@ -36,7 +36,7 @@ pub(super) struct ReuseArtifactValidation<'a> {
     pub(super) snapshot_id: &'a str,
     pub(super) dependencies: &'a BTreeMap<String, String>,
     pub(super) outputs: &'a OutputConfinement,
-    pub(super) attempt: &'a ReservationAttempt<'a>,
+    pub(super) attempt: &'a RoutineExecutionCapability<'a>,
 }
 
 pub(super) fn verify_reuse_artifact(
@@ -90,13 +90,6 @@ pub(super) fn verify_reuse_artifact(
         canonical_bytes: bytes.to_vec(),
     }))
 }
-
-#[cfg(test)]
-#[path = "reuse_input_index/durable_authentication_fixture.rs"]
-mod durable_authentication_fixture;
-#[cfg(test)]
-#[path = "reuse_input_index/durable_authority_tests.rs"]
-mod durable_authority_tests;
 
 pub(crate) fn result_matches_reuse(wire: &ReuseArtifactWire) -> bool {
     let result = &wire.result_artifact;

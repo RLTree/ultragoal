@@ -61,28 +61,30 @@ fn production_source_exposes_no_arbitrary_process_binding_surface() {
 #[test]
 fn publication_is_staged_before_cache_and_terminal_settlement() {
     let mediation = include_str!("../src/routine_work/runtime_adapter/mediator/no_op_mediation.rs");
+    let transaction =
+        include_str!("../src/routine_work/runtime_adapter/production/reservation_transaction.rs");
+    let issuance =
+        include_str!("../src/routine_work/runtime_adapter/production/production_issuance.rs");
     let output = include_str!(
         "../src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection.rs"
     );
-    let reservation =
-        include_str!("../src/routine_work/runtime_adapter/mediator/read_source_binding.rs");
-    let lifecycle =
-        include_str!("../src/routine_work/runtime_adapter/mediator/reservation_state/lifecycle.rs");
     let error = include_str!("../src/routine_work/error.rs");
-    let stage = mediation.find("attempt.stage_success").unwrap();
-    let publish = mediation.find("publisher.publish").unwrap();
-    let settle = mediation.find("attempt.settle_success").unwrap();
+    let catch = transaction.find("catch_unwind").unwrap();
+    let stage = transaction.find(".stage_success(&owner.token").unwrap();
+    let publish = transaction.find("publisher.publish").unwrap();
+    let settle = transaction.find("owner.settle(settlement").unwrap();
     assert!(stage < publish && publish < settle);
+    assert!(catch < stage && catch < settle);
     assert!(output.contains("mediator-output-scope-not-empty"));
     assert!(output.contains("capture_owned_delta"));
     assert!(output.contains("held != scope.identity"));
-    assert!(!reservation.contains("impl Drop for AttemptReservation"));
     assert!(mediation.contains("complete_intent_transition"));
-    assert!(mediation.contains("observe_staged_transition(&attempt, || Ok(()))"));
+    assert!(mediation.contains("attempt.observe_staged_transition(|| Ok(()))"));
     assert!(!mediation.contains("(Err(_), Err(error))"));
-    assert!(lifecycle.contains("attempt.record_failure_and_transition(record)"));
-    assert!(!lifecycle.contains("ReservationFailurePanic"));
-    assert!(!lifecycle.contains("error.transition_failure()"));
+    assert!(!issuance.contains("FileAuthorityLedger"));
+    assert!(!issuance.contains("ReservationToken"));
+    assert!(!transaction.contains("impl Drop for ReservationTransaction"));
+    assert!(transaction.contains("self.ledger.record_failure(&self.token, evidence)"));
     assert!(!error.contains("reservation_failure_evidence"));
     assert!(!error.contains("with_reservation_failure_evidence"));
     assert!(!error.contains("pub(crate) fn with_transition_failure"));
