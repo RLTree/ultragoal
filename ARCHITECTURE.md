@@ -42,6 +42,15 @@ may construct, clone, settle, release, recover, roll back, register, or reopen
 routine authority. Source-shape checks are secondary regression controls, not
 semantic authority proof.
 
+Local agent authority is one private production transaction under
+`plugin_product/agent_discovery/`. The registry control plane supplies one
+explicit home/package/project root set, while the transaction independently
+captures source, package, installed, cache, empty-or-unrelated global, and
+project authority under one candidate and session binding. Registry rows are a
+four-role projection of the canonical six-role observation. This local
+observation never proves host discovery, new-session comprehension, runtime
+activation, route eligibility, exposure, or a claim effect.
+
 ## Public Surfaces
 
 The only successor command groups are `inspect`, `next`, `fit`, `check`,

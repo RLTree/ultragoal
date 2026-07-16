@@ -9,10 +9,10 @@ contract. Normative authority remains the adopted bundle rooted at
 
 Finish the plugin product and typed Rust CLI kernel from current repository
 truth. The intentionally committed self-law refactor now has bounded source
-acceptance. N04 and N06 are root-integrated at source-only ceilings; the current
-warning wall and pending standards audits keep warning-free integration open.
-N09 production adoption is the next root-owned gate before the retained N10
-worktree may refresh. N11 remains a preserved branch-only speculative freeze
+acceptance. N04, N06, and N09 are root-integrated at bounded source/local
+ceilings; the current warning wall and pending standards audits keep
+warning-free integration open. N10 is dependency-refresh eligible from the
+exact current root. N11 remains a preserved branch-only speculative freeze
 after its worktree teardown. N10 and N11 remain at explicitly withheld
 source-local ceilings until their graph dependencies are current on the exact
 root candidate.
@@ -57,15 +57,16 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | integrated | accepted source `a646eace6` / tree `97d7d658`, receipt `e0d2d28e0`, root merge `a02050a74` | Final independent review found no reproducible material defect after the typed launch-acquisition repair. On the merged root, launch custody passed 3/3, closest-boundary privacy 1/1, durable publication 5/5, recovery/reuse 53/53 with an external `/tmp` fixture root, and the exact optimized public binary passed 43/43. A debug-binary run exceeded the 60-second product bound and was correctly not treated as production evidence. Strict compilation still stops at the pre-existing 568-warning wall, with zero primary diagnostics on N06 touched paths. Agent-standards enforcement passes 122 rows and generated authority was refreshed. This is source/root-integration evidence only; external monotonic custody, install, discovery, runtime, product, readiness, release, and completion remain withheld | Archive the accepted task, remove its worktree/cache, then add the real root-owned N09 production adoption path before refreshing N10 |
-| N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
-| N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
+| N06 routine execution | integrated | accepted source `a646eace6` / tree `97d7d658`, receipt `e0d2d28e0`, root merge `a02050a74` | Final independent review found no reproducible material defect after the typed launch-acquisition repair. On the merged root, launch custody passed 3/3, closest-boundary privacy 1/1, durable publication 5/5, recovery/reuse 53/53 with an external `/tmp` fixture root, and the exact optimized public binary passed 43/43. A debug-binary run exceeded the 60-second product bound and was correctly not treated as production evidence. Strict compilation still stops at the pre-existing 568-warning wall, with zero primary diagnostics on N06 touched paths. Agent-standards enforcement passes 122 rows and generated authority was refreshed. This is source/root-integration evidence only; external monotonic custody, install, discovery, runtime, product, readiness, release, and completion remain withheld | Closed; N09 production adoption is integrated and N10 may refresh |
+| N09 agent reader | integrated | production adoption `0c4879b2a` / tree `48978ec8c`; accepted reader base `385f0286c` | The registry control plane now executes the sealed six-role local authority transaction through one explicit home/package/project set. Exact reader behavior passed 70/70; verified and write-capable-rejected caller rows are recursively zero-write; the authoritative schema rejects every cross-status field mutation; a real `run()` receipt carries four verified rows while live exposure remains unavailable. Independent review returned ACCEPT after two invariant-level schema/routing REWORKs. Production N09 paths add zero strict diagnostics; agent standards pass 122 rows and Python laws 27. This raises only the integrated local source-authority ceiling; installed discovery, fresh-session comprehension, runtime exposure, route eligibility, readiness, release, and completion remain withheld | Refresh N10 from the exact current root; preserve the installed host journey for the product boundary |
+| N10 orchestration | refresh eligible | retained `7f92b7ed3` / tree `53bd7717` | The retained source freeze predates current N06 and N09 interfaces; its stale WorkerResult and every dependent claim remain withheld | Rebase or transplant onto the exact current root, reconcile consumed authority interfaces, rerun focused evidence, then freeze once for review |
 | N11 evaluation | candidate | branch tip `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld. Its prior worktree is removed; branch bytes are the only retained source authority | Preserve the branch unchanged until its dependency ceiling is current; create no replacement worktree while the integration queue is occupied |
-| N08 plugin product | planned | no admissible candidate on root `946c7bab1` | N04/N05/N07 source ceilings exist; N06 dependency and live host behavior remain open | Prepare closure only after N06 integrates |
+| N08 plugin product | planned | no admissible current candidate | N04/N05/N06 source ceilings exist; N07 currency and live host behavior remain open | Preserve during the N10 refresh; prepare only at the next dependency boundary |
 
 Controller measures at this checkpoint: integration queue length `0`; installed
 journeys closed `0`; stale or invalidated reviews promoted `0`; final historical
-N06 exact-candidate rejection count `50`; freeze-to-integration time `19m51s`
+N06 exact-candidate rejection count `50`; N09 exact-freeze REWORK count `2`;
+freeze-to-integration time `19m51s`
 from `a646eace6` to root merge `a02050a74`; diminishing-return stop-rule
 interventions `1`. The final source review completed the named transition matrix
 and stopped when only environment confirmation and speculative hardening
@@ -109,6 +110,10 @@ boundary.
 - [x] Independently accepted and root-integrated N04 source transaction and
   recovery authority through `665140d11`, tree `8dd8a461`; archived its Codex
   task and removed its clean worktree/cache. Live host claims remain withheld.
+- [x] Adopted N09 through the production registry route at `0c4879b2a`, bound
+  every verified/unavailable row field in the authoritative schema, and
+  independently accepted the exact local-authority ceiling without promoting
+  installed discovery or runtime exposure.
 - [ ] Close the global strict diagnostics, exact coverage, and all pending
   standards audits without suppression or unsupported PASS restoration.
 - [ ] Accept or return REWORK on each remaining frozen worktree artifact set.
@@ -133,15 +138,9 @@ boundary.
 - All 110 stale standards PASS rows are pending; only 12 rows whose evidence
   digest matches current bytes retain PASS. This mechanically withholds every
   affected claim until behavior and evidence are re-audited.
-- N04 source transaction authority and its corrected WorkerResult are accepted,
-  integrated, and retired. Root production reachability and every live host
-  identity remain open. N06 `fcc2f45b9` / tree `f24c0379` remains the sole gate
-  and is rejected after exhaustive review demonstrated twelve custody,
-  terminal, recovery, rollback, reuse, evidence, and namespace defects in the
-  repeated topology. Root has selected the typed-owner replacement above; the
-  owner preserves only an uncommitted namespace split while awaiting this
-  decision. Receipt regeneration, dependency-closed acceptance, and integration
-  remain withheld.
+- N04 and N06 source authority are accepted and integrated. N09 now has one
+  supported production caller, but that caller deliberately proves only local
+  filesystem authority; its active receipt still withholds live host exposure.
   N10 `7f92b7ed3` / tree `53bd7717` and N11 `9c2911d6d` /
   tree `6176c259` are frozen speculative source candidates; their dependency
   claims, receipt promotion, and integration remain withheld.
@@ -197,6 +196,12 @@ boundary.
   interruption/recovery, runtime, readiness, release, and completion remain
   withheld. This is the required replace-or-narrow decision and adds no new
   tracker, receipt, analyzer, counter, or implementation lane.
+- N09 adoption decision: the registry may project four review personas only
+  from the sealed canonical six-role transaction. One explicit
+  home/package/project set is all-or-none, global canonical duplicates fail
+  closed, and every verified/unavailable row field is status-bound by the
+  public schema. Local authority never substitutes for installed discovery,
+  fresh-session comprehension, runtime exposure, or route eligibility.
 
 ## N06 Typed Custody Transition Matrix
 
@@ -280,22 +285,16 @@ each branch, worktree, and thread identity; unknown host fields stay unknown.
   and corrected receipt `75bced89f` / tree `f57dc811` were independently
   accepted and integrated through root `665140d11` / tree `8dd8a461`. The task
   is archived and its clean worktree/cache is removed.
-- Routine execution trust: active continuation thread
-  `019f67cd-d4f2-7243-ab4a-dbbe11cc564f`,
-  branch `codex/n06-routine-execution-trust`, worktree `.codex/worktrees/db3d`;
-  owns routine kernel/public adapter behavior and matching tests/fixtures;
-  exact source `074eff12c` / tree `aa49255fd` is rejected after one exhaustive
-  review found one material atomic-acquisition defect: physical launch custody
-  can precede typed cleanup custody and a sibling cleanup result can falsely
-  authorize terminal failure. The same owner is repairing that shared boundary
-  from the clean rejected freeze. Its stale WorkerResult,
-  non-reproducible release-fixture result, root strict wall, and root-owned
-  store migration remain withheld.
+- Routine execution trust: thread `019f67cd-d4f2-7243-ab4a-dbbe11cc564f`
+  accepted source `a646eace6` / tree `97d7d658` and receipt `e0d2d28e0`;
+  root integrated it through `a02050a74`. The task is archived and its worktree
+  and disposable target are removed.
 - Orchestration authority: thread `019f5fa2-923f-7770-9a89-83ed713ac1f3`,
   branch `codex/n10-orchestration-authority`, worktree `.codex/worktrees/cb63`;
   owns orchestration issuer/replay/recovery behavior and matching tests/fixtures;
-  exact clean source `7f92b7ed3` / tree `53bd7717` remains a speculative
-  source-local freeze pending integrated N06 and N09 interfaces.
+  retained source `7f92b7ed3` / tree `53bd7717` is now refresh eligible but
+  remains speculative until rebased onto the exact current N06/N09 root and
+  reverified.
 - Evaluation reliability: thread `019f5fa2-cace-7361-a3e7-6102a3dc1224`,
   branch `codex/n11-evaluation-reliability`; its prior worktree is removed and
   branch tip `9c2911d6d` / tree `6176c259` remains frozen at its
