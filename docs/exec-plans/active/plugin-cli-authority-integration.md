@@ -57,7 +57,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | rejected `9cda2f1fc` / tree `359d746a` | The first typed-custody replacement freeze passed owned source laws and focused controls, but one exhaustive independent review found three shared-boundary defects: output, launch, and suspended-child custody can exist before durable ownership and later be terminalized with synthetic cleanup success; descendant modules and `pub(crate)` cloneable records can still construct or mutate authority; and ambiguous publication is neither reconciled under lock nor durably bound to its initiating cause and cleanup evidence. The supplied release fixture was absent from the immutable review checkout, and a fresh local public run was 37/42, so its 42/42 claim was not promoted. The stale WorkerResult remains byte-untouched and every dependent claim remains withheld | Same owner repairs physical-acquisition/publication atomicity, descendant-free privacy, and durable ambiguity reconciliation as one invariant batch, then returns one new clean freeze before a fresh review or receipt regeneration |
+| N06 routine execution | rework | rejected `3b3ba891e` / tree `e8ae2a59` | The typed-custody replacement freeze was clean and kept the stale WorkerResult byte-untouched, but one exhaustive exact-candidate review rejected the complete invariant. Raw record, token, lease, terminal, and ledger authority remained reachable to custody siblings and descendants; its privacy check rejected only one source spelling instead of compiling the forbidden operations. Ambiguous publication was laundered into committed after immediate readback, no durable ambiguous attempt or reconciliation record was written, and expiry/takeover/recovery transitions were absent. The exact public suite failed at case 13/42 and reproduced 0/1 because the timing-based test panicked without reaping or teardown while the abandoned child later completed. No N06, dependency, warning, namespace, installed, runtime, readiness, release, or completion claim is promoted | Same owner repairs the private ownership topology, durable ambiguity/reconciliation, expiry/takeover/recovery matrix, and deterministic child lifecycle as one coherent caller migration, then returns one new clean freeze before another review or receipt regeneration |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | branch tip `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld. Its prior worktree is removed; branch bytes are the only retained source authority | Preserve the branch unchanged until its dependency ceiling is current; create no replacement worktree while the integration queue is occupied |
@@ -66,20 +66,21 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 Controller measures at this checkpoint: integration queue length `1`; installed
 journeys closed `0`; Tree interventions after controller activation `1`; stale
 or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `48`. Exact candidate
-`9cda2f1fc` / tree `359d746a` is rejected after one exhaustive independent
-review. It proved that physical effects still precede durable custody, privacy is
-not enforced against descendants or cloneable raw records, and ambiguous writes
-escape the lock without a durable reconciliation record. The convergence
-decision remains one sealed typed transaction enforced by Rust privacy; the
-repair must now make physical acquisition and publication one owner transition.
-Existing shape and compile
-controls may remain only as secondary topology regression checks and cannot
-support the custody claim. The root replacement decision and transition matrix
-below supersede further patching of this topology. No receipt regeneration or
-dependent claim may consume the rejected freeze.
-The public 42-test claim remains withheld at 41/42 until a representative-load
-root observation.
+current exact-candidate rejection count for N06 is `49`. Exact candidate
+`3b3ba891e` / tree `e8ae2a59` is rejected after one exhaustive independent
+review. It proved that the purported private owner still exposes raw authority
+to siblings and descendants, uncertain publication can be converted to
+committed without crash-durable proof, pending attempts have no implemented
+expiry/takeover/reconciliation path, and the public lifecycle proof can abandon
+a live child on a polling timeout. The convergence decision remains one sealed
+typed transaction enforced by Rust privacy; the repair must migrate the whole
+caller family through that owner and execute every matrix class. Source-shape
+checks may remain only as secondary topology regression checks; compile-negative
+controls must attempt each forbidden operation and cannot substitute for
+behavior. The root replacement decision and transition matrix below supersede
+local spelling patches. No receipt regeneration or dependent claim may consume
+the rejected freeze. No aggregate public-suite claim is current: the exact
+review run failed at case 13/42 and the isolated case reproduced 0/1.
 Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
