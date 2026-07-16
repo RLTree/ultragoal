@@ -12,6 +12,28 @@ pub(crate) struct ProcessObservation {
     pub(crate) output_byte_length: u64,
 }
 
+pub(crate) struct StartedProcessIdentity {
+    process_id: i32,
+    process_group_id: i32,
+}
+
+impl StartedProcessIdentity {
+    pub(super) fn new(child: &BoundChild, group: ProcessGroupId) -> Self {
+        Self {
+            process_id: child.pid(),
+            process_group_id: group.0,
+        }
+    }
+
+    pub(crate) fn process_id(&self) -> i32 {
+        self.process_id
+    }
+
+    pub(crate) fn process_group_id(&self) -> i32 {
+        self.process_group_id
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum ProcessTermination {
     Exited(i32),

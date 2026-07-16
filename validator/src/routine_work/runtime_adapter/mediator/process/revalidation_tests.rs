@@ -3,7 +3,7 @@ use super::super::filesystem::{OutputConfinement, PinnedExecutable, ReadConfinem
 #[cfg(target_os = "macos")]
 use super::super::outcome::RoutineCancellation;
 #[cfg(target_os = "macos")]
-use super::process_termination_tests::ProcessFixture;
+use super::process_termination_tests::{ProcessFixture, observe_prepared};
 #[cfg(target_os = "macos")]
 use super::*;
 #[cfg(target_os = "macos")]
@@ -34,7 +34,6 @@ fn root_revalidation_failure_reaps_before_returning() {
         Duration::from_secs(2),
         1024,
         &RoutineCancellation::new(),
-        || Ok(()),
     );
     assert!(result.is_err());
     assert_last_group_absent();
@@ -67,7 +66,7 @@ fn output_revalidation_failure_reaps_before_returning() {
         fs::rename(&hook_output, &hook_held).unwrap();
         fs::create_dir(&hook_output).unwrap();
     });
-    let result = execute(
+    let result = observe_prepared(
         &program,
         &root,
         &outputs,
@@ -75,10 +74,9 @@ fn output_revalidation_failure_reaps_before_returning() {
         &["sh".to_owned(), "-c".to_owned(), "exit 0".to_owned()],
         &environment,
         Vec::new(),
-        Duration::from_secs(2),
         1024,
         &RoutineCancellation::new(),
-        || Ok(()),
+        Duration::from_secs(2),
     );
     assert!(result.is_err());
     assert_last_group_absent();
@@ -98,7 +96,6 @@ fn setup_panic_preserves_payload_after_explicit_reap() {
             Duration::from_secs(2),
             1024,
             &RoutineCancellation::new(),
-            || Ok(()),
         )
     })) {
         Err(payload) => payload,

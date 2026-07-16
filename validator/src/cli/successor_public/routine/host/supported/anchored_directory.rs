@@ -60,36 +60,6 @@ impl AnchoredDirectory {
         Ok(file)
     }
 
-    pub(crate) fn open_optional_regular(
-        &self,
-        name: &str,
-        mode: u32,
-    ) -> Result<Option<File>, HostFailure> {
-        match self.stat(name)? {
-            None => Ok(None),
-            Some(_) => self.open_regular(name, libc::O_RDONLY, mode).map(Some),
-        }
-    }
-
-    pub(crate) fn create_exclusive(&self, name: &str, mode: u32) -> Result<File, HostFailure> {
-        let file = openat(
-            &self.file,
-            name,
-            libc::O_RDWR | libc::O_CREAT | libc::O_EXCL,
-            mode,
-        )?;
-        let metadata = file.metadata().map_err(|_| HostFailure::Persistence)?;
-        let observed = identity(&metadata);
-        if observed.owner != unsafe { libc::geteuid() }
-            || observed.mode & 0o7777 != mode
-            || observed.links != 1
-            || self.stat(name)? != Some(observed)
-        {
-            return Err(HostFailure::Invalid);
-        }
-        Ok(file)
-    }
-
     pub(crate) fn stat(&self, name: &str) -> Result<Option<Identity>, HostFailure> {
         validate_name(name)?;
         let name = CString::new(name).map_err(|_| HostFailure::Invalid)?;
@@ -111,34 +81,6 @@ impl AnchoredDirectory {
         } else {
             Err(HostFailure::Invalid)
         }
-    }
-
-    pub(crate) fn rename(&self, from: &str, to: &str) -> Result<(), HostFailure> {
-        validate_name(from)?;
-        validate_name(to)?;
-        let from = CString::new(from).map_err(|_| HostFailure::Persistence)?;
-        let to = CString::new(to).map_err(|_| HostFailure::Persistence)?;
-        if unsafe {
-            libc::renameat(
-                self.file.as_raw_fd(),
-                from.as_ptr(),
-                self.file.as_raw_fd(),
-                to.as_ptr(),
-            )
-        } != 0
-        {
-            return Err(HostFailure::Persistence);
-        }
-        Ok(())
-    }
-
-    pub(crate) fn unlink(&self, name: &str) -> Result<(), HostFailure> {
-        validate_name(name)?;
-        let name = CString::new(name).map_err(|_| HostFailure::Persistence)?;
-        if unsafe { libc::unlinkat(self.file.as_raw_fd(), name.as_ptr(), 0) } != 0 {
-            return Err(HostFailure::Persistence);
-        }
-        Ok(())
     }
 
     pub(crate) fn verify(&self) -> Result<(), HostFailure> {

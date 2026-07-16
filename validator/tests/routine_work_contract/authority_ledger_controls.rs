@@ -29,7 +29,6 @@ fn exact_noop_bypasses_authority_initialization_and_workspace_writes() {
         prepared,
         RoutineCancellation::new(),
         RoutineReuseInput::default(),
-        None,
     )
     .unwrap();
     assert_eq!(result.status(), RoutineMediatorStatus::CompleteNoOp);
@@ -38,22 +37,21 @@ fn exact_noop_bypasses_authority_initialization_and_workspace_writes() {
 }
 
 #[test]
-fn missing_publisher_refuses_before_authority_initialization() {
-    let mut fixture = RoutinePlanFixture::new("missing-publisher-zero-write");
+fn missing_authority_root_refuses_before_authority_initialization() {
+    let mut fixture = RoutinePlanFixture::new("missing-authority-root-zero-write");
     let prepared = fixture.prepare().unwrap();
     let authority = fixture.repo.root().join("authority");
     let before = fixture.repo.tree();
     let error = mediate_public_routine_execution(
-        Some(&authority),
+        None,
         &fixture.context,
         &fixture.plan,
         prepared,
         RoutineCancellation::new(),
         RoutineReuseInput::default(),
-        None,
     )
     .unwrap_err();
-    assert_eq!(error.cause(), "routine-production-publisher-missing");
+    assert_eq!(error.cause(), "routine-production-authority-root-missing");
     assert!(!authority.exists());
     assert_eq!(fixture.repo.tree(), before);
     fixture.finish();

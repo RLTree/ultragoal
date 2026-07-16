@@ -1,6 +1,6 @@
 use super::claim::{ClaimFailurePoint, ClaimResidue, FixtureClaimFailure};
 use super::scope::{
-    populate_catalog_scope, CatalogSetupFailurePoint, ClaimedFixtureScope, FixtureScopeError,
+    CatalogSetupFailurePoint, ClaimedFixtureScope, FixtureScopeError, populate_catalog_scope,
 };
 use super::*;
 use std::fs;

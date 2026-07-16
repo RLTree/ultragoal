@@ -76,6 +76,12 @@ pub(crate) enum CleanupEvidence {
     Panic(PanicEvidence),
 }
 
+impl CleanupEvidence {
+    pub(crate) fn shape_is_valid(&self) -> bool {
+        cleanup_is_valid(self)
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct ProcessCustodyEvidence {

@@ -141,7 +141,6 @@ fn context_mutation_refuses_before_authority_creation() {
         prepared,
         RoutineCancellation::new(),
         RoutineReuseInput::default(),
-        None,
     )
     .unwrap_err();
     assert!(matches!(

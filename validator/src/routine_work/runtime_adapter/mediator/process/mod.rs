@@ -109,8 +109,7 @@ fn run_test_process_post_spawn_hook() {}
 fn run_test_loaded_object_hook() {}
 
 pub(crate) use configuration::*;
-#[cfg(test)]
-pub(crate) use custody_settlement::resume_test_process_custody_panic;
+pub(in crate::routine_work) use custody_settlement::ObservedProcessCustody;
 pub(crate) use custody_settlement::take_process_custody_panic;
 #[cfg(target_os = "macos")]
 pub(crate) use darwin_child_custody::*;

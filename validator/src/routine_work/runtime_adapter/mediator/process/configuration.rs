@@ -7,21 +7,16 @@ pub(crate) struct ConfiguredProcess {
     pub(crate) overflow: Arc<AtomicBool>,
 }
 
-pub(crate) fn configure_process<F>(
+pub(crate) fn configure_process(
     setup: SpawnSetupGuard,
     root: &RootAnchor,
     outputs: &OutputConfinement,
     framed_input: Vec<u8>,
     output_budget: u64,
-    on_started: F,
-) -> Result<ConfiguredProcess, RoutineError>
-where
-    F: FnOnce() -> Result<(), RoutineError>,
-{
+) -> Result<ConfiguredProcess, RoutineError> {
     let (setup, (process_group, observed, overflow)) = setup.configure(|setup| {
         root.validate()?;
         outputs.validate()?;
-        on_started()?;
         let process_group = setup.process_group()?;
         inject(
             ProcessFailurePoint::ProcessGroup,

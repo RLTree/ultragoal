@@ -44,7 +44,6 @@ fn every_setup_running_and_join_refusal_explicitly_reaps_custody() {
             Duration::from_secs(2),
             1024,
             &RoutineCancellation::new(),
-            || Ok(()),
         );
         assert!(result.is_err(), "{point:?} unexpectedly succeeded");
         assert_eq!(observed.load(Ordering::SeqCst), 1, "{point:?}");

@@ -11,6 +11,8 @@ fn production_source_exposes_no_arbitrary_process_binding_surface() {
     let invocation = include_str!("../src/routine_work/runtime_adapter/invocation_binding.rs");
     let mediation =
         include_str!("../src/routine_work/runtime_adapter/mediator/intent_mediation.rs");
+    let executed =
+        include_str!("../src/routine_work/runtime_adapter/mediator/outcome/executed_intent.rs");
     let process =
         include_str!("../src/routine_work/runtime_adapter/mediator/process/process_execution.rs");
     let launch = include_str!(
@@ -38,8 +40,9 @@ fn production_source_exposes_no_arbitrary_process_binding_surface() {
     assert!(!mediation.contains("unwrap_or(\"none\")"));
     assert!(
         mediation.find("validate_rust_source_observation").unwrap()
-            < mediation.find("ResultArtifactWire").unwrap()
+            < mediation.find("project_executed_intent").unwrap()
     );
+    assert!(executed.contains("ResultArtifactWire"));
     assert!(process.contains("framed_input: Vec<u8>"));
     assert!(!process.contains("framed_input: Option"));
     assert!(process.contains("spawn_exact_program"));
@@ -59,32 +62,33 @@ fn production_source_exposes_no_arbitrary_process_binding_surface() {
 }
 
 #[test]
-fn publication_is_staged_before_cache_and_terminal_settlement() {
-    let mediation = include_str!("../src/routine_work/runtime_adapter/mediator/no_op_mediation.rs");
+fn terminal_publication_follows_observation_without_parallel_cache_authority() {
     let transaction =
-        include_str!("../src/routine_work/runtime_adapter/production/reservation_transaction.rs");
-    let issuance =
-        include_str!("../src/routine_work/runtime_adapter/production/production_issuance.rs");
+        include_str!("../src/routine_work/runtime_adapter/production/custody/transaction.rs");
+    let durable = include_str!(
+        "../src/routine_work/runtime_adapter/production/custody/transaction/durable_state.rs"
+    );
+    let settlement = include_str!(
+        "../src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_settle.rs"
+    );
+    let source = include_str!("../src/cli/successor_public/routine/source_configuration.rs");
     let output = include_str!(
         "../src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection.rs"
     );
     let error = include_str!("../src/routine_work/error.rs");
     let catch = transaction.find("catch_unwind").unwrap();
-    let stage = transaction.find(".stage_success(&owner.token").unwrap();
-    let publish = transaction.find("publisher.publish").unwrap();
     let settle = transaction.find("owner.settle(settlement").unwrap();
-    assert!(stage < publish && publish < settle);
-    assert!(catch < stage && catch < settle);
+    assert!(catch < settle);
     assert!(output.contains("mediator-output-scope-not-empty"));
     assert!(output.contains("capture_owned_delta"));
     assert!(output.contains("held != scope.identity"));
-    assert!(mediation.contains("complete_intent_transition"));
-    assert!(mediation.contains("attempt.observe_staged_transition(|| Ok(()))"));
-    assert!(!mediation.contains("(Err(_), Err(error))"));
-    assert!(!issuance.contains("FileAuthorityLedger"));
-    assert!(!issuance.contains("ReservationToken"));
+    assert!(!transaction.contains("publisher.publish"));
+    assert!(!source.contains("persist_reuse"));
+    assert!(!source.contains("read_reuse"));
+    assert!(!durable.contains("stage_success"));
+    assert_eq!(settlement.matches("transition_payload(").count(), 1);
     assert!(!transaction.contains("impl Drop for ReservationTransaction"));
-    assert!(transaction.contains("self.ledger.record_failure(&self.token, evidence)"));
+    assert!(durable.contains("record_failure("));
     assert!(!error.contains("reservation_failure_evidence"));
     assert!(!error.contains("with_reservation_failure_evidence"));
     assert!(!error.contains("pub(crate) fn with_transition_failure"));

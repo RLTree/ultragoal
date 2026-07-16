@@ -59,11 +59,11 @@ pub(crate) use catalog::{
     RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation, load_production_catalog,
 };
 pub(crate) use runtime_adapter::{
-    PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, RoutineAdapterSpec,
-    RoutineArtifactPublisher, RoutineCancellation, RoutineInvocationSpec, RoutineMediationResult,
-    RoutineMediatorStatus, RoutineNodeDisposition, RoutineReuseInput,
-    bind_rust_source_syntax_invocation, fixed_environment, mediate_public_routine_execution,
-    prepare_routine_execution, validate_immutable_routine_program,
+    PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, RoutineAdapterSpec, RoutineCancellation,
+    RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
+    RoutineReuseInput, bind_rust_source_syntax_invocation, fixed_environment,
+    mediate_public_routine_execution, prepare_routine_execution,
+    validate_immutable_routine_program,
 };
 
 #[cfg(test)]

@@ -32,10 +32,6 @@ pub(crate) struct RoutineReuseInput {
 }
 
 impl RoutineReuseInput {
-    pub(crate) fn new(artifacts: Vec<Vec<u8>>) -> Self {
-        Self { artifacts }
-    }
-
     pub(crate) fn into_artifacts(self) -> Vec<Vec<u8>> {
         self.artifacts
     }
@@ -107,12 +103,8 @@ pub(crate) struct ReuseArtifactWire {
     pub(crate) mediator_witness_sha256: String,
 }
 
-pub(crate) struct VerifiedReuseArtifact {
-    pub(crate) wire: ReuseArtifactWire,
-    pub(crate) canonical_bytes: Vec<u8>,
-}
-
 pub(crate) struct ExecutedArtifact {
+    pub(crate) node: RoutineNodeMediation,
     pub(crate) result_sha256: String,
     pub(crate) reuse_bytes: Vec<u8>,
 }

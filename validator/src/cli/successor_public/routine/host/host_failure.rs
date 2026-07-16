@@ -7,24 +7,6 @@ pub(crate) enum HostFailure {
     Unavailable,
     Busy,
     Invalid,
-    RandomUnavailable,
-    ClockUnavailable,
-    Persistence,
-}
-
-#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
-#[serde(deny_unknown_fields)]
-pub(crate) struct CacheBinding {
-    pub(crate) command: String,
-    pub(crate) target_id: String,
-    pub(crate) source_id: String,
-    pub(crate) context_id: String,
-    pub(crate) candidate_id: String,
-    pub(crate) graph_id: String,
-    pub(crate) snapshot_id: String,
-    pub(crate) plan_id: String,
-    pub(crate) protocol_id: String,
-    pub(crate) request_id: String,
 }
 
 pub(crate) struct HostState {
@@ -33,26 +15,15 @@ pub(crate) struct HostState {
 }
 
 impl HostState {
-    pub(crate) fn open(home: &Path, target: &Path) -> Result<Self, HostFailure> {
+    pub(crate) fn open(home: &Path) -> Result<Self, HostFailure> {
         #[cfg(target_vendor = "apple")]
         {
-            return supported::HostState::open(home, target).map(|inner| Self { inner });
+            return supported::HostState::open(home).map(|inner| Self { inner });
         }
         #[cfg(not(target_vendor = "apple"))]
         {
-            let _ = (home, target);
+            let _ = home;
             Err(HostFailure::Unsupported)
-        }
-    }
-
-    pub(crate) fn target_id(&self) -> &str {
-        #[cfg(target_vendor = "apple")]
-        {
-            &self.inner.target_id
-        }
-        #[cfg(not(target_vendor = "apple"))]
-        {
-            unreachable!("unsupported host state cannot be constructed")
         }
     }
 
@@ -63,37 +34,6 @@ impl HostState {
         }
         #[cfg(not(target_vendor = "apple"))]
         {
-            unreachable!("unsupported host state cannot be constructed")
-        }
-    }
-
-    pub(crate) fn read_reuse(
-        &self,
-        expected: &CacheBinding,
-    ) -> Result<Option<Vec<Vec<u8>>>, HostFailure> {
-        #[cfg(target_vendor = "apple")]
-        {
-            self.inner.read_reuse(expected)
-        }
-        #[cfg(not(target_vendor = "apple"))]
-        {
-            let _ = expected;
-            unreachable!("unsupported host state cannot be constructed")
-        }
-    }
-
-    pub(crate) fn persist_reuse(
-        &self,
-        binding: CacheBinding,
-        artifacts: &[Vec<u8>],
-    ) -> Result<(), HostFailure> {
-        #[cfg(target_vendor = "apple")]
-        {
-            self.inner.persist_reuse(binding, artifacts)
-        }
-        #[cfg(not(target_vendor = "apple"))]
-        {
-            let _ = (binding, artifacts);
             unreachable!("unsupported host state cannot be constructed")
         }
     }

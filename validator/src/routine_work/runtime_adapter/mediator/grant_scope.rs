@@ -3,7 +3,7 @@ use super::*;
 pub(crate) const RESULT_DOMAIN: &[u8] = b"routine-mediated-result-v1";
 pub(crate) const RECOVERY_DOMAIN: &[u8] = b"routine-mediated-recovery-v1";
 pub(crate) const MEDIATOR_SUPPORT_LIMIT: &str = "internal macOS single-process routine mediation evidence only; grant replay, reuse authentication, ambiguity recovery, and artifacts are process-local; the parent kernel-suspends each launch and matches its loaded vnode to the exact pinned executable descriptor before resume, so a user-writable ancestor name cannot select executed bytes; the exact child activates the fixed sandbox before frame evaluation, unbound file reads are denied, explicitly bound worktree-relative regular-file reads are identity/content/ctime revalidated, immutable system runtime roots remain policy-authorized, post-activation file-backed executable mapping is limited to immutable system-library roots, and process-fork kills the runner; external interpreted sources, startup-loader environments, executable trampolines, different-object aliases, shebang scripts, descriptor aliases, user-owned executable mappings, and multi-process runners are unsupported; canonical root issuance, durable persistence, public dispatch, installed behavior, and claim decisions remain absent";
-pub(crate) const PRODUCTION_SUPPORT_LIMIT: &str = "source-local canonical routine planning, clean no-op, rust-source-syntax execution, exact durable reuse, conservative fallback, cancellation, bounded interruption recovery, and parent-authenticated observation; arbitrary programs, child-authored results, unbound fallback, installed behavior, representative product journeys, readiness, release, and completion remain unavailable";
+pub(crate) const PRODUCTION_SUPPORT_LIMIT: &str = "source-local canonical routine planning, clean no-op, and one fresh single-process rust-source-syntax execution with parent-authenticated observation and durable terminal publication; reuse, repeat execution, fallback, interruption recovery, fresh-process takeover, rollback resistance, installed behavior, representative product journeys, readiness, release, and completion remain unavailable until root wiring carries the opaque custody session and an external monotonic head";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum DurableSettlement {
@@ -11,10 +11,6 @@ pub(crate) enum DurableSettlement {
     Failed,
     Cancelled,
     Incomplete,
-}
-
-pub(crate) trait RoutineArtifactPublisher {
-    fn publish(&self, artifacts: &[Vec<u8>]) -> Result<(), RoutineError>;
 }
 
 pub(crate) fn preflight_production_request(
@@ -29,26 +25,13 @@ pub(crate) fn preflight_production_request(
 /// durable ledger's read-only reuse authentication. These values are not
 /// authority: only the ledger may turn them into an opaque, one-use
 /// preauthorization bound to its current Complete record.
-pub(crate) struct ProductionReuseClaim {
-    pub(crate) protocol_id: String,
-    pub(crate) intent_id: String,
-    pub(crate) artifact_sha256: String,
-    pub(crate) result_artifact_sha256: String,
-    pub(crate) mediator_witness_sha256: String,
-}
-
 pub(crate) struct PreflightedProductionReuse {
     pub(crate) input: RoutineReuseInput,
-    pub(crate) claims: Vec<ProductionReuseClaim>,
 }
 
 impl PreflightedProductionReuse {
     pub(crate) fn is_empty(&self) -> bool {
-        self.claims.is_empty()
-    }
-
-    pub(crate) fn into_parts(self) -> (RoutineReuseInput, Vec<ProductionReuseClaim>) {
-        (self.input, self.claims)
+        self.input.is_empty()
     }
 }
 
@@ -62,10 +45,7 @@ pub(crate) fn preflight_production_reuse_input(
     require_complete_set: bool,
 ) -> Result<PreflightedProductionReuse, RoutineError> {
     if input.is_empty() {
-        return Ok(PreflightedProductionReuse {
-            input,
-            claims: Vec::new(),
-        });
+        return Ok(PreflightedProductionReuse { input });
     }
     let known = request
         .intents
@@ -73,7 +53,6 @@ pub(crate) fn preflight_production_reuse_input(
         .map(|intent| (intent.intent_id(), intent))
         .collect::<BTreeMap<_, _>>();
     let mut supplied = BTreeSet::new();
-    let mut claims = Vec::with_capacity(input.artifacts().len());
     for bytes in input.artifacts() {
         let wire: ReuseArtifactWire = serde_json::from_slice(bytes)
             .map_err(|_| mediator_error("mediator-production-reuse-input-malformed"))?;
@@ -117,17 +96,9 @@ pub(crate) fn preflight_production_reuse_input(
         if !supplied.insert(wire.intent_id.clone()) {
             return Err(mediator_error("mediator-production-reuse-input-duplicated"));
         }
-        claims.push(ProductionReuseClaim {
-            protocol_id: wire.protocol_id,
-            intent_id: wire.intent_id,
-            artifact_sha256: sha256(bytes),
-            result_artifact_sha256: wire.result_artifact_sha256,
-            mediator_witness_sha256: wire.mediator_witness_sha256,
-        });
     }
     if require_complete_set && supplied.len() != known.len() {
         return Err(mediator_error("mediator-production-reuse-input-incomplete"));
     }
-    claims.sort_by(|left, right| left.intent_id.cmp(&right.intent_id));
-    Ok(PreflightedProductionReuse { input, claims })
+    Ok(PreflightedProductionReuse { input })
 }

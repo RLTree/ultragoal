@@ -3,7 +3,7 @@ use super::super::filesystem::{OutputConfinement, PinnedExecutable, ReadConfinem
 #[cfg(target_os = "macos")]
 use super::super::outcome::RoutineCancellation;
 #[cfg(target_os = "macos")]
-use super::{ProcessObservation, ProcessTermination, execute};
+use super::{PreparedProcess, ProcessObservation, ProcessTermination, prepare};
 #[cfg(target_os = "macos")]
 use std::collections::BTreeMap;
 #[cfg(target_os = "macos")]
@@ -47,21 +47,17 @@ impl ProcessFixture {
         budget: u64,
         cancellation: &RoutineCancellation,
     ) -> ProcessObservation {
-        self.run_result(script, timeout, budget, cancellation, || Ok(()))
+        self.run_result(script, timeout, budget, cancellation)
             .unwrap()
     }
 
-    pub(super) fn run_result<F>(
+    pub(super) fn run_result(
         &self,
         script: &str,
         timeout: Duration,
         budget: u64,
         cancellation: &RoutineCancellation,
-        on_started: F,
-    ) -> Result<ProcessObservation, crate::routine_work::RoutineError>
-    where
-        F: FnOnce() -> Result<(), crate::routine_work::RoutineError>,
-    {
+    ) -> Result<ProcessObservation, crate::routine_work::RoutineError> {
         let root = RootAnchor::open(&self.workspace).unwrap();
         let outputs = OutputConfinement::prepare(&root, &[], budget).unwrap();
         let reads = ReadConfinement {
@@ -72,7 +68,7 @@ impl ProcessFixture {
             crate::routine_work::CHILD_MODE_ENV.to_owned(),
             crate::routine_work::CHILD_MODE_VALUE.to_owned(),
         )]);
-        execute(
+        observe_prepared(
             &program,
             &root,
             &outputs,
@@ -80,15 +76,45 @@ impl ProcessFixture {
             &["sh".to_owned(), "-c".to_owned(), script.to_owned()],
             &environment,
             Vec::new(),
-            timeout,
             budget,
             cancellation,
-            on_started,
+            timeout,
         )
     }
 
     pub(super) fn teardown(self) {
         fs::remove_dir_all(self.root).unwrap();
+    }
+}
+
+pub(super) fn observe_prepared(
+    program: &PinnedExecutable,
+    root: &RootAnchor,
+    outputs: &OutputConfinement,
+    reads: &ReadConfinement,
+    argv: &[String],
+    environment: &BTreeMap<String, String>,
+    framed_input: Vec<u8>,
+    budget: u64,
+    cancellation: &RoutineCancellation,
+    timeout: Duration,
+) -> Result<ProcessObservation, crate::routine_work::RoutineError> {
+    match prepare(
+        program,
+        root,
+        outputs,
+        reads,
+        argv,
+        environment,
+        framed_input,
+        budget,
+        cancellation,
+    )? {
+        PreparedProcess::Cancelled(observation) => Ok(observation),
+        PreparedProcess::Suspended(process) => {
+            let _ = process.identity()?;
+            process.observe(program, root, outputs, timeout, cancellation)
+        }
     }
 }
 

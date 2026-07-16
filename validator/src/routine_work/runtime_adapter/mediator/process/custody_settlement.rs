@@ -6,6 +6,20 @@ pub(crate) struct ProcessCustodyPanic {
     evidence: ProcessCustodyEvidence,
 }
 
+pub(in crate::routine_work) struct ObservedProcessCustody {
+    evidence: ProcessCustodyEvidence,
+}
+
+impl ObservedProcessCustody {
+    fn new(evidence: ProcessCustodyEvidence) -> Self {
+        Self { evidence }
+    }
+
+    pub(in crate::routine_work) fn into_evidence(self) -> ProcessCustodyEvidence {
+        self.evidence
+    }
+}
+
 pub(crate) fn take_process_custody_panic(
     payload: Box<dyn std::any::Any + Send>,
 ) -> Result<(Box<dyn std::any::Any + Send>, ProcessCustodyEvidence), Box<dyn std::any::Any + Send>>
@@ -13,14 +27,6 @@ pub(crate) fn take_process_custody_panic(
     payload
         .downcast::<ProcessCustodyPanic>()
         .map(|custody| (custody.resume, custody.evidence))
-}
-
-#[cfg(test)]
-pub(crate) fn resume_test_process_custody_panic(
-    resume: Box<dyn std::any::Any + Send>,
-    evidence: ProcessCustodyEvidence,
-) -> ! {
-    resume_unwind(Box::new(ProcessCustodyPanic { resume, evidence }))
 }
 
 impl SpawnSetupGuard {
@@ -102,16 +108,20 @@ fn cleanup_after_error<T>(
 ) -> Result<T, RoutineError> {
     let primary_evidence = FailureEvidence::Error(primary.evidence());
     match catch_unwind(AssertUnwindSafe(cleanup)) {
-        Ok(Ok(())) => Err(primary.with_process_custody(ProcessCustodyEvidence {
-            primary: primary_evidence,
-            cleanup: CleanupEvidence::Succeeded,
-        })),
+        Ok(Ok(())) => Err(primary.with_process_custody(ObservedProcessCustody::new(
+            ProcessCustodyEvidence {
+                primary: primary_evidence,
+                cleanup: CleanupEvidence::Succeeded,
+            },
+        ))),
         Ok(Err(cleanup_error)) => {
             let cleanup = CleanupEvidence::Error(cleanup_error.evidence());
-            Err(cleanup_error.with_process_custody(ProcessCustodyEvidence {
-                primary: primary_evidence,
-                cleanup,
-            }))
+            Err(
+                primary.with_process_custody(ObservedProcessCustody::new(ProcessCustodyEvidence {
+                    primary: primary_evidence,
+                    cleanup,
+                })),
+            )
         }
         Err(cleanup_panic) => {
             let evidence = ProcessCustodyEvidence {

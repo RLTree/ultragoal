@@ -2,6 +2,12 @@ use super::*;
 
 pub(super) type PanicPayload = Box<dyn std::any::Any + Send>;
 
+pub(super) struct FailureBinding<'a> {
+    pub(super) protocol_id: &'a str,
+    pub(super) grant_id: &'a str,
+    pub(super) recovery_marker: &'a str,
+}
+
 pub(super) struct CapturedCleanup {
     pub(super) outcome: std::thread::Result<Result<(), RoutineError>>,
     pub(super) evidence: CleanupEvidence,
@@ -44,14 +50,38 @@ pub(super) fn combine(
     }
 }
 
+pub(super) fn finish_execution<T>(
+    primary: std::thread::Result<Result<T, RoutineError>>,
+    cleanup: CapturedCleanup,
+) -> Result<T, RoutineError> {
+    match primary {
+        Ok(Ok(value)) => match combine(Ok(Ok(())), cleanup) {
+            Ok(()) => Ok(value),
+            Err(failure) => std::panic::resume_unwind(Box::new(failure)),
+        },
+        Ok(Err(error)) => match combine(Ok(Err(error)), cleanup) {
+            Ok(()) => Err(super::production_mediation::error(
+                "routine-process-error-transition-missing",
+            )),
+            Err(failure) => std::panic::resume_unwind(Box::new(failure)),
+        },
+        Err(payload) => match combine(Err(payload), cleanup) {
+            Ok(()) => Err(super::production_mediation::error(
+                "routine-process-panic-transition-missing",
+            )),
+            Err(failure) => std::panic::resume_unwind(Box::new(failure)),
+        },
+    }
+}
+
 fn observed_error(error: RoutineError, staged: CleanupEvidence) -> Result<(), LifecycleFailure> {
-    let (primary, process_cleanup) = error_parts(&error);
+    let (primary, process_cleanup, observed_staged) = error_parts(&error);
     Err(LifecycleFailure::Error(
         error,
         FailureParts {
             primary,
             process_cleanup,
-            staged_cleanup: staged,
+            staged_cleanup: observed_staged.unwrap_or(staged),
         },
     ))
 }
@@ -68,8 +98,10 @@ fn observed_panic(payload: PanicPayload, staged: CleanupEvidence) -> Result<(), 
     ))
 }
 
-pub(super) fn error_parts(error: &RoutineError) -> (FailureEvidence, CleanupEvidence) {
-    error
+pub(super) fn error_parts(
+    error: &RoutineError,
+) -> (FailureEvidence, CleanupEvidence, Option<CleanupEvidence>) {
+    let (primary, process) = error
         .process_custody()
         .map(|evidence| (evidence.primary.clone(), evidence.cleanup.clone()))
         .unwrap_or_else(|| {
@@ -77,7 +109,8 @@ pub(super) fn error_parts(error: &RoutineError) -> (FailureEvidence, CleanupEvid
                 FailureEvidence::Error(error.evidence()),
                 CleanupEvidence::NotRequired,
             )
-        })
+        });
+    (primary, process, error.staged_cleanup().cloned())
 }
 
 pub(super) fn panic_parts(
@@ -146,16 +179,16 @@ pub(super) fn finish_observed<T>(
 
 pub(super) fn finish_transaction<T>(
     outcome: std::thread::Result<Result<T, RoutineError>>,
-    token: &ReservationToken,
+    binding: FailureBinding<'_>,
     started: bool,
     cleanup: impl FnOnce() -> CapturedCleanup,
     transition: impl FnOnce(&ReservationFailureEvidence) -> Result<(), RoutineError>,
 ) -> Result<T, RoutineError> {
     let evidence = |parts: FailureParts| ReservationFailureEvidence {
         schema_version: RESERVATION_FAILURE_SCHEMA.to_owned(),
-        protocol_id: token.binding.protocol_id.clone(),
-        grant_id: token.grant_id.clone(),
-        recovery_marker: token.recovery_marker.clone(),
+        protocol_id: binding.protocol_id.to_owned(),
+        grant_id: binding.grant_id.to_owned(),
+        recovery_marker: binding.recovery_marker.to_owned(),
         primary: parts.primary,
         process_cleanup: parts.process_cleanup,
         staged_cleanup: parts.staged_cleanup,
@@ -168,12 +201,12 @@ pub(super) fn finish_transaction<T>(
     match outcome {
         Ok(Ok(result)) => Ok(result),
         Ok(Err(error)) => {
-            let (primary, process_cleanup) = error_parts(&error);
+            let (primary, process_cleanup, observed_staged) = error_parts(&error);
             let cleanup = cleanup();
             let record = evidence(FailureParts {
                 primary,
                 process_cleanup,
-                staged_cleanup: cleanup.evidence.clone(),
+                staged_cleanup: observed_staged.unwrap_or_else(|| cleanup.evidence.clone()),
             });
             finish_error(error, Some(cleanup.outcome), transition(&record))
         }

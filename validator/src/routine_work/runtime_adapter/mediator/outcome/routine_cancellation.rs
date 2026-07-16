@@ -69,7 +69,7 @@ impl RoutineNodeMediation {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 #[must_use = "mediation results must be reconciled by their root caller"]
 pub(crate) struct RoutineMediationResult {
     pub(crate) request_id: Option<String>,

@@ -3,9 +3,10 @@ use super::super::filesystem::{OutputConfinement, PinnedExecutable, ReadConfinem
 #[cfg(target_os = "macos")]
 use super::super::outcome::RoutineCancellation;
 #[cfg(target_os = "macos")]
+use super::process_termination_tests::observe_prepared;
+#[cfg(target_os = "macos")]
 use super::{
-    execute, set_test_loaded_object_hook, set_test_process_post_spawn_hook,
-    set_test_process_pre_spawn_hook,
+    set_test_loaded_object_hook, set_test_process_post_spawn_hook, set_test_process_pre_spawn_hook,
 };
 #[cfg(target_os = "macos")]
 use crate::routine_work::{
@@ -77,7 +78,7 @@ fn named_path_swap_during_spawn_cannot_authenticate_observation() {
         fs::rename(&after_held_directory, &after_directory).unwrap();
     });
 
-    let result = execute(
+    let result = observe_prepared(
         &program,
         &root_anchor,
         &outputs,
@@ -89,10 +90,9 @@ fn named_path_swap_during_spawn_cannot_authenticate_observation() {
         ],
         &environment,
         frame,
-        Duration::from_secs(2),
         1024,
         &RoutineCancellation::new(),
-        || Ok(()),
+        Duration::from_secs(2),
     );
     let error = match result {
         Err(error) => error,
@@ -135,7 +135,7 @@ fn named_path_revalidation_failure_explicitly_reaps_suspended_child() {
         fs::set_permissions(&hook_named, fs::Permissions::from_mode(0o555)).unwrap();
     });
 
-    let result = execute(
+    let result = observe_prepared(
         &program,
         &root_anchor,
         &outputs,
@@ -143,10 +143,9 @@ fn named_path_revalidation_failure_explicitly_reaps_suspended_child() {
         &["sh".to_owned(), "-c".to_owned(), "exit 0".to_owned()],
         &environment,
         Vec::new(),
-        Duration::from_secs(2),
         1024,
         &RoutineCancellation::new(),
-        || Ok(()),
+        Duration::from_secs(2),
     );
     let error = match result {
         Err(error) => error,

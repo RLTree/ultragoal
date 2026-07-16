@@ -8,6 +8,9 @@ mod filesystem;
 mod outcome;
 mod process;
 
+#[path = "effect_mediation.rs"]
+mod effect_mediation;
+
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
@@ -19,7 +22,6 @@ use super::execution_authority::{
     RoutineEffectIntent, RoutineEffectRequest, RoutineMediatedIntent, RoutineMediationAuthority,
     RoutineNoOpProjection, RoutineReadSource,
 };
-use super::production::RoutineExecutionCapability;
 use super::{begin_routine_mediation, environment_digest, read_authority_digest};
 use crate::routine_work::digest::{canonical, digest_of, framed, sha256, valid};
 use crate::routine_work::{
@@ -30,13 +32,16 @@ use crate::routine_work::{
 pub(crate) use filesystem::{
     ObjectIdentity, OutputConfinement, PinnedExecutable, ReadConfinement, RootAnchor, StagedProgram,
 };
-use outcome::{ExecutedArtifact, ResultArtifactWire, ReuseArtifactWire, VerifiedReuseArtifact};
+use outcome::{ExecutedArtifact, ResultArtifactWire, project_executed_intent};
 pub(crate) use outcome::{
     RoutineCancellation, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
     RoutineNodeMediation, RoutineReuseInput,
 };
-use process::ProcessTermination;
+pub(in crate::routine_work) use process::ObservedProcessCustody;
+pub(super) use process::PreparedProcess;
+pub(super) use process::StartedProcessIdentity;
 pub(crate) use process::take_process_custody_panic;
+pub(crate) use process::{ProcessObservation, ProcessTermination};
 
 #[path = "grant_scope.rs"]
 mod grant_scope;
@@ -50,11 +55,12 @@ mod intent_mediation;
 mod no_op_mediation;
 #[path = "read_source_binding.rs"]
 mod read_source_binding;
-#[path = "reuse_input_index.rs"]
-mod reuse_input_index;
+#[path = "reuse_artifact.rs"]
+mod reuse_artifact;
 #[path = "rust_source_observation.rs"]
 mod rust_source_observation;
 
+pub(super) use effect_mediation::*;
 #[cfg(test)]
 pub(crate) use filesystem::{
     validate_output_confinement_after, validate_read_confinement_after_bind,
@@ -62,12 +68,38 @@ pub(crate) use filesystem::{
 pub(crate) use grant_scope::*;
 pub(crate) use grant_validation::*;
 pub(crate) use incomplete_outcome::*;
-use intent_mediation::mediate_intent;
+pub(super) use intent_mediation::IntentExecutionRequest;
+use intent_mediation::{bind_intent_request, prepare_intent};
 pub(super) use no_op_mediation::*;
+pub(super) use outcome::ReuseArtifactWire;
 pub(crate) use read_source_binding::{bind_read_sources, validate_read_sources};
-pub(crate) use reuse_input_index::*;
+pub(crate) use reuse_artifact::*;
 pub(crate) use rust_source_observation::*;
 
 pub(super) fn validate_routine_program_path(path: &Path) -> Result<(), RoutineError> {
     PinnedExecutable::open_unbound(path).map(|_| ())
+}
+
+pub(super) fn prepare_authorized_process(
+    executable: &PinnedExecutable,
+    root: &RootAnchor,
+    outputs: &OutputConfinement,
+    reads: &ReadConfinement,
+    argv: &[String],
+    environment: &BTreeMap<String, String>,
+    framed_input: Vec<u8>,
+    output_budget: u64,
+    cancellation: &RoutineCancellation,
+) -> Result<PreparedProcess, RoutineError> {
+    process::prepare(
+        executable,
+        root,
+        outputs,
+        reads,
+        argv,
+        environment,
+        framed_input,
+        output_budget,
+        cancellation,
+    )
 }

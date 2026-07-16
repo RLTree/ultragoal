@@ -28,15 +28,17 @@ pub(crate) use execution_authority::{
     RoutineEffectRequest, RoutineInvocationSpec, RoutineMediationAuthority, RoutineMediationBatch,
     RoutineNoOpProjection,
 };
+pub(in crate::routine_work) use mediator::ObservedProcessCustody;
 pub(crate) use mediator::{
-    PRODUCTION_SUPPORT_LIMIT, RoutineArtifactPublisher, RoutineCancellation,
-    RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition, RoutineReuseInput,
+    PRODUCTION_SUPPORT_LIMIT, RoutineCancellation, RoutineMediationResult, RoutineMediatorStatus,
+    RoutineNodeDisposition, RoutineReuseInput,
 };
 #[cfg(test)]
 pub(crate) use mediator::{
     set_test_output_capture_hook, set_test_read_source_capture_hook,
     validate_output_confinement_after, validate_read_confinement_after_bind,
 };
+pub(in crate::routine_work) use production::ObservedStagedCleanup;
 pub(crate) use production::mediate_public_routine_execution;
 
 #[path = "execution_preparation.rs"]

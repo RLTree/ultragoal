@@ -10,7 +10,7 @@ mod host;
 mod manifest;
 mod outcome;
 
-use self::host::{CacheBinding, HostState};
+use self::host::HostState;
 use self::manifest::{LoadedManifest, MANIFEST_PATH};
 use self::outcome::PublicFailure;
 use crate::cli::successor::runtime::RuntimeOutcome;
@@ -22,11 +22,10 @@ use crate::inventory::{ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFE
 use crate::routine_work::{
     AdoptedRoutineNode, BoundCatalogInvocation, CatalogAdoption, CatalogSelectionRequest,
     ImpactGraph, LocalDirtyTree, PlanRequest, PreparedRoutineExecution, RepoPath,
-    RoutineAdapterSpec, RoutineArtifactPublisher, RoutineCancellation, RoutineInvocationSpec,
-    RoutinePlan, RoutineReuseInput, RunnerObservation, SelectedRoutineNode,
-    TransitiveInputExpectation, bind_rust_source_syntax_invocation, load_production_catalog,
-    mediate_public_routine_execution, plan_routine, prepare_routine_execution,
-    validate_immutable_routine_program,
+    RoutineAdapterSpec, RoutineCancellation, RoutineInvocationSpec, RoutinePlan, RoutineReuseInput,
+    RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation,
+    bind_rust_source_syntax_invocation, load_production_catalog, mediate_public_routine_execution,
+    plan_routine, prepare_routine_execution, validate_immutable_routine_program,
 };
 use std::collections::BTreeSet;
 use std::fs;

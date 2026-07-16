@@ -1,48 +1,33 @@
-use super::creation::{ProvisionEvent, ProvisionOutcome, provision};
+use super::creation::{ProvisionStep, prepare, publish_stage};
 use super::directory_entries::names;
 use super::observation::{open_at, open_root, stat_at, validate_directory};
 use super::*;
 
-pub(super) fn apply(
-    ledger: &FileAuthorityLedger,
-    token: &ReservationToken,
-    root: &Path,
-) -> Result<ApplyOutcome, RoutineError> {
-    apply_inner(ledger, token, root, &mut |_, _| Ok(()))
+pub(in crate::routine_work::runtime_adapter::production) struct OutputProvisioning {
+    journal: OutputProvisionJournal,
+    opened: BTreeMap<String, File>,
+    allowed: BTreeMap<String, BTreeSet<String>>,
+    index: usize,
+    phase: Phase,
 }
 
-#[cfg(test)]
-pub(super) enum ApplyEvent<'a> {
-    StageCreated(&'a str),
-    StageRecorded(&'a str),
-    Published(&'a str),
-    FinalRecorded(&'a str),
+enum Phase {
+    Inspect,
+    Publish(OutputDirectoryIdentity),
+    AwaitStaged(OutputDirectoryIdentity),
+    AwaitPublished(OutputDirectoryIdentity),
+    Complete,
 }
 
-#[cfg(test)]
-pub(super) fn apply_observed(
-    ledger: &FileAuthorityLedger,
-    token: &ReservationToken,
-    root: &Path,
-    observer: &mut dyn FnMut(ApplyEvent<'_>) -> Result<(), RoutineError>,
-) -> Result<ApplyOutcome, RoutineError> {
-    apply_inner(ledger, token, root, &mut |path, event| {
-        observer(match event {
-            ProvisionEvent::StageCreated => ApplyEvent::StageCreated(path),
-            ProvisionEvent::StageRecorded => ApplyEvent::StageRecorded(path),
-            ProvisionEvent::Published => ApplyEvent::Published(path),
-            ProvisionEvent::FinalRecorded => ApplyEvent::FinalRecorded(path),
-        })
-    })
+pub(in crate::routine_work::runtime_adapter::production) enum OutputStep {
+    Record(OutputTransition),
+    Complete(ApplyOutcome),
 }
 
-fn apply_inner(
-    ledger: &FileAuthorityLedger,
-    token: &ReservationToken,
+pub(super) fn begin(
+    journal: &OutputProvisionJournal,
     root: &Path,
-    observer: &mut dyn FnMut(&str, ProvisionEvent) -> Result<(), RoutineError>,
-) -> Result<ApplyOutcome, RoutineError> {
-    let journal = &token.output_journal;
+) -> Result<OutputProvisioning, RoutineError> {
     let root = open_root(root)?;
     if identity(
         &root
@@ -52,39 +37,139 @@ fn apply_inner(
     {
         return Err(error("routine-production-output-root-changed"));
     }
-    let allowed = allowed_children(journal);
     let mut opened = BTreeMap::new();
     opened.insert(String::new(), root);
-    for component in &journal.components {
-        let (parent_name, child_name) = component
-            .relative_path
-            .rsplit_once('/')
-            .map_or(("", component.relative_path.as_str()), |(parent, child)| {
-                (parent, child)
-            });
-        let parent = opened
+    Ok(OutputProvisioning {
+        journal: journal.clone(),
+        opened,
+        allowed: allowed_children(journal),
+        index: 0,
+        phase: Phase::Inspect,
+    })
+}
+
+impl OutputProvisioning {
+    pub(in crate::routine_work::runtime_adapter::production) fn next(
+        &mut self,
+    ) -> Result<OutputStep, RoutineError> {
+        loop {
+            let component = match self.journal.components.get(self.index) {
+                Some(component) => component.clone(),
+                None => {
+                    self.phase = Phase::Complete;
+                    return Ok(OutputStep::Complete(ApplyOutcome::Applied));
+                }
+            };
+            let (parent_name, child_name) = names_for(&component.relative_path);
+            let parent = self
+                .opened
+                .get(parent_name)
+                .ok_or_else(|| error("routine-production-output-parent-unbound"))?;
+            match self.phase {
+                Phase::Inspect => {
+                    if let Some(expected) = component.preexisting {
+                        if stat_at(parent, child_name)? != Some(expected) {
+                            return Err(error("routine-production-output-prestate-changed"));
+                        }
+                        self.bind_ready(&component, expected)?;
+                        continue;
+                    }
+                    match prepare(&component, parent, child_name, self.journal.root.device)? {
+                        ProvisionStep::Ready(identity) => self.bind_ready(&component, identity)?,
+                        ProvisionStep::StageCreated(identity) => {
+                            self.phase = Phase::AwaitStaged(identity);
+                            return Ok(OutputStep::Record(OutputTransition::Staged {
+                                relative_path: component.relative_path,
+                                identity,
+                            }));
+                        }
+                        ProvisionStep::StagePresent(identity) => {
+                            self.phase = Phase::Publish(identity);
+                        }
+                        ProvisionStep::Published(identity) => {
+                            self.phase = Phase::AwaitPublished(identity);
+                            return Ok(OutputStep::Record(OutputTransition::Published {
+                                relative_path: component.relative_path,
+                                identity,
+                            }));
+                        }
+                        ProvisionStep::UnrecordedStage(ambiguity) => {
+                            self.phase = Phase::Complete;
+                            return Ok(OutputStep::Complete(ApplyOutcome::UnrecordedStage(
+                                ambiguity,
+                            )));
+                        }
+                    }
+                }
+                Phase::Publish(identity) => {
+                    publish_stage(
+                        parent,
+                        &component,
+                        child_name,
+                        identity,
+                        self.journal.root.device,
+                    )?;
+                    self.phase = Phase::AwaitPublished(identity);
+                    return Ok(OutputStep::Record(OutputTransition::Published {
+                        relative_path: component.relative_path,
+                        identity,
+                    }));
+                }
+                Phase::AwaitStaged(_) | Phase::AwaitPublished(_) => {
+                    return Err(error("routine-production-output-transition-unrecorded"));
+                }
+                Phase::Complete => {
+                    return Err(error("routine-production-output-provisioning-complete"));
+                }
+            }
+        }
+    }
+
+    pub(in crate::routine_work::runtime_adapter::production) fn recorded(
+        &mut self,
+        transition: OutputTransition,
+    ) -> Result<(), RoutineError> {
+        let component = self
+            .journal
+            .components
+            .get(self.index)
+            .ok_or_else(|| error("routine-production-output-component-unbound"))?;
+        match (&self.phase, transition) {
+            (
+                Phase::AwaitStaged(expected),
+                OutputTransition::Staged {
+                    relative_path,
+                    identity,
+                },
+            ) if component.relative_path == relative_path && *expected == identity => {
+                self.phase = Phase::Publish(identity);
+                Ok(())
+            }
+            (
+                Phase::AwaitPublished(expected),
+                OutputTransition::Published {
+                    relative_path,
+                    identity,
+                },
+            ) if component.relative_path == relative_path && *expected == identity => {
+                let component = component.clone();
+                self.bind_ready(&component, identity)
+            }
+            _ => Err(error("routine-production-output-transition-mismatch")),
+        }
+    }
+
+    fn bind_ready(
+        &mut self,
+        component: &OutputComponentJournal,
+        expected: OutputDirectoryIdentity,
+    ) -> Result<(), RoutineError> {
+        validate_directory(expected, self.journal.root.device)?;
+        let (parent_name, child_name) = names_for(&component.relative_path);
+        let parent = self
+            .opened
             .get(parent_name)
             .ok_or_else(|| error("routine-production-output-parent-unbound"))?;
-        let observed = stat_at(parent, child_name)?;
-        let expected = match (component.preexisting, observed) {
-            (Some(expected), Some(current)) if expected == current => current,
-            (Some(_), _) => return Err(error("routine-production-output-prestate-changed")),
-            (None, _) => match provision(
-                ledger,
-                token,
-                component,
-                parent,
-                child_name,
-                journal.root.device,
-                observer,
-            )? {
-                ProvisionOutcome::Ready(identity) => identity,
-                ProvisionOutcome::UnrecordedStage(ambiguity) => {
-                    return Ok(ApplyOutcome::UnrecordedStage(ambiguity));
-                }
-            },
-        };
-        validate_directory(expected, journal.root.device)?;
         let child = open_at(parent, child_name)?;
         if identity(
             &child
@@ -96,7 +181,8 @@ fn apply_inner(
             return Err(error("routine-production-output-open-raced"));
         }
         if component.preexisting.is_none() {
-            let expected_names = allowed
+            let expected_names = self
+                .allowed
                 .get(&component.relative_path)
                 .cloned()
                 .unwrap_or_default();
@@ -104,9 +190,17 @@ fn apply_inner(
                 return Err(error("routine-production-output-owned-content-ambiguous"));
             }
         }
-        opened.insert(component.relative_path.clone(), child);
+        self.opened.insert(component.relative_path.clone(), child);
+        self.index += 1;
+        self.phase = Phase::Inspect;
+        Ok(())
     }
-    Ok(ApplyOutcome::Applied)
+}
+
+fn names_for(relative: &str) -> (&str, &str) {
+    relative
+        .rsplit_once('/')
+        .map_or(("", relative), |(parent, child)| (parent, child))
 }
 
 fn allowed_children(journal: &OutputProvisionJournal) -> BTreeMap<String, BTreeSet<String>> {

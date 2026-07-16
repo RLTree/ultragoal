@@ -7,41 +7,46 @@ use std::os::unix::ffi::OsStrExt;
 use std::os::unix::fs::MetadataExt;
 use std::path::Path;
 
-use super::ledger::{
-    FileAuthorityLedger, OutputComponentJournal, OutputDirectoryIdentity, OutputProvisionJournal,
-    OutputStageAmbiguity, ReservationToken,
+use super::custody::{
+    OutputComponentJournal, OutputDirectoryIdentity, OutputProvisionJournal, OutputStageAmbiguity,
 };
 use super::production_mediation::error;
 use crate::routine_work::{RepoPath, RoutineError};
 
-#[cfg(test)]
-#[path = "ambiguity_lifecycle_tests.rs"]
-mod ambiguity_lifecycle_tests;
 #[path = "apply.rs"]
 mod apply;
 #[path = "creation.rs"]
 mod creation;
-#[cfg(test)]
-#[path = "custody_tests.rs"]
-mod custody_tests;
 #[path = "directory_entries.rs"]
 mod directory_entries;
 #[path = "observation.rs"]
 mod observation;
-#[cfg(test)]
-#[path = "reconciliation_authority_tests.rs"]
-mod reconciliation_authority_tests;
-#[cfg(test)]
-#[path = "recovery_tests.rs"]
-mod recovery_tests;
-#[cfg(test)]
-#[path = "tests.rs"]
-mod tests;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(super) enum ApplyOutcome {
     Applied,
     UnrecordedStage(OutputStageAmbiguity),
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(super) enum OutputTransition {
+    Staged {
+        relative_path: String,
+        identity: OutputDirectoryIdentity,
+    },
+    Published {
+        relative_path: String,
+        identity: OutputDirectoryIdentity,
+    },
+}
+
+impl ApplyOutcome {
+    pub(super) fn into_ambiguity(self) -> Option<OutputStageAmbiguity> {
+        match self {
+            Self::Applied => None,
+            Self::UnrecordedStage(ambiguity) => Some(ambiguity),
+        }
+    }
 }
 
 pub(super) fn observe(
@@ -51,32 +56,14 @@ pub(super) fn observe(
     observation::observe(root, scopes)
 }
 
-pub(super) fn apply(
-    ledger: &FileAuthorityLedger,
-    token: &ReservationToken,
+pub(super) fn begin(
+    journal: &OutputProvisionJournal,
     root: &Path,
-) -> Result<ApplyOutcome, RoutineError> {
-    apply::apply(ledger, token, root)
+) -> Result<apply::OutputProvisioning, RoutineError> {
+    apply::begin(journal, root)
 }
 
-pub(super) fn resolve_application(
-    ledger: &FileAuthorityLedger,
-    token: &ReservationToken,
-    outcome: ApplyOutcome,
-) -> Result<(), RoutineError> {
-    match outcome {
-        ApplyOutcome::Applied => Ok(()),
-        ApplyOutcome::UnrecordedStage(ambiguity) if token.recovery_for.is_some() => {
-            ledger.reconcile_output_ambiguity(token, &ambiguity)?;
-            Err(error(
-                "routine-production-output-ambiguity-reconciled-incomplete",
-            ))
-        }
-        ApplyOutcome::UnrecordedStage(_) => Err(error(
-            "routine-production-output-ambiguity-recovery-required",
-        )),
-    }
-}
+pub(super) use apply::OutputStep;
 
 fn identity(metadata: &fs::Metadata) -> OutputDirectoryIdentity {
     OutputDirectoryIdentity {

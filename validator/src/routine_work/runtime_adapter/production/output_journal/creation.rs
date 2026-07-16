@@ -2,28 +2,20 @@ use super::directory_entries::names;
 use super::observation::{open_at, stat_at, validate_directory};
 use super::*;
 
-#[derive(Clone, Copy)]
-pub(super) enum ProvisionEvent {
-    StageCreated,
-    StageRecorded,
-    Published,
-    FinalRecorded,
-}
-
-pub(super) enum ProvisionOutcome {
+pub(super) enum ProvisionStep {
     Ready(OutputDirectoryIdentity),
     UnrecordedStage(OutputStageAmbiguity),
+    StageCreated(OutputDirectoryIdentity),
+    StagePresent(OutputDirectoryIdentity),
+    Published(OutputDirectoryIdentity),
 }
 
-pub(super) fn provision(
-    ledger: &FileAuthorityLedger,
-    token: &ReservationToken,
+pub(super) fn prepare(
     component: &OutputComponentJournal,
     parent: &File,
     final_name: &str,
     root_device: u64,
-    observer: &mut dyn FnMut(&str, ProvisionEvent) -> Result<(), RoutineError>,
-) -> Result<ProvisionOutcome, RoutineError> {
+) -> Result<ProvisionStep, RoutineError> {
     let nonce = component
         .creation_nonce
         .as_deref()
@@ -36,41 +28,51 @@ pub(super) fn provision(
             return Err(error("routine-production-output-owned-state-changed"));
         }
         validate_exact(parent, final_name, expected, root_device, false)?;
-        return Ok(ProvisionOutcome::Ready(expected));
+        return Ok(ProvisionStep::Ready(expected));
     }
-    if token.reuse_only {
-        return Err(error("routine-production-reuse-output-missing"));
-    }
-    let staged = match component.staged {
-        Some(expected) => recover_staged(parent, &stage_name, final_name, expected, root_device)?,
+    match component.staged {
+        Some(expected) => {
+            return Ok(
+                match recover_staged(parent, &stage_name, final_name, expected, root_device)? {
+                    StageState::Present(identity) => ProvisionStep::StagePresent(identity),
+                    StageState::Published(identity) => ProvisionStep::Published(identity),
+                },
+            );
+        }
         None => {
             if final_observed.is_some() {
                 return Err(error("routine-production-output-final-without-custody"));
             }
             if stage_observed.is_some() {
-                return Ok(ProvisionOutcome::UnrecordedStage(OutputStageAmbiguity {
+                return Ok(ProvisionStep::UnrecordedStage(OutputStageAmbiguity {
                     relative_path: component.relative_path.clone(),
                     creation_nonce: nonce.to_owned(),
                 }));
             }
             let identity = establish_stage(parent, &stage_name, root_device)?;
-            observer(&component.relative_path, ProvisionEvent::StageCreated)?;
-            ledger.record_output_staged(token, &component.relative_path, identity)?;
-            observer(&component.relative_path, ProvisionEvent::StageRecorded)?;
-            StageState::Present(identity)
+            return Ok(ProvisionStep::StageCreated(identity));
         }
-    };
-    let expected = match staged {
-        StageState::Published(identity) => identity,
-        StageState::Present(identity) => {
-            publish(parent, &stage_name, final_name, identity, root_device)?;
-            observer(&component.relative_path, ProvisionEvent::Published)?;
-            identity
-        }
-    };
-    ledger.record_output_component(token, &component.relative_path, expected)?;
-    observer(&component.relative_path, ProvisionEvent::FinalRecorded)?;
-    Ok(ProvisionOutcome::Ready(expected))
+    }
+}
+
+pub(super) fn publish_stage(
+    parent: &File,
+    component: &OutputComponentJournal,
+    final_name: &str,
+    expected: OutputDirectoryIdentity,
+    root_device: u64,
+) -> Result<(), RoutineError> {
+    let nonce = component
+        .creation_nonce
+        .as_deref()
+        .ok_or_else(|| error("routine-production-output-creation-intent-missing"))?;
+    publish(
+        parent,
+        &format!(".routine-output-{nonce}"),
+        final_name,
+        expected,
+        root_device,
+    )
 }
 
 enum StageState {
@@ -84,6 +86,9 @@ fn establish_stage(
     root_device: u64,
 ) -> Result<OutputDirectoryIdentity, RoutineError> {
     mkdir_at(parent, stage_name)?;
+    parent
+        .sync_all()
+        .map_err(|_| error("routine-production-output-stage-sync-ambiguous"))?;
     let identity = stat_at(parent, stage_name)?
         .ok_or_else(|| error("routine-production-output-stage-unobserved"))?;
     validate_exact(parent, stage_name, identity, root_device, true)?;
@@ -132,6 +137,9 @@ fn publish(
     if result != 0 {
         return Err(error("routine-production-output-publish-conflict"));
     }
+    parent
+        .sync_all()
+        .map_err(|_| error("routine-production-output-publish-sync-ambiguous"))?;
     if stat_at(parent, stage_name)?.is_some() || stat_at(parent, final_name)? != Some(expected) {
         return Err(error("routine-production-output-publish-identity-changed"));
     }

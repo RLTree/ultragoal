@@ -1,6 +1,8 @@
 use sha2::{Digest, Sha256};
 use std::fmt;
 
+use super::runtime_adapter::{ObservedProcessCustody, ObservedStagedCleanup};
+
 #[path = "error/failure_evidence.rs"]
 mod failure_evidence;
 
@@ -53,6 +55,7 @@ pub struct RoutineError {
     cause: &'static str,
     subject_sha256: Option<String>,
     process_custody: Option<Box<ProcessCustodyEvidence>>,
+    staged_cleanup: Option<Box<CleanupEvidence>>,
     transition_failure: Option<Box<ReservationTransitionFailure>>,
 }
 
@@ -69,6 +72,7 @@ impl RoutineError {
             cause,
             subject_sha256,
             process_custody: None,
+            staged_cleanup: None,
             transition_failure: None,
         }
     }
@@ -81,13 +85,28 @@ impl RoutineError {
         }
     }
 
-    pub(crate) fn with_process_custody(mut self, evidence: ProcessCustodyEvidence) -> Self {
-        self.process_custody = Some(Box::new(evidence));
+    pub(in crate::routine_work) fn with_process_custody(
+        mut self,
+        observation: ObservedProcessCustody,
+    ) -> Self {
+        self.process_custody = Some(Box::new(observation.into_evidence()));
         self
     }
 
     pub(crate) fn process_custody(&self) -> Option<&ProcessCustodyEvidence> {
         self.process_custody.as_deref()
+    }
+
+    pub(in crate::routine_work) fn with_staged_cleanup(
+        mut self,
+        observation: ObservedStagedCleanup,
+    ) -> Self {
+        self.staged_cleanup = Some(Box::new(observation.into_evidence()));
+        self
+    }
+
+    pub(crate) fn staged_cleanup(&self) -> Option<&CleanupEvidence> {
+        self.staged_cleanup.as_deref()
     }
 
     fn with_transition_failure(mut self, failure: ReservationTransitionFailure) -> Self {

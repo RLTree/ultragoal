@@ -73,7 +73,7 @@ fn clean_public_routine_is_a_zero_effect_noop() {
 }
 
 #[test]
-fn dirty_public_effect_executes_through_the_local_issuer_and_reuses() {
+fn dirty_public_effect_executes_once_then_repeat_refuses_without_mutation() {
     let mut fixture = Fixture::new(
         "execute-reuse",
         &[pass_node("compile", &[])],
@@ -97,17 +97,14 @@ fn dirty_public_effect_executes_through_the_local_issuer_and_reuses() {
         );
     }
 
-    let reused = fixture.run();
-    assert_eq!(reused.status.code(), Some(0), "{reused:?}");
-    assert!(reused.stderr.is_empty(), "{reused:?}");
-    let reused_value = Fixture::value(&reused);
-    assert_eq!(reused_value["status"], "reused");
-    assert_eq!(reused_value["nodes"][0]["disposition"], "reused");
+    let before_repeat = tree(&fixture.root);
+    assert_session_continuity_refusal(&fixture.run());
+    assert_eq!(tree(&fixture.root), before_repeat);
     fixture.teardown_after_assertions();
 }
 
 #[test]
-fn authorized_fresh_execution_then_exact_repeat_reuses_without_output_attribution() {
+fn authorized_fresh_execution_then_exact_repeat_requires_session_continuity() {
     let mut fixture = Fixture::new(
         "authorized-fresh-repeat",
         &[pass_node("compile", &[])],
@@ -127,12 +124,7 @@ fn authorized_fresh_execution_then_exact_repeat_reuses_without_output_attributio
     assert!(scope.is_dir());
     assert_eq!(fs::read_dir(&scope).unwrap().count(), 0);
 
-    let reused = fixture.run();
-    assert_eq!(reused.status.code(), Some(0), "{reused:?}");
-    assert!(reused.stderr.is_empty(), "{reused:?}");
-    let reused = Fixture::value(&reused);
-    assert_eq!(reused["status"], "reused");
-    assert_eq!(reused["nodes"][0]["disposition"], "reused");
+    assert_session_continuity_refusal(&fixture.run());
     assert_eq!(fs::read_dir(scope).unwrap().count(), 0);
     fixture.teardown_after_assertions();
 }
@@ -178,7 +170,7 @@ fn public_output_creation_is_observed_only_after_the_durable_journal() {
 }
 
 #[test]
-fn terminal_failure_serializes_no_recovery_and_allows_a_fresh_retry() {
+fn terminal_failure_serializes_no_recovery_and_fresh_process_refuses_takeover() {
     let mut fixture = Fixture::new(
         "terminal-failure-retry",
         &[pass_node("compile", &[])],
@@ -188,20 +180,19 @@ fn terminal_failure_serializes_no_recovery_and_allows_a_fresh_retry() {
     );
     fs::write(fixture.root.join("src/lib.rs"), b"pub fn broken(\n").unwrap();
 
-    for _ in 0..2 {
-        let output = fixture.run();
-        assert_eq!(output.status.code(), Some(1), "{output:?}");
-        assert!(output.stderr.is_empty(), "{output:?}");
-        let value = Fixture::value(&output);
-        assert_eq!(value["status"], "incomplete");
-        assert_eq!(value["recovery_required"], false);
-        assert_eq!(value["nodes"][0]["disposition"], "failed");
-    }
+    let output = fixture.run();
+    assert_eq!(output.status.code(), Some(1), "{output:?}");
+    assert!(output.stderr.is_empty(), "{output:?}");
+    let value = Fixture::value(&output);
+    assert_eq!(value["status"], "incomplete");
+    assert_eq!(value["recovery_required"], false);
+    assert_eq!(value["nodes"][0]["disposition"], "failed");
+    assert_session_continuity_refusal(&fixture.run());
     fixture.teardown_after_assertions();
 }
 
 #[test]
-fn cache_binding_misses_across_targets_and_changes_then_reuses_exact_repeat() {
+fn independent_fresh_authority_roots_execute_once_and_refuse_repeat() {
     let mut first = Fixture::new(
         "binding-first",
         &[pass_node("compile", &[])],
@@ -214,26 +205,27 @@ fn cache_binding_misses_across_targets_and_changes_then_reuses_exact_repeat() {
         &[pass_node("compile", &[])],
         &[prefix_route("route-src", "src", &["compile"])],
         true,
-        false,
+        true,
     );
-    second.home.clone_from(&first.home);
-
     assert_status(&first, "executed");
-    assert_status(&first, "reused");
     assert_status(&second, "executed");
-    assert_status(&second, "reused");
-    assert_status(&first, "executed");
-    assert_status(&first, "reused");
-
-    fs::write(
-        first.root.join("src/lib.rs"),
-        b"pub fn value() -> u8 { 3 }\n",
-    )
-    .unwrap();
-    assert_status(&first, "executed");
-    assert_status(&first, "reused");
+    assert_session_continuity_refusal(&first.run());
+    assert_session_continuity_refusal(&second.run());
     second.teardown_after_assertions();
     first.teardown_after_assertions();
+}
+
+fn assert_session_continuity_refusal(output: &std::process::Output) {
+    assert_eq!(output.status.code(), Some(3), "{output:?}");
+    assert!(output.stdout.is_empty(), "{output:?}");
+    let value: Value = serde_json::from_slice(&output.stderr).unwrap();
+    assert_eq!(
+        value["cause"],
+        "routine-production-session-continuity-required"
+    );
+    let ceiling = value["resulting_ceiling"].as_str().unwrap();
+    assert!(ceiling.contains("reuse, repeat execution"), "{ceiling}");
+    assert!(ceiling.contains("external monotonic head"), "{ceiling}");
 }
 
 fn assert_status(fixture: &Fixture, expected: &str) {

@@ -3,7 +3,7 @@ use serde_json::Value;
 use std::fs;
 
 #[test]
-fn dependency_closed_outputs_are_journaled_then_reused_by_the_real_children() {
+fn dependency_closed_outputs_are_journaled_before_real_children_then_repeat_refuses() {
     let mut fixture = Fixture::new(
         "multi-node-output-journal",
         &[pass_node("syntax", &[]), pass_node("compile", &["syntax"])],
@@ -20,23 +20,20 @@ fn dependency_closed_outputs_are_journaled_then_reused_by_the_real_children() {
     assert!(fixture.root.join("target/routine/syntax").is_dir());
     assert!(fixture.root.join("target/routine/compile").is_dir());
 
+    let before = super::scenario::tree(&fixture.root);
     let repeat = fixture.run();
-    assert_eq!(repeat.status.code(), Some(0), "{repeat:?}");
-    assert!(repeat.stderr.is_empty(), "{repeat:?}");
-    let repeat = Fixture::value(&repeat);
-    assert_eq!(repeat["status"], "reused");
-    assert!(
-        repeat["nodes"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .all(|node| node["disposition"] == "reused")
+    assert_eq!(repeat.status.code(), Some(3), "{repeat:?}");
+    let diagnostic: Value = serde_json::from_slice(&repeat.stderr).unwrap();
+    assert_eq!(
+        diagnostic["cause"],
+        "routine-production-session-continuity-required"
     );
+    assert_eq!(super::scenario::tree(&fixture.root), before);
     fixture.teardown_after_assertions();
 }
 
 #[test]
-fn foreign_output_is_preserved_until_exact_pending_recovery_can_continue() {
+fn foreign_output_is_preserved_and_fresh_process_recovery_refuses() {
     let mut fixture = Fixture::new(
         "foreign-output-recovery",
         &[pass_node("compile", &[])],
@@ -63,14 +60,16 @@ fn foreign_output_is_preserved_until_exact_pending_recovery_can_continue() {
     assert!(
         String::from_utf8(durable)
             .unwrap()
-            .contains("\"state\":\"reserved\"")
+            .contains("\"state\":\"failed\"")
     );
 
-    fs::remove_file(&foreign).unwrap();
     let recovered = fixture.run();
-    assert_eq!(recovered.status.code(), Some(0), "{recovered:?}");
-    assert!(recovered.stderr.is_empty(), "{recovered:?}");
-    assert_eq!(Fixture::value(&recovered)["status"], "executed");
-    assert_eq!(fs::read_dir(&scope).unwrap().count(), 0);
+    assert_eq!(recovered.status.code(), Some(3), "{recovered:?}");
+    let diagnostic: Value = serde_json::from_slice(&recovered.stderr).unwrap();
+    assert_eq!(
+        diagnostic["cause"],
+        "routine-production-session-continuity-required"
+    );
+    assert_eq!(fs::read(&foreign).unwrap(), b"foreign-user-work");
     fixture.teardown_after_assertions();
 }

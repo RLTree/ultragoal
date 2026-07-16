@@ -1,6 +1,17 @@
 use super::*;
 
-pub(crate) fn execute<F>(
+pub(crate) enum PreparedProcess {
+    Cancelled(ProcessObservation),
+    Suspended(SuspendedProcess),
+}
+
+pub(crate) struct SuspendedProcess {
+    setup: SpawnSetupGuard,
+    framed_input: Vec<u8>,
+    output_budget: u64,
+}
+
+pub(crate) fn prepare(
     program: &PinnedExecutable,
     root: &RootAnchor,
     outputs: &OutputConfinement,
@@ -8,14 +19,9 @@ pub(crate) fn execute<F>(
     argv: &[String],
     environment: &BTreeMap<String, String>,
     framed_input: Vec<u8>,
-    timeout: Duration,
     output_budget: u64,
     cancellation: &RoutineCancellation,
-    on_started: F,
-) -> Result<ProcessObservation, RoutineError>
-where
-    F: FnOnce() -> Result<(), RoutineError>,
-{
+) -> Result<PreparedProcess, RoutineError> {
     #[cfg(not(target_os = "macos"))]
     {
         let _ = (
@@ -26,10 +32,8 @@ where
             argv,
             environment,
             framed_input,
-            timeout,
             output_budget,
             cancellation,
-            on_started,
         );
         return Err(mediator_error("mediator-confinement-substrate-unavailable"));
     }
@@ -37,7 +41,7 @@ where
     {
         validate_child_mode(environment)?;
         if cancellation.is_cancelled() {
-            return Ok(cancelled_before_spawn());
+            return Ok(PreparedProcess::Cancelled(cancelled_before_spawn()));
         }
         program.validate()?;
         let profile = sandbox_profile(
@@ -50,16 +54,39 @@ where
         root.validate()?;
         outputs.validate()?;
         if cancellation.is_cancelled() {
-            return Ok(cancelled_before_spawn());
+            return Ok(PreparedProcess::Cancelled(cancelled_before_spawn()));
         }
         let setup = spawn_exact_program(program, root, argv, environment)?;
-        let configured = configure_process(
+        Ok(PreparedProcess::Suspended(SuspendedProcess {
             setup,
-            root,
-            outputs,
             framed_input,
             output_budget,
-            on_started,
+        }))
+    }
+}
+
+impl SuspendedProcess {
+    pub(crate) fn identity(&self) -> Result<StartedProcessIdentity, RoutineError> {
+        Ok(StartedProcessIdentity::new(
+            self.setup.child()?,
+            self.setup.process_group()?,
+        ))
+    }
+
+    pub(crate) fn observe(
+        self,
+        program: &PinnedExecutable,
+        root: &RootAnchor,
+        outputs: &OutputConfinement,
+        timeout: Duration,
+        cancellation: &RoutineCancellation,
+    ) -> Result<ProcessObservation, RoutineError> {
+        let configured = configure_process(
+            self.setup,
+            root,
+            outputs,
+            self.framed_input,
+            self.output_budget,
         )?;
         observe_process(configured, program, root, outputs, timeout, cancellation)
     }
