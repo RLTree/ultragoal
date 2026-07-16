@@ -1,11 +1,56 @@
 use super::super::super::mediator::{IntentExecutionRequest, ObjectIdentity, StagedProgram};
 use super::super::DurableSettlement;
-use super::store::{AttemptState, IntentBinding, LaunchEntryIdentity, LaunchStageRecord};
 use crate::routine_work::runtime_adapter::RoutineEffectIntent;
 use crate::routine_work::{CleanupEvidence, ReservationFailureEvidence};
+use std::collections::BTreeMap;
 
-pub(super) fn request_intent(intent: &RoutineEffectIntent) -> IntentBinding {
-    IntentBinding {
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(in crate::routine_work::runtime_adapter::production::custody) struct IntentObservation {
+    pub(super) intent_id: String,
+    pub(super) node_id: String,
+    pub(super) plan_order: usize,
+    pub(super) program_sha256: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(in crate::routine_work::runtime_adapter::production::custody) struct OwnerObservation {
+    pub(super) process_id: i32,
+    pub(super) start_seconds: u64,
+    pub(super) start_microseconds: u64,
+    pub(super) nonce_sha256: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(in crate::routine_work::runtime_adapter::production::custody) struct ChildObservation {
+    pub(super) process_id: i32,
+    pub(super) process_group_id: i32,
+    pub(super) executable_sha256: String,
+    pub(super) executable_device: u64,
+    pub(super) executable_inode: u64,
+    pub(super) intent: IntentObservation,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(in crate::routine_work::runtime_adapter::production::custody) struct LaunchObservation {
+    pub(super) directory: ObjectIdentity,
+    pub(super) program: ObjectIdentity,
+    pub(super) marker: ObjectIdentity,
+    pub(super) seal: ObjectIdentity,
+    pub(super) program_sha256: String,
+    pub(super) intent: IntentObservation,
+}
+
+pub(in crate::routine_work::runtime_adapter::production::custody) struct TerminalObservation {
+    pub(super) outcome: DurableSettlement,
+    pub(super) result_sha256: String,
+    pub(super) artifacts: BTreeMap<String, String>,
+    pub(super) process_cleanup: CleanupEvidence,
+    pub(super) staged_cleanup: CleanupEvidence,
+    pub(super) failure_evidence: Option<ReservationFailureEvidence>,
+}
+
+pub(super) fn request_intent(intent: &RoutineEffectIntent) -> IntentObservation {
+    IntentObservation {
         intent_id: intent.intent_id().to_owned(),
         node_id: intent.node_id().to_owned(),
         plan_order: intent.plan_order(),
@@ -13,11 +58,8 @@ pub(super) fn request_intent(intent: &RoutineEffectIntent) -> IntentBinding {
     }
 }
 
-pub(super) fn observed_intent(
-    intent: &IntentExecutionRequest,
-    program_sha256: &str,
-) -> IntentBinding {
-    IntentBinding {
+fn observed_intent(intent: &IntentExecutionRequest, program_sha256: &str) -> IntentObservation {
+    IntentObservation {
         intent_id: intent.intent_id().to_owned(),
         node_id: intent.node_id().to_owned(),
         plan_order: intent.plan_order(),
@@ -25,26 +67,32 @@ pub(super) fn observed_intent(
     }
 }
 
-pub(super) fn launch_record(
+pub(super) fn launch_observation(
     staged: &StagedProgram,
     intent: &IntentExecutionRequest,
-) -> LaunchStageRecord {
-    LaunchStageRecord {
-        directory: launch_identity(staged.directory_identity),
-        program: launch_identity(staged.executable.identity),
-        marker: launch_identity(staged.marker_identity),
-        seal: launch_identity(staged.seal_identity),
+) -> LaunchObservation {
+    LaunchObservation {
+        directory: staged.directory_identity,
+        program: staged.executable.identity,
+        marker: staged.marker_identity,
+        seal: staged.seal_identity,
         program_sha256: staged.executable.sha256.clone(),
         intent: observed_intent(intent, &staged.executable.sha256),
     }
 }
 
-pub(super) fn terminal_state(outcome: DurableSettlement) -> AttemptState {
-    match outcome {
-        DurableSettlement::Complete => AttemptState::Complete,
-        DurableSettlement::Failed => AttemptState::Failed,
-        DurableSettlement::Cancelled => AttemptState::Cancelled,
-        DurableSettlement::Incomplete => AttemptState::Incomplete,
+pub(super) fn child_observation(
+    started: super::super::super::mediator::StartedProcessIdentity,
+    executable: &super::super::super::mediator::PinnedExecutable,
+    intent: &IntentExecutionRequest,
+) -> ChildObservation {
+    ChildObservation {
+        process_id: started.process_id(),
+        process_group_id: started.process_group_id(),
+        executable_sha256: executable.sha256.clone(),
+        executable_device: executable.identity.device,
+        executable_inode: executable.identity.inode,
+        intent: observed_intent(intent, &executable.sha256),
     }
 }
 
@@ -64,15 +112,4 @@ pub(super) fn cleanup_exact(evidence: &ReservationFailureEvidence) -> bool {
         )
     };
     exact(&evidence.process_cleanup) && exact(&evidence.staged_cleanup)
-}
-
-fn launch_identity(identity: ObjectIdentity) -> LaunchEntryIdentity {
-    LaunchEntryIdentity {
-        device: identity.device,
-        inode: identity.inode,
-        mode: identity.mode,
-        owner: identity.owner_user_id,
-        links: identity.links,
-        length: identity.length,
-    }
 }

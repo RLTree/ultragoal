@@ -1,7 +1,7 @@
 use super::*;
 
 impl Store {
-    pub(crate) fn open(root: &Path) -> Result<Self, RoutineError> {
+    pub(super) fn open(root: &Path) -> Result<Self, RoutineError> {
         let supplied = root.to_path_buf();
         let path_metadata = fs::symlink_metadata(&supplied)
             .map_err(|_| error("routine-production-authority-root-missing"))?;
@@ -45,7 +45,7 @@ impl Store {
         store.verify_root()?;
         Ok(store)
     }
-    pub(crate) fn verify_root(&self) -> Result<(), RoutineError> {
+    pub(super) fn verify_root(&self) -> Result<(), RoutineError> {
         let path = fs::symlink_metadata(&self.requested_root)
             .map_err(|_| error("routine-production-authority-root-replaced"))?;
         let opened = self
@@ -67,7 +67,7 @@ impl Store {
         }
         Ok(())
     }
-    pub(crate) fn acquire_initial_lock(&self) -> Result<ProcessLock, RoutineError> {
+    pub(super) fn acquire_initial_lock(&self) -> Result<ProcessLock, RoutineError> {
         self.verify_root()?;
         let file = self.create_exclusive(LOCK_NAME, 0o600)?;
         let mut guard = ProcessLock::acquire(file)?;
@@ -87,7 +87,7 @@ impl Store {
         }
         Ok(guard)
     }
-    pub(crate) fn create_key(&self) -> Result<File, RoutineError> {
+    pub(super) fn create_key(&self) -> Result<File, RoutineError> {
         let mut bytes = [0u8; KEY_BYTES];
         getrandom::fill(&mut bytes)
             .map_err(|_| error("routine-production-authority-random-unavailable"))?;
@@ -101,7 +101,7 @@ impl Store {
             .map_err(|_| error("routine-production-authority-root-sync-failed"))?;
         Ok(file)
     }
-    pub(crate) fn create_exclusive(&self, name: &str, mode: u32) -> Result<File, RoutineError> {
+    pub(super) fn create_exclusive(&self, name: &str, mode: u32) -> Result<File, RoutineError> {
         validate_name(name)?;
         let name =
             CString::new(name).map_err(|_| error("routine-production-authority-name-invalid"))?;
@@ -126,7 +126,7 @@ impl Store {
         }
         Ok(unsafe { File::from_raw_fd(descriptor) })
     }
-    pub(crate) fn open_existing(&self, name: &str, flags: i32) -> Result<File, RoutineError> {
+    pub(super) fn open_existing(&self, name: &str, flags: i32) -> Result<File, RoutineError> {
         validate_name(name)?;
         let name =
             CString::new(name).map_err(|_| error("routine-production-authority-name-invalid"))?;
@@ -142,7 +142,7 @@ impl Store {
         }
         Ok(unsafe { File::from_raw_fd(descriptor) })
     }
-    pub(crate) fn exact_identity(
+    pub(super) fn exact_identity(
         &self,
         name: &str,
         file: &File,

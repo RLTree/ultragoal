@@ -116,7 +116,10 @@ fn run_with_faults(
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
         .process_group(0);
-    let mut child = command.spawn().unwrap();
+    let mut child = match command.spawn() {
+        Ok(child) => child,
+        Err(_) => return BoundedContender::ReapedWithFailure("contender-spawn-failed"),
+    };
     after_spawn();
     let process_group = i32::try_from(child.id()).unwrap();
     faults.observe_process_group(process_group);

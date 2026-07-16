@@ -9,18 +9,17 @@ use super::routine_work::{
 };
 
 #[test]
-fn output_stage_publication_refusal_rolls_back_exact_created_scope() {
+fn reservation_publication_ambiguity_is_durable_before_workspace_effects() {
     if isolate_fixture_test(
-        "reservation_publication_controls::output_stage_publication_refusal_rolls_back_exact_created_scope",
+        "reservation_publication_controls::reservation_publication_ambiguity_is_durable_before_workspace_effects",
     ) {
         return;
     }
-    let mut fixture = RoutinePlanFixture::new("output-stage-publication-refusal");
-    fs::remove_dir(fixture.repo.root().join("target/routine")).unwrap();
+    let mut fixture = RoutinePlanFixture::new("reservation-publication-ambiguity");
     let prepared = fixture.prepare().unwrap();
+    let before = fixture.repo.tree();
     prepare_authority(&fixture);
     set_test_publication_ambiguity_after(0);
-    set_test_publication_refusal_after(1);
     let error = mediate_public_routine_execution(
         Some(&authority_path(&fixture)),
         &fixture.context,
@@ -32,8 +31,45 @@ fn output_stage_publication_refusal_rolls_back_exact_created_scope() {
     .unwrap_err();
     assert_eq!(
         error.cause(),
-        "routine-production-authority-publish-precommit"
+        "routine-production-authority-publish-ambiguous"
     );
+    assert_eq!(fixture.repo.tree(), before);
+    let state =
+        fs::read_to_string(authority_path(&fixture).join("routine-authority.state")).unwrap();
+    assert!(state.contains("\"state\":\"ambiguous\""), "{state}");
+    assert!(state.contains("\"cause\":\"reserve\""), "{state}");
+    fixture.finish();
+}
+
+#[test]
+fn output_stage_publication_ambiguity_is_durable_and_rolls_back_exact_scope() {
+    if isolate_fixture_test(
+        "reservation_publication_controls::output_stage_publication_ambiguity_is_durable_and_rolls_back_exact_scope",
+    ) {
+        return;
+    }
+    let mut fixture = RoutinePlanFixture::new("output-stage-publication-refusal");
+    fs::remove_dir(fixture.repo.root().join("target/routine")).unwrap();
+    let prepared = fixture.prepare().unwrap();
+    prepare_authority(&fixture);
+    set_test_publication_ambiguity_after(1);
+    let error = mediate_public_routine_execution(
+        Some(&authority_path(&fixture)),
+        &fixture.context,
+        &fixture.plan,
+        prepared,
+        RoutineCancellation::new(),
+        RoutineReuseInput::default(),
+    )
+    .unwrap_err();
+    assert_eq!(
+        error.cause(),
+        "routine-production-authority-publish-ambiguous"
+    );
+    let state =
+        fs::read_to_string(authority_path(&fixture).join("routine-authority.state")).unwrap();
+    assert!(state.contains("\"state\":\"ambiguous\""), "{state}");
+    assert!(state.contains("\"cause\":\"output-custody\""), "{state}");
     let target = fixture.repo.root().join("target");
     assert!(!target.join("routine").exists());
     assert!(fs::read_dir(target).unwrap().all(|entry| {
@@ -43,6 +79,22 @@ fn output_stage_publication_refusal_rolls_back_exact_created_scope() {
             .to_string_lossy()
             .starts_with(".routine-output-")
     }));
+    let before_retry = fixture.repo.tree();
+    let retry = fixture.prepare().unwrap();
+    let error = mediate_public_routine_execution(
+        Some(&authority_path(&fixture)),
+        &fixture.context,
+        &fixture.plan,
+        retry,
+        RoutineCancellation::new(),
+        RoutineReuseInput::default(),
+    )
+    .unwrap_err();
+    assert_eq!(
+        error.cause(),
+        "routine-production-session-continuity-required"
+    );
+    assert_eq!(fixture.repo.tree(), before_retry);
     fixture.finish();
 }
 
@@ -100,6 +152,57 @@ fn child_lease_publication_refusal_reaps_before_stage_cleanup() {
     );
     assert!(test_last_spawn_group_absent().unwrap());
     assert_launch_root_empty(&fixture);
+    fixture.finish();
+}
+
+#[test]
+fn terminal_publication_ambiguity_preserves_cleanup_and_refuses_replay() {
+    if isolate_fixture_test(
+        "reservation_publication_controls::terminal_publication_ambiguity_preserves_cleanup_and_refuses_replay",
+    ) {
+        return;
+    }
+    let mut fixture = RoutinePlanFixture::new("terminal-publication-ambiguity");
+    let prepared = fixture.prepare().unwrap();
+    prepare_authority(&fixture);
+    set_test_publication_ambiguity_after(5);
+    let error = mediate_public_routine_execution(
+        Some(&authority_path(&fixture)),
+        &fixture.context,
+        &fixture.plan,
+        prepared,
+        RoutineCancellation::new(),
+        RoutineReuseInput::default(),
+    )
+    .unwrap_err();
+    assert_eq!(
+        error.cause(),
+        "routine-production-authority-publish-ambiguous"
+    );
+    let state =
+        fs::read_to_string(authority_path(&fixture).join("routine-authority.state")).unwrap();
+    assert!(state.contains("\"state\":\"ambiguous\""), "{state}");
+    assert!(
+        state.contains("\"cause\":\"terminal-settlement\""),
+        "{state}"
+    );
+    assert!(state.contains("\"failure_evidence\""), "{state}");
+    assert!(test_last_spawn_group_absent().unwrap());
+    assert_launch_root_empty(&fixture);
+    let retry = fixture.prepare().unwrap();
+    let retry = mediate_public_routine_execution(
+        Some(&authority_path(&fixture)),
+        &fixture.context,
+        &fixture.plan,
+        retry,
+        RoutineCancellation::new(),
+        RoutineReuseInput::default(),
+    )
+    .unwrap_err();
+    assert_eq!(
+        retry.cause(),
+        "routine-production-session-continuity-required"
+    );
     fixture.finish();
 }
 

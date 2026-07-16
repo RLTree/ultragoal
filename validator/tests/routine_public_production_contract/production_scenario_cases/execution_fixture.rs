@@ -39,6 +39,7 @@ pub(crate) fn prefix_route(
 }
 
 pub(crate) struct Fixture {
+    permit: Option<FixturePermit>,
     pub(crate) container: PathBuf,
     pub root: PathBuf,
     pub home: PathBuf,
@@ -53,6 +54,7 @@ impl Fixture {
         dirty: bool,
         provision_host: bool,
     ) -> Self {
+        let permit = Some(FixturePermit::claim());
         let fixture_root = Self::fixture_parent().join("routine-public-contract-fixtures");
         fs::create_dir_all(&fixture_root).unwrap();
         let container = fixture_root.join(format!(
@@ -97,6 +99,7 @@ impl Fixture {
             provision_host_state(&home);
         }
         Self {
+            permit,
             container,
             root: fs::canonicalize(root).unwrap(),
             home: fs::canonicalize(home).unwrap(),
@@ -125,6 +128,9 @@ impl Fixture {
             "public fixture teardown retained scope: {}",
             self.container.display()
         );
+        self.permit
+            .take()
+            .expect("fixture permit was already released");
     }
 
     pub fn value(output: &Output) -> Value {

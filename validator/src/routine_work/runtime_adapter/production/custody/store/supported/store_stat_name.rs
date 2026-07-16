@@ -1,7 +1,7 @@
 use super::*;
 
 impl Store {
-    pub(crate) fn stat_name(&self, name: &str) -> Result<Option<FileIdentity>, RoutineError> {
+    pub(super) fn stat_name(&self, name: &str) -> Result<Option<FileIdentity>, RoutineError> {
         validate_name(name)?;
         let name =
             CString::new(name).map_err(|_| error("routine-production-authority-name-invalid"))?;
@@ -22,7 +22,7 @@ impl Store {
         }
         Ok(Some(stat_identity(&unsafe { stat.assume_init() })))
     }
-    pub(crate) fn names(&self) -> Result<BTreeSet<String>, RoutineError> {
+    pub(super) fn names(&self) -> Result<BTreeSet<String>, RoutineError> {
         self.verify_root()?;
         let descriptor = unsafe {
             libc::openat(
@@ -70,16 +70,16 @@ impl Store {
         }
         result
     }
-    pub(crate) fn read_state(&self) -> Result<Vec<u8>, RoutineError> {
+    pub(super) fn read_state(&self) -> Result<Vec<u8>, RoutineError> {
         let file = self.open_existing(STATE_NAME, libc::O_RDONLY)?;
         let _ = self.exact_identity(STATE_NAME, &file, 0o600)?;
         read_bounded(&file, MAX_STATE_BYTES)
     }
-    pub(crate) fn state_identity(&self) -> Result<FileIdentity, RoutineError> {
+    pub(super) fn state_identity(&self) -> Result<FileIdentity, RoutineError> {
         let file = self.open_existing(STATE_NAME, libc::O_RDONLY)?;
         self.exact_identity(STATE_NAME, &file, 0o600)
     }
-    pub(crate) fn validate_complete(
+    pub(super) fn validate_complete(
         &self,
         key_identity: FileIdentity,
         lock_identity: FileIdentity,
@@ -108,7 +108,7 @@ impl Store {
 }
 
 impl ProcessLock {
-    pub(crate) fn acquire(file: File) -> Result<Self, RoutineError> {
+    pub(super) fn acquire(file: File) -> Result<Self, RoutineError> {
         if unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) } != 0 {
             return Err(error("routine-production-authority-lock-busy"));
         }

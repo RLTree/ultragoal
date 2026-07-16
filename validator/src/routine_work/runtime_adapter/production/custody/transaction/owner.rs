@@ -1,21 +1,61 @@
 use super::*;
-use crate::routine_work::runtime_adapter::mediator::{
-    IntentExecutionRequest, PinnedExecutable, StagedProgram, StartedProcessIdentity,
-};
+use crate::routine_work::runtime_adapter::mediator::{IntentExecutionRequest, StagedProgram};
 use crate::routine_work::runtime_adapter::production::output_journal::OutputTransition;
 use std::cell::Cell;
 
 pub(super) struct ReservationOwner {
-    ledger: FileAuthorityLedger,
-    head: RefCell<LocalHead>,
-    token: ReservationToken,
+    ledger: DurableCustody,
     started: Cell<bool>,
-    ambiguity: RefCell<Option<DurableAmbiguity>>,
+    ambiguity: Cell<bool>,
     launch_cleaned: Cell<bool>,
 }
 
-pub(super) struct LaunchHandle(LaunchStageRecord);
-pub(super) struct ChildHandle(ChildLease);
+pub(super) struct LaunchHandle;
+pub(super) struct ChildHandle;
+
+pub(in crate::routine_work::runtime_adapter::production::custody) struct ReservationSpec {
+    binding: AuthorityBinding,
+    request_id: String,
+    grant_id: String,
+    recovery_marker: String,
+    owner: OwnerObservation,
+    output_journal: OutputProvisionJournal,
+    intents: Vec<IntentObservation>,
+}
+
+impl ReservationSpec {
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn binding(
+        &self,
+    ) -> &AuthorityBinding {
+        &self.binding
+    }
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn request_id(&self) -> &str {
+        &self.request_id
+    }
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn grant_id(&self) -> &str {
+        &self.grant_id
+    }
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn recovery_marker(
+        &self,
+    ) -> &str {
+        &self.recovery_marker
+    }
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn owner(
+        &self,
+    ) -> &OwnerObservation {
+        &self.owner
+    }
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn output_journal(
+        &self,
+    ) -> &OutputProvisionJournal {
+        &self.output_journal
+    }
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn intents(
+        &self,
+    ) -> &[IntentObservation] {
+        &self.intents
+    }
+}
 
 impl ReservationOwner {
     pub(super) fn reserve(
@@ -31,57 +71,41 @@ impl ReservationOwner {
             recovery_identity(&grant_id, request.protocol_id(), request.request_id());
         let (process_id, start_seconds, start_microseconds, nonce_sha256) =
             owner_process_identity()?;
-        let owner = OwnerLease {
+        let owner = OwnerObservation {
             process_id,
             start_seconds,
             start_microseconds,
             nonce_sha256,
         };
         let intents = request.intents().iter().map(request_intent).collect();
-        let (ledger, head) = FileAuthorityLedger::open_or_initialize(authority_root)?;
-        let value = Self {
-            ledger,
-            head: RefCell::new(head),
-            token: ReservationToken {
-                binding,
-                request_id: request.request_id().to_owned(),
-                grant_id,
-                recovery_marker,
-                expires_tick: Cell::new(0),
-                output_journal,
-                intents,
-            },
-            started: Cell::new(false),
-            ambiguity: RefCell::new(None),
-            launch_cleaned: Cell::new(false),
+        let spec = ReservationSpec {
+            binding,
+            request_id: request.request_id().to_owned(),
+            grant_id,
+            recovery_marker,
+            owner,
+            output_journal,
+            intents,
         };
-        let reserved = value
-            .ledger
-            .reserve(&mut value.head.borrow_mut(), &value.token, owner)?;
-        match reserved {
-            DurableWrite::Committed(expires_tick) => {
-                value.token.expires_tick.set(expires_tick);
-                Ok(value)
-            }
-            DurableWrite::Precommit(_) => {
-                Err(error("routine-production-authority-publish-precommit"))
-            }
-            DurableWrite::Ambiguous(_, ambiguity) => {
-                *value.ambiguity.borrow_mut() = Some(ambiguity);
-                Err(error("routine-production-authority-publish-ambiguous"))
-            }
-        }
+        let ledger = DurableCustody::reserve(authority_root, &spec)?;
+        Ok(Self {
+            ledger,
+            started: Cell::new(false),
+            ambiguity: Cell::new(false),
+            launch_cleaned: Cell::new(false),
+        })
     }
 
     pub(super) fn output_journal(&self) -> &OutputProvisionJournal {
-        &self.token.output_journal
+        self.ledger.output_journal()
     }
 
     pub(super) fn failure_binding(&self) -> FailureBinding<'_> {
+        let (protocol_id, grant_id, recovery_marker) = self.ledger.failure_binding();
         FailureBinding {
-            protocol_id: &self.token.binding.protocol_id,
-            grant_id: &self.token.grant_id,
-            recovery_marker: &self.token.recovery_marker,
+            protocol_id,
+            grant_id,
+            recovery_marker,
         }
     }
 
@@ -90,24 +114,15 @@ impl ReservationOwner {
     }
 
     pub(super) fn validate_reserved(&self) -> Result<(), RoutineError> {
-        self.ledger
-            .validate_reserved(&mut self.head.borrow_mut(), &self.token)
+        self.ledger.validate_reserved()
     }
 
     pub(super) fn note_output_ambiguity(&self) {
-        let head = self.head.borrow().head_sha256.clone();
-        self.ambiguity.borrow_mut().get_or_insert(DurableAmbiguity {
-            previous_head_sha256: head.clone(),
-            proposed_head_sha256: head,
-        });
+        self.ambiguity.set(true);
     }
 
     pub(super) fn record_output(&self, transition: &OutputTransition) -> Result<(), RoutineError> {
-        self.resolve(self.ledger.record_output_transition(
-            &mut self.head.borrow_mut(),
-            &self.token,
-            transition,
-        )?)
+        self.resolve(self.ledger.record_output_transition(transition)?)
     }
 
     pub(super) fn record_stage(
@@ -115,62 +130,47 @@ impl ReservationOwner {
         staged: &StagedProgram,
         intent: &IntentExecutionRequest,
     ) -> Result<LaunchHandle, RoutineError> {
-        let record = launch_record(staged, intent);
-        self.resolve(self.ledger.record_launch_stage(
-            &mut self.head.borrow_mut(),
-            &self.token,
-            &record,
-        )?)?;
-        Ok(LaunchHandle(record))
+        self.resolve(
+            self.ledger
+                .record_launch_stage(&launch_observation(staged, intent))?,
+        )?;
+        Ok(LaunchHandle)
     }
 
     pub(super) fn record_started(
         &self,
-        started: StartedProcessIdentity,
-        executable: &PinnedExecutable,
+        started: crate::routine_work::runtime_adapter::mediator::StartedProcessIdentity,
+        executable: &crate::routine_work::runtime_adapter::mediator::PinnedExecutable,
         intent: &IntentExecutionRequest,
     ) -> Result<ChildHandle, RoutineError> {
-        let child = ChildLease {
-            process_id: started.process_id(),
-            process_group_id: started.process_group_id(),
-            executable_sha256: executable.sha256.clone(),
-            executable_device: executable.identity.device,
-            executable_inode: executable.identity.inode,
-            intent: observed_intent(intent, &executable.sha256),
-        };
         match self
             .ledger
-            .prepare_spawn(&mut self.head.borrow_mut(), &self.token, child.clone())?
+            .prepare_spawn(&child_observation(started, executable, intent))?
         {
             DurableWrite::Committed(()) => {
                 self.started.set(true);
-                Ok(ChildHandle(child))
+                Ok(ChildHandle)
             }
             DurableWrite::Precommit(()) => {
                 Err(error("routine-production-authority-publish-precommit"))
             }
             DurableWrite::Ambiguous((), ambiguity) => {
                 self.started.set(true);
-                *self.ambiguity.borrow_mut() = Some(ambiguity);
+                let _ = ambiguity;
+                self.ambiguity.set(true);
                 Err(error("routine-production-authority-publish-ambiguous"))
             }
         }
     }
 
     pub(super) fn record_reaped(&self, child: ChildHandle) -> Result<(), RoutineError> {
-        self.resolve(self.ledger.record_process_reaped(
-            &mut self.head.borrow_mut(),
-            &self.token,
-            &child.0,
-        )?)
+        let _ = child;
+        self.resolve(self.ledger.record_process_reaped()?)
     }
 
     pub(super) fn record_stage_cleaned(&self, stage: LaunchHandle) -> Result<(), RoutineError> {
-        self.resolve(self.ledger.record_launch_cleaned(
-            &mut self.head.borrow_mut(),
-            &self.token,
-            &stage.0,
-        )?)?;
+        let _ = stage;
+        self.resolve(self.ledger.record_launch_cleaned()?)?;
         self.launch_cleaned.set(true);
         Ok(())
     }
@@ -181,53 +181,38 @@ impl ReservationOwner {
         result: &RoutineMediationResult,
         artifacts: &BTreeMap<String, String>,
     ) -> Result<(), RoutineError> {
-        let state = terminal_state(outcome);
-        let terminal = TerminalRecord {
-            state,
+        let terminal = TerminalObservation {
+            outcome,
             result_sha256: digest_of(result)?,
             artifacts: artifacts.clone(),
             process_cleanup: cleanup_state(self.started.get()),
             staged_cleanup: cleanup_state(self.launch_cleaned.get()),
-            prior_head_sha256: self.head.borrow().head_sha256.clone(),
             failure_evidence: None,
         };
-        self.resolve(self.ledger.settle_terminal(
-            &mut self.head.borrow_mut(),
-            &self.token,
-            terminal,
-        )?)
+        self.resolve(self.ledger.settle_terminal(terminal)?)
     }
 
     pub(super) fn finish_failure(
         &self,
         evidence: &ReservationFailureEvidence,
     ) -> Result<(), RoutineError> {
-        if self.ambiguity.borrow().is_some() || !cleanup_exact(evidence) {
+        if self.ambiguity.get() || !cleanup_exact(evidence) {
             return observed_transition(
                 evidence,
                 catch_unwind(AssertUnwindSafe(|| {
-                    self.resolve(self.ledger.record_failure(
-                        &mut self.head.borrow_mut(),
-                        &self.token,
-                        evidence,
-                    )?)
+                    self.resolve(self.ledger.record_failure(evidence)?)
                 })),
             );
         }
-        let terminal = TerminalRecord {
-            state: AttemptState::Failed,
+        let terminal = TerminalObservation {
+            outcome: DurableSettlement::Failed,
             result_sha256: digest_of(evidence)?,
             artifacts: BTreeMap::new(),
             process_cleanup: evidence.process_cleanup.clone(),
             staged_cleanup: evidence.staged_cleanup.clone(),
-            prior_head_sha256: self.head.borrow().head_sha256.clone(),
             failure_evidence: Some(evidence.clone()),
         };
-        self.resolve(self.ledger.settle_terminal(
-            &mut self.head.borrow_mut(),
-            &self.token,
-            terminal,
-        )?)
+        self.resolve(self.ledger.settle_terminal(terminal)?)
     }
 
     fn resolve<T>(&self, value: DurableWrite<T>) -> Result<T, RoutineError> {
@@ -237,7 +222,8 @@ impl ReservationOwner {
                 Err(error("routine-production-authority-publish-precommit"))
             }
             DurableWrite::Ambiguous(_, ambiguity) => {
-                *self.ambiguity.borrow_mut() = Some(ambiguity);
+                let _ = ambiguity;
+                self.ambiguity.set(true);
                 Err(error("routine-production-authority-publish-ambiguous"))
             }
         }

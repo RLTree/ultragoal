@@ -17,7 +17,7 @@ pub(crate) fn set_test_publication_ambiguity_after(writes: usize) {
 }
 
 impl Store {
-    pub(crate) fn write_initial_state(&self, bytes: &[u8]) -> Result<(), RoutineError> {
+    pub(super) fn write_initial_state(&self, bytes: &[u8]) -> Result<(), RoutineError> {
         let mut file = self.create_exclusive(STATE_NAME, 0o600)?;
         file.write_all(bytes)
             .map_err(|_| error("routine-production-authority-state-write-failed"))?;
@@ -30,7 +30,7 @@ impl Store {
         Ok(())
     }
 
-    pub(crate) fn write_atomic_state(&self, bytes: &[u8]) -> StatePublication {
+    pub(super) fn write_atomic_state(&self, bytes: &[u8]) -> StatePublication {
         if bytes.is_empty() || bytes.len() as u64 > MAX_STATE_BYTES || refuse_publication() {
             return StatePublication::Precommit;
         }

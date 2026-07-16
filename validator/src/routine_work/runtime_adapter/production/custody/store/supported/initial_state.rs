@@ -1,6 +1,6 @@
 use super::*;
 
-pub(crate) fn initial_payload(
+pub(super) fn initial_payload(
     authority_id: &str,
     key_id: &str,
     root_identity: RootIdentity,
@@ -24,7 +24,7 @@ pub(crate) fn initial_payload(
     })
 }
 
-pub(crate) fn authority_id(
+pub(super) fn authority_id(
     key_id: &str,
     root: RootIdentity,
     lock: FileIdentity,
@@ -32,16 +32,16 @@ pub(crate) fn authority_id(
     canonical(&("routine-production-authority-v1", key_id, root, lock)).map(|bytes| sha256(&bytes))
 }
 
-pub(crate) fn encode(payload: &Payload, key: &LedgerKey) -> Result<Vec<u8>, RoutineError> {
+pub(super) fn encode(payload: &Payload, key: &LedgerKey) -> Result<Vec<u8>, RoutineError> {
     let payload_bytes = canonical(payload)?;
     let envelope = Envelope {
         payload: payload.clone(),
-        hmac_sha256: hmac(&key.0, &payload_bytes)?,
+        hmac_sha256: hmac(key.bytes(), &payload_bytes)?,
     };
     canonical(&envelope)
 }
 
-pub(crate) fn decode(
+pub(super) fn decode(
     bytes: &[u8],
     key: &LedgerKey,
     authority_id: &str,
@@ -57,14 +57,14 @@ pub(crate) fn decode(
         || envelope.payload.key_id != key_id
         || envelope.payload.root_identity != root_identity
         || envelope.payload.lock_identity != lock_identity
-        || envelope.hmac_sha256 != hmac(&key.0, &canonical(&envelope.payload)?)?
+        || envelope.hmac_sha256 != hmac(key.bytes(), &canonical(&envelope.payload)?)?
     {
         return Err(error("routine-production-authority-state-tampered"));
     }
     Ok(envelope.payload)
 }
 
-pub(crate) fn validate_payload(payload: &Payload) -> Result<(), RoutineError> {
+pub(super) fn validate_payload(payload: &Payload) -> Result<(), RoutineError> {
     if !valid(&payload.authority_id)
         || !valid(&payload.key_id)
         || !valid(&payload.previous_head_sha256)
@@ -99,6 +99,10 @@ pub(crate) fn validate_payload(payload: &Payload) -> Result<(), RoutineError> {
                     .terminal
                     .as_ref()
                     .is_some_and(|terminal| !valid_terminal(terminal))
+                || record
+                    .publication_ambiguity
+                    .as_ref()
+                    .is_some_and(|ambiguity| !valid_publication_ambiguity(ambiguity, record))
                 || !valid_terminal_binding(record)
                 || validate_output_journal(&record.output_journal).is_err()
         })
@@ -171,10 +175,22 @@ fn valid_terminal(terminal: &TerminalRecord) -> bool {
             .is_none_or(ReservationFailureEvidence::shape_is_valid)
 }
 
+fn valid_publication_ambiguity(ambiguity: &PublicationAmbiguity, record: &ProtocolRecord) -> bool {
+    valid(&ambiguity.previous_head_sha256)
+        && valid(&ambiguity.proposed_head_sha256)
+        && !ambiguity.cause.is_empty()
+        && ambiguity.failure_evidence.as_ref().is_none_or(|evidence| {
+            evidence.shape_is_valid()
+                && evidence.protocol_id == record.binding.protocol_id
+                && evidence.grant_id == record.grant_id
+                && evidence.recovery_marker == record.recovery_marker
+        })
+}
+
 fn valid_terminal_binding(record: &ProtocolRecord) -> bool {
     match record.state {
         AttemptState::Reserved | AttemptState::Staged | AttemptState::Started => {
-            record.terminal.is_none()
+            record.terminal.is_none() && record.publication_ambiguity.is_none()
         }
         AttemptState::Complete
         | AttemptState::Failed
@@ -191,19 +207,17 @@ fn valid_terminal_binding(record: &ProtocolRecord) -> bool {
                         })
                 })
         }
-        AttemptState::RolledBack | AttemptState::Ambiguous => true,
+        AttemptState::RolledBack => record.publication_ambiguity.is_none(),
+        AttemptState::Ambiguous => record.publication_ambiguity.is_some(),
     }
 }
 
-pub(crate) fn validate_token(
-    token: &ReservationToken,
-    owner: &OwnerLease,
-) -> Result<(), RoutineError> {
+pub(super) fn validate_token(token: &ReservationToken) -> Result<(), RoutineError> {
     validate_binding(&token.binding)?;
     if !valid(&token.request_id)
         || !valid(&token.grant_id)
         || !valid(&token.recovery_marker)
-        || !valid_owner(owner)
+        || !valid_owner(&token.owner)
         || token.intents.is_empty()
         || token.intents.iter().any(|intent| !valid_intent(intent))
         || validate_output_journal(&token.output_journal).is_err()
@@ -213,7 +227,7 @@ pub(crate) fn validate_token(
     Ok(())
 }
 
-pub(crate) fn validate_binding(binding: &AuthorityBinding) -> Result<(), RoutineError> {
+pub(super) fn validate_binding(binding: &AuthorityBinding) -> Result<(), RoutineError> {
     if [
         &binding.protocol_id,
         &binding.effect_id,

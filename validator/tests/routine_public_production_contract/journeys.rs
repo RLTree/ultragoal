@@ -1,8 +1,12 @@
-use super::scenario::{Fixture, pass_node, prefix_route, tree};
+use super::scenario::{
+    ContainedContender, Fixture, contain_contender, pass_node, prefix_route, run_bounded_contender,
+    tree,
+};
 use serde_json::Value;
 use std::fs;
-use std::process::Stdio;
-use std::time::{Duration, Instant};
+use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::time::Duration;
 
 #[test]
 fn fixture_matrix_names_the_public_production_contract_without_claim_effect() {
@@ -40,7 +44,6 @@ fn fixture_matrix_names_the_public_production_contract_without_claim_effect() {
             .contains("immutable installed ultragoal runtime")
     );
 }
-
 #[test]
 fn clean_public_routine_is_a_zero_effect_noop() {
     let mut fixture = Fixture::new(
@@ -71,7 +74,6 @@ fn clean_public_routine_is_a_zero_effect_noop() {
     assert_eq!(fixture.status(), before_status);
     fixture.teardown_after_assertions();
 }
-
 #[test]
 fn dirty_public_effect_executes_once_then_repeat_refuses_without_mutation() {
     let mut fixture = Fixture::new(
@@ -102,7 +104,6 @@ fn dirty_public_effect_executes_once_then_repeat_refuses_without_mutation() {
     assert_eq!(tree(&fixture.root), before_repeat);
     fixture.teardown_after_assertions();
 }
-
 #[test]
 fn authorized_fresh_execution_then_exact_repeat_requires_session_continuity() {
     let mut fixture = Fixture::new(
@@ -140,33 +141,45 @@ fn public_output_creation_is_observed_only_after_the_durable_journal() {
     );
     let scope = fixture.root.join("target/routine/compile");
     let state = fixture.authority_root().join("routine-authority.state");
-    let mut command = fixture.base_command();
-    let mut child = command
-        .args(["--json", "check", "routine"])
-        .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
-        .spawn()
-        .unwrap();
-    let deadline = Instant::now() + Duration::from_secs(30);
-    loop {
-        if scope.is_dir() {
-            let durable = fs::read(&state).expect("output appeared before durable state");
-            let text = String::from_utf8(durable).unwrap();
-            assert!(text.contains("\"output_journal\""), "{text}");
-            assert!(text.contains("target/routine/compile"), "{text}");
-            break;
+    let stopped = Arc::new(AtomicBool::new(false));
+    let watcher_stopped = Arc::clone(&stopped);
+    let watcher = std::thread::spawn(move || {
+        loop {
+            if scope.is_dir() {
+                let durable =
+                    fs::read(&state).map_err(|_| "output appeared before durable state")?;
+                let text = String::from_utf8(durable).map_err(|_| "durable state is not UTF-8")?;
+                if !text.contains("\"output_journal\"") || !text.contains("target/routine/compile")
+                {
+                    return Err("output appeared before its durable journal binding");
+                }
+                return Ok(());
+            }
+            if watcher_stopped.load(Ordering::Acquire) {
+                return Err("child exited without provisioning output");
+            }
+            std::thread::sleep(Duration::from_millis(2));
         }
-        assert!(
-            child.try_wait().unwrap().is_none(),
-            "child exited before output"
-        );
-        assert!(Instant::now() < deadline, "child did not provision output");
-        std::thread::yield_now();
-    }
-    let output = child.wait_with_output().unwrap();
+    });
+    let mut command = fixture.base_command();
+    command.args(["--json", "check", "routine"]);
+    let observed = contain_contender(
+        run_bounded_contender(&mut command, Duration::from_secs(60)),
+        Duration::from_secs(2),
+    );
+    stopped.store(true, Ordering::Release);
+    let journal = watcher.join().expect("journal watcher panicked");
+    let outcome = match observed {
+        ContainedContender::Exited(output) => Ok(output),
+        ContainedContender::TerminatedAndReaped(_) => Err("public command timed out"),
+        ContainedContender::ExitedAtDeadline(_) => Err("public command exited after deadline"),
+        ContainedContender::ReapedWithFailure(_) => Err("public command cleanup failed"),
+    };
+    fixture.teardown_after_assertions();
+    assert_eq!(journal, Ok(()));
+    let output = outcome.unwrap();
     assert_eq!(output.status.code(), Some(0), "{output:?}");
     assert!(output.stderr.is_empty(), "{output:?}");
-    fixture.teardown_after_assertions();
 }
 
 #[test]

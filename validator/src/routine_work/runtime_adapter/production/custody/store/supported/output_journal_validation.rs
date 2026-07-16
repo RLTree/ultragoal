@@ -1,6 +1,6 @@
 use super::*;
 
-pub(crate) fn validate_output_journal(
+pub(super) fn validate_output_journal(
     journal: &OutputProvisionJournal,
 ) -> Result<(), RoutineError> {
     let mut scopes = journal.scopes.clone();

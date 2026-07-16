@@ -5,22 +5,22 @@ use sha2::Sha256;
 
 type HmacSha256 = Hmac<Sha256>;
 
-pub(crate) fn hmac(key: &[u8], bytes: &[u8]) -> Result<String, RoutineError> {
+pub(super) fn hmac(key: &[u8], bytes: &[u8]) -> Result<String, RoutineError> {
     let mut mac = HmacSha256::new_from_slice(key)
         .map_err(|_| error("routine-production-authority-hmac-invalid"))?;
     mac.update(bytes);
     Ok(format!("sha256:{:x}", mac.finalize().into_bytes()))
 }
 
-pub(crate) fn read_key(file: &File) -> Result<LedgerKey, RoutineError> {
+pub(super) fn read_key(file: &File) -> Result<LedgerKey, RoutineError> {
     let bytes = read_bounded(file, KEY_BYTES as u64)?;
     let value: [u8; KEY_BYTES] = bytes
         .try_into()
         .map_err(|_| error("routine-production-authority-key-size-invalid"))?;
-    Ok(LedgerKey(value))
+    Ok(LedgerKey::new(value))
 }
 
-pub(crate) fn read_bounded(file: &File, limit: u64) -> Result<Vec<u8>, RoutineError> {
+pub(super) fn read_bounded(file: &File, limit: u64) -> Result<Vec<u8>, RoutineError> {
     let metadata = file
         .metadata()
         .map_err(|_| error("routine-production-authority-entry-stat-failed"))?;
@@ -44,14 +44,14 @@ pub(crate) fn read_bounded(file: &File, limit: u64) -> Result<Vec<u8>, RoutineEr
     Ok(bytes)
 }
 
-pub(crate) fn now_tick() -> Result<u64, RoutineError> {
+pub(super) fn now_tick() -> Result<u64, RoutineError> {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map(|duration| duration.as_secs())
         .map_err(|_| error("routine-production-trusted-time-unavailable"))
 }
 
-pub(crate) fn temporary_name() -> Result<String, RoutineError> {
+pub(super) fn temporary_name() -> Result<String, RoutineError> {
     let mut nonce = [0u8; 16];
     fill(&mut nonce).map_err(|_| error("routine-production-authority-random-unavailable"))?;
     Ok(format!(
@@ -63,7 +63,7 @@ pub(crate) fn temporary_name() -> Result<String, RoutineError> {
     ))
 }
 
-pub(crate) fn validate_name(name: &str) -> Result<(), RoutineError> {
+pub(super) fn validate_name(name: &str) -> Result<(), RoutineError> {
     if matches!(name, KEY_NAME | LOCK_NAME | STATE_NAME)
         || name
             .strip_prefix(".routine-authority-state.tmp.")
@@ -77,7 +77,7 @@ pub(crate) fn validate_name(name: &str) -> Result<(), RoutineError> {
     }
 }
 
-pub(crate) fn rename_relative(directory: &File, from: &str, to: &str) -> Result<(), RoutineError> {
+pub(super) fn rename_relative(directory: &File, from: &str, to: &str) -> Result<(), RoutineError> {
     let from =
         CString::new(from).map_err(|_| error("routine-production-authority-name-invalid"))?;
     let to = CString::new(to).map_err(|_| error("routine-production-authority-name-invalid"))?;
@@ -95,7 +95,7 @@ pub(crate) fn rename_relative(directory: &File, from: &str, to: &str) -> Result<
     Ok(())
 }
 
-pub(crate) fn root_identity(metadata: &fs::Metadata) -> RootIdentity {
+pub(super) fn root_identity(metadata: &fs::Metadata) -> RootIdentity {
     RootIdentity {
         device: metadata.dev(),
         inode: metadata.ino(),
@@ -104,7 +104,7 @@ pub(crate) fn root_identity(metadata: &fs::Metadata) -> RootIdentity {
     }
 }
 
-pub(crate) fn file_identity(metadata: &fs::Metadata) -> FileIdentity {
+pub(super) fn file_identity(metadata: &fs::Metadata) -> FileIdentity {
     FileIdentity {
         device: metadata.dev(),
         inode: metadata.ino(),
@@ -117,7 +117,7 @@ pub(crate) fn file_identity(metadata: &fs::Metadata) -> FileIdentity {
     }
 }
 
-pub(crate) fn stat_identity(stat: &libc::stat) -> FileIdentity {
+pub(super) fn stat_identity(stat: &libc::stat) -> FileIdentity {
     FileIdentity {
         device: stat.st_dev as u64,
         inode: stat.st_ino,
@@ -130,7 +130,7 @@ pub(crate) fn stat_identity(stat: &libc::stat) -> FileIdentity {
     }
 }
 
-pub(crate) fn descriptor_path(file: &File) -> Result<PathBuf, RoutineError> {
+pub(super) fn descriptor_path(file: &File) -> Result<PathBuf, RoutineError> {
     let mut bytes = vec![0u8; libc::PATH_MAX as usize];
     if unsafe { libc::fcntl(file.as_raw_fd(), libc::F_GETPATH, bytes.as_mut_ptr()) } != 0 {
         return Err(error(

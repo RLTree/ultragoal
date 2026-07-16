@@ -15,6 +15,7 @@ mod owner;
 use super::observations::*;
 use super::store::*;
 use super::*;
+pub(in crate::routine_work::runtime_adapter::production::custody) use owner::ReservationSpec;
 use owner::{ChildHandle, ReservationOwner};
 use std::cell::RefCell;
 use std::panic::{AssertUnwindSafe, catch_unwind};

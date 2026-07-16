@@ -1,7 +1,9 @@
 use super::*;
 
 impl FileLedger {
-    pub(crate) fn open_or_initialize(root: &Path) -> Result<(Self, LocalHead), RoutineError> {
+    pub(in crate::routine_work::runtime_adapter::production::custody::store) fn open_or_initialize(
+        root: &Path,
+    ) -> Result<(Self, LocalHead), RoutineError> {
         let store = Store::open(root)?;
         if !store.names()?.is_empty() {
             return Err(error("routine-production-session-continuity-required"));
@@ -13,7 +15,7 @@ impl FileLedger {
             let key = store.create_key()?;
             let key_identity = store.exact_identity(KEY_NAME, &key, 0o600)?;
             let key = read_key(&key)?;
-            let key_id = sha256(&key.0);
+            let key_id = sha256(key.bytes());
             let authority_id = authority_id(&key_id, store.identity, lock_identity)?;
             let payload = initial_payload(&authority_id, &key_id, store.identity, lock_identity)?;
             store.write_initial_state(&encode(&payload, &key)?)?;
@@ -23,7 +25,7 @@ impl FileLedger {
         }
         Self::load_complete(store, guard, lock_identity)
     }
-    pub(crate) fn load_complete(
+    pub(super) fn load_complete(
         store: Store,
         guard: ProcessLock,
         lock_identity: FileIdentity,
@@ -31,7 +33,7 @@ impl FileLedger {
         let key_file = store.open_existing(KEY_NAME, libc::O_RDONLY)?;
         let key_identity = store.exact_identity(KEY_NAME, &key_file, 0o600)?;
         let key = read_key(&key_file)?;
-        let key_id = sha256(&key.0);
+        let key_id = sha256(key.bytes());
         let authority_id = authority_id(&key_id, store.identity, lock_identity)?;
         let bytes = store.read_state()?;
         let payload = decode(

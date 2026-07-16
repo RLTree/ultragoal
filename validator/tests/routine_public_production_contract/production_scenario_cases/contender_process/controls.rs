@@ -16,6 +16,15 @@ fn normal_exit_captures_bounded_streams() {
 }
 
 #[test]
+fn spawn_refusal_returns_without_process_custody() {
+    let mut command = Command::new("/definitely/missing/routine-contender");
+    match run_bounded_contender(&mut command, Duration::from_secs(1)) {
+        BoundedContender::ReapedWithFailure("contender-spawn-failed") => {}
+        other => panic!("spawn refusal did not remain pre-custody: {other:?}"),
+    }
+}
+
+#[test]
 fn pipe_pressure_is_drained_before_verified_termination() {
     let mut command = Command::new("/usr/bin/yes");
     let started = Instant::now();

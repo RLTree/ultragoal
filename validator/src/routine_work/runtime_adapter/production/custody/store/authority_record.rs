@@ -24,7 +24,7 @@ pub(in crate::routine_work::runtime_adapter::production) struct AuthorityBinding
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub(in crate::routine_work::runtime_adapter::production::custody) enum AttemptState {
+pub(super) enum AttemptState {
     Reserved,
     Staged,
     Started,
@@ -37,78 +37,83 @@ pub(in crate::routine_work::runtime_adapter::production::custody) enum AttemptSt
 }
 
 impl AttemptState {
-    pub(in crate::routine_work::runtime_adapter::production::custody) fn pending(self) -> bool {
+    pub(super) fn pending(self) -> bool {
         matches!(self, Self::Reserved | Self::Staged | Self::Started)
     }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(in crate::routine_work::runtime_adapter::production::custody) struct OwnerLease {
-    pub(in crate::routine_work::runtime_adapter::production::custody) process_id: i32,
-    pub(in crate::routine_work::runtime_adapter::production::custody) start_seconds: u64,
-    pub(in crate::routine_work::runtime_adapter::production::custody) start_microseconds: u64,
-    pub(in crate::routine_work::runtime_adapter::production::custody) nonce_sha256: String,
+pub(super) struct OwnerLease {
+    pub(super) process_id: i32,
+    pub(super) start_seconds: u64,
+    pub(super) start_microseconds: u64,
+    pub(super) nonce_sha256: String,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(in crate::routine_work::runtime_adapter::production::custody) struct IntentBinding {
-    pub(in crate::routine_work::runtime_adapter::production::custody) intent_id: String,
-    pub(in crate::routine_work::runtime_adapter::production::custody) node_id: String,
-    pub(in crate::routine_work::runtime_adapter::production::custody) plan_order: usize,
-    pub(in crate::routine_work::runtime_adapter::production::custody) program_sha256: String,
+pub(super) struct IntentBinding {
+    pub(super) intent_id: String,
+    pub(super) node_id: String,
+    pub(super) plan_order: usize,
+    pub(super) program_sha256: String,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(in crate::routine_work::runtime_adapter::production::custody) struct ChildLease {
-    pub(in crate::routine_work::runtime_adapter::production::custody) process_id: i32,
-    pub(in crate::routine_work::runtime_adapter::production::custody) process_group_id: i32,
-    pub(in crate::routine_work::runtime_adapter::production::custody) executable_sha256: String,
-    pub(in crate::routine_work::runtime_adapter::production::custody) executable_device: u64,
-    pub(in crate::routine_work::runtime_adapter::production::custody) executable_inode: u64,
-    pub(in crate::routine_work::runtime_adapter::production::custody) intent: IntentBinding,
+pub(super) struct ChildLease {
+    pub(super) process_id: i32,
+    pub(super) process_group_id: i32,
+    pub(super) executable_sha256: String,
+    pub(super) executable_device: u64,
+    pub(super) executable_inode: u64,
+    pub(super) intent: IntentBinding,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(in crate::routine_work::runtime_adapter::production::custody) struct LaunchEntryIdentity {
-    pub(in crate::routine_work::runtime_adapter::production::custody) device: u64,
-    pub(in crate::routine_work::runtime_adapter::production::custody) inode: u64,
-    pub(in crate::routine_work::runtime_adapter::production::custody) mode: u32,
-    pub(in crate::routine_work::runtime_adapter::production::custody) owner: u32,
-    pub(in crate::routine_work::runtime_adapter::production::custody) links: u64,
-    pub(in crate::routine_work::runtime_adapter::production::custody) length: u64,
+pub(super) struct LaunchEntryIdentity {
+    pub(super) device: u64,
+    pub(super) inode: u64,
+    pub(super) mode: u32,
+    pub(super) owner: u32,
+    pub(super) links: u64,
+    pub(super) length: u64,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(in crate::routine_work::runtime_adapter::production::custody) struct LaunchStageRecord {
-    pub(in crate::routine_work::runtime_adapter::production::custody) directory:
-        LaunchEntryIdentity,
-    pub(in crate::routine_work::runtime_adapter::production::custody) program: LaunchEntryIdentity,
-    pub(in crate::routine_work::runtime_adapter::production::custody) marker: LaunchEntryIdentity,
-    pub(in crate::routine_work::runtime_adapter::production::custody) seal: LaunchEntryIdentity,
-    pub(in crate::routine_work::runtime_adapter::production::custody) program_sha256: String,
-    pub(in crate::routine_work::runtime_adapter::production::custody) intent: IntentBinding,
+pub(super) struct LaunchStageRecord {
+    pub(super) directory: LaunchEntryIdentity,
+    pub(super) program: LaunchEntryIdentity,
+    pub(super) marker: LaunchEntryIdentity,
+    pub(super) seal: LaunchEntryIdentity,
+    pub(super) program_sha256: String,
+    pub(super) intent: IntentBinding,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(in crate::routine_work::runtime_adapter::production::custody) struct TerminalRecord {
-    pub(in crate::routine_work::runtime_adapter::production::custody) state: AttemptState,
-    pub(in crate::routine_work::runtime_adapter::production::custody) result_sha256: String,
-    pub(in crate::routine_work::runtime_adapter::production::custody) artifacts:
-        BTreeMap<String, String>,
-    pub(in crate::routine_work::runtime_adapter::production::custody) process_cleanup:
-        CleanupEvidence,
-    pub(in crate::routine_work::runtime_adapter::production::custody) staged_cleanup:
-        CleanupEvidence,
-    pub(in crate::routine_work::runtime_adapter::production::custody) prior_head_sha256: String,
+pub(super) struct TerminalRecord {
+    pub(super) state: AttemptState,
+    pub(super) result_sha256: String,
+    pub(super) artifacts: BTreeMap<String, String>,
+    pub(super) process_cleanup: CleanupEvidence,
+    pub(super) staged_cleanup: CleanupEvidence,
+    pub(super) prior_head_sha256: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub(in crate::routine_work::runtime_adapter::production::custody) failure_evidence:
-        Option<ReservationFailureEvidence>,
+    pub(super) failure_evidence: Option<ReservationFailureEvidence>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(super) struct PublicationAmbiguity {
+    pub(super) previous_head_sha256: String,
+    pub(super) proposed_head_sha256: String,
+    pub(super) cause: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub(super) failure_evidence: Option<ReservationFailureEvidence>,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -148,18 +153,13 @@ pub(in crate::routine_work::runtime_adapter::production) struct OutputStageAmbig
     pub(in crate::routine_work::runtime_adapter::production) creation_nonce: String,
 }
 
-pub(in crate::routine_work::runtime_adapter::production::custody) struct ReservationToken {
-    pub(in crate::routine_work::runtime_adapter::production::custody) binding: AuthorityBinding,
-    pub(in crate::routine_work::runtime_adapter::production::custody) request_id: String,
-    pub(in crate::routine_work::runtime_adapter::production::custody) grant_id: String,
-    pub(in crate::routine_work::runtime_adapter::production::custody) recovery_marker: String,
-    pub(in crate::routine_work::runtime_adapter::production::custody) expires_tick: Cell<u64>,
-    pub(in crate::routine_work::runtime_adapter::production::custody) output_journal:
-        OutputProvisionJournal,
-    pub(in crate::routine_work::runtime_adapter::production::custody) intents: Vec<IntentBinding>,
-}
-
-pub(in crate::routine_work::runtime_adapter::production::custody) struct FileAuthorityLedger {
-    #[cfg(target_vendor = "apple")]
-    pub(in crate::routine_work::runtime_adapter::production::custody) inner: supported::FileLedger,
+pub(super) struct ReservationToken {
+    pub(super) binding: AuthorityBinding,
+    pub(super) owner: OwnerLease,
+    pub(super) request_id: String,
+    pub(super) grant_id: String,
+    pub(super) recovery_marker: String,
+    pub(super) expires_tick: Cell<u64>,
+    pub(super) output_journal: OutputProvisionJournal,
+    pub(super) intents: Vec<IntentBinding>,
 }

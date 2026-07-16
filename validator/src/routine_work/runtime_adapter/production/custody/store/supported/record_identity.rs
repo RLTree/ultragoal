@@ -1,6 +1,6 @@
 use super::*;
 
-pub(crate) fn exact_record<'a>(
+pub(super) fn exact_record<'a>(
     payload: &'a Payload,
     token: &ReservationToken,
 ) -> Result<&'a ProtocolRecord, RoutineError> {
@@ -12,7 +12,7 @@ pub(crate) fn exact_record<'a>(
     Ok(record)
 }
 
-pub(crate) fn exact_record_mut<'a>(
+pub(super) fn exact_record_mut<'a>(
     payload: &'a mut Payload,
     token: &ReservationToken,
 ) -> Result<&'a mut ProtocolRecord, RoutineError> {
@@ -29,6 +29,7 @@ fn exact_binding(record: &ProtocolRecord, token: &ReservationToken) -> Result<()
         || record.request_id != token.request_id
         || record.grant_id != token.grant_id
         || record.recovery_marker != token.recovery_marker
+        || record.owner != token.owner
         || record.expires_tick != token.expires_tick.get()
         || record.intents != token.intents
     {
@@ -37,7 +38,7 @@ fn exact_binding(record: &ProtocolRecord, token: &ReservationToken) -> Result<()
     Ok(())
 }
 
-pub(crate) fn validate_reservation_capacity(
+pub(super) fn validate_reservation_capacity(
     payload: &Payload,
     token: &ReservationToken,
 ) -> Result<(), RoutineError> {

@@ -1,6 +1,6 @@
 //! Descriptor-bound durable authority for production routine mediation.
 
-use std::cell::Cell;
+use std::cell::{Cell, RefCell};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 use std::sync::Arc;
@@ -17,16 +17,17 @@ use crate::routine_work::{
 mod authority_record;
 #[path = "file_authority.rs"]
 mod file_authority;
-#[path = "file_authority_failure.rs"]
-mod file_authority_failure;
 #[cfg(target_vendor = "apple")]
 #[path = "supported/mod.rs"]
 mod supported;
 
-pub(crate) use authority_record::*;
-pub(crate) use file_authority::*;
-#[cfg(target_vendor = "apple")]
-pub(in crate::routine_work::runtime_adapter::production::custody) use supported::LocalHead;
+use authority_record::*;
+pub(in crate::routine_work::runtime_adapter::production) use authority_record::{
+    AuthorityBinding, OutputComponentJournal, OutputDirectoryIdentity, OutputProvisionJournal,
+    OutputStageAmbiguity,
+};
+pub(in crate::routine_work::runtime_adapter::production::custody) use file_authority::DurableCustody;
+use file_authority::error;
 #[cfg(all(test, target_vendor = "apple"))]
 pub(crate) use supported::{
     set_test_publication_ambiguity_after, set_test_publication_refusal_after,
