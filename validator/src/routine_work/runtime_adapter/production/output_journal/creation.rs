@@ -49,10 +49,30 @@ pub(super) fn prepare(
                     creation_nonce: nonce.to_owned(),
                 }));
             }
-            let identity = establish_stage(parent, &stage_name, root_device)?;
-            return Ok(ProvisionStep::StageCreated(identity));
+            mkdir_at(parent, &stage_name)?;
+            return observe_created_stage(parent, &stage_name, root_device).map_or_else(
+                |_| {
+                    Ok(ProvisionStep::UnrecordedStage(OutputStageAmbiguity {
+                        relative_path: component.relative_path.clone(),
+                        creation_nonce: nonce.to_owned(),
+                    }))
+                },
+                |identity| Ok(ProvisionStep::StageCreated(identity)),
+            );
         }
     }
+}
+
+pub(super) fn sync_created_stage(
+    parent: &File,
+    stage_name: &str,
+    expected: OutputDirectoryIdentity,
+    root_device: u64,
+) -> Result<(), RoutineError> {
+    parent
+        .sync_all()
+        .map_err(|_| error("routine-production-output-stage-sync-ambiguous"))?;
+    validate_exact(parent, stage_name, expected, root_device, true)
 }
 
 pub(super) fn publish_stage(
@@ -80,15 +100,11 @@ enum StageState {
     Published(OutputDirectoryIdentity),
 }
 
-fn establish_stage(
+fn observe_created_stage(
     parent: &File,
     stage_name: &str,
     root_device: u64,
 ) -> Result<OutputDirectoryIdentity, RoutineError> {
-    mkdir_at(parent, stage_name)?;
-    parent
-        .sync_all()
-        .map_err(|_| error("routine-production-output-stage-sync-ambiguous"))?;
     let identity = stat_at(parent, stage_name)?
         .ok_or_else(|| error("routine-production-output-stage-unobserved"))?;
     validate_exact(parent, stage_name, identity, root_device, true)?;

@@ -27,11 +27,21 @@ pub(crate) use authority_record::*;
 pub(crate) use file_authority::*;
 #[cfg(target_vendor = "apple")]
 pub(in crate::routine_work::runtime_adapter::production::custody) use supported::LocalHead;
+#[cfg(all(test, target_vendor = "apple"))]
+pub(crate) use supported::{
+    set_test_publication_ambiguity_after, set_test_publication_refusal_after,
+};
 
 pub(in crate::routine_work::runtime_adapter::production::custody) enum DurableWrite<T> {
     Committed(T),
     Precommit(T),
-    Ambiguous(T),
+    Ambiguous(T, DurableAmbiguity),
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(in crate::routine_work::runtime_adapter::production::custody) struct DurableAmbiguity {
+    pub(in crate::routine_work::runtime_adapter::production::custody) previous_head_sha256: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) proposed_head_sha256: String,
 }
 
 impl<T> DurableWrite<T> {
@@ -39,7 +49,7 @@ impl<T> DurableWrite<T> {
         match self {
             Self::Committed(value) => Ok(value),
             Self::Precommit(_) => Err(error("routine-production-authority-publish-precommit")),
-            Self::Ambiguous(_) => Err(error("routine-production-authority-publish-ambiguous")),
+            Self::Ambiguous(_, _) => Err(error("routine-production-authority-publish-ambiguous")),
         }
     }
 }

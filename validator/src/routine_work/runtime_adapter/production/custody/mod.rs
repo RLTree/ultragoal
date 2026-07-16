@@ -2,9 +2,15 @@
 
 use super::*;
 
+#[path = "observations.rs"]
+mod observations;
+#[path = "store/mod.rs"]
+mod store;
 #[path = "transaction.rs"]
 mod transaction;
 
+#[cfg(all(test, target_vendor = "apple"))]
+pub(crate) use store::{set_test_publication_ambiguity_after, set_test_publication_refusal_after};
 pub(super) use transaction::mediate_reserved_effect;
 pub(super) use transaction::{
     AuthorityBinding, OutputComponentJournal, OutputDirectoryIdentity, OutputProvisionJournal,

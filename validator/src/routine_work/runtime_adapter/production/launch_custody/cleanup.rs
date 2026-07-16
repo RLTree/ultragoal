@@ -207,3 +207,10 @@ pub(in crate::routine_work::runtime_adapter::production) fn cleanup_staged(
         ],
     )
 }
+
+pub(in crate::routine_work::runtime_adapter::production) fn fail_staged(
+    staged: &StagedProgram,
+    primary: RoutineError,
+) -> RoutineError {
+    attach_partial_cleanup(primary, || cleanup_staged(staged))
+}

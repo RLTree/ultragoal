@@ -1,4 +1,4 @@
-use super::routine_plan_fixture::RoutinePlanFixture;
+use super::routine_plan_fixture::{RoutinePlanFixture, isolate_fixture_test};
 use super::routine_work::{
     LocalDirtyTree, PlanRequest, RoutineAdapterSpec, RoutineCancellation, RoutineMediatorStatus,
     RoutineReuseInput, mediate_public_routine_execution, plan_routine, prepare_routine_execution,
@@ -38,6 +38,11 @@ fn exact_noop_bypasses_authority_initialization_and_workspace_writes() {
 
 #[test]
 fn missing_authority_root_refuses_before_authority_initialization() {
+    if isolate_fixture_test(
+        "authority_ledger_controls::missing_authority_root_refuses_before_authority_initialization",
+    ) {
+        return;
+    }
     let mut fixture = RoutinePlanFixture::new("missing-authority-root-zero-write");
     let prepared = fixture.prepare().unwrap();
     let authority = fixture.repo.root().join("authority");

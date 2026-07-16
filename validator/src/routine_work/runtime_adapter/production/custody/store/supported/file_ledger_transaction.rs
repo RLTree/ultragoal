@@ -56,30 +56,35 @@ impl FileLedger {
                 .generation
                 .checked_add(1)
                 .ok_or_else(|| error("routine-production-generation-exhausted"))?;
-            payload.previous_head_sha256 = head_sha256;
+            payload.previous_head_sha256 = head_sha256.clone();
             payload.last_tick = tick;
             validate_payload(&payload)?;
             let next = encode(&payload, &key)?;
-            match self.store.write_atomic_state(&next) {
-                StatePublication::Committed => {}
-                StatePublication::Precommit => {
-                    drop(guard);
+            let publication = self.store.write_atomic_state(&next);
+            let proposed_head_sha256 = sha256(&next);
+            let ambiguity = || DurableAmbiguity {
+                previous_head_sha256: head_sha256.clone(),
+                proposed_head_sha256: proposed_head_sha256.clone(),
+            };
+            match (publication, self.store.read_state()) {
+                (StatePublication::Precommit | StatePublication::Ambiguous, Ok(confirmed))
+                    if confirmed == bytes =>
+                {
+                    if self
+                        .store
+                        .validate_complete(self.key_identity, self.lock_identity)
+                        .is_err()
+                    {
+                        return Ok(DurableWrite::Ambiguous(value, ambiguity()));
+                    }
                     return Ok(DurableWrite::Precommit(value));
                 }
-                StatePublication::Ambiguous => {
-                    drop(guard);
-                    return Ok(DurableWrite::Ambiguous(value));
-                }
-            }
-            let confirmed = match self.store.read_state() {
-                Ok(confirmed) => confirmed,
-                Err(_) => return Ok(DurableWrite::Ambiguous(value)),
-            };
-            if confirmed != next {
-                return Ok(DurableWrite::Ambiguous(value));
+                (StatePublication::Committed | StatePublication::Ambiguous, Ok(confirmed))
+                    if confirmed == next => {}
+                (_, Ok(_) | Err(_)) => return Ok(DurableWrite::Ambiguous(value, ambiguity())),
             }
             let decoded = match decode(
-                &confirmed,
+                &next,
                 &key,
                 &self.authority_id,
                 &self.key_id,
@@ -87,21 +92,21 @@ impl FileLedger {
                 self.lock_identity,
             ) {
                 Ok(decoded) => decoded,
-                Err(_) => return Ok(DurableWrite::Ambiguous(value)),
+                Err(_) => return Ok(DurableWrite::Ambiguous(value, ambiguity())),
             };
             if decoded != payload {
-                return Ok(DurableWrite::Ambiguous(value));
+                return Ok(DurableWrite::Ambiguous(value, ambiguity()));
             }
             let confirmed_identity = match self.store.state_identity() {
                 Ok(identity) => identity,
-                Err(_) => return Ok(DurableWrite::Ambiguous(value)),
+                Err(_) => return Ok(DurableWrite::Ambiguous(value, ambiguity())),
             };
             local.generation = payload.generation;
-            local.head_sha256 = sha256(&confirmed);
+            local.head_sha256 = proposed_head_sha256;
             local.state_identity = confirmed_identity;
         } else {
             local.generation = payload.generation;
-            local.head_sha256 = head_sha256;
+            local.head_sha256 = head_sha256.clone();
             local.state_identity = state_identity;
         }
         if self
@@ -110,7 +115,13 @@ impl FileLedger {
             .is_err()
         {
             return if write {
-                Ok(DurableWrite::Ambiguous(value))
+                Ok(DurableWrite::Ambiguous(
+                    value,
+                    DurableAmbiguity {
+                        previous_head_sha256: head_sha256,
+                        proposed_head_sha256: local.head_sha256.clone(),
+                    },
+                ))
             } else {
                 Err(error("routine-production-authority-store-incomplete"))
             };

@@ -41,6 +41,8 @@ pub(in crate::routine_work) use process::ObservedProcessCustody;
 pub(super) use process::PreparedProcess;
 pub(super) use process::StartedProcessIdentity;
 pub(crate) use process::take_process_custody_panic;
+#[cfg(test)]
+pub(crate) use process::test_last_spawn_group_absent;
 pub(crate) use process::{ProcessObservation, ProcessTermination};
 
 #[path = "grant_scope.rs"]

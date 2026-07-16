@@ -35,11 +35,15 @@ pub(crate) use mediator::{
 };
 #[cfg(test)]
 pub(crate) use mediator::{
-    set_test_output_capture_hook, set_test_read_source_capture_hook,
+    set_test_output_capture_hook, set_test_read_source_capture_hook, test_last_spawn_group_absent,
     validate_output_confinement_after, validate_read_confinement_after_bind,
 };
 pub(in crate::routine_work) use production::ObservedStagedCleanup;
 pub(crate) use production::mediate_public_routine_execution;
+#[cfg(all(test, target_vendor = "apple"))]
+pub(crate) use production::{
+    set_test_publication_ambiguity_after, set_test_publication_refusal_after,
+};
 
 #[path = "execution_preparation.rs"]
 mod execution_preparation;

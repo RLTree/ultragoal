@@ -65,9 +65,8 @@ fn production_source_exposes_no_arbitrary_process_binding_surface() {
 fn terminal_publication_follows_observation_without_parallel_cache_authority() {
     let transaction =
         include_str!("../src/routine_work/runtime_adapter/production/custody/transaction.rs");
-    let durable = include_str!(
-        "../src/routine_work/runtime_adapter/production/custody/transaction/durable_state.rs"
-    );
+    let durable =
+        include_str!("../src/routine_work/runtime_adapter/production/custody/transaction/owner.rs");
     let settlement = include_str!(
         "../src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_settle.rs"
     );
@@ -87,7 +86,7 @@ fn terminal_publication_follows_observation_without_parallel_cache_authority() {
     assert!(!source.contains("read_reuse"));
     assert!(!durable.contains("stage_success"));
     assert_eq!(settlement.matches("transition_payload(").count(), 1);
-    assert!(!transaction.contains("impl Drop for ReservationTransaction"));
+    assert!(!durable.contains("impl Drop for ReservationOwner"));
     assert!(durable.contains("record_failure("));
     assert!(!error.contains("reservation_failure_evidence"));
     assert!(!error.contains("with_reservation_failure_evidence"));

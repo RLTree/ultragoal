@@ -30,6 +30,8 @@ mod output_journal_validation;
 mod record_authentication;
 #[path = "record_identity.rs"]
 mod record_identity;
+#[path = "state_publication.rs"]
+mod state_publication;
 #[path = "store_open.rs"]
 mod store_open;
 #[path = "store_stat_name.rs"]
@@ -38,5 +40,9 @@ mod store_stat_name;
 pub(crate) use initial_state::*;
 pub(crate) use ledger_effect_adapter::*;
 pub(crate) use output_journal_validation::*;
-pub(crate) use record_authentication::*;
+pub(in crate::routine_work::runtime_adapter::production::custody) use record_authentication::*;
 pub(crate) use record_identity::*;
+#[cfg(test)]
+pub(crate) use state_publication::{
+    set_test_publication_ambiguity_after, set_test_publication_refusal_after,
+};

@@ -15,12 +15,16 @@ use crate::routine_work::{RepoPath, RoutineError};
 
 #[path = "apply.rs"]
 mod apply;
+#[path = "component_paths.rs"]
+mod component_paths;
 #[path = "creation.rs"]
 mod creation;
 #[path = "directory_entries.rs"]
 mod directory_entries;
 #[path = "observation.rs"]
 mod observation;
+#[path = "rollback.rs"]
+mod rollback;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(super) enum ApplyOutcome {

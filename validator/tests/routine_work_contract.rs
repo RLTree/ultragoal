@@ -56,6 +56,8 @@ mod provenance;
 mod report;
 #[path = "routine_work_contract/reservation_authority_visibility.rs"]
 mod reservation_authority_visibility;
+#[path = "routine_work_contract/reservation_publication_controls.rs"]
+mod reservation_publication_controls;
 #[path = "routine_work_contract/retired_adapter_routes.rs"]
 mod retired_adapter_routes;
 #[path = "routine_work_contract/retired_authority_routes.rs"]

@@ -31,6 +31,10 @@ mod production_mediation;
 mod reservation_failure;
 
 use custody::AuthorityBinding;
+#[cfg(all(test, target_vendor = "apple"))]
+pub(crate) use custody::{
+    set_test_publication_ambiguity_after, set_test_publication_refusal_after,
+};
 pub(in crate::routine_work) use launch_custody::ObservedStagedCleanup;
 use production_mediation::error;
 

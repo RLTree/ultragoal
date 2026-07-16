@@ -2,99 +2,110 @@ use super::*;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(crate) struct RootIdentity {
-    pub(crate) device: u64,
-    pub(crate) inode: u64,
-    pub(crate) owner: u32,
-    pub(crate) mode: u32,
+pub(in crate::routine_work::runtime_adapter::production::custody) struct RootIdentity {
+    pub(in crate::routine_work::runtime_adapter::production::custody) device: u64,
+    pub(in crate::routine_work::runtime_adapter::production::custody) inode: u64,
+    pub(in crate::routine_work::runtime_adapter::production::custody) owner: u32,
+    pub(in crate::routine_work::runtime_adapter::production::custody) mode: u32,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(crate) struct FileIdentity {
-    pub(crate) device: u64,
-    pub(crate) inode: u64,
-    pub(crate) owner: u32,
-    pub(crate) mode: u32,
-    pub(crate) links: u64,
-    pub(crate) length: u64,
-    pub(crate) changed_seconds: i64,
-    pub(crate) changed_nanos: i64,
+pub(in crate::routine_work::runtime_adapter::production::custody) struct FileIdentity {
+    pub(in crate::routine_work::runtime_adapter::production::custody) device: u64,
+    pub(in crate::routine_work::runtime_adapter::production::custody) inode: u64,
+    pub(in crate::routine_work::runtime_adapter::production::custody) owner: u32,
+    pub(in crate::routine_work::runtime_adapter::production::custody) mode: u32,
+    pub(in crate::routine_work::runtime_adapter::production::custody) links: u64,
+    pub(in crate::routine_work::runtime_adapter::production::custody) length: u64,
+    pub(in crate::routine_work::runtime_adapter::production::custody) changed_seconds: i64,
+    pub(in crate::routine_work::runtime_adapter::production::custody) changed_nanos: i64,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(crate) struct ProtocolRecord {
-    pub(crate) binding: AuthorityBinding,
-    pub(crate) request_id: String,
-    pub(crate) grant_id: String,
-    pub(crate) recovery_marker: String,
-    pub(crate) state: AttemptState,
-    pub(crate) owner: OwnerLease,
-    pub(crate) child: Option<ChildLease>,
-    pub(crate) launch_stage: Option<LaunchStageRecord>,
-    pub(crate) intents: Vec<IntentBinding>,
-    pub(crate) next_intent: usize,
-    pub(crate) issued_tick: u64,
-    pub(crate) expires_tick: u64,
-    pub(crate) recovery_deadline_tick: u64,
-    pub(crate) output_journal: OutputProvisionJournal,
-    pub(crate) terminal: Option<TerminalRecord>,
+pub(in crate::routine_work::runtime_adapter::production::custody) struct ProtocolRecord {
+    pub(in crate::routine_work::runtime_adapter::production::custody) binding: AuthorityBinding,
+    pub(in crate::routine_work::runtime_adapter::production::custody) request_id: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) grant_id: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) recovery_marker: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) state: AttemptState,
+    pub(in crate::routine_work::runtime_adapter::production::custody) owner: OwnerLease,
+    pub(in crate::routine_work::runtime_adapter::production::custody) child: Option<ChildLease>,
+    pub(in crate::routine_work::runtime_adapter::production::custody) launch_stage:
+        Option<LaunchStageRecord>,
+    pub(in crate::routine_work::runtime_adapter::production::custody) intents: Vec<IntentBinding>,
+    pub(in crate::routine_work::runtime_adapter::production::custody) next_intent: usize,
+    pub(in crate::routine_work::runtime_adapter::production::custody) issued_tick: u64,
+    pub(in crate::routine_work::runtime_adapter::production::custody) expires_tick: u64,
+    pub(in crate::routine_work::runtime_adapter::production::custody) recovery_deadline_tick: u64,
+    pub(in crate::routine_work::runtime_adapter::production::custody) output_journal:
+        OutputProvisionJournal,
+    pub(in crate::routine_work::runtime_adapter::production::custody) terminal:
+        Option<TerminalRecord>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub(crate) failure_evidence: Vec<ReservationFailureEvidence>,
+    pub(in crate::routine_work::runtime_adapter::production::custody) failure_evidence:
+        Vec<ReservationFailureEvidence>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(crate) struct Payload {
-    pub(crate) schema_version: String,
-    pub(crate) authority_id: String,
-    pub(crate) key_id: String,
-    pub(crate) root_identity: RootIdentity,
-    pub(crate) lock_identity: FileIdentity,
-    pub(crate) generation: u64,
-    pub(crate) previous_head_sha256: String,
-    pub(crate) last_tick: u64,
-    pub(crate) attempts: BTreeMap<String, ProtocolRecord>,
-    pub(crate) effects: BTreeMap<String, String>,
-    pub(crate) consumed_grants: BTreeSet<String>,
+pub(in crate::routine_work::runtime_adapter::production::custody) struct Payload {
+    pub(in crate::routine_work::runtime_adapter::production::custody) schema_version: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) authority_id: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) key_id: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) root_identity: RootIdentity,
+    pub(in crate::routine_work::runtime_adapter::production::custody) lock_identity: FileIdentity,
+    pub(in crate::routine_work::runtime_adapter::production::custody) generation: u64,
+    pub(in crate::routine_work::runtime_adapter::production::custody) previous_head_sha256: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) last_tick: u64,
+    pub(in crate::routine_work::runtime_adapter::production::custody) attempts:
+        BTreeMap<String, ProtocolRecord>,
+    pub(in crate::routine_work::runtime_adapter::production::custody) effects:
+        BTreeMap<String, String>,
+    pub(in crate::routine_work::runtime_adapter::production::custody) consumed_grants:
+        BTreeSet<String>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(crate) struct Envelope {
-    pub(crate) payload: Payload,
-    pub(crate) hmac_sha256: String,
+pub(in crate::routine_work::runtime_adapter::production::custody) struct Envelope {
+    pub(in crate::routine_work::runtime_adapter::production::custody) payload: Payload,
+    pub(in crate::routine_work::runtime_adapter::production::custody) hmac_sha256: String,
 }
 
-pub(crate) struct LedgerKey(pub(crate) [u8; KEY_BYTES]);
+pub(in crate::routine_work::runtime_adapter::production::custody) struct LedgerKey(
+    pub(in crate::routine_work::runtime_adapter::production::custody) [u8; KEY_BYTES],
+);
 
-pub(crate) struct Store {
-    pub(crate) requested_root: PathBuf,
-    pub(crate) canonical_root: PathBuf,
-    pub(crate) directory: Arc<File>,
-    pub(crate) identity: RootIdentity,
+pub(in crate::routine_work::runtime_adapter::production::custody) struct Store {
+    pub(in crate::routine_work::runtime_adapter::production::custody) requested_root: PathBuf,
+    pub(in crate::routine_work::runtime_adapter::production::custody) canonical_root: PathBuf,
+    pub(in crate::routine_work::runtime_adapter::production::custody) directory: Arc<File>,
+    pub(in crate::routine_work::runtime_adapter::production::custody) identity: RootIdentity,
 }
 
-pub(crate) struct ProcessLock(pub(crate) File);
+pub(in crate::routine_work::runtime_adapter::production::custody) struct ProcessLock(
+    pub(in crate::routine_work::runtime_adapter::production::custody) File,
+);
 
-pub(crate) enum StatePublication {
+pub(in crate::routine_work::runtime_adapter::production::custody) enum StatePublication {
     Committed,
     Precommit,
     Ambiguous,
 }
 
 #[derive(Clone)]
-pub(crate) struct LocalHead {
-    pub(crate) generation: u64,
-    pub(crate) head_sha256: String,
-    pub(crate) state_identity: FileIdentity,
+pub(in crate::routine_work::runtime_adapter::production::custody) struct LocalHead {
+    pub(in crate::routine_work::runtime_adapter::production::custody) generation: u64,
+    pub(in crate::routine_work::runtime_adapter::production::custody) head_sha256: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) state_identity: FileIdentity,
 }
 
-pub(crate) struct FileLedger {
-    pub(crate) store: Store,
-    pub(crate) key_identity: FileIdentity,
-    pub(crate) lock_identity: FileIdentity,
-    pub(crate) key_id: String,
-    pub(crate) authority_id: String,
+pub(in crate::routine_work::runtime_adapter::production::custody) struct FileLedger {
+    pub(in crate::routine_work::runtime_adapter::production::custody) store: Store,
+    pub(in crate::routine_work::runtime_adapter::production::custody) key_identity: FileIdentity,
+    pub(in crate::routine_work::runtime_adapter::production::custody) lock_identity: FileIdentity,
+    pub(in crate::routine_work::runtime_adapter::production::custody) key_id: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) authority_id: String,
 }

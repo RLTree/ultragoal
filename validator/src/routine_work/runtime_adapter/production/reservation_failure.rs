@@ -1,6 +1,7 @@
 use super::*;
 
 pub(super) type PanicPayload = Box<dyn std::any::Any + Send>;
+pub(super) type CleanupOutcome = std::thread::Result<Result<(), RoutineError>>;
 
 pub(super) struct FailureBinding<'a> {
     pub(super) protocol_id: &'a str,
@@ -9,12 +10,12 @@ pub(super) struct FailureBinding<'a> {
 }
 
 pub(super) struct CapturedCleanup {
-    pub(super) outcome: std::thread::Result<Result<(), RoutineError>>,
+    pub(super) outcome: CleanupOutcome,
     pub(super) evidence: CleanupEvidence,
 }
 
 impl CapturedCleanup {
-    pub(super) fn from(outcome: std::thread::Result<Result<(), RoutineError>>) -> Self {
+    pub(super) fn from(outcome: CleanupOutcome) -> Self {
         let evidence = match &outcome {
             Ok(Ok(())) => CleanupEvidence::Succeeded,
             Ok(Err(error)) => CleanupEvidence::Error(error.evidence()),
@@ -32,6 +33,16 @@ pub(super) struct FailureParts {
 
 pub(super) enum LifecycleFailure {
     Error(RoutineError, FailureParts),
+    Panic(PanicPayload, FailureParts),
+}
+
+pub(super) enum PrimaryFailure {
+    Error(RoutineError),
+    Panic(PanicPayload),
+}
+
+pub(super) enum TransactionFailure {
+    Error(RoutineError, FailureParts, Option<CleanupOutcome>),
     Panic(PanicPayload, FailureParts),
 }
 
@@ -125,11 +136,11 @@ pub(super) fn panic_parts(
     }
 }
 
-pub(super) fn transition_result(
+pub(super) fn observed_transition(
     record: &ReservationFailureEvidence,
-    operation: impl FnOnce() -> Result<(), RoutineError>,
+    outcome: std::thread::Result<Result<(), RoutineError>>,
 ) -> Result<(), RoutineError> {
-    match std::panic::catch_unwind(std::panic::AssertUnwindSafe(operation)) {
+    match outcome {
         Ok(Ok(())) => Ok(()),
         Ok(Err(error)) => Err(transition_failure_error(
             "mediator-reservation-failure-transition-failed",
@@ -167,24 +178,12 @@ pub(super) fn finish_panic<T>(
     std::panic::resume_unwind(payload)
 }
 
-pub(super) fn finish_observed<T>(
-    failure: LifecycleFailure,
-    transition: impl FnOnce(&FailureParts) -> Result<(), RoutineError>,
-) -> Result<T, RoutineError> {
-    match failure {
-        LifecycleFailure::Error(error, parts) => finish_error(error, None, transition(&parts)),
-        LifecycleFailure::Panic(payload, parts) => finish_panic(payload, transition(&parts)),
-    }
-}
-
-pub(super) fn finish_transaction<T>(
-    outcome: std::thread::Result<Result<T, RoutineError>>,
+pub(super) fn failure_record(
     binding: FailureBinding<'_>,
     started: bool,
-    cleanup: impl FnOnce() -> CapturedCleanup,
-    transition: impl FnOnce(&ReservationFailureEvidence) -> Result<(), RoutineError>,
-) -> Result<T, RoutineError> {
-    let evidence = |parts: FailureParts| ReservationFailureEvidence {
+    parts: FailureParts,
+) -> ReservationFailureEvidence {
+    ReservationFailureEvidence {
         schema_version: RESERVATION_FAILURE_SCHEMA.to_owned(),
         protocol_id: binding.protocol_id.to_owned(),
         grant_id: binding.grant_id.to_owned(),
@@ -197,37 +196,54 @@ pub(super) fn finish_transaction<T>(
         } else {
             ReservationFailureDisposition::ReservedPending
         },
-    };
-    match outcome {
-        Ok(Ok(result)) => Ok(result),
-        Ok(Err(error)) => {
-            let (primary, process_cleanup, observed_staged) = error_parts(&error);
-            let cleanup = cleanup();
-            let record = evidence(FailureParts {
-                primary,
-                process_cleanup,
-                staged_cleanup: observed_staged.unwrap_or_else(|| cleanup.evidence.clone()),
-            });
-            finish_error(error, Some(cleanup.outcome), transition(&record))
+    }
+}
+
+pub(super) fn parts_from_error(error: &RoutineError, cleanup: &CapturedCleanup) -> FailureParts {
+    let (primary, process_cleanup, observed_staged) = error_parts(error);
+    FailureParts {
+        primary,
+        process_cleanup,
+        staged_cleanup: observed_staged.unwrap_or_else(|| cleanup.evidence.clone()),
+    }
+}
+
+pub(super) fn observe(primary: PrimaryFailure, cleanup: CapturedCleanup) -> TransactionFailure {
+    match primary {
+        PrimaryFailure::Error(error) => {
+            let parts = parts_from_error(&error, &cleanup);
+            TransactionFailure::Error(error, parts, Some(cleanup.outcome))
         }
-        Err(payload) => match payload.downcast::<LifecycleFailure>() {
-            Ok(failure) => finish_observed(*failure, |parts| {
-                transition(&evidence(FailureParts {
-                    primary: parts.primary.clone(),
-                    process_cleanup: parts.process_cleanup.clone(),
-                    staged_cleanup: parts.staged_cleanup.clone(),
-                }))
-            }),
+        PrimaryFailure::Panic(payload) => match payload.downcast::<LifecycleFailure>() {
+            Ok(failure) => match *failure {
+                LifecycleFailure::Error(error, parts) => {
+                    TransactionFailure::Error(error, merge_cleanup(parts, cleanup), None)
+                }
+                LifecycleFailure::Panic(payload, parts) => {
+                    TransactionFailure::Panic(payload, merge_cleanup(parts, cleanup))
+                }
+            },
             Err(payload) => {
                 let (payload, primary, process_cleanup) = panic_parts(payload);
-                let cleanup = cleanup();
-                let record = evidence(FailureParts {
-                    primary,
-                    process_cleanup,
-                    staged_cleanup: cleanup.evidence,
-                });
-                finish_panic(payload, transition(&record))
+                TransactionFailure::Panic(
+                    payload,
+                    FailureParts {
+                        primary,
+                        process_cleanup,
+                        staged_cleanup: cleanup.evidence,
+                    },
+                )
             }
         },
     }
+}
+
+fn merge_cleanup(mut parts: FailureParts, cleanup: CapturedCleanup) -> FailureParts {
+    if matches!(
+        parts.staged_cleanup,
+        CleanupEvidence::NotRequired | CleanupEvidence::Succeeded
+    ) {
+        parts.staged_cleanup = cleanup.evidence;
+    }
+    parts
 }

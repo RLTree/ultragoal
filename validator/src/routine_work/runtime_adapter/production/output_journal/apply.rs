@@ -1,6 +1,8 @@
-use super::creation::{ProvisionStep, prepare, publish_stage};
+use super::component_paths::{allowed_children, names_for};
+use super::creation::{ProvisionStep, prepare, publish_stage, sync_created_stage};
 use super::directory_entries::names;
 use super::observation::{open_at, open_root, stat_at, validate_directory};
+use super::rollback::OutputClaim;
 use super::*;
 
 pub(in crate::routine_work::runtime_adapter::production) struct OutputProvisioning {
@@ -9,10 +11,12 @@ pub(in crate::routine_work::runtime_adapter::production) struct OutputProvisioni
     allowed: BTreeMap<String, BTreeSet<String>>,
     index: usize,
     phase: Phase,
+    created: Vec<OutputClaim>,
 }
 
 enum Phase {
     Inspect,
+    SyncCreated(OutputDirectoryIdentity),
     Publish(OutputDirectoryIdentity),
     AwaitStaged(OutputDirectoryIdentity),
     AwaitPublished(OutputDirectoryIdentity),
@@ -45,6 +49,7 @@ pub(super) fn begin(
         allowed: allowed_children(journal),
         index: 0,
         phase: Phase::Inspect,
+        created: Vec::new(),
     })
 }
 
@@ -77,11 +82,19 @@ impl OutputProvisioning {
                     match prepare(&component, parent, child_name, self.journal.root.device)? {
                         ProvisionStep::Ready(identity) => self.bind_ready(&component, identity)?,
                         ProvisionStep::StageCreated(identity) => {
-                            self.phase = Phase::AwaitStaged(identity);
-                            return Ok(OutputStep::Record(OutputTransition::Staged {
-                                relative_path: component.relative_path,
+                            let name = component
+                                .creation_nonce
+                                .as_deref()
+                                .map(|nonce| format!(".routine-output-{nonce}"))
+                                .ok_or_else(|| {
+                                    error("routine-production-output-creation-intent-missing")
+                                })?;
+                            self.created.push(OutputClaim {
+                                parent: parent_name.to_owned(),
+                                name,
                                 identity,
-                            }));
+                            });
+                            self.phase = Phase::SyncCreated(identity);
                         }
                         ProvisionStep::StagePresent(identity) => {
                             self.phase = Phase::Publish(identity);
@@ -101,14 +114,32 @@ impl OutputProvisioning {
                         }
                     }
                 }
+                Phase::SyncCreated(identity) => {
+                    let name = self
+                        .created
+                        .last()
+                        .filter(|claim| claim.identity == identity)
+                        .map(|claim| claim.name.as_str())
+                        .ok_or_else(|| error("routine-production-output-custody-missing"))?;
+                    sync_created_stage(parent, name, identity, self.journal.root.device)?;
+                    self.phase = Phase::AwaitStaged(identity);
+                    return Ok(OutputStep::Record(OutputTransition::Staged {
+                        relative_path: component.relative_path,
+                        identity,
+                    }));
+                }
                 Phase::Publish(identity) => {
-                    publish_stage(
+                    let published = publish_stage(
                         parent,
                         &component,
                         child_name,
                         identity,
                         self.journal.root.device,
-                    )?;
+                    );
+                    if stat_at(parent, child_name)? == Some(identity) {
+                        self.rename_claim(identity, child_name);
+                    }
+                    published?;
                     self.phase = Phase::AwaitPublished(identity);
                     return Ok(OutputStep::Record(OutputTransition::Published {
                         relative_path: component.relative_path,
@@ -124,6 +155,14 @@ impl OutputProvisioning {
             }
         }
     }
+
+    pub(in crate::routine_work::runtime_adapter::production) fn abort(
+        self,
+    ) -> Result<(), RoutineError> {
+        super::rollback::rollback(&self.created, &self.opened)
+    }
+
+    pub(in crate::routine_work::runtime_adapter::production) fn accept(self) {}
 
     pub(in crate::routine_work::runtime_adapter::production) fn recorded(
         &mut self,
@@ -195,26 +234,14 @@ impl OutputProvisioning {
         self.phase = Phase::Inspect;
         Ok(())
     }
-}
 
-fn names_for(relative: &str) -> (&str, &str) {
-    relative
-        .rsplit_once('/')
-        .map_or(("", relative), |(parent, child)| (parent, child))
-}
-
-fn allowed_children(journal: &OutputProvisionJournal) -> BTreeMap<String, BTreeSet<String>> {
-    let mut allowed = BTreeMap::<String, BTreeSet<String>>::new();
-    for component in &journal.components {
-        if let Some((parent, child)) = component.relative_path.rsplit_once('/') {
-            let children = allowed.entry(parent.to_owned()).or_default();
-            children.insert(child.to_owned());
-            if component.preexisting.is_none()
-                && let Some(nonce) = component.creation_nonce.as_deref()
-            {
-                children.insert(format!(".routine-output-{nonce}"));
-            }
+    fn rename_claim(&mut self, identity: OutputDirectoryIdentity, name: &str) {
+        if let Some(claim) = self
+            .created
+            .iter_mut()
+            .find(|claim| claim.identity == identity)
+        {
+            claim.name = name.to_owned();
         }
     }
-    allowed
 }

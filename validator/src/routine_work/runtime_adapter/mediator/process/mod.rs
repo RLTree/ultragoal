@@ -79,6 +79,14 @@ pub(crate) fn set_test_loaded_object_hook(hook: impl FnOnce() + Send + 'static) 
 }
 
 #[cfg(test)]
+pub(crate) fn test_last_spawn_group_absent() -> Result<bool, RoutineError> {
+    match test_last_spawn_group() {
+        Some(group) => process_group_exists(group).map(|exists| !exists),
+        None => Ok(false),
+    }
+}
+
+#[cfg(test)]
 fn run_test_process_pre_spawn_hook() {
     if let Some(hook) = PRE_SPAWN_HOOK.with(|slot| slot.borrow_mut().take()) {
         hook();

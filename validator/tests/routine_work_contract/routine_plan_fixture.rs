@@ -1,6 +1,7 @@
 use std::fs;
-use std::os::unix::fs::symlink;
+use std::os::unix::fs::{PermissionsExt, symlink};
 use std::path::PathBuf;
+use std::process::Command;
 use std::sync::{Mutex, MutexGuard};
 
 use super::context::{BuildRequest, LiveContext};
@@ -121,16 +122,32 @@ pub(crate) fn repo_path(value: &str) -> RepoPath {
 }
 
 pub(crate) fn authority_path(fixture: &RoutinePlanFixture) -> PathBuf {
-    fixture.repo.root().join(".routine-authority")
+    fixture.program.path().join(".routine-authority")
+}
+
+pub(crate) fn isolate_fixture_test(test: &str) -> bool {
+    const CHILD: &str = "HUL_ROUTINE_PLAN_FIXTURE_CHILD";
+    if std::env::var(CHILD).ok().as_deref() == Some(test) {
+        return false;
+    }
+    let status = Command::new(std::env::current_exe().unwrap())
+        .args([test, "--exact", "--test-threads=1"])
+        .env(CHILD, test)
+        .status()
+        .unwrap();
+    assert!(status.success(), "isolated routine fixture failed: {test}");
+    true
 }
 
 fn expose_current_test_program() -> OwnedCompileScratch {
     let program = OwnedCompileScratch::claim("routine-plan-program");
-    symlink(
-        std::env::current_exe().unwrap(),
-        program.path().join("ultragoal"),
-    )
-    .unwrap();
+    let target = program.path().join("ultragoal");
+    if let Some(source) = std::env::var_os("HUL_ROUTINE_IMMUTABLE_BINARY") {
+        fs::copy(source, &target).unwrap();
+        fs::set_permissions(&target, fs::Permissions::from_mode(0o555)).unwrap();
+    } else {
+        symlink(std::env::current_exe().unwrap(), &target).unwrap();
+    }
     let value = std::env::join_paths(std::iter::once(program.path().to_path_buf()).chain(
         std::env::split_paths(&std::env::var_os("PATH").unwrap_or_default()),
     ))

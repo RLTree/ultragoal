@@ -90,6 +90,24 @@ impl SuspendedProcess {
         )?;
         observe_process(configured, program, root, outputs, timeout, cancellation)
     }
+
+    pub(crate) fn fail(self, primary: RoutineError) -> RoutineError {
+        match self.setup.configure::<()>(|_| Err(primary)) {
+            Err(error) => error,
+            Ok(_) => mediator_error("mediator-suspended-cleanup-outcome-invalid"),
+        }
+    }
+
+    pub(crate) fn resume_after_cleanup(self, payload: Box<dyn std::any::Any + Send>) -> ! {
+        match self
+            .setup
+            .configure::<()>(|_| std::panic::resume_unwind(payload))
+        {
+            Ok(_) | Err(_) => {
+                std::panic::resume_unwind(Box::new("mediator-suspended-cleanup-outcome-invalid"))
+            }
+        }
+    }
 }
 
 #[cfg(target_os = "macos")]
