@@ -12,8 +12,9 @@ pub(crate) struct ControlCommand {
     pub(crate) agent_authority_roots: Option<AgentAuthorityRoots>,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub(crate) struct AgentAuthorityRoots {
+    pub(crate) home: PathBuf,
     pub(crate) package: PathBuf,
     pub(crate) project: PathBuf,
 }
@@ -180,9 +181,14 @@ fn agent_authority_roots(args: &[String]) -> Result<Option<AgentAuthorityRoots>,
     match (
         opt_path(args, "--agent-package-root"),
         opt_path(args, "--agent-project-root"),
+        opt_path(args, "--agent-home-root"),
     ) {
-        (Some(package), Some(project)) => Ok(Some(AgentAuthorityRoots { package, project })),
-        (None, None) => Ok(None),
+        (Some(package), Some(project), Some(home)) => Ok(Some(AgentAuthorityRoots {
+            home,
+            package,
+            project,
+        })),
+        (None, None, None) => Ok(None),
         _ => Err(()),
     }
 }

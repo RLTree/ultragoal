@@ -191,10 +191,12 @@ fn parses_package_surface_audit_roots() {
 }
 
 #[test]
-fn agent_authority_roots_require_one_complete_explicit_pair() {
+fn agent_authority_roots_require_one_complete_explicit_set() {
     let complete = parse(&args(&[
         "registry",
         "probe",
+        "--agent-home-root",
+        "target/home",
         "--agent-package-root",
         "target/package",
         "--agent-project-root",
@@ -204,12 +206,15 @@ fn agent_authority_roots_require_one_complete_explicit_pair() {
     let roots = complete
         .agent_authority_roots
         .expect("agent authority roots");
+    assert_eq!(roots.home, std::path::Path::new("target/home"));
     assert_eq!(roots.package, std::path::Path::new("target/package"));
     assert_eq!(roots.project, std::path::Path::new("target/project"));
     assert!(
         parse(&args(&[
             "registry",
             "probe",
+            "--agent-home-root",
+            "target/home",
             "--agent-package-root",
             "target/package",
         ]))
@@ -219,6 +224,19 @@ fn agent_authority_roots_require_one_complete_explicit_pair() {
         parse(&args(&[
             "registry",
             "probe",
+            "--agent-home-root",
+            "target/home",
+            "--agent-project-root",
+            "target/project",
+        ]))
+        .is_none()
+    );
+    assert!(
+        parse(&args(&[
+            "registry",
+            "probe",
+            "--agent-package-root",
+            "target/package",
             "--agent-project-root",
             "target/project",
         ]))

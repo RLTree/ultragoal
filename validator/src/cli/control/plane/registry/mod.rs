@@ -201,7 +201,9 @@ fn agent_types_with_local_state(
 ) -> Vec<serde_json::Value> {
     agent_rows::for_home(
         root,
-        std::env::var_os("HOME").map(PathBuf::from),
+        authority_roots
+            .map(|roots| roots.home.clone())
+            .or_else(|| std::env::var_os("HOME").map(PathBuf::from)),
         candidate,
         session_id,
         authority_roots.map(|roots| roots.package.clone()),

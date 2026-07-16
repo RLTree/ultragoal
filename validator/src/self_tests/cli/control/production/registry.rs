@@ -1,5 +1,5 @@
 use crate::cli::control::plane::operation::ControlOperation;
-use crate::cli::control::plane::{ControlCommand, receipt, run};
+use crate::cli::control::plane::{AgentAuthorityRoots, ControlCommand, receipt, run};
 use serde_json::json;
 use std::path::Path;
 
@@ -32,13 +32,10 @@ fn copy_flat_dir(root: &Path, repo: &Path, rel: &str) {
     }
 }
 
-fn write_registry_probe_root(root: &Path) {
+fn write_registry_probe_root(root: &Path) -> AgentAuthorityRoots {
     let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     copy_flat_dir(root, &repo, "schemas");
-    write_json(
-        &root.join(".codex-plugin/plugin.json"),
-        &json!({"name":"harness-ultragoal","version":"0.0.0-test"}),
-    );
+    copy_file(root, &repo, ".codex-plugin/plugin.json");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({
@@ -48,18 +45,49 @@ fn write_registry_probe_root(root: &Path) {
             "resources":[]
         }),
     );
+    let home = root.join("agent-home");
+    let package = root.join("agent-package");
+    let project = root.join("agent-project");
+    let version = crate::cli::control::plane::surface::target::plugin_metadata(root).version;
+    let installed = home.join(".codex/plugins/harness-ultragoal");
+    let cache = home
+        .join(".codex/plugins/cache/local-harness-plugins/harness-ultragoal")
+        .join(version);
+    std::fs::create_dir_all(home.join(".codex/agents")).expect("empty global agent root");
+    for role in crate::agent_roles::CANONICAL_AGENT_ROLES {
+        copy_file(root, &repo, role.manifest_path);
+        let source = root.join(role.manifest_path);
+        for authority_root in [&package, &installed, &cache, &project] {
+            let destination = authority_root.join(role.manifest_path);
+            std::fs::create_dir_all(destination.parent().expect("agent parent"))
+                .expect("agent parent");
+            std::fs::copy(&source, destination).expect("agent authority copy");
+        }
+    }
+    for authority_root in [&package, &installed, &cache, &project] {
+        let destination = authority_root.join(".codex-plugin/plugin.json");
+        std::fs::create_dir_all(destination.parent().expect("plugin parent"))
+            .expect("plugin parent");
+        std::fs::copy(root.join(".codex-plugin/plugin.json"), destination)
+            .expect("plugin authority copy");
+    }
+    AgentAuthorityRoots {
+        home,
+        package,
+        project,
+    }
 }
 
 #[test]
 fn registry_probe_reports_registry_surface_without_packet_circularity() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-registry-probe-specific");
-    write_registry_probe_root(&root);
+    let authority_roots = write_registry_probe_root(&root);
     let command = ControlCommand {
         operation: ControlOperation::RegistryProbe,
         receipt: None,
         surface_root: None,
-        agent_authority_roots: None,
+        agent_authority_roots: Some(authority_roots.clone()),
     };
     let value = receipt(&root, &command).expect("receipt");
     assert_eq!(value["status"], "fail");
@@ -88,7 +116,7 @@ fn registry_probe_reports_registry_surface_without_packet_circularity() {
             operation: ControlOperation::RegistryProbe,
             receipt: Some(receipt_path.clone()),
             surface_root: None,
-            agent_authority_roots: None,
+            agent_authority_roots: Some(authority_roots),
         },
     )
     .expect("registry probe command");
@@ -99,6 +127,12 @@ fn registry_probe_reports_registry_surface_without_packet_circularity() {
     assert_eq!(active["status"], "fail");
     assert_eq!(active["claim_ceiling"], "withheld_or_blocked");
     assert_eq!(active["source"], "ultragoal.registry_probe");
+    assert!(active["agent_types"].as_array().is_some_and(|rows| {
+        rows.len() == 4
+            && rows
+                .iter()
+                .all(|row| row["local_authority_status"] == json!("verified"))
+    }));
     assert_eq!(
         active["target_revision"]["value"],
         crate::package::inventory::package_digest(&root).expect("digest")
@@ -147,11 +181,12 @@ fn registry_probe_reports_registry_surface_without_packet_circularity() {
     assert!(lines[1].contains(&format!(
         "query_logs='ultragoal observe logs query --run-id {run_id} --limit 100'"
     )));
+    let observed_after_mint = command_receipt["failure"]["observed_value"]
+        .as_str()
+        .expect("observed after mint");
     assert!(
-        command_receipt["failure"]["observed_value"]
-            .as_str()
-            .expect("observed after mint")
-            .contains("plugin_self_law_registry_agent_sandbox_not_read_only")
+        observed_after_mint.contains("plugin_self_law_registry_live_exposure_unavailable"),
+        "{observed_after_mint}"
     );
     std::fs::remove_dir_all(root).expect("cleanup registry probe");
 }

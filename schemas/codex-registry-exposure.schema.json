@@ -537,6 +537,25 @@
           },
           "then": {
             "properties": {
+              "agent_manifest_digest": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "source_manifest_present": {
+                "const": true
+              },
+              "sandbox_mode": {
+                "const": "read-only"
+              },
+              "disk_cache_synced": {
+                "const": true
+              },
+              "global_toml_present": {
+                "const": false
+              },
+              "project_toml_present": {
+                "const": true
+              },
               "local_authority_catalog_digest": {
                 "type": "string",
                 "pattern": "^sha256:[0-9a-f]{64}$"
@@ -569,6 +588,24 @@
               "local_authority_failure_code"
             ],
             "properties": {
+              "agent_manifest_digest": {
+                "const": "unavailable"
+              },
+              "source_manifest_present": {
+                "const": false
+              },
+              "sandbox_mode": {
+                "const": "unavailable"
+              },
+              "disk_cache_synced": {
+                "const": false
+              },
+              "global_toml_present": {
+                "const": false
+              },
+              "project_toml_present": {
+                "const": false
+              },
               "local_authority_catalog_digest": {
                 "const": "unavailable"
               },

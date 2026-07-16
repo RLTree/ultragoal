@@ -85,6 +85,13 @@ fn fail_closed_rows_report_local_authority_without_runtime_promotion() {
             json!("invalid-binding"),
         );
     assert!(!agent_row_schema_errors(&forged_verified).is_empty());
+    let mut unavailable_shape_with_verified_status = rows[0].clone();
+    unavailable_shape_with_verified_status["agent_manifest_digest"] = json!("unavailable");
+    unavailable_shape_with_verified_status["source_manifest_present"] = json!(false);
+    unavailable_shape_with_verified_status["sandbox_mode"] = json!("unavailable");
+    unavailable_shape_with_verified_status["disk_cache_synced"] = json!(false);
+    unavailable_shape_with_verified_status["project_toml_present"] = json!(false);
+    assert!(!agent_row_schema_errors(&unavailable_shape_with_verified_status).is_empty());
     assert_eq!(recursive_snapshot(&root), before);
 
     let write_capable = home.join(".codex/agents/unrelated-observer.toml");
@@ -113,6 +120,14 @@ fn fail_closed_rows_report_local_authority_without_runtime_promotion() {
     let mut forged_unavailable = rejected[0].clone();
     forged_unavailable["local_authority_binding_digest"] = json!(workspace_fixtures::sha('d'));
     assert!(!agent_row_schema_errors(&forged_unavailable).is_empty());
+    let mut verified_shape_with_unavailable_status = rejected[0].clone();
+    verified_shape_with_unavailable_status["agent_manifest_digest"] =
+        json!(workspace_fixtures::sha('d'));
+    verified_shape_with_unavailable_status["source_manifest_present"] = json!(true);
+    verified_shape_with_unavailable_status["sandbox_mode"] = json!("read-only");
+    verified_shape_with_unavailable_status["disk_cache_synced"] = json!(true);
+    verified_shape_with_unavailable_status["project_toml_present"] = json!(true);
+    assert!(!agent_row_schema_errors(&verified_shape_with_unavailable_status).is_empty());
     assert_eq!(recursive_snapshot(&root), before_rejection);
     std::fs::remove_dir_all(root).expect("cleanup cli registry local truth");
 }
