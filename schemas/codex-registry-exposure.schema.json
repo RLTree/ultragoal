@@ -410,6 +410,11 @@
         "sandbox_mode",
         "disk_cache_synced",
         "global_toml_present",
+        "project_toml_present",
+        "local_authority_status",
+        "local_authority_scope",
+        "local_authority_catalog_digest",
+        "local_authority_binding_digest",
         "runtime_metadata_status",
         "custom_agent_discovery_status",
         "exposed"
@@ -457,6 +462,57 @@
         "global_toml_present": {
           "type": "boolean"
         },
+        "project_toml_present": {
+          "type": "boolean"
+        },
+        "local_authority_status": {
+          "enum": [
+            "verified",
+            "unavailable"
+          ]
+        },
+        "local_authority_scope": {
+          "const": "source-layout-read-only"
+        },
+        "local_authority_catalog_digest": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            {
+              "const": "unavailable"
+            }
+          ]
+        },
+        "local_authority_binding_digest": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            {
+              "const": "unavailable"
+            }
+          ]
+        },
+        "local_authority_failure_code": {
+          "enum": [
+            "invalid-binding",
+            "invalid-source-catalog",
+            "unsafe-filesystem-entry",
+            "input-too-large",
+            "observation-unavailable",
+            "observation-changed",
+            "observation-conflict",
+            "identity-mismatch",
+            "legacy-authority-active",
+            "colliding-authority-active",
+            "sandbox-policy-rejected",
+            "session-state-rejected",
+            "session-replay"
+          ]
+        },
         "runtime_metadata_status": {
           "const": "unavailable"
         },
@@ -468,6 +524,60 @@
         }
       },
       "allOf": [
+        {
+          "if": {
+            "properties": {
+              "local_authority_status": {
+                "const": "verified"
+              }
+            },
+            "required": [
+              "local_authority_status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "local_authority_catalog_digest": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "local_authority_binding_digest": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              }
+            },
+            "not": {
+              "required": [
+                "local_authority_failure_code"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "local_authority_status": {
+                "const": "unavailable"
+              }
+            },
+            "required": [
+              "local_authority_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "local_authority_failure_code"
+            ],
+            "properties": {
+              "local_authority_catalog_digest": {
+                "const": "unavailable"
+              },
+              "local_authority_binding_digest": {
+                "const": "unavailable"
+              }
+            }
+          }
+        },
         {
           "if": {
             "properties": {

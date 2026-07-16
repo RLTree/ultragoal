@@ -45,7 +45,7 @@ fn write_registry_probe_root(root: &Path) {
             "version":"0.0.0-test",
             "schema_catalog":"schemas/schema-catalog.json",
             "schemas":["schemas/codex-registry-exposure.schema.json"],
-            "resources":["schemas/codex-registry-exposure.schema.json"]
+            "resources":[]
         }),
     );
 }
@@ -151,7 +151,7 @@ fn registry_probe_reports_registry_surface_without_packet_circularity() {
         command_receipt["failure"]["observed_value"]
             .as_str()
             .expect("observed after mint")
-            .contains("plugin_self_law_registry_status_not_pass")
+            .contains("plugin_self_law_registry_agent_sandbox_not_read_only")
     );
     std::fs::remove_dir_all(root).expect("cleanup registry probe");
 }

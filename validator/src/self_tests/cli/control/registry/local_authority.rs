@@ -75,6 +75,16 @@ fn fail_closed_rows_report_local_authority_without_runtime_promotion() {
         }),
         "{rows:#?}"
     );
+    assert_agent_rows_schema(&rows);
+    let mut forged_verified = rows[0].clone();
+    forged_verified
+        .as_object_mut()
+        .expect("verified agent row")
+        .insert(
+            "local_authority_failure_code".to_owned(),
+            json!("invalid-binding"),
+        );
+    assert!(!agent_row_schema_errors(&forged_verified).is_empty());
     assert_eq!(recursive_snapshot(&root), before);
 
     let write_capable = home.join(".codex/agents/unrelated-observer.toml");
@@ -99,8 +109,35 @@ fn fail_closed_rows_report_local_authority_without_runtime_promotion() {
             && row["custom_agent_discovery_status"] == json!("unavailable")
             && row["exposed"] == json!(false)
     }));
+    assert_agent_rows_schema(&rejected);
+    let mut forged_unavailable = rejected[0].clone();
+    forged_unavailable["local_authority_binding_digest"] = json!(workspace_fixtures::sha('d'));
+    assert!(!agent_row_schema_errors(&forged_unavailable).is_empty());
     assert_eq!(recursive_snapshot(&root), before_rejection);
     std::fs::remove_dir_all(root).expect("cleanup cli registry local truth");
+}
+
+fn assert_agent_rows_schema(rows: &[serde_json::Value]) {
+    for row in rows {
+        let errors = agent_row_schema_errors(row);
+        assert!(errors.is_empty(), "{errors:#?}\n{row:#?}");
+    }
+}
+
+fn agent_row_schema_errors(row: &serde_json::Value) -> Vec<String> {
+    let repo = workspace_fixtures::repo_root();
+    let schema =
+        crate::json_boundary::read_json(&repo.join("schemas/codex-registry-exposure.schema.json"))
+            .expect("registry schema");
+    let mut row_schema = schema["$defs"]["agentTypeExposure"].clone();
+    row_schema
+        .as_object_mut()
+        .expect("agent row schema")
+        .insert(
+            "$id".to_owned(),
+            json!("https://harness-ultragoal.local/schemas/agent-type-exposure-test.json"),
+        );
+    crate::schema_catalog::bound_schema_errors("agent-type-exposure", &row_schema, row)
 }
 
 fn recursive_snapshot(root: &Path) -> Vec<(std::path::PathBuf, bool, Vec<u8>)> {
