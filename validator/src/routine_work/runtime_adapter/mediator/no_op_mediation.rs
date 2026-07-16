@@ -48,12 +48,9 @@ pub(crate) fn mediate_effect(
     validate_grant(context, plan, &request, &grant)?;
     let supplied_reuse = index_reuse_inputs(reuse, &request)?;
     preflight_request(context, plan, &request)?;
-    run_test_pre_spawn_hook();
-    preflight_request(context, plan, &request)?;
     let request_id = request.request_id().to_owned();
     let protocol_id = request.protocol_id().to_owned();
-    let attempt = reserve_grant(&grant)?;
-    run_reserved(attempt, |attempt| {
+    let (mut result, recovery_marker) = run_reserved(&grant, |attempt| {
         let snapshot_id = request.snapshot_id.clone();
         let batch = begin_routine_mediation(context, plan, request)?;
         let (authority, intents) = batch.into_parts();
@@ -124,11 +121,9 @@ pub(crate) fn mediate_effect(
                     Ok(IntentResult::Incomplete {
                         disposition,
                         failure_code,
-                        started,
                     }) => {
                         incomplete = true;
                         cancelled |= disposition == RoutineNodeDisposition::Cancelled;
-                        debug_assert!(!started || attempt.is_started());
                         incomplete_node(&token, disposition, failure_code)
                     }
                     Err(error) => {
@@ -151,16 +146,15 @@ pub(crate) fn mediate_effect(
             nodes.push(complete_intent_transition(&token, &attempt, node)?);
         }
         reconcile_internal(context, plan, &authority, &nodes)?;
-        run_test_finish_failure_hook(&authority);
         authority.finish()?;
         // The process has been reaped and the batch outcome is reconciled. Consume
         // every launch snapshot before any terminal ledger transition; a custody
         // failure therefore leaves the exact Started reservation recoverable.
         observe_staged_transition(&attempt, || Ok(()))?;
-        let recovery_marker = if incomplete {
+        let terminal = if incomplete {
             artifacts.clear();
             generated.clear();
-            attempt.settle_incomplete(if cancelled {
+            ReservationTerminal::Incomplete(if cancelled {
                 DurableSettlement::Cancelled
             } else if nodes
                 .iter()
@@ -169,9 +163,9 @@ pub(crate) fn mediate_effect(
                 DurableSettlement::Failed
             } else {
                 DurableSettlement::Incomplete
-            })?
+            })
         } else {
-            let authenticated = collect_generated_witnesses(generated, attempt);
+            let authenticated = collect_generated_witnesses(generated, &attempt);
             if !attempt.reuse_only() {
                 attempt.stage_success(&authenticated)?;
                 if let Some(publisher) = publisher {
@@ -183,33 +177,37 @@ pub(crate) fn mediate_effect(
             } else {
                 authenticated
             };
-            attempt.settle_success(&settlement_artifacts)?;
-            None
+            ReservationTerminal::Complete(settlement_artifacts)
         };
-        Ok(RoutineMediationResult {
-            request_id: Some(request_id),
-            protocol_id: Some(protocol_id),
-            status: if cancelled {
-                RoutineMediatorStatus::Cancelled
-            } else if incomplete {
-                RoutineMediatorStatus::IncompleteExecution
-            } else {
-                RoutineMediatorStatus::CompleteExecution
+        Ok((
+            RoutineMediationResult {
+                request_id: Some(request_id),
+                protocol_id: Some(protocol_id),
+                status: if cancelled {
+                    RoutineMediatorStatus::Cancelled
+                } else if incomplete {
+                    RoutineMediatorStatus::IncompleteExecution
+                } else {
+                    RoutineMediatorStatus::CompleteExecution
+                },
+                nodes,
+                recovery_marker: None,
+                support_limit: if production {
+                    PRODUCTION_SUPPORT_LIMIT
+                } else {
+                    MEDIATOR_SUPPORT_LIMIT
+                },
             },
-            nodes,
-            recovery_marker,
-            support_limit: if production {
-                PRODUCTION_SUPPORT_LIMIT
-            } else {
-                MEDIATOR_SUPPORT_LIMIT
-            },
-        })
-    })
+            terminal,
+        ))
+    })?;
+    result.recovery_marker = recovery_marker;
+    Ok(result)
 }
 
 fn complete_intent_transition(
     token: &RoutineMediatedIntent,
-    attempt: &AttemptReservation,
+    attempt: &ReservationAttempt<'_>,
     node: RoutineNodeMediation,
 ) -> Result<RoutineNodeMediation, RoutineError> {
     observe_staged_transition(attempt, || token.advance())?;
@@ -222,7 +220,6 @@ pub(crate) enum IntentResult {
     Incomplete {
         disposition: RoutineNodeDisposition,
         failure_code: &'static str,
-        started: bool,
     },
 }
 

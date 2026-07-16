@@ -29,7 +29,6 @@ pub(crate) fn observe_process(
             stdout: stdout.retained,
             stderr_sha256: stderr.sha256,
             output_byte_length: observed.load(Ordering::Acquire),
-            started: true,
         })
     })
 }

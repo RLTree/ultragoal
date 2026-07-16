@@ -2,214 +2,128 @@ use super::terminal_settlement_fixture::*;
 use super::*;
 use std::panic::{AssertUnwindSafe, catch_unwind};
 
-fn clear(protocol: &str) {
-    let mut state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    state.active_protocols.remove(protocol);
-    state.ambiguous_protocols.remove(protocol);
-    state
-        .failure_records
-        .retain(|_, record| record.protocol_id != protocol);
-}
-
-#[test]
-fn leaving_scope_alone_never_changes_authority_state() {
-    let reservation = attempt("drop-inert", None, true, None);
-    let protocol = reservation.protocol_id().clone();
-    let grant = reservation.grant_id().clone();
-    let marker = reservation.recovery_marker().clone();
-    drop(reservation);
-
-    let state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    assert_eq!(state.active_protocols.get(&protocol), Some(&grant));
-    assert_eq!(state.ambiguous_protocols.get(&protocol), Some(&marker));
-    drop(state);
-    clear(&protocol);
-}
-
 #[test]
 fn explicit_pre_start_failure_releases_only_exact_active_grant() {
-    let (protocol, prior_marker) = pending_recovery("pre-start-prior");
-    let reservation = recovering_attempt("pre-start", &protocol, prior_marker.clone(), None, false);
-    let error = run_reserved(reservation, |_| {
-        Err::<(), _>(mediator_error("pre-start-injected"))
+    let (protocol, prior) = pending_recovery("pre-start-prior");
+    let grant = recovering_grant("pre-start", &protocol, prior.clone(), None);
+    let error = run_reserved(&grant, |_| {
+        Err::<((), ReservationTerminal), _>(mediator_error("pre-start-injected"))
     })
     .unwrap_err();
     assert_eq!(error.cause(), "pre-start-injected");
-
-    let state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    assert!(!state.active_protocols.contains_key(&protocol));
-    assert_eq!(
-        state.ambiguous_protocols.get(&protocol).map(String::as_str),
-        Some(prior_marker.as_str())
-    );
-    drop(state);
-    clear(&protocol);
+    let observed = observe_reservation(&protocol, None, None);
+    assert_eq!(observed.active_grant, None);
+    assert_eq!(observed.recovery_marker, Some(prior.clone()));
+    finish_recovery(&protocol, prior);
 }
 
 #[test]
 fn explicit_post_start_failure_preserves_exact_ambiguity() {
-    let reservation = attempt("post-start", None, false, None);
-    let protocol = reservation.protocol_id().clone();
-    let marker = reservation.recovery_marker().clone();
-    run_reserved(reservation, |attempt| {
+    let grant = attempt_grant("post-start", None, None);
+    let protocol = grant.protocol_id.clone();
+    let marker = grant_recovery_marker(&grant);
+    run_reserved(&grant, |attempt| {
         attempt.mark_started()?;
-        Err::<(), _>(mediator_error("post-start-injected"))
+        Err::<((), ReservationTerminal), _>(mediator_error("post-start-injected"))
     })
     .unwrap_err();
-
-    let state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    assert!(!state.active_protocols.contains_key(&protocol));
-    assert_eq!(state.ambiguous_protocols.get(&protocol), Some(&marker));
-    drop(state);
-    clear(&protocol);
+    let observed = observe_reservation(&protocol, None, None);
+    assert_eq!(observed.active_grant, None);
+    assert_eq!(observed.recovery_marker, Some(marker.clone()));
+    finish_recovery(&protocol, marker);
 }
 
 #[test]
 fn other_protocol_grant_and_marker_are_never_erased_by_failure() {
-    let foreign = attempt("foreign-transition-other", None, true, None);
-    let foreign_protocol = foreign.protocol_id().clone();
-    let foreign_grant = foreign.grant_id().clone();
-    let foreign_marker = foreign.recovery_marker().clone();
-    let reservation = attempt("foreign-transition", None, true, None);
-    let protocol = reservation.protocol_id().clone();
-    run_reserved(reservation, |_| {
-        Err::<(), _>(mediator_error("foreign-transition-injected"))
+    let foreign = attempt_grant("foreign-transition-other", None, None);
+    let foreign_protocol = foreign.protocol_id.clone();
+    let foreign_grant = foreign.grant_id.clone();
+    let foreign_marker = grant_recovery_marker(&foreign);
+    let (ready_tx, ready_rx) = std::sync::mpsc::channel();
+    let (finish_tx, finish_rx) = std::sync::mpsc::channel();
+    let foreign_thread = std::thread::spawn(move || {
+        run_reserved(&foreign, |attempt| {
+            attempt.mark_started()?;
+            ready_tx.send(foreign_marker).unwrap();
+            finish_rx.recv().unwrap();
+            Ok((
+                (),
+                ReservationTerminal::Incomplete(DurableSettlement::Incomplete),
+            ))
+        })
+    });
+    let foreign_marker = ready_rx.recv().unwrap();
+
+    let grant = attempt_grant("foreign-transition", None, None);
+    run_reserved(&grant, |attempt| {
+        attempt.mark_started()?;
+        Err::<((), ReservationTerminal), _>(mediator_error("foreign-transition-injected"))
     })
     .unwrap_err();
+    let observed = observe_reservation(&foreign_protocol, None, None);
+    assert_eq!(observed.active_grant, Some(foreign_grant));
+    assert_eq!(observed.recovery_marker, Some(foreign_marker.clone()));
 
-    let state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    assert_eq!(
-        state
-            .active_protocols
-            .get(&foreign_protocol)
-            .map(String::as_str),
-        Some(foreign_grant.as_str())
-    );
-    assert_eq!(
-        state
-            .ambiguous_protocols
-            .get(&foreign_protocol)
-            .map(String::as_str),
-        Some(foreign_marker.as_str())
-    );
-    drop(state);
-    foreign
-        .settle_incomplete(DurableSettlement::Incomplete)
-        .unwrap();
-    clear(&protocol);
-    clear(&foreign_protocol);
+    finish_tx.send(()).unwrap();
+    foreign_thread.join().unwrap().unwrap();
+    finish_recovery(&foreign_protocol, foreign_marker);
 }
 
 #[test]
 fn recovery_start_rotates_the_exact_prior_marker() {
-    let (protocol, prior_marker) = pending_recovery("foreign-start-prior");
-    let reservation = recovering_attempt(
-        "foreign-start",
-        &protocol,
-        prior_marker.clone(),
-        None,
-        false,
-    );
-    let marker = reservation.recovery_marker().clone();
-    run_reserved(reservation, |attempt| {
+    let (protocol, prior) = pending_recovery("foreign-start-prior");
+    let grant = recovering_grant("foreign-start", &protocol, prior, None);
+    let marker = grant_recovery_marker(&grant);
+    run_reserved(&grant, |attempt| {
         attempt.mark_started()?;
-        Err::<(), _>(mediator_error("recovery-start-injected"))
+        Err::<((), ReservationTerminal), _>(mediator_error("recovery-start-injected"))
     })
     .unwrap_err();
-
-    let state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    assert!(!state.active_protocols.contains_key(&protocol));
-    assert_eq!(
-        state.ambiguous_protocols.get(&protocol).map(String::as_str),
-        Some(marker.as_str())
-    );
-    drop(state);
-    clear(&protocol);
+    let observed = observe_reservation(&protocol, None, None);
+    assert_eq!(observed.active_grant, None);
+    assert_eq!(observed.recovery_marker, Some(marker.clone()));
+    finish_recovery(&protocol, marker);
 }
 
 #[test]
-fn recovery_reservation_refuses_a_wrong_marker() {
-    let (protocol, prior_marker) = pending_recovery("wrong-recovery-prior");
+fn recovery_reservation_refuses_a_wrong_marker_before_lifecycle() {
+    let (protocol, prior) = pending_recovery("wrong-recovery-prior");
     let durable = Arc::new(TerminalDurable::default());
     let grant = recovery_grant(&protocol, Some("wrong-marker".to_owned()), durable);
-    let error = match reserve_grant(&grant) {
-        Ok(_) => panic!("wrong recovery marker reserved authority"),
-        Err(error) => error,
-    };
+    let entered = std::cell::Cell::new(false);
+    let error = run_reserved(&grant, |_| {
+        entered.set(true);
+        Ok((
+            (),
+            ReservationTerminal::Incomplete(DurableSettlement::Failed),
+        ))
+    })
+    .unwrap_err();
     assert_eq!(error.cause(), "mediator-recovery-authority-required");
-    let state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    assert_eq!(
-        state.ambiguous_protocols.get(&protocol),
-        Some(&prior_marker)
-    );
-    assert!(!state.active_protocols.contains_key(&protocol));
-    drop(state);
-    clear(&protocol);
+    assert!(!entered.get());
+    let observed = observe_reservation(&protocol, None, None);
+    assert_eq!(observed.active_grant, None);
+    assert_eq!(observed.recovery_marker, Some(prior.clone()));
+    finish_recovery(&protocol, prior);
 }
 
 #[test]
 fn unwind_uses_the_same_explicit_post_start_transition() {
-    let reservation = attempt("unwind", None, false, None);
-    let protocol = reservation.protocol_id().clone();
-    let marker = reservation.recovery_marker().clone();
+    let grant = attempt_grant("unwind", None, None);
+    let protocol = grant.protocol_id.clone();
+    let marker = grant_recovery_marker(&grant);
     let unwound = catch_unwind(AssertUnwindSafe(|| {
-        let _: Result<(), RoutineError> = run_reserved(reservation, |attempt| {
+        let _: Result<((), Option<String>), RoutineError> = run_reserved(&grant, |attempt| {
             attempt.mark_started()?;
             panic!("reservation-lifecycle-unwind-injected");
         });
     }));
-    let payload = unwound.unwrap_err();
     assert_eq!(
-        payload.downcast_ref::<&'static str>().copied(),
+        unwound.unwrap_err().downcast_ref::<&'static str>().copied(),
         Some("reservation-lifecycle-unwind-injected")
     );
-
-    let state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    assert!(!state.active_protocols.contains_key(&protocol));
-    assert_eq!(state.ambiguous_protocols.get(&protocol), Some(&marker));
-    drop(state);
-    clear(&protocol);
-}
-
-#[test]
-fn success_without_terminal_transition_fails_and_releases_reservation() {
-    let (protocol, prior_marker) = pending_recovery("missing-terminal-prior");
-    let reservation = recovering_attempt(
-        "missing-terminal",
-        &protocol,
-        prior_marker.clone(),
-        None,
-        false,
-    );
-    let error = run_reserved(reservation, |_| Ok(())).unwrap_err();
-    assert_eq!(
-        error.cause(),
-        "mediator-reservation-terminal-transition-missing"
-    );
-    let state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    assert!(!state.active_protocols.contains_key(&protocol));
-    assert_eq!(
-        state.ambiguous_protocols.get(&protocol).map(String::as_str),
-        Some(prior_marker.as_str())
-    );
-    drop(state);
-    clear(&protocol);
+    let observed = observe_reservation(&protocol, None, None);
+    assert_eq!(observed.active_grant, None);
+    assert_eq!(observed.recovery_marker, Some(marker.clone()));
+    finish_recovery(&protocol, marker);
 }

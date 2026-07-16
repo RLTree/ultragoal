@@ -10,7 +10,6 @@ pub(crate) struct ProcessObservation {
     pub(crate) stdout: Vec<u8>,
     pub(crate) stderr_sha256: String,
     pub(crate) output_byte_length: u64,
-    pub(crate) started: bool,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

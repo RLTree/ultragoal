@@ -9,7 +9,7 @@ pub(super) fn mediate_intent(
     dependencies: &BTreeMap<String, String>,
     reuse: Option<&Vec<u8>>,
     cancellation: &RoutineCancellation,
-    attempt: &AttemptReservation,
+    attempt: &ReservationAttempt<'_>,
 ) -> Result<IntentResult, RoutineError> {
     token.require_current()?;
     validate_intent(context, plan, token.intent())?;
@@ -74,9 +74,6 @@ pub(super) fn mediate_intent(
             },
         )
     })?;
-    if observation.started {
-        run_test_post_spawn_hook();
-    }
     reads.validate(&root)?;
     let disposition = match observation.termination {
         ProcessTermination::Exited(0) => None,
@@ -102,14 +99,12 @@ pub(super) fn mediate_intent(
         return Ok(IntentResult::Incomplete {
             disposition,
             failure_code,
-            started: observation.started,
         });
     }
     if validate_rust_source_observation(Some(&framed_input), &observation).is_err() {
         return Ok(IntentResult::Incomplete {
             disposition: RoutineNodeDisposition::Failed,
             failure_code: "MEDIATOR-BEHAVIOR-OBSERVATION-INVALID",
-            started: true,
         });
     }
     let output_files = outputs.capture_owned_delta()?;
@@ -123,7 +118,6 @@ pub(super) fn mediate_intent(
         return Ok(IntentResult::Incomplete {
             disposition: RoutineNodeDisposition::Failed,
             failure_code: "MEDIATOR-OUTPUT-LIMIT",
-            started: true,
         });
     }
     outputs.validate()?;

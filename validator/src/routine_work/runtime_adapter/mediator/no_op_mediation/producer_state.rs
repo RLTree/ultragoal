@@ -1,5 +1,8 @@
 use super::super::super::execution_authority::RequestSeal;
-use super::super::terminal_settlement_fixture::*;
+use super::super::terminal_settlement_fixture::{TerminalDurable, attempt_grant, staged_fixture};
+pub(super) use super::super::terminal_settlement_fixture::{
+    finish_recovery, grant_recovery_marker, retain_stage,
+};
 use super::super::*;
 use std::sync::atomic::Ordering;
 
@@ -10,10 +13,14 @@ pub(super) enum CleanupCase {
     Panic,
 }
 
-pub(super) fn producer_attempt(
-    label: &str,
-    cleanup: CleanupCase,
-) -> (AttemptReservation, Arc<TerminalDurable>, std::path::PathBuf) {
+pub(super) struct ProducerAttempt {
+    pub(super) grant: RoutineRootGrant,
+    pub(super) durable: Arc<TerminalDurable>,
+    pub(super) stage_root: std::path::PathBuf,
+    pub(super) staged: StagedProgram,
+}
+
+pub(super) fn producer_attempt(label: &str, cleanup: CleanupCase) -> ProducerAttempt {
     let durable = Arc::new(TerminalDurable::default());
     match cleanup {
         CleanupCase::Success => {}
@@ -32,10 +39,14 @@ pub(super) fn producer_attempt(
                 Some("producer-staged-cleanup-panic");
         }
     }
-    let attempt = attempt(label, Some(durable.clone()), true, None);
+    let grant = attempt_grant(label, Some(durable.clone()), None);
     let (stage_root, staged) = staged_fixture(label);
-    retain_stage(&attempt, durable.as_ref(), staged);
-    (attempt, durable, stage_root)
+    ProducerAttempt {
+        grant,
+        durable,
+        stage_root,
+        staged,
+    }
 }
 
 pub(super) fn mediated_token(plan_order: usize, next_order: usize) -> RoutineMediatedIntent {
@@ -108,15 +119,4 @@ pub(super) fn assert_error(evidence: &FailureEvidence, cause: &str) {
         FailureEvidence::Error(error) => assert_eq!(error.cause, cause),
         other => panic!("expected error evidence, got {other:?}"),
     }
-}
-
-pub(super) fn clear(protocol: &str) {
-    let mut state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    state.active_protocols.remove(protocol);
-    state.ambiguous_protocols.remove(protocol);
-    state
-        .failure_records
-        .retain(|_, record| record.protocol_id != protocol);
 }

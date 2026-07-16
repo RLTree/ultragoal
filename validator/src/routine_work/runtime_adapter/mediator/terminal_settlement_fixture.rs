@@ -106,46 +106,35 @@ impl DurableAttemptAuthority for TerminalDurable {
     }
 }
 
-pub(super) fn attempt(
+pub(super) fn attempt_grant(
     label: &str,
     durable: Option<Arc<dyn DurableAttemptAuthority>>,
-    started: bool,
     prior_recovery_marker: Option<String>,
-) -> AttemptReservation {
-    let grant = reservation_grant(
+) -> RoutineRootGrant {
+    reservation_grant(
         label,
         &format!("terminal-protocol-{label}"),
         prior_recovery_marker,
         durable,
-    );
-    let reservation = reserve_grant(&grant).unwrap();
-    if started {
-        reservation.mark_started().unwrap();
-    }
-    reservation
+    )
 }
 
-pub(super) fn recovering_attempt(
+pub(super) fn recovering_grant(
     label: &str,
     protocol_id: &str,
     recovery_for: String,
     durable: Option<Arc<dyn DurableAttemptAuthority>>,
-    started: bool,
-) -> AttemptReservation {
-    let grant = reservation_grant(label, protocol_id, Some(recovery_for), durable);
-    let reservation = reserve_grant(&grant).unwrap();
-    if started {
-        reservation.mark_started().unwrap();
-    }
-    reservation
+) -> RoutineRootGrant {
+    reservation_grant(label, protocol_id, Some(recovery_for), durable)
 }
 
 pub(super) fn pending_recovery(label: &str) -> (String, String) {
-    let reservation = attempt(label, None, true, None);
-    let protocol = reservation.protocol_id().clone();
-    let marker = reservation.recovery_marker().clone();
-    run_reserved(reservation, |_| {
-        Err::<(), _>(mediator_error("terminal-fixture-pending-recovery"))
+    let grant = attempt_grant(label, None, None);
+    let protocol = grant.protocol_id.clone();
+    let marker = grant_recovery_marker(&grant);
+    run_reserved(&grant, |attempt| {
+        attempt.mark_started()?;
+        Err::<((), ReservationTerminal), _>(mediator_error("terminal-fixture-pending-recovery"))
     })
     .unwrap_err();
     (protocol, marker)
@@ -160,10 +149,26 @@ pub(super) fn recovery_grant(
 }
 
 pub(super) fn retry_grant(
-    reservation: &AttemptReservation,
+    protocol_id: &str,
     durable: Arc<dyn DurableAttemptAuthority>,
 ) -> RoutineRootGrant {
-    reservation_grant("retry", reservation.protocol_id(), None, Some(durable))
+    reservation_grant("retry", protocol_id, None, Some(durable))
+}
+
+pub(super) fn grant_recovery_marker(grant: &RoutineRootGrant) -> String {
+    recovery_identity(&grant.grant_id, &grant.protocol_id, &grant.request_id)
+}
+
+pub(super) fn finish_recovery(protocol_id: &str, marker: String) {
+    let durable = Arc::new(TerminalDurable::default());
+    let grant = recovering_grant("finish-recovery", protocol_id, marker, Some(durable));
+    run_reserved(&grant, |_| {
+        Ok((
+            (),
+            ReservationTerminal::Incomplete(DurableSettlement::Failed),
+        ))
+    })
+    .unwrap();
 }
 
 fn reservation_grant(
@@ -227,7 +232,7 @@ pub(super) fn staged_fixture(label: &str) -> (PathBuf, StagedProgram) {
 }
 
 pub(super) fn retain_stage(
-    attempt: &AttemptReservation,
+    attempt: &ReservationAttempt<'_>,
     durable: &TerminalDurable,
     staged: StagedProgram,
 ) {

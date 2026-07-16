@@ -1,17 +1,13 @@
 use super::super::{
     RUST_SOURCE_SYNTAX_ARGUMENTS, RUST_SOURCE_SYNTAX_BEHAVIOR, default_environment, exact_runner,
 };
-use super::read_source_binding::MediatorRegistry;
 use super::*;
 
 pub(super) fn reservation_starts_fresh(
-    state: &MediatorRegistry,
+    ambiguous_marker: Option<&String>,
     grant: &RoutineRootGrant,
 ) -> Result<bool, RoutineError> {
-    match (
-        state.ambiguous_protocols.get(&grant.protocol_id),
-        grant.recovery_for.as_ref(),
-    ) {
+    match (ambiguous_marker, grant.recovery_for.as_ref()) {
         (Some(expected), Some(actual)) if expected == actual => Ok(false),
         (Some(_), _) => Err(mediator_error("mediator-recovery-authority-required")),
         (None, Some(_))

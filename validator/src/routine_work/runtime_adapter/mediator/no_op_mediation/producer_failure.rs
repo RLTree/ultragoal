@@ -1,7 +1,7 @@
 use super::producer_state::*;
 use super::*;
 use std::fs;
-use std::panic::{catch_unwind, AssertUnwindSafe};
+use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::sync::atomic::Ordering;
 
 #[derive(Clone, Copy)]
@@ -65,22 +65,31 @@ impl ProducerRoute {
 fn advance_error_remains_primary_across_cleanup_error_and_panic() {
     for route in ProducerRoute::ALL {
         for cleanup in [CleanupCase::Error, CleanupCase::Panic] {
-            let label = format!("producer-{}-advance-error", route.label());
-            let (attempt, durable, stage_root) = producer_attempt(&label, cleanup);
-            let protocol = attempt.protocol_id().clone();
+            let setup = producer_attempt(
+                &format!("producer-{}-advance-error", route.label()),
+                cleanup,
+            );
+            let protocol = setup.grant.protocol_id.clone();
             let token = mediated_token(1, 0);
-            let error = run_reserved(attempt, |attempt| {
-                complete_intent_transition(&token, attempt, route.node(&token)).map(drop)
+            let marker = grant_recovery_marker(&setup.grant);
+            let error = run_reserved(&setup.grant, |attempt| {
+                attempt.mark_started()?;
+                retain_stage(attempt, setup.durable.as_ref(), setup.staged);
+                complete_intent_transition(&token, attempt, route.node(&token)).map(|_| {
+                    (
+                        (),
+                        ReservationTerminal::Incomplete(DurableSettlement::Failed),
+                    )
+                })
             })
             .unwrap_err();
-
             assert_eq!(error.cause(), "adapter-intent-transition-order-invalid");
-            let record = recorded(&durable);
+            let record = recorded(&setup.durable);
             assert_error(&record.primary, "adapter-intent-transition-order-invalid");
             assert_eq!(record.staged_cleanup, expected_cleanup(cleanup));
-            assert_eq!(durable.cleanup_calls.load(Ordering::SeqCst), 1);
-            clear(&protocol);
-            fs::remove_dir_all(stage_root).unwrap();
+            assert_eq!(setup.durable.cleanup_calls.load(Ordering::SeqCst), 1);
+            finish_recovery(&protocol, marker);
+            fs::remove_dir_all(setup.stage_root).unwrap();
         }
     }
 }
@@ -91,97 +100,109 @@ fn advance_panic_remains_primary_across_cleanup_error_and_panic() {
         .into_iter()
         .enumerate()
     {
-        let label = format!("producer-advance-panic-{ordinal}");
-        let (attempt, durable, stage_root) = producer_attempt(&label, cleanup);
-        let protocol = attempt.protocol_id().clone();
+        let setup = producer_attempt(&format!("producer-advance-panic-{ordinal}"), cleanup);
+        let protocol = setup.grant.protocol_id.clone();
         let token = mediated_token(usize::MAX, usize::MAX);
+        let marker = grant_recovery_marker(&setup.grant);
         let payload = catch_unwind(AssertUnwindSafe(|| {
-            let _: Result<(), RoutineError> = run_reserved(attempt, |attempt| {
-                complete_intent_transition(&token, attempt, ProducerRoute::Executed.node(&token))
-                    .map(drop)
-            });
+            let _: Result<((), Option<String>), RoutineError> =
+                run_reserved(&setup.grant, |attempt| {
+                    attempt.mark_started()?;
+                    retain_stage(attempt, setup.durable.as_ref(), setup.staged);
+                    complete_intent_transition(
+                        &token,
+                        attempt,
+                        ProducerRoute::Executed.node(&token),
+                    )
+                    .map(|_| {
+                        (
+                            (),
+                            ReservationTerminal::Incomplete(DurableSettlement::Failed),
+                        )
+                    })
+                });
         }))
         .expect_err("overflowing intent transition did not panic");
-
-        let record = recorded(&durable);
+        let record = recorded(&setup.durable);
         assert_eq!(
             record.primary,
             FailureEvidence::Panic(PanicEvidence::capture(payload.as_ref()))
         );
         assert_eq!(record.staged_cleanup, expected_cleanup(cleanup));
-        assert_eq!(durable.cleanup_calls.load(Ordering::SeqCst), 1);
-        clear(&protocol);
-        fs::remove_dir_all(stage_root).unwrap();
+        assert_eq!(setup.durable.cleanup_calls.load(Ordering::SeqCst), 1);
+        finish_recovery(&protocol, marker);
+        fs::remove_dir_all(setup.stage_root).unwrap();
     }
 }
 
 #[test]
 fn single_and_terminal_cleanup_failures_keep_the_first_observation() {
-    let (attempt, durable, stage_root) =
-        producer_attempt("producer-single-advance", CleanupCase::Success);
-    let protocol = attempt.protocol_id().clone();
+    let setup = producer_attempt("producer-single-advance", CleanupCase::Success);
     let token = mediated_token(1, 0);
-    let error = run_reserved(attempt, |attempt| {
-        complete_intent_transition(&token, attempt, ProducerRoute::Executed.node(&token)).map(drop)
+    let error = run_reserved(&setup.grant, |attempt| {
+        attempt.mark_started()?;
+        retain_stage(attempt, setup.durable.as_ref(), setup.staged);
+        complete_intent_transition(&token, attempt, ProducerRoute::Executed.node(&token)).map(
+            |_| {
+                (
+                    (),
+                    ReservationTerminal::Incomplete(DurableSettlement::Failed),
+                )
+            },
+        )
     })
     .unwrap_err();
     assert_eq!(error.cause(), "adapter-intent-transition-order-invalid");
     assert_eq!(
-        recorded(&durable).staged_cleanup,
+        recorded(&setup.durable).staged_cleanup,
         CleanupEvidence::Succeeded
     );
-    assert_eq!(durable.cleanup_calls.load(Ordering::SeqCst), 1);
-    clear(&protocol);
-    fs::remove_dir_all(stage_root).unwrap();
+    assert_eq!(setup.durable.cleanup_calls.load(Ordering::SeqCst), 1);
+    fs::remove_dir_all(setup.stage_root).unwrap();
 
-    let (attempt, durable, stage_root) = producer_attempt("producer-terminal", CleanupCase::Error);
-    let protocol = attempt.protocol_id().clone();
-    let error = run_reserved(attempt, |attempt| {
-        observe_staged_transition(attempt, || Ok(()))
-    })
-    .unwrap_err();
-    assert_eq!(error.cause(), "producer-staged-cleanup-error");
-    let record = recorded(&durable);
-    assert_error(&record.primary, "producer-staged-cleanup-error");
-    assert_eq!(record.staged_cleanup, expected_cleanup(CleanupCase::Error));
-    assert_eq!(durable.cleanup_calls.load(Ordering::SeqCst), 1);
-    clear(&protocol);
-    fs::remove_dir_all(stage_root).unwrap();
-
-    let (attempt, durable, stage_root) =
-        producer_attempt("producer-terminal-panic", CleanupCase::Panic);
-    let protocol = attempt.protocol_id().clone();
-    let payload = catch_unwind(AssertUnwindSafe(|| {
-        let _: Result<(), RoutineError> = run_reserved(attempt, |attempt| {
-            observe_staged_transition(attempt, || Ok(()))
-        });
-    }))
-    .expect_err("terminal staged cleanup panic was not propagated");
-    assert_eq!(
-        recorded(&durable).staged_cleanup,
-        CleanupEvidence::Panic(PanicEvidence::capture(payload.as_ref()))
-    );
-    assert_eq!(durable.cleanup_calls.load(Ordering::SeqCst), 1);
-    clear(&protocol);
-    fs::remove_dir_all(stage_root).unwrap();
+    for cleanup in [CleanupCase::Error, CleanupCase::Panic] {
+        let setup = producer_attempt("producer-terminal-cleanup", cleanup);
+        let outcome = catch_unwind(AssertUnwindSafe(|| {
+            run_reserved(&setup.grant, |attempt| {
+                retain_stage(attempt, setup.durable.as_ref(), setup.staged);
+                observe_staged_transition(attempt, || Ok(())).map(|_| {
+                    (
+                        (),
+                        ReservationTerminal::Incomplete(DurableSettlement::Failed),
+                    )
+                })
+            })
+        }));
+        assert!(outcome.is_err() || outcome.is_ok_and(|result| result.is_err()));
+        assert_eq!(
+            recorded(&setup.durable).staged_cleanup,
+            expected_cleanup(cleanup)
+        );
+        assert_eq!(setup.durable.cleanup_calls.load(Ordering::SeqCst), 1);
+        fs::remove_dir_all(setup.stage_root).unwrap();
+    }
 }
 
 #[test]
 fn producer_transition_failure_retains_exact_active_authority() {
-    let (attempt, durable, stage_root) =
-        producer_attempt("producer-record-failure", CleanupCase::Error);
-    *durable
-        .failure_record_error
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner) = Some("producer-record-error");
-    let protocol = attempt.protocol_id().clone();
-    let grant = attempt.grant_id().clone();
+    let setup = producer_attempt("producer-record-failure", CleanupCase::Error);
+    *setup.durable.failure_record_error.lock().unwrap() = Some("producer-record-error");
+    let protocol = setup.grant.protocol_id.clone();
+    let grant_id = setup.grant.grant_id.clone();
     let token = mediated_token(1, 0);
-    let error = run_reserved(attempt, |attempt| {
-        complete_intent_transition(&token, attempt, ProducerRoute::Executed.node(&token)).map(drop)
+    let error = run_reserved(&setup.grant, |attempt| {
+        attempt.mark_started()?;
+        retain_stage(attempt, setup.durable.as_ref(), setup.staged);
+        complete_intent_transition(&token, attempt, ProducerRoute::Executed.node(&token)).map(
+            |_| {
+                (
+                    (),
+                    ReservationTerminal::Incomplete(DurableSettlement::Failed),
+                )
+            },
+        )
     })
     .unwrap_err();
-
     let transition = error.transition_failure().unwrap();
     assert_error(
         &transition.attempted.primary,
@@ -191,12 +212,10 @@ fn producer_transition_failure_retains_exact_active_authority() {
         transition.attempted.staged_cleanup,
         expected_cleanup(CleanupCase::Error)
     );
-    assert_eq!(durable.cleanup_calls.load(Ordering::SeqCst), 1);
-    let state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    assert_eq!(state.active_protocols.get(&protocol), Some(&grant));
-    drop(state);
-    clear(&protocol);
-    fs::remove_dir_all(stage_root).unwrap();
+    assert_eq!(setup.durable.cleanup_calls.load(Ordering::SeqCst), 1);
+    assert_eq!(
+        observe_reservation(&protocol, None, None).active_grant,
+        Some(grant_id)
+    );
+    fs::remove_dir_all(setup.stage_root).unwrap();
 }

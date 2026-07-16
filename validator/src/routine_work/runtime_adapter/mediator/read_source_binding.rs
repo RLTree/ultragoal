@@ -22,26 +22,6 @@ pub(crate) fn validate_read_sources(
     ReadConfinement::open_bound(&root, sources)?.validate(&root)
 }
 
-#[derive(Default)]
-pub(crate) struct MediatorRegistry {
-    pub(crate) consumed_grants: BTreeSet<String>,
-    pub(crate) non_durable_authenticated_artifacts: BTreeMap<String, String>,
-    pub(crate) ambiguous_protocols: BTreeMap<String, String>,
-    pub(crate) active_protocols: BTreeMap<String, String>,
-    pub(crate) failure_records: BTreeMap<String, ReservationFailureEvidence>,
-}
-
-pub(crate) fn registry() -> &'static Mutex<MediatorRegistry> {
-    static REGISTRY: OnceLock<Mutex<MediatorRegistry>> = OnceLock::new();
-    REGISTRY.get_or_init(|| Mutex::new(MediatorRegistry::default()))
-}
-
-pub(crate) fn release_active(state: &mut MediatorRegistry, protocol_id: &str, grant_id: &str) {
-    if state.active_protocols.get(protocol_id).map(String::as_str) == Some(grant_id) {
-        state.active_protocols.remove(protocol_id);
-    }
-}
-
 #[derive(Serialize)]
 pub(crate) struct GrantPayload<'a> {
     pub(crate) domain: &'static str,

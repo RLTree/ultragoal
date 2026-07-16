@@ -24,10 +24,10 @@ use super::execution_authority::{
 use super::{begin_routine_mediation, environment_digest, read_authority_digest};
 use crate::routine_work::digest::{canonical, digest_of, framed, sha256, valid};
 use crate::routine_work::{
-    CleanupEvidence, FailureEvidence, LocalDirtyTree, PanicEvidence, ProcessCustodyEvidence,
-    RESERVATION_FAILURE_SCHEMA, RepoPath, ReservationFailureDisposition,
-    ReservationFailureEvidence, RoutineBinding, RoutineError, RoutineErrorId, RoutinePlan,
-    transition_failure_error, trusted_rust_source_execution_observed,
+    CleanupEvidence, FailureEvidence, LocalDirtyTree, PanicEvidence, RESERVATION_FAILURE_SCHEMA,
+    RepoPath, ReservationFailureDisposition, ReservationFailureEvidence, RoutineBinding,
+    RoutineError, RoutineErrorId, RoutinePlan, transition_failure_error,
+    trusted_rust_source_execution_observed,
 };
 
 pub(crate) use filesystem::{
@@ -82,10 +82,12 @@ use intent_mediation::mediate_intent;
 pub(super) use no_op_mediation::*;
 pub(super) use read_source_binding::mediate_prepared_routine_execution;
 pub(crate) use read_source_binding::{
-    bind_read_sources, grant_identity, grant_seal, registry, validate_read_sources,
+    bind_read_sources, grant_identity, grant_seal, validate_read_sources,
 };
+#[cfg(test)]
+use reservation_state::observe_reservation;
 use reservation_state::{
-    AttemptReservation, observe_staged_transition, reserve_grant, run_reserved,
+    ReservationAttempt, ReservationTerminal, observe_staged_transition, run_reserved,
 };
 pub(crate) use reuse_input_index::*;
 pub(crate) use rust_source_observation::*;

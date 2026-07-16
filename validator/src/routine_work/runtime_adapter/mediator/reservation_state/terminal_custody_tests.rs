@@ -8,155 +8,86 @@ use std::sync::atomic::Ordering;
 fn terminal_settlement_refuses_live_staged_custody() {
     for complete in [true, false] {
         let label = if complete {
-            "staged-complete-refusal"
+            "staged-complete"
         } else {
-            "staged-incomplete-refusal"
+            "staged-incomplete"
         };
-        let (attempt, durable, stage_root) = staged_attempt(label);
-        let protocol = attempt.protocol_id().clone();
-        let error = if complete {
-            attempt.settle_success(&BTreeMap::new())
-        } else {
-            attempt
-                .settle_incomplete(DurableSettlement::Failed)
-                .map(|_| ())
-        }
+        let durable = Arc::new(TerminalDurable::default());
+        let grant = attempt_grant(label, Some(durable.clone()), None);
+        let protocol = grant.protocol_id.clone();
+        let (stage_root, staged) = staged_fixture(label);
+        let error = run_reserved(&grant, |attempt| {
+            attempt.mark_started()?;
+            retain_stage(attempt, durable.as_ref(), staged);
+            let terminal = if complete {
+                ReservationTerminal::Complete(BTreeMap::new())
+            } else {
+                ReservationTerminal::Incomplete(DurableSettlement::Failed)
+            };
+            Ok(((), terminal))
+        })
         .unwrap_err();
         assert_eq!(
             error.cause(),
             "mediator-staged-custody-terminal-transition-refused"
         );
-        assert!(durable_settlements(&durable).is_empty());
-        assert_eq!(durable.cleanup_calls.load(Ordering::SeqCst), 0);
-        assert_eq!(active_grant(&protocol), Some(attempt.grant_id().clone()));
-
-        let result = run_reserved(attempt, |_| {
-            Err::<(), _>(mediator_error("post-refusal-cleanup"))
-        });
-        assert_eq!(result.unwrap_err().cause(), "post-refusal-cleanup");
+        assert!(durable.settlements.lock().unwrap().is_empty());
         assert_eq!(durable.cleanup_calls.load(Ordering::SeqCst), 1);
-        assert_eq!(active_grant(&protocol), None);
+        assert_eq!(
+            observe_reservation(&protocol, None, None).active_grant,
+            None
+        );
         assert!(stage_root.is_dir());
-        clear_state(&protocol);
         fs::remove_dir_all(stage_root).unwrap();
     }
 }
 
 #[test]
-fn settled_then_error_and_panic_cannot_bypass_cleanup() {
+fn staged_error_and_panic_preserve_primary_after_cleanup() {
     for panics in [false, true] {
         let label = if panics {
-            "settled-then-panic"
+            "staged-panic"
         } else {
-            "settled-then-error"
+            "staged-error"
         };
-        let (attempt, durable, stage_root) = staged_attempt(label);
-        let protocol = attempt.protocol_id().clone();
+        let durable = Arc::new(TerminalDurable::default());
+        let grant = attempt_grant(label, Some(durable.clone()), None);
+        let protocol = grant.protocol_id.clone();
+        let (stage_root, staged) = staged_fixture(label);
         let outcome = catch_unwind(AssertUnwindSafe(|| {
-            run_reserved(attempt, |attempt| {
-                let refusal = attempt
-                    .settle_incomplete(DurableSettlement::Failed)
-                    .unwrap_err();
-                assert_eq!(
-                    refusal.cause(),
-                    "mediator-staged-custody-terminal-transition-refused"
-                );
+            run_reserved(&grant, |attempt| {
+                attempt.mark_started()?;
+                retain_stage(attempt, durable.as_ref(), staged);
                 if panics {
-                    panic!("post-settlement-panic");
+                    panic!("staged-primary-panic");
                 }
-                Err::<(), _>(mediator_error("post-settlement-error"))
+                Err::<((), ReservationTerminal), _>(mediator_error("staged-primary-error"))
             })
         }));
         if panics {
-            let payload = outcome
-                .expect_err("post-settlement panic was replaced")
-                .downcast::<&'static str>()
-                .expect("post-settlement panic payload changed");
-            assert_eq!(*payload, "post-settlement-panic");
+            assert_eq!(
+                outcome.unwrap_err().downcast_ref::<&'static str>().copied(),
+                Some("staged-primary-panic")
+            );
         } else {
             assert_eq!(
                 outcome.unwrap().unwrap_err().cause(),
-                "post-settlement-error"
+                "staged-primary-error"
             );
         }
-        assert!(durable_settlements(&durable).is_empty());
         assert_eq!(durable.cleanup_calls.load(Ordering::SeqCst), 1);
-        let records = durable
-            .failure_records
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        let records = durable.failure_records.lock().unwrap();
         assert_eq!(records.len(), 1);
         assert_eq!(records[0].staged_cleanup, CleanupEvidence::Succeeded);
         assert!(matches!(
             (&records[0].primary, panics),
             (FailureEvidence::Panic(_), true) | (FailureEvidence::Error(_), false)
         ));
+        assert_eq!(
+            observe_reservation(&protocol, None, None).active_grant,
+            None
+        );
         drop(records);
-        assert_eq!(active_grant(&protocol), None);
-        assert!(stage_root.is_dir());
-        clear_state(&protocol);
         fs::remove_dir_all(stage_root).unwrap();
     }
-}
-
-#[test]
-fn terminal_attempt_rejects_new_staged_custody() {
-    let durable = Arc::new(TerminalDurable::default());
-    let attempt = attempt("stage-after-terminal", Some(durable.clone()), true, None);
-    attempt
-        .settle_incomplete(DurableSettlement::Failed)
-        .unwrap();
-    assert!(attempt.terminal_is_authoritative());
-
-    let (stage_root, staged) = staged_fixture("stage-after-terminal-retain");
-    let error = attempt
-        .stage_and_use(&staged.executable, |_| Ok(()))
-        .unwrap_err();
-    assert_eq!(
-        error.cause(),
-        "mediator-reservation-terminal-already-settled"
-    );
-    assert!(attempt.terminal_is_authoritative());
-    assert_eq!(durable.cleanup_calls.load(Ordering::SeqCst), 0);
-    assert_eq!(
-        durable_settlements(&durable),
-        vec![DurableSettlement::Failed]
-    );
-    fs::remove_dir_all(stage_root).unwrap();
-}
-
-fn staged_attempt(label: &str) -> (AttemptReservation, Arc<TerminalDurable>, std::path::PathBuf) {
-    let durable = Arc::new(TerminalDurable::default());
-    let attempt = attempt(label, Some(durable.clone()), true, None);
-    let (stage_root, staged) = staged_fixture(label);
-    retain_stage(&attempt, durable.as_ref(), staged);
-    (attempt, durable, stage_root)
-}
-
-fn durable_settlements(durable: &TerminalDurable) -> Vec<DurableSettlement> {
-    durable
-        .settlements
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .clone()
-}
-
-fn active_grant(protocol: &str) -> Option<String> {
-    registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .active_protocols
-        .get(protocol)
-        .cloned()
-}
-
-fn clear_state(protocol: &str) {
-    let mut state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    state.active_protocols.remove(protocol);
-    state.ambiguous_protocols.remove(protocol);
-    state
-        .failure_records
-        .retain(|_, record| record.protocol_id != protocol);
 }

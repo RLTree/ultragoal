@@ -36,7 +36,7 @@ pub(super) struct ReuseArtifactValidation<'a> {
     pub(super) snapshot_id: &'a str,
     pub(super) dependencies: &'a BTreeMap<String, String>,
     pub(super) outputs: &'a OutputConfinement,
-    pub(super) attempt: &'a AttemptReservation,
+    pub(super) attempt: &'a ReservationAttempt<'a>,
 }
 
 pub(super) fn verify_reuse_artifact(

@@ -2,6 +2,11 @@ use super::*;
 
 pub(super) struct DurableBinding(Option<Arc<dyn DurableAttemptAuthority>>);
 
+pub(in super::super::super) enum ReservationTerminal {
+    Complete(BTreeMap<String, String>),
+    Incomplete(DurableSettlement),
+}
+
 impl DurableBinding {
     pub(super) fn new(authority: Option<Arc<dyn DurableAttemptAuthority>>) -> Self {
         Self(authority)
@@ -13,6 +18,17 @@ impl DurableBinding {
 
     pub(super) fn reuse_only(&self) -> bool {
         self.0.as_ref().is_some_and(|item| item.reuse_only())
+    }
+
+    pub(super) fn authenticates_artifact(
+        &self,
+        digest: &str,
+        witness: &str,
+    ) -> Result<bool, RoutineError> {
+        self.0
+            .as_ref()
+            .ok_or_else(|| mediator_error("mediator-durable-authentication-authority-missing"))?
+            .authenticates_artifact(digest, witness)
     }
 
     pub(super) fn prepare_spawn(&self) -> Result<(), RoutineError> {
@@ -40,15 +56,33 @@ impl DurableBinding {
         Ok(true)
     }
 
-    pub(super) fn authenticates_artifact(
+    pub(super) fn settle_terminal(
         &self,
-        digest: &str,
-        witness: &str,
-    ) -> Result<Option<bool>, RoutineError> {
-        self.0
-            .as_ref()
-            .map(|item| item.authenticates_artifact(digest, witness))
-            .transpose()
+        terminal: ReservationTerminal,
+    ) -> Result<bool, RoutineError> {
+        match terminal {
+            ReservationTerminal::Complete(artifacts) => {
+                self.settle(DurableSettlement::Complete, &artifacts)?;
+                Ok(true)
+            }
+            ReservationTerminal::Incomplete(outcome) => self.settle(outcome, &BTreeMap::new()),
+        }
+    }
+
+    pub(super) fn failure_transfer(
+        &self,
+        staged_empty: bool,
+        cleanup: &CleanupEvidence,
+    ) -> Result<bool, RoutineError> {
+        match (staged_empty, cleanup) {
+            (true, CleanupEvidence::Succeeded | CleanupEvidence::NotRequired) => Ok(false),
+            (false, CleanupEvidence::Error(_) | CleanupEvidence::Panic(_)) if self.is_present() => {
+                Ok(true)
+            }
+            _ => Err(mediator_error(
+                "mediator-reservation-failure-custody-binding-invalid",
+            )),
+        }
     }
 
     pub(super) fn stage_program(

@@ -85,6 +85,5 @@ fn cancelled_before_spawn() -> ProcessObservation {
         stdout: Vec::new(),
         stderr_sha256: digest_bytes(&[]),
         output_byte_length: 0,
-        started: false,
     }
 }

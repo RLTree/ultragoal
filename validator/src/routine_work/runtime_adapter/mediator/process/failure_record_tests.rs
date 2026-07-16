@@ -1,5 +1,8 @@
-use super::super::terminal_settlement_fixture::{TerminalDurable, attempt};
-use super::super::{registry, run_reserved};
+use super::super::DurableSettlement;
+use super::super::terminal_settlement_fixture::{
+    TerminalDurable, attempt_grant, finish_recovery, grant_recovery_marker,
+};
+use super::super::{ReservationTerminal, observe_reservation, run_reserved};
 use super::process_termination_tests::ProcessFixture;
 use super::*;
 use std::panic::{AssertUnwindSafe, catch_unwind};
@@ -103,22 +106,30 @@ fn panic_cleanup_error_and_panic_remain_typed() {
 fn real_process_cleanup_evidence_reaches_reservation_authority_before_release() {
     let fixture = ProcessFixture::new("reservation-record");
     let durable = Arc::new(TerminalDurable::default());
-    let reservation = attempt("real-process-record", Some(durable.clone()), false, None);
-    let protocol = reservation.protocol_id().clone();
-    let marker = reservation.recovery_marker().clone();
+    let grant = attempt_grant("real-process-record", Some(durable.clone()), None);
+    let protocol = grant.protocol_id.clone();
+    let marker = grant_recovery_marker(&grant);
     set_test_process_failure(ProcessFailurePoint::Cleanup, || {});
-    let result = run_reserved(reservation, |attempt| {
-        fixture.run_result(
-            "while :; do :; done",
-            Duration::from_secs(2),
-            1024,
-            &RoutineCancellation::new(),
-            || {
-                attempt.mark_started()?;
-                Err(mediator_error("mediator-started-transition-injected"))
-            },
-        )
-    });
+    let result = run_reserved(&grant, |attempt| {
+        fixture
+            .run_result(
+                "while :; do :; done",
+                Duration::from_secs(2),
+                1024,
+                &RoutineCancellation::new(),
+                || {
+                    attempt.mark_started()?;
+                    Err(mediator_error("mediator-started-transition-injected"))
+                },
+            )
+            .map(|observation| {
+                (
+                    observation,
+                    ReservationTerminal::Incomplete(DurableSettlement::Failed),
+                )
+            })
+    })
+    .map(|(observation, _)| observation);
     let error = process_error(result);
     assert_eq!(error.cause(), "mediator-process-cleanup-injected");
     let records = durable
@@ -133,13 +144,10 @@ fn real_process_cleanup_evidence_reaches_reservation_authority_before_release() 
     ));
     assert_eq!(records[0].staged_cleanup, CleanupEvidence::Succeeded);
     drop(records);
-    let mut state = registry()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    assert!(!state.active_protocols.contains_key(&protocol));
-    assert_eq!(state.ambiguous_protocols.get(&protocol), Some(&marker));
-    state.ambiguous_protocols.remove(&protocol);
-    drop(state);
+    let observed = observe_reservation(&protocol, None, None);
+    assert_eq!(observed.active_grant, None);
+    assert_eq!(observed.recovery_marker, Some(marker.clone()));
+    finish_recovery(&protocol, marker);
     assert_last_group_absent();
     fixture.teardown();
 }

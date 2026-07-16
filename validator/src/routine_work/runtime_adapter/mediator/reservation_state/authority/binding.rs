@@ -8,6 +8,15 @@ pub(super) struct ReservationBinding {
 }
 
 impl ReservationBinding {
+    pub(super) fn for_grant(grant: &RoutineRootGrant) -> Self {
+        Self::new(
+            grant.protocol_id.clone(),
+            grant.grant_id.clone(),
+            recovery_identity(&grant.grant_id, &grant.protocol_id, &grant.request_id),
+            grant.recovery_for.clone(),
+        )
+    }
+
     pub(super) fn new(
         protocol_id: String,
         grant_id: String,

@@ -52,7 +52,6 @@ mod tests {
             stdout,
             stderr_sha256: sha256(&[]),
             output_byte_length: 0,
-            started: true,
         }
     }
 
