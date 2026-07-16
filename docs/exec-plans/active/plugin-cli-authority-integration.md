@@ -9,13 +9,13 @@ contract. Normative authority remains the adopted bundle rooted at
 
 Finish the plugin product and typed Rust CLI kernel from current repository
 truth. The intentionally committed self-law refactor now has bounded source
-acceptance. N04 is root-integrated and retired at a source-only transaction
-ceiling; the current warning wall and pending standards audits keep warning-free
-integration open. Drive the retained N06 and N10 Codex worktrees through
-root-owned review, wiring, proof, and claim decisions. N11 remains a preserved
-branch-only speculative freeze after its worktree teardown. N06 is the sole next
-integration gate. N10 and N11 remain at explicitly withheld source-local
-ceilings until their graph dependencies are current on the exact root candidate.
+acceptance. N04 and N06 are root-integrated at source-only ceilings; the current
+warning wall and pending standards audits keep warning-free integration open.
+N09 production adoption is the next root-owned gate before the retained N10
+worktree may refresh. N11 remains a preserved branch-only speculative freeze
+after its worktree teardown. N10 and N11 remain at explicitly withheld
+source-local ceilings until their graph dependencies are current on the exact
+root candidate.
 
 ## Durable Goal Binding
 
@@ -57,33 +57,38 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 
 | Package | State | Exact candidate | Transition evidence and ceiling | Next action |
 | --- | --- | --- | --- | --- |
-| N06 routine execution | rework | rejected `074eff12c` / tree `aa49255fd` | The coherent typed-custody replacement closed the earlier raw-authority, ambiguity, and abandoned-child classes, but the exact-candidate review found one remaining material boundary defect: launch `mkdir` can create physical custody before typed cleanup custody is attached, then a plain error can escape and unrelated output rollback can be recorded as successful launch cleanup before terminal failure. Publication controls passed 5/5, privacy controls 3/3, and recovery/reuse reproduced 52/53 with only the unchanged root-owned shared-budget fixture failure. The reported aggregate 43/43 was not reproduced inside the 300-second review bound; eight cases completed, the focused journal-order control timed out, and the supervisor-fault sentinel failed. No N06, dependency, warning, namespace, installed, runtime, readiness, release, or completion claim is promoted | Same owner repairs one shared invariant: physical acquisition returns either fully owned typed custody or a typed partial-custody failure/ambiguity; no plain error or unrelated cleanup evidence may terminalize it. Recheck deterministic lifecycle fixtures, freeze once, then run the final exact-candidate review before receipt regeneration |
+| N06 routine execution | integrated | accepted source `a646eace6` / tree `97d7d658`, receipt `e0d2d28e0`, root merge `a02050a74` | Final independent review found no reproducible material defect after the typed launch-acquisition repair. On the merged root, launch custody passed 3/3, closest-boundary privacy 1/1, durable publication 5/5, recovery/reuse 53/53 with an external `/tmp` fixture root, and the exact optimized public binary passed 43/43. A debug-binary run exceeded the 60-second product bound and was correctly not treated as production evidence. Strict compilation still stops at the pre-existing 568-warning wall, with zero primary diagnostics on N06 touched paths. Agent-standards enforcement passes 122 rows and generated authority was refreshed. This is source/root-integration evidence only; external monotonic custody, install, discovery, runtime, product, readiness, release, and completion remain withheld | Archive the accepted task, remove its worktree/cache, then add the real root-owned N09 production adoption path before refreshing N10 |
 | N09 agent reader | integrated | accepted source `385f0286c`, contained by root `4f4a4765b` / tree `7d550bd8` | Supported source reader only; production caller, installed discovery, and adoption remain withheld | Add a real supported production adoption path after N06 integration capacity opens |
 | N10 orchestration | candidate | `7f92b7ed3` / tree `53bd7717` | Speculative source-only freeze; stale WorkerResult and every N06/N09-dependent claim withheld | Preserve unchanged; refresh only after integrated N06 and N09 production interfaces are current |
 | N11 evaluation | candidate | branch tip `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld. Its prior worktree is removed; branch bytes are the only retained source authority | Preserve the branch unchanged until its dependency ceiling is current; create no replacement worktree while the integration queue is occupied |
 | N08 plugin product | planned | no admissible candidate on root `946c7bab1` | N04/N05/N07 source ceilings exist; N06 dependency and live host behavior remain open | Prepare closure only after N06 integrates |
 
-Controller measures at this checkpoint: integration queue length `1`; installed
-journeys closed `0`; Tree interventions after controller activation `1`; stale
-or invalidated reviews promoted `0`; N06 freeze-to-integration remains open;
-current exact-candidate rejection count for N06 is `50`. Exact candidate
-`074eff12c` / tree `aa49255fd` is rejected after one exhaustive independent
-review. Earlier raw-authority, ambiguity, and child-lifecycle defects are no
-longer current findings. The remaining demonstrated defect is the acquisition
-boundary itself: launch custody can exist after `mkdir` but before typed cleanup
-custody is attached, and that plain-error route can reuse unrelated output
-rollback as launch-cleanup success before terminal failure. The convergence
-decision remains one sealed typed transaction enforced by Rust privacy, now
-with a stricter result type: every physical acquisition returns either complete
-typed ownership or typed partial custody that must be cleaned or durably marked
-ambiguous before any terminal transition. Source-shape checks remain secondary.
-No receipt regeneration or dependent claim may consume the rejected freeze. No
-aggregate public-suite claim is current: the exact review was bounded at 300
-seconds after eight passing cases; its focused journal-order control timed out
-and the supervisor-fault control missed its required panic sentinel.
-Escalation is legitimate only for
+Controller measures at this checkpoint: integration queue length `0`; installed
+journeys closed `0`; stale or invalidated reviews promoted `0`; final historical
+N06 exact-candidate rejection count `50`; freeze-to-integration time `19m51s`
+from `a646eace6` to root merge `a02050a74`; diminishing-return stop-rule
+interventions `1`. The final source review completed the named transition matrix
+and stopped when only environment confirmation and speculative hardening
+remained. N06 is integrated without raising strict, installed, runtime, product,
+readiness, release, or completion claims. Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
+
+## Audit Cadence And Withheld Claims
+
+| Audit | Trigger | Owner | Required candidate identity | Evidence surface | Claims withheld until pass |
+| --- | --- | --- | --- | --- | --- |
+| Focused implementation checks | Each coherent source change | Lane owner | Current worktree HEAD plus dirty-path inventory | Changed behavior, causal negative/race/recovery/security controls, rustfmt, diff, owned warnings, line caps, namespaces | Worktree freeze and source acceptance |
+| Exact worktree freeze review | One clean committed section after focused checks | Independent reviewer; parent decides | Frozen HEAD, tree, path inventory, and unchanged pre-acceptance receipt | One exhaustive review of the complete named invariant; the existing WorkerResult is emitted only after acceptance | Dependency eligibility, integration, product, release, completion |
+| Dependency-closed root integration | One accepted authority-bearing increment lands alone | Parent root | Exact merged root HEAD/tree and integrated source/receipt identities | Strict compile partition, cross-lane behavior, generated authority, namespace/source laws, affected docs, targeted coverage when claim-relevant | Integrated dependency ceiling and every strict claim not proved on that root |
+| Product freeze | Smallest current-source installed journey is dependency-closed | Parent root | Exact source, package, install, discovery, and runtime identities | Product Success/Fitness/Cohesion, observability, real-repository journeys, time/interventions/review/recovery/artifact cost | Installed, runtime, daily-driver, broadly reusable, mastery |
+| Release freeze | Product evidence and migration/retirement prerequisites are current | Parent root plus required independent personas | Exact release candidate and immutable package/install identities | Full standards and coverage, clean-room distribution, migration/retirement, representative journeys, four-persona review, release proof | Readiness and release |
+| Completion freeze | Release proof and all terminal graph nodes are current | Parent root | Final committed candidate plus two byte-identical inventories | Final falsification, requirement-to-evidence reconciliation, duplicate-authority closure, worktree/cache/artifact reconciliation | Completion and runtime goal completion |
+
+Focused build products remain disposable. No durable receipt or artifact is added
+unless an existing authoritative surface requires it for an active claim or
+recovery need; superseded outputs and caches are removed at the next integration
+boundary.
 
 ## Progress
 

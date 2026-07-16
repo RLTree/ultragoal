@@ -225,7 +225,7 @@
         "AGENT_STANDARDS.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "abcfca728c10a568d1ac969679374c3508bd9890082697c0dd6f4a4533670c66"
+      "output_sha256": "1d15f94ab676ad5472f41bd6c5c73f7802ff61e669739d486b76e658607e1013"
     },
     {
       "disposition": "source_projection",
@@ -265,7 +265,7 @@
         "agent-standards/02-boundaries-validation-and-enforcement.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "83e9d8e80cab6380537ccea955ad7751f47e9233e751540b7cf30b3f721a3c74"
+      "output_sha256": "226ced50ac601d6b8d605a377c41414e9df555bf30d274eb753493ef4e191071"
     },
     {
       "disposition": "source_projection",
@@ -275,7 +275,7 @@
         "agent-standards/03-execplans-worktrees-and-orchestration.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "62e003d15efb7d5c43a7615002e7d5bffacedf272ba0554f3a7cd4983895a854"
+      "output_sha256": "59136b9629dd68ec18f3e46828ade64becadef9c46d06e84a105f07ad8eea753"
     },
     {
       "disposition": "source_projection",
@@ -295,7 +295,7 @@
         "agent-standards/05-review-and-completion.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "3c54182388bf5fd1195da68c3f138fb915fd662fcfd72d437770356ec105f3ef"
+      "output_sha256": "3686da7e4b299b069a67883412b2903d98536b2e606b557c2f06f9978acef343"
     },
     {
       "disposition": "source_projection",
@@ -315,7 +315,7 @@
         "agent-standards/07-cli-authority-and-proof-surfaces.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "6879ca776c12466aa9528e3c0ca916847d62a43f2f008affba2cfb08914d43b8"
+      "output_sha256": "9bd6f9e8fd952019b030d637f998cd14bce87ac74ca81a3d8256cd48cbc62f3d"
     },
     {
       "disposition": "source_projection",
