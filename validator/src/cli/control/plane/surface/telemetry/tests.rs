@@ -82,6 +82,7 @@ fn command_with_receipt(operation: ControlOperation, receipt: &PathBuf) -> Contr
         operation,
         receipt: Some(receipt.clone()),
         surface_root: None,
+        agent_authority_roots: None,
     }
 }
 

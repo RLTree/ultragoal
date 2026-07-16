@@ -33,6 +33,7 @@ pub trait HostAgentAuthorityTransaction {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum HostAgentAuthorityTransactionError {
+    #[cfg(test)]
     Unsupported,
     Failed,
 }

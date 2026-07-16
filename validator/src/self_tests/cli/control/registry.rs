@@ -3,6 +3,8 @@ use crate::self_tests::boundaries::workspace_fixtures;
 use serde_json::{Value, json};
 use std::path::Path;
 
+mod local_authority;
+
 fn write_json(path: &Path, value: &Value) {
     if let Some(parent) = path.parent() {
         std::fs::create_dir_all(parent).expect("parent");
@@ -45,6 +47,7 @@ fn registry_probe_rejects_unbound_same_surface_fixture_and_fails_closed() {
         &root,
         ControlOperation::RegistryProbe,
         &current,
+        None,
     )
     .expect("registry mint");
 
@@ -99,6 +102,7 @@ fn registry_probe_fail_closed_receipt_uses_runtime_session_and_candidate_ids() {
         &root,
         ControlOperation::RegistryProbe,
         &current,
+        None,
     )
     .expect("registry mint");
 
@@ -131,52 +135,6 @@ fn registry_probe_fail_closed_receipt_uses_runtime_session_and_candidate_ids() {
     );
 
     std::fs::remove_dir_all(root).expect("cleanup cli registry runtime boundary");
-}
-
-#[test]
-fn registry_probe_fail_closed_rows_report_local_disk_and_global_truth() {
-    let root = workspace_fixtures::temp_root("cli-registry-local-truth");
-    let home = root.join("home");
-    write_json(
-        &root.join(".codex-plugin/plugin.json"),
-        &json!({"name":"harness-ultragoal","version":"0.0.0-test"}),
-    );
-    for (role, manifest_path) in reviewer_specs() {
-        let source = root.join(manifest_path);
-        let install = home
-            .join(".codex/plugins/harness-ultragoal")
-            .join(manifest_path);
-        let cache = home
-            .join(".codex/plugins/cache/local-harness-plugins/harness-ultragoal/0.0.0-test")
-            .join(manifest_path);
-        let global = home
-            .join(".codex/agents")
-            .join(Path::new(manifest_path).file_name().expect("agent file"));
-        let bytes = format!(
-            "name = \"{role}\"\ndescription = \"Review.\"\ndeveloper_instructions = \"Review only.\"\nsandbox_mode = \"read-only\"\n"
-        );
-        for path in [&source, &install, &cache, &global] {
-            std::fs::create_dir_all(path.parent().expect("parent")).expect("mkdir");
-            std::fs::write(path, &bytes).expect("write");
-        }
-    }
-
-    let rows = crate::cli::control::plane::registry::agent_types_for_home(&root, Some(home));
-    assert_eq!(rows.len(), 4);
-    assert!(rows.iter().all(|row| {
-        row.get("agent_type").is_none()
-            && row["agent_manifest_path"]
-                .as_str()
-                .is_some_and(|path| path.starts_with(".codex/agents/"))
-            && row["sandbox_mode"] == json!("read-only")
-            && row["disk_cache_synced"] == json!(true)
-            && row["global_toml_present"] == json!(true)
-            && row["runtime_metadata_status"] == json!("unavailable")
-            && row["custom_agent_discovery_status"] == json!("unavailable")
-            && row["exposed"] == json!(false)
-    }));
-
-    std::fs::remove_dir_all(root).expect("cleanup cli registry local truth");
 }
 
 fn live_registry_receipt(current: &str, raw_rel: &str, raw_digest: &str) -> Value {

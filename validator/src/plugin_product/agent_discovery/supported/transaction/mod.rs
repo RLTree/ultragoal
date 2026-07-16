@@ -2,15 +2,16 @@ mod authority;
 #[path = "../catalog_codec/mod.rs"]
 mod catalog;
 
+#[cfg(test)]
 use super::report::{ReportState, set_generation};
 use super::roots::{LayerFiles, SupportedRootSet};
 use super::{changed, invalid_binding};
 use crate::plugin_product::agent_discovery::error::AgentDiscoveryError;
-use crate::plugin_product::agent_discovery::filesystem::digest;
 use crate::plugin_product::agent_discovery::host::HostAgentAuthorityRequest;
 use crate::plugin_product::agent_discovery::model::AgentAuthorityLayer;
 use crate::plugin_product::agent_discovery::source::SourceAgentCatalog;
 use std::collections::BTreeMap;
+#[cfg(test)]
 use std::sync::{Arc, Mutex};
 
 pub(super) struct SupportedTransaction {
@@ -25,6 +26,7 @@ pub(super) struct SupportedTransaction {
     observation_nonce_sha256: String,
     generation_sha256: String,
     start_generation: u64,
+    #[cfg(test)]
     report: Arc<Mutex<ReportState>>,
 }
 
@@ -33,7 +35,7 @@ impl SupportedTransaction {
         source: SourceAgentCatalog,
         roots: SupportedRootSet,
         request: &HostAgentAuthorityRequest,
-        report: Arc<Mutex<ReportState>>,
+        #[cfg(test)] report: Arc<Mutex<ReportState>>,
     ) -> Result<Self, AgentDiscoveryError> {
         source.revalidate()?;
         roots.revalidate()?;
@@ -44,6 +46,7 @@ impl SupportedTransaction {
         let generation_sha256 = catalog::generation_sha256(&source, &roots, &snapshots)?;
         let start_generation =
             u64::from_str_radix(&generation_sha256[7..23], 16).map_err(|_| invalid_binding())?;
+        #[cfg(test)]
         set_generation(&report, generation_sha256.clone());
         Ok(Self {
             source,
@@ -57,6 +60,7 @@ impl SupportedTransaction {
             observation_nonce_sha256: request.observation_nonce_sha256().to_owned(),
             generation_sha256,
             start_generation,
+            #[cfg(test)]
             report,
         })
     }
@@ -84,8 +88,4 @@ impl SupportedTransaction {
         }
         self.source.revalidate()
     }
-}
-
-fn catalog_digest(bytes: &[u8]) -> String {
-    digest(bytes)
 }

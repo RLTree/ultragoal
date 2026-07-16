@@ -37,6 +37,7 @@ fn package_surface_audit_passes_only_for_same_candidate_target() {
         operation: ControlOperation::InstallAudit,
         receipt: None,
         surface_root: Some(target.clone()),
+        agent_authority_roots: None,
     };
     let value = surface::receipt(&root, &command).expect("surface receipt");
     let digest = crate::package::inventory::package_digest(&root).expect("source digest");
@@ -103,6 +104,7 @@ fn package_cache_surface_audit_passes_only_for_same_candidate_target() {
         operation: ControlOperation::CacheAudit,
         receipt: None,
         surface_root: Some(target.clone()),
+        agent_authority_roots: None,
     };
     let value = surface::receipt(&root, &command).expect("cache surface receipt");
     let digest = crate::package::inventory::package_digest(&root).expect("source digest");
@@ -153,6 +155,7 @@ fn package_surface_run_requires_receipt_and_reports_missing_target() {
             operation: ControlOperation::InstallAudit,
             receipt: None,
             surface_root: Some(missing.clone()),
+            agent_authority_roots: None,
         },
     )
     .expect_err("surface run requires receipt");
@@ -165,6 +168,7 @@ fn package_surface_run_requires_receipt_and_reports_missing_target() {
             operation: ControlOperation::InstallAudit,
             receipt: Some(receipt.clone()),
             surface_root: Some(missing),
+            agent_authority_roots: None,
         },
     )
     .expect("surface run with receipt");
@@ -189,6 +193,7 @@ fn package_surface_run_reports_receipt_source_and_write_errors() {
             operation: ControlOperation::InstallAudit,
             receipt: Some(receipt_dir),
             surface_root: Some(target.clone()),
+            agent_authority_roots: None,
         },
     )
     .expect_err("directory receipt path must fail");
@@ -202,6 +207,7 @@ fn package_surface_run_reports_receipt_source_and_write_errors() {
             operation: ControlOperation::InstallAudit,
             receipt: Some(missing_root.join("validation_artifacts/cli/install-audit-receipt.json")),
             surface_root: Some(target.clone()),
+            agent_authority_roots: None,
         },
     )
     .expect_err("missing source package must fail");
@@ -221,6 +227,7 @@ fn package_surface_receipt_uses_default_root_when_surface_root_is_omitted() {
             operation: ControlOperation::RegistryProbe,
             receipt: None,
             surface_root: None,
+            agent_authority_roots: None,
         },
     )
     .expect("default-root receipt");

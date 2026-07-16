@@ -16,6 +16,7 @@ pub(crate) fn mint_fail_closed_if_needed(
     root: &Path,
     operation: ControlOperation,
     candidate: &str,
+    authority_roots: Option<&super::AgentAuthorityRoots>,
 ) -> Result<(), String> {
     if !matches!(
         operation,
@@ -87,7 +88,12 @@ pub(crate) fn mint_fail_closed_if_needed(
         "round_id": fail_closed_round_id(operation, candidate),
         "raw_observation": {"path": RAW_OBSERVATION, "digest": raw_digest},
         "capability_gap": capability::gap::record(candidate, &now, &session_id, &raw_digest),
-        "agent_types": agent_types_with_local_state(root),
+        "agent_types": agent_types_with_local_state(
+            root,
+            candidate,
+            &session_id,
+            authority_roots,
+        ),
         "failure": {
             "reason": "live_registry_reviewer_exposure_not_proven",
             "observed": "same-surface registry/reviewer proof unavailable; disk source/install/cache proof is not accepted as a substitute",
@@ -187,10 +193,36 @@ fn existing_live_pass(root: &Path) -> Result<bool, String> {
     Ok(crate::audit::plugin::registry::value_failures(root, &store, &receipt).is_empty())
 }
 
-fn agent_types_with_local_state(root: &Path) -> Vec<serde_json::Value> {
-    agent_rows::for_home(root, std::env::var_os("HOME").map(PathBuf::from))
+fn agent_types_with_local_state(
+    root: &Path,
+    candidate: &str,
+    session_id: &str,
+    authority_roots: Option<&super::AgentAuthorityRoots>,
+) -> Vec<serde_json::Value> {
+    agent_rows::for_home(
+        root,
+        std::env::var_os("HOME").map(PathBuf::from),
+        candidate,
+        session_id,
+        authority_roots.map(|roots| roots.package.clone()),
+        authority_roots.map(|roots| roots.project.clone()),
+    )
 }
 
-pub(crate) fn agent_types_for_home(root: &Path, home: Option<PathBuf>) -> Vec<serde_json::Value> {
-    agent_rows::for_home(root, home)
+pub(crate) fn agent_types_for_home(
+    root: &Path,
+    home: Option<PathBuf>,
+    candidate: &str,
+    session_id: &str,
+    package_root: Option<PathBuf>,
+    project_root: Option<PathBuf>,
+) -> Vec<serde_json::Value> {
+    agent_rows::for_home(
+        root,
+        home,
+        candidate,
+        session_id,
+        package_root,
+        project_root,
+    )
 }

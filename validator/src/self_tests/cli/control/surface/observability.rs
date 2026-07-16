@@ -14,6 +14,7 @@ fn package_surface_run_writes_typed_cache_observability() {
             operation: ControlOperation::CacheAudit,
             receipt: Some(path.clone()),
             surface_root: Some(target.clone()),
+            agent_authority_roots: None,
         },
     )
     .expect("surface run");
@@ -55,6 +56,7 @@ fn package_surface_run_writes_typed_install_observability() {
             operation: ControlOperation::InstallAudit,
             receipt: Some(path.clone()),
             surface_root: Some(target.clone()),
+            agent_authority_roots: None,
         },
     )
     .expect("surface run");
@@ -90,6 +92,7 @@ fn package_surface_run_emits_fail_closed_cache_observability() {
             operation: ControlOperation::CacheAudit,
             receipt: Some(path.clone()),
             surface_root: Some(missing),
+            agent_authority_roots: None,
         },
     )
     .expect("surface run");
@@ -130,6 +133,7 @@ fn package_surface_run_emits_fail_closed_install_observability() {
             operation: ControlOperation::InstallAudit,
             receipt: Some(path.clone()),
             surface_root: Some(missing),
+            agent_authority_roots: None,
         },
     )
     .expect("surface run");

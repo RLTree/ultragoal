@@ -5,6 +5,7 @@ use crate::plugin_product::agent_discovery::host::{
     HostAgentAuthorityTransaction, ReadOnlyEffectEnforcement, ReadOnlyEffectRequest,
 };
 use crate::plugin_product::agent_discovery::model::AgentAuthorityLayer;
+#[cfg(test)]
 use crate::plugin_product::agent_discovery::supported::report::{
     increment_capture_count, increment_effect_probe_count, record_failure,
 };
@@ -42,9 +43,11 @@ impl HostAgentAuthorityTransaction for SupportedTransaction {
     }
 
     fn current_generation(&self) -> Result<u64, ()> {
-        self.revalidate_all()
-            .map(|()| self.start_generation)
-            .map_err(|error| record_failure(&self.report, error.id()))
+        let result = self.revalidate_all().map(|()| self.start_generation);
+        #[cfg(test)]
+        return result.map_err(|error| record_failure(&self.report, error.id()));
+        #[cfg(not(test))]
+        result.map_err(|_| ())
     }
 
     fn read_catalog(
@@ -60,10 +63,14 @@ impl HostAgentAuthorityTransaction for SupportedTransaction {
                     AgentDiscoveryErrorId::InputTooLarge,
                 ));
             }
+            #[cfg(test)]
             increment_capture_count(&self.report);
             Ok(Some(bytes))
         })();
-        result.map_err(|error| record_failure(&self.report, error.id()))
+        #[cfg(test)]
+        return result.map_err(|error| record_failure(&self.report, error.id()));
+        #[cfg(not(test))]
+        result.map_err(|_| ())
     }
 
     fn enforce_read_only(
@@ -103,10 +110,14 @@ impl HostAgentAuthorityTransaction for SupportedTransaction {
                 }
             }
             self.revalidate_all()?;
+            #[cfg(test)]
             increment_effect_probe_count(&self.report);
             Ok(ReadOnlyEffectEnforcement::denied(request))
         })();
-        result.map_err(|error| record_failure(&self.report, error.id()))
+        #[cfg(test)]
+        return result.map_err(|error| record_failure(&self.report, error.id()));
+        #[cfg(not(test))]
+        result.map_err(|_| ())
     }
 }
 

@@ -7,6 +7,7 @@ use crate::plugin_product::agent_discovery::model::{
     RawAgentRow, RawLayerCatalog,
 };
 use crate::plugin_product::agent_discovery::source::SourceAgentCatalog;
+#[cfg(test)]
 use crate::plugin_product::agent_discovery::supported::report::record_layer;
 use crate::plugin_product::agent_discovery::supported::roots::{LayerFiles, SupportedRootSet};
 use crate::plugin_product::agent_discovery::supported::{invalid_binding, unsafe_entry};
@@ -109,6 +110,7 @@ fn encode_layer(
         .map(|(name, file)| raw_agent_row(name, file))
         .collect::<Result<Vec<_>, _>>()
         .map_err(|error| AgentCatalogCodecError::Discovery(error.id()))?;
+    #[cfg(test)]
     record_layer(
         &transaction.report,
         &transaction.source,

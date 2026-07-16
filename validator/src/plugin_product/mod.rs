@@ -14,7 +14,6 @@ pub mod source_closure;
 // including every integration test through the library, expose the adapter.
 pub mod distribution_adapter;
 
-// Agent-discovery and host-lifecycle candidate sources remain exercised by
-// their path-bound integration contracts. They are intentionally absent from
-// production until a supported host adapter and a real public caller adopt
-// their sealed construction routes.
+// The registry control plane consumes the sealed read-only agent authority
+// transaction. Host discovery and route eligibility remain separate surfaces.
+pub(crate) mod agent_discovery;

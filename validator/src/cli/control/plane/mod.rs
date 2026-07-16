@@ -9,6 +9,13 @@ pub(crate) struct ControlCommand {
     pub(crate) operation: ControlOperation,
     pub(crate) receipt: Option<PathBuf>,
     pub(crate) surface_root: Option<PathBuf>,
+    pub(crate) agent_authority_roots: Option<AgentAuthorityRoots>,
+}
+
+#[derive(Debug)]
+pub(crate) struct AgentAuthorityRoots {
+    pub(crate) package: PathBuf,
+    pub(crate) project: PathBuf,
 }
 
 pub(crate) fn parse(raw: &[String]) -> Option<ControlCommand> {
@@ -111,6 +118,7 @@ pub(crate) fn parse(raw: &[String]) -> Option<ControlCommand> {
         operation,
         receipt: opt_path(raw, "--receipt"),
         surface_root: surface_root(raw),
+        agent_authority_roots: agent_authority_roots(raw).ok()?,
     })
 }
 
@@ -126,7 +134,12 @@ pub(crate) fn run(root: &Path, command: &ControlCommand) -> Result<i32, String> 
         return surface::run(root, command, &claim_receipt_path);
     }
     let package_digest = crate::package::inventory::package_digest(root)?;
-    registry::mint_fail_closed_if_needed(root, command.operation, &package_digest)?;
+    registry::mint_fail_closed_if_needed(
+        root,
+        command.operation,
+        &package_digest,
+        command.agent_authority_roots.as_ref(),
+    )?;
     let mut receipt = receipt(root, command)?;
     registry::telemetry::attach(root, command, &mut receipt, started)?;
     let exit = i32::from(receipt.get("status").and_then(Value::as_str) != Some("pass"));
@@ -161,6 +174,17 @@ fn surface_root(args: &[String]) -> Option<PathBuf> {
     opt_path(args, "--surface-root")
         .or_else(|| opt_path(args, "--installed-root"))
         .or_else(|| opt_path(args, "--cache-root"))
+}
+
+fn agent_authority_roots(args: &[String]) -> Result<Option<AgentAuthorityRoots>, ()> {
+    match (
+        opt_path(args, "--agent-package-root"),
+        opt_path(args, "--agent-project-root"),
+    ) {
+        (Some(package), Some(project)) => Ok(Some(AgentAuthorityRoots { package, project })),
+        (None, None) => Ok(None),
+        _ => Err(()),
+    }
 }
 
 pub(crate) mod emit;

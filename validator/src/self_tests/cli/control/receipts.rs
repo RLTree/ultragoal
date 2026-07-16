@@ -28,6 +28,7 @@ fn receipt_blocks_claims_and_records_required_evidence() {
         operation: ControlOperation::RegistryProbe,
         receipt: None,
         surface_root: None,
+        agent_authority_roots: None,
     };
     let value = receipt(&root, &registry).expect("receipt builds");
     assert_eq!(value["schema"], RECEIPT_SCHEMA);
@@ -54,6 +55,7 @@ fn receipt_blocks_claims_and_records_required_evidence() {
         operation: ControlOperation::SelfUpdateGoalEligibility,
         receipt: None,
         surface_root: None,
+        agent_authority_roots: None,
     };
     let value = receipt(&root, &update_goal).expect("update-goal receipt builds");
     assert!(
@@ -79,6 +81,7 @@ fn control_plane_schema_accepts_emitted_observability_fields() {
         operation: ControlOperation::SelfUpdateGoalEligibility,
         receipt: Some(path.clone()),
         surface_root: None,
+        agent_authority_roots: None,
     };
     assert_eq!(run(&root, &command).expect("control run writes receipt"), 1);
     let value = crate::json_boundary::read_json(&root.join(&path)).expect("control receipt");
@@ -109,6 +112,7 @@ fn run_writes_and_prints_fail_closed_receipts() {
         operation: ControlOperation::PacketVerify,
         receipt: Some(path.clone()),
         surface_root: None,
+        agent_authority_roots: None,
     };
     assert_eq!(run(&root, &command).expect("run writes receipt"), 1);
     let value = crate::json_boundary::read_json(&root.join(&path)).expect("read receipt");
@@ -119,6 +123,7 @@ fn run_writes_and_prints_fail_closed_receipts() {
         operation: ControlOperation::FixturesAll,
         receipt: None,
         surface_root: None,
+        agent_authority_roots: None,
     };
     let missing_receipt = run(&root, &no_write).expect_err("run requires receipt path");
     assert!(missing_receipt.contains("missing required argument --receipt"));

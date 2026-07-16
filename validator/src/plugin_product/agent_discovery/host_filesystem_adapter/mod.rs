@@ -22,7 +22,7 @@ pub(crate) use descriptor::parse_descriptor;
 pub(crate) use unsupported::{AnchoredDirectory, AnchoredRoot, SecureFile};
 
 pub(crate) fn digest(bytes: &[u8]) -> String {
-    content_digest_adapter::sha256(bytes).expect("SHA-256 digest is total")
+    content_digest_adapter::sha256(bytes)
 }
 
 pub(crate) fn valid_sha256(value: &str) -> bool {

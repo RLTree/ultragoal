@@ -1,20 +1,25 @@
+#[cfg(test)]
 use super::report::{
     ReportState, SupportedHostAgentAuthorityReport, record_failure, reset_report, snapshot_report,
 };
 use super::roots::{SupportedHostAgentRoots, SupportedRootSet};
 use super::transaction::SupportedTransaction;
-use crate::plugin_product::agent_discovery::error::{AgentDiscoveryError, AgentDiscoveryErrorId};
+use crate::plugin_product::agent_discovery::error::AgentDiscoveryError;
+#[cfg(test)]
+use crate::plugin_product::agent_discovery::error::AgentDiscoveryErrorId;
 use crate::plugin_product::agent_discovery::host::{
     HostAgentAuthorityReader, HostAgentAuthorityRequest, HostAgentAuthorityTransaction,
     HostAgentAuthorityTransactionError,
 };
 use crate::plugin_product::agent_discovery::source::SourceAgentCatalog;
+#[cfg(test)]
 use std::sync::{Arc, Mutex};
 
 /// Descriptor-anchored, read-only host authority reader.
 pub struct SupportedHostAgentAuthorityReader {
     source: SourceAgentCatalog,
     roots: SupportedRootSet,
+    #[cfg(test)]
     report: Arc<Mutex<ReportState>>,
     #[cfg(test)]
     after_transaction_open: Option<Box<dyn FnOnce()>>,
@@ -31,12 +36,14 @@ impl SupportedHostAgentAuthorityReader {
         Ok(Self {
             source,
             roots,
+            #[cfg(test)]
             report: Arc::new(Mutex::new(ReportState::default())),
             #[cfg(test)]
             after_transaction_open: None,
         })
     }
 
+    #[cfg(test)]
     pub fn report(&self) -> SupportedHostAgentAuthorityReport {
         snapshot_report(&self.report)
     }
@@ -55,20 +62,27 @@ impl HostAgentAuthorityReader for SupportedHostAgentAuthorityReader {
             Result<&mut dyn HostAgentAuthorityTransaction, HostAgentAuthorityTransactionError>,
         ) -> T,
     ) -> T {
+        #[cfg(test)]
         reset_report(&self.report, &self.source, request);
         if request.project_root_sha256() != self.source.project_root_sha256()
             || request.candidate_id() != self.source.candidate_id()
             || request.session_id() != self.source.session_id()
         {
+            #[cfg(test)]
             record_failure(&self.report, AgentDiscoveryErrorId::InvalidBinding);
             return operation(Err(HostAgentAuthorityTransactionError::Failed));
         }
-        match SupportedTransaction::open(
+        #[cfg(test)]
+        let transaction = SupportedTransaction::open(
             self.source.clone(),
             self.roots.clone(),
             request,
             Arc::clone(&self.report),
-        ) {
+        );
+        #[cfg(not(test))]
+        let transaction =
+            SupportedTransaction::open(self.source.clone(), self.roots.clone(), request);
+        match transaction {
             Ok(mut transaction) => {
                 #[cfg(test)]
                 if let Some(hook) = self.after_transaction_open.take() {
@@ -76,8 +90,9 @@ impl HostAgentAuthorityReader for SupportedHostAgentAuthorityReader {
                 }
                 operation(Ok(&mut transaction))
             }
-            Err(error) => {
-                record_failure(&self.report, error.id());
+            Err(_error) => {
+                #[cfg(test)]
+                record_failure(&self.report, _error.id());
                 operation(Err(HostAgentAuthorityTransactionError::Failed))
             }
         }

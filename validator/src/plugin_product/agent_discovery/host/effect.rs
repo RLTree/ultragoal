@@ -95,7 +95,16 @@ impl ReadOnlyEffectEnforcement {
         &self,
         request: &ReadOnlyEffectRequest,
     ) -> Result<(), AgentDiscoveryError> {
-        if self.request_sha256 != request.request_sha256
+        let expected_request_sha256 = encode_digest(AgentProtocolCodecRequest::ReadOnlyEffect {
+            binding_sha256: request.binding_sha256(),
+            role_name: &request.role_name,
+            descriptor_sha256: &request.descriptor_sha256,
+            observation_nonce_sha256: &request.observation_nonce_sha256,
+        })
+        .map(|response| response.sha256())
+        .map_err(|_| invalid_binding())?;
+        if request.request_sha256() != expected_request_sha256
+            || self.request_sha256 != request.request_sha256
             || self.role_name != request.role_name
             || self.sandbox_mode != "read-only"
             || !self.workspace_write_denied

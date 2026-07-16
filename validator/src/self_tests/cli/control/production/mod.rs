@@ -96,6 +96,7 @@ fn write_control_green_root(root: &Path) -> String {
             operation,
             receipt: None,
             surface_root: Some(root.to_path_buf()),
+            agent_authority_roots: None,
         };
         let receipt =
             crate::cli::control::plane::surface::receipt(root, &command).expect("surface receipt");
@@ -126,6 +127,7 @@ fn production_control_plane_stays_transition_only_without_transactional_finaliza
         operation: ControlOperation::UpdateGoalEligibility,
         receipt: None,
         surface_root: None,
+        agent_authority_roots: None,
     };
     let value = receipt(&root, &command).expect("receipt");
     assert_eq!(value["status"], "fail");

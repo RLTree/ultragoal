@@ -90,6 +90,7 @@ impl AgentDiscoverySession {
         })
     }
 
+    #[cfg(test)]
     pub fn binding_sha256(&self) -> &str {
         &self.binding_sha256
     }
@@ -195,8 +196,11 @@ impl AgentDiscoverySession {
 
 fn transaction_error(error: HostAgentAuthorityTransactionError) -> AgentDiscoveryError {
     match error {
-        HostAgentAuthorityTransactionError::Unsupported
-        | HostAgentAuthorityTransactionError::Failed => {
+        #[cfg(test)]
+        HostAgentAuthorityTransactionError::Unsupported => {
+            AgentDiscoveryError::new(AgentDiscoveryErrorId::ObservationUnavailable)
+        }
+        HostAgentAuthorityTransactionError::Failed => {
             AgentDiscoveryError::new(AgentDiscoveryErrorId::ObservationUnavailable)
         }
     }

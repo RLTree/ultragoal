@@ -18,6 +18,7 @@ fn command(operation: ControlOperation) -> ControlCommand {
         operation,
         receipt: None,
         surface_root: None,
+        agent_authority_roots: None,
     }
 }
 

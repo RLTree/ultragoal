@@ -189,3 +189,39 @@ fn parses_package_surface_audit_roots() {
         Some(std::path::Path::new("target/cache"))
     );
 }
+
+#[test]
+fn agent_authority_roots_require_one_complete_explicit_pair() {
+    let complete = parse(&args(&[
+        "registry",
+        "probe",
+        "--agent-package-root",
+        "target/package",
+        "--agent-project-root",
+        "target/project",
+    ]))
+    .expect("complete agent authority roots");
+    let roots = complete
+        .agent_authority_roots
+        .expect("agent authority roots");
+    assert_eq!(roots.package, std::path::Path::new("target/package"));
+    assert_eq!(roots.project, std::path::Path::new("target/project"));
+    assert!(
+        parse(&args(&[
+            "registry",
+            "probe",
+            "--agent-package-root",
+            "target/package",
+        ]))
+        .is_none()
+    );
+    assert!(
+        parse(&args(&[
+            "registry",
+            "probe",
+            "--agent-project-root",
+            "target/project",
+        ]))
+        .is_none()
+    );
+}

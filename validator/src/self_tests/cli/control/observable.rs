@@ -23,6 +23,7 @@ fn self_update_goal_failures_emit_observable_repair_contract() {
         operation: ControlOperation::SelfUpdateGoalEligibility,
         receipt: Some(path.to_path_buf()),
         surface_root: None,
+        agent_authority_roots: None,
     };
 
     assert_eq!(run(&root, &command).expect("run writes receipt"), 1);

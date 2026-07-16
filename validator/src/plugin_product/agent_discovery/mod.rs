@@ -8,11 +8,17 @@ mod error;
 #[path = "host_filesystem_adapter/mod.rs"]
 mod filesystem;
 mod host;
+mod local_authority;
 mod model;
 mod protocol_codec;
 mod session;
 mod source;
 mod supported;
+
+pub(crate) use local_authority::{
+    LocalAgentAuthorityObservation, LocalAgentAuthorityRequest, LocalAgentRoleObservation,
+    observe_local_authority,
+};
 
 #[cfg(all(test, unix))]
 pub(crate) use filesystem::{

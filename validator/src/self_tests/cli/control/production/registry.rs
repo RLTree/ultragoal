@@ -59,6 +59,7 @@ fn registry_probe_reports_registry_surface_without_packet_circularity() {
         operation: ControlOperation::RegistryProbe,
         receipt: None,
         surface_root: None,
+        agent_authority_roots: None,
     };
     let value = receipt(&root, &command).expect("receipt");
     assert_eq!(value["status"], "fail");
@@ -87,6 +88,7 @@ fn registry_probe_reports_registry_surface_without_packet_circularity() {
             operation: ControlOperation::RegistryProbe,
             receipt: Some(receipt_path.clone()),
             surface_root: None,
+            agent_authority_roots: None,
         },
     )
     .expect("registry probe command");

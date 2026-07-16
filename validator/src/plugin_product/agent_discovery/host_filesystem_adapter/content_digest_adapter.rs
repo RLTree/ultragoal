@@ -8,17 +8,12 @@ pub(super) struct ContentDigestResponse {
     sha256: String,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub(super) enum ContentDigestError {
-    Unavailable,
+pub(super) fn sha256(bytes: &[u8]) -> String {
+    execute(ContentDigestRequest { bytes }).sha256
 }
 
-pub(super) fn sha256(bytes: &[u8]) -> Result<String, ContentDigestError> {
-    execute(ContentDigestRequest { bytes }).map(|response| response.sha256)
-}
-
-fn execute(request: ContentDigestRequest<'_>) -> Result<ContentDigestResponse, ContentDigestError> {
-    Ok(ContentDigestResponse {
+fn execute(request: ContentDigestRequest<'_>) -> ContentDigestResponse {
+    ContentDigestResponse {
         sha256: format!("sha256:{:x}", Sha256::digest(request.bytes)),
-    })
+    }
 }
