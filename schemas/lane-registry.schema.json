@@ -1,860 +1,129 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://harness-ultragoal.local/schemas/lane-registry.schema.json",
-  "title": "Harness Ultragoal Lane Registry",
+  "title": "Harness Ultragoal canonical successor lane registry",
   "type": "object",
-  "required": [
-    "schema",
-    "goal_id",
-    "canonical_authority",
-    "lanes",
-    "root_verification_stages",
-    "generated_at"
-  ],
+  "required": ["$schema", "schema", "checkpoint", "goal_id", "canonical_authority", "authority_mode", "root", "goal_binding", "source_context", "defaults", "state_policy", "lanes", "tombstones", "generated_at"],
   "properties": {
-    "schema": {
-      "const": "harness-ultragoal.lane-registry.v1"
-    },
-    "goal_id": {
-      "type": "string",
-      "minLength": 1
-    },
-    "canonical_authority": {
-      "const": "LANE_REGISTRY.json"
-    },
-    "lanes": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "object",
-        "required": [
-          "id",
-          "status",
-          "lane_type",
-          "lane_objective",
-          "macro_lane_rationale",
-          "acceptance_scope",
-          "lane_size_evidence",
-          "covered_claim_ids",
-          "owner",
-          "thread_or_session_id",
-          "actor_binding",
-          "branch",
-          "workspace",
-          "execplan",
-          "base_commit",
-          "current_commit",
-          "target_branch",
-          "target_head_at_launch",
-          "target_head_at_validation",
-          "merge_base_at_validation",
-          "last_heartbeat",
-          "owned_paths",
-          "forbidden_paths",
-          "state_roots",
-          "temporary_state_roots",
-          "tool_cache_roots",
-          "browser_profile_roots",
-          "artifact_root",
-          "port_allocations",
-          "ready_receipt",
-          "claim_ids",
-          "dependencies",
-          "workspace_status",
-          "teardown"
-        ],
-        "properties": {
-          "id": {
-            "$ref": "schema-authority-primitives.schema.json#/$defs/laneId"
-          },
-          "status": {
-            "enum": [
-              "planned",
-              "active",
-              "blocked",
-              "ready_for_review",
-              "merged",
-              "superseded",
-              "abandoned",
-              "complete"
-            ]
-          },
-          "lane_type": {
-            "enum": [
-              "implementation",
-              "verification",
-              "orchestration",
-              "parent_owned"
-            ]
-          },
-          "owner": {
-            "type": "string",
-            "minLength": 1
-          },
-          "thread_or_session_id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "actor_binding": {
-            "type": "object",
-            "required": [
-              "actor_id",
-              "thread_or_session_id",
-              "launch_receipt",
-              "latest_heartbeat_receipt",
-              "actor_status",
-              "validated_at"
-            ],
-            "properties": {
-              "actor_id": {
-                "type": "string",
-                "minLength": 1
-              },
-              "thread_or_session_id": {
-                "type": "string",
-                "minLength": 1
-              },
-              "launch_receipt": {
-                "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
-              },
-              "latest_heartbeat_receipt": {
-                "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
-              },
-              "actor_status": {
-                "enum": [
-                  "current",
-                  "stale",
-                  "superseded",
-                  "archived"
-                ]
-              },
-              "validated_at": {
-                "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
-              }
-            },
-            "additionalProperties": false
-          },
-          "branch": {
-            "type": "string",
-            "minLength": 1
-          },
-          "workspace": {
-            "type": "string",
-            "minLength": 1
-          },
-          "execplan": {
-            "type": "string",
-            "minLength": 1
-          },
-          "base_commit": {
-            "type": "string",
-            "minLength": 7
-          },
-          "current_commit": {
-            "type": "string",
-            "minLength": 7
-          },
-          "target_branch": {
-            "type": "string",
-            "minLength": 1
-          },
-          "target_head_at_launch": {
-            "type": "string",
-            "minLength": 7
-          },
-          "target_head_at_validation": {
-            "type": "string",
-            "minLength": 7
-          },
-          "merge_base_at_validation": {
-            "type": "string",
-            "minLength": 7
-          },
-          "target_freshness": {
-            "type": "object",
-            "required": [
-              "target_head_matches_live",
-              "merge_base_includes_target_head",
-              "checked_at",
-              "live_target_receipt"
-            ],
-            "properties": {
-              "target_head_matches_live": {
-                "type": "boolean"
-              },
-              "merge_base_includes_target_head": {
-                "type": "boolean"
-              },
-              "checked_at": {
-                "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
-              },
-              "stale_reason": {
-                "type": "string"
-              },
-              "live_target_receipt": {
-                "type": "object",
-                "required": [
-                  "command",
-                  "observed_target_head",
-                  "observed_merge_base",
-                  "observed_workspace",
-                  "observed_branch"
-                ],
-                "properties": {
-                  "command": {
-                    "$ref": "schema-authority-primitives.schema.json#/$defs/commandReceipt"
-                  },
-                  "observed_target_head": {
-                    "type": "string",
-                    "minLength": 7
-                  },
-                  "observed_merge_base": {
-                    "type": "string",
-                    "minLength": 7
-                  },
-                  "observed_workspace": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "observed_branch": {
-                    "type": "string",
-                    "minLength": 1
-                  }
-                },
-                "additionalProperties": false
-              }
-            },
-            "additionalProperties": false
-          },
-          "last_heartbeat": {
-            "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
-          },
-          "owned_paths": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "string"
-            }
-          },
-          "forbidden_paths": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "string"
-            }
-          },
-          "state_roots": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "string"
-            }
-          },
-          "temporary_state_roots": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "string"
-            }
-          },
-          "tool_cache_roots": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "browser_profile_roots": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "artifact_root": {
-            "type": "string",
-            "minLength": 1
-          },
-          "port_allocations": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "name",
-                "port"
-              ],
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "port": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 65535
-                }
-              },
-              "additionalProperties": false
-            }
-          },
-          "ready_receipt": {
-            "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
-          },
-          "claim_ids": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
-            }
-          },
-          "dependencies": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "upstream_lane_id",
-                "claim_id",
-                "required_status",
-                "validated_status",
-                "upstream_ready_receipt",
-                "evidence_digest",
-                "upstream_commit",
-                "validated_after_upstream_ready",
-                "validated_at"
-              ],
-              "properties": {
-                "upstream_lane_id": {
-                  "$ref": "schema-authority-primitives.schema.json#/$defs/laneId"
-                },
-                "claim_id": {
-                  "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
-                },
-                "required_status": {
-                  "$ref": "schema-authority-primitives.schema.json#/$defs/positiveClaimStatus"
-                },
-                "validated_status": {
-                  "$ref": "schema-authority-primitives.schema.json#/$defs/positiveClaimStatus"
-                },
-                "upstream_ready_receipt": {
-                  "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
-                },
-                "evidence_digest": {
-                  "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
-                },
-                "upstream_commit": {
-                  "type": "string",
-                  "minLength": 7
-                },
-                "validated_after_upstream_ready": {
-                  "const": true
-                },
-                "validated_at": {
-                  "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
-                }
-              },
-              "additionalProperties": false
-            }
-          },
-          "dependency_release": {
-            "type": "object",
-            "required": [
-              "action",
-              "downstream_lane_id",
-              "upstream_lane_id",
-              "claim_id",
-              "post_merge_receipt",
-              "decided_at",
-              "actor_id",
-              "thread_or_session_id",
-              "reason"
-            ],
-            "properties": {
-              "action": {
-                "enum": [
-                  "launch",
-                  "resume",
-                  "reblock"
-                ]
-              },
-              "downstream_lane_id": {
-                "$ref": "schema-authority-primitives.schema.json#/$defs/laneId"
-              },
-              "upstream_lane_id": {
-                "$ref": "schema-authority-primitives.schema.json#/$defs/laneId"
-              },
-              "claim_id": {
-                "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
-              },
-              "post_merge_receipt": {
-                "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
-              },
-              "decided_at": {
-                "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
-              },
-              "actor_id": {
-                "type": "string",
-                "minLength": 1
-              },
-              "thread_or_session_id": {
-                "type": "string",
-                "minLength": 1
-              },
-              "reason": {
-                "type": "string",
-                "minLength": 20
-              },
-              "blocker": {
-                "type": "object",
-                "additionalProperties": false,
-                "required": [
-                  "id",
-                  "owner",
-                  "reason",
-                  "affected_claim_ids"
-                ],
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "owner": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "reason": {
-                    "type": "string",
-                    "minLength": 20
-                  },
-                  "affected_claim_ids": {
-                    "type": "array",
-                    "minItems": 1,
-                    "items": {
-                      "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
-                    }
-                  }
-                }
-              }
-            },
-            "additionalProperties": false
-          },
-          "workspace_status": {
-            "type": "object",
-            "required": [
-              "clean",
-              "status_receipt",
-              "status_command_receipt",
-              "observed_clean",
-              "observed_workspace",
-              "observed_branch",
-              "observed_head",
-              "dirty_paths"
-            ],
-            "properties": {
-              "clean": {
-                "type": "boolean"
-              },
-              "status_receipt": {
-                "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
-              },
-              "preserved_dirty_paths": {
-                "type": "array",
-                "items": {
-                  "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
-                }
-              },
-              "status_command_receipt": {
-                "$ref": "schema-authority-primitives.schema.json#/$defs/commandReceipt"
-              },
-              "observed_clean": {
-                "type": "boolean"
-              },
-              "observed_workspace": {
-                "type": "string",
-                "minLength": 1
-              },
-              "observed_branch": {
-                "type": "string",
-                "minLength": 1
-              },
-              "observed_head": {
-                "type": "string",
-                "minLength": 7
-              },
-              "dirty_paths": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            },
-            "additionalProperties": false
-          },
-          "teardown": {
-            "type": "object",
-            "required": [
-              "required",
-              "status"
-            ],
-            "properties": {
-              "required": {
-                "type": "boolean"
-              },
-              "status": {
-                "enum": [
-                  "not_ready",
-                  "ready",
-                  "complete",
-                  "preserved_with_reason"
-                ]
-              },
-              "reason": {
-                "type": "string"
-              },
-              "receipt": {
-                "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
-              },
-              "cleanup_receipts": {
-                "type": "array",
-                "minItems": 1,
-                "items": {
-                  "$ref": "schema-authority-primitives.schema.json#/$defs/cleanupReceipt"
-                }
-              }
-            },
-            "additionalProperties": false,
-            "allOf": [
-              {
-                "if": {
-                  "properties": {
-                    "status": {
-                      "const": "preserved_with_reason"
-                    }
-                  }
-                },
-                "then": {
-                  "required": [
-                    "reason",
-                    "cleanup_receipts"
-                  ]
-                }
-              },
-              {
-                "if": {
-                  "properties": {
-                    "status": {
-                      "const": "complete"
-                    }
-                  }
-                },
-                "then": {
-                  "required": [
-                    "cleanup_receipts"
-                  ]
-                }
-              }
-            ]
-          },
-          "lane_objective": {
-            "type": "string",
-            "minLength": 20
-          },
-          "macro_lane_rationale": {
-            "type": "string",
-            "minLength": 40
-          },
-          "acceptance_scope": {
-            "type": "array",
-            "minItems": 2,
-            "items": {
-              "type": "string",
-              "minLength": 1
-            }
-          },
-          "lane_size_evidence": {
-            "type": "object",
-            "required": [
-              "independent_outcome",
-              "owned_path_groups",
-              "work_units",
-              "why_not_parent_inline",
-              "why_not_smaller"
-            ],
-            "properties": {
-              "independent_outcome": {
-                "type": "string",
-                "minLength": 40
-              },
-              "owned_path_groups": {
-                "type": "array",
-                "minItems": 2,
-                "items": {
-                  "type": "string",
-                  "minLength": 1
-                }
-              },
-              "work_units": {
-                "type": "array",
-                "minItems": 3,
-                "items": {
-                  "type": "string",
-                  "minLength": 1
-                }
-              },
-              "why_not_parent_inline": {
-                "type": "string",
-                "minLength": 30
-              },
-              "why_not_smaller": {
-                "type": "string",
-                "minLength": 30
-              }
-            },
-            "additionalProperties": false
-          },
-          "split_amendment_ref": {
-            "type": "string"
-          },
-          "covered_claim_ids": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
-            },
-            "uniqueItems": true
-          }
-        },
-        "allOf": [
-          {
-            "if": {
-              "properties": {
-                "status": {
-                  "enum": [
-                    "ready_for_review",
-                    "merged",
-                    "complete"
-                  ]
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "target_freshness"
-              ],
-              "properties": {
-                "actor_binding": {
-                  "properties": {
-                    "actor_status": {
-                      "const": "current"
-                    }
-                  }
-                },
-                "target_freshness": {
-                  "properties": {
-                    "target_head_matches_live": {
-                      "const": true
-                    },
-                    "merge_base_includes_target_head": {
-                      "const": true
-                    }
-                  }
-                }
-              }
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "status": {
-                  "enum": [
-                    "merged",
-                    "complete",
-                    "superseded",
-                    "abandoned"
-                  ]
-                }
-              }
-            },
-            "then": {
-              "properties": {
-                "teardown": {
-                  "properties": {
-                    "status": {
-                      "enum": [
-                        "complete",
-                        "preserved_with_reason"
-                      ]
-                    }
-                  }
-                }
-              },
-              "oneOf": [
-                {
-                  "properties": {
-                    "workspace_status": {
-                      "properties": {
-                        "clean": {
-                          "const": true
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "properties": {
-                    "workspace_status": {
-                      "required": [
-                        "preserved_dirty_paths"
-                      ],
-                      "properties": {
-                        "preserved_dirty_paths": {
-                          "minItems": 1
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ],
-        "additionalProperties": false
-      }
-    },
-    "root_verification_stages": {
-      "type": "object",
-      "required": [
-        "pre_merge_lane_gate",
-        "post_merge_integration_gate",
-        "final_all_lanes_gate"
-      ],
-      "properties": {
-        "pre_merge_lane_gate": {
-          "$ref": "#/$defs/rootPhasePreMerge"
-        },
-        "post_merge_integration_gate": {
-          "$ref": "#/$defs/rootPhasePostMerge"
-        },
-        "final_all_lanes_gate": {
-          "$ref": "#/$defs/rootPhaseFinal"
-        }
-      },
-      "additionalProperties": false
-    },
-    "generated_at": {
-      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
-    }
+    "$schema": {"const": "schemas/lane-registry.schema.json"},
+    "schema": {"const": "harness-ultragoal.lane-registry.v2"},
+    "checkpoint": {"const": "V8.1-canonical-state"},
+    "goal_id": {"type": "string", "minLength": 1},
+    "canonical_authority": {"const": "LANE_REGISTRY.json"},
+    "authority_mode": {"const": "single_root_writer_single_successor_registry"},
+    "root": {"$ref": "#/$defs/root"},
+    "goal_binding": {"$ref": "#/$defs/goalBinding"},
+    "source_context": {"$ref": "#/$defs/sourceContext"},
+    "defaults": {"$ref": "#/$defs/defaults"},
+    "state_policy": {"$ref": "#/$defs/statePolicy"},
+    "lanes": {"type": "array", "minItems": 18, "maxItems": 18, "items": {"$ref": "#/$defs/lane"}},
+    "tombstones": {"type": "array", "items": {"$ref": "#/$defs/tombstone"}},
+    "generated_at": {"$ref": "#/$defs/isoTimestamp"}
   },
   "additionalProperties": false,
   "$defs": {
-    "rootPhaseBase": {
+    "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "isoTimestamp": {"type": "string", "format": "date-time"},
+    "goalBinding": {
       "type": "object",
-      "required": [
-        "stage",
-        "status",
-        "trigger",
-        "owner",
-        "required_inputs",
-        "blocking",
-        "claim_ceiling_impact"
-      ],
+      "required": ["status", "goal_id", "objective", "contract_path", "checked_at", "gap_reason", "discovery_probe_receipt"],
       "properties": {
-        "stage": {
-          "$ref": "schema-authority-primitives.schema.json#/$defs/rootVerificationPhase"
-        },
-        "status": {
-          "enum": [
-            "pending",
-            "pass",
-            "fail",
-            "blocked"
-          ]
-        },
-        "trigger": {
-          "type": "string"
-        },
-        "owner": {
-          "type": "string"
-        },
-        "required_inputs": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "command_receipt": {
-          "$ref": "schema-authority-primitives.schema.json#/$defs/commandReceipt"
-        },
-        "artifact_receipt": {
-          "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
-        },
-        "blocking": {
-          "type": "boolean"
-        },
-        "claim_ceiling_impact": {
-          "type": "string"
-        },
-        "validated_at": {
-          "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
+        "status": {"enum": ["bound", "unavailable", "blocked"]}, "goal_id": {"type": "string", "minLength": 1}, "objective": {"type": "string", "minLength": 1}, "contract_path": {"type": "string", "minLength": 1}, "checked_at": {"$ref": "#/$defs/isoTimestamp"}, "gap_reason": {"type": "string", "minLength": 1},
+        "discovery_probe_receipt": {
+          "type": "object", "required": ["tool_surface", "attempted_tools", "verdict", "actor_id", "workspace", "output", "checked_at"],
+          "properties": {"tool_surface": {"type": "string", "minLength": 1}, "attempted_tools": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["get_goal", "create_goal", "update_goal", "automation_update", "create_thread"]}}, "verdict": {"enum": ["available", "unavailable", "blocked"]}, "actor_id": {"type": "string", "minLength": 1}, "workspace": {"type": "string", "minLength": 1}, "output": {"type": "object", "required": ["path", "digest"], "properties": {"path": {"type": "string", "minLength": 1}, "digest": {"$ref": "#/$defs/sha256"}}, "additionalProperties": false}, "checked_at": {"$ref": "#/$defs/isoTimestamp"}},
+          "additionalProperties": false
         }
       },
-      "allOf": [
-        {
-          "if": {
-            "properties": {
-              "status": {
-                "const": "pass"
-              }
-            }
-          },
-          "then": {
-            "required": [
-              "command_receipt",
-              "artifact_receipt",
-              "validated_at"
-            ]
-          }
-        }
-      ],
       "additionalProperties": false
     },
-    "rootPhasePreMerge": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/rootPhaseBase"
-        },
-        {
-          "properties": {
-            "stage": {
-              "const": "pre_merge_lane_gate"
-            }
-          }
-        }
-      ]
+    "laneId": {"type": "string", "pattern": "^N(0[0-9]|1[0-7])$"},
+    "state": {"enum": ["planned", "ready", "leased", "candidate", "under_review", "rework", "accepted", "integrating", "integrated", "blocked", "superseded"]},
+    "ref": {
+      "type": "object",
+      "required": ["path", "digest", "validity", "invalidation"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "digest": {"$ref": "#/$defs/sha256"},
+        "validity": {"enum": ["current_exact", "historical_nonselectable"]},
+        "invalidation": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
     },
-    "rootPhasePostMerge": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/rootPhaseBase"
-        },
-        {
-          "properties": {
-            "stage": {
-              "const": "post_merge_integration_gate"
-            }
-          }
-        }
-      ]
+    "sourceRef": {
+      "type": "object",
+      "required": ["path", "digest"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "digest": {"$ref": "#/$defs/sha256"}, "role": {"type": "string", "minLength": 1}},
+      "additionalProperties": false
     },
-    "rootPhaseFinal": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/rootPhaseBase"
-        },
-        {
-          "properties": {
-            "stage": {
-              "const": "final_all_lanes_gate"
-            }
-          }
-        }
-      ]
-    }
+    "consumedCategory": {
+      "type": "object",
+      "required": ["status", "digest", "entries"],
+      "properties": {"status": {"type": "string", "minLength": 1}, "digest": {"$ref": "#/$defs/sha256"}, "entries": {"type": "array"}},
+      "additionalProperties": false
+    },
+    "consumedSet": {
+      "type": "object",
+      "required": ["files", "symbols", "generated", "fixtures", "effects", "forbidden", "tools", "contract", "context"],
+      "properties": {
+        "files": {"$ref": "#/$defs/consumedCategory"}, "symbols": {"$ref": "#/$defs/consumedCategory"}, "generated": {"$ref": "#/$defs/consumedCategory"},
+        "fixtures": {"$ref": "#/$defs/consumedCategory"}, "effects": {"$ref": "#/$defs/consumedCategory"}, "forbidden": {"$ref": "#/$defs/consumedCategory"},
+        "tools": {"$ref": "#/$defs/consumedCategory"}, "contract": {"$ref": "#/$defs/consumedCategory"}, "context": {"$ref": "#/$defs/consumedCategory"}
+      },
+      "additionalProperties": false
+    },
+    "claimCeiling": {
+      "type": "object",
+      "required": ["effect", "supported_surfaces", "withheld_claims"],
+      "properties": {"effect": {"const": "withheld"}, "supported_surfaces": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "withheld_claims": {"type": "array", "minItems": 14, "items": {"type": "string", "pattern": "^CL-[A-Z0-9-]+$"}}},
+      "additionalProperties": false
+    },
+    "root": {
+      "type": "object",
+      "required": ["branch", "workspace", "base_commit", "base_tree", "workspace_status", "observed_at", "dirty_inventory", "observation"],
+      "properties": {
+        "branch": {"type": "string", "minLength": 1}, "workspace": {"type": "string", "minLength": 1}, "base_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "base_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "workspace_status": {"const": "dirty"}, "observed_at": {"$ref": "#/$defs/isoTimestamp"},
+        "dirty_inventory": {"type": "object", "required": ["owned", "root_owned", "foreign"], "properties": {"owned": {"type": "array", "minItems": 5, "items": {"type": "string"}}, "root_owned": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "foreign": {"type": "array", "minItems": 1, "items": {"type": "string"}}}, "additionalProperties": false},
+        "observation": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "sourceContext": {
+      "type": "object",
+      "required": ["board", "dependency_graph", "custom_tool_inventory", "claim_registry", "contract", "selection_rule"],
+      "properties": {"board": {"$ref": "#/$defs/sourceRef"}, "dependency_graph": {"$ref": "#/$defs/sourceRef"}, "custom_tool_inventory": {"$ref": "#/$defs/sourceRef"}, "claim_registry": {"$ref": "#/$defs/sourceRef"}, "contract": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/sourceRef"}}, "selection_rule": {"type": "string", "minLength": 1}},
+      "additionalProperties": false
+    },
+    "defaults": {
+      "type": "object",
+      "required": ["consumed_set", "claim_ceiling", "branch", "worktree", "execplan"],
+      "properties": {"consumed_set": {"$ref": "#/$defs/consumedSet"}, "claim_ceiling": {"$ref": "#/$defs/claimCeiling"}, "branch": {"type": "string", "minLength": 1}, "worktree": {"type": "string", "minLength": 1}, "execplan": {"type": "string", "minLength": 1}},
+      "additionalProperties": false
+    },
+    "statePolicy": {
+      "type": "object",
+      "required": ["allowed_states", "active_lane_ids", "canonical_writer", "projection_writers", "claim_decision_authority", "epoch_policy", "projection_binding", "root_blockers"],
+      "properties": {
+        "allowed_states": {"type": "array", "minItems": 11, "uniqueItems": true, "items": {"$ref": "#/$defs/state"}},
+        "active_lane_ids": {"type": "array", "minItems": 18, "maxItems": 18, "uniqueItems": true, "items": {"$ref": "#/$defs/laneId"}},
+        "canonical_writer": {"const": "root"}, "projection_writers": {"type": "object", "required": ["VERIFICATION_BACKLOG.json", "COMPLETION_MANIFEST.json"], "properties": {"VERIFICATION_BACKLOG.json": {"const": "root"}, "COMPLETION_MANIFEST.json": {"const": "root"}}, "additionalProperties": false},
+        "claim_decision_authority": {"type": "object", "required": ["writer_lane", "tool", "read_only_consumers"], "properties": {"writer_lane": {"const": "N12"}, "tool": {"const": "HCT-CLAIMS"}, "read_only_consumers": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"enum": ["N13", "N15", "N16", "N17"]}}}, "additionalProperties": false},
+        "epoch_policy": {"type": "string", "minLength": 1}, "projection_binding": {"type": "object", "required": ["base_commit", "base_tree", "finalization"], "properties": {"base_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "base_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "finalization": {"type": "string", "minLength": 1}}, "additionalProperties": false}, "root_blockers": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": false
+    },
+    "lane": {
+      "type": "object",
+      "required": ["id", "state", "board_ref", "owner", "objective", "current_state", "blocker", "dependencies", "authored_dependencies", "candidate_refs", "acceptance_refs", "required_hct_tools", "consumed_set", "claim_ceiling", "next_action", "branch", "worktree", "execplan", "epochs", "claim_role"],
+      "properties": {
+        "id": {"$ref": "#/$defs/laneId"}, "state": {"$ref": "#/$defs/state"}, "board_ref": {"const": "source_context.board"}, "owner": {"type": "string", "minLength": 1}, "objective": {"type": "string", "minLength": 1}, "current_state": {"type": "string", "minLength": 1}, "blocker": {"type": "string", "minLength": 1},
+        "dependencies": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/laneId"}}, "authored_dependencies": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/laneId"}}, "candidate_refs": {"type": "array", "items": {"$ref": "#/$defs/ref"}}, "acceptance_refs": {"type": "array", "items": {"$ref": "#/$defs/ref"}},
+        "required_hct_tools": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^HCT-[A-Z-]+$"}}, "consumed_set": {"const": "defaults.consumed_set"}, "claim_ceiling": {"const": "defaults.claim_ceiling"}, "next_action": {"type": "string", "minLength": 1}, "branch": {"type": ["string", "null"]}, "worktree": {"type": ["string", "null"]}, "execplan": {"type": ["string", "null"]},
+        "epochs": {"type": "object", "required": ["source", "live", "dag_edge_added"], "properties": {"source": {"type": "string", "minLength": 1}, "live": {"type": "string", "minLength": 1}, "dag_edge_added": {"const": false}, "note": {"type": "string"}}, "additionalProperties": false}, "claim_role": {"enum": ["none", "decision_writer", "read_only_reconciliation_consumer"]}
+      },
+      "additionalProperties": false
+    },
+    "tombstone": {"type": "object", "required": ["id", "kind", "identity", "selection", "reason"], "properties": {"id": {"type": "string", "minLength": 1}, "kind": {"type": "string", "minLength": 1}, "identity": {"type": "object"}, "selection": {"enum": ["never", "history_only"]}, "reason": {"type": "string", "minLength": 1}}, "additionalProperties": false}
   }
 }

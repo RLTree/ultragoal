@@ -1,15 +1,17 @@
 # Harness Ultragoal Successor Critical-Path Board
 
-Current recovery note (2026-07-14): durable host goal
-`019f5f39-507b-78a2-a96a-0b566a5a2126` remains active. Root integrated the
-independently accepted N04 source transaction and corrected WorkerResult through
-`665140d11`, tree `8dd8a461`; the N04 task is archived and its clean worktree is
-removed. Exact root library strict compilation still stops at 608
-warning-as-error diagnostics, so warning-free integration remains withheld.
+Current recovery note (2026-07-16): durable host goal
+`019f5f39-507b-78a2-a96a-0b566a5a2126` remains active. Root commit
+`66497891a`, tree `fce134c3`, confines Codex actions to a sanitized worktree
+runner. Real probes strip inherited secrets, use local Cargo/Rustup state,
+reject hostile tool hints, execute the account toolchain, and complete offline
+no-dependency metadata. `scripts/check` then stops because the isolated offline
+Cargo cache lacks `getrandom`; strict and product claims remain withheld.
 
-The node rows remain routing context and are not current candidate proof. Root
-acceptance records, exact candidate behavior, and named receipts remain the
-proof surfaces. Required follow-up is recorded in
+The node rows below are historical routing context and are not current
+candidate proof. `LANE_REGISTRY.json` is the sole operational queue;
+`VERIFICATION_BACKLOG.json` and `COMPLETION_MANIFEST.json` are root-written
+projections. Required follow-up is recorded in
 `docs/exec-plans/active/plugin-cli-authority-integration.md`. Until then source
 warning-free compilation, repository package, install, discovery, runtime,
 journey, release, node closure, and completion claims remain withheld.
@@ -18,17 +20,13 @@ Live root: `/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal`
 
 Branch: `codex/successor-contract-v2-live-product`
 
-Current integration basis before this documentation checkpoint:
-`665140d11c00b0706a60c94508efdbb1a2093667` / tree
-`8dd8a461a93652d8ed9e5ac01984e7323529e922`. The newest accepted ceiling is
-source-local N04 distribution transaction, confinement, identity, rollback,
-and recovery behavior. It does not establish repository package, install,
-cache, marketplace, app-registry, discovery, runtime, readiness, release,
-node-closure, or completion proof.
+Current integrated basis: `66497891a4` / tree `fce134c3c7`. The canonical
+registry and projections are being rebound to that exact commit before another
+implementation worktree launches. All prior acceptance refs remain
+historical/nonselectable until a fresh current-candidate binding exists.
 
-Manifest/routes digests from the prior reconciliation are stale after the integrated authority changes: `8494432c2ad67b679a75634fad68562e6a79dd3fcb3b76e756d020d88e33ad38` / `d5097c25585974e875a28e20e6f5dd9a82fee64e1d3bbdce2f8a030b43d5f6f4`. They must be recomputed at the next dependency-closed authority freeze. Candidate context remains external freeze evidence.
-
-Last broad diagnostic baseline before the current integration series: 2,239 of 2,365 tests passed with 126 open failures. It is historical diagnostic context, not current candidate proof or a completion/readiness surface.
+The last broad diagnostic baseline and the table below are historical context,
+not current candidate proof or a readiness surface.
 Rule: every digest-changing authority edit immediately reopens dependent evidence. Percentages are non-authoritative.
 
 | Node | Exact completion condition | Current proof state | Current blocker | Owner | Active lease / root action | Dependents | Next authoritative proof | Status |

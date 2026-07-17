@@ -1,14 +1,28 @@
 {
-  "template_kind": "harness-ultragoal.authoring-template.v1",
-  "target_schema": "harness-ultragoal.lane-registry.v1",
+  "$schema": "schemas/lane-registry.schema.json",
+  "template_kind": "harness-ultragoal.canonical-state-template.v8.1",
+  "target_schema": "harness-ultragoal.lane-registry.v2",
   "canonical_output": "LANE_REGISTRY.json",
-  "authority": "authoring-template-only; not evidence until generated from actual lanes",
-  "required_generation": [
-    "Register every active lane exactly once with owned paths, target freshness, actor binding, and teardown rules.",
-    "Every active lane must receive an operational objective packet before work starts or before a send-back steer: product-behavior objective, owned/forbidden authority, behavior rows, positive current-candidate proof or verified current-input reuse, negative false-pass proof, independent reconciliation, old-surface disposition, reviewer packet, parent reruns, blocker movement, claim ceiling, and unsupported claims.",
-    "Each behavior row must be evaluable as pass, partial, or blocked from exact commands, source paths, output fields, and falsification cases; broad prose, tests-only evidence, receipt existence, generated rows, or local JSON are not enough.",
-    "Parent acceptance must reject missing behavior rows, missing product run or verified reuse chain, missing negative falsification, missing old-surface disposition, missing reviewer packet, or unclear claim ceiling.",
-    "Terminal lanes require merge/supersession/abandonment evidence and cleanup receipts.",
-    "Do not treat status complete as merged."
-  ]
+  "authority": "authoring-template-only; the same-path registry is canonical and projections are read-only",
+  "required_top_level": ["root", "goal_binding", "source_context", "defaults", "state_policy", "lanes", "tombstones"],
+  "lane_contract": {
+    "required_fields": ["id", "state", "owner", "authored_dependencies", "candidate_refs", "acceptance_refs", "required_hct_tools", "consumed_set", "claim_ceiling", "next_action", "branch", "worktree", "execplan"],
+    "id_rule": "N00-N17 only",
+    "ref_rule": "Every selectable ref carries path, sha256 digest, validity, and invalidation; missing refs force blocked state.",
+    "consumed_set_rule": "Each lane inherits defaults.consumed_set with files, symbols, generated, fixtures, effects, forbidden, tools, contract, and context categories.",
+    "dependency_rule": "authored_dependencies are N00-N17 IDs sourced from source_context.dependency_graph; N09 epochs do not add a DAG edge; N10/N11 remain independent."
+  },
+  "claim_authority": {
+    "writer_lane": "N12",
+    "tool": "HCT-CLAIMS",
+    "read_only_consumers": ["N13", "N15", "N16", "N17"],
+    "claim_ceiling": "All CL-* rows remain withheld until same-surface proof and root reconciliation exist."
+  },
+  "projection_contract": {
+    "backlog": "VERIFICATION_BACKLOG.json",
+    "completion": "COMPLETION_MANIFEST.json",
+    "writer": "root",
+    "binding": "Use exact base commit/tree and recompute projection digests only after the registry candidate settles; never embed circular self-digests."
+  },
+  "selection": "Board is routing context only. Old custom tooling, legacy lane snapshots, stale branches, and duplicate ExecPlans are tombstone history and never selectable."
 }
