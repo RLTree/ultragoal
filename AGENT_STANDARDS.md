@@ -71,8 +71,10 @@ record the gap before acting.
   same-surface proof at the declared evidence level. Engine proof, Product
   Cohesion alone, Product Fitness alone, reviewer agreement, install success,
   or smoke tests are forbidden substitutes.
-- Material review uses the four merged canonical personas with the required model,
-  reasoning, full-scope, fresh-context cadence.
+- Review rigor follows the claim boundary. Routine lane acceptance uses one
+  risk-matched specialist for one exhaustive pass over the named invariant.
+  The four merged canonical personas are reserved for consequential
+  cross-domain milestones and product, release, or completion signoff.
 - A bounded review completes its named invariant surface and batches every
   demonstrated sibling defect into one response. One material defect rejects
   the candidate, but is not an early-stop condition unless continuing would be
@@ -91,7 +93,13 @@ record the gap before acting.
   scrubber, quality receipt, skill update, persona update, routed standard,
   resource-map update, hook, or backlog row.
 
-## Review Team Reminder
+## Review Cadence Reminder
+
+Bounded invariant review is the default material lane review. One specialist
+reviews the complete named invariant and applicable sibling, rollback,
+recovery, race, and false-pass transitions. It can support source or lane
+acceptance only; it cannot promote product, release, readiness, or completion
+claims.
 
 The canonical material review team is:
 
@@ -100,13 +108,11 @@ The canonical material review team is:
 3. Security Trust-Boundary Falsifier.
 4. Product and Simplicity Falsifier.
 
-Every material review round is a sign-off attempt using all four canonical
-personas with full current scope, fresh reviewers, current anchors, and the
-current claim ceiling. Use only runtime-supported model and reasoning
-configuration, and record it only when exposed. All four must return `SIGN_OFF` in the
-same round. Any `REVISE_BEFORE_NEXT_PHASE` or `BLOCKED` invalidates the round;
-repair, regenerate anchors, close reviewers, and start a fresh full-scope
-round.
+Use all four personas only for a milestone signoff that reaches a major root
+integration, Product Fitness, release, completion, protected cross-domain
+change, or explicit escalation. All four receive the full current scope and
+claim ceiling and must return `SIGN_OFF` in the same round. Ordinary lane
+refreezes do not trigger this team.
 
 Before launching reviewers, run the Material Review Scope Gate. Delta-only or
 advisory review is allowed only for non-signoff follow-up or deterministic

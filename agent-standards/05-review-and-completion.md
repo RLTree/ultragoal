@@ -42,11 +42,18 @@ evidence.
 - Approval must name the proof anchors checked and the claim ceiling that
   remains unsupported.
 
-## Four-Persona Review Team Law
+## Review Cadence Law
 
-Material review rounds use the repo-defined four-persona team. This template
-is guidance for agents; the enforceable review result is the typed review
-receipt bound to the validator, review-target, and archive anchors.
+Routine material lane review uses one risk-matched specialist and one exact
+freeze. The reviewer completes the whole named invariant, including applicable
+sibling, rollback, recovery, race, interruption, security, and false-pass
+classes. This review can support source or lane acceptance only. It cannot
+support Product Fitness, readiness, release, or completion.
+
+Use the repo-defined four-persona team only for a consequential cross-domain
+milestone, major root integration signoff, Product Fitness boundary, release,
+completion, or explicit escalation. The enforceable milestone result is the
+typed review receipt bound to the validator, review-target, and archive anchors.
 
 Required personas:
 
@@ -55,10 +62,9 @@ Required personas:
 3. Security Trust-Boundary Falsifier.
 4. Product and Simplicity Falsifier.
 
-Every material round uses all four personas, fresh-context reviewers, full
-scope, current validator receipt, current review-target digest, current archive
-receipt when relevant, and the current claim ceiling. Later rounds are not
-scoped only to previous blockers.
+Every milestone round uses all four personas, fresh-context reviewers, full
+scope, current claim-relevant anchors, and the current claim ceiling. Later
+milestone rounds are not scoped only to previous blockers.
 
 Spawn installed custom agent types only after the active Codex registry exposes
 them. Disk cache sync and `~/.codex/agents/` TOML presence are not enough.
@@ -69,7 +75,7 @@ cannot satisfy material sign-off.
 
 Cadence:
 
-- Every material review round is a sign-off attempt. Recompute only the
+- Every milestone review round is a sign-off attempt. Recompute only the
   canonical claim anchors whose candidate, authority surface, or freshness rule
   makes them necessary for that round; do not regenerate detached, historical,
   superseded, or unrelated receipts.
@@ -81,6 +87,11 @@ Cadence:
 - All four must return `SIGN_OFF` in the same round. Any
   `REVISE_BEFORE_NEXT_PHASE` or `BLOCKED` invalidates the round; repair,
   regenerate anchors, close reviewers, and start a fresh full-scope round.
+
+For bounded invariant review, use the lowest sufficient standard-tier route.
+Persist no separate review receipt unless a current claim, cross-process
+handoff, irreproducible observation, or recovery need consumes it. One
+exhaustive pass with no material finding closes the loop.
 
 ## Completion And Claim Ceiling Law
 

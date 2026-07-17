@@ -78,9 +78,11 @@ Reviewer/fixer loops use direct communication. Advisory development review is
 Sol/medium on the standard service tier; bounded repair uses the lowest-sufficient
 standard-tier patch route, raising reasoning only for a named invariant. Cached
 checks run during repair. Builds, strict checks, and broad audits run only at the
-decision boundary they can support. The repo-defined four-persona round is required for material signoff;
-until installed active-registry exposure is current, generic reviewers remain
-advisory and material signoff stays withheld.
+decision boundary they can support. Routine lane acceptance uses one
+risk-matched specialist for one exhaustive invariant pass. The repo-defined
+four-persona round is reserved for consequential cross-domain milestones and
+product, release, or completion signoff; until installed active-registry
+exposure is current, those milestone claims stay withheld.
 
 Each freeze collects one exhaustive meaningful issue set. Only authority or
 security unsafety, false-pass enablement, integration invalidity,
@@ -118,12 +120,13 @@ source-local candidate preparation is allowed; live, product, claim, and
 inventory-adoption ceilings stay withheld. N00 adoption quarantines, rebinds,
 and reruns N01-N11.
 
-The root records four prelaunch gates with owner, command, status, and the
-derived clean candidate: compile (blocked), namespace
+The root records prelaunch gates with owner, command, status, and the derived
+clean candidate: compile (blocked), namespace
 (`target/debug/ultragoal --root . namespace check --strict --no-write --jobs 8`),
-standards (`scripts/check-agent-standards --root .`), and four-persona exposure
-for product/signoff/release/completion (blocked). No lane is selectable until every
-gate is current and a run-scoped lease is issued.
+and standards (`scripts/check-agent-standards .`). Four-persona exposure
+is a product/release/completion gate, not a prelaunch lane-selection gate. No
+lane is selectable until every applicable prelaunch gate is current and a
+run-scoped lease is issued.
 
 The lease record binds lease id, the exact clean current base commit/tree,
 branch, worktree, upstream identities, consumed files/symbols/generated
@@ -173,9 +176,9 @@ unique state is gone. Never rebase or repair a dirty worktree externally.
 | Boundary | Required evidence | Claims withheld before pass |
 | --- | --- | --- |
 | Implementation | Cheap deterministic checks and focused changed behavior | Source acceptance |
-| Worktree freeze | Exact identity; complete named invariant review; focused failure, race, recovery, security, and false-pass controls | Dependency eligibility and integration |
+| Worktree freeze | Exact identity; one risk-matched specialist completes the named invariant; focused failure, race, recovery, security, and false-pass controls | Dependency eligibility and integration |
 | Root integration | Affected strict compile partition, cross-lane behavior, namespaces, generated authority, docs, and claim-relevant coverage | Integrated dependency and strict claims |
-| Product freeze | Exact package/install/cache/registry/discovery/runtime identities; Product Success/Fitness/Cohesion; two real repositories when broad reuse is claimed | Installed, runtime, daily-driver, mastery |
+| Product freeze | Exact package/install/cache/registry/discovery/runtime identities; one canonical Product Fitness receipt; Product Success/Fitness/Cohesion; four-persona signoff; two real repositories when broad reuse is claimed | Installed, runtime, daily-driver, mastery |
 | Release freeze | Full standards/coverage, clean-room distribution, migration/retirement, representative journeys, four-persona signoff, release proof | Readiness and release |
 | Completion freeze | Final committed candidate, two byte-identical inventories, final falsification and requirement-to-evidence audit | Completion and goal completion |
 
@@ -184,6 +187,13 @@ candidate identity, evidence surface, and withheld claim. A delayed audit never
 promotes a claim. Receipts and build artifacts are retained only while they
 support an active claim, audit, or recovery need; reproducible caches and
 superseded evidence are removed at integration boundaries.
+
+Observability follows applicability rather than artifact volume. Every
+law-bearing command emits a typed redacted diagnostic envelope; logs are
+required for durable effects or reconstruction, metrics for aggregate rate or
+capacity claims, traces for multi-step or cross-process causality, and evals
+for model-behavior claims. All four join only at the observability capability
+claim and representative product or release proof.
 
 ## Current state and next actions
 
@@ -200,6 +210,16 @@ superseded evidence are removed at integration boundaries.
   reachability is allowed.
 - HCT-FIXTURES execution/parity, runtime, installed journey, readiness,
   release, and completion claims remain withheld.
+- The calibrated review, observability, and Product Fitness doctrine is now
+  projected through the canonical standards sources and templates. The
+  disconnected legacy material-review validator is not treated as production
+  enforcement; its bounded-invariant decision must be adopted through a live
+  successor route or retired before an enforcement claim is raised.
+- `scripts/check-agent-standards .` reaches the inherited
+  `cli-performance-latency-speed-iteration-fitness` pass-evidence digest
+  mismatch. The changed standards projection is current, but standards
+  compliance remains withheld until that stale evidence is reconciled without
+  manufacturing a replacement receipt.
 - No implementation worktree launches until the canonical P0 checkpoint is
   committed and the semantic-namespace/standards debt checkpoint is clean.
 - After P0, re-observe N02/N03 and select the smallest dependency-closed source

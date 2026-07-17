@@ -24,6 +24,13 @@ context.
 - Receipts bind audience, job, context, outcome, quality-in-use dimensions,
   accessibility, cognitive load, recovery burden, trust burden, human attention
   cost, continuance when claimed, proof surface, and claim ceiling.
+- Routine implementation observations stay lightweight and ephemeral. Persist
+  one canonical Product Fitness receipt only when a product, daily-driver,
+  broad-reuse, readiness, release, or completion claim consumes it.
+- A manual-first journey row records time to verified value, human
+  interventions, review rounds, recovery outcome, retained artifact/cache
+  cost, and observed false passes or false rejections. Do not build telemetry
+  infrastructure solely for these measurements.
 - Product research distinguishes observed, inferred, assumed, and missing
   evidence. Memory, stale screenshots, old packets, or docs are context only
   until refreshed or explicitly bound as historical evidence.

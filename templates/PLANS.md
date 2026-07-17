@@ -68,11 +68,11 @@ For macro-lanes, also include:
 - claim ceiling;
 - live beneficial end-to-end proof requirement;
 - ready receipt path;
-- review cadence and required reviewer personas when the lane is material;
-- review model and reasoning: every material sign-off round uses the four
-  merged canonical personas against the current validator, review-target,
-  archive, registry, and claim-ceiling anchors, with runtime-supported
-  configuration recorded only when exposed;
+- review cadence and the named invariant for bounded lane review;
+- review model and reasoning: one risk-matched specialist performs the routine
+  exhaustive invariant pass; four merged canonical personas are reserved for
+  consequential cross-domain milestones and product, release, or completion
+  signoff, with runtime-supported configuration recorded only when exposed;
 - parent-thread completion message contract;
 - teardown condition, including what proves the branch tip is preserved, the
   worktree is clean, evidence has been captured, and the worktree can be closed.
