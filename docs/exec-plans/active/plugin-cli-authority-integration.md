@@ -74,9 +74,10 @@ defects require one invariant-level repair across sibling, descendant,
 rollback, recovery, reconciliation, cleanup, and replay transitions.
 
 Reviewer/fixer loops use direct communication. Advisory development review is
-Sol/high; bounded repair is Luna/xhigh. Cached checks run during repair. Builds,
-strict checks, and broad audits run only at the decision boundary they can
-support. The repo-defined four-persona round is required for material signoff;
+Sol/medium on the standard service tier; bounded repair uses the lowest-sufficient
+standard-tier patch route, raising reasoning only for a named invariant. Cached
+checks run during repair. Builds, strict checks, and broad audits run only at the
+decision boundary they can support. The repo-defined four-persona round is required for material signoff;
 until installed active-registry exposure is current, generic reviewers remain
 advisory and material signoff stays withheld.
 
