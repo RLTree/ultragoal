@@ -20,8 +20,6 @@ mod value;
 
 pub use crate::context::EffectClass;
 pub use catalog::catalog;
-#[cfg(not(test))]
-pub use command_contract::CommandDescriptor;
 #[cfg(test)]
 pub use command_contract::LegacyCommand;
 #[cfg(test)]
