@@ -6,12 +6,7 @@ use crate::distribution::{
     DiscoveryObservation, DistributionReport, InstallPlan, InstallSnapshot, MarketplaceSnapshot,
     PackageIdentity, PackagePlan, PackageSnapshot, RuntimeObservation, SurfaceIdentity,
 };
-use crate::evaluation::{EvaluationRun, EvaluationSpec, FailureCase, PromotionDecision, TaskAudit};
 use crate::inventory::{AuthorityCatalog, GeneratedSurfaceIndex, InventoryBuilder};
-use crate::migration::{
-    CompatibilityRoute, MigrationPlan, MigrationPlanProjection, RetirementDecision,
-    RetirementTarget, RetirementTargetProjection,
-};
 use crate::observability::{
     CausalExplanation, EventQuery, EventStore, ExportAdapter, SemanticEvent,
 };
@@ -83,17 +78,6 @@ pub(crate) fn implemented_public_apis() -> &'static [&'static str] {
     require_type::<ProductState>();
     require_type::<NextAction>();
     require_type::<ClaimCeiling>();
-    require_type::<EvaluationSpec>();
-    require_type::<TaskAudit>();
-    require_type::<EvaluationRun>();
-    require_type::<FailureCase>();
-    require_type::<PromotionDecision>();
-    require_type::<MigrationPlan>();
-    require_type::<MigrationPlanProjection>();
-    require_type::<CompatibilityRoute>();
-    require_type::<RetirementTarget>();
-    require_type::<RetirementTargetProjection>();
-    require_type::<RetirementDecision>();
     // This list is an exact witness for adopted custom-tool API identifiers,
     // not a catalog of every compile-visible library type checked above.
     // Additional distribution and orchestration types below remain visibility
@@ -135,14 +119,5 @@ pub(crate) fn implemented_public_apis() -> &'static [&'static str] {
         "ProductState",
         "NextAction",
         "ClaimCeiling",
-        "EvaluationSpec",
-        "TaskAudit",
-        "EvaluationRun",
-        "FailureCase",
-        "PromotionDecision",
-        "MigrationPlan",
-        "CompatibilityRoute",
-        "RetirementTarget",
-        "RetirementDecision",
     ]
 }

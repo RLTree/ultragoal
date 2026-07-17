@@ -22,13 +22,10 @@ pub(crate) enum PackageEntryKind {
 pub(crate) struct PackageSnapshot {
     context_id: Arc<str>,
     snapshot_id: Arc<str>,
-    package_digest: Arc<str>,
-    manifest_bytes: Arc<[u8]>,
     manifest: Arc<DraftPackageManifest>,
-    listed_paths: Arc<[String]>,
     packaged_paths: Arc<[String]>,
-    dependency_paths: Arc<[String]>,
     unix_modes: Arc<BTreeMap<String, u32>>,
+    #[cfg(test)]
     tree: Arc<BTreeMap<String, PackageEntryKind>>,
     bytes: Arc<BTreeMap<String, Arc<[u8]>>>,
 }
@@ -42,34 +39,19 @@ impl PackageSnapshot {
         &self.snapshot_id
     }
 
-    pub(crate) fn package_digest(&self) -> &str {
-        &self.package_digest
-    }
-
-    pub(crate) fn manifest_bytes(&self) -> &[u8] {
-        &self.manifest_bytes
-    }
-
     pub(crate) fn manifest(&self) -> &DraftPackageManifest {
         &self.manifest
-    }
-
-    pub(crate) fn listed_paths(&self) -> &[String] {
-        &self.listed_paths
     }
 
     pub(crate) fn packaged_paths(&self) -> &[String] {
         &self.packaged_paths
     }
 
-    pub(crate) fn dependency_paths(&self) -> &[String] {
-        &self.dependency_paths
-    }
-
     pub(crate) fn unix_mode(&self, relative: &str) -> Option<u32> {
         self.unix_modes.get(relative).copied()
     }
 
+    #[cfg(test)]
     pub(crate) fn tree(&self) -> &BTreeMap<String, PackageEntryKind> {
         &self.tree
     }

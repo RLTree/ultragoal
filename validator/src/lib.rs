@@ -23,11 +23,14 @@ pub mod context;
 mod contract_check_ids;
 mod digest;
 pub mod distribution;
+#[cfg(test)]
 pub mod evaluation;
+#[cfg(test)]
 mod fixture_scheduler;
 mod generated_authority;
 pub mod inventory;
 mod json_boundary;
+#[cfg(test)]
 pub mod migration;
 pub mod observability;
 pub mod orchestration;

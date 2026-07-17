@@ -2,7 +2,7 @@ use super::{PackageCapture, PackageEntryKind, PackageSnapshot, Repo, status, wri
 use std::fs;
 
 #[test]
-fn snapshot_is_context_bound_deterministic_and_digest_compatible() {
+fn snapshot_is_context_bound_and_deterministic() {
     fn send_sync<T: Send + Sync>() {}
     send_sync::<PackageSnapshot>();
     let repo = Repo::new("package-snapshot-deterministic");
@@ -14,22 +14,13 @@ fn snapshot_is_context_bound_deterministic_and_digest_compatible() {
     .expect("rust source");
     let context = repo.context();
     let before = status(&repo.root);
-    let expected = crate::package::inventory::package_digest(&repo.root).expect("legacy digest");
-
     let finished = PackageCapture::begin(&context)
         .expect("snapshot capture")
         .finish()
         .expect("snapshot finish");
     assert_eq!(finished.context_id(), context.context_id());
-    assert_eq!(finished.package_digest(), expected);
-    assert_eq!(
-        finished.manifest_bytes(),
-        finished.bytes("plugin-manifest-draft.json").unwrap()
-    );
     assert_eq!(finished.manifest().name(), "snapshot-test");
-    assert_eq!(finished.listed_paths().len(), 3);
     assert_eq!(finished.packaged_paths(), [".codex-plugin/plugin.json"]);
-    assert!(finished.dependency_paths().len() >= finished.listed_paths().len());
     assert_eq!(finished.unix_mode(".codex-plugin/plugin.json"), Some(0o644));
     assert_eq!(
         finished.bytes("validator/src/unlisted.rs"),
@@ -41,7 +32,6 @@ fn snapshot_is_context_bound_deterministic_and_digest_compatible() {
         .finish()
         .expect("repeat finish");
     assert_eq!(second.snapshot_id(), finished.snapshot_id());
-    assert_eq!(second.package_digest(), finished.package_digest());
     assert_eq!(status(&repo.root), before);
     assert!(!repo.root.join("validation_artifacts").exists());
 }
@@ -143,12 +133,6 @@ fn nested_target_package_resource_is_captured_after_finalization_regression() {
         .expect("snapshot capture")
         .finish()
         .expect("snapshot finish");
-    assert!(
-        snapshot
-            .listed_paths()
-            .iter()
-            .any(|path| path == "skills/target/SKILL.md")
-    );
     assert_eq!(
         snapshot.bytes("skills/target/SKILL.md"),
         Some("legitimate package resource\n".as_bytes())

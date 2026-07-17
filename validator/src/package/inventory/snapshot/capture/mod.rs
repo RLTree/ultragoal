@@ -49,6 +49,13 @@ impl PackageCapture {
         };
         let package = read_package(&tree, &mut source)?;
         cache_rust_sources(&tree, &mut source)?;
+        if package
+            .listed_paths
+            .iter()
+            .any(|path| !source.bytes.contains_key(path))
+        {
+            return Err("package snapshot listed member is unavailable".to_string());
+        }
         let unix_modes = package
             .packaged_paths
             .iter()
@@ -62,7 +69,6 @@ impl PackageCapture {
             })
             .collect::<Result<BTreeMap<_, _>, _>>()?;
         let bytes = source.bytes;
-        let dependency_paths = bytes.keys().cloned().collect::<Vec<_>>();
         let tree_sha256 = identity::tree(&tree);
         let dependency_sha256 = identity::dependencies(&bytes);
         let snapshot_id = identity::snapshot(
@@ -75,13 +81,10 @@ impl PackageCapture {
         let snapshot = Arc::new(PackageSnapshot {
             context_id: Arc::from(context.context_id()),
             snapshot_id: Arc::from(snapshot_id),
-            package_digest: Arc::from(package.package_digest),
-            manifest_bytes: package.manifest_bytes,
             manifest: Arc::new(package.manifest),
-            listed_paths: Arc::from(package.listed_paths),
             packaged_paths: Arc::from(package.packaged_paths),
-            dependency_paths: Arc::from(dependency_paths),
             unix_modes: Arc::new(unix_modes),
+            #[cfg(test)]
             tree: Arc::new(tree),
             bytes: Arc::new(bytes),
         });

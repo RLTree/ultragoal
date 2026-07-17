@@ -16,10 +16,9 @@ mod descriptor;
 mod descriptor_race_control;
 mod environment;
 mod filesystem;
-// The legacy capture integration harness imports this module by path into a
-// reduced test crate.  Its root deliberately has no scheduler authority, so
-// the scheduler-only adapter is compiled only in the real crate.
-#[cfg(not(test))]
+// The fixture adapter is retained only for its direct contract tests. The
+// public capture product remains catalog-bound and has no scheduler authority.
+#[cfg(test)]
 mod fixture;
 mod identity_codec;
 mod inputs;
