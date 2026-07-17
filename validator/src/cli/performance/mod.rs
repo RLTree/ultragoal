@@ -1,9 +1,14 @@
+#[cfg(test)]
 use crate::cli::performance::measurement::{BudgetClass, PerformanceOperation};
+#[cfg(test)]
 use std::path::{Path, PathBuf};
+#[cfg(test)]
 use std::time::Instant;
 
+#[cfg(test)]
 pub(crate) use proof::receipt;
 
+#[cfg(test)]
 #[derive(Debug)]
 pub(crate) struct PerformanceCommand {
     pub(crate) operation: PerformanceOperation,
@@ -34,6 +39,7 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<PerformanceCommand>, String
     }))
 }
 
+#[cfg(test)]
 pub(crate) fn run(root: &Path, command: &PerformanceCommand) -> Result<i32, String> {
     let start = Instant::now();
     let mut receipt = receipt(root, command, 0)?;
@@ -81,5 +87,6 @@ fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     opt_string(args, key).map(PathBuf::from)
 }
 pub(crate) mod measurement;
+#[cfg(test)]
 pub(crate) mod proof;
 pub(crate) mod receipt;

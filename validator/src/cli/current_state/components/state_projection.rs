@@ -1,5 +1,6 @@
 use super::*;
 
+#[cfg(test)]
 #[derive(Debug)]
 pub(crate) struct CurrentStateCommand {
     pub(crate) json: bool,
@@ -17,6 +18,7 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<CurrentStateCommand>, Strin
     }))
 }
 
+#[cfg(test)]
 pub(crate) fn run(root: &Path, command: &CurrentStateCommand) -> Result<i32, String> {
     let state = snapshot(root)?;
     if let Some(relative) = command.receipt.as_ref() {
@@ -118,7 +120,7 @@ pub(crate) fn first_blocker(board: &Value, coverage: &Value, audit: &Value, red:
                 "id": "HCT-OBSERVE",
                 "surface": "successor observability catalog",
                 "failure_class": "hct_observe_successor_catalog_unavailable",
-                "why_failed": text(board, "why_failed", "HCT-OBSERVE successor catalog unavailable/not adopted"),
+                "why_failed": projection_text(board, "why_failed", "HCT-OBSERVE successor catalog unavailable/not adopted"),
                 "next_repair": "implement and adopt the typed candidate-bound HCT-OBSERVE successor catalog",
                 "narrow_rerun": "ultragoal current-state --json",
                 "broad_rerun": "source audit only after HCT-OBSERVE adoption and narrow verification"
@@ -128,13 +130,13 @@ pub(crate) fn first_blocker(board: &Value, coverage: &Value, audit: &Value, red:
             .get("first_incomplete")
             .cloned()
             .unwrap_or(Value::Null);
-        let id = text(&incomplete, "id", "observability_control_board");
+        let id = projection_text(&incomplete, "id", "observability_control_board");
         let (next_repair, narrow_rerun) = observability_repair(id);
         return json!({
             "id": id,
-            "surface": text(&incomplete, "family", "observability"),
+            "surface": projection_text(&incomplete, "family", "observability"),
             "failure_class": "unobservable_authority_surface",
-            "why_failed": format!("observability control board is {}", text(board, "status", "missing")),
+            "why_failed": format!("observability control board is {}", projection_text(board, "status", "missing")),
             "next_repair": next_repair,
             "narrow_rerun": narrow_rerun,
             "broad_rerun": "source audit once after narrow observable proof passes"
@@ -150,11 +152,11 @@ pub(crate) fn first_blocker(board: &Value, coverage: &Value, audit: &Value, red:
             return json!({
                 "id": receipt.get("path").and_then(Value::as_str).unwrap_or("receipt"),
                 "surface": "source-local receipt",
-                "failure_class": text(receipt, "failure_class", "stale_or_missing_source_local_authority"),
+                "failure_class": projection_text(receipt, "failure_class", "stale_or_missing_source_local_authority"),
                 "why_failed": format!(
                     "{} status={} current={}",
                     receipt.get("path").and_then(Value::as_str).unwrap_or("receipt"),
-                    text(receipt, "status", "unknown"),
+                    projection_text(receipt, "status", "unknown"),
                     receipt.get("current").and_then(Value::as_bool).unwrap_or(false)
                 ),
                 "next_repair": receipt_repair(receipt),
@@ -217,6 +219,10 @@ pub(crate) fn receipt_rerun(receipt: &Value) -> String {
         _ => "ultragoal current-state --json",
     }
     .to_string()
+}
+
+fn projection_text<'a>(value: &'a Value, field: &str, default: &'a str) -> &'a str {
+    value.get(field).and_then(Value::as_str).unwrap_or(default)
 }
 
 pub(crate) fn git_status(root: &Path) -> Value {

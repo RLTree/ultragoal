@@ -1,6 +1,9 @@
+#[cfg(not(test))]
+use crate::Args;
 #[cfg(test)]
 use crate::audit;
 use crate::cli;
+#[cfg(test)]
 use crate::command::{Args, Command};
 #[cfg(test)]
 use std::path::PathBuf;

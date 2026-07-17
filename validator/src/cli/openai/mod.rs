@@ -1,4 +1,5 @@
 use serde_json::Value;
+#[cfg(test)]
 use std::path::Path;
 #[cfg(test)]
 use std::path::PathBuf;
@@ -13,6 +14,7 @@ pub(crate) mod policy;
 pub(crate) const LAW_ID: &str = "openai-api-key-model-cost-external-ai-boundary";
 pub(crate) const RECEIPT_SCHEMA: &str = "harness-ultragoal.openai-config-receipt.v1";
 
+#[cfg(test)]
 #[derive(Debug)]
 pub(crate) enum OpenAiCommand {
     Config(config::ConfigCommand),
@@ -44,6 +46,7 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<OpenAiCommand>, String> {
     }
 }
 
+#[cfg(test)]
 pub(crate) fn run(root: &Path, command: &OpenAiCommand) -> Result<i32, String> {
     match command {
         OpenAiCommand::Config(config) => config::run(root, config),

@@ -9,6 +9,9 @@ pub(crate) fn parse_public_os_args_from(
         parsed.into_parts();
     Ok(Args {
         root: root.into_path_buf(),
+        #[cfg(not(test))]
+        outcome,
+        #[cfg(test)]
         command: Command::Successor(outcome),
     })
 }

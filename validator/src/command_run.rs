@@ -1,9 +1,19 @@
+#[cfg(not(test))]
+use crate::Args;
+#[cfg(test)]
 use crate::{Args, Command};
 
+#[cfg(not(test))]
+pub fn run(args: Args) -> Result<i32, String> {
+    crate::cli::successor_public::run_public(&args.root, args.outcome)
+}
+
+#[cfg(test)]
 pub fn run(args: Args) -> Result<i32, String> {
     run_with_exit_code(args)
 }
 
+#[cfg(test)]
 pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
     let root = args.root;
     match args.command {
@@ -126,6 +136,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
     }
 }
 
+#[cfg(test)]
 fn run_transactional_finalization(
     root: std::path::PathBuf,
     receipt: std::path::PathBuf,
@@ -150,6 +161,7 @@ fn run_transactional_finalization(
     ))
 }
 
+#[cfg(test)]
 struct SemanticReceiptArgs {
     root: std::path::PathBuf,
     input: std::path::PathBuf,
@@ -164,6 +176,7 @@ struct SemanticReceiptArgs {
     classifier_actor_id: String,
 }
 
+#[cfg(test)]
 fn run_semantic_receipts(args: SemanticReceiptArgs) -> Result<i32, String> {
     crate::semantic::receipt::generate(crate::semantic::receipt::GenerateOptions {
         root: args.root,

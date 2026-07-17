@@ -7,6 +7,7 @@ macro_rules! include_production_package_module {
 mod agent_manifest;
 mod agent_roles;
 mod api_witness;
+#[cfg(test)]
 mod archive;
 mod argument_parser;
 mod audit;
@@ -16,6 +17,7 @@ mod claim_semantics;
 mod claims;
 mod cli;
 pub use cli::capture;
+#[cfg(test)]
 mod command;
 mod command_run;
 mod command_witness;
@@ -51,6 +53,13 @@ mod skill_links;
 pub mod state;
 mod target_fixtures;
 mod target_repo;
+#[cfg(not(test))]
+pub(crate) struct Args {
+    pub(crate) root: std::path::PathBuf,
+    pub(crate) outcome: cli::successor::ParseOutcome,
+}
+
+#[cfg(test)]
 pub(crate) use command::{Args, Command};
 
 #[cfg(test)]

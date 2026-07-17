@@ -2,8 +2,10 @@ use serde::Serialize;
 
 pub(crate) const PERFORMANCE_RECEIPT_SCHEMA: &str = "harness-ultragoal.cli-performance-receipt.v1";
 
+#[cfg(test)]
 pub(crate) const PERFORMANCE_BUDGET_VERSION: &str = "2026-06-26.performance-budget.v1";
 
+#[cfg(test)]
 pub(crate) const PERFORMANCE_COMMANDS: &[&str] = &[
     "ultragoal performance prove",
     "ultragoal performance verify",
@@ -11,6 +13,7 @@ pub(crate) const PERFORMANCE_COMMANDS: &[&str] = &[
     "ultragoal self performance prove",
 ];
 
+#[cfg(test)]
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum PerformanceOperation {
@@ -20,6 +23,7 @@ pub(crate) enum PerformanceOperation {
     SelfProve,
 }
 
+#[cfg(test)]
 impl PerformanceOperation {
     pub(crate) fn id(self) -> &'static str {
         match self {
