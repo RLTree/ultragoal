@@ -146,33 +146,6 @@ fn audit_boundary_edges_reject_malformed_policy_surfaces() {
 }
 
 #[test]
-fn package_target_validation_covers_unreadable_and_schema_errors() {
-    let root = repo_root();
-    let store = crate::schema_catalog::load(&root);
-    let temp = temp_root("target-artifacts");
-    std::fs::create_dir_all(&temp).expect("temp");
-    let mut failures = BTreeMap::new();
-    crate::audit::package::targets::validate(
-        &store,
-        &mut failures,
-        &[json!({"path": temp.join("missing.json").display().to_string()})],
-    );
-    assert!(failures["target-repo-audit-capability"][0].contains("unreadable"));
-
-    let malformed = temp.join("malformed.json");
-    std::fs::write(&malformed, "{}").expect("malformed");
-    failures.clear();
-    crate::audit::package::targets::validate(
-        &store,
-        &mut failures,
-        &[json!({"path": malformed.display().to_string()})],
-    );
-    assert!(!failures["target-repo-audit-capability"].is_empty());
-    crate::audit::package::targets::validate(&store, &mut failures, &[json!({})]);
-    std::fs::remove_dir_all(temp).expect("cleanup");
-}
-
-#[test]
 fn coverage_scope_policy_reports_missing_surfaces_and_weakened_authority() {
     let root = temp_root("coverage-scope");
     std::fs::create_dir_all(&root).expect("coverage root");

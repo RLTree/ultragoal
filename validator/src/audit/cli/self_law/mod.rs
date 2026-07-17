@@ -27,8 +27,7 @@ pub(crate) fn check(
             format!("schema_catalog:{failure}"),
         );
     }
-    let schema =
-        crate::audit::package::checks::schema_validation_results(request.root, &store, scheduler);
+    let schema = crate::audit::package::schema::validation::mapped(request.root, &store, scheduler);
     for failure in schema.failures {
         push(&mut failures, "schema-valid", failure);
     }

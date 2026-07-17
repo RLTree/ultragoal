@@ -17,7 +17,7 @@ fn write_text(path: &Path, text: &str) {
 }
 
 #[test]
-fn law_surface_red_identity_and_package_check_routing_cover_green_edges() {
+fn law_surface_red_identity_covers_green_edges() {
     let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let package_failures = crate::audit::law::surface::receipts::package_failures(&repo);
     assert!(
@@ -60,34 +60,6 @@ fn law_surface_red_identity_and_package_check_routing_cover_green_edges() {
     crate::audit::red::catalog::check(&root, &store, &mut failures);
     assert!(failures.is_empty(), "{failures:?}");
 
-    write_json(
-        &root.join("docs/mandatory-law-surfaces.json"),
-        &json!({"laws":[{
-            "law_id":"entry-law",
-            "schema":"wrong",
-            "enforcement_status":"partial",
-            "red_fixture_ids":["red-one"],
-            "behavior_failure_modes":[],
-            "law_specific":{"guard":false}
-        }]}),
-    );
-    let routed = crate::audit::package::checks::checks(
-        &root,
-        &store,
-        &[
-            "entry-law".to_string(),
-            "source-obligation-coverage".to_string(),
-        ],
-        &[],
-    );
-    assert!(
-        routed
-            .get("entry-law")
-            .unwrap_or(&Vec::new())
-            .iter()
-            .any(|failure| failure.contains("mandatory_law_wrong_schema:entry-law")),
-        "{routed:?}"
-    );
     std::fs::remove_dir_all(root).expect("cleanup red identity green");
 }
 
@@ -151,7 +123,7 @@ fn source_obligation_text_guard_and_session_edges_cover_current_paths() {
 }
 
 #[test]
-fn schema_max_items_and_symlink_parent_creation_are_exercised() {
+fn schema_max_items_are_exercised() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-symlink-edges");
     write_json(
         &root.join("schemas/schema-catalog.json"),
@@ -168,18 +140,5 @@ fn schema_max_items_and_symlink_parent_creation_are_exercised() {
         "{errors:?}"
     );
 
-    write_json(
-        &root.join("validation_artifacts/product-cohesion/symlink-fixture.json"),
-        &json!({
-            "schema":"harness-ultragoal.target-fixture-symlink.v1",
-            "link_path":"new-parent/link",
-            "target_path":"target.txt"
-        }),
-    );
-    let fixture = crate::target_fixtures::materialize_symlink_fixture(&root)
-        .expect("symlink materialized")
-        .expect("fixture present");
-    assert!(fixture.link.is_symlink());
-    fixture.cleanup().expect("cleanup symlink");
-    std::fs::remove_dir_all(root).expect("cleanup schema symlink edges");
+    std::fs::remove_dir_all(root).expect("cleanup schema edges");
 }

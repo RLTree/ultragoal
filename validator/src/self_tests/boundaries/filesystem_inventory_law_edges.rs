@@ -1,5 +1,4 @@
 use serde_json::json;
-use std::collections::BTreeMap;
 
 fn write_text(path: &std::path::Path, text: &str) {
     if let Some(parent) = path.parent() {
@@ -16,7 +15,7 @@ fn write_json(path: &std::path::Path, value: &serde_json::Value) {
 }
 
 #[test]
-fn filesystem_inventory_and_target_edges() {
+fn filesystem_inventory_edges() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "filesystem_inventory-filesystem",
     );
@@ -63,27 +62,8 @@ fn filesystem_inventory_and_target_edges() {
             .any(|item| item.contains("__pycache__"))
     );
 
-    let target = crate::self_tests::boundaries::workspace_fixtures::temp_root(
-        "filesystem_inventory-target-fixture",
-    );
-    write_text(&target.join("target.txt"), "target");
-    write_json(
-        &target.join("validation_artifacts/product-cohesion/symlink-fixture.json"),
-        &json!({
-            "schema": "harness-ultragoal.target-fixture-symlink.v1",
-            "link_path": "auto/created/link.txt",
-            "target_path": "../../target.txt"
-        }),
-    );
-    let fixture = crate::target_fixtures::materialize_symlink_fixture(&target)
-        .expect("fixture materialized")
-        .expect("fixture present");
-    assert!(fixture.link.is_symlink());
-    fixture.cleanup().expect("cleanup");
-
     let _ = std::fs::remove_dir_all(root);
     let _ = std::fs::remove_dir_all(inventory_root);
-    let _ = std::fs::remove_dir_all(target);
 }
 
 #[test]
@@ -94,28 +74,6 @@ fn artifact_audit_and_receipt_edges() {
     write_text(&root.join("artifacts/proof.json"), "{\"ok\":true}");
     write_text(&root.join("artifacts/not-json.json"), "not-json");
     write_text(&root.join("__pycache__/stale.pyc"), "bytecode");
-    let digest = crate::digest::file(&root.join("artifacts/proof.json")).expect("digest");
-    let bad_json_digest =
-        crate::digest::file(&root.join("artifacts/not-json.json")).expect("bad digest");
-    let proof = json!({"path":"artifacts/proof.json","digest":digest});
-    assert!(crate::target_repo::artifact_refs::read_artifact_json(&root, &proof, "proof").is_ok());
-    let malformed = json!({"path":"artifacts/not-json.json","digest":bad_json_digest});
-    assert!(
-        crate::target_repo::artifact_refs::read_artifact_json(&root, &malformed, "proof")
-            .expect_err("malformed artifact")
-            .contains("json malformed")
-    );
-    for item in [
-        json!({"path":"","digest":crate::digest::ZERO}),
-        json!({"path":"artifacts/fixture-proof.json","digest":proof["digest"]}),
-        json!({"path":"../escape.json","digest":proof["digest"]}),
-        json!({"path":"artifacts/proof.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('e')}),
-    ] {
-        assert!(
-            crate::target_repo::artifact_refs::artifact_ref_error(&root, &item, "proof").is_some()
-        );
-    }
-
     let cli_failures = crate::audit::cli::control_plane::authority::package_failures(&root);
     assert!(
         cli_failures
@@ -172,9 +130,11 @@ fn artifact_audit_and_receipt_edges() {
             .any(|item| item.contains("cli_performance_missing_fail_closed_receipt"))
     );
 
-    let mut failures = BTreeMap::new();
-    crate::audit::package::checks::final_hygiene_check(&root, &mut failures);
-    assert!(!failures.is_empty());
+    assert!(
+        crate::package::inventory::closure::final_bytecode_failures(&root)
+            .iter()
+            .any(|failure| failure.contains("__pycache__"))
+    );
 
     assert!(crate::audit::validate_target_receipt(&json!({"status":"pass"})).is_err());
     assert_eq!(

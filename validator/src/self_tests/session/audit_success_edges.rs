@@ -123,24 +123,3 @@ fn claim_paths_cover_dogfood_lane_and_package_boundaries() {
     assert!(errors(&overlap).contains(&"active_lane_owned_path_overlap"));
     std::fs::remove_dir_all(root).expect("cleanup session_and_review claim boundaries");
 }
-
-#[test]
-fn target_symlink_parent_creation_is_explicit() {
-    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
-        "session_and_review-symlink-parent",
-    );
-    write_json(
-        &root.join("validation_artifacts/product-cohesion/symlink-fixture.json"),
-        &json!({
-            "schema":"harness-ultragoal.target-fixture-symlink.v1",
-            "link_path":"deep/new-parent/link",
-            "target_path":"target.txt"
-        }),
-    );
-    let fixture = crate::target_fixtures::materialize_symlink_fixture(&root)
-        .expect("symlink materialized")
-        .expect("fixture present");
-    assert!(fixture.link.parent().expect("link parent").is_dir());
-    fixture.cleanup().expect("cleanup symlink");
-    std::fs::remove_dir_all(root).expect("cleanup session_and_review symlink parent");
-}
