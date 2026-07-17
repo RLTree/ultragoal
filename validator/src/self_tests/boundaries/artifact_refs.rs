@@ -2,6 +2,55 @@ use std::io::{Error, ErrorKind};
 use std::path::Path;
 
 #[test]
+fn artifact_boundary_result_contracts_are_testable() {
+    let missing = Error::new(ErrorKind::NotFound, "forced missing");
+    assert!(
+        crate::target_repo::artifact_refs::target_root_result(Err(missing))
+            .expect_err("root canonicalization fails")
+            .contains("target repo root unavailable")
+    );
+    assert!(
+        crate::target_repo::artifact_refs::artifact_canonical_result(
+            "artifact",
+            "proof.json",
+            Err(Error::new(ErrorKind::NotFound, "forced missing")),
+        )
+        .expect_err("target artifact canonicalization fails")
+        .contains("artifact missing: proof.json")
+    );
+    assert!(
+        crate::target_repo::artifact_refs::artifact_metadata_result(
+            "artifact",
+            "proof.json",
+            Err(Error::new(ErrorKind::NotFound, "forced metadata")),
+        )
+        .expect_err("target artifact metadata fails")
+        .contains("artifact missing: proof.json")
+    );
+    assert!(
+        crate::target_repo::artifact_refs::artifact_bytes_result(
+            "artifact",
+            Err("forced read".to_string()),
+        )
+        .expect_err("target artifact read fails")
+        .contains("artifact unreadable")
+    );
+    assert!(
+        crate::target_repo::artifact_refs::artifact_json_result(
+            "artifact",
+            serde_json::from_slice(b"{"),
+        )
+        .expect_err("target artifact json fails")
+        .contains("json malformed")
+    );
+    assert!(
+        crate::target_repo::artifact_refs::artifact_digest_result(Err("forced digest".to_string()))
+            .expect_err("target artifact digest fails")
+            .contains("forced digest")
+    );
+}
+
+#[test]
 fn package_artifact_boundary_result_contracts_are_testable() {
     assert!(
         crate::package::artifact::refs::package_root_result(Err(Error::new(

@@ -51,6 +51,8 @@ pub(crate) mod self_tests;
 mod semantic;
 mod skill_links;
 pub mod state;
+mod target_fixtures;
+mod target_repo;
 #[cfg(not(test))]
 pub(crate) struct Args {
     pub(crate) root: std::path::PathBuf,

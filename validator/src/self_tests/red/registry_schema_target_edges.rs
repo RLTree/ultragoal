@@ -1,5 +1,6 @@
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
+use std::path::Path;
 
 fn write_json(path: &Path, value: &Value) {
     if let Some(parent) = path.parent() {
@@ -93,7 +94,29 @@ fn red_registry_and_semantic_boundaries() {
 }
 
 #[test]
-fn audit_schema_cli_edges() {
+fn audit_schema_cli_and_target_edges() {
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let out = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "target_boundary-target-audit",
+    );
+    let receipt = out.join("target-receipt.json");
+    let code = crate::audit::run(crate::audit::AuditOptions {
+        root: repo.clone(),
+        receipt: receipt.clone(),
+        red_report: None,
+        target_repo: Some(repo.join("fixtures/target-repo/valid-init")),
+        mode: "init".to_string(),
+        require_observability: false,
+        require_product_cohesion: false,
+        jobs: None,
+        command_text: "ultragoal target audit".to_string(),
+    })
+    .expect("target audit runs");
+    assert_eq!(code, 0);
+    let target_receipt = crate::json_boundary::read_json(&receipt).expect("target receipt");
+    crate::audit::validate_target_receipt(&target_receipt).expect("target receipt shape");
+    std::fs::remove_dir_all(&out).expect("cleanup target audit");
+
     let schemas =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("target_boundary-schemas");
     write_json(
@@ -152,5 +175,8 @@ fn audit_schema_cli_edges() {
         "{one_success:?}"
     );
 
+    let row = crate::target_repo::row(Path::new("/repo"), "pass", "detail", Some("rel"));
+    assert_eq!(row["status"], "pass");
+    assert_eq!(row["detail"], "detail");
     std::fs::remove_dir_all(schemas).expect("cleanup schemas");
 }

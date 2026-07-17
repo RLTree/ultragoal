@@ -1,0 +1,209 @@
+use crate::target_fixtures::spec::model::{TargetSpec, invalid, valid};
+
+pub fn push(out: &mut Vec<TargetSpec>) {
+    push_valid(out);
+    push_baseline_red(out);
+}
+
+fn push_valid(out: &mut Vec<TargetSpec>) {
+    out.extend([
+        valid(
+            "target-valid-init-receipt.json",
+            "fixtures/target-repo/valid-init",
+            false,
+            false,
+        ),
+        valid(
+            "target-valid-observability-receipt.json",
+            "fixtures/target-repo/valid-observability",
+            true,
+            false,
+        ),
+        valid(
+            "target-valid-product-cohesion-receipt.json",
+            "fixtures/target-repo/valid-product-cohesion",
+            false,
+            true,
+        ),
+    ]);
+}
+
+fn push_baseline_red(out: &mut Vec<TargetSpec>) {
+    push_mode_red(out);
+    push_basic_check_gate_red(out);
+    push_forged_check_gate_red(out);
+    push_worktree_env_red(out);
+}
+
+fn push_mode_red(out: &mut Vec<TargetSpec>) {
+    out.extend([
+        invalid(
+            "target-fake-init-receipt.json",
+            "fixtures/target-repo/red/fake-fresh-init",
+            "init",
+            false,
+            false,
+            "baseline-file:AGENTS.md",
+            "fail",
+        ),
+        invalid(
+            "target-fake-retrofit-receipt.json",
+            "fixtures/target-repo/red/fake-retrofit",
+            "retrofit",
+            false,
+            false,
+            "retrofit-backlog",
+            "fail",
+        ),
+        invalid(
+            "target-failing-gate-receipt.json",
+            "fixtures/target-repo/red/failing-gate",
+            "init",
+            false,
+            false,
+            "check-gate",
+            "fail",
+        ),
+        invalid(
+            "target-existing-as-init-receipt.json",
+            "fixtures/target-repo/red/existing-as-init",
+            "init",
+            false,
+            false,
+            "mode-provenance",
+            "fail",
+        ),
+        invalid(
+            "target-missing-coverage-command-receipt.json",
+            "fixtures/target-repo/red/missing-coverage-command",
+            "init",
+            false,
+            false,
+            "baseline-file:.harness/coverage-command",
+            "fail",
+        ),
+        invalid(
+            "target-empty-coverage-command-receipt.json",
+            "fixtures/target-repo/red/empty-coverage-command",
+            "init",
+            false,
+            false,
+            "baseline-file:.harness/coverage-command",
+            "fail",
+        ),
+        invalid(
+            "target-failing-coverage-command-receipt.json",
+            "fixtures/target-repo/red/failing-coverage-command",
+            "init",
+            false,
+            false,
+            "baseline-file:.harness/coverage-command",
+            "fail",
+        ),
+    ]);
+}
+
+fn push_basic_check_gate_red(out: &mut Vec<TargetSpec>) {
+    out.extend([
+        invalid(
+            "target-trivial-gate-receipt.json",
+            "fixtures/target-repo/red/trivial-gate",
+            "init",
+            false,
+            false,
+            "check-gate",
+            "fail",
+        ),
+        invalid(
+            "target-readme-existing-as-init-receipt.json",
+            "fixtures/target-repo/red/readme-existing-as-init",
+            "init",
+            false,
+            false,
+            "mode-provenance",
+            "fail",
+        ),
+        invalid(
+            "target-fake-marker-gate-receipt.json",
+            "fixtures/target-repo/red/fake-marker-gate",
+            "init",
+            false,
+            false,
+            "check-gate",
+            "fail",
+        ),
+        invalid(
+            "target-marker-only-gate-receipt.json",
+            "fixtures/target-repo/red/marker-only-gate",
+            "init",
+            false,
+            false,
+            "check-gate",
+            "fail",
+        ),
+    ]);
+}
+
+fn push_forged_check_gate_red(out: &mut Vec<TargetSpec>) {
+    out.extend([
+        invalid(
+            "target-unsafe-gate-command-receipt.json",
+            "fixtures/target-repo/red/unsafe-gate-command",
+            "init",
+            false,
+            false,
+            "check-gate",
+            "fail",
+        ),
+        invalid(
+            "target-forged-check-gate-receipt.json",
+            "fixtures/target-repo/red/forged-check-gate",
+            "init",
+            false,
+            false,
+            "check-gate",
+            "fail",
+        ),
+        invalid(
+            "target-duplicate-check-gate-receipt.json",
+            "fixtures/target-repo/red/duplicate-check-gate",
+            "init",
+            false,
+            false,
+            "check-gate",
+            "fail",
+        ),
+        invalid(
+            "target-symlink-check-gate-receipt.json",
+            "fixtures/target-repo/red/symlink-check-gate",
+            "init",
+            false,
+            false,
+            "check-gate",
+            "fail",
+        ),
+    ]);
+}
+
+fn push_worktree_env_red(out: &mut Vec<TargetSpec>) {
+    out.extend([
+        invalid(
+            "target-stale-worktree-env-receipt.json",
+            "fixtures/target-repo/red/stale-worktree-env",
+            "init",
+            false,
+            false,
+            "baseline-file:.codex/environments/environment.toml",
+            "fail",
+        ),
+        invalid(
+            "target-comment-only-worktree-env-receipt.json",
+            "fixtures/target-repo/red/comment-only-worktree-env",
+            "init",
+            false,
+            false,
+            "baseline-file:.codex/environments/environment.toml",
+            "fail",
+        ),
+    ]);
+}

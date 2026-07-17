@@ -1,5 +1,5 @@
 #[test]
-fn product_fitness_boundaries_fail_closed() {
+fn product_fitness_and_target_fixture_boundaries_fail_closed() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("product-fitness");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::create_dir_all(root.join("templates")).expect("templates");
@@ -47,5 +47,11 @@ fn product_fitness_boundaries_fail_closed() {
             .any(|item| item == "product_fitness_receipt_stale")
     );
 
+    let missing = crate::target_fixtures::target_capability_failures(&root, &[]);
+    assert!(
+        missing
+            .iter()
+            .any(|item| item.starts_with("missing target-repo audit files"))
+    );
     std::fs::remove_dir_all(root).expect("cleanup");
 }
