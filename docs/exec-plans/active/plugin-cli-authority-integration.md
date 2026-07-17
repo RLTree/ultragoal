@@ -9,6 +9,23 @@ projections. This plan explains how the root advances that state. Its exact
 digest is bound by `LANE_REGISTRY.json.source_context.operational_plan`; the
 historical duplicate-plan digest remains a tombstone with commit/tree provenance.
 
+## Stage B projection freeze (routing only)
+
+The Stage B candidate is rooted at parent commit
+`c0ab4de8de0ccd2254dddb5d21e598b36549cdd8` / tree
+`27b491bbba946b6d7dc878afeecf74d3f64608ce`. Stage A is accepted for the
+registry, closed lease contract, template, gates, scopes, graph, and review
+anchors; this plan and the board remain projections and cannot promote claims.
+The exact scheduler frontier is N04-N07 after N03, N09 after N02+N05, N08 after
+N04-N07, N10 after N03+N06+N09, N11 after N06+N07+N08, and N12 after N10+N11.
+After N12 the route is N12-A -> N14 -> N14-proof -> N12-B-invalidate-and-reproof
+-> parallel N13/N15 -> N16 -> N17. P0 is available only to root for compile,
+namespace, standards, and retention-aware cleanup; product lanes remain blocked.
+All fourteen claims remain withheld with empty evidence and no validator
+receipts. Cleanup removed 12.8 GB of reproducible state; 954 MB of unique
+home/tmp evidence remains retained. Retention-aware cleanup is still blocked
+until unique evidence is reviewed and the root handoff is current.
+
 ## Outcome
 
 Complete the plugin-led daily-driver product and typed Rust CLI kernel from
@@ -17,8 +34,8 @@ package, install, cache, marketplace, app registry, discovery, runtime,
 product, migration, release, and completion claims on their own surfaces.
 
 The current P0 checkpoint is the clean parent commit
-`8c330e1e297310da5f07b31bcde645d84160724f` / tree
-`53e574331b35ba5863c81405f18b5664d0f0cb2e`. The containing freeze must derive
+`c0ab4de8de0ccd2254dddb5d21e598b36549cdd8` / tree
+`27b491bbba946b6d7dc878afeecf74d3f64608ce`. The containing freeze must derive
 HEAD, parent/tree, exact diff paths, payload digests, projection chain, and
 clean status live. Prelaunch compile (569 lib / 614 test), namespace runtime
 verification, and four-persona exposure are blocked; standards rows are 122
@@ -80,8 +97,8 @@ The accepted execution path is V8.1:
    quarantine, rebind, and rerun of N01-N11 on that exact contract identity.
 7. N12 is the sole HCT-CLAIMS decision writer. N13, N15, N16, and N17 are
    read-only claim-reconciliation consumers.
-8. Advance N12, then N13, then N14. N14 invalidates the prior journey identity,
-   so rerun N13 before N15. Run the stable full rerun before N16, then N17.
+8. Advance N12-A, then N14 and N14-proof, then N12-B-invalidate-and-reproof.
+   Run N13 and N15 in parallel after that reproof, then N16 and N17.
 
 ### P0 freeze gates and lease protocol
 
@@ -158,8 +175,8 @@ superseded evidence are removed at integration boundaries.
 ## Current state and next actions
 
 - P0 canonical registry/projections are frozen against parent
-  `8c330e1e297310da5f07b31bcde645d84160724f` / tree
-  `53e574331b35ba5863c81405f18b5664d0f0cb2e`; the containing commit must prove
+  `c0ab4de8de0ccd2254dddb5d21e598b36549cdd8` / tree
+  `27b491bbba946b6d7dc878afeecf74d3f64608ce`; the containing commit must prove
   the exact diff and clean status live. All acceptance evidence is
   historical/nonselectable and all 14 claims remain withheld.
 - Global strict compilation still fails on the inherited warning wall; no

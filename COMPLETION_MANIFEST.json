@@ -4,10 +4,17 @@
   "required_claim_ids": ["CL-SOURCE", "CL-PACKAGE", "CL-INSTALL", "CL-DISCOVERY", "CL-RUNTIME", "CL-FIT", "CL-ROUTINE", "CL-OBSERVABILITY", "CL-STRICT", "CL-ORCHESTRATION", "CL-EVAL-IMPROVEMENT", "CL-REAL-JOURNEY", "CL-RELEASE", "CL-COMPLETION"],
   "required_claim_ids_hash": "sha256:4b2ed74c6725be599aceda2a08934f97d26f058ad3fda1824571c07b478fb9fd",
   "goal_binding": {
-    "status": "blocked", "goal_id": "019f5f39-507b-78a2-a96a-0b566a5a2126", "objective": "Complete the live Harness Ultragoal successor contract while preserving an honest claim ceiling.", "contract_path": "GOAL_CONTRACT.md", "checked_at": "2026-07-16T21:36:51-07:00", "gap_reason": "No typed repository-operational get_goal receipt is available; host binding context is not claim-bearing.",
-    "discovery_probe_receipt": {"tool_surface": "Codex goal tools", "attempted_tools": ["get_goal"], "verdict": "blocked", "actor_id": "OWN-ULTRA-ROOT", "workspace": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal", "output": {"path": "docs/ultragoal-successor-live/root-decisions/HOST-GOAL-BINDING.json", "digest": "sha256:5f6af3c22e93e4504bff9b0c6895a7088ee3895f8c08a0bc05a7ee4d0e4cb6c7"}, "checked_at": "2026-07-16T21:36:51-07:00"}
+    "status": "blocked", "goal_id": "019f5f39-507b-78a2-a96a-0b566a5a2126", "objective": "Complete the live Harness Ultragoal successor contract while preserving an honest claim ceiling.", "contract_path": "GOAL_CONTRACT.md", "checked_at": "2026-07-16T22:36:38-07:00", "gap_reason": "No typed repository-operational get_goal receipt is available; host binding context is not claim-bearing.",
+    "discovery_probe_receipt": {"tool_surface": "Codex goal tools", "attempted_tools": ["get_goal"], "verdict": "blocked", "actor_id": "OWN-ULTRA-ROOT", "workspace": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal", "output": {"path": "docs/ultragoal-successor-live/root-decisions/HOST-GOAL-BINDING.json", "digest": "sha256:5f6af3c22e93e4504bff9b0c6895a7088ee3895f8c08a0bc05a7ee4d0e4cb6c7"}, "checked_at": "2026-07-16T22:36:38-07:00"}
   },
-  "commit": "8c330e1e297310da5f07b31bcde645d84160724f",
+  "lineage": {
+    "goal": {"path": "GOAL_CONTRACT.md", "digest": "sha256:bc0080163641a33a781d5bd14dd4b40bdba507909a88bbba52303ec3a8295071", "validity": "current_exact", "invalidation": "invalidate_on_any_byte_change"},
+    "amendments": {"path": "AMENDMENTS.jsonl", "digest": "sha256:8d3333f118a55b981d8e1b88a23a8e4b0f65001317172fc3478d2b24d248e3ce", "validity": "current_exact", "invalidation": "invalidate_on_any_byte_change"},
+    "contract_bundle": {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-HANDOFF-MANIFEST.sha256", "digest": "sha256:d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51", "validity": "current_exact", "invalidation": "invalidate_on_any_byte_change"}
+  },
+  "commit": "c0ab4de8de0ccd2254dddb5d21e598b36549cdd8",
+  "tree": "27b491bbba946b6d7dc878afeecf74d3f64608ce",
+  "candidate_status": "pending",
   "root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
   "claim_ceiling": {"effect": "withheld", "all_claims_withheld": true, "reason": "P0 root-freeze prelaunch gates, lease issuance, live surfaces, inventory closure, review exposure, and completion reconciliation remain open."},
   "claims": [
@@ -27,7 +34,7 @@
     {"id": "CL-COMPLETION", "title": "Integrated completion", "description": "Withheld: required claims, goal binding, validator evidence, and cleanup remain unresolved.", "claim_scope": "required", "claim_kind": "static_contract", "status": "withheld_claim", "claim_surface": "root_integration", "allowed_evidence_surfaces": ["root_integration"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-014"}
   ],
   "verification_backlog_path": "VERIFICATION_BACKLOG.json",
-  "verification_backlog_digest": "sha256:34e2787c7f36ef17f65ec86d7f60e9023c234810890a32b52ff48c060f1c4b8f",
+  "verification_backlog_digest": "sha256:e843efa7cc19eb853f4df822e4b8d94fb4e1940ab750a00af336e4af4cc91080",
   "validator_receipts": [],
-  "generated_at": "2026-07-16T21:36:51-07:00"
+  "generated_at": "2026-07-16T22:36:38-07:00"
 }

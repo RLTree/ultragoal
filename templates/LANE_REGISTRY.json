@@ -3,27 +3,112 @@
   "template_kind": "harness-ultragoal.canonical-state-template.v8.1",
   "target_schema": "harness-ultragoal.lane-registry.v2",
   "canonical_output": "LANE_REGISTRY.json",
-  "authority": "authoring-template-only; the same-path registry is canonical and projections are read-only",
-  "required_top_level": ["root", "root_freeze", "pre_adoption_source", "prelaunch_gates", "lease_state", "execution_policy", "goal_binding", "source_context", "defaults", "state_policy", "lanes", "tombstones"],
+  "authority": "template-only; LANE_REGISTRY.json is canonical",
+  "required_top_level": [
+    "root",
+    "root_freeze",
+    "pre_adoption_source",
+    "prelaunch_gates",
+    "lease_state",
+    "execution_policy",
+    "goal_binding",
+    "source_context",
+    "defaults",
+    "state_policy",
+    "review_policy",
+    "lanes",
+    "tombstones"
+  ],
   "lane_contract": {
-    "required_fields": ["id", "state", "owner", "authored_dependencies", "candidate_refs", "acceptance_refs", "required_hct_tools", "consumed_set", "claim_ceiling", "next_action", "branch", "worktree", "execplan"],
-    "id_rule": "N00-N17 only",
-    "ref_rule": "Every selectable ref carries path, sha256 digest, validity, and invalidation; missing refs force blocked state.",
-    "consumed_set_rule": "Each lane inherits defaults.consumed_set with files, symbols, generated, fixtures, effects, forbidden, tools, contract, and context categories.",
-    "dependency_rule": "authored_dependencies are N00-N17 IDs sourced from source_context.dependency_graph; N09 epochs do not add a DAG edge; N10/N11 remain independent.",
-    "prelaunch_rule": "All lanes are blocked and leases unissued until compile, namespace, standards, and four-persona exposure gates pass; an exact run-scoped lease normalizes absolute/symlink paths, resolves linked-worktree gitdir targets, protects exact .git metadata files and Git refs only, records positive/negative overlap examples, and fails closed on overlap."
+    "required_fields": [
+      "id",
+      "owner",
+      "state",
+      "dependencies",
+      "scope_ids",
+      "authority"
+    ],
+    "id_rule": "N00-N17",
+    "dependency_rule": "Use FINAL-CONTRACT graph dependencies; scheduler frontier is N04-N07 after N03, N09 after N02+N05, N08 after N04-N07, N10 after N03+N06+N09, N11 after N06+N07+N08, N12 after N10+N11.",
+    "scope_rule": "Use only graph write scopes. Root-only nodes have empty scope_ids and fail closed. N13 is read-only multi-scope.",
+    "lease_rule": "Global typed lease schema/template only; unissued lanes carry no resolved record. Resolve branch/worktree, owned paths/symbols/generated/fixtures/effects, forbidden roots, and all ten isolated roots before issuance.",
+    "ref_rule": "Resolve all eight source refs as one current byte set; stale, missing, historical, or partial refs block selection.",
+    "retention_rule": "Never broad-delete .codex-worktree while unique fixture repositories or retained home/tmp evidence exist."
+  },
+  "lease_record": {
+    "lease_id": null,
+    "base_commit": "c0ab4de8de0ccd2254dddb5d21e598b36549cdd8",
+    "base_tree": "27b491bbba946b6d7dc878afeecf74d3f64608ce",
+    "branch": null,
+    "worktree": null,
+    "shared_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "owned_files": [],
+    "owned_symbols": [],
+    "generated_outputs": [],
+    "fixtures": [],
+    "effects": [],
+    "forbidden_roots": ["/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal", ".codex", ".agents", ".git"],
+    "root_only_surfaces": [".codex", ".agents", ".git"],
+    "protected_root_patterns": [".codex", ".codex/**", ".agents", ".agents/**", ".git", ".git/**", "**/.git", "**/.git/**", "**/.git/refs/**"],
+    "git_metadata_rule": "normalize absolute paths and symlinks, resolve linked-worktree gitdir, and protect .git files, gitdir targets, and gitdir refs",
+    "overlap_examples": {
+      "positive_rejections": [
+        {"path": "<worktree>/.git", "reason": "linked-worktree git metadata file"},
+        {"path": "<worktree>/.git/refs/heads/x", "reason": "git metadata ref"},
+        {"path": "<resolved-gitdir>/refs/heads/x", "reason": "resolved gitdir ref target"}
+      ],
+      "negative_allows": [
+        {"path": "docs/refs/example.md", "reason": "non-Git documentation path"},
+        {"path": "src/refs/example.rs", "reason": "non-Git source path"}
+      ]
+    },
+    "isolated_roots": {"HOME": "<lease>/home", "CARGO_HOME": "<lease>/cargo", "RUSTUP_HOME": "<lease>/rustup", "target": "<lease>/target", "tmp": "<lease>/tmp", "cache": "<lease>/cache", "port": "<lease>/port", "scratch": "<lease>/scratch", "artifact": "<lease>/artifact", "credentials": "<lease>/credentials"},
+    "overlap_verdict": "disjoint_required",
+    "overlap_rule": "normalize paths, symlinks, and gitdir metadata; fail closed on owned file/symbol/generated/fixture/effect/root overlap",
+    "clean_handoff": "unissued",
+    "reachable_tip": false,
+    "ready_receipt": null,
+    "teardown_retention": "retain only unique evidence; remove reproducible worktree state after handoff",
+    "status": "unissued"
   },
   "claim_authority": {
     "writer_lane": "N12",
-    "tool": "HCT-CLAIMS",
-    "read_only_consumers": ["N13", "N15", "N16", "N17"],
-    "claim_ceiling": "All CL-* rows remain withheld until same-surface proof and root reconciliation exist."
+    "read_only_consumers": [
+      "N13",
+      "N15",
+      "N16",
+      "N17"
+    ],
+    "claim_ceiling": "withheld"
   },
-  "projection_contract": {
+  "prelaunch": {
+    "gates": [
+      "compile",
+      "namespace",
+      "standards",
+      "four_persona_exposure"
+    ],
+    "all_lanes": "blocked",
+    "leases": "unissued",
+    "p0": "root_only"
+  },
+  "post_n12": [
+    "N12-A",
+    "N14",
+    "N14-proof",
+    "N12-B-invalidate-and-reproof",
+    [
+      "N13",
+      "N15"
+    ],
+    "N16",
+    "N17"
+  ],
+  "projections": {
     "backlog": "VERIFICATION_BACKLOG.json",
     "completion": "COMPLETION_MANIFEST.json",
     "writer": "root",
-    "binding": "Use exact parent commit/tree and recompute payload/source projection digests only after the candidate settles; never embed circular authority self-digests."
+    "circular_digests": "forbidden"
   },
-  "selection": "Board is routing context only. Old custom tooling, legacy lane snapshots, stale branches, and duplicate ExecPlans are tombstone history and never selectable."
+  "selection": "Board/plan are routing projections; stale branches/plans are history-only tombstones."
 }

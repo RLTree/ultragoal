@@ -2,8 +2,8 @@
 
 Current recovery note (2026-07-16): durable host goal
 `019f5f39-507b-78a2-a96a-0b566a5a2126` remains active. The P0 root-freeze
-parent is commit `8c330e1e297310da5f07b31bcde645d84160724f`, tree
-`53e574331b35ba5863c81405f18b5664d0f0cb2e`. The containing candidate must
+parent is commit `c0ab4de8de0ccd2254dddb5d21e598b36549cdd8`, tree
+`27b491bbba946b6d7dc878afeecf74d3f64608ce`. The containing candidate must
 prove that parent, exact changed-path set, payload digests, projection chain,
 and clean committed status from live git; this board remains routing-only.
 
@@ -19,13 +19,26 @@ Live root: `/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal`
 
 Branch: `codex/successor-contract-v2-live-product`
 
-Current integrated basis for this freeze: `8c330e1e2` / tree `53e574331b`. The
+Current integrated basis for this freeze: `c0ab4de8d` / tree `27b491bbba9`. The
 canonical registry and projections bind to that clean parent snapshot; no lane
 lease is issued and all N00-N17 lanes remain blocked until prelaunch gates pass.
 
 The last broad diagnostic baseline and the table below are historical context,
 not current candidate proof or a readiness surface.
 Rule: every digest-changing authority edit immediately reopens dependent evidence. Percentages are non-authoritative.
+
+## Stage B routing snapshot (projection, not authority)
+
+Parent identity is `c0ab4de8de0ccd2254dddb5d21e598b36549cdd8` /
+`27b491bbba946b6d7dc878afeecf74d3f64608ce`. Stage A registry, lease contract,
+template, gate identity, graph, scopes, and review anchors are accepted. The
+exact frontiers are N04-N07 after N03; N09 after N02+N05; N08 after N04-N07;
+N10 after N03+N06+N09; N11 after N06+N07+N08; N12 after N10+N11. The N14
+reproof route is N12-A, N14, N14-proof, N12-B-invalidate-and-reproof, parallel
+N13/N15, N16, N17. P0 is root-only and available only for compile, namespace,
+standards, and retention-aware cleanup. All fourteen claims remain withheld
+with empty evidence. Cleanup removed 12.8 GB reproducible state and retained
+954 MB unique home/tmp evidence; retention-aware cleanup remains blocked.
 
 | Node | Exact completion condition | Current proof state | Current blocker | Owner | Active lease / root action | Dependents | Next authoritative proof | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
