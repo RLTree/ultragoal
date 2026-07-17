@@ -5,12 +5,12 @@
 //! sibling child of `production` from inheriting field, signer, or ledger
 //! construction authority.
 
-#[path = "checkpoint.rs"]
-mod checkpoint;
 #[path = "execution_transaction.rs"]
 mod execution_transaction;
 #[path = "ledger.rs"]
 mod ledger;
+#[path = "ledger_observation.rs"]
+mod ledger_observation;
 #[path = "root_authority.rs"]
 mod root_authority;
 #[path = "store.rs"]

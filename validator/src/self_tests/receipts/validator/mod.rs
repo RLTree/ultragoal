@@ -109,7 +109,7 @@ fn validator_receipt_builds_execution_and_generated_artifacts() {
             cache_mode: "declared_local",
             resource_measurement_status: "wall_time_only_cpu_memory_io_unavailable",
             deterministic_ordering: true,
-            shared_validation_artifact_writes_allowed: false,
+            artifacts_are_isolated: true,
         }],
     })
     .expect("validator receipt");

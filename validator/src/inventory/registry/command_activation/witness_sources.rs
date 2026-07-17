@@ -34,8 +34,8 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "evaluation and migration command rows"
     ),
     source!(
-        "validator/src/cli/successor/catalog/fitting_and_validation.rs",
-        include_bytes!("../../../cli/successor/catalog/fitting_and_validation.rs"),
+        "validator/src/cli/successor/catalog/repository_fit_and_checks.rs",
+        include_bytes!("../../../cli/successor/catalog/repository_fit_and_checks.rs"),
         "repository fit and validation command rows"
     ),
     source!(

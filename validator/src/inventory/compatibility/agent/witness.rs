@@ -16,11 +16,11 @@ pub(crate) fn agent_registry_route_is_compiled(
 }
 
 fn target_state_matches(target: &InventoryEntry, spec: &AgentRouteSpec) -> bool {
-    let common = target.stable_id == spec.canonical_target
+    let matches_canonical_target = target.stable_id == spec.canonical_target
         && target.relative_path == spec.target_path
         && target.digest_sha256 == spec.target_sha256
         && target.authority_state == AuthorityState::Canonical;
-    common
+    matches_canonical_target
         && match spec.target_state {
             TargetState::ActiveAgent => {
                 target.kind == "agent"

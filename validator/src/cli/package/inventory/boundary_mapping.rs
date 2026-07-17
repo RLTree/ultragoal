@@ -13,7 +13,7 @@ fn metric(worker_count: usize, task_count: usize, queue_depth: usize) -> crate::
         cache_mode: "no_cache",
         resource_measurement_status: "test_metric",
         deterministic_ordering: true,
-        shared_validation_artifact_writes_allowed: false,
+        artifacts_are_isolated: true,
     }
 }
 

@@ -199,7 +199,7 @@ fn package_checks_emit_bounded_scheduler_metrics_for_schema_validation() {
     assert_eq!(metric.memory_bytes, None);
     assert_eq!(metric.io_bytes, None);
     assert!(metric.deterministic_ordering);
-    assert!(!metric.shared_validation_artifact_writes_allowed);
+    assert!(metric.artifacts_are_isolated);
     assert!(
         !results
             .failures
@@ -216,6 +216,6 @@ fn package_checks_emit_bounded_scheduler_metrics_for_schema_validation() {
     assert_eq!(package_metric.task_count, 7);
     assert!(package_metric.worker_count <= 2);
     assert!(package_metric.deterministic_ordering);
-    assert!(!package_metric.shared_validation_artifact_writes_allowed);
+    assert!(package_metric.artifacts_are_isolated);
     std::fs::remove_dir_all(root).expect("cleanup scheduler checks");
 }

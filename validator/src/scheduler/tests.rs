@@ -25,7 +25,7 @@ fn scheduler_returns_deterministic_order_after_parallel_join() {
     );
     assert_eq!(scheduled.metrics.worker_count, 4);
     assert!(scheduled.metrics.deterministic_ordering);
-    assert!(!scheduled.metrics.shared_validation_artifact_writes_allowed);
+    assert!(scheduled.metrics.artifacts_are_isolated);
     assert_eq!(
         scheduled.metrics.resource_measurement_status,
         "wall_time_only_cpu_memory_io_unavailable"

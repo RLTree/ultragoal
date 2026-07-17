@@ -104,7 +104,7 @@ pub(super) fn expose_members(fixture: &MutantCrate) {
         "    pub(crate) fn reserve(",
     );
     fixture.replace(
-        "orchestration/product/authority/production/ledger_checkpoint.rs",
+        "orchestration/product/authority/production/ledger_integrity.rs",
         "    pub(super) fn open(",
         "    pub(crate) fn open(",
     );

@@ -86,7 +86,7 @@ fn scheduler_receipt(
         failures.push("fixture_scheduler_nondeterministic_ordering".to_string());
     }
     for metric in &results.scheduler_metrics {
-        if metric.shared_validation_artifact_writes_allowed {
+        if !metric.artifacts_are_isolated {
             failures.push("fixture_scheduler_shared_validation_artifacts_allowed".to_string());
         }
         if !metric.deterministic_ordering {

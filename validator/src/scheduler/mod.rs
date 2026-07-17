@@ -92,7 +92,7 @@ pub(crate) struct Metrics {
     pub(crate) cache_mode: &'static str,
     pub(crate) resource_measurement_status: &'static str,
     pub(crate) deterministic_ordering: bool,
-    pub(crate) shared_validation_artifact_writes_allowed: bool,
+    pub(crate) artifacts_are_isolated: bool,
 }
 
 impl Metrics {
@@ -111,7 +111,7 @@ impl Metrics {
             "resource_measurement_status": self.resource_measurement_status,
             "candidate_digest": candidate_digest,
             "deterministic_ordering": self.deterministic_ordering,
-            "shared_validation_artifact_writes_allowed": self.shared_validation_artifact_writes_allowed,
+            "shared_validation_artifact_writes_allowed": !self.artifacts_are_isolated,
             "claim_impact": claim_impact
         })
     }
@@ -162,7 +162,7 @@ pub(crate) fn run_ordered<T: Send + 'static>(
             cache_mode: "declared_local",
             resource_measurement_status: "wall_time_only_cpu_memory_io_unavailable",
             deterministic_ordering: true,
-            shared_validation_artifact_writes_allowed: false,
+            artifacts_are_isolated: true,
         },
     }
 }

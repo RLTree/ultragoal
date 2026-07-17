@@ -106,7 +106,7 @@ pub(super) fn load(
                 "validator/src/command_witness.rs".to_owned(),
                 "validator/src/cli/successor/catalog/mod.rs".to_owned(),
                 "validator/src/cli/successor/catalog/evaluation_and_migration.rs".to_owned(),
-                "validator/src/cli/successor/catalog/fitting_and_validation.rs".to_owned(),
+                "validator/src/cli/successor/catalog/repository_fit_and_checks.rs".to_owned(),
                 "validator/src/cli/successor/catalog/inspection.rs".to_owned(),
                 "validator/src/cli/successor/catalog/observability_and_package.rs".to_owned(),
                 "validator/src/cli/successor/catalog/options.rs".to_owned(),

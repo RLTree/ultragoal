@@ -60,7 +60,7 @@ pub(crate) fn candidate_id(context: &LiveContext) -> Result<String, String> {
     Ok(digest_bytes(&bytes))
 }
 
-pub(crate) fn validate_scratch_root(path: &Path) -> Result<PathBuf, String> {
+pub(crate) fn validate_private_control_root(path: &Path) -> Result<PathBuf, String> {
     if !path.is_absolute()
         || path
             .components()

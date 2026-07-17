@@ -21,7 +21,8 @@ pub struct ClaimDefinition {
     pub required_decision_ids: Vec<String>,
     pub required_evidence: Vec<String>,
     pub current_live_evidence: Vec<String>,
-    pub current_live_evidence_status: String,
+    #[serde(rename = "current_live_evidence_status")]
+    pub current_evidence_observation_state: String,
     pub independent_reconciler: String,
     pub false_pass_controls: Vec<String>,
     pub claim_guard: String,
@@ -199,7 +200,7 @@ fn validate_definition(definition: &ClaimDefinition) -> Result<(), String> {
         || definition.required_surface_ids.is_empty()
         || definition.required_tool_ids.is_empty()
         || definition.false_pass_controls.is_empty()
-        || definition.current_live_evidence_status != "not_verified"
+        || definition.current_evidence_observation_state != "not_verified"
         || !definition.current_live_evidence.is_empty()
         || !unique_nonempty(&definition.required_evidence)
         || !unique_nonempty(&definition.required_surface_ids)

@@ -17,7 +17,7 @@ impl<'a> LocalNegativeControlAuthority<'a> {
         if !digest(&context_id) || !digest(&candidate_id) {
             return Err("claims-control-candidate-binding-invalid".to_owned());
         }
-        validate_scratch_root(scratch_root.as_ref())?;
+        validate_private_control_root(scratch_root.as_ref())?;
         validate_registry_control_index(definitions)?;
         Ok(Self {
             definitions,
