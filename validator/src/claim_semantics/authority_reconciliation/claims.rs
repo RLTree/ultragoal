@@ -1,3 +1,5 @@
+mod backlog;
+
 use crate::audit::contract::Failure;
 use crate::claim_semantics::str_field;
 use serde_json::Value;
@@ -43,7 +45,8 @@ pub(super) fn check(registry: &Value, root: &Path, out: &mut Vec<Failure>) {
     compare_ids(&claim_registry, &completion, &backlog, out);
     compare_projection_digest(registry, &completion, &backlog, out);
     compare_ref(registry, &claim_path, out);
-    super::freeze::payload_refs(registry, root, out);
+    backlog::check(&backlog, root, out);
+    backlog::payload_refs(registry, root, out);
 }
 
 fn compare_ids(

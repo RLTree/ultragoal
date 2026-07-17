@@ -94,3 +94,70 @@ pub(super) fn check(registry: &Value, out: &mut Vec<Failure>) {
         ));
     }
 }
+
+pub(super) fn check_lane_contracts(registry: &Value, out: &mut Vec<Failure>) {
+    let pre_adoption = &registry["pre_adoption_source"];
+    if pre_adoption.get("source_ceiling").and_then(Value::as_str)
+        != Some("source-local-speculative")
+        || pre_adoption
+            .get("eligible_scheduler_nodes")
+            .and_then(Value::as_array)
+            .is_none_or(|rows| !rows.is_empty())
+        || pre_adoption
+            .get("eligible_claim_ids")
+            .and_then(Value::as_array)
+            .is_none_or(|rows| !rows.is_empty())
+    {
+        out.push(Failure::new(
+            "authority-graph",
+            "pre_adoption_scheduler_or_claim_eligibility",
+            "pre_adoption_source",
+        ));
+    }
+    for lane in registry["lanes"].as_array().into_iter().flatten() {
+        let id = lane.get("id").and_then(Value::as_str).unwrap_or_default();
+        let dependencies = array_strings(lane, "dependencies");
+        let consumed = lane
+            .pointer("/consumption_contract/dependency_ids")
+            .and_then(Value::as_array)
+            .into_iter()
+            .flatten()
+            .filter_map(Value::as_str)
+            .map(str::to_owned)
+            .collect::<Vec<_>>();
+        let invalidated = lane
+            .pointer("/invalidation_contract/invalidated_by")
+            .and_then(Value::as_array)
+            .into_iter()
+            .flatten()
+            .filter_map(Value::as_str)
+            .map(str::to_owned)
+            .collect::<Vec<_>>();
+        let expected_ceiling = if id == "N00" {
+            "pre_adoption_context_only"
+        } else {
+            "pre_adoption_source_only"
+        };
+        if consumed != dependencies
+            || invalidated != dependencies
+            || lane.get("ceiling").and_then(Value::as_str) != Some(expected_ceiling)
+        {
+            out.push(Failure::new(
+                "authority-graph",
+                "lane_consumption_or_ceiling_mismatch",
+                id,
+            ));
+        }
+    }
+    if registry
+        .pointer("/execution_policy/n02_reobservation/before")
+        .and_then(Value::as_str)
+        != Some("N03")
+    {
+        out.push(Failure::new(
+            "authority-graph",
+            "n02_reobservation_missing",
+            "execution_policy.n02_reobservation",
+        ));
+    }
+}

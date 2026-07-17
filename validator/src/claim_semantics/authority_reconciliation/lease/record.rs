@@ -1,5 +1,6 @@
 use super::debt;
 use super::overlap;
+use super::plan_binding;
 use super::root;
 use crate::audit::contract::Failure;
 use crate::claim_semantics::str_field;
@@ -104,56 +105,42 @@ pub(super) fn validate_record(
                 "plan_digest",
             ));
         }
-        if record.get("base_commit").and_then(Value::as_str)
-            != registry
-                .pointer("/root/base_commit")
-                .and_then(Value::as_str)
-            || record.get("base_tree").and_then(Value::as_str)
-                != registry.pointer("/root/base_tree").and_then(Value::as_str)
+        let (candidate, _, clean) = root::current_candidate(root);
+        let base = record
+            .get("base_commit")
+            .and_then(Value::as_str)
+            .unwrap_or_default();
+        let base_tree = record
+            .get("base_tree")
+            .and_then(Value::as_str)
+            .unwrap_or_default();
+        if !clean
+            || !root::is_ancestor(root, base, &candidate)
+            || root::tree_at(root, base) != base_tree
         {
             out.push(Failure::new(
                 "authority-lease",
-                "lease_base_binding_mismatch",
+                "lease_issuance_base_invalid",
                 "base_commit/base_tree",
             ));
         }
-        let plan_ref = record
-            .get("plan_ref")
-            .and_then(Value::as_str)
-            .unwrap_or_default();
-        let safe = !plan_ref.is_empty()
-            && plan_ref.starts_with("docs/exec-plans/active/")
-            && !Path::new(plan_ref).is_absolute()
-            && !Path::new(plan_ref).components().any(|component| {
-                matches!(
-                    component,
-                    std::path::Component::ParentDir | std::path::Component::RootDir
-                )
-            });
-        let plan_path = root.join(plan_ref);
-        let contained = plan_path
-            .canonicalize()
-            .ok()
-            .zip(root.canonicalize().ok())
-            .is_some_and(|(candidate, root)| candidate.starts_with(root));
-        if !safe || !plan_path.is_file() || !contained {
-            out.push(Failure::new(
-                "authority-lease",
-                "lease_plan_ref_unavailable",
-                plan_ref,
-            ));
-        } else if crate::digest::file(&plan_path).unwrap_or_default()
-            != record
-                .get("plan_digest")
+        if !p0
+            && (record
+                .pointer("/refresh_state/observed_root_commit")
                 .and_then(Value::as_str)
-                .unwrap_or_default()
+                != Some(base)
+                || record
+                    .pointer("/refresh_state/observed_root_tree")
+                    .and_then(Value::as_str)
+                    != Some(base_tree))
         {
             out.push(Failure::new(
                 "authority-lease",
-                "lease_plan_digest_mismatch",
-                plan_ref,
+                "lease_observation_boundary_mismatch",
+                "base_commit/base_tree/refresh_state",
             ));
         }
+        plan_binding::validate(record, root, out);
         if record
             .get("commands")
             .and_then(Value::as_array)

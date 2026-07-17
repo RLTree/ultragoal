@@ -11,11 +11,13 @@ historical duplicate-plan digest remains a tombstone with commit/tree provenance
 
 ## Stage B projection freeze (routing only)
 
-The P0 candidate is rooted at containing parent commit
+The literal protected checkpoint is commit
 `97e24c9706e7b489bdbdc6184ff9520a7116c6fd` / tree
-`c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`. Stage A is accepted for the
-registry, closed lease contract, template, gates, scopes, graph, and review
-anchors; this plan and the board remain projections and cannot promote claims.
+`c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`. It is provenance, not the
+candidate: every candidate is the clean containing `HEAD`/tree derived live
+from that checkpoint. Stage A is accepted for the registry, closed lease
+contract, template, gates, scopes, graph, and review anchors; this plan and
+the board remain projections and cannot promote claims.
 The exact scheduler frontier is N04-N07 after N03, N09 after N02+N05, N08 after
 N04-N07, N10 after N03+N06+N09, N11 after N06+N07+N08, and N12 after N10+N11.
 After N12 the route is N12-A -> N14 -> N14-proof -> N12-B-invalidate-and-reproof
@@ -33,11 +35,10 @@ current repository truth. Preserve accepted source work while proving source,
 package, install, cache, marketplace, app registry, discovery, runtime,
 product, migration, release, and completion claims on their own surfaces.
 
-The current P0 checkpoint is the clean containing parent commit
-`97e24c9706e7b489bdbdc6184ff9520a7116c6fd` / tree
-`c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`. The containing freeze must derive
-HEAD, parent/tree, exact diff paths, payload digests, projection chain, and
-clean status live. Prelaunch compile (569 lib / 614 test), namespace runtime
+The current P0 candidate is always the clean containing `HEAD`/tree. The
+literal checkpoint above must remain an ancestor with its exact tree; the
+freeze derives live HEAD/tree, permitted root paths, payload digests,
+projection chain, and clean status. Prelaunch compile (569 lib / 614 test), namespace runtime
 verification, and four-persona exposure are blocked; standards rows are 122
 current. No lane is selectable and no lease is issued. All claims remain
 withheld. Namespace and standards are blocked/unavailable until their real
@@ -79,6 +80,12 @@ support. The repo-defined four-persona round is required for material signoff;
 until installed active-registry exposure is current, generic reviewers remain
 advisory and material signoff stays withheld.
 
+Each freeze collects one exhaustive meaningful issue set. Only authority or
+security unsafety, false-pass enablement, integration invalidity,
+operator-journey breakage, or high-compounding architectural debt returns the
+candidate for REWORK. Other findings go to `VERIFICATION_BACKLOG.json` with a
+named trigger, owner, and withheld-claim impact.
+
 ## Dependency and integration path
 
 The accepted execution path is V8.1:
@@ -93,9 +100,9 @@ The accepted execution path is V8.1:
    there is no invented N09-to-N08 edge.
 5. N10 and N11 may proceed in parallel after their own dependencies; refresh
    N11 only when N10 changes its exact consumed-set digest.
-6. Root adopts N00 DEFER-052 only after the N10/N11 deferred conditions are
-   satisfied and before N12 or N14. Adoption starts a new epoch and requires
-   quarantine, rebind, and rerun of N01-N11 on that exact contract identity.
+6. N00 adoption is the first dependency gate after P0. It starts a new epoch,
+   quarantines prior source-only evidence, and requires N01-N11 rebind and
+   re-observation before any scheduler or claim eligibility.
 7. N12 is the sole HCT-CLAIMS decision writer. N13, N15, N16, and N17 are
    read-only claim-reconciliation consumers.
 8. Advance N12-A, then N14 and N14-proof, then N12-B-invalidate-and-reproof.
@@ -109,14 +116,16 @@ source-local candidate preparation is allowed; live, product, claim, and
 inventory-adoption ceilings stay withheld. N00 adoption quarantines, rebinds,
 and reruns N01-N11.
 
-The root records four prelaunch gates with owner, command, status, and
-candidate: compile (blocked), namespace (blocked/unavailable because the
-historical `scripts/check namespace` invocation is not a real command),
-standards (blocked/unavailable), and four-persona exposure unavailable
-(blocked). No lane is selectable until every
+The root records four prelaunch gates with owner, command, status, and the
+derived clean candidate: compile (blocked), namespace
+(`target/debug/ultragoal --root . namespace check --strict --no-write --jobs 8`),
+standards (`scripts/check-agent-standards --root .`), and four-persona exposure
+for product/signoff/release/completion (blocked). No lane is selectable until every
 gate is current and a run-scoped lease is issued.
 
-The lease record binds lease id, base commit/tree, branch, worktree, owned
+The lease record binds lease id, the exact clean current base commit/tree,
+branch, worktree, upstream identities, consumed files/symbols/generated
+outputs/fixtures/effects, owned
 files/symbols, generated outputs, fixtures, effects, forbidden roots (including
 the shared root plus exact `.codex`, `.agents`, and linked-worktree `.git`
 metadata files, resolved gitdir targets, and Git refs only), protected-root
@@ -176,10 +185,10 @@ superseded evidence are removed at integration boundaries.
 
 ## Current state and next actions
 
-- P0 canonical registry/projections are frozen against parent
+- P0 canonical registry/projections retain literal checkpoint
   `97e24c9706e7b489bdbdc6184ff9520a7116c6fd` / tree
-  `c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`; the containing commit must prove
-  the exact diff and clean status live. All acceptance evidence is
+  `c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`; the clean containing candidate
+  must prove permitted paths and status live. All acceptance evidence is
   historical/nonselectable and all 14 claims remain withheld.
 - Global strict compilation still fails on the inherited warning wall; no
   suppression or dummy reachability is allowed.

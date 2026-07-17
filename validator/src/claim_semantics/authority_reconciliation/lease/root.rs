@@ -3,6 +3,62 @@ use crate::audit::contract::Failure;
 use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
+use std::process::Command;
+
+pub(super) fn current_candidate(root: &Path) -> (String, String, bool) {
+    let read = |args: &[&str]| {
+        Command::new("git")
+            .args(args)
+            .current_dir(root)
+            .output()
+            .ok()
+            .filter(|output| output.status.success())
+            .and_then(|output| String::from_utf8(output.stdout).ok())
+            .map(|value| value.trim().to_owned())
+            .unwrap_or_default()
+    };
+    (
+        read(&["rev-parse", "HEAD"]),
+        read(&["rev-parse", "HEAD^{tree}"]),
+        read(&["status", "--porcelain"]).is_empty(),
+    )
+}
+
+pub(super) fn is_ancestor(root: &Path, ancestor: &str, candidate: &str) -> bool {
+    !ancestor.is_empty()
+        && !candidate.is_empty()
+        && Command::new("git")
+            .args(["merge-base", "--is-ancestor", ancestor, candidate])
+            .current_dir(root)
+            .status()
+            .is_ok_and(|status| status.success())
+}
+
+pub(super) fn tree_at(root: &Path, commit: &str) -> String {
+    let spec = format!("{commit}^{{tree}}");
+    git(root, &["rev-parse", &spec])
+}
+
+pub(super) fn changed_paths(root: &Path, from: &str, to: &str) -> BTreeSet<String> {
+    let range = format!("{from}..{to}");
+    git(root, &["diff", "--name-only", &range])
+        .lines()
+        .filter(|path| !path.is_empty())
+        .map(str::to_owned)
+        .collect()
+}
+
+fn git(root: &Path, args: &[&str]) -> String {
+    Command::new("git")
+        .args(args)
+        .current_dir(root)
+        .output()
+        .ok()
+        .filter(|output| output.status.success())
+        .and_then(|output| String::from_utf8(output.stdout).ok())
+        .map(|value| value.trim().to_owned())
+        .unwrap_or_default()
+}
 
 pub(super) fn validate(
     record: &Value,

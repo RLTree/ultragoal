@@ -18,6 +18,7 @@ pub(super) fn check(record: &Value, registry: &Value, root: &Path, out: &mut Vec
             "lane_id",
         ));
     }
+    check_transition_binding(record, registry, out);
     let diagnostic_paths = overlap::array_set(record, "diagnostic_paths");
     let owned_files = overlap::array_set(record, "owned_files");
     let allowed_paths = registry
@@ -217,5 +218,31 @@ pub(super) fn check(record: &Value, registry: &Value, root: &Path, out: &mut Vec
                 forbidden,
             ));
         }
+    }
+}
+
+fn check_transition_binding(record: &Value, registry: &Value, out: &mut Vec<Failure>) {
+    let transition = registry.pointer("/lease_state/p0_exception/authority_transition");
+    let recorded = transition
+        .and_then(|row| row.get("status"))
+        .and_then(Value::as_str)
+        == Some("recorded");
+    let commit = transition
+        .and_then(|row| row.get("commit"))
+        .and_then(Value::as_str)
+        .unwrap_or_default();
+    let tree = transition
+        .and_then(|row| row.get("tree"))
+        .and_then(Value::as_str)
+        .unwrap_or_default();
+    if !recorded
+        || record.get("base_commit").and_then(Value::as_str) != Some(commit)
+        || record.get("base_tree").and_then(Value::as_str) != Some(tree)
+    {
+        out.push(Failure::new(
+            "authority-lease",
+            "p0_transition_binding_mismatch",
+            "authority_transition/base_commit/base_tree",
+        ));
     }
 }

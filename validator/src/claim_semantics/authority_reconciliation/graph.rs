@@ -23,6 +23,7 @@ pub(super) fn check(registry: &Value, root: &Path, out: &mut Vec<Failure>) {
     };
     compare_nodes(registry, &graph, out);
     route::check(registry, out);
+    route::check_lane_contracts(registry, out);
     compare_ref(registry, &graph_path, out);
 }
 

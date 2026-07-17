@@ -2,10 +2,11 @@
 
 Current recovery note (2026-07-16): durable host goal
 `019f5f39-507b-78a2-a96a-0b566a5a2126` remains active. The P0 root-freeze
-parent is commit `97e24c9706e7b489bdbdc6184ff9520a7116c6fd`, tree
-`c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`. The containing candidate must
-prove that parent, exact changed-path set, payload digests, projection chain,
-and clean committed status from live git; this board remains routing-only.
+literal protected checkpoint is commit `97e24c9706e7b489bdbdc6184ff9520a7116c6fd`,
+tree `c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`. The candidate is always the
+clean containing HEAD/tree derived live from that checkpoint; it must prove
+permitted paths, payload digests, projection chain, and clean status. This
+board remains routing-only.
 
 The node rows below are historical routing context and are not current
 candidate proof. `LANE_REGISTRY.json` is the sole operational authority;
@@ -19,9 +20,9 @@ Live root: `/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal`
 
 Branch: `codex/successor-contract-v2-live-product`
 
-Current integrated basis for this freeze: `97e24c970` / tree `c1d0cc65ff`. The
-canonical registry and projections bind to that clean parent snapshot; no lane
-lease is issued and all N00-N17 lanes remain blocked until prelaunch gates pass.
+The checkpoint above is provenance, not current-candidate proof. The canonical
+registry derives a clean current HEAD/tree; no lane lease is issued and all
+N00-N17 lanes remain blocked until P0 gates pass and N00 starts a new epoch.
 
 The last broad diagnostic baseline and the table below are historical context,
 not current candidate proof or a readiness surface.
@@ -29,14 +30,15 @@ Rule: every digest-changing authority edit immediately reopens dependent evidenc
 
 ## Stage B routing snapshot (projection, not authority)
 
-Parent identity is `97e24c9706e7b489bdbdc6184ff9520a7116c6fd` /
+Literal checkpoint identity is `97e24c9706e7b489bdbdc6184ff9520a7116c6fd` /
 `c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`. Stage A registry, lease contract,
 template, gate identity, graph, scopes, and review anchors are accepted. The
 exact frontiers are N04-N07 after N03; N09 after N02+N05; N08 after N04-N07;
 N10 after N03+N06+N09; N11 after N06+N07+N08; N12 after N10+N11. The N14
 reproof route is N12-A, N14, N14-proof, N12-B-invalidate-and-reproof, parallel
 N13/N15, N16, N17. P0 is root-only and available only for compile, namespace,
-standards, and retention-aware cleanup. All fourteen claims remain withheld
+standards, and retention-aware cleanup. P0 issuance atomically captures only
+the exact current diagnostic paths. All fourteen claims remain withheld
 with empty evidence. Cleanup removed 12.8 GB reproducible state and retained
 949 MB unique home/tmp evidence; retention-aware cleanup remains blocked.
 

@@ -7,6 +7,7 @@
     "schema",
     "manifest_digest",
     "registry_preimage_digest",
+    "audit_cadence",
     "rows",
     "generated_at"
   ],
@@ -19,6 +20,24 @@
     },
     "registry_preimage_digest": {
       "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
+    },
+    "audit_cadence": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["audit", "trigger", "owner", "candidate_identity", "evidence_surface", "claims_withheld"],
+        "properties": {
+          "audit": {"enum": ["lane_freeze", "root_integration", "product_freeze", "release_completion"]},
+          "trigger": {"type": "string", "minLength": 1},
+          "owner": {"type": "string", "minLength": 1},
+          "candidate_identity": {"const": "clean current HEAD/tree derived from LANE_REGISTRY.json protected base"},
+          "evidence_surface": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "claims_withheld": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+        }
+      }
     },
     "rows": {
       "type": "array",

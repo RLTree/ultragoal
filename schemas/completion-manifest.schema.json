@@ -4,7 +4,7 @@
   "title": "Harness Ultragoal completion projection",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema", "contract_bundle_hash", "required_claim_ids", "required_claim_ids_hash", "goal_binding", "lineage", "commit", "tree", "candidate_status", "root", "claim_ceiling", "claims", "verification_backlog_path", "registry_preimage_digest", "verification_backlog_digest", "validator_receipts", "generated_at"],
+  "required": ["schema", "contract_bundle_hash", "required_claim_ids", "required_claim_ids_hash", "goal_binding", "lineage", "candidate_resolution", "candidate_status", "root", "claim_ceiling", "claims", "verification_backlog_path", "registry_preimage_digest", "verification_backlog_digest", "validator_receipts", "generated_at"],
   "properties": {
     "schema": {"const": "harness-ultragoal.completion-manifest.v1"},
     "contract_bundle_hash": {"$ref": "#/$defs/sha256"},
@@ -12,8 +12,7 @@
     "required_claim_ids_hash": {"$ref": "#/$defs/sha256"},
     "goal_binding": {"$ref": "#/$defs/goal_binding"},
     "lineage": {"$ref": "#/$defs/lineage"},
-    "commit": {"$ref": "#/$defs/hex40"},
-    "tree": {"$ref": "#/$defs/hex40"},
+    "candidate_resolution": {"$ref": "#/$defs/candidate_resolution"},
     "candidate_status": {"const": "pending"},
     "root": {"type": "string", "minLength": 1},
     "claim_ceiling": {"$ref": "#/$defs/claim_ceiling"},
@@ -58,6 +57,7 @@
       "type": "object", "additionalProperties": false, "required": ["path", "digest", "validity", "invalidation"],
       "properties": {"path": {"type": "string", "minLength": 1}, "digest": {"$ref": "#/$defs/sha256"}, "validity": {"const": "current_exact"}, "invalidation": {"const": "invalidate_on_any_byte_change"}}
     },
+    "candidate_resolution": {"type": "object", "additionalProperties": false, "required": ["kind", "identity_command", "requires_clean_tree", "protected_base_ref"], "properties": {"kind": {"const": "containing_clean_head"}, "identity_command": {"const": "git rev-parse HEAD^{commit} HEAD^{tree}"}, "requires_clean_tree": {"const": true}, "protected_base_ref": {"const": "LANE_REGISTRY.json#/root_freeze/protected_base"}}},
     "claim_ceiling": {
       "type": "object", "additionalProperties": false, "required": ["effect", "all_claims_withheld", "reason"],
       "properties": {"effect": {"const": "withheld"}, "all_claims_withheld": {"const": true}, "reason": {"type": "string", "minLength": 1}}
