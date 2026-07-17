@@ -3,21 +3,6 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
         return Some(markers);
     }
     match rel {
-        "validator/src/cli/control/plane/mod.rs" => Some(&[
-            "ControlOperation",
-            "receipt_from_control_graph",
-            "registry::stdout::print",
-        ]),
-        "validator/src/cli/control/plane/proof/mod.rs" => Some(&[
-            "ControlOperation",
-            "diagnostic::failure_value",
-            "diagnostic::notes",
-        ]),
-        "validator/src/cli/control/plane/registry/capability/gap.rs" => Some(&[
-            "missing_capability_class",
-            "affected_claim_ids",
-            "current_claim_ceiling",
-        ]),
         "validator/src/audit/receipt/scheduler_execution.rs" => Some(&[
             "crate::scheduler::Metrics",
             "metric.to_value",
@@ -27,16 +12,6 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
             "target_ms",
             "hard_ceiling_ms",
             "source_local_speed_budget_only_not_readiness",
-        ]),
-        "validator/src/cli/control/plane/emit.rs" => Some(&[
-            "ControlOperation",
-            "evidence::same_candidate_pass_failures",
-            "required_evidence",
-        ]),
-        "validator/src/cli/control/plane/proof/diagnostic.rs" => Some(&[
-            "claim_ceiling_impact",
-            "source_install_cache_impact",
-            "rerun_command",
         ]),
         "validator/src/cli/final_packet/proof/spans.rs" => {
             Some(&["span_kind", "receipt_deref", "dereferenced_receipt_digest"])

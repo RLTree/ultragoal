@@ -100,7 +100,7 @@ fn graph_binding_failures(
     if graph.get("operation").and_then(Value::as_str) != Some(expected_operation) {
         out.push("cli_control_plane_receipt_evidence_graph_wrong_operation".to_string());
     }
-    for label in super::required_labels(expected_operation) {
+    for label in required_labels(expected_operation) {
         if !items(value).iter().any(|item| item_label_is(item, label)) {
             out.push(format!(
                 "cli_control_plane_receipt_evidence_graph_missing_label:{label}"
@@ -108,6 +108,71 @@ fn graph_binding_failures(
         }
     }
     out
+}
+
+fn required_labels(operation: &str) -> &'static [&'static str] {
+    const BASE: &[&str] = &[
+        "source_audit",
+        "red_fixture_report",
+        "coverage",
+        "cli_performance",
+        "final_packet",
+        "registry_exposure",
+        "fit_repo",
+        "product_fitness",
+        "product_journey",
+        "standards_gardener",
+        "install_audit",
+        "cache_audit",
+        "rust_toolchain",
+        "rust_fast",
+        "rust_standard",
+        "rust_release",
+        "rust_clean_proof",
+        "rust_watch",
+        "rust_memory",
+        "rust_dependency",
+        "rust_coverage",
+        "rust_workspace_topology",
+        "gc_plan",
+        "gc_dry_run",
+        "gc_apply",
+        "gc_verify",
+    ];
+    const UPDATE_GOAL: &[&str] = &[
+        "source_audit",
+        "red_fixture_report",
+        "coverage",
+        "cli_performance",
+        "final_packet",
+        "registry_exposure",
+        "fit_repo",
+        "product_fitness",
+        "product_journey",
+        "standards_gardener",
+        "install_audit",
+        "cache_audit",
+        "rust_toolchain",
+        "rust_fast",
+        "rust_standard",
+        "rust_release",
+        "rust_clean_proof",
+        "rust_watch",
+        "rust_memory",
+        "rust_dependency",
+        "rust_coverage",
+        "rust_workspace_topology",
+        "gc_plan",
+        "gc_dry_run",
+        "gc_apply",
+        "gc_verify",
+        "transactional_finalization",
+    ];
+    match operation {
+        "registry_probe" | "app_surface_probe" => &["registry_exposure"],
+        "update_goal_eligibility" | "self_update_goal_eligibility" => UPDATE_GOAL,
+        _ => BASE,
+    }
 }
 
 fn items(value: &Value) -> Vec<&Value> {

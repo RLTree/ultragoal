@@ -170,7 +170,7 @@
       "id": "cli-control-plane-authority",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 3 red fixtures, a valid receipt, CLI control-plane receipt schema, transactional finalization receipt schema, package inventory coverage, standards row, foundational trace, and claim guard",
       "obligation": "CLI Control Plane Authority must fail closed for all Harness Ultragoal claims and update_goal eligibility.",
-      "package_surface": "validator/src/cli/control/plane/mod.rs; validator/src/cli/control/plane/proof/transaction.rs; validator/src/audit/cli/control_plane/authority/mod.rs; schemas/cli-control-plane-receipt.schema.json; schemas/cli-transactional-finalization-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-control-plane-authority.json; validator/src/self_tests/cli/control/transaction/mod.rs; validator/src/self_tests/cli/control/transaction/required.rs; validator/src/self_tests/cli/control/transaction/reference.rs",
+      "package_surface": "validator/src/audit/cli/control_plane/authority/mod.rs; validator/src/audit/cli/control_plane/authority/receipt/mod.rs; validator/src/audit/cli/control_plane/authority/receipt/evidence.rs; validator/src/audit/cli/control_plane/authority/surface.rs; schemas/cli-control-plane-receipt.schema.json; schemas/cli-transactional-finalization-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-control-plane-authority.json",
       "source": "docs/source-obligation-matrix.json; docs/mandatory-law-surfaces.json; package-owned validator, standards, fixture, and receipt surfaces"
     },
     {
@@ -190,7 +190,7 @@
       "id": "cli-self-law-compliance",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 3 red fixtures, a valid receipt, CLI control-plane receipt schema, transactional finalization receipt schema, package inventory coverage, standards row, foundational trace, and claim guard",
       "obligation": "CLI Self Law Compliance must fail closed for all Harness Ultragoal claims and update_goal eligibility.",
-      "package_surface": "validator/src/cli/control/plane/mod.rs; validator/src/cli/control/plane/proof/transaction.rs; validator/src/audit/cli/control_plane/authority/mod.rs; schemas/cli-control-plane-receipt.schema.json; schemas/cli-transactional-finalization-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json; validator/src/self_tests/cli/control/transaction/mod.rs; validator/src/self_tests/cli/control/transaction/required.rs; validator/src/self_tests/cli/control/transaction/reference.rs",
+      "package_surface": "validator/src/audit/cli/control_plane/authority/mod.rs; validator/src/audit/cli/control_plane/authority/receipt/mod.rs; validator/src/audit/cli/control_plane/authority/receipt/evidence.rs; validator/src/audit/cli/control_plane/authority/surface.rs; schemas/cli-control-plane-receipt.schema.json; schemas/cli-transactional-finalization-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json",
       "source": "docs/source-obligation-matrix.json; docs/mandatory-law-surfaces.json; package-owned validator, standards, fixture, and receipt surfaces"
     },
     {

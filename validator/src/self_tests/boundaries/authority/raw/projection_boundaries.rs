@@ -2,32 +2,12 @@
 fn raw_authority_scanner_allows_named_product_projection_boundaries() {
     for (rel, text) in [
         (
-            "validator/src/cli/control/plane/mod.rs",
-            "use serde_json::{json, Value};\nstruct ControlOperation;\npub(crate) fn project(value: &Value) -> Value { let _ = receipt_from_control_graph(); let _ = registry::stdout::print(); json!({\"value\":value}) }\n",
-        ),
-        (
-            "validator/src/cli/control/plane/proof/mod.rs",
-            "use serde_json::{json, Value};\nstruct ControlOperation;\npub(crate) fn project(value: &Value) -> Value { let _ = diagnostic::failure_value(); let _ = diagnostic::notes(); json!({\"value\":value}) }\n",
-        ),
-        (
-            "validator/src/cli/control/plane/registry/capability/gap.rs",
-            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = missing_capability_class(); let _ = affected_claim_ids(); let _ = current_claim_ceiling(); json!({\"value\":value}) }\n",
-        ),
-        (
             "validator/src/audit/receipt/scheduler_execution.rs",
             "use serde_json::Value;\nstruct Metrics;\npub(crate) fn project(metric: &Metrics, target_digest: &str) -> Value { let _ = \"crate::scheduler::Metrics\"; metric.to_value(target_digest, \"supports_source_local_scheduler_timing_only_not_readiness\") }\n",
         ),
         (
             "validator/src/audit/receipt/speed.rs",
             "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = target_ms(); let _ = hard_ceiling_ms(); let _ = source_local_speed_budget_only_not_readiness(); json!({\"value\":value}) }\n",
-        ),
-        (
-            "validator/src/cli/control/plane/emit.rs",
-            "use serde_json::{json, Value};\nuse std::path::Path;\nstruct ControlOperation;\npub(crate) fn project(root: &Path, value: &Value) -> Value { let _ = root; let _ = evidence::same_candidate_pass_failures(); let _ = required_evidence(); json!({\"value\":value}) }\n",
-        ),
-        (
-            "validator/src/cli/control/plane/proof/diagnostic.rs",
-            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = claim_ceiling_impact(); let _ = source_install_cache_impact(); let _ = rerun_command(); json!({\"value\":value}) }\n",
         ),
         (
             "validator/src/cli/final_packet/proof/spans.rs",

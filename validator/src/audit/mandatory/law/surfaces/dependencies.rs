@@ -53,14 +53,15 @@ fn receipt_file_failures(root: &Path, path: &str, operation: &str) -> Vec<String
         Err(_) => return vec![format!("cli_control_plane_receipt_missing:{path}")],
     };
     let expected = crate::package::inventory::package_digest(root).unwrap_or_default();
-    let pass_failures = crate::cli::control::plane::receipt::same_candidate_pass_failures(
-        &value, &expected, operation,
-    );
+    let pass_failures =
+        crate::audit::cli::control_plane::authority::receipt::same_candidate_pass_failures(
+            &value, &expected, operation,
+        );
     if pass_failures.is_empty() {
         return Vec::new();
     }
     let fail_closed_failures =
-        crate::cli::control::plane::receipt::same_candidate_fail_closed_failures(
+        crate::audit::cli::control_plane::authority::receipt::same_candidate_fail_closed_failures(
             &value, &expected, operation,
         );
     if fail_closed_failures.is_empty() {

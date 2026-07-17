@@ -94,10 +94,6 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::FinalPacket(command) => crate::cli::final_packet::run(&root, &command),
         Command::Product(command) => crate::cli::product::run(&root, &command),
         Command::Standards(command) => crate::cli::standards::run(&root, &command),
-        Command::TransactionalFinalization { receipt } => {
-            run_transactional_finalization(root, receipt)
-        }
-        Command::Control(command) => crate::cli::control::plane::run(&root, &command),
         Command::Coverage(command) => crate::cli::coverage::run(&root, &command),
         Command::CurrentState(command) => crate::cli::current_state::run(&root, &command),
         Command::FoundationalTrace(command) => crate::cli::foundational_trace::run(&root, &command),
@@ -127,31 +123,6 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             Ok(0)
         }
     }
-}
-
-#[cfg(test)]
-fn run_transactional_finalization(
-    root: std::path::PathBuf,
-    receipt: std::path::PathBuf,
-) -> Result<i32, String> {
-    let started = std::time::Instant::now();
-    let claim_receipt = crate::output_path::claim_artifact_path(
-        &root,
-        &receipt,
-        "transactional finalization receipt",
-    )?;
-    let mut value = crate::cli::control::plane::transactional::receipt(&root)?;
-    crate::cli::control::plane::transactional::telemetry::attach(
-        &root,
-        &claim_receipt,
-        &mut value,
-        started,
-    )?;
-    crate::json_boundary::write_json(&claim_receipt, &value)?;
-    crate::cli::control::plane::transactional::stdout::print(&root, &claim_receipt, &value);
-    Ok(i32::from(
-        value.get("status").and_then(serde_json::Value::as_str) != Some("pass"),
-    ))
 }
 
 #[cfg(test)]

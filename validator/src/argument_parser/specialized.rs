@@ -38,8 +38,6 @@ pub(super) fn parse(raw: &[String]) -> Result<Command, String> {
         Ok(Command::TypedBoundaries(command))
     } else if let Some(command) = cli::foundational_trace::parse(raw)? {
         Ok(Command::FoundationalTrace(command))
-    } else if let Some(command) = cli::control::plane::parse(raw) {
-        Ok(Command::Control(command))
     } else {
         Err(super::usage())
     }

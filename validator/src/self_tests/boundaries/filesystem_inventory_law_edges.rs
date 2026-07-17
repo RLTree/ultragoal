@@ -123,7 +123,7 @@ fn artifact_audit_and_receipt_edges() {
             .any(|item| item.contains("cli_control_plane_missing_artifact"))
     );
     assert!(cli_failures.iter().any(|item| item.contains(
-        "cli_control_plane_package_inventory_missing:validator/src/cli/control/plane/mod.rs"
+        "cli_control_plane_package_inventory_missing:validator/src/audit/cli/control_plane/authority/mod.rs"
     )));
     assert!(
         cli_failures

@@ -2,13 +2,6 @@ fn args(raw: &[&str]) -> Vec<String> {
     raw.iter().map(|arg| (*arg).to_string()).collect()
 }
 
-fn transactional_receipt(command: crate::Command) -> Option<std::path::PathBuf> {
-    match command {
-        crate::Command::TransactionalFinalization { receipt } => Some(receipt),
-        _ => None,
-    }
-}
-
 fn final_packet_receipt(command: crate::Command) -> Option<std::path::PathBuf> {
     match command {
         crate::Command::FinalPacket(command) => Some(command.receipt),
@@ -35,17 +28,6 @@ fn review_round_parse_requires_review_target_receipt_argument() {
     ]))
     .expect_err("missing review target receipt");
     assert!(err.contains("missing required argument --review-target-receipt"));
-}
-
-#[test]
-fn transaction_finalize_parse_constructs_typed_receipt_command() {
-    let command = crate::parse_command(&args(&["transaction", "finalize", "--receipt", "tx.json"]))
-        .expect("transaction finalize command");
-    assert_eq!(
-        transactional_receipt(command),
-        Some(std::path::PathBuf::from("tx.json"))
-    );
-    assert_eq!(transactional_receipt(crate::Command::PackageDigest), None);
 }
 
 #[test]

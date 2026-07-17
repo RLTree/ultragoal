@@ -51,8 +51,7 @@ pub(super) fn typed_law_check_boundary_text(text: &str) -> bool {
 pub(super) fn typed_path_boundary_text(rel: &str, text: &str) -> bool {
     matches!(
         rel,
-        "validator/src/cli/control/plane/path.rs"
-            | "validator/src/cli/observe/command_roundtrip/process.rs"
+        "validator/src/cli/observe/command_roundtrip/process.rs"
             | "validator/src/audit/receipt/generated.rs"
             | "validator/src/skill_links.rs"
     ) && path_boundary_product_role(text)

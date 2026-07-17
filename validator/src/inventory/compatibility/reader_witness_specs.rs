@@ -4,7 +4,7 @@ pub(crate) struct ArtifactSpec {
     pub sha256: &'static str,
 }
 
-pub(crate) const ACCEPTED_CONTEXT_ARTIFACTS: [ArtifactSpec; 19] = [
+pub(crate) const ACCEPTED_CONTEXT_ARTIFACTS: [ArtifactSpec; 16] = [
     ArtifactSpec {
         path: "schemas/codex-registry-exposure.schema.json",
         sha256: "c6f814afae2631fa02f693d6e9785115dda7331ed5a7a7e7be94955f1e7e4173",
@@ -34,18 +34,6 @@ pub(crate) const ACCEPTED_CONTEXT_ARTIFACTS: [ArtifactSpec; 19] = [
         sha256: "ffe717cbb8d1fb2d9de5f6121c27e7d1d8a78a08c0c9342fcc74c97f7a3de23f",
     },
     ArtifactSpec {
-        path: "validator/src/cli/control/plane/registry/mod.rs",
-        sha256: "eb2f6c7341c665bf35f2f1ffbcdf3972899b17ff19941907b3b02d84314fcf4c",
-    },
-    ArtifactSpec {
-        path: "validator/src/cli/control/plane/registry/agent_rows.rs",
-        sha256: "8a850630845f3d6cb4944dff0467937e653f017547356e3c6f21c62bd9e55fa1",
-    },
-    ArtifactSpec {
-        path: "validator/src/cli/live_loop/surfaces/input_spec/path_rules.rs",
-        sha256: "7880797e1832bd81c850b7ef61e5029710e61efe3b5fca6b37d45651afd08df7",
-    },
-    ArtifactSpec {
         path: "validator/src/schema_catalog/fixture_schema_rules.rs",
         sha256: "ba00909a97a944cf8f33b555cfb8c7f15c5a91a98bd0e201bfc5f667bbd1260e",
     },
@@ -58,8 +46,8 @@ pub(crate) const ACCEPTED_CONTEXT_ARTIFACTS: [ArtifactSpec; 19] = [
         sha256: "a968480da4f951344338a16c71cbeb92b82c26adf106c4677c70875bd63949df",
     },
     ArtifactSpec {
-        path: "validator/src/self_tests/cli/control/registry.rs",
-        sha256: "904e019aa7adca8cf8ccb7863d2a92a5ec0854d5f4d3c4321492662710035fe8",
+        path: "validator/src/cli/live_loop/surfaces/input_spec/path_rules.rs",
+        sha256: "7880797e1832bd81c850b7ef61e5029710e61efe3b5fca6b37d45651afd08df7",
     },
     ArtifactSpec {
         path: "validator/src/self_tests/command/round_receipts.rs",

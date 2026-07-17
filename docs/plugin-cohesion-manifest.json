@@ -1394,6 +1394,9 @@
     "validation_artifacts/observability/stack-smoke-receipt.json",
     "validation_artifacts/ultragoal-audit/active-registry-observation-current.json",
     "validator/src/audit/cli/control_plane/authority/mod.rs",
+    "validator/src/audit/cli/control_plane/authority/operation.rs",
+    "validator/src/audit/cli/control_plane/authority/receipt/evidence.rs",
+    "validator/src/audit/cli/control_plane/authority/receipt/mod.rs",
     "validator/src/audit/cli/control_plane/authority/surface.rs",
     "validator/src/audit/final_packet/references/package.rs",
     "validator/src/audit/mandatory/law/surface/ids.rs",
@@ -1401,25 +1404,6 @@
     "validator/src/audit/namespace/source/topology.rs",
     "validator/src/audit/rust/developer.rs",
     "validator/src/audit/rust/mod.rs",
-    "validator/src/cli/control/plane/emit.rs",
-    "validator/src/cli/control/plane/evidence/item.rs",
-    "validator/src/cli/control/plane/evidence/mod.rs",
-    "validator/src/cli/control/plane/evidence/receipt_evaluation/label_failures.rs",
-    "validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs",
-    "validator/src/cli/control/plane/evidence/receipt_evaluation/typed_and_surfaces.rs",
-    "validator/src/cli/control/plane/evidence/validate.rs",
-    "validator/src/cli/control/plane/mod.rs",
-    "validator/src/cli/control/plane/path.rs",
-    "validator/src/cli/control/plane/proof/authority.rs",
-    "validator/src/cli/control/plane/proof/diagnostic.rs",
-    "validator/src/cli/control/plane/proof/mod.rs",
-    "validator/src/cli/control/plane/proof/red.rs",
-    "validator/src/cli/control/plane/proof/transaction.rs",
-    "validator/src/cli/control/plane/registry/mod.rs",
-    "validator/src/cli/control/plane/surface/mod.rs",
-    "validator/src/cli/control/plane/surface/target.rs",
-    "validator/src/cli/control/plane/transactional/mod.rs",
-    "validator/src/cli/control/plane/types.rs",
     "validator/src/cli/garbage/collection/mod.rs",
     "validator/src/cli/garbage/collection/observability/mod.rs",
     "validator/src/cli/garbage/collection/observability/tests.rs",
@@ -1437,21 +1421,6 @@
     "validator/src/cli/standards/mod.rs",
     "validator/src/self_tests/audit/final_packet/references/package.rs",
     "validator/src/self_tests/audit/final_packet/receipt_fixtures/package_receipts.rs",
-    "validator/src/self_tests/cli/control/audit.rs",
-    "validator/src/self_tests/cli/control/graph.rs",
-    "validator/src/self_tests/cli/control/output_paths.rs",
-    "validator/src/self_tests/cli/control/production/mod.rs",
-    "validator/src/self_tests/cli/control/production/receipts.rs",
-    "validator/src/self_tests/cli/control/production/registry.rs",
-    "validator/src/self_tests/cli/control/registry.rs",
-    "validator/src/self_tests/cli/control/stale_authority.rs",
-    "validator/src/self_tests/cli/control/surface/mod.rs",
-    "validator/src/self_tests/cli/control/surface/observability.rs",
-    "validator/src/self_tests/cli/control/surface/target.rs",
-    "validator/src/self_tests/cli/control/surface/validation.rs",
-    "validator/src/self_tests/cli/control/transaction/mod.rs",
-    "validator/src/self_tests/cli/control/transaction/reference.rs",
-    "validator/src/self_tests/cli/control/transaction/required.rs",
     "validator/src/self_tests/cli/final_packet.rs",
     "validator/src/self_tests/cli/product/mod.rs",
     "validator/src/self_tests/cli/standards.rs",
@@ -1531,93 +1500,23 @@
     },
     {
       "from": "validator/src/audit/cli/control_plane/authority/mod.rs",
-      "to": "validator/src/cli/control/plane/mod.rs",
-      "reason": "Source audit verifies canonical CLI control-plane authority surfaces"
+      "to": "validator/src/audit/cli/control_plane/authority/receipt/mod.rs",
+      "reason": "Read-only authority validation delegates typed receipt checks to the semantic receipt reader"
     },
     {
-      "from": "validator/src/cli/control/plane/mod.rs",
+      "from": "validator/src/audit/cli/control_plane/authority/receipt/mod.rs",
+      "to": "validator/src/audit/cli/control_plane/authority/receipt/evidence.rs",
+      "reason": "Typed receipt validation dereferences evidence through a read-only semantic leaf"
+    },
+    {
+      "from": "validator/src/audit/cli/control_plane/authority/mod.rs",
+      "to": "validator/src/audit/cli/control_plane/authority/surface.rs",
+      "reason": "Read-only authority validation checks current package and law surfaces"
+    },
+    {
+      "from": "validator/src/audit/cli/control_plane/authority/surface.rs",
       "to": "schemas/cli-control-plane-receipt.schema.json",
-      "reason": "CLI control operations emit schema-bound authority receipts"
-    },
-    {
-      "from": "validator/src/cli/control/plane/mod.rs",
-      "to": "validator/src/cli/control/plane/emit.rs",
-      "reason": "CLI control operations separate production receipt emission from raw fail-closed test constructors"
-    },
-    {
-      "from": "validator/src/cli/control/plane/emit.rs",
-      "to": "validator/src/cli/control/plane/evidence/mod.rs",
-      "reason": "CLI control receipts must include a typed control graph, not summary-only fail-closed text"
-    },
-    {
-      "from": "validator/src/cli/control/plane/evidence/mod.rs",
-      "to": "validator/src/cli/control/plane/evidence/item.rs",
-      "reason": "Evidence graph construction dereferences each artifact path, digest, status, and candidate binding separately"
-    },
-    {
-      "from": "validator/src/cli/control/plane/evidence/item.rs",
-      "to": "validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs",
-      "reason": "Evidence graph items use label-specific typed validators instead of pass-shaped receipt rows"
-    },
-    {
-      "from": "validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs",
-      "to": "validator/src/cli/control/plane/evidence/receipt_evaluation/label_failures.rs",
-      "reason": "Receipt-evaluation tests prove typed package-surface schema errors and stale proof labels fail without row-shape authority"
-    },
-    {
-      "from": "validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs",
-      "to": "validator/src/cli/control/plane/evidence/receipt_evaluation/typed_and_surfaces.rs",
-      "reason": "Receipt-evaluation typed status and package-surface tests are routed into semantic leaves instead of an over-cap catch-all test file"
-    },
-    {
-      "from": "validator/src/cli/control/plane/evidence/mod.rs",
-      "to": "validator/src/cli/control/plane/evidence/validate.rs",
-      "reason": "Receipt validators reject missing, synthetic, stale, or non-authoritative control graphs"
-    },
-    {
-      "from": "validator/src/cli/control/plane/mod.rs",
-      "to": "validator/src/cli/control/plane/path.rs",
-      "reason": "CLI control operations must write only operation-owned CLI receipt paths"
-    },
-    {
-      "from": "validator/src/cli/control/plane/mod.rs",
-      "to": "validator/src/cli/control/plane/proof/mod.rs",
-      "reason": "CLI control operations dereference authority records through the typed proof module"
-    },
-    {
-      "from": "validator/src/cli/control/plane/proof/mod.rs",
-      "to": "validator/src/cli/control/plane/proof/authority.rs",
-      "reason": "CLI proof routes authority evidence separately from receipt diagnostics"
-    },
-    {
-      "from": "validator/src/cli/control/plane/proof/mod.rs",
-      "to": "validator/src/cli/control/plane/proof/diagnostic.rs",
-      "reason": "CLI proof formats claim-ceiling failures separately from evidence lookup"
-    },
-    {
-      "from": "validator/src/cli/control/plane/proof/mod.rs",
-      "to": "validator/src/cli/control/plane/proof/red.rs",
-      "reason": "CLI proof binds red-fixture report semantics without ignoring top-level status"
-    },
-    {
-      "from": "validator/src/cli/control/plane/proof/mod.rs",
-      "to": "validator/src/cli/control/plane/proof/transaction.rs",
-      "reason": "CLI proof blocks update-goal/self-law pass states unless same-candidate transactional finalization dereferences current proof artifacts"
-    },
-    {
-      "from": "validator/src/cli/control/plane/proof/transaction.rs",
-      "to": "schemas/cli-transactional-finalization-receipt.schema.json",
-      "reason": "Transactional finalization receipts are schema-bound and cannot be pass-shaped JSON"
-    },
-    {
-      "from": "validator/src/self_tests/cli/control/transaction/reference.rs",
-      "to": "validator/src/cli/control/plane/proof/transaction.rs",
-      "reason": "CLI transaction tests prove pass-shaped references fail without dereferenced current same-candidate proof artifacts"
-    },
-    {
-      "from": "validator/src/self_tests/cli/control/production/mod.rs",
-      "to": "validator/src/self_tests/cli/control/production/receipts.rs",
-      "reason": "CLI control production green-path tests mint Standards, Rust, and GC receipts through routed helpers instead of over-cap inline fixture setup"
+      "reason": "Authority surface validation requires the canonical typed receipt schema"
     },
     {
       "from": "validator/src/self_tests/audit/final_packet/receipt_fixtures/mod.rs",
@@ -1668,11 +1567,6 @@
       "from": "validator/src/self_tests/law/anti_theater_dependencies/mod.rs",
       "to": "validator/src/self_tests/law/anti_theater_dependencies/evidence.rs",
       "reason": "Anti-theater dependency tests share the complete control graph, including install/cache audit labels, through a semantic test helper"
-    },
-    {
-      "from": "validator/src/cli/control/plane/mod.rs",
-      "to": "validator/src/cli/control/plane/types.rs",
-      "reason": "CLI parser and receipt issuer consume closed authority operation types"
     },
     {
       "from": "validator/src/lib.rs",
@@ -1748,41 +1642,6 @@
       "from": "validator/src/cli/performance/proof/mod.rs",
       "to": "validator/src/cli/performance/types.rs",
       "reason": "Performance receipt issuer consumes closed budget classes"
-    },
-    {
-      "from": "validator/src/self_tests/cli/control/surface/mod.rs",
-      "to": "validator/src/self_tests/cli/control/surface/target.rs",
-      "reason": "Package-surface audit tests route target/default-root and unavailable-surface coverage through a semantic child module"
-    },
-    {
-      "from": "validator/src/self_tests/cli/control/transaction/mod.rs",
-      "to": "validator/src/cli/control/plane/proof/transaction.rs",
-      "reason": "Transaction self-test module routes required and reference-join proof coverage"
-    },
-    {
-      "from": "validator/src/self_tests/cli/control/transaction/required.rs",
-      "to": "validator/src/cli/control/plane/proof/transaction.rs",
-      "reason": "Required transaction tests prove missing and digest-unavailable finalization cannot claim authority"
-    },
-    {
-      "from": "validator/src/cli/control/plane/mod.rs",
-      "to": "validator/src/cli/control/plane/registry/mod.rs",
-      "reason": "Registry probe operation delegates live same-surface registry proof preservation and fail-closed observation minting to the registry module"
-    },
-    {
-      "from": "validator/src/cli/control/plane/registry/mod.rs",
-      "to": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
-      "reason": "Registry probe writes the typed active registry exposure receipt while blocking unsupported reviewer exposure claims"
-    },
-    {
-      "from": "validator/src/cli/control/plane/registry/mod.rs",
-      "to": "validation_artifacts/ultragoal-audit/active-registry-observation-current.json",
-      "reason": "Registry probe writes the raw observation digest that supports the fail-closed registry exposure receipt"
-    },
-    {
-      "from": "validator/src/self_tests/cli/control/registry.rs",
-      "to": "validator/src/cli/control/plane/registry/mod.rs",
-      "reason": "Focused self-tests cover registry proof preservation and fail-closed observation behavior"
     }
   ],
   "claim_ceiling": "package_static_fixture_only",

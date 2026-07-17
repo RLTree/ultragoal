@@ -50,10 +50,6 @@ pub(crate) enum Command {
     FinalPacket(crate::cli::final_packet::FinalPacketCommand),
     Product(crate::cli::product::ProductCommand),
     Standards(crate::cli::standards::StandardsCommand),
-    TransactionalFinalization {
-        receipt: PathBuf,
-    },
-    Control(crate::cli::control::plane::ControlCommand),
     Coverage(crate::cli::coverage::CoverageCommand),
     CurrentState(crate::cli::current_state::CurrentStateCommand),
     FoundationalTrace(crate::cli::foundational_trace::FoundationalTraceCommand),
