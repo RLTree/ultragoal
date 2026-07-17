@@ -70,7 +70,7 @@ fn package_checks_route_schema_inventory_skill_and_final_hygiene_failures() {
     .into_iter()
     .map(str::to_string)
     .collect::<Vec<_>>();
-    let mut failures = crate::audit::package::checks::checks(&root, &store, &check_ids, &[]);
+    let mut failures = crate::audit::package::checks::checks(&root, &store, &check_ids);
     crate::audit::package::checks::final_hygiene_check(&root, &mut failures);
 
     let schema = failures.get("schema-valid").cloned().unwrap_or_default();
@@ -137,7 +137,7 @@ fn package_checks_report_missing_manifest_as_inventory_failure() {
     let store = crate::schema_catalog::load(
         &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
     );
-    let failures = crate::audit::package::checks::checks(&root, &store, &[], &[]);
+    let failures = crate::audit::package::checks::checks(&root, &store, &[]);
     assert!(
         failures
             .get("plugin-inventory-closure")
@@ -182,7 +182,6 @@ fn package_checks_emit_bounded_scheduler_metrics_for_schema_validation() {
         &root,
         &store,
         &["schema-valid".to_string()],
-        &[],
         crate::scheduler::SchedulerConfig::from_jobs(Some(2)).expect("jobs"),
     );
     let metric = results

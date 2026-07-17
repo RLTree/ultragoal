@@ -17,7 +17,6 @@ pub struct ReceiptInput {
     pub check_ids: Vec<String>,
     pub failures: BTreeMap<String, Vec<String>>,
     pub red: BTreeMap<String, Value>,
-    pub target_artifacts: Vec<Value>,
     pub start: String,
     pub status: String,
     pub validator_artifacts: Vec<Value>,

@@ -31,9 +31,17 @@ pub(crate) fn check(
     for failure in schema.failures {
         push(&mut failures, "schema-valid", failure);
     }
-    inventory::append(request.root, &mut failures);
-    crate::audit::red::catalog::check(request.root, &store, &mut failures);
-    composition::append_base_checks(request.root, &store, &mut failures);
+    let check_ids = crate::contract_check_ids::CHECK_IDS
+        .iter()
+        .map(|id| (*id).to_string())
+        .collect::<Vec<_>>();
+    let package = crate::audit::package::checks::checks_with_scheduler(
+        request.root,
+        &store,
+        &check_ids,
+        scheduler,
+    );
+    failures.extend(package.failures);
 
     let current_details = failures
         .iter()

@@ -1,7 +1,6 @@
 use super::{inventory_checks, push};
 use crate::scheduler::{SchedulerConfig, TaskClass};
 use crate::schema_catalog::SchemaStore;
-use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;

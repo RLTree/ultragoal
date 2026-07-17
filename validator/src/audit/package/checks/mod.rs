@@ -1,7 +1,6 @@
 use crate::json_boundary;
 use crate::scheduler::{SchedulerConfig, TaskClass};
 use crate::schema_catalog::{self, SchemaStore};
-use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::Path;
 use std::sync::Arc;
@@ -22,13 +21,11 @@ pub fn checks(
     root: &Path,
     store: &SchemaStore,
     check_ids: &[String],
-    validator_artifacts: &[Value],
 ) -> BTreeMap<String, Vec<String>> {
     checks_with_scheduler(
         root,
         store,
         check_ids,
-        validator_artifacts,
         SchedulerConfig::from_jobs(None).expect("default scheduler"),
     )
     .failures
@@ -38,7 +35,6 @@ pub fn checks_with_scheduler(
     root: &Path,
     store: &SchemaStore,
     check_ids: &[String],
-    validator_artifacts: &[Value],
     scheduler: SchedulerConfig,
 ) -> CheckResults {
     let mut failures = check_ids

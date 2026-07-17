@@ -55,13 +55,6 @@ pub(crate) fn generated_artifacts_cached(
             rows.entry(path.to_string()).or_insert(item);
         }
     }
-    for path in target_receipt_paths(root) {
-        if rows.len() >= 38 {
-            break;
-        }
-        rows.entry(path.clone())
-            .or_insert_with(|| generated_artifact_cached(root, run_id, &path, digest_cache));
-    }
     rows.into_values().take(48).collect()
 }
 
@@ -132,22 +125,6 @@ fn generated_path_for_suffix(suffix: &str) -> String {
     } else {
         suffix.to_string()
     }
-}
-
-fn target_receipt_paths(root: &Path) -> Vec<String> {
-    let Ok(entries) = std::fs::read_dir(root.join("validation_artifacts/ultragoal-audit")) else {
-        return Vec::new();
-    };
-    let mut out = entries
-        .flatten()
-        .filter_map(|entry| {
-            let name = entry.file_name().to_string_lossy().to_string();
-            (name.starts_with("target-") && name.ends_with(".json"))
-                .then(|| format!("validation_artifacts/ultragoal-audit/{name}"))
-        })
-        .collect::<Vec<_>>();
-    out.sort();
-    out
 }
 
 fn generated_artifact_cached(

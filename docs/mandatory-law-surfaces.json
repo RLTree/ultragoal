@@ -4293,18 +4293,9 @@
       "validator_check_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation"
     },
     {
-      "behavior_failure_modes": [
-        "target_repo_audit_capability_unsupported_repo_marked_fit_repo_ready",
-        "target_repo_audit_capability_target_classification_missing",
-        "target_repo_audit_capability_target_command_missing_success_emitted",
-        "target_repo_audit_capability_fixture_used_as_live_target",
-        "target_repo_audit_capability_unknown_language_runtime_accepted",
-        "target_repo_audit_capability_product_surface_not_detected_product_claim_emitted",
-        "target_repo_audit_capability_mode_substitution",
-        "target_repo_audit_capability_generic_repo_support_overclaim"
-      ],
-      "claim_ceiling_guard": "target_repo_claims_withheld_without_exact_target_capability_receipt",
-      "enforcement_status": "deterministic_fail_closed",
+      "behavior_failure_modes": [],
+      "claim_ceiling_guard": "target_repo_audit_capability_withheld_pending_typed_hct_fit_and_hct_fixtures_mapping",
+      "enforcement_status": "pending_typed_successor_mapping",
       "evidence_artifacts": [
         {
           "digest": "sha256:dc238c60e3039eba86c3f9e81a9a512d752d3d0adce1770630a60a2a7dc479de",
@@ -4323,21 +4314,14 @@
         "unknown_language_runtime_accepted": true,
         "unsupported_repo_marked_fit_repo_ready": true
       },
-      "red_fixture_ids": [
-        "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
-        "target-repo-audit-capability-target-classification-missing-red",
-        "target-repo-audit-capability-target-command-missing-success-emitted-red",
-        "target-repo-audit-capability-fixture-used-as-live-target-red",
-        "target-repo-audit-capability-unknown-language-runtime-accepted-red",
-        "target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red",
-        "target-repo-audit-capability-mode-substitution-red",
-        "target-repo-audit-capability-generic-repo-support-overclaim-red"
-      ],
+      "red_fixture_ids": [],
       "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
       "source_obligation_id": "target-repo-audit-capability",
       "standards_row_id": "target-repo-audit-capability",
       "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/target-repo-audit-capability.json",
-      "validator_check_id": "target-repo-audit-capability"
+      "validator_check_id": "target-repo-audit-capability",
+      "current_status": "blocked",
+      "blocker_or_repair_action": "Blocked: bind target-repo-audit-capability to typed HCT-FIT inspect plan verify terminal evidence and HCT-FIXTURES negatives."
     },
     {
       "behavior_failure_modes": [
@@ -4667,10 +4651,10 @@
           "digest": "sha256:72f1bcbd0f499b3a77477ce9ecaa8b7607de1e5eeffa389b74855f978f4b1c48",
           "path": "validator/src/audit/namespace/classes.rs"
         },
-    {
-      "digest": "sha256:6359fa4fc34b1c9da869ec638712ac68c94f27aacbab0012e79a8ce39cc6404a",
-      "path": "validator/src/audit/namespace/law/mod.rs"
-    },
+        {
+          "digest": "sha256:6359fa4fc34b1c9da869ec638712ac68c94f27aacbab0012e79a8ce39cc6404a",
+          "path": "validator/src/audit/namespace/law/mod.rs"
+        },
         {
           "digest": "sha256:565b1ba7e54545c405afb857f76cb85f98ee544502f1cfeb11dba20ba50c315d",
           "path": "validator/src/self_tests/namespace/red_fixtures.rs"
