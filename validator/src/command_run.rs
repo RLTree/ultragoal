@@ -107,7 +107,6 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::NextAction(command) => crate::cli::next_action::run(&root, &command),
         Command::Observe(command) => crate::cli::observe::run(&root, &command),
         Command::RedReport(command) => crate::cli::red_report::run(&root, &command),
-        Command::FixtureSchedule(command) => crate::red::fixture::scheduler::run(&root, &command),
         Command::SchemaValidation(command) => crate::cli::schema_validation::run(&root, &command),
         Command::Routine(command) => crate::cli::routine::run(&root, &command),
         Command::Session(command) => crate::cli::session::run(&root, &command),

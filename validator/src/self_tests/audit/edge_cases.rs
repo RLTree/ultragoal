@@ -1,5 +1,4 @@
 use serde_json::json;
-use std::collections::BTreeMap;
 
 #[test]
 fn archive_writer_and_archive_builder_cover_production_zip_path() {
@@ -201,47 +200,4 @@ fn plugin_self_law_line_scan_recurses_and_reports_over_cap_source() {
         "{failures:?}"
     );
     std::fs::remove_dir_all(root).expect("cleanup self law lines");
-}
-
-#[test]
-fn red_fixture_observation_uses_package_and_nonfirst_semantic_routes() {
-    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
-    let store = crate::schema_catalog::load(&root);
-    let package = crate::red::fixture::observation::observe_materialized(
-        &root,
-        &store,
-        &BTreeMap::new(),
-        &json!({}),
-        &json!({"check_id":"source-card-freshness","error":"source_card_catalog_missing"}),
-        &json!({"schema":"bad"}),
-        "docs/source-cards.json",
-    );
-    assert_eq!(package.check, "source-card-freshness");
-
-    let mut bad =
-        crate::json_boundary::read_json(&root.join("fixtures/valid/minimal-goal-run.json"))
-            .expect("valid semantic fixture");
-    bad["completion_manifest"]["claims"][0]["evidence"][0]["surface"] = json!("runtime_cli");
-    let failures = crate::claim_semantics::semantic_failures(&bad, &root, &BTreeMap::new());
-    let target = failures
-        .iter()
-        .find(|failure| failure.check_id == "claim-evidence-coupling")
-        .expect("claim evidence coupling failure");
-    let observed = crate::red::fixture::observation::observe_materialized(
-        &root,
-        &store,
-        &BTreeMap::new(),
-        &json!({
-            "json_patch":[{
-                "op":"replace",
-                "path":"/completion_manifest/claims/0/evidence/0/surface",
-                "value":"runtime_cli"
-            }],
-            "materialization":{"first_failure_must_match_expected":false}
-        }),
-        &json!({"check_id":target.check_id,"error":target.error}),
-        &bad,
-        "fixtures/valid/semantic-claim-boundary.json",
-    );
-    assert!(observed.ok, "{} {}", observed.check, observed.error);
 }

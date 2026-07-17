@@ -4520,17 +4520,6 @@
       "validator/src/package/inventory/closure/package_entries.rs",
       "validator/src/package/resource/mod.rs",
       "validator/src/package/resource/purpose.rs",
-      "validator/src/red/filesystem/fixtures.rs",
-      "validator/src/red/filesystem/mod.rs",
-      "validator/src/red/fixture/bases.rs",
-      "validator/src/red/fixture/mod.rs",
-      "validator/src/red/fixture/observation.rs",
-      "validator/src/red/fixture/package.rs",
-      "validator/src/red/fixture/review/mod.rs",
-      "validator/src/red/fixture/review/round.rs",
-      "validator/src/red/fixture/row.rs",
-      "validator/src/red/fixture/schema.rs",
-      "validator/src/red/fixtures/mod.rs",
       "validator/src/red/mod.rs",
       "validator/src/review/materiality.rs",
       "validator/src/review/mod.rs",
@@ -4712,14 +4701,8 @@
       "validator/src/self_tests/receipts/validator/mod.rs",
       "validator/src/self_tests/receipts/validator/boundaries.rs",
       "validator/src/self_tests/red/catalog_output.rs",
-      "validator/src/self_tests/red/filesystem.rs",
-      "validator/src/self_tests/red/fixture/boundaries/mod.rs",
-      "validator/src/self_tests/red/fixture/mod.rs",
-      "validator/src/self_tests/red/fixture/runtime/binding.rs",
-      "validator/src/self_tests/red/fixture/runtime/mod.rs",
       "validator/src/self_tests/red/mod.rs",
       "validator/src/self_tests/red/registry_schema_target_edges.rs",
-      "validator/src/self_tests/red/schema.rs",
       "validator/src/self_tests/review/archive/materiality.rs",
       "validator/src/self_tests/review/claim_ceiling.rs",
       "validator/src/self_tests/review/materiality.rs",
@@ -21333,50 +21316,6 @@
           "path": "validator/src/package/resource/purpose.rs"
         },
         {
-          "digest": "sha256:a6509b5f1fe49785cd2e182e24cdfc50accd254b53a84111ba2ef641aa2c4728",
-          "path": "validator/src/red/filesystem/fixtures.rs"
-        },
-        {
-          "digest": "sha256:8db3b881670b69baa8a921b70ca71714c7e1d1b853ca54da72e71857665b835f",
-          "path": "validator/src/red/filesystem/mod.rs"
-        },
-        {
-          "digest": "sha256:53f91fce22ebbc3a29c5b74f41b8a34aee9380d58d5b2fc32db616d417672249",
-          "path": "validator/src/red/fixture/bases.rs"
-        },
-        {
-          "digest": "sha256:77ed92e5c107b61af92e384979e0e32e2224fe78098fb73dd990ddca9c277b10",
-          "path": "validator/src/red/fixture/mod.rs"
-        },
-        {
-          "digest": "sha256:e026b41108d7a139f6949b2b947f96b5bc71a325c72f02ab7e99fd18ef76d65e",
-          "path": "validator/src/red/fixture/observation.rs"
-        },
-        {
-          "digest": "sha256:92e192e02691f021b4d302496626d5a42fade0a292f6236f9a0aaf630c9d24b3",
-          "path": "validator/src/red/fixture/package.rs"
-        },
-        {
-          "digest": "sha256:946f3eea7e22ab266e324afbd80e10113d4555f92e48de7724fd02c87961ece3",
-          "path": "validator/src/red/fixture/review/mod.rs"
-        },
-        {
-          "digest": "sha256:a360f87b3a721d52b38bb4f0eefb96496a69c368c9aae53c65f8d587d2aee7e9",
-          "path": "validator/src/red/fixture/review/round.rs"
-        },
-        {
-          "digest": "sha256:b276d537bf4fba53333ebf7f09bd8e92842e75def4508b492ade0257b97f6be2",
-          "path": "validator/src/red/fixture/row.rs"
-        },
-        {
-          "digest": "sha256:54b56e85e5b4fafb9a591df7418c5589f022a704fbc428743b33546be4b9601c",
-          "path": "validator/src/red/fixture/schema.rs"
-        },
-        {
-          "digest": "sha256:ed88915c77af5e2a657b7a6fa93d0ad29478ef82e41514c06d3eef9ac3c02657",
-          "path": "validator/src/red/fixtures/mod.rs"
-        },
-        {
           "digest": "sha256:cfb5b5f4c3f7cdf602709a7ed4c360c92c5c19395273486d5b380b1900135686",
           "path": "validator/src/red/mod.rs"
         },
@@ -22089,36 +22028,12 @@
           "path": "validator/src/self_tests/red/catalog_output.rs"
         },
         {
-          "digest": "sha256:5b8f20b9425bc5b6535ecb8bc8d2ab1243a9dca85399f31db986dd246cc41d34",
-          "path": "validator/src/self_tests/red/filesystem.rs"
-        },
-        {
-          "digest": "sha256:311fcea1f812f3fe7f626f4c6d8e84531dbdc91588632ecf10348dad879c0301",
-          "path": "validator/src/self_tests/red/fixture/boundaries/mod.rs"
-        },
-        {
-          "digest": "sha256:1d51b05a0b679801a6f446a75531684835fdf51cd5999a8369964f203058598b",
-          "path": "validator/src/self_tests/red/fixture/mod.rs"
-        },
-        {
-          "digest": "sha256:920c1b5b0157a9b947cdf1b21cde8da842cbca9e83cb620a737b35aff90d6d40",
-          "path": "validator/src/self_tests/red/fixture/runtime/binding.rs"
-        },
-        {
-          "digest": "sha256:95ef4f914d1598b1e2b6547a95adc95d9798ded4c5cc3d7316be0e9a4129130f",
-          "path": "validator/src/self_tests/red/fixture/runtime/mod.rs"
-        },
-        {
           "digest": "sha256:87c3cb7fffe4829e943618c1ddc5fdc901c9912d8bcb0d98aaecca559a5c7ca1",
           "path": "validator/src/self_tests/red/mod.rs"
         },
         {
           "digest": "sha256:39d2c8c56e008eb2a8a857b6a97b647e398900c94300b7136b92b0bf8f35ed2c",
           "path": "validator/src/self_tests/red/registry_schema_target_edges.rs"
-        },
-        {
-          "digest": "sha256:aa4b9e35e77b8791866300b4ce2152fbc146263ea56ba918f15b7f64d3af750a",
-          "path": "validator/src/self_tests/red/schema.rs"
         },
         {
           "digest": "sha256:2bbcdc2e10a8a12fca40ddc6259e16591f00069c69f99e4c30161fb0e269d5d3",

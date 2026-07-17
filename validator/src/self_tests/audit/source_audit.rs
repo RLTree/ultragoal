@@ -75,24 +75,6 @@ fn red_catalog_and_row_boundaries_report_typed_failures() {
     assert!(details.contains("red catalog digest mismatch"));
     assert!(details.contains("red catalog expected_failure drift"));
 
-    let expected = json!({"check_id":"claim-status-ceiling","error":"claim_overreach"});
-    let row = crate::red::fixture::row::result_row(
-        &root,
-        "fixtures/red/p.json",
-        &expected,
-        "claim_overreach",
-        crate::red::fixture::row::expected_status(&expected, "claim_overreach"),
-        None,
-        Some("claim-status-ceiling"),
-    );
-    assert_eq!(row["status"], "pass");
-    assert_eq!(row["validator_exit"], 1);
-    let invalid = crate::red::fixture::row::invalid_row(&json!({}), "schema_validation_failed");
-    assert_eq!(invalid["packet_path"], "<invalid>");
-    assert_eq!(
-        crate::red::fixture::row::expected_check(&json!({})),
-        "schema-valid"
-    );
     std::fs::remove_dir_all(root).expect("cleanup");
 }
 

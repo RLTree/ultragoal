@@ -4,6 +4,7 @@ pub(crate) mod backlog_policy;
 pub(crate) mod claim;
 pub(crate) mod coverage;
 pub(crate) mod dogfood_receipt;
+#[cfg(test)]
 mod json_patch;
 pub(crate) mod lane;
 pub(crate) mod plugin_policy;
@@ -21,13 +22,13 @@ use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
+#[cfg(test)]
 pub use json_patch::apply_patch;
 
 #[derive(Default)]
 pub(crate) struct SemanticCache {
     coverage_digests: DigestCache,
     plugin_policy_failures: BTreeMap<String, Vec<Failure>>,
-    pub(crate) package_observations: crate::red::fixture::package::ObservationCache,
 }
 
 pub fn semantic_failures(

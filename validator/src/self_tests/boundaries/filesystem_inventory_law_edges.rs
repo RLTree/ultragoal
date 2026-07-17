@@ -16,23 +16,6 @@ fn write_json(path: &std::path::Path, value: &serde_json::Value) {
 
 #[test]
 fn filesystem_inventory_edges() {
-    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
-        "filesystem_inventory-filesystem",
-    );
-    std::fs::create_dir_all(root.join("dir")).expect("dir");
-    {
-        let _guard = crate::red::filesystem::fixtures::materialize(
-            &root,
-            &json!({"filesystem_fixtures":[{"kind":"file","path":"dir/current.txt","contents":"current"}]}),
-        )
-        .expect("file fixture");
-        assert_eq!(
-            std::fs::read_to_string(root.join("dir/current.txt")).expect("fixture text"),
-            "current"
-        );
-    }
-    assert!(!root.join("dir/current.txt").exists());
-
     let inventory_root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "filesystem_inventory-inventory",
     );
@@ -62,7 +45,6 @@ fn filesystem_inventory_edges() {
             .any(|item| item.contains("__pycache__"))
     );
 
-    let _ = std::fs::remove_dir_all(root);
     let _ = std::fs::remove_dir_all(inventory_root);
 }
 

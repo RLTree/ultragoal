@@ -1,5 +1,5 @@
 use serde_json::{Value, json};
-use std::collections::BTreeMap;
+use std::path::Path;
 
 fn write_json(path: &Path, value: &Value) {
     if let Some(parent) = path.parent() {
@@ -8,53 +8,11 @@ fn write_json(path: &Path, value: &Value) {
     std::fs::write(path, serde_json::to_vec(value).expect("json")).expect("write json");
 }
 
-fn write_text(path: &Path, text: &str) {
-    if let Some(parent) = path.parent() {
-        std::fs::create_dir_all(parent).expect("parent");
-    }
-    std::fs::write(path, text).expect("write text");
-}
-
 #[test]
 fn red_registry_and_semantic_boundaries() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "target_boundary-red-registry-semantic",
     );
-    write_text(
-        &root.join("fixtures/valid/minimal-goal-run.json"),
-        "{bad-json",
-    );
-    write_json(
-        &root.join("fixtures/red/bad-base.json"),
-        &json!({
-            "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
-            "json_patch": [],
-            "expected_failure": {
-                "check_id": "red-fixture-coverage",
-                "error": "base_fixture_malformed_json"
-            }
-        }),
-    );
-    write_json(
-        &root.join("templates/RED_FIXTURES.json"),
-        &json!([{
-            "id": "bad-base",
-            "packet_path": "fixtures/red/bad-base.json",
-            "expected_failure": {
-                "check_id": "red-fixture-coverage",
-                "error": "base_fixture_malformed_json"
-            }
-        }]),
-    );
-    let store = crate::schema_catalog::load(
-        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
-    );
-    let results = crate::red::fixtures::red_fixture_results(&root, &store, &BTreeMap::new());
-    assert_eq!(
-        results["bad-base"]["observed_error"],
-        "base_fixture_malformed_json"
-    );
-
     let mut registry_errors = Vec::new();
     crate::review::round::registry::exposure_errors(
         &root,

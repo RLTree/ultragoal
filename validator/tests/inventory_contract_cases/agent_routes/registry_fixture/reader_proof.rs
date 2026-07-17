@@ -117,7 +117,6 @@ const READER_SOURCES: &[&str] = &[
     "validator/src/inventory/validate.rs",
     "validator/src/lib.rs",
     "validator/src/package/mod.rs",
-    "validator/src/red/fixture/package.rs",
     "validator/src/review/materiality.rs",
     "validator/src/review/materiality/registry.rs",
     "validator/src/review/round/report.rs",

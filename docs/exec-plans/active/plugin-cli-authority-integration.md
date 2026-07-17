@@ -38,8 +38,9 @@ product, migration, release, and completion claims on their own surfaces.
 The current P0 candidate is always the clean containing `HEAD`/tree. The
 literal checkpoint above must remain an ancestor with its exact tree; the
 freeze derives live HEAD/tree, permitted root paths, payload digests,
-projection chain, and clean status. Prelaunch compile (569 lib / 614 test), namespace runtime
-verification, and four-persona exposure are blocked; standards rows are 122
+projection chain, and clean status. The affected production-library check now
+reaches the inherited deny-warning wall at 664 errors; test compilation was not
+rerun at this boundary. Namespace runtime verification and four-persona exposure are blocked; standards rows are 122
 current. No lane is selectable and no lease is issued. All claims remain
 withheld. Namespace and standards are blocked/unavailable until their real
 validator commands produce candidate-bound evidence.
@@ -191,8 +192,14 @@ superseded evidence are removed at integration boundaries.
   `c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`; the clean containing candidate
   must prove permitted paths and status live. All acceptance evidence is
   historical/nonselectable and all 14 claims remain withheld.
-- Global strict compilation still fails on the inherited warning wall; no
-  suppression or dummy reachability is allowed.
+- The disconnected legacy red execution engine was retired at `51e9cae85`.
+  Root reconciliation removes its remaining production, test, fixture, and
+  projection references. The affected production-library check reports 664
+  deny-warning errors, down from 759, with no unresolved reference to the
+  retired red engine. This is not a compile pass; no suppression or dummy
+  reachability is allowed.
+- HCT-FIXTURES execution/parity, runtime, installed journey, readiness,
+  release, and completion claims remain withheld.
 - No implementation worktree launches until the canonical P0 checkpoint is
   committed and the semantic-namespace/standards debt checkpoint is clean.
 - After P0, re-observe N02/N03 and select the smallest dependency-closed source

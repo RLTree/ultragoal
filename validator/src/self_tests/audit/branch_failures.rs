@@ -1,5 +1,4 @@
 use serde_json::{Value, json};
-use std::collections::BTreeMap;
 use std::path::Path;
 
 fn write_json(path: &Path, value: &Value) {
@@ -178,60 +177,4 @@ fn plugin_self_laws_reject_stale_registry_coverage_and_line_cap() {
         assert!(contains(&failures, expected), "{expected}: {failures:?}");
     }
     std::fs::remove_dir_all(root).expect("cleanup plugin self laws");
-}
-
-#[test]
-fn red_fixture_results_report_catalog_packet_and_base_failures() {
-    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("red-fixture-results");
-    let store = crate::schema_catalog::load(
-        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
-    );
-    assert!(crate::red::fixtures::red_fixture_results(&root, &store, &BTreeMap::new()).is_empty());
-    write_json(&root.join("templates/RED_FIXTURES.json"), &json!({}));
-    assert!(crate::red::fixtures::red_fixture_results(&root, &store, &BTreeMap::new()).is_empty());
-
-    write_text(&root.join("fixtures/red/malformed.json"), "{");
-    write_json(
-        &root.join("fixtures/valid/missing-red-base-fixture.json"),
-        &json!({"ok":true}),
-    );
-    for (path, packet) in [
-        (
-            "fixtures/red/base-missing.json",
-            json!({"base_fixture_path":"fixtures/valid/minimal-goal-run.json","expected_failure":{"check_id":"schema-valid","error":"base_fixture_missing"}}),
-        ),
-        (
-            "fixtures/red/no-patch.json",
-            json!({"base_fixture_path":"fixtures/valid/missing-red-base-fixture.json","expected_failure":{"check_id":"schema-valid","error":"red_fixture_json_patch_missing"}}),
-        ),
-        (
-            "fixtures/red/bad-base.json",
-            json!({"base_fixture_path":"fixtures/valid/not-allowed.json","expected_failure":{"check_id":"schema-valid","error":"invalid_base_fixture_path"}}),
-        ),
-    ] {
-        write_json(&root.join(path), &packet);
-    }
-    write_json(
-        &root.join("templates/RED_FIXTURES.json"),
-        &json!([
-            {"id":"escape","packet_path":"../escape.json","expected_failure":{"check_id":"schema-valid","error":"red_fixture_packet_path_invalid"}},
-            {"id":"missing","packet_path":"fixtures/red/missing.json","expected_failure":{"check_id":"schema-valid","error":"red_fixture_packet_missing"}},
-            {"id":"malformed","packet_path":"fixtures/red/malformed.json","expected_failure":{"check_id":"schema-valid","error":"red_fixture_packet_malformed_json"}},
-            {"id":"base-missing","packet_path":"fixtures/red/base-missing.json","expected_failure":{"check_id":"schema-valid","error":"base_fixture_missing"}},
-            {"id":"no-patch","packet_path":"fixtures/red/no-patch.json","expected_failure":{"check_id":"schema-valid","error":"red_fixture_json_patch_missing"}},
-            {"id":"bad-base","packet_path":"fixtures/red/bad-base.json","expected_failure":{"check_id":"schema-valid","error":"invalid_base_fixture_path"}}
-        ]),
-    );
-    let results = crate::red::fixtures::red_fixture_results(&root, &store, &BTreeMap::new());
-    for (id, error) in [
-        ("escape", "red_fixture_packet_path_invalid"),
-        ("missing", "red_fixture_packet_missing"),
-        ("malformed", "red_fixture_packet_malformed_json"),
-        ("base-missing", "base_fixture_missing"),
-        ("no-patch", "red_fixture_json_patch_missing"),
-        ("bad-base", "invalid_base_fixture_path"),
-    ] {
-        assert_eq!(results[id]["observed_error"], error);
-    }
-    std::fs::remove_dir_all(root).expect("cleanup red fixtures");
 }

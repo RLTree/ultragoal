@@ -1,5 +1,4 @@
 use serde_json::json;
-use std::collections::BTreeMap;
 
 fn errors(out: &[crate::audit::contract::Failure]) -> Vec<&str> {
     out.iter().map(|failure| failure.error.as_str()).collect()
@@ -60,83 +59,6 @@ fn semantic_review_and_red_observation_edges_cover_success_paths() {
     );
 
     let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
-    let store = crate::schema_catalog::load(&repo);
-    let packet =
-        json!({"json_patch":[{"op":"replace","path":"/verification_backlog/rows","value":[]}]});
-    let bad = json!({
-        "completion_manifest":{"claims":[{
-            "id":"CLAIM-RED",
-            "status":"proven_static",
-            "claim_ceiling_effect":"included",
-            "evidence":[{"kind":"test_pass","surface":"ci","digest":crate::self_tests::boundaries::workspace_fixtures::sha('r')}]
-        }]},
-        "lane_registry":{"lanes":[{
-            "id":"LANE-RED",
-            "workspace":"workspace",
-            "branch":"branch",
-            "base_commit":"base",
-            "current_commit":"commit",
-            "target_branch":"main",
-            "target_head_at_launch":"head",
-            "target_head_at_validation":"head",
-            "merge_base_at_validation":"base",
-            "execplan":"EXECPLAN.md",
-            "claim_ids":["CLAIM-RED"],
-            "owned_paths":[]
-        }],"root_verification_stages":[]},
-        "ready_for_merge":{
-            "ready":true,
-            "lane_id":"LANE-RED",
-            "workspace":"workspace",
-            "branch":"branch",
-            "base_commit":"base",
-            "commit":"commit",
-            "target_branch":"main",
-            "target_head_at_launch":"head",
-            "target_head_at_validation":"head",
-            "merge_base":"base",
-            "execplan":"EXECPLAN.md",
-            "claim_ids":["CLAIM-RED"],
-            "changed_files":[],
-            "worktree_clean":true,
-            "teardown_ready":true,
-            "commands":[{"id":"ok","exit":0}]
-        },
-        "verification_backlog":{
-            "schema":"harness-ultragoal.verification-backlog.v1",
-            "manifest_digest":crate::self_tests::boundaries::workspace_fixtures::sha('a'),
-            "generated_at":"2026-06-25T00:00:00Z",
-            "rows":[]
-        },
-        "automation_tick_receipt":{
-            "freshness_policy":{
-                "clock_at_validation":"2026-06-25T00:00:00Z",
-                "max_tick_age_minutes":10,
-                "max_success_age_minutes":10
-            },
-            "last_tick_at":"2026-06-25T00:00:00Z",
-            "last_success_at":"2026-06-25T00:00:00Z",
-            "validator_computed_drift_verdict":"fresh",
-            "drift_verdict":"fresh"
-        }
-    });
-    let schema_errors = crate::red::fixture::schema::errors(&store, &packet, &bad);
-    assert!(schema_errors.is_empty(), "{schema_errors:?}");
-    let observed = crate::red::fixture::observation::observe_materialized(
-        &repo,
-        &store,
-        &BTreeMap::new(),
-        &packet,
-        &json!({"check_id":"claim-evidence-coupling","error":"proof_surface_substitution"}),
-        &bad,
-        "fixtures/valid/semantic-claim-boundary.json",
-    );
-    assert!(
-        observed.ok,
-        "check={} error={}",
-        observed.check, observed.error
-    );
-
     let mut ceiling = crate::self_tests::review::claim_ceiling::receipt();
     ceiling["claim_ceiling"]["unsupported"] = json!([
         {"claim_id":"plugins_ui_visibility"},

@@ -60,7 +60,6 @@ pub(crate) enum Command {
     NextAction(crate::cli::next_action::NextActionCommand),
     Observe(crate::cli::observe::command::ObserveCommand),
     RedReport(crate::cli::red_report::RedReportCommand),
-    FixtureSchedule(crate::red::fixture::scheduler::FixtureSchedulerCommand),
     SchemaValidation(crate::cli::schema_validation::SchemaValidationCommand),
     Routine(crate::cli::routine::RoutineCommand),
     Session(crate::cli::session::SessionCommand),
