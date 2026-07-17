@@ -41,7 +41,9 @@ pub(crate) fn check(
         &check_ids,
         scheduler,
     );
-    failures.extend(package.failures);
+    for (check, details) in package.failures {
+        failures.entry(check).or_default().extend(details);
+    }
 
     let current_details = failures
         .iter()

@@ -9953,51 +9953,6 @@
         },
         {
           "contains": {
-            "const": "target-repo-audit-capability-fixture-used-as-live-target-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-generic-repo-support-overclaim-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-mode-substitution-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-source-obligation-parity-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-target-classification-missing-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-target-command-missing-success-emitted-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-unknown-language-runtime-accepted-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red"
-          }
-        },
-        {
-          "contains": {
             "const": "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red"
           }
         },
@@ -11858,8 +11813,8 @@
           "wrong-worktree-or-root"
         ]
       },
-      "maxItems": 1280,
-      "minItems": 1280,
+      "maxItems": 1271,
+      "minItems": 1271,
       "type": "array",
       "uniqueItems": true
     },

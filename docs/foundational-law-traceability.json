@@ -1401,18 +1401,14 @@
       "validator_check_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation"
     },
     {
-      "claim_ceiling_impact": "target_repo_claims_withheld_without_exact_target_capability_receipt",
+      "claim_ceiling_impact": "target_repo_audit_capability_withheld_pending_typed_hct_fit_and_hct_fixtures_mapping",
       "law_id": "target-repo-audit-capability",
       "obligation_id": "target-repo-audit-capability",
-      "receipt_requirement": "mandatory-law receipt target-repo-audit-capability and source-obligation parity red fixture",
-      "red_fixture_id": "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
       "source_artifact": {
         "digest": "sha256:3523deec670e02ced882b302441597c07060ee9f91bdeeb0cf459d86721de204",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "target-repo-audit-capability",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/target-repo-audit-capability.json",
-      "validator_check_id": "target-repo-audit-capability",
       "enforcement_status": "pending_typed_successor_mapping",
       "current_status": "blocked",
       "claim_ceiling_guard": "target_repo_audit_capability_withheld_pending_typed_hct_fit_and_hct_fixtures_mapping",

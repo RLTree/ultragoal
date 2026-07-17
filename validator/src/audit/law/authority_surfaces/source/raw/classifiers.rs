@@ -51,9 +51,7 @@ pub(super) fn typed_law_check_boundary_text(text: &str) -> bool {
 pub(super) fn typed_path_boundary_text(rel: &str, text: &str) -> bool {
     matches!(
         rel,
-        "validator/src/cli/observe/command_roundtrip/process.rs"
-            | "validator/src/audit/receipt/generated.rs"
-            | "validator/src/skill_links.rs"
+        "validator/src/cli/observe/command_roundtrip/process.rs" | "validator/src/skill_links.rs"
     ) && path_boundary_product_role(text)
 }
 
@@ -64,16 +62,10 @@ fn path_boundary_product_role(text: &str) -> bool {
     let command_process_adapter = text.contains("run_production_command")
         && text.contains("CommandOutput")
         && text.contains("current_exe_with");
-    let generated_artifact_normalizer = text.contains("ReceiptInput")
-        && text.contains("target_artifacts")
-        && text.contains("super::rel_path");
     let skill_reference_parser = text.contains("SkillLinkFailure")
         && text.contains("normalized_ref")
         && text.contains("resolves_inside");
-    receipt_path_validator
-        || command_process_adapter
-        || generated_artifact_normalizer
-        || skill_reference_parser
+    receipt_path_validator || command_process_adapter || skill_reference_parser
 }
 
 #[cfg(test)]

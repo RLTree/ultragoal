@@ -36,7 +36,6 @@ fn input(root: &std::path::Path) -> crate::audit::receipt::ReceiptInput {
         check_ids: vec!["schema-valid".to_string()],
         failures: BTreeMap::new(),
         red: BTreeMap::new(),
-        target_artifacts: Vec::new(),
         start: "2026-06-26T00:00:04Z".to_string(),
         status: "fail".to_string(),
         validator_artifacts: Vec::new(),
@@ -44,28 +43,6 @@ fn input(root: &std::path::Path) -> crate::audit::receipt::ReceiptInput {
         mode: "strict".to_string(),
         scheduler_metrics: Vec::new(),
     }
-}
-
-#[test]
-fn validator_receipt_reports_unknown_external_path_labels() {
-    let root = receipt_root("receipt-unknown-external");
-    let mut input = input(&root);
-    input.target_artifacts = vec![json!({
-        "artifact_type": "validator_receipt",
-        "path": "/",
-        "digest": crate::self_tests::boundaries::workspace_fixtures::sha('e')
-    })];
-    let receipt = crate::audit::receipt::build(input).expect("receipt");
-    let artifacts = receipt["generated_artifacts"]
-        .as_array()
-        .expect("artifacts");
-    assert!(
-        artifacts
-            .iter()
-            .any(|row| row["path"] == "<external-artifact:unknown>"),
-        "{artifacts:?}"
-    );
-    std::fs::remove_dir_all(root).expect("cleanup unknown external");
 }
 
 #[test]

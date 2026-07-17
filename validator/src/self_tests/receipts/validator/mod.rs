@@ -3,7 +3,6 @@ use std::collections::BTreeMap;
 use std::path::Path;
 
 mod boundaries;
-mod generated;
 
 #[test]
 fn validator_receipt_identity_and_artifact_set_digest_cover_package_surfaces() {
@@ -93,11 +92,6 @@ fn validator_receipt_builds_execution_and_generated_artifacts() {
         check_ids: vec!["schema-valid".to_string()],
         failures: BTreeMap::from([("schema-valid".to_string(), Vec::new())]),
         red: BTreeMap::new(),
-        target_artifacts: vec![json!({
-            "artifact_type":"validator_receipt",
-            "path":root.join("target.json").to_string_lossy(),
-            "digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')
-        })],
         start: "2026-06-26T00:00:00Z".to_string(),
         status: "pass".to_string(),
         validator_artifacts: vec![json!({"path":"validator/src/main.rs","digest":crate::self_tests::boundaries::workspace_fixtures::sha('b')})],
@@ -189,7 +183,6 @@ fn validator_receipt_builds_execution_and_generated_artifacts() {
         check_ids: vec!["schema-valid".to_string()],
         failures: BTreeMap::from([("schema-valid".to_string(), vec!["bad".to_string()])]),
         red: BTreeMap::new(),
-        target_artifacts: Vec::new(),
         start: "2026-06-26T00:00:01Z".to_string(),
         status: "fail".to_string(),
         validator_artifacts: Vec::new(),
