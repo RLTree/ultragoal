@@ -77,6 +77,10 @@ record the gap before acting.
   demonstrated sibling defect into one response. One material defect rejects
   the candidate, but is not an early-stop condition unless continuing would be
   unsafe, destructive, or outside the authorized surface.
+- Re-review requires a new exact candidate, a newly eligible claim surface, or
+  a demonstrated contradiction in prior evidence. A completed exhaustive
+  review with no material finding closes that review loop; speculative
+  hardening and byte-identical reruns do not keep a candidate under review.
 - Proof artifacts are an exception, not a default output. Persist only the
   smallest canonical artifact required by a current claim, cross-process
   handoff, irreproducible observation, or recovery need; keep ordinary build,

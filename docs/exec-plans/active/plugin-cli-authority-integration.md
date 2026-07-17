@@ -9,13 +9,12 @@ contract. Normative authority remains the adopted bundle rooted at
 
 Finish the plugin product and typed Rust CLI kernel from current repository
 truth. The intentionally committed self-law refactor now has bounded source
-acceptance. N04, N06, and N09 are root-integrated at bounded source/local
+acceptance. N04, N06, N09, and N10 are root-integrated at bounded source/local
 ceilings; the current warning wall and pending standards audits keep
-warning-free integration open. N10 is dependency-refresh eligible from the
-exact current root. N11 remains a preserved branch-only speculative freeze
-after its worktree teardown. N10 and N11 remain at explicitly withheld
-source-local ceilings until their graph dependencies are current on the exact
-root candidate.
+warning-free integration open. N11 remains a preserved branch-only speculative
+freeze after its worktree teardown and stays withheld until N07 and N08 are
+current on the exact root candidate. The accepted N06 and N10 tasks are
+archived and have no live worktree or review eligibility.
 
 ## Durable Goal Binding
 
@@ -59,7 +58,7 @@ not acceptance proof, and it cannot raise a claim beyond the cited evidence.
 | --- | --- | --- | --- | --- |
 | N06 routine execution | integrated | accepted source `a646eace6` / tree `97d7d658`, receipt `e0d2d28e0`, root merge `a02050a74` | Final independent review found no reproducible material defect after the typed launch-acquisition repair. On the merged root, launch custody passed 3/3, closest-boundary privacy 1/1, durable publication 5/5, recovery/reuse 53/53 with an external `/tmp` fixture root, and the exact optimized public binary passed 43/43. A debug-binary run exceeded the 60-second product bound and was correctly not treated as production evidence. Strict compilation still stops at the pre-existing 568-warning wall, with zero primary diagnostics on N06 touched paths. Agent-standards enforcement passes 122 rows and generated authority was refreshed. This is source/root-integration evidence only; external monotonic custody, install, discovery, runtime, product, readiness, release, and completion remain withheld | Closed; N09 production adoption is integrated and N10 may refresh |
 | N09 agent reader | integrated | production adoption `0c4879b2a` / tree `48978ec8c`; accepted reader base `385f0286c` | The registry control plane now executes the sealed six-role local authority transaction through one explicit home/package/project set. Exact reader behavior passed 70/70; verified and write-capable-rejected caller rows are recursively zero-write; the authoritative schema rejects every cross-status field mutation; a real `run()` receipt carries four verified rows while live exposure remains unavailable. Independent review returned ACCEPT after two invariant-level schema/routing REWORKs. Production N09 paths add zero strict diagnostics; agent standards pass 122 rows and Python laws 27. This raises only the integrated local source-authority ceiling; installed discovery, fresh-session comprehension, runtime exposure, route eligibility, readiness, release, and completion remain withheld | Refresh N10 from the exact current root; preserve the installed host journey for the product boundary |
-| N10 orchestration | refresh eligible | retained `7f92b7ed3` / tree `53bd7717` | The retained source freeze predates current N06 and N09 interfaces; its stale WorkerResult and every dependent claim remain withheld | Rebase or transplant onto the exact current root, reconcile consumed authority interfaces, rerun focused evidence, then freeze once for review |
+| N10 orchestration | integrated | accepted source `fcee41933` / tree `32e85546`; receipt/root HEAD `162f2fe8c` / tree `e2c9913d` | The current N06/N09 refresh passed one exhaustive exact-freeze review with no remaining material finding. Root then verified the canonical WorkerResult digests and passed production authority 31/31 plus the exact fresh-process interruption refusal 1/1. This raises only the source/root-integration ceiling; strict warning-free, public dispatch, external monotonic custody, installed/runtime, product, readiness, release, and completion remain withheld | Closed; archive the task and perform the required standards-debt checkpoint before another implementation worktree |
 | N11 evaluation | candidate | branch tip `9c2911d6d` / tree `6176c259` | Dependency-independent source repair only; no current exact-tree acceptance and N06/N07/N08-dependent claims withheld. Its prior worktree is removed; branch bytes are the only retained source authority | Preserve the branch unchanged until its dependency ceiling is current; create no replacement worktree while the integration queue is occupied |
 | N08 plugin product | planned | no admissible current candidate | N04/N05/N06 source ceilings exist; N07 currency and live host behavior remain open | Preserve during the N10 refresh; prepare only at the next dependency boundary |
 
@@ -70,8 +69,12 @@ freeze-to-integration time `19m51s`
 from `a646eace6` to root merge `a02050a74`; diminishing-return stop-rule
 interventions `1`. The final source review completed the named transition matrix
 and stopped when only environment confirmation and speculative hardening
-remained. N06 is integrated without raising strict, installed, runtime, product,
-readiness, release, or completion claims. Escalation is legitimate only for
+remained. N06 and N10 are integrated and their tasks are archived. Historical
+rejection counts are not review triggers. Neither becomes review-eligible again
+without changed authority-bearing bytes, a changed consumed dependency, a newly
+current claim surface, or an observed contradiction. Strict, installed,
+runtime, product, readiness, release, and completion claims remain withheld.
+Escalation is legitimate only for
 an authority conflict, product decision without a safe default, destructive or
 external action, secret handling, or unavailable required access.
 
@@ -373,7 +376,10 @@ For each frozen session: inspect the commit and WorkerResult, run a bounded
 independent falsification through the complete named invariant surface, and
 batch all demonstrated sibling defects into one REWORK packet. One material
 defect is sufficient to reject the candidate, but review does not stop at the
-first defect. Integrate one accepted increment, apply root-owned wiring, rerun
+first defect. Do not commission another review of the same exact candidate once
+that exhaustive pass returns no material finding; require changed authority
+bytes, changed consumed dependencies, a newly current claim surface, or an
+observed contradiction. Integrate one accepted increment, apply root-owned wiring, rerun
 the dependency closure, refresh any remaining worktrees after shared-interface
 changes, then archive and remove the accepted session when no unique state
 remains.

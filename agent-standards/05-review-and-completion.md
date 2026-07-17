@@ -31,6 +31,14 @@ evidence.
   demonstrated sibling and descendant defects in one consolidated result. One
   material defect is sufficient for rejection, but review does not stop at the
   first defect unless continuing would be unsafe, destructive, or out of scope.
+- A fresh review is eligible only after authority-bearing candidate bytes or a
+  consumed dependency changed, a previously unreviewed claim surface became
+  current, or observed behavior contradicted the prior decision. Do not rerun
+  review against a byte-identical candidate merely to seek more findings.
+- When one exhaustive pass covers the named invariant and produces no material
+  finding, close that review loop. Record speculative hardening as backlog or
+  residual risk; it cannot keep the candidate in review or trigger duplicate
+  reviewers without a concrete counterexample.
 - Approval must name the proof anchors checked and the claim ceiling that
   remains unsupported.
 
