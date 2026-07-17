@@ -61,6 +61,7 @@ pub(crate) struct LiveLoopCommand {
     pub(crate) measure_all: bool,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<LiveLoopCommand>, String> {
     match raw {
         [a, b, ..] if a == "loop" && b == "run" => Ok(Some(LiveLoopCommand {
@@ -216,20 +217,24 @@ fn loop_snapshot(
     }
 }
 
+#[cfg(test)]
 fn opt_string(args: &[String], key: &str) -> Option<String> {
     args.windows(2)
         .find(|window| window[0] == key)
         .map(|window| window[1].clone())
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     opt_string(args, key).map(PathBuf::from)
 }
 
+#[cfg(test)]
 fn has_flag(args: &[String], key: &str) -> bool {
     args.iter().any(|arg| arg == key)
 }
 
+#[cfg(test)]
 fn opt_jobs(args: &[String], key: &str) -> Result<Option<usize>, String> {
     match opt_string(args, key).as_deref() {
         None | Some("auto") => Ok(None),

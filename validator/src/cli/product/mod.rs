@@ -1,9 +1,12 @@
 use serde_json::{Value, json};
-use std::path::{Component, Path, PathBuf};
+#[cfg(test)]
+use std::path::PathBuf;
+use std::path::{Component, Path};
 use std::time::Instant;
 
 pub(crate) use command::{ProductCommand, ProductOperation};
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<ProductCommand>, String> {
     match raw {
         [a, b, ..] if a == "product" && b == "prove-cohesion" => Ok(Some(command(
@@ -45,6 +48,7 @@ pub(crate) fn run(root: &Path, command: &ProductCommand) -> Result<i32, String> 
     Ok(i32::from(status != "pass"))
 }
 
+#[cfg(test)]
 fn command(operation: ProductOperation, args: &[String]) -> Result<ProductCommand, String> {
     let observability_receipt = optional_path(args, "--observability-receipt")?
         .unwrap_or_else(|| PathBuf::from(operation.receipt_rel()));
@@ -71,6 +75,7 @@ fn run_minter(root: &Path, command: &ProductCommand) -> telemetry::ProductOutcom
     }
 }
 
+#[cfg(test)]
 fn receipt_dir(operation: ProductOperation, args: &[String]) -> Result<Option<PathBuf>, String> {
     match operation {
         ProductOperation::ProductProveCohesion => optional_path(args, "--receipt-dir"),
@@ -96,10 +101,12 @@ fn validate_root_relative(dir: &Path, label: &str) -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Result<PathBuf, String> {
     optional_path(args, key)?.ok_or_else(|| format!("missing required argument {key}"))
 }
 
+#[cfg(test)]
 fn optional_path(args: &[String], key: &str) -> Result<Option<PathBuf>, String> {
     args.iter()
         .position(|arg| arg == key)

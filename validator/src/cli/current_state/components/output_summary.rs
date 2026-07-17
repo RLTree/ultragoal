@@ -21,6 +21,7 @@ pub(crate) fn text<'a>(value: &'a Value, field: &str, default: &'a str) -> &'a s
     value.get(field).and_then(Value::as_str).unwrap_or(default)
 }
 
+#[cfg(test)]
 pub(crate) fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     args.iter()
         .position(|arg| arg == key)

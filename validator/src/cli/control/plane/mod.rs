@@ -19,6 +19,7 @@ pub(crate) struct AgentAuthorityRoots {
     pub(crate) project: PathBuf,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Option<ControlCommand> {
     let operation = match raw {
         [a, b, rest @ ..] if a == "law" && b == "graph" && has_flag(rest, "--strict") => {
@@ -160,10 +161,12 @@ pub(crate) fn receipt(root: &Path, command: &ControlCommand) -> Result<Value, St
     ))
 }
 
+#[cfg(test)]
 fn has_flag(args: &[String], flag: &str) -> bool {
     args.iter().any(|arg| arg == flag)
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     args.iter()
         .position(|arg| arg == key)
@@ -171,12 +174,14 @@ fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
         .map(PathBuf::from)
 }
 
+#[cfg(test)]
 fn surface_root(args: &[String]) -> Option<PathBuf> {
     opt_path(args, "--surface-root")
         .or_else(|| opt_path(args, "--installed-root"))
         .or_else(|| opt_path(args, "--cache-root"))
 }
 
+#[cfg(test)]
 fn agent_authority_roots(args: &[String]) -> Result<Option<AgentAuthorityRoots>, ()> {
     match (
         opt_path(args, "--agent-package-root"),

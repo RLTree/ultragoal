@@ -44,6 +44,7 @@ pub(crate) enum CoverageMode {
 }
 
 impl CoverageMode {
+    #[cfg(test)]
     fn parse(value: Option<String>) -> Result<Self, String> {
         match value.as_deref().unwrap_or("strict") {
             "strict" => Ok(Self::Strict),
@@ -60,6 +61,7 @@ impl CoverageMode {
     }
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<CoverageCommand>, String> {
     let args = match raw {
         [first, second, rest @ ..] if first == "coverage" && second == "prove" => rest,
@@ -186,6 +188,7 @@ fn write_observability_receipt(root: &Path, value: &Value) -> Result<(), String>
     crate::json_boundary::write_json(&receipt, value)
 }
 
+#[cfg(test)]
 fn reject_unknown(args: &[String]) -> Result<(), String> {
     let mut index = 0;
     while index < args.len() {
@@ -203,10 +206,12 @@ fn reject_unknown(args: &[String]) -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(test)]
 fn has_flag(args: &[String], flag: &str) -> bool {
     args.iter().any(|arg| arg == flag)
 }
 
+#[cfg(test)]
 fn opt_string(args: &[String], key: &str) -> Option<String> {
     args.iter()
         .position(|arg| arg == key)
@@ -214,10 +219,12 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
         .cloned()
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     opt_string(args, key).map(PathBuf::from)
 }
 
+#[cfg(test)]
 fn opt_usize(args: &[String], key: &str) -> Result<Option<usize>, String> {
     let Some(value) = opt_string(args, key) else {
         return Ok(None);

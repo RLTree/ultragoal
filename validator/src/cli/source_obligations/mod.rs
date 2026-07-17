@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use std::time::Instant;
 
+#[cfg(test)]
 mod args;
 mod claims;
 mod runtime;
@@ -21,6 +22,7 @@ pub(crate) struct SourceObligationsCommand {
     pub(crate) jobs: Option<usize>,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<SourceObligationsCommand>, String> {
     let args = match raw {
         [first, second, rest @ ..] if first == "source-obligations" && second == "check" => rest,

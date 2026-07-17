@@ -18,6 +18,7 @@ pub(crate) struct HaloCommand {
     app_path: PathBuf,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<HaloCommand>, String> {
     if raw.first().map(String::as_str) != Some("halo") {
         return Ok(None);
@@ -48,6 +49,7 @@ pub(crate) fn receipt_failures(root: &Path, receipt: &Value) -> Vec<String> {
     proof::receipt_failures(root, receipt)
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     args.iter()
         .position(|arg| arg == key)

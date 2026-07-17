@@ -7,6 +7,7 @@ const CHECK_ID: &str = "review-round-verify-observability-binding";
 const CLAIM_ID: &str = "review_round_source_local_observability";
 const DEFAULT_RECEIPT: &str = "validation_artifacts/observability/review-round-verify.json";
 
+#[cfg(test)]
 pub(crate) fn observability_receipt(args: &[String]) -> Result<PathBuf, String> {
     let path = args
         .windows(2)

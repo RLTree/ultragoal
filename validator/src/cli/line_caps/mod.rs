@@ -16,6 +16,7 @@ pub(crate) struct LineCapsCommand {
     pub(crate) jobs: Option<usize>,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<LineCapsCommand>, String> {
     let args = match raw {
         [first, second, rest @ ..] if first == "line-caps" && second == "check" => rest,
@@ -156,10 +157,12 @@ fn write_receipt(root: &Path, receipt: &Path, value: &Value) -> Result<(), Strin
     crate::json_boundary::write_json(&path, value)
 }
 
+#[cfg(test)]
 fn has_flag(args: &[String], flag: &str) -> bool {
     args.iter().any(|arg| arg == flag)
 }
 
+#[cfg(test)]
 fn reject_unknown(args: &[String]) -> Result<(), String> {
     let mut index = 0;
     while index < args.len() {
@@ -177,6 +180,7 @@ fn reject_unknown(args: &[String]) -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(test)]
 fn opt_string(args: &[String], key: &str) -> Option<String> {
     args.iter()
         .position(|arg| arg == key)
@@ -184,10 +188,12 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
         .cloned()
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     opt_string(args, key).map(PathBuf::from)
 }
 
+#[cfg(test)]
 fn opt_usize(args: &[String], key: &str) -> Result<Option<usize>, String> {
     let Some(value) = opt_string(args, key) else {
         return Ok(None);

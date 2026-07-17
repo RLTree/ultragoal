@@ -1,4 +1,6 @@
-use std::path::{Path, PathBuf};
+use std::path::Path;
+#[cfg(test)]
+use std::path::PathBuf;
 
 pub(crate) mod command;
 mod command_roundtrip;
@@ -11,6 +13,7 @@ pub(crate) mod telemetry;
 
 use command::{ObserveCommand, ObserveOperation};
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<ObserveCommand>, String> {
     if raw.first().map(String::as_str) != Some("observe") {
         return Ok(None);
@@ -57,6 +60,7 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<i32, String> 
     stdout::write_and_print(root, command, &value)
 }
 
+#[cfg(test)]
 fn operation(raw: &[String]) -> Result<ObserveOperation, String> {
     match raw {
         [_, a, b, ..] if a == "stack" && b == "up" => Ok(ObserveOperation::StackUp),
@@ -89,6 +93,7 @@ fn operation(raw: &[String]) -> Result<ObserveOperation, String> {
     }
 }
 
+#[cfg(test)]
 fn opt_string(args: &[String], key: &str) -> Option<String> {
     args.iter()
         .position(|arg| arg == key)
@@ -96,14 +101,17 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
         .cloned()
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     opt_string(args, key).map(PathBuf::from)
 }
 
+#[cfg(test)]
 fn opt_usize(args: &[String], key: &str) -> Option<usize> {
     opt_string(args, key).and_then(|value| value.parse().ok())
 }
 
+#[cfg(test)]
 fn opt_u64(args: &[String], key: &str) -> Option<u64> {
     opt_string(args, key).and_then(|value| value.parse().ok())
 }

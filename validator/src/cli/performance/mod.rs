@@ -11,6 +11,7 @@ pub(crate) struct PerformanceCommand {
     pub(crate) class: BudgetClass,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<PerformanceCommand>, String> {
     let operation = match raw {
         [a, b, ..] if a == "performance" && b == "prove" => PerformanceOperation::Prove,
@@ -58,6 +59,7 @@ pub(crate) fn run(root: &Path, command: &PerformanceCommand) -> Result<i32, Stri
     Ok(receipt["exit_code"].as_i64().unwrap_or(1) as i32)
 }
 
+#[cfg(test)]
 fn default_class(operation: PerformanceOperation) -> BudgetClass {
     match operation {
         PerformanceOperation::Budgets => BudgetClass::HotEditCheck,
@@ -66,6 +68,7 @@ fn default_class(operation: PerformanceOperation) -> BudgetClass {
     }
 }
 
+#[cfg(test)]
 fn opt_string(args: &[String], key: &str) -> Option<String> {
     args.iter()
         .position(|arg| arg == key)
@@ -73,6 +76,7 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
         .cloned()
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     opt_string(args, key).map(PathBuf::from)
 }

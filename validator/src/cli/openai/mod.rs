@@ -1,5 +1,7 @@
 use serde_json::Value;
-use std::path::{Path, PathBuf};
+use std::path::Path;
+#[cfg(test)]
+use std::path::PathBuf;
 
 pub(crate) mod budget;
 mod call;
@@ -18,6 +20,7 @@ pub(crate) enum OpenAiCommand {
     Output(output::OutputCommand),
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<OpenAiCommand>, String> {
     if raw.first().map(String::as_str) != Some("openai") {
         return Ok(None);
@@ -58,6 +61,7 @@ pub(crate) fn build_receipt(root: &Path, command: &OpenAiCommand) -> Result<Valu
     }
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     args.iter()
         .position(|arg| arg == key)
@@ -65,6 +69,7 @@ fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
         .map(PathBuf::from)
 }
 
+#[cfg(test)]
 fn opt_string(args: &[String], key: &str) -> Option<String> {
     args.iter()
         .position(|arg| arg == key)

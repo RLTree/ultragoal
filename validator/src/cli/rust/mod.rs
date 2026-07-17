@@ -13,6 +13,7 @@ pub(crate) struct RustCommand {
     pub(crate) receipt: Option<PathBuf>,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<RustCommand>, String> {
     if raw.first().map(String::as_str) != Some("rust") {
         return Ok(None);
@@ -229,6 +230,7 @@ fn digest(root: &Path, rel: &str) -> Result<String, String> {
     crate::digest::file(&root.join(rel))
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     args.iter()
         .position(|arg| arg == key)

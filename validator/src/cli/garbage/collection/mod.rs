@@ -15,6 +15,7 @@ pub(crate) struct GarbageCommand {
     pub(crate) apply_receipt_digest: Option<String>,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<GarbageCommand>, String> {
     if raw.first().map(String::as_str) != Some("gc") {
         return Ok(None);
@@ -183,6 +184,7 @@ fn digest(root: &Path, rel: &str) -> Result<String, String> {
     crate::digest::file(&root.join(rel))
 }
 
+#[cfg(test)]
 fn opt_string(args: &[String], key: &str) -> Option<String> {
     args.iter()
         .position(|arg| arg == key)
@@ -190,6 +192,7 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
         .cloned()
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     opt_string(args, key).map(PathBuf::from)
 }

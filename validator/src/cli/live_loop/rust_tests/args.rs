@@ -1,6 +1,8 @@
+#[cfg(test)]
 use super::ImpactedRustTestsCommand;
 use std::path::{Path, PathBuf};
 
+#[cfg(test)]
 pub(super) fn parse(raw: &[String]) -> Result<Option<ImpactedRustTestsCommand>, String> {
     let args = match raw {
         [a, b, c, rest @ ..] if a == "loop" && b == "rust-tests" && c == "impacted" => rest,
@@ -28,12 +30,14 @@ pub(super) fn output_path(root: &Path, path: &Path, label: &str) -> Result<PathB
     }
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     args.windows(2)
         .find(|window| window[0] == key)
         .map(|window| PathBuf::from(&window[1]))
 }
 
+#[cfg(test)]
 fn opt_paths(args: &[String], key: &str) -> Result<Vec<PathBuf>, String> {
     let mut out = Vec::new();
     let mut index = 0;
@@ -54,6 +58,7 @@ fn opt_paths(args: &[String], key: &str) -> Result<Vec<PathBuf>, String> {
     Ok(out)
 }
 
+#[cfg(test)]
 fn opt_jobs(args: &[String], key: &str) -> Result<Option<usize>, String> {
     match args
         .windows(2)
@@ -68,6 +73,7 @@ fn opt_jobs(args: &[String], key: &str) -> Result<Option<usize>, String> {
     }
 }
 
+#[cfg(test)]
 fn has_flag(args: &[String], key: &str) -> bool {
     args.iter().any(|arg| arg == key)
 }

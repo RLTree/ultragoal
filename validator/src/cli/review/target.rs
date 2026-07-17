@@ -7,6 +7,7 @@ const CHECK_ID: &str = "review-target-build-observability-binding";
 pub(super) const CLAIM_ID: &str = "review_target_source_local_observability";
 const DEFAULT_RECEIPT: &str = "validation_artifacts/observability/review-target-build.json";
 
+#[cfg(test)]
 pub(crate) fn observability_receipt(args: &[String]) -> Result<PathBuf, String> {
     let path = args
         .windows(2)

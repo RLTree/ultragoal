@@ -22,6 +22,7 @@ pub(crate) struct SchemaValidationCommand {
     pub(crate) jobs: Option<usize>,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<SchemaValidationCommand>, String> {
     let args = match raw {
         [first, second, rest @ ..] if first == "schema" && second == "validation" => rest,
@@ -196,6 +197,7 @@ fn artifact_path(command: &SchemaValidationCommand) -> &str {
         .unwrap_or("schemas/schema-catalog.json")
 }
 
+#[cfg(test)]
 fn opt_string(args: &[String], key: &str) -> Option<String> {
     args.iter()
         .position(|arg| arg == key)
@@ -203,14 +205,17 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
         .cloned()
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     opt_string(args, key).map(PathBuf::from)
 }
 
+#[cfg(test)]
 fn has_flag(args: &[String], key: &str) -> bool {
     args.iter().any(|arg| arg == key)
 }
 
+#[cfg(test)]
 fn opt_usize(args: &[String], key: &str) -> Result<Option<usize>, String> {
     let Some(value) = opt_string(args, key) else {
         return Ok(None);

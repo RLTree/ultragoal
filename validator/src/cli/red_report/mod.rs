@@ -7,6 +7,7 @@ pub(crate) struct RedReportCommand {
     pub(crate) report: PathBuf,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<RedReportCommand>, String> {
     let args = match raw {
         [first, second, third, rest @ ..]
@@ -27,6 +28,7 @@ pub(crate) fn run(root: &Path, command: &RedReportCommand) -> Result<i32, String
     crate::cli::audit::run_red_fixture_report(root, &command.report)
 }
 
+#[cfg(test)]
 fn opt_report(args: &[String]) -> Result<Option<PathBuf>, String> {
     let mut report = None;
     let mut index = 0;

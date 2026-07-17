@@ -9,6 +9,7 @@ pub(crate) struct NextActionCommand {
     pub(crate) json: bool,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<NextActionCommand>, String> {
     if raw.first().map(String::as_str) != Some("next") {
         return Ok(None);

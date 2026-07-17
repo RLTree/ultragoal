@@ -13,6 +13,7 @@ pub(crate) struct OutputCommand {
     parsed_output_digest: String,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> OutputCommand {
     OutputCommand {
         receipt: super::opt_path(raw, "--receipt")

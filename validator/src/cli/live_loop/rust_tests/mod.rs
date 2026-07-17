@@ -51,6 +51,7 @@ pub(crate) struct ImpactedRustTestsCommand {
     pub(crate) run_tests: bool,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<ImpactedRustTestsCommand>, String> {
     args::parse(raw)
 }

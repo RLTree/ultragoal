@@ -6,6 +6,7 @@ pub(crate) struct CurrentStateCommand {
     pub(crate) receipt: Option<PathBuf>,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<CurrentStateCommand>, String> {
     if raw.first().map(String::as_str) != Some("current-state") {
         return Ok(None);

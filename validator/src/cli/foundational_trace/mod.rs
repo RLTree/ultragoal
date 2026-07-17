@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use std::time::Instant;
 
+#[cfg(test)]
 mod args;
 mod claims;
 mod runtime;
@@ -22,6 +23,7 @@ pub(crate) struct FoundationalTraceCommand {
     pub(crate) jobs: Option<usize>,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<FoundationalTraceCommand>, String> {
     let args = match raw {
         [first, second, rest @ ..] if first == "foundational-trace" && second == "check" => rest,

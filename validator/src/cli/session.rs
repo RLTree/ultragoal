@@ -8,6 +8,7 @@ pub(crate) struct SessionCommand {
     pub(crate) receipt: PathBuf,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<SessionCommand>, String> {
     match raw {
         [a, b, c, ..] if a == "session-log" && b == "hardening" && c == "rebind" => {
@@ -87,6 +88,7 @@ fn string<'a>(value: &'a Value, key: &str) -> &'a str {
     value.get(key).and_then(Value::as_str).unwrap_or("")
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Result<PathBuf, String> {
     args.iter()
         .position(|arg| arg == key)

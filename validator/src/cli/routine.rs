@@ -7,6 +7,7 @@ pub(crate) struct RoutineCommand {
     pub(crate) target_repo: Option<PathBuf>,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<RoutineCommand>, String> {
     match raw {
         [a, b, ..] if a == "routine" && b == "check" => Ok(Some(RoutineCommand {
@@ -102,6 +103,7 @@ pub(crate) fn surface_failures(help: &str, script: &str) -> Vec<String> {
     failures
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     args.iter()
         .position(|arg| arg == key)

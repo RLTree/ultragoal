@@ -24,6 +24,7 @@ pub(crate) struct CallCommand {
     pub(super) budget_class: String,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<CallCommand, String> {
     let provider_mode =
         super::opt_string(raw, "--mode").unwrap_or_else(|| DEFAULT_MODE.to_string());
@@ -178,6 +179,7 @@ pub(crate) fn build_call_receipt(root: &Path, command: &CallCommand) -> Result<V
     Ok(value)
 }
 
+#[cfg(test)]
 fn default_model(provider_mode: &str) -> &'static str {
     if provider_mode == "openai_live" {
         "gpt-5.4-nano"
@@ -186,6 +188,7 @@ fn default_model(provider_mode: &str) -> &'static str {
     }
 }
 
+#[cfg(test)]
 fn default_endpoint(provider_mode: &str) -> &'static str {
     if provider_mode == "openai_live" {
         "responses"

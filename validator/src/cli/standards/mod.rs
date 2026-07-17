@@ -113,6 +113,7 @@ pub(crate) struct StandardsCommand {
     pub(crate) observability_receipt: PathBuf,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<StandardsCommand>, String> {
     match raw {
         [a, b, ..] if a == "standards-gardener" && b == "rebind" => Ok(Some(StandardsCommand {
@@ -205,6 +206,7 @@ fn write_json(root: &Path, receipt: &Path, value: &Value) -> Result<(), String> 
     crate::json_boundary::write_json(&path, value)
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Result<PathBuf, String> {
     args.iter()
         .position(|arg| arg == key)
@@ -213,6 +215,7 @@ fn opt_path(args: &[String], key: &str) -> Result<PathBuf, String> {
         .ok_or_else(|| format!("missing required argument {key}"))
 }
 
+#[cfg(test)]
 fn opt_optional_path(args: &[String], key: &str) -> Result<Option<PathBuf>, String> {
     let Some(index) = args.iter().position(|arg| arg == key) else {
         return Ok(None);

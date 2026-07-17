@@ -21,6 +21,7 @@ pub(crate) struct FinalPacketCommand {
     pub(crate) receipt: PathBuf,
 }
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<Option<FinalPacketCommand>, String> {
     match raw {
         [a, b, ..] if a == "final-packet" && b == "prove" => Ok(Some(FinalPacketCommand {
@@ -159,6 +160,7 @@ fn digest_or_zero(root: &Path, rel: &str) -> String {
     crate::digest::file(&root.join(rel)).unwrap_or_else(|_| crate::digest::ZERO.to_string())
 }
 
+#[cfg(test)]
 fn opt_path(args: &[String], key: &str) -> Result<PathBuf, String> {
     args.iter()
         .position(|arg| arg == key)

@@ -8,6 +8,7 @@ pub(super) const CLAIM_ID: &str = "archive_source_local_observability";
 const DEFAULT_RECEIPT: &str = "validation_artifacts/observability/archive-build.json";
 const BLOCKED_CLAIMS: &str = "completion,readiness,release,reviewer_exposure,app_registry_exposure,final_packet_correctness,update_goal_eligibility";
 
+#[cfg(test)]
 pub(crate) fn parse(raw: &[String]) -> Result<crate::Command, String> {
     let args = strip_build_or_verify(raw);
     Ok(crate::Command::Archive {
@@ -22,6 +23,7 @@ pub(crate) fn parse(raw: &[String]) -> Result<crate::Command, String> {
     })
 }
 
+#[cfg(test)]
 pub(crate) fn observability_receipt(args: &[String]) -> Result<PathBuf, String> {
     let path = args
         .windows(2)
@@ -44,6 +46,7 @@ pub(crate) fn observability_receipt(args: &[String]) -> Result<PathBuf, String> 
     Ok(path)
 }
 
+#[cfg(test)]
 fn strip_build_or_verify(args: &[String]) -> &[String] {
     match args.first().map(String::as_str) {
         Some("build" | "verify") => &args[1..],
@@ -51,12 +54,14 @@ fn strip_build_or_verify(args: &[String]) -> &[String] {
     }
 }
 
+#[cfg(test)]
 fn required_path(args: &[String], key: &str) -> Result<PathBuf, String> {
     opt_string(args, key)
         .map(PathBuf::from)
         .ok_or_else(|| format!("missing required argument {key}"))
 }
 
+#[cfg(test)]
 fn opt_string(args: &[String], key: &str) -> Option<String> {
     args.windows(2)
         .find(|window| window[0] == key)
