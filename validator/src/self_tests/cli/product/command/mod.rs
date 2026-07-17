@@ -29,10 +29,12 @@ fn product_command_rejects_unsafe_receipt_dirs() {
         let receipt = crate::json_boundary::read_json(&root.join(&obs)).expect("receipt");
         assert_eq!(receipt["status"], "fail");
         assert_eq!(receipt["event"]["failure_class"], "product_command_failure");
-        assert!(receipt["why_failed"]
-            .as_str()
-            .expect("why")
-            .contains("product receipt directory"));
+        assert!(
+            receipt["why_failed"]
+                .as_str()
+                .expect("why")
+                .contains("product receipt directory")
+        );
     }
 }
 
@@ -73,11 +75,13 @@ fn product_command_runs_typed_receipt_minter_and_returns_pass_exit() {
         receipt["event"]["saturation_status"],
         "shared_authority_write_serial_product_receipts"
     );
-    assert!(receipt["trace"]["child_spans"]
-        .as_array()
-        .expect("child spans")
-        .iter()
-        .all(|span| span["parent_span_id"] == receipt["trace"]["span_id"]));
+    assert!(
+        receipt["trace"]["child_spans"]
+            .as_array()
+            .expect("child spans")
+            .iter()
+            .all(|span| span["parent_span_id"] == receipt["trace"]["span_id"])
+    );
     std::fs::remove_dir_all(out).expect("cleanup product command");
 }
 
@@ -101,10 +105,12 @@ fn product_command_emits_fail_closed_observability_for_missing_receipt_dir() {
     let receipt = crate::json_boundary::read_json(&root.join(&obs)).expect("receipt");
     assert_eq!(receipt["status"], "fail");
     assert_eq!(receipt["event"]["failure_class"], "product_command_failure");
-    assert!(receipt["why_failed"]
-        .as_str()
-        .expect("why")
-        .contains("missing required argument --receipt-dir"));
+    assert!(
+        receipt["why_failed"]
+            .as_str()
+            .expect("why")
+            .contains("missing required argument --receipt-dir")
+    );
     std::fs::remove_file(root.join(obs)).expect("cleanup missing receipt dir");
 }
 
@@ -134,10 +140,12 @@ fn product_command_reports_minter_write_failures_with_observability() {
     let receipt = crate::json_boundary::read_json(&root.join(&obs)).expect("receipt");
     assert_eq!(receipt["status"], "fail");
     assert_eq!(receipt["event"]["failure_class"], "product_command_failure");
-    assert!(receipt["why_failed"]
-        .as_str()
-        .expect("why")
-        .contains("create parent failed"));
+    assert!(
+        receipt["why_failed"]
+            .as_str()
+            .expect("why")
+            .contains("create parent failed")
+    );
     std::fs::remove_file(output_file).expect("cleanup output blocker");
     std::fs::remove_file(root.join(obs)).expect("cleanup minter failure");
 }
@@ -194,13 +202,17 @@ fn product_cohesion_command_emits_fail_closed_observability_for_missing_artifact
         "product-prove-cohesion-observability-binding"
     );
     assert_eq!(receipt["claim_id"], "product_cohesion");
-    assert!(receipt["why_failed"]
-        .as_str()
-        .expect("why")
-        .contains("requested product cohesion gate missing"));
-    assert!(receipt["next_repair"]
-        .as_str()
-        .expect("next repair")
-        .contains("product prove-cohesion"));
+    assert!(
+        receipt["why_failed"]
+            .as_str()
+            .expect("why")
+            .contains("requested product cohesion gate missing")
+    );
+    assert!(
+        receipt["next_repair"]
+            .as_str()
+            .expect("next repair")
+            .contains("product prove-cohesion")
+    );
     std::fs::remove_dir_all(root).expect("cleanup cohesion command");
 }
