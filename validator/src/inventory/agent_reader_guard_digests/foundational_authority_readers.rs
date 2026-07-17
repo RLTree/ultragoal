@@ -56,21 +56,6 @@ pub(crate) const FOUNDATIONAL_AUTHORITY_READERS: &[ReaderSpec] = &[
         true
     ),
     reader!(
-        "validator/src/cli/control/plane/registry/mod.rs",
-        "../cli/control/plane/registry/mod.rs",
-        false
-    ),
-    reader!(
-        "validator/src/cli/control/plane/registry/agent_rows.rs",
-        "../cli/control/plane/registry/agent_rows.rs",
-        true
-    ),
-    reader!(
-        "validator/src/cli/live_loop/surfaces/input_spec/path_rules.rs",
-        "../cli/live_loop/surfaces/input_spec/path_rules.rs",
-        true
-    ),
-    reader!(
         "validator/src/audit/plugin/registry/mod.rs",
         "../audit/plugin/registry/mod.rs",
         false

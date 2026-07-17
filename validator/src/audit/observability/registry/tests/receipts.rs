@@ -74,7 +74,7 @@ fn write_receipt_set(
     crate::json_boundary::write_json(
         &dir.join(format!("{slug}.json")),
         &json!({
-            "schema": crate::cli::observe::command::RECEIPT_SCHEMA,
+            "schema": crate::audit::observability::RECEIPT_SCHEMA,
             "status": "pass",
             "candidate_digest": candidate,
             "operation": operation,
@@ -87,7 +87,7 @@ fn write_receipt_set(
         crate::json_boundary::write_json(
             &dir.join(format!("{slug}-{kind}.json")),
             &json!({
-                "schema": crate::cli::observe::command::QUERY_SCHEMA,
+                "schema": "harness-ultragoal.observability-query-result.v1",
                 "status": "pass",
                 "candidate_digest": candidate,
                 "run_id": run,

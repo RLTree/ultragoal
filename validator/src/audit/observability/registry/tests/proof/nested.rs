@@ -117,7 +117,7 @@ fn write_nested_receipt(root: &std::path::Path, candidate: &str, run: &str, corr
             "run_id": run,
             "correlation_id": corr,
             "observability": {
-                "schema": crate::cli::observe::command::RECEIPT_SCHEMA,
+                "schema": crate::audit::observability::RECEIPT_SCHEMA,
                 "status": "fail",
                 "candidate_digest": candidate,
                 "operation": "final-packet.prove",
@@ -146,7 +146,7 @@ fn write_query(root: &std::path::Path, candidate: &str, run: &str, corr: &str, k
             "validation_artifacts/observability/final-packet-prove-{kind}-query.json"
         )),
         &json!({
-            "schema": crate::cli::observe::command::QUERY_SCHEMA,
+            "schema": "harness-ultragoal.observability-query-result.v1",
             "status": "pass",
             "candidate_digest": candidate,
             "run_id": run,
@@ -167,7 +167,7 @@ fn write_explain(root: &std::path::Path, candidate: &str, run: &str, corr: &str)
     crate::json_boundary::write_json(
         &root.join("validation_artifacts/observability/final-packet-prove-explain-failure.json"),
         &json!({
-            "schema": crate::cli::observe::command::RECEIPT_SCHEMA,
+            "schema": crate::audit::observability::RECEIPT_SCHEMA,
             "status": "pass",
             "candidate_digest": candidate,
             "operation": "observe.explain-failure",

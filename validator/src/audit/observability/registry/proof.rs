@@ -118,8 +118,7 @@ fn require_query_receipts(
 }
 
 fn explain_current(value: &Value, candidate: &str, run_id: &str) -> bool {
-    value.get("schema").and_then(Value::as_str)
-        == Some(crate::cli::observe::command::RECEIPT_SCHEMA)
+    value.get("schema").and_then(Value::as_str) == Some(crate::audit::observability::RECEIPT_SCHEMA)
         && value.get("status").and_then(Value::as_str) == Some("pass")
         && value.get("candidate_digest").and_then(Value::as_str) == Some(candidate)
         && value.get("operation").and_then(Value::as_str) == Some("observe.explain-failure")
@@ -144,7 +143,8 @@ fn query_rows_match(
 }
 
 fn query_current(value: &Value, candidate: &str, run_id: &str) -> bool {
-    value.get("schema").and_then(Value::as_str) == Some(crate::cli::observe::command::QUERY_SCHEMA)
+    value.get("schema").and_then(Value::as_str)
+        == Some("harness-ultragoal.observability-query-result.v1")
         && value.get("status").and_then(Value::as_str) == Some("pass")
         && value.get("candidate_digest").and_then(Value::as_str) == Some(candidate)
         && value.get("run_id").and_then(Value::as_str) == Some(run_id)
