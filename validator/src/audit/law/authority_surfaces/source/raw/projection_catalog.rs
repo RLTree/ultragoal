@@ -128,29 +128,13 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
             "source-local command telemetry roundtrip claim",
             "rejects_generated_rows_only",
         ]),
-        "validator/src/cli/product/cohesion.rs" => Some(&[
-            "product-cohesion",
-            "source_local_product_cohesion_only",
-            "target_repo::product::cohesion::check",
-        ]),
+        "validator/src/cli/product/cohesion.rs" => {
+            Some(&["product-cohesion", "source_local_product_cohesion_only"])
+        }
         "validator/src/cli/review/round.rs" => Some(&[
             "review-round.verify",
             "CommandTelemetry",
             "review_round_source_local_observability",
-        ]),
-        "validator/src/target_repo/baseline.rs" => {
-            Some(&["baseline_checks", "checks: &mut serde_json::Map", "row("])
-        }
-        "validator/src/target_repo/baseline_mode.rs" => {
-            Some(&["mode_checks", "checks: &mut serde_json::Map", "row("])
-        }
-        "validator/src/target_repo/mod.rs" => {
-            Some(&["audit_target_repo", "target_receipt", "display_command"])
-        }
-        "validator/src/target_repo/receipt.rs" => Some(&[
-            "TargetReceiptInput",
-            "canonical_fingerprint",
-            "repo_fingerprint",
         ]),
         _ => None,
     }

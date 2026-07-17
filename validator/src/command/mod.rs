@@ -11,7 +11,6 @@ pub(crate) enum Command {
     Audit {
         receipt: PathBuf,
         red_report: Option<PathBuf>,
-        target_repo: Option<PathBuf>,
         mode: String,
         require_observability: bool,
         require_product_cohesion: bool,

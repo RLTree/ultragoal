@@ -69,8 +69,6 @@ fn option_accepts_value(arg: &str) -> bool {
             | "--run-id"
             | "--schema"
             | "--schema-id"
-            | "--surface-root"
-            | "--target-repo"
             | "--tier"
             | "--timeout-ms"
             | "--validator-receipt"

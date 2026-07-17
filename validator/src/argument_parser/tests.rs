@@ -1,40 +1,9 @@
 use super::{cli_option_role, parse_command, parse_public_args_from};
 use crate::cli::successor::{LegacyCommand, ParseOutcome};
 use crate::command::Command;
-use std::path::PathBuf;
 
 fn strings(args: &[&str]) -> Vec<String> {
     args.iter().map(|arg| (*arg).to_string()).collect()
-}
-
-#[test]
-fn source_audit_parser_preserves_target_repo_authority_path() {
-    let command = parse_command(&strings(&[
-        "source",
-        "audit",
-        "--receipt",
-        "validation_artifacts/ultragoal-audit/validator-receipt.json",
-        "--target-repo",
-        "target-plugin-repo",
-        "--mode",
-        "strict_fixtures",
-        "--jobs",
-        "8",
-    ]))
-    .expect("source audit command parses");
-
-    let Command::Audit {
-        target_repo,
-        mode,
-        jobs,
-        ..
-    } = command
-    else {
-        panic!("expected source audit command");
-    };
-    assert_eq!(target_repo, Some(PathBuf::from("target-plugin-repo")));
-    assert_eq!(mode, "strict_fixtures");
-    assert_eq!(jobs, Some(8));
 }
 
 #[test]

@@ -39,43 +39,12 @@ fn raw_authority_scanner_allows_named_product_projection_boundaries() {
         ),
         (
             "validator/src/cli/product/cohesion.rs",
-            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = \"product-cohesion\"; let _ = \"source_local_product_cohesion_only\"; let _ = \"target_repo::product::cohesion::check\"; json!({\"value\":value}) }\n",
-        ),
-        (
-            "validator/src/target_repo/receipt.rs",
-            "use serde_json::{json, Value};\nstruct TargetReceiptInput;\npub(crate) fn project(value: &Value) -> Value { let _ = canonical_fingerprint(); let _ = repo_fingerprint(); json!({\"value\":value}) }\n",
+            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = \"product-cohesion\"; let _ = \"source_local_product_cohesion_only\"; json!({\"value\":value}) }\n",
         ),
     ] {
         let failures =
             crate::audit::law::authority_surfaces::raw_authority_failures_for_test(rel, text);
         assert!(failures.is_empty(), "{rel}: {failures:?}");
-    }
-}
-
-#[test]
-fn raw_authority_scanner_allows_check_map_projection_shapes() {
-    for (label, text) in [
-        (
-            "input_checks_object",
-            "use serde_json::Value;\npub struct TargetReceiptInput { pub checks: serde_json::Map<String, Value> }\npub fn target_receipt(input: TargetReceiptInput) -> Value { Value::Object(input.checks) }\n",
-        ),
-        (
-            "json_report",
-            "use serde_json::{Value, json};\npub fn report() -> Value { let mut checks = serde_json::Map::new(); json!({\"checks\": checks}) }\n",
-        ),
-        (
-            "target_receipt_projection",
-            "use serde_json::Value;\npub fn report(checks: &mut serde_json::Map<String, Value>) -> Value { target_receipt(checks) }\nfn target_receipt(_: &mut serde_json::Map<String, Value>) -> Value { Value::Null }\n",
-        ),
-    ] {
-        let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
-            "validator/src/target_repo/projection.rs",
-            text,
-        );
-        assert!(
-            failures.is_empty(),
-            "{label} should classify as check-map projection: {failures:?}"
-        );
     }
 }
 

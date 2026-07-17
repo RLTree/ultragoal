@@ -20,7 +20,6 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::Audit {
             receipt,
             red_report,
-            target_repo,
             mode,
             require_observability,
             require_product_cohesion,
@@ -29,7 +28,6 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             root,
             receipt,
             red_report,
-            target_repo,
             mode,
             require_observability,
             require_product_cohesion,

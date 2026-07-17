@@ -66,14 +66,4 @@ pub(crate) const RUNTIME_ROUTING_READERS: &[ReaderSpec] = &[
         "../schema_catalog/schema/patterns.rs",
         true
     ),
-    reader!(
-        "validator/src/target_repo/baseline.rs",
-        "../target_repo/baseline.rs",
-        false
-    ),
-    reader!(
-        "validator/src/target_repo/baseline_mode.rs",
-        "../target_repo/baseline_mode.rs",
-        false
-    ),
 ];

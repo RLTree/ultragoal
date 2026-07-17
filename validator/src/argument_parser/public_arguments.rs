@@ -99,9 +99,6 @@ pub(crate) fn parse_command(raw: &[String]) -> Result<Command, String> {
         "help" | "--help" | "-h" => Command::Help,
         "audit" => parse_audit(&raw[1..])?,
         "source" if raw.get(1).map(String::as_str) == Some("audit") => parse_audit(&raw[2..])?,
-        "target-repo" if raw.get(1).map(String::as_str) == Some("audit") => {
-            parse_target_repo_audit(&raw[2..])?
-        }
         "review-target" => {
             let args = strip_build_or_verify(&raw[1..]);
             let receipt = opt_path(args, "--receipt")?;
@@ -204,13 +201,10 @@ pub(crate) fn parse_audit(args: &[String]) -> Result<Command, String> {
     if !audit::receipt::speed::is_known_mode(&mode) {
         return Err(format!("invalid source audit --mode: {mode}"));
     }
-    let target_repo =
-        authority::optional_artifact_path(args, "--target-repo", "target repository root")?;
     Ok(Command::Audit {
         receipt: opt_path(args, "--receipt")?,
         red_report: authority::optional_artifact_path(args, "--red-report", "red fixture report")?
             .map(authority::CliArtifactPath::into_path_buf),
-        target_repo: target_repo.map(authority::CliArtifactPath::into_path_buf),
         mode,
         require_observability: args.iter().any(|a| a == "--require-observability"),
         require_product_cohesion: args.iter().any(|a| a == "--require-product-cohesion"),
