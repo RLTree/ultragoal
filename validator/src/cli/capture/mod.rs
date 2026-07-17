@@ -1,11 +1,10 @@
 //! Candidate-bound capture machinery and immutable artifact storage.
 //!
-//! On supported macOS hosts, crate-internal typed-catalog permits can execute a
-//! narrow allowlist of pinned, root-owned native read probes under the host
-//! sandbox. Shells, wrappers, unprotected programs, writes, network access, and
-//! process forking remain unavailable.
-//! Without an accepted typed-catalog token and binding, every caller-supplied
-//! `CommandSpec` fails before context revalidation or descriptor access.
+//! Production capture accepts no caller-minted execution authority. Shells,
+//! wrappers, unprotected programs, writes, network access, and process forking
+//! remain unavailable.
+//! Every caller-supplied `CommandSpec` fails before context revalidation or
+//! descriptor access.
 //! Secret values are never inferred.
 
 mod artifact;
@@ -33,10 +32,7 @@ mod tree_witness_adapter;
 
 pub use artifact_model::{ArtifactDisposition, ArtifactRef, ArtifactResolver, CapturedArtifact};
 pub use inputs::{PublicArg, PublicArtifact, PublicEnv, SecretArg, SecretArtifact, SecretEnv};
-#[allow(unused_imports)]
 pub use run::CapturedRun;
-#[allow(unused_imports)]
-pub(crate) use spec::CatalogPermit;
 pub use spec::CommandSpec;
 
 #[cfg(test)]
