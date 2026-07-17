@@ -124,8 +124,6 @@ const READER_SOURCES: &[&str] = &[
     "validator/src/schema_catalog/fixture_schema_rules.rs",
     "validator/src/schema_catalog/mod.rs",
     "validator/src/schema_catalog/schema/patterns.rs",
-    "validator/src/target_repo/baseline.rs",
-    "validator/src/target_repo/baseline_mode.rs",
 ];
 
 const AGENT_MANIFESTS: &[&str] = &[

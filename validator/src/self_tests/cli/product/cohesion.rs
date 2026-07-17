@@ -31,6 +31,12 @@ fn copied_valid_cohesion_fixture() -> PathBuf {
         "product-cohesion-pass-command",
     );
     copy_dir(&repo.join("fixtures/product-cohesion/valid"), &target);
+    std::fs::create_dir_all(target.join("docs/generated")).expect("generated directory");
+    std::fs::write(
+        target.join("docs/generated/index.md"),
+        "# Generated product-cohesion fixture\n",
+    )
+    .expect("generated cohesion index");
     let generated =
         std::fs::read(target.join("docs/generated/index.md")).expect("generated cohesion index");
     let digest = crate::digest::bytes(&generated)
