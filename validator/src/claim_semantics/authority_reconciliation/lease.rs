@@ -1,4 +1,5 @@
 mod debt;
+mod eligibility;
 mod overlap;
 mod plan_binding;
 mod record;
@@ -57,8 +58,10 @@ pub(super) fn check(registry: &Value, root: &Path, out: &mut Vec<Failure>) {
     }
     for row in &rows {
         record::validate_record(row, registry, root, out);
+        eligibility::check(row, registry, out);
         check_consumed_binding(row, registry, root, out);
     }
+    eligibility::check_gate_config(registry, out);
     for (index, left) in rows.iter().enumerate() {
         for right in rows.iter().skip(index + 1) {
             overlap::compare_records(

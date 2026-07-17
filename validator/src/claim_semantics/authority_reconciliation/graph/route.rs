@@ -97,17 +97,29 @@ pub(super) fn check(registry: &Value, out: &mut Vec<Failure>) {
 
 pub(super) fn check_lane_contracts(registry: &Value, out: &mut Vec<Failure>) {
     let pre_adoption = &registry["pre_adoption_source"];
-    if pre_adoption.get("source_ceiling").and_then(Value::as_str)
-        != Some("source-local-speculative")
-        || pre_adoption
+    let pre_adoption_current =
+        pre_adoption.get("adoption_status").and_then(Value::as_str) == Some("pre_adoption");
+    let pre_adoption_valid = pre_adoption_current
+        && pre_adoption.get("epoch").and_then(Value::as_str) == Some("PRE-ADOPTION-SOURCE")
+        && pre_adoption.get("source_ceiling").and_then(Value::as_str)
+            == Some("source-local-speculative")
+        && pre_adoption
             .get("eligible_scheduler_nodes")
             .and_then(Value::as_array)
-            .is_none_or(|rows| !rows.is_empty())
-        || pre_adoption
+            .is_some_and(|rows| rows.is_empty())
+        && pre_adoption
             .get("eligible_claim_ids")
             .and_then(Value::as_array)
-            .is_none_or(|rows| !rows.is_empty())
-    {
+            .is_some_and(|rows| rows.is_empty());
+    let adopted_current = pre_adoption.get("adoption_status").and_then(Value::as_str)
+        == Some("adopted_current_epoch")
+        && pre_adoption.get("epoch").and_then(Value::as_str) == Some("ADOPTED-CURRENT")
+        && pre_adoption.get("source_ceiling").and_then(Value::as_str) == Some("adopted-current")
+        && pre_adoption
+            .get("eligible_scheduler_nodes")
+            .and_then(Value::as_array)
+            .is_some_and(|rows| !rows.is_empty());
+    if !pre_adoption_valid && !adopted_current {
         out.push(Failure::new(
             "authority-graph",
             "pre_adoption_scheduler_or_claim_eligibility",

@@ -1,4 +1,5 @@
 mod route;
+mod scope;
 
 use crate::audit::contract::Failure;
 use crate::claim_semantics::{array_strings, str_field};
@@ -58,6 +59,7 @@ fn compare_nodes(registry: &Value, graph: &Value, out: &mut Vec<Failure>) {
         })
         .collect::<Vec<_>>();
     let scope_owner = scope_owners.iter().cloned().collect::<BTreeMap<_, _>>();
+    scope::check(registry, graph, &scopes, out);
     let root_only = registry
         .get("root_only_overrides")
         .and_then(Value::as_object)
