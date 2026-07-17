@@ -1,10 +1,7 @@
 use crate::cli::control::plane::operation::ControlOperation;
-use serde_json::{Value, json};
-use std::path::Path;
+use serde_json::Value;
 
-pub(crate) mod stdout;
 pub(crate) mod target;
-mod telemetry;
 
 pub(crate) const SCHEMA: &str = "harness-ultragoal.package-surface-audit-receipt.v1";
 pub(crate) const SCHEMA_FILE: &str = "package-surface-audit-receipt.schema.json";
@@ -14,78 +11,6 @@ pub(crate) fn supports(operation: ControlOperation) -> bool {
         operation,
         ControlOperation::InstallAudit | ControlOperation::CacheAudit
     )
-}
-
-pub(crate) fn run(
-    root: &Path,
-    command: &crate::cli::control::plane::ControlCommand,
-    claim_receipt_path: &Path,
-) -> Result<i32, String> {
-    let started = std::time::Instant::now();
-    let mut receipt = receipt(root, command)?;
-    telemetry::attach(root, command, claim_receipt_path, &mut receipt, started)?;
-    let exit = i32::from(receipt.get("status").and_then(Value::as_str) != Some("pass"));
-    crate::json_boundary::write_json(claim_receipt_path, &receipt)?;
-    stdout::print(claim_receipt_path, &receipt);
-    Ok(exit)
-}
-
-pub(crate) fn receipt(
-    root: &Path,
-    command: &crate::cli::control::plane::ControlCommand,
-) -> Result<Value, String> {
-    let source_digest = crate::package::inventory::package_digest(root)?;
-    let source_plugin = target::plugin_metadata(root);
-    let target_root = command
-        .surface_root
-        .clone()
-        .unwrap_or_else(|| target::default_root(root, command.operation, &source_plugin.version));
-    let target = target::state(
-        &target_root,
-        command.operation,
-        &source_digest,
-        &source_plugin,
-    );
-    let failures = value_failures_for_target(command.operation, &source_digest, &target);
-    let pass = failures.is_empty();
-    Ok(json!({
-        "schema": SCHEMA,
-        "schema_version": "v1",
-        "issuer": {
-            "tool": "ultragoal",
-            "authority": "cli_control_plane",
-            "canonical_binary": "ultragoal"
-        },
-        "generated_at": crate::audit::clock::now_iso(),
-        "root": ".",
-        "operation": command.operation.id(),
-        "status": if pass { "pass" } else { "fail" },
-        "claim_ceiling": if pass { "surface_package_digest_aligned" } else { "withheld_or_blocked" },
-        "candidate_digest": source_digest,
-        "source": target::source_value(root, &source_plugin),
-        "target": target,
-        "same_candidate": pass,
-        "unsupported_claim_classes": [
-            "app_registry_or_reviewer_exposure",
-            "plugins_ui_visibility",
-            "marketplace_publication",
-            "install_button_success",
-            "launcher_runtime_exposure",
-            "review_readiness",
-            "release_readiness",
-            "completion",
-            "update_goal_eligibility"
-        ],
-        "blocked_claim_classes": if pass { json!([]) } else { json!([
-            "install_cache_parity",
-            "package_readiness",
-            "review_readiness",
-            "release_readiness",
-            "completion",
-            "update_goal_eligibility"
-        ]) },
-        "failures": failures
-    }))
 }
 
 pub(crate) fn same_candidate_pass_failures(

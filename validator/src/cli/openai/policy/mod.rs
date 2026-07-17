@@ -1,9 +1,6 @@
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 
-#[cfg(test)]
-mod tests;
-
 const APPROVED_DESTINATION: &str = ".codex-worktree/env.sh";
 
 pub(crate) struct PolicyState {

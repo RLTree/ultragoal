@@ -27,7 +27,7 @@ pub(super) fn label_failures(
     match label {
         "source_audit" => source_audit_failures(value, expected),
         "red_fixture_report" => target_status_failures(value, expected, "red_fixture_report"),
-        "coverage" => coverage_failures(root, value, expected),
+        "coverage" => retired_evidence_failures("coverage"),
         "cli_performance" => {
             crate::cli::performance::receipt::same_candidate_pass_failures(value, expected)
         }
@@ -61,7 +61,7 @@ pub(super) fn label_failures(
         ),
         label if label.starts_with("rust_") => rust_failures(label, value, expected),
         label if label.starts_with("gc_") => gc_failures(value, expected),
-        "transactional_finalization" => transactional_finalization_failures(root, value, expected),
+        "transactional_finalization" => retired_evidence_failures("transactional_finalization"),
         _ => vec![format!("unknown_evidence_label:{label}")],
     }
 }
@@ -119,20 +119,8 @@ fn target_status_failures(value: &Value, expected: &str, label: &str) -> Vec<Str
     out
 }
 
-fn coverage_failures(root: &Path, value: &Value, expected: &str) -> Vec<String> {
-    crate::cli::coverage::exact_receipt::claim_failures(
-        root,
-        value,
-        expected,
-        &crate::cli::coverage::exact_receipt::EVIDENCE_CODES,
-    )
-}
-
-fn transactional_finalization_failures(root: &Path, value: &Value, expected: &str) -> Vec<String> {
-    let store = crate::schema_catalog::load(root);
-    crate::cli::control::plane::proof::transaction::same_candidate_failures(
-        root, &store, value, expected,
-    )
+fn retired_evidence_failures(label: &str) -> Vec<String> {
+    vec![format!("retired_evidence_label:{label}")]
 }
 
 fn array_contains(value: &Value, key: &str, needle: &str) -> bool {

@@ -18,7 +18,6 @@ pub struct SchemaValidationResults {
     pub scheduler_metrics: Vec<crate::scheduler::Metrics>,
 }
 
-#[cfg(test)]
 pub fn checks(
     root: &Path,
     store: &SchemaStore,

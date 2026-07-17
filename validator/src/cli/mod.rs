@@ -6,8 +6,6 @@ mod archive_stdout;
 pub(crate) mod audit;
 pub mod capture;
 pub(crate) mod control;
-pub(crate) mod coverage;
-pub(crate) mod current_state;
 #[cfg(test)]
 pub(crate) mod final_packet;
 #[cfg(test)]
@@ -25,9 +23,7 @@ pub(crate) mod mandatory_law_validation;
 pub(crate) mod namespace;
 #[cfg(test)]
 pub(crate) mod next_action;
-pub(crate) mod observe;
 pub(crate) mod openai;
-pub(crate) mod package;
 pub(crate) mod performance;
 #[cfg(test)]
 pub(crate) mod product;
