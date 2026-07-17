@@ -3,7 +3,7 @@
   "$id": "https://harness-ultragoal.local/schemas/lane-registry.schema.json",
   "title": "Harness Ultragoal canonical successor lane registry",
   "type": "object",
-  "required": ["$schema", "schema", "checkpoint", "goal_id", "canonical_authority", "authority_mode", "root", "goal_binding", "source_context", "defaults", "state_policy", "lanes", "tombstones", "generated_at"],
+  "required": ["$schema", "schema", "checkpoint", "goal_id", "canonical_authority", "authority_mode", "root", "root_freeze", "pre_adoption_source", "prelaunch_gates", "lease_state", "execution_policy", "goal_binding", "source_context", "defaults", "state_policy", "lanes", "tombstones", "generated_at"],
   "properties": {
     "$schema": {"const": "schemas/lane-registry.schema.json"},
     "schema": {"const": "harness-ultragoal.lane-registry.v2"},
@@ -12,6 +12,11 @@
     "canonical_authority": {"const": "LANE_REGISTRY.json"},
     "authority_mode": {"const": "single_root_writer_single_successor_registry"},
     "root": {"$ref": "#/$defs/root"},
+    "root_freeze": {"$ref": "#/$defs/rootFreeze"},
+    "pre_adoption_source": {"$ref": "#/$defs/preAdoptionSource"},
+    "prelaunch_gates": {"type": "array", "minItems": 4, "items": {"$ref": "#/$defs/prelaunchGate"}},
+    "lease_state": {"$ref": "#/$defs/leaseState"},
+    "execution_policy": {"$ref": "#/$defs/executionPolicy"},
     "goal_binding": {"$ref": "#/$defs/goalBinding"},
     "source_context": {"$ref": "#/$defs/sourceContext"},
     "defaults": {"$ref": "#/$defs/defaults"},
@@ -83,7 +88,7 @@
       "required": ["branch", "workspace", "base_commit", "base_tree", "workspace_status", "observed_at", "dirty_inventory", "observation"],
       "properties": {
         "branch": {"type": "string", "minLength": 1}, "workspace": {"type": "string", "minLength": 1}, "base_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "base_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
-        "workspace_status": {"const": "dirty"}, "observed_at": {"$ref": "#/$defs/isoTimestamp"},
+        "workspace_status": {"enum": ["precommit_parent_clean", "dirty_candidate"]}, "observed_at": {"$ref": "#/$defs/isoTimestamp"},
         "dirty_inventory": {"type": "object", "required": ["owned", "root_owned", "foreign"], "properties": {"owned": {"type": "array", "minItems": 5, "items": {"type": "string"}}, "root_owned": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "foreign": {"type": "array", "minItems": 1, "items": {"type": "string"}}}, "additionalProperties": false},
         "observation": {"type": "string", "minLength": 1}
       },
@@ -92,7 +97,90 @@
     "sourceContext": {
       "type": "object",
       "required": ["board", "dependency_graph", "custom_tool_inventory", "claim_registry", "contract", "selection_rule"],
-      "properties": {"board": {"$ref": "#/$defs/sourceRef"}, "dependency_graph": {"$ref": "#/$defs/sourceRef"}, "custom_tool_inventory": {"$ref": "#/$defs/sourceRef"}, "claim_registry": {"$ref": "#/$defs/sourceRef"}, "contract": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/sourceRef"}}, "selection_rule": {"type": "string", "minLength": 1}},
+      "properties": {"board": {"$ref": "#/$defs/sourceRef"}, "dependency_graph": {"$ref": "#/$defs/sourceRef"}, "custom_tool_inventory": {"$ref": "#/$defs/sourceRef"}, "claim_registry": {"$ref": "#/$defs/sourceRef"}, "contract": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/sourceRef"}}, "operational_plan": {"$ref": "#/$defs/sourceRef"}, "selection_rule": {"type": "string", "minLength": 1}},
+      "additionalProperties": false
+    },
+    "rootFreeze": {
+      "type": "object",
+      "required": ["expected_branch", "expected_parent_commit", "expected_parent_tree", "authority_path", "payload_refs", "projection_chain", "registry_preimage", "expected_diff_paths", "clean_required", "live_verification_rule"],
+      "properties": {
+        "expected_branch": {"type": "string", "minLength": 1},
+        "expected_parent_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "expected_parent_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "authority_path": {"const": "LANE_REGISTRY.json"},
+        "payload_refs": {"type": "array", "items": {"$ref": "#/$defs/sourceRef"}},
+        "projection_chain": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/sourceRef"}},
+        "registry_preimage": {"type": "object", "required": ["omitted_fields", "canonicalization", "binding", "digest_path"], "properties": {"omitted_fields": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string"}}, "canonicalization": {"const": "RFC8785-style canonical JSON: UTF-8, lexicographic object keys, compact separators, no trailing newline"}, "binding": {"const": "VERIFICATION_BACKLOG.manifest_digest and COMPLETION_MANIFEST.verification_backlog_digest equal sha256 of normalized registry bytes"}, "digest_path": {"const": "VERIFICATION_BACKLOG.json.manifest_digest"}}, "additionalProperties": false},
+        "expected_diff_paths": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "clean_required": {"const": true},
+        "live_verification_rule": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "preAdoptionSource": {
+      "type": "object",
+      "required": ["epoch", "dag_node", "contract_ref", "contract_bundle_ref", "historical_context_ref", "allowed_work", "withheld_surfaces", "adoption_rule"],
+      "properties": {
+        "epoch": {"const": "PRE-ADOPTION-SOURCE"},
+        "dag_node": {"const": false},
+        "contract_ref": {"$ref": "#/$defs/ref"},
+        "contract_bundle_ref": {"$ref": "#/$defs/ref"},
+        "historical_context_ref": {"$ref": "#/$defs/ref"},
+        "allowed_work": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "withheld_surfaces": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "adoption_rule": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "prelaunchGate": {
+      "type": "object",
+      "required": ["id", "owner", "command", "status", "candidate"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "owner": {"type": "string", "minLength": 1},
+        "command": {"type": "string", "minLength": 1},
+        "status": {"enum": ["current", "blocked"]},
+        "candidate": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "leaseState": {
+      "type": "object",
+      "required": ["schema", "status", "issued", "all_lanes_blocked", "required_fields", "isolation", "creation_order", "handoff", "teardown", "lease_record_schema", "unissued_record"],
+      "properties": {
+        "schema": {"const": "harness-ultragoal.prelaunch-lease.v1"},
+        "status": {"const": "unissued"},
+        "issued": {"const": false},
+        "all_lanes_blocked": {"const": true},
+        "required_fields": {"type": "array", "minItems": 18, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "isolation": {"type": "array", "minItems": 10, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "creation_order": {"const": "branch-first/worktree-second"},
+        "handoff": {"type": "array", "minItems": 5, "items": {"type": "string", "minLength": 1}},
+        "teardown": {"type": "array", "minItems": 3, "items": {"type": "string", "minLength": 1}},
+        "lease_record_schema": {
+          "type": "object",
+          "required": ["lease_id", "base_commit", "base_tree", "branch", "worktree", "owned_files", "owned_symbols", "generated_outputs", "fixtures", "effects", "forbidden_roots", "protected_root_patterns", "git_metadata_rule", "overlap_rule", "overlap_examples", "overlap_verdict", "isolated_roots", "status", "ready_receipt"],
+          "properties": {
+            "lease_id": {"type": "string", "minLength": 1}, "base_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "base_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "branch": {"type": "string", "minLength": 1}, "worktree": {"type": "string", "minLength": 1},
+            "owned_files": {"type": "array", "items": {"type": "string"}}, "owned_symbols": {"type": "array", "items": {"type": "string"}}, "generated_outputs": {"type": "array", "items": {"type": "string"}}, "fixtures": {"type": "array", "items": {"type": "string"}}, "effects": {"type": "array", "items": {"type": "string"}}, "forbidden_roots": {"type": "array", "minItems": 4, "items": {"type": "string"}}, "protected_root_patterns": {"type": "array", "minItems": 6, "uniqueItems": true, "items": {"type": "string"}}, "git_metadata_rule": {"const": "normalize_absolute_paths_and_symlinks_then_resolve_linked_worktree_gitdir; protect exact .git file, **/.git file, gitdir targets, and gitdir refs only"}, "overlap_rule": {"const": "fail_closed_if_owned_or_generated_path_matches_any_forbidden_root_or_protected_root_pattern"}, "overlap_examples": {"type": "object", "required": ["positive_rejections", "negative_allows"], "properties": {"positive_rejections": {"type": "array", "minItems": 3, "items": {"type": "object"}}, "negative_allows": {"type": "array", "minItems": 2, "items": {"type": "object"}}}, "additionalProperties": false}, "overlap_verdict": {"enum": ["disjoint_required", "rejected_overlap"]},
+            "isolated_roots": {"type": "object", "required": ["home", "cargo", "rustup", "target", "tmp", "cache", "port"], "additionalProperties": {"type": "string"}}, "status": {"enum": ["unissued", "issued", "clean_committed_handoff", "reachable_tip"]}, "ready_receipt": {"type": ["string", "null"]}
+          },
+          "additionalProperties": false
+        },
+        "unissued_record": {"type": "object", "required": ["status", "lane_ids", "reason"], "properties": {"status": {"const": "unissued"}, "lane_ids": {"type": "array", "minItems": 18, "maxItems": 18, "uniqueItems": true, "items": {"$ref": "#/$defs/laneId"}}, "reason": {"type": "string", "minLength": 1}}, "additionalProperties": false}
+      },
+      "additionalProperties": false
+    },
+    "executionPolicy": {
+      "type": "object",
+      "required": ["selection_rule", "serial_gates", "parallel_worktrees", "root_serialized", "invalidation_rules"],
+      "properties": {
+        "selection_rule": {"type": "string", "minLength": 1},
+        "serial_gates": {"type": "array", "minItems": 3, "items": {"type": "object"}},
+        "parallel_worktrees": {"type": "array", "minItems": 3, "items": {"type": "object"}},
+        "root_serialized": {"type": "array", "minItems": 6, "uniqueItems": true, "items": {"$ref": "#/$defs/laneId"}},
+        "invalidation_rules": {"type": "array", "minItems": 1, "items": {"type": "object"}}
+      },
       "additionalProperties": false
     },
     "defaults": {

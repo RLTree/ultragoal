@@ -4,13 +4,14 @@
   "target_schema": "harness-ultragoal.lane-registry.v2",
   "canonical_output": "LANE_REGISTRY.json",
   "authority": "authoring-template-only; the same-path registry is canonical and projections are read-only",
-  "required_top_level": ["root", "goal_binding", "source_context", "defaults", "state_policy", "lanes", "tombstones"],
+  "required_top_level": ["root", "root_freeze", "pre_adoption_source", "prelaunch_gates", "lease_state", "execution_policy", "goal_binding", "source_context", "defaults", "state_policy", "lanes", "tombstones"],
   "lane_contract": {
     "required_fields": ["id", "state", "owner", "authored_dependencies", "candidate_refs", "acceptance_refs", "required_hct_tools", "consumed_set", "claim_ceiling", "next_action", "branch", "worktree", "execplan"],
     "id_rule": "N00-N17 only",
     "ref_rule": "Every selectable ref carries path, sha256 digest, validity, and invalidation; missing refs force blocked state.",
     "consumed_set_rule": "Each lane inherits defaults.consumed_set with files, symbols, generated, fixtures, effects, forbidden, tools, contract, and context categories.",
-    "dependency_rule": "authored_dependencies are N00-N17 IDs sourced from source_context.dependency_graph; N09 epochs do not add a DAG edge; N10/N11 remain independent."
+    "dependency_rule": "authored_dependencies are N00-N17 IDs sourced from source_context.dependency_graph; N09 epochs do not add a DAG edge; N10/N11 remain independent.",
+    "prelaunch_rule": "All lanes are blocked and leases unissued until compile, namespace, standards, and four-persona exposure gates pass; an exact run-scoped lease normalizes absolute/symlink paths, resolves linked-worktree gitdir targets, protects exact .git metadata files and Git refs only, records positive/negative overlap examples, and fails closed on overlap."
   },
   "claim_authority": {
     "writer_lane": "N12",
@@ -22,7 +23,7 @@
     "backlog": "VERIFICATION_BACKLOG.json",
     "completion": "COMPLETION_MANIFEST.json",
     "writer": "root",
-    "binding": "Use exact base commit/tree and recompute projection digests only after the registry candidate settles; never embed circular self-digests."
+    "binding": "Use exact parent commit/tree and recompute payload/source projection digests only after the candidate settles; never embed circular authority self-digests."
   },
   "selection": "Board is routing context only. Old custom tooling, legacy lane snapshots, stale branches, and duplicate ExecPlans are tombstone history and never selectable."
 }

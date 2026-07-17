@@ -1,11 +1,13 @@
 # Plugin and CLI Authority Integration
 
-This is the active operational plan for the adopted Harness Ultragoal successor.
-It is not contract or proof authority. Normative scope remains the bundle rooted
+This is the active non-authoritative projection plan for the Harness Ultragoal
+successor. It is not contract, queue, lease, or proof authority. Normative scope remains the bundle rooted
 at `docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/00-READ-ME-FIRST.md`.
-`LANE_REGISTRY.json` is the sole current operational queue;
+`LANE_REGISTRY.json` is the sole current operational authority;
 `VERIFICATION_BACKLOG.json` and `COMPLETION_MANIFEST.json` are root-written
-projections. This plan explains how the root advances that state.
+projections. This plan explains how the root advances that state. Its exact
+digest is bound by `LANE_REGISTRY.json.source_context.operational_plan`; the
+historical duplicate-plan digest remains a tombstone with commit/tree provenance.
 
 ## Outcome
 
@@ -14,13 +16,14 @@ current repository truth. Preserve accepted source work while proving source,
 package, install, cache, marketplace, app registry, discovery, runtime,
 product, migration, release, and completion claims on their own surfaces.
 
-The current checkpoint is intentionally narrow. Commit `66497891a` confines
-Codex actions to a sanitized worktree runner. Real probes show inherited secret
-values are absent, Cargo and Rustup state is local, hostile tool hints fail
-closed, the account toolchain executes, and offline no-dependency metadata is
-available. The repo check then stops honestly because the isolated offline
-Cargo cache lacks `getrandom`. Strict, installed, runtime, product, release,
-and completion claims remain withheld.
+The current P0 checkpoint is the clean parent commit
+`8c330e1e297310da5f07b31bcde645d84160724f` / tree
+`53e574331b35ba5863c81405f18b5664d0f0cb2e`. The containing freeze must derive
+HEAD, parent/tree, exact diff paths, payload digests, projection chain, and
+clean status live. Prelaunch compile (569 lib / 614 test), namespace runtime
+verification, and four-persona exposure are blocked; standards rows are 122
+current. No lane is selectable and no lease is issued. All claims remain
+withheld.
 
 ## Durable binding and contract lineage
 
@@ -80,6 +83,37 @@ The accepted execution path is V8.1:
 8. Advance N12, then N13, then N14. N14 invalidates the prior journey identity,
    so rerun N13 before N15. Run the stable full rerun before N16, then N17.
 
+### P0 freeze gates and lease protocol
+
+`PRE-ADOPTION-SOURCE` is a root precondition, not a DAG node. It binds the
+current FINAL-CONTRACT graph and the historical DEFER-052 decision. Only
+source-local candidate preparation is allowed; live, product, claim, and
+inventory-adoption ceilings stay withheld. N00 adoption quarantines, rebinds,
+and reruns N01-N11.
+
+The root records four prelaunch gates with owner, command, status, and
+candidate: compile (569 library / 614 test errors, blocked), namespace static
+debt with runtime unverified (blocked), standards (122 current), and
+four-persona exposure unavailable (blocked). No lane is selectable until every
+gate is current and a run-scoped lease is issued.
+
+The lease record binds lease id, base commit/tree, branch, worktree, owned
+files/symbols, generated outputs, fixtures, effects, forbidden roots (including
+the shared root plus exact `.codex`, `.agents`, and linked-worktree `.git`
+metadata files, resolved gitdir targets, and Git refs only), protected-root
+patterns, normalization/symlink resolution, positive/negative overlap examples,
+and a fail-closed overlap rule. It also binds isolated
+HOME/CARGO/RUSTUP/target/tmp/cache/port roots, clean committed handoff,
+reachable tip, ready receipt, and teardown/cache/evidence retention. Creation is
+branch-first/worktree-second.
+
+N01, N02, and N03 are serial; N02 requires a fresh same-session rebuild, zero
+blockers, and two byte-identical inventories, and no inventory authority or
+claim promotion may occur while it is open. N04-N07 then use four separate
+worktrees; N08/N09 and N10/N11 may run in parallel. N12-N17 are root-serialized.
+N14 invalidates N12/N13 and affected N02/N04/N08/N09 package, discovery, and
+inventory evidence; rerun affected surfaces, then N12 B and N13 B.
+
 N08, N09, and N11 consumed sets include files, symbols, generated output,
 fixtures, effects, forbidden surfaces, tools, contract, and context. N09 live
 proof is root-owned and must separately bind package, install, cache, app
@@ -123,12 +157,11 @@ superseded evidence are removed at integration boundaries.
 
 ## Current state and next actions
 
-- P0 environment source/runtime boundary is integrated at `66497891a` with an
-  explicit offline dependency-cache blocker. External credential revocation is
-  not observed or claimed.
-- P0 canonical registry/projections are being rebound to that commit. All
-  acceptance evidence is historical/nonselectable and all 14 claims remain
-  withheld until current exact candidates exist.
+- P0 canonical registry/projections are frozen against parent
+  `8c330e1e297310da5f07b31bcde645d84160724f` / tree
+  `53e574331b35ba5863c81405f18b5664d0f0cb2e`; the containing commit must prove
+  the exact diff and clean status live. All acceptance evidence is
+  historical/nonselectable and all 14 claims remain withheld.
 - Global strict compilation still fails on the inherited warning wall; no
   suppression or dummy reachability is allowed.
 - No implementation worktree launches until the canonical P0 checkpoint is

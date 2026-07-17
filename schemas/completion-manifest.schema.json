@@ -11,6 +11,7 @@
     "goal_binding",
     "commit",
     "root",
+    "claim_ceiling",
     "claims",
     "verification_backlog_path",
     "verification_backlog_digest",
@@ -40,11 +41,21 @@
     },
     "commit": {
       "type": "string",
-      "minLength": 7
+      "pattern": "^[0-9a-f]{40}$"
     },
     "root": {
       "type": "string",
       "minLength": 1
+    },
+    "claim_ceiling": {
+      "type": "object",
+      "required": ["effect", "all_claims_withheld", "reason"],
+      "properties": {
+        "effect": {"const": "withheld"},
+        "all_claims_withheld": {"const": true},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
     },
     "claims": {
       "type": "array",

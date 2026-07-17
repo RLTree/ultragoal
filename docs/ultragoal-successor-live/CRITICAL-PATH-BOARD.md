@@ -1,15 +1,14 @@
 # Harness Ultragoal Successor Critical-Path Board
 
 Current recovery note (2026-07-16): durable host goal
-`019f5f39-507b-78a2-a96a-0b566a5a2126` remains active. Root commit
-`66497891a`, tree `fce134c3`, confines Codex actions to a sanitized worktree
-runner. Real probes strip inherited secrets, use local Cargo/Rustup state,
-reject hostile tool hints, execute the account toolchain, and complete offline
-no-dependency metadata. `scripts/check` then stops because the isolated offline
-Cargo cache lacks `getrandom`; strict and product claims remain withheld.
+`019f5f39-507b-78a2-a96a-0b566a5a2126` remains active. The P0 root-freeze
+parent is commit `8c330e1e297310da5f07b31bcde645d84160724f`, tree
+`53e574331b35ba5863c81405f18b5664d0f0cb2e`. The containing candidate must
+prove that parent, exact changed-path set, payload digests, projection chain,
+and clean committed status from live git; this board remains routing-only.
 
 The node rows below are historical routing context and are not current
-candidate proof. `LANE_REGISTRY.json` is the sole operational queue;
+candidate proof. `LANE_REGISTRY.json` is the sole operational authority;
 `VERIFICATION_BACKLOG.json` and `COMPLETION_MANIFEST.json` are root-written
 projections. Required follow-up is recorded in
 `docs/exec-plans/active/plugin-cli-authority-integration.md`. Until then source
@@ -20,10 +19,9 @@ Live root: `/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal`
 
 Branch: `codex/successor-contract-v2-live-product`
 
-Current integrated basis: `66497891a4` / tree `fce134c3c7`. The canonical
-registry and projections are being rebound to that exact commit before another
-implementation worktree launches. All prior acceptance refs remain
-historical/nonselectable until a fresh current-candidate binding exists.
+Current integrated basis for this freeze: `8c330e1e2` / tree `53e574331b`. The
+canonical registry and projections bind to that clean parent snapshot; no lane
+lease is issued and all N00-N17 lanes remain blocked until prelaunch gates pass.
 
 The last broad diagnostic baseline and the table below are historical context,
 not current candidate proof or a readiness surface.
