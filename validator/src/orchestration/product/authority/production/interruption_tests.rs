@@ -5,6 +5,9 @@ use std::os::unix::fs::PermissionsExt;
 use std::path::PathBuf;
 use std::process::Command;
 
+#[path = "runtime_test_root.rs"]
+mod runtime_test_root;
+
 const CHILD_ROOT: &str = "ULTRAGOAL_AUTHORITY_SETTLEMENT_CHILD_ROOT";
 const ACTOR: &str = "/root";
 
@@ -20,13 +23,7 @@ fn nonempty_fresh_process_reopen_refuses_before_operation_without_external_custo
         return;
     }
 
-    let root = PathBuf::from(env!("CARGO_TARGET_TMPDIR")).join(format!(
-        "orchestration-authority-settlement-death-{}-{}",
-        std::process::id(),
-        module_path!().replace("::", "-")
-    ));
-    let _ = fs::remove_dir_all(&root);
-    fs::create_dir(&root).unwrap();
+    let root = runtime_test_root::create("authority-settlement-death").unwrap();
     fs::set_permissions(&root, fs::Permissions::from_mode(0o700)).unwrap();
     let permit = format!("sha256:{}", "a".repeat(64));
     let (store, _) = Store::open_or_initialize(&root, ACTOR).unwrap();

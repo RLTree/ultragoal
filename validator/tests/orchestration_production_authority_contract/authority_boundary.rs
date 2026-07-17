@@ -1,7 +1,7 @@
 use super::fixture::*;
 use std::collections::BTreeSet;
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 use ultragoal::orchestration::product::command::OrchestrationStateRequest;
 use ultragoal::orchestration::product::runtime_adapter::{
@@ -15,41 +15,41 @@ use ultragoal::orchestration::product::{
 fn inner_authority_and_direct_executors_are_compile_private() {
     let root = privacy_consumer();
     assert_consumer_rejected(
-        &root,
+        root.path(),
         "inner-type",
         "use ultragoal::orchestration::product::RootAuthority; fn main() {}",
         "E0432",
         "no `RootAuthority` in `orchestration::product`",
     );
     assert_consumer_rejected(
-        &root,
+        root.path(),
         "extract",
         "use ultragoal::orchestration::product::ProductionRootAuthority; fn probe(a: &ProductionRootAuthority) { let _ = &a.authority; } fn main() {}",
         "E0616",
         "field `authority`",
     );
     assert_consumer_rejected(
-        &root,
+        root.path(),
         "clone",
         "use ultragoal::orchestration::product::ProductionRootAuthority; fn probe(a: &ProductionRootAuthority) { let _ = a.authority.clone(); } fn main() {}",
         "E0616",
         "field `authority`",
     );
     assert_consumer_rejected(
-        &root,
+        root.path(),
         "direct-action",
         DIRECT_ACTION,
         "E0624",
         "method `execute_action` is private",
     );
     assert_consumer_rejected(
-        &root,
+        root.path(),
         "direct-reconcile",
         DIRECT_RECONCILE,
         "E0624",
         "method `execute_reconcile` is private",
     );
-    fs::remove_dir_all(root).unwrap();
+    fs::remove_dir_all(root.path()).unwrap();
 }
 
 #[test]
@@ -121,16 +121,12 @@ fn cross_authority_attempt_and_replay_cannot_bypass_one_use_ledger() {
     assert_eq!(recursive_fingerprint(origin_root.path()), committed);
 }
 
-fn privacy_consumer() -> PathBuf {
-    let root = PathBuf::from(env!("CARGO_TARGET_TMPDIR")).join(format!(
-        "orchestration-authority-privacy-{}",
-        std::process::id()
-    ));
-    let _ = fs::remove_dir_all(&root);
-    fs::create_dir_all(root.join("src")).unwrap();
+fn privacy_consumer() -> TestRoot {
+    let root = TestRoot::new("authority-privacy", 0o700);
+    fs::create_dir(root.path().join("src")).unwrap();
     let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     fs::write(
-        root.join("Cargo.toml"),
+        root.path().join("Cargo.toml"),
         format!(
             "[package]\nname = \"authority-privacy\"\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[workspace]\n\n[dependencies]\nultragoal = {{ path = {:?} }}\n",
             manifest
@@ -141,7 +137,7 @@ fn privacy_consumer() -> PathBuf {
 }
 
 fn assert_consumer_rejected(
-    root: &PathBuf,
+    root: &Path,
     label: &str,
     source: &str,
     expected_code: &str,

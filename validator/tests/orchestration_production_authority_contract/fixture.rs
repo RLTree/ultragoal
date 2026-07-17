@@ -4,7 +4,6 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::os::unix::fs::{MetadataExt, PermissionsExt};
 use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicU64, Ordering};
 use ultragoal::orchestration::product::command::{
     InterruptedRecoveryRequest, OrchestrationStateRequest, RootActionRequest,
 };
@@ -16,7 +15,9 @@ use ultragoal::orchestration::product::{
 };
 use ultragoal::orchestration::*;
 
-static NEXT_ROOT: AtomicU64 = AtomicU64::new(1);
+#[path = "../../src/orchestration/product/authority/production/runtime_test_root.rs"]
+mod runtime_test_root;
+
 pub const CHILD_ENV: &str = "ULTRAGOAL_ORCHESTRATION_AUTHORITY_CHILD";
 pub const CHILD_TEST: &str =
     "orchestration_production_authority_contract::race::production_authority_child";
@@ -25,13 +26,7 @@ pub struct TestRoot(PathBuf);
 
 impl TestRoot {
     pub fn new(label: &str, mode: u32) -> Self {
-        let serial = NEXT_ROOT.fetch_add(1, Ordering::Relaxed);
-        let path = PathBuf::from(env!("CARGO_TARGET_TMPDIR")).join(format!(
-            "orchestration-production-authority-{label}-{}-{serial}",
-            std::process::id()
-        ));
-        let _ = fs::remove_dir_all(&path);
-        fs::create_dir_all(&path).unwrap();
+        let path = runtime_test_root::create(label).unwrap();
         fs::set_permissions(&path, fs::Permissions::from_mode(mode)).unwrap();
         Self(path)
     }
