@@ -1,0 +1,176 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="${1:-${CODEX_WORKTREE_PATH:-$PWD}}"
+cd "$root"
+
+manifest=".harness/coverage-manifest.json"
+command_path=".harness/coverage-command"
+receipt="${HARNESS_COVERAGE_RECEIPT:-validation_artifacts/coverage/coverage-receipt.json}"
+
+if [[ ! -f "$manifest" ]]; then
+  echo "coverage_command_missing: missing $manifest" >&2
+  exit 2
+fi
+if [[ ! -r "$command_path" ]]; then
+  echo "coverage_command_missing: missing or unreadable $command_path" >&2
+  exit 2
+fi
+coverage_cmd="$(cat "$command_path")"
+if [[ -z "${coverage_cmd// }" ]]; then
+  echo "coverage_command_empty: empty $command_path" >&2
+  exit 2
+fi
+
+bash -lc "$coverage_cmd" || {
+  echo "coverage_command_failed: $command_path" >&2
+  exit 2
+}
+
+python3 - "$manifest" "$command_path" "$receipt" "$root" source_local_iteration <<'PY'
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+manifest_path, command_path, receipt_path, root, claim_context = sys.argv[1:6]
+root_path = Path(root).resolve()
+
+def fail(code):
+    print(code, file=sys.stderr)
+    sys.exit(2)
+
+def load_json(path, code):
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return json.load(fh)
+    except Exception:
+        fail(code)
+
+def sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return "sha256:" + h.hexdigest()
+
+def digest_named_files(files):
+    h = hashlib.sha256()
+    for raw in sorted(set(files)):
+        path = resolve_repo_path(raw, "coverage_target_path_nonexistent")
+        h.update(raw.encode())
+        h.update(b"\0")
+        with open(path, "rb") as fh:
+            for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+                h.update(chunk)
+        h.update(b"\0")
+    return "sha256:" + h.hexdigest()
+
+def resolve_repo_path(raw, code):
+    candidate = (root_path / raw).resolve()
+    try:
+        candidate.relative_to(root_path)
+    except ValueError:
+        fail(code)
+    return candidate
+
+def ignored(path):
+    if path in {
+        ".harness/coverage-manifest.json",
+        ".harness/coverage-command",
+        "templates/.harness/coverage-manifest.json",
+        "templates/.harness/coverage-command",
+    }:
+        return True
+    for pattern in manifest.get("source_discovery_rules", {}).get("ignore", []):
+        if pattern.endswith("/**"):
+            prefix = pattern[:-3]
+            if path == prefix or path.startswith(prefix + "/"):
+                return True
+    return False
+
+def source_tree_digest():
+    files = []
+    for target in manifest_targets:
+        target_path = resolve_repo_path(target, "coverage_target_path_nonexistent")
+        if target_path.is_file():
+            files.append(target)
+            continue
+        for path in target_path.rglob("*"):
+            if path.is_file():
+                raw = path.relative_to(root_path).as_posix()
+                if not ignored(raw):
+                    files.append(raw)
+    return digest_named_files(files)
+
+def changed_files_digest():
+    policy = manifest.get("changed_file_coupling_policy", {})
+    if "changed_files" not in policy:
+        fail("coverage_changed_file_missing_from_manifest")
+    return digest_named_files(policy.get("changed_files") or [])
+
+manifest = load_json(manifest_path, "coverage_receipt_malformed")
+if manifest.get("schema") != "harness-ultragoal.coverage-manifest.v1":
+    fail("coverage_receipt_malformed")
+manifest_targets = manifest.get("required_target_paths") or []
+if not manifest_targets:
+    fail("coverage_claim_missing_target_paths")
+if manifest.get("changed_file_coupling_policy", {}).get("required") is True:
+    changed = manifest.get("changed_file_coupling_policy", {}).get("changed_files")
+    if changed is None:
+        fail("coverage_changed_file_missing_from_manifest")
+    for raw in changed:
+        path = resolve_repo_path(raw, "coverage_changed_file_missing_from_manifest")
+        if not path.is_file():
+            fail("coverage_changed_file_missing_from_manifest")
+dimension_rows = manifest.get("required_measured_dimensions_per_root") or []
+manifest_dimensions = sorted({d for row in dimension_rows for d in row.get("dimensions", [])})
+if not manifest_dimensions:
+    fail("coverage_claim_missing_dimensions")
+for target in manifest_targets:
+    target_path = resolve_repo_path(target, "coverage_target_path_nonexistent")
+    if not target_path.exists():
+        fail("coverage_target_path_nonexistent")
+    if any(part in {".codex-worktree", "target", "node_modules", "__pycache__"} for part in Path(target).parts):
+        fail("coverage_target_path_ignored_local_state")
+
+if not Path(receipt_path).is_file():
+    fail("coverage_receipt_missing")
+receipt = load_json(receipt_path, "coverage_receipt_malformed")
+if receipt.get("schema") != "harness-ultragoal.coverage-receipt.v1":
+    fail("coverage_receipt_malformed")
+if not receipt.get("tool_version"):
+    fail("coverage_receipt_tool_version_missing")
+if receipt.get("generated_by") != "coverage-command":
+    fail("coverage_receipt_not_tool_generated")
+if receipt.get("percent_source") != "machine_readable_report":
+    fail("coverage_percent_from_prose")
+if receipt.get("workspace_root") not in {str(root_path), "/repo"}:
+    fail("coverage_receipt_workspace_mismatch")
+if receipt.get("command_exit") != 0:
+    fail("coverage_command_failed")
+if receipt.get("coverage_manifest_digest") != sha256_file(manifest_path):
+    fail("coverage_receipt_manifest_digest_mismatch")
+if receipt.get("coverage_command_digest") != sha256_file(command_path):
+    fail("coverage_receipt_command_digest_mismatch")
+if receipt.get("source_tree_digest") != source_tree_digest():
+    fail("coverage_receipt_source_digest_mismatch")
+if receipt.get("changed_files_digest") != changed_files_digest():
+    fail("coverage_receipt_changed_files_digest_mismatch")
+if sorted(receipt.get("target_paths") or []) != sorted(manifest_targets):
+    fail("coverage_manifest_target_gap")
+if sorted(receipt.get("measured_dimensions") or []) != manifest_dimensions:
+    fail("coverage_required_dimension_missing")
+report = receipt.get("machine_readable_report") or {}
+report_path = report.get("path")
+if not report_path:
+    fail("coverage_report_missing")
+resolved_report = resolve_repo_path(report_path, "coverage_report_missing")
+if not resolved_report.is_file():
+    fail("coverage_report_missing")
+load_json(resolved_report, "coverage_report_not_machine_readable")
+if report.get("digest") != sha256_file(resolved_report):
+    fail("coverage_report_digest_mismatch")
+if claim_context != "source_local_iteration" and receipt.get("coverage", {}).get("policy") != "100_percent_required":
+    fail("coverage_fast_gate_used_for_completion")
+PY

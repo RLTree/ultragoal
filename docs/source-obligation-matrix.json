@@ -1099,7 +1099,7 @@
       "id": "target-repo-audit-capability",
       "missing_validation_fixture_or_receipt": "mandatory-law receipt target-repo-audit-capability; red fixtures target-repo-audit-capability-unsupported-repo-marked-fit-repo-red, target-repo-audit-capability-target-classification-missing-red, target-repo-audit-capability-target-command-missing-success-emitted-red, target-repo-audit-capability-fixture-used-as-live-target-red, target-repo-audit-capability-unknown-language-runtime-accepted-red, target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red, target-repo-audit-capability-mode-substitution-red, target-repo-audit-capability-generic-repo-support-overclaim-red; valid fixture target-repo-audit-capability.json",
       "obligation": "Target-repo support, setup, retrofit, audit, Product Fitness applicability, and package usability claims must fail closed without exact target-class, target-surface, target-mode capability proof.",
-      "package_surface": "target-repo audit capability receipt, target-scope support validator, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard",
+      "package_surface": "blocked pending typed HCT-FIT inspect plan verify terminal evidence and HCT-FIXTURES negatives",
       "source": "docs/source-obligation-matrix.json; docs/mandatory-law-surfaces.json; package-owned validator, standards, fixture, and receipt surfaces",
       "enforcement_status": "pending_typed_successor_mapping",
       "current_status": "blocked",

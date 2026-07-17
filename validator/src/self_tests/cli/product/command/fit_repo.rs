@@ -59,24 +59,18 @@ fn fit_repo_command_emits_fail_closed_observability_for_invalid_receipt_dir() {
         receipt["claim_impact"],
         "fit_repo_failed_blocks_readiness_release_completion_update_goal"
     );
-    assert!(
-        receipt["blocked_claims"]
-            .as_array()
-            .expect("blocked claims")
-            .iter()
-            .any(|claim| claim == "update_goal_eligibility")
-    );
-    assert!(
-        receipt["why_failed"]
-            .as_str()
-            .expect("why")
-            .contains("escapes package root")
-    );
-    assert!(
-        receipt["next_repair"]
-            .as_str()
-            .expect("next repair")
-            .contains("fit-repo prove")
-    );
+    assert!(receipt["blocked_claims"]
+        .as_array()
+        .expect("blocked claims")
+        .iter()
+        .any(|claim| claim == "update_goal_eligibility"));
+    assert!(receipt["why_failed"]
+        .as_str()
+        .expect("why")
+        .contains("escapes package root"));
+    assert!(receipt["next_repair"]
+        .as_str()
+        .expect("next repair")
+        .contains("fit-repo prove"));
     std::fs::remove_file(root.join(obs)).expect("cleanup fit-repo failure receipt");
 }

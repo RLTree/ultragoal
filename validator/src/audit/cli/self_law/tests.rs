@@ -1,4 +1,4 @@
-use super::{CliSelfLawCheckError, CliSelfLawCheckRequest, check};
+use super::{check, CliSelfLawCheckError, CliSelfLawCheckRequest};
 use std::path::Path;
 
 #[test]
@@ -24,16 +24,12 @@ fn composition_is_stable_fail_closed_and_zero_write() {
     let findings = response.into_findings();
     assert!(!findings.is_empty());
     assert!(findings.windows(2).all(|pair| pair[0] < pair[1]));
-    assert!(
-        findings
-            .iter()
-            .any(|finding| finding.check_id == "plugin-inventory-closure")
-    );
-    assert!(
-        findings
-            .iter()
-            .any(|finding| finding.check_id == "cli-self-law-compliance")
-    );
+    assert!(findings
+        .iter()
+        .any(|finding| finding.check_id == "plugin-inventory-closure"));
+    assert!(findings
+        .iter()
+        .any(|finding| finding.check_id == "cli-self-law-compliance"));
     assert_eq!(tree(&root), before);
     std::fs::remove_dir_all(root).expect("cleanup self law composition");
 }
