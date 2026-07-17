@@ -58,10 +58,6 @@ fn raw_authority_scanner_allows_named_product_projection_boundaries() {
             "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = child_spans(); let _ = parent_span_id(); let _ = span_kind(); json!({\"value\":value}) }\n",
         ),
         (
-            "validator/src/cli/openai/config.rs",
-            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = openai_config_redacted_resolution(); let _ = secret_material_serialized(); let _ = blocked_claims(); json!({\"value\":value}) }\n",
-        ),
-        (
             "validator/src/cli/product/cohesion.rs",
             "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = \"product-cohesion\"; let _ = \"source_local_product_cohesion_only\"; let _ = \"target_repo::product::cohesion::check\"; json!({\"value\":value}) }\n",
         ),

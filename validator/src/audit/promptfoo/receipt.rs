@@ -38,7 +38,7 @@ pub(super) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
         out.push("promptfoo_receipt_missing_claim_blockers".to_string());
     }
     out.push("promptfoo_retired_observability_binding".to_string());
-    if crate::cli::openai::policy::contains_secret_shape(receipt) {
+    if crate::audit::openai::contains_secret_shape(receipt) {
         out.push("promptfoo_receipt_secret_shape_detected".to_string());
     }
     out

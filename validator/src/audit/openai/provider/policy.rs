@@ -1,40 +1,23 @@
-use serde_json::{Value, json};
+use serde_json::Value;
 use std::path::Path;
 
-pub(crate) const DEFAULT_POLICY: &str = "docs/openai-provider-policy.json";
+const DEFAULT_POLICY: &str = "docs/openai-provider-policy.json";
 
-pub(crate) struct BudgetSelection {
-    pub(crate) policy_digest: String,
-    pub(crate) budget_class: String,
-    pub(crate) selected: Value,
-    pub(crate) failures: Vec<String>,
-}
-#[cfg(test)]
-pub(crate) fn default_class(provider_mode: &str) -> &'static str {
-    match provider_mode {
-        "offline_fixture" => "source_offline_fixture",
-        "local_mock" => "source_local_mock",
-        "openai_live" => "source_live_low",
-        _ => "source_no_network",
-    }
-}
-
-pub(crate) fn load(
+pub(super) fn failures(
     root: &Path,
     policy_path: &Path,
     budget_class: &str,
     provider_mode: &str,
-) -> BudgetSelection {
+) -> Vec<String> {
     let abs = if policy_path.is_absolute() {
         policy_path.to_path_buf()
     } else {
         root.join(policy_path)
     };
     let mut failures = Vec::new();
-    let policy_digest = crate::digest::file(&abs).unwrap_or_else(|err| {
+    if let Err(err) = crate::digest::file(&abs) {
         failures.push(format!("openai_provider_policy_digest_unavailable:{err}"));
-        crate::digest::ZERO.to_string()
-    });
+    }
     let policy = crate::json_boundary::read_json(&abs).unwrap_or_else(|err| {
         failures.push(format!("openai_provider_policy_missing_or_malformed:{err}"));
         Value::Null
@@ -48,15 +31,10 @@ pub(crate) fn load(
             Value::Null
         });
     validate_budget_class(&selected, provider_mode, &mut failures);
-    BudgetSelection {
-        policy_digest,
-        budget_class: budget_class.to_string(),
-        selected,
-        failures,
-    }
+    failures
 }
 
-pub(crate) fn receipt_failures(root: &Path, receipt: &Value) -> Vec<String> {
+pub(super) fn receipt_failures(root: &Path, receipt: &Value) -> Vec<String> {
     let mut out = Vec::new();
     if str_field(receipt, "provider_policy_path") != DEFAULT_POLICY {
         out.push("openai_call_receipt_provider_policy_path_invalid".to_string());
@@ -78,54 +56,6 @@ pub(crate) fn receipt_failures(root: &Path, receipt: &Value) -> Vec<String> {
         out.push("openai_call_receipt_cache_policy_missing".to_string());
     }
     out
-}
-
-pub(crate) fn cost_rate_limit(
-    candidate: &str,
-    provider_mode: &str,
-    selection: &BudgetSelection,
-) -> Value {
-    let status = if selection.failures.is_empty() {
-        "pass"
-    } else {
-        "fail"
-    };
-    json!({
-        "schema": "harness-ultragoal.openai-cost-rate-limit-receipt.v1",
-        "status": status,
-        "candidate_digest": candidate,
-        "provider_mode": provider_mode,
-        "budget_class": selection.budget_class,
-        "max_prompt_tokens": number(&selection.selected, "max_prompt_tokens"),
-        "max_completion_tokens": number(&selection.selected, "max_completion_tokens"),
-        "max_total_tokens": number(&selection.selected, "max_total_tokens"),
-        "prompt_tokens": 0,
-        "completion_tokens": 0,
-        "total_tokens": 0,
-        "cost_ceiling_usd": decimal(&selection.selected, "cost_ceiling_usd"),
-        "estimated_cost_usd": 0,
-        "cost_unavailable_reason": cost_unavailable_reason(provider_mode),
-        "rate_limit_observed": false,
-        "rate_limit_policy": text(&selection.selected, "rate_limit_policy"),
-        "rate_limit_unavailable_reason": rate_limit_unavailable_reason(provider_mode),
-        "claim_impact": "cost_and_rate_limit_observation_only"
-    })
-}
-
-pub(crate) fn timeout_retry_backoff(selection: &BudgetSelection) -> Value {
-    json!({
-        "timeout_ms": number(&selection.selected, "timeout_ms"),
-        "max_retries": number(&selection.selected, "max_retries"),
-        "backoff_policy": text(&selection.selected, "backoff_policy"),
-        "backoff_initial_ms": number(&selection.selected, "backoff_initial_ms"),
-        "backoff_max_ms": number(&selection.selected, "backoff_max_ms"),
-        "cache_policy": text(&selection.selected, "cache_policy"),
-        "no_cache_verification": text(&selection.selected, "no_cache_verification")
-    })
-}
-
-pub(crate) fn cache_policy(selection: &BudgetSelection) -> String {
-    text(&selection.selected, "cache_policy")
 }
 
 fn validate_policy_shape(policy: &Value, provider_mode: &str, failures: &mut Vec<String>) {
@@ -217,10 +147,6 @@ fn number(value: &Value, key: &str) -> i64 {
     value.get(key).and_then(Value::as_i64).unwrap_or(0)
 }
 
-fn decimal(value: &Value, key: &str) -> f64 {
-    value.get(key).and_then(Value::as_f64).unwrap_or(0.0)
-}
-
 fn text(value: &Value, key: &str) -> String {
     value
         .get(key)
@@ -231,20 +157,4 @@ fn text(value: &Value, key: &str) -> String {
 
 fn str_field(value: &Value, key: &str) -> String {
     text(value, key)
-}
-
-fn cost_unavailable_reason(provider_mode: &str) -> &'static str {
-    match provider_mode {
-        "openai_live" => "live_provider_not_invoked_by_boundary_probe",
-        "no_network" => "no_provider_call",
-        _ => "offline_or_mock_provider",
-    }
-}
-
-fn rate_limit_unavailable_reason(provider_mode: &str) -> &'static str {
-    match provider_mode {
-        "openai_live" => "live_provider_not_invoked_by_boundary_probe",
-        "no_network" => "no_provider_call",
-        _ => "offline_or_mock_provider",
-    }
 }

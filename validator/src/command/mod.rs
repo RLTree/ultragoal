@@ -64,7 +64,6 @@ pub(crate) enum Command {
     Namespace(crate::cli::namespace::NamespaceCommand),
     NextAction(crate::cli::next_action::NextActionCommand),
     Observe(crate::cli::observe::command::ObserveCommand),
-    OpenAi(crate::cli::openai::OpenAiCommand),
     RedReport(crate::cli::red_report::RedReportCommand),
     FixtureSchedule(crate::red::fixture::scheduler::FixtureSchedulerCommand),
     SchemaValidation(crate::cli::schema_validation::SchemaValidationCommand),

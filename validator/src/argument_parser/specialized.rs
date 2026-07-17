@@ -20,8 +20,6 @@ pub(super) fn parse(raw: &[String]) -> Result<Command, String> {
         Ok(Command::NextAction(command))
     } else if let Some(command) = cli::observe::parse(raw)? {
         Ok(Command::Observe(command))
-    } else if let Some(command) = cli::openai::parse(raw)? {
-        Ok(Command::OpenAi(command))
     } else if let Some(command) = crate::red::fixture::scheduler::parse(raw)? {
         Ok(Command::FixtureSchedule(command))
     } else if let Some(command) = cli::red_report::parse(raw)? {

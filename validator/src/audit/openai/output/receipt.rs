@@ -1,7 +1,7 @@
 use serde_json::Value;
 use std::path::Path;
 
-pub(crate) fn receipt_failures(root: &Path, receipt: &Value) -> Vec<String> {
+pub(super) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
     let mut out = Vec::new();
     if receipt.get("schema").and_then(Value::as_str)
         != Some("harness-ultragoal.openai-model-output-authority.v1")
@@ -25,7 +25,7 @@ pub(crate) fn receipt_failures(root: &Path, receipt: &Value) -> Vec<String> {
     {
         out.push("openai_model_output_receipt_authority_overbroad".to_string());
     }
-    if super::policy::contains_secret_shape(receipt)
+    if super::contains_secret_shape(receipt)
         || receipt.get("redaction_status").and_then(Value::as_str) != Some("pass")
     {
         out.push("openai_model_output_receipt_secret_leak_or_redaction_failure".to_string());

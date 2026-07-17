@@ -124,11 +124,6 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
             "command_argv",
             "NODE_TIMING_REL",
         ]),
-        "validator/src/cli/openai/config.rs" => Some(&[
-            "openai_config_redacted_resolution",
-            "secret_material_serialized",
-            "blocked_claims",
-        ]),
         "validator/src/audit/law/authority_surfaces/surface_inventory/mod.rs" => Some(&[
             "AuthoritySurfaceInventoryRow",
             "harness-ultragoal.foundational-law-surface-inventory.v1",

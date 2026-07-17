@@ -6,7 +6,6 @@ pub(crate) mod command;
 pub(crate) mod coverage;
 pub(crate) mod law;
 pub(crate) mod namespace;
-pub(crate) mod openai;
 pub(crate) mod package;
 pub(crate) mod plugin;
 pub(crate) mod product;
