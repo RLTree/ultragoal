@@ -1,7 +1,7 @@
 use crate::orchestration::product::snapshot::snapshot;
 use crate::orchestration::product::{
-    open_engine, ProductContext, ProductError, ProductWorkspace, ReadOnlySink, ReconcileOutcome,
-    ReconcileRequest,
+    ProductContext, ProductError, ProductWorkspace, ReadOnlySink, ReconcileOutcome,
+    ReconcileRequest, open_engine,
 };
 
 pub(super) fn execute(

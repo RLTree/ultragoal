@@ -1,13 +1,13 @@
 use super::super::command::RootActionRequest;
 use super::super::{
-    journal_head_identity, open_engine, PermitReplayState, ProductError,
-    ProductionExecutionOutcome, ProductionRootAuthority, ReadOnlySink, ReconcileOutcome,
-    ReconcileRequest, ReservationObservation, RootPermit,
+    PermitReplayState, ProductError, ProductionExecutionOutcome, ProductionRootAuthority,
+    ReadOnlySink, ReconcileOutcome, ReconcileRequest, ReservationObservation, RootPermit,
+    journal_head_identity, open_engine,
 };
 use super::*;
 use crate::orchestration::{
-    encode_orchestration_log, orchestration_head_for, EffectResolution, EventLog, FileJournal,
-    OrchestrationEvent,
+    EffectResolution, EventLog, FileJournal, OrchestrationEvent, encode_orchestration_log,
+    orchestration_head_for,
 };
 
 impl OrchestrationRuntimeAdapter<'_> {

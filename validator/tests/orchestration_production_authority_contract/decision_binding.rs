@@ -132,11 +132,13 @@ fn permit_downgrade_cross_binding_forgery_and_debug_leak_fail_closed() {
         assert_eq!(recursive_fingerprint(authority_root.path()), before);
     }
     let rendered = format!("{permit:?}");
-    assert!(!rendered.contains(
-        &serde_json::to_value(&permit).unwrap()["authenticator"]
-            .as_str()
-            .unwrap()
-    ));
+    assert!(
+        !rendered.contains(
+            &serde_json::to_value(&permit).unwrap()["authenticator"]
+                .as_str()
+                .unwrap()
+        )
+    );
 }
 
 fn request(
