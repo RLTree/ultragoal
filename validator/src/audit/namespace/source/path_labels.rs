@@ -39,6 +39,11 @@ pub(crate) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str>
             return Some(label);
         }
     }
+    if tokens.iter().any(|token| token == "checkpoint")
+        && tokens.iter().any(|token| token == "progress")
+    {
+        return Some("checkpoint_progress");
+    }
     if adjacent_numbered_label(&tokens, "gate") {
         return Some("gate_number");
     }
@@ -105,6 +110,11 @@ pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'stat
             return Some(label);
         }
     }
+    if tokens.iter().any(|token| token == "checkpoint")
+        && tokens.iter().any(|token| token == "progress")
+    {
+        return Some("checkpoint_progress");
+    }
     if let Some(label) = repo_entrypoint_context_label(&tokens) {
         return Some(label);
     }
@@ -155,13 +165,9 @@ fn standalone_goal_work_token_label(tokens: &[String]) -> Option<&'static str> {
         match token.as_str() {
             "fitting" => return Some("fitting"),
             "slice" => return Some("slice"),
-            "phase" => return Some("phase"),
             "workstream" => return Some("workstream"),
-            "checkpoint" => return Some("checkpoint"),
-            "progress" => return Some("progress"),
             "wip" => return Some("wip"),
             "todo" => return Some("todo"),
-            "scratch" => return Some("scratch"),
             "productionproof" => return Some("production_proof"),
             "proofstatus" => return Some("proof_status"),
             "evidencestatus" => return Some("evidence_status"),

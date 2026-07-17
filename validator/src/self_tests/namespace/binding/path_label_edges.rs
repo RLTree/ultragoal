@@ -104,7 +104,7 @@ fn namespace_path_labels_classify_goal_work_and_generic_source_names() {
         ),
         (
             "validation_artifacts/observability/progress/checkpoint.json",
-            "progress",
+            "checkpoint_progress",
         ),
         (
             "validation_artifacts/observability/proof-status/source-audit.json",
@@ -117,6 +117,16 @@ fn namespace_path_labels_classify_goal_work_and_generic_source_names() {
             ),
             Some(expected),
             "{artifact_path}"
+        );
+    }
+
+    for product_state_name in ["phase", "checkpoint", "progress", "scratch"] {
+        assert_eq!(
+            crate::audit::namespace::source::path_labels::product_opaque_goal_work_label(
+                product_state_name
+            ),
+            None,
+            "{product_state_name} must be classified in its product context"
         );
     }
 }
