@@ -1,3 +1,4 @@
+pub(crate) mod authority_reconciliation;
 pub(crate) mod automation_tick;
 pub(crate) mod backlog_policy;
 pub(crate) mod claim;
@@ -111,6 +112,7 @@ pub(crate) fn semantic_failures_with_cache(
     amendment_checks(&bundle["amendments"], &mut out);
     ready::join::check_ready_integrity(lr, ready, &mut out);
     coverage::ready::join::check(root, ready, &mut out);
+    authority_reconciliation::check(bundle, root, &mut out);
     out
 }
 

@@ -6,6 +6,8 @@
   "authority": "template-only; LANE_REGISTRY.json is canonical",
   "required_top_level": [
     "root",
+    "root_only_overrides",
+    "retention_policy",
     "root_freeze",
     "pre_adoption_source",
     "prelaunch_gates",
@@ -37,8 +39,17 @@
   },
   "lease_record": {
     "lease_id": null,
-    "base_commit": "c0ab4de8de0ccd2254dddb5d21e598b36549cdd8",
-    "base_tree": "27b491bbba946b6d7dc878afeecf74d3f64608ce",
+    "lane_id": null,
+    "owner": null,
+    "scope_ids": [],
+    "claim_ceiling": "withheld",
+    "exception_id": null,
+    "commands": [],
+    "parent_handoff": null,
+    "plan_ref": null,
+    "plan_digest": null,
+    "base_commit": "97e24c9706e7b489bdbdc6184ff9520a7116c6fd",
+    "base_tree": "c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e",
     "branch": null,
     "worktree": null,
     "shared_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
@@ -69,6 +80,10 @@
     "reachable_tip": false,
     "ready_receipt": null,
     "teardown_retention": "retain only unique evidence; remove reproducible worktree state after handoff",
+    "ready": {"status": "unavailable", "receipt": null},
+    "handoff": {"status": "unissued", "commit": null, "tree": null, "clean": false},
+    "teardown": {"status": "unissued", "receipt": null},
+    "retention": {"policy": "retain_unique_only", "delete_reproducible_after": "closed_and_no_active_lease"},
     "status": "unissued"
   },
   "claim_authority": {
@@ -91,6 +106,19 @@
     "all_lanes": "blocked",
     "leases": "unissued",
     "p0": "root_only"
+  },
+  "root_only_overrides": {
+    "N00": {"reason": "root_claim_authority"},
+    "N01": {"reason": "no_compatible_write_scope"},
+    "N02": {"reason": "no_compatible_write_scope"},
+    "N10": {"reason": "root_claim_authority"},
+    "N12": {"reason": "root_claim_authority"},
+    "N17": {"reason": "root_claim_authority"}
+  },
+  "retention_policy": {
+    "mode": "fail_closed",
+    "inventory_required_before_cleanup": true,
+    "retention_rule": "Only classified reproducible target/cache/scratch may be deleted after unique evidence and active leases are absent."
   },
   "post_n12": [
     "N12-A",

@@ -1,6 +1,7 @@
 {
   "schema": "harness-ultragoal.verification-backlog.v1",
-  "manifest_digest": "sha256:e843efa7cc19eb853f4df822e4b8d94fb4e1940ab750a00af336e4af4cc91080",
+  "manifest_digest": "sha256:3d93fa408bc5f7440101ae3c44542295920f4902ccc365ec5702c61be8154250",
+  "registry_preimage_digest": "sha256:3d93fa408bc5f7440101ae3c44542295920f4902ccc365ec5702c61be8154250",
   "rows": [
     {
       "id": "BACKLOG-001", "claim_id": "CL-SOURCE", "class": "root_owed", "owner": "OWN-ULTRA-ROOT",

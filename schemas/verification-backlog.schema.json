@@ -6,6 +6,7 @@
   "required": [
     "schema",
     "manifest_digest",
+    "registry_preimage_digest",
     "rows",
     "generated_at"
   ],
@@ -14,6 +15,9 @@
       "const": "harness-ultragoal.verification-backlog.v1"
     },
     "manifest_digest": {
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
+    },
+    "registry_preimage_digest": {
       "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "rows": {

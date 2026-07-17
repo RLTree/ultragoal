@@ -11,9 +11,9 @@ historical duplicate-plan digest remains a tombstone with commit/tree provenance
 
 ## Stage B projection freeze (routing only)
 
-The Stage B candidate is rooted at parent commit
-`c0ab4de8de0ccd2254dddb5d21e598b36549cdd8` / tree
-`27b491bbba946b6d7dc878afeecf74d3f64608ce`. Stage A is accepted for the
+The P0 candidate is rooted at containing parent commit
+`97e24c9706e7b489bdbdc6184ff9520a7116c6fd` / tree
+`c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`. Stage A is accepted for the
 registry, closed lease contract, template, gates, scopes, graph, and review
 anchors; this plan and the board remain projections and cannot promote claims.
 The exact scheduler frontier is N04-N07 after N03, N09 after N02+N05, N08 after
@@ -22,7 +22,7 @@ After N12 the route is N12-A -> N14 -> N14-proof -> N12-B-invalidate-and-reproof
 -> parallel N13/N15 -> N16 -> N17. P0 is available only to root for compile,
 namespace, standards, and retention-aware cleanup; product lanes remain blocked.
 All fourteen claims remain withheld with empty evidence and no validator
-receipts. Cleanup removed 12.8 GB of reproducible state; 954 MB of unique
+receipts. Cleanup removed 12.8 GB of reproducible state; 949 MB of unique
 home/tmp evidence remains retained. Retention-aware cleanup is still blocked
 until unique evidence is reviewed and the root handoff is current.
 
@@ -33,14 +33,15 @@ current repository truth. Preserve accepted source work while proving source,
 package, install, cache, marketplace, app registry, discovery, runtime,
 product, migration, release, and completion claims on their own surfaces.
 
-The current P0 checkpoint is the clean parent commit
-`c0ab4de8de0ccd2254dddb5d21e598b36549cdd8` / tree
-`27b491bbba946b6d7dc878afeecf74d3f64608ce`. The containing freeze must derive
+The current P0 checkpoint is the clean containing parent commit
+`97e24c9706e7b489bdbdc6184ff9520a7116c6fd` / tree
+`c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`. The containing freeze must derive
 HEAD, parent/tree, exact diff paths, payload digests, projection chain, and
 clean status live. Prelaunch compile (569 lib / 614 test), namespace runtime
 verification, and four-persona exposure are blocked; standards rows are 122
 current. No lane is selectable and no lease is issued. All claims remain
-withheld.
+withheld. Namespace and standards are blocked/unavailable until their real
+validator commands produce candidate-bound evidence.
 
 ## Durable binding and contract lineage
 
@@ -109,9 +110,10 @@ inventory-adoption ceilings stay withheld. N00 adoption quarantines, rebinds,
 and reruns N01-N11.
 
 The root records four prelaunch gates with owner, command, status, and
-candidate: compile (569 library / 614 test errors, blocked), namespace static
-debt with runtime unverified (blocked), standards (122 current), and
-four-persona exposure unavailable (blocked). No lane is selectable until every
+candidate: compile (blocked), namespace (blocked/unavailable because the
+historical `scripts/check namespace` invocation is not a real command),
+standards (blocked/unavailable), and four-persona exposure unavailable
+(blocked). No lane is selectable until every
 gate is current and a run-scoped lease is issued.
 
 The lease record binds lease id, base commit/tree, branch, worktree, owned
@@ -175,8 +177,8 @@ superseded evidence are removed at integration boundaries.
 ## Current state and next actions
 
 - P0 canonical registry/projections are frozen against parent
-  `c0ab4de8de0ccd2254dddb5d21e598b36549cdd8` / tree
-  `27b491bbba946b6d7dc878afeecf74d3f64608ce`; the containing commit must prove
+  `97e24c9706e7b489bdbdc6184ff9520a7116c6fd` / tree
+  `c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`; the containing commit must prove
   the exact diff and clean status live. All acceptance evidence is
   historical/nonselectable and all 14 claims remain withheld.
 - Global strict compilation still fails on the inherited warning wall; no
