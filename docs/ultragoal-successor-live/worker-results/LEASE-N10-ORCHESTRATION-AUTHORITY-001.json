@@ -1,39 +1,105 @@
 {
-  "worker": "codex/n10-orchestration-authority",
+  "worker": "codex/n10-orchestration-authority-refresh",
   "lease_id": "LEASE-N10-ORCHESTRATION-AUTHORITY-001",
-  "context_id": "sha256:dd8b1df3a9adf7d503f8f34cfff81aeb721df510e5148ad0dfed59615316a07d",
+  "context_id": "sha256:b25bd65ce8ba955e5f5ce914f5f2b5f5ed01d1f0c7168fc15b964040d7d13af2",
   "candidate_identity": {
-    "candidate_id": "sha256:ccd9a2e98a90d856e62e5b8126dc9df7fbd8fd859352964ddaf038627bc968f6",
-    "context_id": "sha256:dd8b1df3a9adf7d503f8f34cfff81aeb721df510e5148ad0dfed59615316a07d",
-    "repository_root": "/Users/terrynoblin/.codex/worktrees/cb63/harness-ultragoal-plugin-proposal",
-    "branch": "codex/n10-orchestration-authority",
-    "base_commit": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
-    "base_tree": "c3098e235fb5990b5862b478310867840cd2c4f6",
-    "source_commit": "35da75fb9142320cf62a02d14264fd0ebd034238",
-    "source_tree": "2485c558c5e242c3758ef2f29328105a006f1b9b",
-    "accepted_staged_aggregate_sha256": "76218fe92e9d31055d6954bea5de3c7bed417877b0e60871c8e213888246ea59",
-    "artifact_set_sha256": "sha256:ccd9a2e98a90d856e62e5b8126dc9df7fbd8fd859352964ddaf038627bc968f6",
-    "artifact_set_formula": "Sort source artifacts by path; concatenate path, one TAB byte, sha256 without prefix, and one LF byte; SHA-256 the concatenation. The WorkerResult is excluded.",
-    "artifact_count_excluding_result": 38,
-    "artifact_total_bytes": 152261
+    "candidate_id": "sha256:11db919f94807b8118842ac87d544c95cef449be85c2a57ecd0c547db114143c",
+    "context_id": "sha256:b25bd65ce8ba955e5f5ce914f5f2b5f5ed01d1f0c7168fc15b964040d7d13af2",
+    "repository_root": "/Users/terrynoblin/.codex/worktrees/57be/harness-ultragoal-plugin-proposal",
+    "branch": "codex/n10-orchestration-authority-refresh",
+    "base_commit": "d94a471f556b7f1aa7ab000fc285b53dcab08cca",
+    "base_tree": "4c13fdbdcbab17ddeb86e45da0811a503ec985bd",
+    "source_commit": "fcee41933b0b3b569cee975ce67dcff189b1db0d",
+    "source_tree": "32e85546a5a5a623a1ae94a51e513475fedb3141",
+    "source_acceptance": "ACCEPT-SOURCE-FREEZE",
+    "source_review": "SIGN_OFF_SOURCE_FREEZE",
+    "artifact_set_sha256": "sha256:11db919f94807b8118842ac87d544c95cef449be85c2a57ecd0c547db114143c",
+    "artifact_set_formula": "Sort current source artifacts by path; concatenate path, one TAB byte, sha256 without prefix, and one LF byte; SHA-256 the concatenation. Deleted paths and this WorkerResult are excluded.",
+    "artifact_count_excluding_result": 78,
+    "artifact_total_bytes": 271269,
+    "path_inventory": {
+      "formula": "git diff --name-status d94a471f556b7f1aa7ab000fc285b53dcab08cca..fcee41933b0b3b569cee975ce67dcff189b1db0d, sorted by the complete name-status row",
+      "sha256": "sha256:e3299ead8e81ea8d8bc6c97a7d1c1a8dfac790ed8d6307cfadb7f4813c357d5c",
+      "added": 54,
+      "modified": 25,
+      "deleted": 16,
+      "total": 95
+    },
+    "commit_inventory": {
+      "formula": "git log --format='%H%x09%s' --reverse d94a471f556b7f1aa7ab000fc285b53dcab08cca..fcee41933b0b3b569cee975ce67dcff189b1db0d",
+      "sha256": "sha256:f5cd87c93a32f10a06387b1a815b169d86bd3dc2a128a3189fe13b8ec43c7a8b",
+      "commits": [
+        {
+          "commit": "bc45efeabc0a12aae80a0e3d8982fad4b64608d4",
+          "subject": "Add fail-closed production orchestration authority"
+        },
+        {
+          "commit": "35cd33cbc711464a275c7ed7e58bda303b132ac1",
+          "subject": "Record N10 orchestration authority handoff"
+        },
+        {
+          "commit": "dae272b2cdcaa47089aa468e133efb9f80c512c2",
+          "subject": "Seal orchestration execution behind production authority"
+        },
+        {
+          "commit": "d960b8ace6fcfe78fa717e6ac93154b007faa067",
+          "subject": "Bind orchestration reservations to exact execution payload"
+        },
+        {
+          "commit": "916852750647e5d5ce28b5e53c11b21efc97965d",
+          "subject": "Seal orchestration execution beneath reservation issuer"
+        },
+        {
+          "commit": "9ef505957c3b978a3fba01933ea31c5b2e2433c4",
+          "subject": "Seal production authority against descendant bypass"
+        },
+        {
+          "commit": "a4b655ba2931f860d8f7647a2f1fe38f5dd6f429",
+          "subject": "Seal orchestration execution transaction boundaries"
+        },
+        {
+          "commit": "70b6a5242882a813a670453c92b90a899de8755e",
+          "subject": "Bind orchestration compile proofs to exact expressions"
+        },
+        {
+          "commit": "b40b906e9e837a63033d3bf4b08059027a1f7150",
+          "subject": "Format refreshed orchestration authority source"
+        },
+        {
+          "commit": "fcee41933b0b3b569cee975ce67dcff189b1db0d",
+          "subject": "Bind orchestration tests to runtime temp roots"
+        }
+      ]
+    }
   },
   "base_state": {
     "node": "N10-ORCHESTRATION",
-    "commit": "5cc3be5f860de0071837f478bbe3a9de0d6c0e47",
-    "tree": "c3098e235fb5990b5862b478310867840cd2c4f6",
-    "source_authority": "typed successor root acceptance"
+    "commit": "d94a471f556b7f1aa7ab000fc285b53dcab08cca",
+    "tree": "4c13fdbdcbab17ddeb86e45da0811a503ec985bd",
+    "source_authority": "exact integrated root containing accepted N06 source and N09 production adoption",
+    "n06_accepted_source": "a646eace68431b9bae5dc6473762124593450d5f",
+    "n06_claim_ceiling": "source/root-integrated routine execution only",
+    "n09_production_adoption": "0c4879b2a710fce546e4f71ff4f602623412dd12",
+    "n09_claim_ceiling": "production local filesystem authority only; no installed discovery, fresh-session comprehension, runtime exposure, or route eligibility"
   },
   "final_state": {
-    "status": "worker_blocked",
-    "source_commit": "35da75fb9142320cf62a02d14264fd0ebd034238",
-    "source_tree": "2485c558c5e242c3758ef2f29328105a006f1b9b",
-    "artifact_count_excluding_result": 38,
-    "artifact_set_sha256": "sha256:ccd9a2e98a90d856e62e5b8126dc9df7fbd8fd859352964ddaf038627bc968f6",
-    "artifact_total_bytes": 152261,
-    "diagnostic_total_lines": 4276,
+    "status": "source_freeze_accepted",
+    "source_commit": "fcee41933b0b3b569cee975ce67dcff189b1db0d",
+    "source_tree": "32e85546a5a5a623a1ae94a51e513475fedb3141",
+    "artifact_count_excluding_result": 78,
+    "artifact_set_sha256": "sha256:11db919f94807b8118842ac87d544c95cef449be85c2a57ecd0c547db114143c",
+    "artifact_total_bytes": 271269,
+    "path_inventory_sha256": "sha256:e3299ead8e81ea8d8bc6c97a7d1c1a8dfac790ed8d6307cfadb7f4813c357d5c",
+    "commit_inventory_sha256": "sha256:f5cd87c93a32f10a06387b1a815b169d86bd3dc2a128a3189fe13b8ec43c7a8b",
     "maximum_changed_authored_rust_lines": 247,
-    "focused_production_contract": "19 passed; 0 failed",
-    "parent_source_review": "accepted exact bounded source ceiling",
+    "focused_production_contract": "31 passed; 0 failed with ephemeral shared-lint caps",
+    "focused_library_interruption": "1 passed; child re-execution passed with ephemeral shared-lint caps",
+    "behavioral_test_lint_mode": "RUSTFLAGS='-A dead_code -A unused_imports' used only to bypass the accepted root/shared warning wall; this is not warning-free proof",
+    "uncapped_warning_diagnostics": 569,
+    "uncapped_n10_owned_diagnostics": 0,
+    "warning_free_compilation": "withheld",
+    "parent_source_review": "ACCEPT-SOURCE-FREEZE",
+    "exhaustive_source_review": "SIGN_OFF_SOURCE_FREEZE; no material findings",
     "parent_integration_acceptance": "withheld",
     "fresh_process_nonempty_reopen": "fails closed pending external protected monotonic custody",
     "network_performed": false,
@@ -41,45 +107,101 @@
     "destructive_effect_performed": false
   },
   "touched_paths": [
-    "validator/src/orchestration/journal/mod.rs",
-    "validator/src/orchestration/mod.rs",
-    "validator/src/orchestration/product/authority/mod.rs",
-    "validator/src/orchestration/product/authority/production/checkpoint.rs",
-    "validator/src/orchestration/product/authority/production/interruption_tests.rs",
-    "validator/src/orchestration/product/authority/production/ledger.rs",
-    "validator/src/orchestration/product/authority/production/ledger_checkpoint.rs",
-    "validator/src/orchestration/product/authority/production/ledger_record.rs",
-    "validator/src/orchestration/product/authority/production/mod.rs",
-    "validator/src/orchestration/product/authority/production/permit_execution.rs",
-    "validator/src/orchestration/product/authority/production/permit_issuance.rs",
-    "validator/src/orchestration/product/authority/production/restart_reconciliation.rs",
-    "validator/src/orchestration/product/authority/production/store.rs",
-    "validator/src/orchestration/product/authority/production/store_file.rs",
-    "validator/src/orchestration/product/authority/production/store_initialization.rs",
-    "validator/src/orchestration/product/authority/production/store_verification.rs",
-    "validator/src/orchestration/product/authority/root/secret_binding.rs",
-    "validator/src/orchestration/product/authority/root/verification.rs",
-    "validator/src/orchestration/product/error.rs",
-    "validator/src/orchestration/product/mod.rs",
-    "validator/src/orchestration/product/runtime_adapter/action.rs",
-    "validator/src/orchestration/product/runtime_adapter/mod.rs",
-    "validator/src/orchestration/product/runtime_adapter/production.rs",
-    "validator/src/orchestration/product/runtime_adapter/view.rs",
-    "validator/tests/orchestration_production_authority_contract.rs",
-    "validator/tests/orchestration_production_authority_contract/causal_reconciliation.rs",
-    "validator/tests/orchestration_production_authority_contract/execution_binding.rs",
-    "validator/tests/orchestration_production_authority_contract/fixture.rs",
-    "validator/tests/orchestration_production_authority_contract/fixture/execution_permit.rs",
-    "validator/tests/orchestration_production_authority_contract/fixture/process.rs",
-    "validator/tests/orchestration_production_authority_contract/fixture/scenario.rs",
-    "validator/tests/orchestration_production_authority_contract/race.rs",
-    "validator/tests/orchestration_production_authority_contract/reconciliation.rs",
-    "validator/tests/orchestration_production_authority_contract/recovery.rs",
-    "validator/tests/orchestration_production_authority_contract/rollback_security.rs",
-    "validator/tests/orchestration_production_authority_contract/security.rs",
-    "validator/tests/orchestration_production_authority_contract/settlement_binding.rs",
-    "validator/tests/orchestration_production_authority_contract/store_security.rs",
-    "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-AUTHORITY-001.json"
+    "A\tdocs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-AUTHORITY-001.json",
+    "M\tvalidator/src/orchestration/journal/mod.rs",
+    "M\tvalidator/src/orchestration/mod.rs",
+    "M\tvalidator/src/orchestration/product/authority/authority_schema.rs",
+    "M\tvalidator/src/orchestration/product/authority/mod.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/checkpoint.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/execution_transaction.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/execution_transaction/reconcile.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/execution_transaction/recover.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/execution_transaction/resume.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/execution_transaction/route.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/execution_transaction/route_execution.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/execution_transaction/route_verification.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/interruption_tests.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/ledger.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/ledger_checkpoint.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/ledger_record.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/mod.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/permit_issuance.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/restart_reconciliation.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/root_authority.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/root_authority_lifetime_tests.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/runtime_test_root.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/sealed_authority.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/store.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/store_file.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/store_initialization.rs",
+    "A\tvalidator/src/orchestration/product/authority/production/store_verification.rs",
+    "M\tvalidator/src/orchestration/product/authority/root/secret_binding.rs",
+    "M\tvalidator/src/orchestration/product/authority/root/verification.rs",
+    "M\tvalidator/src/orchestration/product/error.rs",
+    "M\tvalidator/src/orchestration/product/mod.rs",
+    "M\tvalidator/src/orchestration/product/reconcile.rs",
+    "M\tvalidator/src/orchestration/product/recover.rs",
+    "M\tvalidator/src/orchestration/product/resume.rs",
+    "M\tvalidator/src/orchestration/product/runtime_adapter/action.rs",
+    "M\tvalidator/src/orchestration/product/runtime_adapter/mod.rs",
+    "A\tvalidator/src/orchestration/product/runtime_adapter/production.rs",
+    "M\tvalidator/src/orchestration/product/runtime_adapter/view.rs",
+    "M\tvalidator/tests/orchestration_product_contract/main.rs",
+    "M\tvalidator/tests/orchestration_product_contract/mutation_security.rs",
+    "M\tvalidator/tests/orchestration_product_contract/product_fixture/next_root.rs",
+    "M\tvalidator/tests/orchestration_product_contract/product_fixture/reconcile_permit.rs",
+    "M\tvalidator/tests/orchestration_product_contract/publication_recovery.rs",
+    "M\tvalidator/tests/orchestration_product_contract/reconciliation/pending_effect.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/authority_boundary.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/causal_reconciliation.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/decision_binding.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/execution_binding.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/fixture.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/fixture/execution_permit.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/fixture/process.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/fixture/scenario.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/projection_staleness.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/race.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/reconciliation.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/reconciliation_race.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/recovery.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/recovery_binding.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/rollback_security.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/same_crate_mutant.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/same_crate_mutant/authority_cases.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/same_crate_mutant/authority_descendants.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/same_crate_mutant/authority_mutants.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/same_crate_mutant/compile_cases.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/same_crate_mutant/direct_routes.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/same_crate_mutant/reservation_cases.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/same_crate_mutant/reservation_mutants.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/same_crate_mutant/reservation_tokens.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/security.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/settlement_binding.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/store_security.rs",
+    "A\tvalidator/tests/orchestration_production_authority_contract/transaction_binding.rs",
+    "M\tvalidator/tests/orchestration_runtime_adapter_contract.rs",
+    "D\tvalidator/tests/orchestration_runtime_adapter_contract/decision_binding.rs",
+    "D\tvalidator/tests/orchestration_runtime_adapter_contract/fresh_process.rs",
+    "D\tvalidator/tests/orchestration_runtime_adapter_contract/fresh_process_child.rs",
+    "D\tvalidator/tests/orchestration_runtime_adapter_contract/fresh_process_child/child_env.rs",
+    "D\tvalidator/tests/orchestration_runtime_adapter_contract/fresh_process_child/reconcile_current.rs",
+    "D\tvalidator/tests/orchestration_runtime_adapter_contract/negative.rs",
+    "D\tvalidator/tests/orchestration_runtime_adapter_contract/negative/current_source_action_request_and_permit_substitutions_refuse_before_mutation.rs",
+    "D\tvalidator/tests/orchestration_runtime_adapter_contract/negative/reconciliation_lease_operation_result_and_source_variant_substitutions_refuse.rs",
+    "D\tvalidator/tests/orchestration_runtime_adapter_contract/positive.rs",
+    "D\tvalidator/tests/orchestration_runtime_adapter_contract/race.rs",
+    "M\tvalidator/tests/orchestration_runtime_adapter_contract/runtime_fixture.rs",
+    "D\tvalidator/tests/orchestration_runtime_adapter_contract/runtime_fixture/interrupted_heartbeat.rs",
+    "M\tvalidator/tests/orchestration_runtime_adapter_contract/runtime_fixture/next_root.rs",
+    "D\tvalidator/tests/orchestration_runtime_adapter_contract/runtime_fixture/permit_for_reconciliation.rs",
+    "M\tvalidator/tests/orchestration_runtime_adapter_public_api.rs",
+    "M\tvalidator/tests/orchestration_state_journey_contract.rs",
+    "D\tvalidator/tests/orchestration_state_journey_contract/fresh_process.rs",
+    "D\tvalidator/tests/orchestration_state_journey_contract/fresh_process/concurrent_fresh_process_recovery_has_one_authoritative_outcome.rs",
+    "D\tvalidator/tests/orchestration_state_journey_contract/fresh_process/write_input.rs",
+    "D\tvalidator/tests/orchestration_state_journey_contract/fresh_process_child.rs"
   ],
   "touched_semantics": [
     "orchestration::production_authority::sealed_permit_issuance",
@@ -89,33 +211,77 @@
     "orchestration::production_authority::single_use_validated_execution",
     "orchestration::production_authority::reservation_reconciliation",
     "orchestration::production_authority::process_local_checkpoint_fail_closed_reopen",
+    "orchestration::production_authority::runtime_selected_isolated_test_roots",
     "orchestration::runtime_adapter::exact_workspace_action_request_binding"
   ],
   "generated_outputs": [],
   "fixtures": [
     "validator/tests/orchestration_production_authority_contract.rs",
+    "validator/tests/orchestration_production_authority_contract/authority_boundary.rs",
     "validator/tests/orchestration_production_authority_contract/causal_reconciliation.rs",
+    "validator/tests/orchestration_production_authority_contract/decision_binding.rs",
     "validator/tests/orchestration_production_authority_contract/execution_binding.rs",
     "validator/tests/orchestration_production_authority_contract/fixture.rs",
     "validator/tests/orchestration_production_authority_contract/fixture/execution_permit.rs",
     "validator/tests/orchestration_production_authority_contract/fixture/process.rs",
     "validator/tests/orchestration_production_authority_contract/fixture/scenario.rs",
+    "validator/tests/orchestration_production_authority_contract/projection_staleness.rs",
     "validator/tests/orchestration_production_authority_contract/race.rs",
     "validator/tests/orchestration_production_authority_contract/reconciliation.rs",
+    "validator/tests/orchestration_production_authority_contract/reconciliation_race.rs",
     "validator/tests/orchestration_production_authority_contract/recovery.rs",
+    "validator/tests/orchestration_production_authority_contract/recovery_binding.rs",
     "validator/tests/orchestration_production_authority_contract/rollback_security.rs",
+    "validator/tests/orchestration_production_authority_contract/same_crate_mutant.rs",
+    "validator/tests/orchestration_production_authority_contract/same_crate_mutant/authority_cases.rs",
+    "validator/tests/orchestration_production_authority_contract/same_crate_mutant/authority_descendants.rs",
+    "validator/tests/orchestration_production_authority_contract/same_crate_mutant/authority_mutants.rs",
+    "validator/tests/orchestration_production_authority_contract/same_crate_mutant/compile_cases.rs",
+    "validator/tests/orchestration_production_authority_contract/same_crate_mutant/direct_routes.rs",
+    "validator/tests/orchestration_production_authority_contract/same_crate_mutant/reservation_cases.rs",
+    "validator/tests/orchestration_production_authority_contract/same_crate_mutant/reservation_mutants.rs",
+    "validator/tests/orchestration_production_authority_contract/same_crate_mutant/reservation_tokens.rs",
     "validator/tests/orchestration_production_authority_contract/security.rs",
     "validator/tests/orchestration_production_authority_contract/settlement_binding.rs",
-    "validator/tests/orchestration_production_authority_contract/store_security.rs"
+    "validator/tests/orchestration_production_authority_contract/store_security.rs",
+    "validator/tests/orchestration_production_authority_contract/transaction_binding.rs"
   ],
   "effects": [
-    { "class": "workspace_write", "target": "n10-production-authority-source-and-result", "performed": true },
-    { "class": "fixture_write", "target": "n10-production-authority-contract", "performed": true },
-    { "class": "process", "target": "focused-cargo-and-source-law-checks", "performed": true },
-    { "class": "network", "target": "network", "performed": false },
-    { "class": "external_write", "target": "external-product", "performed": false },
-    { "class": "destructive", "target": "destructive", "performed": false },
-    { "class": "root_authority", "target": "root-integration", "performed": false }
+    {
+      "class": "workspace_write",
+      "target": "n10-production-authority-source-and-existing-worker-result",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "n10-production-authority-contract",
+      "performed": true
+    },
+    {
+      "class": "process",
+      "target": "focused-cargo-source-law-and-schema-checks",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "external-product",
+      "performed": false
+    },
+    {
+      "class": "destructive",
+      "target": "destructive",
+      "performed": false
+    },
+    {
+      "class": "root_authority",
+      "target": "root-integration",
+      "performed": false
+    }
   ],
   "requirements": [
     "HUL-ORCH-PROD-001",
@@ -137,126 +303,487 @@
     "HUL-ORCH-PROD-017"
   ],
   "dependency_nodes": [
-    "N03-CLI-STATE",
-    "N04-DISTRIBUTION",
+    "N06-ROUTINE",
+    "N09-AGENT-DISCOVERY",
     "N10-ORCHESTRATION"
   ],
   "changes": [
     {
-      "area": "sealed issuance and binding",
-      "rationale": "RootPermit authenticity covers root actor, full binding, exact workspace and journal identities, causal observation, target, action, and request."
+      "area": "exact-root refresh",
+      "rationale": "Replayed the retained eight-commit N10 history onto exact integrated root d94a471f; range-diff preserved those patches exactly."
     },
     {
-      "area": "pre-reservation execution authorization",
-      "rationale": "Runtime validation now creates a private authority-bound single-use token before any durable reserve transition, preventing clone poisoning and substitution."
+      "area": "sealed issuance and execution binding",
+      "rationale": "RootPermit authenticity and private reservation authority bind root actor, complete binding, workspace, journal, observation, action, request, execution, and settlement."
     },
     {
       "area": "durable replay and recovery",
-      "rationale": "The owner-only authenticated ledger records Issued, Reserved, Committed, Refused, and Ambiguous states with descriptor and object identity checks."
+      "rationale": "The owner-only authenticated ledger records Issued, Reserved, Committed, Refused, and Ambiguous states and fails nonempty fresh-process reopen closed without external monotonic custody."
     },
     {
-      "area": "rollback claim ceiling",
-      "rationale": "The local checkpoint is private and process-bound; all nonempty fresh-process reopen fails closed instead of claiming external monotonic authenticity."
+      "area": "runtime test-root selection",
+      "rationale": "One bounded runtime selector replaced every N10 compile-time Cargo temp-root assumption for library and integration tests while preserving isolated roots and explicit cleanup."
     },
     {
-      "area": "adversarial controls",
-      "rationale": "Focused tests exercise replay, interruption, restart refusal, ambiguity, reconciliation, same-head clones, stale copies, same-inode rollback, races, mutation, security, and false-pass cases."
+      "area": "reviewed source freeze",
+      "rationale": "Parent accepted exact fcee4193/32e85546 after a fresh exhaustive SIGN_OFF_SOURCE_FREEZE with no material findings."
     }
   ],
   "commands_and_tests": [
     {
-      "command": "cargo test -p ultragoal --test orchestration_production_authority_contract",
+      "command": "RUSTFLAGS='-A dead_code -A unused_imports' cargo test -p ultragoal --lib 'orchestration::product::authority::production::sealed_authority::interruption_tests::nonempty_fresh_process_reopen_refuses_before_operation_without_external_custody' -- --exact --nocapture",
+      "result": "pass_with_ephemeral_shared_lint_caps",
+      "summary": "The focused library interruption test passed and its child re-execution passed. The caps bypass only the separately recorded root/shared warning wall and do not prove warning-free compilation."
+    },
+    {
+      "command": "RUSTFLAGS='-A dead_code -A unused_imports' cargo test -p ultragoal --test orchestration_production_authority_contract",
+      "result": "pass_with_ephemeral_shared_lint_caps",
+      "summary": "31 passed; 0 failed across positive, negative, race, interruption, recovery, replay, reconciliation, substitution, security, zero-write, and false-pass behavior."
+    },
+    {
+      "command": "cargo test -p ultragoal --test orchestration_production_authority_contract --message-format short",
+      "result": "blocked_root_shared_warning_wall",
+      "summary": "Uncapped compilation stopped on 569 root/shared warning-as-error diagnostics; filtering reported zero diagnostics in N10-owned paths. Warning-free compilation remains withheld."
+    },
+    {
+      "command": "cargo fmt --all -- --check && git diff --check",
       "result": "pass",
-      "summary": "19 passed; 0 failed on the final accepted source candidate."
+      "summary": "Accepted source formatting and patch whitespace checks passed."
     },
     {
-      "command": "cargo test -p ultragoal --test orchestration_runtime_adapter_contract -- --skip path_escape_links_hardlinks_fifo_and_socket_roots_fail_closed",
-      "result": "pass_with_explicit_environment_skip",
-      "summary": "23 passed; 0 failed; one Unix-domain-socket fixture was skipped because this worktree path exceeds SUN_LEN."
-    },
-    {
-      "command": "cargo test -p ultragoal --test orchestration_runtime_adapter_public_api -- --skip exact_root_export_compiles_from_an_external_consumer_crate",
-      "result": "pass_with_explicit_root_fixture_skip",
-      "summary": "2 passed; 0 failed; one external scratch consumer was skipped because its copied manifest lacks root-owned workspace lint configuration."
-    },
-    {
-      "command": "cargo clippy -p ultragoal --tests --message-format=short",
-      "result": "pass_owned_diagnostic_partition",
-      "summary": "Zero diagnostics in changed N10-owned paths."
+      "command": "scripts/project-agent-standards check .",
+      "result": "pass",
+      "summary": "Agent standards projection was current with zero changed generated outputs."
     },
     {
       "command": "changed authored Rust line-cap and suppression scans",
       "result": "pass",
-      "summary": "Maximum 247 lines; no changed authored Rust file exceeds 250; no allow, expect, or cfg_attr suppression added."
+      "summary": "Maximum 247 lines; no changed authored Rust exceeds 250 lines and no allow, expect, or cfg_attr suppression was added."
     },
     {
-      "command": "scripts/check .",
-      "result": "blocked_outside_lane",
-      "summary": "Stopped at root-owned active-setup-to-idle-orchestration-thread-bound-heartbeat evidence digest mismatch."
+      "command": "fresh high-reasoning exhaustive exact-freeze review",
+      "result": "SIGN_OFF_SOURCE_FREEZE",
+      "summary": "No material findings on exact fcee4193/32e85546; source-only verdict."
     },
     {
       "command": "python3 Draft202012Validator against docs/ultragoal-successor-live/generated-authority/WORKER-RESULT-v1.schema.json",
       "result": "pass",
-      "summary": "The canonical repository WorkerResult-v1 JSON Schema accepted this receipt with no unknown top-level field."
+      "summary": "WorkerResult-v1 accepts this exact regenerated receipt."
     },
     {
-      "command": "independent artifact path, SHA-256, byte-length, count, and canonical-set reconciliation",
+      "command": "independent source artifact path, SHA-256, byte-length, count, commit, and name-status reconciliation",
       "result": "pass",
-      "summary": "38 self-excluding source artifacts, 152261 bytes, canonical set sha256:ccd9a2e98a90d856e62e5b8126dc9df7fbd8fd859352964ddaf038627bc968f6."
+      "summary": "78 self-excluding current source artifacts, 271269 bytes, artifact set sha256:11db919f94807b8118842ac87d544c95cef449be85c2a57ecd0c547db114143c; 95 name-status rows and 10 source commits."
     }
   ],
   "artifacts": [
-    { "path": "validator/src/orchestration/journal/mod.rs", "sha256": "sha256:2ffcaec221804615389bdbfa4394254b165728b8e3f84dd63b2524ad191807e4", "byte_length": 5082 },
-    { "path": "validator/src/orchestration/mod.rs", "sha256": "sha256:3fa74e252fcac97ce3bf86ef71894600593cd20e6826c26e2bdce646c1c4d97d", "byte_length": 5765 },
-    { "path": "validator/src/orchestration/product/authority/mod.rs", "sha256": "sha256:b014a4f0c4300810665799156519bd5275f0ecd5ac9e6162fe84eb93345041dc", "byte_length": 494 },
-    { "path": "validator/src/orchestration/product/authority/production/checkpoint.rs", "sha256": "sha256:141a9271b8c3f42991e954ae50d1086e57a44f112ecaddf2fef2f14623188511", "byte_length": 409 },
-    { "path": "validator/src/orchestration/product/authority/production/interruption_tests.rs", "sha256": "sha256:d641a24e5db7b5cc05f20f59328928c06212849a40ff895833b8826bb47fc6fe", "byte_length": 2143 },
-    { "path": "validator/src/orchestration/product/authority/production/ledger.rs", "sha256": "sha256:a95aa2772648f15cb5cf73d537e1c031da21593d14dac3fa5e3827d1856786d8", "byte_length": 7903 },
-    { "path": "validator/src/orchestration/product/authority/production/ledger_checkpoint.rs", "sha256": "sha256:ce44b4496b49159bf1587b5e4f5741ffbe5a6118378e7268ba68bd68811cbc45", "byte_length": 2009 },
-    { "path": "validator/src/orchestration/product/authority/production/ledger_record.rs", "sha256": "sha256:906aa02be6d2f857b2e5914e511583f5db513e22368b03637feb3b67c5b6c66d", "byte_length": 2771 },
-    { "path": "validator/src/orchestration/product/authority/production/mod.rs", "sha256": "sha256:3613d9330fb9a1c481d422bbe2dece881588fb64336932815a39ad14902a4089", "byte_length": 3829 },
-    { "path": "validator/src/orchestration/product/authority/production/permit_execution.rs", "sha256": "sha256:7ae91b223a69a69dc16a6cf489fe0cd7c1c7c2a982f685ff0c9e94e5be251ff7", "byte_length": 3237 },
-    { "path": "validator/src/orchestration/product/authority/production/permit_issuance.rs", "sha256": "sha256:d8609a2cb62039c14721e8531bcf8c55cda94f13a7411129e90b71b1747489d0", "byte_length": 2560 },
-    { "path": "validator/src/orchestration/product/authority/production/restart_reconciliation.rs", "sha256": "sha256:4ea610c32eb2771ac825f02c624789b7faf145957035fa086aeb7fcdc02b5807", "byte_length": 4947 },
-    { "path": "validator/src/orchestration/product/authority/production/store.rs", "sha256": "sha256:bacb5e0b4c7f3a23b8fb4291f1fa194d62d6bd0173eaa9f2c71140ddc2c43da2", "byte_length": 6759 },
-    { "path": "validator/src/orchestration/product/authority/production/store_file.rs", "sha256": "sha256:ed525f421daab89ad2c4478b667bdb84f251eec0457a19744d659d562b6e37c6", "byte_length": 6393 },
-    { "path": "validator/src/orchestration/product/authority/production/store_initialization.rs", "sha256": "sha256:db7a4042d38399aa7921dab285601ec277c281c3b583efa075e1f55d1ad8c828", "byte_length": 1242 },
-    { "path": "validator/src/orchestration/product/authority/production/store_verification.rs", "sha256": "sha256:87fa40d98f1184a63e04f7f11214095ff7236ac84c84e9d1043ca66e2fbabda6", "byte_length": 2190 },
-    { "path": "validator/src/orchestration/product/authority/root/secret_binding.rs", "sha256": "sha256:110db3252e1f939ba5c8d8fe83ef2f8d329e6b651d00a9bf2fded6ec66cc374f", "byte_length": 6781 },
-    { "path": "validator/src/orchestration/product/authority/root/verification.rs", "sha256": "sha256:4c52e8a7dcdbe5e146c41135f068cc102980edfe4ca949a1870844f45fa5d3e7", "byte_length": 7291 },
-    { "path": "validator/src/orchestration/product/error.rs", "sha256": "sha256:124d2ffe0ca943d7eacc3f3bda376f3180b129ddf367497047e03fdb02763eca", "byte_length": 6607 },
-    { "path": "validator/src/orchestration/product/mod.rs", "sha256": "sha256:4faac7923e13da510917618e91f4c9ea40895172168822ee8b8d68acf7298f0b", "byte_length": 1504 },
-    { "path": "validator/src/orchestration/product/runtime_adapter/action.rs", "sha256": "sha256:b3a9d6424e4e07d0364d7958591a4e1d529c41038cea95e487e56e517e473b7f", "byte_length": 9142 },
-    { "path": "validator/src/orchestration/product/runtime_adapter/mod.rs", "sha256": "sha256:859817f61842e44efd6779781552a8cbb4b0c61a61367fb1c295cc7d09bf5a4e", "byte_length": 501 },
-    { "path": "validator/src/orchestration/product/runtime_adapter/production.rs", "sha256": "sha256:1fbf5ce8b195f2ff7a99e49ec9de1489954e6da1921afe7c77dd1a58e6f4f3f3", "byte_length": 5789 },
-    { "path": "validator/src/orchestration/product/runtime_adapter/view.rs", "sha256": "sha256:11c15629910127bb5be8b7398f08047ad5846b791206ed0fa1645f307efc6a00", "byte_length": 4409 },
-    { "path": "validator/tests/orchestration_production_authority_contract.rs", "sha256": "sha256:65d07c8da252a1f2611d3d1a97b3c75e19223c251f56a1fe98a29737d499cc49", "byte_length": 280 },
-    { "path": "validator/tests/orchestration_production_authority_contract/causal_reconciliation.rs", "sha256": "sha256:422604f9d77262b46981a7f50831dba220c71c4cdee31b1f0c0004bf7c4539bf", "byte_length": 2377 },
-    { "path": "validator/tests/orchestration_production_authority_contract/execution_binding.rs", "sha256": "sha256:57343a4cca8f601549d351bdd74afb5e5b799b4ce5fa2c3fa06b175020b5c83b", "byte_length": 8959 },
-    { "path": "validator/tests/orchestration_production_authority_contract/fixture.rs", "sha256": "sha256:cc01fc1646f864180aeebca4603fa5948297a109e4e39176902d05309fb4293b", "byte_length": 4087 },
-    { "path": "validator/tests/orchestration_production_authority_contract/fixture/execution_permit.rs", "sha256": "sha256:02ea1118fa41b733318feffef0e6653b90cdaa3a1918aefda0401a7bb45af1ef", "byte_length": 854 },
-    { "path": "validator/tests/orchestration_production_authority_contract/fixture/process.rs", "sha256": "sha256:cb0c0bbe2e78469e34a503bc915e5186865c83b2339a32dc61dfbcc754b49554", "byte_length": 1126 },
-    { "path": "validator/tests/orchestration_production_authority_contract/fixture/scenario.rs", "sha256": "sha256:23c01eb73e84ab63c5c4f1fbb220a82e24489c0dbe2e45f98417f0c87964530f", "byte_length": 4937 },
-    { "path": "validator/tests/orchestration_production_authority_contract/race.rs", "sha256": "sha256:f39dce82047f111acab33cf6b1216c7de2fe3a308189e60ef9c06e6b0b50798c", "byte_length": 2376 },
-    { "path": "validator/tests/orchestration_production_authority_contract/reconciliation.rs", "sha256": "sha256:479eafbad48dfdcad0d505949c5dd8cf2ec6e0135159aec2ba6d54094543403b", "byte_length": 4375 },
-    { "path": "validator/tests/orchestration_production_authority_contract/recovery.rs", "sha256": "sha256:c0c65e569675b09045ad1860a8bac742b236887ab9c8f1271d363def39510244", "byte_length": 2314 },
-    { "path": "validator/tests/orchestration_production_authority_contract/rollback_security.rs", "sha256": "sha256:b362a855d67e70f3bb6e3517ce8932de8ba3cd7a09948b0b794a197842941eaa", "byte_length": 3583 },
-    { "path": "validator/tests/orchestration_production_authority_contract/security.rs", "sha256": "sha256:ecc18c3877b549f1bc638c12c43d7a55677b2047e3a990758acacd2131d787e1", "byte_length": 7073 },
-    { "path": "validator/tests/orchestration_production_authority_contract/settlement_binding.rs", "sha256": "sha256:98cf0ce86dbb31ed6b47babb816c489ee9d8e1bced0cc0b228cb9d207b2ad646", "byte_length": 6251 },
-    { "path": "validator/tests/orchestration_production_authority_contract/store_security.rs", "sha256": "sha256:9aeb742a1eb35400d9f3a4f8a9692742cddd5dd7339b3bf1cb0c913aa938d55d", "byte_length": 3912 }
+    {
+      "path": "validator/src/orchestration/journal/mod.rs",
+      "sha256": "sha256:2ffcaec221804615389bdbfa4394254b165728b8e3f84dd63b2524ad191807e4",
+      "byte_length": 5082
+    },
+    {
+      "path": "validator/src/orchestration/mod.rs",
+      "sha256": "sha256:ea98894dcb90a1ceaee09ce220aaadb44748abe2cefc5b79cefaa658d42be6b0",
+      "byte_length": 5765
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/authority_schema.rs",
+      "sha256": "sha256:941c02711dfbc0110d08ac62926c40a65a75315d2e654b4450497b5d6634fe95",
+      "byte_length": 2165
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/mod.rs",
+      "sha256": "sha256:f2d2ef694a36cf22144536701b0170f4fae50036dc4d1f605690e61c04510db0",
+      "byte_length": 519
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/checkpoint.rs",
+      "sha256": "sha256:141a9271b8c3f42991e954ae50d1086e57a44f112ecaddf2fef2f14623188511",
+      "byte_length": 409
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/execution_transaction.rs",
+      "sha256": "sha256:dd713b0bd2bb709b5a54b9f7b461edae799d87d2cafe8133fda1e76a3727065b",
+      "byte_length": 178
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/execution_transaction/reconcile.rs",
+      "sha256": "sha256:3b64ab0595d80567b5a13586a2d3f45120b55edc8c9817de217d566ac22246ec",
+      "byte_length": 1943
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/execution_transaction/recover.rs",
+      "sha256": "sha256:d0b53268620ff6d128685abec6d963540eeff6f9c25b2f7ec61a9dd67ce3f098",
+      "byte_length": 2777
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/execution_transaction/resume.rs",
+      "sha256": "sha256:b2b450c68809c7f396209bf86cdb9df350b1f3f4675fd9a4c05970e1dbd16179",
+      "byte_length": 1668
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/execution_transaction/route.rs",
+      "sha256": "sha256:d13484b64b65c663b8f735fa4a90dff4d3be1df43bbaf7ec2650ec0f4e1fd208",
+      "byte_length": 4072
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/execution_transaction/route_execution.rs",
+      "sha256": "sha256:ca944cead63ad60c8b328294c76563825c2a1d8b1acfefc9c8c5b299b98aa2f4",
+      "byte_length": 2756
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/execution_transaction/route_verification.rs",
+      "sha256": "sha256:2ab20494d84ce864c7ff7416572bb5b5e5df633f04c33eb950bd3dbcd965c1af",
+      "byte_length": 2898
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/interruption_tests.rs",
+      "sha256": "sha256:4c0bccbacc04b30bdffbf62e8d0c020eb7b285896967d92a3b43ab9898eac9c5",
+      "byte_length": 1998
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/ledger.rs",
+      "sha256": "sha256:266a7bdcf08824e63b914df0254ccb025cdf611750027bf69dc96506cf467aab",
+      "byte_length": 7310
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/ledger_checkpoint.rs",
+      "sha256": "sha256:ce44b4496b49159bf1587b5e4f5741ffbe5a6118378e7268ba68bd68811cbc45",
+      "byte_length": 2009
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/ledger_record.rs",
+      "sha256": "sha256:c5a4338c37899f4c6b62f05c01414777a3a87bfb049d2fcc6e29b0bfcb3415fd",
+      "byte_length": 2789
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/mod.rs",
+      "sha256": "sha256:0de71194934d0af4e3d08349e9c52ae04e57eea889c432f44c6b025250ac7e12",
+      "byte_length": 638
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/permit_issuance.rs",
+      "sha256": "sha256:76c4e24b1882fa093f7df2d3bf7b2185af65da0cb0a8af4776531f6078469f60",
+      "byte_length": 2567
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/restart_reconciliation.rs",
+      "sha256": "sha256:a34d71f3e4a17c63f261b712d4fe98a9b5a5d1d406c6d82d0285db623e84da16",
+      "byte_length": 4961
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/root_authority.rs",
+      "sha256": "sha256:f7d4bda647b165904f984300addcc1f885f81177c328bbbed125cea1f29495b5",
+      "byte_length": 1183
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/root_authority_lifetime_tests.rs",
+      "sha256": "sha256:c6d74b08c5b9b4b21b63be7e5d376f43f9c8893e9f6ab1daaf5fc1769292debf",
+      "byte_length": 2657
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/runtime_test_root.rs",
+      "sha256": "sha256:f73fe4e1a3c88bed40b49bb1adf6a83f7bbd8233b3708d1328f9139908bc0ab1",
+      "byte_length": 2021
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/sealed_authority.rs",
+      "sha256": "sha256:e0c605628a8e2114c9333393ac50fbc62f929727fb91856cf01f0bce47662fa0",
+      "byte_length": 4028
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/store.rs",
+      "sha256": "sha256:bacb5e0b4c7f3a23b8fb4291f1fa194d62d6bd0173eaa9f2c71140ddc2c43da2",
+      "byte_length": 6759
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/store_file.rs",
+      "sha256": "sha256:ed525f421daab89ad2c4478b667bdb84f251eec0457a19744d659d562b6e37c6",
+      "byte_length": 6393
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/store_initialization.rs",
+      "sha256": "sha256:db7a4042d38399aa7921dab285601ec277c281c3b583efa075e1f55d1ad8c828",
+      "byte_length": 1242
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/production/store_verification.rs",
+      "sha256": "sha256:87fa40d98f1184a63e04f7f11214095ff7236ac84c84e9d1043ca66e2fbabda6",
+      "byte_length": 2190
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/root/secret_binding.rs",
+      "sha256": "sha256:a96b1005a34dcdbb68219c89c981c1d355df0e2f3a6765b14df9d8465000f054",
+      "byte_length": 7016
+    },
+    {
+      "path": "validator/src/orchestration/product/authority/root/verification.rs",
+      "sha256": "sha256:3c6683654c7e2b50ed34ea7b7ec9e30f74a588818ef42c843a29934b7ba57c4f",
+      "byte_length": 7454
+    },
+    {
+      "path": "validator/src/orchestration/product/error.rs",
+      "sha256": "sha256:124d2ffe0ca943d7eacc3f3bda376f3180b129ddf367497047e03fdb02763eca",
+      "byte_length": 6607
+    },
+    {
+      "path": "validator/src/orchestration/product/mod.rs",
+      "sha256": "sha256:3747231e0f389364c0ae40051f9d6e2f27a3a99d1f62881c8b2e3f68c115d9a3",
+      "byte_length": 1384
+    },
+    {
+      "path": "validator/src/orchestration/product/reconcile.rs",
+      "sha256": "sha256:74e1afe80fe51203dfafae55c91ea65537f4a48ba52578efec99b7da4a694981",
+      "byte_length": 707
+    },
+    {
+      "path": "validator/src/orchestration/product/recover.rs",
+      "sha256": "sha256:caea1d6857b5354c4890fdc79536632987060213fa9415f51c439c660a088cc9",
+      "byte_length": 783
+    },
+    {
+      "path": "validator/src/orchestration/product/resume.rs",
+      "sha256": "sha256:1eabdd65567d5b2c6f4c95ea9e511a71fdf8863dd95eac56dc2d7950d98fa63d",
+      "byte_length": 634
+    },
+    {
+      "path": "validator/src/orchestration/product/runtime_adapter/action.rs",
+      "sha256": "sha256:752ea5598d5f3f27637fc9a37307e8df4447fde90925a914dfb30f3cbfaf02f0",
+      "byte_length": 4838
+    },
+    {
+      "path": "validator/src/orchestration/product/runtime_adapter/mod.rs",
+      "sha256": "sha256:859817f61842e44efd6779781552a8cbb4b0c61a61367fb1c295cc7d09bf5a4e",
+      "byte_length": 501
+    },
+    {
+      "path": "validator/src/orchestration/product/runtime_adapter/production.rs",
+      "sha256": "sha256:af8813ef963d40e11f0b5e9ad411f44130e142b1f556db69be8793ee1b07deb6",
+      "byte_length": 5945
+    },
+    {
+      "path": "validator/src/orchestration/product/runtime_adapter/view.rs",
+      "sha256": "sha256:af7964e197af8c4e6ff7890f8591bb67f2b4bd0f27640e1fa0529d103abd9ad1",
+      "byte_length": 4375
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/main.rs",
+      "sha256": "sha256:11fe06c126cccacdbf56e9b7ff236d95bbd3037af415cf8518d22d9c6f89c0ae",
+      "byte_length": 188
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/mutation_security.rs",
+      "sha256": "sha256:522e9cfa3d5f581fb777db6c8a2a1a95fbdcf642e3c0cb8f7708bbbb909a0d63",
+      "byte_length": 7212
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/product_fixture/next_root.rs",
+      "sha256": "sha256:ba150385f52615609152a41bcb2ddd14eeacb210bb9712ca151876463770d76a",
+      "byte_length": 4774
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/product_fixture/reconcile_permit.rs",
+      "sha256": "sha256:3b1853db58fe01756c6d0ce75d317d37806177a35cb948d153a260f0fc8f33b8",
+      "byte_length": 3600
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/publication_recovery.rs",
+      "sha256": "sha256:e4fec62e3a584a9538a01a144af2e03d600e78be3ade8cd31a5e1ca43464ebb5",
+      "byte_length": 6740
+    },
+    {
+      "path": "validator/tests/orchestration_product_contract/reconciliation/pending_effect.rs",
+      "sha256": "sha256:d54b0f86750e4bf18a0cb0ea13f1cecad3e1ec3bcaf2496281ed37886f99eaeb",
+      "byte_length": 6178
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract.rs",
+      "sha256": "sha256:39005763ec46114882cc09433167f59f5dda49bd7d66e48606089d4615e83a36",
+      "byte_length": 475
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/authority_boundary.rs",
+      "sha256": "sha256:fd724b336fd32d6eea8f010634eb42837f810aa73ee963cb5506c57e9216f02d",
+      "byte_length": 6724
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/causal_reconciliation.rs",
+      "sha256": "sha256:422604f9d77262b46981a7f50831dba220c71c4cdee31b1f0c0004bf7c4539bf",
+      "byte_length": 2377
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/decision_binding.rs",
+      "sha256": "sha256:91b5f72410802356e4a6e8a86027c6035378609d18f42eded70f24c63a56ec50",
+      "byte_length": 8212
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/execution_binding.rs",
+      "sha256": "sha256:57343a4cca8f601549d351bdd74afb5e5b799b4ce5fa2c3fa06b175020b5c83b",
+      "byte_length": 8959
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/fixture.rs",
+      "sha256": "sha256:fa267b712aa558b71effecc809721ed3c96912d4a1dae026e213d9fba329cd45",
+      "byte_length": 3718
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/fixture/execution_permit.rs",
+      "sha256": "sha256:02ea1118fa41b733318feffef0e6653b90cdaa3a1918aefda0401a7bb45af1ef",
+      "byte_length": 854
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/fixture/process.rs",
+      "sha256": "sha256:cb0c0bbe2e78469e34a503bc915e5186865c83b2339a32dc61dfbcc754b49554",
+      "byte_length": 1126
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/fixture/scenario.rs",
+      "sha256": "sha256:b30cec75b43ceb2998f8ce2eab5f6fc3cd47a81ca08ed6fd76e481923f9a7462",
+      "byte_length": 5205
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/projection_staleness.rs",
+      "sha256": "sha256:8350dadc2e9ca3e1f11b59b70b033ce2ee679adf6521b60aeb69a632342cad8b",
+      "byte_length": 3495
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/race.rs",
+      "sha256": "sha256:6af7ebcc685aeda71bfa555ac928c406534fb4cd69a8efe4c55aa6ba9cfeb05f",
+      "byte_length": 2360
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/reconciliation.rs",
+      "sha256": "sha256:479eafbad48dfdcad0d505949c5dd8cf2ec6e0135159aec2ba6d54094543403b",
+      "byte_length": 4375
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/reconciliation_race.rs",
+      "sha256": "sha256:9fcdf49a445c269ac19d940e452bfccf1e21525af3eb6d13e97e3918dc66df82",
+      "byte_length": 4715
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/recovery.rs",
+      "sha256": "sha256:c0c65e569675b09045ad1860a8bac742b236887ab9c8f1271d363def39510244",
+      "byte_length": 2314
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/recovery_binding.rs",
+      "sha256": "sha256:703f07ee20841add1584abc2f3c1066810048c6c24456e240b3ff57d7f63058f",
+      "byte_length": 5939
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/rollback_security.rs",
+      "sha256": "sha256:abd1cbe1160b2b1126abbc56c2420048003a049d4de9b639fedad240f9a9feb8",
+      "byte_length": 3553
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/same_crate_mutant.rs",
+      "sha256": "sha256:2aaf7dd672d9c862c127da1dd83ce28ca19f50168ebfad45b5710518177c655e",
+      "byte_length": 7178
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/same_crate_mutant/authority_cases.rs",
+      "sha256": "sha256:1fa61ea76822843acdbdf7ecd61c23e04be2b7fe712e2e3a65e9c0eaaa539dfe",
+      "byte_length": 3459
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/same_crate_mutant/authority_descendants.rs",
+      "sha256": "sha256:2b1f173aee19466cd0681b868a5a7df8cbc6a589247116754119487b543ac769",
+      "byte_length": 4022
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/same_crate_mutant/authority_mutants.rs",
+      "sha256": "sha256:1112efa7e6c961b43ef5a2c99e0720500df555f7884721285762afeff76cfbcf",
+      "byte_length": 4890
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/same_crate_mutant/compile_cases.rs",
+      "sha256": "sha256:ebba369fb5c8cf48e5ddadbe0a8fc15f7d5342a091d8e06efd534d71c3846f44",
+      "byte_length": 3725
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/same_crate_mutant/direct_routes.rs",
+      "sha256": "sha256:07645a89ea5eab866f1a6e370f30eafdbd310c24b4284900bbb61ff1c9b615ba",
+      "byte_length": 2885
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/same_crate_mutant/reservation_cases.rs",
+      "sha256": "sha256:c82a4e5ca07d41d7cb42f1f4154ef5b1daa0e5c8c4b78dfee1f9ef325ab13097",
+      "byte_length": 2142
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/same_crate_mutant/reservation_mutants.rs",
+      "sha256": "sha256:30e2e8548ed7ca871261ce8fd3534fb83bce63d7b3b231126c8fbd617e2808e2",
+      "byte_length": 2109
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/same_crate_mutant/reservation_tokens.rs",
+      "sha256": "sha256:c42aec6de38ab55ca1d29fa7842bbbb12af6e8f16fa8c29f81cdb5134036c67e",
+      "byte_length": 1561
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/security.rs",
+      "sha256": "sha256:9fc710f3d7e766382d49b75af6b34a302e076fef3a7ef934eff5fccc3c2b7d93",
+      "byte_length": 7073
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/settlement_binding.rs",
+      "sha256": "sha256:4b35f3f78353a909b434218a9fe38e5943b5cac132701c58e00ac1e0660c8088",
+      "byte_length": 6222
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/store_security.rs",
+      "sha256": "sha256:9aeb742a1eb35400d9f3a4f8a9692742cddd5dd7339b3bf1cb0c913aa938d55d",
+      "byte_length": 3912
+    },
+    {
+      "path": "validator/tests/orchestration_production_authority_contract/transaction_binding.rs",
+      "sha256": "sha256:52b205d18dbd402d0f6a745120d18dc334c1c3f52d30d43dff029c7575162d94",
+      "byte_length": 2572
+    },
+    {
+      "path": "validator/tests/orchestration_runtime_adapter_contract.rs",
+      "sha256": "sha256:402bd0442405b41985e80c3c696654aed273be000693f017b74b4e34cc0ad170",
+      "byte_length": 203
+    },
+    {
+      "path": "validator/tests/orchestration_runtime_adapter_contract/runtime_fixture.rs",
+      "sha256": "sha256:e8667fb4cc27f257d97e77650b3f31b843b8083ece4b16e468ea696dcfe69029",
+      "byte_length": 545
+    },
+    {
+      "path": "validator/tests/orchestration_runtime_adapter_contract/runtime_fixture/next_root.rs",
+      "sha256": "sha256:7286362916ddcc1a04d21de2859977459aa7cd04b5a65c97aba0b5e3c70e4209",
+      "byte_length": 3821
+    },
+    {
+      "path": "validator/tests/orchestration_runtime_adapter_public_api.rs",
+      "sha256": "sha256:6285460a95e26da0062e21432789fb30c8980bc2d82effa56c01e98793e4a336",
+      "byte_length": 2425
+    },
+    {
+      "path": "validator/tests/orchestration_state_journey_contract.rs",
+      "sha256": "sha256:a8d3035148a6b0993dae4ed9ce89c111b9e3a83222f6295813196e2f34975b86",
+      "byte_length": 211
+    }
   ],
   "findings": [
     {
-      "severity": "accepted-bounded-source",
-      "finding": "Independent parent review accepted the exact 38-path source tree 2485c558c5e242c3758ef2f29328105a006f1b9b at aggregate 76218fe92e9d31055d6954bea5de3c7bed417877b0e60871c8e213888246ea59."
+      "severity": "accepted-source-freeze",
+      "finding": "Parent accepted exact source fcee41933b0b3b569cee975ce67dcff189b1db0d, tree 32e85546a5a5a623a1ae94a51e513475fedb3141, at source-only claim ceiling."
+    },
+    {
+      "severity": "review-sign-off",
+      "finding": "Fresh exhaustive review returned SIGN_OFF_SOURCE_FREEZE with no material findings."
     },
     {
       "severity": "corrected",
-      "finding": "Exact pre-reserve validation and a private single-use execution authority prevent same-head clone execution from poisoning the origin ledger."
+      "finding": "All N10 compile-time Cargo temp-root assumptions were replaced by one bounded runtime selector used by library and integration tests."
     },
     {
-      "severity": "corrected",
-      "finding": "The public caller-forgeable checkpoint/reopen surface was removed; nonempty fresh-process reopen now fails closed."
+      "severity": "root-blocker",
+      "finding": "Uncapped verification remains blocked by 569 root/shared warning-as-error diagnostics; capped behavioral tests do not prove warning-free compilation."
     },
     {
       "severity": "root-blocker",
@@ -264,25 +791,38 @@
     }
   ],
   "unresolved_dependencies": [
+    "ROOT-SHARED-WARNING-WALL-569",
     "ROOT-N10-EXTERNAL-PROTECTED-MONOTONIC-CUSTODY",
     "ROOT-N10-PUBLIC-DISPATCH-AND-RUNTIME-LIFECYCLE-WIRING",
     "ROOT-N10-STRICT-SHARED-ROUTING-RECONCILIATION",
-    "ROOT-AGENT-STANDARDS-EVIDENCE-DIGEST-RECONCILIATION",
-    "ROOT-N04-MISSING-DISTRIBUTION-MODULES",
-    "ROOT-RUNTIME-ADAPTER-UNIX-SOCKET-LONG-PATH-FIXTURE",
-    "ROOT-EXTERNAL-CONSUMER-SCRATCH-WORKSPACE-LINTS",
+    "ROOT-N10-CURRENT-COVERAGE-RECEIPT",
     "PARENT-N10-INTEGRATION-ACCEPTANCE"
   ],
-  "requested_root_changes": [],
+  "requested_root_changes": [
+    {
+      "request": "Repair the 569 root/shared warning-as-error diagnostics and rerun the focused and repository checks without lint caps.",
+      "claim_impact": "Warning-free compilation and uncapped test claims remain withheld."
+    },
+    {
+      "request": "Provide external protected monotonic custody bound to exact store, root actor, complete binding, sequence, and ledger tail before enabling nonempty fresh-process reopen.",
+      "claim_impact": "Fresh-process rollback-resistant replay remains withheld."
+    },
+    {
+      "request": "Integrate the accepted private authority into public dispatch and runtime lifecycle wiring, then reconcile strict/shared routing.",
+      "claim_impact": "Parent integration, runtime exposure, and route eligibility remain withheld."
+    },
+    {
+      "request": "Generate current coverage evidence from the integrated candidate.",
+      "claim_impact": "Coverage, readiness, release, and completion remain withheld."
+    }
+  ],
   "limitations": [
-    "Root must provide an external protected monotonic custodian bound to exact store, root actor, full binding, sequence, and tail before enabling any nonempty fresh-process reopen; a second co-writable local file is insufficient.",
-    "Root must integrate the private authority into public dispatch and runtime lifecycle wiring, then reconcile strict and shared diagnostic routes; this lane supplies no root-owned postimage and therefore makes no forgeable RootChangeRequest digest.",
-    "Public CLI, installed package, live runtime, external monotonic custody, and representative supported-host behavior were not exercised.",
-    "The canonical root check is blocked by a root-owned evidence digest mismatch; legacy namespace commands are deauthorized and current strict/shared routing is root-owned.",
-    "A scratch Cargo parser invocation was removed without source changes after cargo test --manifest-path validator/Cargo.toml --locked --test n10_worker_result_parse failed at compilation under repository -D warnings with 657 root/shared diagnostics before executing the parser; canonical JSON Schema validation passed instead.",
-    "Two adapter checks require explicit environment skips: Unix socket SUN_LEN under this long worktree path, and root workspace-lint inheritance in a copied external-consumer scratch manifest.",
-    "The latest broad 250-test dependency closure predates the final execute-order repair and is not claimed as final-candidate evidence.",
-    "Sudden-power-loss durability, readiness, release, node closure, completion, and parent integration acceptance are withheld."
+    "Behavioral tests on the exact accepted source required ephemeral dead_code and unused_imports caps solely to cross the accepted root/shared warning wall; those runs do not prove warning-free compilation.",
+    "The uncapped focused compile reported 569 root/shared warning-as-error diagnostics and zero N10-owned diagnostics in the filtered partition.",
+    "Coverage was not regenerated and no coverage claim is made.",
+    "N06 proves only source/root-integrated routine execution. N09 proves only production local filesystem authority; neither proves installed discovery, fresh-session comprehension, runtime exposure, or route eligibility.",
+    "Public dispatch, installed package behavior, fresh-session comprehension, live runtime exposure, route eligibility, external monotonic custody, and representative supported-host use were not exercised.",
+    "Sudden-power-loss durability, parent integration acceptance, readiness, release, node closure, and completion are withheld."
   ],
   "no_claim_statement": "This worker does not claim readiness, release, or completion."
 }
