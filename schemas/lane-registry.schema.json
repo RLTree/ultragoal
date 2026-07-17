@@ -72,7 +72,7 @@
         "exception_id": {"type":["string","null"]},
         "commands": {"type":"array","items":{"type":"string"}},
         "parent_handoff": {"type":["object","null"]},
-        "diagnostic_paths": {"type":"array","items":{"type":"string","pattern":"^(?!.*\\\\*).+"}},
+        "diagnostic_paths": {"type":"array","items":{"type":"string","pattern":"^(?!.*\\*).+"}},
         "diagnostic_source_kind": {"type":["string","null"]},
         "diagnostic_output_path": {"type":["string","null"]},
         "diagnostic_output_digest": {"anyOf":[{"$ref":"#/$defs/sha256"},{"type":"null"}]},
@@ -162,7 +162,7 @@
           "additionalProperties": false,
           "description":"commit and tree are the already-existing observed-through boundary. The containing clean candidate is derived at validation time and is never serialized here.",
           "required": ["status","commit","tree","parent_commit","parent_tree","paths","path_set_digest"],
-          "properties": {"status":{"enum":["not_recorded","recorded"]},"commit":{"anyOf":[{"$ref":"#/$defs/hex40"},{"type":"null"}],"description":"observed-through commit, never the containing candidate"},"tree":{"anyOf":[{"$ref":"#/$defs/hex40"},{"type":"null"}],"description":"observed-through tree, never the containing candidate tree"},"parent_commit":{"anyOf":[{"$ref":"#/$defs/hex40"},{"type":"null"}]},"parent_tree":{"anyOf":[{"$ref":"#/$defs/hex40"},{"type":"null"}]},"paths":{"type":"array","uniqueItems":true,"items":{"type":"string","pattern":"^(?!.*\\\\*).+"},"description":"exact activation paths from the observed boundary; later paths must match the separate exact P0 allowlist"},"path_set_digest":{"anyOf":[{"$ref":"#/$defs/sha256"},{"type":"null"}]}},
+          "properties": {"status":{"enum":["not_recorded","recorded"]},"commit":{"anyOf":[{"$ref":"#/$defs/hex40"},{"type":"null"}],"description":"observed-through commit, never the containing candidate"},"tree":{"anyOf":[{"$ref":"#/$defs/hex40"},{"type":"null"}],"description":"observed-through tree, never the containing candidate tree"},"parent_commit":{"anyOf":[{"$ref":"#/$defs/hex40"},{"type":"null"}]},"parent_tree":{"anyOf":[{"$ref":"#/$defs/hex40"},{"type":"null"}]},"paths":{"type":"array","uniqueItems":true,"items":{"type":"string","pattern":"^(?!.*\\*).+"},"description":"exact activation paths from the observed boundary; later paths must match the separate exact P0 allowlist"},"path_set_digest":{"anyOf":[{"$ref":"#/$defs/sha256"},{"type":"null"}]}},
           "allOf": [{"if":{"properties":{"status":{"const":"not_recorded"}}},"then":{"properties":{"commit":{"type":"null"},"tree":{"type":"null"},"parent_commit":{"type":"null"},"parent_tree":{"type":"null"},"paths":{"const":[]},"path_set_digest":{"type":"null"}}}},{"if":{"properties":{"status":{"const":"recorded"}}},"then":{"properties":{"commit":{"$ref":"#/$defs/hex40"},"tree":{"$ref":"#/$defs/hex40"},"parent_commit":{"$ref":"#/$defs/hex40"},"parent_tree":{"$ref":"#/$defs/hex40"},"paths":{"minItems":1},"path_set_digest":{"$ref":"#/$defs/sha256"}}}}]
         }
       }
