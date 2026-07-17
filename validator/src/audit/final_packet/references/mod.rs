@@ -41,7 +41,8 @@ fn check_performance_ref(root: &Path, receipt: &Value, expected: &str, out: &mut
     else {
         return;
     };
-    for failure in crate::cli::performance::receipt::same_candidate_pass_failures(&value, expected)
+    for failure in
+        crate::audit::cli::performance::receipt::same_candidate_pass_failures(&value, expected)
     {
         out.push(format!("final_packet_proof_cli_performance_ref:{failure}"));
     }

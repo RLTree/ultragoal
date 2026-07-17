@@ -1,7 +1,7 @@
 use serde_json::Value;
 use std::path::Path;
 
-pub(super) fn receipt_failures(root: &Path, receipt: &Value) -> Vec<String> {
+pub(super) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
     let mut out = Vec::new();
     let candidate = crate::package::inventory::package_digest(root).unwrap_or_default();
     require_str(receipt, "schema", super::SCHEMA, &mut out);
@@ -9,42 +9,32 @@ pub(super) fn receipt_failures(root: &Path, receipt: &Value) -> Vec<String> {
     require_str(receipt, "candidate_digest", &candidate, &mut out);
     require_str(
         receipt,
-        "raw_halo_authority",
-        "observation_only_until_cli_adapter_ranking_and_validation",
+        "raw_observation_authority",
+        "observation_only_until_cli_parsed_loop_receipt",
         &mut out,
     );
-    require_digest(
-        root,
-        receipt,
-        "adapter_registry_digest",
-        super::REGISTRY,
-        &mut out,
-    );
+    require_digest(root, receipt, "registry_digest", super::REGISTRY, &mut out);
     if !blocks_required_claims(receipt) {
-        out.push("halo_capability_receipt_missing_claim_blockers".to_string());
+        out.push("improvement_loop_receipt_missing_claim_blockers".to_string());
     }
-    if !matches!(
-        receipt.get("authority_class").and_then(Value::as_str),
-        Some("manual_observation_only" | "fail_closed")
-    ) {
-        out.push("halo_capability_authority_overbroad".to_string());
-    }
-    check_observability(receipt, &candidate, &mut out);
+    out.push("improvement_loop_retired_observability_binding".to_string());
     out
 }
 
 fn require_str(receipt: &Value, key: &str, expected: &str, out: &mut Vec<String>) {
     if receipt.get(key).and_then(Value::as_str) != Some(expected) {
-        out.push(format!("halo_capability_receipt_field_mismatch:{key}"));
+        out.push(format!("improvement_loop_field_mismatch:{key}"));
     }
 }
+
 fn require_digest(root: &Path, receipt: &Value, key: &str, rel: &str, out: &mut Vec<String>) {
     let expected =
         crate::digest::file(&root.join(rel)).unwrap_or_else(|_| crate::digest::ZERO.to_string());
     if receipt.get(key).and_then(Value::as_str) != Some(expected.as_str()) {
-        out.push(format!("halo_capability_receipt_digest_mismatch:{key}"));
+        out.push(format!("improvement_loop_receipt_digest_mismatch:{key}"));
     }
 }
+
 fn blocks_required_claims(receipt: &Value) -> bool {
     let claims = receipt
         .get("blocked_claims")
@@ -59,17 +49,13 @@ fn blocks_required_claims(receipt: &Value) -> bool {
         "release",
         "final_packet_correctness",
         "update_goal_eligibility",
-        "product_success",
-        "registry_exposure",
+        "self_improving_claim",
+        "learning_claim",
+        "regression_prevention_claim",
+        "product_learning_claim",
         "reviewer_exposure",
-        "halo_ranked_change_authority",
-        "halo_recommendation_readiness",
-        "improvement_loop_closure",
+        "app_registry_exposure",
     ]
     .iter()
     .all(|claim| claims.contains(claim))
-}
-fn check_observability(receipt: &Value, candidate: &str, out: &mut Vec<String>) {
-    let _ = (receipt, candidate);
-    out.push("halo_capability_retired_observability_binding".to_string());
 }

@@ -1,9 +1,5 @@
 use serde_json::Value;
 
-pub(super) fn speed_claim_ready(value: &Value, expected_candidate: Option<&str>) -> bool {
-    speed_failures(value, expected_candidate).is_empty()
-}
-
 pub(super) fn speed_failures(value: &Value, expected_candidate: Option<&str>) -> Vec<String> {
     let mut out = Vec::new();
     let Some(nodes) = value

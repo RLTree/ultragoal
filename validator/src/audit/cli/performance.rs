@@ -4,8 +4,7 @@ use std::path::Path;
 const LAW: &str = "cli-performance-latency-speed-iteration-fitness";
 const SCHEMA: &str = "schemas/cli-performance-receipt.schema.json";
 const RECEIPT: &str = "validation_artifacts/cli/performance-receipt.json";
-const SRC: &str = "validator/src/cli/performance/mod.rs";
-const TYPES: &str = "validator/src/cli/performance/types.rs";
+pub(crate) mod receipt;
 const REDS: &[&str] = &[
     "cli-performance-missing-budget-red",
     "cli-performance-prose-only-budget-red",
@@ -43,7 +42,7 @@ pub fn package_failures(root: &Path) -> Vec<String> {
 }
 
 fn require_files(root: &Path, out: &mut Vec<String>) {
-    for rel in [SRC, TYPES, SCHEMA] {
+    for rel in [SCHEMA] {
         if !root.join(rel).is_file() {
             out.push(format!("cli_performance_missing_artifact:{rel}"));
         }
@@ -53,7 +52,7 @@ fn require_files(root: &Path, out: &mut Vec<String>) {
 fn require_inventory(root: &Path, out: &mut Vec<String>) {
     let manifest = read_json(root, "plugin-manifest-draft.json");
     let inventory = crate::package::inventory::inventory_paths(&manifest);
-    for rel in [SRC, TYPES, SCHEMA, RECEIPT] {
+    for rel in [SCHEMA, RECEIPT] {
         if !inventory.iter().any(|path| path == rel) {
             out.push(format!("cli_performance_package_inventory_missing:{rel}"));
         }
@@ -125,12 +124,10 @@ fn require_receipt(root: &Path, out: &mut Vec<String>) {
         }
     };
     match crate::json_boundary::read_json(&root.join(RECEIPT)) {
-        Ok(value) => out.extend(
-            crate::cli::performance::receipt::same_candidate_pass_failures(
-                &value,
-                &expected_candidate,
-            ),
-        ),
+        Ok(value) => out.extend(receipt::same_candidate_pass_failures(
+            &value,
+            &expected_candidate,
+        )),
         Err(_) => out.push(format!(
             "cli_performance_missing_fail_closed_receipt:{RECEIPT}"
         )),

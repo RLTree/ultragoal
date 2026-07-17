@@ -1,43 +1,55 @@
-use super::registry;
 use serde_json::Value;
 use std::path::Path;
 
-pub(super) fn receipt_failures(root: &Path, receipt: &Value) -> Vec<String> {
+const PACKAGE_JSON: &str = "package.json";
+const PNPM_LOCK: &str = "pnpm-lock.yaml";
+const PNPM_WORKSPACE: &str = "pnpm-workspace.yaml";
+const PROVIDER_REGISTRY: &str = "docs/promptfoo-provider-registry.json";
+const SUITE_REGISTRY: &str = "docs/promptfoo-suite-registry.json";
+
+pub(super) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
     let mut out = Vec::new();
     let candidate = crate::package::inventory::package_digest(root).unwrap_or_default();
-    registry::require_str(receipt, "schema", super::RECEIPT_SCHEMA, &mut out);
-    registry::require_str(receipt, "status", "pass", &mut out);
-    registry::require_str(receipt, "candidate_digest", &candidate, &mut out);
-    registry::require_str(
+    require_str(receipt, "schema", super::SCHEMA, &mut out);
+    require_str(receipt, "status", "pass", &mut out);
+    require_str(receipt, "candidate_digest", &candidate, &mut out);
+    require_str(
         receipt,
         "promptfoo_version",
         super::PROMPTFOO_VERSION,
         &mut out,
     );
-    registry::require_str(
+    require_str(
         receipt,
         "raw_promptfoo_authority",
         "observation_only_until_cli_parsed_receipt",
         &mut out,
     );
     for (key, rel) in [
-        ("package_json_digest", super::PACKAGE_JSON),
-        ("pnpm_lock_digest", super::PNPM_LOCK),
-        ("pnpm_workspace_digest", super::PNPM_WORKSPACE),
-        ("provider_registry_digest", super::PROVIDER_REGISTRY),
-        ("suite_registry_digest", super::SUITE_REGISTRY),
+        ("package_json_digest", PACKAGE_JSON),
+        ("pnpm_lock_digest", PNPM_LOCK),
+        ("pnpm_workspace_digest", PNPM_WORKSPACE),
+        ("provider_registry_digest", PROVIDER_REGISTRY),
+        ("suite_registry_digest", SUITE_REGISTRY),
     ] {
         require_digest(root, receipt, key, rel, &mut out);
     }
     if !blocks_required_claims(receipt) {
         out.push("promptfoo_receipt_missing_claim_blockers".to_string());
     }
-    check_observability(receipt, &candidate, &mut out);
+    out.push("promptfoo_retired_observability_binding".to_string());
     if crate::cli::openai::policy::contains_secret_shape(receipt) {
         out.push("promptfoo_receipt_secret_shape_detected".to_string());
     }
     out
 }
+
+fn require_str(receipt: &Value, key: &str, expected: &str, out: &mut Vec<String>) {
+    if receipt.get(key).and_then(Value::as_str) != Some(expected) {
+        out.push(format!("promptfoo_receipt_field_mismatch:{key}"));
+    }
+}
+
 fn require_digest(root: &Path, receipt: &Value, key: &str, rel: &str, out: &mut Vec<String>) {
     let expected =
         crate::digest::file(&root.join(rel)).unwrap_or_else(|_| crate::digest::ZERO.to_string());
@@ -45,8 +57,15 @@ fn require_digest(root: &Path, receipt: &Value, key: &str, rel: &str, out: &mut 
         out.push(format!("promptfoo_receipt_digest_mismatch:{key}"));
     }
 }
+
 fn blocks_required_claims(receipt: &Value) -> bool {
-    let claims = registry::array_strings(receipt.get("blocked_claims"));
+    let claims = receipt
+        .get("blocked_claims")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_str)
+        .collect::<Vec<_>>();
     [
         "completion",
         "readiness",
@@ -63,8 +82,4 @@ fn blocks_required_claims(receipt: &Value) -> bool {
     ]
     .iter()
     .all(|claim| claims.contains(claim))
-}
-fn check_observability(receipt: &Value, candidate: &str, out: &mut Vec<String>) {
-    let _ = (receipt, candidate);
-    out.push("promptfoo_retired_observability_binding".to_string());
 }

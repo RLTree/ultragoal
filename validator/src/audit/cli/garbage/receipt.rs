@@ -1,9 +1,10 @@
-use crate::cli::garbage::collection::operation::GC_RECEIPT_SCHEMA;
 use serde_json::Value;
+
+const SCHEMA: &str = "harness-ultragoal.workspace-gc-receipt.v1";
 
 pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
     let mut out = Vec::new();
-    if value.get("schema").and_then(Value::as_str) != Some(GC_RECEIPT_SCHEMA) {
+    if value.get("schema").and_then(Value::as_str) != Some(SCHEMA) {
         out.push("workspace_gc_receipt_wrong_schema".to_string());
     }
     for ptr in [

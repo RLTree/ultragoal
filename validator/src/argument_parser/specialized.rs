@@ -6,16 +6,6 @@ pub(super) fn parse(raw: &[String]) -> Result<Command, String> {
         Ok(Command::Coverage(command))
     } else if let Some(command) = cli::package::inventory::parse(raw)? {
         Ok(Command::PackageInventory(command))
-    } else if let Some(command) = cli::performance::parse(raw)? {
-        Ok(Command::Performance(command))
-    } else if let Some(command) = cli::rust::parse(raw)? {
-        Ok(Command::Rust(command))
-    } else if let Some(command) = cli::garbage::collection::parse(raw)? {
-        Ok(Command::Garbage(command))
-    } else if let Some(command) = cli::halo::parse(raw)? {
-        Ok(Command::Halo(command))
-    } else if let Some(command) = cli::improvement_loop::parse(raw)? {
-        Ok(Command::ImprovementLoop(command))
     } else if let Some(command) = cli::line_caps::parse(raw)? {
         Ok(Command::LineCaps(command))
     } else if let Some(command) = cli::live_loop::rust_tests::parse(raw)? {
@@ -32,8 +22,6 @@ pub(super) fn parse(raw: &[String]) -> Result<Command, String> {
         Ok(Command::Observe(command))
     } else if let Some(command) = cli::openai::parse(raw)? {
         Ok(Command::OpenAi(command))
-    } else if let Some(command) = cli::promptfoo::parse(raw)? {
-        Ok(Command::Promptfoo(command))
     } else if let Some(command) = crate::red::fixture::scheduler::parse(raw)? {
         Ok(Command::FixtureSchedule(command))
     } else if let Some(command) = cli::red_report::parse(raw)? {

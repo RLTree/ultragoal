@@ -1,12 +1,6 @@
 pub mod capture;
 pub(crate) mod control;
-pub(crate) mod garbage;
-pub(crate) mod halo;
-pub(crate) mod improvement_loop;
 pub(crate) mod openai;
-pub(crate) mod performance;
-pub(crate) mod promptfoo;
-pub(crate) mod rust;
 pub(crate) mod successor;
 pub(crate) mod successor_public;
 pub(crate) mod usage;

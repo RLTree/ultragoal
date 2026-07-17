@@ -29,7 +29,7 @@ pub(super) fn label_failures(
         "red_fixture_report" => target_status_failures(value, expected, "red_fixture_report"),
         "coverage" => retired_evidence_failures("coverage"),
         "cli_performance" => {
-            crate::cli::performance::receipt::same_candidate_pass_failures(value, expected)
+            crate::audit::cli::performance::receipt::same_candidate_pass_failures(value, expected)
         }
         "final_packet" => {
             let store = crate::schema_catalog::load(root);
@@ -170,7 +170,7 @@ fn rust_failures(label: &str, value: &Value, expected: &str) -> Vec<String> {
         "rust_memory" => "rust-memory-resource-discipline",
         _ => "rust-command-loop-authority",
     };
-    let mut out = crate::cli::rust::receipt::surface_value_failures(value, expected_law);
+    let mut out = crate::audit::cli::rust::receipt::surface_value_failures(value, expected_law);
     if value.pointer("/digests/candidate").and_then(Value::as_str) != Some(expected) {
         out.push("rust_receipt_candidate_digest_mismatch".to_string());
     }
@@ -181,7 +181,7 @@ fn rust_failures(label: &str, value: &Value, expected: &str) -> Vec<String> {
 }
 
 fn gc_failures(value: &Value, expected: &str) -> Vec<String> {
-    let mut out = crate::cli::garbage::collection::receipt::surface_value_failures(value);
+    let mut out = crate::audit::cli::garbage::receipt::surface_value_failures(value);
     if value.pointer("/digests/candidate").and_then(Value::as_str) != Some(expected) {
         out.push("gc_receipt_candidate_digest_mismatch".to_string());
     }

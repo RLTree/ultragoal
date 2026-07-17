@@ -12,19 +12,13 @@ fn write_json(path: &Path, value: &Value) {
 fn performance_audit_binds_rows_inventory_catalog_and_receipt() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-performance-audit");
-    for rel in [
-        "validator/src/cli/performance/mod.rs",
-        "validator/src/cli/performance/types.rs",
-        "schemas/cli-performance-receipt.schema.json",
-    ] {
+    for rel in ["schemas/cli-performance-receipt.schema.json"] {
         std::fs::create_dir_all(root.join(rel).parent().expect("parent")).expect("parent dir");
         std::fs::write(root.join(rel), rel).expect("artifact");
     }
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[
-            "validator/src/cli/performance/mod.rs",
-            "validator/src/cli/performance/types.rs",
             "schemas/cli-performance-receipt.schema.json",
             "validation_artifacts/cli/performance-receipt.json"
         ]}),

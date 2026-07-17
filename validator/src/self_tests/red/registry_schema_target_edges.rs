@@ -175,31 +175,6 @@ fn audit_schema_cli_and_target_edges() {
         "{one_success:?}"
     );
 
-    let command = crate::cli::performance::PerformanceCommand {
-        operation: crate::cli::performance::measurement::PerformanceOperation::Prove,
-        receipt: Some(repo.join("Cargo.toml/not-a-receipt.json")),
-        class: crate::cli::performance::measurement::BudgetClass::FocusedRepair,
-    };
-    let err = crate::cli::performance::run(&repo, &command).expect_err("absolute receipt path");
-    assert!(
-        err.contains("root-relative claim artifact path") && err.contains("external debug only"),
-        "{err}"
-    );
-
-    let missing =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("target_boundary-cli-missing");
-    let missing_command = crate::cli::performance::PerformanceCommand {
-        operation: crate::cli::performance::measurement::PerformanceOperation::Prove,
-        receipt: Some("validation_artifacts/performance/not-a-receipt.json".into()),
-        class: crate::cli::performance::measurement::BudgetClass::FocusedRepair,
-    };
-    let err = crate::cli::performance::receipt(&missing, &missing_command, 1)
-        .expect_err("missing manifest blocks performance receipt");
-    assert!(
-        err.contains("plugin-manifest-draft") || err.contains("open failed"),
-        "{err}"
-    );
-
     let row = crate::target_repo::row(Path::new("/repo"), "pass", "detail", Some("rel"));
     assert_eq!(row["status"], "pass");
     assert_eq!(row["detail"], "detail");

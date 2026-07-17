@@ -36,18 +36,6 @@ pub(crate) const LAWS: &[RustLaw] = &[
 
 const RUST_SCHEMA: &str = "schemas/rust-devx-receipt.schema.json";
 const GC_SCHEMA: &str = "schemas/workspace-gc-receipt.schema.json";
-const RUST_SRC: &[&str] = &[
-    "validator/src/cli/rust/mod.rs",
-    "validator/src/cli/rust/observations.rs",
-    "validator/src/cli/rust/types.rs",
-    "validator/src/cli/rust/receipt.rs",
-    "validator/src/audit/rust/developer.rs",
-];
-const GC_SRC: &[&str] = &[
-    "validator/src/cli/garbage/collection/mod.rs",
-    "validator/src/cli/garbage/collection/types.rs",
-    "validator/src/cli/garbage/collection/receipt.rs",
-];
 
 pub(crate) struct RustLaw {
     pub(crate) id: &'static str,
@@ -165,13 +153,13 @@ pub(crate) fn require_receipt(root: &Path, law: &RustLaw, candidate: &str, out: 
 
 pub(crate) fn receipt_failures(value: &Value, law: &RustLaw, candidate: &str) -> Vec<String> {
     if law.id == "workspace-artifact-cache-garbage-collection" {
-        let mut out = crate::cli::garbage::collection::receipt::surface_value_failures(value);
+        let mut out = crate::audit::cli::garbage::receipt::surface_value_failures(value);
         if value.pointer("/digests/candidate").and_then(Value::as_str) != Some(candidate) {
             out.push("workspace_gc_receipt_candidate_digest_mismatch".to_string());
         }
         return out;
     }
-    let mut out = crate::cli::rust::receipt::surface_value_failures(value, law.id);
+    let mut out = crate::audit::cli::rust::receipt::surface_value_failures(value, law.id);
     if value.pointer("/digests/candidate").and_then(Value::as_str) != Some(candidate) {
         out.push("rust_devx_receipt_candidate_digest_mismatch".to_string());
     }
@@ -180,9 +168,9 @@ pub(crate) fn receipt_failures(value: &Value, law: &RustLaw, candidate: &str) ->
 
 fn required_files(law: &RustLaw) -> Vec<&'static str> {
     if law.id == "workspace-artifact-cache-garbage-collection" {
-        GC_SRC.iter().copied().chain([GC_SCHEMA]).collect()
+        vec![GC_SCHEMA]
     } else {
-        RUST_SRC.iter().copied().chain([RUST_SCHEMA]).collect()
+        vec![RUST_SCHEMA]
     }
 }
 

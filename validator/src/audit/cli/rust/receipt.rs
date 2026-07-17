@@ -1,9 +1,10 @@
-use crate::cli::rust::operation::RUST_RECEIPT_SCHEMA;
 use serde_json::Value;
+
+const SCHEMA: &str = "harness-ultragoal.rust-devx-receipt.v1";
 
 pub(crate) fn surface_value_failures(value: &Value, expected_law: &str) -> Vec<String> {
     let mut out = Vec::new();
-    if value.get("schema").and_then(Value::as_str) != Some(RUST_RECEIPT_SCHEMA) {
+    if value.get("schema").and_then(Value::as_str) != Some(SCHEMA) {
         out.push("rust_devx_receipt_wrong_schema".to_string());
     }
     for ptr in [

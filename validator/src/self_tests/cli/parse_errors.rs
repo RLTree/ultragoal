@@ -151,32 +151,3 @@ fn parser_error_arms_are_explicit_for_required_receipts() {
         );
     }
 }
-
-#[test]
-fn parser_error_arms_are_explicit_for_fallback_command_families() {
-    let cases = [
-        (
-            &["performance", "prove", "--class", "not-a-budget"][..],
-            "invalid --class performance budget",
-            "performance class",
-        ),
-        (
-            &["rust", "unknown"][..],
-            "unknown ultragoal rust command",
-            "rust command",
-        ),
-        (
-            &["gc", "unknown"][..],
-            "unknown ultragoal gc command",
-            "gc command",
-        ),
-    ];
-
-    for (raw, expected, label) in cases {
-        let err = crate::parse_command(&args(raw)).expect_err(label);
-        assert!(
-            err.contains(expected),
-            "{label}: expected {expected:?}, got {err:?}"
-        );
-    }
-}

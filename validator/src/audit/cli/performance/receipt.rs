@@ -1,13 +1,13 @@
-use crate::cli::performance::measurement::{BudgetClass, PERFORMANCE_RECEIPT_SCHEMA};
 use serde_json::Value;
 
 mod node_speed_evidence;
 
-pub(crate) const SPEED_NODE_CLAIM_CEILING: &str = "source_local_speed_node_timing_only";
+const SCHEMA: &str = "harness-ultragoal.cli-performance-receipt.v1";
+const SPEED_NODE_CLAIM_CEILING: &str = "source_local_speed_node_timing_only";
 
 pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
     let mut out = Vec::new();
-    if value.get("schema").and_then(Value::as_str) != Some(PERFORMANCE_RECEIPT_SCHEMA) {
+    if value.get("schema").and_then(Value::as_str) != Some(SCHEMA) {
         out.push("cli_performance_receipt_wrong_schema".to_string());
     }
     let status = value.get("status").and_then(Value::as_str);
@@ -62,39 +62,50 @@ fn check_budget_authority(value: &Value, out: &mut Vec<String>) {
     let Some(raw_class) = value.pointer("/budget/class").and_then(Value::as_str) else {
         return;
     };
-    let Some(class) = BudgetClass::from_str(raw_class).filter(|class| class.id() == raw_class)
-    else {
+    let Some((cold_p95_ms, hard_ceiling_ms)) = budget_limits(raw_class) else {
         out.push(format!(
             "cli_performance_receipt_noncanonical_budget_class:{raw_class}"
         ));
         return;
     };
-    let fields = [
+    for (ptr, expected, code) in [
         (
             "/budget/cold_p95_ms",
-            class.cold_p95_ms(),
+            cold_p95_ms,
             "cli_performance_receipt_budget_cold_p95_mismatch",
         ),
         (
             "/budget/target_ms",
-            class.cold_p95_ms(),
+            cold_p95_ms,
             "cli_performance_receipt_budget_target_mismatch",
         ),
         (
             "/budget/threshold_ms",
-            class.cold_p95_ms(),
+            cold_p95_ms,
             "cli_performance_receipt_budget_threshold_mismatch",
         ),
         (
             "/budget/hard_ceiling_ms",
-            class.hard_ceiling_ms(),
+            hard_ceiling_ms,
             "cli_performance_receipt_budget_hard_ceiling_mismatch",
         ),
-    ];
-    for (ptr, expected, code) in fields {
+    ] {
         if value.pointer(ptr).and_then(Value::as_u64) != Some(expected) {
             out.push(format!("{code}:{raw_class}"));
         }
+    }
+}
+
+fn budget_limits(class: &str) -> Option<(u64, u64)> {
+    match class {
+        "hot_edit_check" => Some((5_000, 5_000)),
+        "focused_repair" => Some((15_000, 15_000)),
+        "standard_source_local" => Some((30_000, 60_000)),
+        "strict_local" | "strict_fixtures" | "strict_coverage" | "strict_final" => {
+            Some((60_000, 180_000))
+        }
+        "external_live" => Some((30_000, 30_000)),
+        _ => None,
     }
 }
 
@@ -118,11 +129,12 @@ pub(crate) fn same_candidate_pass_failures(value: &Value, expected_candidate: &s
     {
         out.push("cli_performance_pass_has_failure".to_string());
     }
-    let wall_ms = value
+    if value
         .pointer("/telemetry/wall_clock_ms")
         .and_then(Value::as_u64)
-        .unwrap_or(0);
-    if wall_ms == 0 {
+        .unwrap_or(0)
+        == 0
+    {
         out.push("cli_performance_receipt_placeholder_wall_clock".to_string());
     }
     if value
@@ -140,19 +152,11 @@ pub(crate) fn same_candidate_pass_failures(value: &Value, expected_candidate: &s
     {
         out.push("cli_performance_receipt_cache_honesty_missing".to_string());
     }
-    if value
+    let worker_count = value
         .pointer("/concurrency/worker_count")
         .and_then(Value::as_u64)
-        .unwrap_or(0)
-        == 0
-    {
-        out.push("cli_performance_receipt_unbounded_concurrency".to_string());
-    }
-    if value
-        .pointer("/concurrency/worker_count")
-        .and_then(Value::as_u64)
-        .is_some_and(|worker_count| worker_count > 256)
-    {
+        .unwrap_or(0);
+    if worker_count == 0 || worker_count > 256 {
         out.push("cli_performance_receipt_unbounded_concurrency".to_string());
     }
     if value
@@ -170,12 +174,4 @@ pub(crate) fn same_candidate_pass_failures(value: &Value, expected_candidate: &s
         Some(expected_candidate),
     ));
     out
-}
-
-pub(crate) fn speed_proof_claim_ready(value: &Value, expected_candidate: Option<&str>) -> bool {
-    node_speed_evidence::speed_claim_ready(value, expected_candidate)
-}
-
-pub(crate) fn speed_proof_failures(value: &Value, expected_candidate: Option<&str>) -> Vec<String> {
-    node_speed_evidence::speed_failures(value, expected_candidate)
 }

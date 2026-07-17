@@ -120,7 +120,7 @@ fn source_audit_parser_accepts_bounded_jobs_and_rejects_non_numeric_jobs() {
 }
 
 #[test]
-fn command_run_routes_audit_and_performance_variants() {
+fn command_run_routes_audit_variant() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("command-dispatch-routes");
     let empty_path_write = std::panic::catch_unwind(|| write_json(Path::new(""), &json!({})));
@@ -159,25 +159,6 @@ fn command_run_routes_audit_and_performance_variants() {
     ))
     .expect_err("bad red-report basename rejected");
     assert!(err.contains("red-fixture-report.json"), "{err}");
-
-    let code = crate::command_run::run_with_exit_code(args(
-        root.clone(),
-        &[
-            "performance",
-            "budgets",
-            "--class",
-            "focused",
-            "--receipt",
-            "validation_artifacts/performance/performance.json",
-        ],
-    ))
-    .expect("performance command");
-    assert_eq!(code, 0);
-    let performance_receipt = root.join("validation_artifacts/performance/performance.json");
-    assert!(performance_receipt.is_file());
-    let performance = crate::json_boundary::read_json(&performance_receipt).expect("performance");
-    assert_eq!(performance["budget"]["class"], "focused_repair");
-    assert_eq!(performance["budget"]["target_ms"], 15_000);
 
     std::fs::remove_dir_all(root).expect("cleanup command dispatch routes");
 }
