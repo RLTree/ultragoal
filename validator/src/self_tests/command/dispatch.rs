@@ -94,25 +94,6 @@ fn source_audit_parser_accepts_bounded_jobs_and_rejects_non_numeric_jobs() {
         }
     ));
 
-    let bad_target_mode = [
-        "target-repo",
-        "audit",
-        "--surface-root",
-        "target",
-        "--receipt",
-        "receipt.json",
-        "--mode",
-        "slow",
-    ]
-    .iter()
-    .map(|item| item.to_string())
-    .collect::<Vec<_>>();
-    let err = crate::parse_command(&bad_target_mode).expect_err("target mode rejected");
-    assert!(
-        err.contains("invalid target-repo audit --mode: slow"),
-        "{err}"
-    );
-
     assert!(matches!(
         crate::parse_command(&["package".to_string(), "digest".to_string()]).expect("package"),
         crate::Command::PackageDigest

@@ -122,7 +122,7 @@ fn top_level_validation_artifacts_cannot_be_package_resources() {
     write_file(&root, "validation_artifacts/review/report.json", "{}\n");
     write_file(
         &root,
-        "fixtures/target-repo/valid/validation_artifacts/review/report.json",
+        "fixtures/red/valid/validation_artifacts/review/report.json",
         "{}\n",
     );
     write_manifest(
@@ -130,7 +130,7 @@ fn top_level_validation_artifacts_cannot_be_package_resources() {
         &[
             "validator/src/bin/ultragoal.rs",
             "validation_artifacts/review/report.json",
-            "fixtures/target-repo/valid/validation_artifacts/review/report.json",
+            "fixtures/red/valid/validation_artifacts/review/report.json",
         ],
     );
 
@@ -139,7 +139,7 @@ fn top_level_validation_artifacts_cannot_be_package_resources() {
         inventory(&[
             "validator/src/bin/ultragoal.rs",
             "validation_artifacts/review/report.json",
-            "fixtures/target-repo/valid/validation_artifacts/review/report.json",
+            "fixtures/red/valid/validation_artifacts/review/report.json",
         ]),
     );
     assert_contains(
@@ -148,7 +148,7 @@ fn top_level_validation_artifacts_cannot_be_package_resources() {
     );
     assert!(
         !failure_text(&failures).contains(
-            "live-proof-package-resource:fixtures/target-repo/valid/validation_artifacts/review/report.json"
+            "live-proof-package-resource:fixtures/red/valid/validation_artifacts/review/report.json"
         ),
         "fixture-contained validation artifacts are fixture resources, not top-level live proof artifacts: {failures:?}"
     );

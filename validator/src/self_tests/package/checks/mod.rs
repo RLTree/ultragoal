@@ -60,7 +60,6 @@ fn package_checks_route_schema_inventory_skill_and_final_hygiene_failures() {
         "plugin-inventory-closure",
         "skill-inventory-closure",
         "namespace-progressive-disclosure",
-        "target-repo-audit-capability",
         "source-obligation-coverage",
         "agent-standards-enforcement",
         "validator-execution-provenance",
@@ -126,11 +125,6 @@ fn package_checks_route_schema_inventory_skill_and_final_hygiene_failures() {
         skill
             .iter()
             .any(|item| item.code == "skill_local_reference_missing")
-    );
-    assert!(
-        failures
-            .get("target-repo-audit-capability")
-            .is_some_and(|items| !items.is_empty())
     );
     std::fs::remove_dir_all(root).expect("cleanup package checks");
 }
@@ -220,7 +214,7 @@ fn package_checks_emit_bounded_scheduler_metrics_for_schema_validation() {
         .get(1)
         .expect("package check scheduler metric");
     assert_eq!(package_metric.task_class, "pure_read_parallel");
-    assert_eq!(package_metric.task_count, 8);
+    assert_eq!(package_metric.task_count, 7);
     assert!(package_metric.worker_count <= 2);
     assert!(package_metric.deterministic_ordering);
     assert!(!package_metric.shared_validation_artifact_writes_allowed);

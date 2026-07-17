@@ -80,11 +80,6 @@ fn boundary_failures_are_behavioral() {
         crate::package::artifact::refs::validate_object(&missing_root, &item, "proof")
             .expect_err("missing package root is rejected");
     assert!(package_err.contains("package root unavailable"));
-    let target_err =
-        crate::target_repo::artifact_refs::artifact_ref_error(&missing_root, &item, "target proof")
-            .expect("missing target root rejected");
-    assert!(target_err.contains("target repo root unavailable"));
-
     let _ = std::fs::remove_dir_all(root);
 }
 
@@ -196,12 +191,6 @@ fn remaining_typed_boundary_edges_are_enforced() {
         "{schema_errors:?}"
     );
 
-    assert!(
-        crate::target_repo::target_receipt_errors(&json!("scalar"))
-            .iter()
-            .any(|err| err.contains("target repo fingerprint mismatch"))
-    );
-
     write_text(&root.join("actual.txt"), "actual");
     let inventory_failures = crate::package::inventory::closure::inventory_closure_failures(
         &root,
@@ -210,26 +199,6 @@ fn remaining_typed_boundary_edges_are_enforced() {
     let inventory = inventory_failures.join("\n");
     assert!(inventory.contains("missing="), "{inventory}");
     assert!(inventory.contains("duplicates="), "{inventory}");
-
-    let target = root.join("target-fixture");
-    std::fs::create_dir_all(&target).expect("target fixture");
-    let specs = [crate::target_fixtures::TargetSpec {
-        name: "target-fixture.json",
-        rel: "target-fixture",
-        mode: "init",
-        expected_code: 0,
-        require_observability: false,
-        require_product: false,
-        expected_check: None,
-        expected_status: None,
-    }];
-    let failures = crate::target_fixtures::target_capability_failures_for(&root, &[], &specs);
-    assert!(
-        failures
-            .iter()
-            .any(|failure| failure.contains("expected exit 0")),
-        "{failures:?}"
-    );
 
     let _ = std::fs::remove_dir_all(root);
 }

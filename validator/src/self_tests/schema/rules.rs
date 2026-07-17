@@ -68,10 +68,6 @@ fn schema_rule_contracts_cover_fixture_receipt_and_keyword_boundaries() {
             .any(|err| err == "required_execplan_refs must name all active ExecPlans")
     );
 
-    let target_errors =
-        crate::schema_catalog::schema_errors(&store, "target-repo-receipt.schema.json", &json!({}));
-    assert!(target_errors.iter().any(|err| err == "schema is required"));
-
     assert_eq!(
         crate::schema_catalog::schema_error_code(&[
             "$.plugin_manifest.agents[0].path: const mismatch".to_string()

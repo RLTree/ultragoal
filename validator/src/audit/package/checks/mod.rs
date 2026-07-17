@@ -51,7 +51,6 @@ pub fn checks_with_scheduler(
         root,
         store,
         check_ids,
-        validator_artifacts,
         scheduler,
         &mut failures,
     ));

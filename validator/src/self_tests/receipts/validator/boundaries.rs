@@ -51,7 +51,7 @@ fn validator_receipt_reports_unknown_external_path_labels() {
     let root = receipt_root("receipt-unknown-external");
     let mut input = input(&root);
     input.target_artifacts = vec![json!({
-        "artifact_type": "target_repo_receipt",
+        "artifact_type": "validator_receipt",
         "path": "/",
         "digest": crate::self_tests::boundaries::workspace_fixtures::sha('e')
     })];

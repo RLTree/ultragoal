@@ -92,9 +92,9 @@ fn validator_receipt_rejects_reserved_ready_channel_and_reports_external_artifac
         failures: BTreeMap::new(),
         red: BTreeMap::new(),
         target_artifacts: vec![
-            json!({"artifact_type":"target_repo_receipt","digest":crate::self_tests::boundaries::workspace_fixtures::sha('c')}),
+            json!({"artifact_type":"validator_receipt","digest":crate::self_tests::boundaries::workspace_fixtures::sha('c')}),
             json!({
-                "artifact_type":"target_repo_receipt",
+                "artifact_type":"validator_receipt",
                 "path": outside.to_string_lossy(),
                 "digest": crate::self_tests::boundaries::workspace_fixtures::sha('d')
             }),

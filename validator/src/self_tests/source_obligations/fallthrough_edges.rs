@@ -1,19 +1,11 @@
 use serde_json::{Value, json};
-use std::path::Path;
-
-fn write_json(path: &Path, value: &Value) {
-    if let Some(parent) = path.parent() {
-        std::fs::create_dir_all(parent).expect("parent");
-    }
-    std::fs::write(path, serde_json::to_vec(value).expect("json")).expect("write json");
-}
 
 fn errors(out: &[crate::audit::contract::Failure]) -> Vec<&str> {
     out.iter().map(|failure| failure.error.as_str()).collect()
 }
 
 #[test]
-fn source_obligation_toml_and_symlink_edges() {
+fn source_obligation_toml_edges() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "source_obligation_fallthrough-edges",
     );
@@ -90,23 +82,6 @@ developer_instructions = "not enough"
             .any(|failure| failure.contains("source_obligation_missing_tamper")),
         "{topology_failures:?}"
     );
-
-    write_json(
-        &root.join("validation_artifacts/product-cohesion/symlink-fixture.json"),
-        &json!({
-            "schema": "harness-ultragoal.target-fixture-symlink.v1",
-            "link_path": "edge-link",
-            "target_path": "target.txt"
-        }),
-    );
-    let fixture = crate::target_fixtures::materialize_symlink_fixture(&root)
-        .expect("symlink materialized")
-        .expect("fixture present");
-    assert_eq!(
-        fixture.link.file_name().and_then(|name| name.to_str()),
-        Some("edge-link")
-    );
-    fixture.cleanup().expect("cleanup symlink");
 
     std::fs::remove_dir_all(root).expect("cleanup source_obligation_fallthrough edges");
 }

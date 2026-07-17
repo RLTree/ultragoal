@@ -10,19 +10,6 @@ pub(super) fn assert_product(command: crate::Command) {
     assert!(matches!(command, crate::Command::Product(_)));
 }
 
-pub(super) fn audit_parts(
-    command: crate::Command,
-) -> (Option<std::path::PathBuf>, std::path::PathBuf) {
-    match command {
-        crate::Command::Audit {
-            target_repo,
-            receipt,
-            ..
-        } => (target_repo, receipt),
-        _ => panic!("target-repo audit must route to source-local target audit"),
-    }
-}
-
 #[test]
 fn routine_red_edges_reject_missing_help_and_script_surfaces() {
     let failures =
@@ -38,7 +25,7 @@ fn routine_red_edges_reject_missing_help_and_script_surfaces() {
         assert!(failures.iter().any(|item| item == expected), "{expected}");
     }
     let fit_repo_label_missing = crate::cli::routine::surface_failures(
-        "Routine validation\nfit-repo prove\ntarget-repo audit\nTarget repo path\nunsupported claims\nroutine check\nline\nline\nline\nline\nline\nline",
+        "Routine validation\nfit-repo prove\nroutine check --target-repo\nTarget repo path\nunsupported claims\nroutine check\nline\nline\nline\nline\nline\nline",
         "routine check",
     );
     assert!(
@@ -47,7 +34,7 @@ fn routine_red_edges_reject_missing_help_and_script_surfaces() {
             .any(|item| item == "routine_fit_repo_hidden")
     );
     let target_label_missing = crate::cli::routine::surface_failures(
-        "Routine validation\nfit-repo prove\nFirst plugin-activated repo path\ntarget-repo audit\nunsupported claims\nroutine check\nline\nline\nline\nline\nline\nline",
+        "Routine validation\nfit-repo prove\nFirst plugin-activated repo path\nroutine check --target-repo\nunsupported claims\nroutine check\nline\nline\nline\nline\nline\nline",
         "routine check",
     );
     assert!(
@@ -56,7 +43,7 @@ fn routine_red_edges_reject_missing_help_and_script_surfaces() {
             .any(|item| item == "routine_target_repo_hidden")
     );
     let narrow_missing_claims = crate::cli::routine::surface_failures(
-        "Routine validation\nfit-repo prove\nFirst plugin-activated repo path\ntarget-repo audit\nTarget repo path\nunsupported claims\nroutine check\nline\nline\nline\nline\nline",
+        "Routine validation\nfit-repo prove\nFirst plugin-activated repo path\nroutine check --target-repo\nTarget repo path\nunsupported claims\nroutine check\nline\nline\nline\nline\nline",
         "narrow-helper ceiling",
     );
     assert!(
@@ -75,5 +62,4 @@ fn routine_route_assertions_fail_closed_for_wrong_routes() {
     ] {
         assert!(std::panic::catch_unwind(assertion).is_err());
     }
-    assert!(std::panic::catch_unwind(|| audit_parts(crate::Command::PackageDigest)).is_err());
 }

@@ -80,10 +80,6 @@ fn package_run_entrypoint_writes_fail_closed_receipts_for_incomplete_package() {
         &root.join("schemas/schema-catalog.json"),
         &json!({"schemas":[]}),
     );
-    write_json(
-        &root.join("schemas/target-repo-receipt.schema.json"),
-        &json!({"type":"object"}),
-    );
     write_json(&root.join("templates/RED_FIXTURES.json"), &json!([]));
     write_json(
         &root.join("fixtures/valid/minimal-goal-run.json"),

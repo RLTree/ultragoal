@@ -96,7 +96,7 @@ pub fn private_home_path_failures(root: &Path) -> Vec<String> {
 }
 
 fn private_path_fixture_example(rel: &str) -> bool {
-    rel.starts_with("fixtures/red/") || rel.starts_with("fixtures/target-repo/red/")
+    rel.starts_with("fixtures/red/")
 }
 
 fn private_path_failure(root: &Path, rel: &str) -> Option<String> {

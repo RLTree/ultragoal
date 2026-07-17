@@ -1,2 +1,0 @@
-echo "setup blocker: replace .harness/coverage-command with the repo-authoritative coverage command" >&2
-exit 2

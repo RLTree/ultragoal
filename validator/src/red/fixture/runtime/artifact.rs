@@ -172,6 +172,6 @@ fn artifact_type(path: &str) -> &'static str {
     } else if path.contains("READY_FOR_MERGE") {
         "ready_for_merge"
     } else {
-        "target_repo_receipt"
+        "validator_receipt"
     }
 }

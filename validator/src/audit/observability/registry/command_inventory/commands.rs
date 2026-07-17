@@ -40,7 +40,6 @@ pub(crate) const REQUIRED_COMMANDS: &[&str] = &[
     "gc verify",
     "halo capability prove",
     "session-log hardening",
-    "target-repo audit",
     "observe stack up",
     "observe stack health",
     "observe stack smoke",

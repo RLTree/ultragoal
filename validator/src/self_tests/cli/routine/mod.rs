@@ -28,7 +28,7 @@ fn routine_help_fit_repo_and_target_repo_paths_are_discoverable() {
         "First plugin-activated repo path",
         "ultragoal fit-repo prove",
         "Target repo path",
-        "ultragoal target-repo audit",
+        "ultragoal routine check --target-repo <path>",
         "scripts/check is a narrow helper",
         "unsupported claims",
     ] {
@@ -46,24 +46,6 @@ fn routine_help_fit_repo_and_target_repo_paths_are_discoverable() {
             "validation_artifacts/harness",
         ]))
         .expect("fit-repo"),
-    );
-    let target = crate::parse_command(&raw(&[
-        "target-repo",
-        "audit",
-        "--surface-root",
-        "fixtures/target-repo/valid-init",
-        "--receipt",
-        "validation_artifacts/cli/target-repo-audit-receipt.json",
-    ]))
-    .expect("target");
-    let (target_repo, receipt) = surface_edges::audit_parts(target);
-    assert_eq!(
-        target_repo,
-        Some(PathBuf::from("fixtures/target-repo/valid-init"))
-    );
-    assert_eq!(
-        receipt,
-        PathBuf::from("validation_artifacts/cli/target-repo-audit-receipt.json")
     );
 }
 
@@ -139,7 +121,7 @@ fn routine_parse_reads_receipt_and_target_repo_flags() {
         "--receipt",
         "validation_artifacts/cli/custom-routine.json",
         "--target-repo",
-        "fixtures/target-repo/valid-init",
+        "routine-target",
     ]))
     .expect("parse")
     .expect("routine command");
@@ -149,7 +131,7 @@ fn routine_parse_reads_receipt_and_target_repo_flags() {
     );
     assert_eq!(
         command.target_repo,
-        Some(PathBuf::from("fixtures/target-repo/valid-init"))
+        Some(PathBuf::from("routine-target"))
     );
 }
 

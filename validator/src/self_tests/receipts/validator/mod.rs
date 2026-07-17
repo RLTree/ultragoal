@@ -94,7 +94,7 @@ fn validator_receipt_builds_execution_and_generated_artifacts() {
         failures: BTreeMap::from([("schema-valid".to_string(), Vec::new())]),
         red: BTreeMap::new(),
         target_artifacts: vec![json!({
-            "artifact_type":"target_repo_receipt",
+            "artifact_type":"validator_receipt",
             "path":root.join("target.json").to_string_lossy(),
             "digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')
         })],

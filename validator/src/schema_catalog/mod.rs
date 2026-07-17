@@ -81,9 +81,6 @@ pub fn schema_errors(store: &SchemaStore, schema_name: &str, instance: &Value) -
         "red-packet.schema.json" => fixture_schema_rules::red_packet_errors(instance),
         "red-fixtures-catalog.schema.json" => fixture_schema_rules::red_catalog_errors(instance),
         "validator-receipt.schema.json" => receipt_schema_rules::validator_receipt_errors(instance),
-        "target-repo-receipt.schema.json" => {
-            receipt_schema_rules::target_receipt_schema_errors(instance)
-        }
         "semantic-classification-receipt.schema.json" => {
             receipt_schema_rules::semantic_receipt_errors(instance)
         }
