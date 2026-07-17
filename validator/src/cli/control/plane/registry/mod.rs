@@ -211,6 +211,7 @@ fn agent_types_with_local_state(
     )
 }
 
+#[cfg(test)]
 pub(crate) fn agent_types_for_home(
     root: &Path,
     home: Option<PathBuf>,

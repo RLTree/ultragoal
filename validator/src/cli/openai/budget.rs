@@ -9,7 +9,7 @@ pub(crate) struct BudgetSelection {
     pub(crate) selected: Value,
     pub(crate) failures: Vec<String>,
 }
-
+#[cfg(test)]
 pub(crate) fn default_class(provider_mode: &str) -> &'static str {
     match provider_mode {
         "offline_fixture" => "source_offline_fixture",

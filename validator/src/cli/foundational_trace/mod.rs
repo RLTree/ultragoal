@@ -12,6 +12,7 @@ mod stdout;
 #[cfg(test)]
 mod tests;
 
+#[cfg(test)]
 const RECEIPT_REL: &str = "validation_artifacts/observability/foundational-trace-check.json";
 const MATRIX_REL: &str = "docs/source-obligation-matrix.json";
 const TRACE_REL: &str = "docs/foundational-law-traceability.json";

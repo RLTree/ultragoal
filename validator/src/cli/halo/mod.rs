@@ -7,7 +7,9 @@ mod proof;
 mod tests;
 
 pub(crate) const LAW_ID: &str = "halo-ranked-harness-change-optimization";
+#[cfg(test)]
 const DEFAULT_RECEIPT: &str = "validation_artifacts/halo/capability-receipt.json";
+#[cfg(test)]
 const DEFAULT_APP: &str = "/Applications/HALO.app";
 const REGISTRY: &str = "docs/halo-adapter-registry.json";
 const SCHEMA: &str = "harness-ultragoal.halo-capability-receipt.v1";

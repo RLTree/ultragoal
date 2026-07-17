@@ -11,6 +11,7 @@ mod stdout;
 #[cfg(test)]
 mod tests;
 
+#[cfg(test)]
 const RECEIPT_REL: &str = "validation_artifacts/observability/schema-validation.json";
 
 #[derive(Debug)]

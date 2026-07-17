@@ -104,6 +104,7 @@ mod stdout {
     }
 }
 
+#[cfg(test)]
 const OBSERVABILITY_RECEIPT: &str =
     "validation_artifacts/observability/standards-gardener-rebind.json";
 

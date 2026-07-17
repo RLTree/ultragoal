@@ -26,6 +26,7 @@ pub(crate) mod target_dir;
 mod tests;
 mod validation;
 
+#[cfg(test)]
 const COVERAGE_RECEIPT_REL: &str = "validation_artifacts/coverage/coverage-receipt.json";
 const OBSERVABILITY_RECEIPT_REL: &str = "validation_artifacts/observability/coverage-prove.json";
 

@@ -5,6 +5,7 @@ use std::time::Instant;
 pub(super) const OPERATION: &str = "archive.build";
 const CHECK_ID: &str = "archive-build-observability-binding";
 pub(super) const CLAIM_ID: &str = "archive_source_local_observability";
+#[cfg(test)]
 const DEFAULT_RECEIPT: &str = "validation_artifacts/observability/archive-build.json";
 const BLOCKED_CLAIMS: &str = "completion,readiness,release,reviewer_exposure,app_registry_exposure,final_packet_correctness,update_goal_eligibility";
 

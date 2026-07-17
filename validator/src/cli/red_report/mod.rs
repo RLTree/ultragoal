@@ -1,5 +1,6 @@
 use std::path::{Path, PathBuf};
 
+#[cfg(test)]
 const DEFAULT_REPORT: &str = "validation_artifacts/ultragoal-audit/red-fixture-report.json";
 
 #[derive(Debug)]

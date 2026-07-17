@@ -8,6 +8,7 @@ mod tests;
 
 pub(crate) const LAW_ID: &str = "promptfoo-eval-red-team-provider-separation";
 pub(super) const RECEIPT_SCHEMA: &str = "harness-ultragoal.promptfoo-adapter-receipt.v1";
+#[cfg(test)]
 pub(super) const DEFAULT_RECEIPT: &str = "validation_artifacts/promptfoo/adapter-receipt.json";
 pub(super) const PACKAGE_JSON: &str = "package.json";
 pub(super) const PNPM_LOCK: &str = "pnpm-lock.yaml";

@@ -1,5 +1,7 @@
+#[cfg(test)]
 use std::io;
 use std::path::Path;
+#[cfg(test)]
 use std::process::Output;
 
 pub(crate) struct CoverageCommandEffectResponse {
@@ -32,6 +34,7 @@ pub(crate) fn execute_authoritative(root: &Path, receipt: &Path) -> CoverageComm
     }
 }
 
+#[cfg(test)]
 pub(crate) fn execution_from_output(result: io::Result<Output>) -> CoverageCommandEffectResponse {
     match result {
         Ok(output) => CoverageCommandEffectResponse {

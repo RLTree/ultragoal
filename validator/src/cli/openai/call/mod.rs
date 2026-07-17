@@ -3,11 +3,17 @@ use std::path::{Path, PathBuf};
 
 mod receipt;
 
+#[cfg(test)]
 const DEFAULT_RECEIPT: &str = "validation_artifacts/openai/call-receipt.json";
+#[cfg(test)]
 const DEFAULT_MODE: &str = "no_network";
+#[cfg(test)]
 const DEFAULT_MODEL: &str = "none:no-network";
+#[cfg(test)]
 const DEFAULT_ENDPOINT: &str = "none:no-network";
+#[cfg(test)]
 const DEFAULT_PURPOSE: &str = "openai-boundary-proof";
+#[cfg(test)]
 const DEFAULT_SCHEMA_ID: &str = "harness-ultragoal.openai-call-receipt.v1";
 
 #[derive(Debug)]

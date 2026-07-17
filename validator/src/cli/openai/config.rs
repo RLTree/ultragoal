@@ -2,6 +2,7 @@ use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 
 pub(crate) const DEFAULT_POLICY: &str = "docs/openai-key-policy.json";
+#[cfg(test)]
 pub(crate) const DEFAULT_RECEIPT: &str = "validation_artifacts/openai/config-receipt.json";
 
 #[derive(Debug)]

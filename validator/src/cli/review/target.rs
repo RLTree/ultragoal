@@ -5,6 +5,7 @@ use std::time::Instant;
 pub(super) const OPERATION: &str = "review-target.build";
 const CHECK_ID: &str = "review-target-build-observability-binding";
 pub(super) const CLAIM_ID: &str = "review_target_source_local_observability";
+#[cfg(test)]
 const DEFAULT_RECEIPT: &str = "validation_artifacts/observability/review-target-build.json";
 
 #[cfg(test)]

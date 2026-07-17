@@ -8,6 +8,7 @@ mod routine_cache;
 mod runtime;
 mod stdout;
 
+#[cfg(test)]
 const RECEIPT_REL: &str = "validation_artifacts/observability/line-cap-check.json";
 
 #[derive(Debug)]
@@ -128,6 +129,7 @@ fn validate(root: &Path, scheduler: SchedulerConfig) -> ValidationResult {
     }
 }
 
+#[cfg(test)]
 pub(crate) fn check(root: &Path, jobs: Option<usize>) -> Result<Vec<String>, String> {
     Ok(validate(root, SchedulerConfig::from_jobs(jobs)?).failures)
 }

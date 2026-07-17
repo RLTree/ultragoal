@@ -11,6 +11,7 @@ mod command_paths;
 mod runtime;
 mod stdout;
 
+#[cfg(test)]
 const RECEIPT_REL: &str = "validation_artifacts/observability/package-inventory.json";
 
 #[derive(Debug)]

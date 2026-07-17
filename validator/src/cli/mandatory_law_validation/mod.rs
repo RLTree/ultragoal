@@ -10,6 +10,7 @@ mod stdout;
 #[cfg(test)]
 mod tests;
 
+#[cfg(test)]
 const RECEIPT_REL: &str = "validation_artifacts/observability/mandatory-law-validation.json";
 const REGISTRY_REL: &str = "docs/mandatory-law-surfaces.json";
 

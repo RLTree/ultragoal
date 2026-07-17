@@ -1,8 +1,11 @@
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 
+#[cfg(test)]
 const DEFAULT_RECEIPT: &str = "validation_artifacts/openai/model-output-authority.json";
+#[cfg(test)]
 const DEFAULT_CALL_RECEIPT: &str = "validation_artifacts/openai/call-receipt.json";
+#[cfg(test)]
 const DEFAULT_PARSER_SCHEMA: &str = "harness-ultragoal.openai.typed-output.v1";
 
 #[derive(Debug)]

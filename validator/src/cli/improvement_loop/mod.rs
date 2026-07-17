@@ -9,6 +9,7 @@ mod tests;
 
 pub(crate) const LAW_ID: &str = "harness-improvement-loop-trace-feedback-eval-codex-handoff";
 const RECEIPT_SCHEMA: &str = "harness-ultragoal.improvement-loop-receipt.v1";
+#[cfg(test)]
 const DEFAULT_RECEIPT: &str = "validation_artifacts/improvement-loop/loop-closure-receipt.json";
 const REGISTRY: &str = "docs/improvement-loop-registry.json";
 
