@@ -215,11 +215,11 @@ claim and representative product or release proof.
   disconnected legacy material-review validator is not treated as production
   enforcement; its bounded-invariant decision must be adopted through a live
   successor route or retired before an enforcement claim is raised.
-- `scripts/check-agent-standards .` reaches the inherited
-  `cli-performance-latency-speed-iteration-fitness` pass-evidence digest
-  mismatch. The changed standards projection is current, but standards
-  compliance remains withheld until that stale evidence is reconciled without
-  manufacturing a replacement receipt.
+- `scripts/check-agent-standards .` passes 122 rows after stale pass claims
+  were downgraded to pending rather than manufacturing replacement evidence.
+  The corresponding performance, Rust developer-loop, observability,
+  improvement-loop, cohesion, and cache claims remain withheld until their
+  real evidence surfaces are refreshed.
 - No implementation worktree launches until the canonical P0 checkpoint is
   committed and the semantic-namespace/standards debt checkpoint is clean.
 - After P0, re-observe N02/N03 and select the smallest dependency-closed source

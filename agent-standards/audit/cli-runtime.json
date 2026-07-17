@@ -11,7 +11,7 @@
     },
     {
       "standard_id": "cli-performance-latency-speed-iteration-fitness",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/cli/performance.rs",
       "evidence_digest": "sha256:2ce4e604b4adb706e672cf2139abb663702823ed31bb2ccd3014f2191ed63c70",
       "audited_at": "2026-06-29T00:00:00Z",
@@ -59,7 +59,7 @@
     },
     {
       "standard_id": "rust-cache-no-cache-honesty",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/rust/developer.rs",
       "evidence_digest": "sha256:6d8078c3a4735c6fb9fcc855d24bfb310def1575fb85cf78cd51e399ae22925b",
       "audited_at": "2026-06-29T00:00:00Z",
@@ -67,7 +67,7 @@
     },
     {
       "standard_id": "rust-command-loop-authority",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/rust/developer.rs",
       "evidence_digest": "sha256:6d8078c3a4735c6fb9fcc855d24bfb310def1575fb85cf78cd51e399ae22925b",
       "audited_at": "2026-06-29T00:00:00Z",
@@ -75,7 +75,7 @@
     },
     {
       "standard_id": "rust-developer-experience-authority",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/rust/developer.rs",
       "evidence_digest": "sha256:6d8078c3a4735c6fb9fcc855d24bfb310def1575fb85cf78cd51e399ae22925b",
       "audited_at": "2026-06-29T00:00:00Z",
@@ -83,7 +83,7 @@
     },
     {
       "standard_id": "rust-memory-resource-discipline",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/rust/developer.rs",
       "evidence_digest": "sha256:6d8078c3a4735c6fb9fcc855d24bfb310def1575fb85cf78cd51e399ae22925b",
       "audited_at": "2026-06-29T00:00:00Z",
@@ -91,7 +91,7 @@
     },
     {
       "standard_id": "rust-toolchain-substrate-authority",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/rust/developer.rs",
       "evidence_digest": "sha256:6d8078c3a4735c6fb9fcc855d24bfb310def1575fb85cf78cd51e399ae22925b",
       "audited_at": "2026-06-29T00:00:00Z",

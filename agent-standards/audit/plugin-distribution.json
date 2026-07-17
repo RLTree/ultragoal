@@ -75,7 +75,7 @@
     },
     {
       "standard_id": "plugin-product-cohesion-authority",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "docs/plugin-cohesion-manifest.json",
       "evidence_digest": "sha256:556600fb012e2fdd1f6474346effb8cf157d3fcdcc7519cbb61aeacfe99e4309",
       "audited_at": "2026-07-06T00:00:00Z",
