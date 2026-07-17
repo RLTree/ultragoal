@@ -62,7 +62,7 @@
     "lease_record": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["lease_id","lane_id","owner","scope_ids","claim_ceiling","exception_id","commands","parent_handoff","plan_ref","plan_digest","base_commit","base_tree","branch","worktree","shared_root","owned_files","owned_symbols","generated_outputs","fixtures","effects","refresh_state","consumed_set","invalidated_by","invalidation_rule","rebase_rule","forbidden_roots","root_only_surfaces","protected_root_patterns","git_metadata_rule","overlap_examples","isolated_roots","ready","handoff","teardown","retention","overlap_verdict","overlap_rule","clean_handoff","reachable_tip","ready_receipt","teardown_retention","status"],
+      "required": ["lease_id","lane_id","owner","scope_ids","claim_ceiling","exception_id","commands","parent_handoff","plan_ref","plan_digest","base_commit","base_tree","branch","worktree","shared_root","owned_files","owned_symbols","generated_outputs","fixtures","effects","support_files","refresh_state","consumed_set","invalidated_by","invalidation_rule","rebase_rule","forbidden_roots","root_only_surfaces","protected_root_patterns","git_metadata_rule","overlap_examples","isolated_roots","ready","handoff","teardown","retention","overlap_verdict","overlap_rule","clean_handoff","reachable_tip","ready_receipt","teardown_retention","status"],
       "properties": {
         "lease_id": {"type":["string","null"]},
         "lane_id": {"type":["string","null"],"pattern":"^(N(0[0-9]|1[0-7])|P0)$"},
@@ -73,6 +73,7 @@
         "commands": {"type":"array","items":{"type":"string"}},
         "parent_handoff": {"type":["object","null"]},
         "diagnostic_paths": {"type":"array","items":{"type":"string","pattern":"^(?!.*\\*).+"}},
+        "support_files": {"type":"array","uniqueItems":true,"items":{"type":"string","pattern":"^(?!.*\\*).+"}},
         "diagnostic_source_kind": {"type":["string","null"]},
         "diagnostic_output_path": {"type":["string","null"]},
         "diagnostic_output_digest": {"anyOf":[{"$ref":"#/$defs/sha256"},{"type":"null"}]},
@@ -119,7 +120,7 @@
         {"if":{"properties":{"status":{"const":"unissued"}}},"then":{"properties":{"clean_handoff":{"const":"unissued"},"reachable_tip":{"const":false},"ready_receipt":{"type":"null"}}}},
         {"if":{"required":["status","exception_id"],"properties":{"status":{"enum":["issued","ready"]},"exception_id":{"not":{"const":"P0-DEBT-REPAIR"}}}},"then":{"required":["lease_id","branch","worktree"],"properties":{"lease_id":{"type":"string","minLength":1},"branch":{"type":"string","minLength":1},"worktree":{"type":"string","minLength":1},"ready_receipt":{"type":"string","minLength":1}}}},
         {"if":{"properties":{"status":{"const":"ready"}}},"then":{"properties":{"clean_handoff":{"const":"verified"},"reachable_tip":{"const":true}}}},
-        {"if":{"required":["exception_id"],"properties":{"exception_id":{"const":"P0-DEBT-REPAIR"}}},"then":{"required":["diagnostic_paths","diagnostic_source_kind","diagnostic_path_set_digest","operation_id","tool","observed_at"],"properties":{"lane_id":{"const":"P0"},"claim_ceiling":{"const":"withheld"},"worktree":{"type":["null"]},"branch":{"type":"string","minLength":1},"shared_root":{"type":"string","minLength":1}}}}
+        {"if":{"required":["exception_id"],"properties":{"exception_id":{"const":"P0-DEBT-REPAIR"}}},"then":{"required":["diagnostic_paths","support_files","diagnostic_source_kind","diagnostic_path_set_digest","operation_id","tool","observed_at"],"properties":{"lane_id":{"const":"P0"},"claim_ceiling":{"const":"withheld"},"worktree":{"type":["null"]},"branch":{"type":"string","minLength":1},"shared_root":{"type":"string","minLength":1}}}}
       ]
     },
     "overlap_examples": {"type":"object","additionalProperties":false,"required":["positive_rejections","negative_allows"],"properties":{"positive_rejections":{"type":"array","minItems":3,"items":{"$ref":"#/$defs/overlap_example"}},"negative_allows":{"type":"array","minItems":2,"items":{"$ref":"#/$defs/overlap_example"}}}},
@@ -147,7 +148,7 @@
         "availability": {"const":"available_for_exact_lease"},
         "allowed": {"type":"object","additionalProperties":false,"required":["paths","symbols","operations"],"properties":{"paths":{"type":"array","minItems":0,"uniqueItems":true,"items":{"type":"string","pattern":"^(?!.*\\*).+"}},"symbols":{"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string"}},"operations":{"type":"array","minItems":1,"uniqueItems":true,"items":{"enum":["compile","namespace","standards","retention-aware cleanup"]}}}},
         "forbidden": {"type":"object","additionalProperties":false,"required":["paths","operations"],"properties":{"paths":{"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string"}},"operations":{"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string"}}}},
-        "diagnostic_path_policy": {"type":"object","additionalProperties":false,"required":["mode","source","wildcards","ownership"],"properties":{"mode":{"const":"exact_current_set"},"source":{"const":"debt_path_sources"},"wildcards":{"const":"forbidden"},"ownership":{"const":"owned_files_exact_match"}}},
+        "diagnostic_path_policy": {"type":"object","additionalProperties":false,"required":["mode","source","wildcards","ownership"],"properties":{"mode":{"const":"exact_current_set"},"source":{"const":"debt_path_sources"},"wildcards":{"const":"forbidden"},"ownership":{"const":"owned_files_exact_diagnostic_support_union"}}},
         "debt_path_sources": {"type":"object","additionalProperties":false,"required":["compile","namespace","standards","retention"],"properties":{"compile":{"$ref":"#/$defs/debt_source"},"namespace":{"$ref":"#/$defs/debt_source"},"standards":{"$ref":"#/$defs/debt_source"},"retention":{"$ref":"#/$defs/debt_source"}}},
         "rule_ids": {"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string"}},
         "claim_ceiling": {"const":"withheld"},
@@ -155,7 +156,7 @@
           "type": "object",
           "additionalProperties": false,
           "required": ["status","unissued_allowed_paths","source_sets","populate","requires","claim_ceiling_before","claim_ceiling_after"],
-          "properties": {"status":{"const":"not_issued"},"unissued_allowed_paths":{"const":[]},"source_sets":{"type":"object","additionalProperties":false,"required":["compile","namespace","standards","retention"],"properties":{"compile":{"const":[]},"namespace":{"const":[]},"standards":{"const":[]},"retention":{"const":[]}}},"populate":{"type":"string","minLength":1},"requires":{"const":["clean candidate identity","diagnostic command exit","owned-files exact match","sha256 path-set digest"]},"claim_ceiling_before":{"const":"withheld"},"claim_ceiling_after":{"const":"withheld"}}
+          "properties": {"status":{"const":"not_issued"},"unissued_allowed_paths":{"const":[]},"source_sets":{"type":"object","additionalProperties":false,"required":["compile","namespace","standards","retention"],"properties":{"compile":{"const":[]},"namespace":{"const":[]},"standards":{"const":[]},"retention":{"const":[]}}},"populate":{"type":"string","minLength":1},"requires":{"const":["clean candidate identity","diagnostic command exit","dependency-closed support files","owned-files exact union","sha256 diagnostic path-set digest"]},"claim_ceiling_before":{"const":"withheld"},"claim_ceiling_after":{"const":"withheld"}}
         },
         "authority_transition": {
           "type": "object",

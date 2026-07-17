@@ -4,6 +4,8 @@ mod overlap;
 mod plan_binding;
 mod record;
 mod root;
+#[cfg(test)]
+mod tests;
 
 pub(super) fn protected_path_match(normalized: &str, pattern: &str) -> bool {
     let base = pattern.strip_suffix("/**").unwrap_or(pattern);

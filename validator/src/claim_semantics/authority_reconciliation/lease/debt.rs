@@ -12,14 +12,11 @@ pub(super) fn check(record: &Value, registry: &Value, root: &Path, out: &mut Vec
         return;
     }
     if record.get("lane_id").and_then(Value::as_str) != Some("P0") {
-        out.push(Failure::new(
-            "authority-lease",
-            "p0_exception_lane_mismatch",
-            "lane_id",
-        ));
+        fail(out, "p0_exception_lane_mismatch", "lane_id");
     }
     check_transition_binding(record, registry, out);
     let diagnostic_paths = overlap::array_set(record, "diagnostic_paths");
+    let support_files = overlap::array_set(record, "support_files");
     let owned_files = overlap::array_set(record, "owned_files");
     let allowed_paths = registry
         .pointer("/lease_state/p0_exception/allowed/paths")
@@ -30,28 +27,28 @@ pub(super) fn check(record: &Value, registry: &Value, root: &Path, out: &mut Vec
         .map(str::to_owned)
         .collect::<BTreeSet<_>>();
     let authority = root.to_string_lossy();
-    let exact_paths = !allowed_paths.is_empty()
-        && diagnostic_paths == allowed_paths
-        && !diagnostic_paths.is_empty()
-        && diagnostic_paths.iter().all(|path| {
-            !path.contains('*')
-                && !Path::new(path).is_absolute()
-                && !Path::new(path)
-                    .components()
-                    .any(|component| matches!(component, Component::ParentDir | Component::RootDir))
-                && root.join(path).is_file()
-                && overlap::normalize_path(root, &authority, path).is_some()
-                && owned_files.contains(path)
-        })
-        && owned_files
-            .iter()
-            .all(|path| diagnostic_paths.contains(path));
-    if !exact_paths {
-        out.push(Failure::new(
-            "authority-lease",
-            "exact_diagnostic_path_membership_missing",
-            "allowed.paths/diagnostic_paths/owned_files/exact_current_set",
-        ));
+    if !record.get("support_files").is_some_and(Value::is_array) {
+        fail(out, "p0_support_files_missing", "support_files");
+    }
+    let diagnostics = normalized_files(root, &diagnostic_paths, out);
+    let support = normalized_files(root, &support_files, out);
+    let owned = normalized_files(root, &owned_files, out);
+    let allowed = normalized_files(root, &allowed_paths, out);
+    if let Some(path) = diagnostics.intersection(&support).next() {
+        fail(out, "p0_support_file_overlaps_diagnostic", path);
+    }
+    let raw_union = diagnostic_paths.union(&support_files).cloned().collect();
+    let authority_union = diagnostics.union(&support).cloned().collect();
+    if owned_files != raw_union
+        || allowed_paths != raw_union
+        || owned != authority_union
+        || allowed != authority_union
+    {
+        fail(
+            out,
+            "p0_dependency_closed_path_union_mismatch",
+            "allowed.paths/diagnostic_paths/support_files/owned_files",
+        );
     }
     let forbidden_paths = registry
         .pointer("/lease_state/p0_exception/forbidden/paths")
@@ -60,7 +57,7 @@ pub(super) fn check(record: &Value, registry: &Value, root: &Path, out: &mut Vec
         .flatten()
         .filter_map(Value::as_str)
         .collect::<Vec<_>>();
-    for path in &diagnostic_paths {
+    for path in diagnostic_paths.union(&support_files) {
         if forbidden_paths.iter().any(|pattern| {
             let raw_match = pattern
                 .strip_suffix("/**")
@@ -88,11 +85,11 @@ pub(super) fn check(record: &Value, registry: &Value, root: &Path, out: &mut Vec
         .and_then(Value::as_str)
         != Some(expected_path_digest.as_str())
     {
-        out.push(Failure::new(
-            "authority-lease",
+        fail(
+            out,
             "diagnostic_path_set_digest_mismatch",
             "diagnostic_path_set_digest",
-        ));
+        );
     }
     let output_path = record
         .get("diagnostic_output_path")
@@ -103,11 +100,11 @@ pub(super) fn check(record: &Value, registry: &Value, root: &Path, out: &mut Vec
         .and_then(Value::as_str)
         .filter(|digest| !digest.is_empty());
     match (output_path, output_digest) {
-        (None, Some(_)) => out.push(Failure::new(
-            "authority-lease",
+        (None, Some(_)) => fail(
+            out,
             "diagnostic_output_digest_without_path",
             "diagnostic_output_path",
-        )),
+        ),
         (Some(path), digest) => {
             let safe = !Path::new(path).is_absolute()
                 && !Path::new(path).components().any(|component| {
@@ -116,11 +113,7 @@ pub(super) fn check(record: &Value, registry: &Value, root: &Path, out: &mut Vec
                 && root.join(path).is_file()
                 && overlap::normalize_path(root, &authority, path).is_some();
             if !safe {
-                out.push(Failure::new(
-                    "authority-lease",
-                    "diagnostic_output_path_unsafe",
-                    path,
-                ));
+                fail(out, "diagnostic_output_path_unsafe", path);
             } else if let Some(expected) = digest
                 && crate::digest::file(&root.join(path)).ok().as_deref() != Some(expected)
             {
@@ -133,22 +126,13 @@ pub(super) fn check(record: &Value, registry: &Value, root: &Path, out: &mut Vec
         }
         (None, None) => {}
     }
-    for key in [
-        "diagnostic_source_kind",
-        "operation_id",
-        "tool",
-        "observed_at",
-    ] {
+    for key in "diagnostic_source_kind operation_id tool observed_at".split(' ') {
         if record
             .get(key)
             .and_then(Value::as_str)
             .is_none_or(str::is_empty)
         {
-            out.push(Failure::new(
-                "authority-lease",
-                "exact_diagnostic_binding_missing",
-                key,
-            ));
+            fail(out, "exact_diagnostic_binding_missing", key);
         }
     }
     let operation = record
@@ -163,17 +147,11 @@ pub(super) fn check(record: &Value, registry: &Value, root: &Path, out: &mut Vec
         .filter_map(Value::as_str)
         .collect::<BTreeSet<_>>();
     if !allowed_operations.contains(operation) {
-        out.push(Failure::new(
-            "authority-lease",
-            "p0_operation_not_allowed",
-            operation,
-        ));
+        fail(out, "p0_operation_not_allowed", operation);
     }
-    let source_key = if operation == "retention-aware cleanup" {
-        "retention"
-    } else {
-        operation
-    };
+    let source_key = (operation == "retention-aware cleanup")
+        .then_some("retention")
+        .unwrap_or(operation);
     let source = registry.pointer(&format!(
         "/lease_state/p0_exception/debt_path_sources/{source_key}"
     ));
@@ -191,18 +169,10 @@ pub(super) fn check(record: &Value, registry: &Value, root: &Path, out: &mut Vec
         .filter_map(Value::as_str)
         .collect::<Vec<_>>();
     if expected_command.is_none_or(|command| !commands.contains(&command)) {
-        out.push(Failure::new(
-            "authority-lease",
-            "p0_command_source_mismatch",
-            operation,
-        ));
+        fail(out, "p0_command_source_mismatch", operation);
     }
     if expected_kind != record.get("diagnostic_source_kind").and_then(Value::as_str) {
-        out.push(Failure::new(
-            "authority-lease",
-            "p0_source_kind_mismatch",
-            operation,
-        ));
+        fail(out, "p0_source_kind_mismatch", operation);
     }
     let forbidden_operations = registry
         .pointer("/lease_state/p0_exception/forbidden/operations")
@@ -212,21 +182,50 @@ pub(super) fn check(record: &Value, registry: &Value, root: &Path, out: &mut Vec
         .filter_map(Value::as_str);
     for forbidden in forbidden_operations {
         if operation == forbidden {
-            out.push(Failure::new(
-                "authority-lease",
-                "p0_forbidden_operation",
-                forbidden,
-            ));
+            fail(out, "p0_forbidden_operation", forbidden);
         }
     }
 }
 
+fn fail(out: &mut Vec<Failure>, error: &str, detail: impl Into<String>) {
+    out.push(Failure::new("authority-lease", error, detail));
+}
+
+fn normalized_files(
+    root: &Path,
+    paths: &BTreeSet<String>,
+    out: &mut Vec<Failure>,
+) -> BTreeSet<String> {
+    let mut normalized = BTreeSet::new();
+    let canonical_root = root.canonicalize().ok();
+    for raw in paths {
+        let safe = !raw.contains('*')
+            && !Path::new(raw).is_absolute()
+            && Path::new(raw)
+                .components()
+                .all(|part| !matches!(part, Component::ParentDir | Component::RootDir))
+            && root.join(raw).is_file();
+        let Some(path) = safe
+            .then(|| root.join(raw).canonicalize().ok())
+            .flatten()
+            .filter(|path| {
+                canonical_root
+                    .as_ref()
+                    .is_some_and(|base| path.starts_with(base))
+            })
+        else {
+            fail(out, "p0_exact_file_invalid", raw);
+            continue;
+        };
+        if !normalized.insert(path.to_string_lossy().into_owned()) {
+            fail(out, "p0_normalized_file_collision", raw);
+        }
+    }
+    normalized
+}
+
 fn check_transition_binding(record: &Value, registry: &Value, out: &mut Vec<Failure>) {
     let transition = registry.pointer("/lease_state/p0_exception/authority_transition");
-    let recorded = transition
-        .and_then(|row| row.get("status"))
-        .and_then(Value::as_str)
-        == Some("recorded");
     let commit = transition
         .and_then(|row| row.get("commit"))
         .and_then(Value::as_str)
@@ -235,14 +234,17 @@ fn check_transition_binding(record: &Value, registry: &Value, out: &mut Vec<Fail
         .and_then(|row| row.get("tree"))
         .and_then(Value::as_str)
         .unwrap_or_default();
-    if !recorded
+    if transition
+        .and_then(|row| row.get("status"))
+        .and_then(Value::as_str)
+        != Some("recorded")
         || record.get("base_commit").and_then(Value::as_str) != Some(commit)
         || record.get("base_tree").and_then(Value::as_str) != Some(tree)
     {
-        out.push(Failure::new(
-            "authority-lease",
+        fail(
+            out,
             "p0_transition_binding_mismatch",
             "authority_transition/base_commit/base_tree",
-        ));
+        );
     }
 }
