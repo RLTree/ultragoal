@@ -90,7 +90,8 @@ pub(crate) fn parse(bytes: &[u8]) -> Result<PackageSpec, DistributionError> {
         validate_relative_path(&row.path)?;
         validate_relative_path(&row.source_path)?;
         if !insert_prefix_free_path(&mut targets, &row.path)
-            || forbidden_target(&row.path)
+            || forbidden_runtime_path(&row.path)
+            || forbidden_runtime_path(&row.source_path)
             || (row.role == PackageRole::Executable) != row.executable
             || (row.path == ".codex-plugin/plugin.json") != (row.role == PackageRole::Manifest)
         {
@@ -117,11 +118,24 @@ pub(crate) fn parse(bytes: &[u8]) -> Result<PackageSpec, DistributionError> {
     })
 }
 
-fn forbidden_target(path: &str) -> bool {
+fn forbidden_runtime_path(path: &str) -> bool {
     path == ".DS_Store"
         || path.ends_with("/.DS_Store")
         || path == ".git"
         || path.starts_with(".git/")
-        || path == ".codex-worktree/env.sh"
+        || path.split('/').any(|component| component == ".codex-worktree")
         || path.starts_with("target/")
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn runtime_state_is_forbidden_as_package_target_or_source() {
+        assert!(super::forbidden_runtime_path(".codex-worktree"));
+        assert!(super::forbidden_runtime_path(".codex-worktree/env.sh"));
+        assert!(super::forbidden_runtime_path(".codex-worktree/run-command"));
+        assert!(super::forbidden_runtime_path(".codex-worktree/nested/private"));
+        assert!(super::forbidden_runtime_path("nested/.codex-worktree/env.sh"));
+        assert!(!super::forbidden_runtime_path(".codex/environments/environment.toml"));
+    }
 }

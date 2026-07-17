@@ -50,9 +50,10 @@ For macro-lanes, also include:
   created or verified before an app worktree is requested from that branch;
 - worktree path or creation receipt, and the command or `codex_app.create_thread`
   target used to create it;
-- per-worktree environment setup, including `.codex-worktree/env.sh` or the
-  repo's equivalent generated env file that agents must source before
-  validation commands;
+- per-worktree environment setup, including the generated
+  `.codex-worktree/run-command` wrapper and isolated state roots; agents must
+  use the wrapper for validation commands and must not source compatibility
+  `env.sh`;
 - state roots and artifact roots;
 - port, cache, target, temp, scratch, and home isolation requirements;
 - owned paths;

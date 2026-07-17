@@ -30,8 +30,9 @@ claim, release state, or shared documentation.
 
 ## Environment And Verification
 
-Run `.codex/setup-worktree-env.sh`, source `.codex-worktree/env.sh`, and use its
-isolated roots. Prove forged child output cannot authorize success; exercise
+Run the sanitized bootstrap in `.codex/environments/environment.toml`, then
+use `.codex-worktree/run-command <command>` for lane commands; do not source
+the compatibility `env.sh` projection. Prove forged child output cannot authorize success; exercise
 positive, causal failure, race, mutation, security, interruption/recovery,
 reuse, fallback, and recursively zero-write read behavior.
 

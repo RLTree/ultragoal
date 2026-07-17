@@ -5,14 +5,31 @@ name = "harness-ultragoal-plugin-proposal"
 [setup]
 script = '''
 cd "${CODEX_WORKTREE_PATH:-$PWD}"
-bash "$HOME/.codex/bin/codex-worktree-env"
+/usr/bin/env -i \
+  CODEX_WORKTREE_PATH="${CODEX_WORKTREE_PATH:-$PWD}" \
+  PWD="$PWD" \
+  CODEX_HOST_CARGO_BIN="$HOME/.cargo/bin/cargo" \
+  PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" \
+  /bin/bash .codex/setup-worktree-env.sh
 '''
 
 [cleanup]
 script = '''
-cd "${CODEX_WORKTREE_PATH:-$PWD}"
+/usr/bin/env -i \
+  CODEX_WORKTREE_PATH="${CODEX_WORKTREE_PATH:-$PWD}" \
+  PWD="$PWD" \
+  PATH="/usr/bin:/bin" \
+  TMPDIR="/tmp" \
+  /bin/bash -s <<'CLEANUP'
+set -euo pipefail
+umask 077
+cd "$CODEX_WORKTREE_PATH"
+if [ -L .codex-worktree ] || { [ -e .codex-worktree ] && [ ! -d .codex-worktree ]; }; then
+  echo 'refusing untrusted .codex-worktree cleanup path' >&2
+  exit 1
+fi
 if [ -d .codex-worktree ]; then
-  receipt="${TMPDIR:-/tmp}/codex-worktree-cleanup-$(basename "$PWD")-$(date -u +%Y%m%dT%H%M%SZ).txt"
+  receipt="$(mktemp /tmp/codex-worktree-cleanup.XXXXXX.txt)"
   {
     printf 'CODEX_WORKTREE_ROOT=%s\n' "$PWD"
     printf 'cleanup_target=.codex-worktree\n'
@@ -21,6 +38,7 @@ if [ -d .codex-worktree ]; then
   rm -rf .codex-worktree
   printf 'cleanup_receipt=%s\n' "$receipt"
 fi
+CLEANUP
 '''
 
 [[actions]]
@@ -28,9 +46,8 @@ name = "Env"
 icon = "tool"
 script = '''
 cd "${CODEX_WORKTREE_PATH:-$PWD}"
-bash "$HOME/.codex/bin/codex-worktree-env"
-. .codex-worktree/env.sh
-env | sort | grep -E '^(CODEX_WORKTREE_|CARGO_TARGET_DIR|CARGO_LLVM_COV_TARGET_DIR|TMPDIR|TMP=|TEMP=|HOST=|HARNESS_ULTRAGOAL_)'
+/usr/bin/env -i CODEX_WORKTREE_PATH="${CODEX_WORKTREE_PATH:-$PWD}" PWD="$PWD" CODEX_HOST_CARGO_BIN="$HOME/.cargo/bin/cargo" PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" /bin/bash .codex/setup-worktree-env.sh
+.codex-worktree/run-command sh -c 'env | sort | grep -E "^(CODEX_WORKTREE_|CARGO_TARGET_DIR|CARGO_LLVM_COV_TARGET_DIR|TMPDIR|TMP=|TEMP=|HOST=|HARNESS_ULTRAGOAL_)"'
 '''
 
 [[actions]]
@@ -38,12 +55,8 @@ name = "Agent Docs"
 icon = "tool"
 script = '''
 cd "${CODEX_WORKTREE_PATH:-$PWD}"
-. .codex-worktree/env.sh 2>/dev/null || bash "$HOME/.codex/bin/codex-worktree-env"
-. .codex-worktree/env.sh
-test -f docs/agent-first-repo-shape.md
-test -f templates/AGENT_STANDARDS.md
-test -f skills/agent-first-repo-init/SKILL.md
-test -f skills/agent-first-repo-retrofit/SKILL.md
+/usr/bin/env -i CODEX_WORKTREE_PATH="${CODEX_WORKTREE_PATH:-$PWD}" PWD="$PWD" CODEX_HOST_CARGO_BIN="$HOME/.cargo/bin/cargo" PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" /bin/bash .codex/setup-worktree-env.sh
+.codex-worktree/run-command sh -c 'test -f docs/agent-first-repo-shape.md && test -f templates/AGENT_STANDARDS.md && test -f skills/agent-first-repo-init/SKILL.md && test -f skills/agent-first-repo-retrofit/SKILL.md'
 '''
 
 [[actions]]
@@ -51,10 +64,8 @@ name = "Fast Check"
 icon = "tool"
 script = '''
 cd "${CODEX_WORKTREE_PATH:-$PWD}"
-. .codex-worktree/env.sh 2>/dev/null || bash "$HOME/.codex/bin/codex-worktree-env"
-. .codex-worktree/env.sh
-bash -n .codex/setup-worktree-env.sh
-cargo test --offline
+/usr/bin/env -i CODEX_WORKTREE_PATH="${CODEX_WORKTREE_PATH:-$PWD}" PWD="$PWD" CODEX_HOST_CARGO_BIN="$HOME/.cargo/bin/cargo" PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" /bin/bash .codex/setup-worktree-env.sh
+.codex-worktree/run-command sh -c 'scripts/check'
 '''
 
 [[actions]]
@@ -62,6 +73,6 @@ name = "Git State"
 icon = "tool"
 script = '''
 cd "${CODEX_WORKTREE_PATH:-$PWD}"
-git status --short || true
-git log -1 --oneline || true
+/usr/bin/env -i CODEX_WORKTREE_PATH="${CODEX_WORKTREE_PATH:-$PWD}" PWD="$PWD" CODEX_HOST_CARGO_BIN="$HOME/.cargo/bin/cargo" PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" /bin/bash .codex/setup-worktree-env.sh
+.codex-worktree/run-command sh -c 'git status --short || true; git log -1 --oneline || true'
 '''

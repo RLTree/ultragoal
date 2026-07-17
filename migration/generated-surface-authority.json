@@ -225,7 +225,7 @@
         "AGENT_STANDARDS.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "1d15f94ab676ad5472f41bd6c5c73f7802ff61e669739d486b76e658607e1013"
+      "output_sha256": "2e022850e5917eba3cd45940408dd8b75ac6b5bc977acc3b4dc18ff581b3ff5e"
     },
     {
       "disposition": "source_projection",
@@ -235,7 +235,7 @@
         "PLANS.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "ab632b043a4827df6b7ec2958784d4bc745514b416f0dbf373690195179f145c"
+      "output_sha256": "8fccc836862d7337b01d01dd079b033e3eec6b04e155ffeb4753476b58eb0467"
     },
     {
       "disposition": "source_projection",
@@ -275,7 +275,7 @@
         "agent-standards/03-execplans-worktrees-and-orchestration.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "59136b9629dd68ec18f3e46828ade64becadef9c46d06e84a105f07ad8eea753"
+      "output_sha256": "a6964f16c9d3a3cd59b099760e2bdace7c39ba85bac120dc9321ca83c2e11b00"
     },
     {
       "disposition": "source_projection",
@@ -295,7 +295,7 @@
         "agent-standards/05-review-and-completion.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "3686da7e4b299b069a67883412b2903d98536b2e606b557c2f06f9978acef343"
+      "output_sha256": "3dc206c5f8b5911dc8cf3c6715e18977d042fe93869aa822afe9f95b26d3bf4e"
     },
     {
       "disposition": "source_projection",

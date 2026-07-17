@@ -29,8 +29,9 @@ claim registry, claim/release state, or shared documentation.
 
 ## Environment And Verification
 
-Run `.codex/setup-worktree-env.sh`, source `.codex-worktree/env.sh`, and use its
-isolated roots. Exercise positive, negative, replay, race, mutation, security,
+Run the sanitized bootstrap in `.codex/environments/environment.toml`, then
+use `.codex-worktree/run-command <command>` for lane commands; do not source
+the compatibility `env.sh` projection. Exercise positive, negative, replay, race, mutation, security,
 false-pass, multi-process restart, ambiguity, recovery, reconciliation, and
 zero-write read behavior.
 

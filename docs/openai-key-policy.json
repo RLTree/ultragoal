@@ -3,6 +3,7 @@
   "law_id": "openai-api-key-model-cost-external-ai-boundary",
   "env_var": "OPENAI_API_KEY",
   "active_destination": ".codex-worktree/env.sh",
+  "active_destination_role": "optional_secret_compatibility_projection",
   "allowed_destinations": [
     ".codex-worktree/env.sh"
   ],
@@ -33,5 +34,51 @@
     "local_mock",
     "no_network"
   ],
+  "current_execution_sanitation": {
+    "mode": "env_i_allowlist",
+    "wrapper": ".codex-worktree/run-command",
+    "source_env_file": false,
+    "inherits_host_environment": false,
+    "secret_values_forwarded": false,
+    "command_arguments_unrestricted": true,
+    "caller_must_not_forward_or_source_secrets": true,
+    "allowlisted_variables": [
+      "CODEX_WORKTREE_ROOT",
+      "CODEX_WORKTREE_ID",
+      "CODEX_WORKTREE_SCRATCH",
+      "CODEX_WORKTREE_STATE",
+      "CODEX_WORKTREE_HOME",
+      "CODEX_WORKTREE_TMP",
+      "CODEX_WORKTREE_PORT",
+      "TMPDIR",
+      "TMP",
+      "TEMP",
+      "HOST",
+      "HOME",
+      "XDG_CONFIG_HOME",
+      "XDG_CACHE_HOME",
+      "XDG_DATA_HOME",
+      "XDG_STATE_HOME",
+      "CARGO_TARGET_DIR",
+      "CARGO_LLVM_COV_TARGET_DIR",
+      "CARGO_HOME",
+      "RUSTUP_HOME",
+      "CARGO_NET_OFFLINE",
+      "HARNESS_ULTRAGOAL_PLUGIN_REPO",
+      "HARNESS_ULTRAGOAL_VALIDATOR_MANIFEST",
+      "HARNESS_ULTRAGOAL_VALIDATOR_RECEIPT",
+      "PATH",
+      "LANG",
+      "LC_ALL"
+    ],
+    "claim_ceiling": "inherited_environment_sanitation_only"
+  },
+  "external_reconciliation": {
+    "historical_plaintext_key_claim": "unverified_external_claim",
+    "owner_authorized_rotation_required": true,
+    "external_revocation_status": "not_observed_or_performed",
+    "repo_execution_change_does_not_revoke_provider_credentials": true,
+    "claim_ceiling": "historical_external_reconciliation_pending"
+  },
   "claim_ceiling": "config_resolution_only"
 }

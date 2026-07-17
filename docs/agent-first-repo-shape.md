@@ -91,9 +91,11 @@ state only under `.codex-worktree/`, and provide reusable setup, cleanup, env,
 agent-docs, fast-check, and git-state actions in
 `.codex/environments/environment.toml`.
 
-Agents should source `.codex-worktree/env.sh` before validation commands so
+Agents should invoke `.codex-worktree/run-command <command>` for validation so
 temp files, Cargo target output, scratch space, and worktree-local ports are
-isolated per Codex-created worktree.
+isolated per Codex-created worktree without inheriting host secrets.
+`.codex-worktree/env.sh` is an ignored compatibility projection, not an
+execution input.
 
 ## Existing Repo
 

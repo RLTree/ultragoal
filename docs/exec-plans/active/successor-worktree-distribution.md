@@ -38,8 +38,9 @@ claim, release state, or shared documentation.
 
 ## Environment And Verification
 
-Run `.codex/setup-worktree-env.sh`, source `.codex-worktree/env.sh`, and use its
-isolated Cargo, home, state, scratch, and temporary roots. Verify positive,
+Run the sanitized bootstrap in `.codex/environments/environment.toml`, then
+use `.codex-worktree/run-command <command>` for lane commands; do not source
+the compatibility `env.sh` projection. Verify positive,
 negative, race, mutation, confinement, false-pass, interruption/recovery,
 repeat-use, and zero-write behavior. Source tests cannot prove installed or
 runtime claims.

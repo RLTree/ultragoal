@@ -32,8 +32,10 @@ credentials, and mutable runtime state.
 - Branch first, worktree second. The orchestrator must ensure the branch ref
   exists before requesting an app worktree from that branch.
 - Repo-managed Codex app environments should create ignored per-worktree state
-  under `.codex-worktree/`, write `.codex-worktree/env.sh`, and assign isolated
-  state, scratch, home, temp, port, cache, and target directories.
+  under `.codex-worktree/`, write a sanitized `.codex-worktree/run-command`
+  wrapper, and assign isolated state, scratch, home, temp, port, cache, target,
+  and Cargo toolchain directories. Lane commands must use the wrapper rather
+  than source the compatibility `env.sh` projection.
 - Runtime output belongs in ignored per-worktree state, not in repo-managed
   `.codex/` configuration.
 - Durable identity belongs in repo-managed contracts and receipts. Ephemeral
