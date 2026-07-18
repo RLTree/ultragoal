@@ -1,8 +1,6 @@
 pub(crate) mod lane;
 pub(crate) mod ready;
 
-pub(crate) mod coverage;
-
 use crate::digest;
 use crate::json_boundary;
 use serde_json::Value;

@@ -94,7 +94,7 @@ fn law_and_text_boundaries_hit_negative_edges() {
         }
     });
     assert!(
-        crate::claim_semantics::coverage::digests::changed_files_digest(&root, &coverage_manifest)
+        crate::audit::coverage::scope::digests::changed_files_digest(&root, &coverage_manifest)
             .expect("changed digest")
             .starts_with("sha256:")
     );
@@ -105,7 +105,7 @@ fn law_and_text_boundaries_hit_negative_edges() {
         }
     });
     let digest_err =
-        crate::claim_semantics::coverage::digests::changed_files_digest(&root, &hardlink_manifest)
+        crate::audit::coverage::scope::digests::changed_files_digest(&root, &hardlink_manifest)
             .expect_err("hard-linked changed-file input is rejected");
     assert!(digest_err.contains("coverage digest read failed"));
 

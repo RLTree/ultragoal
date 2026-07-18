@@ -54,7 +54,7 @@ fn archive_zip_sync_result_is_testable() {
 #[test]
 fn coverage_digest_boundary_contracts_are_testable() {
     assert!(
-        crate::claim_semantics::coverage::digests::source_rel_path(
+        crate::audit::coverage::scope::digests::source_rel_path(
             Path::new("/repo"),
             Path::new("/outside/file.rs")
         )
@@ -62,7 +62,7 @@ fn coverage_digest_boundary_contracts_are_testable() {
         .contains("source tree strip failed")
     );
     assert!(
-        crate::claim_semantics::coverage::digests::digest_file_bytes(
+        crate::audit::coverage::scope::digests::digest_file_bytes(
             "src/lib.rs",
             Err("forced read".to_string()),
         )
