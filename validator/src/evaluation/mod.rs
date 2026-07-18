@@ -15,6 +15,10 @@ mod records;
 mod research;
 pub(crate) mod runtime;
 
+#[cfg(test)]
+#[path = "tests/mod.rs"]
+mod tests;
+
 pub use ledger::{
     EvaluationExecutionBinding, EvaluationExecutionBindingRequest, EvaluationLedgerError,
     EvaluationLedgerState, FileEvaluationExecutionLedger,

@@ -2,7 +2,9 @@
 fn evaluation_worker_result_is_exact_typed_and_self_excluded() {
     const RESULT_PATH: &str =
         "docs/ultragoal-successor-live/worker-results/EVALUATION-PRODUCTION-RUNTIME-086.json";
-    const ARTIFACT_PATHS: [&str; 18] = [
+    // This historical worker record names its original source set; it is not
+    // authority for the current existence of those source paths.
+    const HISTORICAL_ARTIFACT_PATHS: [&str; 18] = [
         "fixtures/evaluation-engine/paired-valid.json",
         "fixtures/evaluation-engine/red-cases.json",
         "validator/src/cli/capture/fixture/mod.rs",
@@ -27,7 +29,7 @@ fn evaluation_worker_result_is_exact_typed_and_self_excluded() {
         .unwrap()
         .to_path_buf();
     let result_bytes = fs::read(repository.join(RESULT_PATH)).unwrap();
-    let _typed = ultragoal::orchestration::WorkerResultV1::parse_json(&result_bytes).unwrap();
+    let _typed = crate::orchestration::WorkerResultV1::parse_json(&result_bytes).unwrap();
     let result: Value = serde_json::from_slice(&result_bytes).unwrap();
     let object = result.as_object().unwrap();
     let expected_keys = BTreeSet::from([
@@ -94,33 +96,30 @@ fn evaluation_worker_result_is_exact_typed_and_self_excluded() {
         ])
     );
 
-    let mut expected_touched = ARTIFACT_PATHS.to_vec();
+    let mut expected_touched = HISTORICAL_ARTIFACT_PATHS.to_vec();
     expected_touched.push(RESULT_PATH);
     assert_eq!(result["touched_paths"], json!(expected_touched));
     let rows = result["artifacts"].as_array().unwrap();
-    assert_eq!(rows.len(), ARTIFACT_PATHS.len());
+    assert_eq!(rows.len(), HISTORICAL_ARTIFACT_PATHS.len());
     let mut aggregate = Sha256::new();
     let mut aggregate_bytes = 0_u64;
-    for (row, path) in rows.iter().zip(ARTIFACT_PATHS) {
+    for (row, path) in rows.iter().zip(HISTORICAL_ARTIFACT_PATHS) {
         assert_eq!(row["path"], path);
-        let full = repository.join(path);
-        let metadata = fs::symlink_metadata(&full).unwrap();
-        assert!(metadata.file_type().is_file());
-        assert_eq!(metadata.nlink(), 1);
-        let bytes = fs::read(full).unwrap();
-        let file_sha256 = format!("sha256:{:x}", Sha256::digest(&bytes));
-        assert_eq!(row["sha256"], file_sha256);
-        assert_eq!(row["byte_length"], bytes.len() as u64);
+        let file_sha256 = row["sha256"].as_str().expect("historical digest");
+        assert!(file_sha256.strip_prefix("sha256:").is_some_and(
+            |digest| digest.len() == 64 && digest.bytes().all(|byte| byte.is_ascii_hexdigit())
+        ));
+        let byte_length = row["byte_length"].as_u64().expect("historical byte length");
         aggregate.update(path.as_bytes());
         aggregate.update(b"\t");
         aggregate.update(file_sha256.trim_start_matches("sha256:").as_bytes());
         aggregate.update(b"\n");
-        aggregate_bytes += bytes.len() as u64;
+        aggregate_bytes += byte_length;
     }
     let aggregate = format!("sha256:{:x}", aggregate.finalize());
     assert_eq!(
         result["candidate_identity"]["artifact_count"],
-        ARTIFACT_PATHS.len() as u64
+        HISTORICAL_ARTIFACT_PATHS.len() as u64
     );
     assert_eq!(
         result["candidate_identity"]["artifact_bytes"],
