@@ -28,10 +28,10 @@ include!("../../../tests/evaluation_runtime_contract/next_root.rs");
 include!("../../../tests/evaluation_runtime_contract/research/source/url.rs");
 include!("../../../tests/evaluation_runtime_contract/research/proposal.rs");
 include!(
-    "../../../tests/evaluation_runtime_contract/research/source_record_fields_and_canonical_binding_fail_closed.rs"
+    "../../../tests/evaluation_runtime_contract/research/source/record_fields_and_canonical_binding_fail_closed.rs"
 );
 include!(
-    "../../../tests/evaluation_runtime_contract/research/source_substitution_mutate_restore_and_classification_laundering_fail_closed.rs"
+    "../../../tests/evaluation_runtime_contract/research/source/substitution_mutate_restore_and_classification_laundering_fail_closed.rs"
 );
 include!(
     "../../../tests/evaluation_runtime_contract/research/external_stable_fact_and_rebound_laundering_fail_closed.rs"
