@@ -76,6 +76,19 @@ discovery, supported-host runtime, Product Fitness, readiness, release, and
 completion remain withheld; the next N06-bearing proof is the exact installed
 daily-driver journey, not another source receipt.
 
+The post-integration activation check exposed that the adopted HCT-FIXTURES
+types were still test-only. Root correction `9644fba8a` makes `FixtureSpec`,
+`FixtureScheduler`, `IsolationLease`, and `ExpectedOutcome` production-public;
+`e0b626701` binds completion to the confined child adapter through
+`capture::execute_scheduled_fixture`. The warning-deny binary and external
+inventory example compile, and the executing adapter controls pass 9/9. This
+raises only the HCT-FIXTURES source/API ceiling. On the current macOS host the
+identity-conditioned recursive cleanup primitive remains unavailable, so the
+executed route correctly retains `RecoveryRequired` and returns
+`CleanupFailure`; accepted completion, installed behavior, repeat use, Product
+Fitness, readiness, release, and completion remain withheld. N07 must refresh
+from the corrected root identity before its source acceptance can be current.
+
 N07 also has a narrower accepted public/live-source increment. Exact source
 `bc6581ba0ee996c751bc0ab621f867ba27d95556` / tree
 `fb997fcd3c0f5418b11cc6ac4fa7d1608cfe669f` and its equivalent root integration
