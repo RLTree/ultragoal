@@ -15,6 +15,9 @@ pub(super) fn validate(
         return Ok(());
     }
     let base = observed_base(registry)?;
+    if base != (SOURCE_BASE_COMMIT, SOURCE_BASE_TREE) {
+        return Err(invalid("lease source base is not the root-issued base"));
+    }
     validate_git_base(reads, root, base)?;
     let records = registry
         .pointer("/lease_state/active_records")
