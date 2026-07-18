@@ -1,14 +1,12 @@
 #![cfg(target_os = "macos")]
 
-#[path = "capture.rs"]
-mod capture;
 #[path = "detached_descendant.rs"]
 mod detached_descendant;
 #[path = "process_group/mod.rs"]
 mod process_group;
 
+use crate::cli::capture::fixture::FixtureCaptureAdapter;
 use crate::fixture_scheduler::*;
-use capture::fixture::FixtureCaptureAdapter;
 use std::cell::RefCell;
 use std::collections::BTreeSet;
 use std::ffi::OsString;

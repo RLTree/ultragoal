@@ -5,133 +5,6 @@ mod evaluation;
 #[path = "../src/fixture_scheduler/mod.rs"]
 mod fixture_scheduler;
 
-// Recreate the production-only capture dependency closure in this integration
-// crate. The repository's legacy capture harness intentionally omits the
-// scheduler adapter under cfg(test), so this focused contract imports the real
-// adapter directly and supplies only its two-stream bounded-output test seam.
-mod environment {
-    #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-    pub(super) enum InvocationSensitivity {
-        Public,
-        SecretBearing,
-    }
-
-    impl InvocationSensitivity {
-        pub(super) fn from_bound_secrets(secrets: &[Vec<u8>]) -> Self {
-            if secrets.iter().any(|secret| !secret.is_empty()) {
-                Self::SecretBearing
-            } else {
-                Self::Public
-            }
-        }
-
-        pub(super) const fn is_secret_bearing(self) -> bool {
-            matches!(self, Self::SecretBearing)
-        }
-    }
-}
-mod output {
-    use super::environment::InvocationSensitivity;
-    use std::io::Read;
-    use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
-
-    pub(super) struct OutputBudget {
-        limit: u64,
-        observed: AtomicU64,
-        exceeded: AtomicBool,
-    }
-
-    pub(super) struct PendingOutput(Vec<u8>);
-
-    pub(super) struct CapturedOutput(Vec<u8>);
-
-    impl CapturedOutput {
-        pub(super) fn retained(&self) -> &[u8] {
-            &self.0
-        }
-    }
-
-    pub(super) struct StableOutputs {
-        pub(super) first: CapturedOutput,
-        pub(super) second: CapturedOutput,
-        pub(super) output_limit_exceeded: bool,
-    }
-
-    impl OutputBudget {
-        pub(super) fn for_sensitivity(limit: usize, _sensitivity: InvocationSensitivity) -> Self {
-            Self {
-                limit: limit as u64,
-                observed: AtomicU64::new(0),
-                exceeded: AtomicBool::new(false),
-            }
-        }
-
-        fn claim(&self, requested: usize) -> usize {
-            loop {
-                let observed = self.observed.load(Ordering::SeqCst);
-                let remaining = self.limit.saturating_sub(observed);
-                let claimed = remaining.min(requested as u64);
-                if self
-                    .observed
-                    .compare_exchange(
-                        observed,
-                        observed + claimed,
-                        Ordering::SeqCst,
-                        Ordering::SeqCst,
-                    )
-                    .is_ok()
-                {
-                    if claimed < requested as u64 || claimed == 0 {
-                        self.exceeded.store(true, Ordering::SeqCst);
-                    }
-                    return claimed as usize;
-                }
-            }
-        }
-
-        pub(super) fn exceeded(&self) -> bool {
-            self.exceeded.load(Ordering::SeqCst)
-        }
-
-        pub(super) fn finalize_streams(
-            &self,
-            first: PendingOutput,
-            second: PendingOutput,
-        ) -> StableOutputs {
-            StableOutputs {
-                first: CapturedOutput(first.0),
-                second: CapturedOutput(second.0),
-                output_limit_exceeded: self.exceeded(),
-            }
-        }
-    }
-
-    pub(super) fn observe(
-        mut reader: impl Read,
-        _limit: usize,
-        budget: &OutputBudget,
-    ) -> Result<PendingOutput, String> {
-        let mut retained = Vec::new();
-        let mut buffer = [0_u8; 16 * 1024];
-        loop {
-            let read = reader
-                .read(&mut buffer)
-                .map_err(|_| "captured output stream read failed".to_owned())?;
-            if read == 0 {
-                break;
-            }
-            let allowed = budget.claim(read);
-            retained.extend_from_slice(&buffer[..allowed]);
-            if allowed < read {
-                break;
-            }
-        }
-        Ok(PendingOutput(retained))
-    }
-}
-#[path = "../src/cli/capture/fixture/mod.rs"]
-mod fixture_capture;
-
 use evaluation::runtime::{
     FixtureEvaluationBridge, FixtureTaskRequest, ProductionRuntimeError, execute_production,
 };
@@ -146,19 +19,16 @@ use evaluation::{
     RejectedRecommendation, ResearchAudit, ResearchSource, ResearchSourceClass,
     ResearchSourceRecord, ResearchSourceRecordDefinition, RuntimeConfiguration, VerifiedSourceFact,
 };
-use fixture_capture::FixtureCaptureAdapter;
 use fixture_scheduler::{
-    ConfinementPolicy, ExpectedOutcome, FixtureExecutionRecord, FixtureExecutionRecordCapture,
-    FixtureKind, FixtureScheduler, FixtureSpec, NetworkIsolation, ObservedOutcome, ResourceKind,
-    RunDisposition,
+    ExpectedOutcome, FixtureExecutionRecord, FixtureExecutionRecordCapture, FixtureKind,
+    FixtureSpec, ObservedOutcome, ResourceKind,
 };
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
-use std::ffi::OsString;
 use std::fs;
 use std::io::Write;
-use std::os::unix::fs::{MetadataExt, PermissionsExt, symlink};
+use std::os::unix::fs::{MetadataExt, symlink};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::atomic::{AtomicU64, Ordering};

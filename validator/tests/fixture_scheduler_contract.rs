@@ -9,8 +9,6 @@ mod orchestration;
 mod adversarial;
 #[path = "fixture_scheduler_contract/confinement/mod.rs"]
 mod confinement;
-#[path = "fixture_scheduler_contract/execution_adapter/mod.rs"]
-mod execution_adapter;
 #[path = "fixture_scheduler_contract/isolation/mod.rs"]
 mod isolation;
 // FIXTURE-RECOVERY-STATE-CORRECTION-019 is retained on disk as historical
