@@ -300,7 +300,7 @@
       "N11"
     ],
     "deferred_context_proposal": "LIVE-CONTEXT-ENVELOPE-CONFINEMENT-DEFER-052 remains historical and nonselectable; its non-adoption does not modify the already adopted successor contract.",
-    "claim_effect": "No required claim is promoted. N00 may become integrated only after this exact candidate passes independent review and root reconciliation."
+    "claim_effect": "No required claim is promoted. The candidate encodes the atomic N00 transition, but root must not consume N01 eligibility until this exact correction passes independent review."
   },
-  "highest_honest_ceiling": "The successor contract is adopted for implementation in this live repository. P0 source laws are accepted; N00 operational rebinding is a candidate pending independent review. No package, install, discovery, runtime, journey, release, or completion claim is promoted."
+  "highest_honest_ceiling": "The successor contract is adopted for implementation in this live repository. P0 source laws are accepted; the atomic N00 correction is pending exact review. N01-N11 require reobservation and no package, install, discovery, runtime, journey, release, or completion claim is promoted."
 }

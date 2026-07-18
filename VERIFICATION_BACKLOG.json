@@ -1,7 +1,7 @@
 {
   "schema": "harness-ultragoal.verification-backlog.v1",
-  "manifest_digest": "sha256:79dc4d43b8b0fb02ff4340cde302d72fdcc01cb0b6aa6c0f3ec240d975a184e8",
-  "registry_preimage_digest": "sha256:79dc4d43b8b0fb02ff4340cde302d72fdcc01cb0b6aa6c0f3ec240d975a184e8",
+  "manifest_digest": "sha256:e43c911f76fdadeb964218069c132b97e264f5d170b2fccb698bdce7cc85a2a4",
+  "registry_preimage_digest": "sha256:e43c911f76fdadeb964218069c132b97e264f5d170b2fccb698bdce7cc85a2a4",
   "audit_cadence": [
     {"audit":"lane_freeze","trigger":"clean lane source freeze before handoff","owner":"lane owner","candidate_identity":"clean current HEAD/tree derived from LANE_REGISTRY.json protected base","evidence_surface":["focused behavior","negative controls","race or recovery controls","owned source laws"],"claims_withheld":["integration","installed","runtime","readiness","release","completion"]},
     {"audit":"root_integration","trigger":"one accepted authority-bearing increment lands on root","owner":"OWN-ULTRA-ROOT","candidate_identity":"clean current HEAD/tree derived from LANE_REGISTRY.json protected base","evidence_surface":["affected strict compilation","cross-lane behavior","namespace","generated authority","targeted coverage"],"claims_withheld":["installed","runtime","product success","release","completion"]},
@@ -11,9 +11,9 @@
   "rows": [
     {
       "id": "BACKLOG-001", "claim_id": "CL-SOURCE", "class": "root_owed", "owner": "OWN-ULTRA-ROOT",
-      "required_proof": "N00 adoption of the exact contract/ref set and canonical source projection.", "blocker_type": "root_integration_needed",
+      "required_proof": "Current N01/N02 source-authority and duplicate-writer reconciliation under the adopted epoch.", "blocker_type": "root_integration_needed",
       "attempts": [{"id": "OBS-001", "attempt_kind": "withheld_claim_decision", "action": "Withhold CL-SOURCE until the named same-surface proof is current.", "status": "withheld", "attempted_at": "2026-07-16T22:36:38-07:00", "external_receipt": {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json", "digest": "sha256:67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc"}, "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:43b1ceffd9aee3cbdf617177a4bebd3da69b35ec0aa58fa12e33272522d44dbc"}}],
-      "next_action": "Run the root-owned N00 adoption transition; P0 source gates are current.", "claim_ceiling_impact": "withheld", "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:43b1ceffd9aee3cbdf617177a4bebd3da69b35ec0aa58fa12e33272522d44dbc"}
+      "next_action": "Reobserve N01 on the adopted exact refs, then reconcile N02 inventory and duplicate authority.", "claim_ceiling_impact": "withheld", "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:43b1ceffd9aee3cbdf617177a4bebd3da69b35ec0aa58fa12e33272522d44dbc"}
     },
     {
       "id": "BACKLOG-002", "claim_id": "CL-PACKAGE", "class": "externally_blocked", "owner": "OWN-ULTRA-ROOT",
@@ -94,5 +94,5 @@
       "next_action": "Obtain typed goal/validator evidence and finalise projections.", "claim_ceiling_impact": "withheld", "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:43b1ceffd9aee3cbdf617177a4bebd3da69b35ec0aa58fa12e33272522d44dbc"}
     }
   ],
-  "generated_at": "2026-07-18T00:05:00-07:00"
+  "generated_at": "2026-07-18T00:20:00-07:00"
 }
