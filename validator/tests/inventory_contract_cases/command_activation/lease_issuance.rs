@@ -7,7 +7,7 @@ fn active_lease_issuance_rejects_identity_and_authority_substitution() {
     });
     assert_inventory_error(
         &record_mismatch,
-        "active lease base differs from observed source base",
+        "active lease base differs from source base",
     );
 
     let wrong_git_tree = source_repo("lease-git-tree-mismatch");
@@ -38,10 +38,7 @@ fn active_lease_issuance_rejects_identity_and_authority_substitution() {
             .unwrap()
             .push(duplicate);
     });
-    assert_inventory_error(
-        &duplicate_gate,
-        "required lease issuance gate is missing or duplicated",
-    );
+    assert_inventory_error(&duplicate_gate, "required gate is missing or duplicated");
 
     let scope_substitution = source_repo("lease-scope-substitution");
     mutate_registry(&scope_substitution, |registry| {
@@ -50,7 +47,7 @@ fn active_lease_issuance_rejects_identity_and_authority_substitution() {
     });
     assert_inventory_error(
         &scope_substitution,
-        "active lease owned_symbols differ from scope authority",
+        "lease owned_symbols differs from scope authority",
     );
 }
 

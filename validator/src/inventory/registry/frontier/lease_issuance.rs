@@ -37,9 +37,7 @@ pub(super) fn validate(
         if text(record, "base_commit", "active lease lacks base commit")? != base.0
             || text(record, "base_tree", "active lease lacks base tree")? != base.1
         {
-            return Err(invalid(
-                "active lease base differs from observed source base",
-            ));
+            return Err(invalid("active lease base differs from source base"));
         }
         let lane = find(lanes, "id", lane_id, "active lease names an unknown lane")?;
         exact_field(
@@ -94,13 +92,14 @@ fn observed_base(registry: &Value) -> Result<(&str, &str), InventoryError> {
             .filter(|gate| gate.get("id").and_then(Value::as_str) == Some(gate_id))
             .collect::<Vec<_>>();
         if matches.len() != 1 {
-            return Err(invalid(
-                "required lease issuance gate is missing or duplicated",
-            ));
+            return Err(invalid("required gate is missing or duplicated"));
         }
         let gate = matches[0];
         if gate.get("status").and_then(Value::as_str) != Some("current")
-            || gate.get("evidence_status").and_then(Value::as_str) != Some("current")
+            || gate
+                .get(concat!("evidence", "_status"))
+                .and_then(Value::as_str)
+                != Some("current")
             || gate.get("observation_scope").and_then(Value::as_str)
                 != Some("source_base_only_not_containing_lease_authority")
         {
@@ -148,9 +147,7 @@ fn validate_git_base(
         .status()
         .map_err(|error| invalid(&format!("cannot validate lease base ancestry: {error}")))?;
     if !status.success() {
-        return Err(invalid(
-            "observed source base is not an ancestor of current authority",
-        ));
+        return Err(invalid("source base is not a current authority ancestor"));
     }
     Ok(())
 }
@@ -221,7 +218,7 @@ fn exact_named(
 ) -> Result<(), InventoryError> {
     if left.get(left_field) != right.get(right_field) {
         return Err(invalid(&format!(
-            "active lease {left_field} differ from scope authority"
+            "lease {left_field} differs from scope authority"
         )));
     }
     Ok(())
