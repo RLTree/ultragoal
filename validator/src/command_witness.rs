@@ -32,6 +32,7 @@ fn option_identity(option: OptionSpec) -> OptionIdentity {
             ValueKind::Flag => "flag",
             ValueKind::Identifier => "identifier",
             ValueKind::RelativePath => "relative-path",
+            ValueKind::HostPath => "host-path",
         },
         required: option.required,
     }

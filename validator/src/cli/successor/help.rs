@@ -92,6 +92,7 @@ fn json_help(descriptors: &[&CommandDescriptor]) -> String {
                     super::command_contract::ValueKind::Flag => "flag",
                     super::command_contract::ValueKind::Identifier => "identifier",
                     super::command_contract::ValueKind::RelativePath => "relative-path",
+                    super::command_contract::ValueKind::HostPath => "host-path",
                 },
                 option.required
             );

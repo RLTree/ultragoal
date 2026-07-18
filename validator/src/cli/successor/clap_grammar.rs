@@ -104,6 +104,10 @@ fn option_arg(option: OptionSpec) -> Arg {
             .action(ArgAction::Set)
             .num_args(1)
             .value_name("RELATIVE_PATH"),
+        ValueKind::HostPath => argument
+            .action(ArgAction::Set)
+            .num_args(1)
+            .value_name("HOST_PATH"),
     }
 }
 

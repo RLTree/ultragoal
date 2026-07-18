@@ -18,6 +18,7 @@ const INPUT: OptionSpec = option(OptionName::Input, ValueKind::RelativePath, tru
 const CANDIDATE: OptionSpec = option(OptionName::Candidate, ValueKind::Identifier, true);
 const REGISTRY: OptionSpec = option(OptionName::Registry, ValueKind::RelativePath, false);
 const APPROVE_RETIREMENT: OptionSpec = option(OptionName::ApproveRetirement, ValueKind::Flag, true);
+const PACKAGE_ROOT: OptionSpec = option(OptionName::PackageRoot, ValueKind::HostPath, false);
 
 pub(super) const TARGET_OPTION: &[OptionSpec] = &[TARGET];
 pub(super) const FIT_APPLY: &[OptionSpec] = &[TARGET, PLAN, ACCEPT_PLAN];
@@ -37,6 +38,7 @@ pub(super) const ADAPTER_OPTIONS: &[OptionSpec] = &[SPEC, PROVIDER];
 pub(super) const REGISTRY_OPTION: &[OptionSpec] = &[REGISTRY];
 pub(super) const MIGRATE_APPLY: &[OptionSpec] = &[PLAN, ACCEPT_PLAN];
 pub(super) const MIGRATE_RETIRE: &[OptionSpec] = &[PLAN, APPROVE_RETIREMENT];
+pub(super) const CAPABILITIES_OPTION: &[OptionSpec] = &[PACKAGE_ROOT];
 
 const fn option(name: OptionName, kind: ValueKind, required: bool) -> OptionSpec {
     OptionSpec {

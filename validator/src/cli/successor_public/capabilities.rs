@@ -1,5 +1,6 @@
 use super::*;
 use crate::agent_roles::CANONICAL_AGENT_ROLES;
+use crate::cli::successor::{OptionName, ParsedValue};
 use crate::plugin_product::agent_discovery::{
     LocalAgentAuthorityObservation, LocalAgentAuthorityRequest, observe_local_authority,
 };
@@ -13,7 +14,6 @@ pub(super) fn project(
 ) -> RuntimeOutcome {
     if invocation.command != SuccessorCommand::Inspect(InspectTarget::Capabilities)
         || invocation.effect != EffectClass::Read
-        || !invocation.arguments.is_empty()
     {
         return RuntimeSession::new(context, None).dispatch(invocation);
     }
@@ -30,32 +30,62 @@ pub(super) fn project(
         );
     };
     let session_id = session_id(context.context_id(), &candidate_id);
-    let authority = authority_projection(context, home, &candidate_id, &session_id);
+    let Ok(package_root) = package_root(invocation) else {
+        return RuntimeSession::new(context, None).dispatch(invocation);
+    };
+    let authority = authority_projection(context, home, package_root, &candidate_id, &session_id);
     if context.revalidate().is_err() {
         return RuntimeSession::new(context, None).dispatch(invocation);
     }
     render(context, authority)
 }
 
+fn package_root(invocation: &ParsedInvocation) -> Result<Option<&Path>, ()> {
+    match invocation.arguments.as_slice() {
+        [] => Ok(None),
+        [argument]
+            if argument.name == OptionName::PackageRoot
+                && matches!(&argument.value, ParsedValue::HostPath(_)) =>
+        {
+            let ParsedValue::HostPath(path) = &argument.value else {
+                return Err(());
+            };
+            Ok(Some(path.as_path()))
+        }
+        _ => Err(()),
+    }
+}
+
 fn authority_projection(
     context: &LiveContext,
     home: Option<&Path>,
+    package_root: Option<&Path>,
     candidate_id: &str,
     session_id: &str,
 ) -> Value {
-    let root = Path::new(&context.roots().worktree_root);
-    let binding = binding_projection(context, home, root, candidate_id, session_id);
+    let project_root = Path::new(&context.roots().worktree_root);
+    let binding = binding_projection(
+        context,
+        home,
+        package_root,
+        project_root,
+        candidate_id,
+        session_id,
+    );
+    let Some(package_root) = package_root else {
+        return authority_status("unavailable", "package-root-unavailable", binding, None);
+    };
     let Some(home) = home else {
         return authority_status("unavailable", "home-unavailable", binding, None);
     };
     let request = LocalAgentAuthorityRequest {
-        source_root: root,
-        package_root: root.to_path_buf(),
+        source_root: package_root,
+        package_root: package_root.to_path_buf(),
         installed_root: home.join(".codex/plugins/harness-ultragoal"),
         cache_family_root: home
             .join(".codex/plugins/cache/local-harness-plugins/harness-ultragoal"),
         global_root: home.to_path_buf(),
-        project_root: root.to_path_buf(),
+        project_root: project_root.to_path_buf(),
         candidate_id,
         session_id,
     };
@@ -71,16 +101,17 @@ fn authority_projection(
 fn binding_projection(
     context: &LiveContext,
     home: Option<&Path>,
-    root: &Path,
+    package_root: Option<&Path>,
+    project_root: &Path,
     candidate_id: &str,
     session_id: &str,
 ) -> Value {
     json!({
         "candidate_id": candidate_id,
         "session_id": session_id,
-        "source_root_id": opaque_root_id(context.context_id(), "source", root),
-        "package_root_id": opaque_root_id(context.context_id(), "package", root),
-        "project_root_id": opaque_root_id(context.context_id(), "project", root),
+        "source_root_id": package_root.map(|root| opaque_root_id(context.context_id(), "source", root)),
+        "package_root_id": package_root.map(|root| opaque_root_id(context.context_id(), "package", root)),
+        "project_root_id": opaque_root_id(context.context_id(), "project", project_root),
         "home_root_id": home.map(|path| opaque_root_id(context.context_id(), "home", path)),
     })
 }

@@ -1,3 +1,5 @@
+use std::path::{Path, PathBuf};
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum OptionName {
     Target,
@@ -15,6 +17,7 @@ pub enum OptionName {
     Candidate,
     Registry,
     ApproveRetirement,
+    PackageRoot,
 }
 
 impl OptionName {
@@ -35,6 +38,7 @@ impl OptionName {
             Self::Candidate => "--candidate",
             Self::Registry => "--registry",
             Self::ApproveRetirement => "--approve-retirement",
+            Self::PackageRoot => "--package-root",
         }
     }
 }
@@ -44,6 +48,7 @@ pub enum ValueKind {
     Flag,
     Identifier,
     RelativePath,
+    HostPath,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -63,10 +68,20 @@ impl RelativePath {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
+pub struct HostPath(pub(crate) PathBuf);
+
+impl HostPath {
+    pub fn as_path(&self) -> &Path {
+        &self.0
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ParsedValue {
     Flag,
     Identifier(String),
     RelativePath(RelativePath),
+    HostPath(HostPath),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
