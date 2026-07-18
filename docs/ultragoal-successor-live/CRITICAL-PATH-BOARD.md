@@ -32,9 +32,12 @@ is reaccepted at source candidate `c7295ac0bf3b4366cc33cb50e482e55ee8935e74` / t
 accepted at `9a2141e3f5ccf5d7488947a5c0156794b4376066` / tree
 `9cc386a9b5dafb55259fe4c60439e326d120802a`. N03 typed CLI/state source closure
 is accepted at `46ad7794a7e597d93d0afc3465f287d6a7161885` / tree
-`7b8c0647422db58bd5216b6444724ad882cb09d5`. N04-N07 are the next dependency
-frontier, but remain blocked from lease issuance until the semantic-standards
-debt checkpoint and lane restructuring reconcile their production tool rows.
+`7b8c0647422db58bd5216b6444724ad882cb09d5`. The accumulated semantic-standards
+checkpoint passes, and N04-N07 are the next four-lane source-work frontier with
+disjoint code, test, fixture, and effect ownership. Their scheduler-ready state
+does not activate production tools; only integrated lanes enter that frontier.
+Shared schemas, generated authority, public dispatch, claims, and integration
+remain root-owned. Exact worktree leases are not yet issued.
 
 The last broad diagnostic baseline and the table below are historical context,
 not current candidate proof or a readiness surface.

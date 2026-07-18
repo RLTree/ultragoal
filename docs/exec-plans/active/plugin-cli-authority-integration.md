@@ -164,6 +164,25 @@ fixtures, effects, forbidden surfaces, tools, contract, and context. N09 live
 proof is root-owned and must separately bind package, install, cache, app
 registry, new-session discovery, tool execution, and host invalidation.
 
+### N04-N07 dependency frontier
+
+Scheduler `ready` means a lane may receive a source-work lease; it does not
+activate production tools. Only an `integrated` lane enters the production
+frontier. The four ready lanes start from one exact clean root and have no
+leased generated outputs; shared generated authority stays root-owned.
+
+| Lane | Exclusive source and fixture ownership | Root-owned seams | Effects and invalidation |
+| --- | --- | --- | --- |
+| N04 Distribution core | `validator/src/distribution/**`, distribution and plugin-distribution adapter contract tests, `fixtures/plugin-distribution-adapter/**` | Cargo/version/manifests, package adoption, public dispatch, generated package authority, install/cache/marketplace/app-registry/runtime observations and claims | Confined package and supported-host transaction effects; refresh on N02/N03 identity or consumed-interface change |
+| N05 Repository Fit core | `validator/src/repository_fit/**`, repository-fit build-support templates, exact repository-fit tests and fixtures | Public `fit` route, schemas, shared generated authority, installed runtime and claims | Repository inspection/apply/recovery effects; refresh on N02/N03 identity or consumed-interface change |
+| N06 Routine and fixture execution core | `validator/src/routine_work/**`, `validator/src/fixture_scheduler/**`, exact routine/fixture-scheduler tests and fixtures | Public routine dispatch, Cargo, shared schemas/generated authority, external custody, installed runtime and claims | Child execution, custody, cleanup, recovery and reuse; refresh on N02/N03 identity or consumed-interface change |
+| N07 Observability core | `validator/src/observability/**`, exact observability tests and fixtures | Public observe/diagnose routes, schemas, local-store adoption, configured export, installed runtime and claims | Local event publication/query/deletion; refresh on N03 identity or consumed-interface change |
+
+`WS-EVAL` no longer shares `validator/src/fixture_scheduler/**`; N11 consumes
+the integrated N06 interface later. Nonexistent legacy scope roots are removed.
+Root integrates accepted authority-bearing increments one at a time, initially
+N05, N06, N07, then N04 unless live dependency evidence changes that order.
+
 ## Worktree protocol after P0
 
 Use Codex-managed worktree tasks for substantial write streams. Start every
@@ -314,10 +333,13 @@ claim and representative product or release proof.
   `46ad7794a7e597d93d0afc3465f287d6a7161885` / tree
   `7b8c0647422db58bd5216b6444724ad882cb09d5`. The focused state boundary passes
   9/9 and the accepted review correction confines registry-derived fixture
-  inputs without expanding the frozen single-owner claim. N04-N07 are now the
-  dependency frontier, but lease issuance remains blocked until the
-  semantic-standards debt checkpoint and lane restructuring reconcile their
-  production tool rows. Installed and product claims remain withheld.
+  inputs without expanding the frozen single-owner claim. The accumulated P0
+  semantic-standards checkpoint passes on the integrated source, and the live
+  registry now exposes N04-N07 as a four-lane source-work frontier with exact
+  nonoverlapping code/test/fixture scopes. Scheduler readiness is separated
+  from production activation, and no generated authority is leased. Worktree
+  leases remain unissued until this exact root checkpoint is reviewed and
+  committed. Installed and product claims remain withheld.
 - HCT-FIXTURES execution/parity, runtime, installed journey, readiness,
   release, and completion claims remain withheld.
 - The calibrated review, observability, and Product Fitness doctrine is now
@@ -348,10 +370,9 @@ claim and representative product or release proof.
   and HCT-FIXTURES mapping; target capability and product claims remain
   withheld.
 - The root-only N02-N03 serial authority chain is closed at a source ceiling.
-  Before launching the N04-N07 frontier, reconcile accumulated namespace and
-  agent-standards debt and restructure the live graph into disjoint product
-  lanes with nonoverlapping paths, authority, generated outputs, fixtures, and
-  effects.
+  The next execution wave is the exact N04-N07 four-lane frontier above; shared
+  schemas, generated authority, public dispatch, claims, and integration remain
+  root-owned.
 
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine

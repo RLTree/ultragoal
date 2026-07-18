@@ -120,7 +120,7 @@ fn active_nodes(registry: &Value) -> Result<BTreeSet<String>, InventoryError> {
     }
     Ok(states
         .into_iter()
-        .filter(|(_, state)| !matches!(state.as_str(), "blocked" | "superseded"))
+        .filter(|(_, state)| state == "integrated")
         .map(|(id, _)| id)
         .collect())
 }
@@ -178,3 +178,6 @@ fn dependency_tools(
     }
     Ok(tools)
 }
+
+#[cfg(test)]
+mod tests;
