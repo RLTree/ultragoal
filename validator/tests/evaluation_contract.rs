@@ -1,7 +1,5 @@
 #[path = "../src/evaluation/mod.rs"]
 mod evaluation;
-#[path = "../src/fixture_scheduler/mod.rs"]
-mod fixture_scheduler;
 
 use evaluation::{
     BehaviorOutcome, BoundInput, CapturedTaskObservation, CapturedTaskObservationRecord,

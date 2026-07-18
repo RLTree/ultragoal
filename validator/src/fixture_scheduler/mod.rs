@@ -11,10 +11,6 @@ mod outcome;
 mod scheduler;
 mod spec;
 
-#[cfg(test)]
-#[path = "tests/mod.rs"]
-mod tests;
-
 pub(crate) use confinement::ConfinementPlan;
 pub use confinement::ConfinementPolicy;
 #[cfg(test)]

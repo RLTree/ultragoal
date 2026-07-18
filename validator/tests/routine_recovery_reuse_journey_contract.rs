@@ -10,8 +10,6 @@ mod capture;
 mod catalog;
 #[path = "../src/digest.rs"]
 mod digest;
-#[path = "../src/fixture_scheduler/mod.rs"]
-mod fixture_scheduler;
 #[path = "routine_recovery_reuse_journey_contract/journey_scenario.rs"]
 mod journey_scenario;
 #[path = "routine_recovery_reuse_journey_contract/journeys.rs"]
