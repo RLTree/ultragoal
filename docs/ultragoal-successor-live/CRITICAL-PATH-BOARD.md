@@ -21,8 +21,12 @@ Live root: `/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal`
 Branch: `codex/successor-contract-v2-live-product`
 
 The checkpoint above is provenance, not current-candidate proof. The canonical
-registry derives a clean current HEAD/tree; no lane lease is issued and all
-N00-N17 lanes remain blocked until P0 gates pass and N00 starts a new epoch.
+registry derives a clean current HEAD/tree. P0 compile, namespace, standards,
+authored-file, and zero-write enforcement are accepted on source commit
+`ed318ce541684489d017dcfd3363501337290dab` / tree
+`bc9354969b5fe47e539bdeccccec7918a2c0045b`; no lease or product claim was
+created. N00 is the next root-only gate and N01-N17 remain blocked until it
+starts the new epoch.
 
 The last broad diagnostic baseline and the table below are historical context,
 not current candidate proof or a readiness surface.
@@ -39,8 +43,9 @@ reproof route is N12-A, N14, N14-proof, N12-B-invalidate-and-reproof, parallel
 N13/N15, N16, N17. P0 is root-only and available only for compile, namespace,
 standards, and retention-aware cleanup. P0 issuance atomically captures only
 the exact current diagnostic paths. All fourteen claims remain withheld
-with empty evidence. Cleanup removed 12.8 GB reproducible state and retained
-949 MB unique home/tmp evidence; retention-aware cleanup remains blocked.
+with empty evidence. User-authorized cleanup removed the obsolete review tree
+and reproducible worktree home/tmp state, recovering about 10.1 GB; the approved
+paths remain as empty roots and no active worktree remains.
 
 | Node | Exact completion condition | Current proof state | Current blocker | Owner | Active lease / root action | Dependents | Next authoritative proof | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |

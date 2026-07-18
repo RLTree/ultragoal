@@ -24,9 +24,10 @@ After N12 the route is N12-A -> N14 -> N14-proof -> N12-B-invalidate-and-reproof
 -> parallel N13/N15 -> N16 -> N17. P0 is available only to root for compile,
 namespace, standards, and retention-aware cleanup; product lanes remain blocked.
 All fourteen claims remain withheld with empty evidence and no validator
-receipts. Cleanup removed 12.8 GB of reproducible state; 949 MB of unique
-home/tmp evidence remains retained. Retention-aware cleanup is still blocked
-until unique evidence is reviewed and the root handoff is current.
+receipts. The user-authorized cleanup removed the obsolete review tree and
+reproducible worktree home/tmp state, recovering about 10.1 GB in addition to
+earlier cleanup; the three approved paths now exist only as empty roots. No
+unique active-worktree state remains.
 
 ## Outcome
 
@@ -38,12 +39,17 @@ product, migration, release, and completion claims on their own surfaces.
 The current P0 candidate is always the clean containing `HEAD`/tree. The
 literal checkpoint above must remain an ancestor with its exact tree; the
 freeze derives live HEAD/tree, permitted root paths, payload digests,
-projection chain, and clean status. The affected production-library check now
-reaches the inherited deny-warning wall at 664 errors; test compilation was not
-rerun at this boundary. Namespace runtime verification and four-persona exposure are blocked; standards rows are 121
-current. No lane is selectable and no lease is issued. All claims remain
-withheld. Namespace and standards are blocked/unavailable until their real
-validator commands produce candidate-bound evidence.
+projection chain, and clean status. The exact P0 source candidate
+`ed318ce541684489d017dcfd3363501337290dab` / tree
+`bc9354969b5fe47e539bdeccccec7918a2c0045b` passes the warning-free
+production-library check, 121-row standards entrypoint, authored-Rust line cap,
+and the current namespace strict route with zero findings and recursive
+zero-write comparison. One exhaustive independent review returned ACCEPT after
+the namespace inventory path was made fail-closed. This closes only the P0
+compile/namespace/standards checkpoint and makes N00 the next root-only gate.
+The full clippy wall and library-test compilation still have broad inherited
+findings, so CL-STRICT and every package/install/runtime/product claim remain
+withheld. Four-persona exposure remains reserved for its material boundary.
 
 ## Durable binding and contract lineage
 
@@ -122,9 +128,10 @@ inventory-adoption ceilings stay withheld. N00 adoption quarantines, rebinds,
 and reruns N01-N11.
 
 The root records prelaunch gates with owner, command, status, and the derived
-clean candidate: compile (blocked), namespace
+clean candidate: compile (current at the accepted P0 source freeze), namespace
 (`target/debug/ultragoal --root . check strict --claim namespace-progressive-disclosure`),
-and standards (`scripts/check-agent-standards .`). The namespace adapter
+and standards (`scripts/check-agent-standards .`). All three are current at the
+accepted P0 source freeze. The namespace adapter
 evaluates current governed source and plugin-interface names without consuming
 the N02-owned package manifest closure. Four-persona exposure
 is a product/release/completion gate, not a prelaunch lane-selection gate. No
@@ -203,8 +210,9 @@ claim and representative product or release proof.
 - P0 canonical registry/projections retain literal checkpoint
   `97e24c9706e7b489bdbdc6184ff9520a7116c6fd` / tree
   `c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`; the clean containing candidate
-  must prove permitted paths and status live. All acceptance evidence is
-  historical/nonselectable and all 14 claims remain withheld.
+  must prove permitted paths and status live. P0 source acceptance is current
+  only for compile, namespace, standards, line-cap, and zero-write enforcement;
+  all 14 product claims remain withheld.
 - The disconnected legacy red execution engine and target-repository audit are
   retired. The disconnected legacy claim, semantic-receipt, and material-review
   authority was then removed in `a11dcac01`, including its test-only dispatch
@@ -275,8 +283,12 @@ claim and representative product or release proof.
   surviving plan and claim-module digests, and settled the verification backlog
   and completion manifest through one explicit reproducible registry-preimage
   rule. All claims remain withheld, and no replacement tracker or receipt was
-  created. A new exact P0 lease may be issued only from a later clean candidate
-  and current diagnostic set.
+  created. The subsequent root-owned debt repair is accepted at
+  `ed318ce541684489d017dcfd3363501337290dab` / tree
+  `bc9354969b5fe47e539bdeccccec7918a2c0045b`: compile, namespace, standards,
+  authored-file limits, and zero-write enforcement pass, including fail-closed
+  namespace inventory. No P0 lease or receipt was manufactured after the fact.
+  N00 adoption is now the sole serial integration gate.
 - HCT-FIXTURES execution/parity, runtime, installed journey, readiness,
   release, and completion claims remain withheld.
 - The calibrated review, observability, and Product Fitness doctrine is now
@@ -306,9 +318,9 @@ claim and representative product or release proof.
   authority is the blocked source-obligation row for the missing typed HCT-FIT
   and HCT-FIXTURES mapping; target capability and product claims remain
   withheld.
-- No implementation worktree launches until the canonical P0 checkpoint is
-  committed and the semantic-namespace/standards debt checkpoint is clean.
-- After P0, re-observe N02/N03 and select the smallest dependency-closed source
+- No implementation worktree launches until N00 atomically adopts the exact
+  contract/ref set and begins the new epoch; P0 is clean.
+- After N00, re-observe N02/N03 and select the smallest dependency-closed source
   or live-product stream that moves the installed journey.
 
 The nearest product milestone is one exact current-source journey:
