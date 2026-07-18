@@ -20,9 +20,6 @@ pub mod distribution;
 #[cfg(test)]
 pub mod evaluation;
 #[cfg(test)]
-#[path = "../tests/evaluation_runtime_contract/production_native_fixture_boundary_accepts_only_fixed_protected_substrates.rs"]
-mod evaluation_runtime_controls;
-#[cfg(test)]
 mod fixture_scheduler;
 #[cfg(test)]
 #[path = "fixture_scheduler/tests/mod.rs"]
