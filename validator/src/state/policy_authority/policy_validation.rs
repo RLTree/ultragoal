@@ -4,15 +4,12 @@ use super::*;
 ///
 /// The state module does not load or duplicate the registry. Root integration
 /// supplies its verified digest, exact typed claims, and one accepted live policy.
-#[allow(dead_code)]
 pub(crate) struct PolicyAuthority {
-    pub(crate) claim_registry_id: String,
-    pub(crate) authority_id: String,
-    pub(crate) adopted_claims: Vec<ClaimSpec>,
-    pub(crate) accepted_catalog: DependencyActionCatalog,
+    claim_registry_id: String,
+    authority_id: String,
+    accepted_catalog: DependencyActionCatalog,
 }
 
-#[allow(dead_code)]
 impl PolicyAuthority {
     pub(crate) fn from_adopted_claim_registry(
         claim_registry_id: impl Into<String>,
@@ -38,7 +35,6 @@ impl PolicyAuthority {
         Ok(Self {
             claim_registry_id,
             authority_id,
-            adopted_claims,
             accepted_catalog,
         })
     }
@@ -71,7 +67,7 @@ impl PolicyAuthority {
         Ok(catalog)
     }
 
-    pub(crate) fn issue_bound(
+    fn issue_bound(
         &self,
         context_id: &str,
         authority_catalog_id: &str,
