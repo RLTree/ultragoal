@@ -66,13 +66,13 @@ impl AgentRepositoryAdoption {
     pub(crate) fn binding_sha256(&self) -> &str {
         &self.binding_sha256
     }
-    pub(crate) fn fresh_session_observed(&self) -> bool {
+    pub fn fresh_session_observed(&self) -> bool {
         self.fresh_session_observed
     }
 
     /// This is a source-local route decision only. It is not host discovery,
     /// installation, runtime activation, or a claim effect.
-    pub(crate) fn route_eligible(&self) -> bool {
+    pub fn route_eligible(&self) -> bool {
         self.route_eligible
     }
 
@@ -130,7 +130,13 @@ pub(crate) type LocalAgentAuthorityObservation = AgentRepositoryAdoption;
 pub(crate) fn observe_local_authority(
     request: LocalAgentAuthorityRequest<'_>,
 ) -> Result<LocalAgentAuthorityObservation, AgentDiscoveryError> {
-    adopt_agent_repository(request)
+    let adoption = adopt_agent_repository(request)?;
+    if adoption.route_eligible() && !adoption.fresh_session_observed() {
+        return Err(AgentDiscoveryError::new(
+            AgentDiscoveryErrorId::InvalidBinding,
+        ));
+    }
+    Ok(adoption)
 }
 
 fn role_observation(

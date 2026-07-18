@@ -1,6 +1,6 @@
 use super::root_identity_codec::{RootIdentityCodecRequest, encode};
 use super::{MAX_HOST_AGENT_ENTRIES, conflict};
-use crate::plugin_product::agent_discovery::error::AgentDiscoveryError;
+use crate::plugin_product::agent_discovery::error::{AgentDiscoveryError, AgentDiscoveryErrorId};
 use crate::plugin_product::agent_discovery::filesystem::{
     AnchoredDirectory, AnchoredRoot, SecureFile,
 };
@@ -109,7 +109,9 @@ impl SupportedRootSet {
         ];
         let unique = paths.iter().collect::<BTreeSet<_>>();
         if unique.len() != paths.len() {
-            return Err(conflict());
+            return Err(AgentDiscoveryError::new(
+                AgentDiscoveryErrorId::IdentityMismatch,
+            ));
         }
         Ok(())
     }

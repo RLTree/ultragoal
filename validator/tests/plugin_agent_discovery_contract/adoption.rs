@@ -1,4 +1,5 @@
-use super::super::{AgentDiscoveryErrorId, AgentRepositoryAdoptionRequest, adopt_agent_repository};
+use super::super::AgentDiscoveryErrorId;
+use super::super::local_authority::{AgentRepositoryAdoptionRequest, adopt_agent_repository};
 use super::authority_fixtures::{CANDIDATE, SESSION, TempRepo, canonical_names};
 use std::fs;
 use std::path::Path;
@@ -64,7 +65,7 @@ fn duplicate_package_and_project_authority_fails_closed() {
         panic!("duplicate authority roots were accepted");
     };
 
-    assert_eq!(error.id(), AgentDiscoveryErrorId::ObservationConflict);
+    assert_eq!(error.id(), AgentDiscoveryErrorId::IdentityMismatch);
 }
 
 fn copy_plugin_root(source: &Path, target: &Path) {
