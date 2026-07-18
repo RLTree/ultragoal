@@ -1,0 +1,124 @@
+{
+  "worker": "/root/n05_repository_fit_core",
+  "lease_id": "LEASE-N05-REPOSITORY-FIT-CORE-001",
+  "context_id": "sha256:c3a6083d5954f043a1fcaefbb23203a9390762c1c952178ffe63ac9d538640b2",
+  "candidate_identity": {
+    "schema_id": "WorkerResult-v1",
+    "candidate_id": "sha256:e78762d9ae932585d74a1a0bd34c3e429f93756ef0d7f8c36cb360fd18a2f780",
+    "context_id": "sha256:c3a6083d5954f043a1fcaefbb23203a9390762c1c952178ffe63ac9d538640b2",
+    "accepted_head_commit": "2da210f99a66d782557659cbdf8e52e13ba2403f",
+    "accepted_head_tree": "16d198c3a1126a50176185cb7e920035217a716f",
+    "branch": "codex/n05-repository-fit-core",
+    "worker_result_self_excluded": true
+  },
+  "base_state": {
+    "lane_source_base_commit": "0c7f3e147d372f870751548610710353d37f9d4b",
+    "lane_source_base_tree": "d0bbe290b2411ba89de4e90ccedeb013fbdfc1a1",
+    "review_rework_base_commit": "1e7f738fa1567bc170b1e21b0eaafcda16411453",
+    "review_rework_base_tree": "5b489beb18b39ec15b172a34fef4a1e1b8620180",
+    "source_acceptance": "parent accepted the exact N05 candidate at the source-only ceiling"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "accepted_source_head_commit": "2da210f99a66d782557659cbdf8e52e13ba2403f",
+    "accepted_source_head_tree": "16d198c3a1126a50176185cb7e920035217a716f",
+    "lane_commits": [
+      "dd50eafc2bae7d1b94b273f6caa4b2b45486e54d",
+      "1049350a12168b1c66533d2d84ea5310060c2be9",
+      "2da210f99a66d782557659cbdf8e52e13ba2403f"
+    ],
+    "claim_ceiling": "source-only N05 repository-fit test correction and bounded source review",
+    "claim_effect": "none",
+    "root_integration_required": true
+  },
+  "touched_paths": [
+    "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-N05-CORE-001.json",
+    "validator/tests/repository_fit_apply_mediation_contract.rs",
+    "validator/tests/repository_fit_live_journeys_contract.rs",
+    "validator/tests/repository_fit_public_apply_cases/execution_behavior.rs",
+    "validator/tests/repository_fit_public_apply_cases/execution_fixture.rs",
+    "validator/tests/repository_fit_public_apply_cases/filesystem_snapshot.rs",
+    "validator/tests/repository_fit_public_apply_cases/public_apply_refusals.rs",
+    "validator/tests/repository_fit_public_apply_contract.rs"
+  ],
+  "touched_semantics": [
+    "ultragoal::repository_fit"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {"class": "workspace_write", "target": "repository_fit_n05_owned_tests", "performed": true},
+    {"class": "fixture_write", "target": "repository_fit_isolated_fixture", "performed": true},
+    {"class": "process", "target": "repository_fit_focused_validation", "performed": true},
+    {"class": "network", "target": "network_or_external_system", "performed": false},
+    {"class": "external_write", "target": "live_user_repository_or_host", "performed": false},
+    {"class": "root_authority", "target": "root_integration_or_release_authority", "performed": false}
+  ],
+  "requirements": [
+    "N05_SOURCE_ACCEPTANCE",
+    "PUBLIC_FIT_ROUTE_BEHAVIOR",
+    "SOURCE_ONLY_CEILING"
+  ],
+  "dependency_nodes": [],
+  "changes": [
+    {
+      "area": "public-route behavioral acceptance",
+      "result": "The retained N05 targets share public-binary behavior tests for apply, exact-plan replay refusal, fresh-plan idempotence, gated contenders, refusal, stale-plan handling, and root-HOME-TMPDIR zero-write observations."
+    },
+    {
+      "area": "false-pass removal",
+      "result": "Raw brace parsing and production-source token assertions were removed; the mediation, live-journey, and public-apply entrypoints now compile shared behavioral modules."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --test repository_fit_public_apply_contract execution_behavior::public_binary_serializes_concurrent_apply_contenders -- --exact",
+      "exit_code": 0,
+      "result": "1 passed; public binary contenders were held at the fixture gate before release."
+    },
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --test repository_fit_apply_mediation_contract --no-run",
+      "exit_code": 0,
+      "result": "The retained mediation entrypoint compiled with warnings denied."
+    },
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --test repository_fit_public_apply_contract --test repository_fit_live_journeys_contract --test repository_fit_apply_mediation_contract",
+      "status": "process_exited_aggregate_tail_unavailable",
+      "result": "Focused decision-boundary command exited after the public behavior targets; the terminal wrapper did not preserve the aggregate result tail, so this receipt does not claim a fresh aggregate pass."
+    },
+    {
+      "command": "rustfmt --check changed N05 Rust files; git diff --check; scoped line-cap and source-token scan",
+      "exit_code": 0,
+      "result": "Formatting, diff, retained-file line caps, and scoped source-token scan passed."
+    }
+  ],
+  "artifacts": [
+    {"path": "validator/tests/repository_fit_apply_mediation_contract.rs", "sha256": "sha256:175866a4ec5dd0c557ef067bbd8017df2c8efc5ab265088fc59c7172d0a373e1", "byte_length": 851},
+    {"path": "validator/tests/repository_fit_live_journeys_contract.rs", "sha256": "sha256:175866a4ec5dd0c557ef067bbd8017df2c8efc5ab265088fc59c7172d0a373e1", "byte_length": 851},
+    {"path": "validator/tests/repository_fit_public_apply_cases/execution_behavior.rs", "sha256": "sha256:a644825aef8c5df0a7051a9fab3038735a572b4a27159d907d20f50fe27e8085", "byte_length": 4976},
+    {"path": "validator/tests/repository_fit_public_apply_cases/execution_fixture.rs", "sha256": "sha256:19089bcd0ad7c35a11f072f4300c2a3db73679c530f3c319a22b89fea918709f", "byte_length": 5893},
+    {"path": "validator/tests/repository_fit_public_apply_cases/filesystem_snapshot.rs", "sha256": "sha256:49caf0fb546bfa5ba87a3f3c84876dfe1e9c24c73beb6e2de48c9e827202b954", "byte_length": 2555},
+    {"path": "validator/tests/repository_fit_public_apply_cases/public_apply_refusals.rs", "sha256": "sha256:eb21204e5fed96e0d67619d0f060f595578f7758b928d3022ebe5657b249783c", "byte_length": 6458},
+    {"path": "validator/tests/repository_fit_public_apply_contract.rs", "sha256": "sha256:175866a4ec5dd0c557ef067bbd8017df2c8efc5ab265088fc59c7172d0a373e1", "byte_length": 851}
+  ],
+  "findings": [
+    {
+      "review": "fresh Terra high bounded source review",
+      "result": "no material findings against the N05 public-route, replay, contender-gate, zero-write, and source-token-removal invariant"
+    }
+  ],
+  "unresolved_dependencies": [],
+  "requested_root_changes": [
+    {
+      "path": "LANE_REGISTRY.json",
+      "expected_sha256": "sha256:d58402cbc62fca0e039759bfdf8b6a2cb67b37240732e0eb7079f980e54c928a",
+      "request": "Reconcile accepted N05 source identity and schedule only root-owned integration; do not infer runtime, readiness, release, or completion."
+    }
+  ],
+  "limitations": [
+    "Rollback and pending-recovery behavior remain unsupported by this source-only N05 receipt.",
+    "Installed, runtime, product, readiness, release, and completion claims remain unsupported.",
+    "The aggregate focused-suite tail was unavailable from the terminal wrapper and is not represented as a passing receipt."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}
