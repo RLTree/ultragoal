@@ -52,8 +52,7 @@ fn required_json_authority_surface(rel: &str) -> bool {
 }
 
 fn red_fixture_surface(rel: &str) -> bool {
-    rel.starts_with("fixtures/red/")
-        || rel.contains("/red/")
+    rel.starts_with("fixtures/red/") || rel.contains("/red/")
 }
 
 fn schema_or_catalog_surface(rel: &str) -> bool {
