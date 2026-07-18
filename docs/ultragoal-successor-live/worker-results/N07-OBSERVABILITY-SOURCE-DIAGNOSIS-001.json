@@ -1,19 +1,18 @@
 {
-  "worker": "/root/n07_observability_handoff",
+  "worker": "/root/n07_fixture_finish",
   "lease_id": "N07-OBSERVABILITY-SOURCE-DIAGNOSIS-001",
   "context_id": "n07-source-public-diagnosis",
   "candidate_identity": {
-    "branch": "codex/n07-observability-core",
-    "source_base_commit": "0a0c09bf15c92c81007b20ce50af0a3201614620",
-    "source_base_tree": "7579dfab784b54a591eec81e031dc035a07b79c2",
-    "source_head_commit": "8e1f77e60297319bf32ae2843fa882ff67c59146",
-    "source_head_tree": "1a9fb7568525235ffdbf012b26feabd9e94163d3",
+    "schema_id": "WorkerResult-v1",
+    "branch": "codex/n07-observability-root-rework",
+    "source_base_commit": "b5ecf2a85f7dcdbc9b859c07c862f5413eec7fba",
+    "source_head_commit": "bc6581ba0ee996c751bc0ab621f867ba27d95556",
+    "source_head_tree": "fb997fcd3c0f5418b11cc6ac4fa7d1608cfe669f",
     "source_commits": [
-      "39bcd4a5d20325e04d552d6fe577a1720375c1f9",
-      "07d87a85f1bba6a7af0a2c88496e1424f1811b5e",
-      "8e1f77e60297319bf32ae2843fa882ff67c59146"
+      "b5ecf2a85f7dcdbc9b859c07c862f5413eec7fba",
+      "bc6581ba0ee996c751bc0ab621f867ba27d95556"
     ],
-    "status_before_result": "clean"
+    "worker_result_self_excluded": true
   },
   "base_state": {
     "dependency_ceiling_consumed": "N03 accepted inventory authority only",
@@ -24,83 +23,113 @@
     ]
   },
   "final_state": {
-    "status": "source-public-diagnosis candidate accepted by root",
-    "acceptance_ceiling": "Current-source local observability and public diagnosis only",
+    "status": "parent accepted exact source candidate",
+    "acceptance_ceiling": "N07 current-source local observability and public diagnosis behavior only",
     "maximum_changed_authored_rust_lines": 249,
-    "source_head_review_disposition": "Initial routine review and one bounded re-review found a shared privacy invariant; root inspected and accepted the final shared-boundary correction without commissioning a third review."
+    "root_integration_required": true
   },
   "touched_paths": [
-    "validator/src/observability/privacy.rs",
+    "docs/ultragoal-successor-live/worker-results/N07-OBSERVABILITY-SOURCE-DIAGNOSIS-001.json",
+    "fixtures/observability-local-diagnosis/cases.json",
+    "fixtures/observability-public-diagnosis/cases.json",
     "validator/tests/observability_authority_fixture.rs",
-    "validator/tests/observability_contract/privacy_export.rs",
+    "validator/tests/observability_fixture_scratch.rs",
+    "validator/tests/observability_live_journey_cases/causal_correlation_journey.rs",
     "validator/tests/observability_live_journey_cases/scenario_fixture.rs",
+    "validator/tests/observability_live_journey_cases/selected_finding_fixture.rs",
+    "validator/tests/observability_live_journey_cases/substitution_refusals.rs",
     "validator/tests/observability_live_journey_contract.rs",
     "validator/tests/observability_public_diagnosis_contract.rs",
+    "validator/tests/observability_public_diagnosis_contract/boundaries.rs",
+    "validator/tests/observability_public_diagnosis_contract/concurrency.rs",
     "validator/tests/observability_public_diagnosis_contract/journeys.rs",
-    "validator/tests/observability_public_diagnosis_contract/scenario/fixture_components/scenario_fixture.rs",
-    "docs/ultragoal-successor-live/worker-results/N07-OBSERVABILITY-SOURCE-DIAGNOSIS-001.json"
+    "validator/tests/observability_public_diagnosis_contract/recovery.rs",
+    "validator/tests/observability_public_diagnosis_contract/saturated_window.rs",
+    "validator/tests/observability_public_diagnosis_contract/scenario/fixture_components/scenario_fixture.rs"
   ],
   "touched_semantics": [
-    "N07 fixtures copy the current declared inventory inputs before exercising source-built public diagnosis.",
-    "The shared event sanitizer drops URI file paths, UNC paths, and GitHub OAuth token forms before persistence, query, diagnosis, or explicit export.",
-    "Public read journeys preserve recursive zero-write assertions while proving the redacted forms do not reappear in public output."
+    "N07 fixtures derive one agreeing current prelaunch source-base commit from compile, namespace, and standards gates.",
+    "Fixture ancestry uses the canonical linked-worktree Git common-dir object directory and a regular-object alternate after the fixture initial commit.",
+    "Live and public diagnosis fixtures use one canonical temporary confinement root, explicit checked teardown, and no destructive Drop cleanup.",
+    "Read-path behavior retains zero-write, path-boundary, concurrency, recovery, redaction, and false-pass controls."
   ],
-  "generated_outputs": [
-    "docs/ultragoal-successor-live/worker-results/N07-OBSERVABILITY-SOURCE-DIAGNOSIS-001.json"
-  ],
+  "generated_outputs": [],
   "fixtures": [
-    "Current declared inventory inputs copied into source-built live and public-diagnosis fixtures.",
-    "Prefix and embedded file URI, UNC, and GitHub OAuth canaries across persistence and public diagnosis."
+    "Source-built live and public-diagnosis repositories with checked authority ancestry.",
+    "Canonical temporary scratch directories with explicit test-owned teardown."
   ],
   "effects": [
-    {"class": "workspace-write", "scope": "N07 source, fixtures, focused tests, and this WorkerResult"},
-    {"class": "temporary-fixture-write", "scope": "isolated test repositories and local Cargo target"},
-    {"class": "network", "performed": false},
-    {"class": "external-product-effect", "performed": false}
+    {"class": "workspace_write", "target": "N07 test fixtures and WorkerResult", "performed": true},
+    {"class": "fixture_write", "target": "isolated temporary repositories", "performed": true},
+    {"class": "process", "target": "focused N07 validation", "performed": true},
+    {"class": "network", "target": "network_or_external_system", "performed": false},
+    {"class": "external_write", "target": "live_user_repository_or_host", "performed": false},
+    {"class": "root_authority", "target": "root integration_or_release", "performed": false}
   ],
   "requirements": [
-    "N07 local causal query and public diagnosis",
-    "privacy-default event observation",
-    "explicit deletion and contention controls",
-    "recursive zero-write read paths"
+    "N07 source acceptance",
+    "local causal query and public diagnosis behavior",
+    "recursive zero-write read paths",
+    "fixture authority and explicit lifecycle confinement"
   ],
   "dependency_nodes": ["N03"],
   "changes": [
-    {"area": "inventory fixture binding", "result": "Source-built journeys now use the same declared inventory closure required by the current authority reader."},
-    {"area": "privacy boundary", "result": "One sanitizer boundary handles prefix and embedded file URI, UNC, and gho_ OAuth forms before durable observation."}
+    {
+      "area": "fixture authority activation",
+      "result": "Both fixture families establish exact source ancestry only after their initial commit, reject disagreeing or malformed current prelaunch base commits, and safely use the live worktree common object directory."
+    },
+    {
+      "area": "fixture lifecycle",
+      "result": "Checked scratch confinement and explicit teardown replace silent destructive Drop cleanup; the saturated-window journey moved to a behavior-named module to retain the authored-file limit."
+    }
   ],
   "commands_and_tests": [
-    {"command": "cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_contract -- --test-threads=12", "result": "pass", "summary": "36 passed; 0 failed."},
-    {"command": "cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_live_journey_contract -- --test-threads=12", "result": "pass", "summary": "14 passed; 0 failed."},
-    {"command": "cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_public_diagnosis_contract -- --test-threads=12", "result": "prior pass; latest combined output truncated", "summary": "Prior exact fixture repair run passed 14/14. The final combined run was observed progressing but its tool output truncated; it is not claimed as an aggregate final pass and root will rerun after integration."},
-    {"command": "cargo check --manifest-path validator/Cargo.toml --locked --offline --lib", "result": "pass", "summary": "warning-free owned library check."},
-    {"command": "rustfmt --edition 2024 --check changed Rust files; git diff --check", "result": "pass"}
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-n07-observability-target CARGO_BUILD_JOBS=12 RUSTFLAGS=-D warnings cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_live_journey_contract",
+      "exit_code": 0,
+      "result": "14 passed; 0 failed; focused live journey behavior."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-n07-observability-target CARGO_BUILD_JOBS=12 RUSTFLAGS=-D warnings cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_public_diagnosis_contract -- --test-threads=1",
+      "exit_code": 0,
+      "result": "14 passed; 0 failed; public diagnosis, FIFO/hardlink, contention, recovery, and saturated-window behavior."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/tmp/hul-n07-observability-target CARGO_BUILD_JOBS=12 RUSTFLAGS=-D warnings cargo check --manifest-path validator/Cargo.toml --locked --offline --lib",
+      "exit_code": 0,
+      "result": "warning-free library check."
+    },
+    {
+      "command": "rustfmt --check changed N07 Rust files; git diff --check; scoped changed-file line-cap check",
+      "exit_code": 0,
+      "result": "passed; maximum changed authored Rust file is 249 lines."
+    },
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_contract",
+      "status": "withheld",
+      "result": "Local mirror suite is intentionally not claimed: it has seven warnings-deny diagnostics on this candidate and is not a substitute for the two authoritative focused contract suites."
+    }
   ],
-  "artifacts": [
-    {"path": "validator/src/observability/privacy.rs", "sha256": "3ef47d649b43acd6d3bbff62b2b0847e5d5a4228dca381ff758cbddc7a60ead5", "bytes": 5887, "lines": 198},
-    {"path": "validator/tests/observability_authority_fixture.rs", "sha256": "ea4d03ec595b9eec2ba364f8ba1c2317125e7467a16244e6c395b0bd24e243e3", "bytes": 586, "lines": 15},
-    {"path": "validator/tests/observability_contract/privacy_export.rs", "sha256": "7a16996c2865121fdee6477a6d9a3a59d4752ca3be6aff5fdc5b9fb56bc267f4", "bytes": 7774, "lines": 249},
-    {"path": "validator/tests/observability_live_journey_cases/scenario_fixture.rs", "sha256": "0cba546505fd04e2aeac911168c2ad39572fb7a9fc2bacdf6c0e084b34a7a7f0", "bytes": 9022, "lines": 249},
-    {"path": "validator/tests/observability_live_journey_contract.rs", "sha256": "96d948788273b39f33a1fc82a4518929bcd7a12d3d395bedd523d1f9da5f0ecb", "bytes": 1371, "lines": 37},
-    {"path": "validator/tests/observability_public_diagnosis_contract.rs", "sha256": "85dd9d74a6a307126e83172091efd692ea57b1c1c958863c5ff7ad1d702f92ed", "bytes": 2631, "lines": 96},
-    {"path": "validator/tests/observability_public_diagnosis_contract/journeys.rs", "sha256": "e32f9e651ec449d2b91f2218659e0ca76b379bc0261e2b34efbbb750a0a5d06d", "bytes": 9214, "lines": 249},
-    {"path": "validator/tests/observability_public_diagnosis_contract/scenario/fixture_components/scenario_fixture.rs", "sha256": "9d70540264c653bf0bc01cf910106f8c491a1d95ac340cc88f4146f6e449ad49", "bytes": 7448, "lines": 224}
-  ],
+  "artifacts": [],
   "findings": [
-    {"severity": "resolved-in-candidate", "finding": "The initial reviewer found unrecognized prefix file URI, UNC, and gho_ OAuth values; the shared sanitizer was extended and persistence/public-output controls added."},
-    {"severity": "resolved-in-candidate", "finding": "The bounded re-review found embedded equivalents; the same boundary now detects embedded forms, with embedded regression controls."},
-    {"severity": "parent-accepted", "finding": "Root accepted exact source head 8e1f77e60297319bf32ae2843fa882ff67c59146 at the source/public-diagnosis ceiling and prohibited a third routine review."}
+    {
+      "review": "parent integration acceptance",
+      "result": "Root independently reran the exact focused live and public behavior suites and accepted bc6581ba0 at the N07 source-only ceiling."
+    }
   ],
   "unresolved_dependencies": [
-    "Dependency-closed root integration and rerun of the public diagnosis suite on the integrated candidate.",
-    "Installed package, discovery, runtime, Product Fitness, readiness, release, and completion proof."
+    "Dependency-closed root integration and its exact-candidate checks.",
+    "Installed package, discovery, runtime, export effect, Product Fitness, readiness, release, and completion proof."
   ],
   "requested_root_changes": [
-    {"path": "root integration checkpoint", "request": "Integrate only after verifying this result, then rerun affected dependency-closed public diagnosis behavior because the final combined test output is non-promotional."}
+    {
+      "path": "root integration checkpoint",
+      "request": "Integrate only this frozen N07 source candidate; do not promote a claim beyond its source-only ceiling."
+    }
   ],
   "limitations": [
-    "This result makes no installed, discovery, runtime, export-effect, Product Fitness, readiness, release, or completion claim.",
-    "Explicit export is only source-tested as a redaction boundary; no external export effect occurred.",
+    "The withheld local observability mirror suite has seven warnings-deny diagnostics and supplies no passing claim.",
+    "No installed, discovery, runtime, export-effect, Product Fitness, readiness, release, or completion claim is made.",
     "This WorkerResult is a handoff record, not product or generated authority."
   ],
   "no_claim_statement": "This worker does not claim readiness, release, or completion."
