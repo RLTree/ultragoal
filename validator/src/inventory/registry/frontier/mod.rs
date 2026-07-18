@@ -13,6 +13,7 @@ pub(super) struct Frontier {
     pub(super) entries: Vec<InventoryEntry>,
 }
 
+#[derive(Debug)]
 struct SchedulerNodes {
     integrated: BTreeSet<String>,
     ready: BTreeSet<String>,
