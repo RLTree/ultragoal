@@ -14,33 +14,12 @@ pub(crate) fn canonical_package_failures(root: &Path, receipt: &Value) -> Vec<St
     out
 }
 
-pub(crate) fn canonical_package_failures_with_candidate(
-    root: &Path,
-    receipt: &Value,
-    target_digest: &str,
-) -> Vec<String> {
-    let mut out = Vec::new();
-    if pointer_string(receipt, "/claim/id") != "CLAIM-001" {
-        out.push("product_fitness_receipt_wrong_claim_id".to_string());
-    }
-    out.extend(failures_with_candidate(root, receipt, target_digest));
-    out
-}
-
 pub(crate) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
     failures_with_digest(
         root,
         receipt,
         crate::package::inventory::package_digest(root),
     )
-}
-
-pub(crate) fn failures_with_candidate(
-    root: &Path,
-    receipt: &Value,
-    target_digest: &str,
-) -> Vec<String> {
-    failures_with_digest(root, receipt, Ok(target_digest.to_string()))
 }
 
 fn failures_with_digest(

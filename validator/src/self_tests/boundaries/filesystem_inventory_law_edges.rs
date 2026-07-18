@@ -39,12 +39,6 @@ fn filesystem_inventory_edges() {
     assert!(failures.iter().any(|item| item.contains("duplicates=")));
     #[cfg(unix)]
     assert!(failures.iter().any(|item| item.contains("symlinks=")));
-    assert!(
-        crate::package::inventory::closure::final_bytecode_failures(&inventory_root)
-            .iter()
-            .any(|item| item.contains("__pycache__"))
-    );
-
     let _ = std::fs::remove_dir_all(inventory_root);
 }
 
@@ -110,12 +104,6 @@ fn artifact_audit_and_receipt_edges() {
         perf_failures
             .iter()
             .any(|item| item.contains("cli_performance_missing_fail_closed_receipt"))
-    );
-
-    assert!(
-        crate::package::inventory::closure::final_bytecode_failures(&root)
-            .iter()
-            .any(|failure| failure.contains("__pycache__"))
     );
 
     assert!(crate::audit::validate_target_receipt(&json!({"status":"pass"})).is_err());

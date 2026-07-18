@@ -8,15 +8,6 @@ mod live;
 const REGISTRY_RECEIPT: &str =
     "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json";
 
-pub(crate) fn failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec<String> {
-    let mut out = Vec::new();
-    let Some(receipt) = read(root, REGISTRY_RECEIPT, &mut out) else {
-        return out;
-    };
-    out.extend(value_failures(root, store, &receipt));
-    out
-}
-
 pub(crate) fn claim_guard_failures(
     root: &Path,
     store: &schema_catalog::SchemaStore,

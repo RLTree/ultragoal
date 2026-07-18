@@ -32,22 +32,6 @@ pub fn canonical_package_receipt_value_failures(root: &Path, receipt: &Value) ->
     crate::audit::product::fitness::receipt::canonical_package_failures(root, receipt)
 }
 
-pub fn canonical_package_receipt_value_failures_with_candidate(
-    root: &Path,
-    receipt: &Value,
-    target_digest: &str,
-) -> Vec<String> {
-    crate::audit::product::fitness::receipt::canonical_package_failures_with_candidate(
-        root,
-        receipt,
-        target_digest,
-    )
-}
-
-pub fn receipt_value_failures(root: &Path, receipt: &Value) -> Vec<String> {
-    crate::audit::product::fitness::receipt::failures(root, receipt)
-}
-
 fn strict_language_failures(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
     for path in [LAW, "templates/PRODUCT_FITNESS.md"] {

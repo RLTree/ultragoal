@@ -167,14 +167,6 @@ fn validate_command_aliases(root: &Path, out: &mut Vec<(String, String)>) {
             "delete the alias or classify it as parser_boundary compatibility with claim limits and sunset",
         );
     }
-    if source::contains(root, "validator/src/cli/usage.rs", "ultragoal-validator") {
-        push(
-            out,
-            "usage:ultragoal-validator",
-            "help text exposes ultragoal-validator as an active command surface without contract",
-            "remove the compatibility command language or add a typed alias contract",
-        );
-    }
 }
 
 fn validate_rows(rows: &[row::PackageSurfaceRow], out: &mut Vec<(String, String)>) {

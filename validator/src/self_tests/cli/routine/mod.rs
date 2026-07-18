@@ -21,16 +21,18 @@ fn root(label: &str, script: &str) -> PathBuf {
 
 #[test]
 fn routine_help_fit_repo_and_target_repo_paths_are_discoverable() {
-    let help = crate::cli::usage::text();
+    let help = crate::cli::successor::render_help(
+        crate::cli::successor::HelpTarget::Root,
+        crate::cli::successor::OutputMode::Human,
+    );
     for expected in [
-        "Routine validation",
-        "ultragoal routine check",
-        "First plugin-activated repo path",
-        "ultragoal fit-repo prove",
-        "Target repo path",
-        "ultragoal routine check --target-repo <path>",
-        "scripts/check is a narrow helper",
-        "unsupported claims",
+        "Harness Ultragoal successor CLI",
+        "Usage: ultragoal",
+        "fit inspect",
+        "fit apply",
+        "check routine",
+        "check strict",
+        "Inspect semantic components and authority conflicts.",
     ] {
         assert!(help.contains(expected), "{expected}");
     }
@@ -129,10 +131,7 @@ fn routine_parse_reads_receipt_and_target_repo_flags() {
         command.receipt,
         PathBuf::from("validation_artifacts/cli/custom-routine.json")
     );
-    assert_eq!(
-        command.target_repo,
-        Some(PathBuf::from("routine-target"))
-    );
+    assert_eq!(command.target_repo, Some(PathBuf::from("routine-target")));
 }
 
 #[test]

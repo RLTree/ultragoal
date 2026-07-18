@@ -74,7 +74,13 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::PackageDigest => crate::cli::package::digest::run(&root),
         Command::Successor(outcome) => crate::cli::successor_public::run_public(&root, outcome),
         Command::Help => {
-            println!("{}", crate::cli::usage::text());
+            println!(
+                "{}",
+                crate::cli::successor::render_help(
+                    crate::cli::successor::HelpTarget::Root,
+                    crate::cli::successor::OutputMode::Human,
+                )
+            );
             Ok(0)
         }
     }

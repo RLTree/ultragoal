@@ -10,7 +10,7 @@ pub(crate) mod generated_disposition;
 pub(crate) mod payload;
 pub(crate) mod snapshot;
 
-pub use closure::{final_bytecode_failures, inventory_closure_failures};
+pub use closure::inventory_closure_failures;
 pub(crate) use draft_manifest::DraftPackageManifest;
 
 pub const PACKAGE_DIGEST_EXCLUDED_PREFIXES: &[&str] = &["validation_artifacts/"];

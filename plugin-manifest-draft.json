@@ -2383,7 +2383,6 @@
     "validator/src/cli/typed_boundaries/mod.rs",
     "validator/src/cli/typed_boundaries/runtime.rs",
     "validator/src/cli/typed_boundaries/stdout.rs",
-    "validator/src/cli/usage.rs",
     "validator/src/command/mod.rs",
     "validator/src/command_run.rs",
     "validator/src/contract_check_ids.rs",

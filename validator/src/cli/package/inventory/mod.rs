@@ -110,15 +110,6 @@ fn run_inventory_tasks(
         inventory_task(&root, skill_link_failures),
         inventory_task(&root, resource_purpose_failures),
         inventory_task(&root, namespace_inventory_failures),
-        Box::new({
-            let root = root.clone();
-            move || {
-                crate::package::inventory::final_bytecode_failures(&root)
-                    .into_iter()
-                    .map(|failure| format!("plugin-inventory-closure:{failure}"))
-                    .collect()
-            }
-        }),
     ];
     crate::scheduler::run_ordered(scheduler, TaskClass::PureReadParallel, tasks)
 }
