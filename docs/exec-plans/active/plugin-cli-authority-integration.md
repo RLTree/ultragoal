@@ -80,9 +80,11 @@ One material defect returns the candidate to its owner. Repeated same-class
 defects require one invariant-level repair across sibling, descendant,
 rollback, recovery, reconciliation, cleanup, and replay transitions.
 
-Reviewer/fixer loops use direct communication. Advisory development review is
-Sol/medium on the standard service tier; bounded repair uses the lowest-sufficient
-standard-tier patch route, raising reasoning only for a named invariant. Cached
+Reviewer/fixer loops use direct communication. Routine and advisory development
+review uses GPT-5.6 Terra with high reasoning on the standard service tier;
+GPT-5.6 Sol with high reasoning is reserved for the bounded four-reviewer
+milestone team. Bounded repair uses the lowest-sufficient standard-tier patch
+route, raising reasoning only for a named invariant. Cached
 checks run during repair. Builds, strict checks, and broad audits run only at the
 decision boundary they can support. Routine lane acceptance uses one
 risk-matched specialist for one exhaustive invariant pass. The repo-defined
