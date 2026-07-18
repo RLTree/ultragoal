@@ -28,6 +28,7 @@ pub(crate) fn assert_sealed_issuer_and_grant_entrypoints_are_not_externally_call
         ("production_grant_entrypoint_consumer.rs", "E0432"),
         ("production_private_module_consumer.rs", "E0603"),
         ("production_private_grant_consumer.rs", "E0603"),
+        ("production_raw_custody_consumer.rs", "E0603"),
     ] {
         let output = issuer_api_compilation::check(&scratch, probe.trim_end_matches(".rs"));
         assert_private_failure(&output, code, probe);
@@ -38,7 +39,7 @@ pub(crate) fn assert_sealed_issuer_and_grant_entrypoints_are_not_externally_call
     let digest = format!("{:x}", Sha256::digest(&inventory));
     assert_eq!(
         digest,
-        "b132f14ce3ffbc2871dc6fd05f55bec497d32d582ad487682193ffa2ed550d3e"
+        "1cbebc86a68f40bb76aefd42c439e5b78ccccc42e05a9078b065b404b274aef7"
     );
     let routine_root = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/routine_work");
     assert!(!tree_has_hidden_public_api(&routine_root));

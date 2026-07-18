@@ -1,7 +1,6 @@
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
-use std::sync::OnceLock;
 
 const BINS: &[(&str, &str)] = &[
     (
@@ -10,20 +9,24 @@ const BINS: &[(&str, &str)] = &[
     ),
     (
         "production_issuer_consumer",
-        "production_issuer_consumer.rs",
+        "production/issuer_consumer.rs",
     ),
-    ("production_grant_consumer", "production_grant_consumer.rs"),
+    ("production_grant_consumer", "production/grant_consumer.rs"),
     (
         "production_grant_entrypoint_consumer",
-        "production_grant_entrypoint_consumer.rs",
+        "production/grant_entrypoint_consumer.rs",
     ),
     (
         "production_private_module_consumer",
-        "production_private_module_consumer.rs",
+        "production/private_module_consumer.rs",
     ),
     (
         "production_private_grant_consumer",
-        "production_private_grant_consumer.rs",
+        "production/private_grant_consumer.rs",
+    ),
+    (
+        "production_raw_custody_consumer",
+        "production_raw_custody_consumer.rs",
     ),
     (
         "routine_snapshot_read_control",
@@ -48,18 +51,7 @@ const BINS: &[(&str, &str)] = &[
 ];
 
 pub(crate) fn prepare(scratch: &Path, probes: &Path) {
-    let validator = Path::new(env!("CARGO_MANIFEST_DIR"));
-    let mut manifest = format!(
-        "[workspace]\n\n[package]\nname = \"routine-issuer-visibility-contract\"\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[lib]\nname = \"public_surface\"\npath = \"public_surface.rs\"\n\n[dependencies]\nserde_json = \"1\"\nultragoal = {{ path = {:?} }}\n",
-        validator
-    );
-    for (name, file) in BINS {
-        manifest.push_str(&format!(
-            "\n[[bin]]\nname = \"{name}\"\npath = {:?}\n",
-            probes.join(file)
-        ));
-    }
-    fs::write(scratch.join("Cargo.toml"), manifest).unwrap();
+    let _ = probes;
     fs::write(
         scratch.join("public_surface.rs"),
         "#[doc(inline)]\npub use ultragoal::routine_work::*;\npub struct ApiSentinel;\n",
@@ -68,16 +60,48 @@ pub(crate) fn prepare(scratch: &Path, probes: &Path) {
 }
 
 pub(crate) fn check(scratch: &Path, bin: &str) -> Output {
-    cargo(scratch)
-        .args(["check", "--offline", "--quiet", "--bin", bin])
+    compiler()
+        .arg(probe_path(bin))
+        .args([
+            "--crate-name",
+            bin,
+            "--edition",
+            "2024",
+            "--emit",
+            "metadata",
+        ])
+        .arg("--extern")
+        .arg(format!(
+            "ultragoal={}",
+            library_artifact("ultragoal").display()
+        ))
+        .arg("--extern")
+        .arg(format!(
+            "serde_json={}",
+            library_artifact("serde_json").display()
+        ))
+        .arg("-L")
+        .arg(format!("dependency={}", dependency_directory().display()))
+        .arg("--out-dir")
+        .arg(scratch.join("probe-output"))
         .output()
         .unwrap()
 }
 
 pub(crate) fn document(scratch: &Path) -> PathBuf {
-    let docs = compiler_target().join("doc/public_surface");
-    let output = cargo(scratch)
-        .args(["rustdoc", "--offline", "--quiet", "--lib"])
+    let docs = scratch.join("docs/public_surface");
+    let output = rustdoc()
+        .arg(scratch.join("public_surface.rs"))
+        .args(["--crate-name", "public_surface", "--edition", "2024"])
+        .arg("--extern")
+        .arg(format!(
+            "ultragoal={}",
+            library_artifact("ultragoal").display()
+        ))
+        .arg("-L")
+        .arg(format!("dependency={}", dependency_directory().display()))
+        .arg("--out-dir")
+        .arg(scratch.join("docs"))
         .output()
         .unwrap();
     fs::write(
@@ -93,26 +117,44 @@ pub(crate) fn document(scratch: &Path) -> PathBuf {
     docs
 }
 
-fn cargo(scratch: &Path) -> Command {
-    let cargo = std::env::var_os("CARGO").unwrap_or_else(|| "cargo".into());
-    let mut command = Command::new(cargo);
-    command
-        .current_dir(scratch)
-        .env("CARGO_TARGET_DIR", compiler_target())
-        .env("TMPDIR", configured_root("CODEX_WORKTREE_TMP"))
-        .env("TMP", configured_root("CODEX_WORKTREE_TMP"))
-        .env("TEMP", configured_root("CODEX_WORKTREE_TMP"));
-    command
+fn probe_path(bin: &str) -> PathBuf {
+    let (_, file) = BINS
+        .iter()
+        .find(|(name, _)| *name == bin)
+        .unwrap_or_else(|| panic!("unknown routine probe: {bin}"));
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/routine_work_contract/probes")
+        .join(file)
 }
 
-fn compiler_target() -> PathBuf {
-    static TARGET: OnceLock<PathBuf> = OnceLock::new();
-    TARGET
-        .get_or_init(|| {
-            configured_root("CARGO_TARGET_DIR")
-                .join(format!("routine-issuer-api-cache-{}", std::process::id()))
+fn compiler() -> Command {
+    Command::new(std::env::var_os("RUSTC").unwrap_or_else(|| "rustc".into()))
+}
+
+fn rustdoc() -> Command {
+    Command::new(std::env::var_os("RUSTDOC").unwrap_or_else(|| "rustdoc".into()))
+}
+
+fn dependency_directory() -> PathBuf {
+    configured_root("CARGO_TARGET_DIR").join("debug/deps")
+}
+
+fn library_artifact(crate_name: &str) -> PathBuf {
+    let prefix = format!("lib{crate_name}-");
+    let mut artifacts = fs::read_dir(dependency_directory())
+        .unwrap()
+        .map(|entry| entry.unwrap().path())
+        .filter(|path| {
+            path.file_name().is_some_and(|name| {
+                let name = name.to_string_lossy();
+                name.starts_with(&prefix) && name.ends_with(".rlib")
+            })
         })
-        .clone()
+        .collect::<Vec<_>>();
+    artifacts.sort();
+    artifacts
+        .pop()
+        .unwrap_or_else(|| panic!("compiled library artifact missing: {crate_name}"))
 }
 
 fn configured_root(name: &str) -> PathBuf {
