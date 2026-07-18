@@ -15,6 +15,10 @@ mod session;
 mod source;
 mod supported;
 
+#[cfg(test)]
+#[path = "tests/mod.rs"]
+mod tests;
+
 pub(crate) use local_authority::{
     LocalAgentAuthorityObservation, LocalAgentAuthorityRequest, observe_local_authority,
 };

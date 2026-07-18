@@ -1,8 +1,8 @@
-use crate::agent_discovery::{
+use super::super::{
     AgentAuthorityLayer, AgentDiscoveryErrorId, AgentDiscoverySession,
     HostAgentAuthorityTransactionError,
 };
-use crate::authority_fixtures::{FixtureReader, TempRepo};
+use super::authority_fixtures::{FixtureReader, TempRepo};
 
 #[test]
 fn source_catalog_without_host_transaction_cannot_produce_eligibility() {
