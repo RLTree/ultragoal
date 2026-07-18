@@ -25,3 +25,10 @@ mod evaluation_bridge;
 mod scheduled_invocation;
 
 pub(crate) use scheduled_invocation::*;
+
+#[cfg(test)]
+#[path = "../../../../tests/fixture_scheduler_contract/execution_adapter/mod.rs"]
+mod adapter_tests;
+#[cfg(test)]
+#[path = "tests/evaluation_adapter_controls.rs"]
+mod evaluation_adapter_controls;

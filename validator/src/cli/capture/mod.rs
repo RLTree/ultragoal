@@ -15,6 +15,8 @@ mod descriptor;
 mod descriptor_race_control;
 mod environment;
 mod filesystem;
+#[cfg(test)]
+pub(crate) mod fixture;
 mod identity_codec;
 mod inputs;
 mod output;
