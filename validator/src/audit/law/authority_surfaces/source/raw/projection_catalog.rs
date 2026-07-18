@@ -3,16 +3,6 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
         return Some(markers);
     }
     match rel {
-        "validator/src/audit/receipt/scheduler_execution.rs" => Some(&[
-            "crate::scheduler::Metrics",
-            "metric.to_value",
-            "supports_source_local_scheduler_timing_only_not_readiness",
-        ]),
-        "validator/src/audit/receipt/speed.rs" => Some(&[
-            "target_ms",
-            "hard_ceiling_ms",
-            "source_local_speed_budget_only_not_readiness",
-        ]),
         "validator/src/cli/final_packet/proof/spans.rs" => {
             Some(&["span_kind", "receipt_deref", "dereferenced_receipt_digest"])
         }

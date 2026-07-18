@@ -163,7 +163,11 @@ pub(crate) fn strip_build_or_verify(args: &[String]) -> &[String] {
 #[cfg(test)]
 pub(crate) fn parse_audit(args: &[String]) -> Result<Command, String> {
     let mode = opt_string(args, "--mode").unwrap_or_else(|| "init".to_string());
-    if !audit::receipt::speed::is_known_mode(&mode) {
+    if !matches!(
+        mode.as_str(),
+        "init" | "hot" | "focused" | "standard" | "strict" | "strict_fixtures"
+            | "strict_coverage" | "strict_final"
+    ) {
         return Err(format!("invalid source audit --mode: {mode}"));
     }
     Ok(Command::Audit {

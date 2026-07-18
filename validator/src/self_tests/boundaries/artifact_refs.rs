@@ -52,25 +52,6 @@ fn archive_zip_sync_result_is_testable() {
 }
 
 #[test]
-fn audit_artifact_digest_zero_is_testable() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("audit-artifact-digest-zero");
-    std::fs::create_dir_all(root.join("dir")).expect("dir");
-    std::fs::write(root.join("file.txt"), "content").expect("file");
-    assert_eq!(
-        crate::audit::artifacts::artifact_digest_or_zero(&root.join("dir"))
-            .expect("directory digest fallback"),
-        crate::digest::ZERO
-    );
-    assert_ne!(
-        crate::audit::artifacts::artifact_digest_or_zero(&root.join("file.txt"))
-            .expect("file digest"),
-        crate::digest::ZERO
-    );
-    std::fs::remove_dir_all(root).expect("cleanup digest zero test");
-}
-
-#[test]
 fn coverage_digest_boundary_contracts_are_testable() {
     assert!(
         crate::claim_semantics::coverage::digests::source_rel_path(

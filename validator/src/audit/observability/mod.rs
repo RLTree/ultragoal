@@ -6,7 +6,6 @@ mod read;
 mod receipt;
 mod redaction;
 mod registry;
-pub(crate) mod specs;
 
 pub(crate) const LAW: &str = "full-local-observability-stack-integration-non-opaque-failure";
 pub(crate) const RECEIPT_SCHEMA: &str = "harness-ultragoal.observability-receipt.v1";

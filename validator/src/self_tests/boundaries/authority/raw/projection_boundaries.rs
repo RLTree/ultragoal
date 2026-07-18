@@ -2,14 +2,6 @@
 fn raw_authority_scanner_allows_named_product_projection_boundaries() {
     for (rel, text) in [
         (
-            "validator/src/audit/receipt/scheduler_execution.rs",
-            "use serde_json::Value;\nstruct Metrics;\npub(crate) fn project(metric: &Metrics, target_digest: &str) -> Value { let _ = \"crate::scheduler::Metrics\"; metric.to_value(target_digest, \"supports_source_local_scheduler_timing_only_not_readiness\") }\n",
-        ),
-        (
-            "validator/src/audit/receipt/speed.rs",
-            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = target_ms(); let _ = hard_ceiling_ms(); let _ = source_local_speed_budget_only_not_readiness(); json!({\"value\":value}) }\n",
-        ),
-        (
             "validator/src/cli/final_packet/proof/spans.rs",
             "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = span_kind(); let _ = receipt_deref(); let _ = dereferenced_receipt_digest(); json!({\"value\":value}) }\n",
         ),

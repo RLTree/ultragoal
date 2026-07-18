@@ -170,21 +170,12 @@ pub(crate) fn first_blocker(board: &Value, coverage: &Value, audit: &Value, red:
 
 pub(crate) fn observability_repair(id: &str) -> (String, String) {
     let narrow_rerun = format!("ultragoal observe command-roundtrip --command \"{id}\"");
-    if crate::audit::observability::specs::command(id).is_some() {
-        (
-            format!(
-                "run {narrow_rerun} and inspect same-candidate logs metrics traces and explain proof"
-            ),
-            narrow_rerun,
-        )
-    } else {
-        (
-            format!(
-                "extend CommandObservabilitySpec or SurfaceObservabilitySpec for {id}, then run {narrow_rerun} and inspect same-candidate query proof"
-            ),
-            narrow_rerun,
-        )
-    }
+    (
+        format!(
+            "adopt {id} in the successor observability catalog, then run {narrow_rerun} and inspect same-candidate query proof"
+        ),
+        narrow_rerun,
+    )
 }
 
 pub(crate) fn receipt_repair(receipt: &Value) -> String {

@@ -119,14 +119,6 @@ fn artifact_audit_and_receipt_edges() {
     );
 
     assert!(crate::audit::validate_target_receipt(&json!({"status":"pass"})).is_err());
-    assert_eq!(
-        crate::audit::receipt::root_identity(std::path::Path::new("/tmp/example")),
-        format!(
-            "package-root:{}",
-            crate::digest::bytes("/tmp/example".as_bytes())
-        )
-    );
-
     let store = crate::schema_catalog::load(
         &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
     );
