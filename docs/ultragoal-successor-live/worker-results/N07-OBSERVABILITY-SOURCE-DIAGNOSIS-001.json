@@ -1,0 +1,107 @@
+{
+  "worker": "/root/n07_observability_handoff",
+  "lease_id": "N07-OBSERVABILITY-SOURCE-DIAGNOSIS-001",
+  "context_id": "n07-source-public-diagnosis",
+  "candidate_identity": {
+    "branch": "codex/n07-observability-core",
+    "source_base_commit": "0a0c09bf15c92c81007b20ce50af0a3201614620",
+    "source_base_tree": "7579dfab784b54a591eec81e031dc035a07b79c2",
+    "source_head_commit": "8e1f77e60297319bf32ae2843fa882ff67c59146",
+    "source_head_tree": "1a9fb7568525235ffdbf012b26feabd9e94163d3",
+    "source_commits": [
+      "39bcd4a5d20325e04d552d6fe577a1720375c1f9",
+      "07d87a85f1bba6a7af0a2c88496e1424f1811b5e",
+      "8e1f77e60297319bf32ae2843fa882ff67c59146"
+    ],
+    "status_before_result": "clean"
+  },
+  "base_state": {
+    "dependency_ceiling_consumed": "N03 accepted inventory authority only",
+    "root_owned_surfaces_not_modified": [
+      "Cargo.toml and Cargo.lock",
+      "public CLI catalog and dispatcher",
+      "generated authority, claims, migrations, package, release, and completion records"
+    ]
+  },
+  "final_state": {
+    "status": "source-public-diagnosis candidate accepted by root",
+    "acceptance_ceiling": "Current-source local observability and public diagnosis only",
+    "maximum_changed_authored_rust_lines": 249,
+    "source_head_review_disposition": "Initial routine review and one bounded re-review found a shared privacy invariant; root inspected and accepted the final shared-boundary correction without commissioning a third review."
+  },
+  "touched_paths": [
+    "validator/src/observability/privacy.rs",
+    "validator/tests/observability_authority_fixture.rs",
+    "validator/tests/observability_contract/privacy_export.rs",
+    "validator/tests/observability_live_journey_cases/scenario_fixture.rs",
+    "validator/tests/observability_live_journey_contract.rs",
+    "validator/tests/observability_public_diagnosis_contract.rs",
+    "validator/tests/observability_public_diagnosis_contract/journeys.rs",
+    "validator/tests/observability_public_diagnosis_contract/scenario/fixture_components/scenario_fixture.rs",
+    "docs/ultragoal-successor-live/worker-results/N07-OBSERVABILITY-SOURCE-DIAGNOSIS-001.json"
+  ],
+  "touched_semantics": [
+    "N07 fixtures copy the current declared inventory inputs before exercising source-built public diagnosis.",
+    "The shared event sanitizer drops URI file paths, UNC paths, and GitHub OAuth token forms before persistence, query, diagnosis, or explicit export.",
+    "Public read journeys preserve recursive zero-write assertions while proving the redacted forms do not reappear in public output."
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/N07-OBSERVABILITY-SOURCE-DIAGNOSIS-001.json"
+  ],
+  "fixtures": [
+    "Current declared inventory inputs copied into source-built live and public-diagnosis fixtures.",
+    "Prefix and embedded file URI, UNC, and GitHub OAuth canaries across persistence and public diagnosis."
+  ],
+  "effects": [
+    {"class": "workspace-write", "scope": "N07 source, fixtures, focused tests, and this WorkerResult"},
+    {"class": "temporary-fixture-write", "scope": "isolated test repositories and local Cargo target"},
+    {"class": "network", "performed": false},
+    {"class": "external-product-effect", "performed": false}
+  ],
+  "requirements": [
+    "N07 local causal query and public diagnosis",
+    "privacy-default event observation",
+    "explicit deletion and contention controls",
+    "recursive zero-write read paths"
+  ],
+  "dependency_nodes": ["N03"],
+  "changes": [
+    {"area": "inventory fixture binding", "result": "Source-built journeys now use the same declared inventory closure required by the current authority reader."},
+    {"area": "privacy boundary", "result": "One sanitizer boundary handles prefix and embedded file URI, UNC, and gho_ OAuth forms before durable observation."}
+  ],
+  "commands_and_tests": [
+    {"command": "cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_contract -- --test-threads=12", "result": "pass", "summary": "36 passed; 0 failed."},
+    {"command": "cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_live_journey_contract -- --test-threads=12", "result": "pass", "summary": "14 passed; 0 failed."},
+    {"command": "cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_public_diagnosis_contract -- --test-threads=12", "result": "prior pass; latest combined output truncated", "summary": "Prior exact fixture repair run passed 14/14. The final combined run was observed progressing but its tool output truncated; it is not claimed as an aggregate final pass and root will rerun after integration."},
+    {"command": "cargo check --manifest-path validator/Cargo.toml --locked --offline --lib", "result": "pass", "summary": "warning-free owned library check."},
+    {"command": "rustfmt --edition 2024 --check changed Rust files; git diff --check", "result": "pass"}
+  ],
+  "artifacts": [
+    {"path": "validator/src/observability/privacy.rs", "sha256": "3ef47d649b43acd6d3bbff62b2b0847e5d5a4228dca381ff758cbddc7a60ead5", "bytes": 5887, "lines": 198},
+    {"path": "validator/tests/observability_authority_fixture.rs", "sha256": "ea4d03ec595b9eec2ba364f8ba1c2317125e7467a16244e6c395b0bd24e243e3", "bytes": 586, "lines": 15},
+    {"path": "validator/tests/observability_contract/privacy_export.rs", "sha256": "7a16996c2865121fdee6477a6d9a3a59d4752ca3be6aff5fdc5b9fb56bc267f4", "bytes": 7774, "lines": 249},
+    {"path": "validator/tests/observability_live_journey_cases/scenario_fixture.rs", "sha256": "0cba546505fd04e2aeac911168c2ad39572fb7a9fc2bacdf6c0e084b34a7a7f0", "bytes": 9022, "lines": 249},
+    {"path": "validator/tests/observability_live_journey_contract.rs", "sha256": "96d948788273b39f33a1fc82a4518929bcd7a12d3d395bedd523d1f9da5f0ecb", "bytes": 1371, "lines": 37},
+    {"path": "validator/tests/observability_public_diagnosis_contract.rs", "sha256": "85dd9d74a6a307126e83172091efd692ea57b1c1c958863c5ff7ad1d702f92ed", "bytes": 2631, "lines": 96},
+    {"path": "validator/tests/observability_public_diagnosis_contract/journeys.rs", "sha256": "e32f9e651ec449d2b91f2218659e0ca76b379bc0261e2b34efbbb750a0a5d06d", "bytes": 9214, "lines": 249},
+    {"path": "validator/tests/observability_public_diagnosis_contract/scenario/fixture_components/scenario_fixture.rs", "sha256": "9d70540264c653bf0bc01cf910106f8c491a1d95ac340cc88f4146f6e449ad49", "bytes": 7448, "lines": 224}
+  ],
+  "findings": [
+    {"severity": "resolved-in-candidate", "finding": "The initial reviewer found unrecognized prefix file URI, UNC, and gho_ OAuth values; the shared sanitizer was extended and persistence/public-output controls added."},
+    {"severity": "resolved-in-candidate", "finding": "The bounded re-review found embedded equivalents; the same boundary now detects embedded forms, with embedded regression controls."},
+    {"severity": "parent-accepted", "finding": "Root accepted exact source head 8e1f77e60297319bf32ae2843fa882ff67c59146 at the source/public-diagnosis ceiling and prohibited a third routine review."}
+  ],
+  "unresolved_dependencies": [
+    "Dependency-closed root integration and rerun of the public diagnosis suite on the integrated candidate.",
+    "Installed package, discovery, runtime, Product Fitness, readiness, release, and completion proof."
+  ],
+  "requested_root_changes": [
+    {"path": "root integration checkpoint", "request": "Integrate only after verifying this result, then rerun affected dependency-closed public diagnosis behavior because the final combined test output is non-promotional."}
+  ],
+  "limitations": [
+    "This result makes no installed, discovery, runtime, export-effect, Product Fitness, readiness, release, or completion claim.",
+    "Explicit export is only source-tested as a redaction boundary; no external export effect occurred.",
+    "This WorkerResult is a handoff record, not product or generated authority."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}
