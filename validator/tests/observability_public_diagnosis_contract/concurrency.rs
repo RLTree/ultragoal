@@ -113,4 +113,5 @@ fn contention_timeout_cancellation_and_release_are_bounded_zero_write() {
         "lock-failure"
     );
     assert_no_connection(&listener);
+    repository.teardown();
 }

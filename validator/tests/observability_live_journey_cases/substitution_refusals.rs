@@ -64,6 +64,9 @@ pub(crate) fn bound_race_symlink_and_fifo_substitution_refuse_without_hidden_eff
         4,
         "successor_runtime_observability_unavailable",
     );
+    raced.teardown();
+    linked.teardown();
+    fifo.teardown();
 }
 
 #[test]
@@ -158,6 +161,7 @@ pub(crate) fn source_built_query_exits_at_the_lock_deadline_with_deterministic_z
         released["local_policy"]["lock_timeout_millis"],
         EventStore::supported_lock_timeout_millis()
     );
+    repository.teardown();
 }
 
 pub(crate) fn assert_public_lock_timeout(

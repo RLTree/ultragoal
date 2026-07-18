@@ -184,4 +184,5 @@ pub(crate) fn fresh_binary_absent_help_query_diagnose_and_export_refusal_are_zer
     assert!(!repository.root().join("journey-export.json").exists());
     assert_no_connection(&listener);
     assert_eq!(observe(repository.root()), initial);
+    repository.teardown();
 }

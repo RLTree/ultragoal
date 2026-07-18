@@ -52,4 +52,5 @@ fn corruption_is_read_only_until_explicit_truncated_tail_recovery() {
         "ObservabilityQuery-v1",
     );
     assert_eq!(recovered["events"][0]["event_id"], "retained-failure");
+    repository.teardown();
 }

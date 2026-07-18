@@ -103,6 +103,7 @@ pub(crate) fn public_query_and_diagnosis_preserve_redacted_stable_causal_correla
             .any(|row| row["repair_id"].as_str() == Some(finding.repair_id.as_str()))
     }));
     assert_eq!(diagnosis["claim_effect"], "none");
+    repository.teardown();
 }
 
 #[test]
@@ -135,6 +136,7 @@ pub(crate) fn receipt_only_event_cannot_false_pass_as_a_public_cause() {
         "observe-evidence-missing:receipt-only"
     );
     assert_eq!(diagnosis["claim_effect"], "none");
+    repository.teardown();
 }
 
 #[test]
@@ -230,4 +232,7 @@ pub(crate) fn stale_unknown_and_truncated_stores_fail_closed_and_only_explicit_r
     );
     assert_eq!(recovered["event_count"], 1);
     assert_eq!(recovered["events"][0]["event_id"], "retained-event");
+    stale.teardown();
+    unknown.teardown();
+    recovery.teardown();
 }

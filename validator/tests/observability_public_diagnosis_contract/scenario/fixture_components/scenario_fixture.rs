@@ -1,6 +1,6 @@
 use super::*;
 
-pub(crate) const BASE: &str = ".git/codex-scratch/observability/public-diagnosis-107";
+pub(crate) const BASE: &str = "harness-ultragoal-observability-tests";
 pub(crate) const SOURCE_ID: &str = "successor-runtime";
 pub(crate) const PRIVATE_TOKEN: &str = "sk-public-diagnosis-private-107";
 pub(crate) const PRIVATE_PATH: &str = "/Users/private/public-diagnosis-107";
@@ -22,22 +22,21 @@ pub(crate) struct SelectedFinding {
 }
 
 pub(crate) struct Repository {
-    pub(crate) container: PathBuf,
+    scratch: crate::observability_fixture_scratch::ScratchDirectory,
     pub(crate) root: PathBuf,
 }
 
 impl Repository {
     pub(crate) fn new(label: &str, conflict: bool, dirty: bool) -> Self {
-        let container = live_root().join(BASE).join(format!(
-            "{}-{}-{}",
-            safe_label(label),
-            std::process::id(),
-            NEXT.fetch_add(1, Ordering::Relaxed)
-        ));
-        let root = container.join("repo");
+        let scratch = crate::observability_fixture_scratch::ScratchDirectory::new(
+            "public-diagnosis-107",
+            &safe_label(label),
+            NEXT.fetch_add(1, Ordering::Relaxed),
+        );
+        let root = scratch.container().join("repo");
         fs::create_dir_all(&root).unwrap();
         let root = fs::canonicalize(root).unwrap();
-        let repository = Self { container, root };
+        let repository = Self { scratch, root };
         repository.git(&["init", "--quiet"]);
         repository.git(&["config", "user.email", "public-diagnosis@example.invalid"]);
         repository.git(&["config", "user.name", "Public Diagnosis"]);
@@ -62,6 +61,10 @@ impl Repository {
         }
         repository.git(&["add", "-A"]);
         repository.git(&["commit", "--quiet", "-m", "fixture"]);
+        crate::observability_authority_fixture::establish_fixture_authority(
+            &live_root(),
+            repository.root(),
+        );
         if dirty {
             fs::write(
                 repository.root.join("tracked.txt"),
@@ -82,7 +85,7 @@ impl Repository {
     }
 
     pub(crate) fn outside(&self, name: &str) -> PathBuf {
-        self.container.join(name)
+        self.scratch.container().join(name)
     }
 
     pub(crate) fn run(&self, args: &[&str]) -> Output {
@@ -132,12 +135,8 @@ impl Repository {
             .unwrap();
         assert!(output.status.success(), "git {args:?}: {output:?}");
     }
-}
-
-impl Drop for Repository {
-    fn drop(&mut self) {
-        debug_assert!(self.container.starts_with(live_root().join(BASE)));
-        let _ = fs::remove_dir_all(&self.container);
+    pub(crate) fn teardown(self) {
+        self.scratch.teardown();
     }
 }
 

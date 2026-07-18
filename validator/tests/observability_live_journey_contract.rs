@@ -23,6 +23,8 @@ mod authority_inputs;
 mod causal_correlation_journey;
 #[path = "observability_authority_fixture.rs"]
 mod observability_authority_fixture;
+#[path = "observability_fixture_scratch.rs"]
+mod observability_fixture_scratch;
 #[path = "observability_live_journey_cases/process_output_fixture.rs"]
 mod process_output_fixture;
 #[path = "observability_live_journey_cases/scenario_fixture.rs"]

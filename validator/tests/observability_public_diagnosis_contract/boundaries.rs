@@ -52,6 +52,7 @@ fn ancestor_symlink_is_not_followed_or_disclosed() {
         fs::read(outside.join("private.txt")).unwrap(),
         outside_before
     );
+    repository.teardown();
 }
 
 #[test]
@@ -79,4 +80,6 @@ fn fifo_and_multiply_linked_leaf_fail_closed_without_interpretation() {
     let outside_before = fs::read(&outside).unwrap();
     assert_path_boundary(&linked, &linked_finding);
     assert_eq!(fs::read(&outside).unwrap(), outside_before);
+    fifo.teardown();
+    linked.teardown();
 }
