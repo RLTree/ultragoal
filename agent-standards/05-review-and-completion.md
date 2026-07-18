@@ -50,6 +50,12 @@ sibling, rollback, recovery, race, interruption, security, and false-pass
 classes. This review can support source or lane acceptance only. It cannot
 support Product Fitness, readiness, release, or completion.
 
+The default routine reviewer route is GPT-5.6 Terra with high reasoning on the
+standard tier. GPT-5.6 Sol with high reasoning is reserved for the bounded
+four-persona milestone team below. If the requested route is unavailable,
+record the actual route and lower the review claim; do not silently substitute
+a routine Sol review or promote advisory feedback to milestone signoff.
+
 Use the repo-defined four-persona team only for a consequential cross-domain
 milestone, major root integration signoff, Product Fitness boundary, release,
 completion, or explicit escalation. The enforceable milestone result is the

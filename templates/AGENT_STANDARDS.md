@@ -77,6 +77,10 @@ record the gap before acting.
   risk-matched specialist for one exhaustive pass over the named invariant.
   The four merged canonical personas are reserved for consequential
   cross-domain milestones and product, release, or completion signoff.
+- Routine plugin and development reviewers default to GPT-5.6 Terra with high
+  reasoning on the standard tier. GPT-5.6 Sol with high reasoning is reserved
+  for the bounded four-persona milestone team; it is not a routine review or
+  correction-loop route.
 - A bounded review completes its named invariant surface and batches every
   demonstrated sibling defect into one response. One material defect rejects
   the candidate, but is not an early-stop condition unless continuing would be

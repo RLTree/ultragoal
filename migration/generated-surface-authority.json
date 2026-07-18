@@ -225,7 +225,7 @@
         "AGENT_STANDARDS.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "7c601293083e1e2264f84d84cb205a652eb2e036b7514dc3b9afe763b5ce2b98"
+      "output_sha256": "46c3a16b7c39d2e75a7bafede3b8081df2cdb9ea498c4d51fa555bfc1111e8d0"
     },
     {
       "disposition": "source_projection",
@@ -295,7 +295,7 @@
         "agent-standards/05-review-and-completion.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "4f8ee879c033c1ee01ffd1d0c7edf268341a8f8f68e641325adde517c44cf831"
+      "output_sha256": "62b68b4793d18f530077b5965d8413667e157d6b40d7558e1ccc78312e8119f9"
     },
     {
       "disposition": "source_projection",
