@@ -26,6 +26,7 @@ const SOURCES: &[&str] = &[
     "validator/src/inventory/registry/data.rs",
     "validator/src/inventory/registry/integrity.rs",
     "validator/src/inventory/registry/frontier/mod.rs",
+    "validator/src/inventory/registry/frontier/lease_issuance.rs",
     "validator/src/inventory/registry/frontier/scope_ownership.rs",
     "validator/src/inventory/registry/load.rs",
     "validator/src/inventory/registry/mod.rs",
@@ -49,7 +50,7 @@ fn source_repo(label: &str) -> TestRepo {
     let repo = TestRepo::new(label);
     repo.write(".gitignore", b"target/\n");
     copy_sources(&repo);
-    repo.commit();
+    establish_fixture_authority(&repo);
     repo
 }
 

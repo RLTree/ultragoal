@@ -30,6 +30,7 @@ pub(super) fn load(reads: &ReadSession, root: &Path) -> Result<Frontier, Invento
     )?;
     let nodes = scheduler_nodes(&registry)?;
     scope_ownership::validate(&registry)?;
+    lease_issuance::validate(reads, root, &registry, &nodes.ready)?;
     let active_tools = dependency_tools(&graph, &nodes)?;
     let entries = vec![
         physical_entry(
@@ -202,6 +203,7 @@ fn dependency_tools(
     Ok(tools)
 }
 
+mod lease_issuance;
 mod scope_ownership;
 
 #[cfg(test)]

@@ -344,9 +344,14 @@ claim and representative product or release proof.
   semantic-standards checkpoint passes on the integrated source, and the live
   registry now exposes N04-N07 as a four-lane source-work frontier with exact
   nonoverlapping code/test/fixture scopes. Scheduler readiness is separated
-  from production activation, and no generated authority is leased. Worktree
-  leases remain unissued until this exact root checkpoint is reviewed and
-  committed. Installed and product claims remain withheld.
+  from production activation, and no generated authority is leased. The clean
+  `0c7f3e147d372f870751548610710353d37f9d4b` source base passed the exact
+  compile, namespace/zero-write, and standards issuance gates. N04-N07 now have
+  four disjoint issued worktree leases whose typed runtime authority binds that
+  already-existing source base rather than falsely attributing the checks to
+  the containing lease-authority commit. Routine review uses Terra/high on the
+  standard tier; Sol/high remains reserved for bounded four-persona milestone
+  gates. Installed and product claims remain withheld.
 - HCT-FIXTURES execution/parity, runtime, installed journey, readiness,
   release, and completion claims remain withheld.
 - The calibrated review, observability, and Product Fitness doctrine is now
