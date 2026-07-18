@@ -30,8 +30,9 @@ All fourteen claims remain withheld with empty evidence and no validator
 receipts. The user-authorized cleanup removed the obsolete review tree and
 reproducible worktree home/tmp state, recovering about 10.1 GB in addition to
 earlier cleanup; the three approved paths now exist only as empty roots. N06
-and N07 retain their unique active worktree state; the integrated N05 worktree
-is eligible for teardown after this root checkpoint commits.
+and N07 retain their unique active worktree state. The integrated N05 worktree
+and its disposable target are removed; its branch tip remains preserved by the
+registry tombstone.
 
 ## Outcome
 
