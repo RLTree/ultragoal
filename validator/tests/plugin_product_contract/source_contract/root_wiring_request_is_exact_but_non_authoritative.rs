@@ -29,3 +29,34 @@ fn root_wiring_request_is_exact_but_non_authoritative() {
     );
     assert!(!root().join(".agents/plugins/marketplace.json").exists());
 }
+
+#[test]
+fn supported_host_wiring_is_root_owned_and_preserves_each_proof_surface() {
+    let request: serde_json::Value =
+        serde_json::from_str(&read("fixtures/plugin-product/root-wiring-request.json"))
+            .unwrap_or_else(|error| panic!("root wiring request invalid: {error}"));
+    let rows = request["root_owned_wiring_requests"]
+        .as_array()
+        .unwrap_or_else(|| panic!("root-owned wiring requests missing"));
+    assert_eq!(rows.len(), 3);
+    assert_eq!(
+        rows[0]["path"], "validator/src/plugin_product/mod.rs",
+        "only root may compile the internal host lifecycle module"
+    );
+    assert!(
+        rows[0]["required_guard"]
+            .as_str()
+            .is_some_and(|value| value.contains("externally public"))
+    );
+    assert_eq!(rows[1]["path"], "validator/src/cli/successor_public/mod.rs");
+    assert!(
+        rows[1]["requested_change"]
+            .as_str()
+            .is_some_and(|value| value.contains("root-issued distribution effect permit"))
+    );
+    assert!(
+        rows[2]["required_guard"]
+            .as_str()
+            .is_some_and(|value| value.contains("same-surface proof"))
+    );
+}

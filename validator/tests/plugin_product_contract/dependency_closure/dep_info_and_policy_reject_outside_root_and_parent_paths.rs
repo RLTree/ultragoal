@@ -40,7 +40,18 @@ fn live_plugin_product_build_closure_is_exact_and_byte_identical_twice() {
     }
     assert_eq!(first, second);
     assert_eq!(first.rows.len(), policy.required_inputs.len());
-    assert_eq!(first.rows.len(), 71);
+    assert_eq!(first.rows.len(), 122);
+    assert_eq!(
+        first
+            .rows
+            .iter()
+            .filter(|row| row
+                .path
+                .starts_with("validator/src/plugin_product/host_lifecycle/"))
+            .count(),
+        51,
+        "the supported-host transaction source must remain in the candidate closure"
+    );
     first.verify(&root(), &policy).unwrap();
 }
 
