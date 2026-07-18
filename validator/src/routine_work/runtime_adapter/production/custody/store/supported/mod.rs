@@ -21,7 +21,7 @@ mod output_journal_validation;
 pub(super) mod record_authentication;
 #[path = "record_identity.rs"]
 mod record_identity;
-mod reserve;
+mod reservation_lifecycle;
 mod settle;
 #[path = "state_publication.rs"]
 mod state_publication;

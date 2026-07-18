@@ -68,7 +68,7 @@ fn terminal_publication_follows_observation_without_parallel_cache_authority() {
     let durable =
         include_str!("../src/routine_work/runtime_adapter/production/custody/transaction/owner.rs");
     let settlement = include_str!(
-        "../src/routine_work/runtime_adapter/production/custody/store/supported/file_ledger_settle.rs"
+        "../src/routine_work/runtime_adapter/production/custody/store/supported/settle.rs"
     );
     let source = include_str!("../src/cli/successor_public/routine/source_configuration.rs");
     let output = include_str!(
