@@ -13,6 +13,3 @@ use std::os::unix::fs::{PermissionsExt, symlink};
 mod corrupt_row_rejection;
 #[path = "races_paths_cases/unsafe_path_rejection.rs"]
 mod unsafe_path_rejection;
-
-pub(crate) use corrupt_row_rejection::*;
-pub(crate) use unsafe_path_rejection::*;
