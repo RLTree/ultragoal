@@ -34,6 +34,12 @@ mod darwin_child_custody;
 #[cfg(target_os = "macos")]
 #[path = "darwin_suspended_launch.rs"]
 mod darwin_suspended_launch;
+#[path = "execution.rs"]
+mod execution;
+#[path = "group_observation.rs"]
+mod group_observation;
+#[path = "input_write.rs"]
+mod input_write;
 #[cfg(target_os = "macos")]
 #[path = "loaded_executable_identity.rs"]
 mod loaded_executable_identity;
@@ -42,14 +48,8 @@ mod loaded_executable_identity;
 mod object_bound_launch;
 #[path = "observation_lifecycle.rs"]
 mod observation_lifecycle;
-#[path = "process_execution.rs"]
-mod process_execution;
-#[path = "process_group_observation.rs"]
-mod process_group_observation;
-#[path = "process_input_write.rs"]
-mod process_input_write;
-#[path = "process_output_drain.rs"]
-mod process_output_drain;
+#[path = "output_drain.rs"]
+mod output_drain;
 #[path = "spawn_test_observation.rs"]
 mod spawn_test_observation;
 
@@ -123,26 +123,26 @@ pub(crate) use custody_settlement::take_process_custody_panic;
 pub(crate) use darwin_child_custody::*;
 #[cfg(target_os = "macos")]
 pub(crate) use darwin_suspended_launch::*;
+pub(crate) use execution::*;
+pub(crate) use group_observation::*;
+pub(crate) use input_write::*;
 #[cfg(target_os = "macos")]
 pub(crate) use loaded_executable_identity::*;
 #[cfg(target_os = "macos")]
 pub(crate) use object_bound_launch::*;
 pub(crate) use observation_lifecycle::*;
-pub(crate) use process_execution::*;
-pub(crate) use process_group_observation::*;
-pub(crate) use process_input_write::*;
-pub(crate) use process_output_drain::*;
+pub(crate) use output_drain::*;
 pub(crate) use spawn_test_observation::*;
 
 #[cfg(all(test, target_os = "macos"))]
 #[path = "custody_transition_tests.rs"]
 mod custody_transition_tests;
 #[cfg(test)]
-#[path = "process_object_binding_tests.rs"]
-mod process_object_binding_tests;
-#[cfg(test)]
-#[path = "process_termination_tests.rs"]
-mod process_termination_tests;
+#[path = "object_binding_tests.rs"]
+mod object_binding_tests;
 #[cfg(test)]
 #[path = "revalidation_tests.rs"]
 mod revalidation_tests;
+#[cfg(test)]
+#[path = "termination_tests.rs"]
+mod termination_tests;

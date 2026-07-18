@@ -13,8 +13,7 @@ fn production_source_exposes_no_arbitrary_process_binding_surface() {
         include_str!("../src/routine_work/runtime_adapter/mediator/intent_mediation.rs");
     let executed =
         include_str!("../src/routine_work/runtime_adapter/mediator/outcome/executed_intent.rs");
-    let process =
-        include_str!("../src/routine_work/runtime_adapter/mediator/process/process_execution.rs");
+    let process = include_str!("../src/routine_work/runtime_adapter/mediator/process/execution.rs");
     let launch = include_str!(
         "../src/routine_work/runtime_adapter/mediator/process/darwin_suspended_launch.rs"
     );
