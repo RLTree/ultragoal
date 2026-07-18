@@ -106,7 +106,7 @@ fn oversized_and_duplicate_key_source_descriptors_fail_closed() {
 }
 
 fn verify_host_mutation(
-    configure: impl FnOnce(&mut super::super::authority_fixtures::FixtureTransaction) + 'static,
+    configure: impl FnOnce(&mut super::authority_fixtures::FixtureTransaction) + 'static,
 ) -> AgentDiscoveryErrorId {
     let repo = TempRepo::canonical();
     let source = repo.capture();

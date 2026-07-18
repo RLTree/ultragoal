@@ -37,7 +37,7 @@ const LIVE_LEGACY_AGENTS: [(&str, &str, &str); 7] = [
 ];
 
 fn verify_with(
-    configure: impl FnOnce(&mut super::super::authority_fixtures::FixtureTransaction) + 'static,
+    configure: impl FnOnce(&mut super::authority_fixtures::FixtureTransaction) + 'static,
 ) -> AgentDiscoveryErrorId {
     let repo = TempRepo::canonical();
     let source = repo.capture();
