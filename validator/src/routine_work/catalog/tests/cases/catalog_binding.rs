@@ -1,5 +1,5 @@
+use super::catalog_fixture::{TestRoot, VALID_CATALOG};
 use super::*;
-use crate::catalog_fixture::{TestRoot, VALID_CATALOG};
 
 pub(crate) const GRAPH_ID: &str =
     "sha256:1111111111111111111111111111111111111111111111111111111111111111";

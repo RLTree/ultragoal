@@ -2,7 +2,7 @@ use super::*;
 
 #[test]
 pub(crate) fn unknown_duplicate_ambiguous_missing_and_behavior_substitutions_fail_closed() {
-    crate::catalog_fixture::run_catalog_case("definition-rejection", |invocation| {
+    super::catalog_fixture::run_catalog_case("definition-rejection", |invocation| {
         let unknown = String::from_utf8(VALID_CATALOG.to_vec())
             .unwrap()
             .replacen("\"node_id\": \"verify\"", "\"node_id\": \"unknown\"", 1)
@@ -62,7 +62,7 @@ pub(crate) fn unknown_duplicate_ambiguous_missing_and_behavior_substitutions_fai
 #[cfg(unix)]
 #[test]
 pub(crate) fn definition_candidate_input_and_dependency_drift_after_parse_are_refused() {
-    crate::catalog_fixture::run_catalog_case("definition-drift", |invocation| {
+    super::catalog_fixture::run_catalog_case("definition-drift", |invocation| {
         let mut root = invocation.new_root("definition-drift", VALID_CATALOG)?;
         let catalog = load_full(&root, CANDIDATE_ID);
         root.write_catalog(

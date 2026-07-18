@@ -2,9 +2,7 @@ use std::collections::BTreeMap;
 use std::sync::{RwLock, RwLockReadGuard};
 
 use super::base_support::{TempRepo, node, path, route, sha};
-use super::capture::{
-    CapturedArtifact, CapturedRun, CommandSpec, PublicArtifact, capture_public_for_test,
-};
+use super::capture::{CapturedRun, CommandSpec, PublicArtifact, capture_public_for_test};
 use super::context::{BuildRequest, LiveContext};
 use super::routine_work::{
     CapturedExecution, CheckClass, DependencyResult, ImpactGraph, LocalDirtyTree, ObservedResult,

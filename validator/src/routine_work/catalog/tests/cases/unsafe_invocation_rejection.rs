@@ -2,7 +2,7 @@ use super::*;
 
 #[test]
 pub(crate) fn execution_authority_fields_paths_and_prose_substitution_fail_closed() {
-    crate::catalog_fixture::run_catalog_case("unsafe-invocation", |invocation| {
+    super::catalog_fixture::run_catalog_case("unsafe-invocation", |invocation| {
         for (field, value) in [
             ("working_directory", serde_json::json!(".")),
             ("environment", serde_json::json!({"PATH": "/tmp"})),
@@ -72,7 +72,7 @@ pub(crate) fn execution_authority_fields_paths_and_prose_substitution_fail_close
 
 #[test]
 pub(crate) fn retired_v1_catalog_has_no_behavioral_reader() {
-    crate::catalog_fixture::run_catalog_case("retired-v1", |invocation| {
+    super::catalog_fixture::run_catalog_case("retired-v1", |invocation| {
         let mut legacy: serde_json::Value = serde_json::from_slice(VALID_CATALOG).unwrap();
         legacy["schema_version"] = serde_json::json!("RoutineProductionCatalog-v1");
         let legacy = serde_json::to_vec_pretty(&legacy).unwrap();
@@ -89,7 +89,7 @@ pub(crate) fn retired_v1_catalog_has_no_behavioral_reader() {
 #[cfg(unix)]
 #[test]
 pub(crate) fn symbolic_tool_executable_content_mode_and_identity_substitutions_are_refused() {
-    crate::catalog_fixture::run_catalog_case("runner-substitution", |invocation| {
+    super::catalog_fixture::run_catalog_case("runner-substitution", |invocation| {
         let mut root = invocation.new_root("runner-substitution", VALID_CATALOG)?;
         let catalog = load_full(&root, CANDIDATE_ID);
 

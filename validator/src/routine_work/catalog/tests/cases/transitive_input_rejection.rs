@@ -3,7 +3,7 @@ use super::*;
 #[cfg(unix)]
 #[test]
 pub(crate) fn omitted_or_injected_transitive_inputs_and_definition_only_targets_cannot_pass() {
-    crate::catalog_fixture::run_catalog_case("input-set-inexact", |invocation| {
+    super::catalog_fixture::run_catalog_case("input-set-inexact", |invocation| {
         let mut root = invocation.new_root("input-set-inexact", VALID_CATALOG)?;
         let catalog = load_full(&root, CANDIDATE_ID);
         let mut rows = selected(&root, false);
@@ -71,7 +71,7 @@ pub(crate) fn omitted_or_injected_transitive_inputs_and_definition_only_targets_
 #[cfg(unix)]
 #[test]
 pub(crate) fn parse_query_and_refusal_paths_are_recursively_zero_write() {
-    crate::catalog_fixture::run_catalog_case("zero-write", |invocation| {
+    super::catalog_fixture::run_catalog_case("zero-write", |invocation| {
         let mut root = invocation.new_root("zero-write", VALID_CATALOG)?;
         commit_fixture(root.path());
         let before = tree(root.path());

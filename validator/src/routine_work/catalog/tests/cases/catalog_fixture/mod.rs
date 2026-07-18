@@ -17,8 +17,10 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Mutex, MutexGuard};
 
-pub(crate) const VALID_CATALOG: &[u8] =
-    include_bytes!("../../../../fixtures/routine-production-catalog/valid-catalog-v2.json");
+pub(crate) const VALID_CATALOG: &[u8] = include_bytes!(concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../fixtures/routine-production-catalog/valid-catalog-v2.json"
+));
 
 static NEXT: AtomicU64 = AtomicU64::new(0);
 static FIXTURE_ROOT_LOCK: Mutex<()> = Mutex::new(());
@@ -66,10 +68,7 @@ pub(crate) fn verify_catalog_scope_construction() {
 #[test]
 fn fixture_module_tree_is_exclusive() {
     let fixture = include_str!("mod.rs");
-    let harnesses = [
-        include_str!("../../routine_production_catalog_contract.rs"),
-        include_str!("../../routine_work_contract.rs"),
-    ];
+    let harness = include_str!("../../mod.rs");
     for child in [
         "claim",
         "cleanup_hook",
@@ -88,12 +87,10 @@ fn fixture_module_tree_is_exclusive() {
             fixture.contains(&format!("mod {child};")),
             "missing {child}"
         );
-        for harness in harnesses {
-            assert_eq!(harness.matches("mod catalog_fixture;").count(), 1);
-            assert!(
-                !harness.contains(&format!("mod {child};")),
-                "crate root mounted fixture child {child}"
-            );
-        }
+        assert_eq!(harness.matches("mod catalog_fixture;").count(), 1);
+        assert!(
+            !harness.contains(&format!("mod {child};")),
+            "catalog test root mounted fixture child {child}"
+        );
     }
 }

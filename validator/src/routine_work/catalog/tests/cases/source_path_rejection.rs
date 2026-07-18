@@ -4,7 +4,7 @@ use super::*;
 #[test]
 pub(crate) fn source_path_escape_symlink_hardlink_special_and_non_utf8_are_refused_without_blocking()
  {
-    crate::catalog_fixture::run_catalog_case("source-path-security", |invocation| {
+    super::catalog_fixture::run_catalog_case("source-path-security", |invocation| {
         let mut root = invocation.new_root("source-path-security", VALID_CATALOG)?;
         assert_eq!(
             load_production_catalog(
@@ -78,7 +78,7 @@ pub(crate) fn source_path_escape_symlink_hardlink_special_and_non_utf8_are_refus
 #[cfg(unix)]
 #[test]
 pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
-    crate::catalog_fixture::run_catalog_case("input-security", |invocation| {
+    super::catalog_fixture::run_catalog_case("input-security", |invocation| {
         let mut root = invocation.new_root("input-symlink", VALID_CATALOG)?;
         let catalog = load_full(&root, CANDIDATE_ID);
         let stale = selected(&root, false);
@@ -184,7 +184,7 @@ pub(crate) fn transitive_input_symlink_hardlink_and_special_file_are_refused() {
 
 #[test]
 pub(crate) fn catalog_input_and_output_bounds_are_enforced() {
-    crate::catalog_fixture::run_catalog_case("catalog-bounds", |invocation| {
+    super::catalog_fixture::run_catalog_case("catalog-bounds", |invocation| {
         let reads = (0..129)
             .map(|index| format!("src/input-{index}.txt"))
             .collect::<Vec<_>>();
