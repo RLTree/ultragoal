@@ -64,7 +64,6 @@ fn option_accepts_value(arg: &str) -> bool {
             | "--receipt-dir"
             | "--red-report"
             | "--report"
-            | "--review-target-receipt"
             | "--root"
             | "--run-id"
             | "--schema"
