@@ -2,8 +2,6 @@
 mod digest;
 #[path = "../src/evaluation/mod.rs"]
 mod evaluation;
-#[path = "../src/fixture_scheduler/mod.rs"]
-mod fixture_scheduler;
 
 use evaluation::runtime::{
     FixtureEvaluationBridge, FixtureTaskRequest, ProductionRuntimeError, execute_production,
@@ -19,10 +17,6 @@ use evaluation::{
     RejectedRecommendation, ResearchAudit, ResearchSource, ResearchSourceClass,
     ResearchSourceRecord, ResearchSourceRecordDefinition, RuntimeConfiguration, VerifiedSourceFact,
 };
-use fixture_scheduler::{
-    ExpectedOutcome, FixtureExecutionRecord, FixtureExecutionRecordCapture, FixtureKind,
-    FixtureSpec, ObservedOutcome, ResourceKind,
-};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
@@ -36,10 +30,6 @@ use std::sync::mpsc;
 use std::time::{Duration, Instant};
 
 include!("evaluation_runtime_contract/next_root.rs");
-
-include!(
-    "evaluation_runtime_contract/production_native_fixture_boundary_accepts_only_fixed_protected_substrates.rs"
-);
 
 include!("evaluation_runtime_contract/research/source_url.rs");
 

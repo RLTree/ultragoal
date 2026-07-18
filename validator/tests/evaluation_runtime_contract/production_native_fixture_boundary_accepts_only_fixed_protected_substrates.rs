@@ -1,3 +1,18 @@
+use crate::evaluation::runtime::{FixtureEvaluationBridge, FixtureTaskRequest, execute_production};
+use crate::evaluation::{
+    BoundInput, ConfigurationExposure, EvaluationSpec, EvaluationTask, EvaluationTaskDefinition,
+    PerturbationControl, ProductionRuntimeError, RuntimeConfiguration,
+};
+use crate::fixture_scheduler::{
+    FixtureExecutionRecord, FixtureExecutionRecordCapture, ObservedOutcome,
+};
+use serde_json::json;
+use std::collections::BTreeSet;
+
+fn sha(byte: char) -> String {
+    format!("sha256:{}", byte.to_string().repeat(64))
+}
+
 fn controls() -> BTreeSet<PerturbationControl> {
     PerturbationControl::REQUIRED.into_iter().collect()
 }
