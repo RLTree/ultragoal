@@ -53,7 +53,7 @@ fn interrupted_compile_scratch_is_retained_for_explicit_teardown() {
     let interrupted = owned.path().to_path_buf();
     let status = Command::new(std::env::current_exe().unwrap())
         .args([
-            "issuer_scratch_resilience::interrupted_compile_scratch_is_retained_for_explicit_teardown",
+            "routine_work::tests::issuer_scratch_resilience::interrupted_compile_scratch_is_retained_for_explicit_teardown",
             "--exact",
         ])
         .env(CHILD, "1")
