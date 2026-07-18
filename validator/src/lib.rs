@@ -7,14 +7,10 @@ macro_rules! include_production_package_module {
 mod agent_manifest;
 mod agent_roles;
 mod api_witness;
-#[cfg(test)]
-mod archive;
 mod argument_parser;
 mod audit;
 mod cli;
 pub use cli::capture;
-#[cfg(test)]
-mod command;
 mod command_run;
 mod command_witness;
 pub mod context;
@@ -45,28 +41,9 @@ mod schema_catalog;
 pub(crate) mod self_tests;
 mod skill_links;
 pub mod state;
-#[cfg(not(test))]
 pub(crate) struct Args {
     pub(crate) root: std::path::PathBuf,
     pub(crate) outcome: cli::successor::ParseOutcome,
-}
-
-#[cfg(test)]
-pub(crate) use command::{Args, Command};
-
-#[cfg(test)]
-pub(crate) fn parse_args_from(raw: Vec<String>) -> Result<Args, String> {
-    argument_parser::parse_args_from(raw)
-}
-
-#[cfg(test)]
-pub(crate) fn parse_command(raw: &[String]) -> Result<Command, String> {
-    argument_parser::parse_command(raw)
-}
-
-#[cfg(test)]
-pub(crate) fn usage() -> String {
-    argument_parser::usage()
 }
 
 pub fn main_entry() -> i32 {

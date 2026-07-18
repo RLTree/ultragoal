@@ -1,7 +1,4 @@
-pub(crate) mod audit;
 pub(crate) mod boundaries;
-pub(crate) mod cli;
-pub(crate) mod command;
 pub(crate) mod coverage;
 pub(crate) mod law;
 pub(crate) mod namespace;
