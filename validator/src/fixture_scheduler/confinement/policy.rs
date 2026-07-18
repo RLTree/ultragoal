@@ -1,4 +1,5 @@
 use crate::fixture_scheduler::FixtureScheduleError;
+#[cfg(test)]
 use std::time::Duration;
 
 const MIN_MEMORY_BYTES: u64 = 16 * 1024 * 1024;
@@ -57,6 +58,7 @@ impl ConfinementPolicy {
         Ok(())
     }
 
+    #[cfg(test)]
     pub(crate) fn wall_time(&self) -> Duration {
         Duration::from_millis(self.wall_time_millis)
     }

@@ -66,6 +66,7 @@ pub struct ObservedOutcome {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[cfg(test)]
 pub struct FixtureExecutionBinding {
     pub live_context_id: String,
     pub candidate_id: String,
@@ -74,6 +75,7 @@ pub struct FixtureExecutionBinding {
     pub execution_session_id: String,
 }
 
+#[cfg(test)]
 impl FixtureExecutionBinding {
     pub fn new(
         live_context_id: impl Into<String>,
@@ -102,6 +104,7 @@ impl FixtureExecutionBinding {
         Ok(value)
     }
 
+    #[cfg(test)]
     pub(crate) fn standalone(fixture_id: &str, fixture_digest: &str) -> Self {
         let seed = digest(format!("standalone|{fixture_id}|{fixture_digest}").as_bytes());
         Self {
@@ -118,6 +121,7 @@ impl FixtureExecutionBinding {
 /// is never retained. Artifact bytes are private to crate-controlled grading,
 /// size-bounded, and refused when they look secret-bearing.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[cfg(test)]
 pub struct FixtureExecutionRecord {
     pub schema_version: &'static str,
     pub binding: FixtureExecutionBinding,

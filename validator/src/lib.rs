@@ -19,8 +19,7 @@ mod digest;
 pub mod distribution;
 #[cfg(test)]
 pub mod evaluation;
-#[cfg(test)]
-mod fixture_scheduler;
+pub mod fixture_scheduler;
 #[cfg(test)]
 #[path = "fixture_scheduler/tests/mod.rs"]
 mod fixture_scheduler_tests;

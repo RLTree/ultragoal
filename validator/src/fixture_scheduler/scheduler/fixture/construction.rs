@@ -56,6 +56,7 @@ impl FixtureScheduler {
         ))
     }
 
+    #[cfg(test)]
     pub(crate) fn finish_observed(
         &mut self,
         lease_id: &str,
@@ -86,6 +87,7 @@ impl FixtureScheduler {
         Ok(disposition)
     }
 
+    #[cfg(test)]
     pub(crate) fn execute<E: FixtureExecutor>(
         &mut self,
         lease_id: &str,
@@ -125,6 +127,7 @@ impl FixtureScheduler {
         self.finish_observed(lease_id, observed)
     }
 
+    #[cfg(test)]
     pub(crate) fn execute_recorded<E: RecordedFixtureExecutor>(
         &mut self,
         lease_id: &str,
