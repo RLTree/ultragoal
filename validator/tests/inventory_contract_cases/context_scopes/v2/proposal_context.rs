@@ -5,7 +5,7 @@ use serde_json::{Value, json};
 use std::fs;
 
 const REPORT_PATH: &str = "REPORT.md";
-const REPORT_DIGEST: &str = "e0a5534bf81ca2c8c0bc173081c82af1a75acc324ab291993a71c2dda35e58a5";
+const REPORT_DIGEST: &str = "7638fbe3ac770524c5e8ef6e8ecbb0083de35c4c488d29d28a3861cec4d79a82";
 
 fn proposal_row() -> Value {
     json!({

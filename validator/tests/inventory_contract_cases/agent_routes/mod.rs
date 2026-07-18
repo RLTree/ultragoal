@@ -15,18 +15,13 @@ use registry_fixture::{
 };
 
 const CURRENT_AGENT_DISCOVERY_READERS: [&str; 3] = [
-    "validator/src/plugin_product/agent_discovery/host.rs",
+    "validator/src/plugin_product/agent_discovery/host/mod.rs",
     "validator/src/plugin_product/agent_discovery/model.rs",
-    "validator/src/plugin_product/agent_discovery/source.rs",
+    "validator/src/plugin_product/agent_discovery/source/mod.rs",
 ];
 
 fn prepare(repo: &TestRepo, cases: &[Case], reader_proof: bool) {
     prepare_without_agent_discovery_readers(repo, cases, reader_proof);
-    if reader_proof {
-        for path in CURRENT_AGENT_DISCOVERY_READERS {
-            repo.write(path, &fs::read(live_root().join(path)).unwrap());
-        }
-    }
 }
 
 #[test]

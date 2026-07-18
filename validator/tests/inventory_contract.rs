@@ -18,8 +18,12 @@ mod compatibility_routes;
 mod context_scopes;
 #[path = "inventory_contract_cases/contract_integrity.rs"]
 mod contract_integrity;
+#[path = "inventory_contract_cases/fixture_copy.rs"]
+mod fixture_copy;
 #[path = "inventory_contract_cases/fixtures/mod.rs"]
 mod fixtures;
+#[path = "inventory_contract_cases/generated_authority_fixture.rs"]
+mod generated_authority_fixture;
 #[path = "inventory_contract_cases/generated_disposition/mod.rs"]
 mod generated_disposition;
 #[path = "inventory_contract_cases/generated_regeneration.rs"]

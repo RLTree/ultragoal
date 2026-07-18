@@ -25,11 +25,11 @@ fn absent_or_stale_witness_sources_fail_closed_without_echoing_bytes() {
         ),
         (
             "activation-source-stale-status",
-            "validator/src/inventory/types.rs",
+            "validator/src/inventory/types/mod.rs",
         ),
         (
             "activation-source-stale-audit",
-            "validator/src/inventory/validate.rs",
+            "validator/src/inventory/validate/mod.rs",
         ),
         (
             "activation-source-stale-export",

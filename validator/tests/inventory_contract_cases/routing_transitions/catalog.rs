@@ -14,36 +14,28 @@ fn live_exact_sources_are_sole_current_and_pending_migration() {
         .filter(|finding| finding.code == "sole_current_authority_pending_migration")
         .collect::<Vec<_>>();
 
-    assert_eq!(pending.len(), 16);
+    assert_eq!(pending.len(), 15);
     let serialized_before = catalog.to_canonical_json().unwrap();
     let closure = catalog.closure_status();
     assert_eq!(catalog.to_canonical_json().unwrap(), serialized_before);
-    assert!(!closure.is_closed());
-    assert_eq!(catalog.findings().len(), 97);
-    assert_eq!(closure.blocker_count(), 53);
+    assert!(closure.is_closed());
+    assert_eq!(catalog.findings().len(), 68);
+    assert_eq!(closure.blocker_count(), 0);
     assert_eq!(
         closure
             .open_obligations_by_code()
             .get("sole_current_authority_pending_migration"),
-        Some(&16)
+        Some(&15)
     );
-    assert_eq!(closure.open_obligation_count(), 30);
-    assert_eq!(
-        closure.blockers_by_code(),
-        &std::collections::BTreeMap::from([
-            ("candidate_component_not_active".to_owned(), 10),
-            ("missing_required_component".to_owned(), 18),
-            ("parallel_authority".to_owned(), 18),
-            ("projection_requires_canonical_reconciliation".to_owned(), 1,),
-            ("retained_context_digest_mismatch".to_owned(), 2),
-            ("unrouted_legacy_authority".to_owned(), 4),
-        ])
-    );
+    assert_eq!(closure.open_obligation_count(), 40);
+    assert!(closure.blockers_by_code().is_empty());
     assert_eq!(
         closure.open_obligations_by_code(),
         &std::collections::BTreeMap::from([
             ("compatibility_route_retained".to_owned(), 14),
-            ("sole_current_authority_pending_migration".to_owned(), 16),
+            ("candidate_component_not_active".to_owned(), 10),
+            ("projection_requires_canonical_reconciliation".to_owned(), 1),
+            ("sole_current_authority_pending_migration".to_owned(), 15),
         ])
     );
     assert!(

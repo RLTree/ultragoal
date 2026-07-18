@@ -1,26 +1,40 @@
 const SOURCES: &[&str] = &[
     "validator/src/api_witness.rs",
     "validator/src/lib.rs",
+    "validator/tests/public_api_witness.rs",
     "validator/src/command_witness.rs",
-    "validator/src/cli/successor/catalog.rs",
+    "validator/src/cli/successor/catalog/mod.rs",
+    "validator/src/cli/successor/catalog/evaluation_and_migration.rs",
+    "validator/src/cli/successor/catalog/repository_fit_and_checks.rs",
+    "validator/src/cli/successor/catalog/inspection.rs",
+    "validator/src/cli/successor/catalog/observability_and_package.rs",
+    "validator/src/cli/successor/catalog/options.rs",
     "validator/src/cli/successor/command_contract/mod.rs",
+    "validator/src/cli/successor/command_contract/arguments.rs",
+    "validator/src/cli/successor/command_contract/commands.rs",
+    "validator/src/cli/successor/command_contract/descriptor.rs",
+    "validator/src/cli/successor/command_contract/exit.rs",
+    "validator/src/cli/successor/command_contract/invocation.rs",
     "validator/src/inventory/mod.rs",
     "validator/src/inventory/builder.rs",
     "validator/src/inventory/digest.rs",
     "validator/src/inventory/fs.rs",
     "validator/src/inventory/projection.rs",
-    "validator/src/inventory/registry/command_activation.rs",
+    "validator/src/inventory/registry/command_activation/mod.rs",
+    "validator/src/inventory/registry/command_activation/guard.rs",
+    "validator/src/inventory/registry/command_activation/exact_source_manifest.rs",
     "validator/src/inventory/registry/data.rs",
     "validator/src/inventory/registry/integrity.rs",
+    "validator/src/inventory/registry/frontier.rs",
+    "validator/src/inventory/registry/load.rs",
     "validator/src/inventory/registry/mod.rs",
     "validator/src/inventory/registry/semantic.rs",
     "validator/src/inventory/registry/sources.rs",
     "validator/src/inventory/registry/topology.rs",
-    "validator/src/inventory/types.rs",
+    "validator/src/inventory/types/mod.rs",
     "validator/src/inventory/validate/duplicates.rs",
-    "validator/src/inventory/validate.rs",
+    "validator/src/inventory/validate/mod.rs",
     "validator/examples/hct_inventory.rs",
-    "validator/tests/public_api_witness.rs",
 ];
 
 fn copy_sources(repo: &TestRepo) {
@@ -98,7 +112,7 @@ fn exact_current_witness_sources_activate_apis_but_not_command_definitions() {
     assert!(!closure.is_closed());
     assert!(
         closure
-            .blockers_by_code()
+            .open_obligations_by_code()
             .contains_key("candidate_component_not_active")
     );
 }
