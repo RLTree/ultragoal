@@ -78,6 +78,21 @@ a root-owned strict-test-boundary decision at the accumulated standards-debt
 checkpoint; owner is `OWN-ULTRA-ROOT`, and the evidence surface is the exact
 private mutation, race, rollback, recovery, and catalog suites.
 
+N07 also has a narrower accepted public/live-source increment. Exact source
+`bc6581ba0ee996c751bc0ab621f867ba27d95556` / tree
+`fb997fcd3c0f5418b11cc6ac4fa7d1608cfe669f` and its equivalent root integration
+pass the live journey 14/14 and public diagnosis 14/14 under warnings-deny.
+The shared privacy boundary now rejects prefix and embedded URI, UNC, and OAuth
+forms before persistence or public output. Both fixture families use confined
+worktree-safe scratch, explicit checked teardown, and current root-issued Git
+ancestry. The mirrored local observability suite remains withheld behind seven
+warnings-deny diagnostics from isolated production-source duplication. Further
+local topology patching is stopped; N07 stays scheduler-ready and all full-N07,
+downstream, installed, discovery, runtime, export-effect, Product Fitness,
+readiness, release, and completion claims remain withheld. Its next trigger,
+owner, and evidence surface are the same root-owned accumulated standards-debt
+checkpoint, `OWN-ULTRA-ROOT`, and the exact mirrored local control suite.
+
 ## Durable binding and contract lineage
 
 - Active host goal: `019f5f39-507b-78a2-a96a-0b566a5a2126`.
