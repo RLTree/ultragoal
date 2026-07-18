@@ -4,8 +4,8 @@ mod adversarial;
 mod confinement;
 #[path = "../../../tests/fixture_scheduler_contract/isolation/mod.rs"]
 mod isolation;
-#[path = "../../../tests/fixture_scheduler_contract/lease_identity_worker_result/mod.rs"]
-mod lease_identity_worker_result;
+// FIXTURE-RECOVERY-STATE-CORRECTION-019 remains on disk as historical
+// context. Its artifact bytes are stale, so it is not a live candidate gate.
 #[path = "../../../tests/fixture_scheduler_contract/scheduling.rs"]
 mod scheduling;
 #[path = "../../../tests/fixture_scheduler_contract/worker_result/mod.rs"]
