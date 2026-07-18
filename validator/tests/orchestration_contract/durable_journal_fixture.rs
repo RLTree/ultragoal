@@ -17,7 +17,10 @@ pub struct JournalRoot(PathBuf);
 impl JournalRoot {
     pub fn new(label: &str) -> Self {
         let serial = NEXT_JOURNAL.fetch_add(1, Ordering::Relaxed);
-        let path = PathBuf::from(env!("CARGO_TARGET_TMPDIR")).join(format!(
+        let target_tmp = std::env::var_os("CARGO_TARGET_TMPDIR")
+            .map(PathBuf::from)
+            .unwrap_or_else(std::env::temp_dir);
+        let path = target_tmp.join(format!(
             "orchestration-journal-{label}-{}-{serial}",
             std::process::id()
         ));

@@ -60,8 +60,10 @@ fn host_protected_ascii_case_aliases_fail_closed_in_every_path_category() {
 
 #[test]
 fn observed_case_aliases_are_denied_when_the_host_exposes_them() {
-    let root = PathBuf::from(env!("CARGO_TARGET_TMPDIR"))
-        .join(format!("n10-case-alias-observation-{}", std::process::id()));
+    let target_tmp = std::env::var_os("CARGO_TARGET_TMPDIR")
+        .map(PathBuf::from)
+        .unwrap_or_else(std::env::temp_dir);
+    let root = target_tmp.join(format!("n10-case-alias-observation-{}", std::process::id()));
     if root.exists() {
         fs::remove_dir_all(&root).unwrap();
     }

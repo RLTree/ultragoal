@@ -14,7 +14,10 @@ struct TempRoot(PathBuf);
 impl TempRoot {
     fn new(label: &str) -> Self {
         let serial = NEXT_TEMP.fetch_add(1, Ordering::Relaxed);
-        let path = PathBuf::from(env!("CARGO_TARGET_TMPDIR")).join(format!(
+        let target_tmp = std::env::var_os("CARGO_TARGET_TMPDIR")
+            .map(PathBuf::from)
+            .unwrap_or_else(std::env::temp_dir);
+        let path = target_tmp.join(format!(
             "n10-artifact-{label}-{}-{serial}",
             std::process::id()
         ));
