@@ -1,6 +1,7 @@
 mod reader;
 #[cfg(test)]
 mod report;
+mod root_distinctness;
 mod root_identity_codec;
 mod roots;
 mod transaction;

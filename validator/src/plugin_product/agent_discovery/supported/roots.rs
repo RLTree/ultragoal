@@ -1,6 +1,7 @@
+use super::root_distinctness::require_distinct_authority_roots;
 use super::root_identity_codec::{RootIdentityCodecRequest, encode};
 use super::{MAX_HOST_AGENT_ENTRIES, conflict};
-use crate::plugin_product::agent_discovery::error::{AgentDiscoveryError, AgentDiscoveryErrorId};
+use crate::plugin_product::agent_discovery::error::AgentDiscoveryError;
 use crate::plugin_product::agent_discovery::filesystem::{
     AnchoredDirectory, AnchoredRoot, SecureFile,
 };
@@ -10,7 +11,6 @@ use crate::plugin_product::agent_discovery::model::{
 use std::collections::BTreeSet;
 use std::ffi::{OsStr, OsString};
 use std::path::{Path, PathBuf};
-
 /// Explicit roots for one source-local supported-host observation transaction.
 #[derive(Clone, Debug)]
 pub struct SupportedHostAgentRoots {
@@ -20,7 +20,6 @@ pub struct SupportedHostAgentRoots {
     global_root: PathBuf,
     project_root: PathBuf,
 }
-
 impl SupportedHostAgentRoots {
     pub fn new(
         package_root: impl Into<PathBuf>,
@@ -38,7 +37,6 @@ impl SupportedHostAgentRoots {
         }
     }
 }
-
 #[derive(Clone)]
 pub(super) struct SupportedRootSet {
     package: PluginAuthorityRoot,
@@ -47,7 +45,6 @@ pub(super) struct SupportedRootSet {
     global: GlobalAuthorityRoot,
     project: PluginAuthorityRoot,
 }
-
 impl SupportedRootSet {
     pub(super) fn open(roots: &SupportedHostAgentRoots) -> Result<Self, AgentDiscoveryError> {
         let roots = Self {
@@ -57,10 +54,15 @@ impl SupportedRootSet {
             global: GlobalAuthorityRoot::open(&roots.global_root)?,
             project: PluginAuthorityRoot::open(&roots.project_root)?,
         };
-        roots.require_distinct_authority_roots()?;
+        require_distinct_authority_roots(
+            &roots.package,
+            &roots.installed,
+            &roots.cache,
+            &roots.global,
+            &roots.project,
+        )?;
         Ok(roots)
     }
-
     pub(super) fn revalidate(&self) -> Result<(), AgentDiscoveryError> {
         self.package.revalidate()?;
         self.installed.revalidate()?;
@@ -68,7 +70,6 @@ impl SupportedRootSet {
         self.global.revalidate()?;
         self.project.revalidate()
     }
-
     pub(super) fn identity_sha256(&self) -> String {
         let package = self.package.identity_sha256();
         let installed = self.installed.identity_sha256();
@@ -85,7 +86,6 @@ impl SupportedRootSet {
         .expect("fixed root identity tuple serializes")
         .sha256()
     }
-
     pub(super) fn capture(
         &self,
         layer: AgentAuthorityLayer,
@@ -98,28 +98,10 @@ impl SupportedRootSet {
             AgentAuthorityLayer::Discovery => self.project.capture(),
         }
     }
-
-    fn require_distinct_authority_roots(&self) -> Result<(), AgentDiscoveryError> {
-        let paths = [
-            self.package.canonical_path(),
-            self.installed.canonical_path(),
-            self.cache.canonical_path(),
-            self.global.canonical_path(),
-            self.project.canonical_path(),
-        ];
-        let unique = paths.iter().collect::<BTreeSet<_>>();
-        if unique.len() != paths.len() {
-            return Err(AgentDiscoveryError::new(
-                AgentDiscoveryErrorId::IdentityMismatch,
-            ));
-        }
-        Ok(())
-    }
 }
-
 #[derive(Clone)]
-struct PluginAuthorityRoot {
-    root: AnchoredRoot,
+pub(super) struct PluginAuthorityRoot {
+    pub(super) root: AnchoredRoot,
     agents: AnchoredDirectory,
     plugin: AnchoredDirectory,
 }
@@ -155,10 +137,6 @@ impl PluginAuthorityRoot {
         .sha256()
     }
 
-    fn canonical_path(&self) -> &Path {
-        self.root.canonical_path()
-    }
-
     fn capture(&self) -> Result<LayerFiles, AgentDiscoveryError> {
         self.revalidate()?;
         let expected_manifest = [OsString::from("plugin.json")]
@@ -183,8 +161,8 @@ impl PluginAuthorityRoot {
 }
 
 #[derive(Clone)]
-struct GlobalAuthorityRoot {
-    root: AnchoredRoot,
+pub(super) struct GlobalAuthorityRoot {
+    pub(super) root: AnchoredRoot,
     agents: AnchoredDirectory,
 }
 
@@ -209,10 +187,6 @@ impl GlobalAuthorityRoot {
         })
         .expect("fixed global root tuple serializes")
         .sha256()
-    }
-
-    fn canonical_path(&self) -> &Path {
-        self.root.canonical_path()
     }
 
     fn capture(&self) -> Result<LayerFiles, AgentDiscoveryError> {
