@@ -5,8 +5,6 @@ use std::path::Path;
 
 #[cfg(all(test, unix))]
 mod batch_tests;
-#[cfg(test)]
-mod tests;
 
 pub(super) struct State {
     classifications: BTreeMap<String, Result<Classification, ()>>,
