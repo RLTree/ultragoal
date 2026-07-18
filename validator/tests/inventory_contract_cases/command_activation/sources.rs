@@ -95,7 +95,6 @@ fn exact_current_witness_sources_activate_only_bound_operations() {
             "COMMAND:fit",
             "COMMAND:inspect",
             "COMMAND:next",
-            "COMMAND:observe",
         ]
         .into_iter()
         .collect()
@@ -104,7 +103,7 @@ fn exact_current_witness_sources_activate_only_bound_operations() {
         catalog
             .source_registry_counts()
             .get("verified_command_handler_activations"),
-        Some(&6)
+        Some(&5)
     );
     assert_eq!(
         catalog

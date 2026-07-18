@@ -5,8 +5,8 @@
 //! production handler and consumes its named API family.
 
 use crate::cli::successor::{
-    CheckProfile, EffectClass, FitAction, InspectTarget, ObserveAction, ParsedInvocation,
-    SuccessorCommand,
+    CheckProfile, EffectClass, FitAction, Group, InspectTarget, ObserveAction, ParsedInvocation,
+    SuccessorCommand, catalog,
 };
 use std::collections::BTreeSet;
 
@@ -190,11 +190,13 @@ const fn binding(
 }
 
 pub(crate) fn bind(invocation: &ParsedInvocation) -> Option<PublicOperation> {
+    bind_command(invocation.command, invocation.effect)
+}
+
+fn bind_command(command: SuccessorCommand, effect: EffectClass) -> Option<PublicOperation> {
     BINDINGS
         .iter()
-        .find(|binding| {
-            binding.command == invocation.command && binding.effect == invocation.effect
-        })
+        .find(|binding| binding.command == command && binding.effect == effect)
         .map(|binding| binding.operation)
 }
 
@@ -207,9 +209,19 @@ pub(crate) fn active_api_identifiers() -> BTreeSet<&'static str> {
 }
 
 pub(crate) fn active_command_groups() -> BTreeSet<&'static str> {
-    BINDINGS
+    let represented = BINDINGS
         .iter()
-        .map(|binding| binding.command.group().as_str())
+        .map(|binding| binding.command.group())
+        .collect::<BTreeSet<Group>>();
+    represented
+        .into_iter()
+        .filter(|group| {
+            catalog()
+                .iter()
+                .filter(|descriptor| descriptor.command.group() == *group)
+                .all(|descriptor| bind_command(descriptor.command, descriptor.effect).is_some())
+        })
+        .map(Group::as_str)
         .collect()
 }
 

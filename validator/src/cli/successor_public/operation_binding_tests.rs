@@ -59,7 +59,7 @@ fn unsupported_api_families_do_not_gain_dispatcher_authority() {
             "{api} has no supported public operation"
         );
     }
-    for group in ["package", "eval", "migrate", "prove"] {
+    for group in ["observe", "package", "eval", "migrate", "prove"] {
         assert!(!active_command_groups().contains(group));
     }
 }
