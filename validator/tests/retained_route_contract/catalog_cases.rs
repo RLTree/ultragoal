@@ -2,7 +2,7 @@ use crate::retained_routes::{
     AUTHORITY_CLASSIFICATION, RESULT_PATH, ROUTE_COUNT, TARGET_COUNT, by_route_id, by_stable_id,
     registry_route_is_compiled, routes, targets,
 };
-use crate::support::{Fixture, canonical_definition_sha256, repo_root, sha256};
+use crate::route_transition_fixture::{Fixture, canonical_definition_sha256, repo_root, sha256};
 use std::collections::BTreeSet;
 
 #[test]

@@ -1,8 +1,8 @@
 #[cfg(target_os = "macos")]
 mod macos {
-    use super::super::artifact_secret_support::assert_serialized_absent;
     use super::super::capture::{CommandSpec, PublicArg, PublicArtifact, PublicEnv, SecretArg};
     use super::super::fixture::RepoFixture;
+    use super::super::secret_capture_fixture::assert_serialized_absent;
     use crate::context::{BuildRequest, LiveContext};
     use std::path::Path;
 

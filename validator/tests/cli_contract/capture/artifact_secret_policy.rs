@@ -1,10 +1,10 @@
-use super::artifact_secret_support::{bound_context, digest};
 use super::capture::{
     CommandSpec, PublicArtifact, SecretArg, SecretArtifact, SecretEnv,
     capture_spec_artifacts_for_test, reset_test_descriptor_bytes_read,
     reset_test_file_open_attempts, test_descriptor_bytes_read, test_file_open_attempts,
 };
 use super::fixture::RepoFixture;
+use super::secret_capture_fixture::{bound_context, digest};
 
 fn assert_no_file_access() {
     assert_eq!(test_file_open_attempts(), 0);

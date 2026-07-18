@@ -1,12 +1,12 @@
-use super::artifact_secret_support::{
-    assert_public, assert_serialized_absent, assert_withheld, bound_context, digest,
-};
 use super::capture::{
     CommandSpec, PublicArg, PublicArtifact, SecretArg, capture_spec_artifacts_for_test,
     reset_test_descriptor_bytes_read, reset_test_file_open_attempts, test_descriptor_bytes_read,
     test_file_open_attempts,
 };
 use super::fixture::RepoFixture;
+use super::secret_capture_fixture::{
+    assert_public, assert_serialized_absent, assert_withheld, bound_context, digest,
+};
 
 #[cfg(unix)]
 use std::ffi::CString;

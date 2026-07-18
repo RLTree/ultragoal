@@ -1,5 +1,5 @@
-use super::artifact_secret_support::digest;
 use super::capture::{ArtifactDisposition, finalize_for_test};
+use super::secret_capture_fixture::digest;
 
 #[test]
 fn any_nonempty_bound_secret_withholds_without_content_comparison() {

@@ -49,8 +49,8 @@ mod same_session_stale_head_replay_and_terminal_substitution_fail_closed;
 mod scenario_fixture;
 #[path = "stale_target_and_invalid_clock_refuse_before_authority_store_write.rs"]
 mod stale_target_and_invalid_clock_refuse_before_authority_store_write;
-#[path = "subprocess_reservation_helper.rs"]
-mod subprocess_reservation_helper;
+#[path = "subprocess_reservation_entrypoint.rs"]
+mod subprocess_reservation_entrypoint;
 #[path = "wait_for_path.rs"]
 mod wait_for_path;
 #[path = "whole_root_rename_with_exact_leaf_postimage_cannot_recover_as_committed.rs"]
@@ -66,6 +66,6 @@ pub(crate) use production_mutation_grant_has_one_private_mint_in_the_sealed_auth
 pub(crate) use same_session_stale_head_replay_and_terminal_substitution_fail_closed::*;
 pub(crate) use scenario_fixture::*;
 pub(crate) use stale_target_and_invalid_clock_refuse_before_authority_store_write::*;
-pub(crate) use subprocess_reservation_helper::*;
+pub(crate) use subprocess_reservation_entrypoint::*;
 pub(crate) use wait_for_path::*;
 pub(crate) use whole_root_rename_with_exact_leaf_postimage_cannot_recover_as_committed::*;

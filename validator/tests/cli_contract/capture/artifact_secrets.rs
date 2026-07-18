@@ -1,10 +1,10 @@
-use super::artifact_secret_support::{
-    assert_serialized_absent, assert_withheld, bound_context, digest,
-};
 use super::capture::{
     CommandSpec, PublicArg, PublicArtifact, SecretArg, SecretEnv, capture_spec_artifacts_for_test,
 };
 use super::fixture::RepoFixture;
+use super::secret_capture_fixture::{
+    assert_serialized_absent, assert_withheld, bound_context, digest,
+};
 
 #[cfg(unix)]
 use std::ffi::OsString;

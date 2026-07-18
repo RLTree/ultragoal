@@ -1,8 +1,8 @@
 #[cfg(target_os = "macos")]
 mod macos {
-    use super::super::artifact_secret_support::digest;
     use super::super::capture::{CommandSpec, PublicArg, SecretArg, SecretEnv};
     use super::super::fixture::RepoFixture;
+    use super::super::secret_capture_fixture::digest;
     use super::super::transformed_secret_projection::{
         assert_public_run, assert_withheld_run, context,
     };

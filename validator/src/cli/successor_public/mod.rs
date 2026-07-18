@@ -40,7 +40,7 @@ mod diagnose_tests;
 mod diagnose_boundary_tests;
 
 #[cfg(test)]
-mod test_support;
+mod repository_fixture;
 
 pub(crate) use output_emission::*;
 pub(crate) use output_limit::*;

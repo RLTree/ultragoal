@@ -1,7 +1,7 @@
 use super::*;
 
 #[test]
-pub(crate) fn subprocess_reservation_helper() {
+pub(crate) fn subprocess_reservation_entrypoint() {
     if std::env::var_os("HUL_FIT_AUTHORITY_SUBPROCESS").is_none() {
         return;
     }

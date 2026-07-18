@@ -1,4 +1,4 @@
-use super::test_support::{Repository, tree};
+use super::repository_fixture::{Repository, tree};
 use super::{
     MAX_PUBLIC_OUTPUT, execute_invocation, execute_invocation_with_home, parse_public,
     public_output_allowed, read_context,

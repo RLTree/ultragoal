@@ -13,4 +13,4 @@ include!("install/automatic_and_explicit_rollbacks_preserve_concurrent_mutation.
 
 include!("install/rollback_authority.rs");
 
-include!("install/rollback_authority_helpers.rs");
+include!("install/rollback_install_fixture.rs");

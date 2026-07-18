@@ -1,5 +1,5 @@
 use crate::retained_routes::{DigestEvidence, EntryEvidence, VerificationError};
-use crate::support::Fixture;
+use crate::route_transition_fixture::Fixture;
 
 #[test]
 fn source_identity_kind_digest_state_and_status_tamper_fail_closed() {

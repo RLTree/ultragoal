@@ -1,4 +1,4 @@
-use super::test_support::{Repository, tree};
+use super::repository_fixture::{Repository, tree};
 use super::{execute_invocation, read_context};
 use crate::cli::successor::{OutputMode, ParseOutcome, parse_args};
 use crate::inventory::InventoryBuilder;

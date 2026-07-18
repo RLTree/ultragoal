@@ -1,5 +1,5 @@
 use crate::retained_routes::{RegistryRouteEvidence, VerificationError};
-use crate::support::Fixture;
+use crate::route_transition_fixture::Fixture;
 
 #[test]
 fn every_transition_overclaim_fails_closed() {

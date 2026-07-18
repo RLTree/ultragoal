@@ -1,8 +1,8 @@
 #![cfg(target_os = "macos")]
 
-use super::artifact_secret_support::digest;
 use super::capture::CapturedRun;
 use super::fixture::RepoFixture;
+use super::secret_capture_fixture::digest;
 use crate::context::{BuildRequest, LiveContext};
 use sha2::{Digest, Sha256};
 

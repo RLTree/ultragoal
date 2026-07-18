@@ -5,7 +5,6 @@ mod capture;
 
 mod artifact_secret_policy;
 mod artifact_secret_safety;
-mod artifact_secret_support;
 mod artifact_secrets;
 mod artifact_special_files;
 mod artifacts;
@@ -18,6 +17,7 @@ mod process;
 mod process_catalog_rejection;
 mod program_security;
 mod secret_artifact_length_oracle;
+mod secret_capture_fixture;
 mod secret_length_oracle;
 mod security;
 mod transformed_secret_artifacts;
