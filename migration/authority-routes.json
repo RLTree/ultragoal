@@ -829,54 +829,6 @@
       }
     },
     {
-      "route_id": "lane-root-registry-to-ps-orchestration",
-      "match": {
-        "stable_id": "LEGACY-LANE:LANE_REGISTRY.json",
-        "kind": "legacy-lane-authority",
-        "relative_path": "LANE_REGISTRY.json"
-      },
-      "canonical_target": "PS-ORCHESTRATION",
-      "intended_disposition": "non-authoritative",
-      "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
-        "proof_refs": [
-          "LANE_REGISTRY.json",
-          "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
-        ]
-      }
-    },
-    {
-      "route_id": "lane-template-registry-to-ps-orchestration",
-      "match": {
-        "stable_id": "LEGACY-LANE:templates/LANE_REGISTRY.json",
-        "kind": "legacy-lane-authority",
-        "relative_path": "templates/LANE_REGISTRY.json"
-      },
-      "canonical_target": "PS-ORCHESTRATION",
-      "intended_disposition": "non-authoritative",
-      "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
-        "proof_refs": [
-          "templates/LANE_REGISTRY.json",
-          "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
-        ]
-      }
-    },
-    {
       "route_id": "lane-claim-actor-freshness-to-ps-orchestration",
       "match": {
         "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/actor/freshness.rs"

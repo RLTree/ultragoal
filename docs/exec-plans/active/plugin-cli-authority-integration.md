@@ -176,6 +176,13 @@ recovery/security/false-pass evidence, unsupported scope, root requests, and a
 single WorkerResult only after source acceptance. It explicitly disclaims
 readiness, release, and completion.
 
+Routine source-freeze review uses GPT-5.6 Terra with high reasoning on the
+standard tier. GPT-5.6 Sol with high reasoning is reserved for the bounded
+four-reviewer team at material product, release, and completion milestones.
+One review returns the complete material invariant-level finding set; after a
+focused correction, one exact correction review closes the loop. Stylistic
+papercuts do not keep a lane in rework.
+
 Root reviews and integrates one authority-bearing increment at a time, applies
 shared wiring, reruns the affected closure, refreshes dependents when consumed
 interfaces change, and removes accepted worktrees and disposable caches after
@@ -297,8 +304,12 @@ claim and representative product or release proof.
   reaches HCT-CONTEXT and the focused external positive/negative context target
   passes 3/3. Product-wide
   REQ-STATE-001 remains open because routine and strict still build contexts on
-  separate command-local routes. N02 is now the sole serial gate; N03-N11 remain
-  blocked and require adopted-current reobservation.
+  separate command-local routes. N02 dependency-frontier inventory source
+  closure is accepted at `9a2141e3f5ccf5d7488947a5c0156794b4376066` /
+  tree `9cc386a9b5dafb55259fe4c60439e326d120802a`: two byte-identical live
+  catalogs have zero closure blockers and 40 explicitly withheld later-node
+  obligations. N03 is now the sole serial reobservation gate; N04-N11 remain
+  blocked by dependency order.
 - HCT-FIXTURES execution/parity, runtime, installed journey, readiness,
   release, and completion claims remain withheld.
 - The calibrated review, observability, and Product Fitness doctrine is now
