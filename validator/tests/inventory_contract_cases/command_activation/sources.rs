@@ -116,3 +116,92 @@ fn exact_current_witness_sources_activate_apis_but_not_command_definitions() {
             .contains_key("candidate_component_not_active")
     );
 }
+
+#[test]
+fn ready_frontier_rejects_unintegrated_dependencies_and_unexpected_lanes() {
+    let blocked_dependency = source_repo("ready-blocked-dependency");
+    set_lane_states(&blocked_dependency, &[("N03", "blocked")], None);
+    assert_inventory_error(
+        &blocked_dependency,
+        "scheduler ready frontier is not dependency closed",
+    );
+
+    let early_downstream = source_repo("ready-early-downstream");
+    set_lane_states(
+        &early_downstream,
+        &[
+            ("N04", "blocked"),
+            ("N05", "blocked"),
+            ("N06", "blocked"),
+            ("N07", "blocked"),
+            ("N08", "ready"),
+        ],
+        Some(&["N08"]),
+    );
+    assert_inventory_error(
+        &early_downstream,
+        "scheduler frontier has unexpected ready lanes",
+    );
+}
+
+#[test]
+fn scope_authority_rejects_effect_overlap_and_root_only_paths() {
+    let overlapping = source_repo("scope-effect-overlap");
+    mutate_scope(&overlapping, "WS-FIT", |scope| {
+        scope["effects"] = serde_json::json!(["package-plan"]);
+    });
+    assert_inventory_error(&overlapping, "scope effect authority overlaps");
+
+    let root_only = source_repo("scope-root-only-path");
+    mutate_scope(&root_only, "WS-FIT", |scope| {
+        scope["owned_roots"]
+            .as_array_mut()
+            .unwrap()
+            .push(serde_json::Value::String("Cargo.toml".to_owned()));
+    });
+    assert_inventory_error(&root_only, "scope owns a root-only surface");
+}
+
+fn set_lane_states(repo: &TestRepo, states: &[(&str, &str)], eligible: Option<&[&str]>) {
+    let path = repo.root.join("LANE_REGISTRY.json");
+    let mut registry: serde_json::Value =
+        serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    for (lane_id, state) in states {
+        let lane = registry["lanes"]
+            .as_array_mut()
+            .unwrap()
+            .iter_mut()
+            .find(|lane| lane["id"] == *lane_id)
+            .unwrap();
+        lane["state"] = serde_json::Value::String((*state).to_owned());
+    }
+    if let Some(eligible) = eligible {
+        registry["pre_adoption_source"]["eligible_scheduler_nodes"] = serde_json::Value::Array(
+            eligible
+                .iter()
+                .map(|lane| serde_json::Value::String((*lane).to_owned()))
+                .collect(),
+        );
+    }
+    fs::write(path, serde_json::to_vec(&registry).unwrap()).unwrap();
+}
+
+fn mutate_scope(repo: &TestRepo, scope_id: &str, mutate: impl FnOnce(&mut serde_json::Value)) {
+    let path = repo.root.join("LANE_REGISTRY.json");
+    let mut registry: serde_json::Value =
+        serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    let scope = registry["scope_mappings"]
+        .as_array_mut()
+        .unwrap()
+        .iter_mut()
+        .find(|scope| scope["scope_id"] == scope_id)
+        .unwrap();
+    mutate(scope);
+    fs::write(path, serde_json::to_vec(&registry).unwrap()).unwrap();
+}
+
+fn assert_inventory_error(repo: &TestRepo, expected: &str) {
+    let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
+    let error = InventoryBuilder::new(&context).build().unwrap_err();
+    assert_eq!(error.to_string(), format!("invalid registry: {expected}"));
+}

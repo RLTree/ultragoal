@@ -170,6 +170,11 @@ Scheduler `ready` means a lane may receive a source-work lease; it does not
 activate production tools. Only an `integrated` lane enters the production
 frontier. The four ready lanes start from one exact clean root and have no
 leased generated outputs; shared generated authority stays root-owned.
+Runtime registry loading rejects a ready lane whose graph dependencies are not
+integrated and binds this named frontier to exactly N04-N07. Each scope records
+nonempty owned symbols, effects, and the complete root-only forbidden set;
+cross-scope path, symbol, and effect overlap fails closed before inventory or
+lease authority can be derived.
 
 | Lane | Exclusive source and fixture ownership | Root-owned seams | Effects and invalidation |
 | --- | --- | --- | --- |
@@ -179,7 +184,9 @@ leased generated outputs; shared generated authority stays root-owned.
 | N07 Observability core | `validator/src/observability/**`, exact observability tests and fixtures | Public observe/diagnose routes, schemas, local-store adoption, configured export, installed runtime and claims | Local event publication/query/deletion; refresh on N03 identity or consumed-interface change |
 
 `WS-EVAL` no longer shares `validator/src/fixture_scheduler/**`; N11 consumes
-the integrated N06 interface later. Nonexistent legacy scope roots are removed.
+the integrated N06 interface later. Nonexistent legacy scope roots are removed,
+and no lane scope owns Cargo, shared schemas, generated authority, public CLI,
+contract, registry, claim, or migration-registry paths.
 Root integrates accepted authority-bearing increments one at a time, initially
 N05, N06, N07, then N04 unless live dependency evidence changes that order.
 

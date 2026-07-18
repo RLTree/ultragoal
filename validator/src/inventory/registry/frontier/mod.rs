@@ -13,6 +13,11 @@ pub(super) struct Frontier {
     pub(super) entries: Vec<InventoryEntry>,
 }
 
+struct SchedulerNodes {
+    integrated: BTreeSet<String>,
+    ready: BTreeSet<String>,
+}
+
 pub(super) fn load(reads: &ReadSession, root: &Path) -> Result<Frontier, InventoryError> {
     let registry_path = root.join("LANE_REGISTRY.json");
     let template_path = root.join("templates/LANE_REGISTRY.json");
@@ -23,8 +28,9 @@ pub(super) fn load(reads: &ReadSession, root: &Path) -> Result<Frontier, Invento
             .join(CONTRACT_DIR)
             .join("IMPLEMENTATION_DEPENDENCY_GRAPH.json"),
     )?;
-    let active_nodes = active_nodes(&registry)?;
-    let active_tools = dependency_tools(&graph, &active_nodes)?;
+    let nodes = scheduler_nodes(&registry)?;
+    scope_ownership::validate(&registry)?;
+    let active_tools = dependency_tools(&graph, &nodes)?;
     let entries = vec![
         physical_entry(
             reads,
@@ -68,7 +74,7 @@ fn parse(reads: &ReadSession, path: &Path) -> Result<Value, InventoryError> {
         .map_err(|error| InventoryError::InvalidRegistry(error.to_string()))
 }
 
-fn active_nodes(registry: &Value) -> Result<BTreeSet<String>, InventoryError> {
+fn scheduler_nodes(registry: &Value) -> Result<SchedulerNodes, InventoryError> {
     if registry
         .pointer("/pre_adoption_source/epoch")
         .and_then(Value::as_str)
@@ -118,16 +124,27 @@ fn active_nodes(registry: &Value) -> Result<BTreeSet<String>, InventoryError> {
             "scheduler eligibility disagrees with ready lanes".to_owned(),
         ));
     }
-    Ok(states
+    if registry
+        .pointer("/pre_adoption_source/frontier")
+        .and_then(Value::as_str)
+        == Some("N04_N07_READY_SOURCE_FRONTIER")
+        && ready != BTreeSet::from(["N04", "N05", "N06", "N07"].map(str::to_owned))
+    {
+        return Err(InventoryError::InvalidRegistry(
+            "scheduler frontier has unexpected ready lanes".to_owned(),
+        ));
+    }
+    let integrated = states
         .into_iter()
         .filter(|(_, state)| state == "integrated")
         .map(|(id, _)| id)
-        .collect())
+        .collect();
+    Ok(SchedulerNodes { integrated, ready })
 }
 
 fn dependency_tools(
     graph: &Value,
-    active_nodes: &BTreeSet<String>,
+    nodes: &SchedulerNodes,
 ) -> Result<BTreeSet<String>, InventoryError> {
     let rows = graph
         .get("nodes")
@@ -144,7 +161,7 @@ fn dependency_tools(
         let lane = node.get(..3).ok_or_else(|| {
             InventoryError::InvalidRegistry("dependency node ID is malformed".to_owned())
         })?;
-        if !active_nodes.contains(lane) {
+        if !nodes.integrated.contains(lane) && !nodes.ready.contains(lane) {
             continue;
         }
         for dependency in row
@@ -155,29 +172,37 @@ fn dependency_tools(
             .filter_map(Value::as_str)
         {
             let dependency_lane = dependency.get(..3).unwrap_or_default();
-            if !active_nodes.contains(dependency_lane) {
+            if !nodes.integrated.contains(dependency_lane) {
                 return Err(InventoryError::InvalidRegistry(
-                    "scheduler frontier is not dependency closed".to_owned(),
+                    if nodes.ready.contains(lane) {
+                        "scheduler ready frontier is not dependency closed".to_owned()
+                    } else {
+                        "scheduler frontier is not dependency closed".to_owned()
+                    },
                 ));
             }
         }
         seen.insert(lane.to_owned());
-        tools.extend(
-            row.get("required_tools")
-                .and_then(Value::as_array)
-                .into_iter()
-                .flatten()
-                .filter_map(Value::as_str)
-                .map(ToOwned::to_owned),
-        );
+        if nodes.integrated.contains(lane) {
+            tools.extend(
+                row.get("required_tools")
+                    .and_then(Value::as_array)
+                    .into_iter()
+                    .flatten()
+                    .filter_map(Value::as_str)
+                    .map(ToOwned::to_owned),
+            );
+        }
     }
-    if !active_nodes.is_subset(&seen) {
+    if !nodes.integrated.is_subset(&seen) || !nodes.ready.is_subset(&seen) {
         return Err(InventoryError::InvalidRegistry(
             "scheduler frontier names an unknown dependency node".to_owned(),
         ));
     }
     Ok(tools)
 }
+
+mod scope_ownership;
 
 #[cfg(test)]
 mod tests;
