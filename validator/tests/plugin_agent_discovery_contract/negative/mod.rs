@@ -1,5 +1,5 @@
-use crate::agent_discovery::{AgentAuthorityLayer, AgentDiscoveryErrorId, AgentDiscoverySession};
-use crate::authority_fixtures::{FixtureReader, TempRepo, descriptor, digest};
+use super::super::{AgentAuthorityLayer, AgentDiscoveryErrorId, AgentDiscoverySession};
+use super::authority_fixtures::{FixtureReader, TempRepo, descriptor, digest};
 use serde_json::json;
 
 include!("live_legacy_agents.rs");

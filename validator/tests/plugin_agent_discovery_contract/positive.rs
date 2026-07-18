@@ -1,5 +1,5 @@
-use crate::agent_discovery::{AgentAuthorityLayer, AgentDiscoverySession, SourceAgentCatalog};
-use crate::authority_fixtures::{
+use super::super::{AgentAuthorityLayer, AgentDiscoverySession, SourceAgentCatalog};
+use super::authority_fixtures::{
     CANDIDATE, FixtureReader, SESSION, TempRepo, canonical_names, descriptor, tree_snapshot,
 };
 use std::fs;

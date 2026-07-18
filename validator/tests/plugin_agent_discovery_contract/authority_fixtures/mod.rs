@@ -1,4 +1,4 @@
-use crate::agent_discovery::{
+use super::super::{
     AgentAuthorityLayer, HostAgentAuthorityReader, HostAgentAuthorityRequest,
     HostAgentAuthorityTransaction, HostAgentAuthorityTransactionError, ReadOnlyEffectEnforcement,
     ReadOnlyEffectRequest, SourceAgentCatalog, SupportedHostAgentRoots,

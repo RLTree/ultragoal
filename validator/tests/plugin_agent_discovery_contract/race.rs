@@ -1,5 +1,5 @@
-use crate::agent_discovery::{AgentAuthorityLayer, AgentDiscoveryErrorId, AgentDiscoverySession};
-use crate::authority_fixtures::{FixtureReader, TempRepo, descriptor};
+use super::super::{AgentAuthorityLayer, AgentDiscoveryErrorId, AgentDiscoverySession};
+use super::authority_fixtures::{FixtureReader, TempRepo, descriptor};
 
 #[test]
 fn two_capture_catalog_drift_is_rejected_before_effect_probes() {
