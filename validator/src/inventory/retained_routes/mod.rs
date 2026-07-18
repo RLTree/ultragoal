@@ -7,6 +7,10 @@ mod specs;
 mod verify;
 
 #[cfg(test)]
+#[path = "tests/mod.rs"]
+mod tests;
+
+#[cfg(test)]
 pub(crate) use model::{
     ACTIVE_READER_WRITER_STATE, AUTHORITY_CLASSIFICATION, COMPATIBILITY_BEHAVIOR,
     COMPATIBILITY_BOUNDARY, EQUIVALENCE_PROOF, INTENDED_DISPOSITION, OBSERVED_AUTHORITY_STATE,

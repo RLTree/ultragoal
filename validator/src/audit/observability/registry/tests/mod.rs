@@ -3,6 +3,9 @@ use serde_json::json;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+#[path = "inventory_controls.rs"]
+mod inventory_controls;
+
 fn root(label: &str) -> PathBuf {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     fs::create_dir_all(&root).expect("root");
