@@ -1,5 +1,14 @@
 use super::*;
 
+impl ProcessLock {
+    pub(crate) fn acquire(file: File) -> Result<Self, LedgerError> {
+        if unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX) } != 0 {
+            return Err(ledger_io());
+        }
+        Ok(Self(file))
+    }
+}
+
 impl FileLedger {
     pub(crate) fn acquire_process_lock(&self) -> Result<ProcessLock, LedgerError> {
         self.store.verify_root()?;
