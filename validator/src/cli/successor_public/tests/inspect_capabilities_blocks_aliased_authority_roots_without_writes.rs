@@ -1,12 +1,13 @@
 use super::*;
 
 #[test]
-pub(crate) fn inspect_capabilities_blocks_colliding_agent_authority_without_writes() {
+pub(crate) fn inspect_capabilities_blocks_aliased_authority_roots_without_writes() {
     let repo = Repository::new("capabilities-agent-authority");
     let home = repo.root.with_extension("capabilities-home");
     repo.install_agent_authority(&home);
     let before_tree = tree(&repo.root);
     let before_status = repo.status();
+    let before_home_tree = tree(&home);
     let ParseOutcome::Invocation(invocation) =
         parse_args(["--json", "inspect", "capabilities"]).unwrap()
     else {
@@ -43,6 +44,7 @@ pub(crate) fn inspect_capabilities_blocks_colliding_agent_authority_without_writ
     assert!(!output.contains(home.to_str().unwrap()));
     assert_eq!(tree(&repo.root), before_tree);
     assert_eq!(repo.status(), before_status);
+    assert_eq!(tree(&home), before_home_tree);
     fs::remove_dir_all(home).unwrap();
 }
 
