@@ -17,7 +17,7 @@ fn controls() -> BTreeSet<PerturbationControl> {
     PerturbationControl::REQUIRED.into_iter().collect()
 }
 
-fn task(id: &str, dataset: char) -> EvaluationTask {
+pub(super) fn task(id: &str, dataset: char) -> EvaluationTask {
     EvaluationTask::new(EvaluationTaskDefinition {
         task_id: id.to_owned(),
         requirement_id: format!("REQ-{id}"),
@@ -159,14 +159,14 @@ fn privacy_projection_has_no_claim_authority_or_secret_surface() {
     }
 }
 
-const RESEARCH_CHECKED_DAY_EPOCH: u64 = 1_783_900_800;
-const RESEARCH_2026_01_01_EPOCH: u64 = 1_767_225_600;
-const RESEARCH_MUTABLE_FRESHNESS_SECONDS: u64 = 30 * 86_400;
+pub(super) const RESEARCH_CHECKED_DAY_EPOCH: u64 = 1_783_900_800;
+pub(super) const RESEARCH_2026_01_01_EPOCH: u64 = 1_767_225_600;
+pub(super) const RESEARCH_MUTABLE_FRESHNESS_SECONDS: u64 = 30 * 86_400;
 
-fn research_epoch(offset_seconds: u64) -> u64 {
+pub(super) fn research_epoch(offset_seconds: u64) -> u64 {
     RESEARCH_CHECKED_DAY_EPOCH + offset_seconds
 }
 
-fn research_laws() -> BTreeSet<String> {
+pub(super) fn research_laws() -> BTreeSet<String> {
     BTreeSet::from(["HUL-RESEARCH-001".to_owned()])
 }
