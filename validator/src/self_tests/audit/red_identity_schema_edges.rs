@@ -74,14 +74,6 @@ fn source_obligation_text_guard_and_session_edges_cover_current_paths() {
     }]);
     write_json(&root.join("docs/source-cards.json"), &source_cards);
     assert!(crate::audit::text_guards::source_card_freshness_failures(&root).is_empty());
-    assert!(
-        crate::audit::text_guards::moving_value_value_failures(&json!({
-            "safe":"checks have no slash count here",
-            "nested":[7]
-        }))
-        .is_empty()
-    );
-
     let failures = crate::audit::source_obligations::value_failures(&json!({"obligations":[{
         "id":"namespace-progressive-disclosure",
         "enforcement_disposition":"deterministic namespace progressive validator red",

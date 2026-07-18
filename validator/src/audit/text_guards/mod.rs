@@ -9,25 +9,8 @@ pub fn stale_review_law_failures(root: &Path) -> Vec<String> {
     stale_review::failures(root)
 }
 
-pub fn stale_review_law_value_failures(value: &Value) -> Vec<String> {
-    stale_review::value_failures(value)
-}
-
 pub fn moving_value_drift_failures(root: &Path) -> Vec<String> {
     moving_values::failures(root)
-}
-
-pub fn moving_value_value_failures(value: &Value) -> Vec<String> {
-    moving_values::value_failures(value)
-}
-
-pub fn private_path_value_failures(value: &Value) -> Vec<String> {
-    let text = serde_json::to_string(value).unwrap_or_default();
-    if text.contains(private_home_marker()) || text.contains(private_tmp_marker()) {
-        vec!["manifest_owned_private_local_path".to_string()]
-    } else {
-        Vec::new()
-    }
 }
 
 pub fn source_card_freshness_failures(root: &Path) -> Vec<String> {
