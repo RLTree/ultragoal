@@ -1,136 +1,186 @@
 {
-  "worker": "/root/n07_fixture_finish",
+  "worker": "/root/n07_strict_test_boundary",
   "lease_id": "N07-OBSERVABILITY-SOURCE-DIAGNOSIS-001",
   "context_id": "n07-source-public-diagnosis",
   "candidate_identity": {
     "schema_id": "WorkerResult-v1",
     "branch": "codex/n07-observability-root-rework",
-    "source_base_commit": "b5ecf2a85f7dcdbc9b859c07c862f5413eec7fba",
-    "source_head_commit": "bc6581ba0ee996c751bc0ab621f867ba27d95556",
-    "source_head_tree": "fb997fcd3c0f5418b11cc6ac4fa7d1608cfe669f",
+    "source_base_commit": "1e9df4331d6507f6421c00cd9e3cec42126055e8",
+    "source_head_commit": "187416df52daf075566eef6797c2bb77f584ea9b",
+    "source_head_tree": "91edc42df68ff41fcebfb2c1d876c13351613494",
     "source_commits": [
-      "b5ecf2a85f7dcdbc9b859c07c862f5413eec7fba",
-      "bc6581ba0ee996c751bc0ab621f867ba27d95556"
+      "55d88902f71bab3ff3694984a9927018a62ddf13",
+      "9c4c61fc70be4dfe13b0004c7b8a010bb481beab",
+      "70b1d5c948d87bb115b5dfc3b17812f351a70f63",
+      "187416df52daf075566eef6797c2bb77f584ea9b"
+    ],
+    "consumed_root_decisions": [
+      {
+        "source_commit": "ea77b1c45bd98bc14e503200aba9fa03cd729061",
+        "candidate_cherry_pick": "9c4c61fc70be4dfe13b0004c7b8a010bb481beab",
+        "decision": "retire the alternate legacy test dispatcher"
+      },
+      {
+        "source_commit": "15e6d0e35439d6ea064275f52b40647459032972",
+        "candidate_cherry_pick": "187416df52daf075566eef6797c2bb77f584ea9b",
+        "decision": "make scheduler test failures inspectable"
+      }
     ],
     "worker_result_self_excluded": true
   },
   "base_state": {
-    "dependency_ceiling_consumed": "N03 accepted inventory authority only",
-    "root_owned_surfaces_not_modified": [
+    "dependency_ceiling_consumed": "previously accepted N07 source evidence plus the two named root decisions only",
+    "root_owned_surfaces_not_modified_directly": [
       "Cargo.toml and Cargo.lock",
-      "public CLI catalog and dispatcher",
-      "generated authority, claims, migrations, package, release, and completion records"
+      "generated authority, claims, migrations, package, release, and completion records",
+      "root checkout and root integration state"
     ]
   },
   "final_state": {
-    "status": "parent accepted exact source candidate",
-    "acceptance_ceiling": "N07 current-source local observability and public diagnosis behavior only",
-    "maximum_changed_authored_rust_lines": 249,
-    "root_integration_required": true
+    "status": "exact source candidate accepted by bounded reviewer",
+    "acceptance_ceiling": "N07 current-source observability behavior and focused test-boundary review only",
+    "maximum_changed_authored_rust_lines": 149,
+    "root_integration_required": true,
+    "root_gate_owner": "N06"
   },
   "touched_paths": [
     "docs/ultragoal-successor-live/worker-results/N07-OBSERVABILITY-SOURCE-DIAGNOSIS-001.json",
-    "fixtures/observability-local-diagnosis/cases.json",
-    "fixtures/observability-public-diagnosis/cases.json",
-    "validator/tests/observability_authority_fixture.rs",
-    "validator/tests/observability_fixture_scratch.rs",
-    "validator/tests/observability_live_journey_cases/causal_correlation_journey.rs",
-    "validator/tests/observability_live_journey_cases/scenario_fixture.rs",
-    "validator/tests/observability_live_journey_cases/selected_finding_fixture.rs",
-    "validator/tests/observability_live_journey_cases/substitution_refusals.rs",
-    "validator/tests/observability_live_journey_contract.rs",
-    "validator/tests/observability_public_diagnosis_contract.rs",
-    "validator/tests/observability_public_diagnosis_contract/boundaries.rs",
-    "validator/tests/observability_public_diagnosis_contract/concurrency.rs",
-    "validator/tests/observability_public_diagnosis_contract/journeys.rs",
-    "validator/tests/observability_public_diagnosis_contract/recovery.rs",
-    "validator/tests/observability_public_diagnosis_contract/saturated_window.rs",
-    "validator/tests/observability_public_diagnosis_contract/scenario/fixture_components/scenario_fixture.rs"
+    "validator/src/argument_parser/mod.rs",
+    "validator/src/argument_parser/public_arguments.rs",
+    "validator/src/audit/source_governance/tests/mod.rs",
+    "validator/src/cli/package/inventory/mod.rs",
+    "validator/src/cli/successor/mod.rs",
+    "validator/src/command_run.rs",
+    "validator/src/inventory/registry/frontier/mod.rs",
+    "validator/src/lib.rs",
+    "validator/src/observability/identity.rs",
+    "validator/src/observability/identity_tests/cleanup.rs",
+    "validator/src/observability/identity_tests/contention.rs",
+    "validator/src/observability/identity_tests/deadline.rs",
+    "validator/src/observability/identity_tests/mod.rs",
+    "validator/src/observability/store/event_query.rs",
+    "validator/src/self_tests/boundaries/mod.rs",
+    "validator/src/self_tests/law/mod.rs",
+    "validator/src/self_tests/mod.rs",
+    "validator/tests/observability_contract.rs",
+    "validator/tests/observability_contract/corruption.rs",
+    "validator/tests/observability_contract/limits_false_pass.rs",
+    "validator/tests/observability_contract/local_store.rs",
+    "validator/tests/observability_contract/lock_deadline.rs",
+    "validator/tests/observability_contract/lock_deadline_cases/lock_deadline_enforcement.rs",
+    "validator/tests/observability_contract/lock_deadline_cases/lock_policy_source_guard.rs",
+    "validator/tests/observability_contract/privacy_export.rs",
+    "validator/tests/observability_contract/races_paths.rs",
+    "validator/tests/observability_contract/scenario.rs"
   ],
   "touched_semantics": [
-    "N07 fixtures derive one agreeing current prelaunch source-base commit from compile, namespace, and standards gates.",
-    "Fixture ancestry uses the canonical linked-worktree Git common-dir object directory and a regular-object alternate after the fixture initial commit.",
-    "Live and public diagnosis fixtures use one canonical temporary confinement root, explicit checked teardown, and no destructive Drop cleanup.",
-    "Read-path behavior retains zero-write, path-boundary, concurrency, recovery, redaction, and false-pass controls."
+    "Standalone integration contracts import the compiled ultragoal observability API; they no longer compile a second production observability module or narrow locking clone.",
+    "Identity contention is exercised inside the private identity module with no public EventStore test facade.",
+    "Private tests cover query, explain, append, clear, truncated-tail recovery, and explicit export under identity contention, including zero writes and zero adapter calls.",
+    "Private tests cover one shared identity-and-file-lock deadline, release before deadline, cancellation guard release, panic guard release, and poisoned-mutex fail-closed behavior.",
+    "The alternate legacy test dispatcher is retired by the named root decision; the scheduler test error type is inspectable by the named root decision."
   ],
   "generated_outputs": [],
   "fixtures": [
-    "Source-built live and public-diagnosis repositories with checked authority ancestry.",
-    "Canonical temporary scratch directories with explicit test-owned teardown."
+    "Private identity mutex holders scoped to observability unit tests.",
+    "Canonicalized temporary store roots with explicit checked teardown."
   ],
   "effects": [
-    {"class": "workspace_write", "target": "N07 test fixtures and WorkerResult", "performed": true},
-    {"class": "fixture_write", "target": "isolated temporary repositories", "performed": true},
+    {"class": "workspace_write", "target": "N07 source, tests, named root-decision cherry-picks, and this WorkerResult", "performed": true},
+    {"class": "fixture_write", "target": "isolated temporary observability stores", "performed": true},
     {"class": "process", "target": "focused N07 validation", "performed": true},
     {"class": "network", "target": "network_or_external_system", "performed": false},
     {"class": "external_write", "target": "live_user_repository_or_host", "performed": false},
     {"class": "root_authority", "target": "root integration_or_release", "performed": false}
   ],
   "requirements": [
-    "N07 source acceptance",
-    "local causal query and public diagnosis behavior",
-    "recursive zero-write read paths",
-    "fixture authority and explicit lifecycle confinement"
+    "compiled-public observability integration topology",
+    "private identity-contention boundary",
+    "bounded shared lock deadline and cleanup behavior",
+    "zero-write and zero-export-effect contention behavior",
+    "privacy redaction executing controls"
   ],
-  "dependency_nodes": ["N03"],
+  "dependency_nodes": ["N03", "N06"],
   "changes": [
     {
-      "area": "fixture authority activation",
-      "result": "Both fixture families establish exact source ancestry only after their initial commit, reject disagreeing or malformed current prelaunch base commits, and safely use the live worktree common object directory."
+      "area": "integration topology",
+      "result": "Removed duplicate production-module compilation and imported the public observability API from the library crate."
     },
     {
-      "area": "fixture lifecycle",
-      "result": "Checked scratch confinement and explicit teardown replace silent destructive Drop cleanup; the saturated-window journey moved to a behavior-named module to retain the authored-file limit."
+      "area": "private identity tests",
+      "result": "Moved mutex contention coverage to private unit modules without widening the EventStore API or retaining an identity-holder facade."
+    },
+    {
+      "area": "root decisions",
+      "result": "Consumed only the exact legacy-dispatcher retirement and scheduler Debug commits by cherry-pick."
     }
   ],
   "commands_and_tests": [
     {
-      "command": "CARGO_TARGET_DIR=/tmp/hul-n07-observability-target CARGO_BUILD_JOBS=12 RUSTFLAGS=-D warnings cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_live_journey_contract",
+      "command": "rustfmt --edition 2024 --check validator/src/observability/identity.rs validator/src/observability/identity_tests/mod.rs validator/src/observability/identity_tests/cleanup.rs validator/src/observability/identity_tests/contention.rs validator/src/observability/identity_tests/deadline.rs; git diff --check",
       "exit_code": 0,
-      "result": "14 passed; 0 failed; focused live journey behavior."
+      "result": "N07 changed-file formatting and whitespace checks passed. Repo-wide cargo fmt remains outside this receipt because unrelated files have formatting drift."
     },
     {
-      "command": "CARGO_TARGET_DIR=/tmp/hul-n07-observability-target CARGO_BUILD_JOBS=12 RUSTFLAGS=-D warnings cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_public_diagnosis_contract -- --test-threads=1",
+      "command": "RUSTFLAGS='-D warnings' cargo check --manifest-path validator/Cargo.toml --locked --offline --lib",
       "exit_code": 0,
-      "result": "14 passed; 0 failed; public diagnosis, FIFO/hardlink, contention, recovery, and saturated-window behavior."
+      "result": "production library check passed with warnings denied"
     },
     {
-      "command": "CARGO_TARGET_DIR=/tmp/hul-n07-observability-target CARGO_BUILD_JOBS=12 RUSTFLAGS=-D warnings cargo check --manifest-path validator/Cargo.toml --locked --offline --lib",
-      "exit_code": 0,
-      "result": "warning-free library check."
+      "command": "RUSTFLAGS='-D warnings' cargo test --manifest-path validator/Cargo.toml --locked --offline --lib observability::identity::tests -- --test-threads=1",
+      "exit_code": 101,
+      "status": "blocked before N07 test selection",
+      "result": "509 unrelated lib-test unused-import and dead-code topology errors; first blocker is validator/src/cli/successor_public/tests/mod.rs:24. No N07 identity diagnostic was emitted. No lint cap or source suppression was used."
     },
     {
-      "command": "rustfmt --check changed N07 Rust files; git diff --check; scoped changed-file line-cap check",
+      "command": "RUSTFLAGS='-D warnings' cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_contract -- --test-threads=12",
       "exit_code": 0,
-      "result": "passed; maximum changed authored Rust file is 249 lines."
+      "result": "33 passed; 0 failed; compiled-public local observability behavior, including privacy redaction controls"
     },
     {
-      "command": "cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_contract",
-      "status": "withheld",
-      "result": "Local mirror suite is intentionally not claimed: it has seven warnings-deny diagnostics on this candidate and is not a substitute for the two authoritative focused contract suites."
+      "command": "RUSTFLAGS='-D warnings' cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_live_journey_contract -- --test-threads=1",
+      "exit_code": 0,
+      "result": "14 passed; 0 failed; source-built live journey behavior"
+    },
+    {
+      "command": "RUSTFLAGS='-D warnings' cargo test --manifest-path validator/Cargo.toml --locked --offline --test observability_public_diagnosis_contract -- --test-threads=1",
+      "exit_code": 0,
+      "result": "14 passed; 0 failed; public diagnosis behavior and privacy canary controls"
     }
   ],
   "artifacts": [],
   "findings": [
     {
-      "review": "parent integration acceptance",
-      "result": "Root independently reran the exact focused live and public behavior suites and accepted bc6581ba0 at the N07 source-only ceiling."
+      "review": "exact-candidate GPT-5.6 Terra high routine gate",
+      "reviewer_identity": "/root/n07_observability_handoff/n07_source_review",
+      "review_identity_note": "Independent exact-candidate pass by a reused reviewer identity because the root tree had reached its child-thread limit.",
+      "result": "ACCEPT; no material N07 defect found at source and focused test-boundary scope."
+    },
+    {
+      "review": "prior privacy REWORK resolution",
+      "result": "Current bytes redact embedded gho_ OAuth tokens, file:/// URIs, and UNC paths; focused local and public-diagnosis executing controls passed. The finding is resolved by current bytes, not waived."
     }
   ],
   "unresolved_dependencies": [
-    "Dependency-closed root integration and its exact-candidate checks.",
-    "Installed package, discovery, runtime, export effect, Product Fitness, readiness, release, and completion proof."
+    "Root integration remains owned by N06.",
+    "The warning-deny private lib-test target cannot compile until the unrelated 509-error root test topology is repaired.",
+    "Installed package, discovery, runtime, export effect, Product Fitness, readiness, release, and completion proof remain absent."
   ],
   "requested_root_changes": [
     {
+      "path": "root lib-test topology",
+      "request": "Repair the unrelated unused reexports and dormant test-only helpers so the exact warning-deny private identity target can execute without lint caps or suppression."
+    },
+    {
       "path": "root integration checkpoint",
-      "request": "Integrate only this frozen N07 source candidate; do not promote a claim beyond its source-only ceiling."
+      "request": "N06 may integrate only this frozen source candidate and must retain the source-only claim ceiling until root proof exists."
     }
   ],
   "limitations": [
-    "The withheld local observability mirror suite has seven warnings-deny diagnostics and supplies no passing claim.",
+    "The private identity tests are source-reviewed but do not have an unsuppressed executing receipt because unrelated root lib-test topology fails first.",
+    "Passing standalone contract tests are not coverage proof and are not root integration proof.",
     "No installed, discovery, runtime, export-effect, Product Fitness, readiness, release, or completion claim is made.",
-    "This WorkerResult is a handoff record, not product or generated authority."
+    "This WorkerResult is a handoff record, not generated authority or product proof."
   ],
-  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+  "no_claim_statement": "This worker does not claim root integration, installed behavior, discovery, runtime, export effect, Product Fitness, readiness, release, or completion."
 }
