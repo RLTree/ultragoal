@@ -189,19 +189,21 @@ Periodic cleanup and drift prevention. It encodes human taste and run lessons in
 
 ## Recommended Agents
 
-The four material-review personas are required by
-`templates/agent-standards/05-review-and-completion.md`, defined in
-`agents/`, and packaged in `custom-agents/`: contract and claim falsifier,
-orchestration and recovery falsifier, security trust-boundary falsifier, and
-product and simplicity falsifier. Material review uses one fresh full-scope
-sign-off round against the current validator, review-target, archive, registry,
-and claim-ceiling anchors. Any reviewer revision verdict invalidates the round;
-repair, regenerate anchors, close reviewers, and launch a fresh four-persona
-round.
+Routine implementation uses cheap deterministic checks. At a material lane
+freeze, one risk-matched specialist exhaustively reviews the complete named
+invariant and batches all material defects against the exact candidate. The
+four material-review personas defined in `agents/` and
+packaged in `custom-agents/` are reserved for major root integration, Product
+Fitness, protected cross-domain change, release, completion, or explicit
+escalation. Re-review requires changed authority-bearing bytes, a changed
+consumed dependency, a newly eligible claim surface, or contradictory observed
+behavior; review evidence is retained only when a current claim, handoff,
+audit, irreproducible observation, or recovery path consumes it.
 
 Supporting agents such as `plugin-scout`, `standards-extractor`, repo
-initializer, and retrofit planner can help discovery or setup work, but they are
-not substitutes for any required review persona.
+initializer, and retrofit planner can help discovery or setup work, but they do
+not raise the claim ceiling or substitute for the review topology required at
+the current boundary.
 
 ## Optional Connectors
 

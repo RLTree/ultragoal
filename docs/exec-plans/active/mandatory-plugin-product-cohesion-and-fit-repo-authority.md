@@ -307,10 +307,12 @@ error-path evidence, and claim ceiling. It must not rely on chat memory.
 
 ## Mandatory Standards-Gardener Promotion
 
-Every severe blocker, repeated friction, reviewer finding, user correction, setup
-failure, package/cache drift, app-registry drift, stale-doc issue, worktree setup
-failure, coverage-theater attempt, or proof-surface substitution must create a
-standards-gardener candidate row before completion.
+Every severe blocker or recurrent failure class involving user correction,
+setup, package/cache drift, app-registry drift, stale documentation, worktree
+setup, coverage theater, or proof-surface substitution must create a
+standards-gardener candidate row before completion. A one-off reviewer finding
+already prevented by current authority is dispositioned in the bounded review;
+it does not create another durable row or mechanism.
 
 Each candidate row must be resolved into exactly one state:
 
@@ -371,7 +373,8 @@ The plugin must include red fixtures proving rejection for:
 - plugin flow graph missing required edge;
 - product journey receipt missing;
 - standards-gardener candidate missing after severe blocker;
-- reviewer finding not promoted or rejected with reason;
+- severe or recurrent reviewer finding not promoted or rejected with reason,
+  or a one-off finding left without bounded-review disposition;
 - multi-lane ultragoal setup complete without transition receipt;
 - detached automation substituted for thread-bound heartbeat.
 
