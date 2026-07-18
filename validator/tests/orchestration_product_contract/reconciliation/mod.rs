@@ -1,6 +1,6 @@
+use super::product_fixture::*;
+use crate::orchestration::product::*;
 use crate::orchestration::*;
-use crate::orchestration_product::*;
-use crate::product_fixture::*;
 use std::collections::BTreeSet;
 use std::sync::{Arc, Barrier};
 
