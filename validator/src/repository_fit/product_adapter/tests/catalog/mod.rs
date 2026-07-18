@@ -24,7 +24,3 @@ mod production_source_classifier_rejects_real_links_fifo_socket_and_directory_wi
 mod traversal_absolute_and_source_target_mismatch_are_rejected;
 
 pub(crate) use next_source_fixture::*;
-pub(crate) use production_generate_erases_preexisting_outputs_before_manifest_validation::*;
-pub(crate) use production_generate_reports_cleanup_failure_before_validation::*;
-pub(crate) use production_source_classifier_rejects_real_links_fifo_socket_and_directory_without_hanging::*;
-pub(crate) use traversal_absolute_and_source_target_mismatch_are_rejected::*;

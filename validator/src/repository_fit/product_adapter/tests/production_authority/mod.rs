@@ -56,16 +56,6 @@ mod wait_for_path;
 #[path = "whole_root_rename_with_exact_leaf_postimage_cannot_recover_as_committed.rs"]
 mod whole_root_rename_with_exact_leaf_postimage_cannot_recover_as_committed;
 
-pub(crate) use abrupt_process_exit_after_effect_with_target_substitution_recovers_as_ambiguous::*;
 pub(crate) use authority_fixtures::*;
-pub(crate) use failed_terminal_validation_retains_recovery_authority_until_reconciled::*;
-pub(crate) use inspect_plan_verify_and_verify_as_apply_are_recursively_zero_write::*;
-pub(crate) use live_effect_owner_holds_process_lock_through_mutation_and_terminal::*;
-pub(crate) use missing_recovery_ledger_refuses_without_initializing_authority_or_writing_target::*;
-pub(crate) use production_mutation_grant_has_one_private_mint_in_the_sealed_authority::*;
-pub(crate) use same_session_stale_head_replay_and_terminal_substitution_fail_closed::*;
 pub(crate) use scenario_fixture::*;
-pub(crate) use stale_target_and_invalid_clock_refuse_before_authority_store_write::*;
-pub(crate) use subprocess_reservation_entrypoint::*;
 pub(crate) use wait_for_path::*;
-pub(crate) use whole_root_rename_with_exact_leaf_postimage_cannot_recover_as_committed::*;

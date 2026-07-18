@@ -13,4 +13,3 @@ mod receipt_only_event_cannot_be_promoted_to_a_cause;
 mod selected_finding_joins_state_repair_to_explicit_local_cause_without_writes;
 
 pub(crate) use receipt_only_event_cannot_be_promoted_to_a_cause::*;
-pub(crate) use selected_finding_joins_state_repair_to_explicit_local_cause_without_writes::*;
