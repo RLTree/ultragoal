@@ -10,10 +10,6 @@ use serde_json::json;
 use std::path::PathBuf;
 use std::time::Duration;
 
-pub fn program() -> PathBuf {
-    PathBuf::from("runtime/runtime-probe-bin")
-}
-
 pub fn installed_program(root: &std::path::Path) -> PathBuf {
     let target = root.join("runtime/runtime-probe-bin");
     std::fs::create_dir_all(target.parent().unwrap()).unwrap();

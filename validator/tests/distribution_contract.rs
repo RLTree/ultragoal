@@ -1,8 +1,3 @@
-// This contract target compiles the private distribution graph in order to
-// exercise its confined test-only authority. Public production exports are
-// intentionally broader than this one target consumes.
-#![allow(dead_code, unused_imports)]
-
 macro_rules! include_production_package_module {
     () => {};
 }
@@ -11,7 +6,7 @@ macro_rules! include_production_package_module {
 mod plugin_manifest;
 
 #[path = "../src/distribution/mod.rs"]
-mod distribution;
+pub mod distribution;
 
 #[path = "distribution_contract/adversarial_fs.rs"]
 mod adversarial_fs;
