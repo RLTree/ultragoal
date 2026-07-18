@@ -1,6 +1,6 @@
 {
   "schema": "harness-ultragoal.verification-backlog.v1",
-  "manifest_digest": "sha256:e431199ddd6a376222191df9e7f000b8e6f7a8e77ec4bbab7a53c66a6287aeea",
+  "manifest_digest": "sha256:633fb73a9c7f04b6d1eecb272a4de55f175293b6c55165c40e9e6abe7451bbf3",
   "registry_preimage_digest": "sha256:633fb73a9c7f04b6d1eecb272a4de55f175293b6c55165c40e9e6abe7451bbf3",
   "audit_cadence": [
     {"audit":"lane_freeze","trigger":"clean lane source freeze before handoff","owner":"lane owner","candidate_identity":"clean current HEAD/tree derived from LANE_REGISTRY.json protected base","evidence_surface":["focused behavior","negative controls","race or recovery controls","owned source laws"],"claims_withheld":["integration","installed","runtime","readiness","release","completion"]},

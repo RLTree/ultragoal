@@ -34,7 +34,7 @@
   ],
   "registry_preimage_digest": "sha256:633fb73a9c7f04b6d1eecb272a4de55f175293b6c55165c40e9e6abe7451bbf3",
   "verification_backlog_path": "VERIFICATION_BACKLOG.json",
-  "verification_backlog_digest": "sha256:0e407332d95b13aaf78c216cde0150b082c51eefa738e87aa5404b01fa93648a",
+  "verification_backlog_digest": "sha256:0cf9aa133928977806909ffa3d5d7d45294ef54552382a1dc037ddd1cc087573",
   "validator_receipts": [],
   "generated_at": "2026-07-17T22:46:43-07:00"
 }
