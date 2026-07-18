@@ -134,6 +134,10 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "adopted registry integrity gate"
     ),
     registry_source!("frontier/mod.rs", "adopted dependency frontier"),
+    registry_source!(
+        "frontier/scope_ownership.rs",
+        "source lane authority closure"
+    ),
     registry_source!("load.rs", "frontier-bound registry construction"),
     registry_source!("mod.rs", "registry load and guard export"),
     registry_source!("semantic.rs", "active API row construction"),

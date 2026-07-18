@@ -24,7 +24,7 @@ pub(super) fn validate(registry: &Value) -> Result<(), InventoryError> {
         .and_then(Value::as_array)
         .ok_or_else(|| invalid("missing scope mappings"))?;
     let mut paths = Vec::new();
-    let mut symbols = BTreeMap::new();
+    let mut symbols = Vec::new();
     let mut effects = BTreeMap::new();
     for mapping in mappings {
         let scope = text(mapping, "scope_id")?;
@@ -32,7 +32,12 @@ pub(super) fn validate(registry: &Value) -> Result<(), InventoryError> {
         if !ROOT_ONLY.iter().all(|root| forbidden.contains(*root)) {
             return Err(invalid("scope omits a root-only surface"));
         }
-        for field in ["owned_roots", "generated_roots", "fixture_roots"] {
+        for field in [
+            "contract_roots",
+            "owned_roots",
+            "generated_roots",
+            "fixture_roots",
+        ] {
             for path in strings(mapping, field, false)? {
                 validate_path(path)?;
                 if forbidden.iter().any(|root| overlaps(path, root)) {
@@ -41,11 +46,10 @@ pub(super) fn validate(registry: &Value) -> Result<(), InventoryError> {
                 paths.push((scope, path));
             }
         }
-        register_unique(
+        register_symbols(
             &mut symbols,
             scope,
             strings(mapping, "owned_symbols", true)?,
-            "symbol",
         )?;
         register_unique(
             &mut effects,
@@ -60,6 +64,26 @@ pub(super) fn validate(registry: &Value) -> Result<(), InventoryError> {
                 return Err(invalid("scope path authority overlaps"));
             }
         }
+    }
+    Ok(())
+}
+
+fn register_symbols<'a>(
+    seen: &mut Vec<(&'a str, &'a str)>,
+    scope: &'a str,
+    values: BTreeSet<&'a str>,
+) -> Result<(), InventoryError> {
+    for value in values {
+        if value.trim() != value || value.is_empty() {
+            return Err(invalid("scope symbol is not normalized"));
+        }
+        if seen
+            .iter()
+            .any(|(owner, existing)| *owner != scope && namespace_overlaps(value, existing))
+        {
+            return Err(invalid("scope symbol authority overlaps"));
+        }
+        seen.push((scope, value));
     }
     Ok(())
 }
@@ -139,6 +163,16 @@ fn overlaps(left: &str, right: &str) -> bool {
         || right
             .strip_prefix(left)
             .is_some_and(|suffix| suffix.starts_with('/'))
+}
+
+fn namespace_overlaps(left: &str, right: &str) -> bool {
+    left == right
+        || left
+            .strip_prefix(right)
+            .is_some_and(|suffix| suffix.starts_with("::"))
+        || right
+            .strip_prefix(left)
+            .is_some_and(|suffix| suffix.starts_with("::"))
 }
 
 fn invalid(message: &str) -> InventoryError {

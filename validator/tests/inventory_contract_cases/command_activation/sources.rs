@@ -26,6 +26,7 @@ const SOURCES: &[&str] = &[
     "validator/src/inventory/registry/data.rs",
     "validator/src/inventory/registry/integrity.rs",
     "validator/src/inventory/registry/frontier/mod.rs",
+    "validator/src/inventory/registry/frontier/scope_ownership.rs",
     "validator/src/inventory/registry/load.rs",
     "validator/src/inventory/registry/mod.rs",
     "validator/src/inventory/registry/semantic.rs",
@@ -160,6 +161,21 @@ fn scope_authority_rejects_effect_overlap_and_root_only_paths() {
             .push(serde_json::Value::String("Cargo.toml".to_owned()));
     });
     assert_inventory_error(&root_only, "scope owns a root-only surface");
+
+    let contract_root = source_repo("scope-contract-root-only-path");
+    mutate_scope(&contract_root, "WS-FIT", |scope| {
+        scope["contract_roots"]
+            .as_array_mut()
+            .unwrap()
+            .push(serde_json::Value::String("Cargo.toml".to_owned()));
+    });
+    assert_inventory_error(&contract_root, "scope owns a root-only surface");
+
+    let nested_symbol = source_repo("scope-nested-symbol-overlap");
+    mutate_scope(&nested_symbol, "WS-FIT", |scope| {
+        scope["owned_symbols"] = serde_json::json!(["ultragoal::distribution::nested"]);
+    });
+    assert_inventory_error(&nested_symbol, "scope symbol authority overlaps");
 }
 
 fn set_lane_states(repo: &TestRepo, states: &[(&str, &str)], eligible: Option<&[&str]>) {
