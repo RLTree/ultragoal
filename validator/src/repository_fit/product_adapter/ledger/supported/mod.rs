@@ -18,18 +18,18 @@ use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 
+#[path = "effect_settlement.rs"]
+mod effect_settlement;
 #[path = "object_identity.rs"]
 mod object_identity;
+#[path = "process_lock.rs"]
+mod process_lock;
 #[path = "record_authentication.rs"]
 mod record_authentication;
 #[path = "replay_detection.rs"]
 mod replay_detection;
-#[path = "reservation_acquisition.rs"]
-mod reservation_acquisition;
-#[path = "reservation_identity.rs"]
-mod reservation_identity;
-#[path = "reservation_recovery.rs"]
-mod reservation_recovery;
+#[path = "reservation/mod.rs"]
+mod reservation;
 #[path = "snapshot_decoding.rs"]
 mod snapshot_decoding;
 #[path = "snapshot_transaction.rs"]
@@ -44,7 +44,7 @@ mod transition_validation;
 pub(crate) use object_identity::*;
 pub(crate) use record_authentication::*;
 pub(crate) use replay_detection::*;
-pub(crate) use reservation_identity::*;
+pub(crate) use reservation::*;
 pub(crate) use snapshot_decoding::*;
 pub(crate) use store_create_exclusive::*;
 pub(crate) use transition_validation::*;

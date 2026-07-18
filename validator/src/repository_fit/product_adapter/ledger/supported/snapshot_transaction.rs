@@ -1,6 +1,14 @@
 use super::*;
 
 impl FileLedger {
+    pub(crate) fn with_snapshot<T>(
+        &self,
+        operation: impl FnOnce(&mut SnapshotPayload, &ReplayState) -> Result<(T, bool), LedgerError>,
+    ) -> Result<T, LedgerError> {
+        let guard = self.acquire_process_lock()?;
+        self.with_held_snapshot(&guard, operation)
+    }
+
     pub(crate) fn with_held_snapshot<T>(
         &self,
         guard: &ProcessLock,
@@ -67,51 +75,5 @@ impl FileLedger {
     pub(crate) fn snapshot_for_test(&self) -> Result<Vec<u8>, LedgerError> {
         self.verify_store()?;
         self.store.read_state()
-    }
-}
-
-impl EffectOwner<'_> {
-    pub(crate) fn terminal(
-        self,
-        state: RepositoryFitLedgerState,
-        terminal_sha256: &str,
-        error_id: Option<AdapterErrorId>,
-        tick: u64,
-    ) -> Result<(), LedgerError> {
-        if !state.terminal() || !valid_digest(terminal_sha256) {
-            return Err(invalid_transition());
-        }
-        self.ledger
-            .with_held_snapshot(&self.guard, |payload, replayed| {
-                let current = replayed
-                    .records
-                    .get(&self.token.reservation_id)
-                    .ok_or_else(invalid_transition)?;
-                if current.state != RepositoryFitLedgerState::EffectStarted
-                    || !token_matches(&self.token, current)
-                    || tick < current.transition_tick
-                {
-                    return Err(invalid_transition());
-                }
-                let event = next_event(
-                    payload,
-                    &self.token.reservation_id,
-                    &self.token.binding_sha256,
-                    &self.token.semantic_effect_id,
-                    &self.token.target_scope_id,
-                    &self.token.permit_id,
-                    &self.token.nonce_sha256,
-                    &self.token.recovery_intent_sha256,
-                    current.issued_tick,
-                    current.expires_tick,
-                    &current.recovery,
-                    state,
-                    Some(terminal_sha256),
-                    error_id,
-                    tick,
-                )?;
-                append(payload, event)?;
-                Ok(((), true))
-            })
     }
 }
