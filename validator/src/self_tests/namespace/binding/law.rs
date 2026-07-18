@@ -37,6 +37,23 @@ fn namespace_value_failures_accepts_fully_listed_files_without_orphans() {
 }
 
 #[test]
+fn current_root_namespace_audit_fails_closed_when_inventory_is_unavailable() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "namespace-current-root-inventory-unavailable",
+    );
+    let _ = std::fs::remove_dir_all(&root);
+    let failures = crate::audit::namespace::law::current_root_failures(&root);
+    assert!(
+        failures.contains(&"namespace_current_root_inventory_unavailable".to_string()),
+        "{failures:?}"
+    );
+    assert!(
+        contains(&failures, "governed_source_authority_unavailable"),
+        "{failures:?}"
+    );
+}
+
+#[test]
 fn namespace_law_rejects_generic_schema_json_authority_names() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-schema-json");

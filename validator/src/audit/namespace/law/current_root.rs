@@ -7,6 +7,7 @@ use std::path::Path;
 
 pub fn failures(root: &Path) -> Vec<String> {
     let governed = crate::audit::source_governance::capture_namespace_sources(root);
+    let mut out = governed.failures;
     let source_paths = governed
         .inventory
         .sources
@@ -16,8 +17,13 @@ pub fn failures(root: &Path) -> Vec<String> {
     let rust_paths = crate::audit::namespace::source::topology::repo_source_paths_from_actual_files(
         &source_paths,
     );
-    let actual = crate::package::inventory::closure::actual_files(root).unwrap_or_default();
-    let mut out = governed.failures;
+    let actual = match crate::package::inventory::closure::actual_files(root) {
+        Ok(files) => files,
+        Err(_) => {
+            out.push("namespace_current_root_inventory_unavailable".to_string());
+            Vec::new()
+        }
+    };
     out.extend(path_name_failures(&rust_paths));
     out.extend(plugin_interfaces::failures(&actual));
     out.extend(
