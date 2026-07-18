@@ -9,8 +9,6 @@ mod production;
 pub use production::{PermitReplayState, ProductionRootAuthority};
 pub(crate) use production::{ProductionExecutionOutcome, ReservationObservation};
 #[cfg(test)]
-pub(crate) use production::{
-    RootActionPermitIssuance, RootAuthority, RootReconcilePermitIssuance, root_authority_for_test,
-};
+pub(crate) use production::{RootActionPermitIssuance, RootAuthority, root_authority_for_test};
 
 include!("issue_action_permit_for_test.rs");

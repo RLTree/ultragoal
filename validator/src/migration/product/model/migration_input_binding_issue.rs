@@ -26,28 +26,12 @@ impl MigrationInputBinding {
         }
     }
 
-    pub(crate) fn live_context_id(&self) -> &str {
-        &self.live_context_id
-    }
-
     pub(crate) fn candidate_id(&self) -> &str {
         &self.candidate_id
     }
 
-    pub(crate) fn catalog_id(&self) -> &str {
-        &self.catalog_id
-    }
-
     pub(crate) fn read_session_id(&self) -> &str {
         &self.read_session_id
-    }
-
-    pub(crate) fn inventory_sha256(&self) -> &str {
-        &self.inventory_sha256
-    }
-
-    pub(crate) fn registry_sha256(&self) -> &str {
-        &self.registry_sha256
     }
 
     pub(crate) fn binding_sha256(&self) -> &str {

@@ -104,14 +104,6 @@ impl AdoptedRegistrySnapshot {
         &self.bytes
     }
 
-    pub(crate) fn bytes_sha256(&self) -> &str {
-        &self.bytes_sha256
-    }
-
-    pub(crate) fn source_identity_sha256(&self) -> &str {
-        &self.source_identity_sha256
-    }
-
     pub(super) fn validate(&self) -> Result<(), ProductMigrationError> {
         if self.relative_path != REGISTRY_PATH
             || !self.relative_path.is_ascii()

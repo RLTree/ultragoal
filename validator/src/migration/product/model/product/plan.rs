@@ -108,10 +108,6 @@ impl ProductMigrationPlan {
         self.projection.compatibility_boundary_binding.as_ref()
     }
 
-    pub(crate) fn items(&self) -> &[ProductPlanItem] {
-        &self.projection.items
-    }
-
     pub(crate) fn projection(&self) -> ProductMigrationPlanProjection {
         self.projection.clone()
     }
