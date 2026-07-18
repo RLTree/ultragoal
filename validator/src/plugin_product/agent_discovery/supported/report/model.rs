@@ -58,14 +58,6 @@ impl SupportedAgentAuthorityObservation {
         &self.authority_name
     }
 
-    pub fn manifest_path(&self) -> &str {
-        &self.manifest_path
-    }
-
-    pub fn descriptor_sha256(&self) -> &str {
-        &self.descriptor_sha256
-    }
-
     pub fn sandbox_mode(&self) -> Option<&str> {
         self.sandbox_mode.as_deref()
     }
@@ -87,18 +79,6 @@ pub struct SupportedHostAgentAuthorityReport {
 }
 
 impl SupportedHostAgentAuthorityReport {
-    pub fn source_catalog_sha256(&self) -> &str {
-        &self.source_catalog_sha256
-    }
-
-    pub fn candidate_id(&self) -> &str {
-        &self.candidate_id
-    }
-
-    pub fn session_id(&self) -> &str {
-        &self.session_id
-    }
-
     pub fn transaction_provenance_sha256(&self) -> &str {
         &self.transaction_provenance_sha256
     }
