@@ -12,6 +12,7 @@ pub(crate) fn exercise_public_refusals() {
 
     let before_root = snapshot(&fixture.root);
     let before_home = snapshot(&fixture.home);
+    let before_temp = snapshot(&fixture.temp);
     let mismatch = fixture.apply(&bad_digest);
     assert_diagnostic(
         &mismatch,
@@ -21,6 +22,7 @@ pub(crate) fn exercise_public_refusals() {
     );
     assert_eq!(snapshot(&fixture.root), before_root);
     assert_eq!(snapshot(&fixture.home), before_home);
+    assert_eq!(snapshot(&fixture.temp), before_temp);
     assert!(!fixture.root.join("AGENTS.md").exists());
 
     OpenOptions::new()
@@ -31,6 +33,7 @@ pub(crate) fn exercise_public_refusals() {
         .unwrap();
     let before_root = snapshot(&fixture.root);
     let before_home = snapshot(&fixture.home);
+    let before_temp = snapshot(&fixture.temp);
     let alternate_framing = fixture.apply(&plan_sha256);
     assert_diagnostic(
         &alternate_framing,
@@ -40,6 +43,7 @@ pub(crate) fn exercise_public_refusals() {
     );
     assert_eq!(snapshot(&fixture.root), before_root);
     assert_eq!(snapshot(&fixture.home), before_home);
+    assert_eq!(snapshot(&fixture.temp), before_temp);
 
     fs::write(
         fixture.root.join("validation_artifacts/fit-plan.json"),
@@ -53,6 +57,7 @@ pub(crate) fn exercise_public_refusals() {
     symlink(&substituted, &fixture.pending).unwrap();
     let before_root = snapshot(&fixture.root);
     let before_home = snapshot(&fixture.home);
+    let before_temp = snapshot(&fixture.temp);
     let refusal = fixture.apply(&plan_sha256);
     assert_diagnostic(
         &refusal,
@@ -62,6 +67,7 @@ pub(crate) fn exercise_public_refusals() {
     );
     assert_eq!(snapshot(&fixture.root), before_root);
     assert_eq!(snapshot(&fixture.home), before_home);
+    assert_eq!(snapshot(&fixture.temp), before_temp);
     assert!(!fixture.root.join("AGENTS.md").exists());
 }
 
@@ -80,11 +86,13 @@ pub(crate) fn exercise_stale_plan_refusal() {
     .unwrap();
     let before_root = snapshot(&fixture.root);
     let before_home = snapshot(&fixture.home);
+    let before_temp = snapshot(&fixture.temp);
     let before_status = status(&fixture.root);
     let stale = fixture.apply(&plan_sha256);
     assert_diagnostic(&stale, 1, "successor_runtime_stale_context", &fixture);
     assert_eq!(snapshot(&fixture.root), before_root);
     assert_eq!(snapshot(&fixture.home), before_home);
+    assert_eq!(snapshot(&fixture.temp), before_temp);
     assert_eq!(status(&fixture.root), before_status);
     assert!(!fixture.root.join("AGENTS.md").exists());
 }

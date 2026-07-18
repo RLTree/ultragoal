@@ -8,8 +8,13 @@ use std::os::unix::ffi::OsStrExt;
 use std::os::unix::fs::{symlink, MetadataExt, PermissionsExt};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output, Stdio};
-use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::{
+    atomic::{AtomicU64, Ordering},
+    Arc, Barrier,
+};
 
+#[path = "repository_fit_public_apply_cases/execution_behavior.rs"]
+mod execution_behavior;
 #[path = "repository_fit_public_apply_cases/execution_fixture.rs"]
 mod execution_fixture;
 #[path = "repository_fit_public_apply_cases/filesystem_snapshot.rs"]
