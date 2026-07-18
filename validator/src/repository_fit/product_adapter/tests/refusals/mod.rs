@@ -19,5 +19,4 @@ mod leaf_path_swap_and_stale_expected_digest_preserve_foreign_bytes;
 mod removal_cleanup_quarantines_a_substituted_temp_without_deleting_it;
 
 pub(crate) use digest_fixture::*;
-pub(crate) use leaf_path_swap_and_stale_expected_digest_preserve_foreign_bytes::*;
 pub(crate) use removal_cleanup_quarantines_a_substituted_temp_without_deleting_it::*;
