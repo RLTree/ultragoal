@@ -136,3 +136,32 @@ fn integrated_routine_leaves_only_observability_scheduler_ready() {
     assert!(nodes.integrated.contains("N06"));
     assert_eq!(nodes.ready, BTreeSet::from(["N07".to_owned()]));
 }
+
+#[test]
+fn integrated_observability_opens_only_plugin_and_agent_adoption() {
+    let mut value = registry(
+        &[
+            ("N00", "integrated"),
+            ("N01", "integrated"),
+            ("N02", "integrated"),
+            ("N03", "integrated"),
+            ("N04", "integrated"),
+            ("N05", "integrated"),
+            ("N06", "integrated"),
+            ("N07", "integrated"),
+            ("N08", "ready"),
+            ("N09", "ready"),
+        ],
+        &["N08", "N09"],
+    );
+    value["pre_adoption_source"]["frontier"] =
+        json!("N08_N09_READY_N07_INTEGRATED_SOURCE_FRONTIER");
+
+    let nodes = scheduler_nodes(&value).unwrap();
+
+    assert!(nodes.integrated.contains("N07"));
+    assert_eq!(
+        nodes.ready,
+        BTreeSet::from(["N08", "N09"].map(str::to_owned))
+    );
+}

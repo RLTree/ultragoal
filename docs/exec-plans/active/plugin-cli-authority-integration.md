@@ -18,11 +18,15 @@ candidate: every candidate is the clean containing `HEAD`/tree derived live
 from that checkpoint. Stage A is accepted for the registry, closed lease
 contract, template, gates, scopes, graph, and review anchors; this plan and
 the board remain projections and cannot promote claims.
-N04, N05, and N06 are now integrated at source-only ceilings. The exact current
-integration frontier is N07. N09 is dependency-eligible after N05
-but remains blocked until root atomically issues its managed-worktree lease. N08 remains blocked
-until N07 also integrates; N10 remains behind N09; N11 remains behind N07 and
-N08; N12 remains behind N10 and N11.
+N04-N07 are now integrated at source-only ceilings. N07 exact source
+`15771188febd42af01ea3fa41582a167de0e151d` / tree
+`c810b260fc2c25aa86777abae8ef72bda7e9e634` passes the warning-denied public
+library boundary, five private identity controls, 33 local contracts, and the
+three exact causal, recovery, and false-pass journeys. Its task and worktree are
+closed. The exact current source frontier exposes N08 and N09 as dependency-
+eligible but unleased; the root standards-debt checkpoint and lane restructure
+must finish before either receives a worktree. N10 remains behind N09; N11
+remains behind N08; N12 remains behind N10 and N11.
 After N12 the route is N12-A -> N14 -> N14-proof -> N12-B-invalidate-and-reproof
 -> parallel N13/N15 -> N16 -> N17. P0 is available only to root for compile,
 namespace, standards, and retention-aware cleanup; product lanes remain blocked.
@@ -218,15 +222,15 @@ fixtures, effects, forbidden surfaces, tools, contract, and context. N09 live
 proof is root-owned and must separately bind package, install, cache, app
 registry, new-session discovery, tool execution, and host invalidation.
 
-### N07 dependency frontier after integrated N04-N06
+### N08/N09 dependency frontier after integrated N04-N07
 
 Scheduler `ready` means a lane may receive a source-work lease; it does not
 activate production tools. Only an `integrated` lane enters the production
-frontier. N04-N06 are integrated at source ceilings; N07 is the sole ready lane
-and retains its exact root-issued source base without leased generated outputs.
+frontier. N04-N07 are integrated at source ceilings; N08 and N09 are the only
+ready lanes and remain unleased through the debt and lane-restructure checkpoint.
 Shared generated authority stays root-owned. Runtime registry loading rejects a
 ready lane whose graph dependencies are not integrated and binds this named
-frontier to exactly N07 readiness after N04-N06 integration. Each scope records
+frontier to exactly N08/N09 readiness after N07 integration. Each scope records
 nonempty owned symbols, effects, and the complete root-only forbidden set;
 cross-scope path, symbol, and effect overlap fails closed before inventory or
 lease authority can be derived.
@@ -242,10 +246,10 @@ lease authority can be derived.
 the integrated N06 interface later. Nonexistent legacy scope roots are removed,
 and no lane scope owns Cargo, shared schemas, generated authority, public CLI,
 contract, registry, claim, or migration-registry paths.
-Root integrates accepted authority-bearing increments one at a time. N04-N06
-are integrated; N07 is the next integration gate at its dependency-valid source
-ceiling. N09 remains blocked until root atomically
-issues its managed-worktree lease and advances scheduler state.
+Root integrates accepted authority-bearing increments one at a time. N04-N07
+are integrated. N08 and N09 remain unleased until root closes the accumulated
+standards-debt checkpoint, validates the restructured lane plan, and atomically
+issues disjoint managed-worktree leases.
 
 ## Worktree protocol after P0
 
@@ -449,9 +453,10 @@ claim and representative product or release proof.
   authority is the blocked source-obligation row for the missing typed HCT-FIT
   and HCT-FIXTURES mapping; target capability and product claims remain
   withheld.
-- The N02-N06 dependency chain is closed at source ceilings through the exact
-  integrated N06 identity above. N07 is the next serialized integration gate;
-  N09 may proceed only after its existing production adoption path is current.
+- The N02-N07 dependency chain is closed at source ceilings through the exact
+  integrated N07 identity above. N08 and N09 form the next dependency antichain,
+  but stay unleased until the root standards-debt checkpoint and reviewed lane
+  restructure are complete. N09 must establish its production adoption path.
   Shared schemas, generated authority, public dispatch, claims, and integration
   remain root-owned.
 
