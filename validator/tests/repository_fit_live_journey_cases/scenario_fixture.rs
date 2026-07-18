@@ -58,66 +58,6 @@ pub(crate) struct Observation {
     pub(crate) git_status: Vec<u8>,
 }
 
-pub(crate) struct CommandRepository {
-    pub(crate) container: PathBuf,
-    pub(crate) root: PathBuf,
-}
-
-impl CommandRepository {
-    pub(crate) fn new() -> Self {
-        let container = PathBuf::from(BASE).join(format!(
-            "command-zero-write-{}-{}",
-            std::process::id(),
-            NEXT_FIXTURE.fetch_add(1, Ordering::Relaxed)
-        ));
-        let root = container.join("repo");
-        fs::create_dir_all(root.join("nested/empty")).unwrap();
-        let root = fs::canonicalize(root).unwrap();
-        git(&root, &["init", "--quiet"]);
-        git(
-            &root,
-            &["config", "user.email", "fit-command@example.invalid"],
-        );
-        git(&root, &["config", "user.name", "Repository Fit Command"]);
-        git(&root, &["config", "commit.gpgsign", "false"]);
-        git(&root, &["config", "gc.auto", "0"]);
-        git(&root, &["config", "maintenance.auto", "false"]);
-        fs::write(root.join("tracked.txt"), b"tracked baseline\n").unwrap();
-        fs::write(root.join("nested/linked.txt"), b"linked bytes\n").unwrap();
-        std::os::unix::fs::symlink("linked.txt", root.join("nested/linked-symlink")).unwrap();
-        git(&root, &["add", "-A"]);
-        git(&root, &["commit", "--quiet", "-m", "command baseline"]);
-        fs::write(root.join("tracked.txt"), b"tracked dirty user edit\n").unwrap();
-        fs::write(root.join("private-canary.txt"), PRIVATE_CANARY).unwrap();
-        Self { container, root }
-    }
-
-    pub(crate) fn run(&self, args: &[String]) -> Output {
-        Command::new(env!("CARGO_BIN_EXE_ultragoal"))
-            .env_clear()
-            .env("LC_ALL", "C")
-            .env("LANG", "C")
-            .env("PATH", "/usr/bin:/bin")
-            .env("GIT_CONFIG_GLOBAL", "/dev/null")
-            .env("GIT_CONFIG_NOSYSTEM", "1")
-            .env("GIT_OPTIONAL_LOCKS", "0")
-            .env("GIT_TERMINAL_PROMPT", "0")
-            .current_dir(&self.root)
-            .arg("--root")
-            .arg(&self.root)
-            .args(args)
-            .output()
-            .unwrap()
-    }
-}
-
-impl Drop for CommandRepository {
-    fn drop(&mut self) {
-        debug_assert!(self.container.starts_with(BASE));
-        let _ = fs::remove_dir_all(&self.container);
-    }
-}
-
 pub(crate) fn repository_root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()
@@ -129,26 +69,28 @@ pub(crate) fn source(relative: &str) -> String {
     fs::read_to_string(repository_root().join(relative)).unwrap()
 }
 
-pub(crate) fn rust_tree(relative: &str) -> String {
-    fn collect(path: &Path, files: &mut Vec<PathBuf>) {
-        for entry in fs::read_dir(path).unwrap() {
-            let path = entry.unwrap().path();
-            if path.is_dir() {
-                collect(&path, files);
-            } else if path.extension().is_some_and(|extension| extension == "rs") {
-                files.push(path);
+pub(crate) fn function_body<'a>(source: &'a str, marker: &str) -> &'a str {
+    let start = source
+        .find(marker)
+        .unwrap_or_else(|| panic!("missing function {marker}"));
+    let body = start
+        + source[start..]
+            .find('{')
+            .unwrap_or_else(|| panic!("missing function body {marker}"));
+    let mut depth = 0_usize;
+    for (offset, byte) in source[body..].bytes().enumerate() {
+        match byte {
+            b'{' => depth += 1,
+            b'}' => {
+                depth -= 1;
+                if depth == 0 {
+                    return &source[start..=body + offset];
+                }
             }
+            _ => {}
         }
     }
-
-    let mut files = Vec::new();
-    collect(&repository_root().join(relative), &mut files);
-    files.sort();
-    files
-        .into_iter()
-        .map(|path| fs::read_to_string(path).unwrap())
-        .collect::<Vec<_>>()
-        .join("\n")
+    panic!("unterminated function {marker}");
 }
 
 pub(crate) fn catalog() -> Catalog {

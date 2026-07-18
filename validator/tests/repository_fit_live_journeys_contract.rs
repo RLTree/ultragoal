@@ -10,9 +10,12 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 use std::sync::atomic::{AtomicU64, Ordering};
 
+#[path = "repository_fit_live_journey_cases/command_repository.rs"]
+mod command_repository;
 #[path = "repository_fit_live_journey_cases/journey_catalog.rs"]
 mod journey_catalog;
 #[path = "repository_fit_live_journey_cases/scenario_fixture.rs"]
 mod scenario_fixture;
 
+pub(crate) use command_repository::*;
 pub(crate) use scenario_fixture::*;

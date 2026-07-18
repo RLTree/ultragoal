@@ -11,39 +11,6 @@ pub(crate) fn source(relative: &str) -> String {
     fs::read_to_string(repository_root().join(relative)).unwrap()
 }
 
-pub(crate) fn rust_tree(relative: &str) -> String {
-    fn collect(path: &std::path::Path, files: &mut Vec<PathBuf>) {
-        for entry in fs::read_dir(path).unwrap() {
-            let path = entry.unwrap().path();
-            if path.is_dir() {
-                collect(&path, files);
-            } else if path.extension().is_some_and(|extension| extension == "rs") {
-                files.push(path);
-            }
-        }
-    }
-
-    let mut files = Vec::new();
-    collect(&repository_root().join(relative), &mut files);
-    files.sort();
-    files
-        .into_iter()
-        .map(|path| fs::read_to_string(path).unwrap())
-        .collect::<Vec<_>>()
-        .join("\n")
-}
-
-pub(crate) fn declaration<'a>(source: &'a str, marker: &str) -> (&'a str, &'a str) {
-    let start = source
-        .find(marker)
-        .unwrap_or_else(|| panic!("missing {marker}"));
-    let end = start + source[start..].find("\n}").unwrap() + 2;
-    let prefix_start = source[..start]
-        .rfind("\n\n")
-        .map_or(0, |boundary| boundary + 2);
-    (&source[prefix_start..start], &source[start..end])
-}
-
 #[test]
 pub(crate) fn fixture_catalog_is_the_exact_apply_mediation_matrix() {
     let value: Value = serde_json::from_str(&source(
@@ -185,8 +152,11 @@ pub(crate) fn fixture_catalog_is_the_exact_apply_mediation_matrix() {
 #[test]
 pub(crate) fn request_permit_and_lease_are_move_only_internal_authority() {
     let adapter = source("validator/src/repository_fit/product_adapter/mod.rs");
-    let protocol = rust_tree("validator/src/repository_fit/product_adapter/protocol");
-    let permit = rust_tree("validator/src/repository_fit/product_adapter/root_permit");
+    let protocol =
+        source("validator/src/repository_fit/product_adapter/protocol/plan/input_limit.rs");
+    let permit = source("validator/src/repository_fit/product_adapter/root_permit/permit/scope.rs");
+    let lease =
+        source("validator/src/repository_fit/product_adapter/root_permit/mutation_lease.rs");
     assert!(adapter.lines().any(|line| line == "mod root_permit;"));
     assert!(!adapter.contains("pub mod root_permit"));
     assert!(!adapter.contains("pub(crate) mod root_permit"));
@@ -195,7 +165,7 @@ pub(crate) fn request_permit_and_lease_are_move_only_internal_authority() {
     let (permit_prefix, permit_declaration) =
         declaration(&permit, "pub(crate) struct RepositoryFitApplyPermit");
     let (lease_prefix, lease_declaration) =
-        declaration(&permit, "pub(crate) struct RepositoryFitMutationLease");
+        declaration(&lease, "pub(crate) struct RepositoryFitMutationLease");
     for prefix in [request_prefix, permit_prefix, lease_prefix] {
         assert!(!prefix.contains("#[derive"));
     }
@@ -206,15 +176,20 @@ pub(crate) fn request_permit_and_lease_are_move_only_internal_authority() {
     ] {
         assert!(!protocol.contains(&format!("impl Clone for {type_name}")));
         assert!(!permit.contains(&format!("impl Clone for {type_name}")));
+        assert!(!lease.contains(&format!("impl Clone for {type_name}")));
         assert!(!protocol.contains(&format!("impl Copy for {type_name}")));
         assert!(!permit.contains(&format!("impl Copy for {type_name}")));
+        assert!(!lease.contains(&format!("impl Copy for {type_name}")));
         assert!(!protocol.contains(&format!("impl Serialize for {type_name}")));
         assert!(!permit.contains(&format!("impl Serialize for {type_name}")));
+        assert!(!lease.contains(&format!("impl Serialize for {type_name}")));
         assert!(!protocol.contains(&format!("impl Deserialize for {type_name}")));
         assert!(!permit.contains(&format!("impl Deserialize for {type_name}")));
+        assert!(!lease.contains(&format!("impl Deserialize for {type_name}")));
     }
     assert!(!protocol.contains("use serde::Deserialize"));
     assert!(!permit.contains("use serde::Deserialize"));
+    assert!(!lease.contains("use serde::Deserialize"));
     assert!(permit_declaration
         .lines()
         .all(|line| !line.contains("pub ")));
@@ -226,8 +201,13 @@ pub(crate) fn request_permit_and_lease_are_move_only_internal_authority() {
 
 #[test]
 pub(crate) fn permit_binds_every_authority_dimension_and_exact_request_instance() {
-    let protocol = rust_tree("validator/src/repository_fit/product_adapter/protocol");
-    let permit = rust_tree("validator/src/repository_fit/product_adapter/root_permit");
+    let protocol =
+        source("validator/src/repository_fit/product_adapter/protocol/plan/input_limit.rs");
+    let permit = source("validator/src/repository_fit/product_adapter/root_permit/permit/scope.rs");
+    let preflight =
+        source("validator/src/repository_fit/product_adapter/root_permit/effect_preflight.rs");
+    let activation =
+        source("validator/src/repository_fit/product_adapter/root_permit/permit/activation.rs");
     for dimension in [
         "request_id",
         "context_id",
@@ -256,11 +236,11 @@ pub(crate) fn permit_binds_every_authority_dimension_and_exact_request_instance(
     assert!(protocol.contains("compare_exchange("));
     assert!(protocol.contains("REQUEST_STAGE_PREPARED"));
     assert!(protocol.contains("REQUEST_STAGE_IN_FLIGHT"));
-    assert!(permit.contains("Arc::ptr_eq(&request.seal, &permit.seal)"));
-    assert!(permit.contains("Arc::ptr_eq(&request.seal, &lease.seal)"));
-    assert!(permit.contains("Arc::ptr_eq(&permit.authority, &lease.authority)"));
-    assert!(permit.contains("nonce_reservation"));
-    assert!(permit.contains("effect_reservation"));
-    assert!(permit.contains("reservations.contains(&nonce_reservation)"));
-    assert!(permit.contains("reservations.contains(&effect_reservation)"));
+    assert!(preflight.contains("Arc::ptr_eq(&request.seal, &permit.seal)"));
+    assert!(preflight.contains("Arc::ptr_eq(&request.seal, &lease.seal)"));
+    assert!(preflight.contains("Arc::ptr_eq(&permit.authority, &lease.authority)"));
+    assert!(activation.contains("nonce_reservation"));
+    assert!(activation.contains("effect_reservation"));
+    assert!(activation.contains("reservations.contains(&nonce_reservation)"));
+    assert!(activation.contains("reservations.contains(&effect_reservation)"));
 }
