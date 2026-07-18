@@ -252,11 +252,13 @@ claim and representative product or release proof.
   JSON writes now exist only in the test fixture boundary, while the two
   governed claim-artifact path functions remain the sole production surface.
   This is not a compile pass; no suppression or dummy reachability is allowed.
-- `LANE_REGISTRY.json` still binds the retired authority-reconciliation and
-  review paths in its protected checkpoint, P0 lease, consumed set, and plan
-  digest. That registry is intentionally treated as stale and non-promotable
-  until root rewrites the existing canonical record to the surviving live
-  authority; no replacement tracker or receipt is permitted.
+- Root reconciliation revoked the stale P0 lease, removed retired
+  authority-reconciliation paths from the protected checkpoint, rebound the
+  surviving plan and claim-module digests, and settled the verification backlog
+  and completion manifest through one explicit reproducible registry-preimage
+  rule. All claims remain withheld, and no replacement tracker or receipt was
+  created. A new exact P0 lease may be issued only from a later clean candidate
+  and current diagnostic set.
 - HCT-FIXTURES execution/parity, runtime, installed journey, readiness,
   release, and completion claims remain withheld.
 - The calibrated review, observability, and Product Fitness doctrine is now
