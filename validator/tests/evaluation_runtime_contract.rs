@@ -171,55 +171,55 @@ include!(
     "evaluation_runtime_contract/production_native_fixture_boundary_accepts_only_fixed_protected_substrates.rs"
 );
 
-include!("evaluation_runtime_contract/research_source_url.rs");
+include!("evaluation_runtime_contract/research/source_url.rs");
 
-include!("evaluation_runtime_contract/research_proposal.rs");
+include!("evaluation_runtime_contract/research/proposal.rs");
 
 include!(
-    "evaluation_runtime_contract/research_source_record_fields_and_canonical_binding_fail_closed.rs"
+    "evaluation_runtime_contract/research/source_record_fields_and_canonical_binding_fail_closed.rs"
 );
 
 include!(
-    "evaluation_runtime_contract/research_source_substitution_mutate_restore_and_classification_laundering_fail_closed.rs"
+    "evaluation_runtime_contract/research/source_substitution_mutate_restore_and_classification_laundering_fail_closed.rs"
 );
 
 include!(
-    "evaluation_runtime_contract/research_external_stable_fact_and_rebound_laundering_fail_closed.rs"
+    "evaluation_runtime_contract/research/external_stable_fact_and_rebound_laundering_fail_closed.rs"
 );
 
 include!(
-    "evaluation_runtime_contract/research_production_clock_cannot_be_backdated_or_rebound_by_the_caller.rs"
+    "evaluation_runtime_contract/research/production_clock_cannot_be_backdated_or_rebound_by_the_caller.rs"
 );
 
 include!(
-    "evaluation_runtime_contract/research_every_duplicate_source_and_proposal_participant_is_ineligible.rs"
+    "evaluation_runtime_contract/research/every_duplicate_source_and_proposal_participant_is_ineligible.rs"
 );
 
 include!(
-    "evaluation_runtime_contract/research_read_parse_query_and_audit_paths_are_recursively_zero_write.rs"
+    "evaluation_runtime_contract/research/read_parse_query_and_audit_paths_are_recursively_zero_write.rs"
 );
 
-include!("evaluation_runtime_contract/execution_binding.rs");
+include!("evaluation_runtime_contract/execution/binding.rs");
 
 include!(
-    "evaluation_runtime_contract/execution_final_named_root_revalidation_refuses_orphan_write_and_read_success.rs"
+    "evaluation_runtime_contract/execution/final_named_root_revalidation_refuses_orphan_write_and_read_success.rs"
 );
 
-include!("evaluation_runtime_contract/execution_and_promotion_roots_reject_symlinked_ancestors.rs");
+include!("evaluation_runtime_contract/execution/and_promotion_roots_reject_symlinked_ancestors.rs");
 
 include!(
-    "evaluation_runtime_contract/promotion_anchor_journal_recovers_state_only_rollback_and_rejects_paired_restore.rs"
-);
-
-include!(
-    "evaluation_runtime_contract/promotion_lock_replacement_cannot_create_a_second_mutation_authority.rs"
+    "evaluation_runtime_contract/promotion/anchor_journal_recovers_state_only_rollback_and_rejects_paired_restore.rs"
 );
 
 include!(
-    "evaluation_runtime_contract/promotion_final_named_state_revalidation_refuses_recoverable_late_swap_success.rs"
+    "evaluation_runtime_contract/promotion/lock_replacement_cannot_create_a_second_mutation_authority.rs"
 );
 
-include!("evaluation_runtime_contract/execution_reservation_has_exactly_one_two_process_winner.rs");
+include!(
+    "evaluation_runtime_contract/promotion/final_named_state_revalidation_refuses_recoverable_late_swap_success.rs"
+);
+
+include!("evaluation_runtime_contract/execution/reservation_has_exactly_one_two_process_winner.rs");
 
 include!(
     "evaluation_runtime_contract/evaluation_worker_result_is_exact_typed_and_self_excluded.rs"

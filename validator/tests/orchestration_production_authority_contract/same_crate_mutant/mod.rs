@@ -1,10 +1,16 @@
+#[path = "authority/cases.rs"]
 mod authority_cases;
+#[path = "authority/descendants.rs"]
 mod authority_descendants;
+#[path = "authority/mutants.rs"]
 mod authority_mutants;
 mod compile_cases;
 mod direct_routes;
+#[path = "reservation/cases.rs"]
 mod reservation_cases;
+#[path = "reservation/mutants.rs"]
 mod reservation_mutants;
+#[path = "reservation/tokens.rs"]
 mod reservation_tokens;
 
 use super::fixture::TestRoot;

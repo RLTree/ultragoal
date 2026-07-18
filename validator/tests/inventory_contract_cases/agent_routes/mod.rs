@@ -4,9 +4,9 @@ use crate::repository_fixture::{TestRepo, inventory_request, live_root};
 use serde_json::json;
 use std::fs;
 
-#[path = "agent_routes/reader_false_pass.rs"]
+#[path = "reader_false_pass/mod.rs"]
 mod reader_false_pass;
-#[path = "agent_routes/registry_fixture.rs"]
+#[path = "registry_fixture/mod.rs"]
 mod registry_fixture;
 
 use registry_fixture::{

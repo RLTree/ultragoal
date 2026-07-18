@@ -3,6 +3,6 @@ use crate::distribution_fixture::{CANDIDATE_ID, CONTEXT_ID, Fixture, PLUGIN_ID, 
 use serde_json::{Value, json};
 use std::fs;
 
-include!("package_manifest/manifest.rs");
+include!("manifest.rs");
 
-include!("package_manifest/metadata_and_component_paths_are_bounded_normalized_and_unique.rs");
+include!("metadata_and_component_paths_are_bounded_normalized_and_unique.rs");

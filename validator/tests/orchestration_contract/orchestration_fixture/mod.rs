@@ -5,6 +5,6 @@ use std::cell::Cell;
 use std::collections::{BTreeMap, BTreeSet};
 use std::rc::Rc;
 
-include!("orchestration_fixture/digest_live_lib_bytes.rs");
+include!("digest_live_lib_bytes.rs");
 
-include!("orchestration_fixture/result_for.rs");
+include!("result_for.rs");

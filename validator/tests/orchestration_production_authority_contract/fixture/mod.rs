@@ -15,7 +15,7 @@ use ultragoal::orchestration::product::{
 };
 use ultragoal::orchestration::*;
 
-#[path = "../../src/orchestration/product/authority/production/runtime_test_root.rs"]
+#[path = "../../../src/orchestration/product/authority/production/runtime_test_root.rs"]
 mod runtime_test_root;
 
 pub const CHILD_ENV: &str = "ULTRAGOAL_ORCHESTRATION_AUTHORITY_CHILD";
@@ -42,8 +42,8 @@ impl Drop for TestRoot {
     }
 }
 
-include!("fixture/scenario.rs");
-include!("fixture/execution_permit.rs");
+include!("scenario.rs");
+include!("execution_permit.rs");
 
 pub fn inspect_resume(
     journal: &TestRoot,
@@ -92,7 +92,7 @@ pub fn issue_resume(
     (action, permit, authority)
 }
 
-include!("fixture/process.rs");
+include!("process.rs");
 
 pub fn recursive_fingerprint(root: &Path) -> Vec<(String, u64, u32, u64, u64, String)> {
     let mut rows = fs::read_dir(root)

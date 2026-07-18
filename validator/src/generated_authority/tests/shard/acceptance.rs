@@ -3,14 +3,14 @@ use std::collections::BTreeSet;
 
 const SHARDS: &[&[u8]] = &[
     include_bytes!(
-        "../../../../migration/generated-surface-authority/agent-standards-documents.json"
+        "../../../../../migration/generated-surface-authority/agent-standards-documents.json"
     ),
     include_bytes!(
-        "../../../../migration/generated-surface-authority/agent-standards-indexes.json"
+        "../../../../../migration/generated-surface-authority/agent-standards-indexes.json"
     ),
-    include_bytes!("../../../../migration/generated-surface-authority/dependency-locks.json"),
+    include_bytes!("../../../../../migration/generated-surface-authority/dependency-locks.json"),
     include_bytes!(
-        "../../../../migration/generated-surface-authority/retained-predecessor-context.json"
+        "../../../../../migration/generated-surface-authority/retained-predecessor-context.json"
     ),
 ];
 

@@ -7,10 +7,10 @@ use crate::distribution::{
 use crate::distribution_fixture::{CANDIDATE_ID, CONTEXT_ID, Fixture, digest};
 use std::collections::{BTreeMap, BTreeSet};
 
-include!("install/external_mutation.rs");
+include!("external_mutation.rs");
 
-include!("install/automatic_and_explicit_rollbacks_preserve_concurrent_mutation.rs");
+include!("automatic_and_explicit_rollbacks_preserve_concurrent_mutation.rs");
 
-include!("install/rollback_authority.rs");
+include!("rollback_authority.rs");
 
-include!("install/rollback_install_fixture.rs");
+include!("rollback_install_fixture.rs");

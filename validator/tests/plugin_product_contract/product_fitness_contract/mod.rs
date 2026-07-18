@@ -10,8 +10,6 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 
-include!("product_fitness_contract/candidate.rs");
+include!("candidate.rs");
 
-include!(
-    "product_fitness_contract/reviewer_is_disjoint_falsification_only_and_cannot_raise_claims.rs"
-);
+include!("reviewer_is_disjoint_falsification_only_and_cannot_raise_claims.rs");

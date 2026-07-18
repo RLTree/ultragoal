@@ -6,7 +6,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 
-include!("runtime_fixture/next_root.rs");
+include!("next_root.rs");
 
 pub fn state_request(head: JournalHead, tick: u64) -> OrchestrationStateRequest {
     OrchestrationStateRequest {

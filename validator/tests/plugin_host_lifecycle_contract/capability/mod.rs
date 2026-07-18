@@ -8,8 +8,8 @@ use crate::host_lifecycle::{
 };
 use crate::plugin_product::lifecycle::{LifecycleIntent, LifecycleState};
 
-include!("capability/effectful.rs");
+include!("effectful.rs");
 
-include!("capability/no_effect_intents_do_not_promote_or_require_external_host_capability.rs");
+include!("no_effect_intents_do_not_promote_or_require_external_host_capability.rs");
 
-include!("capability/unavailable_session.rs");
+include!("unavailable_session.rs");

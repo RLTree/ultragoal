@@ -4,9 +4,9 @@ use crate::repository_fixture::{TestRepo, live_root};
 use serde_json::{Value, json};
 use std::fs;
 
-#[path = "v2/evidence.rs"]
+#[path = "evidence.rs"]
 mod evidence;
-#[path = "v2/proposal_context.rs"]
+#[path = "proposal_context.rs"]
 mod proposal_context;
 
 const PREDECESSOR_ROOT: &str = "docs/ultragoal-contract-2026-07";

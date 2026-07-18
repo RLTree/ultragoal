@@ -7,9 +7,9 @@ mod host_lifecycle;
 
 #[path = "supported_host_plugin_transaction_contract/product.rs"]
 mod product;
-#[path = "supported_host_plugin_transaction_contract/recovery.rs"]
+#[path = "supported_host_plugin_transaction_contract/recovery/mod.rs"]
 mod recovery;
-#[path = "supported_host_plugin_transaction_contract/security.rs"]
+#[path = "supported_host_plugin_transaction_contract/security/mod.rs"]
 mod security;
 #[path = "supported_host_plugin_transaction_contract/transaction_fixture.rs"]
 mod transaction_fixture;

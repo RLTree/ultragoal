@@ -5,7 +5,7 @@ pub(super) fn unsupported_claim() -> RuntimeOutcome {
         super::super::DiagnosticId::DownstreamToolUnavailable,
         "the requested claim has no production strict-check adapter",
         "check strict claim routing",
-        "select cli-self-law-compliance or implement and register the named claim adapter",
+        "select cli-self-law-compliance or namespace-progressive-disclosure, or implement and register the named claim adapter",
         "the requested strict-check claim remains withheld",
     )
 }

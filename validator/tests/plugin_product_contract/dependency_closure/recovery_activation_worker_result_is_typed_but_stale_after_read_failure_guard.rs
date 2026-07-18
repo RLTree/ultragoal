@@ -93,8 +93,8 @@ fn read_failure_guard_worker_result_is_lease_bound_and_verifies_every_artifact()
         BTreeSet::from([
             "validator/src/plugin_product/lifecycle/execution.rs",
             "validator/src/plugin_product/lifecycle/model.rs",
-            "validator/tests/plugin_product_contract/dependency_closure.rs",
-            "validator/tests/plugin_product_contract/lifecycle_contract.rs",
+            "validator/tests/plugin_product_contract/dependency_closure/mod.rs",
+            "validator/tests/plugin_product_contract/lifecycle_contract/mod.rs",
         ])
     );
 }

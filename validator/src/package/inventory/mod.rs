@@ -15,7 +15,7 @@ pub(crate) use draft_manifest::DraftPackageManifest;
 
 pub const PACKAGE_DIGEST_EXCLUDED_PREFIXES: &[&str] = &["validation_artifacts/"];
 pub const PACKAGE_DIGEST_EXCLUDED_PATHS: &[&str] = &[];
-const BUILDER_CONTRACT_COMPAT_PREFIX: &str = "docs/parent-session-full-ultragoal-";
+const PACKAGE_CONTRACT_COMPATIBILITY_PREFIX: &str = "docs/package-contract-compatibility-";
 const BUILDER_CONTRACT_MODULE_DIR: &str = "docs/ultragoal-contract-2026-07/";
 const MANIFEST_PATH: &str = "plugin-manifest-draft.json";
 
@@ -65,7 +65,7 @@ pub fn package_path_error(root: &Path, rel: &str) -> Option<String> {
 }
 
 pub(crate) fn builder_contract_resource_path(rel: &str) -> bool {
-    (rel.starts_with(BUILDER_CONTRACT_COMPAT_PREFIX) && rel.ends_with(".md"))
+    (rel.starts_with(PACKAGE_CONTRACT_COMPATIBILITY_PREFIX) && rel.ends_with(".md"))
         || rel.starts_with(BUILDER_CONTRACT_MODULE_DIR)
 }
 

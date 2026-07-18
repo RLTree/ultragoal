@@ -21,13 +21,13 @@ use std::thread;
 
 include!("migration_contract/next_root.rs");
 
-include!("migration_contract/test_replacement_authority_current.rs");
+include!("migration_contract/test/replacement/authority/current.rs");
 
-include!("migration_contract/test_replacement_authority_authority_id.rs");
+include!("migration_contract/test/replacement/authority/authority_id.rs");
 
-include!("migration_contract/test_replacement_authority_claim_final_reconciliation.rs");
+include!("migration_contract/test/replacement/authority/claim_final_reconciliation.rs");
 
-include!("migration_contract/test_effect_authority.rs");
+include!("migration_contract/test/effect_authority.rs");
 
 include!("migration_contract/unknown_or_inactive_canonical_target_is_rejected.rs");
 

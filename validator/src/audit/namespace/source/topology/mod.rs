@@ -1,8 +1,10 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 #[cfg(test)]
 use std::path::Path;
 
 use super::failure_text::remediating_failure;
+
+mod factoring;
 
 #[cfg(test)]
 pub(crate) fn failures(root: &Path, manifest_paths: &[String]) -> Vec<String> {
@@ -21,8 +23,8 @@ pub(crate) fn failures_with_repo_paths(
     paths.extend(repo_source_paths.iter().cloned());
     let mut out = Vec::new();
     out.extend(forbidden_top_level_clusters(&paths));
-    out.extend(partial_module_factoring_failures(&paths));
-    out.extend(maximal_factoring_failures(&paths));
+    out.extend(factoring::partial_module_failures(&paths));
+    out.extend(factoring::maximal_prefix_failures(&paths));
     out.extend(generic_leaf_name_failures(&paths));
     out.extend(history_name_failures(&paths));
     out.extend(opaque_gate_number_failures(&paths));
@@ -72,68 +74,6 @@ fn forbidden_top_level_clusters(paths: &BTreeSet<String>) -> Vec<String> {
         "move_repo_owned_validator_tests_into_validator_src_self_tests_semantic_domain_dirs",
         false,
     )]
-}
-
-fn partial_module_factoring_failures(paths: &BTreeSet<String>) -> Vec<String> {
-    paths
-        .iter()
-        .filter(|path| source_stem(path) != "mod")
-        .filter(|path| !cargo_integration_entrypoint(path))
-        .filter_map(|path| {
-            let module_dir = path.strip_suffix(".rs")?;
-            let child_prefix = format!("{module_dir}/");
-            let has_child_source = paths.iter().any(|other| other.starts_with(&child_prefix));
-            has_child_source.then(|| {
-                remediating_failure(
-                    "namespace_validator_source_partial_module_factoring",
-                    parent_dir(path),
-                    source_stem(path),
-                    &[path.to_string()],
-                    "move_partially_factored_module_root_to_mod_rs_so_the_directory_is_the_module_boundary",
-                    false,
-                )
-            })
-        })
-        .collect()
-}
-
-fn cargo_integration_entrypoint(path: &str) -> bool {
-    let Some(tail) = path.strip_prefix("validator/tests/") else {
-        return false;
-    };
-    tail.ends_with(".rs") && !tail.contains('/')
-}
-
-fn maximal_factoring_failures(paths: &BTreeSet<String>) -> Vec<String> {
-    let mut by_dir_prefix: BTreeMap<(String, String), Vec<String>> = BTreeMap::new();
-    for path in paths {
-        let stem = source_stem(path);
-        if route_file(stem) || !stem.contains('_') {
-            continue;
-        }
-        let prefix = stem.split('_').next().unwrap_or("");
-        if prefix.len() < 2 {
-            continue;
-        }
-        by_dir_prefix
-            .entry((parent_dir(path).to_string(), prefix.to_string()))
-            .or_default()
-            .push(path.to_string());
-    }
-    by_dir_prefix
-        .into_iter()
-        .filter(|(_, examples)| examples.len() > 1)
-        .map(|((dir, prefix), examples)| {
-            remediating_failure(
-                "namespace_validator_source_residual_prefix_encoding",
-                &dir,
-                &prefix,
-                &examples,
-                "promote_shared_underscore_namespace_segment_into_directory_module_boundary_until_filename_is_a_semantic_leaf",
-                false,
-            )
-        })
-        .collect()
 }
 
 fn generic_leaf_name_failures(paths: &BTreeSet<String>) -> Vec<String> {
@@ -225,10 +165,6 @@ fn gate_number_token(token: &str) -> bool {
 fn is_validator_rust_source(path: &str) -> bool {
     (path.starts_with("validator/src/") || path.starts_with("validator/tests/"))
         && path.ends_with(".rs")
-}
-
-fn route_file(stem: &str) -> bool {
-    matches!(stem, "mod" | "lib" | "main")
 }
 
 fn parent_dir(path: &str) -> &str {

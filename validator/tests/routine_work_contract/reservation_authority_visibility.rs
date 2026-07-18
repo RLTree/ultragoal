@@ -7,7 +7,7 @@ use std::path::Path;
 use std::process::{Command, Output};
 
 const TRANSACTION: &str =
-    include_str!("../../src/routine_work/runtime_adapter/production/custody/transaction.rs");
+    include_str!("../../src/routine_work/runtime_adapter/production/custody/transaction/mod.rs");
 const OWNER: &str =
     include_str!("../../src/routine_work/runtime_adapter/production/custody/transaction/owner.rs");
 const RECORDS: &str = include_str!(

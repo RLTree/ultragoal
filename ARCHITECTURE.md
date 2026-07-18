@@ -112,6 +112,8 @@ validation_artifacts/          candidate-bound evidence, never behavior
   compatibility, and retirement tests.
 
 `scripts/check` is the repository-wide source/standards/coverage gate. The
-public `check strict --claim cli-self-law-compliance` route is the product
-self-law surface; neither command proves installation, runtime activation,
-journey fitness, release, or completion by itself.
+public `check strict` route has separate recursively read-only adapters for
+`cli-self-law-compliance` and the source-local
+`namespace-progressive-disclosure` law. A pass supports only the requested
+adapter's exact claim; none of these commands proves installation, runtime
+activation, journey fitness, release, or completion by itself.

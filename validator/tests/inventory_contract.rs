@@ -8,19 +8,19 @@ mod inventory {
 
 #[path = "inventory_contract_cases/agent_manifest.rs"]
 mod agent_manifest;
-#[path = "inventory_contract_cases/agent_routes.rs"]
+#[path = "inventory_contract_cases/agent_routes/mod.rs"]
 mod agent_routes;
-#[path = "inventory_contract_cases/command_activation.rs"]
+#[path = "inventory_contract_cases/command_activation/mod.rs"]
 mod command_activation;
-#[path = "inventory_contract_cases/compatibility_routes.rs"]
+#[path = "inventory_contract_cases/compatibility_routes/mod.rs"]
 mod compatibility_routes;
-#[path = "inventory_contract_cases/context_scopes.rs"]
+#[path = "inventory_contract_cases/context_scopes/mod.rs"]
 mod context_scopes;
 #[path = "inventory_contract_cases/contract_integrity.rs"]
 mod contract_integrity;
-#[path = "inventory_contract_cases/fixtures.rs"]
+#[path = "inventory_contract_cases/fixtures/mod.rs"]
 mod fixtures;
-#[path = "inventory_contract_cases/generated_disposition.rs"]
+#[path = "inventory_contract_cases/generated_disposition/mod.rs"]
 mod generated_disposition;
 #[path = "inventory_contract_cases/generated_regeneration.rs"]
 mod generated_regeneration;
@@ -30,13 +30,13 @@ mod legacy_limits;
 mod legacy_scope;
 #[path = "inventory_contract_cases/plugin_hooks.rs"]
 mod plugin_hooks;
-#[path = "inventory_contract_cases/plugin_manifest.rs"]
+#[path = "inventory_contract_cases/plugin_manifest/mod.rs"]
 mod plugin_manifest;
 #[path = "inventory_contract_cases/plugin_manifest_semantics.rs"]
 mod plugin_manifest_semantics;
 #[path = "inventory_contract_cases/repository_fixture.rs"]
 mod repository_fixture;
-#[path = "inventory_contract_cases/routing_transitions.rs"]
+#[path = "inventory_contract_cases/routing_transitions/mod.rs"]
 mod routing_transitions;
 #[path = "inventory_contract_cases/schema_references.rs"]
 mod schema_references;

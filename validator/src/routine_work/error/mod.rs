@@ -3,7 +3,7 @@ use std::fmt;
 
 use super::runtime_adapter::{LaunchCleanupEvidence, ObservedProcessCustody};
 
-#[path = "error/failure_evidence.rs"]
+#[path = "failure_evidence.rs"]
 mod failure_evidence;
 
 pub(crate) use failure_evidence::*;

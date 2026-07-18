@@ -18,7 +18,6 @@ mod authority_record;
 #[path = "file_authority.rs"]
 mod file_authority;
 #[cfg(target_vendor = "apple")]
-#[path = "supported/mod.rs"]
 mod supported;
 
 use authority_record::*;

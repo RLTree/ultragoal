@@ -8,12 +8,10 @@ use std::collections::BTreeSet;
 use std::fs;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-include!("negative/running.rs");
+include!("running.rs");
 
-include!(
-    "negative/finding_and_root_action_membership_injection_cannot_forge_full_state_authority.rs"
-);
+include!("finding_and_root_action_membership_injection_cannot_forge_full_state_authority.rs");
 
-include!("negative/interrupted_head_identity_and_current_source_are_bound_before_issuance.rs");
+include!("interrupted_head_identity_and_current_source_are_bound_before_issuance.rs");
 
-include!("negative/recompute_action_id.rs");
+include!("recompute_action_id.rs");

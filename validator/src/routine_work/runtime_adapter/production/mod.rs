@@ -27,7 +27,7 @@ mod launch_custody;
 mod output_journal;
 #[path = "production_mediation.rs"]
 mod production_mediation;
-#[path = "reservation_failure.rs"]
+#[path = "reservation_failure/mod.rs"]
 mod reservation_failure;
 
 use custody::AuthorityBinding;

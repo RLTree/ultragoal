@@ -63,17 +63,16 @@ fn production_source_exposes_no_arbitrary_process_binding_surface() {
 #[test]
 fn terminal_publication_follows_observation_without_parallel_cache_authority() {
     let transaction =
-        include_str!("../src/routine_work/runtime_adapter/production/custody/transaction.rs");
+        include_str!("../src/routine_work/runtime_adapter/production/custody/transaction/mod.rs");
     let durable =
         include_str!("../src/routine_work/runtime_adapter/production/custody/transaction/owner.rs");
-    let settlement = include_str!(
-        "../src/routine_work/runtime_adapter/production/custody/store/supported/settle.rs"
-    );
-    let source = include_str!("../src/cli/successor_public/routine/source_configuration.rs");
+    let settlement =
+        include_str!("../src/routine_work/runtime_adapter/production/custody/store/settle.rs");
+    let source = include_str!("../src/cli/successor_public/routine/source/configuration.rs");
     let output = include_str!(
         "../src/routine_work/runtime_adapter/mediator/filesystem/ownership_rejection.rs"
     );
-    let error = include_str!("../src/routine_work/error.rs");
+    let error = include_str!("../src/routine_work/error/mod.rs");
     let catch = transaction.find("catch_unwind").unwrap();
     let settle = transaction.find("owner.settle(settlement").unwrap();
     assert!(catch < settle);

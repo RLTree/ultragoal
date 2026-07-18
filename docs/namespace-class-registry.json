@@ -10,7 +10,7 @@
       ],
       "description": "Repo-owned validator Rust source must be maximally factored into semantic module directories before package, review, readiness, release, CLI self-law, or update_goal claims can pass.",
       "authority": "validator_source_topology",
-      "authority_path": "validator/src/audit/namespace/source/topology.rs",
+      "authority_path": "validator/src/audit/namespace/source/topology/mod.rs",
       "maximal_factoring_required": true,
       "waiver_allowed": false,
       "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
@@ -58,7 +58,7 @@
       ],
       "description": "Generated proof artifacts are classified for routing only; generation status never waives namespace, provenance, freshness, or digest checks.",
       "authority": "generated_artifact_provenance",
-      "authority_path": "validator/src/audit/artifacts.rs",
+      "authority_path": "validator/src/audit/law/authority_surfaces/surface_inventory/discovered/artifact_authority.rs",
       "maximal_factoring_required": true,
       "waiver_allowed": false,
       "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
@@ -84,7 +84,7 @@
       ],
       "description": "Packaged examples are non-authoritative illustrative inputs; inventory membership cannot raise a claim ceiling or substitute for current product behavior.",
       "authority": "package_inventory",
-      "authority_path": "validator/src/package/inventory.rs",
+      "authority_path": "validator/src/package/inventory/mod.rs",
       "maximal_factoring_required": true,
       "waiver_allowed": false,
       "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
@@ -130,19 +130,6 @@
       "description": "Lane orchestration state records parent-owned lane identities, ownership, dependencies, launch receipts, and root verification checkpoints; it cannot substitute for lane production proof, install/cache proof, readiness, release, completion, or update_goal eligibility.",
       "authority": "lane_orchestration_registry",
       "authority_path": "schemas/lane-registry.schema.json",
-      "maximal_factoring_required": true,
-      "waiver_allowed": false,
-      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
-    },
-    {
-      "id": "orchestrator-automation-authority",
-      "kind": "orchestration_state",
-      "surface_globs": [
-        ".codex/automations/**"
-      ],
-      "description": "Parent-owned heartbeat automation files bind orchestrator duties, evidence cursors, lane reconciliation actions, and source-local claim ceilings; they cannot substitute for lane production proof, install/cache proof, readiness, release, completion, or update_goal eligibility.",
-      "authority": "orchestrator_automation_contract",
-      "authority_path": ".codex/automations/ultragoal-orchestrator/automation.toml",
       "maximal_factoring_required": true,
       "waiver_allowed": false,
       "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"

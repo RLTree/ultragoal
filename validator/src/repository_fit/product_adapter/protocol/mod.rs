@@ -26,11 +26,11 @@ use crate::repository_fit::{
 
 #[path = "apply_preparation.rs"]
 mod apply_preparation;
-#[path = "plan_input_limit.rs"]
+#[path = "plan/input_limit.rs"]
 mod plan_input_limit;
-#[path = "plan_projection.rs"]
+#[path = "plan/projection.rs"]
 mod plan_projection;
-#[path = "plan_record.rs"]
+#[path = "plan/record.rs"]
 mod plan_record;
 #[path = "root_identity.rs"]
 mod root_identity;

@@ -37,12 +37,10 @@ pub(crate) fn capture(root: &Path) -> Result<GovernedInventory, Vec<String>> {
 }
 
 pub(crate) fn audit(root: &Path) -> GovernedAudit {
-    let (first, mut failures) = scan::once(root);
-    let (mut second, second_failures) = scan::once(root);
-    failures.extend(second_failures);
-    if first.sources != second.sources {
-        failures.push("governed_source_inventory_changed_during_capture".to_string());
-    }
+    let GovernedAudit {
+        inventory: mut second,
+        mut failures,
+    } = capture_namespace_sources(root);
     let generated = generated::validate(root, &second.sources);
     failures.extend(generated.failures);
     second.generated_projections = generated.source_projections;
@@ -53,6 +51,21 @@ pub(crate) fn audit(root: &Path) -> GovernedAudit {
     failures.extend(final_failures);
     if final_inventory.sources != second.sources {
         failures.push("governed_source_inventory_changed_during_validation".to_string());
+    }
+    failures.sort();
+    failures.dedup();
+    GovernedAudit {
+        inventory: second,
+        failures,
+    }
+}
+
+pub(crate) fn capture_namespace_sources(root: &Path) -> GovernedAudit {
+    let (first, mut failures) = scan::once(root);
+    let (second, second_failures) = scan::once(root);
+    failures.extend(second_failures);
+    if first.sources != second.sources {
+        failures.push("governed_source_inventory_changed_during_capture".to_string());
     }
     failures.sort();
     failures.dedup();

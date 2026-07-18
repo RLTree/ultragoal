@@ -8,6 +8,6 @@ use crate::package_manifest::manifest;
 use serde::Serialize;
 use std::fs;
 
-include!("package_identity/catalog.rs");
+include!("catalog.rs");
 
-include!("package_identity/accepted_sources_and_destination_reject_aliases_and_special_objects.rs");
+include!("accepted_sources_and_destination_reject_aliases_and_special_objects.rs");

@@ -14,9 +14,9 @@ fn corrective_lease() -> (WorkPackage, LeaseSpec, ScopePolicy) {
         "validator/src/distribution/runtime_probe.rs",
         "validator/src/plugin_product/host_lifecycle/session.rs",
         "validator/tests/distribution_contract/isolated_journey.rs",
-        "validator/tests/distribution_contract/journey_adversarial.rs",
+        "validator/tests/distribution_contract/journey_adversarial/mod.rs",
         "validator/tests/distribution_contract/observation_races.rs",
-        "validator/tests/distribution_contract/runtime_session.rs",
+        "validator/tests/distribution_contract/runtime_session/mod.rs",
         "validator/tests/plugin_host_lifecycle_contract/negative.rs",
         "validator/tests/supported_package_identity_contract.rs",
     ]);

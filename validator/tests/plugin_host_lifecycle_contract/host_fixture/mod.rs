@@ -18,8 +18,8 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Duration;
 
-include!("host_fixture/context.rs");
+include!("context.rs");
 
-include!("host_fixture/reader_empty.rs");
+include!("reader_empty.rs");
 
-include!("host_fixture/ui_document.rs");
+include!("ui_document.rs");

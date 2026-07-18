@@ -48,11 +48,11 @@ mod loaded_executable_identity;
 #[cfg(target_os = "macos")]
 #[path = "object_bound_launch.rs"]
 mod object_bound_launch;
-#[path = "observation_digest.rs"]
+#[path = "observation/digest.rs"]
 mod observation_digest;
-#[path = "observation_failure.rs"]
+#[path = "observation/failure.rs"]
 mod observation_failure;
-#[path = "observation_lifecycle.rs"]
+#[path = "observation/lifecycle.rs"]
 mod observation_lifecycle;
 #[path = "output_drain.rs"]
 mod output_drain;

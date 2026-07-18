@@ -8,7 +8,7 @@ use std::sync::Arc;
 use std::sync::atomic::AtomicBool;
 
 #[cfg(target_os = "macos")]
-#[path = "bounds/observation_budget.rs"]
+#[path = "observation_budget.rs"]
 mod observation_budget;
 
 const MAX_ARGUMENTS: usize = 4096;

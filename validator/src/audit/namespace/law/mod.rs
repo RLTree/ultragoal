@@ -1,4 +1,5 @@
 mod cache;
+mod current_root;
 pub(crate) mod path_rules;
 mod plugin_interfaces;
 use crate::audit::namespace::law::path_rules::{mixed_domain_folder, root_route_allowed};
@@ -11,6 +12,8 @@ use std::path::Path;
 const CLASS_REGISTRY_PATH: &str = "docs/namespace-class-registry.json";
 const STANDARD_ID: &str = "namespace-progressive-disclosure";
 const TRACE_OBLIGATION_ID: &str = "namespace-progressive-disclosure";
+
+pub use current_root::failures as current_root_failures;
 
 pub fn package_failures(root: &Path, manifest: &Value) -> Vec<String> {
     let mut out = value_failures(root, manifest);

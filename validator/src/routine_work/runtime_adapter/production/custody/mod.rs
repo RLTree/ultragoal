@@ -6,7 +6,7 @@ use super::*;
 mod observations;
 #[path = "store/mod.rs"]
 mod store;
-#[path = "transaction.rs"]
+#[path = "transaction/mod.rs"]
 mod transaction;
 
 #[cfg(all(test, target_vendor = "apple"))]

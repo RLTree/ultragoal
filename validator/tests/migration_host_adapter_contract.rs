@@ -1,9 +1,9 @@
 #[path = "../src/migration/mod.rs"]
 mod migration;
 
-#[path = "migration_host_adapter_contract/adversarial.rs"]
+#[path = "migration_host_adapter_contract/adversarial/mod.rs"]
 mod adversarial;
-#[path = "migration_host_adapter_contract/host_fixture.rs"]
+#[path = "migration_host_adapter_contract/host_fixture/mod.rs"]
 mod host_fixture;
 #[path = "migration_host_adapter_contract/positive.rs"]
 mod positive;

@@ -67,7 +67,7 @@ fn expected_members() -> BTreeMap<&'static str, Authority> {
             Authority::RootRead,
         ),
         (
-            "validator/tests/plugin_product_contract/dependency_closure.rs",
+            "validator/tests/plugin_product_contract/dependency_closure/mod.rs",
             Authority::WorkerOwned,
         ),
         (
@@ -79,11 +79,11 @@ fn expected_members() -> BTreeMap<&'static str, Authority> {
             Authority::WorkerOwned,
         ),
         (
-            "validator/tests/plugin_product_contract/source_contract.rs",
+            "validator/tests/plugin_product_contract/source_contract/mod.rs",
             Authority::WorkerOwned,
         ),
         (
-            "validator/tests/plugin_product_contract/zero_write.rs",
+            "validator/tests/plugin_product_contract/zero_write/mod.rs",
             Authority::WorkerOwned,
         ),
     ])

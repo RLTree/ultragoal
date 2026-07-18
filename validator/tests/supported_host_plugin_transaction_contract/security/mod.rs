@@ -10,16 +10,16 @@ use std::os::unix::fs::{PermissionsExt, symlink};
 use std::os::unix::net::UnixListener;
 
 mod lineage_corruption {
-    include!("security/lineage_corruption.rs");
+    include!("lineage_corruption.rs");
 }
 mod package_and_journal_substitution {
-    include!("security/package_and_journal_substitution.rs");
+    include!("package_and_journal_substitution.rs");
 }
 mod terminal_predecessor_binding {
-    include!("security/terminal_predecessor_binding.rs");
+    include!("terminal_predecessor_binding.rs");
 }
 mod unsafe_surface_objects {
-    include!("security/unsafe_surface_objects.rs");
+    include!("unsafe_surface_objects.rs");
 }
 
 fn replace_once(text: &str, from: &str, to: &str) -> String {

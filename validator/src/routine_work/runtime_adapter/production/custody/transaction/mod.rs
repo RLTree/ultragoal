@@ -9,7 +9,7 @@ use super::super::reservation_failure::{
     CapturedCleanup, FailureBinding, PrimaryFailure, TransactionFailure, failure_record,
     finish_error, finish_execution, finish_panic, observe, observed_transition,
 };
-#[path = "transaction/owner.rs"]
+#[path = "owner.rs"]
 mod owner;
 
 use super::observations::*;

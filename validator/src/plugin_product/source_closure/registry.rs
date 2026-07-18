@@ -96,7 +96,7 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             RustSource,
         ),
         (
-            "validator/tests/plugin_product_contract/dependency_closure.rs",
+            "validator/tests/plugin_product_contract/dependency_closure/mod.rs",
             VerifierInput,
         ),
         (
@@ -104,7 +104,7 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             VerifierInput,
         ),
         (
-            "validator/tests/plugin_product_contract/lifecycle_contract.rs",
+            "validator/tests/plugin_product_contract/lifecycle_contract/mod.rs",
             VerifierInput,
         ),
         (
@@ -112,7 +112,7 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             VerifierInput,
         ),
         (
-            "validator/tests/plugin_product_contract/product_fitness_contract.rs",
+            "validator/tests/plugin_product_contract/product_fitness_contract/mod.rs",
             VerifierInput,
         ),
         (
@@ -120,11 +120,11 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             VerifierInput,
         ),
         (
-            "validator/tests/plugin_product_contract/source_contract.rs",
+            "validator/tests/plugin_product_contract/source_contract/mod.rs",
             VerifierInput,
         ),
         (
-            "validator/tests/plugin_product_contract/zero_write.rs",
+            "validator/tests/plugin_product_contract/zero_write/mod.rs",
             VerifierInput,
         ),
         (

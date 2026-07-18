@@ -14,23 +14,23 @@ fn reopen(fixture: &Fixture) -> Result<DarwinHostTransactionAdapter, DarwinHostE
 }
 
 mod effect_boundary_authority {
-    include!("recovery/effect_boundary_authority.rs");
+    include!("effect_boundary_authority.rs");
 }
 mod effect_failure_recovery {
-    include!("recovery/effect_failure_recovery.rs");
+    include!("effect_failure_recovery.rs");
 }
 mod effect_interruption {
-    include!("recovery/effect_interruption.rs");
+    include!("effect_interruption.rs");
 }
 mod lineage_publication_recovery {
-    include!("recovery/lineage_publication_recovery.rs");
+    include!("lineage_publication_recovery.rs");
 }
 mod repeated_recovery {
-    include!("recovery/repeated_recovery.rs");
+    include!("repeated_recovery.rs");
 }
 mod reservation_races {
-    include!("recovery/reservation_races.rs");
+    include!("reservation_races.rs");
 }
 mod terminal_lineage_recovery {
-    include!("recovery/terminal_lineage_recovery.rs");
+    include!("terminal_lineage_recovery.rs");
 }

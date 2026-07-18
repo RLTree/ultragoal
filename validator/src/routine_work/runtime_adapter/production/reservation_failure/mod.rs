@@ -1,6 +1,6 @@
 use super::*;
 
-#[path = "reservation_failure/completion.rs"]
+#[path = "completion.rs"]
 mod completion;
 pub(super) use completion::{finish_error, finish_execution, finish_panic};
 

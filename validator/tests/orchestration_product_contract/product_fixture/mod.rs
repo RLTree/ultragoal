@@ -7,6 +7,6 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 
-include!("product_fixture/next_root.rs");
+include!("next_root.rs");
 
-include!("product_fixture/reconcile_permit.rs");
+include!("reconcile_permit.rs");

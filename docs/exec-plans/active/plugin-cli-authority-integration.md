@@ -123,8 +123,10 @@ and reruns N01-N11.
 
 The root records prelaunch gates with owner, command, status, and the derived
 clean candidate: compile (blocked), namespace
-(`target/debug/ultragoal --root . namespace check --strict --no-write --jobs 8`),
-and standards (`scripts/check-agent-standards .`). Four-persona exposure
+(`target/debug/ultragoal --root . check strict --claim namespace-progressive-disclosure`),
+and standards (`scripts/check-agent-standards .`). The namespace adapter
+evaluates current governed source and plugin-interface names without consuming
+the N02-owned package manifest closure. Four-persona exposure
 is a product/release/completion gate, not a prelaunch lane-selection gate. No
 lane is selectable until every applicable prelaunch gate is current and a
 run-scoped lease is issued.

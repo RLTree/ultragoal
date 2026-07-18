@@ -12,6 +12,6 @@ use crate::distribution_fixture::digest;
 use crate::package_journey_fixture::JourneyFixture;
 use std::fs;
 
-include!("package_output/corrupt_after_write.rs");
+include!("corrupt_after_write.rs");
 
-include!("package_output/every_identity_dimension_is_checked_before_any_effect.rs");
+include!("every_identity_dimension_is_checked_before_any_effect.rs");

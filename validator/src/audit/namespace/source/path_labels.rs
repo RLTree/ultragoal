@@ -1,7 +1,7 @@
 use super::{
     label_patterns::{
-        GOAL_WORK_PAIRS, adjacent_numbered_label, adjacent_tokens, generic_bucket_label,
-        repo_entrypoint_context_label, source_name_violation_label,
+        adjacent_numbered_label, adjacent_tokens, generic_bucket_label,
+        source_name_violation_label, GOAL_WORK_PAIRS,
     },
     semantic_tokens::semantic_tokens,
 };
@@ -15,9 +15,6 @@ pub(crate) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str>
         .collect::<String>();
     let tokens = semantic_tokens(tail);
     if let Some(label) = source_name_violation_label(&tokens, &compact) {
-        return Some(label);
-    }
-    if let Some(label) = repo_entrypoint_context_label(&tokens) {
         return Some(label);
     }
     if lower.contains("production_proof")
@@ -35,7 +32,7 @@ pub(crate) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str>
         return Some("root_phase");
     }
     for &(first, second, compact_name, label) in GOAL_WORK_PAIRS {
-        if compact == compact_name || adjacent_tokens(&tokens, first, second) {
+        if name_segment_has_pair(tail, first, second, compact_name) {
             return Some(label);
         }
     }
@@ -106,7 +103,7 @@ pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'stat
         return Some("fitting");
     }
     for &(first, second, compact_name, label) in GOAL_WORK_PAIRS {
-        if compact.contains(compact_name) || adjacent_tokens(&tokens, first, second) {
+        if name_segment_has_pair(text, first, second, compact_name) {
             return Some(label);
         }
     }
@@ -114,9 +111,6 @@ pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'stat
         && tokens.iter().any(|token| token == "progress")
     {
         return Some("checkpoint_progress");
-    }
-    if let Some(label) = repo_entrypoint_context_label(&tokens) {
-        return Some(label);
     }
     if adjacent_numbered_label(&tokens, "phase") {
         return Some("phase_number");
@@ -154,6 +148,21 @@ fn authority_like_string(text: &str) -> bool {
                 && trimmed
                     .chars()
                     .all(|ch| ch.is_ascii_alphanumeric() || matches!(ch, '_' | '-' | '.'))))
+}
+
+pub(super) fn authority_like_literal(text: &str) -> bool {
+    authority_like_string(text)
+}
+
+fn name_segment_has_pair(text: &str, first: &str, second: &str, compact_name: &str) -> bool {
+    text.split('/').any(|segment| {
+        let lower = segment.to_ascii_lowercase();
+        let compact = lower
+            .chars()
+            .filter(|ch| ch.is_ascii_alphanumeric())
+            .collect::<String>();
+        compact == compact_name || adjacent_tokens(&semantic_tokens(segment), first, second)
+    })
 }
 
 fn telemetry_instance_literal(text: &str) -> bool {

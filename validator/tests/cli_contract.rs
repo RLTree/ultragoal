@@ -2,11 +2,11 @@ mod context {
     pub use ultragoal::context::*;
 }
 
-#[path = "cli_contract/context_boundaries.rs"]
+#[path = "cli_contract/context/boundaries.rs"]
 mod context_boundaries;
-#[path = "cli_contract/context_identity.rs"]
+#[path = "cli_contract/context/identity.rs"]
 mod context_identity;
-#[path = "cli_contract/context_scenario.rs"]
+#[path = "cli_contract/context/scenario.rs"]
 mod context_scenario;
 pub(crate) use context_scenario::serial;
 

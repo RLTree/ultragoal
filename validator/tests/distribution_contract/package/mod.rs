@@ -7,6 +7,6 @@ use crate::package_manifest::{manifest, spec, write_sources};
 use serde_json::{Value, json};
 use std::fs;
 
-include!("package/mutation.rs");
+include!("mutation.rs");
 
-include!("package/package_inputs_reject_symlink_hardlink_and_special_files.rs");
+include!("package_inputs_reject_symlink_hardlink_and_special_files.rs");

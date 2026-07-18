@@ -194,8 +194,8 @@ fn executable_substitution_during_probe_fails_final_revalidation() {
     assert_eq!(result.unwrap_err().id(), ErrorId::ObjectChanged);
 }
 
-include!("runtime_session/inode_swap.rs");
+include!("inode_swap.rs");
 
-include!("runtime_session/install_authority.rs");
+include!("install_authority.rs");
 
-include!("runtime_session/install_staleness.rs");
+include!("install_staleness.rs");

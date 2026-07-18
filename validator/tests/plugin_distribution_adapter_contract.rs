@@ -6,7 +6,7 @@ mod lifecycle_fixture;
 mod negative;
 #[path = "plugin_distribution_adapter_contract/positive.rs"]
 mod positive;
-#[path = "plugin_distribution_adapter_contract/recovery.rs"]
+#[path = "plugin_distribution_adapter_contract/recovery/mod.rs"]
 mod recovery;
 #[path = "plugin_distribution_adapter_contract/security.rs"]
 mod security;

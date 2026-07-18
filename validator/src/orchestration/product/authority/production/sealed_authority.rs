@@ -5,7 +5,7 @@
 //! sibling child of `production` from inheriting field, signer, or ledger
 //! construction authority.
 
-#[path = "execution_transaction.rs"]
+#[path = "execution_transaction/mod.rs"]
 mod execution_transaction;
 #[path = "ledger.rs"]
 mod ledger;

@@ -226,5 +226,5 @@ impl ScopedInstall {
     }
 }
 
-include!("file/install_postimage_cas.rs");
-include!("file/scoped_install.rs");
+include!("install_postimage_cas.rs");
+include!("scoped_install.rs");

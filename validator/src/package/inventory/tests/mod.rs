@@ -92,7 +92,7 @@ fn package_digest_rejects_builder_contract_resources() {
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/package.md"), "package resource").expect("package doc");
     std::fs::write(
-        root.join("docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"),
+        root.join("docs/package-contract-compatibility-prompt-2026-06-25.md"),
         "builder contract",
     )
     .expect("parent prompt");
@@ -106,7 +106,7 @@ fn package_digest_rejects_builder_contract_resources() {
     write_manifest(&root, json!(["docs/package.md"]));
     let before = super::package_digest(&root).expect("digest before");
     std::fs::write(
-        root.join("docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"),
+        root.join("docs/package-contract-compatibility-prompt-2026-06-25.md"),
         "updated builder contract",
     )
     .expect("parent prompt update");
@@ -120,7 +120,7 @@ fn package_digest_rejects_builder_contract_resources() {
 
     write_manifest(
         &root,
-        json!(["docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"]),
+        json!(["docs/package-contract-compatibility-prompt-2026-06-25.md"]),
     );
     let err = super::package_digest(&root).expect_err("builder contract listed");
     assert!(

@@ -4,5 +4,6 @@ mod label_patterns;
 pub(crate) mod path_labels;
 mod rejection_ownership;
 mod semantic_tokens;
+mod source_shape;
 pub(crate) mod string_labels;
 pub(crate) mod topology;

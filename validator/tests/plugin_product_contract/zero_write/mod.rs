@@ -11,6 +11,6 @@ use std::os::unix::ffi::OsStrExt;
 #[cfg(unix)]
 use std::os::unix::fs::{MetadataExt, PermissionsExt};
 
-include!("zero_write/secret.rs");
+include!("secret.rs");
 
-include!("zero_write/every_candidate_read_help_and_query_operation_is_recursively_zero_write.rs");
+include!("every_candidate_read_help_and_query_operation_is_recursively_zero_write.rs");

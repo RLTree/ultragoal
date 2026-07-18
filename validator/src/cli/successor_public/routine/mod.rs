@@ -33,11 +33,11 @@ use std::path::{Path, PathBuf};
 
 #[path = "invocation_binding.rs"]
 mod invocation_binding;
-#[path = "source_configuration.rs"]
+#[path = "source/configuration.rs"]
 mod source_configuration;
-#[path = "source_context.rs"]
+#[path = "source/context.rs"]
 mod source_context;
-#[path = "source_selection.rs"]
+#[path = "source/selection.rs"]
 mod source_selection;
 
 pub(crate) use invocation_binding::*;

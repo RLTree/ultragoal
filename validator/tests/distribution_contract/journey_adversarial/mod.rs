@@ -8,10 +8,6 @@ use crate::distribution_fixture::digest;
 use crate::package_journey_fixture::{JourneyFixture, renamed, write_scoped};
 use std::fs;
 
-include!(
-    "journey_adversarial/wrong_scope_identity_duplicates_and_registered_hidden_fail_closed.rs"
-);
+include!("wrong_scope_identity_duplicates_and_registered_hidden_fail_closed.rs");
 
-include!(
-    "journey_adversarial/scoped_reads_reject_symlink_hardlink_and_special_file_substitution.rs"
-);
+include!("scoped_reads_reject_symlink_hardlink_and_special_file_substitution.rs");

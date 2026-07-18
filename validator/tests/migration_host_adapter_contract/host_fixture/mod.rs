@@ -14,6 +14,6 @@ use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-include!("host_fixture/product_version.rs");
+include!("product_version.rs");
 
-include!("host_fixture/registry_bytes.rs");
+include!("registry_bytes.rs");

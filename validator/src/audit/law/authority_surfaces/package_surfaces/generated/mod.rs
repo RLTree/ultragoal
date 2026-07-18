@@ -4,6 +4,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
 #[cfg(all(test, unix))]
+#[path = "../generated_tests/mod.rs"]
 mod batch_tests;
 
 pub(super) struct State {

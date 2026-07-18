@@ -1,12 +1,12 @@
 use super::super::super::command_contract::LegacyCommand;
 
-#[path = "route_catalog/control.rs"]
+#[path = "control.rs"]
 mod control;
-#[path = "route_catalog/legacy_routes.rs"]
+#[path = "legacy_routes.rs"]
 mod legacy_routes;
-#[path = "route_catalog/observe.rs"]
+#[path = "observe.rs"]
 mod observe;
-#[path = "route_spec.rs"]
+#[path = "../route_spec.rs"]
 mod route_spec;
 
 pub(super) use route_spec::RouteSpec;

@@ -1,7 +1,7 @@
-#[path = "child_refusal_process.rs"]
+#[path = "refusal_process.rs"]
 mod refusal_process;
 #[cfg(target_os = "macos")]
-#[path = "child_authority_same_executable_parent.rs"]
+#[path = "authority_same_executable_parent.rs"]
 mod same_executable_parent;
 
 use super::scenario::tree;

@@ -18,6 +18,9 @@ fn strict_claim_boundary_accepts_only_identifier_value() {
     let valid = invocation(ParsedValue::Identifier(SELF_LAW_CLAIM.to_owned()));
     assert_eq!(claim_id(&valid), Some(SELF_LAW_CLAIM));
 
+    let namespace = invocation(ParsedValue::Identifier(NAMESPACE_LAW_CLAIM.to_owned()));
+    assert_eq!(claim_id(&namespace), Some(NAMESPACE_LAW_CLAIM));
+
     let invalid = invocation(ParsedValue::Flag);
     assert_eq!(claim_id(&invalid), None);
 }
