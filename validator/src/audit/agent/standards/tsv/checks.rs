@@ -43,23 +43,6 @@ pub fn failures(
     out
 }
 
-pub fn audit_row_failures(root: &Path, row: &Value) -> Vec<String> {
-    let Some(row) = row.as_object() else {
-        return vec!["agent_standards_audit_evidence_invalid".to_string()];
-    };
-    let row = row
-        .iter()
-        .map(|(key, value)| (key.clone(), value.as_str().unwrap_or("").to_string()))
-        .collect::<BTreeMap<_, _>>();
-    if field(&row, "audit_status") == "pass" && evidence_invalid(root, &row) {
-        return vec![format!(
-            "agent_standards_audit_evidence_invalid:{}",
-            field(&row, "standard_id")
-        )];
-    }
-    Vec::new()
-}
-
 fn row_drift_failures(rows: &[BTreeMap<String, String>], json_rows: &Value) -> Vec<String> {
     let mut out = Vec::new();
     let row_index = rows

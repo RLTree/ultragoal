@@ -15,20 +15,6 @@ pub(crate) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
     out
 }
 
-pub(crate) fn failures_with_candidate(
-    root: &Path,
-    receipt: &Value,
-    target_digest: &str,
-) -> Vec<String> {
-    let parsed = FitRepoReceipt::from_value(receipt);
-    let mut out = base_failures_with_candidate(root, &parsed, Ok(target_digest.to_string()));
-    out.extend(classification_failures(&parsed));
-    out.extend(check_artifact_failures(root, &parsed));
-    out.extend(blocker_failures(&parsed));
-    out.extend(digest_failures(receipt, &parsed));
-    out
-}
-
 pub(crate) fn canonical_digest(receipt: &Value) -> String {
     let mut canonical = receipt.clone();
     if let Some(obj) = canonical.as_object_mut() {

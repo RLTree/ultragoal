@@ -209,7 +209,7 @@ claim and representative product or release proof.
   public test dispatch. Follow-up commits `549770c96` and `7799d5973` retired
   disconnected validator-receipt writers, audit artifact aggregation, and
   authority-inventory projections. The affected production-library check now
-  reports 301 deny-warning errors, down from 664, with no unresolved reference
+  reports 286 deny-warning errors, down from 664, with no unresolved reference
   to the retired claim/review or audit-writer graphs. Of these, 194 belong to
   the accepted N09 discovery kernel awaiting production adoption and 59 belong
   to migration-blocked lane authority; neither is deleted to manufacture a
@@ -226,7 +226,10 @@ claim and representative product or release proof.
   variants of the text guards were then retired while preserving the four live
   file-backed self-law checks. Package schema validation now has one live
   scheduler-backed implementation instead of two parallel copies; unused
-  targeted-schema reporting and scheduler-metric projections were retired.
+  targeted-schema reporting and scheduler-metric projections were retired. The
+  audit surface then dropped an unconsumed semantic-receipt Rust model whose
+  schema-owned validation remains live, plus test-only product and standards
+  projection adapters that duplicated the file-backed production routes.
   This is not a compile pass; no suppression or dummy reachability is allowed.
 - `LANE_REGISTRY.json` still binds the retired authority-reconciliation and
   review paths in its protected checkpoint, P0 lease, consumed set, and plan

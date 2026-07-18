@@ -109,14 +109,6 @@ fn mandatory_law_surfaces_and_tsv_evidence_fail_closed() {
             "{expected}: {tsv_failures:?}"
         );
     }
-    let audit_row = crate::audit::agent::standards::tsv::checks::audit_row_failures(
-        &root,
-        &json!({"standard_id":"row1","audit_status":"pass","evidence_path":"missing.txt","evidence_digest":crate::self_tests::boundaries::workspace_fixtures::sha('2')}),
-    );
-    assert!(contains(
-        &audit_row,
-        "agent_standards_audit_evidence_invalid:row1"
-    ));
     std::fs::remove_dir_all(root).expect("cleanup mandatory law audit");
 }
 
