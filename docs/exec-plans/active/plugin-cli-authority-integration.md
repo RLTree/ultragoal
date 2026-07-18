@@ -268,6 +268,49 @@ readiness, release, and completion.
 Routine source-freeze review uses GPT-5.6 Terra with high reasoning on the
 standard tier. GPT-5.6 Sol with high reasoning is reserved for the bounded
 four-reviewer team at material product, release, and completion milestones.
+
+### Reviewed remaining macro-lanes
+
+The adopted N08-N17 dependency graph is unchanged. Operational work is grouped
+into the following nonoverlapping waves so implementation can run in parallel
+without making merge reconciliation the dominant cost:
+
+1. **Plugin daily driver and agent adoption.** Issue N08 `WS-PLUGIN` and N09
+   `WS-AGENTS` from the same exact clean source base as two managed worktrees.
+   Root retains shared module roots, public dispatch/catalog, Cargo, schemas,
+   generated authority, registries, and claims. Accept and integrate one lane
+   at a time; completion order does not promote a dependent claim.
+2. **Orchestration reobservation and evaluation reliability.** After N09 lands,
+   root reobserves the already-ancestral N10 source authority without replaying
+   its branch. After N08 lands, preserve N11's unique clean `WS-EVAL` tip and
+   reconcile current root into that lane without reset, destructive rebase, or
+   loss of its unique delta. N10 and N11 may proceed concurrently but integrate
+   separately.
+3. **Claim-kernel milestone.** Root completes N12 only after current N10 and
+   N11. The exact product-kernel freeze receives the bounded four-persona
+   Sol/high milestone review; routine source reviews remain Terra/high.
+4. **Migration and claim reproof.** N14 owns one `WS-MIGRATION` worktree after
+   N12-A. Integrate N14 before N14 proof and root N12-B invalidation/reproof.
+   N14 and N15 never overlap because both own `WS-MIGRATION`.
+5. **Installed journeys and retirement.** Preliminary read-only N13 journey
+   observation may overlap N15 implementation after N12-B. N15 integrates and
+   is installed before the final N13 rerun. N13 may not mutate the shared
+   installed surface, and every surface invalidated by N15 is rerun.
+6. **Release and completion.** N16 begins only after the post-N15 N13 result;
+   root integrates N16 before N17 reconciliation. Product, release, and
+   completion reviews run only at exact claim boundaries and may share one
+   byte-identical candidate only when the same evidence legitimately supports
+   both boundaries.
+
+Every wave refreshes exact lease base, dependency identities, and affected
+gates before work begins. At most two implementation worktrees are active, and
+the integration queue holds at most one candidate plus one genuinely
+independent repair stream. Branch creation precedes worktree creation. Each
+lane reuses one worktree for its bounded review/fix loop, then closes the task
+and deletes reproducible target, cache, temp, and scratch state immediately
+after verified integration. A bounded fresh Sol/Max adversarial pass found no
+remaining material dependency, overlap, or invalidation defect in this route;
+that planning judgment is intentionally not persisted as a separate receipt.
 One review returns the complete material invariant-level finding set; after a
 focused correction, one exact correction review closes the loop. Stylistic
 papercuts do not keep a lane in rework.

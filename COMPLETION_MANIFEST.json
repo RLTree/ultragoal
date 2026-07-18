@@ -32,9 +32,9 @@
     {"id": "CL-RELEASE", "title": "Release readiness", "description": "Withheld: package, install, discovery, migration, and release decisions are not closed.", "claim_scope": "required", "claim_kind": "package_release", "status": "withheld_claim", "claim_surface": "package", "allowed_evidence_surfaces": ["package", "installed_app", "runtime_cli"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-013"},
     {"id": "CL-COMPLETION", "title": "Integrated goal completion", "description": "Withheld: required claims, goal binding, validator evidence, and cleanup remain unresolved.", "claim_scope": "required", "claim_kind": "static_contract", "status": "withheld_claim", "claim_surface": "root_integration", "allowed_evidence_surfaces": ["root_integration"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-014"}
   ],
-  "registry_preimage_digest": "sha256:8779f60b3ab424a09e8938a3fac4f104c334eb91013e606346aff07473e185a7",
+  "registry_preimage_digest": "sha256:0208a48ad2aac4a6bcd567094f72b004f5cc9375d13edb57258ad6aeeda25fd5",
   "verification_backlog_path": "VERIFICATION_BACKLOG.json",
-  "verification_backlog_digest": "sha256:635b02d03c070868e25c54e7d84e29461cac065706401842979e5be211dacc5d",
+  "verification_backlog_digest": "sha256:10ff40515af106b19be414395cff88e52500d3934e43b006efbf8350ca0e1203",
   "validator_receipts": [],
   "generated_at": "2026-07-18T14:01:10-07:00"
 }

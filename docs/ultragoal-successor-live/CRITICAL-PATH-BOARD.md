@@ -43,6 +43,12 @@ Their source evidence does not activate
 installed product claims. Shared schemas, generated authority, public dispatch,
 claims, and integration remain root-owned.
 
+The reviewed operational route preserves the adopted graph: N08 and N09 run as
+disjoint managed worktrees; root N10 reobservation and a preserved-tip N11
+evaluation refresh follow their respective dependencies; N12 is the next
+milestone; N14 precedes N12-B reproof; final N13 installed journeys rerun after
+N15 retirement; N16 precedes root N17. No normative node or claim was added.
+
 The last broad diagnostic baseline and the table below are historical context,
 not current candidate proof or a readiness surface.
 Rule: every digest-changing authority edit immediately reopens dependent evidence. Percentages are non-authoritative.
