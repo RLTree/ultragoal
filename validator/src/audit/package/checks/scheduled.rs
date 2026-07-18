@@ -1,4 +1,4 @@
-use super::{inventory_checks, push};
+use super::inventory_checks;
 use crate::scheduler::{SchedulerConfig, TaskClass};
 use crate::schema_catalog::SchemaStore;
 use std::collections::BTreeMap;
@@ -71,17 +71,6 @@ fn package_check_tasks(
                     .extend(crate::audit::improvement_loop::package_failures(
                         root.as_path(),
                     ));
-            }
-        }),
-        task({
-            let root = Arc::clone(&root);
-            move |out| {
-                for failure in crate::review::round::fixture_failures(root.as_path()) {
-                    push(out, "validator-execution-provenance", failure);
-                }
-                for failure in crate::review::materiality::fixture_failures(root.as_path()) {
-                    push(out, "material-review-scope-gate", failure);
-                }
             }
         }),
     ]

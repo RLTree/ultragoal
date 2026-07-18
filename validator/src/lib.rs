@@ -11,10 +11,7 @@ mod api_witness;
 mod archive;
 mod argument_parser;
 mod audit;
-mod claim;
 mod claim_semantics;
-#[cfg(test)]
-mod claims;
 mod cli;
 pub use cli::capture;
 #[cfg(test)]
@@ -42,13 +39,11 @@ mod plugin_manifest;
 pub mod plugin_product;
 mod red;
 pub mod repository_fit;
-mod review;
 pub mod routine_work;
 mod scheduler;
 mod schema_catalog;
 #[cfg(test)]
 pub(crate) mod self_tests;
-mod semantic;
 mod skill_links;
 pub mod state;
 #[cfg(not(test))]

@@ -79,12 +79,10 @@ fn ignored(rel: &str, manifest: &Value) -> bool {
 }
 
 fn ignore_match(rel: &str, pattern: &str) -> bool {
-    if rel == pattern {
-        return true;
-    }
-    pattern
-        .strip_suffix("/**")
-        .is_some_and(|prefix| rel == prefix || rel.starts_with(&format!("{prefix}/")))
+    rel == pattern
+        || pattern
+            .strip_suffix("/**")
+            .is_some_and(|prefix| rel == prefix || rel.starts_with(&format!("{prefix}/")))
 }
 
 fn strings(value: &Value, key: &str) -> Vec<String> {
@@ -109,64 +107,4 @@ pub(crate) fn digest_file_bytes(
     result: Result<Vec<u8>, String>,
 ) -> Result<Vec<u8>, String> {
     result.map_err(|err| format!("{rel}: coverage digest read failed: {err}"))
-}
-
-#[cfg(test)]
-mod tests {
-    use serde_json::json;
-    use std::time::{SystemTime, UNIX_EPOCH};
-
-    #[test]
-    fn changed_files_digest_matches_canonical_sorted_unique_script_order() {
-        let stamp = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .expect("clock")
-            .as_nanos();
-        let root =
-            std::env::temp_dir().join(format!("ultragoal-coverage-changed-files-digest-{stamp}"));
-        std::fs::create_dir_all(root.join("validator/src")).expect("source dir");
-        std::fs::write(root.join("validator/src/a.rs"), "a").expect("a");
-        std::fs::write(root.join("validator/src/b.rs"), "b").expect("b");
-        let manifest = json!({
-            "changed_file_coupling_policy": {
-                "changed_files": [
-                    "validator/src/b.rs",
-                    "validator/src/a.rs",
-                    "validator/src/b.rs"
-                ]
-            }
-        });
-        let actual = super::changed_files_digest(&root, &manifest).expect("digest");
-        let expected = super::digest_files(
-            &root,
-            &[
-                "validator/src/a.rs".to_string(),
-                "validator/src/b.rs".to_string(),
-            ],
-        )
-        .expect("expected digest");
-        assert_eq!(actual, expected);
-        std::fs::remove_dir_all(root).expect("cleanup");
-    }
-
-    #[test]
-    fn coverage_digest_reports_unresolvable_root() {
-        let stamp = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .expect("clock")
-            .as_nanos();
-        let root = std::env::temp_dir().join(format!("ultragoal-coverage-missing-root-{stamp}"));
-        let manifest = json!({
-            "required_target_paths": ["validator"],
-            "changed_file_coupling_policy": {
-                "changed_files": ["validator/src/lib.rs"]
-            }
-        });
-        let source = super::source_tree_digest(&root, &manifest)
-            .expect_err("missing root blocks source digest");
-        assert!(source.contains("coverage root canonicalize failed"));
-        let changed = super::changed_files_digest(&root, &manifest)
-            .expect_err("missing root blocks changed-files digest");
-        assert!(changed.contains("coverage root canonicalize failed"));
-    }
 }

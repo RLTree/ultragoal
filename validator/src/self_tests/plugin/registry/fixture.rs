@@ -116,12 +116,12 @@ pub(crate) fn fail_closed_raw_observation(current: &str) -> Value {
 }
 
 fn agent_types() -> Vec<Value> {
-    crate::review::round::config::REVIEW_ROLES
+    crate::agent_roles::CANONICAL_AGENT_ROLES
         .iter()
-        .map(|spec| {
+        .map(|role| {
         json!({
-            "role": spec.role_name,
-            "agent_manifest_path": spec.agent_manifest_path,
+            "role": role.name,
+            "agent_manifest_path": role.manifest_path,
             "agent_manifest_digest": crate::self_tests::boundaries::workspace_fixtures::sha('a'),
             "source_manifest_present": true,
             "sandbox_mode": "read-only",

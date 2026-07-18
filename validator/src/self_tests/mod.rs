@@ -1,6 +1,5 @@
 pub(crate) mod audit;
 pub(crate) mod boundaries;
-pub(crate) mod claim;
 pub(crate) mod cli;
 pub(crate) mod command;
 pub(crate) mod coverage;
@@ -11,11 +10,8 @@ pub(crate) mod plugin;
 pub(crate) mod product;
 pub(crate) mod receipts;
 pub(crate) mod red;
-pub(crate) mod review;
 pub(crate) mod rust;
 pub(crate) mod schema;
-pub(crate) mod semantic;
 pub(crate) mod session;
-pub(crate) mod source_obligations;
 pub(crate) mod standards;
 pub(crate) mod text;

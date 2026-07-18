@@ -12,7 +12,6 @@ pub(crate) mod snapshot;
 
 pub use closure::{final_bytecode_failures, inventory_closure_failures};
 pub(crate) use draft_manifest::DraftPackageManifest;
-pub(crate) use payload::stable_package_payload;
 
 pub const PACKAGE_DIGEST_EXCLUDED_PREFIXES: &[&str] = &["validation_artifacts/"];
 pub const PACKAGE_DIGEST_EXCLUDED_PATHS: &[&str] = &[];
