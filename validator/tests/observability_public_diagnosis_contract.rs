@@ -1,11 +1,15 @@
 #![cfg(unix)]
 
+#[path = "cli_contract/state/authority_inputs.rs"]
+mod authority_inputs;
 #[path = "observability_public_diagnosis_contract/boundaries.rs"]
 mod boundaries;
 #[path = "observability_public_diagnosis_contract/concurrency.rs"]
 mod concurrency;
 #[path = "observability_public_diagnosis_contract/journeys.rs"]
 mod journeys;
+#[path = "observability_authority_fixture.rs"]
+mod observability_authority_fixture;
 #[path = "observability_public_diagnosis_contract/recovery.rs"]
 mod recovery;
 #[path = "observability_public_diagnosis_contract/scenario/mod.rs"]

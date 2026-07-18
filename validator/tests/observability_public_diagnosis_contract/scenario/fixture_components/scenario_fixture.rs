@@ -181,6 +181,7 @@ pub(crate) fn event(
 
 pub(crate) fn copy_authority_inputs(root: &Path) {
     let live = live_root();
+    crate::observability_authority_fixture::copy_current_inventory_inputs(&live, root);
     let source = live.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
     let target = root.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
     fs::create_dir_all(&target).unwrap();

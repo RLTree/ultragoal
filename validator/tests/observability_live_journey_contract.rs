@@ -17,8 +17,12 @@ use std::thread;
 use std::time::{Duration, Instant};
 use ultragoal::observability::{EventQuery, EventStore, SemanticEvent, SemanticEventInput};
 
+#[path = "cli_contract/state/authority_inputs.rs"]
+mod authority_inputs;
 #[path = "observability_live_journey_cases/causal_correlation_journey.rs"]
 mod causal_correlation_journey;
+#[path = "observability_authority_fixture.rs"]
+mod observability_authority_fixture;
 #[path = "observability_live_journey_cases/process_output_fixture.rs"]
 mod process_output_fixture;
 #[path = "observability_live_journey_cases/scenario_fixture.rs"]
