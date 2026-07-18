@@ -455,8 +455,17 @@ claim and representative product or release proof.
   withheld.
 - The N02-N07 dependency chain is closed at source ceilings through the exact
   integrated N07 identity above. N08 and N09 form the next dependency antichain,
-  but stay unleased until the root standards-debt checkpoint and reviewed lane
-  restructure are complete. N09 must establish its production adoption path.
+  and stay unleased until the reviewed lane restructure is complete. The root
+  standards-debt checkpoint is accepted at source commit
+  `9405e863b2f05957dc1f4e56373ca5aba1013db1` / tree
+  `60acb3fc4587b50c1479c239b1bf3166d9f51c69`: the private successor binding is
+  consumed before dispatch, compile visibility remains compatibility-only,
+  only five fully supported command groups are active, partial `observe`
+  remains candidate, warning-denied production compilation passes, the exact
+  namespace/zero-write gate passes, agent standards pass 121 rows, and two
+  current inventory summaries are byte-identical. The inventory remains
+  blocked by 44 existing dependency/migration authority findings, so no source
+  or product claim is promoted. N09 must establish its production adoption path.
   Shared schemas, generated authority, public dispatch, claims, and integration
   remain root-owned.
 
