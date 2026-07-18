@@ -1,11 +1,13 @@
 use super::model::{BuildClosurePolicy, BuildInputKind, ClosureError, RequiredBuildInput};
 
+mod host_lifecycle;
+
 /// Exact source-local closure before root extends it from fresh dep-info.
 pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError> {
     use BuildInputKind::{
         CargoLock, CargoManifest, DynamicInput, RuntimeAuthority, RustSource, VerifierInput,
     };
-    let rows = [
+    let mut rows = vec![
         ("Cargo.lock", CargoLock),
         ("Cargo.toml", CargoManifest),
         ("validator/Cargo.toml", CargoManifest),
@@ -71,210 +73,9 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             "validator/src/plugin_product/lifecycle/plan/transitions.rs",
             RustSource,
         ),
-        (
-            "validator/src/plugin_product/host_lifecycle/capability_gate.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/diagnosis.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/error.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/mod.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/operation.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/report.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/surface_codec/decoding.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/surface_codec/mod.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/surface_codec/package_binding.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/surface_state/mod.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/surface_state/tests.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/surfaces.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/execution.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/journal/mod.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/journal/reservation.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/journal/transition.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/lineage/commit.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/lineage/mod.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/lineage/observation.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/lineage/validation.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/mod.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/product_api.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/record_validation.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/recovery.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/state_validation.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/surface/effect.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/surface/observation.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction/test_surface_seed.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction_codec/mod.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/darwin/transaction_plan.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/effect_request/external_host_effect_request_for_intent.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/effect_request/host_scope_authority.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/effect_request/mod.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/effect_request/prepared_external_host_effect_intent.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/error.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/issuance.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/mod.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/model.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/observation/host_observation_frame_binding_sha256.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/observation/mod.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/observation/observation_limit.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/observation/plugins_ui.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/observation/validate_frame.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/scope.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/session/host_lifecycle/binding.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/session/host_lifecycle/observation_capture.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/session/host_lifecycle/session.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/session/mod.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/session/ordered_layers.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/session/tests.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/host_lifecycle/verify.rs",
-            RustSource,
-        ),
+    ];
+    rows.extend(host_lifecycle::source_rows());
+    rows.extend([
         (
             "validator/src/plugin_product/product_fitness/mod.rs",
             RustSource,
@@ -313,6 +114,10 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
         ),
         (
             "validator/src/plugin_product/source_closure/registry.rs",
+            RustSource,
+        ),
+        (
+            "validator/src/plugin_product/source_closure/registry/host_lifecycle.rs",
             RustSource,
         ),
         (
@@ -421,7 +226,7 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
         ("validator/src/distribution/verify/mod.rs", RustSource),
         ("validator/src/orchestration/model.rs", VerifierInput),
         ("validator/src/orchestration/worker/mod.rs", VerifierInput),
-    ];
+    ]);
     BuildClosurePolicy::new(
         rows.into_iter()
             .map(|(path, kind)| RequiredBuildInput {
