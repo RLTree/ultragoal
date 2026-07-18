@@ -48,9 +48,9 @@ fn boundary_failures_are_behavioral() {
 
     let missing_root = root.join("missing-root");
     let item = json!({"path":"proof.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')});
-    let package_err =
-        crate::package::artifact::refs::validate_object(&missing_root, &item, "proof")
-            .expect_err("missing package root is rejected");
+    let package_err = crate::package::artifact::refs::ArtifactRef::from_object(&item, "proof")
+        .and_then(|artifact| artifact.validate(&missing_root, "proof"))
+        .expect_err("missing package root is rejected");
     assert!(package_err.contains("package root unavailable"));
     let _ = std::fs::remove_dir_all(root);
 }

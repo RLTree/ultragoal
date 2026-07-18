@@ -10,20 +10,3 @@ pub const REQUIRED_SKILLS: &[&str] = &[
     "improve-and-maintain",
     "product-journey-review",
 ];
-
-#[derive(Debug, Clone)]
-pub struct Failure {
-    pub check_id: String,
-    pub error: String,
-    pub detail: String,
-}
-
-impl Failure {
-    pub fn new(check_id: &str, error: &str, detail: impl Into<String>) -> Self {
-        Self {
-            check_id: check_id.to_string(),
-            error: error.to_string(),
-            detail: detail.into(),
-        }
-    }
-}

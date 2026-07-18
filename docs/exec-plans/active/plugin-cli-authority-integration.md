@@ -217,17 +217,17 @@ claim and representative product or release proof.
   roots are validated before discovery, and invalid roots prove zero authority
   I/O. This raises only a source-local public-observation ceiling: host
   discovery, runtime exposure, package/install/cache identity, and claims remain
-  withheld. The remaining 64 errors are one N14 retirement batch: 59 belong to
-  migration-blocked legacy lane/ready-receipt authority and five are its
-  transitive `Failure`, JSON, and artifact-reference helpers. They are
-  unreachable from current production behavior, but remain the required
-  executable predecessor for dependency, isolation, cleanup, rollback, and
-  claim-equivalence proof. OD-008 has no removal boundary, OD-009 has no exact
-  destructive scope, and HCT-CLAIMS is not yet available; wiring the batch back
-  into production or deleting it before N14 would weaken the adopted contract.
-  Root therefore withholds warning-free production, N14 retirement, release,
-  and completion claims until the predecessor/successor matrix executes and the
-  owner authorizes the exact 14-file deletion. The surviving coverage-digest
+  withheld. Scoped OD-008 authority now covers exactly 12 dormant internal
+  `claim_semantics/lane/**` paths plus `ready/mod.rs` and `ready/receipt.rs`.
+  The private, unreachable cohort has no compatibility window: its 14 routes
+  may demote to retained non-authoritative context only while the exact decision,
+  production detachment, stable IDs, source digests, transition tuple, and
+  HCT-CLAIMS target remain current. The five legacy-only helper mechanisms were
+  retired with that production graph. This closes the 64-warning production
+  frontier on the scoped source candidate without deleting archived bytes.
+  Global OD-008 remains unresolved for every other route, OD-009 still forbids
+  physical deletion or movement, and the remaining N14 route adoption,
+  equivalence, host execution, and registry closure are withheld. The surviving coverage-digest
   authority is now owned by `audit/coverage/scope/digests.rs`, outside the
   retirement graph; all Rust callers, both coverage manifests, the package
   manifest, and the five valid package fixtures were rebound to that path. The

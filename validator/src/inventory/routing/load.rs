@@ -20,6 +20,8 @@ pub(crate) fn load(
     validate(&registry, contract_id)?;
     let reader_proof_is_current =
         has_agent_context_routes(&registry) && reader_proof_current(reads, root);
+    let archive_proof_is_current =
+        has_archive_routes(&registry) && archive_proof_current(reads, root);
     let registry_entry = physical_entry(
         reads,
         root,
@@ -39,5 +41,6 @@ pub(crate) fn load(
         registry_entry,
         registry,
         reader_proof_is_current,
+        archive_proof_is_current,
     })
 }

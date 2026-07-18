@@ -18,7 +18,7 @@ pub(crate) use model::{
 };
 #[cfg(test)]
 pub(crate) use specs::{ROUTE_COUNT, TARGET_COUNT, by_route_id, routes, targets};
-pub(crate) use specs::{by_stable_id, is_source_kind, is_target_id};
+pub(crate) use specs::{by_stable_id, is_target_id};
 pub(crate) use verify::verify_catalog;
 #[cfg(test)]
 pub(crate) use verify::{VerificationError, VerifiedCatalog, registry_route_is_compiled};

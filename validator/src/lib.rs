@@ -11,7 +11,6 @@ mod api_witness;
 mod archive;
 mod argument_parser;
 mod audit;
-mod claim_semantics;
 mod cli;
 pub use cli::capture;
 #[cfg(test)]

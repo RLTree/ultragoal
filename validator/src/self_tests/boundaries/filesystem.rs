@@ -57,9 +57,12 @@ fn package_artifact_refs_reject_boundary_substitutes() {
         assert!(err.contains(expected), "{path}: {err}");
     }
     let object = json!({"path":"artifacts/proof.json","digest":digest});
-    crate::package::artifact::refs::validate_object(&root, &object, "object").expect("object");
+    crate::package::artifact::refs::ArtifactRef::from_object(&object, "object")
+        .and_then(|artifact| artifact.validate(&root, "object"))
+        .expect("object");
     let missing_digest = json!({"path":"artifacts/proof.json"});
-    let err = crate::package::artifact::refs::validate_object(&root, &missing_digest, "object")
+    let err = crate::package::artifact::refs::ArtifactRef::from_object(&missing_digest, "object")
+        .and_then(|artifact| artifact.validate(&root, "object"))
         .expect_err("object digest is required");
     assert!(err.contains("missing digest"), "{err}");
     #[cfg(unix)]

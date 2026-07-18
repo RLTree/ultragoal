@@ -21,6 +21,26 @@ fn typed_route_states_cannot_launder_generic_or_unproven_retirement() {
 }
 
 #[test]
+fn od008_archive_tuple_cannot_be_partially_rewritten() {
+    let repo = TestRepo::new("od008-archive-tuple");
+    let path = repo.root.join("migration/authority-routes.json");
+    let mut value: serde_json::Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    let route = value["routes"]
+        .as_array_mut()
+        .unwrap()
+        .iter_mut()
+        .find(|route| route["route_id"] == "finalizer-ready-receipt-to-hct-claims")
+        .unwrap();
+    route["transition"]["replacement_state"] = serde_json::json!("verified");
+    fs::write(&path, serde_json::to_vec(&value).unwrap()).unwrap();
+    repo.commit();
+
+    let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
+    let error = InventoryBuilder::new(&context).build().unwrap_err();
+    assert!(error.to_string().contains("retired archive route"));
+}
+
+#[test]
 fn od009_does_not_forbid_non_destructive_preservation() {
     let repo = TestRepo::new("route-preservation");
     let path = repo.root.join("migration/authority-routes.json");

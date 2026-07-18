@@ -68,10 +68,6 @@ pub fn validate_path_digest(root: &Path, path: &str, got: &str, label: &str) -> 
     }
 }
 
-pub fn validate_object(root: &Path, item: &Value, label: &str) -> Result<(), String> {
-    ArtifactRef::from_object(item, label)?.validate(root, label)
-}
-
 fn placeholder_path(path: &str) -> bool {
     let lower = path.to_ascii_lowercase();
     ["placeholder", "mock", "dummy", "fixture"]

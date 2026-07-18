@@ -82,9 +82,9 @@
       "surface_globs": [
         "examples/**"
       ],
-      "description": "Generated examples are governed package examples with receipt provenance; example presence cannot raise the claim ceiling without matching validator output proof.",
-      "authority": "generated_ready_completion_receipts",
-      "authority_path": "validator/src/claim_semantics/ready/receipt.rs",
+      "description": "Packaged examples are non-authoritative illustrative inputs; inventory membership cannot raise a claim ceiling or substitute for current product behavior.",
+      "authority": "package_inventory",
+      "authority_path": "validator/src/package/inventory.rs",
       "maximal_factoring_required": true,
       "waiver_allowed": false,
       "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"

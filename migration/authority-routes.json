@@ -565,288 +565,264 @@
     {
       "route_id": "lane-claim-actor-freshness-to-ps-orchestration",
       "match": {
-        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/actor/freshness.rs",
-        "kind": "legacy-lane-authority",
-        "relative_path": "validator/src/claim_semantics/lane/actor/freshness.rs"
+        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/actor/freshness.rs"
       },
       "canonical_target": "PS-ORCHESTRATION",
       "intended_disposition": "non-authoritative",
       "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
         "proof_refs": [
           "validator/src/claim_semantics/lane/actor/freshness.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
         ]
       }
     },
     {
       "route_id": "lane-claim-actor-root-to-ps-orchestration",
       "match": {
-        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/actor/mod.rs",
-        "kind": "legacy-lane-authority",
-        "relative_path": "validator/src/claim_semantics/lane/actor/mod.rs"
+        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/actor/mod.rs"
       },
       "canonical_target": "PS-ORCHESTRATION",
       "intended_disposition": "non-authoritative",
       "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
         "proof_refs": [
           "validator/src/claim_semantics/lane/actor/mod.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
         ]
       }
     },
     {
       "route_id": "lane-claim-dependency-to-ps-orchestration",
       "match": {
-        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/dependency.rs",
-        "kind": "legacy-lane-authority",
-        "relative_path": "validator/src/claim_semantics/lane/dependency.rs"
+        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/dependency.rs"
       },
       "canonical_target": "PS-ORCHESTRATION",
       "intended_disposition": "non-authoritative",
       "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
         "proof_refs": [
           "validator/src/claim_semantics/lane/dependency.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
         ]
       }
     },
     {
       "route_id": "lane-claim-isolation-to-ps-orchestration",
       "match": {
-        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/isolation.rs",
-        "kind": "legacy-lane-authority",
-        "relative_path": "validator/src/claim_semantics/lane/isolation.rs"
+        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/isolation.rs"
       },
       "canonical_target": "PS-ORCHESTRATION",
       "intended_disposition": "non-authoritative",
       "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
         "proof_refs": [
           "validator/src/claim_semantics/lane/isolation.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
         ]
       }
     },
     {
       "route_id": "lane-claim-root-to-ps-orchestration",
       "match": {
-        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/mod.rs",
-        "kind": "legacy-lane-authority",
-        "relative_path": "validator/src/claim_semantics/lane/mod.rs"
+        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/mod.rs"
       },
       "canonical_target": "PS-ORCHESTRATION",
       "intended_disposition": "non-authoritative",
       "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
         "proof_refs": [
           "validator/src/claim_semantics/lane/mod.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
         ]
       }
     },
     {
       "route_id": "lane-claim-paths-to-ps-orchestration",
       "match": {
-        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/paths.rs",
-        "kind": "legacy-lane-authority",
-        "relative_path": "validator/src/claim_semantics/lane/paths.rs"
+        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/paths.rs"
       },
       "canonical_target": "PS-ORCHESTRATION",
       "intended_disposition": "non-authoritative",
       "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
         "proof_refs": [
           "validator/src/claim_semantics/lane/paths.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
         ]
       }
     },
     {
       "route_id": "lane-claim-policy-to-ps-orchestration",
       "match": {
-        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/policy.rs",
-        "kind": "legacy-lane-authority",
-        "relative_path": "validator/src/claim_semantics/lane/policy.rs"
+        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/policy.rs"
       },
       "canonical_target": "PS-ORCHESTRATION",
       "intended_disposition": "non-authoritative",
       "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
         "proof_refs": [
           "validator/src/claim_semantics/lane/policy.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
         ]
       }
     },
     {
       "route_id": "lane-claim-root-module-to-ps-orchestration",
       "match": {
-        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/root/mod.rs",
-        "kind": "legacy-lane-authority",
-        "relative_path": "validator/src/claim_semantics/lane/root/mod.rs"
+        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/root/mod.rs"
       },
       "canonical_target": "PS-ORCHESTRATION",
       "intended_disposition": "non-authoritative",
       "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
         "proof_refs": [
           "validator/src/claim_semantics/lane/root/mod.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
         ]
       }
     },
     {
       "route_id": "lane-claim-root-scope-to-ps-orchestration",
       "match": {
-        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/root/scope.rs",
-        "kind": "legacy-lane-authority",
-        "relative_path": "validator/src/claim_semantics/lane/root/scope.rs"
+        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/root/scope.rs"
       },
       "canonical_target": "PS-ORCHESTRATION",
       "intended_disposition": "non-authoritative",
       "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
         "proof_refs": [
           "validator/src/claim_semantics/lane/root/scope.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
         ]
       }
     },
     {
       "route_id": "lane-claim-runtime-root-to-ps-orchestration",
       "match": {
-        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/runtime/mod.rs",
-        "kind": "legacy-lane-authority",
-        "relative_path": "validator/src/claim_semantics/lane/runtime/mod.rs"
+        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/runtime/mod.rs"
       },
       "canonical_target": "PS-ORCHESTRATION",
       "intended_disposition": "non-authoritative",
       "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
         "proof_refs": [
           "validator/src/claim_semantics/lane/runtime/mod.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
         ]
       }
     },
     {
       "route_id": "lane-claim-runtime-state-to-ps-orchestration",
       "match": {
-        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/runtime/state.rs",
-        "kind": "legacy-lane-authority",
-        "relative_path": "validator/src/claim_semantics/lane/runtime/state.rs"
+        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/runtime/state.rs"
       },
       "canonical_target": "PS-ORCHESTRATION",
       "intended_disposition": "non-authoritative",
       "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
         "proof_refs": [
           "validator/src/claim_semantics/lane/runtime/state.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
         ]
       }
     },
     {
       "route_id": "lane-claim-status-to-ps-orchestration",
       "match": {
-        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/status.rs",
-        "kind": "legacy-lane-authority",
-        "relative_path": "validator/src/claim_semantics/lane/status.rs"
+        "stable_id": "LEGACY-LANE:validator/src/claim_semantics/lane/status.rs"
       },
       "canonical_target": "PS-ORCHESTRATION",
       "intended_disposition": "non-authoritative",
       "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
         "proof_refs": [
           "validator/src/claim_semantics/lane/status.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-ORCHESTRATION",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
         ]
       }
     },
@@ -1159,6 +1135,50 @@
           "plugin-manifest-draft.json",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-PLUGIN-MANIFEST",
           "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+        ]
+      }
+    },
+    {
+      "route_id": "finalizer-ready-module-to-hct-claims",
+      "match": {
+        "stable_id": "LEGACY-FINALIZER:validator/src/claim_semantics/ready/mod.rs"
+      },
+      "canonical_target": "HCT-CLAIMS",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "validator/src/claim_semantics/ready/mod.rs",
+          "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS",
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
+        ]
+      }
+    },
+    {
+      "route_id": "finalizer-ready-receipt-to-hct-claims",
+      "match": {
+        "stable_id": "LEGACY-FINALIZER:validator/src/claim_semantics/ready/receipt.rs"
+      },
+      "canonical_target": "HCT-CLAIMS",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "not-applicable",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "archived",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "validator/src/claim_semantics/ready/receipt.rs",
+          "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CUSTOM_TOOL_INVENTORY.json#/custom-tool-definition/HCT-CLAIMS",
+          "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json"
         ]
       }
     }

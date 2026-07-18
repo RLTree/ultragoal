@@ -23,6 +23,7 @@ fn replacement_state(value: ReplacementState) -> &'static str {
         ReplacementState::Unverified => "unverified",
         ReplacementState::CandidateRequired => "candidate-required",
         ReplacementState::Verified => "verified",
+        ReplacementState::NotApplicable => "not-applicable",
     }
 }
 
@@ -65,7 +66,6 @@ fn pending_route_candidate(route: &RouteRule) -> bool {
         .stable_id
         .as_deref()
         .is_some_and(|stable_id| by_stable_id(stable_id).is_some())
-        || route.matcher.kind.as_deref().is_some_and(is_source_kind)
 }
 
 fn entry_evidence(entry: &InventoryEntry) -> EntryEvidence<'_> {

@@ -9,7 +9,9 @@ impl RoutingData {
         let source_rows = groups
             .iter()
             .flatten()
-            .filter(|entry| is_source_kind(&entry.kind))
+            .filter(|entry| {
+                by_stable_id(&entry.stable_id).is_some_and(|spec| spec.kind == entry.kind)
+            })
             .collect::<Vec<_>>();
         let target_rows = groups
             .iter()

@@ -1,5 +1,6 @@
 use super::compatibility::{
-    agent_registry_route_is_compiled, reader_proof_current, registry_route_is_compiled,
+    agent_registry_route_is_compiled, archive_proof_current, archive_registry_route_is_compiled,
+    reader_proof_current, registry_route_is_compiled,
 };
 use super::fs::{PhysicalEntryDescriptor, physical_entry, read_bounded};
 use super::routing_state::RouteTransition;

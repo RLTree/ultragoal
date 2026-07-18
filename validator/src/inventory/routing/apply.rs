@@ -1,6 +1,7 @@
 use super::{ROUTES_PATH, RoutingData};
 use crate::inventory::compatibility::{
-    AgentRouteApplication, RETAINED_KIND, apply_agent_route, apply_route, retention_candidates,
+    AgentRouteApplication, ArchiveRouteApplication, RETAINED_KIND, apply_agent_route,
+    apply_archive_route, apply_route, retention_candidates,
 };
 use crate::inventory::types::{AuthorityState, InventoryEntry, InventoryFinding};
 use std::collections::{BTreeMap, BTreeSet};
@@ -62,10 +63,23 @@ impl RoutingData {
                         duplicate_path_conflicts,
                         findings,
                     });
+                    let archive_verified = apply_archive_route(ArchiveRouteApplication {
+                        entry,
+                        route_id: &route.route_id,
+                        exact_stable_id: route.matcher.exact_stable_id(),
+                        canonical_target: &route.canonical_target,
+                        proof_refs: &route.transition.proof_refs,
+                        transition: &route.transition,
+                        target: targets.get(&route.canonical_target),
+                        archive_proof_is_current: self.archive_proof_is_current,
+                        duplicate_stable_id_conflicts,
+                        duplicate_path_conflicts,
+                        findings,
+                    });
                     entry
                         .input_provenance
                         .push(format!("{ROUTES_PATH}#/routes/{}", route.route_id));
-                    if retained || agent_verified {
+                    if retained || agent_verified || archive_verified {
                         entry
                             .input_provenance
                             .extend(route.transition.proof_refs.iter().cloned());

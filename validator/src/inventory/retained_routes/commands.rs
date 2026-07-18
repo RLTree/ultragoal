@@ -16,7 +16,7 @@ pub(super) const ROUTES: [RouteSpec; 6] = [
         "LEGACY-COMMAND:validator/src/argument_parser/help_request.rs",
         KIND,
         "validator/src/argument_parser/help_request.rs",
-        "d65afba98d06646bca33d23658069ede5fd38eceddce2ed62584b042f0dd1937",
+        "74c10369674766de18369c919da85927109a6daefee7c392a9967dbed2c91726",
         &PS_CLI,
     ),
     spec(
@@ -24,7 +24,7 @@ pub(super) const ROUTES: [RouteSpec; 6] = [
         "LEGACY-COMMAND:validator/src/argument_parser/mod.rs",
         KIND,
         "validator/src/argument_parser/mod.rs",
-        "9af5bc7c96b9ff5e92d1f68095f6058e0018826a5e70324d907ae3c77e056ed7",
+        "dcdcd25aea9a437b98c97a014bef0c7594ff5a263c179085127333efd06b4c75",
         &PS_CLI,
     ),
     spec(
@@ -32,7 +32,7 @@ pub(super) const ROUTES: [RouteSpec; 6] = [
         "LEGACY-COMMAND:validator/src/argument_parser/specialized.rs",
         KIND,
         "validator/src/argument_parser/specialized.rs",
-        "a4d02928f6938c747fc66be5ba6325abbe2bb3d8e745c4edfbf50f0e3ea0bab0",
+        "473c50f32c87994e127a3991ed1eb6d3883342a1b873452c5df38435b3e6d133",
         &PS_CLI,
     ),
     spec(
@@ -40,7 +40,7 @@ pub(super) const ROUTES: [RouteSpec; 6] = [
         "LEGACY-COMMAND:validator/src/argument_parser/tests.rs",
         KIND,
         "validator/src/argument_parser/tests.rs",
-        "2f6f455a18902834db7a0b90d4dd5b272d2e7b38bfd8031447c1c6b82632cfdb",
+        "81ab34eec18f5acf33965a0a2ec6be0ba875ea1f6aa619184a1e41002f2a27ef",
         &PS_CLI,
     ),
     spec(
@@ -48,7 +48,7 @@ pub(super) const ROUTES: [RouteSpec; 6] = [
         "LEGACY-COMMAND:validator/src/command/mod.rs",
         KIND,
         "validator/src/command/mod.rs",
-        "84d68b3a59a38c438a10828d7214a84ef2c0154842424568e6cb5189121a9d4b",
+        "58488e6a47a60d1f4956f0a5bfc675bdf57ab2715f6ba2214af30764d4a500dd",
         &PS_CLI,
     ),
 ];

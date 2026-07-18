@@ -57,6 +57,7 @@ pub(crate) struct RoutingData {
     pub(crate) registry_entry: InventoryEntry,
     registry: RouteRegistry,
     reader_proof_is_current: bool,
+    archive_proof_is_current: bool,
 }
 
 fn invalid(message: impl Into<String>) -> InventoryError {
@@ -162,19 +163,26 @@ fn validate(registry: &RouteRegistry, contract_id: &str) -> Result<(), Inventory
             &route.canonical_target,
             &route.transition.proof_refs,
         );
-        let retirement_witness = agent_registry_route_is_compiled(
+        let agent_retirement_witness = agent_registry_route_is_compiled(
             &route.route_id,
             route.matcher.exact_stable_id(),
             &route.canonical_target,
             &route.transition.proof_refs,
         ) && route.transition.verifies_agent_context_transition();
+        let archive_retirement_witness =
+            archive_registry_route_is_compiled(
+                &route.route_id,
+                route.matcher.exact_stable_id(),
+                &route.canonical_target,
+                &route.transition.proof_refs,
+            ) && route.transition.verifies_retired_archive_transition();
         route
             .transition
             .validate(
                 registry.destructive_cleanup_authorized,
                 exact_matcher,
                 compatibility_witness,
-                retirement_witness,
+                agent_retirement_witness || archive_retirement_witness,
                 safe_proof_refs,
             )
             .map_err(invalid)?;
@@ -190,5 +198,16 @@ fn has_agent_context_routes(registry: &RouteRegistry) -> bool {
             &route.canonical_target,
             &route.transition.proof_refs,
         ) && route.transition.verifies_agent_context_transition()
+    })
+}
+
+fn has_archive_routes(registry: &RouteRegistry) -> bool {
+    registry.routes.iter().any(|route| {
+        archive_registry_route_is_compiled(
+            &route.route_id,
+            route.matcher.exact_stable_id(),
+            &route.canonical_target,
+            &route.transition.proof_refs,
+        ) && route.transition.verifies_retired_archive_transition()
     })
 }

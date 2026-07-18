@@ -49,6 +49,12 @@ pub(super) fn path_match(rel: &Path) -> Option<LegacyMatch> {
         || (component(rel, "agents") && !lower.starts_with(".codex/agents/"))
     {
         found("agent", "path:legacy-agent-collection")
+    } else if matches!(
+        text.as_ref(),
+        "validator/src/claim_semantics/ready/mod.rs"
+            | "validator/src/claim_semantics/ready/receipt.rs"
+    ) {
+        found("finalizer", "path:retired-ready-authority")
     } else if file == "LANE_REGISTRY.json" || component(rel, "lane") {
         found("lane", "path:lane-authority")
     } else if component(rel, "gate") || lower.contains("gate_registry") {

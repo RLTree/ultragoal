@@ -14,34 +14,36 @@ fn live_exact_sources_are_sole_current_and_pending_migration() {
         .filter(|finding| finding.code == "sole_current_authority_pending_migration")
         .collect::<Vec<_>>();
 
-    assert_eq!(pending.len(), 33);
+    assert_eq!(pending.len(), 16);
     let serialized_before = catalog.to_canonical_json().unwrap();
     let closure = catalog.closure_status();
     assert_eq!(catalog.to_canonical_json().unwrap(), serialized_before);
     assert!(!closure.is_closed());
-    assert_eq!(catalog.findings().len(), 81);
-    assert_eq!(closure.blocker_count(), 34);
+    assert_eq!(catalog.findings().len(), 97);
+    assert_eq!(closure.blocker_count(), 53);
     assert_eq!(
         closure
             .open_obligations_by_code()
             .get("sole_current_authority_pending_migration"),
-        Some(&33)
+        Some(&16)
     );
-    assert_eq!(closure.open_obligation_count(), 47);
+    assert_eq!(closure.open_obligation_count(), 30);
     assert_eq!(
         closure.blockers_by_code(),
         &std::collections::BTreeMap::from([
             ("candidate_component_not_active".to_owned(), 10),
-            ("missing_required_component".to_owned(), 9),
-            ("parallel_authority".to_owned(), 14),
+            ("missing_required_component".to_owned(), 18),
+            ("parallel_authority".to_owned(), 18),
             ("projection_requires_canonical_reconciliation".to_owned(), 1,),
+            ("retained_context_digest_mismatch".to_owned(), 2),
+            ("unrouted_legacy_authority".to_owned(), 4),
         ])
     );
     assert_eq!(
         closure.open_obligations_by_code(),
         &std::collections::BTreeMap::from([
             ("compatibility_route_retained".to_owned(), 14),
-            ("sole_current_authority_pending_migration".to_owned(), 33),
+            ("sole_current_authority_pending_migration".to_owned(), 16),
         ])
     );
     assert!(
@@ -64,6 +66,26 @@ fn live_exact_sources_are_sole_current_and_pending_migration() {
             .unwrap();
         assert_eq!(entry.authority_state, AuthorityState::Legacy);
         assert_eq!(entry.active_status, ActiveStatus::Active);
+        assert!(!catalog.findings().iter().any(|candidate| {
+            candidate.code == "parallel_authority"
+                && candidate.entry_id.as_deref() == Some(stable_id)
+        }));
+    }
+    let archived = catalog
+        .findings()
+        .iter()
+        .filter(|finding| finding.code == "verified_od008_archive_context")
+        .collect::<Vec<_>>();
+    assert_eq!(archived.len(), 14);
+    for finding in archived {
+        let stable_id = finding.entry_id.as_deref().unwrap();
+        let entry = catalog
+            .entries()
+            .iter()
+            .find(|entry| entry.stable_id == stable_id)
+            .unwrap();
+        assert_eq!(entry.authority_state, AuthorityState::Context);
+        assert_eq!(entry.active_status, ActiveStatus::Retired);
         assert!(!catalog.findings().iter().any(|candidate| {
             candidate.code == "parallel_authority"
                 && candidate.entry_id.as_deref() == Some(stable_id)

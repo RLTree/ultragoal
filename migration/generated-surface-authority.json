@@ -47,7 +47,7 @@
         "agent-standards/audit/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "41bfed481ffab255de316c27396beedb18c68a05ece1b0130bae069b1ea598df"
+      "output_sha256": "0b411cb1a872cd44bab8fa91ae6cd07d22f7f50e5d1b7762cda27c665bae29e9"
     },
     {
       "disposition": "source_projection",
@@ -70,7 +70,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "8711360b639d74b41d940f792a002927d58b07fffd6ef939f1b13787b0da3d13"
+      "output_sha256": "026aa235f532236d39618ddb5455237c703469f3ba76263470ecdf1939005556"
     },
     {
       "disposition": "source_projection",
@@ -93,7 +93,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "7c784031ce5b152516ee8062cce3a10127f2f2ccce6b6becaaaff42f666b9e3f"
+      "output_sha256": "b5a6b9cf1fe9416b9cb4278fa31db8426dbc612c30e720235ed030c55560fa21"
     },
     {
       "disposition": "retained_context",
@@ -225,7 +225,7 @@
         "AGENT_STANDARDS.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "2e022850e5917eba3cd45940408dd8b75ac6b5bc977acc3b4dc18ff581b3ff5e"
+      "output_sha256": "7c601293083e1e2264f84d84cb205a652eb2e036b7514dc3b9afe763b5ce2b98"
     },
     {
       "disposition": "source_projection",
@@ -235,7 +235,7 @@
         "PLANS.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "8fccc836862d7337b01d01dd079b033e3eec6b04e155ffeb4753476b58eb0467"
+      "output_sha256": "01cfba8c85fc8a96aad47a8d542a1107900bf80744fe9419c27936add43a3d4c"
     },
     {
       "disposition": "source_projection",
@@ -295,7 +295,7 @@
         "agent-standards/05-review-and-completion.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "3dc206c5f8b5911dc8cf3c6715e18977d042fe93869aa822afe9f95b26d3bf4e"
+      "output_sha256": "4f8ee879c033c1ee01ffd1d0c7edf268341a8f8f68e641325adde517c44cf831"
     },
     {
       "disposition": "source_projection",
@@ -325,7 +325,7 @@
         "agent-standards/08-observability-and-repair-loop.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "526de65cc8206bb510281227b87489d57a0cac133257a927da12567754100006"
+      "output_sha256": "86743381fc072ab4e66280c1a886d5df0f0729934926abea5e8be4fa71b789f8"
     },
     {
       "disposition": "source_projection",
@@ -335,7 +335,7 @@
         "agent-standards/09-product-success-and-quality-in-use.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "e7f0caed482241c504f3c8c973d1de75ca54b8b928e8a409df71ec4d0e32c9b7"
+      "output_sha256": "9985bd4eda529c02acdf6ab5e54908c1448a23a83bb8e382925081d96ec0476f"
     },
     {
       "disposition": "source_projection",
@@ -398,7 +398,7 @@
         "agent-standards/audit/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "41bfed481ffab255de316c27396beedb18c68a05ece1b0130bae069b1ea598df"
+      "output_sha256": "0b411cb1a872cd44bab8fa91ae6cd07d22f7f50e5d1b7762cda27c665bae29e9"
     },
     {
       "disposition": "source_projection",
@@ -421,7 +421,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "8711360b639d74b41d940f792a002927d58b07fffd6ef939f1b13787b0da3d13"
+      "output_sha256": "026aa235f532236d39618ddb5455237c703469f3ba76263470ecdf1939005556"
     },
     {
       "disposition": "source_projection",
@@ -444,7 +444,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "7c784031ce5b152516ee8062cce3a10127f2f2ccce6b6becaaaff42f666b9e3f"
+      "output_sha256": "b5a6b9cf1fe9416b9cb4278fa31db8426dbc612c30e720235ed030c55560fa21"
     },
     {
       "disposition": "source_projection",

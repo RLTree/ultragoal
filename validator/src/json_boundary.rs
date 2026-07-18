@@ -12,16 +12,6 @@ pub fn object_get<'a>(value: &'a Value, key: &str) -> Option<&'a Value> {
     value.as_object().and_then(|obj| obj.get(key))
 }
 
-pub fn string(value: &Value, key: &str) -> Option<String> {
-    object_get(value, key)
-        .and_then(Value::as_str)
-        .map(ToOwned::to_owned)
-}
-
-pub fn bool_value(value: &Value, key: &str) -> Option<bool> {
-    object_get(value, key).and_then(Value::as_bool)
-}
-
 pub fn array<'a>(value: &'a Value, key: &str) -> Vec<&'a Value> {
     object_get(value, key)
         .and_then(Value::as_array)
