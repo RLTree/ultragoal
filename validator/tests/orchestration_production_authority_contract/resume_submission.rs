@@ -144,6 +144,8 @@ fn submitted_result_and_authority_expiry_refuse_without_reserving() {
             live_workers: BTreeSet::from(["worker-a".to_owned()]),
         })
         .unwrap();
+    let expired_journal_before = recursive_fingerprint(expired_journal.path());
+    let expired_authority_before = recursive_fingerprint(expired_authority_root.path());
     assert_eq!(
         expired_adapter
             .execute_production_action(
@@ -164,6 +166,14 @@ fn submitted_result_and_authority_expiry_refuse_without_reserving() {
     assert_eq!(
         expired_authority.replay_state(&expired_permit).unwrap(),
         Some(PermitReplayState::Issued)
+    );
+    assert_eq!(
+        recursive_fingerprint(expired_journal.path()),
+        expired_journal_before
+    );
+    assert_eq!(
+        recursive_fingerprint(expired_authority_root.path()),
+        expired_authority_before
     );
 }
 

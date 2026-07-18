@@ -140,6 +140,7 @@ fn reconciliation_only_and_no_pending_views_cannot_issue_the_wrong_authority() {
     let authority =
         ProductionRootAuthority::open_or_initialize(authority_root.path(), root_actor()).unwrap();
     let ambiguous_before = recursive_fingerprint(ambiguous_journal.path());
+    let authority_before = recursive_fingerprint(authority_root.path());
     assert_eq!(
         ambiguous_adapter
             .issue_production_action(
@@ -154,6 +155,10 @@ fn reconciliation_only_and_no_pending_views_cannot_issue_the_wrong_authority() {
     assert_eq!(
         recursive_fingerprint(ambiguous_journal.path()),
         ambiguous_before
+    );
+    assert_eq!(
+        recursive_fingerprint(authority_root.path()),
+        authority_before
     );
 
     let (clean_journal, clean_head) = running_lease("no-pending-reconciliation", 40);
@@ -181,4 +186,8 @@ fn reconciliation_only_and_no_pending_views_cannot_issue_the_wrong_authority() {
         ProductError::AuthorityInvalid
     );
     assert_eq!(recursive_fingerprint(clean_journal.path()), clean_before);
+    assert_eq!(
+        recursive_fingerprint(authority_root.path()),
+        authority_before
+    );
 }
