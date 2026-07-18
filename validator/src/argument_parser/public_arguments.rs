@@ -99,42 +99,7 @@ pub(crate) fn parse_command(raw: &[String]) -> Result<Command, String> {
         "help" | "--help" | "-h" => Command::Help,
         "audit" => parse_audit(&raw[1..])?,
         "source" if raw.get(1).map(String::as_str) == Some("audit") => parse_audit(&raw[2..])?,
-        "review-target" => {
-            let args = strip_build_or_verify(&raw[1..]);
-            let receipt = opt_path(args, "--receipt")?;
-            Command::ReviewTarget {
-                receipt,
-                observability_receipt: cli::review::target::observability_receipt(args)?,
-            }
-        }
         "archive" => cli::archive::parse(&raw[1..])?,
-        "review-round" => {
-            let args = strip_build_or_verify(&raw[1..]);
-            Command::ReviewRound {
-                receipt: opt_path(args, "--receipt")?,
-                validator_receipt: opt_path(args, "--validator-receipt")?,
-                review_target_receipt: opt_path(args, "--review-target-receipt")?,
-                archive_receipt: opt_path(args, "--archive-receipt")?,
-                observability_receipt: cli::review::round::observability_receipt(args)?,
-            }
-        }
-        "semantic-receipts" => Command::SemanticReceipts {
-            input: opt_path(&raw[1..], "--input")?,
-            out_dir: opt_path(&raw[1..], "--out-dir")?,
-            implementation_kind: opt_string(&raw[1..], "--implementation-kind")
-                .unwrap_or_else(|| "deterministic_backstop".to_string()),
-            provider: opt_string(&raw[1..], "--provider"),
-            model: opt_string(&raw[1..], "--model"),
-            contract_id: opt_string(&raw[1..], "--contract-id")
-                .unwrap_or_else(|| "ultragoal-semantic-classification".to_string()),
-            contract_version: opt_string(&raw[1..], "--contract-version")
-                .unwrap_or_else(|| "v1".to_string()),
-            prompt_contract_digest: opt_string(&raw[1..], "--prompt-contract-digest"),
-            producer_actor_id: opt_string(&raw[1..], "--producer-actor-id")
-                .unwrap_or_else(|| "package-author".to_string()),
-            classifier_actor_id: opt_string(&raw[1..], "--classifier-actor-id")
-                .unwrap_or_else(|| "ultragoal-deterministic-backstop".to_string()),
-        },
         "final-packet" | "packet" => {
             let Some(command) = cli::final_packet::parse(raw)? else {
                 return Err(usage());

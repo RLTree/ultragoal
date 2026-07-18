@@ -14,8 +14,6 @@ pub(crate) const REQUIRED_COMMANDS: &[&str] = &[
     "product prove-cohesion",
     "product prove-journey",
     "fit-repo prove",
-    "review-round verify",
-    "review-target build",
     "archive build",
     "final-packet prove",
     "registry probe",

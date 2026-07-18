@@ -32,21 +32,6 @@ pub(crate) const RUNTIME_ROUTING_READERS: &[ReaderSpec] = &[
     reader!("validator/src/lib.rs", "../lib.rs", false),
     reader!("validator/src/package/mod.rs", "../package/mod.rs", false),
     reader!(
-        "validator/src/review/materiality/mod.rs",
-        "../review/materiality/mod.rs",
-        false
-    ),
-    reader!(
-        "validator/src/review/materiality/registry.rs",
-        "../review/materiality/registry.rs",
-        false
-    ),
-    reader!(
-        "validator/src/review/round/report.rs",
-        "../review/round/report.rs",
-        false
-    ),
-    reader!(
         "validator/src/schema_catalog/fixture_schema_rules.rs",
         "../schema_catalog/fixture_schema_rules.rs",
         true

@@ -41,21 +41,6 @@ pub(crate) const FOUNDATIONAL_AUTHORITY_READERS: &[ReaderSpec] = &[
         false
     ),
     reader!(
-        "validator/src/claim_semantics/plugin_policy/mod.rs",
-        "../claim_semantics/plugin_policy/mod.rs",
-        true
-    ),
-    reader!(
-        "validator/src/claim_semantics/coverage/receipt/exclusions.rs",
-        "../claim_semantics/coverage/receipt/exclusions.rs",
-        true
-    ),
-    reader!(
-        "validator/src/claim_semantics/retired_reviewer_policy.rs",
-        "../claim_semantics/retired_reviewer_policy.rs",
-        true
-    ),
-    reader!(
         "validator/src/audit/plugin/registry/mod.rs",
         "../audit/plugin/registry/mod.rs",
         false

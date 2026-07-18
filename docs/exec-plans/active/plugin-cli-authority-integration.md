@@ -202,12 +202,19 @@ claim and representative product or release proof.
   `c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e`; the clean containing candidate
   must prove permitted paths and status live. All acceptance evidence is
   historical/nonselectable and all 14 claims remain withheld.
-- The disconnected legacy red execution engine was retired at `51e9cae85`.
-  Root reconciliation removes its remaining production, test, fixture, and
-  projection references. The affected production-library check reports 664
-  deny-warning errors, down from 759, with no unresolved reference to the
-  retired red engine. This is not a compile pass; no suppression or dummy
-  reachability is allowed.
+- The disconnected legacy red execution engine and target-repository audit are
+  retired. The disconnected legacy claim, semantic-receipt, and material-review
+  authority was then removed in `a11dcac01`, including its test-only dispatch
+  and receipt machinery. Root reconciliation removed stale reader witnesses and
+  public test dispatch. The affected production-library check now reports 388
+  deny-warning errors, down from 664, with no unresolved reference to the
+  retired claim/review graph. This is not a compile pass; no suppression or
+  dummy reachability is allowed.
+- `LANE_REGISTRY.json` still binds the retired authority-reconciliation and
+  review paths in its protected checkpoint, P0 lease, consumed set, and plan
+  digest. That registry is intentionally treated as stale and non-promotable
+  until root rewrites the existing canonical record to the surviving live
+  authority; no replacement tracker or receipt is permitted.
 - HCT-FIXTURES execution/parity, runtime, installed journey, readiness,
   release, and completion claims remain withheld.
 - The calibrated review, observability, and Product Fitness doctrine is now

@@ -15,22 +15,6 @@ fn process_entrypoint_fails_closed_for_test_harness_arguments() {
 }
 
 #[test]
-fn review_round_parse_requires_review_target_receipt_argument() {
-    let err = crate::parse_command(&args(&[
-        "review-round",
-        "verify",
-        "--receipt",
-        "round.json",
-        "--validator-receipt",
-        "validator.json",
-        "--archive-receipt",
-        "archive.json",
-    ]))
-    .expect_err("missing review target receipt");
-    assert!(err.contains("missing required argument --review-target-receipt"));
-}
-
-#[test]
 fn final_packet_parse_constructs_typed_receipt_command() {
     let command = crate::parse_command(&args(&[
         "final-packet",
@@ -94,34 +78,6 @@ fn parser_error_arms_are_explicit_for_required_receipts() {
             &["audit"][..],
             "missing required argument --receipt",
             "audit receipt",
-        ),
-        (
-            &[
-                "review-round",
-                "verify",
-                "--validator-receipt",
-                "validator.json",
-                "--review-target-receipt",
-                "target.json",
-                "--archive-receipt",
-                "archive.json",
-            ][..],
-            "missing required argument --receipt",
-            "review round receipt",
-        ),
-        (
-            &[
-                "review-round",
-                "verify",
-                "--receipt",
-                "round.json",
-                "--validator-receipt",
-                "validator.json",
-                "--review-target-receipt",
-                "target.json",
-            ][..],
-            "missing required argument --archive-receipt",
-            "review round archive",
         ),
     ];
 

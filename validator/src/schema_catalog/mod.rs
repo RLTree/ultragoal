@@ -84,7 +84,6 @@ pub fn schema_errors(store: &SchemaStore, schema_name: &str, instance: &Value) -
         "semantic-classification-receipt.schema.json" => {
             receipt_schema_rules::semantic_receipt_errors(instance)
         }
-        "review-round-receipt.schema.json" => generic_required_schema_errors(instance),
         "product-cohesion-receipt.schema.json" => {
             product::cohesion::rules::product_cohesion_errors(instance)
         }

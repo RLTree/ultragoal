@@ -33,10 +33,6 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             require_product_cohesion,
             jobs,
         }),
-        Command::ReviewTarget {
-            receipt,
-            observability_receipt,
-        } => crate::cli::review::target::run(root, receipt, observability_receipt),
         Command::Archive {
             zip,
             receipt,
@@ -51,44 +47,6 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             zip_root,
             archive_purpose,
         ),
-        Command::ReviewRound {
-            receipt,
-            validator_receipt,
-            review_target_receipt,
-            archive_receipt,
-            observability_receipt,
-        } => crate::cli::review::round::run(
-            root,
-            receipt,
-            validator_receipt,
-            review_target_receipt,
-            archive_receipt,
-            observability_receipt,
-        ),
-        Command::SemanticReceipts {
-            input,
-            out_dir,
-            implementation_kind,
-            provider,
-            model,
-            contract_id,
-            contract_version,
-            prompt_contract_digest,
-            producer_actor_id,
-            classifier_actor_id,
-        } => run_semantic_receipts(SemanticReceiptArgs {
-            root,
-            input,
-            out_dir,
-            implementation_kind,
-            provider,
-            model,
-            contract_id,
-            contract_version,
-            prompt_contract_digest,
-            producer_actor_id,
-            classifier_actor_id,
-        }),
         Command::FinalPacket(command) => crate::cli::final_packet::run(&root, &command),
         Command::Product(command) => crate::cli::product::run(&root, &command),
         Command::Standards(command) => crate::cli::standards::run(&root, &command),
@@ -120,37 +78,4 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             Ok(0)
         }
     }
-}
-
-#[cfg(test)]
-struct SemanticReceiptArgs {
-    root: std::path::PathBuf,
-    input: std::path::PathBuf,
-    out_dir: std::path::PathBuf,
-    implementation_kind: String,
-    provider: Option<String>,
-    model: Option<String>,
-    contract_id: String,
-    contract_version: String,
-    prompt_contract_digest: Option<String>,
-    producer_actor_id: String,
-    classifier_actor_id: String,
-}
-
-#[cfg(test)]
-fn run_semantic_receipts(args: SemanticReceiptArgs) -> Result<i32, String> {
-    crate::semantic::receipt::generate(crate::semantic::receipt::GenerateOptions {
-        root: args.root,
-        input: args.input,
-        out_dir: args.out_dir,
-        implementation_kind: args.implementation_kind,
-        provider: args.provider,
-        model: args.model,
-        contract_id: args.contract_id,
-        contract_version: args.contract_version,
-        prompt_contract_digest: args.prompt_contract_digest,
-        producer_actor_id: args.producer_actor_id,
-        classifier_actor_id: args.classifier_actor_id,
-    })?;
-    Ok(0)
 }

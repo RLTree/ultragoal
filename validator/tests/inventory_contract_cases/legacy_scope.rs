@@ -141,10 +141,6 @@ fn active_authority_negative_controls_remain_flagged() {
         ("agents/current.md", "active agent prompt\n"),
         ("docs/public-model.md", "required model gpt-5.5\n"),
         ("templates/AGENT.md", "required model gpt-5.5\n"),
-        (
-            "validator/src/review/round/config.rs",
-            "const MODEL: &str = \"gpt-5.5\";\n",
-        ),
     ] {
         repo.write(path, content.as_bytes());
     }
@@ -165,7 +161,6 @@ fn active_authority_negative_controls_remain_flagged() {
         ("agents/current.md", "agent"),
         ("docs/public-model.md", "model"),
         ("templates/AGENT.md", "model"),
-        ("validator/src/review/round/config.rs", "model"),
     ] {
         assert_kind(&catalog, path, kind);
     }

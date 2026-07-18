@@ -4,7 +4,7 @@ pub(crate) struct ArtifactSpec {
     pub sha256: &'static str,
 }
 
-pub(crate) const ACCEPTED_CONTEXT_ARTIFACTS: [ArtifactSpec; 16] = [
+pub(crate) const ACCEPTED_CONTEXT_ARTIFACTS: [ArtifactSpec; 11] = [
     ArtifactSpec {
         path: "schemas/codex-registry-exposure.schema.json",
         sha256: "c6f814afae2631fa02f693d6e9785115dda7331ed5a7a7e7be94955f1e7e4173",
@@ -22,18 +22,6 @@ pub(crate) const ACCEPTED_CONTEXT_ARTIFACTS: [ArtifactSpec; 16] = [
         sha256: "e05afc06f83658c43ce502573b4af38ac72adcafc1656ca9697a79c43c21647b",
     },
     ArtifactSpec {
-        path: "validator/src/claim_semantics/coverage/receipt/exclusions.rs",
-        sha256: "3ac6ecd75a072db612af32f89000257f5723f8beb242af8f2319b17eb09febf6",
-    },
-    ArtifactSpec {
-        path: "validator/src/claim_semantics/plugin_policy/mod.rs",
-        sha256: "0402169f674c6c026613107c2364f2f54089730e70a744556ab4a4a4d0b67e9b",
-    },
-    ArtifactSpec {
-        path: "validator/src/claim_semantics/plugin_policy/tests.rs",
-        sha256: "ffe717cbb8d1fb2d9de5f6121c27e7d1d8a78a08c0c9342fcc74c97f7a3de23f",
-    },
-    ArtifactSpec {
         path: "validator/src/schema_catalog/fixture_schema_rules.rs",
         sha256: "ba00909a97a944cf8f33b555cfb8c7f15c5a91a98bd0e201bfc5f667bbd1260e",
     },
@@ -42,20 +30,12 @@ pub(crate) const ACCEPTED_CONTEXT_ARTIFACTS: [ArtifactSpec; 16] = [
         sha256: "03f579dd5c5c8107c28ed6650063e170e120dbf0799295ca7232589c03e80743",
     },
     ArtifactSpec {
-        path: "validator/src/self_tests/claim/plugin/policy.rs",
-        sha256: "a968480da4f951344338a16c71cbeb92b82c26adf106c4677c70875bd63949df",
-    },
-    ArtifactSpec {
         path: "validator/src/cli/live_loop/surfaces/input_spec/path_rules.rs",
         sha256: "7880797e1832bd81c850b7ef61e5029710e61efe3b5fca6b37d45651afd08df7",
     },
     ArtifactSpec {
-        path: "validator/src/self_tests/command/round_receipts.rs",
-        sha256: "7c6997dffa60c0eb7141ae3e9de8f38ea2eee17909f5746429ae1716ed050043",
-    },
-    ArtifactSpec {
         path: "validator/src/self_tests/plugin/registry/fixture.rs",
-        sha256: "ed85a08e23c9b242b7ee9d8a9535edeee05fb56b32b3834161059eab52b8dc67",
+        sha256: "0e3e484a7d2379b24c33210ededd5f6642638cd50dcb2aa1b5dceecf3364783d",
     },
     ArtifactSpec {
         path: "validator/src/self_tests/plugin/registry/guard.rs",

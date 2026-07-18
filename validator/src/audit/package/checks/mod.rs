@@ -164,18 +164,6 @@ fn add_mapped_globs(root: &Path, mapped: &mut BTreeMap<String, &'static str>) {
     add_glob(root, "fixtures/red", "red-packet.schema.json", mapped);
     add_glob(
         root,
-        "fixtures/review-round/valid",
-        "review-round-receipt.schema.json",
-        mapped,
-    );
-    add_glob(
-        root,
-        "fixtures/review-materiality/valid",
-        "review-materiality-gate.schema.json",
-        mapped,
-    );
-    add_glob(
-        root,
         "fixtures/mandatory-law-surfaces/valid",
         "mandatory-law-surface-receipt.schema.json",
         mapped,
