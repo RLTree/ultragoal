@@ -16,6 +16,18 @@
     "lane_source_base_tree": "d0bbe290b2411ba89de4e90ccedeb013fbdfc1a1",
     "review_rework_base_commit": "1e7f738fa1567bc170b1e21b0eaafcda16411453",
     "review_rework_base_tree": "5b489beb18b39ec15b172a34fef4a1e1b8620180",
+    "consumed_dependency_identities": {
+      "N02": {
+        "commit": "9a2141e3f5ccf5d7488947a5c0156794b4376066",
+        "tree": "9cc386a9b5dafb55259fe4c60439e326d120802a",
+        "ceiling": "source_accepted"
+      },
+      "N03": {
+        "commit": "46ad7794a7e597d93d0afc3465f287d6a7161885",
+        "tree": "7b8c0647422db58bd5216b6444724ad882cb09d5",
+        "ceiling": "source_accepted"
+      }
+    },
     "source_acceptance": "parent accepted the exact N05 candidate at the source-only ceiling"
   },
   "final_state": {
@@ -33,7 +45,13 @@
   },
   "touched_paths": [
     "docs/ultragoal-successor-live/worker-results/REPOSITORY-FIT-N05-CORE-001.json",
+    "validator/tests/repository_fit_apply_mediation_cases/function_body.rs",
+    "validator/tests/repository_fit_apply_mediation_cases/mediation_fixture.rs",
+    "validator/tests/repository_fit_apply_mediation_cases/terminal_revalidation.rs",
     "validator/tests/repository_fit_apply_mediation_contract.rs",
+    "validator/tests/repository_fit_live_journey_cases/command_repository.rs",
+    "validator/tests/repository_fit_live_journey_cases/journey_catalog.rs",
+    "validator/tests/repository_fit_live_journey_cases/scenario_fixture.rs",
     "validator/tests/repository_fit_live_journeys_contract.rs",
     "validator/tests/repository_fit_public_apply_cases/execution_behavior.rs",
     "validator/tests/repository_fit_public_apply_cases/execution_fixture.rs",
@@ -59,7 +77,10 @@
     "PUBLIC_FIT_ROUTE_BEHAVIOR",
     "SOURCE_ONLY_CEILING"
   ],
-  "dependency_nodes": [],
+  "dependency_nodes": [
+    "N02",
+    "N03"
+  ],
   "changes": [
     {
       "area": "public-route behavioral acceptance",
