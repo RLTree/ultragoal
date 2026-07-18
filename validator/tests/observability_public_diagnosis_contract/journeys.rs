@@ -3,7 +3,6 @@ use serde_json::json;
 use std::fs;
 use std::net::TcpListener;
 use ultragoal::observability::EventStore;
-
 #[test]
 fn fresh_reads_and_configured_export_refusal_are_repeatable_zero_write() {
     let fresh = Repository::new("fresh", false, false);
@@ -113,6 +112,13 @@ fn diagnosis_reports_latest_bounded_failure_provenance_without_false_pass() {
         .add_public_attribute("private_path", PRIVATE_PATH)
         .unwrap();
     target.add_public_attribute("owner", PRIVATE_EMAIL).unwrap();
+    for (key, value) in [
+        ("uri_hint", "file:///private/public-diagnosis-107"),
+        ("unc_hint", "\\\\private-host\\public-diagnosis-107"),
+        ("oauth_hint", "gho_public_diagnosis_private_107"),
+    ] {
+        target.add_public_attribute(key, value).unwrap();
+    }
     target
         .add_public_attribute("safe", "bounded-public-value")
         .unwrap();
@@ -124,7 +130,14 @@ fn diagnosis_reports_latest_bounded_failure_provenance_without_false_pass() {
         assert!(store.append(item).unwrap());
     }
     let persisted = fs::read_to_string(repository.store_path()).unwrap();
-    for private in [PRIVATE_TOKEN, PRIVATE_PATH, PRIVATE_EMAIL] {
+    for private in [
+        PRIVATE_TOKEN,
+        PRIVATE_PATH,
+        PRIVATE_EMAIL,
+        "file:///private/public-diagnosis-107",
+        "\\\\private-host\\public-diagnosis-107",
+        "gho_public_diagnosis_private_107",
+    ] {
         assert!(!persisted.contains(private));
     }
     assert!(persisted.contains("bounded-public-value"));
@@ -146,6 +159,14 @@ fn diagnosis_reports_latest_bounded_failure_provenance_without_false_pass() {
         "ProductStateDiagnose-v1",
     );
     let observed = &diagnosis["observability"];
+    let public_output = format!("{query}{diagnosis}");
+    for private in [
+        "file:///private/public-diagnosis-107",
+        "\\\\private-host\\public-diagnosis-107",
+        "gho_public_diagnosis_private_107",
+    ] {
+        assert!(!public_output.contains(private));
+    }
     assert_eq!(observed["schema_version"], "PublicCausalDiagnosis-v1");
     assert_eq!(observed["matched_event_id"], "target-failure");
     assert_eq!(observed["failure_provenance"]["matched_reference_count"], 3);
