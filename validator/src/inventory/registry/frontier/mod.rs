@@ -158,6 +158,7 @@ fn expected_ready_lanes(frontier: &str) -> Result<BTreeSet<String>, InventoryErr
         "N07_READY_N04_N06_INTEGRATED_SOURCE_FRONTIER" => &["N07"],
         "N08_N09_READY_N07_INTEGRATED_SOURCE_FRONTIER" => &["N08", "N09"],
         "N08_READY_N09_INTEGRATED_SOURCE_FRONTIER" => &["N08"],
+        "N08_N09_INTEGRATED_DEBT_CHECKPOINT" => &[],
         _ => {
             return Err(InventoryError::InvalidRegistry(
                 "scheduler frontier is unknown".to_owned(),

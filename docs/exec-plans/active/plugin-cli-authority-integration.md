@@ -528,6 +528,18 @@ claim and representative product or release proof.
   readiness, release, and completion remain withheld. N08 remains the sole
   active lease; N10 is dependency-eligible but is not launched while the root
   integration queue is occupied.
+- N08 is root-integrated at source-only boundary
+  `04e9d2d098a6bb0790979896535ac35a59eb1631` / tree
+  `fb96ff1952f69001ce0ce52d0dff12812208238d`. Its compiled product contract
+  passes 68 focused lifecycle, repeat-use, recovery, false-pass, topology, and
+  closure controls, and the warning-denied production library compiles cleanly.
+  The rejected parallel host-lifecycle authority was withdrawn in a forward
+  commit; `distribution::host_effect` remains the sole supported-host mutation
+  authority. The N08 branch tip is therefore tombstoned as historical withdrawal,
+  not treated as the accepted lane identity. N10 and N11 become dependency-ready
+  only after canonical reconciliation and the required dead-code/standards
+  checkpoint. Package, install, cache, marketplace, app-registry, discovery,
+  runtime, Product Fitness, readiness, release, and completion remain withheld.
 
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine

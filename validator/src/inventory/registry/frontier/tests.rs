@@ -191,3 +191,31 @@ fn integrated_agent_adoption_leaves_only_plugin_product_ready() {
     assert!(nodes.integrated.contains("N09"));
     assert_eq!(nodes.ready, BTreeSet::from(["N08".to_owned()]));
 }
+
+#[test]
+fn integrated_plugin_product_and_agent_adoption_enter_the_debt_checkpoint() {
+    let mut value = registry(
+        &[
+            ("N00", "integrated"),
+            ("N01", "integrated"),
+            ("N02", "integrated"),
+            ("N03", "integrated"),
+            ("N04", "integrated"),
+            ("N05", "integrated"),
+            ("N06", "integrated"),
+            ("N07", "integrated"),
+            ("N08", "integrated"),
+            ("N09", "integrated"),
+            ("N10", "blocked"),
+            ("N11", "blocked"),
+        ],
+        &[],
+    );
+    value["pre_adoption_source"]["frontier"] = json!("N08_N09_INTEGRATED_DEBT_CHECKPOINT");
+
+    let nodes = scheduler_nodes(&value).unwrap();
+
+    assert!(nodes.integrated.contains("N08"));
+    assert!(nodes.integrated.contains("N09"));
+    assert!(nodes.ready.is_empty());
+}
