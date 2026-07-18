@@ -7,8 +7,8 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
 const MAX_FRONTIER_BYTES: u64 = 2 * 1024 * 1024;
-const SOURCE_BASE_COMMIT: &str = "0c7f3e147d372f870751548610710353d37f9d4b";
-const SOURCE_BASE_TREE: &str = "d0bbe290b2411ba89de4e90ccedeb013fbdfc1a1";
+const SOURCE_BASE_COMMIT: &str = "766e3b8ac669dac0f49ce10ce352c912381b180f";
+const SOURCE_BASE_TREE: &str = "f6d3c09a7594f4f3d963a050cb89571ab42aa696";
 
 pub(super) struct Frontier {
     pub(super) active_tools: BTreeSet<String>,

@@ -227,7 +227,10 @@ registry, new-session discovery, tool execution, and host invalidation.
 Scheduler `ready` means a lane may receive a source-work lease; it does not
 activate production tools. Only an `integrated` lane enters the production
 frontier. N04-N07 are integrated at source ceilings; N08 and N09 are the only
-ready lanes and remain unleased through the debt and lane-restructure checkpoint.
+ready lanes. The debt and lane-restructure checkpoint is closed, and root has
+issued exact, disjoint managed-worktree leases for both lanes from clean source
+base `766e3b8ac669dac0f49ce10ce352c912381b180f` / tree
+`f6d3c09a7594f4f3d963a050cb89571ab42aa696`.
 Shared generated authority stays root-owned. Runtime registry loading rejects a
 ready lane whose graph dependencies are not integrated and binds this named
 frontier to exactly N08/N09 readiness after N07 integration. Each scope records
@@ -247,9 +250,9 @@ the integrated N06 interface later. Nonexistent legacy scope roots are removed,
 and no lane scope owns Cargo, shared schemas, generated authority, public CLI,
 contract, registry, claim, or migration-registry paths.
 Root integrates accepted authority-bearing increments one at a time. N04-N07
-are integrated. N08 and N09 remain unleased until root closes the accumulated
-standards-debt checkpoint, validates the restructured lane plan, and atomically
-issues disjoint managed-worktree leases.
+are integrated. N08 and N09 now execute under the two issued leases after root
+closed the accumulated standards-debt checkpoint and obtained bounded
+adversarial sign-off on the restructured lane plan.
 
 ## Worktree protocol after P0
 
@@ -268,6 +271,8 @@ readiness, release, and completion.
 Routine source-freeze review uses GPT-5.6 Terra with high reasoning on the
 standard tier. GPT-5.6 Sol with high reasoning is reserved for the bounded
 four-reviewer team at material product, release, and completion milestones.
+This is the product default as well as the current development default; a lane
+may not spend Sol review capacity on an ordinary source freeze.
 
 ### Reviewed remaining macro-lanes
 
@@ -498,7 +503,7 @@ claim and representative product or release proof.
   withheld.
 - The N02-N07 dependency chain is closed at source ceilings through the exact
   integrated N07 identity above. N08 and N09 form the next dependency antichain,
-  and stay unleased until the reviewed lane restructure is complete. The root
+  and are leased from the exact clean restructured source base. The root
   standards-debt checkpoint is accepted at source commit
   `9405e863b2f05957dc1f4e56373ca5aba1013db1` / tree
   `60acb3fc4587b50c1479c239b1bf3166d9f51c69`: the private successor binding is

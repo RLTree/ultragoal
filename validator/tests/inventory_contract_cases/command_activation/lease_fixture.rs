@@ -16,7 +16,7 @@ fn establish_fixture_authority(repo: &TestRepo) {
             "commit-tree",
             &tree,
             "-p",
-            "0c7f3e147d372f870751548610710353d37f9d4b",
+            "766e3b8ac669dac0f49ce10ce352c912381b180f",
             "-m",
             "fixture authority",
         ],
