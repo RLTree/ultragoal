@@ -112,6 +112,21 @@ fn bounded_invariant_review_cannot_promote_milestone_claims_or_add_reviewers() {
         !trigger_errors.is_empty(),
         "bounded milestone trigger false pass"
     );
+
+    let mut reviewer_review = crate::json_boundary::read_json(
+        &root.join("fixtures/review-materiality/valid/bounded-invariant-review-required.json"),
+    )
+    .expect("bounded invariant review fixture");
+    reviewer_review["reviewers_required"] = json!(["claim-falsifier", "security-reviewer"]);
+    let reviewer_errors = crate::schema_catalog::schema_errors(
+        &store,
+        "review-materiality-gate.schema.json",
+        &reviewer_review,
+    );
+    assert!(
+        !reviewer_errors.is_empty(),
+        "bounded reviewer-count false pass"
+    );
 }
 
 #[test]

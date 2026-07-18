@@ -200,17 +200,11 @@
           "claim_ceiling": {
             "properties": {
               "supported": {
-                "not": {
-                  "contains": {
-                    "enum": [
-                      "material_signoff",
-                      "major_root_integration",
-                      "product",
-                      "readiness",
-                      "release",
-                      "completion"
-                    ]
-                  }
+                "items": {
+                  "enum": [
+                    "source_acceptance",
+                    "lane_acceptance"
+                  ]
                 }
               },
               "unsupported": {
