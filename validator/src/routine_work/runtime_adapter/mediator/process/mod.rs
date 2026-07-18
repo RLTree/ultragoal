@@ -36,8 +36,10 @@ mod darwin_child_custody;
 mod darwin_suspended_launch;
 #[path = "execution.rs"]
 mod execution;
-#[path = "group_observation.rs"]
-mod group_observation;
+#[path = "failure_injection.rs"]
+mod failure_injection;
+#[path = "group_custody.rs"]
+mod group_custody;
 #[path = "input_write.rs"]
 mod input_write;
 #[cfg(target_os = "macos")]
@@ -46,12 +48,22 @@ mod loaded_executable_identity;
 #[cfg(target_os = "macos")]
 #[path = "object_bound_launch.rs"]
 mod object_bound_launch;
+#[path = "observation_digest.rs"]
+mod observation_digest;
+#[path = "observation_failure.rs"]
+mod observation_failure;
 #[path = "observation_lifecycle.rs"]
 mod observation_lifecycle;
 #[path = "output_drain.rs"]
 mod output_drain;
+#[cfg(target_os = "macos")]
+#[path = "sandbox_profile.rs"]
+mod sandbox_profile;
 #[path = "spawn_test_observation.rs"]
 mod spawn_test_observation;
+#[cfg(unix)]
+#[path = "termination_status.rs"]
+mod termination_status;
 
 #[cfg(test)]
 type ProcessHook = Box<dyn FnOnce() + Send + 'static>;
@@ -124,15 +136,22 @@ pub(crate) use darwin_child_custody::*;
 #[cfg(target_os = "macos")]
 pub(crate) use darwin_suspended_launch::*;
 pub(crate) use execution::*;
-pub(crate) use group_observation::*;
+pub(crate) use failure_injection::*;
+pub(crate) use group_custody::*;
 pub(crate) use input_write::*;
 #[cfg(target_os = "macos")]
 pub(crate) use loaded_executable_identity::*;
 #[cfg(target_os = "macos")]
 pub(crate) use object_bound_launch::*;
+pub(crate) use observation_digest::*;
+pub(crate) use observation_failure::*;
 pub(crate) use observation_lifecycle::*;
 pub(crate) use output_drain::*;
+#[cfg(target_os = "macos")]
+pub(crate) use sandbox_profile::*;
 pub(crate) use spawn_test_observation::*;
+#[cfg(unix)]
+pub(crate) use termination_status::*;
 
 #[cfg(all(test, target_os = "macos"))]
 #[path = "custody_transition_tests.rs"]

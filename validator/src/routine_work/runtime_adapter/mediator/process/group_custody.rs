@@ -136,14 +136,6 @@ pub(crate) fn wait_group_absent(group: ProcessGroupId) -> Result<(), RoutineErro
     Err(mediator_error("mediator-descendant-cleanup-incomplete"))
 }
 
-pub(crate) fn digest_bytes(bytes: &[u8]) -> String {
-    format!("sha256:{:x}", Sha256::digest(bytes))
-}
-
-pub(crate) fn mediator_error(cause: &'static str) -> RoutineError {
-    RoutineError::new(RoutineErrorId::ObservationFailed, cause, None)
-}
-
 #[cfg(test)]
 mod tests {
     use super::super::ProcessGroupId;
