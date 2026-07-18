@@ -24,9 +24,12 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::mpsc;
 use std::time::{Duration, Instant};
 
-include!(
-    "../../../tests/evaluation_runtime_contract/production_native_fixture_boundary_accepts_only_fixed_protected_substrates.rs"
-);
+#[path = "../../../tests/evaluation_runtime_contract/production_native_fixture_boundary_accepts_only_fixed_protected_substrates.rs"]
+mod production_native;
+use production_native::{
+    RESEARCH_2026_01_01_EPOCH, RESEARCH_CHECKED_DAY_EPOCH, RESEARCH_MUTABLE_FRESHNESS_SECONDS,
+    research_epoch, research_laws, task,
+};
 include!("../../../tests/evaluation_runtime_contract/next_root.rs");
 include!("../../../tests/evaluation_runtime_contract/research/source/url.rs");
 include!("../../../tests/evaluation_runtime_contract/research/proposal.rs");
