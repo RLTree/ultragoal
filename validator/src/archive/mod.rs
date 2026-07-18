@@ -28,7 +28,7 @@ pub fn build_archive(
     Ok(json!({
         "schema": "harness-ultragoal.distribution-archive-receipt.v1",
         "status": "pass",
-        "generated_at": crate::audit::clock::now_iso(),
+        "generated_at": "1980-01-01T00:00:00Z",
         "archive_purpose": purpose,
         "claim_ceiling": archive_claim_ceiling(purpose),
         "archive": {

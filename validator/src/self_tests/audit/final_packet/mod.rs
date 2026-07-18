@@ -12,7 +12,7 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     let store = crate::schema_catalog::load(
         &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
     );
-    let missing = crate::audit::final_packet::package_failures(&root, &store);
+    let missing = crate::audit::final_packet::claim_guard_failures(&root, &store);
     assert!(
         missing
             .iter()
@@ -26,7 +26,7 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     );
     let current = crate::package::inventory::package_digest(&root).expect("digest");
     let receipt = receipt_fixtures::write_green_proof(&root, &current);
-    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    let failures = crate::audit::final_packet::value_failures(&root, &store, &receipt);
     assert!(failures.is_empty(), "{failures:?}");
 
     let mut missing_observability = receipt.clone();
@@ -35,7 +35,8 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
         .expect("receipt object")
         .remove("observability");
     receipt_fixtures::write_proof(&root, &missing_observability);
-    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    let failures =
+        crate::audit::final_packet::value_failures(&root, &store, &missing_observability);
     assert!(
         failures
             .iter()
@@ -47,7 +48,8 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     corrupt_observability["observability"]["event"]["candidate_digest"] =
         json!(crate::self_tests::boundaries::workspace_fixtures::sha('c'));
     receipt_fixtures::write_proof(&root, &corrupt_observability);
-    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    let failures =
+        crate::audit::final_packet::value_failures(&root, &store, &corrupt_observability);
     assert!(
         failures
             .iter()
@@ -60,7 +62,7 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     bad_status["claim_ceiling"] = json!("withheld_or_blocked");
     bad_status["cli_performance"]["status"] = json!("fail");
     receipt_fixtures::write_proof(&root, &bad_status);
-    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    let failures = crate::audit::final_packet::value_failures(&root, &store, &bad_status);
     for expected in [
         "final_packet_authority_status_not_pass",
         "final_packet_proof_claim_ceiling_not_verified",
@@ -83,7 +85,7 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     disagree["cli_performance"]["digest"] =
         json!(crate::digest::file(&root.join(cli_path)).expect("changed cli digest"));
     receipt_fixtures::write_proof(&root, &disagree);
-    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    let failures = crate::audit::final_packet::value_failures(&root, &store, &disagree);
     assert!(
         failures
             .iter()
@@ -94,7 +96,7 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     let mut invalid_path = receipt.clone();
     invalid_path["packet"]["path"] = json!("../final-packet.json");
     receipt_fixtures::write_proof(&root, &invalid_path);
-    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    let failures = crate::audit::final_packet::value_failures(&root, &store, &invalid_path);
     assert!(
         failures
             .iter()
@@ -106,7 +108,7 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     bad_digest["packet"]["digest"] =
         json!(crate::self_tests::boundaries::workspace_fixtures::sha('e'));
     receipt_fixtures::write_proof(&root, &bad_digest);
-    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    let failures = crate::audit::final_packet::value_failures(&root, &store, &bad_digest);
     assert!(
         failures
             .iter()
@@ -117,7 +119,7 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     let mut zero_digest = receipt.clone();
     zero_digest["packet"]["digest"] = json!(crate::digest::ZERO);
     receipt_fixtures::write_proof(&root, &zero_digest);
-    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    let failures = crate::audit::final_packet::value_failures(&root, &store, &zero_digest);
     assert!(
         failures
             .iter()
@@ -128,7 +130,7 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     let mut missing_packet = receipt.clone();
     missing_packet["packet"]["path"] = json!("validation_artifacts/review/missing-packet.json");
     receipt_fixtures::write_proof(&root, &missing_packet);
-    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    let failures = crate::audit::final_packet::value_failures(&root, &store, &missing_packet);
     assert!(
         failures
             .iter()
@@ -141,7 +143,7 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     absent_bad_digest["packet"]["digest"] =
         json!(crate::self_tests::boundaries::workspace_fixtures::sha('a'));
     receipt_fixtures::write_proof(&root, &absent_bad_digest);
-    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    let failures = crate::audit::final_packet::value_failures(&root, &store, &absent_bad_digest);
     assert!(
         failures
             .iter()
@@ -153,7 +155,7 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     stale["target_revision"]["value"] =
         json!(crate::self_tests::boundaries::workspace_fixtures::sha('d'));
     receipt_fixtures::write_proof(&root, &stale);
-    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    let failures = crate::audit::final_packet::value_failures(&root, &store, &stale);
     assert!(
         failures
             .iter()

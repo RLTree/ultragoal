@@ -8,18 +8,6 @@ const SCHEMA: &str = "final-packet-proof.schema.json";
 mod observability;
 mod references;
 
-pub(crate) fn package_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec<String> {
-    let mut out = Vec::new();
-    let receipt = match json_boundary::read_json(&root.join(RECEIPT)) {
-        Ok(value) => value,
-        Err(err) => {
-            out.push(format!("final_packet_proof_missing:{err}"));
-            return out;
-        }
-    };
-    value_failures(root, store, &receipt)
-}
-
 pub(crate) fn claim_guard_failures(
     root: &Path,
     store: &schema_catalog::SchemaStore,

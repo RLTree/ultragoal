@@ -209,7 +209,7 @@ pub(super) fn expect_failure(
     expected: &str,
 ) {
     receipt_fixtures::write_proof(root, proof);
-    let failures = crate::audit::final_packet::package_failures(root, store);
+    let failures = crate::audit::final_packet::value_failures(root, store, proof);
     assert!(
         failures.iter().any(|failure| failure.contains(expected)),
         "{expected}: {failures:?}"
