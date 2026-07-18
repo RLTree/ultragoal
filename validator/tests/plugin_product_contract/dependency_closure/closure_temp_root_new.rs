@@ -1,3 +1,5 @@
+struct ClosureTempRoot(std::path::PathBuf);
+
 impl ClosureTempRoot {
     fn new() -> Self {
         static NEXT_CLOSURE_ROOT: std::sync::atomic::AtomicU64 =

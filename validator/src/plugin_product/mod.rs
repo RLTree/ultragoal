@@ -9,9 +9,8 @@ pub mod lifecycle;
 pub mod product_fitness;
 pub mod source_closure;
 
-// The legacy source-closure contract compiles this module directly inside an
-// integration-test crate that has no distribution kernel. Production builds,
-// including every integration test through the library, expose the adapter.
+// The product contract imports this compiled library surface; it does not
+// duplicate production modules inside an integration-test crate.
 pub mod distribution_adapter;
 
 // The registry control plane consumes the sealed read-only agent authority
