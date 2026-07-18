@@ -70,6 +70,36 @@ fn schema_rule_contracts_cover_fixture_receipt_and_keyword_boundaries() {
 }
 
 #[test]
+fn bounded_invariant_review_cannot_promote_milestone_claims_or_add_reviewers() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let store = crate::schema_catalog::load(&root);
+    let mut review = crate::json_boundary::read_json(
+        &root.join(
+            "fixtures/review-materiality/valid/bounded-invariant-review-required.json",
+        ),
+    )
+    .expect("bounded invariant review fixture");
+
+    assert!(
+        crate::schema_catalog::schema_errors(
+            &store,
+            "review-materiality-gate.schema.json",
+            &review,
+        )
+        .is_empty()
+    );
+
+    review["claim_ceiling"]["unsupported"] = json!(["material_signoff"]);
+    review["reviewers_required"] = json!(["claim-falsifier", "security-reviewer"]);
+    let errors = crate::schema_catalog::schema_errors(
+        &store,
+        "review-materiality-gate.schema.json",
+        &review,
+    );
+    assert!(!errors.is_empty(), "bounded milestone promotion false pass");
+}
+
+#[test]
 fn schema_catalog_loader_reports_invalid_rows_and_catalog_path_errors() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-catalog-loader");

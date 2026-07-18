@@ -1423,6 +1423,7 @@
     "fixtures/red/wrong-worktree-or-root.json",
     "fixtures/review-materiality/valid/advisory-review-allowed.json",
     "fixtures/review-materiality/valid/blocked-before-review.json",
+    "fixtures/review-materiality/valid/bounded-invariant-review-required.json",
     "fixtures/review-materiality/valid/delta-review-allowed.json",
     "fixtures/review-materiality/valid/full-scope-material-review-required.json",
     "fixtures/review-round/anchors/archive-fail-receipt.json",

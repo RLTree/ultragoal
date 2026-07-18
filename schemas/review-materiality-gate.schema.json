@@ -35,6 +35,7 @@
     "decision": {
       "enum": [
         "FULL_SCOPE_MATERIAL_REVIEW_REQUIRED",
+        "BOUNDED_INVARIANT_REVIEW_REQUIRED",
         "DELTA_REVIEW_ALLOWED",
         "ADVISORY_REVIEW_ALLOWED",
         "BLOCKED_BEFORE_REVIEW"
@@ -60,6 +61,13 @@
       "items": {
         "enum": [
           "material_claim_boundary",
+          "bounded_invariant_change",
+          "worktree_freeze",
+          "major_root_integration",
+          "product_claim_boundary",
+          "release_claim_boundary",
+          "completion_claim_boundary",
+          "protected_cross_domain_change",
           "phase_advancement",
           "proof_anchor_change",
           "reviewer_registry_change",
@@ -147,6 +155,89 @@
       "const": false
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "const": "FULL_SCOPE_MATERIAL_REVIEW_REQUIRED"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "reviewers_required": {
+            "minItems": 4,
+            "maxItems": 4
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "const": "BOUNDED_INVARIANT_REVIEW_REQUIRED"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "reviewers_required": {
+            "minItems": 1,
+            "maxItems": 1
+          },
+          "claim_ceiling": {
+            "properties": {
+              "unsupported": {
+                "allOf": [
+                  {
+                    "contains": {
+                      "const": "material_signoff"
+                    }
+                  },
+                  {
+                    "contains": {
+                      "const": "readiness"
+                    }
+                  },
+                  {
+                    "contains": {
+                      "const": "release"
+                    }
+                  },
+                  {
+                    "contains": {
+                      "const": "completion"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "enum": [
+              "ADVISORY_REVIEW_ALLOWED",
+              "BLOCKED_BEFORE_REVIEW"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "reviewers_required": {
+            "maxItems": 0
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "gateList": {
       "type": "array",

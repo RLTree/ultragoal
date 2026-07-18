@@ -130,6 +130,29 @@ access, a secret boundary, or a destructive decision. The interruption names
 the exhausted safe routes, the exact blocker, preserved state, and the exact
 next action.
 
+## Calibrated assurance
+
+Use the smallest proof loop that can honestly support the current claim.
+Implementation uses cheap deterministic checks. A material source lane or
+worktree freeze receives one exhaustive review of its complete named invariant
+from one risk-matched specialist and can support only source or lane acceptance.
+The four-persona team is reserved for major root integration, Product Fitness,
+release, completion, protected cross-domain change, or explicit escalation.
+
+Re-review requires changed authority-bearing bytes, a changed consumed
+dependency, a newly eligible claim surface, or observed behavior that
+contradicts the prior decision. A clean exhaustive pass closes the loop;
+speculative hardening becomes bounded backlog rather than another review round.
+Routine output stays ephemeral. Persist only the smallest artifact consumed by
+an active claim, cross-process handoff, irreproducible observation, audit, or
+recovery need, and delete it when that need ends.
+
+Mandatory security, privacy, destructive-effect, authority, identity, recovery,
+and proof-separation boundaries never become optional. Other universal checks
+must earn their cost through recurrence or strong cross-repository evidence and
+must remain precise, inexpensive, actionable, and easier to maintain than the
+failures they prevent.
+
 ## Truth surfaces
 
 Keep these surfaces separate and candidate-bound:

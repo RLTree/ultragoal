@@ -229,6 +229,15 @@ claim and representative product or release proof.
   disconnected legacy material-review validator is not treated as production
   enforcement; its bounded-invariant decision must be adopted through a live
   successor route or retired before an enforcement claim is raised.
+- A single bounded synthesis of the July model-routing and product-craft source
+  corpus found no monotonic contract change: `AMEND-001` already owns the
+  doctrine. The source plugin materiality agent, its existing schema, and the
+  resource map are being reconciled in place so ordinary material lane freezes
+  select one bounded invariant reviewer while four-persona review remains a
+  milestone topology. No guide, node, tracker, receipt family, or observability
+  channel was added. Installed cache guidance remains an unverified stale
+  projection until the current source is packaged, installed, and observed on
+  those separate surfaces.
 - `scripts/check-agent-standards .` passes 121 rows after stale pass claims
   were downgraded to pending rather than manufacturing replacement evidence.
   The corresponding performance, Rust developer-loop, observability,
