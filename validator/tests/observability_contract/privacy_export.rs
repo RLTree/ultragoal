@@ -1,7 +1,7 @@
-use super::observability::ExplicitExportRequest;
 use super::scenario::{AdapterMode, MockAdapter, TestDir, event, query, store};
 use std::fs;
 use std::time::Duration;
+use ultragoal::observability::ExplicitExportRequest;
 #[test]
 fn tokens_pii_paths_and_bypass_variants_are_dropped_before_persistence() {
     let dir = TestDir::new("redaction");

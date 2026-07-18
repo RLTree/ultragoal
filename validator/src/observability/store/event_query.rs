@@ -22,14 +22,6 @@ impl EventStore {
         self.validate_decoded(&decoded)?;
         Ok(decoded.events)
     }
-    #[cfg(test)]
-    pub fn hold_identity_mutex_for_test(
-        &self,
-        ready: std::sync::mpsc::Sender<()>,
-        release: std::sync::mpsc::Receiver<()>,
-    ) -> Result<(), String> {
-        self.identity.hold_mutex_for_test(ready, release)
-    }
     pub(crate) fn validate_event_binding(&self, event: &SemanticEvent) -> Result<(), String> {
         if event.context_id() != self.context_id {
             return Err("observe-binding-stale-or-wrong-context".to_owned());

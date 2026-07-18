@@ -1,5 +1,5 @@
-use super::observability::{EventQuery, EventStore, SemanticEvent, SemanticEventInput};
 use super::scenario::{TestDir, event, query, store};
+use ultragoal::observability::{EventQuery, EventStore, SemanticEvent, SemanticEventInput};
 
 #[test]
 fn attribute_row_event_store_scan_and_result_limits_fail_closed() {

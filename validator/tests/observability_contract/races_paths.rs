@@ -1,10 +1,10 @@
-use super::observability::{EventQuery, EventStore, SemanticEvent, SemanticEventInput};
 use super::scenario::{TestDir, event, query, store};
 use std::fs::{self, OpenOptions};
 use std::io::Write;
 use std::path::Path;
 use std::process::Command;
 use std::sync::{Arc, Barrier};
+use ultragoal::observability::{EventQuery, EventStore, SemanticEvent, SemanticEventInput};
 
 #[cfg(unix)]
 use std::os::unix::fs::{PermissionsExt, symlink};

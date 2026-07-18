@@ -1,10 +1,7 @@
-use super::observability::{EventStore, ExplicitExportRequest};
 use super::scenario::{AdapterMode, MockAdapter, TestDir, event, query, store, tree_snapshot};
 use std::fs::{self, File, OpenOptions};
-use std::path::Path;
-use std::process::Command;
-use std::sync::mpsc;
 use std::time::{Duration, Instant};
+use ultragoal::observability::{EventStore, ExplicitExportRequest};
 
 #[path = "lock_deadline_cases/lock_deadline_enforcement.rs"]
 mod lock_deadline_enforcement;

@@ -1,12 +1,12 @@
-use super::observability::{
-    EventQuery, EventStore, ExportAdapter, SemanticEvent, SemanticEventInput,
-};
 use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Duration;
+use ultragoal::observability::{
+    EventQuery, EventStore, ExportAdapter, SemanticEvent, SemanticEventInput,
+};
 
 static NEXT_DIR: AtomicU64 = AtomicU64::new(1);
 
