@@ -17,13 +17,16 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::io::Write;
-use std::os::unix::fs::{MetadataExt, symlink};
+use std::os::unix::fs::{MetadataExt, PermissionsExt, symlink};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::mpsc;
 use std::time::{Duration, Instant};
 
+include!(
+    "../../../tests/evaluation_runtime_contract/production_native_fixture_boundary_accepts_only_fixed_protected_substrates.rs"
+);
 include!("../../../tests/evaluation_runtime_contract/next_root.rs");
 include!("../../../tests/evaluation_runtime_contract/research/source/url.rs");
 include!("../../../tests/evaluation_runtime_contract/research/proposal.rs");
