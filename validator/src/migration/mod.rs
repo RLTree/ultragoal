@@ -12,6 +12,10 @@ use std::fmt;
 
 pub(crate) mod product;
 
+#[cfg(test)]
+#[path = "tests/mod.rs"]
+mod tests;
+
 include!("max_surfaces.rs");
 
 include!("inventory.rs");

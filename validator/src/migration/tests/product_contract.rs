@@ -1,13 +1,10 @@
-#[path = "../src/migration/mod.rs"]
-mod migration;
-
-#[path = "migration_product_contract/adversarial/mod.rs"]
+#[path = "../../../tests/migration_product_contract/adversarial/mod.rs"]
 mod adversarial;
-#[path = "migration_product_contract/positive/mod.rs"]
+#[path = "../../../tests/migration_product_contract/positive/mod.rs"]
 mod positive;
-#[path = "migration_product_contract/recovery/mod.rs"]
+#[path = "../../../tests/migration_product_contract/recovery/mod.rs"]
 mod recovery;
-#[path = "migration_product_contract/runtime_fixtures/mod.rs"]
+#[path = "../../../tests/migration_product_contract/runtime_fixtures/mod.rs"]
 mod runtime_fixtures;
 
 #[test]
@@ -18,9 +15,9 @@ fn corrective_worker_result_remains_structural_context_after_source_topology_cha
     use std::path::Path;
 
     let bytes = include_bytes!(
-        "../../docs/ultragoal-successor-live/worker-results/MIGRATION-RETIREMENT-PRODUCTION-090.json"
+        "../../../../docs/ultragoal-successor-live/worker-results/MIGRATION-RETIREMENT-PRODUCTION-090.json"
     );
-    let result = ultragoal::orchestration::WorkerResultV1::parse_json(bytes)
+    let result = crate::orchestration::WorkerResultV1::parse_json(bytes)
         .expect("authoritative WorkerResultV1 parse");
     assert_eq!(result.worker, "/root/routine_execution_authority_reviewer");
     assert_eq!(result.lease_id, "MIGRATION-COMPATIBILITY-BOUNDARY-100");
