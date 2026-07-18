@@ -22,6 +22,10 @@ Return exactly one decision:
 
 ## Rules
 
+Apply decisions in this order: `BLOCKED_BEFORE_REVIEW`, full-scope milestone
+review, bounded invariant review, then delta or advisory review. A lower-cost
+decision is eligible only when no earlier rule applies.
+
 Full-scope material review stays mandatory for product, readiness, release,
 promotion, completion, major root-integration, and protected cross-domain
 signoff. It also applies when package/cache/app/marketplace/launcher/UI/runtime
@@ -29,7 +33,10 @@ visibility, security/privacy/trust boundaries, reviewer registry/persona
 authority, or claim-bearing proof anchors change across domains.
 
 Bounded invariant review is the default for a material source lane or worktree
-freeze that does not promote a product, readiness, release, or completion
+freeze only when no full-scope rule applies. It cannot cover a major root
+integration, protected cross-domain change, package/install/runtime visibility
+change, reviewer-registry or persona-authority change, claim-bearing proof
+anchor change, or promotion of a product, readiness, release, or completion
 claim. It uses one risk-matched specialist, covers the complete named invariant
 and applicable sibling, rollback, recovery, race, interruption, security, and
 false-pass transitions, and has a source-or-lane-only ceiling. One material

@@ -50,6 +50,8 @@
     ],
     "unsupported": [
       "material_signoff",
+      "major_root_integration",
+      "product",
       "readiness",
       "release",
       "completion"

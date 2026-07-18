@@ -187,8 +187,32 @@
             "minItems": 1,
             "maxItems": 1
           },
+          "material_triggers": {
+            "items": {
+              "enum": [
+                "bounded_invariant_change",
+                "worktree_freeze",
+                "material_code_runtime_change",
+                "prior_revise_or_blocked_repair"
+              ]
+            }
+          },
           "claim_ceiling": {
             "properties": {
+              "supported": {
+                "not": {
+                  "contains": {
+                    "enum": [
+                      "material_signoff",
+                      "major_root_integration",
+                      "product",
+                      "readiness",
+                      "release",
+                      "completion"
+                    ]
+                  }
+                }
+              },
               "unsupported": {
                 "allOf": [
                   {
@@ -209,6 +233,16 @@
                   {
                     "contains": {
                       "const": "completion"
+                    }
+                  },
+                  {
+                    "contains": {
+                      "const": "major_root_integration"
+                    }
+                  },
+                  {
+                    "contains": {
+                      "const": "product"
                     }
                   }
                 ]
