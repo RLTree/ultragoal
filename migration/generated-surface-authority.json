@@ -484,7 +484,7 @@
         "scripts/check-agent-standards"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "822b8d7fe36ebc60e8c683c09cbe95016efcfdb1675bf3c3541603537d01c098"
+      "output_sha256": "c4636267e9b5771e05099cb2887bdb6ec87338f064c4e2fd6d3a1293f4aed8c7"
     }
   ]
 }
