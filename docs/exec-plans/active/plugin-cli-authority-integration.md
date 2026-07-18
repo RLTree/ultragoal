@@ -29,10 +29,9 @@ namespace, standards, and retention-aware cleanup; product lanes remain blocked.
 All fourteen claims remain withheld with empty evidence and no validator
 receipts. The user-authorized cleanup removed the obsolete review tree and
 reproducible worktree home/tmp state, recovering about 10.1 GB in addition to
-earlier cleanup; the three approved paths now exist only as empty roots. N06
-and N07 retain their unique active worktree state. The integrated N05 worktree
-and its disposable target are removed; its branch tip remains preserved by the
-registry tombstone.
+earlier cleanup; the three approved paths now exist only as empty roots. N07 is
+the sole active worktree. The integrated N05 and N06 worktrees and disposable
+targets are removed; their branch tips remain preserved by registry tombstones.
 
 ## Outcome
 
