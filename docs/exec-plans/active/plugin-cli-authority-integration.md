@@ -18,16 +18,21 @@ candidate: every candidate is the clean containing `HEAD`/tree derived live
 from that checkpoint. Stage A is accepted for the registry, closed lease
 contract, template, gates, scopes, graph, and review anchors; this plan and
 the board remain projections and cannot promote claims.
-The exact scheduler frontier is N04-N07 after N03, N09 after N02+N05, N08 after
-N04-N07, N10 after N03+N06+N09, N11 after N06+N07+N08, and N12 after N10+N11.
+N04 and N05 are now integrated at source-only ceilings. The exact current
+scheduler-ready frontier is N06 and N07. N09 is dependency-eligible after N05
+but remains blocked until root atomically issues its managed-worktree lease. N08 remains blocked
+until N06 and N07 also integrate; N10 remains behind N06 and N09; N11 remains
+behind N06, N07, and N08; N12 remains behind N10 and N11.
 After N12 the route is N12-A -> N14 -> N14-proof -> N12-B-invalidate-and-reproof
 -> parallel N13/N15 -> N16 -> N17. P0 is available only to root for compile,
 namespace, standards, and retention-aware cleanup; product lanes remain blocked.
 All fourteen claims remain withheld with empty evidence and no validator
 receipts. The user-authorized cleanup removed the obsolete review tree and
 reproducible worktree home/tmp state, recovering about 10.1 GB in addition to
-earlier cleanup; the three approved paths now exist only as empty roots. No
-unique active-worktree state remains.
+earlier cleanup; the three approved paths now exist only as empty roots. N06
+and N07 retain their unique active worktree state. The integrated N05 worktree
+and its disposable target are removed; its branch tip remains preserved by the
+registry tombstone.
 
 ## Outcome
 
@@ -50,6 +55,43 @@ compile/namespace/standards checkpoint and makes N00 the next root-only gate.
 The full clippy wall and library-test compilation still have broad inherited
 findings, so CL-STRICT and every package/install/runtime/product claim remain
 withheld. Four-persona exposure remains reserved for its material boundary.
+
+The N05 source candidate is independently accepted and root-integrated through
+`26aedb17002e419aa7548b3e41f271cf95510f9e` / tree
+`002770ba94f84c0b3a17efa2840ca7e16072f5f9`. Exact root execution passes all
+12 public repository-fit apply, refusal, replay, idempotence, contender, and
+zero-write controls across the three retained entrypoints. This advances only
+the source claim: rollback, pending recovery, package, install, discovery,
+runtime, Product Fitness, readiness, release, and completion remain withheld.
+
+N06 has a narrower accepted public-source increment. The exact lane source
+candidate `3c9a8a4ec3851f5a4035a4a56c917da82cd1650d` / tree
+`97cd6e8c537fa8cc720c35d394c70165eb059cb6` and the equivalent root integration
+pass the real-parent public routine contract 43/43 under warnings-deny. A single
+Terra/high review accepted only that boundary. The three broad private-control
+test roots still fail strict compilation with 95 warnings-as-errors caused by
+isolated production-module inclusion. Two bounded topology replacements failed
+at the same mechanism, so further local topology patching is stopped. N06 stays
+scheduler-ready and all full-N06, downstream, installed, runtime, coverage,
+readiness, release, and completion claims remain withheld. The next trigger is
+a root-owned strict-test-boundary decision at the accumulated standards-debt
+checkpoint; owner is `OWN-ULTRA-ROOT`, and the evidence surface is the exact
+private mutation, race, rollback, recovery, and catalog suites.
+
+N07 also has a narrower accepted public/live-source increment. Exact source
+`bc6581ba0ee996c751bc0ab621f867ba27d95556` / tree
+`fb997fcd3c0f5418b11cc6ac4fa7d1608cfe669f` and its equivalent root integration
+pass the live journey 14/14 and public diagnosis 14/14 under warnings-deny.
+The shared privacy boundary now rejects prefix and embedded URI, UNC, and OAuth
+forms before persistence or public output. Both fixture families use confined
+worktree-safe scratch, explicit checked teardown, and current root-issued Git
+ancestry. The mirrored local observability suite remains withheld behind seven
+warnings-deny diagnostics from isolated production-source duplication. Further
+local topology patching is stopped; N07 stays scheduler-ready and all full-N07,
+downstream, installed, discovery, runtime, export-effect, Product Fitness,
+readiness, release, and completion claims remain withheld. Its next trigger,
+owner, and evidence surface are the same root-owned accumulated standards-debt
+checkpoint, `OWN-ULTRA-ROOT`, and the exact mirrored local control suite.
 
 ## Durable binding and contract lineage
 
@@ -187,8 +229,10 @@ lease authority can be derived.
 the integrated N06 interface later. Nonexistent legacy scope roots are removed,
 and no lane scope owns Cargo, shared schemas, generated authority, public CLI,
 contract, registry, claim, or migration-registry paths.
-Root integrates accepted authority-bearing increments one at a time, initially
-N05, N06, N07, then N04 unless live dependency evidence changes that order.
+Root integrates accepted authority-bearing increments one at a time. N04 and
+N05 are integrated; N06 is the next integration gate while N07 may proceed at
+its dependency-valid source ceiling. N09 remains blocked until root atomically
+issues its managed-worktree lease and advances scheduler state.
 
 ## Worktree protocol after P0
 
@@ -344,9 +388,25 @@ claim and representative product or release proof.
   semantic-standards checkpoint passes on the integrated source, and the live
   registry now exposes N04-N07 as a four-lane source-work frontier with exact
   nonoverlapping code/test/fixture scopes. Scheduler readiness is separated
-  from production activation, and no generated authority is leased. Worktree
-  leases remain unissued until this exact root checkpoint is reviewed and
-  committed. Installed and product claims remain withheld.
+  from production activation, and no generated authority is leased. The clean
+  `0c7f3e147d372f870751548610710353d37f9d4b` source base passed the exact
+  compile, namespace/zero-write, and standards issuance gates. N04-N07 now have
+  four disjoint issued worktree leases whose typed runtime authority binds that
+  already-existing source base rather than falsely attributing the checks to
+  the containing lease-authority commit. Routine review uses Terra/high on the
+  standard tier; Sol/high remains reserved for bounded four-persona milestone
+  gates. Installed and product claims remain withheld.
+- N04 distribution core is independently accepted and root-integrated through
+  `5832bcdbd330840adbf32a3be5bd37e27f4ddd2e` / tree
+  `619436e50e749a8a9c76f108f52f77e8852c92a2`. The correction removes the
+  rejected lint suppression, mirrors the real public distribution boundary in
+  the standalone contract harness, removes two unused test helpers, and binds
+  manifest semantic classification to the existing package-plan refusal.
+  Root checks pass warning-free compilation, distribution 208/208 with one
+  intentional subprocess helper ignored, and adapter 14/14. The task,
+  worktree, and disposable target are closed; package, install, cache,
+  marketplace, app-registry, discovery, runtime, readiness, release, and
+  completion claims remain withheld.
 - HCT-FIXTURES execution/parity, runtime, installed journey, readiness,
   release, and completion claims remain withheld.
 - The calibrated review, observability, and Product Fitness doctrine is now

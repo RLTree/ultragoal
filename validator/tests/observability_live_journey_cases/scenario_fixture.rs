@@ -1,6 +1,6 @@
 use super::*;
 
-pub(crate) const BASE: &str = ".git/codex-scratch/observability/local-diagnosis-069";
+pub(crate) const BASE: &str = "harness-ultragoal-observability-tests";
 pub(crate) const SOURCE_ID: &str = "successor-runtime";
 pub(crate) const PRIVATE_TOKEN: &str = "sk-observability-private-canary-069";
 pub(crate) const PRIVATE_PATH: &str = "/Users/private/observability-canary-069";
@@ -66,22 +66,21 @@ pub(crate) struct Observation {
 }
 
 pub(crate) struct JourneyRepository {
-    pub(crate) container: PathBuf,
+    scratch: crate::observability_fixture_scratch::ScratchDirectory,
     pub(crate) root: PathBuf,
 }
 
 impl JourneyRepository {
     pub(crate) fn new(label: &str, legacy_conflict: bool, dirty: bool) -> Self {
-        let container = live_root().join(BASE).join(format!(
-            "{}-{}-{}",
-            safe_label(label),
-            std::process::id(),
-            NEXT.fetch_add(1, Ordering::Relaxed)
-        ));
-        let root = container.join("repo");
+        let scratch = crate::observability_fixture_scratch::ScratchDirectory::new(
+            "local-diagnosis-069",
+            &safe_label(label),
+            NEXT.fetch_add(1, Ordering::Relaxed),
+        );
+        let root = scratch.container().join("repo");
         fs::create_dir_all(&root).expect("create journey repository");
         let root = fs::canonicalize(root).expect("canonical journey repository");
-        let repository = Self { container, root };
+        let repository = Self { scratch, root };
         repository.git(&["init", "--quiet"]);
         repository.git(&["config", "user.email", "observability-069@example.invalid"]);
         repository.git(&["config", "user.name", "Observability Journey"]);
@@ -108,6 +107,10 @@ impl JourneyRepository {
         }
         repository.git(&["add", "-A"]);
         repository.git(&["commit", "--quiet", "-m", "observability fixture"]);
+        crate::observability_authority_fixture::establish_fixture_authority(
+            &live_root(),
+            repository.root(),
+        );
         if dirty {
             fs::write(
                 repository.root.join("tracked.txt"),
@@ -129,7 +132,7 @@ impl JourneyRepository {
     }
 
     pub(crate) fn outside(&self, name: &str) -> PathBuf {
-        self.container.join(name)
+        self.scratch.container().join(name)
     }
 
     pub(crate) fn run(&self, args: &[&str]) -> Output {
@@ -179,12 +182,8 @@ impl JourneyRepository {
         assert!(output.status.success(), "git {args:?}: {output:?}");
         output
     }
-}
-
-impl Drop for JourneyRepository {
-    fn drop(&mut self) {
-        debug_assert!(self.container.starts_with(live_root().join(BASE)));
-        let _ = fs::remove_dir_all(&self.container);
+    pub(crate) fn teardown(self) {
+        self.scratch.teardown();
     }
 }
 
@@ -205,6 +204,7 @@ pub(crate) fn catalog() -> Catalog {
 
 pub(crate) fn copy_authority_inputs(root: &Path) {
     let live = live_root();
+    crate::observability_authority_fixture::copy_current_inventory_inputs(&live, root);
     let source = live.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
     let target = root.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
     fs::create_dir_all(&target).expect("contract target");

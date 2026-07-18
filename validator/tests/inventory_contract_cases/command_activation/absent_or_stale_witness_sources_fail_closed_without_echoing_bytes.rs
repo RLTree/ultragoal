@@ -1,7 +1,7 @@
 #[test]
 fn absent_or_stale_witness_sources_fail_closed_without_echoing_bytes() {
     let absent = TestRepo::new("activation-source-absent");
-    absent.commit();
+    establish_fixture_authority(&absent);
     let context = LiveContext::build(inventory_request(&absent.root)).unwrap();
     let catalog = InventoryBuilder::new(&context).build().unwrap();
     assert!(
@@ -42,6 +42,7 @@ fn absent_or_stale_witness_sources_fail_closed_without_echoing_bytes() {
     ] {
         let stale = TestRepo::new(label);
         copy_sources(&stale);
+        establish_fixture_authority(&stale);
         stale.write(relative, b"SECRET_CANARY_STALE\n");
         stale.commit();
         let context = LiveContext::build(inventory_request(&stale.root)).unwrap();
@@ -52,6 +53,7 @@ fn absent_or_stale_witness_sources_fail_closed_without_echoing_bytes() {
 
     let private_export = TestRepo::new("activation-source-private-root-export");
     copy_sources(&private_export);
+    establish_fixture_authority(&private_export);
     let api_before = fs::read(private_export.root.join("validator/src/api_witness.rs")).unwrap();
     let lib_path = private_export.root.join("validator/src/lib.rs");
     let lib = fs::read_to_string(&lib_path).unwrap();
@@ -86,6 +88,7 @@ fn absent_or_stale_witness_sources_fail_closed_without_echoing_bytes() {
     ] {
         let omitted = TestRepo::new(label);
         copy_sources(&omitted);
+        establish_fixture_authority(&omitted);
         fs::remove_file(omitted.root.join(relative)).unwrap();
         omitted.commit();
         let context = LiveContext::build(inventory_request(&omitted.root)).unwrap();
@@ -108,6 +111,7 @@ fn witness_source_symlink_hardlink_and_fifo_are_rejected_before_activation() {
     fn assert_special_controls(relative: &str, link_target: &str, label: &str) {
         let linked = TestRepo::new(&format!("activation-{label}-symlink"));
         copy_sources(&linked);
+        establish_fixture_authority(&linked);
         fs::remove_file(linked.root.join(relative)).unwrap();
         symlink(link_target, linked.root.join(relative)).unwrap();
         linked.commit();
@@ -122,6 +126,7 @@ fn witness_source_symlink_hardlink_and_fifo_are_rejected_before_activation() {
 
         let hard = TestRepo::new(&format!("activation-{label}-hardlink"));
         copy_sources(&hard);
+        establish_fixture_authority(&hard);
         let source = hard.root.join(relative);
         let target = hard
             .root
@@ -141,6 +146,7 @@ fn witness_source_symlink_hardlink_and_fifo_are_rejected_before_activation() {
 
         let fifo = TestRepo::new(&format!("activation-{label}-fifo"));
         copy_sources(&fifo);
+        establish_fixture_authority(&fifo);
         fs::remove_file(fifo.root.join(relative)).unwrap();
         fifo.commit();
         assert!(

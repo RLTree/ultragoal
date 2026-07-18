@@ -4,6 +4,8 @@ use crate::repository_fixture::{TestRepo, inventory_request, live_root, snapshot
 use serde::Deserialize;
 use std::fs;
 
+include!("lease_fixture.rs");
+include!("lease_issuance.rs");
 include!("sources.rs");
 
 include!("absent_or_stale_witness_sources_fail_closed_without_echoing_bytes.rs");

@@ -2,10 +2,10 @@ use super::*;
 
 #[test]
 pub(crate) fn product_sources_forbid_blocking_identity_locks_and_deadline_resets() {
-    let identity = include_str!("../../src/observability/identity.rs");
-    let locking = include_str!("../../src/observability/locking.rs");
-    let store = include_str!("../../src/observability/store/mod.rs");
-    let lifecycle = include_str!("../../src/observability/lifecycle.rs");
+    let identity = include_str!("../../../src/observability/identity.rs");
+    let locking = include_str!("../../../src/observability/locking.rs");
+    let store = include_str!("../../../src/observability/store/mod.rs");
+    let lifecycle = include_str!("../../../src/observability/lifecycle.rs");
 
     for (name, source) in [
         ("identity", identity),

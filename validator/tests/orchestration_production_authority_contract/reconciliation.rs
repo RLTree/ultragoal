@@ -120,3 +120,74 @@ fn invalid_request_refuses_before_reservation_and_permit_remains_usable() {
         Some(PermitReplayState::Committed)
     );
 }
+
+#[test]
+fn reconciliation_only_and_no_pending_views_cannot_issue_the_wrong_authority() {
+    let (ambiguous_journal, ambiguous_head) = ambiguous_effect("reconcile-only-view");
+    let authority_root = TestRoot::new("reconcile-only-authority", 0o700);
+    let context = context();
+    let ambiguous_workspace = ProductWorkspace::open(ambiguous_journal.path()).unwrap();
+    let ambiguous_adapter =
+        OrchestrationRuntimeAdapter::new(&context, &ambiguous_workspace).unwrap();
+    let ambiguous_view = ambiguous_adapter
+        .inspect_current(&OrchestrationStateRequest {
+            expected_head: ambiguous_head,
+            tick: 4,
+            live_workers: BTreeSet::from(["worker-a".to_owned()]),
+        })
+        .unwrap();
+    let reconcile_action = ambiguous_view.state().root_action_requests[0].clone();
+    let authority =
+        ProductionRootAuthority::open_or_initialize(authority_root.path(), root_actor()).unwrap();
+    let ambiguous_before = recursive_fingerprint(ambiguous_journal.path());
+    let authority_before = recursive_fingerprint(authority_root.path());
+    assert_eq!(
+        ambiguous_adapter
+            .issue_production_action(
+                &authority,
+                RuntimeActionSource::Current(&ambiguous_view),
+                &reconcile_action,
+                14,
+            )
+            .unwrap_err(),
+        ProductError::AuthorityOperationMismatch
+    );
+    assert_eq!(
+        recursive_fingerprint(ambiguous_journal.path()),
+        ambiguous_before
+    );
+    assert_eq!(
+        recursive_fingerprint(authority_root.path()),
+        authority_before
+    );
+
+    let (clean_journal, clean_head) = running_lease("no-pending-reconciliation", 40);
+    let clean_workspace = ProductWorkspace::open(clean_journal.path()).unwrap();
+    let clean_adapter = OrchestrationRuntimeAdapter::new(&context, &clean_workspace).unwrap();
+    let clean_view = clean_adapter
+        .inspect_current(&OrchestrationStateRequest {
+            expected_head: clean_head,
+            tick: 3,
+            live_workers: BTreeSet::from(["worker-a".to_owned()]),
+        })
+        .unwrap();
+    assert!(clean_view.state().root_action_requests.is_empty());
+    let clean_before = recursive_fingerprint(clean_journal.path());
+    assert_eq!(
+        clean_adapter
+            .issue_production_reconcile(
+                &authority,
+                &clean_view,
+                &reconcile_action,
+                13,
+                &not_applied_resolution(),
+            )
+            .unwrap_err(),
+        ProductError::AuthorityInvalid
+    );
+    assert_eq!(recursive_fingerprint(clean_journal.path()), clean_before);
+    assert_eq!(
+        recursive_fingerprint(authority_root.path()),
+        authority_before
+    );
+}

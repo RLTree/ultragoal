@@ -1,6 +1,6 @@
 {
   "schema_version": "ObservabilityPublicDiagnosisFixtures-v1",
-  "temporary_root": ".git/codex-scratch/observability/public-diagnosis-107",
+  "temporary_root": "harness-ultragoal-observability-tests",
   "source_id": "successor-runtime",
   "public_schema": "PublicCausalDiagnosis-v1",
   "default_mode": "local-only",

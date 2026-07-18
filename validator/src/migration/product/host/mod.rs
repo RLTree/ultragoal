@@ -28,15 +28,6 @@ use std::path::Path;
 use std::sync::{Arc, Mutex};
 
 #[cfg(test)]
-pub(crate) use self::authority::DarwinMigrationAuthority as DarwinApplyAuthorizationAuthority;
-#[cfg(test)]
-pub(crate) use self::effects::DarwinMigrationEffects as DarwinConfinedMigrationEffect;
-#[cfg(test)]
-pub(crate) use self::source::DarwinMigrationSource as DarwinMigrationInputSource;
-#[cfg(test)]
-pub(crate) use self::store::DarwinMigrationStore as DarwinDurableMigrationStore;
-
-#[cfg(test)]
 pub(crate) use self::test_host_provisioning::provision_darwin_migration_host_for_test;
 
 include!("config_name.rs");

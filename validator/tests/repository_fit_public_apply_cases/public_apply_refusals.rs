@@ -2,12 +2,17 @@ use super::*;
 
 #[test]
 pub(crate) fn public_binary_refuses_acceptance_framing_and_host_substitution_without_effect() {
+    exercise_public_refusals();
+}
+
+pub(crate) fn exercise_public_refusals() {
     let fixture = Fixture::new("refusals");
     let (plan_sha256, plan_bytes) = fixture.plan();
     let bad_digest = format!("sha256:{}", "0".repeat(64));
 
     let before_root = snapshot(&fixture.root);
     let before_home = snapshot(&fixture.home);
+    let before_temp = snapshot(&fixture.temp);
     let mismatch = fixture.apply(&bad_digest);
     assert_diagnostic(
         &mismatch,
@@ -17,6 +22,7 @@ pub(crate) fn public_binary_refuses_acceptance_framing_and_host_substitution_wit
     );
     assert_eq!(snapshot(&fixture.root), before_root);
     assert_eq!(snapshot(&fixture.home), before_home);
+    assert_eq!(snapshot(&fixture.temp), before_temp);
     assert!(!fixture.root.join("AGENTS.md").exists());
 
     OpenOptions::new()
@@ -27,6 +33,7 @@ pub(crate) fn public_binary_refuses_acceptance_framing_and_host_substitution_wit
         .unwrap();
     let before_root = snapshot(&fixture.root);
     let before_home = snapshot(&fixture.home);
+    let before_temp = snapshot(&fixture.temp);
     let alternate_framing = fixture.apply(&plan_sha256);
     assert_diagnostic(
         &alternate_framing,
@@ -36,6 +43,7 @@ pub(crate) fn public_binary_refuses_acceptance_framing_and_host_substitution_wit
     );
     assert_eq!(snapshot(&fixture.root), before_root);
     assert_eq!(snapshot(&fixture.home), before_home);
+    assert_eq!(snapshot(&fixture.temp), before_temp);
 
     fs::write(
         fixture.root.join("validation_artifacts/fit-plan.json"),
@@ -49,6 +57,7 @@ pub(crate) fn public_binary_refuses_acceptance_framing_and_host_substitution_wit
     symlink(&substituted, &fixture.pending).unwrap();
     let before_root = snapshot(&fixture.root);
     let before_home = snapshot(&fixture.home);
+    let before_temp = snapshot(&fixture.temp);
     let refusal = fixture.apply(&plan_sha256);
     assert_diagnostic(
         &refusal,
@@ -58,11 +67,16 @@ pub(crate) fn public_binary_refuses_acceptance_framing_and_host_substitution_wit
     );
     assert_eq!(snapshot(&fixture.root), before_root);
     assert_eq!(snapshot(&fixture.home), before_home);
+    assert_eq!(snapshot(&fixture.temp), before_temp);
     assert!(!fixture.root.join("AGENTS.md").exists());
 }
 
 #[test]
 pub(crate) fn public_binary_rejects_a_stale_plan_before_opening_host_authority() {
+    exercise_stale_plan_refusal();
+}
+
+pub(crate) fn exercise_stale_plan_refusal() {
     let fixture = Fixture::new("stale-plan");
     let (plan_sha256, _) = fixture.plan();
     fs::write(
@@ -72,11 +86,13 @@ pub(crate) fn public_binary_rejects_a_stale_plan_before_opening_host_authority()
     .unwrap();
     let before_root = snapshot(&fixture.root);
     let before_home = snapshot(&fixture.home);
+    let before_temp = snapshot(&fixture.temp);
     let before_status = status(&fixture.root);
     let stale = fixture.apply(&plan_sha256);
     assert_diagnostic(&stale, 1, "successor_runtime_stale_context", &fixture);
     assert_eq!(snapshot(&fixture.root), before_root);
     assert_eq!(snapshot(&fixture.home), before_home);
+    assert_eq!(snapshot(&fixture.temp), before_temp);
     assert_eq!(status(&fixture.root), before_status);
     assert!(!fixture.root.join("AGENTS.md").exists());
 }
@@ -169,64 +185,4 @@ pub(crate) fn status(root: &Path) -> Vec<u8> {
         ],
     )
     .stdout
-}
-
-pub(crate) fn snapshot(root: &Path) -> Vec<SnapshotRow> {
-    fn visit(root: &Path, path: &Path, rows: &mut Vec<SnapshotRow>) {
-        let metadata = fs::symlink_metadata(path).unwrap();
-        let kind = if metadata.is_file() {
-            "file"
-        } else if metadata.is_dir() {
-            "directory"
-        } else if metadata.file_type().is_symlink() {
-            "symlink"
-        } else {
-            "special"
-        };
-        let content = if metadata.is_file() {
-            fs::read(path).unwrap()
-        } else if metadata.file_type().is_symlink() {
-            fs::read_link(path).unwrap().as_os_str().as_bytes().to_vec()
-        } else {
-            Vec::new()
-        };
-        rows.push(SnapshotRow {
-            path: path.strip_prefix(root).unwrap().to_path_buf(),
-            kind,
-            device: metadata.dev(),
-            inode: metadata.ino(),
-            links: metadata.nlink(),
-            uid: metadata.uid(),
-            gid: metadata.gid(),
-            mode: metadata.mode(),
-            size: metadata.size(),
-            modified_seconds: metadata.mtime(),
-            modified_nanoseconds: metadata.mtime_nsec(),
-            changed_seconds: metadata.ctime(),
-            changed_nanoseconds: metadata.ctime_nsec(),
-            content_sha256: format!("sha256:{:x}", Sha256::digest(content)),
-        });
-        if metadata.is_dir() {
-            let mut entries = fs::read_dir(path)
-                .unwrap()
-                .map(|entry| entry.unwrap().path())
-                .collect::<Vec<_>>();
-            entries.sort();
-            for entry in entries {
-                visit(root, &entry, rows);
-            }
-        }
-    }
-    let mut rows = Vec::new();
-    visit(root, root, &mut rows);
-    rows
-}
-
-pub(crate) fn pending_entries(pending: &Path) -> Vec<String> {
-    let mut names = fs::read_dir(pending)
-        .unwrap()
-        .map(|entry| entry.unwrap().file_name().to_string_lossy().into_owned())
-        .collect::<Vec<_>>();
-    names.sort();
-    names
 }

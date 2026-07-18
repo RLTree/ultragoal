@@ -6,7 +6,7 @@ macro_rules! include_production_package_module {
 mod plugin_manifest;
 
 #[path = "../src/distribution/mod.rs"]
-mod distribution;
+pub mod distribution;
 
 #[path = "distribution_contract/adversarial_fs.rs"]
 mod adversarial_fs;

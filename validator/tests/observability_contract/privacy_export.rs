@@ -2,7 +2,6 @@ use super::observability::ExplicitExportRequest;
 use super::scenario::{AdapterMode, MockAdapter, TestDir, event, query, store};
 use std::fs;
 use std::time::Duration;
-
 #[test]
 fn tokens_pii_paths_and_bypass_variants_are_dropped_before_persistence() {
     let dir = TestDir::new("redaction");
@@ -21,6 +20,9 @@ fn tokens_pii_paths_and_bypass_variants_are_dropped_before_persistence() {
         ("tmp_path", "/private/tmp/secret.txt"),
         ("home_hint", "~/private/secret.txt"),
         ("windows_hint", "C:\\Users\\private\\secret.txt"),
+        ("uri_hint", "failed at file:///private/secret.txt"),
+        ("unc_hint", "share \\\\private\\secret"),
+        ("oauth_hint", "OAuth gho_private_oauth_token"),
         ("provider_hint", "xoxb-private-token"),
         ("cloud_hint", "AKIAPRIVATEKEYVALUE"),
         ("ssn_hint", "123-45-6789"),
@@ -49,6 +51,9 @@ fn tokens_pii_paths_and_bypass_variants_are_dropped_before_persistence() {
         "/private/tmp",
         "~/private",
         "C:\\Users",
+        "file:///private",
+        "private\\secret",
+        "gho_private_oauth_token",
         "xoxb-private-token",
         "AKIAPRIVATEKEYVALUE",
         "123-45-6789",
@@ -65,7 +70,6 @@ fn tokens_pii_paths_and_bypass_variants_are_dropped_before_persistence() {
             .is_empty()
     );
 }
-
 #[test]
 fn explicit_export_roundtrip_receives_only_redacted_candidate_bound_events() {
     let dir = TestDir::new("export-ok");

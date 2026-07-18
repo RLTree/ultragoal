@@ -7,6 +7,8 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
 const MAX_FRONTIER_BYTES: u64 = 2 * 1024 * 1024;
+const SOURCE_BASE_COMMIT: &str = "0c7f3e147d372f870751548610710353d37f9d4b";
+const SOURCE_BASE_TREE: &str = "d0bbe290b2411ba89de4e90ccedeb013fbdfc1a1";
 
 pub(super) struct Frontier {
     pub(super) active_tools: BTreeSet<String>,
@@ -31,6 +33,7 @@ pub(super) fn load(reads: &ReadSession, root: &Path) -> Result<Frontier, Invento
     )?;
     let nodes = scheduler_nodes(&registry)?;
     scope_ownership::validate(&registry)?;
+    lease_issuance::validate(reads, root, &registry, &nodes.ready)?;
     let active_tools = dependency_tools(&graph, &nodes)?;
     let entries = vec![
         physical_entry(
@@ -125,12 +128,13 @@ fn scheduler_nodes(registry: &Value) -> Result<SchedulerNodes, InventoryError> {
             "scheduler eligibility disagrees with ready lanes".to_owned(),
         ));
     }
-    if registry
+    let frontier = registry
         .pointer("/pre_adoption_source/frontier")
         .and_then(Value::as_str)
-        == Some("N04_N07_READY_SOURCE_FRONTIER")
-        && ready != BTreeSet::from(["N04", "N05", "N06", "N07"].map(str::to_owned))
-    {
+        .ok_or_else(|| {
+            InventoryError::InvalidRegistry("scheduler frontier is missing".to_owned())
+        })?;
+    if ready != expected_ready_lanes(frontier)? {
         return Err(InventoryError::InvalidRegistry(
             "scheduler frontier has unexpected ready lanes".to_owned(),
         ));
@@ -141,6 +145,23 @@ fn scheduler_nodes(registry: &Value) -> Result<SchedulerNodes, InventoryError> {
         .map(|(id, _)| id)
         .collect();
     Ok(SchedulerNodes { integrated, ready })
+}
+
+fn expected_ready_lanes(frontier: &str) -> Result<BTreeSet<String>, InventoryError> {
+    let lanes: &[&str] = match frontier {
+        "N00_ADOPTION_BOUNDARY" => &["N01"],
+        "N01_INTEGRATED" => &["N02"],
+        "N03_INTEGRATED_DEBT_CHECKPOINT" => &[],
+        "N04_N07_READY_SOURCE_FRONTIER" => &["N04", "N05", "N06", "N07"],
+        "N05_N07_READY_N04_INTEGRATED_SOURCE_FRONTIER" => &["N05", "N06", "N07"],
+        "N06_N07_READY_N04_N05_INTEGRATED_SOURCE_FRONTIER" => &["N06", "N07"],
+        _ => {
+            return Err(InventoryError::InvalidRegistry(
+                "scheduler frontier is unknown".to_owned(),
+            ));
+        }
+    };
+    Ok(lanes.iter().map(|lane| (*lane).to_owned()).collect())
 }
 
 fn dependency_tools(
@@ -203,6 +224,7 @@ fn dependency_tools(
     Ok(tools)
 }
 
+mod lease_issuance;
 mod scope_ownership;
 
 #[cfg(test)]

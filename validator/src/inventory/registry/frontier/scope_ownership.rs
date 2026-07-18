@@ -26,8 +26,12 @@ pub(super) fn validate(registry: &Value) -> Result<(), InventoryError> {
     let mut paths = Vec::new();
     let mut symbols = Vec::new();
     let mut effects = BTreeMap::new();
+    let mut scope_ids = BTreeSet::new();
     for mapping in mappings {
         let scope = text(mapping, "scope_id")?;
+        if !scope_ids.insert(scope) {
+            return Err(invalid("duplicate scope authority ID"));
+        }
         let forbidden = strings(mapping, "forbidden_roots", true)?;
         if !ROOT_ONLY.iter().all(|root| forbidden.contains(*root)) {
             return Err(invalid("scope omits a root-only surface"));

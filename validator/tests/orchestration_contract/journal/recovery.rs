@@ -1,6 +1,6 @@
-use crate::durable_journal_fixture::*;
+use super::durable_journal_fixture::*;
+use super::orchestration_fixture::*;
 use crate::orchestration::*;
-use crate::orchestration_fixture::*;
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use std::process::Command;

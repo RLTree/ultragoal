@@ -1,6 +1,6 @@
-use crate::durable_journal_fixture::*;
+use super::durable_journal_fixture::*;
+use super::orchestration_fixture::*;
 use crate::orchestration::*;
-use crate::orchestration_fixture::*;
 use std::fs;
 
 const NAMES: [(&str, &str); 3] = [

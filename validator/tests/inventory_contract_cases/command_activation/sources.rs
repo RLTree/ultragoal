@@ -26,6 +26,7 @@ const SOURCES: &[&str] = &[
     "validator/src/inventory/registry/data.rs",
     "validator/src/inventory/registry/integrity.rs",
     "validator/src/inventory/registry/frontier/mod.rs",
+    "validator/src/inventory/registry/frontier/lease_issuance.rs",
     "validator/src/inventory/registry/frontier/scope_ownership.rs",
     "validator/src/inventory/registry/load.rs",
     "validator/src/inventory/registry/mod.rs",
@@ -49,7 +50,7 @@ fn source_repo(label: &str) -> TestRepo {
     let repo = TestRepo::new(label);
     repo.write(".gitignore", b"target/\n");
     copy_sources(&repo);
-    repo.commit();
+    establish_fixture_authority(&repo);
     repo
 }
 
@@ -124,7 +125,7 @@ fn ready_frontier_rejects_unintegrated_dependencies_and_unexpected_lanes() {
     set_lane_states(&blocked_dependency, &[("N03", "blocked")], None);
     assert_inventory_error(
         &blocked_dependency,
-        "scheduler ready frontier is not dependency closed",
+        "scheduler frontier is not dependency closed",
     );
 
     let early_downstream = source_repo("ready-early-downstream");
