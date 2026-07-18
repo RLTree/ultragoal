@@ -15,7 +15,7 @@
   "candidate_resolution": {"kind":"containing_clean_head","identity_command":"git rev-parse HEAD^{commit} HEAD^{tree}","requires_clean_tree":true,"protected_base_ref":"LANE_REGISTRY.json#/root_freeze/protected_base"},
   "candidate_status": "pending",
   "root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
-  "claim_ceiling": {"effect": "withheld", "all_claims_withheld": true, "reason": "Scoped OD-008 source retirement is under exact-candidate review; global OD-008, OD-009, N02/N14 closure, package/install/discovery/runtime identity, Product Fitness and Cohesion journeys, release, and completion remain open."},
+  "claim_ceiling": {"effect": "withheld", "all_claims_withheld": true, "reason": "Scoped OD-008 source retirement is accepted only at its exact source boundary; global OD-008, OD-009, N02/N14 closure, package/install/discovery/runtime identity, Product Fitness and Cohesion journeys, release, and completion remain open."},
   "claims": [
     {"id": "CL-SOURCE", "title": "Canonical source contract", "description": "Withheld: source authority and projections are not independently reconciled on the current P0 candidate.", "claim_scope": "required", "claim_kind": "static_contract", "status": "withheld_claim", "claim_surface": "static", "allowed_evidence_surfaces": ["static"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-001"},
     {"id": "CL-PACKAGE", "title": "Built package identity", "description": "Withheld: no current package byte reconciliation is available.", "claim_scope": "required", "claim_kind": "package_release", "status": "withheld_claim", "claim_surface": "package", "allowed_evidence_surfaces": ["package"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-002"},
@@ -32,9 +32,9 @@
     {"id": "CL-RELEASE", "title": "Release readiness", "description": "Withheld: package, install, discovery, migration, and release decisions are not closed.", "claim_scope": "required", "claim_kind": "package_release", "status": "withheld_claim", "claim_surface": "package", "allowed_evidence_surfaces": ["package", "installed_app", "runtime_cli"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-013"},
     {"id": "CL-COMPLETION", "title": "Integrated goal completion", "description": "Withheld: required claims, goal binding, validator evidence, and cleanup remain unresolved.", "claim_scope": "required", "claim_kind": "static_contract", "status": "withheld_claim", "claim_surface": "root_integration", "allowed_evidence_surfaces": ["root_integration"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-014"}
   ],
-  "registry_preimage_digest": "sha256:633fb73a9c7f04b6d1eecb272a4de55f175293b6c55165c40e9e6abe7451bbf3",
+  "registry_preimage_digest": "sha256:e880f8a18fe01a3d6a6c6fc725adbb348865fa669274565fd5b864903858ce87",
   "verification_backlog_path": "VERIFICATION_BACKLOG.json",
-  "verification_backlog_digest": "sha256:0cf9aa133928977806909ffa3d5d7d45294ef54552382a1dc037ddd1cc087573",
+  "verification_backlog_digest": "sha256:3965613c6338bd25970e18faabf3231c383b3a6a7eccd88a288f00c36e7c1c4b",
   "validator_receipts": [],
-  "generated_at": "2026-07-17T22:46:43-07:00"
+  "generated_at": "2026-07-17T23:02:45-07:00"
 }

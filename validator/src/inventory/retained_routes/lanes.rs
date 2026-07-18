@@ -8,7 +8,7 @@ pub(super) const ROUTES: [RouteSpec; 2] = [
         "LEGACY-LANE:LANE_REGISTRY.json",
         KIND,
         "LANE_REGISTRY.json",
-        "b1c75e7ec400184093b0a2c4efed5ed27d2a7fd22f75b27ec28cfb25ee2d48df",
+        "bdd68d238b33a36497b02a5ab0b5d74845f3a24d033a9751f913793ec6be812b",
         &PS_ORCHESTRATION,
     ),
     spec(

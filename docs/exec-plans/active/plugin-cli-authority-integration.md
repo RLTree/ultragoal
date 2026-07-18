@@ -227,7 +227,9 @@ claim and representative product or release proof.
   frontier on the scoped source candidate without deleting archived bytes.
   Global OD-008 remains unresolved for every other route, OD-009 still forbids
   physical deletion or movement, and the remaining N14 route adoption,
-  equivalence, host execution, and registry closure are withheld. The surviving coverage-digest
+  equivalence, host execution, and registry closure are withheld. Exact candidate
+  `bd7eb339e` / tree `558f0f6dc` passed the bounded independent review after its
+  root digest chain and pending-source binding were repaired. The surviving coverage-digest
   authority is now owned by `audit/coverage/scope/digests.rs`, outside the
   retirement graph; all Rust callers, both coverage manifests, the package
   manifest, and the five valid package fixtures were rebound to that path. The
