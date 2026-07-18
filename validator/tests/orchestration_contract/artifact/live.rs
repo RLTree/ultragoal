@@ -1,4 +1,4 @@
-use super::super::orchestration_fixture::*;
+use super::orchestration_fixture::*;
 use crate::orchestration::*;
 use sha2::{Digest, Sha256};
 use std::fs;

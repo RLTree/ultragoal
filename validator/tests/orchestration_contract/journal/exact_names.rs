@@ -1,5 +1,5 @@
-use super::super::durable_journal_fixture::*;
-use super::super::orchestration_fixture::*;
+use super::durable_journal_fixture::*;
+use super::orchestration_fixture::*;
 use crate::orchestration::*;
 use std::fs;
 
