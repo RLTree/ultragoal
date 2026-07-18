@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
 mod current_law;
-mod dependencies;
+pub(crate) mod dependencies;
 mod independent;
 mod production;
 mod registry;
@@ -75,14 +75,6 @@ pub(crate) fn current_check_failures_for_test(
     failures: &BTreeMap<String, Vec<String>>,
 ) -> Vec<String> {
     production::current_check_failures(value, law, failures)
-}
-
-pub(crate) fn anti_theater_dependency_failures(
-    root: &Path,
-    store: &crate::schema_catalog::SchemaStore,
-    law: &str,
-) -> Vec<String> {
-    dependencies::anti_theater_failures(root, store, law)
 }
 
 pub fn value_failures(root: &Path, value: &Value) -> Vec<String> {

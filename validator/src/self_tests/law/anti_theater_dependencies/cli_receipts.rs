@@ -29,7 +29,7 @@ fn anti_theater_rejects_cli_receipt_that_is_neither_pass_nor_fail_closed() {
         "self_update_goal_eligibility",
     );
 
-    let failures = crate::audit::mandatory::law::surfaces::anti_theater_dependency_failures(
+    let failures = crate::audit::mandatory::law::surfaces::dependencies::anti_theater_failures(
         &root,
         &store,
         "generated-proof-artifact-provenance-anti-fabrication",

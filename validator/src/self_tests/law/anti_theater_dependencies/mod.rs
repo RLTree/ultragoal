@@ -14,7 +14,7 @@ fn anti_theater_laws_join_to_final_packet_registry_and_cli_authority() {
         &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
     );
     let law = "generated-proof-artifact-provenance-anti-fabrication";
-    let missing = crate::audit::mandatory::law::surfaces::anti_theater_dependency_failures(
+    let missing = crate::audit::mandatory::law::surfaces::dependencies::anti_theater_failures(
         &root, &store, law,
     );
     for expected in [
@@ -42,7 +42,7 @@ fn anti_theater_laws_join_to_final_packet_registry_and_cli_authority() {
         "self-law-receipt",
         "self_update_goal_eligibility",
     );
-    let failures = crate::audit::mandatory::law::surfaces::anti_theater_dependency_failures(
+    let failures = crate::audit::mandatory::law::surfaces::dependencies::anti_theater_failures(
         &root, &store, law,
     );
     assert!(failures.is_empty(), "{failures:?}");
@@ -62,7 +62,7 @@ fn anti_theater_laws_join_to_final_packet_registry_and_cli_authority() {
         "self-law-receipt",
         "self_update_goal_eligibility",
     );
-    let fail_closed = crate::audit::mandatory::law::surfaces::anti_theater_dependency_failures(
+    let fail_closed = crate::audit::mandatory::law::surfaces::dependencies::anti_theater_failures(
         &root,
         &store,
         "adversarial-packet-tampering-forged-proof-rejection",
@@ -97,7 +97,7 @@ fn current_fail_closed_control_blockers_satisfy_source_local_anti_theater_depend
         "self_update_goal_eligibility",
     );
 
-    let failures = crate::audit::mandatory::law::surfaces::anti_theater_dependency_failures(
+    let failures = crate::audit::mandatory::law::surfaces::dependencies::anti_theater_failures(
         &root,
         &store,
         "generated-proof-artifact-provenance-anti-fabrication",

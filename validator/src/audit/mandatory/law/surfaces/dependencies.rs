@@ -1,6 +1,6 @@
 use std::path::Path;
 
-pub(super) fn anti_theater_failures(
+pub(crate) fn anti_theater_failures(
     root: &Path,
     store: &crate::schema_catalog::SchemaStore,
     law: &str,
