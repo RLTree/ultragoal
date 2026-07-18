@@ -56,8 +56,7 @@ fn active_lease_issuance_rejects_identity_and_authority_substitution() {
     let downgraded_frontier = source_repo("lease-frontier-downgrade");
     mutate_registry(&downgraded_frontier, |registry| {
         registry["pre_adoption_source"]["frontier"] = "FORGED_FRONTIER".into();
-        registry["pre_adoption_source"]["eligible_scheduler_nodes"] =
-            serde_json::json!(["N05", "N06"]);
+        registry["pre_adoption_source"]["eligible_scheduler_nodes"] = serde_json::json!(["N06"]);
         registry["lanes"]
             .as_array_mut()
             .unwrap()

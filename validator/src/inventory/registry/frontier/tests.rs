@@ -85,3 +85,30 @@ fn integrated_distribution_advances_only_the_remaining_ready_lanes() {
         BTreeSet::from(["N05", "N06", "N07"].map(str::to_owned))
     );
 }
+
+#[test]
+fn integrated_repository_fit_preserves_the_two_actively_leased_core_lanes() {
+    let mut value = registry(
+        &[
+            ("N00", "integrated"),
+            ("N01", "integrated"),
+            ("N02", "integrated"),
+            ("N03", "integrated"),
+            ("N04", "integrated"),
+            ("N05", "integrated"),
+            ("N06", "ready"),
+            ("N07", "ready"),
+        ],
+        &["N06", "N07"],
+    );
+    value["pre_adoption_source"]["frontier"] =
+        json!("N06_N07_READY_N04_N05_INTEGRATED_SOURCE_FRONTIER");
+
+    let nodes = scheduler_nodes(&value).unwrap();
+
+    assert!(nodes.integrated.contains("N05"));
+    assert_eq!(
+        nodes.ready,
+        BTreeSet::from(["N06", "N07"].map(str::to_owned))
+    );
+}

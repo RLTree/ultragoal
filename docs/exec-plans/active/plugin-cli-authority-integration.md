@@ -18,16 +18,20 @@ candidate: every candidate is the clean containing `HEAD`/tree derived live
 from that checkpoint. Stage A is accepted for the registry, closed lease
 contract, template, gates, scopes, graph, and review anchors; this plan and
 the board remain projections and cannot promote claims.
-The exact scheduler frontier is N04-N07 after N03, N09 after N02+N05, N08 after
-N04-N07, N10 after N03+N06+N09, N11 after N06+N07+N08, and N12 after N10+N11.
+N04 and N05 are now integrated at source-only ceilings. The exact current
+scheduler-ready frontier is N06 and N07. N09 is dependency-eligible after N05
+but remains blocked until root atomically issues its managed-worktree lease. N08 remains blocked
+until N06 and N07 also integrate; N10 remains behind N06 and N09; N11 remains
+behind N06, N07, and N08; N12 remains behind N10 and N11.
 After N12 the route is N12-A -> N14 -> N14-proof -> N12-B-invalidate-and-reproof
 -> parallel N13/N15 -> N16 -> N17. P0 is available only to root for compile,
 namespace, standards, and retention-aware cleanup; product lanes remain blocked.
 All fourteen claims remain withheld with empty evidence and no validator
 receipts. The user-authorized cleanup removed the obsolete review tree and
 reproducible worktree home/tmp state, recovering about 10.1 GB in addition to
-earlier cleanup; the three approved paths now exist only as empty roots. No
-unique active-worktree state remains.
+earlier cleanup; the three approved paths now exist only as empty roots. N06
+and N07 retain their unique active worktree state; the integrated N05 worktree
+is eligible for teardown after this root checkpoint commits.
 
 ## Outcome
 
@@ -50,6 +54,14 @@ compile/namespace/standards checkpoint and makes N00 the next root-only gate.
 The full clippy wall and library-test compilation still have broad inherited
 findings, so CL-STRICT and every package/install/runtime/product claim remain
 withheld. Four-persona exposure remains reserved for its material boundary.
+
+The N05 source candidate is independently accepted and root-integrated through
+`26aedb17002e419aa7548b3e41f271cf95510f9e` / tree
+`002770ba94f84c0b3a17efa2840ca7e16072f5f9`. Exact root execution passes all
+12 public repository-fit apply, refusal, replay, idempotence, contender, and
+zero-write controls across the three retained entrypoints. This advances only
+the source claim: rollback, pending recovery, package, install, discovery,
+runtime, Product Fitness, readiness, release, and completion remain withheld.
 
 ## Durable binding and contract lineage
 
@@ -187,8 +199,10 @@ lease authority can be derived.
 the integrated N06 interface later. Nonexistent legacy scope roots are removed,
 and no lane scope owns Cargo, shared schemas, generated authority, public CLI,
 contract, registry, claim, or migration-registry paths.
-Root integrates accepted authority-bearing increments one at a time, initially
-N05, N06, N07, then N04 unless live dependency evidence changes that order.
+Root integrates accepted authority-bearing increments one at a time. N04 and
+N05 are integrated; N06 is the next integration gate while N07 may proceed at
+its dependency-valid source ceiling. N09 remains blocked until root atomically
+issues its managed-worktree lease and advances scheduler state.
 
 ## Worktree protocol after P0
 
