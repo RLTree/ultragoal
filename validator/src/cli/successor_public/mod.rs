@@ -18,6 +18,7 @@ mod output_emission;
 #[path = "output_limit.rs"]
 mod output_limit;
 
+mod capabilities;
 mod diagnose;
 mod fit;
 mod local_store;

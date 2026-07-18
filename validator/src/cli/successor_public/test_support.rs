@@ -41,6 +41,24 @@ impl Repository {
         assert!(output.status.success());
         output.stdout
     }
+
+    pub(super) fn install_agent_authority(&self, home: &Path) {
+        let version = serde_json::from_slice::<serde_json::Value>(
+            &fs::read(self.root.join(".codex-plugin/plugin.json")).unwrap(),
+        )
+        .unwrap()["version"]
+            .as_str()
+            .unwrap()
+            .to_owned();
+        let installed = home.join(".codex/plugins/harness-ultragoal");
+        let cache = home.join(format!(
+            ".codex/plugins/cache/local-harness-plugins/harness-ultragoal/{version}"
+        ));
+        for target in [&installed, &cache] {
+            copy_plugin_authority(&self.root, target);
+        }
+        fs::create_dir_all(home.join(".codex/agents")).unwrap();
+    }
 }
 
 impl Drop for Repository {
@@ -84,6 +102,28 @@ fn copy_authority_inputs(live: &Path, root: &Path) {
     )
     .unwrap();
     fs::write(root.join(".gitignore"), b"validation_artifacts/\n").unwrap();
+    let agents = root.join(".codex/agents");
+    fs::create_dir_all(&agents).unwrap();
+    for entry in fs::read_dir(live.join(".codex/agents")).unwrap() {
+        let entry = entry.unwrap();
+        fs::copy(entry.path(), agents.join(entry.file_name())).unwrap();
+    }
+}
+
+fn copy_plugin_authority(source: &Path, target: &Path) {
+    let agents = target.join(".codex/agents");
+    let plugin = target.join(".codex-plugin");
+    fs::create_dir_all(&agents).unwrap();
+    fs::create_dir_all(&plugin).unwrap();
+    for entry in fs::read_dir(source.join(".codex/agents")).unwrap() {
+        let entry = entry.unwrap();
+        fs::copy(entry.path(), agents.join(entry.file_name())).unwrap();
+    }
+    fs::copy(
+        source.join(".codex-plugin/plugin.json"),
+        plugin.join("plugin.json"),
+    )
+    .unwrap();
 }
 
 fn git(root: &Path, args: &[&str]) {

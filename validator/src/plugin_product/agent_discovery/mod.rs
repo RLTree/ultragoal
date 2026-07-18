@@ -15,10 +15,8 @@ mod session;
 mod source;
 mod supported;
 
-#[cfg(test)]
 pub(crate) use local_authority::{
-    LocalAgentAuthorityObservation, LocalAgentAuthorityRequest, LocalAgentRoleObservation,
-    observe_local_authority,
+    LocalAgentAuthorityObservation, LocalAgentAuthorityRequest, observe_local_authority,
 };
 
 #[cfg(all(test, unix))]

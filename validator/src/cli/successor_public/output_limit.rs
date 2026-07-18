@@ -83,7 +83,7 @@ pub(crate) fn execute_invocation_with_home(
             public_context::project(&context, &invocation)
         }
         SuccessorCommand::Inspect(InspectTarget::Capabilities) => {
-            RuntimeSession::new(&context, None).dispatch(&invocation)
+            capabilities::project(&context, &invocation, home)
         }
         SuccessorCommand::Inspect(InspectTarget::Inventory) => {
             match InventoryBuilder::new(&context).build() {

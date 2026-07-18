@@ -9,7 +9,7 @@ pub(crate) struct LocalAgentAuthorityRequest<'a> {
     pub(crate) source_root: &'a Path,
     pub(crate) package_root: PathBuf,
     pub(crate) installed_root: PathBuf,
-    pub(crate) cache_root: PathBuf,
+    pub(crate) cache_family_root: PathBuf,
     pub(crate) global_root: PathBuf,
     pub(crate) project_root: PathBuf,
     pub(crate) candidate_id: &'a str,
@@ -18,8 +18,6 @@ pub(crate) struct LocalAgentAuthorityRequest<'a> {
 
 pub(crate) struct LocalAgentRoleObservation {
     name: String,
-    manifest_path: String,
-    descriptor_sha256: String,
     package_matches: bool,
     installed_matches: bool,
     cache_matches: bool,
@@ -30,12 +28,6 @@ pub(crate) struct LocalAgentRoleObservation {
 impl LocalAgentRoleObservation {
     pub(crate) fn name(&self) -> &str {
         &self.name
-    }
-    pub(crate) fn manifest_path(&self) -> &str {
-        &self.manifest_path
-    }
-    pub(crate) fn descriptor_sha256(&self) -> &str {
-        &self.descriptor_sha256
     }
     pub(crate) fn package_matches(&self) -> bool {
         self.package_matches
@@ -84,7 +76,7 @@ pub(crate) fn observe_local_authority(
     let roots = SupportedHostAgentRoots::new(
         request.package_root,
         request.installed_root,
-        request.cache_root,
+        request.cache_family_root.join(source.plugin_version()),
         request.global_root,
         request.project_root,
     );
@@ -119,8 +111,6 @@ fn role_observation(
     let matches = |layer| layer_matches(layers, layer, source);
     LocalAgentRoleObservation {
         name: source.name().to_owned(),
-        manifest_path: source.manifest_path().to_owned(),
-        descriptor_sha256: source.descriptor_sha256().to_owned(),
         package_matches: matches(AgentAuthorityLayer::Package),
         installed_matches: matches(AgentAuthorityLayer::Installed),
         cache_matches: matches(AgentAuthorityLayer::Cache),
