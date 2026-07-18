@@ -3,8 +3,6 @@ use serde_json::json;
 use std::fs;
 use std::path::{Path, PathBuf};
 
-const STATIC_REL: &str = "docs/generated/observability/command-inventory.json";
-
 fn root(label: &str) -> PathBuf {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     fs::create_dir_all(&root).expect("root");
@@ -90,33 +88,12 @@ fn registry_preserves_law_checks_but_never_accepts_a_static_successor_catalog() 
     fs::remove_dir_all(root).expect("cleanup");
 }
 
-#[test]
-fn command_inventory_bytes_paths_and_absence_have_one_non_echoing_result() {
-    let root = root("observe-static-inventory-bait");
-    let path = root.join(STATIC_REL);
-    fs::create_dir_all(path.parent().expect("parent")).expect("parent");
-    let expected = vec![SUCCESSOR_CATALOG_UNAVAILABLE.to_string()];
-
-    assert_eq!(command_inventory_failures(&root), expected);
-    fs::write(&path, "SECRET_CANARY").expect("bait");
-    assert_eq!(command_inventory_failures(&root), expected);
-    fs::write(&path, [0xff, 0xfe]).expect("invalid bait");
-    assert_eq!(command_inventory_failures(&root), expected);
-    fs::remove_file(&path).expect("remove bait");
-    assert_eq!(command_inventory_failures(&root), expected);
-    assert!(!expected.join("\n").contains("SECRET_CANARY"));
-    fs::remove_dir_all(root).expect("cleanup");
-}
-
 #[cfg(unix)]
 #[test]
-fn static_symlink_and_fifo_are_unread_and_registry_checks_write_nothing() {
-    use std::ffi::CString;
-    use std::os::unix::ffi::OsStrExt;
-
+fn static_symlink_is_unread_and_registry_checks_write_nothing() {
     let root = root("observe-static-special-bait");
     write_law_rows(&root);
-    let path = root.join(STATIC_REL);
+    let path = root.join("docs/generated/observability/command-inventory.json");
     fs::create_dir_all(path.parent().expect("parent")).expect("parent");
     let outside = root.with_file_name("observe-static-special-secret");
     fs::write(&outside, "SECRET_CANARY").expect("outside canary");
@@ -131,13 +108,6 @@ fn static_symlink_and_fifo_are_unread_and_registry_checks_write_nothing() {
     );
     assert!(!symlink_failures.join("\n").contains("SECRET_CANARY"));
 
-    fs::remove_file(&path).expect("remove symlink");
-    let name = CString::new(path.as_os_str().as_bytes()).expect("fifo name");
-    assert_eq!(unsafe { libc::mkfifo(name.as_ptr(), 0o600) }, 0);
-    assert_eq!(
-        command_inventory_failures(&root),
-        vec![SUCCESSOR_CATALOG_UNAVAILABLE.to_string()]
-    );
     fs::remove_file(outside).expect("outside cleanup");
     fs::remove_dir_all(root).expect("cleanup");
 }

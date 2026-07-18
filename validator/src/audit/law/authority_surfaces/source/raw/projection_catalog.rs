@@ -92,9 +92,6 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
         "validator/src/audit/law/authority_surfaces/surface_inventory/mod.rs" => {
             Some(&["AuthoritySurfaceInventoryRow"])
         }
-        "validator/src/audit/observability/registry/control.rs" => {
-            Some(&["observability_control_board", "Counts", "first_incomplete"])
-        }
         "validator/src/cli/observe/command_roundtrip/checks.rs" => Some(&[
             "CommandObservabilitySpec",
             "roundtrip_path",

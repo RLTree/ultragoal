@@ -49,7 +49,3 @@ pub(crate) fn required_dimension_families() -> Vec<(
 )> {
     registry::required_dimension_families()
 }
-
-pub(crate) fn command_inventory_failures(root: &Path) -> Vec<String> {
-    registry::command_inventory_failures(root)
-}

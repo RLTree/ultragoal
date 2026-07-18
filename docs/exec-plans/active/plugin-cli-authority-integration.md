@@ -209,7 +209,7 @@ claim and representative product or release proof.
   public test dispatch. Follow-up commits `549770c96` and `7799d5973` retired
   disconnected validator-receipt writers, audit artifact aggregation, and
   authority-inventory projections. The affected production-library check now
-  reports 319 deny-warning errors, down from 664, with no unresolved reference
+  reports 317 deny-warning errors, down from 664, with no unresolved reference
   to the retired claim/review or audit-writer graphs. Of these, 194 belong to
   the accepted N09 discovery kernel awaiting production adoption and 59 belong
   to migration-blocked lane authority; neither is deleted to manufacture a
@@ -218,8 +218,12 @@ claim and representative product or release proof.
   live schema store and deterministic pure-read scheduler. The next item-level
   cleanup removed an unused command-artifact dialect and an unread skill-link
   diagnostic field without changing the surviving artifact or skill-link
-  validators. This is not a compile pass; no suppression or dummy reachability
-  is allowed.
+  validators. The latest coherent retirement removed 3,651 lines of orphaned
+  observability-registry implementation and tests that were physically present
+  but not compiled, plus the two remaining live wrappers that exposed that
+  retired registry. The manifest and raw projection catalog now name only the
+  surviving fail-closed registry surface. This is not a compile pass; no
+  suppression or dummy reachability is allowed.
 - `LANE_REGISTRY.json` still binds the retired authority-reconciliation and
   review paths in its protected checkpoint, P0 lease, consumed set, and plan
   digest. That registry is intentionally treated as stale and non-promotable
