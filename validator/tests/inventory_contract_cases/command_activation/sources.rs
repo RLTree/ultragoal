@@ -125,7 +125,7 @@ fn ready_frontier_rejects_unintegrated_dependencies_and_unexpected_lanes() {
     set_lane_states(&blocked_dependency, &[("N03", "blocked")], None);
     assert_inventory_error(
         &blocked_dependency,
-        "scheduler ready frontier is not dependency closed",
+        "scheduler frontier is not dependency closed",
     );
 
     let early_downstream = source_repo("ready-early-downstream");

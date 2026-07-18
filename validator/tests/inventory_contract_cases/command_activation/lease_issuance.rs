@@ -57,7 +57,7 @@ fn active_lease_issuance_rejects_identity_and_authority_substitution() {
     mutate_registry(&downgraded_frontier, |registry| {
         registry["pre_adoption_source"]["frontier"] = "FORGED_FRONTIER".into();
         registry["pre_adoption_source"]["eligible_scheduler_nodes"] =
-            serde_json::json!(["N04", "N05", "N06"]);
+            serde_json::json!(["N05", "N06"]);
         registry["lanes"]
             .as_array_mut()
             .unwrap()
@@ -69,10 +69,7 @@ fn active_lease_issuance_rejects_identity_and_authority_substitution() {
             .unwrap()
             .retain(|record| record["lane_id"] != "N07");
     });
-    assert_inventory_error(
-        &downgraded_frontier,
-        "scheduler frontier has unexpected ready lanes",
-    );
+    assert_inventory_error(&downgraded_frontier, "scheduler frontier is unknown");
 
     let duplicate_scope = source_repo("lease-duplicate-scope-id");
     mutate_registry(&duplicate_scope, |registry| {

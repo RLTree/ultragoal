@@ -127,7 +127,13 @@ fn scheduler_nodes(registry: &Value) -> Result<SchedulerNodes, InventoryError> {
             "scheduler eligibility disagrees with ready lanes".to_owned(),
         ));
     }
-    if ready != BTreeSet::from(["N04", "N05", "N06", "N07"].map(str::to_owned)) {
+    let frontier = registry
+        .pointer("/pre_adoption_source/frontier")
+        .and_then(Value::as_str)
+        .ok_or_else(|| {
+            InventoryError::InvalidRegistry("scheduler frontier is missing".to_owned())
+        })?;
+    if ready != expected_ready_lanes(frontier)? {
         return Err(InventoryError::InvalidRegistry(
             "scheduler frontier has unexpected ready lanes".to_owned(),
         ));
@@ -138,6 +144,22 @@ fn scheduler_nodes(registry: &Value) -> Result<SchedulerNodes, InventoryError> {
         .map(|(id, _)| id)
         .collect();
     Ok(SchedulerNodes { integrated, ready })
+}
+
+fn expected_ready_lanes(frontier: &str) -> Result<BTreeSet<String>, InventoryError> {
+    let lanes: &[&str] = match frontier {
+        "N00_ADOPTION_BOUNDARY" => &["N01"],
+        "N01_INTEGRATED" => &["N02"],
+        "N03_INTEGRATED_DEBT_CHECKPOINT" => &[],
+        "N04_N07_READY_SOURCE_FRONTIER" => &["N04", "N05", "N06", "N07"],
+        "N05_N07_READY_N04_INTEGRATED_SOURCE_FRONTIER" => &["N05", "N06", "N07"],
+        _ => {
+            return Err(InventoryError::InvalidRegistry(
+                "scheduler frontier is unknown".to_owned(),
+            ));
+        }
+    };
+    Ok(lanes.iter().map(|lane| (*lane).to_owned()).collect())
 }
 
 fn dependency_tools(

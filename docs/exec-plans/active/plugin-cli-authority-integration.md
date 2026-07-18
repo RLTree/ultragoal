@@ -352,6 +352,17 @@ claim and representative product or release proof.
   the containing lease-authority commit. Routine review uses Terra/high on the
   standard tier; Sol/high remains reserved for bounded four-persona milestone
   gates. Installed and product claims remain withheld.
+- N04 distribution core is independently accepted and root-integrated through
+  `5832bcdbd330840adbf32a3be5bd37e27f4ddd2e` / tree
+  `619436e50e749a8a9c76f108f52f77e8852c92a2`. The correction removes the
+  rejected lint suppression, mirrors the real public distribution boundary in
+  the standalone contract harness, removes two unused test helpers, and binds
+  manifest semantic classification to the existing package-plan refusal.
+  Root checks pass warning-free compilation, distribution 208/208 with one
+  intentional subprocess helper ignored, and adapter 14/14. The task,
+  worktree, and disposable target are closed; package, install, cache,
+  marketplace, app-registry, discovery, runtime, readiness, release, and
+  completion claims remain withheld.
 - HCT-FIXTURES execution/parity, runtime, installed journey, readiness,
   release, and completion claims remain withheld.
 - The calibrated review, observability, and Product Fitness doctrine is now
