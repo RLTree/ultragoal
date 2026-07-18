@@ -131,12 +131,33 @@ pub(crate) fn observe_local_authority(
     request: LocalAgentAuthorityRequest<'_>,
 ) -> Result<LocalAgentAuthorityObservation, AgentDiscoveryError> {
     let adoption = adopt_agent_repository(request)?;
-    if adoption.route_eligible() && !adoption.fresh_session_observed() {
+    require_compatibility_observation(&adoption)?;
+    Ok(adoption)
+}
+
+fn require_compatibility_observation(
+    adoption: &AgentRepositoryAdoption,
+) -> Result<(), AgentDiscoveryError> {
+    if adoption.fresh_session_observed() || adoption.route_eligible() {
         return Err(AgentDiscoveryError::new(
             AgentDiscoveryErrorId::InvalidBinding,
         ));
     }
-    Ok(adoption)
+    Ok(())
+}
+
+#[cfg(test)]
+pub(crate) fn compatibility_observation_for_test(
+    fresh_session_observed: bool,
+    route_eligible: bool,
+) -> Result<(), AgentDiscoveryError> {
+    require_compatibility_observation(&AgentRepositoryAdoption {
+        source_catalog_sha256: "test".to_owned(),
+        binding_sha256: "test".to_owned(),
+        fresh_session_observed,
+        route_eligible,
+        roles: Vec::new(),
+    })
 }
 
 fn role_observation(
