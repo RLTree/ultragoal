@@ -18,11 +18,11 @@ candidate: every candidate is the clean containing `HEAD`/tree derived live
 from that checkpoint. Stage A is accepted for the registry, closed lease
 contract, template, gates, scopes, graph, and review anchors; this plan and
 the board remain projections and cannot promote claims.
-N04 and N05 are now integrated at source-only ceilings. The exact current
-scheduler-ready frontier is N06 and N07. N09 is dependency-eligible after N05
+N04, N05, and N06 are now integrated at source-only ceilings. The exact current
+integration frontier is N07. N09 is dependency-eligible after N05
 but remains blocked until root atomically issues its managed-worktree lease. N08 remains blocked
-until N06 and N07 also integrate; N10 remains behind N06 and N09; N11 remains
-behind N06, N07, and N08; N12 remains behind N10 and N11.
+until N07 also integrates; N10 remains behind N09; N11 remains behind N07 and
+N08; N12 remains behind N10 and N11.
 After N12 the route is N12-A -> N14 -> N14-proof -> N12-B-invalidate-and-reproof
 -> parallel N13/N15 -> N16 -> N17. P0 is available only to root for compile,
 namespace, standards, and retention-aware cleanup; product lanes remain blocked.
@@ -64,19 +64,18 @@ zero-write controls across the three retained entrypoints. This advances only
 the source claim: rollback, pending recovery, package, install, discovery,
 runtime, Product Fitness, readiness, release, and completion remain withheld.
 
-N06 has a narrower accepted public-source increment. The exact lane source
-candidate `3c9a8a4ec3851f5a4035a4a56c917da82cd1650d` / tree
-`97cd6e8c537fa8cc720c35d394c70165eb059cb6` and the equivalent root integration
-pass the real-parent public routine contract 43/43 under warnings-deny. A single
-Terra/high review accepted only that boundary. The three broad private-control
-test roots still fail strict compilation with 95 warnings-as-errors caused by
-isolated production-module inclusion. Two bounded topology replacements failed
-at the same mechanism, so further local topology patching is stopped. N06 stays
-scheduler-ready and all full-N06, downstream, installed, runtime, coverage,
-readiness, release, and completion claims remain withheld. The next trigger is
-a root-owned strict-test-boundary decision at the accumulated standards-debt
-checkpoint; owner is `OWN-ULTRA-ROOT`, and the evidence surface is the exact
-private mutation, race, rollback, recovery, and catalog suites.
+N06 is accepted and root-integrated at a source-only ceiling. Exact accepted
+source `f39500c2e4fe695e5bd02670398387c106dd12cc` / tree
+`7e38a76b29605cc9c095ffdb5eaee52ddb2ff7ed` and integrated handoff
+`f845fe937a3e85351e2bae0177aabc7f36cf92f8` / tree
+`791b296176ac48277a732040da363bfa60315bba` pass warning-deny library-test
+compilation, 134 focused private custody/race/rollback/recovery/reuse/security
+controls, and the public routine contract 43/43. One Terra/high exhaustive
+review accepted the complete named source invariant after the stale receipt
+gate and false-pass interruption selector were retired. Package, install,
+discovery, supported-host runtime, Product Fitness, readiness, release, and
+completion remain withheld; the next N06-bearing proof is the exact installed
+daily-driver journey, not another source receipt.
 
 N07 also has a narrower accepted public/live-source increment. Exact source
 `bc6581ba0ee996c751bc0ab621f867ba27d95556` / tree
@@ -436,10 +435,11 @@ claim and representative product or release proof.
   authority is the blocked source-obligation row for the missing typed HCT-FIT
   and HCT-FIXTURES mapping; target capability and product claims remain
   withheld.
-- The root-only N02-N03 serial authority chain is closed at a source ceiling.
-  The next execution wave is the exact N04-N07 four-lane frontier above; shared
-  schemas, generated authority, public dispatch, claims, and integration remain
-  root-owned.
+- The N02-N06 dependency chain is closed at source ceilings through the exact
+  integrated N06 identity above. N07 is the next serialized integration gate;
+  N09 may proceed only after its existing production adoption path is current.
+  Shared schemas, generated authority, public dispatch, claims, and integration
+  remain root-owned.
 
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine

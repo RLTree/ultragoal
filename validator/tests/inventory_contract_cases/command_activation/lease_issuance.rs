@@ -45,7 +45,7 @@ fn active_lease_issuance_rejects_identity_and_authority_substitution() {
 
     let scope_substitution = source_repo("lease-scope-substitution");
     mutate_registry(&scope_substitution, |registry| {
-        registry["lease_state"]["active_records"][1]["owned_symbols"] =
+        registry["lease_state"]["active_records"][0]["owned_symbols"] =
             serde_json::json!(["ultragoal::distribution"]);
     });
     assert_inventory_error(
@@ -56,17 +56,6 @@ fn active_lease_issuance_rejects_identity_and_authority_substitution() {
     let downgraded_frontier = source_repo("lease-frontier-downgrade");
     mutate_registry(&downgraded_frontier, |registry| {
         registry["pre_adoption_source"]["frontier"] = "FORGED_FRONTIER".into();
-        registry["pre_adoption_source"]["eligible_scheduler_nodes"] = serde_json::json!(["N06"]);
-        registry["lanes"]
-            .as_array_mut()
-            .unwrap()
-            .iter_mut()
-            .find(|lane| lane["id"] == "N07")
-            .unwrap()["state"] = "blocked".into();
-        registry["lease_state"]["active_records"]
-            .as_array_mut()
-            .unwrap()
-            .retain(|record| record["lane_id"] != "N07");
     });
     assert_inventory_error(&downgraded_frontier, "scheduler frontier is unknown");
 

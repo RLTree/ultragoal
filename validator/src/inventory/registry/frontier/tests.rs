@@ -112,3 +112,27 @@ fn integrated_repository_fit_preserves_the_two_actively_leased_core_lanes() {
         BTreeSet::from(["N06", "N07"].map(str::to_owned))
     );
 }
+
+#[test]
+fn integrated_routine_leaves_only_observability_scheduler_ready() {
+    let mut value = registry(
+        &[
+            ("N00", "integrated"),
+            ("N01", "integrated"),
+            ("N02", "integrated"),
+            ("N03", "integrated"),
+            ("N04", "integrated"),
+            ("N05", "integrated"),
+            ("N06", "integrated"),
+            ("N07", "ready"),
+        ],
+        &["N07"],
+    );
+    value["pre_adoption_source"]["frontier"] =
+        json!("N07_READY_N04_N06_INTEGRATED_SOURCE_FRONTIER");
+
+    let nodes = scheduler_nodes(&value).unwrap();
+
+    assert!(nodes.integrated.contains("N06"));
+    assert_eq!(nodes.ready, BTreeSet::from(["N07".to_owned()]));
+}
