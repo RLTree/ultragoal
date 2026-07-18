@@ -516,6 +516,18 @@ claim and representative product or release proof.
   or product claim is promoted. N09 must establish its production adoption path.
   Shared schemas, generated authority, public dispatch, claims, and integration
   remain root-owned.
+- N09 is source-accepted at `6a4624db6856ba82d84c3784ec7c6ed23b1cb2c1`
+  / tree `cca55a2b90cec4be96875ebaa8c8183c5790f7b8` and root-integrated
+  through `262a0ead4139a89956e349b3e189d18181e01d97` / tree
+  `94e82787a1f619771489f656908fbeade27dc2ab`. Capability inspection now
+  consumes the typed repository-adoption transaction directly; the retired
+  compatibility wrapper and its proof-only control are removed. Warning-denied
+  production compilation, 64 focused authority controls, seven public
+  capability controls, namespace/zero-write, generated-authority, and 121
+  standards rows pass. Host discovery, runtime exposure, installed behavior,
+  readiness, release, and completion remain withheld. N08 remains the sole
+  active lease; N10 is dependency-eligible but is not launched while the root
+  integration queue is occupied.
 
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine

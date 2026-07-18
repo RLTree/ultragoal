@@ -165,3 +165,29 @@ fn integrated_observability_opens_only_plugin_and_agent_adoption() {
         BTreeSet::from(["N08", "N09"].map(str::to_owned))
     );
 }
+
+#[test]
+fn integrated_agent_adoption_leaves_only_plugin_product_ready() {
+    let mut value = registry(
+        &[
+            ("N00", "integrated"),
+            ("N01", "integrated"),
+            ("N02", "integrated"),
+            ("N03", "integrated"),
+            ("N04", "integrated"),
+            ("N05", "integrated"),
+            ("N06", "integrated"),
+            ("N07", "integrated"),
+            ("N08", "ready"),
+            ("N09", "integrated"),
+            ("N10", "blocked"),
+        ],
+        &["N08"],
+    );
+    value["pre_adoption_source"]["frontier"] = json!("N08_READY_N09_INTEGRATED_SOURCE_FRONTIER");
+
+    let nodes = scheduler_nodes(&value).unwrap();
+
+    assert!(nodes.integrated.contains("N09"));
+    assert_eq!(nodes.ready, BTreeSet::from(["N08".to_owned()]));
+}
