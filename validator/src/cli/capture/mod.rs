@@ -36,20 +36,15 @@ pub use run::CapturedRun;
 pub use spec::CommandSpec;
 
 #[cfg(test)]
-#[allow(unused_imports)]
-pub(crate) use artifact::{capture_public_for_test, capture_spec_artifacts_for_test};
+pub use artifact::{capture_public_for_test, capture_spec_artifacts_for_test};
 #[cfg(test)]
-#[allow(unused_imports)]
-pub(crate) use artifact_safety::finalize_for_test;
+pub use artifact_safety::finalize_for_test;
 #[cfg(test)]
-#[allow(unused_imports)]
-pub(crate) use descriptor::{
+pub use descriptor::{
     reset_test_descriptor_bytes_read, reset_test_file_open_attempts, test_descriptor_bytes_read,
     test_file_open_attempts,
 };
 #[cfg(test)]
-#[allow(unused_imports)]
-pub(crate) use descriptor_race_control::{set_test_preopen_pause_ms, test_preopen_is_paused};
+pub use descriptor_race_control::{set_test_preopen_pause_ms, test_preopen_is_paused};
 #[cfg(test)]
-#[allow(unused_imports)]
-pub(crate) use filesystem::{set_test_artifact_pause_ms, test_artifact_is_paused};
+pub use filesystem::{set_test_artifact_pause_ms, test_artifact_is_paused};

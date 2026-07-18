@@ -1,4 +1,4 @@
-use super::diagnostics::{Diagnostic, DiagnosticId, RuntimeOutcome};
+use super::diagnostics::{Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome};
 use crate::context::EffectClass;
 
 use super::super::{ExitClass, SuccessorCommand};
@@ -63,20 +63,22 @@ pub(super) fn delegated(
                 DiagnosticId::DownstreamToolUnavailable
             },
             class,
-            if authority {
-                "the command requires authority and a downstream product adapter not present in N03"
-            } else {
-                "the command belongs to a downstream Harness tool that is not wired into this runtime"
+            DiagnosticDetails {
+                cause: if authority {
+                    "the command requires authority and a downstream product adapter not present in N03"
+                } else {
+                    "the command belongs to a downstream Harness tool that is not wired into this runtime"
+                },
+                affected_surface: tool,
+                repair,
+                effect: if authority {
+                    "external-or-destructive"
+                } else {
+                    "delegated"
+                },
+                rerun: "ultragoal --json inspect findings",
+                ceiling: "no downstream product or readiness claim is raised",
             },
-            tool,
-            repair,
-            if authority {
-                "external-or-destructive"
-            } else {
-                "delegated"
-            },
-            "ultragoal --json inspect findings",
-            "no downstream product or readiness claim is raised",
         ),
     )
 }
@@ -164,6 +166,17 @@ fn failure(
 ) -> RuntimeOutcome {
     RuntimeOutcome::failure(
         class,
-        Diagnostic::new(id, class, cause, surface, repair, "read", rerun, ceiling),
+        Diagnostic::new(
+            id,
+            class,
+            DiagnosticDetails {
+                cause,
+                affected_surface: surface,
+                repair,
+                effect: "read",
+                rerun,
+                ceiling,
+            },
+        ),
     )
 }

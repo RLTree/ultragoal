@@ -23,23 +23,14 @@ impl EffectOwner<'_> {
                 {
                     return Err(invalid_transition());
                 }
-                let event = next_event(
+                let event = next_event(NextLedgerEvent::transition(
                     payload,
-                    &self.token.reservation_id,
-                    &self.token.binding_sha256,
-                    &self.token.semantic_effect_id,
-                    &self.token.target_scope_id,
-                    &self.token.permit_id,
-                    &self.token.nonce_sha256,
-                    &self.token.recovery_intent_sha256,
-                    current.issued_tick,
-                    current.expires_tick,
-                    &current.recovery,
+                    current,
                     state,
                     Some(terminal_sha256),
                     error_id,
                     tick,
-                )?;
+                ))?;
                 append(payload, event)?;
                 Ok(((), true))
             })

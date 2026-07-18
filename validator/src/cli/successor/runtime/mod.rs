@@ -4,7 +4,7 @@ mod dispatch;
 mod failures;
 mod state_view;
 
-pub(crate) use diagnostics::{Diagnostic, DiagnosticId, RuntimeOutcome};
+pub(crate) use diagnostics::{Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome};
 pub(crate) use dispatch::RuntimeSession;
 pub(crate) use state_view::{StateDisposition, StateProjection, StateView};
 

@@ -16,13 +16,13 @@ pub(crate) fn exclusive_contention_has_one_deadline_for_query_append_clear_recov
 
     let mut adapter = MockAdapter::new(AdapterMode::Ok);
     assert_lock_timeout(|| {
-        store.export_explicit(
-            &query(),
-            true,
-            true,
-            Duration::from_secs(2),
-            Some(&mut adapter),
-        )
+        store.export_explicit(ExplicitExportRequest {
+            query: &query(),
+            configured: true,
+            consent_granted: true,
+            timeout: Duration::from_secs(2),
+            adapter: Some(&mut adapter),
+        })
     });
     assert_eq!(
         adapter.export_calls, 0,
@@ -55,13 +55,13 @@ pub(crate) fn same_process_identity_contention_times_out_every_store_path_withou
 
     let mut adapter = MockAdapter::new(AdapterMode::Ok);
     assert_identity_lock_timeout(&store, || {
-        store.export_explicit(
-            &query(),
-            true,
-            true,
-            Duration::from_secs(2),
-            Some(&mut adapter),
-        )
+        store.export_explicit(ExplicitExportRequest {
+            query: &query(),
+            configured: true,
+            consent_granted: true,
+            timeout: Duration::from_secs(2),
+            adapter: Some(&mut adapter),
+        })
     });
     assert_eq!(adapter.export_calls, 0, "timeout reached export adapter");
     assert_eq!(
@@ -136,13 +136,13 @@ pub(crate) fn shared_holder_allows_reads_but_exclusive_append_times_out_without_
     let mut adapter = MockAdapter::new(AdapterMode::Ok);
     assert_eq!(
         store
-            .export_explicit(
-                &query(),
-                true,
-                true,
-                Duration::from_secs(2),
-                Some(&mut adapter),
-            )
+            .export_explicit(ExplicitExportRequest {
+                query: &query(),
+                configured: true,
+                consent_granted: true,
+                timeout: Duration::from_secs(2),
+                adapter: Some(&mut adapter),
+            })
             .unwrap(),
         1
     );

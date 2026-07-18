@@ -72,16 +72,16 @@ fn symlink_fifo_and_socket_entries_are_retained_without_traversal() {
 fn relative_path(from: &Path, to: &Path) -> PathBuf {
     let from = from.components().collect::<Vec<_>>();
     let to = to.components().collect::<Vec<_>>();
-    let shared = from
+    let common_prefix_length = from
         .iter()
         .zip(&to)
         .take_while(|(left, right)| left == right)
         .count();
     let mut relative = PathBuf::new();
-    for _ in shared..from.len() {
+    for _ in common_prefix_length..from.len() {
         relative.push("..");
     }
-    for component in &to[shared..] {
+    for component in &to[common_prefix_length..] {
         relative.push(component.as_os_str());
     }
     relative

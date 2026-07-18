@@ -50,28 +50,27 @@ pub(crate) struct Diagnostic {
     resulting_ceiling: &'static str,
 }
 
+pub(crate) struct DiagnosticDetails {
+    pub(crate) cause: &'static str,
+    pub(crate) affected_surface: &'static str,
+    pub(crate) repair: &'static str,
+    pub(crate) effect: &'static str,
+    pub(crate) rerun: &'static str,
+    pub(crate) ceiling: &'static str,
+}
+
 impl Diagnostic {
-    #[allow(clippy::too_many_arguments)]
-    pub const fn new(
-        id: DiagnosticId,
-        exit_class: ExitClass,
-        cause: &'static str,
-        affected_surface: &'static str,
-        repair: &'static str,
-        effect: &'static str,
-        rerun: &'static str,
-        ceiling: &'static str,
-    ) -> Self {
+    pub const fn new(id: DiagnosticId, exit_class: ExitClass, details: DiagnosticDetails) -> Self {
         Self {
             schema_version: "HarnessDiagnostic-v1",
             diagnostic_id: id.as_str(),
             exit_class: exit_name(exit_class),
-            cause,
-            affected_surface,
-            smallest_safe_repair: repair,
-            effect,
-            exact_rerun: rerun,
-            resulting_ceiling: ceiling,
+            cause: details.cause,
+            affected_surface: details.affected_surface,
+            smallest_safe_repair: details.repair,
+            effect: details.effect,
+            exact_rerun: details.rerun,
+            resulting_ceiling: details.ceiling,
         }
     }
 

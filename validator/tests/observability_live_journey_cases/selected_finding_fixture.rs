@@ -38,16 +38,16 @@ pub(crate) fn open_store(repository: &JourneyRepository, binding: &Binding) -> E
 }
 
 pub(crate) fn event(binding: &Binding, id: &str, sequence: u64, operation: &str) -> SemanticEvent {
-    SemanticEvent::new(
-        &binding.context_id,
-        &binding.candidate_id,
-        &binding.source_id,
-        id,
+    SemanticEvent::new(SemanticEventInput {
+        context_id: binding.context_id.clone(),
+        candidate_id: binding.candidate_id.clone(),
+        source_id: binding.source_id.clone(),
+        event_id: id.to_owned(),
+        observed_at_unix_ms: sequence,
         sequence,
-        sequence,
-        operation,
-        "fail",
-    )
+        operation: operation.to_owned(),
+        outcome: "fail".to_owned(),
+    })
     .expect("candidate-bound semantic event")
 }
 

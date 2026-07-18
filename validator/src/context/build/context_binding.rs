@@ -68,19 +68,22 @@ impl LiveContext {
             worktree_root: path_text(&worktree)?,
         };
         let permitted = permitted_effects(request.effect);
-        let payload = ContextPayload::new(
+        let payload = ContextPayload::new(ContextPayloadInput {
             roots,
             candidate,
-            configuration::identity(&request.configuration, &request.secret_sources)?,
+            configuration: configuration::identity(
+                &request.configuration,
+                &request.secret_sources,
+            )?,
             capabilities,
-            permission_identity,
-            EffectBoundary {
+            permissions: permission_identity,
+            effect: EffectBoundary {
                 selected: request.effect,
                 permitted,
                 write_scopes: scopes,
             },
-            inputs,
-        );
+            selected_inputs: inputs,
+        });
         let serialized = serde_json::to_vec(&payload)
             .map_err(|error| ContextError::Serialization(error.to_string()))?;
         let context = Self::from_payload(payload, format!("sha256:{}", sha256_hex(&serialized)));

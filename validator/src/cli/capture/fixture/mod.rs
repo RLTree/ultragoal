@@ -7,7 +7,7 @@ mod execute;
 #[path = "permit/mod.rs"]
 mod permit;
 
-pub(crate) use permit::FixtureCaptureAdapter;
+pub(crate) use permit::{FixtureCaptureAdapter, FixtureCaptureRequest};
 
 use crate::evaluation::runtime::{
     FixtureEvaluationBridge, FixtureTaskRequest, ProductionRuntimeError,

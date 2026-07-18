@@ -1,6 +1,8 @@
 #[cfg(test)]
 use crate::cli::successor::parse_args;
-use crate::cli::successor::runtime::{Diagnostic, DiagnosticId, RuntimeOutcome, RuntimeSession};
+use crate::cli::successor::runtime::{
+    Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome, RuntimeSession,
+};
 use crate::cli::successor::{
     CheckProfile, EffectClass, ExitClass, FitAction, InspectTarget, OutputMode, ParseOutcome,
     ParsedInvocation, SuccessorCommand, render_help, version_text,

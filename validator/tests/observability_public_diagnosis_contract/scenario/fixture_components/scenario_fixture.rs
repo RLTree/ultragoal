@@ -166,16 +166,16 @@ pub(crate) fn event(
     operation: &str,
     outcome: &str,
 ) -> SemanticEvent {
-    SemanticEvent::new(
-        &binding.context_id,
-        &binding.candidate_id,
-        &binding.source_id,
-        id,
+    SemanticEvent::new(SemanticEventInput {
+        context_id: binding.context_id.clone(),
+        candidate_id: binding.candidate_id.clone(),
+        source_id: binding.source_id.clone(),
+        event_id: id.to_owned(),
+        observed_at_unix_ms: sequence,
         sequence,
-        sequence,
-        operation,
-        outcome,
-    )
+        operation: operation.to_owned(),
+        outcome: outcome.to_owned(),
+    })
     .unwrap()
 }
 

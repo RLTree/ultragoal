@@ -1,4 +1,5 @@
 use super::*;
+use crate::cli::successor::runtime::DiagnosticDetails;
 use crate::routine_work::PRODUCTION_SUPPORT_LIMIT;
 
 pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
@@ -107,7 +108,18 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
     };
     RuntimeOutcome::failure(
         class,
-        Diagnostic::new(id, class, cause, surface, repair, effect, RERUN, ceiling),
+        Diagnostic::new(
+            id,
+            class,
+            DiagnosticDetails {
+                cause,
+                affected_surface: surface,
+                repair,
+                effect,
+                rerun: RERUN,
+                ceiling,
+            },
+        ),
     )
 }
 

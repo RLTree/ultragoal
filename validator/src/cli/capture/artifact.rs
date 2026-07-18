@@ -138,8 +138,7 @@ pub(super) fn capture(
 }
 
 #[cfg(test)]
-#[allow(dead_code)]
-pub(crate) fn capture_public_for_test(
+pub fn capture_public_for_test(
     context: &LiveContext,
     items: Vec<PublicArtifact>,
 ) -> Result<Vec<CapturedArtifact>, String> {
@@ -169,8 +168,7 @@ pub(crate) fn capture_public_for_test(
 }
 
 #[cfg(test)]
-#[allow(dead_code)]
-pub(crate) fn capture_spec_artifacts_for_test(
+pub fn capture_spec_artifacts_for_test(
     context: &LiveContext,
     spec: &CommandSpec,
 ) -> Result<Vec<CapturedArtifact>, String> {

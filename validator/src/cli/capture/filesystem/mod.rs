@@ -17,4 +17,7 @@ mod pinned_file_access;
 mod root_anchor;
 
 pub(crate) use pinned_file_access::*;
+#[cfg(not(test))]
 pub(crate) use root_anchor::*;
+#[cfg(test)]
+pub use root_anchor::*;

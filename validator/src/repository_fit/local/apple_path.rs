@@ -10,12 +10,14 @@ use std::path::{Path, PathBuf};
 
 pub(super) enum LeafRead {
     Absent(PathStat),
-    Present {
-        bytes: Vec<u8>,
-        file: File,
-        expected: PathStat,
-        parent_expected: PathStat,
-    },
+    Present(PresentLeaf),
+}
+
+pub(super) struct PresentLeaf {
+    pub(super) bytes: Vec<u8>,
+    pub(super) file: File,
+    pub(super) expected: PathStat,
+    pub(super) parent_expected: PathStat,
 }
 
 #[cfg(target_vendor = "apple")]
@@ -51,25 +53,37 @@ pub(super) fn descriptor_path(file: &File) -> Result<PathBuf, FitError> {
     Err(error(FitErrorId::UnsupportedHost))
 }
 
-#[cfg_attr(not(target_vendor = "apple"), allow(unused_variables))]
-#[allow(clippy::too_many_arguments)]
 pub(super) fn finish_present(
     workspace: &Workspace,
     directory: &File,
     expected_parent: &Path,
     name: &str,
-    bytes: Vec<u8>,
-    mut file: File,
-    expected: PathStat,
-    parent_expected: PathStat,
+    leaf: PresentLeaf,
     maximum_bytes: usize,
     enumeration_budget: &mut EnumerationBudget,
 ) -> Result<Option<Vec<u8>>, FitError> {
     #[cfg(not(target_vendor = "apple"))]
-    return Err(error(FitErrorId::UnsupportedHost));
+    {
+        let _ = (
+            workspace,
+            directory,
+            expected_parent,
+            name,
+            leaf,
+            maximum_bytes,
+            enumeration_budget,
+        );
+        return Err(error(FitErrorId::UnsupportedHost));
+    }
 
     #[cfg(target_vendor = "apple")]
     {
+        let PresentLeaf {
+            bytes,
+            mut file,
+            expected,
+            parent_expected,
+        } = leaf;
         file.seek(SeekFrom::Start(0))
             .map_err(|_| error(FitErrorId::ReadFailed))?;
         let final_bytes = bounded_read(&mut file, maximum_bytes)?;
@@ -111,7 +125,6 @@ pub(super) fn finish_present(
     }
 }
 
-#[cfg_attr(not(target_vendor = "apple"), allow(unused_variables))]
 pub(super) fn finish_absent(
     workspace: &Workspace,
     directory: &File,
@@ -121,7 +134,17 @@ pub(super) fn finish_absent(
     enumeration_budget: &mut EnumerationBudget,
 ) -> Result<Option<Vec<u8>>, FitError> {
     #[cfg(not(target_vendor = "apple"))]
-    return Err(error(FitErrorId::UnsupportedHost));
+    {
+        let _ = (
+            workspace,
+            directory,
+            expected_parent,
+            name,
+            parent_expected,
+            enumeration_budget,
+        );
+        return Err(error(FitErrorId::UnsupportedHost));
+    }
 
     #[cfg(target_vendor = "apple")]
     {

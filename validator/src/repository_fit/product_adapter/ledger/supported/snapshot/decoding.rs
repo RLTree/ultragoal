@@ -1,6 +1,5 @@
 use super::*;
 
-#[allow(clippy::too_many_arguments)]
 pub(crate) fn decode_snapshot(
     bytes: &[u8],
     key: &LedgerKey,

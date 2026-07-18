@@ -1,4 +1,5 @@
 use super::*;
+use crate::cli::successor::runtime::DiagnosticDetails;
 
 pub(crate) fn execute(
     context: &LiveContext,
@@ -157,12 +158,14 @@ pub(crate) fn host_failure(failure: HostFailure) -> RuntimeOutcome {
         Diagnostic::new(
             id,
             class,
-            cause,
-            "HCT-FIT public production authority",
-            repair,
-            effect,
-            "ultragoal --json fit apply --plan <plan> --accept-plan <sha256>",
-            ceiling,
+            DiagnosticDetails {
+                cause,
+                affected_surface: "HCT-FIT public production authority",
+                repair,
+                effect,
+                rerun: "ultragoal --json fit apply --plan <plan> --accept-plan <sha256>",
+                ceiling,
+            },
         ),
     )
 }

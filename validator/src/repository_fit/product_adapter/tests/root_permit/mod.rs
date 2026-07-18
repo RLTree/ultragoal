@@ -44,11 +44,11 @@ mod descriptor_capture_rejects_parent_leaf_and_missing_boundary_hybrids_without_
 mod final_green_rechecks_target_after_protected_after_and_rejects_late_target_aba;
 #[path = "missing_permit_missing_lease_and_time_windows_refuse_before_effect_without_consumption.rs"]
 mod missing_permit_missing_lease_and_time_windows_refuse_before_effect_without_consumption;
-#[path = "protected_change_version_rejects_same_inode_mutate_restore_aba.rs"]
+#[path = "protected/change_version_rejects_same_inode_mutate_restore_aba.rs"]
 mod protected_change_version_rejects_same_inode_mutate_restore_aba;
-#[path = "protected_descendants_inside_managed_ancestors_are_preserved_and_bound.rs"]
+#[path = "protected/descendants_inside_managed_ancestors_are_preserved_and_bound.rs"]
 mod protected_descendants_inside_managed_ancestors_are_preserved_and_bound;
-#[path = "protected_descriptor_capture_rejects_rollback_ab_swap.rs"]
+#[path = "protected/descriptor_capture_rejects_rollback_ab_swap.rs"]
 mod protected_descriptor_capture_rejects_rollback_ab_swap;
 #[path = "reconciliation_binds_every_target_collect_to_the_authorized_snapshot.rs"]
 mod reconciliation_binds_every_target_collect_to_the_authorized_snapshot;

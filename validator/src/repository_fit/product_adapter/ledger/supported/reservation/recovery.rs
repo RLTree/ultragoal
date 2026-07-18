@@ -50,23 +50,14 @@ impl FileLedger {
             {
                 return Err(invalid_transition());
             }
-            let event = next_event(
+            let event = next_event(NextLedgerEvent::transition(
                 payload,
-                &current.reservation_id,
-                &current.binding_sha256,
-                &current.semantic_effect_id,
-                &current.target_scope_id,
-                &current.permit_id,
-                &current.nonce_sha256,
-                &current.recovery_intent_sha256,
-                current.issued_tick,
-                current.expires_tick,
-                &current.recovery,
+                current,
                 terminal.state,
                 Some(&terminal.terminal_sha256),
                 terminal.error_id,
                 tick,
-            )?;
+            ))?;
             append(payload, event)?;
             Ok((terminal.state, true))
         })

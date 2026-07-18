@@ -45,25 +45,14 @@ pub(crate) fn collect_protected(
             .iter()
             .map(|file| file.path.as_str().as_bytes().to_vec())
             .collect::<BTreeSet<_>>();
-        let mut budget = FenceBudget {
-            entries: 0,
-            name_bytes: 0,
-            bytes: 0,
-        };
-        let mut visited = BTreeSet::from([(root_object.device, root_object.inode)]);
-        let mut rows = Vec::new();
-        visit_protected_descriptor(
-            &mut root_descriptor,
-            &[],
+        let mut traversal = ProtectedDescriptorTraversal::new(
             root_object.device,
-            &allowed,
+            allowed,
             boundary,
             run_capture_hooks,
-            0,
-            &mut budget,
-            &mut visited,
-            &mut rows,
-        )?;
+            root_object.inode,
+        );
+        traversal.visit(&mut root_descriptor, &[], 0)?;
         let final_path_metadata = fs::symlink_metadata(root)
             .map_err(|_| adapter_error(AdapterErrorId::TargetUnavailable))?;
         let final_root_object = metadata_object(
@@ -78,6 +67,7 @@ pub(crate) fn collect_protected(
         {
             return Err(adapter_error(AdapterErrorId::TargetUnavailable));
         }
+        let mut rows = traversal.into_rows();
         rows.sort_by(|left, right| left.path.cmp(&right.path));
         let sha256 = digest(
             &serde_json::to_vec(&rows)

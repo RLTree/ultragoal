@@ -48,17 +48,20 @@ impl ConfiguredPathAlias {
 fn relative_path(from: &Path, to: &Path) -> PathBuf {
     let from = from.components().collect::<Vec<_>>();
     let to = to.components().collect::<Vec<_>>();
-    let shared = from
+    let common_prefix_length = from
         .iter()
         .zip(&to)
         .take_while(|(left, right)| left == right)
         .count();
-    assert!(shared > 0, "configured alias has no common root");
+    assert!(
+        common_prefix_length > 0,
+        "configured alias has no common root"
+    );
     let mut relative = PathBuf::new();
-    for _ in shared..from.len() {
+    for _ in common_prefix_length..from.len() {
         relative.push("..");
     }
-    for component in &to[shared..] {
+    for component in &to[common_prefix_length..] {
         relative.push(component.as_os_str());
     }
     relative

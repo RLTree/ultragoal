@@ -40,6 +40,14 @@ pub(crate) enum ExecutableIssuancePolicy {
     TestNativeSnapshot,
 }
 
+pub(crate) struct FixtureCaptureRequest {
+    pub(crate) executable: PathBuf,
+    pub(crate) arguments: Vec<OsString>,
+    pub(crate) output_limit: usize,
+    pub(crate) required_output: Vec<u8>,
+    pub(crate) binding: FixtureExecutionBinding,
+}
+
 /// Crate-internal permit binding a pinned invocation to immutable fixture
 /// metadata.  Public `CommandSpec` cannot construct or replace this permit.
 pub(crate) struct FixtureCaptureAdapter {

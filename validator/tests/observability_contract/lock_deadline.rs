@@ -1,4 +1,4 @@
-use super::observability::EventStore;
+use super::observability::{EventStore, ExplicitExportRequest};
 use super::scenario::{AdapterMode, MockAdapter, TestDir, event, query, store, tree_snapshot};
 use std::fs::{self, File, OpenOptions};
 use std::path::Path;

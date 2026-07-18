@@ -20,11 +20,13 @@ impl FixtureEvaluationBridge for ScheduledFixtureEvaluationBridge {
         .map_err(|_| ProductionRuntimeError::bridge("evaluation-fixture-spec-invalid"))?;
         let adapter = FixtureCaptureAdapter::issue_evaluation(
             &fixture,
-            invocation.executable.clone(),
-            invocation.arguments.clone(),
-            invocation.output_limit,
-            invocation.required_output.clone(),
-            request.binding.clone(),
+            FixtureCaptureRequest {
+                executable: invocation.executable.clone(),
+                arguments: invocation.arguments.clone(),
+                output_limit: invocation.output_limit,
+                required_output: invocation.required_output.clone(),
+                binding: request.binding.clone(),
+            },
             &invocation.artifact_name,
         )
         .map_err(|_| ProductionRuntimeError::bridge("evaluation-fixture-permit-refused"))?;

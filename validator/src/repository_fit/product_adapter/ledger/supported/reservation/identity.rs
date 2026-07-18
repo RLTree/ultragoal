@@ -1,5 +1,4 @@
 use super::*;
-
 pub(crate) fn same_reservation(left: &LedgerEvent, right: &LedgerEvent) -> bool {
     left.reservation_id == right.reservation_id
         && left.binding_sha256 == right.binding_sha256
@@ -13,32 +12,106 @@ pub(crate) fn same_reservation(left: &LedgerEvent, right: &LedgerEvent) -> bool 
         && left.recovery == right.recovery
 }
 
-#[allow(clippy::too_many_arguments)]
-pub(crate) fn next_event(
-    payload: &SnapshotPayload,
-    reservation_id: &str,
-    binding_sha256: &str,
-    semantic_effect_id: &str,
-    target_scope_id: &str,
-    permit_id: &str,
-    nonce_sha256: &str,
-    recovery_intent_sha256: &str,
+pub(crate) struct NextLedgerEvent<'a> {
+    payload: &'a SnapshotPayload,
+    reservation: ReservationIdentity<'a>,
+    transition: LedgerTransition<'a>,
+}
+
+struct ReservationIdentity<'a> {
+    reservation_id: &'a str,
+    binding_sha256: &'a str,
+    semantic_effect_id: &'a str,
+    target_scope_id: &'a str,
+    permit_id: &'a str,
+    nonce_sha256: &'a str,
+    recovery_intent_sha256: &'a str,
     issued_tick: u64,
     expires_tick: u64,
-    recovery: &RecoveryTargetSpec,
+    recovery: &'a RecoveryTargetSpec,
+}
+struct LedgerTransition<'a> {
     state: RepositoryFitLedgerState,
-    terminal_sha256: Option<&str>,
+    terminal_sha256: Option<&'a str>,
     error_id: Option<AdapterErrorId>,
-    transition_tick: u64,
-) -> Result<LedgerEvent, LedgerError> {
+    tick: u64,
+}
+
+impl<'a> NextLedgerEvent<'a> {
+    pub(crate) fn reserved(
+        payload: &'a SnapshotPayload,
+        reservation_id: &'a str,
+        request: &'a ReservationRequest<'a>,
+    ) -> Self {
+        Self {
+            payload,
+            reservation: ReservationIdentity {
+                reservation_id,
+                binding_sha256: request.binding_sha256,
+                semantic_effect_id: request.semantic_effect_id,
+                target_scope_id: request.target_scope_id,
+                permit_id: request.permit_id,
+                nonce_sha256: request.nonce_sha256,
+                recovery_intent_sha256: request.recovery_intent_sha256,
+                issued_tick: request.issued_tick,
+                expires_tick: request.expires_tick,
+                recovery: request.recovery,
+            },
+            transition: LedgerTransition {
+                state: RepositoryFitLedgerState::Reserved,
+                terminal_sha256: None,
+                error_id: None,
+                tick: request.issued_tick,
+            },
+        }
+    }
+
+    pub(crate) fn transition(
+        payload: &'a SnapshotPayload,
+        current: &'a LedgerEvent,
+        state: RepositoryFitLedgerState,
+        terminal_sha256: Option<&'a str>,
+        error_id: Option<AdapterErrorId>,
+        tick: u64,
+    ) -> Self {
+        Self {
+            payload,
+            reservation: ReservationIdentity {
+                reservation_id: &current.reservation_id,
+                binding_sha256: &current.binding_sha256,
+                semantic_effect_id: &current.semantic_effect_id,
+                target_scope_id: &current.target_scope_id,
+                permit_id: &current.permit_id,
+                nonce_sha256: &current.nonce_sha256,
+                recovery_intent_sha256: &current.recovery_intent_sha256,
+                issued_tick: current.issued_tick,
+                expires_tick: current.expires_tick,
+                recovery: &current.recovery,
+            },
+            transition: LedgerTransition {
+                state,
+                terminal_sha256,
+                error_id,
+                tick,
+            },
+        }
+    }
+}
+
+pub(crate) fn next_event(input: NextLedgerEvent<'_>) -> Result<LedgerEvent, LedgerError> {
+    let NextLedgerEvent {
+        payload,
+        reservation,
+        transition,
+    } = input;
     let sequence = payload.generation.checked_add(1).ok_or_else(tampered)?;
     let event_id = digest(
         &serde_json::to_vec(&(
             "repository-fit-ledger-event-id-v2",
             &payload.authority_id,
             sequence,
-            reservation_id,
-            state,
+            reservation.reservation_id,
+            transition.state,
         ))
         .map_err(|_| invalid_transition())?,
     );
@@ -46,20 +119,20 @@ pub(crate) fn next_event(
         sequence,
         event_id,
         prior_head_sha256: payload.head_sha256.clone(),
-        reservation_id: reservation_id.to_owned(),
-        binding_sha256: binding_sha256.to_owned(),
-        semantic_effect_id: semantic_effect_id.to_owned(),
-        target_scope_id: target_scope_id.to_owned(),
-        permit_id: permit_id.to_owned(),
-        nonce_sha256: nonce_sha256.to_owned(),
-        recovery_intent_sha256: recovery_intent_sha256.to_owned(),
-        issued_tick,
-        expires_tick,
-        recovery: recovery.clone(),
-        state,
-        terminal_sha256: terminal_sha256.map(str::to_owned),
-        error_id,
-        transition_tick,
+        reservation_id: reservation.reservation_id.to_owned(),
+        binding_sha256: reservation.binding_sha256.to_owned(),
+        semantic_effect_id: reservation.semantic_effect_id.to_owned(),
+        target_scope_id: reservation.target_scope_id.to_owned(),
+        permit_id: reservation.permit_id.to_owned(),
+        nonce_sha256: reservation.nonce_sha256.to_owned(),
+        recovery_intent_sha256: reservation.recovery_intent_sha256.to_owned(),
+        issued_tick: reservation.issued_tick,
+        expires_tick: reservation.expires_tick,
+        recovery: reservation.recovery.clone(),
+        state: transition.state,
+        terminal_sha256: transition.terminal_sha256.map(str::to_owned),
+        error_id: transition.error_id,
+        transition_tick: transition.tick,
         event_sha256: String::new(),
     };
     event.event_sha256 = event_digest(&event)?;
@@ -128,7 +201,7 @@ pub(crate) fn validate_reservation(request: &ReservationRequest<'_>) -> Result<(
     .iter()
     .any(|value| !valid_digest(value))
         || request.expires_tick < request.issued_tick
-        || !valid_recovery(&request.recovery)
+        || !valid_recovery(request.recovery)
         || !recovery_intent_matches(request.recovery, request.recovery_intent_sha256)
     {
         return Err(invalid_transition());

@@ -40,23 +40,11 @@ impl FileLedger {
                 ))
                 .map_err(|_| invalid_transition())?,
             );
-            let event = next_event(
+            let event = next_event(NextLedgerEvent::reserved(
                 payload,
                 &reservation_id,
-                request.binding_sha256,
-                request.semantic_effect_id,
-                request.target_scope_id,
-                request.permit_id,
-                request.nonce_sha256,
-                request.recovery_intent_sha256,
-                request.issued_tick,
-                request.expires_tick,
-                request.recovery,
-                RepositoryFitLedgerState::Reserved,
-                None,
-                None,
-                request.issued_tick,
-            )?;
+                &request,
+            ))?;
             append(payload, event)?;
             Ok((
                 ReservationDecision::Acquired(ReservationToken {

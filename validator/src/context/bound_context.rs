@@ -143,26 +143,27 @@ pub(super) struct ContextPayload {
     selected_inputs: Vec<SelectedInputIdentity>,
 }
 
+pub(super) struct ContextPayloadInput {
+    pub(super) roots: RootIdentity,
+    pub(super) candidate: CandidateIdentity,
+    pub(super) configuration: ConfigurationIdentity,
+    pub(super) capabilities: CapabilitySet,
+    pub(super) permissions: PermissionIdentity,
+    pub(super) effect: EffectBoundary,
+    pub(super) selected_inputs: Vec<SelectedInputIdentity>,
+}
+
 impl ContextPayload {
-    #[allow(clippy::too_many_arguments)]
-    pub(super) fn new(
-        roots: RootIdentity,
-        candidate: CandidateIdentity,
-        configuration: ConfigurationIdentity,
-        capabilities: CapabilitySet,
-        permissions: PermissionIdentity,
-        effect: EffectBoundary,
-        selected_inputs: Vec<SelectedInputIdentity>,
-    ) -> Self {
+    pub(super) fn new(input: ContextPayloadInput) -> Self {
         Self {
             schema_version: "LiveContext-v1",
-            roots,
-            candidate,
-            configuration,
-            capabilities,
-            permissions,
-            effect,
-            selected_inputs,
+            roots: input.roots,
+            candidate: input.candidate,
+            configuration: input.configuration,
+            capabilities: input.capabilities,
+            permissions: input.permissions,
+            effect: input.effect,
+            selected_inputs: input.selected_inputs,
         }
     }
 }

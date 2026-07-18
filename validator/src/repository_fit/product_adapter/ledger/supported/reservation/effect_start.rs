@@ -19,23 +19,14 @@ impl FileLedger {
             {
                 return Err(invalid_transition());
             }
-            let event = next_event(
+            let event = next_event(NextLedgerEvent::transition(
                 payload,
-                &token.reservation_id,
-                &token.binding_sha256,
-                &token.semantic_effect_id,
-                &token.target_scope_id,
-                &token.permit_id,
-                &token.nonce_sha256,
-                &token.recovery_intent_sha256,
-                current.issued_tick,
-                current.expires_tick,
-                &current.recovery,
+                current,
                 RepositoryFitLedgerState::EffectStarted,
                 None,
                 None,
                 tick,
-            )?;
+            ))?;
             append(payload, event)?;
             Ok(((), true))
         })?;

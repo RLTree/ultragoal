@@ -28,7 +28,7 @@ pub(super) fn withheld_secret_bearing_invocation() -> FinalizedArtifact {
 }
 
 #[cfg(test)]
-pub(crate) fn finalize_for_test(
+pub fn finalize_for_test(
     bytes: &[u8],
     secrets: &[Vec<u8>],
 ) -> (ArtifactDisposition, Arc<[u8]>, String) {

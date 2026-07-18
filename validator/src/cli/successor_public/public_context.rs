@@ -1,4 +1,6 @@
-use crate::cli::successor::runtime::{Diagnostic, DiagnosticId, RuntimeOutcome, RuntimeSession};
+use crate::cli::successor::runtime::{
+    Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome, RuntimeSession,
+};
 use crate::cli::successor::{ExitClass, ParsedInvocation};
 use crate::context::LiveContext;
 use serde_json::json;
@@ -65,12 +67,14 @@ fn projection_failure() -> RuntimeOutcome {
         Diagnostic::new(
             DiagnosticId::ProjectionFailed,
             class,
-            "the bounded public context projection could not be produced",
-            "public context output",
-            "repair the public projection without exposing the internal LiveContext payload",
-            "read",
-            "ultragoal --json inspect context",
-            "public context and dependent claims remain withheld",
+            DiagnosticDetails {
+                cause: "the bounded public context projection could not be produced",
+                affected_surface: "public context output",
+                repair: "repair the public projection without exposing the internal LiveContext payload",
+                effect: "read",
+                rerun: "ultragoal --json inspect context",
+                ceiling: "public context and dependent claims remain withheld",
+            },
         ),
     )
 }

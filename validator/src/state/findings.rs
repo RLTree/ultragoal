@@ -20,19 +20,28 @@ struct FindingIdentity<'a> {
     ceiling_reductions: &'a [CeilingReduction],
 }
 
-#[allow(clippy::too_many_arguments)]
-pub(crate) fn finding(
-    code: impl Into<String>,
-    severity: FindingSeverity,
-    source: FindingSource,
-    scope: Scope,
-    dependency_ids: BTreeSet<String>,
-    cause: impl Into<String>,
-    repair: Repair,
-    mut reductions: Vec<CeilingReduction>,
-) -> Finding {
-    let code = code.into();
-    let cause = cause.into();
+pub(crate) struct FindingInput {
+    pub(crate) code: String,
+    pub(crate) severity: FindingSeverity,
+    pub(crate) source: FindingSource,
+    pub(crate) scope: Scope,
+    pub(crate) dependency_ids: BTreeSet<String>,
+    pub(crate) cause: String,
+    pub(crate) repair: Repair,
+    pub(crate) reductions: Vec<CeilingReduction>,
+}
+
+pub(crate) fn finding(input: FindingInput) -> Finding {
+    let FindingInput {
+        code,
+        severity,
+        source,
+        scope,
+        dependency_ids,
+        cause,
+        repair,
+        mut reductions,
+    } = input;
     reductions.sort_by(|a, b| (&a.claim_id, &a.dimensions).cmp(&(&b.claim_id, &b.dimensions)));
     reductions.dedup();
     let affected_claims = reductions

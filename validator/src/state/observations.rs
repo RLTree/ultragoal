@@ -1,5 +1,5 @@
 use super::catalog::DependencyActionCatalog;
-use super::findings::finding;
+use super::findings::{FindingInput, finding};
 use super::product_state::{Finding, FindingSeverity, FindingSource};
 use super::snapshot::BoundInputs;
 use std::collections::BTreeSet;
@@ -18,21 +18,21 @@ pub(crate) fn capability_findings(
         {
             continue;
         }
-        output.push(finding(
-            "unsupported-capability",
-            FindingSeverity::Warning,
-            FindingSource::LiveContext {
+        output.push(finding(FindingInput {
+            code: "unsupported-capability".to_owned(),
+            severity: FindingSeverity::Warning,
+            source: FindingSource::LiveContext {
                 context_id: inputs.context_id.clone(),
             },
-            requirement.scope.clone(),
-            BTreeSet::from([format!("capability:{}", requirement.capability)]),
-            format!(
+            scope: requirement.scope.clone(),
+            dependency_ids: BTreeSet::from([format!("capability:{}", requirement.capability)]),
+            cause: format!(
                 "required capability {} is not exposed",
                 requirement.capability
             ),
-            requirement.repair.clone(),
-            requirement.ceiling_reductions.clone(),
-        ));
+            repair: requirement.repair.clone(),
+            reductions: requirement.ceiling_reductions.clone(),
+        }));
     }
 }
 
@@ -44,20 +44,20 @@ pub(crate) fn runtime_findings(catalog: &DependencyActionCatalog, output: &mut V
         }) {
             continue;
         }
-        output.push(finding(
-            "unverified-runtime-metadata",
-            FindingSeverity::Warning,
-            FindingSource::RuntimeMetadata {
+        output.push(finding(FindingInput {
+            code: "unverified-runtime-metadata".to_owned(),
+            severity: FindingSeverity::Warning,
+            source: FindingSource::RuntimeMetadata {
                 field: requirement.field.name().to_owned(),
             },
-            requirement.scope.clone(),
-            BTreeSet::from([format!("runtime:{}", requirement.field.name())]),
-            format!(
+            scope: requirement.scope.clone(),
+            dependency_ids: BTreeSet::from([format!("runtime:{}", requirement.field.name())]),
+            cause: format!(
                 "{} was not exposed by Codex or runtime metadata",
                 requirement.field.name()
             ),
-            requirement.repair.clone(),
-            requirement.ceiling_reductions.clone(),
-        ));
+            repair: requirement.repair.clone(),
+            reductions: requirement.ceiling_reductions.clone(),
+        }));
     }
 }

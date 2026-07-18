@@ -1,4 +1,4 @@
-use super::observability::{EventQuery, EventStore};
+use super::observability::{EventQuery, EventStore, SemanticEventInput};
 use super::scenario::{TestDir, event, query, store};
 use std::fs::{self, OpenOptions};
 use std::io::Write;
@@ -92,16 +92,16 @@ fn unknown_event_fields_are_rejected_even_with_valid_row_shape() {
 fn wrong_context_candidate_and_source_are_rejected_on_append_query_and_row_read() {
     let dir = TestDir::new("bindings");
     let bound_store = store(&dir);
-    let wrong = super::observability::SemanticEvent::new(
-        "ctx-1",
-        "cand-1",
-        "source-2",
-        "wrong-source",
-        1,
-        1,
-        "check.run",
-        "fail",
-    )
+    let wrong = super::observability::SemanticEvent::new(SemanticEventInput {
+        context_id: "ctx-1".to_owned(),
+        candidate_id: "cand-1".to_owned(),
+        source_id: "source-2".to_owned(),
+        event_id: "wrong-source".to_owned(),
+        observed_at_unix_ms: 1,
+        sequence: 1,
+        operation: "check.run".to_owned(),
+        outcome: "fail".to_owned(),
+    })
     .unwrap();
     assert!(
         bound_store

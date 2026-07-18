@@ -143,19 +143,19 @@ pub(crate) fn policy_finding(
     code: &str,
     reductions: &[CeilingReduction],
 ) -> Finding {
-    finding(
-        "invalid-state-policy",
-        FindingSeverity::Error,
-        FindingSource::StatePolicy {
+    finding(FindingInput {
+        code: "invalid-state-policy".to_owned(),
+        severity: FindingSeverity::Error,
+        source: FindingSource::StatePolicy {
             catalog_id: catalog.catalog_id().to_owned(),
         },
-        Scope {
+        scope: Scope {
             surface: "authority-kernel".to_owned(),
             relative_path: None,
         },
-        BTreeSet::new(),
-        format!("dependency/action catalog defect: {code}"),
-        policy_repair(code),
-        reductions.to_vec(),
-    )
+        dependency_ids: BTreeSet::new(),
+        cause: format!("dependency/action catalog defect: {code}"),
+        repair: policy_repair(code),
+        reductions: reductions.to_vec(),
+    })
 }

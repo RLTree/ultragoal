@@ -1,5 +1,5 @@
 use super::public_output_allowed;
-use crate::cli::successor::runtime::{Diagnostic, DiagnosticId, RuntimeOutcome};
+use crate::cli::successor::runtime::{Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome};
 use crate::cli::successor::{
     EffectClass, ExitClass, OptionName, ParsedInvocation, ParsedValue, SuccessorCommand,
 };
@@ -152,12 +152,14 @@ fn failure(
         Diagnostic::new(
             id,
             class,
-            cause,
-            "HCT-STATE + HCT-OBSERVE diagnosis",
-            repair,
-            "read",
-            "ultragoal --json diagnose",
-            ceiling,
+            DiagnosticDetails {
+                cause,
+                affected_surface: "HCT-STATE + HCT-OBSERVE diagnosis",
+                repair,
+                effect: "read",
+                rerun: "ultragoal --json diagnose",
+                ceiling,
+            },
         ),
     )
 }

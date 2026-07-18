@@ -1,4 +1,4 @@
-use super::observability::{EventQuery, EventStore, SemanticEvent};
+use super::observability::{EventQuery, EventStore, SemanticEvent, SemanticEventInput};
 use super::scenario::{TestDir, event, query, store};
 use std::fs::{self, OpenOptions};
 use std::io::Write;

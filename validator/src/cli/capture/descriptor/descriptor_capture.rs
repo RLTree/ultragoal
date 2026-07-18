@@ -9,26 +9,22 @@ thread_local! {
 }
 
 #[cfg(test)]
-#[allow(dead_code)]
-pub(crate) fn reset_test_descriptor_bytes_read() {
+pub fn reset_test_descriptor_bytes_read() {
     TEST_DESCRIPTOR_BYTES_READ.set(0);
 }
 
 #[cfg(test)]
-#[allow(dead_code)]
-pub(crate) fn test_descriptor_bytes_read() -> u64 {
+pub fn test_descriptor_bytes_read() -> u64 {
     TEST_DESCRIPTOR_BYTES_READ.get()
 }
 
 #[cfg(test)]
-#[allow(dead_code)]
-pub(crate) fn reset_test_file_open_attempts() {
+pub fn reset_test_file_open_attempts() {
     TEST_FILE_OPEN_ATTEMPTS.set(0);
 }
 
 #[cfg(test)]
-#[allow(dead_code)]
-pub(crate) fn test_file_open_attempts() -> u64 {
+pub fn test_file_open_attempts() -> u64 {
     TEST_FILE_OPEN_ATTEMPTS.get()
 }
 

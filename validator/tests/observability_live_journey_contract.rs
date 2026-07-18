@@ -15,7 +15,7 @@ use std::process::{Command, Output, Stdio};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::thread;
 use std::time::{Duration, Instant};
-use ultragoal::observability::{EventQuery, EventStore, SemanticEvent};
+use ultragoal::observability::{EventQuery, EventStore, SemanticEvent, SemanticEventInput};
 
 #[path = "observability_live_journey_cases/causal_correlation_journey.rs"]
 mod causal_correlation_journey;

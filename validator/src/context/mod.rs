@@ -15,15 +15,19 @@ mod git;
 #[cfg(test)]
 mod path;
 mod process;
+#[path = "read/budget.rs"]
 mod read_budget;
 mod read_observation;
+#[path = "read/revalidation.rs"]
 mod read_revalidation;
 mod read_session;
+#[path = "read/snapshot.rs"]
 mod read_snapshot;
 mod request;
 mod revalidate;
 
 #[cfg(test)]
+#[path = "read/session_tests.rs"]
 mod read_session_tests;
 #[cfg(test)]
 mod tests;

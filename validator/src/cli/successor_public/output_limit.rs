@@ -217,12 +217,14 @@ pub(crate) fn failure(
         Diagnostic::new(
             id,
             ExitClass::UnsupportedCapability,
-            cause,
-            surface,
-            repair,
-            "read",
-            "ultragoal --json inspect context",
-            ceiling,
+            DiagnosticDetails {
+                cause,
+                affected_surface: surface,
+                repair,
+                effect: "read",
+                rerun: "ultragoal --json inspect context",
+                ceiling,
+            },
         ),
     )
 }

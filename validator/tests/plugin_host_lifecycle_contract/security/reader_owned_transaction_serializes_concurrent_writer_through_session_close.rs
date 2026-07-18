@@ -18,12 +18,12 @@ fn reader_owned_transaction_serializes_concurrent_writer_through_session_close()
     let (mut session, host) = fixture.session(&bundle, repeat);
     session.apply_confined(&state).unwrap();
     let before = fixture.tree();
-    let shared = std::sync::Arc::new(std::sync::Mutex::new(LockedSurfaceState {
+    let locked_surface = std::sync::Arc::new(std::sync::Mutex::new(LockedSurfaceState {
         reader: Reader::complete(&bundle, &host, session.binding()),
         generation: 0,
     }));
     let writer_ready = std::sync::Arc::new(std::sync::Barrier::new(2));
-    let writer_state = std::sync::Arc::clone(&shared);
+    let writer_state = std::sync::Arc::clone(&locked_surface);
     let writer_barrier = std::sync::Arc::clone(&writer_ready);
     let writer = std::thread::spawn(move || {
         writer_barrier.wait();
@@ -32,13 +32,13 @@ fn reader_owned_transaction_serializes_concurrent_writer_through_session_close()
         state.generation += 1;
     });
     let mut reader = LockedSurfaceReader {
-        state: std::sync::Arc::clone(&shared),
+        state: std::sync::Arc::clone(&locked_surface),
         writer_ready,
     };
 
     assert!(session.capture_and_verify(&mut reader).is_ok());
     writer.join().unwrap();
-    assert_eq!(shared.lock().unwrap().generation, 1);
+    assert_eq!(locked_surface.lock().unwrap().generation, 1);
     let mut replay = Reader::complete(&bundle, &host, session.binding());
     assert_eq!(
         session.capture_and_verify(&mut replay).unwrap_err().id(),
@@ -68,15 +68,15 @@ fn concurrent_capture_and_verify_has_one_winner_and_one_closed_loser() {
     session.apply_confined(&state).unwrap();
     let reader = Reader::complete(&bundle, &host, session.binding());
     let before_tree = fixture.tree();
-    let shared = std::sync::Arc::new(std::sync::Mutex::new(session));
+    let session_transaction = std::sync::Arc::new(std::sync::Mutex::new(session));
     let barrier = std::sync::Arc::new(std::sync::Barrier::new(3));
     let mut handles = Vec::new();
     for mut reader in [reader.clone(), reader] {
-        let shared = std::sync::Arc::clone(&shared);
+        let session_transaction = std::sync::Arc::clone(&session_transaction);
         let barrier = std::sync::Arc::clone(&barrier);
         handles.push(std::thread::spawn(move || {
             barrier.wait();
-            shared
+            session_transaction
                 .lock()
                 .unwrap()
                 .capture_and_verify(&mut reader)

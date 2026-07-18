@@ -1,4 +1,4 @@
-use super::diagnostics::{Diagnostic, DiagnosticId, RuntimeOutcome};
+use super::diagnostics::{Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome};
 use super::failures::{
     delegated, downstream, effect_mismatch, projection_failure, stale_context,
     state_context_mismatch, state_unavailable, unexpected_arguments,
@@ -191,12 +191,14 @@ impl<'a> RuntimeSession<'a> {
                 Diagnostic::new(
                     DiagnosticId::FindingNotPresent,
                     ExitClass::ActionableFinding,
-                    "requested finding is not present in the current state graph",
-                    "diagnose",
-                    "re-run inspect findings and select a current finding identifier",
-                    "read",
-                    "ultragoal --json inspect findings",
-                    "runtime claim remains current-state-only",
+                    DiagnosticDetails {
+                        cause: "requested finding is not present in the current state graph",
+                        affected_surface: "diagnose",
+                        repair: "re-run inspect findings and select a current finding identifier",
+                        effect: "read",
+                        rerun: "ultragoal --json inspect findings",
+                        ceiling: "runtime claim remains current-state-only",
+                    },
                 ),
             ),
             _ => projection_failure(),
