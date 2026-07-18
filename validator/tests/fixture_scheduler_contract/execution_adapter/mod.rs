@@ -175,6 +175,29 @@ fn pinned_capture_adapter_executes_inside_the_confinement_plan() {
 }
 
 #[test]
+fn public_scheduled_execution_derives_the_outcome_from_the_child() {
+    let root = root("public-execution");
+    let fixture = spec("public-execution", ExpectedOutcome::pass(2));
+    let mut scheduler = FixtureScheduler::new(&root);
+    let lease = scheduler.schedule([fixture]).unwrap().pop().unwrap();
+    assert_eq!(
+        crate::capture::execute_scheduled_fixture(
+            &mut scheduler,
+            &lease,
+            "/usr/bin/true".into(),
+            Vec::new(),
+            4096,
+            Vec::new(),
+        )
+        .unwrap(),
+        RunDisposition::CleanupFailure
+    );
+    assert_exact_retained_run(&scheduler, &root, &lease, "public-execution");
+    drop(scheduler);
+    std::fs::remove_dir_all(root).unwrap();
+}
+
+#[test]
 fn nonzero_capture_adapter_preserves_the_bound_causal_control() {
     let root = root("failure");
     let fixture = spec(

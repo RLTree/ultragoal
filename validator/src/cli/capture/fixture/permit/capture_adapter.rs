@@ -46,6 +46,7 @@ impl FixtureCaptureAdapter {
         )
     }
 
+    #[cfg(test)]
     pub(crate) fn issue_evaluation(
         fixture: &FixtureSpec,
         request: FixtureCaptureRequest,
@@ -189,6 +190,7 @@ impl FixtureCaptureAdapter {
         TEST_ISSUE_PAUSED.load(Ordering::SeqCst)
     }
 
+    #[cfg(test)]
     pub(crate) fn interrupt(&self) {
         self.interrupt.store(true, Ordering::SeqCst);
     }

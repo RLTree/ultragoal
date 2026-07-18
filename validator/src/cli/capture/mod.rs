@@ -15,8 +15,7 @@ mod descriptor;
 mod descriptor_race_control;
 mod environment;
 mod filesystem;
-#[cfg(test)]
-pub(crate) mod fixture;
+mod fixture;
 mod identity_codec;
 mod inputs;
 mod output;
@@ -29,6 +28,7 @@ mod spec;
 mod tree_witness_adapter;
 
 pub use artifact_model::{ArtifactDisposition, ArtifactRef, ArtifactResolver, CapturedArtifact};
+pub use fixture::execute_scheduled_fixture;
 pub use inputs::{PublicArg, PublicArtifact, PublicEnv, SecretArg, SecretArtifact, SecretEnv};
 pub use run::CapturedRun;
 pub use spec::CommandSpec;

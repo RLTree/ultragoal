@@ -1,9 +1,10 @@
 use super::super::output::{self, OutputBudget};
 use super::permit::{FixtureCaptureAdapter, PinnedExecutableKind};
+#[cfg(test)]
+use crate::fixture_scheduler::FixtureExecutor;
 use crate::fixture_scheduler::{
-    ExecutedFixture, ExpectedOutcome, FixtureExecutionRecord, FixtureExecutor,
-    FixtureScheduleError, FixtureSpec, IsolationLease, ObservedOutcome, OutcomeVerdict,
-    RecordedFixtureExecutor,
+    ExecutedFixture, ExpectedOutcome, FixtureExecutionRecord, FixtureScheduleError, FixtureSpec,
+    IsolationLease, ObservedOutcome, OutcomeVerdict, RecordedFixtureExecutor,
 };
 use std::collections::BTreeMap;
 use std::path::Path;

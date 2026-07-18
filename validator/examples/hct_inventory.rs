@@ -17,6 +17,7 @@ fn run() -> Result<bool, String> {
     require_fixture_api::<FixtureScheduler>();
     require_fixture_api::<IsolationLease>();
     require_fixture_api::<ExpectedOutcome>();
+    let _execute_fixture = ultragoal::capture::execute_scheduled_fixture;
     let mut arguments = std::env::args_os().skip(1).collect::<Vec<_>>();
     let summary = arguments
         .first()

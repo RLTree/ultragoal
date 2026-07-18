@@ -123,6 +123,7 @@ impl ConfinementPlan {
         Ok(command)
     }
 
+    #[cfg(test)]
     pub(crate) fn address_space_limit(&self) -> u64 {
         self.address_space_limit
     }

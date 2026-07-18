@@ -1,5 +1,4 @@
 use super::lease::isolated_environment;
-#[cfg(test)]
 use super::{ExecutedFixture, FixtureExecutionRecord};
 use super::{FixtureScheduleError, FixtureSpec, IsolationLease, LeaseDisposition, ObservedOutcome};
 use std::collections::{BTreeMap, BTreeSet};

@@ -16,8 +16,7 @@ pub(crate) trait FixtureExecutor {
 /// Narrow extension used only when the crate must retain a bounded execution
 /// record before cleanup. Keeping this separate preserves the established
 /// executor contract for scheduler callers that need only a derived outcome.
-#[cfg(test)]
-pub(crate) trait RecordedFixtureExecutor: FixtureExecutor {
+pub(crate) trait RecordedFixtureExecutor {
     fn execute_recorded(
         &self,
         fixture: &FixtureSpec,

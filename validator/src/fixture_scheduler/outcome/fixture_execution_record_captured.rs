@@ -82,6 +82,7 @@ impl FixtureExecutionRecord {
         &self.record_sha256
     }
 
+    #[cfg(test)]
     pub(crate) fn artifact_bytes(&self) -> &[u8] {
         &self.artifact_bytes
     }

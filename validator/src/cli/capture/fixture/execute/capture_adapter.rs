@@ -1,6 +1,7 @@
 use super::*;
 use crate::fixture_scheduler::FixtureExecutionRecordCapture;
 
+#[cfg(test)]
 impl FixtureExecutor for FixtureCaptureAdapter {
     fn execute(
         &self,
