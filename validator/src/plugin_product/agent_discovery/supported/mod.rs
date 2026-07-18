@@ -7,10 +7,7 @@ mod transaction;
 
 pub use reader::SupportedHostAgentAuthorityReader;
 #[cfg(test)]
-pub use report::{
-    SupportedAgentAuthorityFinding, SupportedAgentAuthorityFindingKind,
-    SupportedAgentAuthorityObservation, SupportedHostAgentAuthorityReport,
-};
+pub use report::SupportedAgentAuthorityFindingKind;
 pub use roots::SupportedHostAgentRoots;
 
 use super::error::{AgentDiscoveryError, AgentDiscoveryErrorId};

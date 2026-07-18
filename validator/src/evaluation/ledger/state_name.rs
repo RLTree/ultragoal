@@ -67,10 +67,6 @@ impl EvaluationExecutionBinding {
         }
         Ok(value)
     }
-
-    pub(crate) fn digest(&self) -> String {
-        sha256(&serde_json::to_vec(self).expect("execution binding serializes"))
-    }
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
