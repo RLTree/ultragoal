@@ -547,7 +547,6 @@
       "fixtures/mandatory-law-surfaces/valid/standards-gardener-promotion.json",
       "fixtures/mandatory-law-surfaces/valid/subagent-custom-agent-sandbox-approval-inheritance.json",
       "fixtures/mandatory-law-surfaces/valid/subagent-orchestration-explicitness-token-model-cost-result-reconciliation.json",
-      "fixtures/mandatory-law-surfaces/valid/target-repo-audit-capability.json",
       "fixtures/mandatory-law-surfaces/valid/targeted-refactor-debt-removal-standards-gardener-cadence.json",
       "fixtures/mandatory-law-surfaces/valid/template-generation-governance-template-creator-boundary.json",
       "fixtures/mandatory-law-surfaces/valid/third-party-dependency-legibility-typed-adapters.json",
@@ -1632,15 +1631,6 @@
       "fixtures/red/subagent-orchestration-explicitness-token-model-cost-result-reconciliation-source-obligation-parity-red.json",
       "fixtures/red/subagent-orchestration-explicitness-token-model-cost-result-reconciliation-subagent-launch-without-explicit-requested-contracted-role-red.json",
       "fixtures/red/target-advanced-after-validation.json",
-      "fixtures/red/target-repo-audit-capability-fixture-used-as-live-target-red.json",
-      "fixtures/red/target-repo-audit-capability-generic-repo-support-overclaim-red.json",
-      "fixtures/red/target-repo-audit-capability-mode-substitution-red.json",
-      "fixtures/red/target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red.json",
-      "fixtures/red/target-repo-audit-capability-source-obligation-parity-red.json",
-      "fixtures/red/target-repo-audit-capability-target-classification-missing-red.json",
-      "fixtures/red/target-repo-audit-capability-target-command-missing-success-emitted-red.json",
-      "fixtures/red/target-repo-audit-capability-unknown-language-runtime-accepted-red.json",
-      "fixtures/red/target-repo-audit-capability-unsupported-repo-marked-fit-repo-red.json",
       "fixtures/red/targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red.json",
       "fixtures/red/targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red.json",
       "fixtures/red/targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red.json",
@@ -5356,10 +5346,6 @@
         "status": "pass"
       },
       "subagent-orchestration-explicitness-token-model-cost-result-reconciliation": {
-        "details": "pass",
-        "status": "pass"
-      },
-      "target-repo-audit-capability": {
         "details": "pass",
         "status": "pass"
       },
@@ -17420,96 +17406,6 @@
         "status": "fail",
         "validator_exit": 1
       },
-      "target-repo-audit-capability-fixture-used-as-live-target-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:fixture_used_as_live_target",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:fixture_used_as_live_target",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:2d6a3d464cd4ca2223cf41d326104f623fbdd34d1702a83862d1683840969a77",
-        "packet_path": "fixtures/red/target-repo-audit-capability-fixture-used-as-live-target-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-generic-repo-support-overclaim-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:generic_repo_support_overclaim",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:generic_repo_support_overclaim",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:a3e996beb8b3b665e4375db5d2b56cf8f2fb9deb5ba1140e4b3eeec7316efd9b",
-        "packet_path": "fixtures/red/target-repo-audit-capability-generic-repo-support-overclaim-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-mode-substitution-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:mode_substitution",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:mode_substitution",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:7f1dcfbb2242f3fad9689c0a8aea5d2bf640b3d9c5d0f5037967aeb346f37d1e",
-        "packet_path": "fixtures/red/target-repo-audit-capability-mode-substitution-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:product_surface_not_detected_product_claim_emitted",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:product_surface_not_detected_product_claim_emitted",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:953433a39b0bdecb9bae8dbb2ba4353d01607d04acae7a43a4cbf479c921c0cf",
-        "packet_path": "fixtures/red/target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-source-obligation-parity-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:source_obligation_parity",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:source_obligation_parity",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:89a09343ba5e150bec5c7bd02cb823a2c342500399897758ed55fdb3485c2cd3",
-        "packet_path": "fixtures/red/target-repo-audit-capability-source-obligation-parity-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-target-classification-missing-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:target_classification_missing",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:target_classification_missing",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:924724bcbc70fd125fd68f2986c42a4c50f9bc234414538d3084b73db4210ba9",
-        "packet_path": "fixtures/red/target-repo-audit-capability-target-classification-missing-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-target-command-missing-success-emitted-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:target_command_missing_success_emitted",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:target_command_missing_success_emitted",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:f28c3822cc62e655e9dda5eb20018018bb0037621f2097083d613288cef67d23",
-        "packet_path": "fixtures/red/target-repo-audit-capability-target-command-missing-success-emitted-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-unknown-language-runtime-accepted-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unknown_language_runtime_accepted",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unknown_language_runtime_accepted",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:a4939aeb695213f38b036f113ebdfab8c194dc09a11c5a6d0e578d1e05d52b96",
-        "packet_path": "fixtures/red/target-repo-audit-capability-unknown-language-runtime-accepted-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unsupported_repo_marked_fit_repo_ready",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unsupported_repo_marked_fit_repo_ready",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:654ba5f53abca13eefdf5e768057ffbced8cfb3eed1f3eb66004ec5e44b04213",
-        "packet_path": "fixtures/red/target-repo-audit-capability-unsupported-repo-marked-fit-repo-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
       "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red": {
         "expected_error": "mandatory_law_specific_guard_not_enforced:targeted-refactor-debt-removal-standards-gardener-cadence:backlog_debt_supporting_claim",
         "expected_failing_check": "source-obligation-coverage",
@@ -18817,7 +18713,6 @@
       "standards-gardener-promotion",
       "subagent-custom-agent-sandbox-approval-inheritance",
       "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-      "target-repo-audit-capability",
       "targeted-refactor-debt-removal-standards-gardener-cadence",
       "template-generation-governance-template-creator-boundary",
       "third-party-dependency-legibility-typed-adapters",
@@ -19998,15 +19893,6 @@
       "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-source-obligation-parity-red",
       "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-subagent-launch-without-explicit-requested-contracted-role-red",
       "target-advanced-after-validation",
-      "target-repo-audit-capability-fixture-used-as-live-target-red",
-      "target-repo-audit-capability-generic-repo-support-overclaim-red",
-      "target-repo-audit-capability-mode-substitution-red",
-      "target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red",
-      "target-repo-audit-capability-source-obligation-parity-red",
-      "target-repo-audit-capability-target-classification-missing-red",
-      "target-repo-audit-capability-target-command-missing-success-emitted-red",
-      "target-repo-audit-capability-unknown-language-runtime-accepted-red",
-      "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
       "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red",
       "targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red",
       "targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red",
@@ -20558,7 +20444,8 @@
         {
           "digest": "sha256:d87960b60d93f1b61edeaaf4da67be0f14cefedd80a94723d731ab158caf1ddb",
           "path": "validator/src/audit/text_guards/stale_review.rs"
-        },        {
+        },
+        {
           "digest": "sha256:92fde06c5cece43a2e0ed81763959a81b8dd552167ab8eb4fffd56eb7e7bb5a5",
           "path": "validator/src/bin/ultragoal.rs"
         },

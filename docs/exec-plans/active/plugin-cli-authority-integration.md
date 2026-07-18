@@ -40,7 +40,7 @@ literal checkpoint above must remain an ancestor with its exact tree; the
 freeze derives live HEAD/tree, permitted root paths, payload digests,
 projection chain, and clean status. The affected production-library check now
 reaches the inherited deny-warning wall at 664 errors; test compilation was not
-rerun at this boundary. Namespace runtime verification and four-persona exposure are blocked; standards rows are 122
+rerun at this boundary. Namespace runtime verification and four-persona exposure are blocked; standards rows are 121
 current. No lane is selectable and no lease is issued. All claims remain
 withheld. Namespace and standards are blocked/unavailable until their real
 validator commands produce candidate-bound evidence.
@@ -215,11 +215,16 @@ claim and representative product or release proof.
   disconnected legacy material-review validator is not treated as production
   enforcement; its bounded-invariant decision must be adopted through a live
   successor route or retired before an enforcement claim is raised.
-- `scripts/check-agent-standards .` passes 122 rows after stale pass claims
+- `scripts/check-agent-standards .` passes 121 rows after stale pass claims
   were downgraded to pending rather than manufacturing replacement evidence.
   The corresponding performance, Rust developer-loop, observability,
   improvement-loop, cohesion, and cache claims remain withheld until their
   real evidence surfaces are refreshed.
+- The retired target-repository audit is removed from covered mandatory-law,
+  trace, standards, schema, fixture, and package projections. Its only current
+  authority is the blocked source-obligation row for the missing typed HCT-FIT
+  and HCT-FIXTURES mapping; target capability and product claims remain
+  withheld.
 - No implementation worktree launches until the canonical P0 checkpoint is
   committed and the semantic-namespace/standards debt checkpoint is clean.
 - After P0, re-observe N02/N03 and select the smallest dependency-closed source

@@ -179,7 +179,6 @@ fn incomplete_package_audit_collects_fail_closed_package_branches() {
         "red-fixture-coverage",
         "agent-standards-enforcement",
         "validator-execution-provenance",
-        "target-repo-audit-capability",
         "plugin-inventory-closure",
     ] {
         assert_eq!(checks[check]["status"], "fail", "{check}");

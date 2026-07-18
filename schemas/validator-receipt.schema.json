@@ -261,7 +261,6 @@
               "standards-gardener-promotion",
               "subagent-custom-agent-sandbox-approval-inheritance",
               "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-              "target-repo-audit-capability",
               "targeted-refactor-debt-removal-standards-gardener-cadence",
               "template-generation-governance-template-creator-boundary",
               "third-party-dependency-legibility-typed-adapters",
@@ -2254,7 +2253,6 @@
         "standards-gardener-promotion",
         "subagent-custom-agent-sandbox-approval-inheritance",
         "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-        "target-repo-audit-capability",
         "targeted-refactor-debt-removal-standards-gardener-cadence",
         "template-generation-governance-template-creator-boundary",
         "third-party-dependency-legibility-typed-adapters",
@@ -4086,11 +4084,6 @@
         },
         {
           "contains": {
-            "const": "target-repo-audit-capability"
-          }
-        },
-        {
-          "contains": {
             "const": "targeted-refactor-debt-removal-standards-gardener-cadence"
           }
         },
@@ -4158,8 +4151,8 @@
       "items": {
         "$ref": "schema-authority-primitives.schema.json#/$defs/requiredValidatorCheckId"
       },
-      "maxItems": 153,
-      "minItems": 153,
+      "maxItems": 152,
+      "minItems": 152,
       "type": "array",
       "uniqueItems": true
     },
