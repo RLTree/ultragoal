@@ -1,7 +1,7 @@
 {
   "schema": "harness-ultragoal.verification-backlog.v1",
-  "manifest_digest": "sha256:699b769807318dcef2f5f161aee700e32e1b51d2424baabaf04ad4657480db81",
-  "registry_preimage_digest": "sha256:699b769807318dcef2f5f161aee700e32e1b51d2424baabaf04ad4657480db81",
+  "manifest_digest": "sha256:79dc4d43b8b0fb02ff4340cde302d72fdcc01cb0b6aa6c0f3ec240d975a184e8",
+  "registry_preimage_digest": "sha256:79dc4d43b8b0fb02ff4340cde302d72fdcc01cb0b6aa6c0f3ec240d975a184e8",
   "audit_cadence": [
     {"audit":"lane_freeze","trigger":"clean lane source freeze before handoff","owner":"lane owner","candidate_identity":"clean current HEAD/tree derived from LANE_REGISTRY.json protected base","evidence_surface":["focused behavior","negative controls","race or recovery controls","owned source laws"],"claims_withheld":["integration","installed","runtime","readiness","release","completion"]},
     {"audit":"root_integration","trigger":"one accepted authority-bearing increment lands on root","owner":"OWN-ULTRA-ROOT","candidate_identity":"clean current HEAD/tree derived from LANE_REGISTRY.json protected base","evidence_surface":["affected strict compilation","cross-lane behavior","namespace","generated authority","targeted coverage"],"claims_withheld":["installed","runtime","product success","release","completion"]},
@@ -94,5 +94,5 @@
       "next_action": "Obtain typed goal/validator evidence and finalise projections.", "claim_ceiling_impact": "withheld", "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:43b1ceffd9aee3cbdf617177a4bebd3da69b35ec0aa58fa12e33272522d44dbc"}
     }
   ],
-  "generated_at": "2026-07-17T23:48:00-07:00"
+  "generated_at": "2026-07-18T00:05:00-07:00"
 }

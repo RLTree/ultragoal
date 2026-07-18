@@ -246,5 +246,61 @@
     {"claim_id": "CL-RELEASE", "state": "blocked_by_unresolved_external_authority_and_secret_rotation", "ceiling": "withheld"},
     {"claim_id": "CL-COMPLETION", "state": "blocked_by_unresolved_external_authority_and_secret_rotation", "ceiling": "withheld"}
   ],
-  "highest_honest_ceiling": "The successor contract is adopted for implementation in this live repository. No source-coherence, package, install, discovery, runtime, journey, release, or completion claim has yet passed on a current live candidate."
+  "current_epoch_rebinding": {
+    "recorded_at": "2026-07-17T23:58:00-07:00",
+    "transition": "adopt_exact_current_operational_epoch",
+    "candidate_base": {
+      "commit": "0d4aeecd5af20193ef24c3afa86b70f27a5c14e8",
+      "tree": "617de4ab287759fcca3bdb7c877f916a63c74c44",
+      "branch": "codex/successor-contract-v2-live-product",
+      "clean": true
+    },
+    "contract_bundle": {
+      "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-HANDOFF-MANIFEST.sha256",
+      "sha256": "d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51"
+    },
+    "dependency_graph": {
+      "path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+      "sha256": "a779b96ccfeba031aa8565f44c808223fe3cf73847ce149eed8759c446905f2f"
+    },
+    "goal_lineage": {
+      "goal_contract_sha256": "bc0080163641a33a781d5bd14dd4b40bdba507909a88bbba52303ec3a8295071",
+      "amendments_sha256": "8d3333f118a55b981d8e1b88a23a8e4b0f65001317172fc3478d2b24d248e3ce",
+      "active_goal_id": "019f5f39-507b-78a2-a96a-0b566a5a2126"
+    },
+    "external_decisions": {
+      "open_decisions_path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/OPEN-DECISIONS.md",
+      "open_decisions_sha256": "ac806088630d09b9ce15b6ca31c6e3022bdca996f87202213ccfd5c80be0d46f",
+      "scoped_od008_path": "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json",
+      "scoped_od008_sha256": "41a727aa9ffcd3c6140a1bde3d88682dc72c5d35223b447ff5e4349766256639",
+      "rule": "Apply every unresolved decision's safe default; scoped OD-008 authority does not resolve global OD-008."
+    },
+    "root_authority": {
+      "canonical_state": "LANE_REGISTRY.json",
+      "owner": "OWN-ULTRA-ROOT",
+      "authority_map": "root_only_authority",
+      "worktree_count": 1
+    },
+    "epoch": "ADOPTED-CURRENT",
+    "eligible_scheduler_nodes": [
+      "N01"
+    ],
+    "eligible_claim_ids": [],
+    "reobservation_required": [
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N05",
+      "N06",
+      "N07",
+      "N08",
+      "N09",
+      "N10",
+      "N11"
+    ],
+    "deferred_context_proposal": "LIVE-CONTEXT-ENVELOPE-CONFINEMENT-DEFER-052 remains historical and nonselectable; its non-adoption does not modify the already adopted successor contract.",
+    "claim_effect": "No required claim is promoted. N00 may become integrated only after this exact candidate passes independent review and root reconciliation."
+  },
+  "highest_honest_ceiling": "The successor contract is adopted for implementation in this live repository. P0 source laws are accepted; N00 operational rebinding is a candidate pending independent review. No package, install, discovery, runtime, journey, release, or completion claim is promoted."
 }
