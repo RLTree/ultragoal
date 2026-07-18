@@ -113,9 +113,9 @@ fn diagnosis_reports_latest_bounded_failure_provenance_without_false_pass() {
         .unwrap();
     target.add_public_attribute("owner", PRIVATE_EMAIL).unwrap();
     for (key, value) in [
-        ("uri_hint", "file:///private/public-diagnosis-107"),
-        ("unc_hint", "\\\\private-host\\public-diagnosis-107"),
-        ("oauth_hint", "gho_public_diagnosis_private_107"),
+        ("uri_hint", "failed at file:///private/public-diagnosis-107"),
+        ("unc_hint", "share \\\\private-host\\public-diagnosis-107"),
+        ("oauth_hint", "OAuth gho_public_diagnosis_private_107"),
     ] {
         target.add_public_attribute(key, value).unwrap();
     }
