@@ -25,7 +25,7 @@ use std::sync::mpsc;
 use std::time::{Duration, Instant};
 
 include!("../../../tests/evaluation_runtime_contract/next_root.rs");
-include!("../../../tests/evaluation_runtime_contract/research/source_url.rs");
+include!("../../../tests/evaluation_runtime_contract/research/source/url.rs");
 include!("../../../tests/evaluation_runtime_contract/research/proposal.rs");
 include!(
     "../../../tests/evaluation_runtime_contract/research/source_record_fields_and_canonical_binding_fail_closed.rs"
