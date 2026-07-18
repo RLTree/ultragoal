@@ -32,10 +32,8 @@ mod replay_detection;
 mod reservation;
 #[path = "snapshot/mod.rs"]
 mod snapshot;
-#[path = "store_create_exclusive.rs"]
-mod store_create_exclusive;
-#[path = "store_open.rs"]
-mod store_open;
+#[path = "store/mod.rs"]
+mod store;
 #[path = "transition_validation.rs"]
 mod transition_validation;
 
@@ -44,5 +42,5 @@ pub(crate) use record_authentication::*;
 pub(crate) use replay_detection::*;
 pub(crate) use reservation::*;
 pub(crate) use snapshot::*;
-pub(crate) use store_create_exclusive::*;
+pub(crate) use store::*;
 pub(crate) use transition_validation::*;
