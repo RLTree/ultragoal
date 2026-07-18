@@ -33,9 +33,7 @@ pub(crate) use execution_transaction::ProductionExecutionOutcome;
 use root_authority::RootAuthority;
 use root_authority::RootPermitIssuance;
 #[cfg(test)]
-pub(crate) use root_authority::{
-    RootActionPermitIssuance, RootAuthority, RootReconcilePermitIssuance, root_authority_for_test,
-};
+pub(crate) use root_authority::{RootActionPermitIssuance, RootAuthority, root_authority_for_test};
 
 #[cfg(test)]
 #[path = "interruption_tests.rs"]
