@@ -15,9 +15,9 @@
   "candidate_resolution": {"kind":"containing_clean_head","identity_command":"git rev-parse HEAD^{commit} HEAD^{tree}","requires_clean_tree":true,"protected_base_ref":"LANE_REGISTRY.json#/root_freeze/protected_base"},
   "candidate_status": "pending",
   "root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
-  "claim_ceiling": {"effect": "withheld", "all_claims_withheld": true, "reason": "N00 operational adoption is encoded at its exact source boundary; N01-N11 reobservation, full strict/test closure, N02/N14, package/install/discovery/runtime identity, Product Fitness and Cohesion journeys, release, and completion remain open."},
+  "claim_ceiling": {"effect": "withheld", "all_claims_withheld": true, "reason": "N00 adoption and N01 structural context authority are accepted; N02-N11 reobservation, product-wide one-context propagation, full strict/test closure, N14, package/install/discovery/runtime identity, Product Fitness and Cohesion journeys, release, and completion remain open."},
   "claims": [
-    {"id": "CL-SOURCE", "title": "Canonical source contract", "description": "Withheld: N00 adopted the exact refs, but N01/N02 source authority and duplicate-writer closure are not current.", "claim_scope": "required", "claim_kind": "static_contract", "status": "withheld_claim", "claim_surface": "static", "allowed_evidence_surfaces": ["static"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-001"},
+    {"id": "CL-SOURCE", "title": "Canonical source contract", "description": "Withheld: N00 and narrow N01 structural authority are current, but N02 source authority and duplicate-writer closure are not current.", "claim_scope": "required", "claim_kind": "static_contract", "status": "withheld_claim", "claim_surface": "static", "allowed_evidence_surfaces": ["static"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-001"},
     {"id": "CL-PACKAGE", "title": "Built package identity", "description": "Withheld: no current package byte reconciliation is available.", "claim_scope": "required", "claim_kind": "package_release", "status": "withheld_claim", "claim_surface": "package", "allowed_evidence_surfaces": ["package"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-002"},
     {"id": "CL-INSTALL", "title": "Installed bytes", "description": "Withheld: no current authorized install observation is available.", "claim_scope": "required", "claim_kind": "package_release", "status": "withheld_claim", "claim_surface": "installed_app", "allowed_evidence_surfaces": ["installed_app"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-003"},
     {"id": "CL-DISCOVERY", "title": "Host discovery", "description": "Withheld: no current new-session host discovery observation is available.", "claim_scope": "required", "claim_kind": "integration", "status": "withheld_claim", "claim_surface": "runtime_cli", "allowed_evidence_surfaces": ["runtime_cli"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-004"},
@@ -32,9 +32,9 @@
     {"id": "CL-RELEASE", "title": "Release readiness", "description": "Withheld: package, install, discovery, migration, and release decisions are not closed.", "claim_scope": "required", "claim_kind": "package_release", "status": "withheld_claim", "claim_surface": "package", "allowed_evidence_surfaces": ["package", "installed_app", "runtime_cli"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-013"},
     {"id": "CL-COMPLETION", "title": "Integrated goal completion", "description": "Withheld: required claims, goal binding, validator evidence, and cleanup remain unresolved.", "claim_scope": "required", "claim_kind": "static_contract", "status": "withheld_claim", "claim_surface": "root_integration", "allowed_evidence_surfaces": ["root_integration"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-014"}
   ],
-  "registry_preimage_digest": "sha256:f4dc84dbce49a3bbb1c602903764bb8c9d6945365efadb341580a584484e244a",
+  "registry_preimage_digest": "sha256:1e8f4d11ca59046fc885f7e1c62b99d9e71dff9f1cd162f2debf884d1f62ef5f",
   "verification_backlog_path": "VERIFICATION_BACKLOG.json",
-  "verification_backlog_digest": "sha256:03a5ba42d7929413e575950d67e990df7d5f1a10e10ccead65b3736924ebb503",
+  "verification_backlog_digest": "sha256:177e10089036c616dcacfe0ddde51b9f4bf22fed32ba647a59fa0265caba06d0",
   "validator_receipts": [],
   "generated_at": "2026-07-18T00:35:00-07:00"
 }

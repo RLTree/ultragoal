@@ -291,8 +291,13 @@ claim and representative product or release proof.
   N00 adoption is accepted on exact clean root candidate `8f789de6a940b5a2b600d3021ac803b0b62ff341`
   / tree `3abfb13a11e529a8af8e96770b2e2392c8658ef1`. The new epoch binds the
   immutable contract bundle and graph, exact N00 source identity, scheduler
-  eligibility, lane states, and source ceilings. N01 is the sole serial gate;
-  N02-N11 remain blocked and require adopted-current reobservation.
+  eligibility, lane states, and source ceilings. N01 structural context and
+  effect authority is reaccepted at root `f7a641691b08a1d21ca504e5987f624b24365bf3`
+  / tree `1eefce8f03044bbeb458903739a981dce8766feb`; the current public source route
+  reaches HCT-CONTEXT and the focused external context test passes. Product-wide
+  REQ-STATE-001 remains open because routine and strict still build contexts on
+  separate command-local routes. N02 is now the sole serial gate; N03-N11 remain
+  blocked and require adopted-current reobservation.
 - HCT-FIXTURES execution/parity, runtime, installed journey, readiness,
   release, and completion claims remain withheld.
 - The calibrated review, observability, and Product Fitness doctrine is now
@@ -322,9 +327,9 @@ claim and representative product or release proof.
   authority is the blocked source-obligation row for the missing typed HCT-FIT
   and HCT-FIXTURES mapping; target capability and product claims remain
   withheld.
-- No implementation worktree launches while the root-only N01-N03 serial
+- No implementation worktree launches while the root-only N02-N03 serial
   authority chain is open; P0 and N00 are clean.
-- Re-observe N01 now, then N02/N03 in dependency order. After that boundary,
+- Re-observe N02 then N03 in dependency order. After that boundary,
   select the smallest dependency-closed source or live-product streams that
   move the installed journey without overlapping authority.
 

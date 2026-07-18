@@ -282,13 +282,12 @@
       "worktree_count": 1
     },
     "epoch": "ADOPTED-CURRENT",
-    "frontier": "N00_ADOPTION_BOUNDARY",
+    "frontier": "N01_INTEGRATED",
     "eligible_scheduler_nodes": [
-      "N01"
+      "N02"
     ],
     "eligible_claim_ids": [],
     "reobservation_required": [
-      "N01",
       "N02",
       "N03",
       "N04",
@@ -301,7 +300,7 @@
       "N11"
     ],
     "deferred_context_proposal": "LIVE-CONTEXT-ENVELOPE-CONFINEMENT-DEFER-052 remains historical and nonselectable; its non-adoption does not modify the already adopted successor contract.",
-    "claim_effect": "No required claim is promoted. The candidate encodes the atomic N00 transition, but root must not consume N01 eligibility until this exact correction passes independent review."
+    "claim_effect": "No required claim is promoted. N00 adoption and narrow N01 structural context authority are current; N02 is the only eligible scheduler node."
   },
-  "highest_honest_ceiling": "The successor contract is adopted for implementation in this live repository. P0 source laws are accepted; the atomic N00 correction is pending exact review. N01-N11 require reobservation and no package, install, discovery, runtime, journey, release, or completion claim is promoted."
+  "highest_honest_ceiling": "The successor contract is adopted for implementation in this live repository. P0 source laws, N00 adoption, and N01 structural HCT-CONTEXT authority are accepted. Product-wide one-context propagation remains open, N02-N11 require reobservation, and no package, install, discovery, runtime, journey, release, or completion claim is promoted."
 }
