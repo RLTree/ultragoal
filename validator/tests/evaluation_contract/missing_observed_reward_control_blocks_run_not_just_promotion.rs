@@ -68,11 +68,11 @@ fn external_callers_cannot_mint_a_review_with_an_independence_boolean() {
 #[test]
 fn fixture_catalog_names_every_false_pass_family() {
     let paired: Value = serde_json::from_str(include_str!(
-        "../../fixtures/evaluation-engine/paired-valid.json"
+        "../../../fixtures/evaluation-engine/paired-valid.json"
     ))
     .unwrap();
     let red: Value = serde_json::from_str(include_str!(
-        "../../fixtures/evaluation-engine/red-cases.json"
+        "../../../fixtures/evaluation-engine/red-cases.json"
     ))
     .unwrap();
     assert_eq!(paired["schema_version"], "EvaluationEngineFixture-v1");
