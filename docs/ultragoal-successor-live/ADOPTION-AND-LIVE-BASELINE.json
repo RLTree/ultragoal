@@ -282,6 +282,7 @@
       "worktree_count": 1
     },
     "epoch": "ADOPTED-CURRENT",
+    "frontier": "N00_ADOPTION_BOUNDARY",
     "eligible_scheduler_nodes": [
       "N01"
     ],
