@@ -292,9 +292,10 @@ claim and representative product or release proof.
   / tree `3abfb13a11e529a8af8e96770b2e2392c8658ef1`. The new epoch binds the
   immutable contract bundle and graph, exact N00 source identity, scheduler
   eligibility, lane states, and source ceilings. N01 structural context and
-  effect authority is reaccepted at root `f7a641691b08a1d21ca504e5987f624b24365bf3`
-  / tree `1eefce8f03044bbeb458903739a981dce8766feb`; the current public source route
-  reaches HCT-CONTEXT and the focused external context test passes. Product-wide
+  effect authority is reaccepted at source candidate `c7295ac0bf3b4366cc33cb50e482e55ee8935e74`
+  / tree `d70607ff6b445cf7f57365c46fcc5475361de80a`; the current public source route
+  reaches HCT-CONTEXT and the focused external positive/negative context target
+  passes 3/3. Product-wide
   REQ-STATE-001 remains open because routine and strict still build contexts on
   separate command-local routes. N02 is now the sole serial gate; N03-N11 remain
   blocked and require adopted-current reobservation.

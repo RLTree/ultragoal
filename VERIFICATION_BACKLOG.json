@@ -1,7 +1,7 @@
 {
   "schema": "harness-ultragoal.verification-backlog.v1",
-  "manifest_digest": "sha256:1e8f4d11ca59046fc885f7e1c62b99d9e71dff9f1cd162f2debf884d1f62ef5f",
-  "registry_preimage_digest": "sha256:1e8f4d11ca59046fc885f7e1c62b99d9e71dff9f1cd162f2debf884d1f62ef5f",
+  "manifest_digest": "sha256:f5459e46cd41b9a30a2b85cdc6a6ff0fcfdd653f122e55c22fdbfa48dc8cf1d1",
+  "registry_preimage_digest": "sha256:f5459e46cd41b9a30a2b85cdc6a6ff0fcfdd653f122e55c22fdbfa48dc8cf1d1",
   "audit_cadence": [
     {"audit":"lane_freeze","trigger":"clean lane source freeze before handoff","owner":"lane owner","candidate_identity":"clean current HEAD/tree derived from LANE_REGISTRY.json protected base","evidence_surface":["focused behavior","negative controls","race or recovery controls","owned source laws"],"claims_withheld":["integration","installed","runtime","readiness","release","completion"]},
     {"audit":"root_integration","trigger":"one accepted authority-bearing increment lands on root","owner":"OWN-ULTRA-ROOT","candidate_identity":"clean current HEAD/tree derived from LANE_REGISTRY.json protected base","evidence_surface":["affected strict compilation","cross-lane behavior","namespace","generated authority","targeted coverage"],"claims_withheld":["installed","runtime","product success","release","completion"]},
@@ -12,8 +12,8 @@
     {
       "id": "BACKLOG-001", "claim_id": "CL-SOURCE", "class": "root_owed", "owner": "OWN-ULTRA-ROOT",
       "required_proof": "Current N02 source-authority and duplicate-writer reconciliation under the adopted epoch.", "blocker_type": "root_integration_needed",
-      "attempts": [{"id": "OBS-001", "attempt_kind": "withheld_claim_decision", "action": "Withhold CL-SOURCE until the named same-surface proof is current.", "status": "withheld", "attempted_at": "2026-07-16T22:36:38-07:00", "external_receipt": {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json", "digest": "sha256:67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc"}, "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:c0701c154002512e4fe8e510b0c406c8ce9265124db393ce1a912ce1e7f2317c"}}],
-      "next_action": "Reconcile N02 inventory and duplicate authority against accepted N01 identity.", "claim_ceiling_impact": "withheld", "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:c0701c154002512e4fe8e510b0c406c8ce9265124db393ce1a912ce1e7f2317c"}
+      "attempts": [{"id": "OBS-001", "attempt_kind": "withheld_claim_decision", "action": "Withhold CL-SOURCE until the named same-surface proof is current.", "status": "withheld", "attempted_at": "2026-07-16T22:36:38-07:00", "external_receipt": {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json", "digest": "sha256:67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc"}, "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:9521a8e887292e3ba204cbd07595e67c56178fbebe4c430fb032e17c88ef0989"}}],
+      "next_action": "Reconcile N02 inventory and duplicate authority against accepted N01 identity.", "claim_ceiling_impact": "withheld", "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:9521a8e887292e3ba204cbd07595e67c56178fbebe4c430fb032e17c88ef0989"}
     },
     {
       "id": "BACKLOG-002", "claim_id": "CL-PACKAGE", "class": "externally_blocked", "owner": "OWN-ULTRA-ROOT",
