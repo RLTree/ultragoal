@@ -1,5 +1,5 @@
+use super::super::orchestration_fixture::*;
 use crate::orchestration::*;
-use crate::orchestration_fixture::*;
 
 fn observed(path: &str) -> ArtifactRecord {
     ArtifactRecord {

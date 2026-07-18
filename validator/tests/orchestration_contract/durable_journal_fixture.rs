@@ -1,8 +1,8 @@
-use crate::orchestration::*;
-use crate::orchestration_fixture::{
+use super::orchestration_fixture::{
     CountingSink, LIVE_LIB_BYTES, LIVE_MANIFEST_BYTES, LIVE_PRIOR_BYTES, binding, bootstrap,
     content_digest, digest, graph_one, policy, root,
 };
+use crate::orchestration::*;
 use std::cell::Cell;
 use std::collections::BTreeMap;
 use std::fs;

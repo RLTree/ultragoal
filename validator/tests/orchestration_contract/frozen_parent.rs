@@ -1,5 +1,5 @@
+use super::orchestration_fixture::*;
 use crate::orchestration::*;
-use crate::orchestration_fixture::*;
 use std::collections::BTreeSet;
 
 fn node006_subject() -> (WorkerResultV1, LeaseSpec, WorkPackage, ScopePolicy) {
