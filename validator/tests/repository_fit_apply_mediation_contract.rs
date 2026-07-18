@@ -9,4 +9,3 @@ mod mediation_fixture;
 mod terminal_revalidation;
 
 pub(crate) use mediation_fixture::*;
-pub(crate) use terminal_revalidation::*;

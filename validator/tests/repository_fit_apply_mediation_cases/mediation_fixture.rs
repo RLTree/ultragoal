@@ -11,6 +11,28 @@ pub(crate) fn source(relative: &str) -> String {
     fs::read_to_string(repository_root().join(relative)).unwrap()
 }
 
+pub(crate) fn rust_tree(relative: &str) -> String {
+    fn collect(path: &std::path::Path, files: &mut Vec<PathBuf>) {
+        for entry in fs::read_dir(path).unwrap() {
+            let path = entry.unwrap().path();
+            if path.is_dir() {
+                collect(&path, files);
+            } else if path.extension().is_some_and(|extension| extension == "rs") {
+                files.push(path);
+            }
+        }
+    }
+
+    let mut files = Vec::new();
+    collect(&repository_root().join(relative), &mut files);
+    files.sort();
+    files
+        .into_iter()
+        .map(|path| fs::read_to_string(path).unwrap())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
 pub(crate) fn declaration<'a>(source: &'a str, marker: &str) -> (&'a str, &'a str) {
     let start = source
         .find(marker)
@@ -163,8 +185,8 @@ pub(crate) fn fixture_catalog_is_the_exact_apply_mediation_matrix() {
 #[test]
 pub(crate) fn request_permit_and_lease_are_move_only_internal_authority() {
     let adapter = source("validator/src/repository_fit/product_adapter/mod.rs");
-    let protocol = source("validator/src/repository_fit/product_adapter/protocol/mod.rs");
-    let permit = source("validator/src/repository_fit/product_adapter/root_permit/mod.rs");
+    let protocol = rust_tree("validator/src/repository_fit/product_adapter/protocol");
+    let permit = rust_tree("validator/src/repository_fit/product_adapter/root_permit");
     assert!(adapter.lines().any(|line| line == "mod root_permit;"));
     assert!(!adapter.contains("pub mod root_permit"));
     assert!(!adapter.contains("pub(crate) mod root_permit"));
@@ -193,11 +215,9 @@ pub(crate) fn request_permit_and_lease_are_move_only_internal_authority() {
     }
     assert!(!protocol.contains("use serde::Deserialize"));
     assert!(!permit.contains("use serde::Deserialize"));
-    assert!(
-        permit_declaration
-            .lines()
-            .all(|line| !line.contains("pub "))
-    );
+    assert!(permit_declaration
+        .lines()
+        .all(|line| !line.contains("pub ")));
     assert!(lease_declaration.lines().all(|line| !line.contains("pub ")));
     assert!(permit.contains(".field(\"permit_id\", &\"[bound]\")"));
     assert!(permit.contains(".field(\"nonce\", &\"[redacted]\")"));
@@ -206,8 +226,8 @@ pub(crate) fn request_permit_and_lease_are_move_only_internal_authority() {
 
 #[test]
 pub(crate) fn permit_binds_every_authority_dimension_and_exact_request_instance() {
-    let protocol = source("validator/src/repository_fit/product_adapter/protocol/mod.rs");
-    let permit = source("validator/src/repository_fit/product_adapter/root_permit/mod.rs");
+    let protocol = rust_tree("validator/src/repository_fit/product_adapter/protocol");
+    let permit = rust_tree("validator/src/repository_fit/product_adapter/root_permit");
     for dimension in [
         "request_id",
         "context_id",

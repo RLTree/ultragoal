@@ -2,15 +2,20 @@ use super::*;
 
 #[test]
 pub(crate) fn apply_revalidates_before_effect_and_has_only_exact_terminal_states() {
-    let permit = source("validator/src/repository_fit/product_adapter/root_permit/mod.rs");
-    let apply_start = permit.find("pub(crate) fn apply_with_root_permit").unwrap();
-    let preflight_start = permit[apply_start..]
+    let permit = rust_tree("validator/src/repository_fit/product_adapter/root_permit");
+    let application =
+        source("validator/src/repository_fit/product_adapter/root_permit/permitted_application.rs");
+    let apply_start = application
+        .find("pub(crate) fn apply_with_root_permit")
+        .unwrap();
+    let preflight_start = application[apply_start..]
         .find("let preflight = preflight(")
         .unwrap();
-    let begin_start = permit[apply_start..].find("request.seal.begin()").unwrap();
+    let begin_start = application[apply_start..]
+        .find("request.seal.begin()")
+        .unwrap();
     assert!(preflight_start < begin_start);
-    let apply_end = permit[apply_start..].find("\nfn preflight").unwrap() + apply_start;
-    let apply_body = &permit[apply_start..apply_end];
+    let apply_body = &application[apply_start..];
     let begin_in_body = apply_body.find("request.seal.begin()").unwrap();
     assert!(!apply_body[begin_in_body..].contains("PreEffectFailure"));
     assert!(permit.contains("revalidate_apply_request(context, request)?"));
@@ -31,12 +36,12 @@ pub(crate) fn apply_revalidates_before_effect_and_has_only_exact_terminal_states
     assert!(permit.contains("let after = match capture_target_descriptor_chain_for_paths"));
     assert!(permit.contains("valid_target_effect_transition("));
     assert!(permit.matches("capture_protected(").count() >= 10);
-    assert!(permit.contains("fn visit_protected_descriptor("));
+    assert!(permit.contains("pub(crate) fn visit("));
     assert!(permit.contains("let duplicated = unsafe { libc::dup(directory.as_raw_fd()) }"));
     assert!(permit.contains("libc::fdopendir"));
     assert!(permit.contains("libc::readdir"));
     assert!(permit.contains("fn open_target_at_bytes("));
-    assert!(permit.contains("fn named_object_at_bytes("));
+    assert!(permit.contains("fn named_versioned_object_at_bytes("));
     assert!(permit.contains("libc::AT_SYMLINK_NOFOLLOW"));
     assert!(permit.contains("if enumerate_protected_entries(directory)? != entries"));
     assert!(permit.contains("struct ProtectedChangeVersion"));
@@ -48,11 +53,8 @@ pub(crate) fn apply_revalidates_before_effect_and_has_only_exact_terminal_states
     assert!(permit.contains("fn collect_protected("));
     assert!(permit.contains("if first != final_recheck"));
     assert!(permit.contains("fn collect_target_descriptor_chain_for_paths("));
-    assert!(
-        permit.contains(
-            "let first = collect_target_descriptor_chain_for_paths(root, target_paths)?;"
-        )
-    );
+    assert!(permit
+        .contains("let first = collect_target_descriptor_chain_for_paths(root, target_paths)?;"));
     assert!(permit.contains(
         "let final_recheck = collect_target_descriptor_chain_for_paths(root, target_paths)?;"
     ));
@@ -76,9 +78,7 @@ pub(crate) fn apply_revalidates_before_effect_and_has_only_exact_terminal_states
     assert!(permit.contains("let final_target_recheck ="));
     assert!(permit.contains("final_target_recheck != final_target"));
     assert!(permit.contains("let target_after = capture_target(context.worktree_root(), request)"));
-    assert!(
-        permit.contains("let authorized_target = match effects.revalidate_authorized_target()")
-    );
+    assert!(permit.contains("let authorized_target = match effects.revalidate_authorized_target()"));
     assert!(permit.contains("if target == authorized_target"));
     assert!(permit.contains("&& target_after == authorized_target"));
     assert!(permit.contains("target_rollback_equivalent(&authorized_target"));
@@ -116,11 +116,9 @@ pub(crate) fn apply_revalidates_before_effect_and_has_only_exact_terminal_states
     assert!(permit.contains("request.seal.ambiguous()"));
     assert!(permit.contains("AdapterErrorId::ApplyOutcomeAmbiguous"));
     assert!(permit.contains("self.inode == other.inode || (leaf && self.kind == \"regular\")"));
-    let controls = source("validator/src/repository_fit/product_adapter/tests/root_permit/mod.rs");
-    assert!(
-        controls
-            .contains("fn reconciliation_binds_every_target_collect_to_the_authorized_snapshot()")
-    );
+    let controls = rust_tree("validator/src/repository_fit/product_adapter/tests/root_permit");
+    assert!(controls
+        .contains("fn reconciliation_binds_every_target_collect_to_the_authorized_snapshot()"));
     assert!(controls.contains(
         "mediator-owned rollback ctime is valid because authorized_target records the post-rollback snapshot"
     ));
@@ -129,9 +127,9 @@ pub(crate) fn apply_revalidates_before_effect_and_has_only_exact_terminal_states
 #[test]
 pub(crate) fn effect_scope_success_construction_and_diagnostics_fail_closed() {
     let adapter = source("validator/src/repository_fit/product_adapter/mod.rs");
-    let fit = source("validator/src/cli/successor_public/fit/mod.rs");
-    let public = source("validator/src/cli/successor_public/mod.rs");
-    let permit = source("validator/src/repository_fit/product_adapter/root_permit/mod.rs");
+    let fit = rust_tree("validator/src/cli/successor_public/fit");
+    let public = source("validator/src/cli/successor_public/output_limit.rs");
+    let permit = rust_tree("validator/src/repository_fit/product_adapter/root_permit");
     assert!(permit.contains("struct ScopedEffects"));
     assert!(permit.contains("let forward = &row.forward_expected == expected"));
     assert!(permit.contains("let rollback = *expected == ExpectedContent::ExactDigest"));
@@ -167,25 +165,25 @@ pub(crate) fn effect_scope_success_construction_and_diagnostics_fail_closed() {
     ] {
         assert!(!permit.contains(prohibited), "prohibited {prohibited}");
     }
-    assert!(public.contains("if invocation.effect != EffectClass::Read"));
-    assert!(!public.contains("SuccessorCommand::Fit(FitAction::Apply) =>"));
+    assert!(public.contains("if invocation.effect != EffectClass::Read && !public_fit_apply"));
+    assert!(public.contains("SuccessorCommand::Fit(FitAction::Apply) => fit::apply"));
     assert!(!fit.contains("apply_with_root_permit"));
 }
 
 #[test]
-pub(crate) fn production_issuance_and_public_apply_remain_explicitly_unwired() {
+pub(crate) fn public_apply_is_root_mediated_and_adapter_authority_remains_private() {
     let adapter = source("validator/src/repository_fit/product_adapter/mod.rs");
     let repository_fit = source("validator/src/repository_fit/mod.rs");
-    let permit = source("validator/src/repository_fit/product_adapter/root_permit/mod.rs");
+    let permit = rust_tree("validator/src/repository_fit/product_adapter/root_permit");
     let tests = source("validator/src/repository_fit/product_adapter/tests/mod.rs");
-    let direct = source("validator/src/repository_fit/product_adapter/tests/root_permit/mod.rs");
+    let direct = rust_tree("validator/src/repository_fit/product_adapter/tests/root_permit");
     assert!(permit.contains("#[cfg(test)]\npub(crate) struct TestRepositoryFitPermitAuthority"));
     assert!(permit.contains("#[cfg(test)]\npub(crate) fn duplicate_authorization_for_test"));
     assert!(!permit.contains("pub(crate) struct RepositoryFitPermitAuthority"));
     assert!(!adapter.contains("pub(crate) use root_permit"));
     assert!(!repository_fit.contains("RepositoryFitApplyPermit"));
     assert!(!repository_fit.contains("apply_with_root_permit"));
-    assert!(tests.contains("#[path = \"tests/root_permit.rs\"]"));
+    assert!(tests.contains("#[path = \"root_permit/mod.rs\"]"));
     for control in [
         "concurrent_identical_contenders_have_one_atomic_winner",
         "permit_and_mutation_lease_must_share_the_exact_request_and_authority_instance",

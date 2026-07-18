@@ -44,12 +44,10 @@ pub(crate) fn fixture_catalog_names_the_exact_below_root_journey_matrix() {
     .collect::<BTreeSet<_>>();
     assert_eq!(observed, expected);
     assert_eq!(catalog.cases.len(), expected.len());
-    assert!(
-        catalog
-            .cases
-            .iter()
-            .all(|case| !case.class.is_empty() && !case.expect.is_empty())
-    );
+    assert!(catalog
+        .cases
+        .iter()
+        .all(|case| !case.class.is_empty() && !case.expect.is_empty()));
     let read_ids = catalog
         .read_operations
         .iter()

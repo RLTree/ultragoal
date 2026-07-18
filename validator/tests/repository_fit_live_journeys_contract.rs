@@ -15,5 +15,4 @@ mod journey_catalog;
 #[path = "repository_fit_live_journey_cases/scenario_fixture.rs"]
 mod scenario_fixture;
 
-pub(crate) use journey_catalog::*;
 pub(crate) use scenario_fixture::*;
