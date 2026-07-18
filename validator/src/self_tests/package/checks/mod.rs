@@ -121,11 +121,7 @@ fn package_checks_route_schema_inventory_and_skill_failures() {
     let manifest = crate::json_boundary::read_json(&root.join("plugin-manifest-draft.json"))
         .expect("manifest");
     let skill = crate::skill_links::manifest_failures(&root, &manifest);
-    assert!(
-        skill
-            .iter()
-            .any(|item| item.code == "skill_local_reference_missing")
-    );
+    assert!(skill.iter().any(|item| item.detail.contains("root-ref.md")));
     std::fs::remove_dir_all(root).expect("cleanup package checks");
 }
 

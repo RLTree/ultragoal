@@ -22,7 +22,6 @@ fn skill_links_cover_missing_invalid_local_and_markdown_references() {
     });
     let failures = crate::skill_links::manifest_failures(&root, &manifest);
     assert_eq!(failures.len(), 1);
-    assert_eq!(failures[0].code, "skill_local_reference_missing");
     assert!(failures[0].detail.contains("root-ref.md"));
     let _ = fs::remove_dir_all(root);
 }

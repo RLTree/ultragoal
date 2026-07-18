@@ -3,7 +3,7 @@ use super::{
     MAX_PUBLIC_OUTPUT, execute_invocation, execute_invocation_with_home, parse_public,
     public_output_allowed, read_context,
 };
-use crate::cli::successor::{OutputMode, ParseOutcome, parse_args};
+use crate::cli::successor::{OutputMode, ParseOutcome, ParsedInvocation, parse_args};
 use crate::observability::{EventStore, SemanticEvent};
 use std::fs;
 use std::path::Path;
