@@ -18,22 +18,22 @@ use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 
-#[path = "file_ledger_reconcile_expired.rs"]
-mod file_ledger_reconcile_expired;
-#[path = "file_ledger_reserve.rs"]
-mod file_ledger_reserve;
-#[path = "file_ledger_with_held_snapshot.rs"]
-mod file_ledger_with_held_snapshot;
 #[path = "object_identity.rs"]
 mod object_identity;
 #[path = "record_authentication.rs"]
 mod record_authentication;
 #[path = "replay_detection.rs"]
 mod replay_detection;
+#[path = "reservation_acquisition.rs"]
+mod reservation_acquisition;
 #[path = "reservation_identity.rs"]
 mod reservation_identity;
+#[path = "reservation_recovery.rs"]
+mod reservation_recovery;
 #[path = "snapshot_decoding.rs"]
 mod snapshot_decoding;
+#[path = "snapshot_transaction.rs"]
+mod snapshot_transaction;
 #[path = "store_create_exclusive.rs"]
 mod store_create_exclusive;
 #[path = "store_open.rs"]
