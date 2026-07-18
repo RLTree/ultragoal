@@ -9,8 +9,8 @@ Commands:
       Inspect candidate-bound live context.
   inspect inventory  [read]
       Inspect semantic components and authority conflicts.
-  inspect capabilities  [read]
-      Inspect exposed tools and supported capability surfaces.
+  inspect capabilities  [read] [--package-root <value>]
+      Inspect exposed tools and candidate-bound agent authority availability.
   inspect findings  [read]
       Inspect typed current findings.
   inspect claims  [read]

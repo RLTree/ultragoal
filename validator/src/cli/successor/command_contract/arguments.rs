@@ -1,4 +1,7 @@
+use super::error::ParseErrorId;
 use std::path::{Path, PathBuf};
+
+const MAX_HOST_PATH_BYTES: usize = 4096;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum OptionName {
@@ -71,8 +74,28 @@ impl RelativePath {
 pub struct HostPath(pub(crate) PathBuf);
 
 impl HostPath {
+    pub(crate) fn parse(value: &str) -> Result<Self, ParseErrorId> {
+        let path = Self(value.into());
+        if path.is_valid() {
+            Ok(path)
+        } else {
+            Err(ParseErrorId::InvalidPath)
+        }
+    }
+
     pub fn as_path(&self) -> &Path {
         &self.0
+    }
+
+    pub(crate) fn is_valid(&self) -> bool {
+        self.0.to_str().is_some_and(|value| {
+            !value.is_empty()
+                && value.len() <= MAX_HOST_PATH_BYTES
+                && !value
+                    .bytes()
+                    .any(|byte| byte == 0 || byte.is_ascii_control())
+                && Path::new(value).is_absolute()
+        })
     }
 }
 

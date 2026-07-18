@@ -1,9 +1,10 @@
 use super::*;
-use crate::cli::successor::command_contract::HelpTarget;
+use crate::cli::successor::command_contract::{HelpTarget, HostPath};
 use crate::cli::successor::{
-    InspectTarget, OptionName, ParseErrorId, ParsedInvocation, ParsedValue, SuccessorCommand,
-    render_help,
+    EffectClass, InspectTarget, OptionArgument, OptionName, ParseErrorId, ParsedInvocation,
+    ParsedValue, SuccessorCommand, render_help,
 };
+use std::path::PathBuf;
 
 #[test]
 pub(crate) fn inspect_capabilities_verifies_distinct_authority_roots_without_writes() {
@@ -171,6 +172,38 @@ pub(crate) fn inspect_capabilities_catalog_exposes_a_typed_package_root() {
     assert!(help.contains("host-path"));
 }
 
+#[cfg(unix)]
+#[test]
+pub(crate) fn inspect_capabilities_rejects_forged_host_paths_without_authority_io() {
+    use crate::plugin_product::agent_discovery::{reset_test_io_counts, test_io_counts};
+    use std::ffi::OsString;
+    use std::os::unix::ffi::OsStringExt;
+
+    let package = Repository::new("forged-package");
+    let project = Repository::new("forged-project");
+    let home = project.root.with_extension("forged-home");
+    package.install_agent_authority(&home);
+    let before_package = tree(&package.root);
+    let before_project = tree(&project.root);
+    let before_home = tree(&home);
+    for path in [
+        PathBuf::from("relative-package"),
+        PathBuf::from(OsString::from_vec(b"/control\0package".to_vec())),
+        PathBuf::from(format!("/{}", "x".repeat(4096))),
+    ] {
+        reset_test_io_counts();
+        let streams =
+            execute_invocation_with_home(&project.root, forged_invocation(path), Some(&home))
+                .render(OutputMode::Json);
+        assert_ne!(streams.exit_code, 0);
+        assert_eq!(test_io_counts(), Default::default());
+        assert_eq!(tree(&package.root), before_package);
+        assert_eq!(tree(&project.root), before_project);
+        assert_eq!(tree(&home), before_home);
+    }
+    fs::remove_dir_all(home).unwrap();
+}
+
 fn invocation(package_root: Option<&Path>) -> ParsedInvocation {
     let mut args = vec![
         "--json".to_owned(),
@@ -185,4 +218,16 @@ fn invocation(package_root: Option<&Path>) -> ParsedInvocation {
         panic!("expected capability invocation")
     };
     invocation
+}
+
+fn forged_invocation(path: PathBuf) -> ParsedInvocation {
+    ParsedInvocation {
+        command: SuccessorCommand::Inspect(InspectTarget::Capabilities),
+        effect: EffectClass::Read,
+        output_mode: OutputMode::Json,
+        arguments: vec![OptionArgument {
+            name: OptionName::PackageRoot,
+            value: ParsedValue::HostPath(HostPath(path)),
+        }],
+    }
 }

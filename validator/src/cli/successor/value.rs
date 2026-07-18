@@ -1,6 +1,5 @@
 use super::command_contract::{HostPath, ParsedValue, RelativePath, ValueKind};
 use super::error::ParseErrorId;
-use std::path::Path;
 
 const MAX_IDENTIFIER_BYTES: usize = 128;
 const MAX_PATH_BYTES: usize = 4096;
@@ -13,7 +12,7 @@ pub(crate) fn parse_value(kind: ValueKind, value: &str) -> Result<ParsedValue, P
         ValueKind::Flag => Err(ParseErrorId::UnexpectedOptionValue),
         ValueKind::Identifier => validate_identifier(value).map(ParsedValue::Identifier),
         ValueKind::RelativePath => validate_relative_path(value).map(ParsedValue::RelativePath),
-        ValueKind::HostPath => validate_host_path(value).map(ParsedValue::HostPath),
+        ValueKind::HostPath => HostPath::parse(value).map(ParsedValue::HostPath),
     }
 }
 
@@ -53,17 +52,4 @@ fn validate_relative_path(value: &str) -> Result<RelativePath, ParseErrorId> {
         return Err(ParseErrorId::InvalidPath);
     }
     Ok(RelativePath(value.to_owned()))
-}
-
-fn validate_host_path(value: &str) -> Result<HostPath, ParseErrorId> {
-    if value.is_empty()
-        || value.len() > MAX_PATH_BYTES
-        || value
-            .bytes()
-            .any(|byte| byte == 0 || byte.is_ascii_control())
-        || !Path::new(value).is_absolute()
-    {
-        return Err(ParseErrorId::InvalidPath);
-    }
-    Ok(HostPath(value.into()))
 }

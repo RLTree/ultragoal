@@ -50,7 +50,7 @@ fn package_root(invocation: &ParsedInvocation) -> Result<Option<&Path>, ()> {
             let ParsedValue::HostPath(path) = &argument.value else {
                 return Err(());
             };
-            Ok(Some(path.as_path()))
+            path.is_valid().then_some(path.as_path()).ok_or(())
         }
         _ => Err(()),
     }
