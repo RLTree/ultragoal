@@ -1,7 +1,5 @@
 const SOURCES: &[&str] = &[
     "validator/src/api_witness.rs",
-    "validator/src/lib.rs",
-    "validator/tests/public_api_witness.rs",
     "validator/src/command_witness.rs",
     "validator/src/cli/successor/catalog/mod.rs",
     "validator/src/cli/successor/catalog/evaluation_and_migration.rs",
@@ -15,6 +13,8 @@ const SOURCES: &[&str] = &[
     "validator/src/cli/successor/command_contract/descriptor.rs",
     "validator/src/cli/successor/command_contract/exit.rs",
     "validator/src/cli/successor/command_contract/invocation.rs",
+    "validator/src/cli/successor_public/operation_binding.rs",
+    "validator/src/cli/successor_public/output_limit.rs",
     "validator/src/inventory/mod.rs",
     "validator/src/inventory/builder.rs",
     "validator/src/inventory/digest.rs",
@@ -55,7 +55,7 @@ fn source_repo(label: &str) -> TestRepo {
 }
 
 #[test]
-fn exact_current_witness_sources_activate_apis_but_not_command_definitions() {
+fn exact_current_witness_sources_activate_only_bound_operations() {
     let repo = source_repo("activation-current");
     let before = snapshot(&repo.root);
     let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
@@ -78,18 +78,33 @@ fn exact_current_witness_sources_activate_apis_but_not_command_definitions() {
             .filter(|entry| entry.stable_id.starts_with("API:"))
             .any(|entry| entry.active_status == ActiveStatus::Active)
     );
-    assert!(
-        catalog
-            .entries()
-            .iter()
-            .filter(|entry| entry.stable_id.starts_with("COMMAND:"))
-            .all(|entry| entry.active_status == ActiveStatus::Candidate)
+    let active_commands = catalog
+        .entries()
+        .iter()
+        .filter(|entry| {
+            entry.generator.as_deref() == Some("HCT-INVENTORY:compiled-command-catalog-witness")
+                && entry.active_status == ActiveStatus::Active
+        })
+        .map(|entry| entry.stable_id.as_str())
+        .collect::<std::collections::BTreeSet<_>>();
+    assert_eq!(
+        active_commands,
+        [
+            "COMMAND:check",
+            "COMMAND:diagnose",
+            "COMMAND:fit",
+            "COMMAND:inspect",
+            "COMMAND:next",
+            "COMMAND:observe",
+        ]
+        .into_iter()
+        .collect()
     );
     assert_eq!(
         catalog
             .source_registry_counts()
             .get("verified_command_handler_activations"),
-        Some(&0)
+        Some(&6)
     );
     assert_eq!(
         catalog

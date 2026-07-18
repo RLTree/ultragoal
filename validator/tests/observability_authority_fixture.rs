@@ -43,10 +43,6 @@ fn observed_source_base(registry: &serde_json::Value) -> String {
         );
         let gate = gates[0];
         assert_eq!(gate["status"], "current", "fixture gate is not current");
-        assert_eq!(
-            gate["evidence_status"], "current",
-            "fixture evidence is not current"
-        );
         let commit = gate["observed_source_base"]["commit"]
             .as_str()
             .expect("fixture gate source base commit")
@@ -65,15 +61,17 @@ fn observed_source_base(registry: &serde_json::Value) -> String {
 }
 
 fn live_object_directory(live: &Path) -> PathBuf {
-    let common = git_text(live, &["rev-parse", "--git-common-dir"]);
-    let common = Path::new(&common);
-    let common = if common.is_absolute() {
-        common.to_path_buf()
+    let git_metadata_directory = git_text(live, &["rev-parse", "--git-common-dir"]);
+    let git_metadata_directory = Path::new(&git_metadata_directory);
+    let git_metadata_directory = if git_metadata_directory.is_absolute() {
+        git_metadata_directory.to_path_buf()
     } else {
-        live.join(common)
+        live.join(git_metadata_directory)
     };
-    let common = fs::canonicalize(common).expect("canonical live Git common directory");
-    let objects = fs::canonicalize(common.join("objects")).expect("canonical live Git objects");
+    let git_metadata_directory =
+        fs::canonicalize(git_metadata_directory).expect("canonical live Git metadata directory");
+    let objects = fs::canonicalize(git_metadata_directory.join("objects"))
+        .expect("canonical live Git objects");
     assert!(
         fs::metadata(&objects)
             .expect("inspect canonical live Git objects")

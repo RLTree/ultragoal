@@ -4,8 +4,8 @@ use crate::cli::successor::runtime::{
     Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome, RuntimeSession,
 };
 use crate::cli::successor::{
-    CheckProfile, EffectClass, ExitClass, FitAction, InspectTarget, OutputMode, ParseOutcome,
-    ParsedInvocation, SuccessorCommand, render_help, version_text,
+    EffectClass, ExitClass, FitAction, InspectTarget, OutputMode, ParseOutcome, ParsedInvocation,
+    SuccessorCommand, render_help, version_text,
 };
 use crate::context::{BuildRequest, LiveContext};
 use crate::inventory::{
@@ -25,6 +25,7 @@ mod diagnose;
 mod fit;
 mod local_store;
 mod observe;
+mod operation_binding;
 mod public_context;
 mod routine;
 mod strict;
@@ -44,5 +45,6 @@ mod diagnose_boundary_tests;
 #[cfg(test)]
 mod repository_fixture;
 
+pub(crate) use operation_binding::{active_api_identifiers, active_command_groups};
 pub(crate) use output_emission::*;
 pub(crate) use output_limit::*;

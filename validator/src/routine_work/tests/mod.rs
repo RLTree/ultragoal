@@ -77,10 +77,10 @@ mod recovery_reuse {
     mod journey_scenario;
     #[path = "cases/journeys.rs"]
     mod journeys;
-    #[path = "cases/routine/fixture/inventory.rs"]
+    #[path = "cases/fixture/inventory.rs"]
     mod routine_fixture_inventory;
-    #[path = "cases/routine/fixture/invocation.rs"]
+    #[path = "cases/fixture/invocation.rs"]
     mod routine_fixture_invocation;
-    #[path = "cases/routine/fixture/lifecycle.rs"]
+    #[path = "cases/fixture/lifecycle.rs"]
     mod routine_fixture_lifecycle;
 }

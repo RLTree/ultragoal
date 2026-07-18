@@ -42,18 +42,16 @@ pub(crate) fn execute_invocation_with_home(
     invocation: ParsedInvocation,
     home: Option<&Path>,
 ) -> RuntimeOutcome {
-    if invocation.command == SuccessorCommand::Check(CheckProfile::Strict)
-        && invocation.effect == EffectClass::Read
-    {
+    let Some(operation) = super::operation_binding::bind(&invocation) else {
+        return crate::cli::successor::runtime::unavailable(&invocation);
+    };
+    if operation == super::operation_binding::PublicOperation::StrictCheck {
         return strict::execute(root, &invocation);
     }
-    if invocation.command == SuccessorCommand::Check(CheckProfile::Routine)
-        && invocation.effect == EffectClass::WorkspaceWrite
-    {
+    if operation == super::operation_binding::PublicOperation::RoutineCheck {
         return routine::execute(root, &invocation, home);
     }
-    let public_fit_apply = invocation.command == SuccessorCommand::Fit(FitAction::Apply)
-        && invocation.effect == EffectClass::WorkspaceWrite;
+    let public_fit_apply = operation == super::operation_binding::PublicOperation::FitApply;
     if invocation.effect != EffectClass::Read && !public_fit_apply {
         return crate::cli::successor::runtime::unavailable(&invocation);
     }

@@ -142,13 +142,16 @@ mod tests {
     }
 
     #[test]
-    fn final_source_reread_rejects_semantic_and_root_export_mutate_restore() {
+    fn final_source_reread_rejects_semantic_and_dispatch_mutate_restore() {
         for (label, relative) in [
             (
                 "semantic-mutate-restore",
                 "validator/src/inventory/registry/semantic.rs",
             ),
-            ("lib-mutate-restore", "validator/src/lib.rs"),
+            (
+                "dispatcher-mutate-restore",
+                "validator/src/cli/successor_public/output_limit.rs",
+            ),
         ] {
             assert_mutate_restore_rejected(label, relative);
         }

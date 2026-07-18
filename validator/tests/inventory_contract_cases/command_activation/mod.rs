@@ -7,6 +7,7 @@ use std::fs;
 include!("lease_fixture.rs");
 include!("lease_issuance.rs");
 include!("sources.rs");
+include!("unsupported_product_apis_remain_inactive.rs");
 
 include!("absent_or_stale_witness_sources_fail_closed_without_echoing_bytes.rs");
 

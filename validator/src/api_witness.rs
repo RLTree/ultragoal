@@ -31,7 +31,9 @@ impl EffectSink for WitnessEffectSink {
     }
 }
 
-pub(crate) fn implemented_public_apis() -> &'static [&'static str] {
+/// Compile compatibility witness only. Product activation is issued by the
+/// private successor dispatcher binding, never by these reexports or types.
+pub(crate) fn compatible_public_apis() -> &'static [&'static str] {
     let _: fn(BuildRequest) -> Result<LiveContext, ContextError> = LiveContext::build;
     require_type::<EffectClass>();
     require_type::<CapabilitySet>();

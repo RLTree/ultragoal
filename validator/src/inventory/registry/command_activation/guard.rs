@@ -55,6 +55,7 @@ pub(crate) fn guard(
     )?;
 
     let sources_current = witness_sources_current(reads, root)?;
+    let active_command_groups = crate::cli::successor_public::active_command_groups();
     if !sources_current {
         registry.findings.push(InventoryFinding::warning(
             "activation_witness_source_set_unverified",
@@ -63,13 +64,19 @@ pub(crate) fn guard(
             "compiled activation witnesses cannot be bound to the target source set".to_owned(),
         ));
     }
-    for entry in registry
-        .entries
-        .iter_mut()
-        .filter(|entry| entry.generator.as_deref() == Some(API_GENERATOR))
-    {
+    for entry in registry.entries.iter_mut().filter(|entry| {
+        matches!(
+            entry.generator.as_deref(),
+            Some(API_GENERATOR | COMMAND_GENERATOR)
+        )
+    }) {
         if !sources_current {
             entry.active_status = ActiveStatus::Candidate;
+        } else if entry.generator.as_deref() == Some(COMMAND_GENERATOR)
+            && active_command_groups
+                .contains(entry.stable_id.strip_prefix("COMMAND:").unwrap_or_default())
+        {
+            entry.active_status = ActiveStatus::Active;
         }
         entry.input_provenance.extend(
             WITNESS_SOURCES
@@ -84,14 +91,20 @@ pub(crate) fn guard(
     );
     registry.counts.insert(
         "verified_api_activations".to_owned(),
-        usize::from(sources_current) * expected_apis.len(),
+        usize::from(sources_current)
+            * expected_apis
+                .values()
+                .filter(|row| row.active_status == ActiveStatus::Active)
+                .count(),
     );
-    registry
-        .counts
-        .insert("verified_command_handler_activations".to_owned(), 0);
+    let active_commands = active_command_groups.len();
+    registry.counts.insert(
+        "verified_command_handler_activations".to_owned(),
+        usize::from(sources_current) * active_commands,
+    );
     registry.counts.insert(
         "candidate_command_groups".to_owned(),
-        expected_commands.len(),
+        expected_commands.len() - usize::from(sources_current) * active_commands,
     );
     Ok(sources_current)
 }

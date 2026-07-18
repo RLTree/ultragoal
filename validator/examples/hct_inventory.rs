@@ -3,21 +3,11 @@ use std::collections::BTreeMap;
 use std::io::{self, Write};
 use std::path::PathBuf;
 use ultragoal::context::{BuildRequest, LiveContext};
-use ultragoal::fixture_scheduler::{
-    ExpectedOutcome, FixtureScheduler, FixtureSpec, IsolationLease,
-};
 use ultragoal::inventory::{
     ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256, InventoryBuilder,
 };
 
-fn require_fixture_api<T>() {}
-
 fn run() -> Result<bool, String> {
-    require_fixture_api::<FixtureSpec>();
-    require_fixture_api::<FixtureScheduler>();
-    require_fixture_api::<IsolationLease>();
-    require_fixture_api::<ExpectedOutcome>();
-    let _execute_fixture = ultragoal::capture::execute_scheduled_fixture;
     let mut arguments = std::env::args_os().skip(1).collect::<Vec<_>>();
     let summary = arguments
         .first()

@@ -9,16 +9,6 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "compiled API declaration"
     ),
     source!(
-        "validator/src/lib.rs",
-        include_bytes!("../../../lib.rs"),
-        "root public module export authority"
-    ),
-    source!(
-        "validator/tests/public_api_witness.rs",
-        include_bytes!("../../../../tests/public_api_witness.rs"),
-        "external crate visibility witness"
-    ),
-    source!(
         "validator/src/command_witness.rs",
         include_bytes!("../../../command_witness.rs"),
         "compiled command row digest"
@@ -82,6 +72,16 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "validator/src/cli/successor/command_contract/invocation.rs",
         include_bytes!("../../../cli/successor/command_contract/invocation.rs"),
         "parsed invocation model"
+    ),
+    source!(
+        "validator/src/cli/successor_public/operation_binding.rs",
+        include_bytes!("../../../cli/successor_public/operation_binding.rs"),
+        "supported operation activation authority"
+    ),
+    source!(
+        "validator/src/cli/successor_public/output_limit.rs",
+        include_bytes!("../../../cli/successor_public/output_limit.rs"),
+        "public dispatcher consumption of operation authority"
     ),
     source!(
         "validator/src/inventory/mod.rs",

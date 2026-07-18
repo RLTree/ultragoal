@@ -109,9 +109,13 @@ pub(super) fn load(request: SemanticRegistryLoad<'_>) -> Result<(), InventoryErr
     counts.insert("research_sources".to_owned(), research_count);
     let required_api_count = required_apis.len();
     let required_api_names = required_apis.keys().cloned().collect::<BTreeSet<_>>();
+    let bound_apis = crate::cli::successor_public::active_api_identifiers();
     let active_api_names = required_apis
         .iter()
-        .filter(|(_, tools)| tools.iter().any(|tool| active_tools.contains(tool)))
+        .filter(|(api, tools)| {
+            bound_apis.contains(api.as_str())
+                && tools.iter().any(|tool| active_tools.contains(tool))
+        })
         .map(|(api, _)| api.clone())
         .collect::<BTreeSet<_>>();
     for (api, tools) in required_apis {
@@ -126,7 +130,7 @@ pub(super) fn load(request: SemanticRegistryLoad<'_>) -> Result<(), InventoryErr
         }
         entries.push(entry);
     }
-    for api in crate::api_witness::implemented_public_apis() {
+    for api in crate::api_witness::compatible_public_apis() {
         if !required_api_names.contains(*api) {
             return Err(InventoryError::InvalidRegistry(
                 "compiled API witness is absent from the adopted tool contract".to_owned(),
