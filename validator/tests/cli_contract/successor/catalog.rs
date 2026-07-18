@@ -1,8 +1,8 @@
 use super::successor::clap_grammar::parser_command;
 use super::successor::command_contract::{CommandDescriptor, HelpTarget};
 use super::successor::{
-    EffectClass, Group, OptionName, OutputMode, ParseErrorId, ParseOutcome, ParsedValue, ValueKind,
-    catalog, effect_name, parse_args, render_help,
+    EffectClass, Group, OptionName, OptionSpec, OutputMode, ParseErrorId, ParseOutcome,
+    ParsedValue, ValueKind, catalog, effect_name, parse_args, render_help,
 };
 use clap::{ArgAction, builder::ValueRange};
 use std::collections::BTreeSet;
@@ -19,12 +19,13 @@ fn catalog_exposes_exactly_the_ten_contract_groups() {
 fn every_catalog_route_is_unique_and_parses_from_its_descriptor() {
     let mut routes = BTreeSet::new();
     for descriptor in catalog() {
+        let options: &[OptionSpec] = descriptor.options;
         assert!(routes.insert((descriptor.command.group(), descriptor.subcommand)));
         let mut args = vec![descriptor.command.group().as_str().to_owned()];
         if let Some(subcommand) = descriptor.subcommand {
             args.push(subcommand.to_owned());
         }
-        for option in descriptor.options.iter().filter(|option| option.required) {
+        for option in options.iter().filter(|option| option.required) {
             args.push(option.name.as_str().to_owned());
             match option.kind {
                 ValueKind::Flag => {}
@@ -55,7 +56,9 @@ fn every_catalog_route_is_unique_and_parses_from_its_descriptor() {
                     ParsedValue::Flag => true,
                     ParsedValue::Identifier(value) => !value.is_empty(),
                     ParsedValue::RelativePath(path) => !path.as_str().is_empty(),
-                    ParsedValue::HostPath(path) => path.is_valid(),
+                    ParsedValue::HostPath(path) => {
+                        path.is_valid() && path.as_path().is_absolute()
+                    }
                 })
         );
     }
@@ -163,7 +166,6 @@ fn clap_requiredness_arity_and_singleton_behavior_match_every_option_spec() {
         }
     }
 }
-
 #[test]
 fn help_is_a_projection_of_the_same_compiled_catalog() {
     let human = render_help(HelpTarget::Root, OutputMode::Human);
@@ -197,7 +199,6 @@ fn help_is_a_projection_of_the_same_compiled_catalog() {
         assert!(json.contains(effect_name(descriptor.effect)));
     }
 }
-
 #[test]
 fn sensitive_effects_are_never_attached_to_read_routes() {
     for descriptor in catalog() {

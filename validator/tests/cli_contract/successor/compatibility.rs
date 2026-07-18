@@ -129,6 +129,9 @@ fn legacy_help_and_machine_guidance_never_echo_untrusted_tail_bytes() {
         "harness-ultragoal.compatibility-guidance.v1"
     );
     assert_eq!(value["legacy_effect_executed"], false);
-    assert_eq!(value["exit_code"], 4);
+    assert_eq!(
+        value["exit_code"],
+        super::successor::compatibility::COMPATIBILITY_EXIT_CODE
+    );
     assert!(!rendered.contains("NEVER_ECHO_COMPATIBILITY_CANARY_4819"));
 }

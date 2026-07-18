@@ -1,4 +1,4 @@
-use super::capture::{ArtifactDisposition, ArtifactResolver, CapturedArtifact};
+use super::capture::{ArtifactDisposition, ArtifactRef, ArtifactResolver, CapturedArtifact};
 use super::fixture::RepoFixture;
 use crate::context::{BuildRequest, LiveContext};
 use sha2::{Digest, Sha256};
@@ -34,7 +34,7 @@ pub fn assert_withheld(artifact: &CapturedArtifact, needles: &[&[u8]]) {
     assert_eq!(artifact.sha256(), digest(&[]));
     assert_eq!(artifact.relative_path(), None);
 
-    let reference = artifact.artifact_ref();
+    let reference: ArtifactRef = artifact.artifact_ref();
     assert_eq!(reference.disposition(), artifact.disposition());
     assert_eq!(reference.sha256(), artifact.sha256());
     assert_eq!(reference.byte_length(), 0);
@@ -56,7 +56,7 @@ pub fn assert_public(artifact: &CapturedArtifact, expected: &[u8]) {
     assert_eq!(artifact.bytes(), expected);
     assert_eq!(artifact.byte_length(), expected.len() as u64);
     assert_eq!(artifact.sha256(), digest(expected));
-    let reference = artifact.artifact_ref();
+    let reference: ArtifactRef = artifact.artifact_ref();
     assert_eq!(reference.disposition(), ArtifactDisposition::Public);
     assert_eq!(&*artifact.resolve(&reference).unwrap(), expected);
 }
