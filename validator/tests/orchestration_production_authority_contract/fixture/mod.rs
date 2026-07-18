@@ -43,6 +43,7 @@ impl Drop for TestRoot {
 }
 
 include!("scenario.rs");
+include!("submission.rs");
 include!("execution_permit.rs");
 
 pub fn inspect_resume(

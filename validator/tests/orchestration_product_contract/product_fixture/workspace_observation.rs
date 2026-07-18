@@ -3,7 +3,6 @@ pub fn worker_result(workspace: &TestRoot) -> WorkerResultV1 {
     let bytes = b"{\"result\":\"bounded\"}\n";
     let target = workspace.path().join(relative);
     fs::create_dir_all(target.parent().unwrap()).unwrap();
-    fs::write(&target, bytes).unwrap();
     WorkerResultV1 {
         worker: "worker-a".to_owned(),
         lease_id: "lease-001".to_owned(),
@@ -76,6 +75,7 @@ pub fn recursive_fingerprint(root: &Path) -> Vec<(String, String)> {
             }
         }
     }
+
     let mut rows = Vec::new();
     walk(root, root, &mut rows);
     rows
@@ -87,6 +87,7 @@ pub fn journal_frame_bytes(event: &OrchestrationEvent) -> Vec<u8> {
         schema_version: &'static str,
         event: &'a OrchestrationEvent,
     }
+
     serde_json::to_vec(&Frame {
         schema_version: "OrchestrationJournalFrame-v1",
         event,

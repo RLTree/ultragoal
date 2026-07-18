@@ -1,6 +1,6 @@
 use super::compile_cases::CaseSpec;
 
-const TRANSACTION: &str = "orchestration/product/authority/production/execution_transaction.rs";
+const TRANSACTION: &str = "orchestration/product/authority/production/execution_transaction/mod.rs";
 
 pub(super) const HIDDEN: &[CaseSpec] = &[
     hidden(

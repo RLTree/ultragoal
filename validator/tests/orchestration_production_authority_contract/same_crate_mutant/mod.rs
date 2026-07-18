@@ -19,7 +19,7 @@ use std::path::{Path, PathBuf};
 use std::process::{Child, Command, Stdio};
 
 const PRODUCTION: &str = "orchestration/product/authority/production/mod.rs";
-const TRANSACTION: &str = "orchestration/product/authority/production/execution_transaction.rs";
+const TRANSACTION: &str = "orchestration/product/authority/production/execution_transaction/mod.rs";
 
 #[test]
 fn same_crate_boundaries_bind_each_exact_expression_to_a_green_exposure() {
@@ -160,6 +160,8 @@ impl MutantCrate {
             .args(["check", "--offline", "--lib", "--message-format=json"])
             .current_dir(&self.crate_root)
             .env("CARGO_TARGET_DIR", &self.target_root)
+            .env_remove("RUSTFLAGS")
+            .env_remove("CARGO_ENCODED_RUSTFLAGS")
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()

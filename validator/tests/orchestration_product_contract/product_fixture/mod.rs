@@ -8,5 +8,4 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 include!("next_root.rs");
-
-include!("reconcile_permit.rs");
+include!("workspace_observation.rs");
