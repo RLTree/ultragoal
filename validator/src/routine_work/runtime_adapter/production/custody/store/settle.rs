@@ -75,10 +75,12 @@ fn validate_terminal(terminal: &TerminalRecord) -> Result<(), RoutineError> {
             .any(|(digest, witness)| !valid(digest) || !valid(witness))
         || !terminal.process_cleanup.shape_is_valid()
         || !terminal.staged_cleanup.shape_is_valid()
-        || terminal
-            .failure_evidence
-            .as_ref()
-            .is_some_and(|evidence| !evidence.shape_is_valid())
+        || terminal.failure_evidence.as_ref().is_some_and(|evidence| {
+            !evidence.shape_is_valid()
+                || terminal.state != AttemptState::Failed
+                || terminal.process_cleanup != evidence.process_cleanup
+                || terminal.staged_cleanup != evidence.staged_cleanup
+        })
     {
         return Err(error("routine-production-settlement-invalid"));
     }

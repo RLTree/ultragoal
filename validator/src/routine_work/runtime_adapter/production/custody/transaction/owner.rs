@@ -181,14 +181,13 @@ impl ReservationOwner {
         result: &RoutineMediationResult,
         artifacts: &BTreeMap<String, String>,
     ) -> Result<(), RoutineError> {
-        let terminal = TerminalObservation {
+        let terminal = TerminalObservation::mediated(
             outcome,
-            result_sha256: digest_of(result)?,
-            artifacts: artifacts.clone(),
-            process_cleanup: cleanup_state(self.started.get()),
-            staged_cleanup: cleanup_state(self.launch_cleaned.get()),
-            failure_evidence: None,
-        };
+            digest_of(result)?,
+            artifacts.clone(),
+            cleanup_state(self.started.get()),
+            cleanup_state(self.launch_cleaned.get()),
+        );
         self.resolve(self.ledger.settle_terminal(terminal)?)
     }
 
@@ -204,14 +203,7 @@ impl ReservationOwner {
                 })),
             );
         }
-        let terminal = TerminalObservation {
-            outcome: DurableSettlement::Failed,
-            result_sha256: digest_of(evidence)?,
-            artifacts: BTreeMap::new(),
-            process_cleanup: evidence.process_cleanup.clone(),
-            staged_cleanup: evidence.staged_cleanup.clone(),
-            failure_evidence: Some(evidence.clone()),
-        };
+        let terminal = TerminalObservation::failed(digest_of(evidence)?, evidence);
         self.resolve(self.ledger.settle_terminal(terminal)?)
     }
 
