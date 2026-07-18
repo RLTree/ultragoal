@@ -47,6 +47,30 @@ For a multi-outcome prompt, choose the earliest outcome the operator must
 complete and report the others as follow-ons. Select `goal-run` only when the
 immediate outcome is coordination itself. Never combine skill authorities.
 
+## Calibrate the selected route
+
+After selecting the primary workflow, choose the smallest current action that
+advances a real operator outcome without crossing a dependency or authority
+boundary. Return this calibration ephemerally; it is guidance, not scheduler,
+claim, receipt, or state authority.
+
+- Name the next legal value-bearing action and why it outranks more proof,
+  planning, review, or infrastructure work now.
+- Define one representative acceptance check before selecting execution cost.
+- When controllable, use the lowest sufficient model, reasoning effort, and
+  orchestration route that can pass that check. Record requested or effective
+  configuration only when the runtime exposes it.
+- Use no independent review for cheap reversible observation, one bounded
+  specialist for a material source freeze, and the milestone team only at a
+  protected cross-domain, product, release, or completion boundary.
+- Keep focused checks and reproducible output ephemeral. Persist only evidence
+  consumed by a current claim, cross-process handoff, irreproducible
+  observation, or recovery need.
+
+Security, privacy, destructive-effect, identity, authority, and proof-surface
+boundaries remain unconditional. Calibration may lower cost or narrow proof;
+it cannot lower those laws or raise a claim ceiling.
+
 ## Fail closed
 
 - A repository-dependent route without one canonical target selects no route;
@@ -70,7 +94,9 @@ and access metadata.
 Return the selected skill or `no_route`, the immediate outcome, candidate and
 target used, effect ceiling, authority required, supported current action,
 unavailable capability, follow-on routes, exact blocker, and highest honest
-candidate-only ceiling.
+candidate-only ceiling. Also return the next value-bearing action,
+representative acceptance check, exposed execution route when known, review
+scope, proof boundary, and persistence decision.
 
 Documentation, tests, schemas, receipts, generated rows, telemetry, or green
 commands do not prove package, installation, discovery, runtime behavior,

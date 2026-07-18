@@ -51,6 +51,30 @@ specialized workflows. If a repository-dependent route lacks a target, or a
 write route lacks required authority, stop before execution and ask one focused
 question. Unknown intents produce no route.
 
+## Calibrated next action
+
+Route selection is followed by one ephemeral calibration. It names the next
+dependency-legal action that reaches operator value, one representative
+acceptance check, the lowest sufficient exposed execution configuration, the
+required review scope, the current proof boundary, and whether any output must
+persist. It is returned as guidance only: `LANE_REGISTRY.json`, root authority,
+and the claim kernel remain authoritative, while `next` remains a zero-write
+read model.
+
+Use one lean Goal, Success, Context, Constraints, Output, Verification contract
+across exposed routes. Change model, reasoning, or orchestration before
+rewriting a working prompt, and change the prompt only for a measured missing
+goal, context, boundary, output, or verification requirement. Never infer the
+effective configuration from prompt text.
+
+Spend review and proof where they can affect a decision. Routine observation
+needs no independent reviewer; a material source freeze gets one exhaustive
+risk-matched specialist; protected cross-domain, product, release, and
+completion boundaries get the milestone team. Reproducible checks and outputs
+stay ephemeral. Durable evidence exists only while a current claim,
+cross-process handoff, irreproducible observation, audit, or recovery path
+consumes it.
+
 ## Representative journeys
 
 ### Fresh repository

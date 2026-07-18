@@ -258,7 +258,13 @@ claim and representative product or release proof.
   production-dead generic JSON/output mutation chain was then retired; generic
   JSON writes now exist only in the test fixture boundary, while the two
   governed claim-artifact path functions remain the sole production surface.
-  This is not a compile pass; no suppression or dummy reachability is allowed.
+  Commit `a558dfaf9a58d4ddb9f9dcb818927acbd42bd7d3` then closed the process-mediator
+  semantic-namespace debt by moving failure injection, sandbox profiles,
+  termination status, observation digests, and observation failures into
+  behavior-named leaves. The exact decision-boundary production check still
+  reports the same 64 N14-blocked diagnostics and no new diagnostic from that
+  move. This is not a compile pass; no suppression or dummy reachability is
+  allowed.
 - Root reconciliation revoked the stale P0 lease, removed retired
   authority-reconciliation paths from the protected checkpoint, rebound the
   surviving plan and claim-module digests, and settled the verification backlog
@@ -274,14 +280,17 @@ claim and representative product or release proof.
   enforcement; its bounded-invariant decision must be adopted through a live
   successor route or retired before an enforcement claim is raised.
 - A single bounded synthesis of the July model-routing and product-craft source
-  corpus found no monotonic contract change: `AMEND-001` already owns the
-  doctrine. The source plugin materiality agent, its existing schema, and the
-  resource map are being reconciled in place so ordinary material lane freezes
-  select one bounded invariant reviewer while four-persona review remains a
-  milestone topology. No guide, node, tracker, receipt family, or observability
-  channel was added. Installed cache guidance remains an unverified stale
-  projection until the current source is packaged, installed, and observed on
-  those separate surfaces.
+  corpus, followed by one bounded Sol/Max adversarial crafting pass, found no
+  monotonic contract change: `AMEND-001` already owns the doctrine. The existing
+  front door, goal-run, maintenance, journey-review, and resource-map surfaces
+  now calibrate the next value-bearing action, representative acceptance check,
+  lowest sufficient exposed route, review scope, proof boundary, and persistence
+  decision. This is ephemeral guidance over the existing registry and claim
+  kernel, not scheduler or state authority. Actual `next` CLI behavior remains
+  deferred to its existing N08/N09 dependency boundary. No guide, node, tracker,
+  schema, receipt family, or observability channel was added. Installed cache
+  guidance remains an unverified stale projection until the current source is
+  packaged, installed, and observed on those separate surfaces.
 - `scripts/check-agent-standards .` passes 121 rows after stale pass claims
   were downgraded to pending rather than manufacturing replacement evidence.
   The corresponding performance, Rust developer-loop, observability,
