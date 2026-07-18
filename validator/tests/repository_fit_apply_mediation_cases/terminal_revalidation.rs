@@ -128,6 +128,10 @@ pub(crate) fn apply_revalidates_before_effect_and_has_only_exact_terminal_states
 pub(crate) fn effect_scope_success_construction_and_diagnostics_fail_closed() {
     let adapter = source("validator/src/repository_fit/product_adapter/mod.rs");
     let fit = rust_tree("validator/src/cli/successor_public/fit");
+    let fit_apply = source("validator/src/cli/successor_public/fit/plan_input_limit.rs");
+    let public_effect = source("validator/src/cli/successor_public/fit/authority/public_effect.rs");
+    let supported_effect =
+        source("validator/src/cli/successor_public/fit/authority/supported/state_components.rs");
     let public = source("validator/src/cli/successor_public/output_limit.rs");
     let permit = rust_tree("validator/src/repository_fit/product_adapter/root_permit");
     assert!(permit.contains("struct ScopedEffects"));
@@ -168,11 +172,20 @@ pub(crate) fn effect_scope_success_construction_and_diagnostics_fail_closed() {
     assert!(public.contains("if invocation.effect != EffectClass::Read && !public_fit_apply"));
     assert!(public.contains("SuccessorCommand::Fit(FitAction::Apply) => fit::apply"));
     assert!(!fit.contains("apply_with_root_permit"));
-    assert!(fit.contains("authority::execute(context, prepared, home)"));
-    assert!(fit.contains("prepare_recovery_intent(context, &prepared)"));
-    assert!(fit.contains("execute_prepared_apply("));
-    assert!(fit.contains("recover_prepared_apply("));
-    assert!(fit.contains("state.persist_pending(&envelope)?"));
+    let apply_start = fit_apply.find("pub(crate) fn apply(").unwrap();
+    let apply_end = fit_apply[apply_start..]
+        .find("\npub(crate) struct ApplyArguments")
+        .unwrap()
+        + apply_start;
+    let apply = &fit_apply[apply_start..apply_end];
+    assert!(apply.contains("authority::recover_pending(context, home)"));
+    assert!(apply.contains("authority::execute(context, prepared, home)"));
+    assert!(public_effect.contains("supported::execute(context, prepared, home)"));
+    assert!(public_effect.contains("supported::recover_pending(context, home)"));
+    assert!(supported_effect.contains("prepare_recovery_intent(context, &prepared)"));
+    assert!(supported_effect.contains("execute_prepared_apply("));
+    assert!(supported_effect.contains("recover_prepared_apply("));
+    assert!(supported_effect.contains("state.persist_pending(&envelope)?"));
 }
 
 #[test]
