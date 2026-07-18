@@ -36,6 +36,9 @@ mod projection;
 #[cfg(test)]
 mod race_tests;
 mod registry;
+#[cfg(test)]
+pub(crate) mod retained_routes;
+#[cfg(not(test))]
 mod retained_routes;
 mod routing;
 #[path = "routing/state.rs"]

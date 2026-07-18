@@ -1,8 +1,8 @@
-use crate::retained_routes::{
+use super::super::{
     EntryEvidence, MatcherEvidence, RegistryRouteEvidence, TransitionEvidence, VerificationError,
     routes,
 };
-use crate::route_transition_fixture::Fixture;
+use super::route_transition_fixture::Fixture;
 
 #[test]
 fn matcher_must_bind_stable_id_kind_and_path_exactly() {

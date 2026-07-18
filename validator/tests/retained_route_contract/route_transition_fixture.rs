@@ -1,4 +1,4 @@
-use crate::retained_routes::{
+use super::super::{
     ACTIVE_READER_WRITER_STATE, COMPATIBILITY_BEHAVIOR, COMPATIBILITY_BOUNDARY, CatalogEvidence,
     DigestEvidence, EQUIVALENCE_PROOF, EntryEvidence, INTENDED_DISPOSITION, MatcherEvidence,
     OBSERVED_AUTHORITY_STATE, PHYSICAL_CLEANUP_STATE, REPLACEMENT_STATE, RegistryRouteEvidence,
