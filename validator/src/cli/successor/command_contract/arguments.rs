@@ -1,4 +1,4 @@
-use super::error::ParseErrorId;
+use super::super::error::ParseErrorId;
 use std::path::{Path, PathBuf};
 
 const MAX_HOST_PATH_BYTES: usize = 4096;
