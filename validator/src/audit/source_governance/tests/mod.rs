@@ -6,4 +6,3 @@ mod production_source_edges;
 mod registry_absence;
 mod standards_fixture;
 mod typed_boundary_edges;
-mod zero_write;

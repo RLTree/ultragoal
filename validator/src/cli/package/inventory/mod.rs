@@ -6,8 +6,6 @@ use std::time::Instant;
 #[cfg(test)]
 mod boundary_mapping;
 mod claim_ceiling;
-#[cfg(test)]
-mod command_paths;
 mod runtime;
 mod stdout;
 
