@@ -195,8 +195,9 @@ branch-first/worktree-second.
 
 N01, N02, and N03 are serial; N02 requires a fresh same-session rebuild, zero
 blockers, and two byte-identical inventories, and no inventory authority or
-claim promotion may occur while it is open. N04-N07 then use four separate
-worktrees; N08/N09 and N10/N11 may run in parallel. N12-N17 are root-serialized.
+claim promotion may occur while it is open. The initial N04-N07 source wave used
+four separate worktrees; N08/N09 and N10/N11 may run in parallel only when their
+live dependency identities permit it. N12-N17 are root-serialized.
 N14 invalidates N12/N13 and affected N02/N04/N08/N09 package, discovery, and
 inventory evidence; rerun affected surfaces, then N12 B and N13 B.
 
@@ -205,14 +206,15 @@ fixtures, effects, forbidden surfaces, tools, contract, and context. N09 live
 proof is root-owned and must separately bind package, install, cache, app
 registry, new-session discovery, tool execution, and host invalidation.
 
-### N04-N07 dependency frontier
+### N07 dependency frontier after integrated N04-N06
 
 Scheduler `ready` means a lane may receive a source-work lease; it does not
 activate production tools. Only an `integrated` lane enters the production
-frontier. The four ready lanes start from one exact clean root and have no
-leased generated outputs; shared generated authority stays root-owned.
-Runtime registry loading rejects a ready lane whose graph dependencies are not
-integrated and binds this named frontier to exactly N04-N07. Each scope records
+frontier. N04-N06 are integrated at source ceilings; N07 is the sole ready lane
+and retains its exact root-issued source base without leased generated outputs.
+Shared generated authority stays root-owned. Runtime registry loading rejects a
+ready lane whose graph dependencies are not integrated and binds this named
+frontier to exactly N07 readiness after N04-N06 integration. Each scope records
 nonempty owned symbols, effects, and the complete root-only forbidden set;
 cross-scope path, symbol, and effect overlap fails closed before inventory or
 lease authority can be derived.
@@ -228,9 +230,9 @@ lease authority can be derived.
 the integrated N06 interface later. Nonexistent legacy scope roots are removed,
 and no lane scope owns Cargo, shared schemas, generated authority, public CLI,
 contract, registry, claim, or migration-registry paths.
-Root integrates accepted authority-bearing increments one at a time. N04 and
-N05 are integrated; N06 is the next integration gate while N07 may proceed at
-its dependency-valid source ceiling. N09 remains blocked until root atomically
+Root integrates accepted authority-bearing increments one at a time. N04-N06
+are integrated; N07 is the next integration gate at its dependency-valid source
+ceiling. N09 remains blocked until root atomically
 issues its managed-worktree lease and advances scheduler state.
 
 ## Worktree protocol after P0
