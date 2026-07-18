@@ -288,7 +288,11 @@ claim and representative product or release proof.
   `bc9354969b5fe47e539bdeccccec7918a2c0045b`: compile, namespace, standards,
   authored-file limits, and zero-write enforcement pass, including fail-closed
   namespace inventory. No P0 lease or receipt was manufactured after the fact.
-  N00 adoption is now the sole serial integration gate.
+  N00 adoption is accepted on exact clean root candidate `8f789de6a940b5a2b600d3021ac803b0b62ff341`
+  / tree `3abfb13a11e529a8af8e96770b2e2392c8658ef1`. The new epoch binds the
+  immutable contract bundle and graph, exact N00 source identity, scheduler
+  eligibility, lane states, and source ceilings. N01 is the sole serial gate;
+  N02-N11 remain blocked and require adopted-current reobservation.
 - HCT-FIXTURES execution/parity, runtime, installed journey, readiness,
   release, and completion claims remain withheld.
 - The calibrated review, observability, and Product Fitness doctrine is now
@@ -318,10 +322,11 @@ claim and representative product or release proof.
   authority is the blocked source-obligation row for the missing typed HCT-FIT
   and HCT-FIXTURES mapping; target capability and product claims remain
   withheld.
-- No implementation worktree launches until N00 atomically adopts the exact
-  contract/ref set and begins the new epoch; P0 is clean.
-- After N00, re-observe N02/N03 and select the smallest dependency-closed source
-  or live-product stream that moves the installed journey.
+- No implementation worktree launches while the root-only N01-N03 serial
+  authority chain is open; P0 and N00 are clean.
+- Re-observe N01 now, then N02/N03 in dependency order. After that boundary,
+  select the smallest dependency-closed source or live-product streams that
+  move the installed journey without overlapping authority.
 
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
