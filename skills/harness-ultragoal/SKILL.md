@@ -60,9 +60,10 @@ claim, receipt, or state authority.
 - When controllable, use the lowest sufficient model, reasoning effort, and
   orchestration route that can pass that check. Record requested or effective
   configuration only when the runtime exposes it.
-- Use no independent review for cheap reversible observation, one bounded
-  specialist for a material source freeze, and the milestone team only at a
-  protected cross-domain, product, release, or completion boundary.
+- Use no independent review for cheap reversible observation and one bounded
+  specialist for a material source or lane freeze. Use the milestone team at a
+  material or major root integration and at protected cross-domain, product,
+  release, or completion boundaries.
 - Keep focused checks and reproducible output ephemeral. Persist only evidence
   consumed by a current claim, cross-process handoff, irreproducible
   observation, or recovery need.

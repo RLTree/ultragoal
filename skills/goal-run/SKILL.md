@@ -69,10 +69,12 @@ correctness, product quality, or a required claim boundary.
    root.
 3. Give each implementation worker one run-scoped lease disjoint in paths,
    semantic symbols, generated outputs, fixtures, scratch roots, and effects.
-4. Freeze a material candidate, assign one risk-matched reviewer who did not
-   implement it, and attack the complete named invariant, including applicable
-   scope escape, stale identity, false passes, security, race, interruption,
-   and recovery. A clean exhaustive pass closes that review loop.
+4. At a material source or lane freeze, assign one risk-matched reviewer who did
+   not implement it and attack the complete named invariant, including
+   applicable scope escape, stale identity, false passes, security, race,
+   interruption, and recovery. A clean exhaustive pass closes that review loop.
+   Use the milestone team for a material or major root integration and at
+   protected cross-domain, product, release, or completion boundaries.
 5. Emit the existing `WorkerResult-v1` once after source acceptance. Workers
    may request root changes but never apply them or claim acceptance.
 6. Integrate accepted work immediately; issue a corrective lease for material

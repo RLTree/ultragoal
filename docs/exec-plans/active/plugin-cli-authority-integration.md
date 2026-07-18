@@ -80,9 +80,10 @@ standard-tier patch route, raising reasoning only for a named invariant. Cached
 checks run during repair. Builds, strict checks, and broad audits run only at the
 decision boundary they can support. Routine lane acceptance uses one
 risk-matched specialist for one exhaustive invariant pass. The repo-defined
-four-persona round is reserved for consequential cross-domain milestones and
-product, release, or completion signoff; until installed active-registry
-exposure is current, those milestone claims stay withheld.
+four-persona round is reserved for material or major root integration,
+consequential cross-domain milestones, and product, release, or completion
+signoff; until installed active-registry exposure is current, those milestone
+claims stay withheld.
 
 Each freeze collects one exhaustive meaningful issue set. Only authority or
 security unsafety, false-pass enablement, integration invalidity,

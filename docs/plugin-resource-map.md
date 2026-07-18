@@ -68,10 +68,11 @@ goal, context, boundary, output, or verification requirement. Never infer the
 effective configuration from prompt text.
 
 Spend review and proof where they can affect a decision. Routine observation
-needs no independent reviewer; a material source freeze gets one exhaustive
-risk-matched specialist; protected cross-domain, product, release, and
-completion boundaries get the milestone team. Reproducible checks and outputs
-stay ephemeral. Durable evidence exists only while a current claim,
+needs no independent reviewer; a material source or lane freeze gets one
+exhaustive risk-matched specialist; material or major root integration and
+protected cross-domain, product, release, and completion boundaries get the
+milestone team. Reproducible checks and outputs stay ephemeral. Durable evidence
+exists only while a current claim,
 cross-process handoff, irreproducible observation, audit, or recovery path
 consumes it.
 
