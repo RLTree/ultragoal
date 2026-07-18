@@ -123,7 +123,9 @@ fn forbidden_runtime_path(path: &str) -> bool {
         || path.ends_with("/.DS_Store")
         || path == ".git"
         || path.starts_with(".git/")
-        || path.split('/').any(|component| component == ".codex-worktree")
+        || path
+            .split('/')
+            .any(|component| component == ".codex-worktree")
         || path.starts_with("target/")
 }
 
@@ -134,8 +136,14 @@ mod tests {
         assert!(super::forbidden_runtime_path(".codex-worktree"));
         assert!(super::forbidden_runtime_path(".codex-worktree/env.sh"));
         assert!(super::forbidden_runtime_path(".codex-worktree/run-command"));
-        assert!(super::forbidden_runtime_path(".codex-worktree/nested/private"));
-        assert!(super::forbidden_runtime_path("nested/.codex-worktree/env.sh"));
-        assert!(!super::forbidden_runtime_path(".codex/environments/environment.toml"));
+        assert!(super::forbidden_runtime_path(
+            ".codex-worktree/nested/private"
+        ));
+        assert!(super::forbidden_runtime_path(
+            "nested/.codex-worktree/env.sh"
+        ));
+        assert!(!super::forbidden_runtime_path(
+            ".codex/environments/environment.toml"
+        ));
     }
 }

@@ -1,7 +1,7 @@
 use super::{
     label_patterns::{
-        adjacent_numbered_label, adjacent_tokens, generic_bucket_label,
-        source_name_violation_label, GOAL_WORK_PAIRS,
+        GOAL_WORK_PAIRS, adjacent_numbered_label, adjacent_tokens, generic_bucket_label,
+        source_name_violation_label,
     },
     semantic_tokens::semantic_tokens,
 };
