@@ -55,25 +55,26 @@ pub(crate) fn public_binary_serializes_concurrent_apply_contenders() {
         "--accept-plan",
         &plan_sha256,
     ];
-    let barrier = Arc::new(Barrier::new(3));
-    let (first, second) = std::thread::scope(|scope| {
-        let first_barrier = Arc::clone(&barrier);
-        let first_fixture = &fixture;
-        let first_args = &args;
-        let first = scope.spawn(move || {
-            first_barrier.wait();
-            first_fixture.command(first_args).output().unwrap()
-        });
-        let second_barrier = Arc::clone(&barrier);
-        let second_fixture = &fixture;
-        let second_args = &args;
-        let second = scope.spawn(move || {
-            second_barrier.wait();
-            second_fixture.command(second_args).output().unwrap()
-        });
-        barrier.wait();
-        (first.join().unwrap(), second.join().unwrap())
-    });
+    let gate = fixture.container.join("contender-gate.sh");
+    let ready = fixture.container.join("contender-ready");
+    let release = fixture.container.join("contender-release");
+    fs::create_dir(&ready).unwrap();
+    fs::write(
+        &gate,
+        "#!/bin/sh\n: \"${HUL_READY:?}\" \"${HUL_RELEASE:?}\"\ntouch \"$HUL_READY/$$\"\nwhile [ ! -f \"$HUL_RELEASE\" ]; do sleep 0.01; done\nexec \"$@\"\n",
+    )
+    .unwrap();
+    fs::set_permissions(&gate, fs::Permissions::from_mode(0o700)).unwrap();
+    let mut first = fixture.gated_command(&gate, &args);
+    first.env("HUL_READY", &ready).env("HUL_RELEASE", &release);
+    let mut second = fixture.gated_command(&gate, &args);
+    second.env("HUL_READY", &ready).env("HUL_RELEASE", &release);
+    let first = first.spawn().unwrap();
+    let second = second.spawn().unwrap();
+    wait_for_gate(&ready);
+    fs::write(&release, b"release\n").unwrap();
+    let first = first.wait_with_output().unwrap();
+    let second = second.wait_with_output().unwrap();
     let outcomes = [first, second]
         .into_iter()
         .map(authoritative_contender_outcome)
@@ -85,6 +86,16 @@ pub(crate) fn public_binary_serializes_concurrent_apply_contenders() {
     assert_eq!(fixture.verify_zero_write()["idempotent"], true);
     assert_eq!(pending_entries(&fixture.pending).len(), 1);
     assert!(pending_entries(&fixture.pending)[0].ends_with(".lock"));
+}
+
+fn wait_for_gate(ready: &Path) {
+    for _ in 0..100 {
+        if fs::read_dir(ready).unwrap().count() == 2 {
+            return;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(10));
+    }
+    panic!("both public apply contenders did not reach the start gate");
 }
 
 fn authoritative_contender_outcome(output: Output) -> String {

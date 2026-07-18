@@ -8,10 +8,7 @@ use std::os::unix::ffi::OsStrExt;
 use std::os::unix::fs::{symlink, MetadataExt, PermissionsExt};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output, Stdio};
-use std::sync::{
-    atomic::{AtomicU64, Ordering},
-    Arc, Barrier,
-};
+use std::sync::atomic::{AtomicU64, Ordering};
 
 #[path = "repository_fit_public_apply_cases/execution_behavior.rs"]
 mod execution_behavior;

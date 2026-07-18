@@ -74,7 +74,24 @@ impl Fixture {
     }
 
     pub(crate) fn command(&self, args: &[&str]) -> Command {
-        let mut command = Command::new(env!("CARGO_BIN_EXE_ultragoal"));
+        let mut command = self.configured_command(env!("CARGO_BIN_EXE_ultragoal"));
+        command.arg("--root").arg(&self.root).args(args);
+        command
+    }
+
+    pub(crate) fn gated_command(&self, gate: &Path, args: &[&str]) -> Command {
+        let mut command = self.configured_command("/bin/sh");
+        command
+            .arg(gate)
+            .arg(env!("CARGO_BIN_EXE_ultragoal"))
+            .arg("--root")
+            .arg(&self.root)
+            .args(args);
+        command
+    }
+
+    fn configured_command(&self, program: &str) -> Command {
+        let mut command = Command::new(program);
         command
             .env_clear()
             .env("HOME", &self.home)
@@ -88,10 +105,7 @@ impl Fixture {
             .env("GIT_TERMINAL_PROMPT", "0")
             .current_dir(&self.root)
             .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .arg("--root")
-            .arg(&self.root)
-            .args(args);
+            .stderr(Stdio::piped());
         command
     }
 
