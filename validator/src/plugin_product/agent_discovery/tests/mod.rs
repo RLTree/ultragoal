@@ -1,3 +1,5 @@
+#[path = "../../../../tests/plugin_agent_discovery_contract/adoption.rs"]
+mod adoption;
 #[path = "../../../../tests/plugin_agent_discovery_contract/authority_fixtures/mod.rs"]
 mod authority_fixtures;
 #[path = "../../../../tests/plugin_agent_discovery_contract/false_pass.rs"]

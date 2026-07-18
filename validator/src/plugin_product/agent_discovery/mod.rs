@@ -20,7 +20,8 @@ mod supported;
 mod tests;
 
 pub(crate) use local_authority::{
-    LocalAgentAuthorityObservation, LocalAgentAuthorityRequest, observe_local_authority,
+    AgentRepositoryAdoption, AgentRepositoryAdoptionRequest, LocalAgentAuthorityObservation,
+    LocalAgentAuthorityRequest, adopt_agent_repository, observe_local_authority,
 };
 
 #[cfg(all(test, unix))]

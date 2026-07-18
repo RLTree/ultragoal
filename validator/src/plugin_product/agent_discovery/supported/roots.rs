@@ -50,13 +50,15 @@ pub(super) struct SupportedRootSet {
 
 impl SupportedRootSet {
     pub(super) fn open(roots: &SupportedHostAgentRoots) -> Result<Self, AgentDiscoveryError> {
-        Ok(Self {
+        let roots = Self {
             package: PluginAuthorityRoot::open(&roots.package_root)?,
             installed: PluginAuthorityRoot::open(&roots.installed_root)?,
             cache: PluginAuthorityRoot::open(&roots.cache_root)?,
             global: GlobalAuthorityRoot::open(&roots.global_root)?,
             project: PluginAuthorityRoot::open(&roots.project_root)?,
-        })
+        };
+        roots.require_distinct_authority_roots()?;
+        Ok(roots)
     }
 
     pub(super) fn revalidate(&self) -> Result<(), AgentDiscoveryError> {
@@ -96,6 +98,21 @@ impl SupportedRootSet {
             AgentAuthorityLayer::Discovery => self.project.capture(),
         }
     }
+
+    fn require_distinct_authority_roots(&self) -> Result<(), AgentDiscoveryError> {
+        let paths = [
+            self.package.canonical_path(),
+            self.installed.canonical_path(),
+            self.cache.canonical_path(),
+            self.global.canonical_path(),
+            self.project.canonical_path(),
+        ];
+        let unique = paths.iter().collect::<BTreeSet<_>>();
+        if unique.len() != paths.len() {
+            return Err(conflict());
+        }
+        Ok(())
+    }
 }
 
 #[derive(Clone)]
@@ -134,6 +151,10 @@ impl PluginAuthorityRoot {
         })
         .expect("fixed plugin root tuple serializes")
         .sha256()
+    }
+
+    fn canonical_path(&self) -> &Path {
+        self.root.canonical_path()
     }
 
     fn capture(&self) -> Result<LayerFiles, AgentDiscoveryError> {
@@ -186,6 +207,10 @@ impl GlobalAuthorityRoot {
         })
         .expect("fixed global root tuple serializes")
         .sha256()
+    }
+
+    fn canonical_path(&self) -> &Path {
+        self.root.canonical_path()
     }
 
     fn capture(&self) -> Result<LayerFiles, AgentDiscoveryError> {
