@@ -69,10 +69,9 @@ pub(crate) fn fixture_catalog_names_the_exact_below_root_journey_matrix() {
 pub(crate) fn direct_journeys_use_the_production_mediator_without_minting_root_authority() {
     let adapter = source("validator/src/repository_fit/product_adapter/mod.rs");
     let tests = source("validator/src/repository_fit/product_adapter/tests/mod.rs");
-    let journeys =
-        source("validator/src/repository_fit/product_adapter/tests/live_journeys/mod.rs");
-    let protocol = source("validator/src/repository_fit/product_adapter/protocol/mod.rs");
-    let permit = source("validator/src/repository_fit/product_adapter/root_permit/mod.rs");
+    let journeys = rust_tree("validator/src/repository_fit/product_adapter/tests/live_journeys");
+    let protocol = rust_tree("validator/src/repository_fit/product_adapter/protocol");
+    let permit = rust_tree("validator/src/repository_fit/product_adapter/root_permit");
     let local = source("validator/src/repository_fit/local/effects/mod.rs");
     assert!(tests.contains("mod live_journeys;"));
     assert!(journeys.contains("apply_with_root_permit"));

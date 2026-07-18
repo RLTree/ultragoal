@@ -168,6 +168,11 @@ pub(crate) fn effect_scope_success_construction_and_diagnostics_fail_closed() {
     assert!(public.contains("if invocation.effect != EffectClass::Read && !public_fit_apply"));
     assert!(public.contains("SuccessorCommand::Fit(FitAction::Apply) => fit::apply"));
     assert!(!fit.contains("apply_with_root_permit"));
+    assert!(fit.contains("authority::execute(context, prepared, home)"));
+    assert!(fit.contains("prepare_recovery_intent(context, &prepared)"));
+    assert!(fit.contains("execute_prepared_apply("));
+    assert!(fit.contains("recover_prepared_apply("));
+    assert!(fit.contains("state.persist_pending(&envelope)?"));
 }
 
 #[test]

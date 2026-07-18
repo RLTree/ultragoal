@@ -129,6 +129,28 @@ pub(crate) fn source(relative: &str) -> String {
     fs::read_to_string(repository_root().join(relative)).unwrap()
 }
 
+pub(crate) fn rust_tree(relative: &str) -> String {
+    fn collect(path: &Path, files: &mut Vec<PathBuf>) {
+        for entry in fs::read_dir(path).unwrap() {
+            let path = entry.unwrap().path();
+            if path.is_dir() {
+                collect(&path, files);
+            } else if path.extension().is_some_and(|extension| extension == "rs") {
+                files.push(path);
+            }
+        }
+    }
+
+    let mut files = Vec::new();
+    collect(&repository_root().join(relative), &mut files);
+    files.sort();
+    files
+        .into_iter()
+        .map(|path| fs::read_to_string(path).unwrap())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
 pub(crate) fn catalog() -> Catalog {
     serde_json::from_str(&source("fixtures/repository-fit-live-journeys/cases.json")).unwrap()
 }
