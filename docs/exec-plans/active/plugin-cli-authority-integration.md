@@ -310,8 +310,14 @@ claim and representative product or release proof.
   closure is accepted at `9a2141e3f5ccf5d7488947a5c0156794b4376066` /
   tree `9cc386a9b5dafb55259fe4c60439e326d120802a`: two byte-identical live
   catalogs have zero closure blockers and 40 explicitly withheld later-node
-  obligations. N03 is now the sole serial reobservation gate; N04-N11 remain
-  blocked by dependency order.
+  obligations. N03 typed CLI/state source closure is accepted at
+  `46ad7794a7e597d93d0afc3465f287d6a7161885` / tree
+  `7b8c0647422db58bd5216b6444724ad882cb09d5`. The focused state boundary passes
+  9/9 and the accepted review correction confines registry-derived fixture
+  inputs without expanding the frozen single-owner claim. N04-N07 are now the
+  dependency frontier, but lease issuance remains blocked until the
+  semantic-standards debt checkpoint and lane restructuring reconcile their
+  production tool rows. Installed and product claims remain withheld.
 - HCT-FIXTURES execution/parity, runtime, installed journey, readiness,
   release, and completion claims remain withheld.
 - The calibrated review, observability, and Product Fitness doctrine is now
@@ -341,11 +347,11 @@ claim and representative product or release proof.
   authority is the blocked source-obligation row for the missing typed HCT-FIT
   and HCT-FIXTURES mapping; target capability and product claims remain
   withheld.
-- No implementation worktree launches while the root-only N02-N03 serial
-  authority chain is open; P0 and N00 are clean.
-- Re-observe N02 then N03 in dependency order. After that boundary,
-  select the smallest dependency-closed source or live-product streams that
-  move the installed journey without overlapping authority.
+- The root-only N02-N03 serial authority chain is closed at a source ceiling.
+  Before launching the N04-N07 frontier, reconcile accumulated namespace and
+  agent-standards debt and restructure the live graph into disjoint product
+  lanes with nonoverlapping paths, authority, generated outputs, fixtures, and
+  effects.
 
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
