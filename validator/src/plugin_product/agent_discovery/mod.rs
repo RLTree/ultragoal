@@ -37,17 +37,12 @@ pub use host::{
     HostAgentAuthorityTransactionError, ReadOnlyEffectEnforcement, ReadOnlyEffectRequest,
 };
 #[cfg(test)]
-pub use model::{
-    AgentAuthorityLayer, AgentLayerObservation, AgentRouteEligibility, CanonicalAgentObservation,
-    HostFileKind,
-};
+pub use model::AgentAuthorityLayer;
 #[cfg(test)]
 pub use session::AgentDiscoverySession;
 #[cfg(test)]
 pub use source::SourceAgentCatalog;
 #[cfg(test)]
 pub use supported::{
-    SupportedAgentAuthorityFinding, SupportedAgentAuthorityFindingKind,
-    SupportedAgentAuthorityObservation, SupportedHostAgentAuthorityReader,
-    SupportedHostAgentAuthorityReport, SupportedHostAgentRoots,
+    SupportedAgentAuthorityFindingKind, SupportedHostAgentAuthorityReader, SupportedHostAgentRoots,
 };
