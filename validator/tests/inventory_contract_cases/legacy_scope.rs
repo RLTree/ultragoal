@@ -127,8 +127,6 @@ fn active_authority_negative_controls_remain_flagged() {
             "validator/src/claim_semantics/lane/policy.rs",
             "pub fn lane_policy() {}\n",
         ),
-        ("LANE_REGISTRY.json", "{}\n"),
-        ("templates/LANE_REGISTRY.json", "{}\n"),
         (
             "validator/src/audit/final_packet/mod.rs",
             "pub fn audit() {}\n",
@@ -153,8 +151,6 @@ fn active_authority_negative_controls_remain_flagged() {
         ("validator/src/command/mod.rs", "command"),
         ("validator/src/command/tests.rs", "command"),
         ("validator/src/claim_semantics/lane/policy.rs", "lane"),
-        ("LANE_REGISTRY.json", "lane"),
-        ("templates/LANE_REGISTRY.json", "lane"),
         ("validator/src/audit/final_packet/mod.rs", "finalizer"),
         ("validator/src/cli/final_packet/mod.rs", "finalizer"),
         ("plugin-manifest-draft.json", "manifest-projection"),
@@ -164,6 +160,8 @@ fn active_authority_negative_controls_remain_flagged() {
     ] {
         assert_kind(&catalog, path, kind);
     }
+    assert_absent(&catalog, "LANE_REGISTRY.json");
+    assert_absent(&catalog, "templates/LANE_REGISTRY.json");
 }
 
 #[test]
