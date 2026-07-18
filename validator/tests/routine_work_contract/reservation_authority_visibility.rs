@@ -1,4 +1,5 @@
 use super::issuer_api_compilation;
+use super::owned_compile_scratch::OwnedCompileScratch;
 use syn::{Item, Visibility};
 
 const TRANSACTION: &str =
@@ -59,17 +60,15 @@ fn child_and_raw_record_visibility_mutants_fail_closed() {
 }
 #[test]
 fn public_boundary_refuses_raw_custody_authority() {
-    let scratch =
-        std::env::temp_dir().join(format!("routine-custody-probe-{}", std::process::id()));
-    std::fs::create_dir(&scratch).unwrap();
-    let output = issuer_api_compilation::check(&scratch, "production_raw_custody_consumer");
+    let mut scratch = OwnedCompileScratch::claim("routine-custody-probe");
+    let output = issuer_api_compilation::check(scratch.path(), "production_raw_custody_consumer");
     assert!(
         !output.status.success(),
         "raw custody authority became public"
     );
     let diagnostic = String::from_utf8_lossy(&output.stderr);
     assert!(diagnostic.contains("E0603"), "{diagnostic}");
-    std::fs::remove_dir_all(scratch).unwrap();
+    scratch.teardown_after_assertions();
 }
 fn validate(
     transaction: &str,

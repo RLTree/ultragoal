@@ -152,9 +152,11 @@ fn library_artifact(crate_name: &str) -> PathBuf {
         })
         .collect::<Vec<_>>();
     artifacts.sort();
-    artifacts
-        .pop()
-        .unwrap_or_else(|| panic!("compiled library artifact missing: {crate_name}"))
+    match artifacts.as_slice() {
+        [artifact] => artifact.clone(),
+        [] => panic!("compiled library artifact missing: {crate_name}"),
+        _ => panic!("compiled library artifact is ambiguous: {crate_name}"),
+    }
 }
 
 fn configured_root(name: &str) -> PathBuf {
