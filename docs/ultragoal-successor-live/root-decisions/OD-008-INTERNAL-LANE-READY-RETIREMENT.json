@@ -1,0 +1,58 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "OD-008-INTERNAL-LANE-READY-RETIREMENT",
+  "node_id": "N14-RETIREMENT",
+  "root_decision": "authorize_scoped_non_destructive_retirement",
+  "review_mode": "root_owned_scoped_decision",
+  "approval_source": "explicit_user_approval",
+  "approval_candidate": {
+    "head": "ed81360cb38bda3ec9b1006d096b24da8c5659e9",
+    "tree": "94166adddd74d970cdc8e7c755d8a2796fd18e0a"
+  },
+  "approved_scope": [
+    "validator/src/claim_semantics/lane/actor/freshness.rs",
+    "validator/src/claim_semantics/lane/actor/mod.rs",
+    "validator/src/claim_semantics/lane/dependency.rs",
+    "validator/src/claim_semantics/lane/isolation.rs",
+    "validator/src/claim_semantics/lane/mod.rs",
+    "validator/src/claim_semantics/lane/paths.rs",
+    "validator/src/claim_semantics/lane/policy.rs",
+    "validator/src/claim_semantics/lane/root/mod.rs",
+    "validator/src/claim_semantics/lane/root/scope.rs",
+    "validator/src/claim_semantics/lane/runtime/mod.rs",
+    "validator/src/claim_semantics/lane/runtime/state.rs",
+    "validator/src/claim_semantics/lane/status.rs",
+    "validator/src/claim_semantics/ready/mod.rs",
+    "validator/src/claim_semantics/ready/receipt.rs"
+  ],
+  "approved_effects": [
+    "No compatibility window is required for this private and unreachable cohort.",
+    "Detach the cohort from production only after exact compiled source, target, reader-writer, and archive-transition evidence passes.",
+    "Preserve the detached source bytes as non-authoritative migration context."
+  ],
+  "retired_legacy_mechanisms": [
+    "14-day actor heartbeat and ISO timestamp ordering",
+    "fixed macro-lane sizing",
+    "absolute cache, profile, and port collision schema",
+    "generic Git-status and cleanup receipts",
+    "ready-for-merge and validator-run receipt schemas"
+  ],
+  "preserved_successor_invariants": [
+    "typed dependency closure",
+    "lease and scope confinement",
+    "canonical repository-relative paths",
+    "explicit typed lifecycle state",
+    "current-source and worktree binding",
+    "explicit cleanup, interruption, recovery, and reuse",
+    "root-owned integration observations and claim decisions",
+    "WorkerResultV1 custody"
+  ],
+  "prohibited_scope": [
+    "No physical deletion or move is authorized.",
+    "This does not resolve global OD-008 for other legacy routes.",
+    "This does not promote HCT-CLAIMS, package, install, discovery, runtime, journey, readiness, release, or completion claims."
+  ],
+  "od009_status": "still_blocked",
+  "claim_ceiling": "Scoped source migration and retirement only; all product, readiness, release, and completion claims remain withheld.",
+  "no_claim_statement": "This decision authorizes a bounded non-destructive retirement transition. It is not implementation, integration, runtime, or completion proof."
+}
