@@ -88,7 +88,11 @@ impl HostPath {
     }
 
     pub(crate) fn is_valid(&self) -> bool {
-        self.0.to_str().is_some_and(|value| {
+        Self::is_valid_path(&self.0)
+    }
+
+    pub(crate) fn is_valid_path(path: &Path) -> bool {
+        path.to_str().is_some_and(|value| {
             !value.is_empty()
                 && value.len() <= MAX_HOST_PATH_BYTES
                 && !value

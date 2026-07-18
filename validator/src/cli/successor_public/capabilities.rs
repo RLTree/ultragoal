@@ -1,5 +1,6 @@
 use super::*;
 use crate::agent_roles::CANONICAL_AGENT_ROLES;
+use crate::cli::successor::command_contract::HostPath;
 use crate::cli::successor::{OptionName, ParsedValue};
 use crate::plugin_product::agent_discovery::{
     LocalAgentAuthorityObservation, LocalAgentAuthorityRequest, observe_local_authority,
@@ -75,7 +76,7 @@ fn authority_projection(
     let Some(package_root) = package_root else {
         return authority_status("unavailable", "package-root-unavailable", binding, None);
     };
-    let Some(home) = home else {
+    let Some(home) = home.filter(|path| HostPath::is_valid_path(path)) else {
         return authority_status("unavailable", "home-unavailable", binding, None);
     };
     let request = LocalAgentAuthorityRequest {
