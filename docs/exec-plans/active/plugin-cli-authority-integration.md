@@ -64,6 +64,20 @@ zero-write controls across the three retained entrypoints. This advances only
 the source claim: rollback, pending recovery, package, install, discovery,
 runtime, Product Fitness, readiness, release, and completion remain withheld.
 
+N06 has a narrower accepted public-source increment. The exact lane source
+candidate `3c9a8a4ec3851f5a4035a4a56c917da82cd1650d` / tree
+`97cd6e8c537fa8cc720c35d394c70165eb059cb6` and the equivalent root integration
+pass the real-parent public routine contract 43/43 under warnings-deny. A single
+Terra/high review accepted only that boundary. The three broad private-control
+test roots still fail strict compilation with 95 warnings-as-errors caused by
+isolated production-module inclusion. Two bounded topology replacements failed
+at the same mechanism, so further local topology patching is stopped. N06 stays
+scheduler-ready and all full-N06, downstream, installed, runtime, coverage,
+readiness, release, and completion claims remain withheld. The next trigger is
+a root-owned strict-test-boundary decision at the accumulated standards-debt
+checkpoint; owner is `OWN-ULTRA-ROOT`, and the evidence surface is the exact
+private mutation, race, rollback, recovery, and catalog suites.
+
 ## Durable binding and contract lineage
 
 - Active host goal: `019f5f39-507b-78a2-a96a-0b566a5a2126`.
