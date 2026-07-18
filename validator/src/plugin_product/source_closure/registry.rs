@@ -1,13 +1,11 @@
 use super::model::{BuildClosurePolicy, BuildInputKind, ClosureError, RequiredBuildInput};
 
-mod host_lifecycle;
-
 /// Exact source-local closure before root extends it from fresh dep-info.
 pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError> {
     use BuildInputKind::{
         CargoLock, CargoManifest, DynamicInput, RuntimeAuthority, RustSource, VerifierInput,
     };
-    let mut rows = vec![
+    let rows = [
         ("Cargo.lock", CargoLock),
         ("Cargo.toml", CargoManifest),
         ("validator/Cargo.toml", CargoManifest),
@@ -46,23 +44,7 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             RustSource,
         ),
         (
-            "validator/src/plugin_product/lifecycle/model/mod.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/lifecycle/model/plan_authorization_seal_issue.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/lifecycle/model/recovery_authorization_seal_issue.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/lifecycle/model/sha256_prefix.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/lifecycle/model/validate_digest.rs",
+            "validator/src/plugin_product/lifecycle/model.rs",
             RustSource,
         ),
         (
@@ -73,9 +55,6 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             "validator/src/plugin_product/lifecycle/plan/transitions.rs",
             RustSource,
         ),
-    ];
-    rows.extend(host_lifecycle::source_rows());
-    rows.extend([
         (
             "validator/src/plugin_product/product_fitness/mod.rs",
             RustSource,
@@ -114,10 +93,6 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
         ),
         (
             "validator/src/plugin_product/source_closure/registry.rs",
-            RustSource,
-        ),
-        (
-            "validator/src/plugin_product/source_closure/registry/host_lifecycle.rs",
             RustSource,
         ),
         (
@@ -210,23 +185,25 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             "validator/src/audit/product/fitness/substitutions.rs",
             VerifierInput,
         ),
-        (
-            "validator/src/cli/successor/catalog/mod.rs",
-            RuntimeAuthority,
-        ),
-        ("validator/src/distribution/cache/mod.rs", RustSource),
-        ("validator/src/distribution/install/mod.rs", RustSource),
+        ("validator/src/cli/successor/catalog.rs", RuntimeAuthority),
+        ("validator/src/distribution/cache.rs", RustSource),
+        ("validator/src/distribution/install.rs", RustSource),
         ("validator/src/distribution/mod.rs", RustSource),
         ("validator/src/distribution/model.rs", RustSource),
         ("validator/src/distribution/package/snapshot.rs", RustSource),
-        (
-            "validator/src/distribution/runtime_probe/mod.rs",
-            RustSource,
-        ),
-        ("validator/src/distribution/verify/mod.rs", RustSource),
+        ("validator/src/distribution/runtime_probe.rs", RustSource),
+        ("validator/src/distribution/verify.rs", RustSource),
         ("validator/src/orchestration/model.rs", VerifierInput),
-        ("validator/src/orchestration/worker/mod.rs", VerifierInput),
-    ]);
+        ("validator/src/orchestration/worker.rs", VerifierInput),
+        (
+            "validator/src/review/round/product/fitness/criteria.rs",
+            VerifierInput,
+        ),
+        (
+            "validator/src/review/round/product/fitness/mod.rs",
+            VerifierInput,
+        ),
+    ];
     BuildClosurePolicy::new(
         rows.into_iter()
             .map(|(path, kind)| RequiredBuildInput {

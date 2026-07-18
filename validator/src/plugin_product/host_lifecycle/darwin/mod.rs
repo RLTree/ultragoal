@@ -20,6 +20,7 @@ mod transaction_plan;
 #[path = "surface_state/tests.rs"]
 mod surface_state_tests;
 
+#[cfg(test)]
 pub use diagnosis::DarwinHostDiagnosis;
 pub use diagnosis::DarwinHostSnapshot;
 pub use error::{DarwinHostError, DarwinHostErrorId};
@@ -27,9 +28,11 @@ pub use operation::DarwinHostOperation;
 pub use report::{DarwinHostTransactionDisposition, DarwinHostTransactionReport};
 pub use surface_state::{DarwinSurfaceObservation, DarwinSurfaceStatus};
 pub use surfaces::DarwinHostSurface;
+#[cfg(test)]
 pub use transaction::DarwinHostTransactionAdapter;
 #[cfg(test)]
 pub use transaction::{DarwinTestControl, DarwinTestPoint};
+#[cfg(test)]
 pub use transaction_plan::DarwinHostTransactionPlan;
 
 pub(super) use surface_state::Sha256Digest;

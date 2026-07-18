@@ -6,7 +6,7 @@
 //! observations without executing a live-host command.
 
 mod capability_gate;
-pub(crate) mod darwin;
+mod darwin;
 mod effect_request;
 mod error;
 mod issuance;
