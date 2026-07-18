@@ -16,8 +16,6 @@ pub use confinement::ConfinementPolicy;
 #[cfg(test)]
 pub use confinement::NetworkIsolation;
 pub use error::FixtureScheduleError;
-#[cfg(test)]
-pub use lease::ResourceBinding;
 #[cfg(all(test, unix))]
 pub(crate) use lease::set_before_capture_hook;
 pub use lease::{IsolationLease, LeaseDisposition};

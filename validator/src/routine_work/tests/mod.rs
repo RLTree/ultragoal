@@ -10,8 +10,6 @@ pub(crate) mod routine_work {
     pub(crate) use super::super::*;
 }
 
-#[path = "../../../tests/routine_work_contract/issuer/api_compilation.rs"]
-mod issuer_api_compilation;
 #[path = "owned/compile/claim.rs"]
 mod owned_compile_claim;
 #[path = "owned/compile/directory.rs"]

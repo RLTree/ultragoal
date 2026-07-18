@@ -73,26 +73,6 @@ impl RoutineEffectRequest {
     pub(crate) fn begin_mediation(&self) -> Result<(), RoutineError> {
         self.seal.begin_mediation()
     }
-
-    #[cfg(test)]
-    pub(crate) fn test_mark_transitioned(&self) -> Result<(), RoutineError> {
-        self.seal.begin_mediation()
-    }
-
-    #[cfg(test)]
-    pub(crate) fn test_duplicate(&self) -> Self {
-        Self {
-            request_id: self.request_id.clone(),
-            protocol_id: self.protocol_id.clone(),
-            binding: self.binding.clone(),
-            graph_id: self.graph_id.clone(),
-            snapshot_id: self.snapshot_id.clone(),
-            plan_id: self.plan_id.clone(),
-            result_scope: self.result_scope.clone(),
-            intents: self.intents.clone(),
-            seal: Arc::clone(&self.seal),
-        }
-    }
 }
 
 #[must_use = "a mediation batch must be split and reconciled once"]

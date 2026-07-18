@@ -38,7 +38,4 @@ impl FixtureRun {
     pub fn is_active(&self) -> bool {
         self.lease.disposition() == &LeaseDisposition::Active
     }
-    pub fn expected(&self) -> &ExpectedOutcome {
-        &self.fixture.expected
-    }
 }

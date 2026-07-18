@@ -80,6 +80,6 @@ pub(crate) use runtime_adapter::{
 pub(crate) use authority::set_test_live_authority_hook;
 #[cfg(test)]
 pub(crate) use runtime_adapter::{
-    set_test_output_capture_hook, set_test_read_source_capture_hook, test_last_spawn_group_absent,
-    validate_output_confinement_after, validate_read_confinement_after_bind,
+    set_test_output_capture_hook, test_last_spawn_group_absent, validate_output_confinement_after,
+    validate_read_confinement_after_bind,
 };

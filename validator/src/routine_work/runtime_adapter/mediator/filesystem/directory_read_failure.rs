@@ -32,30 +32,14 @@ impl Drop for DirectoryStream {
 pub(crate) type CaptureHook = Box<dyn FnOnce() + Send + 'static>;
 
 #[cfg(test)]
-pub(crate) type ReadSourceCaptureHook = Box<dyn FnOnce() + Send + 'static>;
-
-#[cfg(test)]
 pub(crate) fn capture_hook() -> &'static Mutex<Option<CaptureHook>> {
     static HOOK: OnceLock<Mutex<Option<CaptureHook>>> = OnceLock::new();
     HOOK.get_or_init(|| Mutex::new(None))
 }
 
 #[cfg(test)]
-pub(crate) fn read_source_capture_hook() -> &'static Mutex<Option<ReadSourceCaptureHook>> {
-    static HOOK: OnceLock<Mutex<Option<ReadSourceCaptureHook>>> = OnceLock::new();
-    HOOK.get_or_init(|| Mutex::new(None))
-}
-
-#[cfg(test)]
 pub(crate) fn set_test_output_capture_hook(hook: impl FnOnce() + Send + 'static) {
     *capture_hook()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(Box::new(hook));
-}
-
-#[cfg(test)]
-pub(crate) fn set_test_read_source_capture_hook(hook: impl FnOnce() + Send + 'static) {
-    *read_source_capture_hook()
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(Box::new(hook));
 }
@@ -71,22 +55,8 @@ pub(crate) fn run_test_capture_hook() {
     }
 }
 
-#[cfg(test)]
-pub(crate) fn run_test_read_source_capture_hook() {
-    if let Some(hook) = read_source_capture_hook()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .take()
-    {
-        hook();
-    }
-}
-
 #[cfg(not(test))]
 pub(crate) fn run_test_capture_hook() {}
-
-#[cfg(not(test))]
-pub(crate) fn run_test_read_source_capture_hook() {}
 
 pub(crate) fn digest_reader(reader: &mut File, limit: u64) -> Result<String, RoutineError> {
     let mut hasher = Sha256::new();

@@ -71,7 +71,6 @@ pub(crate) fn open_read_source(
         return Err(mediator_error("mediator-read-source-object-unsafe"));
     }
     let sha256 = digest_reader(&mut file, before.length)?;
-    run_test_read_source_capture_hook();
     let after = ObjectIdentity::from(
         &file
             .metadata()

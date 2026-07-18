@@ -22,14 +22,6 @@ pub(crate) fn set_test_process_failure(
 }
 
 #[cfg(test)]
-pub(crate) fn append_test_process_failure(
-    point: ProcessFailurePoint,
-    hook: impl FnOnce() + Send + 'static,
-) {
-    PROCESS_FAILURE_HOOKS.with(|slot| slot.borrow_mut().push((point, Box::new(hook))));
-}
-
-#[cfg(test)]
 pub(crate) fn maybe_inject_process_failure(
     point: ProcessFailurePoint,
     cause: &'static str,
