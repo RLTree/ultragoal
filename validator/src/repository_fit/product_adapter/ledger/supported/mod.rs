@@ -30,10 +30,8 @@ mod record_authentication;
 mod replay_detection;
 #[path = "reservation/mod.rs"]
 mod reservation;
-#[path = "snapshot_decoding.rs"]
-mod snapshot_decoding;
-#[path = "snapshot_transaction.rs"]
-mod snapshot_transaction;
+#[path = "snapshot/mod.rs"]
+mod snapshot;
 #[path = "store_create_exclusive.rs"]
 mod store_create_exclusive;
 #[path = "store_open.rs"]
@@ -45,6 +43,6 @@ pub(crate) use object_identity::*;
 pub(crate) use record_authentication::*;
 pub(crate) use replay_detection::*;
 pub(crate) use reservation::*;
-pub(crate) use snapshot_decoding::*;
+pub(crate) use snapshot::*;
 pub(crate) use store_create_exclusive::*;
 pub(crate) use transition_validation::*;
