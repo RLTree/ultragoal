@@ -233,7 +233,7 @@
       "validator/src/bin/ultragoal.rs",
       "validator/src/claim/language/mod.rs",
       "validator/src/claim_semantics/claim/proof/mod.rs",
-      "validator/src/claim_semantics/coverage/digests.rs",
+      "validator/src/audit/coverage/scope/digests.rs",
       "validator/src/claim_semantics/coverage/receipt/authority/mod.rs",
       "validator/src/claim_semantics/plugin_policy/mod.rs",
       "validator/src/cli/archive.rs",

@@ -4202,8 +4202,7 @@
       "validator/src/claim_semantics/claim/mod.rs",
       "validator/src/claim_semantics/claim/proof/mod.rs",
       "validator/src/claim_semantics/claim/proof/text.rs",
-      "validator/src/claim_semantics/coverage/digests.rs",
-      "validator/src/claim_semantics/coverage/mod.rs",
+      "validator/src/audit/coverage/scope/digests.rs",
       "validator/src/claim_semantics/coverage/policy.rs",
       "validator/src/claim_semantics/coverage/ready/join.rs",
       "validator/src/claim_semantics/coverage/ready/mod.rs",
@@ -20150,7 +20149,7 @@
           "path": "validator/src/audit/coverage/mod.rs"
         },
         {
-          "digest": "sha256:f2b99b5e2f0075f1b0bdda0d4bcc9b616ee4f84a568d0085f97d74223fcc882b",
+          "digest": "sha256:4bc1b10f8f8d225bbfc1f667ed52763073814b50c4cdbef84bc6d104a06a74e3",
           "path": "validator/src/audit/coverage/scope/mod.rs"
         },
         {
@@ -20494,12 +20493,8 @@
           "path": "validator/src/claim_semantics/claim/proof/text.rs"
         },
         {
-          "digest": "sha256:470d2107ee603f630318c56b358c5bd5cfd2cd972fe47f3205bb3b879ee8ea09",
-          "path": "validator/src/claim_semantics/coverage/digests.rs"
-        },
-        {
-          "digest": "sha256:ef4b6b7d428b9c794b5935c580d100efde1699d46c91da6172bec374a1fc1b0f",
-          "path": "validator/src/claim_semantics/coverage/mod.rs"
+          "digest": "sha256:8f7b57ad0dae3f586b233f145dce4a1088a2e655eba03bd07ceb2483924bc27f",
+          "path": "validator/src/audit/coverage/scope/digests.rs"
         },
         {
           "digest": "sha256:e4177c5f486c5c0a569e28774e670a5070003abbaa85fef790af1d76fabcb107",
@@ -20586,7 +20581,7 @@
           "path": "validator/src/claim_semantics/lane/status.rs"
         },
         {
-          "digest": "sha256:4148c68e699dd9af59545f2c53c495e0fb490ca9da06bf4b48cb53585e10ba7a",
+          "digest": "sha256:87b6dc14fbb7257c03029daad2d4e08df59d9167746079bf3484dfe8bfb11abd",
           "path": "validator/src/claim_semantics/mod.rs"
         },
         {
@@ -21114,7 +21109,7 @@
           "path": "validator/src/self_tests/audit/source_audit.rs"
         },
         {
-          "digest": "sha256:cc09350de56147db111d97f7bc008d3996d3357897f31815c8423e42436c75c0",
+          "digest": "sha256:65e17a7f25a32c79c4773fe2b007e7da1db70c03f8dafe874c66c0977991a451",
           "path": "validator/src/self_tests/boundaries/artifact_refs.rs"
         },
         {
@@ -21134,7 +21129,7 @@
           "path": "validator/src/self_tests/boundaries/workspace_fixtures.rs"
         },
         {
-          "digest": "sha256:918904001c2ffafde0ed48a935bbcb06ee84ad2c82af0dc2b34dc1946cfe0f0d",
+          "digest": "sha256:ae79dfebf1316c5fcd36ab0bd670ebe89b0951c6cfc18b714c8981a5d96ec600",
           "path": "validator/src/self_tests/boundaries/typed_authority_edges.rs"
         },
         {
@@ -21426,7 +21421,7 @@
           "path": "validator/src/self_tests/coverage/rootless_digest_guards.rs"
         },
         {
-          "digest": "sha256:3ba063fa609e76bba5e2133f3d22d07491c2dcf5909c2fef51adf832b0164665",
+          "digest": "sha256:eb552a9efeca02a5979ccdf0e331080e9f10ab4ab75089cc302374a44b8fac49",
           "path": "validator/src/self_tests/coverage/scope/authority.rs"
         },
         {

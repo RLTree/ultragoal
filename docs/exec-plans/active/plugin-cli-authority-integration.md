@@ -226,7 +226,14 @@ claim and representative product or release proof.
   into production or deleting it before N14 would weaken the adopted contract.
   Root therefore withholds warning-free production, N14 retirement, release,
   and completion claims until the predecessor/successor matrix executes and the
-  owner authorizes the exact 14-file deletion. The safe audit cleanup separately
+  owner authorizes the exact 14-file deletion. The surviving coverage-digest
+  authority is now owned by `audit/coverage/scope/digests.rs`, outside the
+  retirement graph; all Rust callers, both coverage manifests, the package
+  manifest, and the five valid package fixtures were rebound to that path. The
+  production diagnostic frontier remains exactly the same 64 errors, with no
+  new source diagnostic. Focused coverage test execution is withheld because
+  the library-test target currently fails compilation on 319 pre-existing
+  retired-module/import errors. The safe audit cleanup separately
   retired the test-only clock formatter and redundant final-packet pass wrapper.
   The latest bounded cleanup removed four definition-only schema
   adapters and unreachable scheduler variants/projections while preserving the
