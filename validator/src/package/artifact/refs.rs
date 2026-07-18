@@ -25,21 +25,6 @@ impl ArtifactRef {
         })
     }
 
-    pub(crate) fn from_command_object(item: &Value, label: &str) -> Result<Self, String> {
-        let path = item
-            .get("artifact_path")
-            .and_then(Value::as_str)
-            .ok_or_else(|| format!("{label} artifact ref missing artifact_path"))?;
-        let digest = item
-            .get("artifact_digest")
-            .and_then(Value::as_str)
-            .ok_or_else(|| format!("{label} artifact ref missing artifact_digest"))?;
-        Ok(Self {
-            path: path.to_string(),
-            digest: digest.to_string(),
-        })
-    }
-
     pub(crate) fn path(&self) -> &str {
         &self.path
     }
@@ -85,10 +70,6 @@ pub fn validate_path_digest(root: &Path, path: &str, got: &str, label: &str) -> 
 
 pub fn validate_object(root: &Path, item: &Value, label: &str) -> Result<(), String> {
     ArtifactRef::from_object(item, label)?.validate(root, label)
-}
-
-pub fn validate_command_artifact(root: &Path, item: &Value, label: &str) -> Result<(), String> {
-    ArtifactRef::from_command_object(item, label)?.validate(root, label)
 }
 
 fn placeholder_path(path: &str) -> bool {
