@@ -7,29 +7,13 @@ use std::sync::Arc;
 
 pub(crate) struct Results {
     pub(crate) failures: Vec<String>,
-    pub(crate) scheduler_metrics: Vec<crate::scheduler::Metrics>,
 }
 
 pub(crate) fn mapped(root: &Path, store: &SchemaStore, scheduler: SchedulerConfig) -> Results {
     let mut failures = BTreeMap::from([("schema-valid".to_string(), Vec::new())]);
-    let scheduler_metrics = validate_mapped(root, store, scheduler, &mut failures);
+    validate_mapped(root, store, scheduler, &mut failures);
     Results {
         failures: failures.remove("schema-valid").unwrap_or_default(),
-        scheduler_metrics,
-    }
-}
-
-pub(crate) fn mapped_paths(
-    root: &Path,
-    store: &SchemaStore,
-    scheduler: SchedulerConfig,
-    paths: &[String],
-) -> Results {
-    let mut failures = BTreeMap::from([("schema-valid".to_string(), Vec::new())]);
-    let scheduler_metrics = validate_mapped_paths(root, store, scheduler, paths, &mut failures);
-    Results {
-        failures: failures.remove("schema-valid").unwrap_or_default(),
-        scheduler_metrics,
     }
 }
 
@@ -38,33 +22,9 @@ fn validate_mapped(
     store: &SchemaStore,
     scheduler: SchedulerConfig,
     failures: &mut BTreeMap<String, Vec<String>>,
-) -> Vec<crate::scheduler::Metrics> {
+) {
     let mut mapped = super::map::base();
     add_mapped_globs(root, &mut mapped);
-    scheduled_checks(root, store, scheduler, mapped, failures)
-}
-
-fn validate_mapped_paths(
-    root: &Path,
-    store: &SchemaStore,
-    scheduler: SchedulerConfig,
-    paths: &[String],
-    failures: &mut BTreeMap<String, Vec<String>>,
-) -> Vec<crate::scheduler::Metrics> {
-    if paths.is_empty() {
-        return Vec::new();
-    }
-    let mut mapped = super::map::base();
-    add_mapped_globs(root, &mut mapped);
-    let mapped = paths
-        .iter()
-        .filter_map(|path| {
-            mapped
-                .get(path)
-                .copied()
-                .map(|schema| (path.clone(), schema))
-        })
-        .collect();
     scheduled_checks(root, store, scheduler, mapped, failures)
 }
 
@@ -74,7 +34,7 @@ fn scheduled_checks(
     scheduler: SchedulerConfig,
     mapped: BTreeMap<String, &'static str>,
     failures: &mut BTreeMap<String, Vec<String>>,
-) -> Vec<crate::scheduler::Metrics> {
+) {
     let root = Arc::new(root.to_path_buf());
     let store = Arc::new(store.clone());
     let tasks = mapped
@@ -97,7 +57,6 @@ fn scheduled_checks(
             .or_default()
             .push(failure);
     }
-    vec![scheduled.metrics]
 }
 
 fn add_mapped_globs(root: &Path, mapped: &mut BTreeMap<String, &'static str>) {
