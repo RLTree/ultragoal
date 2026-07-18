@@ -35,28 +35,29 @@ fn supported_host_wiring_is_root_owned_and_preserves_each_proof_surface() {
     let request: serde_json::Value =
         serde_json::from_str(&read("fixtures/plugin-product/root-wiring-request.json"))
             .unwrap_or_else(|error| panic!("root wiring request invalid: {error}"));
-    let rows = request["root_owned_wiring_requests"]
-        .as_array()
-        .unwrap_or_else(|| panic!("root-owned wiring requests missing"));
-    assert_eq!(rows.len(), 3);
     assert_eq!(
-        rows[0]["path"], "validator/src/plugin_product/mod.rs",
-        "only root may compile the internal host lifecycle module"
-    );
-    assert!(
-        rows[0]["required_guard"]
-            .as_str()
-            .is_some_and(|value| value.contains("externally public"))
-    );
-    assert_eq!(rows[1]["path"], "validator/src/cli/successor_public/mod.rs");
-    assert!(
-        rows[1]["requested_change"]
-            .as_str()
-            .is_some_and(|value| value.contains("root-issued distribution effect permit"))
-    );
-    assert!(
-        rows[2]["required_guard"]
-            .as_str()
-            .is_some_and(|value| value.contains("same-surface proof"))
+        request["root_owned_wiring_requests"],
+        serde_json::json!([
+            {
+                "id": "plugin-product-host-lifecycle-module",
+                "path": "validator/src/plugin_product/mod.rs",
+                "preimage_sha256": "sha256:b12632b6f0a1363adda7ae2d87d568cb24c202c6a29af57bc120e25af97e98b8",
+                "requested_change": "Declare `pub(crate) mod host_lifecycle;` so the candidate-closed supported-host transaction and its crate-visible adapter binding are compiled only for in-crate root adapters.",
+                "required_guard": "Do not make the module or adapter externally public. Preserve the existing typed package, confined-root, lifecycle, capability, and claim boundaries."
+            },
+            {
+                "id": "successor-supported-host-dispatch",
+                "path": "validator/src/cli/successor_public/mod.rs",
+                "preimage_sha256": "sha256:29bf29fc044e7eba2f48d6c3cecfe8fb7baad68b404cf7e334744c9a62006795",
+                "requested_change": "Add one typed successor adapter only after it consumes a root-issued distribution effect permit and the exact in-crate host lifecycle binding; read-only diagnosis must remain zero-write and all effectful requests must fail closed when host capability is absent.",
+                "required_guard": "No direct CLI construction of DarwinHostTransactionAdapter, no package/install/runtime claim effect, and no fallback from unsupported host behavior to source-only success."
+            },
+            {
+                "id": "package-install-registry-reconciliation",
+                "paths": ["plugin-manifest-draft.json", "validator/src/distribution/", "validator/src/cli/successor/catalog/mod.rs"],
+                "requested_change": "After the module and dispatcher are integrated, recompute package membership and package bytes, then bind install, cache, marketplace, app-registry, Plugins UI, discovery, and runtime observations separately to that exact candidate.",
+                "required_guard": "This request authorizes no package, install, registry, discovery, or runtime claim. Each surface requires fresh same-surface proof."
+            }
+        ])
     );
 }

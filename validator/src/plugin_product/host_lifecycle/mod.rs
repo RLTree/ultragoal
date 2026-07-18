@@ -6,7 +6,7 @@
 //! observations without executing a live-host command.
 
 mod capability_gate;
-mod darwin;
+pub(crate) mod darwin;
 mod effect_request;
 mod error;
 mod issuance;
@@ -18,7 +18,8 @@ mod verify;
 
 #[cfg(test)]
 pub(crate) use capability_gate::{capability_states_supported, required_host_capabilities};
-pub(crate) use darwin::{
+#[cfg(test)]
+pub use darwin::{
     DarwinHostDiagnosis, DarwinHostError, DarwinHostErrorId, DarwinHostOperation,
     DarwinHostSnapshot, DarwinHostSurface, DarwinHostTransactionAdapter,
     DarwinHostTransactionDisposition, DarwinHostTransactionPlan, DarwinHostTransactionReport,
@@ -26,17 +27,23 @@ pub(crate) use darwin::{
 };
 #[cfg(test)]
 pub use darwin::{DarwinTestControl, DarwinTestPoint};
-pub(crate) use effect_request::{
+#[cfg(test)]
+pub use effect_request::{
     ExternalHostEffectRequest, HostScopeAuthority, PreparedExternalHostEffect,
 };
-pub(crate) use error::{HostLifecycleError, HostLifecycleErrorId};
-pub(crate) use model::{
+#[cfg(test)]
+pub use error::{HostLifecycleError, HostLifecycleErrorId};
+#[cfg(test)]
+pub use model::{
     HostLayer, HostLayerReport, HostLayerVerdict, HostLifecyclePhase, HostLifecycleReport,
     PluginsUiObservation,
 };
-pub(crate) use observation::{
+#[cfg(test)]
+pub use observation::{
     HostObservationFrame, HostObservationTransactionRequest, HostSurfaceReader,
     HostSurfaceTransaction, HostSurfaceTransactionError, observe_plugins_ui,
 };
-pub(crate) use session::{HostLifecycleBindRequest, HostLifecycleSession};
-pub(crate) use verify::verify_host_identity_chain;
+#[cfg(test)]
+pub use session::{HostLifecycleBindRequest, HostLifecycleSession};
+#[cfg(test)]
+pub use verify::verify_host_identity_chain;

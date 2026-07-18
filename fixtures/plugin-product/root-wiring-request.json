@@ -257,7 +257,7 @@
       "id": "plugin-product-host-lifecycle-module",
       "path": "validator/src/plugin_product/mod.rs",
       "preimage_sha256": "sha256:b12632b6f0a1363adda7ae2d87d568cb24c202c6a29af57bc120e25af97e98b8",
-      "requested_change": "Declare `pub(crate) mod host_lifecycle;` so the candidate-closed supported-host transaction is compiled only for in-crate root adapters.",
+      "requested_change": "Declare `pub(crate) mod host_lifecycle;` so the candidate-closed supported-host transaction and its crate-visible adapter binding are compiled only for in-crate root adapters.",
       "required_guard": "Do not make the module or adapter externally public. Preserve the existing typed package, confined-root, lifecycle, capability, and claim boundaries."
     },
     {
@@ -272,7 +272,7 @@
       "paths": [
         "plugin-manifest-draft.json",
         "validator/src/distribution/",
-        "validator/src/cli/successor/catalog.rs"
+        "validator/src/cli/successor/catalog/mod.rs"
       ],
       "requested_change": "After the module and dispatcher are integrated, recompute package membership and package bytes, then bind install, cache, marketplace, app-registry, Plugins UI, discovery, and runtime observations separately to that exact candidate.",
       "required_guard": "This request authorizes no package, install, registry, discovery, or runtime claim. Each surface requires fresh same-surface proof."
