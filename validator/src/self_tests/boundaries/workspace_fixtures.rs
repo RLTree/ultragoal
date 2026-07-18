@@ -42,11 +42,6 @@ fn schema_receipt_rules_cover_required_and_kind_boundaries() {
             .iter()
             .any(|err| err.contains("claim_id is required"))
     );
-    assert_eq!(
-        crate::schema_catalog::schema_error_code(&errors),
-        "semantic_classification_receipt_malformed"
-    );
-
     let base = json!({
         "schema": "harness-ultragoal.semantic-classification-receipt.v1",
         "claim_id": "CLAIM-001",

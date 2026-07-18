@@ -1,4 +1,3 @@
-use serde_json::{Value, json};
 use std::collections::VecDeque;
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
@@ -11,42 +10,13 @@ const MAX_EXPLICIT_JOBS: usize = 256;
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum TaskClass {
     PureReadParallel,
-    IsolatedTempWriteParallel,
-    ExternalLiveBoundedParallel,
-    SharedAuthorityWriteSerial,
-    DestructiveOrMutatingSerial,
 }
 
 impl TaskClass {
-    const ALL: [Self; 5] = [
-        Self::PureReadParallel,
-        Self::IsolatedTempWriteParallel,
-        Self::ExternalLiveBoundedParallel,
-        Self::SharedAuthorityWriteSerial,
-        Self::DestructiveOrMutatingSerial,
-    ];
-
     pub(crate) fn id(self) -> &'static str {
         match self {
             Self::PureReadParallel => "pure_read_parallel",
-            Self::IsolatedTempWriteParallel => "isolated_temp_write_parallel",
-            Self::ExternalLiveBoundedParallel => "external_live_bounded_parallel",
-            Self::SharedAuthorityWriteSerial => "shared_authority_write_serial",
-            Self::DestructiveOrMutatingSerial => "destructive_or_mutating_serial",
         }
-    }
-
-    fn allows_parallel(self) -> bool {
-        matches!(
-            self,
-            Self::PureReadParallel
-                | Self::IsolatedTempWriteParallel
-                | Self::ExternalLiveBoundedParallel
-        )
-    }
-
-    fn is_known_id(id: &str) -> bool {
-        Self::ALL.iter().any(|class| class.id() == id)
     }
 }
 
@@ -73,10 +43,6 @@ impl SchedulerConfig {
     pub(crate) fn jobs(self) -> usize {
         self.jobs
     }
-
-    pub(crate) fn default_jobs() -> usize {
-        default_worker_count()
-    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -93,28 +59,6 @@ pub(crate) struct Metrics {
     pub(crate) resource_measurement_status: &'static str,
     pub(crate) deterministic_ordering: bool,
     pub(crate) artifacts_are_isolated: bool,
-}
-
-impl Metrics {
-    pub(crate) fn to_value(&self, candidate_digest: &str, claim_impact: &str) -> Value {
-        debug_assert!(TaskClass::is_known_id(self.task_class));
-        json!({
-            "task_class": self.task_class,
-            "worker_count": self.worker_count,
-            "task_count": self.task_count,
-            "queue_depth": self.queue_depth,
-            "wall_ms": self.wall_ms,
-            "cpu_ms": self.cpu_ms,
-            "memory_bytes": self.memory_bytes,
-            "io_bytes": self.io_bytes,
-            "cache_mode": self.cache_mode,
-            "resource_measurement_status": self.resource_measurement_status,
-            "candidate_digest": candidate_digest,
-            "deterministic_ordering": self.deterministic_ordering,
-            "shared_validation_artifact_writes_allowed": !self.artifacts_are_isolated,
-            "claim_impact": claim_impact
-        })
-    }
 }
 
 pub(crate) struct Scheduled<T> {
@@ -198,8 +142,8 @@ fn run_parallel<T: Send + 'static>(
     std::mem::take(&mut *results)
 }
 
-fn worker_count(config: SchedulerConfig, task_class: TaskClass, task_count: usize) -> usize {
-    if task_count == 0 || !task_class.allows_parallel() {
+fn worker_count(config: SchedulerConfig, _task_class: TaskClass, task_count: usize) -> usize {
+    if task_count == 0 {
         return usize::from(task_count > 0);
     }
     config.jobs().min(task_count).max(1)

@@ -36,52 +36,9 @@ fn scheduler_returns_deterministic_order_after_parallel_join() {
 }
 
 #[test]
-fn scheduler_keeps_authority_writes_serial() {
-    let config = SchedulerConfig::from_jobs(Some(8)).unwrap();
-    let scheduled = run_ordered(
-        config,
-        TaskClass::SharedAuthorityWriteSerial,
-        vec![
-            Box::new(|| 1usize),
-            Box::new(|| 2usize),
-            Box::new(|| 3usize),
-        ],
-    );
-    assert_eq!(scheduled.values, vec![1, 2, 3]);
-    assert_eq!(scheduled.metrics.worker_count, 1);
-    assert_eq!(
-        scheduled.metrics.task_class,
-        TaskClass::SharedAuthorityWriteSerial.id()
-    );
-}
-
-#[test]
 fn scheduler_default_jobs_uses_available_parallelism_minus_one_or_one() {
     let expected = std::thread::available_parallelism()
         .map(|count| count.get().saturating_sub(1).max(1))
         .unwrap_or(1);
-    assert_eq!(SchedulerConfig::default_jobs(), expected);
     assert_eq!(SchedulerConfig::from_jobs(None).unwrap().jobs(), expected);
-}
-
-#[test]
-fn scheduler_task_class_ids_cover_parallel_and_serial_contract() {
-    let classes = [
-        TaskClass::PureReadParallel,
-        TaskClass::IsolatedTempWriteParallel,
-        TaskClass::ExternalLiveBoundedParallel,
-        TaskClass::SharedAuthorityWriteSerial,
-        TaskClass::DestructiveOrMutatingSerial,
-    ]
-    .map(TaskClass::id);
-    assert_eq!(
-        classes,
-        [
-            "pure_read_parallel",
-            "isolated_temp_write_parallel",
-            "external_live_bounded_parallel",
-            "shared_authority_write_serial",
-            "destructive_or_mutating_serial"
-        ]
-    );
 }

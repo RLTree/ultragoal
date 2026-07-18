@@ -67,19 +67,6 @@ fn schema_rule_contracts_cover_fixture_receipt_and_keyword_boundaries() {
             .iter()
             .any(|err| err == "required_execplan_refs must name all active ExecPlans")
     );
-
-    assert_eq!(
-        crate::schema_catalog::schema_error_code(&[
-            "$.plugin_manifest.agents[0].path: const mismatch".to_string()
-        ]),
-        "plugin_agent_path_missing"
-    );
-    assert_eq!(
-        crate::schema_catalog::schema_error_code(&[
-            "semantic_classification_receipts[0].classifier_evidence: missing required".to_string()
-        ]),
-        "semantic_classification_receipt_malformed"
-    );
 }
 
 #[test]

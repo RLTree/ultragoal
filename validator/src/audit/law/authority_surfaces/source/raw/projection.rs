@@ -62,7 +62,6 @@ fn projection_value_text(text: &str) -> bool {
         || text.contains("telemetry::query_result")
         || text.contains("PathBuf::from(format!(")
         || text.contains("CommandTelemetry")
-        || text.contains("metric.to_value(")
         || text.contains("FnOnce() -> Value")
         || text.contains("diagnostic::failure_value")
         || text.contains("receipt_from_control_graph")
