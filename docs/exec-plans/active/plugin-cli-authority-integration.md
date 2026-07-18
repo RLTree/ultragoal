@@ -209,11 +209,16 @@ claim and representative product or release proof.
   public test dispatch. Follow-up commits `549770c96` and `7799d5973` retired
   disconnected validator-receipt writers, audit artifact aggregation, and
   authority-inventory projections. The affected production-library check now
-  reports 263 deny-warning errors, down from 664, with no unresolved reference
-  to the retired claim/review or audit-writer graphs. Of these, 194 belong to
-  the accepted N09 discovery kernel awaiting production adoption and 59 belong
-  to migration-blocked lane authority; neither is deleted to manufacture a
-  clean compile. The latest bounded cleanup removed four definition-only schema
+  reports 68 deny-warning errors, down from 664, with no unresolved reference
+  to the retired claim/review or audit-writer graphs. N09's 194-diagnostic
+  discovery partition is now genuinely production-reachable through
+  `inspect capabilities --package-root <host-path>`; exact package and `HOME`
+  roots are validated before discovery, and invalid roots prove zero authority
+  I/O. This raises only a source-local public-observation ceiling: host
+  discovery, runtime exposure, package/install/cache identity, and claims remain
+  withheld. Of the remaining 68 errors, 59 belong to migration-blocked legacy
+  lane/ready-receipt authority and nine are transitive audit, JSON, finalizer,
+  or artifact helpers under root disposition. The latest bounded cleanup removed four definition-only schema
   adapters and unreachable scheduler variants/projections while preserving the
   live schema store and deterministic pure-read scheduler. The next item-level
   cleanup removed an unused command-artifact dialect and an unread skill-link

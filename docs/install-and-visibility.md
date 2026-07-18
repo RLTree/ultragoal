@@ -116,6 +116,19 @@ an operator canary echoed by a failure blocks reuse of the result.
 Package, marketplace, install, cache, app registry, Plugins UI, discovery, and
 runtime are not synonyms. A successful lower layer does not raise a higher claim.
 
+The source-local public observation route is:
+
+```text
+ultragoal --root <project-root> --json inspect capabilities --package-root <package-root>
+```
+
+`--root` and `--package-root` must be distinct absolute host paths, and `HOME`
+must be an absolute host path before installed, cache, or global authority is
+read. Missing roots report `unavailable`; aliased or unsafe authority reports
+`blocked`. A verified six-role projection is still only a local source/package/
+project observation: it deliberately reports host discovery and runtime
+exposure as unavailable and cannot raise a claim.
+
 ## Lifecycle coordinator boundary
 
 The source-local lifecycle coordinator covers eight operations with typed
