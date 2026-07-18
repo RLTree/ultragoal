@@ -64,3 +64,7 @@ impl BoundStoreIdentity {
         &self.parent
     }
 }
+
+#[cfg(test)]
+#[path = "identity_tests/mod.rs"]
+mod tests;
