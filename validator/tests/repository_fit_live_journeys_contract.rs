@@ -1,21 +1,22 @@
-#![cfg(unix)]
+#![cfg(target_vendor = "apple")]
 
-use serde::Deserialize;
+use serde_json::Value;
 use sha2::{Digest, Sha256};
-use std::collections::BTreeSet;
-use std::fs;
+use std::fs::{self, OpenOptions};
+use std::io::Write;
 use std::os::unix::ffi::OsStrExt;
-use std::os::unix::fs::MetadataExt;
+use std::os::unix::fs::{symlink, MetadataExt, PermissionsExt};
 use std::path::{Path, PathBuf};
-use std::process::{Command, Output};
+use std::process::{Command, Output, Stdio};
 use std::sync::atomic::{AtomicU64, Ordering};
 
-#[path = "repository_fit_live_journey_cases/command_repository.rs"]
-mod command_repository;
-#[path = "repository_fit_live_journey_cases/journey_catalog.rs"]
-mod journey_catalog;
-#[path = "repository_fit_live_journey_cases/scenario_fixture.rs"]
-mod scenario_fixture;
+#[path = "repository_fit_public_apply_cases/execution_fixture.rs"]
+mod execution_fixture;
+#[path = "repository_fit_public_apply_cases/filesystem_snapshot.rs"]
+mod filesystem_snapshot;
+#[path = "repository_fit_public_apply_cases/public_apply_refusals.rs"]
+mod public_apply_refusals;
 
-pub(crate) use command_repository::*;
-pub(crate) use scenario_fixture::*;
+pub(crate) use execution_fixture::*;
+pub(crate) use filesystem_snapshot::*;
+pub(crate) use public_apply_refusals::*;
