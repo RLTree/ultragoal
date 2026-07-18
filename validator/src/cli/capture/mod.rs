@@ -15,10 +15,6 @@ mod descriptor;
 mod descriptor_race_control;
 mod environment;
 mod filesystem;
-// The fixture adapter is retained only for its direct contract tests. The
-// public capture product remains catalog-bound and has no scheduler authority.
-#[cfg(test)]
-mod fixture;
 mod identity_codec;
 mod inputs;
 mod output;
