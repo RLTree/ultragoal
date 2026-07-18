@@ -1,7 +1,7 @@
 {
   "schema": "harness-ultragoal.verification-backlog.v1",
   "manifest_digest": "sha256:e431199ddd6a376222191df9e7f000b8e6f7a8e77ec4bbab7a53c66a6287aeea",
-  "registry_preimage_digest": "sha256:e431199ddd6a376222191df9e7f000b8e6f7a8e77ec4bbab7a53c66a6287aeea",
+  "registry_preimage_digest": "sha256:f7483dbbac01b4760345117ffadd539a5cf604cb4b959e2a9a9bf84ff90fef6f",
   "audit_cadence": [
     {"audit":"lane_freeze","trigger":"clean lane source freeze before handoff","owner":"lane owner","candidate_identity":"clean current HEAD/tree derived from LANE_REGISTRY.json protected base","evidence_surface":["focused behavior","negative controls","race or recovery controls","owned source laws"],"claims_withheld":["integration","installed","runtime","readiness","release","completion"]},
     {"audit":"root_integration","trigger":"one accepted authority-bearing increment lands on root","owner":"OWN-ULTRA-ROOT","candidate_identity":"clean current HEAD/tree derived from LANE_REGISTRY.json protected base","evidence_surface":["affected strict compilation","cross-lane behavior","namespace","generated authority","targeted coverage"],"claims_withheld":["installed","runtime","product success","release","completion"]},
