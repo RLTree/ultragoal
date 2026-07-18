@@ -133,7 +133,7 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         include_bytes!("../integrity.rs"),
         "adopted registry integrity gate"
     ),
-    registry_source!("frontier.rs", "adopted dependency frontier"),
+    registry_source!("frontier/mod.rs", "adopted dependency frontier"),
     registry_source!("load.rs", "frontier-bound registry construction"),
     registry_source!("mod.rs", "registry load and guard export"),
     registry_source!("semantic.rs", "active API row construction"),

@@ -25,7 +25,7 @@ const SOURCES: &[&str] = &[
     "validator/src/inventory/registry/command_activation/exact_source_manifest.rs",
     "validator/src/inventory/registry/data.rs",
     "validator/src/inventory/registry/integrity.rs",
-    "validator/src/inventory/registry/frontier.rs",
+    "validator/src/inventory/registry/frontier/mod.rs",
     "validator/src/inventory/registry/load.rs",
     "validator/src/inventory/registry/mod.rs",
     "validator/src/inventory/registry/semantic.rs",
