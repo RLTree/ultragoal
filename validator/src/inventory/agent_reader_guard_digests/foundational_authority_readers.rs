@@ -6,6 +6,16 @@ pub(crate) const FOUNDATIONAL_AUTHORITY_READERS: &[ReaderSpec] = &[
     ),
     reader!("validator/src/agent_roles.rs", "../agent_roles.rs", false),
     reader!(
+        "validator/src/audit/namespace/law/plugin_interfaces.rs",
+        "../audit/namespace/law/plugin_interfaces.rs",
+        true
+    ),
+    reader!(
+        "validator/src/audit/source_governance/scope/roots.rs",
+        "../audit/source_governance/scope/roots.rs",
+        false
+    ),
+    reader!(
         "validator/src/audit/contract.rs",
         "../audit/contract.rs",
         false
@@ -28,6 +38,36 @@ pub(crate) const FOUNDATIONAL_AUTHORITY_READERS: &[ReaderSpec] = &[
     reader!(
         "validator/src/inventory/components.rs",
         "components.rs",
+        false
+    ),
+    reader!(
+        "validator/src/cli/successor_public/capabilities.rs",
+        "../cli/successor_public/capabilities.rs",
+        false
+    ),
+    reader!(
+        "validator/src/cli/successor_public/repository_fixture.rs",
+        "../cli/successor_public/repository_fixture.rs",
+        false
+    ),
+    reader!(
+        "validator/src/distribution/package/product/packaged_entries.rs",
+        "../distribution/package/product/packaged_entries.rs",
+        false
+    ),
+    reader!(
+        "validator/src/inventory/agent_reader_guard_digests/foundational_authority_readers.rs",
+        "foundational_authority_readers.rs",
+        false
+    ),
+    reader!(
+        "validator/src/inventory/plugin_manifest_hooks/max_timeout_seconds.rs",
+        "plugin_manifest_hooks/max_timeout_seconds.rs",
+        false
+    ),
+    reader!(
+        "validator/src/orchestration/artifact/max_artifact_bytes.rs",
+        "../orchestration/artifact/max_artifact_bytes.rs",
         false
     ),
     reader!(

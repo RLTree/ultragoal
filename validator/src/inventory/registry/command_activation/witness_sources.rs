@@ -114,6 +114,16 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "exact activation guard"
     ),
     source!(
+        "validator/src/inventory/registry/command_activation/guard.rs",
+        include_bytes!("guard.rs"),
+        "frontier-aware activation decision"
+    ),
+    source!(
+        "validator/src/inventory/registry/command_activation/exact_source_manifest.rs",
+        include_bytes!("exact_source_manifest.rs"),
+        "activation source and row verifier"
+    ),
+    source!(
         "validator/src/inventory/registry/data.rs",
         include_bytes!("../data.rs"),
         "registry identifier and row storage"
@@ -123,16 +133,10 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         include_bytes!("../integrity.rs"),
         "adopted registry integrity gate"
     ),
-    source!(
-        "validator/src/inventory/registry/mod.rs",
-        include_bytes!("../mod.rs"),
-        "registry load and guard export"
-    ),
-    source!(
-        "validator/src/inventory/registry/semantic.rs",
-        include_bytes!("../semantic.rs"),
-        "active API row construction"
-    ),
+    registry_source!("frontier.rs", "adopted dependency frontier"),
+    registry_source!("load.rs", "frontier-bound registry construction"),
+    registry_source!("mod.rs", "registry load and guard export"),
+    registry_source!("semantic.rs", "active API row construction"),
     source!(
         "validator/src/inventory/registry/sources.rs",
         include_bytes!("../sources.rs"),

@@ -20,6 +20,16 @@ macro_rules! source {
     };
 }
 
+macro_rules! registry_source {
+    ($file:literal, $responsibility:literal) => {
+        WitnessSource {
+            relative: concat!("validator/src/inventory/registry/", $file),
+            embedded: include_bytes!(concat!("../", $file)),
+            responsibility: $responsibility,
+        }
+    };
+}
+
 include!("witness_sources.rs");
 
 include!("exact_source_manifest.rs");

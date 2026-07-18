@@ -16,8 +16,10 @@ fn merge_one(
         incoming.active_status,
         ActiveStatus::Required | ActiveStatus::Missing
     );
-    if existing_required ^ incoming_required {
-        let (expected, mut actual) = if existing_required {
+    let existing_semantic = existing.relative_path.starts_with("@semantic/");
+    let incoming_semantic = incoming.relative_path.starts_with("@semantic/");
+    if existing_required ^ incoming_required || existing_semantic ^ incoming_semantic {
+        let (expected, mut actual) = if existing_semantic || existing_required {
             (existing, incoming)
         } else {
             (incoming, existing)

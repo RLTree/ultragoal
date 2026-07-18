@@ -55,7 +55,12 @@ pub(super) fn path_match(rel: &Path) -> Option<LegacyMatch> {
             | "validator/src/claim_semantics/ready/receipt.rs"
     ) {
         found("finalizer", "path:retired-ready-authority")
-    } else if file == "LANE_REGISTRY.json" || component(rel, "lane") {
+    } else if matches!(
+        text.as_ref(),
+        "LANE_REGISTRY.json" | "templates/LANE_REGISTRY.json"
+    ) {
+        None
+    } else if component(rel, "lane") {
         found("lane", "path:lane-authority")
     } else if component(rel, "gate") || lower.contains("gate_registry") {
         found("gate", "path:gate-authority")

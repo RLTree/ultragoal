@@ -62,5 +62,20 @@
       "authority": {"binding": false},
       "status": "run_scoped_evidence_only"
     }
+  ],
+  "proposal_contexts": [
+    {
+      "context_id": "predecessor-plugin-proposal-report-2026-07-02",
+      "path": "REPORT.md",
+      "sha256": "7638fbe3ac770524c5e8ef6e8ecbb0083de35c4c488d29d28a3861cec4d79a82",
+      "authority": {
+        "binding": false
+      },
+      "active_product_replaced": true,
+      "replacement_contract_id": "harness-ultragoal-successor-contract-v2",
+      "status": "replaced_historical_context",
+      "preserve": true,
+      "physical_deletion_authorized": false
+    }
   ]
 }

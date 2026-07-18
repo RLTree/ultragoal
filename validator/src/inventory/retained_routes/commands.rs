@@ -2,7 +2,7 @@ use super::model::{PS_CLI, RouteSpec, spec};
 
 const KIND: &str = "legacy-command-authority";
 
-pub(super) const ROUTES: [RouteSpec; 6] = [
+pub(super) const ROUTES: [RouteSpec; 7] = [
     spec(
         "command-argument-parser-authority-to-ps-cli",
         "LEGACY-COMMAND:validator/src/argument_parser/authority.rs",
@@ -17,6 +17,14 @@ pub(super) const ROUTES: [RouteSpec; 6] = [
         KIND,
         "validator/src/argument_parser/help_request.rs",
         "74c10369674766de18369c919da85927109a6daefee7c392a9967dbed2c91726",
+        &PS_CLI,
+    ),
+    spec(
+        "command-argument-parser-public-arguments-to-ps-cli",
+        "LEGACY-COMMAND:validator/src/argument_parser/public_arguments.rs",
+        KIND,
+        "validator/src/argument_parser/public_arguments.rs",
+        "752a1eb49654e17d1feed73495251ac258956c8be97dc41e84b6c09bc81c7ee6",
         &PS_CLI,
     ),
     spec(

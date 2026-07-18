@@ -13,6 +13,7 @@ pub(super) struct SemanticRegistryLoad<'a> {
     pub root: &'a Path,
     pub product: &'a Value,
     pub required_apis: BTreeMap<String, BTreeSet<String>>,
+    pub active_tools: BTreeSet<String>,
     pub entries: &'a mut Vec<InventoryEntry>,
     pub counts: &'a mut BTreeMap<String, usize>,
     pub findings: &'a mut Vec<InventoryFinding>,
@@ -24,6 +25,7 @@ pub(super) fn load(request: SemanticRegistryLoad<'_>) -> Result<(), InventoryErr
         root,
         product,
         required_apis,
+        active_tools,
         entries,
         counts,
         findings,
@@ -107,13 +109,22 @@ pub(super) fn load(request: SemanticRegistryLoad<'_>) -> Result<(), InventoryErr
     counts.insert("research_sources".to_owned(), research_count);
     let required_api_count = required_apis.len();
     let required_api_names = required_apis.keys().cloned().collect::<BTreeSet<_>>();
+    let active_api_names = required_apis
+        .iter()
+        .filter(|(_, tools)| tools.iter().any(|tool| active_tools.contains(tool)))
+        .map(|(api, _)| api.clone())
+        .collect::<BTreeSet<_>>();
     for (api, tools) in required_apis {
-        entries.push(required_entry(
+        let mut entry = required_entry(
             format!("API:{api}"),
             "source-symbol-implementation",
             format!("@semantic/{api}"),
             tools.into_iter().collect(),
-        ));
+        );
+        if !active_api_names.contains(&api) {
+            entry.active_status = ActiveStatus::Definition;
+        }
+        entries.push(entry);
     }
     for api in crate::api_witness::implemented_public_apis() {
         if !required_api_names.contains(*api) {
@@ -129,7 +140,11 @@ pub(super) fn load(request: SemanticRegistryLoad<'_>) -> Result<(), InventoryErr
             digest_sha256: sha256_hex(api.as_bytes()),
             unix_mode: None,
             authority_state: AuthorityState::Canonical,
-            active_status: ActiveStatus::Active,
+            active_status: if active_api_names.contains(*api) {
+                ActiveStatus::Active
+            } else {
+                ActiveStatus::Definition
+            },
             generator: Some("HCT-INVENTORY:compiled-api-witness".to_owned()),
             input_provenance: vec![
                 "validator/src/api_witness.rs".to_owned(),

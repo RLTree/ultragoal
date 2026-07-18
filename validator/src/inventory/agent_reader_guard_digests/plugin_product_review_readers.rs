@@ -8,6 +8,16 @@ pub(crate) const PLUGIN_PRODUCT_REVIEW_READERS: &[ReaderSpec] = &[
         false
     ),
     reader!(
+        "validator/src/plugin_product/agent_discovery/host/capture.rs",
+        "../plugin_product/agent_discovery/host/capture.rs",
+        false
+    ),
+    reader!(
+        "validator/src/plugin_product/agent_discovery/local_authority.rs",
+        "../plugin_product/agent_discovery/local_authority.rs",
+        false
+    ),
+    reader!(
         "validator/src/plugin_product/agent_discovery/model.rs",
         "../plugin_product/agent_discovery/model.rs",
         false
@@ -15,6 +25,36 @@ pub(crate) const PLUGIN_PRODUCT_REVIEW_READERS: &[ReaderSpec] = &[
     reader!(
         "validator/src/plugin_product/agent_discovery/source/mod.rs",
         "../plugin_product/agent_discovery/source/mod.rs",
+        false
+    ),
+    reader!(
+        "validator/src/plugin_product/agent_discovery/source/catalog_identity_codec/mod.rs",
+        "../plugin_product/agent_discovery/source/catalog_identity_codec/mod.rs",
+        false
+    ),
+    reader!(
+        "validator/src/plugin_product/agent_discovery/source/revalidation.rs",
+        "../plugin_product/agent_discovery/source/revalidation.rs",
+        false
+    ),
+    reader!(
+        "validator/src/plugin_product/agent_discovery/supported/catalog_codec/mod.rs",
+        "../plugin_product/agent_discovery/supported/catalog_codec/mod.rs",
+        false
+    ),
+    reader!(
+        "validator/src/plugin_product/agent_discovery/supported/report/recording.rs",
+        "../plugin_product/agent_discovery/supported/report/recording.rs",
+        false
+    ),
+    reader!(
+        "validator/src/plugin_product/agent_discovery/supported/root_identity_codec/mod.rs",
+        "../plugin_product/agent_discovery/supported/root_identity_codec/mod.rs",
+        false
+    ),
+    reader!(
+        "validator/src/plugin_product/agent_discovery/supported/roots.rs",
+        "../plugin_product/agent_discovery/supported/roots.rs",
         false
     ),
 ];

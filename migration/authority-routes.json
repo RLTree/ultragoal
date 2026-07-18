@@ -23,21 +23,311 @@
       }
     },
     {
-      "route_id": "legacy-agents-to-current-discovery",
+      "route_id": "agent-contract-claim-falsifier-to-claim-falsifier",
       "match": {
-        "kind": "legacy-agent-authority"
+        "stable_id": "LEGACY-AGENT:agents/contract-claim-falsifier.md"
       },
-      "canonical_target": "PS-AGENTS",
+      "canonical_target": "AGENT:claim-falsifier",
       "intended_disposition": "non-authoritative",
       "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
-        "proof_refs": []
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "agents/contract-claim-falsifier.md",
+          ".codex/agents/claim-falsifier.toml",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
+      }
+    },
+    {
+      "route_id": "agent-harness-contract-claim-falsifier-to-claim-falsifier",
+      "match": {
+        "stable_id": "LEGACY-AGENT:custom-agents/harness-contract-claim-falsifier.toml"
+      },
+      "canonical_target": "AGENT:claim-falsifier",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "custom-agents/harness-contract-claim-falsifier.toml",
+          ".codex/agents/claim-falsifier.toml",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
+      }
+    },
+    {
+      "route_id": "agent-orchestration-recovery-falsifier-to-orchestration-recovery-reviewer",
+      "match": {
+        "stable_id": "LEGACY-AGENT:agents/orchestration-recovery-falsifier.md"
+      },
+      "canonical_target": "AGENT:orchestration-recovery-reviewer",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "agents/orchestration-recovery-falsifier.md",
+          ".codex/agents/orchestration-recovery-reviewer.toml",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
+      }
+    },
+    {
+      "route_id": "agent-harness-orchestration-recovery-falsifier-to-orchestration-recovery-reviewer",
+      "match": {
+        "stable_id": "LEGACY-AGENT:custom-agents/harness-orchestration-recovery-falsifier.toml"
+      },
+      "canonical_target": "AGENT:orchestration-recovery-reviewer",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "custom-agents/harness-orchestration-recovery-falsifier.toml",
+          ".codex/agents/orchestration-recovery-reviewer.toml",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
+      }
+    },
+    {
+      "route_id": "agent-security-trust-boundary-falsifier-to-security-reviewer",
+      "match": {
+        "stable_id": "LEGACY-AGENT:agents/security-trust-boundary-falsifier.md"
+      },
+      "canonical_target": "AGENT:security-reviewer",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "agents/security-trust-boundary-falsifier.md",
+          ".codex/agents/security-reviewer.toml",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
+      }
+    },
+    {
+      "route_id": "agent-harness-security-trust-boundary-falsifier-to-security-reviewer",
+      "match": {
+        "stable_id": "LEGACY-AGENT:custom-agents/harness-security-trust-boundary-falsifier.toml"
+      },
+      "canonical_target": "AGENT:security-reviewer",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "custom-agents/harness-security-trust-boundary-falsifier.toml",
+          ".codex/agents/security-reviewer.toml",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
+      }
+    },
+    {
+      "route_id": "agent-product-simplicity-falsifier-to-product-journey-reviewer",
+      "match": {
+        "stable_id": "LEGACY-AGENT:agents/product-simplicity-falsifier.md"
+      },
+      "canonical_target": "AGENT:product-journey-reviewer",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "agents/product-simplicity-falsifier.md",
+          ".codex/agents/product-journey-reviewer.toml",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
+      }
+    },
+    {
+      "route_id": "agent-harness-product-simplicity-falsifier-to-product-journey-reviewer",
+      "match": {
+        "stable_id": "LEGACY-AGENT:custom-agents/harness-product-simplicity-falsifier.toml"
+      },
+      "canonical_target": "AGENT:product-journey-reviewer",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "custom-agents/harness-product-simplicity-falsifier.toml",
+          ".codex/agents/product-journey-reviewer.toml",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
+      }
+    },
+    {
+      "route_id": "agent-material-review-scope-gatekeeper-to-product-journey-reviewer",
+      "match": {
+        "stable_id": "LEGACY-AGENT:agents/material-review-scope-gatekeeper.md"
+      },
+      "canonical_target": "AGENT:product-journey-reviewer",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "agents/material-review-scope-gatekeeper.md",
+          ".codex/agents/product-journey-reviewer.toml",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
+      }
+    },
+    {
+      "route_id": "agent-harness-material-review-scope-gatekeeper-to-product-journey-reviewer",
+      "match": {
+        "stable_id": "LEGACY-AGENT:custom-agents/harness-material-review-scope-gatekeeper.toml"
+      },
+      "canonical_target": "AGENT:product-journey-reviewer",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "custom-agents/harness-material-review-scope-gatekeeper.toml",
+          ".codex/agents/product-journey-reviewer.toml",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
+      }
+    },
+    {
+      "route_id": "agent-plugin-scout-to-repo-recon",
+      "match": {
+        "stable_id": "LEGACY-AGENT:agents/plugin-scout.md"
+      },
+      "canonical_target": "AGENT:repo-recon",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "agents/plugin-scout.md",
+          ".codex/agents/repo-recon.toml",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
+      }
+    },
+    {
+      "route_id": "agent-standards-extractor-to-research-verifier",
+      "match": {
+        "stable_id": "LEGACY-AGENT:agents/standards-extractor.md"
+      },
+      "canonical_target": "AGENT:research-verifier",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "agents/standards-extractor.md",
+          ".codex/agents/research-verifier.toml",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
+      }
+    },
+    {
+      "route_id": "agent-harness-repo-initializer-to-fit-fresh",
+      "match": {
+        "stable_id": "LEGACY-AGENT:custom-agents/harness-repo-initializer.toml"
+      },
+      "canonical_target": "PS-FIT-FRESH",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "custom-agents/harness-repo-initializer.toml",
+          "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-FIT-FRESH",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
+      }
+    },
+    {
+      "route_id": "agent-harness-retrofit-planner-to-fit-retrofit",
+      "match": {
+        "stable_id": "LEGACY-AGENT:custom-agents/harness-retrofit-planner.toml"
+      },
+      "canonical_target": "PS-FIT-RETROFIT",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "not-applicable",
+        "compatibility_boundary": "adopted",
+        "replacement_state": "candidate-required",
+        "active_reader_writer_state": "none-verified",
+        "observed_authority_state": "context-only",
+        "equivalence_proof": "not-applicable",
+        "physical_cleanup_state": "preserve",
+        "proof_refs": [
+          "custom-agents/harness-retrofit-planner.toml",
+          "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-FIT-RETROFIT",
+          "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
+        ]
       }
     },
     {
@@ -413,6 +703,30 @@
         "physical_cleanup_state": "blocked-by-OD-009",
         "proof_refs": [
           "validator/src/argument_parser/help_request.rs",
+          "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI",
+          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
+        ]
+      }
+    },
+    {
+      "route_id": "command-argument-parser-public-arguments-to-ps-cli",
+      "match": {
+        "stable_id": "LEGACY-COMMAND:validator/src/argument_parser/public_arguments.rs",
+        "kind": "legacy-command-authority",
+        "relative_path": "validator/src/argument_parser/public_arguments.rs"
+      },
+      "canonical_target": "PS-CLI",
+      "intended_disposition": "non-authoritative",
+      "transition": {
+        "compatibility_behavior": "unverified",
+        "compatibility_boundary": "blocked-by-OD-008",
+        "replacement_state": "unverified",
+        "active_reader_writer_state": "active",
+        "observed_authority_state": "active",
+        "equivalence_proof": "missing",
+        "physical_cleanup_state": "blocked-by-OD-009",
+        "proof_refs": [
+          "validator/src/argument_parser/public_arguments.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI",
           "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
         ]

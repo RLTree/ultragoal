@@ -113,7 +113,7 @@ const ROUTES: [AgentRouteSpec; 14] = [
     AgentRouteSpec {
         route_id: "agent-material-review-scope-gatekeeper-to-product-journey-reviewer",
         legacy_path: "agents/material-review-scope-gatekeeper.md",
-        legacy_sha256: "88a5984aed2f31f80d7e7ccf3a85eaac37ff466e18cd80b9f4fcd3f5e87ea899",
+        legacy_sha256: "f5ca10859a19854562a57ffc810b076d692bcf705b490225a1a22733ca977622",
         canonical_target: "AGENT:product-journey-reviewer",
         target_path: ".codex/agents/product-journey-reviewer.toml",
         target_sha256: "9d5f4955afbf33a0965676ad00474aabe4843b3345e901fa0e518b0c9daf6a32",
@@ -122,7 +122,7 @@ const ROUTES: [AgentRouteSpec; 14] = [
     AgentRouteSpec {
         route_id: "agent-harness-material-review-scope-gatekeeper-to-product-journey-reviewer",
         legacy_path: "custom-agents/harness-material-review-scope-gatekeeper.toml",
-        legacy_sha256: "1c4d09e014b69b31d964d3e5e48d7bcc9d75d0a7343fcdd320d3502d10b3922d",
+        legacy_sha256: "bf9e7da1d5995bb38c3dd586e022064508afdc36172d220d1ba49ee89ec57133",
         canonical_target: "AGENT:product-journey-reviewer",
         target_path: ".codex/agents/product-journey-reviewer.toml",
         target_sha256: "9d5f4955afbf33a0965676ad00474aabe4843b3345e901fa0e518b0c9daf6a32",

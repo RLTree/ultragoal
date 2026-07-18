@@ -1,5 +1,6 @@
 mod command_activation;
 mod data;
+mod frontier;
 mod integrity;
 mod semantic;
 mod sources;

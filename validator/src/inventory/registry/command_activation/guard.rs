@@ -3,7 +3,7 @@ pub(crate) fn guard(
     root: &Path,
     registry: &mut RegistryData,
 ) -> Result<bool, InventoryError> {
-    let expected_apis = api_rows()?;
+    let mut expected_apis = api_rows()?;
     let expected_commands = command_rows()?;
     let required_apis = registry
         .entries
@@ -11,14 +11,20 @@ pub(crate) fn guard(
         .filter(|entry| {
             entry.kind == "source-symbol-implementation"
                 && entry.relative_path.starts_with("@semantic/")
+                && entry.active_status == ActiveStatus::Required
         })
         .map(|entry| entry.stable_id.clone())
         .collect::<BTreeSet<_>>();
-    if expected_apis
-        .keys()
-        .any(|stable_id| !required_apis.contains(stable_id))
+    if required_apis
+        .iter()
+        .any(|stable_id| !expected_apis.contains_key(stable_id))
     {
         return Err(InventoryError::Activation(ActivationFailure::UnknownRow));
+    }
+    for (stable_id, row) in &mut expected_apis {
+        if !required_apis.contains(stable_id) {
+            row.active_status = ActiveStatus::Definition;
+        }
     }
     exact_rows(
         registry

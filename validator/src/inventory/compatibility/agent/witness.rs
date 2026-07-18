@@ -103,7 +103,7 @@ pub(crate) fn apply_agent_route(request: AgentRouteApplication<'_>) -> bool {
     if verified {
         entry.authority_state = AuthorityState::Context;
         entry.active_status = ActiveStatus::ContextOnly;
-        findings.push(InventoryFinding::warning(
+        findings.push(InventoryFinding::info(
             "verified_agent_route_context",
             Some(&entry.stable_id),
             Some(&entry.relative_path),
