@@ -96,9 +96,9 @@ fn copy_authority_inputs(live: &Path, root: &Path) {
         .unwrap();
     }
     fs::create_dir_all(root.join(".codex-plugin")).unwrap();
-    fs::write(
+    fs::copy(
+        live.join(".codex-plugin/plugin.json"),
         root.join(".codex-plugin/plugin.json"),
-        br#"{"name":"harness-ultragoal","version":"0.0.0-test"}"#,
     )
     .unwrap();
     fs::write(root.join(".gitignore"), b"validation_artifacts/\n").unwrap();

@@ -1,7 +1,5 @@
 use super::super::AgentDiscoveryErrorId;
-use super::super::local_authority::{
-    AgentRepositoryAdoptionRequest, adopt_agent_repository, compatibility_observation_for_test,
-};
+use super::super::local_authority::{AgentRepositoryAdoptionRequest, adopt_agent_repository};
 use super::authority_fixtures::{CANDIDATE, SESSION, TempRepo, canonical_names};
 use std::fs;
 use std::path::Path;
@@ -68,19 +66,6 @@ fn duplicate_package_and_project_authority_fails_closed() {
     };
 
     assert_eq!(error.id(), AgentDiscoveryErrorId::IdentityMismatch);
-}
-
-#[test]
-fn compatibility_observation_rejects_fresh_session_or_route_eligible_results() {
-    for (fresh_session, route_eligible) in [(true, false), (false, true), (true, true)] {
-        assert_eq!(
-            compatibility_observation_for_test(fresh_session, route_eligible)
-                .unwrap_err()
-                .id(),
-            AgentDiscoveryErrorId::InvalidBinding
-        );
-    }
-    compatibility_observation_for_test(false, false).unwrap();
 }
 
 fn copy_plugin_root(source: &Path, target: &Path) {

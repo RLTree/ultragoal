@@ -33,6 +33,8 @@ pub(crate) fn inspect_capabilities_verifies_distinct_authority_roots_without_wri
     assert_eq!(authority["claim_effect"], false);
     assert_eq!(authority["host_discovery"], "unavailable");
     assert_eq!(authority["runtime_exposure"], "unavailable");
+    assert_eq!(authority["fresh_session_observed"], false);
+    assert_eq!(authority["route_eligible"], false);
     assert_ne!(
         authority["binding"]["source_root_id"],
         authority["binding"]["project_root_id"]

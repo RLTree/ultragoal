@@ -3,7 +3,7 @@ use crate::agent_roles::CANONICAL_AGENT_ROLES;
 use crate::cli::successor::command_contract::HostPath;
 use crate::cli::successor::{OptionName, ParsedValue};
 use crate::plugin_product::agent_discovery::{
-    LocalAgentAuthorityObservation, LocalAgentAuthorityRequest, observe_local_authority,
+    AgentRepositoryAdoption, AgentRepositoryAdoptionRequest, adopt_agent_repository,
 };
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
@@ -82,7 +82,7 @@ fn authority_projection(
     let Some(home) = home.filter(|path| HostPath::is_valid_path(path)) else {
         return authority_status("unavailable", "home-unavailable", binding, None);
     };
-    let request = LocalAgentAuthorityRequest {
+    let request = AgentRepositoryAdoptionRequest {
         source_root: package_root,
         package_root: package_root.to_path_buf(),
         installed_root: home.join(".codex/plugins/harness-ultragoal"),
@@ -93,7 +93,7 @@ fn authority_projection(
         candidate_id,
         session_id,
     };
-    match observe_local_authority(request) {
+    match adopt_agent_repository(request) {
         Ok(observation) => authority_status("verified", "verified", binding, Some(&observation)),
         Err(error) if error.id().code() == "observation-unavailable" => {
             authority_status("unavailable", error.id().code(), binding, None)
@@ -124,7 +124,7 @@ fn authority_status(
     status: &str,
     observation_code: &str,
     binding: Value,
-    observation: Option<&LocalAgentAuthorityObservation>,
+    observation: Option<&AgentRepositoryAdoption>,
 ) -> Value {
     let roles = CANONICAL_AGENT_ROLES
         .iter()
@@ -134,8 +134,10 @@ fn authority_status(
         "status": status,
         "observation_code": observation_code,
         "binding": binding,
-        "source_catalog_sha256": observation.map(LocalAgentAuthorityObservation::source_catalog_sha256),
-        "binding_sha256": observation.map(LocalAgentAuthorityObservation::binding_sha256),
+        "source_catalog_sha256": observation.map(AgentRepositoryAdoption::source_catalog_sha256),
+        "binding_sha256": observation.map(AgentRepositoryAdoption::binding_sha256),
+        "fresh_session_observed": observation.map(AgentRepositoryAdoption::fresh_session_observed),
+        "route_eligible": observation.map(AgentRepositoryAdoption::route_eligible),
         "roles": roles,
         "host_discovery": "unavailable",
         "runtime_exposure": "unavailable",
@@ -146,7 +148,7 @@ fn authority_status(
 fn role_projection(
     name: &str,
     status: &str,
-    observation: Option<&LocalAgentAuthorityObservation>,
+    observation: Option<&AgentRepositoryAdoption>,
 ) -> Value {
     let Some(role) =
         observation.and_then(|value| value.roles().iter().find(|role| role.name() == name))
