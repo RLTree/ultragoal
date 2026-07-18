@@ -1,3 +1,4 @@
+use std::fs::{self, File};
 use std::io::{Seek, Write};
 use std::path::Path;
 
@@ -17,11 +18,29 @@ pub struct Entry {
 }
 
 pub fn write_zip(zip_path: &Path, rows: &mut [Entry]) -> Result<(), String> {
-    let (tmp, mut file) = crate::output_path::create_temp_file(zip_path, "zip")?;
+    let (tmp, mut file) = create_temp_file(zip_path)?;
     write_zip_stream(&mut file, rows)?;
     sync_result(&tmp, file.sync_all())?;
     drop(file);
-    crate::output_path::finish_temp_file(&tmp, zip_path, "zip")
+    fs::rename(&tmp, zip_path)
+        .map_err(|err| format!("{}: zip rename failed: {err}", zip_path.display()))
+}
+
+fn create_temp_file(zip_path: &Path) -> Result<(std::path::PathBuf, File), String> {
+    let parent = zip_path
+        .parent()
+        .ok_or_else(|| format!("{}: zip path lacks parent", zip_path.display()))?;
+    fs::create_dir_all(parent)
+        .map_err(|err| format!("{}: zip parent create failed: {err}", parent.display()))?;
+    let name = zip_path
+        .file_name()
+        .ok_or_else(|| format!("{}: zip path lacks file name", zip_path.display()))?
+        .to_string_lossy();
+    let temp = parent.join(format!(".{name}.tmp-{}", std::process::id()));
+    let _ = fs::remove_file(&temp);
+    let file = File::create(&temp)
+        .map_err(|err| format!("{}: zip create failed: {err}", temp.display()))?;
+    Ok((temp, file))
 }
 
 pub(crate) fn sync_result(path: &Path, result: std::io::Result<()>) -> Result<(), String> {

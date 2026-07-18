@@ -13,7 +13,7 @@ fn research_audit_reports_missing_docs_and_registry_row_shape_edges() {
     );
 
     std::fs::create_dir_all(root.join("docs")).expect("docs");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join(super::CARDS_PATH),
         &json!({
             "schema":"wrong",
@@ -49,7 +49,7 @@ fn research_audit_reports_missing_docs_and_registry_row_shape_edges() {
         }),
     )
     .expect("cards");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join(super::REGISTRY_PATH),
         &json!({"sources":[{
             "source_id":"source-a",
@@ -64,8 +64,11 @@ fn research_audit_reports_missing_docs_and_registry_row_shape_edges() {
         }]}),
     )
     .expect("registry");
-    crate::json_boundary::write_json(&root.join(super::TRACE_PATH), &json!({"entries":[]}))
-        .expect("trace");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
+        &root.join(super::TRACE_PATH),
+        &json!({"entries":[]}),
+    )
+    .expect("trace");
     let failures = super::failures(&root);
     assert!(failures.contains(&"research_source_cards_wrong_schema".to_string()));
     assert!(failures.contains(&"research_source_card_canonical_url_missing:source-a".to_string()));

@@ -66,7 +66,8 @@ fn coverage_validation_rejects_target_directory_aliases() {
     ] {
         let mut receipt = crate::json_boundary::read_json(&receipt_path).expect("receipt");
         receipt["coverage_target_dir"] = json!(raw);
-        crate::json_boundary::write_json(&receipt_path, &receipt).expect("write receipt");
+        crate::self_tests::boundaries::workspace_fixtures::write_json(&receipt_path, &receipt)
+            .expect("write receipt");
         let failures = super::super::super::validation::failures(
             &root,
             Path::new(COVERAGE_RECEIPT_REL),

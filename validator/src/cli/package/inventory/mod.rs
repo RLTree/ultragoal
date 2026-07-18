@@ -175,7 +175,7 @@ fn namespace_inventory_failures(root: &Path, manifest: &Value) -> Vec<String> {
 
 fn write_receipt(root: &Path, receipt: &Path, value: &Value) -> Result<(), String> {
     let path = crate::output_path::claim_artifact_path(root, receipt, "package inventory receipt")?;
-    crate::json_boundary::write_json(&path, value)
+    crate::self_tests::boundaries::workspace_fixtures::write_json(&path, value)
 }
 
 #[cfg(test)]

@@ -13,13 +13,19 @@ fn observe_prove_reports_successor_catalog_unavailable_after_stack_passes() {
         vec![json!({"service":"victorialogs","status":"pass"})],
     )
     .expect("health");
-    crate::json_boundary::write_json(&root.join(health.operation.receipt_rel()), &health_receipt)
-        .expect("write health");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
+        &root.join(health.operation.receipt_rel()),
+        &health_receipt,
+    )
+    .expect("write health");
     let smoke = command(&["observe", "stack", "smoke"]);
     let smoke_receipt =
         observe::stack::smoke_receipt(&root, &smoke, &candidate, true, true, true).expect("smoke");
-    crate::json_boundary::write_json(&root.join(smoke.operation.receipt_rel()), &smoke_receipt)
-        .expect("write smoke");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
+        &root.join(smoke.operation.receipt_rel()),
+        &smoke_receipt,
+    )
+    .expect("write smoke");
     fs::create_dir_all(root.join("docs/generated/observability")).expect("inventory parent");
     let static_inventory = root.join("docs/generated/observability/command-inventory.json");
     fs::write(&static_inventory, "SECRET_CANARY").expect("static bait");

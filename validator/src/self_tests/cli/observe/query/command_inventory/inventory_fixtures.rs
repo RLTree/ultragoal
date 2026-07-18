@@ -50,7 +50,7 @@ pub(in crate::self_tests::cli::observe::query) fn write_observable_inventory(roo
     });
     insert_dimension_inventory(&mut inventory);
     fs::create_dir_all(root.join("docs/generated/observability")).expect("inventory parent");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("docs/generated/observability/command-inventory.json"),
         &inventory,
     )

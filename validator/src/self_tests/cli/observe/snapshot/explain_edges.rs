@@ -14,7 +14,8 @@ fn observe_snapshot_refuses_semantically_empty_explain_roundtrip() {
     let mut explain = crate::json_boundary::read_json(&explain_path).expect("explain");
     remove_field(&mut explain, "/observed_why_failed");
     remove_field(&mut explain, "/explanation/implicated_paths");
-    crate::json_boundary::write_json(&explain_path, &explain).expect("write explain");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(&explain_path, &explain)
+        .expect("write explain");
 
     let proof_rel = "validation_artifacts/observability/source-audit-command-roundtrip.json";
     let command = super::command(&[

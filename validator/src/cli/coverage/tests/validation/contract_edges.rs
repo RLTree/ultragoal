@@ -36,7 +36,8 @@ fn coverage_manifest_contract_rejects_unknown_authority() {
     let path = root.join(".harness/coverage-manifest.json");
     let mut manifest = crate::json_boundary::read_json(&path).expect("manifest");
     manifest["unexpected_authority"] = json!(true);
-    crate::json_boundary::write_json(&path, &manifest).expect("mutated manifest");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(&path, &manifest)
+        .expect("mutated manifest");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let failures = super::super::super::validation::failures(
         &root,
@@ -60,7 +61,8 @@ fn strict_failures(label: &str, mutate: impl FnOnce(&mut serde_json::Value)) -> 
     let path = root.join(COVERAGE_RECEIPT_REL);
     let mut receipt = crate::json_boundary::read_json(&path).expect("receipt");
     mutate(&mut receipt);
-    crate::json_boundary::write_json(&path, &receipt).expect("mutated receipt");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(&path, &receipt)
+        .expect("mutated receipt");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let failures = super::super::super::validation::failures(
         &root,

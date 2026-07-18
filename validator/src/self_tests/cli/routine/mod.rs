@@ -11,7 +11,7 @@ fn root(label: &str, script: &str) -> PathBuf {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     std::fs::create_dir_all(root.join("scripts")).expect("scripts");
     std::fs::write(root.join("scripts/check"), script).expect("script");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":["scripts/check"]}),
     )
@@ -60,7 +60,7 @@ fn routine_command_writes_source_local_claim_ceiling_receipt() {
         "narrow-helper ceiling; unsupported claims; update_goal blocked",
     )
     .expect("script");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &serde_json::json!({"resources":["scripts/check"]}),
     )

@@ -6,7 +6,7 @@ fn trace_row_failures_cover_unknowns_missing_paths_and_fields() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("audit-research-trace");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::create_dir_all(root.join("templates/agent-standards")).expect("standards");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":["docs/present-schema.json", "schemas/observability-event.schema.json"]}),
     )
@@ -15,7 +15,7 @@ fn trace_row_failures_cover_unknowns_missing_paths_and_fields() {
     std::fs::create_dir_all(root.join("schemas")).expect("schemas");
     std::fs::write(root.join("schemas/observability-event.schema.json"), "{}")
         .expect("observability schema");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("templates/agent-standards/enforcement.json"),
         &json!({"rows":[
             {"id":"known-standard"},
@@ -23,7 +23,7 @@ fn trace_row_failures_cover_unknowns_missing_paths_and_fields() {
         ]}),
     )
     .expect("standards");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("docs/source-obligation-matrix.json"),
         &json!({"obligations":[
             {"id":"known-obligation"},
@@ -31,7 +31,7 @@ fn trace_row_failures_cover_unknowns_missing_paths_and_fields() {
         ]}),
     )
     .expect("obligations");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("docs/foundational-law-traceability.json"),
         &json!({"entries":[
             {"obligation_id":"known-trace"},
@@ -39,7 +39,7 @@ fn trace_row_failures_cover_unknowns_missing_paths_and_fields() {
         ]}),
     )
     .expect("foundational");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("templates/RED_FIXTURES.json"),
         &json!([{"id":"known-red"}]),
     )

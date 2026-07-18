@@ -61,7 +61,7 @@ fn observe_snapshot_rejects_receipts_without_event_binding() {
         run_id: "run-without-event".to_string(),
         correlation_id: "corr-without-event".to_string(),
     };
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("validation_artifacts/observability/source-audit.json"),
         &json!({
             "schema": RECEIPT_SCHEMA,
@@ -109,7 +109,7 @@ fn observe_snapshot_rejects_missing_candidate_and_nonmatching_receipts() {
         run_id: "run-missing-candidate".to_string(),
         correlation_id: "corr-missing-candidate".to_string(),
     };
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("validation_artifacts/observability/source-audit.json"),
         &json!({
             "schema": RECEIPT_SCHEMA,
@@ -176,7 +176,7 @@ fn write_opaque_target_receipt(root: &std::path::Path, candidate: &str) -> Targe
         run_id: "run-opaque-target".to_string(),
         correlation_id: "corr-opaque-target".to_string(),
     };
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("validation_artifacts/observability/source-audit.json"),
         &json!({
             "schema": RECEIPT_SCHEMA,

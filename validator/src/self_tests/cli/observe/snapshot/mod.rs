@@ -155,7 +155,7 @@ pub(super) fn write_source_audit_receipt(root: &std::path::Path, candidate: &str
     .expect("source audit receipt");
     let run_id = text(&receipt, "run_id");
     let correlation_id = text(&receipt, "correlation_id");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("validation_artifacts/observability/source-audit.json"),
         &receipt,
     )
@@ -193,7 +193,7 @@ pub(super) fn write_query_receipts(root: &std::path::Path, candidate: &str, targ
             value["metric_failure_class"] = json!("source_audit_check_failure");
             value["metric_error_count"] = json!(1);
         }
-        crate::json_boundary::write_json(
+        crate::self_tests::boundaries::workspace_fixtures::write_json(
             &root.join(format!(
                 "validation_artifacts/observability/source-audit-{kind}-query.json"
             )),
@@ -209,7 +209,7 @@ pub(super) fn write_explain_receipt(
     target: &TargetIds,
     fallback_used: bool,
 ) {
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("validation_artifacts/observability/source-audit-explain-failure.json"),
         &json!({
             "schema": RECEIPT_SCHEMA,

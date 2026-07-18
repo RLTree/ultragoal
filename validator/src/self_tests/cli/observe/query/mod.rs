@@ -127,12 +127,16 @@ fn write_default_receipt(root: &Path, command: &observe::command::ObserveCommand
     let receipt =
         observe::telemetry::base_receipt(root, command, status, None).expect("base receipt");
     let path = root.join(command.operation.receipt_rel());
-    crate::json_boundary::write_json(&path, &receipt).expect("write receipt");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(&path, &receipt)
+        .expect("write receipt");
 }
 
 fn write_bad_live_receipt(root: &Path, operation: ObserveOperation, value: Value) {
-    crate::json_boundary::write_json(&root.join(operation.receipt_rel()), &value)
-        .expect("bad live receipt");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
+        &root.join(operation.receipt_rel()),
+        &value,
+    )
+    .expect("bad live receipt");
 }
 
 fn missing_component_receipt(component: &str, source: &Value) -> Value {

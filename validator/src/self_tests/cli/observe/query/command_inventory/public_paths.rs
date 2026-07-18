@@ -18,12 +18,12 @@ fn root(label: &str, bytes: &[u8]) -> PathBuf {
     fs::create_dir_all(root.join("docs/generated/observability")).expect("generated directory");
     fs::create_dir_all(root.join("migration")).expect("migration directory");
     fs::write(root.join(STATIC_REL), bytes).expect("static context");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources": [STATIC_REL]}),
     )
     .expect("manifest");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join(REGISTRY),
         &json!({
             "schema_version": "GeneratedSurfaceAuthority-v2",

@@ -20,7 +20,7 @@ fn observability_package_audit_deauthorizes_static_inventory_and_preserves_other
     write_law_rows(&root);
     let prove_path = root.join("validation_artifacts/observability/observe-prove.json");
     fs::create_dir_all(prove_path.parent().unwrap()).expect("prove parent");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &prove_path,
         &json!({"schema":"wrong","status":"fail","candidate_digest":"sha256:bad"}),
     )
@@ -174,7 +174,7 @@ fn write_law_rows(root: &Path) {
     ] {
         let path = root.join(rel);
         fs::create_dir_all(path.parent().unwrap()).expect("parent");
-        crate::json_boundary::write_json(
+        crate::self_tests::boundaries::workspace_fixtures::write_json(
             &path,
             &json!({
                 "rows":[{"id":crate::audit::observability::LAW}],

@@ -6,8 +6,11 @@ pub(super) fn write_coverage_root(root: &Path, percent: f64, uncovered: Value) {
     for relative in [".harness", "src", "validation_artifacts/coverage"] {
         fs::create_dir_all(root.join(relative)).expect("dir");
     }
-    crate::json_boundary::write_json(&root.join("plugin-manifest-draft.json"), &json!({}))
-        .expect("manifest");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({}),
+    )
+    .expect("manifest");
     fs::write(root.join("src/lib.rs"), "pub fn answer() -> usize { 42 }\n").expect("source");
     fs::write(
         root.join(".harness/coverage-command"),
@@ -15,18 +18,24 @@ pub(super) fn write_coverage_root(root: &Path, percent: f64, uncovered: Value) {
     )
     .expect("coverage command");
     let manifest = manifest();
-    crate::json_boundary::write_json(&root.join(".harness/coverage-manifest.json"), &manifest)
-        .expect("coverage manifest");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
+        &root.join(".harness/coverage-manifest.json"),
+        &manifest,
+    )
+    .expect("coverage manifest");
     let report = json!({"data":[{"totals":{"lines":{"percent":percent}}}]});
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("validation_artifacts/coverage/llvm-cov-full.json"),
         &report,
     )
     .expect("report");
     let candidate = crate::package::inventory::package_digest(root).expect("candidate");
     let receipt = coverage_receipt(root, &manifest, percent, uncovered, &candidate);
-    crate::json_boundary::write_json(&root.join(COVERAGE_RECEIPT_REL), &receipt)
-        .expect("coverage receipt");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
+        &root.join(COVERAGE_RECEIPT_REL),
+        &receipt,
+    )
+    .expect("coverage receipt");
 }
 
 fn manifest() -> Value {

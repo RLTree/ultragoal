@@ -33,7 +33,8 @@ fn write_law_rows(root: &Path) {
             }
             _ => unreachable!("fixed law row"),
         };
-        crate::json_boundary::write_json(&root.join(rel), &value).expect("law row");
+        crate::self_tests::boundaries::workspace_fixtures::write_json(&root.join(rel), &value)
+            .expect("law row");
     }
     fs::create_dir_all(root.join("fixtures/mandatory-law-surfaces/valid"))
         .expect("fixture directory");

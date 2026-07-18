@@ -4,7 +4,7 @@ fn root(label: &str) -> std::path::PathBuf {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     std::fs::create_dir_all(root.join("validation_artifacts/improvement-loop"))
         .expect("improvement loop dir");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
     )
@@ -23,7 +23,7 @@ fn improvement_loop_audit_rejects_missing_and_wrong_schema_receipts() {
         "{missing:#?}"
     );
 
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join(super::RECEIPT_REL),
         &json!({"schema":"wrong","status":"pass"}),
     )

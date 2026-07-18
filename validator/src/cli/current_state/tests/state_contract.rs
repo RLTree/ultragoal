@@ -65,7 +65,7 @@ pub(crate) fn receipt_state_reports_current_status_detail_and_missing_digest() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("current-state-receipt-state");
     std::fs::create_dir_all(root.join("validation_artifacts/coverage")).expect("receipt dir");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("validation_artifacts/coverage/coverage-receipt.json"),
         &json!({
             "status": "pass",
@@ -83,7 +83,7 @@ pub(crate) fn receipt_state_reports_current_status_detail_and_missing_digest() {
     assert_eq!(current["current"], true);
     assert_eq!(current["first_detail"], "covered");
 
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("validation_artifacts/coverage/no-digest.json"),
         &json!({"details": ["missing digest detail"]}),
     )
@@ -163,7 +163,7 @@ pub(crate) fn current_state_never_reads_static_command_inventory_or_claims_obser
 pub(crate) fn current_state_run_writes_json_and_summary_modes() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("current-state-run");
     std::fs::create_dir_all(&root).expect("root");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":["plugin-manifest-draft.json"]}),
     )
@@ -184,7 +184,7 @@ pub(crate) fn current_state_default_public_path_is_read_only() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("current-state-read-only");
     std::fs::create_dir_all(&root).expect("root");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":["plugin-manifest-draft.json"]}),
     )
@@ -228,7 +228,7 @@ pub(crate) fn current_state_run_rejects_external_claim_receipts() {
         "current-state-external-receipt",
     );
     std::fs::create_dir_all(&root).expect("root");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":["plugin-manifest-draft.json"]}),
     )

@@ -114,7 +114,8 @@ fn routine_failures(mut mutate: impl FnMut(&Path, &mut Value)) -> Vec<String> {
     let mut receipt = crate::json_boundary::read_json(&path).expect("receipt");
     make_routine(&mut receipt);
     mutate(&root, &mut receipt);
-    crate::json_boundary::write_json(&path, &receipt).expect("write routine receipt");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(&path, &receipt)
+        .expect("write routine receipt");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let failures =
         super::super::super::routine::failures(&root, Path::new(COVERAGE_RECEIPT_REL), &candidate);

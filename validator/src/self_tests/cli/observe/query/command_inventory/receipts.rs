@@ -92,7 +92,7 @@ fn write_receipt_set(
     corr: &str,
     operation: &str,
 ) {
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &dir.join(format!("{slug}.json")),
         &json!({
             "schema": crate::cli::observe::command::RECEIPT_SCHEMA,
@@ -128,7 +128,7 @@ fn write_query_receipts(
                 "correlation_id": corr
             }])
         };
-        crate::json_boundary::write_json(
+        crate::self_tests::boundaries::workspace_fixtures::write_json(
             &dir.join(format!("{slug}-{kind}.json")),
             &json!({
                 "schema": crate::cli::observe::command::QUERY_SCHEMA,

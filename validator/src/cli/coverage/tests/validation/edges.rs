@@ -179,8 +179,11 @@ fn coverage_validation_rejects_digest_report_and_manifest_edges() {
             crate::json_boundary::read_json(&root.join(".harness/coverage-manifest.json"))
                 .expect("manifest");
         manifest["changed_file_coupling_policy"]["changed_files"] = json!(["missing.rs"]);
-        crate::json_boundary::write_json(&root.join(".harness/coverage-manifest.json"), &manifest)
-            .expect("manifest with missing changed file");
+        crate::self_tests::boundaries::workspace_fixtures::write_json(
+            &root.join(".harness/coverage-manifest.json"),
+            &manifest,
+        )
+        .expect("manifest with missing changed file");
     });
     assert!(has(
         &digest_error,
@@ -192,8 +195,11 @@ fn coverage_validation_rejects_digest_report_and_manifest_edges() {
             crate::json_boundary::read_json(&root.join(".harness/coverage-manifest.json"))
                 .expect("manifest");
         manifest["required_target_paths"] = json!(["../escape.rs"]);
-        crate::json_boundary::write_json(&root.join(".harness/coverage-manifest.json"), &manifest)
-            .expect("manifest with missing source file");
+        crate::self_tests::boundaries::workspace_fixtures::write_json(
+            &root.join(".harness/coverage-manifest.json"),
+            &manifest,
+        )
+        .expect("manifest with missing source file");
     });
     assert!(has(
         &source_digest_error,
@@ -212,7 +218,8 @@ fn mutated_root_failures(mut mutate: impl FnMut(&Path, &mut Value)) -> Vec<Strin
     let path = root.join(COVERAGE_RECEIPT_REL);
     let mut receipt = crate::json_boundary::read_json(&path).expect("receipt");
     mutate(&root, &mut receipt);
-    crate::json_boundary::write_json(&path, &receipt).expect("write receipt");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(&path, &receipt)
+        .expect("write receipt");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let failures = validation_failures(&root, Path::new(COVERAGE_RECEIPT_REL), &candidate);
     fs::remove_dir_all(root).expect("cleanup validation edge");

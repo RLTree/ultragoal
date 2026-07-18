@@ -5,7 +5,7 @@ pub(crate) fn current_state_run_fails_closed_when_receipt_cannot_be_written() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("current-state-write-failure");
     std::fs::create_dir_all(&root).expect("root");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":["plugin-manifest-draft.json"]}),
     )

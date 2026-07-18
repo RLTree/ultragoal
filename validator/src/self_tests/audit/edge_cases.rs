@@ -102,7 +102,7 @@ fn coverage_scope_package_success_path_reads_manifest_and_scripts() {
             "generated_artifacts": ["artifact"]
         }
     });
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("templates/.harness/coverage-manifest.json"),
         &manifest,
     )

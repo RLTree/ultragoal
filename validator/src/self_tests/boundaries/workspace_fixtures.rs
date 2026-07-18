@@ -1,3 +1,4 @@
+use serde::Serialize;
 use serde_json::json;
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
@@ -21,6 +22,20 @@ pub(crate) fn temp_root(label: &str) -> PathBuf {
     repo_root()
         .join("target")
         .join(format!("ultragoal-boundary-{label}-{stamp}-{index}"))
+}
+
+pub(crate) fn write_json(path: &Path, value: &impl Serialize) -> Result<(), String> {
+    let parent = path.parent().expect("test JSON path has a parent");
+    std::fs::create_dir_all(parent).map_err(|err| {
+        format!(
+            "{}: test JSON parent create failed: {err}",
+            parent.display()
+        )
+    })?;
+    let text = serde_json::to_string_pretty(value)
+        .map_err(|err| format!("{}: test JSON encoding failed: {err}", path.display()))?;
+    std::fs::write(path, format!("{text}\n"))
+        .map_err(|err| format!("{}: test JSON write failed: {err}", path.display()))
 }
 
 pub(crate) fn sha(ch: char) -> String {

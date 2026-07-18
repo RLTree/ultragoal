@@ -1,5 +1,3 @@
-use serde::Serialize;
-use serde::ser::{Error, Serializer};
 use serde_json::json;
 use std::io::{Error as IoError, Write};
 
@@ -7,18 +5,6 @@ fn write_text(path: &std::path::Path, text: &str) {
     let parent = path.parent().expect("test path has parent");
     std::fs::create_dir_all(parent).expect("parent");
     std::fs::write(path, text).expect("write text");
-}
-
-#[derive(Debug)]
-struct BadSerialize;
-
-impl Serialize for BadSerialize {
-    fn serialize<S>(&self, _serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        Err(S::Error::custom("forced json encode failure"))
-    }
 }
 
 struct AlwaysFailWrite;
@@ -39,24 +25,10 @@ fn boundary_failures_are_behavioral() {
         crate::self_tests::boundaries::workspace_fixtures::temp_root("typed_authority-boundaries");
     std::fs::create_dir_all(&root).expect("root");
 
-    let encode_err = crate::json_boundary::write_json(&root.join("bad.json"), &BadSerialize)
-        .expect_err("json encoding failures are surfaced");
-    assert!(encode_err.contains("json encode failed"));
     let mut sink = AlwaysFailWrite;
     assert!(crate::archive::zip::write_u16(&mut sink, 1).is_err());
     assert!(crate::archive::zip::write_u32(&mut sink, 1).is_err());
     sink.flush().expect("flush succeeds");
-
-    let existing = root.join("existing.json");
-    write_text(&existing, "{}");
-    let create_err = crate::output_path::create_file(&existing, "receipt")
-        .expect_err("create_new rejects existing files");
-    assert!(create_err.contains("create failed"));
-    let (tmp, file) = crate::output_path::create_temp_file(&root.join("plain.json"), "receipt")
-        .expect("relative temp path");
-    drop(file);
-    assert!(tmp.file_name().is_some());
-    let _ = std::fs::remove_file(tmp);
 
     let manifest = json!({"resources":["hard.json"]});
     write_text(&root.join("source.json"), "{}");

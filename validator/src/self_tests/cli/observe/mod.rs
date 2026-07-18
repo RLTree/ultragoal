@@ -231,7 +231,10 @@ pub(super) fn minimal_root(label: &str) -> std::path::PathBuf {
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     let manifest = json!({"resources":["owned.txt"]});
-    crate::json_boundary::write_json(&root.join("plugin-manifest-draft.json"), &manifest)
-        .expect("manifest");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &manifest,
+    )
+    .expect("manifest");
     root
 }

@@ -24,7 +24,7 @@ pub(crate) fn run(root: &Path, command: &CurrentStateCommand) -> Result<i32, Str
     if let Some(relative) = command.receipt.as_ref() {
         let receipt =
             crate::output_path::claim_artifact_path(root, relative, "current state receipt")?;
-        crate::json_boundary::write_json(&receipt, &state)?;
+        crate::self_tests::boundaries::workspace_fixtures::write_json(&receipt, &state)?;
     }
     if command.json {
         println!(
