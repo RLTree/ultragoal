@@ -4,9 +4,9 @@ use crate::repository_fixture::{TestRepo, inventory_request, live_root, snapshot
 use serde::Deserialize;
 use std::fs;
 
-include!("lease_fixture.rs");
-include!("lease_issuance.rs");
-include!("lease_envelopes.rs");
+include!("worktree_authority/fixture.rs");
+include!("worktree_authority/issuance.rs");
+include!("worktree_authority/envelopes.rs");
 include!("sources.rs");
 include!("unsupported_product_apis_remain_inactive.rs");
 

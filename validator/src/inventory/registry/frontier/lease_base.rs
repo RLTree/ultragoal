@@ -28,7 +28,7 @@ fn gate_base(registry: &Value, bind_operation: bool) -> Result<(&str, &str), Inv
             || gate.get("observation_scope").and_then(Value::as_str)
                 != Some("source_base_only_not_containing_lease_authority")
         {
-            return Err(invalid("required lease issuance gate is not current"));
+            return Err(invalid("required source authority gate is not current"));
         }
         let observed = gate
             .get("observed_source_base")

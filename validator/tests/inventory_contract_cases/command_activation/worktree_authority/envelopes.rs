@@ -197,6 +197,7 @@ fn sorted(mut values: Vec<serde_json::Value>) -> Vec<serde_json::Value> {
     values.dedup();
     values
 }
+
 fn digest(value: &serde_json::Value) -> String {
     use sha2::{Digest, Sha256};
     format!("sha256:{:x}", Sha256::digest(value.to_string().as_bytes()))
