@@ -92,18 +92,22 @@ impl ProductMigrationPlan {
         Ok(Self { projection })
     }
 
+    #[cfg(test)]
     pub(crate) fn plan_sha256(&self) -> &str {
         &self.projection.plan_sha256
     }
 
+    #[cfg(test)]
     pub(crate) fn input_binding(&self) -> &MigrationInputBinding {
         &self.projection.input_binding
     }
 
+    #[cfg(test)]
     pub(crate) fn effects(&self) -> &[PlannedMigrationEffect] {
         &self.projection.effects
     }
 
+    #[cfg(test)]
     pub(super) fn compatibility_boundary_binding(&self) -> Option<&CompatibilityBoundaryBinding> {
         self.projection.compatibility_boundary_binding.as_ref()
     }
@@ -112,6 +116,7 @@ impl ProductMigrationPlan {
         self.projection.clone()
     }
 
+    #[cfg(test)]
     pub(crate) fn verify_projection(
         &self,
         projection: &ProductMigrationPlanProjection,
@@ -124,6 +129,7 @@ impl ProductMigrationPlan {
         Ok(())
     }
 
+    #[cfg(test)]
     pub(super) fn validate(&self) -> Result<(), ProductMigrationError> {
         let expected_boundary_binding =
             match self.projection.compatibility_boundary_binding.as_ref() {

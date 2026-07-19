@@ -1,5 +1,6 @@
 pub(super) const MAX_PRODUCT_ITEMS: usize = 4_096;
 pub(super) const MAX_MACHINE_OUTPUT_BYTES: usize = 2 * 1024 * 1024;
+#[cfg(test)]
 pub(super) const MAX_APPLY_TTL_MS: u64 = 10 * 60 * 1_000;
 const MAX_COMPATIBILITY_WARNING_BYTES: usize = 512;
 const MAX_COMPATIBILITY_MEASUREMENT_WINDOW_MS: u64 = 90 * 24 * 60 * 60 * 1_000;
@@ -37,10 +38,9 @@ impl fmt::Display for ProductMigrationError {
 
 impl std::error::Error for ProductMigrationError {}
 
-/// Root-owned authority for both single-use migration authorization and
-/// compatibility-boundary observations. Registry bytes can declare a boundary
-/// policy, but only this authority can supply the current time and product
-/// version used to decide whether that policy remains open.
+/// Root-owned authority for single-use migration authorization and
+/// compatibility-boundary observations in the apply contract tests.
+#[cfg(test)]
 pub(crate) trait ApplyAuthorizationAuthority {
     fn principal_id(&self) -> &str;
     fn authority_id(&self) -> &str;

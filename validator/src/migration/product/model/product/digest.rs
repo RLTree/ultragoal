@@ -58,6 +58,7 @@ fn validate_inventory_paths(inventory: &MigrationInventory) -> Result<(), Produc
     Ok(())
 }
 
+#[cfg(test)]
 pub(super) fn exact_input_matches(
     binding: &MigrationInputBinding,
     input: &ProductInputSnapshot,

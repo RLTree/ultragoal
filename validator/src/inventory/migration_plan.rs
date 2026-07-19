@@ -2,7 +2,7 @@ use super::{ActiveStatus, AuthorityCatalog, InventoryEntry, InventoryError};
 use crate::context::{LiveContext, ReadSession};
 use crate::migration::product::{
     AdoptedRegistrySnapshot, ProductInputSnapshot, ProductMigrationError,
-    ProductMigrationPlanProjection, derive_product_plan,
+    ProductMigrationPlanProjection, derive_read_only_product_plan,
 };
 use crate::migration::{
     InventorySurface, InventorySurfaceObservation, MigrationInventory, SurfaceFileKind,
@@ -68,7 +68,7 @@ pub(super) fn derive(
     )
     .map_err(|error| MigrationPlanAdapterError(error.code().to_owned()))?;
     let input = ProductInputSnapshot::observed(inventory, registry)?;
-    let plan = derive_product_plan(&input, None)?;
+    let plan = derive_read_only_product_plan(&input)?;
     reads
         .revalidate()
         .map_err(|error| MigrationPlanAdapterError(error.to_string()))?;

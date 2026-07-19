@@ -26,18 +26,22 @@ impl MigrationInputBinding {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn candidate_id(&self) -> &str {
         &self.candidate_id
     }
 
+    #[cfg(test)]
     pub(crate) fn read_session_id(&self) -> &str {
         &self.read_session_id
     }
 
+    #[cfg(test)]
     pub(crate) fn binding_sha256(&self) -> &str {
         &self.binding_sha256
     }
 
+    #[cfg(test)]
     pub(super) fn validate(&self) -> bool {
         self.schema_version == "MigrationProductInputBinding-v1"
             && valid_sha256(&self.live_context_id)

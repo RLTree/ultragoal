@@ -6,6 +6,7 @@ const MAX_IDENTIFIER_BYTES: usize = 160;
 const MAX_PATH_BYTES: usize = 768;
 #[cfg(test)]
 const MAX_AUTHORIZATION_TTL_MS: u64 = 10 * 60 * 1_000;
+#[cfg(test)]
 const REQUIRED_FALSE_PASS_CONTROLS: [&str; 5] = [
     "proof-artifact",
     "receipt-production",
@@ -42,8 +43,11 @@ impl std::error::Error for MigrationError {}
 pub enum SurfaceFileKind {
     Regular,
     Semantic,
+    #[cfg(test)]
     Directory,
+    #[cfg(test)]
     Symlink,
+    #[cfg(test)]
     Special,
 }
 
@@ -114,14 +118,6 @@ impl InventorySurface {
             public_routes: normalized(public_routes),
             generated_outputs: normalized(generated_outputs),
         }
-    }
-
-    pub fn stable_id(&self) -> &str {
-        &self.stable_id
-    }
-
-    pub fn status(&self) -> SurfaceStatus {
-        self.status
     }
 
     fn findings(&self) -> Vec<String> {
