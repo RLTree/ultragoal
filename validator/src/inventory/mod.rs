@@ -36,6 +36,7 @@ mod projection;
 #[cfg(test)]
 mod race_tests;
 mod registry;
+pub(crate) use registry::inspection;
 #[cfg(test)]
 pub(crate) mod retained_routes;
 #[cfg(not(test))]

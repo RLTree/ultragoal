@@ -18,6 +18,13 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         &[],
     ),
     descriptor(
+        SuccessorCommand::Inspect(InspectTarget::Orchestration),
+        Some("orchestration"),
+        EffectClass::Read,
+        "Inspect the current canonical orchestration frontier without authority exposure.",
+        &[],
+    ),
+    descriptor(
         SuccessorCommand::Inspect(InspectTarget::Inventory),
         Some("inventory"),
         EffectClass::Read,

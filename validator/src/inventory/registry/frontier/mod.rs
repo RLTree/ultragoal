@@ -1,4 +1,3 @@
-use super::data::CONTRACT_DIR;
 use crate::context::ReadSession;
 use crate::inventory::fs::{PhysicalEntryDescriptor, physical_entry, read_bounded};
 use crate::inventory::types::{ActiveStatus, AuthorityState, InventoryEntry, InventoryError};
@@ -20,20 +19,13 @@ pub(super) struct SchedulerNodes {
     pub(super) active_worktree_lanes: BTreeSet<String>,
 }
 
+pub(crate) mod inspection;
+
 pub(super) fn load(reads: &ReadSession, root: &Path) -> Result<Frontier, InventoryError> {
     let registry_path = root.join("LANE_REGISTRY.json");
     let template_path = root.join("templates/LANE_REGISTRY.json");
-    let registry = parse(reads, &registry_path)?;
-    let graph = parse(
-        reads,
-        &root
-            .join(CONTRACT_DIR)
-            .join("IMPLEMENTATION_DEPENDENCY_GRAPH.json"),
-    )?;
-    let nodes = scheduler_nodes(&registry)?;
-    scope_ownership::validate(&registry)?;
-    lease_issuance::validate(reads, root, &registry, &nodes)?;
-    let active_tools = dependency_tools(&graph, &nodes)?;
+    let snapshot = validated_snapshot::load(reads, root)?;
+    let active_tools = snapshot.active_tools;
     let entries = vec![
         physical_entry(
             reads,
@@ -225,6 +217,7 @@ mod lease_issuance;
 mod lifecycle;
 mod scope_consumption;
 mod scope_ownership;
+mod validated_snapshot;
 
 #[cfg(test)]
 mod lifecycle_tests;

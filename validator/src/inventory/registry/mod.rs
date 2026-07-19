@@ -1,6 +1,7 @@
 mod command_activation;
 mod data;
 mod frontier;
+pub(crate) use frontier::inspection;
 mod integrity;
 mod semantic;
 mod sources;

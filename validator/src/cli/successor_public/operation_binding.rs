@@ -15,6 +15,7 @@ pub(crate) enum PublicOperation {
     StrictCheck,
     RoutineCheck,
     ContextInspection,
+    OrchestrationInspection,
     CapabilityInspection,
     InventoryInspection,
     StateInspection,
@@ -38,6 +39,7 @@ struct Binding {
 const CONTEXT: &[&str] = &["LiveContext::build", "EffectClass"];
 const CONTEXT_INSPECTION: &[&str] = &["LiveContext::build", "EffectClass", "CandidateIdentity"];
 const CAPABILITIES: &[&str] = &["LiveContext::build", "EffectClass", "CapabilitySet"];
+const ORCHESTRATION: &[&str] = &["LiveContext::build", "EffectClass", "SchedulerFrontier"];
 const INVENTORY: &[&str] = &[
     "LiveContext::build",
     "EffectClass",
@@ -106,6 +108,12 @@ const BINDINGS: &[Binding] = &[
         SuccessorCommand::Inspect(InspectTarget::Capabilities),
         EffectClass::Read,
         CAPABILITIES,
+    ),
+    binding(
+        PublicOperation::OrchestrationInspection,
+        SuccessorCommand::Inspect(InspectTarget::Orchestration),
+        EffectClass::Read,
+        ORCHESTRATION,
     ),
     binding(
         PublicOperation::InventoryInspection,

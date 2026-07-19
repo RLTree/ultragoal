@@ -26,6 +26,7 @@ mod fit;
 mod local_store;
 mod observe;
 mod operation_binding;
+mod orchestration;
 mod public_context;
 mod routine;
 mod strict;
