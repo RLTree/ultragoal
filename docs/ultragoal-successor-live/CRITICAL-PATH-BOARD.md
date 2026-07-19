@@ -75,8 +75,18 @@ N12-A's original source remains accepted at
 rebound at `761abd2efeac1793e415b5224472b9758ed14910` / tree
 `5cd1b34ec8ea96d1837598a12d913764e848ee79`. Warning-free library
 compilation, the canonical namespace check, and 121 standards rows pass; the
-focused library-test build was stopped before execution at the shared 2.5 GiB
-RSS boundary. All decisions remain withheld.
+focused library-test build was stopped before execution at that lane's 2.5 GiB
+RSS boundary. This historical lane-local cap does not authorize a host-global
+build slot or permission handshake. All decisions remain withheld.
+The current production-library Clippy boundary reaches compilation and then
+fails warning denial with 500 findings across 154 files, including 367
+undocumented unsafe boundaries. CL-STRICT remains withheld. Root is preparing
+one clean strict-debt checkpoint and at most four disjoint repair worktrees;
+lane checks and resource limits are local, integration is serialized, and the
+dependency-wide strict audit reruns only after the accepted repair set lands.
+These are root-issued exact P0 repairs, not new product DAG nodes: their claim
+ceiling is withheld and they cannot edit shared schemas, dependencies, public
+dispatch, migration authority, claims, release state, or completion state.
 N14 read-only planning is source-accepted at `1e51edaec34c2e20d5022b536181da60de250671` /
 tree `1b5a6cafca578e0072f8dbfb1c7cae964df757f9`: explicit and default product
 outputs are byte-identical and recursively zero-write, with 38 pending

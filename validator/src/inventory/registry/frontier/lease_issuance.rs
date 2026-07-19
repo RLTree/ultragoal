@@ -5,6 +5,8 @@ use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
 
+mod debt_worktree;
+
 pub(super) fn validate(
     reads: &ReadSession,
     root: &Path,
@@ -35,8 +37,14 @@ pub(super) fn validate(
         .get("scope_mappings")
         .and_then(Value::as_array)
         .ok_or_else(|| invalid("scope mappings are missing"))?;
-    active_record_lanes(records, &nodes.active_worktree_lanes)?;
-    for record in records {
+    debt_worktree::validate(records, registry, base)?;
+    let scheduler_records = records
+        .iter()
+        .filter(|record| !debt_worktree::is_record(record))
+        .cloned()
+        .collect::<Vec<_>>();
+    active_record_lanes(&scheduler_records, &nodes.active_worktree_lanes)?;
+    for record in &scheduler_records {
         let lane_id = text(record, "lane_id", "active lease lacks lane ID")?;
         if text(record, "base_commit", "active lease lacks base commit")? != base.0
             || text(record, "base_tree", "active lease lacks base tree")? != base.1

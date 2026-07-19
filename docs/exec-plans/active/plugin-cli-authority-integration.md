@@ -58,8 +58,9 @@ That source boundary removes the remaining adopted-state namespace debt while
 binding the legacy contract wire key through one exact schema authority tuple.
 Warning-free library compilation, the canonical namespace check, and 121
 standards rows pass on those exact bytes. The focused library-test build was
-stopped before execution at the shared 2.5 GiB RSS boundary, so no new
-behavior-test claim is promoted.
+stopped before execution at that lane's 2.5 GiB RSS boundary, so no new
+behavior-test claim is promoted. That historical lane-local cap does not create
+a host-global build slot or permission boundary for unrelated sessions.
 N02 reobservation passes on exact clean candidate
 `b55e29dc2a5a1c84f3b65477f43a92cd03bbeb7a` / tree
 `796f7ab21e2fff2cfa845815c154505f2fc130dc`: two byte-identical
@@ -95,8 +96,11 @@ product, readiness, release, or completion claim. The corrected route is N14 -> 
 final freeze -> N02/N12 claim reproof -> N13 -> N16 -> post-product
 four-persona review -> non-mutating N17 reconciliation. Preliminary N13 work,
 if used, is isolated, advisory, non-citable, and discarded before the final
-freeze. P0 is available only to root for compile, namespace, standards, and
-retention-aware cleanup; product lanes remain blocked.
+freeze. P0 remains root-issued and claim-withheld. Root may issue up to four
+exact, disjoint worktree repair leases for current compile, Clippy, namespace,
+standards, or retention diagnostics while product DAG lanes remain blocked.
+Those worktrees receive no contract, schema, dependency, public-dispatch,
+migration, claim, release, or completion authority.
 All fourteen claims remain withheld beyond their exact accepted source
 ceilings; the N11 WorkerResult is a source handoff, not product proof. The
 user-authorized cleanup removed the obsolete review tree and
@@ -128,6 +132,17 @@ compile/namespace/standards checkpoint and makes N00 the next root-only gate.
 The full clippy wall and library-test compilation still have broad inherited
 findings, so CL-STRICT and every package/install/runtime/product claim remain
 withheld. Four-persona exposure remains reserved for its material boundary.
+The current production-library Clippy boundary compiles successfully before
+failing warning denial with 500 findings across 154 authored files. The
+dominant class is 367 undocumented unsafe boundaries; the remainder includes
+typed error, argument-bundle, rollback-state, and smaller mechanical findings.
+This is one dependency-wide strict-debt checkpoint, not evidence that the
+affected product behavior failed. Repair is organized into at most four
+disjoint, dependency-closed worktree lanes from one clean root identity.
+Each lane owns its complete named invariant, runs focused checks only at its
+freeze, receives one bounded Terra/high review, and promotes no claim. Root
+serializes integration and runs the dependency-wide Clippy boundary only after
+all accepted strict-debt increments land.
 
 The N05 source candidate is independently accepted and root-integrated through
 `26aedb17002e419aa7548b3e41f271cf95510f9e` / tree
