@@ -10,6 +10,7 @@ pub(super) fn satisfies(registry: &Value, lane: &str, dependency: &str) -> bool 
             Some(
                 "N02_REOBSERVED_N12_INTEGRATED_N14_READY_SOURCE_FRONTIER"
                     | "N14_ACTIVE_N12_INTEGRATED_SOURCE_FRONTIER"
+                    | "N14_EXTERNAL_BLOCKED_N12_INTEGRATED_SOURCE_ACCEPTED"
             )
         )
     {
@@ -37,4 +38,45 @@ pub(super) fn satisfies(registry: &Value, lane: &str, dependency: &str) -> bool 
                     .and_then(Value::as_str)
                     == Some("withheld")
         })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::satisfies;
+    use serde_json::json;
+
+    fn registry(frontier: &str, source_acceptance: &str) -> serde_json::Value {
+        json!({
+            "pre_adoption_source": {"frontier": frontier},
+            "lanes": [{
+                "id": "N11",
+                "state": "blocked",
+                "ceiling": "source_accepted",
+                "outcome": {
+                    "source_acceptance": source_acceptance,
+                    "execution_outcome": "external_blocked",
+                    "claim_availability": "withheld"
+                }
+            }]
+        })
+    }
+
+    #[test]
+    fn accepted_n11_source_remains_a_dependency_after_n14_external_block() {
+        let registry = registry(
+            "N14_EXTERNAL_BLOCKED_N12_INTEGRATED_SOURCE_ACCEPTED",
+            "accepted",
+        );
+        assert!(satisfies(&registry, "N12", "N11"));
+    }
+
+    #[test]
+    fn external_block_does_not_substitute_for_source_acceptance() {
+        let registry = registry(
+            "N14_EXTERNAL_BLOCKED_N12_INTEGRATED_SOURCE_ACCEPTED",
+            "rejected",
+        );
+        assert!(!satisfies(&registry, "N12", "N11"));
+        assert!(!satisfies(&registry, "N13", "N11"));
+    }
 }
