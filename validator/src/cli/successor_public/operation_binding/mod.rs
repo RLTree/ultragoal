@@ -234,8 +234,7 @@ pub(crate) fn active_api_identifiers() -> BTreeSet<&'static str> {
         .collect()
 }
 
-include!("operation_binding/groups.rs");
+include!("groups.rs");
 
 #[cfg(test)]
-#[path = "operation_binding_tests.rs"]
 mod tests;

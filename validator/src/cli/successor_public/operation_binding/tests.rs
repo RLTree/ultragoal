@@ -1,3 +1,5 @@
+//! Public operation bindings admit only exact supported command and effect pairs.
+
 use super::*;
 use crate::cli::successor::OutputMode;
 use crate::cli::successor::command_contract::{EvalAction, PackageAction};

@@ -74,8 +74,8 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "parsed invocation model"
     ),
     source!(
-        "validator/src/cli/successor_public/operation_binding.rs",
-        include_bytes!("../../../cli/successor_public/operation_binding.rs"),
+        "validator/src/cli/successor_public/operation_binding/mod.rs",
+        include_bytes!("../../../cli/successor_public/operation_binding/mod.rs"),
         "supported operation activation authority"
     ),
     source!(
