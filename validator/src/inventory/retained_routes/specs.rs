@@ -2,7 +2,7 @@ use super::model::{
     HCT_CLAIMS, PS_CLI, PS_ORCHESTRATION, PS_PLUGIN_MANIFEST, RouteSpec, TargetSpec,
 };
 
-pub(crate) const ROUTE_COUNT: usize = 15;
+pub(crate) const ROUTE_COUNT: usize = 10;
 pub(crate) const TARGET_COUNT: usize = 4;
 
 pub(crate) fn routes() -> impl Iterator<Item = &'static RouteSpec> {
