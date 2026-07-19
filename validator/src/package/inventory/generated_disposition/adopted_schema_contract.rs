@@ -1,6 +1,7 @@
 use super::{MAX_OUTPUT_BYTES, Source, digest_hex};
 use crate::contract_amendment::{CurrentAmendmentBinding, validate_current};
 use crate::generated_authority::{RepositoryPath, Sha256Digest};
+use serde_json::Value;
 
 pub(super) struct Binding<'a> {
     pub(super) output: &'a RepositoryPath,
