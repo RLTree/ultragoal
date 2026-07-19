@@ -147,11 +147,7 @@ fn ready_frontier_rejects_unintegrated_dependencies_and_unexpected_lanes() {
     );
 
     let early_downstream = source_repo("ready-early-downstream");
-    set_lane_states(
-        &early_downstream,
-        &[("N08", "ready")],
-        Some(&["N08", "N11"]),
-    );
+    set_lane_states(&early_downstream, &[("N08", "ready")], Some(&["N08"]));
     assert_inventory_error(
         &early_downstream,
         "scheduler frontier has unexpected ready lanes",
