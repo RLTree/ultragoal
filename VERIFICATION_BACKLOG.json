@@ -73,7 +73,7 @@
       "id": "BACKLOG-011", "claim_id": "CL-EVAL-IMPROVEMENT", "class": "lane_owed", "owner": "OWN-AGENT-QUALITY",
       "required_proof": "Paired evaluation and guarded promotion evidence.", "blocker_type": "missing_artifact",
       "attempts": [{"id": "OBS-011", "attempt_kind": "withheld_claim_decision", "action": "Withhold CL-EVAL-IMPROVEMENT until the named same-surface proof is current.", "status": "withheld", "attempted_at": "2026-07-16T22:36:38-07:00", "external_receipt": {"path": "docs/ultragoal-successor-live/acceptance/EVALUATION-MIGRATION-DECISION-KERNEL-INTEGRATION-043.json", "digest": "sha256:221cf02accf58d95a1344040b3e83182723a94a63a49117d92731e6b165db7dd"}, "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:3aca2c9d4c26d738436f8427d131aef155cac4ec2ec591d556e88efb3b8702c4"}}],
-      "next_action": "Repair N11 journals and rerun independent evaluation.", "claim_ceiling_impact": "withheld", "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:3aca2c9d4c26d738436f8427d131aef155cac4ec2ec591d556e88efb3b8702c4"}
+      "next_action": "Preserve accepted N11 internal evaluation source; root must implement and verify one authenticated public evaluation admission path before any eval, installed, Product Fitness, readiness, release, or completion claim.", "claim_ceiling_impact": "source_accepted_public_and_live_surfaces_withheld", "evidence": {"path": "validation_artifacts/worker-results/N11-EVAL-RESEARCH.json", "digest": "sha256:6b06992f6459f83821de54d3b7e59b0745b9f73f6747a50da8a586838d79c067"}
     },
     {
       "id": "BACKLOG-012", "claim_id": "CL-REAL-JOURNEY", "class": "externally_blocked", "owner": "OWN-ULTRA-ROOT",

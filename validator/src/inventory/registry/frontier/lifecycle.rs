@@ -51,6 +51,11 @@ pub(super) fn expected(
             exact_state(states, "N11", "integrating")?;
             (&[][..], &[][..])
         }
+        "N10_INTEGRATED_N11_INTEGRATING_ROOT_CLOSURE" => {
+            exact_state(states, "N10", "integrated")?;
+            exact_state(states, "N11", "integrating")?;
+            (&[][..], &[][..])
+        }
         _ => return Err(invalid("scheduler frontier is unknown")),
     };
     Ok(ExpectedLifecycle {

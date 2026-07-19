@@ -20,11 +20,19 @@ Focused public projection controls pass 2/2 and the dependency-closed command
 activation suite passes 10/10. Package, install, discovery, runtime, Product
 Fitness, readiness, release, and completion remain withheld.
 
-N11 remains the sole active managed worktree under
-`LEASE-N11-EVALUATION-CURRENT-001`. Its source base predates the N10 root
-integration, so it may finish a clean scope-pure source commit but must refresh
-and refreeze before acceptance. No N11 WorkerResult is authorized before source
-acceptance.
+N11 source is independently accepted at
+`1a6423bd8623f73001a82af9bf2bf4921128a4ea` / tree
+`5489947dc30ddc81996b11c555b6c0fd4907213a`; its single receipt-only child is
+`79a3259b3b78e20a02eaaafc52f0c8c29084dd2a` / tree
+`2c9c0849881d0986bd5a8f355093f2812369297f`. Root fast-forwarded both commits,
+closed the lease, and tombstoned the clean branch. N11 remains `integrating`:
+the advertised `eval` commands still delegate, and the only scheduled
+evaluation bridge is test-only. Root must add one authenticated evaluation
+admission adapter that owns canonical spec decoding, issuer/principal binding,
+ledger-key custody, invocation selection, confined execution, output projection,
+catalog activation, and dispatch. Source, package, install, runtime, Product
+Fitness, readiness, release, and completion claims remain withheld beyond the
+accepted internal evaluation source ceiling.
 
 ## Stage B projection freeze (routing only)
 
@@ -47,12 +55,14 @@ remains behind N08; N12 remains behind N10 and N11.
 After N12 the route is N12-A -> N14 -> N14-proof -> N12-B-invalidate-and-reproof
 -> parallel N13/N15 -> N16 -> N17. P0 is available only to root for compile,
 namespace, standards, and retention-aware cleanup; product lanes remain blocked.
-All fourteen claims remain withheld with empty evidence and no validator
-receipts. The user-authorized cleanup removed the obsolete review tree and
+All fourteen claims remain withheld beyond their exact accepted source
+ceilings; the N11 WorkerResult is a source handoff, not product proof. The
+user-authorized cleanup removed the obsolete review tree and
 reproducible worktree home/tmp state, recovering about 10.1 GB in addition to
-earlier cleanup; the three approved paths now exist only as empty roots. N07 is
-the sole active worktree. The integrated N05 and N06 worktrees and disposable
-targets are removed; their branch tips remain preserved by registry tombstones.
+earlier cleanup; the three approved paths now exist only as empty roots. No
+implementation lease remains active. Integrated lane branch tips are preserved
+by registry tombstones; root owns the N11 admission closure and the standards /
+dead-authority checkpoint before another implementation worktree may launch.
 
 ## Outcome
 

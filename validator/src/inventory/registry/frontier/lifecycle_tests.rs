@@ -87,6 +87,19 @@ fn lifecycle_rejects_illegal_n11_transitions() {
 }
 
 #[test]
+fn integrated_orchestration_allows_lease_free_evaluation_root_closure() {
+    let nodes = scheduler_nodes(&registry(
+        &[("N10", "integrated"), ("N11", "integrating")],
+        &[],
+        "N10_INTEGRATED_N11_INTEGRATING_ROOT_CLOSURE",
+    ))
+    .unwrap();
+
+    assert!(nodes.ready.is_empty());
+    assert!(nodes.active_worktree_lanes.is_empty());
+}
+
+#[test]
 fn active_leases_are_exactly_one_open_evaluation_worktree() {
     let lanes = BTreeSet::from(["N11".to_owned()]);
     let record = json!({"lane_id":"N11","status":"issued","worktree":"/worktree/n11"});
