@@ -3,13 +3,14 @@ use crate::cli::successor::{
     EffectClass, InspectTarget, OptionArgument, OptionName, ParsedInvocation, ParsedValue,
     SuccessorCommand,
 };
+use crate::cli::successor_public::strict;
 
 #[test]
 pub(crate) fn inspect_orchestration_reads_the_canonical_frontier_without_writes() {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .expect("validator has repository parent");
-    let before_tree = tree(root);
+    let before_tree = strict::capture_zero_write(root).expect("capture bounded repository state");
     let ParseOutcome::Invocation(invocation) =
         parse_args(["--json", "inspect", "orchestration"]).expect("orchestration route parses")
     else {
@@ -47,7 +48,10 @@ pub(crate) fn inspect_orchestration_reads_the_canonical_frontier_without_writes(
     ] {
         assert_forbidden_output(&rendered, root);
     }
-    assert_eq!(tree(root), before_tree);
+    assert_eq!(
+        strict::capture_zero_write(root).expect("recapture bounded repository state"),
+        before_tree
+    );
 }
 
 fn assert_forbidden_output(rendered: &str, root: &std::path::Path) {
