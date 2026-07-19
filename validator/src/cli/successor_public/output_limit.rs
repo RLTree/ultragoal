@@ -106,7 +106,7 @@ pub(crate) fn execute_invocation_with_home(
         SuccessorCommand::Fit(FitAction::Plan) => fit::plan(&context, &invocation),
         SuccessorCommand::Fit(FitAction::Apply) => fit::apply(&context, &invocation, home),
         SuccessorCommand::Fit(FitAction::Verify) => fit::verify(&context, &invocation),
-        SuccessorCommand::Migrate(crate::cli::successor::MigrateAction::Plan) => {
+        SuccessorCommand::Migrate(crate::cli::successor::command_contract::MigrateAction::Plan) => {
             migration::plan(&context, &invocation)
         }
         SuccessorCommand::Diagnose => match InventoryBuilder::new(&context).build() {

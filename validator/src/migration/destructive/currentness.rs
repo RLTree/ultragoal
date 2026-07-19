@@ -93,21 +93,6 @@ fn destructive_authorization_is_current(request: DestructiveAuthorizationCurrent
             )
 }
 
-fn inventory_digest(
-    context: &str,
-    candidate: &str,
-    catalog: &str,
-    session: &str,
-    surfaces: &[InventorySurface],
-) -> String {
-    let rows = surfaces
-        .iter()
-        .map(InventorySurface::digest_fragment)
-        .collect::<Vec<_>>()
-        .join("\n");
-    digest(format!("{context}|{candidate}|{catalog}|{session}|{rows}").as_bytes())
-}
-
 fn plan_digest(
     inventory: &MigrationInventory,
     routes: &[CompatibilityRoute],

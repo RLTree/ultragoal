@@ -1,6 +1,6 @@
 use super::super::{
-    InventorySurface, SurfaceStatus, digest, safe_reference, valid_identifier, valid_sha256,
-    valid_stable_identifier,
+    InventorySurface, SurfaceFileKind, SurfaceStatus, digest, safe_reference, valid_identifier,
+    valid_sha256, valid_stable_identifier,
 };
 use super::model::{
     AdoptedAuthorityPostcondition, ApplyAuthorizationAuthority, AuthoritySnapshot,
@@ -10,6 +10,7 @@ use super::model::{
     ProductPlanItemDefinition, REQUIRED_FALSE_PASS_CONTROLS,
     capture_compatibility_boundary_observation,
 };
+use crate::inventory::MAX_MIGRATION_REGISTRY_BYTES;
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
