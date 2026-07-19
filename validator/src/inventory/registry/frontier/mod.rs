@@ -131,6 +131,21 @@ fn scheduler_nodes(registry: &Value) -> Result<SchedulerNodes, InventoryError> {
             "scheduler frontier has unexpected ready lanes".to_owned(),
         ));
     }
+    let active = states
+        .iter()
+        .filter(|(_, state)| {
+            matches!(
+                state.as_str(),
+                "leased" | "candidate" | "under_review" | "rework" | "accepted"
+            )
+        })
+        .map(|(id, _)| id.clone())
+        .collect::<BTreeSet<_>>();
+    if active != lifecycle.active_worktree_lanes {
+        return Err(InventoryError::InvalidRegistry(
+            "scheduler frontier has unexpected active worktree lanes".to_owned(),
+        ));
+    }
     let integrated = states
         .into_iter()
         .filter(|(_, state)| state == "integrated")

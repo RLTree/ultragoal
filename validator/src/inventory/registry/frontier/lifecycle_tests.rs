@@ -117,6 +117,27 @@ fn external_evaluation_blocker_allows_only_root_claim_reconciliation() {
 }
 
 #[test]
+fn external_evaluation_blocker_rejects_unrelated_active_worktree_lanes() {
+    let result = scheduler_nodes(&registry(
+        &[
+            ("N10", "integrated"),
+            ("N11", "blocked"),
+            ("N12", "planned"),
+            ("N13", "leased"),
+        ],
+        &[],
+        "N11_EXTERNAL_BLOCKED_N12_RECONCILIATION_READY",
+    ));
+
+    assert!(
+        result
+            .unwrap_err()
+            .to_string()
+            .contains("unexpected active worktree lanes")
+    );
+}
+
+#[test]
 fn active_leases_are_exactly_one_open_evaluation_worktree() {
     let lanes = BTreeSet::from(["N11".to_owned()]);
     let record = json!({"lane_id":"N11","status":"issued","worktree":"/worktree/n11"});
