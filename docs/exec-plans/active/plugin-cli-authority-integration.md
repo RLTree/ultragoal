@@ -50,8 +50,10 @@ accepted, positive execution is externally blocked, and all dependent claims
 remain withheld. This terminal blocker releases only root-owned N12-A claim
 reconciliation; it does not satisfy N11 execution or `CL-EVAL-IMPROVEMENT`.
 The current frontier is `N02_REOBSERVED_N12_INTEGRATED_N14_READY_SOURCE_FRONTIER`.
-N12-A is source-integrated at `27c9afd0021ad9751d2411e4837d7f897064b99e` /
-tree `5f403008b137d5758fe760dc508b10f5747bd1c2`; every claim remains withheld.
+N12-A's original source remains accepted from
+`27c9afd0021ad9751d2411e4837d7f897064b99e`, while current root source
+admission is rebound at `10a77aeb9106e74a9cc534741248fbf076942f04` /
+tree `9a1026af5fac465f06efd0bf68a9f54ccaddff0f`; every claim remains withheld.
 N02 reobservation passes on exact clean candidate
 `b55e29dc2a5a1c84f3b65477f43a92cd03bbeb7a` / tree
 `796f7ab21e2fff2cfa845815c154505f2fc130dc`: two byte-identical
