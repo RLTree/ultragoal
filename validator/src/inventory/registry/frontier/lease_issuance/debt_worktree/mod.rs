@@ -59,9 +59,15 @@ pub(super) fn validate(
         if diagnostic.is_empty() {
             return Err(invalid("P0 diagnostic paths are empty"));
         }
-        let support = strings(record.get("support_files"), "P0 support files are missing")?;
+        let dependency_paths = strings(
+            record.get("support_files"),
+            "P0 dependency paths are missing",
+        )?;
         let owned = strings(record.get("owned_files"), "P0 owned files are missing")?;
-        let expected = diagnostic.union(&support).cloned().collect::<BTreeSet<_>>();
+        let expected = diagnostic
+            .union(&dependency_paths)
+            .cloned()
+            .collect::<BTreeSet<_>>();
         if owned != expected {
             return Err(invalid(
                 "P0 owned files differ from diagnostic and support union",
@@ -88,9 +94,52 @@ pub(super) fn validate(
             }
         }
     }
-    if count > 0 && claimed != allowed {
+    if count > 0 {
+        validate_product_dag_is_blocked(records, registry)?;
+        if claimed != allowed {
+            return Err(invalid(
+                "P0 worktree leases do not exactly cover the allowed path set",
+            ));
+        }
+    }
+    Ok(())
+}
+
+fn validate_product_dag_is_blocked(
+    records: &[Value],
+    registry: &Value,
+) -> Result<(), InventoryError> {
+    if records.iter().any(|record| !is_record(record)) {
+        return Err(invalid("P0 worktrees overlap an active product lease"));
+    }
+    let eligible = registry
+        .pointer("/pre_adoption_source/eligible_scheduler_nodes")
+        .and_then(Value::as_array)
+        .ok_or_else(|| invalid("P0 worktrees lack scheduler eligibility state"))?;
+    if !eligible.is_empty() {
+        return Err(invalid("P0 worktrees require a blocked product DAG"));
+    }
+    let lanes = registry
+        .get("lanes")
+        .and_then(Value::as_array)
+        .ok_or_else(|| invalid("P0 worktrees lack product lane state"))?;
+    let active = lanes.iter().any(|lane| {
+        matches!(
+            lane.get("state").and_then(Value::as_str),
+            Some(
+                "ready"
+                    | "leased"
+                    | "candidate"
+                    | "under_review"
+                    | "rework"
+                    | "accepted"
+                    | "integrating"
+            )
+        )
+    });
+    if active {
         return Err(invalid(
-            "P0 worktree leases do not exactly cover the allowed path set",
+            "P0 worktrees require every product lane to be idle",
         ));
     }
     Ok(())

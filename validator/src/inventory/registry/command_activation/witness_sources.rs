@@ -162,7 +162,7 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
     registry_source!("frontier/change_impact.rs", "change authority"),
     registry_source!("frontier/envelope_codec.rs", "envelope integrity"),
     registry_source!("frontier/handoff_adjacency.rs", "handoff authority"),
-    registry_source!("frontier/lease_issuance.rs", "lease authority"),
+    registry_source!("frontier/lease_issuance/mod.rs", "lease authority"),
     registry_source!("frontier/scope_ownership.rs", "scope authority"),
     registry_source!("frontier/scope_consumption.rs", "consumption authority"),
     registry_source!("load.rs", "frontier-bound registry construction"),

@@ -51,8 +51,37 @@ fn forbidden_or_uncovered_paths_are_rejected() {
     assert!(validate(&incomplete, &registry(), (COMMIT, TREE)).is_err());
 }
 
+#[test]
+fn p0_worktrees_are_rejected_when_product_work_is_eligible_or_active() {
+    let records = vec![
+        record("fit", "src/fit.rs", "src/fit_support.rs"),
+        record("routine", "src/routine.rs", "src/routine_support.rs"),
+    ];
+    let mut eligible = registry();
+    eligible["pre_adoption_source"]["eligible_scheduler_nodes"] = json!(["N14"]);
+    assert!(validate(&records, &eligible, (COMMIT, TREE)).is_err());
+
+    let mut active = registry();
+    active["lanes"][0]["state"] = json!("rework");
+    assert!(validate(&records, &active, (COMMIT, TREE)).is_err());
+
+    let mut product_record = record("product", "src/fit.rs", "src/fit_support.rs");
+    product_record["exception_id"] = Value::Null;
+    product_record["lane_id"] = json!("N14");
+    assert!(
+        validate(
+            &[records[0].clone(), product_record],
+            &registry(),
+            (COMMIT, TREE)
+        )
+        .is_err()
+    );
+}
+
 fn registry() -> Value {
     json!({
+        "pre_adoption_source": {"eligible_scheduler_nodes": []},
+        "lanes": [{"id": "N14", "state": "blocked"}],
         "lease_state": {
             "p0_exception": {
                 "allowed": {"paths": [
@@ -67,7 +96,7 @@ fn registry() -> Value {
     })
 }
 
-fn record(name: &str, diagnostic: &str, support: &str) -> Value {
+fn record(name: &str, diagnostic: &str, dependency_path: &str) -> Value {
     json!({
         "lease_id": format!("P0-{name}"),
         "lane_id": "P0",
@@ -78,8 +107,8 @@ fn record(name: &str, diagnostic: &str, support: &str) -> Value {
         "worktree": format!("/worktrees/{name}"),
         "status": "issued",
         "diagnostic_paths": [diagnostic],
-        "support_files": [support],
-        "owned_files": [diagnostic, support],
+        "support_files": [dependency_path],
+        "owned_files": [diagnostic, dependency_path],
         "diagnostic_path_set_digest": path_digest(diagnostic)
     })
 }
