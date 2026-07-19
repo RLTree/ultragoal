@@ -75,6 +75,14 @@ pub(crate) const FOUNDATIONAL_AUTHORITY_READERS: &[ReaderSpec] = &[
         "registry/topology.rs",
         false
     ),
+    // This scope guard mentions root-owned agent paths only to reject lane
+    // authority over them. Binding its exact bytes prevents that negative
+    // vocabulary from becoming an untracked descriptor reader.
+    reader!(
+        "validator/src/inventory/registry/frontier/scope_ownership.rs",
+        "registry/frontier/scope_ownership.rs",
+        false
+    ),
     reader!(
         "validator/src/package/inventory/mod.rs",
         "../package/inventory/mod.rs",

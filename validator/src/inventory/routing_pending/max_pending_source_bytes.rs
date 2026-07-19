@@ -23,7 +23,6 @@ fn replacement_state(value: ReplacementState) -> &'static str {
         ReplacementState::Unverified => "unverified",
         ReplacementState::CandidateRequired => "candidate-required",
         ReplacementState::Verified => "verified",
-        ReplacementState::NotApplicable => "not-applicable",
     }
 }
 
@@ -40,7 +39,6 @@ fn observed_authority_state(value: ObservedAuthorityState) -> &'static str {
         ObservedAuthorityState::Active => "active",
         ObservedAuthorityState::CompatibilityRouteRetained => "compatibility-route-retained",
         ObservedAuthorityState::ContextOnly => "context-only",
-        ObservedAuthorityState::Archived => "archived",
     }
 }
 

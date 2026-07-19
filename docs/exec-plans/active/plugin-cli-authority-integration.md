@@ -379,9 +379,13 @@ claim and representative product or release proof.
   HCT-CLAIMS target remain current. The five legacy-only helper mechanisms were
   retired with that production graph. This closes the 64-warning production
   frontier on the scoped source candidate without deleting archived bytes.
-  Global OD-008 remains unresolved for every other route, OD-009 still forbids
-  physical deletion or movement, and the remaining N14 route adoption,
-  equivalence, host execution, and registry closure are withheld. Exact candidate
+  Scoped OD-009 now consumes one exact root decision for two dead cohorts: the
+  14 OD-008 lane/ready files and the 103 orphaned N08 host-lifecycle source,
+  direct-include test, and fixture files. Their archive-only reader and routes
+  retire in the same batch. Generic destructive cleanup remains disabled,
+  global OD-008 remains unresolved for every other route, and the remaining
+  N14 route adoption, equivalence, host execution, and registry closure are
+  withheld. Exact candidate
   `bd7eb339e` / tree `558f0f6dc` passed the bounded independent review after its
   root digest chain and pending-source binding were repaired. The surviving coverage-digest
   authority is now owned by `audit/coverage/scope/digests.rs`, outside the
@@ -540,6 +544,15 @@ claim and representative product or release proof.
   only after canonical reconciliation and the required dead-code/standards
   checkpoint. Package, install, cache, marketplace, app-registry, discovery,
   runtime, Product Fitness, readiness, release, and completion remain withheld.
+
+Scoped OD-009 is resolved only for the two exact path/content-digested cleanup
+cohorts authorized from root base `ba04b09e9858c524dafeed3e27514eccc2e61354`.
+The cleanup removes 117 dead product/test/fixture paths, their three-file
+archive-only inventory reader, stale package-fixture references, and 14 retired
+route rows. Historical work packages, WorkerResults, acceptances, reviews, and
+root decisions remain immutable. The migration registry still refuses generic
+destructive cleanup; no source, product, migration, release, or completion
+claim is promoted by physical retirement alone.
 
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine

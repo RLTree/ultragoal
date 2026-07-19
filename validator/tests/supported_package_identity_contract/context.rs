@@ -3,16 +3,36 @@ const CANDIDATE: &str = "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 const SUBSTITUTE: &str = "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc";
 const WRONG_HOME: &str = "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
 const WRONG_TREE: &str = "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-const R3_CONTEXT: &str = "sha256:94705c615b06f6c59c08a3234713d0cf6c57b12d557bffe8121e7a8d18ae5168";
-const R3_CANDIDATE: &str =
-    "sha256:2f1c22491962bd8f3211d4b71709f98406c318b42bcacc48e8c9ff5fb2773ce1";
-const R3_RESULT_PATH: &str =
-    "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-IDENTITY-074.json";
-const R3_WORK_PACKAGE_PATH: &str =
-    "docs/ultragoal-successor-live/work-packages/SUPPORTED-PACKAGE-IDENTITY-074-R3.json";
-const R3_WORK_PACKAGE_SHA256: &str =
-    "sha256:a786a53849d5503b76908c6e0e2a4ec1a421be8f68d0180934bbe3746149c6b0";
 static NEXT: AtomicU64 = AtomicU64::new(0);
+
+fn snapshot_tree(root: &Path) -> Vec<(PathBuf, Vec<u8>)> {
+    fn walk(root: &Path, current: &Path, rows: &mut Vec<(PathBuf, Vec<u8>)>) {
+        let mut entries = fs::read_dir(current)
+            .unwrap()
+            .map(|row| row.unwrap())
+            .collect::<Vec<_>>();
+        entries.sort_by_key(|row| row.file_name());
+        for entry in entries {
+            let path = entry.path();
+            if entry.file_type().unwrap().is_dir() {
+                walk(root, &path, rows);
+            } else {
+                rows.push((
+                    path.strip_prefix(root).unwrap().into(),
+                    fs::read(path).unwrap(),
+                ));
+            }
+        }
+    }
+    let mut rows = Vec::new();
+    walk(root, root, &mut rows);
+    rows
+}
+
+fn digest(bytes: &[u8]) -> String {
+    use sha2::{Digest, Sha256};
+    format!("sha256:{:x}", Sha256::digest(bytes))
+}
 
 #[derive(Default)]
 struct Sink(Option<Vec<u8>>);
@@ -32,33 +52,6 @@ impl PackageEffects for Sink {
         }
         self.0 = replacement.map(<[u8]>::to_vec);
         Ok(true)
-    }
-}
-
-#[derive(Default)]
-struct Installed(Option<Vec<u8>>);
-
-impl InstallEffects for Installed {
-    fn read_installed(&mut self, _: &str, _: usize) -> Result<Option<Vec<u8>>, ()> {
-        Ok(self.0.clone())
-    }
-
-    fn compare_exchange_installed(
-        &mut self,
-        _: &str,
-        expected: &ExpectedPrior,
-        replacement: Option<&[u8]>,
-    ) -> Result<bool, ()> {
-        let matches = match expected {
-            ExpectedPrior::Absent => self.0.is_none(),
-            ExpectedPrior::ExactDigest(expected) => {
-                self.0.as_deref().map(digest).as_deref() == Some(expected)
-            }
-        };
-        if matches {
-            self.0 = replacement.map(<[u8]>::to_vec);
-        }
-        Ok(matches)
     }
 }
 

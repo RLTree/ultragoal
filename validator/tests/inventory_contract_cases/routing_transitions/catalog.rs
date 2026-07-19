@@ -19,7 +19,7 @@ fn live_exact_sources_are_sole_current_and_pending_migration() {
     let closure = catalog.closure_status();
     assert_eq!(catalog.to_canonical_json().unwrap(), serialized_before);
     assert!(closure.is_closed());
-    assert_eq!(catalog.findings().len(), 68);
+    assert_eq!(catalog.findings().len(), 54);
     assert_eq!(closure.blocker_count(), 0);
     assert_eq!(
         closure
@@ -63,26 +63,57 @@ fn live_exact_sources_are_sole_current_and_pending_migration() {
                 && candidate.entry_id.as_deref() == Some(stable_id)
         }));
     }
-    let archived = catalog
-        .findings()
-        .iter()
-        .filter(|finding| finding.code == "verified_od008_archive_context")
-        .collect::<Vec<_>>();
-    assert_eq!(archived.len(), 14);
-    for finding in archived {
-        let stable_id = finding.entry_id.as_deref().unwrap();
-        let entry = catalog
-            .entries()
+    assert!(
+        !catalog
+            .findings()
             .iter()
-            .find(|entry| entry.stable_id == stable_id)
-            .unwrap();
-        assert_eq!(entry.authority_state, AuthorityState::Context);
-        assert_eq!(entry.active_status, ActiveStatus::Retired);
-        assert!(!catalog.findings().iter().any(|candidate| {
-            candidate.code == "parallel_authority"
-                && candidate.entry_id.as_deref() == Some(stable_id)
-        }));
+            .any(|finding| finding.code == "verified_od008_archive_context")
+    );
+}
+
+#[test]
+fn od009_cleanup_is_exact_and_does_not_open_generic_deletion_authority() {
+    let root = crate::repository_fixture::live_root();
+    let decision_path = root.join(
+        "docs/ultragoal-successor-live/root-decisions/OD-009-SCOPED-DEAD-AUTHORITY-CLEANUP.json",
+    );
+    let decision: serde_json::Value =
+        serde_json::from_slice(&fs::read(decision_path).unwrap()).unwrap();
+    assert_eq!(decision["decision_id"], "OD-009");
+    assert_eq!(
+        decision["authorized_base"]["commit"],
+        "ba04b09e9858c524dafeed3e27514eccc2e61354"
+    );
+    assert_eq!(decision["authorized_cohorts"][0]["tracked_path_count"], 14);
+    assert_eq!(decision["authorized_cohorts"][1]["tracked_path_count"], 103);
+
+    for path in [
+        "validator/src/claim_semantics/lane",
+        "validator/src/claim_semantics/ready/mod.rs",
+        "validator/src/claim_semantics/ready/receipt.rs",
+        "validator/src/plugin_product/host_lifecycle",
+        "validator/tests/plugin_host_lifecycle_contract.rs",
+        "validator/tests/plugin_host_lifecycle_contract",
+        "validator/tests/supported_host_lifecycle_adapter_contract.rs",
+        "validator/tests/supported_host_lifecycle_adapter_contract",
+        "validator/tests/supported_host_plugin_transaction_contract.rs",
+        "validator/tests/supported_host_plugin_transaction_contract",
+        "fixtures/plugin-host-lifecycle",
+    ] {
+        assert!(!root.join(path).exists(), "retired path survived: {path}");
     }
+    assert!(root.join("validator/src/distribution/host_effect").is_dir());
+
+    let registry: serde_json::Value =
+        serde_json::from_slice(&fs::read(root.join("migration/authority-routes.json")).unwrap())
+            .unwrap();
+    assert_eq!(registry["destructive_cleanup_authorized"], false);
+    assert!(registry["routes"].as_array().unwrap().iter().all(|route| {
+        let path = route["match"]["relative_path"].as_str().unwrap_or_default();
+        !path.starts_with("validator/src/claim_semantics/lane/")
+            && path != "validator/src/claim_semantics/ready/mod.rs"
+            && path != "validator/src/claim_semantics/ready/receipt.rs"
+    }));
 }
 
 #[test]

@@ -6,7 +6,6 @@ pub(super) enum ObservedAuthorityState {
     Active,
     CompatibilityRouteRetained,
     ContextOnly,
-    Archived,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq)]
@@ -15,7 +14,6 @@ pub(super) enum ReplacementState {
     Unverified,
     CandidateRequired,
     Verified,
-    NotApplicable,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq)]
@@ -79,7 +77,7 @@ impl RouteTransition {
     pub fn claims_demoted(&self) -> bool {
         matches!(
             self.observed_authority_state,
-            ObservedAuthorityState::ContextOnly | ObservedAuthorityState::Archived
+            ObservedAuthorityState::ContextOnly
         )
     }
 
@@ -133,25 +131,10 @@ impl RouteTransition {
             && self.physical_cleanup_state == PhysicalCleanupState::Preserve
     }
 
-    pub fn verifies_retired_archive_transition(&self) -> bool {
-        self.compatibility_behavior == CompatibilityBehavior::NotApplicable
-            && self.compatibility_boundary == CompatibilityBoundary::Adopted
-            && self.replacement_state == ReplacementState::NotApplicable
-            && self.active_reader_writer_state == ReaderWriterState::NoneVerified
-            && self.observed_authority_state == ObservedAuthorityState::Archived
-            && self.equivalence_proof == EquivalenceProof::NotApplicable
-            && self.physical_cleanup_state == PhysicalCleanupState::Preserve
-    }
-
     fn requests_agent_context_transition(&self) -> bool {
         self.replacement_state == ReplacementState::CandidateRequired
             && self.active_reader_writer_state == ReaderWriterState::NoneVerified
             && self.observed_authority_state == ObservedAuthorityState::ContextOnly
-    }
-
-    fn requests_retired_archive_transition(&self) -> bool {
-        self.replacement_state == ReplacementState::NotApplicable
-            || self.observed_authority_state == ObservedAuthorityState::Archived
     }
 
     pub fn validate(
@@ -179,17 +162,6 @@ impl RouteTransition {
                 Ok(())
             } else {
                 Err("agent context route lacks exact compiled proof")
-            };
-        }
-        if self.requests_retired_archive_transition() {
-            return if exact_matcher
-                && retirement_witness
-                && !self.proof_refs.is_empty()
-                && self.verifies_retired_archive_transition()
-            {
-                Ok(())
-            } else {
-                Err("retired archive route lacks exact compiled proof")
             };
         }
         if self.requests_retained_compatibility_route() {
