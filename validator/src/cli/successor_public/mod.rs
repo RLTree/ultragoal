@@ -22,6 +22,7 @@ mod output_limit;
 
 mod capabilities;
 mod diagnose;
+mod evaluation;
 mod fit;
 mod local_store;
 mod observe;

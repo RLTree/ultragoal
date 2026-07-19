@@ -95,6 +95,9 @@ pub(crate) fn execute_invocation_with_home(
         SuccessorCommand::Observe(crate::cli::successor::ObserveAction::Query) => {
             observe::query_local(root, &context, &invocation)
         }
+        SuccessorCommand::Eval(crate::cli::successor::command_contract::EvalAction::Audit) => {
+            evaluation::audit(&context, &invocation)
+        }
         SuccessorCommand::Fit(FitAction::Inspect) => fit::inspect(&context, &invocation),
         SuccessorCommand::Fit(FitAction::Plan) => fit::plan(&context, &invocation),
         SuccessorCommand::Fit(FitAction::Apply) => fit::apply(&context, &invocation, home),

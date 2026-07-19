@@ -4,6 +4,7 @@
 //! private table can attest that a command/effect pair reaches one supported
 //! production handler and consumes its named API family.
 
+use crate::cli::successor::command_contract::EvalAction;
 use crate::cli::successor::{
     CheckProfile, EffectClass, FitAction, Group, InspectTarget, ObserveAction, ParsedInvocation,
     SuccessorCommand, catalog,
@@ -26,6 +27,7 @@ pub(crate) enum PublicOperation {
     FitVerification,
     Diagnosis,
     ObservabilityQuery,
+    EvaluationAudit,
 }
 
 #[derive(Clone, Copy)]
@@ -82,6 +84,12 @@ const OBSERVABILITY: &[&str] = &[
     "EventStore",
     "EventQuery",
     "CausalExplanation",
+];
+const EVALUATION_AUDIT: &[&str] = &[
+    "LiveContext::build",
+    "EffectClass",
+    "EvaluationSpec",
+    "TaskAudit",
 ];
 
 const BINDINGS: &[Binding] = &[
@@ -180,6 +188,12 @@ const BINDINGS: &[Binding] = &[
         SuccessorCommand::Observe(ObserveAction::Query),
         EffectClass::Read,
         OBSERVABILITY,
+    ),
+    binding(
+        PublicOperation::EvaluationAudit,
+        SuccessorCommand::Eval(EvalAction::Audit),
+        EffectClass::Read,
+        EVALUATION_AUDIT,
     ),
 ];
 

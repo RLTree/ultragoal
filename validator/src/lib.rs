@@ -17,7 +17,6 @@ pub mod context;
 mod contract_check_ids;
 mod digest;
 pub mod distribution;
-#[cfg(test)]
 pub mod evaluation;
 pub mod fixture_scheduler;
 #[cfg(test)]

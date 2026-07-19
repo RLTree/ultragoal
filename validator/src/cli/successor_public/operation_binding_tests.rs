@@ -1,6 +1,6 @@
 use super::*;
 use crate::cli::successor::OutputMode;
-use crate::cli::successor::command_contract::PackageAction;
+use crate::cli::successor::command_contract::{EvalAction, PackageAction};
 
 fn invocation(command: SuccessorCommand, effect: EffectClass) -> ParsedInvocation {
     ParsedInvocation {
@@ -20,6 +20,13 @@ fn only_exact_supported_command_effect_pairs_bind() {
         )),
         Some(PublicOperation::ObservabilityQuery),
     );
+    assert_eq!(
+        bind(&invocation(
+            SuccessorCommand::Eval(EvalAction::Audit),
+            EffectClass::Read,
+        )),
+        Some(PublicOperation::EvaluationAudit),
+    );
     for invocation in [
         invocation(
             SuccessorCommand::Observe(ObserveAction::Export),
@@ -28,6 +35,10 @@ fn only_exact_supported_command_effect_pairs_bind() {
         invocation(
             SuccessorCommand::Package(PackageAction::Inventory),
             EffectClass::Read,
+        ),
+        invocation(
+            SuccessorCommand::Eval(EvalAction::Run),
+            EffectClass::WorkspaceWrite,
         ),
         invocation(SuccessorCommand::Fit(FitAction::Apply), EffectClass::Read),
     ] {
