@@ -134,6 +134,14 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "adopted registry integrity gate"
     ),
     registry_source!("frontier/mod.rs", "adopted dependency frontier"),
+    registry_source!(
+        "frontier/change_impact.rs",
+        "derived lease change and consumption authority"
+    ),
+    registry_source!(
+        "frontier/handoff_adjacency.rs",
+        "receipt child handoff authority"
+    ),
     registry_source!("frontier/lease_issuance.rs", "source-base lease authority"),
     registry_source!(
         "frontier/scope_ownership.rs",

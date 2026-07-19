@@ -1,4 +1,4 @@
-use super::{SchedulerNodes, lease_base};
+use super::{SchedulerNodes, change_impact, handoff_adjacency, lease_base};
 use crate::context::ReadSession;
 use crate::inventory::types::InventoryError;
 use serde_json::Value;
@@ -77,6 +77,8 @@ pub(super) fn validate(
         ] {
             exact_named(record, record_field, scope, scope_field)?;
         }
+        change_impact::validate(reads, root, registry, lanes, scopes, record, lane, base)?;
+        handoff_adjacency::validate(reads, root, record)?;
     }
     Ok(())
 }

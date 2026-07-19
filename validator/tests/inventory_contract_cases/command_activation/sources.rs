@@ -26,6 +26,8 @@ const SOURCES: &[&str] = &[
     "validator/src/inventory/registry/data.rs",
     "validator/src/inventory/registry/integrity.rs",
     "validator/src/inventory/registry/frontier/mod.rs",
+    "validator/src/inventory/registry/frontier/change_impact.rs",
+    "validator/src/inventory/registry/frontier/handoff_adjacency.rs",
     "validator/src/inventory/registry/frontier/lease_issuance.rs",
     "validator/src/inventory/registry/frontier/scope_ownership.rs",
     "validator/src/inventory/registry/load.rs",

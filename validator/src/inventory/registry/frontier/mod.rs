@@ -217,6 +217,8 @@ fn dependency_tools(
     Ok(tools)
 }
 
+mod change_impact;
+mod handoff_adjacency;
 mod lease_base;
 mod lease_issuance;
 mod lifecycle;
