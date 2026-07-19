@@ -6,7 +6,7 @@ use std::collections::BTreeMap;
 
 const SCHEMA_VERSION: &str = "GeneratedSurfaceAuthorityShard-v1";
 const CONTRACT_ID: &str = "harness-ultragoal-successor-contract-v2";
-const MAX_DEFINITIONS: usize = 512;
+const MAX_DEFINITIONS: usize = 256;
 
 pub(super) fn validate(
     raw: RawShard,
@@ -114,7 +114,7 @@ fn retained(
         || deletion
         || reason.trim().is_empty()
         || reason.len() > 1024
-        || !value::sorted_strings(&replacement_targets)
+        || !value::replacement_targets(&replacement_targets)
     {
         return Err("generated_authority_shard_retained_context_invalid");
     }

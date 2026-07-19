@@ -7,8 +7,13 @@ fn sha256(bytes: &[u8]) -> String {
 
 fn registry(surfaces: Vec<Value>) -> Vec<u8> {
     serde_json::to_vec(&json!({
-        "schema_version": "GeneratedSurfaceAuthority-v2",
+        "schema_version": "GeneratedSurfaceAuthority-v3",
         "contract_id": CONTRACT_ID,
+        "registry_projection": {
+            "generator": REGISTRY,
+            "canonical_sources": [REGISTRY],
+            "regeneration_command": format!("{REGISTRY} write")
+        },
         "surfaces": surfaces
     }))
     .unwrap()
@@ -67,7 +72,7 @@ fn retained_context_is_digest_bound_context_without_generator_authority() {
 }
 
 #[test]
-fn generated_authority_v2_rejects_mixed_unknown_duplicate_and_unsafe_rows() {
+fn generated_authority_v3_rejects_mixed_unknown_duplicate_and_unsafe_rows() {
     let digest = "a".repeat(64);
     let canonical = json!({
         "disposition":"canonical_projection",
@@ -143,11 +148,11 @@ fn generated_authority_v2_rejects_mixed_unknown_duplicate_and_unsafe_rows() {
             "preserve":true, "physical_deletion_authorized":false
         })]),
         format!(
-            "{{\"schema_version\":\"GeneratedSurfaceAuthority-v2\",\"contract_id\":\"{CONTRACT_ID}\",\"surfaces\":[{{\"disposition\":\"retained_context\",\"output\":\"generated/duplicate.json\",\"sha256\":\"{digest}\",\"sha256\":\"{digest}\",\"reason\":\"context\",\"replacement_targets\":[\"HCT-CLAIMS\"],\"preserve\":true,\"physical_deletion_authorized\":false}}]}}"
+            "{{\"schema_version\":\"GeneratedSurfaceAuthority-v3\",\"contract_id\":\"{CONTRACT_ID}\",\"registry_projection\":{{\"generator\":\"{REGISTRY}\",\"canonical_sources\":[\"{REGISTRY}\"],\"regeneration_command\":\"{REGISTRY} write\"}},\"surfaces\":[{{\"disposition\":\"retained_context\",\"output\":\"generated/duplicate.json\",\"sha256\":\"{digest}\",\"sha256\":\"{digest}\",\"reason\":\"context\",\"replacement_targets\":[\"HCT-CLAIMS\"],\"preserve\":true,\"physical_deletion_authorized\":false}}]}}"
         )
         .into_bytes(),
     ];
     for (index, bytes) in invalid.iter().enumerate() {
-        rejects(&format!("generated-invalid-v2-{index}"), bytes);
+        rejects(&format!("generated-invalid-v3-{index}"), bytes);
     }
 }

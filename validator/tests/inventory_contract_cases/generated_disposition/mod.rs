@@ -7,4 +7,4 @@ use std::fs;
 
 include!("contract_id.rs");
 
-include!("generated_authority_v2_keeps_registry_and_collection_bounds.rs");
+include!("generated_authority_v3_keeps_registry_and_collection_bounds.rs");

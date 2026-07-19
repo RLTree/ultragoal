@@ -60,8 +60,9 @@ struct Fixture(PathBuf);
 impl Fixture {
     fn new(label: &str) -> Self {
         let base = std::env::var_os("HUL_SUPPORTED_PACKAGE_SCRATCH_ROOT")
+            .or_else(|| std::env::var_os("CODEX_WORKTREE_TMP"))
             .map(PathBuf::from)
-            .unwrap_or_else(std::env::temp_dir);
+            .unwrap_or_else(|| PathBuf::from("/tmp"));
         let root = base.join(format!(
             "hul-distribution-archive-{label}-{}-{}",
             std::process::id(),

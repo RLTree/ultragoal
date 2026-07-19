@@ -1,6 +1,7 @@
 use super::{PREDECESSOR_ROOT, catalog, exact_repo, live_registry};
+use crate::context::LiveContext;
 use crate::inventory::{ActiveStatus, AuthorityState};
-use crate::repository_fixture::live_root;
+use crate::repository_fixture::{inventory_request, live_root};
 use serde_json::{Value, json};
 use std::fs;
 
@@ -146,7 +147,7 @@ fn unknown_duplicate_and_extended_proposal_rows_are_rejected() {
 
 #[cfg(unix)]
 #[test]
-fn special_proposal_entry_is_rejected() {
+fn special_proposal_entry_fails_before_context_construction() {
     use std::ffi::CString;
     use std::os::unix::ffi::OsStrExt;
 
@@ -156,8 +157,5 @@ fn special_proposal_entry_is_rejected() {
     let path = CString::new(report.as_os_str().as_bytes()).unwrap();
     // SAFETY: `path` is a live NUL-terminated CString and mode contains only permission bits.
     assert_eq!(unsafe { libc::mkfifo(path.as_ptr(), 0o600) }, 0);
-    assert!(has_rejection(
-        &repo,
-        "non_authoritative_context_verification_failed"
-    ));
+    assert!(LiveContext::build(inventory_request(&repo.root)).is_err());
 }

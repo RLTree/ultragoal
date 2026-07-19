@@ -1,5 +1,5 @@
 #[test]
-fn generated_authority_v2_keeps_registry_and_collection_bounds() {
+fn generated_authority_v3_keeps_registry_and_collection_bounds() {
     let surfaces = (0..257)
         .map(|index| {
             json!({

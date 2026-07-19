@@ -515,9 +515,12 @@ claim and representative product or release proof.
   only five fully supported command groups are active, partial `observe`
   remains candidate, warning-denied production compilation passes, the exact
   namespace/zero-write gate passes, agent standards pass 121 rows, and two
-  current inventory summaries are byte-identical. The inventory remains
-  blocked by 44 existing dependency/migration authority findings, so no source
-  or product claim is promoted. N09 must establish its production adoption path.
+  current inventory summaries are byte-identical. After scoped OD-009 cleanup,
+  the corrected current catalog closes with 49 findings and 35 nonblocking
+  obligations: 15 pending migrations, 14 compatibility routes, five inactive
+  command groups, and one projection reconciliation. Exact repeat inventory
+  proof remains required on the clean correction candidate, so no source or
+  product claim is promoted. N09 must establish its production adoption path.
   Shared schemas, generated authority, public dispatch, claims, and integration
   remain root-owned.
 - N09 is source-accepted at `6a4624db6856ba82d84c3784ec7c6ed23b1cb2c1`
@@ -553,6 +556,15 @@ route rows. Historical work packages, WorkerResults, acceptances, reviews, and
 root decisions remain immutable. The migration registry still refuses generic
 destructive cleanup; no source, product, migration, release, or completion
 claim is promoted by physical retirement alone.
+
+The OD-009 correction boundary also restores the generated-authority v3
+contract at its shared parser: at most 256 surfaces, inputs, and replacement
+targets; sorted unique semantic replacement targets using only the adopted
+HCT-, PS-, SKILL:, AGENT:, COMMAND:, and CONTRACT-REGISTRY: grammars; and the
+same enforcement in registry and shard parsing. The dependency-closed inventory
+contract passes 107/107 and supported package identity passes 3/3. This closes
+the source-local cleanup defect only; installed-product and later-node claims
+remain withheld.
 
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine

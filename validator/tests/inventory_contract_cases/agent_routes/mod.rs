@@ -97,11 +97,11 @@ fn source_target_reader_and_positive_reader_drift_leave_legacy_active() {
                 repo.write(&target_path, &bytes);
             }
             "positive-reader" => {
-                let path = "validator/src/cli/control/plane/registry/agent_rows.rs";
+                let path = "validator/src/plugin_product/agent_discovery/source/mod.rs";
                 let text = fs::read_to_string(repo.root.join(path)).unwrap();
                 let changed = text.replace(
-                    "\"role\": role_name,",
-                    "\"role\": role_name, \"custom_agent_path\": \"custom-agents/reintroduced.toml\",",
+                    "role.manifest_path.to_owned(),",
+                    "\"custom-agents/reintroduced.toml\".to_owned(),",
                 );
                 assert_ne!(text, changed);
                 repo.write(path, changed.as_bytes());

@@ -13,13 +13,12 @@ fn live_exact_sources_are_sole_current_and_pending_migration() {
         .iter()
         .filter(|finding| finding.code == "sole_current_authority_pending_migration")
         .collect::<Vec<_>>();
-
     assert_eq!(pending.len(), 15);
     let serialized_before = catalog.to_canonical_json().unwrap();
     let closure = catalog.closure_status();
     assert_eq!(catalog.to_canonical_json().unwrap(), serialized_before);
     assert!(closure.is_closed());
-    assert_eq!(catalog.findings().len(), 54);
+    assert_eq!(catalog.findings().len(), 49);
     assert_eq!(closure.blocker_count(), 0);
     assert_eq!(
         closure
@@ -27,13 +26,13 @@ fn live_exact_sources_are_sole_current_and_pending_migration() {
             .get("sole_current_authority_pending_migration"),
         Some(&15)
     );
-    assert_eq!(closure.open_obligation_count(), 40);
+    assert_eq!(closure.open_obligation_count(), 35);
     assert!(closure.blockers_by_code().is_empty());
     assert_eq!(
         closure.open_obligations_by_code(),
         &std::collections::BTreeMap::from([
             ("compatibility_route_retained".to_owned(), 14),
-            ("candidate_component_not_active".to_owned(), 10),
+            ("candidate_component_not_active".to_owned(), 5),
             ("projection_requires_canonical_reconciliation".to_owned(), 1),
             ("sole_current_authority_pending_migration".to_owned(), 15),
         ])

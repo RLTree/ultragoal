@@ -8,7 +8,7 @@ use std::collections::BTreeMap;
 
 const SCHEMA_VERSION: &str = "GeneratedSurfaceAuthority-v3";
 const CONTRACT_ID: &str = "harness-ultragoal-successor-contract-v2";
-const MAX_SURFACES: usize = 512;
+const MAX_SURFACES: usize = 256;
 
 pub(super) fn validate(raw: RawRegistry) -> Result<GeneratedAuthorityRegistry, &'static str> {
     if raw.schema_version != SCHEMA_VERSION {
