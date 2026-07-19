@@ -21,7 +21,7 @@ fn review(
             candidate,
             PromotionEvidencePaths {
                 representative_journey: "src/evaluation/mod.rs".to_owned(),
-                rollback_evidence: "src/evaluation/production_input.rs".to_owned(),
+                rollback_evidence: "src/evaluation/production_input/mod.rs".to_owned(),
                 reviewed_artifacts: vec!["tests/evaluation_contract/next_root.rs".to_owned()],
             },
         )
@@ -62,12 +62,16 @@ fn stale_context_and_candidate_are_refused() {
     let spec = spec('1');
     let audit = spec.audit(&sha('2'), &sha('3'));
     assert!(!audit.eligible());
-    assert!(audit
-        .findings()
-        .contains(&"evaluation-context-stale".to_owned()));
-    assert!(audit
-        .findings()
-        .contains(&"evaluation-candidate-stale".to_owned()));
+    assert!(
+        audit
+            .findings()
+            .contains(&"evaluation-context-stale".to_owned())
+    );
+    assert!(
+        audit
+            .findings()
+            .contains(&"evaluation-candidate-stale".to_owned())
+    );
 }
 
 #[test]
@@ -88,10 +92,12 @@ fn missing_reward_hacking_control_blocks_audit() {
     let spec = EvaluationSpec::new(sha('c'), sha('1'), "suite", vec![task]).unwrap();
     let audit = spec.audit(&sha('c'), &sha('1'));
     assert!(!audit.eligible());
-    assert!(audit
-        .findings()
-        .iter()
-        .any(|finding| finding.ends_with("score-only")));
+    assert!(
+        audit
+            .findings()
+            .iter()
+            .any(|finding| finding.ends_with("score-only"))
+    );
 }
 
 #[test]

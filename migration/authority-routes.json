@@ -661,54 +661,6 @@
       }
     },
     {
-      "route_id": "command-argument-parser-authority-to-ps-cli",
-      "match": {
-        "stable_id": "LEGACY-COMMAND:validator/src/argument_parser/authority.rs",
-        "kind": "legacy-command-authority",
-        "relative_path": "validator/src/argument_parser/authority.rs"
-      },
-      "canonical_target": "PS-CLI",
-      "intended_disposition": "non-authoritative",
-      "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
-        "proof_refs": [
-          "validator/src/argument_parser/authority.rs",
-          "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
-        ]
-      }
-    },
-    {
-      "route_id": "command-argument-parser-help-request-to-ps-cli",
-      "match": {
-        "stable_id": "LEGACY-COMMAND:validator/src/argument_parser/help_request.rs",
-        "kind": "legacy-command-authority",
-        "relative_path": "validator/src/argument_parser/help_request.rs"
-      },
-      "canonical_target": "PS-CLI",
-      "intended_disposition": "non-authoritative",
-      "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
-        "proof_refs": [
-          "validator/src/argument_parser/help_request.rs",
-          "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
-        ]
-      }
-    },
-    {
       "route_id": "command-argument-parser-public-arguments-to-ps-cli",
       "match": {
         "stable_id": "LEGACY-COMMAND:validator/src/argument_parser/public_arguments.rs",
@@ -751,78 +703,6 @@
         "physical_cleanup_state": "blocked-by-OD-009",
         "proof_refs": [
           "validator/src/argument_parser/mod.rs",
-          "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
-        ]
-      }
-    },
-    {
-      "route_id": "command-argument-parser-specialized-to-ps-cli",
-      "match": {
-        "stable_id": "LEGACY-COMMAND:validator/src/argument_parser/specialized.rs",
-        "kind": "legacy-command-authority",
-        "relative_path": "validator/src/argument_parser/specialized.rs"
-      },
-      "canonical_target": "PS-CLI",
-      "intended_disposition": "non-authoritative",
-      "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
-        "proof_refs": [
-          "validator/src/argument_parser/specialized.rs",
-          "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
-        ]
-      }
-    },
-    {
-      "route_id": "command-argument-parser-tests-to-ps-cli",
-      "match": {
-        "stable_id": "LEGACY-COMMAND:validator/src/argument_parser/tests.rs",
-        "kind": "legacy-command-authority",
-        "relative_path": "validator/src/argument_parser/tests.rs"
-      },
-      "canonical_target": "PS-CLI",
-      "intended_disposition": "non-authoritative",
-      "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
-        "proof_refs": [
-          "validator/src/argument_parser/tests.rs",
-          "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI",
-          "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
-        ]
-      }
-    },
-    {
-      "route_id": "command-dispatcher-root-to-ps-cli",
-      "match": {
-        "stable_id": "LEGACY-COMMAND:validator/src/command/mod.rs",
-        "kind": "legacy-command-authority",
-        "relative_path": "validator/src/command/mod.rs"
-      },
-      "canonical_target": "PS-CLI",
-      "intended_disposition": "non-authoritative",
-      "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
-        "proof_refs": [
-          "validator/src/command/mod.rs",
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-CLI",
           "docs/ultragoal-successor-live/root-decisions/N02-SOLE-CURRENT-PENDING-MIGRATION.json"
         ]

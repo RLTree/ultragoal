@@ -142,7 +142,7 @@ fn audit_boundary_edges_reject_malformed_policy_surfaces() {
     let root = temp_root("review-history");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     let mut failures = BTreeMap::new();
-    crate::audit::review_history::check(&root, &mut failures);
+    crate::audit::review_record::check(&root, &mut failures);
     assert!(failures["validator-execution-provenance"][0].contains("missing"));
     std::fs::write(
         root.join("docs/review-loop-record.md"),
@@ -150,7 +150,7 @@ fn audit_boundary_edges_reject_malformed_policy_surfaces() {
     )
     .expect("review record");
     failures.clear();
-    crate::audit::review_history::check(&root, &mut failures);
+    crate::audit::review_record::check(&root, &mut failures);
     assert_eq!(failures["validator-execution-provenance"].len(), 2);
     std::fs::remove_dir_all(root).expect("cleanup");
 }

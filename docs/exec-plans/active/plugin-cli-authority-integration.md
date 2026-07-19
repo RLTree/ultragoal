@@ -710,6 +710,29 @@ claim and representative product or release proof.
   checkpoint. Package, install, cache, marketplace, app-registry, discovery,
   runtime, Product Fitness, readiness, release, and completion remain withheld.
 
+The post-N11 root debt checkpoint is in exact-freeze preparation. Scoped
+`OD-009-SCOPED-002` authorizes only the 126 path/content-digested Rust files
+proved unreachable from every Cargo production and test root; compile probes
+and standalone roots are excluded. The same batch removes three stale launch
+snapshots after the canonical registry reported no active lease, collapses the
+duplicate required-law list to the mandatory catalog, replaces user-facing
+lane-number repairs with product capabilities, and restores semantic module
+names for review records, evaluation admission, ledger initialization, and
+public inspection controls. Package, install, runtime, journey, readiness,
+release, and completion claims remain withheld. One bounded Terra/high review
+will inspect the exact clean freeze; only material authority/security,
+false-pass, integration, operator-journey, or compounding-architecture defects
+can reopen it, with at most one coherent correction and one correction review.
+
+Two debts are deliberately scheduled at their real dependency boundaries
+instead of extending this review loop. The broad suppression in
+`repository_fit_contract` requires migration to the compiled public-library
+test boundary before N13 installed-journey reproof. The historical frontier
+and handoff vocabulary in the inventory registry is contract-bound migration
+state; N14 owns its one-shot semantic migration before retirement claims. Both
+keep CL-STRICT, migration closure, readiness, release, and completion withheld
+as applicable; neither is treated as current product behavior proof.
+
 Scoped OD-009 is resolved only for the two exact path/content-digested cleanup
 cohorts authorized from root base `ba04b09e9858c524dafeed3e27514eccc2e61354`.
 The cleanup removes 117 dead product/test/fixture paths, their three-file

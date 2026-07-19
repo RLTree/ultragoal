@@ -1,0 +1,5 @@
+use super::*;
+
+mod capabilities_blocks_aliased_authority_roots_without_writes;
+mod capabilities_rejects_ambient_home_without_authority_io;
+mod orchestration_reads_canonical_frontier_without_writes;

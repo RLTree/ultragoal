@@ -12,15 +12,15 @@ use std::path::{Path, PathBuf};
 
 include!("state_name.rs");
 
-include!("file/initialization.rs");
+include!("initialization/ledger_access.rs");
 
-include!("initialization_recovery.rs");
+include!("initialization/recovery.rs");
 
-include!("initialization_validation.rs");
+include!("initialization/snapshot_validation.rs");
 
-include!("initialization_file.rs");
+include!("initialization/file_lifecycle.rs");
 
-include!("initialization_interruption.rs");
+include!("initialization/interruption_hooks.rs");
 
 include!("file/attestation_issuance.rs");
 

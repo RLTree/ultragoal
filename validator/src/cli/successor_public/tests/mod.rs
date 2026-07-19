@@ -12,12 +12,7 @@ use std::path::Path;
 mod accepted_observe_query_reads_current_local_events_without_writes;
 #[path = "fit_apply_runs_the_public_production_route_and_retires_recovery_state.rs"]
 mod fit_apply_runs_the_public_production_route_and_retires_recovery_state;
-#[path = "inspect_capabilities_blocks_aliased_authority_roots_without_writes.rs"]
-mod inspect_capabilities_blocks_aliased_authority_roots_without_writes;
-#[path = "inspect_capabilities_rejects_ambient_home_without_authority_io.rs"]
-mod inspect_capabilities_rejects_ambient_home_without_authority_io;
-#[path = "inspect_orchestration_reads_canonical_frontier_without_writes.rs"]
-mod inspect_orchestration_reads_canonical_frontier_without_writes;
+mod inspection;
 #[path = "public_output_limit_is_inclusive_and_fail_closed.rs"]
 mod public_output_limit_is_inclusive_and_fail_closed;
 #[path = "unavailable_context_is_stable_and_does_not_echo_input.rs"]

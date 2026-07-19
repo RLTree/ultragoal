@@ -72,12 +72,14 @@ impl<'a> RuntimeSession<'a> {
                 self.state_projection(invocation, StateProjection::Next, "next")
             }
             SuccessorCommand::Diagnose => self.diagnose(invocation),
-            SuccessorCommand::Inspect(InspectTarget::Inventory) => {
-                delegated(invocation.effect, "HCT-INVENTORY", "N02-INVENTORY")
-            }
+            SuccessorCommand::Inspect(InspectTarget::Inventory) => delegated(
+                invocation.effect,
+                "HCT-INVENTORY",
+                "activate the canonical inventory projection adapter for this runtime",
+            ),
             _ => {
-                let (tool, node) = downstream(invocation.command);
-                delegated(invocation.effect, tool, node)
+                let (tool, repair) = downstream(invocation.command);
+                delegated(invocation.effect, tool, repair)
             }
         };
         if self.context.revalidate().is_err() {

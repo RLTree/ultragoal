@@ -53,7 +53,7 @@ fn package_check_tasks(
         }),
         task({
             let root = Arc::clone(&root);
-            move |out| crate::audit::review_history::check(root.as_path(), out)
+            move |out| crate::audit::review_record::check(root.as_path(), out)
         }),
         task({
             let root = Arc::clone(&root);

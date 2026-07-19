@@ -7,35 +7,35 @@ pub(super) fn downstream(command: SuccessorCommand) -> (&'static str, &'static s
     match command {
         SuccessorCommand::Fit(_) => (
             "HCT-FIT",
-            "complete and independently accept N05-FIT, then wire its typed adapter",
+            "activate the typed repository-fit adapter for this runtime",
         ),
         SuccessorCommand::Check(_) => (
             "HCT-IMPACT",
-            "complete and independently accept N06-ROUTINE, then wire its typed adapter",
+            "activate the typed routine-work adapter for this runtime",
         ),
         SuccessorCommand::Prove => (
             "HCT-CLAIMS",
-            "complete and independently accept N12-CLAIMS, then wire its typed adapter",
+            "activate the typed claim-reconciliation adapter for this runtime",
         ),
         SuccessorCommand::Observe(_) => (
             "HCT-OBSERVE",
-            "complete and independently accept N07-OBSERVABILITY, then wire its typed adapter",
+            "activate the typed observability adapter for this runtime",
         ),
         SuccessorCommand::Package(_) => (
             "HCT-DISTRIBUTION",
-            "complete and independently accept N04-DISTRIBUTION, then wire its typed adapter",
+            "activate the typed distribution adapter for this runtime",
         ),
         SuccessorCommand::Eval(_) => (
             "HCT-EVAL",
-            "complete and independently accept N11-EVAL-RESEARCH, then wire its typed adapter",
+            "activate the authenticated evaluation-admission adapter for this runtime",
         ),
         SuccessorCommand::Migrate(_) => (
             "HCT-MIGRATE",
-            "complete and independently accept N14-MIGRATION, then wire its typed adapter",
+            "activate the typed migration adapter for this runtime",
         ),
         _ => (
             "HCT-STATE",
-            "complete and independently accept N03-CLI-STATE, then wire its typed adapter",
+            "activate the typed product-state adapter for this runtime",
         ),
     }
 }
@@ -65,7 +65,7 @@ pub(super) fn delegated(
             class,
             DiagnosticDetails {
                 cause: if authority {
-                    "the command requires authority and a downstream product adapter not present in N03"
+                    "the command requires authority and a product adapter not active in this runtime"
                 } else {
                     "the command belongs to a downstream Harness tool that is not wired into this runtime"
                 },

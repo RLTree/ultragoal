@@ -14,15 +14,15 @@ include!("state_name.rs");
 
 include!("current_snapshot.rs");
 
-include!("initialization_publication.rs");
+include!("initialization/file_lifecycle.rs");
 
-include!("initialization_interruption.rs");
+include!("initialization/interruption_hooks.rs");
 
-include!("initialization_anchor.rs");
+include!("initialization/anchor.rs");
 
-include!("initialization_recovery.rs");
+include!("initialization/state_recovery.rs");
 
-include!("file/initialization.rs");
+include!("initialization/ledger_access.rs");
 
 include!("file/recovery_requirement.rs");
 

@@ -3,7 +3,7 @@ use super::super::{
     BehaviorOutcome, BoundInput, EvaluationError, EvaluationTask, PerturbationControl, digest,
     valid_identifier, valid_sha256,
 };
-use super::AuthorizedEvidenceBinding;
+use super::EvaluationAdmissionBinding;
 use crate::fixture_scheduler::FixtureExecutionRecord;
 use serde::Deserialize;
 use std::collections::BTreeSet;
@@ -52,7 +52,7 @@ impl AuthenticatedTaskMaterial {
     pub(super) fn issue(
         task: &EvaluationTask,
         protected: &super::ProtectedTaskInputs,
-        authority: &AuthorizedEvidenceBinding,
+        authority: &EvaluationAdmissionBinding,
     ) -> Result<Self, EvaluationError> {
         let dataset = protected.dataset.read_authenticated()?;
         if digest(&dataset) != task.dataset.digest_sha256 {
