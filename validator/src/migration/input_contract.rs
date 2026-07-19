@@ -20,7 +20,7 @@ fn valid_identifier(value: &str) -> bool {
 
 fn valid_stable_identifier(value: &str) -> bool {
     !value.is_empty()
-        && value.len() <= MAX_IDENTIFIER_BYTES
+        && value.len() <= MAX_STABLE_IDENTIFIER_BYTES
         && !value.starts_with('/')
         && !value.contains('\\')
         && !value.contains("../")

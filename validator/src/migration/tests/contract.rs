@@ -17,6 +17,7 @@ use std::sync::{Arc, Barrier, Mutex};
 use std::thread;
 
 include!("../../../tests/migration_contract/next_root.rs");
+include!("../../../tests/migration_contract/stable_identifier_bounds.rs");
 include!("../../../tests/migration_contract/test/replacement/authority/current.rs");
 include!("../../../tests/migration_contract/test/replacement/authority/authority_id.rs");
 include!(

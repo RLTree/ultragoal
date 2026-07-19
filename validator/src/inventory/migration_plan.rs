@@ -58,7 +58,11 @@ pub(super) fn derive(
         )
         .as_bytes(),
     );
-    let surfaces = catalog.entries().iter().map(surface).collect::<Vec<_>>();
+    let surfaces = catalog
+        .entries()
+        .iter()
+        .map(surface)
+        .collect::<Result<Vec<_>, _>>()?;
     let inventory = MigrationInventory::new(
         context.context_id(),
         candidate_id,
@@ -75,12 +79,12 @@ pub(super) fn derive(
     Ok(plan.projection())
 }
 
-fn surface(entry: &InventoryEntry) -> InventorySurface {
-    InventorySurface::observed(InventorySurfaceObservation {
+fn surface(entry: &InventoryEntry) -> Result<InventorySurface, MigrationPlanAdapterError> {
+    Ok(InventorySurface::observed(InventorySurfaceObservation {
         stable_id: entry.stable_id.clone(),
         kind: entry.kind.clone(),
         relative_path: entry.relative_path.clone(),
-        digest_sha256: canonical_digest(&entry.digest_sha256),
+        digest_sha256: observed_digest(entry)?,
         file_kind: SurfaceFileKind::Semantic,
         link_count: 0,
         status: match entry.active_status {
@@ -96,14 +100,18 @@ fn surface(entry: &InventoryEntry) -> InventorySurface {
         active_writers: Vec::new(),
         public_routes: Vec::new(),
         generated_outputs: Vec::new(),
-    })
+    }))
 }
 
-fn canonical_digest(value: &str) -> String {
-    if value.starts_with("sha256:") {
-        value.to_owned()
+fn observed_digest(entry: &InventoryEntry) -> Result<String, MigrationPlanAdapterError> {
+    if entry.digest_sha256.is_empty() {
+        let bytes = serde_json::to_vec(&("MigrationSemanticInventorySurface-v1", entry))
+            .map_err(|error| MigrationPlanAdapterError(error.to_string()))?;
+        Ok(digest(&bytes))
+    } else if entry.digest_sha256.starts_with("sha256:") {
+        Ok(entry.digest_sha256.clone())
     } else {
-        format!("sha256:{value}")
+        Ok(format!("sha256:{}", entry.digest_sha256))
     }
 }
 

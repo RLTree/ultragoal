@@ -4,6 +4,7 @@ const MAX_ROUTES: usize = 4_096;
 const MAX_REFS_PER_SURFACE: usize = 4_096;
 const MAX_IDENTIFIER_BYTES: usize = 160;
 const MAX_PATH_BYTES: usize = 768;
+const MAX_STABLE_IDENTIFIER_BYTES: usize = MAX_IDENTIFIER_BYTES + 1 + MAX_PATH_BYTES;
 #[cfg(test)]
 const MAX_AUTHORIZATION_TTL_MS: u64 = 10 * 60 * 1_000;
 #[cfg(test)]
