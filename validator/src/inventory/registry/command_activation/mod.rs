@@ -32,6 +32,8 @@ macro_rules! registry_source {
 
 include!("witness_sources.rs");
 
+include!("activation_rows.rs");
+
 include!("exact_source_manifest.rs");
 
 include!("guard.rs");

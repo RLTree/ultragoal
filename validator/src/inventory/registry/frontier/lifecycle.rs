@@ -41,6 +41,11 @@ pub(super) fn expected(
             active_state(states, "N11")?;
             (&[][..], &["N11"][..])
         }
+        "N10_INTEGRATED_N11_ACTIVE_SOURCE_FRONTIER" => {
+            exact_state(states, "N10", "integrated")?;
+            active_state(states, "N11")?;
+            (&[][..], &["N11"][..])
+        }
         "N10_ROOT_PLANNED_N11_INTEGRATING_ROOT_CLOSURE" => {
             exact_state(states, "N10", "planned")?;
             exact_state(states, "N11", "integrating")?;

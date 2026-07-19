@@ -10,7 +10,8 @@ pub(crate) fn inspect_orchestration_reads_the_canonical_frontier_without_writes(
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .expect("validator has repository parent");
-    let before_tree = strict::capture_zero_write(root).expect("capture bounded repository state");
+    let before_tree =
+        strict::zero_write_guard::capture(root).expect("capture bounded repository state");
     let ParseOutcome::Invocation(invocation) =
         parse_args(["--json", "inspect", "orchestration"]).expect("orchestration route parses")
     else {
@@ -49,7 +50,7 @@ pub(crate) fn inspect_orchestration_reads_the_canonical_frontier_without_writes(
         assert_forbidden_output(&rendered, root);
     }
     assert_eq!(
-        strict::capture_zero_write(root).expect("recapture bounded repository state"),
+        strict::zero_write_guard::capture(root).expect("recapture bounded repository state"),
         before_tree
     );
 }

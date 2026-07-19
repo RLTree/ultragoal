@@ -44,6 +44,22 @@ fn evaluation_activity_requires_one_active_worktree_lane() {
 }
 
 #[test]
+fn integrated_orchestration_preserves_one_active_evaluation_worktree() {
+    for state in ["leased", "candidate", "under_review", "rework", "accepted"] {
+        let nodes = scheduler_nodes(&registry(
+            &[("N10", "integrated"), ("N11", state)],
+            &[],
+            "N10_INTEGRATED_N11_ACTIVE_SOURCE_FRONTIER",
+        ))
+        .unwrap();
+        assert_eq!(
+            nodes.active_worktree_lanes,
+            BTreeSet::from(["N11".to_owned()])
+        );
+    }
+}
+
+#[test]
 fn lifecycle_rejects_illegal_n11_transitions() {
     let active = scheduler_nodes(&registry(
         &[("N10", "planned"), ("N11", "ready")],

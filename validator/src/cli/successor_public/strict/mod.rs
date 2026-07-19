@@ -10,9 +10,7 @@ mod check_projection;
 mod failure_diagnostics;
 mod namespace_law_adapter;
 mod python_source_law_adapter;
-mod zero_write_guard;
-
-pub(crate) use zero_write_guard::capture as capture_zero_write;
+pub(crate) mod zero_write_guard;
 
 use check_projection::{CheckResult, LawFinding};
 
