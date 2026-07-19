@@ -6,4 +6,6 @@ mod rejection_ownership;
 mod semantic_tokens;
 mod source_shape;
 pub(crate) mod string_labels;
+mod string_scanner;
 pub(crate) mod topology;
+mod wire_bindings;

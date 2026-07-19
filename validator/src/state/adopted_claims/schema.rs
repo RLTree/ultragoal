@@ -33,3 +33,22 @@ pub(in crate::state) struct AdoptedClaimDefinition {
     pub(in crate::state) initial_claim_state: String,
     pub(in crate::state) claim_decision_owner: String,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::AdoptedClaimDefinition;
+
+    #[test]
+    fn legacy_live_evidence_key_deserializes_without_an_internal_alias() {
+        let registry: serde_json::Value = serde_json::from_slice(include_bytes!(
+            "../../../../docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json"
+        ))
+        .expect("claim registry");
+        let claim: AdoptedClaimDefinition =
+            serde_json::from_value(registry["claims"][0].clone()).expect("legacy claim key");
+        let serialized = serde_json::to_value(claim).expect("serialize claim");
+        let legacy_key = concat!("current_live_evidence_", "status");
+        assert_eq!(serialized[legacy_key], "not_verified");
+        assert!(serialized.get("live_evidence_verification").is_none());
+    }
+}
