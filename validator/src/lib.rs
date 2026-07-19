@@ -17,7 +17,7 @@ pub mod context;
 mod contract_check_ids;
 mod digest;
 pub mod distribution;
-pub mod evaluation;
+mod evaluation;
 pub mod fixture_scheduler;
 #[cfg(test)]
 #[path = "fixture_scheduler/tests/mod.rs"]

@@ -1,14 +1,16 @@
-use super::*;
+use crate::context::LiveContext;
 use crate::evaluation::{
     BoundInput, EvaluationDataControls, EvaluationDataControlsDefinition,
     EvaluationDatasetProvenance, EvaluationSpec, EvaluationTask, EvaluationTaskDefinition,
     PerturbationControl,
 };
 use serde::Deserialize;
+use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
 use std::path::Path;
 
 const MAX_SPEC_BYTES: u64 = 4 * 1024 * 1024;
+const MAX_DATASET_BYTES: u64 = 64 * 1024 * 1024;
 const SCHEMA_VERSION: &str = "EvaluationAuditSpec-v1";
 
 #[derive(Deserialize)]
@@ -71,12 +73,22 @@ pub(super) fn load(
         .read_bounded(Path::new(spec_path), MAX_SPEC_BYTES)
         .map_err(|_| ())?;
     let input = serde_json::from_slice::<AuditSpecificationInput>(&bytes).map_err(|_| ())?;
+    input.authenticate_datasets(&reads)?;
     let spec = input.into_spec(context.context_id(), candidate_id)?;
     reads.revalidate().map_err(|_| ())?;
     Ok(spec)
 }
 
 impl AuditSpecificationInput {
+    fn authenticate_datasets(&self, reads: &crate::context::ReadSession) -> Result<(), ()> {
+        if self.schema_version != SCHEMA_VERSION {
+            return Err(());
+        }
+        self.tasks
+            .iter()
+            .try_for_each(|task| task.authenticate_dataset(reads))
+    }
+
     fn into_spec(self, context_id: &str, candidate_id: &str) -> Result<EvaluationSpec, ()> {
         if self.schema_version != SCHEMA_VERSION {
             return Err(());
@@ -91,6 +103,16 @@ impl AuditSpecificationInput {
 }
 
 impl AuditTaskInput {
+    fn authenticate_dataset(&self, reads: &crate::context::ReadSession) -> Result<(), ()> {
+        let bytes = reads
+            .read_bounded(Path::new(&self.dataset.relative_path), MAX_DATASET_BYTES)
+            .map_err(|_| ())?;
+        (bytes.len() as u64 == self.dataset.byte_length
+            && format!("sha256:{:x}", Sha256::digest(bytes)) == self.dataset.digest_sha256)
+            .then_some(())
+            .ok_or(())
+    }
+
     fn into_task(self) -> EvaluationTask {
         let data_controls = EvaluationDataControls::new(EvaluationDataControlsDefinition {
             objective: self.data_controls.objective,
