@@ -1,4 +1,4 @@
-use super::super::{EvaluationError, EvaluationSpec, digest, valid_identifier, valid_sha256};
+use super::super::{digest, valid_identifier, valid_sha256, EvaluationError, EvaluationSpec};
 use std::collections::BTreeSet;
 
 mod seal {
@@ -41,7 +41,6 @@ pub(super) struct AuthorizedEvidenceBinding {
     pub(super) task_authority_id: String,
     pub(super) task_principal_id: String,
     pub(super) task_session_id: String,
-    pub(super) provenance_authority_id: String,
     pub(super) provenance_principal_id: String,
     pub(super) provenance_session_id: String,
     pub(super) grader_authority_id: String,
@@ -119,7 +118,6 @@ impl ProductionEvidenceAuthority {
             task_authority_id: self.task_authority_id,
             task_principal_id: self.task_principal_id,
             task_session_id: self.task_session_id,
-            provenance_authority_id: self.provenance_authority_id,
             provenance_principal_id: self.provenance_principal_id,
             provenance_session_id: self.provenance_session_id,
             grader_authority_id: self.grader_authority_id,

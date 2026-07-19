@@ -201,10 +201,6 @@ impl FileEvaluationExecutionLedger {
         Ok(ExecutionReservationOutcome::Acquired)
     }
 
-    pub(crate) fn binding(&self) -> &EvaluationExecutionBinding {
-        &self.binding
-    }
-
     fn publish_result(
         &mut self,
         run_sha256: impl Into<String>,
