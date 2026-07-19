@@ -26,6 +26,7 @@ pub(super) struct PresentLeaf {
 /// after their final observation are outside the completed read.
 pub(super) fn descriptor_path(file: &File) -> Result<PathBuf, FitError> {
     let mut buffer = [0 as libc::c_char; libc::PATH_MAX as usize];
+    // SAFETY: `file` owns a live descriptor and `buffer` is writable for `F_GETPATH`.
     if unsafe { libc::fcntl(file.as_raw_fd(), libc::F_GETPATH, buffer.as_mut_ptr()) } < 0 {
         let id = match std::io::Error::last_os_error().raw_os_error() {
             Some(libc::EINVAL | libc::ENOTSUP | libc::ENOSYS) => FitErrorId::UnsupportedHost,

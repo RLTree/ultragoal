@@ -3,6 +3,7 @@ use super::*;
 impl Store {
     pub(crate) fn names(&self) -> Result<BTreeSet<String>, LedgerError> {
         self.verify_root()?;
+        // SAFETY: the store owns a live directory descriptor and `c"."` is NUL-terminated.
         let descriptor = unsafe {
             libc::openat(
                 self.directory.as_raw_fd(),
@@ -17,22 +18,28 @@ impl Store {
         if descriptor < 0 {
             return Err(ledger_io());
         }
+        // SAFETY: `descriptor` is a newly opened directory descriptor; ownership transfers on success.
         let stream = unsafe { libc::fdopendir(descriptor) };
         if stream.is_null() {
+            // SAFETY: `fdopendir` failed, so this call still owns the live descriptor.
             unsafe { libc::close(descriptor) };
             return Err(ledger_io());
         }
         let mut names = BTreeSet::new();
         let result = loop {
+            // SAFETY: `__error` returns the calling thread's writable errno location.
             unsafe { *libc::__error() = 0 };
+            // SAFETY: `stream` is a live directory stream until `closedir` below.
             let entry = unsafe { libc::readdir(stream) };
             if entry.is_null() {
+                // SAFETY: `__error` returns the calling thread's readable errno location.
                 break if unsafe { *libc::__error() } == 0 {
                     Ok(names)
                 } else {
                     Err(ledger_io())
                 };
             }
+            // SAFETY: a non-null `readdir` result points to a NUL-terminated directory entry name.
             let bytes = unsafe { CStr::from_ptr((*entry).d_name.as_ptr()) }.to_bytes();
             if matches!(bytes, b"." | b"..") {
                 continue;
@@ -48,6 +55,7 @@ impl Store {
                 break Err(tampered());
             }
         };
+        // SAFETY: `stream` is live and owns `descriptor`; this releases both exactly once.
         if unsafe { libc::closedir(stream) } != 0 {
             return Err(ledger_io());
         }
@@ -57,6 +65,7 @@ impl Store {
 
     pub(crate) fn is_empty_unclassified(&self) -> Result<bool, LedgerError> {
         self.verify_root()?;
+        // SAFETY: the store owns a live directory descriptor and `c"."` is NUL-terminated.
         let descriptor = unsafe {
             libc::openat(
                 self.directory.as_raw_fd(),
@@ -71,26 +80,33 @@ impl Store {
         if descriptor < 0 {
             return Err(ledger_io());
         }
+        // SAFETY: `descriptor` is a newly opened directory descriptor; ownership transfers on success.
         let stream = unsafe { libc::fdopendir(descriptor) };
         if stream.is_null() {
+            // SAFETY: `fdopendir` failed, so this call still owns the live descriptor.
             unsafe { libc::close(descriptor) };
             return Err(ledger_io());
         }
         let result = loop {
+            // SAFETY: `__error` returns the calling thread's writable errno location.
             unsafe { *libc::__error() = 0 };
+            // SAFETY: `stream` is a live directory stream until `closedir` below.
             let entry = unsafe { libc::readdir(stream) };
             if entry.is_null() {
+                // SAFETY: `__error` returns the calling thread's readable errno location.
                 break if unsafe { *libc::__error() } == 0 {
                     Ok(true)
                 } else {
                     Err(ledger_io())
                 };
             }
+            // SAFETY: a non-null `readdir` result points to a NUL-terminated directory entry name.
             let bytes = unsafe { CStr::from_ptr((*entry).d_name.as_ptr()) }.to_bytes();
             if !matches!(bytes, b"." | b"..") {
                 break Ok(false);
             }
         };
+        // SAFETY: `stream` is live and owns `descriptor`; this releases both exactly once.
         if unsafe { libc::closedir(stream) } != 0 {
             return Err(ledger_io());
         }

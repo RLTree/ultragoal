@@ -13,6 +13,7 @@ impl Store {
         );
         let directory = options.open(&supplied).map_err(|_| invalid_store())?;
         let metadata = directory.metadata().map_err(|_| invalid_store())?;
+        // SAFETY: `geteuid` reads the calling process's effective UID and has no preconditions.
         let expected_uid = unsafe { libc::geteuid() };
         if !metadata.is_dir()
             || metadata.dev() != path_metadata.dev()
@@ -41,11 +42,13 @@ impl Store {
     pub(crate) fn verify_root(&self) -> Result<(), LedgerError> {
         let path = fs::symlink_metadata(&self.requested_root).map_err(|_| tampered())?;
         let opened = self.directory.metadata().map_err(|_| tampered())?;
+        // SAFETY: `geteuid` reads the calling process's effective UID and has no preconditions.
+        let expected_uid = unsafe { libc::geteuid() };
         if path.file_type().is_symlink()
             || !path.is_dir()
             || root_identity(&path) != self.root_identity
             || root_identity(&opened) != self.root_identity
-            || path.uid() != unsafe { libc::geteuid() }
+            || path.uid() != expected_uid
             || path.mode() & 0o7777 != 0o700
             || fs::canonicalize(&self.requested_root).map_err(|_| tampered())?
                 != self.canonical_root

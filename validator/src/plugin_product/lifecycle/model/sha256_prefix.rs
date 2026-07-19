@@ -161,6 +161,9 @@ pub struct LifecyclePlan {
 
 static NEXT_PLAN_ISSUANCE: AtomicU64 = AtomicU64::new(1);
 
+pub(super) type LifecycleActionAuthority = Arc<AtomicU8>;
+pub(super) type RecoveryStateAuthority = Arc<Mutex<Option<LifecycleState>>>;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[repr(u8)]
 pub(super) enum LifecycleActionState {
@@ -184,14 +187,18 @@ impl LifecycleActionState {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub(super) enum PlanAuthorizationSeal {
+    #[default]
     Unsealed,
-    Sealed {
-        issuance_id: u64,
-        observed: LifecycleState,
-        request: LifecycleRequest,
-        action_state: Arc<AtomicU8>,
-        recovery_state: Arc<Mutex<Option<LifecycleState>>>,
-    },
+    Sealed(Box<PlanAuthorizationSealData>),
+}
+
+#[derive(Clone)]
+pub(super) struct PlanAuthorizationSealData {
+    issuance_id: u64,
+    observed: LifecycleState,
+    request: LifecycleRequest,
+    action_state: LifecycleActionAuthority,
+    recovery_state: RecoveryStateAuthority,
 }

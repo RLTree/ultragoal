@@ -2,6 +2,7 @@ use super::*;
 
 impl ProcessLock {
     pub(crate) fn acquire(file: File) -> Result<Self, LedgerError> {
+        // SAFETY: `file` owns a live descriptor that remains open in the returned lock.
         if unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX) } != 0 {
             return Err(ledger_io());
         }

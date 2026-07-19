@@ -26,8 +26,10 @@ impl Store {
             file.write_all(bytes).map_err(|_| ledger_io())?;
             file.sync_all().map_err(|_| ledger_io())?;
             let identity = file_identity(&file.metadata().map_err(|_| ledger_io())?);
+            // SAFETY: `geteuid` reads the calling process's effective UID and has no preconditions.
+            let expected_uid = unsafe { libc::geteuid() };
             if identity.links != 1
-                || identity.uid != unsafe { libc::geteuid() }
+                || identity.uid != expected_uid
                 || identity.mode & 0o7777 != 0o600
                 || identity.length != bytes.len() as u64
             {

@@ -14,7 +14,7 @@ impl ManagedAncestorContract {
         }
         let targets = match leaf_paths
             .iter()
-            .map(|path| CanonicalPath::parse(path))
+            .map(CanonicalPath::parse)
             .collect::<Result<Vec<_>, _>>()
         {
             Ok(targets) => targets,
@@ -30,7 +30,7 @@ impl ManagedAncestorContract {
             return false;
         }
         self.rows.iter().enumerate().all(|(index, row)| {
-            if index == 0 && row.path != "" {
+            if index == 0 && !row.path.is_empty() {
                 return false;
             }
             match row.expectation {
