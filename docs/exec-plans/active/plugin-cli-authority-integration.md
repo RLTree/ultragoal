@@ -574,6 +574,15 @@ negatives for `HCT-`, `PS-`, `HCT-lower`, and `PS--X`. No deletion-scope,
 historical-authority, digest-chain, or claim-ceiling defect was found in that
 review; the correction requires one fresh exact-candidate review.
 
+The corrected checkpoint is accepted at exact clean candidate
+`202b9c6ed4dfc054077bedfccce2e411c49ce2fe` / tree
+`48cc908615d1d87b54d8dd0841525e81bb592a56`. The fresh bounded review returned
+ACCEPT. Two summaries are byte-identical at SHA-256
+`57781c19c33c774ada5ffc6637cf3c281675a6a6e040a67c381d526085d1b51c`;
+the catalog has zero blockers and the exact 35 nonblocking obligations above.
+The next controller action is lane restructuring and one bounded adversarial
+path review before any new implementation worktree is issued.
+
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
 work -> interruption/diagnosis/recovery -> repeat use. Each truth surface keeps
