@@ -56,10 +56,11 @@ pub(super) fn expected(
             exact_state(states, "N11", "integrating")?;
             (&[][..], &[][..])
         }
-        "N11_EXTERNAL_BLOCKED_N12_RECONCILIATION_READY" => {
+        "N11_EXTERNAL_BLOCKED_N12_INTEGRATING_SOURCE_ACCEPTED" => {
             exact_state(states, "N10", "integrated")?;
             exact_state(states, "N11", "blocked")?;
-            exact_state(states, "N12", "planned")?;
+            exact_state(states, "N12", "integrating")?;
+            exact_state(states, "N14", "blocked")?;
             (&[][..], &[][..])
         }
         _ => return Err(invalid("scheduler frontier is unknown")),

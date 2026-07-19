@@ -48,8 +48,11 @@ AMEND-002 makes the three N11 dimensions explicit: source acceptance is
 accepted, positive execution is externally blocked, and all dependent claims
 remain withheld. This terminal blocker releases only root-owned N12-A claim
 reconciliation; it does not satisfy N11 execution or `CL-EVAL-IMPROVEMENT`.
-The current frontier is `N11_EXTERNAL_BLOCKED_N12_RECONCILIATION_READY` with
-N12 planned and no scheduler-eligible worktree lane.
+The current frontier is `N11_EXTERNAL_BLOCKED_N12_INTEGRATING_SOURCE_ACCEPTED`.
+N12-A is source-accepted at `27c9afd0021ad9751d2411e4837d7f897064b99e` /
+tree `5f403008b137d5758fe760dc508b10f5747bd1c2`; every claim remains withheld and
+no worktree lane is scheduler-eligible until current N02 inventory reobservation
+passes twice with byte-identical summaries.
 
 ## Stage B projection freeze (routing only)
 
@@ -66,8 +69,10 @@ N04-N07 are now integrated at source-only ceilings. N07 exact source
 library boundary, five private identity controls, 33 local contracts, and the
 three exact causal, recovery, and false-pass journeys. Its task and worktree are
 closed. The post-N11 standards-debt checkpoint is closed. N10 is integrated;
-N11 is source-accepted and execution-blocked; N12-A is the next root-only
-staged reconciliation boundary. The corrected route is N12-A -> N14 -> N15 ->
+N11 is source-accepted and execution-blocked; N12-A is accepted only as a
+root-owned staged reconciliation boundary. It promotes no N11 execution,
+product, readiness, release, or completion claim. The corrected route is N02
+current reobservation -> N14 -> N15 ->
 final freeze -> N02/N12 claim reproof -> N13 -> N16 -> post-product
 four-persona review -> non-mutating N17 reconciliation. Preliminary N13 work,
 if used, is isolated, advisory, non-citable, and discarded before the final

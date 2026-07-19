@@ -105,10 +105,11 @@ fn external_evaluation_blocker_allows_only_root_claim_reconciliation() {
         &[
             ("N10", "integrated"),
             ("N11", "blocked"),
-            ("N12", "planned"),
+            ("N12", "integrating"),
+            ("N14", "blocked"),
         ],
         &[],
-        "N11_EXTERNAL_BLOCKED_N12_RECONCILIATION_READY",
+        "N11_EXTERNAL_BLOCKED_N12_INTEGRATING_SOURCE_ACCEPTED",
     ))
     .unwrap();
 
@@ -122,11 +123,12 @@ fn external_evaluation_blocker_rejects_unrelated_active_worktree_lanes() {
         &[
             ("N10", "integrated"),
             ("N11", "blocked"),
-            ("N12", "planned"),
+            ("N12", "integrating"),
             ("N13", "leased"),
+            ("N14", "blocked"),
         ],
         &[],
-        "N11_EXTERNAL_BLOCKED_N12_RECONCILIATION_READY",
+        "N11_EXTERNAL_BLOCKED_N12_INTEGRATING_SOURCE_ACCEPTED",
     ));
 
     assert!(
@@ -134,6 +136,27 @@ fn external_evaluation_blocker_rejects_unrelated_active_worktree_lanes() {
             .unwrap_err()
             .to_string()
             .contains("unexpected active worktree lanes")
+    );
+}
+
+#[test]
+fn n12_source_acceptance_does_not_release_n14_before_inventory_reobservation() {
+    let result = scheduler_nodes(&registry(
+        &[
+            ("N10", "integrated"),
+            ("N11", "blocked"),
+            ("N12", "integrating"),
+            ("N14", "ready"),
+        ],
+        &["N14"],
+        "N11_EXTERNAL_BLOCKED_N12_INTEGRATING_SOURCE_ACCEPTED",
+    ));
+
+    assert!(
+        result
+            .unwrap_err()
+            .to_string()
+            .contains("illegal lane lifecycle")
     );
 }
 
