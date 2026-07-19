@@ -88,12 +88,7 @@ const EVALUATION_AUDIT: &[&str] = &[
     "EvaluationSpec",
     "TaskAudit",
 ];
-const EVALUATION_RUN: &[&str] = &[
-    "LiveContext::build",
-    "EvaluationRunAdmission",
-    "ScheduledFixtureEvaluationBridge",
-    "ProductionEvaluationRun",
-];
+const EVALUATION_RUN: &[&str] = &["EvalRunUnsupportedCapability"];
 
 const BINDINGS: &[Binding] = &[
     binding(

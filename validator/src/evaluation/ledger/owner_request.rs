@@ -1,7 +1,7 @@
 use super::EvaluationSpec;
 use super::production_input::ProductionSpecPermit;
 
-pub(in crate::evaluation) struct ProductionExecutionRequest<'a> {
+pub(crate) struct ProductionExecutionRequest<'a> {
     spec: &'a EvaluationSpec,
     input_root: std::path::PathBuf,
     ledger_root: std::path::PathBuf,
@@ -9,11 +9,10 @@ pub(in crate::evaluation) struct ProductionExecutionRequest<'a> {
     execution_session_id: String,
     artifact_root_sha256: String,
     runtime_configuration: RuntimeConfiguration,
-    output: Option<crate::context::AuthorizedPath>,
 }
 
 impl<'a> ProductionExecutionRequest<'a> {
-    pub(in crate::evaluation) fn new(
+    pub(crate) fn new(
         spec: &'a EvaluationSpec,
         input_root: impl Into<std::path::PathBuf>,
         ledger_root: impl Into<std::path::PathBuf>,
@@ -30,19 +29,10 @@ impl<'a> ProductionExecutionRequest<'a> {
             execution_session_id: execution_session_id.into(),
             artifact_root_sha256: artifact_root_sha256.into(),
             runtime_configuration,
-            output: None,
         }
     }
 
-    pub(in crate::evaluation) fn with_output(
-        mut self,
-        output: crate::context::AuthorizedPath,
-    ) -> Self {
-        self.output = Some(output);
-        self
-    }
-
-    pub(in crate::evaluation) fn execute<B: FixtureEvaluationBridge>(
+    pub(crate) fn execute<B: FixtureEvaluationBridge>(
         self,
         bridge: &mut B,
     ) -> Result<ProductionEvaluationRun, ProductionRuntimeError> {
@@ -65,7 +55,6 @@ impl<'a> ProductionExecutionRequest<'a> {
             self.execution_session_id,
             self.runtime_configuration,
             &binding,
-            self.output.as_ref(),
             bridge,
         )
     }

@@ -34,17 +34,6 @@ impl ExecutionOwner {
         };
         Ok(Self(ledger))
     }
-
-    fn publish_terminal_result(
-        &mut self,
-        run_sha256: &str,
-        artifact_set_sha256: String,
-        terminal_result: Vec<u8>,
-    ) -> Result<(), ProductionRuntimeError> {
-        self.0
-            .publish_terminal_result(run_sha256, artifact_set_sha256, terminal_result)
-            .map_err(|error| ProductionRuntimeError::new(error.code()))
-    }
 }
 
 include!("owner_execution.rs");

@@ -139,11 +139,9 @@ impl FileEvaluationExecutionLedger {
                 EvaluationLedgerState::Published {
                     run_sha256,
                     artifact_set_sha256,
-                    terminal_result,
                 } => ExecutionReservationOutcome::AlreadyPublished {
                     run_sha256,
                     artifact_set_sha256,
-                    terminal_result,
                 },
                 EvaluationLedgerState::Interrupted { causal_code } => {
                     ExecutionReservationOutcome::Interrupted { causal_code }
@@ -154,11 +152,9 @@ impl FileEvaluationExecutionLedger {
                 EvaluationLedgerState::Terminal {
                     run_sha256,
                     artifact_set_sha256,
-                    terminal_result,
                 } => ExecutionReservationOutcome::Terminal {
                     run_sha256,
                     artifact_set_sha256,
-                    terminal_result,
                 },
                 EvaluationLedgerState::Initialized => {
                     return Err(EvaluationLedgerError::new(
@@ -206,6 +202,31 @@ impl FileEvaluationExecutionLedger {
         sync_directory(&self.root)?;
         self.require_published_current(&next)?;
         Ok(ExecutionReservationOutcome::Acquired)
+    }
+
+    fn publish_result(
+        &mut self,
+        run_sha256: impl Into<String>,
+        artifact_set_sha256: impl Into<String>,
+    ) -> Result<(), EvaluationLedgerError> {
+        let run_sha256 = run_sha256.into();
+        let artifact_set_sha256 = artifact_set_sha256.into();
+        if !super::valid_sha256(&run_sha256) || !super::valid_sha256(&artifact_set_sha256) {
+            return Err(EvaluationLedgerError::new(
+                "evaluation-publication-binding-invalid",
+            ));
+        }
+        self.transition(None, |_, current| {
+            match current.payload.core.state.clone() {
+                EvaluationLedgerState::Reserved => Ok(EvaluationLedgerState::Published {
+                    run_sha256,
+                    artifact_set_sha256,
+                }),
+                _ => Err(EvaluationLedgerError::new(
+                    "evaluation-publication-transition-refused",
+                )),
+            }
+        })
     }
 
     fn mark_interrupted(

@@ -7,18 +7,15 @@ impl FixtureEvaluationBridge for ScheduledFixtureEvaluationBridge {
         &mut self,
         request: &FixtureTaskRequest,
     ) -> Result<crate::fixture_scheduler::FixtureExecutionRecord, ProductionRuntimeError> {
-        let fixture_directory = self.fixture_root.join(&request.fixture_id);
-        let executable = fixture_directory.join("run.sh");
-        if !fixture_directory.is_dir() || !executable.is_file() {
-            return Err(ProductionRuntimeError::bridge(
-                "evaluation-fixture-not-configured",
-            ));
-        }
+        let invocation = self
+            .invocations
+            .get(&request.fixture_id)
+            .ok_or_else(|| ProductionRuntimeError::bridge("evaluation-fixture-not-configured"))?;
         let fixture = FixtureSpec::new(
             &request.fixture_id,
             FixtureKind::Positive,
             "evaluation-production-execution",
-            BTreeSet::from([ResourceKind::File]),
+            BTreeSet::from([ResourceKind::File, ResourceKind::Env, ResourceKind::Port]),
             ExpectedOutcome::pass(0),
             false,
         )
@@ -26,13 +23,13 @@ impl FixtureEvaluationBridge for ScheduledFixtureEvaluationBridge {
         let adapter = FixtureCaptureAdapter::issue_evaluation(
             &fixture,
             FixtureCaptureRequest {
-                executable,
-                arguments: Vec::new(),
-                output_limit: 1024 * 1024,
-                required_output: Vec::new(),
+                executable: invocation.executable.clone(),
+                arguments: invocation.arguments.clone(),
+                output_limit: invocation.output_limit,
+                required_output: invocation.required_output.clone(),
                 binding: request.binding.clone(),
             },
-            "result.json",
+            &invocation.artifact_name,
         )
         .map_err(|_| ProductionRuntimeError::bridge("evaluation-fixture-permit-refused"))?;
         let lease_id = self

@@ -1,4 +1,4 @@
-#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum EvaluationEventKind {
     ExecutionReserved,
@@ -13,9 +13,9 @@ pub enum EvaluationEventKind {
 /// A deliberately closed event shape. It carries correlation and bounded
 /// outcome facts, but has no claim, readiness, release, acceptance, or
 /// completion fields and cannot authorize any transition.
-#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct PrivacySafeEvaluationEvent {
-    pub schema_version: String,
+    pub schema_version: &'static str,
     pub event_kind: EvaluationEventKind,
     pub live_context_id: String,
     pub candidate_id: String,
@@ -47,7 +47,7 @@ impl PrivacySafeEvaluationEvent {
             causal_code,
         } = record;
         let event = Self {
-            schema_version: "PrivacySafeEvaluationEvent-v1".to_owned(),
+            schema_version: "PrivacySafeEvaluationEvent-v1",
             event_kind,
             live_context_id,
             candidate_id,

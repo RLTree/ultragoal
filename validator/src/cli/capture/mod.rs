@@ -28,7 +28,6 @@ mod spec;
 mod tree_witness_adapter;
 
 pub use artifact_model::{ArtifactDisposition, ArtifactRef, ArtifactResolver, CapturedArtifact};
-pub(crate) use fixture::ScheduledFixtureEvaluationBridge;
 pub use fixture::execute_scheduled_fixture;
 pub use inputs::{PublicArg, PublicArtifact, PublicEnv, SecretArg, SecretArtifact, SecretEnv};
 pub use run::CapturedRun;

@@ -91,7 +91,7 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
     source!(
         "validator/src/cli/successor_public/evaluation/run.rs",
         include_bytes!("../../../cli/successor_public/evaluation/run.rs"),
-        "evaluation write-route admission and result projection"
+        "evaluation run unsupported-capability route"
     ),
     source!(
         "validator/src/cli/successor_public/orchestration.rs",

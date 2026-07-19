@@ -87,7 +87,7 @@ pub(crate) trait EvaluationExecutor {
     ) -> Result<CapturedTaskObservation, EvaluationError>;
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct EvaluationTaskResult {
     task_id: String,
     fixture_id: String,

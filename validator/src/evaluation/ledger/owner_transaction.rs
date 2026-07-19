@@ -84,7 +84,6 @@ impl ExecutionOwner {
         execution_session_id: impl Into<String>,
         runtime_configuration: RuntimeConfiguration,
         expected_binding: &super::EvaluationExecutionBinding,
-        output: Option<&crate::context::AuthorizedPath>,
         bridge: &mut B,
     ) -> Result<ProductionEvaluationRun, ProductionRuntimeError> {
         permit.revalidate()?;
@@ -122,19 +121,10 @@ impl ExecutionOwner {
             .0
             .reserve_outcome(&reservation_id)
             .map_err(|error| ProductionRuntimeError::new(error.code()))?;
-        match reservation {
-            super::ExecutionReservationOutcome::Acquired => {}
-            super::ExecutionReservationOutcome::Terminal {
-                terminal_result, ..
-            } => {
-                publish_public_result(output, &terminal_result)?;
-                return ProductionEvaluationRun::from_terminal(terminal_result);
-            }
-            _ => {
-                return Err(ProductionRuntimeError::new(
-                    "evaluation-production-execution-replayed",
-                ));
-            }
+        if !matches!(reservation, super::ExecutionReservationOutcome::Acquired) {
+            return Err(ProductionRuntimeError::new(
+                "evaluation-production-execution-replayed",
+            ));
         }
         let effect = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let run = EvaluationRun::execute_local(spec, permit.audit(), &mut executor)
@@ -144,7 +134,7 @@ impl ExecutionOwner {
             if records.len() != run.results().len() {
                 return Err("evaluation-fixture-record-count-mismatch");
             }
-            let canonical_failures: Vec<_> = run
+            let canonical_failures = run
                 .harvest_failures()
                 .iter()
                 .map(CanonicalEvaluationFailure::from)
@@ -169,43 +159,25 @@ impl ExecutionOwner {
                     .join("\n")
                     .as_bytes(),
             );
-            let public_result = serde_json::to_vec(&serde_json::json!({
-                "schema_version": "EvaluationRunResult-v1",
-                "canonical_run": &canonical_run,
-                "canonical_failures": &canonical_failures,
-                "events": [&event],
-                "claim_effect": "none",
-            }))
-            .map_err(|_| "evaluation-terminal-result-serialization-failed")?;
             Ok((
                 run,
                 canonical_run,
                 canonical_failures,
                 event,
-                public_result,
                 records,
                 artifact_set_sha256,
             ))
         }))
         .unwrap_or(Err("evaluation-execution-panicked"));
         match effect {
-            Ok((
-                run,
-                canonical_run,
-                canonical_failures,
-                event,
-                public_result,
-                records,
-                artifacts,
-            )) => {
-                self.settle(run.run_sha256(), artifacts, &public_result, output)?;
-                Ok(ProductionEvaluationRun::new(
+            Ok((run, canonical_run, canonical_failures, event, records, artifacts)) => {
+                self.settle(run.run_sha256(), artifacts)?;
+                Ok(ProductionEvaluationRun {
                     canonical_run,
                     canonical_failures,
-                    vec![event],
-                    public_result,
-                    records,
-                ))
+                    events: vec![event],
+                    fixture_records: records,
+                })
             }
             Err(code) => Err(self.interrupt(code)),
         }
@@ -215,18 +187,14 @@ impl ExecutionOwner {
         &mut self,
         run_sha256: &str,
         artifacts: String,
-        terminal_result: &[u8],
-        output: Option<&crate::context::AuthorizedPath>,
     ) -> Result<(), ProductionRuntimeError> {
-        if let Err(error) =
-            self.publish_terminal_result(run_sha256, artifacts, terminal_result.to_vec())
-        {
+        if let Err(error) = self.0.publish_result(run_sha256, artifacts) {
             return Err(self.interrupt(error.code()));
         }
         if let Err(error) = self.0.complete() {
             return Err(self.interrupt(error.code()));
         }
-        publish_public_result(output, terminal_result)
+        Ok(())
     }
 
     fn interrupt(&mut self, causal_code: &'static str) -> ProductionRuntimeError {

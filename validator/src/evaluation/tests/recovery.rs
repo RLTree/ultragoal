@@ -1,8 +1,8 @@
 use super::super::*;
 use super::custody::{execution_binding, root};
-use super::recovery_setup::{RefusingBridge, preparation_spec, sha};
+use super::recovery_setup::{preparation_spec, sha, RefusingBridge};
 use std::fs;
-use std::os::unix::fs::{PermissionsExt, symlink};
+use std::os::unix::fs::{symlink, PermissionsExt};
 
 #[test]
 fn preparation_issues_private_authority_and_derives_material_binding() {
