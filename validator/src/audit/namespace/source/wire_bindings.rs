@@ -54,7 +54,10 @@ fn direct_serde_rename(attribute: &Attribute) -> Option<String> {
     let arguments = Punctuated::<Meta, Token![,]>::parse_terminated
         .parse2(list.tokens.clone())
         .ok()?;
-    let Meta::NameValue(rename) = arguments.single()? else {
+    if arguments.len() != 1 {
+        return None;
+    }
+    let Meta::NameValue(rename) = arguments.first()? else {
         return None;
     };
     if !rename.path.is_ident("rename") {
@@ -63,7 +66,7 @@ fn direct_serde_rename(attribute: &Attribute) -> Option<String> {
     let Expr::Lit(ExprLit {
         lit: Lit::Str(value),
         ..
-    }) = rename.value
+    }) = &rename.value
     else {
         return None;
     };
