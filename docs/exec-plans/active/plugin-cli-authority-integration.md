@@ -876,6 +876,11 @@ three disjoint worktree leases from the exact integrated base. Their
 dependency-closed support sets own typed retained-cleanup recovery, narrow
 nonsecret distribution errors, recorded Git capability, identity-conditioned
 cleanup, journal directory durability, and errno-aware workspace enumeration.
+Root then repaired the shared N11-to-N12 source-dependency join for the
+N14-external-blocked frontier and refreshed all three clean worktrees and
+leases to exact base `7ae6c20a0553e5985eb90c261981222046f5c0bf` / tree
+`1b1e6a267ef8bd904b54ae09e9e0ebe22484c4ad`; the same 118-path diagnostic set
+remained current.
 All work remains source-local and claim-withheld; no receipt family, public
 dispatch, dependency, migration, package, install, runtime, readiness, release,
 or completion authority is added.
