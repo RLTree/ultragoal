@@ -3,7 +3,7 @@ use crate::inventory::{
     ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256, InventoryBuilder,
 };
 use crate::state::adopted::{derive_adopted, issue_adopted};
-use crate::state::adopted_registry::load_claims_for_test;
+use crate::state::adopted_registry::{load_claims_for_test, validate_registry_for_test};
 use crate::state::{NextActionKind, ProductGoalState, StateError};
 use std::fs;
 use std::path::Path;
@@ -22,15 +22,24 @@ const HANDOFF_SHA256: &str = "d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81d
 
 #[test]
 fn adopted_registry_chain_loads_exact_fourteen_claims() {
-    let (id, claims) = load_claims_for_test(HANDOFF, MANIFEST, CLAIMS, HANDOFF_SHA256).unwrap();
+    let loaded = load_claims_for_test(HANDOFF, MANIFEST, CLAIMS, HANDOFF_SHA256).unwrap();
     assert_eq!(
-        id,
+        loaded.claim_registry_sha256,
         "sha256:67e81c4eabe87d16d816a3d7dad352dc21a4a1994dd83b6582e9e4ba5eaa61bc"
     );
-    assert_eq!(claims.len(), 14);
-    assert!(claims.iter().any(|claim| {
-        claim.claim_id == "CL-COMPLETION" && claim.maximum_dimensions == ["complete"]
+    assert_eq!(loaded.registry.claims.len(), 14);
+    assert!(loaded.registry.claims.iter().any(|claim| {
+        claim.claim_id == "CL-COMPLETION" && claim.allowed_ceiling_on_pass == "complete"
     }));
+    assert_eq!(
+        loaded.registry.claim_topological_order,
+        loaded
+            .registry
+            .claims
+            .iter()
+            .map(|claim| claim.claim_id.clone())
+            .collect::<Vec<_>>()
+    );
 }
 
 #[test]
@@ -46,6 +55,29 @@ fn any_manifest_chain_mutation_fails_closed() {
         }
         assert!(matches!(
             load_claims_for_test(&handoff, &manifest, &claims, HANDOFF_SHA256),
+            Err(StateError::InvalidCatalog(_))
+        ));
+    }
+}
+
+#[test]
+fn semantic_claim_graph_mutations_fail_closed() {
+    let original: serde_json::Value = serde_json::from_slice(CLAIMS).unwrap();
+    for mutation in 0..4 {
+        let mut value = original.clone();
+        match mutation {
+            0 => value["claim_topological_order"]
+                .as_array_mut()
+                .unwrap()
+                .swap(0, 13),
+            1 => {
+                value["claims"][1]["prerequisite_claim_ids"] = serde_json::json!(["CL-COMPLETION"])
+            }
+            2 => value["claims"][0]["false_pass_controls"] = serde_json::json!([]),
+            _ => value["claims"][0]["claim_decision_owner"] = serde_json::json!("OWN-CLI"),
+        }
+        assert!(matches!(
+            validate_registry_for_test(&serde_json::to_vec(&value).unwrap()),
             Err(StateError::InvalidCatalog(_))
         ));
     }
@@ -114,6 +146,22 @@ fn live_issuer_covers_exact_inventory_codes_and_cannot_grant_completion() {
 }
 
 fn copy_authority_inputs(live: &Path, root: &Path) {
+    let lane_bytes = fs::read(live.join("LANE_REGISTRY.json")).unwrap();
+    fs::copy(
+        live.join("LANE_REGISTRY.json"),
+        root.join("LANE_REGISTRY.json"),
+    )
+    .unwrap();
+    let lane_registry: serde_json::Value = serde_json::from_slice(&lane_bytes).unwrap();
+    for reference in lane_registry["root_freeze"]["payload_refs"]
+        .as_array()
+        .unwrap()
+    {
+        let relative = Path::new(reference["path"].as_str().unwrap());
+        let destination = root.join(relative);
+        fs::create_dir_all(destination.parent().unwrap()).unwrap();
+        fs::copy(live.join(relative), destination).unwrap();
+    }
     let source = live.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
     let target = root.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
     fs::create_dir_all(&target).unwrap();
@@ -141,6 +189,7 @@ fn copy_authority_inputs(live: &Path, root: &Path) {
         )
         .unwrap();
     }
+    super::adopted_authority_inputs::copy_generated_inputs(live, root);
     fs::create_dir_all(root.join(".codex-plugin")).unwrap();
     fs::write(
         root.join(".codex-plugin/plugin.json"),

@@ -1,3 +1,4 @@
+mod adopted_authority_inputs;
 mod adopted_cases;
 mod authority_cases;
 mod engine_cases;

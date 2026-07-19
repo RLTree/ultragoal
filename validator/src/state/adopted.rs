@@ -1,4 +1,5 @@
 use super::StateEngine;
+use super::adopted_claims::stage;
 use super::adopted_registry::load_adopted_claims;
 use super::catalog::{
     ActionDefinition, ActionKind, ClaimSpec, CommandBinding, DependencyActionCatalog,
@@ -26,8 +27,26 @@ pub(crate) fn issue_adopted(
     context: &LiveContext,
     authority_catalog: &AuthorityCatalog,
 ) -> Result<DependencyActionCatalog, StateError> {
-    let (claim_registry_id, claims) = load_adopted_claims()?;
-    let spec = live_spec(context, authority_catalog, &claims);
+    let loaded = load_adopted_claims()?;
+    let claim_registry_id = loaded.claim_registry_sha256.clone();
+    let staged = stage(
+        context,
+        authority_catalog,
+        &loaded.registry,
+        loaded.claim_registry_sha256.clone(),
+        loaded.contract_manifest_sha256,
+        loaded.handoff_sha256,
+    )?;
+    let claims = loaded
+        .registry
+        .claims
+        .into_iter()
+        .map(|claim| ClaimSpec {
+            claim_id: claim.claim_id,
+            maximum_dimensions: vec![claim.allowed_ceiling_on_pass],
+        })
+        .collect::<Vec<_>>();
+    let spec = live_spec(context, authority_catalog, &claims, staged.stage_id()?);
     PolicyAuthority::from_adopted_claim_registry(claim_registry_id, claims, spec)?
         .issue(context, authority_catalog)
 }
@@ -36,6 +55,7 @@ fn live_spec(
     context: &LiveContext,
     authority_catalog: &AuthorityCatalog,
     claims: &[ClaimSpec],
+    staged_reconciliation_id: &str,
 ) -> DependencyActionSpec {
     let reductions = all_reductions(claims);
     let codes = authority_catalog
@@ -69,7 +89,7 @@ fn live_spec(
         claims: claims.to_vec(),
         dependencies: vec![DependencyFact {
             dependency_id: "reconciliation-kernel".to_owned(),
-            observation_id: "root-policy".to_owned(),
+            observation_id: staged_reconciliation_id.to_owned(),
             status: DependencyStatus::Missing,
             authority: FactAuthority::DirectProbe,
             scope: Scope {

@@ -4,6 +4,7 @@
 //! views, clocks, processes, the network, or the filesystem.
 
 mod adopted;
+mod adopted_claims;
 mod adopted_registry;
 mod catalog;
 mod ceiling;
