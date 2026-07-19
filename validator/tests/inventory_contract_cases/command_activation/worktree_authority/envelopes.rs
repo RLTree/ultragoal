@@ -50,7 +50,7 @@ fn derived_lease_envelopes_refuse_unknown_or_stale_classification() {
 
 fn activate_n11_lease(registry: &mut serde_json::Value) {
     registry["pre_adoption_source"]["frontier"] =
-        "N10_ROOT_PLANNED_N11_ACTIVE_SOURCE_FRONTIER".into();
+        "N10_INTEGRATED_N11_ACTIVE_SOURCE_FRONTIER".into();
     registry["pre_adoption_source"]["eligible_scheduler_nodes"] = serde_json::json!([]);
 
     let lanes = registry["lanes"].as_array_mut().unwrap();

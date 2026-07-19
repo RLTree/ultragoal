@@ -9,6 +9,23 @@ projections. This plan explains how the root advances that state. Its exact
 digest is bound by `LANE_REGISTRY.json.source_context.operational_plan`; the
 historical duplicate-plan digest remains a tombstone with commit/tree provenance.
 
+## Current N10/N11 integration boundary
+
+N10 is root-integrated at source ceiling through source/wiring commit
+`b2ecc82c2a4de01ae84fbd07ed126888062a1f40` / tree
+`dd2d128d72b7fe03b27e9b2a129eedfa998ecaec`. The public read-only
+`inspect orchestration` route consumes the canonical validated lane registry,
+emits a bounded redacted projection, and is bound into command activation.
+Focused public projection controls pass 2/2 and the dependency-closed command
+activation suite passes 10/10. Package, install, discovery, runtime, Product
+Fitness, readiness, release, and completion remain withheld.
+
+N11 remains the sole active managed worktree under
+`LEASE-N11-EVALUATION-CURRENT-001`. Its source base predates the N10 root
+integration, so it may finish a clean scope-pure source commit but must refresh
+and refreeze before acceptance. No N11 WorkerResult is authorized before source
+acceptance.
+
 ## Stage B projection freeze (routing only)
 
 The literal protected checkpoint is commit
