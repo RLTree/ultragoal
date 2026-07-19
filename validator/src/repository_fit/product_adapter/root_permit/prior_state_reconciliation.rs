@@ -18,9 +18,9 @@ pub(crate) fn reconcile_prior<E: RepositoryFitPermitEffects>(
         Ok(authorized_target) => authorized_target,
         Err(_) => return false,
     };
-    test_reconciliation_target_point(ReconciliationTargetPhase::AfterAuthorizedRevalidation);
+    test_reconciliation_target_point(ReconciliationTargetPhase::AuthorizedRevalidation);
     let target = capture_target(context.worktree_root(), request);
-    test_reconciliation_target_point(ReconciliationTargetPhase::AfterFirstTarget);
+    test_reconciliation_target_point(ReconciliationTargetPhase::FirstTarget);
     let root = require_root_binding(effects, &request.root_binding);
     let context_valid = context.revalidate();
     let protected_after = capture_protected(
@@ -28,7 +28,7 @@ pub(crate) fn reconcile_prior<E: RepositoryFitPermitEffects>(
         request,
         ProtectedCaptureBoundary::AmbiguityReconciliationRecheck,
     );
-    test_reconciliation_target_point(ReconciliationTargetPhase::AfterProtectedAfter);
+    test_reconciliation_target_point(ReconciliationTargetPhase::ProtectedAfter);
     let target_after = capture_target(context.worktree_root(), request);
     matches!((protected_before, target, root, context_valid, protected_after, target_after),
         (Ok(protected_before), Ok(target), Ok(()), Ok(()), Ok(protected_after), Ok(target_after))

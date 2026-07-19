@@ -1,18 +1,50 @@
 use super::*;
 
+pub(crate) struct ProductionPermitActivation<E> {
+    prepared: PreparedProductionPermit,
+    effects: E,
+    authority: Arc<AuthorityIdentity>,
+    issued_tick: u64,
+    expires_tick: u64,
+    nonce_sha256: String,
+}
+
+impl<E> ProductionPermitActivation<E> {
+    pub(crate) fn new(
+        prepared: PreparedProductionPermit,
+        effects: E,
+        authority: Arc<AuthorityIdentity>,
+        issued_tick: u64,
+        expires_tick: u64,
+        nonce_sha256: String,
+    ) -> Self {
+        Self {
+            prepared,
+            effects,
+            authority,
+            issued_tick,
+            expires_tick,
+            nonce_sha256,
+        }
+    }
+}
+
 /// Rechecks the complete pre-reservation state and moves the concrete effect
 /// adapter into exactly one permit/lease pair. A post-reservation race can only
 /// yield a terminal ledger rejection; it cannot reach the mutation kernel.
 pub(crate) fn activate_production_permit<E: RepositoryFitPermitEffects>(
     context: &LiveContext,
     request: &OpaqueFitApplyRequest,
-    mut prepared: PreparedProductionPermit,
-    mut effects: E,
-    authority: Arc<AuthorityIdentity>,
-    issued_tick: u64,
-    expires_tick: u64,
-    nonce_sha256: String,
+    activation: ProductionPermitActivation<E>,
 ) -> Result<(RepositoryFitApplyPermit, RepositoryFitMutationLease<E>), FitAdapterError> {
+    let ProductionPermitActivation {
+        mut prepared,
+        mut effects,
+        authority,
+        issued_tick,
+        expires_tick,
+        nonce_sha256,
+    } = activation;
     let reservation = production_reservation_binding(
         &prepared,
         &authority,

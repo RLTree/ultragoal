@@ -83,9 +83,9 @@ pub(crate) enum ProtectedCapturePhase {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum ReconciliationTargetPhase {
-    AfterAuthorizedRevalidation,
-    AfterFirstTarget,
-    AfterProtectedAfter,
+    AuthorizedRevalidation,
+    FirstTarget,
+    ProtectedAfter,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
