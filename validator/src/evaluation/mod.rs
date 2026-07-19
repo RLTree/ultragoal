@@ -25,7 +25,7 @@ pub(crate) use ledger::{
     EvaluationExecutionBinding, EvaluationExecutionBindingRequest, EvaluationLedgerError,
     EvaluationLedgerState, ExecutionReservationOutcome,
 };
-pub use promotion_ledger::{
+pub(crate) use promotion_ledger::{
     FilePromotionReviewLedger, PromotionLedgerBinding, PromotionLedgerState,
 };
 pub use records::{
@@ -39,7 +39,7 @@ pub use research::{
     ProposalAnalyses, RejectedRecommendation, ResearchAudit, ResearchFinding, ResearchSource,
     ResearchSourceClass, ResearchSourceRecord, ResearchSourceRecordDefinition, VerifiedSourceFact,
 };
-pub use runtime::{ProductionEvaluationRun, ProductionRuntimeError};
+pub(crate) use runtime::{ProductionEvaluationRun, ProductionRuntimeError};
 
 include!("max_tasks.rs");
 
