@@ -133,20 +133,13 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         include_bytes!("../integrity.rs"),
         "adopted registry integrity gate"
     ),
-    registry_source!("frontier/mod.rs", "adopted dependency frontier"),
-    registry_source!(
-        "frontier/change_impact.rs",
-        "derived lease change and consumption authority"
-    ),
-    registry_source!(
-        "frontier/handoff_adjacency.rs",
-        "receipt child handoff authority"
-    ),
-    registry_source!("frontier/lease_issuance.rs", "source-base lease authority"),
-    registry_source!(
-        "frontier/scope_ownership.rs",
-        "source lane authority closure"
-    ),
+    registry_source!("frontier/mod.rs", "frontier authority"),
+    registry_source!("frontier/change_impact.rs", "change authority"),
+    registry_source!("frontier/envelope_codec.rs", "envelope integrity"),
+    registry_source!("frontier/handoff_adjacency.rs", "handoff authority"),
+    registry_source!("frontier/lease_issuance.rs", "lease authority"),
+    registry_source!("frontier/scope_ownership.rs", "scope authority"),
+    registry_source!("frontier/scope_consumption.rs", "consumption authority"),
     registry_source!("load.rs", "frontier-bound registry construction"),
     registry_source!("mod.rs", "registry load and guard export"),
     registry_source!("semantic.rs", "active API row construction"),

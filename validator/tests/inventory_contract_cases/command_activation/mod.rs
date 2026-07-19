@@ -6,6 +6,7 @@ use std::fs;
 
 include!("lease_fixture.rs");
 include!("lease_issuance.rs");
+include!("lease_envelopes.rs");
 include!("sources.rs");
 include!("unsupported_product_apis_remain_inactive.rs");
 

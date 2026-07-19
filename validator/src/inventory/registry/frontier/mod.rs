@@ -218,14 +218,19 @@ fn dependency_tools(
 }
 
 mod change_impact;
+mod envelope_codec;
 mod handoff_adjacency;
 mod lease_base;
 mod lease_issuance;
 mod lifecycle;
+mod scope_consumption;
 mod scope_ownership;
 
 #[cfg(test)]
 mod lifecycle_tests;
+
+#[cfg(test)]
+mod handoff_adjacency_tests;
 
 #[cfg(test)]
 mod tests;
