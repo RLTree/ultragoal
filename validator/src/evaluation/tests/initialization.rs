@@ -111,3 +111,21 @@ fn promotion_initialization_recovers_each_authenticated_durable_prefix() {
     fs::remove_dir_all(baseline).unwrap();
     fs::remove_dir_all(candidate).unwrap();
 }
+
+#[test]
+fn promotion_initialization_rejects_replaced_state_scratch_before_reopen() {
+    let baseline = root("promotion-init-scratch-baseline");
+    let candidate = root("promotion-init-scratch-candidate");
+    terminal(&baseline, [1; 32], 'b', '1', '4');
+    terminal(&candidate, [2; 32], 'c', '2', '5');
+    let binding = promotion_binding(&baseline, &candidate);
+    let review = root("promotion-init-scratch-replaced");
+    FilePromotionReviewLedger::set_test_state_scratch_swap(review.clone());
+
+    let error = FilePromotionReviewLedger::initialize(&review, [6; 32], binding).unwrap_err();
+    assert_eq!(error.code(), "promotion-ledger-initialization-file-changed");
+
+    fs::remove_dir_all(review).unwrap();
+    fs::remove_dir_all(baseline).unwrap();
+    fs::remove_dir_all(candidate).unwrap();
+}

@@ -191,10 +191,22 @@ fn initialize_promotion_state(
     if safe_file_identity(&scratch).map_err(map_storage)?.length == 0 {
         write_promotion_initialization_json(&scratch, expected)?;
     }
+    let scratch_authority = safe_file_identity(&scratch)
+        .map_err(map_storage)?
+        .authority();
+    test_promotion_initialization_interruption(root_path, "state_reopen")?;
     // A fresh write leaves its descriptor at EOF. Reopen the exact named
     // scratch file so durable verification starts at offset zero while
     // retaining full identity and authenticated-content checks.
     let verified = open_promotion_initialization_file(root, INITIAL_STATE_NAME, false, false)?;
+    let verified_authority = safe_file_identity(&verified)
+        .map_err(map_storage)?
+        .authority();
+    if verified_authority != scratch_authority {
+        return Err(PromotionLedgerError::new(
+            "promotion-ledger-initialization-file-changed",
+        ));
+    }
     require_promotion_state(
         &verified,
         expected,
@@ -203,11 +215,8 @@ fn initialize_promotion_state(
         anchor_authority,
         binding,
     )?;
-    let authority = safe_file_identity(&verified)
-        .map_err(map_storage)?
-        .authority();
     drop(verified);
     test_promotion_initialization_interruption(root_path, "state_temporary")?;
-    publish_promotion_initialization_file(root, INITIAL_STATE_NAME, STATE_NAME, authority)?;
+    publish_promotion_initialization_file(root, INITIAL_STATE_NAME, STATE_NAME, scratch_authority)?;
     test_promotion_initialization_interruption(root_path, "state_named")
 }

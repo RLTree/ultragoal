@@ -46,6 +46,7 @@ fn audit_and_reconciliation_are_zero_write() {
     let review = review(&baseline, &candidate, &mut authority);
     let _ = PromotionDecision::reconcile(&baseline, &candidate, &review, &mut authority);
     assert_eq!(tree(&root), before);
+    authority.teardown().unwrap();
     fs::remove_dir_all(root).unwrap();
 }
 

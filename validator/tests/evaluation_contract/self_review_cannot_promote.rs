@@ -23,6 +23,7 @@ fn self_review_cannot_promote() {
     )
     .unwrap_err();
     assert_eq!(error.code(), "evaluation-review-issuance-refused");
+    authority.teardown().unwrap();
 }
 
 #[test]
@@ -59,6 +60,7 @@ fn promotion_requires_journey_rollback_and_bounded_change() {
         )
         .unwrap_err();
         assert_eq!(error.code(), "evaluation-review-issuance-refused");
+        authority.teardown().unwrap();
     }
 }
 
@@ -104,6 +106,7 @@ fn review_source_principal_or_execution_session_cannot_issue() {
             .code(),
             "evaluation-review-issuance-refused"
         );
+        authority.teardown().unwrap();
     }
 }
 
@@ -122,6 +125,8 @@ fn stale_authority_and_substituted_review_bindings_are_rejected() {
     assert!(stale
         .reasons
         .contains(&"evaluation-review-authority-stale".to_owned()));
+    issuing_authority.teardown().unwrap();
+    stale_authority.teardown().unwrap();
 
     let mut substituted_authority = review_authority(&baseline, &candidate);
     let mut substituted = review(&baseline, &candidate, &mut substituted_authority);
@@ -136,6 +141,7 @@ fn stale_authority_and_substituted_review_bindings_are_rejected() {
     assert!(decision
         .reasons
         .contains(&"evaluation-review-binding-stale-or-substituted".to_owned()));
+    substituted_authority.teardown().unwrap();
 
     let mut run_authority = review_authority(&baseline, &candidate);
     let run_review = review(&baseline, &candidate, &mut run_authority);
@@ -146,6 +152,7 @@ fn stale_authority_and_substituted_review_bindings_are_rejected() {
     assert!(decision
         .reasons
         .contains(&"evaluation-review-binding-stale-or-substituted".to_owned()));
+    run_authority.teardown().unwrap();
 
     let mut spec_authority = review_authority(&baseline, &candidate);
     let mut substituted_spec = review(&baseline, &candidate, &mut spec_authority);
@@ -160,6 +167,7 @@ fn stale_authority_and_substituted_review_bindings_are_rejected() {
     assert!(decision
         .reasons
         .contains(&"evaluation-review-binding-stale-or-substituted".to_owned()));
+    spec_authority.teardown().unwrap();
 
     let mut evidence_authority = review_authority(&baseline, &candidate);
     let mut substituted_evidence = review(&baseline, &candidate, &mut evidence_authority);
@@ -178,6 +186,7 @@ fn stale_authority_and_substituted_review_bindings_are_rejected() {
     assert!(decision
         .reasons
         .contains(&"evaluation-review-binding-stale-or-substituted".to_owned()));
+    evidence_authority.teardown().unwrap();
 }
 
 #[test]
@@ -195,4 +204,5 @@ fn review_attestation_is_consumed_once_and_replay_is_rejected() {
     assert!(replay
         .reasons
         .contains(&"evaluation-review-attestation-invalid-or-replayed".to_owned()));
+    authority.teardown().unwrap();
 }

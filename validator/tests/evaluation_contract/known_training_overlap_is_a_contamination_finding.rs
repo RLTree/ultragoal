@@ -21,11 +21,9 @@ fn known_training_overlap_is_a_contamination_finding() {
     let spec = EvaluationSpec::new(sha('c'), sha('1'), "suite", vec![task]).unwrap();
     let audit = spec.audit(&sha('c'), &sha('1'));
     assert!(!audit.eligible());
-    assert!(
-        audit
-            .findings()
-            .contains(&"evaluation-dataset-contamination-detected".to_owned())
-    );
+    assert!(audit
+        .findings()
+        .contains(&"evaluation-dataset-contamination-detected".to_owned()));
 }
 
 #[test]
@@ -171,6 +169,7 @@ fn paired_behavior_improvement_yields_only_an_improvement_candidate() {
         "improvement_candidate_not_product_completion"
     );
     assert!(decision.reasons.is_empty());
+    authority.teardown().unwrap();
 }
 
 #[test]
@@ -181,9 +180,8 @@ fn score_gain_without_behavior_improvement_is_a_false_pass() {
     let review = review(&baseline, &candidate, &mut authority);
     let decision = PromotionDecision::reconcile(&baseline, &candidate, &review, &mut authority);
     assert_eq!(decision.status, PromotionStatus::Rejected);
-    assert!(
-        decision
-            .reasons
-            .contains(&"evaluation-no-representative-behavior-improvement".to_owned())
-    );
+    assert!(decision
+        .reasons
+        .contains(&"evaluation-no-representative-behavior-improvement".to_owned()));
+    authority.teardown().unwrap();
 }

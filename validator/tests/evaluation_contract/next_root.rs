@@ -189,7 +189,7 @@ impl ReviewAuthorityHarness {
             Ok(ledger) => ledger,
             Err(error) => {
                 let code = error.code();
-                fs::remove_dir_all(&ledger_root).unwrap();
+                teardown_private_ledger_root(&ledger_root).unwrap();
                 return Err(code);
             }
         };
@@ -197,7 +197,7 @@ impl ReviewAuthorityHarness {
             Ok(authority) => authority,
             Err(error) => {
                 let code = error.code();
-                fs::remove_dir_all(&ledger_root).unwrap();
+                teardown_private_ledger_root(&ledger_root).unwrap();
                 return Err(code);
             }
         };
@@ -219,12 +219,6 @@ impl std::ops::Deref for ReviewAuthorityHarness {
 impl std::ops::DerefMut for ReviewAuthorityHarness {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.authority
-    }
-}
-
-impl Drop for ReviewAuthorityHarness {
-    fn drop(&mut self) {
-        let _ = std::fs::remove_dir_all(&self.ledger_root);
     }
 }
 
