@@ -49,7 +49,7 @@ product-success contract without promoting a claim: source acceptance is
 accepted, positive execution is externally blocked, and all dependent claims
 remain withheld. This terminal blocker releases only root-owned N12-A claim
 reconciliation; it does not satisfy N11 execution or `CL-EVAL-IMPROVEMENT`.
-The current frontier is `N14_ACTIVE_N12_INTEGRATED_SOURCE_FRONTIER`.
+The current frontier is `N14_EXTERNAL_BLOCKED_N12_INTEGRATED_SOURCE_ACCEPTED`.
 N12-A's original source remains accepted from
 `27c9afd0021ad9751d2411e4837d7f897064b99e`, while current root source
 admission is rebound at `761abd2efeac1793e415b5224472b9758ed14910` /
@@ -65,13 +65,14 @@ N02 reobservation passes on exact clean candidate
 `796f7ab21e2fff2cfa845815c154505f2fc130dc`: two byte-identical
 recursive-zero-write summaries at SHA-256
 `859f0b6e115e1201554413c447e086a335892616bb987eeb2cd7179bcb4ffee2`
-both exit zero, with zero blockers and 30 named nonblocking obligations. N14 is
-the sole active worktree lane under lease
-`LEASE-N14-MIGRATION-COMPATIBILITY-001`, branch
-`codex/n14-migration-compatibility-closure`, and managed task
-`019f7a92-0a12-7521-986f-78d1113c9ca9`. Its refreshed exact lease base is
-`761abd2efeac1793e415b5224472b9758ed14910` / tree
-`5cd1b34ec8ea96d1837598a12d913764e848ee79`; every claim remains withheld.
+both exit zero, with zero blockers and 30 named nonblocking obligations. N14
+read-only planning is independently accepted and root-integrated at source and
+product-read ceiling on `1e51edaec34c2e20d5022b536181da60de250671` /
+tree `1b5a6cafca578e0072f8dbfb1c7cae964df757f9`. Explicit/default output is
+byte-identical and recursively zero-write: 38 pending observations, 14 semantic
+active-active obligations, and zero effects. OD-008 blocks compatibility
+adoption, N14 completion, and N15; every claim remains withheld. The unchanged
+N14 worktree tip is tombstoned and may be removed.
 
 ## Stage B projection freeze (routing only)
 
@@ -101,12 +102,10 @@ ceilings; the N11 WorkerResult is a source handoff, not product proof. The
 user-authorized cleanup removed the obsolete review tree and
 reproducible worktree home/tmp state, recovering about 10.1 GB in addition to
 earlier cleanup; the three approved paths now exist only as empty roots.
-`LEASE-N14-MIGRATION-COMPATIBILITY-001` is the sole active source-work lease,
-on `codex/n14-migration-compatibility-closure`, from
-`761abd2efeac1793e415b5224472b9758ed14910` / tree
-`5cd1b34ec8ea96d1837598a12d913764e848ee79`; no additional implementation
-lease may launch. Integrated lane branch tips are preserved by registry
-tombstones; root owns integration and the next dependency transition.
+No implementation lease is active. N14 is source-accepted but externally
+blocked by OD-008, and N15 remains dependency-blocked. The prior unchanged N14
+branch tip is preserved by a registry tombstone; root owns any reopen,
+integration, and next dependency transition.
 
 ## Outcome
 

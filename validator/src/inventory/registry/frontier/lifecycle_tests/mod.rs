@@ -243,3 +243,6 @@ fn active_leases_are_exactly_one_open_evaluation_worktree() {
     assert!(active_record_lanes(&[closed], &BTreeSet::from(["N11".to_owned()])).is_err());
     assert!(active_record_lanes(&[wrong], &BTreeSet::from(["N11".to_owned()])).is_err());
 }
+
+#[path = "external_blocked.rs"]
+mod external_blocked;
