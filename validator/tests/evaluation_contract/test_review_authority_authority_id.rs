@@ -1,46 +1,3 @@
-impl PromotionReviewAuthority for TestReviewAuthority {
-    fn authority_id(&self) -> &str {
-        &self.authority_id
-    }
-
-    fn reviewer_id(&self) -> &str {
-        &self.reviewer_id
-    }
-
-    fn review_session_id(&self) -> &str {
-        &self.session_id
-    }
-
-    fn current_binding(&self) -> (&str, &str) {
-        (&self.context_id, &self.candidate_id)
-    }
-
-    fn issue_attestation(&mut self, binding_sha256: &str) -> Result<String, EvaluationError> {
-        Ok(self.attestation(binding_sha256, &self.reviewer_id))
-    }
-
-    fn verify_and_consume(
-        &mut self,
-        binding_sha256: &str,
-        reviewer_id: &str,
-        review_id: &str,
-        attestation_sha256: &str,
-    ) -> bool {
-        let expected_attestation = self.attestation(binding_sha256, reviewer_id);
-        let expected_review_id = test_digest(
-            format!("promotion-review|{binding_sha256}|{expected_attestation}").as_bytes(),
-        );
-        reviewer_id == self.reviewer_id
-            && expected_attestation == attestation_sha256
-            && expected_review_id == review_id
-            && self.consumed.insert(review_id.to_owned())
-    }
-}
-
-fn test_digest(bytes: &[u8]) -> String {
-    format!("sha256:{:x}", Sha256::digest(bytes))
-}
-
 fn review_evidence() -> (BoundInput, BoundInput, Vec<BoundInput>) {
     (
         BoundInput::regular("journeys/representative.json", sha('8'), 128),
@@ -56,27 +13,26 @@ fn review_evidence() -> (BoundInput, BoundInput, Vec<BoundInput>) {
 fn review(
     baseline: &EvaluationRun,
     candidate: &EvaluationRun,
-    authority: &mut TestReviewAuthority,
+    authority: &mut ReviewAuthorityHarness,
 ) -> PromotionReview {
-    let (journey, rollback, artifacts) = review_evidence();
-    PromotionReview::issue(
-        baseline,
-        candidate,
-        PromotionReviewEvidence {
-            representative_journey: journey,
-            rollback_evidence: rollback,
-            reviewed_artifacts: artifacts,
-        },
-        authority,
-    )
-    .unwrap()
+    authority
+        .issue_review(
+            baseline,
+            candidate,
+            PromotionEvidencePaths {
+                representative_journey: "src/evaluation/mod.rs".to_owned(),
+                rollback_evidence: "src/evaluation/production_input.rs".to_owned(),
+                reviewed_artifacts: vec!["tests/evaluation_contract/next_root.rs".to_owned()],
+            },
+        )
+        .unwrap()
 }
 
 #[test]
 fn opaque_promotion_review_debug_is_bounded_and_never_echoes_fields() {
     let baseline = run('1', BehaviorOutcome::Failed, 2);
     let candidate = run('2', BehaviorOutcome::Passed, 10);
-    let mut authority = TestReviewAuthority::current('2');
+    let mut authority = review_authority(&baseline, &candidate);
     let mut review = review(&baseline, &candidate, &mut authority);
     let sentinels = review.inject_debug_sentinels_for_test();
 

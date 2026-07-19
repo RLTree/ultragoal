@@ -2,8 +2,14 @@
 fn self_review_cannot_promote() {
     let baseline = run('1', BehaviorOutcome::Failed, 2);
     let candidate = run('2', BehaviorOutcome::Passed, 10);
-    let mut authority = TestReviewAuthority::current('2');
-    authority.reviewer_id = "observer-core".to_owned();
+    let mut authority = ReviewAuthorityHarness::with_ids(
+        &baseline,
+        &candidate,
+        "root-review-authority",
+        "observer-core",
+        sha('7'),
+    )
+    .unwrap();
     let (journey, rollback, artifacts) = review_evidence();
     let error = PromotionReview::issue(
         &baseline,
@@ -40,7 +46,7 @@ fn promotion_requires_journey_rollback_and_bounded_change() {
             vec![BoundInput::regular("../escape", sha('6'), 20)],
         ),
     ] {
-        let mut authority = TestReviewAuthority::current('2');
+        let mut authority = review_authority(&baseline, &candidate);
         let error = PromotionReview::issue(
             &baseline,
             &candidate,
@@ -66,9 +72,21 @@ fn review_source_principal_or_execution_session_cannot_issue() {
         ("root-review-authority", execution_session('1')),
         ("root-review-authority", execution_session('2')),
     ] {
-        let mut authority = TestReviewAuthority::current('2');
-        authority.authority_id = authority_id.to_owned();
-        authority.session_id = session_id;
+        let authority = ReviewAuthorityHarness::with_ids(
+            &baseline,
+            &candidate,
+            authority_id,
+            "independent-reviewer",
+            session_id.clone(),
+        );
+        let Ok(mut authority) = authority else {
+            assert!(
+                authority_id == "independent-reviewer"
+                    || session_id == execution_session('1')
+                    || session_id == execution_session('2')
+            );
+            continue;
+        };
         let (journey, rollback, artifacts) = review_evidence();
         assert_eq!(
             PromotionReview::issue(
@@ -93,9 +111,10 @@ fn stale_authority_and_substituted_review_bindings_are_rejected() {
     let baseline = run('1', BehaviorOutcome::Failed, 2);
     let candidate = run('2', BehaviorOutcome::Passed, 10);
 
-    let mut stale_authority = TestReviewAuthority::current('2');
-    let stale_review = review(&baseline, &candidate, &mut stale_authority);
-    stale_authority.candidate_id = sha('3');
+    let mut issuing_authority = review_authority(&baseline, &candidate);
+    let stale_review = review(&baseline, &candidate, &mut issuing_authority);
+    let stale_candidate = run('3', BehaviorOutcome::Passed, 10);
+    let mut stale_authority = review_authority(&baseline, &stale_candidate);
     let stale =
         PromotionDecision::reconcile(&baseline, &candidate, &stale_review, &mut stale_authority);
     assert_eq!(stale.status, PromotionStatus::Rejected);
@@ -105,7 +124,7 @@ fn stale_authority_and_substituted_review_bindings_are_rejected() {
             .contains(&"evaluation-review-authority-stale".to_owned())
     );
 
-    let mut substituted_authority = TestReviewAuthority::current('2');
+    let mut substituted_authority = review_authority(&baseline, &candidate);
     let mut substituted = review(&baseline, &candidate, &mut substituted_authority);
     substituted.substitute_candidate_for_test(sha('3'));
     let decision = PromotionDecision::reconcile(
@@ -121,7 +140,7 @@ fn stale_authority_and_substituted_review_bindings_are_rejected() {
             .contains(&"evaluation-review-binding-stale-or-substituted".to_owned())
     );
 
-    let mut run_authority = TestReviewAuthority::current('2');
+    let mut run_authority = review_authority(&baseline, &candidate);
     let run_review = review(&baseline, &candidate, &mut run_authority);
     let substituted_run = run('2', BehaviorOutcome::Passed, 9);
     let decision =
@@ -133,7 +152,7 @@ fn stale_authority_and_substituted_review_bindings_are_rejected() {
             .contains(&"evaluation-review-binding-stale-or-substituted".to_owned())
     );
 
-    let mut spec_authority = TestReviewAuthority::current('2');
+    let mut spec_authority = review_authority(&baseline, &candidate);
     let mut substituted_spec = review(&baseline, &candidate, &mut spec_authority);
     substituted_spec.substitute_candidate_spec_for_test(sha('0'));
     let decision = PromotionDecision::reconcile(
@@ -149,7 +168,7 @@ fn stale_authority_and_substituted_review_bindings_are_rejected() {
             .contains(&"evaluation-review-binding-stale-or-substituted".to_owned())
     );
 
-    let mut evidence_authority = TestReviewAuthority::current('2');
+    let mut evidence_authority = review_authority(&baseline, &candidate);
     let mut substituted_evidence = review(&baseline, &candidate, &mut evidence_authority);
     substituted_evidence.substitute_journey_for_test(BoundInput::regular(
         "journeys/substituted.json",
@@ -174,7 +193,7 @@ fn stale_authority_and_substituted_review_bindings_are_rejected() {
 fn review_attestation_is_consumed_once_and_replay_is_rejected() {
     let baseline = run('1', BehaviorOutcome::Failed, 2);
     let candidate = run('2', BehaviorOutcome::Passed, 10);
-    let mut authority = TestReviewAuthority::current('2');
+    let mut authority = review_authority(&baseline, &candidate);
     let review = review(&baseline, &candidate, &mut authority);
     assert_eq!(
         PromotionDecision::reconcile(&baseline, &candidate, &review, &mut authority).status,

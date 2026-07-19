@@ -4,8 +4,8 @@ use super::super::{
     EvaluationExecutionBindingRequest, EvaluationLedgerState, EvaluationSpec,
     ExperimentalHypothesis, FactTemporalScope, FileEvaluationExecutionLedger,
     FilePromotionReviewLedger, ImpactAnalysis, InputKind, LawChangeProposal, MigrationAnalysis,
-    PromotionLedgerBinding, PromotionLedgerState, PromotionReviewAuthority, ProofAnalysis,
-    ProposalAnalyses, RejectedRecommendation, ResearchAudit, ResearchSource, ResearchSourceClass,
+    PromotionLedgerBinding, PromotionLedgerState, ProofAnalysis, ProposalAnalyses,
+    RejectedRecommendation, ResearchAudit, ResearchSource, ResearchSourceClass,
     ResearchSourceRecord, ResearchSourceRecordDefinition, VerifiedSourceFact,
 };
 use serde_json::{Value, json};

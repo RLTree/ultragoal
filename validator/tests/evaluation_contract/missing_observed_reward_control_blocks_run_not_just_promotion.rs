@@ -42,7 +42,7 @@ fn audit_and_reconciliation_are_zero_write() {
     let _ = spec.audit(&sha('c'), &sha('1'));
     let baseline = run('1', BehaviorOutcome::Failed, 2);
     let candidate = run('2', BehaviorOutcome::Passed, 10);
-    let mut authority = TestReviewAuthority::current('2');
+    let mut authority = review_authority(&baseline, &candidate);
     let review = review(&baseline, &candidate, &mut authority);
     let _ = PromotionDecision::reconcile(&baseline, &candidate, &review, &mut authority);
     assert_eq!(tree(&root), before);

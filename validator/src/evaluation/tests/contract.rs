@@ -1,12 +1,12 @@
 use super::super::{
     BehaviorOutcome, BoundInput, CapturedTaskObservation, CapturedTaskObservationRecord,
-    EvaluationDatasetProvenance, EvaluationError, EvaluationExecutor, EvaluationRun,
-    EvaluationSpec, EvaluationTask, EvaluationTaskDefinition, FailureCase, InputKind,
-    PerturbationControl, PromotionDecision, PromotionReview, PromotionReviewAuthority,
-    PromotionReviewEvidence, PromotionStatus, TaskAudit,
+    EvaluationDatasetProvenance, EvaluationError, EvaluationExecutionBinding,
+    EvaluationExecutionBindingRequest, EvaluationExecutor, EvaluationRun, EvaluationSpec,
+    EvaluationTask, EvaluationTaskDefinition, FailureCase, FilePromotionReviewLedger, InputKind,
+    PerturbationControl, PromotionDecision, PromotionEvidencePaths, PromotionLedgerBinding,
+    PromotionReview, PromotionReviewAuthority, PromotionReviewEvidence, PromotionStatus, TaskAudit,
 };
 use serde_json::Value;
-use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Path, PathBuf};

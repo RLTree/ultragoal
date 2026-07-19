@@ -152,36 +152,95 @@ fn run(candidate: char, core: BehaviorOutcome, score: u64) -> EvaluationRun {
     EvaluationRun::execute_local(&spec, &audit, &mut executor).unwrap()
 }
 
-struct TestReviewAuthority {
-    authority_id: String,
-    reviewer_id: String,
-    session_id: String,
-    context_id: String,
-    candidate_id: String,
-    secret: String,
-    consumed: BTreeSet<String>,
+struct ReviewAuthorityHarness {
+    authority: PromotionReviewAuthority,
+    ledger_root: PathBuf,
 }
 
-impl TestReviewAuthority {
-    fn current(candidate: char) -> Self {
-        Self {
-            authority_id: "root-review-authority".to_owned(),
-            reviewer_id: "independent-reviewer".to_owned(),
-            session_id: sha('7'),
-            context_id: sha('c'),
-            candidate_id: sha(candidate),
-            secret: "test-only-sealed-review-key".to_owned(),
-            consumed: BTreeSet::new(),
-        }
+impl ReviewAuthorityHarness {
+    fn current(baseline: &EvaluationRun, candidate: &EvaluationRun) -> Self {
+        Self::with_ids(
+            baseline,
+            candidate,
+            "root-review-authority",
+            "independent-reviewer",
+            sha('7'),
+        )
+        .unwrap()
     }
 
-    fn attestation(&self, binding_sha256: &str, reviewer_id: &str) -> String {
-        test_digest(
-            format!(
-                "{}|{}|{}|{}",
-                self.secret, self.authority_id, binding_sha256, reviewer_id
-            )
-            .as_bytes(),
+    fn with_ids(
+        baseline: &EvaluationRun,
+        candidate: &EvaluationRun,
+        authority_id: &str,
+        reviewer_id: &str,
+        review_session_id: String,
+    ) -> Result<Self, &'static str> {
+        let ledger_root = std::env::temp_dir().join(format!(
+            "hul-evaluation-contract-review-{}-{}",
+            std::process::id(),
+            NEXT_ROOT.fetch_add(1, Ordering::SeqCst),
+        ));
+        let baseline_proof = execution_terminal_proof(baseline);
+        let candidate_proof = execution_terminal_proof(candidate);
+        let binding = PromotionLedgerBinding::from_terminal_proofs(
+            authority_id,
+            reviewer_id,
+            review_session_id,
+            baseline_proof,
+            candidate_proof,
         )
+        .map_err(|error| error.code())?;
+        let ledger = FilePromotionReviewLedger::initialize(&ledger_root, [7; 32], binding)
+            .map_err(|error| error.code())?;
+        let authority = ledger
+            .bind_review_evidence(env!("CARGO_MANIFEST_DIR"))
+            .map_err(|error| error.code())?;
+        Ok(Self {
+            authority,
+            ledger_root,
+        })
     }
+}
+
+impl std::ops::Deref for ReviewAuthorityHarness {
+    type Target = PromotionReviewAuthority;
+
+    fn deref(&self) -> &Self::Target {
+        &self.authority
+    }
+}
+
+impl std::ops::DerefMut for ReviewAuthorityHarness {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.authority
+    }
+}
+
+impl Drop for ReviewAuthorityHarness {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_dir_all(&self.ledger_root);
+    }
+}
+
+fn execution_terminal_proof(run: &EvaluationRun) -> super::super::ledger::ExecutionTerminalProof {
+    super::super::ledger::ExecutionTerminalProof {
+        binding: EvaluationExecutionBinding::new(EvaluationExecutionBindingRequest {
+            live_context_id: run.live_context_id.clone(),
+            candidate_id: run.candidate_id.clone(),
+            spec_sha256: run.spec_sha256.clone(),
+            task_set_sha256: run.task_set_sha256.clone(),
+            execution_session_id: run.execution_session_id.clone(),
+            execution_material_set_sha256: sha('e'),
+            artifact_root_sha256: sha('f'),
+        })
+        .unwrap(),
+        run_sha256: run.run_sha256.clone(),
+        artifact_set_sha256: sha('9'),
+        ledger_head_sha256: sha('8'),
+    }
+}
+
+fn review_authority(baseline: &EvaluationRun, candidate: &EvaluationRun) -> ReviewAuthorityHarness {
+    ReviewAuthorityHarness::current(baseline, candidate)
 }
