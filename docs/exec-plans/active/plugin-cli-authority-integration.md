@@ -100,10 +100,13 @@ All fourteen claims remain withheld beyond their exact accepted source
 ceilings; the N11 WorkerResult is a source handoff, not product proof. The
 user-authorized cleanup removed the obsolete review tree and
 reproducible worktree home/tmp state, recovering about 10.1 GB in addition to
-earlier cleanup; the three approved paths now exist only as empty roots. No
-implementation lease remains active. Integrated lane branch tips are preserved
-by registry tombstones; root owns the N11 admission closure and the standards /
-dead-authority checkpoint before another implementation worktree may launch.
+earlier cleanup; the three approved paths now exist only as empty roots.
+`LEASE-N14-MIGRATION-COMPATIBILITY-001` is the sole active source-work lease,
+on `codex/n14-migration-compatibility-closure`, from
+`761abd2efeac1793e415b5224472b9758ed14910` / tree
+`5cd1b34ec8ea96d1837598a12d913764e848ee79`; no additional implementation
+lease may launch. Integrated lane branch tips are preserved by registry
+tombstones; root owns integration and the next dependency transition.
 
 ## Outcome
 
