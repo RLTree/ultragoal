@@ -1,11 +1,13 @@
 //! Exact public-operation authority for the supported successor dispatcher.
 
-use crate::cli::successor::command_contract::EvalAction;
+use crate::cli::successor::command_contract::{EvalAction, MigrateAction};
 use crate::cli::successor::{
     CheckProfile, EffectClass, FitAction, Group, InspectTarget, ObserveAction, ParsedInvocation,
     SuccessorCommand, catalog,
 };
 use std::collections::BTreeSet;
+
+mod migration_plan;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum PublicOperation {
@@ -25,6 +27,7 @@ pub(crate) enum PublicOperation {
     ObservabilityQuery,
     EvaluationAudit,
     EvaluationRun,
+    MigrationPlan,
 }
 
 #[derive(Clone, Copy)]
@@ -198,6 +201,12 @@ const BINDINGS: &[Binding] = &[
         SuccessorCommand::Eval(EvalAction::Run),
         EffectClass::WorkspaceWrite,
         EVALUATION_RUN,
+    ),
+    binding(
+        PublicOperation::MigrationPlan,
+        SuccessorCommand::Migrate(MigrateAction::Plan),
+        EffectClass::Read,
+        migration_plan::APIS,
     ),
 ];
 

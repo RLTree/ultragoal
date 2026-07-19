@@ -14,6 +14,8 @@ mod discovery;
 mod fs;
 mod generated;
 mod legacy;
+mod migration_plan;
+mod migration_registry;
 #[path = "plugin/hooks.rs"]
 mod plugin_hooks;
 #[path = "plugin/manifest/mod.rs"]
@@ -50,10 +52,14 @@ mod validate;
 mod walk;
 
 pub const ADOPTED_HANDOFF_DIGEST_CONFIG_KEY: &str = "ultragoal.adopted_handoff_manifest_sha256";
+pub(crate) use migration_registry::{
+    MAX_MIGRATION_REGISTRY_BYTES, MIGRATION_REGISTRY_PATH, ObservedMigrationRegistry,
+};
 pub const ADOPTED_HANDOFF_MANIFEST_SHA256: &str =
     "d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51";
 
 pub use builder::InventoryBuilder;
+pub(crate) use migration_plan::MigrationPlanAdapterError;
 #[cfg(test)]
 pub(crate) use types::AuthorityCatalogDefinition;
 pub use types::{

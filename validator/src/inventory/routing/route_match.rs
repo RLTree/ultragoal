@@ -57,10 +57,17 @@ pub(crate) struct RoutingData {
     pub(crate) registry_entry: InventoryEntry,
     registry: RouteRegistry,
     reader_proof_is_current: bool,
+    observation: ObservedMigrationRegistry,
+}
+
+impl RoutingData {
+    pub(crate) fn into_registry_observation(self) -> ObservedMigrationRegistry {
+        self.observation
+    }
 }
 
 fn invalid(message: impl Into<String>) -> InventoryError {
-    InventoryError::InvalidRegistry(format!("{ROUTES_PATH}: {}", message.into()))
+    InventoryError::InvalidRegistry(format!("{MIGRATION_REGISTRY_PATH}: {}", message.into()))
 }
 
 fn safe_token(value: &str, maximum: usize, allowed: &[u8]) -> bool {

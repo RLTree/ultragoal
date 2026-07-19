@@ -6,7 +6,8 @@ use super::{
     ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, context_scopes, discovery, legacy, registry, routing,
     validate,
 };
-use crate::context::LiveContext;
+use crate::context::{LiveContext, ReadSession};
+use crate::migration::product::ProductMigrationPlanProjection;
 
 pub struct InventoryBuilder<'context> {
     context: &'context LiveContext,
@@ -18,6 +19,26 @@ impl<'context> InventoryBuilder<'context> {
     }
 
     pub fn build(&self) -> Result<AuthorityCatalog, InventoryError> {
+        self.build_observed().map(|(catalog, _, _)| catalog)
+    }
+
+    pub(crate) fn build_migration_plan(
+        &self,
+    ) -> Result<ProductMigrationPlanProjection, super::MigrationPlanAdapterError> {
+        let (catalog, reads, registry) = self.build_observed()?;
+        super::migration_plan::derive(self.context, &catalog, &reads, &registry)
+    }
+
+    fn build_observed(
+        &self,
+    ) -> Result<
+        (
+            AuthorityCatalog,
+            ReadSession,
+            super::ObservedMigrationRegistry,
+        ),
+        InventoryError,
+    > {
         self.context
             .revalidate()
             .map_err(|error| InventoryError::Context(error.to_string()))?;
@@ -114,6 +135,7 @@ impl<'context> InventoryBuilder<'context> {
         reads
             .revalidate()
             .map_err(|error| InventoryError::Context(error.to_string()))?;
-        Ok(catalog)
+        let migration_registry = routing.into_registry_observation();
+        Ok((catalog, reads, migration_registry))
     }
 }

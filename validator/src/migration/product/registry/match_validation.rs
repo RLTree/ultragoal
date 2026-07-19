@@ -77,11 +77,11 @@ fn validate_transition_shape(transition: &RegistryTransition) -> Result<(), Prod
     let known = [
         matches!(
             transition.compatibility_behavior.as_str(),
-            "unverified" | "exact-route-only" | "removed"
+            "unverified" | "exact-route-only" | "not-applicable" | "removed"
         ),
         matches!(
             transition.compatibility_boundary.as_str(),
-            "blocked-by-OD-008" | "explicit-only" | "closed"
+            "blocked-by-OD-008" | "explicit-only" | "adopted" | "closed"
         ),
         matches!(
             transition.replacement_state.as_str(),
@@ -89,15 +89,15 @@ fn validate_transition_shape(transition: &RegistryTransition) -> Result<(), Prod
         ),
         matches!(
             transition.active_reader_writer_state.as_str(),
-            "active" | "none"
+            "active" | "none" | "none-verified"
         ),
         matches!(
             transition.observed_authority_state.as_str(),
-            "active" | "compatibility-route-retained" | "retired"
+            "active" | "compatibility-route-retained" | "context-only" | "retired"
         ),
         matches!(
             transition.equivalence_proof.as_str(),
-            "missing" | "executed-behavior-v1"
+            "missing" | "not-applicable" | "executed-behavior-v1"
         ),
         matches!(
             transition.physical_cleanup_state.as_str(),

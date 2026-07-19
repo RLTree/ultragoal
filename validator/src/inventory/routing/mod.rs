@@ -1,15 +1,12 @@
 use super::compatibility::{
     agent_registry_route_is_compiled, reader_proof_current, registry_route_is_compiled,
 };
-use super::fs::{PhysicalEntryDescriptor, physical_entry, read_bounded};
 use super::routing_state::RouteTransition;
-use super::types::{ActiveStatus, AuthorityState, InventoryEntry, InventoryError};
+use super::types::{InventoryEntry, InventoryError};
+use super::{MIGRATION_REGISTRY_PATH, ObservedMigrationRegistry};
 use crate::context::ReadSession;
 use serde::Deserialize;
-use std::fs;
 use std::path::Path;
-
-include!("routes_path.rs");
 
 #[path = "apply.rs"]
 mod apply;

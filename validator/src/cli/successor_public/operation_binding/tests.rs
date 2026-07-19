@@ -2,7 +2,7 @@
 
 use super::*;
 use crate::cli::successor::OutputMode;
-use crate::cli::successor::command_contract::{EvalAction, PackageAction};
+use crate::cli::successor::command_contract::{EvalAction, MigrateAction, PackageAction};
 
 fn invocation(command: SuccessorCommand, effect: EffectClass) -> ParsedInvocation {
     ParsedInvocation {
@@ -36,6 +36,13 @@ fn only_exact_supported_command_effect_pairs_bind() {
         )),
         Some(PublicOperation::EvaluationRun),
     );
+    assert_eq!(
+        bind(&invocation(
+            SuccessorCommand::Migrate(MigrateAction::Plan),
+            EffectClass::Read,
+        )),
+        Some(PublicOperation::MigrationPlan),
+    );
     for invocation in [
         invocation(
             SuccessorCommand::Observe(ObserveAction::Export),
@@ -46,6 +53,18 @@ fn only_exact_supported_command_effect_pairs_bind() {
             EffectClass::Read,
         ),
         invocation(SuccessorCommand::Fit(FitAction::Apply), EffectClass::Read),
+        invocation(
+            SuccessorCommand::Migrate(MigrateAction::Apply),
+            EffectClass::WorkspaceWrite,
+        ),
+        invocation(
+            SuccessorCommand::Migrate(MigrateAction::Verify),
+            EffectClass::Read,
+        ),
+        invocation(
+            SuccessorCommand::Migrate(MigrateAction::Retire),
+            EffectClass::Destructive,
+        ),
     ] {
         assert_eq!(bind(&invocation), None);
     }

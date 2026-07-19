@@ -104,6 +104,7 @@ impl ProductInputSnapshot {
     }
 }
 
+#[cfg(test)]
 pub(crate) trait MigrationInputSource {
     /// Captures the exact current semantic inventory and adopted registry bytes
     /// in one root-owned read session.

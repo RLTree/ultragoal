@@ -1,8 +1,10 @@
 const MAX_SURFACES: usize = 16_384;
+#[cfg(test)]
 const MAX_ROUTES: usize = 4_096;
 const MAX_REFS_PER_SURFACE: usize = 4_096;
 const MAX_IDENTIFIER_BYTES: usize = 160;
 const MAX_PATH_BYTES: usize = 768;
+#[cfg(test)]
 const MAX_AUTHORIZATION_TTL_MS: u64 = 10 * 60 * 1_000;
 const REQUIRED_FALSE_PASS_CONTROLS: [&str; 5] = [
     "proof-artifact",
@@ -39,6 +41,7 @@ impl std::error::Error for MigrationError {}
 #[serde(rename_all = "snake_case")]
 pub enum SurfaceFileKind {
     Regular,
+    Semantic,
     Directory,
     Symlink,
     Special,
@@ -132,11 +135,11 @@ impl InventorySurface {
         if !valid_sha256(&self.digest_sha256) {
             findings.push("migration-surface-digest-invalid".to_owned());
         }
-        if self.file_kind != SurfaceFileKind::Regular {
-            findings.push("migration-surface-non-regular".to_owned());
-        }
-        if self.link_count != 1 {
-            findings.push("migration-surface-hardlink-rejected".to_owned());
+        if !matches!(
+            (self.file_kind, self.link_count),
+            (SurfaceFileKind::Regular, 1) | (SurfaceFileKind::Semantic, 0)
+        ) {
+            findings.push("migration-surface-identity-invalid".to_owned());
         }
         for (label, values) in [
             ("reader", &self.active_readers),

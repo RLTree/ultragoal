@@ -3,24 +3,30 @@
 //! This module is crate-private until root wires the sole public migration
 //! route. All product effects remain injected and semantically confined.
 
+#[cfg(test)]
 mod host;
 mod model;
 mod registry;
+#[cfg(test)]
 mod runtime;
 
 #[cfg(test)]
 pub(crate) use host::provision_darwin_migration_host_for_test;
 #[cfg(test)]
 pub(crate) use host::{DarwinMigrationAdapters, DarwinMigrationHost, HostError};
-#[cfg(test)]
-pub(crate) use model::ProductMigrationPlanProjection;
 pub(crate) use model::{
-    AdoptedRegistrySnapshot, AuthoritySnapshot, MigrationInputBinding, MigrationInputSource,
-    PlanDisposition, PlannedMigrationEffect, ProductInputSnapshot, ProductMigrationError,
-    ProductMigrationPlan,
+    AdoptedRegistrySnapshot, ProductInputSnapshot, ProductMigrationError,
+    ProductMigrationPlanProjection,
 };
 #[cfg(test)]
-pub(crate) use registry::{derive_product_plan, validate_adopted_registry_bytes};
+pub(crate) use model::{
+    AuthoritySnapshot, MigrationInputBinding, MigrationInputSource, PlanDisposition,
+    PlannedMigrationEffect, ProductMigrationPlan,
+};
+pub(crate) use registry::derive_product_plan;
+#[cfg(test)]
+pub(crate) use registry::validate_adopted_registry_bytes;
+#[cfg(test)]
 pub(crate) use runtime::{
     ApplyAuthorizationAuthority, AuthorizationRecord, ConfinedMigrationEffect,
     DurableMigrationStore, EffectFault, EffectObservation, MigrationOperation, ReservationRequest,

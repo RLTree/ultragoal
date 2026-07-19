@@ -1,4 +1,4 @@
-use super::{ROUTES_PATH, RoutingData};
+use super::{MIGRATION_REGISTRY_PATH, RoutingData};
 use crate::inventory::compatibility::{
     AgentRouteApplication, RETAINED_KIND, apply_agent_route, apply_route, retention_candidates,
 };
@@ -62,9 +62,10 @@ impl RoutingData {
                         duplicate_path_conflicts,
                         findings,
                     });
-                    entry
-                        .input_provenance
-                        .push(format!("{ROUTES_PATH}#/routes/{}", route.route_id));
+                    entry.input_provenance.push(format!(
+                        "{MIGRATION_REGISTRY_PATH}#/routes/{}",
+                        route.route_id
+                    ));
                     if retained || agent_verified {
                         entry
                             .input_provenance

@@ -101,6 +101,7 @@ impl MigrationInventory {
     }
 }
 
+#[cfg(test)]
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct CompatibilityRoute {
     route_id: String,

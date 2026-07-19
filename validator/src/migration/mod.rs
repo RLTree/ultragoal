@@ -7,7 +7,9 @@
 
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
-use std::collections::{BTreeMap, BTreeSet};
+#[cfg(test)]
+use std::collections::BTreeMap;
+use std::collections::BTreeSet;
 use std::fmt;
 
 pub(crate) mod product;
@@ -20,36 +22,55 @@ include!("max_surfaces.rs");
 
 include!("inventory.rs");
 
+include!("input_contract.rs");
+
+#[cfg(test)]
 include!("compatibility_route_new.rs");
 
+#[cfg(test)]
 include!("replacement/authority.rs");
 
+#[cfg(test)]
 include!("replacement/observation.rs");
 
+#[cfg(test)]
 include!("replacement/issuance.rs");
 
+#[cfg(test)]
 include!("replacement/consumption.rs");
 
+#[cfg(test)]
 include!("consumed/validation.rs");
 
+#[cfg(test)]
 include!("consumed/sentinel_injection_test.rs");
 
+#[cfg(test)]
 include!("retirement/target_digest_fragment.rs");
 
+#[cfg(test)]
 include!("plan/build.rs");
 
+#[cfg(test)]
 include!("plan/projection_verification.rs");
 
+#[cfg(test)]
 include!("retirement/review/issuance.rs");
 
+#[cfg(test)]
 include!("destructive/issuance.rs");
 
+#[cfg(test)]
 include!("retirement/preservation/contract.rs");
 
+#[cfg(test)]
 include!("retirement/decision_reconciliation.rs");
 
+#[cfg(test)]
 include!("replacement/ledger_currentness.rs");
 
+#[cfg(test)]
 include!("retirement/review/currentness.rs");
 
+#[cfg(test)]
 include!("destructive/currentness.rs");

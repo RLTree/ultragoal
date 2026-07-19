@@ -25,6 +25,7 @@ mod diagnose;
 mod evaluation;
 mod fit;
 mod local_store;
+mod migration;
 mod observe;
 mod operation_binding;
 mod orchestration;

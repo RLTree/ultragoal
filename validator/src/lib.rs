@@ -26,8 +26,7 @@ mod fixture_scheduler_tests;
 mod generated_authority;
 pub mod inventory;
 mod json_boundary;
-#[cfg(test)]
-pub mod migration;
+pub(crate) mod migration;
 pub mod observability;
 pub mod orchestration;
 mod output_path;

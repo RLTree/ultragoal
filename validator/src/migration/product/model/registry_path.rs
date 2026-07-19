@@ -1,5 +1,3 @@
-pub(super) const REGISTRY_PATH: &str = "migration/authority-routes.json";
-pub(super) const MAX_REGISTRY_BYTES: usize = 2 * 1024 * 1024;
 pub(super) const MAX_PRODUCT_ITEMS: usize = 4_096;
 pub(super) const MAX_MACHINE_OUTPUT_BYTES: usize = 2 * 1024 * 1024;
 pub(super) const MAX_APPLY_TTL_MS: u64 = 10 * 60 * 1_000;
@@ -105,7 +103,7 @@ impl AdoptedRegistrySnapshot {
     }
 
     pub(super) fn validate(&self) -> Result<(), ProductMigrationError> {
-        if self.relative_path != REGISTRY_PATH
+        if self.relative_path != MIGRATION_REGISTRY_PATH
             || !self.relative_path.is_ascii()
             || !safe_relative_path(&self.relative_path)
         {
@@ -118,7 +116,7 @@ impl AdoptedRegistrySnapshot {
                 "migration-product-registry-file-refused",
             ));
         }
-        if self.bytes.is_empty() || self.bytes.len() > MAX_REGISTRY_BYTES {
+        if self.bytes.is_empty() || self.bytes.len() as u64 > MAX_MIGRATION_REGISTRY_BYTES {
             return Err(ProductMigrationError::new(
                 "migration-product-registry-size-refused",
             ));

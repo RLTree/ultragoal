@@ -31,3 +31,5 @@ include!(
 );
 
 include!("filesystem_alias_special_hardlink_traversal_and_unicode_inputs_are_rejected.rs");
+
+include!("semantic_authority_observation_cannot_authorize_an_effect.rs");
