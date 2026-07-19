@@ -1,3 +1,4 @@
+#[cfg(test)]
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub(crate) struct CapturedTaskObservation {
     task_id: String,
@@ -17,6 +18,7 @@ pub(crate) struct CapturedTaskObservation {
     passed_perturbations: BTreeSet<PerturbationControl>,
 }
 
+#[cfg(test)]
 pub(crate) struct CapturedTaskObservationRecord {
     pub task_id: String,
     pub fixture_id: String,
@@ -35,6 +37,7 @@ pub(crate) struct CapturedTaskObservationRecord {
     pub passed_perturbations: BTreeSet<PerturbationControl>,
 }
 
+#[cfg(test)]
 impl CapturedTaskObservation {
     pub(crate) fn captured(record: CapturedTaskObservationRecord) -> Self {
         let CapturedTaskObservationRecord {
@@ -74,6 +77,7 @@ impl CapturedTaskObservation {
     }
 }
 
+#[cfg(test)]
 pub(crate) trait EvaluationExecutor {
     fn binding(&self) -> (&str, &str);
     fn session_id(&self) -> &str;

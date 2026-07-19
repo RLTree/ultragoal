@@ -69,24 +69,29 @@ pub(super) fn load(
     candidate_id: &str,
 ) -> Result<EvaluationSpec, ()> {
     let reads = context.begin_read_session().map_err(|_| ())?;
+    let spec_path = context.worktree_root().join(spec_path);
     let bytes = reads
-        .read_bounded(Path::new(spec_path), MAX_SPEC_BYTES)
+        .read_bounded(&spec_path, MAX_SPEC_BYTES)
         .map_err(|_| ())?;
     let input = serde_json::from_slice::<AuditSpecificationInput>(&bytes).map_err(|_| ())?;
-    input.authenticate_datasets(&reads)?;
+    input.authenticate_datasets(&reads, context.worktree_root())?;
     let spec = input.into_spec(context.context_id(), candidate_id)?;
     reads.revalidate().map_err(|_| ())?;
     Ok(spec)
 }
 
 impl AuditSpecificationInput {
-    fn authenticate_datasets(&self, reads: &crate::context::ReadSession) -> Result<(), ()> {
+    fn authenticate_datasets(
+        &self,
+        reads: &crate::context::ReadSession,
+        root: &Path,
+    ) -> Result<(), ()> {
         if self.schema_version != SCHEMA_VERSION {
             return Err(());
         }
         self.tasks
             .iter()
-            .try_for_each(|task| task.authenticate_dataset(reads))
+            .try_for_each(|task| task.authenticate_dataset(reads, root))
     }
 
     fn into_spec(self, context_id: &str, candidate_id: &str) -> Result<EvaluationSpec, ()> {
@@ -103,9 +108,14 @@ impl AuditSpecificationInput {
 }
 
 impl AuditTaskInput {
-    fn authenticate_dataset(&self, reads: &crate::context::ReadSession) -> Result<(), ()> {
+    fn authenticate_dataset(
+        &self,
+        reads: &crate::context::ReadSession,
+        root: &Path,
+    ) -> Result<(), ()> {
+        let dataset_path = root.join(&self.dataset.relative_path);
         let bytes = reads
-            .read_bounded(Path::new(&self.dataset.relative_path), MAX_DATASET_BYTES)
+            .read_bounded(&dataset_path, MAX_DATASET_BYTES)
             .map_err(|_| ())?;
         (bytes.len() as u64 == self.dataset.byte_length
             && format!("sha256:{:x}", Sha256::digest(bytes)) == self.dataset.digest_sha256)

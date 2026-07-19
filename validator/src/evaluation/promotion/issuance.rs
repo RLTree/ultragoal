@@ -178,10 +178,3 @@ impl PromotionReview {
         sentinels
     }
 }
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum PromotionStatus {
-    ImprovementCandidate,
-    Rejected,
-}

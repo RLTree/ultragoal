@@ -15,7 +15,12 @@ pub(crate) fn evaluation_audit_binds_typed_spec_to_current_context_without_write
 
     let streams = execute_invocation(&repo.root, invocation).render(OutputMode::Json);
 
-    assert_eq!(streams.exit_code, 0);
+    assert_eq!(
+        streams.exit_code,
+        0,
+        "{}",
+        String::from_utf8_lossy(&streams.stderr)
+    );
     assert!(streams.stderr.is_empty());
     let output: serde_json::Value = serde_json::from_slice(&streams.stdout).unwrap();
     assert_eq!(output["schema_version"], "EvaluationAudit-v1");
@@ -89,7 +94,7 @@ pub(crate) fn evaluation_audit_rejects_missing_or_substituted_datasets_without_w
 }
 
 fn write_spec(root: &std::path::Path, spec_id: &str, extra: bool) {
-    let sha = |character| format!("sha256:{}", character.to_string().repeat(64));
+    let sha = |character: char| format!("sha256:{}", character.to_string().repeat(64));
     let dataset = [b'a'; 32];
     let dataset_digest = format!("sha256:{:x}", Sha256::digest(dataset));
     let mut value = serde_json::json!({
