@@ -16,7 +16,8 @@ pub(crate) fn inspect_orchestration_reads_the_canonical_frontier_without_writes(
         panic!("orchestration route invokes");
     };
 
-    let streams = execute_invocation(root, invocation).render(OutputMode::Json);
+    let outcome = execute_invocation(root, invocation);
+    let streams = outcome.render(OutputMode::Json);
 
     assert_eq!(streams.exit_code, 0);
     assert!(streams.stderr.is_empty());
@@ -37,7 +38,19 @@ pub(crate) fn inspect_orchestration_reads_the_canonical_frontier_without_writes(
             && lane.get("owner").is_none()
             && lane.get("worktree").is_none()
     }));
-    let rendered = String::from_utf8(streams.stdout).unwrap();
+    let human = outcome.render(OutputMode::Human);
+    assert_eq!(human.exit_code, 0);
+    assert!(human.stderr.is_empty());
+    for rendered in [
+        String::from_utf8(streams.stdout).unwrap(),
+        String::from_utf8(human.stdout).unwrap(),
+    ] {
+        assert_forbidden_output(&rendered, root);
+    }
+    assert_eq!(tree(root), before_tree);
+}
+
+fn assert_forbidden_output(rendered: &str, root: &std::path::Path) {
     for forbidden in [
         root.to_string_lossy().as_ref(),
         "worktree_root",
@@ -52,7 +65,6 @@ pub(crate) fn inspect_orchestration_reads_the_canonical_frontier_without_writes(
     ] {
         assert!(!rendered.contains(forbidden), "output exposed {forbidden}");
     }
-    assert_eq!(tree(root), before_tree);
 }
 
 #[test]

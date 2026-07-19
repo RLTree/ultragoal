@@ -26,7 +26,7 @@ pub(super) fn project(context: &LiveContext, invocation: &ParsedInvocation) -> R
         Ok(machine) if public_output_allowed(machine.len()) => RuntimeOutcome::payload(
             ExitClass::Success,
             machine,
-            "canonical orchestration frontier claim_effect=none".to_owned(),
+            "canonical orchestration frontier available".to_owned(),
         ),
         _ => unavailable(),
     }
