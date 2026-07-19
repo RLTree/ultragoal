@@ -9,7 +9,7 @@ pub(in crate::evaluation) struct ProductionExecutionRequest<'a> {
     execution_session_id: String,
     artifact_root_sha256: String,
     runtime_configuration: RuntimeConfiguration,
-    output_path: Option<std::path::PathBuf>,
+    output: Option<crate::context::AuthorizedPath>,
 }
 
 impl<'a> ProductionExecutionRequest<'a> {
@@ -30,15 +30,15 @@ impl<'a> ProductionExecutionRequest<'a> {
             execution_session_id: execution_session_id.into(),
             artifact_root_sha256: artifact_root_sha256.into(),
             runtime_configuration,
-            output_path: None,
+            output: None,
         }
     }
 
-    pub(in crate::evaluation) fn with_output_path(
+    pub(in crate::evaluation) fn with_output(
         mut self,
-        output_path: std::path::PathBuf,
+        output: crate::context::AuthorizedPath,
     ) -> Self {
-        self.output_path = Some(output_path);
+        self.output = Some(output);
         self
     }
 
@@ -65,7 +65,7 @@ impl<'a> ProductionExecutionRequest<'a> {
             self.execution_session_id,
             self.runtime_configuration,
             &binding,
-            self.output_path.as_deref(),
+            self.output.as_ref(),
             bridge,
         )
     }

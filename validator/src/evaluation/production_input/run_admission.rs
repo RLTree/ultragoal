@@ -16,7 +16,7 @@ pub(crate) struct EvaluationRunAdmission<'a> {
     ledger_key: [u8; 32],
     session_id: String,
     artifact_root_sha256: String,
-    output_path: std::path::PathBuf,
+    output: crate::context::AuthorizedPath,
 }
 
 impl<'a> EvaluationRunAdmission<'a> {
@@ -32,8 +32,17 @@ impl<'a> EvaluationRunAdmission<'a> {
             return Err(EvaluationError::new("evaluation-run-admission-stale"));
         }
         let root = context.worktree_root().to_path_buf();
-        let output_path = root.join(output_relative);
-        if output_path.parent().is_none_or(|parent| !parent.is_dir()) {
+        let output = context
+            .authorize_path(
+                output_relative,
+                crate::cli::successor::EffectClass::WorkspaceWrite,
+            )
+            .map_err(|_| EvaluationError::new("evaluation-run-output-unavailable"))?;
+        if output
+            .canonical_path
+            .parent()
+            .is_none_or(|parent| !parent.is_dir())
+        {
             return Err(EvaluationError::new("evaluation-run-output-unavailable"));
         }
         let identity = digest(
@@ -57,7 +66,7 @@ impl<'a> EvaluationRunAdmission<'a> {
             ledger_key: key,
             session_id: digest(format!("session|{identity}").as_bytes()),
             artifact_root_sha256: digest(format!("artifact-root|{identity}").as_bytes()),
-            output_path,
+            output,
         })
     }
 
@@ -74,7 +83,7 @@ impl<'a> EvaluationRunAdmission<'a> {
             self.artifact_root_sha256,
             RuntimeConfiguration::all_unknown(),
         )
-        .with_output_path(self.output_path)
+        .with_output(self.output)
         .execute(bridge)
     }
 }

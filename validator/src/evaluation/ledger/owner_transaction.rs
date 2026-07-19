@@ -84,7 +84,7 @@ impl ExecutionOwner {
         execution_session_id: impl Into<String>,
         runtime_configuration: RuntimeConfiguration,
         expected_binding: &super::EvaluationExecutionBinding,
-        output_path: Option<&std::path::Path>,
+        output: Option<&crate::context::AuthorizedPath>,
         bridge: &mut B,
     ) -> Result<ProductionEvaluationRun, ProductionRuntimeError> {
         permit.revalidate()?;
@@ -127,7 +127,7 @@ impl ExecutionOwner {
             super::ExecutionReservationOutcome::Terminal {
                 terminal_result, ..
             } => {
-                publish_public_result(output_path, &terminal_result)?;
+                publish_public_result(output, &terminal_result)?;
                 return ProductionEvaluationRun::from_terminal(terminal_result);
             }
             _ => {
@@ -198,7 +198,7 @@ impl ExecutionOwner {
                 records,
                 artifacts,
             )) => {
-                self.settle(run.run_sha256(), artifacts, &public_result, output_path)?;
+                self.settle(run.run_sha256(), artifacts, &public_result, output)?;
                 Ok(ProductionEvaluationRun::new(
                     canonical_run,
                     canonical_failures,
@@ -216,7 +216,7 @@ impl ExecutionOwner {
         run_sha256: &str,
         artifacts: String,
         terminal_result: &[u8],
-        output_path: Option<&std::path::Path>,
+        output: Option<&crate::context::AuthorizedPath>,
     ) -> Result<(), ProductionRuntimeError> {
         if let Err(error) =
             self.publish_terminal_result(run_sha256, artifacts, terminal_result.to_vec())
@@ -226,7 +226,7 @@ impl ExecutionOwner {
         if let Err(error) = self.0.complete() {
             return Err(self.interrupt(error.code()));
         }
-        publish_public_result(output_path, terminal_result)
+        publish_public_result(output, terminal_result)
     }
 
     fn interrupt(&mut self, causal_code: &'static str) -> ProductionRuntimeError {
