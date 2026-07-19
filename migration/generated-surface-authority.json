@@ -71,7 +71,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "026aa235f532236d39618ddb5455237c703469f3ba76263470ecdf1939005556"
+      "output_sha256": "ccb23e2d88509463f6a8b3028af099561913d74e1628c9ba83ebe4d7472119bb"
     },
     {
       "disposition": "source_projection",
@@ -94,7 +94,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "b5a6b9cf1fe9416b9cb4278fa31db8426dbc612c30e720235ed030c55560fa21"
+      "output_sha256": "d424ab8ce18daad2dafc8f0b3e1a79bfce4bc756d64bd59ce665f89dd9cb3527"
     },
     {
       "disposition": "retained_context",
@@ -278,7 +278,7 @@
         "agent-standards/03-execplans-worktrees-and-orchestration.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "a6964f16c9d3a3cd59b099760e2bdace7c39ba85bac120dc9321ca83c2e11b00"
+      "output_sha256": "c138f239e1b49185ea376444263ec95e5de6f81b6f26cbe881e0287e14b3cc71"
     },
     {
       "disposition": "source_projection",
@@ -424,7 +424,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "026aa235f532236d39618ddb5455237c703469f3ba76263470ecdf1939005556"
+      "output_sha256": "ccb23e2d88509463f6a8b3028af099561913d74e1628c9ba83ebe4d7472119bb"
     },
     {
       "disposition": "source_projection",
@@ -447,7 +447,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "b5a6b9cf1fe9416b9cb4278fa31db8426dbc612c30e720235ed030c55560fa21"
+      "output_sha256": "d424ab8ce18daad2dafc8f0b3e1a79bfce4bc756d64bd59ce665f89dd9cb3527"
     },
     {
       "disposition": "source_projection",
