@@ -53,11 +53,14 @@ fn two_process_review_worker() {
     let binding_sha256 = sha('6');
     let attestation = std::env::var("HUL_EVAL_ATTESTATION").unwrap();
     let review_id = review_id(&binding_sha256, &attestation);
-    if ledger.verify_and_consume(
-        &binding_sha256,
-        "independent-reviewer",
-        &review_id,
-        &attestation,
+    if matches!(
+        ledger.consume_attestation(
+            &binding_sha256,
+            "independent-reviewer",
+            &review_id,
+            &attestation,
+        ),
+        Ok(PromotionConsumptionOutcome::Consumed)
     ) {
         std::process::exit(83);
     }
@@ -84,7 +87,7 @@ fn review_consumption_has_exactly_one_two_process_winner() {
     let binding = promotion_binding(&baseline_root, &candidate_root);
     let mut ledger =
         FilePromotionReviewLedger::initialize(&review_root, [5_u8; 32], binding).unwrap();
-    let attestation = ledger.issue_attestation(&sha('6')).unwrap();
+    let attestation = ledger.issue_bound_attestation(&sha('6')).unwrap();
     drop(ledger);
     let exe = std::env::current_exe().unwrap();
     let barrier = root("review-race-barrier");

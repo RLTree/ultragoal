@@ -12,7 +12,7 @@ fn promotion_anchor_journal_recovers_state_only_rollback_and_rejects_paired_rest
     let mut review =
         FilePromotionReviewLedger::initialize(&state_only_root, key, binding.clone()).unwrap();
     let old_state = fs::read(state_only_root.join("promotion-review.state")).unwrap();
-    review.issue_attestation(&sha('6')).unwrap();
+    review.issue_bound_attestation(&sha('6')).unwrap();
     fs::write(state_only_root.join("promotion-review.state"), old_state).unwrap();
     let recovered =
         FilePromotionReviewLedger::open(&state_only_root, key, binding.clone()).unwrap();
@@ -25,7 +25,7 @@ fn promotion_anchor_journal_recovers_state_only_rollback_and_rejects_paired_rest
         FilePromotionReviewLedger::initialize(&paired_root, key, binding.clone()).unwrap();
     let old_state = fs::read(paired_root.join("promotion-review.state")).unwrap();
     let old_anchor = fs::read(paired_root.join("promotion-review.anchor.journal")).unwrap();
-    review.issue_attestation(&sha('6')).unwrap();
+    review.issue_bound_attestation(&sha('6')).unwrap();
     fs::write(paired_root.join("promotion-review.state"), old_state).unwrap();
     fs::write(
         paired_root.join("promotion-review.anchor.journal"),
@@ -68,7 +68,7 @@ fn promotion_journal_tolerates_one_crash_tail_and_repairs_only_on_mutation() {
         PromotionLedgerState::Ready
     ));
     assert_eq!(tree(&review_root), before);
-    reopened.issue_attestation(&sha('6')).unwrap();
+    reopened.issue_bound_attestation(&sha('6')).unwrap();
     assert!(fs::metadata(&anchor_path).unwrap().len() > stable_length);
     assert!(matches!(
         reopened.inspect().unwrap(),
@@ -91,7 +91,7 @@ fn promotion_idempotent_issue_repairs_a_crash_tail_with_a_fresh_authenticated_ge
     let binding_sha256 = sha('6');
     let mut review =
         FilePromotionReviewLedger::initialize(&review_root, key, binding.clone()).unwrap();
-    let attestation = review.issue_attestation(&binding_sha256).unwrap();
+    let attestation = review.issue_bound_attestation(&binding_sha256).unwrap();
     drop(review);
 
     let anchor_path = review_root.join("promotion-review.anchor.journal");
@@ -112,7 +112,7 @@ fn promotion_idempotent_issue_repairs_a_crash_tail_with_a_fresh_authenticated_ge
     ));
     assert_eq!(tree(&review_root), before);
     assert_eq!(
-        reopened.issue_attestation(&binding_sha256).unwrap(),
+        reopened.issue_bound_attestation(&binding_sha256).unwrap(),
         attestation
     );
     assert!(fs::metadata(&anchor_path).unwrap().len() > stable_length);
@@ -139,7 +139,7 @@ fn promotion_stale_protocol_pending_file_is_ignored_read_only_then_removed_on_mu
     let mut review =
         FilePromotionReviewLedger::initialize(&review_root, key, binding.clone()).unwrap();
     let binding_sha256 = sha('6');
-    let attestation = review.issue_attestation(&binding_sha256).unwrap();
+    let attestation = review.issue_bound_attestation(&binding_sha256).unwrap();
     drop(review);
     let pending = review_root.join(".promotion-review.state.pending.999999.1");
     fs::write(&pending, b"partial-publication").unwrap();
@@ -153,11 +153,14 @@ fn promotion_stale_protocol_pending_file_is_ignored_read_only_then_removed_on_mu
     ));
     assert_eq!(tree(&review_root), before);
     let review_id = review_id(&binding_sha256, &attestation);
-    assert!(reopened.verify_and_consume(
-        &binding_sha256,
-        "independent-reviewer",
-        &review_id,
-        &attestation,
+    assert!(matches!(
+        reopened.consume_attestation(
+            &binding_sha256,
+            "independent-reviewer",
+            &review_id,
+            &attestation,
+        ),
+        Ok(PromotionConsumptionOutcome::Consumed)
     ));
     assert!(!pending.exists());
     assert!(matches!(

@@ -44,16 +44,19 @@ fn promotion_final_named_root_revalidation_refuses_orphan_consume_and_read_succe
     let mut review =
         FilePromotionReviewLedger::initialize(&review_root, key, binding.clone()).unwrap();
     let binding_sha256 = sha('6');
-    let attestation = review.issue_attestation(&binding_sha256).unwrap();
+    let attestation = review.issue_bound_attestation(&binding_sha256).unwrap();
     let review_id = review_id(&binding_sha256, &attestation);
 
     FilePromotionReviewLedger::set_test_final_validation_pause(review_root.clone(), 10_000);
     let writer = std::thread::spawn(move || {
-        review.verify_and_consume(
-            &binding_sha256,
-            "independent-reviewer",
-            &review_id,
-            &attestation,
+        matches!(
+            review.consume_attestation(
+                &binding_sha256,
+                "independent-reviewer",
+                &review_id,
+                &attestation,
+            ),
+            Ok(PromotionConsumptionOutcome::Consumed)
         )
     });
     wait_until("promotion final write validation", || {
@@ -108,16 +111,19 @@ fn promotion_final_named_lock_and_anchor_revalidation_refuses_late_swap_success(
         let mut review =
             FilePromotionReviewLedger::initialize(&review_root, key, binding.clone()).unwrap();
         let binding_sha256 = sha('6');
-        let attestation = review.issue_attestation(&binding_sha256).unwrap();
+        let attestation = review.issue_bound_attestation(&binding_sha256).unwrap();
         let review_id = review_id(&binding_sha256, &attestation);
 
         FilePromotionReviewLedger::set_test_final_validation_pause(review_root.clone(), 10_000);
         let writer = std::thread::spawn(move || {
-            review.verify_and_consume(
-                &binding_sha256,
-                "independent-reviewer",
-                &review_id,
-                &attestation,
+            matches!(
+                review.consume_attestation(
+                    &binding_sha256,
+                    "independent-reviewer",
+                    &review_id,
+                    &attestation,
+                ),
+                Ok(PromotionConsumptionOutcome::Consumed)
             )
         });
         wait_until("promotion component final validation", || {

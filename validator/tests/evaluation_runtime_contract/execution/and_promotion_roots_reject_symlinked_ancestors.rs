@@ -145,19 +145,25 @@ fn distinct_review_ledger_is_one_shot_and_rejects_replay() {
     let mut review =
         FilePromotionReviewLedger::initialize(&review_root, [3_u8; 32], binding).unwrap();
     let binding_sha256 = sha('6');
-    let attestation = review.issue_attestation(&binding_sha256).unwrap();
+    let attestation = review.issue_bound_attestation(&binding_sha256).unwrap();
     let review_id = review_id(&binding_sha256, &attestation);
-    assert!(review.verify_and_consume(
-        &binding_sha256,
-        "independent-reviewer",
-        &review_id,
-        &attestation,
+    assert!(matches!(
+        review.consume_attestation(
+            &binding_sha256,
+            "independent-reviewer",
+            &review_id,
+            &attestation,
+        ),
+        Ok(PromotionConsumptionOutcome::Consumed)
     ));
-    assert!(!review.verify_and_consume(
-        &binding_sha256,
-        "independent-reviewer",
-        &review_id,
-        &attestation,
+    assert!(!matches!(
+        review.consume_attestation(
+            &binding_sha256,
+            "independent-reviewer",
+            &review_id,
+            &attestation,
+        ),
+        Ok(PromotionConsumptionOutcome::Consumed)
     ));
     assert!(matches!(
         review.inspect().unwrap(),

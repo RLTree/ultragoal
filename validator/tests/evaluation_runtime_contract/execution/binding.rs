@@ -5,7 +5,7 @@ fn execution_binding(candidate: char, session: char) -> EvaluationExecutionBindi
         spec_sha256: sha('c'),
         task_set_sha256: sha('d'),
         execution_session_id: sha(session),
-        executable_set_sha256: sha('e'),
+        execution_material_set_sha256: sha('e'),
         artifact_root_sha256: sha('f'),
     })
     .unwrap()

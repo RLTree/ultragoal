@@ -11,17 +11,20 @@ fn promotion_final_named_state_revalidation_refuses_recoverable_late_swap_succes
     let mut review =
         FilePromotionReviewLedger::initialize(&review_root, key, binding.clone()).unwrap();
     let binding_sha256 = sha('6');
-    let attestation = review.issue_attestation(&binding_sha256).unwrap();
+    let attestation = review.issue_bound_attestation(&binding_sha256).unwrap();
     let review_id = review_id(&binding_sha256, &attestation);
     let issued = fs::read(review_root.join("promotion-review.state")).unwrap();
 
     FilePromotionReviewLedger::set_test_final_validation_pause(review_root.clone(), 10_000);
     let writer = std::thread::spawn(move || {
-        review.verify_and_consume(
-            &binding_sha256,
-            "independent-reviewer",
-            &review_id,
-            &attestation,
+        matches!(
+            review.consume_attestation(
+                &binding_sha256,
+                "independent-reviewer",
+                &review_id,
+                &attestation,
+            ),
+            Ok(PromotionConsumptionOutcome::Consumed)
         )
     });
     wait_until("promotion state final validation", || {
@@ -81,11 +84,9 @@ fn execution_readers_wait_for_a_consistent_publication_pair() {
     writer_thread.join().unwrap().unwrap();
     let states = receiver.into_iter().collect::<Vec<_>>();
     assert_eq!(states.len(), 8);
-    assert!(
-        states
-            .into_iter()
-            .all(|state| { matches!(state, Ok(EvaluationLedgerState::Reserved)) })
-    );
+    assert!(states
+        .into_iter()
+        .all(|state| { matches!(state, Ok(EvaluationLedgerState::Reserved)) }));
     for reader in readers {
         reader.join().unwrap();
     }
@@ -104,15 +105,18 @@ fn promotion_readers_wait_for_a_consistent_publication_pair() {
     let mut writer =
         FilePromotionReviewLedger::initialize(&review_root, key, binding.clone()).unwrap();
     let binding_sha256 = sha('6');
-    let attestation = writer.issue_attestation(&binding_sha256).unwrap();
+    let attestation = writer.issue_bound_attestation(&binding_sha256).unwrap();
     let review_id = review_id(&binding_sha256, &attestation);
     FilePromotionReviewLedger::set_test_publication_pause(review_root.clone(), 5_000);
     let writer_thread = std::thread::spawn(move || {
-        writer.verify_and_consume(
-            &binding_sha256,
-            "independent-reviewer",
-            &review_id,
-            &attestation,
+        matches!(
+            writer.consume_attestation(
+                &binding_sha256,
+                "independent-reviewer",
+                &review_id,
+                &attestation,
+            ),
+            Ok(PromotionConsumptionOutcome::Consumed)
         )
     });
     wait_until("promotion state-anchor publication pause", || {
@@ -138,11 +142,9 @@ fn promotion_readers_wait_for_a_consistent_publication_pair() {
     assert!(writer_thread.join().unwrap());
     let states = receiver.into_iter().collect::<Vec<_>>();
     assert_eq!(states.len(), 8);
-    assert!(
-        states
-            .into_iter()
-            .all(|state| { matches!(state, Ok(PromotionLedgerState::Consumed { .. })) })
-    );
+    assert!(states
+        .into_iter()
+        .all(|state| { matches!(state, Ok(PromotionLedgerState::Consumed { .. })) }));
     for reader in readers {
         reader.join().unwrap();
     }

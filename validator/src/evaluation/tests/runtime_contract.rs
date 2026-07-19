@@ -1,3 +1,4 @@
+use super::super::promotion_ledger::PromotionConsumptionOutcome;
 use super::super::{
     AdvisoryPractice, AuthorityAnalysis, BindingProductRequirement, BoundInput,
     EvaluationDataControls, EvaluationDataControlsDefinition, EvaluationExecutionBinding,
@@ -8,12 +9,12 @@ use super::super::{
     RejectedRecommendation, ResearchAudit, ResearchSource, ResearchSourceClass,
     ResearchSourceRecord, ResearchSourceRecordDefinition, VerifiedSourceFact,
 };
-use serde_json::{Value, json};
+use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::io::Write;
-use std::os::unix::fs::{PermissionsExt, symlink};
+use std::os::unix::fs::{symlink, PermissionsExt};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -23,8 +24,8 @@ use std::time::{Duration, Instant};
 #[path = "../../../tests/evaluation_runtime_contract/production_native_fixture_boundary_accepts_only_fixed_protected_substrates.rs"]
 mod production_native;
 use production_native::{
-    RESEARCH_2026_01_01_EPOCH, RESEARCH_CHECKED_DAY_EPOCH, RESEARCH_MUTABLE_FRESHNESS_SECONDS,
-    research_epoch, research_laws, task,
+    research_epoch, research_laws, task, RESEARCH_2026_01_01_EPOCH, RESEARCH_CHECKED_DAY_EPOCH,
+    RESEARCH_MUTABLE_FRESHNESS_SECONDS,
 };
 include!("../../../tests/evaluation_runtime_contract/next_root.rs");
 include!("../../../tests/evaluation_runtime_contract/research/source/url.rs");
