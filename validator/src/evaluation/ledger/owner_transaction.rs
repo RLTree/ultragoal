@@ -218,7 +218,6 @@ impl ExecutionOwner {
         terminal_result: &[u8],
         output_path: Option<&std::path::Path>,
     ) -> Result<(), ProductionRuntimeError> {
-        publish_public_result(output_path, terminal_result)?;
         if let Err(error) =
             self.publish_terminal_result(run_sha256, artifacts, terminal_result.to_vec())
         {
@@ -227,7 +226,7 @@ impl ExecutionOwner {
         if let Err(error) = self.0.complete() {
             return Err(self.interrupt(error.code()));
         }
-        Ok(())
+        publish_public_result(output_path, terminal_result)
     }
 
     fn interrupt(&mut self, causal_code: &'static str) -> ProductionRuntimeError {
