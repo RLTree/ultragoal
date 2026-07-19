@@ -5,24 +5,6 @@
   "authority_rule": "Rows record intended canonical targets and typed transition state. Active rows remain legacy authority. Exact compiled proof of one sole-current implementation and a definition-only target may classify a source as pending migration without demotion; every other active legacy source triggers parallel_authority. Registry text alone cannot prove sole-current status, compatibility, retirement, removal, or a product claim.",
   "routes": [
     {
-      "route_id": "legacy-contracts-to-successor-v2",
-      "match": {
-        "kind": "legacy-contract-authority"
-      },
-      "canonical_target": "CONTRACT-REGISTRY:CONTRACT_MANIFEST.json",
-      "intended_disposition": "non-authoritative",
-      "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
-        "proof_refs": []
-      }
-    },
-    {
       "route_id": "agent-contract-claim-falsifier-to-claim-falsifier",
       "match": {
         "stable_id": "LEGACY-AGENT:agents/contract-claim-falsifier.md"
@@ -328,42 +310,6 @@
           "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json#/product-surface-definition/PS-FIT-RETROFIT",
           "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
         ]
-      }
-    },
-    {
-      "route_id": "legacy-gates-to-claim-graph",
-      "match": {
-        "kind": "legacy-gate-authority"
-      },
-      "canonical_target": "HCT-CLAIMS",
-      "intended_disposition": "non-authoritative",
-      "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
-        "proof_refs": []
-      }
-    },
-    {
-      "route_id": "legacy-model-pins-to-live-context",
-      "match": {
-        "kind": "legacy-model-authority"
-      },
-      "canonical_target": "HCT-CONTEXT",
-      "intended_disposition": "non-authoritative",
-      "transition": {
-        "compatibility_behavior": "unverified",
-        "compatibility_boundary": "blocked-by-OD-008",
-        "replacement_state": "unverified",
-        "active_reader_writer_state": "active",
-        "observed_authority_state": "active",
-        "equivalence_proof": "missing",
-        "physical_cleanup_state": "blocked-by-OD-009",
-        "proof_refs": []
       }
     },
     {
