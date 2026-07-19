@@ -1,10 +1,14 @@
+use super::super::production_input::ProductionSpecPermit;
 use super::super::runtime::{FixtureEvaluationBridge, FixtureTaskRequest};
 use super::super::*;
 use super::custody::{execution_binding, root};
 use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
 use std::fs;
-use std::os::unix::fs::{PermissionsExt, symlink};
+use std::os::unix::fs::{symlink, PermissionsExt};
+use std::sync::atomic::{AtomicU64, Ordering};
+
+static NEXT_PRODUCTION_ROOT: AtomicU64 = AtomicU64::new(0);
 
 fn sha(byte: char) -> String {
     format!("sha256:{}", byte.to_string().repeat(64))
@@ -12,6 +16,17 @@ fn sha(byte: char) -> String {
 
 fn digest(bytes: &[u8]) -> String {
     format!("sha256:{:x}", Sha256::digest(bytes))
+}
+
+fn production_root(label: &str) -> std::path::PathBuf {
+    let root = std::path::PathBuf::from("/private/tmp").join(format!(
+        "hul-evaluation-panic-{label}-{}-{}",
+        std::process::id(),
+        NEXT_PRODUCTION_ROOT.fetch_add(1, Ordering::SeqCst),
+    ));
+    fs::create_dir(&root).unwrap();
+    fs::set_permissions(&root, fs::Permissions::from_mode(0o700)).unwrap();
+    root
 }
 
 fn preparation_spec(input_root: &std::path::Path) -> EvaluationSpec {
@@ -83,6 +98,19 @@ impl FixtureEvaluationBridge for RefusingBridge {
     }
 }
 
+struct PanickingBridge;
+
+impl super::super::runtime::bridge_authority::Sealed for PanickingBridge {}
+
+impl FixtureEvaluationBridge for PanickingBridge {
+    fn execute_fixture(
+        &mut self,
+        _: &FixtureTaskRequest,
+    ) -> Result<crate::fixture_scheduler::FixtureExecutionRecord, ProductionRuntimeError> {
+        panic!("fixture bridge panic must become an interrupted ledger state");
+    }
+}
+
 #[test]
 fn preparation_issues_private_authority_and_derives_material_binding() {
     let input_root = root("preparation-input");
@@ -100,6 +128,55 @@ fn preparation_issues_private_authority_and_derives_material_binding() {
     let error = request.execute(&mut RefusingBridge).unwrap_err();
     assert_eq!(error.code(), "evaluation-test-bridge-refused");
     assert!(fs::read_dir(&ledger_root).unwrap().next().is_some());
+    fs::remove_dir_all(input_root).unwrap();
+    fs::remove_dir_all(ledger_root).unwrap();
+}
+
+#[test]
+fn execution_panic_is_interrupted_and_requires_explicit_recovery() {
+    let input_root = production_root("input");
+    let ledger_root = production_root("ledger");
+    let spec = preparation_spec(&input_root);
+    let error = super::super::runtime::ProductionExecutionRequest::new(
+        &spec,
+        &input_root,
+        &ledger_root,
+        [6; 32],
+        sha('6'),
+        sha('8'),
+        RuntimeConfiguration::all_unknown(),
+    )
+    .execute(&mut PanickingBridge)
+    .unwrap_err();
+    assert_eq!(error.code(), "evaluation-execution-panicked");
+
+    let binding = EvaluationExecutionBinding::new(EvaluationExecutionBindingRequest {
+        live_context_id: spec.live_context_id().to_owned(),
+        candidate_id: spec.candidate_id().to_owned(),
+        spec_sha256: spec.spec_sha256().to_owned(),
+        task_set_sha256: spec.task_set_sha256().to_owned(),
+        execution_session_id: sha('6'),
+        execution_material_set_sha256: ProductionSpecPermit::test_issue(&spec, &input_root)
+            .unwrap()
+            .material_set_sha256()
+            .to_owned(),
+        artifact_root_sha256: sha('8'),
+    })
+    .unwrap();
+    let mut ledger = FileEvaluationExecutionLedger::open(&ledger_root, [6; 32], binding).unwrap();
+    assert!(matches!(
+        ledger.inspect().unwrap(),
+        EvaluationLedgerState::Interrupted { causal_code }
+            if causal_code == "evaluation-execution-panicked"
+    ));
+    ledger
+        .require_recovery("evaluation-panic-recovery-required")
+        .unwrap();
+    ledger.reconcile_recovery(None).unwrap();
+    assert!(matches!(
+        ledger.inspect().unwrap(),
+        EvaluationLedgerState::Initialized
+    ));
     fs::remove_dir_all(input_root).unwrap();
     fs::remove_dir_all(ledger_root).unwrap();
 }

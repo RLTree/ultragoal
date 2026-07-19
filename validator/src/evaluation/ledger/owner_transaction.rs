@@ -129,7 +129,7 @@ impl ExecutionOwner {
                 "evaluation-production-execution-replayed",
             ));
         }
-        let effect = (|| -> Result<_, &'static str> {
+        let effect = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let run = EvaluationRun::execute_local(spec, permit.audit(), &mut executor)
                 .map_err(|error| error.code())?;
             permit.revalidate().map_err(|error| error.code())?;
@@ -170,7 +170,8 @@ impl ExecutionOwner {
                 records,
                 artifact_set_sha256,
             ))
-        })();
+        }))
+        .unwrap_or(Err("evaluation-execution-panicked"));
         match effect {
             Ok((run, canonical_run, canonical_failures, event, records, artifacts)) => {
                 self.settle(run.run_sha256(), artifacts)?;
