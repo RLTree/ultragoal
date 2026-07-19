@@ -8,5 +8,5 @@ mod inspection_race_rejection;
 #[path = "engine_cases/lifecycle_journey.rs"]
 mod lifecycle_journey;
 
-pub(crate) use inspection_race_rejection::*;
-pub(crate) use lifecycle_journey::*;
+use inspection_race_rejection::*;
+use lifecycle_journey::*;

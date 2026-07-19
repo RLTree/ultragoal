@@ -8,5 +8,5 @@ mod final_sweep_rejection;
 #[path = "apply_failure_cases/missing_plan_refusals.rs"]
 mod missing_plan_refusals;
 
-pub(crate) use final_sweep_rejection::*;
+use final_sweep_rejection::*;
 pub(crate) use missing_plan_refusals::*;

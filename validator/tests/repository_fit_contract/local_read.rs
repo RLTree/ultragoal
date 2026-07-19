@@ -18,5 +18,5 @@ mod scenario_fixture;
 #[path = "local_read_cases/snapshot_contract.rs"]
 mod snapshot_contract;
 
-pub(crate) use scenario_fixture::*;
+use scenario_fixture::*;
 pub(crate) use snapshot_contract::*;
