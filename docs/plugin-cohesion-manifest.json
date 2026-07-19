@@ -1409,13 +1409,6 @@
     "validator/src/cli/rust/types.rs",
     "validator/src/cli/standards/gardener.rs",
     "validator/src/cli/standards/mod.rs",
-    "validator/src/self_tests/audit/final_packet/references/package.rs",
-    "validator/src/self_tests/audit/final_packet/receipt_fixtures/package_receipts.rs",
-    "validator/src/self_tests/cli/final_packet.rs",
-    "validator/src/self_tests/cli/product/mod.rs",
-    "validator/src/self_tests/cli/standards.rs",
-    "validator/src/self_tests/command/product.rs",
-    "validator/src/self_tests/command/standards.rs",
     "validator/src/self_tests/namespace/mod.rs",
     "validator/src/self_tests/namespace/red_fixtures.rs",
     "validator/src/self_tests/rust/gate/audit.rs",
@@ -1509,11 +1502,6 @@
       "reason": "Authority surface validation requires the canonical typed receipt schema"
     },
     {
-      "from": "validator/src/self_tests/audit/final_packet/receipt_fixtures/mod.rs",
-      "to": "validator/src/self_tests/audit/final_packet/receipt_fixtures/package_receipts.rs",
-      "reason": "Final-packet proof fixtures must dereference typed Fit Repo, Product Fitness, and Product Journey package receipts"
-    },
-    {
       "from": "validator/src/audit/final_packet/references/mod.rs",
       "to": "validator/src/audit/final_packet/references/coverage.rs",
       "reason": "Final-packet production validation routes coverage receipt dereferencing through a semantic child module instead of keeping the parent over the line cap"
@@ -1534,29 +1522,9 @@
       "reason": "Registry proof validation routes fail-closed claim guards through a semantic module so disk proof cannot imply app-registry or reviewer exposure"
     },
     {
-      "from": "validator/src/self_tests/audit/final_packet/references/mod.rs",
-      "to": "validator/src/self_tests/audit/final_packet/references/package.rs",
-      "reason": "Final-packet package-reference red and green tests are split into a semantic child module under the same law surface"
-    },
-    {
-      "from": "validator/src/self_tests/audit/final_packet/mod.rs",
-      "to": "validator/src/self_tests/audit/final_packet/claim_guard/mod.rs",
-      "reason": "Final-packet claim-guard tests prove fail-closed packet blockers cannot become completion or readiness proof"
-    },
-    {
       "from": "validator/src/self_tests/plugin/registry/mod.rs",
       "to": "validator/src/self_tests/plugin/registry/guard.rs",
       "reason": "Registry guard tests prove CLI-minted unsupported live-surface blockers are schema-bound and cannot be pass-shaped JSON"
-    },
-    {
-      "from": "validator/src/self_tests/law/anti_theater_dependencies/mod.rs",
-      "to": "validator/src/self_tests/law/anti_theater_dependencies/cli_receipts.rs",
-      "reason": "Anti-theater dependency tests isolate malformed CLI receipts that are neither production green proof nor valid fail-closed blockers"
-    },
-    {
-      "from": "validator/src/self_tests/law/anti_theater_dependencies/mod.rs",
-      "to": "validator/src/self_tests/law/anti_theater_dependencies/evidence.rs",
-      "reason": "Anti-theater dependency tests share the complete control graph, including install/cache audit labels, through a semantic test helper"
     },
     {
       "from": "validator/src/lib.rs",
@@ -1574,19 +1542,9 @@
       "reason": "Private product receipt branch tests live under the receipt leaf to exercise fail-closed package digest, artifact digest, and row-status boundaries without widening production APIs"
     },
     {
-      "from": "validator/src/self_tests/command/product.rs",
-      "to": "validator/src/cli/product/mod.rs",
-      "reason": "Command dispatch tests prove the top-level CLI parser reaches typed Product/Fit/Journey receipt minting"
-    },
-    {
       "from": "validator/src/cli/product/receipts/mod.rs",
       "to": "validation_artifacts/harness/product-fitness-receipt.json",
       "reason": "Product receipt minting writes current package-bound Product Fitness receipt evidence"
-    },
-    {
-      "from": "validator/src/self_tests/cli/product/mod.rs",
-      "to": "validator/src/cli/product/receipts/mod.rs",
-      "reason": "Focused tests prove product receipt minting rebases canonical digest-bound receipts"
     },
     {
       "from": "validator/src/cli/standards/mod.rs",
@@ -1597,16 +1555,6 @@
       "from": "validator/src/cli/standards/gardener.rs",
       "to": "validation_artifacts/standards-gardener/current-standards-gardening-receipt.json",
       "reason": "Standards-gardener rebind command mints the current package-static receipt from live artifact digests"
-    },
-    {
-      "from": "validator/src/self_tests/cli/standards.rs",
-      "to": "validator/src/cli/standards/gardener.rs",
-      "reason": "Standards-gardener CLI tests cover candidate digest and artifact digest rebinding"
-    },
-    {
-      "from": "validator/src/self_tests/command/standards.rs",
-      "to": "validator/src/cli/standards/mod.rs",
-      "reason": "Command dispatch tests prove the top-level CLI reaches the standards-gardener authority path"
     },
     {
       "from": "validator/src/audit/cli/performance.rs",

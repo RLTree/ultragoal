@@ -688,10 +688,6 @@
           "path": "validator/src/audit/cli/control_plane/authority/surface.rs"
         },
         {
-          "digest": "sha256:4177b5595bad0a2146b43b07e746014ddf3e8974874da93ab4a1ee40b6fb8fdb",
-          "path": "validator/src/self_tests/boundaries/filesystem_inventory_law_edges.rs"
-        },
-        {
           "digest": "sha256:28393fe20597aef0a104481126c25139c181773dc12e8f2403d12a8383090a0c",
           "path": "validator/src/self_tests/audit/product_fitness_live_edges.rs"
         },
@@ -903,10 +899,6 @@
         {
           "digest": "sha256:5175e5f381c368a5277b17ef0b4e695b3a2e8371fd832f3186ffa1c555b585c3",
           "path": "validator/src/audit/cli/control_plane/authority/surface.rs"
-        },
-        {
-          "digest": "sha256:4177b5595bad0a2146b43b07e746014ddf3e8974874da93ab4a1ee40b6fb8fdb",
-          "path": "validator/src/self_tests/boundaries/filesystem_inventory_law_edges.rs"
         },
         {
           "digest": "sha256:28393fe20597aef0a104481126c25139c181773dc12e8f2403d12a8383090a0c",
