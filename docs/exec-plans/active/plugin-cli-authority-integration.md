@@ -52,8 +52,14 @@ reconciliation; it does not satisfy N11 execution or `CL-EVAL-IMPROVEMENT`.
 The current frontier is `N14_ACTIVE_N12_INTEGRATED_SOURCE_FRONTIER`.
 N12-A's original source remains accepted from
 `27c9afd0021ad9751d2411e4837d7f897064b99e`, while current root source
-admission is rebound at `10a77aeb9106e74a9cc534741248fbf076942f04` /
-tree `9a1026af5fac465f06efd0bf68a9f54ccaddff0f`; every claim remains withheld.
+admission is rebound at `761abd2efeac1793e415b5224472b9758ed14910` /
+tree `5cd1b34ec8ea96d1837598a12d913764e848ee79`; every claim remains withheld.
+That source boundary removes the remaining adopted-state namespace debt while
+binding the legacy contract wire key through one exact schema authority tuple.
+Warning-free library compilation, the canonical namespace check, and 121
+standards rows pass on those exact bytes. The focused library-test build was
+stopped before execution at the shared 2.5 GiB RSS boundary, so no new
+behavior-test claim is promoted.
 N02 reobservation passes on exact clean candidate
 `b55e29dc2a5a1c84f3b65477f43a92cd03bbeb7a` / tree
 `796f7ab21e2fff2cfa845815c154505f2fc130dc`: two byte-identical
@@ -63,9 +69,9 @@ both exit zero, with zero blockers and 30 named nonblocking obligations. N14 is
 the sole active worktree lane under lease
 `LEASE-N14-MIGRATION-COMPATIBILITY-001`, branch
 `codex/n14-migration-compatibility-closure`, and managed task
-`019f7a92-0a12-7521-986f-78d1113c9ca9`. Its exact lease base is
-`096a81124076eeea3430f62500cbe7b5a932682a` / tree
-`1d177ed28e57179361da151d60036748314ea8b7`; every claim remains withheld.
+`019f7a92-0a12-7521-986f-78d1113c9ca9`. Its refreshed exact lease base is
+`761abd2efeac1793e415b5224472b9758ed14910` / tree
+`5cd1b34ec8ea96d1837598a12d913764e848ee79`; every claim remains withheld.
 
 ## Stage B projection freeze (routing only)
 
