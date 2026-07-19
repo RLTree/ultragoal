@@ -4,7 +4,7 @@ use crate::state::StateError;
 use std::path::Path;
 use std::process::{Command, ExitStatus};
 
-const OWNED_SOURCE_PATHS: [&str; 12] = [
+const OWNED_SOURCE_PATHS: [&str; 11] = [
     "validator/src/cli/successor_public/strict/claim_reconciliation_stage_adapter.rs",
     "validator/src/cli/successor_public/strict/failure_diagnostics.rs",
     "validator/src/cli/successor_public/strict/mod.rs",
