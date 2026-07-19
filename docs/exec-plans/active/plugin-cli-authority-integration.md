@@ -748,6 +748,33 @@ owner before they can be admitted. A stale all-surface public API witness is
 blocked independently by the test-only migration module; the focused external
 evaluation witness passes and forbidden raw authority imports fail closed.
 
+The root decision for that boundary is to retain the scheduler-backed effect
+adapter but replace the raw evaluation request topology. N11 receives one
+explicit support grant for `validator/src/cli/capture/fixture/mod.rs`,
+`validator/src/cli/capture/fixture/permit/mod.rs`, and
+`validator/src/cli/capture/fixture/permit/capture_adapter.rs` only, so its
+evaluation-private owner can consume the existing confined adapter in
+production. The support grant does not include the catalog, parser, public
+dispatcher, fixture scheduler, shared schemas, or generated authority. Raw
+ledger paths, ledger keys, settlement, rollback, recovery, and scheduler-lease
+authority remain private to one evaluation owner; the later root adapter may
+mint only a one-shot non-Clone admission from a current write context.
+
+The complete custody invariant is reviewed as one matrix: initialize or reopen
+the exact authority; reserve with one winner and causal replay losers; schedule
+and observe the exact bound child; require verified cleanup before publication;
+publish output before terminal ledger settlement; and return the exact terminal
+result on repeat use without re-execution. Failure, timeout, cancellation,
+panic, cleanup failure, publication ambiguity, settlement failure, interruption,
+and takeover remain nonterminal until typed observation proves either the
+authenticated publication or no live effect and no staged custody. Rollback to
+an executable state is forbidden from absence of publication alone. Frozen
+candidate `61036ec844d2bed88cd71ad68224094d25dd3412` is therefore REWORK: an
+effect-then-panic can currently be reset with `reconcile_recovery(None)` and
+replayed. The correction must add that red control and close every sibling
+transition at the shared owner boundary. No WorkerResult or N11 claim is
+eligible before the corrected exact freeze passes the one bounded review.
+
 Two debts are deliberately scheduled at their real dependency boundaries
 instead of extending this review loop. The broad suppression in
 `repository_fit_contract` requires migration to the compiled public-library
