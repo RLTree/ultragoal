@@ -21,6 +21,32 @@ fn active_lease_issuance_rejects_identity_and_authority_substitution() {
     });
     assert_inventory_error(
         &older_ancestor,
+        "prelaunch gate operation identity does not bind source base",
+    );
+
+    let rebound_ancestor = source_repo("lease-coherent-ancestor-substitution");
+    mutate_registry(&rebound_ancestor, |registry| {
+        activate_n08_lease(registry);
+        let commit = "97e24c9706e7b489bdbdc6184ff9520a7116c6fd";
+        let tree = "c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e";
+        for gate in registry["prelaunch_gates"].as_array_mut().unwrap() {
+            if gate["status"] == "current" {
+                let id = gate["id"].as_str().unwrap().to_owned();
+                gate["observed_source_base"]["commit"] = commit.into();
+                gate["observed_source_base"]["tree"] = tree.into();
+                gate["operation_id"] = format!("prelaunch-{id}-{commit}-{tree}").into();
+            }
+        }
+        for record in registry["lease_state"]["active_records"]
+            .as_array_mut()
+            .unwrap()
+        {
+            record["base_commit"] = commit.into();
+            record["base_tree"] = tree.into();
+        }
+    });
+    assert_inventory_error(
+        &rebound_ancestor,
         "lease source base is not the root-issued base",
     );
 
@@ -136,6 +162,20 @@ fn activate_n08_lease(registry: &mut serde_json::Value) {
 
     registry["lease_state"]["status"] = "active".into();
     registry["lease_state"]["active_records"] = serde_json::json!([record]);
+    for gate in registry["prelaunch_gates"].as_array_mut().unwrap() {
+        if gate["status"] == "current" {
+            let id = gate["id"].as_str().unwrap().to_owned();
+            let commit = gate["observed_source_base"]["commit"]
+                .as_str()
+                .unwrap()
+                .to_owned();
+            let tree = gate["observed_source_base"]["tree"]
+                .as_str()
+                .unwrap()
+                .to_owned();
+            gate["operation_id"] = format!("prelaunch-{id}-{commit}-{tree}").into();
+        }
+    }
 }
 
 fn mutate_registry(repo: &TestRepo, mutate: impl FnOnce(&mut serde_json::Value)) {

@@ -325,6 +325,141 @@ shared wiring, reruns the affected closure, refreshes dependents when consumed
 interfaces change, and removes accepted worktrees and disposable caches after
 unique state is gone. Never rebase or repair a dirty worktree externally.
 
+### Accepted remaining-path controller design
+
+#### Goal
+
+Advance the accepted source frontier through N10 and N11, then complete the
+claim, migration, installed-journey, release, and completion chain without
+allowing a lease, receipt, review, or stale dependency identity to substitute
+for current product behavior.
+
+#### Evidence
+
+- Root is clean at `7da4f9e1e72433b96ac3480b7c04915111023f46` /
+  tree `7dec3b23d8c0eb49580a769be36d6b59c19ae3af`; only the root worktree exists
+  and the registry has no active lease.
+- N10's accepted authority kernel is already ancestral, but its public
+  read-only lifecycle and current dependency observation are not closed.
+- The historical N11 tip
+  `9c2911d6d78bbf30db02b09af3307b211d49cbb4` / tree
+  `6176c259dcef6c8c7046a58c127bc04edef5b0e3` is not scope-pure: it includes
+  old capture, fixture-scheduler, production-causality, and receipt machinery.
+- Five fresh bounded Sol/Max adversarial passes were stopped at material
+  findings. The fifth returned ACCEPT after the lifecycle, derived-set,
+  handoff, milestone-review, and N16 authority gaps were closed. The planning
+  judgment is not retained as a receipt and raises no claim.
+
+#### Proposed scope
+
+1. Extend the existing `LANE_REGISTRY.json` authority and its validator. Do not
+   add a tracker. Represent root-planned N10 separately from worktree-ready N11;
+   represent N11's active lifecycle and its later lease-free root closure.
+2. Derive typed changed and consumed envelopes independently. Unknown or
+   missing classification blocks; it never means an empty intersection.
+3. Treat the old N11 branch as immutable, nonselectable salvage context. A
+   fresh current-root worktree may reimplement only the named evaluation
+   behaviors inside exact `WS-EVAL` ownership.
+4. Keep shared CLI, schemas, generated authority, registries, claims,
+   migrations, package/install effects, integration, and completion root-owned.
+
+#### N11 salvage contract
+
+| Include as behavior, reimplemented in current topology | Explicitly deny |
+| --- | --- |
+| Authenticated execution and promotion journals | Bulk or path-filter replay of the historical branch |
+| Immutable execution, specification, and input identity | `validator/src/cli/capture/**` |
+| One two-process winner and causal loser classification | `validator/src/fixture_scheduler/**` |
+| Initialization, interruption, crash-tail, rollback, late-swap, symlink, and replacement refusal | `validator/tests/production_causality_contract.rs` |
+| Independent grader and sealed promotion authority | Old WorkerResult bytes, receipt-specific tests, direct-include harnesses, or deleted external topology |
+
+Current destinations are only `validator/src/evaluation/**`, the exact current
+evaluation contract tests, and `fixtures/evaluation-engine/**`. Any missing
+capture, scheduler, public CLI, schema, generated, observability, or custody
+seam is a typed root request, not N11-owned work.
+
+#### Implementation steps
+
+1. Add red/green schema and kernel controls for:
+   `N10_ROOT_PLANNED_N11_READY_SOURCE_FRONTIER`, the single-lease active N11
+   lifecycle, and `N10_ROOT_PLANNED_N11_INTEGRATING_ROOT_CLOSURE`. A planned
+   root-only lane never receives a lease. A closed or absent worktree cannot
+   remain referenced by an active lease.
+2. Replace the historical hard-coded lease base with the exact source base
+   observed by the current compile, namespace, and standards gates.
+3. Bind every current lane to separate changed- and consumed-set envelopes:
+   algorithm/version, from/to commit and tree, normalized sorted categories,
+   category digests, aggregate digest, and explicit intersection disposition.
+   Changed paths derive from Git. Consumption derives conservatively from
+   dependency identities and the complete canonical dependency scope and
+   root-only inventories. Unknown classification blocks.
+4. Record N10 as root-planned with its exact dependency and ownership envelope;
+   issue one N11 lease from the same clean source base in a fresh managed
+   worktree. N10 and N11 may implement concurrently, but N11 must refreeze after
+   any intersecting N10 integration.
+5. Accept one scope-pure N11 source commit. Permit one receipt-only child at
+   `validation_artifacts/worker-results/N11-EVAL-RESEARCH.json`; verify exact
+   parent adjacency, one-path diff, source binding, self-exclusion, and package
+   exclusion. Merge only the source commit. Preserve the receipt child by
+   durable branch/ref, close the lease/worktree/cache, and keep N11 integrating.
+6. Root closes the N11 public adapter, issuer/principal uniqueness, custody,
+   observability, catalog, and dispatch seams. Recompute all intersections and
+   affected checks. Only the combined root identity may mark N11 integrated.
+7. N12-A binds exact N03/N04/N05/N06/N07/N10/N11 identities. Its candidate
+   supplies the live HCT-CLAIMS material-review validator at
+   `validator/src/claim_semantics/review_round/**`, operation
+   `check strict --claim material-review-round`, current red fixtures, and
+   installed active-registry persona exposure. The exact four-persona review
+   must pass that route before N12 integrates.
+8. N14 and N15 use separate serial `WS-MIGRATION` leases. Each advances through
+   accepted lane source, root registry/public adoption, independently derived
+   intersections, every affected reproof, then integration. Each has its own
+   invalidation closure.
+9. Final N13 runs after N15 and all reproof. N16 begins in typed
+   `no_source_write_proof` mode: no worktree or source mutation, only
+   root-confined disposable package/install/cache/runtime effects. A required
+   byte change moves N16 to `write_repair`, issues `WS-DISTRIBUTION`, and forces
+   rebuild, reinstall, and intersecting journey reruns. N17 is last.
+
+#### Verification plan
+
+- Controller boundary: schema positives and negatives for every lifecycle
+  state, lease cardinality, root/worktree disjointness, stale base, missing
+  worktree, handoff adjacency, receipt self-exclusion, and package exclusion.
+- Integration boundary: independent envelope derivation and fail-closed
+  intersections across every current lane; compile, namespace, generated
+  authority, documentation freshness, and affected cross-lane behavior.
+- N10 boundary: bounded/redacted public read projection; stale and concurrent
+  refusal; recursive zero-write including no initialization; no permit, issuer,
+  or action exposure.
+- N11 boundary: exact source identity, scope-pure diff, positive/negative/race/
+  interruption/rollback/recovery/repeat-use/security/false-pass controls, then
+  a single bounded Terra/high acceptance review.
+- Product/release boundaries: exact source, package, install, cache, registry,
+  discovery, runtime, repository-fit, dirty routine, diagnosis, recovery, and
+  repeat-use identities; one minimal final Product Fitness receipt; fresh
+  candidate-bound milestone rounds only where required.
+
+#### Risks
+
+- Conservative consumed sets can cause extra reproof. That cost is accepted;
+  a false empty intersection is not.
+- Salvaging behavior instead of replaying the old N11 branch costs focused
+  implementation time but avoids resurrecting duplicate authority and stale
+  test topology.
+- Root public wiring may intersect N11 inputs. Implementation may continue, but
+  freeze and acceptance wait for refresh on the exact integrated identity.
+- N16 repair can invalidate the final journey. Release remains withheld until
+  rebuild, reinstall, and all intersecting journey surfaces rerun.
+
+#### Stop conditions
+
+Stop only for destructive action without authority, external writes,
+secret-handling risk, unavailable required access, a contract-amendment
+conflict, or a material product/authority decision with no safe default.
+Ordinary schema, compile, test, review, integration, or environmental failures
+return to the owning boundary without weakening a claim.
+
 ## Audit cadence
 
 | Boundary | Required evidence | Claims withheld before pass |

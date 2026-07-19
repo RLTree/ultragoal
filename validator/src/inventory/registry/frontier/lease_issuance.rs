@@ -1,24 +1,28 @@
-use super::*;
-use std::process::Command;
+use super::{SchedulerNodes, lease_base};
+use crate::context::ReadSession;
+use crate::inventory::types::InventoryError;
+use serde_json::Value;
+use std::collections::BTreeSet;
+use std::path::Path;
 
 pub(super) fn validate(
     reads: &ReadSession,
     root: &Path,
     registry: &Value,
-    ready: &BTreeSet<String>,
+    nodes: &SchedulerNodes,
 ) -> Result<(), InventoryError> {
-    if registry
+    let active = registry
         .pointer("/lease_state/status")
         .and_then(Value::as_str)
-        != Some("active")
-    {
+        == Some("active");
+    if !active && !nodes.active_worktree_lanes.is_empty() {
+        return Err(invalid("active worktree lifecycle lacks an active lease"));
+    }
+    if !active {
         return Ok(());
     }
-    let base = observed_base(registry)?;
-    if base != (SOURCE_BASE_COMMIT, SOURCE_BASE_TREE) {
-        return Err(invalid("lease source base is not the root-issued base"));
-    }
-    validate_git_base(reads, root, base)?;
+    let base = lease_base::observed(registry)?;
+    lease_base::validate_git(reads, root, base)?;
     let records = registry
         .pointer("/lease_state/active_records")
         .and_then(Value::as_array)
@@ -31,12 +35,9 @@ pub(super) fn validate(
         .get("scope_mappings")
         .and_then(Value::as_array)
         .ok_or_else(|| invalid("scope mappings are missing"))?;
-    let mut seen = BTreeSet::new();
+    active_record_lanes(records, &nodes.active_worktree_lanes)?;
     for record in records {
         let lane_id = text(record, "lane_id", "active lease lacks lane ID")?;
-        if !ready.contains(lane_id) || !seen.insert(lane_id.to_owned()) {
-            return Err(invalid("active leases do not exactly match ready lanes"));
-        }
         if text(record, "base_commit", "active lease lacks base commit")? != base.0
             || text(record, "base_tree", "active lease lacks base tree")? != base.1
         {
@@ -77,97 +78,37 @@ pub(super) fn validate(
             exact_named(record, record_field, scope, scope_field)?;
         }
     }
-    if &seen != ready {
-        return Err(invalid("active leases do not exactly match ready lanes"));
-    }
     Ok(())
 }
 
-fn observed_base(registry: &Value) -> Result<(&str, &str), InventoryError> {
-    let gates = registry
-        .get("prelaunch_gates")
-        .and_then(Value::as_array)
-        .ok_or_else(|| invalid("prelaunch gates are missing"))?;
-    let mut base = None;
-    for gate_id in ["compile", "namespace", "standards"] {
-        let matches = gates
-            .iter()
-            .filter(|gate| gate.get("id").and_then(Value::as_str) == Some(gate_id))
-            .collect::<Vec<_>>();
-        if matches.len() != 1 {
-            return Err(invalid("required gate is missing or duplicated"));
+pub(super) fn active_record_lanes(
+    records: &[Value],
+    active_worktree_lanes: &BTreeSet<String>,
+) -> Result<BTreeSet<String>, InventoryError> {
+    let mut seen = BTreeSet::new();
+    for record in records {
+        let lane_id = text(record, "lane_id", "active lease lacks lane ID")?;
+        if !active_worktree_lanes.contains(lane_id) || !seen.insert(lane_id.to_owned()) {
+            return Err(invalid(
+                "active leases do not exactly match active worktree lanes",
+            ));
         }
-        let gate = matches[0];
-        if gate.get("status").and_then(Value::as_str) != Some("current")
-            || gate
-                .get(concat!("evidence", "_status"))
-                .and_then(Value::as_str)
-                != Some("current")
-            || gate.get("observation_scope").and_then(Value::as_str)
-                != Some("source_base_only_not_containing_lease_authority")
-        {
-            return Err(invalid("required lease issuance gate is not current"));
+        if !matches!(
+            record.get("status").and_then(Value::as_str),
+            Some("issued" | "ready")
+        ) {
+            return Err(invalid("active lease references a closed worktree"));
         }
-        let observed = gate
-            .get("observed_source_base")
-            .ok_or_else(|| invalid("lease issuance gate lacks observed source base"))?;
-        let current = (
-            text(observed, "commit", "observed source base lacks commit")?,
-            text(observed, "tree", "observed source base lacks tree")?,
-        );
-        if base.is_some_and(|value| value != current) {
-            return Err(invalid("lease issuance gates disagree on source base"));
+        if text(record, "worktree", "active lease lacks worktree")?.is_empty() {
+            return Err(invalid("active lease lacks worktree"));
         }
-        base = Some(current);
     }
-    base.ok_or_else(|| invalid("lease issuance source base is unavailable"))
-}
-
-fn validate_git_base(
-    reads: &ReadSession,
-    root: &Path,
-    base: (&str, &str),
-) -> Result<(), InventoryError> {
-    let tree = git(root, &["rev-parse", &format!("{}^{{tree}}", base.0)])?;
-    if tree != base.1 {
-        return Err(invalid("observed source base has the wrong Git tree"));
+    if &seen != active_worktree_lanes {
+        return Err(invalid(
+            "active leases do not exactly match active worktree lanes",
+        ));
     }
-    let head = reads
-        .context
-        .candidate()
-        .head_commit
-        .as_deref()
-        .ok_or_else(|| invalid("current authority commit is unavailable"))?;
-    let status = Command::new("git")
-        .args([
-            "-C",
-            root.to_string_lossy().as_ref(),
-            "merge-base",
-            "--is-ancestor",
-            base.0,
-            head,
-        ])
-        .status()
-        .map_err(|error| invalid(&format!("cannot validate lease base ancestry: {error}")))?;
-    if !status.success() {
-        return Err(invalid("source base is not a current authority ancestor"));
-    }
-    Ok(())
-}
-
-fn git(root: &Path, args: &[&str]) -> Result<String, InventoryError> {
-    let output = Command::new("git")
-        .arg("-C")
-        .arg(root)
-        .args(args)
-        .output()
-        .map_err(|error| invalid(&format!("cannot inspect lease Git identity: {error}")))?;
-    if !output.status.success() {
-        return Err(invalid("cannot inspect lease Git identity"));
-    }
-    String::from_utf8(output.stdout)
-        .map(|value| value.trim().to_owned())
-        .map_err(|_| invalid("lease Git identity is not UTF-8"))
+    Ok(seen)
 }
 
 fn validate_dependencies(
