@@ -140,7 +140,7 @@ fn exact_current_witness_sources_activate_only_bound_operations() {
 #[test]
 fn ready_frontier_rejects_unintegrated_dependencies_and_unexpected_lanes() {
     let blocked_dependency = source_repo("ready-blocked-dependency");
-    set_lane_states(&blocked_dependency, &[("N03", "blocked")], None);
+    set_lane_states(&blocked_dependency, &[("N06", "blocked")], None);
     assert_inventory_error(
         &blocked_dependency,
         "scheduler frontier is not dependency closed",
@@ -149,14 +149,8 @@ fn ready_frontier_rejects_unintegrated_dependencies_and_unexpected_lanes() {
     let early_downstream = source_repo("ready-early-downstream");
     set_lane_states(
         &early_downstream,
-        &[
-            ("N04", "blocked"),
-            ("N05", "blocked"),
-            ("N06", "blocked"),
-            ("N07", "blocked"),
-            ("N08", "ready"),
-        ],
-        Some(&["N08"]),
+        &[("N08", "ready")],
+        Some(&["N08", "N11"]),
     );
     assert_inventory_error(
         &early_downstream,

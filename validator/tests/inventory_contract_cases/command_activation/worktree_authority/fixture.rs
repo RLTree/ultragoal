@@ -1,3 +1,4 @@
+use std::path::Path;
 use std::process::Command;
 
 fn establish_fixture_authority(repo: &TestRepo) {
@@ -10,18 +11,22 @@ fn establish_fixture_authority(repo: &TestRepo) {
     )
     .unwrap();
     let tree = git_output(repo, &["rev-parse", "HEAD^{tree}"]);
+    let base = git_output_path(&live_root(), &["rev-parse", "HEAD"]);
     let authority = git_output(
         repo,
-        &[
-            "commit-tree",
-            &tree,
-            "-p",
-            "766e3b8ac669dac0f49ce10ce352c912381b180f",
-            "-m",
-            "fixture authority",
-        ],
+        &["commit-tree", &tree, "-p", &base, "-m", "fixture authority"],
     );
     run_git(repo, &["reset", "--hard", "-q", &authority]);
+}
+
+fn git_output_path(root: &Path, args: &[&str]) -> String {
+    let output = Command::new("git")
+        .args(args)
+        .current_dir(root)
+        .output()
+        .unwrap();
+    assert!(output.status.success());
+    String::from_utf8(output.stdout).unwrap().trim().to_owned()
 }
 
 fn git_output(repo: &TestRepo, args: &[&str]) -> String {

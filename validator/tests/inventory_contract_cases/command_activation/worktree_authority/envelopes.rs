@@ -1,7 +1,7 @@
 #[test]
 fn derived_lease_envelopes_refuse_unknown_or_stale_classification() {
     let valid = source_repo("lease-derived-envelope-valid");
-    mutate_registry(&valid, activate_n08_lease);
+    mutate_registry(&valid, activate_n11_lease);
     let context = LiveContext::build(inventory_request(&valid.root)).unwrap();
     InventoryBuilder::new(&context)
         .build()
@@ -41,29 +41,30 @@ fn derived_lease_envelopes_refuse_unknown_or_stale_classification() {
     ] {
         let repo = source_repo(&format!("lease-derived-envelope-{label}"));
         mutate_registry(&repo, |registry| {
-            activate_n08_lease(registry);
+            activate_n11_lease(registry);
             mutate(&mut registry["lease_state"]["active_records"][0]);
         });
         assert_inventory_error(&repo, expected);
     }
 }
 
-fn activate_n08_lease(registry: &mut serde_json::Value) {
-    registry["pre_adoption_source"]["frontier"] = "N08_READY_N09_INTEGRATED_SOURCE_FRONTIER".into();
-    registry["pre_adoption_source"]["eligible_scheduler_nodes"] = serde_json::json!(["N08"]);
+fn activate_n11_lease(registry: &mut serde_json::Value) {
+    registry["pre_adoption_source"]["frontier"] =
+        "N10_ROOT_PLANNED_N11_ACTIVE_SOURCE_FRONTIER".into();
+    registry["pre_adoption_source"]["eligible_scheduler_nodes"] = serde_json::json!([]);
 
     let lanes = registry["lanes"].as_array_mut().unwrap();
-    let n08 = lanes.iter_mut().find(|lane| lane["id"] == "N08").unwrap();
-    n08["state"] = "ready".into();
-    n08["current_identity"] = serde_json::Value::Null;
-    n08["ceiling"] = "adopted_reobservation_required".into();
-    let lane = n08.clone();
+    let n11 = lanes.iter_mut().find(|lane| lane["id"] == "N11").unwrap();
+    n11["state"] = "leased".into();
+    n11["current_identity"] = serde_json::Value::Null;
+    n11["ceiling"] = "adopted_reobservation_required".into();
+    let lane = n11.clone();
 
     let scope = registry["scope_mappings"]
         .as_array()
         .unwrap()
         .iter()
-        .find(|scope| scope["scope_id"] == "WS-PLUGIN")
+        .find(|scope| scope["scope_id"] == "WS-EVAL")
         .unwrap()
         .clone();
     let dependency_identities = lane["dependencies"]
@@ -82,12 +83,12 @@ fn activate_n08_lease(registry: &mut serde_json::Value) {
         .collect::<Vec<_>>();
 
     let mut record = registry["lease_state"]["record_template"].clone();
-    record["lease_id"] = "LEASE-TEST-N08".into();
-    record["lane_id"] = "N08".into();
+    record["lease_id"] = "LEASE-TEST-N11".into();
+    record["lane_id"] = "N11".into();
     record["owner"] = lane["owner"].clone();
     record["scope_ids"] = lane["scope_ids"].clone();
-    record["branch"] = "codex/test-n08".into();
-    record["worktree"] = "/tmp/test-n08".into();
+    record["branch"] = "codex/test-n11".into();
+    record["worktree"] = "/tmp/test-n11".into();
     record["owned_files"] = scope["owned_roots"].clone();
     record["owned_symbols"] = scope["owned_symbols"].clone();
     record["generated_outputs"] = scope["generated_roots"].clone();
