@@ -26,6 +26,8 @@ include!("initialization/ledger_access.rs");
 
 include!("file/recovery_requirement.rs");
 
+include!("file/state_transition.rs");
+
 include!("file/published_current_requirement.rs");
 
 include!("test_publication_pause.rs");
