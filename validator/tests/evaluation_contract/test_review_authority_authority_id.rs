@@ -45,7 +45,6 @@ fn opaque_promotion_review_debug_is_bounded_and_never_echoes_fields() {
             "opaque Debug echoed a private field: {sentinel}"
         );
     }
-    authority.teardown().unwrap();
 }
 
 #[test]

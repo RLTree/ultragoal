@@ -152,7 +152,6 @@ fn run(candidate: char, core: BehaviorOutcome, score: u64) -> EvaluationRun {
 
 struct ReviewAuthorityHarness {
     authority: PromotionReviewAuthority,
-    ledger_root: PathBuf,
 }
 
 impl ReviewAuthorityHarness {
@@ -189,7 +188,6 @@ impl ReviewAuthorityHarness {
             Ok(ledger) => ledger,
             Err(error) => {
                 let code = error.code();
-                teardown_private_ledger_root(&ledger_root).unwrap();
                 return Err(code);
             }
         };
@@ -197,14 +195,10 @@ impl ReviewAuthorityHarness {
             Ok(authority) => authority,
             Err(error) => {
                 let code = error.code();
-                teardown_private_ledger_root(&ledger_root).unwrap();
                 return Err(code);
             }
         };
-        Ok(Self {
-            authority,
-            ledger_root,
-        })
+        Ok(Self { authority })
     }
 }
 

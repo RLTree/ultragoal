@@ -169,7 +169,6 @@ fn paired_behavior_improvement_yields_only_an_improvement_candidate() {
         "improvement_candidate_not_product_completion"
     );
     assert!(decision.reasons.is_empty());
-    authority.teardown().unwrap();
 }
 
 #[test]
@@ -183,5 +182,4 @@ fn score_gain_without_behavior_improvement_is_a_false_pass() {
     assert!(decision
         .reasons
         .contains(&"evaluation-no-representative-behavior-improvement".to_owned()));
-    authority.teardown().unwrap();
 }
