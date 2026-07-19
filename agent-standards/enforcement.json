@@ -692,13 +692,13 @@
     {
       "id": "lane-worktree-isolation-cleanup",
       "source_law": "source obligation: Lane Worktree Isolation Cleanup",
-      "required_behavior": "Lane Worktree Isolation Cleanup must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "required_behavior": "Lane Worktree Isolation Cleanup keeps branches, worktrees, state, artifacts, caches, processes, resource limits, and cleanup lane-local. Concurrent isolated builds are permitted. A session must not invent host-global build or test authority, require permission handshakes from unrelated sessions, or block their independent execution unless the user explicitly establishes a host-global coordination contract.",
       "enforcement_status": "mechanized",
       "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "owner_lane": "root",
       "claim_ids_affected": "completion, review, package, readiness, release",
       "current_status": "active",
-      "blocker_or_repair_action": "Run mandatory-law surface validation; fixture_only.",
+      "blocker_or_repair_action": "Remove invented host-global build or test slots and unrelated-session permission handshakes; keep resource limits and cleanup lane-local unless the user explicitly establishes a host-global coordination contract.",
       "required_execplan_refs": [
         "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
       ]
