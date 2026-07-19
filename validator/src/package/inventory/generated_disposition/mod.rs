@@ -3,13 +3,15 @@ use std::path::Path;
 use std::sync::Arc;
 
 use super::anchored::Session;
-use crate::generated_authority::{
-    GeneratedAuthorityParseRequest, GeneratedAuthorityRegistry, GeneratedSurface,
-};
+use crate::generated_authority::{GeneratedAuthorityParseRequest, GeneratedSurface};
 
+mod adopted_schema_contract;
+#[cfg(test)]
+mod adopted_schema_contract_tests;
 mod anchored;
 #[cfg(test)]
 mod hardening_tests;
+mod projection_verification;
 #[cfg(test)]
 mod tests;
 
@@ -19,6 +21,7 @@ const MAX_OUTPUT_BYTES: u64 = 64 * 1024 * 1024;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(crate) enum Classification {
+    AdoptedSchemaContract,
     RetainedContext { replacement_targets: Vec<String> },
 }
 
@@ -89,7 +92,7 @@ impl Catalog {
         })
         .map_err(|error| error.stable_text().to_string())?
         .registry;
-        verify_projections(source, &parsed)?;
+        projection_verification::verify(source, &parsed)?;
         Ok(Self {
             rows: parsed
                 .surfaces
@@ -150,6 +153,9 @@ impl Catalog {
             .get(relative)
             .ok_or_else(|| "generated package path has no adopted disposition".to_string())?;
         match row {
+            GeneratedSurface::AdoptedSchemaContract { .. } => {
+                Ok(Classification::AdoptedSchemaContract)
+            }
             GeneratedSurface::CanonicalProjection { .. }
             | GeneratedSurface::SourceProjection { .. }
             | GeneratedSurface::ToolProjection { .. } => Err(
@@ -175,64 +181,7 @@ impl Catalog {
     }
 }
 
-fn verify_projections(
-    source: &mut impl Source,
-    parsed: &GeneratedAuthorityRegistry,
-) -> Result<(), String> {
-    source
-        .read(
-            parsed.registry_projection.generator.as_str(),
-            MAX_OUTPUT_BYTES,
-        )
-        .map_err(|_| "generated registry projection generator is unavailable".to_string())?;
-    for canonical_source in &parsed.registry_projection.canonical_sources {
-        source
-            .read(canonical_source.as_str(), MAX_OUTPUT_BYTES)
-            .map_err(|_| {
-                "generated registry projection canonical source is unavailable".to_string()
-            })?;
-    }
-    for (output, row) in &parsed.surfaces {
-        let (generator, canonical_sources, output_sha256) = match row {
-            GeneratedSurface::SourceProjection {
-                generator,
-                canonical_sources,
-                output_sha256,
-                ..
-            } => (Some(generator), canonical_sources, output_sha256),
-            GeneratedSurface::ToolProjection {
-                canonical_sources,
-                output_sha256,
-                ..
-            } => (None, canonical_sources, output_sha256),
-            GeneratedSurface::CanonicalProjection { .. } => {
-                return Err(
-                    "canonical projection cannot authorize current generated authority".to_string(),
-                );
-            }
-            GeneratedSurface::RetainedContext { .. } => continue,
-        };
-        if let Some(generator) = generator {
-            source
-                .read(generator.as_str(), MAX_OUTPUT_BYTES)
-                .map_err(|_| "source projection generator is unavailable".to_string())?;
-        }
-        for canonical_source in canonical_sources {
-            source
-                .read(canonical_source.as_str(), MAX_OUTPUT_BYTES)
-                .map_err(|_| "projection canonical source is unavailable".to_string())?;
-        }
-        let bytes = source
-            .read(output.as_str(), MAX_OUTPUT_BYTES)
-            .map_err(|_| "projection output is unavailable".to_string())?;
-        if digest_hex(bytes.as_ref()) != output_sha256.lowercase_hex() {
-            return Err("projection output digest mismatch".to_string());
-        }
-    }
-    Ok(())
-}
-
-fn digest_hex(bytes: &[u8]) -> String {
+pub(super) fn digest_hex(bytes: &[u8]) -> String {
     crate::digest::bytes(bytes)
         .strip_prefix("sha256:")
         .expect("digest prefix")

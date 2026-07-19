@@ -8,6 +8,7 @@
       "migration/generated-surface-authority/agent-standards-indexes.json",
       "migration/generated-surface-authority/agent-standards-tools.json",
       "migration/generated-surface-authority/dependency-locks.json",
+      "migration/generated-surface-authority/product-success-contract.json",
       "migration/generated-surface-authority/retained-predecessor-context.json"
     ],
     "regeneration_command": "scripts/project-generated-authority write"
@@ -108,15 +109,16 @@
       "physical_deletion_authorized": false
     },
     {
-      "disposition": "retained_context",
+      "disposition": "adopted_schema_contract",
       "output": "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
-      "sha256": "b7b395eae0ac008aee54b436a6d3f86b81a49f86cc23ef5dc35757dde79dfef4",
-      "reason": "Retained predecessor product-success example; it is not claim authority and HCT-CLAIMS is its canonical replacement.",
-      "replacement_targets": [
-        "HCT-CLAIMS"
-      ],
-      "preserve": true,
-      "physical_deletion_authorized": false
+      "sha256": "fc6c87b5888d250608bb5bc0b53155534d5b5638284e29076a3edd5d0768da55",
+      "schema": "schemas/product-success-contract.schema.json",
+      "source_contract": "GOAL_CONTRACT.md",
+      "source_contract_sha256": "6bd05cd382a2e8d1af10f6942ee64016f484983f5a98f118c4a3954ae8df6fa9",
+      "amendment_log": "AMENDMENTS.jsonl",
+      "amendment_id": "AMEND-003",
+      "amendment_hash": "ea134939717ab2422a444f40eed9ca6b388e2d86846a74ce2f0aff823cb95600",
+      "claim_ceiling": "contract_authority_only"
     },
     {
       "disposition": "retained_context",

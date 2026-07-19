@@ -17,6 +17,9 @@ pub(super) fn copy_generated_inputs(live: &Path, root: &Path) {
         for surface in value.get("surfaces").unwrap().as_array().unwrap() {
             insert_path(surface.get("output"), &mut paths);
             insert_path(surface.get("generator"), &mut paths);
+            insert_path(surface.get("schema"), &mut paths);
+            insert_path(surface.get("source_contract"), &mut paths);
+            insert_path(surface.get("amendment_log"), &mut paths);
             paths.extend(paths_from(surface.get("canonical_sources")));
         }
     }

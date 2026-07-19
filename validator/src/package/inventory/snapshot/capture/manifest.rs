@@ -43,7 +43,13 @@ pub(super) fn read_package(
             let catalog = dispositions
                 .as_ref()
                 .expect("generated paths require a disposition catalog");
-            let Classification::RetainedContext { .. } = catalog.classify_from(source, relative)?;
+            match catalog.classify_from(source, relative)? {
+                Classification::AdoptedSchemaContract => rows.push((
+                    relative.clone(),
+                    source.read(relative, anchored::MAX_RESOURCE_BYTES)?,
+                )),
+                Classification::RetainedContext { .. } => {}
+            }
         } else if relative != generated_disposition::REGISTRY_PATH || dispositions.is_none() {
             rows.push((
                 relative.clone(),

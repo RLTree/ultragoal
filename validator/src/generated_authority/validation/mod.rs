@@ -1,3 +1,4 @@
+pub(in crate::generated_authority) mod adopted_schema_contract;
 mod projection;
 mod retained_context;
 pub(in crate::generated_authority) mod value;
@@ -47,6 +48,40 @@ fn registry_projection(raw: RawRegistryProjection) -> Result<RegistryProjection,
 
 fn surface(raw: RawSurface) -> Result<GeneratedSurface, &'static str> {
     match raw {
+        RawSurface::AdoptedSchemaContract {
+            output,
+            sha256,
+            schema,
+            source_contract,
+            source_contract_sha256,
+            amendment_log,
+            amendment_id,
+            amendment_hash,
+            claim_ceiling,
+        } => {
+            let fields =
+                adopted_schema_contract::validate(adopted_schema_contract::AdoptedSchemaInput {
+                    output,
+                    sha256,
+                    schema,
+                    source_contract,
+                    source_contract_sha256,
+                    amendment_log,
+                    amendment_id,
+                    amendment_hash,
+                    claim_ceiling,
+                })?;
+            Ok(GeneratedSurface::AdoptedSchemaContract {
+                output: fields.output,
+                sha256: fields.sha256,
+                schema: fields.schema,
+                source_contract: fields.source_contract,
+                source_contract_sha256: fields.source_contract_sha256,
+                amendment_log: fields.amendment_log,
+                amendment_id: fields.amendment_id,
+                amendment_hash: fields.amendment_hash,
+            })
+        }
         RawSurface::CanonicalProjection {
             output,
             generator,

@@ -132,9 +132,10 @@ pub fn package_digest(root: &Path) -> Result<String, String> {
             let catalog = dispositions
                 .as_ref()
                 .expect("generated path requires a disposition catalog");
-            let generated_disposition::Classification::RetainedContext { .. } =
-                catalog.classify_in(&mut session, &rel)?;
-            continue;
+            match catalog.classify_in(&mut session, &rel)? {
+                generated_disposition::Classification::AdoptedSchemaContract => {}
+                generated_disposition::Classification::RetainedContext { .. } => continue,
+            }
         }
         if rel == generated_disposition::REGISTRY_PATH && dispositions.is_some() {
             continue;

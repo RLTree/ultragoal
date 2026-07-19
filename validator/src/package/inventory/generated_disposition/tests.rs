@@ -101,7 +101,9 @@ fn retained_context_rejects_missing_tampered_and_unregistered_outputs() {
     let bytes = b"retained";
     fs::write(root.join(OUTPUT), bytes).expect("retained output");
     write_manifest(&root, &[OUTPUT]);
-    write_registry(&root, json!([]));
+    let other = "docs/generated/observability/other.json";
+    fs::write(root.join(other), b"other").expect("other output");
+    write_registry(&root, json!([retained(other, b"other")]));
     assert!(
         super::super::package_digest(&root)
             .expect_err("missing row")

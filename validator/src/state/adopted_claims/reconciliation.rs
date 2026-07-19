@@ -8,9 +8,9 @@ use crate::state::StateError;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 
-const AMENDMENT_ID: &str = "AMEND-002";
+const AMENDMENT_ID: &str = "AMEND-003";
 const AMENDMENT_HASH: &str =
-    "sha256:2b4386116e66ded2255fa001341186d4cff1ab883a3e99585be6cc57d5b4cf31";
+    "sha256:ea134939717ab2422a444f40eed9ca6b388e2d86846a74ce2f0aff823cb95600";
 const GOAL_BYTES: &[u8] = include_bytes!("../../../../GOAL_CONTRACT.md");
 const AMENDMENT_BYTES: &[u8] = include_bytes!("../../../../AMENDMENTS.jsonl");
 const LANE_BYTES: &[u8] = include_bytes!("../../../../LANE_REGISTRY.json");

@@ -10,6 +10,9 @@ const SHARDS: &[&[u8]] = &[
     ),
     include_bytes!("../../../../../migration/generated-surface-authority/dependency-locks.json"),
     include_bytes!(
+        "../../../../../migration/generated-surface-authority/product-success-contract.json"
+    ),
+    include_bytes!(
         "../../../../../migration/generated-surface-authority/retained-predecessor-context.json"
     ),
 ];

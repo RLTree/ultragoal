@@ -17,6 +17,33 @@ pub(super) fn verify(
         regular_digest(reads, &root.join(source.as_str()))?;
     }
     for surface in parsed.surfaces.values() {
+        if let GeneratedSurface::AdoptedSchemaContract {
+            output,
+            sha256,
+            schema,
+            source_contract,
+            source_contract_sha256,
+            amendment_log,
+            amendment_id,
+            amendment_hash,
+        } = surface
+        {
+            super::adopted_schema_contract::verify(
+                reads,
+                root,
+                super::adopted_schema_contract::Binding {
+                    output,
+                    sha256,
+                    schema,
+                    source_contract,
+                    source_contract_sha256,
+                    amendment_log,
+                    amendment_id,
+                    amendment_hash,
+                },
+            )?;
+            continue;
+        }
         let (output, generator, sources, expected) = match surface {
             GeneratedSurface::SourceProjection {
                 output,

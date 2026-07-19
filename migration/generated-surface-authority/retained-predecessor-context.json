@@ -16,17 +16,6 @@
     },
     {
       "disposition": "retained_context",
-      "output": "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
-      "sha256": "b7b395eae0ac008aee54b436a6d3f86b81a49f86cc23ef5dc35757dde79dfef4",
-      "reason": "Retained predecessor product-success example; it is not claim authority and HCT-CLAIMS is its canonical replacement.",
-      "replacement_targets": [
-        "HCT-CLAIMS"
-      ],
-      "preserve": true,
-      "physical_deletion_authorized": false
-    },
-    {
-      "disposition": "retained_context",
       "output": "examples/generated/READY_FOR_MERGE-LANE-001.json",
       "sha256": "cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
       "reason": "Retained predecessor readiness example; it cannot authorize merge, readiness, release, or completion.",

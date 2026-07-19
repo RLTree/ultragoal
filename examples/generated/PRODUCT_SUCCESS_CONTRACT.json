@@ -1,15 +1,5 @@
 {
   "schema": "harness-ultragoal.product-success-contract.v1",
-  "source_spec": {
-    "generated_from": "GOAL_CONTRACT.md",
-    "generator_command": "root-authored live successor contract amendment AMEND-002",
-    "input_artifacts": [
-      "GOAL_CONTRACT.md",
-      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json",
-      "schemas/product-success-contract.schema.json"
-    ],
-    "claim_ceiling": "contract_authority_only_until_current_source_identity_tuple_installed_journeys_and_product_fitness_pass"
-  },
   "product_success_contract_id": "PSC-HARNESS-ULTRAGOAL-SUCCESSOR-LIVE-001",
   "contract_version": "2.1.0",
   "goal_id": "harness-ultragoal-successor-contract-v2-live",

@@ -73,3 +73,33 @@ fn rejects_invalid_digest_cycles_and_command_mismatch() {
         "generated_authority_command_invalid"
     );
 }
+
+#[test]
+fn rejects_adopted_contract_that_can_raise_claims() {
+    let bytes = serde_json::to_vec(&serde_json::json!({
+        "schema_version": "GeneratedSurfaceAuthority-v3",
+        "contract_id": "harness-ultragoal-successor-contract-v2",
+        "registry_projection": {
+            "generator": "scripts/project-generated-authority",
+            "canonical_sources": ["migration/generated-surface-authority/product.json"],
+            "regeneration_command": "scripts/project-generated-authority write"
+        },
+        "surfaces": [{
+            "disposition": "adopted_schema_contract",
+            "output": "examples/generated/product.json",
+            "sha256": LOWER_DIGEST,
+            "schema": "schemas/product.json",
+            "source_contract": "GOAL_CONTRACT.md",
+            "source_contract_sha256": LOWER_DIGEST,
+            "amendment_log": "AMENDMENTS.jsonl",
+            "amendment_id": "AMEND-003",
+            "amendment_hash": LOWER_DIGEST,
+            "claim_ceiling": "claim_authority"
+        }]
+    }))
+    .unwrap();
+    assert_eq!(
+        rejection_code(&bytes),
+        "generated_authority_adopted_schema_contract_invalid"
+    );
+}

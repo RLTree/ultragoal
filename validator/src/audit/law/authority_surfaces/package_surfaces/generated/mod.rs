@@ -38,6 +38,9 @@ impl State {
 
     pub(super) fn row(&self, relative: &str) -> PackageSurfaceRow {
         match self.classifications.get(relative) {
+            Some(Ok(Classification::AdoptedSchemaContract)) => {
+                row::adopted_schema_contract(relative)
+            }
             Some(Ok(Classification::RetainedContext {
                 replacement_targets,
             })) => row::retained_context(relative, replacement_targets),

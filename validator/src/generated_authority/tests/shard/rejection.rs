@@ -91,3 +91,28 @@ fn rejects_noncanonical_retained_replacement_targets() {
         );
     }
 }
+
+#[test]
+fn rejects_adopted_contract_with_nonsemantic_amendment() {
+    let bytes = serde_json::to_vec(&serde_json::json!({
+        "schema_version": "GeneratedSurfaceAuthorityShard-v1",
+        "contract_id": "harness-ultragoal-successor-contract-v2",
+        "surfaces": [{
+            "disposition": "adopted_schema_contract",
+            "output": "examples/generated/product.json",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "schema": "schemas/product.json",
+            "source_contract": "GOAL_CONTRACT.md",
+            "source_contract_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "amendment_log": "AMENDMENTS.jsonl",
+            "amendment_id": "amendment-three",
+            "amendment_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "claim_ceiling": "contract_authority_only"
+        }]
+    }))
+    .unwrap();
+    assert_eq!(
+        rejection_code(&bytes),
+        "generated_authority_adopted_schema_contract_invalid"
+    );
+}

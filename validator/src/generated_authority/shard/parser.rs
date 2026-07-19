@@ -16,6 +16,17 @@ pub(super) struct RawShard {
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "disposition", rename_all = "snake_case", deny_unknown_fields)]
 pub(super) enum RawDefinition {
+    AdoptedSchemaContract {
+        output: String,
+        sha256: String,
+        schema: String,
+        source_contract: String,
+        source_contract_sha256: String,
+        amendment_log: String,
+        amendment_id: String,
+        amendment_hash: String,
+        claim_ceiling: String,
+    },
     CanonicalProjection {
         output: String,
         generator: String,

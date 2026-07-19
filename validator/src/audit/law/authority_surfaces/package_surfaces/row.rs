@@ -95,6 +95,16 @@ pub(super) fn retained_context(rel: &str, replacement_targets: &[String]) -> Pac
     row
 }
 
+pub(super) fn adopted_schema_contract(rel: &str) -> PackageSurfaceRow {
+    from_parts(
+        "adopted_schema_contract",
+        rel,
+        "adopted package-visible product contract",
+        "adopted_contract_authority_only",
+        None,
+    )
+}
+
 pub(super) fn invalid_generated_authority(rel: &str) -> PackageSurfaceRow {
     from_parts(
         "generated_artifact",

@@ -38,6 +38,41 @@ pub(super) fn validate(
 
 fn definition(raw: RawDefinition) -> Result<GeneratedSurfaceDefinition, &'static str> {
     match raw {
+        RawDefinition::AdoptedSchemaContract {
+            output,
+            sha256,
+            schema,
+            source_contract,
+            source_contract_sha256,
+            amendment_log,
+            amendment_id,
+            amendment_hash,
+            claim_ceiling,
+        } => {
+            let fields = super::super::validation::adopted_schema_contract::validate(
+                super::super::validation::adopted_schema_contract::AdoptedSchemaInput {
+                    output,
+                    sha256,
+                    schema,
+                    source_contract,
+                    source_contract_sha256,
+                    amendment_log,
+                    amendment_id,
+                    amendment_hash,
+                    claim_ceiling,
+                },
+            )?;
+            Ok(GeneratedSurfaceDefinition::AdoptedSchemaContract {
+                output: fields.output,
+                sha256: fields.sha256,
+                schema: fields.schema,
+                source_contract: fields.source_contract,
+                source_contract_sha256: fields.source_contract_sha256,
+                amendment_log: fields.amendment_log,
+                amendment_id: fields.amendment_id,
+                amendment_hash: fields.amendment_hash,
+            })
+        }
         RawDefinition::CanonicalProjection {
             output,
             generator,
