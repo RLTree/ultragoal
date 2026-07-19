@@ -24,7 +24,7 @@ fn gate_base(registry: &Value, bind_operation: bool) -> Result<(&str, &str), Inv
         }
         let gate = matches[0];
         if gate.get("status").and_then(Value::as_str) != Some("current")
-            || gate.get("evidence_status").and_then(Value::as_str) != Some("current")
+            || gate.get("source_authority_status").and_then(Value::as_str) != Some("current")
             || gate.get("observation_scope").and_then(Value::as_str)
                 != Some("source_base_only_not_containing_lease_authority")
         {
