@@ -13,11 +13,14 @@ fn review_id(binding_sha256: &str, attestation_sha256: &str) -> String {
 }
 
 fn root(label: &str) -> PathBuf {
-    let root = PathBuf::from("/private/tmp").join(format!(
+    private_test_root(PathBuf::from("/private/tmp").join(format!(
         "hul-evaluation-runtime-086-{label}-{}-{}",
         std::process::id(),
         NEXT_ROOT.fetch_add(1, Ordering::SeqCst),
-    ));
+    )))
+}
+
+fn private_test_root(root: PathBuf) -> PathBuf {
     fs::create_dir(&root).unwrap();
     fs::set_permissions(&root, fs::Permissions::from_mode(0o700)).unwrap();
     root
@@ -53,5 +56,6 @@ fn release_process_barrier(root: &Path, participants: usize) {
     wait_until("process race participants", || {
         (0..participants).all(|index| root.join(format!("ready-{index}")).is_file())
     });
+    assert!((0..participants).all(|index| root.join(format!("ready-{index}")).is_file()));
     fs::write(root.join("release"), b"release").unwrap();
 }

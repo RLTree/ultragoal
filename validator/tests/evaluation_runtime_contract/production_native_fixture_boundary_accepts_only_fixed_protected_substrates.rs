@@ -12,11 +12,7 @@ use serde_json::json;
 use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
 use std::fs;
-use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicU64, Ordering};
-
-static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
 
 fn sha(byte: char) -> String {
     format!("sha256:{}", byte.to_string().repeat(64))
@@ -27,15 +23,10 @@ fn controls() -> BTreeSet<PerturbationControl> {
 }
 
 fn root(label: &str) -> PathBuf {
-    let root = std::env::temp_dir().join(format!(
-        "hul-evaluation-runtime-{label}-{}-{}",
-        std::process::id(),
-        NEXT_ROOT.fetch_add(1, Ordering::SeqCst),
-    ));
+    let root = super::root(label);
     fs::create_dir_all(root.join("datasets")).unwrap();
     fs::create_dir_all(root.join("scorers")).unwrap();
     fs::create_dir_all(root.join("graders")).unwrap();
-    fs::set_permissions(&root, fs::Permissions::from_mode(0o700)).unwrap();
     root
 }
 
@@ -134,7 +125,7 @@ impl FixtureEvaluationBridge for FakeConfinedBridge {
 fn audited_runtime_is_stable_artifact_bearing_and_explicitly_unknown() {
     let input_root = root("stable-input");
     let spec = production_spec(&input_root, 'b');
-    let first_ledger = input_root.join("ledger-first");
+    let first_ledger = super::private_test_root(input_root.join("ledger-first"));
     let mut first_bridge = FakeConfinedBridge;
     let first = ProductionExecutionRequest::new(
         &spec,
@@ -147,7 +138,7 @@ fn audited_runtime_is_stable_artifact_bearing_and_explicitly_unknown() {
     )
     .execute(&mut first_bridge)
     .unwrap();
-    let second_ledger = input_root.join("ledger-second");
+    let second_ledger = super::private_test_root(input_root.join("ledger-second"));
     let mut second_bridge = FakeConfinedBridge;
     let second = ProductionExecutionRequest::new(
         &spec,
@@ -181,7 +172,7 @@ fn audited_runtime_is_stable_artifact_bearing_and_explicitly_unknown() {
 fn privacy_projection_has_no_claim_authority_or_secret_surface() {
     let input_root = root("privacy-input");
     let spec = production_spec(&input_root, 'b');
-    let ledger_root = input_root.join("ledger");
+    let ledger_root = super::private_test_root(input_root.join("ledger"));
     let mut bridge = FakeConfinedBridge;
     let run = ProductionExecutionRequest::new(
         &spec,

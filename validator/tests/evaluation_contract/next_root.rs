@@ -1,5 +1,3 @@
-static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
-
 fn require_type<T>() {}
 
 #[test]
@@ -176,11 +174,6 @@ impl ReviewAuthorityHarness {
         reviewer_id: &str,
         review_session_id: String,
     ) -> Result<Self, &'static str> {
-        let ledger_root = std::env::temp_dir().join(format!(
-            "hul-evaluation-contract-review-{}-{}",
-            std::process::id(),
-            NEXT_ROOT.fetch_add(1, Ordering::SeqCst),
-        ));
         let baseline_proof = execution_terminal_proof(baseline);
         let candidate_proof = execution_terminal_proof(candidate);
         let binding = PromotionLedgerBinding::from_terminal_proofs(
@@ -191,11 +184,23 @@ impl ReviewAuthorityHarness {
             candidate_proof,
         )
         .map_err(|error| error.code())?;
-        let ledger = FilePromotionReviewLedger::initialize(&ledger_root, [7; 32], binding)
-            .map_err(|error| error.code())?;
-        let authority = ledger
-            .bind_review_evidence(env!("CARGO_MANIFEST_DIR"))
-            .map_err(|error| error.code())?;
+        let ledger_root = private_ledger_root();
+        let ledger = match FilePromotionReviewLedger::initialize(&ledger_root, [7; 32], binding) {
+            Ok(ledger) => ledger,
+            Err(error) => {
+                let code = error.code();
+                fs::remove_dir_all(&ledger_root).unwrap();
+                return Err(code);
+            }
+        };
+        let authority = match ledger.bind_review_evidence(env!("CARGO_MANIFEST_DIR")) {
+            Ok(authority) => authority,
+            Err(error) => {
+                let code = error.code();
+                fs::remove_dir_all(&ledger_root).unwrap();
+                return Err(code);
+            }
+        };
         Ok(Self {
             authority,
             ledger_root,
@@ -239,8 +244,4 @@ fn execution_terminal_proof(run: &EvaluationRun) -> super::super::ledger::Execut
         artifact_set_sha256: sha('9'),
         ledger_head_sha256: sha('8'),
     }
-}
-
-fn review_authority(baseline: &EvaluationRun, candidate: &EvaluationRun) -> ReviewAuthorityHarness {
-    ReviewAuthorityHarness::current(baseline, candidate)
 }

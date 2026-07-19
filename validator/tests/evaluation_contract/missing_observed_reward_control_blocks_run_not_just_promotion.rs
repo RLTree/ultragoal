@@ -51,18 +51,19 @@ fn audit_and_reconciliation_are_zero_write() {
 
 #[test]
 fn external_callers_cannot_mint_a_review_with_an_independence_boolean() {
-    let source =
-        fs::read_to_string(Path::new(env!("CARGO_MANIFEST_DIR")).join("src/evaluation/mod.rs"))
-            .unwrap();
-    let implementation = source
-        .split("impl PromotionReview {")
-        .nth(1)
-        .and_then(|source| source.split("\n}\n").next())
-        .expect("PromotionReview implementation remains present");
-    assert!(!implementation.contains("pub fn new"));
-    assert!(!implementation.contains("pub fn issue"));
-    assert!(implementation.contains("pub(crate) fn issue"));
-    assert!(!implementation.contains("independent: bool"));
+    let source = fs::read_to_string(
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("src/evaluation/promotion/issuance.rs"),
+    )
+    .unwrap();
+    let issuance = source
+        .split_once("fn issue(")
+        .map(|(_, remainder)| remainder)
+        .expect("sealed PromotionReview issuance remains present");
+    assert!(issuance.contains("authority: &mut PromotionReviewAuthority"));
+    assert!(!issuance.contains("pub fn issue"));
+    assert!(!issuance.contains("pub(crate) fn issue"));
+    assert!(!issuance.contains("independent: bool"));
+    assert!(!source.contains("trait PromotionReview"));
 }
 
 #[test]

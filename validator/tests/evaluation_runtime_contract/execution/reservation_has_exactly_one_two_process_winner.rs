@@ -13,7 +13,11 @@ fn execution_reservation_has_exactly_one_two_process_winner() {
     let mut children = (0..2)
         .map(|index| {
             Command::new(&exe)
-                .args(["--exact", "two_process_execution_worker", "--nocapture"])
+                .args([
+                    "--exact",
+                    "evaluation::tests::runtime_contract::two_process_execution_worker",
+                    "--nocapture",
+                ])
                 .env("HUL_EVAL_EXECUTION_RACE_ROOT", &ledger_root)
                 .env("HUL_EVAL_RACE_BARRIER", &barrier)
                 .env("HUL_EVAL_RACE_PARTICIPANT", index.to_string())
@@ -94,7 +98,11 @@ fn review_consumption_has_exactly_one_two_process_winner() {
     let mut children = (0..2)
         .map(|index| {
             Command::new(&exe)
-                .args(["--exact", "two_process_review_worker", "--nocapture"])
+                .args([
+                    "--exact",
+                    "evaluation::tests::runtime_contract::two_process_review_worker",
+                    "--nocapture",
+                ])
                 .env("HUL_EVAL_REVIEW_RACE_ROOT", &review_root)
                 .env("HUL_EVAL_BASELINE_ROOT", &baseline_root)
                 .env("HUL_EVAL_CANDIDATE_ROOT", &candidate_root)

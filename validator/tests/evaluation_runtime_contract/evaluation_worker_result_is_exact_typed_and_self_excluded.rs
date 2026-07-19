@@ -7,7 +7,9 @@ fn evaluation_worker_result_is_exact_typed_and_self_excluded() {
     const HISTORICAL_ARTIFACT_PATHS: [&str; 18] = [
         "fixtures/evaluation-engine/paired-valid.json",
         "fixtures/evaluation-engine/red-cases.json",
-        "validator/src/cli/capture/fixture/mod.rs",
+        // The retained WorkerResult predates the fixture module split; keep
+        // its historical path while asserting the current module exists.
+        "validator/src/cli/capture/fixture.rs",
         "validator/src/cli/capture/fixture/execute.rs",
         "validator/src/cli/capture/fixture/permit.rs",
         "validator/src/evaluation/ledger.rs",
@@ -28,6 +30,9 @@ fn evaluation_worker_result_is_exact_typed_and_self_excluded() {
         .parent()
         .unwrap()
         .to_path_buf();
+    assert!(repository
+        .join("validator/src/cli/capture/fixture/mod.rs")
+        .is_file());
     let result_bytes = fs::read(repository.join(RESULT_PATH)).unwrap();
     let _typed = crate::orchestration::WorkerResultV1::parse_json(&result_bytes).unwrap();
     let result: Value = serde_json::from_slice(&result_bytes).unwrap();
@@ -80,13 +85,11 @@ fn evaluation_worker_result_is_exact_typed_and_self_excluded() {
         result["final_state"]["lease_exact_no_claim_statement"],
         lease_exact_ceiling
     );
-    assert!(
-        result["limitations"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .any(|limitation| limitation == lease_exact_ceiling)
-    );
+    assert!(result["limitations"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|limitation| limitation == lease_exact_ceiling));
     assert_eq!(result["generated_outputs"], json!([RESULT_PATH]));
     assert_eq!(
         result["fixtures"],
