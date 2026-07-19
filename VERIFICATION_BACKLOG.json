@@ -1,7 +1,7 @@
 {
   "schema": "harness-ultragoal.verification-backlog.v1",
-  "manifest_digest": "sha256:0aa38b76d3340f0e442026d041ed87076436e59425314be8191999bd97e82229",
-  "registry_preimage_digest": "sha256:0aa38b76d3340f0e442026d041ed87076436e59425314be8191999bd97e82229",
+  "manifest_digest": "sha256:f54f77438396188a0e0c0b201ba5e5d7eb9dcda8f349eff291f5f37fad28062b",
+  "registry_preimage_digest": "sha256:f54f77438396188a0e0c0b201ba5e5d7eb9dcda8f349eff291f5f37fad28062b",
   "audit_cadence": [
     {"audit":"lane_freeze","trigger":"clean lane source freeze before handoff","owner":"lane owner","candidate_identity":"clean current HEAD/tree derived from LANE_REGISTRY.json protected base","evidence_surface":["focused behavior","negative controls","race or recovery controls","owned source laws"],"claims_withheld":["integration","installed","runtime","readiness","release","completion"]},
     {"audit":"root_integration","trigger":"one accepted authority-bearing increment lands on root","owner":"OWN-ULTRA-ROOT","candidate_identity":"clean current HEAD/tree derived from LANE_REGISTRY.json protected base","evidence_surface":["affected strict compilation","cross-lane behavior","namespace","generated authority","targeted coverage"],"claims_withheld":["installed","runtime","product success","release","completion"]},
@@ -70,10 +70,10 @@
       "next_action": "Repair orchestration journal and run non-authoring review.", "claim_ceiling_impact": "withheld", "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:3aca2c9d4c26d738436f8427d131aef155cac4ec2ec591d556e88efb3b8702c4"}
     },
     {
-      "id": "BACKLOG-011", "claim_id": "CL-EVAL-IMPROVEMENT", "class": "lane_owed", "owner": "OWN-AGENT-QUALITY",
-      "required_proof": "Paired evaluation and guarded promotion evidence.", "blocker_type": "missing_artifact",
-      "attempts": [{"id": "OBS-011", "attempt_kind": "withheld_claim_decision", "action": "Withhold CL-EVAL-IMPROVEMENT until the named same-surface proof is current.", "status": "withheld", "attempted_at": "2026-07-16T22:36:38-07:00", "external_receipt": {"path": "docs/ultragoal-successor-live/acceptance/EVALUATION-MIGRATION-DECISION-KERNEL-INTEGRATION-043.json", "digest": "sha256:221cf02accf58d95a1344040b3e83182723a94a63a49117d92731e6b165db7dd"}, "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:3aca2c9d4c26d738436f8427d131aef155cac4ec2ec591d556e88efb3b8702c4"}}],
-      "next_action": "Preserve accepted N11 internal evaluation source; root must implement and verify one authenticated public evaluation admission path before any eval, installed, Product Fitness, readiness, release, or completion claim.", "claim_ceiling_impact": "source_accepted_public_and_live_surfaces_withheld", "evidence": {"path": "validation_artifacts/worker-results/N11-EVAL-RESEARCH.json", "digest": "sha256:6b06992f6459f83821de54d3b7e59b0745b9f73f6747a50da8a586838d79c067"}
+      "id": "BACKLOG-011", "claim_id": "CL-EVAL-IMPROVEMENT", "class": "externally_blocked", "owner": "OWN-AGENT-QUALITY",
+      "required_proof": "A host substrate that jointly provides confined fixture execution and identity-conditioned cleanup, followed by independently observed real evaluation and guarded promotion behavior.", "blocker_type": "external_state",
+      "attempts": [{"id": "OBS-011", "attempt_kind": "withheld_claim_decision", "action": "Withhold CL-EVAL-IMPROVEMENT until the named same-surface proof is current.", "status": "withheld", "attempted_at": "2026-07-16T22:36:38-07:00", "external_receipt": {"path": "docs/ultragoal-successor-live/acceptance/EVALUATION-MIGRATION-DECISION-KERNEL-INTEGRATION-043.json", "digest": "sha256:221cf02accf58d95a1344040b3e83182723a94a63a49117d92731e6b165db7dd"}, "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:3aca2c9d4c26d738436f8427d131aef155cac4ec2ec591d556e88efb3b8702c4"}}, {"id": "OBS-011-N11-HOST-CAPABILITY", "attempt_kind": "external_decision", "action": "Falsified the joint host capability and narrowed public eval run to zero-write UnsupportedCapability without issuing a result or receipt.", "status": "blocked", "attempted_at": "2026-07-19T02:36:03-07:00", "external_receipt": {"path": "docs/ultragoal-successor-live/root-decisions/CLAIM-CONTROL-TRANSPORT-CAPABILITY-REWORK-028.json", "digest": "sha256:c17e1c539c1a3eca3d45871d3c5d61a410ded7912b201d40afe15451b87b9124"}, "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:4d3d8e300a961cd09a0042680fcf6a24e08a608c87bf8547093529f2a61f7876"}}],
+      "next_action": "Preserve the accepted internal custody source and public zero-write refusal. Do not issue a receipt or perform hidden cleanup; implement and independently verify a jointly capable host substrate before any positive evaluation, installed, Product Fitness, readiness, release, or completion claim.", "claim_ceiling_impact": "withheld", "evidence": {"path": "validation_artifacts/worker-results/N11-EVAL-RESEARCH.json", "digest": "sha256:6b06992f6459f83821de54d3b7e59b0745b9f73f6747a50da8a586838d79c067"}
     },
     {
       "id": "BACKLOG-012", "claim_id": "CL-REAL-JOURNEY", "class": "externally_blocked", "owner": "OWN-ULTRA-ROOT",
@@ -94,5 +94,5 @@
       "next_action": "Obtain typed goal/validator evidence and finalise projections.", "claim_ceiling_impact": "withheld", "evidence": {"path": "docs/ultragoal-successor-live/CRITICAL-PATH-BOARD.md", "digest": "sha256:3aca2c9d4c26d738436f8427d131aef155cac4ec2ec591d556e88efb3b8702c4"}
     }
   ],
-  "generated_at": "2026-07-18T18:03:28-07:00"
+  "generated_at": "2026-07-19T02:36:03-07:00"
 }
