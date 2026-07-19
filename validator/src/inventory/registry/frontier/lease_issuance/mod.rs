@@ -37,7 +37,7 @@ pub(super) fn validate(
         .get("scope_mappings")
         .and_then(Value::as_array)
         .ok_or_else(|| invalid("scope mappings are missing"))?;
-    debt_worktree::validate(records, registry, base)?;
+    debt_worktree::validate(records, registry, base, root)?;
     let scheduler_records = records
         .iter()
         .filter(|record| !debt_worktree::is_record(record))

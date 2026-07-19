@@ -144,7 +144,7 @@ mod tests {
     }
 
     #[test]
-    fn final_source_reread_rejects_semantic_and_dispatch_mutate_restore() {
+    fn final_source_reread_rejects_authority_source_mutate_restore() {
         for (label, relative) in [
             (
                 "semantic-mutate-restore",
@@ -153,6 +153,18 @@ mod tests {
             (
                 "dispatcher-mutate-restore",
                 "validator/src/cli/successor_public/output_limit.rs",
+            ),
+            (
+                "P0-lease-mutate-restore",
+                "validator/src/inventory/registry/frontier/lease_issuance/debt_worktree/mod.rs",
+            ),
+            (
+                "P0-diagnostic-mutate-restore",
+                "validator/src/inventory/registry/frontier/lease_issuance/debt_worktree/diagnostic_source.rs",
+            ),
+            (
+                "P0-worktree-mutate-restore",
+                "validator/src/inventory/registry/frontier/lease_issuance/debt_worktree/live_worktree.rs",
             ),
         ] {
             assert_mutate_restore_rejected(label, relative);

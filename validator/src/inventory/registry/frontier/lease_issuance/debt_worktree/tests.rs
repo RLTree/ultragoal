@@ -1,118 +1,124 @@
-use super::{digest, validate};
-use serde_json::{Value, json};
-use std::collections::BTreeSet;
-
-const COMMIT: &str = "1111111111111111111111111111111111111111";
-const TREE: &str = "2222222222222222222222222222222222222222";
+use super::test_fixture::{Fixture, empty_digest, git, path_digest};
+use super::validate;
+use serde_json::json;
+use std::fs;
 
 #[test]
 fn disjoint_exact_p0_worktrees_are_accepted() {
-    let records = vec![
-        record("fit", "src/fit.rs", "src/fit_support.rs"),
-        record("routine", "src/routine.rs", "src/routine_support.rs"),
-    ];
-    validate(&records, &registry(), (COMMIT, TREE)).unwrap();
+    let fixture = Fixture::new();
+    validate(
+        &fixture.records(),
+        &fixture.registry(),
+        fixture.base(),
+        &fixture.root,
+    )
+    .unwrap();
 }
 
 #[test]
-fn overlapping_p0_worktrees_are_rejected() {
-    let mut records = vec![
-        record("fit", "src/fit.rs", "src/fit_support.rs"),
-        record("routine", "src/routine.rs", "src/routine_support.rs"),
-    ];
-    records[1]["support_files"] = json!(["src/fit_support.rs"]);
-    records[1]["owned_files"] = json!(["src/routine.rs", "src/fit_support.rs"]);
-    assert!(validate(&records, &registry(), (COMMIT, TREE)).is_err());
-}
+fn overlapping_stale_forbidden_and_uncovered_paths_are_rejected() {
+    let fixture = Fixture::new();
+    let mut overlap = fixture.records();
+    overlap[1]["support_files"] = json!(["src/fit_support.rs"]);
+    overlap[1]["owned_files"] = json!(["src/routine.rs", "src/fit_support.rs"]);
+    assert!(validate(&overlap, &fixture.registry(), fixture.base(), &fixture.root).is_err());
 
-#[test]
-fn stale_path_digest_is_rejected() {
-    let mut records = vec![
-        record("fit", "src/fit.rs", "src/fit_support.rs"),
-        record("routine", "src/routine.rs", "src/routine_support.rs"),
-    ];
-    records[0]["diagnostic_path_set_digest"] =
-        json!("sha256:0000000000000000000000000000000000000000000000000000000000000000");
-    assert!(validate(&records, &registry(), (COMMIT, TREE)).is_err());
-}
+    let mut stale = fixture.records();
+    stale[0]["diagnostic_path_set_digest"] = json!(empty_digest());
+    assert!(validate(&stale, &fixture.registry(), fixture.base(), &fixture.root).is_err());
 
-#[test]
-fn forbidden_or_uncovered_paths_are_rejected() {
-    let mut blocked = vec![
-        record("fit", "src/fit.rs", "src/fit_support.rs"),
-        record("routine", "src/routine.rs", "src/routine_support.rs"),
-    ];
-    blocked[0]["diagnostic_paths"] = json!(["schemas/shared.json"]);
-    blocked[0]["owned_files"] = json!(["schemas/shared.json", "src/fit_support.rs"]);
-    blocked[0]["diagnostic_path_set_digest"] = json!(path_digest("schemas/shared.json"));
-    assert!(validate(&blocked, &registry(), (COMMIT, TREE)).is_err());
-
-    let incomplete = vec![record("fit", "src/fit.rs", "src/fit_support.rs")];
-    assert!(validate(&incomplete, &registry(), (COMMIT, TREE)).is_err());
-}
-
-#[test]
-fn p0_worktrees_are_rejected_when_product_work_is_eligible_or_active() {
-    let records = vec![
-        record("fit", "src/fit.rs", "src/fit_support.rs"),
-        record("routine", "src/routine.rs", "src/routine_support.rs"),
-    ];
-    let mut eligible = registry();
-    eligible["pre_adoption_source"]["eligible_scheduler_nodes"] = json!(["N14"]);
-    assert!(validate(&records, &eligible, (COMMIT, TREE)).is_err());
-
-    let mut active = registry();
-    active["lanes"][0]["state"] = json!("rework");
-    assert!(validate(&records, &active, (COMMIT, TREE)).is_err());
-
-    let mut product_record = record("product", "src/fit.rs", "src/fit_support.rs");
-    product_record["exception_id"] = Value::Null;
-    product_record["lane_id"] = json!("N14");
+    let mut forbidden = fixture.records();
+    forbidden[0]["diagnostic_paths"] = json!(["schemas/shared.json"]);
+    forbidden[0]["owned_files"] = json!(["schemas/shared.json", "src/fit_support.rs"]);
+    forbidden[0]["diagnostic_path_set_digest"] = json!(path_digest("schemas/shared.json"));
     assert!(
         validate(
-            &[records[0].clone(), product_record],
-            &registry(),
-            (COMMIT, TREE)
+            &forbidden,
+            &fixture.registry(),
+            fixture.base(),
+            &fixture.root
+        )
+        .is_err()
+    );
+
+    assert!(
+        validate(
+            &fixture.records()[..1],
+            &fixture.registry(),
+            fixture.base(),
+            &fixture.root
         )
         .is_err()
     );
 }
 
-fn registry() -> Value {
-    json!({
-        "pre_adoption_source": {"eligible_scheduler_nodes": []},
-        "lanes": [{"id": "N14", "state": "blocked"}],
-        "lease_state": {
-            "p0_exception": {
-                "allowed": {"paths": [
-                    "src/fit.rs",
-                    "src/fit_support.rs",
-                    "src/routine.rs",
-                    "src/routine_support.rs"
-                ]},
-                "forbidden": {"paths": ["schemas/**"]}
-            }
-        }
-    })
+#[test]
+fn p0_worktrees_require_blocked_product_and_current_diagnostics() {
+    let fixture = Fixture::new();
+    let records = fixture.records();
+    let mut eligible = fixture.registry();
+    eligible["pre_adoption_source"]["eligible_scheduler_nodes"] = json!(["N14"]);
+    assert!(validate(&records, &eligible, fixture.base(), &fixture.root).is_err());
+
+    let mut active = fixture.registry();
+    active["lanes"][0]["state"] = json!("rework");
+    assert!(validate(&records, &active, fixture.base(), &fixture.root).is_err());
+
+    let mut stale = fixture.registry();
+    stale["lease_state"]["p0_exception"]["debt_path_sources"]["clippy"]["candidate_tree"] =
+        json!("3333333333333333333333333333333333333333");
+    assert!(validate(&records, &stale, fixture.base(), &fixture.root).is_err());
+
+    let mut incomplete = fixture.registry();
+    incomplete["lease_state"]["p0_exception"]["issuance_transition"]["source_sets"]["clippy"] =
+        json!(["src/fit.rs"]);
+    assert!(validate(&records, &incomplete, fixture.base(), &fixture.root).is_err());
 }
 
-fn record(name: &str, diagnostic: &str, dependency_path: &str) -> Value {
-    json!({
-        "lease_id": format!("P0-{name}"),
-        "lane_id": "P0",
-        "exception_id": "P0-DEBT-REPAIR",
-        "base_commit": COMMIT,
-        "base_tree": TREE,
-        "branch": format!("codex/p0-{name}"),
-        "worktree": format!("/worktrees/{name}"),
-        "status": "issued",
-        "diagnostic_paths": [diagnostic],
-        "support_files": [dependency_path],
-        "owned_files": [diagnostic, dependency_path],
-        "diagnostic_path_set_digest": path_digest(diagnostic)
-    })
-}
+#[test]
+fn p0_worktree_identity_rejects_missing_wrong_branch_changed_head_and_dirty_state() {
+    let fixture = Fixture::new();
+    let mut missing = fixture.records();
+    missing[0]["worktree"] = json!(fixture.root.join("missing"));
+    assert!(validate(&missing, &fixture.registry(), fixture.base(), &fixture.root).is_err());
 
-fn path_digest(path: &str) -> String {
-    digest(&BTreeSet::from([path.to_owned()]))
+    let mut wrong_branch = fixture.records();
+    wrong_branch[0]["branch"] = json!("codex/p0-other");
+    assert!(
+        validate(
+            &wrong_branch,
+            &fixture.registry(),
+            fixture.base(),
+            &fixture.root
+        )
+        .is_err()
+    );
+
+    git(
+        &fixture.fit,
+        &["commit", "--allow-empty", "-q", "-m", "changed"],
+    );
+    assert!(
+        validate(
+            &fixture.records(),
+            &fixture.registry(),
+            fixture.base(),
+            &fixture.root
+        )
+        .is_err()
+    );
+    git(
+        &fixture.fit,
+        &["reset", "--hard", "-q", fixture.commit.as_str()],
+    );
+    fs::write(fixture.fit.join("dirty"), b"dirty").unwrap();
+    assert!(
+        validate(
+            &fixture.records(),
+            &fixture.registry(),
+            fixture.base(),
+            &fixture.root
+        )
+        .is_err()
+    );
 }

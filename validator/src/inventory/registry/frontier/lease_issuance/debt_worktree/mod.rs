@@ -2,8 +2,12 @@ use crate::inventory::types::InventoryError;
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
+use std::path::Path;
 
 const EXCEPTION: &str = "P0-DEBT-REPAIR";
+
+mod diagnostic_source;
+mod live_worktree;
 
 pub(super) fn is_record(record: &Value) -> bool {
     record.get("exception_id").and_then(Value::as_str) == Some(EXCEPTION)
@@ -13,6 +17,7 @@ pub(super) fn validate(
     records: &[Value],
     registry: &Value,
     base: (&str, &str),
+    root: &Path,
 ) -> Result<(), InventoryError> {
     let debt = records.iter().filter(|record| is_record(record));
     let allowed = strings(
@@ -52,6 +57,7 @@ pub(super) fn validate(
         unique(record, "lease_id", &mut lease_ids)?;
         unique(record, "branch", &mut branches)?;
         unique(record, "worktree", &mut worktrees)?;
+        live_worktree::validate(root, registry, record, base)?;
         let diagnostic = strings(
             record.get("diagnostic_paths"),
             "P0 diagnostic paths are missing",
@@ -96,6 +102,7 @@ pub(super) fn validate(
     }
     if count > 0 {
         validate_product_dag_is_blocked(records, registry)?;
+        diagnostic_source::validate(records, registry, base)?;
         if claimed != allowed {
             return Err(invalid(
                 "P0 worktree leases do not exactly cover the allowed path set",
@@ -202,5 +209,7 @@ fn invalid(message: &str) -> InventoryError {
     InventoryError::InvalidRegistry(message.to_owned())
 }
 
+#[cfg(test)]
+mod test_fixture;
 #[cfg(test)]
 mod tests;

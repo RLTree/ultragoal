@@ -294,6 +294,16 @@ HOME/CARGO/RUSTUP/target/tmp/cache/port roots, clean committed handoff,
 reachable tip, ready receipt, and teardown/cache/evidence retention. Creation is
 branch-first/worktree-second.
 
+The temporary P0 strict-debt exception uses the same live identity standard:
+each issued path must be a registered worktree beneath the configured root,
+checked out on its declared branch at the exact leased HEAD/tree, and clean.
+Issuance also binds each complete compile, Clippy, namespace, standards, and
+retention path set to the exact candidate, command operation, tool, exit, and
+observation time before partitioning. A digest of a caller-supplied subset is
+not diagnostic authority. Every P0 validator child is included in command
+activation witness closure, and P0 remains unavailable whenever product work
+is eligible or active.
+
 N01, N02, and N03 are serial; N02 requires a fresh same-session rebuild, zero
 blockers, and two byte-identical inventories, and no inventory authority or
 claim promotion may occur while it is open. The initial N04-N07 source wave used
