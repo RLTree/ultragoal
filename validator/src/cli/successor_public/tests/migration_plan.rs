@@ -30,6 +30,9 @@ fn current_source_migration_plan_is_read_only_and_has_no_unadopted_effects() {
             && item["exact_public_routes"].is_null()
             && item["exact_generated_outputs"].is_null()
     }));
+    assert!(projection["items"].as_array().unwrap().iter().any(|item| {
+        item["reason"] == "semantic_parallel_authority_requires_exact_adoption_observation"
+    }));
     assert_eq!(projection["effect_count"], 0);
     assert!(
         !String::from_utf8_lossy(outcome.machine_payload.as_ref().unwrap())

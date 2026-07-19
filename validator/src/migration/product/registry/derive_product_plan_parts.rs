@@ -66,12 +66,20 @@ fn derive_product_plan_parts(
                 None => {
                     if source.status == SurfaceStatus::Active
                         && canonical.status == SurfaceStatus::Active
+                        && source.file_kind == SurfaceFileKind::Regular
+                        && source.link_count == 1
+                        && canonical.file_kind == SurfaceFileKind::Regular
+                        && canonical.link_count == 1
                     {
                         return Err(ProductMigrationError::new(
                             "migration-product-active-parallel-authority",
                         ));
                     }
-                    let reason = if matches.len() == 1
+                    let reason = if source.status == SurfaceStatus::Active
+                        && canonical.status == SurfaceStatus::Active
+                    {
+                        "semantic_parallel_authority_requires_exact_adoption_observation"
+                    } else if matches.len() == 1
                         && source.status == SurfaceStatus::Active
                         && canonical.status == SurfaceStatus::Definition
                     {
