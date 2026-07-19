@@ -1,4 +1,5 @@
-use crate::context::CandidateIdentity;
+use super::source_admission;
+use crate::context::LiveContext;
 use crate::state::StateError;
 use serde::{Deserialize, Serialize};
 
@@ -30,37 +31,44 @@ struct LaneOutcome {
 
 #[derive(Clone, Deserialize, Serialize)]
 pub(super) struct DependencyIdentity {
-    lane_id: String,
-    commit: String,
-    tree: String,
+    pub(super) lane_id: String,
+    pub(super) commit: String,
+    pub(super) tree: String,
 }
 
 pub(super) fn load_declared_dependency_identities(
     bytes: &[u8],
 ) -> Result<Vec<DependencyIdentity>, StateError> {
-    load_dependency_identities(bytes, SourceBinding::Declared)
+    load_dependency_identities(bytes, StagingMode::Declared, None)
 }
 
-pub(super) fn load_exact_dependency_identities(
+pub(super) fn load_root_dependency_identities(
     bytes: &[u8],
-    candidate: &CandidateIdentity,
+    context: &LiveContext,
 ) -> Result<Vec<DependencyIdentity>, StateError> {
-    load_dependency_identities(bytes, SourceBinding::Exact(candidate))
+    load_dependency_identities(bytes, StagingMode::RootAccepted, Some(context))
 }
 
 #[derive(Clone, Copy)]
-enum SourceBinding<'a> {
+enum StagingMode {
     Declared,
-    Exact(&'a CandidateIdentity),
+    RootAccepted,
 }
 
 fn load_dependency_identities(
     bytes: &[u8],
-    source_binding: SourceBinding<'_>,
+    mode: StagingMode,
+    context: Option<&LiveContext>,
 ) -> Result<Vec<DependencyIdentity>, StateError> {
     let registry: LaneRegistry =
         serde_json::from_slice(bytes).map_err(|_| invalid("adopted-lane-registry-invalid"))?;
-    verify_staging_lane(&registry, source_binding)?;
+    let source = verify_staging_lane(&registry, mode)?;
+    if let Some(context) = context {
+        source_admission::verify(
+            context,
+            source.ok_or_else(|| invalid("adopted-staging-source-identity-missing"))?,
+        )?;
+    }
     DEPENDENCIES
         .iter()
         .map(|wanted| dependency_identity(&registry, wanted))
@@ -109,8 +117,8 @@ fn valid_dependency_state(lane: &Lane, wanted: &str) -> bool {
 
 fn verify_staging_lane(
     registry: &LaneRegistry,
-    source_binding: SourceBinding<'_>,
-) -> Result<(), StateError> {
+    mode: StagingMode,
+) -> Result<Option<&DependencyIdentity>, StateError> {
     let rows = registry
         .lanes
         .iter()
@@ -120,13 +128,13 @@ fn verify_staging_lane(
         return Err(invalid("adopted-staging-lane-invalid"));
     }
     let lane = rows[0];
-    let planned = matches!(source_binding, SourceBinding::Declared)
+    let planned = matches!(mode, StagingMode::Declared)
         && lane.state == "planned"
         && lane.current_identity.is_none()
         && lane.ceiling == "adopted_reobservation_required";
     let staged = lane.state == "integrating"
         && lane.ceiling == "source_accepted"
-        && valid_staged_candidate(lane.current_identity.as_ref(), source_binding);
+        && valid_staged_identity(lane.current_identity.as_ref());
     if lane.authority != "root_only"
         || !lane.scope_ids.is_empty()
         || lane
@@ -138,25 +146,12 @@ fn verify_staging_lane(
     {
         return Err(invalid("adopted-staging-lane-invalid"));
     }
-    Ok(())
+    Ok(lane.current_identity.as_ref())
 }
 
-fn valid_staged_candidate(
-    identity: Option<&DependencyIdentity>,
-    source_binding: SourceBinding<'_>,
-) -> bool {
+fn valid_staged_identity(identity: Option<&DependencyIdentity>) -> bool {
     identity.is_some_and(|identity| {
-        identity.lane_id == "N12"
-            && valid_git_id(&identity.commit)
-            && valid_git_id(&identity.tree)
-            && match source_binding {
-                SourceBinding::Declared => true,
-                SourceBinding::Exact(candidate) => {
-                    !candidate.dirty
-                        && Some(identity.commit.as_str()) == candidate.head_commit.as_deref()
-                        && Some(identity.tree.as_str()) == candidate.head_tree.as_deref()
-                }
-            }
+        identity.lane_id == "N12" && valid_git_id(&identity.commit) && valid_git_id(&identity.tree)
     })
 }
 

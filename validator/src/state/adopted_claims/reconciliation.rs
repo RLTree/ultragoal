@@ -1,6 +1,6 @@
 use super::AdoptedClaimRegistry;
 use super::lane_binding::{
-    DependencyIdentity, load_declared_dependency_identities, load_exact_dependency_identities,
+    DependencyIdentity, load_declared_dependency_identities, load_root_dependency_identities,
 };
 use crate::context::{CandidateIdentity, LiveContext};
 use crate::inventory::AuthorityCatalog;
@@ -99,7 +99,7 @@ pub(in crate::state) fn stage_root(
     contract_manifest_sha256: String,
     handoff_sha256: String,
 ) -> Result<RootClaimStage, StateError> {
-    let dependency_identities = load_exact_dependency_identities(LANE_BYTES, context.candidate())?;
+    let dependency_identities = load_root_dependency_identities(LANE_BYTES, context)?;
     let staged = stage(
         context,
         authority_catalog,

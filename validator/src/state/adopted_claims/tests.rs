@@ -1,5 +1,4 @@
-use super::lane_binding::{load_declared_dependency_identities, load_exact_dependency_identities};
-use crate::context::CandidateIdentity;
+use super::lane_binding::load_declared_dependency_identities;
 
 const LANES: &[u8] = include_bytes!("../../../../LANE_REGISTRY.json");
 
@@ -48,7 +47,7 @@ fn lane<'a>(lanes: &'a mut [serde_json::Value], id: &str) -> &'a mut serde_json:
 }
 
 #[test]
-fn exact_root_staged_state_is_accepted_without_promoting_n11() {
+fn declared_staged_state_is_accepted_without_promoting_n11() {
     let mut value: serde_json::Value = serde_json::from_slice(LANES).unwrap();
     let n12 = value["lanes"]
         .as_array_mut()
@@ -65,52 +64,4 @@ fn exact_root_staged_state_is_accepted_without_promoting_n11() {
     });
     let bytes = serde_json::to_vec(&value).unwrap();
     assert!(load_declared_dependency_identities(&bytes).is_ok());
-    assert!(load_exact_dependency_identities(&bytes, &candidate(false)).is_ok());
-    for invalid in [
-        different_commit(),
-        different_tree(),
-        candidate(true),
-        missing_commit(),
-        missing_tree(),
-    ] {
-        assert!(load_exact_dependency_identities(&bytes, &invalid).is_err());
-    }
-    assert!(load_exact_dependency_identities(LANES, &candidate(false)).is_err());
-}
-
-fn candidate(dirty: bool) -> CandidateIdentity {
-    CandidateIdentity {
-        head_commit: Some("0123456789abcdef0123456789abcdef01234567".to_owned()),
-        head_tree: Some("89abcdef0123456789abcdef0123456789abcdef".to_owned()),
-        branch: Some("codex/test".to_owned()),
-        status_sha256: "status".to_owned(),
-        worktree_diff_sha256: "worktree".to_owned(),
-        staged_diff_sha256: "staged".to_owned(),
-        untracked_content_sha256: "untracked".to_owned(),
-        dirty,
-    }
-}
-
-fn different_commit() -> CandidateIdentity {
-    let mut value = candidate(false);
-    value.head_commit = Some("1123456789abcdef0123456789abcdef01234567".to_owned());
-    value
-}
-
-fn different_tree() -> CandidateIdentity {
-    let mut value = candidate(false);
-    value.head_tree = Some("19abcdef0123456789abcdef0123456789abcdef".to_owned());
-    value
-}
-
-fn missing_commit() -> CandidateIdentity {
-    let mut value = candidate(false);
-    value.head_commit = None;
-    value
-}
-
-fn missing_tree() -> CandidateIdentity {
-    let mut value = candidate(false);
-    value.head_tree = None;
-    value
 }
