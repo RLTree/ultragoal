@@ -35,13 +35,32 @@ pub(super) struct DependencyIdentity {
     tree: String,
 }
 
-pub(super) fn load_dependency_identities(
+pub(super) fn load_declared_dependency_identities(
+    bytes: &[u8],
+) -> Result<Vec<DependencyIdentity>, StateError> {
+    load_dependency_identities(bytes, SourceBinding::Declared)
+}
+
+pub(super) fn load_exact_dependency_identities(
     bytes: &[u8],
     candidate: &CandidateIdentity,
 ) -> Result<Vec<DependencyIdentity>, StateError> {
+    load_dependency_identities(bytes, SourceBinding::Exact(candidate))
+}
+
+#[derive(Clone, Copy)]
+enum SourceBinding<'a> {
+    Declared,
+    Exact(&'a CandidateIdentity),
+}
+
+fn load_dependency_identities(
+    bytes: &[u8],
+    source_binding: SourceBinding<'_>,
+) -> Result<Vec<DependencyIdentity>, StateError> {
     let registry: LaneRegistry =
         serde_json::from_slice(bytes).map_err(|_| invalid("adopted-lane-registry-invalid"))?;
-    verify_staging_lane(&registry, candidate)?;
+    verify_staging_lane(&registry, source_binding)?;
     DEPENDENCIES
         .iter()
         .map(|wanted| dependency_identity(&registry, wanted))
@@ -90,7 +109,7 @@ fn valid_dependency_state(lane: &Lane, wanted: &str) -> bool {
 
 fn verify_staging_lane(
     registry: &LaneRegistry,
-    candidate: &CandidateIdentity,
+    source_binding: SourceBinding<'_>,
 ) -> Result<(), StateError> {
     let rows = registry
         .lanes
@@ -101,12 +120,13 @@ fn verify_staging_lane(
         return Err(invalid("adopted-staging-lane-invalid"));
     }
     let lane = rows[0];
-    let planned = lane.state == "planned"
+    let planned = matches!(source_binding, SourceBinding::Declared)
+        && lane.state == "planned"
         && lane.current_identity.is_none()
         && lane.ceiling == "adopted_reobservation_required";
     let staged = lane.state == "integrating"
         && lane.ceiling == "source_accepted"
-        && exact_staged_candidate(lane.current_identity.as_ref(), candidate);
+        && valid_staged_candidate(lane.current_identity.as_ref(), source_binding);
     if lane.authority != "root_only"
         || !lane.scope_ids.is_empty()
         || lane
@@ -121,18 +141,23 @@ fn verify_staging_lane(
     Ok(())
 }
 
-fn exact_staged_candidate(
+fn valid_staged_candidate(
     identity: Option<&DependencyIdentity>,
-    candidate: &CandidateIdentity,
+    source_binding: SourceBinding<'_>,
 ) -> bool {
-    !candidate.dirty
-        && identity.is_some_and(|identity| {
-            identity.lane_id == "N12"
-                && Some(identity.commit.as_str()) == candidate.head_commit.as_deref()
-                && Some(identity.tree.as_str()) == candidate.head_tree.as_deref()
-                && valid_git_id(&identity.commit)
-                && valid_git_id(&identity.tree)
-        })
+    identity.is_some_and(|identity| {
+        identity.lane_id == "N12"
+            && valid_git_id(&identity.commit)
+            && valid_git_id(&identity.tree)
+            && match source_binding {
+                SourceBinding::Declared => true,
+                SourceBinding::Exact(candidate) => {
+                    !candidate.dirty
+                        && Some(identity.commit.as_str()) == candidate.head_commit.as_deref()
+                        && Some(identity.tree.as_str()) == candidate.head_tree.as_deref()
+                }
+            }
+    })
 }
 
 fn valid_git_id(value: &str) -> bool {

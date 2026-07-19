@@ -1,5 +1,5 @@
 use super::StateEngine;
-use super::adopted_claims::stage;
+use super::adopted_claims::{RootClaimStage, stage_root, stage_target};
 use super::adopted_registry::load_adopted_claims;
 use super::catalog::{
     ActionDefinition, ActionKind, ClaimSpec, CommandBinding, DependencyActionCatalog,
@@ -29,7 +29,7 @@ pub(crate) fn issue_adopted(
 ) -> Result<DependencyActionCatalog, StateError> {
     let loaded = load_adopted_claims()?;
     let claim_registry_id = loaded.claim_registry_sha256.clone();
-    let staged = stage(
+    let staged = stage_target(
         context,
         authority_catalog,
         &loaded.registry,
@@ -49,6 +49,21 @@ pub(crate) fn issue_adopted(
     let spec = live_spec(context, authority_catalog, &claims, staged.stage_id()?);
     PolicyAuthority::from_adopted_claim_registry(claim_registry_id, claims, spec)?
         .issue(context, authority_catalog)
+}
+
+pub(crate) fn stage_root_claims(
+    context: &LiveContext,
+    authority_catalog: &AuthorityCatalog,
+) -> Result<RootClaimStage, StateError> {
+    let loaded = load_adopted_claims()?;
+    stage_root(
+        context,
+        authority_catalog,
+        &loaded.registry,
+        loaded.claim_registry_sha256,
+        loaded.contract_manifest_sha256,
+        loaded.handoff_sha256,
+    )
 }
 
 fn live_spec(

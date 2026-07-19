@@ -1,11 +1,11 @@
-use super::lane_binding::load_dependency_identities;
+use super::lane_binding::{load_declared_dependency_identities, load_exact_dependency_identities};
 use crate::context::CandidateIdentity;
 
 const LANES: &[u8] = include_bytes!("../../../../LANE_REGISTRY.json");
 
 #[test]
 fn current_external_blocker_and_dependency_identities_are_accepted() {
-    let identities = load_dependency_identities(LANES, &candidate(false)).unwrap();
+    let identities = load_declared_dependency_identities(LANES).unwrap();
     assert_eq!(identities.len(), 7);
 }
 
@@ -39,10 +39,7 @@ fn authority_and_identity_mutations_fail_closed() {
                 lanes.push(duplicate);
             }
         }
-        assert!(
-            load_dependency_identities(&serde_json::to_vec(&value).unwrap(), &candidate(false))
-                .is_err()
-        );
+        assert!(load_declared_dependency_identities(&serde_json::to_vec(&value).unwrap()).is_err());
     }
 }
 
@@ -67,7 +64,8 @@ fn exact_root_staged_state_is_accepted_without_promoting_n11() {
         "tree": "89abcdef0123456789abcdef0123456789abcdef"
     });
     let bytes = serde_json::to_vec(&value).unwrap();
-    assert!(load_dependency_identities(&bytes, &candidate(false)).is_ok());
+    assert!(load_declared_dependency_identities(&bytes).is_ok());
+    assert!(load_exact_dependency_identities(&bytes, &candidate(false)).is_ok());
     for invalid in [
         different_commit(),
         different_tree(),
@@ -75,8 +73,9 @@ fn exact_root_staged_state_is_accepted_without_promoting_n11() {
         missing_commit(),
         missing_tree(),
     ] {
-        assert!(load_dependency_identities(&bytes, &invalid).is_err());
+        assert!(load_exact_dependency_identities(&bytes, &invalid).is_err());
     }
+    assert!(load_exact_dependency_identities(LANES, &candidate(false)).is_err());
 }
 
 fn candidate(dirty: bool) -> CandidateIdentity {

@@ -1,5 +1,7 @@
 use super::AdoptedClaimRegistry;
-use super::lane_binding::{DependencyIdentity, load_dependency_identities};
+use super::lane_binding::{
+    DependencyIdentity, load_declared_dependency_identities, load_exact_dependency_identities,
+};
 use crate::context::{CandidateIdentity, LiveContext};
 use crate::inventory::AuthorityCatalog;
 use crate::state::StateError;
@@ -29,6 +31,7 @@ pub(in crate::state) struct StagedClaimReconciliation {
     amendment_id: &'static str,
     amendment_hash: &'static str,
     lane_registry_sha256: String,
+    source_binding: SourceBindingStatus,
     dependency_identities: Vec<DependencyIdentity>,
     decisions: Vec<StagedClaimDecision>,
     generated_outputs: Vec<String>,
@@ -56,7 +59,18 @@ enum ClaimDisposition {
     Withheld,
 }
 
-pub(in crate::state) fn stage(
+#[derive(Serialize)]
+#[serde(rename_all = "snake_case")]
+enum SourceBindingStatus {
+    RegistryDeclared,
+    RootSourceVerified,
+}
+
+pub(crate) struct RootClaimStage {
+    stage_id: String,
+}
+
+pub(in crate::state) fn stage_target(
     context: &LiveContext,
     authority_catalog: &AuthorityCatalog,
     registry: &AdoptedClaimRegistry,
@@ -64,9 +78,55 @@ pub(in crate::state) fn stage(
     contract_manifest_sha256: String,
     handoff_sha256: String,
 ) -> Result<StagedClaimReconciliation, StateError> {
+    let dependency_identities = load_declared_dependency_identities(LANE_BYTES)?;
+    stage(
+        context,
+        authority_catalog,
+        registry,
+        claim_registry_sha256,
+        contract_manifest_sha256,
+        handoff_sha256,
+        dependency_identities,
+        SourceBindingStatus::RegistryDeclared,
+    )
+}
+
+pub(in crate::state) fn stage_root(
+    context: &LiveContext,
+    authority_catalog: &AuthorityCatalog,
+    registry: &AdoptedClaimRegistry,
+    claim_registry_sha256: String,
+    contract_manifest_sha256: String,
+    handoff_sha256: String,
+) -> Result<RootClaimStage, StateError> {
+    let dependency_identities = load_exact_dependency_identities(LANE_BYTES, context.candidate())?;
+    let staged = stage(
+        context,
+        authority_catalog,
+        registry,
+        claim_registry_sha256,
+        contract_manifest_sha256,
+        handoff_sha256,
+        dependency_identities,
+        SourceBindingStatus::RootSourceVerified,
+    )?;
+    Ok(RootClaimStage {
+        stage_id: staged.stage_id()?.to_owned(),
+    })
+}
+
+fn stage(
+    context: &LiveContext,
+    authority_catalog: &AuthorityCatalog,
+    registry: &AdoptedClaimRegistry,
+    claim_registry_sha256: String,
+    contract_manifest_sha256: String,
+    handoff_sha256: String,
+    dependency_identities: Vec<DependencyIdentity>,
+    source_binding: SourceBindingStatus,
+) -> Result<StagedClaimReconciliation, StateError> {
     let goal_contract_sha256 = sha256(GOAL_BYTES);
     verify_amendment(&goal_contract_sha256)?;
-    let dependency_identities = load_dependency_identities(LANE_BYTES, context.candidate())?;
     let decisions = registry
         .claims
         .iter()
@@ -94,6 +154,7 @@ pub(in crate::state) fn stage(
         amendment_id: AMENDMENT_ID,
         amendment_hash: AMENDMENT_HASH,
         lane_registry_sha256: sha256(LANE_BYTES),
+        source_binding,
         dependency_identities,
         decisions,
         generated_outputs: Vec::new(),
@@ -102,6 +163,12 @@ pub(in crate::state) fn stage(
     };
     staged.stage_id = Some(digest(&staged)?);
     Ok(staged)
+}
+
+impl RootClaimStage {
+    pub(crate) fn stage_id(&self) -> &str {
+        &self.stage_id
+    }
 }
 
 impl StagedClaimReconciliation {

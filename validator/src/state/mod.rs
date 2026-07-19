@@ -28,7 +28,7 @@ mod snapshot;
 #[cfg(test)]
 mod tests;
 
-pub(crate) use adopted::derive_adopted;
+pub(crate) use adopted::{derive_adopted, stage_root_claims};
 pub use catalog::{
     ActionDefinition, ActionKind, CapabilityRequirement, ClaimSpec, CommandBinding,
     DependencyActionCatalog, DependencyActionSpec, DependencyFact, DependencyStatus, FactAuthority,
