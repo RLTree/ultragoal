@@ -20,19 +20,28 @@ Focused public projection controls pass 2/2 and the dependency-closed command
 activation suite passes 10/10. Package, install, discovery, runtime, Product
 Fitness, readiness, release, and completion remain withheld.
 
-N11 source is independently accepted at
+N11 internal source is independently accepted at
 `1a6423bd8623f73001a82af9bf2bf4921128a4ea` / tree
 `5489947dc30ddc81996b11c555b6c0fd4907213a`; its single receipt-only child is
 `79a3259b3b78e20a02eaaafc52f0c8c29084dd2a` / tree
 `2c9c0849881d0986bd5a8f355093f2812369297f`. Root fast-forwarded both commits,
-closed the lease, and tombstoned the clean branch. N11 remains `integrating`:
-the advertised `eval` commands still delegate, and the only scheduled
-evaluation bridge is test-only. Root must add one authenticated evaluation
-admission adapter that owns canonical spec decoding, issuer/principal binding,
-ledger-key custody, invocation selection, confined execution, output projection,
-catalog activation, and dispatch. Source, package, install, runtime, Product
-Fitness, readiness, release, and completion claims remain withheld beyond the
-accepted internal evaluation source ceiling.
+closed the lease, and tombstoned the clean branch. Root then integrated the
+read-only public audit boundary through `c35ff422785b840b6cfa90889013ce8fa52aed66`
+/ tree `c2b25007470a71325126ff43acfc17f4e2fb90c0`: one bounded relative spec and
+every declared dataset are read through the candidate-bound read session,
+authenticated by exact bytes and length, revalidated, and projected without
+exposing execution, ledger, issuer, bridge, key, or recovery authority. The
+safe contract public records remain externally visible; raw custody records do
+not. Warning-denied production compilation, three public audit controls, two
+exact binding controls, positive/negative external API compilation, namespace
+zero-write, and 121 standards rows pass. The bounded review returned two
+material defects in one pass; its sole correction review caught an overbroad
+public-API retirement, and root reconciled the safe facade without another
+review cycle. N11 remains `integrating`: `eval run`, `harvest`, `promote`, and
+`adapter` stay deliberately unavailable until one real production bridge owns
+issuer/principal, ledger-key/session, confined execution, output publication,
+recovery, and settlement. Package, install, runtime, Product Fitness, readiness,
+release, and completion remain withheld.
 
 ## Stage B projection freeze (routing only)
 
@@ -730,6 +739,14 @@ route cardinality, which the parent corrected and verified as 10 compiled,
 registered routes. The review bound is closed without a third speculative
 round. Package, install, runtime, journey, readiness, release, and completion
 claims remain withheld.
+
+The next N11 root boundary follows the same bounded cadence. Public audit
+source is integrated at `c35ff422785b840b6cfa90889013ce8fa52aed66`; no
+additional source review is authorized for those bytes. The remaining write
+routes require a real production fixture bridge and one atomic private custody
+owner before they can be admitted. A stale all-surface public API witness is
+blocked independently by the test-only migration module; the focused external
+evaluation witness passes and forbidden raw authority imports fail closed.
 
 Two debts are deliberately scheduled at their real dependency boundaries
 instead of extending this review loop. The broad suppression in
