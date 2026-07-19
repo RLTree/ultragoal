@@ -13,6 +13,7 @@ class AdoptedSchemaContract:
     output: str
     sha256: str
     schema: str
+    schema_sha256: str
     source_contract: str
     source_contract_sha256: str
     amendment_log: str
@@ -26,6 +27,7 @@ class AdoptedSchemaContract:
             "output": self.output,
             "sha256": self.sha256,
             "schema": self.schema,
+            "schema_sha256": self.schema_sha256,
             "source_contract": self.source_contract,
             "source_contract_sha256": self.source_contract_sha256,
             "amendment_log": self.amendment_log,
@@ -37,8 +39,8 @@ class AdoptedSchemaContract:
 
 def parse(value: object, path: Path) -> AdoptedSchemaContract:
     fields = {
-        "disposition", "output", "sha256", "schema", "source_contract",
-        "source_contract_sha256", "amendment_log", "amendment_id",
+        "disposition", "output", "sha256", "schema", "schema_sha256",
+        "source_contract", "source_contract_sha256", "amendment_log", "amendment_id",
         "amendment_hash", "claim_ceiling",
     }
     row = exact(value, fields, path)
@@ -46,6 +48,7 @@ def parse(value: object, path: Path) -> AdoptedSchemaContract:
         safe_path(row["output"], "output", path),
         digest(row["sha256"], "sha256", path),
         safe_path(row["schema"], "schema", path),
+        digest(row["schema_sha256"], "schema_sha256", path),
         safe_path(row["source_contract"], "source_contract", path),
         digest(row["source_contract_sha256"], "source_contract_sha256", path),
         safe_path(row["amendment_log"], "amendment_log", path),

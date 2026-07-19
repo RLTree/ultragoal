@@ -113,6 +113,7 @@
       "output": "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
       "sha256": "fc6c87b5888d250608bb5bc0b53155534d5b5638284e29076a3edd5d0768da55",
       "schema": "schemas/product-success-contract.schema.json",
+      "schema_sha256": "6027f3385d5ecaace7fa0e45237bc7433bf560aa3c81a43b48c0b700df10f4f5",
       "source_contract": "GOAL_CONTRACT.md",
       "source_contract_sha256": "6bd05cd382a2e8d1af10f6942ee64016f484983f5a98f118c4a3954ae8df6fa9",
       "amendment_log": "AMENDMENTS.jsonl",

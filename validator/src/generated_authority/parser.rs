@@ -28,6 +28,7 @@ pub(super) enum RawSurface {
         output: String,
         sha256: String,
         schema: String,
+        schema_sha256: String,
         source_contract: String,
         source_contract_sha256: String,
         amendment_log: String,

@@ -145,7 +145,7 @@ fn live_issuer_covers_exact_inventory_codes_and_cannot_grant_completion() {
     fs::remove_dir_all(root).unwrap();
 }
 
-fn copy_authority_inputs(live: &Path, root: &Path) {
+pub(super) fn copy_authority_inputs(live: &Path, root: &Path) {
     let lane_bytes = fs::read(live.join("LANE_REGISTRY.json")).unwrap();
     fs::copy(
         live.join("LANE_REGISTRY.json"),

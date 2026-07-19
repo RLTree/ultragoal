@@ -1,11 +1,12 @@
 use super::{MAX_OUTPUT_BYTES, Source, digest_hex};
+use crate::contract_amendment::{CurrentAmendmentBinding, validate_current};
 use crate::generated_authority::{RepositoryPath, Sha256Digest};
-use serde_json::Value;
 
 pub(super) struct Binding<'a> {
     pub(super) output: &'a RepositoryPath,
     pub(super) sha256: &'a Sha256Digest,
     pub(super) schema: &'a RepositoryPath,
+    pub(super) schema_sha256: &'a Sha256Digest,
     pub(super) source_contract: &'a RepositoryPath,
     pub(super) source_contract_sha256: &'a Sha256Digest,
     pub(super) amendment_log: &'a RepositoryPath,
@@ -19,7 +20,10 @@ pub(super) fn verify(source: &mut impl Source, binding: Binding<'_>) -> Result<(
     if output_digest != binding.sha256.lowercase_hex() {
         return Err("adopted schema contract output digest mismatch".to_string());
     }
-    source.read(binding.schema.as_str(), MAX_OUTPUT_BYTES)?;
+    let schema = source.read(binding.schema.as_str(), MAX_OUTPUT_BYTES)?;
+    if digest_hex(schema.as_ref()) != binding.schema_sha256.lowercase_hex() {
+        return Err("adopted schema contract schema digest mismatch".to_string());
+    }
     let contract = source.read(binding.source_contract.as_str(), MAX_OUTPUT_BYTES)?;
     let source_digest = digest_hex(contract.as_ref());
     if source_digest != binding.source_contract_sha256.lowercase_hex() {
@@ -52,34 +56,19 @@ fn verify_amendment(
     source_digest: &str,
 ) -> Result<(), String> {
     let bytes = source.read(binding.amendment_log.as_str(), MAX_OUTPUT_BYTES)?;
-    let text = std::str::from_utf8(bytes.as_ref())
-        .map_err(|_| "adopted schema amendment log invalid".to_string())?;
-    let rows = text
-        .lines()
-        .map(serde_json::from_str::<Value>)
-        .collect::<Result<Vec<_>, _>>()
-        .map_err(|_| "adopted schema amendment log invalid".to_string())?;
-    let row = rows
-        .iter()
-        .find(|row| row.get("amendment_id").and_then(Value::as_str) == Some(binding.amendment_id))
-        .ok_or_else(|| "adopted schema amendment missing".to_string())?;
     let expected_hash = format!("sha256:{}", binding.amendment_hash.lowercase_hex());
     let output_digest = format!("sha256:{output_digest}");
     let source_digest = format!("sha256:{source_digest}");
-    let backlog_match = row
-        .get("backlog_updates")
-        .and_then(Value::as_array)
-        .is_some_and(|updates| {
-            updates.iter().any(|update| {
-                update.get("path").and_then(Value::as_str) == Some(binding.output.as_str())
-                    && update.get("digest").and_then(Value::as_str) == Some(&output_digest)
-            })
-        });
-    if row.get("amendment_hash").and_then(Value::as_str) != Some(&expected_hash)
-        || row.get("new_contract_hash").and_then(Value::as_str) != Some(&source_digest)
-        || !backlog_match
-    {
-        return Err("adopted schema amendment binding invalid".to_string());
-    }
-    Ok(())
+    validate_current(
+        bytes.as_ref(),
+        CurrentAmendmentBinding {
+            amendment_id: binding.amendment_id,
+            amendment_hash: &expected_hash,
+            contract_hash: &source_digest,
+            output_path: binding.output.as_str(),
+            output_hash: &output_digest,
+        },
+    )
+    .map(|_| ())
+    .map_err(|code| format!("adopted schema amendment invalid: {code}"))
 }

@@ -3,9 +3,12 @@ use super::lane_binding::{
     DependencyIdentity, load_declared_dependency_identities, load_root_dependency_identities,
 };
 use crate::context::{CandidateIdentity, LiveContext};
+use crate::contract_amendment::{
+    CurrentAmendmentBinding, ValidatedCurrentAmendment, validate_current,
+};
 use crate::inventory::AuthorityCatalog;
 use crate::state::StateError;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use sha2::{Digest, Sha256};
 
 const AMENDMENT_ID: &str = "AMEND-003";
@@ -13,7 +16,10 @@ const AMENDMENT_HASH: &str =
     "sha256:ea134939717ab2422a444f40eed9ca6b388e2d86846a74ce2f0aff823cb95600";
 const GOAL_BYTES: &[u8] = include_bytes!("../../../../GOAL_CONTRACT.md");
 const AMENDMENT_BYTES: &[u8] = include_bytes!("../../../../AMENDMENTS.jsonl");
+const PRODUCT_CONTRACT_BYTES: &[u8] =
+    include_bytes!("../../../../examples/generated/PRODUCT_SUCCESS_CONTRACT.json");
 const LANE_BYTES: &[u8] = include_bytes!("../../../../LANE_REGISTRY.json");
+const PRODUCT_CONTRACT_PATH: &str = "examples/generated/PRODUCT_SUCCESS_CONTRACT.json";
 
 #[derive(Serialize)]
 pub(in crate::state) struct StagedClaimReconciliation {
@@ -28,8 +34,8 @@ pub(in crate::state) struct StagedClaimReconciliation {
     handoff_sha256: String,
     goal_contract_sha256: String,
     amendments_sha256: String,
-    amendment_id: &'static str,
-    amendment_hash: &'static str,
+    amendment_id: String,
+    amendment_hash: String,
     lane_registry_sha256: String,
     source_binding: SourceBindingStatus,
     dependency_identities: Vec<DependencyIdentity>,
@@ -37,13 +43,6 @@ pub(in crate::state) struct StagedClaimReconciliation {
     generated_outputs: Vec<String>,
     fixtures: Vec<String>,
     effects: Vec<String>,
-}
-
-#[derive(Deserialize)]
-struct AmendmentRow {
-    amendment_id: String,
-    amendment_hash: String,
-    new_contract_hash: String,
 }
 
 #[derive(Serialize)]
@@ -126,7 +125,7 @@ fn stage(
     source_binding: SourceBindingStatus,
 ) -> Result<StagedClaimReconciliation, StateError> {
     let goal_contract_sha256 = sha256(GOAL_BYTES);
-    verify_amendment(&goal_contract_sha256)?;
+    let amendment = verify_amendment(&goal_contract_sha256)?;
     let decisions = registry
         .claims
         .iter()
@@ -151,8 +150,8 @@ fn stage(
         handoff_sha256,
         goal_contract_sha256,
         amendments_sha256: sha256(AMENDMENT_BYTES),
-        amendment_id: AMENDMENT_ID,
-        amendment_hash: AMENDMENT_HASH,
+        amendment_id: amendment.amendment_id().to_owned(),
+        amendment_hash: amendment.amendment_hash().to_owned(),
         lane_registry_sha256: sha256(LANE_BYTES),
         source_binding,
         dependency_identities,
@@ -179,21 +178,19 @@ impl StagedClaimReconciliation {
     }
 }
 
-fn verify_amendment(goal_contract_sha256: &str) -> Result<(), StateError> {
-    let rows = std::str::from_utf8(AMENDMENT_BYTES)
-        .map_err(|_| invalid("adopted-amendment-log-invalid"))?
-        .lines()
-        .map(serde_json::from_str::<AmendmentRow>)
-        .collect::<Result<Vec<_>, _>>()
-        .map_err(|_| invalid("adopted-amendment-log-invalid"))?;
-    let row = rows
-        .iter()
-        .find(|row| row.amendment_id == AMENDMENT_ID)
-        .ok_or_else(|| invalid("adopted-amendment-missing"))?;
-    if row.amendment_hash != AMENDMENT_HASH || row.new_contract_hash != goal_contract_sha256 {
-        return Err(invalid("adopted-amendment-identity-mismatch"));
-    }
-    Ok(())
+fn verify_amendment(goal_contract_sha256: &str) -> Result<ValidatedCurrentAmendment, StateError> {
+    let output_hash = sha256(PRODUCT_CONTRACT_BYTES);
+    validate_current(
+        AMENDMENT_BYTES,
+        CurrentAmendmentBinding {
+            amendment_id: AMENDMENT_ID,
+            amendment_hash: AMENDMENT_HASH,
+            contract_hash: goal_contract_sha256,
+            output_path: PRODUCT_CONTRACT_PATH,
+            output_hash: &output_hash,
+        },
+    )
+    .map_err(|code| invalid(&format!("adopted-amendment-invalid:{code}")))
 }
 
 fn digest(value: &impl Serialize) -> Result<String, StateError> {

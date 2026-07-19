@@ -14,6 +14,7 @@ pub use cli::capture;
 mod command_run;
 mod command_witness;
 pub mod context;
+mod contract_amendment;
 mod contract_check_ids;
 mod digest;
 pub mod distribution;

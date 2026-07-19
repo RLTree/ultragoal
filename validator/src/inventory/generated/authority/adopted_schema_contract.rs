@@ -1,10 +1,10 @@
 use crate::context::ReadSession;
+use crate::contract_amendment::{CurrentAmendmentBinding, validate_current};
 use crate::generated_authority::{RepositoryPath, Sha256Digest};
 use crate::inventory::digest::file_identity_regular;
 use crate::inventory::fs::read_bounded;
 use crate::inventory::types::InventoryError;
 use serde_json::Value;
-use sha2::{Digest, Sha256};
 use std::path::Path;
 
 const MAX_BYTES: u64 = 1024 * 1024;
@@ -15,6 +15,7 @@ pub(super) struct Binding<'a> {
     pub(super) output: &'a RepositoryPath,
     pub(super) sha256: &'a Sha256Digest,
     pub(super) schema: &'a RepositoryPath,
+    pub(super) schema_sha256: &'a Sha256Digest,
     pub(super) source_contract: &'a RepositoryPath,
     pub(super) source_contract_sha256: &'a Sha256Digest,
     pub(super) amendment_log: &'a RepositoryPath,
@@ -31,7 +32,10 @@ pub(super) fn verify(
     if output_digest != binding.sha256.lowercase_hex() {
         return invalid("adopted schema contract output digest mismatch");
     }
-    regular_digest(reads, root, binding.schema)?;
+    let schema_digest = regular_digest(reads, root, binding.schema)?;
+    if schema_digest != binding.schema_sha256.lowercase_hex() {
+        return invalid("adopted schema contract schema digest mismatch");
+    }
     let source_digest = regular_digest(reads, root, binding.source_contract)?;
     if source_digest != binding.source_contract_sha256.lowercase_hex() {
         return invalid("adopted schema contract source digest mismatch");
@@ -76,68 +80,19 @@ fn verify_amendment(
     source_digest: &str,
 ) -> Result<(), InventoryError> {
     let bytes = read_bounded(reads, &root.join(binding.amendment_log.as_str()), MAX_BYTES)?;
-    let text = std::str::from_utf8(&bytes)
-        .map_err(|_| invalid_error("adopted schema amendment log invalid"))?;
-    let rows = text
-        .lines()
-        .map(serde_json::from_str::<Value>)
-        .collect::<Result<Vec<_>, _>>()
-        .map_err(|_| invalid_error("adopted schema amendment log invalid"))?;
-    let index = rows
-        .iter()
-        .position(|row| {
-            row.get("amendment_id").and_then(Value::as_str) == Some(binding.amendment_id)
-        })
-        .ok_or_else(|| invalid_error("adopted schema amendment missing"))?;
-    let row = &rows[index];
     let expected_hash = format!("sha256:{}", binding.amendment_hash.lowercase_hex());
-    if row.get("amendment_hash").and_then(Value::as_str) != Some(&expected_hash)
-        || row.get("new_contract_hash").and_then(Value::as_str)
-            != Some(&format!("sha256:{source_digest}"))
-        || !backlog_binds(row, binding.output.as_str(), output_digest)
-        || !chain_is_valid(&rows, index)
-        || canonical_hash(row)? != expected_hash
-    {
-        return invalid("adopted schema amendment binding invalid");
-    }
-    Ok(())
-}
-
-fn backlog_binds(row: &Value, output: &str, digest: &str) -> bool {
-    row.get("backlog_updates")
-        .and_then(Value::as_array)
-        .is_some_and(|updates| {
-            updates.iter().any(|update| {
-                update.get("path").and_then(Value::as_str) == Some(output)
-                    && update.get("digest").and_then(Value::as_str)
-                        == Some(&format!("sha256:{digest}"))
-            })
-        })
-}
-
-fn chain_is_valid(rows: &[Value], index: usize) -> bool {
-    let Some(row) = rows.get(index) else {
-        return false;
-    };
-    if index == 0 {
-        return true;
-    }
-    let Some(previous) = rows.get(index - 1) else {
-        return false;
-    };
-    row.get("previous_amendment_hash") == previous.get("amendment_hash")
-        && row.get("previous_contract_hash") == previous.get("new_contract_hash")
-}
-
-fn canonical_hash(row: &Value) -> Result<String, InventoryError> {
-    let mut canonical = row.clone();
-    canonical
-        .as_object_mut()
-        .ok_or_else(|| invalid_error("adopted schema amendment row invalid"))?
-        .remove("amendment_hash");
-    let bytes = serde_json::to_vec(&canonical)
-        .map_err(|_| invalid_error("adopted schema amendment row invalid"))?;
-    Ok(format!("sha256:{:x}", Sha256::digest(bytes)))
+    validate_current(
+        &bytes,
+        CurrentAmendmentBinding {
+            amendment_id: binding.amendment_id,
+            amendment_hash: &expected_hash,
+            contract_hash: &format!("sha256:{source_digest}"),
+            output_path: binding.output.as_str(),
+            output_hash: &format!("sha256:{output_digest}"),
+        },
+    )
+    .map(|_| ())
+    .map_err(|code| invalid_error(&format!("adopted schema amendment invalid: {code}")))
 }
 
 fn regular_digest(

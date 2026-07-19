@@ -1,5 +1,6 @@
 mod adopted_authority_inputs;
 mod adopted_cases;
+mod adopted_surface_tamper_cases;
 mod authority_cases;
 mod engine_cases;
 mod fixture;

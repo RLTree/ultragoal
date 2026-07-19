@@ -7,6 +7,7 @@ pub(crate) enum GeneratedSurfaceDefinition {
         output: RepositoryPath,
         sha256: Sha256Digest,
         schema: RepositoryPath,
+        schema_sha256: Sha256Digest,
         source_contract: RepositoryPath,
         source_contract_sha256: Sha256Digest,
         amendment_log: RepositoryPath,

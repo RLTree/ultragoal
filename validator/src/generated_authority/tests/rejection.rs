@@ -89,6 +89,7 @@ fn rejects_adopted_contract_that_can_raise_claims() {
             "output": "examples/generated/product.json",
             "sha256": LOWER_DIGEST,
             "schema": "schemas/product.json",
+            "schema_sha256": LOWER_DIGEST,
             "source_contract": "GOAL_CONTRACT.md",
             "source_contract_sha256": LOWER_DIGEST,
             "amendment_log": "AMENDMENTS.jsonl",

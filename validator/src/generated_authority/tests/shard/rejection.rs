@@ -102,6 +102,7 @@ fn rejects_adopted_contract_with_nonsemantic_amendment() {
             "output": "examples/generated/product.json",
             "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             "schema": "schemas/product.json",
+            "schema_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             "source_contract": "GOAL_CONTRACT.md",
             "source_contract_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             "amendment_log": "AMENDMENTS.jsonl",
