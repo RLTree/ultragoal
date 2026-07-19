@@ -1,6 +1,8 @@
 const STATE_NAME: &str = "execution.state";
 const ANCHOR_NAME: &str = "execution.anchor.journal";
 const LOCK_NAME: &str = "execution.lock";
+const INITIAL_ANCHOR_NAME: &str = ".execution.anchor.journal.initializing";
+const INITIAL_STATE_NAME: &str = ".execution.state.initializing";
 const MAX_LEDGER_BYTES: u64 = 1024 * 1024;
 const MAX_ANCHOR_JOURNAL_BYTES: u64 = 16 * 1024 * 1024;
 const MAX_ANCHOR_RECORD_BYTES: usize = 1024 * 1024;
@@ -15,7 +17,7 @@ pub struct EvaluationExecutionBinding {
     pub spec_sha256: String,
     pub task_set_sha256: String,
     pub execution_session_id: String,
-    pub executable_set_sha256: String,
+    pub execution_material_set_sha256: String,
     pub artifact_root_sha256: String,
 }
 
@@ -25,7 +27,7 @@ pub struct EvaluationExecutionBindingRequest {
     pub spec_sha256: String,
     pub task_set_sha256: String,
     pub execution_session_id: String,
-    pub executable_set_sha256: String,
+    pub execution_material_set_sha256: String,
     pub artifact_root_sha256: String,
 }
 
@@ -37,7 +39,7 @@ impl EvaluationExecutionBinding {
             spec_sha256,
             task_set_sha256,
             execution_session_id,
-            executable_set_sha256,
+            execution_material_set_sha256,
             artifact_root_sha256,
         } = request;
         let value = Self {
@@ -46,7 +48,7 @@ impl EvaluationExecutionBinding {
             spec_sha256,
             task_set_sha256,
             execution_session_id,
-            executable_set_sha256,
+            execution_material_set_sha256,
             artifact_root_sha256,
         };
         if [
@@ -55,7 +57,7 @@ impl EvaluationExecutionBinding {
             value.spec_sha256.as_str(),
             value.task_set_sha256.as_str(),
             value.execution_session_id.as_str(),
-            value.executable_set_sha256.as_str(),
+            value.execution_material_set_sha256.as_str(),
             value.artifact_root_sha256.as_str(),
         ]
         .iter()
@@ -75,6 +77,32 @@ pub enum EvaluationLedgerState {
     Initialized,
     Reserved,
     Published {
+        run_sha256: String,
+        artifact_set_sha256: String,
+    },
+    Interrupted {
+        causal_code: String,
+    },
+    RecoveryRequired {
+        causal_code: String,
+    },
+    Terminal {
+        run_sha256: String,
+        artifact_set_sha256: String,
+    },
+}
+
+/// The only two outcomes a contender may observe when attempting to claim an
+/// execution journal.  Callers must preserve the losing outcome instead of
+/// inferring success from a later state read.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum ExecutionReservationOutcome {
+    Acquired,
+    Lost {
+        causal_code: &'static str,
+    },
+    AlreadyReserved,
+    AlreadyPublished {
         run_sha256: String,
         artifact_set_sha256: String,
     },
@@ -175,6 +203,10 @@ struct SnapshotCore {
     lock_identity: FileIdentity,
     anchor_authority: FileAuthorityIdentity,
     binding: EvaluationExecutionBinding,
+    /// Bound before any effect can be published. This remains private because
+    /// callers receive the causal reservation outcome rather than mutable
+    /// custody state.
+    reservation_id_sha256: Option<String>,
     state: EvaluationLedgerState,
 }
 

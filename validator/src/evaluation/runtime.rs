@@ -1,12 +1,13 @@
-use super::records::sensitive_text;
+pub(crate) use super::production_input::ProductionExecutionRequest;
+use super::production_input::ProductionSpecPermit;
 use super::{
-    BehaviorOutcome, BoundInput, CanonicalEvaluationFailure, CanonicalEvaluationRun,
-    CapturedTaskObservation, CapturedTaskObservationRecord, EvaluationError, EvaluationEventKind,
-    EvaluationExecutor, EvaluationRun, EvaluationSpec, EvaluationTask, PerturbationControl,
-    PrivacySafeEvaluationEvent, PrivacySafeEvaluationEventRecord, RuntimeConfiguration, TaskAudit,
+    CanonicalEvaluationFailure, CanonicalEvaluationRun, CapturedTaskObservation, EvaluationError,
+    EvaluationEventKind, EvaluationExecutor, EvaluationRun, EvaluationTask,
+    PrivacySafeEvaluationEvent, PrivacySafeEvaluationEventRecord, RuntimeConfiguration,
 };
+use super::{ExecutionReservationOutcome, FileEvaluationExecutionLedger, digest};
 use crate::fixture_scheduler::{FixtureExecutionBinding, FixtureExecutionRecord};
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use std::collections::BTreeSet;
 use std::fmt;
 
@@ -18,7 +19,7 @@ pub struct ProductionRuntimeError {
 }
 
 impl ProductionRuntimeError {
-    fn new(code: &'static str) -> Self {
+    pub(crate) fn new(code: &'static str) -> Self {
         Self { code }
     }
 
@@ -63,44 +64,32 @@ impl ProductionEvaluationRun {
 pub(crate) struct FixtureTaskRequest {
     pub binding: FixtureExecutionBinding,
     pub fixture_id: String,
+    pub dataset_digest_sha256: String,
+    pub scorer_policy_digest_sha256: String,
+    pub executable_digest_sha256: String,
 }
 
-/// Crate-controlled bridge. Public callers cannot substitute a callback that
-/// mints observations; the production implementation is the confined fixture
-/// scheduler/capture adapter.
-pub(crate) trait FixtureEvaluationBridge {
+pub(crate) mod bridge_authority {
+    pub(crate) trait Sealed {}
+}
+
+pub(crate) trait FixtureEvaluationBridge: bridge_authority::Sealed {
     fn execute_fixture(
         &mut self,
         request: &FixtureTaskRequest,
     ) -> Result<FixtureExecutionRecord, ProductionRuntimeError>;
 }
 
-#[derive(Deserialize)]
-#[serde(deny_unknown_fields)]
-struct FixtureArtifactEnvelope {
-    schema_version: String,
-    task_id: String,
-    fixture_id: String,
-    outcome: BehaviorOutcome,
-    causal_code: String,
-    score_earned: u64,
-    score_possible: u64,
-    work_units: u64,
-    producer_id: String,
-    observer_id: String,
-    independent_grader_id: String,
-    independent_score_earned: u64,
-    independent_score_possible: u64,
-    passed_perturbations: BTreeSet<PerturbationControl>,
-}
-
 struct FixtureSchedulerEvaluationExecutor<'a, B> {
     bridge: &'a mut B,
+    permit: &'a ProductionSpecPermit<'a>,
     live_context_id: String,
     candidate_id: String,
     spec_sha256: String,
     execution_session_id: String,
     records: Vec<FixtureExecutionRecord>,
+    record_identities: BTreeSet<String>,
+    lease_ids: BTreeSet<String>,
 }
 
 impl<B: FixtureEvaluationBridge> EvaluationExecutor for FixtureSchedulerEvaluationExecutor<'_, B> {
@@ -116,6 +105,7 @@ impl<B: FixtureEvaluationBridge> EvaluationExecutor for FixtureSchedulerEvaluati
         &mut self,
         task: &EvaluationTask,
     ) -> Result<CapturedTaskObservation, EvaluationError> {
+        let material = self.permit.take_task_material(task)?;
         let request = FixtureTaskRequest {
             binding: FixtureExecutionBinding::new(
                 &self.live_context_id,
@@ -126,98 +116,134 @@ impl<B: FixtureEvaluationBridge> EvaluationExecutor for FixtureSchedulerEvaluati
             )
             .map_err(|_| EvaluationError::new("evaluation-fixture-binding-invalid"))?,
             fixture_id: task.fixture_id().to_owned(),
+            dataset_digest_sha256: material.dataset_digest_sha256().to_owned(),
+            scorer_policy_digest_sha256: material.scorer_policy_digest_sha256().to_owned(),
+            executable_digest_sha256: material.executable_digest_sha256().to_owned(),
         };
         let record = self
             .bridge
             .execute_fixture(&request)
             .map_err(|error| EvaluationError::new(error.code()))?;
+        self.permit.revalidate()?;
         if record.binding != request.binding
             || record.fixture_id != request.fixture_id
             || record.artifact_byte_length == 0
             || record.artifact_byte_length > MAX_ARTIFACT_BYTES
-            || record.artifact_byte_length != record.artifact_bytes().len() as u64
-            || sensitive_text(record.artifact_bytes())
+            || !self
+                .record_identities
+                .insert(record.record_sha256().to_owned())
+            || !self.lease_ids.insert(record.lease_id.clone())
         {
             return Err(EvaluationError::new(
                 "evaluation-fixture-record-binding-invalid",
             ));
         }
-        let envelope: FixtureArtifactEnvelope = serde_json::from_slice(record.artifact_bytes())
-            .map_err(|_| EvaluationError::new("evaluation-fixture-artifact-invalid"))?;
-        if envelope.schema_version != "EvaluationFixtureArtifact-v1"
-            || envelope.task_id != task.task_id()
-            || envelope.fixture_id != task.fixture_id()
-        {
-            return Err(EvaluationError::new("evaluation-fixture-artifact-stale"));
-        }
-        let artifact = BoundInput::regular(
-            format!("artifacts/{}", record.artifact_relative_path),
-            record.artifact_digest_sha256.clone(),
-            record.artifact_byte_length,
-        );
-        let observation = CapturedTaskObservation::captured(CapturedTaskObservationRecord {
-            task_id: envelope.task_id,
-            fixture_id: envelope.fixture_id,
-            outcome: envelope.outcome,
-            causal_code: envelope.causal_code,
-            score_earned: envelope.score_earned,
-            score_possible: envelope.score_possible,
-            work_units: envelope.work_units,
-            artifact,
-            replay_artifact_digest_sha256: record.artifact_digest_sha256.clone(),
-            producer_id: envelope.producer_id,
-            observer_id: envelope.observer_id,
-            independent_grader_id: envelope.independent_grader_id,
-            independent_score_earned: envelope.independent_score_earned,
-            independent_score_possible: envelope.independent_score_possible,
-            passed_perturbations: envelope.passed_perturbations,
-        });
+        let observation = material.score(&record)?;
         self.records.push(record);
         Ok(observation)
     }
 }
 
 pub(crate) fn execute_production<B: FixtureEvaluationBridge>(
-    spec: &EvaluationSpec,
-    audit: &TaskAudit,
+    permit: &ProductionSpecPermit<'_>,
     execution_session_id: impl Into<String>,
     runtime_configuration: RuntimeConfiguration,
+    ledger: &mut FileEvaluationExecutionLedger,
     bridge: &mut B,
 ) -> Result<ProductionEvaluationRun, ProductionRuntimeError> {
-    let mut executor = FixtureSchedulerEvaluationExecutor {
-        bridge,
-        live_context_id: spec.live_context_id().to_owned(),
-        candidate_id: spec.candidate_id().to_owned(),
-        spec_sha256: spec.spec_sha256().to_owned(),
-        execution_session_id: execution_session_id.into(),
-        records: Vec::new(),
-    };
-    let run = EvaluationRun::execute_local(spec, audit, &mut executor)?;
-    let records = executor.records;
-    if records.len() != run.results().len() {
+    permit.revalidate()?;
+    let spec = permit.spec();
+    let execution_session_id = execution_session_id.into();
+    let binding = ledger.binding();
+    if binding.live_context_id != spec.live_context_id()
+        || binding.candidate_id != spec.candidate_id()
+        || binding.spec_sha256 != spec.spec_sha256()
+        || binding.task_set_sha256 != spec.task_set_sha256()
+        || binding.execution_session_id != execution_session_id
+        || binding.execution_material_set_sha256 != permit.material_set_sha256()
+    {
         return Err(ProductionRuntimeError::new(
-            "evaluation-fixture-record-count-mismatch",
+            "evaluation-production-ledger-binding-invalid",
         ));
     }
-    let canonical_failures = run
-        .harvest_failures()
-        .iter()
-        .map(CanonicalEvaluationFailure::from)
-        .collect();
-    let event = PrivacySafeEvaluationEvent::new(PrivacySafeEvaluationEventRecord {
-        event_kind: EvaluationEventKind::ExecutionPublished,
+    let reservation_id = digest(
+        format!(
+            "production-execution|{}|{}",
+            spec.spec_sha256(),
+            execution_session_id
+        )
+        .as_bytes(),
+    );
+    if ledger
+        .reserve_outcome(&reservation_id)
+        .map_err(|error| ProductionRuntimeError::new(error.code()))?
+        != ExecutionReservationOutcome::Acquired
+    {
+        return Err(ProductionRuntimeError::new(
+            "evaluation-production-execution-replayed",
+        ));
+    }
+    let mut executor = FixtureSchedulerEvaluationExecutor {
+        bridge,
+        permit,
         live_context_id: spec.live_context_id().to_owned(),
         candidate_id: spec.candidate_id().to_owned(),
         spec_sha256: spec.spec_sha256().to_owned(),
-        session_id: run.execution_session_id.clone(),
-        run_sha256: Some(run.run_sha256().to_owned()),
-        causal_code: None,
-    })?;
-    let canonical_run = CanonicalEvaluationRun::from_parts(&run, runtime_configuration, &records);
-    Ok(ProductionEvaluationRun {
-        canonical_run,
-        canonical_failures,
-        events: vec![event],
-        fixture_records: records,
-    })
+        execution_session_id,
+        records: Vec::new(),
+        record_identities: BTreeSet::new(),
+        lease_ids: BTreeSet::new(),
+    };
+    let result = (|| -> Result<ProductionEvaluationRun, ProductionRuntimeError> {
+        let run = EvaluationRun::execute_local(spec, permit.audit(), &mut executor)?;
+        permit.revalidate()?;
+        let records = std::mem::take(&mut executor.records);
+        if records.len() != run.results().len() {
+            return Err(ProductionRuntimeError::new(
+                "evaluation-fixture-record-count-mismatch",
+            ));
+        }
+        let canonical_failures = run
+            .harvest_failures()
+            .iter()
+            .map(CanonicalEvaluationFailure::from)
+            .collect();
+        let event = PrivacySafeEvaluationEvent::new(PrivacySafeEvaluationEventRecord {
+            event_kind: EvaluationEventKind::ExecutionPublished,
+            live_context_id: spec.live_context_id().to_owned(),
+            candidate_id: spec.candidate_id().to_owned(),
+            spec_sha256: spec.spec_sha256().to_owned(),
+            session_id: run.execution_session_id.clone(),
+            run_sha256: Some(run.run_sha256().to_owned()),
+            causal_code: None,
+        })?;
+        let canonical_run =
+            CanonicalEvaluationRun::from_parts(&run, runtime_configuration, &records);
+        let artifact_set_sha256 = digest(
+            records
+                .iter()
+                .map(FixtureExecutionRecord::record_sha256)
+                .collect::<Vec<_>>()
+                .join("\n")
+                .as_bytes(),
+        );
+        ledger
+            .publish_result(run.run_sha256(), artifact_set_sha256)
+            .map_err(|error| ProductionRuntimeError::new(error.code()))?;
+        Ok(ProductionEvaluationRun {
+            canonical_run,
+            canonical_failures,
+            events: vec![event],
+            fixture_records: records,
+        })
+    })();
+    match result {
+        Ok(run) => Ok(run),
+        Err(error) => {
+            ledger
+                .mark_interrupted(error.code())
+                .map_err(|ledger_error| ProductionRuntimeError::new(ledger_error.code()))?;
+            Err(error)
+        }
+    }
 }

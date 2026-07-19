@@ -10,18 +10,18 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 
 mod ledger;
+mod production_input;
 mod promotion_ledger;
 mod records;
 mod research;
 pub(crate) mod runtime;
 
 #[cfg(test)]
-#[path = "tests/mod.rs"]
 mod tests;
 
 pub use ledger::{
     EvaluationExecutionBinding, EvaluationExecutionBindingRequest, EvaluationLedgerError,
-    EvaluationLedgerState, FileEvaluationExecutionLedger,
+    EvaluationLedgerState, ExecutionReservationOutcome, FileEvaluationExecutionLedger,
 };
 pub use promotion_ledger::{
     FilePromotionReviewLedger, PromotionLedgerBinding, PromotionLedgerState,
@@ -52,6 +52,10 @@ include!("captured_task_observation.rs");
 include!("local_run.rs");
 
 include!("promotion/display.rs");
+
+include!("promotion/evidence_descriptor.rs");
+
+include!("promotion/authority.rs");
 
 include!("promotion/issuance.rs");
 

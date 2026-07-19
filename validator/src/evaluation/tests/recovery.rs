@@ -1,0 +1,158 @@
+use super::super::*;
+use super::custody::{execution_binding, root};
+use sha2::{Digest, Sha256};
+use std::collections::BTreeSet;
+use std::fs;
+use std::os::unix::fs::{PermissionsExt, symlink};
+
+fn sha(byte: char) -> String {
+    format!("sha256:{}", byte.to_string().repeat(64))
+}
+
+fn digest(bytes: &[u8]) -> String {
+    format!("sha256:{:x}", Sha256::digest(bytes))
+}
+
+fn preparation_spec(input_root: &std::path::Path) -> EvaluationSpec {
+    for name in ["datasets", "scorers", "graders"] {
+        fs::create_dir(input_root.join(name)).unwrap();
+    }
+    let dataset = br#"{\"case\":\"core\"}"#.to_vec();
+    let dataset_digest = digest(&dataset);
+    fs::write(input_root.join("datasets/core.json"), &dataset).unwrap();
+    let controls = PerturbationControl::REQUIRED
+        .into_iter()
+        .collect::<BTreeSet<_>>();
+    let scorer = serde_json::json!({
+        "schema_version": "EvaluationScorer-v2", "dataset_digest_sha256": dataset_digest,
+        "executable_digest_sha256": sha('8'), "primary_score_possible": 1, "work_units": 1,
+        "failure_causal_code": "behavioral-failure", "perturbation_controls": controls,
+        "task_authority_id": "evaluation-test-authority", "task_author_principal_id": "evaluation-test-author",
+        "task_author_session_id": sha('1'),
+    });
+    let scorer = serde_json::to_vec(&scorer).unwrap();
+    let scorer_digest = digest(&scorer);
+    fs::write(input_root.join("scorers/scorer-core"), &scorer).unwrap();
+    let grader = serde_json::json!({
+        "schema_version": "IndependentArtifactTextGrader-v2", "dataset_digest_sha256": dataset_digest,
+        "scorer_digest_sha256": scorer_digest, "root_authority_id": "evaluation-test-grader-authority",
+        "independent_grader_principal_id": "evaluation-test-grader", "independent_grader_session_id": sha('3'),
+        "expected_artifact_text": "pass", "score_possible": 1,
+    });
+    fs::write(
+        input_root.join("graders/core.json"),
+        serde_json::to_vec(&grader).unwrap(),
+    )
+    .unwrap();
+    EvaluationSpec::new(
+        sha('a'),
+        sha('b'),
+        "preparation",
+        vec![EvaluationTask::new(EvaluationTaskDefinition {
+            task_id: "core".to_owned(),
+            requirement_id: "requirement-core".to_owned(),
+            behavior_id: "behavior-core".to_owned(),
+            fixture_id: "fixture-core".to_owned(),
+            dataset: BoundInput::regular(
+                "datasets/core.json",
+                dataset_digest,
+                dataset.len() as u64,
+            ),
+            scorer_id: "scorer-core".to_owned(),
+            scorer_digest_sha256: scorer_digest,
+            perturbation_controls: PerturbationControl::REQUIRED.into_iter().collect(),
+            representative: true,
+        })],
+    )
+    .unwrap()
+}
+
+#[test]
+fn preparation_refuses_a_ledger_binding_that_omits_material_identity() {
+    let input_root = root("preparation-input");
+    let ledger_root = root("preparation-ledger");
+    let spec = preparation_spec(&input_root);
+    let authority = super::super::production_input::ProductionEvidenceAuthority::test_issue(&spec);
+    let request = super::super::runtime::ProductionExecutionRequest::new(
+        &spec,
+        &input_root,
+        &ledger_root,
+        [9; 32],
+        execution_binding('b', '1'),
+        authority,
+        sha('1'),
+        RuntimeConfiguration::all_unknown(),
+    );
+    let error = match request.prepare() {
+        Ok(_) => panic!("preparation accepted a mismatched material identity"),
+        Err(error) => error,
+    };
+    assert_eq!(error.code(), "evaluation-production-ledger-binding-invalid");
+    assert!(fs::read_dir(&ledger_root).unwrap().next().is_none());
+    fs::remove_dir_all(input_root).unwrap();
+    fs::remove_dir_all(ledger_root).unwrap();
+}
+
+#[test]
+fn execution_interruption_recovers_without_a_publication() {
+    let root = root("interruption-recovery");
+    let key = [7; 32];
+    let binding = execution_binding('b', '1');
+    let mut ledger =
+        FileEvaluationExecutionLedger::initialize(&root, key, binding.clone()).unwrap();
+    assert_eq!(
+        ledger.reserve_outcome(&sha('7')).unwrap(),
+        ExecutionReservationOutcome::Acquired
+    );
+    ledger
+        .mark_interrupted("late-effect-revalidation-failed")
+        .unwrap();
+    drop(ledger);
+    let mut reopened = FileEvaluationExecutionLedger::open(&root, key, binding).unwrap();
+    assert!(matches!(
+        reopened.inspect().unwrap(),
+        EvaluationLedgerState::Interrupted { .. }
+    ));
+    reopened
+        .require_recovery("late-effect-recovery-required")
+        .unwrap();
+    assert!(matches!(
+        reopened.inspect().unwrap(),
+        EvaluationLedgerState::RecoveryRequired { .. }
+    ));
+    reopened.reconcile_recovery(None).unwrap();
+    assert!(matches!(
+        reopened.inspect().unwrap(),
+        EvaluationLedgerState::Initialized
+    ));
+    fs::remove_dir_all(root).unwrap();
+}
+
+#[test]
+fn execution_symlink_and_lock_replacement_refuse_second_authority() {
+    let root = root("descriptor-refusal");
+    let key = [8; 32];
+    let binding = execution_binding('b', '1');
+    let mut ledger =
+        FileEvaluationExecutionLedger::initialize(&root, key, binding.clone()).unwrap();
+    let saved = root.with_extension("saved-lock");
+    fs::rename(root.join("execution.lock"), &saved).unwrap();
+    fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(root.join("execution.lock"))
+        .unwrap();
+    fs::set_permissions(
+        root.join("execution.lock"),
+        fs::Permissions::from_mode(0o600),
+    )
+    .unwrap();
+    assert!(ledger.reserve_outcome(&sha('7')).is_err());
+    assert!(FileEvaluationExecutionLedger::open(&root, key, binding.clone()).is_err());
+    fs::remove_file(root.join("execution.lock")).unwrap();
+    fs::rename(&saved, root.join("execution.lock")).unwrap();
+    fs::remove_file(root.join("execution.state")).unwrap();
+    symlink("execution.anchor.journal", root.join("execution.state")).unwrap();
+    assert!(FileEvaluationExecutionLedger::open(&root, key, binding).is_err());
+    fs::remove_dir_all(root).unwrap();
+}

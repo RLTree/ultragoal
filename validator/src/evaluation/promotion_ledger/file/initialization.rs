@@ -4,78 +4,7 @@ impl FilePromotionReviewLedger {
         key: [u8; 32],
         binding: PromotionLedgerBinding,
     ) -> Result<Self, PromotionLedgerError> {
-        validate_binding(&binding)?;
-        let root_path = root.as_ref().to_path_buf();
-        let (root, root_identity) = open_safe_directory(&root_path)
-            .map_err(|_| PromotionLedgerError::new("promotion-ledger-root-unsafe"))?;
-        ensure_entries(&root_path, &root, true)?;
-        let lock = open_review_lock(&root, true)?;
-        let lock_identity = safe_file_identity(&lock)
-            .map_err(|_| PromotionLedgerError::new("promotion-ledger-lock-unsafe"))?;
-        let anchor = open_review_anchor(&root, true)?;
-        let anchor_authority = safe_file_identity(&anchor)
-            .map_err(map_storage)?
-            .authority();
-        let key_id = sha256(&key);
-        let core = ReviewSnapshotCore {
-            schema_version: "PromotionReviewLedger-v1".to_owned(),
-            generation: 0,
-            previous_head_sha256: sha256(b"promotion-review-genesis"),
-            key_id: key_id.clone(),
-            lock_identity,
-            anchor_authority,
-            binding: binding.clone(),
-            state: PromotionLedgerState::Ready,
-        };
-        let record = authenticate_anchor_record(
-            ReviewAnchorRecordPayload {
-                schema_version: "PromotionReviewAnchorRecord-v1".to_owned(),
-                prior_anchor_head_sha256: sha256(ANCHOR_GENESIS),
-                core: core.clone(),
-            },
-            &key,
-        )?;
-        require_named_review_lock_identity(&root, lock_identity)?;
-        require_named_review_anchor_authority(&root, anchor_authority)?;
-        let _guard = FileLock::exclusive(&lock)
-            .map_err(|_| PromotionLedgerError::new("promotion-ledger-lock-failed"))?;
-        require_named_review_lock_identity(&root, lock_identity)?;
-        require_named_review_anchor_authority(&root, anchor_authority)?;
-        if entry_exists(&root, STATE_NAME).map_err(map_storage)? {
-            return Err(PromotionLedgerError::new("promotion-ledger-already-exists"));
-        }
-        let (anchor_observation, anchor_length) = append_anchor_record(&anchor, &record)?;
-        let snapshot = authenticate_snapshot(
-            ReviewSnapshotPayload {
-                core,
-                anchor_observation,
-                anchor_length,
-                anchor_head_sha256: record.head_sha256,
-            },
-            &key,
-        )?;
-        publish_file(&root, STATE_NAME, &snapshot, 0).map_err(map_storage)?;
-        sync_directory(&root).map_err(map_storage)?;
-        drop(_guard);
-        let ledger = Self {
-            root_path,
-            root,
-            root_identity,
-            lock,
-            lock_identity,
-            anchor,
-            anchor_authority,
-            key,
-            key_id,
-            binding,
-            expected_head: snapshot.head_sha256.clone(),
-        };
-        test_final_validation_pause(&ledger.root_path);
-        let _guard = FileLock::exclusive(&ledger.lock)
-            .map_err(|_| PromotionLedgerError::new("promotion-ledger-lock-failed"))?;
-        ledger.require_published_current(&snapshot)?;
-        drop(_guard);
-        Ok(ledger)
+        initialize_promotion_ledger(root.as_ref().to_path_buf(), key, binding)
     }
 
     pub(crate) fn open(

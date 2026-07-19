@@ -5,11 +5,11 @@ pub(crate) struct PromotionReviewEvidence {
 }
 
 impl PromotionReview {
-    pub(crate) fn issue<A: PromotionReviewAuthority>(
+    fn issue(
         baseline: &EvaluationRun,
         candidate: &EvaluationRun,
         evidence: PromotionReviewEvidence,
-        authority: &mut A,
+        authority: &mut PromotionReviewAuthority,
     ) -> Result<Self, EvaluationError> {
         let PromotionReviewEvidence {
             representative_journey,

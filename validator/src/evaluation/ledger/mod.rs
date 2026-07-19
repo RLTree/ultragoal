@@ -14,6 +14,14 @@ include!("state_name.rs");
 
 include!("current_snapshot.rs");
 
+include!("initialization_publication.rs");
+
+include!("initialization_interruption.rs");
+
+include!("initialization_anchor.rs");
+
+include!("initialization_recovery.rs");
+
 include!("file/initialization.rs");
 
 include!("file/recovery_requirement.rs");
