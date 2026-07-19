@@ -66,7 +66,7 @@ pub(in crate::state) fn stage(
 ) -> Result<StagedClaimReconciliation, StateError> {
     let goal_contract_sha256 = sha256(GOAL_BYTES);
     verify_amendment(&goal_contract_sha256)?;
-    let dependency_identities = load_dependency_identities(LANE_BYTES)?;
+    let dependency_identities = load_dependency_identities(LANE_BYTES, context.candidate())?;
     let decisions = registry
         .claims
         .iter()

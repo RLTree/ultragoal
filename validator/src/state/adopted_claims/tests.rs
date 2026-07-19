@@ -1,10 +1,11 @@
 use super::lane_binding::load_dependency_identities;
+use crate::context::CandidateIdentity;
 
 const LANES: &[u8] = include_bytes!("../../../../LANE_REGISTRY.json");
 
 #[test]
 fn current_external_blocker_and_dependency_identities_are_accepted() {
-    let identities = load_dependency_identities(LANES).unwrap();
+    let identities = load_dependency_identities(LANES, &candidate(false)).unwrap();
     assert_eq!(identities.len(), 7);
 }
 
@@ -38,7 +39,10 @@ fn authority_and_identity_mutations_fail_closed() {
                 lanes.push(duplicate);
             }
         }
-        assert!(load_dependency_identities(&serde_json::to_vec(&value).unwrap()).is_err());
+        assert!(
+            load_dependency_identities(&serde_json::to_vec(&value).unwrap(), &candidate(false))
+                .is_err()
+        );
     }
 }
 
@@ -62,5 +66,52 @@ fn exact_root_staged_state_is_accepted_without_promoting_n11() {
         "commit": "0123456789abcdef0123456789abcdef01234567",
         "tree": "89abcdef0123456789abcdef0123456789abcdef"
     });
-    assert!(load_dependency_identities(&serde_json::to_vec(&value).unwrap()).is_ok());
+    let bytes = serde_json::to_vec(&value).unwrap();
+    assert!(load_dependency_identities(&bytes, &candidate(false)).is_ok());
+    for invalid in [
+        different_commit(),
+        different_tree(),
+        candidate(true),
+        missing_commit(),
+        missing_tree(),
+    ] {
+        assert!(load_dependency_identities(&bytes, &invalid).is_err());
+    }
+}
+
+fn candidate(dirty: bool) -> CandidateIdentity {
+    CandidateIdentity {
+        head_commit: Some("0123456789abcdef0123456789abcdef01234567".to_owned()),
+        head_tree: Some("89abcdef0123456789abcdef0123456789abcdef".to_owned()),
+        branch: Some("codex/test".to_owned()),
+        status_sha256: "status".to_owned(),
+        worktree_diff_sha256: "worktree".to_owned(),
+        staged_diff_sha256: "staged".to_owned(),
+        untracked_content_sha256: "untracked".to_owned(),
+        dirty,
+    }
+}
+
+fn different_commit() -> CandidateIdentity {
+    let mut value = candidate(false);
+    value.head_commit = Some("1123456789abcdef0123456789abcdef01234567".to_owned());
+    value
+}
+
+fn different_tree() -> CandidateIdentity {
+    let mut value = candidate(false);
+    value.head_tree = Some("19abcdef0123456789abcdef0123456789abcdef".to_owned());
+    value
+}
+
+fn missing_commit() -> CandidateIdentity {
+    let mut value = candidate(false);
+    value.head_commit = None;
+    value
+}
+
+fn missing_tree() -> CandidateIdentity {
+    let mut value = candidate(false);
+    value.head_tree = None;
+    value
 }

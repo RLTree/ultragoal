@@ -1,3 +1,4 @@
+use crate::context::CandidateIdentity;
 use crate::state::StateError;
 use serde::{Deserialize, Serialize};
 
@@ -36,10 +37,11 @@ pub(super) struct DependencyIdentity {
 
 pub(super) fn load_dependency_identities(
     bytes: &[u8],
+    candidate: &CandidateIdentity,
 ) -> Result<Vec<DependencyIdentity>, StateError> {
     let registry: LaneRegistry =
         serde_json::from_slice(bytes).map_err(|_| invalid("adopted-lane-registry-invalid"))?;
-    verify_staging_lane(&registry)?;
+    verify_staging_lane(&registry, candidate)?;
     DEPENDENCIES
         .iter()
         .map(|wanted| dependency_identity(&registry, wanted))
@@ -86,7 +88,10 @@ fn valid_dependency_state(lane: &Lane, wanted: &str) -> bool {
         })
 }
 
-fn verify_staging_lane(registry: &LaneRegistry) -> Result<(), StateError> {
+fn verify_staging_lane(
+    registry: &LaneRegistry,
+    candidate: &CandidateIdentity,
+) -> Result<(), StateError> {
     let rows = registry
         .lanes
         .iter()
@@ -101,11 +106,7 @@ fn verify_staging_lane(registry: &LaneRegistry) -> Result<(), StateError> {
         && lane.ceiling == "adopted_reobservation_required";
     let staged = lane.state == "integrating"
         && lane.ceiling == "source_accepted"
-        && lane.current_identity.as_ref().is_some_and(|identity| {
-            identity.lane_id == "N12"
-                && valid_git_id(&identity.commit)
-                && valid_git_id(&identity.tree)
-        });
+        && exact_staged_candidate(lane.current_identity.as_ref(), candidate);
     if lane.authority != "root_only"
         || !lane.scope_ids.is_empty()
         || lane
@@ -118,6 +119,20 @@ fn verify_staging_lane(registry: &LaneRegistry) -> Result<(), StateError> {
         return Err(invalid("adopted-staging-lane-invalid"));
     }
     Ok(())
+}
+
+fn exact_staged_candidate(
+    identity: Option<&DependencyIdentity>,
+    candidate: &CandidateIdentity,
+) -> bool {
+    !candidate.dirty
+        && identity.is_some_and(|identity| {
+            identity.lane_id == "N12"
+                && Some(identity.commit.as_str()) == candidate.head_commit.as_deref()
+                && Some(identity.tree.as_str()) == candidate.head_tree.as_deref()
+                && valid_git_id(&identity.commit)
+                && valid_git_id(&identity.tree)
+        })
 }
 
 fn valid_git_id(value: &str) -> bool {
