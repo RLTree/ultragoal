@@ -160,6 +160,7 @@ fn scheduler_nodes(registry: &Value) -> Result<SchedulerNodes, InventoryError> {
 
 fn dependency_tools(
     graph: &Value,
+    registry: &Value,
     nodes: &SchedulerNodes,
 ) -> Result<BTreeSet<String>, InventoryError> {
     let rows = graph
@@ -191,7 +192,9 @@ fn dependency_tools(
             .filter_map(Value::as_str)
         {
             let dependency_lane = dependency.get(..3).unwrap_or_default();
-            if !nodes.integrated.contains(dependency_lane) {
+            if !nodes.integrated.contains(dependency_lane)
+                && !source_dependency::satisfies(registry, lane, dependency_lane)
+            {
                 return Err(InventoryError::InvalidRegistry(
                     if nodes.ready.contains(lane) || nodes.active_worktree_lanes.contains(lane) {
                         "scheduler ready frontier is not dependency closed".to_owned()
@@ -232,6 +235,7 @@ mod lease_issuance;
 mod lifecycle;
 mod scope_consumption;
 mod scope_ownership;
+mod source_dependency;
 mod validated_snapshot;
 
 #[cfg(test)]

@@ -11,26 +11,17 @@ pub(super) fn expected(
     states: &BTreeMap<String, String>,
 ) -> Result<ExpectedLifecycle, InventoryError> {
     let (ready, active_worktree_lanes) = match frontier {
-        "N00_ADOPTION_BOUNDARY" => (&["N01"][..], &["N01"][..]),
-        "N01_INTEGRATED" => (&["N02"][..], &["N02"][..]),
+        "N00_ADOPTION_BOUNDARY" => (&["N01"][..], &[][..]),
+        "N01_INTEGRATED" => (&["N02"][..], &[][..]),
         "N03_INTEGRATED_DEBT_CHECKPOINT" | "N08_N09_INTEGRATED_DEBT_CHECKPOINT" => {
             (&[][..], &[][..])
         }
-        "N04_N07_READY_SOURCE_FRONTIER" => (
-            &["N04", "N05", "N06", "N07"][..],
-            &["N04", "N05", "N06", "N07"][..],
-        ),
-        "N05_N07_READY_N04_INTEGRATED_SOURCE_FRONTIER" => {
-            (&["N05", "N06", "N07"][..], &["N05", "N06", "N07"][..])
-        }
-        "N06_N07_READY_N04_N05_INTEGRATED_SOURCE_FRONTIER" => {
-            (&["N06", "N07"][..], &["N06", "N07"][..])
-        }
-        "N07_READY_N04_N06_INTEGRATED_SOURCE_FRONTIER" => (&["N07"][..], &["N07"][..]),
-        "N08_N09_READY_N07_INTEGRATED_SOURCE_FRONTIER" => {
-            (&["N08", "N09"][..], &["N08", "N09"][..])
-        }
-        "N08_READY_N09_INTEGRATED_SOURCE_FRONTIER" => (&["N08"][..], &["N08"][..]),
+        "N04_N07_READY_SOURCE_FRONTIER" => (&["N04", "N05", "N06", "N07"][..], &[][..]),
+        "N05_N07_READY_N04_INTEGRATED_SOURCE_FRONTIER" => (&["N05", "N06", "N07"][..], &[][..]),
+        "N06_N07_READY_N04_N05_INTEGRATED_SOURCE_FRONTIER" => (&["N06", "N07"][..], &[][..]),
+        "N07_READY_N04_N06_INTEGRATED_SOURCE_FRONTIER" => (&["N07"][..], &[][..]),
+        "N08_N09_READY_N07_INTEGRATED_SOURCE_FRONTIER" => (&["N08", "N09"][..], &[][..]),
+        "N08_READY_N09_INTEGRATED_SOURCE_FRONTIER" => (&["N08"][..], &[][..]),
         "N10_ROOT_PLANNED_N11_READY_SOURCE_FRONTIER" => {
             exact_state(states, "N10", "planned")?;
             exact_state(states, "N11", "ready")?;
@@ -62,6 +53,13 @@ pub(super) fn expected(
             exact_state(states, "N12", "integrating")?;
             exact_state(states, "N14", "blocked")?;
             (&[][..], &[][..])
+        }
+        "N02_REOBSERVED_N12_INTEGRATED_N14_READY_SOURCE_FRONTIER" => {
+            exact_state(states, "N10", "integrated")?;
+            exact_state(states, "N11", "blocked")?;
+            exact_state(states, "N12", "integrated")?;
+            exact_state(states, "N14", "ready")?;
+            (&["N14"][..], &[][..])
         }
         _ => return Err(invalid("scheduler frontier is unknown")),
     };

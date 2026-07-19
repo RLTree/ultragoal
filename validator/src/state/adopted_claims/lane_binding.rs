@@ -132,7 +132,7 @@ fn verify_staging_lane(
         && lane.state == "planned"
         && lane.current_identity.is_none()
         && lane.ceiling == "adopted_reobservation_required";
-    let staged = lane.state == "integrating"
+    let staged = matches!(lane.state.as_str(), "integrating" | "integrated")
         && lane.ceiling == "source_accepted"
         && valid_staged_identity(lane.current_identity.as_ref());
     if lane.authority != "root_only"

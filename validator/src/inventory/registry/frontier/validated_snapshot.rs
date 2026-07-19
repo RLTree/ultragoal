@@ -21,7 +21,7 @@ pub(super) fn load(reads: &ReadSession, root: &Path) -> Result<ValidatedRegistry
     let nodes = scheduler_nodes(&registry)?;
     super::scope_ownership::validate(&registry)?;
     super::lease_issuance::validate(reads, root, &registry, &nodes)?;
-    let active_tools = dependency_tools(&graph, &nodes)?;
+    let active_tools = dependency_tools(&graph, &registry, &nodes)?;
     Ok(ValidatedRegistry {
         registry,
         active_tools,

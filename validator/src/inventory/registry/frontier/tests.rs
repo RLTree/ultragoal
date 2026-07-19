@@ -1,4 +1,4 @@
-use super::scheduler_nodes;
+use super::{scheduler_nodes, source_dependency};
 use serde_json::json;
 use std::collections::BTreeSet;
 
@@ -29,8 +29,8 @@ fn ready_lane_is_schedulable_without_becoming_production_authority() {
 }
 
 #[test]
-fn unintegrated_lifecycle_states_do_not_enter_the_production_frontier() {
-    let active = scheduler_nodes(&registry(
+fn unexpected_active_lifecycle_states_fail_the_frontier_closed() {
+    let error = scheduler_nodes(&registry(
         &[
             ("N00", "integrated"),
             ("N01", "ready"),
@@ -42,9 +42,12 @@ fn unintegrated_lifecycle_states_do_not_enter_the_production_frontier() {
         ],
         &["N01"],
     ))
-    .unwrap();
+    .unwrap_err();
 
-    assert_eq!(active.integrated, BTreeSet::from(["N00".to_owned()]));
+    assert_eq!(
+        error.to_string(),
+        "invalid registry: scheduler frontier has unexpected active worktree lanes"
+    );
 }
 
 #[test]
@@ -57,6 +60,30 @@ fn scheduler_eligibility_must_still_match_ready_lanes_exactly() {
         error.to_string(),
         "invalid registry: scheduler eligibility disagrees with ready lanes"
     );
+}
+
+#[test]
+fn only_exact_n11_external_blocker_satisfies_n12_source_dependency() {
+    let mut value = json!({
+        "pre_adoption_source": {
+            "frontier": "N02_REOBSERVED_N12_INTEGRATED_N14_READY_SOURCE_FRONTIER"
+        },
+        "lanes": [{
+            "id": "N11",
+            "state": "blocked",
+            "ceiling": "source_accepted",
+            "outcome": {
+                "source_acceptance": "accepted",
+                "execution_outcome": "external_blocked",
+                "claim_availability": "withheld"
+            }
+        }]
+    });
+
+    assert!(source_dependency::satisfies(&value, "N12", "N11"));
+    assert!(!source_dependency::satisfies(&value, "N14", "N11"));
+    value["lanes"][0]["outcome"]["claim_availability"] = json!("available");
+    assert!(!source_dependency::satisfies(&value, "N12", "N11"));
 }
 
 #[test]

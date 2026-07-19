@@ -9,13 +9,13 @@
   },
   "lineage": {
     "goal": {"path": "GOAL_CONTRACT.md", "digest": "sha256:6bd05cd382a2e8d1af10f6942ee64016f484983f5a98f118c4a3954ae8df6fa9", "validity": "current_exact", "invalidation": "invalidate_on_any_byte_change"},
-    "amendments": {"path": "AMENDMENTS.jsonl", "digest": "sha256:22ce12ca247230c839f9b6166cf6b121a4fad595b0f023c51ae91adb09e68eef", "validity": "current_exact", "invalidation": "invalidate_on_any_byte_change"},
+    "amendments": {"path": "AMENDMENTS.jsonl", "digest": "sha256:c4f9b6b100e0bf27c21a598d5426c66ab0b4b8b86eb96aa3c79c5548e60bc3c7", "validity": "current_exact", "invalidation": "invalidate_on_any_byte_change"},
     "contract_bundle": {"path": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-HANDOFF-MANIFEST.sha256", "digest": "sha256:d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51", "validity": "current_exact", "invalidation": "invalidate_on_any_byte_change"}
   },
   "candidate_resolution": {"kind":"containing_clean_head","identity_command":"git rev-parse HEAD^{commit} HEAD^{tree}","requires_clean_tree":true,"protected_base_ref":"LANE_REGISTRY.json#/root_freeze/protected_base"},
   "candidate_status": "pending",
   "root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
-  "claim_ceiling": {"effect": "withheld", "all_claims_withheld": true, "reason": "N00-N10 source boundaries are integrated; N11 source acceptance, externally blocked positive execution, and withheld claim availability are recorded separately. N12-A may reconcile only that blocked ceiling. Full strict and coverage proof, N14/N15, sealed package/install/discovery/runtime identities, Product Fitness and Cohesion journeys, release, and completion remain open."},
+  "claim_ceiling": {"effect": "withheld", "all_claims_withheld": true, "reason": "N00-N10 and N12-A are integrated at source ceilings; N11 positive execution remains externally blocked and all claims remain withheld. N02 current inventory reobservation has zero blockers and makes N14 scheduler-ready. Full strict and coverage proof, N14/N15, sealed package/install/discovery/runtime identities, Product Fitness and Cohesion journeys, release, and completion remain open."},
   "claims": [
     {"id": "CL-SOURCE", "title": "Canonical source contract", "description": "Withheld: N00-N10 source ceilings, the N11 public audit and fail-closed capability refusal, and the exact scoped OD-009 dead-authority retirement are current. Positive N11 execution, remaining duplicate authority, generated authority, migration closure, and full warning-free source proof remain open.", "claim_scope": "required", "claim_kind": "static_contract", "status": "withheld_claim", "claim_surface": "static", "allowed_evidence_surfaces": ["static"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-001"},
     {"id": "CL-PACKAGE", "title": "Built package identity", "description": "Withheld: no current package byte reconciliation is available.", "claim_scope": "required", "claim_kind": "package_release", "status": "withheld_claim", "claim_surface": "package", "allowed_evidence_surfaces": ["package"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-002"},
@@ -32,9 +32,9 @@
     {"id": "CL-RELEASE", "title": "Release readiness", "description": "Withheld: package, install, discovery, migration, and release decisions are not closed.", "claim_scope": "required", "claim_kind": "package_release", "status": "withheld_claim", "claim_surface": "package", "allowed_evidence_surfaces": ["package", "installed_app", "runtime_cli"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-013"},
     {"id": "CL-COMPLETION", "title": "Integrated goal completion", "description": "Withheld: required claims, goal binding, validator evidence, and cleanup remain unresolved.", "claim_scope": "required", "claim_kind": "static_contract", "status": "withheld_claim", "claim_surface": "root_integration", "allowed_evidence_surfaces": ["root_integration"], "evidence": [], "claim_ceiling_effect": "withheld", "backlog_row_id": "BACKLOG-014"}
   ],
-  "registry_preimage_digest": "sha256:eccb8dfee5fb000efaab09dc80ad4a9dd37160e6829b2295bae3d161842ab9ff",
+  "registry_preimage_digest": "sha256:108917834c5122b6db13036516952144a651361d75fa155b05524cab6c49a35a",
   "verification_backlog_path": "VERIFICATION_BACKLOG.json",
-  "verification_backlog_digest": "sha256:4c74739c8fd88be1c94285e6bbf454dc2dd11bfeba273e42917b3eff0aa37790",
+  "verification_backlog_digest": "sha256:d083f785fb65da4899d318d757e23a79748e159b0241125051ecfd0dc6b0770d",
   "validator_receipts": [],
-  "generated_at": "2026-07-19T10:39:47Z"
+  "generated_at": "2026-07-19T13:04:30Z"
 }

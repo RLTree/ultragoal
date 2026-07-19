@@ -44,15 +44,22 @@ adapter, package, install, runtime, Product Fitness, readiness, release, and
 completion remain withheld until one jointly capable host substrate is
 implemented and independently observed.
 
-AMEND-002 makes the three N11 dimensions explicit: source acceptance is
+AMEND-003 preserves the three N11 dimensions and seals the adopted static
+product-success contract without promoting a claim: source acceptance is
 accepted, positive execution is externally blocked, and all dependent claims
 remain withheld. This terminal blocker releases only root-owned N12-A claim
 reconciliation; it does not satisfy N11 execution or `CL-EVAL-IMPROVEMENT`.
-The current frontier is `N11_EXTERNAL_BLOCKED_N12_INTEGRATING_SOURCE_ACCEPTED`.
-N12-A is source-accepted at `27c9afd0021ad9751d2411e4837d7f897064b99e` /
-tree `5f403008b137d5758fe760dc508b10f5747bd1c2`; every claim remains withheld and
-no worktree lane is scheduler-eligible until current N02 inventory reobservation
-passes twice with byte-identical summaries.
+The current frontier is `N02_REOBSERVED_N12_INTEGRATED_N14_READY_SOURCE_FRONTIER`.
+N12-A is source-integrated at `27c9afd0021ad9751d2411e4837d7f897064b99e` /
+tree `5f403008b137d5758fe760dc508b10f5747bd1c2`; every claim remains withheld.
+N02 reobservation passes on exact clean candidate
+`b55e29dc2a5a1c84f3b65477f43a92cd03bbeb7a` / tree
+`796f7ab21e2fff2cfa845815c154505f2fc130dc`: two byte-identical
+recursive-zero-write summaries at SHA-256
+`859f0b6e115e1201554413c447e086a335892616bb987eeb2cd7179bcb4ffee2`
+both exit zero, with zero blockers and 30 named nonblocking obligations. N14 is
+the sole scheduler-eligible lane and remains unleased until this checkpoint is
+committed and issuance gates pass.
 
 ## Stage B projection freeze (routing only)
 
@@ -69,10 +76,9 @@ N04-N07 are now integrated at source-only ceilings. N07 exact source
 library boundary, five private identity controls, 33 local contracts, and the
 three exact causal, recovery, and false-pass journeys. Its task and worktree are
 closed. The post-N11 standards-debt checkpoint is closed. N10 is integrated;
-N11 is source-accepted and execution-blocked; N12-A is accepted only as a
-root-owned staged reconciliation boundary. It promotes no N11 execution,
-product, readiness, release, or completion claim. The corrected route is N02
-current reobservation -> N14 -> N15 ->
+N11 is source-accepted and execution-blocked; N12-A is source-integrated only as
+a root-owned staged reconciliation boundary. It promotes no N11 execution,
+product, readiness, release, or completion claim. The corrected route is N14 -> N15 ->
 final freeze -> N02/N12 claim reproof -> N13 -> N16 -> post-product
 four-persona review -> non-mutating N17 reconciliation. Preliminary N13 work,
 if used, is isolated, advisory, non-citable, and discarded before the final
@@ -455,12 +461,13 @@ seam is a typed root request, not N11-owned work.
 6. Root closes the N11 public adapter, issuer/principal uniqueness, custody,
    observability, catalog, and dispatch seams. Recompute all intersections and
    affected checks. Only the combined root identity may mark N11 integrated.
-7. N12-A binds exact N03/N04/N05/N06/N07/N10/N11 identities. Its candidate
+7. N12-A binds exact N03/N04/N05/N06/N07/N10/N11 identities. Its source-integrated candidate
    supplies the live HCT-CLAIMS material-review validator at
    `validator/src/claim_semantics/review_round/**`, operation
    `check strict --claim material-review-round`, current red fixtures, and
    installed active-registry persona exposure. The exact four-persona review
-   must pass that route before N12 integrates.
+   must pass that route before any claim is promoted; the current integrated
+   state is explicitly limited to the source ceiling.
 8. N14 and N15 use separate serial `WS-MIGRATION` leases. Each advances through
    accepted lane source, root registry/public adoption, independently derived
    intersections, every affected reproof, then integration. Each has its own
