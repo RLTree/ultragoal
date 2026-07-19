@@ -134,6 +134,40 @@ current-source package/install/discovery/runtime behavior, Product Fitness,
 real-repository journeys, readiness, release, completion, and mastery remain
 withheld until their exact dependency-closed, same-surface evidence passes.
 
+## Dependency and evidence semantics
+
+- Source acceptance, execution outcome, and claim availability are orthogonal.
+  N11 is source-accepted for its audit route and fail-closed public refusal;
+  its positive execution outcome is externally blocked and
+  `CL-EVAL-IMPROVEMENT` remains withheld.
+- The N11 external blocker releases only root-owned N12 claim-ceiling
+  reconciliation. It does not mean that N11 executed successfully and cannot
+  promote an evaluation, product, runtime, release, or completion claim.
+  N11 reopens when a host can jointly prove confinement and
+  identity-conditioned cleanup, or when its source, consumed dependency,
+  authority, or host-capability identity changes.
+- `N12_A_STAGED` is a source-integrated implementation state consumed only by
+  N14. It promotes no claim and binds its own source identity plus every
+  contract, schema, claim-registry, dependency, generated-output, fixture, and
+  effect identity it consumes. Any change reopens it.
+- Preliminary N13 work is isolated, advisory, non-citable, and discarded before
+  the final journey freeze. All tracked source, generated authority, public CLI,
+  migration, retirement, and distribution mutations finish before that freeze.
+- Product proof seals distinct source, generated, package, install, discovery,
+  and runtime identities. A later mutation invalidates every affected proof;
+  proof outputs and final reconciliation artifacts are excluded from the
+  product identity only when their schema declares that exclusion.
+- Aggregate review records preserve separate persona rows, operation IDs,
+  prompt and schema hashes, structured-output validation, evidence pointers,
+  and individual dispositions. An aggregate summary cannot replace those rows.
+- N13 supports a single installed-journey ceiling by default. Daily-driver,
+  broadly reusable, or mastery claims require the repeated real-repository and
+  Product Fitness evidence above.
+- N16 may establish release mechanics while blockers remain, but it cannot
+  promote readiness or release. N17 is non-mutating and emits the typed final
+  reconciliation artifact; completion remains withheld for every blocked or
+  unsupported required claim.
+
 ## Product Success Lineage
 
 `examples/generated/PRODUCT_SUCCESS_CONTRACT.json` is the current schema-bound,

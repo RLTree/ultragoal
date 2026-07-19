@@ -20,7 +20,7 @@ Focused public projection controls pass 2/2 and the dependency-closed command
 activation suite passes 10/10. Package, install, discovery, runtime, Product
 Fitness, readiness, release, and completion remain withheld.
 
-N11 is lease-free and integrating at exact root source
+N11 is lease-free and source-accepted at exact root source
 `06ab59b1f93acf1bc9a9b61d8547c273c438ad61` / tree
 `ed5a2eb060ad5584c41f35d19a0c1be766ef57bf`. The historical WorkerResult remains
 source evidence for its original candidate only; no replacement receipt was
@@ -44,6 +44,13 @@ adapter, package, install, runtime, Product Fitness, readiness, release, and
 completion remain withheld until one jointly capable host substrate is
 implemented and independently observed.
 
+AMEND-002 makes the three N11 dimensions explicit: source acceptance is
+accepted, positive execution is externally blocked, and all dependent claims
+remain withheld. This terminal blocker releases only root-owned N12-A claim
+reconciliation; it does not satisfy N11 execution or `CL-EVAL-IMPROVEMENT`.
+The current frontier is `N11_EXTERNAL_BLOCKED_N12_RECONCILIATION_READY` with
+N12 planned and no scheduler-eligible worktree lane.
+
 ## Stage B projection freeze (routing only)
 
 The literal protected checkpoint is commit
@@ -58,13 +65,14 @@ N04-N07 are now integrated at source-only ceilings. N07 exact source
 `c810b260fc2c25aa86777abae8ef72bda7e9e634` passes the warning-denied public
 library boundary, five private identity controls, 33 local contracts, and the
 three exact causal, recovery, and false-pass journeys. Its task and worktree are
-closed. The exact current source frontier exposes N08 and N09 as dependency-
-eligible but unleased; the root standards-debt checkpoint and lane restructure
-must finish before either receives a worktree. N10 remains behind N09; N11
-remains behind N08; N12 remains behind N10 and N11.
-After N12 the route is N12-A -> N14 -> N14-proof -> N12-B-invalidate-and-reproof
--> parallel N13/N15 -> N16 -> N17. P0 is available only to root for compile,
-namespace, standards, and retention-aware cleanup; product lanes remain blocked.
+closed. The post-N11 standards-debt checkpoint is closed. N10 is integrated;
+N11 is source-accepted and execution-blocked; N12-A is the next root-only
+staged reconciliation boundary. The corrected route is N12-A -> N14 -> N15 ->
+final freeze -> N02/N12 claim reproof -> N13 -> N16 -> post-product
+four-persona review -> non-mutating N17 reconciliation. Preliminary N13 work,
+if used, is isolated, advisory, non-citable, and discarded before the final
+freeze. P0 is available only to root for compile, namespace, standards, and
+retention-aware cleanup; product lanes remain blocked.
 All fourteen claims remain withheld beyond their exact accepted source
 ceilings; the N11 WorkerResult is a source handoff, not product proof. The
 user-authorized cleanup removed the obsolete review tree and
@@ -721,8 +729,8 @@ claim and representative product or release proof.
   runtime, Product Fitness, readiness, release, and completion remain withheld.
 
 The post-N11 root debt checkpoint is closed at source candidate
-`b279f7c6fc31c5fc35096cd1d5268d91765bb417` / tree
-`165a4fcabd5a3ac539c03c26dc4c03edbb711304`. Scoped
+`f19e389c688df008ebac93e9555d0d83e4ad5a15` / tree
+`03075d90e7903c20498a01059efd5fd5fcf1d603`. Scoped
 `OD-009-SCOPED-002` authorizes only the 126 path/content-digested Rust files
 proved unreachable from every Cargo production and test root; compile probes
 and standalone roots are excluded. Three launch snapshots that were outside
@@ -734,7 +742,10 @@ public inspection controls. It also removes every current package, coverage,
 mandatory-law, cohesion, lane, migration, and retained-route selector for the
 retired paths. Warning-denied production compilation, the exact namespace
 zero-write gate, 121 standards rows, JSON, line caps, and both current coverage
-manifest digests pass. The bounded Terra/high review returned five material
+manifest digests pass. The operation-binding tests now live under their
+semantic namespace and the repository-fit contract compiles inside the public
+library test boundary without broad dead-code or unused-import suppression.
+The bounded Terra/high review returned five material
 projection defects in one pass; one correction review found only the stale
 route cardinality, which the parent corrected and verified as 10 compiled,
 registered routes. The review bound is closed without a third speculative
@@ -760,14 +771,12 @@ publication, settlement, interruption, and takeover paths. No positive N11,
 installed, readiness, release, or completion claim is eligible before that
 same-surface execution passes.
 
-Two debts are deliberately scheduled at their real dependency boundaries
-instead of extending this review loop. The broad suppression in
-`repository_fit_contract` requires migration to the compiled public-library
-test boundary before N13 installed-journey reproof. The historical frontier
-and handoff vocabulary in the inventory registry is contract-bound migration
-state; N14 owns its one-shot semantic migration before retirement claims. Both
-keep CL-STRICT, migration closure, readiness, release, and completion withheld
-as applicable; neither is treated as current product behavior proof.
+The repository-fit suppression and operation-binding semantic namespace debts
+are closed on the current exact source checkpoint. The historical frontier and
+handoff vocabulary in the inventory registry remains contract-bound migration
+state; N14 owns its one-shot semantic migration before retirement claims. This
+keeps migration closure, readiness, release, and completion withheld and is not
+current product behavior proof.
 
 Scoped OD-009 is resolved only for the two exact path/content-digested cleanup
 cohorts authorized from root base `ba04b09e9858c524dafeed3e27514eccc2e61354`.
