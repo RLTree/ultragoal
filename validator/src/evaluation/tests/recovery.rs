@@ -6,9 +6,13 @@ use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
 use std::fs;
 use std::os::unix::fs::{symlink, PermissionsExt};
-use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::{
+    atomic::{AtomicU64, Ordering},
+    Mutex,
+};
 
 static NEXT_PRODUCTION_ROOT: AtomicU64 = AtomicU64::new(0);
+static PANIC_EFFECT_MARKER: Mutex<Option<std::path::PathBuf>> = Mutex::new(None);
 
 fn sha(byte: char) -> String {
     format!("sha256:{}", byte.to_string().repeat(64))
@@ -107,6 +111,9 @@ impl FixtureEvaluationBridge for PanickingBridge {
         &mut self,
         _: &FixtureTaskRequest,
     ) -> Result<crate::fixture_scheduler::FixtureExecutionRecord, ProductionRuntimeError> {
+        if let Some(marker) = PANIC_EFFECT_MARKER.lock().unwrap().as_ref() {
+            fs::write(marker, b"fixture-effect-observed-before-panic").unwrap();
+        }
         panic!("fixture bridge panic must become an interrupted ledger state");
     }
 }
@@ -137,6 +144,7 @@ fn execution_panic_is_interrupted_and_requires_explicit_recovery() {
     let input_root = production_root("input");
     let ledger_root = production_root("ledger");
     let spec = preparation_spec(&input_root);
+    *PANIC_EFFECT_MARKER.lock().unwrap() = Some(input_root.join("fixture-effect"));
     let error = super::super::runtime::ProductionExecutionRequest::new(
         &spec,
         &input_root,
@@ -149,6 +157,10 @@ fn execution_panic_is_interrupted_and_requires_explicit_recovery() {
     .execute(&mut PanickingBridge)
     .unwrap_err();
     assert_eq!(error.code(), "evaluation-execution-panicked");
+    assert_eq!(
+        fs::read(input_root.join("fixture-effect")).unwrap(),
+        b"fixture-effect-observed-before-panic"
+    );
 
     let binding = EvaluationExecutionBinding::new(EvaluationExecutionBindingRequest {
         live_context_id: spec.live_context_id().to_owned(),
@@ -172,17 +184,28 @@ fn execution_panic_is_interrupted_and_requires_explicit_recovery() {
     ledger
         .require_recovery("evaluation-panic-recovery-required")
         .unwrap();
-    ledger.reconcile_recovery(None).unwrap();
+    assert_eq!(
+        ledger
+            .reconcile_authenticated_publication()
+            .unwrap_err()
+            .code(),
+        "evaluation-recovery-publication-unproven"
+    );
     assert!(matches!(
         ledger.inspect().unwrap(),
-        EvaluationLedgerState::Initialized
+        EvaluationLedgerState::RecoveryRequired { .. }
     ));
+    assert!(matches!(
+        ledger.reserve_outcome(&sha('7')).unwrap(),
+        ExecutionReservationOutcome::RecoveryRequired { .. }
+    ));
+    *PANIC_EFFECT_MARKER.lock().unwrap() = None;
     fs::remove_dir_all(input_root).unwrap();
     fs::remove_dir_all(ledger_root).unwrap();
 }
 
 #[test]
-fn execution_interruption_recovers_without_a_publication() {
+fn execution_interruption_without_authenticated_publication_stays_nonterminal() {
     let root = root("interruption-recovery");
     let key = [7; 32];
     let binding = execution_binding('b', '1');
@@ -208,15 +231,21 @@ fn execution_interruption_recovers_without_a_publication() {
         reopened.inspect().unwrap(),
         EvaluationLedgerState::RecoveryRequired { .. }
     ));
-    reopened.reconcile_recovery(None).unwrap();
+    assert_eq!(
+        reopened
+            .reconcile_authenticated_publication()
+            .unwrap_err()
+            .code(),
+        "evaluation-recovery-publication-unproven"
+    );
     assert!(matches!(
         reopened.inspect().unwrap(),
-        EvaluationLedgerState::Initialized
+        EvaluationLedgerState::RecoveryRequired { .. }
     ));
-    assert_eq!(
+    assert!(matches!(
         reopened.reserve_outcome(&sha('8')).unwrap(),
-        ExecutionReservationOutcome::Acquired
-    );
+        ExecutionReservationOutcome::RecoveryRequired { .. }
+    ));
     fs::remove_dir_all(root).unwrap();
 }
 

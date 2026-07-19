@@ -101,11 +101,10 @@ impl TestFileEvaluationExecutionLedger {
         self.0.require_recovery(causal_code)
     }
 
-    pub(super) fn reconcile_recovery(
+    pub(super) fn reconcile_authenticated_publication(
         &mut self,
-        recovered_publication: Option<(String, String)>,
     ) -> Result<(), EvaluationLedgerError> {
-        self.0.reconcile_recovery(recovered_publication)
+        self.0.reconcile_authenticated_publication()
     }
 
     pub(super) fn complete(&mut self) -> Result<(), EvaluationLedgerError> {

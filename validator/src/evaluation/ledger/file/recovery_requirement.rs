@@ -4,56 +4,115 @@ impl FileEvaluationExecutionLedger {
         causal_code: impl Into<String>,
     ) -> Result<(), EvaluationLedgerError> {
         let causal_code = checked_causal_code(causal_code)?;
-        self.transition(None, |state| match state {
-            EvaluationLedgerState::Reserved
-            | EvaluationLedgerState::Published { .. }
-            | EvaluationLedgerState::Interrupted { .. } => {
-                Ok(EvaluationLedgerState::RecoveryRequired { causal_code })
+        self.transition(None, |_, current| {
+            match current.payload.core.state.clone() {
+                EvaluationLedgerState::Reserved
+                | EvaluationLedgerState::Published { .. }
+                | EvaluationLedgerState::Interrupted { .. } => {
+                    Ok(EvaluationLedgerState::RecoveryRequired { causal_code })
+                }
+                _ => Err(EvaluationLedgerError::new(
+                    "evaluation-recovery-transition-refused",
+                )),
             }
-            _ => Err(EvaluationLedgerError::new(
-                "evaluation-recovery-transition-refused",
-            )),
         })
     }
 
-    fn reconcile_recovery(
-        &mut self,
-        recovered_publication: Option<(String, String)>,
-    ) -> Result<(), EvaluationLedgerError> {
-        if let Some((run, artifacts)) = &recovered_publication
-            && (!super::valid_sha256(run) || !super::valid_sha256(artifacts))
-        {
-            return Err(EvaluationLedgerError::new(
-                "evaluation-recovery-binding-invalid",
-            ));
-        }
-        let clear_reservation = recovered_publication.is_none();
-        self.transition(clear_reservation.then_some(None), |state| match state {
-            EvaluationLedgerState::RecoveryRequired { .. } => match recovered_publication {
-                Some((run_sha256, artifact_set_sha256)) => Ok(EvaluationLedgerState::Published {
+    /// Recovery may only restore a publication that the same authenticated
+    /// reservation already recorded. Absence of a recorded publication proves
+    /// neither that the child stopped nor that staged custody was removed.
+    fn reconcile_authenticated_publication(&mut self) -> Result<(), EvaluationLedgerError> {
+        self.transition(None, |ledger, current| match &current.payload.core.state {
+            EvaluationLedgerState::RecoveryRequired { .. } => {
+                let (run_sha256, artifact_set_sha256) =
+                    ledger.authenticated_recovery_publication(current)?;
+                Ok(EvaluationLedgerState::Published {
                     run_sha256,
                     artifact_set_sha256,
-                }),
-                None => Ok(EvaluationLedgerState::Initialized),
-            },
+                })
+            }
             _ => Err(EvaluationLedgerError::new(
                 "evaluation-recovery-not-required",
             )),
         })
     }
 
+    /// This stays inside the custody owner: callers cannot supply a run or
+    /// artifact digest and thereby reinterpret an ambiguous effect as a
+    /// publication. The journal scanner already verifies the MAC, full
+    /// execution binding, and reservation identity for every returned record.
+    fn authenticated_recovery_publication(
+        &self,
+        current: &AuthenticatedSnapshot,
+    ) -> Result<(String, String), EvaluationLedgerError> {
+        let reservation_id = current
+            .payload
+            .core
+            .reservation_id_sha256
+            .as_deref()
+            .ok_or_else(|| EvaluationLedgerError::new("evaluation-recovery-binding-invalid"))?;
+        let before = safe_file_identity(&self.anchor)?;
+        if before != current.payload.anchor_observation {
+            return Err(EvaluationLedgerError::new(
+                "evaluation-anchor-changed-during-recovery",
+            ));
+        }
+        let bytes = read_file_bytes(&self.anchor, MAX_ANCHOR_JOURNAL_BYTES)?;
+        let after = safe_file_identity(&self.anchor)?;
+        if after != before {
+            return Err(EvaluationLedgerError::new(
+                "evaluation-anchor-changed-during-recovery",
+            ));
+        }
+        let scan = scan_anchor_journal(
+            &bytes,
+            &self.key,
+            &self.key_id,
+            self.lock_identity,
+            self.anchor_authority,
+            &self.binding,
+        )?;
+        let current_index = scan
+            .records
+            .iter()
+            .position(|record| {
+                record.end == current.payload.anchor_length
+                    && record.record.head_sha256 == current.payload.anchor_head_sha256
+                    && record.record.payload.core == current.payload.core
+            })
+            .ok_or_else(|| EvaluationLedgerError::new("evaluation-recovery-journal-missing"))?;
+        scan.records[..current_index]
+            .iter()
+            .rev()
+            .find_map(|record| {
+                (record.record.payload.core.reservation_id_sha256.as_deref()
+                    == Some(reservation_id))
+                .then(|| match &record.record.payload.core.state {
+                    EvaluationLedgerState::Published {
+                        run_sha256,
+                        artifact_set_sha256,
+                    } => Some((run_sha256.clone(), artifact_set_sha256.clone())),
+                    _ => None,
+                })
+                .flatten()
+            })
+            .ok_or_else(|| EvaluationLedgerError::new("evaluation-recovery-publication-unproven"))
+    }
+
     fn complete(&mut self) -> Result<(), EvaluationLedgerError> {
-        self.transition(None, |state| match state {
-            EvaluationLedgerState::Published {
-                run_sha256,
-                artifact_set_sha256,
-            } => Ok(EvaluationLedgerState::Terminal {
-                run_sha256,
-                artifact_set_sha256,
-            }),
-            _ => Err(EvaluationLedgerError::new(
-                "evaluation-terminal-transition-refused",
-            )),
+        self.transition(None, |_, current| {
+            match current.payload.core.state.clone() {
+                EvaluationLedgerState::Published {
+                    run_sha256,
+                    artifact_set_sha256,
+                } => Ok(EvaluationLedgerState::Terminal {
+                    run_sha256,
+                    artifact_set_sha256,
+                }),
+                _ => Err(EvaluationLedgerError::new(
+                    "evaluation-terminal-transition-refused",
+                )),
+            }
         })
     }
 
@@ -84,9 +143,10 @@ impl FileEvaluationExecutionLedger {
 
     fn transition(
         &mut self,
-        reservation_id_sha256: Option<Option<String>>,
+        reservation_id_sha256: Option<String>,
         update: impl FnOnce(
-            EvaluationLedgerState,
+            &Self,
+            &AuthenticatedSnapshot,
         ) -> Result<EvaluationLedgerState, EvaluationLedgerError>,
     ) -> Result<(), EvaluationLedgerError> {
         self.validate_descriptors()?;
@@ -109,7 +169,7 @@ impl FileEvaluationExecutionLedger {
         if current.head_sha256 != self.expected_head {
             self.expected_head = current.head_sha256.clone();
         }
-        let next_state = update(current.payload.core.state.clone())?;
+        let next_state = update(self, &current)?;
         let next_generation = current
             .payload
             .core
@@ -125,7 +185,7 @@ impl FileEvaluationExecutionLedger {
             anchor_authority: self.anchor_authority,
             binding: self.binding.clone(),
             reservation_id_sha256: reservation_id_sha256
-                .unwrap_or_else(|| current.payload.core.reservation_id_sha256.clone()),
+                .or_else(|| current.payload.core.reservation_id_sha256.clone()),
             state: next_state,
         };
         let record = authenticate_anchor_record(

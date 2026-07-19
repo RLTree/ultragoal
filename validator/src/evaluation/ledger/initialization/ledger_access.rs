@@ -77,11 +77,13 @@ impl FileEvaluationExecutionLedger {
             sha256(&serde_json::to_vec(&self.binding).map_err(|_| {
                 EvaluationLedgerError::new("evaluation-ledger-serialization-failed")
             })?);
-        self.transition(Some(Some(reservation_id_sha256)), |state| match state {
-            EvaluationLedgerState::Initialized => Ok(EvaluationLedgerState::Reserved),
-            _ => Err(EvaluationLedgerError::new(
-                "evaluation-execution-reservation-conflict",
-            )),
+        self.transition(Some(reservation_id_sha256), |_, current| {
+            match current.payload.core.state.clone() {
+                EvaluationLedgerState::Initialized => Ok(EvaluationLedgerState::Reserved),
+                _ => Err(EvaluationLedgerError::new(
+                    "evaluation-execution-reservation-conflict",
+                )),
+            }
         })
     }
 
@@ -214,14 +216,16 @@ impl FileEvaluationExecutionLedger {
                 "evaluation-publication-binding-invalid",
             ));
         }
-        self.transition(None, |state| match state {
-            EvaluationLedgerState::Reserved => Ok(EvaluationLedgerState::Published {
-                run_sha256,
-                artifact_set_sha256,
-            }),
-            _ => Err(EvaluationLedgerError::new(
-                "evaluation-publication-transition-refused",
-            )),
+        self.transition(None, |_, current| {
+            match current.payload.core.state.clone() {
+                EvaluationLedgerState::Reserved => Ok(EvaluationLedgerState::Published {
+                    run_sha256,
+                    artifact_set_sha256,
+                }),
+                _ => Err(EvaluationLedgerError::new(
+                    "evaluation-publication-transition-refused",
+                )),
+            }
         })
     }
 
@@ -230,13 +234,15 @@ impl FileEvaluationExecutionLedger {
         causal_code: impl Into<String>,
     ) -> Result<(), EvaluationLedgerError> {
         let causal_code = checked_causal_code(causal_code)?;
-        self.transition(None, |state| match state {
-            EvaluationLedgerState::Reserved | EvaluationLedgerState::Published { .. } => {
-                Ok(EvaluationLedgerState::Interrupted { causal_code })
+        self.transition(None, |_, current| {
+            match current.payload.core.state.clone() {
+                EvaluationLedgerState::Reserved | EvaluationLedgerState::Published { .. } => {
+                    Ok(EvaluationLedgerState::Interrupted { causal_code })
+                }
+                _ => Err(EvaluationLedgerError::new(
+                    "evaluation-interruption-transition-refused",
+                )),
             }
-            _ => Err(EvaluationLedgerError::new(
-                "evaluation-interruption-transition-refused",
-            )),
         })
     }
 }

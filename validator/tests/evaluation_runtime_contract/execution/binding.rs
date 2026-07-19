@@ -32,6 +32,7 @@ fn execution_ledger_restart_recovery_and_read_paths_are_zero_write() {
     let mut ledger =
         FileEvaluationExecutionLedger::initialize(&root, key, binding.clone()).unwrap();
     ledger.reserve().unwrap();
+    ledger.publish_result(sha('8'), sha('9')).unwrap();
     ledger.require_recovery("publication-ambiguous").unwrap();
     drop(ledger);
     let mut reopened = FileEvaluationExecutionLedger::open(&root, key, binding).unwrap();
@@ -45,9 +46,7 @@ fn execution_ledger_restart_recovery_and_read_paths_are_zero_write() {
         EvaluationLedgerState::RecoveryRequired { .. }
     ));
     assert_eq!(tree(&root), before);
-    reopened
-        .reconcile_recovery(Some((sha('8'), sha('9'))))
-        .unwrap();
+    reopened.reconcile_authenticated_publication().unwrap();
     reopened.complete().unwrap();
     assert!(matches!(
         reopened.inspect().unwrap(),

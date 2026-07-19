@@ -102,12 +102,9 @@ impl ExecutionOwner {
             ));
         }
         let reservation_id = super::digest(
-            format!(
-                "production-execution|{}|{}",
-                spec.spec_sha256(),
-                execution_session_id
-            )
-            .as_bytes(),
+            serde_json::to_string(expected_binding)
+                .map_err(|_| ProductionRuntimeError::new("evaluation-production-binding-invalid"))?
+                .as_bytes(),
         );
         let mut executor = FixtureSchedulerEvaluationExecutor {
             bridge,
