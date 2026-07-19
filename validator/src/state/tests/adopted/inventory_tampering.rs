@@ -1,6 +1,6 @@
 use crate::context::{BuildRequest, EffectClass, LiveContext};
 use crate::inventory::{
-    ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256, InventoryBuilder,
+    InventoryBuilder, ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256,
 };
 use std::fs;
 use std::path::Path;
@@ -44,7 +44,7 @@ fn assert_inventory_rejects(label: &str, mutate: impl FnOnce(&Path)) {
     git(&root, &["init", "-q"]);
     git(&root, &["config", "user.email", "state@example.invalid"]);
     git(&root, &["config", "user.name", "Adopted State"]);
-    super::adopted_cases::copy_authority_inputs(live, &root);
+    super::registry::copy_authority_inputs(live, &root);
     mutate(&root);
     git(&root, &["add", "-A"]);
     git(&root, &["commit", "-qm", "fixture"]);

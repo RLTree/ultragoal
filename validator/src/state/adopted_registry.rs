@@ -167,7 +167,7 @@ fn invalid_claim(claim: &super::adopted_claims::AdoptedClaimDefinition) -> bool 
         || !valid_values(&claim.required_decision_ids)
         || claim.required_evidence.is_empty()
         || !valid_values(&claim.required_evidence)
-        || claim.current_live_evidence_status != "not_verified"
+        || claim.live_evidence_verification != "not_verified"
         || !claim.current_live_evidence.is_empty()
         || claim.independent_reconciler.is_empty()
         || claim.false_pass_controls.is_empty()

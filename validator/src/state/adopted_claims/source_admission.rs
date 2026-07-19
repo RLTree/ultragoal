@@ -4,7 +4,7 @@ use crate::state::StateError;
 use std::path::Path;
 use std::process::{Command, ExitStatus};
 
-const OWNED_SOURCE_PATHS: [&str; 11] = [
+const OWNED_SOURCE_PATHS: [&str; 10] = [
     "validator/src/cli/successor_public/strict/claim_reconciliation_stage_adapter.rs",
     "validator/src/cli/successor_public/strict/failure_diagnostics.rs",
     "validator/src/cli/successor_public/strict/mod.rs",
@@ -13,8 +13,7 @@ const OWNED_SOURCE_PATHS: [&str; 11] = [
     "validator/src/state/adopted_claims",
     "validator/src/state/adopted_registry.rs",
     "validator/src/state/mod.rs",
-    "validator/src/state/tests/adopted_authority_inputs.rs",
-    "validator/src/state/tests/adopted_cases.rs",
+    "validator/src/state/tests/adopted",
     "validator/src/state/tests/mod.rs",
 ];
 
@@ -138,15 +137,13 @@ mod tests {
     }
 
     fn git(root: &Path, args: &[&str]) {
-        assert!(
-            Command::new("git")
-                .arg("-C")
-                .arg(root)
-                .args(args)
-                .status()
-                .unwrap()
-                .success()
-        );
+        assert!(Command::new("git")
+            .arg("-C")
+            .arg(root)
+            .args(args)
+            .status()
+            .unwrap()
+            .success());
     }
 
     fn git_output(root: &Path, args: &[&str]) -> String {

@@ -1,6 +1,6 @@
 use crate::context::{BuildRequest, EffectClass, LiveContext};
 use crate::inventory::{
-    ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256, InventoryBuilder,
+    InventoryBuilder, ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256,
 };
 use crate::state::adopted::{derive_adopted, issue_adopted};
 use crate::state::adopted_registry::{load_claims_for_test, validate_registry_for_test};
@@ -10,13 +10,13 @@ use std::path::Path;
 use std::process::Command;
 
 const HANDOFF: &[u8] = include_bytes!(
-    "../../../../docs/ultragoal-contract-2026-07-successor-v2/FINAL-HANDOFF-MANIFEST.sha256"
+    "../../../../../docs/ultragoal-contract-2026-07-successor-v2/FINAL-HANDOFF-MANIFEST.sha256"
 );
 const MANIFEST: &[u8] = include_bytes!(
-    "../../../../docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CONTRACT_MANIFEST.json"
+    "../../../../../docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CONTRACT_MANIFEST.json"
 );
 const CLAIMS: &[u8] = include_bytes!(
-    "../../../../docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json"
+    "../../../../../docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json"
 );
 const HANDOFF_SHA256: &str = "d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51";
 
@@ -189,7 +189,7 @@ pub(super) fn copy_authority_inputs(live: &Path, root: &Path) {
         )
         .unwrap();
     }
-    super::adopted_authority_inputs::copy_generated_inputs(live, root);
+    super::generated_inputs::copy_generated_inputs(live, root);
     fs::create_dir_all(root.join(".codex-plugin")).unwrap();
     fs::write(
         root.join(".codex-plugin/plugin.json"),

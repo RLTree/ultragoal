@@ -25,11 +25,9 @@ pub(super) fn copy_generated_inputs(live: &Path, root: &Path) {
     }
     for path in paths {
         let relative = Path::new(&path);
-        assert!(
-            relative
-                .components()
-                .all(|part| matches!(part, Component::Normal(_)))
-        );
+        assert!(relative
+            .components()
+            .all(|part| matches!(part, Component::Normal(_))));
         let destination = root.join(relative);
         fs::create_dir_all(destination.parent().unwrap()).unwrap();
         fs::copy(live.join(relative), destination).unwrap();

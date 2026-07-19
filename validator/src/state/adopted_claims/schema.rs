@@ -22,7 +22,8 @@ pub(in crate::state) struct AdoptedClaimDefinition {
     pub(in crate::state) required_decision_ids: Vec<String>,
     pub(in crate::state) required_evidence: Vec<String>,
     pub(in crate::state) current_live_evidence: Vec<String>,
-    pub(in crate::state) current_live_evidence_status: String,
+    #[serde(rename = "current_live_evidence_status")]
+    pub(in crate::state) live_evidence_verification: String,
     pub(in crate::state) independent_reconciler: String,
     pub(in crate::state) false_pass_controls: Vec<String>,
     pub(in crate::state) claim_guard: String,
